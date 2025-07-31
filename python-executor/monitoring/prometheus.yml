@@ -9,7 +9,7 @@ global:
 
 # Rules for alerting
 rule_files:
-  - "alert_rules.yml"
+  - 'alert_rules.yml'
 
 # Scrape configurations
 scrape_configs:
@@ -41,8 +41,7 @@ alerting:
   alertmanagers:
     - static_configs:
         - targets:
-          - alertmanager:9093
-
+            - alertmanager:9093
 # Remote write configuration (for long-term storage)
 # remote_write:
 #   - url: "https://prometheus-remote-write-endpoint"

@@ -30,13 +30,7 @@ export class MockContextFactory {
    * Create a mock AdvancedExecutionContext for testing
    */
   static create(config: MockContextConfig = {}): AdvancedExecutionContext {
-    const {
-      seed = 'test-seed',
-      variables = {},
-      nodeStates = {},
-      maxDepth = 10,
-      trackPerformance = true
-    } = config;
+    const { seed = 'test-seed', variables = {}, nodeStates = {}, maxDepth = 10, trackPerformance = true } = config;
 
     const prng = seedrandom(seed);
     const variableMap = new Map(Object.entries(variables));
@@ -46,17 +40,19 @@ export class MockContextFactory {
       // Basic execution context
       variables: variableMap,
       prng,
-      
+
       // Advanced context features
       nodeStates: stateMap,
       evaluationDepth: 0,
       cache: new Map(),
-      executionMeta: trackPerformance ? {
-        startTime: Date.now(),
-        nodeStats: new Map(),
-        errors: [],
-        warnings: []
-      } : undefined,
+      executionMeta: trackPerformance
+        ? {
+            startTime: Date.now(),
+            nodeStats: new Map(),
+            errors: [],
+            warnings: [],
+          }
+        : undefined,
 
       // Helper methods for testing
       setVariable: (name: string, value: any) => variableMap.set(name, value),
@@ -98,7 +94,7 @@ export class MockContextFactory {
       decrementDepth: () => {
         const current = variableMap.get('evaluationDepth') || 0;
         variableMap.set('evaluationDepth', Math.max(0, current - 1));
-      }
+      },
     };
   }
 
@@ -108,7 +104,7 @@ export class MockContextFactory {
   static createMinimal(variables: Record<string, any> = {}): AdvancedExecutionContext {
     return this.create({
       variables,
-      trackPerformance: false
+      trackPerformance: false,
     });
   }
 
@@ -122,7 +118,7 @@ export class MockContextFactory {
     return this.create({
       variables,
       nodeStates: initialStates,
-      trackPerformance: true
+      trackPerformance: true,
     });
   }
 
@@ -134,7 +130,7 @@ export class MockContextFactory {
     cacheEntries: Record<string, any> = {}
   ): AdvancedExecutionContext {
     const context = this.create({ variables, trackPerformance: true });
-    
+
     // Pre-populate cache
     for (const [key, value] of Object.entries(cacheEntries)) {
       context.cache.set(key, value);
@@ -156,9 +152,9 @@ export class TestScenarios {
       variables: {
         input,
         text: input,
-        content: input
+        content: input,
       },
-      seed: 'string-test'
+      seed: 'string-test',
     });
   }
 
@@ -171,9 +167,9 @@ export class TestScenarios {
         numbers,
         values: numbers,
         data: numbers,
-        input: numbers[0] || 0
+        input: numbers[0] || 0,
       },
-      seed: 'numeric-test'
+      seed: 'numeric-test',
     });
   }
 
@@ -186,9 +182,9 @@ export class TestScenarios {
         condition,
         trueValue,
         falseValue,
-        input: condition
+        input: condition,
       },
-      seed: 'conditional-test'
+      seed: 'conditional-test',
     });
   }
 
@@ -201,9 +197,9 @@ export class TestScenarios {
         items,
         array: items,
         list: items,
-        input: items
+        input: items,
       },
-      seed: 'array-test'
+      seed: 'array-test',
     });
   }
 
@@ -215,9 +211,9 @@ export class TestScenarios {
       variables: {
         object,
         data: object,
-        input: object
+        input: object,
       },
-      seed: 'object-test'
+      seed: 'object-test',
     });
   }
 
@@ -229,9 +225,9 @@ export class TestScenarios {
       variables: {
         shouldError,
         throwError: shouldError,
-        simulateError: shouldError
+        simulateError: shouldError,
       },
-      seed: 'error-test'
+      seed: 'error-test',
     });
   }
 }

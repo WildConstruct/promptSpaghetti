@@ -5,6 +5,7 @@ Learn how to use the PromptScape Interactive Playground to test, iterate, and ex
 ## What is the Interactive Playground?
 
 The Interactive Playground is a web-based development environment that lets you:
+
 - **Build nodes visually** with guided templates
 - **Test in real-time** with immediate feedback
 - **Experiment safely** without affecting your main project
@@ -33,7 +34,7 @@ The Interactive Playground is a web-based development environment that lets you:
 │ └─────────┘ │ │                                         │
 │             │ │                                         │
 │ ┌─────────┐ │ └─────────────────────────────────────────┤
-│ │API      │ │ Status: Ready           [Validate] [Run] │  
+│ │API      │ │ Status: Ready           [Validate] [Run] │
 │ │Connector│ │                                           │
 │ └─────────┘ │                                           │
 └─────────────┴───────────────────────────────────────────┘
@@ -52,12 +53,13 @@ The Interactive Playground is a web-based development environment that lets you:
 Click through each tab to see:
 
 **Implementation Tab**: The main node logic
+
 ```typescript
 export class TextProcessor extends CustomNodeBase {
   validate(): ValidationResult {
     // Validation logic
   }
-  
+
   async execute(runtime: CustomNodeRuntime): Promise<CustomNodeResult> {
     // Core processing logic
   }
@@ -65,6 +67,7 @@ export class TextProcessor extends CustomNodeBase {
 ```
 
 **Test Inputs Tab**: Sample data for testing
+
 ```json
 {
   "text": "Hello World! This is a Test String.",
@@ -73,6 +76,7 @@ export class TextProcessor extends CustomNodeBase {
 ```
 
 **Schema Tab**: Input/output definitions
+
 ```json
 {
   "inputs": {
@@ -84,7 +88,7 @@ export class TextProcessor extends CustomNodeBase {
   },
   "outputs": {
     "result": {
-      "type": "string", 
+      "type": "string",
       "description": "Processed text result"
     }
   }
@@ -92,6 +96,7 @@ export class TextProcessor extends CustomNodeBase {
 ```
 
 **Metadata Tab**: Node information and configuration
+
 ```json
 {
   "type": "playground.text-processor",
@@ -108,6 +113,7 @@ export class TextProcessor extends CustomNodeBase {
 3. View results in the popup panel
 
 Expected output:
+
 ```json
 {
   "result": "Hello World! This Is A Test String.",
@@ -136,6 +142,7 @@ Expected output:
 ### Experiment 2: Try Different Operations
 
 Change the operation in Test Inputs:
+
 - `"uppercase"` → `"WELCOME TO PROMPTSCAPE CUSTOM NODES!"`
 - `"slug"` → `"welcome-to-promptscape-custom-nodes"`
 - `"reverse"` → `"!sedon motsuc epacstpmorp ot emoclew"`
@@ -148,21 +155,23 @@ Change the operation in Test Inputs:
 
 ```typescript
 case 'alternating':
-  result = text.split('').map((char, index) => 
+  result = text.split('').map((char, index) =>
     index % 2 === 0 ? char.toLowerCase() : char.toUpperCase()
   ).join('');
   break;
 ```
 
 4. Update the **Schema** tab to include the new operation:
+
 ```json
 "enum": ["uppercase", "lowercase", "title", "reverse", "trim", "slug", "alternating"]
 ```
 
 5. Update **Test Inputs** to use the new operation:
+
 ```json
 {
-  "text": "hello world", 
+  "text": "hello world",
   "operation": "alternating"
 }
 ```
@@ -183,6 +192,7 @@ case 'alternating':
 ### Settings Panel
 
 Configure playground behavior:
+
 - **Enable Validation**: Real-time code checking
 - **Enable Logging**: See execution logs and performance data
 - **Enable Caching**: Cache results for repeated executions
@@ -191,9 +201,10 @@ Configure playground behavior:
 ### Error Handling Testing
 
 1. Test with invalid inputs in the **Test Inputs** tab:
+
    ```json
    {
-     "text": 123,  // Wrong type
+     "text": 123, // Wrong type
      "operation": "uppercase"
    }
    ```
@@ -208,6 +219,7 @@ Configure playground behavior:
 ### Performance Monitoring
 
 Enable logging to see detailed performance data:
+
 ```
 📋 Execution Logs
 [INFO] Processing text
@@ -225,7 +237,7 @@ The playground includes several templates:
    - Basic validation
    - Performance logging
 
-2. **API Connector** (Intermediate)  
+2. **API Connector** (Intermediate)
    - External HTTP requests
    - Error recovery
    - Response parsing
@@ -268,6 +280,7 @@ The playground includes several templates:
 ### Using Exported Nodes
 
 The exported JSON can be:
+
 1. **Imported** back into the playground later
 2. **Converted** to a complete npm package
 3. **Deployed** directly in PromptScape applications
@@ -288,7 +301,7 @@ runtime.registerCustomNode('my-text-processor', TextProcessor);
 ### Rapid Prototyping
 
 1. **Load** relevant template
-2. **Modify** core logic quickly  
+2. **Modify** core logic quickly
 3. **Test** with sample data
 4. **Iterate** on edge cases
 5. **Export** when satisfied
@@ -347,21 +360,25 @@ runtime.registerCustomNode('my-text-processor', TextProcessor);
 ### Common Issues
 
 **"Monaco Editor not loading"**
+
 - Check internet connection
 - Refresh the page
 - Try incognito/private mode
 
-**"Execution timeout"**  
+**"Execution timeout"**
+
 - Reduce input data size
 - Increase timeout in settings
 - Check for infinite loops
 
 **"Validation errors"**
+
 - Review TypeScript syntax
 - Check schema consistency
 - Verify metadata completeness
 
 **"Network errors"** (API Connector template)
+
 - Check CORS settings
 - Verify API endpoint availability
 - Review security permissions
@@ -369,6 +386,7 @@ runtime.registerCustomNode('my-text-processor', TextProcessor);
 ### Debug Mode
 
 Enable detailed debugging:
+
 1. Open browser developer tools (F12)
 2. Check console for detailed error messages
 3. Use network tab for API debugging
@@ -379,7 +397,7 @@ Enable detailed debugging:
 ### Continue Learning
 
 1. **[Basic Patterns](./03-basic-patterns.html)** - Common implementation patterns
-2. **[Advanced I/O](./04-advanced-io.html)** - Complex input/output handling  
+2. **[Advanced I/O](./04-advanced-io.html)** - Complex input/output handling
 3. **[Sample Projects](../sample-projects/)** - Complete example implementations
 
 ### Join the Community
@@ -391,6 +409,7 @@ Enable detailed debugging:
 ### Production Deployment
 
 When your playground experiments are ready:
+
 1. **[CLI Scaffolding](../cli-reference.html)** - Generate production projects
 2. **[Testing Guide](../guides/testing.html)** - Comprehensive testing
 3. **[Deployment Guide](../guides/deployment.html)** - Publishing and distribution

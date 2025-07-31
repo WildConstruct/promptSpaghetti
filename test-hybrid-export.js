@@ -13,36 +13,36 @@ async function testHybridExports() {
     results: [
       {
         seed: 12345,
-        output: 'A contemplative character standing in golden hour lighting, medium shot with shallow depth of field, natural cinematic atmosphere'
+        output:
+          'A contemplative character standing in golden hour lighting, medium shot with shallow depth of field, natural cinematic atmosphere',
       },
       {
         seed: 12346,
-        output: 'Close-up of the same character with dramatic rim lighting, emotional expression conveying determination'
-      }
+        output:
+          'Close-up of the same character with dramatic rim lighting, emotional expression conveying determination',
+      },
     ],
     variables: {
       character: 'protagonist',
       lighting_mood: 'golden hour',
       camera_distance: 'medium',
       emotion: 'contemplative',
-      setting: 'outdoor scene'
+      setting: 'outdoor scene',
     },
     graph: {
       nodes: [
         { id: 'node1', type: 'WeightedChoice', data: { choices: ['character', 'protagonist'] } },
-        { id: 'node2', type: 'Output', data: { template: 'A {character} in {lighting_mood}' } }
+        { id: 'node2', type: 'Output', data: { template: 'A {character} in {lighting_mood}' } },
       ],
-      edges: [
-        { id: 'edge1', source: 'node1', target: 'node2' }
-      ]
+      edges: [{ id: 'edge1', source: 'node1', target: 'node2' }],
     },
     performance: {
       totalTime: 150,
       byNode: {
-        'node1': 50,
-        'node2': 100
-      }
-    }
+        node1: 50,
+        node2: 100,
+      },
+    },
   };
 
   const testOptions = {
@@ -50,7 +50,7 @@ async function testHybridExports() {
     includeZada: true,
     includeHollywood: true,
     quality: 'production',
-    targetAudience: 'mixed_crew'
+    targetAudience: 'mixed_crew',
   };
 
   try {
@@ -60,13 +60,13 @@ async function testHybridExports() {
       format: 'hybrid-prompting',
       data: testData,
       options: testOptions,
-      filename: 'hybrid-export-test.json'
+      filename: 'hybrid-export-test.json',
     });
-    
+
     console.log('✅ Hybrid export successful');
     console.log('📄 Type:', hybridResult.type);
     console.log('🎯 MIME:', hybridResult.mimeType);
-    
+
     // Parse and show structure
     const hybridData = JSON.parse(hybridResult.data);
     console.log('📋 Structure sections:');
@@ -82,9 +82,9 @@ async function testHybridExports() {
       format: 'mars-framework',
       data: testData,
       options: testOptions,
-      filename: 'mars-export-test.json'
+      filename: 'mars-export-test.json',
     });
-    
+
     console.log('✅ MARS export successful');
     const marsData = JSON.parse(marsResult.data);
     console.log('📋 MARS sections:');
@@ -102,9 +102,9 @@ async function testHybridExports() {
       format: 'zada-natural',
       data: testData,
       options: { ...testOptions, format: 'json' },
-      filename: 'zada-export-test.json'
+      filename: 'zada-export-test.json',
     });
-    
+
     console.log('✅ Zada export successful');
     const zadaData = JSON.parse(zadaResult.data);
     console.log('📋 Zada sections:');
@@ -120,9 +120,9 @@ async function testHybridExports() {
       format: 'zada-natural',
       data: testData,
       options: { ...testOptions, format: 'markdown' },
-      filename: 'zada-export-test.md'
+      filename: 'zada-export-test.md',
     });
-    
+
     console.log('✅ Zada markdown export successful');
     console.log('📄 Type:', zadaMarkdownResult.type);
     console.log('🎯 MIME:', zadaMarkdownResult.mimeType);
@@ -137,13 +137,12 @@ async function testHybridExports() {
     console.log('✅ zada-markdown: Readable markdown format');
     console.log();
     console.log('🚀 Epic 8.6 Task 7: Hybrid Prompting Export Structure - READY FOR PRODUCTION');
-    
   } catch (error) {
     console.error('❌ Test failed:', error.message);
     console.log();
     console.log('📝 This is expected during development - the hybrid service');
     console.log('   may not be fully initialized. Fallback mechanisms should work.');
-    
+
     if (error.stack) {
       console.log();
       console.log('Stack trace for debugging:');

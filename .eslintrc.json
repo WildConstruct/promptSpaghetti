@@ -20,11 +20,7 @@
     },
     "project": ["./tsconfig.json", "./client/tsconfig.json", "./server/tsconfig.json", "./packages/*/tsconfig.json"]
   },
-  "plugins": [
-    "@typescript-eslint",
-    "react",
-    "react-hooks"
-  ],
+  "plugins": ["@typescript-eslint", "react", "react-hooks"],
   "settings": {
     "react": {
       "version": "detect"
@@ -42,12 +38,15 @@
     "@typescript-eslint/no-misused-promises": "error",
     "@typescript-eslint/require-await": "warn",
     "@typescript-eslint/return-await": ["error", "in-try-catch"],
-    "@typescript-eslint/strict-boolean-expressions": ["warn", {
-      "allowString": false,
-      "allowNumber": false,
-      "allowNullableObject": false
-    }],
-    
+    "@typescript-eslint/strict-boolean-expressions": [
+      "warn",
+      {
+        "allowString": false,
+        "allowNumber": false,
+        "allowNullableObject": false
+      }
+    ],
+
     // React-specific rules
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
@@ -56,7 +55,7 @@
     "react/prop-types": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    
+
     // Code quality rules
     "no-console": "warn",
     "complexity": ["warn", 15],
@@ -65,7 +64,7 @@
     "max-lines-per-function": ["warn", 80],
     "max-params": ["warn", 5],
     "cyclomatic-complexity": ["warn", 15],
-    
+
     // Security and best practices
     "no-eval": "error",
     "no-implied-eval": "error",
@@ -76,7 +75,7 @@
     "no-proto": "error",
     "no-iterator": "error",
     "no-with": "error",
-    
+
     // Modern JavaScript
     "prefer-const": "error",
     "no-var": "error",
@@ -84,11 +83,14 @@
     "prefer-template": "error",
     "prefer-spread": "error",
     "prefer-rest-params": "error",
-    "prefer-destructuring": ["warn", {
-      "array": false,
-      "object": true
-    }],
-    
+    "prefer-destructuring": [
+      "warn",
+      {
+        "array": false,
+        "object": true
+      }
+    ],
+
     // Error prevention
     "no-await-in-loop": "warn",
     "no-promise-executor-return": "error",
@@ -96,20 +98,23 @@
     "require-atomic-updates": "error",
     "prefer-promise-reject-errors": "error",
     "no-return-await": "off",
-    
+
     // Style consistency
-    "camelcase": ["error", { 
-      "properties": "never",
-      "ignoreDestructuring": true,
-      "ignoreImports": true
-    }],
+    "camelcase": [
+      "error",
+      {
+        "properties": "never",
+        "ignoreDestructuring": true,
+        "ignoreImports": true
+      }
+    ],
     "consistent-return": "warn",
     "dot-notation": "error",
     "eqeqeq": ["error", "always"],
     "no-lonely-if": "warn",
     "no-unneeded-ternary": "warn",
     "object-shorthand": "warn",
-    
+
     // Performance
     "no-loop-func": "error",
     "no-inner-declarations": "error"

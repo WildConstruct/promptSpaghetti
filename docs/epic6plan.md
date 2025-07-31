@@ -7,6 +7,7 @@ This document provides granular implementation plans for each story in Epic 6, b
 ### Implementation Tasks
 
 #### 6.1.1 File Format Definition (2 days)
+
 - [ ] Define .psg file structure schema in JSON
   - [ ] Create Zod validation schema for .psg files
   - [ ] Document the schema structure in the codebase
@@ -14,6 +15,7 @@ This document provides granular implementation plans for each story in Epic 6, b
   - [ ] Create serialization/deserialization utilities
 
 #### 6.1.2 Save Project Functionality (3 days)
+
 - [ ] Implement Save menu options in the application toolbar
   - [ ] "Save" for existing projects
   - [ ] "Save As" for new file names
@@ -25,6 +27,7 @@ This document provides granular implementation plans for each story in Epic 6, b
 - [ ] Implement success/failure notifications
 
 #### 6.1.3 Open Project Functionality (3 days)
+
 - [ ] Add Open menu option in toolbar
 - [ ] Create file browser dialog with .psg filter
 - [ ] Implement ProjectManager.loadProject method
@@ -34,6 +37,7 @@ This document provides granular implementation plans for each story in Epic 6, b
 - [ ] Add drag-and-drop support for .psg files onto canvas
 
 #### 6.1.4 Recent Projects Feature (2 days)
+
 - [ ] Create LocalStorage-based RecentProjectsManager
   - [ ] Store up to 5 most recently accessed projects
   - [ ] Store project metadata (name, last access date, thumbnail)
@@ -43,6 +47,7 @@ This document provides granular implementation plans for each story in Epic 6, b
 - [ ] Implement click handlers to load recent projects
 
 #### 6.1.5 Unsaved Changes Management (2 days)
+
 - [ ] Add project "dirty" state tracking
   - [ ] Set dirty flag on graph modifications
   - [ ] Clear dirty flag after successful save
@@ -52,6 +57,7 @@ This document provides granular implementation plans for each story in Epic 6, b
   - [ ] Show confirmation when opening a new project with unsaved changes
 
 #### 6.1.6 Testing & Quality Assurance (3 days)
+
 - [ ] Unit tests for file format serialization/deserialization
 - [ ] Integration tests for save/open workflow
 - [ ] Edge case testing:
@@ -65,6 +71,7 @@ This document provides granular implementation plans for each story in Epic 6, b
 ### Implementation Tasks
 
 #### 6.2.1 Export System Architecture (2 days)
+
 - [ ] Create ExportManager class with plugin architecture
   - [ ] Define abstract Exporter interface
   - [ ] Implement export pipeline with pre-processing hooks
@@ -72,6 +79,7 @@ This document provides granular implementation plans for each story in Epic 6, b
 - [ ] Create "Export" menu in application toolbar with format options
 
 #### 6.2.2 JSON Export Implementation (1 day)
+
 - [ ] Implement JsonExporter class
   - [ ] Add options for formatting/indentation
   - [ ] Include complete graph metadata
@@ -80,6 +88,7 @@ This document provides granular implementation plans for each story in Epic 6, b
 - [ ] Create unit tests for JSON export format
 
 #### 6.2.3 PNG Export Implementation (2 days)
+
 - [ ] Implement PngExporter class
   - [ ] Convert canvas to image using HTML5 Canvas API
   - [ ] Handle different zoom levels and viewport sizes
@@ -89,6 +98,7 @@ This document provides granular implementation plans for each story in Epic 6, b
 - [ ] Test across browsers for rendering consistency
 
 #### 6.2.4 Text Export Implementation (2 days)
+
 - [ ] Implement TextExporter class
   - [ ] Run graph through the executor to generate prompts
   - [ ] Support batch export (multiple seeds)
@@ -98,6 +108,7 @@ This document provides granular implementation plans for each story in Epic 6, b
 - [ ] Add options UI for text export configuration
 
 #### 6.2.5 Import Validation System (3 days)
+
 - [ ] Create ImportManager with validation pipeline
   - [ ] Implement progressive validation (quick → thorough)
   - [ ] Create detailed error reporting system
@@ -108,6 +119,7 @@ This document provides granular implementation plans for each story in Epic 6, b
   - [ ] Provide "import anyway" option for non-critical errors
 
 #### 6.2.6 Import UI Implementation (2 days)
+
 - [ ] Add "Import" option to File menu
 - [ ] Create file picker with format filters
 - [ ] Implement drag-and-drop import zone
@@ -117,6 +129,7 @@ This document provides granular implementation plans for each story in Epic 6, b
   - [ ] Allow cancellation of long imports
 
 #### 6.2.7 Testing & Documentation (3 days)
+
 - [ ] Unit tests for each exporter/importer
 - [ ] Integration tests for complete export/import cycle
   - [ ] Test round-trip preservation of data
@@ -129,6 +142,7 @@ This document provides granular implementation plans for each story in Epic 6, b
 ### Implementation Tasks
 
 #### 6.3.1 Canvas Event Handling (2 days)
+
 - [ ] Extend React-Flow canvas with custom event handlers
   - [ ] Add ctrl/cmd-click detection
   - [ ] Distinguish between clicks on empty canvas vs. nodes/edges
@@ -137,6 +151,7 @@ This document provides granular implementation plans for each story in Epic 6, b
 - [ ] Add event handler cleanup on component unmount
 
 #### 6.3.2 Context-Aware Node Palette (3 days)
+
 - [ ] Create floating NodePalette component
   - [ ] Design compact version of existing palette
   - [ ] Add animation for show/hide transitions
@@ -147,6 +162,7 @@ This document provides granular implementation plans for each story in Epic 6, b
   - [ ] Show recently used nodes first
 
 #### 6.3.3 Node Placement Logic (2 days)
+
 - [ ] Implement precise node placement at click coordinates
   - [ ] Calculate offset based on node dimensions
   - [ ] Adjust for zoom level and canvas pan position
@@ -155,6 +171,7 @@ This document provides granular implementation plans for each story in Epic 6, b
 - [ ] Implement keyboard navigation for the floating palette
 
 #### 6.3.4 User Education & Onboarding (1 day)
+
 - [ ] Create tooltip system to introduce the feature
   - [ ] Show after 5 node drag operations from sidebar
   - [ ] Include dismiss option with "Don't show again"
@@ -162,6 +179,7 @@ This document provides granular implementation plans for each story in Epic 6, b
 - [ ] Create brief animated tutorial for first-time users
 
 #### 6.3.5 Testing & Polish (2 days)
+
 - [ ] Cross-browser compatibility testing
   - [ ] Verify ctrl/cmd key detection differences
   - [ ] Test on trackpad vs. mouse interactions
@@ -175,6 +193,7 @@ This document provides granular implementation plans for each story in Epic 6, b
 ### Implementation Tasks
 
 #### 6.4.1 Wire Hover Detection System (3 days)
+
 - [ ] Extend React-Flow edge components with hover detection
   - [ ] Implement efficient hit-testing algorithm
   - [ ] Create custom edge wrapper component
@@ -185,6 +204,7 @@ This document provides granular implementation plans for each story in Epic 6, b
   - [ ] Track current target edge during drag
 
 #### 6.4.2 Drop Zone Visual Feedback (2 days)
+
 - [ ] Design and implement wire highlight effect
   - [ ] Create pulsing glow animation
   - [ ] Adjust highlight intensity based on proximity
@@ -195,6 +215,7 @@ This document provides granular implementation plans for each story in Epic 6, b
 - [ ] Implement temporary edge previews during drag
 
 #### 6.4.3 Contextual Menu System (3 days)
+
 - [ ] Create generic ContextMenu component
   - [ ] Support custom rendering of menu items
   - [ ] Add keyboard navigation
@@ -206,6 +227,7 @@ This document provides granular implementation plans for each story in Epic 6, b
 - [ ] Add subtle animations for menu appearance
 
 #### 6.4.4 Wire Operations Implementation (3 days)
+
 - [ ] Implement "Splice" operation
   - [ ] Create two new edges connected to the dropped node
   - [ ] Copy properties from original edge
@@ -220,6 +242,7 @@ This document provides granular implementation plans for each story in Epic 6, b
   - [ ] Use different colors for added/removed edges
 
 #### 6.4.5 Undo/Redo Support (2 days)
+
 - [ ] Extend undo/redo system for splice operations
   - [ ] Create atomic transaction for all edge changes
   - [ ] Store before/after state for edge configurations
@@ -228,6 +251,7 @@ This document provides granular implementation plans for each story in Epic 6, b
 - [ ] Test multi-level undo/redo sequences
 
 #### 6.4.6 Testing & Refinement (3 days)
+
 - [ ] Unit tests for wire operations
 - [ ] Integration tests for complete drag-drop-splice workflow
 - [ ] Usability testing
@@ -242,21 +266,25 @@ This document provides granular implementation plans for each story in Epic 6, b
 ## Schedule and Resource Planning
 
 ### Timeline Overview
+
 - Total estimated development time: 49 developer days
 - Recommended team: 2 frontend developers, 1 QA engineer
 - Estimated calendar duration: 6-8 weeks
 
 ### Sprint Breakdown
+
 - Sprint 1 (2 weeks): Stories 6.1.1-6.1.3 and 6.3.1-6.3.2
 - Sprint 2 (2 weeks): Stories 6.1.4-6.1.6, 6.3.3-6.3.5, and 6.2.1-6.2.2
 - Sprint 3 (2 weeks): Stories 6.2.3-6.2.7 and 6.4.1-6.4.2
 - Sprint 4 (2 weeks): Stories 6.4.3-6.4.6 and final integration testing
 
 ### Dependencies
+
 - Story 6.1 (Project File Structure) should be completed before Story 6.2 (Import/Export)
 - Stories 6.3 and 6.4 can be developed in parallel with 6.1 and 6.2
 
 ### Risk Mitigation
+
 - Early prototyping of wire-node interactions to validate UX approach
 - Progressive enhancement approach: implement basic functionality first, then add refinements
 - Feature flags to selectively enable/disable features during development

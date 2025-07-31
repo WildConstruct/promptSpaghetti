@@ -7,7 +7,7 @@ A comprehensive testing framework for validating documentation accuracy, code ex
 This framework ensures that documentation stays synchronized with the actual codebase by validating:
 
 - **Code Examples**: TypeScript, JavaScript, shell commands, and configuration files
-- **API Documentation**: Request/response formats, endpoints, and status codes  
+- **API Documentation**: Request/response formats, endpoints, and status codes
 - **Links**: Internal file references, external URLs, and anchor links
 - **Tutorial Content**: Step-by-step guides and getting started examples
 
@@ -35,7 +35,7 @@ const docTest = new DocTestFramework({
   validateCodeBlocks: true,
   validateApiExamples: true,
   validateLinks: true,
-  generateReport: true
+  generateReport: true,
 });
 
 const summary = await docTest.runTests();
@@ -49,7 +49,7 @@ console.log(`Tested ${summary.totalFiles} files with ${summary.passedTests}/${su
 Main orchestrator that coordinates all validation activities.
 
 - **File Discovery**: Finds documentation using glob patterns
-- **Parallel Processing**: Tests multiple files concurrently 
+- **Parallel Processing**: Tests multiple files concurrently
 - **Report Generation**: Creates JSON, HTML, or Markdown reports
 - **Error Aggregation**: Collects and categorizes issues across files
 
@@ -62,7 +62,7 @@ Extracts and parses code blocks from markdown files.
 - **Statistics**: Analyzes code distribution and complexity
 - **Inline Code**: Handles both fenced blocks and inline snippets
 
-### 🔧 TypeScriptValidator  
+### 🔧 TypeScriptValidator
 
 Validates TypeScript, JavaScript, TSX, and JSX code examples.
 
@@ -96,24 +96,20 @@ Validates command-line examples and shell scripts.
 ```typescript
 const config: DocTestConfig = {
   // File patterns
-  documentationPaths: [
-    'README.md',
-    'docs/**/*.md', 
-    'packages/**/README.md'
-  ],
-  
-  // Validation features  
+  documentationPaths: ['README.md', 'docs/**/*.md', 'packages/**/README.md'],
+
+  // Validation features
   validateCodeBlocks: true,
   validateApiExamples: true,
   validateLinks: true,
-  
+
   // Performance
   maxConcurrentFiles: 5,
   timeout: 30000,
-  
+
   // Reporting
   generateReport: true,
-  reportFormat: 'json'
+  reportFormat: 'json',
 };
 ```
 
@@ -126,27 +122,27 @@ const advancedConfig: DocTestConfig = {
     compilerOptions: {
       target: ts.ScriptTarget.ES2020,
       strict: false,
-      skipLibCheck: true
+      skipLibCheck: true,
     },
     validateTypes: true,
-    allowUndeclaredImports: false
+    allowUndeclaredImports: false,
   },
-  
-  // API validation  
+
+  // API validation
   api: {
     baseUrl: 'http://localhost:8000',
     skipNetworkRequests: false,
     validateResponses: true,
-    timeout: 5000
+    timeout: 5000,
   },
-  
+
   // CLI validation
   cli: {
     allowedCommands: ['npm', 'pnpm', 'git', 'node'],
     validateCommands: true,
     skipExecution: true,
-    safetyChecks: true
-  }
+    safetyChecks: true,
+  },
 };
 ```
 
@@ -166,14 +162,14 @@ const createUser = (userData: Partial<User>): User => {
   return {
     id: Date.now(),
     name: userData.name || 'Anonymous',
-    email: userData.email || 'no-email@example.com'
+    email: userData.email || 'no-email@example.com',
   };
 };
 ```
 
 ### Example: Valid API Documentation
 
-```
+````
 GET /api/users
 
 Response:
@@ -188,7 +184,7 @@ Response:
   ],
   "total": 1
 }
-```
+````
 
 ### Example: Valid CLI Commands
 
@@ -212,7 +208,7 @@ npm run build
   run: |
     pnpm install
     pnpm test:docs
-    
+
 - name: Upload Documentation Report
   uses: actions/upload-artifact@v3
   with:
@@ -248,9 +244,9 @@ npm run build
     "failedTests": 6
   },
   "breakdown": {
-    "codeBlocks": {"total": 89, "passed": 85, "failed": 4},
-    "apiExamples": {"total": 23, "passed": 21, "failed": 2}, 
-    "links": {"total": 15, "passed": 15, "failed": 0}
+    "codeBlocks": { "total": 89, "passed": 85, "failed": 4 },
+    "apiExamples": { "total": 23, "passed": 21, "failed": 2 },
+    "links": { "total": 15, "passed": 15, "failed": 0 }
   }
 }
 ```
@@ -264,12 +260,14 @@ npm run build
 **Execution Time:** 2.3s
 
 ## Summary
+
 - **Files Tested:** 45
-- **Files Passed:** 43  
+- **Files Passed:** 43
 - **Files Failed:** 2
 - **Success Rate:** 95.6%
 
 ## Common Errors
+
 1. **Invalid TypeScript syntax** (3 occurrences)
 2. **Missing import statements** (2 occurrences)
 3. **Broken internal links** (1 occurrence)
@@ -290,10 +288,10 @@ npm run build
 // ✅ Good: Specific language, complete example
 const config = {
   apiUrl: 'https://api.example.com',
-  timeout: 5000
+  timeout: 5000,
 };
 
-// ❌ Bad: Generic language, incomplete code  
+// ❌ Bad: Generic language, incomplete code
 const config = {
   // ... configuration options
 };
@@ -303,23 +301,25 @@ const config = {
 
 ```markdown
 <!-- ✅ Good: Complete request/response cycle -->
+
 POST /api/users
 Content-Type: application/json
 
 {
-  "name": "John Doe",
-  "email": "john@example.com"
+"name": "John Doe",
+"email": "john@example.com"
 }
 
 Response: 201 Created
 {
-  "id": 123,
-  "name": "John Doe", 
-  "email": "john@example.com",
-  "createdAt": "2024-01-15T10:30:00Z"
+"id": 123,
+"name": "John Doe",
+"email": "john@example.com",
+"createdAt": "2024-01-15T10:30:00Z"
 }
 
 <!-- ❌ Bad: Incomplete information -->
+
 POST /api/users
 Creates a new user
 ```
@@ -329,21 +329,25 @@ Creates a new user
 ### Common Issues
 
 **TypeScript validation errors**
+
 - Ensure all imports are available in the project
 - Check that TypeScript compiler options match your project
 - Consider setting `allowUndeclaredImports: true` for documentation examples
 
 **CLI command validation failures**
-- Update `allowedCommands` list for your environment  
+
+- Update `allowedCommands` list for your environment
 - Set `skipExecution: true` to avoid running commands during testing
 - Review safety checks for potentially dangerous operations
 
 **API validation timeouts**
+
 - Increase `api.timeout` for slower networks
 - Set `skipNetworkRequests: true` to test format only
 - Ensure test environment has network access
 
 **Link validation failures**
+
 - Check that referenced files exist at specified paths
 - Verify external URLs are accessible
 - Update documentation paths if files have moved
@@ -354,7 +358,7 @@ Creates a new user
 const docTest = new DocTestFramework({
   verbose: true,
   generateReport: true,
-  reportFormat: 'markdown'
+  reportFormat: 'markdown',
 });
 
 // Enable detailed logging

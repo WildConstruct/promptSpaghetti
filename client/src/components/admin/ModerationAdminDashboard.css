@@ -58,7 +58,7 @@
   background: white;
   border-radius: 8px 8px 0 0;
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .tab {
@@ -89,7 +89,7 @@
 .dashboard-content {
   background: white;
   border-radius: 0 0 8px 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   min-height: 600px;
 }
 
@@ -110,14 +110,22 @@
   padding: 24px;
   border-radius: 8px;
   border-left: 4px solid;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   text-align: center;
 }
 
-.stat-card.pending { border-left-color: #ffc107; }
-.stat-card.approved { border-left-color: #28a745; }
-.stat-card.rejected { border-left-color: #dc3545; }
-.stat-card.flagged { border-left-color: #fd7e14; }
+.stat-card.pending {
+  border-left-color: #ffc107;
+}
+.stat-card.approved {
+  border-left-color: #28a745;
+}
+.stat-card.rejected {
+  border-left-color: #dc3545;
+}
+.stat-card.flagged {
+  border-left-color: #fd7e14;
+}
 
 .stat-number {
   display: block;
@@ -241,7 +249,7 @@
   padding: 24px;
   border-radius: 8px;
   border: 1px solid #dee2e6;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .report-card.full-width {
@@ -429,27 +437,27 @@
   .moderation-admin-dashboard {
     padding: 16px;
   }
-  
+
   .dashboard-header {
     flex-direction: column;
     gap: 16px;
     align-items: stretch;
   }
-  
+
   .dashboard-tabs {
     flex-direction: column;
   }
-  
+
   .tab {
     text-align: left;
   }
-  
+
   .stats-grid,
   .metrics-grid,
   .reports-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .chart-placeholder,
   .chart-labels {
     padding: 0 10px;

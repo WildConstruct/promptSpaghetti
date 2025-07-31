@@ -1,6 +1,7 @@
 # Multi-Factor Authentication (MFA) Architecture Design
 
 ## Overview
+
 This document outlines the comprehensive MFA architecture design for Epic 19: Authentication Enhancement & Security Hardening. The design supports multiple authentication methods with a scalable, secure, and user-friendly approach.
 
 ## System Architecture Overview
@@ -60,6 +61,7 @@ External Services:
 ### 1. MFA Controller Service
 
 **Responsibilities**:
+
 - Orchestrate authentication flows
 - Method selection and routing
 - Risk assessment and adaptive authentication
@@ -78,6 +80,7 @@ interface MFAController {
 ### 2. Authentication Method Providers
 
 #### Email Provider
+
 ```typescript
 class EmailAuthProvider implements AuthProvider {
   async sendChallenge(email: string, template: string): Promise<string> {
@@ -86,7 +89,7 @@ class EmailAuthProvider implements AuthProvider {
     await this.emailService.send(email, template, { code });
     return challengeId;
   }
-  
+
   async verifyResponse(challengeId: string, code: string): Promise<boolean> {
     return this.validateOTP(challengeId, code);
   }
@@ -94,6 +97,7 @@ class EmailAuthProvider implements AuthProvider {
 ```
 
 #### TOTP Provider
+
 ```typescript
 class TOTPAuthProvider implements AuthProvider {
   async enrollDevice(userId: string): Promise<EnrollmentData> {
@@ -102,7 +106,7 @@ class TOTPAuthProvider implements AuthProvider {
     await this.storeSecret(userId, secret);
     return { secret, qrCode };
   }
-  
+
   async verifyTOTP(userId: string, token: string): Promise<boolean> {
     const secret = await this.getSecret(userId);
     return this.validateTOTP(secret, token);
@@ -111,6 +115,7 @@ class TOTPAuthProvider implements AuthProvider {
 ```
 
 #### SMS Provider
+
 ```typescript
 class SMSAuthProvider implements AuthProvider {
   async sendChallenge(phoneNumber: string): Promise<string> {
@@ -125,6 +130,7 @@ class SMSAuthProvider implements AuthProvider {
 ### 3. Risk Assessment Engine
 
 **Risk Factors**:
+
 - Geographic location anomalies
 - Device fingerprint analysis
 - Time-based behavioral patterns
@@ -148,9 +154,9 @@ class RiskAssessmentEngine {
       this.assessDevice(context.deviceFingerprint, context.userId),
       this.assessBehavior(context.userAgent, context.userId),
       this.assessNetwork(context.ip),
-      this.assessVelocity(context.userId)
+      this.assessVelocity(context.userId),
     ]);
-    
+
     return this.calculateOverallRisk(factors);
   }
 }
@@ -159,6 +165,7 @@ class RiskAssessmentEngine {
 ## Database Schema Design
 
 ### User MFA Configuration
+
 ```sql
 CREATE TABLE user_mfa_config (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -186,6 +193,7 @@ CREATE TABLE mfa_methods (
 ```
 
 ### Challenge Management
+
 ```sql
 CREATE TABLE mfa_challenges (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -204,6 +212,7 @@ CREATE TABLE mfa_challenges (
 ```
 
 ### Risk and Audit Logging
+
 ```sql
 CREATE TABLE auth_risk_scores (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -233,13 +242,14 @@ CREATE TABLE auth_audit_log (
 ## Authentication Flow Designs
 
 ### 1. Standard MFA Flow
+
 ```mermaid
 sequenceDiagram
     participant U as User
     participant C as Client
     participant A as Auth Service
     participant P as MFA Provider
-    
+
     U->>C: Submit credentials
     C->>A: Authenticate (username/password)
     A->>A: Validate primary credentials
@@ -255,22 +265,23 @@ sequenceDiagram
 ```
 
 ### 2. Adaptive Authentication Flow
+
 ```mermaid
 flowchart TD
     A[User Login Request] --> B[Validate Primary Credentials]
     B --> C[Calculate Risk Score]
     C --> D{Risk Level}
-    
+
     D -->|Low Risk| E[Single Factor Success]
     D -->|Medium Risk| F[Require MFA]
     D -->|High Risk| G[Enhanced MFA + Additional Verification]
-    
+
     F --> H[Send MFA Challenge]
     G --> I[Send Enhanced Challenge]
-    
+
     H --> J[Verify MFA Response]
     I --> J
-    
+
     J --> K{Verification Success?}
     K -->|Yes| L[Grant Access]
     K -->|No| M[Increment Failed Attempts]
@@ -281,13 +292,14 @@ flowchart TD
 ```
 
 ### 3. Method Enrollment Flow
+
 ```mermaid
 sequenceDiagram
     participant U as User
     participant C as Client
     participant A as Auth Service
     participant P as Provider
-    
+
     U->>C: Request MFA enrollment
     C->>A: Initiate enrollment
     A->>A: Verify user session
@@ -306,6 +318,7 @@ sequenceDiagram
 ## Security Implementation
 
 ### 1. Cryptographic Standards
+
 ```typescript
 // TOTP Secret Generation
 const generateTOTPSecret = (): string => {
@@ -326,6 +339,7 @@ const generateChallengeId = (): string => {
 ```
 
 ### 2. Rate Limiting Strategy
+
 ```typescript
 interface RateLimitConfig {
   maxAttempts: number;
@@ -336,11 +350,12 @@ interface RateLimitConfig {
 const rateLimits = {
   codeGeneration: { maxAttempts: 5, windowMinutes: 60, blockDurationMinutes: 15 },
   codeVerification: { maxAttempts: 3, windowMinutes: 15, blockDurationMinutes: 30 },
-  methodEnrollment: { maxAttempts: 3, windowMinutes: 24 * 60, blockDurationMinutes: 60 }
+  methodEnrollment: { maxAttempts: 3, windowMinutes: 24 * 60, blockDurationMinutes: 60 },
 };
 ```
 
 ### 3. Session Management
+
 ```typescript
 interface MFASession {
   sessionId: string;
@@ -361,15 +376,15 @@ class SessionManager {
       completedMethods: [],
       riskScore,
       expiresAt: new Date(Date.now() + 10 * 60 * 1000), // 10 minutes
-      requiresAdditionalVerification: riskScore > 70
+      requiresAdditionalVerification: riskScore > 70,
     };
-    
+
     await this.redis.setex(
       `mfa_session:${session.sessionId}`,
       600, // 10 minutes
       JSON.stringify(session)
     );
-    
+
     return session;
   }
 }
@@ -378,6 +393,7 @@ class SessionManager {
 ## Configuration and Policies
 
 ### 1. Method Priority Configuration
+
 ```json
 {
   "methodPriority": {
@@ -394,6 +410,7 @@ class SessionManager {
 ```
 
 ### 2. Policy Engine
+
 ```typescript
 interface MFAPolicy {
   requireMFA: boolean;
@@ -413,21 +430,23 @@ const defaultPolicy: MFAPolicy = {
   minimumMethods: 1,
   riskThresholds: {
     requireAdditional: 60,
-    blockAccess: 85
+    blockAccess: 85,
   },
   sessionTimeout: 600, // 10 minutes
-  rememberDeviceDays: 30
+  rememberDeviceDays: 30,
 };
 ```
 
 ## Performance and Scalability
 
 ### 1. Caching Strategy
+
 - **Redis** for active challenge storage (TTL-based expiration)
 - **In-memory cache** for frequently accessed user MFA configurations
 - **CDN caching** for static QR code images and setup guides
 
 ### 2. Database Optimization
+
 ```sql
 -- Indexes for performance
 CREATE INDEX idx_mfa_challenges_user_expires ON mfa_challenges(user_id, expires_at);
@@ -440,6 +459,7 @@ FOR VALUES FROM ('2025-01-01') TO ('2025-02-01');
 ```
 
 ### 3. Async Processing
+
 ```typescript
 // Queue-based email/SMS sending
 interface NotificationJob {
@@ -460,6 +480,7 @@ class NotificationQueue {
 ## Monitoring and Observability
 
 ### 1. Key Metrics
+
 - Authentication success/failure rates by method
 - Challenge completion times
 - Risk score distributions
@@ -467,16 +488,17 @@ class NotificationQueue {
 - Failed attempt patterns
 
 ### 2. Alerting Rules
+
 ```yaml
 alerts:
   - name: HighFailureRate
     condition: failure_rate > 20%
     duration: 5m
-    
+
   - name: UnusualRiskScores
     condition: avg_risk_score > 80
     duration: 10m
-    
+
   - name: ProviderDowntime
     condition: provider_availability < 95%
     duration: 2m
@@ -485,21 +507,25 @@ alerts:
 ## Migration and Rollout Strategy
 
 ### Phase 1: Foundation (Weeks 1-2)
+
 - Core MFA service infrastructure
 - Email OTP implementation
 - Basic UI components
 
 ### Phase 2: Enhancement (Weeks 3-4)
+
 - TOTP provider implementation
 - Risk assessment engine
 - Admin dashboard
 
 ### Phase 3: Advanced Features (Weeks 5-6)
+
 - SMS provider integration
 - Hardware token support
 - Mobile app integration
 
 ### Phase 4: Optimization (Weeks 7-8)
+
 - Performance tuning
 - Advanced analytics
 - User experience improvements
@@ -507,21 +533,25 @@ alerts:
 ## Testing Strategy
 
 ### 1. Unit Testing
+
 - Provider implementations
 - Risk assessment algorithms
 - Cryptographic functions
 
 ### 2. Integration Testing
+
 - End-to-end authentication flows
 - External service integrations
 - Database operations
 
 ### 3. Security Testing
+
 - Penetration testing for common vulnerabilities
 - Rate limiting validation
 - Session management security
 
 ### 4. Load Testing
+
 - Concurrent user authentication
 - Provider service limits
 - Database performance under load
@@ -529,16 +559,19 @@ alerts:
 ## Compliance and Documentation
 
 ### 1. Security Documentation
+
 - Threat model analysis
 - Security control implementation
 - Incident response procedures
 
 ### 2. User Documentation
+
 - Setup guides for each method
 - Troubleshooting documentation
 - Privacy and data handling notices
 
 ### 3. API Documentation
+
 - OpenAPI specifications
 - Integration guides
 - SDK documentation

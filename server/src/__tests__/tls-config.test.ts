@@ -7,7 +7,13 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
-import { TLSConfigManager, CertificateManager, loadTLSConfigFromEnv, createDevelopmentTLSConfig, createProductionTLSConfig } from '../security/tls-config';
+import {
+  TLSConfigManager,
+  CertificateManager,
+  loadTLSConfigFromEnv,
+  createDevelopmentTLSConfig,
+  createProductionTLSConfig,
+} from '../security/tls-config';
 
 // Mock environment variables
 const originalEnv = process.env;
@@ -30,7 +36,7 @@ describe('TLSConfigManager', () => {
   describe('Configuration Management', () => {
     test('should initialize with default configuration', () => {
       const config = tlsManager.getConfig();
-      
+
       expect(config).toBeDefined();
       expect(config.enabled).toBe(process.env.NODE_ENV === 'production');
       expect(config.port).toBe(parseInt(process.env.HTTPS_PORT || '8443'));
@@ -46,8 +52,8 @@ describe('TLSConfigManager', () => {
           enabled: false,
           maxAge: 0,
           includeSubDomains: false,
-          preload: false
-        }
+          preload: false,
+        },
       };
 
       tlsManager.updateConfig(updates);
@@ -60,9 +66,9 @@ describe('TLSConfigManager', () => {
 
     test('should validate configuration for production', () => {
       process.env.NODE_ENV = 'production';
-      
+
       const validation = tlsManager.validateConfiguration();
-      
+
       // Should have errors because certificates don't exist
       expect(validation.valid).toBe(false);
       expect(validation.errors.length).toBeGreaterThan(0);
@@ -71,9 +77,9 @@ describe('TLSConfigManager', () => {
     test('should validate configuration for development', () => {
       process.env.NODE_ENV = 'development';
       tlsManager.updateConfig({ enabled: false });
-      
+
       const validation = tlsManager.validateConfiguration();
-      
+
       // Should be valid when TLS is disabled in development
       expect(validation.valid).toBe(true);
     });
@@ -86,8 +92,8 @@ describe('TLSConfigManager', () => {
           enabled: true,
           maxAge: 31536000,
           includeSubDomains: true,
-          preload: true
-        }
+          preload: true,
+        },
       });
 
       const headers = tlsManager.getSecurityHeaders();
@@ -104,8 +110,8 @@ describe('TLSConfigManager', () => {
           enabled: false,
           maxAge: 0,
           includeSubDomains: false,
-          preload: false
-        }
+          preload: false,
+        },
       });
 
       const headers = tlsManager.getSecurityHeaders();
@@ -128,8 +134,8 @@ describe('TLSConfigManager', () => {
       tlsManager.updateConfig({
         enabled: false, // Disable to avoid certificate errors
         options: {
-          minVersion: 'TLSv1'
-        }
+          minVersion: 'TLSv1',
+        },
       });
 
       const validation = tlsManager.validateConfiguration();
@@ -142,8 +148,8 @@ describe('TLSConfigManager', () => {
       tlsManager.updateConfig({
         enabled: false,
         options: {
-          ciphers: 'RC4-SHA:AES128-SHA'
-        }
+          ciphers: 'RC4-SHA:AES128-SHA',
+        },
       });
 
       const validation = tlsManager.validateConfiguration();
@@ -156,7 +162,7 @@ describe('TLSConfigManager', () => {
   describe('Certificate Watching', () => {
     test('should start and stop certificate watching', () => {
       const mockCallback = jest.fn();
-      
+
       // Should not throw when watching is started
       expect(() => {
         tlsManager.watchCertificates(mockCallback);
@@ -193,8 +199,8 @@ describe('CertificateManager', () => {
         enabled: true,
         certificates: {
           cert: path.join(testCertDir, 'nonexistent.crt'),
-          key: path.join(testCertDir, 'nonexistent.key')
-        }
+          key: path.join(testCertDir, 'nonexistent.key'),
+        },
       } as any;
 
       expect(() => {
@@ -211,8 +217,8 @@ describe('CertificateManager', () => {
         enabled: true,
         certificates: {
           cert: certPath,
-          key: path.join(testCertDir, 'nonexistent.key')
-        }
+          key: path.join(testCertDir, 'nonexistent.key'),
+        },
       } as any;
 
       expect(() => {
@@ -318,7 +324,7 @@ describe('Integration Tests', () => {
 
       // Validate configuration
       const validation = manager.validateConfiguration();
-      
+
       // Should have validation errors due to missing certificate files
       expect(validation.valid).toBe(false);
       expect(validation.errors.some(error => error.includes('not found'))).toBe(true);
@@ -335,15 +341,15 @@ describe('Integration Tests', () => {
     test('should handle production configuration validation', () => {
       const manager = new TLSConfigManager();
       const prodConfig = createProductionTLSConfig();
-      
+
       manager.updateConfig(prodConfig);
-      
+
       const validation = manager.validateConfiguration();
-      
+
       // Should fail validation due to missing certificates
       expect(validation.valid).toBe(false);
       expect(validation.errors.length).toBeGreaterThan(0);
-      
+
       // But should have proper security recommendations
       expect(validation.recommendations).toBeDefined();
     });
@@ -352,25 +358,25 @@ describe('Integration Tests', () => {
   describe('Error Handling', () => {
     test('should handle invalid configuration gracefully', () => {
       const manager = new TLSConfigManager();
-      
+
       // Test with invalid configuration
       manager.updateConfig({
         enabled: true,
         certificates: {
           cert: '/invalid/path/cert.crt',
-          key: '/invalid/path/key.key'
-        }
+          key: '/invalid/path/key.key',
+        },
       } as any);
 
       const validation = manager.validateConfiguration();
-      
+
       expect(validation.valid).toBe(false);
       expect(validation.errors.length).toBeGreaterThan(0);
     });
 
     test('should handle missing dependencies gracefully', () => {
       const manager = new TLSConfigManager();
-      
+
       // Test TLS connection to non-existent server
       expect(async () => {
         await manager.testTLSConnection('nonexistent.example.com', 443);
@@ -382,22 +388,22 @@ describe('Integration Tests', () => {
 describe('Security Validations', () => {
   test('should detect weak cipher configurations', () => {
     const manager = new TLSConfigManager();
-    
+
     manager.updateConfig({
       enabled: false, // Disable to avoid cert errors
       options: {
-        ciphers: 'RC4-SHA:DES-CBC-SHA'
-      }
+        ciphers: 'RC4-SHA:DES-CBC-SHA',
+      },
     });
 
     const validation = manager.validateConfiguration();
-    
+
     expect(validation.warnings).toContain('Weak cipher suites detected');
   });
 
   test('should validate HSTS configuration', () => {
     const manager = new TLSConfigManager();
-    
+
     // Test with weak HSTS settings
     manager.updateConfig({
       enabled: false,
@@ -405,28 +411,28 @@ describe('Security Validations', () => {
         enabled: true,
         maxAge: 300, // 5 minutes - too short
         includeSubDomains: false,
-        preload: false
-      }
+        preload: false,
+      },
     });
 
     const validation = manager.validateConfiguration();
-    
+
     expect(validation.warnings).toContain('HSTS max-age is less than recommended 1 year');
   });
 
   test('should validate TLS version configuration', () => {
     const manager = new TLSConfigManager();
-    
+
     manager.updateConfig({
       enabled: false,
       options: {
         minVersion: 'TLSv1.1',
-        maxVersion: 'TLSv1.2'
-      }
+        maxVersion: 'TLSv1.2',
+      },
     });
 
     const validation = manager.validateConfiguration();
-    
+
     expect(validation.warnings).toContain('TLS versions below 1.2 are deprecated and insecure');
   });
 });
@@ -435,30 +441,30 @@ describe('Performance Tests', () => {
   test('should handle multiple configuration validations efficiently', () => {
     const manager = new TLSConfigManager();
     const startTime = Date.now();
-    
+
     // Run multiple validations
     for (let i = 0; i < 100; i++) {
       manager.validateConfiguration();
     }
-    
+
     const endTime = Date.now();
     const duration = endTime - startTime;
-    
+
     // Should complete within reasonable time
     expect(duration).toBeLessThan(1000); // 1 second
   });
 
   test('should handle concurrent operations safely', async () => {
     const manager = new TLSConfigManager();
-    
+
     // Run multiple concurrent operations
     const promises = Array.from({ length: 10 }, async (_, index) => {
       manager.updateConfig({ port: 8443 + index });
       return manager.validateConfiguration();
     });
-    
+
     const results = await Promise.all(promises);
-    
+
     // All should complete without errors
     expect(results).toHaveLength(10);
     results.forEach(result => {

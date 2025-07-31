@@ -32,10 +32,11 @@ The framework integrates with existing backend services:
 
 - **Overview Tab**: Key metrics and recent activity
 - **Policies Tab**: Policy listing, search, filtering, and management
-- **Violations Tab**: Violation review and enforcement decisions  
+- **Violations Tab**: Violation review and enforcement decisions
 - **Analytics Tab**: Performance analytics (placeholder)
 
 **Key Features**:
+
 - Real-time policy status monitoring
 - Violation review workflow with approve/dismiss actions
 - Policy enable/disable toggles
@@ -51,6 +52,7 @@ The framework integrates with existing backend services:
 **Purpose**: Template-based policy configuration system supporting marketplace-specific use cases.
 
 **Key Features**:
+
 - Category-based policy templates (Creator, Buyer, Template, Transaction, System)
 - Configurable thresholds and timeframes
 - Rule condition editor with expression syntax
@@ -58,6 +60,7 @@ The framework integrates with existing backend services:
 - Template customization with real-time preview
 
 **Policy Categories**:
+
 - **Creator**: Trust score policies, reputation management
 - **Buyer**: Purchase behavior, dispute rate monitoring
 - **Template**: Quality standards, review requirements
@@ -65,6 +68,7 @@ The framework integrates with existing backend services:
 - **System**: Core platform policies
 
 **Configuration Options**:
+
 - Threshold values (trust scores, quality ratings, transaction limits)
 - Timeframe settings (evaluation periods, cooldown times)
 - Action mappings (warnings, restrictions, suspensions)
@@ -76,12 +80,14 @@ The framework integrates with existing backend services:
 **Purpose**: Visual workflow designer and execution monitor for automated policy enforcement.
 
 **Key Features**:
+
 - **Workflow Management**: Create, edit, pause/resume workflows
 - **Step Configuration**: Condition checks, enforcement actions, notifications, human reviews
 - **Execution Monitoring**: Real-time workflow execution status
 - **Approval System**: Manual review points for critical actions
 
 **Workflow Components**:
+
 - **Triggers**: Violation detection, manual triggers, scheduled checks
 - **Steps**: Sequential processing with branching logic
 - **Actions**: Enforcement actions with severity mapping
@@ -94,6 +100,7 @@ The framework integrates with existing backend services:
 **Purpose**: Comprehensive analytics and monitoring interface for policy performance.
 
 **Key Metrics**:
+
 - **KPI Overview**: Active policies, violations, success rates, response times
 - **Violation Breakdown**: Category-based violation distribution
 - **Enforcement Effectiveness**: Action success rates and outcomes
@@ -101,6 +108,7 @@ The framework integrates with existing backend services:
 - **Insights Panel**: AI-driven recommendations and alerts
 
 **Analytics Features**:
+
 - Real-time metrics updates
 - Customizable time ranges (1d, 7d, 30d, 90d)
 - Export capabilities for reporting
@@ -297,7 +305,7 @@ Templates support dynamic configuration through parameter substitution:
 ### Scalability Considerations
 
 - Microservice architecture for policy engine
-- Event-driven architecture for real-time processing  
+- Event-driven architecture for real-time processing
 - Horizontal scaling for analytics processing
 - Caching strategies for improved performance
 

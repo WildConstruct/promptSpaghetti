@@ -93,12 +93,14 @@ Or add configuration to your `package.json`:
 ## Performance Budget Categories
 
 ### 1. Bundle Sizes
+
 - **Main Bundle**: Core application code
-- **Vendor Bundle**: Third-party dependencies  
+- **Vendor Bundle**: Third-party dependencies
 - **Chunks**: Individual code chunks
 - **Total**: Combined bundle size
 
 ### 2. Runtime Performance (Web Vitals)
+
 - **FCP (First Contentful Paint)**: Time to first content
 - **LCP (Largest Contentful Paint)**: Time to largest content
 - **FID (First Input Delay)**: Input responsiveness
@@ -106,24 +108,28 @@ Or add configuration to your `package.json`:
 - **TTI (Time to Interactive)**: Full interactivity
 
 ### 3. API Performance
+
 - **Graph Execution**: Time to execute graphs
 - **Preview Generation**: Time to generate previews
 - **Validation**: Graph validation time
 - **Authentication**: Auth response time
 
 ### 4. Memory Management
+
 - **Initial Heap**: Starting memory usage
 - **Peak Heap**: Maximum memory usage
 - **Steady State**: Normal operating memory
 - **Leak Threshold**: Memory growth rate
 
 ### 5. Network Optimization
+
 - **Request Count**: Total HTTP requests
 - **Transfer Size**: Total bytes transferred
 - **Third-party Requests**: External dependencies
 - **Critical Resources**: Essential resources
 
 ### 6. Build Performance
+
 - **Build Time**: Total build duration
 - **TypeScript Check**: Type checking time
 - **Linting**: Code quality check time
@@ -156,11 +162,11 @@ dashboard.on('snapshot-captured', (snapshot, budgetResult) => {
   console.log(`Performance score: ${budgetResult.score}`);
 });
 
-dashboard.on('alert-created', (alert) => {
+dashboard.on('alert-created', alert => {
   console.log(`New alert: ${alert.title}`);
 });
 
-dashboard.on('optimization-applied', (suggestionId) => {
+dashboard.on('optimization-applied', suggestionId => {
   console.log(`Applied optimization: ${suggestionId}`);
 });
 ```
@@ -173,7 +179,7 @@ dashboard.on('optimization-applied', (suggestionId) => {
 - name: Performance Budget Check
   run: |
     npm run perf:budget:json > performance-results.json
-    
+
 - name: Upload Performance Results
   uses: actions/upload-artifact@v3
   with:
@@ -198,18 +204,21 @@ npm run perf:budget:strict
 The system provides automated optimization suggestions:
 
 ### Bundle Optimization
+
 - Code splitting strategies
 - Dynamic import implementation
 - Dependency auditing
 - Tree shaking configuration
 
 ### Runtime Optimization
+
 - Critical rendering path optimization
 - Resource preloading
 - Component memoization
 - Memory cleanup strategies
 
 ### API Optimization
+
 - Caching strategies
 - Background processing
 - Request batching
@@ -239,9 +248,12 @@ Add custom performance metrics:
 ```typescript
 import { measureExecution } from './packages/core/utils/performance';
 
-const { result, metrics } = await measureExecution(async () => {
-  return await complexOperation();
-}, { operation: 'complex-calculation' });
+const { result, metrics } = await measureExecution(
+  async () => {
+    return await complexOperation();
+  },
+  { operation: 'complex-calculation' }
+);
 
 // Metrics include duration, memory usage, and metadata
 ```

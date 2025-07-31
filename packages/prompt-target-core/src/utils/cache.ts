@@ -9,23 +9,23 @@ export class MemoryCache implements CacheInterface {
 
   async get(key: string): Promise<any> {
     const entry = this.cache.get(key);
-    
+
     if (!entry) {
       return null;
     }
-    
+
     if (Date.now() > entry.expiry) {
       this.cache.delete(key);
       return null;
     }
-    
+
     return entry.value;
   }
 
   async set(key: string, value: any, ttl?: number): Promise<void> {
     const ttlSeconds = ttl || this.defaultTTL;
-    const expiry = Date.now() + (ttlSeconds * 1000);
-    
+    const expiry = Date.now() + ttlSeconds * 1000;
+
     this.cache.set(key, { value, expiry });
   }
 
@@ -35,16 +35,16 @@ export class MemoryCache implements CacheInterface {
 
   async exists(key: string): Promise<boolean> {
     const entry = this.cache.get(key);
-    
+
     if (!entry) {
       return false;
     }
-    
+
     if (Date.now() > entry.expiry) {
       this.cache.delete(key);
       return false;
     }
-    
+
     return true;
   }
 
@@ -66,10 +66,10 @@ export class MemoryCache implements CacheInterface {
         this.cache.delete(key);
       }
     }
-    
+
     return {
       size: this.cache.size,
-      keys: Array.from(this.cache.keys())
+      keys: Array.from(this.cache.keys()),
     };
   }
 }

@@ -35,19 +35,19 @@ export class GraphEngine {
             executionTime: Date.now() - startTime,
             seed: executionSeed,
             nodeCount: graph.nodes.size,
-            executionId
-          }
+            executionId,
+          },
         };
       }
 
       // Convert Map-based graph to array for execution
       const nodeArray = Array.from(graph.nodes.values());
-      
+
       // Create execution context
       const context: ExecutionContext = {
         variables: {},
         seed: executionSeed,
-        edges: Array.from(graph.edges.values())
+        edges: Array.from(graph.edges.values()),
       };
 
       // Execute graph using depth-first traversal
@@ -60,10 +60,9 @@ export class GraphEngine {
           executionTime: Date.now() - startTime,
           seed: executionSeed,
           nodeCount: graph.nodes.size,
-          executionId
-        }
+          executionId,
+        },
       };
-
     } catch (error) {
       return {
         success: false,
@@ -73,8 +72,8 @@ export class GraphEngine {
           executionTime: Date.now() - startTime,
           seed: executionSeed,
           nodeCount: graph.nodes.size,
-          executionId
-        }
+          executionId,
+        },
       };
     }
   }
@@ -103,9 +102,9 @@ export class GraphEngine {
       nodes: Array.from(graph.nodes.entries()),
       edges: Array.from(graph.edges.entries()),
       metadata: graph.metadata,
-      seed: graph.seed
+      seed: graph.seed,
     });
-    
+
     return new TextEncoder().encode(jsonString);
   }
 
@@ -115,13 +114,13 @@ export class GraphEngine {
   deserialize(data: Uint8Array): GraphDocument {
     const jsonString = new TextDecoder().decode(data);
     const parsed = JSON.parse(jsonString);
-    
+
     return {
       id: parsed.id,
       nodes: new Map(parsed.nodes),
       edges: new Map(parsed.edges),
       metadata: parsed.metadata,
-      seed: parsed.seed
+      seed: parsed.seed,
     };
   }
 
@@ -136,8 +135,8 @@ export class GraphEngine {
       metadata: {
         version: '1.0.0',
         created: new Date(),
-        modified: new Date()
-      }
+        modified: new Date(),
+      },
     };
   }
 
@@ -179,7 +178,7 @@ export class GraphEngine {
 
     // Find Output nodes and execute the graph with dependencies
     const outputNodes = nodes.filter(node => node.type === 'Output');
-    
+
     for (const outputNode of outputNodes) {
       const result = await this.executeNodeWithDeps(outputNode, nodeMap, dependencies, context, visited, executing);
       if (typeof result === 'string') {
@@ -214,7 +213,7 @@ export class GraphEngine {
       // Execute dependency nodes first
       const inputResults: any[] = [];
       const deps = dependencies.get(node.id) || [];
-      
+
       for (const depId of deps) {
         const depNode = nodeMap.get(depId);
         if (depNode) {
@@ -254,28 +253,28 @@ export class GraphEngine {
 
   private createRuntimeNode(node: GraphNode, inputs: any[], context: ExecutionContext): RuntimeNode {
     const data = node.data || {};
-    
+
     switch (node.type) {
-    case 'WeightedChoice':
-      return new WeightedChoiceRuntimeNode(node.id, Array.isArray(data.choices) ? data.choices : []);
-      
-    case 'Concat':
-      return new ConcatRuntimeNode(node.id, String(data.template || ''), inputs, context);
-      
-    case 'Output':
-      return new OutputRuntimeNode(node.id, String(data.text || ''), inputs, context);
-      
-    case 'Include':
-      return new IncludeRuntimeNode(node.id, String(data.name || ''), (data.lookup || {}) as Record<string, string>);
-      
-    case 'SetVariable':
-      return new SetVariableRuntimeNode(node.id, String(data.key || ''), data.value);
-      
-    case 'GetVariable':
-      return new GetVariableRuntimeNode(node.id, String(data.key || ''));
-      
-    default:
-      throw new Error(`Unsupported node type: ${node.type}`);
+      case 'WeightedChoice':
+        return new WeightedChoiceRuntimeNode(node.id, Array.isArray(data.choices) ? data.choices : []);
+
+      case 'Concat':
+        return new ConcatRuntimeNode(node.id, String(data.template || ''), inputs, context);
+
+      case 'Output':
+        return new OutputRuntimeNode(node.id, String(data.text || ''), inputs, context);
+
+      case 'Include':
+        return new IncludeRuntimeNode(node.id, String(data.name || ''), (data.lookup || {}) as Record<string, string>);
+
+      case 'SetVariable':
+        return new SetVariableRuntimeNode(node.id, String(data.key || ''), data.value);
+
+      case 'GetVariable':
+        return new GetVariableRuntimeNode(node.id, String(data.key || ''));
+
+      default:
+        throw new Error(`Unsupported node type: ${node.type}`);
     }
   }
 
@@ -295,20 +294,23 @@ export class GraphEngine {
 // Runtime node implementations
 
 class WeightedChoiceRuntimeNode extends RuntimeNode<string> {
-  constructor(id: string, private choices: Array<{ value: string; weight: number }>) {
+  constructor(
+    id: string,
+    private choices: Array<{ value: string; weight: number }>
+  ) {
     super(id);
   }
 
   run(ctx: ExecutionContext): string {
     if (this.choices.length === 0) return '';
-    
+
     const total = this.choices.reduce((sum, c) => sum + c.weight, 0);
     if (total === 0) return this.choices[0].value;
-    
+
     // Create node-specific seed for deterministic results
     const nodeSeed = `${ctx.seed}_${this.id}`;
     let r = seedrandom(nodeSeed)() * total;
-    
+
     for (const choice of this.choices) {
       if (r < choice.weight) return choice.value;
       r -= choice.weight;
@@ -319,9 +321,9 @@ class WeightedChoiceRuntimeNode extends RuntimeNode<string> {
 
 class ConcatRuntimeNode extends RuntimeNode<string> {
   constructor(
-    id: string, 
-    private template: string, 
-    private inputs: any[], 
+    id: string,
+    private template: string,
+    private inputs: any[],
     private context: ExecutionContext
   ) {
     super(id);
@@ -344,9 +346,9 @@ class ConcatRuntimeNode extends RuntimeNode<string> {
 
 class OutputRuntimeNode extends RuntimeNode<string> {
   constructor(
-    id: string, 
-    private text: string, 
-    private inputs: any[], 
+    id: string,
+    private text: string,
+    private inputs: any[],
     private context: ExecutionContext
   ) {
     super(id);
@@ -368,7 +370,11 @@ class OutputRuntimeNode extends RuntimeNode<string> {
 }
 
 class IncludeRuntimeNode extends RuntimeNode<string> {
-  constructor(id: string, private name: string, private lookup: Record<string, string>) {
+  constructor(
+    id: string,
+    private name: string,
+    private lookup: Record<string, string>
+  ) {
     super(id);
   }
 
@@ -378,7 +384,11 @@ class IncludeRuntimeNode extends RuntimeNode<string> {
 }
 
 class SetVariableRuntimeNode extends RuntimeNode<void> {
-  constructor(id: string, private key: string, private value: any) {
+  constructor(
+    id: string,
+    private key: string,
+    private value: any
+  ) {
     super(id);
   }
 
@@ -388,7 +398,10 @@ class SetVariableRuntimeNode extends RuntimeNode<void> {
 }
 
 class GetVariableRuntimeNode extends RuntimeNode<any> {
-  constructor(id: string, private key: string) {
+  constructor(
+    id: string,
+    private key: string
+  ) {
     super(id);
   }
 

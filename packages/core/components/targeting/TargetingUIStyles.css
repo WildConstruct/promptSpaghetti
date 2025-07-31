@@ -11,16 +11,16 @@
 .geographic-targeting,
 .segment-management,
 .targeting-analytics {
-  --primary-color: #3B82F6;
-  --secondary-color: #6B7280;
-  --success-color: #10B981;
-  --warning-color: #F59E0B;
-  --danger-color: #EF4444;
-  --surface-color: #FFFFFF;
-  --surface-hover-color: #F9FAFB;
-  --border-color: #E5E7EB;
+  --primary-color: #3b82f6;
+  --secondary-color: #6b7280;
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --danger-color: #ef4444;
+  --surface-color: #ffffff;
+  --surface-hover-color: #f9fafb;
+  --border-color: #e5e7eb;
   --text-primary: #111827;
-  --text-secondary: #6B7280;
+  --text-secondary: #6b7280;
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
@@ -46,7 +46,7 @@
   align-items: center;
   padding: 1rem 1.25rem;
   border-bottom: 1px solid var(--border-color);
-  background: #FAFBFC;
+  background: #fafbfc;
 }
 
 .header-title {
@@ -129,7 +129,7 @@
 
 .audience-card.selected {
   border-color: var(--primary-color);
-  background: #EBF8FF;
+  background: #ebf8ff;
   box-shadow: var(--shadow-md);
 }
 
@@ -256,7 +256,7 @@
   align-items: center;
   padding: 1rem 1.25rem;
   border-bottom: 1px solid var(--border-color);
-  background: #FAFBFC;
+  background: #fafbfc;
 }
 
 .condition-count {
@@ -293,7 +293,7 @@
 
 .condition-node.disabled {
   opacity: 0.5;
-  background: #F9FAFB;
+  background: #f9fafb;
 }
 
 .node-header {
@@ -302,7 +302,7 @@
   gap: 0.75rem;
   padding: 0.75rem 1rem;
   border-bottom: 1px solid var(--border-color);
-  background: #FAFBFC;
+  background: #fafbfc;
 }
 
 .drag-handle {
@@ -318,28 +318,28 @@
 }
 
 .type-badge.type-attribute {
-  background: #EBF8FF;
-  color: #1D4ED8;
+  background: #ebf8ff;
+  color: #1d4ed8;
 }
 
 .type-badge.type-behavior {
-  background: #F0FDF4;
+  background: #f0fdf4;
   color: #166534;
 }
 
 .type-badge.type-geography {
-  background: #FEF3C7;
-  color: #92400E;
+  background: #fef3c7;
+  color: #92400e;
 }
 
 .type-badge.type-time {
-  background: #F3E8FF;
-  color: #7C3AED;
+  background: #f3e8ff;
+  color: #7c3aed;
 }
 
 .type-badge.type-device {
-  background: #FEE2E2;
-  color: #DC2626;
+  background: #fee2e2;
+  color: #dc2626;
 }
 
 .node-controls {
@@ -426,7 +426,7 @@
 .add-condition-controls {
   padding: 1.25rem;
   border-top: 1px solid var(--border-color);
-  background: #FAFBFC;
+  background: #fafbfc;
 }
 
 .condition-types {
@@ -451,13 +451,13 @@
 
 .condition-type-btn:hover {
   border-color: var(--primary-color);
-  background: #EBF8FF;
+  background: #ebf8ff;
 }
 
 .preview-panel {
   padding: 1.25rem;
   border-top: 1px solid var(--border-color);
-  background: #F9FAFB;
+  background: #f9fafb;
 }
 
 .preview-header {
@@ -560,8 +560,8 @@
 
 .reason-tag {
   padding: 0.125rem 0.375rem;
-  background: #EBF8FF;
-  color: #1D4ED8;
+  background: #ebf8ff;
+  color: #1d4ed8;
   border-radius: 3px;
   font-size: 0.75rem;
 }
@@ -599,7 +599,7 @@
   align-items: center;
   padding: 1rem 1.25rem;
   border-bottom: 1px solid var(--border-color);
-  background: #FAFBFC;
+  background: #fafbfc;
 }
 
 .exclude-toggle {
@@ -641,7 +641,7 @@
 .tab-btn.active {
   color: var(--primary-color);
   border-bottom-color: var(--primary-color);
-  background: #EBF8FF;
+  background: #ebf8ff;
 }
 
 .geo-search {
@@ -691,7 +691,7 @@
 
 .country-item.selected {
   border-color: var(--primary-color);
-  background: #EBF8FF;
+  background: #ebf8ff;
 }
 
 .country-flag {
@@ -700,7 +700,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #F3F4F6;
+  background: #f3f4f6;
   border-radius: 4px;
 }
 
@@ -731,7 +731,7 @@
 .geo-summary {
   padding: 1rem 1.25rem;
   border-top: 1px solid var(--border-color);
-  background: #FAFBFC;
+  background: #fafbfc;
 }
 
 .summary-stats {
@@ -752,7 +752,7 @@
   align-items: center;
   padding: 1rem 1.25rem;
   border-bottom: 1px solid var(--border-color);
-  background: #FAFBFC;
+  background: #fafbfc;
 }
 
 .segment-count {
@@ -780,7 +780,7 @@
 }
 
 .segment-card.expanded {
-  background: #F9FAFB;
+  background: #f9fafb;
 }
 
 .segment-header {
@@ -897,7 +897,7 @@
 
 .condition-text {
   font-family: monospace;
-  background: #F3F4F6;
+  background: #f3f4f6;
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
 }
@@ -911,7 +911,7 @@
 
 .tag {
   padding: 0.25rem 0.5rem;
-  background: #E5E7EB;
+  background: #e5e7eb;
   color: var(--text-primary);
   border-radius: 4px;
   font-size: 0.75rem;
@@ -956,7 +956,7 @@
   align-items: center;
   padding: 1rem 1.25rem;
   border-bottom: 1px solid var(--border-color);
-  background: #FAFBFC;
+  background: #fafbfc;
 }
 
 .time-range-selector {
@@ -1013,7 +1013,7 @@
 
 .metric-icon {
   padding: 0.75rem;
-  background: #EBF8FF;
+  background: #ebf8ff;
   border-radius: 50%;
   color: var(--primary-color);
 }
@@ -1073,7 +1073,7 @@
 .performance-bar {
   flex: 1;
   height: 8px;
-  background: #E5E7EB;
+  background: #e5e7eb;
   border-radius: 4px;
   overflow: hidden;
 }
@@ -1144,8 +1144,8 @@
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #2563EB;
-  border-color: #2563EB;
+  background: #2563eb;
+  border-color: #2563eb;
 }
 
 .btn-secondary {
@@ -1166,8 +1166,8 @@
 }
 
 .btn-danger:hover:not(:disabled) {
-  background: #DC2626;
-  border-color: #DC2626;
+  background: #dc2626;
+  border-color: #dc2626;
 }
 
 .btn-sm {
@@ -1191,7 +1191,7 @@
 }
 
 .btn-icon.btn-danger:hover {
-  background: #FEE2E2;
+  background: #fee2e2;
   color: var(--danger-color);
 }
 
@@ -1200,23 +1200,23 @@
   .audiences-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .condition-inputs {
     grid-template-columns: 1fr;
   }
-  
+
   .countries-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .metric-cards {
     grid-template-columns: 1fr;
   }
-  
+
   .analytics-charts {
     grid-template-columns: 1fr;
   }
-  
+
   .preview-content {
     grid-template-columns: 1fr;
   }

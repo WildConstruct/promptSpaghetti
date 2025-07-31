@@ -17,7 +17,7 @@ class ExtensionValidator {
 
   async validateExtension(manifestPath) {
     console.log(`🔍 Validating extension: ${manifestPath}`);
-    
+
     this.errors = [];
     this.warnings = [];
     this.info = [];
@@ -25,31 +25,30 @@ class ExtensionValidator {
     try {
       // Load and validate manifest
       const manifest = this.loadManifest(manifestPath);
-      
+
       // Run validation checks
       this.validateManifestStructure(manifest);
       this.validateDependencies(manifest, manifestPath);
       this.validatePermissions(manifest);
       this.validateSecurity(manifest);
       this.validateFiles(manifest, manifestPath);
-      
+
       // Generate report
       this.generateReport(manifest);
-      
+
       return {
         valid: this.errors.length === 0,
         errors: this.errors,
         warnings: this.warnings,
-        info: this.info
+        info: this.info,
       };
-      
     } catch (error) {
       this.errors.push(`Failed to validate extension: ${error.message}`);
       return {
         valid: false,
         errors: this.errors,
         warnings: this.warnings,
-        info: this.info
+        info: this.info,
       };
     }
   }
@@ -70,7 +69,7 @@ class ExtensionValidator {
   validateManifestStructure(manifest) {
     // Required fields
     const requiredFields = ['manifest_version', 'id', 'name', 'version', 'extension_type'];
-    
+
     for (const field of requiredFields) {
       if (!manifest[field]) {
         this.errors.push(`Missing required field: ${field}`);
@@ -103,7 +102,7 @@ class ExtensionValidator {
       if (!manifest.runtime.entry_point) {
         this.errors.push('Runtime entry_point is required');
       }
-      
+
       if (manifest.extension_type === 'node' && !manifest.runtime.node_types) {
         this.warnings.push('Node extensions should specify node_types');
       }
@@ -139,11 +138,11 @@ class ExtensionValidator {
     if (fs.existsSync(packageJsonPath)) {
       try {
         const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
-        
+
         if (packageJson.name !== manifest.id) {
           this.warnings.push('package.json name should match manifest id');
         }
-        
+
         if (packageJson.version !== manifest.version) {
           this.warnings.push('package.json version should match manifest version');
         }
@@ -163,21 +162,16 @@ class ExtensionValidator {
         'ui-components',
         'extensions-api',
         'system-info',
-        'data-storage'
+        'data-storage',
       ];
 
-      const dangerousPermissions = [
-        'file-system-write',
-        'network',
-        'extensions-api',
-        'system-info'
-      ];
+      const dangerousPermissions = ['file-system-write', 'network', 'extensions-api', 'system-info'];
 
       for (const permission of manifest.permissions) {
         if (!validPermissions.includes(permission)) {
           this.warnings.push(`Unknown permission: ${permission}`);
         }
-        
+
         if (dangerousPermissions.includes(permission)) {
           this.warnings.push(`Dangerous permission requested: ${permission}`);
         }
@@ -190,15 +184,15 @@ class ExtensionValidator {
       // Validate CSP
       if (manifest.security.content_security_policy) {
         const csp = manifest.security.content_security_policy;
-        
-        if (csp.includes('\'unsafe-eval\'')) {
+
+        if (csp.includes("'unsafe-eval'")) {
           this.warnings.push('Content Security Policy allows unsafe-eval');
         }
-        
-        if (csp.includes('\'unsafe-inline\'')) {
+
+        if (csp.includes("'unsafe-inline'")) {
           this.warnings.push('Content Security Policy allows unsafe-inline');
         }
-        
+
         if (!csp.includes('default-src') && !csp.includes('script-src')) {
           this.warnings.push('Content Security Policy should include default-src or script-src');
         }
@@ -219,7 +213,7 @@ class ExtensionValidator {
           if (domain === '*') {
             this.warnings.push('Wildcard trusted domain (*) is not recommended');
           }
-          
+
           if (!this.isValidDomain(domain)) {
             this.warnings.push(`Invalid trusted domain format: ${domain}`);
           }
@@ -236,7 +230,7 @@ class ExtensionValidator {
     // Check if entry point exists
     if (manifest.runtime && manifest.runtime.entry_point) {
       const entryPointPath = path.join(extensionDir, manifest.runtime.entry_point);
-      
+
       if (!fs.existsSync(entryPointPath)) {
         this.errors.push(`Entry point file not found: ${manifest.runtime.entry_point}`);
       }
@@ -250,20 +244,16 @@ class ExtensionValidator {
 
     // Check for tests
     const testDirs = ['test', 'tests', '__tests__', 'src/__tests__'];
-    const hasTests = testDirs.some(dir => 
-      fs.existsSync(path.join(extensionDir, dir))
-    );
-    
+    const hasTests = testDirs.some(dir => fs.existsSync(path.join(extensionDir, dir)));
+
     if (!hasTests) {
       this.warnings.push('No test directory found - testing is recommended');
     }
 
     // Check for README
     const readmeFiles = ['README.md', 'readme.md', 'README.txt'];
-    const hasReadme = readmeFiles.some(file => 
-      fs.existsSync(path.join(extensionDir, file))
-    );
-    
+    const hasReadme = readmeFiles.some(file => fs.existsSync(path.join(extensionDir, file)));
+
     if (!hasReadme) {
       this.warnings.push('No README file found - documentation is recommended');
     }
@@ -278,26 +268,26 @@ class ExtensionValidator {
   generateReport(manifest) {
     console.log('\n📊 Validation Report');
     console.log('='.repeat(50));
-    
+
     console.log(`Extension: ${manifest.name || 'Unknown'}`);
     console.log(`ID: ${manifest.id || 'Unknown'}`);
     console.log(`Version: ${manifest.version || 'Unknown'}`);
     console.log(`Type: ${manifest.extension_type || 'Unknown'}`);
-    
+
     console.log('\n🔍 Results:');
-    
+
     if (this.errors.length === 0) {
       console.log('✅ No errors found');
     } else {
       console.log(`❌ ${this.errors.length} error(s) found:`);
       this.errors.forEach(error => console.log(`   • ${error}`));
     }
-    
+
     if (this.warnings.length > 0) {
       console.log(`\n⚠️ ${this.warnings.length} warning(s):`);
       this.warnings.forEach(warning => console.log(`   • ${warning}`));
     }
-    
+
     if (this.info.length > 0) {
       console.log(`\nℹ️ ${this.info.length} info item(s):`);
       this.info.forEach(info => console.log(`   • ${info}`));
@@ -305,23 +295,23 @@ class ExtensionValidator {
 
     // Security assessment
     this.generateSecurityAssessment(manifest);
-    
+
     // Recommendations
     this.generateRecommendations(manifest);
   }
 
   generateSecurityAssessment(manifest) {
     console.log('\n🔒 Security Assessment:');
-    
+
     let securityScore = 100;
     const securityIssues = [];
 
     // Check permissions
     if (manifest.permissions) {
-      const dangerousPerms = manifest.permissions.filter(p => 
+      const dangerousPerms = manifest.permissions.filter(p =>
         ['file-system-write', 'network', 'extensions-api', 'system-info'].includes(p)
       );
-      
+
       if (dangerousPerms.length > 0) {
         securityScore -= dangerousPerms.length * 15;
         securityIssues.push(`Requests ${dangerousPerms.length} dangerous permission(s)`);
@@ -346,11 +336,10 @@ class ExtensionValidator {
       securityIssues.push('Uses wildcard trusted domain');
     }
 
-    const securityLevel = securityScore >= 80 ? 'Good' : 
-      securityScore >= 60 ? 'Moderate' : 'Poor';
-    
+    const securityLevel = securityScore >= 80 ? 'Good' : securityScore >= 60 ? 'Moderate' : 'Poor';
+
     console.log(`   Security Score: ${securityScore}/100 (${securityLevel})`);
-    
+
     if (securityIssues.length > 0) {
       console.log('   Issues:');
       securityIssues.forEach(issue => console.log(`     • ${issue}`));
@@ -359,21 +348,21 @@ class ExtensionValidator {
 
   generateRecommendations(manifest) {
     console.log('\n💡 Recommendations:');
-    
+
     const recommendations = [];
 
     // Type-specific recommendations
     switch (manifest.extension_type) {
-    case 'node':
-      if (!manifest.runtime?.node_types) {
-        recommendations.push('Specify node_types in runtime configuration');
-      }
-      break;
-    case 'ui':
-      if (!manifest.ui) {
-        recommendations.push('Add ui configuration with themes or components');
-      }
-      break;
+      case 'node':
+        if (!manifest.runtime?.node_types) {
+          recommendations.push('Specify node_types in runtime configuration');
+        }
+        break;
+      case 'ui':
+        if (!manifest.ui) {
+          recommendations.push('Add ui configuration with themes or components');
+        }
+        break;
     }
 
     // Security recommendations
@@ -410,38 +399,37 @@ class ExtensionProfiler {
       initTime: null,
       activationTime: null,
       memoryUsage: null,
-      performance: []
+      performance: [],
     };
   }
 
   async profileExtension(extensionPath) {
     console.log(`📊 Profiling extension: ${extensionPath}`);
-    
+
     const startTime = performance.now();
-    
+
     try {
       // Simulate extension loading
       const loadStart = performance.now();
       await this.simulateLoad(extensionPath);
       this.metrics.loadTime = performance.now() - loadStart;
-      
+
       // Simulate initialization
       const initStart = performance.now();
       await this.simulateInit();
       this.metrics.initTime = performance.now() - initStart;
-      
+
       // Simulate activation
       const activationStart = performance.now();
       await this.simulateActivation();
       this.metrics.activationTime = performance.now() - activationStart;
-      
+
       // Memory usage
       this.metrics.memoryUsage = process.memoryUsage();
-      
+
       const totalTime = performance.now() - startTime;
-      
+
       this.generatePerformanceReport(totalTime);
-      
     } catch (error) {
       console.error('Profiling failed:', error.message);
     }
@@ -465,32 +453,32 @@ class ExtensionProfiler {
   generatePerformanceReport(totalTime) {
     console.log('\n⚡ Performance Report');
     console.log('='.repeat(30));
-    
+
     console.log(`Total Time: ${totalTime.toFixed(2)}ms`);
     console.log(`Load Time: ${this.metrics.loadTime.toFixed(2)}ms`);
     console.log(`Init Time: ${this.metrics.initTime.toFixed(2)}ms`);
     console.log(`Activation Time: ${this.metrics.activationTime.toFixed(2)}ms`);
-    
+
     console.log('\n💾 Memory Usage:');
     console.log(`RSS: ${(this.metrics.memoryUsage.rss / 1024 / 1024).toFixed(2)} MB`);
     console.log(`Heap Used: ${(this.metrics.memoryUsage.heapUsed / 1024 / 1024).toFixed(2)} MB`);
     console.log(`Heap Total: ${(this.metrics.memoryUsage.heapTotal / 1024 / 1024).toFixed(2)} MB`);
-    
+
     // Performance recommendations
     console.log('\n📈 Performance Recommendations:');
-    
+
     if (this.metrics.loadTime > 100) {
       console.log('   • Load time is high - consider code splitting');
     }
-    
+
     if (this.metrics.initTime > 50) {
       console.log('   • Initialization time is high - defer heavy operations');
     }
-    
+
     if (this.metrics.activationTime > 30) {
       console.log('   • Activation time is high - optimize startup code');
     }
-    
+
     if (this.metrics.memoryUsage.heapUsed > 50 * 1024 * 1024) {
       console.log('   • High memory usage detected - check for memory leaks');
     }
@@ -500,28 +488,28 @@ class ExtensionProfiler {
 // CLI Implementation
 function main() {
   const args = process.argv.slice(2);
-  
+
   if (args.length === 0) {
     showUsage();
     return;
   }
 
   const command = args[0];
-  
+
   switch (command) {
-  case 'validate':
-    handleValidate(args.slice(1));
-    break;
-  case 'profile':
-    handleProfile(args.slice(1));
-    break;
-  case 'help':
-    showUsage();
-    break;
-  default:
-    console.error(`Unknown command: ${command}`);
-    showUsage();
-    process.exit(1);
+    case 'validate':
+      handleValidate(args.slice(1));
+      break;
+    case 'profile':
+      handleProfile(args.slice(1));
+      break;
+    case 'help':
+      showUsage();
+      break;
+    default:
+      console.error(`Unknown command: ${command}`);
+      showUsage();
+      process.exit(1);
   }
 }
 
@@ -536,7 +524,7 @@ async function handleValidate(args) {
 
   try {
     const result = await validator.validateExtension(manifestPath);
-    
+
     if (!result.valid) {
       process.exit(1);
     }

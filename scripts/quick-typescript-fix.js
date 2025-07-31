@@ -80,10 +80,10 @@ class QuickTypeScriptFixer {
 
   processDirectory(dirPath) {
     const entries = fs.readdirSync(dirPath, { withFileTypes: true });
-    
+
     for (const entry of entries) {
       const fullPath = path.join(dirPath, entry.name);
-      
+
       if (entry.isDirectory() && !entry.name.startsWith('.') && entry.name !== 'node_modules') {
         this.processDirectory(fullPath);
       } else if (entry.isFile() && (entry.name.endsWith('.ts') || entry.name.endsWith('.tsx'))) {
@@ -95,12 +95,9 @@ class QuickTypeScriptFixer {
 
   run() {
     console.log('🔧 Starting quick TypeScript fixes...\n');
-    
+
     const startTime = Date.now();
-    const targetDirs = [
-      'packages/core',
-      'client/src'
-    ];
+    const targetDirs = ['packages/core', 'client/src'];
 
     for (const dir of targetDirs) {
       if (fs.existsSync(dir)) {
@@ -110,7 +107,7 @@ class QuickTypeScriptFixer {
     }
 
     const duration = Date.now() - startTime;
-    
+
     console.log('\n' + '='.repeat(50));
     console.log('📊 Quick TypeScript Fix Summary');
     console.log('='.repeat(50));

@@ -1,7 +1,7 @@
 .moderation-queue-manager {
   background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .queue-header {
@@ -260,7 +260,7 @@
   background: rgba(40, 167, 69, 0.02);
 }
 
-.item-select input[type="checkbox"] {
+.item-select input[type='checkbox'] {
   transform: scale(1.2);
 }
 
@@ -515,41 +515,41 @@
     gap: 16px;
     align-items: stretch;
   }
-  
+
   .queue-controls {
     justify-content: space-between;
   }
-  
+
   .filter-row {
     flex-wrap: wrap;
   }
-  
+
   .filter-row select,
   .search-input {
     min-width: auto;
     flex: 1;
   }
-  
+
   .bulk-actions-bar {
     flex-direction: column;
     gap: 12px;
     align-items: stretch;
   }
-  
+
   .bulk-actions {
     justify-content: center;
   }
-  
+
   .queue-item {
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
   }
-  
+
   .item-actions {
     justify-content: center;
   }
-  
+
   .queue-items.grid {
     grid-template-columns: 1fr;
   }

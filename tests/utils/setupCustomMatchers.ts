@@ -14,7 +14,7 @@ beforeAll(async () => {
   // Initialize test environment if not already done
   await TestEnvironmentManager.setupEnvironment('default', {
     NODE_ENV: 'test',
-    LOG_LEVEL: 'error'
+    LOG_LEVEL: 'error',
   });
 });
 

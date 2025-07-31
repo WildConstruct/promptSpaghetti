@@ -16,8 +16,11 @@ This document provides a comprehensive analysis of the incrementing backoff stra
 ### Strategy Types Implemented
 
 #### 1. Exponential Backoff
-#### 2. Fibonacci Backoff  
+
+#### 2. Fibonacci Backoff
+
 #### 3. Linear Backoff
+
 #### 4. Custom Backoff (configurable)
 
 ## Detailed Strategy Analysis
@@ -27,6 +30,7 @@ This document provides a comprehensive analysis of the incrementing backoff stra
 **Formula**: `delay = baseDelay × multiplier^(attemptNumber - 1)`
 
 **Default Configuration**:
+
 - Base Delay: 5 seconds
 - Multiplier: 2.0
 - Maximum Delay: 3600 seconds (1 hour)
@@ -34,6 +38,7 @@ This document provides a comprehensive analysis of the incrementing backoff stra
 **Used For**: Login Authentication (`/auth/login`), Registration (`/auth/register`)
 
 #### Progression Example
+
 ```
 Attempt 1: 5 seconds
 Attempt 2: 10 seconds
@@ -49,11 +54,13 @@ Attempt 11+: 3600 seconds (1 hour) [capped]
 ```
 
 #### Mathematical Properties
+
 - **Growth Rate**: O(2^n) - very rapid escalation
 - **Effectiveness**: Extremely effective against automated attacks
 - **User Impact**: Minimal for 1-3 attempts, severe for persistent failures
 
 #### Security Analysis
+
 - **Attack Deterrence**: Excellent - makes brute force economically unfeasible
 - **Time to Break**: For 6-digit PIN: ~2^20 seconds ≈ 33 years at full rate
 - **False Positive Tolerance**: Low - legitimate users may be heavily penalized
@@ -63,6 +70,7 @@ Attempt 11+: 3600 seconds (1 hour) [capped]
 **Formula**: `delay = baseDelay × fibonacci(attemptNumber)`
 
 **Default Configuration**:
+
 - Base Delay: 10 seconds
 - Multiplier: 1.0 (not used in Fibonacci)
 - Maximum Delay: 1800 seconds (30 minutes)
@@ -70,6 +78,7 @@ Attempt 11+: 3600 seconds (1 hour) [capped]
 **Used For**: MFA Verification (`/auth/mfa/verify`)
 
 #### Progression Example
+
 ```
 Attempt 1: 10 seconds (1 × 10)
 Attempt 2: 10 seconds (1 × 10)
@@ -85,11 +94,13 @@ Attempt 11+: 1800 seconds (30 minutes) [capped]
 ```
 
 #### Mathematical Properties
+
 - **Growth Rate**: O(φ^n) where φ ≈ 1.618 (golden ratio)
 - **Effectiveness**: Good balance between security and usability
 - **User Impact**: Moderate escalation, more forgiving than exponential
 
 #### Security Analysis
+
 - **Attack Deterrence**: Good - slower than exponential but still effective
 - **Time to Break**: For 6-digit TOTP: ~fibonacci(20) × 10 ≈ 67 hours at full rate
 - **False Positive Tolerance**: Medium - reasonable for legitimate users
@@ -99,6 +110,7 @@ Attempt 11+: 1800 seconds (30 minutes) [capped]
 **Formula**: `delay = baseDelay × attemptNumber × multiplier`
 
 **Default Configuration**:
+
 - Base Delay: 60 seconds
 - Multiplier: 1.5
 - Maximum Delay: 3600 seconds (1 hour)
@@ -106,6 +118,7 @@ Attempt 11+: 1800 seconds (30 minutes) [capped]
 **Used For**: Password Reset (`/auth/password/reset`)
 
 #### Progression Example
+
 ```
 Attempt 1: 90 seconds (60 × 1 × 1.5)
 Attempt 2: 180 seconds (60 × 2 × 1.5)
@@ -122,11 +135,13 @@ Attempt 40+: 3600 seconds (1 hour) [capped]
 ```
 
 #### Mathematical Properties
+
 - **Growth Rate**: O(n) - linear progression
 - **Effectiveness**: Moderate - suitable for email-based flows
 - **User Impact**: Predictable and moderate
 
 #### Security Analysis
+
 - **Attack Deterrence**: Moderate - effective for email-based attacks
 - **Time to Break**: Predictable linear progression
 - **False Positive Tolerance**: High - most forgiving for legitimate users
@@ -135,21 +150,21 @@ Attempt 40+: 3600 seconds (1 hour) [capped]
 
 ### Effectiveness Against Attack Types
 
-| Attack Type | Exponential | Fibonacci | Linear | Rationale |
-|-------------|-------------|-----------|--------|-----------|
-| **Brute Force** | Excellent | Good | Poor | Rapid escalation needed |
-| **Credential Stuffing** | Excellent | Good | Moderate | Volume-based attacks |
-| **Automated Scripts** | Excellent | Excellent | Moderate | Time-based deterrence |
-| **Human Attackers** | Good | Good | Good | All strategies deter manual attacks |
+| Attack Type             | Exponential | Fibonacci | Linear   | Rationale                           |
+| ----------------------- | ----------- | --------- | -------- | ----------------------------------- |
+| **Brute Force**         | Excellent   | Good      | Poor     | Rapid escalation needed             |
+| **Credential Stuffing** | Excellent   | Good      | Moderate | Volume-based attacks                |
+| **Automated Scripts**   | Excellent   | Excellent | Moderate | Time-based deterrence               |
+| **Human Attackers**     | Good        | Good      | Good     | All strategies deter manual attacks |
 
 ### User Experience Impact
 
-| Scenario | Exponential | Fibonacci | Linear | Best Choice |
-|----------|-------------|-----------|--------|-------------|
-| **Single Typo** | Low (5s) | Low (10s) | Moderate (90s) | Exponential |
-| **2-3 Mistakes** | Low (20s) | Low (30s) | High (270s) | Fibonacci |
-| **Persistent Issues** | Severe (>20min) | Moderate (9min) | Predictable | Linear |
-| **Recovery Time** | Very Long | Long | Moderate | Linear |
+| Scenario              | Exponential     | Fibonacci       | Linear         | Best Choice |
+| --------------------- | --------------- | --------------- | -------------- | ----------- |
+| **Single Typo**       | Low (5s)        | Low (10s)       | Moderate (90s) | Exponential |
+| **2-3 Mistakes**      | Low (20s)       | Low (30s)       | High (270s)    | Fibonacci   |
+| **Persistent Issues** | Severe (>20min) | Moderate (9min) | Predictable    | Linear      |
+| **Recovery Time**     | Very Long       | Long            | Moderate       | Linear      |
 
 ### Mathematical Comparison
 
@@ -201,9 +216,9 @@ private fibonacci(n: number): number {
 ```typescript
 interface BackoffConfig {
   strategy: BackoffStrategy;
-  baseDelay: number;      // seconds
-  maxDelay: number;       // seconds
-  multiplier: number;     // growth factor
+  baseDelay: number; // seconds
+  maxDelay: number; // seconds
+  multiplier: number; // growth factor
 }
 ```
 
@@ -212,16 +227,19 @@ interface BackoffConfig {
 ### Attack Vector Protection
 
 #### 1. Brute Force Password Attacks
+
 - **Threat**: Automated password guessing
 - **Best Strategy**: Exponential
 - **Reasoning**: Rapid escalation makes attacks economically unfeasible
 
 #### 2. TOTP Code Enumeration
+
 - **Threat**: Systematic code guessing (000000-999999)
 - **Best Strategy**: Fibonacci
 - **Reasoning**: Balances security with TOTP's time-sensitive nature
 
 #### 3. Email Bombing via Password Reset
+
 - **Threat**: Overwhelming user with reset emails
 - **Best Strategy**: Linear
 - **Reasoning**: Predictable delays suitable for email-based flows
@@ -231,16 +249,19 @@ interface BackoffConfig {
 #### Cost-Benefit for Attackers
 
 **Exponential Backoff**:
+
 - Cost: Time increases exponentially
 - Benefit: Linear progress toward goal
 - Result: Rapidly becomes economically unfeasible
 
 **Fibonacci Backoff**:
+
 - Cost: Time increases moderately
 - Benefit: Linear progress toward goal
 - Result: Moderate economic deterrence
 
 **Linear Backoff**:
+
 - Cost: Time increases predictably
 - Benefit: Linear progress toward goal
 - Result: Consistent but limited deterrence
@@ -260,21 +281,21 @@ interface BackoffConfig {
 ```yaml
 login_endpoint:
   strategy: exponential
-  base_delay: 3          # Start with 3 seconds
-  multiplier: 2.5        # Aggressive escalation
-  max_delay: 7200        # 2 hours maximum
+  base_delay: 3 # Start with 3 seconds
+  multiplier: 2.5 # Aggressive escalation
+  max_delay: 7200 # 2 hours maximum
 
 mfa_endpoint:
   strategy: fibonacci
-  base_delay: 15         # Account for TOTP window
-  multiplier: 1.0        # Not used in Fibonacci
-  max_delay: 3600        # 1 hour maximum
+  base_delay: 15 # Account for TOTP window
+  multiplier: 1.0 # Not used in Fibonacci
+  max_delay: 3600 # 1 hour maximum
 
 password_reset:
   strategy: linear
-  base_delay: 120        # 2 minutes base
-  multiplier: 1.2        # Gentle escalation
-  max_delay: 7200        # 2 hours maximum
+  base_delay: 120 # 2 minutes base
+  multiplier: 1.2 # Gentle escalation
+  max_delay: 7200 # 2 hours maximum
 ```
 
 ### Monitoring Requirements
@@ -297,6 +318,7 @@ const adjustedDelay = baseDelay * adaptiveMultiplier;
 ```
 
 **Threat Level Adjustments**:
+
 - Low Threat: 1.0x (normal delay)
 - Medium Threat: 1.5x (50% longer delays)
 - High Threat: 2.0x (double delays)
@@ -305,6 +327,7 @@ const adjustedDelay = baseDelay * adaptiveMultiplier;
 ### Reset Conditions
 
 Backoff resets under these conditions:
+
 1. **Successful Authentication**: Immediate reset to level 0
 2. **Time-Based Decay**: Gradual reduction after 24 hours
 3. **Administrative Override**: Manual reset by security team
@@ -313,6 +336,7 @@ Backoff resets under these conditions:
 ### Integration with Rate Limiting
 
 Backoff strategies work in conjunction with rate limiting:
+
 1. **Rate Limits**: Prevent rapid-fire attempts
 2. **Backoff**: Increase delays for persistent failures
 3. **Combined Effect**: Multiplicative protection
@@ -326,6 +350,7 @@ The implemented backoff strategies provide comprehensive protection against vari
 - **Linear**: User-friendly protection for email-based flows
 
 Key benefits:
+
 - **🎯 Targeted Protection**: Strategy matched to endpoint risk
 - **⚖️ Balanced Security**: Protection without user punishment
 - **📊 Data-Driven**: Configurable based on empirical data

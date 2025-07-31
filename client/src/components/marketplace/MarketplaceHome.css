@@ -135,7 +135,7 @@
   color: var(--text-secondary, #6b7280);
 }
 
-.filter-option input[type="radio"] {
+.filter-option input[type='radio'] {
   margin: 0;
 }
 

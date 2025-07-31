@@ -1,8 +1,8 @@
-import { Event } from "./types";
+import { Event } from './types';
 /**
  * Append an event to the event log
  */
-export declare function append(e: Omit<Event, "id" | "ts">): Event;
+export declare function append(e: Omit<Event, 'id' | 'ts'>): Event;
 /**
  * Fetch events since a given ID
  */

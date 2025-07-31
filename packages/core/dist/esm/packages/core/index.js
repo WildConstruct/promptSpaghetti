@@ -22,7 +22,26 @@ export { IntegratedFileBrowser } from './components/FileManagement/IntegratedFil
 export { RecentFilesPanel } from './components/FileManagement/RecentFilesPanel';
 export { WorkspaceManager } from './components/FileManagement/WorkspaceManager';
 // Epic 4: Inline Node Editing System - Complete Implementation ✅
-export { InlineNodeEditor, InlineEditorManager, InlineEditorProvider, InlineEditableNode, GraphEditorWithInlineEditing, useInlineEditor, useInlineEditorContext, useGraphWithInlineEditing, createInlineEditingGraph, withInlineEditing, RichTextEditor, NodeSpecificRichEditor, WeightedChoiceEditor, ConcatEditor, VariableEditor, ConditionalEditor, OutputEditor, BatchNodeEditor } from './components/InlineEditor';
+export {
+  InlineNodeEditor,
+  InlineEditorManager,
+  InlineEditorProvider,
+  InlineEditableNode,
+  GraphEditorWithInlineEditing,
+  useInlineEditor,
+  useInlineEditorContext,
+  useGraphWithInlineEditing,
+  createInlineEditingGraph,
+  withInlineEditing,
+  RichTextEditor,
+  NodeSpecificRichEditor,
+  WeightedChoiceEditor,
+  ConcatEditor,
+  VariableEditor,
+  ConditionalEditor,
+  OutputEditor,
+  BatchNodeEditor,
+} from './components/InlineEditor';
 // Project Management System exports
 export { ProjectManager } from './projectManager';
 export { ServerProjectManager } from './serverProjectManager';
@@ -40,18 +59,36 @@ export { default as ExportBundleDialog } from './components/ProjectDialogs/Expor
 // Epic 8.4 - Extension System Architecture exports (avoid conflicts)
 export { ExtensionLifecycleManager } from './extensions/ExtensionLifecycleManager';
 export { ExtensionPointRegistry } from './extensions/ExtensionPointRegistry';
-export { ExtensionLifecycleState, ExtensionErrorType, ExtensionError, ExtensionManifestSchema } from './extensions/interfaces/ExtensionInterfaces';
-export { NodeCategory
-// Skip NodeDefinition to avoid conflict 
- } from './extensions/interfaces/NodeExtension';
+export {
+  ExtensionLifecycleState,
+  ExtensionErrorType,
+  ExtensionError,
+  ExtensionManifestSchema,
+} from './extensions/interfaces/ExtensionInterfaces';
+export {
+  NodeCategory,
+  // Skip NodeDefinition to avoid conflict
+} from './extensions/interfaces/NodeExtension';
 export * from './extensions/interfaces/UIExtension';
 export * from './extensions/interfaces/TransformExtension';
 export * from './extensions/interfaces/StorageExtension';
 export * from './components/ExtensionManager';
 // Epic 9.1.2 - Collaborative Editing exports
 export { GraphCRDTAdapter, createCollaborativeGraph } from './collaboration/GraphCRDTAdapter';
-export { useCollaborativeGraphStore, useCollaborationEnabled, useConnectedUsers, useConnectionStatus, useLocalPresence, useCollaborativeGraph, useCollaborativeActions } from './collaboration/collaborativeGraphStore';
-export { useCollaborativeReactFlow, useNodeCollaborators, useCollaborationStatus } from './collaboration/useCollaborativeReactFlow';
+export {
+  useCollaborativeGraphStore,
+  useCollaborationEnabled,
+  useConnectedUsers,
+  useConnectionStatus,
+  useLocalPresence,
+  useCollaborativeGraph,
+  useCollaborativeActions,
+} from './collaboration/collaborativeGraphStore';
+export {
+  useCollaborativeReactFlow,
+  useNodeCollaborators,
+  useCollaborationStatus,
+} from './collaboration/useCollaborativeReactFlow';
 export { CollaborativePresence, CollaborationStatus, UserAvatars } from './collaboration/CollaborativePresence';
 // Epic 9.4 - Workflow Orchestration exports - TEMPORARILY DISABLED
 // export { WorkflowStateManager } from './components/WorkflowStateManager';
@@ -62,28 +99,50 @@ export { CollaborativePresence, CollaborationStatus, UserAvatars } from './colla
 // export { ApiIntegrationManager } from './components/ApiIntegrationManager';
 // export { ScheduledExecutionManager } from './components/ScheduledExecutionManager';
 // export { useWorkflowStore } from './stores/workflowStore';
-// export type { 
-//   WorkflowState, 
-//   WorkflowTransition, 
-//   WorkflowApproval, 
-//   WorkflowLock, 
-//   WorkflowHistoryEntry, 
-//   WorkflowStatistics 
+// export type {
+//   WorkflowState,
+//   WorkflowTransition,
+//   WorkflowApproval,
+//   WorkflowLock,
+//   WorkflowHistoryEntry,
+//   WorkflowStatistics
 // } from './stores/workflowStore';
 // Epic 12 - LLM Agent Randomizer System exports
-export { RandomizerPanel, GraphPreview, RandomizerWorkflow, RandomizerSystem, LLMRandomizerSystem } from './llm-randomizer';
+export {
+  RandomizerPanel,
+  GraphPreview,
+  RandomizerWorkflow,
+  RandomizerSystem,
+  LLMRandomizerSystem,
+} from './llm-randomizer';
 // Epic 19 - Security and Audit Logging exports
-export { AuditLogger, createAuditLogger, AuditOperation, AuditLogLevel, InMemoryStorageBackend } from './security/AuditLogger';
+export {
+  AuditLogger,
+  createAuditLogger,
+  AuditOperation,
+  AuditLogLevel,
+  InMemoryStorageBackend,
+} from './security/AuditLogger';
 export { AuditIntegration, createAuditIntegration } from './security/AuditIntegration';
 export { DataClassifier, createDataClassifier } from './security/DataClassifier';
 export { ClassificationEnforcer, createClassificationEnforcer } from './security/ClassificationEnforcer';
-export { ClassificationEnforcementMiddleware, createClassificationMiddleware } from './security/ClassificationEnforcementMiddleware';
+export {
+  ClassificationEnforcementMiddleware,
+  createClassificationMiddleware,
+} from './security/ClassificationEnforcementMiddleware';
 export { DataClassificationLevel } from './types/DataClassification';
 // Epic 8.8 - UTDG Historical Data Integration Foundation exports
 export { UTDGManager } from './historical/UTDGManager';
 export { ConstraintValidator } from './historical/ConstraintValidator';
 export { ExternalDataService } from './historical/ExternalDataService';
-export { MedievalDemoDatabase, MEDIEVAL_DEMO_CONSTRAINTS, MEDIEVAL_PERIODS, MEDIEVAL_REGIONS, MEDIEVAL_FABRICS, MEDIEVAL_COLORS } from './historical/MedievalDemo';
+export {
+  MedievalDemoDatabase,
+  MEDIEVAL_DEMO_CONSTRAINTS,
+  MEDIEVAL_PERIODS,
+  MEDIEVAL_REGIONS,
+  MEDIEVAL_FABRICS,
+  MEDIEVAL_COLORS,
+} from './historical/MedievalDemo';
 export { HISTORICAL_ERAS } from './types/UTDG';
 // Runtime system exports
 export { RuntimeNode, AdvancedRuntimeNode } from './runtime';

@@ -16,39 +16,39 @@ class TestNeedsPrioritizer {
         weight: 100,
         targetCoverage: 95,
         maxTimeWeeks: 1,
-        description: 'Security-critical components requiring immediate attention'
+        description: 'Security-critical components requiring immediate attention',
       },
       P1_CORE_ENGINE: {
         weight: 90,
         targetCoverage: 90,
         maxTimeWeeks: 2,
-        description: 'Core business logic and execution engine'
+        description: 'Core business logic and execution engine',
       },
       P2_API_INTEGRATION: {
         weight: 80,
         targetCoverage: 80,
         maxTimeWeeks: 3,
-        description: 'API endpoints and integration points'
+        description: 'API endpoints and integration points',
       },
       P3_UI_COMPONENTS: {
         weight: 70,
         targetCoverage: 70,
         maxTimeWeeks: 6,
-        description: 'User interface components and interactions'
+        description: 'User interface components and interactions',
       },
       P4_DATA_PERSISTENCE: {
         weight: 60,
         targetCoverage: 75,
         maxTimeWeeks: 8,
-        description: 'Database operations and data management'
-      }
+        description: 'Database operations and data management',
+      },
     };
 
     this.riskAssessment = {
       CRITICAL: { multiplier: 2.0, color: '\x1b[31m' }, // Red
-      HIGH: { multiplier: 1.5, color: '\x1b[33m' },     // Yellow
-      MEDIUM: { multiplier: 1.2, color: '\x1b[36m' },   // Cyan
-      LOW: { multiplier: 1.0, color: '\x1b[37m' }       // White
+      HIGH: { multiplier: 1.5, color: '\x1b[33m' }, // Yellow
+      MEDIUM: { multiplier: 1.2, color: '\x1b[36m' }, // Cyan
+      LOW: { multiplier: 1.0, color: '\x1b[37m' }, // White
     };
 
     this.securityVulnerabilities = [
@@ -56,32 +56,32 @@ class TestNeedsPrioritizer {
         component: 'packages/core/runtime/index.ts',
         vulnerability: 'SetVariable prototype pollution',
         cveScore: 8.5,
-        priority: 'P0_SECURITY'
+        priority: 'P0_SECURITY',
       },
       {
         component: 'packages/core/runtime/nodes/Conditional.ts',
         vulnerability: 'Expression injection via eval',
         cveScore: 9.2,
-        priority: 'P0_SECURITY'
+        priority: 'P0_SECURITY',
       },
       {
         component: 'packages/core/graphSchema.ts',
         vulnerability: 'Schema validation bypass',
         cveScore: 7.8,
-        priority: 'P0_SECURITY'
+        priority: 'P0_SECURITY',
       },
       {
         component: 'server/src/middleware/auth.ts',
         vulnerability: 'Authentication bypass',
         cveScore: 9.8,
-        priority: 'P0_SECURITY'
+        priority: 'P0_SECURITY',
       },
       {
         component: 'server/src/middleware/rate-limit.ts',
         vulnerability: 'Rate limiting bypass',
         cveScore: 6.5,
-        priority: 'P0_SECURITY'
-      }
+        priority: 'P0_SECURITY',
+      },
     ];
   }
 
@@ -106,8 +106,8 @@ class TestNeedsPrioritizer {
         statements: { pct: 0.01 },
         branches: { pct: 0 },
         functions: { pct: 0 },
-        lines: { pct: 0.01 }
-      }
+        lines: { pct: 0.01 },
+      },
     };
   }
 
@@ -121,7 +121,7 @@ class TestNeedsPrioritizer {
         'server/src/middleware/auth.ts',
         'server/src/middleware/security-headers.ts',
         'server/src/middleware/rate-limit.ts',
-        'server/src/routes/auth.ts'
+        'server/src/routes/auth.ts',
       ],
       P1_CORE_ENGINE: [
         'packages/core/runtime/advanced.ts',
@@ -129,7 +129,7 @@ class TestNeedsPrioritizer {
         'server/src/engine.ts',
         'server/src/graphValidator.ts',
         'packages/core/GraphEditor.tsx',
-        'packages/core/graphStore.ts'
+        'packages/core/graphStore.ts',
       ],
       P2_API_INTEGRATION: [
         'server/src/index.ts',
@@ -137,21 +137,21 @@ class TestNeedsPrioritizer {
         'api/preview.js',
         'api/export.js',
         'server/src/database/',
-        'packages/core/PreviewModal.tsx'
+        'packages/core/PreviewModal.tsx',
       ],
       P3_UI_COMPONENTS: [
         'packages/core/components/Inspector/',
         'client/src/components/',
         'packages/core/components/Inspector/editors/',
-        'client/src/pages/'
+        'client/src/pages/',
       ],
       P4_DATA_PERSISTENCE: [
         'server/src/database/models.ts',
         'server/src/database/*-dao.ts',
         'server/src/database/migration-service.ts',
         'server/src/analytics/',
-        'server/src/performance/'
-      ]
+        'server/src/performance/',
+      ],
     };
   }
 
@@ -159,14 +159,14 @@ class TestNeedsPrioritizer {
     const priorityConfig = this.priorityMatrix[priority];
     const coverageGap = Math.max(0, priorityConfig.targetCoverage - currentCoverage);
     const timeWeight = Math.max(1, 9 - priorityConfig.maxTimeWeeks);
-    
+
     // Security vulnerability bonus
-    const securityVuln = this.securityVulnerabilities.find(v => 
-      component.includes(v.component) || v.component.includes(component)
+    const securityVuln = this.securityVulnerabilities.find(
+      v => component.includes(v.component) || v.component.includes(component)
     );
     const securityBonus = securityVuln ? securityVuln.cveScore * 10 : 0;
-    
-    return (priorityConfig.weight * coverageGap * timeWeight) + securityBonus;
+
+    return priorityConfig.weight * coverageGap * timeWeight + securityBonus;
   }
 
   assessRiskLevel(priorityScore) {
@@ -185,16 +185,18 @@ class TestNeedsPrioritizer {
 
     Object.entries(components).forEach(([priority, componentList]) => {
       const priorityConfig = this.priorityMatrix[priority];
-      
+
       console.log(`\n${priority}: ${priorityConfig.description}`);
-      console.log(`Target Coverage: ${priorityConfig.targetCoverage}% | Timeline: ${priorityConfig.maxTimeWeeks} weeks`);
+      console.log(
+        `Target Coverage: ${priorityConfig.targetCoverage}% | Timeline: ${priorityConfig.maxTimeWeeks} weeks`
+      );
       console.log('─'.repeat(80));
 
       componentList.forEach(component => {
         const priorityScore = this.calculatePriorityScore(component, priority, 0);
         const riskLevel = this.assessRiskLevel(priorityScore);
         const riskConfig = this.riskAssessment[riskLevel];
-        
+
         const task = {
           component,
           priority,
@@ -202,17 +204,17 @@ class TestNeedsPrioritizer {
           riskLevel,
           targetCoverage: priorityConfig.targetCoverage,
           estimatedEffort: this.estimateEffort(component, priorityConfig.targetCoverage),
-          securityCritical: this.securityVulnerabilities.some(v => 
-            component.includes(v.component) || v.component.includes(component)
-          )
+          securityCritical: this.securityVulnerabilities.some(
+            v => component.includes(v.component) || v.component.includes(component)
+          ),
         };
 
         prioritizedTasks.push(task);
 
         console.log(
           `${riskConfig.color}${riskLevel.padEnd(8)}\x1b[0m | ` +
-          `Score: ${priorityScore.toString().padStart(6)} | ` +
-          `${component}${task.securityCritical ? ' 🔒' : ''}`
+            `Score: ${priorityScore.toString().padStart(6)} | ` +
+            `${component}${task.securityCritical ? ' 🔒' : ''}`
         );
       });
     });
@@ -229,12 +231,10 @@ class TestNeedsPrioritizer {
       'server/src/middleware/': 4,
       'packages/core/components/': 6,
       'server/src/database/': 5,
-      'api/': 3
+      'api/': 3,
     };
 
-    const baseEffort = Object.entries(complexityMap).find(([pattern]) => 
-      component.includes(pattern)
-    )?.[1] || 4;
+    const baseEffort = Object.entries(complexityMap).find(([pattern]) => component.includes(pattern))?.[1] || 4;
 
     return Math.ceil(baseEffort * (targetCoverage / 100) * 1.2); // 20% buffer
   }
@@ -244,35 +244,31 @@ class TestNeedsPrioritizer {
     console.log('===========================');
 
     const phases = {
-      'Phase 1 - Critical Security (Week 1-2)': prioritizedTasks
-        .filter(t => t.riskLevel === 'CRITICAL' && t.priority === 'P0_SECURITY'),
-      'Phase 2 - Core Engine (Week 2-3)': prioritizedTasks
-        .filter(t => t.priority === 'P1_CORE_ENGINE'),
-      'Phase 3 - API Integration (Week 4-5)': prioritizedTasks
-        .filter(t => t.priority === 'P2_API_INTEGRATION'),
-      'Phase 4 - UI Components (Week 6-7)': prioritizedTasks
-        .filter(t => t.priority === 'P3_UI_COMPONENTS'),
-      'Phase 5 - Data Persistence (Week 8)': prioritizedTasks
-        .filter(t => t.priority === 'P4_DATA_PERSISTENCE')
+      'Phase 1 - Critical Security (Week 1-2)': prioritizedTasks.filter(
+        t => t.riskLevel === 'CRITICAL' && t.priority === 'P0_SECURITY'
+      ),
+      'Phase 2 - Core Engine (Week 2-3)': prioritizedTasks.filter(t => t.priority === 'P1_CORE_ENGINE'),
+      'Phase 3 - API Integration (Week 4-5)': prioritizedTasks.filter(t => t.priority === 'P2_API_INTEGRATION'),
+      'Phase 4 - UI Components (Week 6-7)': prioritizedTasks.filter(t => t.priority === 'P3_UI_COMPONENTS'),
+      'Phase 5 - Data Persistence (Week 8)': prioritizedTasks.filter(t => t.priority === 'P4_DATA_PERSISTENCE'),
     };
 
     Object.entries(phases).forEach(([phaseName, tasks]) => {
       if (tasks.length === 0) return;
-      
+
       console.log(`\n${phaseName}`);
       console.log('─'.repeat(60));
-      
+
       const totalEffort = tasks.reduce((sum, task) => sum + task.estimatedEffort, 0);
       console.log(`Total Effort: ${totalEffort} hours | Tasks: ${tasks.length}`);
-      
+
       tasks.slice(0, 5).forEach(task => {
         const riskColor = this.riskAssessment[task.riskLevel].color;
         console.log(
-          `  ${riskColor}●\x1b[0m ${task.component} ` +
-          `(${task.estimatedEffort}h, ${task.targetCoverage}% target)`
+          `  ${riskColor}●\x1b[0m ${task.component} ` + `(${task.estimatedEffort}h, ${task.targetCoverage}% target)`
         );
       });
-      
+
       if (tasks.length > 5) {
         console.log(`  ... and ${tasks.length - 5} more tasks`);
       }
@@ -290,7 +286,7 @@ class TestNeedsPrioritizer {
         week2: '15%',
         week4: '40%',
         week8: '80%',
-        target: '>80%'
+        target: '>80%',
       },
       {
         metric: 'Security Components',
@@ -298,7 +294,7 @@ class TestNeedsPrioritizer {
         week2: '95%',
         week4: '95%',
         week8: '95%',
-        target: '>95%'
+        target: '>95%',
       },
       {
         metric: 'Core Engine',
@@ -306,7 +302,7 @@ class TestNeedsPrioritizer {
         week2: '60%',
         week4: '90%',
         week8: '90%',
-        target: '>90%'
+        target: '>90%',
       },
       {
         metric: 'API Endpoints',
@@ -314,22 +310,28 @@ class TestNeedsPrioritizer {
         week2: '20%',
         week4: '80%',
         week8: '85%',
-        target: '>80%'
-      }
+        target: '>80%',
+      },
     ];
 
-    console.log('Metric'.padEnd(20) + 'Current'.padEnd(10) + 'Week 2'.padEnd(10) + 
-                'Week 4'.padEnd(10) + 'Week 8'.padEnd(10) + 'Target');
+    console.log(
+      'Metric'.padEnd(20) +
+        'Current'.padEnd(10) +
+        'Week 2'.padEnd(10) +
+        'Week 4'.padEnd(10) +
+        'Week 8'.padEnd(10) +
+        'Target'
+    );
     console.log('─'.repeat(70));
 
     metrics.forEach(m => {
       console.log(
         m.metric.padEnd(20) +
-        m.current.padEnd(10) +
-        m.week2.padEnd(10) +
-        m.week4.padEnd(10) +
-        m.week8.padEnd(10) +
-        m.target
+          m.current.padEnd(10) +
+          m.week2.padEnd(10) +
+          m.week4.padEnd(10) +
+          m.week8.padEnd(10) +
+          m.target
       );
     });
   }
@@ -344,63 +346,62 @@ class TestNeedsPrioritizer {
         owner: 'Senior Dev',
         deadline: 'Week 1',
         effort: '16h',
-        blockers: 'None'
+        blockers: 'None',
       },
       {
         action: 'Implement authentication flow tests',
         owner: 'Senior Dev',
         deadline: 'Week 1',
         effort: '12h',
-        blockers: 'Security framework'
+        blockers: 'Security framework',
       },
       {
         action: 'Create core engine test suite',
         owner: 'Senior Dev',
         deadline: 'Week 2',
         effort: '20h',
-        blockers: 'None'
+        blockers: 'None',
       },
       {
         action: 'Establish CI/CD test integration',
         owner: 'DevOps',
         deadline: 'Week 2',
         effort: '8h',
-        blockers: 'Test framework setup'
+        blockers: 'Test framework setup',
       },
       {
         action: 'Configure coverage reporting',
         owner: 'QA Engineer',
         deadline: 'Week 1',
         effort: '4h',
-        blockers: 'None'
-      }
+        blockers: 'None',
+      },
     ];
 
-    console.log('Action'.padEnd(35) + 'Owner'.padEnd(12) + 'Deadline'.padEnd(10) + 
-                'Effort'.padEnd(8) + 'Blockers');
+    console.log('Action'.padEnd(35) + 'Owner'.padEnd(12) + 'Deadline'.padEnd(10) + 'Effort'.padEnd(8) + 'Blockers');
     console.log('─'.repeat(80));
 
     actions.forEach(item => {
       console.log(
         item.action.padEnd(35) +
-        item.owner.padEnd(12) +
-        item.deadline.padEnd(10) +
-        item.effort.padEnd(8) +
-        item.blockers
+          item.owner.padEnd(12) +
+          item.deadline.padEnd(10) +
+          item.effort.padEnd(8) +
+          item.blockers
       );
     });
   }
 
   async run() {
     console.log('🔍 Analyzing test needs and prioritization...\n');
-    
+
     await this.loadCoverageReport();
-    
+
     const prioritizedTasks = this.generatePriorityReport();
     this.generateImplementationRoadmap(prioritizedTasks);
     this.generateSuccessMetrics();
     this.generateActionItems();
-    
+
     console.log('\n✅ Test needs prioritization complete!');
     console.log('\n📋 SUMMARY:');
     console.log(`• Total components analyzed: ${prioritizedTasks.length}`);
@@ -408,13 +409,13 @@ class TestNeedsPrioritizer {
     console.log(`• High-priority items: ${prioritizedTasks.filter(t => t.riskLevel === 'HIGH').length}`);
     console.log('• Estimated timeline: 8 weeks');
     console.log('• Estimated effort: 350 hours');
-    
+
     return {
       prioritizedTasks,
       totalTasks: prioritizedTasks.length,
       criticalTasks: prioritizedTasks.filter(t => t.riskLevel === 'CRITICAL').length,
       estimatedWeeks: 8,
-      estimatedHours: 350
+      estimatedHours: 350,
     };
   }
 }
@@ -422,7 +423,8 @@ class TestNeedsPrioritizer {
 // CLI execution
 if (require.main === module) {
   const prioritizer = new TestNeedsPrioritizer();
-  prioritizer.run()
+  prioritizer
+    .run()
     .then(results => {
       console.log('\n🎯 Prioritization completed successfully!');
       process.exit(0);

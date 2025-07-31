@@ -7,6 +7,7 @@ This document provides granular implementation plans for each story in Epic 7, b
 ### Implementation Tasks
 
 #### 7.1.1 Core Node Architecture Planning (2 days)
+
 - [ ] Define unified interface for advanced rule nodes
   - [ ] Create base class with common functionality
   - [ ] Define standardized input/output handling
@@ -16,6 +17,7 @@ This document provides granular implementation plans for each story in Epic 7, b
 - [ ] Define test framework for advanced nodes
 
 #### 7.1.2 `Weighted` Node Implementation (3 days)
+
 - [ ] Define `Weighted` node data model
   - [ ] Implement options for weight distribution types
   - [ ] Add support for dynamic weight adjustment
@@ -30,6 +32,7 @@ This document provides granular implementation plans for each story in Epic 7, b
   - [ ] Create unit tests for various weight distributions
 
 #### 7.1.3 `Conditional` Node Implementation (4 days)
+
 - [ ] Define `Conditional` node data model
   - [ ] Implement condition expression parser
   - [ ] Add support for multiple condition branches
@@ -44,6 +47,7 @@ This document provides granular implementation plans for each story in Epic 7, b
   - [ ] Create comprehensive test suite for condition logic
 
 #### 7.1.4 `Sequential` Node Implementation (3 days)
+
 - [ ] Define `Sequential` node data model
   - [ ] Implement ordered child tracking
   - [ ] Add options for traversal patterns
@@ -58,6 +62,7 @@ This document provides granular implementation plans for each story in Epic 7, b
   - [ ] Create unit tests for various sequence patterns
 
 #### 7.1.5 `Markov` Node Implementation (4 days)
+
 - [ ] Define `Markov` node data model
   - [ ] Implement state transition matrix
   - [ ] Add options for initial state selection
@@ -72,6 +77,7 @@ This document provides granular implementation plans for each story in Epic 7, b
   - [ ] Create unit tests for various state patterns
 
 #### 7.1.6 Advanced Node Integration & Testing (4 days)
+
 - [ ] Integrate all new nodes into node palette
 - [ ] Update graph validation rules for new node types
 - [ ] Create example graphs showcasing each node type
@@ -87,6 +93,7 @@ This document provides granular implementation plans for each story in Epic 7, b
 ### Implementation Tasks
 
 #### 7.2.1 Palette UI Architecture (2 days)
+
 - [ ] Design component architecture for tabbed palette
   - [ ] Create wireframes for desktop and mobile views
   - [ ] Define tab interaction patterns
@@ -98,6 +105,7 @@ This document provides granular implementation plans for each story in Epic 7, b
 - [ ] Create storybook demo of UI components
 
 #### 7.2.2 Category Definition System (2 days)
+
 - [ ] Implement NodeCategory class
   - [ ] Add properties for name, icon, description
   - [ ] Create sorting and filtering capabilities
@@ -112,6 +120,7 @@ This document provides granular implementation plans for each story in Epic 7, b
   - [ ] Support dynamic category membership
 
 #### 7.2.3 Tabbed Palette UI Implementation (3 days)
+
 - [ ] Refactor existing palette into tabbed component
   - [ ] Implement tab navigation component
   - [ ] Create smooth transitions between tabs
@@ -126,6 +135,7 @@ This document provides granular implementation plans for each story in Epic 7, b
   - [ ] Mobile compatibility (limited functionality)
 
 #### 7.2.4 Search & Favorites System (3 days)
+
 - [ ] Implement search functionality
   - [ ] Create search input with auto-focus
   - [ ] Add real-time filtering across all categories
@@ -138,6 +148,7 @@ This document provides granular implementation plans for each story in Epic 7, b
   - [ ] Add drag-and-drop reordering of favorites
 
 #### 7.2.5 Palette System Testing & Polish (2 days)
+
 - [ ] Implement comprehensive test suite
   - [ ] Unit tests for category functions
   - [ ] Integration tests for complete palette
@@ -157,6 +168,7 @@ This document provides granular implementation plans for each story in Epic 7, b
 ### Implementation Tasks
 
 #### 7.3.1 Settings Architecture (2 days)
+
 - [ ] Design settings data model
   - [ ] Create schema for settings groups and items
   - [ ] Define validation rules for each setting type
@@ -169,6 +181,7 @@ This document provides granular implementation plans for each story in Epic 7, b
 - [ ] Define integration points with executor
 
 #### 7.3.2 Modal UI Implementation (3 days)
+
 - [ ] Create reusable Modal component
   - [ ] Implement accessible dialog pattern
   - [ ] Add keyboard navigation and focus management
@@ -183,6 +196,7 @@ This document provides granular implementation plans for each story in Epic 7, b
   - [ ] Implement Alt+S shortcut
 
 #### 7.3.3 Settings Controls Implementation (4 days)
+
 - [ ] Implement seed override section
   - [ ] Create numeric input with validation
   - [ ] Add "Randomize" button with animation
@@ -203,6 +217,7 @@ This document provides granular implementation plans for each story in Epic 7, b
   - [ ] Implement batch naming pattern
 
 #### 7.3.4 Settings Persistence & Integration (2 days)
+
 - [ ] Implement settings persistence
   - [ ] Auto-save on change
   - [ ] Add manual save/load options
@@ -215,6 +230,7 @@ This document provides granular implementation plans for each story in Epic 7, b
   - [ ] Implement graceful fallbacks
 
 #### 7.3.5 Testing & Documentation (2 days)
+
 - [ ] Create comprehensive test suite
   - [ ] Unit tests for individual settings
   - [ ] Integration tests with executor
@@ -231,6 +247,7 @@ This document provides granular implementation plans for each story in Epic 7, b
 ### Implementation Tasks
 
 #### 7.4.1 Documentation System Architecture (2 days)
+
 - [ ] Design documentation data model
   - [ ] Create schema for documentation sections
   - [ ] Define structure for examples and code snippets
@@ -243,6 +260,7 @@ This document provides granular implementation plans for each story in Epic 7, b
 - [ ] Define integration with node inspector
 
 #### 7.4.2 Node Documentation Content (4 days)
+
 - [ ] Create documentation for `Weighted` node
   - [ ] Write conceptual overview
   - [ ] Document configuration options
@@ -265,6 +283,7 @@ This document provides granular implementation plans for each story in Epic 7, b
   - [ ] Add mathematical background
 
 #### 7.4.3 Interactive Examples (3 days)
+
 - [ ] Design example graph component
   - [ ] Create miniature graph renderer
   - [ ] Add play/step controls
@@ -281,6 +300,7 @@ This document provides granular implementation plans for each story in Epic 7, b
   - [ ] Add example download option
 
 #### 7.4.4 Tooltip & Contextual Help System (2 days)
+
 - [ ] Implement tooltip component
   - [ ] Create positioning system
   - [ ] Add rich content support
@@ -293,6 +313,7 @@ This document provides granular implementation plans for each story in Epic 7, b
   - [ ] Implement keyboard shortcut help
 
 #### 7.4.5 Documentation Testing & Publishing (2 days)
+
 - [ ] Implement documentation testing
   - [ ] Validate code examples
   - [ ] Test interactive examples
@@ -307,22 +328,26 @@ This document provides granular implementation plans for each story in Epic 7, b
 ## Schedule and Resource Planning
 
 ### Timeline Overview
+
 - Total estimated development time: 53 developer days
 - Recommended team: 2 frontend developers, 1 backend developer, 1 technical writer
 - Estimated calendar duration: 6-8 weeks
 
 ### Sprint Breakdown
+
 - Sprint 1 (2 weeks): Stories 7.1.1-7.1.3 and 7.2.1-7.2.2
 - Sprint 2 (2 weeks): Stories 7.1.4-7.1.6, 7.2.3-7.2.5, and 7.3.1
 - Sprint 3 (2 weeks): Stories 7.3.2-7.3.5 and 7.4.1-7.4.2
 - Sprint 4 (2 weeks): Stories 7.4.3-7.4.5 and final integration testing
 
 ### Dependencies
+
 - Story 7.1 (Advanced Rule Nodes) provides the foundation for Story 7.4 (Documentation)
 - Story 7.2 (Palette Categorization) should be developed in parallel with 7.1
 - Story 7.3 (Advanced Settings) can be developed independently
 
 ### Risk Mitigation
+
 - Early prototype of complex nodes to validate UX approach
 - Progressive implementation of node types with incremental testing
 - Feature flags to enable individual advanced nodes as they become available

@@ -10,6 +10,20 @@ export { ShareModal } from './ShareModal';
 export { ShareButton } from './ShareButton';
 export { ShareAnalyticsDashboard } from './ShareAnalyticsDashboard';
 export { SharePreview } from './SharePreview';
-export type { ShareableResourceType, ShareTarget, ShareFormat, SocialPlatform, SharePermission, ShareConfig, ShareLink, ShareAnalyticsEvent, ShareMetrics, CreateShareRequest, ShareResponse, ShareCollection, SocialIntegration } from '../../types/sharingTypes';
+export type {
+  ShareableResourceType,
+  ShareTarget,
+  ShareFormat,
+  SocialPlatform,
+  SharePermission,
+  ShareConfig,
+  ShareLink,
+  ShareAnalyticsEvent,
+  ShareMetrics,
+  CreateShareRequest,
+  ShareResponse,
+  ShareCollection,
+  SocialIntegration,
+} from '../../types/sharingTypes';
 export { SharingService } from '../../services/SharingService';
 //# sourceMappingURL=index.d.ts.map

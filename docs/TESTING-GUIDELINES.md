@@ -1,11 +1,13 @@
 # Testing Guidelines
 
 ## Overview
+
 This document outlines testing best practices for the Prompt Spaghetti project.
 
 ## Test Structure
 
 ### Directory Organization
+
 ```
 src/
   components/
@@ -19,6 +21,7 @@ src/
 ```
 
 ### Test File Naming
+
 - Unit tests: `ComponentName.test.tsx`
 - Integration tests: `feature.integration.test.ts`
 - E2E tests: `workflow.e2e.test.ts`
@@ -26,6 +29,7 @@ src/
 ## Testing Principles
 
 ### 1. Test Behavior, Not Implementation
+
 ```typescript
 // ❌ Bad - Testing implementation details
 expect(component.state.isOpen).toBe(true);
@@ -35,6 +39,7 @@ expect(screen.getByRole('dialog')).toBeInTheDocument();
 ```
 
 ### 2. Use Testing Library Best Practices
+
 ```typescript
 // ❌ Bad - Using test IDs unnecessarily
 const button = getByTestId('submit-button');
@@ -44,10 +49,11 @@ const button = getByRole('button', { name: /submit/i });
 ```
 
 ### 3. Mock External Dependencies
+
 ```typescript
 // Mock API calls
 jest.mock('../api/client', () => ({
-  fetchData: jest.fn().mockResolvedValue({ data: 'test' })
+  fetchData: jest.fn().mockResolvedValue({ data: 'test' }),
 }));
 
 // Mock timers
@@ -57,18 +63,21 @@ jest.useFakeTimers();
 ## Test Categories
 
 ### Unit Tests
+
 - Test individual components/functions in isolation
 - Mock all external dependencies
 - Focus on edge cases and error handling
 - Aim for 80%+ coverage
 
 ### Integration Tests
+
 - Test component interactions
 - Test API integrations with mocked backends
 - Test state management flows
 - Use MSW for API mocking
 
 ### E2E Tests
+
 - Test complete user workflows
 - Run against real backend (staging)
 - Focus on critical paths
@@ -77,6 +86,7 @@ jest.useFakeTimers();
 ## Common Patterns
 
 ### Testing Async Code
+
 ```typescript
 // Using waitFor
 await waitFor(() => {
@@ -89,6 +99,7 @@ await waitForElementToBeRemoved(() => screen.queryByText('Loading...'));
 ```
 
 ### Testing User Interactions
+
 ```typescript
 // Simulating user events
 await userEvent.click(button);
@@ -97,6 +108,7 @@ await userEvent.selectOptions(select, 'option1');
 ```
 
 ### Testing Error States
+
 ```typescript
 // Mock error response
 server.use(
@@ -114,6 +126,7 @@ await waitFor(() => {
 ## Performance Testing
 
 ### Bundle Size Monitoring
+
 ```json
 {
   "bundlesize": [
@@ -130,14 +143,15 @@ await waitFor(() => {
 ```
 
 ### Rendering Performance
+
 ```typescript
 test('renders large list efficiently', () => {
   const { rerender } = render(<LargeList items={generateItems(1000)} />);
-  
+
   const startTime = performance.now();
   rerender(<LargeList items={generateItems(2000)} />);
   const endTime = performance.now();
-  
+
   expect(endTime - startTime).toBeLessThan(100); // ms
 });
 ```
@@ -145,24 +159,26 @@ test('renders large list efficiently', () => {
 ## Security Testing
 
 ### XSS Prevention
+
 ```typescript
 test('sanitizes user input', () => {
   const maliciousInput = '<script>alert("XSS")</script>';
   render(<Comment text={maliciousInput} />);
-  
+
   expect(screen.queryByText('alert')).not.toBeInTheDocument();
   expect(screen.getByText('<script>alert("XSS")</script>')).toBeInTheDocument();
 });
 ```
 
 ### Authentication Tests
+
 ```typescript
 test('requires authentication for protected routes', async () => {
   // No auth token
   localStorage.removeItem('authToken');
-  
+
   render(<ProtectedRoute />);
-  
+
   expect(await screen.findByText('Please log in')).toBeInTheDocument();
 });
 ```
@@ -187,6 +203,7 @@ test('requires authentication for protected routes', async () => {
    - Use `jest-dom` matchers
 
 ### Debug Utilities
+
 ```typescript
 // Print current DOM
 screen.debug();
@@ -202,12 +219,14 @@ console.log(prettyDOM(container));
 ## CI/CD Integration
 
 ### GitHub Actions
+
 - Run tests on every PR
 - Fail builds if coverage drops below 80%
 - Run security audits
 - Generate test reports
 
 ### Pre-commit Hooks
+
 - Run related tests for changed files
 - Check test coverage
 - Lint test files
@@ -216,12 +235,13 @@ console.log(prettyDOM(container));
 ## Test Data Management
 
 ### Fixtures
+
 ```typescript
 // fixtures/user.ts
 export const mockUser = {
   id: '123',
   name: 'Test User',
-  email: 'test@example.com'
+  email: 'test@example.com',
 };
 
 // Usage
@@ -229,31 +249,35 @@ import { mockUser } from './fixtures/user';
 ```
 
 ### Factories
+
 ```typescript
 // factories/graph.ts
 export const createGraph = (overrides = {}) => ({
   id: generateId(),
   nodes: [],
   edges: [],
-  ...overrides
+  ...overrides,
 });
 ```
 
 ## Continuous Improvement
 
 ### Metrics to Track
+
 - Test coverage percentage
 - Test execution time
 - Flaky test frequency
 - Time to fix failing tests
 
 ### Regular Reviews
+
 - Monthly test suite health check
 - Quarterly test strategy review
 - Remove obsolete tests
 - Update test patterns
 
 ## Resources
+
 - [Testing Library Docs](https://testing-library.com/)
 - [Jest Documentation](https://jestjs.io/)
 - [MSW (Mock Service Worker)](https://mswjs.io/)

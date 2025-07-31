@@ -1,7 +1,7 @@
 /**
  * Graph Editor Domain - Main Export
  * REFACTOR-005: Domain-Driven Architecture
- * 
+ *
  * Main entry point for the graph editor domain
  */
 
@@ -15,11 +15,11 @@ export { useNodeSelection } from './hooks/useNodeSelection';
 export { useGraphOperations } from './hooks/useGraphOperations';
 
 // Store
-export { 
-  useGraphEditorStore, 
-  useGraphEditorState, 
-  useGraphEditorConfig, 
-  useGraphEditorHistory 
+export {
+  useGraphEditorStore,
+  useGraphEditorState,
+  useGraphEditorConfig,
+  useGraphEditorHistory,
 } from './stores/graphEditorStore';
 
 // Re-export existing components (to be migrated)
@@ -41,6 +41,6 @@ export const createGraphEditorDomain = (config?: any) => {
     services: {},
     events: {},
     config: {},
-    utils: {}
+    utils: {},
   };
 };

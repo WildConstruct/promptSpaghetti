@@ -5,6 +5,7 @@ This document outlines the deployment process for the PromptScape Randomizer Gra
 ## Overview
 
 The application is deployed using Vercel with the following architecture:
+
 - **Frontend**: React + Vite application deployed to Vercel Edge Network
 - **API**: Serverless functions deployed to Vercel Edge Functions
 - **CDN**: Global CDN distribution for static assets
@@ -12,16 +13,19 @@ The application is deployed using Vercel with the following architecture:
 ## Environments
 
 ### Development
+
 - **URL**: `http://localhost:3000`
 - **API**: `http://localhost:8000`
 - **Purpose**: Local development and testing
 
 ### Staging
+
 - **URL**: `https://promptscape-graph-staging.vercel.app`
 - **API**: `https://promptscape-graph-staging.vercel.app/api`
 - **Purpose**: Pre-production testing and validation
 
 ### Production
+
 - **URL**: `https://promptscape-graph.vercel.app`
 - **API**: `https://promptscape-graph.vercel.app/api`
 - **Purpose**: Live production environment
@@ -31,6 +35,7 @@ The application is deployed using Vercel with the following architecture:
 ### Automatic Deployment
 
 The application automatically deploys on:
+
 1. **Pull Request**: Creates preview deployment
 2. **Main Branch**: Deploys to production
 3. **Develop Branch**: Deploys to staging (if configured)
@@ -56,6 +61,7 @@ vercel --prod
 Configure these environment variables in Vercel dashboard:
 
 #### Production Environment
+
 ```bash
 NODE_ENV=production
 ENABLE_CORRECTIONS=false
@@ -66,6 +72,7 @@ VITE_SENTRY_ENVIRONMENT=production
 ```
 
 #### Staging Environment
+
 ```bash
 NODE_ENV=staging
 ENABLE_CORRECTIONS=true
@@ -123,16 +130,19 @@ VITE_SENTRY_ENVIRONMENT=staging
 ## API Endpoints
 
 ### Health Check
+
 - **URL**: `/api/health`
 - **Method**: GET
 - **Purpose**: Service health monitoring
 
 ### Preview
+
 - **URL**: `/api/preview`
 - **Method**: POST
 - **Purpose**: Execute graph with multiple seeds
 
 ### Export
+
 - **URL**: `/api/export`
 - **Method**: POST
 - **Purpose**: Convert graph to GeneratorBundle format
@@ -236,10 +246,11 @@ npm run analyze
 ### Common Issues
 
 1. **Build Failures**
+
    ```bash
    # Check build logs
    vercel logs --build
-   
+
    # Common causes:
    # - Missing environment variables
    # - TypeScript errors
@@ -247,6 +258,7 @@ npm run analyze
    ```
 
 2. **Function Timeouts**
+
    ```bash
    # Increase timeout in vercel.json
    "functions": {
@@ -265,7 +277,7 @@ npm run analyze
 ### Rollback Process
 
 1. **Automatic Rollback**: Vercel automatically rolls back failed deployments
-2. **Manual Rollback**: 
+2. **Manual Rollback**:
    ```bash
    vercel rollback [deployment-url]
    ```
@@ -297,5 +309,5 @@ npm run analyze
 
 ---
 
-*Last updated: 2025-07-15*
-*Next review: 2025-08-15*
+_Last updated: 2025-07-15_
+_Next review: 2025-08-15_

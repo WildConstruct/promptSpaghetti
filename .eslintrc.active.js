@@ -4,11 +4,9 @@ module.exports = {
     browser: true,
     es2021: true,
     node: true,
-    jest: true
+    jest: true,
   },
-  extends: [
-    'eslint:recommended'
-  ],
+  extends: ['eslint:recommended'],
   overrides: [
     {
       files: ['**/*.ts', '**/*.tsx'],
@@ -18,8 +16,8 @@ module.exports = {
         'eslint:recommended',
         'plugin:@typescript-eslint/recommended',
         'plugin:react/recommended',
-        'plugin:react-hooks/recommended'
-      ]
+        'plugin:react-hooks/recommended',
+      ],
     },
     {
       // Extra permissive rules for test files
@@ -29,55 +27,61 @@ module.exports = {
         '@typescript-eslint/no-unused-vars': 'off',
         '@typescript-eslint/ban-ts-comment': 'off',
         'no-console': 'off',
-        'prefer-const': 'off'
-      }
-    }
+        'prefer-const': 'off',
+      },
+    },
   ],
   rules: {
     // Airbnb-style rules (relaxed for CI/CD)
-    'indent': ['warn', 2], // Changed from error to warn
-    'quotes': ['warn', 'single'], // Changed from error to warn
-    'semi': ['warn', 'always'], // Changed from error to warn
+    indent: ['warn', 2], // Changed from error to warn
+    quotes: ['warn', 'single'], // Changed from error to warn
+    semi: ['warn', 'always'], // Changed from error to warn
     'comma-dangle': ['warn', 'never'], // Changed from error to warn
-    'max-len': ['warn', { 
-      code: 120, 
-      ignoreUrls: true, 
-      ignoreComments: true,
-      ignoreStrings: true,
-      ignoreTemplateLiterals: true
-    }], // More lenient line length
-    
+    'max-len': [
+      'warn',
+      {
+        code: 120,
+        ignoreUrls: true,
+        ignoreComments: true,
+        ignoreStrings: true,
+        ignoreTemplateLiterals: true,
+      },
+    ], // More lenient line length
+
     // React rules
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 'off',
-    
+
     // TypeScript rules (more permissive)
-    '@typescript-eslint/no-unused-vars': ['warn', { 
-      argsIgnorePattern: '^_',
-      varsIgnorePattern: '^_',
-      ignoreRestSiblings: true
-    }],
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        ignoreRestSiblings: true,
+      },
+    ],
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/no-explicit-any': 'warn', // Allow any in legacy code
     '@typescript-eslint/ban-ts-comment': 'warn', // Allow @ts-ignore when needed
     '@typescript-eslint/no-non-null-assertion': 'warn',
-    
+
     // Disable some rules that often cause CI failures
     'no-console': 'off', // Allow console.log in development
     'no-debugger': 'warn', // Allow debugger in development
     'prefer-const': 'warn',
     'no-var': 'warn',
-    
+
     // Allow unused parameters in callbacks and event handlers
     'no-unused-vars': 'off', // Let TypeScript handle this
-    
+
     // Allow empty functions (common in tests and mocks)
-    '@typescript-eslint/no-empty-function': 'warn'
+    '@typescript-eslint/no-empty-function': 'warn',
   },
   settings: {
     react: {
-      version: 'detect'
-    }
+      version: 'detect',
+    },
   },
   ignorePatterns: [
     'dist/',
@@ -92,6 +96,6 @@ module.exports = {
     'src/auto-*.js',
     'src/monitor-*.js',
     '**/*.generated.ts',
-    '**/*.generated.js'
-  ]
+    '**/*.generated.js',
+  ],
 };

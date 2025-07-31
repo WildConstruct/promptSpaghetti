@@ -309,12 +309,7 @@
 .loading-shimmer {
   width: 80%;
   height: 60%;
-  background: linear-gradient(
-    90deg,
-    #f0f0f0 25%,
-    #e0e0e0 50%,
-    #f0f0f0 75%
-  );
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
   background-size: 200% 100%;
   border-radius: 8px;
   animation: shimmer 1.5s infinite;
@@ -335,21 +330,21 @@
   .metric-card-large {
     padding: 16px;
   }
-  
+
   .metric-value {
     font-size: 28px;
   }
-  
+
   .metric-card-large .metric-value {
     font-size: 32px;
   }
-  
+
   .metric-value-section {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
   }
-  
+
   .metric-title {
     font-size: 13px;
   }

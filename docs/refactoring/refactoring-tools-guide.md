@@ -17,6 +17,7 @@ The refactoring framework consists of three interconnected tools designed to mod
 **Purpose**: Automated structural transformations and migrations
 
 **Key Features**:
+
 - JavaScript to TypeScript migration
 - Import modernization and organization
 - Duplicate code detection and removal
@@ -25,6 +26,7 @@ The refactoring framework consists of three interconnected tools designed to mod
 - Configuration file modernization
 
 **Usage**:
+
 ```bash
 # Run full refactoring suite
 node tools/refactoring-framework.js
@@ -38,19 +40,20 @@ node tools/refactoring-framework.js --dry-run
 
 **Transformation Types**:
 
-| Transformation | Risk Level | Description |
-|---------------|------------|-------------|
-| JS to TS Migration | Medium | Converts .js files to .ts/.tsx |
-| Import Organization | Low | Sorts and modernizes import statements |
-| Security Fixes | High | Removes dangerous patterns (eval, Function constructor) |
-| Duplicate Removal | Medium | Identifies and suggests duplicate code removal |
-| Config Updates | Low | Modernizes package.json, tsconfig.json |
+| Transformation      | Risk Level | Description                                             |
+| ------------------- | ---------- | ------------------------------------------------------- |
+| JS to TS Migration  | Medium     | Converts .js files to .ts/.tsx                          |
+| Import Organization | Low        | Sorts and modernizes import statements                  |
+| Security Fixes      | High       | Removes dangerous patterns (eval, Function constructor) |
+| Duplicate Removal   | Medium     | Identifies and suggests duplicate code removal          |
+| Config Updates      | Low        | Modernizes package.json, tsconfig.json                  |
 
 ### 2. Code Modernizer (`tools/code-modernizer.js`)
 
 **Purpose**: Advanced pattern detection and code quality improvements
 
 **Key Features**:
+
 - Legacy pattern detection and replacement
 - Code smell identification
 - Performance anti-pattern detection
@@ -59,11 +62,12 @@ node tools/refactoring-framework.js --dry-run
 - Modernization planning
 
 **Usage**:
+
 ```bash
 # Run modernization analysis
 node tools/code-modernizer.js
 
-# Show help  
+# Show help
 node tools/code-modernizer.js --help
 
 # Analyze without changes
@@ -73,18 +77,21 @@ node tools/code-modernizer.js --dry-run
 **Detection Categories**:
 
 **Legacy Patterns**:
+
 - Promise callbacks → async/await
 - `var` declarations → `const`/`let`
 - Function declarations → arrow functions
 - Traditional for loops → modern iterations
 
 **Code Smells**:
+
 - Functions longer than 50 lines
 - Nesting deeper than 4 levels
 - Magic numbers and duplicate strings
 - Complex conditional logic
 
 **Performance Issues**:
+
 - Synchronous file operations
 - Inefficient array operations
 - Unnecessary string concatenation
@@ -95,6 +102,7 @@ node tools/code-modernizer.js --dry-run
 **Purpose**: Unified command-line interface for all refactoring operations
 
 **Key Features**:
+
 - Interactive refactoring sessions
 - Batch transformations with validation
 - Safe refactoring modes
@@ -102,6 +110,7 @@ node tools/code-modernizer.js --dry-run
 - Progress tracking and reporting
 
 **Usage**:
+
 ```bash
 # Interactive mode
 node tools/refactoring-cli.js interactive
@@ -127,30 +136,35 @@ node tools/refactoring-cli.js plan --execute
 ### Recommended Refactoring Process
 
 1. **Analysis Phase**
+
    ```bash
    # Comprehensive codebase analysis
    node tools/refactoring-cli.js analyze
    ```
 
 2. **Planning Phase**
+
    ```bash
    # Create refactoring plan
    node tools/refactoring-cli.js plan
    ```
 
 3. **Security Phase** (High Priority)
+
    ```bash
    # Address security issues first
    node tools/refactoring-cli.js modernize --patterns="security-fixes"
    ```
 
 4. **Migration Phase**
+
    ```bash
    # Migrate JavaScript to TypeScript
    node tools/refactoring-cli.js migrate
    ```
 
 5. **Modernization Phase**
+
    ```bash
    # Apply modern patterns
    node tools/refactoring-cli.js modernize
@@ -216,10 +230,7 @@ Create `.refactoringrc.json` for project-specific settings:
 ```json
 {
   "safeMode": true,
-  "excludePatterns": [
-    "legacy-integration/**",
-    "third-party/**"
-  ],
+  "excludePatterns": ["legacy-integration/**", "third-party/**"],
   "transformations": {
     "jsToTs": true,
     "modernizeImports": true,
@@ -240,6 +251,7 @@ Create `.refactoringrc.json` for project-specific settings:
 ### Analysis Reports
 
 **`refactoring-analysis.json`** - Comprehensive analysis results:
+
 ```json
 {
   "timestamp": "2024-01-15T10:30:00.000Z",
@@ -251,12 +263,17 @@ Create `.refactoringrc.json` for project-specific settings:
     "codeSmells": 89,
     "performanceIssues": 23
   },
-  "structural": { /* detailed structural analysis */ },
-  "modernization": { /* modernization opportunities */ }
+  "structural": {
+    /* detailed structural analysis */
+  },
+  "modernization": {
+    /* modernization opportunities */
+  }
 }
 ```
 
 **`modernization-suggestions.json`** - Prioritized suggestions:
+
 ```json
 {
   "prioritization": {
@@ -268,13 +285,18 @@ Create `.refactoringrc.json` for project-specific settings:
         "suggestion": "Replace with safe evaluation"
       }
     ],
-    "Medium Priority (Next Sprint)": [ /* ... */ ],
-    "Low Priority (Future)": [ /* ... */ ]
+    "Medium Priority (Next Sprint)": [
+      /* ... */
+    ],
+    "Low Priority (Future)": [
+      /* ... */
+    ]
   }
 }
 ```
 
 **`refactoring-plan.json`** - Execution roadmap:
+
 ```json
 {
   "phases": [
@@ -347,18 +369,21 @@ node tools/refactoring-cli.js validate --comprehensive
 The tools track and report on various metrics:
 
 ### Code Quality Metrics
+
 - **Cyclomatic Complexity**: Measures code complexity
 - **Maintainability Index**: Overall maintainability score (0-100)
 - **Lines of Code**: Tracks code growth/reduction
 - **Function Length**: Identifies overly long functions
 
 ### Modernization Progress
+
 - **Legacy Pattern Reduction**: Percentage of legacy patterns eliminated
 - **TypeScript Adoption**: Percentage of codebase in TypeScript
 - **Modern Pattern Usage**: Adoption of ES6+ features
 - **Security Score**: Security vulnerability reduction
 
 ### Performance Impact
+
 - **Build Time**: Impact on compilation speed
 - **Bundle Size**: Effect on output size
 - **Runtime Performance**: Impact on execution speed
@@ -369,15 +394,17 @@ The tools track and report on various metrics:
 ### Common Issues
 
 1. **TypeScript Migration Errors**
+
    ```bash
    # Fix missing type definitions
    npm install --save-dev @types/node @types/react
-   
+
    # Run type checking
    npx tsc --noEmit
    ```
 
 2. **Import Resolution Issues**
+
    ```bash
    # Update tsconfig.json paths
    # Check module resolution strategy
@@ -385,10 +412,11 @@ The tools track and report on various metrics:
    ```
 
 3. **Build Failures After Refactoring**
+
    ```bash
    # Validate step by step
    node tools/refactoring-cli.js validate
-   
+
    # Check specific issues
    npm run typecheck
    npm run lint
@@ -396,10 +424,11 @@ The tools track and report on various metrics:
    ```
 
 4. **Performance Regression**
+
    ```bash
    # Run performance tests
    npm run test:performance
-   
+
    # Profile bundle size
    npm run analyze
    ```
@@ -409,12 +438,14 @@ The tools track and report on various metrics:
 If refactoring causes issues:
 
 1. **Git Reset** (if using version control)
+
    ```bash
    git checkout -- .
    git clean -fd
    ```
 
 2. **Incremental Recovery**
+
    ```bash
    # Re-run with safe mode
    node tools/refactoring-cli.js modernize --safe-mode
@@ -429,6 +460,7 @@ If refactoring causes issues:
 ## Best Practices
 
 ### Before Refactoring
+
 - [ ] Create complete backup of codebase
 - [ ] Ensure all tests pass
 - [ ] Document current architecture
@@ -436,6 +468,7 @@ If refactoring causes issues:
 - [ ] Set up proper monitoring
 
 ### During Refactoring
+
 - [ ] Work in small, incremental changes
 - [ ] Run validation after each phase
 - [ ] Test thoroughly before proceeding
@@ -443,6 +476,7 @@ If refactoring causes issues:
 - [ ] Keep detailed change log
 
 ### After Refactoring
+
 - [ ] Run comprehensive test suite
 - [ ] Performance benchmark comparison
 - [ ] Update documentation
@@ -452,6 +486,7 @@ If refactoring causes issues:
 ## Future Enhancements
 
 ### Planned Features
+
 - **AI-Powered Refactoring**: Machine learning suggestions
 - **Visual Diff Tools**: GUI for reviewing changes
 - **Team Collaboration**: Multi-developer refactoring workflows
@@ -460,21 +495,22 @@ If refactoring causes issues:
 - **Automated Testing**: Generate tests for refactored code
 
 ### Extensibility
+
 The refactoring framework is designed to be extensible:
 
 ```javascript
 // Custom transformation plugin
 class CustomTransformation {
   name = 'custom-pattern';
-  
+
   detect(content) {
     // Detection logic
   }
-  
+
   transform(content) {
     // Transformation logic
   }
-  
+
   validate(content) {
     // Validation logic
   }

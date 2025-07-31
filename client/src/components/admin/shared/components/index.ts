@@ -1,7 +1,7 @@
 /**
  * Shared Components Index
  * REFACTOR-002: Admin Dashboard Architecture Consolidation
- * 
+ *
  * Centralized exports for all shared admin components
  */
 
@@ -14,7 +14,7 @@ export {
   EmptyState,
   EmptySearchState,
   EmptyUsersState,
-  LoadingOverlay
+  LoadingOverlay,
 } from './LoadingStates';
 
 export { default as MetricsCard } from './MetricsCard';

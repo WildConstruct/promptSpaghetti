@@ -56,8 +56,8 @@ export const RNModal: React.FC<RNModalProps> = ({
       // Remove web-specific CSS properties
       transition: undefined,
       opacity: undefined,
-      transform: undefined
-    }
+      transform: undefined,
+    },
   };
 
   if (RNModalComponent) {
@@ -71,7 +71,7 @@ export const RNModal: React.FC<RNModalProps> = ({
             ...rnProps.style,
             // React Native Modal specific styling
             flex: 1,
-            backgroundColor: 'rgba(0, 0, 0, 0.5)'
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
           }}
         >
           {children}
@@ -94,7 +94,7 @@ export const RNModal: React.FC<RNModalProps> = ({
         left: 0,
         right: 0,
         bottom: 0,
-        zIndex: 9999
+        zIndex: 9999,
       }}
     >
       {children}

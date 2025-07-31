@@ -17,11 +17,11 @@ export class AnalyticsClient {
     const fullEvent: AnalyticsEvent = {
       ...event,
       timestamp: new Date(),
-      platform: this.config.platform
+      platform: this.config.platform,
     };
 
     this.eventQueue.push(fullEvent);
-    
+
     if (this.eventQueue.length >= (this.config.batchSize || 10)) {
       this.flush();
     }
@@ -31,7 +31,7 @@ export class AnalyticsClient {
     const fullMetric: PerformanceMetric = {
       ...metric,
       timestamp: new Date(),
-      platform: this.config.platform
+      platform: this.config.platform,
     };
 
     this.metricsQueue.push(fullMetric);
@@ -43,7 +43,7 @@ export class AnalyticsClient {
       console.log(`Flushing ${this.eventQueue.length} events`, this.eventQueue);
       this.eventQueue = [];
     }
-    
+
     if (this.metricsQueue.length > 0) {
       console.log(`Flushing ${this.metricsQueue.length} metrics`, this.metricsQueue);
       this.metricsQueue = [];

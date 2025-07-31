@@ -12,7 +12,7 @@ import {
   CacheInterface,
   MetricsInterface,
   TransformationError,
-  ValidationError
+  ValidationError,
 } from '../types/index.js';
 
 import {
@@ -24,7 +24,7 @@ import {
   ProcessingContext,
   ValidationPipelineStage,
   TransformationPipelineStage,
-  PartialTargetPrompt
+  PartialTargetPrompt,
 } from './AdaptorLifecycle.js';
 
 /**
@@ -35,14 +35,14 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
   protected cache: CacheInterface;
   protected metrics: MetricsInterface;
   protected config: Record<string, any>;
-  
+
   // Lifecycle tracking
   protected initialized = false;
   protected destroyed = false;
   protected initializeTime?: Date;
   protected lastHealthCheck?: Date;
   protected healthMetrics: AdaptorHealthMetrics;
-  
+
   // Pipeline stages
   protected validationPipeline: ValidationPipelineStage[] = [];
   protected transformationPipeline: TransformationPipelineStage[] = [];
@@ -56,24 +56,30 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
     context?: PluginContext
   ) {
     // Initialize with context or defaults
-    this.logger = context?.logger || { 
-      debug: () => {}, 
-      info: () => {}, 
-      warn: () => {}, 
-      error: () => {} 
-    } as Logger;
-    this.cache = context?.cache || { 
-      get: async () => undefined, 
-      set: async () => {}, 
-      del: async () => {},
-      exists: async () => false 
-    } as CacheInterface;
-    this.metrics = context?.metrics || { 
-      counter: () => {}, 
-      gauge: () => {}, 
-      histogram: () => {},
-      timer: () => ({ end: () => {} })
-    } as MetricsInterface;
+    this.logger =
+      context?.logger ||
+      ({
+        debug: () => {},
+        info: () => {},
+        warn: () => {},
+        error: () => {},
+      } as Logger);
+    this.cache =
+      context?.cache ||
+      ({
+        get: async () => undefined,
+        set: async () => {},
+        del: async () => {},
+        exists: async () => false,
+      } as CacheInterface);
+    this.metrics =
+      context?.metrics ||
+      ({
+        counter: () => {},
+        gauge: () => {},
+        histogram: () => {},
+        timer: () => ({ end: () => {} }),
+      } as MetricsInterface);
     this.config = context?.config || {};
 
     this.healthMetrics = {
@@ -81,7 +87,7 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
       requestCount: 0,
       successRate: 1,
       averageResponseTime: 0,
-      errorRate: 0
+      errorRate: 0,
     };
 
     this.setupDefaultPipelines();
@@ -129,34 +135,34 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
       this.config = context.config;
 
       this.initializeTime = new Date();
-      
+
       // Run custom initialization if provided
       if (this.onInitialize) {
         await this.onInitialize();
       }
 
       this.initialized = true;
-      
+
       this.logger.info('Adaptor initialized successfully', {
         adaptorId: this.id,
         version: this.version,
-        platform: this.platform
+        platform: this.platform,
       });
 
       this.metrics.counter('adaptor.initialize.success', 1, {
         adaptor_id: this.id,
-        platform: this.platform
+        platform: this.platform,
       });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       this.logger.error('Adaptor initialization failed', {
         adaptorId: this.id,
-        error: errorMessage
+        error: errorMessage,
       });
 
       this.metrics.counter('adaptor.initialize.error', 1, {
         adaptor_id: this.id,
-        platform: this.platform
+        platform: this.platform,
       });
 
       throw new TransformationError(`Initialization failed: ${errorMessage}`, undefined, 'initialize');
@@ -181,16 +187,16 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
         connectivity: {
           reachable: this.initialized && !this.destroyed,
           latency: 0,
-          lastSuccessfulConnection: this.initializeTime
+          lastSuccessfulConnection: this.initializeTime,
         },
         capabilities: {
           available: this.initialized,
-          lastUpdated: this.initializeTime
+          lastUpdated: this.initializeTime,
         },
         configuration: {
-          valid: this.validateConfiguration()
+          valid: this.validateConfiguration(),
         },
-        dependencies: await this.checkDependencies()
+        dependencies: await this.checkDependencies(),
       };
 
       // Run custom health checks if provided
@@ -208,23 +214,21 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
         details.capabilities.errorMessage = error instanceof Error ? error.message : String(error);
       }
 
-      const healthy = details.connectivity.reachable && 
-                     details.capabilities.available && 
-                     details.configuration.valid;
+      const healthy = details.connectivity.reachable && details.capabilities.available && details.configuration.valid;
 
       const status: AdaptorHealthStatus = {
         healthy,
         status: healthy ? 'healthy' : 'degraded',
         lastChecked: this.lastHealthCheck,
         details,
-        metrics: { ...this.healthMetrics }
+        metrics: { ...this.healthMetrics },
       };
 
       // Update connectivity latency
       status.details.connectivity.latency = Date.now() - startTime;
 
       this.metrics.gauge('adaptor.health.latency', status.details.connectivity.latency, {
-        adaptor_id: this.id
+        adaptor_id: this.id,
       });
 
       return status;
@@ -232,7 +236,7 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
       const errorMessage = error instanceof Error ? error.message : String(error);
       this.logger.error('Health check failed', {
         adaptorId: this.id,
-        error: errorMessage
+        error: errorMessage,
       });
 
       return {
@@ -242,13 +246,13 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
         details: {
           connectivity: {
             reachable: false,
-            errorMessage: errorMessage
+            errorMessage: errorMessage,
           },
           capabilities: { available: false },
           configuration: { valid: false },
-          dependencies: []
+          dependencies: [],
         },
-        metrics: { ...this.healthMetrics }
+        metrics: { ...this.healthMetrics },
       };
     }
   }
@@ -266,9 +270,9 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
     this.healthMetrics.requestCount++;
 
     try {
-      this.logger.debug('Starting validation', { 
-        adaptorId: this.id, 
-        graphId: graph.id 
+      this.logger.debug('Starting validation', {
+        adaptorId: this.id,
+        graphId: graph.id,
       });
 
       // Pre-processing hook
@@ -279,7 +283,7 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
 
       // Run validation pipeline
       let allResults: ValidationResult[] = [];
-      
+
       const context: ProcessingContext = {
         adaptorId: this.id,
         requestId: `val-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -287,7 +291,7 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
         metadata: { originalGraphId: graph.id },
         logger: this.logger,
         metrics: this.metrics,
-        config: this.config
+        config: this.config,
       };
 
       // Execute validation pipeline stages
@@ -310,7 +314,7 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
                 severity: 'high',
                 message: `Validation stage "${stage.name}" failed`,
                 description: error instanceof Error ? error.message : String(error),
-                autoFixable: false
+                autoFixable: false,
               });
             }
           }
@@ -331,44 +335,44 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
       const duration = Date.now() - startTime;
       this.updateSuccessMetrics(duration);
 
-      this.metrics.counter('adaptor.validate.total', 1, { 
+      this.metrics.counter('adaptor.validate.total', 1, {
         adaptor: this.id,
-        platform: this.platform 
+        platform: this.platform,
       });
-      
-      this.metrics.counter('adaptor.validate.issues', allResults.length, { 
+
+      this.metrics.counter('adaptor.validate.issues', allResults.length, {
         adaptor: this.id,
-        platform: this.platform 
+        platform: this.platform,
       });
 
       this.logger.info('Validation completed', {
         adaptorId: this.id,
         graphId: graph.id,
         issueCount: allResults.length,
-        duration
+        duration,
       });
 
       return allResults;
     } catch (error) {
       const typedError = error instanceof Error ? error : new Error(String(error));
       this.updateErrorMetrics(Date.now() - startTime, typedError);
-      
-      this.metrics.counter('adaptor.validate.error', 1, { 
+
+      this.metrics.counter('adaptor.validate.error', 1, {
         adaptor: this.id,
-        platform: this.platform 
+        platform: this.platform,
       });
-      
+
       const errorMessage = error instanceof Error ? error.message : String(error);
       this.logger.error('Validation failed', {
         adaptorId: this.id,
         graphId: graph.id,
-        error: errorMessage
+        error: errorMessage,
       });
-      
+
       if (error instanceof ValidationError) {
         throw error;
       }
-      
+
       throw new ValidationError(`Validation failed: ${errorMessage}`, []);
     } finally {
       timer.end();
@@ -391,13 +395,13 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
       this.logger.debug('Starting transformation', {
         adaptorId: this.id,
         graphId: graph.id,
-        options
+        options,
       });
 
       // Validate first
       const validationResults = await this.validate(graph);
       const errors = validationResults.filter(r => r.type === 'error');
-      
+
       if (errors.length > 0) {
         throw new ValidationError('Graph validation failed', validationResults);
       }
@@ -412,19 +416,19 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
       // Check cache
       const cacheKey = this.generateCacheKey(processedGraph, options);
       const cached = await this.cache.get(cacheKey);
-      
+
       if (cached) {
-        this.metrics.counter('adaptor.transform.cache.hit', 1, { 
+        this.metrics.counter('adaptor.transform.cache.hit', 1, {
           adaptor: this.id,
-          platform: this.platform 
+          platform: this.platform,
         });
-        
+
         this.logger.debug('Cache hit for transformation', {
           adaptorId: this.id,
           graphId: graph.id,
-          cacheKey
+          cacheKey,
         });
-        
+
         this.updateSuccessMetrics(Date.now() - startTime);
         return cached;
       }
@@ -437,7 +441,7 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
         metadata: { originalGraphId: graph.id, options },
         logger: this.logger,
         metrics: this.metrics,
-        config: this.config
+        config: this.config,
       };
 
       const partialResult: PartialTargetPrompt = {};
@@ -447,7 +451,7 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
         if (stage.canHandle(processedGraph)) {
           try {
             const stageResult = await stage.process(processedGraph, context);
-            
+
             // Merge stage results
             if (stageResult.content !== undefined) {
               partialResult.content = stageResult.content;
@@ -469,7 +473,7 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
                 // Handle error recovery
               }
             }
-            
+
             if (stage.required) {
               throw new TransformationError(
                 `Required transformation stage "${stage.name}" failed: ${error instanceof Error ? error.message : String(error)}`,
@@ -499,56 +503,56 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
       }
 
       // Post-processing hook
-      // afterTransform hook - override in subclasses if needed  
+      // afterTransform hook - override in subclasses if needed
       if ('afterTransform' in this && typeof this.afterTransform === 'function') {
         result = await this.afterTransform(processedGraph, result);
       }
 
       // Cache the result
       await this.cache.set(cacheKey, result, this.getCacheTTL());
-      
+
       // Update metrics
       const duration = Date.now() - startTime;
       this.updateSuccessMetrics(duration);
 
-      this.metrics.counter('adaptor.transform.success', 1, { 
+      this.metrics.counter('adaptor.transform.success', 1, {
         adaptor: this.id,
-        platform: this.platform 
+        platform: this.platform,
       });
-      
-      this.metrics.counter('adaptor.transform.cache.miss', 1, { 
+
+      this.metrics.counter('adaptor.transform.cache.miss', 1, {
         adaptor: this.id,
-        platform: this.platform 
+        platform: this.platform,
       });
 
       this.logger.info('Transformation completed', {
         adaptorId: this.id,
         graphId: graph.id,
         quality: result.metadata.quality.overall,
-        duration
+        duration,
       });
 
       return result;
     } catch (error) {
       const typedError = error instanceof Error ? error : new Error(String(error));
       this.updateErrorMetrics(Date.now() - startTime, typedError);
-      
-      this.metrics.counter('adaptor.transform.error', 1, { 
+
+      this.metrics.counter('adaptor.transform.error', 1, {
         adaptor: this.id,
-        platform: this.platform 
+        platform: this.platform,
       });
-      
+
       const errorMessage = error instanceof Error ? error.message : String(error);
       this.logger.error('Transformation failed', {
         adaptorId: this.id,
         graphId: graph.id,
-        error: errorMessage
+        error: errorMessage,
       });
-      
+
       if (error instanceof ValidationError || error instanceof TransformationError) {
         throw error;
       }
-      
+
       throw new TransformationError(`Transformation failed: ${errorMessage}`);
     } finally {
       timer.end();
@@ -562,15 +566,15 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
     try {
       const capabilities = await this.capabilities();
       const validationResults = await this.validate(graph);
-      
+
       return this.calculateQualityScore(graph, capabilities, validationResults);
     } catch (error) {
       this.logger.warn('Quality estimation failed', {
         adaptorId: this.id,
         graphId: graph.id,
-        error: error instanceof Error ? error.message : String(error)
+        error: error instanceof Error ? error.message : String(error),
       });
-      
+
       // Return a low quality score if estimation fails
       return {
         overall: 10,
@@ -583,8 +587,8 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
           parameterMapping: 10,
           featureSupport: 10,
           semanticPreservation: 10,
-          syntaxValidity: 10
-        }
+          syntaxValidity: 10,
+        },
       };
     }
   }
@@ -605,25 +609,25 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
 
       this.destroyed = true;
       this.initialized = false;
-      
+
       this.logger.info('Adaptor destroyed successfully', {
-        adaptorId: this.id
+        adaptorId: this.id,
       });
 
       this.metrics.counter('adaptor.destroy.success', 1, {
         adaptor_id: this.id,
-        platform: this.platform
+        platform: this.platform,
       });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       this.logger.error('Adaptor destruction failed', {
         adaptorId: this.id,
-        error: errorMessage
+        error: errorMessage,
       });
 
       this.metrics.counter('adaptor.destroy.error', 1, {
         adaptor_id: this.id,
-        platform: this.platform
+        platform: this.platform,
       });
 
       throw error;
@@ -635,14 +639,14 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
    */
   async onConfigurationChange(newConfig: Record<string, any>): Promise<void> {
     this.config = { ...this.config, ...newConfig };
-    
+
     this.logger.info('Configuration updated', {
       adaptorId: this.id,
-      configKeys: Object.keys(newConfig)
+      configKeys: Object.keys(newConfig),
     });
 
     this.metrics.counter('adaptor.config.change', 1, {
-      adaptor_id: this.id
+      adaptor_id: this.id,
     });
   }
 
@@ -696,12 +700,10 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
   protected updateSuccessMetrics(duration: number): void {
     const oldCount = this.healthMetrics.requestCount - 1;
     const oldAvg = this.healthMetrics.averageResponseTime;
-    
-    this.healthMetrics.averageResponseTime = 
-      (oldAvg * oldCount + duration) / this.healthMetrics.requestCount;
-    
-    this.healthMetrics.successRate = 
-      (this.healthMetrics.successRate * oldCount + 1) / this.healthMetrics.requestCount;
+
+    this.healthMetrics.averageResponseTime = (oldAvg * oldCount + duration) / this.healthMetrics.requestCount;
+
+    this.healthMetrics.successRate = (this.healthMetrics.successRate * oldCount + 1) / this.healthMetrics.requestCount;
   }
 
   /**
@@ -711,19 +713,17 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
     this.healthMetrics.lastError = {
       timestamp: new Date(),
       message: error.message,
-      type: error.constructor.name
+      type: error.constructor.name,
     };
-    
+
     const oldCount = this.healthMetrics.requestCount - 1;
     const oldAvg = this.healthMetrics.averageResponseTime;
     const oldSuccessRate = this.healthMetrics.successRate;
-    
-    this.healthMetrics.averageResponseTime = 
-      (oldAvg * oldCount + duration) / this.healthMetrics.requestCount;
-    
-    this.healthMetrics.successRate = 
-      (oldSuccessRate * oldCount) / this.healthMetrics.requestCount;
-    
+
+    this.healthMetrics.averageResponseTime = (oldAvg * oldCount + duration) / this.healthMetrics.requestCount;
+
+    this.healthMetrics.successRate = (oldSuccessRate * oldCount) / this.healthMetrics.requestCount;
+
     this.healthMetrics.errorRate = 1 - this.healthMetrics.successRate;
   }
 
@@ -732,24 +732,24 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
     const graphHash = this.hashObject({
       nodes: graph.nodes,
       edges: graph.edges,
-      version: graph.version
+      version: graph.version,
     });
-    
+
     const optionsHash = options ? this.hashObject(options) : 'none';
-    
+
     return `${this.id}:${this.version}:${graphHash}:${optionsHash}`;
   }
 
   protected hashObject(obj: any): string {
     const str = JSON.stringify(obj, Object.keys(obj).sort());
     let hash = 0;
-    
+
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
+      hash = (hash << 5) - hash + char;
       hash = hash & hash;
     }
-    
+
     return Math.abs(hash).toString(36);
   }
 
@@ -764,31 +764,28 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
   ): QualityScore {
     const errors = validationResults.filter(r => r.type === 'error').length;
     const warnings = validationResults.filter(r => r.type === 'warning').length;
-    
+
     // Node type support analysis
-    const unsupportedNodes = graph.nodes.filter(
-      node => !capabilities.supportedNodeTypes.includes(node.type)
-    ).length;
-    
+    const unsupportedNodes = graph.nodes.filter(node => !capabilities.supportedNodeTypes.includes(node.type)).length;
+
     const nodeSupport = Math.max(0, 100 - (unsupportedNodes / graph.nodes.length) * 100);
-    
+
     // Error/warning impact
     const errorImpact = Math.max(0, 100 - errors * 25);
     const warningImpact = Math.max(0, 100 - warnings * 10);
-    
+
     // Feature completeness
-    const featureSupport = capabilities.features
-      .filter(f => f.supported)
-      .length / Math.max(1, capabilities.features.length) * 100;
-    
+    const featureSupport =
+      (capabilities.features.filter(f => f.supported).length / Math.max(1, capabilities.features.length)) * 100;
+
     // Overall calculations
     const fidelity = (nodeSupport + errorImpact) / 2;
     const compatibility = (nodeSupport + featureSupport) / 2;
     const performance = warningImpact;
     const completeness = featureSupport;
-    
+
     const overall = (fidelity + compatibility + performance + completeness) / 4;
-    
+
     return {
       overall: Math.round(overall),
       fidelity: Math.round(fidelity),
@@ -800,8 +797,8 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
         parameterMapping: Math.round(featureSupport),
         featureSupport: Math.round(featureSupport),
         semanticPreservation: Math.round(fidelity),
-        syntaxValidity: Math.round(errorImpact)
-      }
+        syntaxValidity: Math.round(errorImpact),
+      },
     };
   }
 
@@ -827,7 +824,7 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
       nodeId: options.nodeId,
       edgeId: options.edgeId,
       autoFixable: options.autoFixable || false,
-      suggestions: options.suggestions || []
+      suggestions: options.suggestions || [],
     };
   }
 }

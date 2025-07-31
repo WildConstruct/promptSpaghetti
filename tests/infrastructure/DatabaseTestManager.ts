@@ -1,9 +1,9 @@
 /**
  * Database Test Manager
- * 
+ *
  * Provides comprehensive database testing infrastructure including
  * seeding, migration management, transaction isolation, and cleanup.
- * 
+ *
  * Task: E18-1753114562152-28B905
  */
 
@@ -77,7 +77,7 @@ export class DatabaseTestManager {
     await this.connect();
     await this.loadMigrations();
     await this.loadSeedDataSets();
-    
+
     console.log(`📦 Database test manager initialized for ${this.config.type}`);
   }
 
@@ -88,34 +88,31 @@ export class DatabaseTestManager {
     await this.dropAllTables();
     await this.runMigrations();
     await this.createTestSchema();
-    
+
     console.log('🧹 Test database setup completed');
   }
 
   /**
    * Begin a test transaction with isolation
    */
-  async beginTransaction(
-    testId: string, 
-    isolation: TestTransaction['isolation'] = 'read_committed'
-  ): Promise<string> {
+  async beginTransaction(testId: string, isolation: TestTransaction['isolation'] = 'read_committed'): Promise<string> {
     const transactionId = `tx_${testId}_${Date.now()}`;
-    
+
     // Take snapshot before transaction
     const snapshot = await this.createSnapshot(`before_${transactionId}`);
-    
+
     const transaction: TestTransaction = {
       id: transactionId,
       startTime: new Date(),
       isolation,
       tables: new Set(),
-      snapshots: new Map([['before', snapshot.tables]])
+      snapshots: new Map([['before', snapshot.tables]]),
     };
 
     await this.executeQuery(`BEGIN TRANSACTION ISOLATION LEVEL ${isolation.toUpperCase()}`);
-    
+
     this.activeTransactions.set(transactionId, transaction);
-    
+
     console.log(`🔄 Started transaction ${transactionId} with ${isolation} isolation`);
     return transactionId;
   }
@@ -131,7 +128,7 @@ export class DatabaseTestManager {
 
     await this.executeQuery('COMMIT');
     this.activeTransactions.delete(transactionId);
-    
+
     console.log(`✅ Committed transaction ${transactionId}`);
   }
 
@@ -146,7 +143,7 @@ export class DatabaseTestManager {
 
     await this.executeQuery('ROLLBACK');
     this.activeTransactions.delete(transactionId);
-    
+
     console.log(`↩️ Rolled back transaction ${transactionId}`);
   }
 
@@ -156,7 +153,7 @@ export class DatabaseTestManager {
   async seedDatabase(dataSetNames: string[]): Promise<void> {
     // Resolve dependencies and sort
     const sortedDataSets = this.resolveSeedDependencies(dataSetNames);
-    
+
     for (const dataSetName of sortedDataSets) {
       const dataSet = this.seedDataSets.get(dataSetName);
       if (!dataSet) {
@@ -174,23 +171,23 @@ export class DatabaseTestManager {
   async createSnapshot(id: string): Promise<DatabaseSnapshot> {
     const tables = await this.getAllTableData();
     const rowCounts: Record<string, number> = {};
-    
+
     for (const [tableName, data] of Object.entries(tables)) {
       rowCounts[tableName] = data.length;
     }
 
     const checksum = this.calculateDataChecksum(tables);
-    
+
     const snapshot: DatabaseSnapshot = {
       id,
       timestamp: new Date(),
       tables,
-      metadata: { rowCounts, checksum }
+      metadata: { rowCounts, checksum },
     };
 
     this.snapshots.set(id, snapshot);
     console.log(`📸 Created database snapshot: ${id}`);
-    
+
     return snapshot;
   }
 
@@ -205,7 +202,7 @@ export class DatabaseTestManager {
 
     // Clear all tables
     await this.truncateAllTables();
-    
+
     // Restore data
     for (const [tableName, data] of Object.entries(snapshot.tables)) {
       if (data.length > 0) {
@@ -219,7 +216,10 @@ export class DatabaseTestManager {
   /**
    * Compare two snapshots
    */
-  async compareSnapshots(snapshot1Id: string, snapshot2Id: string): Promise<{
+  async compareSnapshots(
+    snapshot1Id: string,
+    snapshot2Id: string
+  ): Promise<{
     identical: boolean;
     differences: Array<{
       table: string;
@@ -230,16 +230,13 @@ export class DatabaseTestManager {
   }> {
     const snapshot1 = this.snapshots.get(snapshot1Id);
     const snapshot2 = this.snapshots.get(snapshot2Id);
-    
+
     if (!snapshot1 || !snapshot2) {
       throw new Error('One or both snapshots not found');
     }
 
     const differences = [];
-    const allTables = new Set([
-      ...Object.keys(snapshot1.tables),
-      ...Object.keys(snapshot2.tables)
-    ]);
+    const allTables = new Set([...Object.keys(snapshot1.tables), ...Object.keys(snapshot2.tables)]);
 
     for (const tableName of allTables) {
       const data1 = snapshot1.tables[tableName] || [];
@@ -250,7 +247,7 @@ export class DatabaseTestManager {
           table: tableName,
           type: 'row_count' as const,
           before: data1.length,
-          after: data2.length
+          after: data2.length,
         });
       }
 
@@ -263,14 +260,14 @@ export class DatabaseTestManager {
           table: tableName,
           type: 'data' as const,
           before: checksum1,
-          after: checksum2
+          after: checksum2,
         });
       }
     }
 
     return {
       identical: differences.length === 0,
-      differences
+      differences,
     };
   }
 
@@ -307,13 +304,13 @@ export class DatabaseTestManager {
       return {
         valid: errors.length === 0,
         errors,
-        warnings
+        warnings,
       };
     } catch (error) {
       return {
         valid: false,
         errors: [`Integrity check failed: ${error}`],
-        warnings
+        warnings,
       };
     }
   }
@@ -321,17 +318,13 @@ export class DatabaseTestManager {
   /**
    * Generate test data for specific tables
    */
-  async generateTestData(
-    tableName: string, 
-    count: number, 
-    template?: Record<string, any>
-  ): Promise<any[]> {
+  async generateTestData(tableName: string, count: number, template?: Record<string, any>): Promise<any[]> {
     const tableSchema = await this.getTableSchema(tableName);
     const testData = [];
 
     for (let i = 0; i < count; i++) {
       const record: Record<string, any> = {};
-      
+
       for (const column of tableSchema.columns) {
         if (template && template[column.name] !== undefined) {
           record[column.name] = template[column.name];
@@ -339,7 +332,7 @@ export class DatabaseTestManager {
           record[column.name] = this.generateColumnValue(column, i);
         }
       }
-      
+
       testData.push(record);
     }
 
@@ -350,7 +343,7 @@ export class DatabaseTestManager {
    * Analyze query performance
    */
   async analyzeQueryPerformance(
-    query: string, 
+    query: string,
     iterations: number = 10
   ): Promise<{
     avgExecutionTime: number;
@@ -364,7 +357,7 @@ export class DatabaseTestManager {
       const startTime = performance.now();
       await this.executeQuery(query);
       const endTime = performance.now();
-      
+
       executionTimes.push(endTime - startTime);
     }
 
@@ -379,7 +372,7 @@ export class DatabaseTestManager {
       avgExecutionTime,
       minExecutionTime,
       maxExecutionTime,
-      executionPlan
+      executionPlan,
     };
   }
 
@@ -404,20 +397,20 @@ export class DatabaseTestManager {
   private async connect(): Promise<void> {
     // Database-specific connection logic
     switch (this.config.type) {
-    case 'sqlite':
-      await this.connectSQLite();
-      break;
-    case 'postgres':
-      await this.connectPostgres();
-      break;
-    case 'mysql':
-      await this.connectMySQL();
-      break;
-    case 'redis':
-      await this.connectRedis();
-      break;
-    default:
-      throw new Error(`Unsupported database type: ${this.config.type}`);
+      case 'sqlite':
+        await this.connectSQLite();
+        break;
+      case 'postgres':
+        await this.connectPostgres();
+        break;
+      case 'mysql':
+        await this.connectMySQL();
+        break;
+      case 'redis':
+        await this.connectRedis();
+        break;
+      default:
+        throw new Error(`Unsupported database type: ${this.config.type}`);
     }
   }
 
@@ -448,15 +441,13 @@ export class DatabaseTestManager {
   private async loadMigrations(): Promise<void> {
     try {
       const files = await fs.readdir(this.migrationsDir);
-      const migrationFiles = files
-        .filter(file => file.endsWith('.sql'))
-        .sort();
+      const migrationFiles = files.filter(file => file.endsWith('.sql')).sort();
 
       for (const file of migrationFiles) {
         const filePath = path.join(this.migrationsDir, file);
         const content = await fs.readFile(filePath, 'utf-8');
         const checksum = createHash('md5').update(content).digest('hex');
-        
+
         // TODO: Check if migration was already applied
         console.log(`📄 Loaded migration: ${file}`);
       }
@@ -474,7 +465,7 @@ export class DatabaseTestManager {
         const filePath = path.join(this.seedsDir, file);
         const content = await fs.readFile(filePath, 'utf-8');
         const seedDataSet: SeedDataSet = JSON.parse(content);
-        
+
         this.seedDataSets.set(seedDataSet.name, seedDataSet);
         console.log(`🌱 Loaded seed data set: ${seedDataSet.name}`);
       }
@@ -514,7 +505,7 @@ export class DatabaseTestManager {
     return {
       users: [],
       projects: [],
-      rules: []
+      rules: [],
     };
   }
 
@@ -562,25 +553,25 @@ export class DatabaseTestManager {
       columns: [
         { name: 'id', type: 'integer', nullable: false },
         { name: 'name', type: 'varchar', nullable: false },
-        { name: 'created_at', type: 'timestamp', nullable: false }
-      ]
+        { name: 'created_at', type: 'timestamp', nullable: false },
+      ],
     };
   }
 
   private generateColumnValue(column: any, index: number): any {
     switch (column.type.toLowerCase()) {
-    case 'integer':
-      return index + 1;
-    case 'varchar':
-    case 'text':
-      return `test_${column.name}_${index}`;
-    case 'timestamp':
-    case 'datetime':
-      return new Date();
-    case 'boolean':
-      return index % 2 === 0;
-    default:
-      return null;
+      case 'integer':
+        return index + 1;
+      case 'varchar':
+      case 'text':
+        return `test_${column.name}_${index}`;
+      case 'timestamp':
+      case 'datetime':
+        return new Date();
+      case 'boolean':
+        return index % 2 === 0;
+      default:
+        return null;
     }
   }
 
@@ -613,14 +604,14 @@ export const DatabaseTestScenarios = {
     tables: {
       users: [
         { id: 1, username: 'testuser1', email: 'test1@example.com', created_at: new Date() },
-        { id: 2, username: 'testuser2', email: 'test2@example.com', created_at: new Date() }
+        { id: 2, username: 'testuser2', email: 'test2@example.com', created_at: new Date() },
       ],
       projects: [
         { id: 1, name: 'Test Project 1', owner_id: 1, created_at: new Date() },
-        { id: 2, name: 'Test Project 2', owner_id: 2, created_at: new Date() }
-      ]
+        { id: 2, name: 'Test Project 2', owner_id: 2, created_at: new Date() },
+      ],
     },
-    cleanup: true
+    cleanup: true,
   },
 
   /**
@@ -632,7 +623,7 @@ export const DatabaseTestScenarios = {
     tables: {
       // Generate large datasets programmatically
     },
-    cleanup: true
+    cleanup: true,
   },
 
   /**
@@ -644,11 +635,16 @@ export const DatabaseTestScenarios = {
     tables: {
       users: [
         { id: 1, username: '', email: null, created_at: new Date('1970-01-01') },
-        { id: 2, username: 'a'.repeat(1000), email: 'very.long.email@' + 'a'.repeat(100) + '.com', created_at: new Date('2999-12-31') }
-      ]
+        {
+          id: 2,
+          username: 'a'.repeat(1000),
+          email: 'very.long.email@' + 'a'.repeat(100) + '.com',
+          created_at: new Date('2999-12-31'),
+        },
+      ],
     },
-    cleanup: true
-  }
+    cleanup: true,
+  },
 };
 
 export default DatabaseTestManager;

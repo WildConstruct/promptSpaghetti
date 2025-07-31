@@ -10,6 +10,7 @@ The retry mechanism system provides robust error handling and automatic recovery
 ## Features
 
 ### Core Capabilities
+
 - **Exponential Backoff**: Intelligent delay calculation with configurable base delay and maximum delay
 - **Jitter**: Random variation to prevent thundering herd problems
 - **Circuit Breaker**: Automatic failure detection and service protection
@@ -18,6 +19,7 @@ The retry mechanism system provides robust error handling and automatic recovery
 - **Decorator Support**: Simple decorator-based retry configuration
 
 ### Specialized Patterns
+
 - **Database Operations**: Optimized for database timeouts, deadlocks, and connection issues
 - **HTTP Operations**: Tailored for API calls with appropriate status code handling
 - **File Operations**: Handles file system locking and resource conflicts
@@ -49,7 +51,7 @@ const result = await RetryUtils.execute(
     retryableErrors: [/timeout/i, /connection/i, 500, 503],
     onAttempt: (attempt, error) => {
       console.log(`Attempt ${attempt} failed: ${error.message}`);
-    }
+    },
   }
 );
 ```
@@ -78,10 +80,10 @@ class UserService {
 import { RetryUtils, retryableHttp } from '../utils/RetryUtils';
 
 class ExternalAPIService {
-  @retryableHttp({ 
+  @retryableHttp({
     maxAttempts: 4,
     baseDelay: 1000,
-    retryableErrors: [500, 502, 503, 504, 408, 429]
+    retryableErrors: [500, 502, 503, 504, 408, 429],
   })
   async callExternalAPI(endpoint: string): Promise<any> {
     const response = await fetch(endpoint);
@@ -106,10 +108,7 @@ const filePath = await RetryPatterns.fileOperation(async () => {
 });
 
 // API calls with service identification
-const apiData = await RetryPatterns.apiCall(
-  () => this.fetchDataFromAPI(),
-  'user-service'
-);
+const apiData = await RetryPatterns.apiCall(() => this.fetchDataFromAPI(), 'user-service');
 
 // Log analysis operations
 await RetryPatterns.logAnalysis(async () => {
@@ -130,7 +129,7 @@ const result = await RetryUtils.executeWithCircuitBreaker(
   'unreliable-service-key',
   {
     maxAttempts: 3,
-    baseDelay: 1000
+    baseDelay: 1000,
   }
 );
 ```
@@ -163,11 +162,11 @@ if (result.success) {
 
 ```typescript
 interface RetryOptions {
-  maxAttempts?: number;        // Maximum retry attempts (default: 3)
-  baseDelay?: number;          // Base delay in milliseconds (default: 1000)
-  maxDelay?: number;           // Maximum delay in milliseconds (default: 30000)
-  backoffFactor?: number;      // Exponential backoff multiplier (default: 2)
-  jitter?: boolean;            // Add random jitter to delays (default: true)
+  maxAttempts?: number; // Maximum retry attempts (default: 3)
+  baseDelay?: number; // Base delay in milliseconds (default: 1000)
+  maxDelay?: number; // Maximum delay in milliseconds (default: 30000)
+  backoffFactor?: number; // Exponential backoff multiplier (default: 2)
+  jitter?: boolean; // Add random jitter to delays (default: true)
   retryableErrors?: Array<string | number | RegExp>; // Error patterns to retry
   onAttempt?: (attempt: number, error: Error) => void;
   onSuccess?: (attempt: number, result: any) => void;
@@ -178,6 +177,7 @@ interface RetryOptions {
 ### Default Configurations
 
 #### Database Operations
+
 - **Max Attempts**: 3
 - **Base Delay**: 500ms
 - **Max Delay**: 5000ms
@@ -185,6 +185,7 @@ interface RetryOptions {
 - **Retryable Errors**: Connection issues, timeouts, deadlocks
 
 #### HTTP Operations
+
 - **Max Attempts**: 3
 - **Base Delay**: 1000ms
 - **Max Delay**: 10000ms
@@ -192,6 +193,7 @@ interface RetryOptions {
 - **Retryable Errors**: 5xx status codes, timeouts, network errors
 
 #### File Operations
+
 - **Max Attempts**: 3
 - **Base Delay**: 100ms
 - **Max Delay**: 1000ms
@@ -268,11 +270,11 @@ The retry system automatically classifies errors:
 // Retry only specific error types
 {
   retryableErrors: [
-    /timeout/i,           // Regex pattern
-    'ECONNRESET',        // String match
-    500,                 // HTTP status code
-    /analysis.*failed/i  // Custom pattern
-  ]
+    /timeout/i, // Regex pattern
+    'ECONNRESET', // String match
+    500, // HTTP status code
+    /analysis.*failed/i, // Custom pattern
+  ];
 }
 ```
 
@@ -310,34 +312,36 @@ The system provides comprehensive retry analytics:
 ## Best Practices
 
 ### 1. Choose Appropriate Retry Counts
+
 - **Critical operations**: 3-5 attempts
-- **User-facing operations**: 2-3 attempts  
+- **User-facing operations**: 2-3 attempts
 - **Background tasks**: 5-10 attempts
 
 ### 2. Use Appropriate Delays
+
 - **Fast operations**: 100-500ms base delay
 - **Network operations**: 1000-2000ms base delay
 - **Heavy processing**: 2000-5000ms base delay
 
 ### 3. Implement Proper Error Classification
+
 ```typescript
 // Good: Specific error patterns
-retryableErrors: [/timeout/i, /connection/i, 500, 503]
+retryableErrors: [/timeout/i, /connection/i, 500, 503];
 
 // Bad: Retry everything
-retryableErrors: [] // This retries ALL errors
+retryableErrors: []; // This retries ALL errors
 ```
 
 ### 4. Use Circuit Breakers for External Dependencies
+
 ```typescript
 // Protect against cascading failures
-await RetryUtils.executeWithCircuitBreaker(
-  () => externalService.call(),
-  'external-service-key'
-);
+await RetryUtils.executeWithCircuitBreaker(() => externalService.call(), 'external-service-key');
 ```
 
 ### 5. Monitor and Alert on Retry Patterns
+
 ```typescript
 // Log retry attempts for monitoring
 onAttempt: (attempt, error) => {
@@ -345,22 +349,25 @@ onAttempt: (attempt, error) => {
     // Send metrics to monitoring system
     metrics.increment('retry.attempt', { service: 'log-analysis' });
   }
-}
+};
 ```
 
 ## Performance Considerations
 
 ### Memory Usage
+
 - Retry history is stored per operation
 - Circuit breaker states are cached in memory
 - Clear completed retry sessions periodically
 
 ### Latency Impact
+
 - Exponential backoff increases operation time
 - Use appropriate maximum delay limits
 - Consider timeout vs retry trade-offs
 
 ### Resource Protection
+
 - Circuit breakers prevent resource exhaustion
 - Jitter prevents synchronized retry storms
 - Rate limiting integration available
@@ -370,17 +377,20 @@ onAttempt: (attempt, error) => {
 ### Existing Services
 
 1. **Add Import**:
+
 ```typescript
 import { RetryUtils, retryableDatabase } from '../utils/RetryUtils';
 ```
 
 2. **Add Decorators to Critical Methods**:
+
 ```typescript
 @retryableDatabase()
 async criticalDatabaseOperation() { ... }
 ```
 
 3. **Update Error Handling**:
+
 ```typescript
 // Replace try-catch with retry logic
 const result = await RetryUtils.execute(() => operation());
@@ -413,7 +423,7 @@ Enable detailed retry logging:
 {
   onAttempt: (attempt, error) => {
     console.debug(`Retry attempt ${attempt}: ${error.message}`);
-  }
+  };
 }
 ```
 
@@ -422,6 +432,7 @@ Enable detailed retry logging:
 The retry mechanism system provides a robust foundation for handling transient failures throughout the application. By implementing proper retry strategies, the system can automatically recover from temporary issues, improve reliability, and provide better user experience.
 
 The system is designed to be:
+
 - **Easy to use**: Simple decorators and utility functions
 - **Configurable**: Extensive customization options
 - **Observable**: Comprehensive logging and monitoring

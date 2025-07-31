@@ -2,13 +2,13 @@
   "name": "@promptscape/core",
   "version": "0.1.0-alpha",
   "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js", 
+  "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",
   "private": true,
   "scripts": {
     "build": "npm run build:esm && npm run build:cjs && npm run build:types",
     "build:esm": "tsc --project tsconfig.esm.json",
-    "build:cjs": "tsc --project tsconfig.cjs.json", 
+    "build:cjs": "tsc --project tsconfig.cjs.json",
     "build:types": "tsc --project tsconfig.types.json",
     "test": "jest"
   },

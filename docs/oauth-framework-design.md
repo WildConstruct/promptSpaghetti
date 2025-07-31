@@ -2,7 +2,7 @@
 
 **Task**: T-1752989143998-562 - Design OAuth framework  
 **Epic**: Epic 19.5 - OAuth Implementation & Framework  
-**Status**: Implementation Ready  
+**Status**: Implementation Ready
 
 ## Executive Summary
 
@@ -26,7 +26,7 @@ The codebase contains a **world-class OAuth infrastructure** including:
 
 1. **Configuration User Interface** - Visual OAuth provider management
 2. **Administrative Dashboard** - Security monitoring and compliance
-3. **User Account Management** - OAuth account linking interface  
+3. **User Account Management** - OAuth account linking interface
 4. **Enhanced User Experience** - Streamlined OAuth workflows
 5. **Developer Tools** - OAuth testing and validation interfaces
 
@@ -61,6 +61,7 @@ OAuth Framework
 **File**: `client/src/components/oauth/OAuthConfigurationInterface.tsx`
 
 **Features**:
+
 - Visual OAuth provider configuration
 - Integration with existing `OAuthGuidanceService`
 - Real-time configuration validation
@@ -68,6 +69,7 @@ OAuth Framework
 - Compliance status monitoring
 
 **API Integration**:
+
 ```typescript
 // Leverages existing endpoints:
 POST /api/oauth-guidance/generate-configuration
@@ -78,6 +80,7 @@ PUT  /api/oauth-guidance/configuration/:id
 ```
 
 **State Management**:
+
 ```typescript
 interface OAuthConfigurationState {
   providers: OAuthProvider[];
@@ -94,6 +97,7 @@ interface OAuthConfigurationState {
 **File**: `client/src/components/oauth/OAuthProviderManager.tsx`
 
 **Features**:
+
 - Add/remove OAuth providers
 - Configure provider settings (client ID, scopes, endpoints)
 - Test provider connections
@@ -101,6 +105,7 @@ interface OAuthConfigurationState {
 - Bulk provider operations
 
 **Integration Points**:
+
 - Consumes existing OAuth service APIs
 - Integrates with security audit logging
 - Uses existing provider validation logic
@@ -110,6 +115,7 @@ interface OAuthConfigurationState {
 **File**: `client/src/components/oauth/OAuthUserAccountManager.tsx`
 
 **Features**:
+
 - View linked OAuth accounts
 - Link new OAuth providers
 - Unlink OAuth accounts
@@ -117,12 +123,13 @@ interface OAuthConfigurationState {
 - OAuth login flow initiation
 
 **API Integration**:
+
 ```typescript
 // Uses existing OAuth routes:
-GET  /auth/oauth/accounts
-POST /auth/oauth/link
-POST /auth/oauth/unlink
-GET  /auth/oauth/providers
+GET / auth / oauth / accounts;
+POST / auth / oauth / link;
+POST / auth / oauth / unlink;
+GET / auth / oauth / providers;
 ```
 
 #### D. OAuth Security Dashboard
@@ -130,13 +137,15 @@ GET  /auth/oauth/providers
 **File**: `client/src/components/oauth/OAuthSecurityDashboard.tsx`
 
 **Features**:
+
 - OAuth security metrics visualization
-- Audit log analysis and display  
+- Audit log analysis and display
 - Compliance status overview
 - Security event monitoring
 - Risk assessment display
 
 **Data Sources**:
+
 - Existing security audit logs
 - OAuth guidance service assessments
 - Real-time security metrics
@@ -174,7 +183,7 @@ interface OAuthFrameworkStore extends AuthStore {
   // OAuth configuration state
   oauthProviders: OAuthProvider[];
   oauthConfigurations: OAuthConfiguration[];
-  
+
   // OAuth actions
   addProvider: (provider: OAuthProvider) => Promise<void>;
   removeProvider: (providerId: string) => Promise<void>;
@@ -191,16 +200,14 @@ class OAuthAPIClient {
   constructor(private authStore: AuthStore) {}
 
   async createConfiguration(config: OAuthConfiguration) {
-    return await this.authStore.authenticatedFetch(
-      '/api/oauth-guidance/generate-configuration',
-      { method: 'POST', body: JSON.stringify(config) }
-    );
+    return await this.authStore.authenticatedFetch('/api/oauth-guidance/generate-configuration', {
+      method: 'POST',
+      body: JSON.stringify(config),
+    });
   }
 
   async getSecurityAssessment(configId: string) {
-    return await this.authStore.authenticatedFetch(
-      `/api/oauth-guidance/security-assessment/${configId}`
-    );
+    return await this.authStore.authenticatedFetch(`/api/oauth-guidance/security-assessment/${configId}`);
   }
 }
 ```
@@ -252,7 +259,7 @@ End User Workflow:
 abstract class OAuthFrameworkComponent<T> extends React.Component<T> {
   protected oauthService: OAuthFrameworkService;
   protected authStore: AuthStore;
-  
+
   constructor(props: T) {
     super(props);
     this.oauthService = new OAuthFrameworkService();
@@ -284,15 +291,15 @@ class OAuthConfigurationInterface extends OAuthFrameworkComponent<ConfigProps> {
 interface OAuthFrameworkSecurity {
   // Input validation
   validateConfiguration(config: OAuthConfiguration): ValidationResult;
-  
+
   // CSRF protection
   generateStateToken(): string;
   validateStateToken(token: string): boolean;
-  
+
   // Secure storage
   storeSecurely(key: string, value: any): void;
   retrieveSecurely(key: string): any;
-  
+
   // Audit logging
   logConfigurationChange(change: ConfigurationChange): void;
   logSecurityEvent(event: SecurityEvent): void;
@@ -364,13 +371,9 @@ describe('OAuth Framework Integration', () => {
 
 ```typescript
 // Lazy load OAuth components
-const OAuthConfigurationInterface = lazy(() => 
-  import('./components/oauth/OAuthConfigurationInterface')
-);
+const OAuthConfigurationInterface = lazy(() => import('./components/oauth/OAuthConfigurationInterface'));
 
-const OAuthSecurityDashboard = lazy(() =>
-  import('./components/oauth/OAuthSecurityDashboard')
-);
+const OAuthSecurityDashboard = lazy(() => import('./components/oauth/OAuthSecurityDashboard'));
 ```
 
 #### B. Caching Strategy
@@ -379,15 +382,15 @@ const OAuthSecurityDashboard = lazy(() =>
 // OAuth configuration caching
 class OAuthConfigurationCache {
   private cache = new Map<string, OAuthConfiguration>();
-  
+
   get(key: string): OAuthConfiguration | undefined {
     return this.cache.get(key);
   }
-  
+
   set(key: string, config: OAuthConfiguration): void {
     this.cache.set(key, config);
   }
-  
+
   invalidate(key: string): void {
     this.cache.delete(key);
   }
@@ -421,8 +424,8 @@ class OAuthAuditIntegration {
       compliance: {
         frameworks: ['OAuth2.1', 'GDPR'],
         requirements: ['access_control', 'data_protection'],
-        evidenceLevel: 'STANDARD'
-      }
+        evidenceLevel: 'STANDARD',
+      },
     });
   }
 }
@@ -431,24 +434,28 @@ class OAuthAuditIntegration {
 ## Implementation Roadmap
 
 ### Phase 1: Core Configuration UI (Week 1)
+
 - [ ] OAuth Configuration Interface component
-- [ ] OAuth Provider Manager component  
+- [ ] OAuth Provider Manager component
 - [ ] Integration with existing OAuth Guidance Service
 - [ ] Basic validation and error handling
 
 ### Phase 2: User Experience Layer (Week 2)
+
 - [ ] OAuth User Account Manager
 - [ ] OAuth Provider Selection interface
 - [ ] Account linking/unlinking workflows
 - [ ] Connection status monitoring
 
 ### Phase 3: Administrative Dashboard (Week 3)
+
 - [ ] OAuth Security Dashboard
 - [ ] Audit log visualization
 - [ ] Compliance status reporting
 - [ ] Real-time monitoring
 
 ### Phase 4: Advanced Features (Week 4)
+
 - [ ] OAuth testing tools
 - [ ] Advanced security configuration
 - [ ] Bulk operations support
@@ -457,18 +464,21 @@ class OAuthAuditIntegration {
 ## Success Metrics
 
 ### Technical Metrics
+
 - **UI Responsiveness**: Configuration UI loads in <2 seconds
 - **API Integration**: 100% compatibility with existing OAuth services
 - **Error Handling**: Graceful handling of all OAuth errors
 - **Security**: Zero security vulnerabilities in framework
 
 ### User Experience Metrics
+
 - **Configuration Time**: Reduce OAuth setup time by 60%
 - **User Adoption**: 80%+ adoption of OAuth account linking
 - **Support Tickets**: 50% reduction in OAuth-related support requests
 - **Admin Efficiency**: 70% faster OAuth provider configuration
 
 ### Security Metrics
+
 - **Compliance Coverage**: 100% compliance framework integration
 - **Audit Coverage**: Complete audit trail for all OAuth operations
 - **Security Assessment**: Automated security scoring for all configurations
@@ -479,8 +489,9 @@ class OAuthAuditIntegration {
 The OAuth Framework design leverages the existing **enterprise-grade OAuth infrastructure** while adding essential **Configuration UI**, **User Experience**, and **Administrative** capabilities. The framework integrates seamlessly with existing services, maintains security standards, and provides intuitive interfaces for both administrators and end users.
 
 **Key Design Principles:**
+
 - ✅ **Build Upon Existing Infrastructure** - Leverage comprehensive OAuth services
-- ✅ **Security First** - Maintain enterprise security standards  
+- ✅ **Security First** - Maintain enterprise security standards
 - ✅ **User-Centric Design** - Intuitive interfaces for all user types
 - ✅ **Compliance Ready** - Full compliance framework integration
 - ✅ **Performance Optimized** - Lazy loading and intelligent caching

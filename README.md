@@ -78,7 +78,7 @@ promptscape-graph/
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - pnpm (recommended) or npm
 - Git
 
@@ -97,6 +97,7 @@ pnpm dev
 ```
 
 This will start:
+
 - **Client**: http://localhost:3000 (React UI)
 - **Server**: http://localhost:8000 (API)
 
@@ -122,14 +123,14 @@ For the best development experience:
 
 ### Node Types
 
-| Node Type | Description | Example Use Case |
-|-----------|-------------|------------------|
-| **WeightedChoice** | Randomly selects from weighted options | Choose between different prompt styles |
-| **Concat** | Combines multiple inputs with a separator | Join subject + verb + object |
-| **Output** | Marks the final output point | Terminal node for completed prompts |
-| **Include** | References another graph/bundle | Modular prompt components |
-| **SetVariable** | Stores a value for later use | Remember user's chosen style |
-| **GetVariable** | Retrieves a stored value | Use previously set style |
+| Node Type          | Description                               | Example Use Case                       |
+| ------------------ | ----------------------------------------- | -------------------------------------- |
+| **WeightedChoice** | Randomly selects from weighted options    | Choose between different prompt styles |
+| **Concat**         | Combines multiple inputs with a separator | Join subject + verb + object           |
+| **Output**         | Marks the final output point              | Terminal node for completed prompts    |
+| **Include**        | References another graph/bundle           | Modular prompt components              |
+| **SetVariable**    | Stores a value for later use              | Remember user's chosen style           |
+| **GetVariable**    | Retrieves a stored value                  | Use previously set style               |
 
 ### Command Line Interface
 
@@ -204,12 +205,12 @@ VITE_API_BASE_URL=http://localhost:8000
 
 ### Benchmarks
 
-| Metric | Target | Current |
-|--------|--------|---------|
-| Graph execution (5 variants) | < 1s | 0.3s |
-| Large graph rendering (250 nodes) | > 30 FPS | 45 FPS |
-| Memory usage | < 500MB | 280MB |
-| Bundle size | < 5MB | 2.8MB |
+| Metric                            | Target   | Current |
+| --------------------------------- | -------- | ------- |
+| Graph execution (5 variants)      | < 1s     | 0.3s    |
+| Large graph rendering (250 nodes) | > 30 FPS | 45 FPS  |
+| Memory usage                      | < 500MB  | 280MB   |
+| Bundle size                       | < 5MB    | 2.8MB   |
 
 ### Optimization Features
 
@@ -309,4 +310,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Made with ❤️ by the PromptScape Team**
 
-*Building the future of prompt engineering, one node at a time.*
+_Building the future of prompt engineering, one node at a time._

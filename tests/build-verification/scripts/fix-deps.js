@@ -22,14 +22,14 @@ const fixes = {
         console.log(chalk.yellow('\nInstalling client dependencies...'));
         execSync('cd client && npm install', { stdio: 'inherit' });
       }
-    }
+    },
   },
   2: {
     name: 'Add missing zod dependency to client',
     run: () => {
       console.log(chalk.yellow('Adding zod@^3.22.4 to client...'));
       execSync('cd client && npm install zod@^3.22.4', { stdio: 'inherit' });
-    }
+    },
   },
   3: {
     name: 'Inject optimizeDeps into Vite config',
@@ -44,11 +44,13 @@ const fixes = {
         console.log(chalk.green('optimizeDeps already present – no changes.'));
         return;
       }
-      content = content.replace('export default defineConfig({',
-        'export default defineConfig({\n  optimizeDeps: { include: [\'zod\',\'zustand\',\'reactflow\',\'seedrandom\'] },');
+      content = content.replace(
+        'export default defineConfig({',
+        "export default defineConfig({\n  optimizeDeps: { include: ['zod','zustand','reactflow','seedrandom'] },"
+      );
       fs.writeFileSync(vitePath, content);
       console.log(chalk.green('optimizeDeps injected into Vite config.'));
-    }
+    },
   },
   4: {
     name: 'Add missing workspaces configuration',
@@ -62,8 +64,8 @@ const fixes = {
       pkg.workspaces = ['client', 'packages/*', 'server'];
       fs.writeFileSync(rootPkgPath, JSON.stringify(pkg, null, 2));
       console.log(chalk.green('workspaces field added to package.json'));
-    }
-  }
+    },
+  },
 };
 
 console.log(chalk.blue.bold('\n🔧 Dependency Fix Tool\n'));

@@ -20,18 +20,18 @@ export class DefaultNodeRegistry implements CustomNodeRegistry {
    */
   register(registration: CustomNodeRegistration): void {
     const nodeType = registration.metadata.type;
-    
+
     // Validate the registration
     this.validateRegistration(registration);
-    
+
     // Check for conflicts
     if (this.nodes.has(nodeType)) {
       throw new Error(`Node type '${nodeType}' is already registered`);
     }
-    
+
     // Register the node
     this.nodes.set(nodeType, registration);
-    
+
     console.debug(`Registered custom node type: ${nodeType} v${registration.metadata.version}`);
   }
 
@@ -102,7 +102,7 @@ export class DefaultNodeRegistry implements CustomNodeRegistry {
   searchByTags(tags: string[], matchAll = false): CustomNodeRegistration[] {
     return this.getAll().filter(reg => {
       if (!reg.metadata.tags) return false;
-      
+
       if (matchAll) {
         return tags.every(tag => reg.metadata.tags!.includes(tag));
       } else {
@@ -121,7 +121,7 @@ export class DefaultNodeRegistry implements CustomNodeRegistry {
     authorsCount: number;
     categories: Record<string, number>;
     authors: Record<string, number>;
-    } {
+  } {
     const registrations = this.getAll();
     const categories = new Map<string, number>();
     const authors = new Map<string, number>();
@@ -141,7 +141,7 @@ export class DefaultNodeRegistry implements CustomNodeRegistry {
       categoriesCount: categories.size,
       authorsCount: authors.size,
       categories: Object.fromEntries(categories),
-      authors: Object.fromEntries(authors)
+      authors: Object.fromEntries(authors),
     };
   }
 
@@ -234,7 +234,7 @@ export class DefaultNodeRegistry implements CustomNodeRegistry {
       if (!inputSpec.type) {
         throw new Error(`Input '${inputName}' must specify a type`);
       }
-      
+
       if (typeof inputSpec.required !== 'boolean') {
         throw new Error(`Input '${inputName}' must specify if it's required`);
       }

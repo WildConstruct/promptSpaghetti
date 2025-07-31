@@ -22,18 +22,22 @@ export function getIOSSafeAreaInsets(): SafeAreaInsets {
   if (typeof window === 'undefined') {
     return { top: 0, right: 0, bottom: 0, left: 0 };
   }
-  
+
   const computedStyle = getComputedStyle(document.documentElement);
-  
+
   return {
-    top: parseInt(computedStyle.getPropertyValue('--sat') || 
-      computedStyle.getPropertyValue('env(safe-area-inset-top)') || '0'),
-    right: parseInt(computedStyle.getPropertyValue('--sar') || 
-      computedStyle.getPropertyValue('env(safe-area-inset-right)') || '0'),
-    bottom: parseInt(computedStyle.getPropertyValue('--sab') || 
-      computedStyle.getPropertyValue('env(safe-area-inset-bottom)') || '0'),
-    left: parseInt(computedStyle.getPropertyValue('--sal') || 
-      computedStyle.getPropertyValue('env(safe-area-inset-left)') || '0')
+    top: parseInt(
+      computedStyle.getPropertyValue('--sat') || computedStyle.getPropertyValue('env(safe-area-inset-top)') || '0'
+    ),
+    right: parseInt(
+      computedStyle.getPropertyValue('--sar') || computedStyle.getPropertyValue('env(safe-area-inset-right)') || '0'
+    ),
+    bottom: parseInt(
+      computedStyle.getPropertyValue('--sab') || computedStyle.getPropertyValue('env(safe-area-inset-bottom)') || '0'
+    ),
+    left: parseInt(
+      computedStyle.getPropertyValue('--sal') || computedStyle.getPropertyValue('env(safe-area-inset-left)') || '0'
+    ),
   };
 }
 
@@ -44,35 +48,31 @@ export const IOSSafeAreaContext = React.createContext<SafeAreaInsets>({
   top: 0,
   right: 0,
   bottom: 0,
-  left: 0
+  left: 0,
 });
 
 export const IOSSafeAreaProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [insets, setInsets] = useState(getIOSSafeAreaInsets());
-  
+
   useEffect(() => {
     const updateInsets = () => {
       setInsets(getIOSSafeAreaInsets());
     };
-    
+
     // Update on orientation change
     window.addEventListener('orientationchange', updateInsets);
     window.addEventListener('resize', updateInsets);
-    
+
     // Initial update
     updateInsets();
-    
+
     return () => {
       window.removeEventListener('orientationchange', updateInsets);
       window.removeEventListener('resize', updateInsets);
     };
   }, []);
-  
-  return (
-    <IOSSafeAreaContext.Provider value={insets}>
-      {children}
-    </IOSSafeAreaContext.Provider>
-  );
+
+  return <IOSSafeAreaContext.Provider value={insets}>{children}</IOSSafeAreaContext.Provider>;
 };
 
 /**
@@ -93,20 +93,20 @@ export const IOSNavigationBar: React.FC<IOSNavigationBarProps> = ({
   rightItems,
   transparent = false,
   large = false,
-  onBack
+  onBack,
 }) => {
   const { top } = React.useContext(IOSSafeAreaContext);
   const [scrolled, setScrolled] = useState(false);
-  
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
-    
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  
+
   return (
     <nav
       className={`ios-navigation-bar ${large ? 'large' : ''} ${scrolled ? 'scrolled' : ''}`}
@@ -121,17 +121,20 @@ export const IOSNavigationBar: React.FC<IOSNavigationBarProps> = ({
         WebkitBackdropFilter: transparent || scrolled ? 'blur(20px)' : 'none',
         borderBottom: scrolled ? '0.5px solid var(--color-border)' : 'none',
         transition: 'all 0.3s ease',
-        zIndex: 1000
+        zIndex: 1000,
       }}
     >
-      <div className="nav-content" style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        height: large && !scrolled ? 96 : 44,
-        padding: '0 16px',
-        transition: 'height 0.3s ease'
-      }}>
+      <div
+        className="nav-content"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          height: large && !scrolled ? 96 : 44,
+          padding: '0 16px',
+          transition: 'height 0.3s ease',
+        }}
+      >
         <div className="nav-left" style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
           {onBack && (
             <button
@@ -144,30 +147,36 @@ export const IOSNavigationBar: React.FC<IOSNavigationBarProps> = ({
                 padding: '8px',
                 marginLeft: '-8px',
                 color: 'var(--color-primary)',
-                fontSize: '17px'
+                fontSize: '17px',
               }}
             >
               <svg width="12" height="20" viewBox="0 0 12 20" fill="currentColor">
-                <path d="M10 0L0 10L10 20L11.5 18.5L3 10L11.5 1.5L10 0Z"/>
+                <path d="M10 0L0 10L10 20L11.5 18.5L3 10L11.5 1.5L10 0Z" />
               </svg>
               Back
             </button>
           )}
           {leftItems}
         </div>
-        
-        <div className="nav-center" style={{ 
-          position: 'absolute',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          fontSize: large && !scrolled ? '34px' : '17px',
-          fontWeight: large ? 700 : 600,
-          transition: 'font-size 0.3s ease'
-        }}>
+
+        <div
+          className="nav-center"
+          style={{
+            position: 'absolute',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            fontSize: large && !scrolled ? '34px' : '17px',
+            fontWeight: large ? 700 : 600,
+            transition: 'font-size 0.3s ease',
+          }}
+        >
           {title}
         </div>
-        
-        <div className="nav-right" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+
+        <div
+          className="nav-right"
+          style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}
+        >
           {rightItems}
         </div>
       </div>
@@ -189,13 +198,9 @@ export interface IOSTabBarProps {
   onItemSelect: (id: string) => void;
 }
 
-export const IOSTabBar: React.FC<IOSTabBarProps> = ({
-  items,
-  activeItem,
-  onItemSelect
-}) => {
+export const IOSTabBar: React.FC<IOSTabBarProps> = ({ items, activeItem, onItemSelect }) => {
   const { bottom } = React.useContext(IOSSafeAreaContext);
-  
+
   return (
     <div
       className="ios-tab-bar"
@@ -209,7 +214,7 @@ export const IOSTabBar: React.FC<IOSTabBarProps> = ({
         borderTop: '0.5px solid var(--color-border)',
         paddingBottom: bottom,
         backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)'
+        WebkitBackdropFilter: 'blur(20px)',
       }}
     >
       {items.map(item => (
@@ -226,7 +231,7 @@ export const IOSTabBar: React.FC<IOSTabBarProps> = ({
             padding: '8px',
             color: activeItem === item.id ? 'var(--color-primary)' : 'var(--color-text-secondary)',
             fontSize: '10px',
-            position: 'relative'
+            position: 'relative',
           }}
         >
           <div style={{ fontSize: '24px' }}>{item.icon}</div>
@@ -244,7 +249,7 @@ export const IOSTabBar: React.FC<IOSTabBarProps> = ({
                 padding: '2px 6px',
                 fontSize: '12px',
                 minWidth: '20px',
-                textAlign: 'center'
+                textAlign: 'center',
               }}
             >
               {item.badge > 99 ? '99+' : item.badge}
@@ -265,11 +270,7 @@ export interface IOSSwitchProps {
   disabled?: boolean;
 }
 
-export const IOSSwitch: React.FC<IOSSwitchProps> = ({
-  checked,
-  onChange,
-  disabled = false
-}) => {
+export const IOSSwitch: React.FC<IOSSwitchProps> = ({ checked, onChange, disabled = false }) => {
   return (
     <button
       className={`ios-switch ${checked ? 'checked' : ''} ${disabled ? 'disabled' : ''}`}
@@ -287,7 +288,7 @@ export const IOSSwitch: React.FC<IOSSwitchProps> = ({
         position: 'relative',
         transition: 'background-color 0.2s ease',
         cursor: disabled ? 'not-allowed' : 'pointer',
-        opacity: disabled ? 0.5 : 1
+        opacity: disabled ? 0.5 : 1,
       }}
     >
       <div
@@ -298,7 +299,7 @@ export const IOSSwitch: React.FC<IOSSwitchProps> = ({
           backgroundColor: 'white',
           boxShadow: '0 3px 8px rgba(0, 0, 0, 0.15)',
           transform: `translateX(${checked ? '20px' : '0'})`,
-          transition: 'transform 0.2s ease'
+          transition: 'transform 0.2s ease',
         }}
       />
     </button>
@@ -320,17 +321,11 @@ export interface IOSActionSheetProps {
   onDismiss: () => void;
 }
 
-export const IOSActionSheet: React.FC<IOSActionSheetProps> = ({
-  visible,
-  title,
-  message,
-  actions,
-  onDismiss
-}) => {
+export const IOSActionSheet: React.FC<IOSActionSheetProps> = ({ visible, title, message, actions, onDismiss }) => {
   const { bottom } = React.useContext(IOSSafeAreaContext);
-  
+
   if (!visible) return null;
-  
+
   return (
     <>
       <div
@@ -344,10 +339,10 @@ export const IOSActionSheet: React.FC<IOSActionSheetProps> = ({
           bottom: 0,
           backgroundColor: 'rgba(0, 0, 0, 0.4)',
           zIndex: 9999,
-          animation: 'fadeIn 0.2s ease'
+          animation: 'fadeIn 0.2s ease',
         }}
       />
-      
+
       <div
         className="ios-action-sheet"
         style={{
@@ -356,7 +351,7 @@ export const IOSActionSheet: React.FC<IOSActionSheetProps> = ({
           right: '8px',
           bottom: bottom + 8,
           zIndex: 10000,
-          animation: 'slideUp 0.3s ease'
+          animation: 'slideUp 0.3s ease',
         }}
       >
         {(title || message) && (
@@ -367,28 +362,20 @@ export const IOSActionSheet: React.FC<IOSActionSheetProps> = ({
               borderRadius: '13px',
               marginBottom: '8px',
               padding: '16px',
-              textAlign: 'center'
+              textAlign: 'center',
             }}
           >
-            {title && (
-              <div style={{ fontSize: '13px', fontWeight: 600, marginBottom: '4px' }}>
-                {title}
-              </div>
-            )}
-            {message && (
-              <div style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>
-                {message}
-              </div>
-            )}
+            {title && <div style={{ fontSize: '13px', fontWeight: 600, marginBottom: '4px' }}>{title}</div>}
+            {message && <div style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>{message}</div>}
           </div>
         )}
-        
+
         <div
           className="action-sheet-actions"
           style={{
             backgroundColor: 'var(--color-background)',
             borderRadius: '13px',
-            overflow: 'hidden'
+            overflow: 'hidden',
           }}
         >
           {actions
@@ -408,14 +395,14 @@ export const IOSActionSheet: React.FC<IOSActionSheetProps> = ({
                   color: action.style === 'destructive' ? 'var(--color-danger)' : 'var(--color-primary)',
                   backgroundColor: 'transparent',
                   border: 'none',
-                  borderTop: index > 0 ? '0.5px solid var(--color-border)' : 'none'
+                  borderTop: index > 0 ? '0.5px solid var(--color-border)' : 'none',
                 }}
               >
                 {action.text}
               </button>
             ))}
         </div>
-        
+
         {actions.find(action => action.style === 'cancel') && (
           <button
             onClick={() => {
@@ -432,7 +419,7 @@ export const IOSActionSheet: React.FC<IOSActionSheetProps> = ({
               backgroundColor: 'var(--color-background)',
               border: 'none',
               borderRadius: '13px',
-              marginTop: '8px'
+              marginTop: '8px',
             }}
           >
             {actions.find(action => action.style === 'cancel')?.text}
@@ -454,28 +441,28 @@ export const iOSHaptics = {
         medium: 20,
         heavy: 30,
         soft: [5, 10, 5],
-        rigid: [20, 10, 20]
+        rigid: [20, 10, 20],
       };
       navigator.vibrate(patterns[style]);
     }
   },
-  
+
   notification: (type: 'success' | 'warning' | 'error') => {
     if (deviceDetector.isIOS() && 'vibrate' in navigator) {
       const patterns = {
         success: [10, 50, 10],
         warning: [20, 20, 20],
-        error: [50, 100, 50]
+        error: [50, 100, 50],
       };
       navigator.vibrate(patterns[type]);
     }
   },
-  
+
   selection: () => {
     if (deviceDetector.isIOS() && 'vibrate' in navigator) {
       navigator.vibrate(10);
     }
-  }
+  },
 };
 
 /**

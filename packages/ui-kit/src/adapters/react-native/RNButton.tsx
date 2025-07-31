@@ -30,7 +30,7 @@ export const RNButton: React.FC<RNButtonProps> = ({
     if (hapticFeedback) {
       adapter.hapticFeedback(hapticFeedback);
     }
-    
+
     onClick?.();
   };
 
@@ -57,16 +57,12 @@ export const RNButton: React.FC<RNButtonProps> = ({
       // Remove web-specific properties
       transition: undefined,
       userSelect: undefined,
-      WebkitTapHighlightColor: undefined
-    }
+      WebkitTapHighlightColor: undefined,
+    },
   };
 
   return (
-    <Button
-      {...props}
-      {...rnProps}
-      style={rnProps.style}
-    >
+    <Button {...props} {...rnProps} style={rnProps.style}>
       {children}
     </Button>
   );

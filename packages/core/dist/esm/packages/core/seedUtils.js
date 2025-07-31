@@ -7,5 +7,5 @@ import seedrandom from 'seedrandom';
  *   const value = rng(); // 0 ≤ value < 1
  */
 export function createRNG(seed) {
-    return seedrandom(String(seed));
+  return seedrandom(String(seed));
 }

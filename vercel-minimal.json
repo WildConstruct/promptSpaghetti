@@ -21,7 +21,7 @@
       "dest": "/api/preview-minimal.js"
     },
     {
-      "src": "/api/export", 
+      "src": "/api/export",
       "dest": "/api/export-minimal.js"
     },
     {

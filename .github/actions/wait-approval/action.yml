@@ -7,7 +7,7 @@ inputs:
   timeout_minutes:
     description: 'Maximum time to wait for approval (in minutes)'
     required: false
-    default: '1440'  # 24 hours
+    default: '1440' # 24 hours
   poll_interval_seconds:
     description: 'Interval between polling checks (in seconds)'
     required: false
@@ -54,11 +54,11 @@ runs:
         echo "⏳ Waiting for approval request: $REQUEST_ID"
         echo "⏰ Timeout: $TIMEOUT_MINUTES minutes"
         echo "🔄 Poll interval: $POLL_INTERVAL seconds"
-        
+
         START_TIME=$(date +%s)
         TIMEOUT_SECONDS=$((TIMEOUT_MINUTES * 60))
         CHECK_RUNS_URL="https://api.github.com/repos/$GITHUB_REPOSITORY/check-runs"
-        
+
         # Function to update GitHub check status
         update_check_status() {
           local status=$1
@@ -85,7 +85,7 @@ runs:
               -d @check_update.json > /dev/null
           fi
         }
-        
+
         # Main polling loop
         while true; do
           CURRENT_TIME=$(date +%s)
@@ -206,7 +206,7 @@ runs:
       run: |
         echo "🏁 Final approval status: $FINAL_STATUS"
         echo "⏰ Total time elapsed: $ELAPSED_MINUTES minutes"
-        
+
         case $FINAL_STATUS in
           "approved")
             echo "::notice::Deployment approved! Proceeding with deployment."

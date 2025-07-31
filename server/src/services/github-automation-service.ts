@@ -16,7 +16,7 @@ export type AutomationAction = 'create_pr' | 'update_pr' | 'push_commits';
 export class GitHubAutomationService {
   private static instance: GitHubAutomationService;
   private projectRoot: string;
-  
+
   private constructor() {
     // Assume we're running from server directory
     this.projectRoot = path.resolve(process.cwd(), '..');
@@ -32,25 +32,20 @@ export class GitHubAutomationService {
   /**
    * Execute GitHub automation based on action type
    */
-  async execute(
-    ticket: Ticket, 
-    config: GitHubAutomationConfig, 
-    action: AutomationAction
-  ): Promise<void> {
-
+  async execute(ticket: Ticket, config: GitHubAutomationConfig, action: AutomationAction): Promise<void> {
     logger.info(`Executing GitHub automation: ${action} for ticket ${ticket.id}`);
 
     try {
       switch (action) {
-      case 'create_pr':
-        await this.createOrUpdatePR(ticket, config, false);
-        break;
-      case 'update_pr':
-        await this.createOrUpdatePR(ticket, config, true);
-        break;
-      case 'push_commits':
-        await this.pushCommits(ticket, config);
-        break;
+        case 'create_pr':
+          await this.createOrUpdatePR(ticket, config, false);
+          break;
+        case 'update_pr':
+          await this.createOrUpdatePR(ticket, config, true);
+          break;
+        case 'push_commits':
+          await this.pushCommits(ticket, config);
+          break;
       }
     } catch (error) {
       logger.error(`GitHub automation failed for ${action}:`, error);
@@ -61,14 +56,9 @@ export class GitHubAutomationService {
   /**
    * Create or update a pull request
    */
-  private async createOrUpdatePR(
-    ticket: Ticket, 
-    config: GitHubAutomationConfig,
-    isUpdate: boolean
-  ): Promise<void> {
-
+  private async createOrUpdatePR(ticket: Ticket, config: GitHubAutomationConfig, isUpdate: boolean): Promise<void> {
     const branchName = ticket.branch_name || `ticket-${ticket.id}`;
-    
+
     // Ensure we're on the correct branch
     await this.ensureBranch(branchName, config.base_branch);
 
@@ -87,14 +77,8 @@ export class GitHubAutomationService {
       await this.updatePR(ticket.pr_number, prTitle, prBody);
     } else {
       // Create new PR
-      const prData = await this.createPR(
-        branchName,
-        config.base_branch,
-        prTitle,
-        prBody,
-        config
-      );
-      
+      const prData = await this.createPR(branchName, config.base_branch, prTitle, prBody, config);
+
       // Update ticket with PR info
       await this.updateTicketPRInfo(ticket.id, prData);
     }
@@ -104,27 +88,20 @@ export class GitHubAutomationService {
    * Push accumulated commits to GitHub
    */
   private async pushCommits(ticket: Ticket, config: GitHubAutomationConfig): Promise<void> {
-
     const branchName = ticket.branch_name || `ticket-${ticket.id}`;
-    
+
     try {
       // Ensure we're on the correct branch
       await execAsync(`git checkout ${branchName}`, { cwd: this.projectRoot });
-      
+
       // Push to remote
-      const { stdout } = await execAsync(
-        `git push origin ${branchName}`,
-        { cwd: this.projectRoot }
-      );
-      
+      const { stdout } = await execAsync(`git push origin ${branchName}`, { cwd: this.projectRoot });
+
       logger.info(`Pushed commits for ticket ${ticket.id}: ${stdout}`);
-      
+
       // If PR exists, add a comment about the push
       if (ticket.pr_number) {
-        await this.addPRComment(
-          ticket.pr_number,
-          `🚀 Pushed ${config.auto_push_interval} new commits to this PR.`
-        );
+        await this.addPRComment(ticket.pr_number, `🚀 Pushed ${config.auto_push_interval} new commits to this PR.`);
       }
     } catch (error) {
       logger.error(`Failed to push commits: ${error instanceof Error ? error.message : String(error)}`);
@@ -136,7 +113,6 @@ export class GitHubAutomationService {
    * Ensure we're on the correct branch, create if needed
    */
   private async ensureBranch(branchName: string, baseBranch: string): Promise<void> {
-
     try {
       // Check if branch exists locally
       await execAsync(`git rev-parse --verify ${branchName}`, { cwd: this.projectRoot });
@@ -158,7 +134,6 @@ export class GitHubAutomationService {
     body: string,
     config: GitHubAutomationConfig
   ): Promise<{ number: number; url: string }> {
-
     // First, push the branch
     await execAsync(`git push -u origin ${sourceBranch}`, { cwd: this.projectRoot });
 
@@ -166,23 +141,23 @@ export class GitHubAutomationService {
     let command = `gh pr create --base ${baseBranch} --head ${sourceBranch}`;
     command += ` --title "${title.replace(/"/g, '\\"')}"`;
     command += ` --body "${body.replace(/"/g, '\\"')}"`;
-    
+
     if (config.draft_pr) {
       command += ' --draft';
     }
-    
+
     // Add labels
     if (config.labels_to_add.length > 0) {
       command += ` --label ${config.labels_to_add.join(',')}`;
     }
-    
+
     // Add reviewers
     if (config.reviewers.length > 0) {
       command += ` --reviewer ${config.reviewers.join(',')}`;
     }
 
     const { stdout } = await execAsync(command, { cwd: this.projectRoot });
-    
+
     // Parse PR URL from output
     const prUrlMatch = stdout.match(/https:\/\/github\.com\/.*\/pull\/(\d+)/);
     if (!prUrlMatch) {
@@ -193,7 +168,7 @@ export class GitHubAutomationService {
     const prUrl = prUrlMatch[0];
 
     logger.info(`Created PR #${prNumber}: ${prUrl}`);
-    
+
     return { number: prNumber, url: prUrl };
   }
 
@@ -201,11 +176,10 @@ export class GitHubAutomationService {
    * Update an existing pull request
    */
   private async updatePR(prNumber: number, title: string, body: string): Promise<void> {
-
     const escapedTitle = title.replace(/"/g, '\\"');
     const escapedBody = body.replace(/"/g, '\\"');
     const command = `gh pr edit ${prNumber} --title "${escapedTitle}" --body "${escapedBody}"`;
-    
+
     await execAsync(command, { cwd: this.projectRoot });
     logger.info(`Updated PR #${prNumber}`);
   }
@@ -214,9 +188,8 @@ export class GitHubAutomationService {
    * Add a comment to a pull request
    */
   private async addPRComment(prNumber: number, comment: string): Promise<void> {
-
     const command = `gh pr comment ${prNumber} --body "${comment.replace(/"/g, '\\"')}"`;
-    
+
     await execAsync(command, { cwd: this.projectRoot });
     logger.info(`Added comment to PR #${prNumber}`);
   }
@@ -228,12 +201,12 @@ export class GitHubAutomationService {
     return template.replace(/\{\{(\w+\.?\w+)\}\}/g, (match, path) => {
       const keys = path.split('.');
       let value: unknown = data;
-      
+
       for (const key of keys) {
         value = value[key];
         if (value === undefined) return match;
       }
-      
+
       return String(value);
     });
   }
@@ -241,10 +214,7 @@ export class GitHubAutomationService {
   /**
    * Generate PR body from ticket and config
    */
-  private renderPRBody(
-    ticket: Ticket, 
-    config: GitHubAutomationConfig
-  ): string {
+  private renderPRBody(ticket: Ticket, config: GitHubAutomationConfig): string {
     if (config.pr_body_template) {
       return this.renderTemplate(config.pr_body_template, { ticket });
     }
@@ -281,11 +251,7 @@ ${ticket.story_id ? `- **Story**: ${ticket.story_id}` : ''}
   /**
    * Update ticket with PR information (this would call back to TicketDAO)
    */
-  private async updateTicketPRInfo(
-    ticketId: string, 
-    prData: { number: number; url: string }
-  ): Promise<void> {
-
+  private async updateTicketPRInfo(ticketId: string, prData: { number: number; url: string }): Promise<void> {
     // This would typically call back to TicketDAO.updateTicket
     // For now, we'll just log it
     logger.info(`Ticket ${ticketId} should be updated with PR #${prData.number} (${prData.url})`);

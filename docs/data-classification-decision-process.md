@@ -20,12 +20,14 @@ Based on Epic 19 requirements, we implement a four-tier classification system:
 ### Step 1: Data Discovery and Inventory
 
 #### Automated Discovery
+
 - **Database Fields**: Scan all database schemas for potentially sensitive field names
 - **File System**: Analyze file names, extensions, and metadata
 - **API Endpoints**: Review request/response payloads for sensitive data patterns
 - **User Input**: Monitor form fields and data entry points
 
 #### Manual Review
+
 - Business stakeholder review of data types
 - Legal/compliance team assessment
 - Security team evaluation
@@ -36,12 +38,14 @@ Based on Epic 19 requirements, we implement a four-tier classification system:
 #### Classification Criteria
 
 **PUBLIC**
+
 - Marketing materials and public documentation
 - Open source code and public APIs
 - General product information
 - Public user profiles (username, public bio)
 
 **INTERNAL**
+
 - Internal documentation and procedures
 - Non-sensitive business metrics
 - Internal user lists (non-PII)
@@ -49,6 +53,7 @@ Based on Epic 19 requirements, we implement a four-tier classification system:
 - System configuration (non-security related)
 
 **CONFIDENTIAL**
+
 - Personal Identifiable Information (PII)
   - Email addresses
   - User full names
@@ -61,6 +66,7 @@ Based on Epic 19 requirements, we implement a four-tier classification system:
   - Security configurations
 
 **RESTRICTED**
+
 - Authentication credentials
   - Password hashes
   - API keys and secrets
@@ -101,12 +107,12 @@ For each data element, evaluate:
 
 #### Decision Matrix
 
-| Criteria | PUBLIC | INTERNAL | CONFIDENTIAL | RESTRICTED |
-|----------|--------|----------|--------------|------------|
-| Legal/Regulatory | None | Low risk | Medium risk | High risk/Required |
-| Business Impact | None | Low | Medium-High | Critical |
-| Personal Privacy | None | Minimal | Personal data | Sensitive personal |
-| Security Risk | None | Low | Medium | High/Critical |
+| Criteria         | PUBLIC | INTERNAL | CONFIDENTIAL  | RESTRICTED         |
+| ---------------- | ------ | -------- | ------------- | ------------------ |
+| Legal/Regulatory | None   | Low risk | Medium risk   | High risk/Required |
+| Business Impact  | None   | Low      | Medium-High   | Critical           |
+| Personal Privacy | None   | Minimal  | Personal data | Sensitive personal |
+| Security Risk    | None   | Low      | Medium        | High/Critical      |
 
 #### Classification Rules
 
@@ -118,16 +124,19 @@ For each data element, evaluate:
 ### Step 4: Validation and Approval
 
 #### Technical Validation
+
 - Automated scanning confirms classification tags
 - Data lineage analysis for consistency
 - Access pattern analysis for appropriateness
 
 #### Business Approval
+
 - Data owner review and sign-off
 - Legal/compliance team approval for restricted data
 - Security team approval for security-related classifications
 
 #### Documentation Requirements
+
 - Classification rationale and justification
 - Data owner identification
 - Approval trail and timestamps
@@ -136,12 +145,14 @@ For each data element, evaluate:
 ### Step 5: Implementation and Monitoring
 
 #### Technical Implementation
+
 - Apply classification metadata tags
 - Configure access controls based on classification
 - Implement encryption based on classification level
 - Set up monitoring and alerting
 
 #### Ongoing Monitoring
+
 - Regular access pattern analysis
 - Classification drift detection
 - Compliance monitoring and reporting
@@ -237,43 +248,46 @@ const classificationRules = {
   // Field name patterns
   fieldPatterns: {
     'password.*': 'RESTRICTED',
-    'email': 'CONFIDENTIAL',
-    'api_key': 'RESTRICTED',
-    'user_id': 'INTERNAL',
-    'public_.*': 'PUBLIC'
+    email: 'CONFIDENTIAL',
+    api_key: 'RESTRICTED',
+    user_id: 'INTERNAL',
+    'public_.*': 'PUBLIC',
   },
-  
+
   // Content patterns
   contentPatterns: {
     'credit card': 'RESTRICTED',
     'social security': 'RESTRICTED',
     'phone number': 'CONFIDENTIAL',
-    'ip address': 'CONFIDENTIAL'
+    'ip address': 'CONFIDENTIAL',
   },
-  
+
   // Context rules
   contextRules: {
-    'authentication': 'RESTRICTED',
-    'audit_log': 'CONFIDENTIAL',
-    'public_api': 'PUBLIC',
-    'internal_metrics': 'INTERNAL'
-  }
+    authentication: 'RESTRICTED',
+    audit_log: 'CONFIDENTIAL',
+    public_api: 'PUBLIC',
+    internal_metrics: 'INTERNAL',
+  },
 };
 ```
 
 ## Compliance Integration
 
 ### GDPR Compliance
+
 - Personal data automatically classified as CONFIDENTIAL or higher
 - Special category data classified as RESTRICTED
 - Consent tracking integrated with classification
 
-### HIPAA Compliance  
+### HIPAA Compliance
+
 - Health information automatically classified as RESTRICTED
 - Audit trail requirements implemented
 - Access controls based on minimum necessary principle
 
 ### PCI DSS Compliance
+
 - Payment card data classified as RESTRICTED
 - Cardholder data environment identification
 - Segmentation requirements enforced
@@ -281,18 +295,21 @@ const classificationRules = {
 ## Quality Assurance
 
 ### Validation Checks
+
 - Classification consistency across related data
 - Access control alignment with classification
 - Encryption requirement compliance
 - Audit trail completeness
 
 ### Performance Monitoring
+
 - Classification decision time tracking
 - False positive/negative rates
 - User satisfaction with classification accuracy
 - Compliance violation frequency
 
 ### Continuous Improvement
+
 - Regular classification rule updates
 - Machine learning model training for automated classification
 - Stakeholder feedback integration
@@ -301,12 +318,14 @@ const classificationRules = {
 ## Training and Communication
 
 ### Role-Based Training
+
 - **Data Owners**: Classification responsibilities and procedures
 - **Developers**: Technical implementation and API usage
 - **Security Team**: Advanced classification scenarios and exceptions
 - **All Users**: Basic classification awareness and handling requirements
 
 ### Communication Channels
+
 - Classification policy updates via internal communications
 - Technical implementation guides in developer documentation
 - Security awareness training integration
@@ -315,12 +334,14 @@ const classificationRules = {
 ## Metrics and Reporting
 
 ### Key Performance Indicators
+
 - Percentage of data classified within SLA timeframes
 - Classification accuracy rates
 - Compliance violation reduction
 - User training completion rates
 
 ### Regular Reports
+
 - Monthly classification status dashboard
 - Quarterly compliance assessment
 - Annual classification framework review

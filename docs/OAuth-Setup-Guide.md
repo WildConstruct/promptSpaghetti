@@ -5,8 +5,9 @@ This guide explains how to configure OAuth providers for the Prompt Spaghetti ap
 ## Overview
 
 The OAuth workflow implementation supports three providers:
+
 - **Google** - OAuth 2.0 with OpenID Connect
-- **GitHub** - OAuth 2.0 for developer-friendly authentication 
+- **GitHub** - OAuth 2.0 for developer-friendly authentication
 - **Microsoft** - OAuth 2.0 with Azure AD integration
 
 ## Provider Configuration
@@ -29,7 +30,7 @@ The OAuth workflow implementation supports three providers:
 
 4. **Configure OAuth Settings**
    - **Name**: Prompt Spaghetti OAuth
-   - **Authorized JavaScript origins**: 
+   - **Authorized JavaScript origins**:
      - `http://localhost:3000` (development)
      - `https://yourdomain.com` (production)
    - **Authorized redirect URIs**:
@@ -101,11 +102,13 @@ The OAuth workflow implementation supports three providers:
 ### Quick Start for Development
 
 1. **Copy Environment Template**
+
    ```bash
    cp .env.example .env
    ```
 
 2. **Configure OAuth State Secret**
+
    ```bash
    # Generate a secure random key (at least 32 characters)
    OAUTH_STATE_SECRET=$(openssl rand -base64 32)
@@ -118,6 +121,7 @@ The OAuth workflow implementation supports three providers:
 ### Testing OAuth Flow
 
 1. **Start the Application**
+
    ```bash
    # Start server
    cd server && npm start

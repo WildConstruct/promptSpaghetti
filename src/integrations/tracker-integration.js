@@ -1,6 +1,6 @@
 /**
  * Daily Ticket Tracker Integration
- * 
+ *
  * Integrates the Daily Ticket Tracker with existing task management systems.
  * Automatically tracks ticket approvals and pushes from various sources.
  */
@@ -15,12 +15,12 @@ class TrackerIntegration {
     this.initialized = false;
     this.watchedFiles = new Map(); // File -> last modified time
     this.watchInterval = null;
-    
+
     // Integration sources
     this.sources = {
       stateFile: path.join(__dirname, '../data/state.json'),
       commitFile: path.join(__dirname, '../data/commit-tracking.json'),
-      qaFile: path.join(__dirname, '../data/qa-results.json')
+      qaFile: path.join(__dirname, '../data/qa-results.json'),
     };
   }
 
@@ -31,12 +31,11 @@ class TrackerIntegration {
     try {
       await this.tracker.initialize();
       this.initialized = true;
-      
+
       console.log('🔗 Tracker integration initialized');
-      
+
       // Start watching for changes
       await this.startWatching();
-      
     } catch (error) {
       console.error('❌ Failed to initialize tracker integration:', error);
       throw error;
@@ -49,7 +48,7 @@ class TrackerIntegration {
   async startWatching() {
     // Initial scan
     await this.scanForChanges();
-    
+
     // Set up periodic scanning (every 30 seconds)
     this.watchInterval = setInterval(async () => {
       try {
@@ -58,7 +57,7 @@ class TrackerIntegration {
         console.error('Error scanning for changes:', error);
       }
     }, 30000);
-    
+
     console.log('👀 Started watching task management files...');
   }
 
@@ -70,16 +69,15 @@ class TrackerIntegration {
       try {
         const stats = await fs.stat(filePath);
         const lastModified = stats.mtime.getTime();
-        
+
         if (this.watchedFiles.has(filePath)) {
           const previousModified = this.watchedFiles.get(filePath);
           if (lastModified > previousModified) {
             await this.processFileChange(name, filePath);
           }
         }
-        
+
         this.watchedFiles.set(filePath, lastModified);
-        
       } catch (error) {
         // File might not exist yet, that's okay
         if (error.code !== 'ENOENT') {
@@ -96,19 +94,18 @@ class TrackerIntegration {
     try {
       const data = await fs.readFile(filePath, 'utf8');
       const parsed = JSON.parse(data);
-      
+
       switch (source) {
-      case 'stateFile':
-        await this.processStateChanges(parsed);
-        break;
-      case 'commitFile':
-        await this.processCommitChanges(parsed);
-        break;
-      case 'qaFile':
-        await this.processQAChanges(parsed);
-        break;
+        case 'stateFile':
+          await this.processStateChanges(parsed);
+          break;
+        case 'commitFile':
+          await this.processCommitChanges(parsed);
+          break;
+        case 'qaFile':
+          await this.processQAChanges(parsed);
+          break;
       }
-      
     } catch (error) {
       console.error(`Error processing ${source} changes:`, error);
     }
@@ -119,24 +116,20 @@ class TrackerIntegration {
    */
   async processStateChanges(stateData) {
     if (!stateData.tasks) return;
-    
+
     // Look for newly approved tasks
     for (const [taskId, task] of Object.entries(stateData.tasks)) {
       if (task.status === 'APPROVED' && !task.trackedApproval) {
-        await this.tracker.trackApproval(
-          taskId,
-          task.assignedTo || task.lastUpdatedBy || 'unknown',
-          {
-            story: task.story,
-            estimate: task.estimate,
-            type: task.wipClass,
-            approvedAt: task.lastUpdated
-          }
-        );
-        
+        await this.tracker.trackApproval(taskId, task.assignedTo || task.lastUpdatedBy || 'unknown', {
+          story: task.story,
+          estimate: task.estimate,
+          type: task.wipClass,
+          approvedAt: task.lastUpdated,
+        });
+
         // Mark as tracked (this won't persist to file, just prevents double-tracking)
         task.trackedApproval = true;
-        
+
         console.log(`📋 Auto-tracked approval: ${taskId}`);
       }
     }
@@ -147,24 +140,19 @@ class TrackerIntegration {
    */
   async processCommitChanges(commitData) {
     if (!commitData.commits) return;
-    
+
     // Look for new commits
     for (const commit of commitData.commits) {
       if (!commit.trackedPush && commit.tasks && commit.tasks.length > 0) {
-        await this.tracker.trackPush(
-          commit.tasks,
-          commit.author || 'unknown',
-          commit.hash || commit.id,
-          {
-            message: commit.message,
-            timestamp: commit.timestamp,
-            branch: commit.branch
-          }
-        );
-        
+        await this.tracker.trackPush(commit.tasks, commit.author || 'unknown', commit.hash || commit.id, {
+          message: commit.message,
+          timestamp: commit.timestamp,
+          branch: commit.branch,
+        });
+
         // Mark as tracked
         commit.trackedPush = true;
-        
+
         console.log(`🚀 Auto-tracked push: ${commit.tasks.length} task(s) in ${commit.hash}`);
       }
     }
@@ -179,7 +167,7 @@ class TrackerIntegration {
     if (qaData.lastRun) {
       const lastRun = new Date(qaData.lastRun);
       const now = new Date();
-      
+
       // If QA ran in the last minute, it's probably new
       if (now.getTime() - lastRun.getTime() < 60000) {
         console.log(`🔍 QA activity detected: ${qaData.passed || 0} passed, ${qaData.failed || 0} failed`);
@@ -195,7 +183,7 @@ class TrackerIntegration {
       console.warn('Tracker not initialized, skipping approval tracking');
       return;
     }
-    
+
     await this.tracker.trackApproval(taskId, agentId, metadata);
   }
 
@@ -204,7 +192,7 @@ class TrackerIntegration {
       console.warn('Tracker not initialized, skipping push tracking');
       return;
     }
-    
+
     await this.tracker.trackPush(taskIds, agentId, commitHash, metadata);
   }
 
@@ -223,7 +211,7 @@ class TrackerIntegration {
     // Track task completion
     await this.trackTaskApproval(taskId, agentId, {
       source: 'finish-task',
-      completedAt: new Date()
+      completedAt: new Date(),
     });
   }
 
@@ -235,7 +223,7 @@ class TrackerIntegration {
       for (const taskId of results.approvedTasks) {
         await this.trackTaskApproval(taskId, 'qa-agent', {
           source: 'qa-approval',
-          qaResults: results
+          qaResults: results,
         });
       }
     }
@@ -264,11 +252,11 @@ class TrackerIntegration {
     if (this.watchInterval) {
       clearInterval(this.watchInterval);
     }
-    
+
     if (this.tracker) {
       await this.tracker.shutdown();
     }
-    
+
     console.log('🔗 Tracker integration shutdown complete');
   }
 }
@@ -316,5 +304,5 @@ module.exports = {
   trackApproval,
   trackPush,
   getStats,
-  generateReport
+  generateReport,
 };

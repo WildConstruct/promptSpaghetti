@@ -19,7 +19,7 @@ export class ValidationEngine {
     this.schema = schema;
     this.inputValidators = new Map();
     this.outputValidators = new Map();
-    
+
     // Build Zod validators from schema
     this.buildValidators();
   }
@@ -81,7 +81,6 @@ export class ValidationEngine {
           warnings.push(`Output name '${outputName}' is reserved and may cause conflicts`);
         }
       }
-
     } catch (error) {
       errors.push(`Schema validation failed: ${error.message}`);
     }
@@ -89,7 +88,7 @@ export class ValidationEngine {
     return {
       valid: errors.length === 0,
       errors,
-      warnings
+      warnings,
     };
   }
 
@@ -132,7 +131,6 @@ export class ValidationEngine {
           warnings.push(`Unexpected input '${inputName}' provided`);
         }
       }
-
     } catch (error) {
       errors.push(`Input validation failed: ${error.message}`);
     }
@@ -140,7 +138,7 @@ export class ValidationEngine {
     return {
       valid: errors.length === 0,
       errors,
-      warnings
+      warnings,
     };
   }
 
@@ -180,7 +178,6 @@ export class ValidationEngine {
           errors.push(`Required output '${outputName}' is missing`);
         }
       }
-
     } catch (error) {
       errors.push(`Output validation failed: ${error.message}`);
     }
@@ -188,7 +185,7 @@ export class ValidationEngine {
     return {
       valid: errors.length === 0,
       errors,
-      warnings
+      warnings,
     };
   }
 
@@ -235,47 +232,43 @@ export class ValidationEngine {
   /**
    * Build a Zod schema from type and validation specifications
    */
-  private buildZodSchema(
-    type: string, 
-    validation?: any, 
-    required: boolean = true
-  ): z.ZodSchema {
+  private buildZodSchema(type: string, validation?: any, required: boolean = true): z.ZodSchema {
     let schema: z.ZodSchema;
 
     // Base schema based on type
     switch (type) {
-    case 'string':
-      schema = z.string();
-      if (validation?.minLength) schema = (schema as z.ZodString).min(validation.minLength);
-      if (validation?.maxLength) schema = (schema as z.ZodString).max(validation.maxLength);
-      if (validation?.pattern) schema = (schema as z.ZodString).regex(new RegExp(validation.pattern));
-      if (validation?.enum) schema = z.enum(validation.enum);
-      break;
+      case 'string':
+        schema = z.string();
+        if (validation?.minLength) schema = (schema as z.ZodString).min(validation.minLength);
+        if (validation?.maxLength) schema = (schema as z.ZodString).max(validation.maxLength);
+        if (validation?.pattern) schema = (schema as z.ZodString).regex(new RegExp(validation.pattern));
+        if (validation?.enum) schema = z.enum(validation.enum);
+        break;
 
-    case 'number':
-      schema = z.number();
-      if (validation?.min !== undefined) schema = (schema as z.ZodNumber).min(validation.min);
-      if (validation?.max !== undefined) schema = (schema as z.ZodNumber).max(validation.max);
-      break;
+      case 'number':
+        schema = z.number();
+        if (validation?.min !== undefined) schema = (schema as z.ZodNumber).min(validation.min);
+        if (validation?.max !== undefined) schema = (schema as z.ZodNumber).max(validation.max);
+        break;
 
-    case 'boolean':
-      schema = z.boolean();
-      break;
+      case 'boolean':
+        schema = z.boolean();
+        break;
 
-    case 'array':
-      schema = z.array(z.any());
-      if (validation?.minLength) schema = (schema as z.ZodArray<any>).min(validation.minLength);
-      if (validation?.maxLength) schema = (schema as z.ZodArray<any>).max(validation.maxLength);
-      break;
+      case 'array':
+        schema = z.array(z.any());
+        if (validation?.minLength) schema = (schema as z.ZodArray<any>).min(validation.minLength);
+        if (validation?.maxLength) schema = (schema as z.ZodArray<any>).max(validation.maxLength);
+        break;
 
-    case 'object':
-      schema = z.object({}).passthrough();
-      break;
+      case 'object':
+        schema = z.object({}).passthrough();
+        break;
 
-    case 'any':
-    default:
-      schema = z.any();
-      break;
+      case 'any':
+      default:
+        schema = z.any();
+        break;
     }
 
     // Make optional if not required
@@ -328,27 +321,27 @@ export class ValidationEngine {
     const errors: string[] = [];
 
     switch (type) {
-    case 'string':
-      valid = typeof value === 'string';
-      break;
-    case 'number':
-      valid = typeof value === 'number' && !isNaN(value);
-      break;
-    case 'boolean':
-      valid = typeof value === 'boolean';
-      break;
-    case 'array':
-      valid = Array.isArray(value);
-      break;
-    case 'object':
-      valid = typeof value === 'object' && value !== null && !Array.isArray(value);
-      break;
-    case 'any':
-      valid = true; // Any type is always valid
-      break;
-    default:
-      valid = false;
-      errors.push(`Unknown type: ${type}`);
+      case 'string':
+        valid = typeof value === 'string';
+        break;
+      case 'number':
+        valid = typeof value === 'number' && !isNaN(value);
+        break;
+      case 'boolean':
+        valid = typeof value === 'boolean';
+        break;
+      case 'array':
+        valid = Array.isArray(value);
+        break;
+      case 'object':
+        valid = typeof value === 'object' && value !== null && !Array.isArray(value);
+        break;
+      case 'any':
+        valid = true; // Any type is always valid
+        break;
+      default:
+        valid = false;
+        errors.push(`Unknown type: ${type}`);
     }
 
     if (!valid && errors.length === 0) {

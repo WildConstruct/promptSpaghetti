@@ -48,6 +48,7 @@ This document defines the operational model for PromptScape graph mutations, ena
 ### Node Operations
 
 #### Node Addition (`NODE_ADD`)
+
 ```typescript
 interface NodeAddOperation {
   type: 'NODE_ADD';
@@ -64,6 +65,7 @@ interface NodeAddOperation {
 ```
 
 **Operation Logic:**
+
 - Generate unique node ID using timestamp + user ID hash
 - Validate node type and initial data against schema
 - Insert node into CRDT Y.Map with atomic transaction
@@ -71,6 +73,7 @@ interface NodeAddOperation {
 - Update document version and checksum
 
 #### Node Update (`NODE_UPDATE`)
+
 ```typescript
 interface NodeUpdateOperation {
   type: 'NODE_UPDATE';
@@ -87,12 +90,14 @@ interface NodeUpdateOperation {
 ```
 
 **Property Update Patterns:**
+
 - **Simple Properties**: Direct value replacement
 - **Array Operations**: Index-based updates with conflict resolution
 - **Object Properties**: Deep merge with conflict detection
 - **Complex Data**: JSON patch operations for large structures
 
 #### Node Deletion (`NODE_REMOVE`)
+
 ```typescript
 interface NodeRemoveOperation {
   type: 'NODE_REMOVE';
@@ -110,6 +115,7 @@ interface NodeRemoveOperation {
 ### Edge Operations
 
 #### Edge Addition (`EDGE_ADD`)
+
 ```typescript
 interface EdgeAddOperation {
   type: 'EDGE_ADD';
@@ -128,12 +134,14 @@ interface EdgeAddOperation {
 ```
 
 **Edge Validation Rules:**
+
 - Prevent self-loops (configurable)
 - Validate port compatibility
 - Check for circular dependencies
 - Enforce connection cardinality limits
 
 #### Edge Update (`EDGE_UPDATE`)
+
 ```typescript
 interface EdgeUpdateOperation {
   type: 'EDGE_UPDATE';
@@ -149,6 +157,7 @@ interface EdgeUpdateOperation {
 ```
 
 #### Edge Deletion (`EDGE_REMOVE`)
+
 ```typescript
 interface EdgeRemoveOperation {
   type: 'EDGE_REMOVE';
@@ -166,6 +175,7 @@ interface EdgeRemoveOperation {
 ### Parameter Change Operations
 
 #### Granular Parameter Updates
+
 ```typescript
 interface ParameterUpdateOperation {
   type: 'PARAMETER_UPDATE';
@@ -184,6 +194,7 @@ interface ParameterUpdateOperation {
 ```
 
 **Parameter Update Strategies:**
+
 - **Atomic Updates**: Simple value changes
 - **Incremental Updates**: Array/object modifications
 - **Batch Updates**: Multiple parameters in single transaction
@@ -196,6 +207,7 @@ interface ParameterUpdateOperation {
 ### Framework Selection: Yjs
 
 **Rationale:**
+
 - **Mature CRDT Implementation**: Proven conflict resolution algorithms
 - **Rich Data Types**: Y.Map, Y.Array, Y.Text for different graph elements
 - **Performance**: Optimized for real-time collaboration
@@ -211,14 +223,14 @@ class GraphCRDT {
   private edges: Y.Map<GraphEdgeCRDT>;
   private metadata: Y.Map<any>;
   private operations: Y.Array<OperationRecord>;
-  
+
   constructor(documentId: string, clientId: string) {
     this.ydoc = new Y.Doc();
     this.nodes = this.ydoc.getMap('nodes');
     this.edges = this.ydoc.getMap('edges');
     this.metadata = this.ydoc.getMap('metadata');
     this.operations = this.ydoc.getArray('operations');
-    
+
     // Setup event listeners for change detection
     this.setupChangeHandlers();
   }
@@ -226,6 +238,7 @@ class GraphCRDT {
 ```
 
 ### Node CRDT Structure
+
 ```typescript
 interface GraphNodeCRDT {
   id: string;
@@ -241,6 +254,7 @@ interface GraphNodeCRDT {
 ```
 
 ### Edge CRDT Structure
+
 ```typescript
 interface GraphEdgeCRDT {
   id: string;
@@ -263,17 +277,20 @@ interface GraphEdgeCRDT {
 ### Automatic Resolution (CRDT-Based)
 
 #### Node Conflicts
+
 1. **Concurrent Creation**: Last-writer-wins with timestamp tiebreaker
 2. **Property Updates**: Per-property CRDT resolution
 3. **Position Updates**: Vector-based interpolation for simultaneous moves
 4. **Deletion vs Update**: Deletion takes precedence (tombstone approach)
 
-#### Edge Conflicts  
+#### Edge Conflicts
+
 1. **Connection Racing**: First successful connection wins
 2. **Port Conflicts**: Validation prevents invalid multi-connections
 3. **Circular Dependencies**: Prevention algorithm blocks invalid edges
 
 #### Parameter Conflicts
+
 1. **Simple Values**: Last-writer-wins with user priority consideration
 2. **Array Operations**: Index-based CRDT with positional integrity
 3. **Object Updates**: Property-level merge with conflict markers
@@ -292,10 +309,10 @@ interface ConflictResolutionUI {
 
 enum ResolutionStrategy {
   ACCEPT_LOCAL = 'accept_local',
-  ACCEPT_REMOTE = 'accept_remote', 
+  ACCEPT_REMOTE = 'accept_remote',
   MERGE_CHANGES = 'merge_changes',
   CUSTOM_RESOLUTION = 'custom_resolution',
-  ROLLBACK_OPERATION = 'rollback_operation'
+  ROLLBACK_OPERATION = 'rollback_operation',
 }
 ```
 
@@ -306,6 +323,7 @@ enum ResolutionStrategy {
 ### Graph Mutation Messages
 
 #### Operation Broadcast
+
 ```typescript
 interface GraphMutationMessage {
   type: 'GRAPH_MUTATION';
@@ -320,6 +338,7 @@ interface GraphMutationMessage {
 ```
 
 #### Conflict Notification
+
 ```typescript
 interface ConflictNotificationMessage {
   type: 'CONFLICT_DETECTED';
@@ -335,6 +354,7 @@ interface ConflictNotificationMessage {
 ```
 
 #### Batch Operations
+
 ```typescript
 interface BatchMutationMessage {
   type: 'BATCH_MUTATION';
@@ -350,6 +370,7 @@ interface BatchMutationMessage {
 ### Real-time Synchronization
 
 #### Delta Sync Protocol
+
 ```typescript
 interface DeltaSyncMessage {
   type: 'DELTA_SYNC';
@@ -363,6 +384,7 @@ interface DeltaSyncMessage {
 ```
 
 #### State Verification
+
 ```typescript
 interface StateVerificationMessage {
   type: 'STATE_VERIFICATION';
@@ -382,6 +404,7 @@ interface StateVerificationMessage {
 ### Node Operation Transforms
 
 #### Concurrent Node Creation
+
 ```typescript
 function transformNodeAdd(op1: NodeAddOperation, op2: NodeAddOperation): [NodeAddOperation, NodeAddOperation] {
   if (op1.nodeId === op2.nodeId) {
@@ -389,7 +412,7 @@ function transformNodeAdd(op1: NodeAddOperation, op2: NodeAddOperation): [NodeAd
     const laterOp = op1.timestamp > op2.timestamp ? op1 : op2;
     return [
       op1.timestamp <= op2.timestamp ? op1 : { ...op1, nodeId: generateUniqueId() },
-      op2.timestamp <= op1.timestamp ? op2 : { ...op2, nodeId: generateUniqueId() }
+      op2.timestamp <= op1.timestamp ? op2 : { ...op2, nodeId: generateUniqueId() },
     ];
   }
   return [op1, op2]; // No conflict
@@ -397,6 +420,7 @@ function transformNodeAdd(op1: NodeAddOperation, op2: NodeAddOperation): [NodeAd
 ```
 
 #### Update vs Delete Resolution
+
 ```typescript
 function transformUpdateDelete(update: NodeUpdateOperation, delete: NodeRemoveOperation): [NodeUpdateOperation | null, NodeRemoveOperation] {
   if (update.nodeId === delete.nodeId) {
@@ -410,12 +434,15 @@ function transformUpdateDelete(update: NodeUpdateOperation, delete: NodeRemoveOp
 ### Edge Operation Transforms
 
 #### Connection Racing
+
 ```typescript
 function transformEdgeAdd(op1: EdgeAddOperation, op2: EdgeAddOperation): [EdgeAddOperation, EdgeAddOperation] {
-  if (op1.sourceNodeId === op2.sourceNodeId && 
-      op1.targetNodeId === op2.targetNodeId &&
-      op1.sourcePort === op2.sourcePort &&
-      op1.targetPort === op2.targetPort) {
+  if (
+    op1.sourceNodeId === op2.sourceNodeId &&
+    op1.targetNodeId === op2.targetNodeId &&
+    op1.sourcePort === op2.sourcePort &&
+    op1.targetPort === op2.targetPort
+  ) {
     // Same connection attempt - first wins
     return op1.timestamp <= op2.timestamp ? [op1, null] : [null, op2];
   }
@@ -426,8 +453,12 @@ function transformEdgeAdd(op1: EdgeAddOperation, op2: EdgeAddOperation): [EdgeAd
 ### Parameter Update Transforms
 
 #### Concurrent Parameter Updates
+
 ```typescript
-function transformParameterUpdate(op1: ParameterUpdateOperation, op2: ParameterUpdateOperation): [ParameterUpdateOperation, ParameterUpdateOperation] {
+function transformParameterUpdate(
+  op1: ParameterUpdateOperation,
+  op2: ParameterUpdateOperation
+): [ParameterUpdateOperation, ParameterUpdateOperation] {
   if (op1.nodeId === op2.nodeId && op1.parameterKey === op2.parameterKey) {
     if (arraysEqual(op1.parameterPath, op2.parameterPath)) {
       // Same parameter - resolve with strategy
@@ -450,17 +481,17 @@ class MutationBatcher {
   private batchTimeout: NodeJS.Timeout | null = null;
   private readonly BATCH_SIZE = 10;
   private readonly BATCH_DELAY = 16; // ~60fps
-  
+
   addOperation(operation: MutationOperation): void {
     this.batch.push(operation);
-    
+
     if (this.batch.length >= this.BATCH_SIZE) {
       this.flushBatch();
     } else if (!this.batchTimeout) {
       this.batchTimeout = setTimeout(() => this.flushBatch(), this.BATCH_DELAY);
     }
   }
-  
+
   private flushBatch(): void {
     if (this.batch.length > 0) {
       this.sendBatchMutation(this.batch);
@@ -481,19 +512,18 @@ class OperationHistory {
   private operations: Map<string, MutationOperation> = new Map();
   private readonly MAX_HISTORY = 1000;
   private readonly CLEANUP_THRESHOLD = 1200;
-  
+
   addOperation(operation: MutationOperation): void {
     this.operations.set(operation.operationId, operation);
-    
+
     if (this.operations.size > this.CLEANUP_THRESHOLD) {
       this.cleanupOldOperations();
     }
   }
-  
+
   private cleanupOldOperations(): void {
-    const sortedOps = Array.from(this.operations.entries())
-      .sort(([,a], [,b]) => b.timestamp - a.timestamp);
-    
+    const sortedOps = Array.from(this.operations.entries()).sort(([, a], [, b]) => b.timestamp - a.timestamp);
+
     // Keep only the most recent operations
     this.operations = new Map(sortedOps.slice(0, this.MAX_HISTORY));
   }
@@ -503,6 +533,7 @@ class OperationHistory {
 ### Network Optimization
 
 #### Operation Compression
+
 ```typescript
 interface CompressedOperation {
   type: string;
@@ -513,6 +544,7 @@ interface CompressedOperation {
 ```
 
 #### Differential Updates
+
 ```typescript
 interface DifferentialUpdate {
   baseVersion: number;
@@ -527,24 +559,28 @@ interface DifferentialUpdate {
 ## Implementation Plan
 
 ### Phase 1: Core Infrastructure (2 hours)
+
 - [ ] Define TypeScript interfaces for all operation types
 - [ ] Implement basic CRDT wrapper for Y.js integration
 - [ ] Create operation validation and serialization logic
 - [ ] Setup WebSocket message handlers for mutations
 
 ### Phase 2: Node Operations (2 hours)
+
 - [ ] Implement NODE_ADD, NODE_UPDATE, NODE_REMOVE operations
 - [ ] Add node-specific conflict resolution logic
 - [ ] Create operation transform functions for node conflicts
 - [ ] Add comprehensive testing for node operations
 
 ### Phase 3: Edge Operations (1.5 hours)
+
 - [ ] Implement EDGE_ADD, EDGE_UPDATE, EDGE_REMOVE operations
 - [ ] Add edge validation and circular dependency detection
 - [ ] Create edge-specific conflict resolution strategies
 - [ ] Integrate with node operation dependencies
 
 ### Phase 4: Advanced Features (0.5 hours)
+
 - [ ] Implement batch operation support
 - [ ] Add operation rollback and undo/redo functionality
 - [ ] Create performance monitoring and optimization
@@ -555,19 +591,22 @@ interface DifferentialUpdate {
 ## Success Criteria
 
 ### Functional Requirements
+
 - ✅ All core graph operations (node/edge/parameter mutations) implemented
 - ✅ CRDT-based automatic conflict resolution working
 - ✅ Real-time synchronization across multiple clients
 - ✅ Operation rollback and undo/redo functionality
 
-### Performance Requirements  
+### Performance Requirements
+
 - ✅ Real-time latency ≤ 150ms P95 (Epic 23 criteria)
 - ✅ Support for 50+ concurrent users per workspace
 - ✅ Conflict resolution correctness ≥ 99% in automated tests
 - ✅ Memory usage optimized with operation history cleanup
 
 ### Integration Requirements
-- ✅ Seamless integration with existing WebSocket collaboration infrastructure  
+
+- ✅ Seamless integration with existing WebSocket collaboration infrastructure
 - ✅ Analytics telemetry for all mutation operations
 - ✅ Authentication and authorization for operation access
 - ✅ Version control integrity with checksum validation

@@ -17,18 +17,21 @@ This document establishes testing best practices for the PromptSpaghetti project
 ```
 
 **Unit Tests (75%)**
+
 - Test individual functions, methods, and components in isolation
 - Fast execution (< 100ms per test)
 - No external dependencies
 - High coverage of edge cases and error conditions
 
 **Integration Tests (20%)**
+
 - Test component interactions and data flow
 - Include database, API, and service integrations
 - Moderate execution time (< 1s per test)
 - Focus on critical user flows
 
 **E2E Tests (5%)**
+
 - Test complete user journeys
 - Include UI, API, and database interactions
 - Slower execution (< 10s per test)
@@ -37,6 +40,7 @@ This document establishes testing best practices for the PromptSpaghetti project
 ### Testing Mindset
 
 **Write Tests First (TDD)**
+
 ```typescript
 // 1. Write failing test
 describe('calculateTotal', () => {
@@ -48,13 +52,14 @@ describe('calculateTotal', () => {
 
 // 2. Write minimal implementation
 export function calculateTotal(amount: number, taxRate: number): number {
-  return amount + (amount * taxRate);
+  return amount + amount * taxRate;
 }
 
 // 3. Refactor while keeping tests green
 ```
 
 **Test Behavior, Not Implementation**
+
 ```typescript
 // ❌ Testing implementation details
 it('should call setLoading with true', () => {
@@ -67,7 +72,7 @@ it('should call setLoading with true', () => {
 it('should show loading indicator while fetching data', async () => {
   render(<Component />);
   expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
-  
+
   await waitFor(() => {
     expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
   });
@@ -85,16 +90,14 @@ describe('Graph Validation', () => {
     const graph: Graph = {
       nodes: [
         { id: 'node1', type: 'WeightedChoice', choices: [{ value: 'A', weight: 1 }] },
-        { id: 'node2', type: 'Output', template: '{{node1}}' }
+        { id: 'node2', type: 'Output', template: '{{node1}}' },
       ],
-      edges: [
-        { id: 'edge1', source: 'node1', target: 'node2' }
-      ]
+      edges: [{ id: 'edge1', source: 'node1', target: 'node2' }],
     };
-    
+
     // Act
     const result = validateGraph(graph);
-    
+
     // Assert
     expect(result.isValid).toBe(true);
     expect(result.errors).toHaveLength(0);
@@ -125,12 +128,12 @@ it('should execute graph correctly', () => {
     nodes: [
       { id: 'n1', type: 'WeightedChoice', choices: [{ value: 'Hello', weight: 1 }] },
       { id: 'n2', type: 'WeightedChoice', choices: [{ value: 'World', weight: 1 }] },
-      { id: 'output', type: 'Output', template: '{{n1}} {{n2}}' }
+      { id: 'output', type: 'Output', template: '{{n1}} {{n2}}' },
     ],
     edges: [
       { id: 'e1', source: 'n1', target: 'n2' },
-      { id: 'e2', source: 'n2', target: 'output' }
-    ]
+      { id: 'e2', source: 'n2', target: 'output' },
+    ],
   };
   // ... test continues
 });
@@ -140,27 +143,22 @@ const GraphBuilder = {
   simple: () => ({
     nodes: [
       TestNodeBuilder.weightedChoice('n1', [{ value: 'Hello', weight: 1 }]),
-      TestNodeBuilder.output('output', '{{n1}}')
+      TestNodeBuilder.output('output', '{{n1}}'),
     ],
-    edges: [
-      TestEdgeBuilder.connect('n1', 'output')
-    ]
+    edges: [TestEdgeBuilder.connect('n1', 'output')],
   }),
-  
+
   complex: () => ({
     nodes: [
       TestNodeBuilder.weightedChoice('choice1', [
         { value: 'Option A', weight: 2 },
-        { value: 'Option B', weight: 1 }
+        { value: 'Option B', weight: 1 },
       ]),
       TestNodeBuilder.variable('var1', 'testValue'),
-      TestNodeBuilder.output('output', '{{choice1}} - {{var1}}')
+      TestNodeBuilder.output('output', '{{choice1}} - {{var1}}'),
     ],
-    edges: [
-      TestEdgeBuilder.connect('choice1', 'output'),
-      TestEdgeBuilder.connect('var1', 'output')
-    ]
-  })
+    edges: [TestEdgeBuilder.connect('choice1', 'output'), TestEdgeBuilder.connect('var1', 'output')],
+  }),
 };
 
 it('should execute simple graph correctly', () => {
@@ -177,26 +175,26 @@ describe('GraphExecutionService', () => {
   let mockDatabase: jest.Mocked<DatabaseService>;
   let mockLogger: jest.Mocked<Logger>;
   let service: GraphExecutionService;
-  
+
   beforeEach(() => {
     mockDatabase = createMockDatabase();
     mockLogger = createMockLogger();
     service = new GraphExecutionService(mockDatabase, mockLogger);
   });
-  
+
   it('should log execution time', async () => {
     // Arrange
     const graph = GraphBuilder.simple();
     mockDatabase.saveExecution.mockResolvedValue({ id: 'exec123' });
-    
+
     // Act
     await service.executeGraph(graph);
-    
+
     // Assert
     expect(mockLogger.info).toHaveBeenCalledWith(
       expect.stringContaining('Graph execution completed'),
       expect.objectContaining({
-        executionTime: expect.any(Number)
+        executionTime: expect.any(Number),
       })
     );
   });
@@ -217,28 +215,28 @@ afterEach(() => {
 describe('Graph Storage Integration', () => {
   let testDb: Database;
   let repository: GraphRepository;
-  
+
   beforeAll(async () => {
     testDb = await createTestDatabase();
     repository = new GraphRepository(testDb);
   });
-  
+
   afterAll(async () => {
     await testDb.close();
   });
-  
+
   beforeEach(async () => {
     await testDb.clear(); // Clean slate for each test
   });
-  
+
   it('should persist and retrieve graph with all relationships', async () => {
     // Arrange
     const graph = GraphBuilder.complex();
-    
+
     // Act
     const savedGraph = await repository.save(graph);
     const retrievedGraph = await repository.findById(savedGraph.id);
-    
+
     // Assert
     expect(retrievedGraph).toMatchObject(graph);
     expect(retrievedGraph.nodes).toHaveLength(graph.nodes.length);
@@ -253,59 +251,51 @@ describe('Graph Storage Integration', () => {
 describe('Graph API Integration', () => {
   let app: Application;
   let request: supertest.SuperTest<supertest.Test>;
-  
+
   beforeAll(async () => {
     app = await createTestApp();
     request = supertest(app);
   });
-  
+
   afterAll(async () => {
     await app.close();
   });
-  
+
   describe('POST /graphs/execute', () => {
     it('should execute valid graph and return results', async () => {
       // Arrange
       const graph = GraphBuilder.simple();
-      
+
       // Act
-      const response = await request
-        .post('/graphs/execute')
-        .send({ graph })
-        .expect(200);
-      
+      const response = await request.post('/graphs/execute').send({ graph }).expect(200);
+
       // Assert
       expect(response.body).toMatchObject({
         success: true,
-        results: expect.arrayContaining([
-          expect.stringMatching(/Hello/)
-        ]),
+        results: expect.arrayContaining([expect.stringMatching(/Hello/)]),
         metadata: expect.objectContaining({
           executionTime: expect.any(Number),
-          nodeCount: graph.nodes.length
-        })
+          nodeCount: graph.nodes.length,
+        }),
       });
     });
-    
+
     it('should reject invalid graph with validation errors', async () => {
       // Arrange
       const invalidGraph = { nodes: [], edges: [] };
-      
+
       // Act & Assert
-      const response = await request
-        .post('/graphs/execute')
-        .send({ graph: invalidGraph })
-        .expect(400);
-      
+      const response = await request.post('/graphs/execute').send({ graph: invalidGraph }).expect(400);
+
       expect(response.body).toMatchObject({
         success: false,
         error: expect.stringContaining('validation'),
         details: expect.arrayContaining([
           expect.objectContaining({
             message: expect.any(String),
-            path: expect.any(String)
-          })
-        ])
+            path: expect.any(String),
+          }),
+        ]),
       });
     });
   });
@@ -323,29 +313,29 @@ describe('GraphEditor Component', () => {
     onSave: jest.fn(),
     onExecute: jest.fn()
   };
-  
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  
+
   it('should render graph nodes and connections', () => {
     // Arrange & Act
     render(<GraphEditor {...defaultProps} />);
-    
+
     // Assert
     expect(screen.getByText('n1')).toBeInTheDocument();
     expect(screen.getByText('output')).toBeInTheDocument();
     expect(screen.getByTestId('react-flow-wrapper')).toBeInTheDocument();
   });
-  
+
   it('should save graph when save button is clicked', async () => {
     // Arrange
     const onSave = jest.fn();
     render(<GraphEditor {...defaultProps} onSave={onSave} />);
-    
+
     // Act
     fireEvent.click(screen.getByRole('button', { name: /save/i }));
-    
+
     // Assert
     await waitFor(() => {
       expect(onSave).toHaveBeenCalledWith(
@@ -356,15 +346,15 @@ describe('GraphEditor Component', () => {
       );
     });
   });
-  
+
   it('should show validation errors for invalid graph', async () => {
     // Arrange
     const invalidGraph = { nodes: [], edges: [] };
     render(<GraphEditor {...defaultProps} initialGraph={invalidGraph} />);
-    
+
     // Act
     fireEvent.click(screen.getByRole('button', { name: /validate/i }));
-    
+
     // Assert
     await waitFor(() => {
       expect(screen.getByText(/validation error/i)).toBeInTheDocument();
@@ -382,17 +372,17 @@ describe('useGraphExecution Hook', () => {
       {children}
     </GraphProvider>
   );
-  
+
   it('should execute graph and return results', async () => {
     // Arrange
     const graph = GraphBuilder.simple();
     const { result } = renderHook(() => useGraphExecution(), { wrapper });
-    
+
     // Act
     act(() => {
       result.current.executeGraph(graph);
     });
-    
+
     // Assert
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
@@ -400,17 +390,17 @@ describe('useGraphExecution Hook', () => {
       expect(result.current.error).toBeNull();
     });
   });
-  
+
   it('should handle execution errors gracefully', async () => {
     // Arrange
     const invalidGraph = { nodes: null, edges: null };
     const { result } = renderHook(() => useGraphExecution(), { wrapper });
-    
+
     // Act
     act(() => {
       result.current.executeGraph(invalidGraph);
     });
-    
+
     // Assert
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
@@ -428,40 +418,42 @@ describe('useGraphExecution Hook', () => {
 ```typescript
 describe('Graph Execution Performance', () => {
   const PERFORMANCE_THRESHOLDS = {
-    SMALL_GRAPH: 50,   // ms
+    SMALL_GRAPH: 50, // ms
     MEDIUM_GRAPH: 200, // ms
-    LARGE_GRAPH: 1000  // ms
+    LARGE_GRAPH: 1000, // ms
   };
-  
+
   it('should execute small graph within performance threshold', async () => {
     // Arrange
     const graph = GraphBuilder.small(); // 5 nodes
-    
+
     // Act & Assert
     const { executionTime, result } = await measureExecution(async () => {
       return await executeGraph(graph);
     });
-    
+
     expect(executionTime).toBeLessThan(PERFORMANCE_THRESHOLDS.SMALL_GRAPH);
     expect(result).toBeDefined();
   });
-  
+
   it('should maintain performance under concurrent load', async () => {
     // Arrange
     const graph = GraphBuilder.medium(); // 20 nodes
     const concurrentExecutions = 10;
-    
+
     // Act
-    const promises = Array(concurrentExecutions).fill(0).map(async () => {
-      return measureExecution(() => executeGraph(graph));
-    });
-    
+    const promises = Array(concurrentExecutions)
+      .fill(0)
+      .map(async () => {
+        return measureExecution(() => executeGraph(graph));
+      });
+
     const results = await Promise.all(promises);
-    
+
     // Assert
     const avgExecutionTime = results.reduce((sum, r) => sum + r.executionTime, 0) / results.length;
     expect(avgExecutionTime).toBeLessThan(PERFORMANCE_THRESHOLDS.MEDIUM_GRAPH);
-    
+
     // No execution should be more than 2x the average
     const maxExecutionTime = Math.max(...results.map(r => r.executionTime));
     expect(maxExecutionTime).toBeLessThan(avgExecutionTime * 2);
@@ -477,22 +469,22 @@ describe('Memory Usage', () => {
     // Arrange
     const graph = GraphBuilder.medium();
     const initialMemory = process.memoryUsage().heapUsed;
-    
+
     // Act
     for (let i = 0; i < 100; i++) {
       await executeGraph(graph);
-      
+
       // Force garbage collection every 10 iterations
       if (i % 10 === 0 && global.gc) {
         global.gc();
       }
     }
-    
+
     // Assert
     const finalMemory = process.memoryUsage().heapUsed;
     const memoryGrowth = finalMemory - initialMemory;
     const acceptableGrowth = 50 * 1024 * 1024; // 50MB
-    
+
     expect(memoryGrowth).toBeLessThan(acceptableGrowth);
   });
 });
@@ -512,33 +504,30 @@ describe('Error Handling', () => {
       {},
       { nodes: null },
       { nodes: [], edges: null },
-      { nodes: [{ invalid: 'node' }], edges: [] }
+      { nodes: [{ invalid: 'node' }], edges: [] },
     ];
-    
+
     // Act & Assert
     for (const input of malformedInputs) {
-      await expect(executeGraph(input as any))
-        .rejects
-        .toThrow(/validation|invalid|malformed/i);
+      await expect(executeGraph(input as any)).rejects.toThrow(/validation|invalid|malformed/i);
     }
   });
-  
+
   it('should handle circular dependencies', () => {
     // Arrange
     const circularGraph = {
       nodes: [
         { id: 'a', type: 'WeightedChoice', choices: [{ value: 'A', weight: 1 }] },
-        { id: 'b', type: 'WeightedChoice', choices: [{ value: 'B', weight: 1 }] }
+        { id: 'b', type: 'WeightedChoice', choices: [{ value: 'B', weight: 1 }] },
       ],
       edges: [
         { id: 'ab', source: 'a', target: 'b' },
-        { id: 'ba', source: 'b', target: 'a' } // Creates cycle
-      ]
+        { id: 'ba', source: 'b', target: 'a' }, // Creates cycle
+      ],
     };
-    
+
     // Act & Assert
-    expect(() => validateGraph(circularGraph))
-      .toThrow(/circular|cycle/i);
+    expect(() => validateGraph(circularGraph)).toThrow(/circular|cycle/i);
   });
 });
 ```
@@ -551,20 +540,18 @@ describe('Boundary Values', () => {
     expect(calculateTotal(0, 0)).toBe(0);
     expect(validateGraph({ nodes: [], edges: [] })).toMatchObject({
       isValid: false,
-      errors: expect.arrayContaining([
-        expect.stringContaining('empty')
-      ])
+      errors: expect.arrayContaining([expect.stringContaining('empty')]),
     });
   });
-  
+
   it('should handle maximum values', () => {
     const largeGraph = GraphBuilder.withNodeCount(1000);
     expect(() => validateGraph(largeGraph)).not.toThrow();
-    
+
     const result = calculateTotal(Number.MAX_SAFE_INTEGER, 0);
     expect(result).toBe(Number.MAX_SAFE_INTEGER);
   });
-  
+
   it('should handle negative values', () => {
     expect(() => calculateTotal(-100, 0.1)).not.toThrow();
     expect(calculateTotal(-100, 0.1)).toBe(-90);
@@ -583,31 +570,30 @@ describe('Security - Input Sanitization', () => {
     'javascript:alert("xss")',
     '${process.exit(1)}',
     'eval("1+1")',
-    '__proto__.polluted = true'
+    '__proto__.polluted = true',
   ];
-  
+
   it('should sanitize malicious input in node templates', () => {
     for (const maliciousInput of maliciousInputs) {
       const node = TestNodeBuilder.output('test', maliciousInput);
-      
+
       expect(() => validateNode(node)).not.toThrow();
-      
+
       const sanitized = sanitizeTemplate(maliciousInput);
       expect(sanitized).not.toContain('<script>');
       expect(sanitized).not.toContain('javascript:');
     }
   });
-  
+
   it('should prevent code injection in expressions', () => {
     const dangerousExpressions = [
       'eval("process.exit(1)")',
       'this.constructor.constructor("return process")().exit(1)',
-      'require("child_process").exec("rm -rf /")'
+      'require("child_process").exec("rm -rf /")',
     ];
-    
+
     for (const expression of dangerousExpressions) {
-      expect(() => evaluateExpression(expression, {}))
-        .toThrow(/unsafe|forbidden|blocked/i);
+      expect(() => evaluateExpression(expression, {})).toThrow(/unsafe|forbidden|blocked/i);
     }
   });
 });
@@ -618,23 +604,20 @@ describe('Security - Input Sanitization', () => {
 ```typescript
 describe('Security - Authentication', () => {
   it('should require valid authentication token', async () => {
-    const response = await request
-      .post('/graphs/execute')
-      .send({ graph: GraphBuilder.simple() })
-      .expect(401);
-    
+    const response = await request.post('/graphs/execute').send({ graph: GraphBuilder.simple() }).expect(401);
+
     expect(response.body.error).toMatch(/authentication|unauthorized/i);
   });
-  
+
   it('should validate token expiration', async () => {
     const expiredToken = createTestToken({ exp: Date.now() / 1000 - 3600 }); // 1 hour ago
-    
+
     const response = await request
       .post('/graphs/execute')
       .set('Authorization', `Bearer ${expiredToken}`)
       .send({ graph: GraphBuilder.simple() })
       .expect(401);
-    
+
     expect(response.body.error).toMatch(/expired|invalid/i);
   });
 });
@@ -694,18 +677,18 @@ it('should throw [error] when [invalid condition]', () => {});
 ```typescript
 /**
  * Tests for the Graph Execution Engine
- * 
+ *
  * This test suite covers:
  * - Basic graph execution scenarios
  * - Error handling and edge cases
  * - Performance characteristics
  * - Integration with external services
- * 
+ *
  * Performance expectations:
  * - Small graphs (< 10 nodes): < 50ms
  * - Medium graphs (10-50 nodes): < 200ms
  * - Large graphs (50+ nodes): < 1000ms
- * 
+ *
  * @see packages/core/runtime/index.ts
  */
 describe('Graph Execution Engine', () => {
@@ -734,12 +717,12 @@ const testMetrics = {
     statements: results.coverageMap.getCoverageSummary().statements.pct,
     branches: results.coverageMap.getCoverageSummary().branches.pct,
     functions: results.coverageMap.getCoverageSummary().functions.pct,
-    lines: results.coverageMap.getCoverageSummary().lines.pct
+    lines: results.coverageMap.getCoverageSummary().lines.pct,
   },
   slowTests: results.testResults
     .flatMap(r => r.testResults)
     .filter(t => t.duration > 1000)
-    .map(t => ({ name: t.fullName, duration: t.duration }))
+    .map(t => ({ name: t.fullName, duration: t.duration })),
 };
 
 // Store metrics for trend analysis

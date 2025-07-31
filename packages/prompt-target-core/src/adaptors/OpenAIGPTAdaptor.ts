@@ -8,7 +8,7 @@ import {
   ParameterSpec,
   Feature,
   PluginContext,
-  TransformationLog
+  TransformationLog,
 } from '../types/index.js';
 import { BaseAdaptor } from './BaseAdaptor.js';
 
@@ -30,13 +30,7 @@ export class OpenAIGPTAdaptor extends BaseAdaptor {
 
   async capabilities(): Promise<Capabilities> {
     return {
-      supportedNodeTypes: [
-        'text',
-        'conditional',
-        'weighted',
-        'concat',
-        'output'
-      ],
+      supportedNodeTypes: ['text', 'conditional', 'weighted', 'concat', 'output'],
       parameters: [
         {
           name: 'temperature',
@@ -45,7 +39,7 @@ export class OpenAIGPTAdaptor extends BaseAdaptor {
           default: 0.7,
           min: 0.0,
           max: 2.0,
-          description: 'Controls randomness in generation (0.0 = deterministic, 2.0 = very random)'
+          description: 'Controls randomness in generation (0.0 = deterministic, 2.0 = very random)',
         },
         {
           name: 'max_tokens',
@@ -54,7 +48,7 @@ export class OpenAIGPTAdaptor extends BaseAdaptor {
           default: 1000,
           min: 1,
           max: 4096,
-          description: 'Maximum number of tokens to generate'
+          description: 'Maximum number of tokens to generate',
         },
         {
           name: 'top_p',
@@ -63,7 +57,7 @@ export class OpenAIGPTAdaptor extends BaseAdaptor {
           default: 1.0,
           min: 0.0,
           max: 1.0,
-          description: 'Nucleus sampling parameter'
+          description: 'Nucleus sampling parameter',
         },
         {
           name: 'frequency_penalty',
@@ -72,7 +66,7 @@ export class OpenAIGPTAdaptor extends BaseAdaptor {
           default: 0.0,
           min: -2.0,
           max: 2.0,
-          description: 'Reduces repetition of frequent tokens'
+          description: 'Reduces repetition of frequent tokens',
         },
         {
           name: 'presence_penalty',
@@ -81,7 +75,7 @@ export class OpenAIGPTAdaptor extends BaseAdaptor {
           default: 0.0,
           min: -2.0,
           max: 2.0,
-          description: 'Encourages discussion of new topics'
+          description: 'Encourages discussion of new topics',
         },
         {
           name: 'model',
@@ -89,49 +83,49 @@ export class OpenAIGPTAdaptor extends BaseAdaptor {
           required: false,
           default: 'gpt-3.5-turbo',
           options: ['gpt-3.5-turbo', 'gpt-4', 'gpt-4-turbo-preview'],
-          description: 'OpenAI model to use'
-        }
+          description: 'OpenAI model to use',
+        },
       ],
       limitations: [
         {
           type: 'prompt_length',
           description: 'Maximum context length varies by model (4K-128K tokens)',
           severity: 'warning',
-          impact: 'Long prompts may be truncated'
+          impact: 'Long prompts may be truncated',
         },
         {
           type: 'feature',
           description: 'No direct image generation support',
           severity: 'error',
-          impact: 'Image nodes will be converted to descriptive text'
-        }
+          impact: 'Image nodes will be converted to descriptive text',
+        },
       ],
       features: [
         {
           name: 'chat_completion',
           supported: true,
-          description: 'Supports system/user/assistant message format'
+          description: 'Supports system/user/assistant message format',
         },
         {
           name: 'function_calling',
           supported: true,
-          description: 'Supports function calling and tool use'
+          description: 'Supports function calling and tool use',
         },
         {
           name: 'streaming',
           supported: true,
-          description: 'Supports streaming responses'
+          description: 'Supports streaming responses',
         },
         {
           name: 'image_analysis',
           supported: false,
           description: 'Image input not supported in this adaptor',
-          alternatives: ['Use OpenAI Vision adaptor for image analysis']
-        }
+          alternatives: ['Use OpenAI Vision adaptor for image analysis'],
+        },
       ],
       maxNodes: 50,
       maxPromptLength: 32000,
-      supportedFormats: ['chat_completion', 'text_completion']
+      supportedFormats: ['chat_completion', 'text_completion'],
     };
   }
 
@@ -142,39 +136,35 @@ export class OpenAIGPTAdaptor extends BaseAdaptor {
     // Check for image nodes (not supported)
     const imageNodes = graph.nodes.filter(node => node.type === 'image');
     imageNodes.forEach(node => {
-      results.push(this.createValidationResult(
-        `unsupported-image-${node.id}`,
-        'warning',
-        'medium',
-        'Image node not supported',
-        {
+      results.push(
+        this.createValidationResult(`unsupported-image-${node.id}`, 'warning', 'medium', 'Image node not supported', {
           description: 'Image nodes will be converted to text descriptions',
           nodeId: node.id,
           autoFixable: true,
-          suggestions: [{
-            type: 'workaround',
-            description: 'Replace image node with descriptive text'
-          }]
-        }
-      ));
+          suggestions: [
+            {
+              type: 'workaround',
+              description: 'Replace image node with descriptive text',
+            },
+          ],
+        })
+      );
     });
 
     // Check node count
     if (graph.nodes.length > capabilities.maxNodes!) {
-      results.push(this.createValidationResult(
-        'too-many-nodes',
-        'error',
-        'high',
-        'Too many nodes in graph',
-        {
+      results.push(
+        this.createValidationResult('too-many-nodes', 'error', 'high', 'Too many nodes in graph', {
           description: `Graph has ${graph.nodes.length} nodes, maximum is ${capabilities.maxNodes}`,
           autoFixable: false,
-          suggestions: [{
-            type: 'fix',
-            description: 'Reduce the number of nodes or split into multiple graphs'
-          }]
-        }
-      ));
+          suggestions: [
+            {
+              type: 'fix',
+              description: 'Reduce the number of nodes or split into multiple graphs',
+            },
+          ],
+        })
+      );
     }
 
     // Validate parameters
@@ -187,7 +177,7 @@ export class OpenAIGPTAdaptor extends BaseAdaptor {
             if (validation) {
               results.push({
                 ...validation,
-                nodeId: node.id
+                nodeId: node.id,
               });
             }
           }
@@ -208,28 +198,28 @@ export class OpenAIGPTAdaptor extends BaseAdaptor {
 
     // Process the graph to build messages
     const processedContent = await this.processGraph(graph, transformations);
-    
+
     // Default system message if none provided
     if (!processedContent.systemMessage) {
       messages.push({
         role: 'system',
-        content: 'You are a helpful assistant.'
+        content: 'You are a helpful assistant.',
       });
       transformations.push({
         step: 'add_default_system_message',
-        action: 'Added default system message'
+        action: 'Added default system message',
       });
     } else {
       messages.push({
         role: 'system',
-        content: processedContent.systemMessage
+        content: processedContent.systemMessage,
       });
     }
 
     // Add user message
     messages.push({
       role: 'user',
-      content: processedContent.userMessage
+      content: processedContent.userMessage,
     });
 
     // Extract and normalize parameters
@@ -256,7 +246,7 @@ export class OpenAIGPTAdaptor extends BaseAdaptor {
       platform: this.platform,
       content: {
         messages,
-        ...parameters
+        ...parameters,
       },
       parameters,
       format: 'chat_completion',
@@ -267,8 +257,8 @@ export class OpenAIGPTAdaptor extends BaseAdaptor {
         adaptorVersion: this.version,
         quality,
         warnings: validationResults.filter(r => r.type === 'warning'),
-        transformations
-      }
+        transformations,
+      },
     };
 
     return targetPrompt;
@@ -277,7 +267,10 @@ export class OpenAIGPTAdaptor extends BaseAdaptor {
   /**
    * Process the graph to extract content and build messages
    */
-  private async processGraph(graph: PromptGraph, transformations: TransformationLog[]): Promise<{
+  private async processGraph(
+    graph: PromptGraph,
+    transformations: TransformationLog[]
+  ): Promise<{
     systemMessage?: string;
     userMessage: string;
   }> {
@@ -286,28 +279,26 @@ export class OpenAIGPTAdaptor extends BaseAdaptor {
 
     // Find output nodes (these define the final prompt structure)
     const outputNodes = graph.nodes.filter(node => node.type === 'output');
-    
+
     if (outputNodes.length === 0) {
       // No output nodes - concatenate all text nodes
-      const textNodes = graph.nodes.filter(node => 
-        node.type === 'text' && node.data.content
-      );
-      
+      const textNodes = graph.nodes.filter(node => node.type === 'text' && node.data.content);
+
       userMessage = textNodes
         .map(node => node.data.content)
         .filter(Boolean)
         .join(' ');
-      
+
       transformations.push({
         step: 'concatenate_text_nodes',
         action: 'Concatenated all text nodes as no output nodes found',
-        details: { nodeCount: textNodes.length }
+        details: { nodeCount: textNodes.length },
       });
     } else {
       // Process output nodes
       for (const outputNode of outputNodes) {
         const content = await this.processNode(outputNode, graph, transformations);
-        
+
         if (outputNode.data.role === 'system') {
           systemMessage = content;
         } else {
@@ -319,17 +310,16 @@ export class OpenAIGPTAdaptor extends BaseAdaptor {
     // Handle image nodes by converting to text descriptions
     const imageNodes = graph.nodes.filter(node => node.type === 'image');
     for (const imageNode of imageNodes) {
-      const description = imageNode.data.description || 
-                         imageNode.data.content || 
-                         `[Image: ${imageNode.data.label || 'untitled'}]`;
-      
+      const description =
+        imageNode.data.description || imageNode.data.content || `[Image: ${imageNode.data.label || 'untitled'}]`;
+
       userMessage += (userMessage ? '\n' : '') + `Image description: ${description}`;
-      
+
       transformations.push({
         step: 'convert_image_to_text',
         sourceNodeId: imageNode.id,
         action: 'Converted image node to text description',
-        details: { description }
+        details: { description },
       });
     }
 
@@ -354,7 +344,7 @@ export class OpenAIGPTAdaptor extends BaseAdaptor {
 
     // Get input edges for this node
     const inputEdges = graph.edges.filter(edge => edge.target === node.id);
-    
+
     if (inputEdges.length > 0) {
       // Process input nodes first
       for (const edge of inputEdges) {
@@ -368,65 +358,65 @@ export class OpenAIGPTAdaptor extends BaseAdaptor {
 
     // Process current node content
     switch (node.type) {
-    case 'text':
-      content += (content ? ' ' : '') + (node.data.content || '');
-      break;
-        
-    case 'concat':
-      // Content already processed from inputs
-      transformations.push({
-        step: 'process_concat',
-        sourceNodeId: node.id,
-        action: 'Concatenated input nodes'
-      });
-      break;
-        
-    case 'weighted':
-      // For simplicity, take the first option (could be enhanced with actual weighting)
-      if (node.data.options && node.data.options.length > 0) {
-        content += (content ? ' ' : '') + node.data.options[0].text;
+      case 'text':
+        content += (content ? ' ' : '') + (node.data.content || '');
+        break;
+
+      case 'concat':
+        // Content already processed from inputs
         transformations.push({
-          step: 'process_weighted',
+          step: 'process_concat',
           sourceNodeId: node.id,
-          action: 'Selected first weighted option',
-          details: { selectedOption: 0 }
+          action: 'Concatenated input nodes',
         });
-      }
-      break;
-        
-    case 'conditional':
-      // For simplicity, take the 'true' branch (could be enhanced with condition evaluation)
-      if (node.data.trueBranch) {
-        content += (content ? ' ' : '') + node.data.trueBranch;
+        break;
+
+      case 'weighted':
+        // For simplicity, take the first option (could be enhanced with actual weighting)
+        if (node.data.options && node.data.options.length > 0) {
+          content += (content ? ' ' : '') + node.data.options[0].text;
+          transformations.push({
+            step: 'process_weighted',
+            sourceNodeId: node.id,
+            action: 'Selected first weighted option',
+            details: { selectedOption: 0 },
+          });
+        }
+        break;
+
+      case 'conditional':
+        // For simplicity, take the 'true' branch (could be enhanced with condition evaluation)
+        if (node.data.trueBranch) {
+          content += (content ? ' ' : '') + node.data.trueBranch;
+          transformations.push({
+            step: 'process_conditional',
+            sourceNodeId: node.id,
+            action: 'Selected true branch',
+            details: { condition: node.data.condition },
+          });
+        }
+        break;
+
+      case 'output':
+        // Content already processed from inputs
         transformations.push({
-          step: 'process_conditional',
+          step: 'process_output',
           sourceNodeId: node.id,
-          action: 'Selected true branch',
-          details: { condition: node.data.condition }
+          action: 'Processed output node',
         });
-      }
-      break;
-        
-    case 'output':
-      // Content already processed from inputs
-      transformations.push({
-        step: 'process_output',
-        sourceNodeId: node.id,
-        action: 'Processed output node'
-      });
-      break;
-        
-    default:
-      // For unsupported node types, try to extract any text content
-      if (node.data.content) {
-        content += (content ? ' ' : '') + node.data.content;
-        transformations.push({
-          step: 'process_fallback',
-          sourceNodeId: node.id,
-          action: `Processed unsupported node type: ${node.type}`,
-          details: { nodeType: node.type }
-        });
-      }
+        break;
+
+      default:
+        // For unsupported node types, try to extract any text content
+        if (node.data.content) {
+          content += (content ? ' ' : '') + node.data.content;
+          transformations.push({
+            step: 'process_fallback',
+            sourceNodeId: node.id,
+            action: `Processed unsupported node type: ${node.type}`,
+            details: { nodeType: node.type },
+          });
+        }
     }
 
     return content.trim();
@@ -437,24 +427,20 @@ export class OpenAIGPTAdaptor extends BaseAdaptor {
    */
   private extractParameters(graph: PromptGraph): Record<string, any> {
     const parameters: Record<string, any> = {};
-    
+
     graph.nodes.forEach(node => {
       if (node.data.parameters) {
         Object.assign(parameters, node.data.parameters);
       }
     });
-    
+
     return parameters;
   }
 
   /**
    * Validate a parameter value against its specification
    */
-  private validateParameter(
-    name: string,
-    value: any,
-    spec: ParameterSpec
-  ): ValidationResult | null {
+  private validateParameter(name: string, value: any, spec: ParameterSpec): ValidationResult | null {
     if (spec.type === 'number') {
       if (typeof value !== 'number' || isNaN(value)) {
         return this.createValidationResult(
@@ -464,11 +450,11 @@ export class OpenAIGPTAdaptor extends BaseAdaptor {
           `Invalid number value for parameter "${name}"`,
           {
             description: `Expected number, got ${typeof value}`,
-            autoFixable: true
+            autoFixable: true,
           }
         );
       }
-      
+
       if (spec.min !== undefined && value < spec.min) {
         return this.createValidationResult(
           `param-too-low-${name}`,
@@ -477,11 +463,11 @@ export class OpenAIGPTAdaptor extends BaseAdaptor {
           `Parameter "${name}" value too low`,
           {
             description: `Value ${value} is below minimum ${spec.min}`,
-            autoFixable: true
+            autoFixable: true,
           }
         );
       }
-      
+
       if (spec.max !== undefined && value > spec.max) {
         return this.createValidationResult(
           `param-too-high-${name}`,
@@ -490,12 +476,12 @@ export class OpenAIGPTAdaptor extends BaseAdaptor {
           `Parameter "${name}" value too high`,
           {
             description: `Value ${value} is above maximum ${spec.max}`,
-            autoFixable: true
+            autoFixable: true,
           }
         );
       }
     }
-    
+
     if (spec.type === 'enum' && spec.options) {
       if (!spec.options.includes(value)) {
         return this.createValidationResult(
@@ -505,12 +491,12 @@ export class OpenAIGPTAdaptor extends BaseAdaptor {
           `Invalid enum value for parameter "${name}"`,
           {
             description: `Value "${value}" not in allowed options: ${spec.options.join(', ')}`,
-            autoFixable: true
+            autoFixable: true,
           }
         );
       }
     }
-    
+
     return null;
   }
 
@@ -521,17 +507,17 @@ export class OpenAIGPTAdaptor extends BaseAdaptor {
     if (spec.type === 'number') {
       const num = Number(value);
       if (isNaN(num)) return spec.default;
-      
+
       if (spec.min !== undefined) return Math.max(spec.min, num);
       if (spec.max !== undefined) return Math.min(spec.max, num);
-      
+
       return num;
     }
-    
+
     if (spec.type === 'enum' && spec.options) {
       return spec.options.includes(value) ? value : spec.default;
     }
-    
+
     return value;
   }
 

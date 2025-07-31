@@ -46,7 +46,7 @@ program
   .option('-o, --output <directory>', 'Output directory', '.')
   .option('-t, --template <template>', 'Template to use', 'basic')
   .option('-y, --yes', 'Skip prompts and use defaults')
-  .action(async (options) => {
+  .action(async options => {
     try {
       console.log(chalk.blue('🚀 PromptScape Custom Node Scaffold'));
       console.log(chalk.gray('Creating a new custom node...\n'));
@@ -79,19 +79,19 @@ async function promptForConfig(): Promise<NodeScaffoldConfig> {
         if (!input.trim()) return 'Name is required';
         if (!/^[a-zA-Z0-9.-]+$/.test(input)) return 'Name must contain only alphanumeric characters, dots, and hyphens';
         return true;
-      }
+      },
     },
     {
       type: 'input',
       name: 'displayName',
       message: 'Display name:',
-      validate: (input: string) => input.trim() ? true : 'Display name is required'
+      validate: (input: string) => (input.trim() ? true : 'Display name is required'),
     },
     {
       type: 'input',
       name: 'description',
       message: 'Description:',
-      validate: (input: string) => input.trim() ? true : 'Description is required'
+      validate: (input: string) => (input.trim() ? true : 'Description is required'),
     },
     {
       type: 'list',
@@ -104,57 +104,57 @@ async function promptForConfig(): Promise<NodeScaffoldConfig> {
         'External APIs',
         'Math & Computation',
         'Utilities',
-        'Custom'
-      ]
+        'Custom',
+      ],
     },
     {
       type: 'input',
       name: 'author',
       message: 'Author name:',
-      validate: (input: string) => input.trim() ? true : 'Author name is required'
+      validate: (input: string) => (input.trim() ? true : 'Author name is required'),
     },
     {
       type: 'input',
       name: 'email',
-      message: 'Author email (optional):'
+      message: 'Author email (optional):',
     },
     {
       type: 'confirm',
       name: 'stateful',
       message: 'Does this node maintain state between executions?',
-      default: false
+      default: false,
     },
     {
       type: 'confirm',
       name: 'cacheable',
       message: 'Can results be cached for performance?',
-      default: true
+      default: true,
     },
     {
       type: 'confirm',
       name: 'allowFileAccess',
       message: 'Does this node need file system access?',
-      default: false
+      default: false,
     },
     {
       type: 'confirm',
       name: 'allowNetworkAccess',
       message: 'Does this node need network access?',
-      default: false
-    }
+      default: false,
+    },
   ]);
 
   // Prompt for inputs
   const inputs = [];
   let addingInputs = true;
-  
+
   while (addingInputs) {
     const inputConfig = await inquirer.prompt([
       {
         type: 'input',
         name: 'name',
-        message: 'Input name (leave empty to stop adding inputs):'
-      }
+        message: 'Input name (leave empty to stop adding inputs):',
+      },
     ]);
 
     if (!inputConfig.name.trim()) {
@@ -167,40 +167,40 @@ async function promptForConfig(): Promise<NodeScaffoldConfig> {
         type: 'list',
         name: 'type',
         message: 'Input type:',
-        choices: ['string', 'number', 'boolean', 'array', 'object', 'any']
+        choices: ['string', 'number', 'boolean', 'array', 'object', 'any'],
       },
       {
         type: 'confirm',
         name: 'required',
         message: 'Is this input required?',
-        default: true
+        default: true,
       },
       {
         type: 'input',
         name: 'description',
-        message: 'Input description (optional):'
-      }
+        message: 'Input description (optional):',
+      },
     ]);
 
     inputs.push({
       name: inputConfig.name,
       type: inputDetails.type,
       required: inputDetails.required,
-      description: inputDetails.description || undefined
+      description: inputDetails.description || undefined,
     });
   }
 
   // Prompt for outputs
   const outputs = [];
   let addingOutputs = true;
-  
+
   while (addingOutputs) {
     const outputConfig = await inquirer.prompt([
       {
         type: 'input',
         name: 'name',
-        message: 'Output name (leave empty to stop adding outputs):'
-      }
+        message: 'Output name (leave empty to stop adding outputs):',
+      },
     ]);
 
     if (!outputConfig.name.trim()) {
@@ -213,19 +213,19 @@ async function promptForConfig(): Promise<NodeScaffoldConfig> {
         type: 'list',
         name: 'type',
         message: 'Output type:',
-        choices: ['string', 'number', 'boolean', 'array', 'object', 'any']
+        choices: ['string', 'number', 'boolean', 'array', 'object', 'any'],
       },
       {
         type: 'input',
         name: 'description',
-        message: 'Output description (optional):'
-      }
+        message: 'Output description (optional):',
+      },
     ]);
 
     outputs.push({
       name: outputConfig.name,
       type: outputDetails.type,
-      description: outputDetails.description || undefined
+      description: outputDetails.description || undefined,
     });
   }
 
@@ -250,8 +250,8 @@ async function promptForConfig(): Promise<NodeScaffoldConfig> {
     cacheable: answers.cacheable,
     security: {
       allowFileAccess: answers.allowFileAccess,
-      allowNetworkAccess: answers.allowNetworkAccess
-    }
+      allowNetworkAccess: answers.allowNetworkAccess,
+    },
   };
 }
 
@@ -268,8 +268,8 @@ function getDefaultConfig(): NodeScaffoldConfig {
     cacheable: true,
     security: {
       allowFileAccess: false,
-      allowNetworkAccess: false
-    }
+      allowNetworkAccess: false,
+    },
   };
 }
 
@@ -297,31 +297,28 @@ async function generatePackageJson(config: NodeScaffoldConfig, outputDir: string
       build: 'tsc',
       test: 'jest',
       'test:watch': 'jest --watch',
-      dev: 'tsc --watch'
+      dev: 'tsc --watch',
     },
     dependencies: {
-      '@prompt-spaghetti/custom-node-sdk': '^0.1.0'
+      '@prompt-spaghetti/custom-node-sdk': '^0.1.0',
     },
     devDependencies: {
       '@types/jest': '^29.0.0',
       '@types/node': '^20.0.0',
       jest: '^29.0.0',
       'ts-jest': '^29.0.0',
-      typescript: '^5.0.0'
+      typescript: '^5.0.0',
     },
     author: config.email ? `${config.author} <${config.email}>` : config.author,
-    keywords: ['promptscape', 'custom-node', config.category.toLowerCase().replace(/\s+/g, '-')]
+    keywords: ['promptscape', 'custom-node', config.category.toLowerCase().replace(/\s+/g, '-')],
   };
 
-  await fs.writeFile(
-    path.join(outputDir, 'package.json'),
-    JSON.stringify(packageJson, null, 2)
-  );
+  await fs.writeFile(path.join(outputDir, 'package.json'), JSON.stringify(packageJson, null, 2));
 }
 
 async function generateNodeImplementation(config: NodeScaffoldConfig, outputDir: string): Promise<void> {
   const className = config.displayName.replace(/[^a-zA-Z0-9]/g, '');
-  
+
   const content = `import {
   CustomNodeBase,
   CustomNodeConfig,
@@ -355,10 +352,13 @@ export class ${className} extends CustomNodeBase {
       ${config.inputs.map(input => `const ${input.name} = inputs.${input.name};`).join('\n      ')}
 
       // TODO: Implement your custom node logic here
-      ${config.outputs.length === 1 && config.outputs[0].name === 'result' 
-    ? 'const result = inputs.input; // Replace with actual logic'
-    : config.outputs.map(output => `const ${output.name} = undefined; // TODO: Implement logic for ${output.name}`).join('\n      ')
-}
+      ${
+        config.outputs.length === 1 && config.outputs[0].name === 'result'
+          ? 'const result = inputs.input; // Replace with actual logic'
+          : config.outputs
+              .map(output => `const ${output.name} = undefined; // TODO: Implement logic for ${output.name}`)
+              .join('\n      ')
+      }
 
       return {
         outputs: {
@@ -387,15 +387,23 @@ export const nodeMetadata = {
 // Export node schema
 export const nodeSchema = {
   inputs: {
-    ${config.inputs.map(input => `${input.name}: {
+    ${config.inputs
+      .map(
+        input => `${input.name}: {
       type: '${input.type}',
       required: ${input.required}${input.description ? `,\n      description: '${input.description}'` : ''}
-    }`).join(',\n    ')}
+    }`
+      )
+      .join(',\n    ')}
   },
   outputs: {
-    ${config.outputs.map(output => `${output.name}: {
+    ${config.outputs
+      .map(
+        output => `${output.name}: {
       type: '${output.type}'${output.description ? `,\n      description: '${output.description}'` : ''}
-    }`).join(',\n    ')}
+    }`
+      )
+      .join(',\n    ')}
   }
 };
 `;
@@ -405,7 +413,7 @@ export const nodeSchema = {
 
 async function generateTests(config: NodeScaffoldConfig, outputDir: string): Promise<void> {
   const className = config.displayName.replace(/[^a-zA-Z0-9]/g, '');
-  
+
   const content = `import { ${className}, nodeMetadata, nodeSchema } from './index';
 import { MockContextFactory } from '@prompt-spaghetti/custom-node-sdk/testing';
 import { CustomNodeConfig } from '@prompt-spaghetti/custom-node-sdk';
@@ -467,13 +475,19 @@ describe('${className}', () => {
       ${config.outputs.map(output => `expect(result.outputs.${output.name}).toBeDefined();`).join('\n      ')}
     });
 
-    ${config.inputs.filter(input => input.required).map(input => `
+    ${config.inputs
+      .filter(input => input.required)
+      .map(
+        input => `
     it('should throw error when required input "${input.name}" is missing', async () => {
       const context = MockContextFactory.create();
       const runtime = {
         context,
         inputs: {
-          ${config.inputs.filter(i => i !== input).map(i => `${i.name}: ${getTestValue(i.type)}`).join(',\n          ')}
+          ${config.inputs
+            .filter(i => i !== input)
+            .map(i => `${i.name}: ${getTestValue(i.type)}`)
+            .join(',\n          ')}
         },
         utils: {
           random: () => 0.5,
@@ -485,7 +499,9 @@ describe('${className}', () => {
       };
 
       await expect(node.execute(runtime)).rejects.toThrow();
-    });`).join('\n')}
+    });`
+      )
+      .join('\n')}
   });
 });
 
@@ -502,12 +518,18 @@ function getTestValue(type: string): any {
 
   function getTestValue(type: string): string {
     switch (type) {
-    case 'string': return '\'test string\'';
-    case 'number': return '42';
-    case 'boolean': return 'true';
-    case 'array': return '[1, 2, 3]';
-    case 'object': return '{ key: \'value\' }';
-    default: return '\'test value\'';
+      case 'string':
+        return "'test string'";
+      case 'number':
+        return '42';
+      case 'boolean':
+        return 'true';
+      case 'array':
+        return '[1, 2, 3]';
+      case 'object':
+        return "{ key: 'value' }";
+      default:
+        return "'test value'";
     }
   }
 
@@ -545,9 +567,12 @@ const node = new ${config.displayName.replace(/[^a-zA-Z0-9]/g, '')}('my-node', {
 
 ## Inputs
 
-${config.inputs.map(
-    input => `- **${input.name}** (${input.type}${input.required ? ', required' : ', optional'}): ${input.description || 'No description'}`
-  ).join('\n')}
+${config.inputs
+  .map(
+    input =>
+      `- **${input.name}** (${input.type}${input.required ? ', required' : ', optional'}): ${input.description || 'No description'}`
+  )
+  .join('\n')}
 
 ## Outputs
 
@@ -593,16 +618,13 @@ async function generateTsConfig(outputDir: string): Promise<void> {
       strict: true,
       esModuleInterop: true,
       skipLibCheck: true,
-      forceConsistentCasingInFileNames: true
+      forceConsistentCasingInFileNames: true,
     },
     include: ['*.ts'],
-    exclude: ['dist', 'node_modules', '**/*.test.ts']
+    exclude: ['dist', 'node_modules', '**/*.test.ts'],
   };
 
-  await fs.writeFile(
-    path.join(outputDir, 'tsconfig.json'),
-    JSON.stringify(tsConfig, null, 2)
-  );
+  await fs.writeFile(path.join(outputDir, 'tsconfig.json'), JSON.stringify(tsConfig, null, 2));
 }
 
 async function generateJestConfig(outputDir: string): Promise<void> {

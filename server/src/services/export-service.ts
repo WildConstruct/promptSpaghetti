@@ -1,18 +1,18 @@
 import { Database } from '../database/connection';
-import { 
-  ExportTemplate, 
-  CreateExportTemplate, 
+import {
+  ExportTemplate,
+  CreateExportTemplate,
   UpdateExportTemplate,
-  ExportJob, 
-  CreateExportJob, 
+  ExportJob,
+  CreateExportJob,
   UpdateExportJob,
-  ExportSchedule, 
-  CreateExportSchedule, 
+  ExportSchedule,
+  CreateExportSchedule,
   UpdateExportSchedule,
-  ExportShare, 
-  CreateExportShare, 
+  ExportShare,
+  CreateExportShare,
   UpdateExportShare,
-  ExportAnalytics, 
+  ExportAnalytics,
   CreateExportAnalytics,
   ExportFormatDefinition,
   ExportFormat,
@@ -36,7 +36,7 @@ import {
   ZipExportOptions,
   DEFAULT_EXPORT_EXPIRATION_HOURS,
   MAX_EXPORT_FILE_SIZE,
-  MAX_CONCURRENT_EXPORTS
+  MAX_CONCURRENT_EXPORTS,
 } from '../../../packages/core/types/export';
 import * as crypto from 'crypto';
 import * as fs from 'fs/promises';
@@ -55,7 +55,6 @@ export class ExportService {
   }
 
   private async ensureExportDirectoryExists(): Promise<void> {
-
     try {
       await fs.mkdir(this.exportDir, { recursive: true });
     } catch (error) {
@@ -66,7 +65,6 @@ export class ExportService {
 
   // Export Template Management
   async createExportTemplate(template: CreateExportTemplate): Promise<ExportTemplate> {
-
     try {
       logger.info('Creating export template:', { name: template.name, format: template.export_format });
 
@@ -105,7 +103,7 @@ export class ExportService {
         template.template_schema ? JSON.stringify(template.template_schema) : null,
         template.created_by,
         template.is_public,
-        template.is_system_template
+        template.is_system_template,
       ]);
 
       const createdTemplate = result.rows[0];
@@ -118,7 +116,6 @@ export class ExportService {
   }
 
   async getExportTemplate(id: string): Promise<ExportTemplate | null> {
-
     try {
       const query = 'SELECT * FROM export_templates WHERE id = $1';
       const result = await this.db.query(query, [id]);
@@ -129,13 +126,15 @@ export class ExportService {
     }
   }
 
-  async getExportTemplates(projectId: string, options: {
-    format?: ExportFormat;
-    isPublic?: boolean;
-    limit?: number;
-    offset?: number;
-  } = {}): Promise<ExportTemplate[]> {
-
+  async getExportTemplates(
+    projectId: string,
+    options: {
+      format?: ExportFormat;
+      isPublic?: boolean;
+      limit?: number;
+      offset?: number;
+    } = {}
+  ): Promise<ExportTemplate[]> {
     try {
       let query = 'SELECT * FROM export_templates WHERE project_id = $1';
       const params: unknown[] = [projectId];
@@ -175,7 +174,6 @@ export class ExportService {
   }
 
   async getExportTemplateWithStats(id: string): Promise<ExportTemplateWithStats | null> {
-
     try {
       const template = await this.getExportTemplate(id);
       if (!template) return null;
@@ -204,7 +202,7 @@ export class ExportService {
         ...template,
         recent_jobs: recentJobsResult.rows,
         avg_processing_time: stats.avg_processing_time || 0,
-        success_rate: stats.success_rate || 0
+        success_rate: stats.success_rate || 0,
       };
     } catch (error) {
       logger.error('Failed to get export template with stats:', error);
@@ -213,7 +211,6 @@ export class ExportService {
   }
 
   async updateExportTemplate(id: string, updates: UpdateExportTemplate): Promise<ExportTemplate | null> {
-
     try {
       logger.info('Updating export template:', { id, updates });
 
@@ -267,13 +264,12 @@ export class ExportService {
   }
 
   async deleteExportTemplate(id: string): Promise<boolean> {
-
     try {
       logger.info('Deleting export template:', { id });
 
       const query = 'DELETE FROM export_templates WHERE id = $1';
       const result = await this.db.query(query, [id]);
-      
+
       const deleted = result.rowCount > 0;
       if (deleted) {
         logger.info('Export template deleted successfully:', { id });
@@ -287,12 +283,11 @@ export class ExportService {
 
   // Export Job Management
   async createExportJob(job: CreateExportJob): Promise<ExportJob> {
-
     try {
-      logger.info('Creating export job:', { 
-        projectId: job.project_id, 
-        format: job.export_format, 
-        type: job.export_type 
+      logger.info('Creating export job:', {
+        projectId: job.project_id,
+        format: job.export_format,
+        type: job.export_type,
       });
 
       // Check concurrent job limits
@@ -334,12 +329,12 @@ export class ExportService {
         JSON.stringify(job.export_options),
         JSON.stringify(job.custom_filters),
         job.initiated_by,
-        expiresAt.toISOString()
+        expiresAt.toISOString(),
       ]);
 
       const createdJob = result.rows[0];
       this.activeJobs.set(createdJob.id, createdJob);
-      
+
       // Start export processing asynchronously
       this.processExportJob(createdJob.id).catch(error => {
         logger.error('Export job processing failed:', error);
@@ -354,7 +349,6 @@ export class ExportService {
   }
 
   async getExportJob(id: string): Promise<ExportJob | null> {
-
     try {
       const query = 'SELECT * FROM export_jobs WHERE id = $1';
       const result = await this.db.query(query, [id]);
@@ -365,14 +359,16 @@ export class ExportService {
     }
   }
 
-  async getExportJobs(projectId: string, options: {
-    status?: ExportJobStatus;
-    format?: ExportFormat;
-    userId?: string;
-    limit?: number;
-    offset?: number;
-  } = {}): Promise<ExportJob[]> {
-
+  async getExportJobs(
+    projectId: string,
+    options: {
+      status?: ExportJobStatus;
+      format?: ExportFormat;
+      userId?: string;
+      limit?: number;
+      offset?: number;
+    } = {}
+  ): Promise<ExportJob[]> {
     try {
       let query = 'SELECT * FROM export_jobs WHERE project_id = $1';
       const params: unknown[] = [projectId];
@@ -418,7 +414,6 @@ export class ExportService {
   }
 
   async getExportJobWithTemplate(id: string): Promise<ExportJobWithTemplate | null> {
-
     try {
       const query = `
         SELECT 
@@ -435,7 +430,7 @@ export class ExportService {
       `;
       const result = await this.db.query(query, [id]);
       const row = result.rows[0];
-      
+
       if (!row) return null;
 
       const job = {
@@ -465,16 +460,20 @@ export class ExportService {
         processing_duration: row.processing_duration,
         memory_usage: row.memory_usage,
         cpu_usage: row.cpu_usage,
-        template: row.template_name ? {
-          id: row.template_id,
-          name: row.template_name,
-          description: row.template_description
-        } : null,
-        share: row.share_token ? {
-          share_token: row.share_token,
-          expires_at: row.share_expires_at,
-          is_active: row.share_is_active
-        } : null
+        template: row.template_name
+          ? {
+              id: row.template_id,
+              name: row.template_name,
+              description: row.template_description,
+            }
+          : null,
+        share: row.share_token
+          ? {
+              share_token: row.share_token,
+              expires_at: row.share_expires_at,
+              is_active: row.share_is_active,
+            }
+          : null,
       };
 
       return job as ExportJobWithTemplate;
@@ -485,7 +484,6 @@ export class ExportService {
   }
 
   async updateExportJob(id: string, updates: UpdateExportJob): Promise<ExportJob | null> {
-
     try {
       const fields = [];
       const values = [];
@@ -513,11 +511,11 @@ export class ExportService {
 
       const result = await this.db.query(query, values);
       const updatedJob = result.rows[0];
-      
+
       if (updatedJob) {
         this.activeJobs.set(id, updatedJob);
       }
-      
+
       return updatedJob || null;
     } catch (error) {
       logger.error('Failed to update export job:', error);
@@ -526,7 +524,6 @@ export class ExportService {
   }
 
   async cancelExportJob(id: string): Promise<boolean> {
-
     try {
       logger.info('Cancelling export job:', { id });
 
@@ -537,9 +534,9 @@ export class ExportService {
         return false;
       }
 
-      await this.updateExportJob(id, { 
+      await this.updateExportJob(id, {
         status: 'cancelled',
-        completed_at: new Date().toISOString()
+        completed_at: new Date().toISOString(),
       });
 
       this.activeJobs.delete(id);
@@ -552,14 +549,14 @@ export class ExportService {
   }
 
   async getExportProgress(id: string): Promise<ExportProgress | null> {
-
     try {
       const job = await this.getExportJob(id);
       if (!job) return null;
 
-      const estimatedCompletion = job.status === 'processing' && job.progress_percentage > 0
-        ? new Date(Date.now() + (100 - job.progress_percentage) * 1000).toISOString()
-        : undefined;
+      const estimatedCompletion =
+        job.status === 'processing' && job.progress_percentage > 0
+          ? new Date(Date.now() + (100 - job.progress_percentage) * 1000).toISOString()
+          : undefined;
 
       return {
         job_id: job.id,
@@ -567,7 +564,7 @@ export class ExportService {
         progress_percentage: job.progress_percentage,
         current_step: this.getCurrentProcessingStep(job.status, job.progress_percentage),
         estimated_completion: estimatedCompletion,
-        processing_log: job.processing_log
+        processing_log: job.processing_log,
       };
     } catch (error) {
       logger.error('Failed to get export progress:', error);
@@ -591,13 +588,12 @@ export class ExportService {
   }
 
   private async processExportJob(jobId: string): Promise<void> {
-
     const startTime = Date.now();
-    
+
     try {
-      await this.updateExportJob(jobId, { 
+      await this.updateExportJob(jobId, {
         status: 'processing',
-        progress_percentage: 0
+        progress_percentage: 0,
       });
 
       const job = await this.getExportJob(jobId);
@@ -609,13 +605,13 @@ export class ExportService {
         { progress: 30, step: 'Extracting content' },
         { progress: 50, step: 'Applying filters' },
         { progress: 70, step: 'Formatting output' },
-        { progress: 90, step: 'Finalizing export' }
+        { progress: 90, step: 'Finalizing export' },
       ];
 
       for (const step of steps) {
         await this.updateExportJob(jobId, {
           progress_percentage: step.progress,
-          processing_log: step.step
+          processing_log: step.step,
         });
         await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate processing time
       }
@@ -633,20 +629,19 @@ export class ExportService {
         output_file_hash: fileHash,
         download_url: `/api/exports/${jobId}/download`,
         completed_at: new Date().toISOString(),
-        processing_duration: Date.now() - startTime
+        processing_duration: Date.now() - startTime,
       });
 
       this.activeJobs.delete(jobId);
       logger.info('Export job completed successfully:', { id: jobId });
-
     } catch (error) {
       logger.error('Export job processing failed:', { id: jobId, error });
-      
+
       await this.updateExportJob(jobId, {
         status: 'failed',
         error_message: error.message,
         completed_at: new Date().toISOString(),
-        processing_duration: Date.now() - startTime
+        processing_duration: Date.now() - startTime,
       });
 
       this.activeJobs.delete(jobId);
@@ -654,10 +649,9 @@ export class ExportService {
   }
 
   private async generateExportFile(job: ExportJob): Promise<string> {
-
     const fileName = `export_${job.id}.${this.getFileExtension(job.export_format)}`;
     const filePath = path.join(this.exportDir, fileName);
-    
+
     // Mock export data generation
     const exportData = {
       project_id: job.project_id,
@@ -669,8 +663,8 @@ export class ExportService {
         nodes: [],
         edges: [],
         metadata: {},
-        version: '1.0'
-      }
+        version: '1.0',
+      },
     };
 
     await fs.writeFile(filePath, this.formatExportData(exportData, job.export_format));
@@ -686,40 +680,41 @@ export class ExportService {
       markdown: 'md',
       pdf: 'pdf',
       html: 'html',
-      zip: 'zip'
+      zip: 'zip',
     };
     return extensions[format] || 'txt';
   }
 
   private formatExportData(data: Record<string, unknown>, format: ExportFormat): string {
     switch (format) {
-    case 'json':
-      return JSON.stringify(data, null, 2);
-    case 'yaml':
-      // Mock YAML formatting
-      return Object.entries(data)
-        .map(([key, value]) => `${key}: ${JSON.stringify(value)}`)
-        .join('\n');
-    case 'xml':
-      return `<?xml version="1.0"?>\n<export>\n${JSON.stringify(data)}\n</export>`;
-    case 'csv':
-      return 'id,type,format,generated_at\n' + 
-               `${data.project_id},${data.export_type},${data.export_format},${data.generated_at}`;
-    case 'markdown':
-      return `# Export Report\n\n**Project:** ${data.project_id}\n**Type:** ${data.export_type}\n**Format:** ${data.export_format}\n**Generated:** ${data.generated_at}`;
-    case 'html':
-      return `<!DOCTYPE html><html><head><title>Export</title></head><body><pre>${JSON.stringify(
-        data,
-        null,
-        2
-      )}</pre></body></html>`;
-    default:
-      return JSON.stringify(data, null, 2);
+      case 'json':
+        return JSON.stringify(data, null, 2);
+      case 'yaml':
+        // Mock YAML formatting
+        return Object.entries(data)
+          .map(([key, value]) => `${key}: ${JSON.stringify(value)}`)
+          .join('\n');
+      case 'xml':
+        return `<?xml version="1.0"?>\n<export>\n${JSON.stringify(data)}\n</export>`;
+      case 'csv':
+        return (
+          'id,type,format,generated_at\n' +
+          `${data.project_id},${data.export_type},${data.export_format},${data.generated_at}`
+        );
+      case 'markdown':
+        return `# Export Report\n\n**Project:** ${data.project_id}\n**Type:** ${data.export_type}\n**Format:** ${data.export_format}\n**Generated:** ${data.generated_at}`;
+      case 'html':
+        return `<!DOCTYPE html><html><head><title>Export</title></head><body><pre>${JSON.stringify(
+          data,
+          null,
+          2
+        )}</pre></body></html>`;
+      default:
+        return JSON.stringify(data, null, 2);
     }
   }
 
   private async calculateFileHash(filePath: string): Promise<string> {
-
     const fileBuffer = await fs.readFile(filePath);
     const hashSum = crypto.createHash('sha256');
     hashSum.update(fileBuffer);
@@ -728,7 +723,6 @@ export class ExportService {
 
   // Export Statistics
   async getExportStatistics(projectId: string): Promise<ExportStatistics> {
-
     try {
       const query = `
         SELECT 
@@ -751,10 +745,13 @@ export class ExportService {
         GROUP BY export_format
       `;
       const formatResult = await this.db.query(formatQuery, [projectId]);
-      const exportsByFormat = formatResult.rows.reduce((acc, row) => {
-        acc[row.export_format] = parseInt(row.count);
-        return acc;
-      }, {} as Record<string, number>);
+      const exportsByFormat = formatResult.rows.reduce(
+        (acc, row) => {
+          acc[row.export_format] = parseInt(row.count);
+          return acc;
+        },
+        {} as Record<string, number>
+      );
 
       // Get exports by type
       const typeQuery = `
@@ -764,10 +761,13 @@ export class ExportService {
         GROUP BY export_type
       `;
       const typeResult = await this.db.query(typeQuery, [projectId]);
-      const exportsByType = typeResult.rows.reduce((acc, row) => {
-        acc[row.export_type] = parseInt(row.count);
-        return acc;
-      }, {} as Record<string, number>);
+      const exportsByType = typeResult.rows.reduce(
+        (acc, row) => {
+          acc[row.export_type] = parseInt(row.count);
+          return acc;
+        },
+        {} as Record<string, number>
+      );
 
       // Get most used templates
       const templatesQuery = `
@@ -783,7 +783,7 @@ export class ExportService {
       const mostUsedTemplates = templatesResult.rows.map(row => ({
         template_id: row.id,
         template_name: row.name,
-        usage_count: parseInt(row.usage_count)
+        usage_count: parseInt(row.usage_count),
       }));
 
       return {
@@ -795,7 +795,7 @@ export class ExportService {
         average_processing_time: parseFloat(stats.avg_processing_time) || 0,
         most_used_templates: mostUsedTemplates,
         success_rate: parseFloat(stats.success_rate) || 0,
-        last_export_at: stats.last_export_at
+        last_export_at: stats.last_export_at,
       };
     } catch (error) {
       logger.error('Failed to get export statistics:', error);
@@ -805,7 +805,6 @@ export class ExportService {
 
   // Export Format Definitions
   async getExportFormats(): Promise<ExportFormatDefinition[]> {
-
     try {
       const query = 'SELECT * FROM export_format_definitions WHERE is_enabled = true ORDER BY format_name';
       const result = await this.db.query(query);
@@ -817,7 +816,6 @@ export class ExportService {
   }
 
   async getExportFormat(formatName: string): Promise<ExportFormatDefinition | null> {
-
     try {
       const query = 'SELECT * FROM export_format_definitions WHERE format_name = $1';
       const result = await this.db.query(query, [formatName]);
@@ -830,10 +828,9 @@ export class ExportService {
 
   // Cleanup Methods
   async cleanupExpiredJobs(): Promise<number> {
-
     try {
       logger.info('Cleaning up expired export jobs');
-      
+
       const query = `
         SELECT id, output_file_path 
         FROM export_jobs 
@@ -849,7 +846,7 @@ export class ExportService {
           if (job.output_file_path) {
             await fs.unlink(job.output_file_path).catch(() => {});
           }
-          
+
           // Delete job record
           await this.db.query('DELETE FROM export_jobs WHERE id = $1', [job.id]);
           cleanedCount++;
@@ -867,10 +864,9 @@ export class ExportService {
   }
 
   async cleanupFailedJobs(olderThanDays: number = 7): Promise<number> {
-
     try {
       logger.info('Cleaning up failed export jobs older than', { days: olderThanDays });
-      
+
       const cutoffDate = new Date();
       cutoffDate.setDate(cutoffDate.getDate() - olderThanDays);
 
@@ -889,7 +885,7 @@ export class ExportService {
           if (job.output_file_path) {
             await fs.unlink(job.output_file_path).catch(() => {});
           }
-          
+
           // Delete job record
           await this.db.query('DELETE FROM export_jobs WHERE id = $1', [job.id]);
           cleanedCount++;

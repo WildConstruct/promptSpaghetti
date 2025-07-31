@@ -11,5 +11,14 @@ export { ComplianceChecker } from './ComplianceChecker';
 export { CitationManager } from './CitationManager';
 export { TerminologyValidator } from './TerminologyValidator';
 export * from './types';
-export type { LegalDocument, ContractAnalysis, ContractClause, ComplianceCheck, Citation, LegalTerminology, TermValidationResult, WorkflowTemplate } from './types';
+export type {
+  LegalDocument,
+  ContractAnalysis,
+  ContractClause,
+  ComplianceCheck,
+  Citation,
+  LegalTerminology,
+  TermValidationResult,
+  WorkflowTemplate,
+} from './types';
 //# sourceMappingURL=index.d.ts.map

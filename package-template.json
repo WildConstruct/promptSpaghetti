@@ -12,10 +12,7 @@
       "types": "./dist/index.d.ts"
     }
   },
-  "files": [
-    "dist",
-    "README.md"
-  ],
+  "files": ["dist", "README.md"],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
@@ -37,12 +34,7 @@
     "ts-jest": "^29.4.0",
     "typescript": "^5.0.2"
   },
-  "keywords": [
-    "promptscape",
-    "graph",
-    "ai",
-    "prompt"
-  ],
+  "keywords": ["promptscape", "graph", "ai", "prompt"],
   "author": "PromptScape Team",
   "license": "MIT",
   "engines": {

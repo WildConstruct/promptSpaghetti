@@ -44,7 +44,8 @@ Now let's add some randomness. This generator will randomly pick from several op
   }
 }'></div>
 
-**Try this**: 
+**Try this**:
+
 1. Add new greetings to the array: `"Welcome"`, `"Salutations"`
 2. Try different seeds to see different outputs
 3. Add more subjects like `"stranger"`, `"adventurer"`
@@ -75,6 +76,7 @@ Sometimes you want some options to appear more often than others. Let's use weig
 }'></div>
 
 **Try this**:
+
 1. Notice how "Warrior" appears more often than "Paladin"
 2. Change the weights - make "Mage" have weight 50
 3. Add a new class with weight 15
@@ -122,6 +124,7 @@ Variables let you store and reuse values throughout generation:
 }'></div>
 
 **Try this**:
+
 1. Notice how the name is consistent throughout
 2. Add a new variable for the hero's weapon
 3. Use the weapon variable in both introduction and quest
@@ -158,6 +161,7 @@ For larger generators, you can split content into separate files:
 }'></div>
 
 **Try this**:
+
 1. Change from "warriors" to "mages" or "rogues"
 2. Add your own character categories
 3. Try mixing different character types
@@ -185,6 +189,7 @@ Create a generator that produces items for a restaurant menu:
 }'></div>
 
 **Your task**: Create a menu generator with:
+
 - Appetizers, main courses, and desserts
 - Weighted choices (some items more common)
 - Price ranges
@@ -209,6 +214,7 @@ Build a generator that creates weather reports:
 }'></div>
 
 **Your task**: Expand this to include:
+
 - Temperature ranges
 - Wind conditions
 - Humidity levels
@@ -234,6 +240,7 @@ Create a generator for creative writing prompts:
 }'></div>
 
 **Your task**: Build a comprehensive story prompt generator with:
+
 - Different genres (fantasy, sci-fi, mystery)
 - Character types and motivations
 - Settings and time periods
@@ -245,12 +252,14 @@ Create a generator for creative writing prompts:
 ### Real-time Validation
 
 Notice how the editors show validation status:
+
 - ✓ Valid JSON - Your code is syntactically correct
 - ✗ Invalid JSON - There's a syntax error to fix
 
 ### Seed Control
 
 Use the seed input to get reproducible results:
+
 - Same seed = same output
 - Different seeds = different variations
 - Click 🎲 for random seeds

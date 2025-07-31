@@ -227,11 +227,26 @@
   font-weight: 600;
 }
 
-.tier-expert { background: #7c3aed; color: white; }
-.tier-professional { background: #2563eb; color: white; }
-.tier-verified { background: #059669; color: white; }
-.tier-basic { background: #d97706; color: white; }
-.tier-unverified { background: #6b7280; color: white; }
+.tier-expert {
+  background: #7c3aed;
+  color: white;
+}
+.tier-professional {
+  background: #2563eb;
+  color: white;
+}
+.tier-verified {
+  background: #059669;
+  color: white;
+}
+.tier-basic {
+  background: #d97706;
+  color: white;
+}
+.tier-unverified {
+  background: #6b7280;
+  color: white;
+}
 
 .score-breakdown {
   flex: 1;
@@ -258,10 +273,18 @@
   height: 0.5rem;
 }
 
-.component-progress.identity { --progress-color: #3b82f6; }
-.component-progress.professional { --progress-color: #7c3aed; }
-.component-progress.community { --progress-color: #059669; }
-.component-progress.activity { --progress-color: #d97706; }
+.component-progress.identity {
+  --progress-color: #3b82f6;
+}
+.component-progress.professional {
+  --progress-color: #7c3aed;
+}
+.component-progress.community {
+  --progress-color: #059669;
+}
+.component-progress.activity {
+  --progress-color: #d97706;
+}
 
 .component-value {
   font-size: 0.875rem;
@@ -502,21 +525,21 @@
   .creator-trust-badge {
     padding: 0.75rem;
   }
-  
+
   .creator-info {
     gap: 0.5rem;
   }
-  
+
   .trust-score-display.horizontal {
     flex-direction: column;
     align-items: stretch;
     gap: 0.75rem;
   }
-  
+
   .trust-elements {
     gap: 0.375rem;
   }
-  
+
   .verification-badges {
     gap: 0.25rem;
   }
@@ -529,34 +552,34 @@
     color: #d1d5db;
     border-color: #4b5563;
   }
-  
+
   .creator-trust-badge {
     background: #1f2937;
     border-color: #374151;
     color: #f9fafb;
   }
-  
+
   .creator-name {
     color: #f9fafb;
   }
-  
+
   .score-value {
     color: #f9fafb;
   }
-  
+
   .component-label {
     color: #d1d5db;
   }
-  
+
   .component-value {
     color: #f3f4f6;
   }
-  
+
   .template-trust-indicator {
     background: #1f2937;
     border-color: #374151;
   }
-  
+
   .remaining-badge {
     background: #374151;
     color: #d1d5db;
@@ -566,8 +589,13 @@
 
 /* Animation Effects */
 @keyframes pulse-trust {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
 
 .trust-indicator:hover {
@@ -594,7 +622,7 @@
   .trust-basic {
     border: 2px solid currentColor;
   }
-  
+
   .verification-badge {
     border-width: 2px;
   }

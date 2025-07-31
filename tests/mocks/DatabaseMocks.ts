@@ -1,9 +1,9 @@
 /**
  * Database Mocks - Comprehensive Database Layer Mocking System
- * 
+ *
  * Provides specialized mock implementations for database operations including
  * SQLite, PostgreSQL, Redis, and various data access patterns.
- * 
+ *
  * Task: E18-1753114562158-DAD671
  */
 
@@ -39,14 +39,17 @@ export interface TransactionContext {
 
 export interface MockTable {
   name: string;
-  schema: Record<string, {
-    type: string;
-    nullable: boolean;
-    default?: unknown;
-    primaryKey?: boolean;
-    unique?: boolean;
-    references?: { table: string; column: string };
-  }>;
+  schema: Record<
+    string,
+    {
+      type: string;
+      nullable: boolean;
+      default?: unknown;
+      primaryKey?: boolean;
+      unique?: boolean;
+      references?: { table: string; column: string };
+    }
+  >;
   data: Map<string | number, unknown>;
   indexes: Map<string, Set<string | number>>;
 }
@@ -70,56 +73,54 @@ export class DatabaseMockService {
    */
   createConnection(_connectionId: string, config: DatabaseConnection): unknown {
     this.connections.set(_connectionId, config);
-    
+
     const connection = {
       id: _connectionId,
       type: config.type,
       connected: true,
-      
+
       // Query methods
       query: async (_sql: string, params?: unknown[]) => this.executeQuery(_connectionId, _sql, params),
-      
+
       // Transaction methods
       beginTransaction: async (isolation?: string) => this.beginTransaction(_connectionId, isolation),
       commit: async (transactionId: string) => this.commitTransaction(transactionId),
       rollback: async (transactionId: string) => this.rollbackTransaction(transactionId),
       savepoint: async (transactionId: string, name: string) => this.createSavepoint(transactionId, name),
       rollbackToSavepoint: async (transactionId: string, name: string) => this.rollbackToSavepoint(transactionId, name),
-      
+
       // Utility methods
       ping: async () => ({ success: true, latency: Math.floor(this.rng() * 10) + 1 }),
       close: async () => this.closeConnection(_connectionId),
       getStats: () => this.getConnectionStats(_connectionId),
-      
+
       // Table operations
       createTable: async (name: string, schema: unknown) => this.createTable(name, schema),
       dropTable: async (name: string) => this.dropTable(name),
       truncateTable: async (name: string) => this.truncateTable(name),
-      
+
       // Specialized query methods
-      select: async (table: string, conditions?: unknown, options?: unknown) => 
+      select: async (table: string, conditions?: unknown, options?: unknown) =>
         this.selectRecords(table, conditions, options),
       insert: async (table: string, data: unknown) => this.insertRecord(table, data),
-      update: async (table: string, data: unknown, conditions?: unknown) => 
-        this.updateRecords(table, data, conditions),
+      update: async (table: string, data: unknown, conditions?: unknown) => this.updateRecords(table, data, conditions),
       delete: async (table: string, conditions?: unknown) => this.deleteRecords(table, conditions),
-      
+
       // Batch operations
       bulkInsert: async (table: string, records: unknown[]) => this.bulkInsert(table, records),
-      bulkUpdate: async (table: string, updates: Array<{ data: unknown; conditions: unknown }>) => 
+      bulkUpdate: async (table: string, updates: Array<{ data: unknown; conditions: unknown }>) =>
         this.bulkUpdate(table, updates),
-      
+
       // Schema operations
       describeTable: async (name: string) => this.describeTable(name),
       listTables: async () => Array.from(this.tables.keys()),
-      createIndex: async (table: string, columns: string[], name?: string) => 
-        this.createIndex(table, columns, name),
-      
+      createIndex: async (table: string, columns: string[], name?: string) => this.createIndex(table, columns, name),
+
       // Redis-specific operations (if type is redis)
       ...(config.type === 'redis' ? this.createRedisOperations(_connectionId) : {}),
-      
+
       // PostgreSQL-specific operations
-      ...(config.type === 'postgres' ? this.createPostgresOperations(_connectionId) : {})
+      ...(config.type === 'postgres' ? this.createPostgresOperations(_connectionId) : {}),
     };
 
     console.log(`🔌 Created ${config.type} database connection: ${_connectionId}`);
@@ -131,26 +132,26 @@ export class DatabaseMockService {
    */
   private async executeQuery(_connectionId: string, _sql: string, _params: unknown[] = []): Promise<QueryResult> {
     const startTime = Date.now();
-    
+
     // Simulate query execution time
     await new Promise(resolve => setTimeout(resolve, Math.floor(this.rng() * 50) + 5));
-    
+
     const executionTime = Date.now() - startTime;
-    
+
     // Log the query
     this.queryLog.push({
       _sql: _sql,
       params: _params,
       timestamp: new Date(),
-      duration: executionTime
+      duration: executionTime,
     });
 
     // Parse and execute the SQL (simplified mock implementation)
     const result = this.parseSQLAndExecute(_sql, _params);
-    
+
     return {
       ...result,
-      executionTime
+      executionTime,
     };
   }
 
@@ -164,12 +165,12 @@ export class DatabaseMockService {
       startTime: new Date(),
       isolation: (isolation as string) || 'READ_COMMITTED',
       savepoints: [],
-      status: 'active'
+      status: 'active',
     };
 
     this.transactions.set(transactionId, transaction);
     console.log(`🔄 Started transaction: ${transactionId}`);
-    
+
     return transactionId;
   }
 
@@ -234,8 +235,8 @@ export class DatabaseMockService {
    * Select records from a table
    */
   private async selectRecords(
-    tableName: string, 
-    conditions: unknown = {}, 
+    tableName: string,
+    conditions: unknown = {},
     options: unknown = {}
   ): Promise<QueryResult> {
     const table = this.tables.get(tableName);
@@ -257,13 +258,20 @@ export class DatabaseMockService {
             // Handle operators like { $gt: 10, $lt: 20 }
             return Object.entries(value).every(([op, val]) => {
               switch (op) {
-              case '$gt': return record[key] > val;
-              case '$gte': return record[key] >= val;
-              case '$lt': return record[key] < val;
-              case '$lte': return record[key] <= val;
-              case '$ne': return record[key] !== val;
-              case '$like': return String(record[key]).includes(String(val));
-              default: return record[key] === val;
+                case '$gt':
+                  return record[key] > val;
+                case '$gte':
+                  return record[key] >= val;
+                case '$lt':
+                  return record[key] < val;
+                case '$lte':
+                  return record[key] <= val;
+                case '$ne':
+                  return record[key] !== val;
+                case '$like':
+                  return String(record[key]).includes(String(val));
+                default:
+                  return record[key] === val;
               }
             });
           }
@@ -308,7 +316,7 @@ export class DatabaseMockService {
       rows: records,
       rowCount: records.length,
       fields: fields || Object.keys(table.schema),
-      executionTime: Math.floor(this.rng() * 50) + 5
+      executionTime: Math.floor(this.rng() * 50) + 5,
     };
   }
 
@@ -350,7 +358,7 @@ export class DatabaseMockService {
       rows: [record],
       rowCount: 1,
       executionTime: Math.floor(this.rng() * 20) + 5,
-      insertId: id
+      insertId: id,
     };
   }
 
@@ -368,14 +376,14 @@ export class DatabaseMockService {
 
     for (const [id, record] of table.data.entries()) {
       const matches = Object.entries(conditions).every(([key, value]) => record[key] === value);
-      
+
       if (matches) {
-        const updatedRecord = { 
-          ...record, 
+        const updatedRecord = {
+          ...record,
           ...data,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         };
-        
+
         table.data.set(id, updatedRecord);
         this.updateIndexes(tableName, updatedRecord, 'update');
         updatedRecords.push(updatedRecord);
@@ -387,7 +395,7 @@ export class DatabaseMockService {
       rows: updatedRecords,
       rowCount: updatedRecords.length,
       affectedRows,
-      executionTime: Math.floor(this.rng() * 30) + 5
+      executionTime: Math.floor(this.rng() * 30) + 5,
     };
   }
 
@@ -406,7 +414,7 @@ export class DatabaseMockService {
 
     for (const [id, record] of table.data.entries()) {
       const matches = Object.entries(conditions).every(([key, value]) => record[key] === value);
-      
+
       if (matches) {
         deletedRecords.push(record);
         toDelete.push(id);
@@ -424,7 +432,7 @@ export class DatabaseMockService {
       rows: deletedRecords,
       rowCount: deletedRecords.length,
       affectedRows,
-      executionTime: Math.floor(this.rng() * 25) + 5
+      executionTime: Math.floor(this.rng() * 25) + 5,
     };
   }
 
@@ -440,7 +448,7 @@ export class DatabaseMockService {
       name,
       schema,
       data: new Map(),
-      indexes: new Map()
+      indexes: new Map(),
     };
 
     this.tables.set(name, table);
@@ -489,7 +497,7 @@ export class DatabaseMockService {
       rows: results,
       rowCount: results.length,
       affectedRows: totalAffected,
-      executionTime: Math.floor(this.rng() * 100) + records.length * 2
+      executionTime: Math.floor(this.rng() * 100) + records.length * 2,
     };
   }
 
@@ -497,7 +505,7 @@ export class DatabaseMockService {
    * Bulk update records
    */
   private async bulkUpdate(
-    tableName: string, 
+    tableName: string,
     updates: Array<{ data: unknown; conditions: unknown }>
   ): Promise<QueryResult> {
     const results = [];
@@ -513,7 +521,7 @@ export class DatabaseMockService {
       rows: results,
       rowCount: results.length,
       affectedRows: totalAffected,
-      executionTime: Math.floor(this.rng() * 150) + updates.length * 3
+      executionTime: Math.floor(this.rng() * 150) + updates.length * 3,
     };
   }
 
@@ -616,7 +624,7 @@ export class DatabaseMockService {
       },
       info: async (_section?: string) => {
         return `# Redis Mock\nredis_version:6.0.0\nuptime_in_seconds:${Math.floor(this.rng() * 86400)}`;
-      }
+      },
     };
   }
 
@@ -649,7 +657,7 @@ export class DatabaseMockService {
             } catch {
               return { ...row, [field]: null };
             }
-          })
+          }),
         };
       },
 
@@ -658,7 +666,7 @@ export class DatabaseMockService {
         const conditions = {};
         conditions[field] = { $like: query };
         return this.selectRecords(table, conditions);
-      }
+      },
     };
   }
 
@@ -672,7 +680,7 @@ export class DatabaseMockService {
       password_hash: { type: 'varchar', nullable: false },
       role: { type: 'varchar', default: 'user' },
       created_at: { type: 'timestamp', default: 'CURRENT_TIMESTAMP' },
-      updated_at: { type: 'timestamp', default: 'CURRENT_TIMESTAMP' }
+      updated_at: { type: 'timestamp', default: 'CURRENT_TIMESTAMP' },
     });
 
     // Projects table
@@ -682,7 +690,7 @@ export class DatabaseMockService {
       description: { type: 'text', nullable: true },
       owner_id: { type: 'integer', nullable: false, references: { table: 'users', column: 'id' } },
       created_at: { type: 'timestamp', default: 'CURRENT_TIMESTAMP' },
-      updated_at: { type: 'timestamp', default: 'CURRENT_TIMESTAMP' }
+      updated_at: { type: 'timestamp', default: 'CURRENT_TIMESTAMP' },
     });
 
     // Graphs table
@@ -692,7 +700,7 @@ export class DatabaseMockService {
       data: { type: 'json', nullable: false },
       project_id: { type: 'integer', nullable: true, references: { table: 'projects', column: 'id' } },
       created_at: { type: 'timestamp', default: 'CURRENT_TIMESTAMP' },
-      updated_at: { type: 'timestamp', default: 'CURRENT_TIMESTAMP' }
+      updated_at: { type: 'timestamp', default: 'CURRENT_TIMESTAMP' },
     });
 
     console.log('📊 Initialized default database tables');
@@ -701,7 +709,7 @@ export class DatabaseMockService {
   private parseSQLAndExecute(_sql: string, _params: unknown[] = []): QueryResult {
     // Simplified SQL parser for common operations
     const sql = _sql.trim().toLowerCase();
-    
+
     if (sql.startsWith('select')) {
       return this.mockSelectQuery(sql, _params);
     } else if (sql.startsWith('insert')) {
@@ -715,7 +723,7 @@ export class DatabaseMockService {
       return {
         rows: [],
         rowCount: 0,
-        executionTime: Math.floor(this.rng() * 20) + 5
+        executionTime: Math.floor(this.rng() * 20) + 5,
       };
     }
   }
@@ -724,7 +732,7 @@ export class DatabaseMockService {
     // Extract table name (very simplified)
     const tableMatch = _sql.match(/from\s+(\w+)/);
     const tableName = tableMatch ? tableMatch[1] : 'users';
-    
+
     const table = this.tables.get(tableName);
     if (!table) {
       return { rows: [], rowCount: 0, executionTime: 5 };
@@ -734,22 +742,22 @@ export class DatabaseMockService {
     return {
       rows,
       rowCount: rows.length,
-      executionTime: Math.floor(this.rng() * 50) + 5
+      executionTime: Math.floor(this.rng() * 50) + 5,
     };
   }
 
   private mockInsertQuery(_sql: string, _params: unknown[]): QueryResult {
     const tableMatch = _sql.match(/into\s+(\w+)/);
     const tableName = tableMatch ? tableMatch[1] : 'users';
-    
+
     const id = this.generateId();
     const record = { id, ...this.generateMockRecord(tableName) };
-    
+
     return {
       rows: [record],
       rowCount: 1,
       executionTime: Math.floor(this.rng() * 20) + 5,
-      insertId: id
+      insertId: id,
     };
   }
 
@@ -759,7 +767,7 @@ export class DatabaseMockService {
       rows: [],
       rowCount: 0,
       affectedRows,
-      executionTime: Math.floor(this.rng() * 30) + 5
+      executionTime: Math.floor(this.rng() * 30) + 5,
     };
   }
 
@@ -769,31 +777,31 @@ export class DatabaseMockService {
       rows: [],
       rowCount: 0,
       affectedRows,
-      executionTime: Math.floor(this.rng() * 25) + 5
+      executionTime: Math.floor(this.rng() * 25) + 5,
     };
   }
 
   private generateMockRecord(tableName: string): unknown {
     switch (tableName) {
-    case 'users':
-      return {
-        email: `user${Math.floor(this.rng() * 1000)}@example.com`,
-        username: `user${Math.floor(this.rng() * 1000)}`,
-        role: 'user',
-        created_at: new Date().toISOString()
-      };
-    case 'projects':
-      return {
-        name: `Project ${Math.floor(this.rng() * 100)}`,
-        description: 'Mock project description',
-        owner_id: Math.floor(this.rng() * 10) + 1,
-        created_at: new Date().toISOString()
-      };
-    default:
-      return {
-        name: `Mock ${tableName} record`,
-        created_at: new Date().toISOString()
-      };
+      case 'users':
+        return {
+          email: `user${Math.floor(this.rng() * 1000)}@example.com`,
+          username: `user${Math.floor(this.rng() * 1000)}`,
+          role: 'user',
+          created_at: new Date().toISOString(),
+        };
+      case 'projects':
+        return {
+          name: `Project ${Math.floor(this.rng() * 100)}`,
+          description: 'Mock project description',
+          owner_id: Math.floor(this.rng() * 10) + 1,
+          created_at: new Date().toISOString(),
+        };
+      default:
+        return {
+          name: `Mock ${tableName} record`,
+          created_at: new Date().toISOString(),
+        };
     }
   }
 
@@ -807,18 +815,18 @@ export class DatabaseMockService {
         if (!table.indexes.has(field)) {
           table.indexes.set(field, new Set());
         }
-        
+
         const index = table.indexes.get(field)!;
         const id = record.id || record[field];
-        
+
         switch (operation) {
-        case 'insert':
-        case 'update':
-          index.add(id);
-          break;
-        case 'delete':
-          index.delete(id);
-          break;
+          case 'insert':
+          case 'update':
+            index.add(id);
+            break;
+          case 'delete':
+            index.delete(id);
+            break;
         }
       }
     });
@@ -832,13 +840,13 @@ export class DatabaseMockService {
 
     const indexName = name || `idx_${tableName}_${columns.join('_')}`;
     const index = new Set();
-    
+
     // Build index from existing data
     for (const record of table.data.values()) {
       const key = columns.map(col => record[col]).join('|');
       index.add(key);
     }
-    
+
     table.indexes.set(indexName, index);
     console.log(`📇 Created index ${indexName} on ${tableName}(${columns.join(', ')})`);
   }
@@ -853,7 +861,7 @@ export class DatabaseMockService {
       name,
       schema: table.schema,
       recordCount: table.data.size,
-      indexes: Array.from(table.indexes.keys())
+      indexes: Array.from(table.indexes.keys()),
     };
   }
 
@@ -870,10 +878,9 @@ export class DatabaseMockService {
       type: connection.type,
       connected: true,
       queryCount: this.queryLog.length,
-      averageQueryTime: this.queryLog.length > 0 
-        ? this.queryLog.reduce((sum, log) => sum + log.duration, 0) / this.queryLog.length 
-        : 0,
-      activeTransactions: Array.from(this.transactions.values()).filter(t => t.status === 'active').length
+      averageQueryTime:
+        this.queryLog.length > 0 ? this.queryLog.reduce((sum, log) => sum + log.duration, 0) / this.queryLog.length : 0,
+      activeTransactions: Array.from(this.transactions.values()).filter(t => t.status === 'active').length,
     };
   }
 

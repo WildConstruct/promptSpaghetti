@@ -35,7 +35,7 @@ class ClaudeCostIntegration {
       path.join(process.env.HOME, '.config', 'claude'),
       path.join(process.env.HOME, 'Library', 'Application Support', 'Claude'),
       path.join(process.env.APPDATA, 'Claude'),
-      path.join(process.cwd(), '.claude')
+      path.join(process.cwd(), '.claude'),
     ];
 
     for (const dir of possiblePaths) {
@@ -80,7 +80,7 @@ class ClaudeCostIntegration {
       }
 
       const { stdout, stderr } = await execAsync(command, {
-        timeout: 30000 // 30 second timeout
+        timeout: 30000, // 30 second timeout
       });
 
       if (stderr) {
@@ -89,7 +89,6 @@ class ClaudeCostIntegration {
 
       const costData = JSON.parse(stdout);
       return this.processCCUsageOutput(costData);
-
     } catch (error) {
       console.error('Error running ccusage:', error.message);
       throw error;
@@ -109,7 +108,7 @@ class ClaudeCostIntegration {
       sessions: [],
       dailyBreakdown: [],
       modelBreakdown: {},
-      lastUpdated: new Date().toISOString()
+      lastUpdated: new Date().toISOString(),
     };
 
     // Process sessions
@@ -120,7 +119,7 @@ class ClaudeCostIntegration {
           inputTokens: session.input_tokens,
           outputTokens: session.output_tokens,
           cost: session.cost,
-          model: session.model
+          model: session.model,
         });
 
         processed.inputTokens += session.input_tokens || 0;
@@ -136,7 +135,7 @@ class ClaudeCostIntegration {
         sessions: day.sessions,
         totalCost: day.total_cost,
         inputTokens: day.input_tokens,
-        outputTokens: day.output_tokens
+        outputTokens: day.output_tokens,
       }));
     }
 
@@ -147,7 +146,7 @@ class ClaudeCostIntegration {
           sessions: rawData.models[model].sessions,
           cost: rawData.models[model].cost,
           inputTokens: rawData.models[model].input_tokens,
-          outputTokens: rawData.models[model].output_tokens
+          outputTokens: rawData.models[model].output_tokens,
         };
       });
     }
@@ -170,7 +169,7 @@ class ClaudeCostIntegration {
         const cache = JSON.parse(fs.readFileSync(this.cacheFile, 'utf8'));
         const now = Date.now();
         const cacheTime = new Date(cache.lastUpdated).getTime();
-        
+
         if (now - cacheTime < this.cacheTimeout) {
           return cache;
         }
@@ -188,7 +187,7 @@ class ClaudeCostIntegration {
       if (!fs.existsSync(dataDir)) {
         fs.mkdirSync(dataDir, { recursive: true });
       }
-      
+
       fs.writeFileSync(this.cacheFile, JSON.stringify(costData, null, 2));
     } catch (error) {
       console.error('Error saving cost cache:', error);
@@ -216,11 +215,11 @@ class ClaudeCostIntegration {
     try {
       const costData = await this.runCCUsage();
       this.saveCostCache(costData);
-      
+
       console.log('✅ Retrieved actual cost data from ccusage');
       console.log(`💰 Total cost: $${costData.totalCost.toFixed(2)}`);
       console.log(`🔢 Total tokens: ${(costData.inputTokens + costData.outputTokens).toLocaleString()}`);
-      
+
       return costData;
     } catch (error) {
       console.error('❌ Failed to get ccusage data:', error.message);
@@ -232,28 +231,28 @@ class ClaudeCostIntegration {
   async generateReport() {
     try {
       const costData = await this.getCostData();
-      
+
       console.log('\n📊 Claude Cost Report');
       console.log('==========================================');
       console.log(`Total Cost: $${costData.totalCost.toFixed(2)}`);
       console.log(`Input Tokens: ${costData.inputTokens.toLocaleString()}`);
       console.log(`Output Tokens: ${costData.outputTokens.toLocaleString()}`);
       console.log(`Sessions: ${costData.sessions.length}`);
-      
+
       if (costData.modelBreakdown && Object.keys(costData.modelBreakdown).length > 0) {
         console.log('\nModel Breakdown:');
         Object.entries(costData.modelBreakdown).forEach(([model, data]) => {
           console.log(`  ${model}: $${data.cost.toFixed(2)} (${data.sessions} sessions)`);
         });
       }
-      
+
       if (costData.dailyBreakdown && costData.dailyBreakdown.length > 0) {
         console.log('\nRecent Daily Usage:');
         costData.dailyBreakdown.slice(-7).forEach(day => {
           console.log(`  ${day.date}: $${day.totalCost.toFixed(2)} (${day.sessions} sessions)`);
         });
       }
-      
+
       return costData;
     } catch (error) {
       console.error('❌ Error generating cost report:', error.message);
@@ -264,7 +263,7 @@ class ClaudeCostIntegration {
   // Install ccusage if not available
   async installCCUsage() {
     console.log('📦 Installing ccusage...');
-    
+
     try {
       // Try bun first (fastest), then npm
       try {
@@ -293,38 +292,38 @@ async function main() {
 
   try {
     switch (command) {
-    case 'report':
-      await integration.generateReport();
-      break;
-        
-    case 'install':
-      await integration.installCCUsage();
-      break;
-        
-    case 'check':
-      const available = await integration.checkCCUsageAvailable();
-      console.log('ccusage available:', available);
-      if (available) {
-        console.log('Data directory:', integration.getConversationDataDir());
-      }
-      break;
-        
-    case 'cache':
-      const cached = integration.getCachedCosts();
-      if (cached) {
-        console.log('Cached data:', cached);
-      } else {
-        console.log('No cached data available');
-      }
-      break;
-        
-    default:
-      console.log('Claude Cost Integration - Usage:');
-      console.log('  node claude-cost-integration.js report   # Generate cost report');
-      console.log('  node claude-cost-integration.js install  # Install ccusage');
-      console.log('  node claude-cost-integration.js check    # Check if ccusage is available');
-      console.log('  node claude-cost-integration.js cache    # Show cached data');
-      break;
+      case 'report':
+        await integration.generateReport();
+        break;
+
+      case 'install':
+        await integration.installCCUsage();
+        break;
+
+      case 'check':
+        const available = await integration.checkCCUsageAvailable();
+        console.log('ccusage available:', available);
+        if (available) {
+          console.log('Data directory:', integration.getConversationDataDir());
+        }
+        break;
+
+      case 'cache':
+        const cached = integration.getCachedCosts();
+        if (cached) {
+          console.log('Cached data:', cached);
+        } else {
+          console.log('No cached data available');
+        }
+        break;
+
+      default:
+        console.log('Claude Cost Integration - Usage:');
+        console.log('  node claude-cost-integration.js report   # Generate cost report');
+        console.log('  node claude-cost-integration.js install  # Install ccusage');
+        console.log('  node claude-cost-integration.js check    # Check if ccusage is available');
+        console.log('  node claude-cost-integration.js cache    # Show cached data');
+        break;
     }
   } catch (error) {
     console.error('Error:', error.message);

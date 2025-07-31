@@ -13,13 +13,13 @@ export { default as RoleProtectedRoute } from '../../components/auth/RoleProtect
 // Re-export hooks
 export { useAuth } from '../../hooks/useAuth';
 // Domain factory (to be implemented)
-export const createSecurityDomain = (config) => {
-    // TODO: Implement domain factory
-    return {
-        components: {},
-        hooks: {},
-        services: {},
-        events: {},
-        utils: {}
-    };
+export const createSecurityDomain = config => {
+  // TODO: Implement domain factory
+  return {
+    components: {},
+    hooks: {},
+    services: {},
+    events: {},
+    utils: {},
+  };
 };

@@ -13,68 +13,56 @@ class CustomNodePlayground {
   }
 
   initializeEditors() {
-    require.config({ 
-      paths: { 
-        'vs': 'https://unpkg.com/monaco-editor@0.34.1/min/vs' 
-      } 
+    require.config({
+      paths: {
+        vs: 'https://unpkg.com/monaco-editor@0.34.1/min/vs',
+      },
     });
 
     require(['vs/editor/editor.main'], () => {
       // Implementation Editor
-      this.editors.implementation = monaco.editor.create(
-        document.getElementById('editor'), 
-        {
-          value: '',
-          language: 'typescript',
-          theme: 'vs-dark',
-          automaticLayout: true,
-          minimap: { enabled: false },
-          fontSize: 14,
-          lineNumbers: 'on',
-          renderWhitespace: 'boundary',
-          scrollBeyondLastLine: false,
-          wordWrap: 'on'
-        }
-      );
+      this.editors.implementation = monaco.editor.create(document.getElementById('editor'), {
+        value: '',
+        language: 'typescript',
+        theme: 'vs-dark',
+        automaticLayout: true,
+        minimap: { enabled: false },
+        fontSize: 14,
+        lineNumbers: 'on',
+        renderWhitespace: 'boundary',
+        scrollBeyondLastLine: false,
+        wordWrap: 'on',
+      });
 
       // Test Inputs Editor
-      this.editors.testInputs = monaco.editor.create(
-        document.getElementById('inputEditor'),
-        {
-          value: '{\n  "input": "test value"\n}',
-          language: 'json',
-          theme: 'vs-dark',
-          automaticLayout: true,
-          minimap: { enabled: false },
-          fontSize: 14
-        }
-      );
+      this.editors.testInputs = monaco.editor.create(document.getElementById('inputEditor'), {
+        value: '{\n  "input": "test value"\n}',
+        language: 'json',
+        theme: 'vs-dark',
+        automaticLayout: true,
+        minimap: { enabled: false },
+        fontSize: 14,
+      });
 
       // Schema Editor
-      this.editors.schema = monaco.editor.create(
-        document.getElementById('schemaEditor'),
-        {
-          value: '',
-          language: 'json',
-          theme: 'vs-dark',
-          automaticLayout: true,
-          minimap: { enabled: false },
-          fontSize: 14
-        }
-      );
+      this.editors.schema = monaco.editor.create(document.getElementById('schemaEditor'), {
+        value: '',
+        language: 'json',
+        theme: 'vs-dark',
+        automaticLayout: true,
+        minimap: { enabled: false },
+        fontSize: 14,
+      });
 
       // Metadata Editor
-      this.editors.metadata = monaco.editor.create(
-        document.getElementById('metadataEditor'),
-        {
-          value: '',
-          language: 'json',
-          theme: 'vs-dark',
-          automaticLayout: true,
-          minimap: { enabled: false },
-          fontSize: 14
-        }
-      );
+      this.editors.metadata = monaco.editor.create(document.getElementById('metadataEditor'), {
+        value: '',
+        language: 'json',
+        theme: 'vs-dark',
+        automaticLayout: true,
+        minimap: { enabled: false },
+        fontSize: 14,
+      });
 
       // Add change listeners for validation
       Object.values(this.editors).forEach(editor => {
@@ -92,20 +80,20 @@ class CustomNodePlayground {
   loadTemplate(templateName) {
     this.currentTemplate = templateName;
     const template = this.getTemplate(templateName);
-        
+
     // Update editors with template content
     if (this.editors.implementation) {
       this.editors.implementation.setValue(template.implementation);
     }
-        
+
     if (this.editors.testInputs) {
       this.editors.testInputs.setValue(JSON.stringify(template.testInputs, null, 2));
     }
-        
+
     if (this.editors.schema) {
       this.editors.schema.setValue(JSON.stringify(template.schema, null, 2));
     }
-        
+
     if (this.editors.metadata) {
       this.editors.metadata.setValue(JSON.stringify(template.metadata, null, 2));
     }
@@ -206,41 +194,41 @@ export class TextProcessor extends CustomNodeBase {
 }`,
         testInputs: {
           text: 'Hello World! This is a Test String.',
-          operation: 'title'
+          operation: 'title',
         },
         schema: {
           inputs: {
             text: {
               type: 'string',
               required: true,
-              description: 'Text to process'
+              description: 'Text to process',
             },
             operation: {
               type: 'string',
               required: false,
               default: 'uppercase',
               enum: ['uppercase', 'lowercase', 'title', 'reverse', 'trim', 'slug'],
-              description: 'Processing operation to apply'
-            }
+              description: 'Processing operation to apply',
+            },
           },
           outputs: {
             result: {
               type: 'string',
-              description: 'Processed text result'
+              description: 'Processed text result',
             },
             originalLength: {
               type: 'number',
-              description: 'Length of original text'
+              description: 'Length of original text',
             },
             processedLength: {
               type: 'number',
-              description: 'Length of processed text'
+              description: 'Length of processed text',
             },
             operation: {
               type: 'string',
-              description: 'Operation that was applied'
-            }
-          }
+              description: 'Operation that was applied',
+            },
+          },
         },
         metadata: {
           type: 'playground.text-processor',
@@ -250,9 +238,9 @@ export class TextProcessor extends CustomNodeBase {
           version: '1.0.0',
           author: {
             name: 'PromptScape Playground',
-            email: 'playground@promptscape.dev'
-          }
-        }
+            email: 'playground@promptscape.dev',
+          },
+        },
       },
 
       'api-connector': {
@@ -344,56 +332,56 @@ export class APIConnector extends CustomNodeBase {
           url: 'https://jsonplaceholder.typicode.com/posts/1',
           method: 'GET',
           headers: {
-            'User-Agent': 'PromptScape-Playground/1.0'
-          }
+            'User-Agent': 'PromptScape-Playground/1.0',
+          },
         },
         schema: {
           inputs: {
             url: {
               type: 'string',
               required: true,
-              description: 'API endpoint URL'
+              description: 'API endpoint URL',
             },
             method: {
               type: 'string',
               required: false,
               default: 'GET',
               enum: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-              description: 'HTTP method'
+              description: 'HTTP method',
             },
             headers: {
               type: 'object',
               required: false,
-              description: 'HTTP headers'
+              description: 'HTTP headers',
             },
             body: {
               type: 'any',
               required: false,
-              description: 'Request body (for non-GET methods)'
-            }
+              description: 'Request body (for non-GET methods)',
+            },
           },
           outputs: {
             data: {
               type: 'any',
-              description: 'Response data'
+              description: 'Response data',
             },
             status: {
               type: 'number',
-              description: 'HTTP status code'
+              description: 'HTTP status code',
             },
             statusText: {
               type: 'string',
-              description: 'HTTP status text'
+              description: 'HTTP status text',
             },
             headers: {
               type: 'object',
-              description: 'Response headers'
+              description: 'Response headers',
             },
             success: {
               type: 'boolean',
-              description: 'Whether the request was successful'
-            }
-          }
+              description: 'Whether the request was successful',
+            },
+          },
         },
         metadata: {
           type: 'playground.api-connector',
@@ -403,9 +391,9 @@ export class APIConnector extends CustomNodeBase {
           version: '1.0.0',
           author: {
             name: 'PromptScape Playground',
-            email: 'playground@promptscape.dev'
-          }
-        }
+            email: 'playground@promptscape.dev',
+          },
+        },
       },
 
       'conditional-logic': {
@@ -509,45 +497,45 @@ export class ConditionalLogic extends CustomNodeBase {
           condition: true,
           trueValue: 'Condition is true!',
           falseValue: 'Condition is false!',
-          expression: '5 > 3 && 2 < 4'
+          expression: '5 > 3 && 2 < 4',
         },
         schema: {
           inputs: {
             condition: {
               type: 'any',
               required: false,
-              description: 'Condition to evaluate (used if no expression provided)'
+              description: 'Condition to evaluate (used if no expression provided)',
             },
             expression: {
               type: 'string',
               required: false,
-              description: 'JavaScript expression to evaluate'
+              description: 'JavaScript expression to evaluate',
             },
             trueValue: {
               type: 'any',
               required: true,
-              description: 'Value to return when condition is true'
+              description: 'Value to return when condition is true',
             },
             falseValue: {
               type: 'any',
               required: true,
-              description: 'Value to return when condition is false'
-            }
+              description: 'Value to return when condition is false',
+            },
           },
           outputs: {
             result: {
               type: 'any',
-              description: 'Selected output based on condition'
+              description: 'Selected output based on condition',
             },
             conditionMet: {
               type: 'boolean',
-              description: 'Whether the condition was met'
+              description: 'Whether the condition was met',
             },
             expression: {
               type: 'string',
-              description: 'Expression that was evaluated (if any)'
-            }
-          }
+              description: 'Expression that was evaluated (if any)',
+            },
+          },
         },
         metadata: {
           type: 'playground.conditional-logic',
@@ -557,10 +545,10 @@ export class ConditionalLogic extends CustomNodeBase {
           version: '1.0.0',
           author: {
             name: 'PromptScape Playground',
-            email: 'playground@promptscape.dev'
-          }
-        }
-      }
+            email: 'playground@promptscape.dev',
+          },
+        },
+      },
     };
 
     // Add templates for other node types with similar structure...
@@ -576,7 +564,7 @@ export class ConditionalLogic extends CustomNodeBase {
       implementation: '// Data Transformer implementation would go here...',
       testInputs: { data: { key: 'value' }, format: 'json' },
       schema: { inputs: {}, outputs: {} },
-      metadata: { type: 'playground.data-transformer', displayName: 'Data Transformer' }
+      metadata: { type: 'playground.data-transformer', displayName: 'Data Transformer' },
     };
   }
 
@@ -585,7 +573,7 @@ export class ConditionalLogic extends CustomNodeBase {
       implementation: '// Math Processor implementation would go here...',
       testInputs: { numbers: [1, 2, 3, 4, 5], operation: 'sum' },
       schema: { inputs: {}, outputs: {} },
-      metadata: { type: 'playground.math-processor', displayName: 'Math Processor' }
+      metadata: { type: 'playground.math-processor', displayName: 'Math Processor' },
     };
   }
 
@@ -594,7 +582,7 @@ export class ConditionalLogic extends CustomNodeBase {
       implementation: '// Utility Helper implementation would go here...',
       testInputs: { input: 'test', utility: 'hash' },
       schema: { inputs: {}, outputs: {} },
-      metadata: { type: 'playground.utility-helper', displayName: 'Utility Helper' }
+      metadata: { type: 'playground.utility-helper', displayName: 'Utility Helper' },
     };
   }
 
@@ -650,16 +638,15 @@ export class ConditionalLogic extends CustomNodeBase {
       // Simulate node execution (in a real environment, this would compile and run the TypeScript)
       const result = await this.simulateExecution(implementation, testInputs, {
         enableLogging,
-        timeout
+        timeout,
       });
 
       this.displayResults(result);
       this.updateStatus('✅ Execution completed', 'success');
-
     } catch (error) {
       this.displayResults({
         error: error.message,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
       this.updateStatus(`❌ Execution failed: ${error.message}`, 'error');
     } finally {
@@ -668,36 +655,41 @@ export class ConditionalLogic extends CustomNodeBase {
   }
 
   async simulateExecution(implementation, testInputs, options) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        // Simulate successful execution with mock results
-        const mockResults = {
-          outputs: {
-            result: 'HELLO WORLD! THIS IS A TEST STRING.',
-            originalLength: 37,
-            processedLength: 37,
-            operation: 'title'
-          },
-          executionTime: Math.random() * 100 + 50,
-          logs: options.enableLogging ? [
-            { level: 'info', message: 'Processing text', data: { operation: 'title', textLength: 37 } },
-            { level: 'info', message: 'Text processing completed', data: { result: 'success' } }
-          ] : [],
-          timestamp: new Date().toISOString(),
-          nodeMetadata: {
-            type: 'playground.text-processor',
-            version: '1.0.0'
-          }
-        };
-        resolve(mockResults);
-      }, Math.random() * 1000 + 500);
+    return new Promise(resolve => {
+      setTimeout(
+        () => {
+          // Simulate successful execution with mock results
+          const mockResults = {
+            outputs: {
+              result: 'HELLO WORLD! THIS IS A TEST STRING.',
+              originalLength: 37,
+              processedLength: 37,
+              operation: 'title',
+            },
+            executionTime: Math.random() * 100 + 50,
+            logs: options.enableLogging
+              ? [
+                  { level: 'info', message: 'Processing text', data: { operation: 'title', textLength: 37 } },
+                  { level: 'info', message: 'Text processing completed', data: { result: 'success' } },
+                ]
+              : [],
+            timestamp: new Date().toISOString(),
+            nodeMetadata: {
+              type: 'playground.text-processor',
+              version: '1.0.0',
+            },
+          };
+          resolve(mockResults);
+        },
+        Math.random() * 1000 + 500
+      );
     });
   }
 
   displayResults(results) {
     const resultsPanel = document.getElementById('resultsPanel');
     const resultsContent = document.getElementById('resultsContent');
-        
+
     resultsContent.innerHTML = '';
 
     if (results.error) {
@@ -722,9 +714,12 @@ export class ConditionalLogic extends CustomNodeBase {
         html += `
                     <div class="execution-result">
                         <strong>📋 Execution Logs</strong><br>
-                        ${results.logs.map(log => 
-    `<div><span style="color: ${this.getLogColor(log.level)}">[${log.level.toUpperCase()}]</span> ${log.message}</div>`
-  ).join('')}
+                        ${results.logs
+                          .map(
+                            log =>
+                              `<div><span style="color: ${this.getLogColor(log.level)}">[${log.level.toUpperCase()}]</span> ${log.message}</div>`
+                          )
+                          .join('')}
                     </div>
                 `;
       }
@@ -740,7 +735,7 @@ export class ConditionalLogic extends CustomNodeBase {
       info: '#007bff',
       warn: '#ffc107',
       error: '#dc3545',
-      debug: '#6c757d'
+      debug: '#6c757d',
     };
     return colors[level] || '#6c757d';
   }
@@ -748,7 +743,7 @@ export class ConditionalLogic extends CustomNodeBase {
   updateStatus(message, type = 'info') {
     const statusText = document.getElementById('statusText');
     statusText.textContent = message;
-        
+
     // Add visual indicators based on type
     statusText.className = type;
   }
@@ -808,18 +803,18 @@ function exportNode() {
   const implementation = window.playground?.editors?.implementation?.getValue() || '';
   const schema = window.playground?.editors?.schema?.getValue() || '{}';
   const metadata = window.playground?.editors?.metadata?.getValue() || '{}';
-    
+
   const nodePackage = {
     implementation,
     schema: JSON.parse(schema),
     metadata: JSON.parse(metadata),
-    exportedAt: new Date().toISOString()
+    exportedAt: new Date().toISOString(),
   };
-    
-  const blob = new Blob([JSON.stringify(nodePackage, null, 2)], { 
-    type: 'application/json' 
+
+  const blob = new Blob([JSON.stringify(nodePackage, null, 2)], {
+    type: 'application/json',
   });
-    
+
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;

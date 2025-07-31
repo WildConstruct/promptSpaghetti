@@ -1,4 +1,4 @@
-import { State, Event } from "./types";
+import { State, Event } from './types';
 /**
  * Apply an event to the state, returning a new state
  * This is a pure function - it does not modify the input state

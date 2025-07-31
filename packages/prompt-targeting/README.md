@@ -17,8 +17,8 @@ The Prompt Targeting System enables users to create prompts once and target mult
 
 - **OpenAI GPT** - Text-to-text generation (GPT-3.5, GPT-4)
 - **Midjourney** - Text-to-image generation with style controls
-- **DALL-E** - *(Coming soon)*
-- **Stable Diffusion** - *(Coming soon)*
+- **DALL-E** - _(Coming soon)_
+- **Stable Diffusion** - _(Coming soon)_
 
 ## Quick Start
 
@@ -41,7 +41,7 @@ const openaiAdaptor = new OpenAIAdaptor();
 const midjourneyAdaptor = new MidjourneyAdaptor();
 
 await openaiAdaptor.initialize({
-  openai: { apiKey: 'your-api-key', model: 'gpt-4' }
+  openai: { apiKey: 'your-api-key', model: 'gpt-4' },
 });
 
 await midjourneyAdaptor.initialize();
@@ -55,10 +55,10 @@ const promptGraph = {
     {
       id: '1',
       type: 'output',
-      data: { text: 'Create a story about a time traveler' }
-    }
+      data: { text: 'Create a story about a time traveler' },
+    },
   ],
-  edges: []
+  edges: [],
 };
 
 // Translate to different platforms
@@ -96,7 +96,7 @@ interface ModelAdaptor {
   readonly id: string;
   readonly version: string;
   readonly platforms: string[];
-  
+
   capabilities(): Promise<PlatformCapabilities>;
   validate(graph: PromptGraph, config?: AdaptorConfig): Promise<ValidationResult>;
   transform(graph: PromptGraph, config?: AdaptorConfig): Promise<PlatformPrompt>;
@@ -111,14 +111,14 @@ interface ModelAdaptor {
 const graph = {
   nodes: [
     { id: '1', type: 'system', data: { text: 'You are a helpful assistant' } },
-    { id: '2', type: 'output', data: { text: 'Explain quantum computing' } }
+    { id: '2', type: 'output', data: { text: 'Explain quantum computing' } },
   ],
-  edges: [{ source: '1', target: '2' }]
+  edges: [{ source: '1', target: '2' }],
 };
 
 const result = await system.engine.translate(graph, 'openai', {
   qualityPreference: 0.8, // Lower temperature for focused responses
-  enableOptimizations: true
+  enableOptimizations: true,
 });
 
 // Result:
@@ -140,17 +140,17 @@ const graph = {
   nodes: [
     { id: '1', type: 'subject', data: { text: 'A dragon flying over mountains' } },
     { id: '2', type: 'style', data: { style: 'fantasy' } },
-    { id: '3', type: 'aspectRatio', data: { aspectRatio: 'landscape' } }
+    { id: '3', type: 'aspectRatio', data: { aspectRatio: 'landscape' } },
   ],
   edges: [
     { source: '1', target: '2' },
-    { source: '2', target: '3' }
-  ]
+    { source: '2', target: '3' },
+  ],
 };
 
 const result = await system.engine.translate(graph, 'midjourney', {
   qualityPreference: 0.9,
-  stylePreference: 'artistic'
+  stylePreference: 'artistic',
 });
 
 // Result:
@@ -171,7 +171,7 @@ const result = await system.engine.translate(graph, 'midjourney', {
 
 ```typescript
 interface AdaptorConfig {
-  qualityPreference?: number;      // 0-1, higher = more quality-focused
+  qualityPreference?: number; // 0-1, higher = more quality-focused
   stylePreference?: 'default' | 'artistic' | 'photorealistic' | 'minimal';
   platformOverrides?: Record<string, unknown>;
   enableOptimizations?: boolean;
@@ -187,13 +187,13 @@ const config = {
   platformOverrides: {
     openai: {
       model: 'gpt-4-turbo',
-      max_tokens: 2000
+      max_tokens: 2000,
     },
     midjourney: {
       version: '6',
-      chaos: 25
-    }
-  }
+      chaos: 25,
+    },
+  },
 };
 ```
 
@@ -204,10 +204,10 @@ The system provides comprehensive validation with compatibility scoring:
 ```typescript
 const validation = await system.engine.validateTranslation(graph, 'midjourney');
 
-console.log(validation.valid);              // true/false
+console.log(validation.valid); // true/false
 console.log(validation.compatibilityScore); // 0-1 score
-console.log(validation.errors);             // Array of errors
-console.log(validation.warnings);           // Array of warnings
+console.log(validation.errors); // Array of errors
+console.log(validation.warnings); // Array of warnings
 ```
 
 ## Performance Features
@@ -246,8 +246,8 @@ class CustomAdaptor extends BaseAdaptor {
       styleSupport: true,
       negativePromptSupport: false,
       parameterRanges: {
-        temperature: [0, 1]
-      }
+        temperature: [0, 1],
+      },
     };
   }
 
@@ -261,7 +261,7 @@ class CustomAdaptor extends BaseAdaptor {
     return {
       platform: 'custom',
       prompt: this.extractTextContent(graph),
-      parameters: {}
+      parameters: {},
     };
   }
 }

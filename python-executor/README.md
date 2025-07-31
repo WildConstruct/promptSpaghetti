@@ -339,16 +339,16 @@ thresholds = {
 ```yaml
 # k8s/deployment.yaml
 env:
-- name: SANDBOX_MODE
-  value: "strict"
-- name: ENABLE_SECCOMP
-  value: "true"
-- name: READONLY_FILESYSTEM
-  value: "true"
-- name: MAX_MEMORY_MB
-  value: "256"
-- name: MAX_EXECUTION_TIME
-  value: "30"
+  - name: SANDBOX_MODE
+    value: 'strict'
+  - name: ENABLE_SECCOMP
+    value: 'true'
+  - name: READONLY_FILESYSTEM
+    value: 'true'
+  - name: MAX_MEMORY_MB
+    value: '256'
+  - name: MAX_EXECUTION_TIME
+    value: '30'
 ```
 
 ## Performance Impact
@@ -372,6 +372,7 @@ env:
 ### Threat Model
 
 **Threats Mitigated:**
+
 - Code injection attacks
 - Resource exhaustion attacks
 - Privilege escalation
@@ -379,6 +380,7 @@ env:
 - Lateral movement
 
 **Residual Risks:**
+
 - Timing attacks (partially mitigated)
 - Side-channel attacks (container isolation)
 - Zero-day exploits (monitoring and response)

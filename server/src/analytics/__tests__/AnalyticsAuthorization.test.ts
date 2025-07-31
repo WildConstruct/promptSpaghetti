@@ -1,6 +1,6 @@
 /**
  * AnalyticsAuthorization Unit Tests - Story 1.5 Task 2
- * 
+ *
  * Basic test suite for analytics authorization service validation
  * focusing on core authorization functionality and access control.
  */
@@ -19,7 +19,7 @@ describe('AnalyticsAuthorization', () => {
         workspaceId: z.string().optional(),
         environment: z.string().default('development'),
         tokenType: z.enum(['jwt', 'api_key', 'session']),
-        expiresAt: z.number().optional()
+        expiresAt: z.number().optional(),
       });
 
       const validContext = {
@@ -29,7 +29,7 @@ describe('AnalyticsAuthorization', () => {
         permissions: ['analytics:read', 'events:view'],
         sessionId: 'session-abc',
         environment: 'test',
-        tokenType: 'session' as const
+        tokenType: 'session' as const,
       };
 
       const result = AuthContextSchema.parse(validContext);
@@ -49,7 +49,7 @@ describe('AnalyticsAuthorization', () => {
         workspaceId: z.string().optional(),
         environment: z.string().default('development'),
         tokenType: z.enum(['jwt', 'api_key', 'session']),
-        expiresAt: z.number().optional()
+        expiresAt: z.number().optional(),
       });
 
       const minimalContext = {
@@ -57,7 +57,7 @@ describe('AnalyticsAuthorization', () => {
         roles: ['user'],
         permissions: ['analytics:read'],
         sessionId: 'session-abc',
-        tokenType: 'session' as const
+        tokenType: 'session' as const,
       };
 
       const result = AuthContextSchema.parse(minimalContext);
@@ -76,7 +76,7 @@ describe('AnalyticsAuthorization', () => {
         workspaceId: z.string().optional(),
         environment: z.string().default('development'),
         tokenType: z.enum(['jwt', 'api_key', 'session']),
-        expiresAt: z.number().optional()
+        expiresAt: z.number().optional(),
       });
 
       const invalidContext = {
@@ -84,7 +84,7 @@ describe('AnalyticsAuthorization', () => {
         roles: 'user', // Should be array
         permissions: ['analytics:read'],
         sessionId: 'session-abc',
-        tokenType: 'invalid' // Invalid enum value
+        tokenType: 'invalid', // Invalid enum value
       };
 
       expect(() => AuthContextSchema.parse(invalidContext)).toThrow();
@@ -99,7 +99,7 @@ describe('AnalyticsAuthorization', () => {
         'analytics:view_all_events',
         'analytics:view_analytics',
         'analytics:view_dashboard',
-        'analytics:manage_analytics'
+        'analytics:manage_analytics',
       ];
 
       analyticsPermissions.forEach(permission => {
@@ -147,10 +147,14 @@ describe('AnalyticsAuthorization', () => {
       // Role mapping logic
       const getPermissionsByRole = (role: string) => {
         switch (role) {
-          case 'admin': return adminPermissions;
-          case 'user': return userPermissions;
-          case 'viewer': return viewerPermissions;
-          default: return [];
+          case 'admin':
+            return adminPermissions;
+          case 'user':
+            return userPermissions;
+          case 'viewer':
+            return viewerPermissions;
+          default:
+            return [];
         }
       };
 
@@ -169,14 +173,14 @@ describe('AnalyticsAuthorization', () => {
         organizationId: 'org-456',
         type: 'USER_INTERACTION',
         category: 'USER',
-        data: { action: 'click' }
+        data: { action: 'click' },
       };
 
       const authContext = {
         userId: 'user-123',
         organizationId: 'org-456',
         roles: ['user'],
-        permissions: ['analytics:view_events']
+        permissions: ['analytics:view_events'],
       };
 
       // Ownership check
@@ -199,14 +203,14 @@ describe('AnalyticsAuthorization', () => {
         organizationId: 'org-456',
         type: 'USER_INTERACTION',
         category: 'USER',
-        data: { action: 'click' }
+        data: { action: 'click' },
       };
 
       const authContext = {
         userId: 'user-123',
         organizationId: 'org-456',
         roles: ['user'],
-        permissions: ['analytics:view_events']
+        permissions: ['analytics:view_events'],
       };
 
       const isOwner = event.userId === authContext.userId;
@@ -226,14 +230,14 @@ describe('AnalyticsAuthorization', () => {
         organizationId: 'org-456',
         type: 'SECURITY_EVENT',
         category: 'SECURITY',
-        data: { threat: 'detected' }
+        data: { threat: 'detected' },
       };
 
       const authContext = {
         userId: 'admin-123',
         organizationId: 'org-456',
         roles: ['admin'],
-        permissions: ['analytics:view_all_events', 'analytics:manage_analytics']
+        permissions: ['analytics:view_all_events', 'analytics:manage_analytics'],
       };
 
       const hasViewAllPermission = authContext.permissions.includes('analytics:view_all_events');
@@ -253,21 +257,21 @@ describe('AnalyticsAuthorization', () => {
         types: ['USER_INTERACTION'],
         categories: ['USER'],
         startTime: Date.now() - 86400000,
-        endTime: Date.now()
+        endTime: Date.now(),
       };
 
       const authContext = {
         userId: 'user-123',
         organizationId: 'org-456',
         roles: ['user'],
-        permissions: ['analytics:view_events']
+        permissions: ['analytics:view_events'],
       };
 
       // Apply user scope restrictions
       const authorizedFilter = {
         ...requestedFilter,
         userId: authContext.userId,
-        organizationId: authContext.organizationId
+        organizationId: authContext.organizationId,
       };
 
       expect(authorizedFilter.userId).toBe('user-123');
@@ -278,14 +282,14 @@ describe('AnalyticsAuthorization', () => {
     it('should allow admin to query without user restrictions', () => {
       const requestedFilter = {
         types: ['SECURITY_EVENT'],
-        categories: ['SECURITY']
+        categories: ['SECURITY'],
       };
 
       const authContext = {
         userId: 'admin-123',
         organizationId: 'org-456',
         roles: ['admin'],
-        permissions: ['analytics:view_all_events', 'analytics:manage_analytics']
+        permissions: ['analytics:view_all_events', 'analytics:manage_analytics'],
       };
 
       const hasViewAllPermission = authContext.permissions.includes('analytics:view_all_events');
@@ -294,7 +298,7 @@ describe('AnalyticsAuthorization', () => {
         // Admin can query without user restrictions
         const authorizedFilter = {
           ...requestedFilter,
-          organizationId: authContext.organizationId
+          organizationId: authContext.organizationId,
           // No userId restriction for admin
         };
 
@@ -309,12 +313,12 @@ describe('AnalyticsAuthorization', () => {
       const currentTime = Date.now();
       const validSession = {
         sessionId: 'session-123',
-        expiresAt: currentTime + 3600000 // 1 hour from now
+        expiresAt: currentTime + 3600000, // 1 hour from now
       };
 
       const expiredSession = {
         sessionId: 'session-456',
-        expiresAt: currentTime - 3600000 // 1 hour ago
+        expiresAt: currentTime - 3600000, // 1 hour ago
       };
 
       const isValidSession = (session: typeof validSession) => {
@@ -327,7 +331,7 @@ describe('AnalyticsAuthorization', () => {
 
     it('should handle missing expiration time', () => {
       const sessionWithoutExpiration = {
-        sessionId: 'session-123'
+        sessionId: 'session-123',
         // No expiresAt field
       };
 
@@ -347,7 +351,7 @@ describe('AnalyticsAuthorization', () => {
       const malformedContext = {
         userId: null,
         permissions: 'not-an-array',
-        sessionId: undefined
+        sessionId: undefined,
       };
 
       const isValidContext = (context: unknown) => {
@@ -377,13 +381,12 @@ describe('AnalyticsAuthorization', () => {
     it('should handle permission checking errors gracefully', () => {
       const authContext = {
         userId: 'user-123',
-        permissions: null // Invalid permissions
+        permissions: null, // Invalid permissions
       };
 
       const hasPermission = (context: unknown, permission: string) => {
         try {
-          return Array.isArray(context.permissions) && 
-                 context.permissions.includes(permission);
+          return Array.isArray(context.permissions) && context.permissions.includes(permission);
         } catch (error) {
           return false; // Default to no permission on error
         }

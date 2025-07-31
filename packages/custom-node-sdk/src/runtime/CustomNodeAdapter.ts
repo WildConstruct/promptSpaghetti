@@ -3,17 +3,8 @@
  * Wraps custom nodes to integrate with the AdvancedRuntimeNode system
  */
 
-import { 
-  AdvancedRuntimeNode,
-  AdvancedExecutionContext,
-  AdvancedNodeConfig
-} from '@promptscape/core';
-import { 
-  CustomNodeBase, 
-  CustomNodeConfig, 
-  CustomNodeRuntime, 
-  CustomNodeResult 
-} from '../types';
+import { AdvancedRuntimeNode, AdvancedExecutionContext, AdvancedNodeConfig } from '@promptscape/core';
+import { CustomNodeBase, CustomNodeConfig, CustomNodeRuntime, CustomNodeResult } from '../types';
 import { SecurityManager } from './SecurityManager';
 import { ValidationEngine } from './ValidationEngine';
 
@@ -32,7 +23,7 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
       deterministic: customConfig.deterministic ?? true,
       cacheable: customConfig.cacheable ?? true,
       stateful: customConfig.stateful ?? false,
-      performanceHints: customConfig.performanceHints
+      performanceHints: customConfig.performanceHints,
     };
 
     super(id, advancedConfig);
@@ -68,13 +59,13 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
       return {
         valid: true,
         errors: [],
-        warnings: []
+        warnings: [],
       };
     } catch (error) {
       return {
         valid: false,
         errors: [`Validation failed: ${(error as Error).message}`],
-        warnings: []
+        warnings: [],
       };
     }
   }
@@ -84,7 +75,7 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
    */
   async run(ctx: AdvancedExecutionContext): Promise<unknown> {
     const startTime = Date.now();
-    
+
     try {
       // Security check
       await this.securityManager.checkExecution(ctx);
@@ -92,7 +83,7 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
       // Extract and validate inputs
       const inputs = this.extractInputs(ctx);
       const inputValidation = this.validationEngine.validateInputs(inputs);
-      
+
       if (!inputValidation.valid) {
         throw new Error(`Input validation failed: ${inputValidation.errors.join(', ')}`);
       }
@@ -125,7 +116,6 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
 
       // Return the primary output or all outputs
       return this.formatOutput(result.outputs);
-
     } catch (error) {
       const executionTime = Date.now() - startTime;
       this.logExecutionError(ctx, error as Error, executionTime);
@@ -143,7 +133,7 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
     for (const [inputName, inputSpec] of Object.entries(schema.inputs)) {
       // Get value from context variables
       const value = ctx.variables.get(inputName);
-      
+
       if (value !== undefined) {
         inputs[inputName] = value;
       } else if (inputSpec.required && inputSpec.default === undefined) {
@@ -161,7 +151,7 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
    */
   private createCustomRuntime(ctx: AdvancedExecutionContext, inputs: Record<string, any>): CustomNodeRuntime {
     const nodeId = this.id;
-    
+
     return {
       context: ctx,
       inputs,
@@ -172,8 +162,8 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
         },
         validate: (data, schema) => this.validationEngine.validateData(data, schema),
         getState: () => ctx.nodeStates.get(nodeId),
-        setState: (state) => ctx.nodeStates.set(nodeId, state)
-      }
+        setState: state => ctx.nodeStates.set(nodeId, state),
+      },
     };
   }
 
@@ -202,19 +192,19 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
    * Update execution statistics in the context
    */
   private updateExecutionStats(
-    ctx: AdvancedExecutionContext, 
-    executionTime: number, 
+    ctx: AdvancedExecutionContext,
+    executionTime: number,
     metadata?: CustomNodeResult['metadata']
   ): void {
     if (ctx.executionMeta) {
       if (!ctx.executionMeta.nodeStats) {
         ctx.executionMeta.nodeStats = new Map();
       }
-      
+
       ctx.executionMeta.nodeStats.set(this.id, {
         executionTime,
         memoryUsed: metadata?.memoryUsed || 0,
-        customMetrics: metadata?.metrics || {}
+        customMetrics: metadata?.metrics || {},
       });
     }
   }
@@ -224,17 +214,17 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
    */
   private logExecutionError(ctx: AdvancedExecutionContext, error: Error, executionTime: number): void {
     console.error(`[${this.id}] Execution failed after ${executionTime}ms:`, error);
-    
+
     if (ctx.executionMeta) {
       if (!ctx.executionMeta.errors) {
         ctx.executionMeta.errors = [];
       }
-      
+
       ctx.executionMeta.errors.push({
         nodeId: this.id,
         error: error.message,
         timestamp: new Date().toISOString(),
-        executionTime
+        executionTime,
       });
     }
   }

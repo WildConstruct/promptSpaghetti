@@ -20,7 +20,7 @@ function findStoryById(storyId) {
 
 function displayTaskDetails(taskId) {
   const task = findTaskById(taskId);
-  
+
   if (!task) {
     console.log(`❌ Task ${taskId} not found`);
     return;
@@ -38,11 +38,11 @@ function displayTaskDetails(taskId) {
   console.log(`Estimate: ${task.est} hours`);
   console.log(`Created: ${task.created}`);
   console.log(`Updated: ${task.updated}`);
-  
+
   if (task.dependencies && task.dependencies.length > 0) {
     console.log(`Dependencies: ${task.dependencies.join(', ')}`);
   }
-  
+
   if (task.notes && task.notes.length > 0) {
     console.log('\n📝 Notes:');
     task.notes.forEach((note, i) => {
@@ -60,7 +60,7 @@ function displayTaskDetails(taskId) {
       console.log(`Goal: ${story.goal_id}`);
       console.log(`Priority: ${story.priority}`);
       console.log(`Status: ${story.status}`);
-      
+
       if (story.acceptance && story.acceptance.length > 0) {
         console.log('\n✅ Acceptance Criteria:');
         story.acceptance.forEach((criteria, i) => {
@@ -82,7 +82,7 @@ function displayTaskDetails(taskId) {
   console.log('\nContext: This task implements automated data deletion as part of');
   console.log('the comprehensive data lifecycle management system, ensuring');
   console.log('compliance with data retention policies and regulations like GDPR.');
-  
+
   console.log('\n' + '─'.repeat(80));
   console.log('📚 IMPLEMENTATION GUIDANCE');
   console.log('─'.repeat(80));
@@ -93,7 +93,7 @@ function displayTaskDetails(taskId) {
   console.log('   • Exception handling for retention holds');
   console.log('   • Integration with the data classification system');
   console.log('   • Compliance reporting for deletion activities');
-  
+
   console.log('\n🔗 Related Epic 19.2.6 tasks from the plan:');
   console.log('   • Implement data aging tracking');
   console.log('   • Build archiving automation');

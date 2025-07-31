@@ -48,12 +48,12 @@ const deps = ['zod', 'zustand', 'reactflow', 'seedrandom'];
 const locations = {
   Root: './node_modules',
   Client: './client/node_modules',
-  Core: './packages/core/node_modules'
+  Core: './packages/core/node_modules',
 };
 
 const depVersions = {};
 
-deps.forEach((dep) => {
+deps.forEach(dep => {
   console.log(chalk.cyan(`\n  ${dep}:`));
   let foundCount = 0;
 
@@ -90,7 +90,7 @@ const checkPkgJson = (label, pkgPath) => {
   if (!fs.existsSync(pkgPath)) return;
   const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
   console.log(chalk.cyan(`\n  ${label}:`));
-  deps.forEach((dep) => {
+  deps.forEach(dep => {
     if (pkg.dependencies?.[dep]) {
       console.log(chalk.green(`    ${dep}: ${pkg.dependencies[dep]} (dependencies)`));
     } else if (pkg.devDependencies?.[dep]) {
@@ -113,7 +113,7 @@ if (fs.existsSync(viteConfigPath)) {
 
   if (viteContent.includes('optimizeDeps')) {
     console.log(chalk.green('  ✓ optimizeDeps configured'));
-    deps.forEach((dep) => {
+    deps.forEach(dep => {
       if (viteContent.includes(`'${dep}'`)) {
         console.log(chalk.green(`    ✓ ${dep} in optimizeDeps`));
       } else {
@@ -133,7 +133,7 @@ try {
   const originalCwd = process.cwd();
   process.chdir(path.resolve('./client'));
   console.log(`  Working directory: ${process.cwd()}`);
-  deps.forEach((dep) => {
+  deps.forEach(dep => {
     try {
       require.resolve(dep);
       console.log(chalk.green(`  ✓ ${dep} resolves in Netlify context`));
@@ -162,7 +162,7 @@ if (!fs.existsSync(rootPkgPath) || !JSON.parse(fs.readFileSync(rootPkgPath, 'utf
 }
 if (issues.length > 0) {
   console.log(chalk.red('\n  Issues found:'));
-  issues.forEach((i) => console.log(chalk.red(`  - ${i}`)));
+  issues.forEach(i => console.log(chalk.red(`  - ${i}`)));
 } else {
   console.log(chalk.green('\n  ✅ All checks passed!'));
 }

@@ -2,14 +2,7 @@ import { EventEmitter } from 'events';
 import { v4 as uuidv4 } from 'uuid';
 import WebSocket from 'ws';
 import jwt from 'jsonwebtoken';
-import { 
-  ConnectionInfo, 
-  DocumentSession, 
-  WSMessage, 
-  WSServerConfig,
-  HealthMetrics,
-  AuthPayload
-} from './types';
+import { ConnectionInfo, DocumentSession, WSMessage, WSServerConfig, HealthMetrics, AuthPayload } from './types';
 
 export class ConnectionManager extends EventEmitter {
   private connections: Map<string, WebSocket> = new Map();
@@ -31,7 +24,7 @@ export class ConnectionManager extends EventEmitter {
       messagesPerSecond: 0,
       uptime: 0,
       memoryUsage: 0,
-      lastUpdated: Date.now()
+      lastUpdated: Date.now(),
     };
 
     this.startHeartbeat();
@@ -43,14 +36,14 @@ export class ConnectionManager extends EventEmitter {
    */
   addConnection(ws: WebSocket, request: any): string {
     const connectionId = uuidv4();
-    
+
     // Extract basic info from request
     const userAgent = request.headers['user-agent'];
     const ipAddress = request.socket.remoteAddress;
 
     // Store connection
     this.connections.set(connectionId, ws);
-    
+
     // Initialize connection info (authentication required)
     const connectionInfo: ConnectionInfo = {
       id: connectionId,
@@ -60,9 +53,9 @@ export class ConnectionManager extends EventEmitter {
       lastSeen: Date.now(),
       authenticated: false,
       userAgent,
-      ipAddress
+      ipAddress,
     };
-    
+
     this.connectionInfo.set(connectionId, connectionInfo);
 
     // Set up WebSocket event handlers
@@ -70,7 +63,7 @@ export class ConnectionManager extends EventEmitter {
 
     this.emit('connection_added', connectionId, connectionInfo);
     this.updateMetrics();
-    
+
     return connectionId;
   }
 
@@ -79,17 +72,17 @@ export class ConnectionManager extends EventEmitter {
    */
   removeConnection(connectionId: string): void {
     const connectionInfo = this.connectionInfo.get(connectionId);
-    
+
     if (connectionInfo) {
       // Remove from document session
       if (connectionInfo.documentId) {
         this.removeFromDocumentSession(connectionInfo.documentId, connectionId);
       }
-      
+
       // Clean up connection
       this.connections.delete(connectionId);
       this.connectionInfo.delete(connectionId);
-      
+
       this.emit('connection_removed', connectionId, connectionInfo);
       this.updateMetrics();
     }
@@ -99,7 +92,6 @@ export class ConnectionManager extends EventEmitter {
    * Authenticate a connection
    */
   async authenticateConnection(connectionId: string, authPayload: AuthPayload): Promise<boolean> {
-
     try {
       if (!this.config.enableAuthentication) {
         // Skip authentication if disabled
@@ -112,7 +104,7 @@ export class ConnectionManager extends EventEmitter {
 
       // Verify JWT token
       const decoded = jwt.verify(authPayload.token, this.config.jwtSecret) as any;
-      
+
       if (!decoded.userId) {
         throw new Error('Invalid token: missing userId');
       }
@@ -120,7 +112,6 @@ export class ConnectionManager extends EventEmitter {
       // Set authenticated connection info
       const permissions = authPayload.permissions || ['read', 'write'];
       return this.setConnectionAuthenticated(connectionId, decoded.userId, authPayload.documentId, permissions);
-      
     } catch (error) {
       console.error('Authentication failed:', error);
       return false;
@@ -137,7 +128,7 @@ export class ConnectionManager extends EventEmitter {
     permissions: string[]
   ): boolean {
     const connectionInfo = this.connectionInfo.get(connectionId);
-    
+
     if (!connectionInfo) {
       return false;
     }
@@ -161,13 +152,13 @@ export class ConnectionManager extends EventEmitter {
    */
   broadcastToDocument(documentId: string, message: WSMessage, excludeConnectionId?: string): void {
     const session = this.documentSessions.get(documentId);
-    
+
     if (!session) {
       return;
     }
 
     const messageStr = JSON.stringify(message);
-    
+
     for (const [connectionId, connectionInfo] of session.connections) {
       if (excludeConnectionId && connectionId === excludeConnectionId) {
         continue;
@@ -190,7 +181,7 @@ export class ConnectionManager extends EventEmitter {
    */
   sendToConnection(connectionId: string, message: WSMessage): boolean {
     const ws = this.connections.get(connectionId);
-    
+
     if (!ws || ws.readyState !== WebSocket.OPEN) {
       return false;
     }
@@ -239,7 +230,7 @@ export class ConnectionManager extends EventEmitter {
    */
   hasPermission(connectionId: string, permission: string): boolean {
     const connectionInfo = this.connectionInfo.get(connectionId);
-    return connectionInfo?.authenticated && connectionInfo.permissions.includes(permission) || false;
+    return (connectionInfo?.authenticated && connectionInfo.permissions.includes(permission)) || false;
   }
 
   /**
@@ -249,7 +240,7 @@ export class ConnectionManager extends EventEmitter {
     if (this.heartbeatInterval) {
       clearInterval(this.heartbeatInterval);
     }
-    
+
     if (this.metricsInterval) {
       clearInterval(this.metricsInterval);
     }
@@ -258,7 +249,7 @@ export class ConnectionManager extends EventEmitter {
     for (const ws of this.connections.values()) {
       ws.close();
     }
-    
+
     this.connections.clear();
     this.connectionInfo.clear();
     this.documentSessions.clear();
@@ -272,7 +263,7 @@ export class ConnectionManager extends EventEmitter {
       this.removeConnection(connectionId);
     });
 
-    ws.on('error', (error) => {
+    ws.on('error', error => {
       console.error(`WebSocket error for connection ${connectionId}:`, error);
       this.removeConnection(connectionId);
     });
@@ -291,20 +282,20 @@ export class ConnectionManager extends EventEmitter {
    */
   private addToDocumentSession(documentId: string, connectionId: string, connectionInfo: ConnectionInfo): void {
     let session = this.documentSessions.get(documentId);
-    
+
     if (!session) {
       session = {
         documentId,
         connections: new Map(),
         lastActivity: Date.now(),
-        version: 1
+        version: 1,
       };
       this.documentSessions.set(documentId, session);
     }
 
     session.connections.set(connectionId, connectionInfo);
     session.lastActivity = Date.now();
-    
+
     this.emit('user_joined_document', documentId, connectionInfo);
   }
 
@@ -313,7 +304,7 @@ export class ConnectionManager extends EventEmitter {
    */
   private removeFromDocumentSession(documentId: string, connectionId: string): void {
     const session = this.documentSessions.get(documentId);
-    
+
     if (!session) {
       return;
     }
@@ -343,7 +334,7 @@ export class ConnectionManager extends EventEmitter {
 
       for (const [connectionId, connectionInfo] of this.connectionInfo) {
         const ws = this.connections.get(connectionId);
-        
+
         if (!ws) {
           this.removeConnection(connectionId);
           continue;
@@ -388,7 +379,7 @@ export class ConnectionManager extends EventEmitter {
       messagesPerSecond: 0, // TODO: Implement message rate tracking
       uptime: Date.now() - this.startTime,
       memoryUsage: process.memoryUsage().heapUsed,
-      lastUpdated: Date.now()
+      lastUpdated: Date.now(),
     };
   }
 }

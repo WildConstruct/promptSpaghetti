@@ -1,7 +1,7 @@
 /**
  * Professional Keyboard Shortcuts System for Graph Editor
  * Phase 2: Critical Professional Features Implementation
- * 
+ *
  * Cinema 4D-inspired keyboard shortcuts with customization and help overlay
  */
 import React, { useState, useCallback, useEffect, useRef } from 'react';
@@ -55,7 +55,7 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
   onToggleFullscreen,
   customShortcuts = [],
   theme = 'cinema',
-  disabled = false
+  disabled = false,
 }) => {
   const [showHelp, setShowHelp] = useState(false);
   const [pressedKeys, setPressedKeys] = useState<Set<string>>(new Set());
@@ -242,7 +242,7 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
       category: 'navigation',
       enabled: true,
       global: true,
-    }
+    },
   ];
 
   // Initialize shortcuts
@@ -259,16 +259,16 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
       if (e.ctrlKey || e.metaKey) modifiers.push(e.ctrlKey ? 'ctrl' : 'meta');
       if (e.shiftKey) modifiers.push('shift');
       if (e.altKey) modifiers.push('alt');
-      
+
       // Update pressed keys for visual feedback
       setPressedKeys(prev => new Set([...prev, key]));
-      
+
       // Find matching shortcut
       const matchingShortcut = shortcuts.find(shortcut => {
         if (!shortcut.enabled) return false;
         const keyMatch = shortcut.key.toLowerCase() === key.toLowerCase();
-        const modifiersMatch = shortcut.modifiers.length === modifiers.length &&
-          shortcut.modifiers.every(mod => modifiers.includes(mod));
+        const modifiersMatch =
+          shortcut.modifiers.length === modifiers.length && shortcut.modifiers.every(mod => modifiers.includes(mod));
         return keyMatch && modifiersMatch;
       });
 
@@ -325,7 +325,7 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
     };
     const parts = [
       ...shortcut.modifiers.map(mod => modifierSymbols[mod]),
-      shortcut.key === ' ' ? 'Space' : shortcut.key.toUpperCase()
+      shortcut.key === ' ' ? 'Space' : shortcut.key.toUpperCase(),
     ];
     return parts.join(isMac ? '' : '+');
   }, []);
@@ -362,7 +362,7 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
         accent: 'var(--color-accent-orange)',
         hover: 'var(--color-ui-hover)',
         key: 'var(--color-bg-primary)',
-      }
+      },
     };
     return themes[theme];
   };
@@ -409,7 +409,7 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
               overflow: 'hidden',
               boxShadow: 'var(--shadow-xl)',
             }}
-            onClick={(e) => e.stopPropagation()}
+            onClick={e => e.stopPropagation()}
           >
             {/* Header */}
             <div
@@ -419,17 +419,21 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
                 background: styles.secondary,
               }}
             >
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}>
-                <h2 style={{
-                  margin: 0,
-                  fontSize: '24px',
-                  fontWeight: '600',
-                  color: styles.text,
-                }}>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <h2
+                  style={{
+                    margin: 0,
+                    fontSize: '24px',
+                    fontWeight: '600',
+                    color: styles.text,
+                  }}
+                >
                   ⌨️ Keyboard Shortcuts
                 </h2>
                 <button
@@ -446,11 +450,13 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
                   ×
                 </button>
               </div>
-              <p style={{
-                margin: '8px 0 0 0',
-                color: styles.textSecondary,
-                fontSize: '16px',
-              }}>
+              <p
+                style={{
+                  margin: '8px 0 0 0',
+                  color: styles.textSecondary,
+                  fontSize: '16px',
+                }}
+              >
                 Master the graph editor with these professional keyboard shortcuts
               </p>
             </div>
@@ -463,30 +469,37 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
               }}
             >
               {Object.entries(
-                shortcuts.reduce((acc, shortcut) => {
-                  if (!acc[shortcut.category]) acc[shortcut.category] = [];
-                  acc[shortcut.category].push(shortcut);
-                  return acc;
-                }, {} as Record<string, KeyboardShortcut[]>)
+                shortcuts.reduce(
+                  (acc, shortcut) => {
+                    if (!acc[shortcut.category]) acc[shortcut.category] = [];
+                    acc[shortcut.category].push(shortcut);
+                    return acc;
+                  },
+                  {} as Record<string, KeyboardShortcut[]>
+                )
               ).map(([category, categoryShortcuts]) => (
                 <div key={category} style={{ marginBottom: '32px' }}>
-                  <h3 style={{
-                    color: styles.accent,
-                    fontSize: '16px',
-                    fontWeight: '600',
-                    marginBottom: '16px',
-                    textTransform: 'capitalize',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                  }}>
+                  <h3
+                    style={{
+                      color: styles.accent,
+                      fontSize: '16px',
+                      fontWeight: '600',
+                      marginBottom: '16px',
+                      textTransform: 'capitalize',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                    }}
+                  >
                     {categoryIcons[category]} {category}
                   </h3>
-                  <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                    gap: '12px',
-                  }}>
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                      gap: '12px',
+                    }}
+                  >
                     {categoryShortcuts
                       .filter(shortcut => shortcut.enabled)
                       .map(shortcut => (
@@ -503,49 +516,58 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
                             transition: 'all var(--transition-fast)',
                           }}
                         >
-                          <div style={{
-                            color: styles.text,
-                            fontSize: '14px',
-                            fontWeight: '500',
-                          }}>
+                          <div
+                            style={{
+                              color: styles.text,
+                              fontSize: '14px',
+                              fontWeight: '500',
+                            }}
+                          >
                             {shortcut.description}
                           </div>
-                          <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '4px',
-                          }}>
-                            {formatShortcut(shortcut).split(/(\+|⌘|⇧|⌥|Ctrl|Alt)/).map((part, index) => {
-                              if (part === '+') {
+                          <div
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '4px',
+                            }}
+                          >
+                            {formatShortcut(shortcut)
+                              .split(/(\+|⌘|⇧|⌥|Ctrl|Alt)/)
+                              .map((part, index) => {
+                                if (part === '+') {
+                                  return (
+                                    <span
+                                      key={index}
+                                      style={{
+                                        color: styles.textSecondary,
+                                        fontSize: '12px',
+                                        margin: '0 2px',
+                                      }}
+                                    >
+                                      +
+                                    </span>
+                                  );
+                                }
                                 return (
-                                  <span key={index} style={{
-                                    color: styles.textSecondary,
-                                    fontSize: '12px',
-                                    margin: '0 2px',
-                                  }}>
-                                    +
-                                  </span>
+                                  <kbd
+                                    key={index}
+                                    style={{
+                                      background: styles.key,
+                                      border: `1px solid ${styles.border}`,
+                                      borderRadius: '4px',
+                                      padding: '4px 8px',
+                                      fontSize: '11px',
+                                      fontWeight: '600',
+                                      color: styles.text,
+                                      fontFamily: 'monospace',
+                                      boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
+                                    }}
+                                  >
+                                    {part}
+                                  </kbd>
                                 );
-                              }
-                              return (
-                                <kbd
-                                  key={index}
-                                  style={{
-                                    background: styles.key,
-                                    border: `1px solid ${styles.border}`,
-                                    borderRadius: '4px',
-                                    padding: '4px 8px',
-                                    fontSize: '11px',
-                                    fontWeight: '600',
-                                    color: styles.text,
-                                    fontFamily: 'monospace',
-                                    boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
-                                  }}
-                                >
-                                  {part}
-                                </kbd>
-                              );
-                            })}
+                              })}
                           </div>
                         </div>
                       ))}
@@ -564,16 +586,24 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
                 alignItems: 'center',
               }}
             >
-              <div style={{
-                fontSize: '12px',
-                color: styles.textSecondary,
-              }}>
-                Press <kbd style={{
-                  background: styles.key,
-                  padding: '2px 6px',
-                  borderRadius: '3px',
-                  fontSize: '11px',
-                }}>Esc</kbd> or click outside to close
+              <div
+                style={{
+                  fontSize: '12px',
+                  color: styles.textSecondary,
+                }}
+              >
+                Press{' '}
+                <kbd
+                  style={{
+                    background: styles.key,
+                    padding: '2px 6px',
+                    borderRadius: '3px',
+                    fontSize: '11px',
+                  }}
+                >
+                  Esc
+                </kbd>{' '}
+                or click outside to close
               </div>
               <button
                 onClick={() => setShowHelp(false)}
@@ -612,26 +642,32 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
             fontFamily: 'var(--font-family-primary)',
           }}
         >
-          <div style={{
-            color: styles.accent,
-            fontSize: '48px',
-            marginBottom: '16px',
-          }}>
+          <div
+            style={{
+              color: styles.accent,
+              fontSize: '48px',
+              marginBottom: '16px',
+            }}
+          >
             ⌨️
           </div>
-          <div style={{
-            color: styles.text,
-            fontSize: '18px',
-            fontWeight: '600',
-            marginBottom: '8px',
-          }}>
+          <div
+            style={{
+              color: styles.text,
+              fontSize: '18px',
+              fontWeight: '600',
+              marginBottom: '8px',
+            }}
+          >
             Recording new shortcut...
           </div>
-          <div style={{
-            color: styles.textSecondary,
-            fontSize: '14px',
-            marginBottom: '16px',
-          }}>
+          <div
+            style={{
+              color: styles.textSecondary,
+              fontSize: '14px',
+              marginBottom: '16px',
+            }}
+          >
             Press the key combination you want to use
           </div>
           <button

@@ -24,8 +24,8 @@ The test suite generates 50 separate test cases, one for each seed value from 1-
 
 ```typescript
 const seeds = Array.from({ length: 50 }, (_, i) => i + 1);
-  
-test.each(seeds)('Seed %i produces deterministic output', async (seed) => {
+
+test.each(seeds)('Seed %i produces deterministic output', async seed => {
   // Test with this specific seed
   // ...
   expect(outputs[0]).toMatchSnapshot(`seed-${seed}`);
@@ -106,6 +106,7 @@ coverageThreshold: {
 ```
 
 This ensures that:
+
 1. The overall codebase maintains at least 80% coverage
 2. Critical execution components maintain at least 90% coverage
 
@@ -113,10 +114,10 @@ This ensures that:
 
 As of the last update, our coverage metrics stand at:
 
-| File                        | Statements | Branches | Functions | Lines   |
-|----------------------------|------------|----------|-----------|--------|
-| engine.ts                  | 97.43%     | 92.3%    | 100%      | 97.14% |
-| packages/core/runtime/index.ts | 83.78% | 100%    | 80%       | 84.84% |
+| File                           | Statements | Branches | Functions | Lines  |
+| ------------------------------ | ---------- | -------- | --------- | ------ |
+| engine.ts                      | 97.43%     | 92.3%    | 100%      | 97.14% |
+| packages/core/runtime/index.ts | 83.78%     | 100%     | 80%       | 84.84% |
 
 The `engine.ts` file now meets all coverage thresholds, but `runtime/index.ts` still requires additional tests to achieve the required 90% coverage threshold.
 
@@ -147,11 +148,13 @@ npm test -- server/src/__tests__/determinism.test.ts server/src/__tests__/engine
 For checking specific implementations:
 
 1. Main determinism matrix (50 seeds):
+
    ```bash
    npm test -- server/src/__tests__/determinism.test.ts
    ```
 
 2. Node type coverage tests:
+
    ```bash
    npm test -- server/src/__tests__/engine-coverage.test.ts
    ```

@@ -19,7 +19,7 @@ class EnumAndObjectSyntaxFixer {
       'packages/core/**/*.tsx',
       'client/src/**/*.ts',
       'client/src/**/*.tsx',
-      'server/src/**/*.ts'
+      'server/src/**/*.ts',
     ];
 
     const allFiles = [];
@@ -48,19 +48,19 @@ class EnumAndObjectSyntaxFixer {
 
     // Fix enum syntax issues
     content = this.fixEnumSyntax(content, filePath);
-    
+
     // Fix malformed object literals
     content = this.fixObjectLiterals(content, filePath);
-    
+
     // Fix orphaned commas and brackets
     content = this.fixOrphanedSyntax(content, filePath);
-    
+
     // Fix malformed arrow functions
     content = this.fixArrowFunctions(content, filePath);
-    
+
     // Fix malformed return statements
     content = this.fixReturnStatements(content, filePath);
-    
+
     // Fix export statements
     content = this.fixExportStatements(content, filePath);
 
@@ -76,18 +76,11 @@ class EnumAndObjectSyntaxFixer {
 
   fixEnumSyntax(content, filePath) {
     // Fix enum member syntax - missing commas between members
-    content = content.replace(
-      /export enum (\w+) \{[\s\S]*?\}/g,
-      (match) => {
-        return match.replace(
-          /(\w+\s*=\s*'[^']*')\s*(\w+\s*=)/g,
-          '$1,\n  $2'
-        ).replace(
-          /(\w+\s*=\s*'[^']*')\s*\}/g,
-          '$1\n}'
-        );
-      }
-    );
+    content = content.replace(/export enum (\w+) \{[\s\S]*?\}/g, match => {
+      return match
+        .replace(/(\w+\s*=\s*'[^']*')\s*(\w+\s*=)/g, '$1,\n  $2')
+        .replace(/(\w+\s*=\s*'[^']*')\s*\}/g, '$1\n}');
+    });
 
     // Fix specific enum patterns that are malformed
     content = content.replace(
@@ -135,11 +128,11 @@ class EnumAndObjectSyntaxFixer {
     content = content.replace(/\{\s*,/g, '{');
     content = content.replace(/,\s*,/g, ',');
     content = content.replace(/,\s*\}/g, '\n}');
-    
+
     // Fix malformed object brackets
     content = content.replace(/\{\)\s*/g, '{\n  ');
     content = content.replace(/\(\{/g, '({');
-    
+
     // Fix state initialization patterns
     content = content.replace(
       /const \[([^,]+), ([^\]]+)\] = useState\(\{\)\s*([^}]*)\s*\}\);/g,
@@ -153,10 +146,10 @@ class EnumAndObjectSyntaxFixer {
     // Fix orphaned brackets and commas
     content = content.replace(/^\s*\}\s*[),]\s*$/gm, '  }');
     content = content.replace(/^\s*[),]\s*$/gm, '');
-    
+
     // Fix trailing commas in wrong places
     content = content.replace(/,\s*;/g, ';');
-    
+
     return content;
   }
 
@@ -165,18 +158,18 @@ class EnumAndObjectSyntaxFixer {
     content = content.replace(/=>\s*\(\)\s*;/g, '=> ();');
     content = content.replace(/=>\s*\(\{/g, '=> ({');
     content = content.replace(/\(\)\s*;/g, '();');
-    
+
     // Fix callback patterns
     content = content.replace(/useCallback\(\(\)\s*=>\s*\{,/g, 'useCallback(() => {');
-    
+
     return content;
   }
 
   fixReturnStatements(content, filePath) {
-    // Fix return statement patterns  
+    // Fix return statement patterns
     content = content.replace(/return\s*\(\)\s*;/g, 'return ();');
     content = content.replace(/return\s*\(\{/g, 'return ({');
-    
+
     return content;
   }
 
@@ -184,7 +177,7 @@ class EnumAndObjectSyntaxFixer {
     // Fix malformed export statements
     content = content.replace(/^export\s*$/gm, '');
     content = content.replace(/export\s+export\s+/g, 'export ');
-    
+
     return content;
   }
 
@@ -192,13 +185,13 @@ class EnumAndObjectSyntaxFixer {
     const originalLines = original.split('\n');
     const modifiedLines = modified.split('\n');
     let changes = 0;
-    
+
     for (let i = 0; i < Math.max(originalLines.length, modifiedLines.length); i++) {
       if (originalLines[i] !== modifiedLines[i]) {
         changes++;
       }
     }
-    
+
     return changes;
   }
 }

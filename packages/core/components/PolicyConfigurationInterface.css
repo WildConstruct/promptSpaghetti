@@ -9,7 +9,13 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
   background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -179,7 +185,9 @@
   border: 1px solid #d1d5db;
   border-radius: 6px;
   font-size: 0.875rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
   background: #ffffff;
 }
 
@@ -226,7 +234,7 @@
   background: #f8fafc;
 }
 
-.checkbox-label input[type="checkbox"] {
+.checkbox-label input[type='checkbox'] {
   width: auto;
   margin: 0;
 }
@@ -506,47 +514,47 @@
   .policy-configuration-interface {
     padding: 1rem;
   }
-  
+
   .policy-config-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
-  
+
   .policy-info {
     flex-wrap: wrap;
   }
-  
+
   .policy-config-tabs {
     flex-direction: column;
   }
-  
+
   .tab-button {
     text-align: left;
   }
-  
+
   .checkbox-group {
     grid-template-columns: 1fr;
   }
-  
+
   .customization-fields {
     grid-template-columns: 1fr;
   }
-  
+
   .preview-section dl {
     grid-template-columns: 1fr;
     gap: 0.25rem;
   }
-  
+
   .preview-section dt {
     font-weight: 600;
     margin-bottom: 0.25rem;
   }
-  
+
   .policy-config-actions {
     flex-direction: column;
   }
-  
+
   .primary-button,
   .secondary-button,
   .deploy-button {
@@ -558,11 +566,11 @@
   .policy-config-title {
     font-size: 1.5rem;
   }
-  
+
   .config-section h3 {
     font-size: 1.25rem;
   }
-  
+
   .policy-configuration-interface {
     padding: 0.75rem;
   }
@@ -573,7 +581,7 @@
   .config-section {
     animation: none;
   }
-  
+
   .tab-button,
   .primary-button,
   .secondary-button,
@@ -588,11 +596,11 @@
   .policy-configuration-interface {
     border-width: 2px;
   }
-  
+
   .tab-button.active {
     border: 2px solid #3b82f6;
   }
-  
+
   .form-group input:focus,
   .form-group select:focus,
   .form-group textarea:focus {
@@ -636,12 +644,12 @@
   .policy-config-actions {
     display: none;
   }
-  
+
   .policy-configuration-interface {
     box-shadow: none;
     padding: 0;
   }
-  
+
   .config-section {
     page-break-inside: avoid;
   }

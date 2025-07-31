@@ -13,12 +13,12 @@ export interface MobileButtonProps extends ButtonProps {
    * Make button full width on mobile
    */
   mobileFullWidth?: boolean;
-  
+
   /**
    * Add haptic feedback on press (mobile only)
    */
   hapticFeedback?: boolean;
-  
+
   /**
    * Show loading spinner inline on mobile
    */
@@ -37,16 +37,16 @@ export const MobileButton: React.FC<MobileButtonProps> = ({
   ...props
 }) => {
   const { isMobile, isTouch } = useDeviceDetection();
-  
+
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     // Haptic feedback for supported devices
     if (hapticFeedback && isTouch && 'vibrate' in navigator) {
       navigator.vibrate(10); // Light haptic feedback
     }
-    
+
     onClick?.(e);
   };
-  
+
   // Mobile-specific styles
   const mobileButtonStyles: React.CSSProperties = {
     minHeight: TOUCH_TARGETS.preferred,
@@ -54,26 +54,22 @@ export const MobileButton: React.FC<MobileButtonProps> = ({
     // Larger tap area with padding
     padding: '12px 24px',
     // Full width on mobile if specified
-    width: (isMobile && mobileFullWidth) ? '100%' : undefined,
+    width: isMobile && mobileFullWidth ? '100%' : undefined,
     // Prevent double-tap zoom
     touchAction: 'manipulation',
     // Remove tap highlight on iOS
     WebkitTapHighlightColor: 'transparent',
     // Ensure text doesn't wrap
     whiteSpace: 'nowrap',
-    ...style
+    ...style,
   };
-  
+
   return (
     <Button
       {...props}
       size={size}
       onClick={onClick ? handleClick : undefined}
-      className={cn(
-        'mobile-button',
-        isTouch && 'touch-device',
-        className
-      )}
+      className={cn('mobile-button', isTouch && 'touch-device', className)}
       style={mobileButtonStyles}
       loading={mobileLoading || props.loading}
     >
@@ -106,26 +102,26 @@ export const MobileFAB: React.FC<MobileFABProps> = ({
     borderRadius: '50%',
     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
     ...mobileStyles.tapHighlight,
-    ...mobileStyles.noSelect
+    ...mobileStyles.noSelect,
   };
-  
+
   // Position-specific styles
   switch (position) {
-  case 'bottom-right':
-    positionStyles.bottom = `calc(${offset}px + env(safe-area-inset-bottom))`;
-    positionStyles.right = `calc(${offset}px + env(safe-area-inset-right))`;
-    break;
-  case 'bottom-left':
-    positionStyles.bottom = `calc(${offset}px + env(safe-area-inset-bottom))`;
-    positionStyles.left = `calc(${offset}px + env(safe-area-inset-left))`;
-    break;
-  case 'bottom-center':
-    positionStyles.bottom = `calc(${offset}px + env(safe-area-inset-bottom))`;
-    positionStyles.left = '50%';
-    positionStyles.transform = 'translateX(-50%)';
-    break;
+    case 'bottom-right':
+      positionStyles.bottom = `calc(${offset}px + env(safe-area-inset-bottom))`;
+      positionStyles.right = `calc(${offset}px + env(safe-area-inset-right))`;
+      break;
+    case 'bottom-left':
+      positionStyles.bottom = `calc(${offset}px + env(safe-area-inset-bottom))`;
+      positionStyles.left = `calc(${offset}px + env(safe-area-inset-left))`;
+      break;
+    case 'bottom-center':
+      positionStyles.bottom = `calc(${offset}px + env(safe-area-inset-bottom))`;
+      positionStyles.left = '50%';
+      positionStyles.transform = 'translateX(-50%)';
+      break;
   }
-  
+
   return (
     <MobileButton
       {...props}
@@ -133,7 +129,7 @@ export const MobileFAB: React.FC<MobileFABProps> = ({
       className={cn('mobile-fab', className)}
       style={{
         ...positionStyles,
-        ...style
+        ...style,
       }}
     >
       {children}

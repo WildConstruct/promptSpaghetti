@@ -34,15 +34,15 @@ export const WebInput: React.FC<WebInputProps> = ({
     // Web-specific keyboard shortcuts
     if (e.ctrlKey || e.metaKey) {
       switch (e.key) {
-      case 'a':
-        // Select all - let browser handle this
-        break;
-      case 'z':
-        // Undo - let browser handle this
-        break;
-      case 'y':
-        // Redo - let browser handle this
-        break;
+        case 'a':
+          // Select all - let browser handle this
+          break;
+        case 'z':
+          // Undo - let browser handle this
+          break;
+        case 'y':
+          // Redo - let browser handle this
+          break;
       }
     }
 
@@ -67,7 +67,7 @@ export const WebInput: React.FC<WebInputProps> = ({
         ...props.style,
         // Web-specific styling
         WebkitTapHighlightColor: 'transparent',
-        WebkitAppearance: 'none'
+        WebkitAppearance: 'none',
       }}
     />
   );
@@ -100,11 +100,11 @@ export const WebTextArea: React.FC<WebTextAreaProps> = ({
     // Web-specific keyboard shortcuts for text areas
     if (e.ctrlKey || e.metaKey) {
       switch (e.key) {
-      case 'Enter':
-        // Ctrl+Enter for submit in some contexts
-        e.preventDefault();
-        // Could trigger onSubmit callback if provided
-        break;
+        case 'Enter':
+          // Ctrl+Enter for submit in some contexts
+          e.preventDefault();
+          // Could trigger onSubmit callback if provided
+          break;
       }
     }
 
@@ -115,14 +115,14 @@ export const WebTextArea: React.FC<WebTextAreaProps> = ({
       const start = textarea.selectionStart;
       const end = textarea.selectionEnd;
       const value = textarea.value;
-      
+
       if (e.shiftKey) {
         // Remove indentation
         const beforeCursor = value.substring(0, start);
         const afterCursor = value.substring(end);
         const lines = beforeCursor.split('\n');
         const currentLine = lines[lines.length - 1];
-        
+
         if (currentLine.startsWith('  ')) {
           lines[lines.length - 1] = currentLine.substring(2);
           const newValue = lines.join('\n') + afterCursor;
@@ -161,7 +161,7 @@ export const WebTextArea: React.FC<WebTextAreaProps> = ({
         // Web-specific styling
         WebkitTapHighlightColor: 'transparent',
         WebkitAppearance: 'none',
-        resize: 'vertical'
+        resize: 'vertical',
       }}
     />
   );

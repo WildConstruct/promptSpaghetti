@@ -9,29 +9,31 @@ import { RedisCacheConfig } from './engines/RedisTranslationCache';
  * Configuration for the prompt targeting system
  */
 export interface PromptTargetingSystemConfig {
-    /** Cache configuration */
-    cache?: {
-        enabled?: boolean;
-        type?: 'redis' | 'memory';
-        config?: RedisCacheConfig;
-    };
-    /** Mapping engine configuration */
-    mapping?: MappingEngineConfig;
-    /** Enable detailed logging */
-    enableLogging?: boolean;
+  /** Cache configuration */
+  cache?: {
+    enabled?: boolean;
+    type?: 'redis' | 'memory';
+    config?: RedisCacheConfig;
+  };
+  /** Mapping engine configuration */
+  mapping?: MappingEngineConfig;
+  /** Enable detailed logging */
+  enableLogging?: boolean;
 }
 /**
  * Complete prompt targeting system
  */
 export interface PromptTargetingSystem {
-    registry: AdaptorRegistry;
-    engine: MappingEngine;
-    cache?: TranslationCache;
+  registry: AdaptorRegistry;
+  engine: MappingEngine;
+  cache?: TranslationCache;
 }
 /**
  * Create a complete prompt targeting system with all components
  */
-export declare function createPromptTargetingSystem(config?: PromptTargetingSystemConfig): Promise<PromptTargetingSystem>;
+export declare function createPromptTargetingSystem(
+  config?: PromptTargetingSystemConfig
+): Promise<PromptTargetingSystem>;
 /**
  * Create a basic prompt targeting system for development/testing
  */

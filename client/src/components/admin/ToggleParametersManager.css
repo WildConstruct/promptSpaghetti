@@ -137,7 +137,9 @@
   border: 1px solid var(--border-color, #d1d5db);
   border-radius: 6px;
   font-size: 14px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .form-control:focus {
@@ -229,7 +231,9 @@
   border: 1px solid var(--border-color, #e5e7eb);
   border-radius: 8px;
   padding: 16px;
-  transition: opacity 0.2s ease, border-color 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .variant-item.disabled {
@@ -310,7 +314,9 @@
   border-radius: 8px;
   padding: 16px;
   margin-bottom: 12px;
-  transition: opacity 0.2s ease, border-color 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .rule-item.disabled {
@@ -574,11 +580,11 @@
   .form-control {
     border-width: 2px;
   }
-  
+
   .btn {
     border-width: 2px;
   }
-  
+
   .variant-item,
   .rule-item {
     border-width: 2px;

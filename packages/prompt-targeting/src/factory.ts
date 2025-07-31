@@ -3,11 +3,7 @@
  * Epic 10.1.2 - Common Interface Definition
  */
 
-import {
-  AdaptorRegistry,
-  MappingEngine,
-  TranslationCache
-} from './types';
+import { AdaptorRegistry, MappingEngine, TranslationCache } from './types';
 import { DefaultAdaptorRegistry } from './adaptors/AdaptorRegistry';
 import { DefaultMappingEngine, MappingEngineConfig } from './engines/MappingEngine';
 import { RedisTranslationCache, RedisCacheConfig } from './engines/RedisTranslationCache';
@@ -44,16 +40,16 @@ export async function createPromptTargetingSystem(
   config: PromptTargetingSystemConfig = {}
 ): Promise<PromptTargetingSystem> {
   const logger = console;
-  
+
   // Create registry
   const registry = new DefaultAdaptorRegistry();
-  
+
   // Create cache if enabled
   let cache: TranslationCache | undefined;
   if (config.cache?.enabled !== false) {
     if (config.cache?.type === 'redis' || !config.cache?.type) {
       cache = new RedisTranslationCache(config.cache?.config);
-      
+
       // Connect to Redis
       try {
         await (cache as RedisTranslationCache).connect();
@@ -69,24 +65,24 @@ export async function createPromptTargetingSystem(
     }
     // TODO: Add memory cache implementation
   }
-  
+
   // Create mapping engine
   const engine = new DefaultMappingEngine(registry, cache, {
     enableLogging: config.enableLogging,
-    ...config.mapping
+    ...config.mapping,
   });
-  
+
   if (config.enableLogging) {
     logger.log('✓ Prompt targeting system created');
     logger.log(`  Registry: ${registry.constructor.name}`);
     logger.log(`  Engine: ${engine.constructor.name}`);
     logger.log(`  Cache: ${cache ? cache.constructor.name : 'disabled'}`);
   }
-  
+
   return {
     registry,
     engine,
-    cache
+    cache,
   };
 }
 
@@ -97,12 +93,12 @@ export function createBasicPromptTargetingSystem(): PromptTargetingSystem {
   const registry = new DefaultAdaptorRegistry();
   const engine = new DefaultMappingEngine(registry, undefined, {
     enableCaching: false,
-    enableLogging: true
+    enableLogging: true,
   });
-  
+
   return {
     registry,
-    engine
+    engine,
   };
 }
 
@@ -117,15 +113,15 @@ export async function createProductionPromptTargetingSystem(
     cache: {
       enabled: true,
       type: 'redis',
-      config: redisConfig
+      config: redisConfig,
     },
     mapping: {
       enableCaching: true,
       maxConcurrency: 20,
       translationTimeout: 30000,
       enableLogging: true,
-      ...mappingConfig
+      ...mappingConfig,
     },
-    enableLogging: true
+    enableLogging: true,
   });
 }

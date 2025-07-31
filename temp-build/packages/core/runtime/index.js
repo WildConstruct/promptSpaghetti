@@ -9,121 +9,119 @@ import { RuntimeNode } from './types';
 export { RuntimeNode } from './types';
 /* ------------------------- Core node runtimes ------------------------- */
 export class WeightedChoiceNode extends RuntimeNode {
-    constructor(id, choices) {
-        super(id);
-        this.choices = choices;
+  constructor(id, choices) {
+    super(id);
+    this.choices = choices;
+  }
+  run(ctx) {
+    const total = this.choices.reduce((sum, c) => sum + c.weight, 0);
+    let r = seededRandom(ctx.seed) * total;
+    for (const c of this.choices) {
+      if (r < c.weight) return c.value;
+      r -= c.weight;
     }
-    run(ctx) {
-        const total = this.choices.reduce((sum, c) => sum + c.weight, 0);
-        let r = seededRandom(ctx.seed) * total;
-        for (const c of this.choices) {
-            if (r < c.weight)
-                return c.value;
-            r -= c.weight;
-        }
-        return this.choices[this.choices.length - 1].value;
-    }
+    return this.choices[this.choices.length - 1].value;
+  }
 }
 export class ConcatNode extends RuntimeNode {
-    constructor(id, inputs) {
-        super(id);
-        this.inputs = inputs;
-    }
-    run() {
-        return this.inputs.join('');
-    }
+  constructor(id, inputs) {
+    super(id);
+    this.inputs = inputs;
+  }
+  run() {
+    return this.inputs.join('');
+  }
 }
 export class OutputNode extends RuntimeNode {
-    constructor(id, input) {
-        super(id);
-        this.input = input;
-    }
-    run() {
-        return this.input;
-    }
+  constructor(id, input) {
+    super(id);
+    this.input = input;
+  }
+  run() {
+    return this.input;
+  }
 }
 export class IncludeNode extends RuntimeNode {
-    constructor(id, name, lookup) {
-        super(id);
-        this.name = name;
-        this.lookup = lookup;
+  constructor(id, name, lookup) {
+    super(id);
+    this.name = name;
+    this.lookup = lookup;
+  }
+  run(ctx) {
+    // Security: Validate lookup object and key
+    if (!this.lookup || typeof this.lookup !== 'object') {
+      return ctx.variables['defaultText'] || '';
     }
-    run(ctx) {
-        // Security: Validate lookup object and key
-        if (!this.lookup || typeof this.lookup !== 'object') {
-            return ctx.variables['defaultText'] || '';
-        }
-        // Security: Prevent prototype pollution and dangerous property access
-        if (this.name.includes('__proto__') ||
-            this.name.includes('constructor') ||
-            this.name.includes('prototype') ||
-            !Object.prototype.hasOwnProperty.call(this.lookup, this.name)) {
-            return ctx.variables['defaultText'] || '';
-        }
-        const result = this.lookup[this.name];
-        // Security: Ensure result is a safe string
-        if (typeof result !== 'string') {
-            return ctx.variables['defaultText'] || '';
-        }
-        return result;
+    // Security: Prevent prototype pollution and dangerous property access
+    if (
+      this.name.includes('__proto__') ||
+      this.name.includes('constructor') ||
+      this.name.includes('prototype') ||
+      !Object.prototype.hasOwnProperty.call(this.lookup, this.name)
+    ) {
+      return ctx.variables['defaultText'] || '';
     }
+    const result = this.lookup[this.name];
+    // Security: Ensure result is a safe string
+    if (typeof result !== 'string') {
+      return ctx.variables['defaultText'] || '';
+    }
+    return result;
+  }
 }
 export class SetVariableNode extends RuntimeNode {
-    constructor(id, key, value) {
-        super(id);
-        this.key = key;
-        this.value = value;
+  constructor(id, key, value) {
+    super(id);
+    this.key = key;
+    this.value = value;
+  }
+  run(ctx) {
+    // Security: Validate variable name using the new alphanumeric pattern with 64 char limit
+    if (!SecurityValidation.validateVariableName(this.key)) {
+      return; // Silently ignore invalid variable names
     }
-    run(ctx) {
-        // Security: Validate variable name using the new alphanumeric pattern with 64 char limit
-        if (!SecurityValidation.validateVariableName(this.key)) {
-            return; // Silently ignore invalid variable names
-        }
-        // Security: Validate value is safe
-        if (this.value === null || this.value === undefined) {
-            ctx.variables[this.key] = this.value;
-            return;
-        }
-        // Only allow safe primitive types and simple objects/arrays
-        const valueType = typeof this.value;
-        if (valueType === 'string' || valueType === 'number' || valueType === 'boolean') {
-            ctx.variables[this.key] = this.value;
-        }
-        else if (Array.isArray(this.value)) {
-            // Deep clone to prevent reference pollution
-            ctx.variables[this.key] = JSON.parse(JSON.stringify(this.value));
-        }
-        else if (valueType === 'object') {
-            // Deep clone to prevent reference pollution
-            ctx.variables[this.key] = JSON.parse(JSON.stringify(this.value));
-        }
-        else {
-            // Reject functions and other dangerous types
-            return;
-        }
+    // Security: Validate value is safe
+    if (this.value === null || this.value === undefined) {
+      ctx.variables[this.key] = this.value;
+      return;
     }
+    // Only allow safe primitive types and simple objects/arrays
+    const valueType = typeof this.value;
+    if (valueType === 'string' || valueType === 'number' || valueType === 'boolean') {
+      ctx.variables[this.key] = this.value;
+    } else if (Array.isArray(this.value)) {
+      // Deep clone to prevent reference pollution
+      ctx.variables[this.key] = JSON.parse(JSON.stringify(this.value));
+    } else if (valueType === 'object') {
+      // Deep clone to prevent reference pollution
+      ctx.variables[this.key] = JSON.parse(JSON.stringify(this.value));
+    } else {
+      // Reject functions and other dangerous types
+      return;
+    }
+  }
 }
 export class GetVariableNode extends RuntimeNode {
-    constructor(id, key) {
-        super(id);
-        this.key = key;
+  constructor(id, key) {
+    super(id);
+    this.key = key;
+  }
+  run(ctx) {
+    // Security: Validate variable name using the same validation as SetVariable
+    if (!SecurityValidation.validateVariableName(this.key)) {
+      return undefined; // Return undefined for invalid variable names
     }
-    run(ctx) {
-        // Security: Validate variable name using the same validation as SetVariable
-        if (!SecurityValidation.validateVariableName(this.key)) {
-            return undefined; // Return undefined for invalid variable names
-        }
-        // Security: Only return value if it exists as own property
-        if (!Object.prototype.hasOwnProperty.call(ctx.variables, this.key)) {
-            return undefined;
-        }
-        return ctx.variables[this.key];
+    // Security: Only return value if it exists as own property
+    if (!Object.prototype.hasOwnProperty.call(ctx.variables, this.key)) {
+      return undefined;
     }
+    return ctx.variables[this.key];
+  }
 }
 /* ----------------------------- Utilities ------------------------------ */
 import seedrandom from 'seedrandom';
 function seededRandom(seed) {
-    return seedrandom(String(seed))();
+  return seedrandom(String(seed))();
 }
 /* ----------------------------- Advanced Nodes (Epic 7) ------------------------------ */
 // Re-export all advanced node capabilities

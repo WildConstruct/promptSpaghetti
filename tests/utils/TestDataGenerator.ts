@@ -1,6 +1,6 @@
 /**
  * Test Data Generator - Comprehensive test data creation utilities
- * 
+ *
  * Provides deterministic test data generation for various testing scenarios
  * including graph generation, user data, performance data, and edge cases.
  */
@@ -14,7 +14,7 @@ export enum TestScenario {
   CIRCULAR_DEPENDENCY = 'circular-dependency',
   DEEP_NESTING = 'deep-nesting',
   MEMORY_INTENSIVE = 'memory-intensive',
-  PERFORMANCE_STRESS = 'performance-stress'
+  PERFORMANCE_STRESS = 'performance-stress',
 }
 
 export enum DataPattern {
@@ -23,7 +23,7 @@ export enum DataPattern {
   WEIGHTED = 'weighted',
   NESTED = 'nested',
   SPARSE = 'sparse',
-  DENSE = 'dense'
+  DENSE = 'dense',
 }
 
 export interface GraphGenerationOptions {
@@ -66,7 +66,7 @@ export class TestDataGenerator {
 
   private random(seed: number, min: number = 0, max: number = 1): number {
     const r = this.prng(seed);
-    return min + (r * (max - min));
+    return min + r * (max - min);
   }
 
   private randomInt(seed: number, min: number, max: number): number {
@@ -80,26 +80,26 @@ export class TestDataGenerator {
     const { nodeCount, seed, scenario, complexity, includeAdvancedNodes } = options;
 
     switch (scenario) {
-    case TestScenario.SIMPLE_LINEAR:
-      return this.generateLinearGraph(nodeCount, seed);
-      
-    case TestScenario.COMPLEX_BRANCHING:
-      return this.generateBranchingGraph(nodeCount, seed, complexity);
-      
-    case TestScenario.CIRCULAR_DEPENDENCY:
-      return this.generateCircularGraph(nodeCount, seed);
-      
-    case TestScenario.DEEP_NESTING:
-      return this.generateDeepNestedGraph(nodeCount, seed);
-      
-    case TestScenario.MEMORY_INTENSIVE:
-      return this.generateMemoryIntensiveGraph(nodeCount, seed);
-      
-    case TestScenario.PERFORMANCE_STRESS:
-      return this.generatePerformanceStressGraph(nodeCount, seed, includeAdvancedNodes);
-      
-    default:
-      return this.generateStandardGraph(nodeCount, seed);
+      case TestScenario.SIMPLE_LINEAR:
+        return this.generateLinearGraph(nodeCount, seed);
+
+      case TestScenario.COMPLEX_BRANCHING:
+        return this.generateBranchingGraph(nodeCount, seed, complexity);
+
+      case TestScenario.CIRCULAR_DEPENDENCY:
+        return this.generateCircularGraph(nodeCount, seed);
+
+      case TestScenario.DEEP_NESTING:
+        return this.generateDeepNestedGraph(nodeCount, seed);
+
+      case TestScenario.MEMORY_INTENSIVE:
+        return this.generateMemoryIntensiveGraph(nodeCount, seed);
+
+      case TestScenario.PERFORMANCE_STRESS:
+        return this.generatePerformanceStressGraph(nodeCount, seed, includeAdvancedNodes);
+
+      default:
+        return this.generateStandardGraph(nodeCount, seed);
     }
   }
 
@@ -110,7 +110,7 @@ export class TestDataGenerator {
     // Create linear chain of nodes
     for (let i = 0; i < nodeCount; i++) {
       const nodeId = `node_${i}`;
-      
+
       if (i === 0) {
         // Start with input node
         nodes.push({
@@ -118,9 +118,9 @@ export class TestDataGenerator {
           type: 'SetVariable',
           data: {
             variableName: 'input',
-            value: `Test value ${i}`
+            value: `Test value ${i}`,
           },
-          position: { x: i * 200, y: 100 }
+          position: { x: i * 200, y: 100 },
         });
       } else if (i === nodeCount - 1) {
         // End with output node
@@ -128,26 +128,26 @@ export class TestDataGenerator {
           id: nodeId,
           type: 'Output',
           data: {},
-          position: { x: i * 200, y: 100 }
+          position: { x: i * 200, y: 100 },
         });
         edges.push({
-          id: `edge_${i-1}_${i}`,
-          source: `node_${i-1}`,
-          target: nodeId
+          id: `edge_${i - 1}_${i}`,
+          source: `node_${i - 1}`,
+          target: nodeId,
         });
       } else {
         // Middle nodes - concat or weighted choice
         const nodeType = this.randomInt(seed + i, 0, 1) === 0 ? 'Concat' : 'WeightedChoice';
-        
+
         if (nodeType === 'Concat') {
           nodes.push({
             id: nodeId,
             type: 'Concat',
             data: {
               separator: ' ',
-              texts: [`Step ${i}`, '{input}']
+              texts: [`Step ${i}`, '{input}'],
             },
-            position: { x: i * 200, y: 100 }
+            position: { x: i * 200, y: 100 },
           });
         } else {
           nodes.push({
@@ -156,17 +156,17 @@ export class TestDataGenerator {
             data: {
               choices: [
                 { value: `Choice A ${i}`, weight: 1 },
-                { value: `Choice B ${i}`, weight: 1 }
-              ]
+                { value: `Choice B ${i}`, weight: 1 },
+              ],
             },
-            position: { x: i * 200, y: 100 }
+            position: { x: i * 200, y: 100 },
           });
         }
-        
+
         edges.push({
-          id: `edge_${i-1}_${i}`,
-          source: `node_${i-1}`,
-          target: nodeId
+          id: `edge_${i - 1}_${i}`,
+          source: `node_${i - 1}`,
+          target: nodeId,
         });
       }
     }
@@ -174,7 +174,7 @@ export class TestDataGenerator {
     return {
       seed,
       nodes,
-      edges: edges as GraphEdge[]
+      edges: edges as GraphEdge[],
     };
   }
 
@@ -185,7 +185,7 @@ export class TestDataGenerator {
   ): Graph {
     const nodes: Node[] = [];
     const edges: GraphEdge[] = [];
-    
+
     const branchFactor = complexity === 'simple' ? 2 : complexity === 'moderate' ? 3 : 4;
     let nodeIndex = 0;
 
@@ -195,9 +195,9 @@ export class TestDataGenerator {
       type: 'SetVariable',
       data: {
         variableName: 'input',
-        value: 'Root value'
+        value: 'Root value',
       },
-      position: { x: 400, y: 50 }
+      position: { x: 400, y: 50 },
     });
     nodeIndex++;
 
@@ -207,39 +207,39 @@ export class TestDataGenerator {
 
     for (let level = 1; level < levels && nodeIndex < nodeCount; level++) {
       const nextLevelNodes: string[] = [];
-      
+
       for (const parentId of currentLevelNodes) {
         const childCount = Math.min(branchFactor, nodeCount - nodeIndex);
-        
+
         for (let child = 0; child < childCount && nodeIndex < nodeCount; child++) {
           const childId = `node_${nodeIndex}`;
-          
+
           nodes.push({
             id: childId,
             type: 'WeightedChoice',
             data: {
               choices: [
                 { value: `Branch ${level}-${child} A`, weight: this.random(seed + nodeIndex, 1, 5) },
-                { value: `Branch ${level}-${child} B`, weight: this.random(seed + nodeIndex + 1, 1, 5) }
-              ]
+                { value: `Branch ${level}-${child} B`, weight: this.random(seed + nodeIndex + 1, 1, 5) },
+              ],
             },
-            position: { 
-              x: 100 + (child * 200), 
-              y: 100 + (level * 150) 
-            }
+            position: {
+              x: 100 + child * 200,
+              y: 100 + level * 150,
+            },
           });
 
           edges.push({
             id: `edge_${parentId}_${childId}`,
             source: parentId,
-            target: childId
+            target: childId,
           });
 
           nextLevelNodes.push(childId);
           nodeIndex++;
         }
       }
-      
+
       currentLevelNodes = nextLevelNodes;
     }
 
@@ -249,7 +249,7 @@ export class TestDataGenerator {
         id: 'output',
         type: 'Output',
         data: {},
-        position: { x: 400, y: 100 + (levels * 150) }
+        position: { x: 400, y: 100 + levels * 150 },
       });
 
       // Connect all leaf nodes to output
@@ -257,7 +257,7 @@ export class TestDataGenerator {
         edges.push({
           id: `edge_${leafId}_output`,
           source: leafId,
-          target: 'output'
+          target: 'output',
         });
       });
     }
@@ -265,7 +265,7 @@ export class TestDataGenerator {
     return {
       seed,
       nodes,
-      edges: edges as GraphEdge[]
+      edges: edges as GraphEdge[],
     };
   }
 
@@ -276,18 +276,18 @@ export class TestDataGenerator {
     // Create circular dependency intentionally for testing
     for (let i = 0; i < nodeCount; i++) {
       const nodeId = `node_${i}`;
-      
+
       nodes.push({
         id: nodeId,
         type: 'Concat',
         data: {
           separator: ' -> ',
-          texts: [`Node ${i}`, '{variable}']
+          texts: [`Node ${i}`, '{variable}'],
         },
-        position: { 
+        position: {
           x: 300 + 200 * Math.cos((2 * Math.PI * i) / nodeCount),
-          y: 300 + 200 * Math.sin((2 * Math.PI * i) / nodeCount)
-        }
+          y: 300 + 200 * Math.sin((2 * Math.PI * i) / nodeCount),
+        },
       });
 
       // Connect to next node (creating circular dependency)
@@ -295,14 +295,14 @@ export class TestDataGenerator {
       edges.push({
         id: `edge_${i}_${nextIndex}`,
         source: nodeId,
-        target: `node_${nextIndex}`
+        target: `node_${nextIndex}`,
       });
     }
 
     return {
       seed,
       nodes,
-      edges: edges as GraphEdge[]
+      edges: edges as GraphEdge[],
     };
   }
 
@@ -314,16 +314,16 @@ export class TestDataGenerator {
     for (let i = 0; i < nodeCount; i++) {
       const nodeId = `node_${i}`;
       const depth = Math.floor(i / 3); // 3 nodes per level
-      
+
       if (i === 0) {
         nodes.push({
           id: nodeId,
           type: 'SetVariable',
           data: {
             variableName: `var_level_${depth}`,
-            value: `Deep value ${depth}`
+            value: `Deep value ${depth}`,
           },
-          position: { x: 100, y: 100 + (depth * 100) }
+          position: { x: 100, y: 100 + depth * 100 },
         });
       } else {
         nodes.push({
@@ -331,9 +331,9 @@ export class TestDataGenerator {
           type: 'GetVariable',
           data: {
             variableName: `var_level_${depth - 1}`,
-            defaultValue: `Default ${depth}`
+            defaultValue: `Default ${depth}`,
           },
-          position: { x: 100 + ((i % 3) * 150), y: 100 + (depth * 100) }
+          position: { x: 100 + (i % 3) * 150, y: 100 + depth * 100 },
         });
 
         // Connect to previous level
@@ -342,7 +342,7 @@ export class TestDataGenerator {
           edges.push({
             id: `edge_${sourceIndex}_${i}`,
             source: `node_${sourceIndex}`,
-            target: nodeId
+            target: nodeId,
           });
         }
       }
@@ -351,7 +351,7 @@ export class TestDataGenerator {
     return {
       seed,
       nodes,
-      edges: edges as GraphEdge[]
+      edges: edges as GraphEdge[],
     };
   }
 
@@ -362,24 +362,24 @@ export class TestDataGenerator {
     // Create memory-intensive scenarios with large data
     for (let i = 0; i < nodeCount; i++) {
       const nodeId = `node_${i}`;
-      
+
       nodes.push({
         id: nodeId,
         type: 'WeightedChoice',
         data: {
           choices: Array.from({ length: 100 }, (_, choiceIndex) => ({
             value: `Large choice ${i}_${choiceIndex} with lots of data: ${new Array(100).fill('X').join('')}`,
-            weight: this.random(seed + i + choiceIndex, 0.1, 5.0)
-          }))
+            weight: this.random(seed + i + choiceIndex, 0.1, 5.0),
+          })),
         },
-        position: { x: (i % 10) * 150, y: Math.floor(i / 10) * 200 }
+        position: { x: (i % 10) * 150, y: Math.floor(i / 10) * 200 },
       });
 
       if (i > 0) {
         edges.push({
-          id: `edge_${i-1}_${i}`,
-          source: `node_${i-1}`,
-          target: nodeId
+          id: `edge_${i - 1}_${i}`,
+          source: `node_${i - 1}`,
+          target: nodeId,
         });
       }
     }
@@ -387,7 +387,7 @@ export class TestDataGenerator {
     return {
       seed,
       nodes,
-      edges: edges as GraphEdge[]
+      edges: edges as GraphEdge[],
     };
   }
 
@@ -405,60 +405,60 @@ export class TestDataGenerator {
       const nodeId = `node_${i}`;
       const nodeTypeIndex = this.randomInt(seed + i, 0, nodeTypes.length - 1);
       const nodeType = nodeTypes[nodeTypeIndex];
-      
+
       let nodeData: Record<string, unknown> = {};
-      
+
       switch (nodeType) {
-      case 'WeightedChoice':
-        nodeData = {
-          choices: Array.from({ length: 20 }, (_, j) => ({
-            value: `Stress choice ${i}_${j}`,
-            weight: this.random(seed + i + j, 0.1, 10.0)
-          }))
-        };
-        break;
-          
-      case 'Concat':
-        nodeData = {
-          separator: ' | ',
-          texts: Array.from({ length: 10 }, (_, j) => `Text ${i}_${j}`)
-        };
-        break;
-          
-      case 'SetVariable':
-        nodeData = {
-          variableName: `var_${i}`,
-          value: `Complex value ${i} with data: ${new Array(50).fill('DATA').join(' ')}`
-        };
-        break;
-          
-      case 'GetVariable':
-        nodeData = {
-          variableName: `var_${Math.max(0, i - 1)}`,
-          defaultValue: `Default for ${i}`
-        };
-        break;
-          
-      case 'Conditional':
-        nodeData = {
-          branches: Array.from({ length: 5 }, (_, j) => ({
-            condition: `variable_${i} > ${j * 10}`,
-            output: `Condition ${i}_${j} met`,
-            label: `Branch ${j}`
-          })),
-          defaultOutput: `Default for ${i}`
-        };
-        break;
+        case 'WeightedChoice':
+          nodeData = {
+            choices: Array.from({ length: 20 }, (_, j) => ({
+              value: `Stress choice ${i}_${j}`,
+              weight: this.random(seed + i + j, 0.1, 10.0),
+            })),
+          };
+          break;
+
+        case 'Concat':
+          nodeData = {
+            separator: ' | ',
+            texts: Array.from({ length: 10 }, (_, j) => `Text ${i}_${j}`),
+          };
+          break;
+
+        case 'SetVariable':
+          nodeData = {
+            variableName: `var_${i}`,
+            value: `Complex value ${i} with data: ${new Array(50).fill('DATA').join(' ')}`,
+          };
+          break;
+
+        case 'GetVariable':
+          nodeData = {
+            variableName: `var_${Math.max(0, i - 1)}`,
+            defaultValue: `Default for ${i}`,
+          };
+          break;
+
+        case 'Conditional':
+          nodeData = {
+            branches: Array.from({ length: 5 }, (_, j) => ({
+              condition: `variable_${i} > ${j * 10}`,
+              output: `Condition ${i}_${j} met`,
+              label: `Branch ${j}`,
+            })),
+            defaultOutput: `Default for ${i}`,
+          };
+          break;
       }
 
       nodes.push({
         id: nodeId,
         type: nodeType,
         data: nodeData,
-        position: { 
-          x: (i % 20) * 120, 
-          y: Math.floor(i / 20) * 150 
-        }
+        position: {
+          x: (i % 20) * 120,
+          y: Math.floor(i / 20) * 150,
+        },
       });
 
       // Create complex connection patterns
@@ -470,7 +470,7 @@ export class TestDataGenerator {
             edges.push({
               id: `edge_${sourceIndex}_${i}_${conn}`,
               source: `node_${sourceIndex}`,
-              target: nodeId
+              target: nodeId,
             });
           }
         }
@@ -480,7 +480,7 @@ export class TestDataGenerator {
     return {
       seed,
       nodes,
-      edges: edges as GraphEdge[]
+      edges: edges as GraphEdge[],
     };
   }
 
@@ -494,7 +494,7 @@ export class TestDataGenerator {
    */
   generateUser(options: UserGenerationOptions): User {
     const { role, permissions, organizationId, isVerified, mfaEnabled } = options;
-    
+
     return {
       id: `user_${Date.now()}_${Math.random()}`,
       email: `test.user.${role.toLowerCase()}@example.com`,
@@ -507,7 +507,7 @@ export class TestDataGenerator {
       createdAt: new Date(),
       updatedAt: new Date(),
       lastLoginAt: new Date(),
-      isActive: true
+      isActive: true,
     };
   }
 
@@ -522,7 +522,7 @@ export class TestDataGenerator {
       refreshToken: `refresh_${Math.random().toString(36)}`,
       expiresAt: new Date(Date.now() + 3600000), // 1 hour
       permissions: user.permissions,
-      organizationId: user.organizationId
+      organizationId: user.organizationId,
     };
   }
 
@@ -537,33 +537,33 @@ export class TestDataGenerator {
       let item: unknown;
 
       switch (pattern) {
-      case DataPattern.SEQUENTIAL:
-        item = { id: i, value: `Item ${i}`, index: i };
-        break;
-          
-      case DataPattern.RANDOM:
-        item = { 
-          id: Math.random(), 
-          value: Math.random().toString(36),
-          data: memoryIntensive ? new Array(1000).fill('X').join('') : null
-        };
-        break;
-          
-      case DataPattern.WEIGHTED:
-        item = {
-          id: i,
-          weight: this.random(i, 0.1, 10.0),
-          category: ['A', 'B', 'C'][i % 3],
-          priority: this.randomInt(i, 1, 5)
-        };
-        break;
-          
-      case DataPattern.NESTED:
-        item = this.createNestedObject(i, nestedDepth, memoryIntensive);
-        break;
-          
-      default:
-        item = { id: i, value: `Item ${i}` };
+        case DataPattern.SEQUENTIAL:
+          item = { id: i, value: `Item ${i}`, index: i };
+          break;
+
+        case DataPattern.RANDOM:
+          item = {
+            id: Math.random(),
+            value: Math.random().toString(36),
+            data: memoryIntensive ? new Array(1000).fill('X').join('') : null,
+          };
+          break;
+
+        case DataPattern.WEIGHTED:
+          item = {
+            id: i,
+            weight: this.random(i, 0.1, 10.0),
+            category: ['A', 'B', 'C'][i % 3],
+            priority: this.randomInt(i, 1, 5),
+          };
+          break;
+
+        case DataPattern.NESTED:
+          item = this.createNestedObject(i, nestedDepth, memoryIntensive);
+          break;
+
+        default:
+          item = { id: i, value: `Item ${i}` };
       }
 
       dataset.push(item);
@@ -574,9 +574,7 @@ export class TestDataGenerator {
 
   private createNestedObject(id: number, depth: number, memoryIntensive: boolean): unknown {
     if (depth <= 0) {
-      return memoryIntensive 
-        ? new Array(100).fill(`Deep data ${id}`).join(' ')
-        : `Deep value ${id}`;
+      return memoryIntensive ? new Array(100).fill(`Deep data ${id}`).join(' ') : `Deep value ${id}`;
     }
 
     return {
@@ -586,8 +584,8 @@ export class TestDataGenerator {
       nested: this.createNestedObject(id, depth - 1, memoryIntensive),
       siblings: Array.from({ length: 3 }, (_, i) => ({
         siblingId: `${id}_${depth}_${i}`,
-        value: `Sibling ${i} at depth ${depth}`
-      }))
+        value: `Sibling ${i} at depth ${depth}`,
+      })),
     };
   }
 
@@ -599,29 +597,29 @@ export class TestDataGenerator {
       // Empty/null scenarios
       emptyGraph: { seed: 123, nodes: [], edges: [] },
       nullValues: { id: null, value: null, data: null },
-      
+
       // Boundary value scenarios
       maxInteger: Number.MAX_SAFE_INTEGER,
       minInteger: Number.MIN_SAFE_INTEGER,
       veryLargeString: new Array(10000).fill('X').join(''),
-      
+
       // Special character scenarios
       unicodeString: '🎯🔥💡🚀✨🎪🌟⚡🎨🔧',
       specialChars: '!@#$%^&*()[]{}|\\;:\'",.<>?`~',
-      sqlInjection: '\'; DROP TABLE users; --',
+      sqlInjection: "'; DROP TABLE users; --",
       xssAttempt: '<script>alert("XSS")</script>',
-      
+
       // Date edge cases
       epochDate: new Date(0),
       futureDate: new Date(2099, 11, 31),
       invalidDate: new Date('invalid'),
-      
+
       // Circular references (for JSON serialization testing)
       circularRef: (() => {
         const obj: Record<string, unknown> = { id: 'circular' };
         obj.self = obj;
         return obj;
-      })()
+      })(),
     };
   }
 }

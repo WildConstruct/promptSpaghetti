@@ -6,7 +6,17 @@
     "type": "chapter",
     "difficulty": "beginner",
     "part": "part1",
-    "keywords": ["introduction", "overview", "getting started", "prompt spaghetti", "content generation", "node-based", "deterministic", "generators", "basics"]
+    "keywords": [
+      "introduction",
+      "overview",
+      "getting started",
+      "prompt spaghetti",
+      "content generation",
+      "node-based",
+      "deterministic",
+      "generators",
+      "basics"
+    ]
   },
   {
     "title": "Architecture & Core Concepts",
@@ -15,7 +25,18 @@
     "type": "chapter",
     "difficulty": "intermediate",
     "part": "part1",
-    "keywords": ["architecture", "concepts", "engine", "execution", "nodes", "runtime", "performance", "security", "integration", "design"]
+    "keywords": [
+      "architecture",
+      "concepts",
+      "engine",
+      "execution",
+      "nodes",
+      "runtime",
+      "performance",
+      "security",
+      "integration",
+      "design"
+    ]
   },
   {
     "title": "Generator JSON Schema Reference",
@@ -24,7 +45,18 @@
     "type": "reference",
     "difficulty": "intermediate",
     "part": "part1",
-    "keywords": ["schema", "json", "reference", "format", "metadata", "grammar", "variables", "validation", "compatibility", "structure"]
+    "keywords": [
+      "schema",
+      "json",
+      "reference",
+      "format",
+      "metadata",
+      "grammar",
+      "variables",
+      "validation",
+      "compatibility",
+      "structure"
+    ]
   },
   {
     "title": "Basic Generator Creation",
@@ -33,7 +65,18 @@
     "type": "chapter",
     "difficulty": "beginner",
     "part": "part2",
-    "keywords": ["basic", "generator", "creation", "tutorial", "first", "rules", "variations", "randomization", "testing", "examples"]
+    "keywords": [
+      "basic",
+      "generator",
+      "creation",
+      "tutorial",
+      "first",
+      "rules",
+      "variations",
+      "randomization",
+      "testing",
+      "examples"
+    ]
   },
   {
     "title": "Interactive Tutorial",
@@ -42,7 +85,18 @@
     "type": "example",
     "difficulty": "beginner",
     "part": "part4",
-    "keywords": ["tutorial", "interactive", "examples", "hands-on", "practice", "live", "exercises", "browser", "editing", "testing"]
+    "keywords": [
+      "tutorial",
+      "interactive",
+      "examples",
+      "hands-on",
+      "practice",
+      "live",
+      "exercises",
+      "browser",
+      "editing",
+      "testing"
+    ]
   },
   {
     "title": "Expansion Recipes for LLMs",
@@ -51,7 +105,18 @@
     "type": "chapter",
     "difficulty": "advanced",
     "part": "part4",
-    "keywords": ["llm", "expansion", "recipes", "patterns", "ai", "content", "development", "language models", "automation", "optimization"]
+    "keywords": [
+      "llm",
+      "expansion",
+      "recipes",
+      "patterns",
+      "ai",
+      "content",
+      "development",
+      "language models",
+      "automation",
+      "optimization"
+    ]
   },
   {
     "title": "Quick Reference Tables",
@@ -60,7 +125,18 @@
     "type": "reference",
     "difficulty": "all",
     "part": "part6",
-    "keywords": ["reference", "tables", "quick", "lookup", "modifiers", "nodes", "variables", "patterns", "debugging", "shortcuts"]
+    "keywords": [
+      "reference",
+      "tables",
+      "quick",
+      "lookup",
+      "modifiers",
+      "nodes",
+      "variables",
+      "patterns",
+      "debugging",
+      "shortcuts"
+    ]
   },
   {
     "title": "Advanced Rule Syntax",
@@ -69,7 +145,18 @@
     "type": "chapter",
     "difficulty": "advanced",
     "part": "part2",
-    "keywords": ["advanced", "rules", "syntax", "weighted", "conditional", "probability", "variables", "nested", "complex", "composition"]
+    "keywords": [
+      "advanced",
+      "rules",
+      "syntax",
+      "weighted",
+      "conditional",
+      "probability",
+      "variables",
+      "nested",
+      "complex",
+      "composition"
+    ]
   },
   {
     "title": "Modularization & Organization",
@@ -78,7 +165,16 @@
     "type": "chapter",
     "difficulty": "intermediate",
     "part": "part2",
-    "keywords": ["modularization", "organization", "includes", "maintenance", "dependencies", "structure", "large projects", "reusability"]
+    "keywords": [
+      "modularization",
+      "organization",
+      "includes",
+      "maintenance",
+      "dependencies",
+      "structure",
+      "large projects",
+      "reusability"
+    ]
   },
   {
     "title": "Engine API Documentation",
@@ -87,7 +183,18 @@
     "type": "reference",
     "difficulty": "advanced",
     "part": "part3",
-    "keywords": ["api", "documentation", "engine", "javascript", "typescript", "python", "methods", "events", "extensions", "developers"]
+    "keywords": [
+      "api",
+      "documentation",
+      "engine",
+      "javascript",
+      "typescript",
+      "python",
+      "methods",
+      "events",
+      "extensions",
+      "developers"
+    ]
   },
   {
     "title": "Modifier System",
@@ -96,7 +203,17 @@
     "type": "chapter",
     "difficulty": "intermediate",
     "part": "part3",
-    "keywords": ["modifiers", "text", "transformations", "custom", "chaining", "performance", "processing", "built-in", "patterns"]
+    "keywords": [
+      "modifiers",
+      "text",
+      "transformations",
+      "custom",
+      "chaining",
+      "performance",
+      "processing",
+      "built-in",
+      "patterns"
+    ]
   },
   {
     "title": "Variable System",
@@ -105,7 +222,17 @@
     "type": "chapter",
     "difficulty": "intermediate",
     "part": "part3",
-    "keywords": ["variables", "scoping", "context", "interpolation", "dynamic", "setVariable", "getVariable", "propagation", "techniques"]
+    "keywords": [
+      "variables",
+      "scoping",
+      "context",
+      "interpolation",
+      "dynamic",
+      "setVariable",
+      "getVariable",
+      "propagation",
+      "techniques"
+    ]
   },
   {
     "title": "Testing & Quality Assurance",
@@ -114,7 +241,18 @@
     "type": "chapter",
     "difficulty": "intermediate",
     "part": "part4",
-    "keywords": ["testing", "quality", "assurance", "unit tests", "integration", "qa", "workflows", "automation", "coverage", "metrics"]
+    "keywords": [
+      "testing",
+      "quality",
+      "assurance",
+      "unit tests",
+      "integration",
+      "qa",
+      "workflows",
+      "automation",
+      "coverage",
+      "metrics"
+    ]
   },
   {
     "title": "Custom Extensions",
@@ -123,7 +261,18 @@
     "type": "chapter",
     "difficulty": "advanced",
     "part": "part5",
-    "keywords": ["extensions", "custom", "nodes", "plugins", "architecture", "lifecycle", "hooks", "distribution", "packaging", "functionality"]
+    "keywords": [
+      "extensions",
+      "custom",
+      "nodes",
+      "plugins",
+      "architecture",
+      "lifecycle",
+      "hooks",
+      "distribution",
+      "packaging",
+      "functionality"
+    ]
   },
   {
     "title": "Security Best Practices",
@@ -132,7 +281,17 @@
     "type": "chapter",
     "difficulty": "advanced",
     "part": "part5",
-    "keywords": ["security", "practices", "sanitization", "injection", "sandboxing", "vulnerabilities", "protection", "checklist", "safety"]
+    "keywords": [
+      "security",
+      "practices",
+      "sanitization",
+      "injection",
+      "sandboxing",
+      "vulnerabilities",
+      "protection",
+      "checklist",
+      "safety"
+    ]
   },
   {
     "title": "Integration Patterns",
@@ -141,7 +300,18 @@
     "type": "chapter",
     "difficulty": "advanced",
     "part": "part5",
-    "keywords": ["integration", "patterns", "server", "client", "api", "batch", "real-time", "applications", "systems", "best practices"]
+    "keywords": [
+      "integration",
+      "patterns",
+      "server",
+      "client",
+      "api",
+      "batch",
+      "real-time",
+      "applications",
+      "systems",
+      "best practices"
+    ]
   },
   {
     "title": "Templates & Boilerplates",
@@ -150,7 +320,18 @@
     "type": "reference",
     "difficulty": "all",
     "part": "part6",
-    "keywords": ["templates", "boilerplates", "starter", "basic", "advanced", "test", "extension", "integration", "development", "acceleration"]
+    "keywords": [
+      "templates",
+      "boilerplates",
+      "starter",
+      "basic",
+      "advanced",
+      "test",
+      "extension",
+      "integration",
+      "development",
+      "acceleration"
+    ]
   },
   {
     "title": "Common Pitfalls & Solutions",
@@ -159,7 +340,17 @@
     "type": "reference",
     "difficulty": "all",
     "part": "part6",
-    "keywords": ["pitfalls", "solutions", "mistakes", "problems", "troubleshooting", "performance", "anti-patterns", "vulnerabilities", "migration"]
+    "keywords": [
+      "pitfalls",
+      "solutions",
+      "mistakes",
+      "problems",
+      "troubleshooting",
+      "performance",
+      "anti-patterns",
+      "vulnerabilities",
+      "migration"
+    ]
   },
   {
     "title": "Conditional Logic",
@@ -168,7 +359,17 @@
     "type": "chapter",
     "difficulty": "advanced",
     "part": "part3",
-    "keywords": ["conditional", "logic", "expressions", "evaluation", "security", "conditions", "dynamic", "behavior", "branching"]
+    "keywords": [
+      "conditional",
+      "logic",
+      "expressions",
+      "evaluation",
+      "security",
+      "conditions",
+      "dynamic",
+      "behavior",
+      "branching"
+    ]
   },
   {
     "title": "Performance Optimization",
@@ -177,7 +378,17 @@
     "type": "chapter",
     "difficulty": "advanced",
     "part": "part3",
-    "keywords": ["performance", "optimization", "execution", "memory", "caching", "large-scale", "profiling", "benchmarking", "efficiency"]
+    "keywords": [
+      "performance",
+      "optimization",
+      "execution",
+      "memory",
+      "caching",
+      "large-scale",
+      "profiling",
+      "benchmarking",
+      "efficiency"
+    ]
   },
   {
     "title": "Simple Greeting Generator",
@@ -195,7 +406,17 @@
     "type": "example",
     "difficulty": "intermediate",
     "part": "examples",
-    "keywords": ["character", "generator", "weighted", "variables", "modularization", "intermediate", "names", "classes", "epithets"]
+    "keywords": [
+      "character",
+      "generator",
+      "weighted",
+      "variables",
+      "modularization",
+      "intermediate",
+      "names",
+      "classes",
+      "epithets"
+    ]
   },
   {
     "title": "Advanced Story Prompt Generator",

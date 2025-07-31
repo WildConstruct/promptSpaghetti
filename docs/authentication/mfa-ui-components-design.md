@@ -1,24 +1,26 @@
 # MFA Status Indicators and UI Components Design
 
 ## Overview
+
 This document defines the comprehensive UI components and status indicators for Multi-Factor Authentication (MFA) as part of Epic 19: Authentication Enhancement & Security Hardening. The design system ensures consistent, accessible, and intuitive user experiences across all MFA interactions.
 
 ## Design System Foundations
 
 ### Color Palette
+
 ```css
 :root {
   /* Security Status Colors */
-  --security-high: #10b981;      /* Green - High security */
-  --security-medium: #f59e0b;    /* Amber - Medium security */
-  --security-low: #ef4444;       /* Red - Low security */
-  --security-warning: #f97316;   /* Orange - Warning */
-  
+  --security-high: #10b981; /* Green - High security */
+  --security-medium: #f59e0b; /* Amber - Medium security */
+  --security-low: #ef4444; /* Red - Low security */
+  --security-warning: #f97316; /* Orange - Warning */
+
   /* MFA Method Colors */
-  --method-active: #3b82f6;      /* Blue - Active method */
-  --method-pending: #6b7280;     /* Gray - Pending setup */
-  --method-disabled: #d1d5db;    /* Light gray - Disabled */
-  
+  --method-active: #3b82f6; /* Blue - Active method */
+  --method-pending: #6b7280; /* Gray - Pending setup */
+  --method-disabled: #d1d5db; /* Light gray - Disabled */
+
   /* Interactive States */
   --primary: #2563eb;
   --primary-hover: #1d4ed8;
@@ -30,33 +32,60 @@ This document defines the comprehensive UI components and status indicators for 
 ```
 
 ### Typography Scale
+
 ```css
-.text-heading-1 { font-size: 2rem; font-weight: 700; line-height: 1.25; }
-.text-heading-2 { font-size: 1.5rem; font-weight: 600; line-height: 1.33; }
-.text-heading-3 { font-size: 1.25rem; font-weight: 600; line-height: 1.4; }
-.text-body { font-size: 1rem; font-weight: 400; line-height: 1.5; }
-.text-small { font-size: 0.875rem; font-weight: 400; line-height: 1.43; }
-.text-caption { font-size: 0.75rem; font-weight: 500; line-height: 1.33; }
+.text-heading-1 {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+.text-heading-2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.33;
+}
+.text-heading-3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.text-body {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+.text-small {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.43;
+}
+.text-caption {
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.33;
+}
 ```
 
 ### Spacing System
+
 ```css
 :root {
-  --space-1: 0.25rem;   /* 4px */
-  --space-2: 0.5rem;    /* 8px */
-  --space-3: 0.75rem;   /* 12px */
-  --space-4: 1rem;      /* 16px */
-  --space-5: 1.25rem;   /* 20px */
-  --space-6: 1.5rem;    /* 24px */
-  --space-8: 2rem;      /* 32px */
-  --space-10: 2.5rem;   /* 40px */
-  --space-12: 3rem;     /* 48px */
+  --space-1: 0.25rem; /* 4px */
+  --space-2: 0.5rem; /* 8px */
+  --space-3: 0.75rem; /* 12px */
+  --space-4: 1rem; /* 16px */
+  --space-5: 1.25rem; /* 20px */
+  --space-6: 1.5rem; /* 24px */
+  --space-8: 2rem; /* 32px */
+  --space-10: 2.5rem; /* 40px */
+  --space-12: 3rem; /* 48px */
 }
 ```
 
 ## Core UI Components
 
 ### 1. Security Status Badge
+
 ```typescript
 interface SecurityStatusProps {
   level: 'high' | 'medium' | 'low';
@@ -153,6 +182,7 @@ const SecurityStatusBadge: React.FC<SecurityStatusProps> = ({ level, methodCount
 ```
 
 ### 2. MFA Method Card
+
 ```typescript
 interface MFAMethodProps {
   method: {
@@ -198,32 +228,32 @@ const MFAMethodCard: React.FC<MFAMethodProps> = ({ method, onEdit, onRemove, onS
           <StatusIndicator status={method.status} />
         </div>
       </div>
-      
+
       <div className="mfa-method-card__body">
         {method.lastUsed && (
           <div className="last-used">
             Last used: {formatRelativeTime(method.lastUsed)}
           </div>
         )}
-        
+
         <div className="method-actions">
-          <button 
+          <button
             className="btn btn--secondary btn--small"
             onClick={() => onEdit(method.id)}
           >
             Edit
           </button>
-          
+
           {!method.isDefault && method.status === 'active' && (
-            <button 
+            <button
               className="btn btn--secondary btn--small"
               onClick={() => onSetDefault(method.id)}
             >
               Set as Default
             </button>
           )}
-          
-          <button 
+
+          <button
             className="btn btn--danger btn--small"
             onClick={() => onRemove(method.id)}
             disabled={method.isDefault}
@@ -320,6 +350,7 @@ const MFAMethodCard: React.FC<MFAMethodProps> = ({ method, onEdit, onRemove, onS
 ```
 
 ### 3. Status Indicator Component
+
 ```typescript
 interface StatusIndicatorProps {
   status: 'active' | 'pending' | 'disabled' | 'error' | 'loading';
@@ -327,10 +358,10 @@ interface StatusIndicatorProps {
   showLabel?: boolean;
 }
 
-const StatusIndicator: React.FC<StatusIndicatorProps> = ({ 
-  status, 
-  size = 'medium', 
-  showLabel = true 
+const StatusIndicator: React.FC<StatusIndicatorProps> = ({
+  status,
+  size = 'medium',
+  showLabel = true
 }) => {
   const statusConfig = {
     active: { color: 'var(--success)', label: 'Active', icon: '●' },
@@ -342,7 +373,7 @@ const StatusIndicator: React.FC<StatusIndicatorProps> = ({
 
   return (
     <div className={`status-indicator status-indicator--${size}`}>
-      <span 
+      <span
         className="status-indicator__dot"
         style={{ color: statusConfig[status].color }}
       >
@@ -359,6 +390,7 @@ const StatusIndicator: React.FC<StatusIndicatorProps> = ({
 ```
 
 ### 4. MFA Setup Progress
+
 ```typescript
 interface SetupProgressProps {
   currentStep: number;
@@ -370,26 +402,26 @@ interface SetupProgressProps {
   }>;
 }
 
-const MFASetupProgress: React.FC<SetupProgressProps> = ({ 
-  currentStep, 
-  totalSteps, 
-  steps 
+const MFASetupProgress: React.FC<SetupProgressProps> = ({
+  currentStep,
+  totalSteps,
+  steps
 }) => {
   return (
     <div className="mfa-setup-progress">
       <div className="progress-bar">
-        <div 
+        <div
           className="progress-fill"
           style={{ width: `${(currentStep / totalSteps) * 100}%` }}
         />
       </div>
-      
+
       <div className="progress-steps">
         {steps.map((step, index) => (
-          <div 
+          <div
             key={index}
             className={`progress-step ${
-              index < currentStep ? 'completed' : 
+              index < currentStep ? 'completed' :
               index === currentStep ? 'active' : 'pending'
             }`}
           >
@@ -413,6 +445,7 @@ const MFASetupProgress: React.FC<SetupProgressProps> = ({
 ```
 
 ### 5. Verification Code Input
+
 ```typescript
 interface CodeInputProps {
   length: number;
@@ -423,30 +456,30 @@ interface CodeInputProps {
   loading?: boolean;
 }
 
-const VerificationCodeInput: React.FC<CodeInputProps> = ({ 
-  length, 
-  value, 
-  onChange, 
-  onComplete, 
-  error, 
-  loading 
+const VerificationCodeInput: React.FC<CodeInputProps> = ({
+  length,
+  value,
+  onChange,
+  onComplete,
+  error,
+  loading
 }) => {
   const inputs = useRef<HTMLInputElement[]>([]);
-  
+
   const handleInputChange = (index: number, inputValue: string) => {
     if (!/^\d*$/.test(inputValue)) return; // Only digits
-    
+
     const newValue = value.split('');
     newValue[index] = inputValue;
     const updatedValue = newValue.join('');
-    
+
     onChange(updatedValue);
-    
+
     // Auto-focus next input
     if (inputValue && index < length - 1) {
       inputs.current[index + 1]?.focus();
     }
-    
+
     // Check if complete
     if (updatedValue.length === length) {
       onComplete(updatedValue);
@@ -476,14 +509,14 @@ const VerificationCodeInput: React.FC<CodeInputProps> = ({
           />
         ))}
       </div>
-      
+
       {error && (
         <div className="code-input-error">
           <span className="error-icon">⚠️</span>
           <span className="error-message">{error}</span>
         </div>
       )}
-      
+
       {loading && (
         <div className="code-input-loading">
           <span className="loading-spinner">⏳</span>
@@ -553,6 +586,7 @@ const VerificationCodeInput: React.FC<CodeInputProps> = ({
 ```
 
 ### 6. Security Dashboard Summary
+
 ```typescript
 interface SecuritySummaryProps {
   user: {
@@ -565,28 +599,28 @@ interface SecuritySummaryProps {
   onManageMethods: () => void;
 }
 
-const SecurityDashboardSummary: React.FC<SecuritySummaryProps> = ({ 
-  user, 
-  onEnableMFA, 
-  onManageMethods 
+const SecurityDashboardSummary: React.FC<SecuritySummaryProps> = ({
+  user,
+  onEnableMFA,
+  onManageMethods
 }) => {
-  const securityLevel = user.mfaEnabled ? 
+  const securityLevel = user.mfaEnabled ?
     (user.methodsCount >= 2 ? 'high' : 'medium') : 'low';
-  
-  const riskLevel = user.riskScore < 30 ? 'low' : 
+
+  const riskLevel = user.riskScore < 30 ? 'low' :
                    user.riskScore < 70 ? 'medium' : 'high';
 
   return (
     <div className="security-dashboard-summary">
       <div className="summary-header">
         <h2>Account Security</h2>
-        <SecurityStatusBadge 
-          level={securityLevel} 
+        <SecurityStatusBadge
+          level={securityLevel}
           methodCount={user.methodsCount}
-          showDetails 
+          showDetails
         />
       </div>
-      
+
       <div className="summary-grid">
         <div className="summary-card">
           <div className="card-icon">🔐</div>
@@ -608,7 +642,7 @@ const SecurityDashboardSummary: React.FC<SecuritySummaryProps> = ({
             </div>
           </div>
         </div>
-        
+
         <div className="summary-card">
           <div className="card-icon">📊</div>
           <div className="card-content">
@@ -623,7 +657,7 @@ const SecurityDashboardSummary: React.FC<SecuritySummaryProps> = ({
             </div>
           </div>
         </div>
-        
+
         <div className="summary-card">
           <div className="card-icon">🕐</div>
           <div className="card-content">
@@ -643,6 +677,7 @@ const SecurityDashboardSummary: React.FC<SecuritySummaryProps> = ({
 ```
 
 ### 7. Method Selection Interface
+
 ```typescript
 interface MethodSelectionProps {
   availableMethods: AuthMethod[];
@@ -650,10 +685,10 @@ interface MethodSelectionProps {
   recommendations?: string[];
 }
 
-const MethodSelectionGrid: React.FC<MethodSelectionProps> = ({ 
-  availableMethods, 
-  onMethodSelect, 
-  recommendations = [] 
+const MethodSelectionGrid: React.FC<MethodSelectionProps> = ({
+  availableMethods,
+  onMethodSelect,
+  recommendations = []
 }) => {
   const methodDetails = {
     totp: {
@@ -695,7 +730,7 @@ const MethodSelectionGrid: React.FC<MethodSelectionProps> = ({
       {availableMethods.map(method => {
         const details = methodDetails[method];
         const isRecommended = recommendations.includes(method);
-        
+
         return (
           <button
             key={method}
@@ -705,13 +740,13 @@ const MethodSelectionGrid: React.FC<MethodSelectionProps> = ({
             {isRecommended && (
               <div className="recommendation-badge">Recommended</div>
             )}
-            
+
             <div className="method-icon">{details.icon}</div>
-            
+
             <div className="method-content">
               <h3 className="method-name">{details.name}</h3>
               <p className="method-description">{details.description}</p>
-              
+
               <div className="method-meta">
                 <div className="security-level">
                   <span className="meta-label">Security:</span>
@@ -719,13 +754,13 @@ const MethodSelectionGrid: React.FC<MethodSelectionProps> = ({
                     {details.securityLevel}
                   </span>
                 </div>
-                
+
                 <div className="setup-time">
                   <span className="meta-label">Setup time:</span>
                   <span>{details.setupTime}</span>
                 </div>
               </div>
-              
+
               <div className="requirements">
                 <span className="meta-label">Requires:</span>
                 <ul className="requirements-list">
@@ -746,6 +781,7 @@ const MethodSelectionGrid: React.FC<MethodSelectionProps> = ({
 ### 8. Responsive Design Patterns
 
 #### Mobile Adaptations
+
 ```css
 /* Mobile-first responsive design */
 .mfa-method-card {
@@ -767,12 +803,12 @@ const MethodSelectionGrid: React.FC<MethodSelectionProps> = ({
   .mfa-method-card {
     padding: var(--space-5);
   }
-  
+
   .method-actions {
     flex-direction: row;
     gap: var(--space-3);
   }
-  
+
   .method-actions .btn {
     width: auto;
   }
@@ -794,7 +830,7 @@ const MethodSelectionGrid: React.FC<MethodSelectionProps> = ({
   .code-inputs {
     gap: var(--space-1);
   }
-  
+
   .code-input {
     width: 40px;
     height: 48px;
@@ -806,10 +842,11 @@ const MethodSelectionGrid: React.FC<MethodSelectionProps> = ({
 ### 9. Accessibility Features
 
 #### ARIA Labels and Descriptions
+
 ```typescript
 const AccessibleMFAMethodCard = ({ method, ...props }) => {
   return (
-    <div 
+    <div
       className="mfa-method-card"
       role="article"
       aria-labelledby={`method-${method.id}-label`}
@@ -818,12 +855,12 @@ const AccessibleMFAMethodCard = ({ method, ...props }) => {
       <h3 id={`method-${method.id}-label`}>
         {method.label} - {method.status}
       </h3>
-      
+
       <div id={`method-${method.id}-description`}>
         {method.type} authentication method for {method.identifier}
         {method.lastUsed && `. Last used ${formatRelativeTime(method.lastUsed)}`}
       </div>
-      
+
       <div role="group" aria-label="Method actions">
         <button aria-describedby={`method-${method.id}-edit-help`}>
           Edit
@@ -838,6 +875,7 @@ const AccessibleMFAMethodCard = ({ method, ...props }) => {
 ```
 
 #### Screen Reader Optimizations
+
 ```css
 .sr-only {
   position: absolute;
@@ -864,7 +902,7 @@ const AccessibleMFAMethodCard = ({ method, ...props }) => {
   .security-badge--high {
     border-width: 2px;
   }
-  
+
   .status-indicator__dot {
     font-weight: bold;
   }
@@ -883,15 +921,25 @@ const AccessibleMFAMethodCard = ({ method, ...props }) => {
 ### 10. Interactive States and Animations
 
 #### Loading States
+
 ```css
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .loading-pulse {
@@ -910,12 +958,17 @@ const AccessibleMFAMethodCard = ({ method, ...props }) => {
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 ```
 
 #### Micro-interactions
+
 ```css
 /* Button press feedback */
 .btn:active {
@@ -924,7 +977,9 @@ const AccessibleMFAMethodCard = ({ method, ...props }) => {
 
 /* Card hover effects */
 .mfa-method-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .mfa-method-card:hover {
@@ -938,15 +993,23 @@ const AccessibleMFAMethodCard = ({ method, ...props }) => {
 }
 
 @keyframes success-flash {
-  0% { border-color: var(--border-color); }
-  50% { border-color: var(--success); background: rgba(5, 150, 105, 0.1); }
-  100% { border-color: var(--success); }
+  0% {
+    border-color: var(--border-color);
+  }
+  50% {
+    border-color: var(--success);
+    background: rgba(5, 150, 105, 0.1);
+  }
+  100% {
+    border-color: var(--success);
+  }
 }
 ```
 
 ### 11. Dark Mode Support
+
 ```css
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   --bg-primary: #1a1a1a;
   --bg-secondary: #2a2a2a;
   --bg-subtle: #3a3a3a;
@@ -955,18 +1018,18 @@ const AccessibleMFAMethodCard = ({ method, ...props }) => {
   --border-color: #404040;
 }
 
-[data-theme="dark"] .mfa-method-card {
+[data-theme='dark'] .mfa-method-card {
   background: var(--bg-secondary);
   border-color: var(--border-color);
 }
 
-[data-theme="dark"] .code-input {
+[data-theme='dark'] .code-input {
   background: var(--bg-secondary);
   border-color: var(--border-color);
   color: var(--text-primary);
 }
 
-[data-theme="dark"] .security-badge--high {
+[data-theme='dark'] .security-badge--high {
   background: rgba(16, 185, 129, 0.2);
 }
 ```

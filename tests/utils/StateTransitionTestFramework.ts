@@ -64,53 +64,53 @@ export class StateTransitionTestFramework {
         name: 'UNASSIGNED',
         validTransitions: ['IN_PROGRESS', 'CANCELLED'],
         conditions: {
-          canAssign: (state) => !state.assignee,
-          hasRequirements: (state) => state.title && state.epic
-        }
+          canAssign: state => !state.assignee,
+          hasRequirements: state => state.title && state.epic,
+        },
       },
       {
-        name: 'IN_PROGRESS', 
+        name: 'IN_PROGRESS',
         validTransitions: ['REVIEW', 'UNASSIGNED', 'CANCELLED'],
         conditions: {
-          hasAssignee: (state) => !!state.assignee,
-          withinDeadline: (state) => !state.dueDate || new Date(state.dueDate) > new Date()
+          hasAssignee: state => !!state.assignee,
+          withinDeadline: state => !state.dueDate || new Date(state.dueDate) > new Date(),
         },
         actions: {
-          startWork: (state) => ({ ...state, startedAt: new Date().toISOString() })
-        }
+          startWork: state => ({ ...state, startedAt: new Date().toISOString() }),
+        },
       },
       {
         name: 'REVIEW',
         validTransitions: ['APPROVED', 'IN_PROGRESS', 'REJECTED'],
         conditions: {
-          hasOutput: (state) => state.output && state.output.length > 0,
-          hasAssignee: (state) => !!state.assignee
-        }
+          hasOutput: state => state.output && state.output.length > 0,
+          hasAssignee: state => !!state.assignee,
+        },
       },
       {
         name: 'APPROVED',
         validTransitions: [],
         conditions: {
-          isComplete: (state) => state.completedAt
+          isComplete: state => state.completedAt,
         },
         actions: {
-          complete: (state) => ({ ...state, completedAt: new Date().toISOString() })
-        }
+          complete: state => ({ ...state, completedAt: new Date().toISOString() }),
+        },
       },
       {
         name: 'REJECTED',
         validTransitions: ['IN_PROGRESS', 'CANCELLED'],
         conditions: {
-          hasRejectionReason: (state) => state.rejectionReason
-        }
+          hasRejectionReason: state => state.rejectionReason,
+        },
       },
       {
         name: 'CANCELLED',
         validTransitions: ['UNASSIGNED'],
         conditions: {
-          canReopen: (state) => state.status !== 'APPROVED'
-        }
-      }
+          canReopen: state => state.status !== 'APPROVED',
+        },
+      },
     ]);
   }
 
@@ -120,14 +120,14 @@ export class StateTransitionTestFramework {
   async startTest(testName: string, config: Partial<StateTestConfig> = {}): Promise<void> {
     this.currentTest = testName;
     this.transitionHistory = [];
-    
+
     const testConfig: StateTestConfig = {
       initialState: 'UNASSIGNED',
       maxTransitions: 50,
       timeout: 30000,
       validateStateIntegrity: true,
       trackHistory: true,
-      ...config
+      ...config,
     };
 
     // Store test configuration in memory (skip TestDataManager for now)
@@ -137,21 +137,16 @@ export class StateTransitionTestFramework {
   /**
    * Test valid state transition
    */
-  async testValidTransition(
-    taskId: string, 
-    fromState: string, 
-    toState: string, 
-    data?: any
-  ): Promise<TransitionEvent> {
+  async testValidTransition(taskId: string, fromState: string, toState: string, data?: any): Promise<TransitionEvent> {
     const timestamp = new Date().toISOString();
-    
+
     try {
       // Validate transition is allowed
       const fromStateDefinition = this.states.get(fromState);
       if (!fromStateDefinition) {
         throw new Error(`Unknown state: ${fromState}`);
       }
-      
+
       if (!fromStateDefinition.validTransitions.includes(toState)) {
         throw new Error(`Invalid transition from ${fromState} to ${toState}`);
       }
@@ -180,7 +175,7 @@ export class StateTransitionTestFramework {
         // Apply state change
         task.status = toState;
         task.updated = timestamp;
-        
+
         // Apply any data changes
         if (data) {
           Object.assign(task, data);
@@ -204,12 +199,11 @@ export class StateTransitionTestFramework {
         event: `${fromState}_TO_${toState}`,
         timestamp,
         data,
-        success: true
+        success: true,
       };
 
       this.transitionHistory.push(event);
       return event;
-
     } catch (error) {
       const event: TransitionEvent = {
         from: fromState,
@@ -218,7 +212,7 @@ export class StateTransitionTestFramework {
         timestamp,
         data,
         success: false,
-        error: error.message
+        error: error.message,
       };
 
       this.transitionHistory.push(event);
@@ -230,8 +224,8 @@ export class StateTransitionTestFramework {
    * Test invalid state transition (should fail)
    */
   async testInvalidTransition(
-    taskId: string, 
-    fromState: string, 
+    taskId: string,
+    fromState: string,
     toState: string
   ): Promise<{ blocked: boolean; reason: string }> {
     try {
@@ -300,8 +294,10 @@ export class StateTransitionTestFramework {
       }
     }
 
-    const totalTransitions = Array.from(this.states.values())
-      .reduce((sum, state) => sum + state.validTransitions.length, 0);
+    const totalTransitions = Array.from(this.states.values()).reduce(
+      (sum, state) => sum + state.validTransitions.length,
+      0
+    );
 
     return {
       valid: issues.length === 0,
@@ -310,8 +306,8 @@ export class StateTransitionTestFramework {
         totalStates: allStates.length,
         totalTransitions,
         deadEndStates,
-        unreachableStates
-      }
+        unreachableStates,
+      },
     };
   }
 
@@ -325,7 +321,7 @@ export class StateTransitionTestFramework {
     for (const fromState of allStates) {
       matrix[fromState] = {};
       const stateDefinition = this.states.get(fromState);
-      
+
       for (const toState of allStates) {
         matrix[fromState][toState] = stateDefinition?.validTransitions.includes(toState) || false;
       }
@@ -357,24 +353,24 @@ export class StateTransitionTestFramework {
         result: 'passed' | 'failed' | 'skipped';
         message: string;
         duration: number;
-      }>
+      }>,
     };
 
     const allStates = Array.from(this.states.keys());
-    
+
     // Test 1: State machine integrity
     const startTime = Date.now();
     try {
       const integrity = await this.validateStateMachineIntegrity();
       const duration = Date.now() - startTime;
-      
+
       if (integrity.valid) {
         results.passed++;
         results.details.push({
           test: 'State machine integrity',
           result: 'passed',
           message: `Valid state machine with ${integrity.statistics.totalStates} states and ${integrity.statistics.totalTransitions} transitions`,
-          duration
+          duration,
         });
       } else {
         results.failed++;
@@ -382,7 +378,7 @@ export class StateTransitionTestFramework {
           test: 'State machine integrity',
           result: 'failed',
           message: `Issues found: ${integrity.issues.join(', ')}`,
-          duration
+          duration,
         });
       }
     } catch (error) {
@@ -391,7 +387,7 @@ export class StateTransitionTestFramework {
         test: 'State machine integrity',
         result: 'failed',
         message: error.message,
-        duration: Date.now() - startTime
+        duration: Date.now() - startTime,
       });
     }
 
@@ -406,13 +402,13 @@ export class StateTransitionTestFramework {
           // Create a test task in the from state
           await this.createTestTask(taskId, fromState);
           await this.testValidTransition(taskId, fromState, toState);
-          
+
           results.passed++;
           results.details.push({
             test: `Valid transition ${fromState} -> ${toState}`,
             result: 'passed',
             message: 'Transition completed successfully',
-            duration: Date.now() - testStart
+            duration: Date.now() - testStart,
           });
         } catch (error) {
           results.failed++;
@@ -420,7 +416,7 @@ export class StateTransitionTestFramework {
             test: `Valid transition ${fromState} -> ${toState}`,
             result: 'failed',
             message: error.message,
-            duration: Date.now() - testStart
+            duration: Date.now() - testStart,
           });
         }
       }
@@ -435,14 +431,14 @@ export class StateTransitionTestFramework {
           try {
             await this.createTestTask(taskId, fromState);
             const result = await this.testInvalidTransition(taskId, fromState, toState);
-            
+
             if (result.blocked) {
               results.passed++;
               results.details.push({
                 test: `Invalid transition ${fromState} -> ${toState}`,
                 result: 'passed',
                 message: `Correctly blocked: ${result.reason}`,
-                duration: Date.now() - testStart
+                duration: Date.now() - testStart,
               });
             } else {
               results.failed++;
@@ -450,7 +446,7 @@ export class StateTransitionTestFramework {
                 test: `Invalid transition ${fromState} -> ${toState}`,
                 result: 'failed',
                 message: 'Invalid transition was not blocked',
-                duration: Date.now() - testStart
+                duration: Date.now() - testStart,
               });
             }
           } catch (error) {
@@ -459,7 +455,7 @@ export class StateTransitionTestFramework {
               test: `Invalid transition ${fromState} -> ${toState}`,
               result: 'failed',
               message: error.message,
-              duration: Date.now() - testStart
+              duration: Date.now() - testStart,
             });
           }
         }
@@ -481,7 +477,7 @@ export class StateTransitionTestFramework {
         epic: 'TEST',
         created: new Date().toISOString(),
         updated: new Date().toISOString(),
-        assignee: initialState === 'UNASSIGNED' ? null : 'test-agent'
+        assignee: initialState === 'UNASSIGNED' ? null : 'test-agent',
       };
     });
   }
@@ -504,16 +500,18 @@ export class StateTransitionTestFramework {
     statesVisited: string[];
     transitionsByState: Record<string, number>;
     averageTransitionTime: number;
-    } {
-    const statesVisited = [...new Set(this.transitionHistory.map(t => t.from).concat(this.transitionHistory.map(t => t.to)))];
+  } {
+    const statesVisited = [
+      ...new Set(this.transitionHistory.map(t => t.from).concat(this.transitionHistory.map(t => t.to))),
+    ];
     const transitionsByState: Record<string, number> = {};
-    
+
     for (const event of this.transitionHistory) {
       transitionsByState[event.from] = (transitionsByState[event.from] || 0) + 1;
     }
 
     const transitionTimes = this.transitionHistory
-      .map((_, i, arr) => i > 0 ? new Date(arr[i].timestamp).getTime() - new Date(arr[i-1].timestamp).getTime() : 0)
+      .map((_, i, arr) => (i > 0 ? new Date(arr[i].timestamp).getTime() - new Date(arr[i - 1].timestamp).getTime() : 0))
       .filter(time => time > 0);
 
     return {
@@ -523,7 +521,8 @@ export class StateTransitionTestFramework {
       failedTransitions: this.transitionHistory.filter(t => !t.success).length,
       statesVisited,
       transitionsByState,
-      averageTransitionTime: transitionTimes.length > 0 ? transitionTimes.reduce((a, b) => a + b, 0) / transitionTimes.length : 0
+      averageTransitionTime:
+        transitionTimes.length > 0 ? transitionTimes.reduce((a, b) => a + b, 0) / transitionTimes.length : 0,
     };
   }
 

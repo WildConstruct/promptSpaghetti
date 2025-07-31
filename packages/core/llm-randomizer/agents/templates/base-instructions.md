@@ -32,23 +32,25 @@ You are an expert graph generator that creates valid Prompt Spaghetti graphs in 
 You must output graphs in this exact format:
 
 ```
+
 version: 1.0.0
 metadata:
-  name: "Graph Name"
-  description: "Brief description"
-  author: "llm-agent"
+name: "Graph Name"
+description: "Brief description"
+author: "llm-agent"
 
 ---NODES---
 node_id:
-  type: NodeType
-  props:
-    key: value
-  inputs: [input1, input2]
+type: NodeType
+props:
+key: value
+inputs: [input1, input2]
 
 ---EDGES---
 source -> target
 
 ---END---
+
 ```
 
 ## NODE TYPES AVAILABLE
@@ -56,7 +58,7 @@ source -> target
 ### Basic Nodes:
 - **WeightedChoice**: Random selection with weights
   - props.choices: [{value: "text", weight: number}]
-- **Concat**: Combines inputs 
+- **Concat**: Combines inputs
   - inputs: [node_ids]
 - **Output**: Final result node
   - inputs: [node_id]
@@ -115,11 +117,13 @@ Generate a complete, valid graph following the format specification.
 ### Parameter Templates
 
 #### Complexity Levels:
+
 - **Simple**: 3-5 nodes, basic connections, single output
 - **Moderate**: 6-15 nodes, some advanced features, multiple paths
 - **Complex**: 16-50 nodes, advanced nodes, sophisticated logic
 
 #### Purpose Categories:
+
 - **Content Generation**: Text creation, story generation, prompt templates
 - **Decision Making**: Conditional logic, branching narratives
 - **Data Processing**: Transformation, filtering, analysis
@@ -127,6 +131,7 @@ Generate a complete, valid graph following the format specification.
 - **Educational**: Tutorial content, quiz generation
 
 #### Node Type Distributions:
+
 - **Basic**: WeightedChoice, Concat, Output (70%), Variables (30%)
 - **Mixed**: Basic (50%), Advanced (30%), Utility (20%)
 - **Advanced**: Advanced nodes (60%), Basic (30%), Utility (10%)
@@ -136,6 +141,7 @@ Generate a complete, valid graph following the format specification.
 ## Instruction Variations by Model
 
 ### OpenAI Optimized (JSON Mode)
+
 ```json
 {
   "system": "You are a graph generator. Use JSON mode for structured output.",
@@ -146,6 +152,7 @@ Generate a complete, valid graph following the format specification.
 ```
 
 ### Anthropic Optimized (Claude)
+
 ```xml
 <instructions>
 Generate a Prompt Spaghetti graph following the exact format specification.
@@ -161,6 +168,7 @@ Generate a Prompt Spaghetti graph following the exact format specification.
 ```
 
 ### Gemini Optimized (Structured Output)
+
 ```
 Generate structured output following the Prompt Spaghetti format.
 
@@ -207,6 +215,7 @@ Validate structure before output.
 ## Validation Integration
 
 ### Generation Loop:
+
 ```
 1. Generate initial graph
 2. Validate format
@@ -219,6 +228,7 @@ Validate structure before output.
 ```
 
 ### Quality Metrics:
+
 - Format compliance (binary)
 - Semantic correctness (weighted)
 - Creativity score (0-1)

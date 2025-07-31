@@ -37,34 +37,33 @@ export class GraphValidator {
     try {
       // Basic structure validation
       this.validateStructure(graph, errors);
-      
+
       // Node validation
       this.validateNodes(graph, errors, warnings);
-      
+
       // Edge validation
       this.validateEdges(graph, errors);
-      
+
       // Cycle detection
       this.detectCycles(graph, errors);
-      
+
       // Performance analysis
       this.analyzePerformance(graph, warnings);
-      
+
       // Connectivity analysis
       this.analyzeConnectivity(graph, warnings);
-
     } catch (error) {
       errors.push({
         type: 'MALFORMED_GRAPH',
         message: `Validation failed: ${error instanceof Error ? error.message : String(error)}`,
-        severity: 'error'
+        severity: 'error',
       });
     }
 
     return {
       valid: errors.length === 0,
       errors,
-      warnings
+      warnings,
     };
   }
 
@@ -76,7 +75,7 @@ export class GraphValidator {
       errors.push({
         type: 'MALFORMED_GRAPH',
         message: 'Graph must have a valid string ID',
-        severity: 'error'
+        severity: 'error',
       });
     }
 
@@ -84,7 +83,7 @@ export class GraphValidator {
       errors.push({
         type: 'MALFORMED_GRAPH',
         message: 'Graph must have a nodes Map',
-        severity: 'error'
+        severity: 'error',
       });
     }
 
@@ -92,7 +91,7 @@ export class GraphValidator {
       errors.push({
         type: 'MALFORMED_GRAPH',
         message: 'Graph must have an edges Map',
-        severity: 'error'
+        severity: 'error',
       });
     }
 
@@ -100,7 +99,7 @@ export class GraphValidator {
       errors.push({
         type: 'MALFORMED_GRAPH',
         message: 'Graph must have metadata object',
-        severity: 'error'
+        severity: 'error',
       });
     }
   }
@@ -110,8 +109,17 @@ export class GraphValidator {
    */
   private validateNodes(graph: GraphDocument, errors: ValidationError[], warnings: ValidationWarning[]): void {
     const validNodeTypes = new Set([
-      'WeightedChoice', 'Concat', 'Output', 'Include', 'SetVariable', 'GetVariable',
-      'WeightedAdvanced', 'Conditional', 'Sequential', 'Markov', 'PythonTransform'
+      'WeightedChoice',
+      'Concat',
+      'Output',
+      'Include',
+      'SetVariable',
+      'GetVariable',
+      'WeightedAdvanced',
+      'Conditional',
+      'Sequential',
+      'Markov',
+      'PythonTransform',
     ]);
 
     for (const [nodeId, node] of graph.nodes) {
@@ -121,7 +129,7 @@ export class GraphValidator {
           type: 'INVALID_DATA',
           message: `Node ID mismatch: map key "${nodeId}" !== node.id "${node.id}"`,
           nodeId,
-          severity: 'error'
+          severity: 'error',
         });
       }
 
@@ -131,7 +139,7 @@ export class GraphValidator {
           type: 'INVALID_NODE_TYPE',
           message: `Invalid node type: "${node.type}"`,
           nodeId,
-          severity: 'error'
+          severity: 'error',
         });
       }
 
@@ -145,7 +153,7 @@ export class GraphValidator {
             type: 'INVALID_DATA',
             message: 'Node inputs must be an array',
             nodeId,
-            severity: 'error'
+            severity: 'error',
           });
         } else {
           // Check that input nodes exist
@@ -155,7 +163,7 @@ export class GraphValidator {
                 type: 'MISSING_NODE',
                 message: `Node "${nodeId}" references non-existent input node "${inputId}"`,
                 nodeId,
-                severity: 'error'
+                severity: 'error',
               });
             }
           }
@@ -169,60 +177,60 @@ export class GraphValidator {
    */
   private validateNodeData(node: GraphNode, errors: ValidationError[]): void {
     switch (node.type) {
-    case 'WeightedChoice':
-      if (!node.data.choices || !Array.isArray(node.data.choices)) {
-        errors.push({
-          type: 'INVALID_DATA',
-          message: 'WeightedChoice node must have choices array',
-          nodeId: node.id,
-          severity: 'error'
-        });
-      } else {
-        for (const choice of node.data.choices) {
-          if (typeof choice.value !== 'string' || typeof choice.weight !== 'number' || choice.weight < 0) {
-            errors.push({
-              type: 'INVALID_DATA',
-              message: 'WeightedChoice choices must have string value and non-negative number weight',
-              nodeId: node.id,
-              severity: 'error'
-            });
+      case 'WeightedChoice':
+        if (!node.data.choices || !Array.isArray(node.data.choices)) {
+          errors.push({
+            type: 'INVALID_DATA',
+            message: 'WeightedChoice node must have choices array',
+            nodeId: node.id,
+            severity: 'error',
+          });
+        } else {
+          for (const choice of node.data.choices) {
+            if (typeof choice.value !== 'string' || typeof choice.weight !== 'number' || choice.weight < 0) {
+              errors.push({
+                type: 'INVALID_DATA',
+                message: 'WeightedChoice choices must have string value and non-negative number weight',
+                nodeId: node.id,
+                severity: 'error',
+              });
+            }
           }
         }
-      }
-      break;
+        break;
 
-    case 'SetVariable':
-      if (!node.data.key || typeof node.data.key !== 'string') {
-        errors.push({
-          type: 'INVALID_DATA',
-          message: 'SetVariable node must have a string key',
-          nodeId: node.id,
-          severity: 'error'
-        });
-      }
-      break;
+      case 'SetVariable':
+        if (!node.data.key || typeof node.data.key !== 'string') {
+          errors.push({
+            type: 'INVALID_DATA',
+            message: 'SetVariable node must have a string key',
+            nodeId: node.id,
+            severity: 'error',
+          });
+        }
+        break;
 
-    case 'GetVariable':
-      if (!node.data.key || typeof node.data.key !== 'string') {
-        errors.push({
-          type: 'INVALID_DATA',
-          message: 'GetVariable node must have a string key',
-          nodeId: node.id,
-          severity: 'error'
-        });
-      }
-      break;
+      case 'GetVariable':
+        if (!node.data.key || typeof node.data.key !== 'string') {
+          errors.push({
+            type: 'INVALID_DATA',
+            message: 'GetVariable node must have a string key',
+            nodeId: node.id,
+            severity: 'error',
+          });
+        }
+        break;
 
-    case 'Include':
-      if (!node.data.name || typeof node.data.name !== 'string') {
-        errors.push({
-          type: 'INVALID_DATA',
-          message: 'Include node must have a string name',
-          nodeId: node.id,
-          severity: 'error'
-        });
-      }
-      break;
+      case 'Include':
+        if (!node.data.name || typeof node.data.name !== 'string') {
+          errors.push({
+            type: 'INVALID_DATA',
+            message: 'Include node must have a string name',
+            nodeId: node.id,
+            severity: 'error',
+          });
+        }
+        break;
     }
   }
 
@@ -237,7 +245,7 @@ export class GraphValidator {
           type: 'INVALID_DATA',
           message: `Edge ID mismatch: map key "${edgeId}" !== edge.id "${edge.id}"`,
           edgeId,
-          severity: 'error'
+          severity: 'error',
         });
       }
 
@@ -247,7 +255,7 @@ export class GraphValidator {
           type: 'MISSING_NODE',
           message: `Edge "${edgeId}" references non-existent source node "${edge.source}"`,
           edgeId,
-          severity: 'error'
+          severity: 'error',
         });
       }
 
@@ -256,7 +264,7 @@ export class GraphValidator {
           type: 'MISSING_NODE',
           message: `Edge "${edgeId}" references non-existent target node "${edge.target}"`,
           edgeId,
-          severity: 'error'
+          severity: 'error',
         });
       }
 
@@ -266,7 +274,7 @@ export class GraphValidator {
           type: 'INVALID_EDGE',
           message: `Edge "${edgeId}" creates a self-loop on node "${edge.source}"`,
           edgeId,
-          severity: 'error'
+          severity: 'error',
         });
       }
     }
@@ -288,7 +296,7 @@ export class GraphValidator {
           type: 'CYCLE_DETECTED',
           message: `Cycle detected: ${cycle.join(' → ')}`,
           nodeId,
-          severity: 'error'
+          severity: 'error',
         });
         return true;
       }
@@ -331,7 +339,7 @@ export class GraphValidator {
       warnings.push({
         type: 'PERFORMANCE_CONCERN',
         message: `Large graph with ${nodeCount} nodes may impact performance`,
-        suggestion: 'Consider breaking into smaller sub-graphs'
+        suggestion: 'Consider breaking into smaller sub-graphs',
       });
     }
 
@@ -340,7 +348,7 @@ export class GraphValidator {
       warnings.push({
         type: 'PERFORMANCE_CONCERN',
         message: `High edge-to-node ratio (${edgeCount}:${nodeCount}) may impact performance`,
-        suggestion: 'Review graph structure for optimization opportunities'
+        suggestion: 'Review graph structure for optimization opportunities',
       });
     }
 
@@ -352,7 +360,7 @@ export class GraphValidator {
           type: 'PERFORMANCE_CONCERN',
           message: `Very deep execution chain (${chain.length} nodes)`,
           nodeId: chain[0],
-          suggestion: 'Consider breaking long chains for better performance'
+          suggestion: 'Consider breaking long chains for better performance',
         });
       }
     }
@@ -382,7 +390,7 @@ export class GraphValidator {
           type: 'DISCONNECTED_NODE',
           message: `Node "${nodeId}" is completely disconnected`,
           nodeId,
-          suggestion: 'Connect node to the graph or remove if unused'
+          suggestion: 'Connect node to the graph or remove if unused',
         });
       }
     }
@@ -393,7 +401,7 @@ export class GraphValidator {
       warnings.push({
         type: 'DISCONNECTED_NODE',
         message: 'Graph has no Output nodes',
-        suggestion: 'Add at least one Output node to generate results'
+        suggestion: 'Add at least one Output node to generate results',
       });
     }
   }
@@ -428,7 +436,7 @@ export class GraphValidator {
 
     const dfs = (nodeId: string, currentChain: string[], visited: Set<string>): void => {
       if (visited.has(nodeId)) return;
-      
+
       visited.add(nodeId);
       currentChain.push(nodeId);
 

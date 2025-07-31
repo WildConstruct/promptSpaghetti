@@ -1,9 +1,9 @@
 /**
  * Service Mocks - Comprehensive Service Layer Mocking System
- * 
+ *
  * Provides specialized mock implementations for external services, internal
  * services, authentication providers, file systems, and network operations.
- * 
+ *
  * Task: E18-1753114562158-DAD671
  */
 
@@ -66,7 +66,7 @@ export class ServiceMockManager extends EventEmitter {
   registerService(name: string, serviceConfig: ServiceConfig): unknown {
     const service = this.createMockService(name, serviceConfig);
     this.services.set(name, service);
-    
+
     // Set up circuit breaker if configured
     if (serviceConfig.circuitBreaker) {
       this.circuitBreakers.set(name, new CircuitBreaker(serviceConfig.circuitBreaker));
@@ -101,7 +101,7 @@ export class ServiceMockManager extends EventEmitter {
           id: this.generateId(),
           ...userData,
           createdAt: new Date(),
-          verified: false
+          verified: false,
         };
         users.set(user.id, user);
         return this.createServiceResponse(name, 'createUser', { user });
@@ -110,15 +110,15 @@ export class ServiceMockManager extends EventEmitter {
       // Authentication methods
       login: async (credentials: { email: string; password: string }) => {
         await this.simulateLatency(name);
-        
+
         // Find user by email
         const user = Array.from(users.values()).find((u: unknown) => u.email === credentials.email);
-        
+
         if (user && user.password === credentials.password) {
           const sessionId = this.generateId();
           const accessToken = this.generateJWT(user, sessionId);
           const refreshToken = this.generateId();
-          
+
           const session = {
             id: sessionId,
             userId: user.id,
@@ -126,25 +126,30 @@ export class ServiceMockManager extends EventEmitter {
             refreshToken,
             createdAt: new Date(),
             expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
-            deviceInfo: this.generateDeviceInfo()
+            deviceInfo: this.generateDeviceInfo(),
           };
-          
+
           sessions.set(sessionId, session);
           tokens.set(accessToken, session);
-          
+
           return this.createServiceResponse(name, 'login', {
             success: true,
             user: { ...user, password: undefined },
             session: { ...session, refreshToken: undefined }, // Don't expose refresh token
             accessToken,
-            refreshToken
+            refreshToken,
           });
         }
-        
-        return this.createServiceResponse(name, 'login', {
-          success: false,
-          error: 'Invalid credentials'
-        }, 401);
+
+        return this.createServiceResponse(
+          name,
+          'login',
+          {
+            success: false,
+            error: 'Invalid credentials',
+          },
+          401
+        );
       },
 
       logout: async (sessionId: string) => {
@@ -164,7 +169,7 @@ export class ServiceMockManager extends EventEmitter {
           return this.createServiceResponse(name, 'validateToken', {
             valid: true,
             user: user ? { ...user, password: undefined } : null,
-            session: { id: session.id, expiresAt: session.expiresAt }
+            session: { id: session.id, expiresAt: session.expiresAt },
           });
         }
         return this.createServiceResponse(name, 'validateToken', { valid: false }, 401);
@@ -175,16 +180,16 @@ export class ServiceMockManager extends EventEmitter {
         if (session && new Date() < session.expiresAt) {
           const newAccessToken = this.generateJWT(users.get(session.userId), session.id);
           const newRefreshToken = this.generateId();
-          
+
           // Update session
           tokens.delete(session.accessToken);
           session.accessToken = newAccessToken;
           session.refreshToken = newRefreshToken;
           tokens.set(newAccessToken, session);
-          
+
           return this.createServiceResponse(name, 'refreshToken', {
             accessToken: newAccessToken,
-            refreshToken: newRefreshToken
+            refreshToken: newRefreshToken,
           });
         }
         return this.createServiceResponse(name, 'refreshToken', { error: 'Invalid refresh token' }, 401);
@@ -194,7 +199,7 @@ export class ServiceMockManager extends EventEmitter {
       oauth: {
         google: async (code: string) => this.simulateOAuthFlow('google', code),
         github: async (code: string) => this.simulateOAuthFlow('github', code),
-        microsoft: async (code: string) => this.simulateOAuthFlow('microsoft', code)
+        microsoft: async (code: string) => this.simulateOAuthFlow('microsoft', code),
       },
 
       // Multi-factor authentication
@@ -204,9 +209,9 @@ export class ServiceMockManager extends EventEmitter {
           if (user) {
             const secret = this.generateId();
             user.mfa = { type, secret, enabled: false };
-            return this.createServiceResponse(name, 'mfa.setup', { 
-              secret, 
-              qrCode: type === 'totp' ? `otpauth://totp/App:${user.email}?secret=${secret}` : undefined 
+            return this.createServiceResponse(name, 'mfa.setup', {
+              secret,
+              qrCode: type === 'totp' ? `otpauth://totp/App:${user.email}?secret=${secret}` : undefined,
             });
           }
           return this.createServiceResponse(name, 'mfa.setup', { error: 'User not found' }, 404);
@@ -223,7 +228,7 @@ export class ServiceMockManager extends EventEmitter {
             }
           }
           return this.createServiceResponse(name, 'mfa.verify', { verified: false }, 400);
-        }
+        },
       },
 
       // Password reset
@@ -234,16 +239,12 @@ export class ServiceMockManager extends EventEmitter {
             const resetToken = this.generateId();
             user.resetToken = resetToken;
             user.resetTokenExpires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
-            return this.createServiceResponse(name, 'resetPassword.request', { 
-              success: true, 
-              resetToken // In real app, would send via email
+            return this.createServiceResponse(name, 'resetPassword.request', {
+              success: true,
+              resetToken, // In real app, would send via email
             });
           }
-          return this.createServiceResponse(
-            name,
-            'resetPassword.request',
-            { success: true }
-          ); // Don't reveal if email exists
+          return this.createServiceResponse(name, 'resetPassword.request', { success: true }); // Don't reveal if email exists
         },
 
         confirm: async (token: string, newPassword: string) => {
@@ -255,21 +256,21 @@ export class ServiceMockManager extends EventEmitter {
             return this.createServiceResponse(name, 'resetPassword.confirm', { success: true });
           }
           return this.createServiceResponse(name, 'resetPassword.confirm', { error: 'Invalid or expired token' }, 400);
-        }
+        },
       },
 
       // Utility methods
       getStats: () => ({
         totalUsers: users.size,
         activeSessions: sessions.size,
-        tokensIssued: tokens.size
+        tokensIssued: tokens.size,
       }),
-      
+
       clearAll: () => {
         users.clear();
         sessions.clear();
         tokens.clear();
-      }
+      },
     };
 
     this.services.set(name, authService);
@@ -289,7 +290,7 @@ export class ServiceMockManager extends EventEmitter {
 
       upload: async (file: { name: string; _content: unknown; mimeType?: string; size?: number }) => {
         await this.simulateLatency(name, 500); // File upload takes longer
-        
+
         const fileId = this.generateId();
         const fileData = {
           id: fileId,
@@ -297,7 +298,7 @@ export class ServiceMockManager extends EventEmitter {
           mimeType: file.mimeType || 'application/octet-stream',
           size: file.size || (typeof file.content === 'string' ? file.content.length : 1000),
           uploadedAt: new Date(),
-          checksum: this.generateChecksum(file.content)
+          checksum: this.generateChecksum(file.content),
         };
 
         files.set(fileId, file.content);
@@ -305,37 +306,42 @@ export class ServiceMockManager extends EventEmitter {
 
         return this.createServiceResponse(name, 'upload', {
           file: fileData,
-          url: `https://mock-storage.example.com/${fileId}`
+          url: `https://mock-storage.example.com/${fileId}`,
         });
       },
 
       download: async (fileId: string) => {
         await this.simulateLatency(name, 200);
-        
+
         const content = files.get(fileId);
         const meta = metadata.get(fileId);
-        
+
         if (content && meta) {
           return this.createServiceResponse(name, 'download', {
             content,
-            metadata: meta
+            metadata: meta,
           });
         }
-        
+
         return this.createServiceResponse(name, 'download', { error: 'File not found' }, 404);
       },
 
       delete: async (fileId: string) => {
         const existed = files.delete(fileId) && metadata.delete(fileId);
-        return this.createServiceResponse(name, 'delete', { 
-          success: existed,
-          message: existed ? 'File deleted' : 'File not found'
-        }, existed ? 200 : 404);
+        return this.createServiceResponse(
+          name,
+          'delete',
+          {
+            success: existed,
+            message: existed ? 'File deleted' : 'File not found',
+          },
+          existed ? 200 : 404
+        );
       },
 
       list: async (filter?: { mimeType?: string; uploadedAfter?: Date }) => {
         let fileList = Array.from(metadata.values());
-        
+
         if (filter) {
           if (filter.mimeType) {
             fileList = fileList.filter((f: unknown) => f.mimeType === filter.mimeType);
@@ -350,10 +356,10 @@ export class ServiceMockManager extends EventEmitter {
 
       getMetadata: async (fileId: string) => {
         const meta = metadata.get(fileId);
-        return meta 
+        return meta
           ? this.createServiceResponse(name, 'getMetadata', { metadata: meta })
           : this.createServiceResponse(name, 'getMetadata', { error: 'File not found' }, 404);
-      }
+      },
     };
 
     this.services.set(name, storageService);
@@ -381,32 +387,32 @@ export class ServiceMockManager extends EventEmitter {
         templateData?: unknown;
       }) => {
         await this.simulateLatency(name, 300);
-        
+
         const email = {
           id: this.generateId(),
           ...emailData,
           from: emailData.from || 'noreply@example.com',
           sentAt: new Date(),
-          status: 'sent'
+          status: 'sent',
         };
 
         sentEmails.push(email);
 
         return this.createServiceResponse(name, 'send', {
           messageId: email.id,
-          status: 'sent'
+          status: 'sent',
         });
       },
 
       sendBulk: async (emails: unknown[]) => {
         await this.simulateLatency(name, emails.length * 50); // Scale with email count
-        
+
         const results = emails.map(emailData => {
           const email = {
             id: this.generateId(),
             ...emailData,
             sentAt: new Date(),
-            status: this.rng() > 0.95 ? 'failed' : 'sent' // 5% failure rate
+            status: this.rng() > 0.95 ? 'failed' : 'sent', // 5% failure rate
           };
           sentEmails.push(email);
           return { id: email.id, status: email.status };
@@ -422,10 +428,10 @@ export class ServiceMockManager extends EventEmitter {
           const randomIndex = Math.floor(this.rng() * statuses.length);
           const maxIndex = statuses.indexOf((email as { status: string }).status) + 1;
           const status = statuses[Math.min(randomIndex, maxIndex)];
-          return this.createServiceResponse(name, 'getDeliveryStatus', { 
+          return this.createServiceResponse(name, 'getDeliveryStatus', {
             messageId,
             status,
-            events: this.generateEmailEvents(email)
+            events: this.generateEmailEvents(email),
           });
         }
         return this.createServiceResponse(name, 'getDeliveryStatus', { error: 'Message not found' }, 404);
@@ -434,8 +440,8 @@ export class ServiceMockManager extends EventEmitter {
       getStats: () => ({
         totalSent: sentEmails.length,
         successRate: sentEmails.filter(e => e.status === 'sent').length / sentEmails.length,
-        recentEmails: sentEmails.slice(-10)
-      })
+        recentEmails: sentEmails.slice(-10),
+      }),
     };
 
     this.services.set(name, emailService);
@@ -460,7 +466,7 @@ export class ServiceMockManager extends EventEmitter {
           event,
           properties: properties || {},
           timestamp: new Date(),
-          sessionId: this.generateSessionId()
+          sessionId: this.generateSessionId(),
         };
 
         events.push(eventData);
@@ -472,33 +478,33 @@ export class ServiceMockManager extends EventEmitter {
           id: userId,
           traits,
           identifiedAt: new Date(),
-          lastSeen: new Date()
+          lastSeen: new Date(),
         });
         return this.createServiceResponse(name, 'identify', { success: true });
       },
 
       page: async (userId: string, pageName: string, properties?: unknown) => {
-        return this.track(userId, 'page_view', { 
+        return this.track(userId, 'page_view', {
           page: pageName,
-          ...properties 
+          ...properties,
         });
       },
 
       group: async (userId: string, groupId: string, _traits?: unknown) => {
-        return this.createServiceResponse(name, 'group', { 
+        return this.createServiceResponse(name, 'group', {
           userId,
           groupId,
-          success: true 
+          success: true,
         });
       },
 
       // Analytics queries
-      getEvents: async (filter?: { 
-        userId?: string; 
-        event?: string; 
-        startDate?: Date; 
-        endDate?: Date; 
-        limit?: number 
+      getEvents: async (filter?: {
+        userId?: string;
+        event?: string;
+        startDate?: Date;
+        endDate?: Date;
+        limit?: number;
       }) => {
         let filteredEvents = events;
 
@@ -520,23 +526,21 @@ export class ServiceMockManager extends EventEmitter {
           }
         }
 
-        return this.createServiceResponse(name, 'getEvents', { 
+        return this.createServiceResponse(name, 'getEvents', {
           events: filteredEvents,
-          total: filteredEvents.length 
+          total: filteredEvents.length,
         });
       },
 
       getFunnel: async (steps: string[], userId?: string) => {
-        const userEvents = userId 
-          ? events.filter(e => e.userId === userId)
-          : events;
+        const userEvents = userId ? events.filter(e => e.userId === userId) : events;
 
         const funnelData = steps.map(step => {
           const stepEvents = userEvents.filter(e => e.event === step);
           return {
             step,
             count: stepEvents.length,
-            conversionRate: stepEvents.length / (userEvents.length || 1)
+            conversionRate: stepEvents.length / (userEvents.length || 1),
           };
         });
 
@@ -548,11 +552,11 @@ export class ServiceMockManager extends EventEmitter {
         const retentionData = Array.from({ length: periods }, (_, i) => ({
           period: i,
           users: Math.floor(this.rng() * 100) + 10,
-          percentage: Math.max(10, 100 - (i * 15) + (this.rng() * 20 - 10))
+          percentage: Math.max(10, 100 - i * 15 + (this.rng() * 20 - 10)),
         }));
 
         return this.createServiceResponse(name, 'getRetention', { retention: retentionData });
-      }
+      },
     };
 
     this.services.set(name, analyticsService);
@@ -579,11 +583,11 @@ export class ServiceMockManager extends EventEmitter {
           protocols: protocols || [],
           connectedAt: new Date(),
           lastPing: new Date(),
-          channels: new Set()
+          channels: new Set(),
         };
 
         connections.set(connectionId, connection);
-        
+
         // Simulate connection events
         setTimeout(() => {
           wsService.emit('connection', connection);
@@ -591,7 +595,7 @@ export class ServiceMockManager extends EventEmitter {
 
         return this.createServiceResponse(name, 'connect', {
           connectionId,
-          protocols: connection.protocols
+          protocols: connection.protocols,
         });
       },
 
@@ -602,10 +606,10 @@ export class ServiceMockManager extends EventEmitter {
           connection.channels.forEach((channel: string) => {
             this.leaveChannel(connectionId, channel);
           });
-          
+
           connections.delete(connectionId);
           wsService.emit('disconnect', connection);
-          
+
           return this.createServiceResponse(name, 'disconnect', { success: true });
         }
         return this.createServiceResponse(name, 'disconnect', { error: 'Connection not found' }, 404);
@@ -640,10 +644,10 @@ export class ServiceMockManager extends EventEmitter {
           if (!channels.has(channel)) {
             channels.set(channel, new Set());
           }
-          
+
           channels.get(channel).add(connectionId);
           connection.channels.add(channel);
-          
+
           wsService.emit('join', { connectionId, channel });
           return this.createServiceResponse(name, 'joinChannel', { success: true });
         }
@@ -672,8 +676,8 @@ export class ServiceMockManager extends EventEmitter {
         activeChannels: channels.size,
         connectionsByChannel: Object.fromEntries(
           Array.from(channels.entries()).map(([channel, conns]) => [channel, conns.size])
-        )
-      })
+        ),
+      }),
     });
 
     this.services.set(name, wsService);
@@ -704,13 +708,13 @@ export class ServiceMockManager extends EventEmitter {
           ...notification,
           sentAt: notification.scheduledFor || new Date(),
           status: 'sent',
-          delivered: this.rng() > 0.05 // 95% delivery rate
+          delivered: this.rng() > 0.05, // 95% delivery rate
         };
 
         notifications.push(notif);
-        return this.createServiceResponse(name, 'send', { 
+        return this.createServiceResponse(name, 'send', {
           notificationId: notif.id,
-          status: notif.status 
+          status: notif.status,
         });
       },
 
@@ -720,7 +724,7 @@ export class ServiceMockManager extends EventEmitter {
           channels,
           preferences: preferences || {},
           subscribedAt: new Date(),
-          active: true
+          active: true,
         };
 
         if (!subscriptions.has(userId)) {
@@ -746,11 +750,14 @@ export class ServiceMockManager extends EventEmitter {
         return this.createServiceResponse(name, 'unsubscribe', { success: true });
       },
 
-      getNotifications: async (userId: string, filter?: { 
-        type?: string; 
-        startDate?: Date; 
-        limit?: number 
-      }) => {
+      getNotifications: async (
+        userId: string,
+        filter?: {
+          type?: string;
+          startDate?: Date;
+          limit?: number;
+        }
+      ) => {
         let userNotifications = notifications.filter(n => n.userId === userId);
 
         if (filter) {
@@ -765,10 +772,10 @@ export class ServiceMockManager extends EventEmitter {
           }
         }
 
-        return this.createServiceResponse(name, 'getNotifications', { 
-          notifications: userNotifications 
+        return this.createServiceResponse(name, 'getNotifications', {
+          notifications: userNotifications,
         });
-      }
+      },
     };
 
     this.services.set(name, notificationService);
@@ -784,18 +791,18 @@ export class ServiceMockManager extends EventEmitter {
       getLatency: () => Math.floor(this.rng() * 200) + 10, // 10-210ms
       call: async (method: string, ...args: unknown[]) => {
         return this.recordServiceCall(name, method, args);
-      }
+      },
     };
 
     switch (config.type) {
-    case 'http':
-      return { ...baseService, ...this.createHTTPMethods(name) };
-    case 'cache':
-      return { ...baseService, ...this.createCacheMethods(name) };
-    case 'message_queue':
-      return { ...baseService, ...this.createMessageQueueMethods(name) };
-    default:
-      return baseService;
+      case 'http':
+        return { ...baseService, ...this.createHTTPMethods(name) };
+      case 'cache':
+        return { ...baseService, ...this.createCacheMethods(name) };
+      case 'message_queue':
+        return { ...baseService, ...this.createMessageQueueMethods(name) };
+      default:
+        return baseService;
     }
   }
 
@@ -804,13 +811,13 @@ export class ServiceMockManager extends EventEmitter {
       get: async (path: string, params?: unknown) => this.recordServiceCall(serviceName, 'GET', [path, params]),
       post: async (path: string, data?: unknown) => this.recordServiceCall(serviceName, 'POST', [path, data]),
       put: async (path: string, data?: unknown) => this.recordServiceCall(serviceName, 'PUT', [path, data]),
-      delete: async (path: string) => this.recordServiceCall(serviceName, 'DELETE', [path])
+      delete: async (path: string) => this.recordServiceCall(serviceName, 'DELETE', [path]),
     };
   }
 
   private createCacheMethods(serviceName: string) {
     const cache = new Map();
-    
+
     return {
       get: async (key: string) => {
         const value = cache.get(key);
@@ -826,13 +833,13 @@ export class ServiceMockManager extends EventEmitter {
       delete: async (key: string) => {
         const existed = cache.delete(key);
         return this.createServiceResponse(serviceName, 'delete', { existed });
-      }
+      },
     };
   }
 
   private createMessageQueueMethods(serviceName: string) {
     const queues = new Map();
-    
+
     return {
       publish: async (_topic: string, message: unknown) => {
         if (!queues.has(topic)) {
@@ -844,7 +851,7 @@ export class ServiceMockManager extends EventEmitter {
       subscribe: async (_topic: string, _handler: () => void) => {
         // Mock subscription
         return this.createServiceResponse(serviceName, 'subscribe', { subscribed: true });
-      }
+      },
     };
   }
 
@@ -865,22 +872,27 @@ export class ServiceMockManager extends EventEmitter {
     // Check circuit breaker
     const circuitBreaker = this.circuitBreakers.get(serviceName);
     if (circuitBreaker && circuitBreaker.isOpen()) {
-      return this.createServiceResponse(serviceName, method, { 
-        error: 'Service temporarily unavailable (circuit breaker open)' 
-      }, 503);
+      return this.createServiceResponse(
+        serviceName,
+        method,
+        {
+          error: 'Service temporarily unavailable (circuit breaker open)',
+        },
+        503
+      );
     }
 
     try {
       await this.simulateLatency(serviceName);
-      
+
       const response = this.createServiceResponse(serviceName, method, {
         success: true,
         data: `Mock response for ${method}`,
-        args
+        args,
       });
 
       const duration = Date.now() - startTime;
-      
+
       const serviceCall: ServiceCall = {
         id: callId,
         service: serviceName,
@@ -888,7 +900,7 @@ export class ServiceMockManager extends EventEmitter {
         args,
         timestamp: new Date(),
         response,
-        duration
+        duration,
       };
 
       this.callHistory.push(serviceCall);
@@ -900,9 +912,14 @@ export class ServiceMockManager extends EventEmitter {
       return response;
     } catch (error) {
       const duration = Date.now() - startTime;
-      const errorResponse = this.createServiceResponse(serviceName, method, { 
-        error: error instanceof Error ? error.message : 'Unknown error' 
-      }, 500);
+      const errorResponse = this.createServiceResponse(
+        serviceName,
+        method,
+        {
+          error: error instanceof Error ? error.message : 'Unknown error',
+        },
+        500
+      );
 
       const serviceCall: ServiceCall = {
         id: callId,
@@ -911,7 +928,7 @@ export class ServiceMockManager extends EventEmitter {
         args,
         timestamp: new Date(),
         response: errorResponse,
-        duration
+        duration,
       };
 
       this.callHistory.push(serviceCall);
@@ -925,17 +942,17 @@ export class ServiceMockManager extends EventEmitter {
   }
 
   private createServiceResponse(
-    serviceName: string, 
-    method: string, 
-    data: unknown, 
+    serviceName: string,
+    method: string,
+    data: unknown,
     statusCode: number = 200
   ): MockResponse {
     return {
       success: statusCode < 400,
       data: statusCode < 400 ? data : undefined,
-      error: statusCode >= 400 ? (data.error || 'Service error') : undefined,
+      error: statusCode >= 400 ? data.error || 'Service error' : undefined,
       statusCode,
-      latency: Math.floor(this.rng() * 100) + 10 // 10-110ms
+      latency: Math.floor(this.rng() * 100) + 10, // 10-110ms
     };
   }
 
@@ -953,32 +970,35 @@ export class ServiceMockManager extends EventEmitter {
       provider,
       providerData: {
         code,
-        exchangedAt: new Date()
-      }
+        exchangedAt: new Date(),
+      },
     };
 
     return this.createServiceResponse('auth', `oauth.${provider}`, {
       success: true,
       user: userData,
-      accessToken: this.generateJWT(userData, 'oauth_session')
+      accessToken: this.generateJWT(userData, 'oauth_session'),
     });
   }
 
   private generateEmailEvents(email: unknown): unknown[] {
     const events = [{ type: 'sent', timestamp: email.sentAt }];
-    
-    if (this.rng() > 0.2) { // 80% delivery rate
+
+    if (this.rng() > 0.2) {
+      // 80% delivery rate
       events.push({ type: 'delivered', timestamp: new Date(email.sentAt.getTime() + 30000) });
-      
-      if (this.rng() > 0.4) { // 60% open rate
+
+      if (this.rng() > 0.4) {
+        // 60% open rate
         events.push({ type: 'opened', timestamp: new Date(email.sentAt.getTime() + 120000) });
-        
-        if (this.rng() > 0.7) { // 30% click rate
+
+        if (this.rng() > 0.7) {
+          // 30% click rate
           events.push({ type: 'clicked', timestamp: new Date(email.sentAt.getTime() + 180000) });
         }
       }
     }
-    
+
     return events;
   }
 
@@ -987,7 +1007,7 @@ export class ServiceMockManager extends EventEmitter {
       'iPhone 14 Pro - iOS 16.0',
       'Samsung Galaxy S23 - Android 13',
       'MacBook Pro M2 - macOS Ventura',
-      'Windows 11 Desktop - Chrome 118'
+      'Windows 11 Desktop - Chrome 118',
     ];
     return devices[Math.floor(this.rng() * devices.length)];
   }
@@ -998,9 +1018,9 @@ export class ServiceMockManager extends EventEmitter {
       email: user.email,
       sessionId,
       iat: Math.floor(Date.now() / 1000),
-      exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60 // 24 hours
+      exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60, // 24 hours
     };
-    
+
     return `mock_jwt_${btoa(JSON.stringify(payload))}`;
   }
 
@@ -1020,9 +1040,7 @@ export class ServiceMockManager extends EventEmitter {
    * Get service call history
    */
   getCallHistory(serviceName?: string): ServiceCall[] {
-    return serviceName 
-      ? this.callHistory.filter(call => call.service === serviceName)
-      : this.callHistory;
+    return serviceName ? this.callHistory.filter(call => call.service === serviceName) : this.callHistory;
   }
 
   /**
@@ -1060,9 +1078,7 @@ class CircuitBreaker {
   private lastFailureTime = 0;
   private state: 'CLOSED' | 'OPEN' | 'HALF_OPEN' = 'CLOSED';
 
-  constructor(
-    private config: { failureThreshold: number; resetTimeout: number }
-  ) {}
+  constructor(private config: { failureThreshold: number; resetTimeout: number }) {}
 
   recordSuccess(): void {
     this.failures = 0;
@@ -1072,7 +1088,7 @@ class CircuitBreaker {
   recordFailure(): void {
     this.failures++;
     this.lastFailureTime = Date.now();
-    
+
     if (this.failures >= this.config.failureThreshold) {
       this.state = 'OPEN';
     }

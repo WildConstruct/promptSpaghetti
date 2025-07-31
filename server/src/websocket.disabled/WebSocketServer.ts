@@ -5,16 +5,16 @@ import { ConnectionManager } from './ConnectionManager';
 import { PresenceManager, PresenceConfig, UserPresenceData } from './PresenceManager';
 import { ConflictResolver, ConflictResolverConfig, ConflictOperation, ConflictType } from './ConflictResolver';
 import { SynchronizationManager, SyncManagerConfig, StateUpdate } from './SynchronizationManager';
-import { 
-  WSMessage, 
-  WSMessageSchema, 
-  WSServerConfig, 
+import {
+  WSMessage,
+  WSMessageSchema,
+  WSServerConfig,
   GraphUpdatePayload,
   PresenceUpdatePayload,
   AuthPayload,
   AuthPayloadSchema,
   GraphUpdatePayloadSchema,
-  PresenceUpdatePayloadSchema
+  PresenceUpdatePayloadSchema,
 } from './types';
 
 // Epic 13 Analytics Integration
@@ -30,7 +30,7 @@ export class WebSocketServer extends EventEmitter {
   private syncManager: SynchronizationManager;
   private config: WSServerConfig;
   private messageHandlers: Map<string, (connectionId: string, payload: any) => void> = new Map();
-  
+
   // Epic 13 Analytics Integration
   public analyticsCollector: AnalyticsCollector | null = null;
   private analyticsDAO: AnalyticsDAO | null = null;
@@ -39,7 +39,7 @@ export class WebSocketServer extends EventEmitter {
     super();
     this.config = config;
     this.connectionManager = new ConnectionManager(config);
-    
+
     // Initialize presence manager
     const presenceConfig: PresenceConfig = {
       idleTimeout: 30000, // 30 seconds
@@ -50,7 +50,7 @@ export class WebSocketServer extends EventEmitter {
       enableLocationSharing: true,
       enableActivityTracking: true,
       retainPresenceHistory: false,
-      historyRetentionPeriod: 86400000 // 24 hours
+      historyRetentionPeriod: 86400000, // 24 hours
     };
     this.presenceManager = new PresenceManager(presenceConfig);
 
@@ -62,7 +62,7 @@ export class WebSocketServer extends EventEmitter {
       positionConflictThreshold: 50, // 50 pixels
       enableSemanticMerge: false,
       preserveConflictHistory: true,
-      conflictHistoryRetention: 86400000 // 24 hours
+      conflictHistoryRetention: 86400000, // 24 hours
     };
     this.conflictResolver = new ConflictResolver(conflictConfig);
 
@@ -74,16 +74,16 @@ export class WebSocketServer extends EventEmitter {
       conflictDetection: true,
       autoMerge: true,
       syncInterval: 1000, // 1 second
-      maxSyncBatchSize: 50
+      maxSyncBatchSize: 50,
     };
     this.syncManager = new SynchronizationManager(syncConfig);
-    
+
     this.setupMessageHandlers();
     this.setupConnectionManagerEvents();
     this.setupPresenceManagerEvents();
     this.setupConflictResolverEvents();
     this.setupSyncManagerEvents();
-    
+
     // Initialize analytics if enabled
     this.initializeAnalytics();
   }
@@ -95,15 +95,15 @@ export class WebSocketServer extends EventEmitter {
     try {
       const db = getDatabase();
       this.analyticsDAO = new AnalyticsDAO(db);
-      
+
       this.analyticsCollector = new AnalyticsCollector({
         enabled: process.env.WS_ANALYTICS_ENABLED !== 'false',
         sampleRate: parseFloat(process.env.WS_ANALYTICS_SAMPLE_RATE || '1.0'),
-        privacyMode: process.env.ANALYTICS_PRIVACY_MODE === 'true'
+        privacyMode: process.env.ANALYTICS_PRIVACY_MODE === 'true',
       });
 
       // Set up event storage handler
-      this.analyticsCollector.on('events_flushed', (events) => {
+      this.analyticsCollector.on('events_flushed', events => {
         if (this.analyticsDAO) {
           events.forEach((event: any) => this.analyticsDAO.storeEvent(event));
         }
@@ -119,22 +119,21 @@ export class WebSocketServer extends EventEmitter {
    * Start the WebSocket server
    */
   start(server?: any): Promise<void> {
-
     return new Promise((resolve, reject) => {
       try {
         const wsOptions: WebSocket.ServerOptions = {
           port: server ? undefined : this.config.port,
           server: server || undefined,
-          verifyClient: (info) => this.verifyClient(info)
+          verifyClient: info => this.verifyClient(info),
         };
 
         this.wss = new WebSocket.Server(wsOptions);
-        
+
         this.wss.on('connection', (ws, request) => {
           this.handleConnection(ws, request);
         });
 
-        this.wss.on('error', (error) => {
+        this.wss.on('error', error => {
           console.error('WebSocket server error:', error);
           this.emit('error', error);
         });
@@ -142,7 +141,6 @@ export class WebSocketServer extends EventEmitter {
         console.log(`WebSocket server started on port ${this.config.port}`);
         this.emit('started');
         resolve();
-        
       } catch (error) {
         reject(error);
       }
@@ -153,8 +151,7 @@ export class WebSocketServer extends EventEmitter {
    * Stop the WebSocket server
    */
   stop(): Promise<void> {
-
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       if (this.wss) {
         this.wss.close(() => {
           this.connectionManager.cleanup();
@@ -191,7 +188,7 @@ export class WebSocketServer extends EventEmitter {
     const metrics = this.connectionManager.getHealthMetrics();
     return {
       activeDocuments: metrics.activeDocuments,
-      totalConnections: metrics.totalConnections
+      totalConnections: metrics.totalConnections,
     };
   }
 
@@ -231,7 +228,7 @@ export class WebSocketServer extends EventEmitter {
       ...message,
       timestamp: Date.now(),
       messageId: uuidv4(),
-      documentId
+      documentId,
     };
 
     this.connectionManager.broadcastToDocument(documentId, fullMessage, excludeConnectionId);
@@ -242,21 +239,21 @@ export class WebSocketServer extends EventEmitter {
    */
   private handleConnection(ws: WebSocket, request: any): void {
     const connectionId = this.connectionManager.addConnection(ws, request);
-    
+
     console.log(`New WebSocket connection: ${connectionId}`);
 
     // Set up message handling
-    ws.on('message', (data) => {
+    ws.on('message', data => {
       this.handleMessage(connectionId, data);
     });
 
     // Send connection confirmation
     this.sendToConnection(connectionId, {
       type: 'connect',
-      payload: { 
+      payload: {
         connectionId,
-        requiresAuthentication: this.config.enableAuthentication 
-      }
+        requiresAuthentication: this.config.enableAuthentication,
+      },
     });
   }
 
@@ -266,10 +263,10 @@ export class WebSocketServer extends EventEmitter {
   private handleMessage(connectionId: string, data: WebSocket.Data): void {
     try {
       const rawMessage = JSON.parse(data.toString());
-      
+
       // Validate message format
       const message = WSMessageSchema.parse(rawMessage);
-      
+
       // Update last seen time
       const connectionInfo = this.connectionManager.getConnectionInfo(connectionId);
       if (connectionInfo) {
@@ -283,16 +280,15 @@ export class WebSocketServer extends EventEmitter {
       } else {
         console.warn(`No handler for message type: ${message.type}`);
       }
-
     } catch (error) {
       console.error(`Invalid message from connection ${connectionId}:`, error);
-      
+
       this.sendToConnection(connectionId, {
         type: 'error',
-        payload: { 
+        payload: {
           error: 'Invalid message format',
-          details: error instanceof Error ? error.message : String(error)
-        }
+          details: error instanceof Error ? error.message : String(error),
+        },
       });
     }
   }
@@ -304,7 +300,7 @@ export class WebSocketServer extends EventEmitter {
     const fullMessage: WSMessage = {
       ...message,
       timestamp: Date.now(),
-      messageId: uuidv4()
+      messageId: uuidv4(),
     };
 
     return this.connectionManager.sendToConnection(connectionId, fullMessage);
@@ -319,7 +315,7 @@ export class WebSocketServer extends EventEmitter {
       try {
         const authPayload = AuthPayloadSchema.parse(payload);
         const success = await this.connectionManager.authenticateConnection(connectionId, authPayload);
-        
+
         // Track authentication event
         if (this.analyticsCollector) {
           this.analyticsCollector.recordUserInteraction(
@@ -329,17 +325,17 @@ export class WebSocketServer extends EventEmitter {
               connectionId,
               userId: authPayload.userId,
               authenticationSuccess: success,
-              interactionType: 'authentication'
+              interactionType: 'authentication',
             }
           );
         }
-        
+
         this.sendToConnection(connectionId, {
           type: 'auth_response',
-          payload: { 
+          payload: {
             success,
-            message: success ? 'Authentication successful' : 'Authentication failed'
-          }
+            message: success ? 'Authentication successful' : 'Authentication failed',
+          },
         });
 
         if (success) {
@@ -354,41 +350,45 @@ export class WebSocketServer extends EventEmitter {
                 userName: authPayload.userName,
                 userAvatar: authPayload.userAvatar,
                 userAgent: connectionInfo.userAgent,
-                platform: authPayload.platform
+                platform: authPayload.platform,
               }
             );
 
             // Send current users to the new user
-            const existingUsers = this.presenceManager.getDocumentUsers(connectionInfo.documentId)
+            const existingUsers = this.presenceManager
+              .getDocumentUsers(connectionInfo.documentId)
               .filter(user => user.connectionId !== connectionId);
-            
+
             if (existingUsers.length > 0) {
               this.sendToConnection(connectionId, {
                 type: 'presence_sync',
-                payload: { users: existingUsers }
+                payload: { users: existingUsers },
               });
             }
 
             // Notify other users in the document
-            this.broadcastToDocument(connectionInfo.documentId, {
-              type: 'user_join',
-              payload: {
-                userId: connectionInfo.userId,
-                userName: presence.userName,
-                userAvatar: presence.userAvatar,
-                timestamp: Date.now()
-              }
-            }, connectionId);
+            this.broadcastToDocument(
+              connectionInfo.documentId,
+              {
+                type: 'user_join',
+                payload: {
+                  userId: connectionInfo.userId,
+                  userName: presence.userName,
+                  userAvatar: presence.userAvatar,
+                  timestamp: Date.now(),
+                },
+              },
+              connectionId
+            );
           }
         }
-
       } catch (error) {
         this.sendToConnection(connectionId, {
           type: 'auth_response',
-          payload: { 
+          payload: {
             success: false,
-            message: 'Invalid authentication payload'
-          }
+            message: 'Invalid authentication payload',
+          },
         });
       }
     });
@@ -398,7 +398,7 @@ export class WebSocketServer extends EventEmitter {
       if (!this.connectionManager.hasPermission(connectionId, 'write')) {
         this.sendToConnection(connectionId, {
           type: 'error',
-          payload: { error: 'Insufficient permissions for graph updates' }
+          payload: { error: 'Insufficient permissions for graph updates' },
         });
         return;
       }
@@ -406,7 +406,7 @@ export class WebSocketServer extends EventEmitter {
       try {
         const updatePayload = GraphUpdatePayloadSchema.parse(payload);
         const connectionInfo = this.connectionManager.getConnectionInfo(connectionId);
-        
+
         if (!connectionInfo || !connectionInfo.documentId) {
           return;
         }
@@ -414,19 +414,15 @@ export class WebSocketServer extends EventEmitter {
         // Track graph update interaction
         if (this.analyticsCollector) {
           const interactionType = this.determineInteractionType(updatePayload);
-          this.analyticsCollector.recordUserInteraction(
-            interactionType,
-            connectionInfo.documentId,
-            {
-              connectionId,
-              userId: connectionInfo.userId,
-              updateType: updatePayload.type,
-              nodeId: updatePayload.nodeId,
-              nodeType: updatePayload.nodeType,
-              component: 'graph_editor',
-              canvasPosition: updatePayload.position
-            }
-          );
+          this.analyticsCollector.recordUserInteraction(interactionType, connectionInfo.documentId, {
+            connectionId,
+            userId: connectionInfo.userId,
+            updateType: updatePayload.type,
+            nodeId: updatePayload.nodeId,
+            nodeType: updatePayload.nodeType,
+            component: 'graph_editor',
+            canvasPosition: updatePayload.position,
+          });
         }
 
         // Initialize document if it doesn't exist
@@ -434,19 +430,19 @@ export class WebSocketServer extends EventEmitter {
 
         // Convert graph update to operations
         const operations = this.convertGraphUpdateToOperations(updatePayload, connectionInfo.userId);
-        
+
         // Process each operation through conflict resolver
         for (const operation of operations) {
           const resolution = this.conflictResolver.processOperation(operation);
-          
+
           if (resolution && resolution.requiresUserInput) {
             // Send conflict to user for resolution
             this.sendToConnection(connectionId, {
               type: 'conflict_detected',
               payload: {
                 conflict: resolution.conflict,
-                requiresResolution: true
-              }
+                requiresResolution: true,
+              },
             });
           }
         }
@@ -463,14 +459,18 @@ export class WebSocketServer extends EventEmitter {
 
         // Broadcast successful updates to other connections
         if (syncResponse.syncType === 'up_to_date') {
-          this.broadcastToDocument(connectionInfo.documentId, {
-            type: 'graph_update',
-            payload: {
-              ...updatePayload,
-              version: syncResponse.currentVersion,
-              conflicts: syncResponse.conflicts
-            }
-          }, connectionId);
+          this.broadcastToDocument(
+            connectionInfo.documentId,
+            {
+              type: 'graph_update',
+              payload: {
+                ...updatePayload,
+                version: syncResponse.currentVersion,
+                conflicts: syncResponse.conflicts,
+              },
+            },
+            connectionId
+          );
         }
 
         // Send response to sender
@@ -479,17 +479,16 @@ export class WebSocketServer extends EventEmitter {
           payload: {
             success: true,
             version: syncResponse.currentVersion,
-            conflicts: syncResponse.conflicts
-          }
+            conflicts: syncResponse.conflicts,
+          },
         });
 
         // Emit event for persistence layer
         this.emit('graph_update', connectionInfo.documentId, updatePayload, connectionInfo);
-
       } catch (error) {
         this.sendToConnection(connectionId, {
           type: 'error',
-          payload: { error: 'Invalid graph update payload' }
+          payload: { error: 'Invalid graph update payload' },
         });
       }
     });
@@ -499,7 +498,7 @@ export class WebSocketServer extends EventEmitter {
       try {
         const presencePayload = PresenceUpdatePayloadSchema.parse(payload);
         const connectionInfo = this.connectionManager.getConnectionInfo(connectionId);
-        
+
         if (!connectionInfo || !connectionInfo.documentId) {
           return;
         }
@@ -507,32 +506,37 @@ export class WebSocketServer extends EventEmitter {
         // Update presence in manager
         const updatedPresence = this.presenceManager.updateUserPresence(connectionId, {
           cursor: presencePayload.cursor,
-          selection: presencePayload.selection ? {
-            nodeIds: presencePayload.selection,
-            edgeIds: [],
-            selectionBox: undefined
-          } : undefined
+          selection: presencePayload.selection
+            ? {
+                nodeIds: presencePayload.selection,
+                edgeIds: [],
+                selectionBox: undefined,
+              }
+            : undefined,
         });
 
         if (updatedPresence) {
           // Broadcast presence to other connections in the document
-          this.broadcastToDocument(connectionInfo.documentId, {
-            type: 'presence_update',
-            payload: {
-              userId: updatedPresence.userId,
-              userName: updatedPresence.userName,
-              cursor: updatedPresence.cursor,
-              selection: updatedPresence.selection?.nodeIds || [],
-              lastSeen: updatedPresence.lastSeen,
-              status: updatedPresence.status
-            }
-          }, connectionId);
+          this.broadcastToDocument(
+            connectionInfo.documentId,
+            {
+              type: 'presence_update',
+              payload: {
+                userId: updatedPresence.userId,
+                userName: updatedPresence.userName,
+                cursor: updatedPresence.cursor,
+                selection: updatedPresence.selection?.nodeIds || [],
+                lastSeen: updatedPresence.lastSeen,
+                status: updatedPresence.status,
+              },
+            },
+            connectionId
+          );
         }
-
       } catch (error) {
         this.sendToConnection(connectionId, {
           type: 'error',
-          payload: { error: 'Invalid presence update payload' }
+          payload: { error: 'Invalid presence update payload' },
         });
       }
     });
@@ -540,80 +544,96 @@ export class WebSocketServer extends EventEmitter {
     // Cursor position updates
     this.messageHandlers.set('cursor_update', (connectionId, payload) => {
       const { x, y, nodeId, viewportBounds } = payload;
-      
+
       const updatedPresence = this.presenceManager.updateUserCursor(connectionId, {
-        x, y, nodeId, viewportBounds
+        x,
+        y,
+        nodeId,
+        viewportBounds,
       });
 
       if (updatedPresence) {
-        this.broadcastToDocument(updatedPresence.documentId, {
-          type: 'cursor_update',
-          payload: {
-            userId: updatedPresence.userId,
-            cursor: updatedPresence.cursor
-          }
-        }, connectionId);
+        this.broadcastToDocument(
+          updatedPresence.documentId,
+          {
+            type: 'cursor_update',
+            payload: {
+              userId: updatedPresence.userId,
+              cursor: updatedPresence.cursor,
+            },
+          },
+          connectionId
+        );
       }
     });
 
     // Selection updates
     this.messageHandlers.set('selection_update', (connectionId, payload) => {
       const { nodeIds, edgeIds, selectionBox } = payload;
-      
+
       const updatedPresence = this.presenceManager.updateUserSelection(connectionId, {
         nodeIds: nodeIds || [],
         edgeIds: edgeIds || [],
-        selectionBox
+        selectionBox,
       });
 
       if (updatedPresence) {
-        this.broadcastToDocument(updatedPresence.documentId, {
-          type: 'selection_update',
-          payload: {
-            userId: updatedPresence.userId,
-            selection: updatedPresence.selection
-          }
-        }, connectionId);
+        this.broadcastToDocument(
+          updatedPresence.documentId,
+          {
+            type: 'selection_update',
+            payload: {
+              userId: updatedPresence.userId,
+              selection: updatedPresence.selection,
+            },
+          },
+          connectionId
+        );
       }
     });
 
     // Activity updates (typing, tool changes, etc.)
     this.messageHandlers.set('activity_update', (connectionId, payload) => {
       const { currentTool, isTyping, focusedNodeId } = payload;
-      
+
       const updatedPresence = this.presenceManager.updateUserActivity(connectionId, {
         currentTool,
         isTyping,
-        focusedNodeId
+        focusedNodeId,
       });
 
       if (updatedPresence) {
-        this.broadcastToDocument(updatedPresence.documentId, {
-          type: 'activity_update',
-          payload: {
-            userId: updatedPresence.userId,
-            currentTool: updatedPresence.currentTool,
-            isTyping: updatedPresence.isTyping,
-            focusedNodeId: updatedPresence.focusedNodeId
-          }
-        }, connectionId);
+        this.broadcastToDocument(
+          updatedPresence.documentId,
+          {
+            type: 'activity_update',
+            payload: {
+              userId: updatedPresence.userId,
+              currentTool: updatedPresence.currentTool,
+              isTyping: updatedPresence.isTyping,
+              focusedNodeId: updatedPresence.focusedNodeId,
+            },
+          },
+          connectionId
+        );
       }
     });
 
     // Request presence data for document
     this.messageHandlers.set('presence_request', (connectionId, payload) => {
       const connectionInfo = this.connectionManager.getConnectionInfo(connectionId);
-      
+
       if (!connectionInfo?.documentId) {
         return;
       }
 
-      const users = this.presenceManager.getDocumentUsers(connectionInfo.documentId)
+      const users = this.presenceManager
+        .getDocumentUsers(connectionInfo.documentId)
         .filter(user => user.connectionId !== connectionId);
 
       this.sendToConnection(connectionId, {
         type: 'presence_sync',
-        payload: { users }
+        payload: { users },
       });
     });
 
@@ -621,11 +641,11 @@ export class WebSocketServer extends EventEmitter {
     this.messageHandlers.set('resolve_conflict', (connectionId, payload) => {
       const { conflictId, strategy, userSelection } = payload;
       const connectionInfo = this.connectionManager.getConnectionInfo(connectionId);
-      
+
       if (!connectionInfo || !this.connectionManager.hasPermission(connectionId, 'write')) {
         this.sendToConnection(connectionId, {
           type: 'error',
-          payload: { error: 'Insufficient permissions to resolve conflicts' }
+          payload: { error: 'Insufficient permissions to resolve conflicts' },
         });
         return;
       }
@@ -645,11 +665,11 @@ export class WebSocketServer extends EventEmitter {
             resolution.operations.map(op => ({
               id: op.id,
               type: 'update' as const,
-              target: op.nodeId ? 'node' as const : 'edge' as const,
+              target: op.nodeId ? ('node' as const) : ('edge' as const),
               targetId: op.nodeId || op.edgeId || '',
               data: op.newValue,
               oldData: op.oldValue,
-              timestamp: op.timestamp
+              timestamp: op.timestamp,
             })),
             connectionInfo.userId
           );
@@ -663,18 +683,18 @@ export class WebSocketServer extends EventEmitter {
           payload: {
             conflictId,
             resolution: resolution.resolvedValue,
-            resolvedBy: connectionInfo.userId
-          }
+            resolvedBy: connectionInfo.userId,
+          },
         });
 
         this.sendToConnection(connectionId, {
           type: 'conflict_resolution_response',
-          payload: { success: true, resolution }
+          payload: { success: true, resolution },
         });
       } else {
         this.sendToConnection(connectionId, {
           type: 'error',
-          payload: { error: 'Failed to resolve conflict' }
+          payload: { error: 'Failed to resolve conflict' },
         });
       }
     });
@@ -682,7 +702,7 @@ export class WebSocketServer extends EventEmitter {
     // Document synchronization
     this.messageHandlers.set('sync_request', (connectionId, payload) => {
       const connectionInfo = this.connectionManager.getConnectionInfo(connectionId);
-      
+
       if (!connectionInfo || !connectionInfo.documentId) {
         return;
       }
@@ -692,20 +712,19 @@ export class WebSocketServer extends EventEmitter {
           documentId: connectionInfo.documentId,
           clientVersion: payload.clientVersion || 0,
           fullSync: payload.fullSync || false,
-          checksum: payload.checksum
+          checksum: payload.checksum,
         };
 
         const syncResponse = this.syncManager.handleSyncRequest(syncRequest);
 
         this.sendToConnection(connectionId, {
           type: 'sync_response',
-          payload: syncResponse
+          payload: syncResponse,
         });
-
       } catch (error) {
         this.sendToConnection(connectionId, {
           type: 'error',
-          payload: { error: 'Sync request failed' }
+          payload: { error: 'Sync request failed' },
         });
       }
     });
@@ -713,7 +732,7 @@ export class WebSocketServer extends EventEmitter {
     // State verification
     this.messageHandlers.set('verify_state', (connectionId, payload) => {
       const connectionInfo = this.connectionManager.getConnectionInfo(connectionId);
-      
+
       if (!connectionInfo || !connectionInfo.documentId) {
         return;
       }
@@ -722,7 +741,7 @@ export class WebSocketServer extends EventEmitter {
 
       this.sendToConnection(connectionId, {
         type: 'state_verification_response',
-        payload: integrity
+        payload: integrity,
       });
     });
 
@@ -730,7 +749,7 @@ export class WebSocketServer extends EventEmitter {
     this.messageHandlers.set('ping', (connectionId, payload) => {
       this.sendToConnection(connectionId, {
         type: 'pong',
-        payload: { timestamp: Date.now() }
+        payload: { timestamp: Date.now() },
       });
     });
   }
@@ -750,7 +769,7 @@ export class WebSocketServer extends EventEmitter {
    */
   private convertGraphUpdateToOperations(updatePayload: GraphUpdatePayload, userId: string): ConflictOperation[] {
     const operations: ConflictOperation[] = [];
-    
+
     for (const operation of updatePayload.operations) {
       const conflictOp: ConflictOperation = {
         id: uuidv4(),
@@ -762,12 +781,12 @@ export class WebSocketServer extends EventEmitter {
         newValue: operation.data,
         userId,
         timestamp: operation.timestamp,
-        documentId: updatePayload.documentId || ''
+        documentId: updatePayload.documentId || '',
       };
-      
+
       operations.push(conflictOp);
     }
-    
+
     return operations;
   }
 
@@ -776,20 +795,20 @@ export class WebSocketServer extends EventEmitter {
    */
   private mapOperationTypeToConflictType(operationType: string): ConflictType {
     switch (operationType) {
-    case 'node_add':
-      return ConflictType.NODE_CREATION;
-    case 'node_remove':
-      return ConflictType.NODE_DELETION;
-    case 'node_update':
-      return ConflictType.NODE_PROPERTIES;
-    case 'edge_add':
-      return ConflictType.EDGE_CREATION;
-    case 'edge_remove':
-      return ConflictType.EDGE_DELETION;
-    case 'edge_update':
-      return ConflictType.EDGE_PROPERTIES;
-    default:
-      return ConflictType.NODE_PROPERTIES;
+      case 'node_add':
+        return ConflictType.NODE_CREATION;
+      case 'node_remove':
+        return ConflictType.NODE_DELETION;
+      case 'node_update':
+        return ConflictType.NODE_PROPERTIES;
+      case 'edge_add':
+        return ConflictType.EDGE_CREATION;
+      case 'edge_remove':
+        return ConflictType.EDGE_DELETION;
+      case 'edge_update':
+        return ConflictType.EDGE_PROPERTIES;
+      default:
+        return ConflictType.NODE_PROPERTIES;
     }
   }
 
@@ -797,7 +816,7 @@ export class WebSocketServer extends EventEmitter {
    * Set up conflict resolver events
    */
   private setupConflictResolverEvents(): void {
-    this.conflictResolver.on('conflict_detected', (conflict) => {
+    this.conflictResolver.on('conflict_detected', conflict => {
       // Broadcast conflict to all users in the document
       this.broadcastToDocument(conflict.documentId, {
         type: 'conflict_notification',
@@ -805,24 +824,24 @@ export class WebSocketServer extends EventEmitter {
           conflictId: conflict.id,
           type: conflict.type,
           description: conflict.description,
-          requiresResolution: true
-        }
+          requiresResolution: true,
+        },
       });
     });
 
-    this.conflictResolver.on('conflict_auto_resolved', (resolution) => {
+    this.conflictResolver.on('conflict_auto_resolved', resolution => {
       // Broadcast auto-resolution
       this.broadcastToDocument(resolution.conflict.documentId, {
         type: 'conflict_auto_resolved',
         payload: {
           conflictId: resolution.conflict.id,
           resolution: resolution.resolvedValue,
-          strategy: resolution.conflict.resolutionStrategy
-        }
+          strategy: resolution.conflict.resolutionStrategy,
+        },
       });
     });
 
-    this.conflictResolver.on('conflict_resolved', (resolution) => {
+    this.conflictResolver.on('conflict_resolved', resolution => {
       // Conflict manually resolved - already handled in message handler
     });
   }
@@ -831,19 +850,19 @@ export class WebSocketServer extends EventEmitter {
    * Set up synchronization manager events
    */
   private setupSyncManagerEvents(): void {
-    this.syncManager.on('state_updated', (event) => {
+    this.syncManager.on('state_updated', event => {
       // Broadcast state changes to connected users
       this.broadcastToDocument(event.documentId, {
         type: 'state_updated',
         payload: {
           version: event.version,
           operationCount: event.operations.length,
-          hasConflicts: event.conflicts.length > 0
-        }
+          hasConflicts: event.conflicts.length > 0,
+        },
       });
     });
 
-    this.syncManager.on('sync_batch', (batch) => {
+    this.syncManager.on('sync_batch', batch => {
       // Handle batch synchronization
       this.emit('sync_batch_processed', batch);
     });
@@ -864,8 +883,8 @@ export class WebSocketServer extends EventEmitter {
         payload: {
           userId: presence.userId,
           userName: presence.userName,
-          timestamp: Date.now()
-        }
+          timestamp: Date.now(),
+        },
       });
     });
 
@@ -876,8 +895,8 @@ export class WebSocketServer extends EventEmitter {
         payload: {
           userId: presence.userId,
           status: newStatus,
-          timestamp: Date.now()
-        }
+          timestamp: Date.now(),
+        },
       });
     });
 
@@ -912,27 +931,27 @@ export class WebSocketServer extends EventEmitter {
    */
   private determineInteractionType(updatePayload: any): AnalyticsEventType {
     switch (updatePayload.type) {
-    case 'node_created':
-    case 'add_node':
-      return AnalyticsEventType.NODE_CREATED;
-    case 'node_updated':
-    case 'update_node':
-      return AnalyticsEventType.NODE_UPDATED;
-    case 'node_deleted':
-    case 'delete_node':
-      return AnalyticsEventType.NODE_DELETED;
-    case 'connection_created':
-    case 'add_connection':
-      return AnalyticsEventType.CONNECTION_CREATED;
-    case 'connection_deleted':
-    case 'delete_connection':
-      return AnalyticsEventType.CONNECTION_DELETED;
-    case 'canvas_pan':
-    case 'canvas_zoom':
-    case 'canvas_interaction':
-      return AnalyticsEventType.CANVAS_INTERACTION;
-    default:
-      return AnalyticsEventType.CANVAS_INTERACTION;
+      case 'node_created':
+      case 'add_node':
+        return AnalyticsEventType.NODE_CREATED;
+      case 'node_updated':
+      case 'update_node':
+        return AnalyticsEventType.NODE_UPDATED;
+      case 'node_deleted':
+      case 'delete_node':
+        return AnalyticsEventType.NODE_DELETED;
+      case 'connection_created':
+      case 'add_connection':
+        return AnalyticsEventType.CONNECTION_CREATED;
+      case 'connection_deleted':
+      case 'delete_connection':
+        return AnalyticsEventType.CONNECTION_DELETED;
+      case 'canvas_pan':
+      case 'canvas_zoom':
+      case 'canvas_interaction':
+        return AnalyticsEventType.CANVAS_INTERACTION;
+      default:
+        return AnalyticsEventType.CANVAS_INTERACTION;
     }
   }
 }

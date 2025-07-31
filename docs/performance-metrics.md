@@ -43,6 +43,7 @@ The Performance Metrics System provides comprehensive measurement, monitoring, a
 ### 1. Web Vitals (Client-Side)
 
 **Core Web Vitals:**
+
 - **FCP (First Contentful Paint)**: Time to first content render
 - **LCP (Largest Contentful Paint)**: Time to largest content element
 - **FID (First Input Delay)**: Input responsiveness
@@ -50,6 +51,7 @@ The Performance Metrics System provides comprehensive measurement, monitoring, a
 - **TTI (Time to Interactive)**: Full interactivity
 
 **Thresholds:**
+
 ```typescript
 {
   fcp: { good: 1800, poor: 3000 },      // milliseconds
@@ -63,12 +65,14 @@ The Performance Metrics System provides comprehensive measurement, monitoring, a
 ### 2. Runtime Performance
 
 **Graph Execution:**
+
 - Node execution timing
 - Graph traversal performance
 - Memory usage during execution
 - Advanced node performance (Epic 7 nodes)
 
 **React Component Performance:**
+
 - Component render timing
 - Re-render frequency
 - Memory usage per component
@@ -77,12 +81,14 @@ The Performance Metrics System provides comprehensive measurement, monitoring, a
 ### 3. API Performance
 
 **Endpoint Metrics:**
+
 - Response time per endpoint
 - Request throughput
 - Error rates
 - Database query performance
 
 **Graph Operations:**
+
 - Graph execution time
 - Preview generation time
 - Validation performance
@@ -91,12 +97,14 @@ The Performance Metrics System provides comprehensive measurement, monitoring, a
 ### 4. Memory Management
 
 **Heap Monitoring:**
+
 - Initial heap size
 - Peak heap usage
 - Steady-state memory
 - Garbage collection frequency
 
 **Memory Leak Detection:**
+
 - Memory growth rate tracking
 - Leak threshold monitoring
 - Component cleanup validation
@@ -104,12 +112,14 @@ The Performance Metrics System provides comprehensive measurement, monitoring, a
 ### 5. Network Performance
 
 **Request Analysis:**
+
 - Total request count
 - Transfer size optimization
 - Third-party request tracking
 - Critical resource identification
 
 **Bundle Analysis:**
+
 - Main bundle size
 - Vendor bundle size
 - Chunk size optimization
@@ -118,6 +128,7 @@ The Performance Metrics System provides comprehensive measurement, monitoring, a
 ### 6. Build Performance
 
 **Compilation Metrics:**
+
 - TypeScript compilation time
 - Build duration
 - Linting performance
@@ -137,7 +148,7 @@ const webVitals = new WebVitalsIntegration({
   samplingRate: 1.0,
   enableConsoleLogging: true,
   enableAnalytics: true,
-  analyticsEndpoint: '/api/analytics/web-vitals'
+  analyticsEndpoint: '/api/analytics/web-vitals',
 });
 
 // Start monitoring
@@ -148,7 +159,7 @@ const currentMetrics = await webVitals.getCurrentVitals();
 console.log('Web Vitals:', currentMetrics);
 
 // Listen for events
-webVitals.on('poor-performance', (metric) => {
+webVitals.on('poor-performance', metric => {
   console.warn(`Poor ${metric.name} performance:`, metric.value);
 });
 ```
@@ -159,9 +170,12 @@ webVitals.on('poor-performance', (metric) => {
 import { measureExecution, PerformanceTracker } from './packages/core/utils/performance';
 
 // Measure function execution
-const { result, metrics } = await measureExecution(async () => {
-  return await complexOperation();
-}, { operation: 'complex-calculation' });
+const { result, metrics } = await measureExecution(
+  async () => {
+    return await complexOperation();
+  },
+  { operation: 'complex-calculation' }
+);
 
 console.log(`Operation took ${metrics.duration}ms and used ${metrics.memory}MB`);
 
@@ -194,13 +208,13 @@ console.log(`Violations: ${result.violations.length}`);
 import { PerformanceMonitoringDashboard } from './packages/core/performance/PerformanceMonitoringDashboard';
 
 const dashboard = new PerformanceMonitoringDashboard({
-  updateInterval: 5000,      // 5 seconds
-  historyLimit: 200,         // 200 snapshots
-  autoOptimize: false,       // Manual optimization
+  updateInterval: 5000, // 5 seconds
+  historyLimit: 200, // 200 snapshots
+  autoOptimize: false, // Manual optimization
   alertThresholds: {
-    violations: 3,           // Alert after 3 violations
-    score: 70               // Alert below score 70
-  }
+    violations: 3, // Alert after 3 violations
+    score: 70, // Alert below score 70
+  },
 });
 
 // Start monitoring
@@ -278,30 +292,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-          
+
       - name: Install dependencies
         run: pnpm install
-        
+
       - name: Build application
         run: pnpm build
-        
+
       - name: Start server
         run: pnpm dev:server &
-        
+
       - name: Wait for server
         run: sleep 10
-        
+
       - name: Performance budget check
         run: npm run perf:budget:json > performance-budget.json
-        
+
       - name: K6 load testing
         run: npm run load:k6:baseline
-        
+
       - name: Upload performance results
         uses: actions/upload-artifact@v3
         with:
@@ -388,14 +402,11 @@ npm run perf:monitor
 
 ```typescript
 // Create custom performance observer
-const observer = webVitals.createPerformanceObserver(
-  ['navigation', 'resource', 'paint'],
-  (entries) => {
-    entries.forEach(entry => {
-      console.log(`${entry.entryType}: ${entry.name} took ${entry.duration}ms`);
-    });
-  }
-);
+const observer = webVitals.createPerformanceObserver(['navigation', 'resource', 'paint'], entries => {
+  entries.forEach(entry => {
+    console.log(`${entry.entryType}: ${entry.name} took ${entry.duration}ms`);
+  });
+});
 ```
 
 ### Memory Profiling
@@ -407,7 +418,7 @@ const memoryObserver = setInterval(() => {
   console.log({
     used: Math.round(memory.usedJSHeapSize / 1024 / 1024),
     total: Math.round(memory.totalJSHeapSize / 1024 / 1024),
-    limit: Math.round(memory.jsHeapSizeLimit / 1024 / 1024)
+    limit: Math.round(memory.jsHeapSizeLimit / 1024 / 1024),
   });
 }, 5000);
 ```
@@ -423,8 +434,8 @@ const profiler = new PerformanceProfiler({
   alertThresholds: {
     cpuUsage: 80,
     memoryUsage: 80,
-    responseTime: 1000
-  }
+    responseTime: 1000,
+  },
 });
 
 profiler.startMonitoring();

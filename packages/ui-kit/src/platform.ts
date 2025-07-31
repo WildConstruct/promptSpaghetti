@@ -17,7 +17,7 @@ const defaultColors: ThemeColors = {
   error: '#FF3B30',
   warning: '#FF9500',
   success: '#34C759',
-  info: '#007AFF'
+  info: '#007AFF',
 };
 
 const darkColors: ThemeColors = {
@@ -32,7 +32,7 @@ const darkColors: ThemeColors = {
   error: '#FF453A',
   warning: '#FF9F0A',
   success: '#32D74B',
-  info: '#64D2FF'
+  info: '#64D2FF',
 };
 
 const defaultSpacing: ThemeSpacing = {
@@ -40,7 +40,7 @@ const defaultSpacing: ThemeSpacing = {
   sm: 8,
   md: 16,
   lg: 24,
-  xl: 32
+  xl: 32,
 };
 
 const defaultTypography: ThemeTypography = {
@@ -51,43 +51,43 @@ const defaultTypography: ThemeTypography = {
     md: 16,
     lg: 18,
     xl: 24,
-    xxl: 32
+    xxl: 32,
   },
   fontWeight: {
     light: 300,
     normal: 400,
     medium: 500,
     semibold: 600,
-    bold: 700
+    bold: 700,
   },
   lineHeight: {
     tight: 1.2,
     normal: 1.5,
-    relaxed: 1.75
-  }
+    relaxed: 1.75,
+  },
 };
 
 export const detectPlatform = (): Platform => {
   if (typeof window === 'undefined') return 'desktop';
-  
+
   const userAgent = window.navigator.userAgent;
-  
+
   // Check for mobile devices
   if (/Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)) {
     return 'mobile';
   }
-  
+
   // Check for Electron (desktop app)
   if (typeof (window as any).process !== 'undefined' && (window as any).process.type) {
     return 'desktop';
   }
-  
+
   return 'web';
 };
 
 export const getPlatformCapabilities = (): DeviceCapabilities => {
   const platform = detectPlatform();
-  
+
   if (typeof window === 'undefined') {
     return {
       touchSupport: false,
@@ -95,17 +95,17 @@ export const getPlatformCapabilities = (): DeviceCapabilities => {
       keyboardSupport: true,
       maxViewportWidth: 1920,
       maxViewportHeight: 1080,
-      pixelRatio: 1
+      pixelRatio: 1,
     };
   }
-  
+
   return {
     touchSupport: 'ontouchstart' in window || navigator.maxTouchPoints > 0,
     hoverSupport: platform !== 'mobile' && window.matchMedia('(hover: hover)').matches,
     keyboardSupport: true,
     maxViewportWidth: window.screen.width || window.innerWidth || 1920,
     maxViewportHeight: window.screen.height || window.innerHeight || 1080,
-    pixelRatio: window.devicePixelRatio || 1
+    pixelRatio: window.devicePixelRatio || 1,
   };
 };
 
@@ -116,11 +116,10 @@ export const getBreakpoint = (width: number): 'mobile' | 'tablet' | 'desktop' =>
 };
 
 export const createTheme = (overrides?: Partial<Theme>): Theme => {
-  const prefersDark = typeof window !== 'undefined' && 
-    window.matchMedia('(prefers-color-scheme: dark)').matches;
-  
+  const prefersDark = typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
   const colors = prefersDark ? darkColors : defaultColors;
-  
+
   return {
     colors: { ...colors, ...(overrides?.colors || {}) },
     spacing: { ...defaultSpacing, ...(overrides?.spacing || {}) },
@@ -130,14 +129,14 @@ export const createTheme = (overrides?: Partial<Theme>): Theme => {
       sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
       md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
       lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-      ...(overrides?.shadows || {})
+      ...(overrides?.shadows || {}),
     },
     breakpoints: {
       mobile: 768,
       tablet: 1024,
       desktop: 1200,
-      ...(overrides?.breakpoints || {})
-    }
+      ...(overrides?.breakpoints || {}),
+    },
   };
 };
 
@@ -160,68 +159,68 @@ export const getViewportSize = () => {
   if (typeof window === 'undefined') {
     return { width: 1920, height: 1080 };
   }
-  
+
   return {
     width: window.innerWidth,
-    height: window.innerHeight
+    height: window.innerHeight,
   };
 };
 
 // Platform-specific optimizations
 export const getPlatformOptimizations = (platform: Platform) => {
   switch (platform) {
-  case 'mobile':
-    return {
-      enableTouchOptimizations: true,
-      reducedAnimations: isReducedMotion(),
-      useLargerTouchTargets: true,
-      enableVirtualization: true,
-      prefersSystemTheme: true
-    };
-    
-  case 'desktop':
-    return {
-      enableTouchOptimizations: false,
-      reducedAnimations: false,
-      useLargerTouchTargets: false,
-      enableVirtualization: false,
-      prefersSystemTheme: false,
-      enableKeyboardShortcuts: true
-    };
-    
-  case 'web':
-  default:
-    return {
-      enableTouchOptimizations: isTouchDevice(),
-      reducedAnimations: isReducedMotion(),
-      useLargerTouchTargets: isTouchDevice(),
-      enableVirtualization: true,
-      prefersSystemTheme: true,
-      enableKeyboardShortcuts: !isTouchDevice()
-    };
+    case 'mobile':
+      return {
+        enableTouchOptimizations: true,
+        reducedAnimations: isReducedMotion(),
+        useLargerTouchTargets: true,
+        enableVirtualization: true,
+        prefersSystemTheme: true,
+      };
+
+    case 'desktop':
+      return {
+        enableTouchOptimizations: false,
+        reducedAnimations: false,
+        useLargerTouchTargets: false,
+        enableVirtualization: false,
+        prefersSystemTheme: false,
+        enableKeyboardShortcuts: true,
+      };
+
+    case 'web':
+    default:
+      return {
+        enableTouchOptimizations: isTouchDevice(),
+        reducedAnimations: isReducedMotion(),
+        useLargerTouchTargets: isTouchDevice(),
+        enableVirtualization: true,
+        prefersSystemTheme: true,
+        enableKeyboardShortcuts: !isTouchDevice(),
+      };
   }
 };
 
 // Legacy function for backward compatibility
 export function getPlatformConfig(platform: Platform) {
   const capabilities = getPlatformCapabilities();
-  
+
   const configs = {
     web: {
       touchEnabled: capabilities.touchSupport,
       screenSize: 'large',
-      inputMethod: capabilities.touchSupport ? 'touch' : 'mouse'
+      inputMethod: capabilities.touchSupport ? 'touch' : 'mouse',
     },
     mobile: {
       touchEnabled: true,
       screenSize: 'small',
-      inputMethod: 'touch'
+      inputMethod: 'touch',
     },
     desktop: {
       touchEnabled: false,
       screenSize: 'large',
-      inputMethod: 'mouse'
-    }
+      inputMethod: 'mouse',
+    },
   };
 
   return configs[platform];

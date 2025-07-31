@@ -63,14 +63,14 @@ export class TestDataManager {
         directory: 'test-data',
         cleanup: true,
         retentionDays: 7,
-        ...config.persistence
+        ...config.persistence,
       },
       generation: {
         deterministic: true,
         maxCacheSize: 1000,
         batchSize: 100,
-        ...config.generation
-      }
+        ...config.generation,
+      },
     };
 
     this.cache = new Map();
@@ -103,9 +103,9 @@ export class TestDataManager {
           preferences: {
             theme: ['light', 'dark'][i % 2],
             notifications: true,
-            language: 'en'
-          }
-        }
+            language: 'en',
+          },
+        },
       }));
     });
 
@@ -115,7 +115,7 @@ export class TestDataManager {
       return Array.from({ length: count }, (_, i) => {
         const type = options.type || graphTypes[i % graphTypes.length];
         const baseGraph = this.getFixtureGraph(type);
-        
+
         return {
           id: this.generateId('graph'),
           name: `Test Graph ${i + 1}`,
@@ -128,8 +128,8 @@ export class TestDataManager {
             nodeCount: baseGraph.nodes.length,
             edgeCount: baseGraph.edges.length,
             complexity: this.calculateGraphComplexity(baseGraph),
-            testGenerated: true
-          }
+            testGenerated: true,
+          },
         };
       });
     });
@@ -145,13 +145,13 @@ export class TestDataManager {
         headers: {
           'content-type': 'application/json',
           'x-request-id': this.generateId('req'),
-          ...options.headers
+          ...options.headers,
         },
         metadata: {
           responseTime: Math.floor(Math.random() * 100) + 50,
           cached: false,
-          testGenerated: true
-        }
+          testGenerated: true,
+        },
       }));
     });
 
@@ -170,8 +170,8 @@ export class TestDataManager {
           metadata: {
             checksum: randomBytes(16).toString('hex'),
             encoding: 'utf-8',
-            testGenerated: true
-          }
+            testGenerated: true,
+          },
         };
       });
     });
@@ -185,7 +185,7 @@ export class TestDataManager {
           executionTime: Math.floor(Math.random() * 1000) + 100,
           memoryUsage: Math.floor(Math.random() * 100) + 10,
           cpuUsage: Math.random() * 100,
-          networkLatency: Math.floor(Math.random() * 50) + 10
+          networkLatency: Math.floor(Math.random() * 50) + 10,
         },
         timestamp: new Date().toISOString(),
         environment: this.config.environment,
@@ -193,10 +193,10 @@ export class TestDataManager {
           executionTime: 500,
           memoryUsage: 50,
           cpuUsage: 30,
-          networkLatency: 20
+          networkLatency: 20,
         },
         passed: options.passed !== false,
-        testGenerated: true
+        testGenerated: true,
       }));
     });
 
@@ -214,9 +214,9 @@ export class TestDataManager {
         context: options.context || {
           operation: `test-operation-${i + 1}`,
           userId: this.generateId('user'),
-          requestId: this.generateId('req')
+          requestId: this.generateId('req'),
         },
-        testGenerated: true
+        testGenerated: true,
       }));
     });
   }
@@ -239,7 +239,7 @@ export class TestDataManager {
     this.seedRandom(useSeed);
 
     const cacheKey = this.getCacheKey(request);
-    
+
     // Check cache first
     if (this.cache.has(cacheKey) && this.config.generation.deterministic) {
       return this.cache.get(cacheKey);
@@ -253,7 +253,7 @@ export class TestDataManager {
 
     // Generate data
     const data = generator(count, { ...options, ...constraints });
-    
+
     // Cache the result
     if (this.cache.size < this.config.generation.maxCacheSize) {
       this.cache.set(cacheKey, data);
@@ -288,8 +288,8 @@ export class TestDataManager {
         seed: this.currentSeed,
         environment: this.config.environment,
         testCount: Object.keys(data).length,
-        generatedBy: 'TestDataManager'
-      }
+        generatedBy: 'TestDataManager',
+      },
     };
 
     this.snapshots.set(snapshot.id, snapshot);
@@ -348,7 +348,7 @@ export class TestDataManager {
       schema: schema || {},
       tables: {},
       createdAt: new Date().toISOString(),
-      testGenerated: true
+      testGenerated: true,
     };
 
     await fs.mkdir(path.dirname(dbPath), { recursive: true });
@@ -363,7 +363,7 @@ export class TestDataManager {
   async seedDatabase(dbId: string, tableData: Record<string, any[]>): Promise<void> {
     const dbPath = path.join(this.dataDirectory, 'databases', `*_${dbId}.json`);
     const files = await this.globFiles(dbPath);
-    
+
     if (files.length === 0) {
       throw new Error(`Database not found: ${dbId}`);
     }
@@ -428,7 +428,7 @@ export class TestDataManager {
       currentSeed: this.currentSeed,
       environment: this.config.environment,
       persistenceEnabled: this.config.persistence.enabled,
-      dataDirectory: this.dataDirectory
+      dataDirectory: this.dataDirectory,
     };
   }
 
@@ -440,7 +440,7 @@ export class TestDataManager {
       config: this.config,
       snapshots: Array.from(this.snapshots.values()),
       statistics: this.getStatistics(),
-      exportedAt: new Date().toISOString()
+      exportedAt: new Date().toISOString(),
     };
 
     const exportPath = path.join(this.dataDirectory, 'exports', `test-data-export-${Date.now()}.${format}`);
@@ -461,7 +461,7 @@ export class TestDataManager {
    */
   async import(filePath: string): Promise<void> {
     const data = JSON.parse(await fs.readFile(filePath, 'utf8'));
-    
+
     if (data.snapshots) {
       for (const snapshot of data.snapshots) {
         this.snapshots.set(snapshot.id, snapshot);
@@ -498,10 +498,14 @@ export class TestDataManager {
 
   private getFixtureGraph(type: string) {
     switch (type) {
-    case 'simple': return fixtures.graphs.simple;
-    case 'branching': return fixtures.graphs.branching;
-    case 'complex': return fixtures.graphs.complex;
-    default: return fixtures.graphs.simple;
+      case 'simple':
+        return fixtures.graphs.simple;
+      case 'branching':
+        return fixtures.graphs.branching;
+      case 'complex':
+        return fixtures.graphs.complex;
+      default:
+        return fixtures.graphs.simple;
     }
   }
 
@@ -509,21 +513,21 @@ export class TestDataManager {
     const nodeCount = graph.nodes.length;
     const edgeCount = graph.edges.length;
     const branchingFactor = edgeCount / Math.max(nodeCount - 1, 1);
-    return Math.round((nodeCount * 0.5) + (edgeCount * 0.3) + (branchingFactor * 2));
+    return Math.round(nodeCount * 0.5 + edgeCount * 0.3 + branchingFactor * 2);
   }
 
   private generateFileContent(type: string, options: any): string {
     switch (type) {
-    case 'json':
-      return JSON.stringify({ test: true, data: options.data || 'sample' }, null, 2);
-    case 'csv':
-      return 'id,name,value\n1,test1,100\n2,test2,200\n3,test3,300';
-    case 'txt':
-      return 'This is a test file content.\nGenerated for testing purposes.';
-    case 'xml':
-      return '<?xml version="1.0"?>\n<root>\n  <test>data</test>\n</root>';
-    default:
-      return 'Test file content';
+      case 'json':
+        return JSON.stringify({ test: true, data: options.data || 'sample' }, null, 2);
+      case 'csv':
+        return 'id,name,value\n1,test1,100\n2,test2,200\n3,test3,300';
+      case 'txt':
+        return 'This is a test file content.\nGenerated for testing purposes.';
+      case 'xml':
+        return '<?xml version="1.0"?>\n<root>\n  <test>data</test>\n</root>';
+      default:
+        return 'Test file content';
     }
   }
 
@@ -532,7 +536,7 @@ export class TestDataManager {
       `${errorName}: Test error occurred`,
       '    at TestFunction (test-file.js:10:5)',
       '    at TestSuite (test-suite.js:25:10)',
-      '    at TestRunner (test-runner.js:50:15)'
+      '    at TestRunner (test-runner.js:50:15)',
     ].join('\n');
   }
 
@@ -563,10 +567,10 @@ export class TestDataManager {
 
   private async cleanupPersistentData(options: { olderThan?: Date }): Promise<void> {
     const { olderThan } = options;
-    const cutoffDate = olderThan || new Date(Date.now() - (this.config.persistence.retentionDays * 24 * 60 * 60 * 1000));
+    const cutoffDate = olderThan || new Date(Date.now() - this.config.persistence.retentionDays * 24 * 60 * 60 * 1000);
 
     const directories = ['snapshots', 'databases', 'exports'];
-    
+
     for (const dir of directories) {
       const dirPath = path.join(this.dataDirectory, dir);
       try {
@@ -588,11 +592,11 @@ export class TestDataManager {
     // Simple glob implementation for database files
     const dir = path.dirname(pattern);
     const filename = path.basename(pattern);
-    
+
     try {
       const files = await fs.readdir(dir);
       return files
-        .filter(file => filename.includes('*') ? true : file === filename)
+        .filter(file => (filename.includes('*') ? true : file === filename))
         .map(file => path.join(dir, file));
     } catch {
       return [];
@@ -603,17 +607,13 @@ export class TestDataManager {
     // Simple CSV conversion for export
     const rows = [];
     rows.push('Type,ID,Timestamp,TestSuite,DataCount');
-    
+
     for (const snapshot of data.snapshots) {
-      rows.push([
-        'Snapshot',
-        snapshot.id,
-        snapshot.timestamp,
-        snapshot.testSuite,
-        Object.keys(snapshot.data).length
-      ].join(','));
+      rows.push(
+        ['Snapshot', snapshot.id, snapshot.timestamp, snapshot.testSuite, Object.keys(snapshot.data).length].join(',')
+      );
     }
-    
+
     return rows.join('\n');
   }
 }
@@ -643,48 +643,40 @@ export const testData = {
   /**
    * Generate users for testing
    */
-  users: (count = 1, options = {}) => 
-    getTestDataManager().generate({ type: 'user', count, options }),
+  users: (count = 1, options = {}) => getTestDataManager().generate({ type: 'user', count, options }),
 
   /**
    * Generate graphs for testing
    */
-  graphs: (count = 1, options = {}) => 
-    getTestDataManager().generate({ type: 'graph', count, options }),
+  graphs: (count = 1, options = {}) => getTestDataManager().generate({ type: 'graph', count, options }),
 
   /**
    * Generate API responses for testing
    */
-  apiResponses: (count = 1, options = {}) => 
-    getTestDataManager().generate({ type: 'apiResponse', count, options }),
+  apiResponses: (count = 1, options = {}) => getTestDataManager().generate({ type: 'apiResponse', count, options }),
 
   /**
    * Generate files for testing
    */
-  files: (count = 1, options = {}) => 
-    getTestDataManager().generate({ type: 'file', count, options }),
+  files: (count = 1, options = {}) => getTestDataManager().generate({ type: 'file', count, options }),
 
   /**
    * Generate performance data for testing
    */
-  performance: (count = 1, options = {}) => 
-    getTestDataManager().generate({ type: 'performance', count, options }),
+  performance: (count = 1, options = {}) => getTestDataManager().generate({ type: 'performance', count, options }),
 
   /**
    * Generate errors for testing
    */
-  errors: (count = 1, options = {}) => 
-    getTestDataManager().generate({ type: 'error', count, options }),
+  errors: (count = 1, options = {}) => getTestDataManager().generate({ type: 'error', count, options }),
 
   /**
    * Create snapshot of test data
    */
-  snapshot: (testSuite: string, data: Record<string, any>) =>
-    getTestDataManager().createSnapshot(testSuite, data),
+  snapshot: (testSuite: string, data: Record<string, any>) => getTestDataManager().createSnapshot(testSuite, data),
 
   /**
    * Clean up test data
    */
-  cleanup: (options = {}) => 
-    getTestDataManager().cleanup(options)
+  cleanup: (options = {}) => getTestDataManager().cleanup(options),
 };

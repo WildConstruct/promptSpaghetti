@@ -2,7 +2,7 @@
 
 /**
  * Fix Remaining Parsing Errors - Phase 2
- * 
+ *
  * Addresses specific parsing errors that are still preventing linting:
  * - Object literal syntax corruption ({) -> {)
  * - Function syntax corruption ({, -> {)
@@ -23,7 +23,7 @@ class RemainingParsingErrorsFixer {
       info: '🔍',
       success: '✅',
       warning: '⚠️',
-      error: '❌'
+      error: '❌',
     }[type];
     console.log(`${prefix} ${message}`);
   }
@@ -40,53 +40,53 @@ class RemainingParsingErrorsFixer {
       {
         pattern: /(\w+)\s*:\s*\{\)/g,
         replacement: '$1: {',
-        description: 'Fix object literal opening brace {) -> {'
+        description: 'Fix object literal opening brace {) -> {',
       },
       {
         pattern: /new\s+(\w+)\([^)]*,\s*\{\)/g,
         replacement: (match, className) => match.replace(/\{\)/, '{'),
-        description: 'Fix constructor object parameter {) -> {'
+        description: 'Fix constructor object parameter {) -> {',
       },
       // Fix function parameter object syntax
       {
         pattern: /=>\s*\{,/g,
         replacement: '=> {',
-        description: 'Fix arrow function opening {, -> {'
+        description: 'Fix arrow function opening {, -> {',
       },
       {
         pattern: /function\s*\([^)]*\)\s*\{,/g,
-        replacement: (match) => match.replace(/\{,/, '{'),
-        description: 'Fix function opening {, -> {'
+        replacement: match => match.replace(/\{,/, '{'),
+        description: 'Fix function opening {, -> {',
       },
       // Fix method signature issues
       {
         pattern: /(\w+)\s*\(\s*([^)]*)\s*\)\s*:\s*\{,/g,
         replacement: '$1($2): {',
-        description: 'Fix method signature {, -> {'
+        description: 'Fix method signature {, -> {',
       },
       // Fix interface/type property syntax
       {
         pattern: /interface\s+(\w+)\s*\{,/g,
         replacement: 'interface $1 {',
-        description: 'Fix interface opening {, -> {'
+        description: 'Fix interface opening {, -> {',
       },
       {
         pattern: /type\s+(\w+)\s*=\s*\{,/g,
         replacement: 'type $1 = {',
-        description: 'Fix type alias opening {, -> {'
+        description: 'Fix type alias opening {, -> {',
       },
       // Fix object method definitions
       {
         pattern: /(\w+):\s*\([^)]*\)\s*=>\s*\{,/g,
         replacement: '$1: ($2) => {',
-        description: 'Fix object method {, -> {'
+        description: 'Fix object method {, -> {',
       },
       // Fix JSX prop object syntax
       {
         pattern: /\s+\{\)\s*$/gm,
         replacement: ' {',
-        description: 'Fix JSX prop object {) -> {'
-      }
+        description: 'Fix JSX prop object {) -> {',
+      },
     ];
 
     for (const fix of parsingFixes) {
@@ -132,13 +132,13 @@ class RemainingParsingErrorsFixer {
 
     // Get files with parsing errors from lint output
     const { execSync } = require('child_process');
-    
+
     try {
       // Run lint and capture output
-      const lintOutput = execSync('pnpm lint 2>&1', { 
+      const lintOutput = execSync('pnpm lint 2>&1', {
         encoding: 'utf8',
         cwd: process.cwd(),
-        maxBuffer: 10 * 1024 * 1024 // 10MB buffer
+        maxBuffer: 10 * 1024 * 1024, // 10MB buffer
       });
 
       // Extract file paths with parsing errors
@@ -168,17 +168,16 @@ class RemainingParsingErrorsFixer {
       for (const filePath of filesWithParsingErrors) {
         this.processFile(filePath);
       }
-
     } catch (error) {
       // If lint fails, fall back to processing known problematic files
       this.log('Lint command failed, processing known problematic files...', 'warning');
-      
+
       const knownProblematicFiles = [
         'client/src/__tests__/bugfix/NodeSelectionFixes.real.test.tsx',
         'client/src/components/BrowserSafeGraphEditor.tsx',
         'client/src/components/EnhancedGraphEditor.refactored.tsx',
         'client/src/components/EpicDashboard.tsx',
-        'client/src/components/GraphNode.tsx'
+        'client/src/components/GraphNode.tsx',
       ];
 
       for (const relPath of knownProblematicFiles) {

@@ -1,4 +1,4 @@
-import { State } from "./types";
+import { State } from './types';
 /**
  * Create an empty initial state
  */
@@ -23,9 +23,9 @@ export declare function backupState(): void;
  * Get state statistics
  */
 export declare function getStateStats(s: State): {
-    totalTasks: number;
-    tasksByState: Record<string, number>;
-    assignmentsByDev: Record<string, number>;
-    storiesByStatus: Record<string, number>;
+  totalTasks: number;
+  tasksByState: Record<string, number>;
+  assignmentsByDev: Record<string, number>;
+  storiesByStatus: Record<string, number>;
 };
 //# sourceMappingURL=state.d.ts.map

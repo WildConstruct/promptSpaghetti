@@ -31,15 +31,11 @@ function PasswordForm() {
       <input
         type="password"
         value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={e => setPassword(e.target.value)}
         placeholder="Enter your password"
       />
-      
-      <PasswordStrengthIndicator
-        password={password}
-        showDetails={true}
-        showSuggestions={true}
-      />
+
+      <PasswordStrengthIndicator password={password} showDetails={true} showSuggestions={true} />
     </div>
   );
 }
@@ -48,30 +44,25 @@ function PasswordForm() {
 ### Advanced Implementation with Context
 
 ```tsx
-import { 
-  PasswordStrengthIndicator,
-  PasswordComplexityValidator 
-} from '@promptscape/core/auth';
+import { PasswordStrengthIndicator, PasswordComplexityValidator } from '@promptscape/core/auth';
 
 function AdvancedPasswordForm() {
   const [password, setPassword] = useState('');
   const [validationResult, setValidationResult] = useState(null);
-  
+
   // Custom validator with strict rules
-  const validator = useMemo(() => 
-    new PasswordComplexityValidator({ mode: 'strict' }), []
-  );
-  
+  const validator = useMemo(() => new PasswordComplexityValidator({ mode: 'strict' }), []);
+
   // User context for personal information checking
   const userContext = {
     username: 'johndoe',
     email: 'john.doe@example.com',
     firstName: 'John',
     lastName: 'Doe',
-    organizationName: 'Acme Corp'
+    organizationName: 'Acme Corp',
   };
 
-  const handleValidationChange = (result) => {
+  const handleValidationChange = result => {
     setValidationResult(result);
     console.log('Password strength:', result.strength);
     console.log('Security score:', result.score);
@@ -87,12 +78,12 @@ function AdvancedPasswordForm() {
           id="password"
           type="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={e => setPassword(e.target.value)}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
           placeholder="Enter a strong password"
         />
       </div>
-      
+
       <PasswordStrengthIndicator
         password={password}
         context={userContext}
@@ -104,7 +95,7 @@ function AdvancedPasswordForm() {
         onValidationChange={handleValidationChange}
         theme="auto"
       />
-      
+
       {validationResult && (
         <div className="text-sm text-gray-600">
           Password meets {validationResult.passedRules} of {validationResult.totalRules} requirements
@@ -119,20 +110,20 @@ function AdvancedPasswordForm() {
 
 ### PasswordStrengthIndicator Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `password` | `string` | **required** | The password to validate |
-| `context` | `PasswordValidationContext` | `undefined` | User context for personalized validation |
-| `validator` | `PasswordComplexityValidator` | `new PasswordComplexityValidator()` | Custom validator instance |
-| `showDetails` | `boolean` | `true` | Show detailed rule breakdown |
-| `showSuggestions` | `boolean` | `true` | Show improvement suggestions |
-| `showCrackTime` | `boolean` | `false` | Show estimated crack times |
-| `showEntropy` | `boolean` | `false` | Show password entropy |
-| `compact` | `boolean` | `false` | Use compact display mode |
-| `theme` | `'light' \| 'dark' \| 'auto'` | `'auto'` | Visual theme |
-| `className` | `string` | `''` | Additional CSS classes |
-| `onValidationChange` | `(result: PasswordValidationResult) => void` | `undefined` | Validation result callback |
-| `debounceMs` | `number` | `300` | Validation debounce delay |
+| Prop                 | Type                                         | Default                             | Description                              |
+| -------------------- | -------------------------------------------- | ----------------------------------- | ---------------------------------------- |
+| `password`           | `string`                                     | **required**                        | The password to validate                 |
+| `context`            | `PasswordValidationContext`                  | `undefined`                         | User context for personalized validation |
+| `validator`          | `PasswordComplexityValidator`                | `new PasswordComplexityValidator()` | Custom validator instance                |
+| `showDetails`        | `boolean`                                    | `true`                              | Show detailed rule breakdown             |
+| `showSuggestions`    | `boolean`                                    | `true`                              | Show improvement suggestions             |
+| `showCrackTime`      | `boolean`                                    | `false`                             | Show estimated crack times               |
+| `showEntropy`        | `boolean`                                    | `false`                             | Show password entropy                    |
+| `compact`            | `boolean`                                    | `false`                             | Use compact display mode                 |
+| `theme`              | `'light' \| 'dark' \| 'auto'`                | `'auto'`                            | Visual theme                             |
+| `className`          | `string`                                     | `''`                                | Additional CSS classes                   |
+| `onValidationChange` | `(result: PasswordValidationResult) => void` | `undefined`                         | Validation result callback               |
+| `debounceMs`         | `number`                                     | `300`                               | Validation debounce delay                |
 
 ### PasswordValidationContext
 
@@ -156,6 +147,7 @@ interface PasswordValidationContext {
 ### Full Mode (Default)
 
 Shows complete password analysis with:
+
 - Visual strength meter with color coding
 - Detailed rule breakdown with pass/fail indicators
 - Improvement suggestions
@@ -175,15 +167,13 @@ Shows complete password analysis with:
 ### Compact Mode
 
 Minimalist display for tight UI spaces:
+
 - Small progress bar
 - Strength label only
 - No detailed breakdown
 
 ```tsx
-<PasswordStrengthIndicator
-  password={password}
-  compact={true}
-/>
+<PasswordStrengthIndicator password={password} compact={true} />
 ```
 
 ## Customization
@@ -205,8 +195,8 @@ const strictValidator = new PasswordComplexityValidator({
     PasswordRules.requireSpecialChars(2),
     PasswordRules.noPersonalInfo(),
     PasswordRules.notInHistory(10),
-    PasswordRules.minimumEntropy(60)
-  ]
+    PasswordRules.minimumEntropy(60),
+  ],
 });
 
 // Lenient consumer policy
@@ -217,8 +207,8 @@ const lenientValidator = new PasswordComplexityValidator({
     PasswordRules.minLength(6),
     PasswordRules.requireUppercase(1),
     PasswordRules.requireLowercase(1),
-    PasswordRules.requireDigits(1)
-  ]
+    PasswordRules.requireDigits(1),
+  ],
 });
 ```
 
@@ -262,26 +252,18 @@ import { usePasswordStrength } from '@promptscape/core/components/PasswordStreng
 
 function CustomPasswordField() {
   const [password, setPassword] = useState('');
-  
-  const {
-    result,
-    isValidating,
-    isValid,
-    score,
-    strength,
-    suggestions,
-    errors
-  } = usePasswordStrength(password);
+
+  const { result, isValidating, isValid, score, strength, suggestions, errors } = usePasswordStrength(password);
 
   return (
     <div>
       <input
         type="password"
         value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={e => setPassword(e.target.value)}
         className={`border ${isValid ? 'border-green-500' : 'border-red-500'}`}
       />
-      
+
       <div className="mt-2">
         {isValidating && <span>Checking...</span>}
         {!isValidating && (
@@ -290,7 +272,9 @@ function CustomPasswordField() {
             <div>Score: {score}/100</div>
             {errors.length > 0 && (
               <div className="text-red-600">
-                {errors.map(error => <div key={error}>{error}</div>)}
+                {errors.map(error => (
+                  <div key={error}>{error}</div>
+                ))}
               </div>
             )}
           </>
@@ -307,14 +291,14 @@ function CustomPasswordField() {
 
 The component uses a graduated color scheme to indicate password strength:
 
-| Strength | Score Range | Color | Description |
-|----------|-------------|-------|-------------|
-| Very Weak | 0-19 | `#dc2626` (Red 600) | Easily crackable |
-| Weak | 20-39 | `#ea580c` (Orange 600) | Vulnerable to attacks |
-| Fair | 40-59 | `#d97706` (Amber 600) | Some resistance |
-| Good | 60-79 | `#65a30d` (Lime 600) | Reasonably secure |
-| Strong | 80-89 | `#16a34a` (Green 600) | Very secure |
-| Very Strong | 90-100 | `#059669` (Emerald 600) | Extremely secure |
+| Strength    | Score Range | Color                   | Description           |
+| ----------- | ----------- | ----------------------- | --------------------- |
+| Very Weak   | 0-19        | `#dc2626` (Red 600)     | Easily crackable      |
+| Weak        | 20-39       | `#ea580c` (Orange 600)  | Vulnerable to attacks |
+| Fair        | 40-59       | `#d97706` (Amber 600)   | Some resistance       |
+| Good        | 60-79       | `#65a30d` (Lime 600)    | Reasonably secure     |
+| Strong      | 80-89       | `#16a34a` (Green 600)   | Very secure           |
+| Very Strong | 90-100      | `#059669` (Emerald 600) | Extremely secure      |
 
 ### Progress Bar
 
@@ -382,14 +366,14 @@ Validation is debounced to prevent excessive API calls:
 <PasswordStrengthIndicator password={password} />
 
 // Custom debounce timing
-<PasswordStrengthIndicator 
-  password={password} 
+<PasswordStrengthIndicator
+  password={password}
   debounceMs={500} // 500ms delay
 />
 
 // Immediate validation (no debounce)
-<PasswordStrengthIndicator 
-  password={password} 
+<PasswordStrengthIndicator
+  password={password}
   debounceMs={0}
 />
 ```
@@ -416,9 +400,7 @@ For large applications, you can lazy load the component:
 ```tsx
 import { lazy, Suspense } from 'react';
 
-const PasswordStrengthIndicator = lazy(() => 
-  import('@promptscape/core/components/PasswordStrengthIndicator')
-);
+const PasswordStrengthIndicator = lazy(() => import('@promptscape/core/components/PasswordStrengthIndicator'));
 
 function LazyPasswordForm() {
   return (
@@ -447,29 +429,19 @@ function RegistrationForm() {
         name="password"
         control={control}
         rules={{
-          validate: async (value) => {
+          validate: async value => {
             const validator = new PasswordComplexityValidator();
             const result = await validator.validatePassword(value);
             return result.valid || 'Password does not meet security requirements';
-          }
+          },
         }}
         render={({ field, fieldState: { error } }) => (
           <div>
-            <input
-              {...field}
-              type="password"
-              placeholder="Enter password"
-            />
-            
-            <PasswordStrengthIndicator
-              password={field.value || ''}
-              showDetails={true}
-              showSuggestions={true}
-            />
-            
-            {error && (
-              <span className="text-red-600">{error.message}</span>
-            )}
+            <input {...field} type="password" placeholder="Enter password" />
+
+            <PasswordStrengthIndicator password={field.value || ''} showDetails={true} showSuggestions={true} />
+
+            {error && <span className="text-red-600">{error.message}</span>}
           </div>
         )}
       />
@@ -485,30 +457,19 @@ import { Formik, Field, Form } from 'formik';
 import { PasswordStrengthIndicator } from '@promptscape/core/components/PasswordStrengthIndicator';
 
 function FormikPasswordForm() {
-  const validatePassword = async (password) => {
+  const validatePassword = async password => {
     const validator = new PasswordComplexityValidator();
     const result = await validator.validatePassword(password);
     return result.valid ? undefined : 'Password is too weak';
   };
 
   return (
-    <Formik
-      initialValues={{ password: '' }}
-      onSubmit={handleSubmit}
-    >
+    <Formik initialValues={{ password: '' }} onSubmit={handleSubmit}>
       {({ values }) => (
         <Form>
-          <Field
-            name="password"
-            type="password"
-            validate={validatePassword}
-          />
-          
-          <PasswordStrengthIndicator
-            password={values.password}
-            showDetails={true}
-            showSuggestions={true}
-          />
+          <Field name="password" type="password" validate={validatePassword} />
+
+          <PasswordStrengthIndicator password={values.password} showDetails={true} showSuggestions={true} />
         </Form>
       )}
     </Formik>
@@ -524,21 +485,21 @@ import { PasswordComplexityValidator } from '@promptscape/core/auth';
 // API endpoint for password validation
 app.post('/api/validate-password', async (req, res) => {
   const { password, context } = req.body;
-  
+
   const validator = new PasswordComplexityValidator({
     mode: 'strict',
-    minimumScore: 80
+    minimumScore: 80,
   });
-  
+
   try {
     const result = await validator.validatePassword(password, context);
-    
+
     res.json({
       valid: result.valid,
       score: result.score,
       strength: result.strength,
       suggestions: result.suggestions,
-      errors: result.errors
+      errors: result.errors,
     });
   } catch (error) {
     res.status(500).json({ error: 'Validation failed' });
@@ -548,21 +509,21 @@ app.post('/api/validate-password', async (req, res) => {
 // Client-side integration
 function RemoteValidationIndicator({ password }) {
   const [result, setResult] = useState(null);
-  
+
   useEffect(() => {
     if (!password) return;
-    
+
     const validateRemotely = async () => {
       const response = await fetch('/api/validate-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password })
+        body: JSON.stringify({ password }),
       });
-      
+
       const result = await response.json();
       setResult(result);
     };
-    
+
     const timeoutId = setTimeout(validateRemotely, 500);
     return () => clearTimeout(timeoutId);
   }, [password]);
@@ -591,12 +552,7 @@ import { PasswordStrengthIndicator } from '@promptscape/core/components/Password
 import { PasswordComplexityValidator } from '@promptscape/core/auth';
 
 test('shows strength indicator for valid password', async () => {
-  render(
-    <PasswordStrengthIndicator 
-      password="StrongPassword123!" 
-      showDetails={true}
-    />
-  );
+  render(<PasswordStrengthIndicator password="StrongPassword123!" showDetails={true} />);
 
   await waitFor(() => {
     expect(screen.getByText('Password Strength')).toBeInTheDocument();
@@ -605,12 +561,7 @@ test('shows strength indicator for valid password', async () => {
 });
 
 test('shows suggestions for weak password', async () => {
-  render(
-    <PasswordStrengthIndicator 
-      password="weak" 
-      showSuggestions={true}
-    />
-  );
+  render(<PasswordStrengthIndicator password="weak" showSuggestions={true} />);
 
   await waitFor(() => {
     expect(screen.getByText('Suggestions')).toBeInTheDocument();
@@ -624,15 +575,10 @@ test('shows suggestions for weak password', async () => {
 test('integrates with custom validator', async () => {
   const customValidator = new PasswordComplexityValidator({
     mode: 'strict',
-    minimumScore: 90
+    minimumScore: 90,
   });
 
-  render(
-    <PasswordStrengthIndicator 
-      password="TestPassword123!" 
-      validator={customValidator}
-    />
-  );
+  render(<PasswordStrengthIndicator password="TestPassword123!" validator={customValidator} />);
 
   await waitFor(() => {
     expect(screen.getByText('Password Strength')).toBeInTheDocument();
@@ -681,43 +627,49 @@ test('integrates with custom validator', async () => {
 ### Common Issues
 
 #### 1. Component Not Updating
+
 ```tsx
 // Problem: Validator not responding to password changes
-<PasswordStrengthIndicator password={password} />
+<PasswordStrengthIndicator password={password} />;
 
 // Solution: Check if password prop is actually changing
 console.log('Password changed:', password);
 
 // Ensure debouncing isn't too aggressive
-<PasswordStrengthIndicator password={password} debounceMs={100} />
+<PasswordStrengthIndicator password={password} debounceMs={100} />;
 ```
 
 #### 2. Performance Issues
+
 ```tsx
 // Problem: Slow validation
 // Solution: Use memoized validator
 const validator = useMemo(() => new PasswordComplexityValidator(), []);
 
-<PasswordStrengthIndicator 
-  password={password} 
+<PasswordStrengthIndicator
+  password={password}
   validator={validator}
   debounceMs={500} // Increase debounce time
-/>
+/>;
 ```
 
 #### 3. Styling Issues
+
 ```tsx
 // Problem: Component not matching app theme
 // Solution: Use CSS custom properties
-<div style={{ 
-  '--strength-good': '#22c55e',
-  '--strength-strong': '#16a34a' 
-}}>
+<div
+  style={{
+    '--strength-good': '#22c55e',
+    '--strength-strong': '#16a34a',
+  }}
+>
   <PasswordStrengthIndicator password={password} />
 </div>
 ```
 
 #### 4. Validation Context Not Working
+
 ```tsx
 // Problem: Personal information not detected
 // Solution: Ensure context is properly structured
@@ -725,13 +677,10 @@ const context = {
   username: user.username?.toLowerCase(),
   email: user.email?.toLowerCase(),
   firstName: user.firstName?.toLowerCase(),
-  lastName: user.lastName?.toLowerCase()
+  lastName: user.lastName?.toLowerCase(),
 };
 
-<PasswordStrengthIndicator 
-  password={password} 
-  context={context}
-/>
+<PasswordStrengthIndicator password={password} context={context} />;
 ```
 
 This comprehensive password strength indicator provides a robust, accessible, and user-friendly way to guide users toward creating secure passwords while maintaining excellent performance and customization options.

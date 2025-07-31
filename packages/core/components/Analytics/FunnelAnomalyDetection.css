@@ -78,7 +78,7 @@
   color: var(--text-primary, #1a1a1a);
 }
 
-.real-time-toggle input[type="checkbox"] {
+.real-time-toggle input[type='checkbox'] {
   width: 16px;
   height: 16px;
   cursor: pointer;
@@ -116,7 +116,9 @@
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: color 0.2s, border-color 0.2s;
+  transition:
+    color 0.2s,
+    border-color 0.2s;
 }
 
 .detection-tabs .tab:hover {
@@ -460,7 +462,9 @@
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
 }
 
 .acknowledge-button {
@@ -636,7 +640,9 @@
   width: 100%;
   max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 .modal-header {
@@ -662,7 +668,9 @@
   cursor: pointer;
   padding: 4px;
   border-radius: 4px;
-  transition: color 0.2s, background-color 0.2s;
+  transition:
+    color 0.2s,
+    background-color 0.2s;
 }
 
 .close-button:hover {
@@ -737,8 +745,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .funnel-anomaly-detection-loading p,
@@ -929,7 +941,7 @@
   .real-time-toggle {
     transition: none;
   }
-  
+
   .loading-spinner {
     animation: none;
   }
@@ -940,11 +952,11 @@
   .funnel-anomaly-detection {
     border: 2px solid;
   }
-  
+
   .anomaly-card {
     border: 2px solid;
   }
-  
+
   .severity-badge,
   .status-badge,
   .algorithm-badge {
@@ -958,7 +970,7 @@
     box-shadow: none;
     border: 1px solid #000;
   }
-  
+
   .export-button,
   .acknowledge-button,
   .details-button,
@@ -967,18 +979,18 @@
   .real-time-toggle {
     display: none;
   }
-  
+
   .anomaly-detail-modal {
     position: static !important;
     background: transparent !important;
   }
-  
+
   .modal-overlay {
     position: static;
     background: transparent;
     box-shadow: none;
   }
-  
+
   .modal-content {
     box-shadow: none;
     border: 1px solid #000;

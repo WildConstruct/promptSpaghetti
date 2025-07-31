@@ -8,7 +8,7 @@ test.describe('Large Graph Performance', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the application
     await page.goto('http://localhost:3000');
-    
+
     // Wait for the canvas to be ready
     await page.waitForSelector('[data-testid="react-flow-canvas"]');
   });
@@ -16,9 +16,9 @@ test.describe('Large Graph Performance', () => {
   test('250-node graph rendering performance', async ({ page }) => {
     // Create a large graph with 250 nodes
     const largeGraph = generateLargeGraph(250);
-    
+
     // Inject the graph data into the application
-    await page.evaluate((graph) => {
+    await page.evaluate(graph => {
       // Store the graph in localStorage to simulate loading a large graph
       localStorage.setItem('graphDraft', JSON.stringify(graph));
       window.location.reload();
@@ -35,10 +35,10 @@ test.describe('Large Graph Performance', () => {
 
     // Monitor FPS for 5 seconds
     const fpsPromise = page.evaluate(() => {
-      return new Promise<number>((resolve) => {
+      return new Promise<number>(resolve => {
         let frames = 0;
         const startTime = performance.now();
-        
+
         const measureFrame = () => {
           frames++;
           if (performance.now() - startTime < 5000) {
@@ -48,14 +48,14 @@ test.describe('Large Graph Performance', () => {
             resolve(fps);
           }
         };
-        
+
         requestAnimationFrame(measureFrame);
       });
     });
 
     // Monitor memory usage
     const memoryPromise = page.evaluate(() => {
-      return new Promise<number>((resolve) => {
+      return new Promise<number>(resolve => {
         if ('memory' in performance) {
           const memory = (performance as any).memory;
           resolve(memory.usedJSHeapSize / 1024 / 1024); // Convert to MB
@@ -67,11 +67,11 @@ test.describe('Large Graph Performance', () => {
 
     // Perform canvas interactions to test performance under load
     const canvas = page.locator('[data-testid="react-flow-canvas"]');
-    
+
     // Test panning
-    await canvas.dragTo(canvas, { 
+    await canvas.dragTo(canvas, {
       sourcePosition: { x: 100, y: 100 },
-      targetPosition: { x: 200, y: 200 }
+      targetPosition: { x: 200, y: 200 },
     });
 
     // Test zooming
@@ -89,7 +89,7 @@ test.describe('Large Graph Performance', () => {
     // Performance assertions
     expect(fps).toBeGreaterThan(30); // Should maintain at least 30 FPS
     expect(memoryUsage).toBeLessThan(500); // Should use less than 500MB
-    
+
     // Log performance metrics
     console.log('Performance metrics for 250-node graph:');
     console.log(`Average FPS: ${fps.toFixed(2)}`);
@@ -99,8 +99,8 @@ test.describe('Large Graph Performance', () => {
   test('canvas virtualization with large graphs', async ({ page }) => {
     // Test that nodes outside viewport are not rendered
     const largeGraph = generateLargeGraph(1000);
-    
-    await page.evaluate((graph) => {
+
+    await page.evaluate(graph => {
       localStorage.setItem('graphDraft', JSON.stringify(graph));
       window.location.reload();
     }, largeGraph);
@@ -110,7 +110,7 @@ test.describe('Large Graph Performance', () => {
 
     // Count rendered nodes in viewport
     const renderedNodes = await page.locator('[data-testid^="node-"]').count();
-    
+
     // With virtualization, we should render far fewer than 1000 nodes
     expect(renderedNodes).toBeLessThan(100);
   });
@@ -123,37 +123,37 @@ test.describe('Large Graph Performance', () => {
 function generateLargeGraph(nodeCount: number) {
   const nodes = [];
   const edges = [];
-  
+
   const nodeTypes = ['WeightedChoice', 'Concat', 'Output', 'Include', 'SetVariable', 'GetVariable'];
-  
+
   for (let i = 0; i < nodeCount; i++) {
     const nodeType = nodeTypes[i % nodeTypes.length];
     const gridSize = Math.ceil(Math.sqrt(nodeCount));
     const x = (i % gridSize) * 200;
     const y = Math.floor(i / gridSize) * 150;
-    
+
     nodes.push({
       id: `node-${i}`,
       type: 'default',
       position: { x, y },
       data: {
         label: `${nodeType}-${i}`,
-        ...getDefaultNodeData(nodeType)
+        ...getDefaultNodeData(nodeType),
       },
-      selected: false
+      selected: false,
     });
-    
+
     // Create some edges to test edge rendering performance
     if (i > 0 && i % 3 === 0) {
       edges.push({
         id: `edge-${i}`,
         source: `node-${i - 1}`,
         target: `node-${i}`,
-        type: 'default'
+        type: 'default',
       });
     }
   }
-  
+
   return { nodes, edges };
 }
 
@@ -162,19 +162,19 @@ function generateLargeGraph(nodeCount: number) {
  */
 function getDefaultNodeData(nodeType: string) {
   switch (nodeType) {
-  case 'WeightedChoice':
-    return { choices: ['option1', 'option2'], weights: [0.5, 0.5] };
-  case 'Concat':
-    return { separator: ' ' };
-  case 'Output':
-    return { template: 'Output: {{value}}' };
-  case 'Include':
-    return { bundleName: 'example' };
-  case 'SetVariable':
-    return { variableName: 'var1', value: 'default' };
-  case 'GetVariable':
-    return { variableName: 'var1' };
-  default:
-    return {};
+    case 'WeightedChoice':
+      return { choices: ['option1', 'option2'], weights: [0.5, 0.5] };
+    case 'Concat':
+      return { separator: ' ' };
+    case 'Output':
+      return { template: 'Output: {{value}}' };
+    case 'Include':
+      return { bundleName: 'example' };
+    case 'SetVariable':
+      return { variableName: 'var1', value: 'default' };
+    case 'GetVariable':
+      return { variableName: 'var1' };
+    default:
+      return {};
   }
 }

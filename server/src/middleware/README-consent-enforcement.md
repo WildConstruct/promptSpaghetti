@@ -8,7 +8,7 @@ The consent enforcement system provides:
 
 - **Real-time consent validation** before API operations
 - **Configurable enforcement rules** with different severity levels
-- **Cross-service consent propagation** for distributed architectures  
+- **Cross-service consent propagation** for distributed architectures
 - **Cookie and tracking enforcement** with automatic removal of unauthorized cookies
 - **Database-level consent validation** with audit trails
 - **Comprehensive violation tracking** and reporting
@@ -45,7 +45,7 @@ await fastify.register(consentEnforcementPlugin, {
   enableStrict: true,
   enableCookieEnforcement: true,
   enableCrossServicePropagation: true,
-  exemptPaths: ['/api/public/*']
+  exemptPaths: ['/api/public/*'],
 });
 ```
 
@@ -90,9 +90,9 @@ const rule: ConsentEnforcementRule = {
   methods: ['POST', 'PUT'],
   requiredConsents: ['MARKETING'],
   dataCategories: ['contact_data', 'preference_data'],
-  enforcementLevel: 'strict',        // 'strict' | 'permissive' | 'audit_only'
-  exemptions: ['admin'],             // User roles exempt from this rule
-  enabled: true
+  enforcementLevel: 'strict', // 'strict' | 'permissive' | 'audit_only'
+  exemptions: ['admin'], // User roles exempt from this rule
+  enabled: true,
 };
 
 middleware.addEnforcementRule(rule);
@@ -160,10 +160,10 @@ When consent changes, the system automatically notifies relevant services:
 ```typescript
 // Services are notified based on consent type
 const serviceNotifications = {
-  'ANALYTICS': ['analytics-service', 'metrics-service'],
-  'MARKETING': ['email-service', 'campaign-service'],
-  'SOCIAL_MEDIA': ['social-service', 'sharing-service'],
-  'PERSONALIZATION': ['recommendation-service']
+  ANALYTICS: ['analytics-service', 'metrics-service'],
+  MARKETING: ['email-service', 'campaign-service'],
+  SOCIAL_MEDIA: ['social-service', 'sharing-service'],
+  PERSONALIZATION: ['recommendation-service'],
 };
 ```
 
@@ -185,10 +185,10 @@ The system automatically manages browser cookies based on consent:
 ```typescript
 // Tracking cookies that require consent
 const trackingCookies = {
-  '_ga*': 'ANALYTICS',      // Google Analytics
-  '_fbp': 'MARKETING',      // Facebook Pixel
-  'utm_*': 'MARKETING',     // UTM tracking
-  'pixel_*': 'MARKETING'    // Custom marketing pixels
+  '_ga*': 'ANALYTICS', // Google Analytics
+  _fbp: 'MARKETING', // Facebook Pixel
+  'utm_*': 'MARKETING', // UTM tracking
+  'pixel_*': 'MARKETING', // Custom marketing pixels
 };
 ```
 
@@ -284,7 +284,7 @@ The system follows a "fail-open" approach for non-critical errors:
 const retryPolicy = {
   maxRetries: 3,
   backoffMs: 1000,
-  exponentialBackoff: true
+  exponentialBackoff: true,
 };
 ```
 
@@ -329,7 +329,7 @@ The system includes extensive tests:
 The system supports compliance with:
 
 - **GDPR** (General Data Protection Regulation)
-- **CCPA** (California Consumer Privacy Act)  
+- **CCPA** (California Consumer Privacy Act)
 - **PIPEDA** (Personal Information Protection and Electronic Documents Act)
 - **LGPD** (Lei Geral de Proteção de Dados)
 - **PDPA** (Personal Data Protection Act)
@@ -351,7 +351,7 @@ middleware.addCustomValidator('SENSITIVE_DATA', async (context, rule) => {
   // Custom validation logic
   return {
     allowed: await customValidation(context),
-    reason: 'Custom validation result'
+    reason: 'Custom validation result',
   };
 });
 ```
@@ -360,10 +360,10 @@ middleware.addCustomValidator('SENSITIVE_DATA', async (context, rule) => {
 
 ```typescript
 // Enhance consent context with additional data
-middleware.addContextEnhancer(async (baseContext) => ({
+middleware.addContextEnhancer(async baseContext => ({
   ...baseContext,
   deviceFingerprint: await getDeviceFingerprint(baseContext.userAgent),
-  riskScore: await calculateRiskScore(baseContext)
+  riskScore: await calculateRiskScore(baseContext),
 }));
 ```
 
@@ -403,7 +403,7 @@ If your application currently performs manual consent checks:
 // Enable verbose logging for troubleshooting
 const middleware = new ConsentEnforcementMiddleware(services, {
   debugMode: true,
-  logLevel: 'verbose'
+  logLevel: 'verbose',
 });
 ```
 

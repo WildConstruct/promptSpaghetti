@@ -75,7 +75,7 @@ const customFilter = new ASTNodeWhitelistFilter({
   maxDepth: 15,
   maxNodes: 50,
   additionalSafeTypes: ['CustomNodeType'],
-  blockedSafeTypes: ['CallExpression']
+  blockedSafeTypes: ['CallExpression'],
 });
 ```
 
@@ -104,7 +104,7 @@ const result = SafeExpressionEvaluator.evaluate('x + y > 5', { x: 10, y: 3 });
 This implementation addresses the P0 security requirements for Epic 18 - Conditional Node Security (DEBT-002):
 
 - ✅ Safe node type whitelist
-- ✅ Dangerous node type blocking  
+- ✅ Dangerous node type blocking
 - ✅ Security audit logging
 - ✅ Configurable security policies
 - ✅ Context-specific filtering

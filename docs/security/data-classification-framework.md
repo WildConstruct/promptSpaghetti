@@ -7,9 +7,11 @@ This document establishes a comprehensive data classification framework for iden
 ## Classification Levels & Definitions
 
 ### Level 1: Public
+
 **Definition**: Information that can be freely shared without risk to the organization or individuals.
 
 **Examples**:
+
 - Marketing materials
 - Published documentation
 - Public API specifications
@@ -20,28 +22,34 @@ This document establishes a comprehensive data classification framework for iden
 **Retention**: As needed for business purposes
 
 ### Level 2: Internal
+
 **Definition**: Information intended for internal use that could cause minor damage if disclosed.
 
 **Examples**:
+
 - Internal procedures and policies
 - Employee directories
 - Non-sensitive operational metrics
 - Development environment configurations
 
-**Encryption Requirements**: 
+**Encryption Requirements**:
+
 - TLS 1.3 for transmission
 - Optional encryption at rest
 
-**Access Controls**: 
+**Access Controls**:
+
 - Authenticated users only
 - Role-based access control (RBAC)
 
 **Retention**: Standard business retention policies
 
 ### Level 3: Confidential
+
 **Definition**: Sensitive business information that could cause significant damage if disclosed.
 
 **Examples for MFA Systems**:
+
 - User authentication logs (without PII)
 - System configuration details
 - Performance metrics and analytics
@@ -49,11 +57,13 @@ This document establishes a comprehensive data classification framework for iden
 - API keys and service credentials
 
 **Encryption Requirements**:
+
 - **At Rest**: AES-256 encryption mandatory
 - **In Transit**: TLS 1.3 with perfect forward secrecy
 - **Key Management**: Hardware Security Module (HSM) or cloud KMS
 
 **Access Controls**:
+
 - Need-to-know basis
 - Multi-factor authentication required
 - Detailed audit logging
@@ -62,33 +72,33 @@ This document establishes a comprehensive data classification framework for iden
 **Retention**: 7 years for compliance, 1 year for operational data
 
 ### Level 4: Restricted
+
 **Definition**: Highly sensitive data requiring maximum protection due to legal, regulatory, or business requirements.
 
 **Examples for MFA Systems**:
+
 - **Personal Identifiable Information (PII)**:
   - User email addresses
   - Phone numbers
   - Authentication device identifiers
   - Biometric templates (if used)
-  
 - **Authentication Data**:
   - Password hashes
   - TOTP secret keys
   - Recovery codes
   - Security questions and answers
-  
 - **Security-Critical Data**:
   - Encryption keys
   - Security incident details
   - Vulnerability assessments
   - Fraud detection algorithms
-  
 - **Compliance Data**:
   - Audit trails with PII
   - Breach investigation records
   - Legal hold data
 
 **Encryption Requirements**:
+
 - **At Rest**: AES-256-GCM with authenticated encryption
 - **In Transit**: TLS 1.3 with certificate pinning
 - **Application Layer**: End-to-end encryption for highly sensitive fields
@@ -96,13 +106,15 @@ This document establishes a comprehensive data classification framework for iden
 - **Backup Encryption**: Separate encryption keys for backups
 
 **Access Controls**:
+
 - Zero-trust verification for all access
 - Privileged Access Management (PAM)
 - Just-in-time access provisioning
 - Dual authorization for administrative actions
 - Continuous monitoring and behavioral analytics
 
-**Retention**: 
+**Retention**:
+
 - PII: As required by GDPR (minimal necessary)
 - Authentication data: 90 days after account closure
 - Audit logs: 7 years for compliance
@@ -111,44 +123,44 @@ This document establishes a comprehensive data classification framework for iden
 
 ### MFA System Data Inventory
 
-| Data Type | Classification | Encryption Required | Key Rationale |
-|-----------|---------------|-------------------|---------------|
-| **User Identity Data** |
-| Email addresses | Restricted | Yes | PII under GDPR, required for breach notification |
-| Phone numbers | Restricted | Yes | PII under GDPR, sensitive personal data |
-| Full names | Restricted | Yes | Direct PII, identity disclosure risk |
-| User IDs (internal) | Confidential | Yes | Could enable user enumeration attacks |
+| Data Type                      | Classification | Encryption Required | Key Rationale                                    |
+| ------------------------------ | -------------- | ------------------- | ------------------------------------------------ |
+| **User Identity Data**         |
+| Email addresses                | Restricted     | Yes                 | PII under GDPR, required for breach notification |
+| Phone numbers                  | Restricted     | Yes                 | PII under GDPR, sensitive personal data          |
+| Full names                     | Restricted     | Yes                 | Direct PII, identity disclosure risk             |
+| User IDs (internal)            | Confidential   | Yes                 | Could enable user enumeration attacks            |
 | **Authentication Credentials** |
-| Password hashes | Restricted | Yes | Critical for account security |
-| TOTP secrets | Restricted | Yes | Compromise enables account takeover |
-| Recovery codes | Restricted | Yes | Bypass MFA if compromised |
-| Biometric templates | Restricted | Yes | Immutable personal data, high privacy risk |
-| **Session & Activity Data** |
-| Session tokens | Restricted | Yes | Active session compromise risk |
-| Authentication logs with PII | Restricted | Yes | Privacy risk, behavioral profiling |
-| Login attempt details | Confidential | Yes | Security pattern analysis |
-| Device fingerprints | Confidential | Yes | Tracking and profiling concerns |
-| **System Configuration** |
-| API keys | Confidential | Yes | System access and privilege escalation |
-| Database connection strings | Confidential | Yes | Infrastructure access |
-| Encryption keys | Restricted | Yes | Master keys for other encrypted data |
-| Security policies | Internal | Optional | Configuration disclosure |
-| **Operational Data** |
-| Error logs (no PII) | Internal | Optional | System troubleshooting |
-| Performance metrics | Internal | Optional | Operational intelligence |
-| Feature usage statistics | Confidential | Yes | Business intelligence |
-| A/B test results | Confidential | Yes | Competitive advantage |
+| Password hashes                | Restricted     | Yes                 | Critical for account security                    |
+| TOTP secrets                   | Restricted     | Yes                 | Compromise enables account takeover              |
+| Recovery codes                 | Restricted     | Yes                 | Bypass MFA if compromised                        |
+| Biometric templates            | Restricted     | Yes                 | Immutable personal data, high privacy risk       |
+| **Session & Activity Data**    |
+| Session tokens                 | Restricted     | Yes                 | Active session compromise risk                   |
+| Authentication logs with PII   | Restricted     | Yes                 | Privacy risk, behavioral profiling               |
+| Login attempt details          | Confidential   | Yes                 | Security pattern analysis                        |
+| Device fingerprints            | Confidential   | Yes                 | Tracking and profiling concerns                  |
+| **System Configuration**       |
+| API keys                       | Confidential   | Yes                 | System access and privilege escalation           |
+| Database connection strings    | Confidential   | Yes                 | Infrastructure access                            |
+| Encryption keys                | Restricted     | Yes                 | Master keys for other encrypted data             |
+| Security policies              | Internal       | Optional            | Configuration disclosure                         |
+| **Operational Data**           |
+| Error logs (no PII)            | Internal       | Optional            | System troubleshooting                           |
+| Performance metrics            | Internal       | Optional            | Operational intelligence                         |
+| Feature usage statistics       | Confidential   | Yes                 | Business intelligence                            |
+| A/B test results               | Confidential   | Yes                 | Competitive advantage                            |
 
 ## GDPR Compliance Matrix
 
 ### Personal Data Categories
 
-| GDPR Category | Examples in MFA | Classification | Special Requirements |
-|---------------|-----------------|----------------|---------------------|
-| **Basic Personal Data** | Email, phone, name | Restricted | Lawful basis required, data minimization |
-| **Special Categories** | Biometric data | Restricted | Explicit consent, enhanced security |
-| **Criminal Offence Data** | Fraud alerts, security violations | Restricted | Legal authority required |
-| **Data Subject Rights** | Access requests, deletion records | Restricted | 30-day response requirement |
+| GDPR Category             | Examples in MFA                   | Classification | Special Requirements                     |
+| ------------------------- | --------------------------------- | -------------- | ---------------------------------------- |
+| **Basic Personal Data**   | Email, phone, name                | Restricted     | Lawful basis required, data minimization |
+| **Special Categories**    | Biometric data                    | Restricted     | Explicit consent, enhanced security      |
+| **Criminal Offence Data** | Fraud alerts, security violations | Restricted     | Legal authority required                 |
+| **Data Subject Rights**   | Access requests, deletion records | Restricted     | 30-day response requirement              |
 
 ### GDPR Protection Measures
 
@@ -162,6 +174,7 @@ This document establishes a comprehensive data classification framework for iden
 ## NIST SP 800-53 Control Mapping
 
 ### Access Control (AC)
+
 - **AC-2**: Account Management
   - Classification: Confidential
   - Controls: Automated provisioning/deprovisioning, role-based access
@@ -171,6 +184,7 @@ This document establishes a comprehensive data classification framework for iden
   - Controls: Attribute-based access control (ABAC), least privilege
 
 ### Identification and Authentication (IA)
+
 - **IA-2**: Identification and Authentication
   - Classification: Restricted
   - Controls: Multi-factor authentication, cryptographic authentication
@@ -180,6 +194,7 @@ This document establishes a comprehensive data classification framework for iden
   - Controls: Secure storage, lifecycle management, revocation
 
 ### System and Communications Protection (SC)
+
 - **SC-8**: Transmission Confidentiality and Integrity
   - Classification: Restricted
   - Controls: TLS 1.3, certificate validation, encryption in transit
@@ -193,6 +208,7 @@ This document establishes a comprehensive data classification framework for iden
 ### Encryption Standards by Classification
 
 #### Level 3 (Confidential)
+
 ```yaml
 encryption_at_rest:
   algorithm: AES-256-CBC
@@ -202,7 +218,7 @@ encryption_at_rest:
 
 encryption_in_transit:
   protocol: TLS 1.3
-  cipher_suites: 
+  cipher_suites:
     - TLS_AES_256_GCM_SHA384
     - TLS_CHACHA20_POLY1305_SHA256
   certificate_validation: strict
@@ -215,6 +231,7 @@ database_encryption:
 ```
 
 #### Level 4 (Restricted)
+
 ```yaml
 encryption_at_rest:
   algorithm: AES-256-GCM
@@ -235,7 +252,7 @@ application_layer_encryption:
   field_level: AES-256-GCM
   end_to_end: Required for PII
   key_derivation: PBKDF2 (100,000 iterations)
-  
+
 database_encryption:
   type: Always Encrypted or equivalent
   column_encryption: Required for PII
@@ -251,12 +268,12 @@ key_hierarchy:
     location: HSM or Cloud HSM
     rotation: Annual
     backup: Secure escrow
-    
+
   data_encryption_keys:
     location: Key Management Service
     rotation: Quarterly (Restricted), Annual (Confidential)
     versioning: All versions retained during rotation
-    
+
   application_keys:
     derivation: Key derivation function from master
     scope: Per-tenant, per-classification level
@@ -266,6 +283,7 @@ key_hierarchy:
 ## Data Flow Encryption Requirements
 
 ### Authentication Flow
+
 ```mermaid
 graph TD
     A[User Input] -->|TLS 1.3| B[Application Server]
@@ -277,6 +295,7 @@ graph TD
 ```
 
 ### Data Processing Pipeline
+
 ```mermaid
 graph LR
     A[Raw Data] -->|Classification Engine| B{Data Classifier}
@@ -284,7 +303,7 @@ graph LR
     B -->|Internal| D[Encrypted Storage]
     B -->|Confidential| E[HSM Encrypted]
     B -->|Restricted| F[End-to-End Encrypted]
-    
+
     C --> G[Standard Backup]
     D --> H[Encrypted Backup]
     E --> I[HSM Backup]
@@ -294,6 +313,7 @@ graph LR
 ## Implementation Checklist
 
 ### Phase 1: Data Discovery & Classification
+
 - [ ] Inventory all data assets in MFA system
 - [ ] Map data to classification levels
 - [ ] Identify data flows and processing locations
@@ -301,6 +321,7 @@ graph LR
 - [ ] Establish data ownership and stewardship
 
 ### Phase 2: Encryption Implementation
+
 - [ ] Deploy key management infrastructure
 - [ ] Implement encryption at rest for Restricted data
 - [ ] Upgrade TLS configurations to 1.3
@@ -308,6 +329,7 @@ graph LR
 - [ ] Configure encrypted backups
 
 ### Phase 3: Access Controls & Monitoring
+
 - [ ] Implement RBAC/ABAC for classified data
 - [ ] Deploy data loss prevention (DLP) tools
 - [ ] Establish monitoring and alerting
@@ -315,6 +337,7 @@ graph LR
 - [ ] Configure breach detection
 
 ### Phase 4: Compliance & Validation
+
 - [ ] Conduct encryption validation testing
 - [ ] Perform data classification audit
 - [ ] Validate GDPR compliance measures
@@ -325,14 +348,14 @@ graph LR
 
 ### Key Performance Indicators
 
-| Metric | Target | Classification Focus |
-|--------|--------|---------------------|
-| Data encrypted at rest | 100% | Confidential, Restricted |
-| TLS 1.3 coverage | 100% | All classifications |
-| Key rotation compliance | 100% | Restricted: 90 days, Confidential: 1 year |
-| Unauthorized access attempts | < 0.1% | Restricted data |
-| Data breach response time | < 4 hours | All classifications |
-| GDPR request fulfillment | < 30 days | Personal data |
+| Metric                       | Target    | Classification Focus                      |
+| ---------------------------- | --------- | ----------------------------------------- |
+| Data encrypted at rest       | 100%      | Confidential, Restricted                  |
+| TLS 1.3 coverage             | 100%      | All classifications                       |
+| Key rotation compliance      | 100%      | Restricted: 90 days, Confidential: 1 year |
+| Unauthorized access attempts | < 0.1%    | Restricted data                           |
+| Data breach response time    | < 4 hours | All classifications                       |
+| GDPR request fulfillment     | < 30 days | Personal data                             |
 
 ### Audit Requirements
 
@@ -356,22 +379,23 @@ graph LR
 
 ## Risk Assessment Matrix
 
-| Data Type | Confidentiality Risk | Integrity Risk | Availability Risk | Overall Classification |
-|-----------|---------------------|----------------|-------------------|----------------------|
-| User passwords | Critical | Critical | High | Restricted |
-| TOTP secrets | Critical | Critical | High | Restricted |
-| Email addresses | High | Medium | Medium | Restricted |
-| Phone numbers | High | Medium | Medium | Restricted |
-| Session tokens | Critical | Critical | Critical | Restricted |
-| API keys | Critical | High | High | Confidential |
-| System logs | Medium | Medium | High | Confidential |
-| Configuration | Medium | High | High | Confidential |
+| Data Type       | Confidentiality Risk | Integrity Risk | Availability Risk | Overall Classification |
+| --------------- | -------------------- | -------------- | ----------------- | ---------------------- |
+| User passwords  | Critical             | Critical       | High              | Restricted             |
+| TOTP secrets    | Critical             | Critical       | High              | Restricted             |
+| Email addresses | High                 | Medium         | Medium            | Restricted             |
+| Phone numbers   | High                 | Medium         | Medium            | Restricted             |
+| Session tokens  | Critical             | Critical       | Critical          | Restricted             |
+| API keys        | Critical             | High           | High              | Confidential           |
+| System logs     | Medium               | Medium         | High              | Confidential           |
+| Configuration   | Medium               | High           | High              | Confidential           |
 
 ## Conclusion
 
 This data classification framework provides a comprehensive foundation for securing sensitive data in MFA systems while ensuring compliance with GDPR and NIST requirements. The classification-based encryption approach enables proportional security controls while maintaining operational efficiency.
 
 ### Key Benefits
+
 - 🛡️ **Zero-Trust Foundation**: Data-centric security regardless of location
 - 📊 **Risk-Based Protection**: Encryption proportional to sensitivity
 - ⚖️ **Regulatory Compliance**: GDPR and NIST alignment

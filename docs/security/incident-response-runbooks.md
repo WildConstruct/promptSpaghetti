@@ -4,20 +4,21 @@
 **Document Classification**: INTERNAL  
 **Epic**: 18 - Technical Debt & Performance Optimization  
 **Task**: Document Audit Response Procedures (T-1752989143998-405)  
-**Generated**: 2025-07-22T08:37:00Z  
+**Generated**: 2025-07-22T08:37:00Z
 
 ---
 
 ## Quick Reference - Emergency Contacts
 
-| Role | Primary Contact | Backup | Phone |
-|------|----------------|---------|-------|
-| **Incident Commander** | CISO | CTO | [Emergency Line] |
-| **Technical Lead** | Engineering Manager | Senior Engineer | [Emergency Line] |
-| **Legal Counsel** | General Counsel | External Counsel | [Emergency Line] |
-| **Communications** | PR Manager | CEO | [Emergency Line] |
+| Role                   | Primary Contact     | Backup           | Phone            |
+| ---------------------- | ------------------- | ---------------- | ---------------- |
+| **Incident Commander** | CISO                | CTO              | [Emergency Line] |
+| **Technical Lead**     | Engineering Manager | Senior Engineer  | [Emergency Line] |
+| **Legal Counsel**      | General Counsel     | External Counsel | [Emergency Line] |
+| **Communications**     | PR Manager          | CEO              | [Emergency Line] |
 
 **Emergency Channels**:
+
 - 🚨 **Slack**: `#security-incidents`
 - 📧 **Email**: `security-response@promptscape.app`
 - 📊 **Dashboard**: Security Operations Center
@@ -29,40 +30,43 @@
 ### 🔥 Runbook 1: Data Breach Response
 
 #### **Immediate Response (0-15 minutes)**
+
 ```bash
 # CRITICAL FIRST STEPS
 □ STOP - Do not panic, follow procedures
-□ Verify incident authenticity 
+□ Verify incident authenticity
 □ Activate incident response team
 □ Preserve evidence - take screenshots/logs
 □ Isolate affected systems if still compromised
 
 # Initial Assessment Questions:
 - What type of data is involved?
-- How many records potentially affected? 
+- How many records potentially affected?
 - Is the breach still ongoing?
 - Who has been notified so far?
 - What systems are affected?
 ```
 
 #### **Evidence Preservation (15-30 minutes)**
+
 ```sql
 -- URGENT: Extract audit trail evidence
-SELECT * FROM evidence_access_audit 
+SELECT * FROM evidence_access_audit
 WHERE event_timestamp >= NOW() - INTERVAL '24 hours'
   AND (risk_score > 7 OR classification IN ('HIGH', 'CRITICAL'))
 ORDER BY event_timestamp DESC;
 
 -- Capture current system state
-COPY (SELECT * FROM user_sessions WHERE last_activity >= NOW() - INTERVAL '1 hour') 
+COPY (SELECT * FROM user_sessions WHERE last_activity >= NOW() - INTERVAL '1 hour')
 TO '/tmp/active_sessions.csv' CSV HEADER;
 ```
 
 #### **Containment Actions (30-60 minutes)**
+
 ```bash
 # System Containment
 □ Change all administrative passwords
-□ Revoke API keys and access tokens  
+□ Revoke API keys and access tokens
 □ Block suspicious IP addresses
 □ Isolate compromised user accounts
 □ Enable enhanced audit logging
@@ -77,31 +81,24 @@ TO '/tmp/active_sessions.csv' CSV HEADER;
 ```
 
 #### **Notification Requirements**
+
 ```typescript
 // Data breach notification timeline
 BreachNotification = {
-  immediate: [
-    'Incident Commander',
-    'CISO', 
-    'CTO',
-    'Legal Counsel'
-  ],
-  within_1_hour: [
-    'CEO',
-    'Data Protection Officer',
-    'Customer Success Lead'
-  ],
+  immediate: ['Incident Commander', 'CISO', 'CTO', 'Legal Counsel'],
+  within_1_hour: ['CEO', 'Data Protection Officer', 'Customer Success Lead'],
   regulatory: {
     GDPR: '72 hours to supervisory authority',
-    CCPA: 'Without unreasonable delay to Attorney General',  
-    state_laws: 'Varies - check state requirements'
-  }
-}
+    CCPA: 'Without unreasonable delay to Attorney General',
+    state_laws: 'Varies - check state requirements',
+  },
+};
 ```
 
 ### 🛡️ Runbook 2: Security Incident Response
 
 #### **Initial Assessment (0-15 minutes)**
+
 ```bash
 # SECURITY INCIDENT TRIAGE
 □ Incident severity assessment (P1-P4)
@@ -119,6 +116,7 @@ BreachNotification = {
 ```
 
 #### **Threat Containment (15-45 minutes)**
+
 ```bash
 # IMMEDIATE CONTAINMENT
 □ Isolate compromised systems from network
@@ -135,19 +133,20 @@ iptables -A INPUT -s [MALICIOUS_IP] -j DROP
 # Terminate user sessions
 DELETE FROM user_sessions WHERE user_id = '[COMPROMISED_USER]';
 
-# Disable user account  
-UPDATE users SET status = 'SUSPENDED', 
-  suspended_reason = 'Security incident', 
-  suspended_at = NOW() 
+# Disable user account
+UPDATE users SET status = 'SUSPENDED',
+  suspended_reason = 'Security incident',
+  suspended_at = NOW()
 WHERE id = '[USER_ID]';
 ```
 
 #### **Investigation Phase (45 minutes - 4 hours)**
+
 ```bash
 # FORENSIC INVESTIGATION
 □ Timeline reconstruction from logs
 □ Attack vector analysis
-□ Lateral movement assessment  
+□ Lateral movement assessment
 □ Data access pattern analysis
 □ Attribution and threat intelligence
 □ Vulnerability assessment
@@ -163,6 +162,7 @@ WHERE id = '[USER_ID]';
 ### 🚨 Runbook 3: Performance Incident Response
 
 #### **Performance Degradation Response (0-30 minutes)**
+
 ```bash
 # IMMEDIATE PERFORMANCE TRIAGE
 □ Identify affected services and user impact
@@ -179,6 +179,7 @@ iostat -x 1 3
 ```
 
 #### **System Scaling Response (30-60 minutes)**
+
 ```bash
 # AUTO-SCALING ACTIONS
 □ Scale application servers horizontally
@@ -189,8 +190,8 @@ iostat -x 1 3
 
 # Performance Monitoring Commands:
 # Check database performance
-SELECT query, mean_exec_time, calls, mean_io_time 
-FROM pg_stat_statements 
+SELECT query, mean_exec_time, calls, mean_io_time
+FROM pg_stat_statements
 ORDER BY mean_exec_time DESC LIMIT 10;
 
 # Monitor API response times
@@ -198,6 +199,7 @@ tail -f /var/log/nginx/access.log | grep -E "(5[0-9]{2}|[4-9][0-9]{3}ms)"
 ```
 
 #### **Root Cause Analysis (1-4 hours)**
+
 ```bash
 # PERFORMANCE ROOT CAUSE ANALYSIS
 □ Database query performance analysis
@@ -216,7 +218,8 @@ tail -f /var/log/nginx/access.log | grep -E "(5[0-9]{2}|[4-9][0-9]{3}ms)"
 
 ### 📊 Runbook 4: Compliance Violation Response
 
-#### **Compliance Incident Assessment (0-30 minutes)**  
+#### **Compliance Incident Assessment (0-30 minutes)**
+
 ```bash
 # COMPLIANCE VIOLATION TRIAGE
 □ Identify specific regulation/standard violated
@@ -234,6 +237,7 @@ tail -f /var/log/nginx/access.log | grep -E "(5[0-9]{2}|[4-9][0-9]{3}ms)"
 ```
 
 #### **Immediate Corrective Actions (30-60 minutes)**
+
 ```bash
 # STOP ONGOING VIOLATIONS
 □ Halt processes causing violations
@@ -251,6 +255,7 @@ tail -f /var/log/nginx/access.log | grep -E "(5[0-9]{2}|[4-9][0-9]{3}ms)"
 ```
 
 #### **Regulatory Notification Process (1-72 hours)**
+
 ```typescript
 // Compliance notification requirements
 ComplianceNotification = {
@@ -259,30 +264,31 @@ ComplianceNotification = {
     individual_deadline: 'Without undue delay if high risk',
     documentation_required: [
       'Description of violation',
-      'Categories of data subjects affected', 
+      'Categories of data subjects affected',
       'Approximate number of individuals',
       'Likely consequences',
-      'Measures taken or proposed'
-    ]
+      'Measures taken or proposed',
+    ],
   },
-  
+
   CCPA: {
     attorney_general: 'Without unreasonable delay',
     consumer_notification: 'If sensitive personal information',
-    documentation: 'Maintain 24-month record'
+    documentation: 'Maintain 24-month record',
   },
-  
+
   SOX: {
     materiality_assessment: 'Within discovery period',
-    audit_committee: 'Quarterly or immediate if material',  
-    external_auditor: 'Coordinate with audit firm'
-  }
-}
+    audit_committee: 'Quarterly or immediate if material',
+    external_auditor: 'Coordinate with audit firm',
+  },
+};
 ```
 
 ### 🔄 Runbook 5: System Outage Response
 
 #### **Service Outage Response (0-15 minutes)**
+
 ```bash
 # IMMEDIATE OUTAGE RESPONSE
 □ Confirm outage scope (partial/total)
@@ -292,12 +298,13 @@ ComplianceNotification = {
 □ Begin customer communication
 
 # Status Page Update:
-"We are investigating reports of service disruption affecting [SERVICES]. 
-Our engineering team is actively working on resolution. 
+"We are investigating reports of service disruption affecting [SERVICES].
+Our engineering team is actively working on resolution.
 Next update in 30 minutes."
 ```
 
 #### **Technical Recovery Actions (15-60 minutes)**
+
 ```bash
 # SYSTEM RECOVERY STEPS
 □ Identify root cause (infrastructure, code, data)
@@ -319,6 +326,7 @@ kubectl scale deployment api-server --replicas=10 -n production
 ```
 
 #### **Communication Protocol (Throughout incident)**
+
 ```bash
 # CUSTOMER COMMUNICATION
 □ Status page updates every 30 minutes
@@ -338,6 +346,7 @@ kubectl scale deployment api-server --replicas=10 -n production
 ## Emergency Decision Trees
 
 ### 🌳 Security Incident Decision Tree
+
 ```
 SECURITY ALERT RECEIVED
 ├── Verify Alert Authenticity
@@ -345,14 +354,15 @@ SECURITY ALERT RECEIVED
 │   └── CONFIRMED INCIDENT
 │       ├── Assess Severity
 │       │   ├── P1 CRITICAL → Immediate Executive Notification
-│       │   ├── P2 HIGH → Security Team Lead Notification  
+│       │   ├── P2 HIGH → Security Team Lead Notification
 │       │   └── P3/P4 → Standard Response Team
 │       └── Check Ongoing Threat
 │           ├── ACTIVE ATTACK → Immediate Containment
 │           └── HISTORICAL → Investigation Priority
 ```
 
-### 🔒 Data Breach Decision Tree  
+### 🔒 Data Breach Decision Tree
+
 ```
 POTENTIAL DATA BREACH
 ├── Confirm Data Access/Exposure
@@ -368,7 +378,8 @@ POTENTIAL DATA BREACH
 ```
 
 ### ⚡ Performance Decision Tree
-```  
+
+```
 PERFORMANCE DEGRADATION
 ├── Check System Health
 │   ├── SYSTEM HEALTHY → Application Issue
@@ -389,6 +400,7 @@ PERFORMANCE DEGRADATION
 ### 📧 Email Templates
 
 #### **P1 Critical Incident Notification**
+
 ```
 Subject: CRITICAL INCIDENT - Immediate Response Required [INC-XXXX]
 
@@ -412,6 +424,7 @@ This is a critical incident requiring immediate attention.
 ```
 
 #### **Customer Notification - Security Incident**
+
 ```
 Subject: Important Security Update for Your PromptScape Account
 
@@ -447,6 +460,7 @@ security-support@promptscape.app
 ### 📱 Slack Templates
 
 #### **Incident War Room Creation**
+
 ```
 🚨 INCIDENT DECLARED 🚨
 
@@ -460,7 +474,7 @@ Incident Commander: @[USERNAME]
 
 🎯 IMMEDIATE PRIORITIES:
 1. [Priority 1]
-2. [Priority 2]  
+2. [Priority 2]
 3. [Priority 3]
 
 👥 RESPONSE TEAM:
@@ -474,6 +488,7 @@ React with ✅ to acknowledge
 ```
 
 #### **Status Update Template**
+
 ```
 📊 INCIDENT UPDATE - INC-XXXX
 
@@ -502,10 +517,11 @@ React with ✅ to acknowledge
 ### 📋 Hot Wash Meeting (24-48 hours)
 
 #### **Meeting Structure**
+
 ```bash
 # HOT WASH AGENDA (60 minutes)
 □ Incident timeline review (15 min)
-□ What went well discussion (15 min)  
+□ What went well discussion (15 min)
 □ What could be improved (15 min)
 □ Immediate action items (10 min)
 □ Follow-up planning (5 min)
@@ -518,34 +534,36 @@ React with ✅ to acknowledge
 ```
 
 #### **Hot Wash Questions**
+
 ```typescript
 HotWashQuestions = {
   timeline: [
     'What was the sequence of events?',
     'When did we first detect the incident?',
     'How long did containment take?',
-    'What was the total impact duration?'
+    'What was the total impact duration?',
   ],
-  
+
   effectiveness: [
     'What response actions were most effective?',
-    'Where did our procedures work well?', 
+    'Where did our procedures work well?',
     'What tools/resources were most valuable?',
-    'How was team communication and coordination?'
+    'How was team communication and coordination?',
   ],
-  
+
   improvements: [
     'What slowed down our response?',
     'What information did we lack?',
     'Where did procedures break down?',
-    'What tools/capabilities do we need?'
-  ]
-}
+    'What tools/capabilities do we need?',
+  ],
+};
 ```
 
 ### 📊 Formal Post-Incident Review (1-2 weeks)
 
 #### **Review Process**
+
 ```bash
 # FORMAL PIR PROCESS
 □ Comprehensive timeline reconstruction
@@ -558,13 +576,16 @@ HotWashQuestions = {
 ```
 
 #### **PIR Report Template**
+
 ```markdown
 # Post-Incident Review Report
 
 ## Executive Summary
+
 [High-level incident summary, impact, and key findings]
 
-## Incident Details  
+## Incident Details
+
 - **Incident ID**: [INC-XXXX]
 - **Duration**: [START] to [END] ([DURATION])
 - **Severity**: [P1-P4]
@@ -572,31 +593,40 @@ HotWashQuestions = {
 - **Impact**: [Users affected, service downtime, financial impact]
 
 ## Timeline
+
 [Detailed incident timeline with key events and response actions]
 
 ## Root Cause Analysis
+
 [Comprehensive analysis using multiple methodologies]
 
 ## Response Effectiveness
+
 [Evaluation of detection, response, communication, and recovery]
 
 ## Lessons Learned
+
 ### What Worked Well
+
 - [Positive aspects of response]
 
-### Areas for Improvement  
+### Areas for Improvement
+
 - [Identified weaknesses and gaps]
 
 ## Recommendations
+
 1. [Recommendation 1 - Priority: High/Medium/Low]
 2. [Recommendation 2 - Priority: High/Medium/Low]
 
 ## Action Plan
-| Action | Owner | Due Date | Status |
-|--------|-------|----------|--------|
-| [Action 1] | [Owner] | [Date] | Open |
+
+| Action     | Owner   | Due Date | Status |
+| ---------- | ------- | -------- | ------ |
+| [Action 1] | [Owner] | [Date]   | Open   |
 
 ## Appendices
+
 - Incident timeline
 - Communication log
 - Evidence collected
@@ -608,6 +638,7 @@ HotWashQuestions = {
 ## Quick Reference Cards
 
 ### 🎯 Incident Commander Quick Card
+
 ```
 INCIDENT COMMANDER CHECKLIST
 
@@ -636,11 +667,12 @@ ESCALATION CRITERIA:
 ```
 
 ### 🔧 Technical Lead Quick Card
+
 ```
 TECHNICAL LEAD CHECKLIST
 
 □ Lead technical investigation
-□ Coordinate containment actions  
+□ Coordinate containment actions
 □ Preserve digital evidence
 □ Implement recovery procedures
 □ Validate system restoration
@@ -650,7 +682,7 @@ TECHNICAL LEAD CHECKLIST
 
 IMMEDIATE PRIORITIES:
 1. Stop ongoing damage
-2. Preserve evidence  
+2. Preserve evidence
 3. Identify root cause
 4. Implement fix
 5. Validate recovery
@@ -664,6 +696,7 @@ TECHNICAL DECISIONS:
 ```
 
 ### 📢 Communications Lead Quick Card
+
 ```
 COMMUNICATIONS LEAD CHECKLIST
 
@@ -683,7 +716,7 @@ COMMUNICATION PRIORITIES:
 
 APPROVAL REQUIRED:
 • Customer notifications
-• Public statements  
+• Public statements
 • Regulatory communications
 • Media responses
 • Social media posts
@@ -694,14 +727,16 @@ APPROVAL REQUIRED:
 ## Document Control
 
 ### Version History
-| Version | Date | Author | Changes |
-|---------|------|--------|---------|
-| 1.0 | 2025-07-22 | James (AI Agent) | Initial incident response runbooks creation |
+
+| Version | Date       | Author           | Changes                                     |
+| ------- | ---------- | ---------------- | ------------------------------------------- |
+| 1.0     | 2025-07-22 | James (AI Agent) | Initial incident response runbooks creation |
 
 ### Distribution
+
 - Incident Response Team Members
 - Security Team
-- Engineering Leadership  
+- Engineering Leadership
 - Legal and Compliance Teams
 - Executive Team
 
@@ -712,4 +747,4 @@ APPROVAL REQUIRED:
 **Status**: Supporting Documentation Complete  
 **Next Review**: 2025-10-22 (Quarterly Review)
 
-*These runbooks provide tactical, step-by-step procedures for responding to common incident types in the PromptScape environment.*
+_These runbooks provide tactical, step-by-step procedures for responding to common incident types in the PromptScape environment._

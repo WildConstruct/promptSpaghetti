@@ -3,7 +3,9 @@
 ## Version 1.0.0
 
 ### Overview
+
 This format is designed for LLM generation of Prompt Spaghetti graphs. It prioritizes:
+
 - Human readability for LLM understanding
 - Token efficiency to reduce costs
 - Clear delimiters to prevent parsing errors
@@ -43,47 +45,55 @@ node2 -> final
 ### Section Definitions
 
 #### Header Section
+
 - `version`: Format version for migration compatibility
 - `checksum`: SHA-256 integrity check (computed after generation)
 - `metadata`: Optional graph metadata
 
 #### Nodes Section (`---NODES---`)
+
 Each node definition includes:
+
 - **Key**: Unique node identifier (alphanumeric, underscore, hyphen)
 - **type**: One of the 21 supported node types
 - **props**: Node-specific properties (optional)
 - **inputs**: Array of upstream node IDs (optional)
 
 #### Edges Section (`---EDGES---`)
+
 Simple arrow notation for connections:
+
 - Format: `source_id -> target_id`
 - One connection per line
 - Implicit from node.inputs if omitted
 
 #### End Marker (`---END---`)
+
 Clear termination marker for parsing
 
 ### Node Type Specifications
 
 #### WeightedChoice
+
 ```yaml
 weighted_choice:
   type: WeightedChoice
   props:
     choices:
-      - value: "Option A"
+      - value: 'Option A'
         weight: 0.7
-      - value: "Option B"
+      - value: 'Option B'
         weight: 0.3
 ```
 
 #### WeightedAdvanced
+
 ```yaml
 advanced_weighted:
   type: WeightedAdvanced
   props:
     choices:
-      - value: "Advanced A"
+      - value: 'Advanced A'
         weight: 2.5
     distribution:
       type: exponential
@@ -93,25 +103,27 @@ advanced_weighted:
 ```
 
 #### Conditional
+
 ```yaml
 conditional_node:
   type: Conditional
   props:
     branches:
       - condition: "variable == 'value'"
-        output: "Match found"
-        label: "equality_check"
-    default: "No match"
+        output: 'Match found'
+        label: 'equality_check'
+    default: 'No match'
     config:
       strict_mode: true
 ```
 
 #### Sequential
+
 ```yaml
 sequence_node:
   type: Sequential
   props:
-    sequence: ["First", "Second", "Third"]
+    sequence: ['First', 'Second', 'Third']
     pattern:
       type: cyclical
       config:
@@ -119,12 +131,13 @@ sequence_node:
 ```
 
 #### Markov
+
 ```yaml
 markov_chain:
   type: Markov
   props:
     states:
-      start: 
+      start:
         transitions:
           middle: 0.7
           end: 0.3
@@ -136,6 +149,7 @@ markov_chain:
 ```
 
 #### Basic Nodes
+
 ```yaml
 concat_node:
   type: Concat
@@ -148,18 +162,18 @@ output_node:
 variable_set:
   type: SetVariable
   props:
-    key: "user_name"
-    value: "Claude"
+    key: 'user_name'
+    value: 'Claude'
 
 variable_get:
   type: GetVariable
   props:
-    key: "user_name"
+    key: 'user_name'
 
 include_node:
   type: Include
   props:
-    name: "shared_template"
+    name: 'shared_template'
 
 python_transform:
   type: PythonTransform
@@ -174,6 +188,7 @@ python_transform:
 ### Validation Rules
 
 #### Syntax Validation
+
 1. Valid YAML structure within sections
 2. Required section delimiters present
 3. All node IDs are unique
@@ -181,6 +196,7 @@ python_transform:
 5. No circular dependencies
 
 #### Semantic Validation
+
 1. Node types match supported types
 2. Required properties present for each node type
 3. Property types match schema expectations
@@ -190,6 +206,7 @@ python_transform:
 ### LLM Generation Guidelines
 
 #### For LLM Agents
+
 1. Always include version header
 2. Use descriptive node IDs (not random)
 3. Keep property values simple and readable
@@ -198,6 +215,7 @@ python_transform:
 6. Validate against schema before output
 
 #### Token Optimization
+
 - Short property names where possible
 - Use abbreviations consistently
 - Omit optional empty properties
@@ -205,6 +223,7 @@ python_transform:
 - Prefer arrays over verbose objects
 
 #### Error Prevention
+
 - Use consistent indentation (2 spaces)
 - Quote string values that could be ambiguous
 - Avoid special YAML characters in IDs
@@ -214,12 +233,14 @@ python_transform:
 ### Migration Strategy
 
 #### Version Compatibility
+
 - Format version in header enables safe migration
 - Backward compatibility maintained for minor versions
 - Breaking changes require major version increment
 - Auto-migration tools provided for version upgrades
 
 #### Future Extensions
+
 - Additional node types can be added
 - New property types can be introduced
 - Section ordering is flexible

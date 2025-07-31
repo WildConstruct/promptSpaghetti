@@ -241,21 +241,21 @@
     gap: 8px;
     align-items: flex-start;
   }
-  
+
   .error-state.default,
   .error-state.detailed {
     padding: 20px 16px;
   }
-  
+
   .error-state.detailed .error-title {
     font-size: 20px;
   }
-  
+
   .error-actions {
     flex-direction: column;
     width: 100%;
   }
-  
+
   .retry-btn.detailed,
   .reload-btn {
     width: 100%;

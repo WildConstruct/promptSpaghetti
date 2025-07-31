@@ -21,7 +21,7 @@ class ComprehensiveBuildFixer {
       success: '✅',
       warning: '⚠️',
       error: '❌',
-      step: '📋'
+      step: '📋',
     }[type];
     console.log(`${prefix} ${message}`);
   }
@@ -31,22 +31,22 @@ class ComprehensiveBuildFixer {
    */
   runCommand(command, description) {
     this.log(`${description}...`, 'step');
-    
+
     if (this.dryRun) {
       this.log(`Would run: ${command}`, 'warning');
       return true;
     }
 
     try {
-      const output = execSync(command, { 
-        encoding: 'utf8', 
-        stdio: this.verbose ? 'inherit' : 'pipe' 
+      const output = execSync(command, {
+        encoding: 'utf8',
+        stdio: this.verbose ? 'inherit' : 'pipe',
       });
-      
+
       if (this.verbose && output) {
         console.log(output);
       }
-      
+
       this.log(`${description} completed`, 'success');
       return true;
     } catch (error) {
@@ -64,11 +64,8 @@ class ComprehensiveBuildFixer {
    */
   removeBadBuildScripts() {
     this.log('Step 1: Removing problematic build scripts', 'step');
-    
-    const badScripts = [
-      'netlify-build-transform.sh',
-      'netlify-build-webpack.sh'
-    ];
+
+    const badScripts = ['netlify-build-transform.sh', 'netlify-build-webpack.sh'];
 
     let removed = 0;
     for (const script of badScripts) {
@@ -93,10 +90,7 @@ class ComprehensiveBuildFixer {
    */
   cleanMalformedFiles() {
     this.log('Step 2: Cleaning malformed transpiled files', 'step');
-    return this.runCommand(
-      'node scripts/clean-malformed-files.js',
-      'Clean malformed files'
-    );
+    return this.runCommand('node scripts/clean-malformed-files.js', 'Clean malformed files');
   }
 
   /**
@@ -104,10 +98,7 @@ class ComprehensiveBuildFixer {
    */
   fixCorruptedSources() {
     this.log('Step 3: Fixing corrupted source files', 'step');
-    return this.runCommand(
-      'node scripts/fix-corrupted-source-files.js',
-      'Fix corrupted source files'
-    );
+    return this.runCommand('node scripts/fix-corrupted-source-files.js', 'Fix corrupted source files');
   }
 
   /**
@@ -115,10 +106,7 @@ class ComprehensiveBuildFixer {
    */
   validateBuild() {
     this.log('Step 4: Validating build', 'step');
-    return this.runCommand(
-      'node scripts/validate-build.js',
-      'Validate build'
-    );
+    return this.runCommand('node scripts/validate-build.js', 'Validate build');
   }
 
   /**
@@ -126,10 +114,7 @@ class ComprehensiveBuildFixer {
    */
   testTypeScriptCompilation() {
     this.log('Step 5: Testing TypeScript compilation', 'step');
-    return this.runCommand(
-      'cd packages/core && pnpm tsc --noEmit',
-      'TypeScript compilation test'
-    );
+    return this.runCommand('cd packages/core && pnpm tsc --noEmit', 'TypeScript compilation test');
   }
 
   /**
@@ -137,10 +122,7 @@ class ComprehensiveBuildFixer {
    */
   runLinting() {
     this.log('Step 6: Running linting', 'step');
-    return this.runCommand(
-      'pnpm lint --fix',
-      'ESLint with fixes'
-    );
+    return this.runCommand('pnpm lint --fix', 'ESLint with fixes');
   }
 
   /**
@@ -159,7 +141,7 @@ class ComprehensiveBuildFixer {
       () => this.fixCorruptedSources(),
       () => this.validateBuild(),
       () => this.testTypeScriptCompilation(),
-      () => this.runLinting()
+      () => this.runLinting(),
     ];
 
     let completedSteps = 0;
@@ -183,8 +165,11 @@ class ComprehensiveBuildFixer {
 
     // Final report
     console.log('📊 Build Fix Summary:');
-    this.log(`Completed steps: ${completedSteps}/${steps.length}`, completedSteps === steps.length ? 'success' : 'warning');
-    
+    this.log(
+      `Completed steps: ${completedSteps}/${steps.length}`,
+      completedSteps === steps.length ? 'success' : 'warning'
+    );
+
     if (failedSteps > 0) {
       this.log(`Failed steps: ${failedSteps}`, 'error');
     }

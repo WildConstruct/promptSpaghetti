@@ -1,11 +1,13 @@
 # Data Deletion Workflow Wireframes
 
 ## Overview
+
 Basic wireframes for automated data deletion workflow as part of Epic 19.2.6 Data Retention Automation.
 
 ## User Interface Components
 
 ### 1. Data Retention Dashboard
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │ Data Retention Management                               │
@@ -22,6 +24,7 @@ Basic wireframes for automated data deletion workflow as part of Epic 19.2.6 Dat
 ```
 
 ### 2. Deletion Confirmation Dialog
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │ Confirm Data Deletion                              [X]  │
@@ -41,6 +44,7 @@ Basic wireframes for automated data deletion workflow as part of Epic 19.2.6 Dat
 ```
 
 ### 3. Deletion Progress View
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │ Data Deletion in Progress...                       [X]  │
@@ -60,6 +64,7 @@ Basic wireframes for automated data deletion workflow as part of Epic 19.2.6 Dat
 ```
 
 ### 4. Retention Policy Editor
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │ Edit Retention Policy                              [X]  │

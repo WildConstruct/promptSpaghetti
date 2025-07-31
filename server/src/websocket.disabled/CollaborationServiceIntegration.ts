@@ -4,10 +4,10 @@
  */
 
 import { WebSocketServer } from './WebSocketServer';
-import { 
+import {
   EnhancedCollaborationService,
   EnhancedCollaborationConfig,
-  CollaborationSession
+  CollaborationSession,
 } from './EnhancedCollaborationService';
 import { WSMessage } from './types';
 
@@ -17,7 +17,7 @@ export class CollaborationServiceIntegration {
 
   constructor(wsServer: WebSocketServer) {
     this.wsServer = wsServer;
-    
+
     const config: EnhancedCollaborationConfig = {
       maxSessionsPerDocument: 5,
       sessionTimeoutMs: 24 * 60 * 60 * 1000, // 24 hours
@@ -28,7 +28,7 @@ export class CollaborationServiceIntegration {
       analyticsEnabled: true,
       enableAdvancedConflictResolution: true,
       enableSmartMerging: true,
-      enableOperationalTransform: false // Future feature
+      enableOperationalTransform: false, // Future feature
     };
 
     this.collaborationService = new EnhancedCollaborationService(wsServer, config);
@@ -54,11 +54,11 @@ export class CollaborationServiceIntegration {
     messageHandlers.set('collaboration_create_session', (connectionId: string, payload: any) => {
       const { documentId, title, settings, permissions } = payload;
       const connectionInfo = (this.wsServer as any).connectionManager.getConnectionInfo(connectionId);
-      
+
       if (!connectionInfo) {
         this.sendToConnection(connectionId, {
           type: 'error',
-          payload: { error: 'Authentication required' }
+          payload: { error: 'Authentication required' },
         });
         return;
       }
@@ -74,12 +74,12 @@ export class CollaborationServiceIntegration {
 
         this.sendToConnection(connectionId, {
           type: 'collaboration_session_created',
-          payload: { session }
+          payload: { session },
         });
       } catch (error) {
         this.sendToConnection(connectionId, {
           type: 'error',
-          payload: { error: 'Failed to create collaboration session' }
+          payload: { error: 'Failed to create collaboration session' },
         });
       }
     });
@@ -88,11 +88,11 @@ export class CollaborationServiceIntegration {
     messageHandlers.set('collaboration_join_session', (connectionId: string, payload: any) => {
       const { sessionId, userName, userAvatar, role } = payload;
       const connectionInfo = (this.wsServer as any).connectionManager.getConnectionInfo(connectionId);
-      
+
       if (!connectionInfo) {
         this.sendToConnection(connectionId, {
           type: 'error',
-          payload: { error: 'Authentication required' }
+          payload: { error: 'Authentication required' },
         });
         return;
       }
@@ -109,25 +109,25 @@ export class CollaborationServiceIntegration {
         if (participant) {
           // Update connection info to link to collaboration session
           connectionInfo.collaborationSessionId = sessionId;
-          
+
           this.sendToConnection(connectionId, {
             type: 'collaboration_session_joined',
-            payload: { 
-              sessionId, 
+            payload: {
+              sessionId,
               participant,
-              session: this.collaborationService.getSession(sessionId)
-            }
+              session: this.collaborationService.getSession(sessionId),
+            },
           });
         } else {
           this.sendToConnection(connectionId, {
             type: 'error',
-            payload: { error: 'Failed to join collaboration session' }
+            payload: { error: 'Failed to join collaboration session' },
           });
         }
       } catch (error) {
         this.sendToConnection(connectionId, {
           type: 'error',
-          payload: { error: 'Failed to join collaboration session' }
+          payload: { error: 'Failed to join collaboration session' },
         });
       }
     });
@@ -136,24 +136,24 @@ export class CollaborationServiceIntegration {
     messageHandlers.set('collaboration_leave_session', (connectionId: string, payload: any) => {
       const { sessionId } = payload;
       const connectionInfo = (this.wsServer as any).connectionManager.getConnectionInfo(connectionId);
-      
+
       if (!connectionInfo) return;
 
       try {
         const success = this.collaborationService.leaveSession(sessionId, connectionInfo.userId);
-        
+
         if (success) {
           connectionInfo.collaborationSessionId = undefined;
-          
+
           this.sendToConnection(connectionId, {
             type: 'collaboration_session_left',
-            payload: { sessionId }
+            payload: { sessionId },
           });
         }
       } catch (error) {
         this.sendToConnection(connectionId, {
           type: 'error',
-          payload: { error: 'Failed to leave collaboration session' }
+          payload: { error: 'Failed to leave collaboration session' },
         });
       }
     });
@@ -162,7 +162,7 @@ export class CollaborationServiceIntegration {
     messageHandlers.set('collaboration_lock_element', (connectionId: string, payload: any) => {
       const { sessionId, targetId, type, reason, expiresAt } = payload;
       const connectionInfo = (this.wsServer as any).connectionManager.getConnectionInfo(connectionId);
-      
+
       if (!connectionInfo) return;
 
       try {
@@ -178,18 +178,18 @@ export class CollaborationServiceIntegration {
         if (lock) {
           this.sendToConnection(connectionId, {
             type: 'collaboration_element_locked',
-            payload: { lock }
+            payload: { lock },
           });
         } else {
           this.sendToConnection(connectionId, {
             type: 'error',
-            payload: { error: 'Failed to lock element' }
+            payload: { error: 'Failed to lock element' },
           });
         }
       } catch (error) {
         this.sendToConnection(connectionId, {
           type: 'error',
-          payload: { error: 'Failed to lock element' }
+          payload: { error: 'Failed to lock element' },
         });
       }
     });
@@ -198,27 +198,27 @@ export class CollaborationServiceIntegration {
     messageHandlers.set('collaboration_unlock_element', (connectionId: string, payload: any) => {
       const { sessionId, lockId } = payload;
       const connectionInfo = (this.wsServer as any).connectionManager.getConnectionInfo(connectionId);
-      
+
       if (!connectionInfo) return;
 
       try {
         const success = this.collaborationService.unlockElement(sessionId, connectionInfo.userId, lockId);
-        
+
         if (success) {
           this.sendToConnection(connectionId, {
             type: 'collaboration_element_unlocked',
-            payload: { lockId }
+            payload: { lockId },
           });
         } else {
           this.sendToConnection(connectionId, {
             type: 'error',
-            payload: { error: 'Failed to unlock element' }
+            payload: { error: 'Failed to unlock element' },
           });
         }
       } catch (error) {
         this.sendToConnection(connectionId, {
           type: 'error',
-          payload: { error: 'Failed to unlock element' }
+          payload: { error: 'Failed to unlock element' },
         });
       }
     });
@@ -227,7 +227,7 @@ export class CollaborationServiceIntegration {
     messageHandlers.set('collaboration_create_snapshot', (connectionId: string, payload: any) => {
       const { sessionId, name, description, tags } = payload;
       const connectionInfo = (this.wsServer as any).connectionManager.getConnectionInfo(connectionId);
-      
+
       if (!connectionInfo) return;
 
       try {
@@ -242,18 +242,18 @@ export class CollaborationServiceIntegration {
         if (snapshot) {
           this.sendToConnection(connectionId, {
             type: 'collaboration_snapshot_created',
-            payload: { snapshot: { ...snapshot, documentState: undefined } } // Don't send full state
+            payload: { snapshot: { ...snapshot, documentState: undefined } }, // Don't send full state
           });
         } else {
           this.sendToConnection(connectionId, {
             type: 'error',
-            payload: { error: 'Failed to create snapshot' }
+            payload: { error: 'Failed to create snapshot' },
           });
         }
       } catch (error) {
         this.sendToConnection(connectionId, {
           type: 'error',
-          payload: { error: 'Failed to create snapshot' }
+          payload: { error: 'Failed to create snapshot' },
         });
       }
     });
@@ -262,31 +262,27 @@ export class CollaborationServiceIntegration {
     messageHandlers.set('collaboration_restore_snapshot', (connectionId: string, payload: any) => {
       const { sessionId, snapshotId } = payload;
       const connectionInfo = (this.wsServer as any).connectionManager.getConnectionInfo(connectionId);
-      
+
       if (!connectionInfo) return;
 
       try {
-        const success = this.collaborationService.restoreSnapshot(
-          sessionId,
-          connectionInfo.userId,
-          snapshotId
-        );
+        const success = this.collaborationService.restoreSnapshot(sessionId, connectionInfo.userId, snapshotId);
 
         if (success) {
           this.sendToConnection(connectionId, {
             type: 'collaboration_snapshot_restored',
-            payload: { snapshotId }
+            payload: { snapshotId },
           });
         } else {
           this.sendToConnection(connectionId, {
             type: 'error',
-            payload: { error: 'Failed to restore snapshot' }
+            payload: { error: 'Failed to restore snapshot' },
           });
         }
       } catch (error) {
         this.sendToConnection(connectionId, {
           type: 'error',
-          payload: { error: 'Failed to restore snapshot' }
+          payload: { error: 'Failed to restore snapshot' },
         });
       }
     });
@@ -294,25 +290,25 @@ export class CollaborationServiceIntegration {
     // Get session info
     messageHandlers.set('collaboration_get_session', (connectionId: string, payload: any) => {
       const { sessionId } = payload;
-      
+
       try {
         const session = this.collaborationService.getSession(sessionId);
-        
+
         if (session) {
           this.sendToConnection(connectionId, {
             type: 'collaboration_session_info',
-            payload: { session }
+            payload: { session },
           });
         } else {
           this.sendToConnection(connectionId, {
             type: 'error',
-            payload: { error: 'Session not found' }
+            payload: { error: 'Session not found' },
           });
         }
       } catch (error) {
         this.sendToConnection(connectionId, {
           type: 'error',
-          payload: { error: 'Failed to get session info' }
+          payload: { error: 'Failed to get session info' },
         });
       }
     });
@@ -320,25 +316,25 @@ export class CollaborationServiceIntegration {
     // Get session analytics
     messageHandlers.set('collaboration_get_analytics', (connectionId: string, payload: any) => {
       const { sessionId } = payload;
-      
+
       try {
         const analytics = this.collaborationService.getSessionAnalytics(sessionId);
-        
+
         if (analytics) {
           this.sendToConnection(connectionId, {
             type: 'collaboration_analytics',
-            payload: { sessionId, analytics }
+            payload: { sessionId, analytics },
           });
         } else {
           this.sendToConnection(connectionId, {
             type: 'error',
-            payload: { error: 'Analytics not found' }
+            payload: { error: 'Analytics not found' },
           });
         }
       } catch (error) {
         this.sendToConnection(connectionId, {
           type: 'error',
-          payload: { error: 'Failed to get analytics' }
+          payload: { error: 'Failed to get analytics' },
         });
       }
     });
@@ -347,31 +343,27 @@ export class CollaborationServiceIntegration {
     messageHandlers.set('collaboration_update_settings', (connectionId: string, payload: any) => {
       const { sessionId, settings } = payload;
       const connectionInfo = (this.wsServer as any).connectionManager.getConnectionInfo(connectionId);
-      
+
       if (!connectionInfo) return;
 
       try {
-        const success = this.collaborationService.updateSessionSettings(
-          sessionId,
-          connectionInfo.userId,
-          settings
-        );
+        const success = this.collaborationService.updateSessionSettings(sessionId, connectionInfo.userId, settings);
 
         if (success) {
           this.sendToConnection(connectionId, {
             type: 'collaboration_settings_updated',
-            payload: { sessionId, settings }
+            payload: { sessionId, settings },
           });
         } else {
           this.sendToConnection(connectionId, {
             type: 'error',
-            payload: { error: 'Failed to update settings' }
+            payload: { error: 'Failed to update settings' },
           });
         }
       } catch (error) {
         this.sendToConnection(connectionId, {
           type: 'error',
-          payload: { error: 'Failed to update settings' }
+          payload: { error: 'Failed to update settings' },
         });
       }
     });
@@ -380,7 +372,7 @@ export class CollaborationServiceIntegration {
     messageHandlers.set('collaboration_end_session', (connectionId: string, payload: any) => {
       const { sessionId } = payload;
       const connectionInfo = (this.wsServer as any).connectionManager.getConnectionInfo(connectionId);
-      
+
       if (!connectionInfo) return;
 
       try {
@@ -389,18 +381,18 @@ export class CollaborationServiceIntegration {
         if (success) {
           this.sendToConnection(connectionId, {
             type: 'collaboration_session_ended',
-            payload: { sessionId }
+            payload: { sessionId },
           });
         } else {
           this.sendToConnection(connectionId, {
             type: 'error',
-            payload: { error: 'Failed to end session' }
+            payload: { error: 'Failed to end session' },
           });
         }
       } catch (error) {
         this.sendToConnection(connectionId, {
           type: 'error',
-          payload: { error: 'Failed to end session' }
+          payload: { error: 'Failed to end session' },
         });
       }
     });
@@ -470,18 +462,18 @@ export class CollaborationServiceIntegration {
     totalParticipants: number;
     totalLocks: number;
     totalSnapshots: number;
-    } {
+  } {
     const sessions = Array.from((this.collaborationService as any).sessions.values());
     const activeSessions = sessions.filter((s: any) => s.status === 'active');
-    
+
     return {
       activeSessions: activeSessions.length,
       totalParticipants: activeSessions.reduce(
-        (sum: number,
-        s: any
-      ) => sum + s.participants.filter((p: any) => p.isOnline).length, 0),
+        (sum: number, s: any) => sum + s.participants.filter((p: any) => p.isOnline).length,
+        0
+      ),
       totalLocks: (this.collaborationService as any).locks.size,
-      totalSnapshots: activeSessions.reduce((sum: number, s: any) => sum + s.snapshots.length, 0)
+      totalSnapshots: activeSessions.reduce((sum: number, s: any) => sum + s.snapshots.length, 0),
     };
   }
 }

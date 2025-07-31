@@ -7,7 +7,7 @@ import { GraphDocument, GraphNode, GraphEdge } from '../types';
 
 describe('GraphEngine', () => {
   let engine: GraphEngine;
-  
+
   beforeEach(() => {
     engine = new GraphEngine();
   });
@@ -25,12 +25,12 @@ describe('GraphEngine', () => {
         metadata: {
           version: '0.1.0',
           created: new Date(),
-          modified: new Date()
-        }
+          modified: new Date(),
+        },
       };
 
       const result = await engine.execute(graph, 12345);
-      
+
       expect(result.success).toBe(true);
       expect(result.metadata.seed).toBe(12345);
       expect(result.metadata.executionTime).toBeGreaterThanOrEqual(0);
@@ -44,8 +44,8 @@ describe('GraphEngine', () => {
         metadata: {
           version: '0.1.0',
           created: new Date(),
-          modified: new Date()
-        }
+          modified: new Date(),
+        },
       };
 
       const validation = engine.validate(graph);
@@ -58,22 +58,25 @@ describe('GraphEngine', () => {
       const graph: GraphDocument = {
         id: 'test-graph',
         nodes: new Map([
-          ['output1', {
-            id: 'output1',
-            type: 'Output',
-            data: { text: 'Hello World' }
-          }]
+          [
+            'output1',
+            {
+              id: 'output1',
+              type: 'Output',
+              data: { text: 'Hello World' },
+            },
+          ],
         ]),
         edges: new Map(),
         metadata: {
           version: '1.0.0',
           created: new Date(),
-          modified: new Date()
-        }
+          modified: new Date(),
+        },
       };
 
       const result = await engine.execute(graph, 'test-seed');
-      
+
       expect(result.success).toBe(true);
       expect(result.outputs).toContain('Hello World');
       expect(result.metadata.seed).toBe('test-seed');
@@ -83,34 +86,43 @@ describe('GraphEngine', () => {
       const graph: GraphDocument = {
         id: 'test-graph',
         nodes: new Map([
-          ['choice1', {
-            id: 'choice1',
-            type: 'WeightedChoice',
-            data: {
-              choices: [
-                { value: 'Option A', weight: 1 },
-                { value: 'Option B', weight: 1 }
-              ]
-            }
-          }],
-          ['output1', {
-            id: 'output1',
-            type: 'Output',
-            data: { text: '{{choice1}}' }
-          }]
+          [
+            'choice1',
+            {
+              id: 'choice1',
+              type: 'WeightedChoice',
+              data: {
+                choices: [
+                  { value: 'Option A', weight: 1 },
+                  { value: 'Option B', weight: 1 },
+                ],
+              },
+            },
+          ],
+          [
+            'output1',
+            {
+              id: 'output1',
+              type: 'Output',
+              data: { text: '{{choice1}}' },
+            },
+          ],
         ]),
         edges: new Map([
-          ['edge1', {
-            id: 'edge1',
-            source: 'choice1',
-            target: 'output1'
-          }]
+          [
+            'edge1',
+            {
+              id: 'edge1',
+              source: 'choice1',
+              target: 'output1',
+            },
+          ],
         ]),
         metadata: {
           version: '1.0.0',
           created: new Date(),
-          modified: new Date()
-        }
+          modified: new Date(),
+        },
       };
 
       // Execute with same seed multiple times
@@ -122,7 +134,7 @@ describe('GraphEngine', () => {
 
       // Same seed should produce same result
       expect(result1.outputs).toEqual(result2.outputs);
-      
+
       // Result should be one of the choices
       expect(['Option A', 'Option B']).toContain(result1.outputs[0]);
     });
@@ -131,41 +143,48 @@ describe('GraphEngine', () => {
       const graph: GraphDocument = {
         id: 'test-graph',
         nodes: new Map([
-          ['choice1', {
-            id: 'choice1',
-            type: 'WeightedChoice',
-            data: {
-              choices: [
-                { value: 'Hello', weight: 1 }
-              ]
-            }
-          }],
-          ['concat1', {
-            id: 'concat1',
-            type: 'Concat',
-            data: {
-              template: '{{choice1}} World!'
-            }
-          }],
-          ['output1', {
-            id: 'output1',
-            type: 'Output',
-            data: { text: '{{concat1}}' }
-          }]
+          [
+            'choice1',
+            {
+              id: 'choice1',
+              type: 'WeightedChoice',
+              data: {
+                choices: [{ value: 'Hello', weight: 1 }],
+              },
+            },
+          ],
+          [
+            'concat1',
+            {
+              id: 'concat1',
+              type: 'Concat',
+              data: {
+                template: '{{choice1}} World!',
+              },
+            },
+          ],
+          [
+            'output1',
+            {
+              id: 'output1',
+              type: 'Output',
+              data: { text: '{{concat1}}' },
+            },
+          ],
         ]),
         edges: new Map([
           ['edge1', { id: 'edge1', source: 'choice1', target: 'concat1' }],
-          ['edge2', { id: 'edge2', source: 'concat1', target: 'output1' }]
+          ['edge2', { id: 'edge2', source: 'concat1', target: 'output1' }],
         ]),
         metadata: {
           version: '1.0.0',
           created: new Date(),
-          modified: new Date()
-        }
+          modified: new Date(),
+        },
       };
 
       const result = await engine.execute(graph, 'test-seed');
-      
+
       expect(result.success).toBe(true);
       expect(result.outputs[0]).toBe('Hello World!');
     });
@@ -174,35 +193,44 @@ describe('GraphEngine', () => {
       const graph: GraphDocument = {
         id: 'test-graph',
         nodes: new Map([
-          ['setVar1', {
-            id: 'setVar1',
-            type: 'SetVariable',
-            data: { key: 'greeting', value: 'Hello' }
-          }],
-          ['getVar1', {
-            id: 'getVar1',
-            type: 'GetVariable',
-            data: { key: 'greeting' }
-          }],
-          ['output1', {
-            id: 'output1',
-            type: 'Output',
-            data: { text: '{{getVar1}} World!' }
-          }]
+          [
+            'setVar1',
+            {
+              id: 'setVar1',
+              type: 'SetVariable',
+              data: { key: 'greeting', value: 'Hello' },
+            },
+          ],
+          [
+            'getVar1',
+            {
+              id: 'getVar1',
+              type: 'GetVariable',
+              data: { key: 'greeting' },
+            },
+          ],
+          [
+            'output1',
+            {
+              id: 'output1',
+              type: 'Output',
+              data: { text: '{{getVar1}} World!' },
+            },
+          ],
         ]),
         edges: new Map([
           ['edge1', { id: 'edge1', source: 'setVar1', target: 'getVar1' }],
-          ['edge2', { id: 'edge2', source: 'getVar1', target: 'output1' }]
+          ['edge2', { id: 'edge2', source: 'getVar1', target: 'output1' }],
         ]),
         metadata: {
           version: '1.0.0',
           created: new Date(),
-          modified: new Date()
-        }
+          modified: new Date(),
+        },
       };
 
       const result = await engine.execute(graph, 'test-seed');
-      
+
       expect(result.success).toBe(true);
       expect(result.outputs[0]).toBe('Hello World!');
     });
@@ -211,24 +239,27 @@ describe('GraphEngine', () => {
       const graph: GraphDocument = {
         id: 'test-graph',
         nodes: new Map([
-          ['choice1', {
-            id: 'choice1',
-            type: 'WeightedChoice',
-            data: {
-              choices: [{ value: 'Hello', weight: 1 }]
-            }
-          }]
+          [
+            'choice1',
+            {
+              id: 'choice1',
+              type: 'WeightedChoice',
+              data: {
+                choices: [{ value: 'Hello', weight: 1 }],
+              },
+            },
+          ],
         ]),
         edges: new Map(),
         metadata: {
           version: '1.0.0',
           created: new Date(),
-          modified: new Date()
-        }
+          modified: new Date(),
+        },
       };
 
       const result = await engine.execute(graph, 'test-seed');
-      
+
       expect(result.success).toBe(true);
       expect(result.outputs).toEqual([]);
     });
@@ -239,18 +270,21 @@ describe('GraphEngine', () => {
       const graph: GraphDocument = {
         id: 'test-graph',
         nodes: new Map([
-          ['node1', {
-            id: 'node1',
-            type: 'Output',
-            data: { text: 'Hello World' }
-          }]
+          [
+            'node1',
+            {
+              id: 'node1',
+              type: 'Output',
+              data: { text: 'Hello World' },
+            },
+          ],
         ]),
         edges: new Map(),
         metadata: {
           version: '1.0.0',
           created: new Date('2023-01-01'),
-          modified: new Date('2023-01-02')
-        }
+          modified: new Date('2023-01-02'),
+        },
       };
 
       const serialized = engine.serialize(graph);
@@ -270,8 +304,8 @@ describe('GraphEngine', () => {
         metadata: {
           version: '1.0.0',
           created: new Date(),
-          modified: new Date()
-        }
+          modified: new Date(),
+        },
       };
 
       const serialized = engine.serialize(graph);
@@ -288,7 +322,7 @@ describe('GraphEngine', () => {
       const malformedGraph = {
         // Missing required fields
         nodes: new Map(),
-        edges: new Map()
+        edges: new Map(),
       } as any;
 
       expect(() => engine.validate(malformedGraph)).not.toThrow();
@@ -300,25 +334,28 @@ describe('GraphEngine', () => {
       const graph: GraphDocument = {
         id: 'test-graph',
         nodes: new Map([
-          ['output1', {
-            id: 'output1',
-            type: 'Output',
-            data: { text: 'Hello' }
-          }]
+          [
+            'output1',
+            {
+              id: 'output1',
+              type: 'Output',
+              data: { text: 'Hello' },
+            },
+          ],
         ]),
         edges: new Map(),
         metadata: {
           version: '1.0.0',
           created: new Date(),
-          modified: new Date()
-        }
+          modified: new Date(),
+        },
       };
 
       // Should handle different seed types
       const result1 = await engine.execute(graph, 123);
       const result2 = await engine.execute(graph, 'string-seed');
       const result3 = await engine.execute(graph);
-      
+
       expect(result1.success).toBe(true);
       expect(result2.success).toBe(true);
       expect(result3.success).toBe(true);
@@ -337,15 +374,15 @@ describe('GraphEngine', () => {
           id: `node${i}`,
           type: 'WeightedChoice',
           data: {
-            choices: [{ value: `Value ${i}`, weight: 1 }]
-          }
+            choices: [{ value: `Value ${i}`, weight: 1 }],
+          },
         });
 
         if (i > 0) {
           edges.set(`edge${i}`, {
             id: `edge${i}`,
-            source: `node${i-1}`,
-            target: `node${i}`
+            source: `node${i - 1}`,
+            target: `node${i}`,
           });
         }
       }
@@ -354,12 +391,12 @@ describe('GraphEngine', () => {
       nodes.set('output', {
         id: 'output',
         type: 'Output',
-        data: { text: `{{node${nodeCount-1}}}` }
+        data: { text: `{{node${nodeCount - 1}}}` },
       });
       edges.set('outputEdge', {
         id: 'outputEdge',
-        source: `node${nodeCount-1}`,
-        target: 'output'
+        source: `node${nodeCount - 1}`,
+        target: 'output',
       });
 
       const graph: GraphDocument = {
@@ -369,8 +406,8 @@ describe('GraphEngine', () => {
         metadata: {
           version: '1.0.0',
           created: new Date(),
-          modified: new Date()
-        }
+          modified: new Date(),
+        },
       };
 
       const startTime = performance.now();

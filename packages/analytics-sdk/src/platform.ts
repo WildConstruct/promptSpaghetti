@@ -11,7 +11,7 @@ export function createPlatformAnalytics(platform: Platform): AnalyticsClient {
     endpoint: process.env.ANALYTICS_ENDPOINT || 'http://localhost:8080/analytics',
     platform,
     batchSize: platform === 'mobile' ? 5 : 10,
-    flushInterval: platform === 'mobile' ? 30000 : 10000
+    flushInterval: platform === 'mobile' ? 30000 : 10000,
   };
 
   return new AnalyticsClient(config);
@@ -21,21 +21,24 @@ export function getPlatformMetadata(platform: Platform) {
   const metadata = {
     web: {
       userAgent: typeof window !== 'undefined' ? window.navigator.userAgent : '',
-      viewport: typeof window !== 'undefined' ? {
-        width: window.innerWidth,
-        height: window.innerHeight
-      } : null
+      viewport:
+        typeof window !== 'undefined'
+          ? {
+              width: window.innerWidth,
+              height: window.innerHeight,
+            }
+          : null,
     },
     mobile: {
       // TODO: Get mobile-specific metadata
       device: 'unknown',
-      os: 'unknown'
+      os: 'unknown',
     },
     desktop: {
       // TODO: Get desktop-specific metadata
       platform: 'unknown',
-      arch: 'unknown'
-    }
+      arch: 'unknown',
+    },
   };
 
   return metadata[platform];

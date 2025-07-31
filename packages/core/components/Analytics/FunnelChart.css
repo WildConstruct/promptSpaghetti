@@ -109,7 +109,9 @@
 /* Step Interactions */
 .funnel-step-bar {
   cursor: pointer;
-  transition: opacity 0.2s, stroke-width 0.2s;
+  transition:
+    opacity 0.2s,
+    stroke-width 0.2s;
 }
 
 .funnel-step-bar:hover {
@@ -336,7 +338,9 @@
   cursor: pointer;
   padding: 4px;
   border-radius: 4px;
-  transition: color 0.2s, background-color 0.2s;
+  transition:
+    color 0.2s,
+    background-color 0.2s;
 }
 
 .close-button:hover {
@@ -417,8 +421,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .funnel-chart-loading p,
@@ -542,7 +550,7 @@
   .retry-button {
     transition: none;
   }
-  
+
   .loading-spinner {
     animation: none;
   }
@@ -553,7 +561,7 @@
   .funnel-chart {
     border: 2px solid;
   }
-  
+
   .funnel-step-bar {
     stroke: currentColor;
     stroke-width: 2;
@@ -566,13 +574,13 @@
     box-shadow: none;
     border: 1px solid #000;
   }
-  
+
   .export-button,
   .close-button,
   .retry-button {
     display: none;
   }
-  
+
   .step-tooltip {
     position: static !important;
     box-shadow: none;

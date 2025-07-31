@@ -2,7 +2,7 @@
  * Integration Example for Testing Infrastructure
  * Epic 18 - Implement testing infrastructure
  * Task: E18-1753114562510-5E3421
- * 
+ *
  * This file demonstrates how to use the comprehensive testing infrastructure
  */
 
@@ -23,7 +23,7 @@ describe('Testing Infrastructure Integration', () => {
       setupDatabase: false, // Set to true if database tests are needed
       setupEnvironment: true,
       generateReports: true,
-      outputDir: './test-results'
+      outputDir: './test-results',
     });
 
     // Initialize the test harness
@@ -75,7 +75,7 @@ describe('Testing Infrastructure Integration', () => {
       const graphBenchmarks = benchmarks.graphExecution;
 
       expect(graphBenchmarks.length).toBeGreaterThan(0);
-      
+
       for (const benchmark of graphBenchmarks) {
         expect(benchmark.nodeCount).toBeDefined();
         expect(benchmark.executionTime).toBeGreaterThan(0);
@@ -148,12 +148,12 @@ describe('Testing Infrastructure Integration', () => {
   describe('Event Handling', () => {
     it('should emit events during test execution', async () => {
       const events: string[] = [];
-      
+
       const eventHandlers = {
-        'testRunStarted': () => events.push('testRunStarted'),
-        'executionPlanCreated': () => events.push('executionPlanCreated'),
-        'testResult': () => events.push('testResult'),
-        'testRunCompleted': () => events.push('testRunCompleted')
+        testRunStarted: () => events.push('testRunStarted'),
+        executionPlanCreated: () => events.push('executionPlanCreated'),
+        testResult: () => events.push('testResult'),
+        testRunCompleted: () => events.push('testRunCompleted'),
       };
 
       // Register event handlers
@@ -179,7 +179,7 @@ describe('Testing Infrastructure Integration', () => {
     it('should handle test execution errors gracefully', async () => {
       // This test verifies that the test harness handles errors properly
       // In a real scenario, we might simulate failures or invalid configurations
-      
+
       const status = testHarness.getTestStatus();
       expect(status).toBeDefined();
       expect(typeof status.isRunning).toBe('boolean');
@@ -200,7 +200,7 @@ describe('Testing Infrastructure Integration', () => {
   describe('Configuration Validation', () => {
     it('should use provided configuration', () => {
       const config = testHarness['config'];
-      
+
       expect(config.environment).toBe(TestEnvironment.INTEGRATION);
       expect(config.categories).toContain(TestCategory.ENGINE);
       expect(config.categories).toContain(TestCategory.FRONTEND);
@@ -220,13 +220,13 @@ describe('Individual Component Testing', () => {
     it('should generate deterministic graph data', async () => {
       const { GraphDataGenerator } = await import('./TestDataGenerators');
       const generator = new GraphDataGenerator('test-seed-123');
-      
+
       const graph1 = generator.generateGraph({ nodeCount: 5, edgeCount: 4 });
-      
+
       // Reset with same seed
       generator.setSeed('test-seed-123');
       const graph2 = generator.generateGraph({ nodeCount: 5, edgeCount: 4 });
-      
+
       // Should generate identical graphs with same seed
       expect(graph1.nodes.length).toBe(graph2.nodes.length);
       expect(graph1.edges.length).toBe(graph2.edges.length);
@@ -235,13 +235,13 @@ describe('Individual Component Testing', () => {
     it('should generate realistic user data', async () => {
       const { UserDataGenerator } = await import('./TestDataGenerators');
       const generator = new UserDataGenerator();
-      
+
       const user = generator.generateUser({
         includeAuth: true,
         includeProfile: true,
-        roles: ['admin', 'user']
+        roles: ['admin', 'user'],
       });
-      
+
       expect(user.id).toBeDefined();
       expect(user.email).toMatch(/^[^@]+@[^@]+\.[^@]+$/);
       expect(user.auth).toBeDefined();
@@ -252,10 +252,10 @@ describe('Individual Component Testing', () => {
     it('should generate API request/response data', async () => {
       const { APIDataGenerator } = await import('./TestDataGenerators');
       const generator = new APIDataGenerator();
-      
+
       const request = generator.generateRequest();
       const response = generator.generateResponse(request);
-      
+
       expect(request.method).toBeDefined();
       expect(request.endpoint).toBeDefined();
       expect(response.statusCode).toBeDefined();
@@ -267,15 +267,15 @@ describe('Individual Component Testing', () => {
     it('should provide comprehensive test fixtures', async () => {
       const { default: TestFixtureManager } = await import('./TestFixtures');
       const fixtureManager = new TestFixtureManager();
-      
+
       const fixtures = fixtureManager.list();
       expect(fixtures.length).toBeGreaterThan(0);
-      
+
       // Verify specific fixture categories exist
       const graphFixtures = fixtureManager.getByCategory('graph');
       const userFixtures = fixtureManager.getByCategory('user');
       const apiFixtures = fixtureManager.getByCategory('api');
-      
+
       expect(graphFixtures.length).toBeGreaterThan(0);
       expect(userFixtures.length).toBeGreaterThan(0);
       expect(apiFixtures.length).toBeGreaterThan(0);
@@ -284,16 +284,16 @@ describe('Individual Component Testing', () => {
     it('should allow custom fixture registration', async () => {
       const { default: TestFixtureManager } = await import('./TestFixtures');
       const fixtureManager = new TestFixtureManager();
-      
+
       const customFixture = {
         category: 'graph' as const,
         data: { nodes: [], edges: [] },
-        metadata: { description: 'Custom test fixture' }
+        metadata: { description: 'Custom test fixture' },
       };
-      
+
       fixtureManager.register('custom-test-fixture', customFixture);
       const retrieved = fixtureManager.get('custom-test-fixture');
-      
+
       expect(retrieved).toBeDefined();
       expect(retrieved?.name).toBe('custom-test-fixture');
       expect(retrieved?.category).toBe('graph');
@@ -305,15 +305,15 @@ describe('Individual Component Testing', () => {
       const { default: TestingFramework, TestEnvironment, TestCategory } = await import('./TestingFramework');
       const framework = new TestingFramework({
         environment: TestEnvironment.UNIT,
-        category: TestCategory.ENGINE
+        category: TestCategory.ENGINE,
       });
-      
+
       const suite = framework.registerSuite('Test Suite');
-      suite.test('Sample Test', async (context) => {
+      suite.test('Sample Test', async context => {
         const result = context.utilities.assert.equal(2 + 2, 4);
         expect(result.passed).toBe(true);
       });
-      
+
       const results = await framework.runAll();
       expect(results.length).toBe(1);
       expect(results[0].status).toBe('passed');

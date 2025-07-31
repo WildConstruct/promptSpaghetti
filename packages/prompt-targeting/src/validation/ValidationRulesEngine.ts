@@ -13,7 +13,7 @@ export enum ValidationSeverity {
   INFO = 'info',
   WARNING = 'warning',
   ERROR = 'error',
-  CRITICAL = 'critical'
+  CRITICAL = 'critical',
 }
 
 /**
@@ -25,7 +25,7 @@ export enum ValidationCategory {
   PLATFORM = 'platform',
   PERFORMANCE = 'performance',
   SECURITY = 'security',
-  QUALITY = 'quality'
+  QUALITY = 'quality',
 }
 
 /**
@@ -54,22 +54,22 @@ export interface ValidationRule {
   category: ValidationCategory;
   severity: ValidationSeverity;
   enabled: boolean;
-  
+
   /**
    * Check if rule applies to the current context
    */
   applies(context: ValidationContext): boolean;
-  
+
   /**
    * Execute the validation rule
    */
   validate(context: ValidationContext): Promise<ValidationRuleResult>;
-  
+
   /**
    * Get suggested fix for the validation issue
    */
   getSuggestion?(context: ValidationContext, result: ValidationRuleResult): string;
-  
+
   /**
    * Auto-fix the validation issue if possible
    */
@@ -97,21 +97,21 @@ export interface ValidationReport {
   rulesExecuted: number;
   rulesPassed: number;
   rulesFailed: number;
-  
+
   results: {
     rule: ValidationRule;
     result: ValidationRuleResult;
     severity: ValidationSeverity;
     category: ValidationCategory;
   }[];
-  
+
   summary: {
     critical: number;
     errors: number;
     warnings: number;
     info: number;
   };
-  
+
   recommendations: string[];
   autoFixable: number;
 }
@@ -142,7 +142,7 @@ export class ValidationRulesEngine extends EventEmitter {
 
   constructor(config: Partial<ValidationEngineConfig> = {}) {
     super();
-    
+
     this.config = {
       enabledCategories: Object.values(ValidationCategory),
       minSeverity: ValidationSeverity.INFO,
@@ -150,15 +150,15 @@ export class ValidationRulesEngine extends EventEmitter {
       maxExecutionTime: 10000, // 10 seconds
       parallelExecution: true,
       enableMetrics: true,
-      ...config
+      ...config,
     };
-    
+
     this.metrics = {
       totalValidations: 0,
       averageExecutionTime: 0,
-      rulePerformance: new Map()
+      rulePerformance: new Map(),
     };
-    
+
     this.initializeBuiltInRules();
   }
 
@@ -169,7 +169,7 @@ export class ValidationRulesEngine extends EventEmitter {
     if (this.rules.has(rule.id)) {
       throw new Error(`Validation rule with ID '${rule.id}' already exists`);
     }
-    
+
     this.rules.set(rule.id, rule);
     this.emit('rule:registered', rule);
   }
@@ -227,20 +227,20 @@ export class ValidationRulesEngine extends EventEmitter {
     try {
       // Filter applicable rules
       const applicableRules = this.getApplicableRules(context);
-      
+
       if (applicableRules.length === 0) {
         return this.createEmptyReport(Date.now() - startTime);
       }
 
       // Execute rules
       const ruleResults = await this.executeRules(applicableRules, context);
-      
+
       // Generate report
       const report = this.generateReport(ruleResults, Date.now() - startTime);
-      
+
       // Update metrics
       this.updateMetrics(report);
-      
+
       this.emit('validation:completed', report);
       return report;
     } catch (error) {
@@ -268,13 +268,13 @@ export class ValidationRulesEngine extends EventEmitter {
             fixes.push({
               ruleId: result.rule.id,
               changes: fixResult.changes,
-              success: fixResult.fixed
+              success: fixResult.fixed,
             });
           } catch (error) {
             fixes.push({
               ruleId: result.rule.id,
               changes: [],
-              success: false
+              success: false,
             });
           }
         }
@@ -302,21 +302,23 @@ export class ValidationRulesEngine extends EventEmitter {
         const item = {
           code: result.rule.id,
           message: result.result.message,
-          source: result.result.affectedNodes?.length ? {
-            nodeId: result.result.affectedNodes[0]
-          } : undefined
+          source: result.result.affectedNodes?.length
+            ? {
+                nodeId: result.result.affectedNodes[0],
+              }
+            : undefined,
         };
 
         if (result.severity === ValidationSeverity.ERROR || result.severity === ValidationSeverity.CRITICAL) {
           errors.push({
             ...item,
             severity: 'error' as const,
-            suggestion: result.rule.getSuggestion?.(report.results[0] as any, result.result)
+            suggestion: result.rule.getSuggestion?.(report.results[0] as any, result.result),
           });
         } else {
           warnings.push({
             ...item,
-            optimization: result.rule.getSuggestion?.(report.results[0] as any, result.result)
+            optimization: result.rule.getSuggestion?.(report.results[0] as any, result.result),
           });
         }
       }
@@ -326,7 +328,7 @@ export class ValidationRulesEngine extends EventEmitter {
       valid: report.valid,
       errors,
       warnings,
-      compatibilityScore: report.score / 100
+      compatibilityScore: report.score / 100,
     };
   }
 
@@ -344,13 +346,13 @@ export class ValidationRulesEngine extends EventEmitter {
       averageTime: number;
       failureRate: number;
     }>;
-    } {
+  } {
     const enabledRules = this.getRules().filter(r => r.enabled).length;
     const rulePerformance = Array.from(this.metrics.rulePerformance.entries()).map(([ruleId, stats]) => ({
       ruleId,
       executions: stats.executions,
       averageTime: stats.totalTime / stats.executions,
-      failureRate: stats.failureRate
+      failureRate: stats.failureRate,
     }));
 
     return {
@@ -358,7 +360,7 @@ export class ValidationRulesEngine extends EventEmitter {
       averageExecutionTime: this.metrics.averageExecutionTime,
       registeredRules: this.rules.size,
       enabledRules,
-      rulePerformance
+      rulePerformance,
     };
   }
 
@@ -423,7 +425,7 @@ export class ValidationRulesEngine extends EventEmitter {
       if (!rule.enabled) return false;
       if (!this.config.enabledCategories.includes(rule.category)) return false;
       if (this.getSeverityOrder(rule.severity) < this.getSeverityOrder(this.config.minSeverity)) return false;
-      
+
       return rule.applies(context);
     });
   }
@@ -439,30 +441,30 @@ export class ValidationRulesEngine extends EventEmitter {
 
     if (this.config.parallelExecution) {
       // Execute rules in parallel
-      const promises = rules.map(async (rule) => {
+      const promises = rules.map(async rule => {
         const startTime = Date.now();
         try {
           const result = await this.executeRuleWithTimeout(rule, context);
           const executionTime = Date.now() - startTime;
-          
+
           this.updateRuleMetrics(rule.id, executionTime, !result.passed);
           return { rule, result, executionTime };
         } catch (error) {
           const executionTime = Date.now() - startTime;
           this.updateRuleMetrics(rule.id, executionTime, true);
-          
+
           return {
             rule,
             result: {
               passed: false,
-              message: `Rule execution failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+              message: `Rule execution failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
             },
-            executionTime
+            executionTime,
           };
         }
       });
 
-      results.push(...await Promise.all(promises));
+      results.push(...(await Promise.all(promises)));
     } else {
       // Execute rules sequentially
       for (const rule of rules) {
@@ -470,20 +472,20 @@ export class ValidationRulesEngine extends EventEmitter {
         try {
           const result = await this.executeRuleWithTimeout(rule, context);
           const executionTime = Date.now() - startTime;
-          
+
           this.updateRuleMetrics(rule.id, executionTime, !result.passed);
           results.push({ rule, result, executionTime });
         } catch (error) {
           const executionTime = Date.now() - startTime;
           this.updateRuleMetrics(rule.id, executionTime, true);
-          
+
           results.push({
             rule,
             result: {
               passed: false,
-              message: `Rule execution failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+              message: `Rule execution failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
             },
-            executionTime
+            executionTime,
           });
         }
       }
@@ -504,7 +506,8 @@ export class ValidationRulesEngine extends EventEmitter {
         reject(new Error(`Rule ${rule.id} execution timeout`));
       }, this.config.maxExecutionTime);
 
-      rule.validate(context)
+      rule
+        .validate(context)
         .then(result => {
           clearTimeout(timeout);
           resolve(result);
@@ -527,25 +530,25 @@ export class ValidationRulesEngine extends EventEmitter {
       rule,
       result,
       severity: rule.severity,
-      category: rule.category
+      category: rule.category,
     }));
 
     const summary = {
       critical: results.filter(r => r.severity === ValidationSeverity.CRITICAL && !r.result.passed).length,
       errors: results.filter(r => r.severity === ValidationSeverity.ERROR && !r.result.passed).length,
       warnings: results.filter(r => r.severity === ValidationSeverity.WARNING && !r.result.passed).length,
-      info: results.filter(r => r.severity === ValidationSeverity.INFO && !r.result.passed).length
+      info: results.filter(r => r.severity === ValidationSeverity.INFO && !r.result.passed).length,
     };
 
     const rulesPassed = results.filter(r => r.result.passed).length;
     const rulesFailed = results.length - rulesPassed;
-    
+
     // Calculate validation score (0-100)
     const score = this.calculateValidationScore(results, summary);
-    
+
     // Generate recommendations
     const recommendations = this.generateRecommendations(results);
-    
+
     // Count auto-fixable issues
     const autoFixable = results.filter(r => !r.result.passed && r.rule.autoFix).length;
 
@@ -559,30 +562,25 @@ export class ValidationRulesEngine extends EventEmitter {
       results,
       summary,
       recommendations,
-      autoFixable
+      autoFixable,
     };
   }
 
   /**
    * Calculate validation score based on severity weights
    */
-  private calculateValidationScore(
-    results: ValidationReport['results'],
-    summary: ValidationReport['summary']
-  ): number {
+  private calculateValidationScore(results: ValidationReport['results'], summary: ValidationReport['summary']): number {
     const weights = {
       [ValidationSeverity.CRITICAL]: 40,
       [ValidationSeverity.ERROR]: 25,
       [ValidationSeverity.WARNING]: 10,
-      [ValidationSeverity.INFO]: 5
+      [ValidationSeverity.INFO]: 5,
     };
 
     const totalPossiblePoints = results.reduce((sum, r) => sum + weights[r.severity], 0);
     if (totalPossiblePoints === 0) return 100;
 
-    const lostPoints = results
-      .filter(r => !r.result.passed)
-      .reduce((sum, r) => sum + weights[r.severity], 0);
+    const lostPoints = results.filter(r => !r.result.passed).reduce((sum, r) => sum + weights[r.severity], 0);
 
     return Math.max(0, Math.round(((totalPossiblePoints - lostPoints) / totalPossiblePoints) * 100));
   }
@@ -595,35 +593,38 @@ export class ValidationRulesEngine extends EventEmitter {
     const failedResults = results.filter(r => !r.result.passed);
 
     // Group by category for better recommendations
-    const byCategory = failedResults.reduce((acc, result) => {
-      if (!acc[result.category]) acc[result.category] = [];
-      acc[result.category].push(result);
-      return acc;
-    }, {} as Record<ValidationCategory, typeof failedResults>);
+    const byCategory = failedResults.reduce(
+      (acc, result) => {
+        if (!acc[result.category]) acc[result.category] = [];
+        acc[result.category].push(result);
+        return acc;
+      },
+      {} as Record<ValidationCategory, typeof failedResults>
+    );
 
     // Generate category-specific recommendations
     for (const [category, categoryResults] of Object.entries(byCategory)) {
       const count = categoryResults.length;
-      
+
       switch (category) {
-      case ValidationCategory.STRUCTURE:
-        recommendations.push(`Fix ${count} structural issue${count > 1 ? 's' : ''} to improve graph validity`);
-        break;
-      case ValidationCategory.CONTENT:
-        recommendations.push(`Address ${count} content issue${count > 1 ? 's' : ''} to enhance output quality`);
-        break;
-      case ValidationCategory.PLATFORM:
-        recommendations.push(`Resolve ${count} platform compatibility issue${count > 1 ? 's' : ''}`);
-        break;
-      case ValidationCategory.PERFORMANCE:
-        recommendations.push(`Optimize ${count} performance aspect${count > 1 ? 's' : ''} for better efficiency`);
-        break;
-      case ValidationCategory.SECURITY:
-        recommendations.push(`Address ${count} security concern${count > 1 ? 's' : ''} before deployment`);
-        break;
-      case ValidationCategory.QUALITY:
-        recommendations.push(`Improve ${count} quality metric${count > 1 ? 's' : ''} for better results`);
-        break;
+        case ValidationCategory.STRUCTURE:
+          recommendations.push(`Fix ${count} structural issue${count > 1 ? 's' : ''} to improve graph validity`);
+          break;
+        case ValidationCategory.CONTENT:
+          recommendations.push(`Address ${count} content issue${count > 1 ? 's' : ''} to enhance output quality`);
+          break;
+        case ValidationCategory.PLATFORM:
+          recommendations.push(`Resolve ${count} platform compatibility issue${count > 1 ? 's' : ''}`);
+          break;
+        case ValidationCategory.PERFORMANCE:
+          recommendations.push(`Optimize ${count} performance aspect${count > 1 ? 's' : ''} for better efficiency`);
+          break;
+        case ValidationCategory.SECURITY:
+          recommendations.push(`Address ${count} security concern${count > 1 ? 's' : ''} before deployment`);
+          break;
+        case ValidationCategory.QUALITY:
+          recommendations.push(`Improve ${count} quality metric${count > 1 ? 's' : ''} for better results`);
+          break;
       }
     }
 
@@ -644,7 +645,7 @@ export class ValidationRulesEngine extends EventEmitter {
       results: [],
       summary: { critical: 0, errors: 0, warnings: 0, info: 0 },
       recommendations: [],
-      autoFixable: 0
+      autoFixable: 0,
     };
   }
 
@@ -655,7 +656,7 @@ export class ValidationRulesEngine extends EventEmitter {
     if (!this.config.enableMetrics) return;
 
     this.metrics.totalValidations++;
-    
+
     // Update average execution time
     const totalTime = this.metrics.averageExecutionTime * (this.metrics.totalValidations - 1) + report.executionTime;
     this.metrics.averageExecutionTime = totalTime / this.metrics.totalValidations;
@@ -671,13 +672,13 @@ export class ValidationRulesEngine extends EventEmitter {
       this.metrics.rulePerformance.set(ruleId, {
         executions: 0,
         totalTime: 0,
-        failureRate: 0
+        failureRate: 0,
       });
     }
 
     const stats = this.metrics.rulePerformance.get(ruleId)!;
     const previousFailures = stats.failureRate * stats.executions;
-    
+
     stats.executions++;
     stats.totalTime += executionTime;
     stats.failureRate = (previousFailures + (failed ? 1 : 0)) / stats.executions;
@@ -691,7 +692,7 @@ export class ValidationRulesEngine extends EventEmitter {
       [ValidationSeverity.INFO]: 0,
       [ValidationSeverity.WARNING]: 1,
       [ValidationSeverity.ERROR]: 2,
-      [ValidationSeverity.CRITICAL]: 3
+      [ValidationSeverity.CRITICAL]: 3,
     };
     return order[severity];
   }
@@ -717,38 +718,36 @@ class EmptyGraphRule implements ValidationRule {
 
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     const { graph } = context;
-    
+
     if (!graph.nodes || graph.nodes.length === 0) {
       return {
         passed: false,
         message: 'Graph contains no nodes',
-        details: { nodeCount: 0 }
+        details: { nodeCount: 0 },
       };
     }
 
     // Check for content nodes
-    const contentNodes = graph.nodes.filter((node: any) => 
-      node.data?.text || node.data?.content
-    );
+    const contentNodes = graph.nodes.filter((node: any) => node.data?.text || node.data?.content);
 
     if (contentNodes.length === 0) {
       return {
         passed: false,
         message: 'Graph contains no content-producing nodes',
-        details: { 
+        details: {
           totalNodes: graph.nodes.length,
-          contentNodes: 0 
-        }
+          contentNodes: 0,
+        },
       };
     }
 
     return {
       passed: true,
       message: 'Graph contains valid content nodes',
-      details: { 
+      details: {
         totalNodes: graph.nodes.length,
-        contentNodes: contentNodes.length 
-      }
+        contentNodes: contentNodes.length,
+      },
     };
   }
 
@@ -774,18 +773,18 @@ class TokenLimitRule implements ValidationRule {
 
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     const { graph, capabilities } = context;
-    
+
     if (!capabilities?.maxTokens) {
       return {
         passed: true,
-        message: 'No token limit specified for platform'
+        message: 'No token limit specified for platform',
       };
     }
 
     // Extract all text content
     const allText = this.extractAllText(graph);
     const estimatedTokens = Math.ceil(allText.length / 4); // Rough estimate
-    
+
     const limit = capabilities.maxTokens;
     const warningThreshold = limit * 0.8;
     const errorThreshold = limit * 0.95;
@@ -794,12 +793,12 @@ class TokenLimitRule implements ValidationRule {
       return {
         passed: false,
         message: `Content exceeds platform token limit (${estimatedTokens}/${limit} tokens)`,
-        details: { 
-          estimatedTokens, 
-          limit, 
-          overLimit: estimatedTokens - limit 
+        details: {
+          estimatedTokens,
+          limit,
+          overLimit: estimatedTokens - limit,
         },
-        metrics: { tokenUsage: estimatedTokens / limit }
+        metrics: { tokenUsage: estimatedTokens / limit },
       };
     }
 
@@ -807,12 +806,12 @@ class TokenLimitRule implements ValidationRule {
       return {
         passed: false,
         message: `Content approaching platform token limit (${estimatedTokens}/${limit} tokens)`,
-        details: { 
-          estimatedTokens, 
-          limit, 
-          warningThreshold 
+        details: {
+          estimatedTokens,
+          limit,
+          warningThreshold,
         },
-        metrics: { tokenUsage: estimatedTokens / limit }
+        metrics: { tokenUsage: estimatedTokens / limit },
       };
     }
 
@@ -820,7 +819,7 @@ class TokenLimitRule implements ValidationRule {
       passed: true,
       message: `Content within acceptable token limits (${estimatedTokens}/${limit} tokens)`,
       details: { estimatedTokens, limit },
-      metrics: { tokenUsage: estimatedTokens / limit }
+      metrics: { tokenUsage: estimatedTokens / limit },
     };
   }
 
@@ -834,7 +833,7 @@ class TokenLimitRule implements ValidationRule {
 
   private extractAllText(graph: any): string {
     if (!graph.nodes) return '';
-    
+
     return graph.nodes
       .filter((node: any) => node.data?.text || node.data?.content)
       .map((node: any) => node.data.text || node.data.content)
@@ -862,7 +861,7 @@ class InjectionDetectionRule implements ValidationRule {
     /execute\s+code/i,
     /run\s+command/i,
     /\$\{.*\}/g, // Template injection
-    /\{\{.*\}\}/g // Handlebars/Mustache injection
+    /\{\{.*\}\}/g, // Handlebars/Mustache injection
   ];
 
   applies(context: ValidationContext): boolean {
@@ -872,7 +871,7 @@ class InjectionDetectionRule implements ValidationRule {
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     const { graph } = context;
     const allText = this.extractAllText(graph);
-    
+
     const detectedPatterns: string[] = [];
     const affectedNodes: string[] = [];
 
@@ -880,7 +879,7 @@ class InjectionDetectionRule implements ValidationRule {
     if (graph.nodes) {
       for (const node of graph.nodes) {
         const nodeText = node.data?.text || node.data?.content || '';
-        
+
         for (const pattern of this.dangerousPatterns) {
           if (pattern.test(nodeText)) {
             detectedPatterns.push(pattern.source);
@@ -894,18 +893,18 @@ class InjectionDetectionRule implements ValidationRule {
       return {
         passed: false,
         message: `Potential injection attack detected: ${detectedPatterns.length} suspicious pattern(s) found`,
-        details: { 
+        details: {
           patterns: detectedPatterns,
-          affectedNodeCount: affectedNodes.length 
+          affectedNodeCount: affectedNodes.length,
         },
-        affectedNodes: [...new Set(affectedNodes)] // Remove duplicates
+        affectedNodes: [...new Set(affectedNodes)], // Remove duplicates
       };
     }
 
     return {
       passed: true,
       message: 'No injection attack patterns detected',
-      details: { patternsChecked: this.dangerousPatterns.length }
+      details: { patternsChecked: this.dangerousPatterns.length },
     };
   }
 
@@ -931,7 +930,7 @@ class InjectionDetectionRule implements ValidationRule {
               nodeId: node.id,
               type: 'text_sanitized',
               original: originalText,
-              cleaned: cleanedText
+              cleaned: cleanedText,
             });
           }
         }
@@ -952,7 +951,7 @@ class InjectionDetectionRule implements ValidationRule {
 
   private extractAllText(graph: any): string {
     if (!graph.nodes) return '';
-    
+
     return graph.nodes
       .filter((node: any) => node.data?.text || node.data?.content)
       .map((node: any) => node.data.text || node.data.content)
@@ -971,27 +970,29 @@ class CyclicGraphRule implements ValidationRule {
   severity = ValidationSeverity.ERROR;
   enabled = true;
 
-  applies() { return true; }
-  
+  applies() {
+    return true;
+  }
+
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     const { graph } = context;
-    
+
     if (!graph.edges || graph.edges.length === 0) {
       return {
         passed: true,
-        message: 'No edges present, no cycles possible'
+        message: 'No edges present, no cycles possible',
       };
     }
 
     // Build adjacency list
     const adjacencyList = new Map<string, string[]>();
-    
+
     if (graph.nodes) {
       for (const node of graph.nodes) {
         adjacencyList.set(node.id, []);
       }
     }
-    
+
     for (const edge of graph.edges) {
       const sourceConnections = adjacencyList.get(edge.source) || [];
       sourceConnections.push(edge.target);
@@ -1032,7 +1033,7 @@ class CyclicGraphRule implements ValidationRule {
             passed: false,
             message: `Cycle detected in graph involving ${cycleNodes.length} node(s)`,
             details: { cycleLength: cycleNodes.length },
-            affectedNodes: [...new Set(cycleNodes)]
+            affectedNodes: [...new Set(cycleNodes)],
           };
         }
       }
@@ -1041,7 +1042,7 @@ class CyclicGraphRule implements ValidationRule {
     return {
       passed: true,
       message: 'No cycles detected in graph',
-      details: { nodesChecked: adjacencyList.size }
+      details: { nodesChecked: adjacencyList.size },
     };
   }
 
@@ -1058,15 +1059,17 @@ class DisconnectedNodesRule implements ValidationRule {
   severity = ValidationSeverity.WARNING;
   enabled = true;
 
-  applies() { return true; }
-  
+  applies() {
+    return true;
+  }
+
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     const { graph } = context;
-    
+
     if (!graph.nodes || graph.nodes.length === 0) {
       return {
         passed: true,
-        message: 'No nodes to validate'
+        message: 'No nodes to validate',
       };
     }
 
@@ -1074,24 +1077,24 @@ class DisconnectedNodesRule implements ValidationRule {
       if (graph.nodes.length === 1) {
         return {
           passed: true,
-          message: 'Single node graph is valid'
+          message: 'Single node graph is valid',
         };
       }
       return {
         passed: false,
         message: 'Multiple nodes with no connections detected',
         details: { disconnectedNodes: graph.nodes.length },
-        affectedNodes: graph.nodes.map((n: any) => n.id)
+        affectedNodes: graph.nodes.map((n: any) => n.id),
       };
     }
 
     // Build undirected adjacency list for connectivity analysis
     const adjacencyList = new Map<string, Set<string>>();
-    
+
     for (const node of graph.nodes) {
       adjacencyList.set(node.id, new Set());
     }
-    
+
     for (const edge of graph.edges) {
       adjacencyList.get(edge.source)?.add(edge.target);
       adjacencyList.get(edge.target)?.add(edge.source);
@@ -1132,33 +1135,31 @@ class DisconnectedNodesRule implements ValidationRule {
 
     // Check for disconnected components
     if (components.length > 1) {
-      const largestComponent = components.reduce((largest, current) => 
+      const largestComponent = components.reduce((largest, current) =>
         current.length > largest.length ? current : largest
       );
-      
-      const disconnectedNodes = components
-        .filter(comp => comp !== largestComponent)
-        .flat();
+
+      const disconnectedNodes = components.filter(comp => comp !== largestComponent).flat();
 
       return {
         passed: false,
         message: `Found ${components.length} disconnected component(s) with ${disconnectedNodes.length} isolated node(s)`,
-        details: { 
+        details: {
           componentCount: components.length,
           largestComponentSize: largestComponent.length,
-          disconnectedNodeCount: disconnectedNodes.length
+          disconnectedNodeCount: disconnectedNodes.length,
         },
-        affectedNodes: disconnectedNodes
+        affectedNodes: disconnectedNodes,
       };
     }
 
     return {
       passed: true,
       message: 'All nodes are properly connected',
-      details: { 
+      details: {
         nodeCount: graph.nodes.length,
-        edgeCount: graph.edges.length 
-      }
+        edgeCount: graph.edges.length,
+      },
     };
   }
 
@@ -1175,13 +1176,15 @@ class InvalidNodeTypeRule implements ValidationRule {
   severity = ValidationSeverity.ERROR;
   enabled = true;
 
-  applies() { return true; }
-  
+  applies() {
+    return true;
+  }
+
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     // Implementation for node type validation
     return {
       passed: true,
-      message: 'All nodes have valid types'
+      message: 'All nodes have valid types',
     };
   }
 }
@@ -1194,13 +1197,15 @@ class MissingRequiredPropertiesRule implements ValidationRule {
   severity = ValidationSeverity.ERROR;
   enabled = true;
 
-  applies() { return true; }
-  
+  applies() {
+    return true;
+  }
+
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     // Implementation for required properties validation
     return {
       passed: true,
-      message: 'All nodes have required properties'
+      message: 'All nodes have required properties',
     };
   }
 }
@@ -1213,15 +1218,17 @@ class EmptyContentRule implements ValidationRule {
   severity = ValidationSeverity.WARNING;
   enabled = true;
 
-  applies() { return true; }
-  
+  applies() {
+    return true;
+  }
+
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     const { graph } = context;
-    
+
     if (!graph.nodes || graph.nodes.length === 0) {
       return {
         passed: true,
-        message: 'No nodes to validate'
+        message: 'No nodes to validate',
       };
     }
 
@@ -1245,10 +1252,9 @@ class EmptyContentRule implements ValidationRule {
 
       // Check for content nodes that should have content
       const nodeType = node.type || nodeData.type || '';
-      const isContentNode = [
-        'output', 'text', 'prompt', 'template', 
-        'concat', 'transform', 'generate'
-      ].some(type => nodeType.toLowerCase().includes(type));
+      const isContentNode = ['output', 'text', 'prompt', 'template', 'concat', 'transform', 'generate'].some(type =>
+        nodeType.toLowerCase().includes(type)
+      );
 
       if (isContentNode && !hasContent) {
         emptyContentNodes.push(node.id);
@@ -1259,18 +1265,18 @@ class EmptyContentRule implements ValidationRule {
       return {
         passed: false,
         message: `Found ${emptyContentNodes.length} content node(s) with empty content`,
-        details: { 
+        details: {
           emptyNodeCount: emptyContentNodes.length,
-          totalNodes: graph.nodes.length 
+          totalNodes: graph.nodes.length,
         },
-        affectedNodes: emptyContentNodes
+        affectedNodes: emptyContentNodes,
       };
     }
 
     return {
       passed: true,
       message: 'All content nodes have valid content',
-      details: { contentNodesChecked: graph.nodes.length }
+      details: { contentNodesChecked: graph.nodes.length },
     };
   }
 
@@ -1286,16 +1292,15 @@ class EmptyContentRule implements ValidationRule {
       for (const node of context.graph.nodes) {
         const nodeData = node.data || {};
         const nodeType = node.type || nodeData.type || '';
-        
-        const isContentNode = [
-          'output', 'text', 'prompt', 'template', 
-          'concat', 'transform', 'generate'
-        ].some(type => nodeType.toLowerCase().includes(type));
+
+        const isContentNode = ['output', 'text', 'prompt', 'template', 'concat', 'transform', 'generate'].some(type =>
+          nodeType.toLowerCase().includes(type)
+        );
 
         if (isContentNode) {
           let hasContent = false;
           const contentTypes = ['text', 'content', 'prompt', 'template'];
-          
+
           for (const contentType of contentTypes) {
             if (nodeData[contentType] && String(nodeData[contentType]).trim().length > 0) {
               hasContent = true;
@@ -1306,7 +1311,7 @@ class EmptyContentRule implements ValidationRule {
           if (!hasContent) {
             // Add placeholder content
             const placeholderContent = `[${nodeType} placeholder content]`;
-            
+
             if (nodeData.text !== undefined) {
               nodeData.text = placeholderContent;
             } else if (nodeData.content !== undefined) {
@@ -1319,7 +1324,7 @@ class EmptyContentRule implements ValidationRule {
             changes.push({
               nodeId: node.id,
               type: 'content_added',
-              content: placeholderContent
+              content: placeholderContent,
             });
           }
         }
@@ -1338,13 +1343,15 @@ class ContentLengthRule implements ValidationRule {
   severity = ValidationSeverity.INFO;
   enabled = true;
 
-  applies() { return true; }
-  
+  applies() {
+    return true;
+  }
+
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     // Implementation for content length validation
     return {
       passed: true,
-      message: 'Content length is appropriate'
+      message: 'Content length is appropriate',
     };
   }
 }
@@ -1357,15 +1364,17 @@ class ContentQualityRule implements ValidationRule {
   severity = ValidationSeverity.INFO;
   enabled = true;
 
-  applies() { return true; }
-  
+  applies() {
+    return true;
+  }
+
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     const { graph } = context;
-    
+
     if (!graph.nodes || graph.nodes.length === 0) {
       return {
         passed: true,
-        message: 'No content to assess'
+        message: 'No content to assess',
       };
     }
 
@@ -1377,7 +1386,7 @@ class ContentQualityRule implements ValidationRule {
     for (const node of graph.nodes) {
       const nodeData = node.data || {};
       const content = this.extractContent(nodeData);
-      
+
       if (!content) continue;
       totalContentNodes++;
 
@@ -1393,7 +1402,7 @@ class ContentQualityRule implements ValidationRule {
 
     if (qualityIssues.length > 0) {
       const severity = qualityScore < 60 ? ValidationSeverity.WARNING : ValidationSeverity.INFO;
-      
+
       return {
         passed: qualityScore >= 70,
         message: `Content quality issues detected (score: ${qualityScore}/100)`,
@@ -1401,10 +1410,10 @@ class ContentQualityRule implements ValidationRule {
           qualityScore,
           issueCount: qualityIssues.length,
           contentNodesChecked: totalContentNodes,
-          issues: qualityIssues.slice(0, 10) // Limit to first 10 issues
+          issues: qualityIssues.slice(0, 10), // Limit to first 10 issues
         },
         affectedNodes: [...new Set(affectedNodes)],
-        metrics: { qualityScore: qualityScore / 100 }
+        metrics: { qualityScore: qualityScore / 100 },
       };
     }
 
@@ -1413,39 +1422,39 @@ class ContentQualityRule implements ValidationRule {
       message: `Content quality is excellent (score: ${qualityScore}/100)`,
       details: {
         qualityScore,
-        contentNodesChecked: totalContentNodes
+        contentNodesChecked: totalContentNodes,
       },
-      metrics: { qualityScore: qualityScore / 100 }
+      metrics: { qualityScore: qualityScore / 100 },
     };
   }
 
   private extractContent(nodeData: any): string {
     const contentFields = ['text', 'content', 'prompt', 'template', 'description'];
-    
+
     for (const field of contentFields) {
       if (nodeData[field] && typeof nodeData[field] === 'string') {
         return nodeData[field].trim();
       }
     }
-    
+
     return '';
   }
 
   private assessContentQuality(content: string): string[] {
     const issues: string[] = [];
-    
+
     // Length checks
     if (content.length < 10) {
       issues.push('Content too short (less than 10 characters)');
     }
-    
+
     if (content.length > 5000) {
       issues.push('Content very long (over 5000 characters)');
     }
 
     // Basic quality checks
     const words = content.split(/\s+/).filter(w => w.length > 0);
-    
+
     if (words.length < 3) {
       issues.push('Content has very few words');
     }
@@ -1459,23 +1468,16 @@ class ContentQualityRule implements ValidationRule {
       }
     }
 
-    const repeatedWords = Array.from(wordCounts.entries())
-      .filter(([_, count]) => count > Math.max(3, words.length * 0.1))
-      .length;
+    const repeatedWords = Array.from(wordCounts.entries()).filter(
+      ([_, count]) => count > Math.max(3, words.length * 0.1)
+    ).length;
 
     if (repeatedWords > 0) {
       issues.push(`Excessive word repetition detected (${repeatedWords} words)`);
     }
 
     // Placeholder content check
-    const placeholderPatterns = [
-      /placeholder/i,
-      /lorem ipsum/i,
-      /\[.*\]/,
-      /TODO/i,
-      /FIXME/i,
-      /test.*content/i
-    ];
+    const placeholderPatterns = [/placeholder/i, /lorem ipsum/i, /\[.*\]/, /TODO/i, /FIXME/i, /test.*content/i];
 
     for (const pattern of placeholderPatterns) {
       if (pattern.test(content)) {
@@ -1515,13 +1517,15 @@ class DuplicateContentRule implements ValidationRule {
   severity = ValidationSeverity.WARNING;
   enabled = true;
 
-  applies() { return true; }
-  
+  applies() {
+    return true;
+  }
+
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     // Implementation for duplicate content detection
     return {
       passed: true,
-      message: 'No duplicate content detected'
+      message: 'No duplicate content detected',
     };
   }
 }
@@ -1534,13 +1538,15 @@ class LanguageConsistencyRule implements ValidationRule {
   severity = ValidationSeverity.INFO;
   enabled = true;
 
-  applies() { return true; }
-  
+  applies() {
+    return true;
+  }
+
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     // Implementation for language consistency check
     return {
       passed: true,
-      message: 'Language usage is consistent'
+      message: 'Language usage is consistent',
     };
   }
 }
@@ -1553,27 +1559,27 @@ class PlatformCompatibilityRule implements ValidationRule {
   severity = ValidationSeverity.ERROR;
   enabled = true;
 
-  applies(context: ValidationContext) { 
-    return !!context.targetPlatform && !!context.capabilities; 
+  applies(context: ValidationContext) {
+    return !!context.targetPlatform && !!context.capabilities;
   }
-  
+
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     const { targetPlatform, capabilities, graph } = context;
-    
+
     if (!capabilities) {
       return {
         passed: true,
-        message: 'No platform capabilities defined for validation'
+        message: 'No platform capabilities defined for validation',
       };
     }
 
     const incompatibilityIssues: string[] = [];
     const affectedNodes: string[] = [];
-    
+
     if (!graph.nodes) {
       return {
         passed: true,
-        message: 'No nodes to validate for platform compatibility'
+        message: 'No nodes to validate for platform compatibility',
       };
     }
 
@@ -1581,7 +1587,7 @@ class PlatformCompatibilityRule implements ValidationRule {
     for (const node of graph.nodes) {
       const nodeType = node.type || node.data?.type || '';
       const nodeIssues = this.checkNodeCompatibility(node, capabilities, targetPlatform);
-      
+
       if (nodeIssues.length > 0) {
         incompatibilityIssues.push(...nodeIssues.map(issue => `${nodeType} (${node.id}): ${issue}`));
         affectedNodes.push(node.id);
@@ -1599,9 +1605,9 @@ class PlatformCompatibilityRule implements ValidationRule {
         details: {
           platform: targetPlatform,
           issueCount: incompatibilityIssues.length,
-          issues: incompatibilityIssues.slice(0, 10) // Limit to first 10 issues
+          issues: incompatibilityIssues.slice(0, 10), // Limit to first 10 issues
         },
-        affectedNodes: [...new Set(affectedNodes)]
+        affectedNodes: [...new Set(affectedNodes)],
       };
     }
 
@@ -1610,15 +1616,15 @@ class PlatformCompatibilityRule implements ValidationRule {
       message: `Content is fully compatible with ${targetPlatform}`,
       details: {
         platform: targetPlatform,
-        nodesChecked: graph.nodes.length
-      }
+        nodesChecked: graph.nodes.length,
+      },
     };
   }
 
   private checkNodeCompatibility(node: any, capabilities: any, platform: string): string[] {
     const issues: string[] = [];
     const nodeData = node.data || {};
-    
+
     // Check node type support
     const nodeType = node.type || nodeData.type || '';
     if (capabilities.supportedNodeTypes && !capabilities.supportedNodeTypes.includes(nodeType)) {
@@ -1637,7 +1643,7 @@ class PlatformCompatibilityRule implements ValidationRule {
         if (capabilities.unsupportedParameters?.includes(param)) {
           issues.push(`Parameter '${param}' not supported`);
         }
-        
+
         // Check parameter value ranges
         if (capabilities.parameterLimits?.[param]) {
           const limits = capabilities.parameterLimits[param];
@@ -1655,16 +1661,16 @@ class PlatformCompatibilityRule implements ValidationRule {
 
     // Platform-specific checks
     switch (platform.toLowerCase()) {
-    case 'openai':
-      issues.push(...this.checkOpenAICompatibility(nodeData));
-      break;
-    case 'midjourney':
-      issues.push(...this.checkMidjourneyCompatibility(nodeData));
-      break;
-    case 'dalle':
-    case 'dall-e':
-      issues.push(...this.checkDALLECompatibility(nodeData));
-      break;
+      case 'openai':
+        issues.push(...this.checkOpenAICompatibility(nodeData));
+        break;
+      case 'midjourney':
+        issues.push(...this.checkMidjourneyCompatibility(nodeData));
+        break;
+      case 'dalle':
+      case 'dall-e':
+        issues.push(...this.checkDALLECompatibility(nodeData));
+        break;
     }
 
     return issues;
@@ -1672,7 +1678,7 @@ class PlatformCompatibilityRule implements ValidationRule {
 
   private checkGraphCompatibility(graph: any, capabilities: any, platform: string): string[] {
     const issues: string[] = [];
-    
+
     // Check total token count
     if (capabilities.maxTokens) {
       const totalContent = this.extractAllContent(graph);
@@ -1700,54 +1706,54 @@ class PlatformCompatibilityRule implements ValidationRule {
 
   private checkOpenAICompatibility(nodeData: any): string[] {
     const issues: string[] = [];
-    
+
     // OpenAI specific checks
     if (nodeData.model && !['gpt-3.5-turbo', 'gpt-4', 'gpt-4-turbo'].includes(nodeData.model)) {
       issues.push(`Model '${nodeData.model}' may not be supported by OpenAI`);
     }
-    
+
     return issues;
   }
 
   private checkMidjourneyCompatibility(nodeData: any): string[] {
     const issues: string[] = [];
-    
+
     // Midjourney specific checks
     const content = this.extractContent(nodeData);
     if (content && content.length > 4000) {
       issues.push('Prompt too long for Midjourney (max 4000 characters)');
     }
-    
+
     return issues;
   }
 
   private checkDALLECompatibility(nodeData: any): string[] {
     const issues: string[] = [];
-    
+
     // DALL-E specific checks
     const content = this.extractContent(nodeData);
     if (content && content.length > 1000) {
       issues.push('Prompt too long for DALL-E (max 1000 characters)');
     }
-    
+
     return issues;
   }
 
   private extractContent(nodeData: any): string {
     const contentFields = ['text', 'content', 'prompt', 'template'];
-    
+
     for (const field of contentFields) {
       if (nodeData[field] && typeof nodeData[field] === 'string') {
         return nodeData[field].trim();
       }
     }
-    
+
     return '';
   }
 
   private extractAllContent(graph: any): string {
     if (!graph.nodes) return '';
-    
+
     return graph.nodes
       .map((node: any) => this.extractContent(node.data || {}))
       .filter((content: string) => content.length > 0)
@@ -1773,13 +1779,15 @@ class ParameterValidationRule implements ValidationRule {
   severity = ValidationSeverity.WARNING;
   enabled = true;
 
-  applies() { return true; }
-  
+  applies() {
+    return true;
+  }
+
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     // Implementation for parameter validation
     return {
       passed: true,
-      message: 'All parameters are valid for target platform'
+      message: 'All parameters are valid for target platform',
     };
   }
 }
@@ -1792,13 +1800,15 @@ class FeatureSupportRule implements ValidationRule {
   severity = ValidationSeverity.ERROR;
   enabled = true;
 
-  applies() { return true; }
-  
+  applies() {
+    return true;
+  }
+
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     // Implementation for feature support validation
     return {
       passed: true,
-      message: 'All features are supported by target platform'
+      message: 'All features are supported by target platform',
     };
   }
 }
@@ -1811,37 +1821,35 @@ class ComplexityRule implements ValidationRule {
   severity = ValidationSeverity.INFO;
   enabled = true;
 
-  applies() { return true; }
-  
+  applies() {
+    return true;
+  }
+
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     const { graph, metadata } = context;
-    
+
     if (!graph.nodes || graph.nodes.length === 0) {
       return {
         passed: true,
         message: 'Empty graph has minimal complexity',
-        metrics: { complexity: 0 }
+        metrics: { complexity: 0 },
       };
     }
 
     const nodeCount = graph.nodes.length;
     const edgeCount = graph.edges?.length || 0;
-    
+
     // Calculate cyclomatic complexity (edges - nodes + 2)
     const cyclomaticComplexity = Math.max(0, edgeCount - nodeCount + 2);
-    
+
     // Calculate depth complexity (longest path)
     const depthComplexity = this.calculateMaxDepth(graph);
-    
+
     // Calculate branching factor
     const branchingFactor = nodeCount > 0 ? edgeCount / nodeCount : 0;
-    
+
     // Overall complexity score (0-100)
-    const complexityScore = Math.min(100, 
-      (cyclomaticComplexity * 10) + 
-      (depthComplexity * 5) + 
-      (branchingFactor * 20)
-    );
+    const complexityScore = Math.min(100, cyclomaticComplexity * 10 + depthComplexity * 5 + branchingFactor * 20);
 
     // Thresholds
     const warningThreshold = 50;
@@ -1870,13 +1878,13 @@ class ComplexityRule implements ValidationRule {
         depthComplexity,
         branchingFactor: Math.round(branchingFactor * 100) / 100,
         nodeCount,
-        edgeCount
+        edgeCount,
       },
       metrics: {
         complexity: complexityScore,
         depth: depthComplexity,
-        branching: branchingFactor
-      }
+        branching: branchingFactor,
+      },
     };
   }
 
@@ -1888,7 +1896,7 @@ class ComplexityRule implements ValidationRule {
     // Build adjacency list
     const adjacencyList = new Map<string, string[]>();
     const inDegree = new Map<string, number>();
-    
+
     // Initialize
     if (graph.nodes) {
       for (const node of graph.nodes) {
@@ -1896,7 +1904,7 @@ class ComplexityRule implements ValidationRule {
         inDegree.set(node.id, 0);
       }
     }
-    
+
     // Build graph
     for (const edge of graph.edges) {
       adjacencyList.get(edge.source)?.push(edge.target);
@@ -1920,12 +1928,12 @@ class ComplexityRule implements ValidationRule {
 
     while (queue.length > 0) {
       const { nodeId, depth } = queue.shift()!;
-      
+
       if (visited.has(nodeId)) continue;
       visited.add(nodeId);
-      
+
       maxDepth = Math.max(maxDepth, depth);
-      
+
       const neighbors = adjacencyList.get(nodeId) || [];
       for (const neighbor of neighbors) {
         if (!visited.has(neighbor)) {
@@ -1950,13 +1958,15 @@ class ProcessingTimeRule implements ValidationRule {
   severity = ValidationSeverity.WARNING;
   enabled = true;
 
-  applies() { return true; }
-  
+  applies() {
+    return true;
+  }
+
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     // Implementation for processing time estimation
     return {
       passed: true,
-      message: 'Expected processing time is acceptable'
+      message: 'Expected processing time is acceptable',
     };
   }
 }
@@ -1969,13 +1979,15 @@ class MemoryUsageRule implements ValidationRule {
   severity = ValidationSeverity.INFO;
   enabled = true;
 
-  applies() { return true; }
-  
+  applies() {
+    return true;
+  }
+
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     // Implementation for memory usage estimation
     return {
       passed: true,
-      message: 'Expected memory usage is within limits'
+      message: 'Expected memory usage is within limits',
     };
   }
 }
@@ -1988,13 +2000,15 @@ class SensitiveContentRule implements ValidationRule {
   severity = ValidationSeverity.WARNING;
   enabled = true;
 
-  applies() { return true; }
-  
+  applies() {
+    return true;
+  }
+
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     // Implementation for sensitive content detection
     return {
       passed: true,
-      message: 'No sensitive content detected'
+      message: 'No sensitive content detected',
     };
   }
 }
@@ -2007,13 +2021,15 @@ class MaliciousPatternRule implements ValidationRule {
   severity = ValidationSeverity.ERROR;
   enabled = true;
 
-  applies() { return true; }
-  
+  applies() {
+    return true;
+  }
+
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     // Implementation for malicious pattern detection
     return {
       passed: true,
-      message: 'No malicious patterns detected'
+      message: 'No malicious patterns detected',
     };
   }
 }
@@ -2026,13 +2042,15 @@ class OutputCoherenceRule implements ValidationRule {
   severity = ValidationSeverity.INFO;
   enabled = true;
 
-  applies() { return true; }
-  
+  applies() {
+    return true;
+  }
+
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     // Implementation for output coherence assessment
     return {
       passed: true,
-      message: 'Expected output coherence is good'
+      message: 'Expected output coherence is good',
     };
   }
 }
@@ -2045,13 +2063,15 @@ class StyleConsistencyRule implements ValidationRule {
   severity = ValidationSeverity.WARNING;
   enabled = true;
 
-  applies() { return true; }
-  
+  applies() {
+    return true;
+  }
+
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     // Implementation for style consistency check
     return {
       passed: true,
-      message: 'Style is consistent across the graph'
+      message: 'Style is consistent across the graph',
     };
   }
 }
@@ -2064,13 +2084,15 @@ class OptimizationOpportunityRule implements ValidationRule {
   severity = ValidationSeverity.INFO;
   enabled = true;
 
-  applies() { return true; }
-  
+  applies() {
+    return true;
+  }
+
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     // Implementation for optimization opportunity detection
     return {
       passed: true,
-      message: 'No obvious optimization opportunities detected'
+      message: 'No obvious optimization opportunities detected',
     };
   }
 }

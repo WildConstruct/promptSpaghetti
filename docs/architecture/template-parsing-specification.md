@@ -7,47 +7,51 @@ This specification defines how the template-based variable system works in Epic 
 ## Template Syntax
 
 ### Basic Variable Syntax
+
 ```typescript
 // Basic variable placeholder
-"A {creature} in a {setting}"
+'A {creature} in a {setting}';
 
 // Variables extracted: ["creature", "setting"]
 ```
 
 ### Supported Patterns
+
 ```typescript
 // Single word variables
-"{color} dragon"           // ✅ Valid
+'{color} dragon'; // ✅ Valid
 
 // Multi-word variables (underscore or camelCase)
-"{background_color}"       // ✅ Valid
-"{backgroundColor}"        // ✅ Valid
+'{background_color}'; // ✅ Valid
+'{backgroundColor}'; // ✅ Valid
 
 // Numbers in variable names
-"{option1}"               // ✅ Valid
-"{setting2}"              // ✅ Valid
+'{option1}'; // ✅ Valid
+'{setting2}'; // ✅ Valid
 ```
 
 ### Invalid Patterns
+
 ```typescript
 // Spaces in variable names
-"{background color}"      // ❌ Invalid
+'{background color}'; // ❌ Invalid
 
 // Special characters
-"{color-code}"           // ❌ Invalid
-"{user@name}"            // ❌ Invalid
+'{color-code}'; // ❌ Invalid
+'{user@name}'; // ❌ Invalid
 
 // Empty variables
-"{}"                     // ❌ Invalid
+'{}'; // ❌ Invalid
 
 // Nested braces
-"{{variable}}"           // ❌ Invalid
-"{outer{inner}}"         // ❌ Invalid
+'{{variable}}'; // ❌ Invalid
+'{outer{inner}}'; // ❌ Invalid
 ```
 
 ## Parsing Algorithm
 
 ### Variable Extraction
+
 ```typescript
 function extractVariables(template: string): ExtractedVariable[] {
   const regex = /\{(\w+)\}/g;
@@ -56,9 +60,9 @@ function extractVariables(template: string): ExtractedVariable[] {
 
   while ((match = regex.exec(template)) !== null) {
     variables.push({
-      name: match[1],           // Variable name without braces
-      placeholder: match[0],    // Full {variable} text
-      position: match.index,    // Character position in template
+      name: match[1], // Variable name without braces
+      placeholder: match[0], // Full {variable} text
+      position: match.index, // Character position in template
     });
   }
 
@@ -67,20 +71,21 @@ function extractVariables(template: string): ExtractedVariable[] {
 ```
 
 ### Validation Rules
+
 ```typescript
 function validateTemplate(template: string): ValidationResult {
   const errors: string[] = [];
-  
+
   // 1. Check balanced braces
   const openCount = (template.match(/\{/g) || []).length;
   const closeCount = (template.match(/\}/g) || []).length;
   if (openCount !== closeCount) {
-    errors.push("Unmatched braces in template");
+    errors.push('Unmatched braces in template');
   }
 
   // 2. Check for empty variables
   if (template.includes('{}')) {
-    errors.push("Empty variable names not allowed");
+    errors.push('Empty variable names not allowed');
   }
 
   // 3. Check for invalid characters in variable names
@@ -91,7 +96,7 @@ function validateTemplate(template: string): ValidationResult {
 
   // 4. Check for nested braces
   if (template.includes('{{') || template.includes('}}')) {
-    errors.push("Nested braces not supported");
+    errors.push('Nested braces not supported');
   }
 
   return { valid: errors.length === 0, errors };
@@ -101,13 +106,11 @@ function validateTemplate(template: string): ValidationResult {
 ## Template Preview System
 
 ### Real-time Preview
+
 ```typescript
-function previewTemplate(
-  template: string, 
-  variables: Record<string, string>
-): string {
+function previewTemplate(template: string, variables: Record<string, string>): string {
   let result = template;
-  
+
   // Replace each variable with its value
   Object.entries(variables).forEach(([name, value]) => {
     const placeholder = `{${name}}`;
@@ -120,10 +123,11 @@ function previewTemplate(
 ```
 
 ### Sample Variable Generation
+
 ```typescript
 function generateSampleVariables(variables: ExtractedVariable[]): Record<string, string> {
   const samples: Record<string, string> = {};
-  
+
   variables.forEach(variable => {
     samples[variable.name] = getSampleValue(variable.name);
   });
@@ -133,22 +137,22 @@ function generateSampleVariables(variables: ExtractedVariable[]): Record<string,
 
 function getSampleValue(variableName: string): string {
   const name = variableName.toLowerCase();
-  
+
   // Context-aware sample generation
   const sampleMap: Record<string, string> = {
-    'creature': 'dragon',
-    'animal': 'wolf',
-    'color': 'crimson',
-    'style': 'dramatic',
-    'setting': 'enchanted forest',
-    'location': 'ancient castle',
-    'character': 'warrior',
-    'person': 'wizard',
-    'time': 'at sunset',
-    'weather': 'stormy',
-    'mood': 'mysterious',
-    'object': 'glowing orb',
-    'action': 'flying',
+    creature: 'dragon',
+    animal: 'wolf',
+    color: 'crimson',
+    style: 'dramatic',
+    setting: 'enchanted forest',
+    location: 'ancient castle',
+    character: 'warrior',
+    person: 'wizard',
+    time: 'at sunset',
+    weather: 'stormy',
+    mood: 'mysterious',
+    object: 'glowing orb',
+    action: 'flying',
   };
 
   // Find best match for variable name
@@ -166,6 +170,7 @@ function getSampleValue(variableName: string): string {
 ## UI Integration Patterns
 
 ### Template Input Component
+
 ```typescript
 interface TemplateInputProps {
   value: string;
@@ -175,7 +180,7 @@ interface TemplateInputProps {
 
 function TemplateInput({ value, onChange, onVariablesChange }: TemplateInputProps) {
   const [variables, setVariables] = useState<ExtractedVariable[]>([]);
-  
+
   useEffect(() => {
     const extracted = NodeAdapter.extractVariables(value);
     setVariables(extracted);
@@ -184,7 +189,7 @@ function TemplateInput({ value, onChange, onVariablesChange }: TemplateInputProp
 
   return (
     <div className="template-input">
-      <textarea 
+      <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Enter template with {variables}..."
@@ -197,11 +202,12 @@ function TemplateInput({ value, onChange, onVariablesChange }: TemplateInputProp
 ```
 
 ### Variable Highlighting
+
 ```typescript
 function VariableHighlight({ template, variables }: HighlightProps) {
   const highlightedTemplate = useMemo(() => {
     let result = template;
-    
+
     // Highlight each variable with distinct colors
     variables.forEach((variable, index) => {
       const color = getVariableColor(index);
@@ -217,13 +223,14 @@ function VariableHighlight({ template, variables }: HighlightProps) {
 ```
 
 ### Variable Connection Ports
+
 ```typescript
 function NodeWithVariablePorts({ node, variables }: NodePortsProps) {
   return (
     <div className="node-with-ports">
       <div className="input-ports">
         {variables.map(variable => (
-          <VariablePort 
+          <VariablePort
             key={variable.name}
             variable={variable}
             type="input"
@@ -231,9 +238,9 @@ function NodeWithVariablePorts({ node, variables }: NodePortsProps) {
           />
         ))}
       </div>
-      
+
       <NodeContent node={node} />
-      
+
       <div className="output-port">
         <Port type="output" />
       </div>
@@ -245,6 +252,7 @@ function NodeWithVariablePorts({ node, variables }: NodePortsProps) {
 ## Error Handling
 
 ### Template Validation Errors
+
 ```typescript
 interface TemplateError {
   type: 'syntax' | 'validation' | 'runtime';
@@ -255,15 +263,17 @@ interface TemplateError {
 
 function getTemplateErrors(template: string): TemplateError[] {
   const errors: TemplateError[] = [];
-  
+
   // Syntax errors
   const validation = validateTemplate(template);
   if (!validation.valid) {
-    errors.push(...validation.errors.map(error => ({
-      type: 'syntax' as const,
-      message: error,
-      suggestions: getSyntaxSuggestions(error),
-    })));
+    errors.push(
+      ...validation.errors.map(error => ({
+        type: 'syntax' as const,
+        message: error,
+        suggestions: getSyntaxSuggestions(error),
+      }))
+    );
   }
 
   // Variable name warnings
@@ -284,13 +294,14 @@ function getTemplateErrors(template: string): TemplateError[] {
 ```
 
 ### Runtime Error Recovery
+
 ```typescript
 function safeTemplatePreview(
-  template: string, 
+  template: string,
   variables: Record<string, string>
 ): { result: string; errors: string[] } {
   const errors: string[] = [];
-  
+
   try {
     const validation = validateTemplate(template);
     if (!validation.valid) {
@@ -302,7 +313,6 @@ function safeTemplatePreview(
 
     const result = previewTemplate(template, variables);
     return { result, errors: [] };
-    
   } catch (error) {
     errors.push(`Template processing error: ${error.message}`);
     return { result: template, errors };
@@ -313,6 +323,7 @@ function safeTemplatePreview(
 ## Performance Considerations
 
 ### Template Parsing Cache
+
 ```typescript
 class TemplateCache {
   private cache = new Map<string, ExtractedVariable[]>();
@@ -324,13 +335,13 @@ class TemplateCache {
     }
 
     const variables = NodeAdapter.extractVariables(template);
-    
+
     // LRU cache management
     if (this.cache.size >= this.maxSize) {
       const firstKey = this.cache.keys().next().value;
       this.cache.delete(firstKey);
     }
-    
+
     this.cache.set(template, variables);
     return variables;
   }
@@ -338,15 +349,17 @@ class TemplateCache {
 ```
 
 ### Debounced Validation
+
 ```typescript
 function useTemplateValidation(template: string, delay = 300) {
   const [validation, setValidation] = useState<ValidationResult>({ valid: true, errors: [] });
-  
+
   const debouncedValidate = useMemo(
-    () => debounce((template: string) => {
-      const result = validateTemplate(template);
-      setValidation(result);
-    }, delay),
+    () =>
+      debounce((template: string) => {
+        const result = validateTemplate(template);
+        setValidation(result);
+      }, delay),
     [delay]
   );
 
@@ -361,6 +374,7 @@ function useTemplateValidation(template: string, delay = 300) {
 ## Integration with Existing System
 
 ### Backward Compatibility
+
 ```typescript
 // Migrate existing nodes to template system
 function migrateToTemplateSystem(oldNode: InternalNode): UINode {
@@ -371,12 +385,13 @@ function migrateToTemplateSystem(oldNode: InternalNode): UINode {
       name: oldNode.name || 'Choice Node',
     };
   }
-  
+
   // Handle other node types...
 }
 ```
 
 ### Export Compatibility
+
 ```typescript
 // Ensure exported templates work in other systems
 function exportTemplate(template: string): ExportedTemplate {

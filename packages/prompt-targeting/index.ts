@@ -27,41 +27,36 @@ export type { RedisCacheConfig } from './src/engines/RedisTranslationCache';
 
 // Testing framework
 export { AdaptorTestFramework } from './src/testing/AdaptorTestFramework';
-export type { 
-  AdaptorTestCase, 
-  TestSuiteConfig, 
-  TestResult, 
-  TestSuiteResult 
-} from './src/testing/AdaptorTestFramework';
+export type { AdaptorTestCase, TestSuiteConfig, TestResult, TestSuiteResult } from './src/testing/AdaptorTestFramework';
 
 // Configuration system
 export { ConfigurationManager } from './src/config/ConfigurationManager';
-export type { 
-  OpenAIConfig, 
-  MidjourneyConfig, 
-  DALLEConfig, 
+export type {
+  OpenAIConfig,
+  MidjourneyConfig,
+  DALLEConfig,
   GlobalConfig,
   ConfigurationPreset,
-  ConfigValidationResult
+  ConfigValidationResult,
 } from './src/config/ConfigurationManager';
 
 // UI Components (React)
 export { ConfigurationPanel } from './src/ui/components/ConfigurationPanel';
 // TODO: Implement useConfiguration hooks
-// export { 
+// export {
 //   useConfiguration,
 //   ConfigurationProvider,
 //   useConfigurationContext,
 //   withConfiguration
 // } from './src/ui/hooks/useConfiguration';
-// export type { 
+// export type {
 //   UseConfigurationReturn,
 //   UseConfigurationOptions
 // } from './src/ui/hooks/useConfiguration';
 
 // Convenience factory functions
-export { 
+export {
   createPromptTargetingSystem,
   createBasicPromptTargetingSystem,
-  createProductionPromptTargetingSystem
+  createProductionPromptTargetingSystem,
 } from './src/factory';

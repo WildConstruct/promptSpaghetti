@@ -1,6 +1,6 @@
 // import { z } from 'zod';
 import { DatabaseClient } from '../database/client';
-import { 
+import {
   ProjectBranch,
   BranchCommit,
   BranchMergeRequest,
@@ -38,7 +38,7 @@ import {
   validateCreateMergeRequestRequest,
   validateMergeBranchRequest,
   validateBranchFilter,
-  validateMergeRequestFilter
+  validateMergeRequestFilter,
 } from '../../../packages/core/types/branching';
 
 export class BranchingService {
@@ -54,22 +54,24 @@ export class BranchingService {
    * Create a new branch
    */
   async createBranch(request: CreateBranchRequest, userId: string): Promise<ProjectBranch> {
-
     const validatedRequest = validateCreateBranchRequest(request);
-    
+
     this.logger.info('Creating new branch', {
       projectId: request.projectId,
       name: request.name,
       branchType: request.branchType,
       parentBranchId: request.parentBranchId,
-      userId
+      userId,
     });
 
     // Check if branch name already exists
-    const existingBranch = await this.db.query(`
+    const existingBranch = await this.db.query(
+      `
       SELECT id FROM project_branches 
       WHERE project_id = $1 AND name = $2
-    `, [request.projectId, request.name]);
+    `,
+      [request.projectId, request.name]
+    );
 
     if (existingBranch.rows.length > 0) {
       throw new Error(`Branch with name "${request.name}" already exists`);
@@ -84,12 +86,15 @@ export class BranchingService {
 
     if (!baseSnapshotId) {
       // Get the latest snapshot from the project
-      const latestSnapshot = await this.db.query(`
+      const latestSnapshot = await this.db.query(
+        `
         SELECT id FROM version_snapshots 
         WHERE project_id = $1 
         ORDER BY created_at DESC 
         LIMIT 1
-      `, [request.projectId]);
+      `,
+        [request.projectId]
+      );
 
       if (latestSnapshot.rows.length === 0) {
         throw new Error('No snapshots available to create branch from');
@@ -98,37 +103,43 @@ export class BranchingService {
     }
 
     // Create the branch
-    const result = await this.db.query(`
+    const result = await this.db.query(
+      `
       INSERT INTO project_branches (
         project_id, name, display_name, description, parent_branch_id,
         base_snapshot_id, head_snapshot_id, branch_type, created_by,
         auto_merge_enabled, requires_review, allow_force_push, delete_on_merge
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
       RETURNING *
-    `, [
-      validatedRequest.projectId,
-      validatedRequest.name,
-      validatedRequest.displayName,
-      validatedRequest.description,
-      validatedRequest.parentBranchId,
-      baseSnapshotId,
-      baseSnapshotId, // Initially head is same as base
-      validatedRequest.branchType,
-      userId,
-      validatedRequest.autoMergeEnabled,
-      validatedRequest.requiresReview,
-      validatedRequest.allowForcePush,
-      validatedRequest.deleteOnMerge
-    ]);
+    `,
+      [
+        validatedRequest.projectId,
+        validatedRequest.name,
+        validatedRequest.displayName,
+        validatedRequest.description,
+        validatedRequest.parentBranchId,
+        baseSnapshotId,
+        baseSnapshotId, // Initially head is same as base
+        validatedRequest.branchType,
+        userId,
+        validatedRequest.autoMergeEnabled,
+        validatedRequest.requiresReview,
+        validatedRequest.allowForcePush,
+        validatedRequest.deleteOnMerge,
+      ]
+    );
 
     const branch = this.mapDatabaseRowToBranch(result.rows[0]);
 
     // Create initial commit
-    await this.createCommit({
-      branchId: branch.id,
-      snapshotId: baseSnapshotId,
-      commitMessage: `Initial commit for branch ${branch.name}`
-    }, userId);
+    await this.createCommit(
+      {
+        branchId: branch.id,
+        snapshotId: baseSnapshotId,
+        commitMessage: `Initial commit for branch ${branch.name}`,
+      },
+      userId
+    );
 
     return branch;
   }
@@ -137,13 +148,12 @@ export class BranchingService {
    * Update branch settings
    */
   async updateBranch(branchId: string, request: UpdateBranchRequest, userId: string): Promise<ProjectBranch> {
-
     const validatedRequest = validateUpdateBranchRequest(request);
-    
+
     this.logger.info('Updating branch', {
       branchId,
       updates: validatedRequest,
-      userId
+      userId,
     });
 
     // Check permissions
@@ -211,12 +221,15 @@ export class BranchingService {
     updateFields.push('updated_at = CURRENT_TIMESTAMP');
     updateValues.push(branchId);
 
-    const result = await this.db.query(`
+    const result = await this.db.query(
+      `
       UPDATE project_branches 
       SET ${updateFields.join(', ')}
       WHERE id = $${paramIndex}
       RETURNING *
-    `, updateValues);
+    `,
+      updateValues
+    );
 
     if (result.rows.length === 0) {
       throw new Error(`Branch not found: ${branchId}`);
@@ -229,7 +242,6 @@ export class BranchingService {
    * Delete a branch
    */
   async deleteBranch(branchId: string, userId: string): Promise<void> {
-
     this.logger.info('Deleting branch', { branchId, userId });
 
     // Check permissions
@@ -245,30 +257,38 @@ export class BranchingService {
     }
 
     // Check if branch has active merge requests
-    const activeMergeRequests = await this.db.query(`
+    const activeMergeRequests = await this.db.query(
+      `
       SELECT COUNT(*) as count FROM branch_merge_requests 
       WHERE (source_branch_id = $1 OR target_branch_id = $1) 
       AND status IN ('open', 'draft')
-    `, [branchId]);
+    `,
+      [branchId]
+    );
 
     if (parseInt(activeMergeRequests.rows[0].count) > 0) {
       throw new Error('Cannot delete branch with active merge requests');
     }
 
     // Delete the branch
-    await this.db.query(`
+    await this.db.query(
+      `
       DELETE FROM project_branches WHERE id = $1
-    `, [branchId]);
+    `,
+      [branchId]
+    );
   }
 
   /**
    * Get branch by ID
    */
   async getBranchById(branchId: string): Promise<ProjectBranch> {
-
-    const result = await this.db.query(`
+    const result = await this.db.query(
+      `
       SELECT * FROM project_branches WHERE id = $1
-    `, [branchId]);
+    `,
+      [branchId]
+    );
 
     if (result.rows.length === 0) {
       throw new Error(`Branch not found: ${branchId}`);
@@ -281,9 +301,8 @@ export class BranchingService {
    * List branches with filtering
    */
   async listBranches(filter: BranchFilter): Promise<ProjectBranch[]> {
-
     const validatedFilter = validateBranchFilter(filter);
-    
+
     let query = `
       SELECT * FROM project_branches
       WHERE 1=1
@@ -358,11 +377,10 @@ export class BranchingService {
    * Create a commit in a branch
    */
   async createCommit(request: CreateCommitRequest, userId: string): Promise<BranchCommit> {
-
     this.logger.info('Creating commit', {
       branchId: request.branchId,
       snapshotId: request.snapshotId,
-      userId
+      userId,
     });
 
     // Check branch write permissions
@@ -372,37 +390,46 @@ export class BranchingService {
     }
 
     // Get next commit order
-    const nextOrderResult = await this.db.query(`
+    const nextOrderResult = await this.db.query(
+      `
       SELECT COALESCE(MAX(commit_order), 0) + 1 as next_order
       FROM branch_commits
       WHERE branch_id = $1
-    `, [request.branchId]);
+    `,
+      [request.branchId]
+    );
 
     const nextOrder = nextOrderResult.rows[0].next_order;
 
     // Create the commit
-    const result = await this.db.query(`
+    const result = await this.db.query(
+      `
       INSERT INTO branch_commits (
         branch_id, snapshot_id, commit_order, commit_message, commit_author,
         parent_commit_ids, commit_metadata
       ) VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING *
-    `, [
-      request.branchId,
-      request.snapshotId,
-      nextOrder,
-      request.commitMessage,
-      userId,
-      request.parentCommitIds,
-      JSON.stringify(request.commitMetadata)
-    ]);
+    `,
+      [
+        request.branchId,
+        request.snapshotId,
+        nextOrder,
+        request.commitMessage,
+        userId,
+        request.parentCommitIds,
+        JSON.stringify(request.commitMetadata),
+      ]
+    );
 
     // Update branch head snapshot
-    await this.db.query(`
+    await this.db.query(
+      `
       UPDATE project_branches 
       SET head_snapshot_id = $1, last_activity_at = CURRENT_TIMESTAMP
       WHERE id = $2
-    `, [request.snapshotId, request.branchId]);
+    `,
+      [request.snapshotId, request.branchId]
+    );
 
     return this.mapDatabaseRowToCommit(result.rows[0]);
   }
@@ -411,14 +438,13 @@ export class BranchingService {
    * Create a merge request
    */
   async createMergeRequest(request: CreateMergeRequestRequest, userId: string): Promise<BranchMergeRequest> {
-
     const validatedRequest = validateCreateMergeRequestRequest(request);
-    
+
     this.logger.info('Creating merge request', {
       sourceBranchId: request.sourceBranchId,
       targetBranchId: request.targetBranchId,
       title: request.title,
-      userId
+      userId,
     });
 
     // Check if source and target branches exist
@@ -430,37 +456,43 @@ export class BranchingService {
     }
 
     // Check for existing open merge request
-    const existingMR = await this.db.query(`
+    const existingMR = await this.db.query(
+      `
       SELECT id FROM branch_merge_requests 
       WHERE source_branch_id = $1 AND target_branch_id = $2 AND status IN ('open', 'draft')
-    `, [validatedRequest.sourceBranchId, validatedRequest.targetBranchId]);
+    `,
+      [validatedRequest.sourceBranchId, validatedRequest.targetBranchId]
+    );
 
     if (existingMR.rows.length > 0) {
       throw new Error('An open merge request already exists for these branches');
     }
 
     // Create the merge request
-    const result = await this.db.query(`
+    const result = await this.db.query(
+      `
       INSERT INTO branch_merge_requests (
         project_id, source_branch_id, target_branch_id, title, description,
         created_by, assigned_to, reviewers, allow_squash_merge, allow_merge_commit,
         allow_rebase_merge, delete_source_branch
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       RETURNING *
-    `, [
-      sourceBranch.projectId,
-      validatedRequest.sourceBranchId,
-      validatedRequest.targetBranchId,
-      validatedRequest.title,
-      validatedRequest.description,
-      userId,
-      validatedRequest.assignedTo,
-      validatedRequest.reviewers,
-      validatedRequest.allowSquashMerge,
-      validatedRequest.allowMergeCommit,
-      validatedRequest.allowRebaseMerge,
-      validatedRequest.deleteSourceBranch
-    ]);
+    `,
+      [
+        sourceBranch.projectId,
+        validatedRequest.sourceBranchId,
+        validatedRequest.targetBranchId,
+        validatedRequest.title,
+        validatedRequest.description,
+        userId,
+        validatedRequest.assignedTo,
+        validatedRequest.reviewers,
+        validatedRequest.allowSquashMerge,
+        validatedRequest.allowMergeCommit,
+        validatedRequest.allowRebaseMerge,
+        validatedRequest.deleteSourceBranch,
+      ]
+    );
 
     return this.mapDatabaseRowToMergeRequest(result.rows[0]);
   }
@@ -469,18 +501,17 @@ export class BranchingService {
    * Merge a branch
    */
   async mergeBranch(request: MergeBranchRequest, userId: string): Promise<BranchMergeRequest> {
-
     const validatedRequest = validateMergeBranchRequest(request);
-    
+
     this.logger.info('Merging branch', {
       mergeRequestId: request.mergeRequestId,
       strategy: request.mergeStrategy,
-      userId
+      userId,
     });
 
     // Get merge request
     const mergeRequest = await this.getMergeRequestById(validatedRequest.mergeRequestId);
-    
+
     if (mergeRequest.status !== 'open') {
       throw new Error('Merge request is not open');
     }
@@ -493,10 +524,13 @@ export class BranchingService {
 
     // Check if reviews are required and satisfied
     if (await this.branchRequiresReview(mergeRequest.targetBranchId)) {
-      const approvedReviews = await this.db.query(`
+      const approvedReviews = await this.db.query(
+        `
         SELECT COUNT(*) as count FROM branch_merge_reviews 
         WHERE merge_request_id = $1 AND status = 'approved'
-      `, [validatedRequest.mergeRequestId]);
+      `,
+        [validatedRequest.mergeRequestId]
+      );
 
       if (parseInt(approvedReviews.rows[0].count) === 0) {
         throw new Error('Merge request requires at least one approval');
@@ -513,7 +547,8 @@ export class BranchingService {
     const mergeCommitId = await this.performMerge(mergeRequest, validatedRequest.mergeStrategy, userId);
 
     // Update merge request
-    const result = await this.db.query(`
+    const result = await this.db.query(
+      `
       UPDATE branch_merge_requests 
       SET 
         status = 'merged',
@@ -522,15 +557,20 @@ export class BranchingService {
         updated_at = CURRENT_TIMESTAMP
       WHERE id = $2
       RETURNING *
-    `, [mergeCommitId, validatedRequest.mergeRequestId]);
+    `,
+      [mergeCommitId, validatedRequest.mergeRequestId]
+    );
 
     // Update source branch status if delete_source_branch is true
     if (validatedRequest.deleteSourceBranch || mergeRequest.deleteSourceBranch) {
-      await this.db.query(`
+      await this.db.query(
+        `
         UPDATE project_branches 
         SET status = 'merged', merged_at = CURRENT_TIMESTAMP, merged_by = $1
         WHERE id = $2
-      `, [userId, mergeRequest.sourceBranchId]);
+      `,
+        [userId, mergeRequest.sourceBranchId]
+      );
     }
 
     return this.mapDatabaseRowToMergeRequest(result.rows[0]);
@@ -540,8 +580,8 @@ export class BranchingService {
    * Get branch statistics
    */
   async getBranchStats(projectId: string): Promise<BranchStatsResponse> {
-
-    const stats = await this.db.query(`
+    const stats = await this.db.query(
+      `
       SELECT 
         COUNT(*) as total_branches,
         COUNT(CASE WHEN status = 'active' THEN 1 END) as active_branches,
@@ -549,23 +589,32 @@ export class BranchingService {
         COUNT(CASE WHEN status = 'abandoned' THEN 1 END) as abandoned_branches
       FROM project_branches
       WHERE project_id = $1
-    `, [projectId]);
+    `,
+      [projectId]
+    );
 
-    const byType = await this.db.query(`
+    const byType = await this.db.query(
+      `
       SELECT branch_type, COUNT(*) as count
       FROM project_branches
       WHERE project_id = $1
       GROUP BY branch_type
-    `, [projectId]);
+    `,
+      [projectId]
+    );
 
-    const byStatus = await this.db.query(`
+    const byStatus = await this.db.query(
+      `
       SELECT status, COUNT(*) as count
       FROM project_branches
       WHERE project_id = $1
       GROUP BY status
-    `, [projectId]);
+    `,
+      [projectId]
+    );
 
-    const recentActivity = await this.db.query(`
+    const recentActivity = await this.db.query(
+      `
       SELECT 
         b.id as branch_id,
         b.name as branch_name,
@@ -579,29 +628,37 @@ export class BranchingService {
       WHERE b.project_id = $1
       ORDER BY bc.commit_timestamp DESC
       LIMIT 20
-    `, [projectId]);
+    `,
+      [projectId]
+    );
 
     return {
       totalBranches: parseInt(stats.rows[0].total_branches),
       activeBranches: parseInt(stats.rows[0].active_branches),
       mergedBranches: parseInt(stats.rows[0].merged_branches),
       abandonedBranches: parseInt(stats.rows[0].abandoned_branches),
-      byType: byType.rows.reduce((acc, row) => {
-        acc[row.branch_type] = parseInt(row.count);
-        return acc;
-      }, {} as Record<string, number>),
-      byStatus: byStatus.rows.reduce((acc, row) => {
-        acc[row.status] = parseInt(row.count);
-        return acc;
-      }, {} as Record<string, number>),
+      byType: byType.rows.reduce(
+        (acc, row) => {
+          acc[row.branch_type] = parseInt(row.count);
+          return acc;
+        },
+        {} as Record<string, number>
+      ),
+      byStatus: byStatus.rows.reduce(
+        (acc, row) => {
+          acc[row.status] = parseInt(row.count);
+          return acc;
+        },
+        {} as Record<string, number>
+      ),
       recentActivity: recentActivity.rows.map(row => ({
         branchId: row.branch_id,
         branchName: row.branch_name,
         activityType: row.activity_type,
         activityDate: row.activity_date,
         userId: row.user_id,
-        userName: row.user_name
-      }))
+        userName: row.user_name,
+      })),
     };
   }
 
@@ -609,21 +666,16 @@ export class BranchingService {
    * Get branch hierarchy
    */
   async getBranchHierarchy(projectId: string): Promise<BranchHierarchy[]> {
-
     const branches = await this.listBranches({ projectId, limit: 1000 });
-    
-    const buildHierarchy = (
-      parentId: string | null, 
-      depth: number = 0, 
-      path: string[] = []
-    ): BranchHierarchy[] => {
+
+    const buildHierarchy = (parentId: string | null, depth: number = 0, path: string[] = []): BranchHierarchy[] => {
       return branches
         .filter(branch => branch.parentBranchId === parentId)
         .map(branch => ({
           branch,
           children: buildHierarchy(branch.id, depth + 1, [...path, branch.name]),
           depth,
-          path: [...path, branch.name]
+          path: [...path, branch.name],
         }));
     };
 
@@ -634,18 +686,23 @@ export class BranchingService {
    * Compare branches
    */
   async compareBranches(sourceBranchId: string, targetBranchId: string): Promise<BranchComparisonResponse> {
-
     const sourceBranch = await this.getBranchById(sourceBranchId);
     const targetBranch = await this.getBranchById(targetBranchId);
 
     // Get commit counts
-    const sourceCommits = await this.db.query(`
+    const sourceCommits = await this.db.query(
+      `
       SELECT COUNT(*) as count FROM branch_commits WHERE branch_id = $1
-    `, [sourceBranchId]);
+    `,
+      [sourceBranchId]
+    );
 
-    const targetCommits = await this.db.query(`
+    const targetCommits = await this.db.query(
+      `
       SELECT COUNT(*) as count FROM branch_commits WHERE branch_id = $1
-    `, [targetBranchId]);
+    `,
+      [targetBranchId]
+    );
 
     // Find common ancestor (simplified - would need more complex logic)
     const commonAncestor = await this.findCommonAncestor(sourceBranchId, targetBranchId);
@@ -666,18 +723,20 @@ export class BranchingService {
       conflicts,
       canMerge: conflicts.length === 0,
       mergeStrategy: conflicts.length === 0 ? 'merge' : undefined,
-      estimatedMergeTime: this.estimateMergeTime(ahead, behind, conflicts.length)
+      estimatedMergeTime: this.estimateMergeTime(ahead, behind, conflicts.length),
     };
   }
 
   // Private helper methods
 
   private async checkBranchPermission(branchId: string, userId: string, permission: string): Promise<boolean> {
-
-    const result = await this.db.query(`
+    const result = await this.db.query(
+      `
       SELECT ${permission} FROM branch_permissions 
       WHERE branch_id = $1 AND user_id = $2
-    `, [branchId, userId]);
+    `,
+      [branchId, userId]
+    );
 
     if (result.rows.length > 0) {
       return result.rows[0][permission];
@@ -689,34 +748,40 @@ export class BranchingService {
   }
 
   private async branchRequiresReview(branchId: string): Promise<boolean> {
-
-    const result = await this.db.query(`
+    const result = await this.db.query(
+      `
       SELECT requires_review FROM project_branches WHERE id = $1
-    `, [branchId]);
+    `,
+      [branchId]
+    );
 
     return result.rows.length > 0 ? result.rows[0].requires_review : false;
   }
 
   private async detectConflicts(sourceBranchId: string, targetBranchId: string): Promise<BranchConflict[]> {
-
     // Simplified conflict detection - would need more sophisticated logic
-    const result = await this.db.query(`
+    const result = await this.db.query(
+      `
       SELECT * FROM branch_conflicts 
       WHERE source_branch_id = $1 AND target_branch_id = $2 AND conflict_status = 'unresolved'
-    `, [sourceBranchId, targetBranchId]);
+    `,
+      [sourceBranchId, targetBranchId]
+    );
 
     return result.rows.map(row => this.mapDatabaseRowToConflict(row));
   }
 
   private async performMerge(mergeRequest: BranchMergeRequest, strategy: string, userId: string): Promise<string> {
-
     // Simplified merge implementation - would need actual merge logic
-    const mergeCommitId = await this.createCommit({
-      branchId: mergeRequest.targetBranchId,
-      snapshotId: mergeRequest.sourceCommitId || mergeRequest.sourceBranchId,
-      commitMessage: `Merge ${strategy}: ${mergeRequest.title}`,
-      parentCommitIds: [mergeRequest.sourceCommitId || mergeRequest.sourceBranchId]
-    }, userId);
+    const mergeCommitId = await this.createCommit(
+      {
+        branchId: mergeRequest.targetBranchId,
+        snapshotId: mergeRequest.sourceCommitId || mergeRequest.sourceBranchId,
+        commitMessage: `Merge ${strategy}: ${mergeRequest.title}`,
+        parentCommitIds: [mergeRequest.sourceCommitId || mergeRequest.sourceBranchId],
+      },
+      userId
+    );
 
     return mergeCommitId.id;
   }
@@ -725,7 +790,6 @@ export class BranchingService {
     ____sourceBranchId: string,
     ____targetBranchId: string
   ): Promise<BranchCommit | null> {
-
     // Simplified common ancestor finding - would need graph traversal
     return null;
   }
@@ -736,10 +800,12 @@ export class BranchingService {
   }
 
   private async getMergeRequestById(mergeRequestId: string): Promise<BranchMergeRequest> {
-
-    const result = await this.db.query(`
+    const result = await this.db.query(
+      `
       SELECT * FROM branch_merge_requests WHERE id = $1
-    `, [mergeRequestId]);
+    `,
+      [mergeRequestId]
+    );
 
     if (result.rows.length === 0) {
       throw new Error(`Merge request not found: ${mergeRequestId}`);
@@ -775,7 +841,7 @@ export class BranchingService {
       commitCount: row.commit_count,
       contributorCount: row.contributor_count,
       lastActivityAt: row.last_activity_at,
-      metadata: row.metadata || {}
+      metadata: row.metadata || {},
     };
   }
 
@@ -792,7 +858,7 @@ export class BranchingService {
       changesCount: row.changes_count,
       additionsCount: row.additions_count,
       deletionsCount: row.deletions_count,
-      commitMetadata: row.commit_metadata || {}
+      commitMetadata: row.commit_metadata || {},
     };
   }
 
@@ -823,7 +889,7 @@ export class BranchingService {
       updatedAt: row.updated_at,
       mergedAt: row.merged_at,
       closedAt: row.closed_at,
-      metadata: row.metadata || {}
+      metadata: row.metadata || {},
     };
   }
 
@@ -838,7 +904,7 @@ export class BranchingService {
       conflictResolution: row.conflict_resolution,
       detectedAt: row.detected_at,
       resolvedAt: row.resolved_at,
-      resolvedBy: row.resolved_by
+      resolvedBy: row.resolved_by,
     };
   }
 }

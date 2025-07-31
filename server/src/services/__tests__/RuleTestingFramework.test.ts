@@ -1,9 +1,9 @@
 /**
  * Rule Testing Framework Unit Tests - Epic 19
- * 
+ *
  * Unit tests for the Rule Testing Framework interfaces, types, and utilities.
  * Tests focus on type definitions, validation, and core framework functionality.
- * 
+ *
  * Task: T-1752989145671 - Write unit tests for Model Evaluation Framework
  */
 
@@ -18,11 +18,10 @@ import {
   OutputFormat,
   LogLevel,
   ScenarioCategory,
-  ScenarioComplexity
+  ScenarioComplexity,
 } from '../RuleTestingFramework';
 
 describe('RuleTestingFramework Types and Enums', () => {
-  
   describe('TestSuiteCategory', () => {
     test('should contain all expected test suite categories', () => {
       expect(TestSuiteCategory.FUNCTIONAL).toBe('FUNCTIONAL');
@@ -97,12 +96,12 @@ describe('RuleTestingFramework Types and Enums', () => {
 
     test('should cover all aspects of rule testing', () => {
       const categories = Object.values(RuleTestCategory);
-      
+
       // Core testing categories
       expect(categories).toContain('RULE_EVALUATION');
       expect(categories).toContain('CONDITION_LOGIC');
       expect(categories).toContain('ACTION_EXECUTION');
-      
+
       // Advanced testing categories
       expect(categories).toContain('CONFLICT_RESOLUTION');
       expect(categories).toContain('PERFORMANCE_BENCHMARKS');
@@ -137,13 +136,13 @@ describe('RuleTestingFramework Types and Enums', () => {
 
     test('should support complete test lifecycle states', () => {
       const statuses = Object.values(TestStatus);
-      
+
       // Initial states
       expect(statuses).toContain('PENDING');
-      
+
       // Execution states
       expect(statuses).toContain('RUNNING');
-      
+
       // Final states
       expect(statuses).toContain('PASSED');
       expect(statuses).toContain('FAILED');
@@ -182,14 +181,14 @@ describe('RuleTestingFramework Types and Enums', () => {
 
     test('should support common reporting formats', () => {
       const formats = Object.values(OutputFormat);
-      
+
       // Standard data formats
       expect(formats).toContain('JSON');
       expect(formats).toContain('XML');
-      
+
       // Human-readable formats
       expect(formats).toContain('HTML');
-      
+
       // Test framework formats
       expect(formats).toContain('JUNIT');
       expect(formats).toContain('CUCUMBER');
@@ -221,13 +220,13 @@ describe('RuleTestingFramework Types and Enums', () => {
 
     test('should cover different test scenario types', () => {
       const categories = Object.values(ScenarioCategory);
-      
+
       // Positive testing
       expect(categories).toContain('HAPPY_PATH');
-      
+
       // Negative testing
       expect(categories).toContain('ERROR_PATH');
-      
+
       // Special case testing
       expect(categories).toContain('EDGE_CASE');
       expect(categories).toContain('BOUNDARY_CONDITION');
@@ -250,14 +249,13 @@ describe('RuleTestingFramework Types and Enums', () => {
 });
 
 describe('RuleTestingFramework Type Validation', () => {
-  
   describe('Test Suite Configuration Validation', () => {
     test('should validate resource limits structure', () => {
       const resourceLimits = {
         maxMemory: 512,
         maxCpu: 80,
         maxDuration: 300000,
-        maxConcurrency: 5
+        maxConcurrency: 5,
       };
 
       expect(resourceLimits.maxMemory).toBeGreaterThan(0);
@@ -273,7 +271,7 @@ describe('RuleTestingFramework Type Validation', () => {
         captureScreenshots: false,
         recordPerformanceMetrics: true,
         logLevel: LogLevel.INFO,
-        outputFormats: [OutputFormat.JSON, OutputFormat.HTML]
+        outputFormats: [OutputFormat.JSON, OutputFormat.HTML],
       };
 
       expect(typeof reportingSettings.generateDetailedReports).toBe('boolean');
@@ -290,10 +288,10 @@ describe('RuleTestingFramework Type Validation', () => {
   describe('Test Priority and Status Transitions', () => {
     test('should validate priority levels are properly ordered', () => {
       const priorities = [TestPriority.P0, TestPriority.P1, TestPriority.P2, TestPriority.P3];
-      
+
       // P0 should be most critical
       expect(priorities[0]).toBe(TestPriority.P0);
-      
+
       // P3 should be least critical
       expect(priorities[3]).toBe(TestPriority.P3);
     });
@@ -305,7 +303,7 @@ describe('RuleTestingFramework Type Validation', () => {
         [TestStatus.RUNNING, TestStatus.FAILED],
         [TestStatus.RUNNING, TestStatus.ERROR],
         [TestStatus.PENDING, TestStatus.SKIPPED],
-        [TestStatus.PENDING, TestStatus.BLOCKED]
+        [TestStatus.PENDING, TestStatus.BLOCKED],
       ];
 
       validTransitions.forEach(([from, to]) => {
@@ -359,11 +357,10 @@ describe('RuleTestingFramework Type Validation', () => {
 });
 
 describe('RuleTestingFramework Utility Functions', () => {
-  
   describe('Priority Comparison', () => {
     test('should correctly compare test priorities', () => {
       const priorityOrder = [TestPriority.P0, TestPriority.P1, TestPriority.P2, TestPriority.P3];
-      
+
       // Helper function to get priority numeric value
       const getPriorityValue = (priority: TestPriority): number => {
         return parseInt(priority.substring(1));
@@ -437,7 +434,7 @@ describe('RuleTestingFramework Utility Functions', () => {
         [OutputFormat.XML, '.xml'],
         [OutputFormat.HTML, '.html'],
         [OutputFormat.JUNIT, '.xml'],
-        [OutputFormat.CUCUMBER, '.json']
+        [OutputFormat.CUCUMBER, '.json'],
       ]);
 
       formatExtensions.forEach((extension, format) => {
@@ -470,7 +467,6 @@ describe('RuleTestingFramework Utility Functions', () => {
 });
 
 describe('RuleTestingFramework Integration Points', () => {
-  
   describe('Framework Configuration', () => {
     test('should validate complete framework configuration structure', () => {
       const frameworkConfig = {
@@ -481,7 +477,7 @@ describe('RuleTestingFramework Integration Points', () => {
         maxConcurrentTests: 10,
         enablePerformanceMetrics: true,
         enableCoverageReporting: true,
-        logLevel: LogLevel.INFO
+        logLevel: LogLevel.INFO,
       };
 
       expect(frameworkConfig.frameworkId).toBeTruthy();
@@ -506,7 +502,7 @@ describe('RuleTestingFramework Integration Points', () => {
         estimatedDuration: 5000,
         dependencies: ['database', 'auth-service'],
         requirements: ['consent-service'],
-        documentation: 'https://docs.example.com/test-001'
+        documentation: 'https://docs.example.com/test-001',
       };
 
       expect(Array.isArray(testMetadata.tags)).toBe(true);
@@ -525,7 +521,7 @@ describe('RuleTestingFramework Integration Points', () => {
         maxMemoryUsage: 100, // MB
         maxCpuUsage: 50, // percentage
         minThroughput: 100, // operations per second
-        maxErrorRate: 1 // percentage
+        maxErrorRate: 1, // percentage
       };
 
       expect(performanceExpectations.maxExecutionTime).toBeGreaterThan(0);
@@ -546,7 +542,7 @@ describe('RuleTestingFramework Integration Points', () => {
         VALIDATION_ERROR: 'Test validation failed',
         TIMEOUT_ERROR: 'Test execution timeout',
         RESOURCE_ERROR: 'Insufficient resources',
-        DEPENDENCY_ERROR: 'Missing or failed dependency'
+        DEPENDENCY_ERROR: 'Missing or failed dependency',
       };
 
       Object.entries(errorCategories).forEach(([category, description]) => {
@@ -558,7 +554,7 @@ describe('RuleTestingFramework Integration Points', () => {
 
     test('should validate error severity levels', () => {
       const errorSeverities = ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'];
-      
+
       errorSeverities.forEach(severity => {
         expect(severity).toMatch(/^[A-Z]+$/);
       });

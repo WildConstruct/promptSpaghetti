@@ -2,7 +2,7 @@
 
 /**
  * Fix Structural Parsing Issues
- * 
+ *
  * Addresses more complex parsing errors including:
  * - Missing closing braces for if/function statements
  * - Orphaned return statements
@@ -24,7 +24,7 @@ class StructuralParsingFixer {
       info: '🔍',
       success: '✅',
       warning: '⚠️',
-      error: '❌'
+      error: '❌',
     }[type];
     console.log(`${prefix} ${message}`);
   }
@@ -42,57 +42,57 @@ class StructuralParsingFixer {
         pattern: /(\s+)return\s+([^;]+);\s*return\s+([^;]+);/g,
         replacement: '$1if (condition) {\n$1  return $2;\n$1}\n$1return $3;',
         description: 'Fix orphaned return statements',
-        customLogic: true
+        customLogic: true,
       },
-      
+
       // Fix object property semicolons vs commas
       {
         pattern: /(\w+):\s*([^,;\n]+);(\s*\w+:)/g,
         replacement: '$1: $2,$3',
-        description: 'Fix object property semicolon -> comma'
+        description: 'Fix object property semicolon -> comma',
       },
-      
+
       // Fix function signature with wrong closing
       {
         pattern: /(\w+)\s*\(\s*([^)]*)\s*\)\s*:\s*\{([^}]*)\}$/gm,
         replacement: '$1($2) => {\n$3\n}',
-        description: 'Fix function signature syntax'
+        description: 'Fix function signature syntax',
       },
-      
+
       // Fix missing closing braces in if statements
       {
         pattern: /(if\s*\([^)]+\)\s*\{[^}]*return[^;]*;)\s*(return[^;]*;)/g,
         replacement: '$1\n}\n$2',
-        description: 'Fix missing closing brace in if statement'
+        description: 'Fix missing closing brace in if statement',
       },
-      
+
       // Fix callback function syntax issues
       {
         pattern: /(\w+)\s*:\s*\([^)]*\)\s*=>\s*\{,/g,
         replacement: '$1: ($2) => {',
-        description: 'Fix callback function opening syntax'
+        description: 'Fix callback function opening syntax',
       },
-      
+
       // Fix array/object initialization with wrong brackets
       {
         pattern: /useState<([^>]+)>\(\[\]\)/g,
         replacement: 'useState<$1[]>([])',
-        description: 'Fix useState array type annotation'
+        description: 'Fix useState array type annotation',
       },
-      
+
       // Fix interface syntax issues
       {
         pattern: /(interface\s+\w+\s*\{[^}]*),(\s*\})/g,
         replacement: '$1$2',
-        description: 'Fix interface trailing comma'
+        description: 'Fix interface trailing comma',
       },
-      
+
       // Fix method calls with wrong syntax
       {
         pattern: /(\w+)\(\s*\)\s*:\s*\{/g,
         replacement: '$1(): {',
-        description: 'Fix method signature colon placement'
-      }
+        description: 'Fix method signature colon placement',
+      },
     ];
 
     for (const fix of structuralFixes) {
@@ -107,9 +107,13 @@ class StructuralParsingFixer {
               const indent = parts[1];
               const firstReturn = parts[2].trim();
               const secondReturn = parts[3].trim();
-              
+
               // If first return looks conditional, wrap it
-              if (firstReturn.includes('dataTransferData') || firstReturn.includes('||') || firstReturn.includes('&&')) {
+              if (
+                firstReturn.includes('dataTransferData') ||
+                firstReturn.includes('||') ||
+                firstReturn.includes('&&')
+              ) {
                 const replacement = `${indent}if (format === 'application/reactflow' || format === 'application/node-type') {\n${indent}  return ${firstReturn};\n${indent}}\n${indent}return ${secondReturn};`;
                 fixedContent = fixedContent.replace(match, replacement);
                 fileFixCount++;
@@ -168,7 +172,7 @@ class StructuralParsingFixer {
       'client/src/components/GraphTemplates/TemplateSelector.tsx',
       'client/src/components/NodePalette.tsx',
       'client/src/components/PerformanceDashboard.tsx',
-      'packages/core/usePreviewSeeds.ts'
+      'packages/core/usePreviewSeeds.ts',
     ];
 
     for (const relPath of problematicFiles) {

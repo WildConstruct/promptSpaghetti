@@ -4,7 +4,7 @@ module.exports = {
     browser: true,
     es2021: true,
     node: true,
-    jest: true
+    jest: true,
   },
   extends: [],
   parser: '@typescript-eslint/parser',
@@ -12,7 +12,7 @@ module.exports = {
   rules: {
     // Disable all problematic rules
     'comma-dangle': 'off',
-    '@typescript-eslint/comma-dangle': 'off', 
+    '@typescript-eslint/comma-dangle': 'off',
     'max-len': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     'no-console': 'off',
@@ -21,21 +21,21 @@ module.exports = {
     'no-var': 'off',
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
-    'quotes': 'off',
-    'semi': 'off',
-    'indent': 'off',
-    
+    quotes: 'off',
+    semi: 'off',
+    indent: 'off',
+
     // Only keep essential rules that prevent real errors
     'no-undef': 'error',
     'no-unreachable': 'error',
     'no-dupe-keys': 'error',
     'no-duplicate-case': 'error',
-    'valid-typeof': 'error'
+    'valid-typeof': 'error',
   },
   settings: {
     react: {
-      version: 'detect'
-    }
+      version: 'detect',
+    },
   },
   ignorePatterns: [
     'dist/',
@@ -60,6 +60,6 @@ module.exports = {
     '*.sqlite',
     '*.sqlite3',
     '*.d.ts',
-    '*.js.map'
-  ]
+    '*.js.map',
+  ],
 };

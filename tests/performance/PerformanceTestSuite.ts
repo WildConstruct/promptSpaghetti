@@ -75,9 +75,9 @@ export class PerformanceTestSuite {
         minThroughput: 10,
         maxErrorRate: 0.05,
         maxMemoryUsage: 512,
-        maxCpuUsage: 80
+        maxCpuUsage: 80,
       },
-      ...config
+      ...config,
     };
 
     this.outputDir = this.config.outputDir!;
@@ -89,7 +89,7 @@ export class PerformanceTestSuite {
    */
   async executeFullSuite(): Promise<PerformanceTestResult> {
     console.log('🚀 Starting Comprehensive Performance Test Suite');
-    console.log('=' .repeat(80));
+    console.log('='.repeat(80));
     console.log(`Base URL: ${this.config.baseUrl}`);
     console.log(`Concurrency: ${this.config.concurrency}`);
     console.log(`Duration: ${this.config.duration! / 1000}s`);
@@ -105,7 +105,7 @@ export class PerformanceTestSuite {
       passed: true,
       results: {},
       thresholdViolations: [],
-      recommendations: []
+      recommendations: [],
     };
 
     try {
@@ -134,7 +134,7 @@ export class PerformanceTestSuite {
       // 5. Analyze Results and Generate Reports
       console.log('📈 Analyzing Results and Generating Reports...');
       await this.analyzeResults(result);
-      
+
       if (this.config.generateReports) {
         await this.generateReports(result);
       }
@@ -144,7 +144,6 @@ export class PerformanceTestSuite {
 
       this.displaySummary(result);
       return result;
-
     } catch (error) {
       console.error('❌ Performance test suite failed:', error);
       result.passed = false;
@@ -162,7 +161,7 @@ export class PerformanceTestSuite {
     try {
       // Execute baseline load test
       const baselineResult = await this.runLoadTestScenario('baseline_light');
-      
+
       // Execute stress test if baseline passes
       let stressResult = null;
       if (baselineResult.success) {
@@ -172,7 +171,7 @@ export class PerformanceTestSuite {
       return {
         baseline: baselineResult,
         stress: stressResult,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     } catch (error) {
       console.error('❌ Load tests failed:', error);
@@ -186,13 +185,13 @@ export class PerformanceTestSuite {
   private async executeInfrastructureScenarios(): Promise<any> {
     try {
       const infraScenarios = new InfraPerformanceScenarios();
-      
+
       // Execute key infrastructure scenarios
       const scenarios = [
         'graph-execution-small',
         'graph-execution-large',
         'api-performance-baseline',
-        'memory-usage-monitoring'
+        'memory-usage-monitoring',
       ];
 
       const results = [];
@@ -212,9 +211,9 @@ export class PerformanceTestSuite {
         summary: {
           total: scenarios.length,
           passed: results.filter(r => r.success).length,
-          failed: results.filter(r => !r.success).length
+          failed: results.filter(r => !r.success).length,
         },
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     } catch (error) {
       console.error('❌ Infrastructure scenarios failed:', error);
@@ -228,12 +227,12 @@ export class PerformanceTestSuite {
   private async executeUserWorkflows(): Promise<any> {
     try {
       const framework = new TestScenarioFramework();
-      
+
       // Execute performance-focused user workflows
       const workflows = [
         UserPerformanceScenarios.getGraphExecutionPerformanceScenario(),
         UserPerformanceScenarios.getUIResponsivenessScenario(),
-        UserPerformanceScenarios.getMemoryPerformanceScenario()
+        UserPerformanceScenarios.getMemoryPerformanceScenario(),
       ];
 
       const results = [];
@@ -253,9 +252,9 @@ export class PerformanceTestSuite {
         summary: {
           total: workflows.length,
           passed: results.filter(r => r.success).length,
-          failed: results.filter(r => !r.success).length
+          failed: results.filter(r => !r.success).length,
         },
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     } catch (error) {
       console.error('❌ User workflows failed:', error);
@@ -269,17 +268,21 @@ export class PerformanceTestSuite {
   private async executeMainPerformanceRunner(): Promise<any> {
     return new Promise((resolve, reject) => {
       const runnerPath = path.join(process.cwd(), 'performance-test-runner.js');
-      
+
       const args = [
-        '--concurrency', this.config.concurrency!.toString(),
-        '--duration', (this.config.duration! / 1000).toString(),
-        '--output', this.outputDir,
-        '--format', 'json'
+        '--concurrency',
+        this.config.concurrency!.toString(),
+        '--duration',
+        (this.config.duration! / 1000).toString(),
+        '--output',
+        this.outputDir,
+        '--format',
+        'json',
       ];
 
       const process = spawn('node', [runnerPath, ...args], {
         stdio: ['pipe', 'pipe', 'pipe'],
-        cwd: process.cwd()
+        cwd: process.cwd(),
       });
 
       this.runningProcesses.push(process);
@@ -287,31 +290,33 @@ export class PerformanceTestSuite {
       let stdout = '';
       let stderr = '';
 
-      process.stdout?.on('data', (data) => {
+      process.stdout?.on('data', data => {
         stdout += data.toString();
         if (this.config.generateReports) {
           console.log(data.toString().trim());
         }
       });
 
-      process.stderr?.on('data', (data) => {
+      process.stderr?.on('data', data => {
         stderr += data.toString();
         console.error(data.toString().trim());
       });
 
-      process.on('close', (code) => {
+      process.on('close', code => {
         this.runningProcesses = this.runningProcesses.filter(p => p !== process);
-        
+
         if (code === 0) {
           try {
             // Try to parse JSON results
-            const results = stdout.includes('{') ? JSON.parse(stdout.split('\n').find(line => line.includes('{')) || '{}') : {};
+            const results = stdout.includes('{')
+              ? JSON.parse(stdout.split('\n').find(line => line.includes('{')) || '{}')
+              : {};
             resolve({
               success: true,
               exitCode: code,
               results,
               stdout: stdout.trim(),
-              stderr: stderr.trim()
+              stderr: stderr.trim(),
             });
           } catch (parseError) {
             resolve({
@@ -320,7 +325,7 @@ export class PerformanceTestSuite {
               results: {},
               stdout: stdout.trim(),
               stderr: stderr.trim(),
-              parseError: parseError.message
+              parseError: parseError.message,
             });
           }
         } else {
@@ -328,7 +333,7 @@ export class PerformanceTestSuite {
         }
       });
 
-      process.on('error', (error) => {
+      process.on('error', error => {
         this.runningProcesses = this.runningProcesses.filter(p => p !== process);
         reject(error);
       });
@@ -341,15 +346,18 @@ export class PerformanceTestSuite {
   private async runLoadTestScenario(scenarioName: string): Promise<any> {
     return new Promise((resolve, reject) => {
       const scenarioRunnerPath = path.join(process.cwd(), 'load-tests', 'scenarios', 'run-load-scenarios.js');
-      
+
       const args = [
-        '--scenario', scenarioName,
-        '--base-url', this.config.baseUrl!,
-        '--output', path.join(this.outputDir, 'load-tests')
+        '--scenario',
+        scenarioName,
+        '--base-url',
+        this.config.baseUrl!,
+        '--output',
+        path.join(this.outputDir, 'load-tests'),
       ];
 
       const process = spawn('node', [scenarioRunnerPath, ...args], {
-        stdio: ['pipe', 'pipe', 'pipe']
+        stdio: ['pipe', 'pipe', 'pipe'],
       });
 
       this.runningProcesses.push(process);
@@ -357,32 +365,32 @@ export class PerformanceTestSuite {
       let stdout = '';
       let stderr = '';
 
-      process.stdout?.on('data', (data) => {
+      process.stdout?.on('data', data => {
         stdout += data.toString();
       });
 
-      process.stderr?.on('data', (data) => {
+      process.stderr?.on('data', data => {
         stderr += data.toString();
       });
 
-      process.on('close', (code) => {
+      process.on('close', code => {
         this.runningProcesses = this.runningProcesses.filter(p => p !== process);
-        
+
         resolve({
           scenario: scenarioName,
           success: code === 0,
           exitCode: code,
           stdout: stdout.trim(),
-          stderr: stderr.trim()
+          stderr: stderr.trim(),
         });
       });
 
-      process.on('error', (error) => {
+      process.on('error', error => {
         this.runningProcesses = this.runningProcesses.filter(p => p !== process);
         resolve({
           scenario: scenarioName,
           success: false,
-          error: error.message
+          error: error.message,
         });
       });
     });
@@ -393,23 +401,23 @@ export class PerformanceTestSuite {
    */
   private async analyzeResults(result: PerformanceTestResult): Promise<void> {
     const thresholds = this.config.thresholds!;
-    
+
     // Analyze orchestration results
     if (result.results.orchestration?.results) {
       const metrics = result.results.orchestration.results;
-      
+
       if (metrics.averageResponseTime > thresholds.maxResponseTime!) {
         result.thresholdViolations.push(
           `Response time exceeded threshold: ${metrics.averageResponseTime}ms > ${thresholds.maxResponseTime}ms`
         );
       }
-      
+
       if (metrics.requestsPerSecond < thresholds.minThroughput!) {
         result.thresholdViolations.push(
           `Throughput below threshold: ${metrics.requestsPerSecond} < ${thresholds.minThroughput}`
         );
       }
-      
+
       if (metrics.errorRate > thresholds.maxErrorRate!) {
         result.thresholdViolations.push(
           `Error rate exceeded threshold: ${metrics.errorRate} > ${thresholds.maxErrorRate}`
@@ -427,10 +435,7 @@ export class PerformanceTestSuite {
         '- Reviewing algorithmic complexity'
       );
     } else {
-      result.recommendations.push(
-        'Performance tests passed!',
-        'System is performing within acceptable thresholds.'
-      );
+      result.recommendations.push('Performance tests passed!', 'System is performing within acceptable thresholds.');
     }
   }
 
@@ -439,19 +444,19 @@ export class PerformanceTestSuite {
    */
   private async generateReports(result: PerformanceTestResult): Promise<void> {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    
+
     // Generate JSON report
     const jsonReport = path.join(this.outputDir, `performance-suite-${timestamp}.json`);
     await fs.writeFile(jsonReport, JSON.stringify(result, null, 2));
-    
+
     // Generate HTML report
     const htmlReport = path.join(this.outputDir, `performance-suite-${timestamp}.html`);
     await fs.writeFile(htmlReport, this.generateHTMLReport(result));
-    
+
     // Generate text summary
     const textReport = path.join(this.outputDir, `performance-suite-summary-${timestamp}.txt`);
     await fs.writeFile(textReport, this.generateTextSummary(result));
-    
+
     console.log('📄 Reports generated:');
     console.log(`  - JSON: ${jsonReport}`);
     console.log(`  - HTML: ${htmlReport}`);
@@ -485,11 +490,15 @@ export class PerformanceTestSuite {
         <p><strong>Status:</strong> <span class="${result.passed ? 'passed' : 'failed'}">${result.passed ? 'PASSED' : 'FAILED'}</span></p>
     </div>
     
-    ${result.thresholdViolations.length > 0 ? `
+    ${
+      result.thresholdViolations.length > 0
+        ? `
     <div class="section">
         <h2>Threshold Violations</h2>
         ${result.thresholdViolations.map(v => `<div class="violation">${v}</div>`).join('')}
-    </div>` : ''}
+    </div>`
+        : ''
+    }
     
     <div class="section">
         <h2>Recommendations</h2>
@@ -514,7 +523,7 @@ export class PerformanceTestSuite {
     summary += `Timestamp: ${result.timestamp}\n`;
     summary += `Duration: ${Math.ceil(result.duration / 1000)}s\n`;
     summary += `Status: ${result.passed ? 'PASSED' : 'FAILED'}\n\n`;
-    
+
     if (result.thresholdViolations.length > 0) {
       summary += `THRESHOLD VIOLATIONS (${result.thresholdViolations.length})\n`;
       summary += `${'='.repeat(30)}\n`;
@@ -523,13 +532,13 @@ export class PerformanceTestSuite {
       });
       summary += '\n';
     }
-    
+
     summary += 'RECOMMENDATIONS\n';
     summary += '===============\n';
     result.recommendations.forEach(rec => {
       summary += `- ${rec}\n`;
     });
-    
+
     return summary;
   }
 
@@ -552,28 +561,28 @@ export class PerformanceTestSuite {
   private displaySummary(result: PerformanceTestResult): void {
     console.log('\n' + '='.repeat(80));
     console.log('🏁 PERFORMANCE TEST SUITE SUMMARY');
-    console.log('=' .repeat(80));
+    console.log('='.repeat(80));
     console.log(`Status: ${result.passed ? '✅ PASSED' : '❌ FAILED'}`);
     console.log(`Duration: ${Math.ceil(result.duration / 1000)}s`);
-    
+
     if (result.thresholdViolations.length > 0) {
       console.log(`\n⚠️ Threshold Violations (${result.thresholdViolations.length}):`);
       result.thresholdViolations.forEach(violation => {
         console.log(`  - ${violation}`);
       });
     }
-    
+
     console.log('\n💡 Recommendations:');
     result.recommendations.forEach(rec => {
       console.log(`  - ${rec}`);
     });
-    
+
     console.log('\n📊 Test Components:');
     if (result.results.loadTests) console.log('  ✓ Load Testing Scenarios');
     if (result.results.infrastructureScenarios) console.log('  ✓ Infrastructure Performance Scenarios');
     if (result.results.userWorkflows) console.log('  ✓ User Workflow Performance Testing');
     if (result.results.orchestration) console.log('  ✓ Main Performance Test Runner');
-    
+
     console.log('\n' + '='.repeat(80));
   }
 
@@ -597,12 +606,13 @@ if (require.main === module) {
     baseUrl: process.env.API_BASE_URL || 'http://localhost:8000',
     concurrency: parseInt(process.env.PERF_CONCURRENCY || '10'),
     duration: parseInt(process.env.PERF_DURATION || '60000'),
-    outputDir: process.env.PERF_OUTPUT_DIR || './performance-test-results'
+    outputDir: process.env.PERF_OUTPUT_DIR || './performance-test-results',
   };
-  
+
   const suite = new PerformanceTestSuite(config);
-  
-  suite.executeFullSuite()
+
+  suite
+    .executeFullSuite()
     .then(result => {
       console.log('\n✅ Performance test suite completed');
       process.exit(result.passed ? 0 : 1);

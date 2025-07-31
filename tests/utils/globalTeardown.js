@@ -12,11 +12,11 @@ module.exports = async () => {
     console.warn = global.testConsole.warn;
     console.error = global.testConsole.error;
   }
-  
+
   // Clean up any global resources
   if (global.gc) {
     global.gc();
   }
-  
+
   console.log('🧹 Epic 18 testing environment cleaned up');
 };

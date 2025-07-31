@@ -1,4 +1,5 @@
 # Load Testing Tool Evaluation for PromptScape
+
 **Epic 20 - Enterprise Scaling & Performance Optimization**
 
 ## Executive Summary
@@ -12,6 +13,7 @@ Based on comprehensive research and analysis of PromptScape's existing performan
 ## PromptScape System Context
 
 ### Current Architecture
+
 - **Backend**: Fastify + Node.js + TypeScript
 - **Database**: PostgreSQL with Redis caching
 - **Real-time**: WebSocket collaboration (port 8001)
@@ -19,13 +21,16 @@ Based on comprehensive research and analysis of PromptScape's existing performan
 - **Scaling Target**: 500-2000 concurrent users
 
 ### Existing Performance Infrastructure ✅
+
 PromptScape already has sophisticated performance testing:
+
 - **LoadTestRunner.ts** - Complete load testing framework
 - **PerformanceDashboard.ts** - Real-time monitoring
 - **CLI Tools** - `pnpm --filter server perf:test|monitor|optimize`
 - **Pre-defined Scenarios** - Light/Medium/Heavy editing workloads
 
 ### Key Testing Requirements
+
 1. **Graph Execution Engine** - Primary performance bottleneck
 2. **WebSocket Collaboration** - 1000+ concurrent connections
 3. **Authentication Load** - JWT refresh and OAuth flows
@@ -39,6 +44,7 @@ PromptScape already has sophisticated performance testing:
 ### 1. k6 (Grafana)
 
 #### Strengths ✅
+
 - **High Performance**: Go-based engine with minimal resource consumption
 - **Developer-Friendly**: JavaScript ES6 scripting with familiar syntax
 - **Protocol Support**: HTTP, WebSocket, gRPC, and 20+ extensions
@@ -48,6 +54,7 @@ PromptScape already has sophisticated performance testing:
 - **Active Ecosystem**: Large community with continuous updates
 
 #### Technical Capabilities
+
 ```javascript
 // k6 WebSocket Example
 import ws from 'k6/ws';
@@ -57,19 +64,21 @@ export default function () {
   const url = 'ws://localhost:8001';
   const response = ws.connect(url, {}, function (socket) {
     socket.on('open', () => socket.send('graph-collaboration-message'));
-    socket.on('message', (data) => check(data, { 'received': (r) => r.length > 0 }));
+    socket.on('message', data => check(data, { received: r => r.length > 0 }));
   });
 }
 ```
 
 #### PromptScape Fit Assessment
+
 - **✅ Excellent**: Graph execution API load testing
-- **✅ Excellent**: WebSocket collaboration testing  
+- **✅ Excellent**: WebSocket collaboration testing
 - **✅ Excellent**: CI/CD integration with existing tools
 - **✅ Good**: JavaScript familiarity for development team
 - **✅ Good**: Cloud scaling for enterprise load testing
 
 #### Limitations ❌
+
 - **Steeper Learning Curve**: More complex than Artillery for simple tests
 - **Resource Requirements**: Higher memory usage during very large tests
 - **Extension Dependency**: Some protocols require community extensions
@@ -79,6 +88,7 @@ export default function () {
 ### 2. Artillery
 
 #### Strengths ✅
+
 - **Node.js Native**: Seamless integration with PromptScape's stack
 - **YAML Configuration**: Simple, readable test definitions
 - **Real-time Testing**: Excellent WebSocket and Socket.IO support
@@ -88,6 +98,7 @@ export default function () {
 - **Modern Architecture**: Built for 2025 cloud-native applications
 
 #### Technical Capabilities
+
 ```yaml
 # Artillery Configuration Example
 config:
@@ -98,22 +109,23 @@ config:
   engines:
     ws: {}
 scenarios:
-  - name: "Graph Execution Load Test"
+  - name: 'Graph Execution Load Test'
     flow:
       - post:
-          url: "/preview"
+          url: '/preview'
           json:
-            graph: "{{ graphData }}"
+            graph: '{{ graphData }}'
             seeds: [1, 2, 3, 4, 5]
-  - name: "WebSocket Collaboration"
+  - name: 'WebSocket Collaboration'
     engine: ws
     flow:
       - connect:
-          url: "ws://localhost:8001"
-      - send: "collaboration-message"
+          url: 'ws://localhost:8001'
+      - send: 'collaboration-message'
 ```
 
 #### PromptScape Fit Assessment
+
 - **✅ Excellent**: Node.js ecosystem compatibility
 - **✅ Excellent**: Rapid prototyping and iteration
 - **✅ Excellent**: WebSocket and real-time testing
@@ -121,6 +133,7 @@ scenarios:
 - **✅ Good**: AWS integration for scaling
 
 #### Limitations ❌
+
 - **Performance Ceiling**: JavaScript-based, higher resource usage than k6
 - **Limited Metrics**: Fewer built-in performance metrics than k6
 - **Enterprise Features**: Less mature enterprise monitoring integration
@@ -130,6 +143,7 @@ scenarios:
 ### 3. Apache JMeter
 
 #### Strengths ✅
+
 - **Industry Standard**: Mature, well-established with extensive documentation
 - **GUI Interface**: Visual test plan creation and debugging
 - **Protocol Coverage**: Comprehensive protocol support out-of-the-box
@@ -139,6 +153,7 @@ scenarios:
 - **Free & Open Source**: No licensing costs for enterprise use
 
 #### Technical Capabilities
+
 - **WebSocket Testing**: Via JMeter WebSocket Sampler plugin
 - **API Testing**: Built-in HTTP, REST, SOAP, GraphQL support
 - **Database Testing**: JDBC connection testing and optimization
@@ -146,6 +161,7 @@ scenarios:
 - **Advanced Reporting**: HTML reports, real-time dashboards, CSV export
 
 #### PromptScape Fit Assessment
+
 - **✅ Good**: Comprehensive testing capabilities
 - **✅ Good**: Database performance testing
 - **✅ Good**: Enterprise reporting and compliance
@@ -153,6 +169,7 @@ scenarios:
 - **⚠️ Moderate**: Java-based, separate from Node.js ecosystem
 
 #### Limitations ❌
+
 - **Heavy Resource Usage**: GUI and Java runtime overhead
 - **Complex Setup**: Steeper learning curve for modern web applications
 - **Limited Modern Integration**: Less CI/CD friendly than k6/Artillery
@@ -163,37 +180,41 @@ scenarios:
 ## Comparative Analysis
 
 ### Performance & Scalability
-| Tool | Engine | Resource Usage | Max Concurrent Users | Cloud Native |
-|------|---------|---------------|---------------------|-------------|
-| **k6** | Go | Very Low | 100,000+ | ✅ Excellent |
-| **Artillery** | Node.js | Moderate | 50,000+ | ✅ Good |
-| **JMeter** | Java | High | 10,000+ | ⚠️ Limited |
+
+| Tool          | Engine  | Resource Usage | Max Concurrent Users | Cloud Native |
+| ------------- | ------- | -------------- | -------------------- | ------------ |
+| **k6**        | Go      | Very Low       | 100,000+             | ✅ Excellent |
+| **Artillery** | Node.js | Moderate       | 50,000+              | ✅ Good      |
+| **JMeter**    | Java    | High           | 10,000+              | ⚠️ Limited   |
 
 ### Protocol Support
-| Protocol | k6 | Artillery | JMeter |
-|----------|----|-----------|---------| 
-| **HTTP/REST API** | ✅ Native | ✅ Native | ✅ Native |
-| **WebSocket** | ✅ Native | ✅ Excellent | ⚠️ Plugin Required |
-| **GraphQL** | ✅ Extension | ✅ Native | ✅ Plugin |
-| **Database** | ⚠️ Extension | ❌ Limited | ✅ Native |
-| **Authentication** | ✅ OAuth/JWT | ✅ OAuth/JWT | ✅ Complete |
+
+| Protocol           | k6           | Artillery    | JMeter             |
+| ------------------ | ------------ | ------------ | ------------------ |
+| **HTTP/REST API**  | ✅ Native    | ✅ Native    | ✅ Native          |
+| **WebSocket**      | ✅ Native    | ✅ Excellent | ⚠️ Plugin Required |
+| **GraphQL**        | ✅ Extension | ✅ Native    | ✅ Plugin          |
+| **Database**       | ⚠️ Extension | ❌ Limited   | ✅ Native          |
+| **Authentication** | ✅ OAuth/JWT | ✅ OAuth/JWT | ✅ Complete        |
 
 ### Developer Experience
-| Aspect | k6 | Artillery | JMeter |
-|--------|----|-----------|---------| 
-| **Learning Curve** | Moderate | Easy | Steep |
-| **Configuration** | JavaScript | YAML | GUI/XML |
-| **Debugging** | CLI + Logs | CLI + Logs | GUI + Reports |
-| **CI/CD Integration** | ✅ Excellent | ✅ Good | ⚠️ Complex |
-| **Node.js Integration** | ⚠️ Separate | ✅ Native | ❌ None |
+
+| Aspect                  | k6           | Artillery  | JMeter        |
+| ----------------------- | ------------ | ---------- | ------------- |
+| **Learning Curve**      | Moderate     | Easy       | Steep         |
+| **Configuration**       | JavaScript   | YAML       | GUI/XML       |
+| **Debugging**           | CLI + Logs   | CLI + Logs | GUI + Reports |
+| **CI/CD Integration**   | ✅ Excellent | ✅ Good    | ⚠️ Complex    |
+| **Node.js Integration** | ⚠️ Separate  | ✅ Native  | ❌ None       |
 
 ### Enterprise Features
-| Feature | k6 | Artillery | JMeter |
-|---------|----|-----------|---------| 
-| **Distributed Testing** | ✅ Cloud Native | ✅ Serverless | ✅ Master-Slave |
-| **Monitoring Integration** | ✅ 20+ Integrations | ⚠️ Limited | ✅ Extensive |
-| **Reporting** | ✅ HTML/JSON | ⚠️ Basic | ✅ Advanced |
-| **Enterprise Support** | ✅ Grafana Labs | ✅ Artillery.io | ❌ Community |
+
+| Feature                    | k6                  | Artillery       | JMeter          |
+| -------------------------- | ------------------- | --------------- | --------------- |
+| **Distributed Testing**    | ✅ Cloud Native     | ✅ Serverless   | ✅ Master-Slave |
+| **Monitoring Integration** | ✅ 20+ Integrations | ⚠️ Limited      | ✅ Extensive    |
+| **Reporting**              | ✅ HTML/JSON        | ⚠️ Basic        | ✅ Advanced     |
+| **Enterprise Support**     | ✅ Grafana Labs     | ✅ Artillery.io | ❌ Community    |
 
 ---
 
@@ -202,6 +223,7 @@ scenarios:
 ### Primary Recommendation: **k6**
 
 **Why k6 for PromptScape:**
+
 1. **Performance Critical**: PromptScape's graph execution is CPU-intensive; k6's Go engine provides optimal performance
 2. **WebSocket Excellence**: Native WebSocket support crucial for collaboration testing
 3. **CI/CD Integration**: Seamless integration with existing performance CLI tools
@@ -212,6 +234,7 @@ scenarios:
 ### Secondary Recommendation: **Artillery**
 
 **Why Artillery as Complement:**
+
 1. **Rapid Prototyping**: Quick iteration during development cycles
 2. **Node.js Integration**: Direct integration with PromptScape's tech stack
 3. **Developer Productivity**: YAML configuration for fast test creation
@@ -220,6 +243,7 @@ scenarios:
 ### Implementation Strategy
 
 #### Phase 1: k6 Integration (Weeks 1-2)
+
 ```bash
 # Install k6
 npm install -g k6
@@ -229,12 +253,13 @@ mkdir server/src/performance/k6-tests
 ```
 
 **Priority Test Scripts:**
+
 1. **Graph Execution Load** (`graph-execution.js`)
    - Test `/preview` endpoint with various graph complexities
    - Simulate 10-1000 concurrent executions
    - Validate response times < 2s and success rate > 95%
 
-2. **WebSocket Collaboration** (`websocket-collaboration.js`) 
+2. **WebSocket Collaboration** (`websocket-collaboration.js`)
    - Test real-time editing with 100+ concurrent connections
    - Validate message delivery and conflict resolution
    - Monitor connection stability and latency
@@ -245,20 +270,23 @@ mkdir server/src/performance/k6-tests
    - Validate session management under load
 
 #### Phase 2: Artillery Integration (Week 3)
+
 ```bash
 # Install Artillery
 npm install -g artillery
 
-# Create Artillery test suite  
+# Create Artillery test suite
 mkdir server/src/performance/artillery-tests
 ```
 
 **Use Cases:**
+
 - **Development Testing**: Quick API endpoint validation during feature development
 - **Integration Testing**: End-to-end user journey testing
 - **Debugging**: Detailed request/response analysis with Node.js debugging tools
 
 #### Phase 3: CI/CD Integration (Week 4)
+
 ```yaml
 # GitHub Actions Workflow
 name: Performance Tests
@@ -282,24 +310,29 @@ jobs:
 ## Integration with Existing Infrastructure
 
 ### Enhancing Current Performance CLI
+
 ```bash
 # Extended CLI commands
 pnpm --filter server perf:k6:graph        # k6 graph execution tests
-pnpm --filter server perf:k6:websocket    # k6 WebSocket collaboration  
+pnpm --filter server perf:k6:websocket    # k6 WebSocket collaboration
 pnpm --filter server perf:k6:auth         # k6 authentication load
 pnpm --filter server perf:artillery:dev   # Artillery development testing
 pnpm --filter server perf:compare         # Compare results across tools
 ```
 
 ### Dashboard Integration
+
 Extend existing `PerformanceDashboard.ts` to include:
+
 - **k6 Metrics**: Real-time test execution metrics
-- **Artillery Results**: Development test summaries  
+- **Artillery Results**: Development test summaries
 - **Trend Analysis**: Performance regression detection
 - **Alert System**: Threshold violation notifications
 
 ### Database Performance Testing
+
 While k6/Artillery focus on API/WebSocket testing, complement with:
+
 - **Existing LoadTestRunner**: Continue using for database-specific scenarios
 - **k6 Extensions**: SQL testing for complex database operations
 - **JMeter (Optional)**: Deep database performance analysis if needed
@@ -309,24 +342,28 @@ While k6/Artillery focus on API/WebSocket testing, complement with:
 ## Implementation Timeline
 
 ### Week 1: k6 Foundation
+
 - [x] Install and configure k6
 - [x] Create basic graph execution load test
 - [x] Integrate with existing performance monitoring
 - [x] Establish baseline metrics
 
-### Week 2: k6 Advanced Scenarios  
+### Week 2: k6 Advanced Scenarios
+
 - [x] WebSocket collaboration testing
 - [x] Authentication load testing
 - [x] Multi-scenario test orchestration
 - [x] Performance threshold configuration
 
 ### Week 3: Artillery Integration
+
 - [x] Install Artillery for development testing
 - [x] Create rapid prototyping test templates
 - [x] Node.js integration with existing tools
 - [x] Team training on YAML configuration
 
 ### Week 4: CI/CD & Production
+
 - [x] GitHub Actions workflow integration
 - [x] Performance regression detection
 - [x] Production monitoring alerting
@@ -337,19 +374,22 @@ While k6/Artillery focus on API/WebSocket testing, complement with:
 ## Cost & Resource Analysis
 
 ### Tool Costs
-| Tool | Open Source | Enterprise | Cloud Execution |
-|------|-------------|------------|-----------------|
-| **k6** | Free | Grafana Cloud Plans | AWS/Azure native |
-| **Artillery** | Free | Artillery Pro | AWS Lambda/Fargate |
-| **JMeter** | Free | No official support | Manual setup |
+
+| Tool          | Open Source | Enterprise          | Cloud Execution    |
+| ------------- | ----------- | ------------------- | ------------------ |
+| **k6**        | Free        | Grafana Cloud Plans | AWS/Azure native   |
+| **Artillery** | Free        | Artillery Pro       | AWS Lambda/Fargate |
+| **JMeter**    | Free        | No official support | Manual setup       |
 
 ### Resource Requirements
+
 - **Development Time**: 2-3 weeks for full implementation
 - **Infrastructure**: Minimal (leverage existing Docker/CI/CD)
 - **Training**: 1 week team onboarding for k6 + Artillery
 - **Maintenance**: Low (integrates with existing performance framework)
 
-### ROI Analysis  
+### ROI Analysis
+
 - **Cost**: ~$5,000 (developer time + potential cloud costs)
 - **Benefit**: Early performance issue detection, enterprise scaling confidence
 - **Risk Mitigation**: Prevents production performance incidents
@@ -360,36 +400,41 @@ While k6/Artillery focus on API/WebSocket testing, complement with:
 ## Risk Assessment & Mitigation
 
 ### Technical Risks
-| Risk | Impact | Probability | Mitigation |
-|------|--------|-------------|------------|
-| **k6 Learning Curve** | Medium | Low | Artillery fallback, team training |
-| **Cloud Costs** | Medium | Medium | Usage monitoring, cost alerts |
-| **Integration Complexity** | Low | Low | Gradual rollout, existing framework |
 
-### Operational Risks  
-| Risk | Impact | Probability | Mitigation |
-|------|--------|-------------|------------|
-| **False Positives** | Medium | Medium | Baseline establishment, threshold tuning |
-| **Test Maintenance** | Low | High | Modular test design, documentation |
-| **Tool Vendor Lock-in** | Low | Low | Open source tools, multiple options |
+| Risk                       | Impact | Probability | Mitigation                          |
+| -------------------------- | ------ | ----------- | ----------------------------------- |
+| **k6 Learning Curve**      | Medium | Low         | Artillery fallback, team training   |
+| **Cloud Costs**            | Medium | Medium      | Usage monitoring, cost alerts       |
+| **Integration Complexity** | Low    | Low         | Gradual rollout, existing framework |
+
+### Operational Risks
+
+| Risk                    | Impact | Probability | Mitigation                               |
+| ----------------------- | ------ | ----------- | ---------------------------------------- |
+| **False Positives**     | Medium | Medium      | Baseline establishment, threshold tuning |
+| **Test Maintenance**    | Low    | High        | Modular test design, documentation       |
+| **Tool Vendor Lock-in** | Low    | Low         | Open source tools, multiple options      |
 
 ---
 
 ## Success Metrics & KPIs
 
 ### Implementation Success
+
 - **✅ Tool Integration**: k6 + Artillery operational within 4 weeks
-- **✅ Test Coverage**: 90% of critical endpoints under load testing  
+- **✅ Test Coverage**: 90% of critical endpoints under load testing
 - **✅ CI/CD Integration**: Automated performance regression detection
 - **✅ Team Adoption**: 100% developer team trained and using tools
 
-### Performance Success  
+### Performance Success
+
 - **📊 Response Time**: 95% of requests < 2s under normal load
 - **📊 Throughput**: 500+ concurrent users with stable performance
 - **📊 Availability**: 99.9% uptime during load testing periods
 - **📊 Scalability**: Linear performance scaling to 1000+ users
 
 ### Business Success
+
 - **💼 Enterprise Readiness**: Confident scaling for enterprise customers
 - **💼 Performance SLA**: Meet performance guarantees in customer contracts
 - **💼 Competitive Advantage**: Superior performance vs. competitors
@@ -402,7 +447,7 @@ While k6/Artillery focus on API/WebSocket testing, complement with:
 The **k6 + Artillery hybrid approach** provides PromptScape with:
 
 1. **Best-in-Class Performance Testing** with k6's Go-based engine
-2. **Developer-Friendly Rapid Testing** with Artillery's Node.js integration  
+2. **Developer-Friendly Rapid Testing** with Artillery's Node.js integration
 3. **Comprehensive Protocol Coverage** for HTTP, WebSocket, and real-time scenarios
 4. **Enterprise Scalability** supporting 1000+ concurrent users
 5. **Seamless CI/CD Integration** with existing performance infrastructure

@@ -68,7 +68,7 @@ ws.onopen = () => {
   // Authentication required immediately after connection
 };
 
-ws.onmessage = (event) => {
+ws.onmessage = event => {
   const message = JSON.parse(event.data);
   handleCollaborationMessage(message);
 };
@@ -80,11 +80,11 @@ All WebSocket messages follow this standardized format:
 
 ```typescript
 interface WSMessage {
-  type: string;           // Message type identifier
-  payload: object;        // Type-specific data
-  timestamp: number;      // Server timestamp (ms since epoch)
-  messageId: string;      // Unique message identifier
-  documentId?: string;    // Document context (optional)
+  type: string; // Message type identifier
+  payload: object; // Type-specific data
+  timestamp: number; // Server timestamp (ms since epoch)
+  messageId: string; // Unique message identifier
+  documentId?: string; // Document context (optional)
 }
 ```
 
@@ -103,6 +103,7 @@ interface WSMessage {
 ### Authentication Messages
 
 #### `auth_request`
+
 Authenticate user for collaboration session.
 
 ```typescript
@@ -120,6 +121,7 @@ Authenticate user for collaboration session.
 ```
 
 #### `auth_response`
+
 Server authentication result.
 
 ```typescript
@@ -136,6 +138,7 @@ Server authentication result.
 ### Graph Update Messages
 
 #### `graph_update`
+
 Real-time graph modifications with conflict detection.
 
 ```typescript
@@ -144,7 +147,7 @@ Real-time graph modifications with conflict detection.
   payload: {
     documentId: string,
     operations: Array<{
-      type: 'node_add' | 'node_update' | 'node_remove' | 
+      type: 'node_add' | 'node_update' | 'node_remove' |
             'edge_add' | 'edge_update' | 'edge_remove',
       nodeId?: string,
       edgeId?: string,
@@ -160,6 +163,7 @@ Real-time graph modifications with conflict detection.
 ```
 
 #### `graph_update_response`
+
 Server response to graph update.
 
 ```typescript
@@ -176,6 +180,7 @@ Server response to graph update.
 ### Presence Messages
 
 #### `presence_update`
+
 User presence, cursor, and selection updates.
 
 ```typescript
@@ -195,6 +200,7 @@ User presence, cursor, and selection updates.
 ```
 
 #### `user_join`
+
 Notification when user joins document.
 
 ```typescript
@@ -210,6 +216,7 @@ Notification when user joins document.
 ```
 
 #### `user_leave`
+
 Notification when user leaves document.
 
 ```typescript
@@ -226,6 +233,7 @@ Notification when user leaves document.
 ### Synchronization Messages
 
 #### `sync_request`
+
 Request document state synchronization.
 
 ```typescript
@@ -240,6 +248,7 @@ Request document state synchronization.
 ```
 
 #### `sync_response`
+
 Server synchronization response.
 
 ```typescript
@@ -258,6 +267,7 @@ Server synchronization response.
 ### Conflict Resolution Messages
 
 #### `conflict_detected`
+
 Server notification of editing conflict.
 
 ```typescript
@@ -275,6 +285,7 @@ Server notification of editing conflict.
 ```
 
 #### `resolve_conflict`
+
 Client conflict resolution request.
 
 ```typescript
@@ -295,7 +306,7 @@ Client conflict resolution request.
 ### Presence System Features
 
 - **Real-time Cursors**: Live cursor position sharing with user identification
-- **Selection Awareness**: Shared node/edge selections with visual indicators  
+- **Selection Awareness**: Shared node/edge selections with visual indicators
 - **Activity Tracking**: User typing, tool changes, and focus state
 - **Status Management**: Online, idle, away, and offline presence states
 - **Performance Optimized**: Throttled updates and efficient broadcasting
@@ -305,10 +316,12 @@ Client conflict resolution request.
 ```typescript
 // Client sends cursor position updates
 const updateCursor = (x: number, y: number, nodeId?: string) => {
-  ws.send(JSON.stringify({
-    type: 'cursor_update',
-    payload: { x, y, nodeId, viewportBounds: getViewportBounds() }
-  }));
+  ws.send(
+    JSON.stringify({
+      type: 'cursor_update',
+      payload: { x, y, nodeId, viewportBounds: getViewportBounds() },
+    })
+  );
 };
 
 // Throttle cursor updates to avoid spam
@@ -320,14 +333,16 @@ const throttledUpdateCursor = throttle(updateCursor, 50); // 20 FPS max
 ```typescript
 // Share selected elements with other users
 const updateSelection = (nodeIds: string[], edgeIds: string[]) => {
-  ws.send(JSON.stringify({
-    type: 'selection_update',
-    payload: { 
-      nodeIds, 
-      edgeIds,
-      selectionBox: calculateSelectionBounds(nodeIds, edgeIds)
-    }
-  }));
+  ws.send(
+    JSON.stringify({
+      type: 'selection_update',
+      payload: {
+        nodeIds,
+        edgeIds,
+        selectionBox: calculateSelectionBounds(nodeIds, edgeIds),
+      },
+    })
+  );
 };
 ```
 
@@ -335,15 +350,13 @@ const updateSelection = (nodeIds: string[], edgeIds: string[]) => {
 
 ```typescript
 // Track user activity and tool usage
-const updateActivity = (activity: {
-  currentTool: string,
-  isTyping: boolean,
-  focusedNodeId?: string
-}) => {
-  ws.send(JSON.stringify({
-    type: 'activity_update',
-    payload: activity
-  }));
+const updateActivity = (activity: { currentTool: string; isTyping: boolean; focusedNodeId?: string }) => {
+  ws.send(
+    JSON.stringify({
+      type: 'activity_update',
+      payload: activity,
+    })
+  );
 };
 ```
 
@@ -364,26 +377,26 @@ The system uses Conflict-free Replicated Data Types (CRDTs) for automatic confli
 
 ```typescript
 interface ConflictOperation {
-  id: string,
-  type: ConflictType,
-  nodeId?: string,
-  edgeId?: string,
-  property?: string,
-  oldValue: any,
-  newValue: any,
-  userId: string,
-  timestamp: number,
-  documentId: string
+  id: string;
+  type: ConflictType;
+  nodeId?: string;
+  edgeId?: string;
+  property?: string;
+  oldValue: any;
+  newValue: any;
+  userId: string;
+  timestamp: number;
+  documentId: string;
 }
 
 enum ConflictType {
   NODE_CREATION = 'node_creation',
-  NODE_DELETION = 'node_deletion', 
+  NODE_DELETION = 'node_deletion',
   NODE_PROPERTIES = 'node_properties',
   NODE_POSITION = 'node_position',
   EDGE_CREATION = 'edge_creation',
   EDGE_DELETION = 'edge_deletion',
-  EDGE_PROPERTIES = 'edge_properties'
+  EDGE_PROPERTIES = 'edge_properties',
 }
 ```
 
@@ -405,11 +418,11 @@ Each document maintains a version history with checksums for integrity verificat
 
 ```typescript
 interface DocumentVersion {
-  version: number,
-  operations: Operation[],
-  checksum: string,
-  timestamp: number,
-  author: string
+  version: number;
+  operations: Operation[];
+  checksum: string;
+  timestamp: number;
+  author: string;
 }
 ```
 
@@ -423,13 +436,15 @@ interface DocumentVersion {
 
 ```typescript
 // Client requests state verification
-ws.send(JSON.stringify({
-  type: 'verify_state',
-  payload: {
-    localChecksum: calculateDocumentChecksum(document),
-    localVersion: document.version
-  }
-}));
+ws.send(
+  JSON.stringify({
+    type: 'verify_state',
+    payload: {
+      localChecksum: calculateDocumentChecksum(document),
+      localVersion: document.version,
+    },
+  })
+);
 ```
 
 ---
@@ -441,18 +456,21 @@ ws.send(JSON.stringify({
 The system tracks 50+ collaboration-specific events:
 
 #### Session Events
+
 - `collaborative_session_start`
-- `collaborative_session_end` 
+- `collaborative_session_end`
 - `user_presence_update`
 - `concurrent_editors_peak`
 
 #### Real-time Editing Events
+
 - `simultaneous_edit_detected`
 - `conflict_resolution_triggered`
 - `conflict_resolution_completed`
 - `operational_transform_applied`
 
 #### Performance Events
+
 - `collaboration_latency_measured`
 - `websocket_connection_quality`
 - `sync_performance_measured`
@@ -464,13 +482,13 @@ Real-time analytics broadcasting on port 8001:
 ```javascript
 const analyticsWs = new WebSocket('ws://localhost:8001');
 
-analyticsWs.onmessage = (event) => {
+analyticsWs.onmessage = event => {
   const analyticsEvent = JSON.parse(event.data);
-  
+
   if (analyticsEvent.topic === 'collaboration_analytics') {
     updateCollaborationDashboard(analyticsEvent.data);
   }
-  
+
   if (analyticsEvent.topic === 'epic23_alerts') {
     showPerformanceAlert(analyticsEvent.data);
   }
@@ -509,7 +527,7 @@ const PERMISSIONS = {
   PROJECT_CREATE: 1 << 6,
   RESOURCE_WRITE: 1 << 9,
   COMMENT_WRITE: 1 << 13,
-  USER_INVITE: 1 << 15
+  USER_INVITE: 1 << 15,
 };
 
 // Check user permissions
@@ -529,39 +547,39 @@ class CollaborationClient {
   private ws: WebSocket;
   private documentId: string;
   private userId: string;
-  
+
   constructor(documentId: string, userId: string) {
     this.documentId = documentId;
     this.userId = userId;
     this.connect();
   }
-  
+
   private connect() {
     this.ws = new WebSocket('ws://localhost:8000');
-    
+
     this.ws.onopen = () => {
       this.authenticate();
     };
-    
-    this.ws.onmessage = (event) => {
+
+    this.ws.onmessage = event => {
       this.handleMessage(JSON.parse(event.data));
     };
-    
+
     this.ws.onclose = () => {
       // Implement reconnection logic
       setTimeout(() => this.connect(), 1000);
     };
   }
-  
+
   private authenticate() {
     this.send('auth_request', {
       userId: this.userId,
       documentId: this.documentId,
       userName: 'User Name',
-      token: getAuthToken()
+      token: getAuthToken(),
     });
   }
-  
+
   private send(type: string, payload: any) {
     this.ws.send(JSON.stringify({ type, payload }));
   }
@@ -578,34 +596,31 @@ export const CollaborativeEditor = ({ documentId, userId }) => {
   const [collaborationClient, setCollaborationClient] = useState<CollaborationClient>();
   const [connectedUsers, setConnectedUsers] = useState<User[]>([]);
   const [userCursors, setUserCursors] = useState<Map<string, CursorData>>(new Map());
-  
+
   useEffect(() => {
     const client = new CollaborationClient(documentId, userId);
-    
-    client.onUserJoin = (user) => {
+
+    client.onUserJoin = user => {
       setConnectedUsers(prev => [...prev, user]);
     };
-    
-    client.onUserLeave = (userId) => {
+
+    client.onUserLeave = userId => {
       setConnectedUsers(prev => prev.filter(u => u.id !== userId));
     };
-    
+
     client.onCursorUpdate = (userId, cursor) => {
       setUserCursors(prev => new Map(prev.set(userId, cursor)));
     };
-    
+
     setCollaborationClient(client);
-    
+
     return () => client.disconnect();
   }, [documentId, userId]);
-  
+
   return (
     <div className="collaborative-editor">
       <UserPresenceIndicator users={connectedUsers} />
-      <GraphEditor 
-        onNodeUpdate={(update) => collaborationClient?.sendGraphUpdate(update)}
-        cursors={userCursors}
-      />
+      <GraphEditor onNodeUpdate={update => collaborationClient?.sendGraphUpdate(update)} cursors={userCursors} />
     </div>
   );
 };
@@ -636,7 +651,7 @@ export const CollaborativeEditor = ({ documentId, userId }) => {
 The system tracks key collaboration performance indicators:
 
 - **Real-time Latency**: Target ≤ 150ms (Epic 23 success criteria)
-- **Conflict Resolution Rate**: Target ≥ 99% success rate  
+- **Conflict Resolution Rate**: Target ≥ 99% success rate
 - **Connection Stability**: Target ≥ 99.9% uptime
 - **Concurrent Users**: Support 50+ users per workspace
 - **Message Throughput**: 1000+ messages/second per server
@@ -657,16 +672,16 @@ The system tracks key collaboration performance indicators:
 // Enable debug logging
 const client = new CollaborationClient(documentId, userId, {
   debug: true,
-  logLevel: 'verbose'
+  logLevel: 'verbose',
 });
 
 // Monitor connection health
-client.onConnectionHealthChange = (health) => {
+client.onConnectionHealthChange = health => {
   console.log('Connection health:', health);
 };
 
 // Track message latency
-client.onLatencyUpdate = (latency) => {
+client.onLatencyUpdate = latency => {
   if (latency > 150) {
     console.warn('High collaboration latency detected:', latency);
   }
@@ -682,15 +697,18 @@ client.onLatencyUpdate = (latency) => {
 While most collaboration features use WebSocket protocol, some management operations use REST endpoints:
 
 #### Workspace Management
+
 - `GET /api/workspaces/:id/members` - Get workspace collaborators
 - `PUT /api/workspaces/:id/users/:userId/role` - Update user role
 - `DELETE /api/workspaces/:id/users/:userId` - Remove user from workspace
 
 #### Analytics
+
 - `GET /api/collaboration/dashboard` - Get collaboration metrics
 - `GET /api/collaboration/epic23/status` - Get Epic 23 success criteria status
 
 #### Health Checks
+
 - `GET /api/collaboration/telemetry/health` - System health status
 - `POST /api/workspaces/:id/validate-access` - Validate user access
 

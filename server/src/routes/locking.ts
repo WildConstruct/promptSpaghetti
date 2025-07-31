@@ -15,7 +15,7 @@ const LockRequestSchema = z.object({
   reason: z.string().optional(),
   duration_minutes: z.number().min(1).max(1440).optional(),
   force: z.boolean().default(false),
-  metadata: z.record(z.any()).optional()
+  metadata: z.record(z.any()).optional(),
 });
 
 const LockPolicySchema = z.object({
@@ -33,30 +33,30 @@ const LockPolicySchema = z.object({
   lock_breaking_roles: z.array(z.string()).default([]),
   require_justification: z.boolean().default(true),
   conflict_resolution_strategy: z.enum(['queue', 'reject', 'notify', 'escalate']).default('reject'),
-  escalation_timeout_minutes: z.number().min(1).max(1440).default(60)
+  escalation_timeout_minutes: z.number().min(1).max(1440).default(60),
 });
 
 const BreakLockSchema = z.object({
   lock_id: z.string().uuid(),
   breaker_user_id: z.string().uuid(),
   justification: z.string().optional(),
-  force: z.boolean().default(false)
+  force: z.boolean().default(false),
 });
 
 const WorkspaceParamsSchema = z.object({
-  workspaceId: z.string().uuid()
+  workspaceId: z.string().uuid(),
 });
 
 const ResourceParamsSchema = z.object({
-  resourceId: z.string().uuid()
+  resourceId: z.string().uuid(),
 });
 
 const UserParamsSchema = z.object({
-  userId: z.string().uuid()
+  userId: z.string().uuid(),
 });
 
 const LockParamsSchema = z.object({
-  lockId: z.string().uuid()
+  lockId: z.string().uuid(),
 });
 
 export default async function lockingRoutes(fastify: FastifyInstance) {
@@ -72,25 +72,25 @@ export default async function lockingRoutes(fastify: FastifyInstance) {
     try {
       const lockRequest = LockRequestSchema.parse(request.body);
       const result = await lockingService.acquireLock(lockRequest);
-      
+
       if (result.success) {
         reply.code(200).send({
           success: true,
           lock: result.lock,
-          message: 'Lock acquired successfully'
+          message: 'Lock acquired successfully',
         });
       } else {
         reply.code(409).send({
           success: false,
           error: result.error,
           conflict: result.conflict,
-          queue_position: result.queue_position
+          queue_position: result.queue_position,
         });
       }
     } catch (error) {
       reply.code(400).send({
         success: false,
-        error: error instanceof Error ? error.message : 'Invalid request'
+        error: error instanceof Error ? error.message : 'Invalid request',
       });
     }
   });
@@ -100,24 +100,24 @@ export default async function lockingRoutes(fastify: FastifyInstance) {
     try {
       const { lockId } = LockParamsSchema.parse(request.params);
       const { user_id } = z.object({ user_id: z.string().uuid() }).parse(request.body);
-      
+
       const result = await lockingService.releaseLock(lockId, user_id);
-      
+
       if (result.success) {
         reply.code(200).send({
           success: true,
-          message: 'Lock released successfully'
+          message: 'Lock released successfully',
         });
       } else {
         reply.code(400).send({
           success: false,
-          error: result.error
+          error: result.error,
         });
       }
     } catch (error) {
       reply.code(400).send({
         success: false,
-        error: error instanceof Error ? error.message : 'Invalid request'
+        error: error instanceof Error ? error.message : 'Invalid request',
       });
     }
   });
@@ -126,25 +126,25 @@ export default async function lockingRoutes(fastify: FastifyInstance) {
   fastify.post('/locks/break', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { lock_id, breaker_user_id, justification, force } = BreakLockSchema.parse(request.body);
-      
+
       const result = await lockingService.breakLock(lock_id, breaker_user_id, justification, force);
-      
+
       if (result.success) {
         reply.code(200).send({
           success: true,
           message: 'Lock broken successfully',
-          notification_sent: result.notification_sent
+          notification_sent: result.notification_sent,
         });
       } else {
         reply.code(400).send({
           success: false,
-          error: result.error
+          error: result.error,
         });
       }
     } catch (error) {
       reply.code(400).send({
         success: false,
-        error: error instanceof Error ? error.message : 'Invalid request'
+        error: error instanceof Error ? error.message : 'Invalid request',
       });
     }
   });
@@ -154,16 +154,16 @@ export default async function lockingRoutes(fastify: FastifyInstance) {
     try {
       const { resourceId } = ResourceParamsSchema.parse(request.params);
       const locks = await lockingService.getResourceLocks(resourceId);
-      
+
       reply.code(200).send({
         success: true,
         locks,
-        count: locks.length
+        count: locks.length,
       });
     } catch (error) {
       reply.code(400).send({
         success: false,
-        error: error instanceof Error ? error.message : 'Invalid request'
+        error: error instanceof Error ? error.message : 'Invalid request',
       });
     }
   });
@@ -173,16 +173,16 @@ export default async function lockingRoutes(fastify: FastifyInstance) {
     try {
       const { userId } = UserParamsSchema.parse(request.params);
       const locks = await lockingService.getUserLocks(userId);
-      
+
       reply.code(200).send({
         success: true,
         locks,
-        count: locks.length
+        count: locks.length,
       });
     } catch (error) {
       reply.code(400).send({
         success: false,
-        error: error instanceof Error ? error.message : 'Invalid request'
+        error: error instanceof Error ? error.message : 'Invalid request',
       });
     }
   });
@@ -196,18 +196,18 @@ export default async function lockingRoutes(fastify: FastifyInstance) {
     try {
       const { workspaceId } = WorkspaceParamsSchema.parse(request.params);
       const policyData = LockPolicySchema.parse({ ...request.body, workspace_id: workspaceId });
-      
+
       const policy = await lockingService.createLockPolicy(policyData);
-      
+
       reply.code(201).send({
         success: true,
         policy,
-        message: 'Lock policy created successfully'
+        message: 'Lock policy created successfully',
       });
     } catch (error) {
       reply.code(400).send({
         success: false,
-        error: error instanceof Error ? error.message : 'Invalid request'
+        error: error instanceof Error ? error.message : 'Invalid request',
       });
     }
   });
@@ -217,22 +217,22 @@ export default async function lockingRoutes(fastify: FastifyInstance) {
     try {
       const { workspaceId } = WorkspaceParamsSchema.parse(request.params);
       const policy = await lockingService.getLockPolicy(workspaceId);
-      
+
       if (policy) {
         reply.code(200).send({
           success: true,
-          policy
+          policy,
         });
       } else {
         reply.code(404).send({
           success: false,
-          error: 'Lock policy not found'
+          error: 'Lock policy not found',
         });
       }
     } catch (error) {
       reply.code(400).send({
         success: false,
-        error: error instanceof Error ? error.message : 'Invalid request'
+        error: error instanceof Error ? error.message : 'Invalid request',
       });
     }
   });
@@ -242,18 +242,18 @@ export default async function lockingRoutes(fastify: FastifyInstance) {
     try {
       const { workspaceId } = WorkspaceParamsSchema.parse(request.params);
       const policyData = LockPolicySchema.parse({ ...request.body, workspace_id: workspaceId });
-      
+
       const policy = await lockingService.updateLockPolicy(workspaceId, policyData);
-      
+
       reply.code(200).send({
         success: true,
         policy,
-        message: 'Lock policy updated successfully'
+        message: 'Lock policy updated successfully',
       });
     } catch (error) {
       reply.code(400).send({
         success: false,
-        error: error instanceof Error ? error.message : 'Invalid request'
+        error: error instanceof Error ? error.message : 'Invalid request',
       });
     }
   });
@@ -267,16 +267,16 @@ export default async function lockingRoutes(fastify: FastifyInstance) {
     try {
       const { resourceId } = ResourceParamsSchema.parse(request.params);
       const queue = await lockingService.getLockQueue(resourceId);
-      
+
       reply.code(200).send({
         success: true,
         queue,
-        count: queue.length
+        count: queue.length,
       });
     } catch (error) {
       reply.code(400).send({
         success: false,
-        error: error instanceof Error ? error.message : 'Invalid request'
+        error: error instanceof Error ? error.message : 'Invalid request',
       });
     }
   });
@@ -286,24 +286,24 @@ export default async function lockingRoutes(fastify: FastifyInstance) {
     try {
       const { queueId } = z.object({ queueId: z.string().uuid() }).parse(request.params);
       const { user_id } = z.object({ user_id: z.string().uuid() }).parse(request.body);
-      
+
       const result = await lockingService.removeFromQueue(queueId, user_id);
-      
+
       if (result.success) {
         reply.code(200).send({
           success: true,
-          message: 'Removed from queue successfully'
+          message: 'Removed from queue successfully',
         });
       } else {
         reply.code(400).send({
           success: false,
-          error: result.error
+          error: result.error,
         });
       }
     } catch (error) {
       reply.code(400).send({
         success: false,
-        error: error instanceof Error ? error.message : 'Invalid request'
+        error: error instanceof Error ? error.message : 'Invalid request',
       });
     }
   });
@@ -316,21 +316,23 @@ export default async function lockingRoutes(fastify: FastifyInstance) {
   fastify.get('/workspaces/:workspaceId/lock-conflicts', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { workspaceId } = WorkspaceParamsSchema.parse(request.params);
-      const { status } = z.object({ 
-        status: z.enum(['pending', 'resolved', 'rejected']).optional() 
-      }).parse(request.query);
-      
+      const { status } = z
+        .object({
+          status: z.enum(['pending', 'resolved', 'rejected']).optional(),
+        })
+        .parse(request.query);
+
       const conflicts = await lockingService.getLockConflicts(workspaceId, status);
-      
+
       reply.code(200).send({
         success: true,
         conflicts,
-        count: conflicts.length
+        count: conflicts.length,
       });
     } catch (error) {
       reply.code(400).send({
         success: false,
-        error: error instanceof Error ? error.message : 'Invalid request'
+        error: error instanceof Error ? error.message : 'Invalid request',
       });
     }
   });
@@ -339,28 +341,30 @@ export default async function lockingRoutes(fastify: FastifyInstance) {
   fastify.post('/lock-conflicts/:conflictId/resolve', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { conflictId } = z.object({ conflictId: z.string().uuid() }).parse(request.params);
-      const { resolution, user_id } = z.object({
-        resolution: z.enum(['approve', 'reject', 'escalate']),
-        user_id: z.string().uuid()
-      }).parse(request.body);
-      
+      const { resolution, user_id } = z
+        .object({
+          resolution: z.enum(['approve', 'reject', 'escalate']),
+          user_id: z.string().uuid(),
+        })
+        .parse(request.body);
+
       const result = await lockingService.resolveLockConflict(conflictId, resolution, user_id);
-      
+
       if (result.success) {
         reply.code(200).send({
           success: true,
-          message: 'Conflict resolved successfully'
+          message: 'Conflict resolved successfully',
         });
       } else {
         reply.code(400).send({
           success: false,
-          error: result.error
+          error: result.error,
         });
       }
     } catch (error) {
       reply.code(400).send({
         success: false,
-        error: error instanceof Error ? error.message : 'Invalid request'
+        error: error instanceof Error ? error.message : 'Invalid request',
       });
     }
   });
@@ -373,21 +377,23 @@ export default async function lockingRoutes(fastify: FastifyInstance) {
   fastify.get('/users/:userId/lock-notifications', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { userId } = UserParamsSchema.parse(request.params);
-      const { unread_only } = z.object({ 
-        unread_only: z.boolean().default(false) 
-      }).parse(request.query);
-      
+      const { unread_only } = z
+        .object({
+          unread_only: z.boolean().default(false),
+        })
+        .parse(request.query);
+
       const notifications = await lockingService.getLockNotifications(userId, unread_only);
-      
+
       reply.code(200).send({
         success: true,
         notifications,
-        count: notifications.length
+        count: notifications.length,
       });
     } catch (error) {
       reply.code(400).send({
         success: false,
-        error: error instanceof Error ? error.message : 'Invalid request'
+        error: error instanceof Error ? error.message : 'Invalid request',
       });
     }
   });
@@ -396,24 +402,24 @@ export default async function lockingRoutes(fastify: FastifyInstance) {
   fastify.post('/lock-notifications/:notificationId/read', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { notificationId } = z.object({ notificationId: z.string().uuid() }).parse(request.params);
-      
+
       const result = await lockingService.markNotificationAsRead(notificationId);
-      
+
       if (result.success) {
         reply.code(200).send({
           success: true,
-          message: 'Notification marked as read'
+          message: 'Notification marked as read',
         });
       } else {
         reply.code(400).send({
           success: false,
-          error: result.error
+          error: result.error,
         });
       }
     } catch (error) {
       reply.code(400).send({
         success: false,
-        error: error instanceof Error ? error.message : 'Invalid request'
+        error: error instanceof Error ? error.message : 'Invalid request',
       });
     }
   });
@@ -427,15 +433,15 @@ export default async function lockingRoutes(fastify: FastifyInstance) {
     try {
       const { workspaceId } = WorkspaceParamsSchema.parse(request.params);
       const statistics = await lockingService.getLockingStatistics(workspaceId);
-      
+
       reply.code(200).send({
         success: true,
-        statistics
+        statistics,
       });
     } catch (error) {
       reply.code(400).send({
         success: false,
-        error: error instanceof Error ? error.message : 'Invalid request'
+        error: error instanceof Error ? error.message : 'Invalid request',
       });
     }
   });
@@ -448,16 +454,16 @@ export default async function lockingRoutes(fastify: FastifyInstance) {
   fastify.post('/maintenance/cleanup-expired-locks', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const expiredCount = await lockingService.releaseExpiredLocks();
-      
+
       reply.code(200).send({
         success: true,
         expired_count: expiredCount,
-        message: `Cleaned up ${expiredCount} expired locks`
+        message: `Cleaned up ${expiredCount} expired locks`,
       });
     } catch (error) {
       reply.code(500).send({
         success: false,
-        error: error instanceof Error ? error.message : 'Cleanup failed'
+        error: error instanceof Error ? error.message : 'Cleanup failed',
       });
     }
   });
@@ -466,16 +472,16 @@ export default async function lockingRoutes(fastify: FastifyInstance) {
   fastify.post('/maintenance/send-expiration-warnings', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const warningCount = await lockingService.sendExpirationWarnings();
-      
+
       reply.code(200).send({
         success: true,
         warning_count: warningCount,
-        message: `Sent ${warningCount} expiration warnings`
+        message: `Sent ${warningCount} expiration warnings`,
       });
     } catch (error) {
       reply.code(500).send({
         success: false,
-        error: error instanceof Error ? error.message : 'Warning sending failed'
+        error: error instanceof Error ? error.message : 'Warning sending failed',
       });
     }
   });
@@ -486,7 +492,7 @@ export default async function lockingRoutes(fastify: FastifyInstance) {
       success: true,
       service: 'locking-service',
       timestamp: new Date().toISOString(),
-      status: 'healthy'
+      status: 'healthy',
     });
   });
 }

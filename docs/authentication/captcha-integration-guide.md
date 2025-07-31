@@ -77,30 +77,31 @@ const challengeMiddleware = new ChallengeMiddleware({
       conditions: [
         {
           type: 'failedAttempts',
-          threshold: 3
-        }
-      ]
+          threshold: 3,
+        },
+      ],
     },
     {
       path: '/auth/register',
       method: 'POST',
       challengeType: ChallengeType.TEXT_CAPTCHA,
       difficulty: ChallengeDifficulty.MEDIUM,
-      riskThreshold: 0.2
+      riskThreshold: 0.2,
     },
     {
       path: '/auth/password-reset',
       method: 'POST',
       challengeType: ChallengeType.RECAPTCHA_V2,
-      riskThreshold: 0.1
-    }
-  ]
+      riskThreshold: 0.1,
+    },
+  ],
 });
 ```
 
 ### 3. Risk Score Calculation
 
 The system calculates risk scores based on:
+
 - Failed login attempts
 - Request rate
 - Time between requests
@@ -129,7 +130,7 @@ function LoginForm() {
   return (
     <div>
       {/* Your login form */}
-      
+
       <ChallengeComponent
         onSuccess={handleChallengeSuccess}
         onError={handleChallengeError}
@@ -153,8 +154,8 @@ const response = await fetch('/auth/challenge/generate', {
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
     type: 'text_captcha',
-    difficulty: 'medium'
-  })
+    difficulty: 'medium',
+  }),
 });
 
 const { challenge } = await response.json();
@@ -165,8 +166,8 @@ const validateResponse = await fetch('/auth/challenge/validate', {
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
     challengeId: challenge.id,
-    solution: userInput
-  })
+    solution: userInput,
+  }),
 });
 
 const { valid, token } = await validateResponse.json();
@@ -185,53 +186,63 @@ const loginResponse = await fetch('/auth/login', {
     email: 'user@example.com',
     password: 'password',
     challengeId: 'ch_xxx',
-    challengeSolution: 'solution'
-  })
+    challengeSolution: 'solution',
+  }),
 });
 
 // Option 2: In headers
 const apiResponse = await fetch('/api/protected', {
   method: 'GET',
   headers: {
-    'Authorization': 'Bearer xxx',
+    Authorization: 'Bearer xxx',
     'X-Challenge-Id': 'ch_xxx',
-    'X-Challenge-Token': 'solution'
-  }
+    'X-Challenge-Token': 'solution',
+  },
 });
 ```
 
 ## Challenge Types
 
 ### 1. Math Puzzle
+
 Simple arithmetic problems with difficulty-based complexity:
+
 - **Easy**: Basic addition/subtraction (1-20)
 - **Medium**: Multiplication/division included
 - **Hard**: Multi-step calculations with parentheses
 
 ### 2. Text CAPTCHA
+
 Character recognition with noise:
+
 - **Easy**: 4 characters, no noise
 - **Medium**: 6 characters, minimal noise
 - **Hard**: 8 characters with noise characters
 
 ### 3. Pattern Recognition
+
 Complete the sequence challenges:
+
 - Number sequences
 - Letter patterns
 - Mathematical progressions
 
 ### 4. reCAPTCHA v2
+
 Traditional "I'm not a robot" checkbox with image challenges.
 
 ### 5. reCAPTCHA v3
+
 Invisible risk analysis with score-based validation.
 
 ### 6. hCaptcha
+
 Privacy-focused alternative to reCAPTCHA.
 
 ## API Endpoints
 
 ### Generate Challenge
+
 ```http
 POST /auth/challenge/generate
 Content-Type: application/json
@@ -262,6 +273,7 @@ Response:
 ```
 
 ### Validate Challenge
+
 ```http
 POST /auth/challenge/validate
 Content-Type: application/json
@@ -290,6 +302,7 @@ Response (Failure):
 ```
 
 ### Refresh Challenge
+
 ```http
 POST /auth/challenge/refresh
 Content-Type: application/json
@@ -312,6 +325,7 @@ Response:
 ```
 
 ### Get Configuration
+
 ```http
 GET /auth/challenge/config
 
@@ -337,6 +351,7 @@ Response:
 ```
 
 ### Get Statistics (Admin)
+
 ```http
 GET /auth/challenge/stats
 X-Admin-Token: your-admin-token

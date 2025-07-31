@@ -93,4 +93,4 @@ Success of the Prompt Spaghetti tool will be measured by:
 
 ---
 
-*This document was prepared by James (Developer) on July 15, 2025 as part of the Prompt Spaghetti documentation suite.*
+_This document was prepared by James (Developer) on July 15, 2025 as part of the Prompt Spaghetti documentation suite._

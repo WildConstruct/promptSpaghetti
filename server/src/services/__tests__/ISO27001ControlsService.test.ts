@@ -1,16 +1,16 @@
 /**
  * ISO 27001 Controls Service Tests - Epic 19
- * 
+ *
  * Comprehensive test suite for ISO 27001:2022 controls mapping service
  * Task: T-1752989143998-102 - Add ISO 27001 controls mapping
  */
 
-import { 
+import {
   ISO27001ControlsService,
   ISO27001Theme,
   ISO27001Category,
   ControlStatus,
-  ControlRiskLevel
+  ControlRiskLevel,
 } from '../ISO27001ControlsService';
 import { ComplianceRuleEngine } from '../ComplianceRuleEngine';
 import { AuditService } from '../../auth/services/AuditService';
@@ -29,11 +29,11 @@ describe('ISO27001ControlsService', () => {
     mockAuditService = new AuditService({} as any) as jest.Mocked<AuditService>;
     mockComplianceEngine = new ComplianceRuleEngine(mockAuditService) as jest.Mocked<ComplianceRuleEngine>;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    mockComplianceEngine.addRule = jest.fn<any[], any>().mockResolvedValue({ 
-      added: true, 
-      conflicts: [] 
+    mockComplianceEngine.addRule = jest.fn<any[], any>().mockResolvedValue({
+      added: true,
+      conflicts: [],
     } as unknown);
-    
+
     service = new ISO27001ControlsService(mockComplianceEngine);
   });
 
@@ -44,7 +44,7 @@ describe('ISO27001ControlsService', () => {
   describe('Control Initialization', () => {
     test('should initialize with predefined ISO 27001 controls', () => {
       const allControls = service.getAllControls();
-      
+
       expect(allControls.length).toBeGreaterThan(0);
       expect(allControls.length).toBeLessThanOrEqual(93); // ISO 27001:2022 has 93 controls
     });
@@ -63,7 +63,7 @@ describe('ISO27001ControlsService', () => {
 
     test('should have properly structured control A.5.1', () => {
       const control = service.getControl('A.5.1');
-      
+
       expect(control).toBeDefined();
       expect(control?.controlNumber).toBe('A.5.1');
       expect(control?.title).toBe('Information security policies');
@@ -75,7 +75,7 @@ describe('ISO27001ControlsService', () => {
 
     test('should have control A.6.1 with proper people theme', () => {
       const control = service.getControl('A.6.1');
-      
+
       expect(control).toBeDefined();
       expect(control?.controlNumber).toBe('A.6.1');
       expect(control?.title).toBe('Screening');
@@ -85,7 +85,7 @@ describe('ISO27001ControlsService', () => {
 
     test('should have control A.7.1 with proper physical theme', () => {
       const control = service.getControl('A.7.1');
-      
+
       expect(control).toBeDefined();
       expect(control?.controlNumber).toBe('A.7.1');
       expect(control?.title).toBe('Physical security perimeters');
@@ -95,7 +95,7 @@ describe('ISO27001ControlsService', () => {
 
     test('should have control A.8.1 with proper technological theme', () => {
       const control = service.getControl('A.8.1');
-      
+
       expect(control).toBeDefined();
       expect(control?.controlNumber).toBe('A.8.1');
       expect(control?.title).toBe('User endpoint devices');
@@ -112,7 +112,7 @@ describe('ISO27001ControlsService', () => {
 
     test('should filter controls by category', () => {
       const policyControls = service.getControlsByCategory(ISO27001Category.INFORMATION_SECURITY_POLICIES);
-      
+
       expect(policyControls.length).toBeGreaterThan(0);
       policyControls.forEach(control => {
         expect(control.category).toBe(ISO27001Category.INFORMATION_SECURITY_POLICIES);
@@ -121,7 +121,7 @@ describe('ISO27001ControlsService', () => {
 
     test('should filter controls by status', () => {
       const notImplementedControls = service.getControlsByStatus(ControlStatus.NOT_IMPLEMENTED);
-      
+
       expect(notImplementedControls.length).toBeGreaterThan(0);
       notImplementedControls.forEach(control => {
         expect(control.status).toBe(ControlStatus.NOT_IMPLEMENTED);
@@ -148,9 +148,9 @@ describe('ISO27001ControlsService', () => {
     test('should generate compliance rules for all controls', async () => {
       const rules = await service.generateComplianceRules();
       const allControls = service.getAllControls();
-      
+
       expect(rules.length).toBe(allControls.length);
-      
+
       rules.forEach(rule => {
         expect(rule.framework).toBe('ISO_27001');
         expect(rule.ruleId).toMatch(/^ISO27001_A_\d+_\d+$/);
@@ -161,7 +161,7 @@ describe('ISO27001ControlsService', () => {
 
     test('should map control categories to rule categories correctly', async () => {
       const rules = await service.generateComplianceRules();
-      
+
       const policyRule = rules.find(r => r.ruleId === 'ISO27001_A_5_1');
       expect(policyRule?.category).toBe('GOVERNANCE');
 
@@ -171,7 +171,7 @@ describe('ISO27001ControlsService', () => {
 
     test('should map risk levels to priorities correctly', async () => {
       const rules = await service.generateComplianceRules();
-      
+
       const highRiskRule = rules.find(r => r.ruleId === 'ISO27001_A_5_1');
       expect(highRiskRule?.priority).toBe('HIGH');
       expect(highRiskRule?.severity).toBe('ERROR');
@@ -179,7 +179,7 @@ describe('ISO27001ControlsService', () => {
 
     test('should integrate with compliance engine', async () => {
       await service.integrateWithComplianceEngine();
-      
+
       expect(mockComplianceEngine.addRule).toHaveBeenCalled();
       const callCount = mockComplianceEngine.addRule.mock.calls.length;
       expect(callCount).toBeGreaterThan(0);
@@ -189,17 +189,17 @@ describe('ISO27001ControlsService', () => {
   describe('Compliance Reporting', () => {
     test('should generate comprehensive compliance report', () => {
       const report = service.generateComplianceReport();
-      
+
       expect(report.reportId).toMatch(/^iso27001_report_\d+$/);
       expect(report.generatedAt).toBeInstanceOf(Date);
       expect(report.totalControls).toBeGreaterThan(0);
       expect(report.implementationRate).toBe(0); // All controls start as NOT_IMPLEMENTED
       expect(report.complianceRate).toBe(0); // No controls verified yet
-      
+
       expect(report.statusSummary).toHaveProperty(ControlStatus.NOT_IMPLEMENTED);
       expect(report.statusSummary).toHaveProperty(ControlStatus.IMPLEMENTED);
       expect(report.statusSummary).toHaveProperty(ControlStatus.VERIFIED);
-      
+
       expect(report.themeSummary).toHaveProperty(ISO27001Theme.ORGANIZATIONAL);
       expect(report.themeSummary).toHaveProperty(ISO27001Theme.PEOPLE);
       expect(report.themeSummary).toHaveProperty(ISO27001Theme.PHYSICAL);
@@ -208,7 +208,7 @@ describe('ISO27001ControlsService', () => {
 
     test('should include gap analysis in report', () => {
       const report = service.generateComplianceReport();
-      
+
       expect(report.gapAnalysis.length).toBeGreaterThan(0);
       report.gapAnalysis.forEach(control => {
         expect([ControlStatus.NOT_IMPLEMENTED, ControlStatus.NON_COMPLIANT]).toContain(control.status);
@@ -217,7 +217,7 @@ describe('ISO27001ControlsService', () => {
 
     test('should generate appropriate recommendations', () => {
       const report = service.generateComplianceReport();
-      
+
       expect(report.recommendations.length).toBeGreaterThan(0);
       expect(report.recommendations.some(r => r.includes('not implemented'))).toBe(true);
     });
@@ -226,9 +226,9 @@ describe('ISO27001ControlsService', () => {
       // Update some control statuses
       await service.updateControlStatus('A.5.1', ControlStatus.IMPLEMENTED);
       await service.updateControlStatus('A.6.1', ControlStatus.VERIFIED);
-      
+
       const report = service.generateComplianceReport();
-      
+
       expect(report.implementationRate).toBeGreaterThan(0);
       expect(report.complianceRate).toBeGreaterThan(0);
       expect(report.statusSummary[ControlStatus.IMPLEMENTED]).toBeGreaterThanOrEqual(1);
@@ -239,7 +239,7 @@ describe('ISO27001ControlsService', () => {
   describe('Control Structure Validation', () => {
     test('should have proper compliance mappings for all controls', () => {
       const allControls = service.getAllControls();
-      
+
       allControls.forEach(control => {
         expect(control.complianceMapping).toBeDefined();
         expect(control.complianceMapping.soc2Mapping).toBeInstanceOf(Array);
@@ -252,7 +252,7 @@ describe('ISO27001ControlsService', () => {
 
     test('should have proper metadata for all controls', () => {
       const allControls = service.getAllControls();
-      
+
       allControls.forEach(control => {
         expect(control.metadata).toBeDefined();
         expect(control.metadata.version).toBe('1.0');
@@ -265,7 +265,7 @@ describe('ISO27001ControlsService', () => {
 
     test('should have implementation details for organizational controls', () => {
       const organizationalControls = service.getControlsByTheme(ISO27001Theme.ORGANIZATIONAL);
-      
+
       organizationalControls.forEach(control => {
         expect(control.implementation).toBeDefined();
         expect(control.implementation.requirements.length).toBeGreaterThan(0);
@@ -276,7 +276,7 @@ describe('ISO27001ControlsService', () => {
 
     test('should have valid control IDs following ISO 27001 format', () => {
       const allControls = service.getAllControls();
-      
+
       allControls.forEach(control => {
         expect(control.controlId).toMatch(/^A\.\d+\.\d+$/);
         expect(control.controlNumber).toMatch(/^A\.\d+\.\d+$/);
@@ -288,31 +288,31 @@ describe('ISO27001ControlsService', () => {
   describe('Performance and Scalability', () => {
     test('should handle large number of controls efficiently', () => {
       const startTime = Date.now();
-      
+
       // Perform multiple operations
       service.getAllControls();
       service.getControlsByTheme(ISO27001Theme.ORGANIZATIONAL);
       service.getControlsByCategory(ISO27001Category.ACCESS_CONTROL);
       service.getControlsByStatus(ControlStatus.NOT_IMPLEMENTED);
-      
+
       const endTime = Date.now();
       expect(endTime - startTime).toBeLessThan(100); // Should complete in under 100ms
     });
 
     test('should generate compliance rules efficiently', async () => {
       const startTime = Date.now();
-      
+
       await service.generateComplianceRules();
-      
+
       const endTime = Date.now();
       expect(endTime - startTime).toBeLessThan(1000); // Should complete in under 1 second
     });
 
     test('should generate compliance report efficiently', () => {
       const startTime = Date.now();
-      
+
       service.generateComplianceReport();
-      
+
       const endTime = Date.now();
       expect(endTime - startTime).toBeLessThan(100); // Should complete in under 100ms
     });

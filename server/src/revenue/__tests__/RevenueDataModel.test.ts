@@ -3,12 +3,7 @@
  * Story 30.1.1 - Revenue Data Model Integration
  */
 
-import {
-  RevenueEventType,
-  RevenueEventSchema,
-  PricingTierSchema,
-  DiscountCodeSchema
-} from '../RevenueDataModel';
+import { RevenueEventType, RevenueEventSchema, PricingTierSchema, DiscountCodeSchema } from '../RevenueDataModel';
 import { PaymentProvider, LicenseType } from '../../marketplace/transaction.types';
 
 describe('RevenueDataModel', () => {
@@ -41,8 +36,8 @@ describe('RevenueDataModel', () => {
           country_code: 'US',
           utm_source: 'google',
           utm_medium: 'cpc',
-          utm_campaign: 'holiday-sale'
-        }
+          utm_campaign: 'holiday-sale',
+        },
       };
 
       const result = RevenueEventSchema.safeParse(validEvent);
@@ -56,8 +51,8 @@ describe('RevenueDataModel', () => {
           amount_cents: 5000,
           currency: 'USD',
           revenue_type: 'commission',
-          payment_provider: PaymentProvider.PAYPAL
-        }
+          payment_provider: PaymentProvider.PAYPAL,
+        },
       };
 
       const result = RevenueEventSchema.safeParse(minimalEvent);
@@ -71,8 +66,8 @@ describe('RevenueDataModel', () => {
           amount_cents: -100, // Invalid: negative amount
           currency: 'USD',
           revenue_type: 'purchase',
-          payment_provider: PaymentProvider.STRIPE
-        }
+          payment_provider: PaymentProvider.STRIPE,
+        },
       };
 
       const result = RevenueEventSchema.safeParse(invalidEvent);
@@ -86,8 +81,8 @@ describe('RevenueDataModel', () => {
           amount_cents: 10000,
           currency: 'INVALID', // Invalid: not 3 characters
           revenue_type: 'purchase',
-          payment_provider: PaymentProvider.STRIPE
-        }
+          payment_provider: PaymentProvider.STRIPE,
+        },
       };
 
       const result = RevenueEventSchema.safeParse(invalidEvent);
@@ -101,8 +96,8 @@ describe('RevenueDataModel', () => {
           amount_cents: 10000,
           currency: 'USD',
           revenue_type: 'invalid_type', // Invalid enum value
-          payment_provider: PaymentProvider.STRIPE
-        }
+          payment_provider: PaymentProvider.STRIPE,
+        },
       };
 
       const result = RevenueEventSchema.safeParse(invalidEvent);
@@ -117,8 +112,8 @@ describe('RevenueDataModel', () => {
           currency: 'USD',
           transaction_id: 'not-a-uuid',
           revenue_type: 'purchase',
-          payment_provider: PaymentProvider.STRIPE
-        }
+          payment_provider: PaymentProvider.STRIPE,
+        },
       };
 
       const result = RevenueEventSchema.safeParse(invalidEvent);
@@ -133,8 +128,8 @@ describe('RevenueDataModel', () => {
           currency: 'USD',
           revenue_type: 'purchase',
           payment_provider: PaymentProvider.STRIPE,
-          country_code: 'USA' // Invalid: should be 2 characters
-        }
+          country_code: 'USA', // Invalid: should be 2 characters
+        },
       };
 
       const result = RevenueEventSchema.safeParse(invalidEvent);
@@ -152,14 +147,14 @@ describe('RevenueDataModel', () => {
         currency: 'USD',
         volume_discounts: [
           { min_quantity: 10, discount_percentage: 10 },
-          { min_quantity: 50, discount_percentage: 20 }
+          { min_quantity: 50, discount_percentage: 20 },
         ],
         regional_pricing: [
           { country_code: 'GB', price_cents: 8999, currency: 'GBP' },
-          { country_code: 'DE', price_cents: 8999, currency: 'EUR' }
+          { country_code: 'DE', price_cents: 8999, currency: 'EUR' },
         ],
         valid_from: new Date(),
-        valid_until: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
+        valid_until: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
       };
 
       const result = PricingTierSchema.safeParse(validTier);
@@ -173,7 +168,7 @@ describe('RevenueDataModel', () => {
         license_type: LicenseType.PERSONAL,
         base_price_cents: 1999,
         currency: 'USD',
-        valid_from: new Date()
+        valid_from: new Date(),
       };
 
       const result = PricingTierSchema.safeParse(minimalTier);
@@ -190,9 +185,9 @@ describe('RevenueDataModel', () => {
         base_price_cents: 9999,
         currency: 'USD',
         volume_discounts: [
-          { min_quantity: 10, discount_percentage: 150 } // Invalid: > 100%
+          { min_quantity: 10, discount_percentage: 150 }, // Invalid: > 100%
         ],
-        valid_from: new Date()
+        valid_from: new Date(),
       };
 
       const result = PricingTierSchema.safeParse(invalidTier);
@@ -206,7 +201,7 @@ describe('RevenueDataModel', () => {
         license_type: LicenseType.COMMERCIAL,
         base_price_cents: -1000, // Invalid: negative price
         currency: 'USD',
-        valid_from: new Date()
+        valid_from: new Date(),
       };
 
       const result = PricingTierSchema.safeParse(invalidTier);
@@ -220,7 +215,7 @@ describe('RevenueDataModel', () => {
         license_type: LicenseType.COMMERCIAL,
         base_price_cents: 9999,
         currency: 'DOLLARS', // Invalid: not 3 characters
-        valid_from: new Date()
+        valid_from: new Date(),
       };
 
       const result = PricingTierSchema.safeParse(invalidTier);
@@ -242,7 +237,7 @@ describe('RevenueDataModel', () => {
         eligible_templates: ['123e4567-e89b-12d3-a456-426614174000'],
         eligible_license_types: [LicenseType.COMMERCIAL, LicenseType.PERSONAL],
         valid_from: new Date(),
-        valid_until: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+        valid_until: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
       };
 
       const result = DiscountCodeSchema.safeParse(validDiscount);
@@ -255,7 +250,7 @@ describe('RevenueDataModel', () => {
         description: 'Save 10%',
         discount_type: 'percentage',
         discount_value: 10,
-        valid_from: new Date()
+        valid_from: new Date(),
       };
 
       const result = DiscountCodeSchema.safeParse(minimalDiscount);
@@ -268,7 +263,7 @@ describe('RevenueDataModel', () => {
         description: 'Test discount',
         discount_type: 'percentage',
         discount_value: 10,
-        valid_from: new Date()
+        valid_from: new Date(),
       };
 
       const result = DiscountCodeSchema.safeParse(invalidDiscount);
@@ -277,14 +272,14 @@ describe('RevenueDataModel', () => {
 
     it('should accept valid code formats', () => {
       const validCodes = ['SAVE10', 'HOLIDAY-2024', 'VIP_ACCESS', 'CODE123'];
-      
+
       for (const code of validCodes) {
         const discount = {
           code,
           description: 'Test discount',
           discount_type: 'percentage',
           discount_value: 10,
-          valid_from: new Date()
+          valid_from: new Date(),
         };
 
         const result = DiscountCodeSchema.safeParse(discount);
@@ -298,7 +293,7 @@ describe('RevenueDataModel', () => {
         description: 'Test discount',
         discount_type: 'percentage',
         discount_value: -10, // Invalid: negative discount
-        valid_from: new Date()
+        valid_from: new Date(),
       };
 
       const result = DiscountCodeSchema.safeParse(invalidDiscount);
@@ -311,7 +306,7 @@ describe('RevenueDataModel', () => {
         description: 'Test discount',
         discount_type: 'invalid_type', // Invalid enum value
         discount_value: 10,
-        valid_from: new Date()
+        valid_from: new Date(),
       };
 
       const result = DiscountCodeSchema.safeParse(invalidDiscount);
@@ -324,7 +319,7 @@ describe('RevenueDataModel', () => {
         description: 'Test discount',
         discount_type: 'percentage',
         discount_value: 10,
-        valid_from: new Date()
+        valid_from: new Date(),
       };
 
       const result = DiscountCodeSchema.safeParse(invalidDiscount);
@@ -337,7 +332,7 @@ describe('RevenueDataModel', () => {
         description: 'Test discount',
         discount_type: 'percentage',
         discount_value: 10,
-        valid_from: new Date()
+        valid_from: new Date(),
       };
 
       const result = DiscountCodeSchema.safeParse(invalidDiscount);
@@ -351,7 +346,7 @@ describe('RevenueDataModel', () => {
         discount_type: 'percentage',
         discount_value: 10,
         eligible_templates: ['not-a-uuid'], // Invalid UUID
-        valid_from: new Date()
+        valid_from: new Date(),
       };
 
       const result = DiscountCodeSchema.safeParse(invalidDiscount);
@@ -371,7 +366,7 @@ describe('RevenueDataModel', () => {
         attribution_percentage: 1.0,
         revenue_cents: 10000,
         commission_cents: 7000,
-        created_at: new Date()
+        created_at: new Date(),
       };
 
       expect(attribution.attribution_model).toBe('first_touch');
@@ -394,11 +389,11 @@ describe('RevenueDataModel', () => {
         average_order_value_cents: 10000,
         license_breakdown: [
           { license_type: LicenseType.COMMERCIAL, count: 3, revenue_cents: 30000 },
-          { license_type: LicenseType.PERSONAL, count: 2, revenue_cents: 20000 }
+          { license_type: LicenseType.PERSONAL, count: 2, revenue_cents: 20000 },
         ],
         period_start: new Date('2024-01-01'),
         period_end: new Date('2024-01-31'),
-        updated_at: new Date()
+        updated_at: new Date(),
       };
 
       expect(metrics.total_revenue_cents).toBe(50000);
@@ -421,14 +416,14 @@ describe('RevenueDataModel', () => {
         top_template_revenue_cents: 25000,
         revenue_by_license_type: [
           { license_type: LicenseType.COMMERCIAL, count: 30, revenue_cents: 75000 },
-          { license_type: LicenseType.PERSONAL, count: 20, revenue_cents: 25000 }
+          { license_type: LicenseType.PERSONAL, count: 20, revenue_cents: 25000 },
         ],
         payout_frequency: 'monthly' as const,
         next_payout_date: new Date('2024-02-01'),
         payment_method: 'stripe_connect',
         period_start: new Date('2024-01-01'),
         period_end: new Date('2024-01-31'),
-        updated_at: new Date()
+        updated_at: new Date(),
       };
 
       expect(metrics.total_earnings_cents).toBe(100000);

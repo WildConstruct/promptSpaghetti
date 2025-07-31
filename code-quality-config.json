@@ -60,13 +60,7 @@
       "maxTechnicalDebt": "2h"
     }
   },
-  "reportFormats": [
-    "json",
-    "html",
-    "sarif",
-    "checkstyle",
-    "junit"
-  ],
+  "reportFormats": ["json", "html", "sarif", "checkstyle", "junit"],
   "integrations": {
     "vscode": {
       "eslint": true,

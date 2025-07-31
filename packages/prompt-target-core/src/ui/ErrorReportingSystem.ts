@@ -2,7 +2,7 @@ import {
   ValidationReport,
   PlatformValidationResult,
   AutoFixSuggestion,
-  CrossPlatformIssue
+  CrossPlatformIssue,
 } from '../validation/ValidationEngine.js';
 import { ValidationResult } from '../types/index.js';
 import { Platform, Logger, MetricsInterface } from '../types/index.js';
@@ -23,10 +23,7 @@ export class ErrorReportingSystem {
   /**
    * Report a validation error with detailed context
    */
-  reportValidationError(
-    error: ValidationResult,
-    context: ErrorContext
-  ): void {
+  reportValidationError(error: ValidationResult, context: ErrorContext): void {
     const notification: ErrorNotification = {
       id: `validation-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       type: 'validation',
@@ -42,8 +39,8 @@ export class ErrorReportingSystem {
       metadata: {
         nodeId: error.nodeId,
         edgeId: error.edgeId,
-        platform: context.platform
-      }
+        platform: context.platform,
+      },
     };
 
     this.addNotification(notification);
@@ -51,17 +48,14 @@ export class ErrorReportingSystem {
 
     this.metrics.counter('error_reporting.validation_error', 1, {
       severity: error.severity,
-      platform: context.platform || 'unknown'
+      platform: context.platform || 'unknown',
     });
   }
 
   /**
    * Report a runtime error during transformation
    */
-  reportRuntimeError(
-    error: Error,
-    context: ErrorContext
-  ): void {
+  reportRuntimeError(error: Error, context: ErrorContext): void {
     const notification: ErrorNotification = {
       id: `runtime-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       type: 'runtime',
@@ -72,15 +66,17 @@ export class ErrorReportingSystem {
       context,
       error: error.stack || error.message,
       autoFixable: false,
-      suggestions: [{
-        type: 'workaround',
-        description: 'Check graph structure and adaptor configuration'
-      }],
+      suggestions: [
+        {
+          type: 'workaround',
+          description: 'Check graph structure and adaptor configuration',
+        },
+      ],
       acknowledged: false,
       metadata: {
         errorType: error.constructor.name,
-        platform: context.platform
-      }
+        platform: context.platform,
+      },
     };
 
     this.addNotification(notification);
@@ -89,22 +85,19 @@ export class ErrorReportingSystem {
     this.logger.error('Runtime error reported', {
       errorId: notification.id,
       error: error.message,
-      context
+      context,
     });
 
     this.metrics.counter('error_reporting.runtime_error', 1, {
       error_type: error.constructor.name,
-      platform: context.platform || 'unknown'
+      platform: context.platform || 'unknown',
     });
   }
 
   /**
    * Report cross-platform compatibility issues
    */
-  reportCompatibilityIssue(
-    issue: CrossPlatformIssue,
-    context: ErrorContext
-  ): void {
+  reportCompatibilityIssue(issue: CrossPlatformIssue, context: ErrorContext): void {
     const notification: ErrorNotification = {
       id: `compatibility-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       type: 'compatibility',
@@ -115,16 +108,18 @@ export class ErrorReportingSystem {
       context,
       error: issue,
       autoFixable: false,
-      suggestions: [{
-        type: 'alternative',
-        description: issue.impact
-      }],
+      suggestions: [
+        {
+          type: 'alternative',
+          description: issue.impact,
+        },
+      ],
       acknowledged: false,
       metadata: {
         issueType: issue.type,
         supportingPlatforms: issue.supportingPlatforms,
-        unsupportedPlatforms: issue.unsupportedPlatforms
-      }
+        unsupportedPlatforms: issue.unsupportedPlatforms,
+      },
     };
 
     this.addNotification(notification);
@@ -132,17 +127,14 @@ export class ErrorReportingSystem {
 
     this.metrics.counter('error_reporting.compatibility_issue', 1, {
       issue_type: issue.type,
-      severity: issue.severity
+      severity: issue.severity,
     });
   }
 
   /**
    * Generate comprehensive error report from validation report
    */
-  generateErrorReport(
-    validationReport: ValidationReport,
-    context: ErrorContext
-  ): ErrorReport {
+  generateErrorReport(validationReport: ValidationReport, context: ErrorContext): ErrorReport {
     const report: ErrorReport = {
       id: `report-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       timestamp: new Date(),
@@ -153,15 +145,15 @@ export class ErrorReportingSystem {
         totalWarnings: validationReport.summary.mediumWarnings,
         totalInfos: validationReport.summary.lowInfos,
         overallValid: validationReport.overallValid,
-        platformCompatibility: this.calculatePlatformCompatibility(validationReport)
+        platformCompatibility: this.calculatePlatformCompatibility(validationReport),
       },
       platformDetails: new Map(),
       recommendations: [],
       autoFixSuggestions: validationReport.autoFixSuggestions,
       export: {
         formats: ['json', 'html', 'pdf'],
-        downloadUrl: this.generateReportDownloadUrl(validationReport.graphId)
-      }
+        downloadUrl: this.generateReportDownloadUrl(validationReport.graphId),
+      },
     };
 
     // Process platform-specific details
@@ -179,8 +171,8 @@ export class ErrorReportingSystem {
         performance: {
           validationDuration: platformResult.duration,
           supportedFeatures: platformResult.capabilities.features?.filter((f: any) => f.supported).length || 0,
-          unsupportedFeatures: platformResult.capabilities.features?.filter((f: any) => !f.supported).length || 0
-        }
+          unsupportedFeatures: platformResult.capabilities.features?.filter((f: any) => !f.supported).length || 0,
+        },
       };
 
       report.platformDetails.set(platform, details);
@@ -192,7 +184,7 @@ export class ErrorReportingSystem {
     this.logger.info('Error report generated', {
       reportId: report.id,
       graphId: validationReport.graphId,
-      totalIssues: validationReport.totalIssues
+      totalIssues: validationReport.totalIssues,
     });
 
     return report;
@@ -235,12 +227,12 @@ export class ErrorReportingSystem {
     if (notification) {
       notification.acknowledged = true;
       notification.acknowledgedAt = new Date();
-      
+
       this.notifyListeners('notification_acknowledged', notification);
-      
+
       this.metrics.counter('error_reporting.notification_acknowledged', 1, {
         type: notification.type,
-        severity: notification.severity
+        severity: notification.severity,
       });
     }
   }
@@ -254,26 +246,23 @@ export class ErrorReportingSystem {
     const cleared = beforeCount - this.notifications.length;
 
     this.logger.info('Cleared acknowledged notifications', { count: cleared });
-    
+
     this.metrics.counter('error_reporting.notifications_cleared', cleared);
   }
 
   /**
    * Export error report in specified format
    */
-  exportReport(
-    report: ErrorReport,
-    format: 'json' | 'html' | 'csv'
-  ): string {
+  exportReport(report: ErrorReport, format: 'json' | 'html' | 'csv'): string {
     switch (format) {
-    case 'json':
-      return this.exportAsJSON(report);
-    case 'html':
-      return this.exportAsHTML(report);
-    case 'csv':
-      return this.exportAsCSV(report);
-    default:
-      throw new Error(`Unsupported export format: ${format}`);
+      case 'json':
+        return this.exportAsJSON(report);
+      case 'html':
+        return this.exportAsHTML(report);
+      case 'csv':
+        return this.exportAsCSV(report);
+      default:
+        throw new Error(`Unsupported export format: ${format}`);
     }
   }
 
@@ -295,7 +284,7 @@ export class ErrorReportingSystem {
 
   private addNotification(notification: ErrorNotification): void {
     this.notifications.unshift(notification);
-    
+
     // Maintain max notifications limit
     if (this.notifications.length > this.maxNotifications) {
       this.notifications = this.notifications.slice(0, this.maxNotifications);
@@ -308,7 +297,7 @@ export class ErrorReportingSystem {
         listener(event, data);
       } catch (error) {
         this.logger.error('Error reporting listener failed', {
-          error: error instanceof Error ? error.message : String(error)
+          error: error instanceof Error ? error.message : String(error),
         });
       }
     });
@@ -316,20 +305,29 @@ export class ErrorReportingSystem {
 
   private mapValidationSeverity(severity: string): 'low' | 'medium' | 'high' | 'critical' {
     switch (severity) {
-    case 'critical': return 'critical';
-    case 'high': return 'high';
-    case 'medium': return 'medium';
-    case 'low': return 'low';
-    default: return 'medium';
+      case 'critical':
+        return 'critical';
+      case 'high':
+        return 'high';
+      case 'medium':
+        return 'medium';
+      case 'low':
+        return 'low';
+      default:
+        return 'medium';
     }
   }
 
   private mapIssueSeverity(severity: string): 'low' | 'medium' | 'high' | 'critical' {
     switch (severity) {
-    case 'high': return 'high';
-    case 'medium': return 'medium';
-    case 'low': return 'low';
-    default: return 'medium';
+      case 'high':
+        return 'high';
+      case 'medium':
+        return 'medium';
+      case 'low':
+        return 'low';
+      default:
+        return 'medium';
     }
   }
 
@@ -337,8 +335,7 @@ export class ErrorReportingSystem {
     const totalPlatforms = report.platformResults.size;
     if (totalPlatforms === 0) return 0;
 
-    const compatiblePlatforms = Array.from(report.platformResults.values())
-      .filter(r => r.compatible).length;
+    const compatiblePlatforms = Array.from(report.platformResults.values()).filter(r => r.compatible).length;
 
     return Math.round((compatiblePlatforms / totalPlatforms) * 100);
   }
@@ -355,8 +352,7 @@ export class ErrorReportingSystem {
       recommendations.push('Consider using platform-specific graph variations for better compatibility');
     }
 
-    const qualityScores = Array.from(report.platformResults.values())
-      .map(r => r.quality?.overall || 0);
+    const qualityScores = Array.from(report.platformResults.values()).map(r => r.quality?.overall || 0);
     const avgQuality = qualityScores.reduce((sum, q) => sum + q, 0) / qualityScores.length;
 
     if (avgQuality < 60) {
@@ -375,12 +371,16 @@ export class ErrorReportingSystem {
   }
 
   private exportAsJSON(report: ErrorReport): string {
-    return JSON.stringify(report, (key, value) => {
-      if (value instanceof Map) {
-        return Object.fromEntries(value);
-      }
-      return value;
-    }, 2);
+    return JSON.stringify(
+      report,
+      (key, value) => {
+        if (value instanceof Map) {
+          return Object.fromEntries(value);
+        }
+        return value;
+      },
+      2
+    );
   }
 
   private exportAsHTML(report: ErrorReport): string {
@@ -415,7 +415,9 @@ export class ErrorReportingSystem {
     
     <div class="platforms">
         <h2>Platform Details</h2>
-        ${Array.from(report.platformDetails.entries()).map(([platform, details]) => `
+        ${Array.from(report.platformDetails.entries())
+          .map(
+            ([platform, details]) => `
             <div class="platform">
                 <h3>${platform}</h3>
                 <p>Compatible: ${details.compatible ? 'Yes' : 'No'}</p>
@@ -423,7 +425,9 @@ export class ErrorReportingSystem {
                 <p>Errors: ${details.errors.length}</p>
                 <p>Warnings: ${details.warnings.length}</p>
             </div>
-        `).join('')}
+        `
+          )
+          .join('')}
     </div>
 </body>
 </html>`;
@@ -431,16 +435,18 @@ export class ErrorReportingSystem {
 
   private exportAsCSV(report: ErrorReport): string {
     const lines = ['Platform,Compatible,Quality,Errors,Warnings,Infos'];
-    
+
     report.platformDetails.forEach((details, platform) => {
-      lines.push([
-        platform,
-        details.compatible ? 'Yes' : 'No',
-        details.quality?.overall || 'N/A',
-        details.errors.length,
-        details.warnings.length,
-        details.infos.length
-      ].join(','));
+      lines.push(
+        [
+          platform,
+          details.compatible ? 'Yes' : 'No',
+          details.quality?.overall || 'N/A',
+          details.errors.length,
+          details.warnings.length,
+          details.infos.length,
+        ].join(',')
+      );
     });
 
     return lines.join('\n');

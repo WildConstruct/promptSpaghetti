@@ -377,7 +377,7 @@
   .admin-layout {
     flex-direction: column;
   }
-  
+
   .admin-sidebar {
     position: fixed;
     top: 64px;
@@ -386,15 +386,15 @@
     z-index: 40;
     transition: left 0.3s ease;
   }
-  
+
   .admin-sidebar.open {
     left: 0;
   }
-  
+
   .admin-main-content {
     margin-left: 0;
   }
-  
+
   .admin-content-wrapper {
     padding: 16px;
   }

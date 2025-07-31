@@ -23,12 +23,12 @@ spec:
         app: python-executor
         version: v1.0.0
       annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "8001"
-        prometheus.io/path: "/metrics"
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '8001'
+        prometheus.io/path: '/metrics'
     spec:
       serviceAccountName: python-executor-sa
-      
+
       # Security Context for the entire pod
       securityContext:
         runAsNonRoot: true
@@ -38,159 +38,159 @@ spec:
         seccompProfile:
           type: Localhost
           localhostProfile: profiles/python-executor-seccomp.json
-      
+
       containers:
-      - name: python-executor
-        image: python-executor:secure
-        imagePullPolicy: Always
-        
-        # Container security context
-        securityContext:
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
-          runAsUser: 1000
-          runAsGroup: 1000
-          capabilities:
-            drop:
-            - ALL
-          seccompProfile:
-            type: Localhost
-            localhostProfile: profiles/python-executor-seccomp.json
-        
-        ports:
-        - containerPort: 8001
-          name: http
-          protocol: TCP
-        
-        env:
-        - name: PORT
-          value: "8001"
-        - name: WORKERS
-          value: "1"
-        - name: LOG_LEVEL
-          value: "info"
-        - name: MAX_MEMORY_MB
-          value: "256"
-        - name: MAX_EXECUTION_TIME
-          value: "30"
-        - name: SANDBOX_MODE
-          value: "strict"
-        - name: ENABLE_SECCOMP
-          value: "true"
-        - name: READONLY_FILESYSTEM
-          value: "true"
-        - name: JWT_SECRET_KEY
-          valueFrom:
-            secretKeyRef:
-              name: python-executor-secrets
-              key: jwt-secret-key
-        - name: TRACING_ENDPOINT
-          value: "http://jaeger-collector:14268/api/traces"
-        - name: METRICS_ENDPOINT
-          value: "http://prometheus-pushgateway:9091"
-        
-        # Resource limits and requests
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-            ephemeral-storage: "1Gi"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
-            ephemeral-storage: "2Gi"
-        
-        # Volume mounts for writable directories
-        volumeMounts:
-        - name: tmp-volume
-          mountPath: /tmp
-        - name: app-cache
-          mountPath: /app/cache
-        - name: app-logs
-          mountPath: /app/logs
-        - name: seccomp-profiles
-          mountPath: /var/lib/kubelet/seccomp/profiles
-          readOnly: true
-        
-        # Liveness probe
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 8001
-          initialDelaySeconds: 30
-          periodSeconds: 10
-          timeoutSeconds: 5
-          failureThreshold: 3
-          successThreshold: 1
-        
-        # Readiness probe
-        readinessProbe:
-          httpGet:
-            path: /health
-            port: 8001
-          initialDelaySeconds: 10
-          periodSeconds: 5
-          timeoutSeconds: 3
-          failureThreshold: 3
-          successThreshold: 1
-        
-        # Startup probe
-        startupProbe:
-          httpGet:
-            path: /health
-            port: 8001
-          initialDelaySeconds: 5
-          periodSeconds: 5
-          timeoutSeconds: 3
-          failureThreshold: 10
-          successThreshold: 1
-      
+        - name: python-executor
+          image: python-executor:secure
+          imagePullPolicy: Always
+
+          # Container security context
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: Localhost
+              localhostProfile: profiles/python-executor-seccomp.json
+
+          ports:
+            - containerPort: 8001
+              name: http
+              protocol: TCP
+
+          env:
+            - name: PORT
+              value: '8001'
+            - name: WORKERS
+              value: '1'
+            - name: LOG_LEVEL
+              value: 'info'
+            - name: MAX_MEMORY_MB
+              value: '256'
+            - name: MAX_EXECUTION_TIME
+              value: '30'
+            - name: SANDBOX_MODE
+              value: 'strict'
+            - name: ENABLE_SECCOMP
+              value: 'true'
+            - name: READONLY_FILESYSTEM
+              value: 'true'
+            - name: JWT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: python-executor-secrets
+                  key: jwt-secret-key
+            - name: TRACING_ENDPOINT
+              value: 'http://jaeger-collector:14268/api/traces'
+            - name: METRICS_ENDPOINT
+              value: 'http://prometheus-pushgateway:9091'
+
+          # Resource limits and requests
+          resources:
+            requests:
+              memory: '256Mi'
+              cpu: '250m'
+              ephemeral-storage: '1Gi'
+            limits:
+              memory: '512Mi'
+              cpu: '500m'
+              ephemeral-storage: '2Gi'
+
+          # Volume mounts for writable directories
+          volumeMounts:
+            - name: tmp-volume
+              mountPath: /tmp
+            - name: app-cache
+              mountPath: /app/cache
+            - name: app-logs
+              mountPath: /app/logs
+            - name: seccomp-profiles
+              mountPath: /var/lib/kubelet/seccomp/profiles
+              readOnly: true
+
+          # Liveness probe
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8001
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
+
+          # Readiness probe
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8001
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+            successThreshold: 1
+
+          # Startup probe
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 8001
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 10
+            successThreshold: 1
+
       volumes:
-      - name: tmp-volume
-        emptyDir:
-          sizeLimit: "100Mi"
-      - name: app-cache
-        emptyDir:
-          sizeLimit: "50Mi"
-      - name: app-logs
-        emptyDir:
-          sizeLimit: "100Mi"
-      - name: seccomp-profiles
-        configMap:
-          name: seccomp-profiles
-      
+        - name: tmp-volume
+          emptyDir:
+            sizeLimit: '100Mi'
+        - name: app-cache
+          emptyDir:
+            sizeLimit: '50Mi'
+        - name: app-logs
+          emptyDir:
+            sizeLimit: '100Mi'
+        - name: seccomp-profiles
+          configMap:
+            name: seccomp-profiles
+
       # DNS Policy
       dnsPolicy: ClusterFirst
-      
+
       # Restart policy
       restartPolicy: Always
-      
+
       # Termination grace period
       terminationGracePeriodSeconds: 30
-      
+
       # Node selection
       nodeSelector:
         kubernetes.io/os: linux
         node-type: worker
-      
+
       # Tolerations for dedicated nodes
       tolerations:
-      - key: "execution-workload"
-        operator: "Equal"
-        value: "true"
-        effect: "NoSchedule"
-      
+        - key: 'execution-workload'
+          operator: 'Equal'
+          value: 'true'
+          effect: 'NoSchedule'
+
       # Affinity rules for better distribution
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchLabels:
-                  app: python-executor
-              topologyKey: kubernetes.io/hostname
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: python-executor
+                topologyKey: kubernetes.io/hostname
 ---
 apiVersion: v1
 kind: Service
@@ -203,10 +203,10 @@ spec:
   selector:
     app: python-executor
   ports:
-  - port: 8001
-    targetPort: 8001
-    protocol: TCP
-    name: http
+    - port: 8001
+      targetPort: 8001
+      protocol: TCP
+      name: http
   type: ClusterIP
 ---
 apiVersion: v1
@@ -228,32 +228,32 @@ spec:
     matchLabels:
       app: python-executor
   policyTypes:
-  - Ingress
-  - Egress
+    - Ingress
+    - Egress
   ingress:
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          name: prompt-spaghetti
-    - podSelector:
-        matchLabels:
-          app: main-application
-    ports:
-    - protocol: TCP
-      port: 8001
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: prompt-spaghetti
+        - podSelector:
+            matchLabels:
+              app: main-application
+      ports:
+        - protocol: TCP
+          port: 8001
   egress:
-  - to: []
-    ports:
-    - protocol: TCP
-      port: 53  # DNS
-    - protocol: UDP
-      port: 53  # DNS
-  - to:
-    - namespaceSelector:
-        matchLabels:
-          name: monitoring
-    ports:
-    - protocol: TCP
-      port: 14268  # Jaeger
-    - protocol: TCP
-      port: 9091   # Prometheus Pushgateway
+    - to: []
+      ports:
+        - protocol: TCP
+          port: 53 # DNS
+        - protocol: UDP
+          port: 53 # DNS
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              name: monitoring
+      ports:
+        - protocol: TCP
+          port: 14268 # Jaeger
+        - protocol: TCP
+          port: 9091 # Prometheus Pushgateway

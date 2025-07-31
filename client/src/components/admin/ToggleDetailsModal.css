@@ -482,33 +482,33 @@
     height: 100vh;
     max-height: 100vh;
   }
-  
+
   .info-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .dependencies-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .variant-item {
     grid-template-columns: 1fr;
     gap: 8px;
   }
-  
+
   .audit-header {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .audit-time {
     margin-left: 0;
   }
-  
+
   .details-tabs {
     overflow-x: auto;
   }
-  
+
   .tab {
     white-space: nowrap;
   }

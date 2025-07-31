@@ -2,7 +2,7 @@
 
 /**
  * Comprehensive Parsing Error Fix
- * 
+ *
  * Systematically addresses all remaining parsing error patterns across the codebase:
  * - Interface missing closing braces
  * - Function parameter syntax corruption
@@ -27,7 +27,7 @@ class ComprehensiveParsingFixer {
       info: '🔍',
       success: '✅',
       warning: '⚠️',
-      error: '❌'
+      error: '❌',
     }[type];
     console.log(`${prefix} ${message}`);
   }
@@ -44,104 +44,104 @@ class ComprehensiveParsingFixer {
       {
         pattern: /(interface\s+\w+\s*\{[^}]*)\ninterface/g,
         replacement: '$1}\n\ninterface',
-        description: 'Fix missing interface closing brace'
+        description: 'Fix missing interface closing brace',
       },
       {
         pattern: /(interface\s+\w+\s*\{[^}]*?)(\n\s*\/\/|export|const|function|class)/g,
         replacement: '$1}\n\n$2',
-        description: 'Fix unclosed interface before code'
+        description: 'Fix unclosed interface before code',
       },
-      
+
       // Function syntax fixes
       {
         pattern: /=>\s*\(\)/g,
         replacement: '=> (',
-        description: 'Fix function arrow syntax () to ('
+        description: 'Fix function arrow syntax () to (',
       },
       {
         pattern: /\(\s*\{,/g,
         replacement: '({',
-        description: 'Fix object parameter opening {,'
+        description: 'Fix object parameter opening {,',
       },
       {
         pattern: /=>\s*\{,/g,
         replacement: '=> {',
-        description: 'Fix arrow function body opening {,'
+        description: 'Fix arrow function body opening {,',
       },
-      
+
       // Object literal fixes
       {
         pattern: /:\s*\{,/g,
         replacement: ': {',
-        description: 'Fix object property opening {,'
+        description: 'Fix object property opening {,',
       },
       {
         pattern: /,(\s*\})/g,
         replacement: '$1',
-        description: 'Fix trailing comma before closing brace'
+        description: 'Fix trailing comma before closing brace',
       },
-      
+
       // Type annotation fixes
       {
         pattern: /useState<([^>]+)>\(\[\]\)/g,
         replacement: 'useState<$1[]>([])',
-        description: 'Fix useState array type annotation'
+        description: 'Fix useState array type annotation',
       },
       {
         pattern: /:\s*([^,;\n]+);(\s*\w+:)/g,
         replacement: ': $1,$2',
-        description: 'Fix semicolon to comma in object properties'
+        description: 'Fix semicolon to comma in object properties',
       },
-      
+
       // JSX fixes
       {
         pattern: /\{\)\s*$/gm,
         replacement: '{',
-        description: 'Fix JSX prop object {) to {'
+        description: 'Fix JSX prop object {) to {',
       },
       {
         pattern: /=\s*\(\)\s*$/gm,
         replacement: '= (',
-        description: 'Fix JSX attribute assignment'
+        description: 'Fix JSX attribute assignment',
       },
-      
+
       // Callback function fixes
       {
         pattern: /(setResults|setState|setNodes)\s*\(\s*prev\s*=>\s*\{\)/g,
         replacement: '$1(prev => {',
-        description: 'Fix setState callback syntax'
+        description: 'Fix setState callback syntax',
       },
-      
+
       // React component fixes
       {
         pattern: /const\s+(\w+):\s*React\.FC<([^>]*)>\s*=\s*\(\{,/g,
         replacement: 'const $1: React.FC<$2> = ({',
-        description: 'Fix React FC parameter destructuring'
+        description: 'Fix React FC parameter destructuring',
       },
-      
+
       // Map/filter function fixes
       {
         pattern: /\.map\(\)\s*\(/g,
         replacement: '.map(',
-        description: 'Fix array map() method call'
+        description: 'Fix array map() method call',
       },
       {
         pattern: /\.filter\(\)\s*\(/g,
         replacement: '.filter(',
-        description: 'Fix array filter() method call'
+        description: 'Fix array filter() method call',
       },
-      
+
       // Import/export fixes
       {
         pattern: /import\s*\{([^}]*),\s*\}/g,
         replacement: 'import { $1 }',
-        description: 'Fix import trailing comma'
+        description: 'Fix import trailing comma',
       },
       {
         pattern: /export\s*\{([^}]*),\s*\}/g,
         replacement: 'export { $1 }',
-        description: 'Fix export trailing comma'
-      }
+        description: 'Fix export trailing comma',
+      },
     ];
 
     for (const fix of comprehensiveFixes) {
@@ -167,7 +167,7 @@ class ComprehensiveParsingFixer {
     if (this.processedFiles.has(filePath)) {
       return; // Skip already processed files
     }
-    
+
     try {
       if (!fs.existsSync(filePath)) {
         this.log(`File not found: ${filePath}`, 'warning');
@@ -183,7 +183,7 @@ class ComprehensiveParsingFixer {
         this.fixCount += fixCount;
         this.fileCount++;
       }
-      
+
       this.processedFiles.add(filePath);
     } catch (error) {
       this.log(`Error processing ${filePath}: ${error.message}`, 'error');
@@ -195,12 +195,12 @@ class ComprehensiveParsingFixer {
    */
   getFilesWithParsingErrors() {
     this.log('Getting files with parsing errors from lint output...', 'info');
-    
+
     try {
       const lintOutput = execSync('pnpm lint 2>&1 | head -200', {
         encoding: 'utf8',
         cwd: process.cwd(),
-        maxBuffer: 5 * 1024 * 1024
+        maxBuffer: 5 * 1024 * 1024,
       });
 
       const lines = lintOutput.split('\n');
@@ -219,7 +219,7 @@ class ComprehensiveParsingFixer {
       return Array.from(filesWithErrors);
     } catch (error) {
       this.log('Failed to get lint output, using fallback file list', 'warning');
-      
+
       // Fallback to known problematic files
       const fallbackFiles = [
         'client/src/components/BrowserSafeGraphEditor.tsx',
@@ -230,7 +230,7 @@ class ComprehensiveParsingFixer {
         'client/src/components/GraphTemplates/TemplateSelector.tsx',
         'client/src/components/PerformanceDashboard.tsx',
         'client/src/__tests__/bugfix/NodeSelectionFixes.real.test.tsx',
-        'packages/core/usePreviewSeeds.ts'
+        'packages/core/usePreviewSeeds.ts',
       ];
 
       return fallbackFiles.map(f => path.join(process.cwd(), f)).filter(fs.existsSync);
@@ -257,11 +257,11 @@ class ComprehensiveParsingFixer {
     if (this.fixCount > 0) {
       this.log('Comprehensive parsing fixes completed successfully!', 'success');
       console.log('\n🔍 Running quick lint check to verify improvements...');
-      
+
       try {
         const afterCount = execSync('pnpm lint 2>&1 | grep "Parsing error" | wc -l', {
           encoding: 'utf8',
-          cwd: process.cwd()
+          cwd: process.cwd(),
         }).trim();
         console.log(`Remaining parsing errors: ${afterCount}`);
       } catch (error) {

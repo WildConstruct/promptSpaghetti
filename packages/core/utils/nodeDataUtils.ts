@@ -1,12 +1,12 @@
-import { 
-  NodeData, 
-  NodeType, 
-  VariationConfig, 
+import {
+  NodeData,
+  NodeType,
+  VariationConfig,
   createNodeData,
   WeightedChoiceNodeData,
   SetVariableNodeData,
   GetVariableNodeData,
-  IncludeNodeData
+  IncludeNodeData,
 } from '../types/NodeTypes';
 
 // Legacy function - delegates to new factory system
@@ -19,55 +19,48 @@ export const createDefaultNodeData = (type: NodeType): NodeData => {
 export const addVariationToNode = (nodeData: NodeData, variation: string): NodeData => {
   const currentVariations = nodeData.variations || [];
   return {
-  ...nodeData,
-  variations: [...currentVariations, variation],
-};
+    ...nodeData,
+    variations: [...currentVariations, variation],
+  };
 };
 
 export const removeVariationFromNode = (nodeData: NodeData, index: number): NodeData => {
   const currentVariations = nodeData.variations || [];
   return {
-  ...nodeData,
-  variations: currentVariations.filter((_, i) => i !== index),
-};
+    ...nodeData,
+    variations: currentVariations.filter((_, i) => i !== index),
+  };
 };
 
-export const updateVariationInNode = (
-  nodeData: NodeData,
-  index: number,
-  newValue: string
-): NodeData => {
+export const updateVariationInNode = (nodeData: NodeData, index: number, newValue: string): NodeData => {
   const currentVariations = nodeData.variations || [];
   const updatedVariations = [...currentVariations];
   updatedVariations[index] = newValue;
   return {
-  ...nodeData,
-  variations: updatedVariations,
-};
+    ...nodeData,
+    variations: updatedVariations,
+  };
 };
 
-export const reorderVariationsInNode = (
-  nodeData: NodeData,
-  fromIndex: number,
-  toIndex: number
-): NodeData => {
+export const reorderVariationsInNode = (nodeData: NodeData, fromIndex: number, toIndex: number): NodeData => {
   const currentVariations = nodeData.variations || [];
   const updatedVariations = [...currentVariations];
   const [movedItem] = updatedVariations.splice(fromIndex, 1);
   updatedVariations.splice(toIndex, 0, movedItem);
   return {
-  ...nodeData,
-  variations: updatedVariations,
-};
+    ...nodeData,
+    variations: updatedVariations,
+  };
 };
 
 export const getRandomVariation = (nodeData: NodeData, seed?: number): string => {
   const variations = nodeData.variations || [];
   if (variations.length === 0) return nodeData.label;
   // Use seed for deterministic randomness if provided
-  const randomIndex = seed !== undefined
-    ? Math.floor((Math.abs(seed) + 1) % variations.length)
-    : Math.floor(Math.random() * variations.length);
+  const randomIndex =
+    seed !== undefined
+      ? Math.floor((Math.abs(seed) + 1) % variations.length)
+      : Math.floor(Math.random() * variations.length);
   return variations[randomIndex];
 };
 
@@ -85,9 +78,9 @@ export const validateNodeDataLegacyWrapper = (nodeData: NodeData): { valid: bool
   const { validateNodeData: newValidate } = require('../types/NodeTypes');
   const errors = newValidate(nodeData);
   return {
-  valid: errors.length === 0,
-  errors
-};
+    valid: errors.length === 0,
+    errors,
+  };
 };
 
 // Legacy validation with old interface for backward compatibility
@@ -101,7 +94,7 @@ export const validateNodeDataLegacy = (nodeData: NodeData): { valid: boolean; er
   }
   // Type-specific validation with new field names
   switch (nodeData.type) {
-  case 'WeightedChoice': {
+    case 'WeightedChoice': {
       const wcData = nodeData as WeightedChoiceNodeData;
       if (wcData.choices && wcData.weights && wcData.choices.length !== wcData.weights.length) {
         errors.push('Number of choices must match number of weights');
@@ -133,10 +126,10 @@ export const validateNodeDataLegacy = (nodeData: NodeData): { valid: boolean; er
       break;
     }
   }
-  
+
   return {
     valid: errors.length === 0,
-    errors
+    errors,
   };
 };
 
@@ -144,13 +137,10 @@ export const cloneNodeData = (nodeData: NodeData): NodeData => {
   return JSON.parse(JSON.stringify(nodeData));
 };
 
-export const mergeNodeData = <T extends NodeData>(
-    original: T,
-    updates: Partial<T>,
-  ): T => {
+export const mergeNodeData = <T extends NodeData>(original: T, updates: Partial<T>): T => {
   return {
     ...original,
-    ...updates
+    ...updates,
   } as T;
 };
 

@@ -3,20 +3,13 @@
  * Integrates CRDT collaborative editing with React Flow editor
  */
 import { useCallback, useEffect, useMemo } from 'react';
-import { 
-  Node as FlowNode, 
-  Edge as FlowEdge, 
-  NodeChange, 
-  EdgeChange,
-  Connection,
-  useReactFlow
-} from 'reactflow';
+import { Node as FlowNode, Edge as FlowEdge, NodeChange, EdgeChange, Connection, useReactFlow } from 'reactflow';
 import { Node, Edge } from '../graphSchema';
-import { 
+import {
   useCollaborativeGraphStore,
   useCollaborativeActions,
   useConnectedUsers,
-  UserPresence
+  UserPresence,
 } from './collaborativeGraphStore';
 /**
  * Hook that bridges collaborative graph store with React Flow
@@ -33,102 +26,113 @@ export function useCollaborativeReactFlow() {
     deleteEdge,
     updateNodePosition,
     updateUserCursor,
-    updateUserSelection
+    updateUserSelection,
   } = useCollaborativeActions();
-  const {
-    graph,
-    isCollaborative,
-    collaborationEnabled,
-    connectionStatus,
-    localPresence
-  } = useCollaborativeGraphStore();
+  const { graph, isCollaborative, collaborationEnabled, connectionStatus, localPresence } =
+    useCollaborativeGraphStore();
   const connectedUsers = useConnectedUsers();
   // Convert graph nodes to React Flow nodes
   const flowNodes = useMemo((): FlowNode[] => {
     return graph.nodes.map(node => ({
-  id: node.id,
+      id: node.id,
       type: node.type.toLowerCase(),
       position: { x: 0, y: 0 }, // Position will be managed by React Flow
       data: {
         ...node,
         isCollaborative,
         // Add collaborative metadata
-        collaborators: isCollaborative ? getNodeCollaborators(node.id, connectedUsers) : []
-      }
+        collaborators: isCollaborative ? getNodeCollaborators(node.id, connectedUsers) : [],
+      },
     }));
   }, [graph.nodes, isCollaborative, connectedUsers]);
   // Convert graph edges to React Flow edges
   const flowEdges = useMemo((): FlowEdge => {
     return graph.edges.map(edge => ({
-  id: edge.id,
-  source: edge.source,
-  target: edge.target,
-  sourceHandle: edge.sourceHandle,
-  targetHandle: edge.targetHandle,
-  type: 'step',
-  style: {
-    stroke: '#666',
-    strokeWidth: 2,
-    // Highlight if being edited by collaborators
-    ...(isCollaborative && isEdgeBeingEdited(edge.id, connectedUsers) && {
-      stroke: '#ff6b6b',
-      strokeWidth: 3
-    })
-  }
-}));
+      id: edge.id,
+      source: edge.source,
+      target: edge.target,
+      sourceHandle: edge.sourceHandle,
+      targetHandle: edge.targetHandle,
+      type: 'step',
+      style: {
+        stroke: '#666',
+        strokeWidth: 2,
+        // Highlight if being edited by collaborators
+        ...(isCollaborative &&
+          isEdgeBeingEdited(edge.id, connectedUsers) && {
+            stroke: '#ff6b6b',
+            strokeWidth: 3,
+          }),
+      },
+    }));
   }, [graph.edges, isCollaborative, connectedUsers]);
   // Handle node changes (position, deletion, etc.)
-  const onNodesChange = useCallback((changes: NodeChange) => {
-    changes.forEach(change => {
-  switch (change.type) {
-    case 'position':
-      if (change.position && change.dragging === false) {
-        // Only update position when drag is complete
-        updateNodePosition(change.id, change.position);
-      }
-      break;
-    case 'remove':
-      deleteNode(change.id);
-      break;
-  }
-});
-  }, [updateNodePosition, deleteNode]);
+  const onNodesChange = useCallback(
+    (changes: NodeChange) => {
+      changes.forEach(change => {
+        switch (change.type) {
+          case 'position':
+            if (change.position && change.dragging === false) {
+              // Only update position when drag is complete
+              updateNodePosition(change.id, change.position);
+            }
+            break;
+          case 'remove':
+            deleteNode(change.id);
+            break;
+        }
+      });
+    },
+    [updateNodePosition, deleteNode]
+  );
   // Handle edge changes
-  const onEdgesChange = useCallback((changes: EdgeChange) => {
-  changes.forEach(change => {
-    switch (change.type) {
-      case 'remove':
-        deleteEdge(change.id);
-        break;
-    }
-  });
-  }, [deleteEdge]);
+  const onEdgesChange = useCallback(
+    (changes: EdgeChange) => {
+      changes.forEach(change => {
+        switch (change.type) {
+          case 'remove':
+            deleteEdge(change.id);
+            break;
+        }
+      });
+    },
+    [deleteEdge]
+  );
   // Handle new connections
-  const onConnect = useCallback((connection: Connection) => {
-    if (connection.source && connection.target) {
-      const newEdge: Edge = {
-        id: `edge-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        source: connection.source,
-        target: connection.target,
-        sourceHandle: connection.sourceHandle || undefined,
-        targetHandle: connection.targetHandle || undefined
-      };
-      addEdge(newEdge);
-    }
-  }, [addEdge]);
+  const onConnect = useCallback(
+    (connection: Connection) => {
+      if (connection.source && connection.target) {
+        const newEdge: Edge = {
+          id: `edge-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          source: connection.source,
+          target: connection.target,
+          sourceHandle: connection.sourceHandle || undefined,
+          targetHandle: connection.targetHandle || undefined,
+        };
+        addEdge(newEdge);
+      }
+    },
+    [addEdge]
+  );
   // Handle node drag for presence updates
-  const onNodeDrag = useCallback((event: React.MouseEvent, node: FlowNode) => {
-    if (isCollaborative) {
-      updateUserCursor(node.id, node.position);
-    }
-  }, [isCollaborative, updateUserCursor]);
+  const onNodeDrag = useCallback(
+    (event: React.MouseEvent, node: FlowNode) => {
+      if (isCollaborative) {
+        updateUserCursor(node.id, node.position);
+      }
+    },
+    [isCollaborative, updateUserCursor]
+  );
   // Handle node selection for presence updates
-  const onSelectionChange = useCallback((params: { nodes: FlowNode; edges: FlowEdge }) => {
-    if (isCollaborative) {
-      const selectedNodeIds = params.nodes.map(node => node.id);
-      updateUserSelection(selectedNodeIds);
-    }
-  }, [isCollaborative, updateUserSelection]);
+  const onSelectionChange = useCallback(
+    (params: { nodes: FlowNode; edges: FlowEdge }) => {
+      if (isCollaborative) {
+        const selectedNodeIds = params.nodes.map(node => node.id);
+        updateUserSelection(selectedNodeIds);
+      }
+    },
+    [isCollaborative, updateUserSelection]
+  );
   // Handle pane click to clear selection
   const onPaneClick = useCallback(() => {
     if (isCollaborative) {
@@ -137,16 +141,19 @@ export function useCollaborativeReactFlow() {
     }
   }, [isCollaborative, updateUserCursor, updateUserSelection]);
   // Add new node at specific position
-  const addNodeAtPosition = useCallback((node: Node, position: { x: number; y: number }) => {
-    addNode(node, position);
-  }, [addNode]);
+  const addNodeAtPosition = useCallback(
+    (node: Node, position: { x: number; y: number }) => {
+      addNode(node, position);
+    },
+    [addNode]
+  );
   // Get user cursors for rendering
   const getUserCursors = useCallback(() => {
     if (!isCollaborative) return [];
     const cursors: Array<{
-  userId: string;
+      userId: string;
       user: UserPresence;
-  position: { x: number; y: number };
+      position: { x: number; y: number };
       nodeId?: string;
     }> = [];
     connectedUsers.forEach((user, userId) => {
@@ -155,7 +162,7 @@ export function useCollaborativeReactFlow() {
           userId,
           user,
           position: user.cursor.position,
-          nodeId: user.cursor.nodeId
+          nodeId: user.cursor.nodeId,
         });
       }
     });
@@ -187,29 +194,29 @@ export function useCollaborativeReactFlow() {
     }
   }, [reactFlowInstance, flowNodes.length]);
   return {
-  // React Flow props
-  nodes: flowNodes,
-  edges: flowEdges,
-  onNodesChange,
-  onEdgesChange,
-  onConnect,
-  onNodeDrag,
-  onSelectionChange,
-  onPaneClick,
-  // Collaboration-specific actions
-  enableCollaboration,
-  disableCollaboration,
-  addNodeAtPosition,
-  // Collaboration state
-  isCollaborative,
-  collaborationEnabled,
-  connectionStatus,
-  connectedUsers,
-  // Presence and cursors
-  getUserCursors,
-  getRemoteSelections,
-  // Utility
-  isConnected: connectionStatus === 'connected'
+    // React Flow props
+    nodes: flowNodes,
+    edges: flowEdges,
+    onNodesChange,
+    onEdgesChange,
+    onConnect,
+    onNodeDrag,
+    onSelectionChange,
+    onPaneClick,
+    // Collaboration-specific actions
+    enableCollaboration,
+    disableCollaboration,
+    addNodeAtPosition,
+    // Collaboration state
+    isCollaborative,
+    collaborationEnabled,
+    connectionStatus,
+    connectedUsers,
+    // Presence and cursors
+    getUserCursors,
+    getRemoteSelections,
+    // Utility
+    isConnected: connectionStatus === 'connected',
   };
 }
 
@@ -242,7 +249,7 @@ export function useNodeCollaborators(nodeId: string) {
   const connectedUsers = useConnectedUsers();
   const localPresence = useCollaborativeGraphStore(state => state.localPresence);
   return useMemo(() => {
-  const collaborators: UserPresence[] = [];
+    const collaborators: UserPresence[] = [];
     connectedUsers.forEach((user, userId) => {
       if (userId !== localPresence?.userId) {
         if (user.cursor?.nodeId === nodeId || user.selection?.includes(nodeId)) {
@@ -259,10 +266,10 @@ export function useNodeCollaborators(nodeId: string) {
  */
 export function useCollaborationStatus() {
   return useCollaborativeGraphStore(state => ({
-  isCollaborative: state.isCollaborative,
-  connectionStatus: state.connectionStatus,
-  isConnected: state.isConnected,
-  connectedUserCount: state.connectedUsers.size,
-  lastSyncTime: state.lastSyncTime
-}));
+    isCollaborative: state.isCollaborative,
+    connectionStatus: state.connectionStatus,
+    isConnected: state.isConnected,
+    connectedUserCount: state.connectedUsers.size,
+    lastSyncTime: state.lastSyncTime,
+  }));
 }

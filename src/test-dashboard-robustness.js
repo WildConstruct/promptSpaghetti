@@ -24,49 +24,49 @@ const edgeCases = [
     id: 'TEST-EDGE-001',
     title: 'Task with undefined tags',
     tags: undefined,
-    state: 'UNASSIGNED'
+    state: 'UNASSIGNED',
   },
   {
-    id: 'TEST-EDGE-002', 
+    id: 'TEST-EDGE-002',
     title: 'Task with null tags',
     tags: null,
-    state: 'IN_PROGRESS'
+    state: 'IN_PROGRESS',
   },
   {
     id: 'TEST-EDGE-003',
     title: 'Task with empty array tags',
     tags: [],
-    state: 'COMPLETED'
+    state: 'COMPLETED',
   },
   {
     id: 'TEST-EDGE-004',
     title: 'Task with invalid tag types',
     tags: [null, undefined, '', 123, {}, []],
-    state: 'BLOCKED'
+    state: 'BLOCKED',
   },
   {
     id: 'TEST-EDGE-005',
     title: 'Task with special characters in tags',
     tags: ['<script>', 'tag/with/slashes', 'tag with spaces', 'tag.with.dots'],
-    state: 'REVIEW'
+    state: 'REVIEW',
   },
   {
     id: 'TEST-EDGE-006',
     title: undefined,
     tags: ['normal-tag'],
-    state: null
+    state: null,
   },
   {
     id: undefined,
     title: 'Task with undefined ID',
     tags: ['test'],
-    state: 'UNASSIGNED'
+    state: 'UNASSIGNED',
   },
   {
     // Completely malformed task
     random_field: 'unexpected',
-    tags: 'not-an-array'
-  }
+    tags: 'not-an-array',
+  },
 ];
 
 console.log('🔍 TESTING EDGE CASES:\n');
@@ -75,21 +75,23 @@ console.log('🔍 TESTING EDGE CASES:\n');
 function testTaskRendering(task, index) {
   try {
     // This mimics the exact logic from the updated dashboard
-    const taskTags = (task.tags && Array.isArray(task.tags)) ? task.tags : [];
+    const taskTags = task.tags && Array.isArray(task.tags) ? task.tags : [];
     const taskState = String(task.state || 'unknown').toLowerCase();
     const taskTitle = String(task.title || 'Untitled Task');
     const taskId = String(task.id || `Unknown-ID-${index}`);
-        
+
     const isAuth = taskTags.includes('auth') || (task.story && task.story.includes('20.1'));
     const isFile = taskTags.includes('file-browser') || (task.story && task.story.includes('20.2'));
     const priorityClass = isAuth ? 'priority-auth' : isFile ? 'priority-file' : '';
     const stateClass = `state-${taskState.replace(/[^a-z0-9]/g, '-')}`;
-        
+
     const priorityEmoji = isAuth ? '🔐' : isFile ? '📁' : task.priority === 'high' ? '🔥' : '📝';
 
     // Test tag class generation
     const tagClasses = taskTags.map(tag => {
-      const sanitizedTag = String(tag || '').replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+      const sanitizedTag = String(tag || '')
+        .replace(/[^a-zA-Z0-9]/g, '-')
+        .toLowerCase();
       const displayTag = String(tag || '').substring(0, 20);
       return { sanitized: sanitizedTag, display: displayTag };
     });
@@ -102,14 +104,13 @@ function testTaskRendering(task, index) {
       taskTags: taskTags.length,
       priorityClass,
       stateClass,
-      tagClasses
+      tagClasses,
     };
-
   } catch (error) {
     return {
       success: false,
       error: error.message,
-      taskId: task?.id || `Unknown-${index}`
+      taskId: task?.id || `Unknown-${index}`,
     };
   }
 }
@@ -120,9 +121,9 @@ let failed = 0;
 
 edgeCases.forEach((task, index) => {
   console.log(`${index + 1}. Testing: ${JSON.stringify(task).substring(0, 80)}...`);
-    
+
   const result = testTaskRendering(task, index);
-    
+
   if (result.success) {
     console.log(`   ✅ PASS: ID=${result.taskId}, Tags=${result.taskTags}, State=${result.stateClass}`);
     if (result.tagClasses.length > 0) {
@@ -142,9 +143,9 @@ const randomTasks = realTasks.sort(() => Math.random() - 0.5).slice(0, 10);
 
 randomTasks.forEach((task, index) => {
   console.log(`${index + 1}. Testing real task: ${task.id}`);
-    
+
   const result = testTaskRendering(task, index);
-    
+
   if (result.success) {
     console.log(`   ✅ PASS: Title="${result.taskTitle.substring(0, 40)}...", Tags=${result.taskTags}`);
     passed++;
@@ -159,7 +160,7 @@ console.log('\n🎨 CSS CLASS SAFETY TEST:\n');
 
 const dangerousInputs = [
   'javascript:alert(1)',
-  '<script>alert(1)</script>', 
+  '<script>alert(1)</script>',
   'onload="alert(1)"',
   'style="background:red"',
   '../../../etc/passwd',
@@ -168,17 +169,19 @@ const dangerousInputs = [
   'undefined',
   ';;;;;;;',
   '"""""""',
-  '\'\'\'\'\'\'\'',
+  "'''''''",
   '&lt;&gt;&amp;',
   '..\\..\\..\\',
-  String.fromCharCode(0, 1, 2, 3)
+  String.fromCharCode(0, 1, 2, 3),
 ];
 
 let cssPassed = 0;
 dangerousInputs.forEach((input, index) => {
-  const sanitized = String(input || '').replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+  const sanitized = String(input || '')
+    .replace(/[^a-zA-Z0-9]/g, '-')
+    .toLowerCase();
   const isSafe = /^[a-z0-9-]*$/.test(sanitized);
-    
+
   console.log(`${index + 1}. Input: "${input.substring(0, 20)}..." → tag-${sanitized}`);
   if (isSafe) {
     console.log('   ✅ SAFE CSS class generated');
@@ -194,7 +197,9 @@ console.log(`✅ Passed: ${passed + cssPassed}`);
 console.log(`❌ Failed: ${failed + (dangerousInputs.length - cssPassed)}`);
 console.log(`📋 Total Tests: ${edgeCases.length + randomTasks.length + dangerousInputs.length}`);
 
-const successRate = Math.round(((passed + cssPassed) / (edgeCases.length + randomTasks.length + dangerousInputs.length)) * 100);
+const successRate = Math.round(
+  ((passed + cssPassed) / (edgeCases.length + randomTasks.length + dangerousInputs.length)) * 100
+);
 
 console.log(`\n🎯 SUCCESS RATE: ${successRate}%`);
 
@@ -211,7 +216,7 @@ if (successRate >= 95) {
 
 console.log('\n🔧 UNIVERSAL PROTECTIONS IN PLACE:');
 console.log('   • Undefined/null tag protection');
-console.log('   • CSS class sanitization');  
+console.log('   • CSS class sanitization');
 console.log('   • String coercion for all values');
 console.log('   • Array validation before .map()');
 console.log('   • Try-catch error boundaries');

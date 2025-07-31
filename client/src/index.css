@@ -8,13 +8,13 @@
   --bg-tertiary: #353535;
   --bg-elevated: #404040;
   --bg-hover: #2d2d2d;
-  
+
   /* Text Colors */
   --text-primary: #e8e8e8;
   --text-secondary: #b8b8b8;
   --text-tertiary: #888888;
   --text-accent: #ff7c00;
-  
+
   /* Accent Colors */
   --accent-orange: #ff7c00;
   --accent-blue: #4a9eff;
@@ -22,14 +22,14 @@
   --accent-purple: #b45cff;
   --accent-green: #4ade80;
   --accent-red: #ef4444;
-  
+
   /* UI Colors */
   --border: #404040;
   --border-hover: #5a5a5a;
   --border-active: #ff7c00;
   --focus: #4a9eff;
   --selection: #ff7c0040;
-  
+
   /* Professional Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
@@ -38,7 +38,7 @@
   --shadow-node: 0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.2);
   --shadow-node-hover: 0 8px 25px rgba(0, 0, 0, 0.45), 0 4px 10px rgba(0, 0, 0, 0.25);
   --shadow-node-selected: 0 0 0 2px #ff7c00, 0 8px 25px rgba(255, 124, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.4);
-  
+
   /* Professional Spacing (8px grid) */
   --space-1: 4px;
   --space-2: 8px;
@@ -49,16 +49,16 @@
   --space-8: 32px;
   --space-10: 40px;
   --space-12: 48px;
-  
+
   /* Border Radius */
   --radius-sm: 3px;
   --radius-md: 6px;
   --radius-lg: 8px;
   --radius-xl: 12px;
-  
+
   /* Professional Typography */
-  --font-primary: -apple-system, BlinkMacSystemFont, "Segoe UI", "SF Pro Display", system-ui, sans-serif;
-  --font-mono: "SF Mono", "Monaco", "Cascadia Code", "Roboto Mono", "Consolas", monospace;
+  --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'SF Pro Display', system-ui, sans-serif;
+  --font-mono: 'SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', 'Consolas', monospace;
   --font-size-xs: 11px;
   --font-size-sm: 13px;
   --font-size-base: 14px;
@@ -66,7 +66,7 @@
   --font-size-xl: 18px;
   --font-size-2xl: 20px;
   --font-size-3xl: 24px;
-  
+
   /* Demo & Presentation Mode Variables */
   --demo-font-scale: 1;
   --demo-spacing-scale: 1;
@@ -84,7 +84,7 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   font-variant-numeric: tabular-nums;
 }
 
@@ -124,31 +124,71 @@ body {
   justify-content: space-between;
 }
 
-.gap-2 { gap: var(--space-2); }
-.gap-3 { gap: var(--space-3); }
-.gap-4 { gap: var(--space-4); }
-.gap-6 { gap: var(--space-6); }
+.gap-2 {
+  gap: var(--space-2);
+}
+.gap-3 {
+  gap: var(--space-3);
+}
+.gap-4 {
+  gap: var(--space-4);
+}
+.gap-6 {
+  gap: var(--space-6);
+}
 
 /* Professional Typography Classes */
-.text-xs { font-size: var(--font-size-xs); }
-.text-sm { font-size: var(--font-size-sm); }
-.text-base { font-size: var(--font-size-base); }
-.text-lg { font-size: var(--font-size-lg); }
-.text-xl { font-size: var(--font-size-xl); }
-.text-2xl { font-size: var(--font-size-2xl); }
-.text-3xl { font-size: var(--font-size-3xl); }
+.text-xs {
+  font-size: var(--font-size-xs);
+}
+.text-sm {
+  font-size: var(--font-size-sm);
+}
+.text-base {
+  font-size: var(--font-size-base);
+}
+.text-lg {
+  font-size: var(--font-size-lg);
+}
+.text-xl {
+  font-size: var(--font-size-xl);
+}
+.text-2xl {
+  font-size: var(--font-size-2xl);
+}
+.text-3xl {
+  font-size: var(--font-size-3xl);
+}
 
-.font-normal { font-weight: 400; }
-.font-medium { font-weight: 500; }
-.font-semibold { font-weight: 600; }
-.font-bold { font-weight: 700; }
+.font-normal {
+  font-weight: 400;
+}
+.font-medium {
+  font-weight: 500;
+}
+.font-semibold {
+  font-weight: 600;
+}
+.font-bold {
+  font-weight: 700;
+}
 
-.text-primary { color: var(--text-primary); }
-.text-secondary { color: var(--text-secondary); }
-.text-tertiary { color: var(--text-tertiary); }
-.text-accent { color: var(--text-accent); }
+.text-primary {
+  color: var(--text-primary);
+}
+.text-secondary {
+  color: var(--text-secondary);
+}
+.text-tertiary {
+  color: var(--text-tertiary);
+}
+.text-accent {
+  color: var(--text-accent);
+}
 
-.font-mono { font-family: var(--font-mono); }
+.font-mono {
+  font-family: var(--font-mono);
+}
 
 /* Override React Flow default styles for dark mode */
 .react-flow__edge-path {
@@ -157,7 +197,7 @@ body {
 }
 
 .react-flow__edge.selected .react-flow__edge-path {
-  stroke: #4CAF50;
+  stroke: #4caf50;
   stroke-width: 2px;
 }
 
@@ -189,13 +229,13 @@ body {
 
 .react-flow__selection {
   background: rgba(76, 175, 80, 0.1);
-  border: 1px solid #4CAF50;
+  border: 1px solid #4caf50;
 }
 
 /* Selection box styling */
 .react-flow__nodesselection-rect {
   background: rgba(76, 175, 80, 0.1);
-  border: 1px solid #4CAF50;
+  border: 1px solid #4caf50;
 }
 
 /* Node styling - Safari-compatible overrides */
@@ -234,7 +274,7 @@ body {
     -webkit-text-size-adjust: 100%;
     isolation: isolate;
   }
-  
+
   .react-flow__node > div > div {
     display: block !important;
     visibility: visible !important;
@@ -244,7 +284,9 @@ body {
 }
 
 /* Ensure form inputs work properly - AGGRESSIVE FIXES */
-input, textarea, select {
+input,
+textarea,
+select {
   pointer-events: auto !important;
   user-select: text !important;
   -webkit-user-select: text !important;
@@ -259,7 +301,9 @@ input, textarea, select {
 }
 
 /* Inspector panel should not interfere with inputs */
-aside input, aside textarea, aside select {
+aside input,
+aside textarea,
+aside select {
   pointer-events: auto !important;
   user-select: text !important;
   -webkit-user-select: text !important;
@@ -274,16 +318,20 @@ aside input, aside textarea, aside select {
 }
 
 /* Force inputs to be interactive */
-input:focus, textarea:focus, select:focus {
+input:focus,
+textarea:focus,
+select:focus {
   pointer-events: auto !important;
   user-select: text !important;
   -webkit-user-select: text !important;
-  border-color: #4CAF50 !important;
+  border-color: #4caf50 !important;
   background: #374151 !important;
 }
 
 /* Prevent React Flow from interfering */
-.react-flow input, .react-flow textarea, .react-flow select {
+.react-flow input,
+.react-flow textarea,
+.react-flow select {
   pointer-events: auto !important;
   user-select: text !important;
   -webkit-user-select: text !important;
@@ -308,13 +356,13 @@ input:focus, textarea:focus, select:focus {
 .react-flow__handle:hover {
   -webkit-transform: scale(1.2) translateZ(0);
   transform: scale(1.2) translateZ(0);
-  border-color: #4CAF50 !important;
+  border-color: #4caf50 !important;
   background: #5a6578 !important;
 }
 
 .react-flow__handle.connecting {
-  background: #4CAF50 !important;
-  border-color: #4CAF50 !important;
+  background: #4caf50 !important;
+  border-color: #4caf50 !important;
 }
 
 /* Connection line while dragging */
@@ -351,15 +399,15 @@ input:focus, textarea:focus, select:focus {
     --demo-shadow-intensity: 1.2;
     --demo-contrast-boost: 1.05;
   }
-  
+
   body {
     font-size: calc(var(--font-size-base) * var(--demo-font-scale));
   }
-  
+
   .react-flow__node {
     font-size: calc(14px * var(--demo-font-scale)) !important;
   }
-  
+
   .react-flow__handle {
     width: calc(12px * var(--demo-spacing-scale)) !important;
     height: calc(12px * var(--demo-spacing-scale)) !important;
@@ -374,22 +422,22 @@ input:focus, textarea:focus, select:focus {
     --demo-shadow-intensity: 1.5;
     --demo-contrast-boost: 1.1;
   }
-  
+
   body {
     font-size: calc(var(--font-size-base) * var(--demo-font-scale));
   }
-  
+
   .react-flow__node {
     font-size: calc(16px * var(--demo-font-scale)) !important;
     min-width: calc(180px * var(--demo-spacing-scale)) !important;
     min-height: calc(90px * var(--demo-spacing-scale)) !important;
   }
-  
+
   .react-flow__handle {
     width: calc(16px * var(--demo-spacing-scale)) !important;
     height: calc(16px * var(--demo-spacing-scale)) !important;
   }
-  
+
   .react-flow__controls button {
     font-size: calc(14px * var(--demo-font-scale)) !important;
     padding: calc(8px * var(--demo-spacing-scale)) !important;
@@ -404,13 +452,13 @@ input:focus, textarea:focus, select:focus {
     --demo-shadow-intensity: 1.3;
     --demo-contrast-boost: 1.08;
   }
-  
+
   /* Enhanced shadows for better visibility on large screens */
   .react-flow__node {
     box-shadow: calc(var(--shadow-node) * var(--demo-shadow-intensity)) !important;
     filter: contrast(var(--demo-contrast-boost));
   }
-  
+
   .react-flow__node:hover {
     box-shadow: calc(var(--shadow-node-hover) * var(--demo-shadow-intensity)) !important;
   }
@@ -422,7 +470,7 @@ input:focus, textarea:focus, select:focus {
     -webkit-font-smoothing: subpixel-antialiased;
     text-rendering: optimizeLegibility;
   }
-  
+
   .react-flow__node {
     -webkit-font-smoothing: subpixel-antialiased;
     text-rendering: optimizeLegibility;
@@ -433,33 +481,33 @@ input:focus, textarea:focus, select:focus {
 .demo-screenshot-mode {
   /* Hide development-only elements */
   .development-only,
-  [data-development-only="true"],
+  [data-development-only='true'],
   .debug-panel,
   .performance-monitor,
   .dev-controls {
     display: none !important;
   }
-  
+
   /* Hide React Flow controls for clean screenshots */
   .react-flow__controls {
     opacity: 0;
     pointer-events: none;
   }
-  
+
   /* Hide minimap for cleaner view */
   .react-flow__minimap {
     opacity: 0;
     pointer-events: none;
   }
-  
+
   /* Clean up status messages */
   .status-message:not(.demo-safe) {
     display: none !important;
   }
-  
+
   /* Ensure professional branding is visible */
   .demo-branding,
-  [data-demo-safe="true"] {
+  [data-demo-safe='true'] {
     display: block !important;
     opacity: 1 !important;
   }
@@ -518,7 +566,9 @@ input:focus, textarea:focus, select:focus {
 .presentation-focus .react-flow__node.selected {
   opacity: 1;
   filter: none;
-  box-shadow: 0 0 20px rgba(255, 124, 0, 0.4), var(--shadow-node-selected) !important;
+  box-shadow:
+    0 0 20px rgba(255, 124, 0, 0.4),
+    var(--shadow-node-selected) !important;
   transform: scale(1.05);
   z-index: 100;
 }
@@ -531,12 +581,12 @@ input:focus, textarea:focus, select:focus {
   .react-flow__handle {
     transition-duration: 0.1s !important;
   }
-  
+
   /* Simplify shadows for better performance */
   .react-flow__node {
     box-shadow: var(--shadow-md) !important;
   }
-  
+
   /* Disable expensive effects during demos */
   .react-flow__node:hover {
     transform: none !important;
@@ -573,9 +623,15 @@ input:focus, textarea:focus, select:focus {
 
 /* Clean typography for presentations */
 .presentation-typography {
-  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-  -webkit-font-feature-settings: "liga", "kern";
-  font-feature-settings: "liga", "kern";
+  font-family:
+    'SF Pro Display',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    system-ui,
+    sans-serif;
+  -webkit-font-feature-settings: 'liga', 'kern';
+  font-feature-settings: 'liga', 'kern';
   text-rendering: optimizeLegibility;
 }
 
@@ -593,12 +649,12 @@ input:focus, textarea:focus, select:focus {
   .debug-panel {
     display: none !important;
   }
-  
+
   .react-flow__node {
     box-shadow: none !important;
     border: 1px solid #333 !important;
   }
-  
+
   body {
     background: white !important;
     color: black !important;

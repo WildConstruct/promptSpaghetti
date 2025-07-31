@@ -9,15 +9,17 @@ This document outlines comprehensive security considerations for email-based ver
 ### Fundamental Email Security Limitations
 
 #### 1. Email Account Dependency
+
 - **Risk**: Email verification relies entirely on the security of the user's email account
 - **Impact**: If email account lacks MFA, system only requires knowledge of email password
 - **Common Issue**: Email passwords often identical to application passwords
-- **Mitigation**: 
+- **Mitigation**:
   - Require users to enable MFA on their email accounts
   - Educate users about email security best practices
   - Consider email verification as convenience factor, not security factor
 
 #### 2. Device Overlap Vulnerability
+
 - **Risk**: Email may be received on the same device used for authentication
 - **Impact**: Defeats the "something you have" factor of MFA
 - **Scenario**: User authenticates on phone, receives verification email on same phone
@@ -27,6 +29,7 @@ This document outlines comprehensive security considerations for email-based ver
   - Consider push notifications as alternative
 
 #### 3. Phishing Susceptibility
+
 - **Risk**: Email verification codes/links vulnerable to phishing attacks
 - **Impact**: Attackers can intercept codes or redirect users to malicious sites
 - **Attack Vector**: Fake emails requesting verification codes
@@ -38,7 +41,9 @@ This document outlines comprehensive security considerations for email-based ver
 ## OWASP Top 10 Vulnerabilities (2025) - Email Context
 
 ### 1. Broken Access Control
+
 **Risk to Email Verification**: Improper validation of email verification tokens
+
 ```javascript
 // Vulnerable: No token ownership validation
 if (isValidToken(token)) {
@@ -52,12 +57,15 @@ if (isValidToken(token) && tokenBelongsToUser(token, user.id)) {
 ```
 
 **Mitigation**:
+
 - Bind tokens to specific user sessions
 - Implement proper authorization checks
 - Validate token ownership before granting access
 
 ### 2. Cryptographic Failures
+
 **Risk to Email Verification**: Weak token generation or storage
+
 ```javascript
 // Vulnerable: Weak random number generation
 const code = Math.floor(Math.random() * 1000000);
@@ -68,12 +76,15 @@ const code = crypto.randomInt(100000, 999999);
 ```
 
 **Mitigation**:
+
 - Use cryptographically secure random number generators
 - Implement proper token encryption at rest
 - Use strong hashing algorithms for token storage
 
 ### 3. Injection Vulnerabilities
+
 **Risk to Email Verification**: Email template injection, database injection
+
 ```javascript
 // Vulnerable: Direct string concatenation
 const emailBody = `Your code is: ${userInput}`;
@@ -83,23 +94,29 @@ const emailBody = template.render('verification', { code: sanitizedCode });
 ```
 
 **Mitigation**:
+
 - Sanitize all user inputs
 - Use parameterized email templates
 - Implement input validation and output encoding
 
 ### 4. Insecure Design
+
 **Risk to Email Verification**: Fundamentally flawed verification flow
+
 - **Design Flaw**: Allowing unlimited verification attempts
 - **Design Flaw**: No rate limiting on email sending
 - **Design Flaw**: Predictable token generation patterns
 
 **Mitigation**:
+
 - Implement comprehensive rate limiting
 - Design secure token lifecycle management
 - Use unpredictable token generation algorithms
 
 ### 5. Security Misconfiguration
+
 **Risk to Email Verification**: Exposed debugging information, default credentials
+
 ```javascript
 // Vulnerable: Exposing sensitive information
 app.use((err, req, res, next) => {
@@ -114,20 +131,25 @@ app.use((err, req, res, next) => {
 ```
 
 **Mitigation**:
+
 - Remove debugging information from production
 - Implement proper error handling
 - Use environment-specific configurations
 
 ### 6. Vulnerable and Outdated Components
+
 **Risk to Email Verification**: Outdated email libraries with known vulnerabilities
 
 **Mitigation**:
+
 - Regularly update all dependencies
 - Monitor security advisories for email libraries
 - Implement automated vulnerability scanning
 
 ### 7. Identification and Authentication Failures
+
 **Risk to Email Verification**: Weak session management, inadequate logout
+
 ```javascript
 // Vulnerable: No session invalidation after verification
 function verifyEmail(token) {
@@ -148,20 +170,25 @@ function verifyEmail(token) {
 ```
 
 **Mitigation**:
+
 - Implement proper session lifecycle management
 - Invalidate verification sessions after use
 - Use secure session storage mechanisms
 
 ### 8. Software and Data Integrity Failures
+
 **Risk to Email Verification**: Tampering with verification tokens or email content
 
 **Mitigation**:
+
 - Implement token integrity checks (HMAC signatures)
 - Use secure email transmission (TLS)
 - Validate email content integrity
 
 ### 9. Security Logging and Monitoring Failures
+
 **Risk to Email Verification**: Undetected abuse or attack patterns
+
 ```javascript
 // Implement comprehensive logging
 function sendVerificationEmail(user, attempt) {
@@ -171,9 +198,9 @@ function sendVerificationEmail(user, attempt) {
     attempt: attempt,
     timestamp: new Date(),
     ipAddress: req.ip,
-    userAgent: req.get('User-Agent')
+    userAgent: req.get('User-Agent'),
   });
-  
+
   if (attempt > 3) {
     logger.warn('Excessive verification attempts', { userId: user.id });
     alertSecurityTeam(user.id, 'excessive_verification_attempts');
@@ -182,14 +209,17 @@ function sendVerificationEmail(user, attempt) {
 ```
 
 **Mitigation**:
+
 - Log all verification attempts and outcomes
 - Monitor for abuse patterns
 - Implement real-time alerting for suspicious activity
 
 ### 10. Server-Side Request Forgery (SSRF)
+
 **Risk to Email Verification**: Malicious URLs in verification emails
 
 **Mitigation**:
+
 - Validate all URLs in email content
 - Use allowlisted domains for verification links
 - Implement URL scanning for malicious content
@@ -197,26 +227,30 @@ function sendVerificationEmail(user, attempt) {
 ## Email-Specific Security Threats
 
 ### 1. Code Reuse Attacks
+
 **Description**: Reusing verification codes across multiple attempts
 **Impact**: Reduces security effectiveness of time-limited codes
 **Mitigation**:
+
 ```javascript
 function validateCode(user, code) {
   const storedCode = getUserVerificationCode(user.id);
-  
+
   if (storedCode && storedCode.code === code && !storedCode.used) {
     markCodeAsUsed(storedCode.id);
     return true;
   }
-  
+
   return false;
 }
 ```
 
 ### 2. Timing Attacks
+
 **Description**: Analyzing response times to guess valid codes
 **Impact**: Potential code enumeration through timing analysis
 **Mitigation**:
+
 ```javascript
 const crypto = require('crypto');
 
@@ -224,31 +258,37 @@ function constantTimeCompare(a, b) {
   if (a.length !== b.length) {
     return false;
   }
-  
+
   return crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b));
 }
 ```
 
 ### 3. Enumeration Attacks
+
 **Description**: Attempting to guess valid email addresses or codes
 **Impact**: Information disclosure, account enumeration
 **Mitigation**:
+
 - Implement generic error messages
 - Use rate limiting on verification endpoints
 - Add CAPTCHA after multiple failed attempts
 
 ### 4. Session Hijacking
+
 **Description**: Intercepting session cookies during verification process
 **Impact**: Complete account takeover
 **Mitigation**:
+
 - Use secure, HttpOnly cookies
 - Implement proper session rotation
 - Use HTTPS for all verification endpoints
 
 ### 5. Social Engineering
+
 **Description**: Manipulating users to disclose verification codes
 **Impact**: Bypass of MFA protection
 **Mitigation**:
+
 - User education about social engineering
 - Clear warnings about not sharing codes
 - Implement suspicious activity detection
@@ -256,6 +296,7 @@ function constantTimeCompare(a, b) {
 ## Implementation Security Best Practices
 
 ### Token Generation and Management
+
 ```javascript
 // Secure token generation
 const crypto = require('crypto');
@@ -267,26 +308,30 @@ class VerificationTokenManager {
     const min = Math.pow(10, length - 1);
     return crypto.randomInt(min, max + 1).toString();
   }
-  
+
   static createToken(userId, email, purpose) {
-    return jwt.sign({
-      userId,
-      email,
-      purpose,
-      iat: Math.floor(Date.now() / 1000),
-      jti: crypto.randomUUID() // Unique token ID
-    }, process.env.JWT_SECRET, {
-      expiresIn: '15m',
-      issuer: 'your-app',
-      audience: 'email-verification'
-    });
+    return jwt.sign(
+      {
+        userId,
+        email,
+        purpose,
+        iat: Math.floor(Date.now() / 1000),
+        jti: crypto.randomUUID(), // Unique token ID
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: '15m',
+        issuer: 'your-app',
+        audience: 'email-verification',
+      }
+    );
   }
-  
+
   static validateToken(token) {
     try {
       return jwt.verify(token, process.env.JWT_SECRET, {
         issuer: 'your-app',
-        audience: 'email-verification'
+        audience: 'email-verification',
       });
     } catch (error) {
       return null;
@@ -296,6 +341,7 @@ class VerificationTokenManager {
 ```
 
 ### Rate Limiting Implementation
+
 ```javascript
 const rateLimit = require('express-rate-limit');
 
@@ -306,7 +352,7 @@ const emailRateLimit = rateLimit({
   message: 'Too many verification emails sent',
   standardHeaders: true,
   legacyHeaders: false,
-  keyGenerator: (req) => req.user.id || req.ip
+  keyGenerator: req => req.user.id || req.ip,
 });
 
 // Code verification rate limit
@@ -314,11 +360,12 @@ const verificationRateLimit = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 10, // 10 attempts per window
   message: 'Too many verification attempts',
-  skipSuccessfulRequests: true
+  skipSuccessfulRequests: true,
 });
 ```
 
 ### Secure Email Configuration
+
 ```javascript
 const nodemailer = require('nodemailer');
 
@@ -326,19 +373,19 @@ const transporter = nodemailer.createTransporter({
   service: 'SendGrid',
   auth: {
     user: process.env.SENDGRID_USERNAME,
-    pass: process.env.SENDGRID_PASSWORD
+    pass: process.env.SENDGRID_PASSWORD,
   },
   secure: true,
   tls: {
-    rejectUnauthorized: true
-  }
+    rejectUnauthorized: true,
+  },
 });
 
 // Email template with security considerations
 const createVerificationEmail = (code, userEmail) => ({
   from: {
     name: 'Your App Security',
-    address: 'security@yourapp.com'
+    address: 'security@yourapp.com',
   },
   to: userEmail,
   subject: 'Email Verification Required',
@@ -353,12 +400,13 @@ const createVerificationEmail = (code, userEmail) => ({
   `,
   headers: {
     'X-Priority': '1',
-    'X-MSMail-Priority': 'High'
-  }
+    'X-MSMail-Priority': 'High',
+  },
 });
 ```
 
 ### Database Security for Verification Data
+
 ```javascript
 // Secure storage schema
 const verificationSchema = {
@@ -371,7 +419,7 @@ const verificationSchema = {
   attempts: 'INTEGER DEFAULT 0',
   createdAt: 'TIMESTAMP DEFAULT NOW()',
   ipAddress: 'INET',
-  userAgent: 'TEXT'
+  userAgent: 'TEXT',
 };
 
 // Hashing codes before storage
@@ -379,18 +427,22 @@ const bcrypt = require('bcrypt');
 
 async function storeVerificationCode(userId, email, code) {
   const hashedCode = await bcrypt.hash(code, 12);
-  
-  return db.query(`
+
+  return db.query(
+    `
     INSERT INTO verification_codes 
     (user_id, email, code_hash, expires_at, ip_address)
     VALUES ($1, $2, $3, $4, $5)
-  `, [userId, email, hashedCode, new Date(Date.now() + 15 * 60 * 1000), req.ip]);
+  `,
+    [userId, email, hashedCode, new Date(Date.now() + 15 * 60 * 1000), req.ip]
+  );
 }
 ```
 
 ## Monitoring and Alerting
 
 ### Security Metrics to Track
+
 1. **Verification attempt patterns**
    - Failed attempts per user/IP
    - Time-based attempt clustering
@@ -407,23 +459,24 @@ async function storeVerificationCode(userId, email, code) {
    - Suspicious user agents or IPs
 
 ### Automated Response Actions
+
 ```javascript
 // Automated security responses
 class SecurityMonitor {
   static async handleSuspiciousActivity(userId, activityType) {
     const user = await User.findById(userId);
-    
+
     switch (activityType) {
       case 'excessive_attempts':
         await this.temporaryLockout(userId, '30m');
         await this.notifySecurityTeam(userId, activityType);
         break;
-        
+
       case 'enumeration_detected':
         await this.blockIP(req.ip, '1h');
         await this.requireCaptcha(userId);
         break;
-        
+
       case 'social_engineering_suspected':
         await this.flagAccount(userId);
         await this.sendSecurityAlert(user.email);
@@ -436,18 +489,21 @@ class SecurityMonitor {
 ## Compliance Considerations
 
 ### GDPR Compliance
+
 - Obtain explicit consent for email verification
 - Implement data retention policies for verification logs
 - Provide data portability for verification history
 - Enable user deletion of verification data
 
 ### SOC 2 Compliance
+
 - Implement comprehensive audit trails
 - Maintain security control documentation
 - Regular security assessments of email verification systems
 - Incident response procedures for verification-related breaches
 
 ### HIPAA Compliance (if applicable)
+
 - Encrypt all email verification data
 - Implement business associate agreements with email providers
 - Maintain detailed access logs

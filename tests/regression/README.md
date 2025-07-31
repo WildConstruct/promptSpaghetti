@@ -5,8 +5,9 @@ This directory contains regression tests to ensure critical functionality remain
 ## Overview
 
 Regression tests focus on:
+
 1. **Golden File Tests** - Deterministic output validation
-2. **Performance Benchmarks** - Performance regression detection  
+2. **Performance Benchmarks** - Performance regression detection
 3. **API Contract Tests** - External API stability
 4. **Database Migration Tests** - Data integrity across schema changes
 5. **Security Boundary Tests** - Security feature preservation
@@ -14,30 +15,35 @@ Regression tests focus on:
 ## Test Categories
 
 ### 1. Core Engine Regression (`core-engine/`)
+
 - Graph execution deterministic output
 - Advanced node algorithm correctness
 - Memory usage and performance benchmarks
 - Security boundary validation
 
 ### 2. API Stability (`api-stability/`)
+
 - Preview endpoint contract compliance
 - Export/import round-trip integrity
 - Error response format consistency
 - Authentication and authorization
 
 ### 3. Database Integrity (`database-integrity/`)
+
 - Schema migration compatibility
 - Data persistence across versions
 - Query performance benchmarks
 - Transaction consistency
 
 ### 4. Performance Benchmarks (`performance/`)
+
 - Graph execution speed thresholds
 - Memory usage limits
 - Concurrent user scenarios
 - Frontend rendering performance
 
 ### 5. Security Regression (`security/`)
+
 - Expression evaluation sandboxing
 - Prototype pollution prevention
 - Authentication bypass attempts
@@ -72,6 +78,7 @@ npm run test:regression:benchmark
 ## CI/CD Integration
 
 Regression tests run automatically on:
+
 - Pull requests to main branch
 - Pre-release builds
 - Nightly performance benchmarks
@@ -80,8 +87,9 @@ Regression tests run automatically on:
 ## Performance Thresholds
 
 Current acceptable limits:
+
 - Graph execution (100 nodes): < 100ms
-- Memory usage (1000 nodes): < 50MB  
+- Memory usage (1000 nodes): < 50MB
 - API response time: < 1s
 - Database query time: < 100ms
 - Frontend render time: < 500ms
@@ -94,7 +102,7 @@ When legitimate changes require updating expected outputs:
 # Review changes carefully
 npm run test:regression:review-changes
 
-# Update specific golden files  
+# Update specific golden files
 npm run test:regression:update-golden -- --test-pattern="specific-test"
 
 # Update performance baselines

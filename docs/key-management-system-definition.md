@@ -2,7 +2,7 @@
 
 **Task**: E17-1753114397214-9C3464 - Define key management  
 **Epic**: 17 - Backstage Admin Controls  
-**Status**: Completed  
+**Status**: Completed
 
 ## Overview
 
@@ -15,20 +15,20 @@ This document provides comprehensive definitions for the key management system w
 ```mermaid
 graph TB
     A[Key Management Service] --> B[Storage Provider]
-    A --> C[Access Controller] 
+    A --> C[Access Controller]
     A --> D[Audit Logger]
     A --> E[Policy Engine]
-    
+
     B --> F[Database Storage]
     B --> G[HSM Storage]
     B --> H[Cache Storage]
-    
+
     C --> I[RBAC Service]
     C --> J[Permission Engine]
-    
+
     D --> K[Audit Database]
     D --> L[Compliance Reporter]
-    
+
     E --> M[Policy Store]
     E --> N[Rule Engine]
 ```
@@ -49,22 +49,22 @@ graph TB
 enum KeyType {
   // API Management Keys
   API_ACCESS_KEY = 'api_access_key',
-  API_SECRET_KEY = 'api_secret_key', 
+  API_SECRET_KEY = 'api_secret_key',
   API_SIGNING_KEY = 'api_signing_key',
-  
+
   // System Keys
   MASTER_KEY = 'master_key',
   ENCRYPTION_KEY = 'encryption_key',
   SIGNING_KEY = 'signing_key',
-  
+
   // Session Keys
   SESSION_KEY = 'session_key',
   TEMPORARY_KEY = 'temporary_key',
-  
+
   // Cryptographic Keys
   SYMMETRIC_KEY = 'symmetric_key',
   ASYMMETRIC_KEY = 'asymmetric_key',
-  HMAC_KEY = 'hmac_key'
+  HMAC_KEY = 'hmac_key',
 }
 ```
 
@@ -89,13 +89,13 @@ stateDiagram-v2
 
 ### Security Levels
 
-| Level | Description | Use Cases | Requirements |
-|-------|-------------|-----------|--------------|
-| LOW | Basic protection | Development, testing | Standard encryption |
-| STANDARD | Enterprise security | Production APIs | Enhanced encryption |
-| HIGH | Enhanced security | Sensitive data | MFA, approval workflows |
-| CRITICAL | Maximum security | Financial, PII | HSM, dual approval |
-| ULTRA | Ultra-high security | Compliance critical | HSM + audit trail |
+| Level    | Description         | Use Cases            | Requirements            |
+| -------- | ------------------- | -------------------- | ----------------------- |
+| LOW      | Basic protection    | Development, testing | Standard encryption     |
+| STANDARD | Enterprise security | Production APIs      | Enhanced encryption     |
+| HIGH     | Enhanced security   | Sensitive data       | MFA, approval workflows |
+| CRITICAL | Maximum security    | Financial, PII       | HSM, dual approval      |
+| ULTRA    | Ultra-high security | Compliance critical  | HSM + audit trail       |
 
 ## Key Management Operations
 
@@ -136,17 +136,20 @@ The key management system integrates with the API Permission Assignment Service 
 - **Temporal permissions**: Time-limited access grants
 
 Example permission assignment:
+
 ```typescript
 const keyPermission = {
   permissionType: ApiPermissionType.API_KEY_MANAGEMENT,
   action: ApiPermissionAction.USE,
   scope: ApiPermissionScope.ORGANIZATION,
   resourcePattern: 'keys:encryption:*',
-  conditions: [{
-    field: 'ipAddress',
-    operator: 'in',
-    value: ['10.0.0.0/8', '192.168.0.0/16']
-  }]
+  conditions: [
+    {
+      field: 'ipAddress',
+      operator: 'in',
+      value: ['10.0.0.0/8', '192.168.0.0/16'],
+    },
+  ],
 };
 ```
 
@@ -158,7 +161,7 @@ const keyPermission = {
 interface KeyManagementPolicy {
   policyId: string;
   policyName: string;
-  
+
   // Generation Rules
   generationRules: {
     minimumKeySize: number;
@@ -167,7 +170,7 @@ interface KeyManagementPolicy {
     defaultExpirationDays: number;
     requireApproval: boolean;
   };
-  
+
   // Rotation Rules
   rotationRules: {
     mandatoryRotationDays: number;
@@ -175,7 +178,7 @@ interface KeyManagementPolicy {
     gracePeriodHours: number;
     autoRotationEnabled: boolean;
   };
-  
+
   // Access Rules
   accessRules: {
     requireMFA: boolean;
@@ -188,12 +191,12 @@ interface KeyManagementPolicy {
 
 ### Compliance Framework
 
-| Framework | Requirements | Implementation |
-|-----------|-------------|----------------|
-| **SOC 2** | Encryption at rest/transit, access logging | AES-256-GCM, comprehensive audit |
-| **PCI DSS** | Key rotation, secure storage | 90-day rotation, HSM storage |
-| **HIPAA** | Access controls, audit trails | Role-based access, detailed logging |
-| **FIPS 140-2** | Cryptographic standards | Validated algorithms, secure random |
+| Framework      | Requirements                               | Implementation                      |
+| -------------- | ------------------------------------------ | ----------------------------------- |
+| **SOC 2**      | Encryption at rest/transit, access logging | AES-256-GCM, comprehensive audit    |
+| **PCI DSS**    | Key rotation, secure storage               | 90-day rotation, HSM storage        |
+| **HIPAA**      | Access controls, audit trails              | Role-based access, detailed logging |
+| **FIPS 140-2** | Cryptographic standards                    | Validated algorithms, secure random |
 
 ## Storage Architecture
 
@@ -202,10 +205,10 @@ interface KeyManagementPolicy {
 ```mermaid
 graph LR
     A[Memory Cache] --> B[Database Storage]
-    B --> C[File Storage]  
+    B --> C[File Storage]
     C --> D[HSM Storage]
     D --> E[Cloud Storage]
-    
+
     A -.->|Hot keys| F[Active operations]
     B -.->|Warm keys| G[Regular access]
     C -.->|Cold keys| H[Occasional access]
@@ -271,7 +274,7 @@ GET    /api/keys/:keyId         // Get key metadata
 PUT    /api/keys/:keyId         // Update key
 DELETE /api/keys/:keyId         // Revoke key
 
-// Lifecycle Operations  
+// Lifecycle Operations
 POST   /api/keys/:keyId/activate    // Activate key
 POST   /api/keys/:keyId/rotate      // Rotate key
 POST   /api/keys/:keyId/revoke      // Revoke key
@@ -325,7 +328,7 @@ POST   /api/keys/:keyId/permissions/check // Check permissions
 ✅ **API Permission Integration**: Service integration with RBAC  
 ✅ **Expiration Management**: Automated lifecycle handling  
 ✅ **Storage Architecture**: Multi-tier storage design  
-✅ **Policy Framework**: Configurable governance rules  
+✅ **Policy Framework**: Configurable governance rules
 
 ### Integration Points
 

@@ -25,7 +25,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
   color = 'currentColor',
   size = 24,
   className,
-  style
+  style,
 }) => {
   return (
     <button
@@ -44,16 +44,10 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
         cursor: 'pointer',
         padding: 0,
         ...mobileStyles.tapHighlight,
-        ...style
+        ...style,
       }}
     >
-      <svg
-        width={size}
-        height={size}
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
           d={isOpen ? 'M6 6L18 18M6 18L18 6' : 'M3 12H21M3 6H21M3 18H21'}
           stroke={color}
@@ -61,7 +55,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
           strokeLinecap="round"
           strokeLinejoin="round"
           style={{
-            transition: 'd 0.3s ease, opacity 0.3s ease'
+            transition: 'd 0.3s ease, opacity 0.3s ease',
           }}
         />
       </svg>
@@ -94,17 +88,17 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
   onItemClick,
   showLabels = true,
   className,
-  style
+  style,
 }) => {
   const { isTouch } = useDeviceDetection();
-  
+
   const handleItemClick = (id: string) => {
     if (isTouch && 'vibrate' in navigator) {
       navigator.vibrate(10); // Light haptic feedback
     }
     onItemClick(id);
   };
-  
+
   return (
     <nav
       className={cn('bottom-navigation', className)}
@@ -118,12 +112,12 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
         borderTop: '1px solid var(--color-border)',
         paddingBottom: getSafeAreaPadding('bottom'),
         zIndex: 999,
-        ...style
+        ...style,
       }}
     >
-      {items.map((item) => {
+      {items.map(item => {
         const isActive = item.id === activeId;
-        
+
         return (
           <button
             key={item.id}
@@ -146,7 +140,7 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
               transition: 'color 0.2s ease',
               position: 'relative',
               ...mobileStyles.tapHighlight,
-              ...mobileStyles.noSelect
+              ...mobileStyles.noSelect,
             }}
           >
             <div className="bottom-nav-icon" style={{ position: 'relative' }}>
@@ -168,7 +162,7 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
                     fontWeight: 'bold',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
                   }}
                 >
                   {item.badge}
@@ -181,7 +175,7 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
                 style={{
                   fontSize: 12,
                   marginTop: 4,
-                  fontWeight: isActive ? 500 : 400
+                  fontWeight: isActive ? 500 : 400,
                 }}
               >
                 {item.label}
@@ -222,7 +216,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
   transparent = false,
   className,
   style,
-  children
+  children,
 }) => {
   return (
     <header
@@ -241,7 +235,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
         backgroundColor: transparent ? 'transparent' : 'var(--color-background)',
         borderBottom: transparent ? 'none' : '1px solid var(--color-border)',
         zIndex: 998,
-        ...style
+        ...style,
       }}
     >
       {leftAction && (
@@ -259,13 +253,13 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
             border: 'none',
             cursor: 'pointer',
             marginRight: MOBILE_SPACING.sm,
-            ...mobileStyles.tapHighlight
+            ...mobileStyles.tapHighlight,
           }}
         >
           {leftAction.icon}
         </button>
       )}
-      
+
       {title && (
         <h1
           className="mobile-header-title"
@@ -276,19 +270,19 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
             margin: 0,
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap'
+            whiteSpace: 'nowrap',
           }}
         >
           {title}
         </h1>
       )}
-      
+
       {children && (
         <div className="mobile-header-content" style={{ flex: 1 }}>
           {children}
         </div>
       )}
-      
+
       {rightActions.length > 0 && (
         <div className="mobile-header-actions right" style={{ display: 'flex', gap: 4 }}>
           {rightActions.map((action, index) => (
@@ -306,7 +300,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
-                ...mobileStyles.tapHighlight
+                ...mobileStyles.tapHighlight,
               }}
             >
               {action.icon}
@@ -338,7 +332,7 @@ export const SlideMenu: React.FC<SlideMenuProps> = ({
   width = '80%',
   className,
   style,
-  children
+  children,
 }) => {
   return (
     <>
@@ -353,11 +347,11 @@ export const SlideMenu: React.FC<SlideMenuProps> = ({
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
             zIndex: 1000,
             opacity: isOpen ? 1 : 0,
-            transition: 'opacity 0.3s ease'
+            transition: 'opacity 0.3s ease',
           }}
         />
       )}
-      
+
       {/* Menu */}
       <div
         className={cn('slide-menu', `position-${position}`, isOpen && 'is-open', className)}
@@ -374,7 +368,7 @@ export const SlideMenu: React.FC<SlideMenuProps> = ({
           zIndex: 1001,
           overflowY: 'auto',
           ...mobileStyles.smoothScroll,
-          ...style
+          ...style,
         }}
       >
         {children}

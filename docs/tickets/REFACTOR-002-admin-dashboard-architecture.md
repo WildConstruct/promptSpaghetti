@@ -1,9 +1,11 @@
 # REFACTOR-002: Admin Dashboard Architecture Consolidation
 
 ## 🎯 Objective
+
 Consolidate 65+ inconsistent admin components into a cohesive, maintainable architecture with shared patterns, reusable components, and standardized hooks. Target 60-70% code reduction through elimination of duplication.
 
 ## 📊 Current State Analysis
+
 - **65 Total Components**: Dashboards, forms, controls, management tools
 - **Major Duplication**: Auth headers, loading states, form validation, modal structures
 - **Inconsistent Patterns**: Mixed styling approaches, error handling, date formatting
@@ -12,6 +14,7 @@ Consolidate 65+ inconsistent admin components into a cohesive, maintainable arch
 ## 🎯 Target Architecture
 
 ### New Structure
+
 ```
 client/src/components/admin/
 ├── shared/
@@ -44,25 +47,29 @@ client/src/components/admin/
 ```
 
 ### Shared Hook Architecture
+
 ```typescript
 // useAdminApi.ts - Centralized API with auth
 export const useAdminApi = () => {
   const { token } = useAuth();
-  
-  const apiCall = useCallback(async (endpoint, options) => {
-    const response = await fetch(endpoint, {
-      ...options,
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        ...options.headers
-      }
-    });
-    
-    if (!response.ok) throw new Error(response.statusText);
-    return response.json();
-  }, [token]);
-  
+
+  const apiCall = useCallback(
+    async (endpoint, options) => {
+      const response = await fetch(endpoint, {
+        ...options,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          ...options.headers,
+        },
+      });
+
+      if (!response.ok) throw new Error(response.statusText);
+      return response.json();
+    },
+    [token]
+  );
+
   return { apiCall, loading, error };
 };
 
@@ -71,12 +78,12 @@ export const useAdminForm = <T>(schema: FormSchema<T>) => {
   const [values, setValues] = useState<T>(schema.defaultValues);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   const validate = () => schema.validate(values);
   const submit = async (onSubmit: (data: T) => Promise<void>) => {
     // Validation and submission logic
   };
-  
+
   return { values, errors, isSubmitting, validate, submit, setValues };
 };
 ```
@@ -84,6 +91,7 @@ export const useAdminForm = <T>(schema: FormSchema<T>) => {
 ## 🚀 Implementation Plan
 
 ### Phase 1: Foundation (Days 1-2)
+
 1. **Create base layout components**
    - AdminLayout with consistent header/sidebar
    - DashboardLayout for dashboard pages
@@ -95,6 +103,7 @@ export const useAdminForm = <T>(schema: FormSchema<T>) => {
    - MetricsCard for dashboard widgets
 
 ### Phase 2: Core Infrastructure (Days 3-4)
+
 1. **Implement shared hooks**
    - useAdminApi for authenticated requests
    - usePermissions for access control
@@ -106,6 +115,7 @@ export const useAdminForm = <T>(schema: FormSchema<T>) => {
    - Common validation rules
 
 ### Phase 3: Component Consolidation (Days 5-7)
+
 1. **Build reusable components**
    - AdminTable with sorting/filtering/pagination
    - AdminFormModal base component
@@ -116,6 +126,7 @@ export const useAdminForm = <T>(schema: FormSchema<T>) => {
    - Demonstrate patterns for other components
 
 ### Phase 4: Migration & Testing (Days 8-10)
+
 1. **Gradual migration**
    - Update remaining components to use shared architecture
    - Maintain backward compatibility during transition
@@ -127,42 +138,49 @@ export const useAdminForm = <T>(schema: FormSchema<T>) => {
 ## 📋 Detailed Tasks
 
 ### Task 1: Create AdminLayout Foundation
+
 - [ ] Design consistent admin header with user info
 - [ ] Implement sidebar navigation with permissions
 - [ ] Create responsive layout structure
 - [ ] Add breadcrumb navigation
 
 ### Task 2: Extract Common UI Components
+
 - [ ] StatusBadge component with consistent styling
 - [ ] LoadingStates (spinner, error message, empty state)
 - [ ] MetricsCard for dashboard KPIs
 - [ ] ConfirmationModal for destructive actions
 
 ### Task 3: Implement Core Hooks
+
 - [ ] useAdminApi with authentication and error handling
 - [ ] usePermissions with role-based access
 - [ ] useAdminNotifications with toast system
 - [ ] useModal for modal state management
 
 ### Task 4: Build Form Infrastructure
+
 - [ ] AdminFormBuilder with schema validation
 - [ ] FormField wrapper with consistent styling
 - [ ] Validation rules library
 - [ ] Form submission handling
 
 ### Task 5: Create Table System
+
 - [ ] AdminTable with sorting and filtering
 - [ ] Pagination component
 - [ ] Column configuration system
 - [ ] Bulk actions support
 
 ### Task 6: Refactor Key Dashboards
+
 - [ ] FeatureToggleDashboard using new architecture
 - [ ] UserManagementDashboard conversion
 - [ ] ApiManagementDashboard refactor
 - [ ] Document migration patterns
 
 ### Task 7: Testing & Documentation
+
 - [ ] Unit tests for all shared components
 - [ ] Integration tests for common workflows
 - [ ] Storybook documentation
@@ -171,6 +189,7 @@ export const useAdminForm = <T>(schema: FormSchema<T>) => {
 ## 🎯 Success Criteria
 
 ### Code Quality Metrics
+
 - [ ] 60-70% reduction in duplicated code across admin components
 - [ ] All admin components use shared layout system
 - [ ] 90%+ test coverage on new shared components
@@ -178,6 +197,7 @@ export const useAdminForm = <T>(schema: FormSchema<T>) => {
 - [ ] Consistent error handling across all admin features
 
 ### Developer Experience
+
 - [ ] New admin features can be built using shared components only
 - [ ] Form creation requires <50 lines of code for simple forms
 - [ ] Dashboard creation uses consistent layout patterns
@@ -185,6 +205,7 @@ export const useAdminForm = <T>(schema: FormSchema<T>) => {
 - [ ] Comprehensive documentation and examples
 
 ### User Experience
+
 - [ ] Consistent navigation and layout across admin pages
 - [ ] Uniform loading states and error messages
 - [ ] Standardized form validation and feedback
@@ -194,29 +215,34 @@ export const useAdminForm = <T>(schema: FormSchema<T>) => {
 ## 🔧 Implementation Notes
 
 ### Breaking Changes
+
 - **Minimal**: Designed to be backward compatible
 - **Gradual Migration**: Components can be updated incrementally
 - **API Preservation**: Existing component APIs maintained where possible
 
 ### Performance Considerations
+
 - Lazy loading for admin routes
 - Memoization for expensive table operations
 - Optimized re-renders for form components
 - Bundle size impact monitoring
 
 ### Migration Strategy
+
 1. Create new shared components alongside existing
 2. Update one dashboard at a time to new architecture
 3. Provide migration examples and patterns
 4. Remove old components once migration complete
 
 ## 📚 References
+
 - Current admin components: `client/src/components/admin/`
 - Form patterns: Following React Hook Form best practices
 - Table patterns: Based on TanStack Table architecture
 - Design system: Extending existing UI patterns
 
 ## 🏷️ Labels
+
 - `refactoring`
 - `admin-system`
 - `architecture`
@@ -224,13 +250,16 @@ export const useAdminForm = <T>(schema: FormSchema<T>) => {
 - `technical-debt`
 
 ## ⏱️ Estimated Effort
+
 **10 days** (1 senior developer)
+
 - Days 1-2: Foundation and layout components
-- Days 3-4: Core hooks and form infrastructure  
+- Days 3-4: Core hooks and form infrastructure
 - Days 5-7: Component consolidation and table system
 - Days 8-10: Migration, testing, and documentation
 
 **Expected Impact:**
+
 - 60-70% code reduction through elimination of duplication
 - Consistent UX across all admin interfaces
 - Faster development of new admin features

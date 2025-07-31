@@ -370,8 +370,12 @@
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Responsive Design */
@@ -379,33 +383,33 @@
   .feature-toggle-dashboard {
     padding: 16px;
   }
-  
+
   .dashboard-header {
     flex-direction: column;
     gap: 16px;
     align-items: stretch;
   }
-  
+
   .header-actions {
     justify-content: center;
   }
-  
+
   .dashboard-stats {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   }
-  
+
   .filters-panel {
     grid-template-columns: 1fr;
   }
-  
+
   .toggles-table-container {
     overflow-x: auto;
   }
-  
+
   .toggles-table {
     min-width: 800px;
   }
-  
+
   .bulk-actions {
     flex-direction: column;
     gap: 12px;
@@ -417,7 +421,7 @@
   .action-buttons {
     flex-direction: column;
   }
-  
+
   .btn {
     justify-content: center;
   }
@@ -437,4 +441,3 @@
   overflow-y: auto;
   padding: 0; /* Let the ToggleParametersManager handle its own padding */
 }
-

@@ -1,6 +1,6 @@
 /**
  * Basic Test Suite for Password Reset Flow Component
- * 
+ *
  * Simplified tests focusing on core functionality and rendering.
  */
 import React from 'react';
@@ -8,12 +8,12 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { PasswordResetFlow, ResetStep } from '../components/PasswordResetFlow';
 describe('PasswordResetFlow - Basic Tests', () => {
   const defaultProps = {
-  onResetComplete: jest.fn<unknown, unknown>(),
-  onStepChange: jest.fn<unknown, unknown>(),
-  onSecurityEvent: jest.fn<unknown, unknown>(),
-  brandName: 'Test App',
-  supportEmail: 'support@test.com',
-};
+    onResetComplete: jest.fn<unknown, unknown>(),
+    onStepChange: jest.fn<unknown, unknown>(),
+    onSecurityEvent: jest.fn<unknown, unknown>(),
+    brandName: 'Test App',
+    supportEmail: 'support@test.com',
+  };
   beforeEach(() => {
     jest.clearAllMocks();
   });

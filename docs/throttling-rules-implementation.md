@@ -84,8 +84,8 @@ const rule: ThrottlingRule = {
     {
       type: 'endpoint',
       operator: 'contains',
-      value: '/api'
-    }
+      value: '/api',
+    },
   ],
   baseDelay: 100,
   maxDelay: 5000,
@@ -104,7 +104,7 @@ const middleware = new AdaptiveThrottlingMiddleware(rateLimitingService, {
   maxDelayMs: 10000,
   enableMetricsCollection: true,
   systemMetricsInterval: 30000,
-  logThrottledRequests: true
+  logThrottledRequests: true,
 });
 ```
 
@@ -113,6 +113,7 @@ const middleware = new AdaptiveThrottlingMiddleware(rateLimitingService, {
 The system includes several pre-configured rules:
 
 ### 1. API Adaptive Throttling
+
 - **Target**: `/api` endpoints
 - **Mode**: Adaptive
 - **Base Delay**: 100ms
@@ -120,6 +121,7 @@ The system includes several pre-configured rules:
 - **Multiplier**: 1.5x
 
 ### 2. Authentication Circuit Breaker
+
 - **Target**: Authentication endpoints (`/login`, `/register`, `/auth`)
 - **Mode**: Circuit Breaker
 - **Failure Threshold**: 5 failures
@@ -127,12 +129,14 @@ The system includes several pre-configured rules:
 - **Half-Open Requests**: 3
 
 ### 3. System Load Shedding
+
 - **Trigger**: System load > 85%
 - **Mode**: Load Shedding
 - **Shed Percentage**: 50%
 - **Response**: 503 Service Unavailable
 
 ### 4. Preview Bandwidth Shaping
+
 - **Target**: `/preview` endpoints
 - **Mode**: Bandwidth Shaping
 - **Rate**: 2 requests/second
@@ -152,10 +156,12 @@ const engine = new AdaptiveThrottlingRulesEngine(rateLimitingService);
 
 ```typescript
 // Register the plugin
-await fastify.register(createAdaptiveThrottlingPlugin(rateLimitingService, {
-  enabled: true,
-  logThrottledRequests: true
-}));
+await fastify.register(
+  createAdaptiveThrottlingPlugin(rateLimitingService, {
+    enabled: true,
+    logThrottledRequests: true,
+  })
+);
 
 // Access middleware methods
 fastify.adaptiveThrottling.addThrottlingRule(customRule);
@@ -201,6 +207,7 @@ Returns comprehensive statistics:
 ### Control Endpoints
 
 Enable/disable throttling:
+
 ```
 POST /api/throttling/enable
 {
@@ -239,16 +246,19 @@ npm test -- AdaptiveThrottlingRules
 ## Performance Characteristics
 
 ### Memory Usage
+
 - Efficient in-memory storage of throttling state
 - Automatic cleanup of old data
 - Token bucket state is lightweight
 
 ### CPU Impact
+
 - Minimal overhead per request
 - Efficient condition evaluation
 - Optimized rule matching
 
 ### Response Time Impact
+
 - Adaptive delays based on system condition
 - Circuit breaker provides immediate blocking
 - Token bucket provides smooth rate limiting
@@ -256,16 +266,19 @@ npm test -- AdaptiveThrottlingRules
 ## Security Considerations
 
 ### Threat Assessment
+
 - Multi-factor threat level calculation
 - Pattern detection for common attacks
 - Integration with existing security systems
 
 ### Protection Against Attacks
+
 - DDoS mitigation through load shedding
 - Brute force protection via circuit breakers
 - Application-layer attack detection
 
 ### Fail-Safe Design
+
 - Defaults to allowing requests on errors
 - Configurable maximum delays
 - Circuit breaker prevents cascading failures
@@ -273,16 +286,19 @@ npm test -- AdaptiveThrottlingRules
 ## Operational Guidelines
 
 ### Deployment Considerations
+
 - Start with conservative thresholds
 - Monitor system impact closely
 - Adjust rules based on traffic patterns
 
 ### Alerting Recommendations
+
 - Alert on circuit breaker openings
 - Monitor system condition changes
 - Track throttling application rates
 
 ### Maintenance Tasks
+
 - Regular review of throttling effectiveness
 - Adjustment of thresholds based on growth
 - Clean up of unnecessary rules
@@ -290,6 +306,7 @@ npm test -- AdaptiveThrottlingRules
 ## Future Enhancements
 
 ### Planned Improvements
+
 1. Machine learning-based threat detection
 2. Geographic-based rule conditions
 3. Integration with external threat intelligence
@@ -297,6 +314,7 @@ npm test -- AdaptiveThrottlingRules
 5. Rule versioning and rollback capabilities
 
 ### Integration Opportunities
+
 1. APM (Application Performance Monitoring) integration
 2. Logging system integration
 3. Metrics collection (Prometheus/Grafana)
@@ -334,6 +352,7 @@ npm test -- AdaptiveThrottlingRules
 The Adaptive Throttling Rules implementation provides a comprehensive, intelligent throttling system that protects the application while maintaining good user experience. It integrates seamlessly with existing security infrastructure and provides extensive monitoring and control capabilities.
 
 The system is designed to be:
+
 - **Adaptive** - Responds to changing system conditions
 - **Intelligent** - Makes decisions based on multiple factors
 - **Observable** - Provides comprehensive monitoring

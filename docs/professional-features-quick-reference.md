@@ -3,6 +3,7 @@
 ## 🚀 Quick Start
 
 ### Basic Integration
+
 ```typescript
 import { ProfessionalIntegration } from './components/CommandPalette/ProfessionalIntegration';
 import './professional-theme.css';
@@ -27,23 +28,23 @@ import './professional-theme.css';
 
 ## ⌨️ Keyboard Shortcuts
 
-| Action | Shortcut | Description |
-|--------|----------|-------------|
-| **Command Palette** | `⌘K` | Open command palette |
-| **Undo** | `⌘Z` | Undo last action |
-| **Redo** | `⌘⇧Z` or `⌘Y` | Redo last undone action |
-| **Save** | `⌘S` | Save project |
-| **Load** | `⌘O` | Load project |
-| **Export** | `⌘E` | Export graph |
-| **Select All** | `⌘A` | Select all nodes |
-| **Delete** | `Delete` or `Backspace` | Delete selected items |
-| **Duplicate** | `⌘D` | Duplicate selected nodes |
-| **Fit View** | `⌘0` | Fit all nodes in view |
-| **Zoom In** | `⌘+` | Zoom in |
-| **Zoom Out** | `⌘-` | Zoom out |
-| **Generate Character** | `⌘G` | Quick character generation |
-| **Toggle Fullscreen** | `Alt+F` | Toggle fullscreen mode |
-| **Help** | `?` or `F1` | Show keyboard shortcuts |
+| Action                 | Shortcut                | Description                |
+| ---------------------- | ----------------------- | -------------------------- |
+| **Command Palette**    | `⌘K`                    | Open command palette       |
+| **Undo**               | `⌘Z`                    | Undo last action           |
+| **Redo**               | `⌘⇧Z` or `⌘Y`           | Redo last undone action    |
+| **Save**               | `⌘S`                    | Save project               |
+| **Load**               | `⌘O`                    | Load project               |
+| **Export**             | `⌘E`                    | Export graph               |
+| **Select All**         | `⌘A`                    | Select all nodes           |
+| **Delete**             | `Delete` or `Backspace` | Delete selected items      |
+| **Duplicate**          | `⌘D`                    | Duplicate selected nodes   |
+| **Fit View**           | `⌘0`                    | Fit all nodes in view      |
+| **Zoom In**            | `⌘+`                    | Zoom in                    |
+| **Zoom Out**           | `⌘-`                    | Zoom out                   |
+| **Generate Character** | `⌘G`                    | Quick character generation |
+| **Toggle Fullscreen**  | `Alt+F`                 | Toggle fullscreen mode     |
+| **Help**               | `?` or `F1`             | Show keyboard shortcuts    |
 
 ## 🎨 Theme Colors (Cinema 4D Style)
 
@@ -55,10 +56,10 @@ import './professional-theme.css';
 --color-bg-quaternary: #4a4a4a;
 
 /* Accent Colors */
---color-accent-orange: #ff7800;  /* Primary */
---color-accent-blue: #0ea5e9;    /* Secondary */
---color-accent-green: #10b981;   /* Success */
---color-accent-red: #ef4444;     /* Error */
+--color-accent-orange: #ff7800; /* Primary */
+--color-accent-blue: #0ea5e9; /* Secondary */
+--color-accent-green: #10b981; /* Success */
+--color-accent-red: #ef4444; /* Error */
 
 /* Text Colors */
 --color-text-primary: #e5e7eb;
@@ -69,6 +70,7 @@ import './professional-theme.css';
 ## 🛠️ Component API
 
 ### Command Palette
+
 ```typescript
 <CommandPalette
   isOpen={boolean}
@@ -82,6 +84,7 @@ import './professional-theme.css';
 ```
 
 ### Undo/Redo Manager
+
 ```typescript
 <UndoRedoManager
   onStateChange={(state) => void}
@@ -91,6 +94,7 @@ import './professional-theme.css';
 ```
 
 ### Multi-Selection Manager
+
 ```typescript
 <MultiSelectionManager
   nodes={Node[]}
@@ -105,6 +109,7 @@ import './professional-theme.css';
 ```
 
 ### Autosave Manager
+
 ```typescript
 <AutosaveManager
   nodes={Node[]}
@@ -118,18 +123,19 @@ import './professional-theme.css';
 
 ## 🎯 Selection Modes
 
-| Method | Action | Result |
-|--------|--------|--------|
-| **Single** | Click node | Select single node |
-| **Toggle** | `⌘+Click` | Add/remove from selection |
-| **Range** | `⇧+Click` | Select range of nodes |
-| **Rectangle** | Drag on canvas | Select nodes in rectangle |
-| **Select All** | `⌘A` | Select all nodes |
-| **Clear** | `Esc` | Clear selection |
+| Method         | Action         | Result                    |
+| -------------- | -------------- | ------------------------- |
+| **Single**     | Click node     | Select single node        |
+| **Toggle**     | `⌘+Click`      | Add/remove from selection |
+| **Range**      | `⇧+Click`      | Select range of nodes     |
+| **Rectangle**  | Drag on canvas | Select nodes in rectangle |
+| **Select All** | `⌘A`           | Select all nodes          |
+| **Clear**      | `Esc`          | Clear selection           |
 
 ## 🎬 Generation Flows
 
 ### Character Development
+
 ```typescript
 // Triggered via Command Palette or ⌘G
 {
@@ -143,6 +149,7 @@ import './professional-theme.css';
 ```
 
 ### Story Structure
+
 ```typescript
 {
   id: 'story-structure',
@@ -155,6 +162,7 @@ import './professional-theme.css';
 ```
 
 ### Scene Dialogue
+
 ```typescript
 {
   id: 'dialogue-generator',
@@ -169,6 +177,7 @@ import './professional-theme.css';
 ## 💾 Autosave System
 
 ### Configuration
+
 ```typescript
 const autosaveSystem = new AutosaveSystem('project-id', 10);
 
@@ -185,6 +194,7 @@ if (autosaveSystem.hasConflict()) {
 ```
 
 ### Data Structure
+
 ```typescript
 interface AutosaveState {
   nodes: Node[];
@@ -204,14 +214,16 @@ interface AutosaveState {
 ## 🔍 Professional Status Indicators
 
 ### Status Messages
+
 - `Professional Mode Active` - All features enabled
 - `Saved` - Autosave successful
 - `Error` - Operation failed
 - `Ready` - System ready for input
 
 ### Visual Indicators
+
 - 🟢 Green dot - System healthy
-- 🟡 Yellow dot - Warning state  
+- 🟡 Yellow dot - Warning state
 - 🔴 Red dot - Error state
 - 📋 History icon - Access undo/redo
 - 💾 Save icon - Manual save
@@ -222,21 +234,25 @@ interface AutosaveState {
 ### Common Issues
 
 **Command Palette Not Opening**
+
 - Check if `⌘K` is bound by browser/OS
 - Verify component is properly integrated
 - Check theme CSS is loaded
 
 **Undo/Redo Not Working**
+
 - Ensure UndoRedoManager is mounted
 - Check if state changes are being tracked
 - Verify keyboard shortcuts are active
 
 **Autosave Not Functioning**
+
 - Check localStorage permissions
 - Verify interval setting (default 30s)
 - Check browser storage limits
 
 **Selection Issues**
+
 - Ensure MultiSelectionManager is active
 - Check for event conflicts
 - Verify mouse event handlers
@@ -244,12 +260,14 @@ interface AutosaveState {
 ### Performance Tips
 
 **Large Graphs (100+ nodes)**
+
 - Enable performance monitoring
 - Reduce animation complexity
 - Increase autosave interval
 - Use viewport-based rendering
 
 **Memory Management**
+
 - Limit undo history (default 50 states)
 - Clear autosave versions periodically
 - Monitor browser memory usage
@@ -270,26 +288,49 @@ packages/core/components/CommandPalette/
 ## 🎨 CSS Classes
 
 ### Professional Components
+
 ```css
-.professional-mode-active { /* Status indicator */ }
-.command-palette-overlay { /* Palette backdrop */ }
-.selection-rectangle { /* Drag selection */ }
-.undo-redo-toolbar { /* History controls */ }
-.autosave-indicator { /* Save status */ }
-.keyboard-help-overlay { /* Shortcuts help */ }
+.professional-mode-active {
+  /* Status indicator */
+}
+.command-palette-overlay {
+  /* Palette backdrop */
+}
+.selection-rectangle {
+  /* Drag selection */
+}
+.undo-redo-toolbar {
+  /* History controls */
+}
+.autosave-indicator {
+  /* Save status */
+}
+.keyboard-help-overlay {
+  /* Shortcuts help */
+}
 ```
 
 ### Animation Classes
+
 ```css
-.fade-in { /* Smooth appearance */ }
-.slide-up { /* Upward animation */ }
-.scale-in { /* Scale animation */ }
-.professional-transition { /* Standard transition */ }
+.fade-in {
+  /* Smooth appearance */
+}
+.slide-up {
+  /* Upward animation */
+}
+.scale-in {
+  /* Scale animation */
+}
+.professional-transition {
+  /* Standard transition */
+}
 ```
 
 ## 🔧 Development Mode
 
 ### Performance Monitor
+
 ```typescript
 // Automatically shows in development
 {
@@ -301,6 +342,7 @@ packages/core/components/CommandPalette/
 ```
 
 ### Debug Information
+
 - Node/edge counts
 - Selection state
 - Performance metrics

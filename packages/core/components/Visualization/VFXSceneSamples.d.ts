@@ -11,11 +11,11 @@ export declare const romanForum: VFXScene;
 export declare const sampleScenes: VFXScene[];
 export declare const generateRandomScene: (id: string, name: string, period: string) => VFXScene;
 declare const _default: {
-    medievalCourtyard: VFXScene;
-    vikingVillage: VFXScene;
-    romanForum: VFXScene;
-    sampleScenes: VFXScene[];
-    generateRandomScene: (id: string, name: string, period: string) => VFXScene;
+  medievalCourtyard: VFXScene;
+  vikingVillage: VFXScene;
+  romanForum: VFXScene;
+  sampleScenes: VFXScene[];
+  generateRandomScene: (id: string, name: string, period: string) => VFXScene;
 };
 export default _default;
 //# sourceMappingURL=VFXSceneSamples.d.ts.map

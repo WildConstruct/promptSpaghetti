@@ -4,11 +4,9 @@ module.exports = {
     browser: true,
     es2021: true,
     node: true,
-    jest: true
+    jest: true,
   },
-  extends: [
-    'eslint:recommended'
-  ],
+  extends: ['eslint:recommended'],
   overrides: [
     {
       files: ['**/*.ts', '**/*.tsx'],
@@ -18,37 +16,31 @@ module.exports = {
         'eslint:recommended',
         'plugin:@typescript-eslint/recommended',
         'plugin:react/recommended',
-        'plugin:react-hooks/recommended'
-      ]
-    }
+        'plugin:react-hooks/recommended',
+      ],
+    },
   ],
   rules: {
     // Airbnb-style rules
-    'indent': ['error', 2],
-    'quotes': ['error', 'single'],
-    'semi': ['error', 'always'],
+    indent: ['error', 2],
+    quotes: ['error', 'single'],
+    semi: ['error', 'always'],
     'comma-dangle': ['error', 'never'],
     'max-len': ['error', { code: 120, ignoreUrls: true, ignoreComments: true }],
-    
+
     // React rules
     'react/react-in-jsx-scope': 'off', // Not needed with React 17+
     'react/prop-types': 'off', // Using TypeScript
-    
+
     // TypeScript rules
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/no-explicit-any': 'warn'
+    '@typescript-eslint/no-explicit-any': 'warn',
   },
   settings: {
     react: {
-      version: 'detect'
-    }
+      version: 'detect',
+    },
   },
-  ignorePatterns: [
-    'dist/',
-    'build/',
-    'node_modules/',
-    '*.js.map',
-    '*.d.ts'
-  ]
+  ignorePatterns: ['dist/', 'build/', 'node_modules/', '*.js.map', '*.d.ts'],
 };

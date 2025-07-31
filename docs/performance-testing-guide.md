@@ -1,6 +1,7 @@
 # Performance Testing Methodology and Usage Guide
 
 ## Epic 18 - Technical Debt & Refactoring
+
 **Task:** E18-1753114562178-E4CD83 - Implement performance tests
 
 ---
@@ -25,7 +26,7 @@
 This comprehensive performance testing system provides multi-layered performance validation for the PromptScape application, covering:
 
 - **Core Engine Performance**: Runtime execution, memory usage, and deterministic behavior
-- **Graph Execution Benchmarks**: Multi-seed testing and scalability analysis  
+- **Graph Execution Benchmarks**: Multi-seed testing and scalability analysis
 - **Memory Optimization**: Leak detection, GC efficiency, and memory scaling
 - **API Load Testing**: Endpoint performance under realistic load conditions
 - **Real-time Monitoring**: Continuous performance tracking and alerting
@@ -87,6 +88,7 @@ The performance testing system integrates with existing components:
 **Purpose**: Validate core runtime engine performance and memory usage
 
 **Test Categories**:
+
 - **Simple Execution**: Basic node execution performance (target: >1000 ops/sec)
 - **Complex Graphs**: Multi-node graph execution (target: >100 ops/sec)
 - **Advanced Nodes**: WeightedAdvanced, Conditional, Sequential, Markov (target: >50 ops/sec)
@@ -94,6 +96,7 @@ The performance testing system integrates with existing components:
 - **Deterministic Consistency**: Verify same seed produces same output
 
 **Key Metrics**:
+
 - Operations per second
 - Memory usage (MB)
 - Execution time (ms)
@@ -107,6 +110,7 @@ The performance testing system integrates with existing components:
 **Purpose**: Comprehensive testing of graph execution across multiple seeds and complexities
 
 **Test Categories**:
+
 - **Linear Graphs**: Sequential node execution
 - **Branching Graphs**: Multiple execution paths
 - **Complex Graphs**: All node types with variables
@@ -114,6 +118,7 @@ The performance testing system integrates with existing components:
 - **Scaling Analysis**: Performance vs. graph size
 
 **Key Metrics**:
+
 - Average execution time
 - Throughput (executions/second)
 - Determinism score (95%+ expected)
@@ -127,6 +132,7 @@ The performance testing system integrates with existing components:
 **Purpose**: Detect memory leaks and validate memory management
 
 **Test Categories**:
+
 - **Repeated Executions**: Long-running execution cycles
 - **Context Scaling**: Memory usage with large execution contexts
 - **Advanced Node Memory**: Stateful node memory management
@@ -134,6 +140,7 @@ The performance testing system integrates with existing components:
 - **Stress Testing**: High-memory-pressure scenarios
 
 **Key Metrics**:
+
 - Memory growth (MB)
 - Garbage collection efficiency
 - Memory leak detection
@@ -147,6 +154,7 @@ The performance testing system integrates with existing components:
 **Purpose**: Validate API performance under realistic load conditions
 
 **Test Scenarios**:
+
 - **Preview Endpoint**: Graph execution requests
 - **Export Endpoint**: Graph-to-bundle conversion
 - **Health Endpoints**: System status checks
@@ -156,6 +164,7 @@ The performance testing system integrates with existing components:
 - **Realistic User Scenarios**: Mixed workflow testing
 
 **Key Metrics**:
+
 - Requests per second (RPS)
 - Response time (average, P95, P99)
 - Success rate (%)
@@ -169,6 +178,7 @@ The performance testing system integrates with existing components:
 **Purpose**: Real-time performance monitoring and alerting
 
 **Features**:
+
 - **Metrics Collection**: Automated performance data gathering
 - **Threshold Monitoring**: Configurable performance thresholds
 - **Alert Generation**: Automated alerts for performance issues
@@ -227,7 +237,7 @@ const coreEngineConfig = {
   simpleExecutionIterations: 1000,
   complexGraphNodeCount: 100,
   advancedNodeIterations: 500,
-  memoryScalingSteps: [10, 50, 100, 500, 1000]
+  memoryScalingSteps: [10, 50, 100, 500, 1000],
 };
 
 // Graph Execution Benchmarks
@@ -237,8 +247,8 @@ const graphBenchmarkConfig = {
   expectedPerformance: {
     maxExecutionTime: 50,
     maxMemoryUsage: 20,
-    minThroughput: 100
-  }
+    minThroughput: 100,
+  },
 };
 
 // API Load Testing
@@ -249,8 +259,8 @@ const apiLoadConfig = {
   expectedPerformance: {
     maxResponseTime: 2000,
     minSuccessRate: 95,
-    minThroughput: 10
-  }
+    minThroughput: 10,
+  },
 };
 ```
 
@@ -270,7 +280,7 @@ const dashboard = new PerformanceMonitoringDashboard({
   enableRealTimeUpdates: true,
   updateIntervalMs: 5000,
   enableNotifications: true,
-  notificationWebhook: 'https://hooks.slack.com/...'
+  notificationWebhook: 'https://hooks.slack.com/...',
 });
 
 // Record metrics
@@ -325,22 +335,22 @@ const thresholds = [
     operator: 'gt',
     value: 2000,
     severity: 'error',
-    description: 'Engine execution time exceeds 2 seconds'
+    description: 'Engine execution time exceeds 2 seconds',
   },
   {
     metric: 'api.success_rate',
     operator: 'lt',
     value: 95,
     severity: 'warning',
-    description: 'API success rate below 95%'
+    description: 'API success rate below 95%',
   },
   {
     metric: 'memory.leak_detected',
     operator: 'eq',
     value: 1,
     severity: 'critical',
-    description: 'Memory leak detected'
-  }
+    description: 'Memory leak detected',
+  },
 ];
 ```
 
@@ -351,6 +361,7 @@ const thresholds = [
 ### Performance Test Results
 
 **Core Engine Performance Results**:
+
 ```
 ✅ Simple Node Execution
    Execution Time: 25.34ms
@@ -366,6 +377,7 @@ const thresholds = [
 ```
 
 **API Load Testing Results**:
+
 ```
 ✅ Preview Endpoint Load Test
    Requests/sec: 15.2
@@ -377,6 +389,7 @@ const thresholds = [
 ```
 
 **Memory Optimization Results**:
+
 ```
 ✅ Long-Running Memory Leak Detection
    Memory Growth: 12.5MB
@@ -388,6 +401,7 @@ const thresholds = [
 ### Health Score Interpretation
 
 **Overall Health Scores**:
+
 - **95-100**: Excellent performance, no issues
 - **85-94**: Good performance, minor optimizations possible
 - **70-84**: Fair performance, some issues need attention
@@ -397,11 +411,13 @@ const thresholds = [
 ### Trend Analysis
 
 **Performance Trends**:
+
 - **Improving**: Metrics trending better over time
 - **Degrading**: Performance declining, needs investigation
 - **Stable**: Consistent performance within acceptable range
 
 **Change Percentage**:
+
 - **±5%**: Normal variation, no action needed
 - **±5-15%**: Monitor closely, may need investigation
 - **±15%+**: Significant change, requires immediate review
@@ -412,15 +428,15 @@ const thresholds = [
 
 ### Default Thresholds
 
-| Metric | Warning | Error | Critical | Unit |
-|--------|---------|-------|----------|------|
-| Engine Execution Time | >1000 | >2000 | >5000 | ms |
-| Memory Usage | >100 | >200 | >500 | MB |
-| API Response Time | >2000 | >5000 | >10000 | ms |
-| Success Rate | <95 | <90 | <80 | % |
-| Operations/sec | <100 | <50 | <10 | ops/sec |
-| Memory Leak | N/A | N/A | Detected | boolean |
-| GC Efficiency | <30 | <20 | <10 | % |
+| Metric                | Warning | Error | Critical | Unit    |
+| --------------------- | ------- | ----- | -------- | ------- |
+| Engine Execution Time | >1000   | >2000 | >5000    | ms      |
+| Memory Usage          | >100    | >200  | >500     | MB      |
+| API Response Time     | >2000   | >5000 | >10000   | ms      |
+| Success Rate          | <95     | <90   | <80      | %       |
+| Operations/sec        | <100    | <50   | <10      | ops/sec |
+| Memory Leak           | N/A     | N/A   | Detected | boolean |
+| GC Efficiency         | <30     | <20   | <10      | %       |
 
 ### Customizing Thresholds
 
@@ -429,13 +445,13 @@ const thresholds = [
 const developmentThresholds = {
   'engine.execution_time': { warning: 2000, error: 5000 },
   'api.response_time': { warning: 3000, error: 8000 },
-  'memory.usage': { warning: 150, error: 300 }
+  'memory.usage': { warning: 150, error: 300 },
 };
 
 const productionThresholds = {
   'engine.execution_time': { warning: 500, error: 1000 },
   'api.response_time': { warning: 1000, error: 2000 },
-  'memory.usage': { warning: 50, error: 100 }
+  'memory.usage': { warning: 50, error: 100 },
 };
 ```
 
@@ -448,10 +464,12 @@ const productionThresholds = {
 #### Slow Engine Execution
 
 **Symptoms**:
+
 - Engine execution time >2000ms
 - Low operations per second
 
 **Causes & Solutions**:
+
 - **Complex Graphs**: Simplify graph structure, optimize node connections
 - **Memory Pressure**: Check for memory leaks, optimize variable usage
 - **Inefficient Algorithms**: Profile node execution, optimize hot paths
@@ -459,11 +477,13 @@ const productionThresholds = {
 #### High Memory Usage
 
 **Symptoms**:
+
 - Memory usage >200MB
 - Memory growth over time
 - GC efficiency <30%
 
 **Causes & Solutions**:
+
 - **Memory Leaks**: Use memory profiler, check for unreleased references
 - **Large Contexts**: Optimize variable storage, implement context cleanup
 - **Inefficient Data Structures**: Review data structures, use more efficient alternatives
@@ -471,11 +491,13 @@ const productionThresholds = {
 #### API Performance Issues
 
 **Symptoms**:
+
 - Response times >2000ms
 - Low success rates
 - High error rates
 
 **Causes & Solutions**:
+
 - **Database Bottlenecks**: Optimize queries, add indexing
 - **Network Issues**: Check network configuration, implement caching
 - **Resource Contention**: Scale infrastructure, optimize resource allocation
@@ -483,11 +505,13 @@ const productionThresholds = {
 #### Memory Leaks
 
 **Symptoms**:
+
 - Continuous memory growth
 - GC inefficiency
 - Out of memory errors
 
 **Debugging Steps**:
+
 1. **Enable GC Logging**: `node --expose-gc --trace-gc`
 2. **Use Memory Profiler**: Chrome DevTools, clinic.js
 3. **Analyze Heap Dumps**: Identify retained objects
@@ -598,24 +622,24 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Start test server
         run: npm run dev &
-        
+
       - name: Wait for server
         run: npx wait-on http://localhost:8000/health
-      
+
       - name: Run performance tests
         run: |
           npm run test:performance -- --ci --coverage
           npm run test -- tests/performance/ --reporters=default --reporters=jest-junit
         env:
-          NODE_OPTIONS: "--expose-gc --max-old-space-size=4096"
+          NODE_OPTIONS: '--expose-gc --max-old-space-size=4096'
           API_BASE_URL: http://localhost:8000
-          
+
       - name: Upload performance results
         uses: actions/upload-artifact@v3
         with:
@@ -623,7 +647,7 @@ jobs:
           path: |
             performance-test-results/
             coverage/
-            
+
       - name: Performance regression check
         run: |
           node scripts/check-performance-regression.js \
@@ -638,17 +662,17 @@ jobs:
 // scripts/check-performance-regression.js
 const performanceRegression = {
   thresholds: {
-    executionTime: 0.15,      // 15% increase is a regression
-    memoryUsage: 0.20,        // 20% increase is a regression
-    throughput: -0.10,        // 10% decrease is a regression
-    responseTime: 0.15        // 15% increase is a regression
+    executionTime: 0.15, // 15% increase is a regression
+    memoryUsage: 0.2, // 20% increase is a regression
+    throughput: -0.1, // 10% decrease is a regression
+    responseTime: 0.15, // 15% increase is a regression
   },
-  
+
   async checkRegression(currentResults, baselineResults) {
     // Compare current results against baseline
     // Generate regression report
     // Fail CI if significant regressions detected
-  }
+  },
 };
 ```
 

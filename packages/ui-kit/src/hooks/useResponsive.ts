@@ -18,14 +18,14 @@ export function useResponsive(): ResponsiveState {
   const [responsiveState, setResponsiveState] = useState<ResponsiveState>(() => {
     const { width, height } = getViewportSize();
     const breakpoint = getBreakpoint(width);
-    
+
     return {
       isMobile: breakpoint === 'mobile',
       isTablet: breakpoint === 'tablet',
       isDesktop: breakpoint === 'desktop',
       breakpoint,
       width,
-      height
+      height,
     };
   });
 
@@ -33,21 +33,21 @@ export function useResponsive(): ResponsiveState {
     const updateResponsiveState = () => {
       const { width, height } = getViewportSize();
       const breakpoint = getBreakpoint(width);
-      
+
       setResponsiveState({
         isMobile: breakpoint === 'mobile',
         isTablet: breakpoint === 'tablet',
         isDesktop: breakpoint === 'desktop',
         breakpoint,
         width,
-        height
+        height,
       });
     };
 
     // Update on window resize
     if (typeof window !== 'undefined') {
       window.addEventListener('resize', updateResponsiveState);
-      
+
       // Also listen for orientation change on mobile
       window.addEventListener('orientationchange', () => {
         // Small delay to allow viewport to update
@@ -79,7 +79,7 @@ export function useMediaQuery(query: string): boolean {
 
     const mediaQuery = window.matchMedia(query);
     const updateMatches = () => setMatches(mediaQuery.matches);
-    
+
     updateMatches();
     mediaQuery.addEventListener('change', updateMatches);
 

@@ -9,16 +9,20 @@ This documentation suite provides comprehensive coverage of PromptScape's real-t
 ### 📚 Core Documentation
 
 #### 1. [Collaboration Protocol and API](./collaboration-protocol-api.md)
+
 **Comprehensive overview and reference guide**
+
 - Architecture overview and core components
-- Complete message types reference 
+- Complete message types reference
 - Authentication and security model
 - Analytics and telemetry integration
 - Performance optimization guidelines
 - Troubleshooting and debugging
 
-#### 2. [WebSocket Protocol Specification](./websocket-protocol-spec.md) 
+#### 2. [WebSocket Protocol Specification](./websocket-protocol-spec.md)
+
 **Technical protocol specification**
+
 - Connection lifecycle and message format
 - Detailed message schemas with validation
 - Error handling and recovery procedures
@@ -27,7 +31,9 @@ This documentation suite provides comprehensive coverage of PromptScape's real-t
 - Complete message type definitions
 
 #### 3. [Integration Guide](./collaboration-integration-guide.md)
+
 **Developer implementation guide**
+
 - Quick start and setup instructions
 - Framework-specific integration (React, Vue, Angular)
 - Real-time editing implementation patterns
@@ -232,7 +238,7 @@ npm install
 
 # Start development servers
 npm run dev:websocket  # WebSocket server on :8000
-npm run dev:analytics  # Analytics server on :8001  
+npm run dev:analytics  # Analytics server on :8001
 npm run dev:client     # Client application on :3000
 
 # Run tests
@@ -242,23 +248,26 @@ npm run test:collaboration
 ### 2. Integration Steps
 
 1. **Install Client Library**
+
    ```bash
    npm install @promptscape/collaboration-client
    ```
 
 2. **Import and Initialize**
+
    ```typescript
    import { CollaborationClient } from '@promptscape/collaboration-client';
-   
+
    const client = new CollaborationClient(documentId, userId, userName);
    client.connect();
    ```
 
 3. **Handle Events**
+
    ```typescript
-   client.onGraphUpdate = (update) => applyUpdate(update);
-   client.onUserJoin = (user) => showUser(user);
-   client.onConflict = (conflict) => resolveConflict(conflict);
+   client.onGraphUpdate = update => applyUpdate(update);
+   client.onUserJoin = user => showUser(user);
+   client.onConflict = conflict => resolveConflict(conflict);
    ```
 
 4. **Send Updates**
@@ -279,24 +288,26 @@ describe('Collaboration Client', () => {
   it('should authenticate and join document', async () => {
     const client = new CollaborationClient(docId, userId, userName);
     await client.connect();
-    
+
     expect(client.isConnected()).toBe(true);
     expect(client.isAuthenticated()).toBe(true);
   });
-  
+
   it('should handle graph updates correctly', () => {
     const updateSpy = jest.fn();
     client.onGraphUpdate = updateSpy;
-    
+
     // Simulate incoming update
     client.handleMessage({
       type: 'graph_update',
-      payload: { operations: [mockOperation] }
+      payload: { operations: [mockOperation] },
     });
-    
-    expect(updateSpy).toHaveBeenCalledWith(expect.objectContaining({
-      operations: expect.arrayContaining([mockOperation])
-    }));
+
+    expect(updateSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        operations: expect.arrayContaining([mockOperation]),
+      })
+    );
   });
 });
 ```
@@ -314,7 +325,7 @@ describe('Collaboration Client', () => {
 
 2. **Security Configuration**
    - Enable HTTPS/WSS in production
-   - Configure CORS origins appropriately  
+   - Configure CORS origins appropriately
    - Implement rate limiting and DDoS protection
    - Use secure JWT tokens with expiration
 
@@ -339,7 +350,7 @@ WS_CORS_ORIGINS=https://app.promptscape.com,https://admin.promptscape.com
 WS_MAX_CONNECTIONS=10000
 WS_HEARTBEAT_INTERVAL=30000
 
-# Analytics Configuration  
+# Analytics Configuration
 ANALYTICS_WS_PORT=8001
 ANALYTICS_ENABLED=true
 ANALYTICS_SAMPLE_RATE=1.0

@@ -7,13 +7,13 @@
 // Domain types
 export * from './types/TargetingTypes';
 // Domain factory (to be implemented in Epic 17)
-export const createTargetingDomain = (config) => {
-    // TODO: Implement domain factory in Epic 17
-    return {
-        components: {},
-        hooks: {},
-        services: {},
-        events: {},
-        utils: {}
-    };
+export const createTargetingDomain = config => {
+  // TODO: Implement domain factory in Epic 17
+  return {
+    components: {},
+    hooks: {},
+    services: {},
+    events: {},
+    utils: {},
+  };
 };

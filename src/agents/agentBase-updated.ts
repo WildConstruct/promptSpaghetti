@@ -40,7 +40,7 @@ export abstract class AgentRunner {
   async run(events: Event[], state: State): Promise<Event | 'NOOP'> {
     // Filter to relevant events
     const relevant = this.filterRelevant(events);
-    
+
     // Process each event
     for (const ev of relevant) {
       const decision = await this.decide(ev, state);
@@ -48,7 +48,7 @@ export abstract class AgentRunner {
         return decision;
       }
     }
-    
+
     return 'NOOP';
   }
 
@@ -71,7 +71,7 @@ export abstract class AgentRunner {
       type,
       timestamp: new Date().toISOString(),
       payload,
-      agent_id: this.agentId
+      agent_id: this.agentId,
     };
   }
 
@@ -79,9 +79,8 @@ export abstract class AgentRunner {
    * Get count of active tasks for a developer
    */
   protected getActiveTaskCount(state: State, devId: string): number {
-    return Object.values(state.tasks).filter(
-      t => t.assignee === devId && ['IN_PROGRESS', 'REVIEW'].includes(t.state)
-    ).length;
+    return Object.values(state.tasks).filter(t => t.assignee === devId && ['IN_PROGRESS', 'REVIEW'].includes(t.state))
+      .length;
   }
 
   /**
@@ -146,7 +145,7 @@ export abstract class AgentRunner {
       review: tasks.filter(t => t.state === 'REVIEW').length,
       approved: tasks.filter(t => t.state === 'APPROVED').length,
       completed: tasks.filter(t => t.state === 'COMPLETED').length,
-      blocked: tasks.filter(t => t.state === 'BLOCKED').length
+      blocked: tasks.filter(t => t.state === 'BLOCKED').length,
     };
   }
 }
@@ -157,6 +156,6 @@ export abstract class AgentRunner {
  * - Developers self-assign using grab-tasks.js
  * - QA approval triggers automatic GitHub PR creation
  * - Database handles GitHub automation and commit tracking
- * 
+ *
  * See docs/ticket-system.md for complete system documentation
  */

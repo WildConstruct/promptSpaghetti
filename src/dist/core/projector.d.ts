@@ -1,4 +1,4 @@
-import { Event, DiscordMessage } from "./types";
+import { Event, DiscordMessage } from './types';
 /**
  * Project an event into Discord message(s)
  * Returns null if no Discord message should be sent

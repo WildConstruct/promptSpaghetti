@@ -11,7 +11,7 @@ export enum TestEnvironment {
   INTEGRATION = 'integration',
   E2E = 'e2e',
   PERFORMANCE = 'performance',
-  SECURITY = 'security'
+  SECURITY = 'security',
 }
 
 export enum TestCategory {
@@ -21,7 +21,7 @@ export enum TestCategory {
   API = 'api',
   UI = 'ui',
   WORKFLOW = 'workflow',
-  ACCESSIBILITY = 'accessibility'
+  ACCESSIBILITY = 'accessibility',
 }
 
 export interface TestResult {
@@ -86,7 +86,7 @@ export class TestingFramework extends EventEmitter {
 
   constructor(config?: Partial<TestSuiteConfig>) {
     super();
-    
+
     this.globalConfig = {
       name: 'PromptSpaghetti Test Suite',
       environment: TestEnvironment.UNIT,
@@ -95,7 +95,7 @@ export class TestingFramework extends EventEmitter {
       retries: 0,
       parallel: false,
       coverage: true,
-      ...config
+      ...config,
     };
 
     this.context = {
@@ -103,7 +103,7 @@ export class TestingFramework extends EventEmitter {
       mocks: new Map(),
       utilities: new TestUtilities(),
       environment: this.globalConfig.environment,
-      category: this.globalConfig.category
+      category: this.globalConfig.category,
     };
   }
 
@@ -113,7 +113,7 @@ export class TestingFramework extends EventEmitter {
   registerSuite(name: string, config: Partial<TestSuiteConfig> = {}): TestSuite {
     const suiteConfig = { ...this.globalConfig, ...config, name };
     const suite = new TestSuite(suiteConfig, this.context);
-    
+
     suite.on('testComplete', (result: TestResult) => {
       this.results.push(result);
       this.emit('testResult', result);
@@ -241,12 +241,7 @@ export class TestSuite extends EventEmitter {
    * Register a test case
    */
   test(name: string, testFn: (context: TestContext) => void | Promise<void>, config?: Partial<TestSuiteConfig>): void {
-    const testCase = new TestCase(
-      name,
-      testFn,
-      { ...this.config, ...config },
-      this.context
-    );
+    const testCase = new TestCase(name, testFn, { ...this.config, ...config }, this.context);
 
     testCase.on('complete', (result: TestResult) => {
       this.emit('testComplete', result);
@@ -316,16 +311,16 @@ export class TestCase extends EventEmitter {
       environment: this.config.environment,
       status: 'pending',
       duration: 0,
-      assertions: []
+      assertions: [],
     };
 
     try {
       // Create isolated context for this test
       const testContext = { ...this.context };
-      
+
       // Run the test with timeout
       await this.runWithTimeout(this.testFn(testContext), this.config.timeout);
-      
+
       result.status = 'passed';
     } catch (error) {
       result.status = 'failed';
@@ -343,7 +338,7 @@ export class TestCase extends EventEmitter {
       promise,
       new Promise<never>((_, reject) => {
         setTimeout(() => reject(new Error(`Test timeout after ${timeout}ms`)), timeout);
-      })
+      }),
     ]);
   }
 }
@@ -370,20 +365,16 @@ export class TestUtilities {
   /**
    * Wait for a condition to be true
    */
-  async waitFor(
-    condition: () => boolean | Promise<boolean>,
-    timeout = 5000,
-    interval = 100
-  ): Promise<void> {
+  async waitFor(condition: () => boolean | Promise<boolean>, timeout = 5000, interval = 100): Promise<void> {
     const startTime = Date.now();
-    
+
     while (Date.now() - startTime < timeout) {
       if (await condition()) {
         return;
       }
       await this.wait(interval);
     }
-    
+
     throw new Error(`Timeout: Condition not met within ${timeout}ms`);
   }
 
@@ -392,25 +383,25 @@ export class TestUtilities {
    */
   generateData(type: 'string' | 'number' | 'boolean' | 'array' | 'object', options?: any): any {
     switch (type) {
-    case 'string':
-      return this.generateRandomString(options?.length || 10);
-    case 'number':
-      return Math.floor(Math.random() * (options?.max || 1000)) + (options?.min || 0);
-    case 'boolean':
-      return Math.random() > 0.5;
-    case 'array':
-      return Array.from({ length: options?.length || 5 }, () => 
-        this.generateData(options?.itemType || 'string', options?.itemOptions)
-      );
-    case 'object':
-      const obj: Record<string, any> = {};
-      const keys = options?.keys || ['id', 'name', 'value'];
-      keys.forEach((key: string) => {
-        obj[key] = this.generateData('string');
-      });
-      return obj;
-    default:
-      return null;
+      case 'string':
+        return this.generateRandomString(options?.length || 10);
+      case 'number':
+        return Math.floor(Math.random() * (options?.max || 1000)) + (options?.min || 0);
+      case 'boolean':
+        return Math.random() > 0.5;
+      case 'array':
+        return Array.from({ length: options?.length || 5 }, () =>
+          this.generateData(options?.itemType || 'string', options?.itemOptions)
+        );
+      case 'object':
+        const obj: Record<string, any> = {};
+        const keys = options?.keys || ['id', 'name', 'value'];
+        keys.forEach((key: string) => {
+          obj[key] = this.generateData('string');
+        });
+        return obj;
+      default:
+        return null;
     }
   }
 
@@ -434,7 +425,7 @@ export class TestUtilities {
         passed,
         expected,
         actual,
-        error: passed ? undefined : `Expected: ${expected}, Actual: ${actual}`
+        error: passed ? undefined : `Expected: ${expected}, Actual: ${actual}`,
       };
     },
 
@@ -445,7 +436,7 @@ export class TestUtilities {
         passed,
         expected,
         actual,
-        error: passed ? undefined : 'Objects are not deeply equal'
+        error: passed ? undefined : 'Objects are not deeply equal',
       };
     },
 
@@ -455,7 +446,7 @@ export class TestUtilities {
         description: message || 'Expected value to be truthy',
         passed,
         actual: value,
-        error: passed ? undefined : `Expected truthy value, got: ${value}`
+        error: passed ? undefined : `Expected truthy value, got: ${value}`,
       };
     },
 
@@ -465,9 +456,9 @@ export class TestUtilities {
         description: message || 'Expected value to be falsy',
         passed,
         actual: value,
-        error: passed ? undefined : `Expected falsy value, got: ${value}`
+        error: passed ? undefined : `Expected falsy value, got: ${value}`,
       };
-    }
+    },
   };
 }
 
@@ -489,21 +480,19 @@ export class TestReporter {
         failed,
         skipped,
         duration: totalDuration,
-        passRate: totalTests > 0 ? (passed / totalTests) * 100 : 0
+        passRate: totalTests > 0 ? (passed / totalTests) * 100 : 0,
       },
       results,
       config,
       timestamp: new Date(),
-      coverage: this.calculateCoverage(results)
+      coverage: this.calculateCoverage(results),
     };
 
     return report;
   }
 
   private calculateCoverage(results: TestResult[]): CoverageData {
-    const coverageResults = results
-      .map(r => r.coverage)
-      .filter(c => c !== undefined) as CoverageData[];
+    const coverageResults = results.map(r => r.coverage).filter(c => c !== undefined) as CoverageData[];
 
     if (coverageResults.length === 0) {
       return {
@@ -511,7 +500,7 @@ export class TestReporter {
         statements: 0,
         functions: 0,
         branches: 0,
-        percentage: 0
+        percentage: 0,
       };
     }
 
@@ -521,7 +510,7 @@ export class TestReporter {
         statements: acc.statements + coverage.statements,
         functions: acc.functions + coverage.functions,
         branches: acc.branches + coverage.branches,
-        percentage: acc.percentage + coverage.percentage
+        percentage: acc.percentage + coverage.percentage,
       }),
       { lines: 0, statements: 0, functions: 0, branches: 0, percentage: 0 }
     );
@@ -531,7 +520,7 @@ export class TestReporter {
       statements: Math.round(totalCoverage.statements / coverageResults.length),
       functions: Math.round(totalCoverage.functions / coverageResults.length),
       branches: Math.round(totalCoverage.branches / coverageResults.length),
-      percentage: Math.round(totalCoverage.percentage / coverageResults.length)
+      percentage: Math.round(totalCoverage.percentage / coverageResults.length),
     };
   }
 }

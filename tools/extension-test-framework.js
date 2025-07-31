@@ -18,37 +18,36 @@ class ExtensionTestFramework {
       retries: 0,
       parallel: false,
       coverage: false,
-      verbose: false
+      verbose: false,
     };
   }
 
   async runTests(extensionPath, options = {}) {
     console.log(`🧪 Running tests for extension: ${extensionPath}`);
-    
+
     this.config = { ...this.config, ...options };
-    
+
     try {
       // Load extension manifest
       const manifest = this.loadManifest(extensionPath);
-      
+
       // Discover test files
       const testFiles = this.discoverTests(extensionPath);
-      
+
       if (testFiles.length === 0) {
         console.log('⚠️ No test files found');
         return { passed: 0, failed: 0, skipped: 0 };
       }
-      
+
       console.log(`Found ${testFiles.length} test file(s)`);
-      
+
       // Run tests
       const results = await this.executeTests(testFiles, manifest);
-      
+
       // Generate report
       this.generateTestReport(results);
-      
+
       return results.summary;
-      
     } catch (error) {
       console.error(`Test execution failed: ${error.message}`);
       throw error;
@@ -57,11 +56,11 @@ class ExtensionTestFramework {
 
   loadManifest(extensionPath) {
     const manifestPath = path.join(extensionPath, 'manifest.json');
-    
+
     if (!fs.existsSync(manifestPath)) {
       throw new Error('Manifest file not found');
     }
-    
+
     return JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
   }
 
@@ -71,25 +70,25 @@ class ExtensionTestFramework {
       path.join(extensionPath, 'test'),
       path.join(extensionPath, 'tests'),
       path.join(extensionPath, '__tests__'),
-      path.join(extensionPath, 'src', '__tests__')
+      path.join(extensionPath, 'src', '__tests__'),
     ];
-    
+
     for (const testDir of testDirs) {
       if (fs.existsSync(testDir)) {
         this.walkTestDirectory(testDir, testFiles);
       }
     }
-    
+
     return testFiles;
   }
 
   walkTestDirectory(dir, testFiles) {
     const files = fs.readdirSync(dir);
-    
+
     for (const file of files) {
       const filePath = path.join(dir, file);
       const stat = fs.statSync(filePath);
-      
+
       if (stat.isDirectory()) {
         this.walkTestDirectory(filePath, testFiles);
       } else if (this.isTestFile(file)) {
@@ -107,26 +106,25 @@ class ExtensionTestFramework {
       summary: { passed: 0, failed: 0, skipped: 0, total: 0 },
       tests: [],
       coverage: null,
-      duration: 0
+      duration: 0,
     };
-    
+
     const startTime = Date.now();
-    
+
     // Set up test environment
     await this.setupTestEnvironment(manifest);
-    
+
     for (const testFile of testFiles) {
       console.log(`\n📝 Running ${path.basename(testFile)}`);
-      
+
       try {
         const testResult = await this.runTestFile(testFile, manifest);
         results.tests.push(testResult);
-        
+
         results.summary.passed += testResult.passed;
         results.summary.failed += testResult.failed;
         results.summary.skipped += testResult.skipped;
         results.summary.total += testResult.total;
-        
       } catch (error) {
         console.error(`❌ Test file failed: ${error.message}`);
         results.tests.push({
@@ -136,20 +134,20 @@ class ExtensionTestFramework {
           skipped: 0,
           total: 1,
           error: error.message,
-          tests: []
+          tests: [],
         });
         results.summary.failed += 1;
         results.summary.total += 1;
       }
     }
-    
+
     results.duration = Date.now() - startTime;
-    
+
     // Generate coverage report if requested
     if (this.config.coverage) {
       results.coverage = await this.generateCoverageReport();
     }
-    
+
     return results;
   }
 
@@ -159,9 +157,9 @@ class ExtensionTestFramework {
       register: () => Promise.resolve(),
       unregister: () => Promise.resolve(),
       getExtension: () => null,
-      isEnabled: () => true
+      isEnabled: () => true,
     };
-    
+
     // Mock console if not verbose
     if (!this.config.verbose) {
       global.originalConsole = console;
@@ -169,7 +167,7 @@ class ExtensionTestFramework {
       console.warn = () => {};
       console.info = () => {};
     }
-    
+
     // Set up test globals
     global.TEST_MANIFEST = manifest;
     global.TEST_CONFIG = this.config;
@@ -183,16 +181,16 @@ class ExtensionTestFramework {
       skipped: 0,
       total: 0,
       tests: [],
-      duration: 0
+      duration: 0,
     };
-    
+
     const startTime = Date.now();
-    
+
     try {
       // Load test file
       delete require.cache[require.resolve(testFile)];
       const testModule = require(testFile);
-      
+
       // Run tests based on framework
       if (this.isJestTest(testFile)) {
         await this.runJestTest(testFile, testContext);
@@ -201,7 +199,6 @@ class ExtensionTestFramework {
       } else {
         await this.runCustomTest(testModule, testContext);
       }
-      
     } catch (error) {
       testContext.failed += 1;
       testContext.total += 1;
@@ -209,10 +206,10 @@ class ExtensionTestFramework {
         name: 'Test file execution',
         status: 'failed',
         error: error.message,
-        duration: 0
+        duration: 0,
       });
     }
-    
+
     testContext.duration = Date.now() - startTime;
     return testContext;
   }
@@ -231,21 +228,21 @@ class ExtensionTestFramework {
     return new Promise((resolve, reject) => {
       const jest = spawn('npx', ['jest', testFile, '--json'], {
         cwd: path.dirname(testFile),
-        stdio: ['pipe', 'pipe', 'pipe']
+        stdio: ['pipe', 'pipe', 'pipe'],
       });
-      
+
       let output = '';
       let errorOutput = '';
-      
-      jest.stdout.on('data', (data) => {
+
+      jest.stdout.on('data', data => {
         output += data.toString();
       });
-      
-      jest.stderr.on('data', (data) => {
+
+      jest.stderr.on('data', data => {
         errorOutput += data.toString();
       });
-      
-      jest.on('close', (code) => {
+
+      jest.on('close', code => {
         try {
           if (output) {
             const result = JSON.parse(output);
@@ -256,11 +253,11 @@ class ExtensionTestFramework {
           reject(new Error(`Jest execution failed: ${errorOutput}`));
         }
       });
-      
-      jest.on('error', (error) => {
+
+      jest.on('error', error => {
         reject(new Error(`Failed to run Jest: ${error.message}`));
       });
-      
+
       setTimeout(() => {
         jest.kill();
         reject(new Error('Test timeout'));
@@ -271,19 +268,19 @@ class ExtensionTestFramework {
   parseJestResults(jestResult, testContext) {
     if (jestResult.testResults && jestResult.testResults.length > 0) {
       const fileResult = jestResult.testResults[0];
-      
+
       testContext.passed = fileResult.numPassingTests || 0;
       testContext.failed = fileResult.numFailingTests || 0;
       testContext.skipped = fileResult.numPendingTests || 0;
       testContext.total = fileResult.numPassingTests + fileResult.numFailingTests + fileResult.numPendingTests;
-      
+
       // Parse individual test results
       if (fileResult.assertionResults) {
         testContext.tests = fileResult.assertionResults.map(test => ({
           name: test.title,
           status: test.status,
           duration: test.duration || 0,
-          error: test.failureMessages ? test.failureMessages.join('\n') : null
+          error: test.failureMessages ? test.failureMessages.join('\n') : null,
         }));
       }
     }
@@ -293,21 +290,21 @@ class ExtensionTestFramework {
     return new Promise((resolve, reject) => {
       const mocha = spawn('npx', ['mocha', testFile, '--reporter', 'json'], {
         cwd: path.dirname(testFile),
-        stdio: ['pipe', 'pipe', 'pipe']
+        stdio: ['pipe', 'pipe', 'pipe'],
       });
-      
+
       let output = '';
       let errorOutput = '';
-      
-      mocha.stdout.on('data', (data) => {
+
+      mocha.stdout.on('data', data => {
         output += data.toString();
       });
-      
-      mocha.stderr.on('data', (data) => {
+
+      mocha.stderr.on('data', data => {
         errorOutput += data.toString();
       });
-      
-      mocha.on('close', (code) => {
+
+      mocha.on('close', code => {
         try {
           if (output) {
             const result = JSON.parse(output);
@@ -318,11 +315,11 @@ class ExtensionTestFramework {
           reject(new Error(`Mocha execution failed: ${errorOutput}`));
         }
       });
-      
-      mocha.on('error', (error) => {
+
+      mocha.on('error', error => {
         reject(new Error(`Failed to run Mocha: ${error.message}`));
       });
-      
+
       setTimeout(() => {
         mocha.kill();
         reject(new Error('Test timeout'));
@@ -335,14 +332,14 @@ class ExtensionTestFramework {
     testContext.failed = mochaResult.stats.failures || 0;
     testContext.skipped = mochaResult.stats.pending || 0;
     testContext.total = mochaResult.stats.tests || 0;
-    
+
     // Parse individual test results
     if (mochaResult.tests) {
       testContext.tests = mochaResult.tests.map(test => ({
         name: test.title,
-        status: test.pending ? 'skipped' : (test.err ? 'failed' : 'passed'),
+        status: test.pending ? 'skipped' : test.err ? 'failed' : 'passed',
         duration: test.duration || 0,
-        error: test.err ? test.err.message : null
+        error: test.err ? test.err.message : null,
       }));
     }
   }
@@ -351,13 +348,12 @@ class ExtensionTestFramework {
     // Run custom test format
     if (typeof testModule.runTests === 'function') {
       const results = await testModule.runTests();
-      
+
       testContext.passed = results.passed || 0;
       testContext.failed = results.failed || 0;
       testContext.skipped = results.skipped || 0;
       testContext.total = results.total || 0;
       testContext.tests = results.tests || [];
-      
     } else {
       throw new Error('Custom test module must export a runTests function');
     }
@@ -376,35 +372,35 @@ class ExtensionTestFramework {
           statements: 95.0,
           branches: 88.0,
           functions: 100.0,
-          lines: 96.0
-        }
-      ]
+          lines: 96.0,
+        },
+      ],
     };
   }
 
   generateTestReport(results) {
     console.log('\n📊 Test Results');
     console.log('='.repeat(50));
-    
+
     const { summary } = results;
-    
+
     console.log(`Total: ${summary.total}`);
     console.log(`✅ Passed: ${summary.passed}`);
     console.log(`❌ Failed: ${summary.failed}`);
     console.log(`⏭️ Skipped: ${summary.skipped}`);
     console.log(`⏱️ Duration: ${results.duration}ms`);
-    
-    const successRate = summary.total > 0 ? (summary.passed / summary.total * 100).toFixed(1) : 0;
+
+    const successRate = summary.total > 0 ? ((summary.passed / summary.total) * 100).toFixed(1) : 0;
     console.log(`📈 Success Rate: ${successRate}%`);
-    
+
     // Show failed tests
     if (summary.failed > 0) {
       console.log('\n❌ Failed Tests:');
-      
+
       for (const testFile of results.tests) {
         if (testFile.failed > 0) {
           console.log(`\n📁 ${path.basename(testFile.file)}`);
-          
+
           for (const test of testFile.tests) {
             if (test.status === 'failed') {
               console.log(`   ❌ ${test.name}`);
@@ -416,7 +412,7 @@ class ExtensionTestFramework {
         }
       }
     }
-    
+
     // Show coverage if available
     if (results.coverage) {
       console.log('\n📋 Coverage Report:');
@@ -425,32 +421,32 @@ class ExtensionTestFramework {
       console.log(`Functions: ${results.coverage.functions}%`);
       console.log(`Lines: ${results.coverage.lines}%`);
     }
-    
+
     // Performance analysis
     this.generatePerformanceReport(results);
-    
+
     // Recommendations
     this.generateTestRecommendations(results);
   }
 
   generatePerformanceReport(results) {
     console.log('\n⚡ Performance Analysis:');
-    
+
     const slowTests = [];
     const totalDuration = results.duration;
-    
+
     for (const testFile of results.tests) {
       for (const test of testFile.tests) {
         if (test.duration > 1000) {
           slowTests.push({
             name: test.name,
             file: testFile.file,
-            duration: test.duration
+            duration: test.duration,
           });
         }
       }
     }
-    
+
     if (slowTests.length > 0) {
       console.log('🐌 Slow tests (>1s):');
       slowTests
@@ -462,16 +458,16 @@ class ExtensionTestFramework {
     } else {
       console.log('✅ All tests completed quickly');
     }
-    
+
     const avgTestTime = results.summary.total > 0 ? totalDuration / results.summary.total : 0;
     console.log(`Average test time: ${avgTestTime.toFixed(1)}ms`);
   }
 
   generateTestRecommendations(results) {
     console.log('\n💡 Recommendations:');
-    
+
     const recommendations = [];
-    
+
     // Coverage recommendations
     if (results.coverage) {
       if (results.coverage.statements < 80) {
@@ -483,25 +479,25 @@ class ExtensionTestFramework {
     } else {
       recommendations.push('Enable code coverage reporting');
     }
-    
+
     // Test count recommendations
     const testCount = results.summary.total;
     if (testCount < 10) {
       recommendations.push('Add more comprehensive tests');
     }
-    
+
     // Performance recommendations
     const avgDuration = results.duration / Math.max(results.summary.total, 1);
     if (avgDuration > 500) {
       recommendations.push('Optimize slow tests for better performance');
     }
-    
+
     // Failure rate recommendations
     const failureRate = results.summary.total > 0 ? results.summary.failed / results.summary.total : 0;
     if (failureRate > 0.1) {
       recommendations.push('Fix failing tests to improve reliability');
     }
-    
+
     if (recommendations.length === 0) {
       console.log('✅ Your test suite looks good!');
     } else {
@@ -511,54 +507,50 @@ class ExtensionTestFramework {
 
   async runBenchmarks(extensionPath) {
     console.log(`📊 Running benchmarks for: ${extensionPath}`);
-    
+
     const benchmarkFiles = this.discoverBenchmarks(extensionPath);
-    
+
     if (benchmarkFiles.length === 0) {
       console.log('⚠️ No benchmark files found');
       return;
     }
-    
+
     const results = [];
-    
+
     for (const benchmarkFile of benchmarkFiles) {
       console.log(`\n🏃 Running ${path.basename(benchmarkFile)}`);
-      
+
       try {
         const benchmarkResult = await this.runBenchmarkFile(benchmarkFile);
         results.push(benchmarkResult);
-        
       } catch (error) {
         console.error(`❌ Benchmark failed: ${error.message}`);
       }
     }
-    
+
     this.generateBenchmarkReport(results);
   }
 
   discoverBenchmarks(extensionPath) {
     const benchmarkFiles = [];
-    const benchmarkDirs = [
-      path.join(extensionPath, 'benchmarks'),
-      path.join(extensionPath, 'bench')
-    ];
-    
+    const benchmarkDirs = [path.join(extensionPath, 'benchmarks'), path.join(extensionPath, 'bench')];
+
     for (const benchmarkDir of benchmarkDirs) {
       if (fs.existsSync(benchmarkDir)) {
         this.walkBenchmarkDirectory(benchmarkDir, benchmarkFiles);
       }
     }
-    
+
     return benchmarkFiles;
   }
 
   walkBenchmarkDirectory(dir, benchmarkFiles) {
     const files = fs.readdirSync(dir);
-    
+
     for (const file of files) {
       const filePath = path.join(dir, file);
       const stat = fs.statSync(filePath);
-      
+
       if (stat.isDirectory()) {
         this.walkBenchmarkDirectory(filePath, benchmarkFiles);
       } else if (file.includes('bench') || file.includes('perf')) {
@@ -569,28 +561,28 @@ class ExtensionTestFramework {
 
   async runBenchmarkFile(benchmarkFile) {
     const startTime = performance.now();
-    
+
     // Load benchmark
     delete require.cache[require.resolve(benchmarkFile)];
     const benchmarkModule = require(benchmarkFile);
-    
+
     if (typeof benchmarkModule.runBenchmark !== 'function') {
       throw new Error('Benchmark module must export a runBenchmark function');
     }
-    
+
     // Run benchmark multiple times
     const iterations = 100;
     const results = [];
-    
+
     for (let i = 0; i < iterations; i++) {
       const iterationStart = performance.now();
       await benchmarkModule.runBenchmark();
       const iterationTime = performance.now() - iterationStart;
       results.push(iterationTime);
     }
-    
+
     const totalTime = performance.now() - startTime;
-    
+
     // Calculate statistics
     results.sort((a, b) => a - b);
     const min = results[0];
@@ -598,7 +590,7 @@ class ExtensionTestFramework {
     const avg = results.reduce((sum, time) => sum + time, 0) / results.length;
     const median = results[Math.floor(results.length / 2)];
     const p95 = results[Math.floor(results.length * 0.95)];
-    
+
     return {
       file: benchmarkFile,
       iterations,
@@ -608,15 +600,15 @@ class ExtensionTestFramework {
         max: max.toFixed(2),
         avg: avg.toFixed(2),
         median: median.toFixed(2),
-        p95: p95.toFixed(2)
-      }
+        p95: p95.toFixed(2),
+      },
     };
   }
 
   generateBenchmarkReport(results) {
     console.log('\n📊 Benchmark Results');
     console.log('='.repeat(50));
-    
+
     for (const result of results) {
       console.log(`\n📁 ${path.basename(result.file)}`);
       console.log(`Iterations: ${result.iterations}`);
@@ -633,7 +625,7 @@ class ExtensionTestFramework {
 // CLI Implementation
 async function main() {
   const args = process.argv.slice(2);
-  
+
   if (args.length === 0) {
     showUsage();
     return;
@@ -641,34 +633,34 @@ async function main() {
 
   const command = args[0];
   const framework = new ExtensionTestFramework();
-  
+
   switch (command) {
-  case 'test':
-    await handleTest(framework, args.slice(1));
-    break;
-  case 'benchmark':
-    await handleBenchmark(framework, args.slice(1));
-    break;
-  case 'coverage':
-    await handleCoverage(framework, args.slice(1));
-    break;
-  case 'help':
-    showUsage();
-    break;
-  default:
-    console.error(`Unknown command: ${command}`);
-    showUsage();
-    process.exit(1);
+    case 'test':
+      await handleTest(framework, args.slice(1));
+      break;
+    case 'benchmark':
+      await handleBenchmark(framework, args.slice(1));
+      break;
+    case 'coverage':
+      await handleCoverage(framework, args.slice(1));
+      break;
+    case 'help':
+      showUsage();
+      break;
+    default:
+      console.error(`Unknown command: ${command}`);
+      showUsage();
+      process.exit(1);
   }
 }
 
 async function handleTest(framework, args) {
   const extensionPath = args[0] || '.';
   const options = parseTestOptions(args.slice(1));
-  
+
   try {
     const results = await framework.runTests(extensionPath, options);
-    
+
     if (results.failed > 0) {
       process.exit(1);
     }
@@ -680,7 +672,7 @@ async function handleTest(framework, args) {
 
 async function handleBenchmark(framework, args) {
   const extensionPath = args[0] || '.';
-  
+
   try {
     await framework.runBenchmarks(extensionPath);
   } catch (error) {
@@ -692,7 +684,7 @@ async function handleBenchmark(framework, args) {
 async function handleCoverage(framework, args) {
   const extensionPath = args[0] || '.';
   const options = { ...parseTestOptions(args.slice(1)), coverage: true };
-  
+
   try {
     await framework.runTests(extensionPath, options);
   } catch (error) {
@@ -703,29 +695,29 @@ async function handleCoverage(framework, args) {
 
 function parseTestOptions(args) {
   const options = {};
-  
+
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
-    
+
     switch (arg) {
-    case '--verbose':
-      options.verbose = true;
-      break;
-    case '--coverage':
-      options.coverage = true;
-      break;
-    case '--parallel':
-      options.parallel = true;
-      break;
-    case '--timeout':
-      options.timeout = parseInt(args[++i]) || 30000;
-      break;
-    case '--retries':
-      options.retries = parseInt(args[++i]) || 0;
-      break;
+      case '--verbose':
+        options.verbose = true;
+        break;
+      case '--coverage':
+        options.coverage = true;
+        break;
+      case '--parallel':
+        options.parallel = true;
+        break;
+      case '--timeout':
+        options.timeout = parseInt(args[++i]) || 30000;
+        break;
+      case '--retries':
+        options.retries = parseInt(args[++i]) || 0;
+        break;
     }
   }
-  
+
   return options;
 }
 

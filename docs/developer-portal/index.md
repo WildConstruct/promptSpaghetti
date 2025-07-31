@@ -29,7 +29,7 @@ Welcome to the PromptScape Custom Node Developer Portal! This comprehensive reso
 Custom nodes extend PromptScape's capabilities with:
 
 - **Text Processing**: Advanced string manipulation, formatting, and analysis
-- **API Integrations**: Connect to external services and databases  
+- **API Integrations**: Connect to external services and databases
 - **Logic & Control**: Complex conditional logic and flow control
 - **Data Transformation**: Convert between formats and structures
 - **Math & Computation**: Mathematical operations and algorithms
@@ -43,9 +43,9 @@ graph LR
     B --> C[Add Tests]
     C --> D[Test in Playground]
     D --> E[Package & Deploy]
-    
+
     style A fill:#e1f5fe
-    style B fill:#f3e5f5  
+    style B fill:#f3e5f5
     style C fill:#e8f5e8
     style D fill:#fff3e0
     style E fill:#fce4ec
@@ -56,12 +56,14 @@ graph LR
 PromptScape's custom node system is built on a robust foundation:
 
 ### Runtime Integration
+
 - **Advanced Execution Context**: State management, variable access, and performance tracking
 - **Type-Safe I/O System**: Comprehensive input/output handling with validation
 - **Security Framework**: Sandboxed execution with configurable permissions
 - **Performance Caching**: Intelligent caching for optimal graph execution
 
 ### Development Tools
+
 - **TypeScript SDK**: Full type safety and IntelliSense support
 - **CLI Scaffolding**: Interactive project generation with best practices
 - **Testing Framework**: Mock contexts and test harnesses for reliable testing
@@ -70,16 +72,19 @@ PromptScape's custom node system is built on a robust foundation:
 ## Learning Path
 
 ### Beginner (30 minutes)
+
 1. [Getting Started](./tutorials/01-getting-started.html) - Your first custom node
 2. [Interactive Playground](./tutorials/02-playground-basics.html) - Test and iterate quickly
 3. [Basic Patterns](./tutorials/03-basic-patterns.html) - Common implementation patterns
 
-### Intermediate (2 hours)  
+### Intermediate (2 hours)
+
 4. [Advanced I/O](./tutorials/04-advanced-io.html) - Complex input/output handling
 5. [State Management](./tutorials/05-state-management.html) - Stateful node development
 6. [Error Handling](./tutorials/06-error-handling.html) - Robust error management
 
 ### Advanced (4+ hours)
+
 7. [Security & Permissions](./tutorials/07-security.html) - Safe external integrations
 8. [Performance Optimization](./tutorials/08-performance.html) - Caching and optimization
 9. [Production Deployment](./tutorials/09-deployment.html) - Publishing and distribution
@@ -87,45 +92,52 @@ PromptScape's custom node system is built on a robust foundation:
 ## Featured Examples
 
 ### Text Processing Node
+
 ```typescript
 export class TextProcessorNode extends CustomNodeBase {
   async execute(runtime: CustomNodeRuntime): Promise<CustomNodeResult> {
     const { text } = runtime.inputs;
     const processed = text.toUpperCase().trim();
-    
+
     return { outputs: { result: processed } };
   }
 }
 ```
+
 [View Complete Example →](./sample-projects/text-processor/)
 
-### API Integration Node  
+### API Integration Node
+
 ```typescript
 export class WeatherAPINode extends CustomNodeBase {
   async execute(runtime: CustomNodeRuntime): Promise<CustomNodeResult> {
     const { city } = runtime.inputs;
     const response = await fetch(`/api/weather?city=${city}`);
     const weather = await response.json();
-    
+
     return { outputs: { forecast: weather.forecast } };
   }
 }
 ```
+
 [View Complete Example →](./sample-projects/weather-api/)
 
 ## Resources
 
 ### Documentation
+
 - [API Reference](./api-reference/) - Complete SDK documentation
 - [Extension Guide](../extension-development-guide.html) - Advanced extension development
 - [Architecture Guide](../architecture/) - Understanding the runtime system
 
 ### Tools & Utilities
+
 - [CLI Commands](./cli-reference.html) - Complete command reference
 - [Testing Utilities](./testing/) - Mock contexts and test helpers
 - [Code Templates](./templates/) - Reusable patterns and snippets
 
 ### Community
+
 - [GitHub Issues](https://github.com/promptspaghetti/promptscape/issues) - Report bugs and request features
 - [Discussions](https://github.com/promptspaghetti/promptscape/discussions) - Community Q&A
 - [Examples Repository](https://github.com/promptspaghetti/custom-nodes) - Community contributed nodes

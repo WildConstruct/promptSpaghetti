@@ -75,26 +75,32 @@ const vfxPolicy: UnifiedPolicy = {
   domain: PolicyDomain.VFX_PIPELINE,
   type: PolicyType.HISTORICAL_ACCURACY,
   configuration: {
-    rules: [{
-      name: 'Historical Period Accuracy',
-      ruleType: 'VALIDATION',
-      context: {
-        timeBasedRules: [{
-          timePeriods: ['ancient', 'medieval', 'renaissance'],
-          historicalContext: true
-        }],
-        contentBasedRules: [{
-          contentTypes: ['vfx', 'historical_recreation'],
-          historicalAccuracy: true
-        }]
-      }
-    }]
+    rules: [
+      {
+        name: 'Historical Period Accuracy',
+        ruleType: 'VALIDATION',
+        context: {
+          timeBasedRules: [
+            {
+              timePeriods: ['ancient', 'medieval', 'renaissance'],
+              historicalContext: true,
+            },
+          ],
+          contentBasedRules: [
+            {
+              contentTypes: ['vfx', 'historical_recreation'],
+              historicalAccuracy: true,
+            },
+          ],
+        },
+      },
+    ],
   },
   historicalAccuracy: {
     timePeriods: ['ancient', 'medieval', 'renaissance'],
     accuracyLevel: 'STRICT',
-    expertValidationRequired: true
-  }
+    expertValidationRequired: true,
+  },
 };
 ```
 
@@ -109,14 +115,14 @@ const context: PolicyEvaluationContext = {
   entityId: 'template-456',
   operation: {
     type: 'historical_accuracy_check',
-    parameters: { period: 'medieval', region: 'europe' }
+    parameters: { period: 'medieval', region: 'europe' },
   },
   contentContext: {
     historicalPeriod: 'medieval',
     culturalContext: 'european',
     accuracyLevel: 'STRICT',
-    expertReviewed: false
-  }
+    expertReviewed: false,
+  },
 };
 
 const results = await policyManager.evaluatePolicies(context);
@@ -157,9 +163,11 @@ if (!validation.allowed) {
 ### Core Endpoints
 
 #### GET /api/policies
+
 Get all policies with filtering options.
 
 **Query Parameters:**
+
 - `domain`: Filter by policy domain
 - `type`: Filter by policy type
 - `status`: Filter by policy status
@@ -168,6 +176,7 @@ Get all policies with filtering options.
 - `offset`: Pagination offset
 
 **Response:**
+
 ```json
 {
   "policies": [...],
@@ -181,9 +190,11 @@ Get all policies with filtering options.
 ```
 
 #### POST /api/policies
+
 Create a new policy.
 
 **Request Body:**
+
 ```json
 {
   "name": "Policy Name",
@@ -207,9 +218,11 @@ Create a new policy.
 ```
 
 #### POST /api/policies/evaluate
+
 Evaluate policies for a given context.
 
 **Request Body:**
+
 ```json
 {
   "entityType": "TEMPLATE",
@@ -226,9 +239,11 @@ Evaluate policies for a given context.
 ```
 
 #### POST /api/policies/vfx/historical-accuracy
+
 VFX-specific historical accuracy validation.
 
 **Request Body:**
+
 ```json
 {
   "templateId": "template-123",
@@ -241,12 +256,15 @@ VFX-specific historical accuracy validation.
 ### Specialized Endpoints
 
 #### GET /api/policies/compliance/:framework
+
 Generate compliance report for specific framework.
 
 #### GET /api/policies/statistics
+
 Get policy statistics and metrics.
 
 #### GET /api/policies/export?format=json
+
 Export policies in various formats (JSON, YAML, CSV).
 
 ## React Integration
@@ -257,21 +275,15 @@ Export policies in various formats (JSON, YAML, CSV).
 import { usePolicyManagement } from '@/hooks/usePolicyManagement';
 
 function PolicyComponent() {
-  const {
-    policies,
-    evaluatePolicies,
-    checkVFXHistoricalAccuracy,
-    isLoading,
-    error
-  } = usePolicyManagement();
+  const { policies, evaluatePolicies, checkVFXHistoricalAccuracy, isLoading, error } = usePolicyManagement();
 
   const handleEvaluate = async () => {
     const results = await evaluatePolicies({
       entityType: 'TEMPLATE',
       entityId: 'template-123',
-      operation: { type: 'validate', parameters: {} }
+      operation: { type: 'validate', parameters: {} },
     });
-    
+
     console.log('Policy results:', results);
   };
 
@@ -292,12 +304,7 @@ function PolicyComponent() {
 import { PolicyManagementDashboard } from '@/components/Policy/PolicyManagementDashboard';
 
 function AdminPanel() {
-  return (
-    <PolicyManagementDashboard
-      userId="user-123"
-      userRole="admin"
-    />
-  );
+  return <PolicyManagementDashboard userId="user-123" userRole="admin" />;
 }
 ```
 
@@ -313,50 +320,58 @@ const historicalAccuracyPolicy = {
   type: PolicyType.HISTORICAL_ACCURACY,
   status: PolicyStatus.ACTIVE,
   configuration: {
-    rules: [{
-      id: 'historical-accuracy-rule-001',
-      name: 'Historical Period Accuracy',
-      ruleType: 'VALIDATION',
-      logic: {
-        field: 'contentContext.historicalPeriod',
-        operator: 'CUSTOM',
-        value: null,
-        customFunction: 'validateHistoricalAccuracy'
+    rules: [
+      {
+        id: 'historical-accuracy-rule-001',
+        name: 'Historical Period Accuracy',
+        ruleType: 'VALIDATION',
+        logic: {
+          field: 'contentContext.historicalPeriod',
+          operator: 'CUSTOM',
+          value: null,
+          customFunction: 'validateHistoricalAccuracy',
+        },
+        context: {
+          timeBasedRules: [
+            {
+              timePeriods: ['ancient', 'medieval', 'renaissance'],
+              historicalContext: true,
+            },
+          ],
+          contentBasedRules: [
+            {
+              contentTypes: ['vfx', 'historical_recreation'],
+              historicalAccuracy: true,
+            },
+          ],
+        },
+        weight: 1.0,
+        enabled: true,
       },
-      context: {
-        timeBasedRules: [{
-          timePeriods: ['ancient', 'medieval', 'renaissance'],
-          historicalContext: true
-        }],
-        contentBasedRules: [{
-          contentTypes: ['vfx', 'historical_recreation'],
-          historicalAccuracy: true
-        }]
+    ],
+    actions: [
+      {
+        id: 'require-expert-review',
+        name: 'Require Expert Review',
+        actionType: 'ESCALATE',
+        configuration: {
+          parameters: { reviewType: 'historical_expert' },
+          executionMode: 'IMMEDIATE',
+        },
       },
-      weight: 1.0,
-      enabled: true
-    }],
-    actions: [{
-      id: 'require-expert-review',
-      name: 'Require Expert Review',
-      actionType: 'ESCALATE',
-      configuration: {
-        parameters: { reviewType: 'historical_expert' },
-        executionMode: 'IMMEDIATE'
-      }
-    }]
+    ],
   },
   enforcement: {
     mode: 'ENFORCE',
     severity: 'HIGH',
     automated: false,
-    reviewRequired: true
+    reviewRequired: true,
   },
   historicalAccuracy: {
     timePeriods: ['ancient', 'medieval', 'renaissance'],
     accuracyLevel: 'STRICT',
-    expertValidationRequired: true
-  }
+    expertValidationRequired: true,
+  },
 };
 ```
 
@@ -370,35 +385,39 @@ const dataProtectionPolicy = {
   type: PolicyType.DATA_CLASSIFICATION,
   status: PolicyStatus.ACTIVE,
   configuration: {
-    rules: [{
-      name: 'Asset Classification Validation',
-      ruleType: 'VALIDATION',
-      logic: {
-        field: 'operation.parameters.dataClassification',
-        operator: 'NOT_EQUALS',
-        value: null
-      }
-    }],
-    actions: [{
-      name: 'Apply Data Protection Measures',
-      actionType: 'RESTRICT',
-      configuration: {
-        parameters: { protectionLevel: 'high' },
-        executionMode: 'IMMEDIATE'
-      }
-    }]
+    rules: [
+      {
+        name: 'Asset Classification Validation',
+        ruleType: 'VALIDATION',
+        logic: {
+          field: 'operation.parameters.dataClassification',
+          operator: 'NOT_EQUALS',
+          value: null,
+        },
+      },
+    ],
+    actions: [
+      {
+        name: 'Apply Data Protection Measures',
+        actionType: 'RESTRICT',
+        configuration: {
+          parameters: { protectionLevel: 'high' },
+          executionMode: 'IMMEDIATE',
+        },
+      },
+    ],
   },
   enforcement: {
     mode: 'ENFORCE',
     severity: 'CRITICAL',
     automated: true,
-    reviewRequired: false
+    reviewRequired: false,
   },
   compliance: {
     frameworks: [ComplianceFramework.GDPR, ComplianceFramework.ISO_27001],
     requirements: ['data_protection', 'asset_security'],
-    auditRequired: true
-  }
+    auditRequired: true,
+  },
 };
 ```
 
@@ -407,6 +426,7 @@ const dataProtectionPolicy = {
 ### Performance Metrics
 
 The system tracks performance metrics including:
+
 - Policy evaluation time
 - Cache hit rates
 - Violation rates
@@ -415,6 +435,7 @@ The system tracks performance metrics including:
 ### Violation Tracking
 
 All policy violations are tracked with:
+
 - Violation type and severity
 - Affected entities
 - Response actions taken
@@ -423,6 +444,7 @@ All policy violations are tracked with:
 ### Compliance Reporting
 
 Automated compliance reporting for:
+
 - Policy coverage by framework
 - Violation trends
 - Risk assessment

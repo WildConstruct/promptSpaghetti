@@ -80,7 +80,9 @@ The `grammar` section contains the generation rules:
 ### Basic Rule Types
 
 #### String Rules
+
 Simple text output:
+
 ```json
 {
   "grammar": {
@@ -90,7 +92,9 @@ Simple text output:
 ```
 
 #### Array Rules
+
 Random selection from options:
+
 ```json
 {
   "grammar": {
@@ -100,15 +104,17 @@ Random selection from options:
 ```
 
 #### Weighted Rules
+
 Probability-based selection:
+
 ```json
 {
   "grammar": {
     "rarity": [
-      {"w": 60, "v": "common"},
-      {"w": 30, "v": "uncommon"},
-      {"w": 9, "v": "rare"},
-      {"w": 1, "v": "legendary"}
+      { "w": 60, "v": "common" },
+      { "w": 30, "v": "uncommon" },
+      { "w": 9, "v": "rare" },
+      { "w": 1, "v": "legendary" }
     ]
   }
 }
@@ -117,7 +123,9 @@ Probability-based selection:
 ### Advanced Rule Patterns
 
 #### Reference Expansion
+
 Reference other rules using square brackets:
+
 ```json
 {
   "grammar": {
@@ -129,7 +137,9 @@ Reference other rules using square brackets:
 ```
 
 #### Nested References
+
 Build complex structures:
+
 ```json
 {
   "grammar": {
@@ -144,7 +154,9 @@ Build complex structures:
 ```
 
 #### Modifier Application
+
 Apply text transformations:
+
 ```json
 {
   "grammar": {
@@ -160,6 +172,7 @@ Apply text transformations:
 Variables provide dynamic state during generation:
 
 ### Variable Declaration
+
 ```json
 {
   "variables": {
@@ -172,6 +185,7 @@ Variables provide dynamic state during generation:
 ```
 
 ### Variable Types
+
 - **String**: Text values
 - **Number**: Integers or decimals
 - **Boolean**: true/false
@@ -179,7 +193,9 @@ Variables provide dynamic state during generation:
 - **Object**: Nested structures
 
 ### Variable Usage
+
 Reference variables with curly braces:
+
 ```json
 {
   "grammar": {
@@ -190,7 +206,9 @@ Reference variables with curly braces:
 ```
 
 ### Dynamic Variables
+
 Set variables during generation:
+
 ```json
 {
   "grammar": {
@@ -211,7 +229,9 @@ Set variables during generation:
 Entry points determine where generation begins:
 
 ### Default Entry Point
+
 The `start` rule is the default:
+
 ```json
 {
   "grammar": {
@@ -221,7 +241,9 @@ The `start` rule is the default:
 ```
 
 ### Multiple Entry Points
+
 Define multiple starting options:
+
 ```json
 {
   "entryPoints": ["character", "location", "item"],
@@ -234,7 +256,9 @@ Define multiple starting options:
 ```
 
 ### Execution Configuration
+
 Control execution behavior:
+
 ```json
 {
   "config": {
@@ -252,6 +276,7 @@ Control execution behavior:
 Break large generators into manageable pieces:
 
 ### Basic Include
+
 ```json
 {
   "includes": {
@@ -265,7 +290,9 @@ Break large generators into manageable pieces:
 ```
 
 ### Include File Format
+
 `names.json`:
+
 ```json
 {
   "first": ["Alice", "Bob", "Charlie"],
@@ -274,7 +301,9 @@ Break large generators into manageable pieces:
 ```
 
 ### Meta Merge Arrays
+
 Special `_meta` array for extending includes:
+
 ```json
 {
   "includes": {
@@ -297,17 +326,19 @@ Special `_meta` array for extending includes:
 When using the visual editor, nodes map to JSON structures:
 
 ### WeightedChoice Node
+
 ```json
 {
   "type": "WeightedChoice",
   "choices": [
-    {"value": "common", "weight": 70},
-    {"value": "rare", "weight": 30}
+    { "value": "common", "weight": 70 },
+    { "value": "rare", "weight": 30 }
   ]
 }
 ```
 
 ### Concat Node
+
 ```json
 {
   "type": "Concat",
@@ -316,6 +347,7 @@ When using the visual editor, nodes map to JSON structures:
 ```
 
 ### Output Node
+
 ```json
 {
   "type": "Output",
@@ -324,6 +356,7 @@ When using the visual editor, nodes map to JSON structures:
 ```
 
 ### SetVariable Node
+
 ```json
 {
   "type": "SetVariable",
@@ -333,6 +366,7 @@ When using the visual editor, nodes map to JSON structures:
 ```
 
 ### GetVariable Node
+
 ```json
 {
   "type": "GetVariable",
@@ -344,6 +378,7 @@ When using the visual editor, nodes map to JSON structures:
 ## Advanced Schema Features
 
 ### Conditional Rules
+
 ```json
 {
   "type": "conditional",
@@ -354,6 +389,7 @@ When using the visual editor, nodes map to JSON structures:
 ```
 
 ### Sequential Patterns
+
 ```json
 {
   "type": "Sequential",
@@ -368,6 +404,7 @@ When using the visual editor, nodes map to JSON structures:
 ```
 
 ### Markov Chains
+
 ```json
 {
   "type": "Markov",
@@ -390,22 +427,26 @@ When using the visual editor, nodes map to JSON structures:
 The schema enforces several validation rules:
 
 ### Structure Validation
+
 - Valid JSON syntax required
 - All references must resolve
 - No circular dependencies
 - Proper type matching
 
 ### Weight Validation
+
 - Weights must be positive numbers
 - At least one non-zero weight required
 - Weights automatically normalized
 
 ### Variable Validation
+
 - Variable names must be valid identifiers
 - No reserved keywords
 - Type consistency maintained
 
 ### Performance Limits
+
 - Maximum recursion depth
 - String length limits
 - Array size limits
@@ -414,6 +455,7 @@ The schema enforces several validation rules:
 ## Migration and Compatibility
 
 ### Version Detection
+
 ```json
 {
   "meta": {
@@ -424,7 +466,9 @@ The schema enforces several validation rules:
 ```
 
 ### Legacy Format Support
+
 Older formats automatically upgraded:
+
 ```json
 {
   "grammar": {
@@ -437,7 +481,9 @@ Older formats automatically upgraded:
 ```
 
 ### Future-Proofing
+
 Use extension fields:
+
 ```json
 {
   "meta": {
@@ -501,9 +547,9 @@ Here's a full generator demonstrating all major features:
     "character": "[name] the [adjective] {characterClass}",
     "name": "[names:first] [names:last]",
     "adjective": [
-      {"w": 60, "v": "[common_adjective]"},
-      {"w": 30, "v": "[uncommon_adjective]"},
-      {"w": 10, "v": "[rare_adjective]"}
+      { "w": 60, "v": "[common_adjective]" },
+      { "w": 30, "v": "[uncommon_adjective]" },
+      { "w": 10, "v": "[rare_adjective]" }
     ],
     "common_adjective": ["brave", "strong", "swift"],
     "uncommon_adjective": ["cunning", "wise", "fierce"],

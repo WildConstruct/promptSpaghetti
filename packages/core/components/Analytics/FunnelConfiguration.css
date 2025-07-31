@@ -220,7 +220,9 @@
   background: var(--bg-primary, #ffffff);
   color: var(--text-primary, #1a1a1a);
   font-size: 14px;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
 .form-input:focus,
@@ -244,7 +246,7 @@
   line-height: 1.4;
 }
 
-.form-group input[type="checkbox"] {
+.form-group input[type='checkbox'] {
   width: auto;
   margin-right: 8px;
 }
@@ -371,7 +373,9 @@
   cursor: pointer;
   padding: 4px;
   border-radius: 4px;
-  transition: color 0.2s, background-color 0.2s;
+  transition:
+    color 0.2s,
+    background-color 0.2s;
 }
 
 .expand-button:hover {
@@ -494,7 +498,7 @@
   color: var(--text-secondary, #6b7280);
 }
 
-.matcher-options input[type="checkbox"] {
+.matcher-options input[type='checkbox'] {
   margin-right: 6px;
 }
 

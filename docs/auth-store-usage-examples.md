@@ -12,15 +12,15 @@ function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  
+
   const { login, isLoading, error, clearError } = useAuthStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     clearError(); // Clear any previous errors
-    
+
     const success = await login(email, password, rememberMe);
-    
+
     if (success) {
       console.log('Login successful!');
       // Navigation handled automatically by routing system
@@ -34,7 +34,7 @@ function LoginForm() {
           {error}
         </div>
       )}
-      
+
       <input
         type="email"
         value={email}
@@ -42,7 +42,7 @@ function LoginForm() {
         placeholder="Email"
         required
       />
-      
+
       <input
         type="password"
         value={password}
@@ -50,7 +50,7 @@ function LoginForm() {
         placeholder="Password"
         required
       />
-      
+
       <label>
         <input
           type="checkbox"
@@ -59,7 +59,7 @@ function LoginForm() {
         />
         Remember me
       </label>
-      
+
       <button type="submit" disabled={isLoading}>
         {isLoading ? 'Signing in...' : 'Sign In'}
       </button>
@@ -82,20 +82,20 @@ function RegistrationForm() {
     firstName: '',
     lastName: ''
   });
-  
+
   const { register, isLoading, error } = useAuthStore();
   const [localError, setLocalError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLocalError('');
-    
+
     // Client-side validation
     if (formData.password !== formData.confirmPassword) {
       setLocalError('Passwords do not match');
       return;
     }
-    
+
     if (formData.password.length < 8) {
       setLocalError('Password must be at least 8 characters');
       return;
@@ -107,7 +107,7 @@ function RegistrationForm() {
       firstName: formData.firstName,
       lastName: formData.lastName
     });
-    
+
     if (success) {
       alert('Registration successful! Please check your email to verify your account.');
     }
@@ -126,7 +126,7 @@ function RegistrationForm() {
           {displayError}
         </div>
       )}
-      
+
       <input
         type="email"
         value={formData.email}
@@ -134,7 +134,7 @@ function RegistrationForm() {
         placeholder="Email"
         required
       />
-      
+
       <input
         type="text"
         value={formData.firstName}
@@ -142,7 +142,7 @@ function RegistrationForm() {
         placeholder="First Name"
         required
       />
-      
+
       <input
         type="text"
         value={formData.lastName}
@@ -150,7 +150,7 @@ function RegistrationForm() {
         placeholder="Last Name"
         required
       />
-      
+
       <input
         type="password"
         value={formData.password}
@@ -158,7 +158,7 @@ function RegistrationForm() {
         placeholder="Password"
         required
       />
-      
+
       <input
         type="password"
         value={formData.confirmPassword}
@@ -166,7 +166,7 @@ function RegistrationForm() {
         placeholder="Confirm Password"
         required
       />
-      
+
       <button type="submit" disabled={isLoading}>
         {isLoading ? 'Creating account...' : 'Create Account'}
       </button>
@@ -206,13 +206,13 @@ function UserProfile() {
   return (
     <div className="user-profile">
       <h2>Welcome, {user.firstName} {user.lastName}</h2>
-      
+
       <div className="profile-info">
         <p><strong>Email:</strong> {user.email}</p>
         <p><strong>Email Verified:</strong> {user.isEmailVerified ? 'Yes' : 'No'}</p>
         <p><strong>Roles:</strong> {user.roles?.join(', ') || 'User'}</p>
       </div>
-      
+
       <div className="profile-actions">
         <button onClick={handleUpdateProfile}>
           Update Profile
@@ -248,23 +248,23 @@ function OAuthButtons() {
   return (
     <div className="oauth-buttons">
       <p>Or sign in with:</p>
-      
-      <button 
+
+      <button
         onClick={() => handleOAuthLogin('google')}
         disabled={isLoading}
         className="oauth-button google"
       >
         {isLoading ? 'Connecting...' : 'Continue with Google'}
       </button>
-      
-      <button 
+
+      <button
         onClick={() => handleOAuthLogin('github')}
         disabled={isLoading}
         className="oauth-button github"
       >
         {isLoading ? 'Connecting...' : 'Continue with GitHub'}
       </button>
-      
+
       {error && (
         <div className="error-message">
           {error}
@@ -288,11 +288,11 @@ interface ProtectedRouteProps {
 }
 
 function ProtectedRoute({ children, redirectTo = '/login' }: ProtectedRouteProps) {
-  const { 
-    isAuthenticated, 
-    isLoading, 
-    checkAuthStatus, 
-    setReturnUrl 
+  const {
+    isAuthenticated,
+    isLoading,
+    checkAuthStatus,
+    setReturnUrl
   } = useAuthStore();
   const location = useLocation();
 
@@ -407,7 +407,7 @@ function App() {
   useEffect(() => {
     // Setup automatic token refresh
     const cleanup = setupTokenRefresh();
-    
+
     // Cleanup on unmount
     return cleanup;
   }, []);
@@ -429,11 +429,11 @@ import { authenticatedFetch, getAuthHeaders } from '../stores/authStore';
 async function fetchUserData() {
   try {
     const response = await authenticatedFetch('/api/user/profile');
-    
+
     if (!response.ok) {
       throw new Error('Failed to fetch user data');
     }
-    
+
     return await response.json();
   } catch (error) {
     console.error('Error fetching user data:', error);
@@ -445,17 +445,17 @@ async function fetchUserData() {
 async function updateUserProfile(profileData: any) {
   try {
     const headers = getAuthHeaders();
-    
+
     const response = await fetch('/api/user/profile', {
       method: 'PATCH',
       headers,
-      body: JSON.stringify(profileData)
+      body: JSON.stringify(profileData),
     });
-    
+
     if (!response.ok) {
       throw new Error('Failed to update profile');
     }
-    
+
     return await response.json();
   } catch (error) {
     console.error('Error updating profile:', error);
@@ -476,7 +476,7 @@ function Header() {
   return (
     <header className="app-header">
       <div className="logo">MyApp</div>
-      
+
       <nav>
         {isAuthenticated ? (
           <div className="auth-nav">
@@ -510,12 +510,12 @@ function AuthErrorHandler() {
     if (error) {
       // Show error to user (could use a toast library)
       console.error('Authentication error:', error);
-      
+
       // Auto-clear error after 5 seconds
       const timer = setTimeout(() => {
         clearError();
       }, 5000);
-      
+
       return () => clearTimeout(timer);
     }
   }, [error, clearError]);
@@ -546,6 +546,7 @@ function App() {
 ## Best Practices
 
 ### 1. Always Handle Loading States
+
 ```typescript
 const { isLoading } = useAuthStore();
 
@@ -555,6 +556,7 @@ if (isLoading) {
 ```
 
 ### 2. Check Authentication Before Protected Operations
+
 ```typescript
 const { isAuthenticated } = useAuthStore();
 
@@ -563,12 +565,13 @@ const handleProtectedAction = () => {
     // Redirect to login or show error
     return;
   }
-  
+
   // Perform protected action
 };
 ```
 
 ### 3. Clear Errors Appropriately
+
 ```typescript
 const { error, clearError } = useAuthStore();
 
@@ -583,6 +586,7 @@ useEffect(() => {
 ```
 
 ### 4. Use Return URLs for Better UX
+
 ```typescript
 const { setReturnUrl } = useAuthStore();
 
@@ -593,13 +597,14 @@ const handleLoginRedirect = () => {
 ```
 
 ### 5. Handle Token Expiration Gracefully
+
 The store automatically handles token refresh, but you can also listen for auth state changes:
 
 ```typescript
 useEffect(() => {
   const unsubscribe = useAuthStore.subscribe(
-    (state) => state.isAuthenticated,
-    (isAuthenticated) => {
+    state => state.isAuthenticated,
+    isAuthenticated => {
       if (!isAuthenticated) {
         // Handle logout
         navigate('/login');

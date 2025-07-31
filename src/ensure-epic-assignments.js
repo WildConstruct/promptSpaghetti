@@ -19,94 +19,140 @@ function determineEpicAssignment(task) {
   const description = (task.description || '').toLowerCase();
   const tags = task.tags || [];
   const content = title + ' ' + description + ' ' + tags.join(' ');
-  
+
   // Authentication (Story 20.1) detection
-  const authKeywords = ['auth', 'login', 'register', 'password', 'jwt', 'token', 'session', 
-    'signin', 'signup', 'oauth', 'totp', 'mfa', 'authentication', 
-    'user management', 'account', 'credential'];
-  
+  const authKeywords = [
+    'auth',
+    'login',
+    'register',
+    'password',
+    'jwt',
+    'token',
+    'session',
+    'signin',
+    'signup',
+    'oauth',
+    'totp',
+    'mfa',
+    'authentication',
+    'user management',
+    'account',
+    'credential',
+  ];
+
   if (authKeywords.some(keyword => content.includes(keyword))) {
     return {
       story: '20.1',
       tags: [...(tags || []), 'auth'].filter((tag, index, arr) => arr.indexOf(tag) === index),
       metadata: {
         epic: 'Authentication System',
-        priority: 'critical'
-      }
+        priority: 'critical',
+      },
     };
   }
-  
-  // File Browser (Story 20.2) detection  
-  const fileKeywords = ['file browser', 'project', 'save', 'load', 'import', 'export',
-    'file management', 'project management', 'recent files', 
-    'file preview', 'drag drop', 'upload', 'download'];
-  
-  if (fileKeywords.some(keyword => content.includes(keyword)) && 
-      !content.includes('privacy') && !content.includes('policy')) {
+
+  // File Browser (Story 20.2) detection
+  const fileKeywords = [
+    'file browser',
+    'project',
+    'save',
+    'load',
+    'import',
+    'export',
+    'file management',
+    'project management',
+    'recent files',
+    'file preview',
+    'drag drop',
+    'upload',
+    'download',
+  ];
+
+  if (
+    fileKeywords.some(keyword => content.includes(keyword)) &&
+    !content.includes('privacy') &&
+    !content.includes('policy')
+  ) {
     return {
       story: '20.2',
       tags: [...(tags || []), 'file-browser'].filter((tag, index, arr) => arr.indexOf(tag) === index),
       metadata: {
         epic: 'File Browser System',
-        priority: 'critical'
-      }
+        priority: 'critical',
+      },
     };
   }
-  
+
   // Epic 19 (Privacy/Compliance) detection
-  const privacyKeywords = ['privacy', 'compliance', 'gdpr', 'policy', 'audit', 
-    'iso 27001', 'security policy', 'data protection',
-    'privacy policy', 'compliance framework', 'regulatory'];
-  
+  const privacyKeywords = [
+    'privacy',
+    'compliance',
+    'gdpr',
+    'policy',
+    'audit',
+    'iso 27001',
+    'security policy',
+    'data protection',
+    'privacy policy',
+    'compliance framework',
+    'regulatory',
+  ];
+
   if (privacyKeywords.some(keyword => content.includes(keyword))) {
     return {
       story: '19',
       tags: [...(tags || []), 'privacy', 'compliance'].filter((tag, index, arr) => arr.indexOf(tag) === index),
       metadata: {
         epic: 'Privacy & Compliance Framework',
-        priority: 'low' // Deprioritized per IMMEDIATE-PRIORITIES.md
-      }
+        priority: 'low', // Deprioritized per IMMEDIATE-PRIORITIES.md
+      },
     };
   }
-  
+
   // Epic 7 (Advanced Nodes) detection
-  const advancedKeywords = ['weighted', 'conditional', 'sequential', 'markov', 
-    'advanced node', 'runtime node', 'node type'];
-  
+  const advancedKeywords = [
+    'weighted',
+    'conditional',
+    'sequential',
+    'markov',
+    'advanced node',
+    'runtime node',
+    'node type',
+  ];
+
   if (advancedKeywords.some(keyword => content.includes(keyword))) {
     return {
       story: '7',
       tags: [...(tags || []), 'advanced-nodes'].filter((tag, index, arr) => arr.indexOf(tag) === index),
       metadata: {
         epic: 'Advanced Node Capabilities',
-        priority: 'medium'
-      }
+        priority: 'medium',
+      },
     };
   }
-  
+
   // Epic 3 (Export System) detection
   const exportKeywords = ['export', 'generator bundle', 'png', 'pdf', 'yaml', 'xml'];
-  
-  if (exportKeywords.some(keyword => content.includes(keyword)) && 
-      !content.includes('privacy')) {
+
+  if (exportKeywords.some(keyword => content.includes(keyword)) && !content.includes('privacy')) {
     return {
       story: '3',
       tags: [...(tags || []), 'export'].filter((tag, index, arr) => arr.indexOf(tag) === index),
       metadata: {
         epic: 'Export System',
-        priority: 'medium'
-      }
+        priority: 'medium',
+      },
     };
   }
-  
+
   // Default for unclassified tasks
   return {
     story: 'Other',
     tags: tags || [],
     metadata: {
       epic: 'Other',
-      priority: 'normal'
-    }
+      priority: 'normal',
+    },
   };
 }
 
@@ -117,7 +163,7 @@ function determineEpicAssignment(task) {
  */
 function applyEpicAssignment(task) {
   const epicData = determineEpicAssignment(task);
-  
+
   return {
     ...task,
     story: epicData.story,
@@ -126,8 +172,8 @@ function applyEpicAssignment(task) {
       ...(task.metadata || {}),
       ...epicData.metadata,
       epic_assigned: true,
-      epic_assignment_date: new Date().toISOString()
-    }
+      epic_assignment_date: new Date().toISOString(),
+    },
   };
 }
 
@@ -137,19 +183,13 @@ function applyEpicAssignment(task) {
  * @returns {boolean} - True if properly assigned
  */
 function hasProperEpicAssignment(task) {
-  return !!(
-    task.story && 
-    task.tags && 
-    Array.isArray(task.tags) && 
-    task.metadata && 
-    task.metadata.epic
-  );
+  return !!(task.story && task.tags && Array.isArray(task.tags) && task.metadata && task.metadata.epic);
 }
 
 module.exports = {
   determineEpicAssignment,
   applyEpicAssignment,
-  hasProperEpicAssignment
+  hasProperEpicAssignment,
 };
 
 console.log('✅ Epic assignment utilities loaded');

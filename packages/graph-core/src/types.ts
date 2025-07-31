@@ -19,7 +19,7 @@ export const NodeTypeEnum = z.enum([
   'Sequential',
   'Markov',
   // Epic 8 Python Integration
-  'PythonTransform'
+  'PythonTransform',
 ]);
 
 export type NodeType = z.infer<typeof NodeTypeEnum>;

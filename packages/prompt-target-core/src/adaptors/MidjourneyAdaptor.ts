@@ -8,7 +8,7 @@ import {
   ParameterSpec,
   Feature,
   PluginContext,
-  TransformationLog
+  TransformationLog,
 } from '../types/index.js';
 import { BaseAdaptor } from './BaseAdaptor.js';
 
@@ -17,13 +17,9 @@ import { BaseAdaptor } from './BaseAdaptor.js';
  * Supports Midjourney v6 syntax and parameters
  */
 export class MidjourneyAdaptor extends BaseAdaptor {
-  private readonly supportedAspectRatios = [
-    '1:1', '2:3', '3:2', '4:5', '5:4', '16:9', '9:16'
-  ];
+  private readonly supportedAspectRatios = ['1:1', '2:3', '3:2', '4:5', '5:4', '16:9', '9:16'];
 
-  private readonly supportedVersions = [
-    'v6', 'v5.2', 'v5.1', 'v5', 'v4'
-  ];
+  private readonly supportedVersions = ['v6', 'v5.2', 'v5.1', 'v5', 'v4'];
 
   constructor(context: PluginContext) {
     super(
@@ -45,7 +41,7 @@ export class MidjourneyAdaptor extends BaseAdaptor {
         'conditional',
         'weighted',
         'concat',
-        'output'
+        'output',
       ],
       parameters: [
         {
@@ -54,7 +50,7 @@ export class MidjourneyAdaptor extends BaseAdaptor {
           required: false,
           default: '1:1',
           options: this.supportedAspectRatios,
-          description: 'Image aspect ratio (e.g., 16:9, 4:3)'
+          description: 'Image aspect ratio (e.g., 16:9, 4:3)',
         },
         {
           name: 'stylize',
@@ -63,7 +59,7 @@ export class MidjourneyAdaptor extends BaseAdaptor {
           default: 100,
           min: 0,
           max: 1000,
-          description: 'Stylization level (0-1000, default 100)'
+          description: 'Stylization level (0-1000, default 100)',
         },
         {
           name: 'quality',
@@ -72,7 +68,7 @@ export class MidjourneyAdaptor extends BaseAdaptor {
           default: 1,
           min: 0.25,
           max: 2,
-          description: 'Image quality (0.25, 0.5, 1, 2)'
+          description: 'Image quality (0.25, 0.5, 1, 2)',
         },
         {
           name: 'chaos',
@@ -81,7 +77,7 @@ export class MidjourneyAdaptor extends BaseAdaptor {
           default: 0,
           min: 0,
           max: 100,
-          description: 'Variation amount (0-100)'
+          description: 'Variation amount (0-100)',
         },
         {
           name: 'version',
@@ -89,7 +85,7 @@ export class MidjourneyAdaptor extends BaseAdaptor {
           required: false,
           default: 'v6',
           options: this.supportedVersions,
-          description: 'Midjourney version to use'
+          description: 'Midjourney version to use',
         },
         {
           name: 'weird',
@@ -97,72 +93,72 @@ export class MidjourneyAdaptor extends BaseAdaptor {
           required: false,
           min: 0,
           max: 3000,
-          description: 'Weirdness level (0-3000, v6 only)'
+          description: 'Weirdness level (0-3000, v6 only)',
         },
         {
           name: 'tile',
           type: 'boolean',
           required: false,
           default: false,
-          description: 'Generate tileable images'
-        }
+          description: 'Generate tileable images',
+        },
       ],
       limitations: [
         {
           type: 'prompt_length',
           description: 'Maximum prompt length ~6000 characters',
           severity: 'warning',
-          impact: 'Long prompts may be truncated'
+          impact: 'Long prompts may be truncated',
         },
         {
           type: 'feature',
           description: 'No direct text generation support',
           severity: 'error',
-          impact: 'Text-only nodes will be converted to image descriptions'
+          impact: 'Text-only nodes will be converted to image descriptions',
         },
         {
           type: 'parameter',
           description: 'Some parameters are version-specific',
           severity: 'info',
-          impact: 'Parameters may be ignored on older versions'
-        }
+          impact: 'Parameters may be ignored on older versions',
+        },
       ],
       features: [
         {
           name: 'aspect_ratios',
           supported: true,
-          description: 'Supports custom aspect ratios'
+          description: 'Supports custom aspect ratios',
         },
         {
           name: 'stylization',
           supported: true,
-          description: 'Adjustable stylization levels'
+          description: 'Adjustable stylization levels',
         },
         {
           name: 'variations',
           supported: true,
-          description: 'Generate variations with chaos parameter'
+          description: 'Generate variations with chaos parameter',
         },
         {
           name: 'image_references',
           supported: true,
-          description: 'Use image URLs as references'
+          description: 'Use image URLs as references',
         },
         {
           name: 'style_references',
           supported: true,
-          description: 'Use style reference images'
+          description: 'Use style reference images',
         },
         {
           name: 'blend_mode',
           supported: false,
           description: 'Blend mode not supported in this adaptor version',
-          alternatives: ['Use image references for similar effects']
-        }
+          alternatives: ['Use image references for similar effects'],
+        },
       ],
       maxNodes: 20,
       maxPromptLength: 6000,
-      supportedFormats: ['midjourney_prompt']
+      supportedFormats: ['midjourney_prompt'],
     };
   }
 
@@ -171,45 +167,38 @@ export class MidjourneyAdaptor extends BaseAdaptor {
     const capabilities = await this.capabilities();
 
     // Check for pure text nodes (should have image context)
-    const textOnlyNodes = graph.nodes.filter(node => 
-      node.type === 'text' && 
-      !this.hasImageContext(node, graph)
-    );
+    const textOnlyNodes = graph.nodes.filter(node => node.type === 'text' && !this.hasImageContext(node, graph));
 
     if (textOnlyNodes.length === graph.nodes.length && textOnlyNodes.length > 0) {
-      results.push(this.createValidationResult(
-        'text-only-graph',
-        'warning',
-        'medium',
-        'Graph contains only text nodes',
-        {
+      results.push(
+        this.createValidationResult('text-only-graph', 'warning', 'medium', 'Graph contains only text nodes', {
           description: 'Midjourney works best with visual descriptions. Consider adding style or image context.',
           autoFixable: true,
-          suggestions: [{
-            type: 'workaround',
-            description: 'Add visual descriptors or style keywords to improve image generation'
-          }]
-        }
-      ));
+          suggestions: [
+            {
+              type: 'workaround',
+              description: 'Add visual descriptors or style keywords to improve image generation',
+            },
+          ],
+        })
+      );
     }
 
     // Check prompt length
     const estimatedPromptLength = this.estimatePromptLength(graph);
     if (estimatedPromptLength > capabilities.maxPromptLength!) {
-      results.push(this.createValidationResult(
-        'prompt-too-long',
-        'warning',
-        'high',
-        'Prompt may be too long',
-        {
+      results.push(
+        this.createValidationResult('prompt-too-long', 'warning', 'high', 'Prompt may be too long', {
           description: `Estimated length ${estimatedPromptLength} exceeds recommended ${capabilities.maxPromptLength}`,
           autoFixable: false,
-          suggestions: [{
-            type: 'fix',
-            description: 'Simplify prompt or split into multiple generations'
-          }]
-        }
-      ));
+          suggestions: [
+            {
+              type: 'fix',
+              description: 'Simplify prompt or split into multiple generations',
+            },
+          ],
+        })
+      );
     }
 
     // Validate parameters
@@ -222,7 +211,7 @@ export class MidjourneyAdaptor extends BaseAdaptor {
             if (validation) {
               results.push({
                 ...validation,
-                nodeId: node.id
+                nodeId: node.id,
               });
             }
           }
@@ -234,20 +223,24 @@ export class MidjourneyAdaptor extends BaseAdaptor {
     const versionParams = this.extractVersionSpecificParams(graph);
     if (versionParams.conflicts.length > 0) {
       versionParams.conflicts.forEach(conflict => {
-        results.push(this.createValidationResult(
-          `version-conflict-${conflict.param}`,
-          'warning',
-          'medium',
-          'Version-specific parameter conflict',
-          {
-            description: `Parameter "${conflict.param}" is not supported in version ${conflict.version}`,
-            autoFixable: true,
-            suggestions: [{
-              type: 'fix',
-              description: 'Remove parameter or upgrade to compatible version'
-            }]
-          }
-        ));
+        results.push(
+          this.createValidationResult(
+            `version-conflict-${conflict.param}`,
+            'warning',
+            'medium',
+            'Version-specific parameter conflict',
+            {
+              description: `Parameter "${conflict.param}" is not supported in version ${conflict.version}`,
+              autoFixable: true,
+              suggestions: [
+                {
+                  type: 'fix',
+                  description: 'Remove parameter or upgrade to compatible version',
+                },
+              ],
+            }
+          )
+        );
       });
     }
 
@@ -284,7 +277,7 @@ export class MidjourneyAdaptor extends BaseAdaptor {
 
     // Build parameter string for Midjourney
     const paramString = this.buildParameterString(parameters, transformations);
-    
+
     // Combine prompt text with parameters
     const finalPrompt = `${promptText}${paramString}`.trim();
 
@@ -304,8 +297,8 @@ export class MidjourneyAdaptor extends BaseAdaptor {
         adaptorVersion: this.version,
         quality,
         warnings: validationResults.filter(r => r.type === 'warning'),
-        transformations
-      }
+        transformations,
+      },
     };
 
     return targetPrompt;
@@ -314,7 +307,10 @@ export class MidjourneyAdaptor extends BaseAdaptor {
   /**
    * Process the graph to extract content and build prompt
    */
-  private async processGraph(graph: PromptGraph, transformations: TransformationLog[]): Promise<{
+  private async processGraph(
+    graph: PromptGraph,
+    transformations: TransformationLog[]
+  ): Promise<{
     mainPrompt: string;
   }> {
     let mainPrompt = '';
@@ -322,25 +318,24 @@ export class MidjourneyAdaptor extends BaseAdaptor {
 
     // Find output nodes first
     const outputNodes = graph.nodes.filter(node => node.type === 'output');
-    
+
     if (outputNodes.length === 0) {
       // No output nodes - process all content nodes
-      const contentNodes = graph.nodes.filter(node => 
-        ['text', 'style', 'image'].includes(node.type) && 
-        (node.data.content || node.data.description)
+      const contentNodes = graph.nodes.filter(
+        node => ['text', 'style', 'image'].includes(node.type) && (node.data.content || node.data.description)
       );
-      
+
       for (const node of contentNodes) {
         const content = await this.processNode(node, graph, transformations);
         if (content) {
           processedElements.push(content);
         }
       }
-      
+
       transformations.push({
         step: 'process_all_content_nodes',
         action: 'Processed all content nodes as no output nodes found',
-        details: { nodeCount: contentNodes.length }
+        details: { nodeCount: contentNodes.length },
       });
     } else {
       // Process output nodes
@@ -379,7 +374,7 @@ export class MidjourneyAdaptor extends BaseAdaptor {
 
     // Get input edges for this node
     const inputEdges = graph.edges.filter(edge => edge.target === node.id);
-    
+
     if (inputEdges.length > 0) {
       // Process input nodes first
       const inputContents: string[] = [];
@@ -397,106 +392,106 @@ export class MidjourneyAdaptor extends BaseAdaptor {
 
     // Process current node content
     switch (node.type) {
-    case 'text':
-      const textContent = node.data.content || '';
-      content = content ? `${content} ${textContent}` : textContent;
-      break;
-        
-    case 'style':
-      const styleContent = node.data.style || node.data.content || '';
-      if (styleContent) {
-        // Add style modifiers
-        content = content ? `${content}, ${styleContent}` : styleContent;
+      case 'text':
+        const textContent = node.data.content || '';
+        content = content ? `${content} ${textContent}` : textContent;
+        break;
+
+      case 'style':
+        const styleContent = node.data.style || node.data.content || '';
+        if (styleContent) {
+          // Add style modifiers
+          content = content ? `${content}, ${styleContent}` : styleContent;
+          transformations.push({
+            step: 'process_style',
+            sourceNodeId: node.id,
+            action: 'Added style modifiers',
+            details: { style: styleContent },
+          });
+        }
+        break;
+
+      case 'image':
+        const imageRef = node.data.url || node.data.content;
+        const imageDesc = node.data.description || node.data.alt || '';
+
+        if (imageRef && imageRef.startsWith('http')) {
+          // Image URL reference
+          content = content ? `${content} ${imageRef}` : imageRef;
+          transformations.push({
+            step: 'process_image_reference',
+            sourceNodeId: node.id,
+            action: 'Added image URL reference',
+            details: { url: imageRef },
+          });
+        } else if (imageDesc) {
+          // Image description
+          content = content ? `${content}, ${imageDesc}` : imageDesc;
+          transformations.push({
+            step: 'process_image_description',
+            sourceNodeId: node.id,
+            action: 'Added image description',
+            details: { description: imageDesc },
+          });
+        }
+        break;
+
+      case 'concat':
+        // Content already processed from inputs
         transformations.push({
-          step: 'process_style',
+          step: 'process_concat',
           sourceNodeId: node.id,
-          action: 'Added style modifiers',
-          details: { style: styleContent }
+          action: 'Concatenated input nodes',
         });
-      }
-      break;
-        
-    case 'image':
-      const imageRef = node.data.url || node.data.content;
-      const imageDesc = node.data.description || node.data.alt || '';
-        
-      if (imageRef && imageRef.startsWith('http')) {
-        // Image URL reference
-        content = content ? `${content} ${imageRef}` : imageRef;
+        break;
+
+      case 'weighted':
+        // Select based on weights (simplified - could be enhanced)
+        if (node.data.options && node.data.options.length > 0) {
+          const selectedOption = this.selectWeightedOption(node.data.options);
+          content = content ? `${content} ${selectedOption.text}` : selectedOption.text;
+          transformations.push({
+            step: 'process_weighted',
+            sourceNodeId: node.id,
+            action: 'Selected weighted option',
+            details: { selectedIndex: selectedOption.index, weight: selectedOption.weight },
+          });
+        }
+        break;
+
+      case 'conditional':
+        // For simplicity, take the 'true' branch (could be enhanced with condition evaluation)
+        if (node.data.trueBranch) {
+          content = content ? `${content} ${node.data.trueBranch}` : node.data.trueBranch;
+          transformations.push({
+            step: 'process_conditional',
+            sourceNodeId: node.id,
+            action: 'Selected true branch',
+            details: { condition: node.data.condition },
+          });
+        }
+        break;
+
+      case 'output':
+        // Content already processed from inputs
         transformations.push({
-          step: 'process_image_reference',
+          step: 'process_output',
           sourceNodeId: node.id,
-          action: 'Added image URL reference',
-          details: { url: imageRef }
+          action: 'Processed output node',
         });
-      } else if (imageDesc) {
-        // Image description
-        content = content ? `${content}, ${imageDesc}` : imageDesc;
-        transformations.push({
-          step: 'process_image_description',
-          sourceNodeId: node.id,
-          action: 'Added image description',
-          details: { description: imageDesc }
-        });
-      }
-      break;
-        
-    case 'concat':
-      // Content already processed from inputs
-      transformations.push({
-        step: 'process_concat',
-        sourceNodeId: node.id,
-        action: 'Concatenated input nodes'
-      });
-      break;
-        
-    case 'weighted':
-      // Select based on weights (simplified - could be enhanced)
-      if (node.data.options && node.data.options.length > 0) {
-        const selectedOption = this.selectWeightedOption(node.data.options);
-        content = content ? `${content} ${selectedOption.text}` : selectedOption.text;
-        transformations.push({
-          step: 'process_weighted',
-          sourceNodeId: node.id,
-          action: 'Selected weighted option',
-          details: { selectedIndex: selectedOption.index, weight: selectedOption.weight }
-        });
-      }
-      break;
-        
-    case 'conditional':
-      // For simplicity, take the 'true' branch (could be enhanced with condition evaluation)
-      if (node.data.trueBranch) {
-        content = content ? `${content} ${node.data.trueBranch}` : node.data.trueBranch;
-        transformations.push({
-          step: 'process_conditional',
-          sourceNodeId: node.id,
-          action: 'Selected true branch',
-          details: { condition: node.data.condition }
-        });
-      }
-      break;
-        
-    case 'output':
-      // Content already processed from inputs
-      transformations.push({
-        step: 'process_output',
-        sourceNodeId: node.id,
-        action: 'Processed output node'
-      });
-      break;
-        
-    default:
-      // For unsupported node types, try to extract any text content
-      if (node.data.content) {
-        content = content ? `${content} ${node.data.content}` : node.data.content;
-        transformations.push({
-          step: 'process_fallback',
-          sourceNodeId: node.id,
-          action: `Processed unsupported node type: ${node.type}`,
-          details: { nodeType: node.type }
-        });
-      }
+        break;
+
+      default:
+        // For unsupported node types, try to extract any text content
+        if (node.data.content) {
+          content = content ? `${content} ${node.data.content}` : node.data.content;
+          transformations.push({
+            step: 'process_fallback',
+            sourceNodeId: node.id,
+            action: `Processed unsupported node type: ${node.type}`,
+            details: { nodeType: node.type },
+          });
+        }
     }
 
     return content.trim();
@@ -505,10 +500,7 @@ export class MidjourneyAdaptor extends BaseAdaptor {
   /**
    * Build parameter string for Midjourney format
    */
-  private buildParameterString(
-    parameters: Record<string, any>,
-    transformations: TransformationLog[]
-  ): string {
+  private buildParameterString(parameters: Record<string, any>, transformations: TransformationLog[]): string {
     const paramParts: string[] = [];
 
     // Aspect ratio
@@ -544,7 +536,7 @@ export class MidjourneyAdaptor extends BaseAdaptor {
         transformations.push({
           step: 'skip_incompatible_param',
           action: 'Skipped --weird parameter (not supported in selected version)',
-          details: { version: parameters.version }
+          details: { version: parameters.version },
         });
       }
     }
@@ -565,11 +557,17 @@ export class MidjourneyAdaptor extends BaseAdaptor {
 
     // Add common quality modifiers if not present
     const qualityKeywords = [
-      'highly detailed', 'professional', 'masterpiece', '8k', '4k',
-      'photorealistic', 'cinematic', 'studio lighting'
+      'highly detailed',
+      'professional',
+      'masterpiece',
+      '8k',
+      '4k',
+      'photorealistic',
+      'cinematic',
+      'studio lighting',
     ];
 
-    const hasQualityModifiers = qualityKeywords.some(keyword => 
+    const hasQualityModifiers = qualityKeywords.some(keyword =>
       optimized.toLowerCase().includes(keyword.toLowerCase())
     );
 
@@ -578,7 +576,7 @@ export class MidjourneyAdaptor extends BaseAdaptor {
       transformations.push({
         step: 'add_quality_modifiers',
         action: 'Added default quality modifiers',
-        details: { added: 'highly detailed, professional quality' }
+        details: { added: 'highly detailed, professional quality' },
       });
     }
 
@@ -599,10 +597,29 @@ export class MidjourneyAdaptor extends BaseAdaptor {
   private hasImageContext(node: PromptNode, graph: PromptGraph): boolean {
     // Check if the text contains visual descriptors
     const visualKeywords = [
-      'image', 'photo', 'picture', 'art', 'painting', 'drawing', 'sketch',
-      'render', 'illustration', 'design', 'style', 'color', 'lighting',
-      'composition', 'visual', 'aesthetic', 'cinematic', 'landscape',
-      'portrait', 'character', 'scene', 'environment', 'background'
+      'image',
+      'photo',
+      'picture',
+      'art',
+      'painting',
+      'drawing',
+      'sketch',
+      'render',
+      'illustration',
+      'design',
+      'style',
+      'color',
+      'lighting',
+      'composition',
+      'visual',
+      'aesthetic',
+      'cinematic',
+      'landscape',
+      'portrait',
+      'character',
+      'scene',
+      'environment',
+      'background',
     ];
 
     const content = (node.data.content || '').toLowerCase();
@@ -611,9 +628,7 @@ export class MidjourneyAdaptor extends BaseAdaptor {
     if (hasVisualWords) return true;
 
     // Check if connected to style or image nodes
-    const connectedEdges = graph.edges.filter(edge => 
-      edge.source === node.id || edge.target === node.id
-    );
+    const connectedEdges = graph.edges.filter(edge => edge.source === node.id || edge.target === node.id);
 
     for (const edge of connectedEdges) {
       const otherNodeId = edge.source === node.id ? edge.target : edge.source;
@@ -683,18 +698,14 @@ export class MidjourneyAdaptor extends BaseAdaptor {
     return {
       text: selected.text || selected.content || '',
       index: 0,
-      weight: selected.weight || 1
+      weight: selected.weight || 1,
     };
   }
 
   /**
    * Validate a parameter value against its specification
    */
-  private validateParameter(
-    name: string,
-    value: any,
-    spec: ParameterSpec
-  ): ValidationResult | null {
+  private validateParameter(name: string, value: any, spec: ParameterSpec): ValidationResult | null {
     // Implement parameter validation logic
     if (spec.type === 'number') {
       if (typeof value !== 'number' || isNaN(value)) {
@@ -705,11 +716,11 @@ export class MidjourneyAdaptor extends BaseAdaptor {
           `Invalid number value for parameter "${name}"`,
           {
             description: `Expected number, got ${typeof value}`,
-            autoFixable: true
+            autoFixable: true,
           }
         );
       }
-      
+
       if (spec.min !== undefined && value < spec.min) {
         return this.createValidationResult(
           `param-too-low-${name}`,
@@ -718,11 +729,11 @@ export class MidjourneyAdaptor extends BaseAdaptor {
           `Parameter "${name}" value too low`,
           {
             description: `Value ${value} is below minimum ${spec.min}`,
-            autoFixable: true
+            autoFixable: true,
           }
         );
       }
-      
+
       if (spec.max !== undefined && value > spec.max) {
         return this.createValidationResult(
           `param-too-high-${name}`,
@@ -731,12 +742,12 @@ export class MidjourneyAdaptor extends BaseAdaptor {
           `Parameter "${name}" value too high`,
           {
             description: `Value ${value} is above maximum ${spec.max}`,
-            autoFixable: true
+            autoFixable: true,
           }
         );
       }
     }
-    
+
     if (spec.type === 'enum' && spec.options) {
       if (!spec.options.includes(value)) {
         return this.createValidationResult(
@@ -746,12 +757,12 @@ export class MidjourneyAdaptor extends BaseAdaptor {
           `Invalid enum value for parameter "${name}"`,
           {
             description: `Value "${value}" not in allowed options: ${spec.options.join(', ')}`,
-            autoFixable: true
+            autoFixable: true,
           }
         );
       }
     }
-    
+
     return null;
   }
 
@@ -762,17 +773,17 @@ export class MidjourneyAdaptor extends BaseAdaptor {
     if (spec.type === 'number') {
       const num = Number(value);
       if (isNaN(num)) return spec.default;
-      
+
       if (spec.min !== undefined) return Math.max(spec.min, num);
       if (spec.max !== undefined) return Math.min(spec.max, num);
-      
+
       return num;
     }
-    
+
     if (spec.type === 'enum' && spec.options) {
       return spec.options.includes(value) ? value : spec.default;
     }
-    
+
     return value;
   }
 
@@ -781,13 +792,13 @@ export class MidjourneyAdaptor extends BaseAdaptor {
    */
   private extractParameters(graph: PromptGraph): Record<string, any> {
     const parameters: Record<string, any> = {};
-    
+
     graph.nodes.forEach(node => {
       if (node.data.parameters) {
         Object.assign(parameters, node.data.parameters);
       }
     });
-    
+
     return parameters;
   }
 

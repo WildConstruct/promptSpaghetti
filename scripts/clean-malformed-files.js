@@ -20,7 +20,7 @@ class MalformedFileCleaner {
       success: '✅',
       warning: '⚠️',
       error: '❌',
-      remove: '🗑️'
+      remove: '🗑️',
     }[type];
     console.log(`${prefix} ${message}`);
   }
@@ -33,61 +33,63 @@ class MalformedFileCleaner {
     const baseName = path.basename(jsFilePath, '.js');
     const tsFile = path.join(dir, `${baseName}.ts`);
     const tsxFile = path.join(dir, `${baseName}.tsx`);
-    
+
     // Remove if corresponding .ts or .tsx exists
     if (fs.existsSync(tsFile) || fs.existsSync(tsxFile)) {
       return { shouldRemove: true, reason: 'has TS/TSX counterpart' };
     }
-    
+
     // Check for malformed content patterns
     try {
       const content = fs.readFileSync(jsFilePath, 'utf8');
       const lines = content.split('\n');
-      
+
       let hasOrphanedReturn = false;
       let hasOrphanedJSX = false;
       let inFunction = false;
       let braceCount = 0;
-      
+
       for (const line of lines) {
         const trimmed = line.trim();
-        
+
         // Track function context
-        if (trimmed.includes('function') || trimmed.includes('=>') || 
-            (trimmed.includes('const') && trimmed.includes('='))) {
+        if (
+          trimmed.includes('function') ||
+          trimmed.includes('=>') ||
+          (trimmed.includes('const') && trimmed.includes('='))
+        ) {
           inFunction = true;
         }
-        
+
         // Track brace depth
         braceCount += (trimmed.match(/{/g) || []).length;
         braceCount -= (trimmed.match(/}/g) || []).length;
-        
+
         if (braceCount <= 0) {
           inFunction = false;
         }
-        
+
         // Check for problematic patterns
         if (trimmed.startsWith('return ') && !inFunction) {
           hasOrphanedReturn = true;
         }
-        
+
         if ((trimmed.includes('_jsx') || trimmed.includes('_jsxs')) && !inFunction) {
           hasOrphanedJSX = true;
         }
       }
-      
+
       if (hasOrphanedReturn) {
         return { shouldRemove: true, reason: 'orphaned return statement' };
       }
-      
+
       if (hasOrphanedJSX) {
         return { shouldRemove: true, reason: 'orphaned JSX' };
       }
-      
     } catch (error) {
       this.log(`Could not read ${jsFilePath}: ${error.message}`, 'warning');
     }
-    
+
     return { shouldRemove: false };
   }
 
@@ -96,20 +98,20 @@ class MalformedFileCleaner {
    */
   cleanDirectory(dir) {
     if (!fs.existsSync(dir)) return;
-    
+
     const items = fs.readdirSync(dir, { withFileTypes: true });
-    
+
     for (const item of items) {
       const fullPath = path.join(dir, item.name);
-      
+
       if (item.isDirectory() && !['node_modules', 'dist', 'coverage', '.git'].includes(item.name)) {
         this.cleanDirectory(fullPath);
       } else if (item.isFile() && item.name.endsWith('.js')) {
         const { shouldRemove, reason } = this.shouldRemoveFile(fullPath);
-        
+
         if (shouldRemove) {
           const relativePath = path.relative(process.cwd(), fullPath);
-          
+
           if (this.dryRun) {
             this.log(`Would remove: ${relativePath} (${reason})`, 'warning');
           } else {
@@ -131,15 +133,13 @@ class MalformedFileCleaner {
    */
   run() {
     console.log('🧹 Starting malformed file cleanup...\n');
-    
+
     if (this.dryRun) {
       this.log('DRY RUN MODE - No files will be deleted', 'warning');
     }
-    
-    const targetDirs = [
-      'packages/core'
-    ];
-    
+
+    const targetDirs = ['packages/core'];
+
     for (const dir of targetDirs) {
       if (fs.existsSync(dir)) {
         this.log(`Cleaning ${dir}...`, 'info');
@@ -148,15 +148,15 @@ class MalformedFileCleaner {
         this.log(`Directory not found: ${dir}`, 'warning');
       }
     }
-    
+
     // Report results
     console.log('\n📊 Cleanup Results:');
-    
+
     if (this.dryRun) {
       this.log('Dry run completed - no files were actually removed', 'info');
     } else if (this.removedFiles.length > 0) {
       this.log(`Removed ${this.removedFiles.length} malformed files`, 'success');
-      
+
       // Suggest running validation
       console.log('\n🔧 Next steps:');
       console.log('  1. Run: node scripts/validate-build.js');

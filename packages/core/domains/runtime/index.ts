@@ -1,7 +1,7 @@
 /**
  * Runtime Domain - Main Export
  * REFACTOR-005: Domain-Driven Architecture
- * 
+ *
  * Main entry point for the runtime execution domain
  */
 
@@ -26,6 +26,6 @@ export const createRuntimeDomain = (config?: any) => {
     services: {},
     events: {},
     config: {},
-    utils: {}
+    utils: {},
   };
 };

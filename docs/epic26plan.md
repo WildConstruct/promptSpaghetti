@@ -5,6 +5,7 @@ This implementation plan details tasks, timeline, dependencies, risks, and succe
 ## Story 26.1 – Model Registry & Versioning
 
 ### Implementation Tasks
+
 - [ ] Define registry schema (model metadata, lineage, performance metrics)
 - [ ] Set up registry service (PostgreSQL + REST/GraphQL API)
 - [ ] Implement CRUD endpoints and access controls
@@ -17,6 +18,7 @@ This implementation plan details tasks, timeline, dependencies, risks, and succe
 ## Story 26.2 – Fine-tuning Workflow Management
 
 ### Implementation Tasks
+
 - [ ] Design dataset schema and validation rules
 - [ ] Implement dataset upload & versioning endpoints
 - [ ] Build training job orchestrator (Kubernetes jobs or managed service)
@@ -29,6 +31,7 @@ This implementation plan details tasks, timeline, dependencies, risks, and succe
 ## Story 26.3 – Model Evaluation Framework
 
 ### Implementation Tasks
+
 - [ ] Curate benchmark datasets and standard metrics
 - [ ] Develop evaluation pipeline supporting custom metrics
 - [ ] Implement comparison reports across model versions
@@ -40,6 +43,7 @@ This implementation plan details tasks, timeline, dependencies, risks, and succe
 ## Story 26.4 – Model Deployment Pipeline
 
 ### Implementation Tasks
+
 - [ ] Define deployment targets (serverless function, container image)
 - [ ] Implement automated build & deploy pipeline with Canary/Blue-Green options
 - [ ] Add pre-deployment validation checks (latency, memory, schema)
@@ -51,6 +55,7 @@ This implementation plan details tasks, timeline, dependencies, risks, and succe
 ## Story 26.5 – Training Data Management
 
 ### Implementation Tasks
+
 - [ ] Build data labeling & annotation UI with role permissions
 - [ ] Implement data augmentation utilities (paraphrasing, noise injection)
 - [ ] Add data quality checks (duplication, imbalance)
@@ -63,22 +68,24 @@ This implementation plan details tasks, timeline, dependencies, risks, and succe
 ---
 
 ## Timeline & Sprint Breakdown
+
 Estimated duration: **10 sprints**
 
-| Sprint | Focus |
-|-------|-------|
-| 1 | Model registry service & schema |
-| 2 | Registry UI & access controls |
-| 3 | Fine-tuning workflow backend |
-| 4 | Fine-tuning UI & auto-registration |
-| 5 | Evaluation framework & benchmark datasets |
-| 6 | Deployment pipeline core & validation checks |
-| 7 | Rollback, monitoring integration, UI |
-| 8 | Training data management tools |
-| 9 | Security, compliance, scalability hardening |
-| 10 | End-to-end testing, docs, GA rollout |
+| Sprint | Focus                                        |
+| ------ | -------------------------------------------- |
+| 1      | Model registry service & schema              |
+| 2      | Registry UI & access controls                |
+| 3      | Fine-tuning workflow backend                 |
+| 4      | Fine-tuning UI & auto-registration           |
+| 5      | Evaluation framework & benchmark datasets    |
+| 6      | Deployment pipeline core & validation checks |
+| 7      | Rollback, monitoring integration, UI         |
+| 8      | Training data management tools               |
+| 9      | Security, compliance, scalability hardening  |
+| 10     | End-to-end testing, docs, GA rollout         |
 
 ## Dependencies
+
 - Storage bucket for model artifacts
 - Kubernetes/compute resources for training jobs
 - Monitoring stack (Prometheus/Grafana) from Epic 20
@@ -87,14 +94,16 @@ Estimated duration: **10 sprints**
 - Licensing/IP assessment for training data and models
 
 ## Risks & Mitigations
+
 - **High infrastructure costs for training** → Budget alerts, spot instances, autoscaling
 - **Data privacy/compliance issues** → Audit logging, dataset access controls, anonymization utilities
 - **Complexity of deployment environments** → Standardized container base images, automated validation suite
 
 ## Success Criteria
+
 - 100 % of models tracked in registry with lineage & metrics
 - Fine-tuning jobs auto-register new versions with <10 min setup overhead
 - Evaluation reports generated for every new model within 1 hour
 - Deployment pipeline delivers <5 min rollback and zero-downtime switches
 - No critical compliance violations; audit logs meet regulatory standards
-- >80 % test coverage across new services
+- > 80 % test coverage across new services

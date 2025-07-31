@@ -5,6 +5,7 @@ This plan translates Epic 21 into actionable tasks with clear timelines, depende
 ## Story 21.1 – Graph Pattern Recognition
 
 ### Implementation Tasks
+
 - [ ] Research graph-analysis algorithms and pattern-mining libraries (e.g., Neo4j algorithms, NetworkX, custom heuristics)
 - [ ] Define catalogue of best-practice graph patterns and anti-patterns
 - [ ] Build pattern-detection engine:
@@ -19,6 +20,7 @@ This plan translates Epic 21 into actionable tasks with clear timelines, depende
 ## Story 21.2 – Automated Node Configuration
 
 ### Implementation Tasks
+
 - [ ] Collect data on typical node configurations and outcomes
 - [ ] Design ML/heuristic model for parameter suggestion
 - [ ] Implement context extraction from surrounding graph
@@ -32,6 +34,7 @@ This plan translates Epic 21 into actionable tasks with clear timelines, depende
 ## Story 21.3 – Natural Language Graph Generation
 
 ### Implementation Tasks
+
 - [ ] Craft prompt schema for intent → graph translation
 - [ ] Fine-tune / configure LLM for graph DSL output
 - [ ] Implement parser to convert LLM output into node/edge objects
@@ -44,6 +47,7 @@ This plan translates Epic 21 into actionable tasks with clear timelines, depende
 ## Story 21.4 – Intelligent Debugging Assistant
 
 ### Implementation Tasks
+
 - [ ] Identify common graph issues & error patterns
 - [ ] Extend pattern engine to detect error conditions (invalid edges, unused outputs, etc.)
 - [ ] Develop explanation generator describing root cause & fix steps
@@ -56,6 +60,7 @@ This plan translates Epic 21 into actionable tasks with clear timelines, depende
 ## Story 21.5 – Smart Template System
 
 ### Implementation Tasks
+
 - [ ] Design template metadata schema (tags, domain, performance metrics)
 - [ ] Build adaptive template engine that maps user intent/context to template suggestions
 - [ ] Implement learning mechanism from user edits to templates
@@ -68,29 +73,33 @@ This plan translates Epic 21 into actionable tasks with clear timelines, depende
 ---
 
 ## Timeline & Sprint Breakdown
+
 Estimated duration: **9 sprints**
 
-| Sprint | Focus |
-|--------|-------|
-| 1-2 | Pattern recognition engine & pattern library |
-| 3-4 | Automated node configuration service & UI |
-| 5-6 | Natural language graph generation & parser |
-| 7 | Debugging assistant core & UI integration |
-| 8 | Smart template system & analytics |
-| 9 | Integration, user testing, documentation, hardening |
+| Sprint | Focus                                               |
+| ------ | --------------------------------------------------- |
+| 1-2    | Pattern recognition engine & pattern library        |
+| 3-4    | Automated node configuration service & UI           |
+| 5-6    | Natural language graph generation & parser          |
+| 7      | Debugging assistant core & UI integration           |
+| 8      | Smart template system & analytics                   |
+| 9      | Integration, user testing, documentation, hardening |
 
 ## Dependencies
+
 - LLM access & cost budget for generation features
 - Telemetry pipeline for learning loops
 - Existing editor extension points and UI component library
 - Pattern definitions from architecture team
 
 ## Risks & Mitigations
+
 - **LLM output unpredictability** → Use schema validation & fallback flows
 - **Performance impact of real-time suggestions** → Debounce & async processing
 - **User trust in AI recommendations** → Provide explanations & manual override
 
 ## Success Criteria
+
 - ≥90 % accuracy in pattern/issue detection benchmark
 - ≥70 % user acceptance rate for AI suggestions (tracked via telemetry)
 - NL graph generation reduces manual node creation time by ≥40 %

@@ -7,13 +7,15 @@ This document outlines the architectural design for Epic 7's advanced node capab
 ## Current Architecture Analysis
 
 ### ✅ Strengths of Current Foundation
+
 - **RuntimeNode Base Class**: Clean abstract base with `run(ctx: ExecutionContext)` method
-- **ExecutionContext**: Variables + seed management for deterministic execution  
+- **ExecutionContext**: Variables + seed management for deterministic execution
 - **Schema System**: Zod-based type safety and validation
 - **Inspector System**: Modular `BaseNodeEditor` with schema-driven form generation
 - **Engine Integration**: `createRuntime()` factory pattern ready for extension
 
 ### 🎯 Architecture Goals for Advanced Nodes
+
 1. **Unified Interface**: All advanced nodes inherit from enhanced base classes
 2. **Deterministic Execution**: Maintain seeded random behavior for complex algorithms
 3. **Extensible UI**: Leverage existing inspector pattern for specialized editors
@@ -29,14 +31,14 @@ This document outlines the architectural design for Epic 7's advanced node capab
 
 export interface AdvancedExecutionContext extends ExecutionContext {
   // Enhanced context for stateful nodes
-  nodeStates: Map<string, any>;  // For Sequential, Markov state tracking
-  evaluationDepth: number;       // For cycle detection
-  cache: Map<string, any>;       // For performance optimization
+  nodeStates: Map<string, any>; // For Sequential, Markov state tracking
+  evaluationDepth: number; // For cycle detection
+  cache: Map<string, any>; // For performance optimization
 }
 
 export abstract class AdvancedRuntimeNode<TOutput = unknown> extends RuntimeNode<TOutput> {
   protected config: AdvancedNodeConfig;
-  
+
   constructor(id: string, config: AdvancedNodeConfig) {
     super(id);
     this.config = config;
@@ -44,37 +46,38 @@ export abstract class AdvancedRuntimeNode<TOutput = unknown> extends RuntimeNode
 
   // Enhanced run method with advanced context
   abstract run(ctx: AdvancedExecutionContext): Promise<TOutput> | TOutput;
-  
+
   // Validation method for complex node configurations
   abstract validate(): ValidationResult;
-  
+
   // Serialization for complex state
   abstract serialize(): AdvancedNodeData;
-  
+
   // State management for stateful nodes
   protected getState(ctx: AdvancedExecutionContext): any {
     return ctx.nodeStates.get(this.id);
   }
-  
+
   protected setState(ctx: AdvancedExecutionContext, state: any): void {
     ctx.nodeStates.set(this.id, state);
   }
 }
 
 export interface AdvancedNodeConfig {
-  deterministic: boolean;       // For seeded vs non-seeded behavior
-  cacheable: boolean;          // For performance optimization
-  stateful: boolean;           // For nodes that maintain state
+  deterministic: boolean; // For seeded vs non-seeded behavior
+  cacheable: boolean; // For performance optimization
+  stateful: boolean; // For nodes that maintain state
 }
 ```
 
 ### 2. Specific Advanced Node Types
 
 #### A. WeightedAdvanced Node
+
 ```typescript
 export class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
   constructor(
-    id: string, 
+    id: string,
     private distribution: WeightDistribution,
     private options: WeightedOptions
   ) {
@@ -95,6 +98,7 @@ export interface WeightDistribution {
 ```
 
 #### B. Conditional Node
+
 ```typescript
 export class ConditionalNode extends AdvancedRuntimeNode<string> {
   constructor(
@@ -121,12 +125,13 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
 }
 
 export interface ConditionalBranch {
-  condition: string;    // "variable > 5", "hasFlag('debug')", etc.
+  condition: string; // "variable > 5", "hasFlag('debug')", etc.
   output: string;
 }
 ```
 
 #### C. Sequential Node
+
 ```typescript
 export class SequentialNode extends AdvancedRuntimeNode<string> {
   constructor(
@@ -139,14 +144,14 @@ export class SequentialNode extends AdvancedRuntimeNode<string> {
 
   run(ctx: AdvancedExecutionContext): string {
     const state = this.getState(ctx) || { index: 0, history: [] };
-    
+
     const result = this.pattern.getNext(this.sequence, state, ctx);
-    
+
     this.setState(ctx, {
       index: state.index + 1,
-      history: [...state.history, result]
+      history: [...state.history, result],
     });
-    
+
     return result;
   }
 }
@@ -158,6 +163,7 @@ export interface SequencePattern {
 ```
 
 #### D. Markov Node
+
 ```typescript
 export class MarkovNode extends AdvancedRuntimeNode<string> {
   constructor(
@@ -170,22 +176,22 @@ export class MarkovNode extends AdvancedRuntimeNode<string> {
 
   run(ctx: AdvancedExecutionContext): string {
     let state = this.getState(ctx);
-    
+
     if (!state) {
       state = {
         currentState: this.initialState || this.transitionMatrix.getInitialState(),
-        history: []
+        history: [],
       };
     }
 
     const nextState = this.transitionMatrix.transition(
-      state.currentState, 
+      state.currentState,
       this.createSeededRNG(ctx.seed, this.id + state.history.length)
     );
 
     this.setState(ctx, {
       currentState: nextState,
-      history: [...state.history, nextState]
+      history: [...state.history, nextState],
     });
 
     return nextState;
@@ -207,9 +213,17 @@ export interface TransitionMatrix {
 
 export const NodeTypeEnum = z.enum([
   // Existing types
-  'WeightedChoice', 'Concat', 'Output', 'Include', 'SetVariable', 'GetVariable',
+  'WeightedChoice',
+  'Concat',
+  'Output',
+  'Include',
+  'SetVariable',
+  'GetVariable',
   // New advanced types
-  'WeightedAdvanced', 'Conditional', 'Sequential', 'Markov'
+  'WeightedAdvanced',
+  'Conditional',
+  'Sequential',
+  'Markov',
 ]);
 
 export const WeightedAdvancedNodeSchema = BaseNode.extend({
@@ -217,17 +231,19 @@ export const WeightedAdvancedNodeSchema = BaseNode.extend({
   distribution: z.object({
     type: z.enum(['linear', 'exponential', 'gaussian', 'custom']),
     values: z.array(z.object({ value: z.string(), weight: z.number() })),
-    parameters: z.record(z.number()).optional()
-  })
+    parameters: z.record(z.number()).optional(),
+  }),
 });
 
 export const ConditionalNodeSchema = BaseNode.extend({
   type: z.literal('Conditional'),
-  conditions: z.array(z.object({
-    condition: z.string(),
-    output: z.string()
-  })),
-  defaultBranch: z.string().optional()
+  conditions: z.array(
+    z.object({
+      condition: z.string(),
+      output: z.string(),
+    })
+  ),
+  defaultBranch: z.string().optional(),
 });
 
 export const SequentialNodeSchema = BaseNode.extend({
@@ -235,15 +251,15 @@ export const SequentialNodeSchema = BaseNode.extend({
   sequence: z.array(z.string()),
   pattern: z.object({
     type: z.enum(['linear', 'cyclical', 'random', 'weighted']),
-    config: z.record(z.any()).optional()
-  })
+    config: z.record(z.any()).optional(),
+  }),
 });
 
 export const MarkovNodeSchema = BaseNode.extend({
   type: z.literal('Markov'),
   states: z.array(z.string()),
   transitions: z.record(z.record(z.number())),
-  initialState: z.string().optional()
+  initialState: z.string().optional(),
 });
 ```
 
@@ -255,7 +271,7 @@ export const MarkovNodeSchema = BaseNode.extend({
 function createRuntime(node: Node, resolvedInputs: any[]): RuntimeNode<any> {
   switch (node.type) {
     // Existing cases...
-    
+
     case 'WeightedAdvanced':
       return new WeightedAdvancedNode(node.id, node.distribution, {});
     case 'Conditional':
@@ -264,7 +280,7 @@ function createRuntime(node: Node, resolvedInputs: any[]): RuntimeNode<any> {
       return new SequentialNode(node.id, node.sequence, createSequencePattern(node.pattern));
     case 'Markov':
       return new MarkovNode(node.id, createTransitionMatrix(node), node.initialState);
-    
+
     default:
       const _exhaustive: never = node;
       throw new Error(`Unsupported node type ${(node as any).type}`);
@@ -278,7 +294,7 @@ export async function executeGraphAdvanced(graph: Graph): Promise<string[]> {
     seed: graph.seed ?? Date.now(),
     nodeStates: new Map(),
     evaluationDepth: 0,
-    cache: new Map()
+    cache: new Map(),
   };
   // ... rest of execution logic
 }
@@ -307,11 +323,11 @@ export const WeightedAdvancedEditor: React.FC<BaseNodeEditorProps> = ({
           onChange={(type) => onChange({ distribution: { ...nodeData.distribution, type }})}
         />
       </CollapsibleSection>
-      
+
       <CollapsibleSection title="Weight Distribution Graph">
         <WeightDistributionGraph distribution={nodeData.distribution} />
       </CollapsibleSection>
-      
+
       <CollapsibleSection title="Values & Weights">
         <VariationList
           variations={nodeData.distribution?.values || []}
@@ -327,18 +343,21 @@ export const WeightedAdvancedEditor: React.FC<BaseNodeEditorProps> = ({
 ## Implementation Plan
 
 ### Phase 1: Foundation (2 days)
+
 1. ✅ **Architecture Design** (this document)
 2. **Create AdvancedRuntimeNode base class**
 3. **Extend ExecutionContext for advanced features**
 4. **Update engine.ts with extension points**
 
 ### Phase 2: Core Nodes (6 days)
+
 1. **WeightedAdvanced Node** (2 days)
-2. **Conditional Node** (2 days)  
+2. **Conditional Node** (2 days)
 3. **Sequential Node** (1 day)
 4. **Markov Node** (1 day)
 
 ### Phase 3: UI Integration (4 days)
+
 1. **Advanced node editors** (2 days)
 2. **Specialized visualizations** (1 day)
 3. **Integration testing** (1 day)
@@ -346,16 +365,19 @@ export const WeightedAdvancedEditor: React.FC<BaseNodeEditorProps> = ({
 ## Risk Mitigation
 
 ### Performance Concerns
+
 - **Caching Strategy**: Implement smart caching for expensive operations
 - **Lazy Evaluation**: Only compute when needed
 - **Memory Management**: Clear state for completed executions
 
 ### Complexity Management
+
 - **Progressive Disclosure**: Start with basic configurations, expand as needed
 - **Sensible Defaults**: Provide working defaults for all advanced features
 - **Validation**: Comprehensive validation at both schema and runtime levels
 
 ### Backward Compatibility
+
 - **Zero Impact**: Existing nodes continue to work unchanged
 - **Gradual Migration**: Optional migration path for enhanced features
 - **Feature Flags**: Enable advanced nodes incrementally

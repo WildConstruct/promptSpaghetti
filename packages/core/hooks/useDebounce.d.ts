@@ -8,5 +8,8 @@ export declare function useDebounce<T extends (...args: any[]) => void>(callback
  * useWeightChangeDebounce - Specialized debounce for weight control changes
  * Epic 8.5 Task 6: Optimized for preview system integration
  */
-export declare function useWeightChangeDebounce(onWeightChange: (weights: any[]) => void, delay?: number): (newWeights: any[]) => void;
+export declare function useWeightChangeDebounce(
+  onWeightChange: (weights: any[]) => void,
+  delay?: number
+): (newWeights: any[]) => void;
 //# sourceMappingURL=useDebounce.d.ts.map

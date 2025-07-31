@@ -17,7 +17,7 @@ import {
   ToggleMetrics,
   ToggleHealthStatus,
   DependencyAnalysis,
-  ToggleSnapshot
+  ToggleSnapshot,
 } from './feature-toggle-models';
 
 export class FeatureToggleDAO {
@@ -26,7 +26,6 @@ export class FeatureToggleDAO {
   // Feature Toggle CRUD Operations
 
   async createToggle(request: CreateToggleRequest, createdBy?: string): Promise<FeatureToggle> {
-
     const client = await this.pool.connect();
     try {
       const query = `
@@ -35,7 +34,7 @@ export class FeatureToggleDAO {
         ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
         RETURNING *
       `;
-      
+
       const values = [
         request.key,
         request.name,
@@ -46,7 +45,7 @@ export class FeatureToggleDAO {
         request.claudeCompat || [],
         request.claudeImpact || ClaudeImpact.NONE,
         request.enabled || false,
-        createdBy
+        createdBy,
       ];
 
       const result = await client.query(query, values);
@@ -57,16 +56,15 @@ export class FeatureToggleDAO {
   }
 
   async getToggleById(id: string): Promise<FeatureToggle | null> {
-
     const client = await this.pool.connect();
     try {
       const query = 'SELECT * FROM feature_toggle WHERE id = $1 AND archived = false';
       const result = await client.query(query, [id]);
-      
+
       if (result.rows.length === 0) {
         return null;
       }
-      
+
       return this.mapToggleFromDB(result.rows[0]);
     } finally {
       client.release();
@@ -74,7 +72,6 @@ export class FeatureToggleDAO {
   }
 
   async getToggleByKey(key: string, orgId?: string): Promise<FeatureToggle | null> {
-
     const client = await this.pool.connect();
     try {
       let query = 'SELECT * FROM feature_toggle WHERE key = $1 AND archived = false';
@@ -88,27 +85,28 @@ export class FeatureToggleDAO {
       }
 
       const result = await client.query(query, values);
-      
+
       if (result.rows.length === 0) {
         return null;
       }
-      
+
       return this.mapToggleFromDB(result.rows[0]);
     } finally {
       client.release();
     }
   }
 
-  async listToggles(options: {
-    orgId?: string;
-    enabled?: boolean;
-    type?: ToggleType;
-    claudeImpact?: ClaudeImpact;
-    search?: string;
-    limit?: number;
-    offset?: number;
-  } = {}): Promise<{ toggles: FeatureToggle[]; total: number }> {
-
+  async listToggles(
+    options: {
+      orgId?: string;
+      enabled?: boolean;
+      type?: ToggleType;
+      claudeImpact?: ClaudeImpact;
+      search?: string;
+      limit?: number;
+      offset?: number;
+    } = {}
+  ): Promise<{ toggles: FeatureToggle[]; total: number }> {
     const client = await this.pool.connect();
     try {
       const whereConditions = ['archived = false'];
@@ -145,7 +143,9 @@ export class FeatureToggleDAO {
       }
 
       if (options.search) {
-        whereConditions.push(`(key ILIKE $${paramIndex} OR name ILIKE $${paramIndex} OR description ILIKE $${paramIndex})`);
+        whereConditions.push(
+          `(key ILIKE $${paramIndex} OR name ILIKE $${paramIndex} OR description ILIKE $${paramIndex})`
+        );
         values.push(`%${options.search}%`);
         paramIndex++;
       }
@@ -164,7 +164,7 @@ export class FeatureToggleDAO {
         ORDER BY created_at DESC
         LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
       `;
-      
+
       values.push(options.limit || 50, options.offset || 0);
       const result = await client.query(query, values);
 
@@ -177,7 +177,6 @@ export class FeatureToggleDAO {
   }
 
   async updateToggle(request: UpdateToggleRequest, updatedBy?: string): Promise<FeatureToggle> {
-
     const client = await this.pool.connect();
     try {
       const setClause: string[] = [];
@@ -240,7 +239,7 @@ export class FeatureToggleDAO {
       `;
 
       const result = await client.query(query, values);
-      
+
       if (result.rows.length === 0) {
         throw new Error('Toggle not found or already archived');
       }
@@ -252,7 +251,6 @@ export class FeatureToggleDAO {
   }
 
   async archiveToggle(id: string, archivedBy?: string): Promise<void> {
-
     const client = await this.pool.connect();
     try {
       const query = `
@@ -260,9 +258,9 @@ export class FeatureToggleDAO {
         SET archived = true, enabled = false, updated_by = $2
         WHERE id = $1 AND archived = false
       `;
-      
+
       const result = await client.query(query, [id, archivedBy]);
-      
+
       if (result.rowCount === 0) {
         throw new Error('Toggle not found or already archived');
       }
@@ -274,7 +272,6 @@ export class FeatureToggleDAO {
   // Toggle Scope Operations
 
   async createToggleScope(request: CreateToggleScopeRequest): Promise<ToggleScope> {
-
     const client = await this.pool.connect();
     try {
       const query = `
@@ -282,12 +279,8 @@ export class FeatureToggleDAO {
         VALUES ($1, $2, $3)
         RETURNING *
       `;
-      
-      const values = [
-        request.toggleId,
-        JSON.stringify(request.rule),
-        request.priority || 100
-      ];
+
+      const values = [request.toggleId, JSON.stringify(request.rule), request.priority || 100];
 
       const result = await client.query(query, values);
       return this.mapScopeFromDB(result.rows[0]);
@@ -297,7 +290,6 @@ export class FeatureToggleDAO {
   }
 
   async getToggleScopes(toggleId: string): Promise<ToggleScope[]> {
-
     const client = await this.pool.connect();
     try {
       const query = `
@@ -305,7 +297,7 @@ export class FeatureToggleDAO {
         WHERE toggle_id = $1 
         ORDER BY priority ASC, created_at ASC
       `;
-      
+
       const result = await client.query(query, [toggleId]);
       return result.rows.map(row => this.mapScopeFromDB(row));
     } finally {
@@ -314,12 +306,11 @@ export class FeatureToggleDAO {
   }
 
   async deleteToggleScope(id: string): Promise<void> {
-
     const client = await this.pool.connect();
     try {
       const query = 'DELETE FROM toggle_scope WHERE id = $1';
       const result = await client.query(query, [id]);
-      
+
       if (result.rowCount === 0) {
         throw new Error('Toggle scope not found');
       }
@@ -331,7 +322,6 @@ export class FeatureToggleDAO {
   // Audit Operations
 
   async createAuditEntry(entry: Partial<ToggleAudit>): Promise<ToggleAudit> {
-
     const client = await this.pool.connect();
     try {
       const query = `
@@ -341,7 +331,7 @@ export class FeatureToggleDAO {
         ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
         RETURNING *
       `;
-      
+
       const values = [
         entry.toggleId,
         entry.actorId,
@@ -351,7 +341,7 @@ export class FeatureToggleDAO {
         entry.reason,
         JSON.stringify(entry.metadata || {}),
         entry.isEmergency || false,
-        entry.ttlExpiresAt
+        entry.ttlExpiresAt,
       ];
 
       const result = await client.query(query, values);
@@ -362,7 +352,6 @@ export class FeatureToggleDAO {
   }
 
   async getToggleAuditHistory(toggleId: string, limit = 100): Promise<ToggleAudit[]> {
-
     const client = await this.pool.connect();
     try {
       const query = `
@@ -371,7 +360,7 @@ export class FeatureToggleDAO {
         ORDER BY created_at DESC 
         LIMIT $2
       `;
-      
+
       const result = await client.query(query, [toggleId, limit]);
       return result.rows.map(row => this.mapAuditFromDB(row));
     } finally {
@@ -382,7 +371,6 @@ export class FeatureToggleDAO {
   // Emergency Override
 
   async createEmergencyOverride(request: EmergencyOverrideRequest, actorId: string): Promise<void> {
-
     const client = await this.pool.connect();
     try {
       await client.query('BEGIN');
@@ -394,32 +382,34 @@ export class FeatureToggleDAO {
       }
 
       const newEnabled = request.action === 'enable';
-      const ttlExpiresAt = request.ttlMinutes 
-        ? new Date(Date.now() + request.ttlMinutes * 60000) 
-        : null;
+      const ttlExpiresAt = request.ttlMinutes ? new Date(Date.now() + request.ttlMinutes * 60000) : null;
 
       // Update toggle
-      await client.query(
-        'UPDATE feature_toggle SET enabled = $1, updated_by = $2 WHERE id = $3',
-        [newEnabled, actorId, request.toggleId]
-      );
+      await client.query('UPDATE feature_toggle SET enabled = $1, updated_by = $2 WHERE id = $3', [
+        newEnabled,
+        actorId,
+        request.toggleId,
+      ]);
 
       // Create audit entry
-      await client.query(`
+      await client.query(
+        `
         INSERT INTO toggle_audit (
           toggle_id, actor_id, action, before_value, after_value, 
           reason, is_emergency, ttl_expires_at
         ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-      `, [
-        request.toggleId,
-        actorId,
-        ToggleAuditAction.OVERRIDE,
-        JSON.stringify({ enabled: toggle.enabled }),
-        JSON.stringify({ enabled: newEnabled }),
-        request.reason,
-        true,
-        ttlExpiresAt
-      ]);
+      `,
+        [
+          request.toggleId,
+          actorId,
+          ToggleAuditAction.OVERRIDE,
+          JSON.stringify({ enabled: toggle.enabled }),
+          JSON.stringify({ enabled: newEnabled }),
+          request.reason,
+          true,
+          ttlExpiresAt,
+        ]
+      );
 
       await client.query('COMMIT');
     } catch (error) {
@@ -433,14 +423,13 @@ export class FeatureToggleDAO {
   // Cache Operations
 
   async getCachedEvaluation(toggleId: string, cacheKey: string): Promise<any | null> {
-
     const client = await this.pool.connect();
     try {
       const query = `
         SELECT result FROM toggle_evaluation_cache 
         WHERE toggle_id = $1 AND cache_key = $2 AND expires_at > CURRENT_TIMESTAMP
       `;
-      
+
       const result = await client.query(query, [toggleId, cacheKey]);
       return result.rows.length > 0 ? result.rows[0].result : null;
     } finally {
@@ -451,22 +440,20 @@ export class FeatureToggleDAO {
   async setCachedEvaluation(
     toggleId: string,
     cacheKey: string,
-    result: Record<string,
-    unknown>,
+    result: Record<string, unknown>,
     ttlSeconds = 300
   ): Promise<void> {
-
     const client = await this.pool.connect();
     try {
       const expiresAt = new Date(Date.now() + ttlSeconds * 1000);
-      
+
       const query = `
         INSERT INTO toggle_evaluation_cache (toggle_id, cache_key, result, expires_at)
         VALUES ($1, $2, $3, $4)
         ON CONFLICT (toggle_id, cache_key) 
         DO UPDATE SET result = $3, expires_at = $4, created_at = CURRENT_TIMESTAMP
       `;
-      
+
       await client.query(query, [toggleId, cacheKey, JSON.stringify(result), expiresAt]);
     } finally {
       client.release();
@@ -474,7 +461,6 @@ export class FeatureToggleDAO {
   }
 
   async clearCacheForToggle(toggleId: string): Promise<void> {
-
     const client = await this.pool.connect();
     try {
       await client.query('DELETE FROM toggle_evaluation_cache WHERE toggle_id = $1', [toggleId]);
@@ -486,7 +472,6 @@ export class FeatureToggleDAO {
   // Dependencies
 
   async createDependency(parentToggleId: string, childToggleId: string, type: string): Promise<ToggleDependency> {
-
     const client = await this.pool.connect();
     try {
       const query = `
@@ -494,7 +479,7 @@ export class FeatureToggleDAO {
         VALUES ($1, $2, $3)
         RETURNING *
       `;
-      
+
       const result = await client.query(query, [parentToggleId, childToggleId, type]);
       return this.mapDependencyFromDB(result.rows[0]);
     } finally {
@@ -503,7 +488,6 @@ export class FeatureToggleDAO {
   }
 
   async getDependencyAnalysis(toggleId: string): Promise<DependencyAnalysis> {
-
     const client = await this.pool.connect();
     try {
       // Get dependencies (what this toggle depends on)
@@ -525,13 +509,15 @@ export class FeatureToggleDAO {
       const dependencies = {
         requires: depsResult.rows.filter(r => r.dependency_type === 'requires').map(r => r.child_toggle_id),
         conflicts: depsResult.rows.filter(r => r.dependency_type === 'conflicts').map(r => r.child_toggle_id),
-        suggests: depsResult.rows.filter(r => r.dependency_type === 'suggests').map(r => r.child_toggle_id)
+        suggests: depsResult.rows.filter(r => r.dependency_type === 'suggests').map(r => r.child_toggle_id),
       };
 
       const dependents = {
         requiredBy: dependentsResult.rows.filter(r => r.dependency_type === 'requires').map(r => r.parent_toggle_id),
-        conflictsWith: dependentsResult.rows.filter(r => r.dependency_type === 'conflicts').map(r => r.parent_toggle_id),
-        suggestedBy: dependentsResult.rows.filter(r => r.dependency_type === 'suggests').map(r => r.parent_toggle_id)
+        conflictsWith: dependentsResult.rows
+          .filter(r => r.dependency_type === 'conflicts')
+          .map(r => r.parent_toggle_id),
+        suggestedBy: dependentsResult.rows.filter(r => r.dependency_type === 'suggests').map(r => r.parent_toggle_id),
       };
 
       const impactRadius = Math.max(
@@ -543,7 +529,7 @@ export class FeatureToggleDAO {
         toggleId,
         dependencies,
         dependents,
-        impactRadius
+        impactRadius,
       };
     } finally {
       client.release();
@@ -569,7 +555,7 @@ export class FeatureToggleDAO {
       updatedBy: row.updated_by,
       createdAt: new Date(row.created_at),
       updatedAt: new Date(row.updated_at),
-      version: row.version
+      version: row.version,
     };
   }
 
@@ -580,7 +566,7 @@ export class FeatureToggleDAO {
       rule: row.rule,
       priority: row.priority,
       createdAt: new Date(row.created_at),
-      updatedAt: new Date(row.updated_at)
+      updatedAt: new Date(row.updated_at),
     };
   }
 
@@ -596,7 +582,7 @@ export class FeatureToggleDAO {
       metadata: row.metadata || {},
       isEmergency: row.is_emergency,
       ttlExpiresAt: row.ttl_expires_at ? new Date(row.ttl_expires_at) : undefined,
-      createdAt: new Date(row.created_at)
+      createdAt: new Date(row.created_at),
     };
   }
 
@@ -606,7 +592,7 @@ export class FeatureToggleDAO {
       parentToggleId: row.parent_toggle_id,
       childToggleId: row.child_toggle_id,
       dependencyType: row.dependency_type as 'requires' | 'conflicts' | 'suggests',
-      createdAt: new Date(row.created_at)
+      createdAt: new Date(row.created_at),
     };
   }
 }

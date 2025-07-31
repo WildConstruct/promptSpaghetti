@@ -11,13 +11,37 @@
  */
 export { default as SecurityDashboardMain } from './SecurityDashboardMain';
 export { default as SecurityDashboardDataService } from './SecurityDashboardDataService';
-export { SecurityDashboardFramework, DashboardType, SecurityRole, DashboardTheme } from '../../security/dashboard/SecurityDashboardFramework';
+export {
+  SecurityDashboardFramework,
+  DashboardType,
+  SecurityRole,
+  DashboardTheme,
+} from '../../security/dashboard/SecurityDashboardFramework';
 export { SecurityDashboardWorkflow } from '../../security/dashboard/SecurityDashboardWorkflow';
 export { OperationalSecurityDashboard } from '../../security/dashboard/OperationalSecurityDashboard';
 export { ExecutiveSecurityDashboard } from '../../security/dashboard/ExecutiveSecurityDashboard';
 export { ComplianceSecurityDashboard } from '../../security/dashboard/ComplianceSecurityDashboard';
-export type { SecurityDashboardMainProps, SecurityMetrics, SecurityAlert, ResponseAction, ComplianceStatus, ComplianceViolation } from './SecurityDashboardMain';
+export type {
+  SecurityDashboardMainProps,
+  SecurityMetrics,
+  SecurityAlert,
+  ResponseAction,
+  ComplianceStatus,
+  ComplianceViolation,
+} from './SecurityDashboardMain';
 export type { SecurityAction, DataServiceConfig, ApiResponse } from './SecurityDashboardDataService';
-export type { DashboardConfig, WidgetConfiguration, DashboardLayout, DashboardPermissions, SecurityDashboardFrameworkOptions } from '../../security/dashboard/SecurityDashboardFramework';
-export type { SecurityWorkflowEvent, SecurityEventType, SecuritySeverity, SecurityActionType, SecurityWorkflowConfig } from '../../security/dashboard/SecurityDashboardWorkflow';
+export type {
+  DashboardConfig,
+  WidgetConfiguration,
+  DashboardLayout,
+  DashboardPermissions,
+  SecurityDashboardFrameworkOptions,
+} from '../../security/dashboard/SecurityDashboardFramework';
+export type {
+  SecurityWorkflowEvent,
+  SecurityEventType,
+  SecuritySeverity,
+  SecurityActionType,
+  SecurityWorkflowConfig,
+} from '../../security/dashboard/SecurityDashboardWorkflow';
 //# sourceMappingURL=index.d.ts.map

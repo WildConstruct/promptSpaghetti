@@ -14,7 +14,7 @@ const path = require('path');
 function processResults(results) {
   const timestamp = new Date().toISOString();
   const reportDir = path.join(process.cwd(), 'test-reports');
-  
+
   // Ensure report directory exists
   if (!fs.existsSync(reportDir)) {
     fs.mkdirSync(reportDir, { recursive: true });
@@ -27,7 +27,7 @@ function processResults(results) {
       testRunId: `run-${Date.now()}`,
       environment: process.env.NODE_ENV || 'test',
       jestVersion: results.jestVersion || 'unknown',
-      totalTime: results.runTime
+      totalTime: results.runTime,
     },
     summary: {
       numTotalTests: results.numTotalTests,
@@ -36,7 +36,7 @@ function processResults(results) {
       numPendingTests: results.numPendingTests,
       numTodoTests: results.numTodoTests,
       testRunTime: results.runTime,
-      success: results.success
+      success: results.success,
     },
     coverage: extractCoverageData(results),
     testSuites: [],
@@ -45,16 +45,16 @@ function processResults(results) {
       errorsByType: {},
       criticalErrors: [],
       performanceIssues: [],
-      flaky_tests: []
+      flaky_tests: [],
     },
-    recommendations: []
+    recommendations: [],
   };
 
   // Process individual test suites
   results.testResults.forEach(testResult => {
     const suiteResult = processTestSuite(testResult);
     processedResults.testSuites.push(suiteResult);
-    
+
     // Aggregate error analysis
     aggregateErrorAnalysis(processedResults.errorAnalysis, suiteResult);
   });
@@ -65,15 +65,15 @@ function processResults(results) {
   // Save processed results
   const resultFilePath = path.join(reportDir, `processed-results-${Date.now()}.json`);
   fs.writeFileSync(resultFilePath, JSON.stringify(processedResults, null, 2));
-  
+
   // Generate summary report
   generateSummaryReport(processedResults, reportDir);
-  
+
   // Generate error trend analysis
   generateErrorTrendAnalysis(processedResults, reportDir);
 
   console.log(`\n📊 Enhanced test results saved to: ${resultFilePath}`);
-  
+
   return results; // Return original results for Jest
 }
 
@@ -89,31 +89,31 @@ function processTestSuite(testResult) {
       total: testResult.testResults.length,
       passed: testResult.testResults.filter(t => t.status === 'passed').length,
       failed: testResult.testResults.filter(t => t.status === 'failed').length,
-      skipped: testResult.testResults.filter(t => t.status === 'pending').length
+      skipped: testResult.testResults.filter(t => t.status === 'pending').length,
     },
     errors: [],
     performance: {
       slowTests: [],
       memoryUsage: null,
-      avgTestDuration: 0
+      avgTestDuration: 0,
     },
-    coverage: null
+    coverage: null,
   };
 
   // Process individual tests
   let totalDuration = 0;
   testResult.testResults.forEach(test => {
     totalDuration += test.duration || 0;
-    
+
     // Identify slow tests (>5 seconds)
     if ((test.duration || 0) > 5000) {
       suiteResult.performance.slowTests.push({
         name: test.title,
         duration: test.duration,
-        fullName: test.fullName
+        fullName: test.fullName,
       });
     }
-    
+
     // Process test failures
     if (test.status === 'failed') {
       test.failureMessages.forEach(failure => {
@@ -122,7 +122,7 @@ function processTestSuite(testResult) {
           message: failure,
           type: classifyError(failure),
           severity: determineSeverity(failure),
-          stack: extractStack(failure)
+          stack: extractStack(failure),
         });
       });
     }
@@ -146,9 +146,9 @@ function extractCoverageData(results) {
       statements: 0,
       branches: 0,
       functions: 0,
-      lines: 0
+      lines: 0,
     },
-    files: []
+    files: [],
   };
 
   // This would process the coverage map if available
@@ -161,7 +161,7 @@ function extractCoverageData(results) {
  */
 function classifyError(errorMessage) {
   const message = errorMessage.toLowerCase();
-  
+
   if (message.includes('timeout') || message.includes('etimedout')) {
     return 'timeout';
   }
@@ -180,7 +180,7 @@ function classifyError(errorMessage) {
   if (message.includes('async') || message.includes('promise')) {
     return 'async';
   }
-  
+
   return 'unknown';
 }
 
@@ -189,7 +189,7 @@ function classifyError(errorMessage) {
  */
 function determineSeverity(errorMessage) {
   const message = errorMessage.toLowerCase();
-  
+
   if (message.includes('critical') || message.includes('fatal') || message.includes('security')) {
     return 'critical';
   }
@@ -199,7 +199,7 @@ function determineSeverity(errorMessage) {
   if (message.includes('timeout') || message.includes('connection')) {
     return 'medium';
   }
-  
+
   return 'low';
 }
 
@@ -209,11 +209,11 @@ function determineSeverity(errorMessage) {
 function extractStack(errorMessage) {
   const lines = errorMessage.split('\n');
   const stackStart = lines.findIndex(line => line.trim().startsWith('at '));
-  
+
   if (stackStart !== -1) {
     return lines.slice(stackStart, stackStart + 5).join('\n'); // First 5 stack lines
   }
-  
+
   return null;
 }
 
@@ -223,26 +223,26 @@ function extractStack(errorMessage) {
 function aggregateErrorAnalysis(errorAnalysis, suiteResult) {
   suiteResult.errors.forEach(error => {
     errorAnalysis.totalErrors++;
-    
+
     // Count by type
     errorAnalysis.errorsByType[error.type] = (errorAnalysis.errorsByType[error.type] || 0) + 1;
-    
+
     // Track critical errors
     if (error.severity === 'critical') {
       errorAnalysis.criticalErrors.push({
         suite: suiteResult.name,
         test: error.testName,
-        message: error.message
+        message: error.message,
       });
     }
   });
-  
+
   // Track performance issues
   suiteResult.performance.slowTests.forEach(slowTest => {
     errorAnalysis.performanceIssues.push({
       suite: suiteResult.name,
       test: slowTest.name,
-      duration: slowTest.duration
+      duration: slowTest.duration,
     });
   });
 }
@@ -252,37 +252,36 @@ function aggregateErrorAnalysis(errorAnalysis, suiteResult) {
  */
 function generateRecommendations(results) {
   const recommendations = results.recommendations;
-  
+
   // High failure rate recommendation
   const failureRate = results.summary.numFailedTests / results.summary.numTotalTests;
-  if (failureRate > 0.1) { // >10% failure rate
+  if (failureRate > 0.1) {
+    // >10% failure rate
     recommendations.push({
       type: 'stability',
       priority: 'high',
       title: 'High Test Failure Rate Detected',
       description: `${(failureRate * 100).toFixed(1)}% of tests are failing. Consider reviewing test stability and fixing fundamental issues.`,
-      action: 'Review and fix failing tests, check for environmental issues'
+      action: 'Review and fix failing tests, check for environmental issues',
     });
   }
-  
+
   // Performance recommendations
-  const slowTests = results.testSuites.reduce((acc, suite) => 
-    acc + suite.performance.slowTests.length, 0);
-  
+  const slowTests = results.testSuites.reduce((acc, suite) => acc + suite.performance.slowTests.length, 0);
+
   if (slowTests > 0) {
     recommendations.push({
       type: 'performance',
       priority: 'medium',
       title: 'Slow Test Detection',
       description: `${slowTests} tests are running slower than 5 seconds. Consider optimizing these tests.`,
-      action: 'Review slow tests and optimize by reducing setup time, using mocks, or splitting large tests'
+      action: 'Review slow tests and optimize by reducing setup time, using mocks, or splitting large tests',
     });
   }
-  
+
   // Error pattern recommendations
-  const topErrorType = Object.entries(results.errorAnalysis.errorsByType)
-    .sort(([,a], [,b]) => b - a)[0];
-  
+  const topErrorType = Object.entries(results.errorAnalysis.errorsByType).sort(([, a], [, b]) => b - a)[0];
+
   if (topErrorType && topErrorType[1] > 5) {
     const [type, count] = topErrorType;
     recommendations.push({
@@ -290,10 +289,10 @@ function generateRecommendations(results) {
       priority: 'high',
       title: `Frequent ${type.charAt(0).toUpperCase() + type.slice(1)} Errors`,
       description: `${count} tests failed due to ${type} errors. This suggests a systemic issue.`,
-      action: `Focus on fixing ${type} related issues. Consider improving error handling and resilience.`
+      action: `Focus on fixing ${type} related issues. Consider improving error handling and resilience.`,
     });
   }
-  
+
   // Critical error recommendations
   if (results.errorAnalysis.criticalErrors.length > 0) {
     recommendations.push({
@@ -301,7 +300,7 @@ function generateRecommendations(results) {
       priority: 'critical',
       title: 'Critical Errors Detected',
       description: `${results.errorAnalysis.criticalErrors.length} critical errors found. These need immediate attention.`,
-      action: 'Address critical errors immediately as they may indicate security or data integrity issues.'
+      action: 'Address critical errors immediately as they may indicate security or data integrity issues.',
     });
   }
 }
@@ -332,27 +331,35 @@ function generateSummaryReport(results, reportDir) {
 
 ### Error Distribution
 ${Object.entries(results.errorAnalysis.errorsByType)
-    .sort(([,a], [,b]) => b - a)
-    .map(([type, count]) => `- **${type}**: ${count}`)
-    .join('\n')}
+  .sort(([, a], [, b]) => b - a)
+  .map(([type, count]) => `- **${type}**: ${count}`)
+  .join('\n')}
 
 ## Recommendations
-${results.recommendations.map(rec => `
+${results.recommendations
+  .map(
+    rec => `
 ### ${rec.title} (${rec.priority.toUpperCase()})
 ${rec.description}
 
 **Action**: ${rec.action}
-`).join('\n')}
+`
+  )
+  .join('\n')}
 
 ## Test Suite Details
-${results.testSuites.map(suite => `
+${results.testSuites
+  .map(
+    suite => `
 ### ${path.basename(suite.name)}
 - **Status**: ${suite.status}
 - **Duration**: ${(suite.duration / 1000).toFixed(2)}s
 - **Tests**: ${suite.tests.passed}/${suite.tests.total} passed
 - **Errors**: ${suite.errors.length}
 - **Slow Tests**: ${suite.performance.slowTests.length}
-`).join('\n')}
+`
+  )
+  .join('\n')}
 `;
 
   fs.writeFileSync(path.join(reportDir, 'test-summary.md'), summary);
@@ -364,7 +371,7 @@ ${results.testSuites.map(suite => `
 function generateErrorTrendAnalysis(results, reportDir) {
   // This would typically compare with historical data
   // For now, create a simple trend report
-  
+
   const trendData = {
     timestamp: results.metadata.timestamp,
     runId: results.metadata.testRunId,
@@ -373,17 +380,17 @@ function generateErrorTrendAnalysis(results, reportDir) {
       failureRate: results.summary.numFailedTests / results.summary.numTotalTests,
       avgTestDuration: results.summary.testRunTime / results.summary.numTotalTests,
       errorCount: results.errorAnalysis.totalErrors,
-      criticalErrors: results.errorAnalysis.criticalErrors.length
+      criticalErrors: results.errorAnalysis.criticalErrors.length,
     },
-    errorTypes: results.errorAnalysis.errorsByType
+    errorTypes: results.errorAnalysis.errorsByType,
   };
-  
+
   // Append to trend history
   const trendFile = path.join(reportDir, 'error-trends.jsonl');
   const trendLine = JSON.stringify(trendData) + '\n';
-  
+
   fs.appendFileSync(trendFile, trendLine);
-  
+
   console.log(`📈 Error trend data appended to: ${trendFile}`);
 }
 

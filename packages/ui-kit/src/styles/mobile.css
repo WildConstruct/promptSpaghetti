@@ -8,7 +8,7 @@
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
   }
-  
+
   body {
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
@@ -111,7 +111,9 @@
 }
 
 .mobile-node {
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .mobile-node:active {
@@ -125,7 +127,9 @@
 /* Mobile FAB */
 .mobile-fab {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .mobile-fab:active {
@@ -150,7 +154,7 @@
   .mobile-scroll::-webkit-scrollbar {
     display: none;
   }
-  
+
   .mobile-scroll {
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -171,11 +175,11 @@
   .mobile-header {
     min-height: 40px;
   }
-  
+
   .bottom-navigation {
     min-height: 48px;
   }
-  
+
   .mobile-button {
     min-height: 36px;
   }
@@ -186,7 +190,7 @@
   .mobile-header {
     background-color: rgba(0, 0, 0, 0.8);
   }
-  
+
   .slide-menu-backdrop {
     background-color: rgba(0, 0, 0, 0.7);
   }
@@ -198,13 +202,13 @@
   .bottom-navigation {
     padding-bottom: max(env(safe-area-inset-bottom), 20px);
   }
-  
+
   /* Fix for iOS input zoom */
-  input[type="text"],
-  input[type="email"],
-  input[type="password"],
-  input[type="number"],
-  input[type="tel"],
+  input[type='text'],
+  input[type='email'],
+  input[type='password'],
+  input[type='number'],
+  input[type='tel'],
   textarea {
     font-size: 16px !important;
   }

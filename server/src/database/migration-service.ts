@@ -20,19 +20,18 @@ export class MigrationService {
     importedCount: number;
     errors: string[];
   }> {
-
     const errors: string[] = [];
     let importedCount = 0;
 
     try {
       // Parse localStorage data
       const correctionsData = this.parseLocalStorageData(localStorageData);
-      
+
       if (!correctionsData || !correctionsData.rules) {
         return {
           success: false,
           importedCount: 0,
-          errors: ['No valid corrections data found in localStorage']
+          errors: ['No valid corrections data found in localStorage'],
         };
       }
 
@@ -55,13 +54,13 @@ export class MigrationService {
       return {
         success: errors.length === 0,
         importedCount,
-        errors
+        errors,
       };
     } catch (error) {
       return {
         success: false,
         importedCount: 0,
-        errors: [`Migration failed: ${error instanceof Error ? error.message : String(error)}`]
+        errors: [`Migration failed: ${error instanceof Error ? error.message : String(error)}`],
       };
     }
   }
@@ -83,7 +82,7 @@ export class MigrationService {
       if (data.state && data.state.rules) {
         return {
           rules: data.state.rules,
-          preferences: data.state.preferences || null
+          preferences: data.state.preferences || null,
         };
       }
 
@@ -91,7 +90,7 @@ export class MigrationService {
       if (Array.isArray(data)) {
         return {
           rules: data,
-          preferences: null
+          preferences: null,
         };
       }
 
@@ -99,7 +98,7 @@ export class MigrationService {
       if (data.rules && Array.isArray(data.rules)) {
         return {
           rules: data.rules,
-          preferences: data.preferences || null
+          preferences: data.preferences || null,
         };
       }
 
@@ -114,7 +113,6 @@ export class MigrationService {
    * Migrate user preferences
    */
   private async migrateUserPreferences(preferences: unknown): Promise<void> {
-
     // TODO: Implement user preferences migration
     // This would update the user_preferences table with the settings
     console.log('User preferences migration not yet implemented:', preferences);
@@ -133,7 +131,7 @@ export class MigrationService {
 
     try {
       const parsed = this.parseLocalStorageData(data);
-      
+
       if (!parsed) {
         errors.push('Unable to parse localStorage data');
         return { valid: false, errors, warnings };
@@ -171,7 +169,7 @@ export class MigrationService {
       return {
         valid: errors.length === 0,
         errors,
-        warnings
+        warnings,
       };
     } catch (error) {
       errors.push(`Validation failed: ${error instanceof Error ? error.message : String(error)}`);
@@ -225,18 +223,17 @@ export class MigrationService {
    * Create a backup of current database before migration
    */
   async createBackup(): Promise<string> {
-
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const backupPath = `corrections-backup-${timestamp}.db`;
-    
+
     try {
       const { backupDatabase } = await import('./connection');
       const success = backupDatabase(backupPath);
-      
+
       if (!success) {
         throw new Error('Backup failed');
       }
-      
+
       return backupPath;
     } catch (error) {
       throw new Error(`Failed to create backup: ${error instanceof Error ? error.message : String(error)}`);
@@ -251,23 +248,23 @@ export class MigrationService {
     totalRules: number;
     activeRules: number;
     canMigrate: boolean;
-    } {
+  } {
     try {
       const { getDatabaseStats } = require('./connection');
       const stats = getDatabaseStats();
-      
+
       return {
         databaseInitialized: stats !== null,
         totalRules: stats?.totalRules?.count || 0,
         activeRules: stats?.activeRules?.count || 0,
-        canMigrate: stats !== null
+        canMigrate: stats !== null,
       };
     } catch (error) {
       return {
         databaseInitialized: false,
         totalRules: 0,
         activeRules: 0,
-        canMigrate: false
+        canMigrate: false,
       };
     }
   }
@@ -277,25 +274,24 @@ export class MigrationService {
  * Standalone migration function for CLI usage
  */
 export async function runMigration(localStorageData: unknown): Promise<void> {
-
   const migrationService = new MigrationService();
-  
+
   console.log('Starting corrections migration...');
-  
+
   // Validate data first
   const validation = migrationService.validateMigrationData(localStorageData);
-  
+
   if (!validation.valid) {
     console.error('Migration validation failed:');
     validation.errors.forEach(error => console.error(`  - ${error}`));
     return;
   }
-  
+
   if (validation.warnings.length > 0) {
     console.warn('Migration warnings:');
     validation.warnings.forEach(warning => console.warn(`  - ${warning}`));
   }
-  
+
   // Create backup
   try {
     const backupPath = await migrationService.createBackup();
@@ -303,17 +299,17 @@ export async function runMigration(localStorageData: unknown): Promise<void> {
   } catch (error) {
     console.warn('Failed to create backup:', error);
   }
-  
+
   // Run migration
   const result = await migrationService.migrateFromLocalStorage(localStorageData);
-  
+
   if (result.success) {
     console.log(`Migration completed successfully! Imported ${result.importedCount} correction rules.`);
   } else {
     console.error('Migration failed:');
     result.errors.forEach(error => console.error(`  - ${error}`));
   }
-  
+
   // Show final status
   const status = migrationService.getMigrationStatus();
   console.log(`Final status: ${status.totalRules} total rules, ${status.activeRules} active rules`);

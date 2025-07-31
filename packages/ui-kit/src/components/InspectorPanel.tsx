@@ -31,28 +31,28 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
     if (!selectedNode) return null;
 
     switch (selectedNode.type) {
-    case 'WeightedChoice':
-      return <WeightedChoiceEditor node={selectedNode} onUpdate={onNodeUpdate} />;
-    case 'Concat':
-      return <ConcatEditor node={selectedNode} onUpdate={onNodeUpdate} />;
-    case 'Output':
-      return <OutputEditor node={selectedNode} onUpdate={onNodeUpdate} />;
-    case 'Include':
-      return <IncludeEditor node={selectedNode} onUpdate={onNodeUpdate} />;
-    case 'SetVariable':
-      return <SetVariableEditor node={selectedNode} onUpdate={onNodeUpdate} />;
-    case 'GetVariable':
-      return <GetVariableEditor node={selectedNode} onUpdate={onNodeUpdate} />;
-    case 'WeightedAdvanced':
-      return <WeightedAdvancedEditor node={selectedNode} onUpdate={onNodeUpdate} />;
-    case 'Conditional':
-      return <ConditionalEditor node={selectedNode} onUpdate={onNodeUpdate} />;
-    case 'Sequential':
-      return <SequentialEditor node={selectedNode} onUpdate={onNodeUpdate} />;
-    case 'Markov':
-      return <MarkovEditor node={selectedNode} onUpdate={onNodeUpdate} />;
-    default:
-      return <GenericEditor node={selectedNode} onUpdate={onNodeUpdate} />;
+      case 'WeightedChoice':
+        return <WeightedChoiceEditor node={selectedNode} onUpdate={onNodeUpdate} />;
+      case 'Concat':
+        return <ConcatEditor node={selectedNode} onUpdate={onNodeUpdate} />;
+      case 'Output':
+        return <OutputEditor node={selectedNode} onUpdate={onNodeUpdate} />;
+      case 'Include':
+        return <IncludeEditor node={selectedNode} onUpdate={onNodeUpdate} />;
+      case 'SetVariable':
+        return <SetVariableEditor node={selectedNode} onUpdate={onNodeUpdate} />;
+      case 'GetVariable':
+        return <GetVariableEditor node={selectedNode} onUpdate={onNodeUpdate} />;
+      case 'WeightedAdvanced':
+        return <WeightedAdvancedEditor node={selectedNode} onUpdate={onNodeUpdate} />;
+      case 'Conditional':
+        return <ConditionalEditor node={selectedNode} onUpdate={onNodeUpdate} />;
+      case 'Sequential':
+        return <SequentialEditor node={selectedNode} onUpdate={onNodeUpdate} />;
+      case 'Markov':
+        return <MarkovEditor node={selectedNode} onUpdate={onNodeUpdate} />;
+      default:
+        return <GenericEditor node={selectedNode} onUpdate={onNodeUpdate} />;
     }
   }, [selectedNode, onNodeUpdate]);
 
@@ -66,7 +66,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
       overflow: 'hidden',
       display: 'flex',
       flexDirection: 'column' as const,
-      ...style
+      ...style,
     };
 
     if (isMobile) {
@@ -79,7 +79,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
         left: 0,
         right: 0,
         borderRadius: internalCollapsed ? 0 : `${theme.borderRadius}px ${theme.borderRadius}px 0 0`,
-        zIndex: 100
+        zIndex: 100,
       };
     }
 
@@ -96,21 +96,25 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
         data-testid={testId}
         {...props}
       >
-        <div style={{
-          padding: `${theme.spacing.sm}px`,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          borderBottom: !isMobile ? `1px solid ${theme.colors.border}` : 'none'
-        }}>
-          <span style={{
-            fontSize: `${theme.typography.fontSize.sm}px`,
-            fontWeight: theme.typography.fontWeight.medium,
-            color: theme.colors.text
-          }}>
+        <div
+          style={{
+            padding: `${theme.spacing.sm}px`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            borderBottom: !isMobile ? `1px solid ${theme.colors.border}` : 'none',
+          }}
+        >
+          <span
+            style={{
+              fontSize: `${theme.typography.fontSize.sm}px`,
+              fontWeight: theme.typography.fontWeight.medium,
+              color: theme.colors.text,
+            }}
+          >
             Inspector
           </span>
-          
+
           <Button
             variant="ghost"
             size="xs"
@@ -125,12 +129,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
   }
 
   return (
-    <div
-      className={cn('ui-inspector-panel', className)}
-      style={panelStyles}
-      data-testid={testId}
-      {...props}
-    >
+    <div className={cn('ui-inspector-panel', className)} style={panelStyles} data-testid={testId} {...props}>
       {/* Header */}
       <div
         className="ui-inspector-panel-header"
@@ -138,23 +137,27 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
           padding: `${theme.spacing.md}px`,
           borderBottom: `1px solid ${theme.colors.border}`,
           backgroundColor: theme.colors.background,
-          flexShrink: 0
+          flexShrink: 0,
         }}
       >
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between'
-        }}>
-          <h3 style={{
-            margin: 0,
-            fontSize: `${theme.typography.fontSize.md}px`,
-            fontWeight: theme.typography.fontWeight.semibold,
-            color: theme.colors.text
-          }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <h3
+            style={{
+              margin: 0,
+              fontSize: `${theme.typography.fontSize.md}px`,
+              fontWeight: theme.typography.fontWeight.semibold,
+              color: theme.colors.text,
+            }}
+          >
             Inspector
           </h3>
-          
+
           <Button
             variant="ghost"
             size="xs"
@@ -164,13 +167,15 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
             {position === 'bottom' || isMobile ? '🔽' : '◀️'}
           </Button>
         </div>
-        
+
         {selectedNode && (
-          <div style={{
-            marginTop: `${theme.spacing.xs}px`,
-            fontSize: `${theme.typography.fontSize.sm}px`,
-            color: theme.colors.textSecondary
-          }}>
+          <div
+            style={{
+              marginTop: `${theme.spacing.xs}px`,
+              fontSize: `${theme.typography.fontSize.sm}px`,
+              color: theme.colors.textSecondary,
+            }}
+          >
             {selectedNode.type} Node
           </div>
         )}
@@ -182,7 +187,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
         style={{
           flex: 1,
           overflow: 'auto',
-          padding: `${theme.spacing.md}px`
+          padding: `${theme.spacing.md}px`,
         }}
       >
         {selectedNode ? (
@@ -190,19 +195,9 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
             {/* Node basic info */}
             <Card variant="outlined" padding="sm">
               <Stack spacing="sm">
-                <Input
-                  label="Node ID"
-                  value={selectedNode.id}
-                  readOnly
-                  size="sm"
-                />
-                
-                <Input
-                  label="Node Type"
-                  value={selectedNode.type}
-                  readOnly
-                  size="sm"
-                />
+                <Input label="Node ID" value={selectedNode.id} readOnly size="sm" />
+
+                <Input label="Node Type" value={selectedNode.type} readOnly size="sm" />
               </Stack>
             </Card>
 
@@ -210,41 +205,47 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
             {nodeEditor}
 
             {/* Actions */}
-            <div style={{
-              display: 'flex',
-              gap: `${theme.spacing.sm}px`,
-              justifyContent: 'flex-end'
-            }}>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => onNodeDelete?.(selectedNode.id)}
-              >
+            <div
+              style={{
+                display: 'flex',
+                gap: `${theme.spacing.sm}px`,
+                justifyContent: 'flex-end',
+              }}
+            >
+              <Button variant="outline" size="sm" onClick={() => onNodeDelete?.(selectedNode.id)}>
                 Delete Node
               </Button>
             </div>
           </Stack>
         ) : (
-          <div style={{
-            padding: `${theme.spacing.xl}px`,
-            textAlign: 'center',
-            color: theme.colors.textSecondary
-          }}>
-            <div style={{
-              fontSize: '48px',
-              marginBottom: `${theme.spacing.md}px`
-            }}>
+          <div
+            style={{
+              padding: `${theme.spacing.xl}px`,
+              textAlign: 'center',
+              color: theme.colors.textSecondary,
+            }}
+          >
+            <div
+              style={{
+                fontSize: '48px',
+                marginBottom: `${theme.spacing.md}px`,
+              }}
+            >
               🎯
             </div>
-            <div style={{
-              fontSize: `${theme.typography.fontSize.md}px`,
-              marginBottom: `${theme.spacing.sm}px`
-            }}>
+            <div
+              style={{
+                fontSize: `${theme.typography.fontSize.md}px`,
+                marginBottom: `${theme.spacing.sm}px`,
+              }}
+            >
               No Node Selected
             </div>
-            <div style={{
-              fontSize: `${theme.typography.fontSize.sm}px`
-            }}>
+            <div
+              style={{
+                fontSize: `${theme.typography.fontSize.sm}px`,
+              }}
+            >
               Select a node to edit its properties
             </div>
           </div>
@@ -264,10 +265,10 @@ interface NodeEditorProps {
 
 const WeightedChoiceEditor: React.FC<NodeEditorProps> = ({ node, onUpdate }) => {
   const choices = node.data.choices || [];
-  
+
   const updateChoices = (newChoices: any[]) => {
     onUpdate?.(node.id, {
-      data: { ...node.data, choices: newChoices }
+      data: { ...node.data, choices: newChoices },
     });
   };
 
@@ -297,7 +298,7 @@ const WeightedChoiceEditor: React.FC<NodeEditorProps> = ({ node, onUpdate }) => 
               <Input
                 label={`Choice ${index + 1}`}
                 value={choice.value}
-                onChange={(value) => updateChoice(index, 'value', value)}
+                onChange={value => updateChoice(index, 'value', value)}
                 size="sm"
                 style={{ flex: 1 }}
               />
@@ -305,20 +306,16 @@ const WeightedChoiceEditor: React.FC<NodeEditorProps> = ({ node, onUpdate }) => 
                 label="Weight"
                 type="number"
                 value={choice.weight}
-                onChange={(value) => updateChoice(index, 'weight', parseFloat(value) || 0)}
+                onChange={value => updateChoice(index, 'weight', parseFloat(value) || 0)}
                 size="sm"
                 style={{ width: '80px' }}
               />
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => removeChoice(index)}
-              >
+              <Button variant="outline" size="sm" onClick={() => removeChoice(index)}>
                 ❌
               </Button>
             </div>
           ))}
-          
+
           <Button variant="outline" size="sm" onClick={addChoice}>
             Add Choice
           </Button>
@@ -338,9 +335,11 @@ const ConcatEditor: React.FC<NodeEditorProps> = ({ node, onUpdate }) => {
         <TextArea
           label="Template"
           value={node.data.template || ''}
-          onChange={(value) => onUpdate?.(node.id, {
-            data: { ...node.data, template: value }
-          })}
+          onChange={value =>
+            onUpdate?.(node.id, {
+              data: { ...node.data, template: value },
+            })
+          }
           rows={4}
           hint="Use {{nodeId}} to reference other nodes"
         />
@@ -359,9 +358,11 @@ const OutputEditor: React.FC<NodeEditorProps> = ({ node, onUpdate }) => {
         <TextArea
           label="Text"
           value={node.data.text || ''}
-          onChange={(value) => onUpdate?.(node.id, {
-            data: { ...node.data, text: value }
-          })}
+          onChange={value =>
+            onUpdate?.(node.id, {
+              data: { ...node.data, text: value },
+            })
+          }
           rows={4}
           hint="Use {{nodeId}} to reference other nodes"
         />
@@ -380,9 +381,11 @@ const IncludeEditor: React.FC<NodeEditorProps> = ({ node, onUpdate }) => {
         <Input
           label="Reference Name"
           value={node.data.name || ''}
-          onChange={(value) => onUpdate?.(node.id, {
-            data: { ...node.data, name: value }
-          })}
+          onChange={value =>
+            onUpdate?.(node.id, {
+              data: { ...node.data, name: value },
+            })
+          }
           size="sm"
           hint="Name of the content to include"
         />
@@ -402,17 +405,21 @@ const SetVariableEditor: React.FC<NodeEditorProps> = ({ node, onUpdate }) => {
           <Input
             label="Variable Key"
             value={node.data.key || ''}
-            onChange={(value) => onUpdate?.(node.id, {
-              data: { ...node.data, key: value }
-            })}
+            onChange={value =>
+              onUpdate?.(node.id, {
+                data: { ...node.data, key: value },
+              })
+            }
             size="sm"
           />
           <Input
             label="Value"
             value={node.data.value || ''}
-            onChange={(value) => onUpdate?.(node.id, {
-              data: { ...node.data, value: value }
-            })}
+            onChange={value =>
+              onUpdate?.(node.id, {
+                data: { ...node.data, value: value },
+              })
+            }
             size="sm"
           />
         </Stack>
@@ -431,9 +438,11 @@ const GetVariableEditor: React.FC<NodeEditorProps> = ({ node, onUpdate }) => {
         <Input
           label="Variable Key"
           value={node.data.key || ''}
-          onChange={(value) => onUpdate?.(node.id, {
-            data: { ...node.data, key: value }
-          })}
+          onChange={value =>
+            onUpdate?.(node.id, {
+              data: { ...node.data, key: value },
+            })
+          }
           size="sm"
         />
       </CardContent>
@@ -449,9 +458,7 @@ const WeightedAdvancedEditor: React.FC<NodeEditorProps> = ({ node, onUpdate }) =
         <CardTitle level={4}>Advanced Weighted Choice</CardTitle>
       </CardHeader>
       <CardContent>
-        <div style={{ padding: '16px', textAlign: 'center', color: '#666' }}>
-          Advanced configuration options
-        </div>
+        <div style={{ padding: '16px', textAlign: 'center', color: '#666' }}>Advanced configuration options</div>
       </CardContent>
     </Card>
   );
@@ -464,9 +471,7 @@ const ConditionalEditor: React.FC<NodeEditorProps> = ({ node, onUpdate }) => {
         <CardTitle level={4}>Conditional Logic</CardTitle>
       </CardHeader>
       <CardContent>
-        <div style={{ padding: '16px', textAlign: 'center', color: '#666' }}>
-          Conditional expression configuration
-        </div>
+        <div style={{ padding: '16px', textAlign: 'center', color: '#666' }}>Conditional expression configuration</div>
       </CardContent>
     </Card>
   );
@@ -479,9 +484,7 @@ const SequentialEditor: React.FC<NodeEditorProps> = ({ node, onUpdate }) => {
         <CardTitle level={4}>Sequential Processing</CardTitle>
       </CardHeader>
       <CardContent>
-        <div style={{ padding: '16px', textAlign: 'center', color: '#666' }}>
-          Sequential pattern configuration
-        </div>
+        <div style={{ padding: '16px', textAlign: 'center', color: '#666' }}>Sequential pattern configuration</div>
       </CardContent>
     </Card>
   );
@@ -494,9 +497,7 @@ const MarkovEditor: React.FC<NodeEditorProps> = ({ node, onUpdate }) => {
         <CardTitle level={4}>Markov Chain</CardTitle>
       </CardHeader>
       <CardContent>
-        <div style={{ padding: '16px', textAlign: 'center', color: '#666' }}>
-          State transition configuration
-        </div>
+        <div style={{ padding: '16px', textAlign: 'center', color: '#666' }}>State transition configuration</div>
       </CardContent>
     </Card>
   );

@@ -76,6 +76,7 @@ interface PythonTransformConfig {
 ```
 
 **Key Features**:
+
 - Secure code execution with resource limits
 - Comprehensive error handling and fallback mechanisms
 - Security event monitoring and logging
@@ -90,14 +91,15 @@ The client provides a robust interface to the Python executor service:
 
 ```typescript
 class PythonExecutorClient {
-  async execute(request: PythonExecutionRequest): Promise<PythonExecutionResult>
-  async validate(request: PythonValidationRequest): Promise<PythonValidationResult>
-  async health(): Promise<{status: string; version: string; uptime: number}>
-  async metrics(): Promise<any>
+  async execute(request: PythonExecutionRequest): Promise<PythonExecutionResult>;
+  async validate(request: PythonValidationRequest): Promise<PythonValidationResult>;
+  async health(): Promise<{ status: string; version: string; uptime: number }>;
+  async metrics(): Promise<any>;
 }
 ```
 
 **Key Features**:
+
 - Automatic retry logic with exponential backoff
 - Request timeout and cancellation
 - Comprehensive error handling
@@ -139,6 +141,7 @@ interface PythonExecutorConfig {
 ```
 
 **Key Features**:
+
 - Environment variable support
 - Configuration validation
 - Change listeners and notifications
@@ -158,14 +161,16 @@ export const PythonTransformNodeSchema = BaseNode.extend({
   timeout: z.number().positive().optional(),
   memoryLimit: z.string().optional(),
   allowedModules: z.array(z.string()).optional(),
-  pythonConfig: z.object({
-    strictMode: z.boolean().optional(),
-    enableCaching: z.boolean().optional(),
-    executorUrl: z.string().optional(),
-    retryAttempts: z.number().min(0).optional(),
-    fallbackBehavior: z.enum(['error', 'skip', 'default']).optional(),
-    defaultOutput: z.string().optional(),
-  }).optional(),
+  pythonConfig: z
+    .object({
+      strictMode: z.boolean().optional(),
+      enableCaching: z.boolean().optional(),
+      executorUrl: z.string().optional(),
+      retryAttempts: z.number().min(0).optional(),
+      fallbackBehavior: z.enum(['error', 'skip', 'default']).optional(),
+      defaultOutput: z.string().optional(),
+    })
+    .optional(),
 });
 ```
 
@@ -199,7 +204,7 @@ def transform(input_data):
   `,
   timeout: 30,
   memoryLimit: '128MB',
-  allowedModules: ['json', 'math']
+  allowedModules: ['json', 'math'],
 });
 
 // Execute the node
@@ -232,8 +237,8 @@ def transform(input_data):
     enableCaching: true,
     retryAttempts: 3,
     fallbackBehavior: 'default',
-    defaultOutput: '{"error": "Processing failed"}'
-  }
+    defaultOutput: '{"error": "Processing failed"}',
+  },
 });
 ```
 
@@ -247,11 +252,11 @@ pythonExecutorConfig.update({
   serviceUrl: 'https://python-executor.example.com',
   apiKey: 'your-api-key',
   defaultMemoryLimit: '256MB',
-  strictMode: true
+  strictMode: true,
 });
 
 // Listen for configuration changes
-pythonExecutorConfig.addListener((config) => {
+pythonExecutorConfig.addListener(config => {
   console.log('Configuration updated:', config);
 });
 ```
@@ -274,12 +279,12 @@ Security events are automatically logged and monitored:
 
 ```typescript
 // Example security event handling
-node.addSecurityEventHandler((event) => {
+node.addSecurityEventHandler(event => {
   if (event.level === 'critical') {
     // Alert security team
     alertSecurityTeam(event);
   }
-  
+
   // Log all events
   auditLogger.log(event);
 });
@@ -301,8 +306,8 @@ const node = new PythonTransformNode('resilient-transform', {
   code: 'def transform(input_data): return input_data',
   pythonConfig: {
     fallbackBehavior: 'default',
-    defaultOutput: 'Processing temporarily unavailable'
-  }
+    defaultOutput: 'Processing temporarily unavailable',
+  },
 });
 ```
 
@@ -314,7 +319,7 @@ Automatic retry with exponential backoff:
 const client = new PythonExecutorClient({
   retryAttempts: 3,
   retryDelay: 1000, // 1 second base delay
-  timeout: 30000    // 30 second timeout
+  timeout: 30000, // 30 second timeout
 });
 ```
 
@@ -331,7 +336,7 @@ console.log('Execution stats:', {
   executionsRun: stats.executionsRun,
   successRate: stats.successRate,
   averageExecutionTime: stats.averageExecutionTime,
-  securityViolations: stats.securityViolations
+  securityViolations: stats.securityViolations,
 });
 ```
 
@@ -380,9 +385,9 @@ Integration tests validate:
 describe('PythonTransformNode', () => {
   it('should execute Python code successfully', async () => {
     const node = new PythonTransformNode('test-node', {
-      code: 'def transform(input_data): return input_data.upper()'
+      code: 'def transform(input_data): return input_data.upper()',
     });
-    
+
     const result = await node.execute(context);
     expect(result).toBe('HELLO WORLD');
   });
@@ -487,7 +492,7 @@ import { pythonExecutorConfig } from './config/python-executor';
 pythonExecutorConfig.update({
   enableDebugLogs: true,
   enableMetrics: true,
-  enableTracing: true
+  enableTracing: true,
 });
 ```
 

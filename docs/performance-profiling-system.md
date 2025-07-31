@@ -9,7 +9,7 @@ Comprehensive performance monitoring and profiling system for both server-side a
 This system provides end-to-end performance monitoring capabilities including:
 
 - **Server-side profiling** with CPU, memory, database, and application metrics
-- **Client-side profiling** with render times, memory usage, and user interaction tracking  
+- **Client-side profiling** with render times, memory usage, and user interaction tracking
 - **Load testing integration** for realistic performance analysis
 - **Real-time monitoring dashboard** with live metrics visualization
 - **Comprehensive reporting** with automated recommendations
@@ -20,7 +20,9 @@ This system provides end-to-end performance monitoring capabilities including:
 ### Server Components
 
 #### 1. Performance Profiler (`server/src/performance/PerformanceProfiler.ts`)
+
 Core server-side profiling engine that collects:
+
 - CPU usage and load averages
 - Memory utilization (heap, RSS, external)
 - Database connection metrics
@@ -29,7 +31,9 @@ Core server-side profiling engine that collects:
 - Custom business metrics
 
 #### 2. Performance Middleware (`server/src/middleware/performance-profiler-middleware.ts`)
+
 Fastify plugin that automatically:
+
 - Tracks all HTTP requests
 - Measures response times
 - Monitors error rates
@@ -37,6 +41,7 @@ Fastify plugin that automatically:
 - Integrates with existing server infrastructure
 
 #### 3. API Endpoints
+
 - `POST /api/performance/start` - Start profiling
 - `POST /api/performance/stop` - Stop profiling and generate report
 - `GET /api/performance/stats` - Get current metrics
@@ -48,7 +53,9 @@ Fastify plugin that automatically:
 ### Client Components
 
 #### 1. Client Performance Profiler (`client/src/utils/clientPerformanceProfiler.ts`)
+
 Browser-based profiling system that tracks:
+
 - React component render times
 - Memory usage (JS heap)
 - Network request performance
@@ -57,7 +64,9 @@ Browser-based profiling system that tracks:
 - Custom application metrics
 
 #### 2. React Integration (`client/src/hooks/usePerformanceProfiler.ts`)
+
 React hooks for seamless integration:
+
 - `usePerformanceProfiler` - Main profiling hook
 - `withPerformanceTracking` - HOC for automatic tracking
 - `useInteractionTracking` - User interaction monitoring
@@ -65,7 +74,9 @@ React hooks for seamless integration:
 - `useMemoryTracking` - Component memory usage
 
 #### 3. Performance Dashboard (`client/src/components/PerformanceDashboard.tsx`)
+
 Real-time monitoring interface showing:
+
 - Live server and client metrics
 - Performance threshold indicators
 - Historical trending
@@ -75,14 +86,18 @@ Real-time monitoring interface showing:
 ### Integration Components
 
 #### 1. Load Testing Integration (`performance-test-runner.js`)
+
 Orchestrator that combines:
+
 - Load test execution with realistic traffic
 - Simultaneous server and client profiling
 - System health monitoring
 - Comprehensive report generation
 
 #### 2. Test Runner (`test-performance-profiling.js`)
+
 Demonstration and validation system that:
+
 - Tests all profiling components
 - Validates API endpoints
 - Generates sample reports
@@ -101,8 +116,8 @@ const profiler = new PerformanceProfiler({
     cpuUsage: 80,
     memoryUsage: 85,
     responseTime: 2000,
-    errorRate: 5
-  }
+    errorRate: 5,
+  },
 });
 
 // Start profiling
@@ -120,12 +135,14 @@ const snapshots = await profiler.stopProfiling();
 import { createPerformanceMiddleware } from './middleware/performance-profiler-middleware';
 
 // Register middleware
-await fastify.register(createPerformanceMiddleware({
-  enabled: true,
-  autoStartProfiling: true,
-  trackAllRequests: true,
-  excludeRoutes: ['/health', '/favicon.ico']
-}));
+await fastify.register(
+  createPerformanceMiddleware({
+    enabled: true,
+    autoStartProfiling: true,
+    trackAllRequests: true,
+    excludeRoutes: ['/health', '/favicon.ico'],
+  })
+);
 
 // Access profiler in routes
 fastify.get('/custom-route', async (request, reply) => {
@@ -144,7 +161,7 @@ function MyComponent() {
   const { trackRender, trackInteraction, addCustomMetric } = usePerformanceProfiler({
     componentName: 'MyComponent',
     autoStart: true,
-    alertOnSlowRender: true
+    alertOnSlowRender: true,
   });
 
   const handleClick = () => {
@@ -164,7 +181,7 @@ function MyComponent() {
 export default withPerformanceTracking(MyComponent, {
   componentName: 'MyComponent',
   trackRenders: true,
-  trackInteractions: true
+  trackInteractions: true,
 });
 ```
 
@@ -177,11 +194,7 @@ function App() {
   return (
     <div>
       {/* Other app components */}
-      <PerformanceDashboard 
-        showServerMetrics={true}
-        showClientMetrics={true}
-        refreshInterval={2000}
-      />
+      <PerformanceDashboard showServerMetrics={true} showClientMetrics={true} refreshInterval={2000} />
     </div>
   );
 }
@@ -214,17 +227,17 @@ const orchestrator = new PerformanceTestOrchestrator({
       cpuUsage: 75,
       memoryUsage: 80,
       responseTime: 1500,
-      errorRate: 3
-    }
+      errorRate: 3,
+    },
   },
   loadTests: [
     {
       name: 'Custom Load Test',
       script: './my-load-test.js',
       concurrency: 20,
-      duration: 180000
-    }
-  ]
+      duration: 180000,
+    },
+  ],
 });
 
 orchestrator.runPerformanceTests();
@@ -236,17 +249,17 @@ orchestrator.runPerformanceTests();
 
 ```typescript
 interface ProfilingConfig {
-  sampleInterval: number;        // Metrics collection interval (ms)
-  databaseEnabled: boolean;      // Include database metrics
+  sampleInterval: number; // Metrics collection interval (ms)
+  databaseEnabled: boolean; // Include database metrics
   systemMetricsEnabled: boolean; // Include system-level metrics
-  gcMetricsEnabled: boolean;     // Include garbage collection metrics
-  outputDirectory: string;       // Report output location
-  maxSnapshots: number;          // Memory limit for snapshots
+  gcMetricsEnabled: boolean; // Include garbage collection metrics
+  outputDirectory: string; // Report output location
+  maxSnapshots: number; // Memory limit for snapshots
   alertThresholds: {
-    cpuUsage: number;           // CPU alert threshold (%)
-    memoryUsage: number;        // Memory alert threshold (%)
-    responseTime: number;       // Response time alert threshold (ms)
-    errorRate: number;          // Error rate alert threshold (%)
+    cpuUsage: number; // CPU alert threshold (%)
+    memoryUsage: number; // Memory alert threshold (%)
+    responseTime: number; // Response time alert threshold (ms)
+    errorRate: number; // Error rate alert threshold (%)
   };
 }
 ```
@@ -255,18 +268,18 @@ interface ProfilingConfig {
 
 ```typescript
 interface ClientProfilingConfig {
-  sampleInterval: number;        // Metrics collection interval (ms)
-  trackRenderMetrics: boolean;   // Track React render performance
-  trackMemoryMetrics: boolean;   // Track browser memory usage
-  trackNetworkMetrics: boolean;  // Track network request performance
+  sampleInterval: number; // Metrics collection interval (ms)
+  trackRenderMetrics: boolean; // Track React render performance
+  trackMemoryMetrics: boolean; // Track browser memory usage
+  trackNetworkMetrics: boolean; // Track network request performance
   trackUserInteractions: boolean; // Track user interactions
-  trackWebVitals: boolean;       // Track Core Web Vitals
-  maxSnapshots: number;          // Memory limit for snapshots
+  trackWebVitals: boolean; // Track Core Web Vitals
+  maxSnapshots: number; // Memory limit for snapshots
   alertThresholds: {
-    renderTime: number;         // Render time alert threshold (ms)
-    memoryUsage: number;        // Memory alert threshold (%)
-    responseTime: number;       // Network response alert threshold (ms)
-    layoutShift: number;        // Layout shift alert threshold
+    renderTime: number; // Render time alert threshold (ms)
+    memoryUsage: number; // Memory alert threshold (%)
+    responseTime: number; // Network response alert threshold (ms)
+    layoutShift: number; // Layout shift alert threshold
   };
 }
 ```
@@ -275,28 +288,29 @@ interface ClientProfilingConfig {
 
 ### Server Metrics
 
-| Metric | Description | Good | Warning | Critical |
-|--------|-------------|------|---------|----------|
-| CPU Usage | Processor utilization | < 50% | 50-80% | > 80% |
-| Memory Usage | RAM utilization | < 70% | 70-85% | > 85% |
-| Response Time | HTTP response latency | < 200ms | 200-1000ms | > 1000ms |
-| Error Rate | HTTP error percentage | < 1% | 1-5% | > 5% |
-| Requests/Second | Throughput rate | > 100 | 50-100 | < 50 |
+| Metric          | Description           | Good    | Warning    | Critical |
+| --------------- | --------------------- | ------- | ---------- | -------- |
+| CPU Usage       | Processor utilization | < 50%   | 50-80%     | > 80%    |
+| Memory Usage    | RAM utilization       | < 70%   | 70-85%     | > 85%    |
+| Response Time   | HTTP response latency | < 200ms | 200-1000ms | > 1000ms |
+| Error Rate      | HTTP error percentage | < 1%    | 1-5%       | > 5%     |
+| Requests/Second | Throughput rate       | > 100   | 50-100     | < 50     |
 
 ### Client Metrics
 
-| Metric | Description | Good | Warning | Critical |
-|--------|-------------|------|---------|----------|
-| Render Time | Component render duration | < 16ms | 16-33ms | > 33ms |
-| Memory Usage | JS heap utilization | < 70% | 70-85% | > 85% |
-| Network Time | Request response time | < 500ms | 500-2000ms | > 2000ms |
-| Layout Shift | CLS score | < 0.1 | 0.1-0.25 | > 0.25 |
-| FCP | First Contentful Paint | < 1.8s | 1.8-3s | > 3s |
-| LCP | Largest Contentful Paint | < 2.5s | 2.5-4s | > 4s |
+| Metric       | Description               | Good    | Warning    | Critical |
+| ------------ | ------------------------- | ------- | ---------- | -------- |
+| Render Time  | Component render duration | < 16ms  | 16-33ms    | > 33ms   |
+| Memory Usage | JS heap utilization       | < 70%   | 70-85%     | > 85%    |
+| Network Time | Request response time     | < 500ms | 500-2000ms | > 2000ms |
+| Layout Shift | CLS score                 | < 0.1   | 0.1-0.25   | > 0.25   |
+| FCP          | First Contentful Paint    | < 1.8s  | 1.8-3s     | > 3s     |
+| LCP          | Largest Contentful Paint  | < 2.5s  | 2.5-4s     | > 4s     |
 
 ## Alerting System
 
 ### Server Alerts
+
 - High CPU usage detection
 - Memory leak identification
 - Response time degradation
@@ -304,6 +318,7 @@ interface ClientProfilingConfig {
 - Database performance issues
 
 ### Client Alerts
+
 - Slow render detection
 - Memory growth patterns
 - Network performance issues
@@ -313,9 +328,9 @@ interface ClientProfilingConfig {
 ### Alert Configuration
 
 ```typescript
-profiler.on('performance_alert', (alert) => {
+profiler.on('performance_alert', alert => {
   console.warn('Performance Alert:', alert);
-  
+
   // Integration examples:
   // - Send to Slack/Discord
   // - Log to monitoring service
@@ -412,21 +427,25 @@ The system generates comprehensive reports including:
 ### Common Issues
 
 **Server profiling not starting:**
+
 - Verify server is running and accessible
 - Check API endpoints are properly registered
 - Ensure sufficient permissions for file system access
 
 **Client metrics not collecting:**
+
 - Verify browser supports Performance API
 - Check console for JavaScript errors
 - Ensure profiler is properly initialized
 
 **High profiling overhead:**
+
 - Increase sample interval
 - Disable unnecessary metric collection
 - Reduce snapshot retention count
 
 **Missing performance data:**
+
 - Check network connectivity between client and server
 - Verify API endpoints are accessible
 - Review server logs for errors
@@ -464,7 +483,7 @@ localStorage.setItem('performance-debug', 'true');
 
 ```typescript
 // Datadog integration example
-profiler.on('snapshot_collected', (snapshot) => {
+profiler.on('snapshot_collected', snapshot => {
   dogstatsd.gauge('app.cpu_usage', snapshot.cpu.percentage);
   dogstatsd.gauge('app.memory_usage', snapshot.memory.heapUtilization);
   dogstatsd.gauge('app.response_time', snapshot.application.averageResponseTime);
@@ -474,6 +493,7 @@ profiler.on('snapshot_collected', (snapshot) => {
 ## Future Enhancements
 
 ### Planned Features
+
 - Machine learning-based anomaly detection
 - Predictive performance modeling
 - Advanced visualization and charting
@@ -482,6 +502,7 @@ profiler.on('snapshot_collected', (snapshot) => {
 - Custom dashboard builder
 
 ### Extensibility
+
 - Plugin system for custom metrics
 - Third-party integrations (APM tools)
 - Custom alert channels

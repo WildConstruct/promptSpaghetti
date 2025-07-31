@@ -6,7 +6,13 @@
 
 /* Base prompt styles */
 .jit-prompt {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
   font-size: 14px;
   line-height: 1.5;
   color: #1a202c;
@@ -378,27 +384,27 @@
     left: 0.5rem;
     right: 0.5rem;
   }
-  
+
   .jit-prompt--sidebar {
     width: 280px;
   }
-  
+
   .jit-prompt--sidebar.jit-prompt--left {
     left: 0.5rem;
   }
-  
+
   .jit-prompt--sidebar.jit-prompt--right {
     right: 0.5rem;
   }
-  
+
   .jit-prompt--modal {
     margin: 0.5rem;
   }
-  
+
   .jit-prompt__actions {
     flex-direction: column;
   }
-  
+
   .jit-prompt__button {
     width: 100%;
   }
@@ -409,19 +415,19 @@
     flex-direction: column;
     gap: 0.5rem;
   }
-  
+
   .jit-prompt__icon {
     align-self: flex-start;
   }
-  
+
   .jit-prompt__title {
     font-size: 1rem;
   }
-  
+
   .jit-prompt__message {
     font-size: 0.875rem;
   }
-  
+
   .jit-prompt--tooltip {
     max-width: 250px;
     font-size: 12px;
@@ -433,7 +439,7 @@
   .jit-prompt {
     animation: none;
   }
-  
+
   .jit-prompt__button {
     transition: none;
   }
@@ -443,11 +449,11 @@
   .jit-prompt {
     border-width: 2px;
   }
-  
+
   .jit-prompt__button {
     border-width: 2px;
   }
-  
+
   .jit-prompt__button:focus {
     outline-width: 3px;
   }

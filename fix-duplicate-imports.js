@@ -53,7 +53,7 @@ for (const [filePath, duplicateNames] of duplicateFiles.entries()) {
     duplicateNames.forEach(duplicateName => {
       // Find all import lines for this identifier
       const importIndices = [];
-      
+
       lines.forEach((line, index) => {
         if (line.trim().startsWith('import {') && line.includes(duplicateName) && line.includes('} from ')) {
           importIndices.push(index);
@@ -61,18 +61,23 @@ for (const [filePath, duplicateNames] of duplicateFiles.entries()) {
       });
 
       if (importIndices.length > 1) {
-        console.log(`🔍 Found ${importIndices.length} imports for '${duplicateName}' in ${path.relative('.', filePath)}`);
-        
+        console.log(
+          `🔍 Found ${importIndices.length} imports for '${duplicateName}' in ${path.relative('.', filePath)}`
+        );
+
         // Keep the first import, remove the rest
         const linesToRemove = importIndices.slice(1);
-        
+
         // Also remove the comment lines above duplicates
         const allLinesToRemove = [];
         linesToRemove.forEach(lineIndex => {
           allLinesToRemove.push(lineIndex);
           // Check if previous line is a comment related to this import
-          if (lineIndex > 0 && lines[lineIndex - 1].trim().startsWith('// Import') && 
-              lines[lineIndex - 1].includes(duplicateName)) {
+          if (
+            lineIndex > 0 &&
+            lines[lineIndex - 1].trim().startsWith('// Import') &&
+            lines[lineIndex - 1].includes(duplicateName)
+          ) {
             allLinesToRemove.push(lineIndex - 1);
           }
           // Check if line before that is empty
@@ -83,7 +88,7 @@ for (const [filePath, duplicateNames] of duplicateFiles.entries()) {
 
         // Sort in descending order to remove from end to beginning
         allLinesToRemove.sort((a, b) => b - a);
-        
+
         allLinesToRemove.forEach(lineIndex => {
           updatedLines.splice(lineIndex, 1);
         });
@@ -99,7 +104,6 @@ for (const [filePath, duplicateNames] of duplicateFiles.entries()) {
       fs.writeFileSync(filePath, updatedContent);
       filesProcessed++;
     }
-    
   } catch (error) {
     console.error(`❌ Error processing ${filePath}:`, error.message);
   }

@@ -7,6 +7,17 @@
  * Task: E16-1753114247016-0B348A - Create sentiment analysis
  */
 export { SentimentDashboard } from './SentimentDashboard';
-export type { SentimentAnalysis, SentimentAnalytics, SentimentAnalysisConfig, AnalyzeSentimentRequest, SentimentAnalysisResponse, SentimentType, EmotionType, ToxicityLevel, FeedbackSourceType, AnalysisModelType } from '../../types/SentimentAnalysisTypes';
+export type {
+  SentimentAnalysis,
+  SentimentAnalytics,
+  SentimentAnalysisConfig,
+  AnalyzeSentimentRequest,
+  SentimentAnalysisResponse,
+  SentimentType,
+  EmotionType,
+  ToxicityLevel,
+  FeedbackSourceType,
+  AnalysisModelType,
+} from '../../types/SentimentAnalysisTypes';
 export { SentimentAnalysisService } from '../../services/SentimentAnalysisService';
 //# sourceMappingURL=index.d.ts.map

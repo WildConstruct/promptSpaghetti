@@ -412,35 +412,35 @@
     align-items: stretch;
     gap: 12px;
   }
-  
+
   .toolbar-left,
   .toolbar-right {
     justify-content: center;
   }
-  
+
   .search-input input {
     width: 100%;
   }
-  
+
   .table-pagination {
     flex-direction: column;
     gap: 12px;
   }
-  
+
   .pagination-controls {
     justify-content: center;
   }
-  
+
   .pagination-info {
     text-align: center;
   }
-  
+
   /* Hide some columns on mobile */
-  .table th:nth-child(n+4),
-  .table td:nth-child(n+4) {
+  .table th:nth-child(n + 4),
+  .table td:nth-child(n + 4) {
     display: none;
   }
-  
+
   .table th:nth-child(1),
   .table td:nth-child(1),
   .table th:nth-child(2),
@@ -457,19 +457,19 @@
   .table-container {
     margin: 0 -16px;
   }
-  
+
   .table thead th,
   .table tbody td {
     padding: 8px 12px;
     font-size: 12px;
   }
-  
+
   .page-button {
     padding: 6px 8px;
     font-size: 12px;
     min-width: 32px;
   }
-  
+
   .action-button {
     width: 28px;
     height: 28px;

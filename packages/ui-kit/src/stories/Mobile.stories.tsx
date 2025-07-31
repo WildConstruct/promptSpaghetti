@@ -17,7 +17,7 @@ import {
   MobileNodeEditor,
   MobileGraphCanvas,
   MobileAppLayout,
-  createMobileTheme
+  createMobileTheme,
 } from '../mobile';
 import { ThemeProvider } from '../components/ThemeProvider';
 import { GraphDocument, GraphNode } from '@prompt-spaghetti/graph-core';
@@ -27,25 +27,27 @@ const meta: Meta = {
   parameters: {
     layout: 'fullscreen',
     viewport: {
-      defaultViewport: 'iphone12'
-    }
+      defaultViewport: 'iphone12',
+    },
   },
   decorators: [
-    (Story) => {
+    Story => {
       const mobileTheme = createMobileTheme({} as any);
       return (
         <ThemeProvider theme={mobileTheme}>
-          <div style={{ 
-            minHeight: '100vh',
-            backgroundColor: 'var(--color-background)',
-            color: 'var(--color-text)'
-          }}>
+          <div
+            style={{
+              minHeight: '100vh',
+              backgroundColor: 'var(--color-background)',
+              color: 'var(--color-text)',
+            }}
+          >
             <Story />
           </div>
         </ThemeProvider>
       );
-    }
-  ]
+    },
+  ],
 };
 
 export default meta;
@@ -59,25 +61,25 @@ const sampleGraph: GraphDocument = {
       id: 'node-1',
       type: 'subject',
       position: { x: 100, y: 100 },
-      data: { variations: ['A brave knight', 'A wise wizard', 'A cunning thief'] }
+      data: { variations: ['A brave knight', 'A wise wizard', 'A cunning thief'] },
     },
     {
       id: 'node-2',
       type: 'action',
       position: { x: 300, y: 100 },
-      data: { variations: ['battles', 'explores', 'discovers'] }
+      data: { variations: ['battles', 'explores', 'discovers'] },
     },
     {
       id: 'node-3',
       type: 'output',
       position: { x: 500, y: 100 },
-      data: { template: '{{subject}} {{action}} the ancient ruins.' }
-    }
+      data: { template: '{{subject}} {{action}} the ancient ruins.' },
+    },
   ],
   edges: [
     { id: 'edge-1', source: 'node-1', target: 'node-3' },
-    { id: 'edge-2', source: 'node-2', target: 'node-3' }
-  ]
+    { id: 'edge-2', source: 'node-2', target: 'node-3' },
+  ],
 };
 
 // Mobile Components Demo
@@ -85,11 +87,11 @@ export const ComponentsDemo: StoryObj = {
   render: () => {
     const [inputValue, setInputValue] = React.useState('');
     const [textAreaValue, setTextAreaValue] = React.useState('');
-    
+
     return (
       <div style={{ padding: 16 }}>
         <h2 style={{ marginTop: 0 }}>Mobile Components</h2>
-        
+
         {/* Buttons */}
         <section style={{ marginBottom: 32 }}>
           <h3>Buttons</h3>
@@ -98,12 +100,18 @@ export const ComponentsDemo: StoryObj = {
             <MobileButton variant="secondary">Secondary Button</MobileButton>
             <MobileButton variant="outline">Outline Button</MobileButton>
             <MobileButton variant="ghost">Ghost Button</MobileButton>
-            <MobileButton variant="primary" mobileFullWidth>Full Width Button</MobileButton>
-            <MobileButton variant="primary" loading>Loading...</MobileButton>
-            <MobileButton variant="primary" disabled>Disabled</MobileButton>
+            <MobileButton variant="primary" mobileFullWidth>
+              Full Width Button
+            </MobileButton>
+            <MobileButton variant="primary" loading>
+              Loading...
+            </MobileButton>
+            <MobileButton variant="primary" disabled>
+              Disabled
+            </MobileButton>
           </div>
         </section>
-        
+
         {/* Inputs */}
         <section style={{ marginBottom: 32 }}>
           <h3>Inputs</h3>
@@ -111,39 +119,34 @@ export const ComponentsDemo: StoryObj = {
             <MobileInput
               placeholder="Enter text..."
               value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
+              onChange={e => setInputValue(e.target.value)}
               clearable
             />
-            
-            <MobileSearchInput
-              placeholder="Search..."
-              onSearch={(value) => console.log('Search:', value)}
-            />
-            
+
+            <MobileSearchInput placeholder="Search..." onSearch={value => console.log('Search:', value)} />
+
             <MobileInput
               type="email"
               placeholder="Email address"
               mobileInputMode="email"
               error="Invalid email format"
             />
-            
+
             <MobileTextArea
               placeholder="Enter your message..."
               value={textAreaValue}
-              onChange={(e) => setTextAreaValue(e.target.value)}
+              onChange={e => setTextAreaValue(e.target.value)}
               maxLength={200}
               showCount
             />
           </div>
         </section>
-        
+
         {/* FAB */}
-        <MobileFAB position="bottom-right">
-          +
-        </MobileFAB>
+        <MobileFAB position="bottom-right">+</MobileFAB>
       </div>
     );
-  }
+  },
 };
 
 // Navigation Demo
@@ -151,14 +154,14 @@ export const NavigationDemo: StoryObj = {
   render: () => {
     const [menuOpen, setMenuOpen] = React.useState(false);
     const [activeTab, setActiveTab] = React.useState('home');
-    
+
     const bottomNavItems = [
       { id: 'home', label: 'Home', icon: '🏠' },
       { id: 'search', label: 'Search', icon: '🔍' },
       { id: 'create', label: 'Create', icon: '➕', badge: '3' },
-      { id: 'profile', label: 'Profile', icon: '👤' }
+      { id: 'profile', label: 'Profile', icon: '👤' },
     ];
-    
+
     return (
       <>
         <MobileHeader
@@ -166,34 +169,29 @@ export const NavigationDemo: StoryObj = {
           leftAction={{
             icon: <HamburgerMenu isOpen={menuOpen} onToggle={() => setMenuOpen(!menuOpen)} />,
             onClick: () => setMenuOpen(!menuOpen),
-            label: 'Menu'
+            label: 'Menu',
           }}
           rightActions={[
             { icon: '🔔', onClick: () => console.log('Notifications'), label: 'Notifications' },
-            { icon: '⚙️', onClick: () => console.log('Settings'), label: 'Settings' }
+            { icon: '⚙️', onClick: () => console.log('Settings'), label: 'Settings' },
           ]}
         />
-        
-        <main style={{ 
-          padding: 16, 
-          minHeight: 'calc(100vh - 120px)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
+
+        <main
+          style={{
+            padding: 16,
+            minHeight: 'calc(100vh - 120px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
           <p>Active tab: {activeTab}</p>
         </main>
-        
-        <BottomNavigation
-          items={bottomNavItems}
-          activeId={activeTab}
-          onItemClick={setActiveTab}
-        />
-        
-        <SlideMenu
-          isOpen={menuOpen}
-          onClose={() => setMenuOpen(false)}
-        >
+
+        <BottomNavigation items={bottomNavItems} activeId={activeTab} onItemClick={setActiveTab} />
+
+        <SlideMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)}>
           <div style={{ padding: 20 }}>
             <h2>Menu</h2>
             <nav style={{ marginTop: 24 }}>
@@ -206,14 +204,14 @@ export const NavigationDemo: StoryObj = {
         </SlideMenu>
       </>
     );
-  }
+  },
 };
 
 // Node Editor Demo
 export const NodeEditorDemo: StoryObj = {
   render: () => {
     const [node, setNode] = React.useState<GraphNode>(sampleGraph.nodes[0]);
-    
+
     return (
       <MobileNodeEditor
         node={node}
@@ -221,44 +219,39 @@ export const NodeEditorDemo: StoryObj = {
           console.log('Update node:', id, updates);
           setNode({ ...node, ...updates });
         }}
-        onDelete={(id) => console.log('Delete node:', id)}
+        onDelete={id => console.log('Delete node:', id)}
         onClose={() => console.log('Close editor')}
       />
     );
-  }
+  },
 };
 
 // Graph Canvas Demo
 export const GraphCanvasDemo: StoryObj = {
   render: () => {
     const [selectedNodeId, setSelectedNodeId] = React.useState<string | null>(null);
-    
+
     return (
       <div style={{ height: '100vh' }}>
         <MobileGraphCanvas
           graph={sampleGraph}
           selectedNodeId={selectedNodeId}
           onNodeSelect={setSelectedNodeId}
-          onNodeEdit={(id) => console.log('Edit node:', id)}
+          onNodeEdit={id => console.log('Edit node:', id)}
           onAddNode={() => console.log('Add node')}
         />
       </div>
     );
-  }
+  },
 };
 
 // Complete App Demo
 export const CompleteAppDemo: StoryObj = {
   render: () => {
     const [graph, setGraph] = React.useState(sampleGraph);
-    
-    return (
-      <MobileAppLayout
-        graph={graph}
-        onGraphUpdate={setGraph}
-      />
-    );
-  }
+
+    return <MobileAppLayout graph={graph} onGraphUpdate={setGraph} />;
+  },
 };
 
 // Touch Target Demo
@@ -269,54 +262,58 @@ export const TouchTargetDemo: StoryObj = {
       <p style={{ marginBottom: 24, color: 'var(--color-text-secondary)' }}>
         All interactive elements meet minimum 44x44px touch target requirements
       </p>
-      
+
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
         <div style={{ textAlign: 'center' }}>
           <h4>Standard (48px)</h4>
           <MobileButton size="md">Tap Me</MobileButton>
         </div>
-        
+
         <div style={{ textAlign: 'center' }}>
           <h4>Large (56px)</h4>
           <MobileButton size="lg">Tap Me</MobileButton>
         </div>
-        
+
         <div style={{ textAlign: 'center' }}>
           <h4>FAB (56px)</h4>
-          <button style={{
-            width: 56,
-            height: 56,
-            borderRadius: '50%',
-            backgroundColor: 'var(--color-primary)',
-            color: 'white',
-            border: 'none',
-            fontSize: 24,
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
+          <button
+            style={{
+              width: 56,
+              height: 56,
+              borderRadius: '50%',
+              backgroundColor: 'var(--color-primary)',
+              color: 'white',
+              border: 'none',
+              fontSize: 24,
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
             +
           </button>
         </div>
-        
+
         <div style={{ textAlign: 'center' }}>
           <h4>Icon Button (48px)</h4>
-          <button style={{
-            width: 48,
-            height: 48,
-            borderRadius: 8,
-            backgroundColor: 'var(--color-surface)',
-            border: '1px solid var(--color-border)',
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
+          <button
+            style={{
+              width: 48,
+              height: 48,
+              borderRadius: 8,
+              backgroundColor: 'var(--color-surface)',
+              border: '1px solid var(--color-border)',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
             ⚙️
           </button>
         </div>
       </div>
     </div>
-  )
+  ),
 };
 
 const menuItemStyle: React.CSSProperties = {
@@ -329,5 +326,5 @@ const menuItemStyle: React.CSSProperties = {
   textAlign: 'left',
   fontSize: 16,
   cursor: 'pointer',
-  borderRadius: 8
+  borderRadius: 8,
 };

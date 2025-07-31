@@ -760,17 +760,17 @@
     padding: 16px;
     gap: 16px;
   }
-  
+
   .payment-analytics__header {
     flex-direction: column;
     align-items: stretch;
     gap: 16px;
   }
-  
+
   .header-actions {
     justify-content: space-between;
   }
-  
+
   .payment-analytics__footer {
     flex-direction: column;
     gap: 12px;
@@ -785,7 +785,7 @@
     border-color: var(--dark-border, #374151);
     color: var(--dark-text, #f9fafb);
   }
-  
+
   .metric-card,
   .method-card,
   .failure-card,
@@ -795,7 +795,7 @@
     background: var(--dark-surface-light, #374151);
     border-color: var(--dark-border, #4b5563);
   }
-  
+
   .provider-selector,
   .export-button,
   .refresh-button {

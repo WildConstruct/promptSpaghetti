@@ -1,6 +1,6 @@
 # LLM Generator Assembly Guide
 
-*Status: Draft – 2025-07-08*
+_Status: Draft – 2025-07-08_
 
 This guide explains how to create and maintain JSON generators for the Randomizer Engine. It targets:
 
@@ -11,6 +11,7 @@ This guide explains how to create and maintain JSON generators for the Randomize
 ---
 
 ## Contents
+
 1. [Generator JSON Essentials](#1-generator-json-essentials)
 2. [Authoring Patterns](#2-authoring-patterns)
 3. [Worked Examples](#3-worked-examples)
@@ -22,24 +23,26 @@ This guide explains how to create and maintain JSON generators for the Randomize
 ---
 
 ## 1. Generator JSON Essentials
+
 A generator JSON file has four required sections:
 
-| Key | Purpose |
-|-----|---------|
-| `metadata` | Name, version, description, tags, preview image |
-| `variables` | Numeric or string variables tracked during generation |
-| `grammar` | Rule definitions (arrays, weighted objects, conditional objects) |
-| `entry_points` | Default rule(s) the engine starts from |
+| Key            | Purpose                                                          |
+| -------------- | ---------------------------------------------------------------- |
+| `metadata`     | Name, version, description, tags, preview image                  |
+| `variables`    | Numeric or string variables tracked during generation            |
+| `grammar`      | Rule definitions (arrays, weighted objects, conditional objects) |
+| `entry_points` | Default rule(s) the engine starts from                           |
 
 ### Minimal Example
+
 ```jsonc
 {
   "metadata": { "name": "Hello World", "version": "1.0.0" },
   "grammar": {
     "greeting": ["Hello", "Hi", "Hey"],
-    "default": ["#greeting# world!"]
+    "default": ["#greeting# world!"],
   },
-  "entry_points": { "default": "default" }
+  "entry_points": { "default": "default" },
 }
 ```
 
@@ -48,13 +51,17 @@ A generator JSON file has four required sections:
 ## 2. Authoring Patterns
 
 ### 2.1 Plain Arrays (string values)
+
 Most basic form:
+
 ```jsonc
 "colors": ["red", "green", "blue"]
 ```
 
 ### 2.2 Object-Wrapped Arrays
+
 Useful for UI labels or weights:
+
 ```jsonc
 "tones": [
   { "label": "Serious", "value": "serious" },
@@ -63,18 +70,21 @@ Useful for UI labels or weights:
 ```
 
 ### 2.3 `$include` Single Object
+
 ```jsonc
 "platforms": { "$include": "platforms.json" }
 ```
 
 ### 2.4 `_meta` + `$include` Array Pattern (2025-07-08)
+
 ```jsonc
 "platforms": [
   { "_meta": { "uiLabel": "Streaming Platforms" } },
   { "$include": "platforms.json" }
 ]
 ```
-The loader merges the included array *after* `_meta`. Keep `_meta` first.
+
+The loader merges the included array _after_ `_meta`. Keep `_meta` first.
 
 ---
 
@@ -94,9 +104,10 @@ The Opera generator stores most categories as **object arrays** so that each opt
 ```
 
 Key points:
-* **Lockable** – because the value is an array, the modal shows a dropdown.
-* **`label` vs `value`** – UI shows the label; engine inserts the value.
-* **Custom label** – `_meta.uiLabel` overrides the auto-generated label.
+
+- **Lockable** – because the value is an array, the modal shows a dropdown.
+- **`label` vs `value`** – UI shows the label; engine inserts the value.
+- **Custom label** – `_meta.uiLabel` overrides the auto-generated label.
 
 ### 3.2 Anachronistic Tech Panel (include-array pattern)
 
@@ -115,16 +126,16 @@ The Tech-Panel generator keeps huge option lists in subfiles and merges them wit
 ]
 ```
 
-*The loader* flattens the included arrays after the `_meta` object, so UI metadata stays intact.
+_The loader_ flattens the included arrays after the `_meta` object, so UI metadata stays intact.
 
 Additional highlights:
-* **Multi-select** – `_meta.multiSelect` makes the modal render checkbox grids.
-* **Color palette** – Tech-Panel includes a `palette` category with hex values for UI swatches.
 
+- **Multi-select** – `_meta.multiSelect` makes the modal render checkbox grids.
+- **Color palette** – Tech-Panel includes a `palette` category with hex values for UI swatches.
 
 ### 2.5 Assigning Slots for the Prompt Rewriter
 
-Every grammar rule that contributes a *chip* to the final sentence is mapped to a **slot**—see `docs/slot_taxonomy.md` for the canonical list and order.
+Every grammar rule that contributes a _chip_ to the final sentence is mapped to a **slot**—see `docs/slot_taxonomy.md` for the canonical list and order.
 
 If your rule name clearly matches a slot (e.g. `colour`, `materials`) the engine infers it automatically. Otherwise, pin the slot explicitly via `_meta.slot`:
 
@@ -151,10 +162,12 @@ When inventing a brand-new slot, add it to `slot_taxonomy.md` first, then refere
 
 ## 5. Testing Workflow
 
-1. **Unit tests (Vitest)**  
+1. **Unit tests (Vitest)**
+
    ```bash
    npm run test -- tests/generatorLoader_includes.test.js
    ```
+
    – Ensure generator loads without errors.  
    – Snapshot the prompt output.
 
@@ -169,29 +182,30 @@ When inventing a brand-new slot, add it to `slot_taxonomy.md` first, then refere
 
 ## 6. Common Pitfalls & FAQ
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| `[NO VALID OPTIONS]` | `$include` failed or empty array | Check file path and array syntax |
-| Circular `$include` recursion | File A includes B, B includes A | Avoid; loader will throw. |
-| UI dropdown missing | Array items not strings/objects | Ensure correct pattern |
+| Issue                         | Cause                            | Fix                              |
+| ----------------------------- | -------------------------------- | -------------------------------- |
+| `[NO VALID OPTIONS]`          | `$include` failed or empty array | Check file path and array syntax |
+| Circular `$include` recursion | File A includes B, B includes A  | Avoid; loader will throw.        |
+| UI dropdown missing           | Array items not strings/objects  | Ensure correct pattern           |
 
 ---
 
 ## 7. Quick-Start Templates
 
 ### Blank Generator Template
+
 ```jsonc
 {
   "metadata": {
     "name": "New Generator",
     "version": "0.1.0",
-    "description": "…"
+    "description": "…",
   },
   "variables": {},
   "grammar": {
-    "placeholder": ["example"]
+    "placeholder": ["example"],
   },
-  "entry_points": { "default": "placeholder" }
+  "entry_points": { "default": "placeholder" },
 }
 ```
 

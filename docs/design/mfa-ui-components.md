@@ -7,28 +7,30 @@ This document defines the visual design system for Multi-Factor Authentication (
 ## Design System Foundation
 
 ### Visual Hierarchy Principles
+
 1. **Immediate Recognition**: Critical security states must be instantly recognizable
 2. **Progressive Disclosure**: Detailed information available on demand
 3. **Consistent Patterns**: Uniform visual language across all components
 4. **Accessibility First**: WCAG 2.1 AA compliance with color, contrast, and screen reader support
 
 ### Color Palette for Security States
+
 ```css
 :root {
   /* Security Status Colors */
-  --security-success: #10B981;    /* Green - Secure/Protected */
-  --security-warning: #F59E0B;    /* Amber - Attention Required */
-  --security-danger: #EF4444;     /* Red - Critical/Vulnerable */
-  --security-info: #3B82F6;       /* Blue - Informational */
-  --security-neutral: #6B7280;    /* Gray - Inactive/Disabled */
-  
+  --security-success: #10b981; /* Green - Secure/Protected */
+  --security-warning: #f59e0b; /* Amber - Attention Required */
+  --security-danger: #ef4444; /* Red - Critical/Vulnerable */
+  --security-info: #3b82f6; /* Blue - Informational */
+  --security-neutral: #6b7280; /* Gray - Inactive/Disabled */
+
   /* Status Backgrounds */
-  --success-bg: #D1FAE5;          /* Light green background */
-  --warning-bg: #FEF3C7;          /* Light amber background */
-  --danger-bg: #FEE2E2;           /* Light red background */
-  --info-bg: #DBEAFE;             /* Light blue background */
-  --neutral-bg: #F3F4F6;          /* Light gray background */
-  
+  --success-bg: #d1fae5; /* Light green background */
+  --warning-bg: #fef3c7; /* Light amber background */
+  --danger-bg: #fee2e2; /* Light red background */
+  --info-bg: #dbeafe; /* Light blue background */
+  --neutral-bg: #f3f4f6; /* Light gray background */
+
   /* Interactive States */
   --hover-opacity: 0.8;
   --focus-ring: 0 0 0 3px rgba(59, 130, 246, 0.5);
@@ -37,6 +39,7 @@ This document defines the visual design system for Multi-Factor Authentication (
 ```
 
 ### Typography Scale
+
 ```css
 /* Typography for Status Components */
 .status-label-large {
@@ -68,6 +71,7 @@ This document defines the visual design system for Multi-Factor Authentication (
 ## Core Status Indicator Components
 
 ### 1. MFA Status Badge
+
 ```html
 <div class="mfa-status-badge" data-status="active">
   <div class="status-indicator">
@@ -93,25 +97,25 @@ This document defines the visual design system for Multi-Factor Authentication (
   cursor: pointer;
 }
 
-.mfa-status-badge[data-status="active"] {
+.mfa-status-badge[data-status='active'] {
   background: var(--success-bg);
   border-color: var(--security-success);
   color: var(--security-success);
 }
 
-.mfa-status-badge[data-status="warning"] {
+.mfa-status-badge[data-status='warning'] {
   background: var(--warning-bg);
   border-color: var(--security-warning);
   color: var(--security-warning);
 }
 
-.mfa-status-badge[data-status="danger"] {
+.mfa-status-badge[data-status='danger'] {
   background: var(--danger-bg);
   border-color: var(--security-danger);
   color: var(--security-danger);
 }
 
-.mfa-status-badge[data-status="inactive"] {
+.mfa-status-badge[data-status='inactive'] {
   background: var(--neutral-bg);
   border-color: var(--security-neutral);
   color: var(--security-neutral);
@@ -147,9 +151,18 @@ This document defines the visual design system for Multi-Factor Authentication (
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); opacity: 0.3; }
-  50% { transform: scale(1.1); opacity: 0.1; }
-  100% { transform: scale(1); opacity: 0.3; }
+  0% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
 }
 
 .status-content {
@@ -182,6 +195,7 @@ This document defines the visual design system for Multi-Factor Authentication (
 ```
 
 ### 2. Security Status Grid
+
 ```html
 <div class="security-status-grid">
   <div class="status-card" data-method="totp">
@@ -198,7 +212,7 @@ This document defines the visual design system for Multi-Factor Authentication (
       <button class="btn-manage">Manage</button>
     </div>
   </div>
-  
+
   <div class="status-card" data-method="sms">
     <div class="card-header">
       <div class="method-icon">📲</div>
@@ -213,7 +227,7 @@ This document defines the visual design system for Multi-Factor Authentication (
       <button class="btn-setup">Set Up</button>
     </div>
   </div>
-  
+
   <div class="status-card" data-method="recovery">
     <div class="card-header">
       <div class="method-icon">🎫</div>
@@ -241,7 +255,7 @@ This document defines the visual design system for Multi-Factor Authentication (
 
 .status-card {
   background: white;
-  border: 1px solid #E5E7EB;
+  border: 1px solid #e5e7eb;
   border-radius: 12px;
   padding: 20px;
   transition: all var(--transition-speed) ease;
@@ -293,22 +307,22 @@ This document defines the visual design system for Multi-Factor Authentication (
   animation: pulse 2s infinite;
 }
 
-.status-dot[data-status="active"] {
+.status-dot[data-status='active'] {
   background: var(--security-success);
   color: var(--security-success);
 }
 
-.status-dot[data-status="warning"] {
+.status-dot[data-status='warning'] {
   background: var(--security-warning);
   color: var(--security-warning);
 }
 
-.status-dot[data-status="danger"] {
+.status-dot[data-status='danger'] {
   background: var(--security-danger);
   color: var(--security-danger);
 }
 
-.status-dot[data-status="info"] {
+.status-dot[data-status='info'] {
   background: var(--security-info);
   color: var(--security-info);
 }
@@ -320,13 +334,13 @@ This document defines the visual design system for Multi-Factor Authentication (
 .method-name {
   font-size: 16px;
   font-weight: 600;
-  color: #1F2937;
+  color: #1f2937;
   margin: 0 0 8px 0;
 }
 
 .method-status {
   font-size: 14px;
-  color: #4B5563;
+  color: #4b5563;
   margin: 0 0 4px 0;
 }
 
@@ -334,7 +348,7 @@ This document defines the visual design system for Multi-Factor Authentication (
 .setup-prompt,
 .regenerate-prompt {
   font-size: 12px;
-  color: #6B7280;
+  color: #6b7280;
 }
 
 .card-actions {
@@ -378,7 +392,7 @@ This document defines the visual design system for Multi-Factor Authentication (
 }
 
 .btn-setup:hover {
-  background: #D97706;
+  background: #d97706;
 }
 
 .btn-regenerate:hover {
@@ -388,6 +402,7 @@ This document defines the visual design system for Multi-Factor Authentication (
 ```
 
 ### 3. Inline Status Indicators
+
 ```html
 <!-- Table Row Status -->
 <tr class="user-row">
@@ -418,7 +433,7 @@ This document defines the visual design system for Multi-Factor Authentication (
 <div class="form-field">
   <label for="phone-number">Phone Number</label>
   <div class="input-group">
-    <input type="tel" id="phone-number" class="form-input">
+    <input type="tel" id="phone-number" class="form-input" />
     <div class="field-status" data-status="verified">
       <span class="status-icon">✅</span>
       <span class="status-tooltip">Verified for MFA</span>
@@ -439,22 +454,22 @@ This document defines the visual design system for Multi-Factor Authentication (
   font-weight: 500;
 }
 
-.inline-status[data-status="active"] {
+.inline-status[data-status='active'] {
   background: var(--success-bg);
   color: var(--security-success);
 }
 
-.inline-status[data-status="warning"] {
+.inline-status[data-status='warning'] {
   background: var(--warning-bg);
   color: var(--security-warning);
 }
 
-.inline-status[data-status="danger"] {
+.inline-status[data-status='danger'] {
   background: var(--danger-bg);
   color: var(--security-danger);
 }
 
-.inline-status[data-status="inactive"] {
+.inline-status[data-status='inactive'] {
   background: var(--neutral-bg);
   color: var(--security-neutral);
 }
@@ -504,15 +519,15 @@ This document defines the visual design system for Multi-Factor Authentication (
   cursor: help;
 }
 
-.field-status[data-status="verified"] .status-icon {
+.field-status[data-status='verified'] .status-icon {
   color: var(--security-success);
 }
 
-.field-status[data-status="pending"] .status-icon {
+.field-status[data-status='pending'] .status-icon {
   color: var(--security-warning);
 }
 
-.field-status[data-status="error"] .status-icon {
+.field-status[data-status='error'] .status-icon {
   color: var(--security-danger);
 }
 
@@ -520,7 +535,7 @@ This document defines the visual design system for Multi-Factor Authentication (
   position: absolute;
   bottom: 100%;
   right: 0;
-  background: #1F2937;
+  background: #1f2937;
   color: white;
   padding: 6px 8px;
   border-radius: 4px;
@@ -538,6 +553,7 @@ This document defines the visual design system for Multi-Factor Authentication (
 ```
 
 ### 4. Security Dashboard Overview
+
 ```html
 <div class="security-dashboard">
   <div class="dashboard-header">
@@ -545,16 +561,15 @@ This document defines the visual design system for Multi-Factor Authentication (
     <div class="security-score">
       <div class="score-circle" data-score="85">
         <svg class="progress-ring" width="60" height="60">
-          <circle class="progress-ring-background" cx="30" cy="30" r="25"/>
-          <circle class="progress-ring-progress" cx="30" cy="30" r="25" 
-                  stroke-dasharray="157" stroke-dashoffset="24"/>
+          <circle class="progress-ring-background" cx="30" cy="30" r="25" />
+          <circle class="progress-ring-progress" cx="30" cy="30" r="25" stroke-dasharray="157" stroke-dashoffset="24" />
         </svg>
         <div class="score-text">85%</div>
       </div>
       <div class="score-label">Security Score</div>
     </div>
   </div>
-  
+
   <div class="security-summary">
     <div class="summary-item secure">
       <div class="summary-icon">🛡️</div>
@@ -563,7 +578,7 @@ This document defines the visual design system for Multi-Factor Authentication (
         <span class="summary-label">Active Methods</span>
       </div>
     </div>
-    
+
     <div class="summary-item warning">
       <div class="summary-icon">⚠️</div>
       <div class="summary-content">
@@ -571,7 +586,7 @@ This document defines the visual design system for Multi-Factor Authentication (
         <span class="summary-label">Needs Attention</span>
       </div>
     </div>
-    
+
     <div class="summary-item info">
       <div class="summary-icon">📊</div>
       <div class="summary-content">
@@ -580,7 +595,7 @@ This document defines the visual design system for Multi-Factor Authentication (
       </div>
     </div>
   </div>
-  
+
   <div class="quick-actions">
     <h3 class="section-title">Quick Actions</h3>
     <div class="action-buttons">
@@ -619,7 +634,7 @@ This document defines the visual design system for Multi-Factor Authentication (
 .dashboard-title {
   font-size: 20px;
   font-weight: 600;
-  color: #1F2937;
+  color: #1f2937;
   margin: 0;
 }
 
@@ -643,7 +658,7 @@ This document defines the visual design system for Multi-Factor Authentication (
 
 .progress-ring-background {
   fill: none;
-  stroke: #E5E7EB;
+  stroke: #e5e7eb;
   stroke-width: 4;
 }
 
@@ -680,7 +695,7 @@ This document defines the visual design system for Multi-Factor Authentication (
   gap: 12px;
   padding: 16px;
   border-radius: 8px;
-  border: 1px solid #E5E7EB;
+  border: 1px solid #e5e7eb;
 }
 
 .summary-item.secure {
@@ -710,7 +725,7 @@ This document defines the visual design system for Multi-Factor Authentication (
 .summary-count {
   font-size: 18px;
   font-weight: 600;
-  color: #1F2937;
+  color: #1f2937;
 }
 
 .summary-label {
@@ -725,7 +740,7 @@ This document defines the visual design system for Multi-Factor Authentication (
 .section-title {
   font-size: 16px;
   font-weight: 600;
-  color: #1F2937;
+  color: #1f2937;
   margin: 0 0 16px 0;
 }
 
@@ -766,7 +781,7 @@ This document defines the visual design system for Multi-Factor Authentication (
 }
 
 .action-btn.primary:hover {
-  background: #2563EB;
+  background: #2563eb;
 }
 
 .action-btn.secondary:hover {
@@ -780,6 +795,7 @@ This document defines the visual design system for Multi-Factor Authentication (
 ```
 
 ### 5. Toast Notifications for MFA Events
+
 ```html
 <div class="toast-container">
   <div class="toast toast-success" data-type="mfa-success">
@@ -790,7 +806,7 @@ This document defines the visual design system for Multi-Factor Authentication (
     </div>
     <button class="toast-close">×</button>
   </div>
-  
+
   <div class="toast toast-warning" data-type="mfa-warning">
     <div class="toast-icon">⚠️</div>
     <div class="toast-content">
@@ -866,13 +882,13 @@ This document defines the visual design system for Multi-Factor Authentication (
 .toast-title {
   font-size: 14px;
   font-weight: 600;
-  color: #1F2937;
+  color: #1f2937;
   margin-bottom: 4px;
 }
 
 .toast-message {
   font-size: 13px;
-  color: #4B5563;
+  color: #4b5563;
   line-height: 1.4;
 }
 
@@ -915,6 +931,7 @@ This document defines the visual design system for Multi-Factor Authentication (
 ## Mobile-Responsive Adaptations
 
 ### Breakpoint Adjustments
+
 ```css
 /* Mobile First Responsive Design */
 @media (max-width: 768px) {
@@ -922,32 +939,32 @@ This document defines the visual design system for Multi-Factor Authentication (
     grid-template-columns: 1fr;
     gap: 16px;
   }
-  
+
   .dashboard-header {
     flex-direction: column;
     gap: 16px;
     text-align: center;
   }
-  
+
   .security-summary {
     grid-template-columns: 1fr;
   }
-  
+
   .action-buttons {
     flex-direction: column;
   }
-  
+
   .action-btn {
     width: 100%;
     justify-content: center;
   }
-  
+
   .toast-container {
     left: 20px;
     right: 20px;
     max-width: none;
   }
-  
+
   .mfa-status-badge {
     padding: 16px;
   }
@@ -958,7 +975,7 @@ This document defines the visual design system for Multi-Factor Authentication (
   .security-status-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .security-summary {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -969,11 +986,11 @@ This document defines the visual design system for Multi-Factor Authentication (
   .status-card:hover {
     transform: none;
   }
-  
+
   .action-btn {
     min-height: 44px;
   }
-  
+
   .toast-close {
     min-width: 44px;
     min-height: 44px;
@@ -984,53 +1001,49 @@ This document defines the visual design system for Multi-Factor Authentication (
 ## Accessibility Features
 
 ### Screen Reader Support
+
 ```html
 <!-- Semantic markup for screen readers -->
-<div class="mfa-status-badge" 
-     data-status="active"
-     role="status"
-     aria-label="MFA Status: Active with 2 methods configured">
-  
+<div
+  class="mfa-status-badge"
+  data-status="active"
+  role="status"
+  aria-label="MFA Status: Active with 2 methods configured"
+>
   <div class="status-indicator" aria-hidden="true">
     <div class="status-icon">🔒</div>
     <div class="status-pulse"></div>
   </div>
-  
+
   <div class="status-content">
-    <span class="status-label" aria-describedby="status-description">
-      MFA Active
-    </span>
-    <span id="status-description" class="status-description">
-      2 methods configured
-    </span>
+    <span class="status-label" aria-describedby="status-description"> MFA Active </span>
+    <span id="status-description" class="status-description"> 2 methods configured </span>
   </div>
 </div>
 
 <!-- Live region for dynamic updates -->
-<div id="mfa-announcements" 
-     class="sr-only" 
-     aria-live="polite" 
-     aria-atomic="true">
+<div id="mfa-announcements" class="sr-only" aria-live="polite" aria-atomic="true">
   <!-- Dynamic status updates announced here -->
 </div>
 ```
 
 ### High Contrast Mode Support
+
 ```css
 @media (prefers-contrast: high) {
   .status-card {
     border-width: 2px;
     border-color: currentColor;
   }
-  
+
   .mfa-status-badge {
     border-width: 2px;
   }
-  
+
   .status-indicator {
     border: 2px solid currentColor;
   }
-  
+
   .action-btn {
     border-width: 2px;
   }
@@ -1042,11 +1055,11 @@ This document defines the visual design system for Multi-Factor Authentication (
   .progress-ring-progress {
     animation: none;
   }
-  
+
   .toast {
     animation: none;
   }
-  
+
   * {
     transition: none !important;
   }
@@ -1054,6 +1067,7 @@ This document defines the visual design system for Multi-Factor Authentication (
 ```
 
 ### Focus Management
+
 ```css
 /* Enhanced focus indicators */
 .focusable:focus {
@@ -1087,6 +1101,7 @@ This document defines the visual design system for Multi-Factor Authentication (
 ## Interactive Behaviors
 
 ### JavaScript Enhancements
+
 ```javascript
 // MFA Status Component Controller
 class MFAStatusController {
@@ -1094,46 +1109,46 @@ class MFAStatusController {
     this.element = element;
     this.init();
   }
-  
+
   init() {
     this.bindEvents();
     this.updateStatus();
     this.startPeriodicUpdates();
   }
-  
+
   bindEvents() {
     // Click handlers for status cards
     this.element.querySelectorAll('.status-card').forEach(card => {
       card.addEventListener('click', this.handleCardClick.bind(this));
       card.addEventListener('keydown', this.handleCardKeydown.bind(this));
     });
-    
+
     // Toast close handlers
     this.element.querySelectorAll('.toast-close').forEach(btn => {
       btn.addEventListener('click', this.closeToast.bind(this));
     });
   }
-  
+
   handleCardClick(event) {
     const card = event.currentTarget;
     const method = card.dataset.method;
     this.openMethodDetails(method);
   }
-  
+
   handleCardKeydown(event) {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       this.handleCardClick(event);
     }
   }
-  
+
   updateStatus() {
     fetch('/api/mfa/status')
       .then(response => response.json())
       .then(data => this.renderStatus(data))
       .catch(error => this.handleError(error));
   }
-  
+
   renderStatus(data) {
     // Update status indicators
     data.methods.forEach(method => {
@@ -1142,49 +1157,49 @@ class MFAStatusController {
         this.updateCard(card, method);
       }
     });
-    
+
     // Update security score
     this.updateSecurityScore(data.securityScore);
-    
+
     // Announce changes to screen readers
     this.announceChanges(data);
   }
-  
+
   updateCard(card, method) {
     const statusDot = card.querySelector('.status-dot');
     const methodStatus = card.querySelector('.method-status');
     const lastUsed = card.querySelector('.last-used');
-    
+
     statusDot.dataset.status = method.status;
     methodStatus.textContent = method.statusText;
-    
+
     if (lastUsed && method.lastUsed) {
       lastUsed.textContent = `Last used: ${method.lastUsed}`;
     }
   }
-  
+
   updateSecurityScore(score) {
     const scoreText = this.element.querySelector('.score-text');
     const progressRing = this.element.querySelector('.progress-ring-progress');
-    
+
     if (scoreText) {
       scoreText.textContent = `${score}%`;
     }
-    
+
     if (progressRing) {
       const circumference = 2 * Math.PI * 25; // radius = 25
       const offset = circumference - (score / 100) * circumference;
       progressRing.style.strokeDashoffset = offset;
     }
   }
-  
+
   announceChanges(data) {
     const announcer = document.getElementById('mfa-announcements');
     if (announcer && data.announcements) {
       announcer.textContent = data.announcements.join('. ');
     }
   }
-  
+
   showToast(type, title, message, actions = []) {
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
@@ -1197,35 +1212,35 @@ class MFAStatusController {
       </div>
       <button class="toast-close">×</button>
     `;
-    
+
     const container = document.querySelector('.toast-container');
     container.appendChild(toast);
-    
+
     // Auto-remove after 5 seconds
     setTimeout(() => {
       this.closeToast({ currentTarget: toast.querySelector('.toast-close') });
     }, 5000);
-    
+
     // Bind close event
     toast.querySelector('.toast-close').addEventListener('click', this.closeToast.bind(this));
   }
-  
+
   closeToast(event) {
     const toast = event.currentTarget.closest('.toast');
     toast.style.animation = 'slideOut 0.3s ease forwards';
     setTimeout(() => toast.remove(), 300);
   }
-  
+
   getToastIcon(type) {
     const icons = {
       success: '✅',
       warning: '⚠️',
       danger: '❌',
-      info: 'ℹ️'
+      info: 'ℹ️',
     };
     return icons[type] || icons.info;
   }
-  
+
   startPeriodicUpdates() {
     // Update status every 30 seconds
     setInterval(() => {
@@ -1253,6 +1268,7 @@ document.addEventListener('DOMContentLoaded', () => {
 5. **Toast Notifications**: Real-time feedback, error states, success confirmations
 
 ### Customization Parameters
+
 ```javascript
 // Component configuration options
 const mfaComponentConfig = {
@@ -1260,28 +1276,29 @@ const mfaComponentConfig = {
     size: 'small' | 'medium' | 'large',
     showPulse: boolean,
     clickable: boolean,
-    showDescription: boolean
+    showDescription: boolean,
   },
-  
+
   statusGrid: {
     columns: 'auto' | number,
     compactMode: boolean,
     showActions: boolean,
-    sortable: boolean
+    sortable: boolean,
   },
-  
+
   dashboard: {
     showSecurityScore: boolean,
     showQuickActions: boolean,
     updateInterval: number,
-    theme: 'light' | 'dark'
-  }
+    theme: 'light' | 'dark',
+  },
 };
 ```
 
 ## Performance Considerations
 
 ### Optimization Strategies
+
 ```css
 /* GPU acceleration for animations */
 .status-pulse,
@@ -1302,6 +1319,7 @@ const mfaComponentConfig = {
 ```
 
 ### Loading States
+
 ```html
 <div class="status-card loading">
   <div class="card-skeleton">
@@ -1322,6 +1340,7 @@ const mfaComponentConfig = {
 This comprehensive MFA UI component system provides a consistent, accessible, and user-friendly interface for displaying authentication status across all application touchpoints. The design prioritizes clarity and immediate comprehension while maintaining flexibility for various implementation contexts.
 
 ### Key Benefits
+
 - 🎯 **Instant Recognition**: Clear visual hierarchy for security states
 - ♿ **Accessibility**: WCAG 2.1 AA compliant with screen reader support
 - 📱 **Responsive**: Mobile-first design with touch-friendly interactions

@@ -16,71 +16,72 @@ class TypeScriptRepairer {
       {
         name: 'Malformed object literals',
         pattern: /:\s*\{\s*,/g,
-        replacement: ': {'
+        replacement: ': {',
       },
       // Fix malformed array generics with trailing commas
       {
         name: 'Malformed array generics',
         pattern: /Array<\{\s*,/g,
-        replacement: 'Array<{'
+        replacement: 'Array<{',
       },
       // Fix malformed function parameters with ) on new line
       {
         name: 'Malformed function parameters',
-        pattern: /\)\s*\n\s*([a-zA-Z_$][a-zA-Z0-9_$]*:\s*[^,\n]+),?\s*\n\s*([a-zA-Z_$][a-zA-Z0-9_$]*:\s*[^,\n]+),?\s*\n\s*\):/g,
-        replacement: '(\n    $1,\n    $2\n  ):'
+        pattern:
+          /\)\s*\n\s*([a-zA-Z_$][a-zA-Z0-9_$]*:\s*[^,\n]+),?\s*\n\s*([a-zA-Z_$][a-zA-Z0-9_$]*:\s*[^,\n]+),?\s*\n\s*\):/g,
+        replacement: '(\n    $1,\n    $2\n  ):',
       },
       // Fix malformed push calls with )
       {
         name: 'Malformed push calls',
         pattern: /\.push\(\)\s*\n/g,
-        replacement: '.push(\n'
+        replacement: '.push(\n',
       },
       // Fix trailing semicolons after closing brackets
       {
         name: 'Trailing semicolons after brackets',
         pattern: /\}\s*;\s*\)/g,
-        replacement: '})'
+        replacement: '})',
       },
       // Fix malformed conditional expressions with orphaned :
       {
         name: 'Malformed conditional expressions',
         pattern: /\?\s*['"a-zA-Z_$][^:]*\s*:\s*;\s*\n/g,
-        replacement: function(match) {
+        replacement: function (match) {
           return match.replace(/:\s*;\s*\n/, ':\n');
-        }
+        },
       },
       // Fix malformed export/import statements
       {
         name: 'Malformed exports',
         pattern: /export\s+\{\s*,/g,
-        replacement: 'export {'
+        replacement: 'export {',
       },
       // Fix missing closing brackets in interfaces
       {
         name: 'Missing closing brackets',
         pattern: /interface\s+[A-Z][a-zA-Z0-9]*\s*\{[^}]+$/gm,
-        replacement: function(match) {
+        replacement: function (match) {
           if (!match.includes('}')) {
             return match + '\n}';
           }
           return match;
-        }
+        },
       },
       // Fix malformed method declarations
       {
         name: 'Malformed method declarations',
         pattern: /public\s+async\s+([a-zA-Z_$][a-zA-Z0-9_$]*)\(\)\s*\n/g,
-        replacement: 'public async $1(\n'
+        replacement: 'public async $1(\n',
       },
       // Fix orphaned return types
       {
         name: 'Orphaned return types',
         pattern: /\)\s*:\s*Promise<[^>]+>\s*\{\s*$/gm,
-        replacement: function(match) {
+        replacement: function (match) {
           return match.replace(/\{\s*$/, '{\n');
-        }
-      }
+        },
+      },
     ];
   }
 
@@ -93,13 +94,13 @@ class TypeScriptRepairer {
       // Apply all repair patterns
       for (const pattern of this.patterns) {
         const originalContent = content;
-        
+
         if (typeof pattern.replacement === 'function') {
           content = content.replace(pattern.pattern, pattern.replacement);
         } else {
           content = content.replace(pattern.pattern, pattern.replacement);
         }
-        
+
         if (content !== originalContent) {
           const matches = (originalContent.match(pattern.pattern) || []).length;
           localRepairs += matches;
@@ -130,15 +131,15 @@ class TypeScriptRepairer {
 
     // Fix cases where object properties have trailing commas at start
     modified = modified.replace(/(\w+):\s*\{\s*,\s*\n/g, '$1: {\n');
-    
+
     // Fix Array<{, patterns
     modified = modified.replace(/Array<\{\s*,\s*\n/g, 'Array<{\n');
-    
+
     // Fix method parameter lists that are malformed
     modified = modified.replace(/\(\)\s*\n\s*([^)]+)\s*\):/g, '($1):');
-    
+
     // Fix conditional operators with missing expressions
-    modified = modified.replace(/\?\s*['"a-zA-Z_$][^:]*\s*:\s*;\s*\n/g, function(match) {
+    modified = modified.replace(/\?\s*['"a-zA-Z_$][^:]*\s*:\s*;\s*\n/g, function (match) {
       return match.replace(/:\s*;\s*/, ': ');
     });
 
@@ -153,7 +154,7 @@ class TypeScriptRepairer {
 
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
-      
+
       if (line.match(/^(export\s+)?(interface|type)\s+[A-Z]/)) {
         inInterface = true;
         braceCount = 0;
@@ -189,10 +190,10 @@ class TypeScriptRepairer {
 
   repairDirectory(dirPath) {
     const entries = fs.readdirSync(dirPath, { withFileTypes: true });
-    
+
     for (const entry of entries) {
       const fullPath = path.join(dirPath, entry.name);
-      
+
       if (entry.isDirectory() && !entry.name.startsWith('.') && entry.name !== 'node_modules') {
         this.repairDirectory(fullPath);
       } else if (entry.isFile() && (entry.name.endsWith('.ts') || entry.name.endsWith('.tsx'))) {
@@ -204,13 +205,9 @@ class TypeScriptRepairer {
 
   run() {
     console.log('🔧 Starting comprehensive TypeScript repair...\n');
-    
+
     const startTime = Date.now();
-    const targetDirs = [
-      'packages/core',
-      'client/src',
-      'server/src'
-    ];
+    const targetDirs = ['packages/core', 'client/src', 'server/src'];
 
     for (const dir of targetDirs) {
       if (fs.existsSync(dir)) {
@@ -220,7 +217,7 @@ class TypeScriptRepairer {
     }
 
     const duration = Date.now() - startTime;
-    
+
     console.log('\n' + '='.repeat(60));
     console.log('📊 Comprehensive TypeScript Repair Summary');
     console.log('='.repeat(60));

@@ -3,11 +3,7 @@
  * Epic 10.1.4 - Multi-Platform Validation
  */
 
-import {
-  createBasicPromptTargetingSystem,
-  OpenAIAdaptor,
-  MidjourneyAdaptor
-} from '../index';
+import { createBasicPromptTargetingSystem, OpenAIAdaptor, MidjourneyAdaptor } from '../index';
 
 /**
  * Sample prompt graphs for demonstration
@@ -20,24 +16,24 @@ const sampleGraphs = {
         id: '1',
         type: 'system',
         data: {
-          text: 'You are a creative writing assistant.'
-        }
+          text: 'You are a creative writing assistant.',
+        },
       },
       {
         id: '2',
         type: 'output',
         data: {
-          text: 'Write a short story about a time traveler who discovers they can only travel to moments of great historical significance.'
-        }
-      }
+          text: 'Write a short story about a time traveler who discovers they can only travel to moments of great historical significance.',
+        },
+      },
     ],
     edges: [
       {
         id: 'e1',
         source: '1',
-        target: '2'
-      }
-    ]
+        target: '2',
+      },
+    ],
   },
 
   // Visual art prompt (good for Midjourney)
@@ -47,36 +43,36 @@ const sampleGraphs = {
         id: '1',
         type: 'subject',
         data: {
-          text: 'A cyberpunk cityscape at night'
-        }
+          text: 'A cyberpunk cityscape at night',
+        },
       },
       {
         id: '2',
         type: 'style',
         data: {
-          style: 'sci-fi'
-        }
+          style: 'sci-fi',
+        },
       },
       {
         id: '3',
         type: 'aspectRatio',
         data: {
-          aspectRatio: 'landscape'
-        }
-      }
+          aspectRatio: 'landscape',
+        },
+      },
     ],
     edges: [
       {
         id: 'e1',
         source: '1',
-        target: '2'
+        target: '2',
       },
       {
         id: 'e2',
         source: '2',
-        target: '3'
-      }
-    ]
+        target: '3',
+      },
+    ],
   },
 
   // Mixed content prompt (works for both)
@@ -86,12 +82,12 @@ const sampleGraphs = {
         id: '1',
         type: 'output',
         data: {
-          text: 'Create something inspiring about the future of technology'
-        }
-      }
+          text: 'Create something inspiring about the future of technology',
+        },
+      },
     ],
-    edges: []
-  }
+    edges: [],
+  },
 };
 
 /**
@@ -106,7 +102,7 @@ async function runDemo() {
 
   // Create and register adaptors
   console.log('2. Creating and registering adaptors...');
-  
+
   const openaiAdaptor = new OpenAIAdaptor();
   const midjourneyAdaptor = new MidjourneyAdaptor();
 
@@ -114,16 +110,16 @@ async function runDemo() {
   await openaiAdaptor.initialize({
     openai: {
       apiKey: 'demo-key', // Not actually used in demo
-      model: 'gpt-4'
-    }
+      model: 'gpt-4',
+    },
   });
 
   await midjourneyAdaptor.initialize({
     midjourney: {
       version: '6',
       defaultAspectRatio: '1:1',
-      defaultQuality: 1
-    }
+      defaultQuality: 1,
+    },
   });
 
   // Register adaptors
@@ -168,7 +164,7 @@ async function showAdaptorCapabilities(system: any) {
   for (const adaptor of adaptors) {
     console.log(`\n📋 ${adaptor.name} (${adaptor.id})`);
     console.log(`   Platforms: ${adaptor.platforms.join(', ')}`);
-    
+
     const capabilities = await adaptor.capabilities();
     console.log(`   Max Tokens: ${capabilities.maxTokens}`);
     console.log(`   Style Support: ${capabilities.styleSupport ? '✅' : '❌'}`);
@@ -185,27 +181,24 @@ async function demoValidation(system: any) {
     { name: 'Creative Writing', graph: sampleGraphs.creativeWriting, platform: 'openai' },
     { name: 'Visual Art', graph: sampleGraphs.visualArt, platform: 'midjourney' },
     { name: 'Creative Writing → Midjourney', graph: sampleGraphs.creativeWriting, platform: 'midjourney' },
-    { name: 'Visual Art → OpenAI', graph: sampleGraphs.visualArt, platform: 'openai' }
+    { name: 'Visual Art → OpenAI', graph: sampleGraphs.visualArt, platform: 'openai' },
   ];
 
   for (const testCase of testCases) {
     console.log(`\n🔍 ${testCase.name}:`);
-    
-    const validation = await system.engine.validateTranslation(
-      testCase.graph,
-      testCase.platform
-    );
+
+    const validation = await system.engine.validateTranslation(testCase.graph, testCase.platform);
 
     console.log(`   Valid: ${validation.valid ? '✅' : '❌'}`);
     console.log(`   Compatibility Score: ${(validation.compatibilityScore * 100).toFixed(1)}%`);
-    
+
     if (validation.errors.length > 0) {
       console.log(`   Errors: ${validation.errors.length}`);
       validation.errors.slice(0, 2).forEach((error: any) => {
         console.log(`     • ${error.message}`);
       });
     }
-    
+
     if (validation.warnings.length > 0) {
       console.log(`   Warnings: ${validation.warnings.length}`);
       validation.warnings.slice(0, 2).forEach((warning: any) => {
@@ -230,7 +223,7 @@ async function demoCrossPlatformTranslation(system: any) {
   try {
     const openaiResult = await system.engine.translate(graph, 'openai', {
       qualityPreference: 0.8,
-      stylePreference: 'default'
+      stylePreference: 'default',
     });
 
     console.log(`   Platform: ${openaiResult.platform}`);
@@ -247,7 +240,7 @@ async function demoCrossPlatformTranslation(system: any) {
   try {
     const mjResult = await system.engine.translate(graph, 'midjourney', {
       qualityPreference: 0.9,
-      stylePreference: 'artistic'
+      stylePreference: 'artistic',
     });
 
     console.log(`   Platform: ${mjResult.platform}`);
@@ -270,14 +263,10 @@ async function demoBatchTranslation(system: any) {
   console.log('   Source: Visual Art Graph');
   console.log('   Targets: OpenAI, Midjourney');
 
-  const results = await system.engine.translateBatch(
-    graph,
-    ['openai', 'midjourney'],
-    {
-      qualityPreference: 0.7,
-      enableOptimizations: true
-    }
-  );
+  const results = await system.engine.translateBatch(graph, ['openai', 'midjourney'], {
+    qualityPreference: 0.7,
+    enableOptimizations: true,
+  });
 
   console.log(`\n   Results: ${Object.keys(results).length} successful translations`);
 
@@ -298,21 +287,21 @@ async function demoConfigurationEffects(system: any) {
   const configs = [
     { name: 'High Quality', config: { qualityPreference: 0.9, stylePreference: 'photorealistic' } },
     { name: 'Creative', config: { qualityPreference: 0.5, stylePreference: 'artistic' } },
-    { name: 'Minimal', config: { qualityPreference: 0.7, stylePreference: 'minimal' } }
+    { name: 'Minimal', config: { qualityPreference: 0.7, stylePreference: 'minimal' } },
   ];
 
   console.log('\n⚙️ Configuration Effects (Midjourney):');
 
   for (const { name, config } of configs) {
     console.log(`\n   ${name} Configuration:`);
-    
+
     try {
       const result = await system.engine.translate(graph, 'midjourney', config);
-      
+
       console.log(`     Quality: ${result.parameters.quality}`);
       console.log(`     Stylize: ${result.parameters.stylize}`);
       console.log(`     Optimizations: ${result.metadata.optimizations.join(', ')}`);
-      
+
       // Show how the prompt changes
       const parameterPart = result.prompt.split('--').slice(1).join(' --');
       if (parameterPart) {
@@ -333,7 +322,7 @@ if (require.main === module) {
       console.log('\n✨ Demo finished successfully');
       process.exit(0);
     })
-    .catch((error) => {
+    .catch(error => {
       console.error('\n💥 Demo failed:', error);
       process.exit(1);
     });

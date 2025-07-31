@@ -286,7 +286,7 @@
   border-color: #ef4444;
 }
 
-.rollback-type-option input[type="radio"] {
+.rollback-type-option input[type='radio'] {
   margin-right: 12px;
   width: auto;
 }
@@ -705,45 +705,45 @@
     padding: 16px;
     margin: 0 16px;
   }
-  
+
   .rollback-header {
     flex-direction: column;
     gap: 8px;
     align-items: flex-start;
   }
-  
+
   .rollback-type-options {
     gap: 4px;
   }
-  
+
   .rollback-type-option {
     padding: 8px;
   }
-  
+
   .option-content {
     gap: 8px;
   }
-  
+
   .option-indicator {
     width: 32px;
     height: 32px;
     font-size: 14px;
   }
-  
+
   .summary-grid,
   .details-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .form-actions {
     flex-direction: column;
   }
-  
+
   .array-input {
     flex-direction: column;
     gap: 4px;
   }
-  
+
   .array-input button {
     align-self: flex-start;
   }
@@ -768,23 +768,23 @@
     background: #1f2937;
     color: #f9fafb;
   }
-  
+
   .rollback-header {
     border-bottom-color: #374151;
   }
-  
+
   .rollback-header h2 {
     color: #f9fafb;
   }
-  
+
   .step-content h3 {
     color: #f9fafb;
   }
-  
+
   .form-group label {
     color: #d1d5db;
   }
-  
+
   .form-group input,
   .form-group textarea,
   .form-group select {
@@ -792,77 +792,77 @@
     border-color: #4b5563;
     color: #f9fafb;
   }
-  
+
   .form-group input:focus,
   .form-group textarea:focus,
   .form-group select:focus {
     border-color: #ef4444;
     box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
   }
-  
+
   .version-card {
     background: #374151;
     border-color: #4b5563;
   }
-  
+
   .version-card.current {
     background: #1e3a8a;
     border-color: #3b82f6;
   }
-  
+
   .version-card.selectable:hover {
     background: #7f1d1d;
     border-color: #ef4444;
   }
-  
+
   .version-card.selected {
     background: #7f1d1d;
     border-color: #ef4444;
   }
-  
+
   .version-number {
     color: #f9fafb;
   }
-  
+
   .rollback-summary,
   .rollback-final-summary,
   .version-details {
     background: #374151;
     border-color: #4b5563;
   }
-  
+
   .rollback-summary h4,
   .rollback-final-summary h4,
   .version-details h4 {
     color: #f9fafb;
   }
-  
+
   .summary-item strong,
   .detail-item strong {
     color: #f9fafb;
   }
-  
+
   .confirmation-content {
     background: #1f2937;
     color: #f9fafb;
   }
-  
+
   .confirmation-header {
     border-bottom-color: #374151;
   }
-  
+
   .confirmation-header h3 {
     color: #f9fafb;
   }
-  
+
   .result-content {
     color: #f9fafb;
   }
-  
+
   .result-summary {
     background: #374151;
   }
-  
+
   .form-actions {
     border-top-color: #374151;
   }

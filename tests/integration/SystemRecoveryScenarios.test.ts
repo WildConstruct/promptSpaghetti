@@ -13,10 +13,18 @@ import WebSocket from 'ws';
 // Mock ConnectionManager since websocket functionality is disabled
 class ConnectionManager {
   constructor(config: unknown) {}
-  connect() { return Promise.resolve(); }
-  disconnect() { return Promise.resolve(); }
-  isConnected() { return false; }
-  reconnect() { return Promise.resolve(); }
+  connect() {
+    return Promise.resolve();
+  }
+  disconnect() {
+    return Promise.resolve();
+  }
+  isConnected() {
+    return false;
+  }
+  reconnect() {
+    return Promise.resolve();
+  }
 }
 
 describe('System Recovery and Resilience Scenarios', () => {
@@ -28,7 +36,7 @@ describe('System Recovery and Resilience Scenarios', () => {
     testEnv = await TestEnvironmentManager.createEnvironment('recovery-scenarios', {
       seed: 'recovery-test',
       mockWebSocket: true,
-      mockLocalStorage: true
+      mockLocalStorage: true,
     });
   });
 
@@ -50,7 +58,7 @@ describe('System Recovery and Resilience Scenarios', () => {
           corsOrigins: ['*'],
           enableAutoReconnect: true,
           reconnectInterval: 200,
-          maxReconnectAttempts: 3
+          maxReconnectAttempts: 3,
         };
 
         const manager = new ConnectionManager(config);
@@ -69,12 +77,12 @@ describe('System Recovery and Resilience Scenarios', () => {
           reconnect: jest.fn(() => {
             reconnectAttempts++;
             return Promise.resolve();
-          })
+          }),
         } as WebSocket & { reconnect: () => Promise<void> };
 
         const request = {
           headers: { 'user-agent': 'test-agent' },
-          socket: { remoteAddress: '127.0.0.1' }
+          socket: { remoteAddress: '127.0.0.1' },
         };
 
         const connectionId = manager.addConnection(mockWs, request);
@@ -89,7 +97,7 @@ describe('System Recovery and Resilience Scenarios', () => {
             // Use fake timers for tests to prevent timeouts
             jest.advanceTimersByTime(config.reconnectInterval);
             reconnectAttempts++;
-            
+
             // In a real scenario, this would be a new WebSocket connection
             if (attempt === 2) break; // Simulate successful reconnection on second attempt
           }
@@ -112,12 +120,12 @@ describe('System Recovery and Resilience Scenarios', () => {
           const currentTime = Date.now();
           reconnectionTimes.push(currentTime);
           reconnectAttempts++;
-          
+
           // Simulate failure for first few attempts
           if (reconnectAttempts < 3) {
             throw new Error('Connection failed');
           }
-          
+
           return Promise.resolve();
         });
 
@@ -132,20 +140,20 @@ describe('System Recovery and Resilience Scenarios', () => {
           enableAutoReconnect: true,
           reconnectInterval: 100, // Base interval
           maxReconnectAttempts: 5,
-          useExponentialBackoff: true
+          useExponentialBackoff: true,
         };
 
         const manager = new ConnectionManager(config);
-        
+
         // Mock connection with reconnection logic
         const mockConnection = {
           id: 'test-connection',
           reconnect: mockReconnect,
-          status: 'disconnected'
+          status: 'disconnected',
         };
 
         // Simulate reconnection process
-                
+
         for (let attempt = 1; attempt <= 3; attempt++) {
           try {
             await mockConnection.reconnect();
@@ -177,12 +185,12 @@ describe('System Recovery and Resilience Scenarios', () => {
           maxConnections: 10,
           enableAuthentication: false,
           jwtSecret: 'test-secret',
-          corsOrigins: ['*']
+          corsOrigins: ['*'],
         };
 
         const manager = new ConnectionManager(config);
         const connections: any[] = [];
-        
+
         // Create multiple connections
         for (let i = 0; i < 5; i++) {
           const mockWs = {
@@ -192,12 +200,12 @@ describe('System Recovery and Resilience Scenarios', () => {
             send: jest.fn<unknown[], unknown>(),
             readyState: i < 3 ? WebSocket.OPEN : WebSocket.CLOSED, // Some fail
             removeAllListeners: jest.fn<unknown[], unknown>(),
-            id: `connection-${i}`
+            id: `connection-${i}`,
           } as any;
 
           const request = {
             headers: { 'user-agent': `test-agent-${i}` },
-            socket: { remoteAddress: '127.0.0.1' }
+            socket: { remoteAddress: '127.0.0.1' },
           };
 
           const connectionId = manager.addConnection(mockWs, request);
@@ -206,7 +214,7 @@ describe('System Recovery and Resilience Scenarios', () => {
 
         // Verify partial success
         const activeConnections = connections.filter((_, i) => i < 3);
-        
+
         activeConnections.forEach(conn => {
           expect(manager.getConnectionInfo(conn.id)).toBeDefined();
         });
@@ -226,13 +234,13 @@ describe('System Recovery and Resilience Scenarios', () => {
           enableAuthentication: false,
           jwtSecret: 'test-secret',
           corsOrigins: ['*'],
-          serviceName: 'primary'
+          serviceName: 'primary',
         };
 
         const fallbackConfig = {
           ...primaryConfig,
           port: 8002,
-          serviceName: 'fallback'
+          serviceName: 'fallback',
         };
 
         const primaryManager = new ConnectionManager(primaryConfig);
@@ -241,7 +249,7 @@ describe('System Recovery and Resilience Scenarios', () => {
         // Simulate primary service failure
         const mockServiceHealth = {
           primary: false, // Failed
-          fallback: true  // Healthy
+          fallback: true, // Healthy
         };
 
         const getHealthyService = () => {
@@ -263,7 +271,7 @@ describe('System Recovery and Resilience Scenarios', () => {
           database: false,
           cache: false,
           messageQueue: false,
-          storage: false
+          storage: false,
         };
 
         const checkServiceHealth = async (serviceName: string) => {
@@ -308,25 +316,25 @@ describe('System Recovery and Resilience Scenarios', () => {
               data: {
                 items: ['A', 'B', 'C', 'D', 'E'],
                 pattern: 'linear',
-                currentIndex: 2 // Interrupted at position 2
-              }
+                currentIndex: 2, // Interrupted at position 2
+              },
             },
             {
               id: 'output1',
               type: 'Output',
               inputs: ['sequential1'],
-              data: { template: '{{sequential1}}' }
-            }
-          ]
+              data: { template: '{{sequential1}}' },
+            },
+          ],
         };
 
         // Save state before execution
         const stateBeforeFailure = JSON.parse(JSON.stringify(graph));
-        
+
         try {
           // Execute - might fail due to simulated interruption
           const result = await executeGraph(graph);
-          
+
           if (result.outputs && result.outputs.length > 0) {
             expect(result.outputs[0]).toBe('C'); // Should continue from saved state
           }
@@ -340,7 +348,7 @@ describe('System Recovery and Resilience Scenarios', () => {
 
       it('should handle corrupted state recovery', async () => {
         const mockStorage = testEnv.mocks.get('localStorage');
-        
+
         // Simulate corrupted state data
         mockStorage.getItem = jest.fn<unknown[], unknown>().mockReturnValue(
           '{"corrupted": "json"}' // Invalid JSON (missing quotes around json value as unknown as unknown as unknown)
@@ -353,15 +361,15 @@ describe('System Recovery and Resilience Scenarios', () => {
               type: 'WeightedChoice',
               inputs: [],
               data: {},
-              choices: [{ value: 'Default', weight: 1 }]
+              choices: [{ value: 'Default', weight: 1 }],
             },
             {
               id: 'output1',
               type: 'Output',
               inputs: ['choice1'],
-              data: { template: '{{choice1}}' }
-            }
-          ]
+              data: { template: '{{choice1}}' },
+            },
+          ],
         };
 
         // Should recover with default state
@@ -383,26 +391,26 @@ describe('System Recovery and Resilience Scenarios', () => {
                 transitionMatrix: [
                   [0.5, 0.3, 0.2],
                   [0.2, 0.5, 0.3],
-                  [0.3, 0.2, 0.5]
+                  [0.3, 0.2, 0.5],
                 ],
                 currentState: 'B', // Partially executed state
-                executionHistory: ['A', 'B'] // Some history available
-              }
+                executionHistory: ['A', 'B'], // Some history available
+              },
             },
             {
               id: 'output1',
               type: 'Output',
               inputs: ['markov1'],
-              data: { template: '{{markov1}}' }
-            }
-          ]
+              data: { template: '{{markov1}}' },
+            },
+          ],
         };
 
         // Execute with partial state
         const result = await executeGraph(partialStateGraph);
         expect(result.outputs).toBeDefined();
         expect(result.outputs.length).toBeGreaterThan(0);
-        
+
         // Should continue from current state 'B'
         const currentState = partialStateGraph.nodes[0].data?.currentState;
         expect(['A', 'B', 'C']).toContain(currentState);
@@ -417,28 +425,28 @@ describe('System Recovery and Resilience Scenarios', () => {
               id: 'set-var1',
               type: 'SetVariable',
               inputs: [],
-              data: { name: 'counter', value: 1 }
+              data: { name: 'counter', value: 1 },
             },
             {
               id: 'set-var2',
               type: 'SetVariable',
               inputs: ['set-var1'],
-              data: { name: 'counter', value: 2 }
+              data: { name: 'counter', value: 2 },
             },
             {
               id: 'failing-node',
               type: 'WeightedChoice',
               inputs: ['set-var2'],
               data: {},
-              choices: [] // Empty choices will fail
+              choices: [], // Empty choices will fail
             },
             {
               id: 'output1',
               type: 'Output',
               inputs: ['failing-node'],
-              data: { template: '{{counter}}' }
-            }
-          ]
+              data: { template: '{{counter}}' },
+            },
+          ],
         };
 
         try {
@@ -458,22 +466,22 @@ describe('System Recovery and Resilience Scenarios', () => {
               id: 'shared-var',
               type: 'SetVariable',
               inputs: [],
-              data: { name: 'sharedCounter', value: 0 }
+              data: { name: 'sharedCounter', value: 0 },
             },
             {
               id: 'output1',
               type: 'Output',
               inputs: ['shared-var'],
-              data: { template: '{{sharedCounter}}' }
-            }
-          ]
+              data: { template: '{{sharedCounter}}' },
+            },
+          ],
         };
 
         // Simplified test: just verify both executions work
         try {
           const result1 = await executeGraph(conflictingGraph);
           const result2 = await executeGraph(conflictingGraph);
-          
+
           expect(result1.outputs).toBeDefined();
           expect(result2.outputs).toBeDefined();
           expect(result1.outputs.length).toBeGreaterThan(0);
@@ -492,20 +500,20 @@ describe('System Recovery and Resilience Scenarios', () => {
         // Mock memory monitoring
         let memoryPressure = false;
         const originalMemoryUsage = process.memoryUsage;
-        
+
         process.memoryUsage = jest.fn<unknown[], unknown>().mockImplementation(() => {
           return {
             rss: memoryPressure ? 800000000 : 400000000, // 800MB vs 400MB
             heapUsed: memoryPressure ? 750000000 : 300000000,
             heapTotal: memoryPressure ? 800000000 : 400000000,
             external: 10000000,
-            arrayBuffers: 5000000
+            arrayBuffers: 5000000,
           };
         });
 
         // Simulate memory pressure scenario
         memoryPressure = true;
-        
+
         const lightweightGraph: Graph = {
           nodes: [
             {
@@ -513,20 +521,20 @@ describe('System Recovery and Resilience Scenarios', () => {
               type: 'WeightedChoice',
               inputs: [],
               data: {},
-              choices: [{ value: 'Simple', weight: 1 }]
+              choices: [{ value: 'Simple', weight: 1 }],
             },
             {
               id: 'output1',
               type: 'Output',
               inputs: ['simple-choice'],
-              data: { template: '{{simple-choice}}' }
-            }
-          ]
+              data: { template: '{{simple-choice}}' },
+            },
+          ],
         };
 
         try {
           const result = await executeGraph(lightweightGraph);
-          
+
           // Should either succeed with memory management or fail gracefully
           if (result.outputs && result.outputs.length > 0) {
             expect(result.outputs[0]).toBe('Simple');
@@ -542,7 +550,7 @@ describe('System Recovery and Resilience Scenarios', () => {
       it('should implement garbage collection on memory pressure', async () => {
         const memoryStats = {
           before: process.memoryUsage(),
-          after: null as any
+          after: null as any,
         };
 
         // Force garbage collection if available
@@ -560,7 +568,7 @@ describe('System Recovery and Resilience Scenarios', () => {
         cleanup();
 
         memoryStats.after = process.memoryUsage();
-        
+
         // Memory usage should be reasonable
         expect(memoryStats.after.heapUsed).toBeLessThan(memoryStats.before.heapUsed * 1.5);
       });
@@ -582,16 +590,16 @@ describe('System Recovery and Resilience Scenarios', () => {
 
         // Attempt to store large data
         const largeData = JSON.stringify({ data: new Array(10000).fill('large') });
-        
+
         try {
           mockStorage.setItem('large-key', largeData);
         } catch (error) {
           expect(error.name).toBe('QuotaExceededError');
-          
+
           // Implement recovery strategy - compress or split data
           const compressedData = JSON.stringify({ compressed: true, size: largeData.length });
           quotaExceeded = false;
-          
+
           // Should succeed with compressed data
           expect(() => mockStorage.setItem('compressed-key', compressedData)).not.toThrow();
         }
@@ -599,9 +607,9 @@ describe('System Recovery and Resilience Scenarios', () => {
 
       it('should handle storage corruption recovery', async () => {
         const mockStorage = testEnv.mocks.get('localStorage');
-        
+
         // Simulate corrupted storage
-        mockStorage.getItem = jest.fn<unknown[], unknown>().mockImplementation((key) => {
+        mockStorage.getItem = jest.fn<unknown[], unknown>().mockImplementation(key => {
           if (key === 'corrupted-key') {
             return '{"incomplete": json'; // Corrupted JSON
           }
@@ -647,12 +655,12 @@ describe('System Recovery and Resilience Scenarios', () => {
             failureCount++;
             throw new Error('Service failure');
           }),
-          
+
           reset: () => {
             failureCount = 0;
             circuitOpen = false;
             serviceHealthy = true; // Service becomes healthy after reset
-          }
+          },
         };
 
         // Test circuit breaker logic - fail exactly maxFailures times
@@ -681,7 +689,7 @@ describe('System Recovery and Resilience Scenarios', () => {
 
         // Test recovery after timeout
         await AsyncTestingUtils.delay(1000);
-        
+
         // Simulate circuit breaker reset after timeout
         mockService.reset();
 
@@ -694,7 +702,7 @@ describe('System Recovery and Resilience Scenarios', () => {
         const resourcePools = {
           critical: { limit: 10, current: 0 },
           normal: { limit: 20, current: 0 },
-          background: { limit: 5, current: 0 }
+          background: { limit: 5, current: 0 },
         };
 
         const acquireResource = (poolName: keyof typeof resourcePools) => {
@@ -728,7 +736,6 @@ describe('System Recovery and Resilience Scenarios', () => {
           const criticalResource = acquireResource('critical');
           expect(criticalResource).toBe(1);
           releaseResource('critical');
-
         } catch (error) {
           fail(`Resource isolation failed: ${error.message}`);
         }

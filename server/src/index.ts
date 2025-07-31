@@ -48,7 +48,7 @@ import { AnalyticsDAO } from './database/analytics-dao';
 // import { PerformanceDashboard } from './performance/PerformanceDashboard';
 // TEMPORARILY DISABLED - syntax errors
 // import { ExtensionLifecycleManager } from '../../packages/core/extensions/ExtensionLifecycleManager';
-// TEMPORARILY DISABLED - WebSocket type mismatches and message type conflicts  
+// TEMPORARILY DISABLED - WebSocket type mismatches and message type conflicts
 // import { WebSocketServer } from './websocket/WebSocketServer';
 // import { WSServerConfig } from './websocket/types';
 // import { AnalyticsWebSocketServer } from './websocket/AnalyticsWebSocketServer';
@@ -88,9 +88,9 @@ import { VerificationThresholdService } from './services/VerificationThresholdSe
 import { verificationThresholdRoutes } from './routes/verification-threshold';
 import { LocationDetectionService, LocationDetectionConfig } from './services/LocationDetectionService';
 import { locationDetectionRoutes } from './routes/location-detection';
-import { 
+import {
   LocationHistoryAnalysisService,
-  LocationHistoryAnalysisConfig
+  LocationHistoryAnalysisConfig,
 } from './services/LocationHistoryAnalysisService';
 import { locationHistoryAnalysisRoutes } from './routes/location-history-analysis';
 import { DeviceFingerprintingService, DeviceFingerprintConfig } from './services/DeviceFingerprintingService';
@@ -100,12 +100,12 @@ import { newDeviceDetectionRoutes } from './routes/new-device-detection';
 import { BehaviorAnalyticsService, BehaviorAnalyticsConfig } from './auth/services/BehaviorAnalyticsService';
 import { behaviorAnalyticsRoutes } from './routes/behavior-analytics';
 import referrerPolicyPlugin from './plugins/referrer-policy';
-import { 
-  PayloadEncryptionService, 
+import {
+  PayloadEncryptionService,
   defaultPayloadEncryptionConfig,
   requestEncryptionMiddleware,
   responseEncryptionMiddleware,
-  encryptionStatusMiddleware
+  encryptionStatusMiddleware,
 } from './middleware/payload-encryption';
 import { payloadEncryptionRoutes } from './routes/payload-encryption';
 import { dataClassificationRoutes } from './routes/data-classification';
@@ -175,27 +175,31 @@ const PreviewRequestSchema = z.object({
   graph: z.object({
     nodes: z.array(z.unknown()),
     edges: z.array(z.unknown()).optional(),
-    seed: z.number().optional()
+    seed: z.number().optional(),
   }),
   runs: z.number().int().min(1).max(50).default(5),
-  seedStart: z.number().int().min(1).default(1)
+  seedStart: z.number().int().min(1).default(1),
 });
 
 // Define response schema
 const PreviewResponseSchema = z.object({
-  results: z.array(z.object({
-    seed: z.number(),
-    output: z.string()
-  })),
-  error: z.string().optional(),
-  validationErrors: z.array(
+  results: z.array(
     z.object({
-      code: z.string(),
-      message: z.string(),
-      nodeId: z.string().optional(),
-      severity: z.enum(['error', 'warning']).optional()
+      seed: z.number(),
+      output: z.string(),
     })
-  ).optional()
+  ),
+  error: z.string().optional(),
+  validationErrors: z
+    .array(
+      z.object({
+        code: z.string(),
+        message: z.string(),
+        nodeId: z.string().optional(),
+        severity: z.enum(['error', 'warning']).optional(),
+      })
+    )
+    .optional(),
 });
 
 // Type definitions for TypeScript
@@ -203,13 +207,13 @@ type PreviewRequest = z.infer<typeof PreviewRequestSchema>;
 type PreviewResponse = z.infer<typeof PreviewResponseSchema>;
 
 // Epic 8.5 Performance optimization caches
-const graphValidationCache = new Map<string, { valid: boolean, errors?: unknown[] }>();
+const graphValidationCache = new Map<string, { valid: boolean; errors?: unknown[] }>();
 
 /**
  * Generate multiple outputs from a graph using different seeds
  * Epic 8.5 - Optimized for parallel execution and sub-second performance
  * Epic 13 - Enhanced with analytics tracking for preview executions
- * 
+ *
  * Performance Optimizations:
  * - Shared execution context for all seeds to reduce overhead
  * - Graph validation caching using graph structure hash
@@ -217,50 +221,54 @@ const graphValidationCache = new Map<string, { valid: boolean, errors?: unknown[
  * - Parallel Promise.all execution with minimal overhead
  */
 export async function generatePreviewOutputs(
-  graph: Graph, 
-  runs: number, 
+  graph: Graph,
+  runs: number,
   seedStart: number,
   sessionId?: string,
   userId?: number
-): Promise<Array<{
-  seed: number, 
-  output: string, 
-  executionTimeMs?: number,
-  executionPath?: Record<string, unknown>,
-  weightChoices?: Array<{
-    nodeId: string,
-    selectedOption: unknown,
-    availableOptions: unknown[],
-    weights?: number[],
-    selectionProbability?: number
+): Promise<
+  Array<{
+    seed: number;
+    output: string;
+    executionTimeMs?: number;
+    executionPath?: Record<string, unknown>;
+    weightChoices?: Array<{
+      nodeId: string;
+      selectedOption: unknown;
+      availableOptions: unknown[];
+      weights?: number[];
+      selectionProbability?: number;
+    }>;
   }>
-}>> {
+> {
   const startTime = Date.now();
-  
+
   // Epic 8.5: Generate graph hash for caching
   const graphHash = generateGraphHash(graph);
-  
+
   // Epic 8.5: Pre-validate graph once and cache result
   let validationResult = graphValidationCache.get(graphHash);
   if (!validationResult) {
     validationResult = validateGraph(graph);
     graphValidationCache.set(graphHash, validationResult);
   }
-  
+
   if (!validationResult.valid) {
-    throw new Error(`Graph validation failed: ${validationResult.errors?.map(e => (e as any)?.message || String(e)).join(', ')}`);
+    throw new Error(
+      `Graph validation failed: ${validationResult.errors?.map(e => (e as any)?.message || String(e)).join(', ')}`
+    );
   }
-  
+
   // Epic 8.5: Pre-cache graph information that will be reused
-  
+
   // Epic 8.5: Create optimized execution promises with minimal object creation
   const executionPromises = Array.from({ length: runs }, (_, i) => {
     const seed = seedStart + i;
     const executionStartTime = Date.now();
-    
+
     // Create graph with seed (minimal object creation)
     const graphWithSeed = { ...graph, seed };
-    
+
     return executeGraph(graphWithSeed, sessionId, userId)
       .then(result => ({
         seed,
@@ -269,13 +277,14 @@ export async function generatePreviewOutputs(
         // Epic 8.5-5: Include weight impact information
         executionPath: result.executionPath,
         // Extract weight-specific information for easier frontend consumption
-        weightChoices: result.executionPath?.randomizationPoints?.map(point => ({
-          nodeId: point.nodeId,
-          selectedOption: point.selectedOption,
-          availableOptions: point.availableOptions,
-          weights: point.weights,
-          selectionProbability: point.selectionProbability
-        })) || []
+        weightChoices:
+          result.executionPath?.randomizationPoints?.map(point => ({
+            nodeId: point.nodeId,
+            selectedOption: point.selectedOption,
+            availableOptions: point.availableOptions,
+            weights: point.weights,
+            selectionProbability: point.selectionProbability,
+          })) || [],
       }))
       .catch(error => {
         console.error(`Error generating preview for seed ${seed}:`, error);
@@ -284,23 +293,23 @@ export async function generatePreviewOutputs(
           output: `Error: ${error instanceof Error ? error.message : String(error)}`,
           executionTimeMs: Date.now() - executionStartTime,
           executionPath: undefined,
-          weightChoices: []
+          weightChoices: [],
         };
       });
   });
-  
+
   // Execute all previews in parallel
   const results = await Promise.all(executionPromises);
-  
+
   const totalTime = Date.now() - startTime;
   const avgTime = Math.round(totalTime / runs);
   console.log(`Preview generation: ${runs} seeds completed in ${totalTime}ms (avg: ${avgTime}ms/seed)`);
-  
+
   // Epic 8.5: Log performance warning if not meeting sub-second target
   if (totalTime > 1000) {
     console.warn(`⚠️ Preview generation exceeded 1-second target: ${totalTime}ms for ${runs} seeds`);
   }
-  
+
   return results;
 }
 
@@ -310,16 +319,14 @@ export async function generatePreviewOutputs(
 function generateGraphHash(graph: Graph): string {
   // Create a stable hash from graph structure (excluding seed)
   const graphStructure = {
-    nodes: graph.nodes.map(n => ({ id: n.id, type: n.type, inputs: n.inputs }))
+    nodes: graph.nodes.map(n => ({ id: n.id, type: n.type, inputs: n.inputs })),
   };
   return JSON.stringify(graphStructure);
 }
 
-
-
 // Create server instance
 const server = Fastify({
-  logger: true
+  logger: true,
 });
 
 // Build authentication configuration
@@ -342,16 +349,16 @@ server.decorate('authConfig', authConfig);
 // Initialize database on startup
 try {
   const db = initDatabase();
-  
+
   // Run migrations
   runMigrations();
-  
+
   // Make database available to fastify routes
   server.decorate('db', db);
   // DEPLOYMENT BLOCKER FIX: Add database property as expected by type definitions
   server.decorate('database', db);
   server.decorate('databaseService', db);
-  
+
   console.log('Database initialized successfully');
 } catch (error) {
   console.error('Failed to initialize database:', error);
@@ -388,7 +395,7 @@ try {
 try {
   // Register centralized error handler (this should be registered early)
   server.register(errorHandlerPlugin);
-  
+
   // Initialize health monitoring for critical dependencies
   healthMonitoringService.registerDatabaseHealthCheck(async () => {
     try {
@@ -419,7 +426,7 @@ try {
 
   // Start health monitoring (check every 30 seconds)
   healthMonitoringService.startMonitoring(30000);
-  
+
   console.log('Error Handling & Resilience System initialized successfully');
 } catch (error) {
   console.error('Failed to initialize Error Handling & Resilience System:', error);
@@ -432,20 +439,20 @@ function createAuthConfig() {
     jwtSecret: process.env.JWT_SECRET || 'dev-secret',
     jwtIssuer: 'promptgraph',
     jwtAudience: 'promptgraph-api',
-    database: { 
-      host: process.env.DB_HOST || 'localhost', 
-      port: parseInt(process.env.DB_PORT || '5432'), 
-      database: process.env.DB_NAME || 'dev', 
-      username: process.env.DB_USER || 'postgres', 
+    database: {
+      host: process.env.DB_HOST || 'localhost',
+      port: parseInt(process.env.DB_PORT || '5432'),
+      database: process.env.DB_NAME || 'dev',
+      username: process.env.DB_USER || 'postgres',
       password: process.env.DB_PASSWORD || 'dev',
       ssl: false,
-      poolSize: 10
-  },
-  redis: { 
-    host: process.env.REDIS_HOST || 'localhost', 
-    port: parseInt(process.env.REDIS_PORT || '6379') 
-  },
-  security: {
+      poolSize: 10,
+    },
+    redis: {
+      host: process.env.REDIS_HOST || 'localhost',
+      port: parseInt(process.env.REDIS_PORT || '6379'),
+    },
+    security: {
       passwordMinLength: 8,
       passwordRequireUppercase: true,
       passwordRequireLowercase: true,
@@ -456,9 +463,9 @@ function createAuthConfig() {
       passwordResetTokenExpiry: 60,
       emailVerificationTokenExpiry: 1440,
       sessionTokenExpiry: 60,
-      refreshTokenExpiry: 7
-  },
-  oauth: {
+      refreshTokenExpiry: 7,
+    },
+    oauth: {
       google: {
         clientId: process.env.GOOGLE_CLIENT_ID || '',
         clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
@@ -466,7 +473,7 @@ function createAuthConfig() {
         scopes: ['email', 'profile'],
         authorizationUrl: 'https://accounts.google.com/oauth/authorize',
         tokenUrl: 'https://oauth2.googleapis.com/token',
-        userInfoUrl: 'https://www.googleapis.com/oauth2/v2/userinfo'
+        userInfoUrl: 'https://www.googleapis.com/oauth2/v2/userinfo',
       },
       github: {
         clientId: process.env.GITHUB_CLIENT_ID || '',
@@ -475,7 +482,7 @@ function createAuthConfig() {
         scopes: ['user:email'],
         authorizationUrl: 'https://github.com/login/oauth/authorize',
         tokenUrl: 'https://github.com/login/oauth/access_token',
-        userInfoUrl: 'https://api.github.com/user'
+        userInfoUrl: 'https://api.github.com/user',
       },
       microsoft: {
         clientId: process.env.MICROSOFT_CLIENT_ID || '',
@@ -484,9 +491,9 @@ function createAuthConfig() {
         scopes: ['https://graph.microsoft.com/user.read'],
         authorizationUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
         tokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
-        userInfoUrl: 'https://graph.microsoft.com/v1.0/me'
-      }
-    }
+        userInfoUrl: 'https://graph.microsoft.com/v1.0/me',
+      },
+    },
   };
 }
 
@@ -828,9 +835,8 @@ server.register(referrerPolicyPlugin, {
   strictMode: process.env.REFERRER_POLICY_STRICT_MODE !== 'false',
   enableReporting: process.env.REFERRER_POLICY_REPORTING !== 'false',
   maxViolationHistory: parseInt(process.env.REFERRER_POLICY_MAX_HISTORY || '10000'),
-  cacheTimeout: parseInt(process.env.REFERRER_POLICY_CACHE_TIMEOUT || '3600')
+  cacheTimeout: parseInt(process.env.REFERRER_POLICY_CACHE_TIMEOUT || '3600'),
 });
-
 
 // Initialize security audit service
 let securityAuditService: SecurityAuditService | undefined;
@@ -858,7 +864,7 @@ try {
 server.addHook('onRequest', (request, reply, done) => {
   const origin = request.headers.origin;
   const allowedOrigins = CORS_CONFIG.origin;
-  
+
   if (Array.isArray(allowedOrigins)) {
     if (allowedOrigins.includes('*') || (origin && allowedOrigins.includes(origin))) {
       reply.header('Access-Control-Allow-Origin', origin || '*');
@@ -866,18 +872,18 @@ server.addHook('onRequest', (request, reply, done) => {
   } else if (allowedOrigins === '*' || allowedOrigins === origin) {
     reply.header('Access-Control-Allow-Origin', origin || allowedOrigins);
   }
-  
+
   reply.header('Access-Control-Allow-Methods', CORS_CONFIG.methods.join(', '));
   reply.header('Access-Control-Allow-Headers', CORS_CONFIG.allowedHeaders.join(', '));
   reply.header('Access-Control-Expose-Headers', CORS_CONFIG.exposedHeaders.join(', '));
   reply.header('Access-Control-Allow-Credentials', CORS_CONFIG.credentials.toString());
-  
+
   // Handle preflight requests
   if (request.method === 'OPTIONS') {
     reply.code(204).send();
     return;
   }
-  
+
   done();
 });
 
@@ -889,12 +895,12 @@ server.get('/', async (request, reply) => {
 // Health check endpoint
 server.get('/health', async (request, reply) => {
   const dbHealthy = healthCheck();
-  
-  return { 
+
+  return {
     status: dbHealthy ? 'healthy' : 'unhealthy',
     database: dbHealthy ? 'connected' : 'disconnected',
     websocket: 'disabled', // WebSocket functionality temporarily disabled
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   };
 });
 
@@ -903,7 +909,7 @@ server.get('/health', async (request, reply) => {
 //   const metrics = wsServer.getHealthMetrics();
 //   const sessions = wsServer.getDocumentSessions();
 //   const presenceStats = wsServer.getPresenceStats();
-//   
+//
 //   return {
 //     status: 'running',
 //     metrics,
@@ -916,7 +922,7 @@ server.get('/health', async (request, reply) => {
 // server.get('/ws/documents/:documentId/users', async (request, reply) => {
 //   const { documentId } = request.params as { documentId: string };
 //   const users = wsServer.getDocumentUsers(documentId);
-//   
+//
 //   return {
 //     documentId,
 //     users,
@@ -978,22 +984,22 @@ let analyticsWebSocketServer: any = null; // WebSocket functionality disabled
 
 try {
   const db = getDatabase();
-  
+
   // TEMPORARILY DISABLED - syntax errors
   // Initialize metrics and performance dashboard
   // metricsCollector = new MetricsCollector();
   // performanceDashboard = new PerformanceDashboard(metricsCollector);
-  
+
   // Create analytics DAO (separate from engine's instance for server-specific features)
   analyticsDAO = new AnalyticsDAO(db);
-  
+
   // Create a new analytics collector for server-specific analytics
   const serverAnalyticsCollector = new AnalyticsCollector({
     enabled: process.env.ANALYTICS_ENABLED !== 'false',
     sampleRate: parseFloat(process.env.ANALYTICS_SAMPLE_RATE || '1.0'),
-    privacyMode: process.env.ANALYTICS_PRIVACY_MODE === 'true'
+    privacyMode: process.env.ANALYTICS_PRIVACY_MODE === 'true',
   });
-  
+
   // TEMPORARILY DISABLED - syntax errors
   // costTracker = new CostTracker(serverAnalyticsCollector, analyticsDAO);
   // TEMPORARILY DISABLED - syntax errors
@@ -1005,7 +1011,7 @@ try {
   // );
 
   // Set up analytics event storage
-  serverAnalyticsCollector.on('events_flushed', (events) => {
+  serverAnalyticsCollector.on('events_flushed', events => {
     events.forEach((event: any) => analyticsDAO.storeEvent(event));
   });
 
@@ -1054,12 +1060,12 @@ try {
 // TEMPORARILY DISABLED - compilation issues
 // server.register(approvalRoutes, { prefix: '/api/approval' });
 
-// Register locking routes  
+// Register locking routes
 // TEMPORARILY DISABLED - compilation issues
 // server.register(lockingRoutes, { prefix: '/api/locking' });
 
 // Register randomizer routes
-// TEMPORARILY DISABLED - syntax errors  
+// TEMPORARILY DISABLED - syntax errors
 // server.register(randomizerRoutes, { prefix: '/api/randomizer' });
 
 // Register ticket routes
@@ -1102,11 +1108,14 @@ try {
 // Register marketplace routes
 try {
   const db = getDatabase();
-  server.register(async (fastify) => {
-    await marketplaceRoutes(fastify, db as any);
-    await communityRoutes(fastify, db as any);
-    await knowledgeBaseRoutes(fastify, db as any);
-  }, { prefix: '/api/marketplace' });
+  server.register(
+    async fastify => {
+      await marketplaceRoutes(fastify, db as any);
+      await communityRoutes(fastify, db as any);
+      await knowledgeBaseRoutes(fastify, db as any);
+    },
+    { prefix: '/api/marketplace' }
+  );
   console.log('Marketplace routes registered successfully');
 } catch (error) {
   console.error('Failed to register marketplace routes:', error);
@@ -1124,10 +1133,13 @@ try {
 try {
   const db = getDatabase();
   const featureToggleDAO = new FeatureToggleDAO(db as any);
-  
-  server.register(async (fastify) => {
-    await toggleStateRoutes(fastify, { dao: featureToggleDAO });
-  }, { prefix: '/api/toggle-state' });
+
+  server.register(
+    async fastify => {
+      await toggleStateRoutes(fastify, { dao: featureToggleDAO });
+    },
+    { prefix: '/api/toggle-state' }
+  );
   console.log('Toggle state routes registered successfully');
 } catch (error) {
   console.error('Failed to register toggle state routes:', error);
@@ -1136,10 +1148,13 @@ try {
 // Register toggle parameters routes (Epic 17 - Server Integration)
 try {
   const db = getDatabase();
-  
-  server.register(async (fastify) => {
-    await toggleParametersRoutes(fastify, { db });
-  }, { prefix: '/api/toggle-parameters' });
+
+  server.register(
+    async fastify => {
+      await toggleParametersRoutes(fastify, { db });
+    },
+    { prefix: '/api/toggle-parameters' }
+  );
   console.log('Toggle parameters routes registered successfully');
 } catch (error) {
   console.error('Failed to register toggle parameters routes:', error);
@@ -1148,9 +1163,12 @@ try {
 // Register security audit routes
 if (securityAuditService) {
   try {
-    server.register(async (fastify) => {
-      await securityAuditRoutes(fastify, securityAuditService!);
-    }, { prefix: '/api' });
+    server.register(
+      async fastify => {
+        await securityAuditRoutes(fastify, securityAuditService!);
+      },
+      { prefix: '/api' }
+    );
     console.log('Security audit routes registered successfully');
   } catch (error) {
     console.error('Failed to register security audit routes:', error);
@@ -1163,10 +1181,13 @@ try {
   const authConfig = createAuthConfig();
   const auditService = new AuditService(authConfig, db as any);
   const totpService = new TOTPService(db, undefined, auditService); // Redis will be initialized separately
-  
-  server.register(async (fastify) => {
-    await totpRoutes(fastify, totpService);
-  }, { prefix: '/api' });
+
+  server.register(
+    async fastify => {
+      await totpRoutes(fastify, totpService);
+    },
+    { prefix: '/api' }
+  );
   console.log('TOTP routes registered successfully');
 } catch (error) {
   console.error('Failed to register TOTP routes:', error);
@@ -1175,9 +1196,12 @@ try {
 // Register timeout management routes
 if (timeoutMonitoringService) {
   try {
-    server.register(async (fastify) => {
-      await timeoutManagementRoutes(fastify, timeoutMonitoringService);
-    }, { prefix: '/api/timeout' });
+    server.register(
+      async fastify => {
+        await timeoutManagementRoutes(fastify, timeoutMonitoringService);
+      },
+      { prefix: '/api/timeout' }
+    );
     console.log('Timeout management routes registered successfully');
   } catch (error) {
     console.error('Failed to register timeout management routes:', error);
@@ -1187,9 +1211,12 @@ if (timeoutMonitoringService) {
 // Register anomaly detection routes
 if (anomalyDetectionService) {
   try {
-    server.register(async (fastify) => {
-      await anomalyDetectionRoutes(fastify, anomalyDetectionService);
-    }, { prefix: '/api/security' });
+    server.register(
+      async fastify => {
+        await anomalyDetectionRoutes(fastify, anomalyDetectionService);
+      },
+      { prefix: '/api/security' }
+    );
     console.log('Anomaly detection routes registered successfully');
   } catch (error) {
     console.error('Failed to register anomaly detection routes:', error);
@@ -1199,9 +1226,12 @@ if (anomalyDetectionService) {
 // Register verification threshold routes
 if (verificationThresholdService) {
   try {
-    server.register(async (fastify) => {
-      await verificationThresholdRoutes(fastify, verificationThresholdService);
-    }, { prefix: '/api/auth' });
+    server.register(
+      async fastify => {
+        await verificationThresholdRoutes(fastify, verificationThresholdService);
+      },
+      { prefix: '/api/auth' }
+    );
     console.log('Verification threshold routes registered successfully');
   } catch (error) {
     console.error('Failed to register verification threshold routes:', error);
@@ -1211,9 +1241,12 @@ if (verificationThresholdService) {
 // Register location detection routes
 if (locationDetectionService) {
   try {
-    server.register(async (fastify) => {
-      await locationDetectionRoutes(fastify, locationDetectionService);
-    }, { prefix: '/api/security' });
+    server.register(
+      async fastify => {
+        await locationDetectionRoutes(fastify, locationDetectionService);
+      },
+      { prefix: '/api/security' }
+    );
     console.log('Location detection routes registered successfully');
   } catch (error) {
     console.error('Failed to register location detection routes:', error);
@@ -1223,9 +1256,12 @@ if (locationDetectionService) {
 // Register location history analysis routes
 if (locationHistoryAnalysisService) {
   try {
-    server.register(async (fastify) => {
-      await locationHistoryAnalysisRoutes(fastify, locationHistoryAnalysisService);
-    }, { prefix: '/api/security' });
+    server.register(
+      async fastify => {
+        await locationHistoryAnalysisRoutes(fastify, locationHistoryAnalysisService);
+      },
+      { prefix: '/api/security' }
+    );
     console.log('Location history analysis routes registered successfully');
   } catch (error) {
     console.error('Failed to register location history analysis routes:', error);
@@ -1235,9 +1271,12 @@ if (locationHistoryAnalysisService) {
 // Register device fingerprinting routes
 if (deviceFingerprintingService) {
   try {
-    server.register(async (fastify) => {
-      await deviceFingerprintingRoutes(fastify, deviceFingerprintingService);
-    }, { prefix: '/api' });
+    server.register(
+      async fastify => {
+        await deviceFingerprintingRoutes(fastify, deviceFingerprintingService);
+      },
+      { prefix: '/api' }
+    );
     console.log('Device fingerprinting routes registered successfully');
   } catch (error) {
     console.error('Failed to register device fingerprinting routes:', error);
@@ -1247,9 +1286,12 @@ if (deviceFingerprintingService) {
 // Register behavior analytics routes
 if (behaviorAnalyticsService) {
   try {
-    server.register(async (fastify) => {
-      await behaviorAnalyticsRoutes(fastify, behaviorAnalyticsService);
-    }, { prefix: '/api' });
+    server.register(
+      async fastify => {
+        await behaviorAnalyticsRoutes(fastify, behaviorAnalyticsService);
+      },
+      { prefix: '/api' }
+    );
     console.log('Behavior analytics routes registered successfully');
   } catch (error) {
     console.error('Failed to register behavior analytics routes:', error);
@@ -1259,9 +1301,12 @@ if (behaviorAnalyticsService) {
 // Register payload encryption routes
 if (payloadEncryptionService) {
   try {
-    server.register(async (fastify) => {
-      await payloadEncryptionRoutes(fastify, payloadEncryptionService);
-    }, { prefix: '/api' });
+    server.register(
+      async fastify => {
+        await payloadEncryptionRoutes(fastify, payloadEncryptionService);
+      },
+      { prefix: '/api' }
+    );
     console.log('Payload encryption routes registered successfully');
   } catch (error) {
     console.error('Failed to register payload encryption routes:', error);
@@ -1271,9 +1316,12 @@ if (payloadEncryptionService) {
 // Register data classification routes
 if (dataClassificationService) {
   try {
-    server.register(async (fastify) => {
-      await dataClassificationRoutes(fastify, dataClassificationService);
-    }, { prefix: '/api' });
+    server.register(
+      async fastify => {
+        await dataClassificationRoutes(fastify, dataClassificationService);
+      },
+      { prefix: '/api' }
+    );
     console.log('Data classification routes registered successfully');
   } catch (error) {
     console.error('Failed to register data classification routes:', error);
@@ -1283,9 +1331,12 @@ if (dataClassificationService) {
 // Register audit team collaboration routes
 if (auditTeamCollaborationService) {
   try {
-    server.register(async (fastify) => {
-      await auditTeamCollaborationRoutes(fastify, auditTeamCollaborationService);
-    }, { prefix: '/api/audit-collaboration' });
+    server.register(
+      async fastify => {
+        await auditTeamCollaborationRoutes(fastify, auditTeamCollaborationService);
+      },
+      { prefix: '/api/audit-collaboration' }
+    );
     console.log('Audit team collaboration routes registered successfully');
   } catch (error) {
     console.error('Failed to register audit team collaboration routes:', error);
@@ -1304,9 +1355,9 @@ try {
 try {
   const db = getDatabase();
   const authConfig = createAuthConfig();
-  
+
   const auditService = new AuditService(authConfig, db as any);
-  
+
   // TEMPORARILY DISABLED - Policy and compliance services (non-essential for core functionality)
   let dataClassificationService: any = null;
   let keyManagementService: any = null;
@@ -1320,7 +1371,7 @@ try {
   let policyNotificationService: any = null;
   let complianceReportingService: any = null;
   let consentCollectionService: any = null;
-  
+
   /*
   try {
     dataClassificationService = new DataClassificationService(
@@ -1395,13 +1446,10 @@ try {
     consentCollectionService = new ConsentCollectionService(auditService);
   } catch (e) { console.log('ConsentCollectionService init failed:', e); }
   */
-  
+
   // Initialize Model Evaluation Trigger Service (Epic 26.3)
-  const modelEvaluationService = new ModelEvaluationTriggerService(
-    defaultModelEvaluationConfig,
-    auditService
-  );
-  
+  const modelEvaluationService = new ModelEvaluationTriggerService(defaultModelEvaluationConfig, auditService);
+
   // Initialize Financial Data Lifecycle Service for Epic 19.2.6
   const dataLifecycleAutomationService = new DataLifecycleAutomationService(
     db as any,
@@ -1417,7 +1465,7 @@ try {
     dataRetentionFrameworkService,
     dataClassificationService
   );
-  
+
   // Make the services available to routes via Fastify's dependency injection
   // DEPLOYMENT BLOCKER FIX: Add auditService property as expected by type definitions
   server.decorate('auditService', auditService);
@@ -1433,7 +1481,7 @@ try {
   server.decorate('consentCollectionService', consentCollectionService);
   server.decorate('financialDataLifecycleService', financialDataLifecycleService);
   server.decorate('modelEvaluationService', modelEvaluationService);
-  
+
   server.register(dataAccessRoutes, { prefix: '/api/data-access' });
   server.register(auditWorkflowRoutes, { prefix: '/api/audit-workflow' });
   server.register(accessRequestWorkflowRoutes, { prefix: '/api/access-request-workflow' });
@@ -1451,25 +1499,28 @@ try {
   server.register(cryptographicEvidenceRoutes, { prefix: '/api/cryptographic-evidence' });
   server.register(openidConnectRoutes, { prefix: '/auth/oidc' });
   server.register(modelEvaluationWebhooks, { prefix: '/api/model-evaluation' });
-  
+
   // Register Epic 23 collaboration routes - conflict resolution
   try {
     const epic23WorkspaceDAO = new Epic23WorkspaceDAO(db as any);
-    server.register(async (fastify) => {
-      await conflictResolutionRoutes(fastify, epic23WorkspaceDAO);
-    }, { prefix: '/api/collaboration' });
+    server.register(
+      async fastify => {
+        await conflictResolutionRoutes(fastify, epic23WorkspaceDAO);
+      },
+      { prefix: '/api/collaboration' }
+    );
     console.log('Epic 23 conflict resolution routes registered successfully');
   } catch (error) {
     console.error('Failed to register Epic 23 conflict resolution routes:', error);
   }
-  
+
   console.log(
     'Epic 19 security platform routes registered successfully: data access, ' +
-    'audit workflow, access request workflow, policy update workflow, ' +
-    'policy acceptance tracking, OAuth guidance, policy authoring, ' +
-    'policy notifications, compliance reporting, consent collection, ' +
-    'financial data lifecycle management, healthcare & life sciences toolkit, ' +
-    'training data management, cryptographic evidence signing, OpenID Connect, and model evaluation'
+      'audit workflow, access request workflow, policy update workflow, ' +
+      'policy acceptance tracking, OAuth guidance, policy authoring, ' +
+      'policy notifications, compliance reporting, consent collection, ' +
+      'financial data lifecycle management, healthcare & life sciences toolkit, ' +
+      'training data management, cryptographic evidence signing, OpenID Connect, and model evaluation'
   );
 
   // Register System Monitoring & Error Handling routes
@@ -1481,15 +1532,18 @@ try {
     const analyticsCollector = new AnalyticsCollector(db as any);
     const tokenInfluenceAnalyzer = TokenInfluenceAnalyzer.getInstance(analyticsCollector);
     const promptAnalyzer = PromptAnalyzer.getInstance(analyticsCollector);
-    
-    server.register(async (fastify) => {
-      await modelInterpretationRoutes(fastify, {
-        tokenAnalyzer: tokenInfluenceAnalyzer,
-        promptAnalyzer,
-        analyticsCollector
-      });
-    }, { prefix: '/api' });
-    
+
+    server.register(
+      async fastify => {
+        await modelInterpretationRoutes(fastify, {
+          tokenAnalyzer: tokenInfluenceAnalyzer,
+          promptAnalyzer,
+          analyticsCollector,
+        });
+      },
+      { prefix: '/api' }
+    );
+
     console.log('Model interpretation and token analysis routes registered successfully');
   } catch (error) {
     console.error('Failed to register model interpretation routes:', error);
@@ -1510,8 +1564,8 @@ server.get('/preview', async (request, reply) => {
       meta: { version: '0.1.0', seed: 12345 },
       nodes: [],
       edges: [],
-      preview: 'This is a dummy prompt preview.'
-    }
+      preview: 'This is a dummy prompt preview.',
+    },
   };
 });
 
@@ -1527,8 +1581,8 @@ server.post<{
       properties: {
         graph: { type: 'object' },
         runs: { type: 'integer', minimum: 1, maximum: 50, default: 5 },
-        seedStart: { type: 'integer', minimum: 1, default: 1 }
-      }
+        seedStart: { type: 'integer', minimum: 1, default: 1 },
+      },
     },
     response: {
       200: {
@@ -1540,78 +1594,78 @@ server.post<{
               type: 'object',
               properties: {
                 seed: { type: 'integer' },
-                output: { type: 'string' }
-              }
-            }
+                output: { type: 'string' },
+              },
+            },
           },
-          error: { type: 'string' }
-        }
-      }
-    }
+          error: { type: 'string' },
+        },
+      },
+    },
   },
   handler: async (request, reply) => {
     // Feature flag check
     if (!ENABLE_PREVIEW_API) {
-      reply.status(503).send({ 
+      reply.status(503).send({
         results: [],
-        error: 'Preview API is currently disabled. Please try again later.'
+        error: 'Preview API is currently disabled. Please try again later.',
       });
       return;
     }
-    
+
     try {
       const { graph, runs = 5, seedStart = 1 } = request.body;
-      
+
       // Validate request with Zod
-            
+
       // Validate graph structure and rules
       const validationResult = validateGraph(graph);
-      
+
       if (!validationResult.valid) {
         // Return validation errors
         reply.status(400).send({
           results: [],
           error: 'Graph validation failed',
-          validationErrors: validationResult.errors
+          validationErrors: validationResult.errors,
         });
         return;
       }
-      
+
       // Generate previews with analytics tracking
       const sessionId = request.headers['x-session-id'];
       const userId = request.headers['x-user-id'] ? parseInt(request.headers['x-user-id']) : undefined;
-      
+
       const results = await generatePreviewOutputs(graph, runs, seedStart, sessionId, userId);
-      
+
       return { results };
     } catch (error: unknown) {
       request.log.error(error);
-      
+
       // Return appropriate error response
       if (error instanceof z.ZodError) {
-        reply.status(400).send({ 
+        reply.status(400).send({
           results: [],
-          error: `Invalid request: ${error.message}`
+          error: `Invalid request: ${error.message}`,
         });
       } else {
-        reply.status(500).send({ 
+        reply.status(500).send({
           results: [],
-          error: `Server error: ${error instanceof Error ? error.message : String(error)}`
+          error: `Server error: ${error instanceof Error ? error.message : String(error)}`,
         });
       }
     }
-  }
+  },
 });
 
 // Export endpoint - Convert graph to GeneratorBundle format
 server.post<{
-  Body: { 
-    graph: Graph; 
-    options: { 
-      name: string; 
-      version?: string; 
-      author?: string; 
-    } 
+  Body: {
+    graph: Graph;
+    options: {
+      name: string;
+      version?: string;
+      author?: string;
+    };
   };
 }>('/export', {
   schema: {
@@ -1626,59 +1680,59 @@ server.post<{
           properties: {
             name: { type: 'string', minLength: 1 },
             version: { type: 'string' },
-            author: { type: 'string' }
-          }
-        }
-      }
+            author: { type: 'string' },
+          },
+        },
+      },
     },
     response: {
       200: {
         type: 'object',
         properties: {
           bundle: { type: 'object' },
-          filename: { type: 'string' }
-        }
-      }
-    }
+          filename: { type: 'string' },
+        },
+      },
+    },
   },
   handler: async (request, reply) => {
     try {
       const { graph, options } = request.body;
-      
+
       // Validate graph structure
       const validationResult = validateGraph(graph);
-      
+
       if (!validationResult.valid) {
         reply.status(400).send({
           error: 'Graph validation failed',
-          validationErrors: validationResult.errors
+          validationErrors: validationResult.errors,
         });
         return;
       }
-      
+
       // TEMPORARILY DISABLED - exporter has compilation issues
       // Convert graph to GeneratorBundle
       // const bundle = graphToBundle(graph, options);
-      const bundle = { 
-        error: "Export functionality temporarily disabled",
-        metadata: { version: "0.1.0-alpha" }
+      const bundle = {
+        error: 'Export functionality temporarily disabled',
+        metadata: { version: '0.1.0-alpha' },
       };
-      
+
       // Generate filename
       const safeName = options.name.replace(/[^a-zA-Z0-9-_]/g, '_');
       const filename = `${safeName}_v${bundle.metadata.version}.bundle.json`;
-      
-      return { 
+
+      return {
         bundle,
-        filename
+        filename,
       };
     } catch (error: unknown) {
       request.log.error(error);
       reply.status(500).send({
-        error: `Export failed: ${error instanceof Error ? error.message : String(error)}`
+        error: `Export failed: ${error instanceof Error ? error.message : String(error)}`,
       });
     }
-  }
+  },
 });
 
 // Start server
@@ -1786,7 +1840,7 @@ const start = async () => {
       try {
         // Set Redis service on key management service
         (keyManagementService as any).redis = redisService;
-        
+
         // Initialize payload encryption service
         await payloadEncryptionService.initialize();
         console.log('Payload encryption service started successfully');
@@ -1806,7 +1860,7 @@ const start = async () => {
     // try {
     //   await wsServer.start();
     //   console.log(`WebSocket server started on port ${wsConfig.port}`);
-    //   
+    //
     //   // Set up WebSocket event handlers
     //   wsServer.on('graph_update', (documentId, updatePayload, connectionInfo) => {
     //     console.log(`Graph update for document ${documentId} by user ${connectionInfo.userId}`);
@@ -1821,7 +1875,6 @@ const start = async () => {
     //   console.error('Failed to start WebSocket server:', wsError);
     //   // Continue without WebSocket functionality for now
     // }
-
   } catch (err) {
     server.log.error(err);
     process.exit(1);

@@ -13,11 +13,11 @@ import { PlatformAdapter } from './usePlatformAdapter';
 export class ReactNativeAdapter implements PlatformAdapter {
   // Event handling
   handlePress = (callback: () => void) => ({
-    onPress: callback
+    onPress: callback,
   });
 
   handleLongPress = (callback: () => void) => ({
-    onLongPress: callback
+    onLongPress: callback,
   });
 
   handleHover = (_callback: () => void) => {
@@ -95,7 +95,7 @@ export class ReactNativeAdapter implements PlatformAdapter {
       const feedbackTypes = {
         light: HapticFeedback.HapticFeedbackTypes.impactLight,
         medium: HapticFeedback.HapticFeedbackTypes.impactMedium,
-        heavy: HapticFeedback.HapticFeedbackTypes.impactHeavy
+        heavy: HapticFeedback.HapticFeedbackTypes.impactHeavy,
       };
       HapticFeedback.trigger(feedbackTypes[type]);
     } catch (error) {
@@ -118,7 +118,7 @@ export class ReactNativeAdapter implements PlatformAdapter {
       await { share: () => Promise.resolve() }.share({
         title: content.title,
         message: content.text || content.url || '',
-        url: content.url
+        url: content.url,
       });
     } catch (error) {
       console.warn('Failed to share content:', error);
@@ -128,7 +128,7 @@ export class ReactNativeAdapter implements PlatformAdapter {
 
   // Layout measurements
   measureElement = async (element: unknown): Promise<{ width: number; height: number; x: number; y: number }> => {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       if (element && element.measure) {
         element.measure((x: number, y: number, width: number, height: number) => {
           resolve({ width, height, x, y });
@@ -140,17 +140,13 @@ export class ReactNativeAdapter implements PlatformAdapter {
   };
 
   // Animation (using React Native Animated API)
-  createAnimation = (config: {
-    duration?: number;
-    easing?: unknown;
-    useNativeDriver?: boolean;
-  }) => {
+  createAnimation = (config: { duration?: number; easing?: unknown; useNativeDriver?: boolean }) => {
     try {
       // Would use Animated and Easing from React Native in actual RN environment
       return {
         duration: config.duration || 300,
         easing: config.easing || Easing.ease,
-        useNativeDriver: config.useNativeDriver !== false
+        useNativeDriver: config.useNativeDriver !== false,
       };
     } catch {
       return config;
@@ -222,19 +218,19 @@ export class ReactNativeAdapter implements PlatformAdapter {
   getDeviceInfo = () => {
     try {
       // Would use Platform and DeviceInfo from React Native in actual RN environment
-      
+
       return {
         model: DeviceInfo.getModel(),
         brand: DeviceInfo.getBrand(),
         osVersion: Platform.Version,
-        appVersion: DeviceInfo.getVersion()
+        appVersion: DeviceInfo.getVersion(),
       };
     } catch {
       return {
         model: 'Unknown',
         brand: 'React Native',
         osVersion: 'Unknown',
-        appVersion: '1.0.0'
+        appVersion: '1.0.0',
       };
     }
   };

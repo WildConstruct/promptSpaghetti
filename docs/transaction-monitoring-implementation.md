@@ -5,6 +5,7 @@ This document describes the implementation of the transaction monitoring and ano
 ## Overview
 
 The transaction monitoring system provides comprehensive admin capabilities for:
+
 - Advanced transaction search and filtering
 - Real-time anomaly detection and fraud prevention
 - Risk assessment and scoring
@@ -17,6 +18,7 @@ The transaction monitoring system provides comprehensive admin capabilities for:
 ### Core Services
 
 #### 1. TransactionMonitoringService (`server/src/services/TransactionMonitoringService.ts`)
+
 - **Primary responsibility**: Administrative transaction management and analysis
 - **Key features**:
   - Advanced transaction search with filtering
@@ -27,6 +29,7 @@ The transaction monitoring system provides comprehensive admin capabilities for:
   - Integration with existing transaction system
 
 #### 2. TransactionAnomalyDetectionService (`server/src/services/TransactionAnomalyDetectionService.ts`)
+
 - **Primary responsibility**: Automated anomaly detection and fraud prevention
 - **Key features**:
   - Real-time anomaly detection across multiple patterns
@@ -48,6 +51,7 @@ The transaction monitoring system provides comprehensive admin capabilities for:
 7. **transaction_monitoring_config**: System configuration
 
 #### Indexes and Performance Optimizations
+
 - Strategic B-tree indexes for date ranges, status filters, and user lookups
 - GIN indexes for JSONB columns (evidence, metadata)
 - Partitioned tables for high-volume audit logs
@@ -56,6 +60,7 @@ The transaction monitoring system provides comprehensive admin capabilities for:
 ### API Routes (`server/src/routes/transaction-monitoring.ts`)
 
 #### Admin Transaction Management
+
 - `GET /admin/transactions/search` - Advanced transaction search
 - `GET /admin/transactions/:id` - Detailed transaction view
 - `PUT /admin/transactions/:id/status` - Update transaction status
@@ -63,53 +68,63 @@ The transaction monitoring system provides comprehensive admin capabilities for:
 - `POST /admin/transactions/:id/flag` - Flag for manual review
 
 #### Analytics & Reporting
+
 - `GET /admin/transactions/analytics/summary` - Transaction metrics
 - `POST /admin/transactions/reports/generate` - Generate reports
 - `GET /admin/transactions/export` - Export transaction data
 
 #### Anomaly Detection
+
 - `GET /admin/transactions/anomalies` - View active anomalies
 - `PUT /admin/transactions/anomalies/:id/status` - Update anomaly status
 - `GET /admin/transactions/fraud-rings` - Detected fraud rings
 - `POST /admin/transactions/:id/analyze-anomalies` - Manual analysis trigger
 
 #### Dashboard
+
 - `GET /admin/transactions/dashboard` - Real-time dashboard metrics
 
 ## Anomaly Detection Patterns
 
 ### 1. Velocity Anomalies
+
 - **Count-based**: More than X transactions in time window
 - **Amount-based**: More than $X spent in time window
 - **Thresholds**: Configurable per pattern
 - **Time windows**: 15m, 1h, 24h, 7d
 
 ### 2. Amount Anomalies
+
 - **Statistical analysis**: Deviation from user's historical patterns
 - **Fixed thresholds**: $1000+ (medium), $5000+ (critical)
 - **Confidence scoring**: Based on statistical significance
 
 ### 3. Behavioral Anomalies
+
 - **Failed payment patterns**: Multiple failures before success
 - **Card testing detection**: Small amount probing
 - **Payment method cycling**: Multiple methods in short time
 
 ### 4. Payment Method Anomalies
+
 - **Shared payment methods**: Same method across multiple accounts
 - **Fraud ring indicators**: Coordinated payment method usage
 
 ### 5. Temporal Anomalies
+
 - **Unusual timing**: Transactions at atypical hours
 - **User pattern deviation**: Outside normal activity windows
 
 ## Fraud Ring Detection
 
 ### Detection Methods
+
 1. **Shared Payment Methods**: Groups using same payment instruments
 2. **Transaction Patterns**: Identical amounts, timing, or sequences
 3. **Network Analysis**: IP address clustering (future enhancement)
 
 ### Risk Scoring
+
 - **Confidence levels**: 0.0 - 1.0 scale
 - **Multi-factor analysis**: Payment methods + timing + patterns
 - **Threshold-based classification**: Suspected vs. Confirmed
@@ -117,12 +132,14 @@ The transaction monitoring system provides comprehensive admin capabilities for:
 ## Integration Points
 
 ### Existing System Integration
+
 - **Transaction Service**: Extends `server/src/marketplace/transaction.service.ts`
 - **Database**: Uses existing transaction tables + new monitoring tables
 - **Auth System**: Leverages existing admin role checks
 - **Audit System**: Integrates with existing audit logging
 
 ### Admin Dashboard Integration
+
 - **React Components**: Ready for Epic 19 admin dashboard
 - **Real-time Updates**: WebSocket-ready for live notifications
 - **Role-based Access**: Admin and transaction_admin roles
@@ -130,6 +147,7 @@ The transaction monitoring system provides comprehensive admin capabilities for:
 ## Configuration
 
 ### Default Patterns
+
 ```json
 {
   "velocity_threshold": 5,
@@ -142,6 +160,7 @@ The transaction monitoring system provides comprehensive admin capabilities for:
 ```
 
 ### Alert Settings
+
 ```json
 {
   "email_enabled": true,
@@ -153,6 +172,7 @@ The transaction monitoring system provides comprehensive admin capabilities for:
 ```
 
 ### Fraud Ring Detection
+
 ```json
 {
   "min_users_for_ring": 3,
@@ -166,11 +186,13 @@ The transaction monitoring system provides comprehensive admin capabilities for:
 ## Security Considerations
 
 ### Access Control
+
 - **Admin-only APIs**: All endpoints require admin or transaction_admin role
 - **Audit logging**: All admin actions are logged with user attribution
 - **Data anonymization**: PII handling in compliance with privacy requirements
 
 ### Data Protection
+
 - **Encryption**: Sensitive data encrypted at rest
 - **Access logging**: All data access logged for compliance
 - **Retention policies**: Configurable data retention periods
@@ -178,12 +200,14 @@ The transaction monitoring system provides comprehensive admin capabilities for:
 ## Testing
 
 ### Test Coverage (`server/src/__tests__/transaction-monitoring.test.ts`)
+
 - **Unit tests**: Service method validation
 - **Integration tests**: Cross-service workflows
 - **Error handling**: Edge cases and failure scenarios
 - **Mock data**: Comprehensive test data factories
 
 ### Test Categories
+
 1. **Transaction Search**: Filtering, pagination, sorting
 2. **Anomaly Detection**: Pattern recognition accuracy
 3. **Risk Analysis**: Scoring algorithm validation
@@ -193,12 +217,14 @@ The transaction monitoring system provides comprehensive admin capabilities for:
 ## Performance Considerations
 
 ### Database Optimization
+
 - **Indexing strategy**: Optimized for common query patterns
 - **Query optimization**: Efficient joins and aggregations
 - **Caching**: Redis caching for frequent lookups
 - **Pagination**: Efficient large dataset handling
 
 ### Scalability
+
 - **Async processing**: Background anomaly detection
 - **Rate limiting**: API throttling for admin endpoints
 - **Resource monitoring**: Memory and CPU usage tracking
@@ -207,12 +233,14 @@ The transaction monitoring system provides comprehensive admin capabilities for:
 ## Monitoring & Alerting
 
 ### System Health
+
 - **Service availability**: Health check endpoints
 - **Performance metrics**: Response time tracking
 - **Error rates**: Exception monitoring
 - **Resource usage**: Memory, CPU, database connections
 
 ### Business Metrics
+
 - **Detection accuracy**: True positive/false positive rates
 - **Response times**: Admin action to resolution time
 - **Coverage**: Percentage of transactions monitored
@@ -221,12 +249,14 @@ The transaction monitoring system provides comprehensive admin capabilities for:
 ## Deployment
 
 ### Prerequisites
+
 - **Database migration**: Run transaction monitoring schema
 - **Environment variables**: Configure detection thresholds
 - **Role setup**: Ensure admin roles are configured
 - **Monitoring**: Set up alerts and dashboards
 
 ### Configuration Steps
+
 1. Run database migration: `2024-01-22-transaction-monitoring.sql`
 2. Configure anomaly detection patterns
 3. Set up alert notifications
@@ -236,6 +266,7 @@ The transaction monitoring system provides comprehensive admin capabilities for:
 ## Future Enhancements
 
 ### Phase 2 Features
+
 - **Machine learning models**: Advanced pattern recognition
 - **Real-time streaming**: Event-driven detection
 - **Geographic analysis**: Location-based risk assessment
@@ -243,6 +274,7 @@ The transaction monitoring system provides comprehensive admin capabilities for:
 - **Automated actions**: Self-healing fraud prevention
 
 ### Integration Opportunities
+
 - **Epic 14**: A/B testing for detection algorithms
 - **Epic 13**: Enhanced analytics dashboard
 - **Epic 16**: Marketplace-specific fraud patterns
@@ -251,7 +283,9 @@ The transaction monitoring system provides comprehensive admin capabilities for:
 ## API Documentation
 
 ### Authentication
+
 All endpoints require admin authentication:
+
 ```typescript
 headers: {
   'Authorization': 'Bearer <admin_token>',
@@ -260,6 +294,7 @@ headers: {
 ```
 
 ### Search Transactions
+
 ```typescript
 GET /admin/transactions/search?minAmount=10000&startDate=2024-01-01&page=1&limit=50
 
@@ -273,6 +308,7 @@ Response: {
 ```
 
 ### Get Anomalies
+
 ```typescript
 GET /admin/transactions/anomalies?severity=high&limit=20
 
@@ -282,6 +318,7 @@ Response: {
 ```
 
 ### Generate Report
+
 ```typescript
 POST /admin/transactions/reports/generate
 {
@@ -300,6 +337,7 @@ Response: {
 ## Conclusion
 
 The transaction monitoring system provides a comprehensive foundation for Epic 17.5.3, delivering:
+
 - **Real-time fraud detection** with configurable patterns
 - **Advanced admin tools** for transaction investigation
 - **Scalable architecture** ready for high transaction volumes

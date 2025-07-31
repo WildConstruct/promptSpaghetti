@@ -11,6 +11,7 @@ This document outlines the enhanced workspace data model design for Epic 23, bui
 ## Current Architecture Assessment
 
 ### Existing Strengths
+
 - ✅ **Mature Authentication System**: JWT + OAuth2 with MFA support
 - ✅ **Sophisticated RBAC**: Bitmask permissions (21+ granular types)
 - ✅ **Multi-tenant Architecture**: Workspace-based isolation
@@ -19,6 +20,7 @@ This document outlines the enhanced workspace data model design for Epic 23, bui
 - ✅ **Audit & Activity Tracking**: Comprehensive logging system
 
 ### Enhancement Requirements for Epic 23
+
 - 🎯 **Real-time Collaboration**: Live cursors, selections, collaborative editing
 - 🎯 **Advanced Permissions**: Fine-grained resource-level permissions
 - 🎯 **Resource Quotas**: Workspace limits and usage tracking
@@ -45,21 +47,21 @@ export interface EnhancedWorkspace extends Workspace {
 
   // Epic 23 Enhancements
   collaboration_settings: {
-    max_concurrent_editors: number;      // Default: 10
-    auto_save_interval: number;          // Milliseconds, default: 5000
+    max_concurrent_editors: number; // Default: 10
+    auto_save_interval: number; // Milliseconds, default: 5000
     conflict_resolution: 'last_writer_wins' | 'operational_transform' | 'manual';
-    real_time_cursors: boolean;          // Show live cursors
-    allow_anonymous_viewers: boolean;    // Guest access
-    session_timeout: number;             // Minutes, default: 30
+    real_time_cursors: boolean; // Show live cursors
+    allow_anonymous_viewers: boolean; // Guest access
+    session_timeout: number; // Minutes, default: 30
   };
-  
+
   resource_quotas: {
-    max_projects: number;                // Default: 100
-    max_resources_per_project: number;   // Default: 1000
-    max_storage_bytes: number;           // Default: 1GB
-    max_concurrent_sessions: number;     // Default: 25
+    max_projects: number; // Default: 100
+    max_resources_per_project: number; // Default: 1000
+    max_storage_bytes: number; // Default: 1GB
+    max_concurrent_sessions: number; // Default: 25
   };
-  
+
   usage_stats: {
     current_projects: number;
     current_resources: number;
@@ -67,11 +69,11 @@ export interface EnhancedWorkspace extends Workspace {
     active_sessions: number;
     last_activity_at: Date;
   };
-  
+
   // Collaborative state
-  active_sessions: number;               // Current active sessions
-  last_collaborative_activity: Date;    // Last real-time edit
-  version: number;                       // Workspace version for optimistic locking
+  active_sessions: number; // Current active sessions
+  last_collaborative_activity: Date; // Last real-time edit
+  version: number; // Workspace version for optimistic locking
 }
 ```
 
@@ -79,15 +81,15 @@ export interface EnhancedWorkspace extends Workspace {
 
 ```typescript
 export enum IsolationLevel {
-  STRICT = 'strict',           // Complete isolation (default)
+  STRICT = 'strict', // Complete isolation (default)
   SHARED_READ = 'shared_read', // Cross-workspace read access
-  FEDERATED = 'federated'      // Cross-workspace collaboration
+  FEDERATED = 'federated', // Cross-workspace collaboration
 }
 
 export interface WorkspaceIsolation {
   workspace_id: string;
   isolation_level: IsolationLevel;
-  shared_with: string[];       // Other workspace IDs
+  shared_with: string[]; // Other workspace IDs
   federation_rules: {
     allow_resource_sharing: boolean;
     allow_user_discovery: boolean;
@@ -106,19 +108,19 @@ Building on the existing 21+ permission types with collaborative permissions:
 export const COLLABORATIVE_PERMISSIONS = {
   // Existing permissions (1 << 0 through 1 << 20)
   ...PERMISSIONS,
-  
+
   // Epic 23 Collaborative Permissions (1 << 21 onwards)
-  REAL_TIME_EDIT: 1 << 21,           // Can participate in real-time editing
-  PRESENCE_VIEW: 1 << 22,            // Can see other users' presence
-  PRESENCE_BROADCAST: 1 << 23,       // Can broadcast own presence
-  CURSOR_VIEW: 1 << 24,              // Can see live cursors
-  CURSOR_BROADCAST: 1 << 25,         // Can broadcast own cursor
-  CONFLICT_RESOLVE: 1 << 26,         // Can resolve merge conflicts
-  SESSION_MANAGE: 1 << 27,           // Can manage active sessions
-  VERSION_CONTROL: 1 << 28,          // Can access version history
-  BRANCH_CREATE: 1 << 29,            // Can create content branches
-  MERGE_APPROVE: 1 << 30,            // Can approve merge requests
-  
+  REAL_TIME_EDIT: 1 << 21, // Can participate in real-time editing
+  PRESENCE_VIEW: 1 << 22, // Can see other users' presence
+  PRESENCE_BROADCAST: 1 << 23, // Can broadcast own presence
+  CURSOR_VIEW: 1 << 24, // Can see live cursors
+  CURSOR_BROADCAST: 1 << 25, // Can broadcast own cursor
+  CONFLICT_RESOLVE: 1 << 26, // Can resolve merge conflicts
+  SESSION_MANAGE: 1 << 27, // Can manage active sessions
+  VERSION_CONTROL: 1 << 28, // Can access version history
+  BRANCH_CREATE: 1 << 29, // Can create content branches
+  MERGE_APPROVE: 1 << 30, // Can approve merge requests
+
   // Meta permissions
   ALL_COLLABORATIVE: (1 << 31) - (1 << 21), // All collaborative permissions
 } as const;
@@ -136,15 +138,15 @@ export interface CollaborativeRole extends Role {
   name: string;
   permissions: bigint;
   is_system_role: boolean;
-  
+
   // Epic 23 Enhancements
   collaboration_settings: {
-    max_concurrent_edits: number;     // How many resources can edit simultaneously
+    max_concurrent_edits: number; // How many resources can edit simultaneously
     priority_level: 'low' | 'normal' | 'high' | 'critical'; // Conflict resolution priority
-    auto_save_enabled: boolean;       // Can use auto-save
+    auto_save_enabled: boolean; // Can use auto-save
     session_duration_minutes: number; // Max session length
   };
-  
+
   quota_overrides?: Partial<ResourceQuotas>; // Role-specific quota modifications
 }
 
@@ -157,33 +159,39 @@ export const COLLABORATIVE_SYSTEM_ROLES = {
       max_concurrent_edits: -1, // Unlimited
       priority_level: 'critical',
       auto_save_enabled: true,
-      session_duration_minutes: 480 // 8 hours
-    }
+      session_duration_minutes: 480, // 8 hours
+    },
   },
-  
+
   COLLABORATIVE_EDITOR: {
     name: 'Collaborative Editor',
-    permissions: PERMISSIONS.RESOURCE_WRITE | COLLABORATIVE_PERMISSIONS.REAL_TIME_EDIT | 
-                COLLABORATIVE_PERMISSIONS.PRESENCE_VIEW | COLLABORATIVE_PERMISSIONS.CURSOR_VIEW,
+    permissions:
+      PERMISSIONS.RESOURCE_WRITE |
+      COLLABORATIVE_PERMISSIONS.REAL_TIME_EDIT |
+      COLLABORATIVE_PERMISSIONS.PRESENCE_VIEW |
+      COLLABORATIVE_PERMISSIONS.CURSOR_VIEW,
     collaboration_settings: {
       max_concurrent_edits: 5,
       priority_level: 'normal',
       auto_save_enabled: true,
-      session_duration_minutes: 240 // 4 hours
-    }
+      session_duration_minutes: 240, // 4 hours
+    },
   },
-  
+
   COLLABORATIVE_REVIEWER: {
     name: 'Collaborative Reviewer',
-    permissions: PERMISSIONS.RESOURCE_READ | COLLABORATIVE_PERMISSIONS.PRESENCE_VIEW | 
-                COLLABORATIVE_PERMISSIONS.CONFLICT_RESOLVE | COLLABORATIVE_PERMISSIONS.MERGE_APPROVE,
+    permissions:
+      PERMISSIONS.RESOURCE_READ |
+      COLLABORATIVE_PERMISSIONS.PRESENCE_VIEW |
+      COLLABORATIVE_PERMISSIONS.CONFLICT_RESOLVE |
+      COLLABORATIVE_PERMISSIONS.MERGE_APPROVE,
     collaboration_settings: {
       max_concurrent_edits: 0, // Read-only real-time access
       priority_level: 'high',
       auto_save_enabled: false,
-      session_duration_minutes: 120 // 2 hours
-    }
-  }
+      session_duration_minutes: 120, // 2 hours
+    },
+  },
 } as const;
 ```
 
@@ -208,37 +216,37 @@ export interface CollaborativeResource extends Resource {
   created_by: string;
   created_at: Date;
   updated_at: Date;
-  
+
   // Epic 23 Collaborative Enhancements
   collaborative_state: {
-    is_collaborative: boolean;        // Can be edited collaboratively
-    active_editors: string[];         // Currently editing user IDs
-    edit_sessions: EditSession[];     // Active editing sessions
+    is_collaborative: boolean; // Can be edited collaboratively
+    active_editors: string[]; // Currently editing user IDs
+    edit_sessions: EditSession[]; // Active editing sessions
     lock_status: 'unlocked' | 'soft_lock' | 'hard_lock';
-    locked_by?: string;               // User ID who has the lock
+    locked_by?: string; // User ID who has the lock
     locked_at?: Date;
     lock_expires_at?: Date;
   };
-  
+
   version_control: {
-    current_branch: string;           // Default: 'main'
+    current_branch: string; // Default: 'main'
     available_branches: string[];
     last_merge_at?: Date;
     merge_conflicts: ConflictMarker[];
     pending_merges: PendingMerge[];
   };
-  
+
   presence_data: {
-    active_viewers: UserPresence[];   // Users currently viewing
+    active_viewers: UserPresence[]; // Users currently viewing
     last_presence_update: Date;
     cursor_positions: CursorPosition[];
     selection_ranges: SelectionRange[];
   };
-  
+
   // Performance and optimization
   optimization_hints: {
-    is_large_resource: boolean;       // > 1MB or complex structure
-    requires_chunking: boolean;       // For efficient real-time sync
+    is_large_resource: boolean; // > 1MB or complex structure
+    requires_chunking: boolean; // For efficient real-time sync
     cache_strategy: 'aggressive' | 'normal' | 'minimal';
     priority: 'low' | 'normal' | 'high';
   };
@@ -250,36 +258,36 @@ export interface CollaborativeResource extends Resource {
 ```typescript
 export interface ResourceQuotas {
   workspace_id: string;
-  
+
   // Storage quotas
   max_storage_bytes: number;
   current_storage_bytes: number;
-  storage_warning_threshold: number;  // % of max (default: 80)
-  
+  storage_warning_threshold: number; // % of max (default: 80)
+
   // Resource count quotas
   max_projects: number;
   current_projects: number;
   max_resources_per_project: number;
-  
+
   // Collaborative quotas
   max_concurrent_sessions: number;
   current_concurrent_sessions: number;
   max_concurrent_editors_per_resource: number;
-  
+
   // Time-based quotas
   max_session_duration_minutes: number;
   max_monthly_edit_hours: number;
   current_monthly_edit_hours: number;
-  
+
   // API quotas
   max_api_requests_per_hour: number;
   current_api_requests_per_hour: number;
-  
+
   // Enforcement settings
-  enforce_hard_limits: boolean;       // Block vs warn on quota exceeded
-  grace_period_hours: number;         // Allow brief overages
+  enforce_hard_limits: boolean; // Block vs warn on quota exceeded
+  grace_period_hours: number; // Allow brief overages
   quota_reset_schedule: 'daily' | 'weekly' | 'monthly';
-  
+
   last_updated: Date;
   next_reset: Date;
 }
@@ -289,7 +297,7 @@ export interface QuotaUsageEvent {
   workspace_id: string;
   user_id: string;
   quota_type: keyof ResourceQuotas;
-  usage_delta: number;                // Change in usage
+  usage_delta: number; // Change in usage
   timestamp: Date;
   context: {
     resource_id?: string;
@@ -310,16 +318,16 @@ export interface EditSession {
   resource_id: string;
   user_id: string;
   workspace_id: string;
-  
+
   session_info: {
     started_at: Date;
     last_activity_at: Date;
     expires_at: Date;
-    client_id: string;              // Browser/device identifier
+    client_id: string; // Browser/device identifier
     user_agent: string;
     ip_address?: string;
   };
-  
+
   editing_state: {
     current_cursor_position?: CursorPosition;
     current_selection?: SelectionRange;
@@ -327,9 +335,9 @@ export interface EditSession {
     is_active: boolean;
     has_unsaved_changes: boolean;
   };
-  
+
   collaboration_metadata: {
-    priority_level: number;         // For conflict resolution
+    priority_level: number; // For conflict resolution
     edit_permissions: Permission[];
     can_force_save: boolean;
     auto_save_interval: number;
@@ -340,11 +348,11 @@ export interface CursorPosition {
   user_id: string;
   resource_id: string;
   position: {
-    node_id?: string;              // For graph editing
-    field_path?: string;           // JSON path for structured data
-    line?: number;                 // For text content
+    node_id?: string; // For graph editing
+    field_path?: string; // JSON path for structured data
+    line?: number; // For text content
     column?: number;
-    offset?: number;               // Character offset
+    offset?: number; // Character offset
   };
   timestamp: Date;
   is_typing: boolean;
@@ -366,14 +374,14 @@ export interface SelectionRange {
 export interface UserPresence {
   user_id: string;
   workspace_id: string;
-  
+
   presence_status: {
     status: 'online' | 'idle' | 'away' | 'do_not_disturb' | 'offline';
     custom_message?: string;
     last_seen_at: Date;
     is_mobile: boolean;
   };
-  
+
   current_context: {
     current_project_id?: string;
     current_resource_id?: string;
@@ -381,14 +389,14 @@ export interface UserPresence {
     cursor_position?: CursorPosition;
     selection_range?: SelectionRange;
   };
-  
+
   collaboration_state: {
     is_editing: boolean;
-    editing_resources: string[];    // Resource IDs currently editing
-    can_be_interrupted: boolean;    // For conflict resolution
-    collaboration_role: string;     // Current role in this context
+    editing_resources: string[]; // Resource IDs currently editing
+    can_be_interrupted: boolean; // For conflict resolution
+    collaboration_role: string; // Current role in this context
   };
-  
+
   session_metadata: {
     session_id: string;
     client_type: 'web' | 'desktop' | 'mobile';
@@ -396,7 +404,7 @@ export interface UserPresence {
     connection_quality: 'excellent' | 'good' | 'fair' | 'poor';
     latency_ms?: number;
   };
-  
+
   timestamp: Date;
 }
 ```
@@ -409,7 +417,7 @@ export interface UserPresence {
 export interface WorkspaceContext {
   workspace_id: string;
   user_id: string;
-  
+
   // User's current context within the workspace
   navigation_state: {
     current_view: 'dashboard' | 'projects' | 'resources' | 'settings' | 'collaboration';
@@ -419,7 +427,7 @@ export interface WorkspaceContext {
     recent_projects: string[];      // Recently accessed project IDs
     recent_resources: string[];     // Recently accessed resource IDs
   };
-  
+
   // Collaboration state
   collaboration_context: {
     active_sessions: EditSession[];
@@ -427,7 +435,7 @@ export interface WorkspaceContext {
     notification_preferences: NotificationPreferences;
     collaboration_mode: 'individual' | 'paired' | 'team' | 'review';
   };
-  
+
   // Workspace-specific preferences
   workspace_preferences: {
     default_project_template?: string;
@@ -437,7 +445,7 @@ export interface WorkspaceContext {
     presence_visibility: boolean;
     conflict_resolution_preference: 'ask' | 'auto_merge' | 'manual';
   };
-  
+
   // Performance and caching
   cache_state: {
     cached_projects: Map<string, Date>;     // Project ID -> Last cached
@@ -445,7 +453,7 @@ export interface WorkspaceContext {
     cache_size_bytes: number;
     last_cache_cleanup: Date;
   };
-  
+
   last_updated: Date;
   expires_at: Date;
 }
@@ -453,7 +461,7 @@ export interface WorkspaceContext {
 export interface NotificationPreferences {
   workspace_id: string;
   user_id: string;
-  
+
   notifications: {
     new_collaborators: boolean;
     edit_conflicts: boolean;
@@ -462,7 +470,7 @@ export interface NotificationPreferences {
     system_announcements: boolean;
     quota_warnings: boolean;
   };
-  
+
   delivery_methods: {
     in_app: boolean;
     email: boolean;
@@ -470,7 +478,7 @@ export interface NotificationPreferences {
     slack?: string;                 // Webhook URL
     teams?: string;                 // Webhook URL
   };
-  
+
   quiet_hours: {
     enabled: boolean;
     start_time: string;             // HH:MM format
@@ -487,15 +495,15 @@ export interface WorkspaceSwitchContext {
   user_id: string;
   from_workspace_id?: string;
   to_workspace_id: string;
-  
+
   // Context preservation
   preserve_state: {
     open_projects: string[];
     open_resources: string[];
     unsaved_changes: UnsavedChange[];
-    active_sessions: string[];      // Session IDs to maintain
+    active_sessions: string[]; // Session IDs to maintain
   };
-  
+
   // Security context
   security_context: {
     requires_reauthentication: boolean;
@@ -503,7 +511,7 @@ export interface WorkspaceSwitchContext {
     mfa_required: boolean;
     session_elevation_needed: boolean;
   };
-  
+
   switch_metadata: {
     switch_reason: 'user_action' | 'invitation' | 'redirect' | 'system';
     initiated_at: Date;
@@ -591,15 +599,15 @@ CREATE TABLE IF NOT EXISTS edit_sessions (
   resource_id UUID NOT NULL REFERENCES resources(id) ON DELETE CASCADE,
   user_id VARCHAR(255) NOT NULL,
   workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
-  
+
   session_info JSONB NOT NULL,
   editing_state JSONB NOT NULL,
   collaboration_metadata JSONB NOT NULL,
-  
+
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
-  
+
   CONSTRAINT fk_edit_sessions_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
@@ -607,15 +615,15 @@ CREATE TABLE IF NOT EXISTS user_presence (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id VARCHAR(255) NOT NULL,
   workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
-  
+
   presence_status JSONB NOT NULL,
   current_context JSONB,
   collaboration_state JSONB,
   session_metadata JSONB,
-  
+
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  
+
   CONSTRAINT fk_user_presence_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
   CONSTRAINT unique_user_workspace_presence UNIQUE (user_id, workspace_id)
 );
@@ -624,16 +632,16 @@ CREATE TABLE IF NOT EXISTS workspace_contexts (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
   user_id VARCHAR(255) NOT NULL,
-  
+
   navigation_state JSONB NOT NULL,
   collaboration_context JSONB,
   workspace_preferences JSONB,
   cache_state JSONB,
-  
+
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
-  
+
   CONSTRAINT fk_workspace_contexts_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
   CONSTRAINT unique_user_workspace_context UNIQUE (user_id, workspace_id)
 );
@@ -641,34 +649,34 @@ CREATE TABLE IF NOT EXISTS workspace_contexts (
 CREATE TABLE IF NOT EXISTS resource_quotas (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
-  
+
   max_storage_bytes BIGINT NOT NULL DEFAULT 1073741824,
   current_storage_bytes BIGINT NOT NULL DEFAULT 0,
   storage_warning_threshold INTEGER NOT NULL DEFAULT 80,
-  
+
   max_projects INTEGER NOT NULL DEFAULT 100,
   current_projects INTEGER NOT NULL DEFAULT 0,
   max_resources_per_project INTEGER NOT NULL DEFAULT 1000,
-  
+
   max_concurrent_sessions INTEGER NOT NULL DEFAULT 25,
   current_concurrent_sessions INTEGER NOT NULL DEFAULT 0,
   max_concurrent_editors_per_resource INTEGER NOT NULL DEFAULT 10,
-  
+
   max_session_duration_minutes INTEGER NOT NULL DEFAULT 480,
   max_monthly_edit_hours INTEGER NOT NULL DEFAULT 200,
   current_monthly_edit_hours INTEGER NOT NULL DEFAULT 0,
-  
+
   max_api_requests_per_hour INTEGER NOT NULL DEFAULT 10000,
   current_api_requests_per_hour INTEGER NOT NULL DEFAULT 0,
-  
+
   enforce_hard_limits BOOLEAN NOT NULL DEFAULT TRUE,
   grace_period_hours INTEGER NOT NULL DEFAULT 24,
   quota_reset_schedule VARCHAR(20) NOT NULL DEFAULT 'monthly',
-  
+
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   next_reset TIMESTAMP WITH TIME ZONE NOT NULL,
-  
+
   CONSTRAINT unique_workspace_quota UNIQUE (workspace_id)
 );
 
@@ -679,9 +687,9 @@ CREATE TABLE IF NOT EXISTS quota_usage_events (
   quota_type VARCHAR(50) NOT NULL,
   usage_delta INTEGER NOT NULL,
   context JSONB,
-  
+
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  
+
   CONSTRAINT fk_quota_usage_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 ```
@@ -690,35 +698,35 @@ CREATE TABLE IF NOT EXISTS quota_usage_events (
 
 ```sql
 -- Performance indexes for collaborative features
-CREATE INDEX IF NOT EXISTS idx_edit_sessions_resource_active 
-  ON edit_sessions(resource_id, expires_at) 
+CREATE INDEX IF NOT EXISTS idx_edit_sessions_resource_active
+  ON edit_sessions(resource_id, expires_at)
   WHERE expires_at > NOW();
 
-CREATE INDEX IF NOT EXISTS idx_edit_sessions_user_workspace 
+CREATE INDEX IF NOT EXISTS idx_edit_sessions_user_workspace
   ON edit_sessions(user_id, workspace_id, expires_at);
 
-CREATE INDEX IF NOT EXISTS idx_user_presence_workspace_active 
-  ON user_presence(workspace_id, updated_at) 
+CREATE INDEX IF NOT EXISTS idx_user_presence_workspace_active
+  ON user_presence(workspace_id, updated_at)
   WHERE updated_at > NOW() - INTERVAL '5 minutes';
 
-CREATE INDEX IF NOT EXISTS idx_workspace_contexts_user_expires 
-  ON workspace_contexts(user_id, expires_at) 
+CREATE INDEX IF NOT EXISTS idx_workspace_contexts_user_expires
+  ON workspace_contexts(user_id, expires_at)
   WHERE expires_at > NOW();
 
-CREATE INDEX IF NOT EXISTS idx_quota_usage_workspace_time 
+CREATE INDEX IF NOT EXISTS idx_quota_usage_workspace_time
   ON quota_usage_events(workspace_id, created_at);
 
-CREATE INDEX IF NOT EXISTS idx_quota_usage_type_time 
+CREATE INDEX IF NOT EXISTS idx_quota_usage_type_time
   ON quota_usage_events(quota_type, created_at);
 
 -- JSONB indexes for collaborative state queries
-CREATE INDEX IF NOT EXISTS idx_resources_collaborative_state 
+CREATE INDEX IF NOT EXISTS idx_resources_collaborative_state
   ON resources USING GIN (collaborative_state);
 
-CREATE INDEX IF NOT EXISTS idx_resources_presence_data 
+CREATE INDEX IF NOT EXISTS idx_resources_presence_data
   ON resources USING GIN (presence_data);
 
-CREATE INDEX IF NOT EXISTS idx_workspaces_collaboration_settings 
+CREATE INDEX IF NOT EXISTS idx_workspaces_collaboration_settings
   ON workspaces USING GIN (collaboration_settings);
 ```
 
@@ -728,22 +736,18 @@ CREATE INDEX IF NOT EXISTS idx_workspaces_collaboration_settings
 
 ```typescript
 export class CollaborativeWorkspaceDAO extends WorkspaceDAO {
-  
-  async createCollaborativeWorkspace(
-    data: CreateCollaborativeWorkspace, 
-    userId: string
-  ): Promise<EnhancedWorkspace> {
+  async createCollaborativeWorkspace(data: CreateCollaborativeWorkspace, userId: string): Promise<EnhancedWorkspace> {
     const workspace = await this.createWorkspace(data, userId);
-    
+
     // Initialize collaborative features
     await this.initializeCollaborativeFeatures(workspace.id);
-    
+
     // Set up default quotas
     await this.createDefaultQuotas(workspace.id);
-    
+
     return this.getEnhancedWorkspace(workspace.id);
   }
-  
+
   async updateWorkspaceCollaborationSettings(
     workspaceId: string,
     settings: Partial<EnhancedWorkspace['collaboration_settings']>
@@ -755,10 +759,10 @@ export class CollaborativeWorkspaceDAO extends WorkspaceDAO {
           version = version + 1
       WHERE id = ?
     `);
-    
+
     await stmt.run(JSON.stringify(settings), workspaceId);
   }
-  
+
   async getActiveEditSessions(workspaceId: string): Promise<EditSession[]> {
     const stmt = this.db.prepare(`
       SELECT * FROM edit_sessions 
@@ -766,36 +770,36 @@ export class CollaborativeWorkspaceDAO extends WorkspaceDAO {
         AND expires_at > CURRENT_TIMESTAMP
       ORDER BY updated_at DESC
     `);
-    
+
     return stmt.all(workspaceId).map(row => ({
       ...row,
       session_info: JSON.parse(row.session_info),
       editing_state: JSON.parse(row.editing_state),
-      collaboration_metadata: JSON.parse(row.collaboration_metadata)
+      collaboration_metadata: JSON.parse(row.collaboration_metadata),
     }));
   }
-  
+
   async enforceResourceQuotas(
-    workspaceId: string, 
+    workspaceId: string,
     quotaType: keyof ResourceQuotas,
     requestedUsage: number
   ): Promise<{ allowed: boolean; reason?: string; current: number; limit: number }> {
     const quotas = await this.getResourceQuotas(workspaceId);
     const currentKey = `current_${quotaType}` as keyof ResourceQuotas;
     const maxKey = `max_${quotaType}` as keyof ResourceQuotas;
-    
+
     const current = quotas[currentKey] as number;
     const max = quotas[maxKey] as number;
-    
+
     if (current + requestedUsage > max) {
       return {
         allowed: false,
         reason: `Would exceed ${quotaType} quota: ${current + requestedUsage} > ${max}`,
         current,
-        limit: max
+        limit: max,
       };
     }
-    
+
     return { allowed: true, current, limit: max };
   }
 }
@@ -806,21 +810,25 @@ export class CollaborativeWorkspaceDAO extends WorkspaceDAO {
 ### 8.1 Acceptance Criteria Mapping
 
 ✅ **Workspace management supports multi-tenant isolation**
+
 - Enhanced workspace model with isolation levels
 - Workspace-specific quotas and resource limits
 - Cross-workspace sharing controls with federation rules
 
 ✅ **Role-based access control enforces permissions correctly**
+
 - Extended RBAC with 10+ new collaborative permissions
 - Role-specific collaboration settings and quotas
 - Fine-grained resource-level permission enforcement
 
 ✅ **Workspace switching maintains user context**
+
 - Comprehensive workspace context preservation
 - Unsaved changes tracking and restoration
 - Security context validation during switches
 
 ✅ **Resource quotas prevent workspace abuse**
+
 - Multi-dimensional quota system (storage, API, sessions)
 - Real-time quota enforcement with grace periods
 - Usage tracking and analytics for optimization
@@ -828,21 +836,25 @@ export class CollaborativeWorkspaceDAO extends WorkspaceDAO {
 ### 8.2 Implementation Roadmap
 
 **Phase 1: Core Data Models** (2 hours)
+
 - Implement enhanced TypeScript interfaces
 - Create database migration scripts
 - Add basic DAO layer extensions
 
 **Phase 2: Collaboration Infrastructure** (2 hours)
+
 - Edit session management system
 - User presence tracking
 - Real-time cursor and selection models
 
 **Phase 3: Quota and Context Systems** (1.5 hours)
+
 - Resource quota enforcement
 - Workspace context management
 - Performance optimization hints
 
 **Phase 4: Integration and Testing** (0.5 hours)
+
 - API endpoint integration
 - Unit and integration tests
 - Documentation and examples
@@ -850,6 +862,7 @@ export class CollaborativeWorkspaceDAO extends WorkspaceDAO {
 ## 9. Security and Performance Considerations
 
 ### 9.1 Security Enhancements
+
 - **Session Security**: Encrypted session tokens with rotation
 - **Permission Validation**: Real-time permission checking for all operations
 - **Audit Logging**: Comprehensive tracking of all collaborative actions
@@ -857,6 +870,7 @@ export class CollaborativeWorkspaceDAO extends WorkspaceDAO {
 - **Data Isolation**: Strict workspace boundary enforcement
 
 ### 9.2 Performance Optimizations
+
 - **Efficient Indexing**: Specialized indexes for collaborative queries
 - **Caching Strategy**: Multi-layer caching for presence and context data
 - **Connection Pooling**: Optimized database connections for real-time features
@@ -866,12 +880,14 @@ export class CollaborativeWorkspaceDAO extends WorkspaceDAO {
 ## 10. Migration and Backward Compatibility
 
 ### 10.1 Migration Strategy
+
 - **Incremental Migration**: Existing workspaces automatically upgraded
 - **Default Settings**: Conservative defaults for all new collaborative features
 - **Rollback Support**: Schema versioning for safe rollbacks
 - **Data Preservation**: All existing data preserved during migration
 
 ### 10.2 Backward Compatibility
+
 - **API Compatibility**: Existing APIs continue to function unchanged
 - **Client Support**: Enhanced features optional for older clients
 - **Grace Period**: Gradual rollout of quota enforcement

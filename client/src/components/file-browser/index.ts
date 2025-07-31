@@ -1,6 +1,6 @@
 /**
  * File Browser Components - Index exports
- * 
+ *
  * Centralized exports for all file browser components
  */
 
@@ -27,5 +27,5 @@ export type {
   FileOperation,
   FileUploadProgress,
   SearchOptions,
-  SortOptions
+  SortOptions,
 } from './types';

@@ -9,7 +9,7 @@ import {
   ValidationResult,
   PlatformPrompt,
   AdaptorConfig,
-  ValidationError
+  ValidationError,
 } from '../types';
 import { BaseAdaptor } from './BaseAdaptor';
 
@@ -48,7 +48,7 @@ export class OpenAIAdaptor extends BaseAdaptor implements TextToTextAdaptor {
       apiKey: process.env.OPENAI_API_KEY,
       organization: process.env.OPENAI_ORGANIZATION,
       baseURL: process.env.OPENAI_BASE_URL,
-      ...(this.config.openai || {})
+      ...(this.config.openai || {}),
     };
 
     if (!this.openaiConfig.apiKey) {
@@ -61,7 +61,7 @@ export class OpenAIAdaptor extends BaseAdaptor implements TextToTextAdaptor {
    */
   public async capabilities(): Promise<PlatformCapabilities> {
     const model = this.openaiConfig.model || 'gpt-3.5-turbo';
-    
+
     // Model-specific capabilities
     const modelCapabilities = this.getModelCapabilities(model);
 
@@ -74,7 +74,7 @@ export class OpenAIAdaptor extends BaseAdaptor implements TextToTextAdaptor {
         top_p: [0.0, 1.0],
         frequency_penalty: [-2.0, 2.0],
         presence_penalty: [-2.0, 2.0],
-        max_tokens: [1, modelCapabilities.maxTokens]
+        max_tokens: [1, modelCapabilities.maxTokens],
       },
       features: [
         'text-generation',
@@ -87,7 +87,7 @@ export class OpenAIAdaptor extends BaseAdaptor implements TextToTextAdaptor {
         'top-p-sampling',
         'frequency-penalty',
         'presence-penalty',
-        'stop-sequences'
+        'stop-sequences',
       ],
       styleSupport: false,
       negativePromptSupport: false,
@@ -95,8 +95,8 @@ export class OpenAIAdaptor extends BaseAdaptor implements TextToTextAdaptor {
         model: model,
         supportsChatFormat: true,
         supportsSystemMessages: true,
-        supportsFunctionCalling: model.includes('gpt-4') || model.includes('gpt-3.5-turbo')
-      }
+        supportsFunctionCalling: model.includes('gpt-4') || model.includes('gpt-3.5-turbo'),
+      },
     };
   }
 
@@ -113,23 +113,20 @@ export class OpenAIAdaptor extends BaseAdaptor implements TextToTextAdaptor {
       supportsSystemMessages: true,
       supportsFunctionCalling: model.includes('gpt-4') || model.includes('gpt-3.5-turbo'),
       temperatureRange: [0.0, 2.0] as [number, number],
-      topPRange: [0.0, 1.0] as [number, number]
+      topPRange: [0.0, 1.0] as [number, number],
     };
   }
 
   /**
    * Platform-specific validation
    */
-  protected async performPlatformValidation(
-    graph: any,
-    config?: AdaptorConfig
-  ): Promise<ValidationResult> {
+  protected async performPlatformValidation(graph: any, config?: AdaptorConfig): Promise<ValidationResult> {
     const errors: any[] = [];
     const warnings: any[] = [];
 
     // Extract text content from graph
     const textContent = this.extractTextContent(graph);
-    
+
     // Check content length
     const model = this.openaiConfig.model || 'gpt-3.5-turbo';
     const modelCapabilities = this.getModelCapabilities(model);
@@ -142,7 +139,7 @@ export class OpenAIAdaptor extends BaseAdaptor implements TextToTextAdaptor {
           estimated: ${estimatedTokens} tokens,
           limit: ${modelCapabilities.maxTokens}
         )`,
-        optimization: 'Consider breaking content into smaller chunks'
+        optimization: 'Consider breaking content into smaller chunks',
       });
     }
 
@@ -152,7 +149,7 @@ export class OpenAIAdaptor extends BaseAdaptor implements TextToTextAdaptor {
       warnings.push({
         code: 'IMAGE_CONTENT_DETECTED',
         message: 'Graph contains image-related content that may not translate well to text generation',
-        optimization: 'Remove image-specific nodes or use a text-to-image adaptor instead'
+        optimization: 'Remove image-specific nodes or use a text-to-image adaptor instead',
       });
     }
 
@@ -162,32 +159,29 @@ export class OpenAIAdaptor extends BaseAdaptor implements TextToTextAdaptor {
       warnings.push({
         code: 'UNSUPPORTED_FEATURE',
         message: `Feature '${feature}' is not supported by OpenAI models`,
-        optimization: 'Remove or replace unsupported features'
+        optimization: 'Remove or replace unsupported features',
       });
     }
 
     // Calculate compatibility score
     const totalIssues = errors.length + warnings.length;
-    const compatibilityScore = Math.max(0, 1 - (totalIssues * 0.1));
+    const compatibilityScore = Math.max(0, 1 - totalIssues * 0.1);
 
     return {
       valid: errors.length === 0,
       errors,
       warnings,
-      compatibilityScore
+      compatibilityScore,
     };
   }
 
   /**
    * Transform graph to OpenAI format
    */
-  protected async performTransformation(
-    graph: any,
-    config?: AdaptorConfig
-  ): Promise<Omit<PlatformPrompt, 'metadata'>> {
+  protected async performTransformation(graph: any, config?: AdaptorConfig): Promise<Omit<PlatformPrompt, 'metadata'>> {
     // Extract content and build OpenAI prompt
     const { prompt, systemMessage } = this.buildOpenAIPrompt(graph, config);
-    
+
     // Build parameters
     const parameters = this.buildOpenAIParameters(graph, config);
 
@@ -196,15 +190,18 @@ export class OpenAIAdaptor extends BaseAdaptor implements TextToTextAdaptor {
       prompt,
       parameters: {
         ...parameters,
-        ...(systemMessage && { system: systemMessage })
-      }
+        ...(systemMessage && { system: systemMessage }),
+      },
     };
   }
 
   /**
    * Build OpenAI-specific prompt from graph
    */
-  private buildOpenAIPrompt(graph: any, config?: AdaptorConfig): {
+  private buildOpenAIPrompt(
+    graph: any,
+    config?: AdaptorConfig
+  ): {
     prompt: string;
     systemMessage?: string;
   } {
@@ -220,39 +217,39 @@ export class OpenAIAdaptor extends BaseAdaptor implements TextToTextAdaptor {
       if (!node.data) continue;
 
       switch (node.type) {
-      case 'system':
-        systemMessage = node.data.text || node.data.content;
-        break;
-          
-      case 'user':
-      case 'output':
-      case 'text':
-        if (node.data.text || node.data.content) {
-          userContent.push(node.data.text || node.data.content);
-        }
-        break;
-          
-      case 'concat':
-        if (node.data.template) {
-          userContent.push(node.data.template);
-        }
-        break;
-          
-      case 'weightedChoice':
-        // For weighted choice, pick the first option for now
-        // In a real implementation, this would be handled by the graph executor
-        if (node.data.choices && node.data.choices.length > 0) {
-          userContent.push(node.data.choices[0].text);
-        }
-        break;
+        case 'system':
+          systemMessage = node.data.text || node.data.content;
+          break;
 
-      case 'setVariable':
-      case 'getVariable':
-        // Variables would be resolved by the graph executor
-        if (node.data.defaultValue) {
-          userContent.push(String(node.data.defaultValue));
-        }
-        break;
+        case 'user':
+        case 'output':
+        case 'text':
+          if (node.data.text || node.data.content) {
+            userContent.push(node.data.text || node.data.content);
+          }
+          break;
+
+        case 'concat':
+          if (node.data.template) {
+            userContent.push(node.data.template);
+          }
+          break;
+
+        case 'weightedChoice':
+          // For weighted choice, pick the first option for now
+          // In a real implementation, this would be handled by the graph executor
+          if (node.data.choices && node.data.choices.length > 0) {
+            userContent.push(node.data.choices[0].text);
+          }
+          break;
+
+        case 'setVariable':
+        case 'getVariable':
+          // Variables would be resolved by the graph executor
+          if (node.data.defaultValue) {
+            userContent.push(String(node.data.defaultValue));
+          }
+          break;
       }
     }
 
@@ -267,17 +264,13 @@ export class OpenAIAdaptor extends BaseAdaptor implements TextToTextAdaptor {
    */
   private buildOpenAIParameters(graph: any, config?: AdaptorConfig): Record<string, unknown> {
     const parameters: Record<string, unknown> = {
-      model: this.openaiConfig.model || 'gpt-3.5-turbo'
+      model: this.openaiConfig.model || 'gpt-3.5-turbo',
     };
 
     // Apply configuration preferences
     if (config?.qualityPreference !== undefined) {
       // Higher quality = lower temperature for more focused responses
-      parameters.temperature = this.normalizeParameter(
-        1 - config.qualityPreference,
-        [0, 1],
-        [0.0, 1.0]
-      );
+      parameters.temperature = this.normalizeParameter(1 - config.qualityPreference, [0, 1], [0.0, 1.0]);
     } else {
       parameters.temperature = 0.7; // Default
     }
@@ -290,11 +283,11 @@ export class OpenAIAdaptor extends BaseAdaptor implements TextToTextAdaptor {
 
     // Ensure parameters are within valid ranges
     const capabilities = this.getModelCapabilities(parameters.model as string);
-    
+
     if (typeof parameters.temperature === 'number') {
       parameters.temperature = Math.max(0.0, Math.min(2.0, parameters.temperature));
     }
-    
+
     if (typeof parameters.max_tokens === 'number') {
       parameters.max_tokens = Math.max(1, Math.min(capabilities.maxTokens, parameters.max_tokens));
     }
@@ -314,7 +307,7 @@ export class OpenAIAdaptor extends BaseAdaptor implements TextToTextAdaptor {
       'gpt-3.5-turbo': { maxTokens: 4096 },
       'gpt-3.5-turbo-16k': { maxTokens: 16384 },
       'text-davinci-003': { maxTokens: 4097 },
-      'text-curie-001': { maxTokens: 2049 }
+      'text-curie-001': { maxTokens: 2049 },
     };
 
     return modelCapabilities[model] || { maxTokens: 4096 };
@@ -335,8 +328,17 @@ export class OpenAIAdaptor extends BaseAdaptor implements TextToTextAdaptor {
     if (!graph.nodes) return false;
 
     const imageKeywords = [
-      'image', 'photo', 'picture', 'visual', 'artwork', 'painting',
-      'drawing', 'illustration', 'style:', '--ar', 'aspect ratio'
+      'image',
+      'photo',
+      'picture',
+      'visual',
+      'artwork',
+      'painting',
+      'drawing',
+      'illustration',
+      'style:',
+      '--ar',
+      'aspect ratio',
     ];
 
     return graph.nodes.some((node: any) => {
@@ -350,16 +352,16 @@ export class OpenAIAdaptor extends BaseAdaptor implements TextToTextAdaptor {
    */
   private detectUnsupportedFeatures(graph: any): string[] {
     const unsupported: string[] = [];
-    
+
     if (!graph.nodes) return unsupported;
 
     for (const node of graph.nodes) {
       switch (node.type) {
-      case 'image':
-      case 'style':
-      case 'negativePrompt':
-        unsupported.push(node.type);
-        break;
+        case 'image':
+        case 'style':
+        case 'negativePrompt':
+          unsupported.push(node.type);
+          break;
       }
     }
 
@@ -369,26 +371,21 @@ export class OpenAIAdaptor extends BaseAdaptor implements TextToTextAdaptor {
   /**
    * Get platform-specific optimizations
    */
-  protected async getPlatformOptimizations(
-    graph: any,
-    config?: AdaptorConfig
-  ): Promise<string[]> {
+  protected async getPlatformOptimizations(graph: any, config?: AdaptorConfig): Promise<string[]> {
     const optimizations: string[] = [];
 
     // Check for system message optimization
-    const hasSystemContent = graph.nodes?.some((node: any) => 
-      node.type === 'system' || node.data?.role === 'system'
-    );
-    
+    const hasSystemContent = graph.nodes?.some((node: any) => node.type === 'system' || node.data?.role === 'system');
+
     if (hasSystemContent) {
       optimizations.push('system-message-extraction');
     }
 
     // Check for conversation format optimization
-    const hasMultipleRoles = graph.nodes?.some((node: any) => 
-      node.data?.role && ['user', 'assistant', 'system'].includes(node.data.role)
+    const hasMultipleRoles = graph.nodes?.some(
+      (node: any) => node.data?.role && ['user', 'assistant', 'system'].includes(node.data.role)
     );
-    
+
     if (hasMultipleRoles) {
       optimizations.push('chat-format-optimization');
     }

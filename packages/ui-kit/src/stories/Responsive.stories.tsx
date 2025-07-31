@@ -4,15 +4,15 @@
 
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { 
-  Grid, 
-  Row, 
-  Col, 
+import {
+  Grid,
+  Row,
+  Col,
   Container,
   CollapsiblePanel,
   AdaptiveLayout,
   ResponsiveDrawer,
-  ResponsiveTabs
+  ResponsiveTabs,
 } from '../responsive';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
@@ -21,8 +21,8 @@ import { useEnhancedResponsive, useBreakpointValue } from '../responsive/utiliti
 const meta: Meta = {
   title: 'Responsive/Overview',
   parameters: {
-    layout: 'fullscreen'
-  }
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;
@@ -30,21 +30,27 @@ export default meta;
 // Helper component to show current breakpoint
 const BreakpointIndicator = () => {
   const { breakpoint, width, height, device } = useEnhancedResponsive();
-  
+
   return (
-    <div style={{
-      position: 'fixed',
-      top: 10,
-      right: 10,
-      padding: '8px 16px',
-      background: 'rgba(0, 0, 0, 0.8)',
-      color: 'white',
-      borderRadius: 4,
-      fontSize: 12,
-      zIndex: 9999
-    }}>
-      <div>Breakpoint: <strong>{breakpoint}</strong></div>
-      <div>Viewport: {width} × {height}</div>
+    <div
+      style={{
+        position: 'fixed',
+        top: 10,
+        right: 10,
+        padding: '8px 16px',
+        background: 'rgba(0, 0, 0, 0.8)',
+        color: 'white',
+        borderRadius: 4,
+        fontSize: 12,
+        zIndex: 9999,
+      }}
+    >
+      <div>
+        Breakpoint: <strong>{breakpoint}</strong>
+      </div>
+      <div>
+        Viewport: {width} × {height}
+      </div>
       <div>Device: {device?.type}</div>
     </div>
   );
@@ -58,7 +64,7 @@ export const GridSystemDemo: StoryObj = {
       <Container maxWidth="xl">
         <h2>Responsive Grid System</h2>
         <p>Resize your viewport to see the grid adapt</p>
-        
+
         <Row spacing={2}>
           <Col xs={12} md={6} lg={4}>
             <Card>
@@ -79,7 +85,7 @@ export const GridSystemDemo: StoryObj = {
             </Card>
           </Col>
         </Row>
-        
+
         <h3 style={{ marginTop: 32 }}>Nested Grid</h3>
         <Row spacing={3}>
           <Col xs={12} lg={8}>
@@ -87,14 +93,10 @@ export const GridSystemDemo: StoryObj = {
               <h4>Main Content</h4>
               <Row spacing={2}>
                 <Col xs={6}>
-                  <div style={{ background: '#f0f0f0', padding: 16 }}>
-                    Nested Col 1
-                  </div>
+                  <div style={{ background: '#f0f0f0', padding: 16 }}>Nested Col 1</div>
                 </Col>
                 <Col xs={6}>
-                  <div style={{ background: '#f0f0f0', padding: 16 }}>
-                    Nested Col 2
-                  </div>
+                  <div style={{ background: '#f0f0f0', padding: 16 }}>Nested Col 2</div>
                 </Col>
               </Row>
             </Card>
@@ -108,14 +110,14 @@ export const GridSystemDemo: StoryObj = {
         </Row>
       </Container>
     </>
-  )
+  ),
 };
 
 // Adaptive Layout Demo
 export const AdaptiveLayoutDemo: StoryObj = {
   render: () => {
     const [sidebarOpen, setSidebarOpen] = React.useState(false);
-    
+
     return (
       <>
         <BreakpointIndicator />
@@ -129,9 +131,7 @@ export const AdaptiveLayoutDemo: StoryObj = {
             <div style={{ padding: 16 }}>
               <h3>Sidebar</h3>
               <p>Auto-collapses on mobile</p>
-              <Button onClick={() => setSidebarOpen(false)}>
-                Close Sidebar
-              </Button>
+              <Button onClick={() => setSidebarOpen(false)}>Close Sidebar</Button>
             </div>
           }
           sidebarCollapseOn={['xs', 'sm']}
@@ -139,10 +139,8 @@ export const AdaptiveLayoutDemo: StoryObj = {
             <Container>
               <h2>Main Content Area</h2>
               <p>The sidebar automatically collapses on small screens.</p>
-              <Button onClick={() => setSidebarOpen(true)}>
-                Open Sidebar
-              </Button>
-              
+              <Button onClick={() => setSidebarOpen(true)}>Open Sidebar</Button>
+
               <Row spacing={2} style={{ marginTop: 24 }}>
                 <Col xs={12} md={6}>
                   <Card>
@@ -159,15 +157,11 @@ export const AdaptiveLayoutDemo: StoryObj = {
               </Row>
             </Container>
           }
-          footer={
-            <div style={{ padding: 16, background: '#f0f0f0', textAlign: 'center' }}>
-              Footer Content
-            </div>
-          }
+          footer={<div style={{ padding: 16, background: '#f0f0f0', textAlign: 'center' }}>Footer Content</div>}
         />
       </>
     );
-  }
+  },
 };
 
 // Collapsible Panels Demo
@@ -178,37 +172,24 @@ export const CollapsiblePanelsDemo: StoryObj = {
       <Container maxWidth="lg">
         <h2>Collapsible Panels</h2>
         <p>Panels can auto-collapse based on breakpoints</p>
-        
+
         <div style={{ marginTop: 24 }}>
-          <CollapsiblePanel
-            title="Always Collapsible"
-            icon="📁"
-            actions={<Button size="sm">Action</Button>}
-          >
+          <CollapsiblePanel title="Always Collapsible" icon="📁" actions={<Button size="sm">Action</Button>}>
             <p>This panel is always collapsible. Click the header to toggle.</p>
           </CollapsiblePanel>
-          
-          <CollapsiblePanel
-            title="Collapses on Mobile"
-            icon="📱"
-            collapseOn={['xs', 'sm']}
-            defaultOpen={true}
-          >
+
+          <CollapsiblePanel title="Collapses on Mobile" icon="📱" collapseOn={['xs', 'sm']} defaultOpen={true}>
             <p>This panel automatically collapses on mobile devices.</p>
             <p>Resize your viewport to see it in action.</p>
           </CollapsiblePanel>
-          
-          <CollapsiblePanel
-            title="Not Collapsible"
-            icon="🔒"
-            collapsible={false}
-          >
+
+          <CollapsiblePanel title="Not Collapsible" icon="🔒" collapsible={false}>
             <p>This panel cannot be collapsed by the user.</p>
           </CollapsiblePanel>
         </div>
       </Container>
     </>
-  )
+  ),
 };
 
 // Responsive Tabs Demo
@@ -224,7 +205,7 @@ export const ResponsiveTabsDemo: StoryObj = {
             <h3>Overview Content</h3>
             <p>This is the overview tab content.</p>
           </div>
-        )
+        ),
       },
       {
         id: 'details',
@@ -235,7 +216,7 @@ export const ResponsiveTabsDemo: StoryObj = {
             <h3>Details Content</h3>
             <p>This is the details tab content.</p>
           </div>
-        )
+        ),
       },
       {
         id: 'settings',
@@ -246,7 +227,7 @@ export const ResponsiveTabsDemo: StoryObj = {
             <h3>Settings Content</h3>
             <p>This is the settings tab content.</p>
           </div>
-        )
+        ),
       },
       {
         id: 'help',
@@ -258,32 +239,32 @@ export const ResponsiveTabsDemo: StoryObj = {
             <p>This is the help tab content.</p>
           </div>
         ),
-        disabled: true
-      }
+        disabled: true,
+      },
     ];
-    
+
     return (
       <>
         <BreakpointIndicator />
         <Container maxWidth="lg">
           <h2>Responsive Tabs</h2>
           <p>Tabs stack vertically on mobile devices</p>
-          
+
           <div style={{ marginTop: 24 }}>
             <h3>Default Variant</h3>
             <ResponsiveTabs tabs={tabs} variant="default" />
           </div>
-          
+
           <div style={{ marginTop: 48 }}>
             <h3>Pills Variant</h3>
             <ResponsiveTabs tabs={tabs} variant="pills" />
           </div>
-          
+
           <div style={{ marginTop: 48 }}>
             <h3>Underline Variant</h3>
             <ResponsiveTabs tabs={tabs} variant="underline" />
           </div>
-          
+
           <div style={{ marginTop: 48 }}>
             <h3>Vertical Orientation</h3>
             <ResponsiveTabs tabs={tabs} orientation="vertical" stackOn={[]} />
@@ -291,50 +272,58 @@ export const ResponsiveTabsDemo: StoryObj = {
         </Container>
       </>
     );
-  }
+  },
 };
 
 // Responsive Values Demo
 export const ResponsiveValuesDemo: StoryObj = {
   render: () => {
-    const padding = useBreakpointValue({
-      xs: 8,
-      sm: 12,
-      md: 16,
-      lg: 24,
-      xl: 32
-    }, 16);
-    
-    const columns = useBreakpointValue({
-      xs: 1,
-      sm: 2,
-      md: 3,
-      lg: 4
-    }, 1);
-    
+    const padding = useBreakpointValue(
+      {
+        xs: 8,
+        sm: 12,
+        md: 16,
+        lg: 24,
+        xl: 32,
+      },
+      16
+    );
+
+    const columns = useBreakpointValue(
+      {
+        xs: 1,
+        sm: 2,
+        md: 3,
+        lg: 4,
+      },
+      1
+    );
+
     return (
       <>
         <BreakpointIndicator />
         <Container>
           <h2>Responsive Values</h2>
           <p>Values change based on breakpoint</p>
-          
-          <div style={{
-            padding: padding,
-            background: '#f0f0f0',
-            borderRadius: 8,
-            marginTop: 24
-          }}>
+
+          <div
+            style={{
+              padding: padding,
+              background: '#f0f0f0',
+              borderRadius: 8,
+              marginTop: 24,
+            }}
+          >
             <p>Current padding: {padding}px</p>
             <p>Current columns: {columns}</p>
           </div>
-          
+
           <div
             style={{
               display: 'grid',
               gridTemplateColumns: `repeat(${columns}, 1fr)`,
               gap: 16,
-              marginTop: 24
+              marginTop: 24,
             }}
           >
             {Array.from({ length: 8 }).map((_, i) => (
@@ -347,5 +336,5 @@ export const ResponsiveValuesDemo: StoryObj = {
         </Container>
       </>
     );
-  }
+  },
 };

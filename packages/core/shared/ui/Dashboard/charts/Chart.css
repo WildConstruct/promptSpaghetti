@@ -51,7 +51,7 @@
 .grid-line {
   stroke: #f3f4f6;
   stroke-width: 1;
-  stroke-dasharray: 2,2;
+  stroke-dasharray: 2, 2;
 }
 
 /* Axes */
@@ -63,7 +63,10 @@
 .axis-label {
   fill: #6b7280;
   font-size: 12px;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
 /* ===== LINE CHART ===== */
@@ -228,12 +231,7 @@
 .loading-shimmer {
   width: 200px;
   height: 120px;
-  background: linear-gradient(
-    90deg,
-    #f0f0f0 25%,
-    #e0e0e0 50%,
-    #f0f0f0 75%
-  );
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
   background-size: 200% 100%;
   border-radius: 8px;
   animation: shimmer 1.5s infinite;
@@ -309,21 +307,21 @@
   .chart {
     padding: 16px;
   }
-  
+
   .chart-detailed {
     padding: 16px;
   }
-  
+
   .chart-legend {
     flex-direction: column;
     align-items: center;
     gap: 8px;
   }
-  
+
   .axis-label {
     font-size: 10px;
   }
-  
+
   .chart-tooltip {
     font-size: 11px;
     padding: 6px 10px;
@@ -335,11 +333,11 @@
     font-size: 14px;
     margin-bottom: 12px;
   }
-  
+
   .legend-item {
     font-size: 11px;
   }
-  
+
   .x-axis-label,
   .y-axis-label {
     font-size: 12px;

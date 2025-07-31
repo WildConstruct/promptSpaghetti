@@ -4,24 +4,21 @@
 export { InlineNodeEditor } from './InlineNodeEditor';
 export type { InlineNodeEditorProps } from './InlineNodeEditor';
 
-export { 
+export {
   InlineEditorManager,
   InlineEditorProvider,
   useInlineEditor,
-  useInlineEditorContext
+  useInlineEditorContext,
 } from './InlineEditorManager';
 export type { InlineEditorManagerProps } from './InlineEditorManager';
 
-export { 
-  InlineEditableNode,
-  withInlineEditing
-} from './InlineEditableNode';
+export { InlineEditableNode, withInlineEditing } from './InlineEditableNode';
 export type { InlineEditableNodeProps } from './InlineEditableNode';
 
 export {
   GraphEditorWithInlineEditing,
   useGraphWithInlineEditing,
-  createInlineEditingGraph
+  createInlineEditingGraph,
 } from './GraphEditorIntegration';
 export type { GraphEditorWithInlineEditingProps } from './GraphEditorIntegration';
 
@@ -32,7 +29,7 @@ export {
   ConcatEditor,
   VariableEditor,
   ConditionalEditor,
-  OutputEditor
+  OutputEditor,
 } from './NodeSpecificEditors';
 
 // Story 4.3: Multi-Node Batch Editing

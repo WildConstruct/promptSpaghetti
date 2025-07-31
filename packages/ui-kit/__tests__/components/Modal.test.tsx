@@ -33,14 +33,14 @@ describe('Modal', () => {
         </Modal>
       </ThemeProvider>
     );
-    
+
     expect(screen.queryByText('Modal Content')).not.toBeInTheDocument();
   });
 
   it('calls onClose when overlay is clicked', async () => {
     const handleClose = jest.fn();
     renderModal({ onClose: handleClose, closeOnOverlayClick: true });
-    
+
     const overlay = screen.getByRole('dialog').parentElement;
     if (overlay) {
       await userEvent.click(overlay);
@@ -51,7 +51,7 @@ describe('Modal', () => {
   it('calls onClose when escape key is pressed', async () => {
     const handleClose = jest.fn();
     renderModal({ onClose: handleClose, closeOnEscape: true });
-    
+
     await userEvent.keyboard('{Escape}');
     expect(handleClose).toHaveBeenCalled();
   });
@@ -59,7 +59,7 @@ describe('Modal', () => {
   it('does not close on overlay click when disabled', async () => {
     const handleClose = jest.fn();
     renderModal({ onClose: handleClose, closeOnOverlayClick: false });
-    
+
     const overlay = screen.getByRole('dialog').parentElement;
     if (overlay) {
       await userEvent.click(overlay);
@@ -70,7 +70,7 @@ describe('Modal', () => {
   it('does not close on escape when disabled', async () => {
     const handleClose = jest.fn();
     renderModal({ onClose: handleClose, closeOnEscape: false });
-    
+
     await userEvent.keyboard('{Escape}');
     expect(handleClose).not.toHaveBeenCalled();
   });
@@ -83,10 +83,10 @@ describe('Modal', () => {
   it('shows close button when enabled', async () => {
     const handleClose = jest.fn();
     renderModal({ onClose: handleClose, showCloseButton: true });
-    
+
     const closeButton = screen.getByRole('button', { name: /close/i });
     expect(closeButton).toBeInTheDocument();
-    
+
     await userEvent.click(closeButton);
     expect(handleClose).toHaveBeenCalled();
   });
@@ -94,7 +94,7 @@ describe('Modal', () => {
   it('supports different sizes', () => {
     const { rerender } = renderModal({ size: 'sm' });
     expect(screen.getByRole('dialog')).toHaveClass('ui-modal--sm');
-    
+
     rerender(
       <ThemeProvider>
         <Modal isOpen={true} onClose={jest.fn()} size="lg">
@@ -106,15 +106,15 @@ describe('Modal', () => {
   });
 
   it('renders footer when provided', () => {
-    renderModal({ 
+    renderModal({
       footer: (
         <div>
           <button>Cancel</button>
           <button>Save</button>
         </div>
-      )
+      ),
     });
-    
+
     expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
   });
@@ -122,7 +122,7 @@ describe('Modal', () => {
   it('manages focus correctly', () => {
     renderModal();
     const modal = screen.getByRole('dialog');
-    
+
     // Modal should be focused when opened
     expect(document.activeElement).toBe(modal);
   });
@@ -134,7 +134,7 @@ describe('Modal', () => {
 
   it('restores body scroll when closed', () => {
     const { rerender } = renderModal();
-    
+
     rerender(
       <ThemeProvider>
         <Modal isOpen={false} onClose={jest.fn()}>
@@ -142,27 +142,27 @@ describe('Modal', () => {
         </Modal>
       </ThemeProvider>
     );
-    
+
     expect(document.body.style.overflow).toBe('');
   });
 
   it('supports custom className and styles', () => {
-    renderModal({ 
+    renderModal({
       className: 'custom-modal',
-      style: { backgroundColor: 'red' }
+      style: { backgroundColor: 'red' },
     });
-    
+
     const modal = screen.getByRole('dialog');
     expect(modal).toHaveClass('custom-modal');
     expect(modal).toHaveStyle({ backgroundColor: 'red' });
   });
 
   it('supports accessibility attributes', () => {
-    renderModal({ 
+    renderModal({
       'aria-labelledby': 'modal-title',
-      'aria-describedby': 'modal-description'
+      'aria-describedby': 'modal-description',
     });
-    
+
     const modal = screen.getByRole('dialog');
     expect(modal).toHaveAttribute('aria-labelledby', 'modal-title');
     expect(modal).toHaveAttribute('aria-describedby', 'modal-description');

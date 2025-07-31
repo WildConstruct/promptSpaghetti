@@ -80,7 +80,7 @@ class PerformanceMonitoringDashboard extends EventEmitter {
 
   constructor(config: Partial<DashboardConfig> = {}) {
     super();
-    
+
     this.config = {
       metricsRetentionDays: 30,
       alertRetentionDays: 90,
@@ -88,12 +88,12 @@ class PerformanceMonitoringDashboard extends EventEmitter {
       enableRealTimeUpdates: true,
       updateIntervalMs: 5000,
       enableNotifications: false,
-      ...config
+      ...config,
     };
 
     this.setupDefaultThresholds();
     this.setupOutputDirectory();
-    
+
     if (this.config.enableRealTimeUpdates) {
       this.startRealTimeUpdates();
     }
@@ -110,96 +110,96 @@ class PerformanceMonitoringDashboard extends EventEmitter {
         operator: 'gt',
         value: 1000,
         severity: 'warning',
-        description: 'Engine execution time exceeds 1 second'
+        description: 'Engine execution time exceeds 1 second',
       },
       {
         metric: 'engine.execution_time',
         operator: 'gt',
         value: 2000,
         severity: 'error',
-        description: 'Engine execution time exceeds 2 seconds'
+        description: 'Engine execution time exceeds 2 seconds',
       },
       {
         metric: 'engine.memory_usage',
         operator: 'gt',
         value: 100,
         severity: 'warning',
-        description: 'Engine memory usage exceeds 100MB'
+        description: 'Engine memory usage exceeds 100MB',
       },
       {
         metric: 'engine.memory_usage',
         operator: 'gt',
         value: 200,
         severity: 'error',
-        description: 'Engine memory usage exceeds 200MB'
+        description: 'Engine memory usage exceeds 200MB',
       },
       {
         metric: 'engine.operations_per_second',
         operator: 'lt',
         value: 100,
         severity: 'warning',
-        description: 'Engine throughput below 100 ops/sec'
+        description: 'Engine throughput below 100 ops/sec',
       },
-      
+
       // API Performance Thresholds
       {
         metric: 'api.response_time',
         operator: 'gt',
         value: 2000,
         severity: 'warning',
-        description: 'API response time exceeds 2 seconds'
+        description: 'API response time exceeds 2 seconds',
       },
       {
         metric: 'api.response_time',
         operator: 'gt',
         value: 5000,
         severity: 'error',
-        description: 'API response time exceeds 5 seconds'
+        description: 'API response time exceeds 5 seconds',
       },
       {
         metric: 'api.success_rate',
         operator: 'lt',
         value: 95,
         severity: 'warning',
-        description: 'API success rate below 95%'
+        description: 'API success rate below 95%',
       },
       {
         metric: 'api.success_rate',
         operator: 'lt',
         value: 90,
         severity: 'error',
-        description: 'API success rate below 90%'
+        description: 'API success rate below 90%',
       },
       {
         metric: 'api.requests_per_second',
         operator: 'lt',
         value: 10,
         severity: 'warning',
-        description: 'API throughput below 10 RPS'
+        description: 'API throughput below 10 RPS',
       },
-      
+
       // Memory Performance Thresholds
       {
         metric: 'memory.leak_detected',
         operator: 'eq',
         value: 1,
         severity: 'critical',
-        description: 'Memory leak detected'
+        description: 'Memory leak detected',
       },
       {
         metric: 'memory.gc_efficiency',
         operator: 'lt',
         value: 0.3,
         severity: 'warning',
-        description: 'Garbage collection efficiency below 30%'
+        description: 'Garbage collection efficiency below 30%',
       },
       {
         metric: 'memory.peak_usage',
         operator: 'gt',
         value: 500,
         severity: 'error',
-        description: 'Peak memory usage exceeds 500MB'
-      }
+        description: 'Peak memory usage exceeds 500MB',
+      },
     ];
   }
 
@@ -235,7 +235,7 @@ class PerformanceMonitoringDashboard extends EventEmitter {
       value,
       unit,
       tags,
-      metadata
+      metadata,
     };
 
     this.metrics.push(performanceMetric);
@@ -262,14 +262,13 @@ class PerformanceMonitoringDashboard extends EventEmitter {
    * Check thresholds and generate alerts
    */
   private checkThresholds(metric: PerformanceMetric): void {
-    const relevantThresholds = this.thresholds.filter(t => 
-      metric.metric.includes(t.metric.split('.')[1]) || 
-      `${metric.testSuite}.${metric.metric}`.includes(t.metric)
+    const relevantThresholds = this.thresholds.filter(
+      t => metric.metric.includes(t.metric.split('.')[1]) || `${metric.testSuite}.${metric.metric}`.includes(t.metric)
     );
 
     for (const threshold of relevantThresholds) {
       const violated = this.evaluateThreshold(metric.value, threshold);
-      
+
       if (violated) {
         const alert: PerformanceAlert = {
           id: `alert-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -279,12 +278,12 @@ class PerformanceMonitoringDashboard extends EventEmitter {
           testSuite: metric.testSuite,
           severity: threshold.severity,
           message: `${threshold.description}. Actual: ${metric.value}${metric.unit}, Threshold: ${threshold.value}`,
-          resolved: false
+          resolved: false,
         };
 
         this.alerts.push(alert);
         this.emit('alert_triggered', alert);
-        
+
         if (this.config.enableNotifications) {
           this.sendNotification(alert);
         }
@@ -297,13 +296,20 @@ class PerformanceMonitoringDashboard extends EventEmitter {
    */
   private evaluateThreshold(value: number, threshold: PerformanceThreshold): boolean {
     switch (threshold.operator) {
-    case 'gt': return value > threshold.value;
-    case 'lt': return value < threshold.value;
-    case 'gte': return value >= threshold.value;
-    case 'lte': return value <= threshold.value;
-    case 'eq': return value === threshold.value;
-    case 'neq': return value !== threshold.value;
-    default: return false;
+      case 'gt':
+        return value > threshold.value;
+      case 'lt':
+        return value < threshold.value;
+      case 'gte':
+        return value >= threshold.value;
+      case 'lte':
+        return value <= threshold.value;
+      case 'eq':
+        return value === threshold.value;
+      case 'neq':
+        return value !== threshold.value;
+      default:
+        return false;
     }
   }
 
@@ -321,7 +327,7 @@ class PerformanceMonitoringDashboard extends EventEmitter {
         timestamp: new Date(alert.timestamp).toISOString(),
         metric: alert.threshold.metric,
         actualValue: alert.actualValue,
-        thresholdValue: alert.threshold.value
+        thresholdValue: alert.threshold.value,
       };
 
       // In a real implementation, you'd send this to Slack, Discord, etc.
@@ -334,12 +340,7 @@ class PerformanceMonitoringDashboard extends EventEmitter {
   /**
    * Get metrics for a specific time range
    */
-  getMetrics(
-    testSuite?: string,
-    metric?: string,
-    startTime?: number,
-    endTime?: number
-  ): PerformanceMetric[] {
+  getMetrics(testSuite?: string, metric?: string, startTime?: number, endTime?: number): PerformanceMetric[] {
     return this.metrics.filter(m => {
       if (testSuite && m.testSuite !== testSuite) return false;
       if (metric && m.metric !== metric) return false;
@@ -364,9 +365,8 @@ class PerformanceMonitoringDashboard extends EventEmitter {
    * Analyze performance trends
    */
   analyzeTrends(metric: string, testSuite?: string, windowHours: number = 24): TrendAnalysis[] {
-    const cutoffTime = Date.now() - (windowHours * 60 * 60 * 1000);
-    const relevantMetrics = this.getMetrics(testSuite, metric, cutoffTime)
-      .sort((a, b) => a.timestamp - b.timestamp);
+    const cutoffTime = Date.now() - windowHours * 60 * 60 * 1000;
+    const relevantMetrics = this.getMetrics(testSuite, metric, cutoffTime).sort((a, b) => a.timestamp - b.timestamp);
 
     if (relevantMetrics.length < 3) {
       return [];
@@ -386,7 +386,7 @@ class PerformanceMonitoringDashboard extends EventEmitter {
     const hourlyAverages = Array.from(hourlyData.entries())
       .map(([hour, values]) => ({
         hour,
-        average: values.reduce((sum, val) => sum + val, 0) / values.length
+        average: values.reduce((sum, val) => sum + val, 0) / values.length,
       }))
       .sort((a, b) => a.hour - b.hour);
 
@@ -408,26 +408,34 @@ class PerformanceMonitoringDashboard extends EventEmitter {
     let recommendation: string | undefined;
 
     // For metrics where lower is better (response time, memory usage)
-    const lowerIsBetter = ['response_time', 'execution_time', 'memory_usage', 'error_count'].some(m => metric.includes(m));
-    
+    const lowerIsBetter = ['response_time', 'execution_time', 'memory_usage', 'error_count'].some(m =>
+      metric.includes(m)
+    );
+
     if (absChangePercent < 5) {
       trend = 'stable';
     } else if (changePercent < 0) {
       trend = lowerIsBetter ? 'improving' : 'degrading';
-      recommendation = lowerIsBetter ? 'Performance is improving' : 'Performance is degrading - investigate recent changes';
+      recommendation = lowerIsBetter
+        ? 'Performance is improving'
+        : 'Performance is degrading - investigate recent changes';
     } else {
       trend = lowerIsBetter ? 'degrading' : 'improving';
-      recommendation = lowerIsBetter ? 'Performance is degrading - investigate recent changes' : 'Performance is improving';
+      recommendation = lowerIsBetter
+        ? 'Performance is degrading - investigate recent changes'
+        : 'Performance is improving';
     }
 
-    return [{
-      metric,
-      trend,
-      changePercent,
-      confidence: Math.min(100, hourlyAverages.length * 10), // Simple confidence calculation
-      dataPoints: relevantMetrics.length,
-      recommendation
-    }];
+    return [
+      {
+        metric,
+        trend,
+        changePercent,
+        confidence: Math.min(100, hourlyAverages.length * 10), // Simple confidence calculation
+        dataPoints: relevantMetrics.length,
+        recommendation,
+      },
+    ];
   }
 
   /**
@@ -435,22 +443,22 @@ class PerformanceMonitoringDashboard extends EventEmitter {
    */
   async generateReport(format: 'json' | 'html' | 'markdown' = 'json'): Promise<string> {
     const now = Date.now();
-    const last24Hours = now - (24 * 60 * 60 * 1000);
-    const last7Days = now - (7 * 24 * 60 * 60 * 1000);
+    const last24Hours = now - 24 * 60 * 60 * 1000;
+    const last7Days = now - 7 * 24 * 60 * 60 * 1000;
 
     // Get recent metrics
     const recentMetrics = this.getMetrics(undefined, undefined, last24Hours);
     const weeklyMetrics = this.getMetrics(undefined, undefined, last7Days);
-    
+
     // Get active alerts
     const activeAlerts = this.getActiveAlerts();
-    
+
     // Analyze trends
     const trendAnalysis = [
       ...this.analyzeTrends('execution_time', undefined, 24),
       ...this.analyzeTrends('memory_usage', undefined, 24),
       ...this.analyzeTrends('response_time', undefined, 24),
-      ...this.analyzeTrends('success_rate', undefined, 24)
+      ...this.analyzeTrends('success_rate', undefined, 24),
     ];
 
     // Calculate summary statistics
@@ -460,13 +468,14 @@ class PerformanceMonitoringDashboard extends EventEmitter {
       const executionTimes = suiteMetrics.filter(m => m.metric.includes('execution_time')).map(m => m.value);
       const memoryUsages = suiteMetrics.filter(m => m.metric.includes('memory')).map(m => m.value);
       const successRates = suiteMetrics.filter(m => m.metric.includes('success_rate')).map(m => m.value);
-      
+
       return {
         testSuite: suite,
-        avgExecutionTime: executionTimes.length > 0 ? executionTimes.reduce((a, b) => a + b, 0) / executionTimes.length : 0,
+        avgExecutionTime:
+          executionTimes.length > 0 ? executionTimes.reduce((a, b) => a + b, 0) / executionTimes.length : 0,
         avgMemoryUsage: memoryUsages.length > 0 ? memoryUsages.reduce((a, b) => a + b, 0) / memoryUsages.length : 0,
         avgSuccessRate: successRates.length > 0 ? successRates.reduce((a, b) => a + b, 0) / successRates.length : 0,
-        metricCount: suiteMetrics.length
+        metricCount: suiteMetrics.length,
       };
     });
 
@@ -476,25 +485,25 @@ class PerformanceMonitoringDashboard extends EventEmitter {
         last24Hours: {
           start: new Date(last24Hours).toISOString(),
           end: new Date(now).toISOString(),
-          metricCount: recentMetrics.length
+          metricCount: recentMetrics.length,
         },
         last7Days: {
           start: new Date(last7Days).toISOString(),
           end: new Date(now).toISOString(),
-          metricCount: weeklyMetrics.length
-        }
+          metricCount: weeklyMetrics.length,
+        },
       },
       activeAlerts: {
         total: activeAlerts.length,
         critical: activeAlerts.filter(a => a.severity === 'critical').length,
         error: activeAlerts.filter(a => a.severity === 'error').length,
         warning: activeAlerts.filter(a => a.severity === 'warning').length,
-        alerts: activeAlerts.slice(0, 10) // Top 10 most recent
+        alerts: activeAlerts.slice(0, 10), // Top 10 most recent
       },
       trends: trendAnalysis,
       testSuiteSummary: summaryStats,
       overallHealth: this.calculateOverallHealth(summaryStats, activeAlerts),
-      recommendations: this.generateRecommendations(trendAnalysis, activeAlerts)
+      recommendations: this.generateRecommendations(trendAnalysis, activeAlerts),
     };
 
     // Save report
@@ -519,7 +528,10 @@ class PerformanceMonitoringDashboard extends EventEmitter {
   /**
    * Calculate overall system health score
    */
-  private calculateOverallHealth(summaryStats: any[], alerts: PerformanceAlert[]): {
+  private calculateOverallHealth(
+    summaryStats: any[],
+    alerts: PerformanceAlert[]
+  ): {
     score: number;
     status: 'excellent' | 'good' | 'fair' | 'poor' | 'critical';
     factors: string[];
@@ -655,35 +667,44 @@ class PerformanceMonitoringDashboard extends EventEmitter {
             <h3 class="health-${report.overallHealth.status}">
                 Score: ${report.overallHealth.score}/100 (${report.overallHealth.status.toUpperCase()})
             </h3>
-            ${report.overallHealth.factors.length > 0 ? 
-    '<p><strong>Contributing Factors:</strong></p><ul>' + 
-                report.overallHealth.factors.map(f => `<li>${f}</li>`).join('') + 
-                '</ul>' : ''}
+            ${
+              report.overallHealth.factors.length > 0
+                ? '<p><strong>Contributing Factors:</strong></p><ul>' +
+                  report.overallHealth.factors.map(f => `<li>${f}</li>`).join('') +
+                  '</ul>'
+                : ''
+            }
         </div>
 
         <div class="section">
             <h2>Active Alerts (${report.activeAlerts.total})</h2>
-            ${report.activeAlerts.alerts.map(alert => 
-    `<div class="alert-${alert.severity}">
+            ${report.activeAlerts.alerts
+              .map(
+                alert =>
+                  `<div class="alert-${alert.severity}">
                     <strong>${alert.severity.toUpperCase()}:</strong> ${alert.message}
                     <br><small>Test Suite: ${alert.testSuite} | ${new Date(alert.timestamp).toLocaleString()}</small>
                 </div>`
-  ).join('')}
+              )
+              .join('')}
         </div>
 
         <div class="section">
             <h2>Performance Trends</h2>
             <table>
                 <tr><th>Metric</th><th>Trend</th><th>Change</th><th>Confidence</th><th>Recommendation</th></tr>
-                ${report.trends.map(trend => 
-    `<tr>
+                ${report.trends
+                  .map(
+                    trend =>
+                      `<tr>
                         <td><span class="metric">${trend.metric}</span></td>
                         <td class="trend-${trend.trend}">${trend.trend.toUpperCase()}</td>
                         <td>${trend.changePercent.toFixed(1)}%</td>
                         <td>${trend.confidence.toFixed(0)}%</td>
                         <td>${trend.recommendation || 'No action needed'}</td>
                     </tr>`
-  ).join('')}
+                  )
+                  .join('')}
             </table>
         </div>
 
@@ -691,15 +712,18 @@ class PerformanceMonitoringDashboard extends EventEmitter {
             <h2>Test Suite Summary</h2>
             <table>
                 <tr><th>Test Suite</th><th>Avg Execution Time</th><th>Avg Memory Usage</th><th>Avg Success Rate</th><th>Metrics</th></tr>
-                ${report.testSuiteSummary.map(suite => 
-    `<tr>
+                ${report.testSuiteSummary
+                  .map(
+                    suite =>
+                      `<tr>
                         <td><strong>${suite.testSuite}</strong></td>
                         <td>${suite.avgExecutionTime.toFixed(0)}ms</td>
                         <td>${suite.avgMemoryUsage.toFixed(1)}MB</td>
                         <td>${suite.avgSuccessRate.toFixed(1)}%</td>
                         <td>${suite.metricCount}</td>
                     </tr>`
-  ).join('')}
+                  )
+                  .join('')}
             </table>
         </div>
 
@@ -726,32 +750,44 @@ class PerformanceMonitoringDashboard extends EventEmitter {
 
 **Score:** ${report.overallHealth.score}/100 (${report.overallHealth.status.toUpperCase()})
 
-${report.overallHealth.factors.length > 0 ? 
-    '**Contributing Factors:**\n' + 
-    report.overallHealth.factors.map(f => `- ${f}`).join('\n') + '\n' : ''}
+${
+  report.overallHealth.factors.length > 0
+    ? '**Contributing Factors:**\n' + report.overallHealth.factors.map(f => `- ${f}`).join('\n') + '\n'
+    : ''
+}
 
 ## Active Alerts (${report.activeAlerts.total})
 
-${report.activeAlerts.alerts.map(alert => 
-    `### ${alert.severity.toUpperCase()}: ${alert.message}
+${report.activeAlerts.alerts
+  .map(
+    alert =>
+      `### ${alert.severity.toUpperCase()}: ${alert.message}
 **Test Suite:** ${alert.testSuite} | **Time:** ${new Date(alert.timestamp).toLocaleString()}
-`).join('\n')}
+`
+  )
+  .join('\n')}
 
 ## Performance Trends
 
 | Metric | Trend | Change | Confidence | Recommendation |
 |--------|-------|--------|------------|----------------|
-${report.trends.map(trend => 
-    `| \`${trend.metric}\` | ${trend.trend.toUpperCase()} | ${trend.changePercent.toFixed(1)}% | ${trend.confidence.toFixed(0)}% | ${trend.recommendation || 'No action needed'} |`
-  ).join('\n')}
+${report.trends
+  .map(
+    trend =>
+      `| \`${trend.metric}\` | ${trend.trend.toUpperCase()} | ${trend.changePercent.toFixed(1)}% | ${trend.confidence.toFixed(0)}% | ${trend.recommendation || 'No action needed'} |`
+  )
+  .join('\n')}
 
 ## Test Suite Summary
 
 | Test Suite | Avg Execution Time | Avg Memory Usage | Avg Success Rate | Metrics |
 |------------|-------------------|------------------|------------------|---------|
-${report.testSuiteSummary.map(suite => 
-    `| **${suite.testSuite}** | ${suite.avgExecutionTime.toFixed(0)}ms | ${suite.avgMemoryUsage.toFixed(1)}MB | ${suite.avgSuccessRate.toFixed(1)}% | ${suite.metricCount} |`
-  ).join('\n')}
+${report.testSuiteSummary
+  .map(
+    suite =>
+      `| **${suite.testSuite}** | ${suite.avgExecutionTime.toFixed(0)}ms | ${suite.avgMemoryUsage.toFixed(1)}MB | ${suite.avgSuccessRate.toFixed(1)}% | ${suite.metricCount} |`
+  )
+  .join('\n')}
 
 ## Recommendations
 
@@ -767,7 +803,7 @@ ${report.recommendations.map(rec => `- ${rec}`).join('\n')}
       this.emit('dashboard_update', {
         timestamp: Date.now(),
         activeAlerts: this.getActiveAlerts().length,
-        recentMetrics: this.getMetrics(undefined, undefined, Date.now() - 60000).length
+        recentMetrics: this.getMetrics(undefined, undefined, Date.now() - 60000).length,
       });
     }, this.config.updateIntervalMs);
   }
@@ -776,8 +812,8 @@ ${report.recommendations.map(rec => `- ${rec}`).join('\n')}
    * Cleanup old metrics and alerts
    */
   private cleanupOldMetrics(): void {
-    const metricsRetentionCutoff = Date.now() - (this.config.metricsRetentionDays * 24 * 60 * 60 * 1000);
-    const alertsRetentionCutoff = Date.now() - (this.config.alertRetentionDays * 24 * 60 * 60 * 1000);
+    const metricsRetentionCutoff = Date.now() - this.config.metricsRetentionDays * 24 * 60 * 60 * 1000;
+    const alertsRetentionCutoff = Date.now() - this.config.alertRetentionDays * 24 * 60 * 60 * 1000;
 
     this.metrics = this.metrics.filter(m => m.timestamp >= metricsRetentionCutoff);
     this.alerts = this.alerts.filter(a => a.timestamp >= alertsRetentionCutoff);
@@ -791,7 +827,7 @@ ${report.recommendations.map(rec => `- ${rec}`).join('\n')}
       clearInterval(this.updateTimer);
       this.updateTimer = undefined;
     }
-    
+
     this.emit('dashboard_stopped');
   }
 
@@ -804,13 +840,13 @@ ${report.recommendations.map(rec => `- ${rec}`).join('\n')}
       alerts: this.alerts,
       thresholds: this.thresholds,
       config: this.config,
-      exportedAt: new Date().toISOString()
+      exportedAt: new Date().toISOString(),
     };
 
     const filename = `dashboard-state-${Date.now()}.json`;
     const filepath = path.join(this.config.outputDir, filename);
     await fs.writeFile(filepath, JSON.stringify(state, null, 2));
-    
+
     return filepath;
   }
 
@@ -821,11 +857,11 @@ ${report.recommendations.map(rec => `- ${rec}`).join('\n')}
     try {
       const data = await fs.readFile(filepath, 'utf8');
       const state = JSON.parse(data);
-      
+
       this.metrics = state.metrics || [];
       this.alerts = state.alerts || [];
       this.thresholds = state.thresholds || this.thresholds;
-      
+
       console.log(`📊 Dashboard state imported from ${filepath}`);
     } catch (error) {
       console.error('Failed to import dashboard state:', error);
@@ -840,5 +876,5 @@ export {
   PerformanceAlert,
   PerformanceSummary,
   TrendAnalysis,
-  DashboardConfig
+  DashboardConfig,
 };

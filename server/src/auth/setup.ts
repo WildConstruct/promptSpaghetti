@@ -7,7 +7,7 @@ import { TokenService } from './services/TokenService';
 
 export function setupAuthenticationKeys(): void {
   const keysDir = join(__dirname, '../../../keys');
-  
+
   // Create keys directory if it doesn't exist
   if (!existsSync(keysDir)) {
     mkdirSync(keysDir, { recursive: true });
@@ -40,7 +40,7 @@ export function setupAuthenticationKeys(): void {
 
 function createEnvironmentTemplate(): void {
   const envTemplatePath = join(__dirname, '../../../.env.example');
-  
+
   if (existsSync(envTemplatePath)) {
     console.log('Environment template already exists. Skipping creation.');
     return;
@@ -113,13 +113,7 @@ NODE_ENV=development
 }
 
 export function validateEnvironment(): void {
-  const requiredVars = [
-    'JWT_SECRET',
-    'DB_HOST',
-    'DB_NAME',
-    'DB_USER',
-    'REDIS_HOST'
-  ];
+  const requiredVars = ['JWT_SECRET', 'DB_HOST', 'DB_NAME', 'DB_USER', 'REDIS_HOST'];
 
   const missingVars = requiredVars.filter(varName => !process.env[varName]);
 
@@ -152,28 +146,28 @@ if (require.main === module) {
   const command = process.argv[2];
 
   switch (command) {
-  case 'setup':
-    setupAuthenticationKeys();
-    break;
-    
-  case 'validate':
-    validateEnvironment();
-    break;
-    
-  case 'generate-secret':
-    const secret = generateSecureSecret();
-    console.log('Generated JWT secret:');
-    console.log(secret);
-    console.log('\nAdd this to your .env file as JWT_SECRET=');
-    break;
-    
-  default:
-    console.log('Usage: ts-node setup.ts [setup|validate|generate-secret]');
-    console.log('');
-    console.log('Commands:');
-    console.log('  setup          - Generate JWT keys and environment template');
-    console.log('  validate       - Validate environment configuration');
-    console.log('  generate-secret - Generate a secure JWT secret');
-    break;
+    case 'setup':
+      setupAuthenticationKeys();
+      break;
+
+    case 'validate':
+      validateEnvironment();
+      break;
+
+    case 'generate-secret':
+      const secret = generateSecureSecret();
+      console.log('Generated JWT secret:');
+      console.log(secret);
+      console.log('\nAdd this to your .env file as JWT_SECRET=');
+      break;
+
+    default:
+      console.log('Usage: ts-node setup.ts [setup|validate|generate-secret]');
+      console.log('');
+      console.log('Commands:');
+      console.log('  setup          - Generate JWT keys and environment template');
+      console.log('  validate       - Validate environment configuration');
+      console.log('  generate-secret - Generate a secure JWT secret');
+      break;
   }
 }

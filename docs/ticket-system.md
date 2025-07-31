@@ -121,6 +121,7 @@ A convenience script is provided at `scripts/github-automation.sh`:
 ## Integration with QA Agent
 
 **CRITICAL**: QA agents must use `node src/run-qa-agent.js` for task reviews
+
 - This script properly integrates with commit tracking and GitHub automation
 - DO NOT use `qa-review-workflow.js` as it doesn't track commits correctly
 
@@ -144,7 +145,7 @@ async function approveTicket(ticketId: string) {
       changed_by: 'qa-agent'
     })
   });
-  
+
   // PR will be created automatically
   console.log('Ticket approved, PR creation triggered');
 }
@@ -166,6 +167,7 @@ When a ticket status changes, a webhook is sent with this payload:
 ```
 
 Configure webhook URL via environment variable:
+
 ```bash
 NOTIFICATION_WEBHOOK_URL=https://your-webhook-endpoint.com/webhooks
 ```
@@ -173,10 +175,11 @@ NOTIFICATION_WEBHOOK_URL=https://your-webhook-endpoint.com/webhooks
 ## Prerequisites
 
 1. **GitHub CLI**: Install `gh` command line tool
+
    ```bash
    # macOS
    brew install gh
-   
+
    # Login to GitHub
    gh auth login
    ```
@@ -206,22 +209,26 @@ NOTIFICATION_WEBHOOK_URL=https://your-webhook-endpoint.com/webhooks
 ## Troubleshooting
 
 ### PR Creation Fails
+
 - Ensure `gh` CLI is authenticated: `gh auth status`
 - Check branch exists and has commits
 - Verify base branch is correct in config
 
 ### Auto-Push Not Working
+
 - Check GitHub automation is enabled in config
 - Verify commit tracking is working
 - Check server logs for errors
 
 ### Status Transition Rejected
+
 - Review allowed transitions in `TICKET_TRANSITIONS`
 - Ensure current status allows transition to new status
 
 ## Database Schema
 
 The system creates these tables:
+
 - `tickets` - Main ticket data
 - `commit_tracking` - Tracks commits per ticket
 - `ticket_history` - Audit trail of changes
@@ -232,17 +239,20 @@ The system creates these tables:
 The ticket system is fully integrated with the agent architecture:
 
 ### QA Agent Integration
+
 - When QA agent sets task status to `APPROVED`, it automatically triggers:
   - GitHub PR creation (if enabled)
   - Commit tracking and auto-push
   - Webhook notifications
 
 ### Developer Agent Updates
+
 - Agents no longer use phase-based task assignment
 - Developers self-assign tasks using `grab-tasks.js`
 - See `/src/agents/README.md` for updated agent documentation
 
 ### Related Documentation
+
 - **Agent System**: `/src/agents/README.md` - Complete agent documentation
 - **Migration Guide**: `/src/AGENT-MIGRATION-GUIDE.md` - Updating existing agents
 - **Developer Workflow**: `/src/dev-workflow.md` - Task management commands

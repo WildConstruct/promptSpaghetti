@@ -30,7 +30,7 @@ const result = await timeoutManager.executeWithTimeout(
     return await someAsyncOperation();
   },
   'database', // Operation type
-  'query',    // Operation subtype
+  'query', // Operation subtype
   'optional-operation-id'
 );
 
@@ -51,10 +51,7 @@ import { createDatabaseIntegration } from './services/timeout-integrations';
 const dbIntegration = createDatabaseIntegration(database);
 
 // Database query with timeout and retry
-const result = await dbIntegration.query(
-  'SELECT * FROM users WHERE id = ?',
-  [userId]
-);
+const result = await dbIntegration.query('SELECT * FROM users WHERE id = ?', [userId]);
 
 // Query with fallback to read replica
 const resultWithFallback = await dbIntegration.queryWithFallback(
@@ -100,7 +97,7 @@ server.get('/api/users/:id', async (request, reply) => {
     reply.status(500).send({
       error: 'Failed to fetch user',
       timedOut: result.timedOut,
-      circuitBreakerOpen: result.circuitBreakerOpen
+      circuitBreakerOpen: result.circuitBreakerOpen,
     });
     return;
   }
@@ -167,11 +164,11 @@ const timeoutManager = initializeTimeoutManager(
   {
     database: {
       query: 20000,
-      transaction: 45000
+      transaction: 45000,
     },
     redis: {
-      operation: 8000
-    }
+      operation: 8000,
+    },
   },
   // Retry configuration
   {
@@ -179,13 +176,13 @@ const timeoutManager = initializeTimeoutManager(
     baseDelay: 2000,
     maxDelay: 60000,
     backoffMultiplier: 2.5,
-    jitterEnabled: true
+    jitterEnabled: true,
   },
   // Circuit breaker configuration
   {
     failureThreshold: 3,
     resetTimeout: 30000,
-    monitoringPeriod: 120000
+    monitoringPeriod: 120000,
   }
 );
 ```
@@ -205,7 +202,7 @@ const monitoringService = createTimeoutMonitoringService(
     timeoutThreshold: 5,
     circuitBreakerThreshold: 1,
     errorRateThreshold: 0.1,
-    alertCooldown: 300000
+    alertCooldown: 300000,
   },
   analyticsCollector
 );
@@ -214,15 +211,15 @@ const monitoringService = createTimeoutMonitoringService(
 monitoringService.addAlertChannel({
   type: 'slack',
   config: {
-    webhookUrl: process.env.SLACK_WEBHOOK_URL
-  }
+    webhookUrl: process.env.SLACK_WEBHOOK_URL,
+  },
 });
 
 monitoringService.addAlertChannel({
   type: 'webhook',
   config: {
-    url: process.env.ALERT_WEBHOOK_URL
-  }
+    url: process.env.ALERT_WEBHOOK_URL,
+  },
 });
 ```
 
@@ -232,9 +229,12 @@ monitoringService.addAlertChannel({
 import { timeoutManagementRoutes } from './routes/timeout-management';
 
 // Register timeout management routes
-server.register(async (fastify) => {
-  await timeoutManagementRoutes(fastify, monitoringService);
-}, { prefix: '/api/timeout' });
+server.register(
+  async fastify => {
+    await timeoutManagementRoutes(fastify, monitoringService);
+  },
+  { prefix: '/api/timeout' }
+);
 ```
 
 ## API Endpoints
@@ -282,24 +282,21 @@ class WorkspaceService {
   private dbIntegration = createDatabaseIntegration(this.database);
 
   async getWorkspace(id: number) {
-    const result = await this.dbIntegration.query(
-      'SELECT * FROM workspaces WHERE id = ?',
-      [id]
-    );
-    
+    const result = await this.dbIntegration.query('SELECT * FROM workspaces WHERE id = ?', [id]);
+
     if (!result.success) {
       throw new Error(`Database query failed: ${result.error?.message}`);
     }
-    
+
     return result.data?.[0];
   }
 
   async createWorkspace(data: any) {
-    const result = await this.dbIntegration.transaction((db) => {
+    const result = await this.dbIntegration.transaction(db => {
       const stmt = db.prepare('INSERT INTO workspaces (name, description) VALUES (?, ?)');
       return stmt.run(data.name, data.description);
     });
-    
+
     return result.data;
   }
 }
@@ -321,7 +318,7 @@ class CacheService {
       3600, // 1 hour TTL
       this.inMemoryCache
     );
-    
+
     return result.data;
   }
 }
@@ -336,17 +333,15 @@ class AuthService {
   private authIntegration = createAuthIntegration();
 
   async login(username: string, password: string) {
-    const result = await this.authIntegration.login(
-      async () => {
-        // Your authentication logic
-        return await this.validateCredentials(username, password);
-      }
-    );
-    
+    const result = await this.authIntegration.login(async () => {
+      // Your authentication logic
+      return await this.validateCredentials(username, password);
+    });
+
     if (!result.success) {
       throw new Error(`Login failed: ${result.error?.message}`);
     }
-    
+
     return result.data;
   }
 }
@@ -361,13 +356,11 @@ class FileService {
   private fileIntegration = createFileIntegration();
 
   async uploadFile(file: any, destination: string) {
-    const result = await this.fileIntegration.upload(
-      async () => {
-        // Your file upload logic
-        return await this.processFileUpload(file, destination);
-      }
-    );
-    
+    const result = await this.fileIntegration.upload(async () => {
+      // Your file upload logic
+      return await this.processFileUpload(file, destination);
+    });
+
     return result.data;
   }
 }
@@ -386,13 +379,13 @@ class EmailService {
       from: process.env.FROM_EMAIL,
       to,
       subject,
-      html: content
+      html: content,
     });
-    
+
     if (!result.success) {
       throw new Error(`Email sending failed: ${result.error?.message}`);
     }
-    
+
     return result.data;
   }
 }
@@ -408,11 +401,11 @@ class ExternalAPIService {
 
   async callWebhook(url: string, payload: any) {
     const result = await this.apiIntegration.webhook(url, payload);
-    
+
     if (!result.success) {
       throw new Error(`Webhook failed: ${result.error?.message}`);
     }
-    
+
     return result.data;
   }
 }
@@ -427,15 +420,13 @@ class HealthService {
   private healthIntegration = createHealthCheckIntegration();
 
   async performHealthCheck() {
-    const result = await this.healthIntegration.comprehensiveHealthCheck(
-      this.database,
-      this.redis,
-      ['https://api.external-service.com']
-    );
-    
+    const result = await this.healthIntegration.comprehensiveHealthCheck(this.database, this.redis, [
+      'https://api.external-service.com',
+    ]);
+
     return {
       status: result.overall ? 'healthy' : 'unhealthy',
-      components: result
+      components: result,
     };
   }
 }

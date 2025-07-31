@@ -8,38 +8,42 @@
   @page {
     size: A4;
     margin: 2cm;
-    
+
     @top-left {
-      content: "Content Authoring Handbook";
+      content: 'Content Authoring Handbook';
       font-size: 9pt;
       color: #666;
     }
-    
+
     @top-right {
-      content: "Page " counter(page);
+      content: 'Page ' counter(page);
       font-size: 9pt;
       color: #666;
     }
-    
+
     @bottom-center {
-      content: "© 2025 Prompt Spaghetti";
+      content: '© 2025 Prompt Spaghetti';
       font-size: 8pt;
       color: #999;
     }
   }
-  
+
   @page :first {
-    @top-left { content: none; }
-    @top-right { content: none; }
+    @top-left {
+      content: none;
+    }
+    @top-right {
+      content: none;
+    }
   }
-  
+
   /* Base print styles */
   * {
     -webkit-print-color-adjust: exact !important;
     color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
-  
+
   body {
     font-family: Georgia, 'Times New Roman', serif;
     font-size: 11pt;
@@ -49,7 +53,7 @@
     margin: 0;
     padding: 0;
   }
-  
+
   /* Hide non-print elements */
   .no-print,
   .handbook-header,
@@ -69,12 +73,12 @@
   .handbook-navigation {
     display: none !important;
   }
-  
+
   /* Show print-only elements */
   .print-only {
     display: block !important;
   }
-  
+
   /* Layout adjustments */
   .main-container {
     display: block;
@@ -83,69 +87,75 @@
     margin: 0;
     padding: 0;
   }
-  
+
   .content {
     width: 100%;
     max-width: none;
     margin: 0;
     padding: 0;
   }
-  
+
   /* Typography */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     color: #000;
     page-break-after: avoid;
     page-break-inside: avoid;
   }
-  
+
   .page-title {
     font-size: 20pt;
     margin-bottom: 12pt;
     padding-bottom: 6pt;
     border-bottom: 2pt solid #000;
   }
-  
+
   h1 {
     font-size: 16pt;
     margin-top: 12pt;
     margin-bottom: 6pt;
   }
-  
+
   h2 {
     font-size: 14pt;
     margin-top: 10pt;
     margin-bottom: 5pt;
   }
-  
+
   h3 {
     font-size: 12pt;
     margin-top: 8pt;
     margin-bottom: 4pt;
   }
-  
+
   h4 {
     font-size: 11pt;
     margin-top: 6pt;
     margin-bottom: 3pt;
   }
-  
+
   p {
     margin-bottom: 6pt;
     text-align: justify;
     orphans: 2;
     widows: 2;
   }
-  
+
   /* Lists */
-  ul, ol {
+  ul,
+  ol {
     margin-bottom: 6pt;
     padding-left: 12pt;
   }
-  
+
   li {
     margin-bottom: 3pt;
   }
-  
+
   /* Code and pre */
   code {
     font-family: 'Courier New', monospace;
@@ -155,7 +165,7 @@
     border-radius: 2pt;
     border: 1pt solid #ddd;
   }
-  
+
   pre {
     background: #f5f5f5;
     padding: 6pt;
@@ -170,7 +180,7 @@
     white-space: pre-wrap;
     word-wrap: break-word;
   }
-  
+
   /* Tables */
   table {
     width: 100%;
@@ -179,18 +189,19 @@
     font-size: 10pt;
     page-break-inside: avoid;
   }
-  
-  th, td {
+
+  th,
+  td {
     border: 1pt solid #333;
     padding: 4pt;
     text-align: left;
   }
-  
+
   th {
     background: #f0f0f0;
     font-weight: bold;
   }
-  
+
   /* Blockquotes */
   blockquote {
     margin: 6pt 0;
@@ -200,26 +211,26 @@
     font-style: italic;
     page-break-inside: avoid;
   }
-  
+
   /* Links */
   a {
     color: #000;
     text-decoration: underline;
   }
-  
+
   a[href]:after {
-    content: " (" attr(href) ")";
+    content: ' (' attr(href) ')';
     font-size: 9pt;
     color: #666;
     word-break: break-all;
   }
-  
-  a[href^="#"]:after,
-  a[href^="javascript:"]:after,
-  a[href^="mailto:"]:after {
-    content: "";
+
+  a[href^='#']:after,
+  a[href^='javascript:']:after,
+  a[href^='mailto:']:after {
+    content: '';
   }
-  
+
   /* Interactive examples - simplified for print */
   .interactive-example {
     border: 1pt solid #333;
@@ -229,21 +240,21 @@
     background: #f9f9f9;
     page-break-inside: avoid;
   }
-  
+
   .interactive-example::before {
-    content: "💻 Interactive Example (see web version for full functionality)";
+    content: '💻 Interactive Example (see web version for full functionality)';
     display: block;
     font-weight: bold;
     margin-bottom: 6pt;
     color: #000;
     font-size: 10pt;
   }
-  
+
   .interactive-example .editor-pane {
     display: block;
     width: 100%;
   }
-  
+
   .interactive-example .code-editor,
   .interactive-example .code-textarea {
     background: #fff;
@@ -255,19 +266,19 @@
     white-space: pre-wrap;
     word-wrap: break-word;
   }
-  
+
   /* Page breaks */
   .page-break,
   .chapter-page,
   .print-chapter {
     page-break-before: always;
   }
-  
+
   .avoid-break,
   .print-avoid-break {
     page-break-inside: avoid;
   }
-  
+
   /* Content metadata */
   .page-meta {
     font-size: 10pt;
@@ -276,16 +287,24 @@
     border-bottom: 1pt solid #ddd;
     padding-bottom: 6pt;
   }
-  
-  .page-type, .page-difficulty, .page-part {
+
+  .page-type,
+  .page-difficulty,
+  .page-part {
     display: inline-block;
     margin-right: 12pt;
   }
-  
-  .page-type::before { content: "Type: "; }
-  .page-difficulty::before { content: "Level: "; }
-  .page-part::before { content: "Part: "; }
-  
+
+  .page-type::before {
+    content: 'Type: ';
+  }
+  .page-difficulty::before {
+    content: 'Level: ';
+  }
+  .page-part::before {
+    content: 'Part: ';
+  }
+
   /* Special print elements */
   .print-note {
     border: 1pt solid #ccc;
@@ -295,13 +314,13 @@
     border-radius: 3pt;
     page-break-inside: avoid;
   }
-  
+
   .print-note::before {
-    content: "📝 Note: ";
+    content: '📝 Note: ';
     font-weight: bold;
     color: #000;
   }
-  
+
   .print-warning {
     border: 1pt solid #d1a700;
     background: #fff3cd;
@@ -310,13 +329,13 @@
     border-radius: 3pt;
     page-break-inside: avoid;
   }
-  
+
   .print-warning::before {
-    content: "⚠️ Warning: ";
+    content: '⚠️ Warning: ';
     font-weight: bold;
     color: #856404;
   }
-  
+
   .print-tip {
     border: 1pt solid #28a745;
     background: #d4edda;
@@ -325,26 +344,26 @@
     border-radius: 3pt;
     page-break-inside: avoid;
   }
-  
+
   .print-tip::before {
-    content: "💡 Tip: ";
+    content: '💡 Tip: ';
     font-weight: bold;
     color: #155724;
   }
-  
+
   /* Images */
   img {
     max-width: 100%;
     height: auto;
     page-break-inside: avoid;
   }
-  
+
   /* Figures */
   figure {
     margin: 6pt 0;
     page-break-inside: avoid;
   }
-  
+
   figcaption {
     font-size: 10pt;
     color: #666;
@@ -352,49 +371,58 @@
     text-align: center;
     margin-top: 3pt;
   }
-  
+
   /* High contrast mode */
   @media (prefers-contrast: high) {
     body {
       color: #000;
     }
-    
-    h1, h2, h3, h4, h5, h6 {
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
       color: #000;
     }
-    
-    code, pre {
+
+    code,
+    pre {
       background: #fff;
       border: 2pt solid #000;
     }
-    
+
     .interactive-example {
       background: #fff;
       border: 2pt solid #000;
     }
-    
-    table th, table td {
+
+    table th,
+    table td {
       border: 2pt solid #000;
     }
-    
+
     blockquote {
       border-left: 4pt solid #000;
       background: #fff;
     }
   }
-  
+
   /* Monochrome mode */
   @media print and (monochrome) {
     * {
       background: white !important;
       color: black !important;
     }
-    
-    .print-warning, .print-tip, .print-note {
+
+    .print-warning,
+    .print-tip,
+    .print-note {
       background: white !important;
       border: 2pt solid black !important;
     }
-    
+
     .interactive-example {
       background: white !important;
       border: 2pt solid black !important;
@@ -409,17 +437,17 @@
     padding: 20pt;
     font-family: Georgia, 'Times New Roman', serif;
   }
-  
+
   .print-preview .print-page {
     background: white;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 20pt;
     padding: 20pt;
     max-width: 210mm;
     margin-left: auto;
     margin-right: auto;
   }
-  
+
   .print-preview-note {
     background: #e3f2fd;
     border: 1pt solid #1976d2;
@@ -428,9 +456,9 @@
     margin: 20pt 0;
     color: #1976d2;
   }
-  
+
   .print-preview-note::before {
-    content: "👀 Print Preview: ";
+    content: '👀 Print Preview: ';
     font-weight: bold;
   }
 }

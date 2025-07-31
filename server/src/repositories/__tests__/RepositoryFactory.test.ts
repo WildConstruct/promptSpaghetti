@@ -6,15 +6,15 @@ import { DatabaseGraphRepository, FileSystemGraphRepository } from '../implement
 // Mock the database connection module
 jest.mock('../../database/connection', () => ({
   getDatabase: jest.fn<unknown[], unknown>(),
-  healthCheck: jest.fn<unknown[], unknown>()
+  healthCheck: jest.fn<unknown[], unknown>(),
 }));
 
 describe('RepositoryFactory', () => {
   let mockDb: Database.Database;
-  
+
   beforeEach(() => {
     mockDb = new Database(':memory:');
-    
+
     // Create test schemas
     mockDb.exec(`
       CREATE TABLE graphs (
@@ -49,13 +49,13 @@ describe('RepositoryFactory', () => {
         metadata TEXT
       );
     `);
-    
+
     // Mock the getDatabase function to return our test database
     const { getDatabase, healthCheck } = require('../../database/connection');
     getDatabase.mockReturnValue(mockDb as unknown as unknown);
     healthCheck.mockReturnValue(true as unknown as unknown);
   });
-  
+
   afterEach(() => {
     mockDb.close();
     jest.clearAllMocks();
@@ -66,38 +66,38 @@ describe('RepositoryFactory', () => {
       const config: RepositoryConfig = {
         database: { type: 'sqlite', path: ':memory:' },
         cache: { type: 'memory' },
-        storage: { type: 'database' }
+        storage: { type: 'database' },
       };
-      
+
       const factory = new RepositoryFactoryImpl(config);
       await factory.initialize();
-      
+
       const graphRepo = factory.createGraphRepository();
       const userRepo = factory.createUserRepository();
       const sessionRepo = factory.createSessionRepository();
       const analyticsRepo = factory.createAnalyticsRepository();
-      
+
       expect(graphRepo).toBeInstanceOf(DatabaseGraphRepository);
       expect(userRepo).toBeDefined();
       expect(sessionRepo).toBeDefined();
       expect(analyticsRepo).toBeDefined();
-      
+
       await factory.close();
     });
-    
+
     test('should create filesystem repositories with filesystem config', async () => {
       const config: RepositoryConfig = {
         database: { type: 'sqlite', path: ':memory:' },
         cache: { type: 'memory' },
-        storage: { type: 'filesystem', basePath: '/tmp/test-graphs' }
+        storage: { type: 'filesystem', basePath: '/tmp/test-graphs' },
       };
-      
+
       const factory = new RepositoryFactoryImpl(config);
       await factory.initialize();
-      
+
       const graphRepo = factory.createGraphRepository();
       expect(graphRepo).toBeInstanceOf(FileSystemGraphRepository);
-      
+
       await factory.close();
     });
   });
@@ -107,17 +107,17 @@ describe('RepositoryFactory', () => {
       const config: RepositoryConfig = {
         database: { type: 'sqlite', path: ':memory:' },
         cache: { type: 'memory' },
-        storage: { type: 'database' }
+        storage: { type: 'database' },
       };
-      
+
       const factory = new RepositoryFactoryImpl(config);
       await factory.initialize();
-      
+
       const graphRepo1 = factory.createGraphRepository();
       const graphRepo2 = factory.createGraphRepository();
-      
+
       expect(graphRepo1).toBe(graphRepo2);
-      
+
       await factory.close();
     });
   });
@@ -127,20 +127,20 @@ describe('RepositoryFactory', () => {
       const config: RepositoryConfig = {
         database: { type: 'sqlite', path: ':memory:' },
         cache: { type: 'memory' },
-        storage: { type: 'database' }
+        storage: { type: 'database' },
       };
-      
+
       const factory = new RepositoryFactoryImpl(config);
       await factory.initialize();
-      
+
       const health = await factory.healthCheck();
-      
+
       expect(health.graph).toBe(true);
       expect(health.user).toBe(true);
       expect(health.session).toBe(true);
       expect(health.analytics).toBe(true);
       expect(health.overall).toBe(true);
-      
+
       await factory.close();
     });
   });
@@ -150,12 +150,12 @@ describe('RepositoryFactory', () => {
       const factory = createRepositoryFactory();
       expect(factory).toBeInstanceOf(RepositoryFactoryImpl);
     });
-    
+
     test('should create factory with overridden configuration', () => {
       const overrides = {
-        storage: { type: 'filesystem' as const, basePath: '/custom/path' }
+        storage: { type: 'filesystem' as const, basePath: '/custom/path' },
       };
-      
+
       const factory = createRepositoryFactory(overrides);
       expect(factory).toBeInstanceOf(RepositoryFactoryImpl);
     });
@@ -167,15 +167,15 @@ describe('RepositoryFactory', () => {
       getDatabase.mockImplementation(() => {
         throw new Error('Database not initialized');
       });
-      
+
       const config: RepositoryConfig = {
         database: { type: 'sqlite', path: ':memory:' },
         cache: { type: 'memory' },
-        storage: { type: 'database' }
+        storage: { type: 'database' },
       };
-      
+
       const factory = new RepositoryFactoryImpl(config);
-      
+
       expect(() => factory.createUserRepository()).toThrow('Database required for user repository');
     });
   });

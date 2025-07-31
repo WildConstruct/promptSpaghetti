@@ -10,7 +10,7 @@ describe('ParameterMappingSystem', () => {
         aspect_ratio: '16:9',
         stylize: 200,
         quality: 1.5,
-        version: 'v6'
+        version: 'v6',
       };
       const result = mappingSystem.mapParameters(sourceParams, 'midjourney', 'openai-dalle');
       expect(result.mappedParameters.size).toBe('1792x1024'); // 16:9 -> landscape
@@ -34,7 +34,7 @@ describe('ParameterMappingSystem', () => {
         chaos: 50,
         weird: 100,
         tile: true,
-        aspect_ratio: '1:1'
+        aspect_ratio: '1:1',
       };
       const result = mappingSystem.mapParameters(sourceParams, 'midjourney', 'openai-dalle');
       expect(result.incompatible).toContain('chaos');
@@ -64,7 +64,7 @@ describe('ParameterMappingSystem', () => {
         size: '1792x1024',
         style: 'vivid',
         quality: 'hd',
-        model: 'dall-e-3'
+        model: 'dall-e-3',
       };
       const result = mappingSystem.mapParameters(sourceParams, 'openai-dalle', 'midjourney');
       expect(result.mappedParameters.aspect_ratio).toBe('16:9');
@@ -82,7 +82,7 @@ describe('ParameterMappingSystem', () => {
       const sourceParams = {
         n: 3,
         response_format: 'b64_json',
-        size: '1024x1024'
+        size: '1024x1024',
       };
       const result = mappingSystem.mapParameters(sourceParams, 'openai-dalle', 'midjourney');
       expect(result.incompatible).toContain('n');
@@ -96,7 +96,7 @@ describe('ParameterMappingSystem', () => {
         width: 1920,
         height: 1080,
         style_strength: 0.8,
-        detail_level: 0.9
+        detail_level: 0.9,
       };
       const result = mappingSystem.mapParameters(sourceParams, 'custom', 'midjourney');
       expect(result.mappedParameters.aspect_ratio).toBe('16:9');
@@ -108,7 +108,7 @@ describe('ParameterMappingSystem', () => {
         width: 1024,
         height: 1024,
         style_strength: 0.7,
-        detail_level: 0.8
+        detail_level: 0.8,
       };
       const result = mappingSystem.mapParameters(sourceParams, 'custom', 'openai-dalle');
       expect(result.mappedParameters.size).toBe('1024x1024');
@@ -118,7 +118,7 @@ describe('ParameterMappingSystem', () => {
     it('should handle missing height parameter', () => {
       const sourceParams = {
         width: 1024,
-        style_strength: 0.3
+        style_strength: 0.3,
       };
       const result = mappingSystem.mapParameters(sourceParams, 'custom', 'midjourney');
       // Should not map width without height due to condition
@@ -139,12 +139,16 @@ describe('ParameterMappingSystem', () => {
       customSystem.registerMappingRuleSet({
         fromPlatform: 'custom',
         toPlatform: 'midjourney',
-        mappings: [{
-          sourceParam: 'test',
-          targetParam: 'result',
-          transform: () => { throw new Error('Transform error'); },
-          description: 'Faulty transform'
-        }]
+        mappings: [
+          {
+            sourceParam: 'test',
+            targetParam: 'result',
+            transform: () => {
+              throw new Error('Transform error');
+            },
+            description: 'Faulty transform',
+          },
+        ],
       });
       const result = customSystem.mapParameters({ test: 'value' }, 'custom', 'midjourney');
       expect(result.warnings).toContain('Failed to transform test: Error: Transform error');
@@ -154,15 +158,21 @@ describe('ParameterMappingSystem', () => {
       customSystem.registerMappingRuleSet({
         fromPlatform: 'custom',
         toPlatform: 'midjourney',
-        mappings: [{
-          sourceParam: 'conditional_param',
-          targetParam: 'result',
-          condition: (params) => params.enable_feature === true,
-          description: 'Conditional mapping'
-        }]
+        mappings: [
+          {
+            sourceParam: 'conditional_param',
+            targetParam: 'result',
+            condition: params => params.enable_feature === true,
+            description: 'Conditional mapping',
+          },
+        ],
       });
       const resultWithoutCondition = customSystem.mapParameters({ conditional_param: 'value' }, 'custom', 'midjourney');
-      const resultWithCondition = customSystem.mapParameters({ conditional_param: 'value', enable_feature: true }, 'custom', 'midjourney');
+      const resultWithCondition = customSystem.mapParameters(
+        { conditional_param: 'value', enable_feature: true },
+        'custom',
+        'midjourney'
+      );
       expect(resultWithoutCondition.warnings).toContain('Parameter conditional_param mapping skipped due to condition');
       expect(resultWithCondition.mappedParameters.result).toBe('value');
     });
@@ -175,8 +185,8 @@ describe('ParameterMappingSystem', () => {
         defaultParameters: {
           aspect_ratio: '1:1',
           version: 'v6',
-          stylize: 100
-        }
+          stylize: 100,
+        },
       });
       const result = customSystem.mapParameters({}, 'custom', 'midjourney');
       expect(result.mappedParameters.aspect_ratio).toBe('1:1');
@@ -191,7 +201,7 @@ describe('ParameterMappingSystem', () => {
         { ratio: '16:9', expectedSize: '1792x1024' },
         { ratio: '9:16', expectedSize: '1024x1792' },
         { ratio: '4:3', expectedSize: '1792x1024' }, // Approximated to landscape
-        { ratio: '3:2', expectedSize: '1792x1024' }
+        { ratio: '3:2', expectedSize: '1792x1024' },
       ];
       testCases.forEach(({ ratio, expectedSize }) => {
         const result = mappingSystem.mapParameters({ aspect_ratio: ratio }, 'midjourney', 'openai-dalle');
@@ -204,7 +214,7 @@ describe('ParameterMappingSystem', () => {
         { width: 1080, height: 1920, expectedRatio: '9:16' },
         { width: 1024, height: 1024, expectedRatio: '1:1' },
         { width: 1600, height: 1200, expectedRatio: '4:3' },
-        { width: 800, height: 600, expectedRatio: '4:3' }
+        { width: 800, height: 600, expectedRatio: '4:3' },
       ];
       testCases.forEach(({ width, height, expectedRatio }) => {
         const result = mappingSystem.mapParameters({ width, height }, 'custom', 'midjourney');
@@ -212,8 +222,11 @@ describe('ParameterMappingSystem', () => {
       });
     });
     it('should handle unusual dimensions gracefully', () => {
-      const result = mappingSystem.mapParameters({ width: 1337, height: 741 }, // Unusual ratio
-        'custom', 'midjourney');
+      const result = mappingSystem.mapParameters(
+        { width: 1337, height: 741 }, // Unusual ratio
+        'custom',
+        'midjourney'
+      );
       // Should produce some valid aspect ratio
       expect(result.mappedParameters.aspect_ratio).toMatch(/^\d+:\d+$/);
     });
@@ -232,15 +245,17 @@ describe('ParameterMappingSystem', () => {
       const customRuleSet = {
         fromPlatform: 'stable-diffusion',
         toPlatform: 'midjourney',
-        mappings: [{
-          sourceParam: 'steps',
-          targetParam: 'quality',
-          transform: (steps) => Math.min(2, steps / 25),
-          description: 'Map diffusion steps to quality'
-        }],
+        mappings: [
+          {
+            sourceParam: 'steps',
+            targetParam: 'quality',
+            transform: steps => Math.min(2, steps / 25),
+            description: 'Map diffusion steps to quality',
+          },
+        ],
         defaultParameters: {
-          version: 'v6'
-        }
+          version: 'v6',
+        },
       };
       mappingSystem.registerMappingRuleSet(customRuleSet);
       const result = mappingSystem.mapParameters({ steps: 50 }, 'stable-diffusion', 'midjourney');

@@ -137,11 +137,13 @@ export interface AdaptorConfig {
     skipOptimization?: boolean;
     stages?: string[];
     stageTimeouts?: Record<string, number>;
-    retries?: number | {
-      maxAttempts?: number;
-      backoffMs?: number;
-      retryableErrors?: string[];
-    };
+    retries?:
+      | number
+      | {
+          maxAttempts?: number;
+          backoffMs?: number;
+          retryableErrors?: string[];
+        };
   };
 }
 
@@ -291,11 +293,7 @@ export interface MappingEngine {
   /**
    * Execute translation pipeline
    */
-  translate(
-    graph: any,
-    targetPlatform: string,
-    config?: AdaptorConfig
-  ): Promise<PlatformPrompt>;
+  translate(graph: any, targetPlatform: string, config?: AdaptorConfig): Promise<PlatformPrompt>;
 
   /**
    * Batch translate to multiple platforms
@@ -309,11 +307,7 @@ export interface MappingEngine {
   /**
    * Validate translation without executing
    */
-  validateTranslation(
-    graph: any,
-    targetPlatform: string,
-    config?: AdaptorConfig
-  ): Promise<ValidationResult>;
+  validateTranslation(graph: any, targetPlatform: string, config?: AdaptorConfig): Promise<ValidationResult>;
 }
 
 /**
@@ -359,14 +353,10 @@ export interface TranslationCache {
 /**
  * Zod schemas for runtime validation
  */
-export 
-export 
-export 
-export 
-/**
+export class /**
  * Error classes for prompt targeting system
  */
-export class PromptTargetingError extends Error {
+PromptTargetingError extends Error {
   constructor(
     message: string,
     public code: string,

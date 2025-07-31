@@ -1,8 +1,8 @@
 # Model Evaluation Workflow - Epic 26.3
-# 
+#
 # Automatically triggered when new models are uploaded to the registry.
 # Evaluates model performance, security, compliance, and quality metrics.
-# 
+#
 # Task: T-1752989144419-71 - Add CI task triggering evaluation on new model upload
 
 name: Model Evaluation
@@ -100,13 +100,13 @@ jobs:
             echo "should-continue=false" >> $GITHUB_OUTPUT
             exit 1
           fi
-          
+
           if [ -z "${{ github.event.inputs.modelName }}" ]; then
             echo "❌ Model name is required"
             echo "should-continue=false" >> $GITHUB_OUTPUT
             exit 1
           fi
-          
+
           if [ -z "${{ github.event.inputs.version }}" ]; then
             echo "❌ Model version is required"
             echo "should-continue=false" >> $GITHUB_OUTPUT
@@ -185,11 +185,11 @@ jobs:
     if: needs.validate-model.outputs.should-continue == 'true'
     strategy:
       matrix:
-        evaluation-type: 
-          - ${{ needs.validate-model.outputs.evaluation-suite == 'standard' && fromJSON('["performance", "quality"]') || 
-                needs.validate-model.outputs.evaluation-suite == 'comprehensive' && fromJSON('["performance", "quality", "security", "compliance"]') ||
-                needs.validate-model.outputs.evaluation-suite == 'security' && fromJSON('["security", "compliance"]') ||
-                needs.validate-model.outputs.evaluation-suite == 'performance' && fromJSON('["performance"]') }}
+        evaluation-type:
+          - ${{ needs.validate-model.outputs.evaluation-suite == 'standard' && fromJSON('["performance", "quality"]') ||
+            needs.validate-model.outputs.evaluation-suite == 'comprehensive' && fromJSON('["performance", "quality", "security", "compliance"]') ||
+            needs.validate-model.outputs.evaluation-suite == 'security' && fromJSON('["security", "compliance"]') ||
+            needs.validate-model.outputs.evaluation-suite == 'performance' && fromJSON('["performance"]') }}
     continue-on-error: false
     steps:
       - name: Checkout repository
@@ -204,17 +204,17 @@ jobs:
         id: download
         run: |
           echo "🔽 Downloading model artifacts..."
-          
+
           # Create scripts directory if it doesn't exist
           mkdir -p scripts/model-evaluation
-          
+
           # Create a mock download script for demonstration
           cat > scripts/model-evaluation/download-model.py << 'EOF'
           #!/usr/bin/env python3
           import sys
           import json
           import os
-          
+
           def download_model(model_id, artifact_path, config_path):
               """Mock model download - in production this would download from storage"""
               print(f"Downloading model {model_id}...")
@@ -232,7 +232,7 @@ jobs:
               
               print("✅ Model download completed")
               return True
-          
+
           if __name__ == "__main__":
               download_model(
                   "${{ github.event.inputs.modelId }}",
@@ -240,24 +240,24 @@ jobs:
                   "${{ github.event.inputs.configPath }}"
               )
           EOF
-          
+
           python scripts/model-evaluation/download-model.py
 
       - name: Run ${{ matrix.evaluation-type }} evaluation
         id: evaluate
         run: |
           echo "🧪 Running ${{ matrix.evaluation-type }} evaluation..."
-          
+
           # Create evaluation script
           mkdir -p scripts/model-evaluation
-          
+
           cat > scripts/model-evaluation/evaluate-${{ matrix.evaluation-type }}.py << 'EOF'
           #!/usr/bin/env python3
           import json
           import time
           import random
           import os
-          
+
           def run_evaluation(evaluation_type, model_id, model_name, framework):
               """Run model evaluation based on type"""
               print(f"Starting {evaluation_type} evaluation for {model_name}")
@@ -322,7 +322,7 @@ jobs:
                   f.write(f"status={results['status']}\n")
               
               return results
-          
+
           if __name__ == "__main__":
               run_evaluation(
                   "${{ matrix.evaluation-type }}",
@@ -331,7 +331,7 @@ jobs:
                   "${{ github.event.inputs.framework }}"
               )
           EOF
-          
+
           python scripts/model-evaluation/evaluate-${{ matrix.evaluation-type }}.py
 
       - name: Upload evaluation results
@@ -359,7 +359,7 @@ jobs:
         id: aggregate
         run: |
           echo "📊 Aggregating evaluation results..."
-          
+
           # Create aggregation script
           cat > aggregate-results.py << 'EOF'
           #!/usr/bin/env python3
@@ -367,7 +367,7 @@ jobs:
           import os
           import glob
           from pathlib import Path
-          
+
           def aggregate_results():
               results = {
                   "model_id": "${{ github.event.inputs.modelId }}",
@@ -452,11 +452,11 @@ jobs:
               print(f"   Summary: {results['overall']['summary']}")
               
               return results
-          
+
           if __name__ == "__main__":
               aggregate_results()
           EOF
-          
+
           python aggregate-results.py
 
       - name: Upload final results
@@ -473,7 +473,7 @@ jobs:
           echo "Overall Score: ${{ steps.aggregate.outputs.overall-score }}"
           echo "Status: ${{ steps.aggregate.outputs.overall-status }}"
           echo "Summary: ${{ steps.aggregate.outputs.summary }}"
-          
+
           if [ "${{ steps.aggregate.outputs.overall-status }}" = "failed" ]; then
             echo "❌ Evaluation failed - model requires attention before deployment"
             exit 1
@@ -492,7 +492,7 @@ jobs:
       - name: Notify model registry
         run: |
           echo "📬 Notifying model registry of evaluation completion..."
-          
+
           # In a real implementation, this would make an API call to update the evaluation job status
           curl -X POST \
             -H "Content-Type: application/json" \
@@ -506,5 +506,5 @@ jobs:
             }' \
             "${{ secrets.API_BASE_URL || 'http://localhost:8000' }}/api/model-evaluation/webhook" \
           || echo "⚠️ Failed to notify model registry (this is expected in development)"
-          
+
           echo "✅ Evaluation pipeline completed"

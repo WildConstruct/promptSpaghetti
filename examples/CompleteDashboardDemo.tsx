@@ -1,7 +1,7 @@
 /**
  * Complete Dashboard System Demo
  * REFACTOR-003: Dashboard Component Architecture Consolidation
- * 
+ *
  * Demonstrates the full consolidated dashboard architecture with:
  * - Metrics & KPIs with trends
  * - Interactive charts (line, bar, pie)
@@ -11,7 +11,7 @@
  */
 
 import React, { useState } from 'react';
-import { 
+import {
   DashboardShell,
   DashboardProvider,
   MetricsGrid,
@@ -20,18 +20,9 @@ import {
   DataTable,
   LoadingState,
   ErrorState,
-  EmptyState
+  EmptyState,
 } from '../packages/ui-kit/src/Dashboard';
-import { 
-  Users, 
-  DollarSign, 
-  TrendingUp, 
-  ShoppingCart, 
-  Eye, 
-  Edit, 
-  Trash2,
-  Download
-} from 'lucide-react';
+import { Users, DollarSign, TrendingUp, ShoppingCart, Eye, Edit, Trash2, Download } from 'lucide-react';
 
 // Sample data for demonstration
 const generateMetricsData = () => ({
@@ -39,67 +30,73 @@ const generateMetricsData = () => ({
     current: 24567,
     previous: 23124,
     target: 25000,
-    format: 'number' as const
+    format: 'number' as const,
   },
   revenue: {
     current: 142567.89,
     previous: 134299.12,
     target: 150000,
     format: 'currency' as const,
-    precision: 2
+    precision: 2,
   },
   conversionRate: {
     current: 3.45,
     previous: 3.12,
     target: 4.0,
     format: 'percentage' as const,
-    precision: 2
+    precision: 2,
   },
   averageOrderValue: {
     current: 89.23,
     previous: 92.14,
     target: 95.0,
     format: 'currency' as const,
-    precision: 2
-  }
+    precision: 2,
+  },
 });
 
 const generateChartData = () => ({
   revenue: {
-    series: [{
-      name: 'Revenue',
-      data: [
-        { label: 'Jan', value: 120000 },
-        { label: 'Feb', value: 132000 },
-        { label: 'Mar', value: 148000 },
-        { label: 'Apr', value: 156000 },
-        { label: 'May', value: 142000 },
-        { label: 'Jun', value: 167000 }
-      ]
-    }]
+    series: [
+      {
+        name: 'Revenue',
+        data: [
+          { label: 'Jan', value: 120000 },
+          { label: 'Feb', value: 132000 },
+          { label: 'Mar', value: 148000 },
+          { label: 'Apr', value: 156000 },
+          { label: 'May', value: 142000 },
+          { label: 'Jun', value: 167000 },
+        ],
+      },
+    ],
   },
   userGrowth: {
-    series: [{
-      name: 'New Users',
-      data: [
-        { label: 'Week 1', value: 245 },
-        { label: 'Week 2', value: 289 },
-        { label: 'Week 3', value: 312 },
-        { label: 'Week 4', value: 278 }
-      ]
-    }]
+    series: [
+      {
+        name: 'New Users',
+        data: [
+          { label: 'Week 1', value: 245 },
+          { label: 'Week 2', value: 289 },
+          { label: 'Week 3', value: 312 },
+          { label: 'Week 4', value: 278 },
+        ],
+      },
+    ],
   },
   trafficSources: {
-    series: [{
-      name: 'Traffic Sources',
-      data: [
-        { label: 'Direct', value: 45, color: '#3b82f6' },
-        { label: 'Search', value: 30, color: '#10b981' },
-        { label: 'Social', value: 15, color: '#f59e0b' },
-        { label: 'Email', value: 10, color: '#ef4444' }
-      ]
-    }]
-  }
+    series: [
+      {
+        name: 'Traffic Sources',
+        data: [
+          { label: 'Direct', value: 45, color: '#3b82f6' },
+          { label: 'Search', value: 30, color: '#10b981' },
+          { label: 'Social', value: 15, color: '#f59e0b' },
+          { label: 'Email', value: 10, color: '#ef4444' },
+        ],
+      },
+    ],
+  },
 });
 
 const generateTableData = () => [
@@ -111,7 +108,7 @@ const generateTableData = () => [
     joinDate: '2024-01-15',
     orders: 12,
     revenue: 1234.56,
-    lastSeen: '2 hours ago'
+    lastSeen: '2 hours ago',
   },
   {
     id: 2,
@@ -121,7 +118,7 @@ const generateTableData = () => [
     joinDate: '2024-02-20',
     orders: 8,
     revenue: 892.34,
-    lastSeen: '1 day ago'
+    lastSeen: '1 day ago',
   },
   {
     id: 3,
@@ -131,7 +128,7 @@ const generateTableData = () => [
     joinDate: '2024-01-03',
     orders: 15,
     revenue: 2156.78,
-    lastSeen: '1 week ago'
+    lastSeen: '1 week ago',
   },
   {
     id: 4,
@@ -141,7 +138,7 @@ const generateTableData = () => [
     joinDate: '2024-03-10',
     orders: 5,
     revenue: 567.89,
-    lastSeen: '30 minutes ago'
+    lastSeen: '30 minutes ago',
   },
   {
     id: 5,
@@ -151,8 +148,8 @@ const generateTableData = () => [
     joinDate: '2024-03-25',
     orders: 2,
     revenue: 234.12,
-    lastSeen: '3 days ago'
-  }
+    lastSeen: '3 days ago',
+  },
 ];
 
 const CompleteDashboardDemo: React.FC = () => {
@@ -169,14 +166,14 @@ const CompleteDashboardDemo: React.FC = () => {
     { key: 'overview', label: 'Overview', icon: TrendingUp },
     { key: 'users', label: 'Users', icon: Users },
     { key: 'revenue', label: 'Revenue', icon: DollarSign },
-    { key: 'orders', label: 'Orders', icon: ShoppingCart }
+    { key: 'orders', label: 'Orders', icon: ShoppingCart },
   ];
 
   const timeRangeOptions = [
     { value: '24h', label: 'Last 24 Hours' },
     { value: '7d', label: 'Last 7 Days' },
     { value: '30d', label: 'Last 30 Days' },
-    { value: '90d', label: 'Last 90 Days' }
+    { value: '90d', label: 'Last 90 Days' },
   ];
 
   // Table columns configuration
@@ -186,33 +183,29 @@ const CompleteDashboardDemo: React.FC = () => {
       title: 'Name',
       dataIndex: 'name' as const,
       sortable: true,
-      filterable: true
+      filterable: true,
     },
     {
       key: 'email',
       title: 'Email',
       dataIndex: 'email' as const,
       sortable: true,
-      filterable: true
+      filterable: true,
     },
     {
       key: 'status',
       title: 'Status',
       dataIndex: 'status' as const,
-      render: (status: string) => (
-        <span className={`status-badge ${status.toLowerCase()}`}>
-          {status}
-        </span>
-      ),
+      render: (status: string) => <span className={`status-badge ${status.toLowerCase()}`}>{status}</span>,
       sortable: true,
-      filterable: true
+      filterable: true,
     },
     {
       key: 'orders',
       title: 'Orders',
       dataIndex: 'orders' as const,
       align: 'right' as const,
-      sortable: true
+      sortable: true,
     },
     {
       key: 'revenue',
@@ -220,14 +213,14 @@ const CompleteDashboardDemo: React.FC = () => {
       dataIndex: 'revenue' as const,
       render: (value: number) => `$${value.toFixed(2)}`,
       align: 'right' as const,
-      sortable: true
+      sortable: true,
     },
     {
       key: 'lastSeen',
       title: 'Last Seen',
       dataIndex: 'lastSeen' as const,
-      sortable: true
-    }
+      sortable: true,
+    },
   ];
 
   // Table actions
@@ -236,14 +229,14 @@ const CompleteDashboardDemo: React.FC = () => {
       key: 'view',
       label: 'View',
       icon: Eye,
-      onClick: (record: any) => console.log('View user:', record.name)
+      onClick: (record: any) => console.log('View user:', record.name),
     },
     {
       key: 'edit',
       label: 'Edit',
       icon: Edit,
       onClick: (record: any) => console.log('Edit user:', record.name),
-      variant: 'primary' as const
+      variant: 'primary' as const,
     },
     {
       key: 'delete',
@@ -251,8 +244,8 @@ const CompleteDashboardDemo: React.FC = () => {
       icon: Trash2,
       onClick: (record: any) => console.log('Delete user:', record.name),
       variant: 'danger' as const,
-      disabled: (record: any) => record.status === 'Active'
-    }
+      disabled: (record: any) => record.status === 'Active',
+    },
   ];
 
   const handleRefresh = () => {
@@ -294,11 +287,7 @@ const CompleteDashboardDemo: React.FC = () => {
         activeTab={activeTab}
         onTabChange={setActiveTab}
       >
-        <ErrorState 
-          title="Dashboard Error"
-          message={error}
-          onRetry={() => setError(null)}
-        />
+        <ErrorState title="Dashboard Error" message={error} onRetry={() => setError(null)} />
       </DashboardShell>
     );
   }
@@ -322,8 +311,8 @@ const CompleteDashboardDemo: React.FC = () => {
             label: 'Export Data',
             icon: Download,
             onClick: handleExport,
-            variant: 'primary'
-          }
+            variant: 'primary',
+          },
         ]}
       >
         <div className="dashboard-content">
@@ -341,12 +330,12 @@ const CompleteDashboardDemo: React.FC = () => {
                       value: 6.2,
                       direction: 'up',
                       period: 'vs last month',
-                      isGoodTrend: true
+                      isGoodTrend: true,
                     }}
                     variant="success"
                     helpText="Total registered users on the platform"
                   />
-                  
+
                   <MetricCard
                     title="Revenue"
                     value={metrics.revenue}
@@ -355,12 +344,12 @@ const CompleteDashboardDemo: React.FC = () => {
                       value: 6.1,
                       direction: 'up',
                       period: 'vs last month',
-                      isGoodTrend: true
+                      isGoodTrend: true,
                     }}
                     variant="success"
                     badge={{ text: 'Target: 95%', variant: 'success' }}
                   />
-                  
+
                   <MetricCard
                     title="Conversion Rate"
                     value={metrics.conversionRate}
@@ -369,11 +358,11 @@ const CompleteDashboardDemo: React.FC = () => {
                       value: 10.6,
                       direction: 'up',
                       period: 'vs last month',
-                      isGoodTrend: true
+                      isGoodTrend: true,
                     }}
                     variant="info"
                   />
-                  
+
                   <MetricCard
                     title="Avg Order Value"
                     value={metrics.averageOrderValue}
@@ -382,7 +371,7 @@ const CompleteDashboardDemo: React.FC = () => {
                       value: 3.2,
                       direction: 'down',
                       period: 'vs last month',
-                      isGoodTrend: false
+                      isGoodTrend: false,
                     }}
                     variant="warning"
                   />
@@ -400,12 +389,12 @@ const CompleteDashboardDemo: React.FC = () => {
                       title="Revenue Trend"
                       height={300}
                       showLegend={false}
-                      valueFormatter={(value) => `$${(value / 1000).toFixed(0)}K`}
+                      valueFormatter={value => `$${(value / 1000).toFixed(0)}K`}
                       xAxisLabel="Month"
                       yAxisLabel="Revenue ($)"
                     />
                   </div>
-                  
+
                   <div className="chart-card">
                     <Chart
                       type="bar"
@@ -418,7 +407,7 @@ const CompleteDashboardDemo: React.FC = () => {
                       yAxisLabel="New Users"
                     />
                   </div>
-                  
+
                   <div className="chart-card">
                     <Chart
                       type="pie"
@@ -442,11 +431,11 @@ const CompleteDashboardDemo: React.FC = () => {
                   pagination={{
                     pageSize: 5,
                     showSizeChanger: true,
-                    showTotal: true
+                    showTotal: true,
                   }}
                   rowSelection={{
                     type: 'checkbox',
-                    onChange: (keys, rows) => console.log('Selected:', keys, rows)
+                    onChange: (keys, rows) => console.log('Selected:', keys, rows),
                   }}
                   searchable={true}
                   exportable={true}
@@ -469,7 +458,7 @@ const CompleteDashboardDemo: React.FC = () => {
                   pageSize: 10,
                   showSizeChanger: true,
                   showTotal: true,
-                  showQuickJumper: true
+                  showQuickJumper: true,
                 }}
                 searchable={true}
                 exportable={true}
@@ -490,12 +479,12 @@ const CompleteDashboardDemo: React.FC = () => {
                     trend={{
                       value: 6.1,
                       direction: 'up',
-                      period: 'vs last month'
+                      period: 'vs last month',
                     }}
                     variant="success"
                     size="large"
                   />
-                  
+
                   <MetricCard
                     title="Average Order Value"
                     value={metrics.averageOrderValue}
@@ -503,7 +492,7 @@ const CompleteDashboardDemo: React.FC = () => {
                     trend={{
                       value: 3.2,
                       direction: 'down',
-                      period: 'vs last month'
+                      period: 'vs last month',
                     }}
                     variant="warning"
                     size="large"
@@ -520,7 +509,7 @@ const CompleteDashboardDemo: React.FC = () => {
                   colorScheme="success"
                   showGrid={true}
                   showAxes={true}
-                  valueFormatter={(value) => `$${(value / 1000).toFixed(0)}K`}
+                  valueFormatter={value => `$${(value / 1000).toFixed(0)}K`}
                 />
               </section>
             </>

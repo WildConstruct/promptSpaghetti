@@ -1,9 +1,9 @@
-import { 
+import {
   ConflictResolver,
   ConflictResolverConfig,
   ConflictOperation,
   ConflictType,
-  ResolutionStrategy
+  ResolutionStrategy,
 } from '../ConflictResolver';
 
 describe('ConflictResolver', () => {
@@ -18,9 +18,9 @@ describe('ConflictResolver', () => {
       positionConflictThreshold: 50, // 50 pixels
       enableSemanticMerge: false,
       preserveConflictHistory: true,
-      conflictHistoryRetention: 10000 // 10 seconds for testing
+      conflictHistoryRetention: 10000, // 10 seconds for testing
     };
-    
+
     resolver = new ConflictResolver(config);
   });
 
@@ -38,7 +38,7 @@ describe('ConflictResolver', () => {
         newValue: { x: 100, y: 100 },
         userId: 'user1',
         timestamp: Date.now(),
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       const result = resolver.processOperation(operation);
@@ -54,7 +54,7 @@ describe('ConflictResolver', () => {
         newValue: { x: 100, y: 100 },
         userId: 'user1',
         timestamp: Date.now(),
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       const operation2: ConflictOperation = {
@@ -65,7 +65,7 @@ describe('ConflictResolver', () => {
         newValue: { x: 120, y: 120 }, // Close position
         userId: 'user2',
         timestamp: Date.now() + 500, // Within threshold
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       resolver.processOperation(operation1);
@@ -88,7 +88,7 @@ describe('ConflictResolver', () => {
         newValue: 'New Name 1',
         userId: 'user1',
         timestamp: Date.now(),
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       const operation2: ConflictOperation = {
@@ -100,7 +100,7 @@ describe('ConflictResolver', () => {
         newValue: 'New Name 2',
         userId: 'user2',
         timestamp: Date.now() + 500,
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       resolver.processOperation(operation1);
@@ -121,7 +121,7 @@ describe('ConflictResolver', () => {
         newValue: { x: 100, y: 100 },
         userId: 'user1',
         timestamp: Date.now(),
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       const operation2: ConflictOperation = {
@@ -132,7 +132,7 @@ describe('ConflictResolver', () => {
         newValue: { x: 100, y: 100 },
         userId: 'user2',
         timestamp: Date.now() + 500,
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       resolver.processOperation(operation1);
@@ -150,7 +150,7 @@ describe('ConflictResolver', () => {
         newValue: { x: 100, y: 100 },
         userId: 'user1',
         timestamp: Date.now(),
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       const operation2: ConflictOperation = {
@@ -161,7 +161,7 @@ describe('ConflictResolver', () => {
         newValue: { x: 200, y: 200 },
         userId: 'user1', // Same user
         timestamp: Date.now() + 500,
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       resolver.processOperation(operation1);
@@ -182,7 +182,7 @@ describe('ConflictResolver', () => {
         newValue: 'First',
         userId: 'user1',
         timestamp: Date.now(),
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       const operation2: ConflictOperation = {
@@ -194,7 +194,7 @@ describe('ConflictResolver', () => {
         newValue: 'Second',
         userId: 'user2',
         timestamp: Date.now() + 500, // Later timestamp
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       resolver.processOperation(operation1);
@@ -218,7 +218,7 @@ describe('ConflictResolver', () => {
         newValue: { x: 100, y: 100 },
         userId: 'user1',
         timestamp: Date.now(),
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       const operation2: ConflictOperation = {
@@ -229,7 +229,7 @@ describe('ConflictResolver', () => {
         newValue: { x: 110, y: 110 },
         userId: 'user2',
         timestamp: Date.now() + 500,
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       offsetResolver.processOperation(operation1);
@@ -254,7 +254,7 @@ describe('ConflictResolver', () => {
         newValue: 'First',
         userId: 'user1',
         timestamp: Date.now(),
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       const operation2: ConflictOperation = {
@@ -266,12 +266,12 @@ describe('ConflictResolver', () => {
         newValue: 'Second',
         userId: 'user2',
         timestamp: Date.now() + 500,
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       resolver.processOperation(operation1);
       const conflictResult = resolver.processOperation(operation2);
-      
+
       expect(conflictResult).toBeDefined();
       const conflictId = conflictResult!.conflict.id;
 
@@ -299,7 +299,7 @@ describe('ConflictResolver', () => {
         newValue: 'First',
         userId: 'user1',
         timestamp: Date.now(),
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       const operation2: ConflictOperation = {
@@ -311,16 +311,16 @@ describe('ConflictResolver', () => {
         newValue: 'Second',
         userId: 'user2',
         timestamp: Date.now() + 500,
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       resolver.processOperation(operation1);
       const conflictResult = resolver.processOperation(operation2);
-      
+
       const conflictId = conflictResult!.conflict.id;
       const userSelection = {
         operationId: 'op1',
-        value: 'User Custom Value'
+        value: 'User Custom Value',
       };
 
       const resolution = resolver.resolveConflict(
@@ -346,7 +346,7 @@ describe('ConflictResolver', () => {
         newValue: 'First',
         userId: 'user1',
         timestamp: Date.now(),
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       const operation2: ConflictOperation = {
@@ -358,7 +358,7 @@ describe('ConflictResolver', () => {
         newValue: 'Second',
         userId: 'user2',
         timestamp: Date.now() + 500,
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       resolver.processOperation(operation1);
@@ -379,7 +379,7 @@ describe('ConflictResolver', () => {
         newValue: 'First',
         userId: 'user1',
         timestamp: Date.now(),
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       const operation2: ConflictOperation = {
@@ -391,7 +391,7 @@ describe('ConflictResolver', () => {
         newValue: 'Second',
         userId: 'user2',
         timestamp: Date.now() + 500,
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       resolver.processOperation(operation1);
@@ -415,7 +415,7 @@ describe('ConflictResolver', () => {
         newValue: 'First',
         userId: 'user1',
         timestamp: Date.now(),
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       const operation2: ConflictOperation = {
@@ -427,7 +427,7 @@ describe('ConflictResolver', () => {
         newValue: 'Second',
         userId: 'user2',
         timestamp: Date.now() + 500,
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       resolver.processOperation(operation1);
@@ -439,12 +439,7 @@ describe('ConflictResolver', () => {
       expect(stats.resolved).toBe(0);
 
       // Resolve the conflict
-      resolver.resolveConflict(
-        conflictResult!.conflict.id,
-        ResolutionStrategy.LAST_WRITER_WINS,
-        undefined,
-        'user1'
-      );
+      resolver.resolveConflict(conflictResult!.conflict.id, ResolutionStrategy.LAST_WRITER_WINS, undefined, 'user1');
 
       const updatedStats = resolver.getConflictStats('doc1');
       expect(updatedStats.resolved).toBe(1);
@@ -463,7 +458,7 @@ describe('ConflictResolver', () => {
         newValue: { a: 2, b: 2 },
         userId: 'user1',
         timestamp: Date.now(),
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       const operation2: ConflictOperation = {
@@ -475,7 +470,7 @@ describe('ConflictResolver', () => {
         newValue: { a: 3, c: 3 },
         userId: 'user2',
         timestamp: Date.now() + 500,
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       resolver.processOperation(operation1);
@@ -493,12 +488,12 @@ describe('ConflictResolver', () => {
   });
 
   describe('event emissions', () => {
-    it('should emit conflict detected event', (done) => {
+    it('should emit conflict detected event', done => {
       const timeout = setTimeout(() => {
         done(new Error('Test timed out waiting for conflict_detected event'));
       }, 5000);
-      
-      resolver.on('conflict_detected', (conflict) => {
+
+      resolver.on('conflict_detected', conflict => {
         clearTimeout(timeout);
         expect(conflict.type).toBe(ConflictType.NODE_PROPERTIES);
         expect(conflict.operations).toHaveLength(2);
@@ -514,7 +509,7 @@ describe('ConflictResolver', () => {
         newValue: 'First',
         userId: 'user1',
         timestamp: Date.now(),
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       const operation2: ConflictOperation = {
@@ -526,19 +521,19 @@ describe('ConflictResolver', () => {
         newValue: 'Second',
         userId: 'user2',
         timestamp: Date.now() + 500,
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       resolver.processOperation(operation1);
       resolver.processOperation(operation2);
     });
 
-    it('should emit conflict auto-resolved event', (done) => {
+    it('should emit conflict auto-resolved event', done => {
       const timeout = setTimeout(() => {
         done(new Error('Test timed out waiting for conflict_auto_resolved event'));
       }, 5000);
-      
-      resolver.on('conflict_auto_resolved', (resolution) => {
+
+      resolver.on('conflict_auto_resolved', resolution => {
         clearTimeout(timeout);
         expect(resolution.resolvedValue).toBe('Second');
         expect(resolution.requiresUserInput).toBe(false);
@@ -554,7 +549,7 @@ describe('ConflictResolver', () => {
         newValue: 'First',
         userId: 'user1',
         timestamp: Date.now(),
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       const operation2: ConflictOperation = {
@@ -566,7 +561,7 @@ describe('ConflictResolver', () => {
         newValue: 'Second',
         userId: 'user2',
         timestamp: Date.now() + 500,
-        documentId: 'doc1'
+        documentId: 'doc1',
       };
 
       resolver.processOperation(operation1);

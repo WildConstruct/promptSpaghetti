@@ -1,16 +1,19 @@
 # MFA Recovery and Backup Procedures
 
 ## Overview
+
 This document defines comprehensive recovery and backup procedures for Multi-Factor Authentication (MFA) as part of Epic 19: Authentication Enhancement & Security Hardening. These procedures ensure users can regain access to their accounts when primary MFA methods are unavailable.
 
 ## Recovery Method Hierarchy
 
 ### Primary Recovery Methods
+
 1. **Backup Codes** (One-time use codes)
 2. **Alternative MFA Methods** (Secondary enrolled methods)
 3. **Recovery Email/Phone** (Verified backup contact)
 
 ### Secondary Recovery Methods
+
 4. **Administrative Override** (Help desk with verification)
 5. **Identity Verification** (Document-based verification)
 6. **Account Recovery Workflow** (Multi-step verification process)
@@ -18,6 +21,7 @@ This document defines comprehensive recovery and backup procedures for Multi-Fac
 ## Backup Codes System
 
 ### Code Generation
+
 ```typescript
 interface BackupCode {
   code: string;
@@ -30,30 +34,30 @@ interface BackupCode {
 class BackupCodeGenerator {
   generateBackupCodes(userId: string, count: number = 10): BackupCode[] {
     const codes: BackupCode[] = [];
-    
+
     for (let i = 0; i < count; i++) {
       const code = this.generateSecureCode();
       codes.push({
         code: code,
         userId,
         used: false,
-        generatedAt: new Date()
+        generatedAt: new Date(),
       });
     }
-    
+
     return codes;
   }
-  
+
   private generateSecureCode(): string {
     // Generate 8-character alphanumeric code
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let result = '';
-    
+
     for (let i = 0; i < 8; i++) {
       const randomIndex = crypto.randomInt(0, chars.length);
       result += chars[randomIndex];
     }
-    
+
     // Format as XXXX-XXXX for readability
     return `${result.slice(0, 4)}-${result.slice(4, 8)}`;
   }
@@ -61,6 +65,7 @@ class BackupCodeGenerator {
 ```
 
 ### Code Management
+
 - **Generation**: 10 backup codes created during MFA setup
 - **Format**: 8-character alphanumeric (XXXX-XXXX)
 - **Usage**: Single-use only, automatically invalidated after use
@@ -68,6 +73,7 @@ class BackupCodeGenerator {
 - **Display**: Shown only once during generation, user must save securely
 
 ### Backup Code Database Schema
+
 ```sql
 CREATE TABLE mfa_backup_codes (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -88,6 +94,7 @@ CREATE INDEX idx_backup_codes_used ON mfa_backup_codes(user_id, used);
 ## Alternative MFA Method Recovery
 
 ### Method Prioritization
+
 ```typescript
 interface MFAMethodPriority {
   primary: string[];
@@ -98,11 +105,12 @@ interface MFAMethodPriority {
 const recoveryPriority: MFAMethodPriority = {
   primary: ['totp', 'hardware_token'],
   backup: ['email', 'sms'],
-  emergency: ['backup_codes', 'recovery_email']
+  emergency: ['backup_codes', 'recovery_email'],
 };
 ```
 
 ### Cross-Method Recovery Flow
+
 1. **Primary Method Failure** → Offer backup methods
 2. **All Methods Unavailable** → Initiate recovery workflow
 3. **Account Lockout** → Administrative intervention required
@@ -110,12 +118,14 @@ const recoveryPriority: MFAMethodPriority = {
 ## Recovery Email/Phone System
 
 ### Verification Requirements
+
 - **Separate from login email** (prevents single point of failure)
 - **Verified during setup** (confirmation code sent)
 - **Regular revalidation** (annual verification reminders)
 - **Change notifications** (alert sent to old contact method)
 
 ### Recovery Contact Database Schema
+
 ```sql
 CREATE TABLE mfa_recovery_contacts (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -134,6 +144,7 @@ CREATE TABLE mfa_recovery_contacts (
 ## Administrative Override Procedures
 
 ### Help Desk Verification Process
+
 1. **Identity Verification**:
    - Full name and username
    - Account creation date (approximate)
@@ -152,6 +163,7 @@ CREATE TABLE mfa_recovery_contacts (
    - Security team final authorization (for high-value accounts)
 
 ### Override Database Schema
+
 ```sql
 CREATE TABLE mfa_admin_overrides (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -171,6 +183,7 @@ CREATE TABLE mfa_admin_overrides (
 ## Self-Service Recovery Workflows
 
 ### Automated Recovery Process
+
 ```typescript
 interface RecoveryWorkflow {
   step: number;
@@ -182,32 +195,33 @@ interface RecoveryWorkflow {
 const standardRecoveryWorkflow: RecoveryWorkflow[] = [
   {
     step: 1,
-    description: "Verify recovery email/phone",
+    description: 'Verify recovery email/phone',
     required: true,
-    timeLimit: 15
+    timeLimit: 15,
   },
   {
     step: 2,
-    description: "Answer security questions",
+    description: 'Answer security questions',
     required: true,
-    timeLimit: 10
+    timeLimit: 10,
   },
   {
     step: 3,
-    description: "Provide account information",
+    description: 'Provide account information',
     required: true,
-    timeLimit: 30
+    timeLimit: 30,
   },
   {
     step: 4,
-    description: "Wait for verification (1-24 hours)",
+    description: 'Wait for verification (1-24 hours)',
     required: true,
-    timeLimit: 1440
-  }
+    timeLimit: 1440,
+  },
 ];
 ```
 
 ### Knowledge-Based Authentication (KBA)
+
 - **Account Details**: Creation date, last login location, recent activity
 - **Security Questions**: Custom questions set during registration
 - **Behavioral Patterns**: Typical login times, device types, locations
@@ -215,6 +229,7 @@ const standardRecoveryWorkflow: RecoveryWorkflow[] = [
 ## Recovery Time Objectives
 
 ### Service Level Targets
+
 - **Backup Codes**: Immediate (< 30 seconds)
 - **Alternative Methods**: Immediate (< 2 minutes)
 - **Recovery Email/Phone**: Fast (< 15 minutes)
@@ -223,6 +238,7 @@ const standardRecoveryWorkflow: RecoveryWorkflow[] = [
 - **Identity Verification**: Extended (3-5 business days)
 
 ### Escalation Procedures
+
 ```typescript
 interface EscalationRule {
   trigger: string;
@@ -232,71 +248,54 @@ interface EscalationRule {
 
 const escalationRules: EscalationRule[] = [
   {
-    trigger: "High-value account locked > 4 hours",
-    escalateTo: "Security Team",
-    timeLimit: 4
+    trigger: 'High-value account locked > 4 hours',
+    escalateTo: 'Security Team',
+    timeLimit: 4,
   },
   {
-    trigger: "Multiple failed recovery attempts",
-    escalateTo: "Fraud Prevention",
-    timeLimit: 1
+    trigger: 'Multiple failed recovery attempts',
+    escalateTo: 'Fraud Prevention',
+    timeLimit: 1,
   },
   {
-    trigger: "Corporate account recovery request",
-    escalateTo: "Enterprise Support",
-    timeLimit: 2
-  }
+    trigger: 'Corporate account recovery request',
+    escalateTo: 'Enterprise Support',
+    timeLimit: 2,
+  },
 ];
 ```
 
 ## User Communication Templates
 
 ### Backup Code Generation Email
+
 ```html
-Subject: Important: Your MFA Backup Codes
-
-Dear [Name],
-
-You have successfully generated new backup codes for your account. These codes can be used to access your account if your primary MFA method is unavailable.
-
-IMPORTANT: Save these codes in a secure location. Each code can only be used once.
-
-[Backup Codes List]
-
-Security Tips:
-- Store codes separately from your password
-- Do not share codes with anyone
-- Generate new codes if you suspect compromise
-- Keep codes updated and accessible
-
-Questions? Contact support at [email]
+Subject: Important: Your MFA Backup Codes Dear [Name], You have successfully generated new backup codes for your
+account. These codes can be used to access your account if your primary MFA method is unavailable. IMPORTANT: Save these
+codes in a secure location. Each code can only be used once. [Backup Codes List] Security Tips: - Store codes separately
+from your password - Do not share codes with anyone - Generate new codes if you suspect compromise - Keep codes updated
+and accessible Questions? Contact support at [email]
 ```
 
 ### Recovery Process Initiated
+
 ```html
-Subject: Account Recovery Request Started
-
-We received a request to recover access to your account using backup procedures.
-
-Recovery Method: [Method]
-Request Time: [Timestamp]
-IP Address: [IP]
-
-If you did not request this recovery, please contact security immediately.
-
-Expected completion time: [Timeframe]
-Reference ID: [ID]
+Subject: Account Recovery Request Started We received a request to recover access to your account using backup
+procedures. Recovery Method: [Method] Request Time: [Timestamp] IP Address: [IP] If you did not request this recovery,
+please contact security immediately. Expected completion time: [Timeframe] Reference ID: [ID]
 ```
 
 ## Security Measures
 
 ### Fraud Prevention
+
 - **Rate limiting** on recovery attempts (3 per 24 hours)
 - **Geographic validation** for recovery requests
 - **Device fingerprinting** for known devices
 - **Behavioral analysis** for suspicious patterns
 
 ### Audit Requirements
+
 ```sql
 CREATE TABLE mfa_recovery_audit (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -313,6 +312,7 @@ CREATE TABLE mfa_recovery_audit (
 ```
 
 ### Compliance Logging
+
 - All recovery attempts logged with timestamps
 - Successful recoveries trigger security notifications
 - Failed attempts increment risk scores
@@ -322,6 +322,7 @@ CREATE TABLE mfa_recovery_audit (
 ## Backup Code User Experience
 
 ### Generation Flow
+
 1. **Navigate to Security Settings** → MFA Configuration
 2. **Generate Backup Codes** → Display warning about secure storage
 3. **Display Codes** → Show once with download/print options
@@ -329,6 +330,7 @@ CREATE TABLE mfa_recovery_audit (
 5. **Invalidate Previous** → Old codes automatically disabled
 
 ### Usage Flow
+
 1. **Login with Username/Password** → Standard authentication
 2. **MFA Challenge Presented** → Primary method requested
 3. **Select "Use Backup Code"** → Alternative option displayed
@@ -337,6 +339,7 @@ CREATE TABLE mfa_recovery_audit (
 6. **Access Granted** → Code marked as used, remaining count shown
 
 ### Code Management Interface
+
 ```typescript
 interface BackupCodeUI {
   codesRemaining: number;
@@ -350,6 +353,7 @@ interface BackupCodeUI {
 ## Recovery Method Configuration
 
 ### User Preferences
+
 ```typescript
 interface RecoveryPreferences {
   preferredRecoveryMethods: string[];
@@ -362,6 +366,7 @@ interface RecoveryPreferences {
 ```
 
 ### Organization Policies
+
 ```typescript
 interface OrganizationRecoveryPolicy {
   allowSelfServiceRecovery: boolean;
@@ -376,12 +381,14 @@ interface OrganizationRecoveryPolicy {
 ## Testing and Validation
 
 ### Recovery Process Testing
+
 - **Monthly validation** of backup code functionality
 - **Quarterly testing** of administrative override procedures
 - **Annual testing** of identity verification workflows
 - **User education** on recovery procedure awareness
 
 ### Performance Metrics
+
 - Recovery success rates by method
 - Average resolution times
 - User satisfaction scores
@@ -391,21 +398,25 @@ interface OrganizationRecoveryPolicy {
 ## Implementation Checklist
 
 ### Phase 1: Basic Recovery (Week 1)
+
 - [ ] Backup code generation system
 - [ ] Basic recovery email/phone verification
 - [ ] Simple administrative override process
 
 ### Phase 2: Enhanced Recovery (Week 2)
+
 - [ ] Self-service recovery workflows
 - [ ] Knowledge-based authentication
 - [ ] Automated escalation procedures
 
 ### Phase 3: Advanced Features (Week 3)
+
 - [ ] Fraud prevention measures
 - [ ] Behavioral analysis integration
 - [ ] Comprehensive audit logging
 
 ### Phase 4: User Experience (Week 4)
+
 - [ ] Recovery method management UI
 - [ ] User education materials
 - [ ] Support process documentation

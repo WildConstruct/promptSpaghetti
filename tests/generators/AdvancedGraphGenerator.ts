@@ -1,12 +1,12 @@
 /**
  * Advanced Graph Generator for Comprehensive Testing
- * 
+ *
  * Generates complex graph structures for testing scenarios including:
  * - Performance stress testing with large node counts
  * - Security validation with malicious configurations
  * - Edge case validation with boundary conditions
  * - Advanced node combinations and configurations
- * 
+ *
  * Task: E18-1753114562159-0BC5A0
  */
 
@@ -50,18 +50,18 @@ export class AdvancedGraphGenerator {
     const { complexity } = options;
 
     switch (complexity) {
-    case 'simple':
-      return this.generateSimpleScenario(options);
-    case 'validation':
-      return this.generateValidationScenario(options);
-    case 'performance':
-      return this.generatePerformanceScenario(options);
-    case 'security':
-      return this.generateSecurityScenario(options);
-    case 'edge-case':
-      return this.generateEdgeCaseScenario(options);
-    default:
-      throw new Error(`Unknown complexity type: ${complexity}`);
+      case 'simple':
+        return this.generateSimpleScenario(options);
+      case 'validation':
+        return this.generateValidationScenario(options);
+      case 'performance':
+        return this.generatePerformanceScenario(options);
+      case 'security':
+        return this.generateSecurityScenario(options);
+      case 'edge-case':
+        return this.generateEdgeCaseScenario(options);
+      default:
+        throw new Error(`Unknown complexity type: ${complexity}`);
     }
   }
 
@@ -80,15 +80,15 @@ export class AdvancedGraphGenerator {
         type: 'WeightedChoice',
         choices: [
           { text: `Option ${i}A`, weight: this.rng() * 5 },
-          { text: `Option ${i}B`, weight: this.rng() * 5 }
-        ]
+          { text: `Option ${i}B`, weight: this.rng() * 5 },
+        ],
       });
 
       if (i > 0) {
         edges.push({
           id: `e${i}`,
           source: `choice${i - 1}`,
-          target: `choice${i}`
+          target: `choice${i}`,
         });
       }
     }
@@ -97,13 +97,13 @@ export class AdvancedGraphGenerator {
     nodes.push({
       id: 'output1',
       type: 'Output',
-      inputs: nodeCount > 1 ? [`choice${nodeCount - 2}`] : []
+      inputs: nodeCount > 1 ? [`choice${nodeCount - 2}`] : [],
     });
 
     edges.push({
       id: `e${nodeCount}`,
       source: nodeCount > 1 ? `choice${nodeCount - 2}` : 'choice0',
-      target: 'output1'
+      target: 'output1',
     });
 
     return {
@@ -113,13 +113,13 @@ export class AdvancedGraphGenerator {
         id: `simple-graph-${Date.now()}`,
         seed: options.seed || 12345,
         nodes,
-        edges
+        edges,
       },
       expectedBehavior: 'success',
       performanceThresholds: {
         maxExecutionTimeMs: 100,
-        maxMemoryUsageMB: 10
-      }
+        maxMemoryUsageMB: 10,
+      },
     };
   }
 
@@ -132,7 +132,7 @@ export class AdvancedGraphGenerator {
       () => this.generateDisconnectedGraph(),
       () => this.generateCircularDependencyGraph(),
       () => this.generateMissingInputGraph(),
-      () => this.generateDuplicateEdgeGraph()
+      () => this.generateDuplicateEdgeGraph(),
     ];
 
     const scenario = scenarios[Math.floor(this.rng() * scenarios.length)]();
@@ -140,7 +140,7 @@ export class AdvancedGraphGenerator {
       name: `validation-${scenario.type}`,
       description: scenario.description,
       graph: scenario.graph,
-      expectedBehavior: 'error'
+      expectedBehavior: 'error',
     };
   }
 
@@ -158,16 +158,16 @@ export class AdvancedGraphGenerator {
 
     for (let layer = 0; layer < layerSizes.length; layer++) {
       const layerSize = layerSizes[layer];
-      
+
       for (let i = 0; i < layerSize; i++) {
         const nodeId = `node_${layer}_${i}`;
-        
+
         if (layer === layerSizes.length - 1) {
           // Final layer - output nodes
           nodes.push({
             id: nodeId,
             type: 'Output',
-            inputs: layer > 0 ? [`node_${layer - 1}_${i % layerSizes[layer - 1]}`] : []
+            inputs: layer > 0 ? [`node_${layer - 1}_${i % layerSizes[layer - 1]}`] : [],
           });
         } else if (options.includeAdvancedNodes && this.rng() < 0.3) {
           // 30% chance of advanced nodes
@@ -180,8 +180,8 @@ export class AdvancedGraphGenerator {
             type: 'WeightedChoice',
             choices: Array.from({ length: choiceCount }, (_, idx) => ({
               text: `Choice ${nodeId}_${idx}`,
-              weight: this.rng() * 10
-            }))
+              weight: this.rng() * 10,
+            })),
           });
         }
 
@@ -189,13 +189,13 @@ export class AdvancedGraphGenerator {
         if (layer > 0) {
           const prevLayerSize = layerSizes[layer - 1];
           const connectionsPerNode = Math.min(3, prevLayerSize);
-          
+
           for (let j = 0; j < connectionsPerNode; j++) {
             const sourceIdx = (i + j) % prevLayerSize;
             edges.push({
               id: `edge_${layer}_${i}_${j}`,
               source: `node_${layer - 1}_${sourceIdx}`,
-              target: nodeId
+              target: nodeId,
             });
           }
         }
@@ -211,13 +211,13 @@ export class AdvancedGraphGenerator {
         id: `perf-graph-${Date.now()}`,
         seed: options.seed || 42,
         nodes,
-        edges
+        edges,
       },
       expectedBehavior: 'performance',
       performanceThresholds: {
         maxExecutionTimeMs: nodeCount < 500 ? 1000 : 3000,
-        maxMemoryUsageMB: Math.max(50, nodeCount * 0.1)
-      }
+        maxMemoryUsageMB: Math.max(50, nodeCount * 0.1),
+      },
     };
   }
 
@@ -229,7 +229,7 @@ export class AdvancedGraphGenerator {
       () => this.generateMaliciousExpressionGraph(),
       () => this.generatePrototypePollutionGraph(),
       () => this.generateCodeInjectionGraph(),
-      () => this.generateResourceExhaustionGraph()
+      () => this.generateResourceExhaustionGraph(),
     ];
 
     const scenario = securityTests[Math.floor(this.rng() * securityTests.length)]();
@@ -237,7 +237,7 @@ export class AdvancedGraphGenerator {
       name: `security-${scenario.type}`,
       description: scenario.description,
       graph: scenario.graph,
-      expectedBehavior: 'error'
+      expectedBehavior: 'error',
     };
   }
 
@@ -250,7 +250,7 @@ export class AdvancedGraphGenerator {
       () => this.generateSingleNodeGraph(),
       () => this.generateLargeWeightGraph(),
       () => this.generateZeroWeightGraph(),
-      () => this.generateDeepNestingGraph(options.maxDepth || 20)
+      () => this.generateDeepNestingGraph(options.maxDepth || 20),
     ];
 
     const scenario = edgeCases[Math.floor(this.rng() * edgeCases.length)]();
@@ -258,7 +258,7 @@ export class AdvancedGraphGenerator {
       name: `edge-case-${scenario.type}`,
       description: scenario.description,
       graph: scenario.graph,
-      expectedBehavior: scenario.expectedBehavior || 'success'
+      expectedBehavior: scenario.expectedBehavior || 'success',
     };
   }
 
@@ -300,71 +300,69 @@ export class AdvancedGraphGenerator {
     const type = advancedTypes[Math.floor(this.rng() * advancedTypes.length)];
 
     switch (type) {
-    case 'WeightedAdvanced':
-      return {
-        id: nodeId,
-        type: 'WeightedAdvanced',
-        choices: Array.from({ length: 20 }, (_, i) => ({
-          text: `Advanced ${nodeId}_${i}`,
-          weight: this.rng() * 10
-        })),
-        distributionConfig: {
-          type: 'exponential',
-          normalize: true,
-          temperature: 1.0 + this.rng() * 2.0
-        }
-      };
+      case 'WeightedAdvanced':
+        return {
+          id: nodeId,
+          type: 'WeightedAdvanced',
+          choices: Array.from({ length: 20 }, (_, i) => ({
+            text: `Advanced ${nodeId}_${i}`,
+            weight: this.rng() * 10,
+          })),
+          distributionConfig: {
+            type: 'exponential',
+            normalize: true,
+            temperature: 1.0 + this.rng() * 2.0,
+          },
+        };
 
-    case 'Sequential':
-      return {
-        id: nodeId,
-        type: 'Sequential',
-        sequence: Array.from({ length: 30 }, (_, i) => `Item ${nodeId}_${i}`),
-        pattern: {
-          type: 'weighted',
-          config: {
-            weights: Array.from({ length: 30 }, () => this.rng())
+      case 'Sequential':
+        return {
+          id: nodeId,
+          type: 'Sequential',
+          sequence: Array.from({ length: 30 }, (_, i) => `Item ${nodeId}_${i}`),
+          pattern: {
+            type: 'weighted',
+            config: {
+              weights: Array.from({ length: 30 }, () => this.rng()),
+            },
+          },
+        };
+
+      case 'Markov':
+        const states = ['alpha', 'beta', 'gamma', 'delta'];
+        const transitions: Record<string, Record<string, number>> = {};
+
+        for (const state of states) {
+          transitions[state] = {};
+          let remaining = 1.0;
+
+          for (let i = 0; i < states.length - 1; i++) {
+            const prob = this.rng() * remaining;
+            transitions[state][states[i]] = prob;
+            remaining -= prob;
           }
+          transitions[state][states[states.length - 1]] = remaining;
         }
-      };
 
-    case 'Markov':
-      const states = ['alpha', 'beta', 'gamma', 'delta'];
-      const transitions: Record<string, Record<string, number>> = {};
-        
-      for (const state of states) {
-        transitions[state] = {};
-        let remaining = 1.0;
-          
-        for (let i = 0; i < states.length - 1; i++) {
-          const prob = this.rng() * remaining;
-          transitions[state][states[i]] = prob;
-          remaining -= prob;
-        }
-        transitions[state][states[states.length - 1]] = remaining;
-      }
+        return {
+          id: nodeId,
+          type: 'Markov',
+          states,
+          transitions,
+          initialState: states[0],
+          markovConfig: {
+            maxSteps: 10,
+            terminationConditions: [states[states.length - 1]],
+          },
+        };
 
-      return {
-        id: nodeId,
-        type: 'Markov',
-        states,
-        transitions,
-        initialState: states[0],
-        markovConfig: {
-          maxSteps: 10,
-          terminationConditions: [states[states.length - 1]]
-        }
-      };
-
-    default:
-      return {
-        id: nodeId,
-        type: 'Conditional',
-        branches: [
-          { condition: 'true', output: `Conditional ${nodeId} met` }
-        ],
-        defaultOutput: `Conditional ${nodeId} default`
-      };
+      default:
+        return {
+          id: nodeId,
+          type: 'Conditional',
+          branches: [{ condition: 'true', output: `Conditional ${nodeId} met` }],
+          defaultOutput: `Conditional ${nodeId} default`,
+        };
     }
   }
 
@@ -378,13 +376,13 @@ export class AdvancedGraphGenerator {
         seed: 12345,
         nodes: [
           { id: 'node1', type: 'WeightedChoice' as const, choices: [{ text: 'Self', weight: 1 }] },
-          { id: 'output1', type: 'Output' as const, inputs: ['node1'] }
+          { id: 'output1', type: 'Output' as const, inputs: ['node1'] },
         ],
         edges: [
           { id: 'e1', source: 'node1', target: 'node1' }, // Self-loop
-          { id: 'e2', source: 'node1', target: 'output1' }
-        ]
-      }
+          { id: 'e2', source: 'node1', target: 'output1' },
+        ],
+      },
     };
   }
 
@@ -399,13 +397,13 @@ export class AdvancedGraphGenerator {
           { id: 'isolated1', type: 'WeightedChoice' as const, choices: [{ text: 'Isolated', weight: 1 }] },
           { id: 'isolated2', type: 'WeightedChoice' as const, choices: [{ text: 'Also isolated', weight: 1 }] },
           { id: 'output1', type: 'Output' as const, inputs: ['connected1'] },
-          { id: 'connected1', type: 'WeightedChoice' as const, choices: [{ text: 'Connected', weight: 1 }] }
+          { id: 'connected1', type: 'WeightedChoice' as const, choices: [{ text: 'Connected', weight: 1 }] },
         ],
         edges: [
-          { id: 'e1', source: 'connected1', target: 'output1' }
+          { id: 'e1', source: 'connected1', target: 'output1' },
           // isolated1 and isolated2 have no connections
-        ]
-      }
+        ],
+      },
     };
   }
 
@@ -420,15 +418,15 @@ export class AdvancedGraphGenerator {
           { id: 'node1', type: 'Concat' as const, inputs: ['node2'] },
           { id: 'node2', type: 'Concat' as const, inputs: ['node3'] },
           { id: 'node3', type: 'Concat' as const, inputs: ['node1'] }, // Creates cycle
-          { id: 'output1', type: 'Output' as const, inputs: ['node1'] }
+          { id: 'output1', type: 'Output' as const, inputs: ['node1'] },
         ],
         edges: [
           { id: 'e1', source: 'node2', target: 'node1' },
           { id: 'e2', source: 'node3', target: 'node2' },
           { id: 'e3', source: 'node1', target: 'node3' }, // Creates cycle
-          { id: 'e4', source: 'node1', target: 'output1' }
-        ]
-      }
+          { id: 'e4', source: 'node1', target: 'output1' },
+        ],
+      },
     };
   }
 
@@ -439,11 +437,9 @@ export class AdvancedGraphGenerator {
       graph: {
         id: 'missing-input-test',
         seed: 12345,
-        nodes: [
-          { id: 'output1', type: 'Output' as const, inputs: ['nonexistent'] }
-        ],
-        edges: []
-      }
+        nodes: [{ id: 'output1', type: 'Output' as const, inputs: ['nonexistent'] }],
+        edges: [],
+      },
     };
   }
 
@@ -456,17 +452,17 @@ export class AdvancedGraphGenerator {
         seed: 12345,
         nodes: [
           { id: 'node1', type: 'WeightedChoice' as const, choices: [{ text: 'Source', weight: 1 }] },
-          { id: 'output1', type: 'Output' as const, inputs: ['node1'] }
+          { id: 'output1', type: 'Output' as const, inputs: ['node1'] },
         ],
         edges: [
           { id: 'e1', source: 'node1', target: 'output1' },
-          { id: 'e2', source: 'node1', target: 'output1' } // Duplicate
-        ]
-      }
+          { id: 'e2', source: 'node1', target: 'output1' }, // Duplicate
+        ],
+      },
     };
   }
 
-  // Security scenario generators  
+  // Security scenario generators
   private generateMaliciousExpressionGraph() {
     return {
       type: 'malicious-expression',
@@ -478,17 +474,13 @@ export class AdvancedGraphGenerator {
           {
             id: 'conditional1',
             type: 'Conditional' as const,
-            branches: [
-              { condition: 'eval("process.exit(1)")', output: 'Malicious executed' }
-            ],
-            defaultOutput: 'Safe'
+            branches: [{ condition: 'eval("process.exit(1)")', output: 'Malicious executed' }],
+            defaultOutput: 'Safe',
           },
-          { id: 'output1', type: 'Output' as const, inputs: ['conditional1'] }
+          { id: 'output1', type: 'Output' as const, inputs: ['conditional1'] },
         ],
-        edges: [
-          { id: 'e1', source: 'conditional1', target: 'output1' }
-        ]
-      }
+        edges: [{ id: 'e1', source: 'conditional1', target: 'output1' }],
+      },
     };
   }
 
@@ -502,13 +494,13 @@ export class AdvancedGraphGenerator {
         nodes: [
           { id: 'setVar1', type: 'SetVariable' as const, key: '__proto__', value: '{"isEvil": true}' },
           { id: 'getVar1', type: 'GetVariable' as const, key: '__proto__', inputs: ['setVar1'] },
-          { id: 'output1', type: 'Output' as const, inputs: ['getVar1'] }
+          { id: 'output1', type: 'Output' as const, inputs: ['getVar1'] },
         ],
         edges: [
           { id: 'e1', source: 'setVar1', target: 'getVar1' },
-          { id: 'e2', source: 'getVar1', target: 'output1' }
-        ]
-      }
+          { id: 'e2', source: 'getVar1', target: 'output1' },
+        ],
+      },
     };
   }
 
@@ -523,17 +515,13 @@ export class AdvancedGraphGenerator {
           {
             id: 'conditional1',
             type: 'Conditional' as const,
-            branches: [
-              { condition: 'Function("return process")().exit(1)', output: 'Injection succeeded' }
-            ],
-            defaultOutput: 'Safe'
+            branches: [{ condition: 'Function("return process")().exit(1)', output: 'Injection succeeded' }],
+            defaultOutput: 'Safe',
           },
-          { id: 'output1', type: 'Output' as const, inputs: ['conditional1'] }
+          { id: 'output1', type: 'Output' as const, inputs: ['conditional1'] },
         ],
-        edges: [
-          { id: 'e1', source: 'conditional1', target: 'output1' }
-        ]
-      }
+        edges: [{ id: 'e1', source: 'conditional1', target: 'output1' }],
+      },
     };
   }
 
@@ -548,17 +536,13 @@ export class AdvancedGraphGenerator {
           {
             id: 'conditional1',
             type: 'Conditional' as const,
-            branches: [
-              { condition: 'while(true) { /* infinite loop */ }', output: 'Loop completed' }
-            ],
-            defaultOutput: 'Safe'
+            branches: [{ condition: 'while(true) { /* infinite loop */ }', output: 'Loop completed' }],
+            defaultOutput: 'Safe',
           },
-          { id: 'output1', type: 'Output' as const, inputs: ['conditional1'] }
+          { id: 'output1', type: 'Output' as const, inputs: ['conditional1'] },
         ],
-        edges: [
-          { id: 'e1', source: 'conditional1', target: 'output1' }
-        ]
-      }
+        edges: [{ id: 'e1', source: 'conditional1', target: 'output1' }],
+      },
     };
   }
 
@@ -571,9 +555,9 @@ export class AdvancedGraphGenerator {
         id: 'empty-test',
         seed: 12345,
         nodes: [],
-        edges: []
+        edges: [],
       },
-      expectedBehavior: 'success' as const
+      expectedBehavior: 'success' as const,
     };
   }
 
@@ -584,12 +568,10 @@ export class AdvancedGraphGenerator {
       graph: {
         id: 'single-node-test',
         seed: 12345,
-        nodes: [
-          { id: 'output1', type: 'Output' as const, inputs: [] }
-        ],
-        edges: []
+        nodes: [{ id: 'output1', type: 'Output' as const, inputs: [] }],
+        edges: [],
       },
-      expectedBehavior: 'success' as const
+      expectedBehavior: 'success' as const,
     };
   }
 
@@ -606,16 +588,14 @@ export class AdvancedGraphGenerator {
             type: 'WeightedChoice' as const,
             choices: [
               { text: 'Huge weight', weight: Number.MAX_SAFE_INTEGER },
-              { text: 'Normal weight', weight: 1 }
-            ]
+              { text: 'Normal weight', weight: 1 },
+            ],
           },
-          { id: 'output1', type: 'Output' as const, inputs: ['choice1'] }
+          { id: 'output1', type: 'Output' as const, inputs: ['choice1'] },
         ],
-        edges: [
-          { id: 'e1', source: 'choice1', target: 'output1' }
-        ]
+        edges: [{ id: 'e1', source: 'choice1', target: 'output1' }],
       },
-      expectedBehavior: 'success' as const
+      expectedBehavior: 'success' as const,
     };
   }
 
@@ -632,16 +612,14 @@ export class AdvancedGraphGenerator {
             type: 'WeightedChoice' as const,
             choices: [
               { text: 'Zero A', weight: 0 },
-              { text: 'Zero B', weight: 0 }
-            ]
+              { text: 'Zero B', weight: 0 },
+            ],
           },
-          { id: 'output1', type: 'Output' as const, inputs: ['choice1'] }
+          { id: 'output1', type: 'Output' as const, inputs: ['choice1'] },
         ],
-        edges: [
-          { id: 'e1', source: 'choice1', target: 'output1' }
-        ]
+        edges: [{ id: 'e1', source: 'choice1', target: 'output1' }],
       },
-      expectedBehavior: 'success' as const
+      expectedBehavior: 'success' as const,
     };
   }
 
@@ -655,29 +633,29 @@ export class AdvancedGraphGenerator {
         nodes.push({
           id: `depth${i}`,
           type: 'WeightedChoice',
-          choices: [{ text: `Depth ${i}`, weight: 1 }]
+          choices: [{ text: `Depth ${i}`, weight: 1 }],
         });
       } else if (i === maxDepth - 1) {
         nodes.push({
           id: `depth${i}`,
           type: 'Output',
-          inputs: [`depth${i - 1}`]
+          inputs: [`depth${i - 1}`],
         });
         edges.push({
           id: `e${i}`,
           source: `depth${i - 1}`,
-          target: `depth${i}`
+          target: `depth${i}`,
         });
       } else {
         nodes.push({
           id: `depth${i}`,
           type: 'Concat',
-          inputs: [`depth${i - 1}`]
+          inputs: [`depth${i - 1}`],
         });
         edges.push({
           id: `e${i}`,
           source: `depth${i - 1}`,
-          target: `depth${i}`
+          target: `depth${i}`,
         });
       }
     }
@@ -689,9 +667,9 @@ export class AdvancedGraphGenerator {
         id: 'deep-nesting-test',
         seed: 12345,
         nodes,
-        edges
+        edges,
       },
-      expectedBehavior: 'success' as const
+      expectedBehavior: 'success' as const,
     };
   }
 
@@ -706,11 +684,11 @@ export class AdvancedGraphGenerator {
       this.generateComplexScenario({ nodeCount: 10, complexity: 'validation' }),
       this.generateComplexScenario({ nodeCount: 5, complexity: 'security' }),
       this.generateComplexScenario({ nodeCount: 3, complexity: 'edge-case', maxDepth: 50 }),
-      this.generateComplexScenario({ 
-        nodeCount: 200, 
-        complexity: 'performance', 
-        includeAdvancedNodes: true 
-      })
+      this.generateComplexScenario({
+        nodeCount: 200,
+        complexity: 'performance',
+        includeAdvancedNodes: true,
+      }),
     ];
   }
 }
@@ -733,20 +711,27 @@ export class GraphBatchGenerator {
 
     // Node count variations
     const nodeCounts = [1, 5, 10, 25, 50, 100, 500];
-    
+
     // Complexity variations
-    const complexities: Array<'simple' | 'validation' | 'performance' | 'security' | 'edge-case'> = 
-      ['simple', 'validation', 'performance', 'security', 'edge-case'];
+    const complexities: Array<'simple' | 'validation' | 'performance' | 'security' | 'edge-case'> = [
+      'simple',
+      'validation',
+      'performance',
+      'security',
+      'edge-case',
+    ];
 
     for (const nodeCount of nodeCounts) {
       for (const complexity of complexities) {
-        scenarios.push(this.generator.generateComplexScenario({
-          nodeCount,
-          complexity,
-          seed: nodeCount * 1000 + scenarios.length,
-          includeAdvancedNodes: nodeCount > 20,
-          memoryIntensive: nodeCount > 100
-        }));
+        scenarios.push(
+          this.generator.generateComplexScenario({
+            nodeCount,
+            complexity,
+            seed: nodeCount * 1000 + scenarios.length,
+            includeAdvancedNodes: nodeCount > 20,
+            memoryIntensive: nodeCount > 100,
+          })
+        );
       }
     }
 
@@ -762,41 +747,41 @@ export class GraphBatchGenerator {
       this.generator.generateComplexScenario({
         nodeCount: 10,
         complexity: 'simple',
-        seed: 1001
+        seed: 1001,
       }),
-      
+
       // Medium graph with advanced nodes
       this.generator.generateComplexScenario({
         nodeCount: 100,
         complexity: 'performance',
         includeAdvancedNodes: true,
-        seed: 1002
+        seed: 1002,
       }),
-      
+
       // Large graph stress test
       this.generator.generateComplexScenario({
         nodeCount: 1000,
         complexity: 'performance',
         includeAdvancedNodes: true,
         memoryIntensive: true,
-        seed: 1003
+        seed: 1003,
       }),
-      
+
       // Deep nesting test
       this.generator.generateComplexScenario({
         nodeCount: 50,
         complexity: 'edge-case',
         maxDepth: 100,
-        seed: 1004
+        seed: 1004,
       }),
-      
+
       // Connection density test
       this.generator.generateComplexScenario({
         nodeCount: 200,
         complexity: 'performance',
         connectionDensity: 0.8,
-        seed: 1005
-      })
+        seed: 1005,
+      }),
     ];
   }
 
@@ -805,16 +790,18 @@ export class GraphBatchGenerator {
    */
   generateSecurityTestMatrix(): GraphScenario[] {
     const scenarios: GraphScenario[] = [];
-    
+
     // Generate multiple security scenarios with different seeds
     for (let i = 0; i < 10; i++) {
-      scenarios.push(this.generator.generateComplexScenario({
-        nodeCount: 5 + (i * 2),
-        complexity: 'security',
-        seed: 2000 + i
-      }));
+      scenarios.push(
+        this.generator.generateComplexScenario({
+          nodeCount: 5 + i * 2,
+          complexity: 'security',
+          seed: 2000 + i,
+        })
+      );
     }
-    
+
     return scenarios;
   }
 
@@ -823,7 +810,7 @@ export class GraphBatchGenerator {
    */
   generateEdgeCaseMatrix(): GraphScenario[] {
     const scenarios: GraphScenario[] = [];
-    
+
     // Various edge case configurations
     const edgeConfigs = [
       { nodeCount: 0, maxDepth: 1 },
@@ -831,18 +818,20 @@ export class GraphBatchGenerator {
       { nodeCount: 2, maxDepth: 5 },
       { nodeCount: 5, maxDepth: 20 },
       { nodeCount: 10, maxDepth: 50 },
-      { nodeCount: 3, maxDepth: 100 }
+      { nodeCount: 3, maxDepth: 100 },
     ];
-    
+
     edgeConfigs.forEach((config, index) => {
-      scenarios.push(this.generator.generateComplexScenario({
-        nodeCount: config.nodeCount,
-        complexity: 'edge-case',
-        maxDepth: config.maxDepth,
-        seed: 3000 + index
-      }));
+      scenarios.push(
+        this.generator.generateComplexScenario({
+          nodeCount: config.nodeCount,
+          complexity: 'edge-case',
+          maxDepth: config.maxDepth,
+          seed: 3000 + index,
+        })
+      );
     });
-    
+
     return scenarios;
   }
 }

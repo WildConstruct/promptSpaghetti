@@ -22,24 +22,24 @@ const graph = bundleToGraph(bundleJson);
 
 The importer can convert the following GeneratorBundle elements to Graph nodes:
 
-| GeneratorBundle Element | Graph Node Type |
-|------------------------|-----------------|
-| Variables | SetVariable nodes |
-| Weighted array rules | WeightedChoice nodes |
-| Sequential rules | Concat nodes |
-| Include rules | Include nodes |
-| Entry points | Output nodes |
+| GeneratorBundle Element | Graph Node Type      |
+| ----------------------- | -------------------- |
+| Variables               | SetVariable nodes    |
+| Weighted array rules    | WeightedChoice nodes |
+| Sequential rules        | Concat nodes         |
+| Include rules           | Include nodes        |
+| Entry points            | Output nodes         |
 
 ## Known Limitations
 
 The current implementation has several limitations when importing complex bundles:
 
-1. **Conditional Rules**: 
+1. **Conditional Rules**:
    - Conditional rules are converted to WeightedChoice nodes with equal weights
    - The actual conditions are not preserved or evaluated
    - Complex conditional logic is simplified
 
-2. **Modifier Chains**: 
+2. **Modifier Chains**:
    - Modifier chains are simplified to Concat nodes
    - Actual modifiers like uppercase/lowercase are not implemented
 

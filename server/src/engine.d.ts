@@ -9,9 +9,13 @@ export declare function initializeAnalytics(): void;
  * Epic 13 - Enhanced with comprehensive analytics collection.
  * Epic 8.5 - Returns execution path data for visualization.
  */
-export declare function executeGraph(graph: Graph, sessionId?: string, userId?: number): Promise<{
-    outputs: string[];
-    executionPath?: ExecutionPath;
+export declare function executeGraph(
+  graph: Graph,
+  sessionId?: string,
+  userId?: number
+): Promise<{
+  outputs: string[];
+  executionPath?: ExecutionPath;
 }>;
 /**
  * Legacy wrapper for backward compatibility - returns just the output strings

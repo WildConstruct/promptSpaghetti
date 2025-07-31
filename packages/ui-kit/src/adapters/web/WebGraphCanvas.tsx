@@ -34,62 +34,65 @@ export const WebGraphCanvas: React.FC<WebGraphCanvasProps> = ({
   const [redoStack, setRedoStack] = useState<any[]>([]);
 
   // Keyboard shortcuts
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (!enableKeyboardShortcuts) return;
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (!enableKeyboardShortcuts) return;
 
-    const isCtrlOrCmd = e.ctrlKey || e.metaKey;
+      const isCtrlOrCmd = e.ctrlKey || e.metaKey;
 
-    switch (e.key) {
-    case 'Delete':
-    case 'Backspace':
-      // Delete selected node
-      if (props.selectedNodeId && !props.readOnly) {
-        e.preventDefault();
-        // onNodeDelete could be called here
+      switch (e.key) {
+        case 'Delete':
+        case 'Backspace':
+          // Delete selected node
+          if (props.selectedNodeId && !props.readOnly) {
+            e.preventDefault();
+            // onNodeDelete could be called here
+          }
+          break;
+
+        case 'z':
+          if (isCtrlOrCmd && enableUndo) {
+            e.preventDefault();
+            if (e.shiftKey) {
+              // Redo
+              handleRedo();
+            } else {
+              // Undo
+              handleUndo();
+            }
+          }
+          break;
+
+        case 'c':
+          if (isCtrlOrCmd && enableClipboard && props.selectedNodeId) {
+            e.preventDefault();
+            handleCopyNode();
+          }
+          break;
+
+        case 'v':
+          if (isCtrlOrCmd && enableClipboard) {
+            e.preventDefault();
+            handlePasteNode();
+          }
+          break;
+
+        case 'a':
+          if (isCtrlOrCmd) {
+            e.preventDefault();
+            // Select all nodes
+            handleSelectAll();
+          }
+          break;
+
+        case 'Escape':
+          // Deselect all
+          onNodeSelect?.(null);
+          break;
       }
-      break;
-
-    case 'z':
-      if (isCtrlOrCmd && enableUndo) {
-        e.preventDefault();
-        if (e.shiftKey) {
-          // Redo
-          handleRedo();
-        } else {
-          // Undo
-          handleUndo();
-        }
-      }
-      break;
-
-    case 'c':
-      if (isCtrlOrCmd && enableClipboard && props.selectedNodeId) {
-        e.preventDefault();
-        handleCopyNode();
-      }
-      break;
-
-    case 'v':
-      if (isCtrlOrCmd && enableClipboard) {
-        e.preventDefault();
-        handlePasteNode();
-      }
-      break;
-
-    case 'a':
-      if (isCtrlOrCmd) {
-        e.preventDefault();
-        // Select all nodes
-        handleSelectAll();
-      }
-      break;
-
-    case 'Escape':
-      // Deselect all
-      onNodeSelect?.(null);
-      break;
-    }
-  }, [enableKeyboardShortcuts, enableUndo, enableClipboard, props.selectedNodeId, props.readOnly, onNodeSelect]);
+    },
+    [enableKeyboardShortcuts, enableUndo, enableClipboard, props.selectedNodeId, props.readOnly, onNodeSelect]
+  );
 
   // Undo/Redo functionality
   const handleUndo = () => {
@@ -140,50 +143,59 @@ export const WebGraphCanvas: React.FC<WebGraphCanvasProps> = ({
   };
 
   // Context menu
-  const handleContextMenu = useCallback((e: React.MouseEvent) => {
-    if (!enableContextMenu) return;
+  const handleContextMenu = useCallback(
+    (e: React.MouseEvent) => {
+      if (!enableContextMenu) return;
 
-    e.preventDefault();
-    
-    // Show custom context menu
-    const contextMenu = [
-      { label: 'Copy', action: handleCopyNode, shortcut: 'Ctrl+C' },
-      { label: 'Paste', action: handlePasteNode, shortcut: 'Ctrl+V' },
-      { separator: true },
-      { label: 'Delete', action: () => {}, shortcut: 'Delete' },
-      { separator: true },
-      { label: 'Select All', action: handleSelectAll, shortcut: 'Ctrl+A' }
-    ];
+      e.preventDefault();
 
-    // This would need to show an actual context menu component
-    console.log('Context menu:', contextMenu);
-  }, [enableContextMenu]);
+      // Show custom context menu
+      const contextMenu = [
+        { label: 'Copy', action: handleCopyNode, shortcut: 'Ctrl+C' },
+        { label: 'Paste', action: handlePasteNode, shortcut: 'Ctrl+V' },
+        { separator: true },
+        { label: 'Delete', action: () => {}, shortcut: 'Delete' },
+        { separator: true },
+        { label: 'Select All', action: handleSelectAll, shortcut: 'Ctrl+A' },
+      ];
+
+      // This would need to show an actual context menu component
+      console.log('Context menu:', contextMenu);
+    },
+    [enableContextMenu]
+  );
 
   // Drag and drop for files
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    if (!enableDragAndDrop) return;
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'copy';
-  }, [enableDragAndDrop]);
+  const handleDragOver = useCallback(
+    (e: React.DragEvent) => {
+      if (!enableDragAndDrop) return;
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'copy';
+    },
+    [enableDragAndDrop]
+  );
 
-  const handleDrop = useCallback(async (e: React.DragEvent) => {
-    if (!enableDragAndDrop) return;
-    e.preventDefault();
+  const handleDrop = useCallback(
+    async (e: React.DragEvent) => {
+      if (!enableDragAndDrop) return;
+      e.preventDefault();
 
-    const files = Array.from(e.dataTransfer.files);
-    for (const file of files) {
-      if (file.type === 'application/json') {
-        try {
-          const content = await adapter.readFile(file);
-          const data = JSON.parse(content);
-          // Handle imported graph data
-          console.log('Imported data:', data);
-        } catch (error) {
-          console.warn('Failed to import file:', error);
+      const files = Array.from(e.dataTransfer.files);
+      for (const file of files) {
+        if (file.type === 'application/json') {
+          try {
+            const content = await adapter.readFile(file);
+            const data = JSON.parse(content);
+            // Handle imported graph data
+            console.log('Imported data:', data);
+          } catch (error) {
+            console.warn('Failed to import file:', error);
+          }
         }
       }
-    }
-  }, [enableDragAndDrop, adapter]);
+    },
+    [enableDragAndDrop, adapter]
+  );
 
   // Enhanced mouse handling
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
@@ -199,7 +211,7 @@ export const WebGraphCanvas: React.FC<WebGraphCanvasProps> = ({
     if (!canvas) return;
 
     canvas.addEventListener('keydown', handleKeyDown);
-    
+
     return () => {
       canvas.removeEventListener('keydown', handleKeyDown);
     };
@@ -221,7 +233,7 @@ export const WebGraphCanvas: React.FC<WebGraphCanvasProps> = ({
         outline: 'none', // Remove focus outline
         position: 'relative',
         width: '100%',
-        height: '100%'
+        height: '100%',
       }}
       onContextMenu={handleContextMenu}
       onDragOver={handleDragOver}
@@ -235,7 +247,7 @@ export const WebGraphCanvas: React.FC<WebGraphCanvasProps> = ({
         onEdgeCreate={onEdgeCreate}
         onEdgeDelete={onEdgeDelete}
       />
-      
+
       {/* Keyboard shortcuts help */}
       {enableKeyboardShortcuts && (
         <div
@@ -250,7 +262,7 @@ export const WebGraphCanvas: React.FC<WebGraphCanvasProps> = ({
             fontSize: '12px',
             opacity: 0,
             transition: 'opacity 0.3s',
-            pointerEvents: 'none'
+            pointerEvents: 'none',
           }}
           className="keyboard-shortcuts-help"
         >

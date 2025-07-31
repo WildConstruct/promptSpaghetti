@@ -52,25 +52,31 @@ export interface CustomNodeMetadata {
  */
 export interface NodeIOSchema {
   /** Input specifications */
-  inputs: Record<string, {
-    type: 'string' | 'number' | 'boolean' | 'array' | 'object' | 'any';
-    required: boolean;
-    description?: string;
-    default?: any;
-    validation?: {
-      minLength?: number;
-      maxLength?: number;
-      pattern?: string;
-      min?: number;
-      max?: number;
-      enum?: any[];
-    };
-  }>;
+  inputs: Record<
+    string,
+    {
+      type: 'string' | 'number' | 'boolean' | 'array' | 'object' | 'any';
+      required: boolean;
+      description?: string;
+      default?: any;
+      validation?: {
+        minLength?: number;
+        maxLength?: number;
+        pattern?: string;
+        min?: number;
+        max?: number;
+        enum?: any[];
+      };
+    }
+  >;
   /** Output specifications */
-  outputs: Record<string, {
-    type: 'string' | 'number' | 'boolean' | 'array' | 'object' | 'any';
-    description?: string;
-  }>;
+  outputs: Record<
+    string,
+    {
+      type: 'string' | 'number' | 'boolean' | 'array' | 'object' | 'any';
+      description?: string;
+    }
+  >;
 }
 
 /**
@@ -217,13 +223,13 @@ export abstract class CustomNodeBase {
 export interface AdvancedCustomNode extends CustomNodeBase {
   /** Handle dynamic input changes */
   onInputChanged?(inputName: string, newValue: any, runtime: CustomNodeRuntime): Promise<void> | void;
-  
+
   /** Handle node configuration changes */
   onConfigChanged?(newConfig: Partial<CustomNodeConfig>): Promise<void> | void;
-  
+
   /** Provide dynamic validation based on current inputs */
   validateDynamic?(inputs: Record<string, any>): ValidationResult;
-  
+
   /** Provide suggestions for input values */
   getSuggestions?(inputName: string, partialValue: any): Promise<any[]> | any[];
 }
@@ -234,16 +240,16 @@ export interface AdvancedCustomNode extends CustomNodeBase {
 export interface CustomNodeRegistry {
   /** Register a new custom node type */
   register(registration: CustomNodeRegistration): void;
-  
+
   /** Get a registered node type */
   get(nodeType: string): CustomNodeRegistration | undefined;
-  
+
   /** Get all registered node types */
   getAll(): CustomNodeRegistration[];
-  
+
   /** Check if a node type is registered */
   has(nodeType: string): boolean;
-  
+
   /** Unregister a node type */
   unregister(nodeType: string): boolean;
 }

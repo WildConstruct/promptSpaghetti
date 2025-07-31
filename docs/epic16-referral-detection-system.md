@@ -68,12 +68,14 @@ The Referral Detection System consists of several interconnected components:
 ## Core Features
 
 ### Multi-Channel Referral Tracking
+
 - Direct links, social media, email campaigns, search engines
 - UTM parameter support for detailed attribution
 - Device fingerprinting and session management
 - Geographic tracking with timezone support
 
 ### Advanced Fraud Detection
+
 - Real-time risk scoring with configurable thresholds
 - IP velocity monitoring and anomaly detection
 - Device fingerprint analysis for duplicate detection
@@ -81,6 +83,7 @@ The Referral Detection System consists of several interconnected components:
 - Machine learning-based behavioral analysis
 
 ### Attribution Modeling
+
 - **First Touch**: Full credit to first referral interaction
 - **Last Touch**: Full credit to final referral interaction
 - **Linear**: Equal credit distributed across all touchpoints
@@ -89,6 +92,7 @@ The Referral Detection System consists of several interconnected components:
 - **Data-Driven**: ML-based attribution using conversion patterns
 
 ### Campaign Management
+
 - Flexible reward structures (percentage, fixed, tiered, progressive)
 - Geographic and demographic targeting
 - A/B testing support with performance tracking
@@ -96,6 +100,7 @@ The Referral Detection System consists of several interconnected components:
 - ROI calculation and optimization recommendations
 
 ### Real-Time Analytics
+
 - Live dashboard with key performance indicators
 - Conversion funnel analysis with drop-off insights
 - Fraud detection metrics and alerts
@@ -107,6 +112,7 @@ The Referral Detection System consists of several interconnected components:
 ### Core Tables
 
 #### referral_campaigns
+
 Stores campaign configuration and performance metrics.
 
 ```sql
@@ -131,6 +137,7 @@ CREATE TABLE referral_campaigns (
 ```
 
 #### referral_tracking
+
 Main tracking table for all referral interactions.
 
 ```sql
@@ -172,6 +179,7 @@ CREATE TABLE referral_tracking (
 ```
 
 #### referral_rewards
+
 Tracks reward calculations and payouts.
 
 ```sql
@@ -198,6 +206,7 @@ CREATE TABLE referral_rewards (
 ### Analytics Tables
 
 #### referral_daily_analytics
+
 Daily aggregated metrics for performance monitoring.
 
 ```sql
@@ -248,9 +257,11 @@ CREATE INDEX CONCURRENTLY idx_referral_tracking_campaign_status ON referral_trac
 ### Core Endpoints
 
 #### POST /api/referrals/track
+
 Track a new referral interaction.
 
 **Request Body:**
+
 ```json
 {
   "referralCode": "REF-12345",
@@ -266,12 +277,13 @@ Track a new referral interaction.
   "deviceFingerprint": "device-hash",
   "country": "US",
   "userAgent": "Mozilla/5.0...",
-  "conversionValue": 150.00,
+  "conversionValue": 150.0,
   "conversionEvent": "purchase"
 }
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -287,9 +299,11 @@ Track a new referral interaction.
 ```
 
 #### GET /api/referrals/{referralId}
+
 Retrieve details for a specific referral.
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -302,7 +316,7 @@ Retrieve details for a specific referral.
     "source": "social_media",
     "fraudRiskLevel": "low",
     "fraudRiskScore": 15.0,
-    "conversionValue": 150.00,
+    "conversionValue": 150.0,
     "rewardCalculated": true,
     "clickedAt": "2024-01-15T10:30:00Z",
     "conversionDate": "2024-01-15T11:45:00Z"
@@ -311,9 +325,11 @@ Retrieve details for a specific referral.
 ```
 
 #### POST /api/campaigns
+
 Create a new referral campaign.
 
 **Request Body:**
+
 ```json
 {
   "name": "Summer Promotion 2024",
@@ -322,7 +338,7 @@ Create a new referral campaign.
   "rewardType": "percentage",
   "rewardValue": 15.0,
   "rewardCurrency": "USD",
-  "maxRewardPerReferrer": 1000.00,
+  "maxRewardPerReferrer": 1000.0,
   "startDate": "2024-06-01T00:00:00Z",
   "endDate": "2024-08-31T23:59:59Z",
   "targetAudience": {
@@ -333,15 +349,18 @@ Create a new referral campaign.
 ```
 
 #### GET /api/analytics/dashboard
+
 Retrieve dashboard analytics for referral performance.
 
 **Query Parameters:**
+
 - `campaignId` (optional): Filter by specific campaign
 - `startDate`: Start date for analytics period
 - `endDate`: End date for analytics period
 - `granularity`: Data granularity (daily, weekly, monthly)
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -350,7 +369,7 @@ Retrieve dashboard analytics for referral performance.
       "totalReferrals": 1250,
       "uniqueReferrers": 850,
       "conversionRate": 12.5,
-      "totalRevenue": 45750.00,
+      "totalRevenue": 45750.0,
       "fraudRate": 2.1
     },
     "trends": {
@@ -359,7 +378,7 @@ Retrieve dashboard analytics for referral performance.
           "date": "2024-01-15",
           "referrals": 45,
           "conversions": 6,
-          "revenue": 890.00
+          "revenue": 890.0
         }
       ]
     },
@@ -426,6 +445,7 @@ interface FraudRiskFactors {
 ### Fraud Detection Rules
 
 #### IP Velocity Rule
+
 ```sql
 -- Detect high-frequency referrals from same IP
 SELECT ip_address, COUNT(*) as referral_count
@@ -436,6 +456,7 @@ HAVING COUNT(*) > 10;
 ```
 
 #### Device Fingerprint Rule
+
 ```sql
 -- Detect device reuse across multiple referrals
 SELECT device_fingerprint, COUNT(DISTINCT referrer_id) as unique_referrers
@@ -447,6 +468,7 @@ HAVING COUNT(DISTINCT referrer_id) > 5;
 ```
 
 #### Geographic Anomaly Rule
+
 ```sql
 -- Detect referrals from unusual geographic locations
 SELECT country, COUNT(*) as referral_count,
@@ -463,6 +485,7 @@ ORDER BY referral_count DESC;
 ### Model Implementations
 
 #### Last Touch Attribution
+
 ```typescript
 function calculateLastTouchAttribution(referral: Referral): number {
   // Last interaction gets 100% credit
@@ -471,20 +494,18 @@ function calculateLastTouchAttribution(referral: Referral): number {
 ```
 
 #### Time Decay Attribution
+
 ```typescript
-function calculateTimeDecayAttribution(
-  referral: Referral, 
-  halfLifeDays: number = 7
-): number {
-  const hoursSinceClick = 
-    (Date.now() - referral.clickedAt.getTime()) / (1000 * 60 * 60);
-  const decayFactor = Math.exp(-hoursSinceClick / (halfLifeDays * 24) * Math.LN2);
-  
+function calculateTimeDecayAttribution(referral: Referral, halfLifeDays: number = 7): number {
+  const hoursSinceClick = (Date.now() - referral.clickedAt.getTime()) / (1000 * 60 * 60);
+  const decayFactor = Math.exp((-hoursSinceClick / (halfLifeDays * 24)) * Math.LN2);
+
   return Math.max(0.1, Math.min(1.0, decayFactor));
 }
 ```
 
 #### Position-Based Attribution
+
 ```typescript
 function calculatePositionBasedAttribution(
   touchpoints: Referral[],
@@ -492,7 +513,7 @@ function calculatePositionBasedAttribution(
 ): number[] {
   if (touchpoints.length === 1) return [1.0];
   if (touchpoints.length === 2) return [weights.first, weights.last];
-  
+
   const middleWeight = weights.middle / (touchpoints.length - 2);
   return touchpoints.map((_, index) => {
     if (index === 0) return weights.first;
@@ -538,16 +559,19 @@ function calculatePositionBasedAttribution(
 ### Campaign Types
 
 #### Affiliate Campaigns
+
 - Commission-based rewards for marketplace sales
 - Performance tracking with conversion metrics
 - Automated payout processing
 
 #### Influencer Campaigns
+
 - Fixed fee or hybrid reward structures
 - Content performance tracking
 - Brand safety and compliance monitoring
 
 #### Partnership Campaigns
+
 - B2B referral programs with enterprise clients
 - Custom reward structures and reporting
 - Contract-based performance metrics
@@ -555,29 +579,32 @@ function calculatePositionBasedAttribution(
 ### Reward Structures
 
 #### Percentage-Based Rewards
+
 ```json
 {
   "rewardType": "percentage",
   "rewardValue": 10.0,
   "description": "10% commission on conversion value",
-  "minimumConversion": 25.00,
-  "maximumReward": 500.00
+  "minimumConversion": 25.0,
+  "maximumReward": 500.0
 }
 ```
 
 #### Tiered Rewards
+
 ```json
 {
   "rewardType": "tiered",
   "tiers": [
-    { "minValue": 0, "maxValue": 49.99, "reward": 5.00 },
-    { "minValue": 50, "maxValue": 99.99, "reward": 15.00 },
-    { "minValue": 100, "maxValue": null, "reward": 25.00 }
+    { "minValue": 0, "maxValue": 49.99, "reward": 5.0 },
+    { "minValue": 50, "maxValue": 99.99, "reward": 15.0 },
+    { "minValue": 100, "maxValue": null, "reward": 25.0 }
   ]
 }
 ```
 
 #### Progressive Rewards
+
 ```json
 {
   "rewardType": "progressive",
@@ -609,35 +636,35 @@ function calculatePositionBasedAttribution(
 async function processReward(referralId: string): Promise<Reward> {
   const referral = await getReferral(referralId);
   const campaign = await getCampaign(referral.campaignId);
-  
+
   // Verify eligibility
   if (!isEligibleForReward(referral, campaign)) {
     throw new Error('Referral not eligible for reward');
   }
-  
+
   // Calculate attribution weight
   const attributionWeight = await calculateAttribution(
-    referralId, 
+    referralId,
     campaign.attributionModel
   );
-  
+
   // Calculate base reward
   let rewardAmount = calculateBaseReward(
     referral.conversionValue,
     campaign.rewardType,
     campaign.rewardValue
   );
-  
+
   // Apply attribution weighting
   rewardAmount *= attributionWeight;
-  
+
   // Apply caps and limits
   rewardAmount = applyRewardCaps(
     rewardAmount,
     referral.referrerId,
     campaign
   );
-  
+
   // Create reward record
   return await createReward({
     referralId,
@@ -659,6 +686,7 @@ async function processReward(referralId: string): Promise<Reward> {
 ### Dashboard Metrics
 
 #### Key Performance Indicators (KPIs)
+
 - **Total Referrals**: Count of all tracked referrals
 - **Unique Referrers**: Number of distinct users making referrals
 - **Conversion Rate**: Percentage of referrals resulting in conversions
@@ -667,12 +695,14 @@ async function processReward(referralId: string): Promise<Reward> {
 - **Return on Investment**: Revenue vs. reward costs
 
 #### Conversion Funnel
+
 ```
 Referral Clicks → Unique Visitors → Signups → Conversions → Paid Rewards
      100%              85%           45%        12%           10%
 ```
 
 #### Fraud Detection Metrics
+
 - **Fraud Detection Rate**: Percentage of referrals flagged as fraudulent
 - **False Positive Rate**: Incorrectly flagged legitimate referrals
 - **Average Risk Score**: Mean fraud risk across all referrals
@@ -683,6 +713,7 @@ Referral Clicks → Unique Visitors → Signups → Conversions → Paid Rewards
 #### Standard Reports
 
 **Daily Performance Report**
+
 ```json
 {
   "reportType": "daily_performance",
@@ -702,16 +733,17 @@ Referral Clicks → Unique Visitors → Signups → Conversions → Paid Rewards
 ```
 
 **Campaign ROI Analysis**
+
 ```json
 {
   "reportType": "campaign_roi",
   "campaignId": "campaign-uuid",
   "period": "Q1_2024",
   "metrics": {
-    "totalInvestment": 15000.00,
-    "totalRevenue": 89750.00,
-    "rewardsPaid": 8975.00,
-    "netProfit": 65775.00,
+    "totalInvestment": 15000.0,
+    "totalRevenue": 89750.0,
+    "rewardsPaid": 8975.0,
+    "netProfit": 65775.0,
     "roi": 338.5,
     "paybackPeriod": 23
   }
@@ -719,6 +751,7 @@ Referral Clicks → Unique Visitors → Signups → Conversions → Paid Rewards
 ```
 
 **Fraud Analysis Report**
+
 ```json
 {
   "reportType": "fraud_analysis",
@@ -730,7 +763,7 @@ Referral Clicks → Unique Visitors → Signups → Conversions → Paid Rewards
     "totalAnalyzed": 2450,
     "fraudAttempts": 44,
     "fraudRate": 1.8,
-    "preventedLoss": 2150.00
+    "preventedLoss": 2150.0
   },
   "patterns": {
     "ipVelocity": 18,
@@ -753,14 +786,16 @@ Referral Clicks → Unique Visitors → Signups → Conversions → Paid Rewards
 ### Database Setup
 
 1. **Create Database Schema**
+
    ```bash
    psql -U postgres -d marketplace -f server/database/migrations/045_epic16_referral_detection.sql
    ```
 
 2. **Verify Installation**
+
    ```sql
-   SELECT table_name FROM information_schema.tables 
-   WHERE table_schema = 'public' 
+   SELECT table_name FROM information_schema.tables
+   WHERE table_schema = 'public'
    AND table_name LIKE 'referral_%';
    ```
 
@@ -773,6 +808,7 @@ Referral Clicks → Unique Visitors → Signups → Conversions → Paid Rewards
 ### Service Configuration
 
 1. **Environment Variables**
+
    ```bash
    # Database Configuration
    DATABASE_HOST=localhost
@@ -798,6 +834,7 @@ Referral Clicks → Unique Visitors → Signups → Conversions → Paid Rewards
    ```
 
 2. **Service Integration**
+
    ```typescript
    import { ReferralDetectionService } from './server/src/admin/ReferralDetectionService';
 
@@ -807,18 +844,20 @@ Referral Clicks → Unique Visitors → Signups → Conversions → Paid Rewards
      maxRetentionDays: 2555, // 7 years
      encryptionEnabled: true,
      complianceMode: 'strict',
-     automaticVerification: true
+     automaticVerification: true,
    });
    ```
 
 ### Testing Setup
 
 1. **Install Test Dependencies**
+
    ```bash
    npm install --save-dev jest @types/jest ts-jest
    ```
 
 2. **Run Test Suite**
+
    ```bash
    npm test -- server/src/__tests__/referral-detection.test.ts
    ```
@@ -841,7 +880,7 @@ const referral = await service.trackReferral('REF-12345', userId, {
   utmCampaign: 'summer-promo',
   ipAddress: req.ip,
   userAgent: req.headers['user-agent'],
-  landingPage: 'https://marketplace.com/templates/123'
+  landingPage: 'https://marketplace.com/templates/123',
 });
 
 console.log(`Referral tracked: ${referral.id}`);
@@ -854,15 +893,12 @@ console.log(`Fraud risk: ${referral.fraudRiskLevel} (${referral.fraudRiskScore})
 // Update referral with conversion data
 const conversionData = {
   conversionEvent: 'purchase',
-  conversionValue: 150.00,
+  conversionValue: 150.0,
   conversionDate: new Date(),
-  referredUserId: newUserId
+  referredUserId: newUserId,
 };
 
-const updatedReferral = await service.updateReferralConversion(
-  referralId, 
-  conversionData
-);
+const updatedReferral = await service.updateReferralConversion(referralId, conversionData);
 
 // Calculate and process reward
 const reward = await service.calculateReward(referralId);
@@ -883,13 +919,13 @@ const campaign = await service.createCampaign({
   rewardType: 'tiered',
   rewardValue: 0, // Tiered rewards don't use base value
   tiers: [
-    { minValue: 0, maxValue: 49.99, reward: 10.00 },
-    { minValue: 50, maxValue: 99.99, reward: 20.00 },
-    { minValue: 100, maxValue: null, reward: 35.00 }
+    { minValue: 0, maxValue: 49.99, reward: 10.0 },
+    { minValue: 50, maxValue: 99.99, reward: 20.0 },
+    { minValue: 100, maxValue: null, reward: 35.0 },
   ],
   startDate: new Date('2024-11-29'),
   endDate: new Date('2024-12-02'),
-  maxRewardPerReferrer: 500.00
+  maxRewardPerReferrer: 500.0,
 });
 
 console.log(`Campaign created: ${campaign.id}`);
@@ -902,26 +938,26 @@ console.log(`Campaign created: ${campaign.id}`);
 const analytics = await service.generateAnalytics({
   startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
   endDate: new Date(),
-  campaignId: 'specific-campaign-uuid' // optional
+  campaignId: 'specific-campaign-uuid', // optional
 });
 
 console.log('Analytics Summary:');
 console.log(`Total Referrals: ${analytics.summary.totalReferrals}`);
 console.log(`Conversion Rate: ${analytics.summary.conversionRate}%`);
 console.log(`Total Revenue: $${analytics.summary.totalConversionValue}`);
-console.log(`Fraud Rate: ${analytics.summary.fraudAttempts / analytics.summary.totalReferrals * 100}%`);
+console.log(`Fraud Rate: ${(analytics.summary.fraudAttempts / analytics.summary.totalReferrals) * 100}%`);
 
 // Generate compliance report
 const complianceReport = await service.generateComplianceReport(
   'gdpr',
   {
     start: new Date('2024-01-01'),
-    end: new Date('2024-12-31')
+    end: new Date('2024-12-31'),
   },
   {
     includeUserData: false,
     anonymizeData: true,
-    exportFormat: 'json'
+    exportFormat: 'json',
   }
 );
 
@@ -935,7 +971,7 @@ console.log(`Compliance report generated: ${complianceReport.reportId}`);
 const fraudAnalysis = await service.analyzeFraudPatterns({
   timeRange: '24h',
   riskThreshold: 40,
-  includeIndicators: true
+  includeIndicators: true,
 });
 
 console.log('Fraud Analysis:');
@@ -946,7 +982,7 @@ console.log(`Top fraud indicators:`, fraudAnalysis.topIndicators);
 await service.updateFraudRule('ip-velocity-check', {
   threshold: 15, // Increase threshold
   timeWindow: '2h', // Extend time window
-  enabled: true
+  enabled: true,
 });
 ```
 
@@ -1072,7 +1108,7 @@ node scripts/epic16-referral-detection.js health --format json
 The referral detection system includes comprehensive test coverage:
 
 - **Unit Tests**: Core functionality and business logic
-- **Integration Tests**: Component interaction and workflows  
+- **Integration Tests**: Component interaction and workflows
 - **Performance Tests**: Load testing and scalability validation
 - **Security Tests**: Fraud detection and data protection
 - **Compliance Tests**: GDPR, CCPA, and other regulatory requirements
@@ -1096,6 +1132,7 @@ npm test -- --watch
 ### Test Categories
 
 #### Unit Tests
+
 - Referral tracking functionality
 - Fraud detection algorithms
 - Attribution model calculations
@@ -1103,6 +1140,7 @@ npm test -- --watch
 - Campaign management operations
 
 #### Integration Tests
+
 - End-to-end referral workflows
 - Database transaction integrity
 - API endpoint functionality
@@ -1110,6 +1148,7 @@ npm test -- --watch
 - Compliance data handling
 
 #### Performance Tests
+
 - High-volume referral tracking
 - Concurrent fraud detection
 - Batch reward processing
@@ -1117,6 +1156,7 @@ npm test -- --watch
 - Database query optimization
 
 #### Security Tests
+
 - Fraud detection effectiveness
 - Data encryption validation
 - Access control verification
@@ -1138,8 +1178,8 @@ const mockReferralData = {
   ipAddress: '192.168.1.100',
   deviceFingerprint: 'test-device-hash',
   country: 'US',
-  conversionValue: 150.00,
-  conversionEvent: 'purchase'
+  conversionValue: 150.0,
+  conversionEvent: 'purchase',
 };
 ```
 
@@ -1148,6 +1188,7 @@ const mockReferralData = {
 ### Key Performance Indicators
 
 #### System Performance
+
 - **Referral Tracking Latency**: Average time to process referral clicks
 - **Fraud Detection Speed**: Time to calculate risk scores
 - **Attribution Processing**: Time to calculate attribution weights
@@ -1155,6 +1196,7 @@ const mockReferralData = {
 - **Database Query Performance**: Response times for common queries
 
 #### Business Metrics
+
 - **Referral Volume**: Number of referrals processed per time period
 - **Conversion Throughput**: Rate of conversion processing
 - **Fraud Detection Rate**: Percentage of fraud successfully identified
@@ -1164,6 +1206,7 @@ const mockReferralData = {
 ### Performance Benchmarks
 
 #### Target Performance Metrics
+
 ```json
 {
   "referralTracking": {
@@ -1189,6 +1232,7 @@ const mockReferralData = {
 ### Monitoring Tools
 
 #### Database Performance
+
 ```sql
 -- Monitor query performance
 SELECT query, calls, total_time, mean_time, stddev_time
@@ -1204,20 +1248,21 @@ ORDER BY n_distinct DESC;
 ```
 
 #### Application Metrics
+
 ```typescript
 // Performance monitoring middleware
 app.use('/api/referrals', (req, res, next) => {
   const startTime = Date.now();
-  
+
   res.on('finish', () => {
     const duration = Date.now() - startTime;
     metrics.recordRequestDuration('referral_api', duration);
     metrics.incrementCounter('referral_requests_total', {
       method: req.method,
-      status: res.statusCode.toString()
+      status: res.statusCode.toString(),
     });
   });
-  
+
   next();
 });
 ```
@@ -1225,12 +1270,14 @@ app.use('/api/referrals', (req, res, next) => {
 ### Alerting Configuration
 
 #### Critical Alerts
+
 - **High Fraud Rate**: > 5% fraud detection rate
 - **Processing Delays**: > 1000ms p95 latency
 - **Database Issues**: Connection errors or slow queries
 - **Revenue Impact**: Significant drops in conversion rates
 
 #### Warning Alerts
+
 - **Elevated Risk Scores**: Unusual patterns in fraud detection
 - **Performance Degradation**: Increasing response times
 - **Queue Backlogs**: Processing delays in reward calculations
@@ -1241,6 +1288,7 @@ app.use('/api/referrals', (req, res, next) => {
 ### Data Protection
 
 #### Personal Information Handling
+
 - **Data Minimization**: Collect only necessary referral data
 - **Encryption**: Encrypt sensitive data at rest and in transit
 - **Access Controls**: Role-based access to referral information
@@ -1248,6 +1296,7 @@ app.use('/api/referrals', (req, res, next) => {
 - **Data Retention**: Automatic cleanup based on retention policies
 
 #### Privacy Compliance
+
 - **GDPR Compliance**: Right to erasure, data portability, consent management
 - **CCPA Compliance**: Consumer privacy rights and data deletion
 - **Cookie Consent**: Proper consent for tracking cookies
@@ -1256,6 +1305,7 @@ app.use('/api/referrals', (req, res, next) => {
 ### Fraud Prevention
 
 #### Multi-Layer Security
+
 ```typescript
 interface SecurityLayers {
   rateLimiting: {
@@ -1281,21 +1331,27 @@ interface SecurityLayers {
 ```
 
 #### Input Validation
+
 ```typescript
 const referralSchema = z.object({
-  referralCode: z.string().min(1).max(50).regex(/^[A-Z0-9-]+$/),
+  referralCode: z
+    .string()
+    .min(1)
+    .max(50)
+    .regex(/^[A-Z0-9-]+$/),
   referrerId: z.string().uuid(),
   source: z.enum(['direct_link', 'social_media', 'email_campaign']),
   ipAddress: z.string().ip(),
   conversionValue: z.number().min(0).max(100000),
   utmSource: z.string().max(100).optional(),
-  customData: z.record(z.unknown()).optional()
+  customData: z.record(z.unknown()).optional(),
 });
 ```
 
 ### Access Control
 
 #### Role-Based Permissions
+
 ```json
 {
   "roles": {
@@ -1310,33 +1366,20 @@ const referralSchema = z.object({
       ]
     },
     "campaign_manager": {
-      "permissions": [
-        "campaigns:read",
-        "campaigns:write",
-        "analytics:campaign_access",
-        "referrals:read"
-      ]
+      "permissions": ["campaigns:read", "campaigns:write", "analytics:campaign_access", "referrals:read"]
     },
     "fraud_analyst": {
-      "permissions": [
-        "fraud:read",
-        "fraud:review",
-        "referrals:read",
-        "analytics:fraud_access"
-      ]
+      "permissions": ["fraud:read", "fraud:review", "referrals:read", "analytics:fraud_access"]
     },
     "referrer": {
-      "permissions": [
-        "referrals:own_data",
-        "rewards:own_data",
-        "analytics:personal"
-      ]
+      "permissions": ["referrals:own_data", "rewards:own_data", "analytics:personal"]
     }
   }
 }
 ```
 
 #### API Security
+
 - **Authentication**: JWT tokens with proper expiration
 - **Authorization**: Endpoint-level permission checks
 - **Rate Limiting**: Prevent abuse and DoS attacks
@@ -1346,6 +1389,7 @@ const referralSchema = z.object({
 ### Compliance and Auditing
 
 #### Audit Requirements
+
 - **Data Access Logging**: Track all access to referral data
 - **Change History**: Maintain complete audit trail of modifications
 - **Compliance Reporting**: Generate reports for regulatory requirements
@@ -1359,23 +1403,26 @@ const referralSchema = z.object({
 #### High Fraud Detection Rates
 
 **Symptoms:**
+
 - Sudden increase in referrals marked as high-risk
 - Legitimate users unable to receive rewards
 - Complaints about false positives
 
 **Diagnosis:**
+
 ```bash
 # Check fraud detection metrics
 node scripts/epic16-referral-detection.js fraud --verbose
 
 # Analyze recent risk score distribution
-SELECT fraud_risk_level, COUNT(*) 
-FROM referral_tracking 
+SELECT fraud_risk_level, COUNT(*)
+FROM referral_tracking
 WHERE clicked_at > NOW() - INTERVAL '24 hours'
 GROUP BY fraud_risk_level;
 ```
 
 **Solutions:**
+
 1. **Adjust Thresholds**: Lower fraud detection sensitivity
 2. **Review Rules**: Disable problematic fraud detection rules
 3. **Whitelist IPs**: Add trusted IP addresses to whitelist
@@ -1384,11 +1431,13 @@ GROUP BY fraud_risk_level;
 #### Performance Degradation
 
 **Symptoms:**
+
 - Slow API response times
 - Database query timeouts
 - User complaints about delayed tracking
 
 **Diagnosis:**
+
 ```sql
 -- Check slow queries
 SELECT query, calls, total_time, mean_time
@@ -1404,6 +1453,7 @@ ORDER BY query_start;
 ```
 
 **Solutions:**
+
 1. **Database Optimization**: Add indexes, optimize queries
 2. **Caching**: Implement Redis caching for frequent queries
 3. **Connection Pooling**: Optimize database connection management
@@ -1412,11 +1462,13 @@ ORDER BY query_start;
 #### Reward Calculation Errors
 
 **Symptoms:**
+
 - Incorrect reward amounts
 - Missing rewards for verified referrals
 - Calculation timeout errors
 
 **Diagnosis:**
+
 ```bash
 # Check reward calculation logs
 node scripts/epic16-referral-detection.js rewards calculate --verbose
@@ -1426,6 +1478,7 @@ SELECT * FROM referral_campaigns WHERE status = 'active';
 ```
 
 **Solutions:**
+
 1. **Campaign Validation**: Verify campaign configuration
 2. **Attribution Model**: Check attribution model settings
 3. **Retry Processing**: Reprocess failed reward calculations
@@ -1434,11 +1487,13 @@ SELECT * FROM referral_campaigns WHERE status = 'active';
 #### Data Inconsistencies
 
 **Symptoms:**
+
 - Mismatched analytics numbers
 - Duplicate referral records
 - Missing conversion data
 
 **Diagnosis:**
+
 ```sql
 -- Check for duplicate referrals
 SELECT referral_code, COUNT(*)
@@ -1447,7 +1502,7 @@ GROUP BY referral_code
 HAVING COUNT(*) > 1;
 
 -- Verify data integrity
-SELECT 
+SELECT
   COUNT(*) as total_referrals,
   COUNT(DISTINCT referral_code) as unique_codes,
   COUNT(conversion_date) as conversions
@@ -1455,6 +1510,7 @@ FROM referral_tracking;
 ```
 
 **Solutions:**
+
 1. **Data Cleanup**: Remove or merge duplicate records
 2. **Validation Rules**: Implement stricter data validation
 3. **Backup Restore**: Restore from backup if corruption detected
@@ -1483,7 +1539,7 @@ node scripts/epic16-referral-detection.js fraud \
 
 ```sql
 -- Performance analysis
-SELECT 
+SELECT
   campaign_id,
   COUNT(*) as total_referrals,
   AVG(fraud_risk_score) as avg_risk_score,
@@ -1494,7 +1550,7 @@ WHERE clicked_at > NOW() - INTERVAL '7 days'
 GROUP BY campaign_id;
 
 -- Fraud pattern analysis
-SELECT 
+SELECT
   DATE(clicked_at) as date,
   fraud_risk_level,
   COUNT(*) as count,
@@ -1546,6 +1602,7 @@ iostat -x 1
 #### Emergency Procedures
 
 **System Outage Response:**
+
 1. Assess impact and affected components
 2. Activate backup systems if available
 3. Communicate with stakeholders
@@ -1554,6 +1611,7 @@ iostat -x 1
 6. Document incident and lessons learned
 
 **Security Incident Response:**
+
 1. Isolate affected systems
 2. Assess scope of potential breach
 3. Preserve evidence for investigation

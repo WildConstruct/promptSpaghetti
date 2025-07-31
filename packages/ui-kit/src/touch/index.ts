@@ -7,14 +7,7 @@ export { TouchManager } from './TouchManager';
 export type { GestureHandler, TouchManagerOptions } from './TouchManager';
 
 // Gesture definitions
-export type {
-  GestureType,
-  SwipeDirection,
-  TouchPoint,
-  GestureState,
-  GestureEvent,
-  GestureConfig
-} from './gestures';
+export type { GestureType, SwipeDirection, TouchPoint, GestureState, GestureEvent, GestureConfig } from './gestures';
 
 export {
   defaultGestureConfig,
@@ -27,7 +20,7 @@ export {
   getPinchScale,
   getRotation,
   isWithinBounds,
-  gestureHelpers
+  gestureHelpers,
 } from './gestures';
 
 // Feedback system
@@ -36,69 +29,41 @@ export type {
   VisualFeedbackType,
   HapticFeedbackConfig,
   VisualFeedbackConfig,
-  TouchFeedbackConfig
+  TouchFeedbackConfig,
 } from './feedback';
 
-export {
-  gestureFeedbackPresets,
-  HapticFeedback,
-  VisualFeedback,
-  TouchFeedback,
-  touchFeedbackStyles
-} from './feedback';
+export { gestureFeedbackPresets, HapticFeedback, VisualFeedback, TouchFeedback, touchFeedbackStyles } from './feedback';
 
 // Accessibility utilities
-export type {
-  TouchTargetConfig,
-  TouchTargetAnalysis
-} from './accessibility';
+export type { TouchTargetConfig, TouchTargetAnalysis } from './accessibility';
 
 export {
   accessibilityGuidelines,
   analyzeTouchTarget,
   createAccessibleTouchTarget,
   enableTouchTargetDebugging,
-  touchTargetUtils
+  touchTargetUtils,
 } from './accessibility';
 
 // Node gesture components
-export type {
-  NodeGestureHandlers,
-  TouchableNodeProps,
-  SelectionBoxProps
-} from './NodeGestures';
+export type { NodeGestureHandlers, TouchableNodeProps, SelectionBoxProps } from './NodeGestures';
 
-export {
-  TouchableNode,
-  SelectionBox
-} from './NodeGestures';
+export { TouchableNode, SelectionBox } from './NodeGestures';
 
 // Multi-touch gestures
 export type {
   MultiTouchHandlers,
   MultiTouchControllerProps,
   GestureCombination,
-  GestureTrainerProps
+  GestureTrainerProps,
 } from './MultiTouchGestures';
 
-export {
-  MultiTouchController,
-  gestureShortcuts,
-  GestureTrainer
-} from './MultiTouchGestures';
+export { MultiTouchController, gestureShortcuts, GestureTrainer } from './MultiTouchGestures';
 
 // Context menu system
-export type {
-  ContextMenuItem,
-  TouchContextMenuProps,
-  ContextMenuProviderProps
-} from './TouchContextMenu';
+export type { ContextMenuItem, TouchContextMenuProps, ContextMenuProviderProps } from './TouchContextMenu';
 
-export {
-  TouchContextMenu,
-  ContextMenuProvider,
-  graphContextMenuItems
-} from './TouchContextMenu';
+export { TouchContextMenu, ContextMenuProvider, graphContextMenuItems } from './TouchContextMenu';
 
 /**
  * Touch interaction system initialization
@@ -117,28 +82,27 @@ export function initializeTouchSystem(options?: {
  * Touch device detection utilities
  */
 export const touchUtils = {
-  
   /**
    * Check if device is touch-enabled
    */
   isTouchDevice(): boolean {
     return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
   },
-  
+
   /**
    * Check if device supports haptic feedback
    */
   supportsHaptics(): boolean {
     return 'vibrate' in navigator;
   },
-  
+
   /**
    * Check if device supports force touch
    */
   supportsForceTouch(): boolean {
     return 'ontouchforcechange' in document;
   },
-  
+
   /**
    * Get touch capabilities
    */
@@ -148,13 +112,13 @@ export const touchUtils = {
     haptics: boolean;
     forceTouch: boolean;
     maxTouchPoints: number;
-    } {
+  } {
     return {
       touch: this.isTouchDevice(),
       multiTouch: navigator.maxTouchPoints > 1,
       haptics: this.supportsHaptics(),
       forceTouch: this.supportsForceTouch(),
-      maxTouchPoints: navigator.maxTouchPoints || 0
+      maxTouchPoints: navigator.maxTouchPoints || 0,
     };
-  }
+  },
 };

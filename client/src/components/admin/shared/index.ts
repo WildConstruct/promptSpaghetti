@@ -1,7 +1,7 @@
 /**
  * Shared Admin Components & Hooks
  * REFACTOR-002: Admin Dashboard Architecture Consolidation
- * 
+ *
  * Main export file for all shared admin functionality
  */
 

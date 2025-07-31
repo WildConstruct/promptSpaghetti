@@ -1,1225 +1,1341 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Visual Ticket Dashboard</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: #e1e5e9;
-        }
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        min-height: 100vh;
+        padding: 20px;
+        color: #e1e5e9;
+      }
 
-        .dashboard {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: #1e1e2e;
-            border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-            overflow: hidden;
-            border: 1px solid #2d2d44;
-        }
+      .dashboard {
+        max-width: 1400px;
+        margin: 0 auto;
+        background: #1e1e2e;
+        border-radius: 15px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+        border: 1px solid #2d2d44;
+      }
 
-        .header {
-            background: linear-gradient(135deg, #0f1419 0%, #1a1f29 100%);
-            color: #e1e5e9;
-            padding: 30px;
-            text-align: center;
-            position: relative;
-            border-bottom: 1px solid #2d2d44;
-        }
+      .header {
+        background: linear-gradient(135deg, #0f1419 0%, #1a1f29 100%);
+        color: #e1e5e9;
+        padding: 30px;
+        text-align: center;
+        position: relative;
+        border-bottom: 1px solid #2d2d44;
+      }
 
-        .theme-toggle {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: #374151;
-            color: #e1e5e9;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.3s;
-        }
+      .theme-toggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: #374151;
+        color: #e1e5e9;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: background 0.3s;
+      }
 
-        .theme-toggle:hover {
-            background: #4b5563;
-        }
+      .theme-toggle:hover {
+        background: #4b5563;
+      }
 
-        /* Light Mode Styles */
-        .light-mode {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
-        }
+      /* Light Mode Styles */
+      .light-mode {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #333;
+      }
 
-        .light-mode .dashboard {
-            background: white;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-            border: 1px solid #e5e7eb;
-        }
+      .light-mode .dashboard {
+        background: white;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e5e7eb;
+      }
 
-        .light-mode .header {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            color: white;
-            border-bottom: 1px solid #e5e7eb;
-        }
+      .light-mode .header {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        color: white;
+        border-bottom: 1px solid #e5e7eb;
+      }
 
-        .light-mode .theme-toggle {
-            background: #4a5568;
-            color: white;
-        }
+      .light-mode .theme-toggle {
+        background: #4a5568;
+        color: white;
+      }
 
-        .light-mode .theme-toggle:hover {
-            background: #2d3748;
-        }
+      .light-mode .theme-toggle:hover {
+        background: #2d3748;
+      }
 
-        .light-mode .stats-bar {
-            background: #f8f9fa;
-            border-bottom: 1px solid #e9ecef;
-        }
+      .light-mode .stats-bar {
+        background: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+      }
 
-        .light-mode .stat-number {
-            color: #2c3e50;
-        }
+      .light-mode .stat-number {
+        color: #2c3e50;
+      }
 
-        .light-mode .stat-label {
-            color: #6c757d;
-        }
+      .light-mode .stat-label {
+        color: #6c757d;
+      }
 
-        .light-mode .controls {
-            background: white;
-            border-bottom: 1px solid #e9ecef;
-        }
+      .light-mode .controls {
+        background: white;
+        border-bottom: 1px solid #e9ecef;
+      }
 
-        .light-mode .control-group label {
-            color: #495057;
-        }
+      .light-mode .control-group label {
+        color: #495057;
+      }
 
-        .light-mode .control-group select,
-        .light-mode .control-group input {
-            background: white;
-            border: 1px solid #ced4da;
-            color: #495057;
-        }
+      .light-mode .control-group select,
+      .light-mode .control-group input {
+        background: white;
+        border: 1px solid #ced4da;
+        color: #495057;
+      }
 
-        .light-mode .control-group select:focus,
-        .light-mode .control-group input:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
-        }
+      .light-mode .control-group select:focus,
+      .light-mode .control-group input:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+      }
 
-        .light-mode .refresh-btn {
-            background: #28a745;
-        }
+      .light-mode .refresh-btn {
+        background: #28a745;
+      }
 
-        .light-mode .refresh-btn:hover {
-            background: #218838;
-        }
+      .light-mode .refresh-btn:hover {
+        background: #218838;
+      }
 
-        .light-mode .ticket {
-            background: white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            border-left: 5px solid #6c757d;
-        }
+      .light-mode .ticket {
+        background: white;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        border-left: 5px solid #6c757d;
+      }
 
-        .light-mode .ticket:hover {
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
+      .light-mode .ticket:hover {
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      }
 
-        .light-mode .ticket.priority-auth {
-            border-left-color: #dc3545;
-            background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
-        }
+      .light-mode .ticket.priority-auth {
+        border-left-color: #dc3545;
+        background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
+      }
 
-        .light-mode .ticket.priority-file {
-            border-left-color: #28a745;
-            background: linear-gradient(135deg, #f0fff4 0%, #ffffff 100%);
-        }
+      .light-mode .ticket.priority-file {
+        border-left-color: #28a745;
+        background: linear-gradient(135deg, #f0fff4 0%, #ffffff 100%);
+      }
 
-        .light-mode .ticket.state-unassigned {
-            border-left-color: #6c757d;
-        }
+      .light-mode .ticket.state-unassigned {
+        border-left-color: #6c757d;
+      }
 
-        .light-mode .ticket.state-todo {
-            border-left-color: #ffc107;
-        }
+      .light-mode .ticket.state-todo {
+        border-left-color: #ffc107;
+      }
 
-        .light-mode .ticket.state-in_progress {
-            border-left-color: #007bff;
-        }
+      .light-mode .ticket.state-in_progress {
+        border-left-color: #007bff;
+      }
 
-        .light-mode .ticket.state-review {
-            border-left-color: #6f42c1;
-        }
+      .light-mode .ticket.state-review {
+        border-left-color: #6f42c1;
+      }
 
-        .light-mode .ticket.state-completed {
-            border-left-color: #28a745;
-        }
+      .light-mode .ticket.state-completed {
+        border-left-color: #28a745;
+      }
 
-        .light-mode .ticket.state-blocked {
-            border-left-color: #dc3545;
-        }
+      .light-mode .ticket.state-blocked {
+        border-left-color: #dc3545;
+      }
 
-        .light-mode .ticket.state-error {
-            border-left-color: #dc2626;
-            background: #fef2f2;
-        }
+      .light-mode .ticket.state-error {
+        border-left-color: #dc2626;
+        background: #fef2f2;
+      }
 
-        .light-mode .state-error {
-            background: #dc2626;
-            color: white;
-        }
+      .light-mode .state-error {
+        background: #dc2626;
+        color: white;
+      }
 
-        .light-mode .ticket-id {
-            background: #e9ecef;
-            color: #495057;
-        }
+      .light-mode .ticket-id {
+        background: #e9ecef;
+        color: #495057;
+      }
 
-        .light-mode .state-todo {
-            background: #fff3cd;
-            color: #856404;
-        }
+      .light-mode .state-todo {
+        background: #fff3cd;
+        color: #856404;
+      }
 
-        .light-mode .state-in_progress {
-            background: #cce5ff;
-            color: #004085;
-        }
+      .light-mode .state-in_progress {
+        background: #cce5ff;
+        color: #004085;
+      }
 
-        .light-mode .state-review {
-            background: #e2d9f3;
-            color: #6f42c1;
-        }
+      .light-mode .state-review {
+        background: #e2d9f3;
+        color: #6f42c1;
+      }
 
-        .light-mode .state-completed {
-            background: #d4edda;
-            color: #155724;
-        }
+      .light-mode .state-completed {
+        background: #d4edda;
+        color: #155724;
+      }
 
-        .light-mode .state-blocked {
-            background: #f8d7da;
-            color: #721c24;
-        }
+      .light-mode .state-blocked {
+        background: #f8d7da;
+        color: #721c24;
+      }
 
-        .light-mode .state-unassigned {
-            background: #6c757d;
-            color: white;
-        }
+      .light-mode .state-unassigned {
+        background: #6c757d;
+        color: white;
+      }
 
-        .light-mode .ticket-title {
-            color: #2c3e50;
-        }
+      .light-mode .ticket-title {
+        color: #2c3e50;
+      }
 
-        .light-mode .ticket-meta {
-            color: #6c757d;
-        }
+      .light-mode .ticket-meta {
+        color: #6c757d;
+      }
 
-        .light-mode .tag {
-            background: #e7f3ff;
-            color: #0066cc;
-            border: 1px solid #cce5ff;
-        }
+      .light-mode .tag {
+        background: #e7f3ff;
+        color: #0066cc;
+        border: 1px solid #cce5ff;
+      }
 
-        .light-mode .tag.tag-auth {
-            background: #ffebee;
-            color: #c62828;
-            border-color: #ffcdd2;
-        }
+      .light-mode .tag.tag-auth {
+        background: #ffebee;
+        color: #c62828;
+        border-color: #ffcdd2;
+      }
 
-        .light-mode .tag.tag-file-browser {
-            background: #e8f5e8;
-            color: #2e7d32;
-            border-color: #c8e6c8;
-        }
+      .light-mode .tag.tag-file-browser {
+        background: #e8f5e8;
+        color: #2e7d32;
+        border-color: #c8e6c8;
+      }
 
-        .light-mode .tag.tag-high-priority {
-            background: #fff3e0;
-            color: #f57c00;
-            border-color: #ffe0b2;
-        }
+      .light-mode .tag.tag-high-priority {
+        background: #fff3e0;
+        color: #f57c00;
+        border-color: #ffe0b2;
+      }
 
-        /* Light mode fallback for malformed tag classes */
-        .light-mode .tag[class*="tag-undefined"], 
-        .light-mode .tag[class*="tag-null"], 
-        .light-mode .tag[class*="tag-"] {
-            background: #f3f4f6;
-            color: #6b7280;
-            border: 1px solid #d1d5db;
-        }
+      /* Light mode fallback for malformed tag classes */
+      .light-mode .tag[class*='tag-undefined'],
+      .light-mode .tag[class*='tag-null'],
+      .light-mode .tag[class*='tag-'] {
+        background: #f3f4f6;
+        color: #6b7280;
+        border: 1px solid #d1d5db;
+      }
 
-        .light-mode .no-tickets {
-            color: #6c757d;
-        }
+      .light-mode .no-tickets {
+        color: #6c757d;
+      }
 
-        .light-mode .loading {
-            color: #6c757d;
-        }
+      .light-mode .loading {
+        color: #6c757d;
+      }
 
-        .light-mode .error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
+      .light-mode .error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
 
-        .light-mode .search-highlight {
-            background: yellow;
-            color: #333;
-        }
+      .light-mode .search-highlight {
+        background: yellow;
+        color: #333;
+      }
 
-        .light-mode .ticket-footer {
-            border-top: 1px solid #e9ecef;
-            color: #6c757d;
-        }
+      .light-mode .ticket-footer {
+        border-top: 1px solid #e9ecef;
+        color: #6c757d;
+      }
 
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            font-weight: 300;
-        }
+      .header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        font-weight: 300;
+      }
 
-        .header p {
-            opacity: 0.9;
-            font-size: 1.1rem;
-        }
+      .header p {
+        opacity: 0.9;
+        font-size: 1.1rem;
+      }
 
-        .stats-bar {
-            display: flex;
-            justify-content: space-around;
-            background: #252538;
-            padding: 20px;
-            border-bottom: 1px solid #2d2d44;
-        }
+      .stats-bar {
+        display: flex;
+        justify-content: space-around;
+        background: #252538;
+        padding: 20px;
+        border-bottom: 1px solid #2d2d44;
+      }
 
-        .stat {
-            text-align: center;
-            padding: 10px;
-        }
+      .stat {
+        text-align: center;
+        padding: 10px;
+      }
 
-        .stat-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #74c0fc;
-        }
+      .stat-number {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #74c0fc;
+      }
 
-        .stat-label {
-            color: #9ca3af;
-            font-size: 0.9rem;
-            margin-top: 5px;
+      .stat-label {
+        color: #9ca3af;
+        font-size: 0.9rem;
+        margin-top: 5px;
+      }
+
+      .controls {
+        background: #1e1e2e;
+        padding: 25px;
+        border-bottom: 1px solid #2d2d44;
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .control-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .control-group label {
+        font-size: 0.9rem;
+        color: #d1d5db;
+        font-weight: 500;
+      }
+
+      .control-group select,
+      .control-group input {
+        padding: 8px 12px;
+        border: 1px solid #374151;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        background: #2d2d44;
+        color: #e1e5e9;
+      }
+
+      .control-group select:focus,
+      .control-group input:focus {
+        outline: none;
+        border-color: #74c0fc;
+        box-shadow: 0 0 0 2px rgba(116, 192, 252, 0.2);
+      }
+
+      .refresh-btn {
+        background: #059669;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: background 0.3s;
+        align-self: end;
+      }
+
+      .refresh-btn:hover {
+        background: #047857;
+      }
+
+      .tickets-container {
+        padding: 20px;
+        min-height: auto;
+      }
+
+      .ticket-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        gap: 25px;
+        margin-bottom: 40px;
+      }
+
+      .ticket {
+        background: #2d2d44;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+        border-left: 5px solid #6b7280;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+        position: relative;
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .ticket:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+      }
+
+      .ticket.priority-auth {
+        border-left-color: #ef4444;
+        background: linear-gradient(135deg, #3c1f1f 0%, #2d2d44 100%);
+      }
+
+      .ticket.priority-file {
+        border-left-color: #10b981;
+        background: linear-gradient(135deg, #1f3c26 0%, #2d2d44 100%);
+      }
+
+      .ticket.state-unassigned {
+        border-left-color: #6b7280;
+      }
+
+      .ticket.state-todo {
+        border-left-color: #f59e0b;
+      }
+
+      .ticket.state-in_progress {
+        border-left-color: #3b82f6;
+      }
+
+      .ticket.state-review {
+        border-left-color: #8b5cf6;
+      }
+
+      .ticket.state-completed {
+        border-left-color: #10b981;
+      }
+
+      .ticket.state-blocked {
+        border-left-color: #ef4444;
+      }
+
+      .ticket.state-error {
+        border-left-color: #dc2626;
+        background: #3c1917;
+      }
+
+      .state-error {
+        background: #dc2626;
+        color: white;
+      }
+
+      .ticket-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 15px;
+        flex-shrink: 0;
+      }
+
+      .ticket-id {
+        font-family: 'Courier New', monospace;
+        background: #374151;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        color: #d1d5db;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 200px;
+      }
+
+      .ticket-state {
+        padding: 4px 12px;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      .state-unassigned {
+        background: #4b5563;
+        color: white;
+      }
+      .state-todo {
+        background: #f59e0b;
+        color: #111827;
+      }
+      .state-in_progress {
+        background: #3b82f6;
+        color: white;
+      }
+      .state-review {
+        background: #8b5cf6;
+        color: white;
+      }
+      .state-completed {
+        background: #10b981;
+        color: white;
+      }
+      .state-blocked {
+        background: #ef4444;
+        color: white;
+      }
+
+      .ticket-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #f3f4f6;
+        margin-bottom: 15px;
+        line-height: 1.4;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+
+      .ticket-meta {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        font-size: 0.9rem;
+        color: #9ca3af;
+        margin-bottom: 15px;
+        flex: 1;
+      }
+
+      .ticket-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 12px;
+        margin-bottom: 12px;
+      }
+
+      .tag {
+        background: #374151;
+        color: #74c0fc;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        border: 1px solid #4b5563;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 150px;
+      }
+
+      .tag.tag-auth {
+        background: #3c1f1f;
+        color: #fca5a5;
+        border-color: #7f1d1d;
+      }
+      .tag.tag-file-browser {
+        background: #1f3c26;
+        color: #86efac;
+        border-color: #166534;
+      }
+      .tag.tag-high-priority {
+        background: #3c2a1f;
+        color: #fdba74;
+        border-color: #92400e;
+      }
+
+      /* Fallback for malformed or undefined tag classes */
+      .tag[class*='tag-undefined'],
+      .tag[class*='tag-null'],
+      .tag[class*='tag-'] {
+        background: #374151;
+        color: #9ca3af;
+        border: 1px solid #4b5563;
+      }
+
+      .no-tickets {
+        text-align: center;
+        color: #9ca3af;
+        font-size: 1.2rem;
+        margin: 50px 0;
+      }
+
+      .loading {
+        text-align: center;
+        color: #9ca3af;
+        font-size: 1.1rem;
+        margin: 50px 0;
+      }
+
+      .error {
+        background: #3c1f1f;
+        color: #fca5a5;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 20px;
+        border: 1px solid #7f1d1d;
+      }
+
+      @media (max-width: 768px) {
+        .ticket-grid {
+          grid-template-columns: 1fr;
         }
 
         .controls {
-            background: #1e1e2e;
-            padding: 25px;
-            border-bottom: 1px solid #2d2d44;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            align-items: center;
+          flex-direction: column;
+          align-items: stretch;
         }
 
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
+        .stats-bar {
+          flex-direction: column;
+          gap: 10px;
         }
+      }
 
-        .control-group label {
-            font-size: 0.9rem;
-            color: #d1d5db;
-            font-weight: 500;
+      .priority-indicator {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 1.2rem;
+        z-index: 1;
+      }
+
+      .search-highlight {
+        background: #fbbf24;
+        color: #111827;
+        padding: 1px 2px;
+        border-radius: 2px;
+      }
+
+      .ticket-footer {
+        margin-top: auto;
+        padding-top: 15px;
+        border-top: 1px solid #374151;
+        font-size: 0.85rem;
+        color: #9ca3af;
+      }
+
+      /* Epic Integration Completion Styles */
+      .epic-section {
+        background: #1e1e2e;
+        border-bottom: 1px solid #2d2d44;
+        padding: 25px;
+      }
+
+      .epic-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .epic-header h2 {
+        color: #e1e5e9;
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .epic-header p {
+        color: #9ca3af;
+        font-size: 0.9rem;
+        margin: 5px 0 0 0;
+      }
+
+      .toggle-epic-btn {
+        background: #374151;
+        color: #e1e5e9;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: background 0.3s;
+        white-space: nowrap;
+      }
+
+      .toggle-epic-btn:hover {
+        background: #4b5563;
+      }
+
+      .epic-overview {
+        display: flex;
+        gap: 30px;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+      }
+
+      .epic-stat {
+        text-align: center;
+        padding: 15px;
+        background: #252538;
+        border-radius: 10px;
+        border: 1px solid #2d2d44;
+        flex: 1;
+        min-width: 150px;
+      }
+
+      .epic-stat-number {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #10b981;
+        margin-bottom: 5px;
+      }
+
+      .epic-stat-label {
+        color: #9ca3af;
+        font-size: 0.85rem;
+        line-height: 1.2;
+      }
+
+      .epic-details {
+        animation: slideDown 0.3s ease-out;
+      }
+
+      .epic-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+
+      .epic-card {
+        background: #252538;
+        border-radius: 10px;
+        padding: 20px;
+        border: 1px solid #2d2d44;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+
+      .epic-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      }
+
+      .epic-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #e1e5e9;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .epic-description {
+        color: #9ca3af;
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+        line-height: 1.4;
+      }
+
+      .epic-progress {
+        margin-bottom: 15px;
+      }
+
+      .epic-progress-label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+        font-size: 0.85rem;
+        color: #d1d5db;
+      }
+
+      .epic-progress-bar {
+        width: 100%;
+        height: 8px;
+        background: #374151;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .epic-progress-fill {
+        height: 100%;
+        transition: width 0.5s ease-in-out;
+        background: linear-gradient(90deg, #10b981, #34d399);
+      }
+
+      .epic-progress-fill.critical {
+        background: linear-gradient(90deg, #ef4444, #f87171);
+      }
+
+      .epic-progress-fill.high {
+        background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+      }
+
+      .epic-progress-fill.medium {
+        background: linear-gradient(90deg, #f59e0b, #fbbf24);
+      }
+
+      .epic-components {
+        font-size: 0.85rem;
+      }
+
+      .epic-component {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 5px;
+        color: #9ca3af;
+      }
+
+      .epic-component-status {
+        font-size: 1rem;
+      }
+
+      .quick-actions {
+        background: #252538;
+        border-radius: 10px;
+        padding: 20px;
+        border: 1px solid #2d2d44;
+      }
+
+      .quick-actions h3 {
+        color: #e1e5e9;
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+      }
+
+      .action-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .action-item {
+        display: grid;
+        grid-template-columns: 30px 1fr auto;
+        gap: 12px;
+        align-items: center;
+        padding: 12px;
+        background: #1e1e2e;
+        border-radius: 8px;
+        border: 1px solid #2d2d44;
+        transition: background 0.2s;
+      }
+
+      .action-item:hover {
+        background: #2d2d44;
+      }
+
+      .action-icon {
+        font-size: 1.2rem;
+        text-align: center;
+      }
+
+      .action-text {
+        color: #e1e5e9;
+        font-size: 0.9rem;
+      }
+
+      .action-time {
+        color: #10b981;
+        font-size: 0.8rem;
+        font-weight: 500;
+        background: #1f3c26;
+        padding: 4px 8px;
+        border-radius: 4px;
+        border: 1px solid #166534;
+        white-space: nowrap;
+      }
+
+      .action-time.in-progress {
+        color: #3b82f6;
+        background: #1e3a8a;
+        border-color: #2563eb;
+      }
+
+      /* Light mode styles for epic section */
+      .light-mode .epic-section {
+        background: white;
+        border-bottom: 1px solid #e9ecef;
+      }
+
+      .light-mode .epic-header h2 {
+        color: #2c3e50;
+      }
+
+      .light-mode .epic-header p {
+        color: #6c757d;
+      }
+
+      .light-mode .toggle-epic-btn {
+        background: #4a5568;
+        color: white;
+      }
+
+      .light-mode .toggle-epic-btn:hover {
+        background: #2d3748;
+      }
+
+      .light-mode .epic-stat {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+      }
+
+      .light-mode .epic-stat-number {
+        color: #28a745;
+      }
+
+      .light-mode .epic-stat-label {
+        color: #6c757d;
+      }
+
+      .light-mode .epic-card {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+      }
+
+      .light-mode .epic-title {
+        color: #2c3e50;
+      }
+
+      .light-mode .epic-description {
+        color: #6c757d;
+      }
+
+      .light-mode .epic-progress-label {
+        color: #495057;
+      }
+
+      .light-mode .epic-progress-bar {
+        background: #e9ecef;
+      }
+
+      .light-mode .epic-component {
+        color: #6c757d;
+      }
+
+      .light-mode .quick-actions {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+      }
+
+      .light-mode .quick-actions h3 {
+        color: #2c3e50;
+      }
+
+      .light-mode .action-item {
+        background: white;
+        border: 1px solid #e9ecef;
+      }
+
+      .light-mode .action-item:hover {
+        background: #f8f9fa;
+      }
+
+      .light-mode .action-text {
+        color: #2c3e50;
+      }
+
+      /* Animation */
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
         }
-
-        .control-group select,
-        .control-group input {
-            padding: 8px 12px;
-            border: 1px solid #374151;
-            border-radius: 5px;
-            font-size: 0.9rem;
-            background: #2d2d44;
-            color: #e1e5e9;
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
+      }
 
-        .control-group select:focus,
-        .control-group input:focus {
-            outline: none;
-            border-color: #74c0fc;
-            box-shadow: 0 0 0 2px rgba(116, 192, 252, 0.2);
-        }
-
-        .refresh-btn {
-            background: #059669;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.3s;
-            align-self: end;
-        }
-
-        .refresh-btn:hover {
-            background: #047857;
-        }
-
-        .tickets-container {
-            padding: 20px;
-            min-height: auto;
-        }
-
-        .ticket-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
-        }
-
-        .ticket {
-            background: #2d2d44;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.25);
-            border-left: 5px solid #6b7280;
-            transition: transform 0.2s, box-shadow 0.2s;
-            position: relative;
-            min-height: 200px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .ticket:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-        }
-
-        .ticket.priority-auth {
-            border-left-color: #ef4444;
-            background: linear-gradient(135deg, #3c1f1f 0%, #2d2d44 100%);
-        }
-
-        .ticket.priority-file {
-            border-left-color: #10b981;
-            background: linear-gradient(135deg, #1f3c26 0%, #2d2d44 100%);
-        }
-
-        .ticket.state-unassigned {
-            border-left-color: #6b7280;
-        }
-
-        .ticket.state-todo {
-            border-left-color: #f59e0b;
-        }
-
-        .ticket.state-in_progress {
-            border-left-color: #3b82f6;
-        }
-
-        .ticket.state-review {
-            border-left-color: #8b5cf6;
-        }
-
-        .ticket.state-completed {
-            border-left-color: #10b981;
-        }
-
-        .ticket.state-blocked {
-            border-left-color: #ef4444;
-        }
-
-        .ticket.state-error {
-            border-left-color: #dc2626;
-            background: #3c1917;
-        }
-
-        .state-error {
-            background: #dc2626;
-            color: white;
-        }
-
-        .ticket-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 15px;
-            flex-shrink: 0;
-        }
-
-        .ticket-id {
-            font-family: 'Courier New', monospace;
-            background: #374151;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            color: #d1d5db;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 200px;
-        }
-
-        .ticket-state {
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-
-        .state-unassigned { background: #4b5563; color: white; }
-        .state-todo { background: #f59e0b; color: #111827; }
-        .state-in_progress { background: #3b82f6; color: white; }
-        .state-review { background: #8b5cf6; color: white; }
-        .state-completed { background: #10b981; color: white; }
-        .state-blocked { background: #ef4444; color: white; }
-
-        .ticket-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #f3f4f6;
-            margin-bottom: 15px;
-            line-height: 1.4;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-
-        .ticket-meta {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            font-size: 0.9rem;
-            color: #9ca3af;
-            margin-bottom: 15px;
-            flex: 1;
-        }
-
-        .ticket-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-top: 12px;
-            margin-bottom: 12px;
-        }
-
-        .tag {
-            background: #374151;
-            color: #74c0fc;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            border: 1px solid #4b5563;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 150px;
-        }
-
-        .tag.tag-auth { background: #3c1f1f; color: #fca5a5; border-color: #7f1d1d; }
-        .tag.tag-file-browser { background: #1f3c26; color: #86efac; border-color: #166534; }
-        .tag.tag-high-priority { background: #3c2a1f; color: #fdba74; border-color: #92400e; }
-
-        /* Fallback for malformed or undefined tag classes */
-        .tag[class*="tag-undefined"], .tag[class*="tag-null"], .tag[class*="tag-"] {
-            background: #374151;
-            color: #9ca3af;
-            border: 1px solid #4b5563;
-        }
-
-        .no-tickets {
-            text-align: center;
-            color: #9ca3af;
-            font-size: 1.2rem;
-            margin: 50px 0;
-        }
-
-        .loading {
-            text-align: center;
-            color: #9ca3af;
-            font-size: 1.1rem;
-            margin: 50px 0;
-        }
-
-        .error {
-            background: #3c1f1f;
-            color: #fca5a5;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 20px;
-            border: 1px solid #7f1d1d;
-        }
-
-        @media (max-width: 768px) {
-            .ticket-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .stats-bar {
-                flex-direction: column;
-                gap: 10px;
-            }
-        }
-
-        .priority-indicator {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 1.2rem;
-            z-index: 1;
-        }
-
-        .search-highlight {
-            background: #fbbf24;
-            color: #111827;
-            padding: 1px 2px;
-            border-radius: 2px;
-        }
-
-        .ticket-footer {
-            margin-top: auto;
-            padding-top: 15px;
-            border-top: 1px solid #374151;
-            font-size: 0.85rem;
-            color: #9ca3af;
-        }
-
-        /* Epic Integration Completion Styles */
-        .epic-section {
-            background: #1e1e2e;
-            border-bottom: 1px solid #2d2d44;
-            padding: 25px;
-        }
-
+      @media (max-width: 768px) {
         .epic-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .epic-header h2 {
-            color: #e1e5e9;
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin: 0;
-        }
-
-        .epic-header p {
-            color: #9ca3af;
-            font-size: 0.9rem;
-            margin: 5px 0 0 0;
-        }
-
-        .toggle-epic-btn {
-            background: #374151;
-            color: #e1e5e9;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.3s;
-            white-space: nowrap;
-        }
-
-        .toggle-epic-btn:hover {
-            background: #4b5563;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
         }
 
         .epic-overview {
-            display: flex;
-            gap: 30px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
-
-        .epic-stat {
-            text-align: center;
-            padding: 15px;
-            background: #252538;
-            border-radius: 10px;
-            border: 1px solid #2d2d44;
-            flex: 1;
-            min-width: 150px;
-        }
-
-        .epic-stat-number {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #10b981;
-            margin-bottom: 5px;
-        }
-
-        .epic-stat-label {
-            color: #9ca3af;
-            font-size: 0.85rem;
-            line-height: 1.2;
-        }
-
-        .epic-details {
-            animation: slideDown 0.3s ease-out;
+          flex-direction: column;
+          gap: 15px;
         }
 
         .epic-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .epic-card {
-            background: #252538;
-            border-radius: 10px;
-            padding: 20px;
-            border: 1px solid #2d2d44;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .epic-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-        }
-
-        .epic-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #e1e5e9;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .epic-description {
-            color: #9ca3af;
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-            line-height: 1.4;
-        }
-
-        .epic-progress {
-            margin-bottom: 15px;
-        }
-
-        .epic-progress-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-            font-size: 0.85rem;
-            color: #d1d5db;
-        }
-
-        .epic-progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #374151;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .epic-progress-fill {
-            height: 100%;
-            transition: width 0.5s ease-in-out;
-            background: linear-gradient(90deg, #10b981, #34d399);
-        }
-
-        .epic-progress-fill.critical {
-            background: linear-gradient(90deg, #ef4444, #f87171);
-        }
-
-        .epic-progress-fill.high {
-            background: linear-gradient(90deg, #8b5cf6, #a78bfa);
-        }
-
-        .epic-progress-fill.medium {
-            background: linear-gradient(90deg, #f59e0b, #fbbf24);
-        }
-
-        .epic-components {
-            font-size: 0.85rem;
-        }
-
-        .epic-component {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 5px;
-            color: #9ca3af;
-        }
-
-        .epic-component-status {
-            font-size: 1rem;
-        }
-
-        .quick-actions {
-            background: #252538;
-            border-radius: 10px;
-            padding: 20px;
-            border: 1px solid #2d2d44;
-        }
-
-        .quick-actions h3 {
-            color: #e1e5e9;
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-        }
-
-        .action-list {
-            display: grid;
-            gap: 12px;
+          grid-template-columns: 1fr;
         }
 
         .action-item {
-            display: grid;
-            grid-template-columns: 30px 1fr auto;
-            gap: 12px;
-            align-items: center;
-            padding: 12px;
-            background: #1e1e2e;
-            border-radius: 8px;
-            border: 1px solid #2d2d44;
-            transition: background 0.2s;
-        }
-
-        .action-item:hover {
-            background: #2d2d44;
-        }
-
-        .action-icon {
-            font-size: 1.2rem;
-            text-align: center;
-        }
-
-        .action-text {
-            color: #e1e5e9;
-            font-size: 0.9rem;
+          grid-template-columns: 30px 1fr;
+          gap: 8px;
         }
 
         .action-time {
-            color: #10b981;
-            font-size: 0.8rem;
-            font-weight: 500;
-            background: #1f3c26;
-            padding: 4px 8px;
-            border-radius: 4px;
-            border: 1px solid #166534;
-            white-space: nowrap;
+          grid-column: 2;
+          justify-self: start;
+          margin-top: 5px;
         }
-
-        .action-time.in-progress {
-            color: #3b82f6;
-            background: #1e3a8a;
-            border-color: #2563eb;
-        }
-
-        /* Light mode styles for epic section */
-        .light-mode .epic-section {
-            background: white;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .light-mode .epic-header h2 {
-            color: #2c3e50;
-        }
-
-        .light-mode .epic-header p {
-            color: #6c757d;
-        }
-
-        .light-mode .toggle-epic-btn {
-            background: #4a5568;
-            color: white;
-        }
-
-        .light-mode .toggle-epic-btn:hover {
-            background: #2d3748;
-        }
-
-        .light-mode .epic-stat {
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-        }
-
-        .light-mode .epic-stat-number {
-            color: #28a745;
-        }
-
-        .light-mode .epic-stat-label {
-            color: #6c757d;
-        }
-
-        .light-mode .epic-card {
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-        }
-
-        .light-mode .epic-title {
-            color: #2c3e50;
-        }
-
-        .light-mode .epic-description {
-            color: #6c757d;
-        }
-
-        .light-mode .epic-progress-label {
-            color: #495057;
-        }
-
-        .light-mode .epic-progress-bar {
-            background: #e9ecef;
-        }
-
-        .light-mode .epic-component {
-            color: #6c757d;
-        }
-
-        .light-mode .quick-actions {
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-        }
-
-        .light-mode .quick-actions h3 {
-            color: #2c3e50;
-        }
-
-        .light-mode .action-item {
-            background: white;
-            border: 1px solid #e9ecef;
-        }
-
-        .light-mode .action-item:hover {
-            background: #f8f9fa;
-        }
-
-        .light-mode .action-text {
-            color: #2c3e50;
-        }
-
-        /* Animation */
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .epic-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-            
-            .epic-overview {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .epic-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .action-item {
-                grid-template-columns: 30px 1fr;
-                gap: 8px;
-            }
-            
-            .action-time {
-                grid-column: 2;
-                justify-self: start;
-                margin-top: 5px;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="dashboard">
-        <div class="header">
-            <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
-            <h1>🎯 Visual Ticket Dashboard</h1>
-            <p>Real-time view of all tasks and tickets in the system</p>
+      <div class="header">
+        <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+        <h1>🎯 Visual Ticket Dashboard</h1>
+        <p>Real-time view of all tasks and tickets in the system</p>
+      </div>
+
+      <div class="stats-bar" id="statsBar">
+        <div class="stat">
+          <div class="stat-number" id="totalTasks">-</div>
+          <div class="stat-label">Total Tasks</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number" id="unassignedTasks">-</div>
+          <div class="stat-label">Available</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number" id="inProgressTasks">-</div>
+          <div class="stat-label">In Progress</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number" id="authTasks">-</div>
+          <div class="stat-label">Auth Tasks</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number" id="fileTasks">-</div>
+          <div class="stat-label">File Browser</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number" id="completedTasks">-</div>
+          <div class="stat-label">Completed</div>
+        </div>
+      </div>
+
+      <!-- Epic Integration Completion Section -->
+      <div class="epic-section" id="epicSection">
+        <div class="epic-header">
+          <h2>🎯 Epic Integration Completion Status</h2>
+          <p>Ready-to-deliver features with massive business value</p>
+          <button class="toggle-epic-btn" onclick="toggleEpicDetails()" id="toggleEpicBtn">Show Details ▼</button>
         </div>
 
-        <div class="stats-bar" id="statsBar">
-            <div class="stat">
-                <div class="stat-number" id="totalTasks">-</div>
-                <div class="stat-label">Total Tasks</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number" id="unassignedTasks">-</div>
-                <div class="stat-label">Available</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number" id="inProgressTasks">-</div>
-                <div class="stat-label">In Progress</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number" id="authTasks">-</div>
-                <div class="stat-label">Auth Tasks</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number" id="fileTasks">-</div>
-                <div class="stat-label">File Browser</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number" id="completedTasks">-</div>
-                <div class="stat-label">Completed</div>
-            </div>
+        <div class="epic-overview">
+          <div class="epic-stat">
+            <div class="epic-stat-number" id="overallProgress">77%</div>
+            <div class="epic-stat-label">Average Epic Completion</div>
+          </div>
+          <div class="epic-stat">
+            <div class="epic-stat-number" id="criticalProgress">85%</div>
+            <div class="epic-stat-label">Critical Systems</div>
+          </div>
+          <div class="epic-stat">
+            <div class="epic-stat-number" id="quickWins">4</div>
+            <div class="epic-stat-label">Quick Wins Available</div>
+          </div>
+          <div class="epic-stat">
+            <div class="epic-stat-number">6+</div>
+            <div class="epic-stat-label">Months of Work Ready</div>
+          </div>
         </div>
 
-        <!-- Epic Integration Completion Section -->
-        <div class="epic-section" id="epicSection">
-            <div class="epic-header">
-                <h2>🎯 Epic Integration Completion Status</h2>
-                <p>Ready-to-deliver features with massive business value</p>
-                <button class="toggle-epic-btn" onclick="toggleEpicDetails()" id="toggleEpicBtn">Show Details ▼</button>
-            </div>
-            
-            <div class="epic-overview">
-                <div class="epic-stat">
-                    <div class="epic-stat-number" id="overallProgress">77%</div>
-                    <div class="epic-stat-label">Average Epic Completion</div>
-                </div>
-                <div class="epic-stat">
-                    <div class="epic-stat-number" id="criticalProgress">85%</div>
-                    <div class="epic-stat-label">Critical Systems</div>
-                </div>
-                <div class="epic-stat">
-                    <div class="epic-stat-number" id="quickWins">4</div>
-                    <div class="epic-stat-label">Quick Wins Available</div>
-                </div>
-                <div class="epic-stat">
-                    <div class="epic-stat-number">6+</div>
-                    <div class="epic-stat-label">Months of Work Ready</div>
-                </div>
-            </div>
+        <div class="epic-details" id="epicDetails" style="display: none">
+          <div class="epic-grid" id="epicGrid">
+            <!-- Epic progress bars will be populated by JavaScript -->
+          </div>
 
-            <div class="epic-details" id="epicDetails" style="display: none;">
-                <div class="epic-grid" id="epicGrid">
-                    <!-- Epic progress bars will be populated by JavaScript -->
-                </div>
-                
-                <div class="quick-actions">
-                    <h3>⚡ Immediate Actions</h3>
-                    <div class="action-list">
-                        <div class="action-item">
-                            <span class="action-icon">🔐</span>
-                            <span class="action-text">Complete auth store: Work on AUTH-985113-F18F</span>
-                            <span class="action-time in-progress">In Progress</span>
-                        </div>
-                        <div class="action-item">
-                            <span class="action-icon">📁</span>
-                            <span class="action-text">Create project API: PROJECT-API-* task available</span>
-                            <span class="action-time">3-4h</span>
-                        </div>
-                        <div class="action-item">
-                            <span class="action-icon">🎨</span>
-                            <span class="action-text">Update palette categories: Add advanced/transform</span>
-                            <span class="action-time">15min</span>
-                        </div>
-                        <div class="action-item">
-                            <span class="action-icon">📤</span>
-                            <span class="action-text">Enhance export dialog: Format selection</span>
-                            <span class="action-time">2-3h</span>
-                        </div>
-                    </div>
-                </div>
+          <div class="quick-actions">
+            <h3>⚡ Immediate Actions</h3>
+            <div class="action-list">
+              <div class="action-item">
+                <span class="action-icon">🔐</span>
+                <span class="action-text">Complete auth store: Work on AUTH-985113-F18F</span>
+                <span class="action-time in-progress">In Progress</span>
+              </div>
+              <div class="action-item">
+                <span class="action-icon">📁</span>
+                <span class="action-text">Create project API: PROJECT-API-* task available</span>
+                <span class="action-time">3-4h</span>
+              </div>
+              <div class="action-item">
+                <span class="action-icon">🎨</span>
+                <span class="action-text">Update palette categories: Add advanced/transform</span>
+                <span class="action-time">15min</span>
+              </div>
+              <div class="action-item">
+                <span class="action-icon">📤</span>
+                <span class="action-text">Enhance export dialog: Format selection</span>
+                <span class="action-time">2-3h</span>
+              </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="control-group">
+          <label>Filter by State</label>
+          <select id="stateFilter">
+            <option value="">All States</option>
+            <option value="UNASSIGNED">Unassigned</option>
+            <option value="TODO">Todo</option>
+            <option value="IN_PROGRESS">In Progress</option>
+            <option value="REVIEW">Review</option>
+            <option value="COMPLETED">Completed</option>
+            <option value="BLOCKED">Blocked</option>
+          </select>
         </div>
 
-        <div class="controls">
-            <div class="control-group">
-                <label>Filter by State</label>
-                <select id="stateFilter">
-                    <option value="">All States</option>
-                    <option value="UNASSIGNED">Unassigned</option>
-                    <option value="TODO">Todo</option>
-                    <option value="IN_PROGRESS">In Progress</option>
-                    <option value="REVIEW">Review</option>
-                    <option value="COMPLETED">Completed</option>
-                    <option value="BLOCKED">Blocked</option>
-                </select>
-            </div>
-
-            <div class="control-group">
-                <label>Filter by Priority</label>
-                <select id="priorityFilter">
-                    <option value="">All Priorities</option>
-                    <option value="auth">Authentication (20.1)</option>
-                    <option value="file-browser">File Browser (20.2)</option>
-                    <option value="priority-automation">Priority Tasks</option>
-                    <option value="high">High Priority</option>
-                </select>
-            </div>
-
-            <div class="control-group">
-                <label>Search Tasks</label>
-                <input type="text" id="searchInput" placeholder="Search by title, ID, or assignee...">
-            </div>
-
-            <div class="control-group">
-                <label>Sort by</label>
-                <select id="sortBy">
-                    <option value="priority">Priority</option>
-                    <option value="created">Created Date</option>
-                    <option value="updated">Updated Date</option>
-                    <option value="assignee">Assignee</option>
-                    <option value="state">State</option>
-                </select>
-            </div>
-
-            <button class="refresh-btn" onclick="loadTasks()">🔄 Refresh Data</button>
+        <div class="control-group">
+          <label>Filter by Priority</label>
+          <select id="priorityFilter">
+            <option value="">All Priorities</option>
+            <option value="auth">Authentication (20.1)</option>
+            <option value="file-browser">File Browser (20.2)</option>
+            <option value="priority-automation">Priority Tasks</option>
+            <option value="high">High Priority</option>
+          </select>
         </div>
 
-        <div class="tickets-container">
-            <div id="loading" class="loading">Loading tickets...</div>
-            <div id="ticketsGrid" class="ticket-grid" style="display: none;"></div>
-            <div id="noTickets" class="no-tickets" style="display: none;">
-                No tickets found matching your criteria.
-            </div>
-            <div id="error" class="error" style="display: none;"></div>
+        <div class="control-group">
+          <label>Search Tasks</label>
+          <input type="text" id="searchInput" placeholder="Search by title, ID, or assignee..." />
         </div>
+
+        <div class="control-group">
+          <label>Sort by</label>
+          <select id="sortBy">
+            <option value="priority">Priority</option>
+            <option value="created">Created Date</option>
+            <option value="updated">Updated Date</option>
+            <option value="assignee">Assignee</option>
+            <option value="state">State</option>
+          </select>
+        </div>
+
+        <button class="refresh-btn" onclick="loadTasks()">🔄 Refresh Data</button>
+      </div>
+
+      <div class="tickets-container">
+        <div id="loading" class="loading">Loading tickets...</div>
+        <div id="ticketsGrid" class="ticket-grid" style="display: none"></div>
+        <div id="noTickets" class="no-tickets" style="display: none">No tickets found matching your criteria.</div>
+        <div id="error" class="error" style="display: none"></div>
+      </div>
     </div>
 
     <script>
-        let allTasks = [];
-        let filteredTasks = [];
+      let allTasks = [];
+      let filteredTasks = [];
 
-        // Epic completion data (from show-epic-completion.js analysis)
-        const EPIC_ANALYSIS = {
-            'epic7_advanced_nodes': {
-                name: 'Epic 7: Advanced Nodes',
-                icon: '🎲',
-                description: 'WeightedAdvanced, Conditional, Sequential, Markov nodes',
-                businessValue: 'Advanced workflow capabilities for power users',
-                overallProgress: 85,
-                impact: 'HIGH',
-                components: [
-                    { name: 'Runtime Implementation', status: 'complete', progress: 100, location: 'packages/core/runtime/nodes/' },
-                    { name: 'GraphEditor Integration', status: 'complete', progress: 100, location: 'packages/core/GraphEditor.tsx:129-164' },
-                    { name: 'Palette Categories', status: 'complete', progress: 100, location: 'packages/core/Palette.tsx:100-109' },
-                    { name: 'Node Editors', status: 'missing', progress: 0, task: 'Create specialized editors for advanced nodes' },
-                    { name: 'Test Coverage', status: 'complete', progress: 90, location: 'packages/core/runtime/__tests__/' }
-                ]
+      // Epic completion data (from show-epic-completion.js analysis)
+      const EPIC_ANALYSIS = {
+        epic7_advanced_nodes: {
+          name: 'Epic 7: Advanced Nodes',
+          icon: '🎲',
+          description: 'WeightedAdvanced, Conditional, Sequential, Markov nodes',
+          businessValue: 'Advanced workflow capabilities for power users',
+          overallProgress: 85,
+          impact: 'HIGH',
+          components: [
+            {
+              name: 'Runtime Implementation',
+              status: 'complete',
+              progress: 100,
+              location: 'packages/core/runtime/nodes/',
             },
-            'epic3_export_system': {
-                name: 'Epic 3: Export System',
-                icon: '📤',
-                description: 'Professional export formats (PNG, PDF, YAML, XML, GeneratorBundle)',
-                businessValue: 'Users can export graphs for presentations and documentation',
-                overallProgress: 75,
-                impact: 'MEDIUM-HIGH',
-                components: [
-                    { name: 'GeneratorBundle Exporter', status: 'complete', progress: 100, location: 'server/src/exporter.ts' },
-                    { name: 'Export Handler UI', status: 'complete', progress: 100, location: 'packages/core/GraphEditor.tsx:461-514' },
-                    { name: 'Server Routes', status: 'complete', progress: 100, location: 'server/src/index.ts:1619-1690' },
-                    { name: 'Format Selection Dialog', status: 'missing', progress: 0, task: 'Create ExportDialog component with format options' },
-                    { name: 'Import System', status: 'missing', progress: 0, task: 'Create import functionality for round-trip operations' }
-                ]
+            {
+              name: 'GraphEditor Integration',
+              status: 'complete',
+              progress: 100,
+              location: 'packages/core/GraphEditor.tsx:129-164',
             },
-            'epic8_python_integration': {
-                name: 'Epic 8: Python Integration',
-                icon: '🐍',
-                description: 'Python code execution within graph workflows',
-                businessValue: 'Users can run Python transformations in their graphs',
-                overallProgress: 80,
-                impact: 'MEDIUM',
-                components: [
-                    { name: 'PythonTransform Node', status: 'complete', progress: 100, location: 'packages/core/runtime/nodes/PythonTransform.ts' },
-                    { name: 'GraphEditor Integration', status: 'complete', progress: 100, location: 'packages/core/GraphEditor.tsx:158-164' },
-                    { name: 'Server Engine Support', status: 'partial', progress: 50, task: 'Enable Python imports in server/src/engine.ts' },
-                    { name: 'Python Executor Service', status: 'exists', progress: 80, location: 'Python executor framework implemented' },
-                    { name: 'UI Editor', status: 'unknown', progress: 50, task: 'Verify PythonTransformEditor exists' }
-                ]
+            {
+              name: 'Palette Categories',
+              status: 'complete',
+              progress: 100,
+              location: 'packages/core/Palette.tsx:100-109',
             },
-            'authentication_system': {
-                name: 'Authentication System',
-                icon: '🔐',
-                description: 'User login, registration, and session management',
-                businessValue: 'Users can create accounts and access personal features',
-                overallProgress: 85,
-                impact: 'CRITICAL',
-                components: [
-                    { name: 'React Router Setup', status: 'complete', progress: 100, location: 'client/src/App.tsx' },
-                    { name: 'Auth Pages & Routes', status: 'complete', progress: 100, location: 'LoginPage, RegistrationPage, etc.' },
-                    { name: 'Protected Routes', status: 'complete', progress: 100, location: 'PrivateRoute component' },
-                    { name: 'Backend APIs', status: 'complete', progress: 100, location: 'server/src/auth/' },
-                    { name: 'Zustand Store Integration', status: 'in_progress', progress: 70, assignee: 'claude_dev' },
-                    { name: 'JWT Token Handling', status: 'partial', progress: 60, task: 'Session management validation' },
-                    { name: 'Email Verification', status: 'backend_ready', progress: 40, task: 'Connect to SMTP service' }
-                ]
+            {
+              name: 'Node Editors',
+              status: 'missing',
+              progress: 0,
+              task: 'Create specialized editors for advanced nodes',
             },
-            'file_browser_system': {
-                name: 'File Browser & Project Management',
-                icon: '📁',
-                description: 'Save, load, and manage user projects',
-                businessValue: 'Users can save their work and not lose projects',
-                overallProgress: 60,
-                impact: 'CRITICAL',
-                components: [
-                    { name: 'Project Dialogs UI', status: 'complete', progress: 100, location: 'packages/core/GraphEditor.tsx:647-657' },
-                    { name: 'Graph Store Management', status: 'complete', progress: 100, location: 'packages/core/graphStore.ts' },
-                    { name: 'Export Infrastructure', status: 'complete', progress: 100, location: 'server/src/exporter.ts' },
-                    { name: 'Backend API Endpoints', status: 'missing', progress: 0, task: 'PROJECT-API-* task available (3-4h)' },
-                    { name: '.psg File Format Spec', status: 'missing', progress: 0, task: 'Define project file format' },
-                    { name: 'Recent Files System', status: 'missing', progress: 0, task: 'Quick access to recent projects' },
-                    { name: 'Auto-recovery', status: 'missing', progress: 0, task: 'Crash recovery system' }
-                ]
-            }
-        };
+            { name: 'Test Coverage', status: 'complete', progress: 90, location: 'packages/core/runtime/__tests__/' },
+          ],
+        },
+        epic3_export_system: {
+          name: 'Epic 3: Export System',
+          icon: '📤',
+          description: 'Professional export formats (PNG, PDF, YAML, XML, GeneratorBundle)',
+          businessValue: 'Users can export graphs for presentations and documentation',
+          overallProgress: 75,
+          impact: 'MEDIUM-HIGH',
+          components: [
+            { name: 'GeneratorBundle Exporter', status: 'complete', progress: 100, location: 'server/src/exporter.ts' },
+            {
+              name: 'Export Handler UI',
+              status: 'complete',
+              progress: 100,
+              location: 'packages/core/GraphEditor.tsx:461-514',
+            },
+            { name: 'Server Routes', status: 'complete', progress: 100, location: 'server/src/index.ts:1619-1690' },
+            {
+              name: 'Format Selection Dialog',
+              status: 'missing',
+              progress: 0,
+              task: 'Create ExportDialog component with format options',
+            },
+            {
+              name: 'Import System',
+              status: 'missing',
+              progress: 0,
+              task: 'Create import functionality for round-trip operations',
+            },
+          ],
+        },
+        epic8_python_integration: {
+          name: 'Epic 8: Python Integration',
+          icon: '🐍',
+          description: 'Python code execution within graph workflows',
+          businessValue: 'Users can run Python transformations in their graphs',
+          overallProgress: 80,
+          impact: 'MEDIUM',
+          components: [
+            {
+              name: 'PythonTransform Node',
+              status: 'complete',
+              progress: 100,
+              location: 'packages/core/runtime/nodes/PythonTransform.ts',
+            },
+            {
+              name: 'GraphEditor Integration',
+              status: 'complete',
+              progress: 100,
+              location: 'packages/core/GraphEditor.tsx:158-164',
+            },
+            {
+              name: 'Server Engine Support',
+              status: 'partial',
+              progress: 50,
+              task: 'Enable Python imports in server/src/engine.ts',
+            },
+            {
+              name: 'Python Executor Service',
+              status: 'exists',
+              progress: 80,
+              location: 'Python executor framework implemented',
+            },
+            { name: 'UI Editor', status: 'unknown', progress: 50, task: 'Verify PythonTransformEditor exists' },
+          ],
+        },
+        authentication_system: {
+          name: 'Authentication System',
+          icon: '🔐',
+          description: 'User login, registration, and session management',
+          businessValue: 'Users can create accounts and access personal features',
+          overallProgress: 85,
+          impact: 'CRITICAL',
+          components: [
+            { name: 'React Router Setup', status: 'complete', progress: 100, location: 'client/src/App.tsx' },
+            {
+              name: 'Auth Pages & Routes',
+              status: 'complete',
+              progress: 100,
+              location: 'LoginPage, RegistrationPage, etc.',
+            },
+            { name: 'Protected Routes', status: 'complete', progress: 100, location: 'PrivateRoute component' },
+            { name: 'Backend APIs', status: 'complete', progress: 100, location: 'server/src/auth/' },
+            { name: 'Zustand Store Integration', status: 'in_progress', progress: 70, assignee: 'claude_dev' },
+            { name: 'JWT Token Handling', status: 'partial', progress: 60, task: 'Session management validation' },
+            { name: 'Email Verification', status: 'backend_ready', progress: 40, task: 'Connect to SMTP service' },
+          ],
+        },
+        file_browser_system: {
+          name: 'File Browser & Project Management',
+          icon: '📁',
+          description: 'Save, load, and manage user projects',
+          businessValue: 'Users can save their work and not lose projects',
+          overallProgress: 60,
+          impact: 'CRITICAL',
+          components: [
+            {
+              name: 'Project Dialogs UI',
+              status: 'complete',
+              progress: 100,
+              location: 'packages/core/GraphEditor.tsx:647-657',
+            },
+            {
+              name: 'Graph Store Management',
+              status: 'complete',
+              progress: 100,
+              location: 'packages/core/graphStore.ts',
+            },
+            { name: 'Export Infrastructure', status: 'complete', progress: 100, location: 'server/src/exporter.ts' },
+            {
+              name: 'Backend API Endpoints',
+              status: 'missing',
+              progress: 0,
+              task: 'PROJECT-API-* task available (3-4h)',
+            },
+            { name: '.psg File Format Spec', status: 'missing', progress: 0, task: 'Define project file format' },
+            { name: 'Recent Files System', status: 'missing', progress: 0, task: 'Quick access to recent projects' },
+            { name: 'Auto-recovery', status: 'missing', progress: 0, task: 'Crash recovery system' },
+          ],
+        },
+      };
 
-        // Epic section functionality
-        function toggleEpicDetails() {
-            const details = document.getElementById('epicDetails');
-            const button = document.getElementById('toggleEpicBtn');
-            
-            if (details.style.display === 'none') {
-                details.style.display = 'block';
-                button.textContent = 'Hide Details ▲';
-                populateEpicGrid();
-            } else {
-                details.style.display = 'none';
-                button.textContent = 'Show Details ▼';
-            }
+      // Epic section functionality
+      function toggleEpicDetails() {
+        const details = document.getElementById('epicDetails');
+        const button = document.getElementById('toggleEpicBtn');
+
+        if (details.style.display === 'none') {
+          details.style.display = 'block';
+          button.textContent = 'Hide Details ▲';
+          populateEpicGrid();
+        } else {
+          details.style.display = 'none';
+          button.textContent = 'Show Details ▼';
         }
+      }
 
-        function populateEpicGrid() {
-            const epicGrid = document.getElementById('epicGrid');
-            
-            epicGrid.innerHTML = Object.entries(EPIC_ANALYSIS).map(([key, epic]) => {
-                const impactClass = epic.impact.toLowerCase().includes('critical') ? 'critical' :
-                                   epic.impact.toLowerCase().includes('high') ? 'high' :
-                                   epic.impact.toLowerCase().includes('medium') ? 'medium' : '';
+      function populateEpicGrid() {
+        const epicGrid = document.getElementById('epicGrid');
 
-                const componentsHtml = epic.components.map(component => {
-                    const statusIcon = getComponentStatusIcon(component.status);
-                    return `
+        epicGrid.innerHTML = Object.entries(EPIC_ANALYSIS)
+          .map(([key, epic]) => {
+            const impactClass = epic.impact.toLowerCase().includes('critical')
+              ? 'critical'
+              : epic.impact.toLowerCase().includes('high')
+                ? 'high'
+                : epic.impact.toLowerCase().includes('medium')
+                  ? 'medium'
+                  : '';
+
+            const componentsHtml = epic.components
+              .map(component => {
+                const statusIcon = getComponentStatusIcon(component.status);
+                return `
                         <div class="epic-component">
                             <span class="epic-component-status">${statusIcon}</span>
                             <span>${component.name} (${component.progress}%)</span>
                         </div>
                     `;
-                }).join('');
+              })
+              .join('');
 
-                return `
+            return `
                     <div class="epic-card">
                         <div class="epic-title">
                             <span>${epic.icon}</span>
@@ -1243,295 +1359,347 @@
                         </div>
                     </div>
                 `;
-            }).join('');
+          })
+          .join('');
+      }
+
+      function getComponentStatusIcon(status) {
+        switch (status) {
+          case 'complete':
+            return '✅';
+          case 'in_progress':
+            return '🔄';
+          case 'partial':
+            return '⚡';
+          case 'missing':
+            return '❌';
+          case 'exists':
+            return '📁';
+          case 'backend_ready':
+            return '🔧';
+          case 'unknown':
+            return '❓';
+          default:
+            return '📋';
         }
+      }
 
-        function getComponentStatusIcon(status) {
-            switch (status) {
-                case 'complete': return '✅';
-                case 'in_progress': return '🔄';
-                case 'partial': return '⚡';
-                case 'missing': return '❌';
-                case 'exists': return '📁';
-                case 'backend_ready': return '🔧';
-                case 'unknown': return '❓';
-                default: return '📋';
-            }
-        }
+      function updateEpicOverview() {
+        const epics = Object.values(EPIC_ANALYSIS);
+        const totalProgress = epics.reduce((sum, epic) => sum + epic.overallProgress, 0);
+        const averageProgress = Math.round(totalProgress / epics.length);
 
-        function updateEpicOverview() {
-            const epics = Object.values(EPIC_ANALYSIS);
-            const totalProgress = epics.reduce((sum, epic) => sum + epic.overallProgress, 0);
-            const averageProgress = Math.round(totalProgress / epics.length);
-            
-            const criticalEpics = epics.filter(epic => epic.impact.includes('CRITICAL'));
-            const criticalProgress = criticalEpics.length > 0 ? 
-                Math.round(criticalEpics.reduce((sum, epic) => sum + epic.overallProgress, 0) / criticalEpics.length) : 0;
-            
-            const quickWinsCount = epics.reduce((count, epic) => {
-                return count + epic.components.filter(component => 
-                    component.status === 'missing' || component.status === 'partial'
-                ).length;
-            }, 0);
+        const criticalEpics = epics.filter(epic => epic.impact.includes('CRITICAL'));
+        const criticalProgress =
+          criticalEpics.length > 0
+            ? Math.round(criticalEpics.reduce((sum, epic) => sum + epic.overallProgress, 0) / criticalEpics.length)
+            : 0;
 
-            document.getElementById('overallProgress').textContent = averageProgress + '%';
-            document.getElementById('criticalProgress').textContent = criticalProgress + '%';
-            document.getElementById('quickWins').textContent = quickWinsCount;
-        }
+        const quickWinsCount = epics.reduce((count, epic) => {
+          return (
+            count +
+            epic.components.filter(component => component.status === 'missing' || component.status === 'partial').length
+          );
+        }, 0);
 
-        // Load tasks from the data file
-        async function loadTasks() {
-            try {
-                document.getElementById('loading').style.display = 'block';
-                document.getElementById('ticketsGrid').style.display = 'none';
-                document.getElementById('noTickets').style.display = 'none';
-                document.getElementById('error').style.display = 'none';
+        document.getElementById('overallProgress').textContent = averageProgress + '%';
+        document.getElementById('criticalProgress').textContent = criticalProgress + '%';
+        document.getElementById('quickWins').textContent = quickWinsCount;
+      }
 
-                // In a real environment, you'd fetch from an API endpoint
-                // For now, we'll simulate loading from the state.json file
-                const response = await fetch('./data/state.json');
-                if (!response.ok) {
-                    throw new Error(`Failed to load data: ${response.statusText}`);
-                }
-                
-                const state = await response.json();
-                
-                // Convert tasks object to array
-                allTasks = Object.entries(state.tasks || {}).map(([id, task]) => ({
-                    ...task,
-                    id: id
-                }));
+      // Load tasks from the data file
+      async function loadTasks() {
+        try {
+          document.getElementById('loading').style.display = 'block';
+          document.getElementById('ticketsGrid').style.display = 'none';
+          document.getElementById('noTickets').style.display = 'none';
+          document.getElementById('error').style.display = 'none';
 
-                updateStats();
-                applyFilters();
-                
-                document.getElementById('loading').style.display = 'none';
-                
-            } catch (error) {
-                console.error('Error loading tasks:', error);
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('error').style.display = 'block';
-                document.getElementById('error').textContent = `Error loading tasks: ${error.message}. 
+          // In a real environment, you'd fetch from an API endpoint
+          // For now, we'll simulate loading from the state.json file
+          const response = await fetch('./data/state.json');
+          if (!response.ok) {
+            throw new Error(`Failed to load data: ${response.statusText}`);
+          }
+
+          const state = await response.json();
+
+          // Convert tasks object to array
+          allTasks = Object.entries(state.tasks || {}).map(([id, task]) => ({
+            ...task,
+            id: id,
+          }));
+
+          updateStats();
+          applyFilters();
+
+          document.getElementById('loading').style.display = 'none';
+        } catch (error) {
+          console.error('Error loading tasks:', error);
+          document.getElementById('loading').style.display = 'none';
+          document.getElementById('error').style.display = 'block';
+          document.getElementById('error').textContent = `Error loading tasks: ${error.message}. 
 
 💡 To use this dashboard:
 1. Make sure you're running this from the project root directory
 2. Start a local web server (e.g., python -m http.server 8000)
 3. Open http://localhost:8000/src/visual-ticket-dashboard.html
 4. The dashboard will load data from src/data/state.json`;
-            }
         }
+      }
 
-        // Update statistics with improved epic detection
-        function updateStats() {
-            const stats = {
-                total: allTasks.length,
-                unassigned: allTasks.filter(t => t.state === 'UNASSIGNED' || (t.state === 'TODO' && (!t.assignee || t.assignee === 'Unassigned'))).length,
-                inProgress: allTasks.filter(t => t.state === 'IN_PROGRESS').length,
-                auth: 0,
-                file: 0,
-                completed: allTasks.filter(t => t.state === 'COMPLETED').length
-            };
+      // Update statistics with improved epic detection
+      function updateStats() {
+        const stats = {
+          total: allTasks.length,
+          unassigned: allTasks.filter(
+            t => t.state === 'UNASSIGNED' || (t.state === 'TODO' && (!t.assignee || t.assignee === 'Unassigned'))
+          ).length,
+          inProgress: allTasks.filter(t => t.state === 'IN_PROGRESS').length,
+          auth: 0,
+          file: 0,
+          completed: allTasks.filter(t => t.state === 'COMPLETED').length,
+        };
 
-            // Use same logic as getStoryLabel for consistency
-            allTasks.forEach(task => {
-                const title = (task.title || '').toLowerCase();
-                const story = (task.story || '').toLowerCase();
-                const tags = task.tags || [];
-                
-                // Authentication tasks
-                if (story.includes('20.1') || tags.includes('auth') || 
-                    title.includes('auth') || title.includes('login') ||
-                    title.includes('register') || title.includes('password') ||
-                    title.includes('jwt') || title.includes('token')) {
-                    stats.auth++;
-                }
-                
-                // File browser tasks
-                if (story.includes('20.2') || tags.includes('file-browser') || 
-                    title.includes('file browser') || title.includes('project') ||
-                    title.includes('save') || title.includes('load') ||
-                    (title.includes('export') && !story.includes('19')) ||
-                    (title.includes('import') && !story.includes('19'))) {
-                    stats.file++;
-                }
-            });
+        // Use same logic as getStoryLabel for consistency
+        allTasks.forEach(task => {
+          const title = (task.title || '').toLowerCase();
+          const story = (task.story || '').toLowerCase();
+          const tags = task.tags || [];
 
-            document.getElementById('totalTasks').textContent = stats.total;
-            document.getElementById('unassignedTasks').textContent = stats.unassigned;
-            document.getElementById('inProgressTasks').textContent = stats.inProgress;
-            document.getElementById('authTasks').textContent = stats.auth;
-            document.getElementById('fileTasks').textContent = stats.file;
-            document.getElementById('completedTasks').textContent = stats.completed;
-        }
+          // Authentication tasks
+          if (
+            story.includes('20.1') ||
+            tags.includes('auth') ||
+            title.includes('auth') ||
+            title.includes('login') ||
+            title.includes('register') ||
+            title.includes('password') ||
+            title.includes('jwt') ||
+            title.includes('token')
+          ) {
+            stats.auth++;
+          }
 
-        // Apply filters and display tasks
-        function applyFilters() {
-            const stateFilter = document.getElementById('stateFilter').value;
-            const priorityFilter = document.getElementById('priorityFilter').value;
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const sortBy = document.getElementById('sortBy').value;
+          // File browser tasks
+          if (
+            story.includes('20.2') ||
+            tags.includes('file-browser') ||
+            title.includes('file browser') ||
+            title.includes('project') ||
+            title.includes('save') ||
+            title.includes('load') ||
+            (title.includes('export') && !story.includes('19')) ||
+            (title.includes('import') && !story.includes('19'))
+          ) {
+            stats.file++;
+          }
+        });
 
-            filteredTasks = allTasks.filter(task => {
-                // State filter
-                if (stateFilter && task.state !== stateFilter) {
-                    return false;
-                }
+        document.getElementById('totalTasks').textContent = stats.total;
+        document.getElementById('unassignedTasks').textContent = stats.unassigned;
+        document.getElementById('inProgressTasks').textContent = stats.inProgress;
+        document.getElementById('authTasks').textContent = stats.auth;
+        document.getElementById('fileTasks').textContent = stats.file;
+        document.getElementById('completedTasks').textContent = stats.completed;
+      }
 
-                // Priority filter with improved epic detection
-                if (priorityFilter) {
-                    const title = (task.title || '').toLowerCase();
-                    const story = (task.story || '').toLowerCase();
-                    const tags = task.tags || [];
-                    
-                    switch (priorityFilter) {
-                        case 'auth':
-                            const isAuthTask = story.includes('20.1') || tags.includes('auth') || 
-                                              title.includes('auth') || title.includes('login') ||
-                                              title.includes('register') || title.includes('password') ||
-                                              title.includes('jwt') || title.includes('token');
-                            if (!isAuthTask) return false;
-                            break;
-                        case 'file-browser':
-                            const isFileTask = story.includes('20.2') || tags.includes('file-browser') || 
-                                              title.includes('file browser') || title.includes('project') ||
-                                              title.includes('save') || title.includes('load') ||
-                                              (title.includes('export') && !story.includes('19')) ||
-                                              (title.includes('import') && !story.includes('19'));
-                            if (!isFileTask) return false;
-                            break;
-                        case 'priority-automation':
-                            if (task.metadata?.source !== 'priority-automation') return false;
-                            break;
-                        case 'high':
-                            if (task.priority !== 'high') return false;
-                            break;
-                    }
-                }
+      // Apply filters and display tasks
+      function applyFilters() {
+        const stateFilter = document.getElementById('stateFilter').value;
+        const priorityFilter = document.getElementById('priorityFilter').value;
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const sortBy = document.getElementById('sortBy').value;
 
-                // Search filter
-                if (searchTerm) {
-                    const searchableText = [
-                        task.title,
-                        task.id,
-                        task.assignee,
-                        task.description,
-                        task.story,
-                        ...(task.tags || [])
-                    ].join(' ').toLowerCase();
-                    
-                    if (!searchableText.includes(searchTerm)) {
-                        return false;
-                    }
-                }
+        filteredTasks = allTasks.filter(task => {
+          // State filter
+          if (stateFilter && task.state !== stateFilter) {
+            return false;
+          }
 
-                return true;
-            });
-
-            // Sort tasks
-            filteredTasks.sort((a, b) => {
-                switch (sortBy) {
-                    case 'priority':
-                        return getPriority(a) - getPriority(b);
-                    case 'created':
-                        return new Date(b.created || 0) - new Date(a.created || 0);
-                    case 'updated':
-                        return new Date(b.updated || 0) - new Date(a.updated || 0);
-                    case 'assignee':
-                        return (a.assignee || '').localeCompare(b.assignee || '');
-                    case 'state':
-                        return (a.state || '').localeCompare(b.state || '');
-                    default:
-                        return 0;
-                }
-            });
-
-            displayTasks();
-        }
-
-        // Get priority score for sorting with improved epic detection
-        function getPriority(task) {
+          // Priority filter with improved epic detection
+          if (priorityFilter) {
             const title = (task.title || '').toLowerCase();
             const story = (task.story || '').toLowerCase();
             const tags = task.tags || [];
-            
-            // Authentication tasks (Priority 1)
-            if (story.includes('20.1') || tags.includes('auth') || 
-                title.includes('auth') || title.includes('login') ||
-                title.includes('register') || title.includes('password') ||
-                title.includes('jwt') || title.includes('token')) {
-                return 1;
+
+            switch (priorityFilter) {
+              case 'auth':
+                const isAuthTask =
+                  story.includes('20.1') ||
+                  tags.includes('auth') ||
+                  title.includes('auth') ||
+                  title.includes('login') ||
+                  title.includes('register') ||
+                  title.includes('password') ||
+                  title.includes('jwt') ||
+                  title.includes('token');
+                if (!isAuthTask) return false;
+                break;
+              case 'file-browser':
+                const isFileTask =
+                  story.includes('20.2') ||
+                  tags.includes('file-browser') ||
+                  title.includes('file browser') ||
+                  title.includes('project') ||
+                  title.includes('save') ||
+                  title.includes('load') ||
+                  (title.includes('export') && !story.includes('19')) ||
+                  (title.includes('import') && !story.includes('19'));
+                if (!isFileTask) return false;
+                break;
+              case 'priority-automation':
+                if (task.metadata?.source !== 'priority-automation') return false;
+                break;
+              case 'high':
+                if (task.priority !== 'high') return false;
+                break;
             }
-            
-            // File browser tasks (Priority 2)
-            if (story.includes('20.2') || tags.includes('file-browser') || 
-                title.includes('file browser') || title.includes('project') ||
-                title.includes('save') || title.includes('load') ||
-                (title.includes('export') && !story.includes('19')) ||
-                (title.includes('import') && !story.includes('19'))) {
-                return 2;
+          }
+
+          // Search filter
+          if (searchTerm) {
+            const searchableText = [
+              task.title,
+              task.id,
+              task.assignee,
+              task.description,
+              task.story,
+              ...(task.tags || []),
+            ]
+              .join(' ')
+              .toLowerCase();
+
+            if (!searchableText.includes(searchTerm)) {
+              return false;
             }
-            
-            // Priority automation tasks
-            if (task.metadata?.source === 'priority-automation') return 3;
-            
-            // High priority tasks
-            if (task.priority === 'high') return 4;
-            
-            // Epic 19 tasks (deprioritized)
-            if (story.includes('19') || title.includes('privacy') || 
-                title.includes('compliance') || title.includes('gdpr') || 
-                title.includes('policy') || title.includes('audit') ||
-                title.includes('iso 27001')) {
-                return 10; // Low priority
-            }
-            
-            return 5;
+          }
+
+          return true;
+        });
+
+        // Sort tasks
+        filteredTasks.sort((a, b) => {
+          switch (sortBy) {
+            case 'priority':
+              return getPriority(a) - getPriority(b);
+            case 'created':
+              return new Date(b.created || 0) - new Date(a.created || 0);
+            case 'updated':
+              return new Date(b.updated || 0) - new Date(a.updated || 0);
+            case 'assignee':
+              return (a.assignee || '').localeCompare(b.assignee || '');
+            case 'state':
+              return (a.state || '').localeCompare(b.state || '');
+            default:
+              return 0;
+          }
+        });
+
+        displayTasks();
+      }
+
+      // Get priority score for sorting with improved epic detection
+      function getPriority(task) {
+        const title = (task.title || '').toLowerCase();
+        const story = (task.story || '').toLowerCase();
+        const tags = task.tags || [];
+
+        // Authentication tasks (Priority 1)
+        if (
+          story.includes('20.1') ||
+          tags.includes('auth') ||
+          title.includes('auth') ||
+          title.includes('login') ||
+          title.includes('register') ||
+          title.includes('password') ||
+          title.includes('jwt') ||
+          title.includes('token')
+        ) {
+          return 1;
         }
 
-        // Display filtered tasks
-        function displayTasks() {
-            const container = document.getElementById('ticketsGrid');
-            const noTickets = document.getElementById('noTickets');
-            
-            if (filteredTasks.length === 0) {
-                container.style.display = 'none';
-                noTickets.style.display = 'block';
-                return;
-            }
+        // File browser tasks (Priority 2)
+        if (
+          story.includes('20.2') ||
+          tags.includes('file-browser') ||
+          title.includes('file browser') ||
+          title.includes('project') ||
+          title.includes('save') ||
+          title.includes('load') ||
+          (title.includes('export') && !story.includes('19')) ||
+          (title.includes('import') && !story.includes('19'))
+        ) {
+          return 2;
+        }
 
-            noTickets.style.display = 'none';
-            container.style.display = 'grid';
-            
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            
-            container.innerHTML = filteredTasks.map(task => {
+        // Priority automation tasks
+        if (task.metadata?.source === 'priority-automation') return 3;
+
+        // High priority tasks
+        if (task.priority === 'high') return 4;
+
+        // Epic 19 tasks (deprioritized)
+        if (
+          story.includes('19') ||
+          title.includes('privacy') ||
+          title.includes('compliance') ||
+          title.includes('gdpr') ||
+          title.includes('policy') ||
+          title.includes('audit') ||
+          title.includes('iso 27001')
+        ) {
+          return 10; // Low priority
+        }
+
+        return 5;
+      }
+
+      // Display filtered tasks
+      function displayTasks() {
+        const container = document.getElementById('ticketsGrid');
+        const noTickets = document.getElementById('noTickets');
+
+        if (filteredTasks.length === 0) {
+          container.style.display = 'none';
+          noTickets.style.display = 'block';
+          return;
+        }
+
+        noTickets.style.display = 'none';
+        container.style.display = 'grid';
+
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+        container.innerHTML = filteredTasks
+          .map(task => {
+            try {
+              // Safely check task properties with fallbacks
+              const taskTags = task.tags && Array.isArray(task.tags) ? task.tags : [];
+              const taskState = String(task.state || 'unknown').toLowerCase();
+              const taskTitle = String(task.title || 'Untitled Task');
+              const taskId = String(task.id || 'Unknown-ID');
+
+              const isAuth = taskTags.includes('auth') || (task.story && task.story.includes('20.1'));
+              const isFile = taskTags.includes('file-browser') || (task.story && task.story.includes('20.2'));
+              const priorityClass = isAuth ? 'priority-auth' : isFile ? 'priority-file' : '';
+              const stateClass = `state-${taskState.replace(/[^a-z0-9]/g, '-')}`;
+
+              const priorityEmoji = isAuth ? '🔐' : isFile ? '📁' : task.priority === 'high' ? '🔥' : '📝';
+
+              // Highlight search terms safely
+              let displayTitle = taskTitle;
+              if (searchTerm) {
                 try {
-                    // Safely check task properties with fallbacks
-                    const taskTags = (task.tags && Array.isArray(task.tags)) ? task.tags : [];
-                    const taskState = String(task.state || 'unknown').toLowerCase();
-                    const taskTitle = String(task.title || 'Untitled Task');
-                    const taskId = String(task.id || 'Unknown-ID');
-                    
-                    const isAuth = taskTags.includes('auth') || (task.story && task.story.includes('20.1'));
-                    const isFile = taskTags.includes('file-browser') || (task.story && task.story.includes('20.2'));
-                    const priorityClass = isAuth ? 'priority-auth' : isFile ? 'priority-file' : '';
-                    const stateClass = `state-${taskState.replace(/[^a-z0-9]/g, '-')}`;
-                    
-                    const priorityEmoji = isAuth ? '🔐' : isFile ? '📁' : task.priority === 'high' ? '🔥' : '📝';
-                
-                    // Highlight search terms safely
-                    let displayTitle = taskTitle;
-                    if (searchTerm) {
-                        try {
-                            const regex = new RegExp(`(${searchTerm})`, 'gi');
-                            displayTitle = taskTitle.replace(regex, '<span class="search-highlight">$1</span>');
-                        } catch (e) {
-                            // If regex fails, just use the plain title
-                            displayTitle = taskTitle;
-                        }
-                    }
+                  const regex = new RegExp(`(${searchTerm})`, 'gi');
+                  displayTitle = taskTitle.replace(regex, '<span class="search-highlight">$1</span>');
+                } catch (e) {
+                  // If regex fails, just use the plain title
+                  displayTitle = taskTitle;
+                }
+              }
 
-                    return `
+              return `
                         <div class="ticket ${priorityClass} ${stateClass}">
                             <div class="priority-indicator">${priorityEmoji}</div>
                             <div class="ticket-header">
@@ -1545,26 +1713,34 @@
                                 <div><strong>Story:</strong> ${getStoryLabel(task)}</div>
                                 <div><strong>Est. Time:</strong> ${task.est || 'N/A'} hrs</div>
                             </div>
-                            ${(taskTags.length > 0) ? `
+                            ${
+                              taskTags.length > 0
+                                ? `
                                 <div class="ticket-tags">
-                                    ${taskTags.map(tag => {
+                                    ${taskTags
+                                      .map(tag => {
                                         // Sanitize tag for CSS class
-                                        const sanitizedTag = String(tag || '').replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+                                        const sanitizedTag = String(tag || '')
+                                          .replace(/[^a-zA-Z0-9]/g, '-')
+                                          .toLowerCase();
                                         const displayTag = String(tag || '').substring(0, 20); // Limit display length
                                         return `<span class="tag tag-${sanitizedTag}">${displayTag}</span>`;
-                                    }).join('')}
+                                      })
+                                      .join('')}
                                 </div>
-                            ` : ''}
+                            `
+                                : ''
+                            }
                             <div class="ticket-footer">
                                 <div><strong>Created:</strong> ${formatDate(task.created)}</div>
                                 <div><strong>Updated:</strong> ${formatDate(task.updated)}</div>
                             </div>
                         </div>
                     `;
-                } catch (error) {
-                    console.warn('Error rendering task:', task?.id || 'unknown', error);
-                    // Return a safe fallback card for problematic tasks
-                    return `
+            } catch (error) {
+              console.warn('Error rendering task:', task?.id || 'unknown', error);
+              // Return a safe fallback card for problematic tasks
+              return `
                         <div class="ticket state-error">
                             <div class="ticket-header">
                                 <div class="ticket-id">${task?.id || 'Error-Task'}</div>
@@ -1577,101 +1753,118 @@
                             </div>
                         </div>
                     `;
-                }
-            }).join('');
+            }
+          })
+          .join('');
+      }
+
+      // Get story label with improved epic detection
+      function getStoryLabel(task) {
+        const title = (task.title || '').toLowerCase();
+        const story = (task.story || '').toLowerCase();
+        const tags = task.tags || [];
+
+        // Priority system matching (same as priority task system)
+        if (
+          story.includes('20.1') ||
+          tags.includes('auth') ||
+          title.includes('auth') ||
+          title.includes('login') ||
+          title.includes('register') ||
+          title.includes('password') ||
+          title.includes('jwt') ||
+          title.includes('token')
+        ) {
+          return '🔐 Authentication (20.1)';
         }
 
-        // Get story label with improved epic detection
-        function getStoryLabel(task) {
-            const title = (task.title || '').toLowerCase();
-            const story = (task.story || '').toLowerCase();
-            const tags = task.tags || [];
-            
-            // Priority system matching (same as priority task system)
-            if (story.includes('20.1') || tags.includes('auth') || 
-                title.includes('auth') || title.includes('login') ||
-                title.includes('register') || title.includes('password') ||
-                title.includes('jwt') || title.includes('token')) {
-                return '🔐 Authentication (20.1)';
-            }
-            
-            if (story.includes('20.2') || tags.includes('file-browser') || 
-                title.includes('file browser') || title.includes('project') ||
-                title.includes('save') || title.includes('load') ||
-                (title.includes('export') && !story.includes('19')) ||
-                (title.includes('import') && !story.includes('19'))) {
-                return '📁 File Browser (20.2)';
-            }
-            
-            // Epic 19 detection
-            if (story.includes('19') || title.includes('privacy') || 
-                title.includes('compliance') || title.includes('gdpr') || 
-                title.includes('policy') || title.includes('audit') ||
-                title.includes('iso 27001')) {
-                return '🚫 Epic 19 (Privacy)';
-            }
-            
-            // Check for priority automation tasks
-            if (task.metadata?.source === 'priority-automation') {
-                return '⚡ Priority Task';
-            }
-            
-            return task.story || 'Other';
+        if (
+          story.includes('20.2') ||
+          tags.includes('file-browser') ||
+          title.includes('file browser') ||
+          title.includes('project') ||
+          title.includes('save') ||
+          title.includes('load') ||
+          (title.includes('export') && !story.includes('19')) ||
+          (title.includes('import') && !story.includes('19'))
+        ) {
+          return '📁 File Browser (20.2)';
         }
 
-        // Format date
-        function formatDate(dateString) {
-            if (!dateString) return 'N/A';
-            const date = new Date(dateString);
-            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+        // Epic 19 detection
+        if (
+          story.includes('19') ||
+          title.includes('privacy') ||
+          title.includes('compliance') ||
+          title.includes('gdpr') ||
+          title.includes('policy') ||
+          title.includes('audit') ||
+          title.includes('iso 27001')
+        ) {
+          return '🚫 Epic 19 (Privacy)';
         }
 
-        // Theme toggle functionality
-        function toggleTheme() {
-            const body = document.body;
-            const button = document.querySelector('.theme-toggle');
-            
-            if (body.classList.contains('light-mode')) {
-                body.classList.remove('light-mode');
-                button.textContent = '🌙 Dark Mode';
-                localStorage.setItem('theme', 'dark');
-            } else {
-                body.classList.add('light-mode');
-                button.textContent = '☀️ Light Mode';
-                localStorage.setItem('theme', 'light');
-            }
+        // Check for priority automation tasks
+        if (task.metadata?.source === 'priority-automation') {
+          return '⚡ Priority Task';
         }
 
-        // Load saved theme on page load
-        function loadTheme() {
-            const savedTheme = localStorage.getItem('theme');
-            const body = document.body;
-            const button = document.querySelector('.theme-toggle');
-            
-            if (savedTheme === 'light') {
-                body.classList.add('light-mode');
-                button.textContent = '☀️ Light Mode';
-            } else {
-                // Default to dark mode
-                button.textContent = '🌙 Dark Mode';
-            }
+        return task.story || 'Other';
+      }
+
+      // Format date
+      function formatDate(dateString) {
+        if (!dateString) return 'N/A';
+        const date = new Date(dateString);
+        return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+      }
+
+      // Theme toggle functionality
+      function toggleTheme() {
+        const body = document.body;
+        const button = document.querySelector('.theme-toggle');
+
+        if (body.classList.contains('light-mode')) {
+          body.classList.remove('light-mode');
+          button.textContent = '🌙 Dark Mode';
+          localStorage.setItem('theme', 'dark');
+        } else {
+          body.classList.add('light-mode');
+          button.textContent = '☀️ Light Mode';
+          localStorage.setItem('theme', 'light');
         }
+      }
 
-        // Event listeners
-        document.getElementById('stateFilter').addEventListener('change', applyFilters);
-        document.getElementById('priorityFilter').addEventListener('change', applyFilters);
-        document.getElementById('searchInput').addEventListener('input', applyFilters);
-        document.getElementById('sortBy').addEventListener('change', applyFilters);
+      // Load saved theme on page load
+      function loadTheme() {
+        const savedTheme = localStorage.getItem('theme');
+        const body = document.body;
+        const button = document.querySelector('.theme-toggle');
 
-        // Load tasks and theme on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            loadTheme();
-            loadTasks();
-            updateEpicOverview();
-        });
+        if (savedTheme === 'light') {
+          body.classList.add('light-mode');
+          button.textContent = '☀️ Light Mode';
+        } else {
+          // Default to dark mode
+          button.textContent = '🌙 Dark Mode';
+        }
+      }
 
-        // Auto-refresh every 30 seconds
-        setInterval(loadTasks, 30000);
+      // Event listeners
+      document.getElementById('stateFilter').addEventListener('change', applyFilters);
+      document.getElementById('priorityFilter').addEventListener('change', applyFilters);
+      document.getElementById('searchInput').addEventListener('input', applyFilters);
+      document.getElementById('sortBy').addEventListener('change', applyFilters);
+
+      // Load tasks and theme on page load
+      document.addEventListener('DOMContentLoaded', () => {
+        loadTheme();
+        loadTasks();
+        updateEpicOverview();
+      });
+
+      // Auto-refresh every 30 seconds
+      setInterval(loadTasks, 30000);
     </script>
-</body>
+  </body>
 </html>

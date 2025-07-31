@@ -3,6 +3,7 @@
 ## Emergency Response (Use Immediately)
 
 ### 🚨 Critical False Positive Incident
+
 If users are being blocked from critical business operations:
 
 ```bash
@@ -19,6 +20,7 @@ curl -X POST /api/security/emergency-bypass \
 ```
 
 ### ⚡ Quick Threshold Adjustment
+
 For immediate relief from specific false positives:
 
 ```bash
@@ -31,6 +33,7 @@ curl -X PATCH /api/security/thresholds/$SYSTEM_NAME \
 ## Daily Operations
 
 ### 📊 Check False Positive Metrics
+
 **Morning routine - Run these commands:**
 
 ```bash
@@ -45,11 +48,13 @@ curl -X PATCH /api/security/thresholds/$SYSTEM_NAME \
 ```
 
 **Expected outputs:**
+
 - FP rate should be <2%
 - No single system >5% FP rate
 - User complaints <10/day
 
 ### 🔍 Investigate User Reports
+
 When users report false positives:
 
 ```bash
@@ -64,6 +69,7 @@ When users report false positives:
 ```
 
 ### 📈 Weekly FP Review
+
 Every Monday morning:
 
 ```bash
@@ -80,7 +86,9 @@ Every Monday morning:
 ## Common False Positive Patterns
 
 ### 🔑 Authentication Issues
+
 **Pattern**: Legitimate users blocked at login
+
 ```bash
 # Quick fixes:
 # 1. Check if user is traveling
@@ -94,7 +102,9 @@ Every Monday morning:
 ```
 
 ### 📝 Input Validation Issues
+
 **Pattern**: Valid content flagged as malicious
+
 ```bash
 # Quick analysis:
 ./scripts/analyze-input-fp.sh "$INPUT_CONTENT"
@@ -108,7 +118,9 @@ Every Monday morning:
 ```
 
 ### 🚀 Rate Limiting Issues
+
 **Pattern**: Legitimate high-frequency usage blocked
+
 ```bash
 # Quick relief:
 # 1. Grant burst allowance
@@ -121,12 +133,13 @@ Every Monday morning:
 ## API Quick Reference
 
 ### Emergency Bypass
+
 ```bash
 # Request bypass
 POST /api/security/bypass/request
 {
   "userId": "user123",
-  "operation": "bulk_export", 
+  "operation": "bulk_export",
   "urgency": "high",
   "duration": 30,
   "justification": "Monthly compliance report deadline"
@@ -137,6 +150,7 @@ GET /api/data/export?bypass_token=$TOKEN
 ```
 
 ### Report False Positive
+
 ```bash
 # User report
 POST /api/security/feedback/false-positive
@@ -157,6 +171,7 @@ PUT /api/security/feedback/$FEEDBACK_ID/review
 ```
 
 ### Threshold Management
+
 ```bash
 # Get current thresholds
 GET /api/security/thresholds?system=auth
@@ -173,6 +188,7 @@ PATCH /api/security/thresholds/auth/login_attempts
 ## Monitoring Commands
 
 ### Real-time Monitoring
+
 ```bash
 # Watch FP rate in real-time
 watch -n 30 './scripts/current-fp-rate.sh'
@@ -185,6 +201,7 @@ tail -f /var/log/security/user-complaints.log | grep false_positive
 ```
 
 ### Alert Investigation
+
 ```bash
 # When you get a FP rate spike alert:
 
@@ -204,6 +221,7 @@ tail -f /var/log/security/user-complaints.log | grep false_positive
 ## Configuration Files
 
 ### Key Configuration Locations
+
 ```bash
 # Main FP configuration
 /etc/security/false-positive-config.yaml
@@ -223,6 +241,7 @@ tail -f /var/log/security/user-complaints.log | grep false_positive
 ```
 
 ### Quick Config Changes
+
 ```bash
 # Temporarily reduce global sensitivity
 sed -i 's/sensitivity: 0.8/sensitivity: 0.6/' /etc/security/false-positive-config.yaml
@@ -235,18 +254,21 @@ echo "  - name: John Doe\n    phone: +1234567890\n    role: security_lead" >> /e
 ## Escalation Procedures
 
 ### Level 1: Support Team (0-15 minutes)
+
 - ✅ Apply emergency bypass if needed
 - ✅ Gather basic information
 - ✅ Check known issues list
 - ✅ Provide user workaround
 
 ### Level 2: Security Team (15-60 minutes)
+
 - ✅ Analyze root cause
 - ✅ Implement temporary fix
 - ✅ Assess broader impact
 - ✅ Update monitoring
 
 ### Level 3: Engineering Team (60+ minutes)
+
 - ✅ Implement permanent fix
 - ✅ Update ML models if needed
 - ✅ Modify core algorithms
@@ -255,11 +277,13 @@ echo "  - name: John Doe\n    phone: +1234567890\n    role: security_lead" >> /e
 ## Contact Information
 
 ### Emergency Escalation
+
 - **Critical FP Issues**: `security-emergency@company.com`
 - **After Hours**: `+1-555-SECURITY`
 - **Slack**: `#security-incidents`
 
 ### Team Contacts
+
 - **Security Team**: `security@company.com`
 - **DevOps Team**: `devops@company.com`
 - **Support Team**: `support@company.com`
@@ -304,6 +328,7 @@ When investigating false positives:
 ## Success Metrics
 
 **Target Metrics (check weekly):**
+
 - False Positive Rate: <2%
 - User Satisfaction: >95%
 - Resolution Time: <1 hour (critical), <4 hours (normal)
@@ -311,6 +336,7 @@ When investigating false positives:
 - ML Model Accuracy: >95%
 
 **Red Flags (immediate attention needed):**
+
 - FP Rate >5% for any system
 - User complaints >20/day
 - Resolution time >4 hours average
@@ -319,4 +345,4 @@ When investigating false positives:
 
 ---
 
-*Keep this reference handy and update it based on your experience and system changes.*
+_Keep this reference handy and update it based on your experience and system changes._

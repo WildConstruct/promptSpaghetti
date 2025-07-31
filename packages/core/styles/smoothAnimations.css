@@ -17,7 +17,8 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -143,7 +144,8 @@
 }
 
 @keyframes glowPulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
   }
   50% {
@@ -313,12 +315,7 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.1),
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
   transition: left 0.5s;
 }
 
@@ -464,12 +461,7 @@
   left: 0;
   bottom: 0;
   right: 0;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.2),
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
   animation: shimmer 2s infinite;
 }
 
@@ -500,11 +492,11 @@
   .animate-node-hover:hover {
     transform: none;
   }
-  
+
   .animate-hover-lift:hover {
     transform: none;
   }
-  
+
   .btn-animated:hover {
     transform: none;
   }
@@ -536,9 +528,10 @@
 }
 
 .smooth-colors {
-  transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
-              background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
-              border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: color, background-color, border-color;
 }
 
@@ -561,6 +554,12 @@
   animation: pulse 1.4s ease-in-out infinite both;
 }
 
-.spinner-dots .dot:nth-child(1) { animation-delay: -0.32s; }
-.spinner-dots .dot:nth-child(2) { animation-delay: -0.16s; }
-.spinner-dots .dot:nth-child(3) { animation-delay: 0s; }
+.spinner-dots .dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+.spinner-dots .dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+.spinner-dots .dot:nth-child(3) {
+  animation-delay: 0s;
+}

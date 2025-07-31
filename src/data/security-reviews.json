@@ -10,12 +10,8 @@
     "story": "S-SECURITY-VALIDATION-001",
     "createdAt": "2025-07-20T19:05:11.700Z",
     "details": {
-      "filesModified": [
-        "packages/core/validation/security.ts"
-      ],
-      "testFiles": [
-        "packages/core/__tests__/variable-name-validation.test.ts"
-      ],
+      "filesModified": ["packages/core/validation/security.ts"],
+      "testFiles": ["packages/core/__tests__/variable-name-validation.test.ts"],
       "securityImplications": [
         "Prevents use of 'eval' and 'Function' as variable names",
         "Closes potential code injection vector in variable naming",

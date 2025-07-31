@@ -15,7 +15,7 @@ import { AnalyticsCollector } from '../server/src/analytics/AnalyticsCollector';
 const analyticsCollector = new AnalyticsCollector({
   enabled: true,
   sampleRate: 1.0,
-  privacyMode: false
+  privacyMode: false,
 });
 
 // Record user events
@@ -24,7 +24,7 @@ analyticsCollector.recordEvent('graph_execution', {
   graphId: 'graph-456',
   executionTime: 1250,
   nodeCount: 8,
-  success: true
+  success: true,
 });
 
 // Record performance metrics
@@ -32,7 +32,7 @@ analyticsCollector.recordEvent('performance_metric', {
   metric: 'response_time',
   value: 340,
   endpoint: '/api/preview',
-  timestamp: Date.now()
+  timestamp: Date.now(),
 });
 ```
 
@@ -51,7 +51,7 @@ await costTracker.trackCost({
   model: 'gpt-4',
   tokenCount: 1500,
   cost: 0.045,
-  requestType: 'completion'
+  requestType: 'completion',
 });
 
 // Check budget alerts
@@ -70,7 +70,7 @@ const journeyAnalyzer = new UserJourneyAnalyzer(analyticsDAO);
 // Analyze user journey patterns
 const journeyData = await journeyAnalyzer.analyzeUserJourney(123, {
   startTime: Date.now() - 7 * 24 * 60 * 60 * 1000, // 7 days ago
-  endTime: Date.now()
+  endTime: Date.now(),
 });
 
 console.log('User journey patterns:', journeyData.patterns);
@@ -91,7 +91,7 @@ const App: React.FC = () => {
   const analyticsClient = new AnalyticsClient({
     apiUrl: 'http://localhost:8000/api',
     userId: 123,
-    organizationId: 456
+    organizationId: 456,
   });
 
   return (
@@ -119,7 +119,7 @@ const wsClient = new AnalyticsWebSocketClient({
   apiKey: 'your-api-key',
   userId: 123,
   organizationId: 456,
-  enableLogging: true
+  enableLogging: true,
 });
 
 // Connect and subscribe to dashboard updates
@@ -129,17 +129,17 @@ await wsClient.subscribeToCostAlerts();
 await wsClient.subscribeToRecommendations();
 
 // Handle real-time updates
-wsClient.on('dashboard_update', (data) => {
+wsClient.on('dashboard_update', data => {
   console.log('Dashboard updated:', data);
   // Update your UI components
 });
 
-wsClient.on('alert', (alert) => {
+wsClient.on('alert', alert => {
   console.log('New alert:', alert);
   // Show alert notification
 });
 
-wsClient.on('new_recommendation', (recommendation) => {
+wsClient.on('new_recommendation', recommendation => {
   console.log('New recommendation:', recommendation);
   // Update recommendations panel
 });
@@ -158,7 +158,7 @@ const CostDashboard: React.FC = () => {
   const [budget, setBudget] = useState({
     monthly: 1000,
     daily: 50,
-    alerts: true
+    alerts: true,
   });
 
   return (
@@ -168,7 +168,7 @@ const CostDashboard: React.FC = () => {
       onBudgetUpdate={setBudget}
       timeRange={{
         startTime: Date.now() - 30 * 24 * 60 * 60 * 1000,
-        endTime: Date.now()
+        endTime: Date.now(),
       }}
       showForecast={true}
       showRecommendations={true}
@@ -185,7 +185,7 @@ import { UsagePatterns } from '../packages/core/components/Analytics/UsagePatter
 
 const UsageDashboard: React.FC = () => {
   const analyticsClient = new AnalyticsClient({
-    apiUrl: 'http://localhost:8000/api'
+    apiUrl: 'http://localhost:8000/api',
   });
 
   return (
@@ -198,7 +198,7 @@ const UsageDashboard: React.FC = () => {
       showCohortAnalysis={true}
       timeRange={{
         startTime: Date.now() - 7 * 24 * 60 * 60 * 1000,
-        endTime: Date.now()
+        endTime: Date.now(),
       }}
     />
   );
@@ -218,9 +218,7 @@ const AlertsDashboard: React.FC = () => {
     // Acknowledge alert via API
     await analyticsClient.acknowledgeAlert(alertId);
     // Update local state
-    setAlerts(alerts.map(alert => 
-      alert.id === alertId ? { ...alert, acknowledged: true } : alert
-    ));
+    setAlerts(alerts.map(alert => (alert.id === alertId ? { ...alert, acknowledged: true } : alert)));
   };
 
   const handleDismiss = async (alertId: string) => {
@@ -230,14 +228,7 @@ const AlertsDashboard: React.FC = () => {
     setAlerts(alerts.filter(alert => alert.id !== alertId));
   };
 
-  return (
-    <AlertsPanel
-      alerts={alerts}
-      onAcknowledge={handleAcknowledge}
-      onDismiss={handleDismiss}
-      showSummary={true}
-    />
-  );
+  return <AlertsPanel alerts={alerts} onAcknowledge={handleAcknowledge} onDismiss={handleDismiss} showSummary={true} />;
 };
 ```
 
@@ -250,8 +241,8 @@ const AlertsDashboard: React.FC = () => {
 const dashboardData = await analyticsClient.getDashboardData({
   timeRange: {
     startTime: Date.now() - 24 * 60 * 60 * 1000,
-    endTime: Date.now()
-  }
+    endTime: Date.now(),
+  },
 });
 
 // Get performance metrics
@@ -259,8 +250,8 @@ const metrics = await analyticsClient.getPerformanceMetrics({
   metrics: ['response_time', 'throughput', 'error_rate'],
   timeRange: {
     startTime: Date.now() - 7 * 24 * 60 * 60 * 1000,
-    endTime: Date.now()
-  }
+    endTime: Date.now(),
+  },
 });
 ```
 
@@ -271,10 +262,10 @@ const metrics = await analyticsClient.getPerformanceMetrics({
 const costData = await analyticsClient.getCostData({
   timeRange: {
     startTime: Date.now() - 30 * 24 * 60 * 60 * 1000,
-    endTime: Date.now()
+    endTime: Date.now(),
   },
   groupBy: 'provider',
-  includeForecasting: true
+  includeForecasting: true,
 });
 
 // Get budget information
@@ -289,10 +280,10 @@ const patterns = await analyticsClient.getUsagePatterns({
   userId: 123,
   timeRange: {
     startTime: Date.now() - 7 * 24 * 60 * 60 * 1000,
-    endTime: Date.now()
+    endTime: Date.now(),
   },
   includeHeatMap: true,
-  includeJourneyAnalysis: true
+  includeJourneyAnalysis: true,
 });
 
 // Get cohort analysis
@@ -301,8 +292,8 @@ const cohortData = await analyticsClient.getCohortAnalysis({
   cohortType: 'weekly',
   timeRange: {
     startTime: Date.now() - 90 * 24 * 60 * 60 * 1000,
-    endTime: Date.now()
-  }
+    endTime: Date.now(),
+  },
 });
 ```
 
@@ -310,10 +301,13 @@ const cohortData = await analyticsClient.getCohortAnalysis({
 
 ```typescript
 // Export dashboard data
-const exportData = await analyticsClient.exportData({
-  startTime: Date.now() - 30 * 24 * 60 * 60 * 1000,
-  endTime: Date.now()
-}, 'json');
+const exportData = await analyticsClient.exportData(
+  {
+    startTime: Date.now() - 30 * 24 * 60 * 60 * 1000,
+    endTime: Date.now(),
+  },
+  'json'
+);
 
 // Generate comprehensive report
 const report = await analyticsClient.generateReport({
@@ -322,7 +316,7 @@ const report = await analyticsClient.generateReport({
   format: 'pdf',
   includeHeatMap: true,
   includeCostAnalysis: true,
-  includePatterns: true
+  includePatterns: true,
 });
 ```
 
@@ -340,8 +334,8 @@ await sessionReplay.startRecording({
   sessionId: 'session-789',
   initialState: {
     url: '/dashboard',
-    timestamp: Date.now()
-  }
+    timestamp: Date.now(),
+  },
 });
 
 // Record user interactions
@@ -351,15 +345,15 @@ await sessionReplay.recordInteraction('session-789', {
   timestamp: Date.now(),
   metadata: {
     x: 100,
-    y: 200
-  }
+    y: 200,
+  },
 });
 
 // Get session recordings
 const recordings = await sessionReplay.getRecordings({
   userId: 123,
   startTime: Date.now() - 24 * 60 * 60 * 1000,
-  endTime: Date.now()
+  endTime: Date.now(),
 });
 ```
 
@@ -376,7 +370,7 @@ const cohortData = await cohortAnalyzer.analyzeCohorts({
   organizationId: 456,
   cohortType: 'monthly',
   startDate: new Date('2024-01-01'),
-  endDate: new Date('2024-12-31')
+  endDate: new Date('2024-12-31'),
 });
 
 // Get retention analysis
@@ -385,8 +379,8 @@ const retentionData = await cohortAnalyzer.getRetentionAnalysis({
   cohortType: 'weekly',
   timeRange: {
     startTime: Date.now() - 90 * 24 * 60 * 60 * 1000,
-    endTime: Date.now()
-  }
+    endTime: Date.now(),
+  },
 });
 ```
 
@@ -415,7 +409,7 @@ const analyticsClient = new AnalyticsClient({
   enableRetries: true,
   retryAttempts: 3,
   retryDelay: 1000,
-  timeout: 10000
+  timeout: 10000,
 });
 ```
 
@@ -428,14 +422,14 @@ const analyticsClient = new AnalyticsClient({
 const analyticsClient = new AnalyticsClient({
   apiUrl: 'http://localhost:8000/api',
   enableCaching: true,
-  cacheTimeout: 5 * 60 * 1000 // 5 minutes
+  cacheTimeout: 5 * 60 * 1000, // 5 minutes
 });
 
 // Batch multiple requests
 const [dashboardData, costData, patterns] = await Promise.all([
   analyticsClient.getDashboardData(timeRange),
   analyticsClient.getCostData(timeRange),
-  analyticsClient.getUsagePatterns(timeRange)
+  analyticsClient.getUsagePatterns(timeRange),
 ]);
 ```
 
@@ -465,7 +459,7 @@ const analyticsCollector = new AnalyticsCollector({
   privacyMode: true, // Enable privacy mode
   dataRetention: 90 * 24 * 60 * 60 * 1000, // 90 days
   anonymizeIPs: true,
-  respectDoNotTrack: true
+  respectDoNotTrack: true,
 });
 ```
 
@@ -479,16 +473,16 @@ import { AnalyticsClient } from '../packages/core/analytics/AnalyticsClient';
 describe('AnalyticsClient', () => {
   it('should fetch dashboard data', async () => {
     const client = new AnalyticsClient({
-      apiUrl: 'http://localhost:8000/api'
+      apiUrl: 'http://localhost:8000/api',
     });
-    
+
     const data = await client.getDashboardData({
       timeRange: {
         startTime: Date.now() - 24 * 60 * 60 * 1000,
-        endTime: Date.now()
-      }
+        endTime: Date.now(),
+      },
     });
-    
+
     expect(data).toBeDefined();
     expect(data.summary).toBeDefined();
   });
@@ -503,19 +497,19 @@ import { AnalyticsWebSocketClient } from '../packages/core/analytics/WebSocketCl
 describe('WebSocket Integration', () => {
   it('should receive real-time updates', async () => {
     const wsClient = new AnalyticsWebSocketClient({
-      url: 'ws://localhost:8000/ws/analytics'
+      url: 'ws://localhost:8000/ws/analytics',
     });
-    
+
     await wsClient.connect();
     await wsClient.subscribeToDashboard();
-    
-    const updatePromise = new Promise((resolve) => {
+
+    const updatePromise = new Promise(resolve => {
       wsClient.on('dashboard_update', resolve);
     });
-    
+
     // Trigger an update
     // ... trigger code ...
-    
+
     const update = await updatePromise;
     expect(update).toBeDefined();
   });
@@ -548,12 +542,12 @@ describe('WebSocket Integration', () => {
 const analyticsClient = new AnalyticsClient({
   apiUrl: 'http://localhost:8000/api',
   enableLogging: true,
-  logLevel: 'debug'
+  logLevel: 'debug',
 });
 
 const wsClient = new AnalyticsWebSocketClient({
   url: 'ws://localhost:8000/ws/analytics',
-  enableLogging: true
+  enableLogging: true,
 });
 ```
 

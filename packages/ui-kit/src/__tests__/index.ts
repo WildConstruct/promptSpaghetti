@@ -21,34 +21,34 @@ export const testConfig = {
     service: process.env.VISUAL_REGRESSION_SERVICE || 'percy',
     projectId: process.env.VISUAL_REGRESSION_PROJECT_ID,
     token: process.env.VISUAL_REGRESSION_TOKEN,
-    branch: process.env.CI_BRANCH || 'main'
+    branch: process.env.CI_BRANCH || 'main',
   },
-  
+
   // Performance thresholds
   performance: {
     renderBudget: 16, // ms for 60fps
     interactionBudget: 100, // ms for touch response
     bundleSizeBudget: 100, // KB for UI kit
-    memorySizeBudget: 10 // MB for runtime memory
+    memorySizeBudget: 10, // MB for runtime memory
   },
-  
+
   // Coverage requirements
   coverage: {
     statements: 80,
     branches: 80,
     functions: 80,
-    lines: 80
+    lines: 80,
   },
-  
+
   // Platform test matrix
   platforms: [
     { name: 'iOS Safari', os: 'iOS', browser: 'Safari' },
     { name: 'Android Chrome', os: 'Android', browser: 'Chrome' },
     { name: 'Desktop Chrome', os: 'Windows', browser: 'Chrome' },
     { name: 'Desktop Safari', os: 'macOS', browser: 'Safari' },
-    { name: 'Desktop Firefox', os: 'Windows', browser: 'Firefox' }
+    { name: 'Desktop Firefox', os: 'Windows', browser: 'Firefox' },
   ],
-  
+
   // Viewport test matrix
   viewports: [
     { name: 'iPhone SE', width: 375, height: 667 },
@@ -56,8 +56,8 @@ export const testConfig = {
     { name: 'iPad', width: 768, height: 1024 },
     { name: 'iPad Pro', width: 1024, height: 1366 },
     { name: 'Desktop HD', width: 1920, height: 1080 },
-    { name: 'Desktop 4K', width: 3840, height: 2160 }
-  ]
+    { name: 'Desktop 4K', width: 3840, height: 2160 },
+  ],
 };
 
 /**
@@ -82,20 +82,20 @@ export function generateTestReport(results: any) {
       passed: results.numPassedTests,
       failed: results.numFailedTests,
       pending: results.numPendingTests,
-      duration: results.testResults.reduce((sum: number, r: any) => sum + r.perfStats.runtime, 0)
+      duration: results.testResults.reduce((sum: number, r: any) => sum + r.perfStats.runtime, 0),
     },
     coverage: {
       statements: results.coverageMap?.getCoverageSummary().statements.pct || 0,
       branches: results.coverageMap?.getCoverageSummary().branches.pct || 0,
       functions: results.coverageMap?.getCoverageSummary().functions.pct || 0,
-      lines: results.coverageMap?.getCoverageSummary().lines.pct || 0
+      lines: results.coverageMap?.getCoverageSummary().lines.pct || 0,
     },
     performance: {
       slowestTests: results.testResults
         .flatMap((r: any) => r.testResults)
         .sort((a: any, b: any) => b.duration - a.duration)
         .slice(0, 10)
-        .map((t: any) => ({ title: t.title, duration: t.duration }))
-    }
+        .map((t: any) => ({ title: t.title, duration: t.duration })),
+    },
   };
 }

@@ -66,7 +66,7 @@ function createTestingBugTickets() {
 Class extension errors in compiled JavaScript files where RuntimeNode is undefined during import.
 
 **Solution:**
-Fix import/export chains and ensure proper module resolution for RuntimeNode base class.`
+Fix import/export chains and ensure proper module resolution for RuntimeNode base class.`,
     },
     {
       id: `T-TEST-${timestamp}-002`,
@@ -83,11 +83,11 @@ packages/core/components/Inspector/SelectEditor.js:58:44 - Cannot read propertie
 - packages/core/__tests__/inspector-components.test.tsx
 
 **Solution:**
-Add null checks and proper error handling in SelectEditor component reduce logic.`
+Add null checks and proper error handling in SelectEditor component reduce logic.`,
     },
     {
       id: `T-TEST-${timestamp}-003`,
-      title: 'Fix GraphCRDTAdapter method mocking issues in collaboration tests',  
+      title: 'Fix GraphCRDTAdapter method mocking issues in collaboration tests',
       priority: 'medium',
       est: 2,
       tags: ['testing', 'collaboration', 'mocking', 'crdt'],
@@ -100,12 +100,12 @@ Add null checks and proper error handling in SelectEditor component reduce logic
 Test mocks not properly defining yGraph methods that are called by the adapter.
 
 **Solution:**
-Update test mocks to include all required yGraph methods with proper implementations.`
+Update test mocks to include all required yGraph methods with proper implementations.`,
     },
     {
       id: `T-TEST-${timestamp}-004`,
       title: 'Fix workflow store API URL formatting bug in query parameters',
-      priority: 'low', 
+      priority: 'low',
       est: 1,
       tags: ['testing', 'workflow', 'api', 'url-formatting'],
       description: `Fix URL formatting bug where query parameters are incorrectly concatenated with ? instead of &.
@@ -118,11 +118,11 @@ Received: resource_id=resource-1?lock_type=edit
 - packages/core/__tests__/stores/workflowStore.test.ts
 
 **Solution:**
-Fix query parameter concatenation logic in workflow store API calls.`
+Fix query parameter concatenation logic in workflow store API calls.`,
     },
     {
       id: `T-TEST-${timestamp}-005`,
-      title: 'Fix security audit logger compilation syntax errors', 
+      title: 'Fix security audit logger compilation syntax errors',
       priority: 'medium',
       est: 2,
       tags: ['testing', 'security', 'compilation', 'decorators'],
@@ -138,13 +138,13 @@ SyntaxError: Invalid or unexpected token at @(0, security_audit_logger_1.auditSe
 Decorator syntax or import/export issues in compiled security audit logger.
 
 **Solution:**
-Fix decorator syntax and ensure proper compilation of security audit decorators.`
+Fix decorator syntax and ensure proper compilation of security audit decorators.`,
     },
     {
       id: `T-TEST-${timestamp}-006`,
       title: 'Fix workflow store rejectWorkflow API response type mismatch',
       priority: 'low',
-      est: 1, 
+      est: 1,
       tags: ['testing', 'workflow', 'api', 'response-types'],
       description: `Fix API response type mismatch in rejectWorkflow test where boolean is expected but object is returned.
 
@@ -156,8 +156,8 @@ Received: {"success": true}
 - packages/core/__tests__/stores/workflowStore.test.ts
 
 **Solution:**
-Update test expectation or API response to match expected return type.`
-    }
+Update test expectation or API response to match expected return type.`,
+    },
   ];
 
   // Add each ticket to the database
@@ -170,24 +170,24 @@ Update test expectation or API response to match expected return type.`
         'Test suite runs without errors',
         'All affected test cases pass',
         'No regression in existing functionality',
-        'Code follows existing project patterns'
-      ]
+        'Code follows existing project patterns',
+      ],
     });
 
     // Insert task into database
     insertTask.run(
-      bug.id,                              // id
-      bug.title,                           // title  
-      bug.description,                     // description
-      'REVIEW',                            // status - set for review as requested
-      'quinn-qa-architect',                // assignee
-      bug.priority.toUpperCase(),          // priority
-      bug.tags.join(','),                  // tags
-      bug.est,                             // estimated_hours
-      'BUG_FIX',                          // work_class
+      bug.id, // id
+      bug.title, // title
+      bug.description, // description
+      'REVIEW', // status - set for review as requested
+      'quinn-qa-architect', // assignee
+      bug.priority.toUpperCase(), // priority
+      bug.tags.join(','), // tags
+      bug.est, // estimated_hours
+      'BUG_FIX', // work_class
       'Fix testing infrastructure bugs to ensure reliable test execution', // business_value
-      'TESTING_QA',                       // story_id
-      metadata                            // metadata
+      'TESTING_QA', // story_id
+      metadata // metadata
     );
 
     tickets.push(bug);
@@ -203,7 +203,7 @@ Update test expectation or API response to match expected return type.`
   console.log('📊 SUMMARY:');
   console.log(`   🎫 Total Tickets Created: ${tickets.length}`);
   console.log(`   🔥 High Priority: ${tickets.filter(t => t.priority === 'high').length}`);
-  console.log(`   ⚡ Medium Priority: ${tickets.filter(t => t.priority === 'medium').length}`); 
+  console.log(`   ⚡ Medium Priority: ${tickets.filter(t => t.priority === 'medium').length}`);
   console.log(`   📋 Low Priority: ${tickets.filter(t => t.priority === 'low').length}`);
   console.log(`   ⏱️  Total Estimated Time: ${tickets.reduce((sum, t) => sum + t.est, 0)} hours`);
   console.log('   📈 All tickets set to REVIEW status for QA approval');

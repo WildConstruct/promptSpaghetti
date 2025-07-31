@@ -3,7 +3,9 @@
 ## Containerization Options Analysis
 
 ### Docker (Recommended)
+
 **Advantages:**
+
 - Industry standard with mature ecosystem
 - Excellent isolation and security features
 - Resource limiting via cgroups (CPU, memory, disk I/O)
@@ -12,6 +14,7 @@
 - Rich base image ecosystem (python:3.11-slim)
 
 **Use Case:**
+
 ```dockerfile
 FROM python:3.11-slim
 RUN useradd -m -u 1000 sandboxuser
@@ -24,13 +27,16 @@ CMD ["python", "app.py"]
 ```
 
 **Security Features:**
+
 - `--security-opt no-new-privileges`
 - `--cap-drop ALL` to remove all capabilities
 - `--read-only` filesystem with tmpfs for /tmp
 - Custom seccomp profile to restrict system calls
 
 ### Kubernetes (Production Orchestration)
+
 **Advantages:**
+
 - Horizontal pod autoscaling
 - Rolling deployments with zero downtime
 - Service discovery and load balancing
@@ -39,6 +45,7 @@ CMD ["python", "app.py"]
 - Health checks and automatic restarts
 
 **Resource Configuration:**
+
 ```yaml
 resources:
   requests:
@@ -50,6 +57,7 @@ resources:
 ```
 
 **Alternative Considered:** Docker Swarm
+
 - **Pros:** Simpler than Kubernetes, integrated with Docker
 - **Cons:** Less feature-rich, smaller ecosystem
 - **Decision:** Use Kubernetes for production scalability
@@ -57,7 +65,9 @@ resources:
 ## Communication Protocol Analysis
 
 ### REST over HTTP (Recommended)
+
 **Advantages:**
+
 - Universal compatibility (browsers, tools, libraries)
 - Stateless design supports horizontal scaling
 - Rich ecosystem of monitoring and debugging tools
@@ -66,6 +76,7 @@ resources:
 - OpenAPI specification generation
 
 **API Design Principles:**
+
 - RESTful resource modeling
 - Consistent error response format
 - Versioning through URL path (/v1/execute)
@@ -73,13 +84,16 @@ resources:
 - Idempotent operations where possible
 
 ### gRPC (Future Consideration)
+
 **Advantages:**
+
 - Binary protocol with better performance
 - Built-in streaming for long-running executions
 - Strong typing with Protocol Buffers
 - Excellent code generation for clients
 
 **Current Decision:** Start with REST for simplicity, evaluate gRPC migration if:
+
 - Latency becomes critical (>100ms average)
 - Need for streaming Python execution results
 - High throughput requirements (>1000 req/sec)
@@ -89,6 +103,7 @@ resources:
 ### Python Code Execution Security
 
 #### RestrictedPython (Primary Choice)
+
 ```python
 from RestrictedPython import compile_restricted, safe_globals
 
@@ -104,12 +119,14 @@ exec(code, safe_env)
 ```
 
 **Features:**
+
 - AST-based code analysis before execution
 - Removes dangerous operations (eval, exec, import, file access)
 - Configurable allowed operations and modules
 - Execution time and memory monitoring
 
 #### Alternative: PyPy Sandbox
+
 - **Pros:** Complete Python interpreter isolation
 - **Cons:** Complex setup, limited Python version support
 - **Decision:** Use RestrictedPython for easier maintenance
@@ -117,6 +134,7 @@ exec(code, safe_env)
 ### Container Security
 
 #### Docker Security Profile
+
 ```json
 {
   "defaultAction": "SCMP_ACT_ERRNO",
@@ -131,6 +149,7 @@ exec(code, safe_env)
 ```
 
 #### AppArmor Profile (Linux)
+
 ```
 profile python-executor {
   /usr/bin/python3 ix,
@@ -144,6 +163,7 @@ profile python-executor {
 ### Authentication and Authorization
 
 #### JWT Token Validation
+
 ```python
 import jwt
 from fastapi import HTTPException, Depends
@@ -160,6 +180,7 @@ def verify_token(token: str = Depends(security)):
 ```
 
 #### Rate Limiting
+
 ```python
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
@@ -177,18 +198,21 @@ async def execute_code(request: Request, ...):
 ### Scaling Strategy and Resource Allocation
 
 #### Development Environment
+
 - **Single container** with 1 CPU core, 512MB RAM
 - **Local Docker Compose** for easy development
 - **Hot reloading** for code changes
 - **Shared volume** for code persistence during development
 
 #### Staging Environment
+
 - **2-3 containers** behind load balancer
 - **1 CPU core, 1GB RAM** per container
 - **Kubernetes deployment** with manual scaling
 - **Resource monitoring** with alerts
 
 #### Production Environment
+
 - **Horizontal Pod Autoscaler** configuration:
   ```yaml
   spec:
@@ -204,6 +228,7 @@ async def execute_code(request: Request, ...):
 ### Monitoring and Logging Approach
 
 #### Application Metrics (Prometheus)
+
 ```python
 from prometheus_client import Counter, Histogram, Gauge
 
@@ -213,6 +238,7 @@ ACTIVE_EXECUTIONS = Gauge('python_active_executions', 'Currently running executi
 ```
 
 #### Structured Logging
+
 ```python
 import structlog
 
@@ -220,13 +246,14 @@ logger = structlog.get_logger()
 
 @app.post("/v1/execute")
 async def execute_code(request: ExecuteRequest):
-    logger.info("execution_started", 
+    logger.info("execution_started",
                 execution_id=request.execution_id,
                 code_length=len(request.code),
                 timeout=request.timeout)
 ```
 
 #### Distributed Tracing (OpenTelemetry)
+
 ```python
 from opentelemetry import trace
 from opentelemetry.exporter.jaeger.thrift import JaegerExporter
@@ -243,6 +270,7 @@ async def execute_code(request: ExecuteRequest):
 ### Disaster Recovery and High Availability Plan
 
 #### Multi-Region Deployment
+
 ```
 Primary Region (us-east-1)     Secondary Region (us-west-2)
 ┌─────────────────────┐        ┌─────────────────────┐
@@ -253,6 +281,7 @@ Primary Region (us-east-1)     Secondary Region (us-west-2)
 ```
 
 #### Health Check Strategy
+
 ```python
 @app.get("/health")
 async def health_check():
@@ -269,6 +298,7 @@ async def health_check():
 ```
 
 #### Circuit Breaker Pattern
+
 ```python
 from circuit_breaker import CircuitBreaker
 
@@ -285,6 +315,7 @@ async def call_python_executor(code, input_data):
 ```
 
 #### Graceful Degradation
+
 - **Fallback behavior:** Main app continues without Python execution
 - **User notification:** Clear error messages when Python service unavailable
 - **Cached results:** Return previous execution results if available
@@ -293,6 +324,7 @@ async def call_python_executor(code, input_data):
 ## Technology Stack Summary
 
 ### Selected Technologies
+
 1. **Containerization:** Docker + Kubernetes
 2. **Communication:** REST over HTTP with OpenAPI
 3. **Python Security:** RestrictedPython + Docker isolation
@@ -302,6 +334,7 @@ async def call_python_executor(code, input_data):
 7. **Load Balancing:** Kubernetes Services + Ingress
 
 ### Implementation Priority
+
 1. **Phase 1:** Docker container with RestrictedPython
 2. **Phase 2:** FastAPI service with basic endpoints
 3. **Phase 3:** Kubernetes deployment with monitoring
@@ -309,6 +342,7 @@ async def call_python_executor(code, input_data):
 5. **Phase 5:** High availability and disaster recovery
 
 ## Next Implementation Steps (Story 8.1.2)
+
 1. Create FastAPI service structure
 2. Implement REST API endpoints with OpenAPI spec
 3. Add request/response validation with Pydantic

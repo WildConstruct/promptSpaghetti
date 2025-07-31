@@ -13,7 +13,7 @@ import {
   RuleUsageStats,
   PerformanceMetrics,
   WorkflowStateHistory,
-  WorkflowNotification
+  WorkflowNotification,
 } from './models';
 
 /**
@@ -34,7 +34,7 @@ export class CorrectionsDAO {
   createRule(input: CreateCorrectionRuleInput): CorrectionRule {
     const uuid = uuidv4();
     const now = new Date().toISOString();
-    
+
     const stmt = this.db.prepare(`
       INSERT INTO correction_rules (
         uuid, name, description, find_pattern, replace_with, is_regex, is_active, priority,
@@ -43,7 +43,7 @@ export class CorrectionsDAO {
         usage_count, effectiveness_score
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
-    
+
     const result = stmt.run(
       uuid,
       input.name,
@@ -67,15 +67,15 @@ export class CorrectionsDAO {
       0, // usage_count starts at 0
       0.0 // effectiveness_score starts at 0
     );
-    
+
     const rule = this.getRuleById(result.lastInsertRowid as number);
     if (!rule) {
       throw new Error('Failed to create correction rule');
     }
-    
+
     // Create history entry
     this.createHistoryEntry(rule, 'created', 'Rule created', input.user_id);
-    
+
     return rule;
   }
 
@@ -83,16 +83,14 @@ export class CorrectionsDAO {
    * Get all correction rules for a user
    */
   getRulesByUser(userId: number, includeInactive: boolean = false): CorrectionRule[] {
-    const whereClause = includeInactive 
-      ? 'WHERE user_id = ?'
-      : 'WHERE user_id = ? AND is_active = 1';
-    
+    const whereClause = includeInactive ? 'WHERE user_id = ?' : 'WHERE user_id = ? AND is_active = 1';
+
     const stmt = this.db.prepare(`
       SELECT * FROM correction_rules 
       ${whereClause}
       ORDER BY priority ASC, created_at ASC
     `);
-    
+
     return stmt.all(userId) as CorrectionRule[];
   }
 
@@ -122,10 +120,10 @@ export class CorrectionsDAO {
     if (!currentRule) {
       return null;
     }
-    
+
     const updates: string[] = [];
     const values: unknown[] = [];
-    
+
     // Build dynamic update query
     Object.entries(input).forEach(([key, value]) => {
       if (value !== undefined) {
@@ -141,30 +139,30 @@ export class CorrectionsDAO {
         }
       }
     });
-    
+
     if (updates.length === 0) {
       return currentRule;
     }
-    
+
     // Add metadata updates
     updates.push('updated_by = ?', 'updated_at = CURRENT_TIMESTAMP');
     values.push(updatedBy);
     values.push(id); // For WHERE clause
-    
+
     const stmt = this.db.prepare(`
       UPDATE correction_rules 
       SET ${updates.join(', ')}
       WHERE id = ?
     `);
-    
+
     stmt.run(...values);
-    
+
     const updatedRule = this.getRuleById(id);
     if (updatedRule) {
       // Create history entry
       this.createHistoryEntry(updatedRule, 'updated', 'Rule updated', updatedBy);
     }
-    
+
     return updatedRule;
   }
 
@@ -176,13 +174,13 @@ export class CorrectionsDAO {
     if (!rule) {
       return false;
     }
-    
+
     // Create history entry before deletion
     this.createHistoryEntry(rule, 'deleted', 'Rule deleted', deletedBy);
-    
+
     const stmt = this.db.prepare('DELETE FROM correction_rules WHERE id = ?');
     const result = stmt.run(id);
-    
+
     return result.changes > 0;
   }
 
@@ -194,22 +192,22 @@ export class CorrectionsDAO {
     if (!rule) {
       return null;
     }
-    
+
     const newActiveState = !rule.is_active;
     const stmt = this.db.prepare(`
       UPDATE correction_rules 
       SET is_active = ?, updated_by = ?, updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
     `);
-    
+
     stmt.run(newActiveState ? 1 : 0, updatedBy, id);
-    
+
     const updatedRule = this.getRuleById(id);
     if (updatedRule) {
       const changeType = newActiveState ? 'activated' : 'deactivated';
       this.createHistoryEntry(updatedRule, changeType, `Rule ${changeType}`, updatedBy);
     }
-    
+
     return updatedRule;
   }
 
@@ -227,7 +225,7 @@ export class CorrectionsDAO {
         stmt.run(index, userId, id, userId);
       });
     });
-    
+
     try {
       transaction(ruleIds);
       return true;
@@ -250,7 +248,7 @@ export class CorrectionsDAO {
 
       ORDER BY priority ASC
     `);
-    
+
     const searchTerm = `%${query}%`;
     return stmt.all(userId, searchTerm, searchTerm, searchTerm) as CorrectionRule[];
   }
@@ -266,7 +264,7 @@ export class CorrectionsDAO {
       WHERE user_id = ? AND workflow_state = ?
       ORDER BY priority ASC, created_at DESC
     `);
-    
+
     return stmt.all(userId, state) as CorrectionRule[];
   }
 
@@ -290,17 +288,17 @@ export class CorrectionsDAO {
           updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
     `);
-    
+
     stmt.run(approvedBy, now, approvedBy, ruleId);
-    
+
     const updatedRule = this.getRuleById(ruleId);
     if (updatedRule) {
       // Create workflow history entry
       this.createWorkflowHistoryEntry(ruleId, 'draft', 'published', approvedBy, comment || 'Rule approved');
-      
+
       // Create history entry
       this.createHistoryEntry(updatedRule, 'updated', 'Rule approved and published', approvedBy);
-      
+
       // Create notification
       this.createWorkflowNotification(
         rule.user_id,
@@ -310,7 +308,7 @@ export class CorrectionsDAO {
         `Your rule "${rule.name}" has been approved and published.`
       );
     }
-    
+
     return updatedRule;
   }
 
@@ -334,17 +332,17 @@ export class CorrectionsDAO {
           updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
     `);
-    
+
     stmt.run(now, reason, deprecatedBy, ruleId);
-    
+
     const updatedRule = this.getRuleById(ruleId);
     if (updatedRule) {
       // Create workflow history entry
       this.createWorkflowHistoryEntry(ruleId, 'published', 'deprecated', deprecatedBy, reason);
-      
+
       // Create history entry
       this.createHistoryEntry(updatedRule, 'updated', `Rule deprecated: ${reason}`, deprecatedBy);
-      
+
       // Create notification
       this.createWorkflowNotification(
         rule.user_id,
@@ -354,7 +352,7 @@ export class CorrectionsDAO {
         `Your rule "${rule.name}" has been deprecated. Reason: ${reason}`
       );
     }
-    
+
     return updatedRule;
   }
 
@@ -363,7 +361,7 @@ export class CorrectionsDAO {
    */
   bulkApproveRules(ruleIds: number[], approvedBy: number): number {
     let approvedCount = 0;
-    
+
     const transaction = this.db.transaction((ids: number[]) => {
       ids.forEach(id => {
         const result = this.approveRule(id, approvedBy, 'Bulk approval');
@@ -372,14 +370,14 @@ export class CorrectionsDAO {
         }
       });
     });
-    
+
     try {
       transaction(ruleIds);
     } catch (error) {
       console.error('Bulk approval failed:', error);
       throw error;
     }
-    
+
     return approvedCount;
   }
 
@@ -388,7 +386,7 @@ export class CorrectionsDAO {
    */
   bulkDeprecateRules(ruleIds: number[], deprecatedBy: number, reason: string): number {
     let deprecatedCount = 0;
-    
+
     const transaction = this.db.transaction((ids: number[]) => {
       ids.forEach(id => {
         const result = this.deprecateRule(id, deprecatedBy, reason);
@@ -397,14 +395,14 @@ export class CorrectionsDAO {
         }
       });
     });
-    
+
     try {
       transaction(ruleIds);
     } catch (error) {
       console.error('Bulk deprecation failed:', error);
       throw error;
     }
-    
+
     return deprecatedCount;
   }
 
@@ -417,10 +415,9 @@ export class CorrectionsDAO {
       WHERE user_id = ? AND suggested_by IS NOT NULL AND workflow_state = 'draft'
       ORDER BY suggestion_date DESC
     `);
-    
+
     return stmt.all(userId) as CorrectionRule[];
   }
-
 
   /**
    * Update rule effectiveness score
@@ -431,7 +428,7 @@ export class CorrectionsDAO {
       SET effectiveness_score = ?
       WHERE id = ?
     `);
-    
+
     stmt.run(score, ruleId);
   }
 
@@ -451,15 +448,8 @@ export class CorrectionsDAO {
         rule_id, previous_state, new_state, changed_by, change_reason, metadata
       ) VALUES (?, ?, ?, ?, ?, ?)
     `);
-    
-    stmt.run(
-      ruleId,
-      previousState,
-      newState,
-      changedBy,
-      changeReason,
-      metadata ? JSON.stringify(metadata) : null
-    );
+
+    stmt.run(ruleId, previousState, newState, changedBy, changeReason, metadata ? JSON.stringify(metadata) : null);
   }
 
   /**
@@ -479,7 +469,7 @@ export class CorrectionsDAO {
         user_id, rule_id, notification_type, title, message, action_url, metadata
       ) VALUES (?, ?, ?, ?, ?, ?, ?)
     `);
-    
+
     stmt.run(
       userId,
       ruleId,
@@ -501,7 +491,7 @@ export class CorrectionsDAO {
       ORDER BY created_at DESC
       LIMIT ?
     `);
-    
+
     return stmt.all(userId, limit) as WorkflowNotification[];
   }
 
@@ -515,7 +505,7 @@ export class CorrectionsDAO {
       SET is_read = 1, read_at = ?
       WHERE id = ? AND user_id = ?
     `);
-    
+
     const result = stmt.run(now, notificationId, userId);
     return result.changes > 0;
   }
@@ -529,7 +519,7 @@ export class CorrectionsDAO {
       WHERE rule_id = ?
       ORDER BY changed_at DESC
     `);
-    
+
     return stmt.all(ruleId) as WorkflowStateHistory[];
   }
 
@@ -539,7 +529,7 @@ export class CorrectionsDAO {
    * Create a history entry for a rule change
    */
   private createHistoryEntry(
-    rule: CorrectionRule, 
+    rule: CorrectionRule,
     changeType: 'created' | 'updated' | 'deleted' | 'activated' | 'deactivated',
     summary: string,
     changedBy: number
@@ -550,7 +540,7 @@ export class CorrectionsDAO {
         is_regex, is_active, priority, change_type, change_summary, changed_by
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
-    
+
     stmt.run(
       rule.id,
       rule.uuid,
@@ -576,7 +566,7 @@ export class CorrectionsDAO {
       WHERE rule_id = ? 
       ORDER BY changed_at DESC
     `);
-    
+
     return stmt.all(ruleId) as CorrectionRuleHistory[];
   }
 
@@ -628,18 +618,18 @@ export class CorrectionsDAO {
     // Enhanced usage tracking
     const rule = this.getRuleById(ruleId);
     if (!rule) return;
-    
+
     const now = new Date();
     const dateBucket = now.toISOString().split('T')[0];
     const hourBucket = now.getHours();
-    
+
     // Calculate enhanced metrics
     const charactersAfter = options.charactersAfter || charactersProcessed;
     const charactersSaved = charactersProcessed - charactersAfter;
     const qualityScore = options.qualityScore || this.calculateQualityScore(rule, charactersSaved, success);
     const impactRating = options.impactRating || this.calculateImpactRating(rule, charactersSaved);
     const complexityScore = this.calculateComplexityScore(rule);
-    
+
     // Update or insert statistics
     const stmt = this.db.prepare(`
       INSERT INTO correction_statistics (
@@ -663,7 +653,7 @@ export class CorrectionsDAO {
         complexity_score = excluded.complexity_score,
         updated_at = CURRENT_TIMESTAMP
     `);
-    
+
     stmt.run(
       ruleId,
       rule.uuid,
@@ -681,7 +671,7 @@ export class CorrectionsDAO {
       charactersSaved,
       complexityScore
     );
-    
+
     // Update last_used_at
     const updateStmt = this.db.prepare(`
       UPDATE correction_rules 
@@ -700,7 +690,7 @@ export class CorrectionsDAO {
       WHERE rule_id = ? AND date_bucket >= date('now', '-${days} days')
       ORDER BY date_bucket DESC, hour_bucket DESC
     `);
-    
+
     return stmt.all(ruleId) as CorrectionStatistics[];
   }
 
@@ -709,11 +699,13 @@ export class CorrectionsDAO {
    */
   getPerformanceMetrics(userId: number, days: number = 30): PerformanceMetrics {
     const totalRulesStmt = this.db.prepare('SELECT COUNT(*) as count FROM correction_rules WHERE user_id = ?');
-    const activeRulesStmt = this.db.prepare('SELECT COUNT(*) as count FROM correction_rules WHERE user_id = ? AND is_active = 1');
-    
+    const activeRulesStmt = this.db.prepare(
+      'SELECT COUNT(*) as count FROM correction_rules WHERE user_id = ? AND is_active = 1'
+    );
+
     const totalRules = totalRulesStmt.get(userId) as { count: number };
     const activeRules = activeRulesStmt.get(userId) as { count: number };
-    
+
     // Get aggregated statistics with enhanced metrics
     const statsStmt = this.db.prepare(`
       SELECT 
@@ -730,9 +722,9 @@ export class CorrectionsDAO {
       JOIN correction_rules cr ON cs.rule_id = cr.id
       WHERE cr.user_id = ? AND cs.date_bucket >= date('now', '-${days} days')
     `);
-    
+
     const stats = statsStmt.get(userId) as Record<string, unknown>;
-    
+
     // Get most used rules with enhanced metrics
     const mostUsedStmt = this.db.prepare(`
       SELECT 
@@ -766,9 +758,9 @@ export class CorrectionsDAO {
       ORDER BY total_applications DESC
       LIMIT 10
     `);
-    
+
     const mostUsedRules = mostUsedStmt.all(userId) as RuleUsageStats[];
-    
+
     // Get performance trends with enhanced metrics
     const trendsStmt = this.db.prepare(`
       SELECT 
@@ -784,9 +776,9 @@ export class CorrectionsDAO {
       GROUP BY cs.date_bucket
       ORDER BY cs.date_bucket ASC
     `);
-    
+
     const trends = trendsStmt.all(userId) as Array<Record<string, unknown>>;
-    
+
     // Get rule effectiveness distribution
     const distributionStmt = this.db.prepare(`
       SELECT 
@@ -803,17 +795,16 @@ export class CorrectionsDAO {
       WHERE cr.user_id = ? AND cs.date_bucket >= date('now', '-${days} days')
       GROUP BY cr.id
     `);
-    
+
     const distribution = distributionStmt.get(userId) as Record<string, unknown>;
-    
+
     return {
       total_rules: totalRules.count,
       active_rules: activeRules.count,
       total_executions: stats.total_executions || 0,
       average_execution_time: stats.avg_execution_time || 0,
-      error_rate: stats.total_errors && stats.total_executions 
-        ? (stats.total_errors / stats.total_executions) * 100 
-        : 0,
+      error_rate:
+        stats.total_errors && stats.total_executions ? (stats.total_errors / stats.total_executions) * 100 : 0,
       most_used_rules: mostUsedRules,
       performance_trends: trends,
       overall_quality_score: stats.avg_quality_score || 0,
@@ -828,7 +819,7 @@ export class CorrectionsDAO {
       slow_rules: distribution.slow_rules || 0,
       excellent_rules: distribution.excellent_rules || 0,
       good_rules: distribution.good_rules || 0,
-      poor_rules: distribution.poor_rules || 0
+      poor_rules: distribution.poor_rules || 0,
     };
   }
 
@@ -839,7 +830,7 @@ export class CorrectionsDAO {
    */
   importFromLocalStorage(localStorageRules: unknown[], userId: number = 1): number {
     let importedCount = 0;
-    
+
     const transaction = this.db.transaction((rules: unknown[]) => {
       for (const rule of rules) {
         try {
@@ -853,9 +844,9 @@ export class CorrectionsDAO {
             is_active: ruleData.isActive,
             priority: ruleData.priority,
             user_id: userId,
-            scope: 'private'
+            scope: 'private',
           };
-          
+
           this.createRule(input);
           importedCount++;
         } catch (error) {
@@ -863,7 +854,7 @@ export class CorrectionsDAO {
         }
       }
     });
-    
+
     transaction(localStorageRules);
     return importedCount;
   }
@@ -873,7 +864,7 @@ export class CorrectionsDAO {
    */
   exportToLocalStorage(userId: number): unknown[] {
     const rules = this.getRulesByUser(userId, true);
-    
+
     return rules.map(rule => ({
       id: rule.uuid, // Use UUID for external ID
       name: rule.name,
@@ -884,7 +875,7 @@ export class CorrectionsDAO {
       isActive: rule.is_active,
       priority: rule.priority,
       createdAt: rule.created_at,
-      updatedAt: rule.updated_at
+      updatedAt: rule.updated_at,
     }));
   }
 
@@ -914,7 +905,7 @@ export class CorrectionsDAO {
           updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
     `);
-    
+
     const result = stmt.run(rating, comment || null, ruleId);
     return result.changes > 0;
   }
@@ -932,14 +923,14 @@ export class CorrectionsDAO {
     const now = new Date();
     const dateBucket = now.toISOString().split('T')[0];
     const hourBucket = now.getHours();
-    
+
     const stmt = this.db.prepare(`
       UPDATE correction_statistics 
       SET false_positive_count = false_positive_count + 1,
           updated_at = CURRENT_TIMESTAMP
       WHERE rule_id = ? AND date_bucket = ? AND hour_bucket = ?
     `);
-    
+
     const result = stmt.run(ruleId, dateBucket, hourBucket);
     return result.changes > 0;
   }
@@ -961,7 +952,7 @@ export class CorrectionsDAO {
         cr.usage_count DESC
       LIMIT ?
     `);
-    
+
     return stmt.all(userId, limit) as CorrectionRule[];
   }
 
@@ -972,17 +963,17 @@ export class CorrectionsDAO {
    */
   private calculateQualityScore(rule: CorrectionRule, charactersSaved: number, success: boolean): number {
     if (!success) return 0;
-    
+
     let score = 50; // Base score
-    
+
     // Bonus for character savings
     if (charactersSaved > 100) score += 30;
     else if (charactersSaved > 50) score += 20;
     else if (charactersSaved > 10) score += 10;
-    
+
     // Bonus for regex rules (assuming more sophisticated)
     if (rule.is_regex) score += 10;
-    
+
     // Cap at 100
     return Math.min(score, 100);
   }
@@ -992,12 +983,12 @@ export class CorrectionsDAO {
    */
   private calculateImpactRating(rule: CorrectionRule, charactersSaved: number): number {
     let rating = 1; // Minimum rating
-    
+
     if (charactersSaved > 200) rating = 5;
     else if (charactersSaved > 100) rating = 4;
     else if (charactersSaved > 50) rating = 3;
     else if (charactersSaved > 10) rating = 2;
-    
+
     return rating;
   }
 
@@ -1006,7 +997,7 @@ export class CorrectionsDAO {
    */
   private calculateComplexityScore(rule: CorrectionRule): number {
     let score = 1; // Base complexity
-    
+
     if (rule.is_regex) {
       // Analyze regex complexity
       const pattern = rule.find_pattern;
@@ -1014,11 +1005,11 @@ export class CorrectionsDAO {
       if (pattern.includes('*') || pattern.includes('+')) score += 1;
       if (pattern.includes('?') || pattern.includes('|')) score += 1;
     }
-    
+
     // Longer patterns are generally more complex
     if (rule.find_pattern.length > 50) score += 2;
     else if (rule.find_pattern.length > 20) score += 1;
-    
+
     return Math.min(score, 10); // Cap at 10
   }
 }

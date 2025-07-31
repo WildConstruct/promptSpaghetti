@@ -2,7 +2,7 @@
 
 **QA Review Date:** 2025-07-22  
 **Reviewer:** Quinn (Senior QA Architect)  
-**Status:** DOCUMENTATION REMEDIATION  
+**Status:** DOCUMENTATION REMEDIATION
 
 ## Overview
 
@@ -17,6 +17,7 @@ The Archive Management system provides comprehensive data lifecycle management w
 #### Key Components
 
 1. **Archive Storage Engine**
+
    ```typescript
    interface ArchiveStorageConfig {
      storageBackend: 'filesystem' | 's3' | 'azure' | 'gcs';
@@ -78,32 +79,32 @@ class ArchiveManagementService {
 archiveManagement:
   enabled: true
   policies:
-    - name: "audit-logs"
-      dataType: "audit_logs"
+    - name: 'audit-logs'
+      dataType: 'audit_logs'
       rules:
-        - condition: "age > 90 days"
-          action: "move_to_cold"
-        - condition: "age > 7 years"
-          action: "delete"
-      
-    - name: "user-data"
-      dataType: "user_profiles"
+        - condition: 'age > 90 days'
+          action: 'move_to_cold'
+        - condition: 'age > 7 years'
+          action: 'delete'
+
+    - name: 'user-data'
+      dataType: 'user_profiles'
       rules:
-        - condition: "inactive > 2 years"
-          action: "archive"
-        - condition: "gdpr_deletion_request = true"
-          action: "secure_delete"
+        - condition: 'inactive > 2 years'
+          action: 'archive'
+        - condition: 'gdpr_deletion_request = true'
+          action: 'secure_delete'
 
   storage:
     backends:
-      hot: "filesystem"
-      warm: "s3_standard"
-      cold: "s3_glacier"
-    
+      hot: 'filesystem'
+      warm: 's3_standard'
+      cold: 's3_glacier'
+
     encryption:
       enabled: true
-      algorithm: "AES-256-GCM"
-      keyRotation: "90d"
+      algorithm: 'AES-256-GCM'
+      keyRotation: '90d'
 ```
 
 ---
@@ -117,6 +118,7 @@ The Uploader Architecture provides scalable, secure file upload capabilities wit
 #### Core Architecture Patterns
 
 1. **Multi-Stage Upload Pipeline**
+
    ```
    Client → Upload Gateway → Processing Queue → Storage Backend → Index/Catalog
    ```
@@ -130,18 +132,19 @@ The Uploader Architecture provides scalable, secure file upload capabilities wit
 #### Component Details
 
 ##### Upload Gateway
+
 ```typescript
 interface UploadGatewayConfig {
   // Connection limits
   maxConcurrentUploads: number;
   maxUploadSize: number;
   allowedFileTypes: string[];
-  
+
   // Security features
   virusScanningEnabled: boolean;
   contentValidation: boolean;
   duplicateDetection: boolean;
-  
+
   // Performance optimization
   chunkSize: number;
   resumableUploads: boolean;
@@ -154,10 +157,7 @@ class UploadGateway {
    * @param fileMetadata - File information and constraints
    * @param uploadOptions - Upload behavior configuration
    */
-  async initiateUpload(
-    fileMetadata: FileMetadata,
-    uploadOptions: UploadOptions
-  ): Promise<UploadSession> {
+  async initiateUpload(fileMetadata: FileMetadata, uploadOptions: UploadOptions): Promise<UploadSession> {
     // Create upload session with unique ID
     // Validate file constraints
     // Initialize chunk tracking
@@ -170,11 +170,7 @@ class UploadGateway {
    * @param chunkData - Binary chunk data
    * @param chunkIndex - Position in file
    */
-  async uploadChunk(
-    sessionId: string,
-    chunkData: Buffer,
-    chunkIndex: number
-  ): Promise<ChunkUploadResult> {
+  async uploadChunk(sessionId: string, chunkData: Buffer, chunkIndex: number): Promise<ChunkUploadResult> {
     // Validate session
     // Process chunk (validation, deduplication)
     // Update progress tracking
@@ -184,6 +180,7 @@ class UploadGateway {
 ```
 
 ##### Processing Pipeline
+
 ```typescript
 interface ProcessingStage {
   name: string;
@@ -194,29 +191,29 @@ interface ProcessingStage {
 
 const UPLOAD_PROCESSING_PIPELINE: ProcessingStage[] = [
   {
-    name: "virus_scan",
+    name: 'virus_scan',
     processor: new ClamAVProcessor(),
-    requirements: { cpu: "medium", memory: "high" },
-    parallelizable: false
+    requirements: { cpu: 'medium', memory: 'high' },
+    parallelizable: false,
   },
   {
-    name: "content_validation",
+    name: 'content_validation',
     processor: new ContentValidator(),
-    requirements: { cpu: "low", memory: "low" },
-    parallelizable: true
+    requirements: { cpu: 'low', memory: 'low' },
+    parallelizable: true,
   },
   {
-    name: "metadata_extraction",
+    name: 'metadata_extraction',
     processor: new MetadataExtractor(),
-    requirements: { cpu: "high", memory: "medium" },
-    parallelizable: true
+    requirements: { cpu: 'high', memory: 'medium' },
+    parallelizable: true,
   },
   {
-    name: "thumbnail_generation",
+    name: 'thumbnail_generation',
     processor: new ThumbnailGenerator(),
-    requirements: { cpu: "very_high", memory: "high" },
-    parallelizable: true
-  }
+    requirements: { cpu: 'very_high', memory: 'high' },
+    parallelizable: true,
+  },
 ];
 ```
 
@@ -229,6 +226,7 @@ const UPLOAD_PROCESSING_PIPELINE: ProcessingStage[] = [
    - **Backup**: Redundant disaster recovery
 
 2. **Data Distribution**
+
    ```typescript
    interface StorageDecision {
      primary: StorageBackend;
@@ -237,14 +235,12 @@ const UPLOAD_PROCESSING_PIPELINE: ProcessingStage[] = [
      archiveAfter: Duration;
    }
 
-   function determineStorageStrategy(
-     file: ProcessedFile
-   ): StorageDecision {
+   function determineStorageStrategy(file: ProcessedFile): StorageDecision {
      const strategy: StorageDecision = {
        primary: 'nvme',
        replicas: ['ssd', 's3'],
        cdnEnabled: false,
-       archiveAfter: Duration.fromDays(365)
+       archiveAfter: Duration.fromDays(365),
      };
 
      // Hot content - frequently accessed
@@ -252,13 +248,13 @@ const UPLOAD_PROCESSING_PIPELINE: ProcessingStage[] = [
        strategy.cdnEnabled = true;
        strategy.primary = 'nvme';
      }
-     
+
      // Cold content - rarely accessed
      if (file.accessPattern === 'cold') {
        strategy.primary = 's3';
        strategy.archiveAfter = Duration.fromDays(90);
      }
-     
+
      return strategy;
    }
    ```
@@ -270,10 +266,7 @@ interface UploadErrorHandler {
   /**
    * Handle upload failures with automatic retry
    */
-  handleUploadError(
-    error: UploadError,
-    context: UploadContext
-  ): Promise<ErrorResolution>;
+  handleUploadError(error: UploadError, context: UploadContext): Promise<ErrorResolution>;
 
   /**
    * Cleanup failed uploads and temporary files
@@ -283,10 +276,7 @@ interface UploadErrorHandler {
   /**
    * Recover corrupted uploads using chunk checksums
    */
-  recoverCorruptedUpload(
-    sessionId: string,
-    corruptedChunks: number[]
-  ): Promise<RecoveryResult>;
+  recoverCorruptedUpload(sessionId: string, corruptedChunks: number[]): Promise<RecoveryResult>;
 }
 ```
 
@@ -306,18 +296,18 @@ interface CategoryNode {
   name: string;
   slug: string;
   description?: string;
-  
+
   // Hierarchy relationships
   parentId?: string;
   ancestorIds: string[]; // Materialized path for performance
   childrenIds: string[];
   depth: number;
   path: string; // Human-readable path like "/technology/ai/machine-learning"
-  
+
   // Metadata and attributes
   attributes: CategoryAttributes;
   permissions: CategoryPermissions;
-  
+
   // Lifecycle tracking
   createdAt: Date;
   updatedAt: Date;
@@ -330,11 +320,11 @@ interface CategoryAttributes {
   color?: string;
   icon?: string;
   template?: string;
-  
+
   // SEO attributes
   metaTitle?: string;
   metaDescription?: string;
-  
+
   // Business attributes
   tags: string[];
   featured: boolean;
@@ -370,11 +360,7 @@ class CategoryHierarchyService {
    * @param newParentId - New parent (null for root)
    * @param newPosition - Position among new siblings
    */
-  async moveCategory(
-    categoryId: string,
-    newParentId?: string,
-    newPosition?: number
-  ): Promise<CategoryMoveResult> {
+  async moveCategory(categoryId: string, newParentId?: string, newPosition?: number): Promise<CategoryMoveResult> {
     // Validate move is not creating cycle
     // Update all descendant paths
     // Recalculate content counts
@@ -388,11 +374,7 @@ class CategoryHierarchyService {
    * @param maxDepth - Limit tree depth
    * @param filters - Additional filtering criteria
    */
-  async getCategoryTree(
-    rootId?: string,
-    maxDepth?: number,
-    filters?: CategoryTreeFilters
-  ): Promise<CategoryTree> {
+  async getCategoryTree(rootId?: string, maxDepth?: number, filters?: CategoryTreeFilters): Promise<CategoryTree> {
     // Use materialized path for efficient querying
     // Apply permission filters
     // Include content counts if requested
@@ -404,25 +386,27 @@ class CategoryHierarchyService {
 #### Performance Optimizations
 
 1. **Materialized Path Pattern**
+
    ```sql
    -- Efficient ancestor queries using path indexing
-   SELECT * FROM categories 
+   SELECT * FROM categories
    WHERE ancestor_ids @> ARRAY[$1]
    ORDER BY path;
-   
+
    -- Efficient subtree queries
-   SELECT * FROM categories 
+   SELECT * FROM categories
    WHERE path LIKE '/technology/ai/%'
    ORDER BY path;
    ```
 
 2. **Nested Set Model (Alternative)**
+
    ```typescript
    interface NestedSetCategory extends CategoryNode {
-     leftBound: number;  // Left boundary in nested set
+     leftBound: number; // Left boundary in nested set
      rightBound: number; // Right boundary in nested set
    }
-   
+
    // Subtree query: WHERE left_bound > parent_left AND right_bound < parent_right
    // Leaf nodes: WHERE right_bound = left_bound + 1
    ```
@@ -433,13 +417,13 @@ class CategoryHierarchyService {
      // Full tree cache (invalidated on any hierarchy change)
      fullTree: CachedCategoryTree;
      ttl: number;
-     
+
      // Individual category cache
      categories: Map<string, CachedCategory>;
-     
+
      // Path lookup cache for slug resolution
      pathLookup: Map<string, string>; // path -> categoryId
-     
+
      // Content count cache (updated via background job)
      contentCounts: Map<string, number>; // categoryId -> count
    }
@@ -451,16 +435,16 @@ class CategoryHierarchyService {
 interface ContentCategoryAssociation {
   contentId: string;
   categoryId: string;
-  
+
   // Association metadata
   isPrimary: boolean; // Primary categorization
-  weight: number;     // Relevance weight (0-1)
+  weight: number; // Relevance weight (0-1)
   assignedBy: string; // Manual vs automatic assignment
   assignedAt: Date;
-  
+
   // Auto-categorization data
   confidence?: number; // ML confidence score
-  mlModel?: string;    // Which model assigned this
+  mlModel?: string; // Which model assigned this
   keywords?: string[]; // Keywords that influenced assignment
 }
 
@@ -511,26 +495,21 @@ interface HierarchyMaintenance {
    * Rebuild materialized paths after bulk operations
    */
   rebuildMaterializedPaths(): Promise<RebuildResult>;
-  
+
   /**
    * Validate hierarchy integrity
    */
   validateHierarchy(): Promise<ValidationReport>;
-  
+
   /**
    * Merge duplicate categories
    */
-  mergeCategories(
-    sourceIds: string[],
-    targetId: string
-  ): Promise<MergeResult>;
-  
+  mergeCategories(sourceIds: string[], targetId: string): Promise<MergeResult>;
+
   /**
    * Archive unused categories
    */
-  archiveUnusedCategories(
-    unusedDays: number
-  ): Promise<ArchiveResult>;
+  archiveUnusedCategories(unusedDays: number): Promise<ArchiveResult>;
 }
 ```
 
@@ -549,7 +528,8 @@ This documentation addresses the QA rejection reasons for tasks E17-175311439685
 
 All documentation follows consistent formatting, includes proper JSDoc annotations, and provides both conceptual overviews and practical implementation guidance.
 
-**Next Steps:** 
+**Next Steps:**
+
 - Review and approve updated documentation
 - Integrate with existing API documentation
 - Add to developer onboarding materials

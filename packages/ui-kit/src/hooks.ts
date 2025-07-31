@@ -10,19 +10,13 @@ export * from './hooks/useUIState';
 // Re-export specific hooks for convenience
 export { useTheme, useThemeControls } from './hooks/useTheme';
 export { useResponsive, useBreakpoint, useMediaQuery } from './hooks/useResponsive';
-export { 
-  usePlatform, 
-  useIsMobile, 
-  useIsDesktop, 
+export {
+  usePlatform,
+  useIsMobile,
+  useIsDesktop,
   useIsWeb,
   useTouchSupport,
   useHoverSupport,
-  useKeyboardSupport
+  useKeyboardSupport,
 } from './hooks/usePlatform';
-export { 
-  useUIState, 
-  useSelectedNode, 
-  useInspectorState, 
-  usePaletteState,
-  useThemeState
-} from './hooks/useUIState';
+export { useUIState, useSelectedNode, useInspectorState, usePaletteState, useThemeState } from './hooks/useUIState';

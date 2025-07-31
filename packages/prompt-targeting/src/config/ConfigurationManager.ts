@@ -20,7 +20,7 @@ export const OpenAIConfigSchema = z.object({
   topP: z.number().min(0).max(1).default(1),
   frequencyPenalty: z.number().min(-2).max(2).default(0),
   presencePenalty: z.number().min(-2).max(2).default(0),
-  stopSequences: z.array(z.string()).max(4).default([])
+  stopSequences: z.array(z.string()).max(4).default([]),
 });
 
 export const MidjourneyConfigSchema = z.object({
@@ -30,7 +30,7 @@ export const MidjourneyConfigSchema = z.object({
   defaultStylize: z.number().min(0).max(1000).default(100),
   defaultChaos: z.number().min(0).max(100).default(0),
   enableUpscaling: z.boolean().default(true),
-  enableVariations: z.boolean().default(true)
+  enableVariations: z.boolean().default(true),
 });
 
 export const DALLEConfigSchema = z.object({
@@ -38,7 +38,7 @@ export const DALLEConfigSchema = z.object({
   size: z.enum(['256x256', '512x512', '1024x1024', '1792x1024', '1024x1792']).default('1024x1024'),
   quality: z.enum(['standard', 'hd']).default('standard'),
   style: z.enum(['vivid', 'natural']).default('vivid'),
-  n: z.number().min(1).max(10).default(1)
+  n: z.number().min(1).max(10).default(1),
 });
 
 /**
@@ -49,36 +49,44 @@ export const GlobalConfigSchema = z.object({
   qualityPreference: z.number().min(0).max(1).default(0.7),
   stylePreference: z.enum(['default', 'artistic', 'photorealistic', 'minimal']).default('default'),
   enableOptimizations: z.boolean().default(true),
-  
+
   // Platform overrides
-  platformOverrides: z.object({
-    openai: OpenAIConfigSchema.partial().optional(),
-    midjourney: MidjourneyConfigSchema.partial().optional(),
-    dalle: DALLEConfigSchema.partial().optional()
-  }).default({}),
-  
+  platformOverrides: z
+    .object({
+      openai: OpenAIConfigSchema.partial().optional(),
+      midjourney: MidjourneyConfigSchema.partial().optional(),
+      dalle: DALLEConfigSchema.partial().optional(),
+    })
+    .default({}),
+
   // Pipeline configuration
-  pipeline: z.object({
-    skipValidation: z.boolean().default(false),
-    skipOptimization: z.boolean().default(false),
-    stageTimeouts: z.record(z.number()).default({}),
-    retries: z.object({
-      maxAttempts: z.number().min(1).max(10).default(3),
-      backoffMs: z.number().min(10).max(5000).default(100),
-      retryableErrors: z.array(z.string()).default(['NETWORK_ERROR', 'TIMEOUT_ERROR', 'RATE_LIMIT_ERROR'])
-    }).default({})
-  }).default({}),
-  
+  pipeline: z
+    .object({
+      skipValidation: z.boolean().default(false),
+      skipOptimization: z.boolean().default(false),
+      stageTimeouts: z.record(z.number()).default({}),
+      retries: z
+        .object({
+          maxAttempts: z.number().min(1).max(10).default(3),
+          backoffMs: z.number().min(10).max(5000).default(100),
+          retryableErrors: z.array(z.string()).default(['NETWORK_ERROR', 'TIMEOUT_ERROR', 'RATE_LIMIT_ERROR']),
+        })
+        .default({}),
+    })
+    .default({}),
+
   // Monitoring configuration
-  monitoring: z.object({
-    enableTiming: z.boolean().default(true),
-    enableMemoryTracking: z.boolean().default(false),
-    enableEvents: z.boolean().default(true),
-    enableLogging: z.boolean().default(true)
-  }).default({}),
-  
+  monitoring: z
+    .object({
+      enableTiming: z.boolean().default(true),
+      enableMemoryTracking: z.boolean().default(false),
+      enableEvents: z.boolean().default(true),
+      enableLogging: z.boolean().default(true),
+    })
+    .default({}),
+
   // Custom mappings
-  customMappings: z.record(z.unknown()).default({})
+  customMappings: z.record(z.unknown()).default({}),
 });
 
 export type OpenAIConfig = z.infer<typeof OpenAIConfigSchema>;
@@ -154,43 +162,45 @@ export class ConfigurationManager extends EventEmitter {
    */
   public updateConfig(updates: Partial<GlobalConfig>, reason = 'Manual update'): ConfigValidationResult {
     const oldConfig = structuredClone(this.config);
-    
+
     try {
       // Merge updates with current config
       const newConfig = this.mergeConfigs(this.config, updates);
-      
+
       // Validate merged config
       const validationResult = this.validateConfig(newConfig);
-      
+
       if (validationResult.valid) {
         this.config = newConfig;
-        
+
         // Add to history
         this.configHistory.push({
           timestamp: new Date(),
           config: structuredClone(newConfig),
-          reason
+          reason,
         });
-        
+
         // Emit change events
         this.emitConfigChanges(oldConfig, newConfig);
-        
+
         this.logger.log(`Configuration updated: ${reason}`);
       }
-      
+
       this.emit('config:validated', validationResult);
       return validationResult;
     } catch (error) {
       const validationResult: ConfigValidationResult = {
         valid: false,
-        errors: [{
-          path: 'root',
-          message: error instanceof Error ? error.message : 'Unknown validation error',
-          code: 'VALIDATION_ERROR'
-        }],
-        warnings: []
+        errors: [
+          {
+            path: 'root',
+            message: error instanceof Error ? error.message : 'Unknown validation error',
+            code: 'VALIDATION_ERROR',
+          },
+        ],
+        warnings: [],
       };
-      
+
       this.emit('config:validated', validationResult);
       return validationResult;
     }
@@ -217,14 +227,14 @@ export class ConfigurationManager extends EventEmitter {
   public validateConfig(config: unknown = this.config): ConfigValidationResult {
     try {
       GlobalConfigSchema.parse(config);
-      
+
       // Additional business logic validation
       const warnings = this.performBusinessValidation(config as GlobalConfig);
-      
+
       return {
         valid: true,
         errors: [],
-        warnings
+        warnings,
       };
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -233,20 +243,22 @@ export class ConfigurationManager extends EventEmitter {
           errors: error.errors.map(err => ({
             path: err.path.join('.'),
             message: err.message,
-            code: err.code
+            code: err.code,
           })),
-          warnings: []
+          warnings: [],
         };
       }
-      
+
       return {
         valid: false,
-        errors: [{
-          path: 'root',
-          message: error instanceof Error ? error.message : 'Unknown error',
-          code: 'UNKNOWN_ERROR'
-        }],
-        warnings: []
+        errors: [
+          {
+            path: 'root',
+            message: error instanceof Error ? error.message : 'Unknown error',
+            code: 'UNKNOWN_ERROR',
+          },
+        ],
+        warnings: [],
       };
     }
   }
@@ -267,9 +279,9 @@ export class ConfigurationManager extends EventEmitter {
       tags,
       isBuiltIn: false,
       created: new Date(),
-      updated: new Date()
+      updated: new Date(),
     };
-    
+
     this.presets.set(name, preset);
     this.logger.log(`Created configuration preset: ${name}`);
   }
@@ -282,21 +294,23 @@ export class ConfigurationManager extends EventEmitter {
     if (!preset) {
       return {
         valid: false,
-        errors: [{
-          path: 'preset',
-          message: `Preset '${name}' not found`,
-          code: 'PRESET_NOT_FOUND'
-        }],
-        warnings: []
+        errors: [
+          {
+            path: 'preset',
+            message: `Preset '${name}' not found`,
+            code: 'PRESET_NOT_FOUND',
+          },
+        ],
+        warnings: [],
       };
     }
-    
+
     const result = this.updateConfig(preset.config, `Applied preset: ${name}`);
-    
+
     if (result.valid) {
       this.emit('config:preset:applied', name, preset.config);
     }
-    
+
     return result;
   }
 
@@ -305,13 +319,11 @@ export class ConfigurationManager extends EventEmitter {
    */
   public listPresets(tags?: string[]): ConfigurationPreset[] {
     const presets = Array.from(this.presets.values());
-    
+
     if (tags && tags.length > 0) {
-      return presets.filter(preset => 
-        tags.some(tag => preset.tags.includes(tag))
-      );
+      return presets.filter(preset => tags.some(tag => preset.tags.includes(tag)));
     }
-    
+
     return presets;
   }
 
@@ -323,11 +335,11 @@ export class ConfigurationManager extends EventEmitter {
     if (!preset) {
       return false;
     }
-    
+
     if (preset.isBuiltIn) {
       throw new Error('Cannot delete built-in presets');
     }
-    
+
     this.presets.delete(name);
     this.logger.log(`Deleted configuration preset: ${name}`);
     return true;
@@ -338,20 +350,20 @@ export class ConfigurationManager extends EventEmitter {
    */
   public exportConfig(format: 'json' | 'yaml' = 'json'): string {
     const config = this.getConfig();
-    
+
     let exported: string;
     switch (format) {
-    case 'json':
-      exported = JSON.stringify(config, null, 2);
-      break;
-    case 'yaml':
-      // Simple YAML export - in production, use a proper YAML library
-      exported = this.configToYaml(config);
-      break;
-    default:
-      throw new Error(`Unsupported export format: ${format}`);
+      case 'json':
+        exported = JSON.stringify(config, null, 2);
+        break;
+      case 'yaml':
+        // Simple YAML export - in production, use a proper YAML library
+        exported = this.configToYaml(config);
+        break;
+      default:
+        throw new Error(`Unsupported export format: ${format}`);
     }
-    
+
     this.emit('config:exported', format, config);
     return exported;
   }
@@ -362,35 +374,37 @@ export class ConfigurationManager extends EventEmitter {
   public importConfig(data: string, format: 'json' | 'yaml' = 'json'): ConfigValidationResult {
     try {
       let imported: unknown;
-      
+
       switch (format) {
-      case 'json':
-        imported = JSON.parse(data);
-        break;
-      case 'yaml':
-        // Simple YAML import - in production, use a proper YAML library
-        imported = this.yamlToConfig(data);
-        break;
-      default:
-        throw new Error(`Unsupported import format: ${format}`);
+        case 'json':
+          imported = JSON.parse(data);
+          break;
+        case 'yaml':
+          // Simple YAML import - in production, use a proper YAML library
+          imported = this.yamlToConfig(data);
+          break;
+        default:
+          throw new Error(`Unsupported import format: ${format}`);
       }
-      
+
       const result = this.updateConfig(imported as Partial<GlobalConfig>, `Imported from ${format}`);
-      
+
       if (result.valid) {
         this.emit('config:imported', format, this.config);
       }
-      
+
       return result;
     } catch (error) {
       return {
         valid: false,
-        errors: [{
-          path: 'import',
-          message: `Failed to import ${format}: ${error instanceof Error ? error.message : 'Unknown error'}`,
-          code: 'IMPORT_ERROR'
-        }],
-        warnings: []
+        errors: [
+          {
+            path: 'import',
+            message: `Failed to import ${format}: ${error instanceof Error ? error.message : 'Unknown error'}`,
+            code: 'IMPORT_ERROR',
+          },
+        ],
+        warnings: [],
       };
     }
   }
@@ -399,12 +413,10 @@ export class ConfigurationManager extends EventEmitter {
    * Get configuration history
    */
   public getConfigHistory(limit = 10): Array<{ timestamp: Date; reason: string }> {
-    return this.configHistory
-      .slice(-limit)
-      .map(entry => ({
-        timestamp: entry.timestamp,
-        reason: entry.reason
-      }));
+    return this.configHistory.slice(-limit).map(entry => ({
+      timestamp: entry.timestamp,
+      reason: entry.reason,
+    }));
   }
 
   /**
@@ -424,22 +436,24 @@ export class ConfigurationManager extends EventEmitter {
     optimizationsEnabled: boolean;
     presetCount: number;
     lastUpdated: Date | null;
-    } {
+  } {
     const platforms = Object.keys(this.config.platformOverrides).filter(
-      platform => Object.keys(this.config.platformOverrides[platform as keyof typeof this.config.platformOverrides] || {}).length > 0
+      platform =>
+        Object.keys(this.config.platformOverrides[platform as keyof typeof this.config.platformOverrides] || {})
+          .length > 0
     );
-    
-    const qualityLevel = this.config.qualityPreference > 0.8 ? 'High' : 
-      this.config.qualityPreference > 0.5 ? 'Medium' : 'Low';
-    
+
+    const qualityLevel =
+      this.config.qualityPreference > 0.8 ? 'High' : this.config.qualityPreference > 0.5 ? 'Medium' : 'Low';
+
     const lastEntry = this.configHistory[this.configHistory.length - 1];
-    
+
     return {
       platforms,
       qualityLevel,
       optimizationsEnabled: this.config.enableOptimizations,
       presetCount: this.presets.size,
-      lastUpdated: lastEntry?.timestamp || null
+      lastUpdated: lastEntry?.timestamp || null,
     };
   }
 
@@ -457,13 +471,13 @@ export class ConfigurationManager extends EventEmitter {
         enableOptimizations: true,
         platformOverrides: {
           openai: { temperature: 0.2, topP: 0.8 },
-          midjourney: { defaultQuality: 2, defaultStylize: 50 }
-        }
+          midjourney: { defaultQuality: 2, defaultStylize: 50 },
+        },
       }),
       tags: ['quality', 'professional', 'precise'],
       isBuiltIn: true,
       created: new Date(),
-      updated: new Date()
+      updated: new Date(),
     });
 
     // Creative Preset
@@ -476,13 +490,13 @@ export class ConfigurationManager extends EventEmitter {
         enableOptimizations: true,
         platformOverrides: {
           openai: { temperature: 0.8, topP: 0.9 },
-          midjourney: { defaultQuality: 1, defaultStylize: 250, defaultChaos: 25 }
-        }
+          midjourney: { defaultQuality: 1, defaultStylize: 250, defaultChaos: 25 },
+        },
       }),
       tags: ['creative', 'artistic', 'experimental'],
       isBuiltIn: true,
       created: new Date(),
-      updated: new Date()
+      updated: new Date(),
     });
 
     // Fast Processing Preset
@@ -497,18 +511,18 @@ export class ConfigurationManager extends EventEmitter {
           skipOptimization: true,
           stageTimeouts: {
             validation: 1000,
-            transformation: 2000
-          }
+            transformation: 2000,
+          },
         },
         platformOverrides: {
           openai: { temperature: 0.7, maxTokens: 1000 },
-          midjourney: { defaultQuality: 0.5 }
-        }
+          midjourney: { defaultQuality: 0.5 },
+        },
       }),
       tags: ['fast', 'basic', 'efficient'],
       isBuiltIn: true,
       created: new Date(),
-      updated: new Date()
+      updated: new Date(),
     });
 
     this.logger.log('Initialized built-in configuration presets');
@@ -519,7 +533,7 @@ export class ConfigurationManager extends EventEmitter {
    */
   private mergeConfigs(base: GlobalConfig, updates: Partial<GlobalConfig>): GlobalConfig {
     const merged = structuredClone(base);
-    
+
     for (const [key, value] of Object.entries(updates)) {
       if (value !== undefined) {
         if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
@@ -529,7 +543,7 @@ export class ConfigurationManager extends EventEmitter {
         }
       }
     }
-    
+
     return merged;
   }
 
@@ -538,7 +552,7 @@ export class ConfigurationManager extends EventEmitter {
    */
   private mergeObjects(target: any, source: any): any {
     const result = { ...target };
-    
+
     for (const [key, value] of Object.entries(source)) {
       if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
         result[key] = this.mergeObjects(result[key] || {}, value);
@@ -546,7 +560,7 @@ export class ConfigurationManager extends EventEmitter {
         result[key] = value;
       }
     }
-    
+
     return result;
   }
 
@@ -556,13 +570,13 @@ export class ConfigurationManager extends EventEmitter {
   private createNestedUpdate(path: string, value: unknown): any {
     const parts = path.split('.');
     const update: any = {};
-    
+
     let current = update;
     for (let i = 0; i < parts.length - 1; i++) {
       current[parts[i]] = {};
       current = current[parts[i]];
     }
-    
+
     current[parts[parts.length - 1]] = value;
     return update;
   }
@@ -579,36 +593,36 @@ export class ConfigurationManager extends EventEmitter {
    */
   private performBusinessValidation(config: GlobalConfig): ConfigValidationResult['warnings'] {
     const warnings: ConfigValidationResult['warnings'] = [];
-    
+
     // Check for conflicting settings
     if (config.qualityPreference > 0.8 && config.stylePreference === 'minimal') {
       warnings.push({
         path: 'stylePreference',
         message: 'High quality preference with minimal style may produce unexpected results',
-        suggestion: 'Consider using photorealistic or artistic style for high quality'
+        suggestion: 'Consider using photorealistic or artistic style for high quality',
       });
     }
-    
+
     // Check OpenAI settings
     const openaiConfig = config.platformOverrides.openai;
     if (openaiConfig?.temperature && openaiConfig.temperature > 1.5 && config.qualityPreference > 0.7) {
       warnings.push({
         path: 'platformOverrides.openai.temperature',
         message: 'High temperature with high quality preference may reduce output consistency',
-        suggestion: 'Lower temperature for more consistent high-quality results'
+        suggestion: 'Lower temperature for more consistent high-quality results',
       });
     }
-    
+
     // Check Midjourney settings
     const midjourneyConfig = config.platformOverrides.midjourney;
     if (midjourneyConfig?.defaultChaos && midjourneyConfig.defaultChaos > 50 && config.qualityPreference > 0.8) {
       warnings.push({
         path: 'platformOverrides.midjourney.defaultChaos',
         message: 'High chaos with high quality preference may produce unpredictable results',
-        suggestion: 'Lower chaos value for more predictable high-quality images'
+        suggestion: 'Lower chaos value for more predictable high-quality images',
       });
     }
-    
+
     return warnings;
   }
 
@@ -617,7 +631,7 @@ export class ConfigurationManager extends EventEmitter {
    */
   private emitConfigChanges(oldConfig: GlobalConfig, newConfig: GlobalConfig): void {
     const changes = this.getConfigChanges(oldConfig, newConfig);
-    
+
     for (const change of changes) {
       this.emit('config:changed', change.path, change.newValue, change.oldValue);
     }
@@ -626,35 +640,44 @@ export class ConfigurationManager extends EventEmitter {
   /**
    * Get configuration changes between two configs
    */
-  private getConfigChanges(oldConfig: any, newConfig: any, path = ''): Array<{
+  private getConfigChanges(
+    oldConfig: any,
+    newConfig: any,
+    path = ''
+  ): Array<{
     path: string;
     oldValue: unknown;
     newValue: unknown;
   }> {
     const changes: Array<{ path: string; oldValue: unknown; newValue: unknown }> = [];
-    
+
     const allKeys = new Set([...Object.keys(oldConfig || {}), ...Object.keys(newConfig || {})]);
-    
+
     for (const key of allKeys) {
       const currentPath = path ? `${path}.${key}` : key;
       const oldValue = oldConfig?.[key];
       const newValue = newConfig?.[key];
-      
+
       if (oldValue !== newValue) {
-        if (typeof oldValue === 'object' && typeof newValue === 'object' && 
-            oldValue !== null && newValue !== null && 
-            !Array.isArray(oldValue) && !Array.isArray(newValue)) {
+        if (
+          typeof oldValue === 'object' &&
+          typeof newValue === 'object' &&
+          oldValue !== null &&
+          newValue !== null &&
+          !Array.isArray(oldValue) &&
+          !Array.isArray(newValue)
+        ) {
           changes.push(...this.getConfigChanges(oldValue, newValue, currentPath));
         } else {
           changes.push({
             path: currentPath,
             oldValue,
-            newValue
+            newValue,
           });
         }
       }
     }
-    
+
     return changes;
   }
 
@@ -664,7 +687,7 @@ export class ConfigurationManager extends EventEmitter {
   private configToYaml(config: any, indent = 0): string {
     const spaces = ' '.repeat(indent);
     let yaml = '';
-    
+
     for (const [key, value] of Object.entries(config)) {
       if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
         yaml += `${spaces}${key}:\n`;
@@ -678,7 +701,7 @@ export class ConfigurationManager extends EventEmitter {
         yaml += `${spaces}${key}: ${value}\n`;
       }
     }
-    
+
     return yaml;
   }
 
@@ -689,7 +712,7 @@ export class ConfigurationManager extends EventEmitter {
     // Very basic YAML parser - in production, use a proper library
     const lines = yaml.split('\n').filter(line => line.trim());
     const config: any = {};
-    
+
     for (const line of lines) {
       const [key, ...valueParts] = line.split(':');
       if (valueParts.length > 0) {
@@ -697,7 +720,7 @@ export class ConfigurationManager extends EventEmitter {
         config[key.trim()] = this.parseYamlValue(value);
       }
     }
-    
+
     return config;
   }
 

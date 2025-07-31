@@ -14,21 +14,21 @@
   },
   "grammar": {
     "start": "[selectGenre][buildStory]",
-    
+
     "selectGenre": {
       "type": "setVariable",
       "key": "genre",
       "value": "[genres]"
     },
-    
+
     "genres": [
-      {"w": 30, "v": "fantasy"},
-      {"w": 25, "v": "sci-fi"},
-      {"w": 20, "v": "mystery"},
-      {"w": 15, "v": "horror"},
-      {"w": 10, "v": "romance"}
+      { "w": 30, "v": "fantasy" },
+      { "w": 25, "v": "sci-fi" },
+      { "w": 20, "v": "mystery" },
+      { "w": 15, "v": "horror" },
+      { "w": 10, "v": "romance" }
     ],
-    
+
     "buildStory": {
       "type": "conditional",
       "branches": [
@@ -47,15 +47,15 @@
       ],
       "defaultOutput": "[genericPrompt]"
     },
-    
+
     "fantasyPrompt": "In a realm where [magicSystem], [hero] must [quest] before [deadline]. But [complication] threatens everything.",
-    
+
     "scifiPrompt": "The year is [futureYear]. [scifiHero] discovers [discovery] that could [consequence]. Time is running out as [threat].",
-    
+
     "mysteryPrompt": "[detective] investigates [crime] in [location]. The only clue: [clue]. But [twist] changes everything.",
-    
+
     "genericPrompt": "[protagonist] faces [challenge] in [setting]. With only [resource], they must [action] or [consequence].",
-    
+
     "magicSystem": [
       "magic flows through ancient ley lines",
       "spells are woven from forgotten words",
@@ -63,7 +63,7 @@
       "the elements obey those with the gift",
       "reality bends to the will of the awakened"
     ],
-    
+
     "hero": {
       "type": "Sequential",
       "sequence": [
@@ -80,7 +80,7 @@
         }
       }
     },
-    
+
     "quest": [
       "retrieve the lost artifact",
       "unite the warring kingdoms",
@@ -88,7 +88,7 @@
       "defeat the ancient evil",
       "restore the broken covenant"
     ],
-    
+
     "deadline": [
       "the blood moon rises",
       "the prophecy expires",
@@ -96,22 +96,22 @@
       "the enemy arrives",
       "the magic fades forever"
     ],
-    
+
     "complication": {
       "type": "WeightedAdvanced",
       "choices": [
-        {"value": "betrayal from within", "weight": 30},
-        {"value": "an impossible love", "weight": 25},
-        {"value": "a dark family secret", "weight": 20},
-        {"value": "a cursed bloodline", "weight": 15},
-        {"value": "the price of power", "weight": 10}
+        { "value": "betrayal from within", "weight": 30 },
+        { "value": "an impossible love", "weight": 25 },
+        { "value": "a dark family secret", "weight": 20 },
+        { "value": "a cursed bloodline", "weight": 15 },
+        { "value": "the price of power", "weight": 10 }
       ],
       "distributionConfig": {
         "type": "exponential",
-        "parameters": {"rate": 0.5}
+        "parameters": { "rate": 0.5 }
       }
     },
-    
+
     "futureYear": {
       "type": "Markov",
       "states": {
@@ -131,12 +131,12 @@
       "initial": "near",
       "outputs": {
         "near": "[2050-2100]",
-        "mid": "[2100-2200]", 
+        "mid": "[2100-2200]",
         "far": "[2200-3000]"
       }
     }
   },
-  
+
   "config": {
     "maxRecursionDepth": 20,
     "enableCaching": true,

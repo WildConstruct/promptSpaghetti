@@ -118,12 +118,14 @@ The Model Deployment Pipeline consists of the following core components:
 **Overview**: Two identical production environments (Blue and Green) where new versions are deployed to the inactive environment, validated, and then traffic is switched over.
 
 **Advantages**:
+
 - Zero-downtime deployments
 - Instant rollback capability
 - Full environment isolation for testing
 - Minimal risk during deployment
 
 **Configuration Example**:
+
 ```yaml
 deployment:
   strategy: blue-green
@@ -131,17 +133,17 @@ deployment:
     blue:
       replicas: 3
       resources:
-        cpu: "1000m"
-        memory: "2Gi"
+        cpu: '1000m'
+        memory: '2Gi'
     green:
       replicas: 3
       resources:
-        cpu: "1000m"
-        memory: "2Gi"
+        cpu: '1000m'
+        memory: '2Gi'
   switchover:
-    validation_duration: "10m"
-    health_check_interval: "30s"
-    rollback_threshold: "5%"
+    validation_duration: '10m'
+    health_check_interval: '30s'
+    rollback_threshold: '5%'
 ```
 
 ### 2. Canary Deployment
@@ -149,29 +151,31 @@ deployment:
 **Overview**: New model versions are gradually rolled out to a small subset of traffic, with progressive increases based on success metrics.
 
 **Advantages**:
+
 - Risk mitigation through gradual rollout
 - Real-world validation with production traffic
 - Fine-grained control over deployment speed
 - Early detection of issues
 
 **Configuration Example**:
+
 ```yaml
 deployment:
   strategy: canary
   phases:
-    - name: "initial"
+    - name: 'initial'
       traffic_percentage: 5
-      duration: "15m"
+      duration: '15m'
       success_criteria:
-        error_rate: "<1%"
-        latency_p95: "<500ms"
-    - name: "expand"
+        error_rate: '<1%'
+        latency_p95: '<500ms'
+    - name: 'expand'
       traffic_percentage: 25
-      duration: "30m"
-    - name: "majority"
+      duration: '30m'
+    - name: 'majority'
       traffic_percentage: 75
-      duration: "30m"
-    - name: "complete"
+      duration: '30m'
+    - name: 'complete'
       traffic_percentage: 100
 ```
 
@@ -180,6 +184,7 @@ deployment:
 **Overview**: Instances are updated one by one, maintaining service availability throughout the process.
 
 **Configuration Example**:
+
 ```yaml
 deployment:
   strategy: rolling
@@ -187,7 +192,7 @@ deployment:
     max_unavailable: 1
     max_surge: 1
   readiness_probe:
-    path: "/health"
+    path: '/health'
     initial_delay: 30
     period: 10
 ```
@@ -197,33 +202,36 @@ deployment:
 ### Pre-Deployment Validation
 
 #### Schema Validation
+
 ```python
 # Example schema validation
 def validate_model_schema(model_metadata):
     required_fields = [
         'input_schema',
-        'output_schema', 
+        'output_schema',
         'model_version',
         'framework',
         'runtime_requirements'
     ]
-    
+
     for field in required_fields:
         if field not in model_metadata:
             raise ValidationError(f"Missing required field: {field}")
-    
+
     # Validate input/output schemas
-    validate_io_schemas(model_metadata['input_schema'], 
+    validate_io_schemas(model_metadata['input_schema'],
                        model_metadata['output_schema'])
 ```
 
 #### Performance Validation
+
 - **Latency Testing**: P50, P95, P99 latency measurements
 - **Throughput Testing**: Requests per second under various loads
 - **Memory Profiling**: Peak memory usage and garbage collection impact
 - **CPU Utilization**: Processing efficiency metrics
 
 #### Security Validation
+
 - Container image vulnerability scanning
 - Model artifact integrity verification
 - Secrets and configuration validation
@@ -232,6 +240,7 @@ def validate_model_schema(model_metadata):
 ### Post-Deployment Validation
 
 #### Functional Testing
+
 ```python
 # Example functional test suite
 class ModelDeploymentTests:
@@ -239,11 +248,11 @@ class ModelDeploymentTests:
         """Test model predictions against known good outputs"""
         test_inputs = load_test_dataset()
         expected_outputs = load_expected_outputs()
-        
+
         for input_data, expected in zip(test_inputs, expected_outputs):
             result = model_client.predict(input_data)
             assert similarity(result, expected) > 0.95
-    
+
     def test_edge_cases(self):
         """Test model behavior with edge cases"""
         edge_cases = [
@@ -252,7 +261,7 @@ class ModelDeploymentTests:
             extremely_large_input(),
             unicode_input()
         ]
-        
+
         for case in edge_cases:
             result = model_client.predict(case)
             assert result is not None
@@ -260,6 +269,7 @@ class ModelDeploymentTests:
 ```
 
 #### Integration Testing
+
 - Downstream service compatibility
 - API contract verification
 - Data pipeline integration
@@ -307,6 +317,7 @@ POST /api/v1/deployments/{deployment_id}/rollback
 ### Rollback Validation
 
 After rollback execution:
+
 - Verify previous version is healthy
 - Confirm traffic routing is correct
 - Validate all dependent services are functioning
@@ -317,18 +328,21 @@ After rollback execution:
 ### Key Metrics
 
 #### Deployment Metrics
+
 - **Deployment Duration**: Time from initiation to completion
 - **Deployment Success Rate**: Percentage of successful deployments
 - **Rollback Frequency**: Number of rollbacks per time period
 - **Mean Time to Recovery (MTTR)**: Average time to recover from failures
 
 #### Model Performance Metrics
+
 - **Request Latency**: P50, P95, P99 response times
 - **Throughput**: Requests per second
 - **Error Rate**: Percentage of failed requests
 - **Model Accuracy**: Prediction quality metrics
 
 #### Infrastructure Metrics
+
 - **Resource Utilization**: CPU, memory, disk usage
 - **Network Performance**: Bandwidth, connection counts
 - **Container Health**: Pod restart counts, health check status
@@ -339,28 +353,28 @@ After rollback execution:
 monitoring:
   prometheus:
     enabled: true
-    scrape_interval: "15s"
-    metrics_path: "/metrics"
-  
+    scrape_interval: '15s'
+    metrics_path: '/metrics'
+
   grafana:
     dashboards:
       - deployment_overview
       - model_performance
       - infrastructure_health
-  
+
   alerting:
     channels:
-      - slack: "#ml-ops-alerts"
-      - pagerduty: "ml-deployment-service"
-    
+      - slack: '#ml-ops-alerts'
+      - pagerduty: 'ml-deployment-service'
+
     rules:
-      - alert: "HighErrorRate"
+      - alert: 'HighErrorRate'
         expr: "rate(http_requests_total{status!~'2..'}[5m]) > 0.05"
-        duration: "2m"
-        
-      - alert: "DeploymentFailed"
-        expr: "deployment_status != 1"
-        duration: "1m"
+        duration: '2m'
+
+      - alert: 'DeploymentFailed'
+        expr: 'deployment_status != 1'
+        duration: '1m'
 ```
 
 ### Logging Strategy
@@ -375,6 +389,7 @@ monitoring:
 ### Deployment Management
 
 #### Create Deployment
+
 ```http
 POST /api/v1/deployments
 Content-Type: application/json
@@ -394,6 +409,7 @@ Content-Type: application/json
 ```
 
 #### Get Deployment Status
+
 ```http
 GET /api/v1/deployments/{deployment_id}
 
@@ -413,6 +429,7 @@ Response:
 ```
 
 #### Update Deployment
+
 ```http
 PATCH /api/v1/deployments/{deployment_id}
 {
@@ -428,6 +445,7 @@ PATCH /api/v1/deployments/{deployment_id}
 ```
 
 #### List Deployments
+
 ```http
 GET /api/v1/deployments?environment=production&status=active&limit=50
 ```
@@ -435,6 +453,7 @@ GET /api/v1/deployments?environment=production&status=active&limit=50
 ### Rollback Operations
 
 #### Trigger Rollback
+
 ```http
 POST /api/v1/deployments/{deployment_id}/rollback
 {
@@ -445,6 +464,7 @@ POST /api/v1/deployments/{deployment_id}/rollback
 ```
 
 #### Get Rollback History
+
 ```http
 GET /api/v1/deployments/{deployment_id}/rollbacks
 ```
@@ -452,11 +472,13 @@ GET /api/v1/deployments/{deployment_id}/rollbacks
 ### Health & Monitoring
 
 #### Health Check
+
 ```http
 GET /api/v1/health
 ```
 
 #### Metrics Endpoint
+
 ```http
 GET /api/v1/metrics
 ```
@@ -468,22 +490,22 @@ GET /api/v1/metrics
 ```yaml
 # config/production.yaml
 environment:
-  name: "production"
-  region: "us-west-2"
-  
+  name: 'production'
+  region: 'us-west-2'
+
 deployment:
-  default_strategy: "blue-green"
+  default_strategy: 'blue-green'
   timeout_minutes: 30
-  
+
   validation:
     pre_deployment:
       enabled: true
       timeout_minutes: 10
-    
+
     post_deployment:
       enabled: true
       timeout_minutes: 15
-      
+
   rollback:
     automatic: true
     thresholds:
@@ -493,17 +515,17 @@ deployment:
 
 resources:
   default_limits:
-    cpu: "1000m"
-    memory: "2Gi"
-  
+    cpu: '1000m'
+    memory: '2Gi'
+
   default_requests:
-    cpu: "500m"
-    memory: "1Gi"
+    cpu: '500m'
+    memory: '1Gi'
 
 monitoring:
   metrics_retention_days: 30
-  log_level: "INFO"
-  
+  log_level: 'INFO'
+
 security:
   image_scanning: true
   network_policies: true
@@ -515,21 +537,21 @@ security:
 ```yaml
 # Model deployment configuration
 model:
-  id: "sentiment-analysis"
-  version: "v2.1.0"
-  framework: "pytorch"
-  
+  id: 'sentiment-analysis'
+  version: 'v2.1.0'
+  framework: 'pytorch'
+
   runtime:
-    python_version: "3.9"
+    python_version: '3.9'
     dependencies:
-      - "torch==1.12.0"
-      - "transformers==4.20.0"
-  
+      - 'torch==1.12.0'
+      - 'transformers==4.20.0'
+
   serving:
     port: 8080
-    health_check_path: "/health"
-    prediction_path: "/predict"
-    
+    health_check_path: '/health'
+    prediction_path: '/predict'
+
   scaling:
     min_replicas: 2
     max_replicas: 20
@@ -540,24 +562,28 @@ model:
 ## Security Considerations
 
 ### Access Control
+
 - **Role-Based Access Control (RBAC)**: Granular permissions for deployment operations
 - **API Authentication**: OAuth 2.0 with JWT tokens
 - **Service-to-Service**: mTLS for internal communications
 - **Audit Logging**: Complete audit trail for all deployment activities
 
 ### Container Security
+
 - **Image Scanning**: Vulnerability assessment for all container images
 - **Base Image Hardening**: Minimal, security-focused base images
 - **Runtime Security**: Container runtime protection and monitoring
 - **Network Policies**: Strict network segmentation and firewall rules
 
 ### Data Protection
+
 - **Encryption at Rest**: All model artifacts encrypted in storage
 - **Encryption in Transit**: TLS 1.3 for all network communications
 - **Secrets Management**: Secure handling of API keys and credentials
 - **Data Residency**: Compliance with geographic data requirements
 
 ### Compliance
+
 - **SOC 2 Type II**: Security controls and monitoring
 - **ISO 27001**: Information security management
 - **GDPR**: Data protection and privacy compliance
@@ -568,39 +594,48 @@ model:
 ### Common Issues
 
 #### Deployment Stuck in VALIDATING State
+
 **Symptoms**: Deployment remains in validation phase beyond expected duration
 **Possible Causes**:
+
 - Model artifacts not accessible
 - Validation tests failing
 - Network connectivity issues
 
 **Resolution Steps**:
+
 1. Check model registry connectivity
 2. Verify artifact download logs
 3. Review validation test results
 4. Check network policies and firewall rules
 
 #### High Memory Usage During Deployment
+
 **Symptoms**: Containers reaching memory limits during model loading
 **Possible Causes**:
+
 - Model size larger than allocated memory
 - Memory leaks in model initialization
 - Concurrent model loading
 
 **Resolution Steps**:
+
 1. Increase memory limits in deployment configuration
 2. Review model loading code for memory efficiency
 3. Implement staged model loading
 4. Add memory monitoring and alerting
 
 #### Rollback Not Triggered Automatically
+
 **Symptoms**: Performance degradation not triggering automatic rollback
 **Possible Causes**:
+
 - Thresholds not properly configured
 - Monitoring metrics not available
 - Rollback disabled or misconfigured
 
 **Resolution Steps**:
+
 1. Verify rollback configuration settings
 2. Check monitoring system connectivity
 3. Review metric collection and alerting rules
@@ -609,6 +644,7 @@ model:
 ### Debugging Tools
 
 #### Deployment Logs
+
 ```bash
 # View deployment logs
 kubectl logs -f deployment/model-sentiment-analysis -n ml-production
@@ -618,6 +654,7 @@ kubectl logs -f deployment/model-sentiment-analysis -c model-server -n ml-produc
 ```
 
 #### Metrics Query
+
 ```bash
 # Query deployment metrics
 curl -H "Authorization: Bearer $TOKEN" \
@@ -625,6 +662,7 @@ curl -H "Authorization: Bearer $TOKEN" \
 ```
 
 #### Health Check
+
 ```bash
 # Direct health check
 curl -H "Authorization: Bearer $TOKEN" \
@@ -684,6 +722,6 @@ For additional support or questions, please consult the [API documentation](./ap
 
 ---
 
-*Last Updated: July 21, 2025*  
-*Version: 1.0*  
-*Author: ML Platform Engineering Team*
+_Last Updated: July 21, 2025_  
+_Version: 1.0_  
+_Author: ML Platform Engineering Team_

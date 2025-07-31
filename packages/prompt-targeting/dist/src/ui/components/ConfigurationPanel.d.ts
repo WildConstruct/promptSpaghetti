@@ -8,10 +8,10 @@ import { ConfigurationManager, GlobalConfig, ConfigValidationResult } from '../.
  * Configuration panel props
  */
 export interface ConfigurationPanelProps {
-    configManager: ConfigurationManager;
-    className?: string;
-    onConfigChanged?: (config: GlobalConfig) => void;
-    onValidationResult?: (result: ConfigValidationResult) => void;
+  configManager: ConfigurationManager;
+  className?: string;
+  onConfigChanged?: (config: GlobalConfig) => void;
+  onValidationResult?: (result: ConfigValidationResult) => void;
 }
 /**
  * Main configuration panel component

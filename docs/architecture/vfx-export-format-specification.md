@@ -23,18 +23,19 @@ The VFX export format follows a hierarchical JSON structure with six main sectio
 
 ```typescript
 interface VFXExportFormat {
-  metadata: VFXExportMetadata;      // Core export information
-  prompt: VFXPromptData;            // Generated prompt and variants
-  graph: VFXGraphStructure;         // Node network and execution flow
-  execution: VFXExecutionData;      // Performance and reproducibility data
-  extensions: VFXExtensions;        // Future module integration hooks
-  rendering: VFXRenderingData;      // VFX-specific render parameters
+  metadata: VFXExportMetadata; // Core export information
+  prompt: VFXPromptData; // Generated prompt and variants
+  graph: VFXGraphStructure; // Node network and execution flow
+  execution: VFXExecutionData; // Performance and reproducibility data
+  extensions: VFXExtensions; // Future module integration hooks
+  rendering: VFXRenderingData; // VFX-specific render parameters
 }
 ```
 
 ## Core Metadata
 
 ### Export Identification
+
 ```json
 {
   "metadata": {
@@ -59,6 +60,7 @@ interface VFXExportFormat {
 ```
 
 ### Project Context
+
 ```json
 {
   "metadata": {
@@ -73,6 +75,7 @@ interface VFXExportFormat {
 ```
 
 ### Compatibility Matrix
+
 ```json
 {
   "metadata": {
@@ -95,6 +98,7 @@ interface VFXExportFormat {
 ## Prompt and Generation Data
 
 ### Final Prompt Structure
+
 ```json
 {
   "prompt": {
@@ -118,6 +122,7 @@ interface VFXExportFormat {
 ```
 
 ### Variable Substitution History
+
 ```json
 {
   "prompt": {
@@ -140,6 +145,7 @@ interface VFXExportFormat {
 ```
 
 ### Multi-Variant Generation
+
 ```json
 {
   "prompt": {
@@ -163,6 +169,7 @@ interface VFXExportFormat {
 ## Graph Structure
 
 ### Node Network Definition
+
 ```json
 {
   "graph": {
@@ -206,6 +213,7 @@ interface VFXExportFormat {
 ```
 
 ### Execution Flow Analysis
+
 ```json
 {
   "graph": {
@@ -224,6 +232,7 @@ interface VFXExportFormat {
 ## Execution Data
 
 ### Randomization State (Reproducibility Core)
+
 ```json
 {
   "execution": {
@@ -251,6 +260,7 @@ interface VFXExportFormat {
 ```
 
 ### Performance Metrics
+
 ```json
 {
   "execution": {
@@ -270,6 +280,7 @@ interface VFXExportFormat {
 ```
 
 ### Generation History
+
 ```json
 {
   "execution": {
@@ -302,6 +313,7 @@ interface VFXExportFormat {
 ## Extensions System
 
 ### ControlNet Integration
+
 ```json
 {
   "extensions": {
@@ -324,6 +336,7 @@ interface VFXExportFormat {
 ```
 
 ### Animation Sequences
+
 ```json
 {
   "extensions": {
@@ -351,6 +364,7 @@ interface VFXExportFormat {
 ```
 
 ### Wild Construct Ecosystem Integration
+
 ```json
 {
   "extensions": {
@@ -380,6 +394,7 @@ interface VFXExportFormat {
 ## Rendering Data
 
 ### Camera Parameters
+
 ```json
 {
   "rendering": {
@@ -401,6 +416,7 @@ interface VFXExportFormat {
 ```
 
 ### Lighting Configuration
+
 ```json
 {
   "rendering": {
@@ -416,6 +432,7 @@ interface VFXExportFormat {
 ```
 
 ### Style and Post-Processing
+
 ```json
 {
   "rendering": {
@@ -442,6 +459,7 @@ interface VFXExportFormat {
 ## Reproducibility System
 
 ### Hash-Based Validation
+
 The reproducibility system uses SHA-256 hashes to ensure data integrity:
 
 ```typescript
@@ -456,7 +474,7 @@ function calculateReproducibilityHash(exportData: VFXExportFormat): string {
   const reproData = {
     masterSeed: exportData.execution.randomization.masterSeed,
     nodeSeed: exportData.execution.randomization.nodeSeed,
-    nodeConfigs: exportData.graph.nodes.map(n => ({ id: n.id, config: n.configuration }))
+    nodeConfigs: exportData.graph.nodes.map(n => ({ id: n.id, config: n.configuration })),
   };
   const reproString = JSON.stringify(reproData, Object.keys(reproData).sort());
   return crypto.createHash('sha256').update(reproString).digest('hex').substring(0, 16);
@@ -464,6 +482,7 @@ function calculateReproducibilityHash(exportData: VFXExportFormat): string {
 ```
 
 ### RNG State Serialization
+
 ```typescript
 // Serialize RNG state for exact reproduction
 function serializeRngState(rng: seedrandom.prng): string {
@@ -478,6 +497,7 @@ function serializeRngState(rng: seedrandom.prng): string {
 ## Validation Schema
 
 ### Required Fields Validation
+
 ```typescript
 interface ValidationRules {
   required: {
@@ -501,21 +521,22 @@ interface ValidationRules {
 ```
 
 ### Compatibility Checking
+
 ```typescript
 function validateCompatibility(exportData: VFXExportFormat): ValidationResult {
   const compatibility = exportData.metadata.compatibility;
   const issues: string[] = [];
-  
+
   // Check VFX software compatibility
   if (compatibility.vfxSoftware.blender.minVersion < '3.6.0') {
     issues.push('Blender version too old for advanced features');
   }
-  
+
   // Check render engine support
   if (!compatibility.renderEngines.cycles && !compatibility.renderEngines.octane) {
     issues.push('No supported render engines found');
   }
-  
+
   return { isValid: issues.length === 0, issues };
 }
 ```
@@ -523,6 +544,7 @@ function validateCompatibility(exportData: VFXExportFormat): ValidationResult {
 ## Version Compatibility
 
 ### Semantic Versioning
+
 The VFX export format follows semantic versioning (MAJOR.MINOR.PATCH):
 
 - **MAJOR**: Incompatible API changes
@@ -530,6 +552,7 @@ The VFX export format follows semantic versioning (MAJOR.MINOR.PATCH):
 - **PATCH**: Backward-compatible bug fixes
 
 ### Migration Support
+
 ```json
 {
   "metadata": {
@@ -537,43 +560,37 @@ The VFX export format follows semantic versioning (MAJOR.MINOR.PATCH):
       "exportedFrom": "1.2.0",
       "canUpgradeTo": ["1.3.0", "2.0.0"],
       "deprecatedFeatures": ["legacy-node-types"],
-      "newFeatures": [
-        "enhanced-reproducibility",
-        "multi-platform-compatibility",
-        "performance-optimization"
-      ]
+      "newFeatures": ["enhanced-reproducibility", "multi-platform-compatibility", "performance-optimization"]
     }
   }
 }
 ```
 
 ### Backward Compatibility Matrix
-| Export Version | Import Version | Status | Notes |
-|---------------|----------------|--------|-------|
-| 1.2.0 | 1.2.0 | ✅ Full | Perfect compatibility |
-| 1.2.0 | 1.1.0 | ⚠️ Partial | Some features unavailable |
-| 1.2.0 | 1.0.0 | ❌ None | Major breaking changes |
-| 1.1.0 | 1.2.0 | ✅ Full | Forward compatible |
+
+| Export Version | Import Version | Status     | Notes                     |
+| -------------- | -------------- | ---------- | ------------------------- |
+| 1.2.0          | 1.2.0          | ✅ Full    | Perfect compatibility     |
+| 1.2.0          | 1.1.0          | ⚠️ Partial | Some features unavailable |
+| 1.2.0          | 1.0.0          | ❌ None    | Major breaking changes    |
+| 1.1.0          | 1.2.0          | ✅ Full    | Forward compatible        |
 
 ## Integration Examples
 
 ### Basic Export Usage
+
 ```typescript
 import { WildConstructVFXExporter } from '@wild-construct/core';
 
 const exporter = WildConstructVFXExporter.getInstance();
 
 // Export with full reproducibility
-const exportData = await exporter.exportGraph(
-  graph,
-  executionResults,
-  {
-    quality: 'production',
-    includeDebugInfo: true,
-    includeHistoricalData: true,
-    formatVersion: '1.2.0'
-  }
-);
+const exportData = await exporter.exportGraph(graph, executionResults, {
+  quality: 'production',
+  includeDebugInfo: true,
+  includeHistoricalData: true,
+  formatVersion: '1.2.0',
+});
 
 // Validate export
 const validation = exporter.validateExport(exportData);
@@ -587,6 +604,7 @@ fs.writeFileSync('scene-42-dragon-encounter.vfx.json', exportJson);
 ```
 
 ### Reproduction Workflow
+
 ```typescript
 // Load export data
 const exportData = JSON.parse(fs.readFileSync('scene-42-dragon-encounter.vfx.json', 'utf8'));
@@ -605,6 +623,7 @@ if (reproductionCheck.canReproduce) {
 ## Error Handling
 
 ### Common Validation Errors
+
 ```typescript
 enum ValidationErrorCodes {
   MISSING_EXPORT_ID = 'MISSING_EXPORT_ID',
@@ -612,11 +631,12 @@ enum ValidationErrorCodes {
   MISSING_FINAL_PROMPT = 'MISSING_FINAL_PROMPT',
   EMPTY_GRAPH = 'EMPTY_GRAPH',
   MISSING_MASTER_SEED = 'MISSING_MASTER_SEED',
-  CONFIGURATION_HASH_MISMATCH = 'CONFIGURATION_HASH_MISMATCH'
+  CONFIGURATION_HASH_MISMATCH = 'CONFIGURATION_HASH_MISMATCH',
 }
 ```
 
 ### Error Response Format
+
 ```json
 {
   "isValid": false,
@@ -643,18 +663,21 @@ enum ValidationErrorCodes {
 ## Best Practices
 
 ### Performance Optimization
+
 1. **Selective Export**: Use quality levels to control export size
 2. **Compression**: Compress large exports with gzip
 3. **Streaming**: Use streaming JSON parsers for large files
 4. **Caching**: Cache validation results for repeated operations
 
 ### Security Considerations
+
 1. **Data Sanitization**: Validate all input data before processing
 2. **Size Limits**: Enforce reasonable file size limits
 3. **Schema Validation**: Always validate against schema before processing
 4. **Access Control**: Implement proper access controls for export operations
 
 ### Integration Guidelines
+
 1. **Version Checking**: Always check format version before processing
 2. **Graceful Degradation**: Handle missing optional fields gracefully
 3. **Error Recovery**: Implement robust error handling and recovery

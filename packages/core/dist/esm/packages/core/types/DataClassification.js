@@ -6,9 +6,9 @@
  */
 export var DataClassificationLevel;
 (function (DataClassificationLevel) {
-    DataClassificationLevel["PUBLIC"] = "PUBLIC";
-    DataClassificationLevel["INTERNAL"] = "INTERNAL";
-    DataClassificationLevel["CONFIDENTIAL"] = "CONFIDENTIAL";
-    DataClassificationLevel["RESTRICTED"] = "RESTRICTED";
-    DataClassificationLevel["TOP_SECRET"] = "TOP_SECRET";
+  DataClassificationLevel['PUBLIC'] = 'PUBLIC';
+  DataClassificationLevel['INTERNAL'] = 'INTERNAL';
+  DataClassificationLevel['CONFIDENTIAL'] = 'CONFIDENTIAL';
+  DataClassificationLevel['RESTRICTED'] = 'RESTRICTED';
+  DataClassificationLevel['TOP_SECRET'] = 'TOP_SECRET';
 })(DataClassificationLevel || (DataClassificationLevel = {}));

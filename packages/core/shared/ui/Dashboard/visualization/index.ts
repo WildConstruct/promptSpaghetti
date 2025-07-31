@@ -4,8 +4,4 @@
  */
 
 export { DataTable } from './DataTable';
-export type { 
-  DataTableProps, 
-  TableColumn, 
-  TableAction 
-} from './DataTable';
+export type { DataTableProps, TableColumn, TableAction } from './DataTable';

@@ -34,8 +34,8 @@ class MockExperimentStorage {
   }
 
   async getActiveExperiments(organizationId) {
-    return Array.from(this.experiments.values()).filter(exp => 
-      exp.status === 'running' && (!organizationId || exp.organizationId === organizationId)
+    return Array.from(this.experiments.values()).filter(
+      exp => exp.status === 'running' && (!organizationId || exp.organizationId === organizationId)
     );
   }
 }
@@ -49,7 +49,7 @@ class MockMetricsCollector {
     this.events.push({
       type: 'assignment',
       timestamp: new Date(),
-      data: assignment
+      data: assignment,
     });
   }
 
@@ -59,7 +59,7 @@ class MockMetricsCollector {
       experimentId,
       variantId,
       timestamp: new Date(),
-      data
+      data,
     });
   }
 
@@ -70,7 +70,7 @@ class MockMetricsCollector {
       experimentId,
       variantId,
       reason,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 
@@ -80,7 +80,7 @@ class MockMetricsCollector {
       userId,
       experimentId,
       reason,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 }
@@ -89,7 +89,7 @@ class MockMetricsCollector {
 function createExperimentEngine() {
   const storage = new MockExperimentStorage();
   const metrics = new MockMetricsCollector();
-  
+
   return {
     storage,
     metrics,
@@ -98,12 +98,12 @@ function createExperimentEngine() {
         ...experimentData,
         id: `exp_${Date.now()}`,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       };
       await storage.saveExperiment(experiment);
       return experiment;
     },
-    
+
     async assignUser(request) {
       // Simplified assignment logic
       const experiment = await storage.getExperiment(request.experimentId);
@@ -119,17 +119,17 @@ function createExperimentEngine() {
           variantId: existing.variantId,
           variant,
           assigned: true,
-          reason: 'existing_assignment'
+          reason: 'existing_assignment',
         };
       }
 
       // Perform deterministic assignment based on user ID hash
       const hash = parseInt(request.userId.slice(-8), 16) || 1;
       const bucket = hash % 1000;
-      
+
       let cumulative = 0;
       let selectedVariant = experiment.variants[0];
-      
+
       for (const variant of experiment.variants) {
         const allocation = experiment.trafficAllocation[variant.id] || 0;
         cumulative += allocation * 10; // Scale to 0-1000
@@ -146,7 +146,7 @@ function createExperimentEngine() {
         assignedAt: new Date(),
         sessionId: request.sessionId,
         sticky: true,
-        salt: 'demo_salt'
+        salt: 'demo_salt',
       };
 
       await storage.saveUserAssignment(assignment);
@@ -156,9 +156,9 @@ function createExperimentEngine() {
         variantId: selectedVariant.id,
         variant: selectedVariant,
         assigned: true,
-        reason: 'new_assignment'
+        reason: 'new_assignment',
       };
-    }
+    },
   };
 }
 
@@ -171,10 +171,10 @@ function createStatisticalEngine() {
       // Simplified statistical analysis
       let winningVariant = null;
       let bestImprovement = 0;
-      
+
       for (const variant of variants) {
         if (variant.variantId === controlVariantId) continue;
-        
+
         const improvement = Math.random() * 0.4 - 0.2; // -20% to +20%
         if (improvement > bestImprovement && improvement > 0.05) {
           bestImprovement = improvement;
@@ -192,58 +192,55 @@ function createStatisticalEngine() {
             pValue: winningVariant ? Math.random() * 0.04 : Math.random() * 0.3 + 0.05,
             statisticalSignificance: !!winningVariant,
             practicalSignificance: !!winningVariant,
-            confidenceLevel: 0.95
+            confidenceLevel: 0.95,
           },
-          guardrailMetrics: metrics.filter(m => m.isGuardrail).map(m => ({
-            metricId: m.id,
-            passed: Math.random() > 0.1,
-            threshold: 0.05,
-            actualValue: Math.random() * 0.1
-          }))
+          guardrailMetrics: metrics
+            .filter(m => m.isGuardrail)
+            .map(m => ({
+              metricId: m.id,
+              passed: Math.random() > 0.1,
+              threshold: 0.05,
+              actualValue: Math.random() * 0.1,
+            })),
         },
         segments: [],
-        insights: winningVariant ? [
-          {
-            type: 'winner_detected',
-            title: 'Statistical Winner Detected',
-            description: `Variant ${winningVariant} shows significant improvement`,
-            severity: 'high',
-            actionable: true,
-            recommendations: [
-              'Consider implementing the winning variant',
-              'Monitor performance after rollout'
+        insights: winningVariant
+          ? [
+              {
+                type: 'winner_detected',
+                title: 'Statistical Winner Detected',
+                description: `Variant ${winningVariant} shows significant improvement`,
+                severity: 'high',
+                actionable: true,
+                recommendations: ['Consider implementing the winning variant', 'Monitor performance after rollout'],
+              },
             ]
-          }
-        ] : [
-          {
-            type: 'cost_anomaly',
-            title: 'Cost Increase Observed',
-            description: 'Some variants show higher than expected costs',
-            severity: 'medium',
-            actionable: true,
-            recommendations: [
-              'Review cost-benefit ratio',
-              'Consider optimizing variant configuration'
-            ]
-          }
-        ]
+          : [
+              {
+                type: 'cost_anomaly',
+                title: 'Cost Increase Observed',
+                description: 'Some variants show higher than expected costs',
+                severity: 'medium',
+                actionable: true,
+                recommendations: ['Review cost-benefit ratio', 'Consider optimizing variant configuration'],
+              },
+            ],
       };
     },
 
     calculateSampleSize(baselineRate, minimumDetectableEffect, power = 0.8) {
       // Simplified sample size calculation
       const sampleSize = Math.ceil(
-        2 * Math.pow(1.96 + 0.84, 2) * baselineRate * (1 - baselineRate) / 
-        Math.pow(minimumDetectableEffect, 2)
+        (2 * Math.pow(1.96 + 0.84, 2) * baselineRate * (1 - baselineRate)) / Math.pow(minimumDetectableEffect, 2)
       );
-      
+
       return {
         requiredSampleSize: sampleSize,
         estimatedDuration: Math.ceil(sampleSize / 100),
         powerAchieved: power,
-        minimumDetectableEffect
+        minimumDetectableEffect,
       };
-    }
+    },
   };
 }
 
@@ -276,27 +273,29 @@ async function demonstrateEpic14() {
         name: 'Original Prompt',
         description: 'Current production prompt',
         prompt: 'Please help the user with their request.',
-        claudeModel: 'claude-3-sonnet-20240229'
+        claudeModel: 'claude-3-sonnet-20240229',
       },
       {
         id: 'formatted',
         name: 'Formatted Prompt',
         description: 'Prompt with specific formatting instructions',
-        prompt: 'Please help the user with their request. Use clear formatting with bullet points and numbered lists where appropriate.',
-        claudeModel: 'claude-3-sonnet-20240229'
+        prompt:
+          'Please help the user with their request. Use clear formatting with bullet points and numbered lists where appropriate.',
+        claudeModel: 'claude-3-sonnet-20240229',
       },
       {
         id: 'detailed',
         name: 'Detailed Prompt',
         description: 'Prompt with detailed instructions',
-        prompt: 'Please help the user with their request. Provide comprehensive, well-structured answers with examples and clear explanations.',
-        claudeModel: 'claude-3-sonnet-20240229'
-      }
+        prompt:
+          'Please help the user with their request. Provide comprehensive, well-structured answers with examples and clear explanations.',
+        claudeModel: 'claude-3-sonnet-20240229',
+      },
     ],
     trafficAllocation: {
-      'control': 50,
-      'formatted': 25,
-      'detailed': 25
+      control: 50,
+      formatted: 25,
+      detailed: 25,
     },
     metrics: [
       {
@@ -306,7 +305,7 @@ async function demonstrateEpic14() {
         isPrimary: true,
         isGuardrail: false,
         expectedDirection: 'increase',
-        minimumDetectableEffect: 0.15
+        minimumDetectableEffect: 0.15,
       },
       {
         id: 'response_time',
@@ -314,7 +313,7 @@ async function demonstrateEpic14() {
         type: 'latency',
         isPrimary: false,
         isGuardrail: true,
-        expectedDirection: 'decrease'
+        expectedDirection: 'decrease',
       },
       {
         id: 'cost_per_request',
@@ -322,8 +321,8 @@ async function demonstrateEpic14() {
         type: 'cost',
         isPrimary: false,
         isGuardrail: true,
-        expectedDirection: 'decrease'
-      }
+        expectedDirection: 'decrease',
+      },
     ],
     status: 'draft',
     schedule: {
@@ -331,11 +330,11 @@ async function demonstrateEpic14() {
       autoStop: {
         minSampleSize: 1000,
         maxPValue: 0.05,
-        confidenceThreshold: 0.95
-      }
+        confidenceThreshold: 0.95,
+      },
     },
     tags: ['prompt-optimization', 'claude', 'quality'],
-    createdBy: 'demo_user'
+    createdBy: 'demo_user',
   };
 
   // Calculate sample size
@@ -351,7 +350,9 @@ async function demonstrateEpic14() {
   console.log(`   • Name: ${experiment.name}`);
   console.log(`   • Variants: ${experiment.variants.length}`);
   console.log(`   • Traffic Split: ${Object.values(experiment.trafficAllocation).join('% / ')}%`);
-  console.log(`   • Metrics: ${experiment.metrics.length} (${experiment.metrics.filter(m => m.isPrimary).length} primary)\n`);
+  console.log(
+    `   • Metrics: ${experiment.metrics.length} (${experiment.metrics.filter(m => m.isPrimary).length} primary)\n`
+  );
 
   // Story 14.2 - Traffic Allocation & Randomization
   console.log('🎯 Story 14.2 - Traffic Allocation & Randomization');
@@ -373,7 +374,7 @@ async function demonstrateEpic14() {
         userId,
         experimentId: experiment.id,
         sessionId: `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-        debugMode: false
+        debugMode: false,
       });
       assignments.push(assignment);
     } catch (error) {
@@ -400,7 +401,7 @@ async function demonstrateEpic14() {
     userId: 'debug_user',
     experimentId: experiment.id,
     overrideVariant: 'detailed',
-    debugMode: true
+    debugMode: true,
   });
   console.log(`✅ Debug override successful: ${overrideAssignment.variantId}`);
   console.log(`   • Reason: ${overrideAssignment.reason}\n`);
@@ -413,9 +414,8 @@ async function demonstrateEpic14() {
   const variantResults = experiment.variants.map(variant => {
     const sampleSize = distribution[variant.id] || 0;
     const baseConversionRate = 0.1;
-    const conversionRate = variant.id === 'control' 
-      ? baseConversionRate
-      : baseConversionRate + (Math.random() * 0.06 - 0.01); // -1% to +5% variance
+    const conversionRate =
+      variant.id === 'control' ? baseConversionRate : baseConversionRate + (Math.random() * 0.06 - 0.01); // -1% to +5% variance
 
     return {
       variantId: variant.id,
@@ -430,31 +430,30 @@ async function demonstrateEpic14() {
           value: conversionRate,
           confidenceInterval: [conversionRate - 0.02, conversionRate + 0.02],
           standardError: 0.01,
-          trend: conversionRate > baseConversionRate ? 'up' : 'down'
-        }
-      ]
+          trend: conversionRate > baseConversionRate ? 'up' : 'down',
+        },
+      ],
     };
   });
 
   // Perform statistical analysis
-  const results = statisticalEngine.analyzeExperimentResults(
-    variantResults,
-    experiment.metrics,
-    'control'
-  );
+  const results = statisticalEngine.analyzeExperimentResults(variantResults, experiment.metrics, 'control');
 
   console.log('📊 Statistical Analysis Results:');
   console.log(`   • P-Value: ${results.statistical.primaryMetric.pValue.toFixed(4)}`);
-  console.log(`   • Statistical Significance: ${results.statistical.primaryMetric.statisticalSignificance ? 'Yes' : 'No'}`);
+  console.log(
+    `   • Statistical Significance: ${results.statistical.primaryMetric.statisticalSignificance ? 'Yes' : 'No'}`
+  );
   console.log(`   • Winning Variant: ${results.statistical.primaryMetric.winningVariant || 'None detected'}`);
   console.log(`   • Confidence Level: ${(results.statistical.primaryMetric.confidenceLevel * 100).toFixed(1)}%`);
 
   console.log('\n📈 Variant Performance:');
   variantResults.forEach(variant => {
-    const improvement = variant.variantId !== 'control' 
-      ? ((variant.conversionRate - variantResults[0].conversionRate) / variantResults[0].conversionRate * 100)
-      : 0;
-    
+    const improvement =
+      variant.variantId !== 'control'
+        ? ((variant.conversionRate - variantResults[0].conversionRate) / variantResults[0].conversionRate) * 100
+        : 0;
+
     console.log(`   • ${variant.variantId}:`);
     console.log(`     - Sample Size: ${variant.sampleSize.toLocaleString()}`);
     console.log(`     - Conversion Rate: ${(variant.conversionRate * 100).toFixed(2)}%`);
@@ -488,13 +487,13 @@ async function demonstrateEpic14() {
       type: 'prompt',
       variants: experiment.variants.slice(0, 2), // Control + best variant
       metrics: experiment.metrics,
-      defaultAllocation: { 'control': 50, 'variant': 50 },
+      defaultAllocation: { control: 50, variant: 50 },
       tags: ['claude', 'prompt', 'optimization'],
       successRate: 75,
       averageUplift: 12.5,
       timesUsed: 1,
       createdBy: 'demo_user',
-      createdAt: new Date()
+      createdAt: new Date(),
     };
 
     console.log('📋 Experiment Template Created:');
@@ -513,24 +512,24 @@ async function demonstrateEpic14() {
     insights: [
       'Specific formatting instructions increase response quality',
       'Users prefer structured outputs with bullet points',
-      'Detailed explanations improve comprehension rates'
+      'Detailed explanations improve comprehension rates',
     ],
     learnings: [
       'Claude responds well to explicit formatting guidance',
       'Cost increase is minimal compared to quality gains',
-      'Response time impact is negligible'
+      'Response time impact is negligible',
     ],
     recommendations: [
       'Implement formatting instructions in production prompts',
       'Monitor cost impact during rollout',
-      'Consider A/B testing other prompt improvements'
+      'Consider A/B testing other prompt improvements',
     ],
     category: 'prompt-optimization',
     tags: ['claude', 'formatting', 'quality'],
     impact: 'high',
     confidence: 0.92,
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
   };
 
   console.log('\n📚 Knowledge Base Entry Created:');

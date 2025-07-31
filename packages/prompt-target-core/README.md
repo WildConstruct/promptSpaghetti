@@ -36,12 +36,12 @@ This package provides the foundational components for translating graph-based pr
 ### Basic Translation
 
 ```typescript
-import { 
-  MappingEngine, 
+import {
+  MappingEngine,
   OpenAIGPTAdaptor,
   ConsoleLogger,
   MemoryCache,
-  MemoryMetrics 
+  MemoryMetrics,
 } from '@promptscape/prompt-target-core';
 
 // Create dependencies
@@ -57,7 +57,7 @@ engine.registerAdaptor('openai-gpt', gptAdaptor);
 // Translate a graph
 const request = {
   graph: myPromptGraph,
-  targetPlatform: 'openai-gpt' as Platform
+  targetPlatform: 'openai-gpt' as Platform,
 };
 
 const response = await engine.translate(request);
@@ -75,10 +75,16 @@ class MyCustomAdaptor extends BaseAdaptor {
   async capabilities(): Promise<Capabilities> {
     return {
       supportedNodeTypes: ['text', 'concat'],
-      parameters: [/* parameter specs */],
-      limitations: [/* limitations */],
-      features: [/* features */],
-      supportedFormats: ['custom_format']
+      parameters: [
+        /* parameter specs */
+      ],
+      limitations: [
+        /* limitations */
+      ],
+      features: [
+        /* features */
+      ],
+      supportedFormats: ['custom_format'],
     };
   }
 
@@ -91,10 +97,12 @@ class MyCustomAdaptor extends BaseAdaptor {
     // Custom transformation logic
     return {
       platform: this.platform,
-      content: "transformed prompt",
+      content: 'transformed prompt',
       parameters: {},
       format: 'custom_format',
-      metadata: {/* metadata */}
+      metadata: {
+        /* metadata */
+      },
     };
   }
 }
@@ -111,7 +119,7 @@ const report = await validator.validateGraph(graph, [gptAdaptor]);
 console.log('Validation report:', {
   valid: report.overallValid,
   issues: report.totalIssues,
-  autoFixSuggestions: report.autoFixSuggestions.length
+  autoFixSuggestions: report.autoFixSuggestions.length,
 });
 ```
 
@@ -171,6 +179,7 @@ npm run lint
 The central orchestrator for prompt translations.
 
 **Methods:**
+
 - `registerAdaptor(platform, adaptor)` - Register a platform adaptor
 - `translate(request)` - Translate a prompt graph
 - `getStats()` - Get engine statistics
@@ -180,6 +189,7 @@ The central orchestrator for prompt translations.
 Comprehensive validation for prompt graphs.
 
 **Methods:**
+
 - `validateGraph(graph, adaptors, options)` - Validate a graph
 - `addCustomRule(rule)` - Add custom validation rule
 
@@ -188,6 +198,7 @@ Comprehensive validation for prompt graphs.
 Abstract base class for platform adaptors.
 
 **Abstract Methods:**
+
 - `capabilities()` - Return platform capabilities
 - `doValidate(graph)` - Validate graph for platform
 - `doTransform(graph, options)` - Transform graph to platform format

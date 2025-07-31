@@ -4,7 +4,12 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { ConfigurationManager, GlobalConfig, ConfigValidationResult, ConfigurationPreset } from '../../config/ConfigurationManager';
+import {
+  ConfigurationManager,
+  GlobalConfig,
+  ConfigValidationResult,
+  ConfigurationPreset,
+} from '../../config/ConfigurationManager';
 
 /**
  * Configuration panel props
@@ -51,7 +56,7 @@ export const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
   configManager,
   className = '',
   onConfigChanged,
-  onValidationResult
+  onValidationResult,
 }) => {
   const [config, setConfig] = useState<GlobalConfig>(configManager.getConfig());
   const [validationResult, setValidationResult] = useState<ConfigValidationResult | null>(null);
@@ -63,7 +68,7 @@ export const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
   // Load initial data
   useEffect(() => {
     setPresets(configManager.listPresets());
-    
+
     // Subscribe to config changes
     const handleConfigChanged = () => {
       const newConfig = configManager.getConfig();
@@ -89,31 +94,40 @@ export const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
   }, [configManager, onConfigChanged, onValidationResult]);
 
   // Update configuration value
-  const updateConfig = useCallback((path: string, value: any) => {
-    const result = configManager.setConfigValue(path, value);
-    setIsDirty(true);
-    
-    if (!result.valid) {
-      console.error('Configuration validation failed:', result.errors);
-    }
-  }, [configManager]);
+  const updateConfig = useCallback(
+    (path: string, value: any) => {
+      const result = configManager.setConfigValue(path, value);
+      setIsDirty(true);
+
+      if (!result.valid) {
+        console.error('Configuration validation failed:', result.errors);
+      }
+    },
+    [configManager]
+  );
 
   // Apply preset
-  const applyPreset = useCallback((presetName: string) => {
-    if (!presetName) return;
-    
-    const result = configManager.applyPreset(presetName);
-    if (result.valid) {
-      setSelectedPreset(presetName);
-      setIsDirty(false);
-    }
-  }, [configManager]);
+  const applyPreset = useCallback(
+    (presetName: string) => {
+      if (!presetName) return;
+
+      const result = configManager.applyPreset(presetName);
+      if (result.valid) {
+        setSelectedPreset(presetName);
+        setIsDirty(false);
+      }
+    },
+    [configManager]
+  );
 
   // Save current config as preset
-  const saveAsPreset = useCallback((name: string, description: string) => {
-    configManager.createPreset(name, description, config, ['custom']);
-    setPresets(configManager.listPresets());
-  }, [configManager, config]);
+  const saveAsPreset = useCallback(
+    (name: string, description: string) => {
+      configManager.createPreset(name, description, config, ['custom']);
+      setPresets(configManager.listPresets());
+    },
+    [configManager, config]
+  );
 
   // Reset to defaults
   const resetToDefaults = useCallback(() => {
@@ -122,16 +136,19 @@ export const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
   }, [configManager]);
 
   // Export configuration
-  const exportConfig = useCallback((format: 'json' | 'yaml' = 'json') => {
-    const exported = configManager.exportConfig(format);
-    const blob = new Blob([exported], { type: format === 'json' ? 'application/json' : 'text/yaml' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `prompt-targeting-config.${format}`;
-    a.click();
-    URL.revokeObjectURL(url);
-  }, [configManager]);
+  const exportConfig = useCallback(
+    (format: 'json' | 'yaml' = 'json') => {
+      const exported = configManager.exportConfig(format);
+      const blob = new Blob([exported], { type: format === 'json' ? 'application/json' : 'text/yaml' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `prompt-targeting-config.${format}`;
+      a.click();
+      URL.revokeObjectURL(url);
+    },
+    [configManager]
+  );
 
   return (
     <div className={`configuration-panel ${className}`}>
@@ -152,9 +169,7 @@ export const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
       </div>
 
       {/* Validation status */}
-      {validationResult && (
-        <ValidationStatus result={validationResult} />
-      )}
+      {validationResult && <ValidationStatus result={validationResult} />}
 
       {/* Dirty state indicator */}
       {isDirty && (
@@ -166,46 +181,28 @@ export const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
 
       {/* Tab navigation */}
       <div className="config-tabs">
-        <button 
-          className={activeTab === 'general' ? 'active' : ''}
-          onClick={() => setActiveTab('general')}
-        >
+        <button className={activeTab === 'general' ? 'active' : ''} onClick={() => setActiveTab('general')}>
           General
         </button>
-        <button 
-          className={activeTab === 'platforms' ? 'active' : ''}
-          onClick={() => setActiveTab('platforms')}
-        >
+        <button className={activeTab === 'platforms' ? 'active' : ''} onClick={() => setActiveTab('platforms')}>
           Platforms
         </button>
-        <button 
-          className={activeTab === 'pipeline' ? 'active' : ''}
-          onClick={() => setActiveTab('pipeline')}
-        >
+        <button className={activeTab === 'pipeline' ? 'active' : ''} onClick={() => setActiveTab('pipeline')}>
           Pipeline
         </button>
-        <button 
-          className={activeTab === 'presets' ? 'active' : ''}
-          onClick={() => setActiveTab('presets')}
-        >
+        <button className={activeTab === 'presets' ? 'active' : ''} onClick={() => setActiveTab('presets')}>
           Presets
         </button>
       </div>
 
       {/* Tab content */}
       <div className="config-content">
-        {activeTab === 'general' && (
-          <GeneralConfigSection config={config} onUpdate={updateConfig} />
-        )}
-        
-        {activeTab === 'platforms' && (
-          <PlatformConfigSection config={config} onUpdate={updateConfig} />
-        )}
-        
-        {activeTab === 'pipeline' && (
-          <PipelineConfigSection config={config} onUpdate={updateConfig} />
-        )}
-        
+        {activeTab === 'general' && <GeneralConfigSection config={config} onUpdate={updateConfig} />}
+
+        {activeTab === 'platforms' && <PlatformConfigSection config={config} onUpdate={updateConfig} />}
+
+        {activeTab === 'pipeline' && <PipelineConfigSection config={config} onUpdate={updateConfig} />}
+
         {activeTab === 'presets' && (
           <PresetsSection
             presets={presets}
@@ -247,7 +244,7 @@ const ValidationStatus: React.FC<{ result: ConfigValidationResult }> = ({ result
           </ul>
         </div>
       )}
-      
+
       {result.warnings.length > 0 && (
         <div className="validation-warnings">
           <h4>⚠️ Warnings:</h4>
@@ -277,31 +274,31 @@ const GeneralConfigSection: React.FC<{
       <FormField
         label="Quality Preference"
         value={config.qualityPreference}
-        onChange={(value) => onUpdate('qualityPreference', value)}
+        onChange={value => onUpdate('qualityPreference', value)}
         type="range"
         min={0}
         max={1}
         step={0.1}
         help="Higher values prioritize quality over creativity"
       />
-      
+
       <FormField
         label="Style Preference"
         value={config.stylePreference}
-        onChange={(value) => onUpdate('stylePreference', value)}
+        onChange={value => onUpdate('stylePreference', value)}
         type="select"
         options={[
           { value: 'default', label: 'Default' },
           { value: 'artistic', label: 'Artistic' },
           { value: 'photorealistic', label: 'Photorealistic' },
-          { value: 'minimal', label: 'Minimal' }
+          { value: 'minimal', label: 'Minimal' },
         ]}
       />
-      
+
       <FormField
         label="Enable Optimizations"
         value={config.enableOptimizations}
-        onChange={(value) => onUpdate('enableOptimizations', value)}
+        onChange={value => onUpdate('enableOptimizations', value)}
         type="boolean"
         help="Apply platform-specific optimizations during translation"
       />
@@ -322,31 +319,31 @@ const PlatformConfigSection: React.FC<{
         <FormField
           label="Model"
           value={config.platformOverrides.openai?.model || 'gpt-4'}
-          onChange={(value) => onUpdate('platformOverrides.openai.model', value)}
+          onChange={value => onUpdate('platformOverrides.openai.model', value)}
           type="select"
           options={[
             { value: 'gpt-3.5-turbo', label: 'GPT-3.5 Turbo' },
             { value: 'gpt-3.5-turbo-16k', label: 'GPT-3.5 Turbo 16K' },
             { value: 'gpt-4', label: 'GPT-4' },
             { value: 'gpt-4-32k', label: 'GPT-4 32K' },
-            { value: 'gpt-4-turbo', label: 'GPT-4 Turbo' }
+            { value: 'gpt-4-turbo', label: 'GPT-4 Turbo' },
           ]}
         />
-        
+
         <FormField
           label="Temperature"
           value={config.platformOverrides.openai?.temperature || 0.7}
-          onChange={(value) => onUpdate('platformOverrides.openai.temperature', value)}
+          onChange={value => onUpdate('platformOverrides.openai.temperature', value)}
           type="range"
           min={0}
           max={2}
           step={0.1}
         />
-        
+
         <FormField
           label="Max Tokens"
           value={config.platformOverrides.openai?.maxTokens || 4096}
-          onChange={(value) => onUpdate('platformOverrides.openai.maxTokens', value)}
+          onChange={value => onUpdate('platformOverrides.openai.maxTokens', value)}
           type="number"
           min={1}
           max={128000}
@@ -357,30 +354,30 @@ const PlatformConfigSection: React.FC<{
         <FormField
           label="Version"
           value={config.platformOverrides.midjourney?.version || '6'}
-          onChange={(value) => onUpdate('platformOverrides.midjourney.version', value)}
+          onChange={value => onUpdate('platformOverrides.midjourney.version', value)}
           type="select"
           options={[
             { value: '5', label: 'Version 5' },
             { value: '5.1', label: 'Version 5.1' },
             { value: '5.2', label: 'Version 5.2' },
-            { value: '6', label: 'Version 6' }
+            { value: '6', label: 'Version 6' },
           ]}
         />
-        
+
         <FormField
           label="Default Quality"
           value={config.platformOverrides.midjourney?.defaultQuality || 1}
-          onChange={(value) => onUpdate('platformOverrides.midjourney.defaultQuality', value)}
+          onChange={value => onUpdate('platformOverrides.midjourney.defaultQuality', value)}
           type="range"
           min={0.25}
           max={2}
           step={0.25}
         />
-        
+
         <FormField
           label="Default Stylize"
           value={config.platformOverrides.midjourney?.defaultStylize || 100}
-          onChange={(value) => onUpdate('platformOverrides.midjourney.defaultStylize', value)}
+          onChange={value => onUpdate('platformOverrides.midjourney.defaultStylize', value)}
           type="range"
           min={0}
           max={1000}
@@ -404,15 +401,15 @@ const PipelineConfigSection: React.FC<{
         <FormField
           label="Skip Validation"
           value={config.pipeline.skipValidation}
-          onChange={(value) => onUpdate('pipeline.skipValidation', value)}
+          onChange={value => onUpdate('pipeline.skipValidation', value)}
           type="boolean"
           help="Skip validation stage for faster processing"
         />
-        
+
         <FormField
           label="Skip Optimization"
           value={config.pipeline.skipOptimization}
-          onChange={(value) => onUpdate('pipeline.skipOptimization', value)}
+          onChange={value => onUpdate('pipeline.skipOptimization', value)}
           type="boolean"
           help="Skip optimization stage for faster processing"
         />
@@ -422,16 +419,16 @@ const PipelineConfigSection: React.FC<{
         <FormField
           label="Max Attempts"
           value={config.pipeline.retries.maxAttempts}
-          onChange={(value) => onUpdate('pipeline.retries.maxAttempts', value)}
+          onChange={value => onUpdate('pipeline.retries.maxAttempts', value)}
           type="number"
           min={1}
           max={10}
         />
-        
+
         <FormField
           label="Backoff (ms)"
           value={config.pipeline.retries.backoffMs}
-          onChange={(value) => onUpdate('pipeline.retries.backoffMs', value)}
+          onChange={value => onUpdate('pipeline.retries.backoffMs', value)}
           type="number"
           min={10}
           max={5000}
@@ -442,21 +439,21 @@ const PipelineConfigSection: React.FC<{
         <FormField
           label="Enable Timing"
           value={config.monitoring.enableTiming}
-          onChange={(value) => onUpdate('monitoring.enableTiming', value)}
+          onChange={value => onUpdate('monitoring.enableTiming', value)}
           type="boolean"
         />
-        
+
         <FormField
           label="Enable Events"
           value={config.monitoring.enableEvents}
-          onChange={(value) => onUpdate('monitoring.enableEvents', value)}
+          onChange={value => onUpdate('monitoring.enableEvents', value)}
           type="boolean"
         />
-        
+
         <FormField
           label="Enable Logging"
           value={config.monitoring.enableLogging}
-          onChange={(value) => onUpdate('monitoring.enableLogging', value)}
+          onChange={value => onUpdate('monitoring.enableLogging', value)}
           type="boolean"
         />
       </ConfigSection>
@@ -492,8 +489,8 @@ const PresetsSection: React.FC<{
       <div className="presets-list">
         <h4>Available Presets:</h4>
         <div className="preset-grid">
-          {presets.map((preset) => (
-            <div 
+          {presets.map(preset => (
+            <div
               key={preset.name}
               className={`preset-card ${selectedPreset === preset.name ? 'selected' : ''} ${preset.isBuiltIn ? 'built-in' : 'custom'}`}
             >
@@ -501,21 +498,17 @@ const PresetsSection: React.FC<{
               <p>{preset.description}</p>
               <div className="preset-tags">
                 {preset.tags.map(tag => (
-                  <span key={tag} className="tag">{tag}</span>
+                  <span key={tag} className="tag">
+                    {tag}
+                  </span>
                 ))}
               </div>
               <div className="preset-actions">
-                <button 
-                  onClick={() => onApplyPreset(preset.name)}
-                  className="btn-primary"
-                >
+                <button onClick={() => onApplyPreset(preset.name)} className="btn-primary">
                   Apply
                 </button>
                 {!preset.isBuiltIn && (
-                  <button 
-                    onClick={() => configManager.deletePreset(preset.name)}
-                    className="btn-danger"
-                  >
+                  <button onClick={() => configManager.deletePreset(preset.name)} className="btn-danger">
                     Delete
                   </button>
                 )}
@@ -526,10 +519,7 @@ const PresetsSection: React.FC<{
       </div>
 
       <div className="create-preset-section">
-        <button 
-          onClick={() => setShowCreateForm(!showCreateForm)}
-          className="btn-secondary"
-        >
+        <button onClick={() => setShowCreateForm(!showCreateForm)} className="btn-secondary">
           {showCreateForm ? 'Cancel' : 'Save Current as Preset'}
         </button>
 
@@ -542,7 +532,7 @@ const PresetsSection: React.FC<{
               type="text"
               placeholder="Enter preset name"
             />
-            
+
             <FormField
               label="Description"
               value={newPresetDescription}
@@ -550,12 +540,8 @@ const PresetsSection: React.FC<{
               type="text"
               placeholder="Describe this preset"
             />
-            
-            <button 
-              onClick={handleSavePreset}
-              className="btn-primary"
-              disabled={!newPresetName.trim()}
-            >
+
+            <button onClick={handleSavePreset} className="btn-primary" disabled={!newPresetName.trim()}>
               Save Preset
             </button>
           </div>
@@ -568,31 +554,25 @@ const PresetsSection: React.FC<{
 /**
  * Reusable configuration section component
  */
-const ConfigSection: React.FC<ConfigSectionProps> = ({ 
-  title, 
-  children, 
-  collapsible = false, 
-  defaultExpanded = true 
+const ConfigSection: React.FC<ConfigSectionProps> = ({
+  title,
+  children,
+  collapsible = false,
+  defaultExpanded = true,
 }) => {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
 
   return (
     <div className="config-section">
-      <div 
+      <div
         className={`section-header ${collapsible ? 'clickable' : ''}`}
         onClick={collapsible ? () => setIsExpanded(!isExpanded) : undefined}
       >
         <h3>{title}</h3>
-        {collapsible && (
-          <span className="expand-icon">{isExpanded ? '▼' : '▶'}</span>
-        )}
+        {collapsible && <span className="expand-icon">{isExpanded ? '▼' : '▶'}</span>}
       </div>
-      
-      {isExpanded && (
-        <div className="section-content">
-          {children}
-        </div>
-      )}
+
+      {isExpanded && <div className="section-content">{children}</div>}
     </div>
   );
 };
@@ -612,70 +592,54 @@ const FormField: React.FC<FormFieldProps> = ({
   placeholder,
   error,
   warning,
-  help
+  help,
 }) => {
   const renderInput = () => {
     switch (type) {
-    case 'boolean':
-      return (
-        <input
-          type="checkbox"
-          checked={value}
-          onChange={(e) => onChange(e.target.checked)}
-        />
-      );
-      
-    case 'number':
-      return (
-        <input
-          type="number"
-          value={value}
-          onChange={(e) => onChange(Number(e.target.value))}
-          min={min}
-          max={max}
-          step={step}
-          placeholder={placeholder}
-        />
-      );
-      
-    case 'range':
-      return (
-        <div className="range-input">
+      case 'boolean':
+        return <input type="checkbox" checked={value} onChange={e => onChange(e.target.checked)} />;
+
+      case 'number':
+        return (
           <input
-            type="range"
+            type="number"
             value={value}
-            onChange={(e) => onChange(Number(e.target.value))}
+            onChange={e => onChange(Number(e.target.value))}
             min={min}
             max={max}
             step={step}
+            placeholder={placeholder}
           />
-          <span className="range-value">{value}</span>
-        </div>
-      );
-      
-    case 'select':
-      return (
-        <select
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-        >
-          {options?.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      );
-      
-    default:
-      return (
-        <input
-          type="text"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder}
-        />
-      );
+        );
+
+      case 'range':
+        return (
+          <div className="range-input">
+            <input
+              type="range"
+              value={value}
+              onChange={e => onChange(Number(e.target.value))}
+              min={min}
+              max={max}
+              step={step}
+            />
+            <span className="range-value">{value}</span>
+          </div>
+        );
+
+      case 'select':
+        return (
+          <select value={value} onChange={e => onChange(e.target.value)}>
+            {options?.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        );
+
+      default:
+        return <input type="text" value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder} />;
     }
   };
 

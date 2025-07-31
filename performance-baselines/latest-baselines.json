@@ -64,11 +64,7 @@
       "target": 5,
       "warning": 15,
       "critical": 30,
-      "tags": [
-        "core",
-        "execution",
-        "basic"
-      ]
+      "tags": ["core", "execution", "basic"]
     },
     {
       "id": "core-engine-complex-execution",
@@ -116,11 +112,7 @@
       "target": 50,
       "warning": 150,
       "critical": 300,
-      "tags": [
-        "core",
-        "execution",
-        "complex"
-      ]
+      "tags": ["core", "execution", "complex"]
     },
     {
       "id": "core-engine-throughput",
@@ -168,10 +160,7 @@
       "target": 200,
       "warning": 100,
       "critical": 50,
-      "tags": [
-        "core",
-        "throughput"
-      ]
+      "tags": ["core", "throughput"]
     },
     {
       "id": "memory-graph-usage",
@@ -219,10 +208,7 @@
       "target": 5,
       "warning": 15,
       "critical": 30,
-      "tags": [
-        "memory",
-        "graph"
-      ]
+      "tags": ["memory", "graph"]
     },
     {
       "id": "memory-peak-heap",
@@ -270,10 +256,7 @@
       "target": 30,
       "warning": 60,
       "critical": 100,
-      "tags": [
-        "memory",
-        "heap"
-      ]
+      "tags": ["memory", "heap"]
     },
     {
       "id": "build-typescript-compilation",
@@ -321,10 +304,7 @@
       "target": 8,
       "warning": 20,
       "critical": 45,
-      "tags": [
-        "build",
-        "typescript"
-      ]
+      "tags": ["build", "typescript"]
     }
   ]
 }

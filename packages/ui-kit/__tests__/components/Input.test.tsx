@@ -25,10 +25,10 @@ describe('Input', () => {
   it('handles value changes', async () => {
     const handleChange = jest.fn();
     renderInput(Input, { label: 'Test Input', onChange: handleChange });
-    
+
     const input = screen.getByLabelText('Test Input');
     await userEvent.type(input, 'test value');
-    
+
     expect(handleChange).toHaveBeenCalledWith('test value');
   });
 
@@ -41,7 +41,7 @@ describe('Input', () => {
   it('supports different input types', () => {
     const { rerender } = renderInput(Input, { type: 'email' });
     expect(screen.getByRole('textbox')).toHaveAttribute('type', 'email');
-    
+
     rerender(
       <ThemeProvider>
         <Input type="password" />
@@ -51,12 +51,12 @@ describe('Input', () => {
   });
 
   it('shows validation errors', () => {
-    renderInput(Input, { 
+    renderInput(Input, {
       label: 'Test Input',
       error: 'This field is required',
-      invalid: true
+      invalid: true,
     });
-    
+
     expect(screen.getByText('This field is required')).toBeInTheDocument();
     expect(screen.getByLabelText('Test Input')).toHaveAttribute('aria-invalid', 'true');
   });
@@ -90,11 +90,11 @@ describe('Input', () => {
     const handleFocus = jest.fn();
     const handleBlur = jest.fn();
     renderInput(Input, { onFocus: handleFocus, onBlur: handleBlur });
-    
+
     const input = screen.getByRole('textbox');
     await userEvent.click(input);
     expect(handleFocus).toHaveBeenCalled();
-    
+
     await userEvent.tab();
     expect(handleBlur).toHaveBeenCalled();
   });
@@ -106,7 +106,7 @@ describe('Input', () => {
         <Input ref={ref} />
       </ThemeProvider>
     );
-    
+
     expect(ref.current).toBeInstanceOf(HTMLInputElement);
   });
 });
@@ -120,10 +120,10 @@ describe('TextArea', () => {
   it('handles multiline input', async () => {
     const handleChange = jest.fn();
     renderInput(TextArea, { label: 'Test TextArea', onChange: handleChange });
-    
+
     const textarea = screen.getByLabelText('Test TextArea');
     await userEvent.type(textarea, 'Line 1\nLine 2');
-    
+
     expect(handleChange).toHaveBeenCalledWith('Line 1\nLine 2');
   });
 
@@ -140,7 +140,7 @@ describe('TextArea', () => {
   it('supports auto-resize', async () => {
     renderInput(TextArea, { autoResize: true });
     const textarea = screen.getByRole('textbox');
-    
+
     // Auto-resize functionality would need to be tested with actual DOM manipulation
     expect(textarea).toHaveClass('ui-textarea--auto-resize');
   });
@@ -152,7 +152,7 @@ describe('TextArea', () => {
         <TextArea ref={ref} />
       </ThemeProvider>
     );
-    
+
     expect(ref.current).toBeInstanceOf(HTMLTextAreaElement);
   });
 });

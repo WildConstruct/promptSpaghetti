@@ -22,10 +22,10 @@ jest.mock('../services/TokenService', () => {
         sub: 'user-123',
         email: 'test@example.com',
         roles: [],
-        permissions: []
+        permissions: [],
       }),
-      revokeAllUserTokens: jest.fn().mockResolvedValue(undefined)
-    }))
+      revokeAllUserTokens: jest.fn().mockResolvedValue(undefined),
+    })),
   };
 });
 
@@ -36,8 +36,8 @@ jest.mock('../database/DatabaseService', () => {
       query: jest.fn().mockResolvedValue({ rows: [{ health: 1 }] }),
       healthCheck: jest.fn().mockResolvedValue(true),
       connect: jest.fn().mockResolvedValue(undefined),
-      disconnect: jest.fn().mockResolvedValue(undefined)
-    }))
+      disconnect: jest.fn().mockResolvedValue(undefined),
+    })),
   };
 });
 
@@ -50,8 +50,8 @@ jest.mock('../database/RedisService', () => {
       del: jest.fn().mockResolvedValue(1),
       healthCheck: jest.fn().mockResolvedValue(true),
       connect: jest.fn().mockResolvedValue(undefined),
-      disconnect: jest.fn().mockResolvedValue(undefined)
-    }))
+      disconnect: jest.fn().mockResolvedValue(undefined),
+    })),
   };
 });
 
@@ -62,10 +62,10 @@ describe('AuthenticationService', () => {
   beforeAll(async () => {
     config = buildAuthConfig();
     authService = new AuthenticationService(config);
-    
+
     // Mock database and Redis connections for testing
     jest.spyOn(authService, 'initialize').mockResolvedValue();
-    
+
     // Mock internal methods
     jest.spyOn(authService as any, 'toPublicUser').mockImplementation(async (user: any) => ({
       id: user.id,
@@ -73,11 +73,11 @@ describe('AuthenticationService', () => {
       emailVerified: user.emailVerified,
       createdAt: user.createdAt,
       roles: [],
-      permissions: []
+      permissions: [],
     }));
-    
+
     jest.spyOn(authService as any, 'createSession').mockResolvedValue('session-123');
-    
+
     // Mock all internal services
     (authService as any).userService = {
       createUser: jest.fn(),
@@ -86,35 +86,35 @@ describe('AuthenticationService', () => {
       updateUser: jest.fn(),
       verifyPassword: jest.fn(),
       requestPasswordReset: jest.fn(),
-      resetPassword: jest.fn()
+      resetPassword: jest.fn(),
     };
-    
+
     (authService as any).rateLimitService = {
       checkIPRateLimit: jest.fn(),
-      checkUserRateLimit: jest.fn()
+      checkUserRateLimit: jest.fn(),
     };
-    
+
     (authService as any).auditService = {
-      logEvent: jest.fn()
+      logEvent: jest.fn(),
     };
-    
+
     (authService as any).tokenService = {
       generateAccessToken: jest.fn().mockResolvedValue('access-token'),
       generateRefreshToken: jest.fn().mockResolvedValue('refresh-token'),
       verifyAccessToken: jest.fn(),
-      revokeAllUserTokens: jest.fn()
+      revokeAllUserTokens: jest.fn(),
     };
-    
+
     (authService as any).dbService = {
       query: jest.fn(),
-      healthCheck: jest.fn()
+      healthCheck: jest.fn(),
     };
-    
+
     (authService as any).redisService = {
       get: jest.fn(),
       set: jest.fn(),
       del: jest.fn(),
-      healthCheck: jest.fn()
+      healthCheck: jest.fn(),
     };
   });
 
@@ -132,30 +132,30 @@ describe('AuthenticationService', () => {
         lastLoginAt: undefined,
         failedLoginAttempts: 0,
         accountLocked: false,
-        status: 'active' as const
+        status: 'active' as const,
       };
 
       // Configure mocked services
       (authService as any).userService.createUser.mockResolvedValue(mockUser);
-      
+
       (authService as any).rateLimitService.checkIPRateLimit.mockResolvedValue({
         allowed: true,
         remaining: 4,
         resetTime: new Date(),
-        totalRequests: 1
+        totalRequests: 1,
       });
-      
+
       (authService as any).auditService.logEvent.mockResolvedValue(undefined);
 
       const request = {
         email: 'test@example.com',
         password: 'SecurePassword123!',
-        displayName: 'Test User'
+        displayName: 'Test User',
       };
 
       const context = {
         ipAddress: '127.0.0.1',
-        userAgent: 'Test Agent'
+        userAgent: 'Test Agent',
       };
 
       // toPublicUser is already mocked in beforeAll
@@ -171,12 +171,12 @@ describe('AuthenticationService', () => {
       const request = {
         email: 'test@example.com',
         password: 'weak',
-        displayName: 'Test User'
+        displayName: 'Test User',
       };
 
       const context = {
         ipAddress: '127.0.0.1',
-        userAgent: 'Test Agent'
+        userAgent: 'Test Agent',
       };
 
       // Configure mocked services
@@ -184,26 +184,29 @@ describe('AuthenticationService', () => {
         allowed: true,
         remaining: 4,
         resetTime: new Date(),
-        totalRequests: 1
+        totalRequests: 1,
       });
 
       // Mock user service to throw password validation error
-      (authService as any).userService.createUser.mockRejectedValue(new Error('Password must be at least 12 characters long'));
+      (authService as any).userService.createUser.mockRejectedValue(
+        new Error('Password must be at least 12 characters long')
+      );
 
-      await expect(authService.register(request, context))
-        .rejects.toThrow('Password must be at least 12 characters long');
+      await expect(authService.register(request, context)).rejects.toThrow(
+        'Password must be at least 12 characters long'
+      );
     });
 
     it('should reject registration when rate limited', async () => {
       const request = {
         email: 'test@example.com',
         password: 'SecurePassword123!',
-        displayName: 'Test User'
+        displayName: 'Test User',
       };
 
       const context = {
         ipAddress: '127.0.0.1',
-        userAgent: 'Test Agent'
+        userAgent: 'Test Agent',
       };
 
       // Configure mocked services
@@ -211,13 +214,14 @@ describe('AuthenticationService', () => {
         allowed: false,
         remaining: 0,
         resetTime: new Date(),
-        totalRequests: 6
+        totalRequests: 6,
       });
 
       (authService as any).auditService.logEvent.mockResolvedValue(undefined);
 
-      await expect(authService.register(request, context))
-        .rejects.toThrow('Rate limit exceeded. Please try again later.');
+      await expect(authService.register(request, context)).rejects.toThrow(
+        'Rate limit exceeded. Please try again later.'
+      );
     });
   });
 
@@ -232,17 +236,17 @@ describe('AuthenticationService', () => {
         lastLoginAt: new Date(),
         failedLoginAttempts: 0,
         accountLocked: false,
-        status: 'active' as const
+        status: 'active' as const,
       };
 
       const request = {
         email: 'test@example.com',
-        password: 'SecurePassword123!'
+        password: 'SecurePassword123!',
       };
 
       const context = {
         ipAddress: '127.0.0.1',
-        userAgent: 'Test Agent'
+        userAgent: 'Test Agent',
       };
 
       // Configure mocked services
@@ -250,7 +254,7 @@ describe('AuthenticationService', () => {
         allowed: true,
         remaining: 4,
         resetTime: new Date(),
-        totalRequests: 1
+        totalRequests: 1,
       });
 
       (authService as any).userService.getUserByEmail.mockResolvedValue(mockUser);
@@ -283,17 +287,17 @@ describe('AuthenticationService', () => {
         lastLoginAt: new Date(),
         failedLoginAttempts: 0,
         accountLocked: false,
-        status: 'active' as const
+        status: 'active' as const,
       };
 
       const request = {
         email: 'test@example.com',
-        password: 'WrongPassword123!'
+        password: 'WrongPassword123!',
       };
 
       const context = {
         ipAddress: '127.0.0.1',
-        userAgent: 'Test Agent'
+        userAgent: 'Test Agent',
       };
 
       // Configure mocked services
@@ -301,7 +305,7 @@ describe('AuthenticationService', () => {
         allowed: true,
         remaining: 4,
         resetTime: new Date(),
-        totalRequests: 1
+        totalRequests: 1,
       });
 
       (authService as any).userService.getUserByEmail.mockResolvedValue(mockUser);
@@ -309,8 +313,7 @@ describe('AuthenticationService', () => {
 
       (authService as any).auditService.logEvent.mockResolvedValue(undefined);
 
-      await expect(authService.login(request, context))
-        .rejects.toThrow('Invalid email or password');
+      await expect(authService.login(request, context)).rejects.toThrow('Invalid email or password');
     });
 
     it('should reject login for locked account', async () => {
@@ -324,17 +327,17 @@ describe('AuthenticationService', () => {
         failedLoginAttempts: 5,
         accountLocked: true,
         lockedUntil: new Date(Date.now() + 30 * 60 * 1000), // 30 minutes from now
-        status: 'active' as const
+        status: 'active' as const,
       };
 
       const request = {
         email: 'test@example.com',
-        password: 'SecurePassword123!'
+        password: 'SecurePassword123!',
       };
 
       const context = {
         ipAddress: '127.0.0.1',
-        userAgent: 'Test Agent'
+        userAgent: 'Test Agent',
       };
 
       // Configure mocked services
@@ -342,15 +345,16 @@ describe('AuthenticationService', () => {
         allowed: true,
         remaining: 4,
         resetTime: new Date(),
-        totalRequests: 1
+        totalRequests: 1,
       });
 
       (authService as any).userService.getUserByEmail.mockResolvedValue(mockUser);
 
       (authService as any).auditService.logEvent.mockResolvedValue(undefined);
 
-      await expect(authService.login(request, context))
-        .rejects.toThrow('Account is locked. Please try again later or reset your password.');
+      await expect(authService.login(request, context)).rejects.toThrow(
+        'Account is locked. Please try again later or reset your password.'
+      );
     });
   });
 
@@ -362,7 +366,7 @@ describe('AuthenticationService', () => {
         emailVerified: true,
         createdAt: new Date(),
         roles: [],
-        permissions: []
+        permissions: [],
       };
 
       const mockPayload = {
@@ -373,7 +377,7 @@ describe('AuthenticationService', () => {
         iat: Math.floor(Date.now() / 1000),
         exp: Math.floor(Date.now() / 1000) + 900, // 15 minutes
         iss: 'promptscape-auth',
-        aud: 'promptscape-api'
+        aud: 'promptscape-api',
       };
 
       // Configure mocked services
@@ -384,7 +388,7 @@ describe('AuthenticationService', () => {
         email: 'test@example.com',
         emailVerified: true,
         createdAt: new Date(),
-        status: 'active'
+        status: 'active',
       });
       // toPublicUser is already mocked in beforeAll
 
@@ -397,8 +401,7 @@ describe('AuthenticationService', () => {
       // Configure mocked services to throw error
       (authService as any).tokenService.verifyAccessToken.mockRejectedValue(new Error('Invalid token'));
 
-      await expect(authService.validateToken('invalid-jwt-token'))
-        .rejects.toThrow('Invalid token');
+      await expect(authService.validateToken('invalid-jwt-token')).rejects.toThrow('Invalid token');
     });
   });
 
@@ -408,13 +411,13 @@ describe('AuthenticationService', () => {
         email: 'test@example.com',
         clientInfo: {
           ipAddress: '127.0.0.1',
-          userAgent: 'Test Agent'
-        }
+          userAgent: 'Test Agent',
+        },
       };
 
       const context = {
         ipAddress: '127.0.0.1',
-        userAgent: 'Test Agent'
+        userAgent: 'Test Agent',
       };
 
       // Configure mocked services
@@ -422,7 +425,7 @@ describe('AuthenticationService', () => {
         allowed: true,
         remaining: 2,
         resetTime: new Date(),
-        totalRequests: 1
+        totalRequests: 1,
       });
 
       (authService as any).userService.requestPasswordReset.mockResolvedValue('reset-token-123');
@@ -430,8 +433,7 @@ describe('AuthenticationService', () => {
       (authService as any).auditService.logEvent.mockResolvedValue(undefined);
 
       // Should not throw any error
-      await expect(authService.requestPasswordReset(request, context))
-        .resolves.not.toThrow();
+      await expect(authService.requestPasswordReset(request, context)).resolves.not.toThrow();
     });
 
     it('should complete password reset with valid token', async () => {
@@ -440,17 +442,17 @@ describe('AuthenticationService', () => {
         email: 'test@example.com',
         emailVerified: true,
         createdAt: new Date(),
-        status: 'active' as const
+        status: 'active' as const,
       };
 
       const request = {
         token: 'valid-reset-token',
-        newPassword: 'NewSecurePassword123!'
+        newPassword: 'NewSecurePassword123!',
       };
 
       const context = {
         ipAddress: '127.0.0.1',
-        userAgent: 'Test Agent'
+        userAgent: 'Test Agent',
       };
 
       // Configure mocked services
@@ -461,8 +463,7 @@ describe('AuthenticationService', () => {
       (authService as any).auditService.logEvent.mockResolvedValue(undefined);
 
       // Should not throw any error
-      await expect(authService.resetPassword(request, context))
-        .resolves.not.toThrow();
+      await expect(authService.resetPassword(request, context)).resolves.not.toThrow();
     });
   });
 
@@ -498,5 +499,5 @@ describe('AuthenticationService', () => {
 // Mock crypto.randomUUID for consistent testing
 jest.mock('crypto', () => ({
   ...jest.requireActual('crypto'),
-  randomUUID: jest.fn(() => 'test-uuid-123')
+  randomUUID: jest.fn(() => 'test-uuid-123'),
 }));

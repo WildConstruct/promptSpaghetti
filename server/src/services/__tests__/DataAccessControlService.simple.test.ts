@@ -9,15 +9,15 @@ jest.mock('../../auth/services/AuditService');
 
 // Mock database with successful responses
 const mockDb = {
-  query: jest.fn<unknown[], unknown>().mockResolvedValue({ 
+  query: jest.fn<unknown[], unknown>().mockResolvedValue({
     rows: [
-      { 
+      {
         classification: 'INTERNAL',
         owner_id: 'owner-123',
-        metadata: '{}'
-      }
-    ] 
-  } as unknown as unknown)
+        metadata: '{}',
+      },
+    ],
+  } as unknown as unknown),
 };
 
 describe('DataAccessControlService - Basic Tests', () => {
@@ -26,11 +26,11 @@ describe('DataAccessControlService - Basic Tests', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    
+
     mockAuditService = {
-      logSecurityEvent: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown)
+      logSecurityEvent: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown),
     } as any;
-    
+
     dataAccessService = new DataAccessControlService(mockDb as any, mockAuditService);
   });
 
@@ -46,12 +46,12 @@ describe('DataAccessControlService - Basic Tests', () => {
         userId: 'user-123',
         resourceId: 'resource-456',
         resourceType: 'customer_data',
-        operation: 'READ' as DataOperation
+        operation: 'READ' as DataOperation,
       };
 
       // This test just verifies the method doesn't throw an error
       const result = await dataAccessService.checkAccess(request);
-      
+
       expect(result).toBeDefined();
       expect(result.allowed).toBeDefined();
       expect(result.reason).toBeDefined();
@@ -71,8 +71,8 @@ describe('DataAccessControlService - Basic Tests', () => {
           classification: 'INTERNAL',
           access_level: 'GRANTED',
           timestamp: new Date(),
-          risk_score: 25
-        }
+          risk_score: 25,
+        },
       ];
 
       mockDb.query.mockResolvedValueOnce({ rows: mockHistory });
@@ -97,8 +97,8 @@ describe('DataAccessControlService - Basic Tests', () => {
           granted_at: new Date(),
           expires_at: new Date(Date.now() + 86400000),
           reason: 'Temporary access',
-          restrictions: '[]'
-        }
+          restrictions: '[]',
+        },
       ];
 
       mockDb.query.mockResolvedValueOnce({ rows: mockGrants });
@@ -112,11 +112,13 @@ describe('DataAccessControlService - Basic Tests', () => {
 
   describe('Access Revocation', () => {
     it('should revoke access grant', async () => {
-      mockDb.query.mockResolvedValueOnce({ 
-        rows: [{ 
-          user_id: 'user-123', 
-          resource_id: 'res-1' 
-        }] 
+      mockDb.query.mockResolvedValueOnce({
+        rows: [
+          {
+            user_id: 'user-123',
+            resource_id: 'res-1',
+          },
+        ],
       }); // Find grant
       mockDb.query.mockResolvedValueOnce({ rowCount: 1 }); // Update grant
 

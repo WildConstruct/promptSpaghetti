@@ -2,15 +2,15 @@
 
 /**
  * Comprehensive Load Test Runner
- * 
+ *
  * Orchestrates all load tests for the PromptScape application:
  * - Authentication flow load tests
- * - File browser operation load tests  
+ * - File browser operation load tests
  * - Graph execution load tests
  * - Generates comprehensive reports
  * - Monitors system health during tests
  * - Provides real-time progress updates
- * 
+ *
  * Task: T-1752989144295-507 - Implement automated load test scripts for key user flows
  */
 
@@ -34,7 +34,7 @@ class LoadTestOrchestrator {
       reportFormat: options.reportFormat || 'all', // 'html', 'pdf', 'json', 'all'
       healthCheckInterval: options.healthCheckInterval || 30000, // 30 seconds
       maxRetries: options.maxRetries || 2,
-      outputDir: options.outputDir || './load-test-results'
+      outputDir: options.outputDir || './load-test-results',
     };
 
     this.testResults = [];
@@ -49,46 +49,46 @@ class LoadTestOrchestrator {
   async runAllLoadTests() {
     console.log('🚀 Starting Comprehensive Load Test Suite');
     console.log('=========================================\n');
-    
+
     this.startTime = new Date();
-    
+
     try {
       // Ensure output directory exists
       await this.ensureOutputDir();
-      
+
       // Pre-test health check
       await this.performHealthCheck('pre-test');
-      
+
       // Start system monitoring
       const monitoringInterval = this.startSystemMonitoring();
-      
+
       // Define test suites
       const testSuites = [
         {
           name: 'Authentication Flow Tests',
           script: './auth-flow-load-test.js',
           skip: this.options.skipAuthentication,
-          estimatedDuration: 300 // 5 minutes
+          estimatedDuration: 300, // 5 minutes
         },
         {
-          name: 'File Browser Operation Tests', 
+          name: 'File Browser Operation Tests',
           script: './file-browser-load-test.js',
           skip: this.options.skipFileBrowser,
-          estimatedDuration: 420 // 7 minutes
+          estimatedDuration: 420, // 7 minutes
         },
         {
           name: 'Graph Execution Tests',
-          script: './graph-execution-load-test.js', 
+          script: './graph-execution-load-test.js',
           skip: this.options.skipGraphExecution,
-          estimatedDuration: 600 // 10 minutes
-        }
+          estimatedDuration: 600, // 10 minutes
+        },
       ];
 
       // Calculate total estimated time
       const totalEstimatedTime = testSuites
         .filter(suite => !suite.skip)
         .reduce((total, suite) => total + suite.estimatedDuration, 0);
-      
+
       console.log(`⏱️  Estimated total test time: ${Math.ceil(totalEstimatedTime / 60)} minutes\n`);
 
       // Run tests
@@ -117,19 +117,18 @@ class LoadTestOrchestrator {
       this.printFinalSummary();
 
       console.log('\n✅ All load tests completed successfully!');
-      
+
       return {
         success: true,
         testResults: this.testResults,
         systemHealth: this.systemHealthData,
-        duration: this.endTime - this.startTime
+        duration: this.endTime - this.startTime,
       };
-
     } catch (error) {
       console.error('\n❌ Load test suite failed:', error.message);
-      
+
       this.endTime = new Date();
-      
+
       // Generate partial report if any tests completed
       if (this.testResults.length > 0 && this.options.generateReport) {
         try {
@@ -144,7 +143,7 @@ class LoadTestOrchestrator {
         error: error.message,
         testResults: this.testResults,
         systemHealth: this.systemHealthData,
-        duration: this.endTime - this.startTime
+        duration: this.endTime - this.startTime,
       };
     }
   }
@@ -154,10 +153,10 @@ class LoadTestOrchestrator {
    */
   async runTestsInSequence(testSuites) {
     console.log('📋 Running tests in sequence...\n');
-    
+
     for (let i = 0; i < testSuites.length; i++) {
       const suite = testSuites[i];
-      
+
       if (suite.skip) {
         console.log(`⏭️  Skipping ${suite.name}`);
         continue;
@@ -181,11 +180,11 @@ class LoadTestOrchestrator {
    */
   async runTestsInParallel(testSuites) {
     console.log('🔀 Running tests in parallel...\n');
-    
+
     const activeTestSuites = testSuites.filter(suite => !suite.skip);
-    
+
     const testPromises = activeTestSuites.map(suite => this.runTestSuite(suite));
-    
+
     try {
       await Promise.all(testPromises);
     } catch (error) {
@@ -203,18 +202,18 @@ class LoadTestOrchestrator {
 
     while (attempts < this.options.maxRetries) {
       attempts++;
-      
+
       try {
         console.log(`\n🏃 Running ${suite.name} (attempt ${attempts}/${this.options.maxRetries})`);
-        
+
         const startTime = Date.now();
-        
+
         // Execute the test script
         const result = await this.executeTestScript(suite.script);
-        
+
         const endTime = Date.now();
         const duration = endTime - startTime;
-        
+
         // Store results
         this.testResults.push({
           suiteName: suite.name,
@@ -222,16 +221,15 @@ class LoadTestOrchestrator {
           result,
           duration,
           timestamp: new Date().toISOString(),
-          attempt: attempts
+          attempt: attempts,
         });
 
         console.log(`✅ ${suite.name} completed in ${Math.ceil(duration / 1000)}s`);
         return result;
-
       } catch (error) {
         lastError = error;
         console.error(`❌ ${suite.name} failed (attempt ${attempts}):`, error.message);
-        
+
         if (attempts < this.options.maxRetries) {
           console.log('🔄 Retrying in 10 seconds...');
           await this.delay(10000);
@@ -250,7 +248,7 @@ class LoadTestOrchestrator {
     try {
       // Make the script executable
       await fs.chmod(scriptPath, '755');
-      
+
       // Execute the script
       const output = execSync(`node ${scriptPath}`, {
         cwd: __dirname,
@@ -259,23 +257,22 @@ class LoadTestOrchestrator {
         timeout: 30 * 60 * 1000, // 30 minute timeout
         env: {
           ...process.env,
-          API_BASE_URL: this.options.baseUrl
-        }
+          API_BASE_URL: this.options.baseUrl,
+        },
       });
 
       return {
         success: true,
         output: output,
-        exitCode: 0
+        exitCode: 0,
       };
-
     } catch (error) {
       return {
         success: false,
         output: error.stdout || error.message,
         stderr: error.stderr,
         exitCode: error.status || 1,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -285,11 +282,11 @@ class LoadTestOrchestrator {
    */
   async performHealthCheck(phase) {
     console.log(`🩺 Performing ${phase} health check...`);
-    
+
     const healthData = {
       phase,
       timestamp: new Date().toISOString(),
-      checks: {}
+      checks: {},
     };
 
     try {
@@ -304,7 +301,6 @@ class LoadTestOrchestrator {
         healthData.checks.serverLoad = health.load || 'unknown';
         healthData.checks.memoryUsage = health.memory || 'unknown';
       }
-
     } catch (error) {
       console.warn(`⚠️  Health check failed: ${error.message}`);
       healthData.checks.apiAvailable = false;
@@ -312,7 +308,7 @@ class LoadTestOrchestrator {
     }
 
     this.systemHealthData.push(healthData);
-    
+
     if (healthData.checks.apiAvailable) {
       console.log(`✅ ${phase} health check passed`);
     } else {
@@ -325,7 +321,7 @@ class LoadTestOrchestrator {
    */
   startSystemMonitoring() {
     console.log('📊 Starting system monitoring...');
-    
+
     return setInterval(async () => {
       await this.performHealthCheck('monitoring');
     }, this.options.healthCheckInterval);
@@ -336,17 +332,17 @@ class LoadTestOrchestrator {
    */
   async generateComprehensiveReport() {
     console.log('\n📊 Generating comprehensive load test report...');
-    
+
     try {
       const reporter = new LoadTestReporter({
         outputDir: this.options.outputDir,
         generatePDF: this.options.reportFormat === 'pdf' || this.options.reportFormat === 'all',
-        includeCharts: true
+        includeCharts: true,
       });
 
       // Collect all test result files
       const testResultFiles = await this.collectTestResultFiles();
-      
+
       if (testResultFiles.length === 0) {
         console.warn('⚠️  No test result files found for reporting');
         return;
@@ -363,14 +359,13 @@ class LoadTestOrchestrator {
 
       if (reportData.alerts.length > 0) {
         console.log(`🚨 ${reportData.alerts.length} performance alerts detected`);
-        
+
         reportData.alerts.forEach(alert => {
           console.log(`   ${alert.type.toUpperCase()}: ${alert.message}`);
         });
       }
 
       return reportData;
-
     } catch (error) {
       console.error('❌ Failed to generate comprehensive report:', error);
       throw error;
@@ -382,23 +377,23 @@ class LoadTestOrchestrator {
    */
   async collectTestResultFiles() {
     const resultFiles = [];
-    
+
     try {
       const files = await fs.readdir('./');
-      const loadTestFiles = files.filter(file => 
-        file.includes('load-test') && file.endsWith('.json') && !file.includes('report')
+      const loadTestFiles = files.filter(
+        file => file.includes('load-test') && file.endsWith('.json') && !file.includes('report')
       );
 
       for (const file of loadTestFiles) {
         try {
           const content = await fs.readFile(file, 'utf8');
           const data = JSON.parse(content);
-          
+
           resultFiles.push({
             testName: this.extractTestName(file),
             results: data,
             filename: file,
-            timestamp: data.timestamp || Date.now()
+            timestamp: data.timestamp || Date.now(),
           });
         } catch (error) {
           console.warn(`⚠️  Failed to load result file ${file}:`, error.message);
@@ -432,17 +427,17 @@ class LoadTestOrchestrator {
       testPeriod: {
         start: this.startTime,
         end: this.endTime,
-        duration: this.endTime - this.startTime
+        duration: this.endTime - this.startTime,
       },
       healthChecks: this.systemHealthData,
-      summary: this.generateHealthSummary()
+      summary: this.generateHealthSummary(),
     };
 
     const filename = `system-health-report-${Date.now()}.json`;
     const filepath = path.join(this.options.outputDir, filename);
-    
+
     await fs.writeFile(filepath, JSON.stringify(healthReport, null, 2));
-    
+
     console.log(`💊 System health report saved: ${filename}`);
   }
 
@@ -451,16 +446,14 @@ class LoadTestOrchestrator {
    */
   generateHealthSummary() {
     const totalChecks = this.systemHealthData.length;
-    const successfulChecks = this.systemHealthData.filter(check => 
-      check.checks.apiAvailable
-    ).length;
+    const successfulChecks = this.systemHealthData.filter(check => check.checks.apiAvailable).length;
 
     return {
       totalHealthChecks: totalChecks,
       successfulHealthChecks: successfulChecks,
       healthSuccessRate: totalChecks > 0 ? (successfulChecks / totalChecks) * 100 : 0,
       averageResponseTime: this.calculateAverageResponseTime(),
-      systemStability: successfulChecks === totalChecks ? 'stable' : 'unstable'
+      systemStability: successfulChecks === totalChecks ? 'stable' : 'unstable',
     };
   }
 
@@ -471,9 +464,9 @@ class LoadTestOrchestrator {
     const responseTimes = this.systemHealthData
       .filter(check => check.checks.apiResponseTime)
       .map(check => check.checks.apiResponseTime);
-    
+
     if (responseTimes.length === 0) return 0;
-    
+
     return responseTimes.reduce((sum, time) => sum + time, 0) / responseTimes.length;
   }
 
@@ -483,7 +476,7 @@ class LoadTestOrchestrator {
   printFinalSummary() {
     const duration = this.endTime - this.startTime;
     const durationMinutes = Math.ceil(duration / (1000 * 60));
-    
+
     console.log('\n📈 FINAL LOAD TEST SUMMARY');
     console.log('==========================');
     console.log(`🕐 Total Duration: ${durationMinutes} minutes`);
@@ -492,7 +485,7 @@ class LoadTestOrchestrator {
     console.log(`❌ Failed Tests: ${this.testResults.filter(r => !r.result.success).length}`);
     console.log(`🩺 Health Checks: ${this.systemHealthData.length}`);
     console.log(`📊 Reports Generated: ${this.options.generateReport ? 'Yes' : 'No'}`);
-    
+
     const healthSummary = this.generateHealthSummary();
     console.log(`💊 System Stability: ${healthSummary.systemStability.toUpperCase()}`);
   }
@@ -581,20 +574,20 @@ Environment Variables:
 // Export for programmatic usage
 module.exports = {
   LoadTestOrchestrator,
-  runComprehensiveLoadTests
+  runComprehensiveLoadTests,
 };
 
 // Run if called directly
 if (require.main === module) {
   const args = process.argv.slice(2);
-  
+
   if (args.includes('--help') || args.includes('-h')) {
     displayUsage();
     process.exit(0);
   }
 
   const options = parseArgs();
-  
+
   runComprehensiveLoadTests(options)
     .then(result => {
       process.exit(result.success ? 0 : 1);

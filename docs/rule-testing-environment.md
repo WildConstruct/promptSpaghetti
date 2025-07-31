@@ -146,18 +146,18 @@ const config: TestEnvironmentConfig = {
   performance: {
     maxExecutionTime: 30000,
     maxRuleCount: 1000,
-    maxConcurrency: 5
+    maxConcurrency: 5,
   },
   data: {
     generateSyntheticData: true,
     datasetSize: 'medium',
-    includeEdgeCases: true
+    includeEdgeCases: true,
   },
   reporting: {
     enableRealTimeReporting: true,
     generateDetailedReports: true,
-    exportResults: true
-  }
+    exportResults: true,
+  },
 };
 
 // Initialize and setup
@@ -185,7 +185,7 @@ Tests specific compliance frameworks:
 # Test GDPR compliance rules
 npm run rule-test run --framework GDPR
 
-# Test CCPA privacy rules  
+# Test CCPA privacy rules
 npm run rule-test run --framework CCPA
 
 # Test HIPAA healthcare rules
@@ -280,24 +280,24 @@ Reports can be exported in multiple formats:
 
 ```typescript
 interface TestEnvironmentConfig {
-  name: string;                    // Environment name
-  description: string;             // Environment description
+  name: string; // Environment name
+  description: string; // Environment description
   frameworks: ComplianceFramework[]; // Frameworks to test
-  testTypes: RuleTestType[];       // Types of tests to run
+  testTypes: RuleTestType[]; // Types of tests to run
   performance: {
-    maxExecutionTime: number;      // Max test execution time (ms)
-    maxRuleCount: number;          // Max rules per test
-    maxConcurrency: number;        // Max concurrent tests
+    maxExecutionTime: number; // Max test execution time (ms)
+    maxRuleCount: number; // Max rules per test
+    maxConcurrency: number; // Max concurrent tests
   };
   data: {
     generateSyntheticData: boolean; // Generate test data
     datasetSize: 'small' | 'medium' | 'large'; // Data volume
-    includeEdgeCases: boolean;     // Include edge case data
+    includeEdgeCases: boolean; // Include edge case data
   };
   reporting: {
     enableRealTimeReporting: boolean; // Live reporting
     generateDetailedReports: boolean; // Detailed reports
-    exportResults: boolean;        // Export capability
+    exportResults: boolean; // Export capability
   };
 }
 ```
@@ -305,7 +305,7 @@ interface TestEnvironmentConfig {
 ### Supported Frameworks
 
 - **GDPR** - General Data Protection Regulation
-- **CCPA** - California Consumer Privacy Act  
+- **CCPA** - California Consumer Privacy Act
 - **HIPAA** - Health Insurance Portability and Accountability Act
 - **SOX** - Sarbanes-Oxley Act
 - **PCI_DSS** - Payment Card Industry Data Security Standard
@@ -408,7 +408,7 @@ npx tsc --noEmit server/src/services/RuleTestingEnvironment.ts
 #### Import/Export Errors
 
 - Ensure proper TypeScript compilation
-- Check file permissions for output directories  
+- Check file permissions for output directories
 - Verify all dependencies are installed
 
 ### Debug Mode

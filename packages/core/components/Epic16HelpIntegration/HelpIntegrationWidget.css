@@ -151,7 +151,9 @@
 }
 
 .help-trigger:focus {
-  box-shadow: var(--help-shadow), 0 0 0 3px rgba(59, 130, 246, 0.3);
+  box-shadow:
+    var(--help-shadow),
+    0 0 0 3px rgba(59, 130, 246, 0.3);
 }
 
 .help-trigger:active {
@@ -172,8 +174,13 @@
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 /* =============================================================================
@@ -327,7 +334,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Error state */
@@ -742,14 +751,14 @@
     width: calc(100vw - 32px);
     max-width: 380px;
   }
-  
+
   .help-integration-widget.bottom-right,
   .help-integration-widget.bottom-left {
     bottom: 16px;
     left: 16px;
     right: 16px;
   }
-  
+
   .help-integration-widget.top-right,
   .help-integration-widget.top-left {
     top: 16px;
@@ -762,7 +771,7 @@
   .help-panel {
     max-height: calc(100vh - 80px);
   }
-  
+
   .help-body {
     max-height: calc(100vh - 200px);
   }
@@ -783,11 +792,11 @@
   .support-button {
     transition: none;
   }
-  
+
   .help-spinner {
     animation: none;
   }
-  
+
   .escalation-indicator {
     animation: none;
   }

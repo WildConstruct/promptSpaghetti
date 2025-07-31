@@ -9,13 +9,16 @@ The Randomizer Engine is a flexible, modular system for creating and executing p
 ### Core Components
 
 #### 1. RandomizerEngine Core
+
 - **Bundle Loader**: Loads and validates JSON generator files
 - **Rule Processor**: Executes grammar rules with weighted selection
 - **Variable Manager**: Tracks and updates generator variables
 - **Asset Manager**: Handles images, audio, and styling assets
 
 #### 2. Generator Bundle Format
+
 Each generator bundle is a JSON file containing:
+
 - **Metadata**: Name, version, description, author info
 - **Assets**: Images, audio files, fonts, styling
 - **Variables**: Dynamic values that change during generation
@@ -23,6 +26,7 @@ Each generator bundle is a JSON file containing:
 - **Entry Points**: Starting points for generation
 
 #### 3. Rule Types
+
 - **Simple Arrays**: Basic random selection from list
 - **Weighted**: Probability-based selection
 - **Conditional**: Logic-based branching
@@ -63,8 +67,8 @@ Each generator bundle is a JSON file containing:
       {
         "text": "weighted option",
         "weight": 5,
-        "conditions": {"var": {"$gt": 10}},
-        "actions": {"set": {"var": 20}}
+        "conditions": { "var": { "$gt": 10 } },
+        "actions": { "set": { "var": 20 } }
       }
     ]
   },
@@ -78,20 +82,26 @@ Each generator bundle is a JSON file containing:
 ## Features
 
 ### Weighted Random Selection
+
 The system supports sophisticated probability weighting:
+
 - Basic weights (higher = more likely)
 - Conditional weights (based on variable states)
 - Dynamic weight adjustment during generation
 
 ### Variable System
+
 Variables enable:
+
 - State tracking across generations
 - Conditional logic branching
 - Dynamic content modification
 - Memory between rule executions
 
 ### Text Processing
+
 Advanced text substitution supports:
+
 - Variable interpolation: `#variable_name#`
 - **Rule Expansion**: `#rule_name#` (Python & JS).
 - **Text Modifiers**: In both Python and JavaScript, rule expansions can include modifiers: `#rule_name.modifier1.modifier2#`. Standard modifiers (e.g., `capitalize`, `plural`, `a_an`) are built-in, and custom modifiers can be registered.
@@ -99,14 +109,18 @@ Advanced text substitution supports:
 - **Grammar Includes**: Grammar rules can use an `$include` directive, e.g., `{"$include": "path/to/other_rules.json"}`. Python reads relative files by default. JavaScript requires an `includeResolver` function to be passed in the options to `loadGenerator`. This function `(path) => resolvedContent` is called to provide the content for any `$include` directives.
 
 ### Seedable PRNG (Python)
+
 The Python engine can be initialized with a seed (string or int) or by calling `set_seed()` to ensure reproducible random generation sequences. It uses a Linear Congruential Generator (LCG) when seeded.
 
 ### Include Directive Resolution
+
 - **Python**: `load_generator` resolves `{"$include": "path"}` by attempting to read `generators/path`.
 - **JavaScript**: `loadGenerator` accepts an `options.includeResolver` function. This function `(path) => resolvedContent` is called to provide the content for any `$include` directives.
 
 ### Slot Taxonomy & Smart Prompt Rewriter
+
 The engine now supports a **canonical slot taxonomy** (see `docs/slot_taxonomy.md`). Grammar rules may tag each option with `_meta.slot`, enabling:
+
 - Smart Prompt Rewriter to rearrange sentence fragments intelligently.
 - UI widgets (dropdowns, multi-selects) that map 1-to-1 with slots, letting users lock or tweak specific aspects of a prompt.
 - Consistent cross-generator analytics and future ML training.
@@ -114,21 +128,25 @@ The engine now supports a **canonical slot taxonomy** (see `docs/slot_taxonomy.m
 Both JavaScript and Python engines expose slot metadata after generation, and legacy generators without slot tags continue to function.
 
 ### Conditional Logic
+
 Supports MongoDB-style operators:
+
 - `$lt`, `$gt`: Less than, greater than
-- `$eq`, `$ne`: Equal, not equal  
+- `$eq`, `$ne`: Equal, not equal
 - `$gte`, `$lte`: Greater/less than or equal
 - `$in`, `$nin`: In/not in array
 
 ## Error Handling
 
 ### Validation
+
 - JSON schema validation on load
 - Grammar rule validation
 - Circular reference detection
 - Missing asset checking
 
 ### Runtime Safety
+
 - Graceful degradation for missing rules
 - Fallback options for failed conditions
 - Variable bounds checking
@@ -137,12 +155,14 @@ Supports MongoDB-style operators:
 ## Performance Considerations
 
 ### Optimization Strategies
+
 - Rule compilation caching
 - Variable lookup optimization
 - Asset preloading
 - Memory pool management
 
 ### Scalability
+
 - Generator unloading for memory management
 - Lazy asset loading
 - Configurable recursion limits
@@ -151,6 +171,7 @@ Supports MongoDB-style operators:
 ## Future Extensions
 
 ### Planned Features
+
 - Visual grammar editor
 - Generator marketplace/sharing
 - Real-time collaboration
@@ -160,6 +181,7 @@ Supports MongoDB-style operators:
 - Export to multiple formats
 
 ### Integration Possibilities
+
 - Discord bot integration
 - Web service API
 - Mobile app support
@@ -178,6 +200,7 @@ Supports MongoDB-style operators:
 ## Best Practices
 
 ### Generator Design
+
 - Start simple, add complexity gradually
 - Test edge cases and variable states
 - Use meaningful variable names
@@ -185,6 +208,7 @@ Supports MongoDB-style operators:
 - Provide fallback options
 
 ### Performance
+
 - Avoid deep recursion in rules
 - Limit variable count per generator
 - Use appropriate weights (avoid extremes)
@@ -192,6 +216,7 @@ Supports MongoDB-style operators:
 - Monitor memory usage with many generators
 
 ### Content Quality
+
 - Balance randomness with coherence
 - Test generated content for humor/appropriateness
 - Iterate based on output quality
@@ -200,4 +225,4 @@ Supports MongoDB-style operators:
 
 ---
 
-*This document serves as the complete specification for implementing and extending the Randomizer Engine system.*
+_This document serves as the complete specification for implementing and extending the Randomizer Engine system._

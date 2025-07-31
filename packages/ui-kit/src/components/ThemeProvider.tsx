@@ -16,13 +16,12 @@ interface ThemeProviderProps {
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({
   children,
   theme: themeOverrides,
-  defaultColorMode = 'system'
+  defaultColorMode = 'system',
 }) => {
   const [colorMode, setColorMode] = useState<'light' | 'dark'>(() => {
     if (defaultColorMode === 'system') {
-      return typeof window !== 'undefined' && 
-        window.matchMedia('(prefers-color-scheme: dark)').matches 
-        ? 'dark' 
+      return typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
         : 'light';
     }
     return defaultColorMode;
@@ -34,7 +33,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
   useEffect(() => {
     if (defaultColorMode === 'system' && typeof window !== 'undefined') {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      
+
       const handleChange = (e: MediaQueryListEvent) => {
         setColorMode(e.matches ? 'dark' : 'light');
       };
@@ -47,25 +46,28 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
   // Create theme with color mode and custom overrides
   const theme = useMemo(() => {
     const baseTheme = createTheme();
-    
+
     // Apply color mode
-    const colorModeTheme = colorMode === 'dark' ? {
-      ...baseTheme,
-      colors: {
-        primary: '#0A84FF',
-        secondary: '#5E5CE6',
-        accent: '#FF9F0A',
-        background: '#000000',
-        surface: '#1C1C1E',
-        text: '#FFFFFF',
-        textSecondary: '#8E8E93',
-        border: '#38383A',
-        error: '#FF453A',
-        warning: '#FF9F0A',
-        success: '#32D74B',
-        info: '#64D2FF'
-      }
-    } : baseTheme;
+    const colorModeTheme =
+      colorMode === 'dark'
+        ? {
+            ...baseTheme,
+            colors: {
+              primary: '#0A84FF',
+              secondary: '#5E5CE6',
+              accent: '#FF9F0A',
+              background: '#000000',
+              surface: '#1C1C1E',
+              text: '#FFFFFF',
+              textSecondary: '#8E8E93',
+              border: '#38383A',
+              error: '#FF453A',
+              warning: '#FF9F0A',
+              success: '#32D74B',
+              info: '#64D2FF',
+            },
+          }
+        : baseTheme;
 
     // Apply custom theme overrides
     return {
@@ -73,8 +75,8 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
       ...customTheme,
       colors: {
         ...colorModeTheme.colors,
-        ...(customTheme.colors || {})
-      }
+        ...(customTheme.colors || {}),
+      },
     };
   }, [colorMode, customTheme]);
 
@@ -84,20 +86,20 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
       ...themeOverrides,
       colors: {
         ...prev.colors,
-        ...(themeOverrides.colors || {})
-      }
+        ...(themeOverrides.colors || {}),
+      },
     }));
   };
 
   const toggleColorMode = () => {
-    setColorMode(prev => prev === 'light' ? 'dark' : 'light');
+    setColorMode(prev => (prev === 'light' ? 'dark' : 'light'));
   };
 
   const contextValue = {
     theme,
     setTheme,
     toggleColorMode,
-    colorMode
+    colorMode,
   };
 
   return (
@@ -110,12 +112,13 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
           fontFamily: theme.typography.fontFamily,
           fontSize: `${theme.typography.fontSize.md}px`,
           lineHeight: theme.typography.lineHeight.normal,
-          minHeight: '100%'
+          minHeight: '100%',
         }}
       >
         {children}
-        <style dangerouslySetInnerHTML={{
-          __html: `
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
             :root {
               --ui-primary: ${theme.colors.primary};
               --ui-secondary: ${theme.colors.secondary};
@@ -201,8 +204,9 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
                 transition-duration: 0.01ms !important;
               }
             }
-          `
-        }} />
+          `,
+          }}
+        />
       </div>
     </ThemeContext.Provider>
   );

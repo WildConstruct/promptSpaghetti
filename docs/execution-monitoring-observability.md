@@ -15,6 +15,7 @@ The PromptScape application includes a robust monitoring and observability stack
 The `AnalyticsCollector` provides comprehensive event tracking across the application:
 
 #### Event Types Tracked
+
 - **Graph Execution**: Start, completion, and error events for graph executions
 - **Node Execution**: Individual node processing metrics and errors
 - **User Interactions**: Canvas interactions, node creation/updates, connections
@@ -22,6 +23,7 @@ The `AnalyticsCollector` provides comprehensive event tracking across the applic
 - **Security Events**: Authentication, authorization, and security violations
 
 #### Key Features
+
 - Configurable sampling rates to manage performance impact
 - Privacy mode for anonymizing sensitive data
 - Buffer-based event collection with configurable flush intervals
@@ -29,15 +31,16 @@ The `AnalyticsCollector` provides comprehensive event tracking across the applic
 - Real-time event streaming via EventEmitter interface
 
 #### Configuration
+
 ```javascript
 const analyticsConfig = {
   enabled: true,
-  sampleRate: 1.0,        // 100% sampling for critical events
-  bufferSize: 100,        // Events before forced flush
-  flushInterval: 10000,   // 10 seconds between flushes
-  privacyMode: false,     // Disable for full tracking
-  maxEvents: 10000,       // Memory limit
-  retentionPeriod: 604800000 // 7 days in milliseconds
+  sampleRate: 1.0, // 100% sampling for critical events
+  bufferSize: 100, // Events before forced flush
+  flushInterval: 10000, // 10 seconds between flushes
+  privacyMode: false, // Disable for full tracking
+  maxEvents: 10000, // Memory limit
+  retentionPeriod: 604800000, // 7 days in milliseconds
 };
 ```
 
@@ -48,21 +51,23 @@ const analyticsConfig = {
 The `MetricsCollector` focuses on system performance and resource utilization:
 
 #### Metrics Collected
+
 - **System Metrics**: CPU usage, memory consumption, network I/O, disk usage
 - **WebSocket Metrics**: Connection counts, message latency, error rates
 - **Collaboration Metrics**: Conflict resolution times, synchronization latency
 - **Process Metrics**: Heap usage, uptime, garbage collection stats
 
 #### Alerting Thresholds
+
 ```javascript
 const performanceThresholds = {
-  maxCpuUsage: 80,              // 80% CPU usage
-  maxMemoryUsage: 85,           // 85% memory usage
-  maxMessageLatency: 1000,      // 1 second message latency
+  maxCpuUsage: 80, // 80% CPU usage
+  maxMemoryUsage: 85, // 85% memory usage
+  maxMessageLatency: 1000, // 1 second message latency
   maxConflictResolutionTime: 5000, // 5 seconds conflict resolution
   maxSynchronizationLatency: 2000, // 2 seconds sync latency
-  minSuccessRate: 95,           // 95% minimum success rate
-  maxErrorRate: 5               // 5% maximum error rate
+  minSuccessRate: 95, // 95% minimum success rate
+  maxErrorRate: 5, // 5% maximum error rate
 };
 ```
 
@@ -73,13 +78,15 @@ const performanceThresholds = {
 The Financial Services API includes comprehensive monitoring for Epic 19.2.6 compliance and data lifecycle management:
 
 #### Monitored Operations
+
 - **Data Registration**: Financial record registration with retention tracking
 - **Deletion Workflows**: Automated deletion execution monitoring
-- **Compliance Reporting**: Report generation and export tracking  
+- **Compliance Reporting**: Report generation and export tracking
 - **Safety Checks**: Legal hold verification, audit period validation
 - **Verification Steps**: Hash verification, approval workflows
 
 #### Audit Events Tracked
+
 ```javascript
 // Data registration audit
 await auditService.logEvent({
@@ -91,9 +98,9 @@ await auditService.logEvent({
     dataType: record.dataType,
     externalId: record.externalId,
     retentionPeriodYears: record.retentionPeriodYears,
-    jurisdiction: record.jurisdiction
+    jurisdiction: record.jurisdiction,
   },
-  severity: 'info'
+  severity: 'info',
 });
 
 // Deletion workflow execution audit
@@ -107,9 +114,9 @@ await auditService.logEvent({
     recordsProcessed: eligibleRecords.length,
     recordsDeleted: deletedCount,
     recordsFailed: failedCount,
-    workflowName: workflow.workflowName
+    workflowName: workflow.workflowName,
   },
-  severity: 'info'
+  severity: 'info',
 });
 ```
 
@@ -122,8 +129,9 @@ await auditService.logEvent({
 Provides real-time insights into application usage and performance:
 
 #### Features
+
 - Real-time event streaming dashboard
-- User journey analysis and cohort tracking  
+- User journey analysis and cohort tracking
 - Performance trend analysis
 - Cost tracking for API usage and token consumption
 - Session replay capabilities for debugging
@@ -135,7 +143,8 @@ Provides real-time insights into application usage and performance:
 
 Focuses on system health and performance metrics:
 
-#### Features  
+#### Features
+
 - System resource monitoring (CPU, memory, network)
 - WebSocket connection health tracking
 - Collaboration performance metrics
@@ -148,6 +157,7 @@ Focuses on system health and performance metrics:
 **Location**: `server/src/websocket/WebSocketServer.ts`, `server/src/websocket/AnalyticsWebSocketServer.ts`
 
 ### Real-time Metrics Streaming
+
 - Live connection counts and session tracking
 - Message throughput and latency monitoring
 - Error rate tracking and alerting
@@ -155,6 +165,7 @@ Focuses on system health and performance metrics:
 - User presence and activity tracking
 
 ### Health Endpoints
+
 ```javascript
 // WebSocket status endpoint
 GET /ws/status
@@ -170,7 +181,7 @@ GET /ws/status
   "timestamp": "2025-07-21T..."
 }
 
-// Document-specific user tracking  
+// Document-specific user tracking
 GET /ws/documents/:documentId/users
 {
   "documentId": "abc123",
@@ -187,13 +198,15 @@ GET /ws/documents/:documentId/users
 The Epic 19 Security & Compliance Framework includes monitoring for:
 
 #### 1. Authentication & Authorization
+
 - Login attempt tracking and anomaly detection
-- MFA verification monitoring  
+- MFA verification monitoring
 - Device fingerprinting and trust scoring
 - Location-based risk assessment
 - Behavior analytics and pattern detection
 
 #### 2. Data Protection & Privacy
+
 - Data classification monitoring and compliance tracking
 - Access control enforcement logging
 - Encryption key management audit trails
@@ -201,6 +214,7 @@ The Epic 19 Security & Compliance Framework includes monitoring for:
 - GDPR/CCPA compliance monitoring
 
 #### 3. Audit & Compliance
+
 - Comprehensive audit trail collection
 - Evidence mapping for compliance frameworks
 - Policy update and acceptance tracking
@@ -214,6 +228,7 @@ The Epic 19 Security & Compliance Framework includes monitoring for:
 The Rule Evaluation Engine provides high-performance compliance rule processing with comprehensive monitoring:
 
 ##### Performance Metrics Tracked
+
 - **Concurrent Evaluations**: Real-time tracking of parallel rule evaluations
 - **Evaluation Timeout**: Monitoring of rule evaluation duration against thresholds
 - **Memory Usage**: Memory consumption during rule processing
@@ -222,23 +237,24 @@ The Rule Evaluation Engine provides high-performance compliance rule processing 
 - **Cache Performance**: Hit ratios and cache efficiency metrics
 
 ##### Configuration Monitoring
+
 ```javascript
 const ruleEngineConfig = {
   performance: {
     maxConcurrentEvaluations: 100,
     evaluationTimeout: 5000, // 5 seconds
-    memoryLimit: 104857600,   // 100MB
-    cpuThreshold: 70,         // 70% CPU usage
+    memoryLimit: 104857600, // 100MB
+    cpuThreshold: 70, // 70% CPU usage
     batchSize: 50,
     enableProfiling: true,
-    performanceMetrics: true
+    performanceMetrics: true,
   },
   caching: {
     enabled: true,
-    ttl: 3600,               // 1 hour cache
-    maxCacheSize: 10000,     // 10k entries
+    ttl: 3600, // 1 hour cache
+    maxCacheSize: 10000, // 10k entries
     cacheStrategy: 'LRU',
-    compressionEnabled: true
+    compressionEnabled: true,
   },
   monitoring: {
     enableRealTimeMetrics: true,
@@ -246,15 +262,16 @@ const ruleEngineConfig = {
     performanceThresholds: [
       { metric: 'evaluationTime', warning: 1000, critical: 5000, unit: 'ms' },
       { metric: 'memoryUsage', warning: 75, critical: 90, unit: 'percent' },
-      { metric: 'cpuUsage', warning: 60, critical: 80, unit: 'percent' }
+      { metric: 'cpuUsage', warning: 60, critical: 80, unit: 'percent' },
     ],
     healthCheckInterval: 30000, // 30 seconds
-    metricRetentionDays: 30
-  }
+    metricRetentionDays: 30,
+  },
 };
 ```
 
 ##### Security and Audit Monitoring
+
 - **Sandbox Mode**: Monitoring for unsafe rule execution attempts
 - **Operation Filtering**: Tracking of allowed vs blocked operations
 - **Result Encryption**: Monitoring of sensitive rule result encryption
@@ -263,6 +280,7 @@ const ruleEngineConfig = {
 ## Observability Best Practices
 
 ### 1. Structured Logging
+
 All monitoring components use structured logging with consistent formats:
 
 ```javascript
@@ -284,20 +302,23 @@ All monitoring components use structured logging with consistent formats:
 ```
 
 ### 2. Correlation IDs
+
 Request tracing uses correlation IDs for tracking operations across services:
+
 - Session ID tracking for user operations
-- Batch ID tracking for bulk operations  
+- Batch ID tracking for bulk operations
 - Execution ID tracking for workflow operations
 - Request ID tracking for API operations
 
 ### 3. Health Check Endpoints
 
 #### Application Health
+
 ```javascript
 GET /health
 {
   "status": "healthy",
-  "database": "connected", 
+  "database": "connected",
   "websocket": {
     "status": "healthy",
     "connections": 42,
@@ -308,7 +329,8 @@ GET /health
 }
 ```
 
-#### Service-specific Health  
+#### Service-specific Health
+
 ```javascript
 GET /api/financial-services/health
 {
@@ -324,13 +346,14 @@ GET /api/financial-services/health
 Based on the performance requirements documented in `docs/PERF.md`:
 
 - **Graph Execution**: Generate 5 prompt variants in < 1 second
-- **Memory Usage**: Peak memory < 500 MB during execution  
+- **Memory Usage**: Peak memory < 500 MB during execution
 - **UI Responsiveness**: Maintain ≥ 30 FPS during canvas interactions
 - **Large Graph Support**: Support up to 1000 nodes with virtualization
 
 ## Alerting and Notifications
 
 ### Alert Configuration
+
 Alerts are configured with severity levels and notification channels:
 
 ```javascript
@@ -339,22 +362,23 @@ const alertConfig = {
   cpu_usage: {
     threshold: 80,
     severity: 'warning',
-    channels: ['email', 'webhook']
+    channels: ['email', 'webhook'],
   },
   memory_usage: {
-    threshold: 85, 
+    threshold: 85,
     severity: 'critical',
-    channels: ['email', 'webhook', 'slack']
+    channels: ['email', 'webhook', 'slack'],
   },
   financial_deletion_failure: {
     threshold: 1,
     severity: 'critical',
-    channels: ['email', 'webhook', 'compliance_team']
-  }
+    channels: ['email', 'webhook', 'compliance_team'],
+  },
 };
 ```
 
 ### Notification Channels
+
 - **Email**: Critical alerts sent to operations team
 - **Webhook**: Integration with external monitoring systems
 - **Slack**: Real-time notifications for development team
@@ -363,6 +387,7 @@ const alertConfig = {
 ## Monitoring Data Export
 
 ### Analytics Export
+
 ```javascript
 // Export analytics data
 const analytics = new AnalyticsCollector();
@@ -372,7 +397,8 @@ const data = analytics.exportData('json'); // or 'csv'
 await analytics.exportMetrics('/path/to/export.json', 'json');
 ```
 
-### Performance Export  
+### Performance Export
+
 ```javascript
 // Export performance metrics
 const metrics = new MetricsCollector();
@@ -382,22 +408,26 @@ await metrics.exportMetrics('/path/to/performance.csv', 'csv');
 ## Integration with External Tools
 
 ### OpenTelemetry Integration
+
 The application supports OpenTelemetry for integration with external observability platforms:
+
 - Distributed tracing for request flows
 - Metrics export to Prometheus/Grafana
 - Log aggregation to ELK stack
 - Custom instrumentation for business metrics
 
 ### Monitoring Tool Compatibility
+
 - **Prometheus**: Metrics scraping endpoints
 - **Grafana**: Pre-built dashboards for visualization
-- **DataDog**: APM integration for full-stack monitoring  
+- **DataDog**: APM integration for full-stack monitoring
 - **New Relic**: Application performance monitoring
 - **Splunk**: Log aggregation and analysis
 
 ## Troubleshooting and Debug Tools
 
 ### Performance Debugging
+
 ```javascript
 // Memory profiling in development
 if (process.env.NODE_ENV === 'development') {
@@ -406,7 +436,7 @@ if (process.env.NODE_ENV === 'development') {
       console.log('Memory usage:', {
         used: Math.round(performance.memory.usedJSHeapSize / 1024 / 1024),
         total: Math.round(performance.memory.totalJSHeapSize / 1024 / 1024),
-        limit: Math.round(performance.memory.jsHeapSizeLimit / 1024 / 1024)
+        limit: Math.round(performance.memory.jsHeapSizeLimit / 1024 / 1024),
       });
     }
   }, 10000);
@@ -414,11 +444,12 @@ if (process.env.NODE_ENV === 'development') {
 ```
 
 ### Debug Commands
+
 ```bash
 # Performance profiling
 npm run dev:profile
 
-# Memory analysis  
+# Memory analysis
 npm run analyze:memory
 
 # Bundle analysis
@@ -428,12 +459,14 @@ npm run analyze:bundle
 ## Security Considerations
 
 ### Data Privacy
+
 - Sensitive data anonymization in privacy mode
 - PII redaction in logs and metrics
 - Secure storage of monitoring data
 - Access controls for monitoring dashboards
 
 ### Compliance Requirements
+
 - Audit trail integrity and immutability
 - Data retention policy enforcement
 - Regulatory reporting automation
@@ -442,6 +475,7 @@ npm run analyze:bundle
 ## Future Enhancements
 
 ### Planned Improvements
+
 - Machine learning-based anomaly detection
 - Predictive performance monitoring
 - Advanced user behavior analytics
@@ -450,5 +484,5 @@ npm run analyze:bundle
 
 ---
 
-*Last updated: 2025-07-21*  
-*Next review: 2025-08-21*
+_Last updated: 2025-07-21_  
+_Next review: 2025-08-21_

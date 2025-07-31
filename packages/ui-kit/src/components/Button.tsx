@@ -33,11 +33,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ...createButtonVariantStyles(variant, theme),
       ...createSizeStyles(size, theme, 'button'),
       ...(fullWidth && { width: '100%' }),
-      ...(loading && { 
+      ...(loading && {
         cursor: 'not-allowed',
-        opacity: 0.7
+        opacity: 0.7,
       }),
-      ...style
+      ...style,
     };
 
     const handleClick = () => {
@@ -59,25 +59,25 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {leftIcon && (
-          <span 
+          <span
             className="ui-button-icon-left"
-            style={{ 
+            style={{
               marginRight: children ? `${theme.spacing.xs}px` : 0,
               display: 'flex',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           >
             {leftIcon}
           </span>
         )}
-        
+
         {loading ? (
-          <span 
+          <span
             className="ui-button-loading"
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: `${theme.spacing.xs}px`
+              gap: `${theme.spacing.xs}px`,
             }}
           >
             <LoadingSpinner size={size} />
@@ -86,14 +86,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ) : (
           children
         )}
-        
+
         {rightIcon && !loading && (
-          <span 
+          <span
             className="ui-button-icon-right"
-            style={{ 
+            style={{
               marginLeft: children ? `${theme.spacing.xs}px` : 0,
               display: 'flex',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           >
             {rightIcon}
@@ -109,17 +109,17 @@ Button.displayName = 'Button';
 // Simple loading spinner component
 const LoadingSpinner: React.FC<{ size: string }> = ({ size }) => {
   const theme = useTheme();
-  
+
   const sizeMap = {
     xs: 12,
     sm: 14,
     md: 16,
     lg: 18,
-    xl: 20
+    xl: 20,
   };
-  
+
   const spinnerSize = sizeMap[size as keyof typeof sizeMap] || 16;
-  
+
   return (
     <div
       className="ui-loading-spinner"
@@ -129,7 +129,7 @@ const LoadingSpinner: React.FC<{ size: string }> = ({ size }) => {
         border: '2px solid transparent',
         borderTopColor: 'currentColor',
         borderRadius: '50%',
-        animation: 'ui-spin 0.8s linear infinite'
+        animation: 'ui-spin 0.8s linear infinite',
       }}
     />
   );

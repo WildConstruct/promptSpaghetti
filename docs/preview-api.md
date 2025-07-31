@@ -95,12 +95,12 @@ This allows for easy rollback if issues arise in production.
 const response = await fetch('http://localhost:8000/preview', {
   method: 'POST',
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
   },
   body: JSON.stringify({
     graph: myGraph,
-    runs: 3
-  })
+    runs: 3,
+  }),
 });
 
 const { results } = await response.json();
@@ -114,13 +114,13 @@ console.log(results);
 const response = await fetch('http://localhost:8000/preview', {
   method: 'POST',
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
   },
   body: JSON.stringify({
     graph: myGraph,
     runs: 10,
-    seedStart: 100
-  })
+    seedStart: 100,
+  }),
 });
 ```
 

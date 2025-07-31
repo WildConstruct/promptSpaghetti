@@ -113,7 +113,7 @@ runs:
         # Parse response
         REQUEST_ID=$(echo "$RESPONSE" | jq -r '.id // empty')
         STATUS=$(echo "$RESPONSE" | jq -r '.status // "pending"')
-        
+
         if [ -z "$REQUEST_ID" ]; then
           echo "Error: Failed to create approval request"
           echo "Response: $RESPONSE"

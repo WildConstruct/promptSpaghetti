@@ -50,71 +50,83 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
     return graph.nodes.map(node => ({
       ...node,
       position: node.position || { x: Math.random() * 400 + 100, y: Math.random() * 300 + 100 },
-      size: { width: 150, height: 80 }
+      size: { width: 150, height: 80 },
     }));
   }, [graph.nodes]);
 
   // Get node by ID
-  const getNodeById = useCallback((nodeId: string) => {
-    return canvasNodes.find(node => node.id === nodeId);
-  }, [canvasNodes]);
+  const getNodeById = useCallback(
+    (nodeId: string) => {
+      return canvasNodes.find(node => node.id === nodeId);
+    },
+    [canvasNodes]
+  );
 
   // Transform coordinates from screen to canvas space
-  const screenToCanvas = useCallback((screenX: number, screenY: number) => {
-    const rect = canvasRef.current?.getBoundingClientRect();
-    if (!rect) return { x: 0, y: 0 };
-    
-    return {
-      x: (screenX - rect.left - viewport.pan.x) / viewport.zoom,
-      y: (screenY - rect.top - viewport.pan.y) / viewport.zoom
-    };
-  }, [viewport]);
+  const screenToCanvas = useCallback(
+    (screenX: number, screenY: number) => {
+      const rect = canvasRef.current?.getBoundingClientRect();
+      if (!rect) return { x: 0, y: 0 };
+
+      return {
+        x: (screenX - rect.left - viewport.pan.x) / viewport.zoom,
+        y: (screenY - rect.top - viewport.pan.y) / viewport.zoom,
+      };
+    },
+    [viewport]
+  );
 
   // Handle mouse events
-  const handleMouseDown = useCallback((e: React.MouseEvent, nodeId?: string) => {
-    e.preventDefault();
-    
-    if (nodeId && !readOnly) {
-      // Start dragging node
-      const node = getNodeById(nodeId);
-      if (node) {
-        const canvasPos = screenToCanvas(e.clientX, e.clientY);
-        setDragNode(nodeId);
-        setDragOffset({
-          x: canvasPos.x - node.position.x,
-          y: canvasPos.y - node.position.y
-        });
-        onNodeSelect?.(node);
-      }
-    } else {
-      // Start panning canvas
-      setIsDragging(true);
-      onNodeSelect?.(null);
-    }
-  }, [readOnly, getNodeById, screenToCanvas, onNodeSelect]);
+  const handleMouseDown = useCallback(
+    (e: React.MouseEvent, nodeId?: string) => {
+      e.preventDefault();
 
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    const canvasPos = screenToCanvas(e.clientX, e.clientY);
-    setMousePosition(canvasPos);
-
-    if (dragNode && !readOnly) {
-      // Update node position
-      const newPosition = {
-        x: canvasPos.x - dragOffset.x,
-        y: canvasPos.y - dragOffset.y
-      };
-      onNodeMove?.(dragNode, newPosition);
-    } else if (isDragging) {
-      // Pan canvas
-      setViewport(prev => ({
-        ...prev,
-        pan: {
-          x: prev.pan.x + e.movementX,
-          y: prev.pan.y + e.movementY
+      if (nodeId && !readOnly) {
+        // Start dragging node
+        const node = getNodeById(nodeId);
+        if (node) {
+          const canvasPos = screenToCanvas(e.clientX, e.clientY);
+          setDragNode(nodeId);
+          setDragOffset({
+            x: canvasPos.x - node.position.x,
+            y: canvasPos.y - node.position.y,
+          });
+          onNodeSelect?.(node);
         }
-      }));
-    }
-  }, [dragNode, readOnly, dragOffset, isDragging, screenToCanvas, onNodeMove]);
+      } else {
+        // Start panning canvas
+        setIsDragging(true);
+        onNodeSelect?.(null);
+      }
+    },
+    [readOnly, getNodeById, screenToCanvas, onNodeSelect]
+  );
+
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent) => {
+      const canvasPos = screenToCanvas(e.clientX, e.clientY);
+      setMousePosition(canvasPos);
+
+      if (dragNode && !readOnly) {
+        // Update node position
+        const newPosition = {
+          x: canvasPos.x - dragOffset.x,
+          y: canvasPos.y - dragOffset.y,
+        };
+        onNodeMove?.(dragNode, newPosition);
+      } else if (isDragging) {
+        // Pan canvas
+        setViewport(prev => ({
+          ...prev,
+          pan: {
+            x: prev.pan.x + e.movementX,
+            y: prev.pan.y + e.movementY,
+          },
+        }));
+      }
+    },
+    [dragNode, readOnly, dragOffset, isDragging, screenToCanvas, onNodeMove]
+  );
 
   const handleMouseUp = useCallback(() => {
     setDragNode(null);
@@ -123,16 +135,19 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
   }, []);
 
   // Handle zoom
-  const handleWheel = useCallback((e: React.WheelEvent) => {
-    e.preventDefault();
-    const zoomFactor = 1 - e.deltaY * 0.001;
-    const newZoom = Math.max(0.1, Math.min(3, viewport.zoom * zoomFactor));
-    
-    setViewport(prev => ({
-      ...prev,
-      zoom: newZoom
-    }));
-  }, [viewport.zoom]);
+  const handleWheel = useCallback(
+    (e: React.WheelEvent) => {
+      e.preventDefault();
+      const zoomFactor = 1 - e.deltaY * 0.001;
+      const newZoom = Math.max(0.1, Math.min(3, viewport.zoom * zoomFactor));
+
+      setViewport(prev => ({
+        ...prev,
+        zoom: newZoom,
+      }));
+    },
+    [viewport.zoom]
+  );
 
   // Control functions
   const zoomIn = useCallback(() => {
@@ -149,19 +164,22 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
 
   const fitToView = useCallback(() => {
     if (canvasNodes.length === 0) return;
-    
+
     // Calculate bounds of all nodes
-    const bounds = canvasNodes.reduce((acc, node) => ({
-      left: Math.min(acc.left, node.position.x),
-      top: Math.min(acc.top, node.position.y),
-      right: Math.max(acc.right, node.position.x + node.size.width),
-      bottom: Math.max(acc.bottom, node.position.y + node.size.height)
-    }), {
-      left: Infinity,
-      top: Infinity,
-      right: -Infinity,
-      bottom: -Infinity
-    });
+    const bounds = canvasNodes.reduce(
+      (acc, node) => ({
+        left: Math.min(acc.left, node.position.x),
+        top: Math.min(acc.top, node.position.y),
+        right: Math.max(acc.right, node.position.x + node.size.width),
+        bottom: Math.max(acc.bottom, node.position.y + node.size.height),
+      }),
+      {
+        left: Infinity,
+        top: Infinity,
+        right: -Infinity,
+        bottom: -Infinity,
+      }
+    );
 
     const rect = canvasRef.current?.getBoundingClientRect();
     if (!rect) return;
@@ -181,8 +199,8 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
       zoom: scale,
       pan: {
         x: rect.width / 2 - centerX * scale,
-        y: rect.height / 2 - centerY * scale
-      }
+        y: rect.height / 2 - centerY * scale,
+      },
     });
   }, [canvasNodes]);
 
@@ -195,28 +213,34 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
   }, [fitView, fitToView, canvasNodes.length]);
 
   // Handle connection creation
-  const handleConnectionStart = useCallback((nodeId: string, e: React.MouseEvent) => {
-    if (readOnly) return;
-    e.stopPropagation();
-    setConnectionStart(nodeId);
-  }, [readOnly]);
+  const handleConnectionStart = useCallback(
+    (nodeId: string, e: React.MouseEvent) => {
+      if (readOnly) return;
+      e.stopPropagation();
+      setConnectionStart(nodeId);
+    },
+    [readOnly]
+  );
 
-  const handleConnectionEnd = useCallback((targetNodeId: string, e: React.MouseEvent) => {
-    if (!connectionStart || connectionStart === targetNodeId || readOnly) {
+  const handleConnectionEnd = useCallback(
+    (targetNodeId: string, e: React.MouseEvent) => {
+      if (!connectionStart || connectionStart === targetNodeId || readOnly) {
+        setConnectionStart(null);
+        return;
+      }
+
+      e.stopPropagation();
+
+      // Create new edge
+      onEdgeCreate?.({
+        source: connectionStart,
+        target: targetNodeId,
+      });
+
       setConnectionStart(null);
-      return;
-    }
-    
-    e.stopPropagation();
-    
-    // Create new edge
-    onEdgeCreate?.({
-      source: connectionStart,
-      target: targetNodeId
-    });
-    
-    setConnectionStart(null);
-  }, [connectionStart, readOnly, onEdgeCreate]);
+    },
+    [connectionStart, readOnly, onEdgeCreate]
+  );
 
   // Get node type styles
   const getNodeTypeStyles = (nodeType: string) => {
@@ -224,23 +248,23 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
       border: `2px solid ${theme.colors.border}`,
       borderRadius: `${theme.borderRadius}px`,
       background: theme.colors.surface,
-      color: theme.colors.text
+      color: theme.colors.text,
     };
 
     switch (nodeType) {
-    case 'WeightedChoice':
-      return { ...baseStyles, borderColor: theme.colors.primary };
-    case 'Concat':
-      return { ...baseStyles, borderColor: theme.colors.secondary };
-    case 'Output':
-      return { ...baseStyles, borderColor: theme.colors.success };
-    case 'Include':
-      return { ...baseStyles, borderColor: theme.colors.info };
-    case 'SetVariable':
-    case 'GetVariable':
-      return { ...baseStyles, borderColor: theme.colors.warning };
-    default:
-      return { ...baseStyles, borderColor: theme.colors.accent };
+      case 'WeightedChoice':
+        return { ...baseStyles, borderColor: theme.colors.primary };
+      case 'Concat':
+        return { ...baseStyles, borderColor: theme.colors.secondary };
+      case 'Output':
+        return { ...baseStyles, borderColor: theme.colors.success };
+      case 'Include':
+        return { ...baseStyles, borderColor: theme.colors.info };
+      case 'SetVariable':
+      case 'GetVariable':
+        return { ...baseStyles, borderColor: theme.colors.warning };
+      default:
+        return { ...baseStyles, borderColor: theme.colors.accent };
     }
   };
 
@@ -251,7 +275,7 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
     overflow: 'hidden',
     backgroundColor: theme.colors.background,
     cursor: isDragging ? 'grabbing' : 'grab',
-    ...style
+    ...style,
   };
 
   const transformStyles = {
@@ -259,16 +283,11 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
     transformOrigin: '0 0',
     width: '100%',
     height: '100%',
-    position: 'absolute' as const
+    position: 'absolute' as const,
   };
 
   return (
-    <div
-      className={cn('ui-graph-canvas', className)}
-      style={canvasStyles}
-      data-testid={testId}
-      {...props}
-    >
+    <div className={cn('ui-graph-canvas', className)} style={canvasStyles} data-testid={testId} {...props}>
       {/* Canvas container */}
       <div
         ref={canvasRef}
@@ -277,9 +296,9 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
           width: '100%',
           height: '100%',
           position: 'relative',
-          userSelect: 'none'
+          userSelect: 'none',
         }}
-        onMouseDown={(e) => handleMouseDown(e)}
+        onMouseDown={e => handleMouseDown(e)}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
@@ -297,20 +316,20 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
               width: '100%',
               height: '100%',
               pointerEvents: 'none',
-              zIndex: 1
+              zIndex: 1,
             }}
           >
             {graph.edges.map(edge => {
               const sourceNode = getNodeById(edge.source);
               const targetNode = getNodeById(edge.target);
-              
+
               if (!sourceNode || !targetNode) return null;
-              
+
               const sourceX = sourceNode.position.x + sourceNode.size.width / 2;
               const sourceY = sourceNode.position.y + sourceNode.size.height / 2;
               const targetX = targetNode.position.x + targetNode.size.width / 2;
               const targetY = targetNode.position.y + targetNode.size.height / 2;
-              
+
               return (
                 <line
                   key={edge.id}
@@ -324,7 +343,7 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
                 />
               );
             })}
-            
+
             {/* Connection line while dragging */}
             {connectionStart && (
               <line
@@ -337,21 +356,11 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
                 strokeDasharray="5,5"
               />
             )}
-            
+
             {/* Arrow marker */}
             <defs>
-              <marker
-                id="arrowhead"
-                markerWidth="10"
-                markerHeight="7"
-                refX="9"
-                refY="3.5"
-                orient="auto"
-              >
-                <polygon
-                  points="0 0, 10 3.5, 0 7"
-                  fill={theme.colors.border}
-                />
+              <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                <polygon points="0 0, 10 3.5, 0 7" fill={theme.colors.border} />
               </marker>
             </defs>
           </svg>
@@ -361,10 +370,7 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
             {canvasNodes.map(node => (
               <div
                 key={node.id}
-                className={cn(
-                  'ui-graph-node',
-                  { 'ui-graph-node--selected': selectedNodeId === node.id }
-                )}
+                className={cn('ui-graph-node', { 'ui-graph-node--selected': selectedNodeId === node.id })}
                 style={{
                   position: 'absolute',
                   left: node.position.x,
@@ -376,26 +382,28 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
                   ...getNodeTypeStyles(node.type),
                   ...(selectedNodeId === node.id && {
                     borderColor: theme.colors.primary,
-                    boxShadow: `0 0 0 2px ${theme.colors.primary}40`
-                  })
+                    boxShadow: `0 0 0 2px ${theme.colors.primary}40`,
+                  }),
                 }}
-                onMouseDown={(e) => handleMouseDown(e, node.id)}
-                onClick={(e) => {
+                onMouseDown={e => handleMouseDown(e, node.id)}
+                onClick={e => {
                   e.stopPropagation();
                   onNodeSelect?.(node);
                 }}
               >
                 {/* Node header */}
-                <div style={{
-                  fontSize: `${theme.typography.fontSize.sm}px`,
-                  fontWeight: theme.typography.fontWeight.medium,
-                  marginBottom: `${theme.spacing.xs}px`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between'
-                }}>
+                <div
+                  style={{
+                    fontSize: `${theme.typography.fontSize.sm}px`,
+                    fontWeight: theme.typography.fontWeight.medium,
+                    marginBottom: `${theme.spacing.xs}px`,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                  }}
+                >
                   <span>{node.type}</span>
-                  
+
                   {/* Connection handles */}
                   {!readOnly && (
                     <div style={{ display: 'flex', gap: '4px' }}>
@@ -406,9 +414,9 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
                           height: '8px',
                           borderRadius: '50%',
                           backgroundColor: theme.colors.success,
-                          cursor: 'crosshair'
+                          cursor: 'crosshair',
                         }}
-                        onMouseDown={(e) => handleConnectionStart(node.id, e)}
+                        onMouseDown={e => handleConnectionStart(node.id, e)}
                       />
                       <div
                         className="ui-connection-handle ui-connection-handle--input"
@@ -417,21 +425,23 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
                           height: '8px',
                           borderRadius: '50%',
                           backgroundColor: theme.colors.info,
-                          cursor: 'crosshair'
+                          cursor: 'crosshair',
                         }}
-                        onMouseUp={(e) => handleConnectionEnd(node.id, e)}
+                        onMouseUp={e => handleConnectionEnd(node.id, e)}
                       />
                     </div>
                   )}
                 </div>
 
                 {/* Node content */}
-                <div style={{
-                  fontSize: `${theme.typography.fontSize.xs}px`,
-                  color: theme.colors.textSecondary,
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis'
-                }}>
+                <div
+                  style={{
+                    fontSize: `${theme.typography.fontSize.xs}px`,
+                    color: theme.colors.textSecondary,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}
+                >
                   {node.id}
                 </div>
               </div>
@@ -451,7 +461,7 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
             display: 'flex',
             flexDirection: 'column',
             gap: `${theme.spacing.xs}px`,
-            zIndex: 10
+            zIndex: 10,
           }}
         >
           <Button variant="outline" size="sm" onClick={zoomIn}>
@@ -482,16 +492,18 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
             backgroundColor: theme.colors.surface,
             border: `1px solid ${theme.colors.border}`,
             borderRadius: `${theme.borderRadius}px`,
-            zIndex: 10
+            zIndex: 10,
           }}
         >
           {/* Minimap implementation would go here */}
-          <div style={{
-            padding: `${theme.spacing.sm}px`,
-            fontSize: `${theme.typography.fontSize.xs}px`,
-            color: theme.colors.textSecondary,
-            textAlign: 'center'
-          }}>
+          <div
+            style={{
+              padding: `${theme.spacing.sm}px`,
+              fontSize: `${theme.typography.fontSize.xs}px`,
+              color: theme.colors.textSecondary,
+              textAlign: 'center',
+            }}
+          >
             Minimap
             <br />
             Zoom: {Math.round(viewport.zoom * 100)}%
@@ -512,7 +524,7 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
           borderRadius: `${theme.borderRadius}px`,
           fontSize: `${theme.typography.fontSize.xs}px`,
           color: theme.colors.textSecondary,
-          zIndex: 10
+          zIndex: 10,
         }}
       >
         Nodes: {canvasNodes.length} | Edges: {graph.edges.length} | Zoom: {Math.round(viewport.zoom * 100)}%

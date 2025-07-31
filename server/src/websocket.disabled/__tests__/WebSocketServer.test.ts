@@ -4,7 +4,7 @@ import { WSServerConfig } from '../types';
 
 // Mock all dependencies
 jest.mock('ws', () => ({
-  Server: jest.fn<unknown[], unknown>()
+  Server: jest.fn<unknown[], unknown>(),
 }));
 
 // Mock ConnectionManager
@@ -16,12 +16,12 @@ jest.mock('../ConnectionManager', () => ({
       messagesPerSecond: 0,
       uptime: 0,
       memoryUsage: 0,
-      lastUpdated: Date.now()
+      lastUpdated: Date.now(),
     })),
     broadcastToDocument: jest.fn<unknown[], unknown>(),
     cleanup: jest.fn<unknown[], unknown>(),
-    on: jest.fn<unknown[], unknown>()
-  }))
+    on: jest.fn<unknown[], unknown>(),
+  })),
 }));
 
 // Mock PresenceManager
@@ -30,39 +30,39 @@ jest.mock('../PresenceManager', () => ({
     cleanup: jest.fn<unknown[], unknown>(),
     getDocumentUsers: jest.fn(() => []),
     getPresenceStats: jest.fn(() => ({})),
-    on: jest.fn<unknown[], unknown>()
-  }))
+    on: jest.fn<unknown[], unknown>(),
+  })),
 }));
 
 // Mock ConflictResolver
 jest.mock('../ConflictResolver', () => ({
   ConflictResolver: jest.fn<unknown[], unknown>().mockImplementation(() => ({
     cleanup: jest.fn<unknown[], unknown>(),
-    on: jest.fn<unknown[], unknown>()
-  }))
+    on: jest.fn<unknown[], unknown>(),
+  })),
 }));
 
 // Mock SynchronizationManager
 jest.mock('../SynchronizationManager', () => ({
   SynchronizationManager: jest.fn<unknown[], unknown>().mockImplementation(() => ({
     cleanup: jest.fn<unknown[], unknown>(),
-    on: jest.fn<unknown[], unknown>()
-  }))
+    on: jest.fn<unknown[], unknown>(),
+  })),
 }));
 
 // Mock Analytics
 jest.mock('../../analytics/AnalyticsCollector', () => ({
   AnalyticsCollector: jest.fn<unknown[], unknown>().mockImplementation(() => ({
-    on: jest.fn<unknown[], unknown>()
-  }))
+    on: jest.fn<unknown[], unknown>(),
+  })),
 }));
 
 jest.mock('../../database/analytics-dao', () => ({
-  AnalyticsDAO: jest.fn<unknown[], unknown>().mockImplementation(() => ({}))
+  AnalyticsDAO: jest.fn<unknown[], unknown>().mockImplementation(() => ({})),
 }));
 
 jest.mock('../../database/connection', () => ({
-  getDatabase: jest.fn(() => ({}))
+  getDatabase: jest.fn(() => ({})),
 }));
 
 describe('WebSocketServer', () => {
@@ -77,9 +77,9 @@ describe('WebSocketServer', () => {
       connectionTimeout: 5000,
       maxConnections: 10,
       enableAuthentication: false,
-      corsOrigins: ['*']
+      corsOrigins: ['*'],
     };
-    
+
     server = new WebSocketServer(config);
   });
 
@@ -97,19 +97,19 @@ describe('WebSocketServer', () => {
     it('should start server on configured port', async () => {
       const mockWss = {
         on: jest.fn<unknown[], unknown>(),
-        close: jest.fn((callback) => callback && callback())
+        close: jest.fn(callback => callback && callback()),
       };
-      
+
       (WebSocket.Server as jest.Mock).mockImplementation(() => mockWss as any);
 
       await server.start();
-      
+
       expect(WebSocket.Server).toHaveBeenCalledWith({
         port: config.port,
         server: undefined,
-        verifyClient: expect.any(Function)
+        verifyClient: expect.any(Function),
       });
-      
+
       expect(mockWss.on).toHaveBeenCalledWith('connection', expect.any(Function));
       expect(mockWss.on).toHaveBeenCalledWith('error', expect.any(Function));
     }, 10000); // 10 second timeout
@@ -118,14 +118,14 @@ describe('WebSocketServer', () => {
   describe('health metrics', () => {
     it('should return health metrics', () => {
       const metrics = server.getHealthMetrics();
-      
+
       expect(metrics).toHaveProperty('totalConnections');
       expect(metrics).toHaveProperty('activeDocuments');
       expect(metrics).toHaveProperty('messagesPerSecond');
       expect(metrics).toHaveProperty('uptime');
       expect(metrics).toHaveProperty('memoryUsage');
       expect(metrics).toHaveProperty('lastUpdated');
-      
+
       expect(typeof metrics.totalConnections).toBe('number');
       expect(typeof metrics.activeDocuments).toBe('number');
       expect(typeof metrics.uptime).toBe('number');
@@ -135,7 +135,7 @@ describe('WebSocketServer', () => {
   describe('document sessions', () => {
     it('should return document session info', () => {
       const sessions = server.getDocumentSessions();
-      
+
       expect(sessions).toHaveProperty('activeDocuments');
       expect(sessions).toHaveProperty('totalConnections');
       expect(typeof sessions.activeDocuments).toBe('number');
@@ -148,7 +148,7 @@ describe('WebSocketServer', () => {
       const documentId = 'test-doc';
       const message = {
         type: 'ping' as const,
-        payload: { data: 'test' }
+        payload: { data: 'test' },
       };
 
       // Should not throw when no connections exist
@@ -163,7 +163,7 @@ describe('WebSocketServer', () => {
       const authConfig = {
         ...config,
         enableAuthentication: true,
-        jwtSecret: undefined
+        jwtSecret: undefined,
       };
 
       expect(() => {
@@ -174,7 +174,7 @@ describe('WebSocketServer', () => {
     it('should handle CORS origins configuration', () => {
       const corsConfig = {
         ...config,
-        corsOrigins: ['http://localhost:3000', 'https://example.com']
+        corsOrigins: ['http://localhost:3000', 'https://example.com'],
       };
 
       const corsServer = new WebSocketServer(corsConfig);
@@ -186,7 +186,7 @@ describe('WebSocketServer', () => {
     it('should respect max connections limit', () => {
       const limitedConfig = {
         ...config,
-        maxConnections: 1
+        maxConnections: 1,
       };
 
       const limitedServer = new WebSocketServer(limitedConfig);
@@ -198,11 +198,11 @@ describe('WebSocketServer', () => {
     it('should handle server start errors gracefully', async () => {
       const errorConfig = {
         ...config,
-        port: -1 // Invalid port
+        port: -1, // Invalid port
       };
 
       const errorServer = new WebSocketServer(errorConfig);
-      
+
       (WebSocket.Server as jest.Mock).mockImplementation(() => {
         throw new Error('Invalid port');
       });
@@ -215,14 +215,14 @@ describe('WebSocketServer', () => {
     it('should stop server gracefully', async () => {
       const mockWss = {
         on: jest.fn<unknown[], unknown>(),
-        close: jest.fn((callback) => callback && callback())
+        close: jest.fn(callback => callback && callback()),
       };
-      
+
       (WebSocket.Server as jest.Mock).mockImplementation(() => mockWss as any);
 
       await server.start();
       await server.stop();
-      
+
       expect(mockWss.close).toHaveBeenCalled();
     });
 

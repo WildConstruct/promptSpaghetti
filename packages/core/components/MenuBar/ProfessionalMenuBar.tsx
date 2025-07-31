@@ -1,7 +1,7 @@
 /**
  * Professional Desktop Application Menu Bar
  * Epic 2 Story 2.1: Menu Bar Architecture Implementation
- * 
+ *
  * Cinema 4D-inspired menu bar with File, Edit, View, Debug, Help sections
  */
 import React, { useState, useCallback, useRef, useEffect } from 'react';
@@ -98,25 +98,27 @@ const professionalColors = {
   },
 };
 const MenuItem: React.FC<MenuItemProps> = ({
-  label, 
-  shortcut, 
-  onClick, 
-  disabled = false, 
+  label,
+  shortcut,
+  onClick,
+  disabled = false,
   divider = false,
-  submenu 
+  submenu,
 }) => {
   const [showSubmenu, setShowSubmenu] = useState(false);
   const itemRef = useRef<HTMLDivElement>(null);
   if (divider) {
     return (
-      <div style={{
-        height: '1px',
-        backgroundColor: professionalColors.ui.border,
-        margin: '4px 0',
-      }} />
+      <div
+        style={{
+          height: '1px',
+          backgroundColor: professionalColors.ui.border,
+          margin: '4px 0',
+        }}
+      />
     );
   }
-  
+
   const handleClick = useCallback(() => {
     if (!disabled && onClick) {
       onClick();
@@ -127,7 +129,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
       setShowSubmenu(true);
     }
   }, [submenu]);
-  
+
   const handleMouseLeave = useCallback(() => {
     if (submenu) {
       setShowSubmenu(false);
@@ -152,51 +154,57 @@ const MenuItem: React.FC<MenuItemProps> = ({
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onMouseOver={(e) => {
+      onMouseOver={e => {
         if (!disabled) {
           e.currentTarget.style.backgroundColor = professionalColors.ui.hover;
         }
       }}
-      onMouseOut={(e) => {
+      onMouseOut={e => {
         if (!showSubmenu) {
-          e.currentTarget.style.backgroundColor = 'transparent'
-  }
+          e.currentTarget.style.backgroundColor = 'transparent';
+        }
       }}
     >
       <span>{label}</span>
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         {shortcut && (
-          <span style={{
-            fontSize: '11px',
-            color: professionalColors.text.secondary,
-            fontFamily: 'SF Mono, Monaco, Inconsolata, Roboto Mono, monospace',
-          }}>
+          <span
+            style={{
+              fontSize: '11px',
+              color: professionalColors.text.secondary,
+              fontFamily: 'SF Mono, Monaco, Inconsolata, Roboto Mono, monospace',
+            }}
+          >
             {shortcut}
           </span>
         )}
         {submenu && (
-          <span style={{
-            fontSize: '10px',
-            color: professionalColors.text.secondary,
-          }}>
+          <span
+            style={{
+              fontSize: '10px',
+              color: professionalColors.text.secondary,
+            }}
+          >
             ▶
           </span>
         )}
       </div>
       {/* Submenu */}
       {submenu && showSubmenu && (
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: '100%',
-          minWidth: '200px',
-          backgroundColor: professionalColors.background.secondary,
-          border: `1px solid ${professionalColors.ui.border}`,
-          borderRadius: '4px',
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
-          zIndex: 1002,
-          padding: '4px 0',
-        }}>
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: '100%',
+            minWidth: '200px',
+            backgroundColor: professionalColors.background.secondary,
+            border: `1px solid ${professionalColors.ui.border}`,
+            borderRadius: '4px',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+            zIndex: 1002,
+            padding: '4px 0',
+          }}
+        >
           {submenu.map((item, index) => (
             <MenuItem key={index} {...item} />
           ))}
@@ -233,32 +241,34 @@ const Menu: React.FC<MenuProps> = ({ label, items, isOpen, onToggle, onClose }) 
           transition: 'background-color 0.15s ease',
           borderRadius: '2px',
         }}
-        onMouseOver={(e) => {
+        onMouseOver={e => {
           if (!isOpen) {
             e.currentTarget.style.backgroundColor = professionalColors.ui.hover;
           }
         }}
-        onMouseOut={(e) => {
+        onMouseOut={e => {
           if (!isOpen) {
-            e.currentTarget.style.backgroundColor = 'transparent'
-  }
+            e.currentTarget.style.backgroundColor = 'transparent';
+          }
         }}
       >
         {label}
       </button>
       {isOpen && (
-        <div style={{
-          position: 'absolute',
-          top: '100%',
-          left: 0,
-          minWidth: '220px',
-          backgroundColor: professionalColors.background.secondary,
-          border: `1px solid ${professionalColors.ui.border}`,
-          borderRadius: '4px',
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
-          zIndex: 1001,
-          padding: '4px 0',
-        }}>
+        <div
+          style={{
+            position: 'absolute',
+            top: '100%',
+            left: 0,
+            minWidth: '220px',
+            backgroundColor: professionalColors.background.secondary,
+            border: `1px solid ${professionalColors.ui.border}`,
+            borderRadius: '4px',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+            zIndex: 1001,
+            padding: '4px 0',
+          }}
+        >
           {items.map((item, index) => (
             <MenuItem key={index} {...item} />
           ))}
@@ -318,12 +328,15 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
   gridVisible = true,
   minimapVisible = true,
   inspectorVisible = true,
-  recentFiles = []
+  recentFiles = [],
 }) => {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
-  const handleMenuToggle = useCallback((menuName: string) => {
-    setOpenMenu(openMenu === menuName ? null : menuName);
-  }, [openMenu]);
+  const handleMenuToggle = useCallback(
+    (menuName: string) => {
+      setOpenMenu(openMenu === menuName ? null : menuName);
+    },
+    [openMenu]
+  );
   const handleMenuClose = useCallback(() => {
     setOpenMenu(null);
   }, []);
@@ -336,38 +349,45 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
     { label: 'Save As...', shortcut: '⌘⇧S', onClick: onSaveAs },
     { divider: true },
     { label: 'Import...', shortcut: '⌘I', onClick: onImport },
-    { 
-      label: 'Export', 
+    {
+      label: 'Export',
       submenu: [
         { label: 'Export as JSON', onClick: () => onExport?.('json') },
         { label: 'Export as PNG', onClick: () => onExport?.('png') },
         { label: 'Export as SVG', onClick: () => onExport?.('svg') },
-        { label: 'Export as PDF', onClick: () => onExport?.('pdf') }
-      ]
+        { label: 'Export as PDF', onClick: () => onExport?.('pdf') },
+      ],
     },
-    ...(recentFiles.length > 0 ? [
-      { divider: true },
-      { 
-        label: 'Recent Files', 
-        submenu: [
-          ...recentFiles.slice(0, 10).map((file, index) => ({
-            label: `${index + 1}. ${file.metadata.title || file.name.replace('.psg', '')}`,
-            onClick: () => onRecentFileLoad?.(file)
-          })),
-          ...(recentFiles.length > 0 ? [
-            { divider: true },
-            { label: 'Clear Recent Files', onClick: () => {
-              // TODO: Implement clear recent files
-              console.log('Clear recent files');
-            }}
-          ] : [])
+    ...(recentFiles.length > 0
+      ? [
+          { divider: true },
+          {
+            label: 'Recent Files',
+            submenu: [
+              ...recentFiles.slice(0, 10).map((file, index) => ({
+                label: `${index + 1}. ${file.metadata.title || file.name.replace('.psg', '')}`,
+                onClick: () => onRecentFileLoad?.(file),
+              })),
+              ...(recentFiles.length > 0
+                ? [
+                    { divider: true },
+                    {
+                      label: 'Clear Recent Files',
+                      onClick: () => {
+                        // TODO: Implement clear recent files
+                        console.log('Clear recent files');
+                      },
+                    },
+                  ]
+                : []),
+            ],
+          },
         ]
-      }
-    ] : []),
+      : []),
     { divider: true },
-    { label: 'Quit', shortcut: '⌘Q', onClick: onQuit }
+    { label: 'Quit', shortcut: '⌘Q', onClick: onQuit },
   ];
-  
+
   // Edit menu items
   const editMenuItems: MenuItemProps[] = [
     { label: 'Undo', shortcut: '⌘Z', onClick: onUndo, disabled: !canUndo },
@@ -380,29 +400,29 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
     { label: 'Select All', shortcut: '⌘A', onClick: onSelectAll },
     { label: 'Find', shortcut: '⌘F', onClick: onFind },
     { divider: true },
-    { label: 'Preferences...', shortcut: '⌘,', onClick: onPreferences }
+    { label: 'Preferences...', shortcut: '⌘,', onClick: onPreferences },
   ];
-  
+
   // View menu items
   const viewMenuItems: MenuItemProps[] = [
     { label: 'Zoom In', shortcut: '⌘+', onClick: onZoomIn },
     { label: 'Zoom Out', shortcut: '⌘-', onClick: onZoomOut },
     { label: 'Fit View', shortcut: '⌘0', onClick: onFitView },
     { divider: true },
-    { 
+    {
       label: `${gridVisible ? 'Hide' : 'Show'} Grid`,
-      shortcut: '⌘G', 
-      onClick: onToggleGrid 
+      shortcut: '⌘G',
+      onClick: onToggleGrid,
     },
-    { 
+    {
       label: `${minimapVisible ? 'Hide' : 'Show'} Minimap`,
-      shortcut: '⌘M', 
-      onClick: onToggleMinimap
+      shortcut: '⌘M',
+      onClick: onToggleMinimap,
     },
-    { 
+    {
       label: `${inspectorVisible ? 'Hide' : 'Show'} Inspector`,
-      shortcut: '⌘⇧I', 
-      onClick: onToggleInspector
+      shortcut: '⌘⇧I',
+      onClick: onToggleInspector,
     },
     { divider: true },
     {
@@ -410,23 +430,23 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
       shortcut: 'Alt+F',
       onClick: onToggleFullscreen,
     },
-    { 
-      label: 'Theme', 
+    {
+      label: 'Theme',
       submenu: [
         { label: '🌙 Dark', onClick: () => onToggleTheme?.('dark') },
         { label: '☀️ Light', onClick: () => onToggleTheme?.('light') },
-        { label: '🎬 Cinema 4D', onClick: () => onToggleTheme?.('cinema') }
-      ]
-    }
+        { label: '🎬 Cinema 4D', onClick: () => onToggleTheme?.('cinema') },
+      ],
+    },
   ];
   // Debug menu items
   const debugMenuItems: MenuItemProps[] = [
     { label: 'Open DevTools', shortcut: 'F12', onClick: onDevTools },
     { label: 'Validate Graph', shortcut: '⌘⇧V', onClick: onValidateGraph },
     { label: 'Performance Monitor', onClick: onPerformanceMonitor },
-    { label: 'Toggle Console', shortcut: '⌘⇧C', onClick: onConsoleToggle }
+    { label: 'Toggle Console', shortcut: '⌘⇧C', onClick: onConsoleToggle },
   ];
-  
+
   // Help menu items
   const helpMenuItems: MenuItemProps[] = [
     { label: 'Documentation', shortcut: 'F1', onClick: onDocumentation },
@@ -435,29 +455,33 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
     { label: 'Support', onClick: onSupport },
     { label: 'Report Bug', onClick: onReportBug },
     { divider: true },
-    { label: 'About', onClick: onAbout }
+    { label: 'About', onClick: onAbout },
   ];
-  
+
   return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      height: '32px',
-      backgroundColor: professionalColors.background.secondary,
-      borderBottom: `1px solid ${professionalColors.ui.border}`,
-      padding: '0 8px',
-      position: 'relative',
-      zIndex: 1000,
-      userSelect: 'none',
-    }}>
-      {/* Application Title */}
-      <div style={{
-        fontSize: '13px',
-        fontWeight: 600,
-        color: professionalColors.text.primary,
-        marginRight: '24px',
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        height: '32px',
+        backgroundColor: professionalColors.background.secondary,
+        borderBottom: `1px solid ${professionalColors.ui.border}`,
         padding: '0 8px',
-      }}>
+        position: 'relative',
+        zIndex: 1000,
+        userSelect: 'none',
+      }}
+    >
+      {/* Application Title */}
+      <div
+        style={{
+          fontSize: '13px',
+          fontWeight: 600,
+          color: professionalColors.text.primary,
+          marginRight: '24px',
+          padding: '0 8px',
+        }}
+      >
         Prompt Spaghetti
       </div>
       {/* Menu Items */}
@@ -499,15 +523,19 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
         />
       </div>
       {/* Status Indicator */}
-      <div style={{
-        marginLeft: 'auto',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '16px',
-        fontSize: '11px',
-        color: professionalColors.text.secondary,
-      }}>
-        <span>{nodes.length} nodes, {edges.length} edges</span>
+      <div
+        style={{
+          marginLeft: 'auto',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '16px',
+          fontSize: '11px',
+          color: professionalColors.text.secondary,
+        }}
+      >
+        <span>
+          {nodes.length} nodes, {edges.length} edges
+        </span>
         <span>🎬 Cinema 4D</span>
       </div>
     </div>

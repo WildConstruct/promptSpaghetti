@@ -33,7 +33,7 @@ const lockPath = statePath + '.lock';
 
 async function grabTasksSafely() {
   let release;
-  
+
   try {
     // Acquire exclusive lock with timeout
     console.log(`🔒 Acquiring lock for ${devId}...`);
@@ -41,71 +41,72 @@ async function grabTasksSafely() {
       retries: {
         retries: 10,
         minTimeout: 100,
-        maxTimeout: 1000
+        maxTimeout: 1000,
       },
-      stale: 30000 // Lock expires after 30 seconds
+      stale: 30000, // Lock expires after 30 seconds
     });
-    
+
     console.log(`✅ Lock acquired for ${devId}`);
-    
+
     // Read state file
     const stateData = fs.readFileSync(statePath, 'utf8');
     const state = JSON.parse(stateData);
-    
+
     // Convert tasks to array
-    const tasks = Object.entries(state.tasks || {}).map(([id, task]) => ({...task, id}));
-    
+    const tasks = Object.entries(state.tasks || {}).map(([id, task]) => ({ ...task, id }));
+
     // Find available tasks - priority tasks use 'TODO' state, regular tasks use 'UNASSIGNED'
-    let unassignedTasks = tasks
-      .filter(task => 
-        (task.state === 'UNASSIGNED' && !task.assignee) || 
-        (task.state === 'TODO' && task.metadata?.source === 'priority-automation' && 
-         (!task.assignee || task.assignee === 'Unassigned'))
-      );
-    
+    let unassignedTasks = tasks.filter(
+      task =>
+        (task.state === 'UNASSIGNED' && !task.assignee) ||
+        (task.state === 'TODO' &&
+          task.metadata?.source === 'priority-automation' &&
+          (!task.assignee || task.assignee === 'Unassigned'))
+    );
+
     // Apply filters
     if (storyFilter) {
       unassignedTasks = unassignedTasks.filter(task => {
         // Check both story field AND task tags for priority tasks
         const hasStoryField = task.story && task.story.includes(storyFilter);
-        const hasStoryTag = (
+        const hasStoryTag =
           (storyFilter === '20.1' && task.tags?.includes('auth')) ||
-          (storyFilter === '20.2' && task.tags?.includes('file-browser'))
-        );
+          (storyFilter === '20.2' && task.tags?.includes('file-browser'));
         return hasStoryField || hasStoryTag;
       });
       console.log(`📋 Filtering by story: ${storyFilter}`);
     }
-    
+
     if (epicFilter) {
-      unassignedTasks = unassignedTasks.filter(task => 
-        task.epic && task.epic.includes(epicFilter)
-      );
+      unassignedTasks = unassignedTasks.filter(task => task.epic && task.epic.includes(epicFilter));
       console.log(`📋 Filtering by epic: ${epicFilter}`);
     }
-    
+
     if (priorityOnly) {
-      unassignedTasks = unassignedTasks.filter(task => 
-        // PRIORITY 1: Epic 8 Demo-Ready Proof of Concept
-        (task.epic === 'Epic 8' || task.tags?.includes('epic-8') || task.tags?.includes('wild-construct')) ||
-        // PRIORITY 2: Authentication and File Browser
-        task.priority === 'high' || 
-        task.metadata?.source === 'priority-automation' ||
-        (task.story && (task.story.includes('20.1') || task.story.includes('20.2'))) ||
-        task.tags?.includes('auth') ||
-        task.tags?.includes('file-browser')
+      unassignedTasks = unassignedTasks.filter(
+        task =>
+          // PRIORITY 1: Epic 8 Demo-Ready Proof of Concept
+          task.epic === 'Epic 8' ||
+          task.tags?.includes('epic-8') ||
+          task.tags?.includes('wild-construct') ||
+          // PRIORITY 2: Authentication and File Browser
+          task.priority === 'high' ||
+          task.metadata?.source === 'priority-automation' ||
+          (task.story && (task.story.includes('20.1') || task.story.includes('20.2'))) ||
+          task.tags?.includes('auth') ||
+          task.tags?.includes('file-browser')
       );
       console.log('🎯 Filtering to priority tasks only');
     }
-    
+
     // Sort by business priority (Epic 8 > authentication > file-browser > other)
     unassignedTasks = unassignedTasks.sort((a, b) => {
-      const getPriority = (task) => {
+      const getPriority = task => {
         // Highest priority: Epic 8 Demo-Ready Proof of Concept
         if (task.epic === 'Epic 8' || task.tags?.includes('epic-8') || task.tags?.includes('wild-construct')) return 1;
         // Second priority: Authentication tasks (Story 20.1 OR auth tag)
         if (task.story?.includes('20.1') || task.tags?.includes('auth')) return 2;
-        // Third priority: File browser tasks (Story 20.2 OR file-browser tag) 
+        // Third priority: File browser tasks (Story 20.2 OR file-browser tag)
         if (task.story?.includes('20.2') || task.tags?.includes('file-browser')) return 3;
         // Fourth priority: Other priority automation tasks
         if (task.metadata?.source === 'priority-automation') return 4;
@@ -114,14 +115,14 @@ async function grabTasksSafely() {
         // Lower priority: Everything else
         return 5;
       };
-      
+
       const priorityDiff = getPriority(a) - getPriority(b);
       if (priorityDiff !== 0) return priorityDiff;
-      
+
       // If same priority, sort by creation date (newest first)
       return new Date(b.created || 0) - new Date(a.created || 0);
     });
-    
+
     // Optional debug output (uncomment for troubleshooting)
     // if (unassignedTasks.length > 0) {
     //   console.log(`\n🔍 DEBUG: Found ${unassignedTasks.length} matching tasks:`);
@@ -133,10 +134,10 @@ async function grabTasksSafely() {
     //   }
     //   console.log('');
     // }
-    
+
     // Take only the requested count
     unassignedTasks = unassignedTasks.slice(0, taskCount);
-    
+
     if (unassignedTasks.length === 0) {
       console.log('❌ No unassigned tasks available matching your criteria.');
       console.log('');
@@ -150,27 +151,27 @@ async function grabTasksSafely() {
       console.log('   5. Check IMMEDIATE-PRIORITIES.md for current business focus');
       return;
     }
-    
+
     console.log(`\n🎯 Assigning ${unassignedTasks.length} task(s) to ${devId}:\n`);
-    
+
     // Update tasks atomically
     const assignedTaskIds = [];
     const timestamp = new Date().toISOString();
-    
+
     unassignedTasks.forEach(task => {
       // Verify task is still available (paranoid check)
       const currentTask = state.tasks[task.id];
-      const isStillAvailable = 
+      const isStillAvailable =
         (currentTask.state === 'UNASSIGNED' && !currentTask.assignee) ||
         (currentTask.state === 'TODO' && (!currentTask.assignee || currentTask.assignee === 'Unassigned'));
-        
+
       if (isStillAvailable) {
         state.tasks[task.id].state = 'IN_PROGRESS';
         state.tasks[task.id].assignee = devId;
         state.tasks[task.id].updated = timestamp;
-        
+
         assignedTaskIds.push(task.id);
-        
+
         console.log(`✓ ${task.id}: ${task.title}`);
         console.log(`  Story: ${task.story_id}, WIP Class: ${task.wip_class}, Est: ${task.est} hours`);
         console.log('  Status: UNASSIGNED → IN_PROGRESS');
@@ -179,44 +180,44 @@ async function grabTasksSafely() {
         console.log(`⚠️ Task ${task.id} was already assigned by another agent`);
       }
     });
-    
+
     if (assignedTaskIds.length === 0) {
       console.log('❌ All tasks were taken by other agents during lock acquisition');
       console.log('');
       console.log('💡 SUGGESTED ACTIONS:');
       console.log('   1. Try again immediately: node src/grab-tasks.js ' + devId + ' ' + taskCount);
-      console.log('   2. Check what\'s available: node src/monitor-available-tasks.js');
+      console.log("   2. Check what's available: node src/monitor-available-tasks.js");
       console.log('   3. Try grabbing different task types with filters');
       return;
     }
-    
+
     // Update assignments
     if (!state.assignments) {
       state.assignments = {};
     }
-    
+
     // Handle both string and array formats for assignments
     let currentAssignments = [];
     if (state.assignments[devId]) {
-      currentAssignments = Array.isArray(state.assignments[devId]) 
+      currentAssignments = Array.isArray(state.assignments[devId])
         ? state.assignments[devId]
         : state.assignments[devId].split(',').filter(id => id.length > 0);
     }
-    
+
     const newAssignments = [...new Set([...currentAssignments, ...assignedTaskIds])];
     state.assignments[devId] = newAssignments;
-    
+
     // Update metadata
     state.meta.updated = timestamp;
-    
+
     // Write state atomically
     const tempPath = statePath + '.tmp';
     fs.writeFileSync(tempPath, JSON.stringify(state, null, 2));
     fs.renameSync(tempPath, statePath);
-    
+
     console.log(`✅ Successfully assigned ${assignedTaskIds.length} task(s) to ${devId}`);
     console.log(`📋 Total assignments for ${devId}: ${newAssignments.length} tasks`);
-    
+
     // Show current tasks
     const devTasks = tasks.filter(t => t.assignee === devId && t.state === 'IN_PROGRESS');
     if (devTasks.length > 0) {
@@ -225,7 +226,6 @@ async function grabTasksSafely() {
         console.log(`  - ${task.id}: ${task.title}`);
       });
     }
-    
   } catch (error) {
     if (error.code === 'ELOCKED') {
       console.error('🔒 Another agent is currently assigning tasks. Please try again in a few seconds.');

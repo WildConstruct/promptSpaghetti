@@ -14,7 +14,7 @@ global.TextDecoder = TextDecoder as any;
 // Configure testing library
 configure({
   testIdAttribute: 'data-testid',
-  asyncUtilTimeout: 5000
+  asyncUtilTimeout: 5000,
 });
 
 /**
@@ -31,8 +31,8 @@ export function mockMatchMedia(matches: boolean = false) {
       removeListener: jest.fn(), // deprecated
       addEventListener: jest.fn(),
       removeEventListener: jest.fn(),
-      dispatchEvent: jest.fn()
-    }))
+      dispatchEvent: jest.fn(),
+    })),
   });
 }
 
@@ -42,29 +42,34 @@ export function mockMatchMedia(matches: boolean = false) {
 export class MockIntersectionObserver {
   private callback: IntersectionObserverCallback;
   private elements: Set<Element> = new Set();
-  
+
   constructor(callback: IntersectionObserverCallback) {
     this.callback = callback;
   }
-  
+
   observe(element: Element) {
     this.elements.add(element);
     // Simulate immediate intersection
-    this.callback([{
-      target: element,
-      isIntersecting: true,
-      intersectionRatio: 1,
-      boundingClientRect: element.getBoundingClientRect(),
-      intersectionRect: element.getBoundingClientRect(),
-      rootBounds: null,
-      time: Date.now()
-    }], this);
+    this.callback(
+      [
+        {
+          target: element,
+          isIntersecting: true,
+          intersectionRatio: 1,
+          boundingClientRect: element.getBoundingClientRect(),
+          intersectionRect: element.getBoundingClientRect(),
+          rootBounds: null,
+          time: Date.now(),
+        },
+      ],
+      this
+    );
   }
-  
+
   unobserve(element: Element) {
     this.elements.delete(element);
   }
-  
+
   disconnect() {
     this.elements.clear();
   }
@@ -78,27 +83,32 @@ global.IntersectionObserver = MockIntersectionObserver as any;
 export class MockResizeObserver {
   private callback: ResizeObserverCallback;
   private elements: Set<Element> = new Set();
-  
+
   constructor(callback: ResizeObserverCallback) {
     this.callback = callback;
   }
-  
+
   observe(element: Element) {
     this.elements.add(element);
     // Simulate resize
-    this.callback([{
-      target: element,
-      contentRect: element.getBoundingClientRect(),
-      borderBoxSize: [{ inlineSize: 100, blockSize: 100 }],
-      contentBoxSize: [{ inlineSize: 100, blockSize: 100 }],
-      devicePixelContentBoxSize: [{ inlineSize: 100, blockSize: 100 }]
-    }], this);
+    this.callback(
+      [
+        {
+          target: element,
+          contentRect: element.getBoundingClientRect(),
+          borderBoxSize: [{ inlineSize: 100, blockSize: 100 }],
+          contentBoxSize: [{ inlineSize: 100, blockSize: 100 }],
+          devicePixelContentBoxSize: [{ inlineSize: 100, blockSize: 100 }],
+        },
+      ],
+      this
+    );
   }
-  
+
   unobserve(element: Element) {
     this.elements.delete(element);
   }
-  
+
   disconnect() {
     this.elements.clear();
   }
@@ -116,9 +126,9 @@ export function createTouchEvent(
   const touchList = {
     length: touches.length,
     item: (index: number) => touches[index],
-    ...touches.reduce((acc, touch, index) => ({ ...acc, [index]: touch }), {})
+    ...touches.reduce((acc, touch, index) => ({ ...acc, [index]: touch }), {}),
   } as unknown as TouchList;
-  
+
   return new Event(type, { bubbles: true }) as TouchEvent & {
     touches: TouchList;
     changedTouches: TouchList;
@@ -137,22 +147,22 @@ export function mockPlatform(platform: {
 }) {
   Object.defineProperty(window.navigator, 'userAgent', {
     writable: true,
-    value: platform.userAgent || 'Mozilla/5.0'
+    value: platform.userAgent || 'Mozilla/5.0',
   });
-  
+
   Object.defineProperty(window.navigator, 'platform', {
     writable: true,
-    value: platform.platform || 'MacIntel'
+    value: platform.platform || 'MacIntel',
   });
-  
+
   Object.defineProperty(window.navigator, 'maxTouchPoints', {
     writable: true,
-    value: platform.maxTouchPoints || 0
+    value: platform.maxTouchPoints || 0,
   });
-  
+
   Object.defineProperty(window.navigator, 'vendor', {
     writable: true,
-    value: platform.vendor || 'Google Inc.'
+    value: platform.vendor || 'Google Inc.',
   });
 }
 
@@ -164,26 +174,26 @@ export const platformPresets = {
     userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15',
     platform: 'iPhone',
     maxTouchPoints: 5,
-    vendor: 'Apple Computer, Inc.'
+    vendor: 'Apple Computer, Inc.',
   },
   android: {
     userAgent: 'Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36',
     platform: 'Linux armv81',
     maxTouchPoints: 5,
-    vendor: 'Google Inc.'
+    vendor: 'Google Inc.',
   },
   desktop: {
     userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
     platform: 'Win32',
     maxTouchPoints: 0,
-    vendor: 'Google Inc.'
+    vendor: 'Google Inc.',
   },
   mac: {
     userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
     platform: 'MacIntel',
     maxTouchPoints: 0,
-    vendor: 'Apple Computer, Inc.'
-  }
+    vendor: 'Apple Computer, Inc.',
+  },
 };
 
 /**
@@ -193,15 +203,15 @@ export function mockViewport(width: number, height: number) {
   Object.defineProperty(window, 'innerWidth', {
     writable: true,
     configurable: true,
-    value: width
+    value: width,
   });
-  
+
   Object.defineProperty(window, 'innerHeight', {
     writable: true,
     configurable: true,
-    value: height
+    value: height,
   });
-  
+
   // Trigger resize event
   window.dispatchEvent(new Event('resize'));
 }
@@ -213,18 +223,13 @@ export const viewportPresets = {
   mobile: { width: 375, height: 667 }, // iPhone 8
   tablet: { width: 768, height: 1024 }, // iPad
   desktop: { width: 1920, height: 1080 }, // Full HD
-  ultrawide: { width: 3440, height: 1440 } // Ultrawide
+  ultrawide: { width: 3440, height: 1440 }, // Ultrawide
 };
 
 /**
  * Mock safe area insets (iOS)
  */
-export function mockSafeAreaInsets(insets: {
-  top?: number;
-  right?: number;
-  bottom?: number;
-  left?: number;
-}) {
+export function mockSafeAreaInsets(insets: { top?: number; right?: number; bottom?: number; left?: number }) {
   const root = document.documentElement;
   root.style.setProperty('--sat', `${insets.top || 0}px`);
   root.style.setProperty('--sar', `${insets.right || 0}px`);
@@ -239,7 +244,7 @@ export function mockHapticFeedback() {
   const vibrate = jest.fn();
   Object.defineProperty(window.navigator, 'vibrate', {
     writable: true,
-    value: vibrate
+    value: vibrate,
   });
   return vibrate;
 }
@@ -249,30 +254,30 @@ export function mockHapticFeedback() {
  */
 export class PerformanceObserver {
   private marks: Map<string, number> = new Map();
-  
+
   mark(name: string) {
     this.marks.set(name, performance.now());
   }
-  
+
   measure(name: string, startMark: string, endMark?: string) {
     const start = this.marks.get(startMark);
     const end = endMark ? this.marks.get(endMark) : performance.now();
-    
+
     if (!start) {
       throw new Error(`Start mark "${startMark}" not found`);
     }
-    
+
     if (endMark && !end) {
       throw new Error(`End mark "${endMark}" not found`);
     }
-    
+
     return {
       name,
       duration: (end || performance.now()) - start,
-      startTime: start
+      startTime: start,
     };
   }
-  
+
   clear() {
     this.marks.clear();
   }
@@ -283,22 +288,22 @@ export class PerformanceObserver {
  */
 export function checkAccessibility(element: HTMLElement) {
   const issues: string[] = [];
-  
+
   // Check for proper ARIA labels
   const interactiveElements = element.querySelectorAll(
     'button, a, input, select, textarea, [role="button"], [tabindex]'
   );
-  
+
   interactiveElements.forEach(el => {
     if (!el.getAttribute('aria-label') && !el.textContent?.trim()) {
       issues.push(`Interactive element missing accessible label: ${el.tagName}`);
     }
   });
-  
+
   // Check for proper heading structure
   const headings = Array.from(element.querySelectorAll('h1, h2, h3, h4, h5, h6'));
   let lastLevel = 0;
-  
+
   headings.forEach(heading => {
     const level = parseInt(heading.tagName[1]);
     if (level > lastLevel + 1) {
@@ -306,7 +311,7 @@ export function checkAccessibility(element: HTMLElement) {
     }
     lastLevel = level;
   });
-  
+
   // Check for color contrast (simplified)
   const elementsWithColor = element.querySelectorAll('[style*="color"]');
   elementsWithColor.forEach(el => {
@@ -317,10 +322,10 @@ export function checkAccessibility(element: HTMLElement) {
       issues.push(`Check color contrast for element: ${el.tagName}`);
     }
   });
-  
+
   return {
     passed: issues.length === 0,
-    issues
+    issues,
   };
 }
 
@@ -339,7 +344,7 @@ export function setupVisualRegression() {
       // In real implementation, this would compare images
       console.log(`Visual regression compare: ${name}`);
       return Promise.resolve({ match: true, diff: 0 });
-    }
+    },
   };
 }
 
@@ -349,13 +354,13 @@ export function setupVisualRegression() {
 export function cleanup() {
   // Reset all mocks
   jest.clearAllMocks();
-  
+
   // Clear DOM
   document.body.innerHTML = '';
-  
+
   // Reset viewport
   mockViewport(1024, 768);
-  
+
   // Reset platform
   mockPlatform(platformPresets.desktop);
 }

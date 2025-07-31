@@ -7,18 +7,18 @@ import { GraphContext } from './types';
 export const SystemPrompts = {
   GRAPH_ANALYSIS: `You are an expert at analyzing prompt engineering graphs. 
     Analyze the provided graph structure and suggest improvements or identify patterns.`,
-  
+
   PROMPT_ENHANCEMENT: `You are a prompt engineering expert. 
     Enhance the given prompt to be more effective and specific.`,
-  
+
   NODE_SUGGESTION: `Based on the current graph context, suggest the next logical node 
-    to add to this prompt engineering workflow.`
+    to add to this prompt engineering workflow.`,
 } as const;
 
 export function buildGraphAnalysisPrompt(context: GraphContext): string {
   const nodeCount = context.graph.nodes.size;
   const edgeCount = context.graph.edges.size;
-  
+
   return `${SystemPrompts.GRAPH_ANALYSIS}
 
 Graph Statistics:

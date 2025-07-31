@@ -1,9 +1,9 @@
 /**
  * Test Environment Manager
- * 
+ *
  * Provides dynamic test environment provisioning, isolation, and management
  * for comprehensive testing infrastructure.
- * 
+ *
  * Task: E18-1753114562152-28B905
  */
 
@@ -86,7 +86,7 @@ export class TestEnvironmentManager {
       ports: new Map(),
       processes: [],
       tempDirs: [],
-      healthChecks: new Map()
+      healthChecks: new Map(),
     };
 
     this.environments.set(config.id, instance);
@@ -154,7 +154,7 @@ export class TestEnvironmentManager {
       for (const process of instance.processes) {
         if (process && !process.killed) {
           process.kill('SIGTERM');
-          
+
           // Force kill after 5 seconds
           setTimeout(() => {
             if (!process.killed) {
@@ -179,7 +179,7 @@ export class TestEnvironmentManager {
 
       instance.status = 'stopped';
       instance.endTime = new Date();
-      
+
       console.log(`🧹 Test environment ${id} cleaned up`);
     } catch (error) {
       console.error(`❌ Error cleaning up environment ${id}:`, error);
@@ -203,7 +203,7 @@ export class TestEnvironmentManager {
           const response = await fetch(service.healthCheckUrl);
           const isHealthy = response.ok;
           instance.healthChecks.set(serviceName, isHealthy);
-          
+
           if (!isHealthy) {
             console.warn(`⚠️ Service ${serviceName} health check failed`);
             return false;
@@ -244,7 +244,7 @@ export class TestEnvironmentManager {
       healthyServices,
       // TODO: Add actual memory/CPU monitoring
       memoryUsage: undefined,
-      cpuUsage: undefined
+      cpuUsage: undefined,
     };
   }
 
@@ -266,25 +266,25 @@ export class TestEnvironmentManager {
     if (!database) return;
 
     switch (database.type) {
-    case 'sqlite':
-      await this.setupSQLiteDatabase(instance);
-      break;
-    case 'postgres':
-      await this.setupPostgresDatabase(instance);
-      break;
-    case 'redis':
-      await this.setupRedisDatabase(instance);
-      break;
+      case 'sqlite':
+        await this.setupSQLiteDatabase(instance);
+        break;
+      case 'postgres':
+        await this.setupPostgresDatabase(instance);
+        break;
+      case 'redis':
+        await this.setupRedisDatabase(instance);
+        break;
     }
   }
 
   private async setupSQLiteDatabase(instance: TestEnvironmentInstance): Promise<void> {
     const tempDir = instance.tempDirs[0];
     const dbPath = path.join(tempDir, 'data', 'test.db');
-    
+
     // Create database file
     await fs.writeFile(dbPath, '');
-    
+
     // TODO: Run migrations and seed data
     console.log(`📦 SQLite database created at ${dbPath}`);
   }
@@ -315,7 +315,7 @@ export class TestEnvironmentManager {
     for (const serviceConfig of instance.config.services) {
       const service: ServiceInstance = {
         name: serviceConfig.name,
-        status: 'starting'
+        status: 'starting',
       };
 
       const port = serviceConfig.port || this.allocatePort();
@@ -328,15 +328,15 @@ export class TestEnvironmentManager {
 
       // Start service based on isolation type
       switch (instance.config.isolation) {
-      case 'process':
-        await this.startServiceProcess(instance, service, serviceConfig);
-        break;
-      case 'container':
-        await this.startServiceContainer(instance, service, serviceConfig);
-        break;
-      default:
-        // No isolation - service runs in same process
-        service.status = 'ready';
+        case 'process':
+          await this.startServiceProcess(instance, service, serviceConfig);
+          break;
+        case 'container':
+          await this.startServiceContainer(instance, service, serviceConfig);
+          break;
+        default:
+          // No isolation - service runs in same process
+          service.status = 'ready';
       }
 
       instance.services.set(serviceConfig.name, service);
@@ -377,7 +377,7 @@ export class TestEnvironmentManager {
             const response = await fetch(service.healthCheckUrl);
             const isHealthy = response.ok;
             instance.healthChecks.set(serviceName, isHealthy);
-            
+
             if (!isHealthy) {
               allHealthy = false;
             }
@@ -444,7 +444,7 @@ export const EnvironmentTemplates = {
     resources: {},
     services: [],
     timeout: 300000, // 5 minutes
-    cleanup: true
+    cleanup: true,
   }),
 
   integration: (): TestEnvironmentConfig => ({
@@ -453,21 +453,21 @@ export const EnvironmentTemplates = {
     type: 'integration',
     isolation: 'process',
     resources: {
-      memory: '512MB'
+      memory: '512MB',
     },
     services: [
       {
         name: 'test-server',
         port: 8080,
-        healthCheck: 'http://localhost:8080/health'
-      }
+        healthCheck: 'http://localhost:8080/health',
+      },
     ],
     database: {
       type: 'sqlite',
-      seedData: ['test-data.sql']
+      seedData: ['test-data.sql'],
     },
     timeout: 900000, // 15 minutes
-    cleanup: true
+    cleanup: true,
   }),
 
   e2e: (): TestEnvironmentConfig => ({
@@ -478,27 +478,27 @@ export const EnvironmentTemplates = {
     resources: {
       cpu: '1',
       memory: '1GB',
-      network: true
+      network: true,
     },
     services: [
       {
         name: 'web-app',
         port: 3000,
-        healthCheck: 'http://localhost:3000'
+        healthCheck: 'http://localhost:3000',
       },
       {
         name: 'api-server',
         port: 8000,
-        healthCheck: 'http://localhost:8000/api/health'
-      }
+        healthCheck: 'http://localhost:8000/api/health',
+      },
     ],
     database: {
       type: 'postgres',
       migrations: ['migrations/*.sql'],
-      seedData: ['e2e-test-data.sql']
+      seedData: ['e2e-test-data.sql'],
     },
     timeout: 1800000, // 30 minutes
-    cleanup: true
+    cleanup: true,
   }),
 
   performance: (): TestEnvironmentConfig => ({
@@ -509,26 +509,26 @@ export const EnvironmentTemplates = {
     resources: {
       cpu: '2',
       memory: '2GB',
-      network: true
+      network: true,
     },
     services: [
       {
         name: 'app-under-test',
         port: 3000,
-        healthCheck: 'http://localhost:3000/health'
+        healthCheck: 'http://localhost:3000/health',
       },
       {
         name: 'load-generator',
-        port: 8080
-      }
+        port: 8080,
+      },
     ],
     database: {
       type: 'postgres',
-      seedData: ['performance-test-data.sql']
+      seedData: ['performance-test-data.sql'],
     },
     timeout: 3600000, // 1 hour
-    cleanup: true
-  })
+    cleanup: true,
+  }),
 };
 
 export default TestEnvironmentManager;

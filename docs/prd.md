@@ -10,10 +10,11 @@ _Version 1.0 · 2025-01-23_
 
 **Analysis Source**: User-provided comprehensive QA technical debt analysis
 
-**Current Project State**: 
+**Current Project State**:
 You have built a sophisticated visual prompt engineering platform ("Photoshop for AI prompts") with:
+
 - Advanced runtime engine with deterministic execution
-- Multi-agent workflow orchestration system  
+- Multi-agent workflow orchestration system
 - Real-time analytics dashboards
 - Comprehensive security framework
 - Complex monorepo structure with React frontend, Node.js Fastify backend, and shared TypeScript libraries
@@ -23,8 +24,9 @@ The system currently suffers from rapid development technical debt that poses $1
 ### Available Documentation Analysis
 
 Based on your QA analysis, you have:
+
 - ✅ **Technical Debt Documentation** - Comprehensive analysis in `docs/INTEGRATION_TECHNICAL_DEBT_REPORT.md`
-- ✅ **Architecture Documentation** - Current/target diagrams in `docs/INTEGRATION_ARCHITECTURE_DIAGRAMS.md` 
+- ✅ **Architecture Documentation** - Current/target diagrams in `docs/INTEGRATION_ARCHITECTURE_DIAGRAMS.md`
 - ✅ **Tech Stack Documentation** - Identified in QA analysis (includes version conflicts)
 - ✅ **Integration Analysis** - 290+ service classes, 4+ auth implementations documented
 - ⚠️ **API Documentation** - May need updates post-remediation
@@ -35,7 +37,7 @@ Based on your QA analysis, you have:
 
 **Enhancement Type**: ✅ **Integration with New Systems** + **Performance/Scalability Improvements** + **Technology Stack Upgrade**
 
-**Enhancement Description**: 
+**Enhancement Description**:
 Comprehensive technical debt remediation to consolidate fragmented architecture, resolve dependency conflicts, unify authentication systems, standardize data access patterns, and integrate analytics systems - transforming the current fragmented state into a cohesive, maintainable platform.
 
 **Impact Assessment**: ✅ **Major Impact** (architectural changes required)
@@ -43,6 +45,7 @@ Comprehensive technical debt remediation to consolidate fragmented architecture,
 ### Goals and Background Context
 
 **Goals**:
+
 - Eliminate $100K/month productivity losses from technical debt
 - Consolidate 290+ fragmented service classes into cohesive architecture
 - Resolve critical dependency version conflicts (Zod 3.0.0 vs 3.22.4 vs 3.25.76)
@@ -57,9 +60,9 @@ Rapid development of your sophisticated prompt engineering platform created subs
 
 ### Change Log
 
-| Change | Date | Version | Description | Author |
-|--------|------|---------|-------------|--------|
-| Initial Creation | 2025-01-23 | 1.0 | Created comprehensive PRD for integration remediation project | Sarah (PO) |
+| Change           | Date       | Version | Description                                                   | Author     |
+| ---------------- | ---------- | ------- | ------------------------------------------------------------- | ---------- |
+| Initial Creation | 2025-01-23 | 1.0     | Created comprehensive PRD for integration remediation project | Sarah (PO) |
 
 ---
 
@@ -83,7 +86,7 @@ Rapid development of your sophisticated prompt engineering platform created subs
 
 **FR8**: Event Bus Architecture - The system shall implement a pub/sub event system to decouple services and enable reliable inter-service communication.
 
-### Non-Functional Requirements  
+### Non-Functional Requirements
 
 **NFR1**: Availability - System availability must remain above 99.5% throughout the 5-sprint remediation process with zero-downtime deployment strategies.
 
@@ -119,7 +122,8 @@ Rapid development of your sophisticated prompt engineering platform created subs
 **Frameworks**: React with Vite frontend, Node.js Fastify backend, React Flow for node-based UI  
 **Database**: Multiple database connections (10+ direct patterns identified), likely PostgreSQL-based
 **Infrastructure**: Monorepo structure with pnpm workspaces, Vercel deployment, GitHub Actions CI/CD
-**External Dependencies**: 
+**External Dependencies**:
+
 - Zod for validation (multiple conflicting versions: 3.0.0, 3.22.4, 3.25.76)
 - Analytics systems (6+ competing implementations)
 - Authentication services (4+ separate implementations)
@@ -157,25 +161,29 @@ Rapid development of your sophisticated prompt engineering platform created subs
 
 ### Risk Assessment and Mitigation
 
-**Technical Risks**: 
+**Technical Risks**:
+
 - Dependency version conflicts causing runtime failures
 - Service consolidation breaking existing integrations
 - Performance degradation during architecture changes
 - Data consistency issues during repository pattern migration
 
 **Integration Risks**:
+
 - Authentication system consolidation impacting user sessions
 - Analytics data loss during system integration
 - API compatibility breaks affecting external integrations
 - Database migration failures in production environment
 
 **Deployment Risks**:
+
 - Zero-downtime deployment complexity with consolidated services
 - Rollback complications across multiple integrated systems
 - Configuration drift between development and production
 - Performance monitoring gaps during transition
 
 **Mitigation Strategies**:
+
 - Incremental migration with feature flags and circuit breakers
 - Comprehensive integration testing with staging environment validation
 - Automated rollback triggers based on performance and error thresholds
@@ -206,6 +214,7 @@ I want to resolve critical dependency version conflicts and establish standardiz
 so that the system has consistent, secure dependencies without runtime conflicts.
 
 **Acceptance Criteria**:
+
 1. All Zod version conflicts (3.0.0 vs 3.22.4 vs 3.25.76) resolved to single standardized version
 2. Automated dependency conflict detection integrated into CI/CD pipeline
 3. Standardized package.json structure across all monorepo workspaces
@@ -224,6 +233,7 @@ I want to consolidate 4+ separate authentication implementations into a unified 
 so that security is enhanced and maintenance overhead is reduced.
 
 **Acceptance Criteria**:
+
 1. Single authentication service implemented with support for all existing authentication methods
 2. User session migration completed without user disruption
 3. All existing authentication endpoints remain functional during transition
@@ -242,6 +252,7 @@ I want to consolidate 290+ fragmented service classes into a cohesive service re
 so that service discovery, communication, and maintenance are standardized and efficient.
 
 **Acceptance Criteria**:
+
 1. Service registry implemented with automated service discovery
 2. 290+ service classes organized into logical service boundaries
 3. Standardized REST/GraphQL interfaces for inter-service communication
@@ -260,6 +271,7 @@ I want to standardize 10+ direct database connection patterns through repository
 so that data access is consistent, secure, and maintainable.
 
 **Acceptance Criteria**:
+
 1. Repository pattern implemented for all data access operations
 2. Connection pooling and transaction management standardized
 3. Database migration scripts created with rollback capabilities
@@ -278,6 +290,7 @@ I want to integrate 6+ competing analytics systems into a unified event bus arch
 so that we have consistent, comprehensive analytics without data fragmentation.
 
 **Acceptance Criteria**:
+
 1. Unified event bus implemented with pub/sub architecture
 2. All existing analytics data successfully migrated and integrated
 3. Real-time analytics dashboard consolidated from multiple sources
@@ -287,13 +300,10 @@ so that we have consistent, comprehensive analytics without data fragmentation.
 **Integration Verification**:
 IV1: All existing analytics reports continue to function with historical data intact
 IV2: Real-time analytics performance matches or exceeds current capabilities
-IV3: Analytics API endpoints remain compatible with existing integrations
-7. FR7: CLI wrapper `npx promptgraph exec <graph.json> --seed 1234` prints the final prompt and exits with code 0.
-8. FR8: Exporter converts a saved graph to a valid `GeneratorBundle` JSON envelope that the existing Randomizer Engine consumes.
-9. FR9: Importer opens a legacy GeneratorBundle back into the editor (`bundleToGraph`).
-10. FR10: CI pipeline runs lint, unit tests, and builds a Docker image on every push to `main`.
+IV3: Analytics API endpoints remain compatible with existing integrations 7. FR7: CLI wrapper `npx promptgraph exec <graph.json> --seed 1234` prints the final prompt and exits with code 0. 8. FR8: Exporter converts a saved graph to a valid `GeneratorBundle` JSON envelope that the existing Randomizer Engine consumes. 9. FR9: Importer opens a legacy GeneratorBundle back into the editor (`bundleToGraph`). 10. FR10: CI pipeline runs lint, unit tests, and builds a Docker image on every push to `main`.
 
 ### 2.2 Non-Functional Requirements (NFR)
+
 1. NFR1: Performance – generate five prompt variants in < 1 s; peak memory < 500 MB during execution.
 2. NFR2: Browser compatibility – Chrome ≥ 113, Firefox ≥ 114, Edge (latest).
 3. NFR3: Accessibility – editor UI meets WCAG 2.1 AA.
@@ -308,9 +318,11 @@ IV3: Analytics API endpoints remain compatible with existing integrations
 ## 3 · User Interface Design Goals
 
 ### 3.1 Overall UX Vision
+
 Provide an intuitive, low-friction canvas where prompt artists can drag, connect, and inspect nodes with minimal clicks. Emphasise immediate feedback (live JSON, seed preview) and deterministic confidence indicators (seed badge, lock icons).
 
 ### 3.2 Key Interaction Paradigms
+
 - Drag-and-drop node creation on a zoomable, pannable canvas.
 - Single-click selection → right sidebar inspector.
 - Context menu on edge or node for quick actions (delete, duplicate).
@@ -318,46 +330,50 @@ Provide an intuitive, low-friction canvas where prompt artists can drag, connect
 - Status bar showing active seed, validation errors count.
 
 ### 3.3 Core Screens / Views
+
 1. Canvas Editor (default landing screen)
 2. Batch Preview Modal (shows 5 outputs, seed under each)
 3. Bundle Settings Modal (metadata, version, author)
 4. Corrections Manager Panel (Phase-1 feature flag)
 
 ### 3.4 Accessibility
+
 Target WCAG 2.1 AA: keyboard nav for canvas & inspector, sufficient colour contrast, ARIA labels.
 
 ### 3.5 Branding
+
 Neutral developer-tool style; adopt Windsurf default font + colour tokens. Later theming via CSS vars.
 
 ### 3.6 Target Platforms
+
 Cross-platform web (responsive desktop first; basic usability on tablets).
 
 ---
 
 ## 4 · Technical Assumptions
 
-| Area | Decision | Rationale |
-|------|----------|-----------|
-| Repository Structure | **Monorepo** (`/client`, `/server`, optional `/python_executor`, shared `tests/`) | Simplifies cross-package imports, single CI pipeline, easier atomic PRs. |
-| Service Architecture | **Monolith** (Node front-end + executor in one repo) for Phase-0; optional Python micro-service added Phase-1 via REST. | Keeps MVP deployment simple; isolates bridge complexity to later sprint. |
-| Languages & Frameworks | TypeScript (Node 18) with React, Vite, pnpm; Python 3.11 (FastAPI) optional. | Matches Windsurf template and dev skillset; TS for type-safety, FastAPI widely adopted. |
-| Testing Strategy | **Unit + Integration** (Jest, Playwright). | Validate logic and core UI flow; full pyramid not required for MVP. |
-| Deployment Target | Windsurf containers (preview) & optional **Vercel** production deploy; ports 3000 (UI) & 8000 (executor). | Windsurf for internal previews; Vercel offers CDN edge delivery for public/production. |
-| Secrets Management | Windsurf Secret Manager environment injection. | Central, audited, avoids git leaks. |
-| Starter Templates / Libs | React Flow, seedrandom, zod, fastapi, uvicorn. | Already listed in Phase-0 plan. |
-| CI/CD | GitHub Actions (or Windsurf) pipeline; Docker image artifact + **Codecov** upload step. | Enforces lint/tests, publishes coverage badge, repeatable builds. |
-| Additional Assumptions | No database required for Phase-0; graphs persisted as JSON files in git. | Reduces infra overhead, aligns with MVP focus.
+| Area                     | Decision                                                                                                                | Rationale                                                                               |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Repository Structure     | **Monorepo** (`/client`, `/server`, optional `/python_executor`, shared `tests/`)                                       | Simplifies cross-package imports, single CI pipeline, easier atomic PRs.                |
+| Service Architecture     | **Monolith** (Node front-end + executor in one repo) for Phase-0; optional Python micro-service added Phase-1 via REST. | Keeps MVP deployment simple; isolates bridge complexity to later sprint.                |
+| Languages & Frameworks   | TypeScript (Node 18) with React, Vite, pnpm; Python 3.11 (FastAPI) optional.                                            | Matches Windsurf template and dev skillset; TS for type-safety, FastAPI widely adopted. |
+| Testing Strategy         | **Unit + Integration** (Jest, Playwright).                                                                              | Validate logic and core UI flow; full pyramid not required for MVP.                     |
+| Deployment Target        | Windsurf containers (preview) & optional **Vercel** production deploy; ports 3000 (UI) & 8000 (executor).               | Windsurf for internal previews; Vercel offers CDN edge delivery for public/production.  |
+| Secrets Management       | Windsurf Secret Manager environment injection.                                                                          | Central, audited, avoids git leaks.                                                     |
+| Starter Templates / Libs | React Flow, seedrandom, zod, fastapi, uvicorn.                                                                          | Already listed in Phase-0 plan.                                                         |
+| CI/CD                    | GitHub Actions (or Windsurf) pipeline; Docker image artifact + **Codecov** upload step.                                 | Enforces lint/tests, publishes coverage badge, repeatable builds.                       |
+| Additional Assumptions   | No database required for Phase-0; graphs persisted as JSON files in git.                                                | Reduces infra overhead, aligns with MVP focus.                                          |
 
 ---
 
 ## 5 · Epic List
 
-| # | Epic Title | Goal Statement |
-|---|------------|----------------|
-| **1** | Foundation & Core Infrastructure | Establish repo, monorepo tooling, CI pipeline, devcontainer, and a running React-Flow canvas skeleton served via Windsurf preview. |
-| **2** | Editor MVP (Graph Authoring) | Enable artists to create, connect, and edit six core node types with Inspector, live JSON, and Preview-5 modal. |
-| **3** | Executor & Integration | Implement deterministic executor + CLI, export to `GeneratorBundle`, import legacy bundles, and validate end-to-end against Randomizer Engine. |
-| **4** | Alpha Hardening & DX Polish | Add test matrices, performance tuning, docs, and hand-off package for Phase-1 backlog (node expansion, Python bridge). |
+| #     | Epic Title                       | Goal Statement                                                                                                                                 |
+| ----- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| **1** | Foundation & Core Infrastructure | Establish repo, monorepo tooling, CI pipeline, devcontainer, and a running React-Flow canvas skeleton served via Windsurf preview.             |
+| **2** | Editor MVP (Graph Authoring)     | Enable artists to create, connect, and edit six core node types with Inspector, live JSON, and Preview-5 modal.                                |
+| **3** | Executor & Integration           | Implement deterministic executor + CLI, export to `GeneratorBundle`, import legacy bundles, and validate end-to-end against Randomizer Engine. |
+| **4** | Alpha Hardening & DX Polish      | Add test matrices, performance tuning, docs, and hand-off package for Phase-1 backlog (node expansion, Python bridge).                         |
 
 ---
 
@@ -366,45 +382,55 @@ Cross-platform web (responsive desktop first; basic usability on tablets).
 **Epic Goal**  
 Set up the development foundation: repo, tooling, CI/CD, devcontainer, and a live React-Flow canvas skeleton accessible via Windsurf Preview. This enables contributors to start feature work with consistent environments and automated checks.
 
-### Story 1.1  Repo & Monorepo Tooling
+### Story 1.1 Repo & Monorepo Tooling
+
 As a developer, I want an initialized monorepo with pnpm workspaces, so that client, server, and shared code live under a single root with coherent dependency management.
 
 **Acceptance Criteria**
+
 1. A new git repository named `promptscape-graph` exists and is pushed to origin.
 2. `package.json` defines pnpm workspaces: `client/`, `server/`, `tests/`.
 3. Root `.editorconfig`, `.prettierrc`, and ESLint (Airbnb) are configured.
 4. Running `pnpm install` at repo root completes without errors.
 
-### Story 1.2  Dev Container & VS Code Settings
+### Story 1.2 Dev Container & VS Code Settings
+
 As a developer, I want a Windsurf `devcontainer.json` that pre-installs Node 18, Python 3.11, and pnpm, so that any contributor can spin up a ready-to-code environment in one click.
 
 **Acceptance Criteria**
+
 1. `devcontainer.json` defines Node 18, Python 3.11, pnpm, and ports 3000/8000 exposed.
 2. Opening the repo in Windsurf launches the container and passes `pnpm install` automatically.
 3. VS Code settings in `.vscode/settings.json` enable eslint and prettier on save.
 
-### Story 1.3  React-Flow Canvas Skeleton
+### Story 1.3 React-Flow Canvas Skeleton
+
 As a developer, I want a basic Vite + React project that renders an empty React-Flow canvas at `/`, so that future graph editing features have a working UI scaffold.
 
 **Acceptance Criteria**
+
 1. `client` folder created via `pnpm create vite` using React-TS template.
 2. React-Flow added as a dependency and imported in `App.tsx`.
 3. Canvas renders with grid and minimap enabled; no errors in console.
 4. Local dev server runs with `pnpm --filter client dev` and shows canvas at `localhost:3000`.
 
-### Story 1.4  CI Pipeline
+### Story 1.4 CI Pipeline
+
 As a CI engineer, I want GitHub Actions (or Windsurf pipeline) to lint and test on every push, so that code quality gates prevent regressions.
 
 **Acceptance Criteria**
+
 1. `.github/workflows/ci.yml` installs pnpm, runs `pnpm lint`, Jest unit tests with `--coverage`, and uploads coverage to Codecov.
 2. Pipeline caches node modules for faster iterations.
 3. Coverage threshold ≥ 80% lines on `main`; badge visible in README.
 4. Build job passes in < 5 minutes on default branch.
 
-### Story 1.5  Windsurf Preview Deployment
+### Story 1.5 Windsurf Preview Deployment
+
 As a product owner, I want each branch to auto-deploy a preview URL, so stakeholders can see progress without local setup.
 
 **Acceptance Criteria**
+
 1. Windsurf preview enabled for port 3000; URL comment posted to PR on push.
 2. Preview reflects latest commit within 2 minutes of push.
 3. Preview teardown occurs on branch delete.
@@ -442,41 +468,51 @@ As a product owner, I want each branch to auto-deploy a preview URL, so stakehol
 **Epic Goal**  
 Allow prompt artists to visually author deterministic grammars using six core node types, validate graphs, and preview outputs—all within the browser.
 
-### Story 2.1  Core Node Library UI
+### Story 2.1 Core Node Library UI
+
 As a prompt artist, I want to drag six core node types (`WeightedChoice`, `Concat`, `Output`, `Include`, `SetVariable`, `GetVariable`) onto the canvas, so that I can model branching grammars.
 
 **Acceptance Criteria**
+
 1. Palette shows the six node icons with tooltips.
 2. Drag-drop adds node to canvas with default params.
 3. Each node displays title and key param summary.
 
-### Story 2.2  Node Connections & Validation
+### Story 2.2 Node Connections & Validation
+
 As a prompt artist, I want to connect nodes via edges and see validation errors if I miswire, so that my grammar executes correctly.
 
 **Acceptance Criteria**
+
 1. Edge drag from output handle to input handle.
 2. Graph validation runs on change; invalid edges highlighted red.
 3. Status bar shows error count; hover displays message.
 
-### Story 2.3  Node Inspector Forms
+### Story 2.3 Node Inspector Forms
+
 As a prompt artist, I want an Inspector sidebar that lets me edit properties of the selected node with typed controls, so that changes immediately update the graph JSON.
 
 **Acceptance Criteria**
+
 1. Selecting a node opens form generated from Zod schema.
 2. Changes debounce-save to graph state and validation re-runs.
 
-### Story 2.4  Preview-5 Modal
+### Story 2.4 Preview-5 Modal
+
 As a prompt artist, I want a Preview button that runs the executor five times with sequential seeds and shows the outputs, so that I can quickly gauge variety.
 
 **Acceptance Criteria**
+
 1. Toolbar “Preview 5” button triggers `/server/preview` call.
 2. Modal lists five strings with seed under each row.
 3. Spinner and error state handled gracefully.
 
-### Story 2.5  Graph JSON Autosave
+### Story 2.5 Graph JSON Autosave
+
 As a user, I want the editor to autosave the current graph to LocalStorage every 5 seconds, so that I don’t lose work on refresh.
 
 **Acceptance Criteria**
+
 1. Debounced autosave writes JSON to `localStorage.graphDraft`.
 2. On load, if draft exists, prompt to restore.
 3. “Save as JSON” menu item downloads file.
@@ -538,48 +574,60 @@ As a user, I want the editor to autosave the current graph to LocalStorage every
 **Epic Goal**  
 Provide a deterministic executor service and CLI, export graphs to GeneratorBundles, import legacy bundles, and prove full compatibility with the existing Randomizer Engine.
 
-### Story 3.1  Deterministic Graph Executor
+### Story 3.1 Deterministic Graph Executor
+
 As a backend developer, I want a Node/TS executor that traverses the graph depth-first with seeded RNG, so that the same graph + seed always yields the same output.
 
 **Acceptance Criteria**
+
 1. `server/engine.ts` implements DFS traversal using `seedUtils`.
 2. Supports node runtime classes for six core types.
 3. Unit tests cover path permutations and seed determinism (≥ 90 % branch coverage).
 
-### Story 3.2  CLI Wrapper
+### Story 3.2 CLI Wrapper
+
 As a CLI user, I want to run `npx promptgraph exec graph.json --seed 1234`, so that I can generate prompts from scripts and CI jobs.
 
 **Acceptance Criteria**
+
 1. CLI parses args, loads graph JSON, calls executor, prints result to stdout.
 2. `--seed` optional; defaults to timestamp.
 3. Proper exit codes: `0` success, `1` validation error, `>1` unexpected error.
 
-### Story 3.3  Export to GeneratorBundle
+### Story 3.3 Export to GeneratorBundle
+
 As a developer, I want to export the current graph to a valid `GeneratorBundle` JSON, so that it can run in the existing Randomizer Engine.
 
 **Acceptance Criteria**
+
 1. `exporter.ts` converts graph to bundle per contract.
 2. Bundle passes JSON schema validation (Zod).
 3. Integration test: bundle → Randomizer Engine generates prompt with expected seed.
 
-### Story 3.4  Import Legacy Bundle
+### Story 3.4 Import Legacy Bundle
+
 As a user, I want to import a legacy bundle and see the graph reconstructed, so that I can edit older generators visually.
 
 **Acceptance Criteria**
+
 1. `bundleToGraph` parses bundle JSON and populates canvas.
 2. Round-trip test: graph → export → import → JSON deep-equal original graph.
 
-### Story 3.5  Determinism Test Matrix
+### Story 3.5 Determinism Test Matrix
+
 As QA, I want an automated matrix that runs the executor against 10 seeds and compares outputs to a golden file, so that regressions are caught.
 
 **Acceptance Criteria**
+
 1. Jest test iterates seeds 1-10 on sample graph fixture.
 2. Outputs compared to stored snapshots; mismatch fails CI.
 
-### Story 3.6  Preview API Endpoint
+### Story 3.6 Preview API Endpoint
+
 As the frontend, I need a `/preview` HTTP route that executes the graph N times and returns results, so that the Preview-5 modal can fetch outputs.
 
 **Acceptance Criteria**
+
 1. Fastify or Express route `POST /preview` accepts `{graph, runs, seed}`.
 2. Returns array of strings with corresponding seeds.
 3. Runs complete in < 1 s for demo graph.
@@ -591,40 +639,50 @@ As the frontend, I need a `/preview` HTTP route that executes the graph N times 
 **Epic Goal**  
 Stabilise the MVP for wider team use: improve performance, add key developer-experience niceties, deploy to Vercel production, and finalize documentation.
 
-### Story 4.1  Performance Profiling & Tuning
+### Story 4.1 Performance Profiling & Tuning
+
 As a developer, I want to profile the executor and canvas with large graphs and optimise hotspots, so that generation remains < 1 s and the UI feels smooth.
 
 **Acceptance Criteria**
+
 1. Playwright script loads a 250-node graph and records FPS & memory.
 2. Optimisations (React memoization, workerised executor) reduce jank; metrics documented in `PERF.md`.
 
-### Story 4.2  Corrections Manager Feature Flag
+### Story 4.2 Corrections Manager Feature Flag
+
 As a power user, I want to enable a Corrections Store panel to manage find/replace rules, so that edge-case tuning can be tested in alpha.
 
 **Acceptance Criteria**
+
 1. Feature flag `ENABLE_CORRECTIONS=true` shows sidebar.
 2. CRUD UI backed by in-memory store; integration test covers add/remove.
 
-### Story 4.3  Vercel Production Deploy
+### Story 4.3 Vercel Production Deploy
+
 As DevOps, I want the `main` branch to auto-deploy to Vercel, so that stakeholders can access a CDN-optimised build.
 
 **Acceptance Criteria**
+
 1. Vercel project connected via GitHub; env vars injected via Vercel Secrets.
 2. Successful build runs executor API behind `/api/*` edge functions.
 3. Production URL added to README.
 
-### Story 4.4  Documentation & Onboarding
+### Story 4.4 Documentation & Onboarding
+
 As a new contributor, I want clear docs (README, architecture, content authoring) so that I can set up the project and understand core concepts quickly.
 
 **Acceptance Criteria**
+
 1. README explains quick start, scripts, and links to docs.
 2. `docs/architecture.md` diagrams data flow (graph → exporter → engine).
 3. `content_authoring.md` describes grammar conventions & bundle spec.
 
-### Story 4.5  QA Sign-off & Release Notes
+### Story 4.5 QA Sign-off & Release Notes
+
 As QA, I need a checklist to validate Alpha features and publish release notes, so that the project is ready for Phase-1.
 
 **Acceptance Criteria**
+
 1. QA checklist executed; all critical bugs fixed.
 2. Release notes summarise features, limitations, and migration steps.
 3. Version bump to `v0.1.0-alpha` tagged in git.
@@ -632,21 +690,21 @@ As QA, I need a checklist to validate Alpha features and publish release notes, 
 ---
 
 ## 10 · Phase-1 Backlog (Post-Alpha)
+
 The following candidate features are out of scope for Alpha but prioritised for Phase-1 planning:
 
-| # | Theme | Candidate Story |
-|---|-------|-----------------|
-| P1-1 | Node Library | Add advanced rule nodes matching engine capabilities: `Weighted`, `Conditional`, `Sequential`, `Markov`. |
-| P1-2 | UX – Advanced Modal | Implement “Advanced Settings” modal (seed override, sampling temperature, run count selector). |
-| P1-3 | Content Authoring | Publish **Content Authoring Handbook** distilled from `LLM_Content_Development_Guide.md` & `LLM_Generator_Assembly_Guide.md`. |
-| P1-4 | Python Bridge | Introduce optional `python_executor` micro-service via REST for heavy NLP transforms. |
-| P1-5 | Corrections Manager GA | Graduate Corrections Store feature flag to GA with persistent storage. |
-| P1-6 | Collaboration | Add real-time multi-user editing via CRDT & WebSockets. |
-| P1-7 | Prompt Targeting System | Begin design of cross-model export (Midjourney, Imagen, etc.) as outlined in `FUTURE_DIRECTIONS.md`. |
-| P1-8 | Palette Scalability | Add category tabs to Palette when node types exceed 12. |
+| #    | Theme                   | Candidate Story                                                                                                               |
+| ---- | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| P1-1 | Node Library            | Add advanced rule nodes matching engine capabilities: `Weighted`, `Conditional`, `Sequential`, `Markov`.                      |
+| P1-2 | UX – Advanced Modal     | Implement “Advanced Settings” modal (seed override, sampling temperature, run count selector).                                |
+| P1-3 | Content Authoring       | Publish **Content Authoring Handbook** distilled from `LLM_Content_Development_Guide.md` & `LLM_Generator_Assembly_Guide.md`. |
+| P1-4 | Python Bridge           | Introduce optional `python_executor` micro-service via REST for heavy NLP transforms.                                         |
+| P1-5 | Corrections Manager GA  | Graduate Corrections Store feature flag to GA with persistent storage.                                                        |
+| P1-6 | Collaboration           | Add real-time multi-user editing via CRDT & WebSockets.                                                                       |
+| P1-7 | Prompt Targeting System | Begin design of cross-model export (Midjourney, Imagen, etc.) as outlined in `FUTURE_DIRECTIONS.md`.                          |
+| P1-8 | Palette Scalability     | Add category tabs to Palette when node types exceed 12.                                                                       |
 
 These items will be groomed and scheduled after v0.1.0-alpha release.
-
 
 ---
 
@@ -655,37 +713,45 @@ These items will be groomed and scheduled after v0.1.0-alpha release.
 **Epic Goal**  
 Implement core project management features for saving/loading graph files, import/export functionality, and UI enhancements that improve workflow efficiency, including ctrl-click node palette access and intelligent wire-node interactions.
 
-### Story 6.1  Project File Structure & Management
+### Story 6.1 Project File Structure & Management
+
 As a prompt artist, I want to save my graph projects to files and open them later, so that I can maintain a library of prompt templates and continue my work across sessions.
 
 **Acceptance Criteria**
+
 1. "Save Project" and "Open Project" options in the main menu/toolbar.
 2. Project files (.psg format) store the complete graph state, including node positions and connections.
 3. Confirmation dialog if attempting to open a new project with unsaved changes.
 4. Recently opened projects list in the file menu (last 5).
 
-### Story 6.2  Import & Export System
+### Story 6.2 Import & Export System
+
 As a prompt artist, I want to import and export my graphs in various formats, so that I can share them with colleagues or integrate them with other tools.
 
 **Acceptance Criteria**
+
 1. Export options: JSON (raw), PNG (visual representation), Text (generated prompts).
 2. Import accepts .psg files and valid JSON graph structures.
 3. Import validation with clear error messaging for invalid files.
 4. Progress indicator for large file imports/exports.
 
-### Story 6.3  Ctrl-Click Node Palette Access
+### Story 6.3 Ctrl-Click Node Palette Access
+
 As a prompt artist, I want to ctrl-click anywhere on the canvas to open the node palette at that position, so that I can add nodes more efficiently without dragging from the side panel.
 
 **Acceptance Criteria**
+
 1. Ctrl-click (Cmd-click on macOS) on empty canvas space opens node palette at cursor position.
 2. Selected node appears at the clicked position.
 3. Feature can be toggled on/off in settings.
 4. Tooltip/onboarding hint to educate users about this feature.
 
-### Story 6.4  Intelligent Wire-Node Interactions
+### Story 6.4 Intelligent Wire-Node Interactions
+
 As a prompt artist, I want to drop a node onto an existing wire and be presented with options to disconnect or splice, so that I can modify my graph structure more intuitively.
 
 **Acceptance Criteria**
+
 1. Visual feedback when dragging a node over a wire (highlight or glow effect).
 2. Contextual menu appears when dropping a node on a wire with options:
    - "Splice" - Insert the node into the connection, creating two edges.
@@ -746,10 +812,12 @@ As a prompt artist, I want to drop a node onto an existing wire and be presented
 **Epic Goal**  
 Enhance the core capabilities of the graph editor with advanced node types, improved palette organization, and fine-grained control settings to empower prompt artists with more powerful and flexible graph authoring tools.
 
-### Story 7.1  Advanced Rule Node Implementation
+### Story 7.1 Advanced Rule Node Implementation
+
 As a prompt artist, I want access to advanced rule nodes (`Weighted`, `Conditional`, `Sequential`, `Markov`) that match engine capabilities, so that I can create more sophisticated and dynamic prompt structures.
 
 **Acceptance Criteria**
+
 1. Four new node types implemented with corresponding runtime classes in the executor:
    - `Weighted`: Probability-based branching beyond simple choices
    - `Conditional`: If-then-else logic based on variable values
@@ -759,20 +827,24 @@ As a prompt artist, I want access to advanced rule nodes (`Weighted`, `Condition
 3. Documentation for each node type with usage examples.
 4. Test suite covering all node behaviors and edge cases.
 
-### Story 7.2  Palette Categorization System
+### Story 7.2 Palette Categorization System
+
 As a prompt artist, I want the node palette organized into logical categories with tabs, so that I can efficiently find nodes as the library grows beyond 12 node types.
 
 **Acceptance Criteria**
+
 1. Palette UI redesigned with category tabs at the top.
 2. Initial categories include: Basic, Flow Control, Variables, Advanced Rules.
 3. Visual indicators show which categories contain which nodes.
 4. Search functionality to quickly find nodes across categories.
 5. User-customizable favorites section for most frequently used nodes.
 
-### Story 7.3  Advanced Settings Modal
+### Story 7.3 Advanced Settings Modal
+
 As a prompt artist, I want an Advanced Settings modal that gives me fine-grained control over seed, sampling, and execution parameters, so that I can precisely tune how my prompts are generated.
 
 **Acceptance Criteria**
+
 1. Modal accessible from main toolbar with gear icon.
 2. Settings include:
    - Seed override with manual entry field and "Randomize" button
@@ -783,10 +855,12 @@ As a prompt artist, I want an Advanced Settings modal that gives me fine-grained
 4. Changes take immediate effect on preview generation.
 5. Reset to defaults button for each setting group.
 
-### Story 7.4  Advanced Node Documentation & Examples
+### Story 7.4 Advanced Node Documentation & Examples
+
 As a prompt artist, I want comprehensive documentation and examples for the advanced nodes, so that I can understand their use cases and implement them effectively in my graphs.
 
 **Acceptance Criteria**
+
 1. Interactive documentation with live examples for each advanced node.
 2. Tooltip help text available directly in the UI.
 3. Example graphs demonstrating practical applications.
@@ -856,10 +930,12 @@ As a prompt artist, I want comprehensive documentation and examples for the adva
 **Epic Goal**  
 Extend the prompt execution capabilities through Python integration and corrections management while providing comprehensive documentation for content authors, enabling more powerful NLP transforms and supporting advanced content creation workflows.
 
-### Story 8.1  Python Executor Bridge
+### Story 8.1 Python Executor Bridge
+
 As a prompt engineer working with complex NLP tasks, I want an optional Python executor bridge via REST API, so that I can leverage Python's powerful NLP libraries and custom transforms within my prompt graphs.
 
 **Acceptance Criteria**
+
 1. Microservice architecture designed and implemented for Python execution.
 2. REST API with standardized interfaces for text transformation.
 3. Secure sandboxed execution environment for user-defined Python code.
@@ -867,10 +943,12 @@ As a prompt engineer working with complex NLP tasks, I want an optional Python e
 5. Performance monitoring and timeout handling for long-running operations.
 6. Documentation for extending with custom Python transforms.
 
-### Story 8.2  Corrections Manager General Availability
+### Story 8.2 Corrections Manager General Availability
+
 As a content creator, I want a fully-featured Corrections Manager with persistent storage, so that I can maintain a library of corrections that improve the quality of generated content across sessions.
 
 **Acceptance Criteria**
+
 1. Feature flag for Corrections Store graduated to general availability.
 2. Persistent storage implementation for corrections database.
 3. Import/export functionality for sharing correction sets.
@@ -878,10 +956,12 @@ As a content creator, I want a fully-featured Corrections Manager with persisten
 5. Statistics and effectiveness tracking for applied corrections.
 6. Integration with main editor workflow for seamless corrections application.
 
-### Story 8.3  Content Authoring Handbook
+### Story 8.3 Content Authoring Handbook
+
 As a content author using the prompt creation tool, I want comprehensive documentation distilled from existing guides, so that I can follow best practices for LLM content development and prompt engineering.
 
 **Acceptance Criteria**
+
 1. Published handbook combining content from `LLM_Content_Development_Guide.md` and `LLM_Generator_Assembly_Guide.md`.
 2. Interactive examples demonstrating key concepts.
 3. Search functionality across all documentation.
@@ -889,10 +969,12 @@ As a content author using the prompt creation tool, I want comprehensive documen
 5. Available in multiple formats (web, PDF, offline).
 6. Regular update cycle established for maintaining current best practices.
 
-### Story 8.4  Extension System Architecture
+### Story 8.4 Extension System Architecture
+
 As a developer extending the application, I want a standardized extension architecture, so that I can build and integrate custom components that enhance the core functionality.
 
 **Acceptance Criteria**
+
 1. Documented extension points for all major system components.
 2. Standard interface definitions for custom node types.
 3. Plugin manifest format for extension registration.
@@ -968,10 +1050,12 @@ As a developer extending the application, I want a standardized extension archit
 **Epic Goal**  
 Enable real-time collaborative editing and shared workflows to support team-based prompt engineering, allowing multiple users to simultaneously work on the same prompt graph with coordination features and role-based access controls.
 
-### Story 9.1  Real-Time Collaboration Foundation
+### Story 9.1 Real-Time Collaboration Foundation
+
 As a team member working on prompt engineering, I want a foundation for real-time collaborative editing, so that multiple users can work simultaneously on the same prompt graph without conflicts.
 
 **Acceptance Criteria**
+
 1. CRDT (Conflict-free Replicated Data Type) implementation for graph state management.
 2. WebSocket server for real-time state synchronization.
 3. User presence indicators showing who is currently editing the document.
@@ -979,10 +1063,12 @@ As a team member working on prompt engineering, I want a foundation for real-tim
 5. Performance testing with multiple concurrent users (minimum 10).
 6. Graceful handling of network interruptions and reconnections.
 
-### Story 9.2  Collaborative Workspace
+### Story 9.2 Collaborative Workspace
+
 As a prompt engineering team leader, I want a collaborative workspace for organizing projects and sharing graphs, so that my team can coordinate work and maintain visibility across multiple prompt projects.
 
 **Acceptance Criteria**
+
 1. Workspace concept with project grouping and organization.
 2. Shared access controls with role-based permissions.
 3. Activity feed showing recent changes across projects.
@@ -990,10 +1076,12 @@ As a prompt engineering team leader, I want a collaborative workspace for organi
 5. Notification system for important changes and mentions.
 6. Project templates for standardizing new prompt graphs.
 
-### Story 9.3  Version History & Comparison
+### Story 9.3 Version History & Comparison
+
 As a content creator collaborating with others, I want version history and comparison tools, so that I can track changes, revert if needed, and understand how a prompt has evolved over time.
 
 **Acceptance Criteria**
+
 1. Version history with automatic and manual snapshot creation.
 2. Visual diff tool for comparing graph versions.
 3. Ability to restore previous versions.
@@ -1001,10 +1089,12 @@ As a content creator collaborating with others, I want version history and compa
 5. Branching capability for experimental variations.
 6. Export of version history in human-readable format.
 
-### Story 9.4  Workflow Orchestration
+### Story 9.4 Workflow Orchestration
+
 As a team using prompt engineering in production workflows, I want workflow orchestration capabilities, so that prompt graphs can be integrated into larger business processes with approvals and governance.
 
 **Acceptance Criteria**
+
 1. Workflow states for prompt graphs (draft, review, approved, published).
 2. Approval processes with role-based authorization.
 3. Locking mechanism for preventing edits to published graphs.
@@ -1080,10 +1170,12 @@ As a team using prompt engineering in production workflows, I want workflow orch
 **Epic Goal**  
 Develop a cross-model export system that allows prompt graphs to target multiple AI platforms and modalities, enabling prompt artists to create once and deploy to various AI systems with platform-specific optimizations.
 
-### Story 10.1  Prompt Targeting System Design
+### Story 10.1 Prompt Targeting System Design
+
 As a prompt engineer working across multiple AI platforms, I want a comprehensive design for cross-model exports, so that I can understand how to structure prompts that work across different AI models and modalities.
 
 **Acceptance Criteria**
+
 1. Detailed design document outlining cross-model export architecture.
 2. Common interface definition for model-specific adaptors.
 3. Mapping strategies for translating graph structures to different prompt formats.
@@ -1091,10 +1183,12 @@ As a prompt engineer working across multiple AI platforms, I want a comprehensiv
 5. Performance and compatibility considerations documented.
 6. Extension points identified for future platform support.
 
-### Story 10.2  Model-Specific Adaptor Framework
+### Story 10.2 Model-Specific Adaptor Framework
+
 As a developer integrating with multiple AI systems, I want a framework for creating model-specific adaptors, so that new AI platforms can be supported through a standardized extension mechanism.
 
 **Acceptance Criteria**
+
 1. Base adaptor class with standardized methods for prompt translation.
 2. Configuration system for model-specific parameters.
 3. Validation rules for ensuring prompt compatibility with target models.
@@ -1102,10 +1196,12 @@ As a developer integrating with multiple AI systems, I want a framework for crea
 5. Runtime detection of adaptor capabilities.
 6. Documentation for creating custom adaptors.
 
-### Story 10.3  Text-to-Image Model Support
+### Story 10.3 Text-to-Image Model Support
+
 As a prompt artist working with both text and images, I want text-to-image model support for my prompt graphs, so that I can generate images using platforms like Midjourney and DALL-E with the same graph structure I use for text generation.
 
 **Acceptance Criteria**
+
 1. Implementation of adaptors for at least two major text-to-image platforms.
 2. Parameter mapping for image-specific controls (dimensions, style, etc.).
 3. Preview generation for image prompts.
@@ -1113,10 +1209,12 @@ As a prompt artist working with both text and images, I want text-to-image model
 5. Metadata association with generated images.
 6. Export options for image prompts in platform-native formats.
 
-### Story 10.4  Platform-Optimized Prompt Authoring
+### Story 10.4 Platform-Optimized Prompt Authoring
+
 As a professional prompt engineer, I want platform-optimized prompt authoring, so that I can leverage platform-specific features while maintaining compatibility across multiple AI systems.
 
 **Acceptance Criteria**
+
 1. Platform-specific node types that map to unique capabilities.
 2. Visual indicators for platform compatibility in the editor.
 3. Parameter override system for platform-specific tuning.
@@ -1190,9 +1288,11 @@ As a professional prompt engineer, I want platform-optimized prompt authoring, s
 ## 16 · Future Feature Candidates
 
 ### Template Library System
+
 A comprehensive template library enabling users to discover, share, and reuse graph templates for common prompt engineering patterns, accelerating development and promoting best practices.
 
 **Key Components**
+
 - Template repository with categories and search
 - Rating and review system for community templates
 - Template parameterization for easy customization
@@ -1202,14 +1302,17 @@ A comprehensive template library enabling users to discover, share, and reuse gr
 ## 17 · Epic 11 — Authentication & User Management
 
 ### Overview
+
 Implement a comprehensive authentication and user management system that provides secure access control while enabling personalized experiences and setting the foundation for collaboration features.
 
 ### Stories
 
 #### Story 11.1 - Authentication Foundation
+
 **Description:** Implement core authentication infrastructure with multiple authentication methods and secure session management.
 
 **Acceptance Criteria:**
+
 - Users can register using email/password or OAuth providers (Google, GitHub)
 - Secure login with appropriate rate limiting and protection
 - Password reset functionality with secure token-based flow
@@ -1218,6 +1321,7 @@ Implement a comprehensive authentication and user management system that provide
 - API authentication using JWT tokens for programmatic access
 
 **Progress:**
+
 - [ ] Authentication service architecture designed
 - [ ] User registration implemented
 - [ ] Login system implemented
@@ -1227,9 +1331,11 @@ Implement a comprehensive authentication and user management system that provide
 - [ ] API authentication added
 
 #### Story 11.2 - User Profile & Preferences
+
 **Description:** Create user profile management allowing users to customize their experience and manage personal information.
 
 **Acceptance Criteria:**
+
 - User profile page with editable personal information
 - Profile image upload and management
 - User preferences for editor settings (themes, keybindings, etc.)
@@ -1238,6 +1344,7 @@ Implement a comprehensive authentication and user management system that provide
 - Account deletion with appropriate data handling
 
 **Progress:**
+
 - [ ] User profile UI implemented
 - [ ] Profile image management completed
 - [ ] User preferences system implemented
@@ -1246,9 +1353,11 @@ Implement a comprehensive authentication and user management system that provide
 - [ ] Account deletion process implemented
 
 #### Story 11.3 - Access Control System
+
 **Description:** Implement role-based access control system for managing permissions across the application.
 
 **Acceptance Criteria:**
+
 - Role-based access control with predefined roles (admin, editor, viewer)
 - Custom permission sets for granular access control
 - Resource-level permissions for projects and templates
@@ -1257,6 +1366,7 @@ Implement a comprehensive authentication and user management system that provide
 - Audit logging for security-related actions
 
 **Progress:**
+
 - [ ] RBAC system designed and implemented
 - [ ] Permission management UI created
 - [ ] Resource-level permissions implemented
@@ -1265,9 +1375,11 @@ Implement a comprehensive authentication and user management system that provide
 - [ ] Audit logging added for security events
 
 #### Story 11.4 - Teams & Organizations
+
 **Description:** Support for team-based collaboration with organizational hierarchy for enterprise use cases.
 
 **Acceptance Criteria:**
+
 - Organization creation and management
 - Team creation and management within organizations
 - User assignment to multiple teams
@@ -1276,6 +1388,7 @@ Implement a comprehensive authentication and user management system that provide
 - Team activity dashboards and reporting
 
 **Progress:**
+
 - [ ] Organization data model implemented
 - [ ] Team management functionality completed
 - [ ] User-team assignment system implemented
@@ -1286,14 +1399,17 @@ Implement a comprehensive authentication and user management system that provide
 ## Epic 12 — LLM Agent Randomizer System
 
 ### Overview
+
 Create a system that enables LLMs to generate structured output files that can be parsed back into prompt-spaghetti node graphs, allowing for automated prompt graph generation and transformation by different LLM agents.
 
 ### Stories
 
 #### Story 12.1 - Serialization Format Design
+
 **Description:** Design a serialization format that can represent prompt-spaghetti node graphs in a text format easily generated by LLMs and parseable by the application.
 
 **Acceptance Criteria:**
+
 - Specification document detailing the serialization format
 - Format supports all node types and connections in prompt-spaghetti
 - Format is human-readable and easily generated by LLMs
@@ -1302,6 +1418,7 @@ Create a system that enables LLMs to generate structured output files that can b
 - Conversion examples between node graphs and serialization format
 
 **Progress:**
+
 - [ ] Format requirements gathered
 - [ ] Serialization format designed
 - [ ] Test cases created
@@ -1310,9 +1427,11 @@ Create a system that enables LLMs to generate structured output files that can b
 - [ ] Example conversions documented
 
 #### Story 12.2 - LLM Agent Script Development
+
 **Description:** Develop agent scripts for multiple LLM providers that instruct the models to generate properly formatted output conforming to the serialization specification.
 
 **Acceptance Criteria:**
+
 - Agent scripts for OpenAI, Anthropic, and Gemini LLMs
 - Scripts include detailed instructions on format requirements
 - Examples and templates for generating different types of node graphs
@@ -1321,6 +1440,7 @@ Create a system that enables LLMs to generate structured output files that can b
 - Documentation for users on how to utilize the agent scripts
 
 **Progress:**
+
 - [ ] Core instruction templates created
 - [ ] OpenAI agent script developed
 - [ ] Anthropic agent script developed
@@ -1329,9 +1449,11 @@ Create a system that enables LLMs to generate structured output files that can b
 - [ ] User documentation written
 
 #### Story 12.3 - Parser Implementation
+
 **Description:** Implement a robust parser in the prompt-spaghetti application that can transform the LLM-generated text into the internal node graph representation.
 
 **Acceptance Criteria:**
+
 - Parser handles all features of the serialization format
 - Graceful error handling for malformed input
 - Detailed error messages for debugging
@@ -1340,6 +1462,7 @@ Create a system that enables LLMs to generate structured output files that can b
 - Unit tests covering parsing edge cases
 
 **Progress:**
+
 - [ ] Parser architecture designed
 - [ ] Core parsing logic implemented
 - [ ] Error handling developed
@@ -1348,9 +1471,11 @@ Create a system that enables LLMs to generate structured output files that can b
 - [ ] Unit tests written
 
 #### Story 12.4 - Randomizer Generator Implementation
+
 **Description:** Create a specialized LLM agent script and associated parser handler specifically for generating randomized prompt node graphs with configurable parameters.
 
 **Acceptance Criteria:**
+
 - Specialized agent script for randomizer generation
 - Configuration parameters for controlling randomization
 - Support for templates and constraints in randomization
@@ -1359,6 +1484,7 @@ Create a system that enables LLMs to generate structured output files that can b
 - Ability to regenerate with same or modified parameters
 
 **Progress:**
+
 - [ ] Randomizer requirements gathered
 - [ ] Randomizer agent script developed
 - [ ] Configuration parameters defined
@@ -1369,14 +1495,17 @@ Create a system that enables LLMs to generate structured output files that can b
 ## Epic 13 — Analytics Dashboard
 
 ### Overview
+
 Create a comprehensive analytics system that tracks prompt performance metrics, usage patterns, and optimization opportunities, enabling users to measure effectiveness and continuously improve their prompt engineering.
 
 ### Stories
 
 #### Story 13.1 - Analytics Data Collection
+
 **Description:** Implement a robust system for collecting, processing, and storing analytics data from prompt executions and user interactions.
 
 **Acceptance Criteria:**
+
 - Event tracking framework for prompt execution and performance
 - Telemetry collection for token usage, response quality, and execution time
 - User interaction tracking with privacy controls and opt-in mechanisms
@@ -1385,6 +1514,7 @@ Create a comprehensive analytics system that tracks prompt performance metrics, 
 - Performance impact minimization on core application functions
 
 **Progress:**
+
 - [ ] Event tracking architecture designed
 - [ ] Core metrics collection implemented
 - [ ] User interaction tracking added
@@ -1393,9 +1523,11 @@ Create a comprehensive analytics system that tracks prompt performance metrics, 
 - [ ] Performance optimization completed
 
 #### Story 13.2 - Performance Metrics Dashboard
+
 **Description:** Create a visual dashboard for monitoring and analyzing prompt performance metrics with historical trends and comparisons.
 
 **Acceptance Criteria:**
+
 - Main dashboard with key performance indicators
 - Historical trend analysis with configurable time ranges
 - Comparison tools for different prompt versions
@@ -1404,6 +1536,7 @@ Create a comprehensive analytics system that tracks prompt performance metrics, 
 - Interactive filtering and drill-down capabilities
 
 **Progress:**
+
 - [ ] Dashboard layout and architecture designed
 - [ ] Core visualizations implemented
 - [ ] Historical trend analysis built
@@ -1412,9 +1545,11 @@ Create a comprehensive analytics system that tracks prompt performance metrics, 
 - [ ] Interactive features implemented
 
 #### Story 13.3 - Cost & Resource Analysis
+
 **Description:** Develop tools for tracking, analyzing, and optimizing token usage and associated costs across different models and prompt configurations.
 
 **Acceptance Criteria:**
+
 - Token usage tracking by prompt, node, and graph
 - Cost calculation based on current API pricing
 - Budget management with alerts and limits
@@ -1423,6 +1558,7 @@ Create a comprehensive analytics system that tracks prompt performance metrics, 
 - Comparison of cost efficiency across different models
 
 **Progress:**
+
 - [ ] Token tracking implemented
 - [ ] Cost calculation system built
 - [ ] Budget management created
@@ -1431,9 +1567,11 @@ Create a comprehensive analytics system that tracks prompt performance metrics, 
 - [ ] Model comparison tools implemented
 
 #### Story 13.4 - Usage Pattern Analytics
+
 **Description:** Implement analytics for understanding user behavior, feature usage, and interaction patterns to guide product development and user education.
 
 **Acceptance Criteria:**
+
 - Analysis of user interaction patterns
 - Heat maps for node and edge usage
 - User journey visualization
@@ -1442,6 +1580,7 @@ Create a comprehensive analytics system that tracks prompt performance metrics, 
 - Cohort analysis for different user segments
 
 **Progress:**
+
 - [ ] Pattern analysis framework implemented
 - [ ] Heat map visualization created
 - [ ] User journey tools built
@@ -1452,14 +1591,17 @@ Create a comprehensive analytics system that tracks prompt performance metrics, 
 ## Epic 14 — A/B Testing Framework
 
 ### Overview
+
 Develop a comprehensive A/B testing framework that enables users to systematically compare prompt variations, measure performance differences, and optimize prompt engineering with data-driven decisions.
 
 ### Stories
 
 #### Story 14.1 - Experiment Design System
+
 **Description:** Create a system for designing, configuring, and managing A/B test experiments for prompt engineering.
 
 **Acceptance Criteria:**
+
 - Visual experiment builder with variant creation
 - Experiment configuration with traffic allocation
 - Success metric definition and goal setting
@@ -1468,6 +1610,7 @@ Develop a comprehensive A/B testing framework that enables users to systematical
 - Experiment documentation and collaboration tools
 
 **Progress:**
+
 - [ ] Experiment data model designed
 - [ ] Visual experiment builder created
 - [ ] Configuration options implemented
@@ -1476,9 +1619,11 @@ Develop a comprehensive A/B testing framework that enables users to systematical
 - [ ] Statistical tools integrated
 
 #### Story 14.2 - Traffic Allocation & Randomization
+
 **Description:** Implement a robust system for allocating traffic between test variants with consistent user assignment and randomization.
 
 **Acceptance Criteria:**
+
 - Configurable traffic split between variants
 - Consistent user assignment to variants
 - Support for multi-variant testing
@@ -1487,6 +1632,7 @@ Develop a comprehensive A/B testing framework that enables users to systematical
 - Manual override and exclusion options
 
 **Progress:**
+
 - [ ] Traffic allocation engine built
 - [ ] User assignment system implemented
 - [ ] Multi-variant support added
@@ -1495,9 +1641,11 @@ Develop a comprehensive A/B testing framework that enables users to systematical
 - [ ] Override mechanisms implemented
 
 #### Story 14.3 - Results Analysis & Visualization
+
 **Description:** Create comprehensive analytics and visualization tools for understanding experiment results and making data-driven decisions.
 
 **Acceptance Criteria:**
+
 - Real-time experiment results dashboard
 - Statistical significance calculation
 - Confidence interval visualization
@@ -1506,6 +1654,7 @@ Develop a comprehensive A/B testing framework that enables users to systematical
 - Detailed metrics comparison between variants
 
 **Progress:**
+
 - [ ] Results dashboard created
 - [ ] Statistical calculations implemented
 - [ ] Visualization components built
@@ -1514,9 +1663,11 @@ Develop a comprehensive A/B testing framework that enables users to systematical
 - [ ] Detailed comparison tools created
 
 #### Story 14.4 - Experiment Management System
+
 **Description:** Build tools for managing the complete lifecycle of experiments from creation through analysis to implementation of winners.
 
 **Acceptance Criteria:**
+
 - Experiment library and organization
 - Experiment status tracking and history
 - Integration with version control
@@ -1525,6 +1676,7 @@ Develop a comprehensive A/B testing framework that enables users to systematical
 - Experiment templating for reuse
 
 **Progress:**
+
 - [ ] Experiment library implemented
 - [ ] Status tracking developed
 - [ ] Version control integration built
@@ -1535,14 +1687,17 @@ Develop a comprehensive A/B testing framework that enables users to systematical
 ## Epic 15 — Mobile & Cross-Platform Support
 
 ### Overview
+
 Expand prompt-spaghetti's reach and flexibility by adding comprehensive mobile and cross-platform support, enabling users to create, edit, and manage prompts across different devices and operating systems with a consistent experience.
 
 ### Stories
 
 #### Story 15.1 - Responsive Web Interface
+
 **Description:** Redesign the web interface to be fully responsive and mobile-friendly, providing an optimal user experience across devices of different screen sizes.
 
 **Acceptance Criteria:**
+
 - Responsive layout that adapts to phones, tablets, and desktop devices
 - Touch-friendly controls and interaction patterns
 - Optimized canvas navigation for small screens
@@ -1551,6 +1706,7 @@ Expand prompt-spaghetti's reach and flexibility by adding comprehensive mobile a
 - Consistent functionality across screen sizes
 
 **Progress:**
+
 - [ ] Responsive framework implemented
 - [ ] Mobile layouts designed
 - [ ] Touch interactions developed
@@ -1559,9 +1715,11 @@ Expand prompt-spaghetti's reach and flexibility by adding comprehensive mobile a
 - [ ] Cross-device testing finished
 
 #### Story 15.2 - Native Mobile Applications
+
 **Description:** Develop native mobile applications for iOS and Android platforms, providing a tailored experience optimized for mobile users with device-specific features.
 
 **Acceptance Criteria:**
+
 - Native iOS application for iPhone and iPad
 - Native Android application for phones and tablets
 - Offline capabilities with synchronization
@@ -1570,6 +1728,7 @@ Expand prompt-spaghetti's reach and flexibility by adding comprehensive mobile a
 - App store compliance and distribution
 
 **Progress:**
+
 - [ ] Core application architecture created
 - [ ] iOS application developed
 - [ ] Android application developed
@@ -1578,9 +1737,11 @@ Expand prompt-spaghetti's reach and flexibility by adding comprehensive mobile a
 - [ ] Store deployment completed
 
 #### Story 15.3 - Desktop Application Suite
+
 **Description:** Create cross-platform desktop applications that offer enhanced performance, system integration, and offline capabilities compared to the web version.
 
 **Acceptance Criteria:**
+
 - Cross-platform desktop application for Windows, macOS, and Linux
 - Enhanced performance for large prompt graphs
 - System integration (notifications, file associations)
@@ -1589,6 +1750,7 @@ Expand prompt-spaghetti's reach and flexibility by adding comprehensive mobile a
 - Automatic updates and deployment
 
 **Progress:**
+
 - [ ] Desktop framework selected
 - [ ] Core application shell built
 - [ ] Platform-specific integrations added
@@ -1597,9 +1759,11 @@ Expand prompt-spaghetti's reach and flexibility by adding comprehensive mobile a
 - [ ] Deployment pipeline established
 
 #### Story 15.4 - Synchronization & Cloud Storage
+
 **Description:** Implement a robust synchronization system that allows users to seamlessly work across devices with automatic data syncing and conflict resolution.
 
 **Acceptance Criteria:**
+
 - Real-time synchronization between devices
 - Offline changes tracking and reconciliation
 - Conflict detection and resolution
@@ -1608,6 +1772,7 @@ Expand prompt-spaghetti's reach and flexibility by adding comprehensive mobile a
 - User control over sync settings
 
 **Progress:**
+
 - [ ] Sync architecture designed
 - [ ] Real-time sync implemented
 - [ ] Offline capabilities developed
@@ -1618,14 +1783,17 @@ Expand prompt-spaghetti's reach and flexibility by adding comprehensive mobile a
 ## Epic 16 — Marketplace & Community Features
 
 ### Overview
+
 Create a vibrant community ecosystem around prompt-spaghetti by developing a comprehensive marketplace for sharing, discovering, and monetizing prompt templates, along with social features to foster collaboration and knowledge sharing among users.
 
 ### Stories
 
 #### Story 16.1 - Prompt Template Marketplace
+
 **Description:** Build a full-featured marketplace where users can discover, share, and purchase prompt templates created by the community, with robust search, filtering, and recommendation capabilities.
 
 **Acceptance Criteria:**
+
 - Intuitive marketplace interface with featured, trending, and new templates
 - Advanced search and filtering by category, rating, usage, and compatibility
 - Template preview and detailed information display
@@ -1634,6 +1802,7 @@ Create a vibrant community ecosystem around prompt-spaghetti by developing a com
 - Personalized recommendations based on user preferences and activity
 
 **Progress:**
+
 - [ ] Marketplace UI/UX designed
 - [ ] Template listing and discovery implemented
 - [ ] Search and filter system built
@@ -1642,9 +1811,11 @@ Create a vibrant community ecosystem around prompt-spaghetti by developing a com
 - [ ] Rating and review system implemented
 
 #### Story 16.2 - Template Publishing & Management
+
 **Description:** Provide creators with comprehensive tools to publish, update, and manage their templates in the marketplace, including analytics, version control, and monetization options.
 
 **Acceptance Criteria:**
+
 - Streamlined template submission and publication workflow
 - Template versioning and update management
 - Comprehensive template analytics (downloads, usage, ratings)
@@ -1653,6 +1824,7 @@ Create a vibrant community ecosystem around prompt-spaghetti by developing a com
 - Creator profile and portfolio management
 
 **Progress:**
+
 - [ ] Template submission system built
 - [ ] Version management implemented
 - [ ] Creator analytics dashboard developed
@@ -1661,9 +1833,11 @@ Create a vibrant community ecosystem around prompt-spaghetti by developing a com
 - [ ] Creator profiles developed
 
 #### Story 16.3 - Community & Social Features
+
 **Description:** Foster a collaborative community environment with social features including discussion forums, user profiles, following system, and collaborative creation tools.
 
 **Acceptance Criteria:**
+
 - User profiles with activity history, contributions, and achievements
 - Following system to track favorite creators and templates
 - Discussion forums organized by topics and categories
@@ -1672,6 +1846,7 @@ Create a vibrant community ecosystem around prompt-spaghetti by developing a com
 - Community guidelines and moderation tools
 
 **Progress:**
+
 - [ ] User profile system developed
 - [ ] Following functionality implemented
 - [ ] Discussion forums created
@@ -1680,9 +1855,11 @@ Create a vibrant community ecosystem around prompt-spaghetti by developing a com
 - [ ] Moderation tools implemented
 
 #### Story 16.4 - Knowledge Base & Learning Resources
+
 **Description:** Develop a comprehensive knowledge base and learning resources section to help users maximize the platform's potential, including tutorials, best practices, case studies, and documentation.
 
 **Acceptance Criteria:**
+
 - Structured knowledge base with searchable articles and guides
 - Interactive tutorials and learning paths for different skill levels
 - Community-contributed tips and best practices
@@ -1691,6 +1868,7 @@ Create a vibrant community ecosystem around prompt-spaghetti by developing a com
 - Integration with in-app help system
 
 **Progress:**
+
 - [ ] Knowledge base system implemented
 - [ ] Tutorial framework developed
 - [ ] Community contribution system built
@@ -1701,14 +1879,17 @@ Create a vibrant community ecosystem around prompt-spaghetti by developing a com
 ## Epic 17 — Backstage Admin Controls
 
 ### Overview
+
 Develop a comprehensive administrative backend system that enables platform administrators to manage all aspects of the prompt-spaghetti ecosystem, including feature toggles, content moderation, system configuration, user management, and advanced analytics.
 
 ### Stories
 
 #### Story 17.1 - Feature Management & Toggle System
+
 **Description:** Create a flexible feature management system that allows administrators to enable, disable, and configure features across the platform, supporting gradual rollouts, A/B testing, and emergency controls.
 
 **Acceptance Criteria:**
+
 - Comprehensive feature toggle dashboard with status overview
 - Granular controls for enabling/disabling individual features
 - User segment targeting for selective feature activation
@@ -1717,6 +1898,7 @@ Develop a comprehensive administrative backend system that enables platform admi
 - Audit logging of all feature state changes
 
 **Progress:**
+
 - [ ] Feature toggle architecture designed
 - [ ] Admin dashboard UI implemented
 - [ ] Toggle controls developed
@@ -1725,9 +1907,11 @@ Develop a comprehensive administrative backend system that enables platform admi
 - [ ] Audit logging implemented
 
 #### Story 17.2 - Content Management System
+
 **Description:** Build an advanced content management system for administrators to upload, categorize, moderate, and organize content across the platform, including randomizers, templates, tutorials, and documentation.
 
 **Acceptance Criteria:**
+
 - Multi-format content uploader with validation and preview
 - Hierarchical category and tag management
 - Content moderation queue and approval workflows
@@ -1736,6 +1920,7 @@ Develop a comprehensive administrative backend system that enables platform admi
 - Version control and rollback capabilities
 
 **Progress:**
+
 - [ ] Content uploader implemented
 - [ ] Category management system built
 - [ ] Moderation tools developed
@@ -1744,9 +1929,11 @@ Develop a comprehensive administrative backend system that enables platform admi
 - [ ] Version control integrated
 
 #### Story 17.3 - User & Permission Management
+
 **Description:** Develop a comprehensive user management system with role-based access control, allowing administrators to manage accounts, assign permissions, and monitor user activity.
 
 **Acceptance Criteria:**
+
 - User management dashboard with search and filtering
 - Role-based access control system with custom roles
 - Permission assignment at user and group levels
@@ -1755,6 +1942,7 @@ Develop a comprehensive administrative backend system that enables platform admi
 - Self-service permission requests and approvals
 
 **Progress:**
+
 - [ ] User management dashboard created
 - [ ] RBAC system implemented
 - [ ] Permission management built
@@ -1763,9 +1951,11 @@ Develop a comprehensive administrative backend system that enables platform admi
 - [ ] Self-service system created
 
 #### Story 17.4 - System Configuration & Monitoring
+
 **Description:** Create a centralized system configuration dashboard that allows administrators to configure system parameters, monitor performance metrics, and manage integrations and APIs.
 
 **Acceptance Criteria:**
+
 - System configuration panel for core settings
 - Performance monitoring dashboard with alerts
 - Integration management for third-party services
@@ -1774,6 +1964,7 @@ Develop a comprehensive administrative backend system that enables platform admi
 - Backup and restore capabilities
 
 **Progress:**
+
 - [ ] Configuration panel developed
 - [ ] Monitoring dashboard implemented
 - [ ] Integration management built
@@ -1782,9 +1973,11 @@ Develop a comprehensive administrative backend system that enables platform admi
 - [ ] Backup system developed
 
 #### Story 17.5 - Marketplace Administration
+
 **Description:** Build specialized tools for administrators to manage the template marketplace, including content moderation, featured listings, promotions, and transaction oversight.
 
 **Acceptance Criteria:**
+
 - Template submission review and approval workflow
 - Featured content and promotion management
 - Transaction monitoring and issue resolution
@@ -1793,6 +1986,7 @@ Develop a comprehensive administrative backend system that enables platform admi
 - Marketplace analytics and health metrics
 
 **Progress:**
+
 - [ ] Review workflow implemented
 - [ ] Featured content tools developed
 - [ ] Transaction monitoring built
@@ -1803,14 +1997,17 @@ Develop a comprehensive administrative backend system that enables platform admi
 ## Epic 18 — Technical Debt & Refactoring
 
 ### Overview
+
 Identify, prioritize, and address technical debt throughout the codebase, improving architecture, performance, maintainability, and scalability through systematic refactoring, while implementing best practices for preventing future technical debt accumulation.
 
 ### Stories
 
 #### Story 18.1 - Technical Debt Assessment & Inventory
+
 **Description:** Conduct a comprehensive assessment of the codebase to identify, categorize, and prioritize technical debt across all components, establishing a clear inventory of issues requiring attention.
 
 **Acceptance Criteria:**
+
 - Complete static code analysis across all repositories
 - Comprehensive technical debt inventory with categorization
 - Debt scoring and prioritization framework
@@ -1819,6 +2016,7 @@ Identify, prioritize, and address technical debt throughout the codebase, improv
 - Technical debt visualization and reporting
 
 **Progress:**
+
 - [ ] Static analysis tools implemented
 - [ ] Manual code review completed
 - [ ] Architecture assessment performed
@@ -1827,9 +2025,11 @@ Identify, prioritize, and address technical debt throughout the codebase, improv
 - [ ] Prioritization framework established
 
 #### Story 18.2 - Core Engine Refactoring
+
 **Description:** Refactor the core prompt engine components to improve performance, maintainability, and extensibility, focusing on the execution context, runtime nodes, and validation systems.
 
 **Acceptance Criteria:**
+
 - Modular architecture with clear separation of concerns
 - Improved type safety and error handling
 - Performance optimization for large graph execution
@@ -1838,6 +2038,7 @@ Identify, prioritize, and address technical debt throughout the codebase, improv
 - Developer documentation for core engine architecture
 
 **Progress:**
+
 - [ ] Architecture redesign completed
 - [ ] Execution context refactored
 - [ ] Runtime nodes optimized
@@ -1846,9 +2047,11 @@ Identify, prioritize, and address technical debt throughout the codebase, improv
 - [ ] Test coverage expanded
 
 #### Story 18.3 - Frontend Component Modernization
+
 **Description:** Modernize the frontend component architecture, implementing consistent patterns, improving state management, and enhancing the UI component library for better maintainability and developer experience.
 
 **Acceptance Criteria:**
+
 - Standardized component architecture pattern
 - Component library with documentation and examples
 - Improved state management implementation
@@ -1857,6 +2060,7 @@ Identify, prioritize, and address technical debt throughout the codebase, improv
 - Responsive design implementation
 
 **Progress:**
+
 - [ ] Component audit completed
 - [ ] Architecture pattern established
 - [ ] Component library created
@@ -1865,9 +2069,11 @@ Identify, prioritize, and address technical debt throughout the codebase, improv
 - [ ] Accessibility improvements completed
 
 #### Story 18.4 - Testing & Quality Infrastructure
+
 **Description:** Enhance the testing and quality assurance infrastructure by implementing comprehensive test automation, code quality tools, and continuous integration practices to prevent future technical debt.
 
 **Acceptance Criteria:**
+
 - Expanded unit test coverage across all modules
 - Integration test suite for critical paths
 - End-to-end testing for key user journeys
@@ -1876,6 +2082,7 @@ Identify, prioritize, and address technical debt throughout the codebase, improv
 - Continuous integration pipeline improvements
 
 **Progress:**
+
 - [ ] Test coverage expanded
 - [ ] Integration tests implemented
 - [ ] E2E test suite created
@@ -1884,9 +2091,11 @@ Identify, prioritize, and address technical debt throughout the codebase, improv
 - [ ] CI pipeline enhanced
 
 #### Story 18.5 - Technical Documentation Overhaul
+
 **Description:** Create comprehensive technical documentation covering architecture, components, APIs, and development practices, ensuring knowledge transfer and facilitating future maintenance and development.
 
 **Acceptance Criteria:**
+
 - Architecture documentation with diagrams and rationale
 - Component API documentation with examples
 - Development standards and best practices guide
@@ -1895,6 +2104,7 @@ Identify, prioritize, and address technical debt throughout the codebase, improv
 - Automated documentation generation where appropriate
 
 **Progress:**
+
 - [ ] Architecture documentation created
 - [ ] API documentation completed
 - [ ] Standards guide developed
@@ -1905,14 +2115,17 @@ Identify, prioritize, and address technical debt throughout the codebase, improv
 ## Epic 19 — Security & Compliance Framework
 
 ### Overview
+
 Develop a comprehensive security and compliance framework that safeguards user data, ensures platform integrity, meets regulatory requirements, and provides transparent controls for both users and administrators, establishing the platform as enterprise-ready and suitable for regulated industries.
 
 ### Stories
 
 #### Story 19.1 - Authentication Enhancement & Security Hardening
+
 **Description:** Strengthen the authentication system with additional security features, implement advanced threat protection, and enhance session management to protect against common vulnerabilities.
 
 **Acceptance Criteria:**
+
 - Multi-factor authentication implementation with multiple options (SMS, app, email)
 - Advanced password policies with breach detection
 - Brute force protection with intelligent rate limiting
@@ -1921,6 +2134,7 @@ Develop a comprehensive security and compliance framework that safeguards user d
 - Security headers and protection against common web vulnerabilities
 
 **Progress:**
+
 - [ ] Multi-factor authentication implemented
 - [ ] Password policies enhanced
 - [ ] Brute force protection added
@@ -1929,9 +2143,11 @@ Develop a comprehensive security and compliance framework that safeguards user d
 - [ ] Security headers implemented
 
 #### Story 19.2 - Data Protection & Privacy Controls
+
 **Description:** Implement comprehensive data protection measures, privacy controls, and consent management to safeguard user data and ensure compliance with privacy regulations like GDPR, CCPA, and emerging standards.
 
 **Acceptance Criteria:**
+
 - End-to-end encryption for sensitive data
 - Data classification system with appropriate protection levels
 - User data access controls and transparency tools
@@ -1940,6 +2156,7 @@ Develop a comprehensive security and compliance framework that safeguards user d
 - Data retention and deletion automation
 
 **Progress:**
+
 - [ ] Data encryption implemented
 - [ ] Data classification system built
 - [ ] Access controls developed
@@ -1948,9 +2165,11 @@ Develop a comprehensive security and compliance framework that safeguards user d
 - [ ] Data retention automation built
 
 #### Story 19.3 - Compliance Framework & Reporting
+
 **Description:** Create a flexible compliance framework that supports multiple regulatory standards, provides automated compliance monitoring, and generates comprehensive reports for internal and external audits.
 
 **Acceptance Criteria:**
+
 - Compliance rule engine with standard templates (GDPR, HIPAA, SOC2, etc.)
 - Automated compliance monitoring and violation detection
 - Evidence collection and secure storage
@@ -1959,6 +2178,7 @@ Develop a comprehensive security and compliance framework that safeguards user d
 - Audit preparation tools and workflow
 
 **Progress:**
+
 - [ ] Compliance rule engine built
 - [ ] Automated monitoring implemented
 - [ ] Evidence collection system created
@@ -1967,9 +2187,11 @@ Develop a comprehensive security and compliance framework that safeguards user d
 - [ ] Audit preparation workflow built
 
 #### Story 19.4 - Security Monitoring & Incident Response
+
 **Description:** Implement robust security monitoring, threat detection, and incident response capabilities to identify potential security issues, respond effectively to incidents, and maintain platform security posture.
 
 **Acceptance Criteria:**
+
 - Security event logging and monitoring
 - Threat detection with behavioral analysis
 - Alerting system with escalation paths
@@ -1978,6 +2200,7 @@ Develop a comprehensive security and compliance framework that safeguards user d
 - Security dashboard for real-time visibility
 
 **Progress:**
+
 - [ ] Security logging implemented
 - [ ] Threat detection system built
 - [ ] Alerting system created
@@ -1986,9 +2209,11 @@ Develop a comprehensive security and compliance framework that safeguards user d
 - [ ] Security dashboard built
 
 #### Story 19.5 - Secure API & Integration Framework
+
 **Description:** Enhance API security with advanced authentication, authorization, and monitoring to ensure secure integration with external systems while protecting platform integrity and data security.
 
 **Acceptance Criteria:**
+
 - OAuth 2.0/OpenID Connect implementation
 - Granular API permissions and scopes
 - API key management with rotation and revocation
@@ -1997,6 +2222,7 @@ Develop a comprehensive security and compliance framework that safeguards user d
 - Integration risk assessment framework
 
 **Progress:**
+
 - [ ] OAuth/OIDC implemented
 - [ ] API permissions system built
 - [ ] Key management developed
@@ -2064,30 +2290,35 @@ Develop a comprehensive security and compliance framework that safeguards user d
 ## Future Feature Candidates
 
 ### Template Library
+
 - Create shareable graph templates
 - Add template categorization and search
 - Implement template versioning
 - Add template import/export capabilities
 
 ### Version Control Integration
+
 - Integrate with Git for project versioning
 - Add commit, branch, merge capabilities
 - Implement visual diff for graph changes
 - Add version history browser
 
 ### Analytics Dashboard
+
 - Track prompt performance metrics
 - Add usage statistics and reporting
 - Implement cost tracking and optimization
 - Create custom dashboard views
 
 ### A/B Testing Framework
+
 - Create controlled experiments for prompts
 - Add variant management and comparison
 - Implement statistical analysis tools
 - Generate optimization recommendations
 
 **Key Components**
+
 - Key performance indicators for prompts (success rate, token usage, etc.)
 - Historical trend analysis for prompt performance
 - Comparison views for different prompt versions
@@ -2095,9 +2326,11 @@ Develop a comprehensive security and compliance framework that safeguards user d
 - Custom reporting and dashboard creation
 
 ### A/B Testing Framework
+
 Structured framework for comparing prompt variations, enabling data-driven optimization of prompt effectiveness through controlled experiments.
 
 **Key Components**
+
 - Experiment definition with variant management
 - Traffic allocation controls for testing
 - Statistical analysis of performance differences
@@ -2107,4 +2340,4 @@ Structured framework for comparing prompt variations, enabling data-driven optim
 
 ---
 
-*PRD complete – ready for hand-off to UX Expert and Architect agents.*
+_PRD complete – ready for hand-off to UX Expert and Architect agents._

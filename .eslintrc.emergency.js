@@ -1,20 +1,18 @@
 // Emergency ESLint configuration - extremely permissive for critical commits
 module.exports = {
-  extends: [
-    'eslint:recommended'
-  ],
+  extends: ['eslint:recommended'],
   parserOptions: {
     ecmaVersion: 2022,
     sourceType: 'module',
     ecmaFeatures: {
-      jsx: true
-    }
+      jsx: true,
+    },
   },
   env: {
     browser: true,
     node: true,
     es6: true,
-    jest: true
+    jest: true,
   },
   rules: {
     // Turn off all possible problematic rules
@@ -22,9 +20,9 @@ module.exports = {
     'no-undef': 'off',
     'max-len': 'off',
     'comma-dangle': 'off',
-    'semi': 'off',
-    'quotes': 'off',
-    'indent': 'off',
+    semi: 'off',
+    quotes: 'off',
+    indent: 'off',
     'no-console': 'off',
     'no-debugger': 'off',
     'no-unreachable': 'off',
@@ -48,7 +46,7 @@ module.exports = {
     'no-sparse-arrays': 'off',
     'no-unexpected-multiline': 'off',
     'use-isnan': 'off',
-    'valid-typeof': 'off'
+    'valid-typeof': 'off',
   },
   ignorePatterns: [
     'node_modules/',
@@ -72,6 +70,6 @@ module.exports = {
     'src/monitor-*',
     'api/',
     '*.config.js',
-    '*.config.ts'
-  ]
+    '*.config.ts',
+  ],
 };

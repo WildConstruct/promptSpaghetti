@@ -1,6 +1,6 @@
 /**
  * Epic 20.1 - PerformanceOptimizer Unit Tests
- * 
+ *
  * Comprehensive unit tests for PerformanceOptimizer component covering:
  * - Automated optimization strategies
  * - Message batching and response caching
@@ -15,7 +15,7 @@ import {
   OptimizationStrategy,
   OptimizationMetrics,
   OptimizationResult,
-  PerformanceThresholds
+  PerformanceThresholds,
 } from '../PerformanceOptimizer';
 
 describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
@@ -31,7 +31,7 @@ describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
       maxConflictResolutionTime: 200,
       maxSynchronizationLatency: 150,
       minSuccessRate: 95,
-      maxErrorRate: 5
+      maxErrorRate: 5,
     };
 
     mockMetrics = {
@@ -46,7 +46,7 @@ describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
       synchronizationLatency: 90,
       operationSuccessRate: 97,
       networkThroughput: 1000,
-      responseTime: 45
+      responseTime: 45,
     };
 
     optimizer = new PerformanceOptimizer(mockThresholds);
@@ -72,7 +72,7 @@ describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
         ...mockMetrics,
         cpuUsage: 95,
         memoryUsage: 90,
-        messageLatency: 150
+        messageLatency: 150,
       };
 
       const strategies = optimizer.selectOptimizationStrategies(criticalMetrics);
@@ -96,7 +96,7 @@ describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
         cpuUsage: 20,
         memoryUsage: 30,
         messageLatency: 25,
-        errorRate: 0.1
+        errorRate: 0.1,
       };
 
       const strategies = optimizer.selectOptimizationStrategies(optimalMetrics);
@@ -107,7 +107,7 @@ describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
   describe('2. Message Batching Optimization', () => {
     it('should enable message batching when message rate is high', async () => {
       const highTrafficMetrics = { ...mockMetrics, messageRate: 500 };
-      
+
       const result = await optimizer.executeOptimization(
         OptimizationStrategy.ENABLE_MESSAGE_BATCHING,
         highTrafficMetrics
@@ -154,11 +154,8 @@ describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
   describe('3. Response Caching Strategy', () => {
     it('should enable caching for repeated queries', async () => {
       const cacheMetrics = { ...mockMetrics, responseTime: 120 };
-      
-      const result = await optimizer.executeOptimization(
-        OptimizationStrategy.ENABLE_RESPONSE_CACHING,
-        cacheMetrics
-      );
+
+      const result = await optimizer.executeOptimization(OptimizationStrategy.ENABLE_RESPONSE_CACHING, cacheMetrics);
 
       expect(result.success).toBe(true);
       expect(result.metricsImprovement.responseTimeReduction).toBeGreaterThan(0);
@@ -188,7 +185,7 @@ describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
         misses: 150,
         evictions: 25,
         memoryUsage: 1024 * 1024 * 50, // 50MB
-        avgResponseTime: 15
+        avgResponseTime: 15,
       });
 
       const cacheStats = optimizer.getCacheStatistics();
@@ -204,13 +201,10 @@ describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
         ...mockMetrics,
         connectionCount: 200,
         cpuUsage: 88,
-        memoryUsage: 85
+        memoryUsage: 85,
       };
 
-      const result = await optimizer.executeOptimization(
-        OptimizationStrategy.THROTTLE_CONNECTIONS,
-        highLoadMetrics
-      );
+      const result = await optimizer.executeOptimization(OptimizationStrategy.THROTTLE_CONNECTIONS, highLoadMetrics);
 
       expect(result.success).toBe(true);
       expect(result.metricsImprovement.cpuUsageReduction).toBeGreaterThan(0);
@@ -230,9 +224,7 @@ describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
 
       expect(degradationStrategy.stages.length).toBeGreaterThan(1);
       expect(degradationStrategy.stages[0].threshold).toBeLessThan(degradationStrategy.stages[1].threshold);
-      expect(degradationStrategy.stages.every(stage => 
-        stage.actions.length > 0 && stage.threshold > 0
-      )).toBe(true);
+      expect(degradationStrategy.stages.every(stage => stage.actions.length > 0 && stage.threshold > 0)).toBe(true);
     });
 
     it('should prioritize connection types', () => {
@@ -247,11 +239,8 @@ describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
   describe('5. Memory Cleanup Optimization', () => {
     it('should trigger memory cleanup when usage is high', async () => {
       const highMemoryMetrics = { ...mockMetrics, memoryUsage: 90 };
-      
-      const result = await optimizer.executeOptimization(
-        OptimizationStrategy.CLEANUP_MEMORY,
-        highMemoryMetrics
-      );
+
+      const result = await optimizer.executeOptimization(OptimizationStrategy.CLEANUP_MEMORY, highMemoryMetrics);
 
       expect(result.success).toBe(true);
       expect(result.metricsImprovement.memoryUsageReduction).toBeGreaterThan(0);
@@ -284,7 +273,7 @@ describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
         misses: 20,
         evictions: 5,
         memoryUsage: 1024 * 1024 * 100, // 100MB
-        avgResponseTime: 25
+        avgResponseTime: 25,
       });
 
       const cleanupResult = await optimizer.cleanupExpiredCache();
@@ -298,7 +287,7 @@ describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
   describe('6. Conflict Resolution Optimization', () => {
     it('should optimize conflict resolution when resolution time is high', async () => {
       const slowConflictMetrics = { ...mockMetrics, conflictResolutionTime: 250 };
-      
+
       const result = await optimizer.executeOptimization(
         OptimizationStrategy.OPTIMIZE_CONFLICT_RESOLUTION,
         slowConflictMetrics
@@ -312,7 +301,7 @@ describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
       const conflictData = [
         { type: 'concurrent_edit', frequency: 45, avgResolutionTime: 150 },
         { type: 'structure_change', frequency: 20, avgResolutionTime: 200 },
-        { type: 'property_update', frequency: 85, avgResolutionTime: 50 }
+        { type: 'property_update', frequency: 85, avgResolutionTime: 50 },
       ];
 
       const analysis = optimizer.analyzeConflictPatterns(conflictData);
@@ -343,8 +332,8 @@ describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
         conflictsByType: {
           concurrent_edit: 80,
           structure_change: 25,
-          property_update: 45
-        }
+          property_update: 45,
+        },
       };
 
       const analysis = optimizer.analyzeConflictResolutionPerformance(performanceData);
@@ -361,7 +350,7 @@ describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
       const strategies = [
         OptimizationStrategy.ENABLE_MESSAGE_BATCHING,
         OptimizationStrategy.ENABLE_RESPONSE_CACHING,
-        OptimizationStrategy.CLEANUP_MEMORY
+        OptimizationStrategy.CLEANUP_MEMORY,
       ];
 
       const results = await optimizer.executeStrategies(strategies, mockMetrics);
@@ -376,7 +365,7 @@ describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
 
     it('should rollback failed optimizations', async () => {
       const mockFailingStrategy = OptimizationStrategy.THROTTLE_CONNECTIONS;
-      
+
       // Mock a failing optimization
       jest.spyOn(optimizer, 'executeOptimization').mockImplementationOnce(async () => ({
         success: false,
@@ -384,14 +373,14 @@ describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
         executionTime: 100,
         error: 'Optimization failed',
         resourceUsage: { cpu: 0, memory: 0 },
-        metricsImprovement: {}
+        metricsImprovement: {},
       }));
 
       const result = await optimizer.executeOptimization(mockFailingStrategy, mockMetrics);
-      
+
       expect(result.success).toBe(false);
       expect(result.error).toBeDefined();
-      
+
       // Should trigger rollback
       const rollbackResult = await optimizer.rollbackOptimization(mockFailingStrategy);
       expect(rollbackResult.success).toBe(true);
@@ -401,7 +390,7 @@ describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
       const optimizationHistory = [
         { timestamp: Date.now() - 3600000, strategy: OptimizationStrategy.ENABLE_MESSAGE_BATCHING, improvement: 15 },
         { timestamp: Date.now() - 1800000, strategy: OptimizationStrategy.ENABLE_RESPONSE_CACHING, improvement: 25 },
-        { timestamp: Date.now() - 900000, strategy: OptimizationStrategy.CLEANUP_MEMORY, improvement: 10 }
+        { timestamp: Date.now() - 900000, strategy: OptimizationStrategy.CLEANUP_MEMORY, improvement: 10 },
       ];
 
       const effectiveness = optimizer.calculateOptimizationEffectiveness(optimizationHistory);
@@ -429,16 +418,13 @@ describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
   describe('8. Performance Impact Analysis', () => {
     it('should measure optimization impact accurately', async () => {
       const beforeMetrics = mockMetrics;
-      
-      await optimizer.executeOptimization(
-        OptimizationStrategy.ENABLE_MESSAGE_BATCHING,
-        beforeMetrics
-      );
+
+      await optimizer.executeOptimization(OptimizationStrategy.ENABLE_MESSAGE_BATCHING, beforeMetrics);
 
       const afterMetrics = {
         ...mockMetrics,
         messageLatency: mockMetrics.messageLatency * 0.8, // 20% improvement
-        networkThroughput: mockMetrics.networkThroughput * 1.2 // 20% increase
+        networkThroughput: mockMetrics.networkThroughput * 1.2, // 20% increase
       };
 
       const impact = optimizer.calculateImpactAnalysis(beforeMetrics, afterMetrics);
@@ -453,7 +439,7 @@ describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
       const regressedMetrics = {
         ...mockMetrics,
         messageLatency: mockMetrics.messageLatency * 1.5, // 50% worse
-        errorRate: mockMetrics.errorRate * 2 // 100% worse
+        errorRate: mockMetrics.errorRate * 2, // 100% worse
       };
 
       const regression = optimizer.detectPerformanceRegression(baselineMetrics, regressedMetrics);
@@ -468,13 +454,13 @@ describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
       const optimizationCost = {
         cpuOverhead: 5, // 5% CPU overhead
         memoryOverhead: 10, // 10MB memory overhead
-        implementationTime: 2 // 2 hours
+        implementationTime: 2, // 2 hours
       };
 
       const performanceBenefit = {
         responseTimeImprovement: 30, // 30% faster
         throughputIncrease: 25, // 25% more throughput
-        errorRateReduction: 50 // 50% fewer errors
+        errorRateReduction: 50, // 50% fewer errors
       };
 
       const roi = optimizer.calculateOptimizationROI(optimizationCost, performanceBenefit);
@@ -489,10 +475,7 @@ describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
     it('should handle optimization failures gracefully', async () => {
       const invalidMetrics = { ...mockMetrics, cpuUsage: -1 };
 
-      const result = await optimizer.executeOptimization(
-        OptimizationStrategy.REDUCE_CPU_LOAD,
-        invalidMetrics
-      );
+      const result = await optimizer.executeOptimization(OptimizationStrategy.REDUCE_CPU_LOAD, invalidMetrics);
 
       expect(result.success).toBe(false);
       expect(result.error).toBeDefined();
@@ -502,7 +485,7 @@ describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
     it('should prevent conflicting optimizations', async () => {
       const conflictingStrategies = [
         OptimizationStrategy.ENABLE_MESSAGE_BATCHING,
-        OptimizationStrategy.DISABLE_MESSAGE_BATCHING
+        OptimizationStrategy.DISABLE_MESSAGE_BATCHING,
       ];
 
       const conflicts = optimizer.detectStrategyConflicts(conflictingStrategies);
@@ -516,11 +499,11 @@ describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
       const constrainedMetrics = {
         ...mockMetrics,
         cpuUsage: 98,
-        memoryUsage: 95
+        memoryUsage: 95,
       };
 
       const safeStrategies = optimizer.selectSafeOptimizationStrategies(constrainedMetrics);
-      
+
       // Should only select low-risk optimizations under resource constraints
       expect(safeStrategies.every(strategy => strategy.riskLevel <= 2)).toBe(true);
       expect(safeStrategies.length).toBeLessThanOrEqual(2);
@@ -535,7 +518,7 @@ describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
       expect(prerequisites.canExecute).toBeDefined();
       expect(prerequisites.missingRequirements).toBeDefined();
       expect(prerequisites.warnings).toBeDefined();
-      
+
       if (!prerequisites.canExecute) {
         expect(prerequisites.missingRequirements.length).toBeGreaterThan(0);
       }

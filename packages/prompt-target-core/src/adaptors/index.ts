@@ -12,5 +12,5 @@ export type {
   ValidationResult,
   TargetPrompt,
   TransformOptions,
-  QualityScore
+  QualityScore,
 } from '../types/index.js';

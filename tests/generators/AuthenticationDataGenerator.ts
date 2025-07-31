@@ -1,9 +1,9 @@
 /**
  * Authentication Data Generator for Testing
- * 
+ *
  * Generates comprehensive authentication test data including users, sessions,
  * tokens, permissions, and various authentication scenarios.
- * 
+ *
  * Task: E18-1753114562159-0BC5A0
  */
 
@@ -82,46 +82,41 @@ export class AuthenticationDataGenerator {
       {
         id: 'admin',
         name: 'Administrator',
-        permissions: [
-          'user:*', 'project:*', 'rule:*', 'system:*',
-          'analytics:read', 'settings:write', 'export:*'
-        ],
-        hierarchy: 100
+        permissions: ['user:*', 'project:*', 'rule:*', 'system:*', 'analytics:read', 'settings:write', 'export:*'],
+        hierarchy: 100,
       },
       {
         id: 'manager',
         name: 'Project Manager',
         permissions: [
-          'project:read', 'project:write', 'rule:read', 'rule:write',
-          'user:read', 'analytics:read', 'export:project'
+          'project:read',
+          'project:write',
+          'rule:read',
+          'rule:write',
+          'user:read',
+          'analytics:read',
+          'export:project',
         ],
-        hierarchy: 50
+        hierarchy: 50,
       },
       {
         id: 'editor',
         name: 'Content Editor',
-        permissions: [
-          'rule:read', 'rule:write', 'project:read',
-          'analytics:read'
-        ],
-        hierarchy: 30
+        permissions: ['rule:read', 'rule:write', 'project:read', 'analytics:read'],
+        hierarchy: 30,
       },
       {
         id: 'viewer',
         name: 'Viewer',
-        permissions: [
-          'rule:read', 'project:read'
-        ],
-        hierarchy: 10
+        permissions: ['rule:read', 'project:read'],
+        hierarchy: 10,
       },
       {
         id: 'guest',
         name: 'Guest User',
-        permissions: [
-          'project:read'
-        ],
-        hierarchy: 0
-      }
+        permissions: ['project:read'],
+        hierarchy: 0,
+      },
     ];
   }
 
@@ -140,7 +135,7 @@ export class AuthenticationDataGenerator {
           name: `${action.charAt(0).toUpperCase() + action.slice(1)} ${resource}`,
           resource,
           action,
-          conditions: this.generatePermissionConditions(resource, action)
+          conditions: this.generatePermissionConditions(resource, action),
         });
       });
 
@@ -149,7 +144,7 @@ export class AuthenticationDataGenerator {
         id: `${resource}:*`,
         name: `All ${resource} permissions`,
         resource,
-        action: '*'
+        action: '*',
       });
     });
 
@@ -211,12 +206,13 @@ export class AuthenticationDataGenerator {
           preference_theme: this.rng() > 0.5 ? 'dark' : 'light',
           preference_language: ['en', 'es', 'fr', 'de'][Math.floor(this.rng() * 4)],
           tutorial_completed: this.rng() > 0.3,
-          beta_features: this.rng() > 0.7
+          beta_features: this.rng() > 0.7,
         },
-        createdAt: new Date(Date.now() - (this.rng() * 365 * 24 * 60 * 60 * 1000)), // Within last year
-        lastLoginAt: isActive && this.rng() > 0.2 
-          ? new Date(Date.now() - (this.rng() * 30 * 24 * 60 * 60 * 1000)) // Within last 30 days
-          : undefined
+        createdAt: new Date(Date.now() - this.rng() * 365 * 24 * 60 * 60 * 1000), // Within last year
+        lastLoginAt:
+          isActive && this.rng() > 0.2
+            ? new Date(Date.now() - this.rng() * 30 * 24 * 60 * 60 * 1000) // Within last 30 days
+            : undefined,
       });
     }
 
@@ -228,15 +224,16 @@ export class AuthenticationDataGenerator {
    */
   generateSessions(users: TestUser[]): SessionData[] {
     const sessions: SessionData[] = [];
-    
+
     users.forEach(user => {
-      if (user.isActive && this.rng() > 0.3) { // 70% of active users have sessions
+      if (user.isActive && this.rng() > 0.3) {
+        // 70% of active users have sessions
         const sessionCount = Math.floor(this.rng() * 3) + 1; // 1-3 sessions per user
-        
+
         for (let i = 0; i < sessionCount; i++) {
-          const createdAt = new Date(Date.now() - (this.rng() * 7 * 24 * 60 * 60 * 1000)); // Within last week
-          const expiresAt = new Date(createdAt.getTime() + (24 * 60 * 60 * 1000)); // 24 hours from creation
-          
+          const createdAt = new Date(Date.now() - this.rng() * 7 * 24 * 60 * 60 * 1000); // Within last week
+          const expiresAt = new Date(createdAt.getTime() + 24 * 60 * 60 * 1000); // 24 hours from creation
+
           sessions.push({
             sessionId: `sess-${user.id}-${i}-${Date.now()}`,
             userId: user.id,
@@ -246,7 +243,7 @@ export class AuthenticationDataGenerator {
             createdAt,
             deviceInfo: this.generateDeviceInfo(),
             ipAddress: this.generateIPAddress(),
-            userAgent: this.generateUserAgent()
+            userAgent: this.generateUserAgent(),
           });
         }
       }
@@ -268,7 +265,7 @@ export class AuthenticationDataGenerator {
       'MacBook Pro M2',
       'Windows 11 Desktop',
       'iPad Pro',
-      'Chrome OS Laptop'
+      'Chrome OS Laptop',
     ];
     return devices[Math.floor(this.rng() * devices.length)];
   }
@@ -282,7 +279,7 @@ export class AuthenticationDataGenerator {
       'Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15',
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0',
       'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0',
-      'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0'
+      'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0',
     ];
     return agents[Math.floor(this.rng() * agents.length)];
   }
@@ -308,8 +305,8 @@ export class AuthenticationDataGenerator {
         { action: 'read', resource: 'user', expected: true },
         { action: 'write', resource: 'project', expected: true },
         { action: 'delete', resource: 'rule', expected: true },
-        { action: 'admin', resource: 'system', expected: true }
-      ]
+        { action: 'admin', resource: 'system', expected: true },
+      ],
     });
 
     scenarios.push({
@@ -323,8 +320,8 @@ export class AuthenticationDataGenerator {
         { action: 'read', resource: 'rule', expected: true },
         { action: 'write', resource: 'rule', expected: true },
         { action: 'delete', resource: 'user', expected: false, reason: 'Insufficient permissions' },
-        { action: 'admin', resource: 'system', expected: false, reason: 'Admin rights required' }
-      ]
+        { action: 'admin', resource: 'system', expected: false, reason: 'Admin rights required' },
+      ],
     });
 
     scenarios.push({
@@ -338,8 +335,8 @@ export class AuthenticationDataGenerator {
         { action: 'read', resource: 'rule', expected: true },
         { action: 'read', resource: 'project', expected: true },
         { action: 'write', resource: 'rule', expected: false, reason: 'Read-only user' },
-        { action: 'delete', resource: 'project', expected: false, reason: 'Read-only user' }
-      ]
+        { action: 'delete', resource: 'project', expected: false, reason: 'Read-only user' },
+      ],
     });
 
     // Authentication failure scenarios
@@ -350,9 +347,7 @@ export class AuthenticationDataGenerator {
       expectedBehavior: 'failure',
       permissions,
       roles,
-      testActions: [
-        { action: 'read', resource: 'project', expected: false, reason: 'User account inactive' }
-      ]
+      testActions: [{ action: 'read', resource: 'project', expected: false, reason: 'User account inactive' }],
     });
 
     scenarios.push({
@@ -364,8 +359,8 @@ export class AuthenticationDataGenerator {
       roles,
       testActions: [
         { action: 'read', resource: 'project', expected: true },
-        { action: 'write', resource: 'rule', expected: false, reason: 'Email verification required' }
-      ]
+        { action: 'write', resource: 'rule', expected: false, reason: 'Email verification required' },
+      ],
     });
 
     // MFA scenarios
@@ -379,8 +374,8 @@ export class AuthenticationDataGenerator {
       testActions: [
         { action: 'read', resource: 'project', expected: true },
         { action: 'delete', resource: 'user', expected: false, reason: 'MFA verification required' },
-        { action: 'admin', resource: 'system', expected: false, reason: 'MFA verification required' }
-      ]
+        { action: 'admin', resource: 'system', expected: false, reason: 'MFA verification required' },
+      ],
     });
 
     // Organization-based access
@@ -393,8 +388,8 @@ export class AuthenticationDataGenerator {
       roles,
       testActions: [
         { action: 'read', resource: 'project', expected: true, reason: 'Within organization' },
-        { action: 'read', resource: 'analytics', expected: false, reason: 'Cross-organization access denied' }
-      ]
+        { action: 'read', resource: 'analytics', expected: false, reason: 'Cross-organization access denied' },
+      ],
     });
 
     return scenarios;
@@ -406,7 +401,7 @@ export class AuthenticationDataGenerator {
   generateEdgeCaseScenarios(): AuthenticationScenario[] {
     const roles = this.generateStandardRoles();
     const permissions = this.generatePermissions();
-    
+
     return [
       {
         name: 'expired-session',
@@ -418,14 +413,12 @@ export class AuthenticationDataGenerator {
           accessToken: 'expired-token',
           refreshToken: 'refresh-token',
           expiresAt: new Date(Date.now() - 3600000), // Expired 1 hour ago
-          createdAt: new Date(Date.now() - 86400000) // Created 24 hours ago
+          createdAt: new Date(Date.now() - 86400000), // Created 24 hours ago
         },
         expectedBehavior: 'failure',
         permissions,
         roles,
-        testActions: [
-          { action: 'read', resource: 'project', expected: false, reason: 'Session expired' }
-        ]
+        testActions: [{ action: 'read', resource: 'project', expected: false, reason: 'Session expired' }],
       },
       {
         name: 'malformed-token',
@@ -437,14 +430,12 @@ export class AuthenticationDataGenerator {
           accessToken: 'malformed.token.invalid',
           refreshToken: 'malformed.refresh.invalid',
           expiresAt: new Date(Date.now() + 3600000),
-          createdAt: new Date()
+          createdAt: new Date(),
         },
         expectedBehavior: 'failure',
         permissions,
         roles,
-        testActions: [
-          { action: 'read', resource: 'project', expected: false, reason: 'Invalid token format' }
-        ]
+        testActions: [{ action: 'read', resource: 'project', expected: false, reason: 'Invalid token format' }],
       },
       {
         name: 'concurrent-sessions',
@@ -455,9 +446,9 @@ export class AuthenticationDataGenerator {
         roles,
         testActions: [
           { action: 'read', resource: 'project', expected: true },
-          { action: 'write', resource: 'rule', expected: false, reason: 'Session conflict detected' }
-        ]
-      }
+          { action: 'write', resource: 'rule', expected: false, reason: 'Session conflict detected' },
+        ],
+      },
     ];
   }
 
@@ -471,7 +462,7 @@ export class AuthenticationDataGenerator {
     permissions: Permission[];
     scenarios: AuthenticationScenario[];
     edgeCases: AuthenticationScenario[];
-    } {
+  } {
     const users = this.generateTestUsers(50);
     const sessions = this.generateSessions(users);
     const roles = this.generateStandardRoles();
@@ -485,7 +476,7 @@ export class AuthenticationDataGenerator {
       roles,
       permissions,
       scenarios,
-      edgeCases
+      edgeCases,
     };
   }
 }

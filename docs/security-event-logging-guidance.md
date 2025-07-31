@@ -20,14 +20,18 @@ This document provides comprehensive guidance for implementing and maintaining s
 ### Core Components
 
 #### SecurityEventLoggingFramework
+
 Primary service for all security event logging operations:
+
 - Location: `server/src/services/SecurityEventLoggingFramework.ts`
 - Handles structured event collection, enrichment, and storage
 - Supports multiple output destinations (databases, SIEM, files)
 - Implements event filtering, correlation, and aggregation
 
 #### SecurityAuditLogger
+
 Runtime security logging for real-time threats:
+
 - Location: `packages/core/runtime/security-audit-logger.ts`
 - Focused on immediate security violations
 - Memory-efficient with automatic cleanup
@@ -50,6 +54,7 @@ Runtime security logging for real-time threats:
 ### Security Event Categories
 
 #### Authentication Events
+
 - **Login attempts** (successful/failed)
 - **Password changes**
 - **Account lockouts**
@@ -65,12 +70,13 @@ await logSecurityEvent({
     action: 'login_success',
     method: '2fa',
     ipAddress: '192.168.1.1',
-    userAgent: 'Mozilla/5.0...'
-  }
+    userAgent: 'Mozilla/5.0...',
+  },
 });
 ```
 
 #### Authorization Events
+
 - **Permission grants/denials**
 - **Role changes**
 - **Privilege escalations**
@@ -86,12 +92,13 @@ await logSecurityEvent({
     action: 'access_denied',
     reason: 'insufficient_permissions',
     requiredRole: 'manager',
-    currentRole: 'employee'
-  }
+    currentRole: 'employee',
+  },
 });
 ```
 
 #### Data Access Events
+
 - **Data queries and retrieval**
 - **Export operations**
 - **Sensitive data access**
@@ -106,12 +113,13 @@ await logSecurityEvent({
     action: 'data_export',
     recordCount: 1500,
     classification: 'CONFIDENTIAL',
-    exportFormat: 'CSV'
-  }
+    exportFormat: 'CSV',
+  },
 });
 ```
 
 #### System Events
+
 - **Configuration changes**
 - **Service starts/stops**
 - **Error conditions**
@@ -125,12 +133,13 @@ await logSecurityEvent({
     action: 'config_change',
     component: 'security_policy',
     changedBy: 'admin123',
-    changes: ['max_login_attempts', 'session_timeout']
-  }
+    changes: ['max_login_attempts', 'session_timeout'],
+  },
 });
 ```
 
 #### Policy Events
+
 - **Policy updates**
 - **Consent changes**
 - **Compliance violations**
@@ -146,27 +155,31 @@ await logSecurityEvent({
     violation: 'retention_period_exceeded',
     dataType: 'personal_information',
     retentionPeriod: '7_years',
-    actualAge: '8_years'
-  }
+    actualAge: '8_years',
+  },
 });
 ```
 
 ### Severity Levels
 
-| Level | Description | Use Cases | Response Time |
-|-------|-------------|-----------|---------------|
-| **INFO** | Normal operations | Successful operations, routine events | No action required |
-| **LOW** | Minor issues | Non-critical errors, warnings | 24-48 hours |
-| **MEDIUM** | Notable events | Authentication failures, permission denials | 4-8 hours |
-| **HIGH** | Significant issues | Multiple failures, suspicious patterns | 1-2 hours |
-| **CRITICAL** | Security incidents | Breaches, attacks, system compromises | Immediate |
+| Level        | Description        | Use Cases                                   | Response Time      |
+| ------------ | ------------------ | ------------------------------------------- | ------------------ |
+| **INFO**     | Normal operations  | Successful operations, routine events       | No action required |
+| **LOW**      | Minor issues       | Non-critical errors, warnings               | 24-48 hours        |
+| **MEDIUM**   | Notable events     | Authentication failures, permission denials | 4-8 hours          |
+| **HIGH**     | Significant issues | Multiple failures, suspicious patterns      | 1-2 hours          |
+| **CRITICAL** | Security incidents | Breaches, attacks, system compromises       | Immediate          |
 
 ## Implementation Guidelines
 
 ### Basic Event Logging
 
 ```typescript
-import { SecurityEventLoggingFramework, SecurityEventType, SecuritySeverity } from '../services/SecurityEventLoggingFramework';
+import {
+  SecurityEventLoggingFramework,
+  SecurityEventType,
+  SecuritySeverity,
+} from '../services/SecurityEventLoggingFramework';
 
 const securityLogger = new SecurityEventLoggingFramework();
 
@@ -179,8 +192,8 @@ await securityLogger.logSecurityEvent({
   userAgent: req.headers['user-agent'],
   details: {
     action: 'login_success',
-    method: 'password'
-  }
+    method: 'password',
+  },
 });
 ```
 
@@ -198,7 +211,7 @@ await securityLogger.logSecurityEventWithContext({
     query: 'SELECT * FROM customers WHERE created_at > ?',
     recordCount: 5000,
     exportFormat: 'JSON',
-    classification: 'CONFIDENTIAL'
+    classification: 'CONFIDENTIAL',
   },
   context: {
     requestId: req.id,
@@ -208,23 +221,23 @@ await securityLogger.logSecurityEventWithContext({
     geolocation: {
       country: 'US',
       region: 'CA',
-      city: 'San Francisco'
+      city: 'San Francisco',
     },
     business: {
       department: 'sales',
       project: 'customer_analysis_q4',
-      approvalRequired: true
-    }
+      approvalRequired: true,
+    },
   },
   technical: {
     responseTime: 1250,
     resourceUsage: {
       cpu: 45,
       memory: 512,
-      diskIO: 1024
+      diskIO: 1024,
     },
-    errorCount: 0
-  }
+    errorCount: 0,
+  },
 });
 ```
 
@@ -237,14 +250,14 @@ const events = [
     eventType: SecurityEventType.API_ACCESS,
     severity: SecuritySeverity.INFO,
     userId: 'api_user_1',
-    details: { endpoint: '/api/users', method: 'GET' }
+    details: { endpoint: '/api/users', method: 'GET' },
   },
   {
     eventType: SecurityEventType.API_ACCESS,
     severity: SecuritySeverity.INFO,
     userId: 'api_user_2',
-    details: { endpoint: '/api/orders', method: 'POST' }
-  }
+    details: { endpoint: '/api/orders', method: 'POST' },
+  },
 ];
 
 await securityLogger.logSecurityEventBatch(events);
@@ -261,7 +274,7 @@ await securityLogger.logSecurityEvent({
   severity: SecuritySeverity.WARNING,
   userId: 'user123',
   details: { action: 'login_failed', attempt: 1 },
-  correlationId
+  correlationId,
 });
 
 await securityLogger.logSecurityEvent({
@@ -269,7 +282,7 @@ await securityLogger.logSecurityEvent({
   severity: SecuritySeverity.HIGH,
   userId: 'user123',
   details: { action: 'account_locked', reason: 'multiple_failures' },
-  correlationId
+  correlationId,
 });
 ```
 
@@ -278,6 +291,7 @@ await securityLogger.logSecurityEvent({
 ### GDPR Compliance
 
 #### Required Event Types
+
 - All personal data access events
 - Consent changes and withdrawals
 - Data subject rights requests
@@ -285,11 +299,13 @@ await securityLogger.logSecurityEvent({
 - Third-party data sharing
 
 #### Data Retention
+
 - Security logs: 6 years minimum
 - Access logs: 2 years minimum
 - Consent logs: Duration of processing + 3 years
 
 #### Privacy Considerations
+
 ```typescript
 // Pseudonymize sensitive data in logs
 await securityLogger.logSecurityEvent({
@@ -300,14 +316,15 @@ await securityLogger.logSecurityEvent({
     action: 'profile_view',
     dataSubject: hashUserId(targetUserId), // Pseudonymized
     ipAddress: anonymizeIP(req.ip), // Last octet removed
-    timestamp: new Date().toISOString()
-  }
+    timestamp: new Date().toISOString(),
+  },
 });
 ```
 
 ### SOX Compliance
 
 #### Financial Data Access
+
 ```typescript
 await securityLogger.logSecurityEvent({
   eventType: SecurityEventType.FINANCIAL_DATA_ACCESS,
@@ -318,19 +335,20 @@ await securityLogger.logSecurityEvent({
     reportType: 'quarterly_earnings',
     period: 'Q4_2023',
     approver: 'cfo@company.com',
-    businessJustification: 'board_presentation'
+    businessJustification: 'board_presentation',
   },
   compliance: {
     framework: 'SOX',
     controls: ['IT-01', 'FIN-15'],
-    auditTrail: true
-  }
+    auditTrail: true,
+  },
 });
 ```
 
 ### HIPAA Compliance (if applicable)
 
 #### PHI Access Logging
+
 ```typescript
 await securityLogger.logSecurityEvent({
   eventType: SecurityEventType.PHI_ACCESS,
@@ -341,13 +359,13 @@ await securityLogger.logSecurityEvent({
     patientId: hashPatientId(patientId),
     recordType: 'medical_history',
     accessReason: 'treatment',
-    minimumNecessary: true
+    minimumNecessary: true,
   },
   compliance: {
     framework: 'HIPAA',
     safeguards: ['access_control', 'audit_logs'],
-    businessAssociate: false
-  }
+    businessAssociate: false,
+  },
 });
 ```
 
@@ -356,6 +374,7 @@ await securityLogger.logSecurityEvent({
 ### Real-time Monitoring
 
 #### Threshold-based Alerts
+
 ```typescript
 // Configure automatic alerts
 await securityLogger.configureAlert({
@@ -365,41 +384,43 @@ await securityLogger.configureAlert({
     severity: SecuritySeverity.WARNING,
     count: 5,
     timeWindow: '5 minutes',
-    groupBy: ['userId', 'ipAddress']
+    groupBy: ['userId', 'ipAddress'],
   },
   actions: [
     {
       type: 'email',
       recipients: ['security@company.com'],
-      template: 'failed_login_alert'
+      template: 'failed_login_alert',
     },
     {
       type: 'slack',
       channel: '#security-alerts',
-      message: 'Multiple failed login attempts detected'
-    }
-  ]
+      message: 'Multiple failed login attempts detected',
+    },
+  ],
 });
 ```
 
 #### Pattern-based Detection
+
 ```typescript
 // Detect suspicious patterns
 await securityLogger.configurePatternDetection({
   name: 'privilege_escalation_pattern',
   pattern: [
     { eventType: SecurityEventType.AUTHORIZATION, action: 'role_change' },
-    { eventType: SecurityEventType.DATA_ACCESS, classification: 'CONFIDENTIAL' }
+    { eventType: SecurityEventType.DATA_ACCESS, classification: 'CONFIDENTIAL' },
   ],
   timeWindow: '30 minutes',
   severity: SecuritySeverity.HIGH,
-  autoResponse: 'flag_for_review'
+  autoResponse: 'flag_for_review',
 });
 ```
 
 ### Dashboard Integration
 
 #### Key Metrics
+
 - Failed authentication attempts per hour
 - Privilege escalation events
 - Data export volumes by classification
@@ -407,21 +428,22 @@ await securityLogger.configurePatternDetection({
 - System error rates
 
 #### Visualization Examples
+
 ```typescript
 // Generate dashboard data
 const dashboardData = await securityLogger.generateDashboardMetrics({
   timeRange: {
     start: new Date(Date.now() - 24 * 60 * 60 * 1000), // 24 hours ago
-    end: new Date()
+    end: new Date(),
   },
   metrics: [
     'authentication_success_rate',
     'authorization_denials',
     'data_access_volume',
     'geographic_distribution',
-    'threat_level_distribution'
+    'threat_level_distribution',
   ],
-  groupBy: 'hour'
+  groupBy: 'hour',
 });
 ```
 
@@ -430,6 +452,7 @@ const dashboardData = await securityLogger.generateDashboardMetrics({
 ### Daily Operations
 
 #### Log Review Checklist
+
 1. **Critical Events Review** (0-30 minutes)
    - All CRITICAL severity events
    - Policy violations
@@ -449,6 +472,7 @@ const dashboardData = await securityLogger.generateDashboardMetrics({
    - Audit trail completeness
 
 #### Sample Daily Review Script
+
 ```bash
 #!/bin/bash
 # Daily security log review
@@ -475,6 +499,7 @@ node scripts/compliance-summary.js --frameworks GDPR,SOX
 ### Incident Response Integration
 
 #### Automated Incident Creation
+
 ```typescript
 await securityLogger.configureIncidentTrigger({
   name: 'data_breach_trigger',
@@ -482,25 +507,21 @@ await securityLogger.configureIncidentTrigger({
     {
       eventType: SecurityEventType.DATA_ACCESS,
       severity: SecuritySeverity.CRITICAL,
-      classification: 'RESTRICTED'
+      classification: 'RESTRICTED',
     },
     {
       eventType: SecurityEventType.UNAUTHORIZED_ACCESS,
-      count: 1
-    }
+      count: 1,
+    },
   ],
-  actions: [
-    'create_incident',
-    'notify_security_team',
-    'escalate_to_management',
-    'begin_containment_procedures'
-  ]
+  actions: ['create_incident', 'notify_security_team', 'escalate_to_management', 'begin_containment_procedures'],
 });
 ```
 
 ### Backup and Archive Procedures
 
 #### Log Archival Strategy
+
 ```typescript
 // Archive old logs
 await securityLogger.archiveLogs({
@@ -509,35 +530,38 @@ await securityLogger.archiveLogs({
   compression: 'gzip',
   encryption: 'AES-256',
   retentionPeriod: '7 years',
-  compliance: ['GDPR', 'SOX']
+  compliance: ['GDPR', 'SOX'],
 });
 ```
 
 ## Performance Considerations
 
 ### Async Logging
+
 ```typescript
 // Non-blocking event logging
 await securityLogger.logSecurityEventAsync({
   eventType: SecurityEventType.API_ACCESS,
   severity: SecuritySeverity.INFO,
   userId: req.user.id,
-  details: { endpoint: req.path, method: req.method }
+  details: { endpoint: req.path, method: req.method },
 });
 ```
 
 ### Batch Processing
+
 ```typescript
 // Configure batch processing for high-volume events
 await securityLogger.configureBatchProcessing({
   batchSize: 1000,
   flushInterval: 30000, // 30 seconds
   maxMemoryUsage: '100MB',
-  compressionEnabled: true
+  compressionEnabled: true,
 });
 ```
 
 ### Database Optimization
+
 ```sql
 -- Recommended indexes for security event tables
 CREATE INDEX idx_security_events_timestamp ON security_events(timestamp);
@@ -556,28 +580,32 @@ FOR VALUES FROM ('2024-01-01') TO ('2024-02-01');
 ### Common Issues
 
 #### High Log Volume
+
 **Problem**: Excessive logging affecting performance
 **Solution**:
+
 ```typescript
 // Implement intelligent filtering
 await securityLogger.configureFiltering({
   rules: [
     {
       condition: { eventType: 'API_ACCESS', endpoint: '/health' },
-      action: 'discard' // Don't log health checks
+      action: 'discard', // Don't log health checks
     },
     {
       condition: { severity: 'INFO', source: 'automated_process' },
       action: 'sample', // Log only 10% of INFO events from automated processes
-      sampleRate: 0.1
-    }
-  ]
+      sampleRate: 0.1,
+    },
+  ],
 });
 ```
 
 #### Missing Events
+
 **Problem**: Expected events not appearing in logs
 **Diagnostics**:
+
 ```typescript
 // Check logger configuration
 const status = await securityLogger.getStatus();
@@ -593,8 +621,10 @@ console.log('Recent errors:', errors);
 ```
 
 #### Performance Degradation
+
 **Problem**: Logging causing application slowdown
 **Optimization**:
+
 ```typescript
 // Enable async mode
 await securityLogger.configure({
@@ -604,42 +634,43 @@ await securityLogger.configure({
   circuitBreaker: {
     enabled: true,
     failureThreshold: 10,
-    timeout: 30000
-  }
+    timeout: 30000,
+  },
 });
 ```
 
 ### Monitoring Script
+
 ```javascript
 // scripts/security-log-monitor.js
 const { SecurityEventLoggingFramework } = require('./src/services/SecurityEventLoggingFramework');
 
 async function monitorSecurityLogs() {
   const logger = new SecurityEventLoggingFramework();
-  
+
   // Check system health
   const health = await logger.getHealthStatus();
   console.log('Security logging health:', health);
-  
+
   // Recent critical events
   const criticalEvents = await logger.getEvents({
     severity: 'CRITICAL',
-    timeRange: { hours: 1 }
+    timeRange: { hours: 1 },
   });
-  
+
   if (criticalEvents.length > 0) {
     console.warn(`${criticalEvents.length} critical events in last hour`);
     criticalEvents.forEach(event => {
       console.log(`  - ${event.eventType}: ${event.details.action}`);
     });
   }
-  
+
   // Performance metrics
   const metrics = await logger.getPerformanceMetrics();
   console.log('Performance metrics:', {
     eventsPerSecond: metrics.throughput,
     avgProcessingTime: metrics.avgProcessingTime,
-    errorRate: metrics.errorRate
+    errorRate: metrics.errorRate,
   });
 }
 
@@ -649,32 +680,34 @@ if (require.main === module) {
 ```
 
 ### Alerting Configuration
+
 ```yaml
 # alerts.yml
 alerts:
-  - name: "Critical Security Events"
+  - name: 'Critical Security Events'
     condition: "severity = 'CRITICAL'"
     threshold: 1
-    timeWindow: "1m"
-    channels: ["email", "slack", "pagerduty"]
-    
-  - name: "Failed Login Spike"
+    timeWindow: '1m'
+    channels: ['email', 'slack', 'pagerduty']
+
+  - name: 'Failed Login Spike'
     condition: "eventType = 'AUTHENTICATION' AND details.action = 'login_failed'"
     threshold: 10
-    timeWindow: "5m"
-    groupBy: ["ipAddress"]
-    channels: ["slack"]
-    
-  - name: "Unusual Data Access"
+    timeWindow: '5m'
+    groupBy: ['ipAddress']
+    channels: ['slack']
+
+  - name: 'Unusual Data Access'
     condition: "eventType = 'DATA_ACCESS' AND classification IN ('CONFIDENTIAL', 'RESTRICTED')"
     threshold: 100
-    timeWindow: "1h"
-    channels: ["email"]
+    timeWindow: '1h'
+    channels: ['email']
 ```
 
 ## Best Practices Summary
 
 ### Development
+
 1. **Always log security-relevant events** at appropriate severity levels
 2. **Include sufficient context** for investigation and correlation
 3. **Use structured logging** with consistent schemas
@@ -682,6 +715,7 @@ alerts:
 5. **Test logging configuration** in development and staging
 
 ### Operations
+
 1. **Monitor log volume and performance** impact
 2. **Regular review of critical and high-severity events**
 3. **Maintain compliance with retention policies**
@@ -689,6 +723,7 @@ alerts:
 5. **Keep alerting rules tuned** to minimize false positives
 
 ### Security
+
 1. **Protect log integrity** with appropriate access controls
 2. **Encrypt sensitive log data** at rest and in transit
 3. **Pseudonymize personal data** where possible
@@ -697,4 +732,4 @@ alerts:
 
 ---
 
-*This guidance document is part of Epic 19 - Data Protection & Privacy Controls. For implementation questions, contact the security team.*
+_This guidance document is part of Epic 19 - Data Protection & Privacy Controls. For implementation questions, contact the security team._

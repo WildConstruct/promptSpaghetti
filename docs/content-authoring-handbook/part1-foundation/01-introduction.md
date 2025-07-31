@@ -19,14 +19,18 @@ At its core, Prompt Spaghetti transforms structured rule definitions into dynami
 Before diving in, let's establish the fundamental concepts:
 
 ### Generators
+
 A **generator** is a collection of rules that produce randomized content. Generators are defined in JSON format and contain:
+
 - Metadata (name, author, version)
 - Grammar rules (the content patterns)
 - Variables (dynamic values)
 - Entry points (where generation begins)
 
 ### Nodes
+
 In the visual editor, content is created using **nodes** - visual components that represent different operations:
+
 - **WeightedChoice**: Selects from weighted options
 - **Concat**: Combines multiple inputs
 - **Output**: Produces final text
@@ -36,21 +40,27 @@ In the visual editor, content is created using **nodes** - visual components tha
 - **Markov**: State-based transitions
 
 ### Rules
+
 **Rules** define how content varies. They can be:
+
 - Simple strings: `"Hello, world!"`
 - Arrays of options: `["red", "blue", "green"]`
 - Weighted choices: `[{"w": 2, "v": "common"}, {"w": 1, "v": "rare"}]`
 - Nested structures with modifiers and conditions
 
 ### Deterministic Execution
+
 Unlike pure random generation, Prompt Spaghetti uses **deterministic randomization**:
+
 - Same seed + same generator = identical output
 - Enables reproducible results
 - Allows "favorite" generations to be saved
 - Facilitates testing and debugging
 
 ### Variable Context
+
 The **variable context** flows through the generation process:
+
 - Variables can be set and retrieved at any point
 - Context propagates through connected nodes
 - Enables dynamic, context-aware generation
@@ -60,6 +70,7 @@ The **variable context** flows through the generation process:
 This handbook is structured to support different learning paths:
 
 ### Progressive Learning Path
+
 1. **Foundation** (Part 1): Understand the system architecture
 2. **Content Development** (Part 2): Learn to create generators
 3. **Practical Guides** (Part 4): Follow step-by-step tutorials
@@ -67,6 +78,7 @@ This handbook is structured to support different learning paths:
 5. **Advanced Topics** (Part 5): Master complex techniques
 
 ### Reference Path
+
 - **Quick Start**: Jump to Chapter 14 for immediate hands-on experience
 - **API Reference**: Part 3 for technical documentation
 - **Troubleshooting**: Chapter 17 for problem-solving
@@ -75,16 +87,19 @@ This handbook is structured to support different learning paths:
 ### Use Case Paths
 
 #### For Content Creators
+
 - Start with Chapter 4: Basic Generator Creation
 - Focus on Part 2: Content Development
 - Reference Chapter 22: Quick Reference Tables
 
 #### For Developers
+
 - Begin with Chapter 2: Architecture
 - Study Part 3: Engine Reference
 - Explore Part 5: Advanced Topics
 
 #### For LLM Integration
+
 - Review Chapter 8: Slot Taxonomy
 - Study Chapter 15: Expansion Recipes
 - Understand Chapter 20: Integration Patterns
@@ -94,16 +109,19 @@ This handbook is structured to support different learning paths:
 To get the most from this handbook, you should have:
 
 ### Technical Prerequisites
+
 - Basic understanding of JSON syntax
 - Familiarity with text editors or IDEs
 - Elementary programming concepts (variables, conditionals)
 
 ### Helpful but Not Required
+
 - JavaScript/TypeScript knowledge (for advanced features)
 - Regular expressions (for complex patterns)
 - Node.js experience (for CLI usage)
 
 ### What You'll Need
+
 - A modern web browser (Chrome, Firefox, Safari, Edge)
 - A text editor (VS Code recommended)
 - The Prompt Spaghetti application (web or local)
@@ -131,6 +149,7 @@ Throughout this handbook, we use consistent formatting:
 ### Code Examples
 
 Examples show both JSON generator format:
+
 ```json
 {
   "name": "Simple Generator",

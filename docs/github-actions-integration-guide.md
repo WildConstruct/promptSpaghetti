@@ -1,4 +1,5 @@
 # GitHub Actions Integration Guide
+
 ## Agent Productivity Utilities CI/CD Integration
 
 ### Overview
@@ -8,6 +9,7 @@ The enhanced GitHub Actions workflows integrate all 14 agent productivity utilit
 ### Current Workflow Status
 
 #### Available Workflows:
+
 1. **Enhanced CI** (`enhanced-ci.yml`) - 6 parallel jobs with comprehensive utilities integration
 2. **Enhanced Quality Gates** (`enhanced-quality-gates.yml`) - 8 specialized quality validation jobs
 3. **Basic CI** (`ci.yml`) - Simple build/test workflow (legacy)
@@ -16,6 +18,7 @@ The enhanced GitHub Actions workflows integrate all 14 agent productivity utilit
 ### Workflow Activation Options
 
 #### Option 1: Gradual Migration (Recommended)
+
 ```bash
 # Rename current workflows to backup
 mv .github/workflows/ci.yml .github/workflows/ci-legacy.yml
@@ -26,6 +29,7 @@ mv .github/workflows/quality-gates.yml .github/workflows/quality-gates-legacy.ym
 ```
 
 #### Option 2: Parallel Execution (Testing Phase)
+
 ```bash
 # Keep both versions running to compare effectiveness
 # Enhanced workflows will run alongside basic ones
@@ -33,6 +37,7 @@ mv .github/workflows/quality-gates.yml .github/workflows/quality-gates-legacy.ym
 ```
 
 #### Option 3: Direct Replacement
+
 ```bash
 # Remove legacy workflows entirely
 rm .github/workflows/ci.yml
@@ -45,6 +50,7 @@ rm .github/workflows/quality-gates.yml
 #### **Enhanced CI Pipeline** (`enhanced-ci.yml`)
 
 **Triggers:**
+
 - Push to main, alpha, dev branches
 - Pull requests to main, alpha, dev branches
 
@@ -84,6 +90,7 @@ rm .github/workflows/quality-gates.yml
 #### **Enhanced Quality Gates** (`enhanced-quality-gates.yml`)
 
 **Triggers:**
+
 - Pull request events (opened, synchronize, reopened)
 - Push to main, develop branches
 
@@ -131,19 +138,19 @@ rm .github/workflows/quality-gates.yml
 
 #### **Automated Triggers:**
 
-| Utility | When Triggered | Purpose |
-|---------|---------------|---------|
-| `QAPrecheck.js` | Every PR/push | Comprehensive validation (blocks on failure) |
-| `CodeQualityScanner.js` | Every PR/push | Code analysis, security, performance checks |
-| `TestCaseGenerator.js` | Every PR/push | Generate missing test cases automatically |
-| `ConflictResolutionAssistant.js` | Every PR | Detect and prevent merge conflicts |
-| `TaskEstimationImprover.js` | PR only | Estimate effort and complexity for changes |
-| `AgentWorkloadBalancer.js` | PR only | Analyze workload distribution impact |
-| `IntegrationHealthMonitor.js` | Every run | System health validation and monitoring |
-| `AgentProductivityDashboard.js` | Every run | Performance metrics and CI summaries |
-| `KnowledgeBaseIndexer.js` | Every run | Learn from CI results and update knowledge |
-| `DocumentationAutoGenerator.js` | Main branch only | Auto-update documentation |
-| `EnvironmentSetupAutomator.js` | Setup phase | Validate and auto-setup development environment |
+| Utility                          | When Triggered   | Purpose                                         |
+| -------------------------------- | ---------------- | ----------------------------------------------- |
+| `QAPrecheck.js`                  | Every PR/push    | Comprehensive validation (blocks on failure)    |
+| `CodeQualityScanner.js`          | Every PR/push    | Code analysis, security, performance checks     |
+| `TestCaseGenerator.js`           | Every PR/push    | Generate missing test cases automatically       |
+| `ConflictResolutionAssistant.js` | Every PR         | Detect and prevent merge conflicts              |
+| `TaskEstimationImprover.js`      | PR only          | Estimate effort and complexity for changes      |
+| `AgentWorkloadBalancer.js`       | PR only          | Analyze workload distribution impact            |
+| `IntegrationHealthMonitor.js`    | Every run        | System health validation and monitoring         |
+| `AgentProductivityDashboard.js`  | Every run        | Performance metrics and CI summaries            |
+| `KnowledgeBaseIndexer.js`        | Every run        | Learn from CI results and update knowledge      |
+| `DocumentationAutoGenerator.js`  | Main branch only | Auto-update documentation                       |
+| `EnvironmentSetupAutomator.js`   | Setup phase      | Validate and auto-setup development environment |
 
 #### **Manual Triggers Available:**
 
@@ -165,6 +172,7 @@ node src/utils/EnvironmentSetupAutomator.js setup
 ### Quality Gates and Blocking Conditions
 
 #### **Hard Blocks (CI Failure):**
+
 - QA pre-check validation fails
 - Security vulnerabilities (critical/high severity)
 - Build failures
@@ -172,6 +180,7 @@ node src/utils/EnvironmentSetupAutomator.js setup
 - Test coverage below 80%
 
 #### **Soft Warnings (Continue with alerts):**
+
 - Code quality score below 80
 - Performance degradation detected
 - Missing test cases for new code
@@ -180,7 +189,9 @@ node src/utils/EnvironmentSetupAutomator.js setup
 ### GitHub Integration Features
 
 #### **PR Comments:**
+
 Enhanced workflows automatically post detailed quality reports to pull requests including:
+
 - Job status summary (✅/❌)
 - Test coverage metrics
 - Security scan results
@@ -188,7 +199,9 @@ Enhanced workflows automatically post detailed quality reports to pull requests 
 - Agent productivity utility results
 
 #### **GitHub Step Summaries:**
+
 Each job generates comprehensive summaries visible in the Actions tab:
+
 - QA pre-check results with issue breakdown
 - Code quality metrics with scores
 - Test coverage tables with thresholds
@@ -196,6 +209,7 @@ Each job generates comprehensive summaries visible in the Actions tab:
 - Bundle size analysis with file breakdowns
 
 #### **Artifact Uploads:**
+
 - QA reports and quality metrics
 - Test coverage reports
 - Performance analysis data
@@ -204,22 +218,26 @@ Each job generates comprehensive summaries visible in the Actions tab:
 ### Environment Variables and Secrets
 
 #### **Required Secrets:**
+
 - `GITHUB_TOKEN` - For automated documentation commits
 - `CODECOV_TOKEN` - For coverage reporting (optional)
 
 #### **Environment Variables:**
+
 - `NODE_VERSION: '18'` - Node.js version
 - `PNPM_VERSION: '8'` - pnpm version
 
 ### Activation Checklist
 
 #### **Pre-Activation Steps:**
+
 1. ✅ All 14 productivity utilities are implemented and tested
 2. ✅ Enhanced workflows are committed to repository
 3. ✅ Documentation is available for agents
 4. ✅ Manual testing of utilities completed
 
 #### **Activation Process:**
+
 1. **Choose activation strategy** (gradual/parallel/direct)
 2. **Backup existing workflows** if using gradual migration
 3. **Monitor first few CI runs** for any issues
@@ -228,6 +246,7 @@ Each job generates comprehensive summaries visible in the Actions tab:
 6. **Fine-tune thresholds** based on results
 
 #### **Post-Activation Monitoring:**
+
 - Monitor CI run times (should improve with caching)
 - Review quality gate effectiveness (catching real issues)
 - Track test coverage improvements
@@ -237,21 +256,25 @@ Each job generates comprehensive summaries visible in the Actions tab:
 ### Troubleshooting Common Issues
 
 #### **Utility Script Permissions:**
+
 ```bash
 chmod +x src/utils/*.js
 ```
 
 #### **Missing Data Directories:**
+
 ```bash
 mkdir -p src/data/{logs,reports,tracking,estimation,quality,health}
 ```
 
 #### **Node.js Module Issues:**
+
 ```bash
 pnpm install --frozen-lockfile
 ```
 
 #### **Workflow Syntax Validation:**
+
 ```bash
 # Use GitHub CLI to validate workflows
 gh workflow list
@@ -261,6 +284,7 @@ gh workflow view enhanced-ci
 ### Metrics and Effectiveness Tracking
 
 #### **Key Metrics to Monitor:**
+
 - CI run success rate improvement
 - Average time to detect issues
 - Test coverage percentage increase
@@ -269,6 +293,7 @@ gh workflow view enhanced-ci
 - Agent productivity scores
 
 #### **Weekly Review Process:**
+
 1. Review CI success rates and failure patterns
 2. Analyze utility effectiveness reports
 3. Collect agent feedback on utility helpfulness
@@ -278,17 +303,20 @@ gh workflow view enhanced-ci
 ### Support and Maintenance
 
 #### **Utility Updates:**
+
 - Agent productivity utilities can be updated independently
 - No workflow changes needed for utility enhancements
 - Utilities are self-contained and modular
 
 #### **Workflow Maintenance:**
+
 - Monitor GitHub Actions usage limits
 - Update action versions quarterly
 - Review and optimize job dependencies
 - Add new utilities to integration points as developed
 
 #### **Agent Training:**
+
 - Utilities are designed to be self-explanatory
 - Documentation includes usage examples
 - Quick reference card available in `docs/agent-utilities-quick-reference.md`
@@ -297,6 +325,7 @@ gh workflow view enhanced-ci
 ---
 
 **Next Steps:**
+
 1. Review this guide with development team
 2. Choose activation strategy
 3. Execute activation plan

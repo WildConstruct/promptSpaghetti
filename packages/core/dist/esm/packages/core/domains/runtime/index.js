@@ -14,14 +14,14 @@ export * from '../../runtime/io-system';
 // Re-export node implementations
 export * from '../../runtime/nodes';
 // Domain factory (to be implemented)
-export const createRuntimeDomain = (config) => {
-    // TODO: Implement domain factory
-    return {
-        components: {},
-        hooks: {},
-        services: {},
-        events: {},
-        config: {},
-        utils: {}
-    };
+export const createRuntimeDomain = config => {
+  // TODO: Implement domain factory
+  return {
+    components: {},
+    hooks: {},
+    services: {},
+    events: {},
+    config: {},
+    utils: {},
+  };
 };

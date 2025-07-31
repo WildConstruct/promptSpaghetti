@@ -1,5 +1,6 @@
 # Security Dashboard Procedures
-*Task T-1752989143998-143: Document security dashboard procedures*
+
+_Task T-1752989143998-143: Document security dashboard procedures_
 
 ## Overview
 
@@ -21,9 +22,10 @@ The Security Dashboard provides a comprehensive, real-time security operations c
 ### Initial Setup
 
 1. **Access the Security Dashboard**
+
    ```typescript
    import { SecurityDashboardMain } from '@packages/core/components/SecurityDashboard';
-   
+
    <SecurityDashboardMain
      workspaceId="your-workspace-id"
      userId="current-user-id"
@@ -48,6 +50,7 @@ The Security Dashboard provides a comprehensive, real-time security operations c
 ### Operational Dashboard (SOC Analysts, Security Engineers)
 
 **Primary Features:**
+
 - Real-time alert queue with severity-based filtering
 - Active incident management and response coordination
 - System health monitoring and component status
@@ -55,10 +58,12 @@ The Security Dashboard provides a comprehensive, real-time security operations c
 - Response action tracking and automation
 
 **Access Requirements:**
+
 - Role: `SECURITY_ANALYST`, `SOC_ANALYST`, `SECURITY_ADMIN`
 - Permissions: View, investigate, respond to security events
 
 **Key Metrics:**
+
 - Active alerts count and severity distribution
 - Incident response times and SLA compliance
 - System component health and uptime
@@ -67,6 +72,7 @@ The Security Dashboard provides a comprehensive, real-time security operations c
 ### Executive Dashboard (Leadership, Management)
 
 **Primary Features:**
+
 - High-level security KPIs and business impact metrics
 - Risk trend analysis and forecasting
 - Budget and ROI tracking for security investments
@@ -74,10 +80,12 @@ The Security Dashboard provides a comprehensive, real-time security operations c
 - Executive summary reports and briefings
 
 **Access Requirements:**
+
 - Role: `EXECUTIVE`, `SECURITY_ADMIN`
 - Permissions: View strategic metrics, export reports
 
 **Key Metrics:**
+
 - Overall security posture score
 - Financial impact of security incidents
 - Compliance status and audit readiness
@@ -86,6 +94,7 @@ The Security Dashboard provides a comprehensive, real-time security operations c
 ### Compliance Dashboard (Compliance Officers, Auditors)
 
 **Primary Features:**
+
 - Regulatory framework compliance tracking
 - Audit preparation and evidence management
 - Policy violation monitoring and remediation
@@ -93,10 +102,12 @@ The Security Dashboard provides a comprehensive, real-time security operations c
 - Risk assessment and mitigation tracking
 
 **Access Requirements:**
+
 - Role: `COMPLIANCE_OFFICER`, `AUDITOR`, `SECURITY_ADMIN`
 - Permissions: View compliance data, generate reports
 
 **Key Metrics:**
+
 - Compliance scores by framework (GDPR, SOX, etc.)
 - Outstanding violations and remediation status
 - Audit trail completeness and data retention
@@ -105,6 +116,7 @@ The Security Dashboard provides a comprehensive, real-time security operations c
 ### Analytics Dashboard (Advanced Users)
 
 **Primary Features:**
+
 - Advanced threat hunting and investigation tools
 - Custom query building and data exploration
 - Machine learning insights and anomaly detection
@@ -112,6 +124,7 @@ The Security Dashboard provides a comprehensive, real-time security operations c
 - Historical trend analysis and reporting
 
 **Access Requirements:**
+
 - Role: `SECURITY_ANALYST`, `SECURITY_ADMIN`
 - Permissions: Advanced analytics, workflow management
 
@@ -126,12 +139,11 @@ The Security Dashboard provides a comprehensive, real-time security operations c
    - Asset and indicator association
 
 2. **Alert Triage and Investigation**
+
    ```typescript
    // Filter alerts by severity
-   const criticalAlerts = alerts.filter(alert => 
-     alert.severity === 'critical'
-   );
-   
+   const criticalAlerts = alerts.filter(alert => alert.severity === 'critical');
+
    // Handle alert actions
    const handleAlertAction = async (alertId: string, action: string) => {
      await dataService.updateAlert(alertId, { action });
@@ -153,24 +165,28 @@ The Security Dashboard provides a comprehensive, real-time security operations c
 ### Alert Severity Guidelines
 
 #### Critical (Red)
+
 - **Response Time:** 15 minutes
 - **Escalation:** Immediate
 - **Examples:** Active breach, malware outbreak, system compromise
 - **Actions:** Automatic isolation, immediate team notification
 
-#### High (Orange)  
+#### High (Orange)
+
 - **Response Time:** 60 minutes
 - **Escalation:** Within 2 hours if unresolved
 - **Examples:** Suspicious activity, policy violations, failed attacks
 - **Actions:** Investigation, monitoring, manual review
 
 #### Medium (Yellow)
+
 - **Response Time:** 4 hours
 - **Escalation:** End of business day
 - **Examples:** Anomalous behavior, configuration issues
 - **Actions:** Scheduled investigation, risk assessment
 
 #### Low (Green)
+
 - **Response Time:** 24 hours
 - **Escalation:** Weekly review
 - **Examples:** Informational events, routine monitoring
@@ -222,8 +238,8 @@ const autoApprovalRules = [
     conditions: { threatIntelligence: 'confirmed_malicious' },
     maxSeverity: SecuritySeverity.HIGH,
     approvedActions: [SecurityActionType.BLOCK_IP],
-    requiredRole: SecurityRole.SECURITY_ANALYST
-  }
+    requiredRole: SecurityRole.SECURITY_ANALYST,
+  },
 ];
 ```
 
@@ -232,16 +248,19 @@ const autoApprovalRules = [
 ### Supported Frameworks
 
 #### GDPR (General Data Protection Regulation)
+
 - **Key Requirements:** Data protection, breach notification, privacy rights
 - **Response Time:** 60 minutes for detection, 72 hours for reporting
 - **Documentation:** Incident reports, impact assessments, notification records
 
 #### SOX (Sarbanes-Oxley Act)
+
 - **Key Requirements:** Financial controls, access management, audit trails
 - **Response Time:** 4 hours for investigation, 24 hours for documentation
 - **Documentation:** Access logs, control testing, remediation plans
 
 #### ISO 27001
+
 - **Key Requirements:** Information security management, risk assessment
 - **Response Time:** Based on risk assessment, typically 24 hours
 - **Documentation:** Risk registers, security policies, incident records
@@ -271,18 +290,21 @@ const autoApprovalRules = [
 ### Key Performance Indicators (KPIs)
 
 #### Security Operations
+
 - **Mean Time to Detection (MTTD):** < 15 minutes
 - **Mean Time to Response (MTTR):** < 60 minutes for critical
 - **Alert Resolution Rate:** > 95%
 - **False Positive Rate:** < 5%
 
 #### System Performance
+
 - **Dashboard Load Time:** < 3 seconds
 - **Real-time Update Latency:** < 5 seconds
 - **API Response Time:** < 500ms
 - **Uptime:** > 99.9%
 
 #### Team Metrics
+
 - **Analyst Utilization:** 70-85%
 - **Case Load per Analyst:** < 10 active cases
 - **Training Hours per Quarter:** > 40 hours
@@ -307,32 +329,40 @@ const autoApprovalRules = [
 ### Common Issues and Solutions
 
 #### Connection Problems
+
 **Symptoms:** "OFFLINE" status, missing real-time updates
 **Solutions:**
+
 - Check network connectivity and firewall rules
 - Verify WebSocket port (8000) accessibility
 - Restart browser or clear cache
 - Contact IT support for network issues
 
 #### Performance Issues
+
 **Symptoms:** Slow dashboard loading, delayed updates
 **Solutions:**
+
 - Reduce refresh frequency temporarily
 - Clear browser cache and cookies
 - Check system resources (CPU, memory)
 - Report to security team for investigation
 
 #### Data Discrepancies
+
 **Symptoms:** Inconsistent metrics, missing alerts
 **Solutions:**
+
 - Verify time synchronization across systems
 - Check data source connectivity
 - Review filter settings and permissions
 - Validate against source systems
 
 #### Access and Permission Issues
+
 **Symptoms:** Missing dashboard tabs, restricted functionality
 **Solutions:**
+
 - Verify user role assignments
 - Check workspace membership
 - Request additional permissions from security admin
@@ -435,6 +465,6 @@ const autoApprovalRules = [
 **Documentation:** https://docs.company.com/security
 **Training Portal:** https://training.company.com/security
 
-*Last Updated: 2025-07-22*
-*Version: 1.0.0*
-*Document Owner: Security Engineering Team*
+_Last Updated: 2025-07-22_
+_Version: 1.0.0_
+_Document Owner: Security Engineering Team_

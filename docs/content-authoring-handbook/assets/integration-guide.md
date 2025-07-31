@@ -10,7 +10,7 @@ Add these files to your HTML page:
 
 ```html
 <!-- CSS -->
-<link rel="stylesheet" href="assets/css/interactive-examples.css">
+<link rel="stylesheet" href="assets/css/interactive-examples.css" />
 
 <!-- JavaScript -->
 <script src="assets/js/interactive-examples.js"></script>
@@ -21,11 +21,13 @@ Add these files to your HTML page:
 Add a div with the appropriate data attributes:
 
 ```html
-<div id="my-example" data-interactive-example 
-     data-title="My Generator" 
-     data-variations="true"
-     data-code='{"meta":{"name":"Test"},"grammar":{"start":"Hello!"}}'>
-</div>
+<div
+  id="my-example"
+  data-interactive-example
+  data-title="My Generator"
+  data-variations="true"
+  data-code='{"meta":{"name":"Test"},"grammar":{"start":"Hello!"}}'
+></div>
 ```
 
 ### 3. Auto-initialization
@@ -37,30 +39,34 @@ Examples initialize automatically when the page loads. No additional JavaScript 
 ### Basic Configuration
 
 ```html
-<div id="example-1" data-interactive-example 
-     data-title="Basic Example"
-     data-code='{"grammar":{"start":"Hello world"}}'>
-</div>
+<div
+  id="example-1"
+  data-interactive-example
+  data-title="Basic Example"
+  data-code='{"grammar":{"start":"Hello world"}}'
+></div>
 ```
 
 ### Advanced Configuration
 
 ```html
-<div id="example-2" data-interactive-example 
-     data-title="Advanced Example"
-     data-variations="true"
-     data-options='{"autoRun":false,"editorHeight":"400px","showVariations":true}'>
-</div>
+<div
+  id="example-2"
+  data-interactive-example
+  data-title="Advanced Example"
+  data-variations="true"
+  data-options='{"autoRun":false,"editorHeight":"400px","showVariations":true}'
+></div>
 ```
 
 ## Data Attributes
 
-| Attribute | Description | Example |
-|-----------|-------------|---------|
-| `data-title` | Example title | `"My Generator"` |
-| `data-code` | Initial JSON code | `'{"grammar":{"start":"Hi"}}'` |
-| `data-variations` | Show variations | `"true"` or `"false"` |
-| `data-options` | Additional options | `'{"autoRun":false}'` |
+| Attribute         | Description        | Example                        |
+| ----------------- | ------------------ | ------------------------------ |
+| `data-title`      | Example title      | `"My Generator"`               |
+| `data-code`       | Initial JSON code  | `'{"grammar":{"start":"Hi"}}'` |
+| `data-variations` | Show variations    | `"true"` or `"false"`          |
+| `data-options`    | Additional options | `'{"autoRun":false}'`          |
 
 ## Options Object
 
@@ -82,12 +88,16 @@ For dynamic content or custom initialization:
 ```javascript
 const example = new InteractiveExample('my-container', {
   title: 'Custom Example',
-  initialCode: JSON.stringify({
-    meta: { name: 'Custom Generator' },
-    grammar: { start: 'Hello!' }
-  }, null, 2),
+  initialCode: JSON.stringify(
+    {
+      meta: { name: 'Custom Generator' },
+      grammar: { start: 'Hello!' },
+    },
+    null,
+    2
+  ),
   autoRun: true,
-  showVariations: true
+  showVariations: true,
 });
 ```
 
@@ -105,7 +115,7 @@ async executeGenerator(generatorJSON, seed) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ generator: generatorJSON, seed })
   });
-  
+
   return await response.json();
 }
 ```
@@ -113,6 +123,7 @@ async executeGenerator(generatorJSON, seed) {
 ### Engine API Requirements
 
 The engine should provide:
+
 - `POST /api/generate` - Execute generator with seed
 - `POST /api/validate` - Validate generator JSON
 - `GET /api/examples` - Get example generators
@@ -140,10 +151,7 @@ Customize appearance using CSS variables:
 Create themed examples:
 
 ```html
-<div id="dark-example" data-interactive-example 
-     class="dark-theme"
-     data-title="Dark Theme Example">
-</div>
+<div id="dark-example" data-interactive-example class="dark-theme" data-title="Dark Theme Example"></div>
 ```
 
 ```css
@@ -159,9 +167,11 @@ Create themed examples:
 ### Basic Generator Template
 
 ```html
-<div id="basic-template" data-interactive-example 
-     data-title="Basic Generator Template"
-     data-code='{
+<div
+  id="basic-template"
+  data-interactive-example
+  data-title="Basic Generator Template"
+  data-code='{
   "meta": {
     "name": "Basic Generator",
     "version": "1.0.0"
@@ -171,17 +181,19 @@ Create themed examples:
     "greeting": ["Hello", "Hi", "Hey"],
     "subject": ["world", "there", "friend"]
   }
-}'>
-</div>
+}'
+></div>
 ```
 
 ### Advanced Template with Variables
 
 ```html
-<div id="advanced-template" data-interactive-example 
-     data-title="Advanced Generator Template"
-     data-variations="true"
-     data-code='{
+<div
+  id="advanced-template"
+  data-interactive-example
+  data-title="Advanced Generator Template"
+  data-variations="true"
+  data-code='{
   "meta": {
     "name": "Advanced Generator",
     "version": "1.0.0"
@@ -207,8 +219,8 @@ Create themed examples:
     "classes": ["warrior", "mage", "rogue"],
     "introduction": "Meet {characterName} the {characterClass}!"
   }
-}'>
-</div>
+}'
+></div>
 ```
 
 ## Error Handling
@@ -237,7 +249,7 @@ This will log detailed information to the browser console.
 For pages with many examples, implement lazy loading:
 
 ```javascript
-const observer = new IntersectionObserver((entries) => {
+const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       const element = entry.target;
@@ -281,10 +293,7 @@ example.destroy();
 - Status announcements
 
 ```html
-<div id="accessible-example" data-interactive-example
-     aria-label="Interactive generator example"
-     role="region">
-</div>
+<div id="accessible-example" data-interactive-example aria-label="Interactive generator example" role="region"></div>
 ```
 
 ## Testing
@@ -299,7 +308,7 @@ describe('InteractiveExample', () => {
     const example = new InteractiveExample('test-container');
     expect(example).toBeDefined();
   });
-  
+
   it('should validate JSON correctly', () => {
     const example = new InteractiveExample('test-container');
     expect(example.validateJSON()).toBe(true);
@@ -316,9 +325,9 @@ describe('Generator Integration', () => {
   it('should execute simple generator', async () => {
     const generator = {
       meta: { name: 'Test' },
-      grammar: { start: 'Hello' }
+      grammar: { start: 'Hello' },
     };
-    
+
     const result = await executeGenerator(generator, 'test-seed');
     expect(result.output).toBe('Hello');
   });
@@ -348,7 +357,7 @@ For CMS integration:
 Host assets on CDN for better performance:
 
 ```html
-<link rel="stylesheet" href="https://cdn.example.com/interactive-examples.css">
+<link rel="stylesheet" href="https://cdn.example.com/interactive-examples.css" />
 <script src="https://cdn.example.com/interactive-examples.js"></script>
 ```
 
@@ -371,8 +380,7 @@ function sanitizeJSON(input) {
 Configure CSP headers:
 
 ```html
-<meta http-equiv="Content-Security-Policy" 
-      content="default-src 'self'; script-src 'self' 'unsafe-inline';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline';" />
 ```
 
 ## Support and Community

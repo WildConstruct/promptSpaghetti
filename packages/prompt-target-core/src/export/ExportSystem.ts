@@ -5,15 +5,15 @@ import { GenerationMetadata } from '../metadata/MetadataManager.js';
 /**
  * Export format types
  */
-export type ExportFormat = 
-  | 'json' 
-  | 'csv' 
-  | 'xlsx' 
-  | 'pdf' 
-  | 'html' 
-  | 'zip' 
-  | 'png' 
-  | 'jpeg' 
+export type ExportFormat =
+  | 'json'
+  | 'csv'
+  | 'xlsx'
+  | 'pdf'
+  | 'html'
+  | 'zip'
+  | 'png'
+  | 'jpeg'
   | 'webp'
   | 'midjourney_prompt'
   | 'dalle_prompt'
@@ -123,11 +123,11 @@ export class ExportSystem {
   private templates: Map<string, ExportTemplate> = new Map();
   private platformConfigs: Map<Platform, PlatformExportConfig> = new Map();
   private progressCallbacks: Map<string, ExportProgressCallback> = new Map();
-  
+
   private readonly maxConcurrentExports = 3;
   private readonly maxFileSize = 500 * 1024 * 1024; // 500MB
   private readonly resultTTL = 7 * 24 * 60 * 60 * 1000; // 7 days
-  
+
   private processingQueue: string[] = [];
   private activeExports: Set<string> = new Set();
 
@@ -148,14 +148,14 @@ export class ExportSystem {
     onProgress?: ExportProgressCallback
   ): Promise<string> {
     const requestId = this.generateRequestId();
-    
+
     const request: ExportRequest = {
       id: requestId,
       name,
       description,
       items: itemIds,
       options,
-      created: new Date()
+      created: new Date(),
     };
 
     const result: ExportResult = {
@@ -166,7 +166,7 @@ export class ExportSystem {
       itemCount: itemIds.length,
       created: new Date(),
       downloadCount: 0,
-      progress: 0
+      progress: 0,
     };
 
     this.requests.set(requestId, request);
@@ -210,14 +210,14 @@ export class ExportSystem {
     const queueIndex = this.processingQueue.indexOf(requestId);
     if (queueIndex >= 0) {
       this.processingQueue.splice(queueIndex, 1);
-      
+
       // Update result status
       const result = Array.from(this.results.values()).find(r => r.requestId === requestId);
       if (result) {
         result.status = 'failed';
         result.error = 'Cancelled by user';
       }
-      
+
       this.progressCallbacks.delete(requestId);
       return true;
     }
@@ -237,7 +237,7 @@ export class ExportSystem {
     tags: string[] = []
   ): string {
     const templateId = this.generateTemplateId();
-    
+
     const template: ExportTemplate = {
       id: templateId,
       name,
@@ -247,7 +247,7 @@ export class ExportSystem {
       created: new Date(),
       modified: new Date(),
       usageCount: 0,
-      tags
+      tags,
     };
 
     this.templates.set(templateId, template);
@@ -278,7 +278,7 @@ export class ExportSystem {
 
     Object.assign(template, updates);
     template.modified = new Date();
-    
+
     return true;
   }
 
@@ -292,11 +292,7 @@ export class ExportSystem {
   /**
    * Export to platform-specific format
    */
-  async exportToPlatform(
-    itemIds: string[],
-    platform: Platform,
-    options?: Partial<ExportOptions>
-  ): Promise<string> {
+  async exportToPlatform(itemIds: string[], platform: Platform, options?: Partial<ExportOptions>): Promise<string> {
     const config = this.platformConfigs.get(platform);
     if (!config) {
       throw new Error(`No export configuration found for platform: ${platform}`);
@@ -307,7 +303,7 @@ export class ExportSystem {
       includePrompts: true,
       includeParameters: true,
       includeMetadata: false,
-      ...options
+      ...options,
     };
 
     return this.createExportRequest(
@@ -328,9 +324,9 @@ export class ExportSystem {
     totalDownloads: number;
     popularFormats: Array<{ format: ExportFormat; count: number }>;
     averageFileSize: number;
-    } {
+  } {
     const results = Array.from(this.results.values());
-    
+
     const totalExports = results.length;
     const successfulExports = results.filter(r => r.status === 'completed').length;
     const failedExports = results.filter(r => r.status === 'failed').length;
@@ -349,9 +345,10 @@ export class ExportSystem {
 
     // Average file size
     const completedResults = results.filter(r => r.status === 'completed' && r.size);
-    const averageFileSize = completedResults.length > 0
-      ? completedResults.reduce((sum, r) => sum + (r.size || 0), 0) / completedResults.length
-      : 0;
+    const averageFileSize =
+      completedResults.length > 0
+        ? completedResults.reduce((sum, r) => sum + (r.size || 0), 0) / completedResults.length
+        : 0;
 
     return {
       totalExports,
@@ -359,7 +356,7 @@ export class ExportSystem {
       failedExports,
       totalDownloads,
       popularFormats,
-      averageFileSize
+      averageFileSize,
     };
   }
 
@@ -376,7 +373,7 @@ export class ExportSystem {
 
     const request = this.requests.get(requestId);
     const result = Array.from(this.results.values()).find(r => r.requestId === requestId);
-    
+
     if (!request || !result) return;
 
     this.activeExports.add(requestId);
@@ -387,14 +384,13 @@ export class ExportSystem {
 
     try {
       await this.processExport(request, result);
-      
+
       result.status = 'completed';
       result.completed = new Date();
       result.expiresAt = new Date(Date.now() + this.resultTTL);
       result.progress = 100;
 
       this.notifyProgress(requestId, 'completed', 100, 'Export completed successfully');
-
     } catch (error) {
       result.status = 'failed';
       result.error = error instanceof Error ? error.message : 'Unknown error';
@@ -404,7 +400,7 @@ export class ExportSystem {
     } finally {
       this.activeExports.delete(requestId);
       this.progressCallbacks.delete(requestId);
-      
+
       // Process next item in queue
       this.processQueue();
     }
@@ -415,15 +411,15 @@ export class ExportSystem {
    */
   private async processExport(request: ExportRequest, result: ExportResult): Promise<void> {
     const { options, items } = request;
-    
+
     // Simulate processing delay
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     this.notifyProgress(request.id, 'processing', 20, 'Gathering items...');
 
     // Validate items exist (mock)
     const validItems = items; // In real implementation, validate against gallery
-    
+
     this.notifyProgress(request.id, 'processing', 40, 'Processing items...');
 
     // Generate export based on format
@@ -432,61 +428,61 @@ export class ExportSystem {
     let mimeType: string;
 
     switch (options.format) {
-    case 'json':
-      exportData = await this.generateJSONExport(validItems, options);
-      filename = `${request.name}.json`;
-      mimeType = 'application/json';
-      break;
-        
-    case 'csv':
-      exportData = await this.generateCSVExport(validItems, options);
-      filename = `${request.name}.csv`;
-      mimeType = 'text/csv';
-      break;
-        
-    case 'zip':
-      exportData = await this.generateZIPExport(validItems, options);
-      filename = `${request.name}.zip`;
-      mimeType = 'application/zip';
-      break;
-        
-    case 'pdf':
-      exportData = await this.generatePDFExport(validItems, options);
-      filename = `${request.name}.pdf`;
-      mimeType = 'application/pdf';
-      break;
-        
-    case 'html':
-      exportData = await this.generateHTMLExport(validItems, options);
-      filename = `${request.name}.html`;
-      mimeType = 'text/html';
-      break;
-        
-    case 'midjourney_prompt':
-      exportData = await this.generatePlatformExport(validItems, 'midjourney', options);
-      filename = `${request.name}_midjourney.txt`;
-      mimeType = 'text/plain';
-      break;
-        
-    case 'dalle_prompt':
-      exportData = await this.generatePlatformExport(validItems, 'openai-dalle', options);
-      filename = `${request.name}_dalle.txt`;
-      mimeType = 'text/plain';
-      break;
+      case 'json':
+        exportData = await this.generateJSONExport(validItems, options);
+        filename = `${request.name}.json`;
+        mimeType = 'application/json';
+        break;
 
-    default:
-      throw new Error(`Unsupported export format: ${options.format}`);
+      case 'csv':
+        exportData = await this.generateCSVExport(validItems, options);
+        filename = `${request.name}.csv`;
+        mimeType = 'text/csv';
+        break;
+
+      case 'zip':
+        exportData = await this.generateZIPExport(validItems, options);
+        filename = `${request.name}.zip`;
+        mimeType = 'application/zip';
+        break;
+
+      case 'pdf':
+        exportData = await this.generatePDFExport(validItems, options);
+        filename = `${request.name}.pdf`;
+        mimeType = 'application/pdf';
+        break;
+
+      case 'html':
+        exportData = await this.generateHTMLExport(validItems, options);
+        filename = `${request.name}.html`;
+        mimeType = 'text/html';
+        break;
+
+      case 'midjourney_prompt':
+        exportData = await this.generatePlatformExport(validItems, 'midjourney', options);
+        filename = `${request.name}_midjourney.txt`;
+        mimeType = 'text/plain';
+        break;
+
+      case 'dalle_prompt':
+        exportData = await this.generatePlatformExport(validItems, 'openai-dalle', options);
+        filename = `${request.name}_dalle.txt`;
+        mimeType = 'text/plain';
+        break;
+
+      default:
+        throw new Error(`Unsupported export format: ${options.format}`);
     }
 
     this.notifyProgress(request.id, 'processing', 80, 'Finalizing export...');
 
     // Simulate file upload/storage
     await new Promise(resolve => setTimeout(resolve, 500));
-    
+
     result.url = `https://example.com/exports/${result.id}/${filename}`;
     result.filename = filename;
     result.size = this.calculateSize(exportData);
-    
+
     if (result.size > this.maxFileSize) {
       throw new Error('Export file size exceeds maximum limit');
     }
@@ -504,7 +500,7 @@ export class ExportSystem {
         exportedAt: new Date().toISOString(),
         format: 'json',
         itemCount: itemIds.length,
-        options
+        options,
       },
       items: itemIds.map(id => ({
         id,
@@ -515,9 +511,9 @@ export class ExportSystem {
         parameters: { aspect_ratio: '1:1' },
         metadata: {
           created: new Date().toISOString(),
-          quality: 0.8
-        }
-      }))
+          quality: 0.8,
+        },
+      })),
     };
 
     return JSON.stringify(exportData, null, 2);
@@ -532,14 +528,7 @@ export class ExportSystem {
 
     // Mock data
     itemIds.forEach(id => {
-      const row = [
-        id,
-        `"Item ${id}"`,
-        '"Sample prompt"',
-        'midjourney',
-        new Date().toISOString(),
-        '0.8'
-      ];
+      const row = [id, `"Item ${id}"`, '"Sample prompt"', 'midjourney', new Date().toISOString(), '0.8'];
       rows.push(row.join(','));
     });
 
@@ -566,14 +555,18 @@ export class ExportSystem {
    * Generate HTML export
    */
   private async generateHTMLExport(itemIds: string[], options: ExportOptions): Promise<string> {
-    const items = itemIds.map(id => `
+    const items = itemIds
+      .map(
+        id => `
       <div class="gallery-item">
         <h3>Item ${id}</h3>
         <p><strong>Prompt:</strong> Sample prompt</p>
         <p><strong>Platform:</strong> midjourney</p>
         <p><strong>Created:</strong> ${new Date().toISOString()}</p>
       </div>
-    `).join('');
+    `
+      )
+      .join('');
 
     return `
 <!DOCTYPE html>
@@ -597,11 +590,7 @@ export class ExportSystem {
   /**
    * Generate platform-specific export
    */
-  private async generatePlatformExport(
-    itemIds: string[],
-    platform: Platform,
-    options: ExportOptions
-  ): Promise<string> {
+  private async generatePlatformExport(itemIds: string[], platform: Platform, options: ExportOptions): Promise<string> {
     const config = this.platformConfigs.get(platform);
     if (!config) {
       throw new Error(`No configuration for platform: ${platform}`);
@@ -610,13 +599,13 @@ export class ExportSystem {
     // Mock implementation - would convert prompts to platform format
     const prompts = itemIds.map(id => {
       const basePrompt = 'Sample prompt';
-      
+
       if (platform === 'midjourney') {
         return `${basePrompt} --ar 1:1 --s 100 --v 6`;
       } else if (platform === 'openai-dalle') {
         return basePrompt;
       }
-      
+
       return basePrompt;
     });
 
@@ -631,40 +620,40 @@ export class ExportSystem {
       platform: 'midjourney',
       promptFormat: 'midjourney_prompt',
       parameterMapping: {
-        'aspect_ratio': '--ar',
-        'stylize': '--s',
-        'quality': '--q',
-        'chaos': '--c',
-        'version': '--'
+        aspect_ratio: '--ar',
+        stylize: '--s',
+        quality: '--q',
+        chaos: '--c',
+        version: '--',
       },
       fileExtension: '.txt',
       mimeType: 'text/plain',
       maxPromptLength: 6000,
       supportedParameters: ['aspect_ratio', 'stylize', 'quality', 'chaos', 'version', 'weird', 'tile'],
       templateVariables: {
-        'PROMPT': '{{prompt}}',
-        'PARAMS': '{{parameters}}'
-      }
+        PROMPT: '{{prompt}}',
+        PARAMS: '{{parameters}}',
+      },
     });
 
     this.platformConfigs.set('openai-dalle', {
       platform: 'openai-dalle',
       promptFormat: 'dalle_prompt',
       parameterMapping: {
-        'size': 'size',
-        'quality': 'quality',
-        'style': 'style',
-        'n': 'n'
+        size: 'size',
+        quality: 'quality',
+        style: 'style',
+        n: 'n',
       },
       fileExtension: '.txt',
       mimeType: 'text/plain',
       maxPromptLength: 4000,
       supportedParameters: ['model', 'size', 'quality', 'style', 'n', 'response_format'],
       templateVariables: {
-        'PROMPT': '{{prompt}}',
-        'MODEL': '{{model}}',
-        'SIZE': '{{size}}'
-      }
+        PROMPT: '{{prompt}}',
+        MODEL: '{{model}}',
+        SIZE: '{{size}}',
+      },
     });
   }
 
@@ -679,7 +668,7 @@ export class ExportSystem {
         includeImages: false,
         includeMetadata: true,
         includePrompts: true,
-        includeParameters: true
+        includeParameters: true,
       },
       'Export gallery items with metadata and prompts',
       true,
@@ -694,7 +683,7 @@ export class ExportSystem {
         includeMetadata: true,
         includePrompts: true,
         includeParameters: true,
-        compression: 'medium'
+        compression: 'medium',
       },
       'Complete archive with images and all metadata',
       true,
@@ -706,7 +695,7 @@ export class ExportSystem {
       {
         format: 'midjourney_prompt',
         includePrompts: true,
-        includeParameters: true
+        includeParameters: true,
       },
       'Export prompts optimized for Midjourney',
       true,
@@ -718,7 +707,7 @@ export class ExportSystem {
       {
         format: 'dalle_prompt',
         includePrompts: true,
-        includeParameters: true
+        includeParameters: true,
       },
       'Export prompts optimized for DALL-E',
       true,
@@ -730,27 +719,25 @@ export class ExportSystem {
    * Start background cleaner for expired results
    */
   private startBackgroundCleaner(): void {
-    setInterval(() => {
-      const now = Date.now();
-      
-      for (const [id, result] of this.results.entries()) {
-        if (result.expiresAt && result.expiresAt.getTime() < now) {
-          result.status = 'expired';
-          // In real implementation, would also delete the file
+    setInterval(
+      () => {
+        const now = Date.now();
+
+        for (const [id, result] of this.results.entries()) {
+          if (result.expiresAt && result.expiresAt.getTime() < now) {
+            result.status = 'expired';
+            // In real implementation, would also delete the file
+          }
         }
-      }
-    }, 60 * 60 * 1000); // Check every hour
+      },
+      60 * 60 * 1000
+    ); // Check every hour
   }
 
   /**
    * Notify progress callback
    */
-  private notifyProgress(
-    requestId: string,
-    status: ExportResult['status'],
-    progress: number,
-    message?: string
-  ): void {
+  private notifyProgress(requestId: string, status: ExportResult['status'], progress: number, message?: string): void {
     const callback = this.progressCallbacks.get(requestId);
     if (callback) {
       callback({ requestId, status, progress, message });

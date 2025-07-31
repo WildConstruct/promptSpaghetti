@@ -16,6 +16,7 @@ This document provides comprehensive real-world examples of Wild Construct VFX e
 ## Epic Fantasy Film - Dragon Scene
 
 ### Production Context
+
 - **Project**: "The Last Kingdom" - Epic Fantasy Feature
 - **Scene**: Act II, Dragon Encounter Sequence
 - **Shot**: Wide establishing shot of dragon on ancient ruins
@@ -369,7 +370,7 @@ This document provides comprehensive real-world examples of Wild Construct VFX e
     ],
     "executionPath": [
       "dragon-type-selector",
-      "scale-texture-selector", 
+      "scale-texture-selector",
       "atmosphere-selector",
       "dragon-description-builder",
       "atmosphere-integration",
@@ -377,11 +378,7 @@ This document provides comprehensive real-world examples of Wild Construct VFX e
       "technical-specs",
       "final-prompt-assembly"
     ],
-    "criticalPath": [
-      "dragon-type-selector",
-      "dragon-description-builder", 
-      "final-prompt-assembly"
-    ],
+    "criticalPath": ["dragon-type-selector", "dragon-description-builder", "final-prompt-assembly"],
     "analysis": {
       "complexity": "moderate",
       "variabilityScore": 0.75,
@@ -409,7 +406,7 @@ This document provides comprehensive real-world examples of Wild Construct VFX e
           "seed": 12346,
           "state": "{\"type\":\"snapshot\",\"values\":[0.9123,0.3456,0.7890]}",
           "callCount": 3,
-          "lastValue": 0.7890
+          "lastValue": 0.789
         },
         "scale-texture-selector": {
           "seed": 12347,
@@ -429,7 +426,7 @@ This document provides comprehensive real-world examples of Wild Construct VFX e
         "scale-texture-selector",
         "atmosphere-selector",
         "dragon-description-builder",
-        "atmosphere-integration", 
+        "atmosphere-integration",
         "lighting-setup",
         "technical-specs",
         "final-prompt-assembly"
@@ -497,8 +494,8 @@ This document provides comprehensive real-world examples of Wild Construct VFX e
           "timestamp": "2025-07-24T14:25:00.000Z",
           "type": "node_modified",
           "nodeId": "dragon-type-selector",
-          "before": { "choices": [{"text": "ancient red dragon", "weight": 3}] },
-          "after": { "choices": [{"text": "ancient red dragon", "weight": 4}] },
+          "before": { "choices": [{ "text": "ancient red dragon", "weight": 3 }] },
+          "after": { "choices": [{ "text": "ancient red dragon", "weight": 4 }] },
           "userNote": "Director wants more red dragons in variations"
         }
       ]
@@ -606,25 +603,25 @@ from datetime import datetime
 
 def import_dragon_scene_export(export_path):
     """Import The Last Kingdom dragon scene into Maya"""
-    
+
     with open(export_path, 'r') as f:
         export_data = json.load(f)
-    
+
     # Create scene namespace
     scene_name = export_data['metadata']['project']['scene'].replace(' ', '_')
     namespace = f"wildConstruct_{scene_name}"
     cmds.namespace(add=namespace)
-    
+
     # Setup camera
     camera_data = export_data['rendering']['camera']
     camera_transform, camera_shape = cmds.camera(name=f'{namespace}:hero_camera')
-    
+
     # Set camera parameters
     cmds.setAttr(f'{camera_shape}.focalLength', camera_data['focal'])
     cmds.setAttr(f'{camera_shape}.fStop', camera_data['aperture'])
     cmds.setAttr(f'{camera_shape}.horizontalFilmAperture', 1.417) # 35mm Academy
     cmds.setAttr(f'{camera_shape}.verticalFilmAperture', 0.945)
-    
+
     # Position camera
     pos = camera_data['position']
     rot = camera_data['rotation']
@@ -634,10 +631,10 @@ def import_dragon_scene_export(export_path):
     cmds.setAttr(f'{camera_transform}.rotateX', rot[0])
     cmds.setAttr(f'{camera_transform}.rotateY', rot[1])
     cmds.setAttr(f'{camera_transform}.rotateZ', rot[2])
-    
+
     # Setup lighting for golden hour
     lighting_data = export_data['rendering']['lighting']
-    
+
     # Key light (sun)
     key_light = cmds.directionalLight(
         name=f'{namespace}:key_light',
@@ -647,11 +644,11 @@ def import_dragon_scene_export(export_path):
     key_transform = cmds.listRelatives(key_light, parent=True)[0]
     cmds.setAttr(f'{key_transform}.rotateX', -30)
     cmds.setAttr(f'{key_transform}.rotateY', 45)
-    
+
     # Set golden hour color temperature
     temp_color = temperature_to_rgb(lighting_data['temperature'])
     cmds.setAttr(f'{key_light}.color', *temp_color, type='double3')
-    
+
     # Fill light (sky)
     fill_light = cmds.directionalLight(
         name=f'{namespace}:fill_light',
@@ -661,42 +658,42 @@ def import_dragon_scene_export(export_path):
     cmds.setAttr(f'{fill_transform}.rotateX', -60)
     cmds.setAttr(f'{fill_transform}.rotateY', -30)
     cmds.setAttr(f'{fill_light}.color', 0.7, 0.8, 1.0, type='double3')
-    
+
     # Create locators for dragon and ruins placement
     dragon_locator = cmds.spaceLocator(name=f'{namespace}:dragon_placement')[0]
     cmds.setAttr(f'{dragon_locator}.translateY', 6)
-    
+
     ruins_locator = cmds.spaceLocator(name=f'{namespace}:ruins_placement')[0]
-    
+
     # Add custom attributes for prompt data
     cmds.addAttr(dragon_locator, longName='dragonType', dataType='string')
     cmds.addAttr(dragon_locator, longName='scaleTexture', dataType='string')
     cmds.addAttr(dragon_locator, longName='reproSeed', attributeType='long')
-    
+
     # Set values from export
     final_prompt = export_data['prompt']['finalPrompt']
     dragon_type = export_data['prompt']['variables']['dragon_type']['value']
     scale_texture = export_data['prompt']['variables']['scale_texture']['value']
     master_seed = export_data['execution']['randomization']['masterSeed']
-    
+
     cmds.setAttr(f'{dragon_locator}.dragonType', dragon_type, type='string')
     cmds.setAttr(f'{dragon_locator}.scaleTexture', scale_texture, type='string')
     cmds.setAttr(f'{dragon_locator}.reproSeed', master_seed)
-    
+
     # Create custom shelf button for variant switching
     create_variant_switcher(export_data)
-    
+
     print(f"Dragon scene imported successfully!")
     print(f"Scene: {export_data['metadata']['project']['scene']}")
     print(f"Final Prompt: {final_prompt}")
     print(f"Reproducibility Seed: {master_seed}")
-    
+
     return namespace
 
 def temperature_to_rgb(temp_kelvin):
     """Convert color temperature to RGB values"""
     temp = temp_kelvin / 100.0
-    
+
     if temp <= 66:
         red = 255
         green = temp
@@ -712,15 +709,15 @@ def temperature_to_rgb(temp_kelvin):
         green = temp - 60
         green = 288.1221695283 * (green ** -0.0755148492)
         blue = 255
-    
-    return [max(0, min(255, red))/255.0, 
-            max(0, min(255, green))/255.0, 
+
+    return [max(0, min(255, red))/255.0,
+            max(0, min(255, green))/255.0,
             max(0, min(255, blue))/255.0]
 
 def create_variant_switcher(export_data):
     """Create Maya shelf tool for switching between prompt variants"""
     variants = export_data['prompt']['variants']
-    
+
     shelf_code = f'''
 import maya.cmds as cmds
 
@@ -729,13 +726,13 @@ def switch_dragon_variant(variant_index):
     if variant_index < len(variants):
         variant = variants[variant_index]
         print(f"Switching to variant {{variant_index + 1}}: {{variant['prompt'][:50]}}...")
-        
+
         # Update scene based on variant
         # This would trigger any variant-specific changes
         seed = variant['seed']
         cmds.setAttr('wildConstruct_Dragon_Encounter___Act_II:dragon_placement.reproSeed', seed)
 '''
-    
+
     # Add shelf button (simplified - would normally use Maya's shelf API)
     print("Variant switcher code generated. Add to Maya shelf manually.")
 ```
@@ -755,7 +752,7 @@ shader dragon_scales(
     float color_variation = 0.3;
     vector base_color = {0.8, 0.2, 0.1};  // Red dragon base
     int reproduction_seed = 12345;
-    
+
     export vector Cf = 0;
     export vector N = 0;
     export float rough = 0;
@@ -763,11 +760,11 @@ shader dragon_scales(
 {
     // Seed random functions with reproduction seed
     int seed = reproduction_seed + (int)(P.x * 1000) + (int)(P.y * 1000) + (int)(P.z * 1000);
-    
+
     // Generate scale pattern
     vector scale_pos = P / scale_size;
     float scale_noise = noise(scale_pos, seed);
-    
+
     // Apply weathering based on scale_type
     float weathering = 0.0;
     if (scale_type == "weathered") {
@@ -777,14 +774,14 @@ shader dragon_scales(
     } else if (scale_type == "crystalline") {
         weathering = -0.3; // Negative weathering for pristine look
     }
-    
+
     // Color variation
     vector color_offset = noise(scale_pos * 3.0, seed + 300) * color_variation;
     Cf = base_color + color_offset;
-    
+
     // Adjust roughness based on weathering
     rough = 0.4 + weathering * 0.6;
-    
+
     // Normal perturbation for scale detail
     vector scale_normal = noise(scale_pos * 10.0, seed + 400);
     N = normalize(N + scale_normal * 0.1);
@@ -794,6 +791,7 @@ shader dragon_scales(
 ## Sci-Fi Series - Spaceship Battle
 
 ### Production Context
+
 - **Project**: "Stellar Frontiers" - Episodic Sci-Fi Series
 - **Episode**: S02E08 - "Battle for Kepler Station"
 - **Shot**: Hero ship dodging through asteroid field
@@ -868,32 +866,32 @@ import random
 
 def create_asteroid_field_from_export(export_data):
     """Generate procedural asteroid field based on Wild Construct export"""
-    
+
     # Get scene parameters from export
     environment = export_data['prompt']['variables']['environment_hazard']['value']
     seed = export_data['execution']['randomization']['masterSeed']
-    
+
     # Create geometry network
     geo = hou.node('/obj').createNode('geo', 'asteroid_field')
-    
+
     # Scatter points for asteroid positions
     scatter = geo.createNode('scatter', 'asteroid_positions')
     scatter.parm('npts').set(500)  # Number of asteroids
     scatter.parm('seed').set(seed)
-    
+
     # Create source geometry (bounding volume)
     box = geo.createNode('box', 'field_bounds')
     box.parm('sizex').set(200)
-    box.parm('sizey').set(100) 
+    box.parm('sizey').set(100)
     box.parm('sizez').set(200)
-    
+
     scatter.setInput(0, box)
-    
+
     # Copy asteroid geometry to points
     copy = geo.createNode('copy', 'asteroid_copy')
     copy.setInput(0, create_asteroid_geometry(geo, seed))
     copy.setInput(1, scatter)
-    
+
     # Add variation attributes
     attrib_randomize = geo.createNode('attribrandomize', 'size_variation')
     attrib_randomize.setInput(0, copy)
@@ -901,36 +899,37 @@ def create_asteroid_field_from_export(export_data):
     attrib_randomize.parm('min').set(0.5)
     attrib_randomize.parm('max').set(3.0)
     attrib_randomize.parm('seed').set(seed + 1)
-    
+
     # Material assignment based on prompt
     material = create_asteroid_material(export_data)
     geo.createNode('material', 'asteroid_material')
-    
+
     return geo
 
 def create_asteroid_geometry(parent, seed):
     """Create base asteroid geometry with procedural variation"""
     sphere = parent.createNode('sphere', 'base_asteroid')
-    
+
     # Add noise for irregular shape
     mountain = parent.createNode('mountain', 'asteroid_surface')
     mountain.setInput(0, sphere)
     mountain.parm('height').set(0.3)
     mountain.parm('offset').set(seed)
-    
+
     # Add more detailed noise
     mountain2 = parent.createNode('mountain', 'surface_detail')
     mountain2.setInput(0, mountain)
     mountain2.parm('height').set(0.1)
     mountain2.parm('elementsize').set(0.1)
     mountain2.parm('offset').set(seed + 100)
-    
+
     return mountain2
 ```
 
 ## Historical Drama - Medieval Castle
 
 ### Production Context
+
 - **Project**: "Crown and Sword" - Historical Drama Series
 - **Season**: 3, Episode 4 - "The Siege"
 - **Shot**: Establishing shot of besieged castle at dawn
@@ -995,6 +994,7 @@ def create_asteroid_geometry(parent, seed):
 ## Horror Film - Creature Reveal
 
 ### Production Context
+
 - **Project**: "The Depths" - Supernatural Horror Feature
 - **Scene**: Act III - Monster Reveal
 - **Shot**: Close-up creature emergence from darkness
@@ -1021,9 +1021,9 @@ def create_asteroid_geometry(parent, seed):
       "temperature": 2700
     },
     "camera": {
-      "fov": 85,  // Wide angle for distortion
-      "aperture": 1.4,  // Shallow DOF
-      "position": [0, -2, 3]  // Low angle
+      "fov": 85, // Wide angle for distortion
+      "aperture": 1.4, // Shallow DOF
+      "position": [0, -2, 3] // Low angle
     }
   }
 }
@@ -1032,6 +1032,7 @@ def create_asteroid_geometry(parent, seed):
 ## Commercial - Product Hero Shot
 
 ### Production Context
+
 - **Project**: Luxury Watch Advertisement
 - **Brand**: "Chronos Elite"
 - **Shot**: Product hero shot with dramatic lighting
@@ -1045,7 +1046,7 @@ def create_asteroid_geometry(parent, seed):
     "finalPrompt": "Luxury gold watch with intricate mechanical movement visible through sapphire crystal caseback, dramatic studio lighting with soft reflections, black velvet background, macro photography detail, commercial product photography, photorealistic rendering",
     "weights": {
       "overall": 1.0,
-      "subject": 1.8,  // Heavy emphasis on product
+      "subject": 1.8, // Heavy emphasis on product
       "composition": 1.4,
       "style": 1.6
     }
@@ -1057,7 +1058,7 @@ def create_asteroid_geometry(parent, seed):
       "aspectRatio": "1:1"
     },
     "quality": {
-      "samples": 256,  // High quality for product shot
+      "samples": 256, // High quality for product shot
       "denoising": 0.9,
       "sharpness": 0.9
     }
@@ -1068,6 +1069,7 @@ def create_asteroid_geometry(parent, seed):
 ## Music Video - Abstract Visualization
 
 ### Production Context
+
 - **Project**: "Neon Dreams" Music Video
 - **Artist**: Electronic/Synthwave genre
 - **Shot**: Beat-synchronized abstract visuals
@@ -1086,7 +1088,7 @@ def create_asteroid_geometry(parent, seed):
         "prompt": "Geometric shapes pulsing with bass frequencies..."
       },
       {
-        "id": "beat-sync-2", 
+        "id": "beat-sync-2",
         "seed": 20002,
         "prompt": "Light trails following melody progression..."
       }
@@ -1094,7 +1096,7 @@ def create_asteroid_geometry(parent, seed):
   },
   "extensions": {
     "animation": {
-      "frameCount": 720,  // 30 seconds at 24fps
+      "frameCount": 720, // 30 seconds at 24fps
       "fps": 24,
       "keyframes": [
         {

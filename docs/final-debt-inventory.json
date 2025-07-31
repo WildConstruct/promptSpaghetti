@@ -85,11 +85,7 @@
       "status": "open",
       "createdAt": "2025-07-18T15:04:15.343Z",
       "updatedAt": "2025-07-18T15:04:15.343Z",
-      "tags": [
-        "security",
-        "deployment-blocker",
-        "validation"
-      ],
+      "tags": ["security", "deployment-blocker", "validation"],
       "blocksDeployment": true,
       "estimatedHours": 6,
       "actualHours": 0,
@@ -133,9 +129,7 @@
           "strategic": 10
         },
         "baseScore": 94,
-        "adjustmentFactors": [
-          "Deployment Blocker (×1.5)"
-        ],
+        "adjustmentFactors": ["Deployment Blocker (×1.5)"],
         "finalScore": 100,
         "calculatedPriority": "P0"
       },
@@ -162,11 +156,7 @@
       "status": "open",
       "createdAt": "2025-07-18T15:04:15.343Z",
       "updatedAt": "2025-07-18T15:04:15.343Z",
-      "tags": [
-        "security",
-        "deployment-blocker",
-        "injection"
-      ],
+      "tags": ["security", "deployment-blocker", "injection"],
       "blocksDeployment": true,
       "estimatedHours": 6,
       "actualHours": 0,
@@ -210,9 +200,7 @@
           "strategic": 10
         },
         "baseScore": 94,
-        "adjustmentFactors": [
-          "Deployment Blocker (×1.5)"
-        ],
+        "adjustmentFactors": ["Deployment Blocker (×1.5)"],
         "finalScore": 100,
         "calculatedPriority": "P0"
       },
@@ -239,11 +227,7 @@
       "status": "open",
       "createdAt": "2025-07-18T15:04:15.343Z",
       "updatedAt": "2025-07-18T15:04:15.343Z",
-      "tags": [
-        "security",
-        "deployment-blocker",
-        "validation"
-      ],
+      "tags": ["security", "deployment-blocker", "validation"],
       "blocksDeployment": true,
       "estimatedHours": 6,
       "actualHours": 0,
@@ -287,9 +271,7 @@
           "strategic": 10
         },
         "baseScore": 88,
-        "adjustmentFactors": [
-          "Deployment Blocker (×1.5)"
-        ],
+        "adjustmentFactors": ["Deployment Blocker (×1.5)"],
         "finalScore": 100,
         "calculatedPriority": "P0"
       },
@@ -316,11 +298,7 @@
       "status": "open",
       "createdAt": "2025-07-18T15:04:15.343Z",
       "updatedAt": "2025-07-18T15:04:15.343Z",
-      "tags": [
-        "security",
-        "api",
-        "validation"
-      ],
+      "tags": ["security", "api", "validation"],
       "blocksDeployment": false,
       "estimatedHours": 16,
       "actualHours": 0,
@@ -390,11 +368,7 @@
       "status": "open",
       "createdAt": "2025-07-18T15:04:15.343Z",
       "updatedAt": "2025-07-18T15:04:15.343Z",
-      "tags": [
-        "security",
-        "api",
-        "validation"
-      ],
+      "tags": ["security", "api", "validation"],
       "blocksDeployment": false,
       "estimatedHours": 16,
       "actualHours": 0,
@@ -464,11 +438,7 @@
       "status": "open",
       "createdAt": "2025-07-18T15:04:15.343Z",
       "updatedAt": "2025-07-18T15:04:15.343Z",
-      "tags": [
-        "security",
-        "validation",
-        "auth"
-      ],
+      "tags": ["security", "validation", "auth"],
       "blocksDeployment": false,
       "estimatedHours": 3,
       "actualHours": 0,
@@ -538,11 +508,7 @@
       "status": "open",
       "createdAt": "2025-07-18T15:04:15.343Z",
       "updatedAt": "2025-07-18T15:04:15.343Z",
-      "tags": [
-        "reliability",
-        "error_handling",
-        "user_experience"
-      ],
+      "tags": ["reliability", "error_handling", "user_experience"],
       "blocksDeployment": false,
       "estimatedHours": 6,
       "actualHours": 0,
@@ -612,11 +578,7 @@
       "status": "open",
       "createdAt": "2025-07-18T15:04:15.343Z",
       "updatedAt": "2025-07-18T15:04:15.343Z",
-      "tags": [
-        "security",
-        "dependencies",
-        "vulnerabilities"
-      ],
+      "tags": ["security", "dependencies", "vulnerabilities"],
       "blocksDeployment": false,
       "estimatedHours": 6,
       "actualHours": 0,
@@ -686,10 +648,7 @@
       "status": "open",
       "createdAt": "2025-07-18T15:04:15.343Z",
       "updatedAt": "2025-07-18T15:04:15.343Z",
-      "tags": [
-        "maintainability",
-        "feature_completeness"
-      ],
+      "tags": ["maintainability", "feature_completeness"],
       "blocksDeployment": false,
       "estimatedHours": 3,
       "actualHours": 0,
@@ -759,11 +718,7 @@
       "status": "open",
       "createdAt": "2025-07-18T15:04:15.343Z",
       "updatedAt": "2025-07-18T15:04:15.343Z",
-      "tags": [
-        "performance",
-        "ui",
-        "optimization"
-      ],
+      "tags": ["performance", "ui", "optimization"],
       "blocksDeployment": false,
       "estimatedHours": 2,
       "actualHours": 0,
@@ -833,11 +788,7 @@
       "status": "open",
       "createdAt": "2025-07-18T15:04:15.343Z",
       "updatedAt": "2025-07-18T15:04:15.343Z",
-      "tags": [
-        "performance",
-        "bundle_size",
-        "optimization"
-      ],
+      "tags": ["performance", "bundle_size", "optimization"],
       "blocksDeployment": false,
       "estimatedHours": 1,
       "actualHours": 0,
@@ -907,20 +858,11 @@
       "status": "open",
       "createdAt": "2025-07-18T15:04:15.343Z",
       "updatedAt": "2025-07-18T15:04:15.343Z",
-      "tags": [
-        "performance",
-        "validation",
-        "optimization"
-      ],
+      "tags": ["performance", "validation", "optimization"],
       "blocksDeployment": false,
       "estimatedHours": 4,
       "actualHours": 0,
-      "successCriteria": [
-        "Implement caching",
-        "Add performance monitoring",
-        "Optimize algorithms",
-        "Add benchmarks"
-      ],
+      "successCriteria": ["Implement caching", "Add performance monitoring", "Optimize algorithms", "Add benchmarks"],
       "remediation": {
         "approach": "Implement caching and optimization",
         "testingRequired": true,
@@ -981,11 +923,7 @@
       "status": "open",
       "createdAt": "2025-07-18T15:04:15.343Z",
       "updatedAt": "2025-07-18T15:04:15.343Z",
-      "tags": [
-        "reliability",
-        "websocket",
-        "analytics"
-      ],
+      "tags": ["reliability", "websocket", "analytics"],
       "blocksDeployment": false,
       "estimatedHours": 2,
       "actualHours": 0,
@@ -1055,10 +993,7 @@
       "status": "open",
       "createdAt": "2025-07-18T15:04:15.343Z",
       "updatedAt": "2025-07-18T15:04:15.343Z",
-      "tags": [
-        "type_safety",
-        "developer_experience"
-      ],
+      "tags": ["type_safety", "developer_experience"],
       "blocksDeployment": false,
       "estimatedHours": 16,
       "actualHours": 0,
@@ -1128,10 +1063,7 @@
       "status": "open",
       "createdAt": "2025-07-18T15:04:15.343Z",
       "updatedAt": "2025-07-18T15:04:15.343Z",
-      "tags": [
-        "type_safety",
-        "components"
-      ],
+      "tags": ["type_safety", "components"],
       "blocksDeployment": false,
       "estimatedHours": 16,
       "actualHours": 0,
@@ -1201,11 +1133,7 @@
       "status": "open",
       "createdAt": "2025-07-18T15:04:15.343Z",
       "updatedAt": "2025-07-18T15:04:15.343Z",
-      "tags": [
-        "reliability",
-        "database",
-        "migrations"
-      ],
+      "tags": ["reliability", "database", "migrations"],
       "blocksDeployment": false,
       "estimatedHours": 6,
       "actualHours": 0,
@@ -1275,11 +1203,7 @@
       "status": "open",
       "createdAt": "2025-07-18T15:04:15.343Z",
       "updatedAt": "2025-07-18T15:04:15.343Z",
-      "tags": [
-        "reliability",
-        "database",
-        "startup"
-      ],
+      "tags": ["reliability", "database", "startup"],
       "blocksDeployment": false,
       "estimatedHours": 6,
       "actualHours": 0,
@@ -1349,11 +1273,7 @@
       "status": "open",
       "createdAt": "2025-07-18T15:04:15.343Z",
       "updatedAt": "2025-07-18T15:04:15.343Z",
-      "tags": [
-        "maintainability",
-        "complexity",
-        "refactoring"
-      ],
+      "tags": ["maintainability", "complexity", "refactoring"],
       "blocksDeployment": false,
       "estimatedHours": 32,
       "actualHours": 0,
@@ -1423,11 +1343,7 @@
       "status": "open",
       "createdAt": "2025-07-18T15:04:15.343Z",
       "updatedAt": "2025-07-18T15:04:15.343Z",
-      "tags": [
-        "maintainability",
-        "architecture",
-        "refactoring"
-      ],
+      "tags": ["maintainability", "architecture", "refactoring"],
       "blocksDeployment": false,
       "estimatedHours": 32,
       "actualHours": 0,
@@ -1497,11 +1413,7 @@
       "status": "open",
       "createdAt": "2025-07-18T15:04:15.343Z",
       "updatedAt": "2025-07-18T15:04:15.343Z",
-      "tags": [
-        "maintainability",
-        "code_standards",
-        "tooling"
-      ],
+      "tags": ["maintainability", "code_standards", "tooling"],
       "blocksDeployment": false,
       "estimatedHours": 4,
       "actualHours": 0,
@@ -1571,11 +1483,7 @@
       "status": "open",
       "createdAt": "2025-07-18T15:04:15.343Z",
       "updatedAt": "2025-07-18T15:04:15.343Z",
-      "tags": [
-        "developer_experience",
-        "build",
-        "tooling"
-      ],
+      "tags": ["developer_experience", "build", "tooling"],
       "blocksDeployment": false,
       "estimatedHours": 3,
       "actualHours": 0,
@@ -1645,11 +1553,7 @@
       "status": "open",
       "createdAt": "2025-07-18T15:04:15.343Z",
       "updatedAt": "2025-07-18T15:04:15.343Z",
-      "tags": [
-        "maintainability",
-        "testing",
-        "quality"
-      ],
+      "tags": ["maintainability", "testing", "quality"],
       "blocksDeployment": false,
       "estimatedHours": 40,
       "actualHours": 0,
@@ -1719,11 +1623,7 @@
       "status": "open",
       "createdAt": "2025-07-18T15:04:15.343Z",
       "updatedAt": "2025-07-18T15:04:15.343Z",
-      "tags": [
-        "performance",
-        "memory",
-        "stability"
-      ],
+      "tags": ["performance", "memory", "stability"],
       "blocksDeployment": false,
       "estimatedHours": 12,
       "actualHours": 0,
@@ -1793,11 +1693,7 @@
       "status": "open",
       "createdAt": "2025-07-18T15:04:15.343Z",
       "updatedAt": "2025-07-18T15:04:15.343Z",
-      "tags": [
-        "developer_experience",
-        "build",
-        "tooling"
-      ],
+      "tags": ["developer_experience", "build", "tooling"],
       "blocksDeployment": false,
       "estimatedHours": 16,
       "actualHours": 0,

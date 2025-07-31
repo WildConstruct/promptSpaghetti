@@ -3,7 +3,7 @@
 **Task**: E18-1753114562016-FA48C0 - Create architecture decision records  
 **Epic**: 18 - Technical Debt & Refactoring  
 **Author**: Claude Code  
-**Date**: 2025-07-22  
+**Date**: 2025-07-22
 
 ## Overview
 
@@ -79,6 +79,7 @@ Chosen option: "[Option X]", because [justification].
 ## Context and Problem Statement
 
 The PromptScape system consists of multiple interconnected components:
+
 - React frontend client
 - Node.js API server
 - Shared core library
@@ -189,6 +190,7 @@ packages:
 ## Context and Problem Statement
 
 The PromptScape system handles complex graph data structures that flow between:
+
 - Frontend UI components
 - API endpoints
 - Runtime execution engine
@@ -271,8 +273,8 @@ export const GraphNodeSchema = z.object({
   params: z.record(z.any()),
   position: z.object({
     x: z.number(),
-    y: z.number()
-  })
+    y: z.number(),
+  }),
 });
 
 export const GraphSchema = z.object({
@@ -280,8 +282,8 @@ export const GraphSchema = z.object({
   edges: z.array(GraphEdgeSchema),
   meta: z.object({
     version: z.string(),
-    seed: z.number().optional()
-  })
+    seed: z.number().optional(),
+  }),
 });
 
 // Automatic type inference
@@ -319,6 +321,7 @@ export function validateGraph(data: unknown): Graph {
 ## Context and Problem Statement
 
 The core of PromptScape is a visual node editor where users can:
+
 - Drag and drop nodes from a palette
 - Connect nodes with edges
 - Select and configure individual nodes
@@ -408,7 +411,7 @@ const NodeTypes = {
 // Graph editor component
 function GraphEditor() {
   const { nodes, edges, onNodesChange, onEdgesChange } = useGraphStore();
-  
+
   return (
     <ReactFlow
       nodes={nodes}
@@ -451,6 +454,7 @@ function GraphEditor() {
 ## Context and Problem Statement
 
 The PromptScape API server needs to:
+
 - Execute graph operations quickly (target: <100ms for typical graphs)
 - Handle concurrent requests efficiently
 - Provide preview, export, and health check endpoints
@@ -534,9 +538,9 @@ const server = fastify({
   ajv: {
     customOptions: {
       strict: false,
-      coerceTypes: true
-    }
-  }
+      coerceTypes: true,
+    },
+  },
 });
 
 // Type-safe route handlers
@@ -547,22 +551,26 @@ interface PreviewRequest {
   };
 }
 
-server.post<PreviewRequest>('/preview', {
-  schema: {
-    body: {
-      type: 'object',
-      required: ['graph'],
-      properties: {
-        graph: GraphSchema,
-        seeds: { type: 'array', items: { type: 'number' } }
-      }
-    }
+server.post<PreviewRequest>(
+  '/preview',
+  {
+    schema: {
+      body: {
+        type: 'object',
+        required: ['graph'],
+        properties: {
+          graph: GraphSchema,
+          seeds: { type: 'array', items: { type: 'number' } },
+        },
+      },
+    },
+  },
+  async (request, reply) => {
+    const { graph, seeds = [42] } = request.body;
+    const results = await executeGraph(graph, seeds);
+    return { results };
   }
-}, async (request, reply) => {
-  const { graph, seeds = [42] } = request.body;
-  const results = await executeGraph(graph, seeds);
-  return { results };
-});
+);
 ```
 
 ## Performance Characteristics
@@ -598,6 +606,7 @@ server.post<PreviewRequest>('/preview', {
 ## Context and Problem Statement
 
 The React frontend needs to manage complex state including:
+
 - Graph nodes and edges
 - UI state (selected nodes, viewport position)
 - Application settings and preferences
@@ -681,7 +690,7 @@ interface GraphState {
   edges: Edge[];
   selectedNodes: string[];
   viewport: { x: number; y: number; zoom: number };
-  
+
   // Actions
   addNode: (node: Node) => void;
   removeNode: (id: string) => void;
@@ -695,36 +704,37 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   edges: [],
   selectedNodes: [],
   viewport: { x: 0, y: 0, zoom: 1 },
-  
-  addNode: (node) => set((state) => ({
-    nodes: [...state.nodes, node]
-  })),
-  
-  removeNode: (id) => set((state) => ({
-    nodes: state.nodes.filter(n => n.id !== id),
-    edges: state.edges.filter(e => e.source !== id && e.target !== id)
-  })),
-  
-  updateNode: (id, updates) => set((state) => ({
-    nodes: state.nodes.map(n => n.id === id ? { ...n, ...updates } : n)
-  })),
-  
-  selectNodes: (ids) => set({ selectedNodes: ids }),
-  
-  updateViewport: (viewport) => set({ viewport })
+
+  addNode: node =>
+    set(state => ({
+      nodes: [...state.nodes, node],
+    })),
+
+  removeNode: id =>
+    set(state => ({
+      nodes: state.nodes.filter(n => n.id !== id),
+      edges: state.edges.filter(e => e.source !== id && e.target !== id),
+    })),
+
+  updateNode: (id, updates) =>
+    set(state => ({
+      nodes: state.nodes.map(n => (n.id === id ? { ...n, ...updates } : n)),
+    })),
+
+  selectNodes: ids => set({ selectedNodes: ids }),
+
+  updateViewport: viewport => set({ viewport }),
 }));
 
 // Component usage
 function GraphEditor() {
-  const { nodes, edges, addNode, selectNodes } = useGraphStore(
-    state => ({
-      nodes: state.nodes,
-      edges: state.edges,
-      addNode: state.addNode,
-      selectNodes: state.selectNodes
-    })
-  );
-  
+  const { nodes, edges, addNode, selectNodes } = useGraphStore(state => ({
+    nodes: state.nodes,
+    edges: state.edges,
+    addNode: state.addNode,
+    selectNodes: state.selectNodes,
+  }));
+
   // Component logic...
 }
 ```
@@ -760,6 +770,7 @@ function GraphEditor() {
 ## Context and Problem Statement
 
 The PromptScape system executes graphs containing random elements (WeightedChoice nodes). Users need:
+
 - Identical outputs when re-running the same graph with the same seed
 - Ability to reproduce specific generations for debugging
 - Consistent behavior across different environments (browser, Node.js, CLI)
@@ -839,27 +850,27 @@ import seedrandom from 'seedrandom';
 
 export class ExecutionContext {
   private prng: seedrandom.PRNG;
-  
+
   constructor(public seed: number = Date.now()) {
     this.prng = seedrandom(seed.toString());
   }
-  
+
   // Generate random number [0, 1)
   random(): number {
     return this.prng();
   }
-  
+
   // Generate random integer [0, max)
   randomInt(max: number): number {
     return Math.floor(this.random() * max);
   }
-  
+
   // Generate sub-context with deterministic seed
   createSubContext(nodeId: string): ExecutionContext {
     const subSeed = this.hashSeed(this.seed, nodeId);
     return new ExecutionContext(subSeed);
   }
-  
+
   private hashSeed(seed: number, nodeId: string): number {
     // Simple hash function for deterministic sub-seeds
     let hash = seed;
@@ -875,7 +886,7 @@ export class WeightedChoiceNode extends RuntimeNode {
   async run(context: ExecutionContext): Promise<string> {
     const totalWeight = this.options.reduce((sum, opt) => sum + opt.weight, 0);
     const randomValue = context.random() * totalWeight;
-    
+
     let currentWeight = 0;
     for (const option of this.options) {
       currentWeight += option.weight;
@@ -883,7 +894,7 @@ export class WeightedChoiceNode extends RuntimeNode {
         return option.value;
       }
     }
-    
+
     return this.options[this.options.length - 1].value;
   }
 }
@@ -896,32 +907,32 @@ describe('Deterministic Execution', () => {
   test('identical outputs with same seed', () => {
     const graph = createTestGraph();
     const seed = 12345;
-    
+
     const result1 = executeGraph(graph, seed);
     const result2 = executeGraph(graph, seed);
-    
+
     expect(result1).toEqual(result2);
   });
-  
+
   test('different outputs with different seeds', () => {
     const graph = createTestGraph();
-    
+
     const result1 = executeGraph(graph, 12345);
     const result2 = executeGraph(graph, 54321);
-    
+
     expect(result1).not.toEqual(result2);
   });
-  
+
   test('cross-platform consistency', async () => {
     const graph = createTestGraph();
     const seed = 12345;
-    
+
     // Test in browser environment
     const browserResult = await executeBrowser(graph, seed);
-    
+
     // Test in Node.js environment
     const nodeResult = await executeNode(graph, seed);
-    
+
     expect(browserResult).toEqual(nodeResult);
   });
 });
@@ -936,6 +947,7 @@ For complex graphs with multiple random nodes, we use deterministic sub-seeding:
 3. **Execution Seeds**: Hash of node seed + execution step for stateful nodes
 
 This ensures that:
+
 - Adding/removing nodes doesn't affect other nodes' randomness
 - Reordering nodes doesn't change their outputs
 - Each node's randomness is isolated and reproducible
@@ -956,7 +968,7 @@ This ensures that:
 
 ---
 
-# ADR-0007: Inline Metadata Storage with _meta Blocks
+# ADR-0007: Inline Metadata Storage with \_meta Blocks
 
 **Date**: 2024-06-26  
 **Status**: Accepted  
@@ -966,12 +978,14 @@ This ensures that:
 ## Context and Problem Statement
 
 Each prompt-visible grammar rule in generator bundles needs associated metadata:
+
 - **Slot**: Semantic category (subject, verb, object, etc.)
 - **Priority**: Generation priority level
 - **Modifiers**: Style modifiers and constraints
 - **Connectors**: How fragments connect to other elements
 
 This metadata is used by:
+
 - Smart Prompt Rewriter for fragment reordering
 - UI components for categorization and display
 - Analytics pipelines for usage tracking
@@ -989,14 +1003,14 @@ We need to decide where to store this metadata to optimize for author experience
 
 ## Considered Options
 
-1. **Inline _meta blocks** - Store metadata directly in grammar rules
+1. **Inline \_meta blocks** - Store metadata directly in grammar rules
 2. **External metadata files** - Separate JSON files per generator
 3. **Central registry** - Store metadata in application code
 4. **Sidecar files** - Parallel file structure with metadata
 
 ## Decision Outcome
 
-Chosen option: "**Inline _meta blocks**", because it provides the best author experience while maintaining performance and simplicity.
+Chosen option: "**Inline \_meta blocks**", because it provides the best author experience while maintaining performance and simplicity.
 
 ### Positive Consequences
 
@@ -1010,11 +1024,11 @@ Chosen option: "**Inline _meta blocks**", because it provides the best author ex
 
 - **File Size**: Slight increase in generator file size (~3-5%)
 - **Syntax Change**: Simple arrays must be wrapped in $values object
-- **Parser Complexity**: Loader must handle _meta blocks correctly
+- **Parser Complexity**: Loader must handle \_meta blocks correctly
 
 ## Pros and Cons of the Options
 
-### Inline _meta Blocks
+### Inline \_meta Blocks
 
 ```jsonc
 "panelArchetype": {
@@ -1033,7 +1047,7 @@ Chosen option: "**Inline _meta blocks**", because it provides the best author ex
 
 ```jsonc
 // metadata.json
-{"panelArchetype": {"slot": "subject", "priority": 10}}
+{ "panelArchetype": { "slot": "subject", "priority": 10 } }
 ```
 
 - Good, because grammar files remain unchanged
@@ -1047,7 +1061,7 @@ Chosen option: "**Inline _meta blocks**", because it provides the best author ex
 ```typescript
 // In application code
 const METADATA_REGISTRY = {
-  "panelArchetype": { "slot": "subject", "priority": 10 }
+  panelArchetype: { slot: 'subject', priority: 10 },
 };
 ```
 
@@ -1104,15 +1118,15 @@ interface GrammarRule {
 function parseGrammarRule(rule: any): ParsedRule {
   // Extract metadata
   const metadata = rule._meta || {};
-  
+
   // Extract values (supporting both old and new formats)
   const values = Array.isArray(rule) ? rule : rule.$values || [];
-  
+
   // Validate metadata
   if (metadata.slot && !isValidSlot(metadata.slot)) {
     throw new ValidationError(`Invalid slot: ${metadata.slot}`);
   }
-  
+
   return { metadata, values, type: inferRuleType(rule) };
 }
 ```
@@ -1122,25 +1136,25 @@ function parseGrammarRule(rule: any): ParsedRule {
 ```typescript
 function validateMetadata(rule: GrammarRule, ruleName: string): ValidationResult {
   const issues: ValidationIssue[] = [];
-  
+
   // Check if prompt-visible rule has metadata
   if (isPromptVisible(rule) && !rule._meta) {
     issues.push({
       type: 'missing_metadata',
       message: `Rule '${ruleName}' is prompt-visible but lacks _meta block`,
-      severity: 'error'
+      severity: 'error',
     });
   }
-  
+
   // Validate slot taxonomy
   if (rule._meta?.slot && !SLOT_TAXONOMY.includes(rule._meta.slot)) {
     issues.push({
       type: 'invalid_slot',
       message: `Unknown slot '${rule._meta.slot}' in rule '${ruleName}'`,
-      severity: 'error'
+      severity: 'error',
     });
   }
-  
+
   return { issues };
 }
 ```
@@ -1148,16 +1162,19 @@ function validateMetadata(rule: GrammarRule, ruleName: string): ValidationResult
 ## Migration Strategy
 
 ### Phase 1: Backwards Compatibility
+
 - Loader supports both old and new formats
 - Existing generators work without modification
-- New generators can use _meta blocks
+- New generators can use \_meta blocks
 
 ### Phase 2: Content Migration
-- Tools to automatically add _meta blocks to existing generators
+
+- Tools to automatically add \_meta blocks to existing generators
 - Bulk migration of high-priority generators
 - Author documentation and training
 
 ### Phase 3: Enforcement
+
 - Linter warnings for missing metadata
 - Eventually require metadata for new generators
 - Deprecate support for metadata-less rules
@@ -1166,11 +1183,11 @@ function validateMetadata(rule: GrammarRule, ruleName: string): ValidationResult
 
 Analysis of existing generators:
 
-| Generator | Original Size | With Metadata | Increase |
-|-----------|---------------|---------------|----------|
-| SciFi Prompts | 45KB | 47KB | 4.4% |
-| Fantasy Characters | 32KB | 33KB | 3.1% |
-| Technical Descriptions | 28KB | 29KB | 3.6% |
+| Generator              | Original Size | With Metadata | Increase |
+| ---------------------- | ------------- | ------------- | -------- |
+| SciFi Prompts          | 45KB          | 47KB          | 4.4%     |
+| Fantasy Characters     | 32KB          | 33KB          | 3.1%     |
+| Technical Descriptions | 28KB          | 29KB          | 3.6%     |
 
 Average increase: 3.7% (acceptable for our use case)
 
@@ -1193,6 +1210,7 @@ Average increase: 3.7% (acceptable for our use case)
 ## Context and Problem Statement
 
 The PromptScape application needs a deployment platform that supports:
+
 - Global CDN distribution for fast loading worldwide
 - Serverless API functions for backend operations
 - Automatic deployments from Git branches
@@ -1284,44 +1302,16 @@ Chosen option: "**Vercel**", because it provides the best combination of perform
 ```yaml
 # vercel.json
 {
-  "builds": [
-    {
-      "src": "client/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    }
-  ],
-  "functions": {
-    "api/preview.ts": {
-      "maxDuration": 30
-    },
-    "api/export.ts": {
-      "maxDuration": 60
-    }
-  },
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/client/$1"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "s-maxage=60, stale-while-revalidate"
-        }
-      ]
-    }
-  ]
+  'builds': [{ 'src': 'client/package.json', 'use': '@vercel/static-build', 'config': { 'distDir': 'dist' } }],
+  'functions': { 'api/preview.ts': { 'maxDuration': 30 }, 'api/export.ts': { 'maxDuration': 60 } },
+  'routes': [{ 'src': '/api/(.*)', 'dest': '/api/$1' }, { 'src': '/(.*)', 'dest': '/client/$1' }],
+  'headers':
+    [
+      {
+        'source': '/api/(.*)',
+        'headers': [{ 'key': 'Cache-Control', 'value': 's-maxage=60, stale-while-revalidate' }],
+      },
+    ],
 }
 ```
 
@@ -1336,27 +1326,22 @@ export default async function handler(req: Request) {
   if (req.method !== 'POST') {
     return new Response('Method not allowed', { status: 405 });
   }
-  
+
   try {
     const { graph, seeds = [42] } = await req.json();
-    
+
     // Validate graph
     const validatedGraph = validateGraph(graph);
-    
+
     // Execute with timeout
     const results = await Promise.race([
       executeGraph(validatedGraph, seeds),
-      new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Timeout')), 25000)
-      )
+      new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 25000)),
     ]);
-    
+
     return Response.json({ results });
   } catch (error) {
-    return Response.json(
-      { error: error.message },
-      { status: 400 }
-    );
+    return Response.json({ error: error.message }, { status: 400 });
   }
 }
 ```
@@ -1364,18 +1349,21 @@ export default async function handler(req: Request) {
 ## Performance Characteristics
 
 ### Global Performance
+
 - **First Contentful Paint**: <1.2s globally (95th percentile)
 - **Time to Interactive**: <2.5s globally (95th percentile)
 - **API Response Time**: <200ms from nearest edge location
 - **Cache Hit Rate**: >95% for static assets
 
 ### Scalability
+
 - **Concurrent Users**: Automatically scales to handle traffic spikes
 - **Function Concurrency**: 1000+ concurrent executions per region
 - **Bandwidth**: Unlimited bandwidth (within reasonable usage)
 - **Storage**: 100GB included for static assets
 
 ### Cost Analysis
+
 ```
 Current Usage (Monthly):
 - Static Hosting: $0 (within free tier)
@@ -1405,27 +1393,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 8
-          
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
           cache: 'pnpm'
-          
+
       - name: Install dependencies
         run: pnpm install
-        
+
       - name: Run tests
         run: pnpm test
-        
+
       - name: Build
         run: pnpm build
-        
+
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
         with:
@@ -1468,21 +1456,22 @@ This document contains the following Architecture Decision Records:
 4. **[ADR-0004: Fastify for High-Performance API Server](#adr-0004-fastify-for-high-performance-api-server)** - Backend framework choice
 5. **[ADR-0005: Zustand for Lightweight State Management](#adr-0005-zustand-for-lightweight-state-management)** - Frontend state management
 6. **[ADR-0006: Deterministic Execution with Seeded Random Number Generation](#adr-0006-deterministic-execution-with-seeded-random-number-generation)** - Reproducible execution strategy
-7. **[ADR-0007: Inline Metadata Storage with _meta Blocks](#adr-0007-inline-metadata-storage-with-_meta-blocks)** - Content metadata storage approach
+7. **[ADR-0007: Inline Metadata Storage with \_meta Blocks](#adr-0007-inline-metadata-storage-with-_meta-blocks)** - Content metadata storage approach
 8. **[ADR-0008: Vercel Platform for Deployment and Hosting](#adr-0008-vercel-platform-for-deployment-and-hosting)** - Deployment and hosting strategy
 
 ## Status Summary
 
-| Status | Count |
-|--------|-------|
-| Accepted | 8 |
-| Proposed | 0 |
-| Deprecated | 0 |
-| Superseded | 0 |
+| Status     | Count |
+| ---------- | ----- |
+| Accepted   | 8     |
+| Proposed   | 0     |
+| Deprecated | 0     |
+| Superseded | 0     |
 
 ## Next Steps
 
 Additional ADRs may be created for:
+
 - Authentication and authorization strategy
 - Testing framework and methodology decisions
 - Performance optimization approaches
@@ -1492,8 +1481,9 @@ Additional ADRs may be created for:
 
 ---
 
-**Document Metadata**  
-- **Created**: 2025-07-22  
-- **Last Updated**: 2025-07-22  
-- **Version**: 1.0  
+**Document Metadata**
+
+- **Created**: 2025-07-22
+- **Last Updated**: 2025-07-22
+- **Version**: 1.0
 - **Status**: Complete

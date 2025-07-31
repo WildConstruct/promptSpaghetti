@@ -31,7 +31,7 @@ export class GraphCRDT {
   constructor(options: CRDTOptions = {}) {
     this.clientId = options.clientId || this.generateClientId();
     this.ydoc = new Y.Doc();
-    
+
     this.nodes = this.ydoc.getMap('nodes');
     this.edges = this.ydoc.getMap('edges');
     this.metadata = this.ydoc.getMap('metadata');
@@ -53,7 +53,7 @@ export class GraphCRDT {
         data: node.data,
         inputs: node.inputs,
         lastModified: new Date().toISOString(),
-        modifiedBy: this.clientId
+        modifiedBy: this.clientId,
       });
 
       this.recordOperation('addNode', { nodeId: node.id, type: node.type });
@@ -72,7 +72,7 @@ export class GraphCRDT {
           ...updates,
           id: nodeId, // Ensure ID doesn't change
           lastModified: new Date().toISOString(),
-          modifiedBy: this.clientId
+          modifiedBy: this.clientId,
         };
         this.nodes.set(nodeId, updated);
         this.recordOperation('updateNode', { nodeId, updates });
@@ -86,7 +86,7 @@ export class GraphCRDT {
   removeNode(nodeId: string): void {
     this.ydoc.transact(() => {
       this.nodes.delete(nodeId);
-      
+
       // Remove edges connected to this node
       const edgesToRemove: string[] = [];
       this.edges.forEach((edge, edgeId) => {
@@ -94,9 +94,9 @@ export class GraphCRDT {
           edgesToRemove.push(edgeId);
         }
       });
-      
+
       edgesToRemove.forEach(edgeId => this.edges.delete(edgeId));
-      
+
       this.recordOperation('removeNode', { nodeId, removedEdges: edgesToRemove });
     });
   }
@@ -118,7 +118,7 @@ export class GraphCRDT {
         sourceHandle: edge.sourceHandle,
         targetHandle: edge.targetHandle,
         lastModified: new Date().toISOString(),
-        modifiedBy: this.clientId
+        modifiedBy: this.clientId,
       });
 
       this.recordOperation('addEdge', { edgeId: edge.id, source: edge.source, target: edge.target });
@@ -146,7 +146,7 @@ export class GraphCRDT {
         ...current,
         ...metadata,
         modified: new Date().toISOString(),
-        modifiedBy: this.clientId
+        modifiedBy: this.clientId,
       };
       this.metadata.set('current', updated);
       this.recordOperation('updateMetadata', { metadata });
@@ -167,7 +167,7 @@ export class GraphCRDT {
         type: nodeData.type,
         position: nodeData.position,
         data: nodeData.data,
-        inputs: nodeData.inputs
+        inputs: nodeData.inputs,
       });
     });
 
@@ -178,7 +178,7 @@ export class GraphCRDT {
         source: edgeData.source,
         target: edgeData.target,
         sourceHandle: edgeData.sourceHandle,
-        targetHandle: edgeData.targetHandle
+        targetHandle: edgeData.targetHandle,
       });
     });
 
@@ -194,9 +194,9 @@ export class GraphCRDT {
         created: new Date(metadataData.created || Date.now()),
         modified: new Date(metadataData.modified || Date.now()),
         author: metadataData.author,
-        platform: metadataData.platform
+        platform: metadataData.platform,
       },
-      seed: metadataData.seed
+      seed: metadataData.seed,
     };
   }
 
@@ -215,7 +215,7 @@ export class GraphCRDT {
         this.nodes.set(nodeId, {
           ...node,
           lastModified: new Date().toISOString(),
-          modifiedBy: this.clientId
+          modifiedBy: this.clientId,
         });
       });
 
@@ -224,7 +224,7 @@ export class GraphCRDT {
         this.edges.set(edgeId, {
           ...edge,
           lastModified: new Date().toISOString(),
-          modifiedBy: this.clientId
+          modifiedBy: this.clientId,
         });
       });
 
@@ -234,7 +234,7 @@ export class GraphCRDT {
         id: graph.id,
         seed: graph.seed,
         modified: new Date().toISOString(),
-        modifiedBy: this.clientId
+        modifiedBy: this.clientId,
       });
 
       this.recordOperation('loadGraph', { graphId: graph.id, nodeCount: graph.nodes.size });
@@ -256,7 +256,7 @@ export class GraphCRDT {
       connected: false, // Will be updated by sync provider
       lastSync: new Date(),
       pendingOperations: this.operationHistory.length,
-      conflictCount: 0 // Will be tracked by conflict resolution
+      conflictCount: 0, // Will be tracked by conflict resolution
     };
   }
 
@@ -330,7 +330,7 @@ export class GraphCRDT {
     const observer = (event: Y.YMapEvent<any>, _transaction: Y.Transaction) => {
       // Convert single event to array format for compatibility
       const events = [event];
-      
+
       // Notify all change listeners
       this.changeListeners.forEach(callback => {
         try {
@@ -347,19 +347,20 @@ export class GraphCRDT {
   }
 
   private recordOperation(type: string, data: any): void {
-    this.operationHistory.push([{
-      type,
-      data,
-      timestamp: new Date().toISOString(),
-      clientId: this.clientId,
-      id: this.generateOperationId()
-    }]);
+    this.operationHistory.push([
+      {
+        type,
+        data,
+        timestamp: new Date().toISOString(),
+        clientId: this.clientId,
+        id: this.generateOperationId(),
+      },
+    ]);
   }
 
   private generateClientId(): string {
     return `client_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
-
 
   private generateGraphId(): string {
     return `graph_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -390,7 +391,7 @@ export function mergeGraphs(graphs: GraphDocument[]): GraphDocument {
   }
 
   const crdt = new GraphCRDT();
-  
+
   // Apply each graph as an update
   graphs.forEach(graph => {
     const tempCrdt = new GraphCRDT();
@@ -402,6 +403,6 @@ export function mergeGraphs(graphs: GraphDocument[]): GraphDocument {
 
   const merged = crdt.toGraphDocument();
   crdt.destroy();
-  
+
   return merged;
 }

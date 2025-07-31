@@ -7,7 +7,7 @@ export {
   BUILT_IN_HELP_CONTENT,
   type HelpContent,
   type ContextualTooltipProps,
-  type HelpSystemProps
+  type HelpSystemProps,
 } from './ContextualHelpSystem';
 
 export {
@@ -18,7 +18,7 @@ export {
   useOnboardingHelp,
   HelpSystemSettings,
   type HelpContextState,
-  type HelpProviderProps
+  type HelpProviderProps,
 } from './HelpContentManager';
 
 export {
@@ -30,7 +30,7 @@ export {
   OnboardingOverlay,
   type HelpfulInputProps,
   type HelpfulButtonProps,
-  type HelpfulSectionProps
+  type HelpfulSectionProps,
 } from './HelpIntegration';
 
 // Default export for easy importing

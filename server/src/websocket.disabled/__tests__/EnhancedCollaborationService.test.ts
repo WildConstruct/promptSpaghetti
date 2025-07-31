@@ -21,7 +21,7 @@ class MockSynchronizationManager extends EventEmitter {
     checksum: 'mock-checksum',
     nodes: new Map(),
     edges: new Map(),
-    metadata: {}
+    metadata: {},
   }));
   createStateUpdate = jest.fn<unknown[], unknown>();
   applyStateUpdate = jest.fn<unknown[], unknown>();
@@ -35,7 +35,7 @@ class MockConflictResolver extends EventEmitter {
     resolved: 0,
     escalated: 0,
     autoResolved: 0,
-    avgResolutionTime: 0
+    avgResolutionTime: 0,
   }));
 }
 
@@ -57,7 +57,7 @@ class MockWebSocketServer extends EventEmitter {
   conflictResolver = new MockConflictResolver();
   presenceManager = new MockPresenceManager();
   connectionManager = new MockConnectionManager();
-  
+
   initializeDocument = jest.fn<unknown[], unknown>();
   broadcastToDocument = jest.fn<unknown[], unknown>();
 }
@@ -79,13 +79,10 @@ describe('EnhancedCollaborationService', () => {
       analyticsEnabled: true,
       enableAdvancedConflictResolution: true,
       enableSmartMerging: true,
-      enableOperationalTransform: false
+      enableOperationalTransform: false,
     };
 
-    collaborationService = new EnhancedCollaborationService(
-      mockWsServer as any,
-      config
-    );
+    collaborationService = new EnhancedCollaborationService(mockWsServer as any, config);
   });
 
   afterEach(() => {
@@ -94,11 +91,7 @@ describe('EnhancedCollaborationService', () => {
 
   describe('Session Management', () => {
     test('should create a new collaboration session', () => {
-      const session = collaborationService.createSession(
-        'doc-123',
-        'user-456',
-        'Test Session'
-      );
+      const session = collaborationService.createSession('doc-123', 'user-456', 'Test Session');
 
       expect(session).toBeDefined();
       expect(session.documentId).toBe('doc-123');
@@ -110,11 +103,7 @@ describe('EnhancedCollaborationService', () => {
     });
 
     test('should join an existing session', () => {
-      const session = collaborationService.createSession(
-        'doc-123',
-        'user-456',
-        'Test Session'
-      );
+      const session = collaborationService.createSession('doc-123', 'user-456', 'Test Session');
 
       const participant = collaborationService.joinSession(
         session.sessionId,
@@ -136,12 +125,7 @@ describe('EnhancedCollaborationService', () => {
 
     test('should not allow joining when session is full', () => {
       // Create session with max 2 participants
-      const session = collaborationService.createSession(
-        'doc-123',
-        'user-456',
-        'Test Session',
-        { maxParticipants: 2 }
-      );
+      const session = collaborationService.createSession('doc-123', 'user-456', 'Test Session', { maxParticipants: 2 });
 
       // Join as second participant
       const participant1 = collaborationService.joinSession(
@@ -165,17 +149,9 @@ describe('EnhancedCollaborationService', () => {
     });
 
     test('should leave a session successfully', () => {
-      const session = collaborationService.createSession(
-        'doc-123',
-        'user-456',
-        'Test Session'
-      );
+      const session = collaborationService.createSession('doc-123', 'user-456', 'Test Session');
 
-      collaborationService.joinSession(
-        session.sessionId,
-        'user-789',
-        'John Doe'
-      );
+      collaborationService.joinSession(session.sessionId, 'user-789', 'John Doe');
 
       const success = collaborationService.leaveSession(session.sessionId, 'user-789');
       expect(success).toBe(true);
@@ -196,8 +172,8 @@ describe('EnhancedCollaborationService', () => {
     });
 
     test('should get user sessions', () => {
-            const session2 = collaborationService.createSession('doc-456', 'user-2', 'Session 2');
-      
+      const session2 = collaborationService.createSession('doc-456', 'user-2', 'Session 2');
+
       collaborationService.joinSession(session2.sessionId, 'user-1', 'User 1');
 
       const userSessions = collaborationService.getUserSessions('user-1');
@@ -240,75 +216,34 @@ describe('EnhancedCollaborationService', () => {
 
     test('should not allow locking already locked element', () => {
       // First user locks the element
-      const lock1 = collaborationService.lockElement(
-        session.sessionId,
-        participantId,
-        'node-123',
-        'node'
-      );
+      const lock1 = collaborationService.lockElement(session.sessionId, participantId, 'node-123', 'node');
       expect(lock1).toBeDefined();
 
       // Second user tries to lock same element
-      const participant2 = collaborationService.joinSession(
-        session.sessionId,
-        'user-other',
-        'Other User'
-      );
+      const participant2 = collaborationService.joinSession(session.sessionId, 'user-other', 'Other User');
 
-      const lock2 = collaborationService.lockElement(
-        session.sessionId,
-        participant2!.userId,
-        'node-123',
-        'node'
-      );
+      const lock2 = collaborationService.lockElement(session.sessionId, participant2!.userId, 'node-123', 'node');
       expect(lock2).toBeNull();
     });
 
     test('should unlock an element', () => {
-      const lock = collaborationService.lockElement(
-        session.sessionId,
-        participantId,
-        'node-123',
-        'node'
-      );
+      const lock = collaborationService.lockElement(session.sessionId, participantId, 'node-123', 'node');
 
-      const success = collaborationService.unlockElement(
-        session.sessionId,
-        participantId,
-        lock!.lockId
-      );
+      const success = collaborationService.unlockElement(session.sessionId, participantId, lock!.lockId);
       expect(success).toBe(true);
     });
 
     test('should not allow unlocking someone elses lock', () => {
-      const lock = collaborationService.lockElement(
-        session.sessionId,
-        participantId,
-        'node-123',
-        'node'
-      );
+      const lock = collaborationService.lockElement(session.sessionId, participantId, 'node-123', 'node');
 
-      const participant2 = collaborationService.joinSession(
-        session.sessionId,
-        'user-other',
-        'Other User'
-      );
+      const participant2 = collaborationService.joinSession(session.sessionId, 'user-other', 'Other User');
 
-      const success = collaborationService.unlockElement(
-        session.sessionId,
-        participant2!.userId,
-        lock!.lockId
-      );
+      const success = collaborationService.unlockElement(session.sessionId, participant2!.userId, lock!.lockId);
       expect(success).toBe(false);
     });
 
     test('should allow owner to unlock any element', () => {
-      const lock = collaborationService.lockElement(
-        session.sessionId,
-        participantId,
-        'node-123',
-        'node'
-      );
+      const lock = collaborationService.lockElement(session.sessionId, participantId, 'node-123', 'node');
 
       const success = collaborationService.unlockElement(
         session.sessionId,
@@ -354,20 +289,12 @@ describe('EnhancedCollaborationService', () => {
     test('should limit number of snapshots per session', () => {
       // Create maximum number of snapshots
       for (let i = 0; i < config.maxSnapshotsPerSession; i++) {
-        const snapshot = collaborationService.createSnapshot(
-          session.sessionId,
-          participantId,
-          `Snapshot ${i}`
-        );
+        const snapshot = collaborationService.createSnapshot(session.sessionId, participantId, `Snapshot ${i}`);
         expect(snapshot).toBeDefined();
       }
 
       // Creating one more should remove the oldest
-      const extraSnapshot = collaborationService.createSnapshot(
-        session.sessionId,
-        participantId,
-        'Extra Snapshot'
-      );
+      const extraSnapshot = collaborationService.createSnapshot(session.sessionId, participantId, 'Extra Snapshot');
       expect(extraSnapshot).toBeDefined();
 
       const updatedSession = collaborationService.getSession(session.sessionId);
@@ -376,17 +303,9 @@ describe('EnhancedCollaborationService', () => {
     });
 
     test('should restore from snapshot', () => {
-      const snapshot = collaborationService.createSnapshot(
-        session.sessionId,
-        participantId,
-        'Test Snapshot'
-      );
+      const snapshot = collaborationService.createSnapshot(session.sessionId, participantId, 'Test Snapshot');
 
-      const success = collaborationService.restoreSnapshot(
-        session.sessionId,
-        participantId,
-        snapshot!.snapshotId
-      );
+      const success = collaborationService.restoreSnapshot(session.sessionId, participantId, snapshot!.snapshotId);
 
       expect(success).toBe(true);
     });
@@ -400,11 +319,7 @@ describe('EnhancedCollaborationService', () => {
         'viewer'
       );
 
-      const snapshot = collaborationService.createSnapshot(
-        session.sessionId,
-        viewer!.userId,
-        'Viewer Snapshot'
-      );
+      const snapshot = collaborationService.createSnapshot(session.sessionId, viewer!.userId, 'Viewer Snapshot');
 
       expect(snapshot).toBeNull();
     });
@@ -413,13 +328,13 @@ describe('EnhancedCollaborationService', () => {
   describe('Analytics', () => {
     test('should track session analytics', () => {
       const session = collaborationService.createSession('doc-123', 'user-owner', 'Test Session');
-      
+
       // Join users
       collaborationService.joinSession(session.sessionId, 'user-1', 'User 1');
       collaborationService.joinSession(session.sessionId, 'user-2', 'User 2');
 
       const analytics = collaborationService.getSessionAnalytics(session.sessionId);
-      
+
       expect(analytics).toBeDefined();
       expect(analytics?.peakConcurrentUsers).toBe(3); // owner + 2 joiners
       expect(analytics?.totalEdits).toBe(0); // No edits yet
@@ -428,7 +343,7 @@ describe('EnhancedCollaborationService', () => {
 
     test('should update analytics on graph updates', () => {
       const session = collaborationService.createSession('doc-123', 'user-owner', 'Test Session');
-      
+
       // Simulate graph update event
       (collaborationService as any).handleGraphUpdate(
         'doc-123',
@@ -444,18 +359,14 @@ describe('EnhancedCollaborationService', () => {
   describe('Session Settings', () => {
     test('should update session settings', () => {
       const session = collaborationService.createSession('doc-123', 'user-owner', 'Test Session');
-      
-      const success = collaborationService.updateSessionSettings(
-        session.sessionId,
-        'user-owner',
-        {
-          enableComments: false,
-          maxParticipants: 5
-        }
-      );
+
+      const success = collaborationService.updateSessionSettings(session.sessionId, 'user-owner', {
+        enableComments: false,
+        maxParticipants: 5,
+      });
 
       expect(success).toBe(true);
-      
+
       const updatedSession = collaborationService.getSession(session.sessionId);
       expect(updatedSession?.settings.enableComments).toBe(false);
       expect(updatedSession?.settings.maxParticipants).toBe(5);
@@ -463,25 +374,19 @@ describe('EnhancedCollaborationService', () => {
 
     test('should not allow non-owner to modify settings', () => {
       const session = collaborationService.createSession('doc-123', 'user-owner', 'Test Session');
-      const participant = collaborationService.joinSession(
-        session.sessionId,
-        'user-editor',
-        'Editor User'
-      );
+      const participant = collaborationService.joinSession(session.sessionId, 'user-editor', 'Editor User');
 
-      const success = collaborationService.updateSessionSettings(
-        session.sessionId,
-        participant!.userId,
-        { enableComments: false }
-      );
+      const success = collaborationService.updateSessionSettings(session.sessionId, participant!.userId, {
+        enableComments: false,
+      });
 
       expect(success).toBe(false);
     });
   });
 
   describe('Event Handling', () => {
-    test('should emit session created event', (done) => {
-      collaborationService.on('session_created', (session) => {
+    test('should emit session created event', done => {
+      collaborationService.on('session_created', session => {
         expect(session.documentId).toBe('doc-123');
         expect(session.title).toBe('Test Session');
         done();
@@ -490,7 +395,7 @@ describe('EnhancedCollaborationService', () => {
       collaborationService.createSession('doc-123', 'user-owner', 'Test Session');
     });
 
-    test('should emit user joined event', (done) => {
+    test('should emit user joined event', done => {
       const session = collaborationService.createSession('doc-123', 'user-owner', 'Test Session');
 
       collaborationService.on('user_joined', (sessionId, participant) => {
@@ -502,7 +407,7 @@ describe('EnhancedCollaborationService', () => {
       collaborationService.joinSession(session.sessionId, 'user-editor', 'Editor');
     });
 
-    test('should emit element locked event', (done) => {
+    test('should emit element locked event', done => {
       const session = collaborationService.createSession('doc-123', 'user-owner', 'Test Session');
 
       collaborationService.on('element_locked', (sessionId, lock) => {
@@ -518,7 +423,7 @@ describe('EnhancedCollaborationService', () => {
   describe('Session Lifecycle', () => {
     test('should end a session successfully', () => {
       const session = collaborationService.createSession('doc-123', 'user-owner', 'Test Session');
-      
+
       const success = collaborationService.endSession(session.sessionId, 'user-owner');
       expect(success).toBe(true);
 
@@ -528,11 +433,7 @@ describe('EnhancedCollaborationService', () => {
 
     test('should not allow non-owner to end session', () => {
       const session = collaborationService.createSession('doc-123', 'user-owner', 'Test Session');
-      const participant = collaborationService.joinSession(
-        session.sessionId,
-        'user-editor',
-        'Editor User'
-      );
+      const participant = collaborationService.joinSession(session.sessionId, 'user-editor', 'Editor User');
 
       const success = collaborationService.endSession(session.sessionId, participant!.userId);
       expect(success).toBe(false);
@@ -542,7 +443,7 @@ describe('EnhancedCollaborationService', () => {
   describe('Permissions', () => {
     test('should assign correct permissions based on role', () => {
       const session = collaborationService.createSession('doc-123', 'user-owner', 'Test Session');
-      
+
       const editor = collaborationService.joinSession(
         session.sessionId,
         'user-editor',

@@ -22,10 +22,10 @@ export class ConfigurationManager {
    */
   registerSchema(adaptorId: string, schema: z.ZodSchema, metadata?: SchemaMetadata): void {
     this.schemas.set(adaptorId, schema);
-    
+
     this.logger.info('Configuration schema registered', {
       adaptorId,
-      hasMetadata: !!metadata
+      hasMetadata: !!metadata,
     });
   }
 
@@ -46,11 +46,10 @@ export class ConfigurationManager {
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
         const errorDetails = error instanceof Error && 'errors' in error ? (error as any).errors : undefined;
-        throw new ConfigurationError(
-          `Invalid configuration for ${adaptorId}: ${errorMessage}`,
-          'VALIDATION_ERROR',
-          { adaptorId, validationErrors: errorDetails }
-        );
+        throw new ConfigurationError(`Invalid configuration for ${adaptorId}: ${errorMessage}`, 'VALIDATION_ERROR', {
+          adaptorId,
+          validationErrors: errorDetails,
+        });
       }
     }
 
@@ -66,12 +65,14 @@ export class ConfigurationManager {
         createdAt: new Date(),
         updatedAt: new Date(),
         source: options.source || 'manual',
-        environment: options.environment || 'default'
+        environment: options.environment || 'default',
       },
-      inheritance: options.inherit ? {
-        parentId: options.inherit.parentId,
-        overrides: options.inherit.overrides || {}
-      } : undefined
+      inheritance: options.inherit
+        ? {
+            parentId: options.inherit.parentId,
+            overrides: options.inherit.overrides || {},
+          }
+        : undefined,
     };
 
     const oldConfig = this.configurations.get(adaptorId);
@@ -86,7 +87,7 @@ export class ConfigurationManager {
     this.logger.info('Configuration updated', {
       adaptorId,
       hasInheritance: !!configuration.inheritance,
-      environment: configuration.metadata.environment
+      environment: configuration.metadata.environment,
     });
   }
 
@@ -95,7 +96,7 @@ export class ConfigurationManager {
    */
   getConfiguration(adaptorId: string, environment?: string): AdaptorConfiguration | undefined {
     const config = this.configurations.get(adaptorId);
-    
+
     if (!config) {
       return undefined;
     }
@@ -111,11 +112,7 @@ export class ConfigurationManager {
   /**
    * Get configuration value with type safety
    */
-  getConfigurationValue<T = any>(
-    adaptorId: string,
-    path: string,
-    defaultValue?: T
-  ): T | undefined {
+  getConfigurationValue<T = any>(adaptorId: string, path: string, defaultValue?: T): T | undefined {
     const config = this.getConfiguration(adaptorId);
     if (!config) {
       return defaultValue;
@@ -134,23 +131,15 @@ export class ConfigurationManager {
   ): Promise<void> {
     const existingConfig = this.getConfiguration(adaptorId);
     if (!existingConfig) {
-      throw new ConfigurationError(
-        `No configuration found for adaptor: ${adaptorId}`,
-        'NOT_FOUND',
-        { adaptorId }
-      );
+      throw new ConfigurationError(`No configuration found for adaptor: ${adaptorId}`, 'NOT_FOUND', { adaptorId });
     }
 
-    const updatedConfig = this.mergeConfiguration(
-      existingConfig.config,
-      updates,
-      options.mergeStrategy || 'deep'
-    );
+    const updatedConfig = this.mergeConfiguration(existingConfig.config, updates, options.mergeStrategy || 'deep');
 
     await this.setConfiguration(adaptorId, updatedConfig, {
       version: this.incrementVersion(existingConfig.metadata.version),
       environment: existingConfig.metadata.environment,
-      source: options.source || 'update'
+      source: options.source || 'update',
     });
   }
 
@@ -160,32 +149,24 @@ export class ConfigurationManager {
   createPreset(preset: ConfigurationPreset): void {
     this.validatePreset(preset);
     this.presets.set(preset.id, preset);
-    
+
     this.logger.info('Configuration preset created', {
       presetId: preset.id,
-      platforms: preset.platforms
+      platforms: preset.platforms,
     });
   }
 
   /**
    * Apply configuration preset to an adaptor
    */
-  async applyPreset(
-    adaptorId: string,
-    presetId: string,
-    overrides?: Record<string, any>
-  ): Promise<void> {
+  async applyPreset(adaptorId: string, presetId: string, overrides?: Record<string, any>): Promise<void> {
     const preset = this.presets.get(presetId);
     if (!preset) {
-      throw new ConfigurationError(
-        `Preset not found: ${presetId}`,
-        'PRESET_NOT_FOUND',
-        { presetId }
-      );
+      throw new ConfigurationError(`Preset not found: ${presetId}`, 'PRESET_NOT_FOUND', { presetId });
     }
 
     let config = { ...preset.configuration };
-    
+
     // Apply overrides if provided
     if (overrides) {
       config = this.mergeConfiguration(config, overrides, 'deep');
@@ -194,7 +175,7 @@ export class ConfigurationManager {
     await this.setConfiguration(adaptorId, config, {
       version: preset.version,
       source: `preset:${presetId}`,
-      environment: preset.environment || 'default'
+      environment: preset.environment || 'default',
     });
   }
 
@@ -211,24 +192,24 @@ export class ConfigurationManager {
     try {
       // Parse data based on format
       switch (format) {
-      case 'json':
-        parsedData = typeof data === 'string' ? JSON.parse(data) : data;
-        break;
-      case 'yaml':
-        // Note: Would need yaml library in real implementation
-        throw new Error('YAML import not implemented yet');
-      case 'env':
-        parsedData = this.parseEnvironmentVariables(data as string);
-        break;
-      default:
-        throw new Error(`Unsupported format: ${format}`);
+        case 'json':
+          parsedData = typeof data === 'string' ? JSON.parse(data) : data;
+          break;
+        case 'yaml':
+          // Note: Would need yaml library in real implementation
+          throw new Error('YAML import not implemented yet');
+        case 'env':
+          parsedData = this.parseEnvironmentVariables(data as string);
+          break;
+        default:
+          throw new Error(`Unsupported format: ${format}`);
       }
 
       const result: ImportResult = {
         success: true,
         imported: 0,
         failed: 0,
-        errors: []
+        errors: [],
       };
 
       // Import configurations
@@ -242,7 +223,7 @@ export class ConfigurationManager {
             result.failed++;
             result.errors.push({
               adaptorId: configData.adaptorId || 'unknown',
-              error: error instanceof Error ? error.message : String(error)
+              error: error instanceof Error ? error.message : String(error),
             });
           }
         }
@@ -255,7 +236,7 @@ export class ConfigurationManager {
           result.failed++;
           result.errors.push({
             adaptorId: parsedData.adaptorId,
-            error: error instanceof Error ? error.message : String(error)
+            error: error instanceof Error ? error.message : String(error),
           });
         }
       } else {
@@ -264,14 +245,14 @@ export class ConfigurationManager {
           try {
             await this.setConfiguration(adaptorId, config as Record<string, any>, {
               source: 'import',
-              environment: options.environment
+              environment: options.environment,
             });
             result.imported++;
           } catch (error) {
             result.failed++;
             result.errors.push({
               adaptorId,
-              error: error instanceof Error ? error.message : String(error)
+              error: error instanceof Error ? error.message : String(error),
             });
           }
         }
@@ -280,7 +261,7 @@ export class ConfigurationManager {
       this.logger.info('Configuration import completed', {
         imported: result.imported,
         failed: result.failed,
-        format
+        format,
       });
 
       return result;
@@ -288,14 +269,14 @@ export class ConfigurationManager {
       const errorMessage = error instanceof Error ? error.message : String(error);
       this.logger.error('Configuration import failed', {
         error: errorMessage,
-        format
+        format,
       });
 
       return {
         success: false,
         imported: 0,
         failed: 1,
-        errors: [{ adaptorId: 'unknown', error: errorMessage }]
+        errors: [{ adaptorId: 'unknown', error: errorMessage }],
       };
     }
   }
@@ -311,15 +292,15 @@ export class ConfigurationManager {
     const configs = this.getConfigurationsForExport(adaptorIds, options);
 
     switch (format) {
-    case 'json':
-      return JSON.stringify(configs, null, options.pretty ? 2 : 0);
-    case 'yaml':
-      // Note: Would need yaml library in real implementation
-      throw new Error('YAML export not implemented yet');
-    case 'env':
-      return this.exportAsEnvironmentVariables(configs);
-    default:
-      throw new Error(`Unsupported export format: ${format}`);
+      case 'json':
+        return JSON.stringify(configs, null, options.pretty ? 2 : 0);
+      case 'yaml':
+        // Note: Would need yaml library in real implementation
+        throw new Error('YAML export not implemented yet');
+      case 'env':
+        return this.exportAsEnvironmentVariables(configs);
+      default:
+        throw new Error(`Unsupported export format: ${format}`);
     }
   }
 
@@ -328,12 +309,12 @@ export class ConfigurationManager {
    */
   validateConfiguration(adaptorId: string, config: Record<string, any>): ValidationResult {
     const schema = this.schemas.get(adaptorId);
-    
+
     if (!schema) {
       return {
         valid: true,
         errors: [],
-        warnings: [`No schema registered for adaptor: ${adaptorId}`]
+        warnings: [`No schema registered for adaptor: ${adaptorId}`],
       };
     }
 
@@ -342,7 +323,7 @@ export class ConfigurationManager {
       return {
         valid: true,
         errors: [],
-        warnings: []
+        warnings: [],
       };
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
@@ -350,7 +331,7 @@ export class ConfigurationManager {
       return {
         valid: false,
         errors: errorDetails || [errorMessage],
-        warnings: []
+        warnings: [],
       };
     }
   }
@@ -358,11 +339,7 @@ export class ConfigurationManager {
   /**
    * Get configuration differences between environments
    */
-  getConfigurationDiff(
-    adaptorId: string,
-    fromEnvironment: string,
-    toEnvironment: string
-  ): ConfigurationDiff {
+  getConfigurationDiff(adaptorId: string, fromEnvironment: string, toEnvironment: string): ConfigurationDiff {
     const fromConfig = this.getConfiguration(adaptorId);
     const toConfig = this.getConfiguration(adaptorId);
 
@@ -372,7 +349,7 @@ export class ConfigurationManager {
       fromEnvironment,
       toEnvironment,
       differences: [],
-      summary: 'No differences found (single environment implementation)'
+      summary: 'No differences found (single environment implementation)',
     };
   }
 
@@ -395,13 +372,11 @@ export class ConfigurationManager {
    */
   getPresets(platform?: Platform): ConfigurationPreset[] {
     const allPresets = Array.from(this.presets.values());
-    
+
     if (platform) {
-      return allPresets.filter(preset => 
-        preset.platforms.includes(platform)
-      );
+      return allPresets.filter(preset => preset.platforms.includes(platform));
     }
-    
+
     return allPresets;
   }
 
@@ -411,7 +386,7 @@ export class ConfigurationManager {
   getConfigurationHistory(adaptorId: string): ConfigurationHistoryEntry[] {
     // Note: Real implementation would maintain history in persistent storage
     const config = this.getConfiguration(adaptorId);
-    
+
     if (!config) {
       return [];
     }
@@ -421,8 +396,8 @@ export class ConfigurationManager {
         version: config.metadata.version,
         timestamp: config.metadata.updatedAt,
         changes: ['Configuration loaded'],
-        author: 'system'
-      }
+        author: 'system',
+      },
     ];
   }
 
@@ -434,7 +409,7 @@ export class ConfigurationManager {
       enabled: z.boolean().default(true),
       timeout: z.number().min(0).default(30000),
       retries: z.number().min(0).max(10).default(3),
-      cacheTTL: z.number().min(0).default(3600)
+      cacheTTL: z.number().min(0).default(3600),
     });
 
     // Register base schema for all adaptors
@@ -452,11 +427,7 @@ export class ConfigurationManager {
     if (options.inherit?.parentId) {
       const parentConfig = this.getConfiguration(options.inherit.parentId);
       if (parentConfig) {
-        finalConfig = this.mergeConfiguration(
-          parentConfig.config,
-          finalConfig,
-          'deep'
-        );
+        finalConfig = this.mergeConfiguration(parentConfig.config, finalConfig, 'deep');
       }
     }
 
@@ -470,11 +441,7 @@ export class ConfigurationManager {
 
     // Apply explicit overrides
     if (options.inherit?.overrides) {
-      finalConfig = this.mergeConfiguration(
-        finalConfig,
-        options.inherit.overrides,
-        'deep'
-      );
+      finalConfig = this.mergeConfiguration(finalConfig, options.inherit.overrides, 'deep');
     }
 
     return finalConfig;
@@ -491,14 +458,10 @@ export class ConfigurationManager {
 
     // Deep merge implementation
     const result = { ...base };
-    
+
     for (const [key, value] of Object.entries(override)) {
       if (value && typeof value === 'object' && !Array.isArray(value)) {
-        result[key] = this.mergeConfiguration(
-          result[key] || {},
-          value,
-          'deep'
-        );
+        result[key] = this.mergeConfiguration(result[key] || {}, value, 'deep');
       } else {
         result[key] = value;
       }
@@ -507,10 +470,7 @@ export class ConfigurationManager {
     return result;
   }
 
-  private async cacheConfiguration(
-    adaptorId: string,
-    configuration: AdaptorConfiguration
-  ): Promise<void> {
+  private async cacheConfiguration(adaptorId: string, configuration: AdaptorConfiguration): Promise<void> {
     const cacheKey = `config:${adaptorId}:${configuration.metadata.environment}`;
     await this.cache.set(cacheKey, configuration, 86400); // 24 hours
   }
@@ -525,7 +485,7 @@ export class ConfigurationManager {
       oldConfiguration: oldConfig,
       newConfiguration: newConfig,
       timestamp: new Date(),
-      source: newConfig.metadata.source
+      source: newConfig.metadata.source,
     };
 
     for (const listener of this.changeListeners) {
@@ -534,7 +494,7 @@ export class ConfigurationManager {
       } catch (error) {
         this.logger.error('Configuration change listener failed', {
           adaptorId,
-          error: error instanceof Error ? error.message : String(error)
+          error: error instanceof Error ? error.message : String(error),
         });
       }
     }
@@ -554,24 +514,15 @@ export class ConfigurationManager {
 
   private validatePreset(preset: ConfigurationPreset): void {
     if (!preset.id || !preset.name) {
-      throw new ConfigurationError(
-        'Preset must have id and name',
-        'INVALID_PRESET'
-      );
+      throw new ConfigurationError('Preset must have id and name', 'INVALID_PRESET');
     }
 
     if (!preset.platforms || preset.platforms.length === 0) {
-      throw new ConfigurationError(
-        'Preset must specify at least one platform',
-        'INVALID_PRESET'
-      );
+      throw new ConfigurationError('Preset must specify at least one platform', 'INVALID_PRESET');
     }
 
     if (!preset.configuration) {
-      throw new ConfigurationError(
-        'Preset must have configuration object',
-        'INVALID_PRESET'
-      );
+      throw new ConfigurationError('Preset must have configuration object', 'INVALID_PRESET');
     }
   }
 
@@ -614,29 +565,19 @@ export class ConfigurationManager {
     return value;
   }
 
-  private async importSingleConfiguration(
-    configData: any,
-    options: ImportOptions
-  ): Promise<void> {
+  private async importSingleConfiguration(configData: any, options: ImportOptions): Promise<void> {
     if (!configData.adaptorId) {
       throw new Error('Configuration must have adaptorId');
     }
 
-    await this.setConfiguration(
-      configData.adaptorId,
-      configData.config || configData,
-      {
-        version: configData.version,
-        environment: options.environment || configData.environment,
-        source: 'import'
-      }
-    );
+    await this.setConfiguration(configData.adaptorId, configData.config || configData, {
+      version: configData.version,
+      environment: options.environment || configData.environment,
+      source: 'import',
+    });
   }
 
-  private getConfigurationsForExport(
-    adaptorIds?: string[],
-    options: ExportOptions = {}
-  ): any {
+  private getConfigurationsForExport(adaptorIds?: string[], options: ExportOptions = {}): any {
     const configs: Record<string, any> = {};
 
     const targetIds = adaptorIds || Array.from(this.configurations.keys());
@@ -648,14 +589,12 @@ export class ConfigurationManager {
       }
     }
 
-    return options.singleAdaptor && adaptorIds?.length === 1 
-      ? configs[adaptorIds[0]]
-      : configs;
+    return options.singleAdaptor && adaptorIds?.length === 1 ? configs[adaptorIds[0]] : configs;
   }
 
   private exportAsEnvironmentVariables(configs: Record<string, any>): string {
     const lines: string[] = [];
-    
+
     for (const [adaptorId, config] of Object.entries(configs)) {
       lines.push(`# Configuration for ${adaptorId}`);
       this.flattenObjectToEnvVars(config, adaptorId.toUpperCase(), lines);
@@ -665,30 +604,21 @@ export class ConfigurationManager {
     return lines.join('\n');
   }
 
-  private flattenObjectToEnvVars(
-    obj: any,
-    prefix: string,
-    lines: string[]
-  ): void {
+  private flattenObjectToEnvVars(obj: any, prefix: string, lines: string[]): void {
     for (const [key, value] of Object.entries(obj)) {
       const envKey = `${prefix}_${key.toUpperCase()}`;
-      
+
       if (value && typeof value === 'object' && !Array.isArray(value)) {
         this.flattenObjectToEnvVars(value, envKey, lines);
       } else {
-        const envValue = Array.isArray(value) || typeof value === 'object'
-          ? JSON.stringify(value)
-          : String(value);
-        
+        const envValue = Array.isArray(value) || typeof value === 'object' ? JSON.stringify(value) : String(value);
+
         lines.push(`${envKey}="${envValue}"`);
       }
     }
   }
 
-  private async getEnvironmentOverrides(
-    adaptorId: string,
-    environment: string
-  ): Promise<Record<string, any> | null> {
+  private async getEnvironmentOverrides(adaptorId: string, environment: string): Promise<Record<string, any> | null> {
     // Note: Real implementation would load from environment-specific storage
     return null;
   }

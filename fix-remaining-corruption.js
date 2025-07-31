@@ -19,7 +19,7 @@ function fixCorruptionInFile(filePath) {
   try {
     let content = fs.readFileSync(filePath, 'utf8');
     let fixedPatterns = 0;
-    
+
     // Apply each corruption pattern fix
     corruptionPatterns.forEach(({ pattern, replacement }) => {
       const before = content;
@@ -28,13 +28,13 @@ function fixCorruptionInFile(filePath) {
         fixedPatterns++;
       }
     });
-    
+
     if (fixedPatterns > 0) {
       fs.writeFileSync(filePath, content);
       console.log(`Fixed ${fixedPatterns} patterns in ${filePath}`);
       return fixedPatterns;
     }
-    
+
     return 0;
   } catch (error) {
     console.error(`Error processing ${filePath}:`, error.message);
@@ -46,7 +46,7 @@ function fixCorruptionInFile(filePath) {
 function findFilesToFix(dir) {
   const files = [];
   const entries = fs.readdirSync(dir, { withFileTypes: true });
-  
+
   for (const entry of entries) {
     const fullPath = path.join(dir, entry.name);
     if (entry.isDirectory() && !entry.name.startsWith('.') && !entry.name.includes('node_modules')) {
@@ -55,7 +55,7 @@ function findFilesToFix(dir) {
       files.push(fullPath);
     }
   }
-  
+
   return files;
 }
 

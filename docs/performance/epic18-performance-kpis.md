@@ -29,69 +29,69 @@ The performance KPI system consists of several interconnected components:
 
 Based on Google Core Web Vitals and user experience research:
 
-| KPI | Target | Warning | Critical | Description |
-|-----|--------|---------|----------|-------------|
-| **First Contentful Paint (FCP)** | 1200ms | 1500ms | 2000ms | Time until first content is painted |
-| **Largest Contentful Paint (LCP)** | 2000ms | 2500ms | 3000ms | Time until largest content is rendered |
-| **First Input Delay (FID)** | 50ms | 100ms | 200ms | Time from user interaction to response |
-| **Cumulative Layout Shift (CLS)** | 0.05 | 0.1 | 0.25 | Visual stability during page load |
-| **Time to Interactive (TTI)** | 2500ms | 3000ms | 4000ms | Time until page is fully interactive |
+| KPI                                | Target | Warning | Critical | Description                            |
+| ---------------------------------- | ------ | ------- | -------- | -------------------------------------- |
+| **First Contentful Paint (FCP)**   | 1200ms | 1500ms  | 2000ms   | Time until first content is painted    |
+| **Largest Contentful Paint (LCP)** | 2000ms | 2500ms  | 3000ms   | Time until largest content is rendered |
+| **First Input Delay (FID)**        | 50ms   | 100ms   | 200ms    | Time from user interaction to response |
+| **Cumulative Layout Shift (CLS)**  | 0.05   | 0.1     | 0.25     | Visual stability during page load      |
+| **Time to Interactive (TTI)**      | 2500ms | 3000ms  | 4000ms   | Time until page is fully interactive   |
 
 ### API Performance KPIs
 
 Based on user workflow requirements:
 
-| KPI | Target | Warning | Critical | Description |
-|-----|--------|---------|----------|-------------|
-| **Graph Execution Time** | 800ms | 1000ms | 1500ms | Core workflow operation performance |
-| **Preview Generation** | 400ms | 500ms | 800ms | Preview feedback loop performance |
-| **Graph Validation** | 50ms | 100ms | 200ms | Real-time validation performance |
-| **API Throughput** | 100 RPS | 75 RPS | 50 RPS | Concurrent user support capacity |
+| KPI                      | Target  | Warning | Critical | Description                         |
+| ------------------------ | ------- | ------- | -------- | ----------------------------------- |
+| **Graph Execution Time** | 800ms   | 1000ms  | 1500ms   | Core workflow operation performance |
+| **Preview Generation**   | 400ms   | 500ms   | 800ms    | Preview feedback loop performance   |
+| **Graph Validation**     | 50ms    | 100ms   | 200ms    | Real-time validation performance    |
+| **API Throughput**       | 100 RPS | 75 RPS  | 50 RPS   | Concurrent user support capacity    |
 
 ### Bundle Size KPIs
 
 Based on network performance constraints:
 
-| KPI | Target | Warning | Critical | Description |
-|-----|--------|---------|----------|-------------|
-| **Main Bundle Size** | 200KB | 250KB | 350KB | Initial bundle for mobile networks |
-| **Total Bundle Size** | 800KB | 1000KB | 1400KB | Complete application size |
+| KPI                   | Target | Warning | Critical | Description                        |
+| --------------------- | ------ | ------- | -------- | ---------------------------------- |
+| **Main Bundle Size**  | 200KB  | 250KB   | 350KB    | Initial bundle for mobile networks |
+| **Total Bundle Size** | 800KB  | 1000KB  | 1400KB   | Complete application size          |
 
 ### Memory Usage KPIs
 
 Based on device constraints:
 
-| KPI | Target | Warning | Critical | Description |
-|-----|--------|---------|----------|-------------|
-| **Peak Memory Usage** | 100MB | 150MB | 200MB | Maximum memory consumption |
-| **Memory Leak Rate** | 2MB/hr | 5MB/hr | 10MB/hr | Memory growth over time |
+| KPI                   | Target | Warning | Critical | Description                |
+| --------------------- | ------ | ------- | -------- | -------------------------- |
+| **Peak Memory Usage** | 100MB  | 150MB   | 200MB    | Maximum memory consumption |
+| **Memory Leak Rate**  | 2MB/hr | 5MB/hr  | 10MB/hr  | Memory growth over time    |
 
 ### Network Efficiency KPIs
 
 Based on connection and data constraints:
 
-| KPI | Target | Warning | Critical | Description |
-|-----|--------|---------|----------|-------------|
-| **Transfer Size** | 1200KB | 1500KB | 2000KB | Total bytes for initial load |
-| **Request Count** | 20 | 25 | 35 | Number of network requests |
+| KPI               | Target | Warning | Critical | Description                  |
+| ----------------- | ------ | ------- | -------- | ---------------------------- |
+| **Transfer Size** | 1200KB | 1500KB  | 2000KB   | Total bytes for initial load |
+| **Request Count** | 20     | 25      | 35       | Number of network requests   |
 
 ### Build Performance KPIs
 
 Based on developer productivity requirements:
 
-| KPI | Target | Warning | Critical | Description |
-|-----|--------|---------|----------|-------------|
-| **Build Time** | 45s | 60s | 90s | Complete application build time |
-| **Test Execution** | 25s | 30s | 45s | Test suite execution time |
+| KPI                | Target | Warning | Critical | Description                     |
+| ------------------ | ------ | ------- | -------- | ------------------------------- |
+| **Build Time**     | 45s    | 60s     | 90s      | Complete application build time |
+| **Test Execution** | 25s    | 30s     | 45s      | Test suite execution time       |
 
 ### User Experience KPIs
 
 Based on workflow efficiency requirements:
 
-| KPI | Target | Warning | Critical | Description |
-|-----|--------|---------|----------|-------------|
-| **Graph Creation Time** | 30s | 45s | 60s | End-to-end workflow time |
-| **Error Rate** | 1% | 3% | 5% | User-facing error percentage |
+| KPI                     | Target | Warning | Critical | Description                  |
+| ----------------------- | ------ | ------- | -------- | ---------------------------- |
+| **Graph Creation Time** | 30s    | 45s     | 60s      | End-to-end workflow time     |
+| **Error Rate**          | 1%     | 3%      | 5%       | User-facing error percentage |
 
 ## Measurement Methodology
 
@@ -161,7 +161,7 @@ const adjustedTarget = baseTarget * environmentMultiplier * deviceMultiplier;
 // Production environment with high-end devices
 const productionTarget = 1200 * 1.0 * 0.8 = 960ms; // More aggressive
 
-// Development environment with low-end devices  
+// Development environment with low-end devices
 const devTarget = 1200 * 1.5 * 1.5 = 2700ms; // More lenient
 ```
 
@@ -238,8 +238,8 @@ const monitoring = new KPIMonitoringService({
   monitoringInterval: 30000, // 30 seconds
   alertingEnabled: true,
   kpiFilters: {
-    priorities: ['critical', 'high'] // Monitor only critical and high priority KPIs
-  }
+    priorities: ['critical', 'high'], // Monitor only critical and high priority KPIs
+  },
 });
 
 const dashboard = new KPIDashboard(monitoring, baseline);
@@ -256,7 +256,7 @@ dashboard.startAutoRefresh('executive-summary');
 const baseline = await baseline.captureBaseline({
   graphComplexity: 'complex',
   dataSize: 'large',
-  concurrentUsers: 10
+  concurrentUsers: 10,
 });
 
 console.log(`Captured ${baseline.kpiSnapshots.length} KPI measurements`);
@@ -283,7 +283,7 @@ const targets = getAdjustedTargets({
   environment: 'production',
   userSegment: 'power-users',
   deviceProfile: 'high-end',
-  networkProfile: 'fast'
+  networkProfile: 'fast',
 });
 
 console.log(`FCP Target: ${targets.runtime_fcp.target}ms`);

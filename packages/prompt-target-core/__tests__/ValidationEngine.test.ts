@@ -18,10 +18,10 @@ describe('ValidationEngine', () => {
         get: jest.fn(),
         set: jest.fn(),
         del: jest.fn(),
-        exists: jest.fn()
+        exists: jest.fn(),
       },
       metrics,
-      config: {}
+      config: {},
     };
     gptAdaptor = new OpenAIGPTAdaptor(context);
     midjourneyAdaptor = new MidjourneyAdaptor(context);
@@ -36,8 +36,8 @@ describe('ValidationEngine', () => {
         metadata: {
           created: new Date(),
           modified: new Date(),
-          version: '1.0'
-        }
+          version: '1.0',
+        },
       };
       const report = await validator.validateGraph(emptyGraph, [gptAdaptor]);
       expect(report.overallValid).toBe(false);
@@ -58,29 +58,27 @@ describe('ValidationEngine', () => {
             id: 'node1',
             type: 'text',
             data: { content: 'Connected node' },
-            position: { x: 0, y: 0 }
+            position: { x: 0, y: 0 },
           },
           {
             id: 'node2',
             type: 'text',
             data: { content: 'Another connected node' },
-            position: { x: 100, y: 0 }
+            position: { x: 100, y: 0 },
           },
           {
             id: 'orphan',
             type: 'text',
             data: { content: 'Orphaned node' },
-            position: { x: 200, y: 0 }
-          }
+            position: { x: 200, y: 0 },
+          },
         ],
-        edges: [
-          { id: 'e1', source: 'node1', target: 'node2' }
-        ],
+        edges: [{ id: 'e1', source: 'node1', target: 'node2' }],
         metadata: {
           created: new Date(),
           modified: new Date(),
-          version: '1.0'
-        }
+          version: '1.0',
+        },
       };
       const report = await validator.validateGraph(disconnectedGraph, [gptAdaptor]);
       const orphanWarning = Array.from(report.platformResults.values())
@@ -99,18 +97,18 @@ describe('ValidationEngine', () => {
             id: 'node1',
             type: 'text',
             data: { content: 'Valid node' },
-            position: { x: 0, y: 0 }
-          }
+            position: { x: 0, y: 0 },
+          },
         ],
         edges: [
           { id: 'e1', source: 'node1', target: 'nonexistent' },
-          { id: 'e2', source: 'missing', target: 'node1' }
+          { id: 'e2', source: 'missing', target: 'node1' },
         ],
         metadata: {
           created: new Date(),
           modified: new Date(),
-          version: '1.0'
-        }
+          version: '1.0',
+        },
       };
       const report = await validator.validateGraph(invalidEdgeGraph, [gptAdaptor]);
       expect(report.overallValid).toBe(false);
@@ -133,18 +131,18 @@ describe('ValidationEngine', () => {
               content: 'Write a story about AI',
               parameters: {
                 temperature: 0.7,
-                max_tokens: 500
-              }
+                max_tokens: 500,
+              },
             },
-            position: { x: 0, y: 0 }
-          }
+            position: { x: 0, y: 0 },
+          },
         ],
         edges: [],
         metadata: {
           created: new Date(),
           modified: new Date(),
-          version: '1.0'
-        }
+          version: '1.0',
+        },
       };
       const report = await validator.validateGraph(gptCompatibleGraph, [gptAdaptor]);
       const gptResult = report.platformResults.get('openai-gpt');
@@ -162,17 +160,17 @@ describe('ValidationEngine', () => {
             type: 'image',
             data: {
               url: 'https://example.com/image.jpg',
-              description: 'An example image'
+              description: 'An example image',
             },
-            position: { x: 0, y: 0 }
-          }
+            position: { x: 0, y: 0 },
+          },
         ],
         edges: [],
         metadata: {
           created: new Date(),
           modified: new Date(),
-          version: '1.0'
-        }
+          version: '1.0',
+        },
       };
       const report = await validator.validateGraph(gptIncompatibleGraph, [gptAdaptor]);
       const gptResult = report.platformResults.get('openai-gpt');
@@ -189,13 +187,13 @@ describe('ValidationEngine', () => {
             id: 'subject',
             type: 'text',
             data: { content: 'A mystical forest' },
-            position: { x: 0, y: 0 }
+            position: { x: 0, y: 0 },
           },
           {
             id: 'style',
             type: 'style',
             data: { style: 'fantasy art, highly detailed' },
-            position: { x: 100, y: 0 }
+            position: { x: 100, y: 0 },
           },
           {
             id: 'output',
@@ -203,21 +201,21 @@ describe('ValidationEngine', () => {
             data: {
               parameters: {
                 aspect_ratio: '16:9',
-                stylize: 250
-              }
+                stylize: 250,
+              },
             },
-            position: { x: 200, y: 0 }
-          }
+            position: { x: 200, y: 0 },
+          },
         ],
         edges: [
           { id: 'e1', source: 'subject', target: 'output' },
-          { id: 'e2', source: 'style', target: 'output' }
+          { id: 'e2', source: 'style', target: 'output' },
         ],
         metadata: {
           created: new Date(),
           modified: new Date(),
-          version: '1.0'
-        }
+          version: '1.0',
+        },
       };
       const report = await validator.validateGraph(midjourneyCompatibleGraph, [midjourneyAdaptor]);
       const midjourneyResult = report.platformResults.get('midjourney');
@@ -236,26 +234,24 @@ describe('ValidationEngine', () => {
             id: 'text-node',
             type: 'text',
             data: { content: 'Generate an image of a sunset' },
-            position: { x: 0, y: 0 }
+            position: { x: 0, y: 0 },
           },
           {
             id: 'image-node',
             type: 'image',
             data: {
               url: 'https://example.com/reference.jpg',
-              description: 'Reference image'
+              description: 'Reference image',
             },
-            position: { x: 100, y: 0 }
-          }
+            position: { x: 100, y: 0 },
+          },
         ],
-        edges: [
-          { id: 'e1', source: 'text-node', target: 'image-node' }
-        ],
+        edges: [{ id: 'e1', source: 'text-node', target: 'image-node' }],
         metadata: {
           created: new Date(),
           modified: new Date(),
-          version: '1.0'
-        }
+          version: '1.0',
+        },
       };
       const report = await validator.validateGraph(mixedGraph, [gptAdaptor, midjourneyAdaptor]);
       expect(report.platformResults.size).toBe(2);
@@ -270,22 +266,27 @@ describe('ValidationEngine', () => {
       expect(midjourneyResult?.compatible).toBe(true);
     });
     it('should identify cross-platform feature gaps', async () => {
-      const report = await validator.validateGraph({
-        id: 'feature-test',
-        version: '1.0',
-        nodes: [{
-          id: 'test',
-          type: 'text',
-          data: { content: 'test' },
-          position: { x: 0, y: 0 }
-        }],
-        edges: [],
-        metadata: {
-          created: new Date(),
-          modified: new Date(),
-          version: '1.0'
-        }
-      }, [gptAdaptor, midjourneyAdaptor]);
+      const report = await validator.validateGraph(
+        {
+          id: 'feature-test',
+          version: '1.0',
+          nodes: [
+            {
+              id: 'test',
+              type: 'text',
+              data: { content: 'test' },
+              position: { x: 0, y: 0 },
+            },
+          ],
+          edges: [],
+          metadata: {
+            created: new Date(),
+            modified: new Date(),
+            version: '1.0',
+          },
+        },
+        [gptAdaptor, midjourneyAdaptor]
+      );
       // Should identify features supported by one platform but not others
       expect(report.crossPlatformIssues).toBeDefined();
       // Look for specific feature gaps
@@ -304,28 +305,31 @@ describe('ValidationEngine', () => {
             id: 'main-node',
             type: 'text',
             data: { content: 'Main content' },
-            position: { x: 0, y: 0 }
+            position: { x: 0, y: 0 },
           },
           {
             id: 'orphan-node',
             type: 'text',
             data: { content: 'Disconnected content' },
-            position: { x: 200, y: 0 }
-          }
+            position: { x: 200, y: 0 },
+          },
         ],
         edges: [],
         metadata: {
           created: new Date(),
           modified: new Date(),
-          version: '1.0'
-        }
+          version: '1.0',
+        },
       };
       const report = await validator.validateGraph(problematicGraph, [gptAdaptor]);
       expect(report.autoFixSuggestions).toBeDefined();
       expect(report.autoFixSuggestions.length).toBeGreaterThan(0);
       // Should have suggestions for orphaned nodes
-      const orphanFixes = report.autoFixSuggestions.filter(suggestion => suggestion.description.toLowerCase().includes('orphan') ||
-                suggestion.description.toLowerCase().includes('disconnect'));
+      const orphanFixes = report.autoFixSuggestions.filter(
+        suggestion =>
+          suggestion.description.toLowerCase().includes('orphan') ||
+          suggestion.description.toLowerCase().includes('disconnect')
+      );
       expect(orphanFixes.length).toBeGreaterThan(0);
       // Check fix confidence and impact
       orphanFixes.forEach(fix => {
@@ -344,18 +348,18 @@ describe('ValidationEngine', () => {
           id: `node-${i}`,
           type: 'text',
           data: { content: `Content for node ${i}` },
-          position: { x: i * 50, y: 0 }
+          position: { x: i * 50, y: 0 },
         })),
         edges: Array.from({ length: 19 }, (_, i) => ({
           id: `edge-${i}`,
           source: `node-${i}`,
-          target: `node-${i + 1}`
+          target: `node-${i + 1}`,
         })),
         metadata: {
           created: new Date(),
           modified: new Date(),
-          version: '1.0'
-        }
+          version: '1.0',
+        },
       };
       const startTime = Date.now();
       const report = await validator.validateGraph(largeGraph, [gptAdaptor, midjourneyAdaptor]);

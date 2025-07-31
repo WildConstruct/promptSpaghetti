@@ -1,10 +1,12 @@
 # Integration Architecture Diagrams
+
 **System:** PromptScape Randomizer Graph Platform  
 **Purpose:** Visual documentation of current state vs. target architecture
 
 ## Current Architecture (Problem State)
 
 ### System Overview - Current Fragmented State
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                    CLIENT (React + Vite)                       │
@@ -47,7 +49,7 @@
 
 PROBLEMS:
 ❌ Multiple auth systems (4+ implementations)
-❌ Duplicate analytics (6+ separate systems)  
+❌ Duplicate analytics (6+ separate systems)
 ❌ Direct database access from 10+ services
 ❌ No service registry or dependency injection
 ❌ Version conflicts (Zod: 3.0.0 vs 3.22.4 vs 3.25.76)
@@ -56,6 +58,7 @@ PROBLEMS:
 ```
 
 ### Data Flow - Current Fragmented State
+
 ```
 ┌──────────────┐    ┌──────────────┐    ┌──────────────┐
 │              │    │              │    │              │
@@ -81,7 +84,7 @@ PROBLEMS:
 
 PROBLEMS:
 ❌ Each request creates new DB connections
-❌ No connection pooling or resource management  
+❌ No connection pooling or resource management
 ❌ No caching layer or data access abstraction
 ❌ No unified logging or monitoring
 ❌ Direct SQL queries scattered across services
@@ -90,6 +93,7 @@ PROBLEMS:
 ## Target Architecture (Solution State)
 
 ### System Overview - Integrated Architecture
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                    CLIENT (React + Vite)                       │
@@ -162,6 +166,7 @@ BENEFITS:
 ```
 
 ### Data Flow - Integrated Architecture
+
 ```
 ┌──────────────┐    ┌──────────────┐    ┌──────────────┐    ┌──────────────┐
 │              │    │              │    │              │    │              │
@@ -197,6 +202,7 @@ BENEFITS:
 ## Service Integration Patterns
 
 ### Before: Direct Dependencies (Tightly Coupled)
+
 ```
 ┌─────────────────┐
 │  Auth Service   │
@@ -223,6 +229,7 @@ PROBLEMS:
 ```
 
 ### After: Dependency Injection (Loosely Coupled)
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                     SERVICE CONTAINER                          │
@@ -263,6 +270,7 @@ BENEFITS:
 ## Database Integration Pattern
 
 ### Before: Direct Database Access
+
 ```
 ┌──────────────┐    ┌──────────────┐    ┌──────────────┐
 │              │    │              │    │              │
@@ -288,6 +296,7 @@ PROBLEMS:
 ```
 
 ### After: Repository Pattern with Connection Pooling
+
 ```
 ┌──────────────┐    ┌──────────────┐    ┌──────────────┐
 │              │    │              │    │              │
@@ -328,6 +337,7 @@ BENEFITS:
 ## Event System Integration
 
 ### Before: Direct Service Communication
+
 ```
 ┌──────────────┐                    ┌──────────────┐
 │              │  HTTP Request      │              │
@@ -352,6 +362,7 @@ PROBLEMS:
 ```
 
 ### After: Event-Driven Architecture
+
 ```
 ┌──────────────┐    publish    ┌─────────────────────────────────────┐
 │              │    events     │                                     │

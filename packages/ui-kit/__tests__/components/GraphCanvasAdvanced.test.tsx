@@ -26,12 +26,12 @@ const createLargeGraph = (nodeCount: number, edgeRatio: number = 0.3) => {
       label: `Node ${i}`,
       ...(i % 3 === 0 && { choices: [{ value: `Choice ${i}`, weight: 1 }] }),
       ...(i % 3 === 1 && { text: `Output ${i}` }),
-      ...(i % 3 === 2 && { parts: [`Part ${i}`] })
+      ...(i % 3 === 2 && { parts: [`Part ${i}`] }),
     },
-    position: { 
-      x: (i % 10) * 150, 
-      y: Math.floor(i / 10) * 100 
-    }
+    position: {
+      x: (i % 10) * 150,
+      y: Math.floor(i / 10) * 100,
+    },
   }));
 
   const edgeCount = Math.floor(nodeCount * edgeRatio);
@@ -39,7 +39,7 @@ const createLargeGraph = (nodeCount: number, edgeRatio: number = 0.3) => {
     id: `perf-edge-${i}`,
     source: `perf-node-${i}`,
     target: `perf-node-${Math.min(i + 1, nodeCount - 1)}`,
-    animated: i % 5 === 0
+    animated: i % 5 === 0,
   }));
 
   return { nodes, edges };
@@ -48,7 +48,7 @@ const createLargeGraph = (nodeCount: number, edgeRatio: number = 0.3) => {
 const renderGraphCanvas = (props = {}) => {
   return render(
     <ThemeProvider>
-      <GraphCanvas 
+      <GraphCanvas
         graph={{ nodes: [], edges: [] }}
         onNodeSelect={jest.fn()}
         onNodeMove={jest.fn()}
@@ -64,20 +64,20 @@ describe('GraphCanvas Advanced Rendering', () => {
   describe('Performance Tests', () => {
     it('renders 100 nodes within acceptable time', async () => {
       const largeGraph = createLargeGraph(100);
-      
+
       const renderTime = await measureRenderTime(() => {
         renderGraphCanvas({ graph: largeGraph });
       });
 
       // Should render within 1 second
       expect(renderTime).toBeLessThan(1000);
-      
+
       expect(screen.getAllByText(/Node \d+/).length).toBe(100);
     });
 
     it('handles 500 nodes without crashing', async () => {
       const massiveGraph = createLargeGraph(500, 0.1);
-      
+
       expect(() => {
         renderGraphCanvas({ graph: massiveGraph });
       }).not.toThrow();
@@ -107,7 +107,7 @@ describe('GraphCanvas Advanced Rendering', () => {
 
       const totalTime = performance.now() - startTime;
       const avgTimePerFrame = totalTime / dragOperations;
-      
+
       // Should maintain 60fps (16.67ms per frame)
       expect(avgTimePerFrame).toBeLessThan(20);
     });
@@ -121,13 +121,13 @@ describe('GraphCanvas Advanced Rendering', () => {
           ...initialGraph,
           nodes: initialGraph.nodes.map((node, i) => ({
             ...node,
-            position: { x: node.position.x + 10, y: node.position.y + 10 }
-          }))
+            position: { x: node.position.x + 10, y: node.position.y + 10 },
+          })),
         };
-        
+
         rerender(
           <ThemeProvider>
-            <GraphCanvas 
+            <GraphCanvas
               graph={updatedGraph}
               onNodeSelect={jest.fn()}
               onNodeMove={jest.fn()}
@@ -149,13 +149,13 @@ describe('GraphCanvas Advanced Rendering', () => {
         nodes: [
           { id: 'a', type: 'WeightedChoice', data: { label: 'A' }, position: { x: 0, y: 0 } },
           { id: 'b', type: 'Output', data: { label: 'B' }, position: { x: 100, y: 0 } },
-          { id: 'c', type: 'Concat', data: { label: 'C' }, position: { x: 50, y: 100 } }
+          { id: 'c', type: 'Concat', data: { label: 'C' }, position: { x: 50, y: 100 } },
         ],
         edges: [
           { id: 'ab', source: 'a', target: 'b' },
           { id: 'bc', source: 'b', target: 'c' },
-          { id: 'ca', source: 'c', target: 'a' }
-        ]
+          { id: 'ca', source: 'c', target: 'a' },
+        ],
       };
 
       expect(() => {
@@ -172,9 +172,9 @@ describe('GraphCanvas Advanced Rendering', () => {
         nodes: [
           { id: 'good', type: 'Output', data: { label: 'Good Node' }, position: { x: 0, y: 0 } },
           { id: 'bad', type: 'WeightedChoice', data: null, position: { x: 100, y: 0 } },
-          { id: 'ugly', type: undefined, data: { label: 'Ugly Node' }, position: { x: 200, y: 0 } }
+          { id: 'ugly', type: undefined, data: { label: 'Ugly Node' }, position: { x: 200, y: 0 } },
         ],
-        edges: []
+        edges: [],
       };
 
       expect(() => {
@@ -189,9 +189,9 @@ describe('GraphCanvas Advanced Rendering', () => {
         nodes: [
           { id: 'node1', type: 'Output', data: { label: 'Node 1' }, position: { x: 100, y: 100 } },
           { id: 'node2', type: 'Output', data: { label: 'Node 2' }, position: { x: 100, y: 100 } },
-          { id: 'node3', type: 'Output', data: { label: 'Node 3' }, position: { x: 105, y: 105 } }
+          { id: 'node3', type: 'Output', data: { label: 'Node 3' }, position: { x: 105, y: 105 } },
         ],
-        edges: []
+        edges: [],
       };
 
       renderGraphCanvas({ graph: overlappingGraph });
@@ -274,9 +274,7 @@ describe('GraphCanvas Advanced Rendering', () => {
       const graph = createLargeGraph(20);
       renderGraphCanvas({ graph });
 
-      const nodes = screen.getAllByRole('generic').filter(el => 
-        el.classList.contains('ui-graph-node')
-      );
+      const nodes = screen.getAllByRole('generic').filter(el => el.classList.contains('ui-graph-node'));
 
       expect(nodes.length).toBeGreaterThan(0);
 
@@ -303,13 +301,15 @@ describe('GraphCanvas Advanced Rendering', () => {
     it('recovers from rendering errors gracefully', () => {
       // Force an error condition
       const errorGraph = {
-        nodes: [{
-          id: 'error-node',
-          type: 'WeightedChoice',
-          data: { label: 'Error Node' },
-          position: { x: NaN, y: NaN }
-        }],
-        edges: []
+        nodes: [
+          {
+            id: 'error-node',
+            type: 'WeightedChoice',
+            data: { label: 'Error Node' },
+            position: { x: NaN, y: NaN },
+          },
+        ],
+        edges: [],
       };
 
       // Should handle NaN positions gracefully
@@ -322,7 +322,7 @@ describe('GraphCanvas Advanced Rendering', () => {
       const invalidProps = {
         graph: null,
         onNodeSelect: 'not-a-function',
-        showControls: 'not-a-boolean'
+        showControls: 'not-a-boolean',
       };
 
       // Should render with fallback behavior
@@ -335,10 +335,10 @@ describe('GraphCanvas Advanced Rendering', () => {
   describe('Theme Switching', () => {
     it('handles theme changes with large graphs', async () => {
       const graph = createLargeGraph(50);
-      
+
       const { rerender } = render(
         <ThemeProvider theme="light">
-          <GraphCanvas 
+          <GraphCanvas
             graph={graph}
             onNodeSelect={jest.fn()}
             onNodeMove={jest.fn()}
@@ -353,7 +353,7 @@ describe('GraphCanvas Advanced Rendering', () => {
       // Switch to dark theme
       rerender(
         <ThemeProvider theme="dark">
-          <GraphCanvas 
+          <GraphCanvas
             graph={graph}
             onNodeSelect={jest.fn()}
             onNodeMove={jest.fn()}

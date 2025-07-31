@@ -2,7 +2,7 @@
 
 /**
  * File Browser Load Test
- * 
+ *
  * Comprehensive load testing for file browser endpoints including:
  * - File listing and navigation
  * - File upload operations
@@ -10,7 +10,7 @@
  * - Search functionality
  * - File management operations (create, rename, delete)
  * - Analytics tracking endpoints
- * 
+ *
  * Task: T-1752989144295-507 - Implement automated load test scripts for key user flows
  */
 
@@ -22,7 +22,6 @@ const path = require('path');
  * File Browser Test Scenarios
  */
 class FileBrowserTests {
-  
   /**
    * File Listing and Navigation Test
    */
@@ -30,7 +29,7 @@ class FileBrowserTests {
     try {
       // 1. List root directory
       const rootResponse = await user.executeRequest('GET', '/api/files/list?path=/');
-      
+
       if (rootResponse.statusCode !== 200) {
         console.log(`⚠️  Root listing failed for user ${user.id}: ${rootResponse.statusCode}`);
         return false;
@@ -41,14 +40,15 @@ class FileBrowserTests {
       // 2. Navigate to subdirectories from response
       const files = rootResponse.data?.files || [];
       const folders = files.filter(f => f.type === 'folder');
-      
+
       if (folders.length > 0) {
         const randomFolder = folders[Math.floor(Math.random() * folders.length)];
-        
-        const subDirResponse = await user.executeRequest('GET', 
+
+        const subDirResponse = await user.executeRequest(
+          'GET',
           `/api/files/list?path=${encodeURIComponent(randomFolder.path)}`
         );
-        
+
         if (subDirResponse.statusCode !== 200) {
           console.log(`⚠️  Subdirectory listing failed for user ${user.id}: ${subDirResponse.statusCode}`);
         }
@@ -60,18 +60,18 @@ class FileBrowserTests {
       const regularFiles = files.filter(f => f.type === 'file');
       if (regularFiles.length > 0) {
         const randomFile = regularFiles[Math.floor(Math.random() * regularFiles.length)];
-        
-        const fileDetailsResponse = await user.executeRequest('GET',
+
+        const fileDetailsResponse = await user.executeRequest(
+          'GET',
           `/api/files/details?path=${encodeURIComponent(randomFile.path)}`
         );
-        
+
         if (fileDetailsResponse.statusCode !== 200) {
           console.log(`⚠️  File details failed for user ${user.id}: ${fileDetailsResponse.statusCode}`);
         }
       }
 
       return true;
-
     } catch (error) {
       console.error(`❌ File navigation error for user ${user.id}:`, error.message || error);
       return false;
@@ -94,7 +94,7 @@ class FileBrowserTests {
         filePath: `/uploads/${testFileName}`,
         content: Buffer.from(testFileContent).toString('base64'),
         contentType: 'text/plain',
-        size: testFileSize
+        size: testFileSize,
       });
 
       if (uploadResponse.statusCode !== 201) {
@@ -110,7 +110,7 @@ class FileBrowserTests {
 
       // 2. Verify file was uploaded by listing directory
       const verifyResponse = await user.executeRequest('GET', '/api/files/list?path=/uploads');
-      
+
       if (verifyResponse.statusCode !== 200) {
         console.log(`⚠️  Upload verification failed for user ${user.id}: ${verifyResponse.statusCode}`);
         return false;
@@ -119,7 +119,8 @@ class FileBrowserTests {
       await user.thinkTime();
 
       // 3. Get uploaded file details
-      const detailsResponse = await user.executeRequest('GET',
+      const detailsResponse = await user.executeRequest(
+        'GET',
         `/api/files/details?path=${encodeURIComponent(uploadedFilePath)}`
       );
 
@@ -128,7 +129,6 @@ class FileBrowserTests {
       }
 
       return true;
-
     } catch (error) {
       console.error(`❌ File upload error for user ${user.id}:`, error.message || error);
       return false;
@@ -142,7 +142,7 @@ class FileBrowserTests {
     try {
       // 1. First list files to find downloadable content
       const listResponse = await user.executeRequest('GET', '/api/files/list?path=/');
-      
+
       if (listResponse.statusCode !== 200) {
         console.log(`⚠️  File listing for download failed for user ${user.id}: ${listResponse.statusCode}`);
         return false;
@@ -150,7 +150,7 @@ class FileBrowserTests {
 
       const files = listResponse.data?.files || [];
       const downloadableFiles = files.filter(f => f.type === 'file' && f.size && f.size > 0);
-      
+
       if (downloadableFiles.length === 0) {
         // Use uploaded file if available
         if (user.sessionData.uploadedFiles && user.sessionData.uploadedFiles.length > 0) {
@@ -166,8 +166,9 @@ class FileBrowserTests {
 
       // 2. Download a random file
       const randomFile = downloadableFiles[Math.floor(Math.random() * downloadableFiles.length)];
-      
-      const downloadResponse = await user.executeRequest('GET',
+
+      const downloadResponse = await user.executeRequest(
+        'GET',
         `/api/files/download?path=${encodeURIComponent(randomFile.path)}`
       );
 
@@ -186,8 +187,8 @@ class FileBrowserTests {
         success: true,
         metadata: {
           fileSize: randomFile.size || 1024,
-          downloadMethod: 'direct'
-        }
+          downloadMethod: 'direct',
+        },
       });
 
       if (analyticsResponse.statusCode !== 200) {
@@ -195,7 +196,6 @@ class FileBrowserTests {
       }
 
       return true;
-
     } catch (error) {
       console.error(`❌ File download error for user ${user.id}:`, error.message || error);
       return false;
@@ -207,13 +207,14 @@ class FileBrowserTests {
    */
   static async fileSearchTest(user) {
     const searchTerms = ['test', 'prompt', 'graph', 'workflow', 'template', 'example', 'demo'];
-    
+
     try {
       // 1. Perform multiple searches with different terms
       for (let i = 0; i < Math.min(3, searchTerms.length); i++) {
         const searchTerm = searchTerms[Math.floor(Math.random() * searchTerms.length)];
-        
-        const searchResponse = await user.executeRequest('GET', 
+
+        const searchResponse = await user.executeRequest(
+          'GET',
           `/api/files/search?q=${encodeURIComponent(searchTerm)}&limit=10`
         );
 
@@ -223,14 +224,15 @@ class FileBrowserTests {
         }
 
         const results = searchResponse.data?.results || [];
-        
+
         await user.thinkTime();
 
         // 2. Click on search result (simulate)
         if (results.length > 0) {
           const randomResult = results[Math.floor(Math.random() * results.length)];
-          
-          const resultClickResponse = await user.executeRequest('GET',
+
+          const resultClickResponse = await user.executeRequest(
+            'GET',
             `/api/files/details?path=${encodeURIComponent(randomResult.path)}`
           );
 
@@ -239,18 +241,24 @@ class FileBrowserTests {
           }
 
           // 3. Track search analytics
-          const searchAnalyticsResponse = await user.executeRequest('POST', '/api/file-browser/analytics/track-search', {
-            searchTerm,
-            resultsCount: results.length,
-            clickedResults: 1,
-            metadata: {
-              searchType: 'full_text',
-              responseTime: searchResponse.responseTime || 0
+          const searchAnalyticsResponse = await user.executeRequest(
+            'POST',
+            '/api/file-browser/analytics/track-search',
+            {
+              searchTerm,
+              resultsCount: results.length,
+              clickedResults: 1,
+              metadata: {
+                searchType: 'full_text',
+                responseTime: searchResponse.responseTime || 0,
+              },
             }
-          });
+          );
 
           if (searchAnalyticsResponse.statusCode !== 200) {
-            console.log(`⚠️  Search analytics tracking failed for user ${user.id}: ${searchAnalyticsResponse.statusCode}`);
+            console.log(
+              `⚠️  Search analytics tracking failed for user ${user.id}: ${searchAnalyticsResponse.statusCode}`
+            );
           }
         }
 
@@ -258,7 +266,6 @@ class FileBrowserTests {
       }
 
       return true;
-
     } catch (error) {
       console.error(`❌ File search error for user ${user.id}:`, error.message || error);
       return false;
@@ -272,11 +279,11 @@ class FileBrowserTests {
     try {
       const testFolderName = `test-folder-${user.id}-${Date.now()}`;
       const testFileName = `test-file-${user.id}-${Date.now()}.txt`;
-      
+
       // 1. Create folder
       const createFolderResponse = await user.executeRequest('POST', '/api/files/folder', {
         name: testFolderName,
-        path: `/temp/${testFolderName}`
+        path: `/temp/${testFolderName}`,
       });
 
       if (createFolderResponse.statusCode !== 201) {
@@ -290,7 +297,7 @@ class FileBrowserTests {
         fileName: testFileName,
         filePath: `/temp/${testFolderName}/${testFileName}`,
         content: Buffer.from(`Test content for ${testFileName}`).toString('base64'),
-        contentType: 'text/plain'
+        contentType: 'text/plain',
       });
 
       if (createFileResponse.statusCode !== 201) {
@@ -303,7 +310,7 @@ class FileBrowserTests {
       const renamedFileName = `renamed-${testFileName}`;
       const renameResponse = await user.executeRequest('PUT', '/api/files/rename', {
         oldPath: `/temp/${testFolderName}/${testFileName}`,
-        newPath: `/temp/${testFolderName}/${renamedFileName}`
+        newPath: `/temp/${testFolderName}/${renamedFileName}`,
       });
 
       if (renameResponse.statusCode !== 200) {
@@ -315,7 +322,7 @@ class FileBrowserTests {
       // 4. Copy file
       const copyResponse = await user.executeRequest('POST', '/api/files/copy', {
         sourcePath: `/temp/${testFolderName}/${renamedFileName}`,
-        targetPath: `/temp/${testFolderName}/copy-${renamedFileName}`
+        targetPath: `/temp/${testFolderName}/copy-${renamedFileName}`,
       });
 
       if (copyResponse.statusCode !== 201) {
@@ -325,15 +332,18 @@ class FileBrowserTests {
       await user.thinkTime();
 
       // 5. Delete files and folder (cleanup)
-      const deleteFileResponse = await user.executeRequest('DELETE', 
+      const deleteFileResponse = await user.executeRequest(
+        'DELETE',
         `/api/files/delete?path=${encodeURIComponent(`/temp/${testFolderName}/${renamedFileName}`)}`
       );
 
-      const deleteCopyResponse = await user.executeRequest('DELETE',
+      const deleteCopyResponse = await user.executeRequest(
+        'DELETE',
         `/api/files/delete?path=${encodeURIComponent(`/temp/${testFolderName}/copy-${renamedFileName}`)}`
       );
 
-      const deleteFolderResponse = await user.executeRequest('DELETE',
+      const deleteFolderResponse = await user.executeRequest(
+        'DELETE',
         `/api/files/delete?path=${encodeURIComponent(`/temp/${testFolderName}`)}`
       );
 
@@ -343,7 +353,6 @@ class FileBrowserTests {
       }
 
       return true;
-
     } catch (error) {
       console.error(`❌ File management error for user ${user.id}:`, error.message || error);
       return false;
@@ -357,7 +366,7 @@ class FileBrowserTests {
     try {
       // 1. Load dashboard data
       const dashboardResponse = await user.executeRequest('GET', '/api/file-browser/analytics/dashboard');
-      
+
       if (dashboardResponse.statusCode !== 200) {
         console.log(`⚠️  Analytics dashboard failed for user ${user.id}: ${dashboardResponse.statusCode}`);
         return false;
@@ -367,7 +376,7 @@ class FileBrowserTests {
 
       // 2. Load download statistics
       const downloadStatsResponse = await user.executeRequest('GET', '/api/file-browser/analytics/download-stats');
-      
+
       if (downloadStatsResponse.statusCode !== 200) {
         console.log(`⚠️  Download stats failed for user ${user.id}: ${downloadStatsResponse.statusCode}`);
       }
@@ -377,8 +386,9 @@ class FileBrowserTests {
       // 3. Load usage analytics with time range
       const endDate = new Date();
       const startDate = new Date(endDate.getTime() - 7 * 24 * 60 * 60 * 1000); // 7 days ago
-      
-      const usageResponse = await user.executeRequest('GET',
+
+      const usageResponse = await user.executeRequest(
+        'GET',
         `/api/file-browser/analytics/usage?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`
       );
 
@@ -390,7 +400,7 @@ class FileBrowserTests {
 
       // 4. Load developer insights (admin only)
       const insightsResponse = await user.executeRequest('GET', '/api/file-browser/analytics/insights');
-      
+
       // Insights might fail for non-admin users, which is expected
       if (insightsResponse.statusCode === 403) {
         console.log(`ℹ️  Insights access denied for user ${user.id} (not admin)`);
@@ -399,7 +409,6 @@ class FileBrowserTests {
       }
 
       return true;
-
     } catch (error) {
       console.error(`❌ Analytics dashboard error for user ${user.id}:`, error.message || error);
       return false;
@@ -416,7 +425,7 @@ class FileBrowserTests {
       download: false,
       search: false,
       management: false,
-      analytics: false
+      analytics: false,
     };
 
     try {
@@ -424,59 +433,58 @@ class FileBrowserTests {
       const testPattern = user.id % 6;
 
       switch (testPattern) {
-      case 0:
-        // Navigation + Analytics flow
-        flowResults.navigation = await FileBrowserTests.fileNavigationTest(user);
-        await user.thinkTime();
-        flowResults.analytics = await FileBrowserTests.analyticsDashboardTest(user);
-        break;
-          
-      case 1:
-        // Upload + Download flow
-        flowResults.upload = await FileBrowserTests.fileUploadTest(user);
-        await user.thinkTime();
-        flowResults.download = await FileBrowserTests.fileDownloadTest(user);
-        break;
-          
-      case 2:
-        // Search + Navigation flow
-        flowResults.search = await FileBrowserTests.fileSearchTest(user);
-        await user.thinkTime();
-        flowResults.navigation = await FileBrowserTests.fileNavigationTest(user);
-        break;
-          
-      case 3:
-        // Management operations flow
-        flowResults.management = await FileBrowserTests.fileManagementTest(user);
-        await user.thinkTime();
-        flowResults.navigation = await FileBrowserTests.fileNavigationTest(user);
-        break;
-          
-      case 4:
-        // Full upload workflow
-        flowResults.upload = await FileBrowserTests.fileUploadTest(user);
-        await user.thinkTime();
-        flowResults.search = await FileBrowserTests.fileSearchTest(user);
-        await user.thinkTime();
-        flowResults.download = await FileBrowserTests.fileDownloadTest(user);
-        break;
-          
-      case 5:
-        // Complete flow test
-        flowResults.navigation = await FileBrowserTests.fileNavigationTest(user);
-        await user.thinkTime();
-        flowResults.upload = await FileBrowserTests.fileUploadTest(user);
-        await user.thinkTime();
-        flowResults.search = await FileBrowserTests.fileSearchTest(user);
-        await user.thinkTime();
-        flowResults.analytics = await FileBrowserTests.analyticsDashboardTest(user);
-        break;
+        case 0:
+          // Navigation + Analytics flow
+          flowResults.navigation = await FileBrowserTests.fileNavigationTest(user);
+          await user.thinkTime();
+          flowResults.analytics = await FileBrowserTests.analyticsDashboardTest(user);
+          break;
+
+        case 1:
+          // Upload + Download flow
+          flowResults.upload = await FileBrowserTests.fileUploadTest(user);
+          await user.thinkTime();
+          flowResults.download = await FileBrowserTests.fileDownloadTest(user);
+          break;
+
+        case 2:
+          // Search + Navigation flow
+          flowResults.search = await FileBrowserTests.fileSearchTest(user);
+          await user.thinkTime();
+          flowResults.navigation = await FileBrowserTests.fileNavigationTest(user);
+          break;
+
+        case 3:
+          // Management operations flow
+          flowResults.management = await FileBrowserTests.fileManagementTest(user);
+          await user.thinkTime();
+          flowResults.navigation = await FileBrowserTests.fileNavigationTest(user);
+          break;
+
+        case 4:
+          // Full upload workflow
+          flowResults.upload = await FileBrowserTests.fileUploadTest(user);
+          await user.thinkTime();
+          flowResults.search = await FileBrowserTests.fileSearchTest(user);
+          await user.thinkTime();
+          flowResults.download = await FileBrowserTests.fileDownloadTest(user);
+          break;
+
+        case 5:
+          // Complete flow test
+          flowResults.navigation = await FileBrowserTests.fileNavigationTest(user);
+          await user.thinkTime();
+          flowResults.upload = await FileBrowserTests.fileUploadTest(user);
+          await user.thinkTime();
+          flowResults.search = await FileBrowserTests.fileSearchTest(user);
+          await user.thinkTime();
+          flowResults.analytics = await FileBrowserTests.analyticsDashboardTest(user);
+          break;
       }
 
       // Store results for reporting
       user.sessionData.fileBrowserResults = flowResults;
       return true;
-
     } catch (error) {
       console.error(`❌ Comprehensive file browser test error for user ${user.id}:`, error.message || error);
       return false;
@@ -500,9 +508,9 @@ async function runFileBrowserLoadTests() {
         concurrency: 8,
         duration: 30000, // 30 seconds
         rampUpTime: 5000, // 5 seconds
-        thinkTime: { min: 800, max: 2500 }
+        thinkTime: { min: 800, max: 2500 },
       }),
-      scenario: FileBrowserTests.fileNavigationTest
+      scenario: FileBrowserTests.fileNavigationTest,
     },
     {
       name: 'File Upload/Download - Medium Load',
@@ -511,9 +519,9 @@ async function runFileBrowserLoadTests() {
         concurrency: 12,
         duration: 45000, // 45 seconds
         rampUpTime: 10000, // 10 seconds
-        thinkTime: { min: 1000, max: 3000 }
+        thinkTime: { min: 1000, max: 3000 },
       }),
-      scenario: FileBrowserTests.fileUploadTest
+      scenario: FileBrowserTests.fileUploadTest,
     },
     {
       name: 'File Search - Medium Load',
@@ -522,9 +530,9 @@ async function runFileBrowserLoadTests() {
         concurrency: 15,
         duration: 40000, // 40 seconds
         rampUpTime: 8000, // 8 seconds
-        thinkTime: { min: 500, max: 2000 }
+        thinkTime: { min: 500, max: 2000 },
       }),
-      scenario: FileBrowserTests.fileSearchTest
+      scenario: FileBrowserTests.fileSearchTest,
     },
     {
       name: 'Analytics Dashboard - Light Load',
@@ -533,9 +541,9 @@ async function runFileBrowserLoadTests() {
         concurrency: 6,
         duration: 35000, // 35 seconds
         rampUpTime: 7000, // 7 seconds
-        thinkTime: { min: 1500, max: 4000 }
+        thinkTime: { min: 1500, max: 4000 },
       }),
-      scenario: FileBrowserTests.analyticsDashboardTest
+      scenario: FileBrowserTests.analyticsDashboardTest,
     },
     {
       name: 'Comprehensive File Browser - Heavy Load',
@@ -550,11 +558,11 @@ async function runFileBrowserLoadTests() {
           { email: 'fileuser2@example.com', password: 'TestPass123!', role: 'user' },
           { email: 'fileuser3@example.com', password: 'TestPass123!', role: 'user' },
           { email: 'fileadmin@example.com', password: 'TestPass123!', role: 'admin' },
-          { email: 'filedev@example.com', password: 'TestPass123!', role: 'developer' }
-        ]
+          { email: 'filedev@example.com', password: 'TestPass123!', role: 'developer' },
+        ],
       }),
-      scenario: FileBrowserTests.comprehensiveFileBrowserTest
-    }
+      scenario: FileBrowserTests.comprehensiveFileBrowserTest,
+    },
   ];
 
   const allResults = [];
@@ -562,18 +570,18 @@ async function runFileBrowserLoadTests() {
   for (const testConfig of testConfigs) {
     console.log(`\n🎯 Running: ${testConfig.name}`);
     console.log('─'.repeat(50));
-    
+
     const runner = new LoadTestRunner(testConfig.config);
     const results = await runner.runLoadTest(testConfig.scenario, testConfig.name);
-    
+
     // Export results
     const filename = `file-browser-load-test-${testConfig.name.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.json`;
     runner.exportResults(results, filename);
-    
+
     allResults.push({
       testName: testConfig.name,
       results,
-      filename
+      filename,
     });
 
     // Pause between tests
@@ -586,7 +594,7 @@ async function runFileBrowserLoadTests() {
   // Generate summary report
   console.log('\n📊 File Browser Load Test Summary');
   console.log('==================================');
-  
+
   allResults.forEach((testResult, index) => {
     const { testName, results } = testResult;
     console.log(`\n${index + 1}. ${testName}:`);
@@ -607,5 +615,5 @@ if (require.main === module) {
 
 module.exports = {
   FileBrowserTests,
-  runFileBrowserLoadTests
+  runFileBrowserLoadTests,
 };

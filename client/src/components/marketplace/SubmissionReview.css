@@ -400,7 +400,7 @@
   background: #f9fafb;
 }
 
-.radio-option input[type="radio"] {
+.radio-option input[type='radio'] {
   margin: 0;
 }
 
@@ -419,7 +419,7 @@
   font-weight: 500;
 }
 
-.form-section input[type="range"] {
+.form-section input[type='range'] {
   width: 100%;
   margin: 8px 0;
 }
@@ -494,7 +494,7 @@
   white-space: nowrap;
 }
 
-.rating-input input[type="range"] {
+.rating-input input[type='range'] {
   flex: 1;
   margin: 0;
 }
@@ -606,7 +606,7 @@
   .review-content {
     grid-template-columns: 1fr;
   }
-  
+
   .review-form {
     position: static;
   }
@@ -616,31 +616,31 @@
   .submission-review {
     padding: 16px;
   }
-  
+
   .review-header {
     flex-direction: column;
     gap: 16px;
     align-items: flex-start;
   }
-  
+
   .detail-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .decision-options {
     flex-direction: column;
   }
-  
+
   .rating-input {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .suggestion-item {
     flex-direction: column;
     gap: 4px;
   }
-  
+
   .remove-suggestion {
     align-self: flex-start;
   }
@@ -652,22 +652,22 @@
     background: #111827;
     color: #f9fafb;
   }
-  
+
   .submission-info h2 {
     color: #f9fafb;
   }
-  
+
   .detail-section,
   .review-form {
     background: #1f2937;
     color: #f9fafb;
   }
-  
+
   .detail-section h3,
   .review-form h3 {
     color: #f9fafb;
   }
-  
+
   .description-text,
   .code-preview,
   .example-output,
@@ -676,7 +676,7 @@
     background: #374151;
     border-color: #4b5563;
   }
-  
+
   .form-section textarea,
   .comments-input textarea,
   .suggestion-item input {
@@ -684,18 +684,18 @@
     border-color: #4b5563;
     color: #f9fafb;
   }
-  
+
   .form-section textarea:focus,
   .comments-input textarea:focus,
   .suggestion-item input:focus {
     border-color: #667eea;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
   }
-  
+
   .radio-option {
     border-color: #4b5563;
   }
-  
+
   .radio-option:hover {
     background: #374151;
   }

@@ -11,17 +11,20 @@ The Prompt Spaghetti extension system provides a comprehensive framework for ext
 ### Core Runtime System Extension Points
 
 #### 1. Node Runtime Extensions (`RuntimeNode`)
+
 **Location**: `packages/core/runtime/index.ts`
 **Purpose**: Add new node types with custom execution logic
 **Extensibility**: HIGH
 
 **Extension Points**:
+
 - **Custom Node Types**: Extend `RuntimeNode<TOutput>` or `AdvancedRuntimeNode<TOutput>`
 - **Execution Context**: Access to `ExecutionContext` and `AdvancedExecutionContext`
 - **State Management**: Persistent state through `nodeStates` Map
 - **Performance Tracking**: Built-in performance metrics collection
 
 **Current Node Types**:
+
 - `WeightedChoiceNode` - Weighted random selection
 - `ConcatNode` - String concatenation
 - `OutputNode` - Output generation
@@ -35,11 +38,13 @@ The Prompt Spaghetti extension system provides a comprehensive framework for ext
 - `PythonTransform` - Python code execution (Epic 8)
 
 #### 2. Advanced Runtime Extensions (`AdvancedRuntimeNode`)
+
 **Location**: `packages/core/runtime/advanced.ts`
 **Purpose**: Add advanced nodes with state management and caching
 **Extensibility**: HIGH
 
 **Extension Points**:
+
 - **State Management**: `getState()` and `setState()` methods
 - **Validation**: `validate()` method for configuration validation
 - **Serialization**: `serialize()` method for persistence
@@ -47,11 +52,13 @@ The Prompt Spaghetti extension system provides a comprehensive framework for ext
 - **Cache Integration**: Access to performance cache
 
 #### 3. I/O System Extensions
+
 **Location**: `packages/core/runtime/io-system.ts`
 **Purpose**: Type-safe input/output handling with validation
 **Extensibility**: MEDIUM
 
 **Extension Points**:
+
 - **Input Specifications**: `IOSpecBuilder` for defining inputs
 - **Output Specifications**: Type-safe output definitions
 - **Validation Constraints**: Custom validation rules
@@ -60,17 +67,20 @@ The Prompt Spaghetti extension system provides a comprehensive framework for ext
 ### UI Component Extension Points
 
 #### 4. Inspector Panel Extensions
+
 **Location**: `packages/core/components/Inspector/InspectorPanel.tsx`
 **Purpose**: Add custom node editors and UI components
 **Extensibility**: HIGH
 
 **Extension Points**:
+
 - **Node Editors**: Custom editors for node configuration
 - **Properties Section**: Custom property editors
 - **Preview Section**: Custom preview components
 - **Collapsible Sections**: Reusable UI components
 
 **Current Editors**:
+
 - `BaseNodeEditor` - Base class for all editors
 - `WeightedChoiceEditor` - Weighted choice configuration
 - `OutputEditor` - Output node configuration
@@ -79,22 +89,26 @@ The Prompt Spaghetti extension system provides a comprehensive framework for ext
 - `PythonTransformEditor` - Python code editor
 
 #### 5. Graph Editor Extensions
+
 **Location**: `packages/core/GraphEditor.tsx`
 **Purpose**: Add custom graph visualization and interaction
 **Extensibility**: MEDIUM
 
 **Extension Points**:
+
 - **Node Rendering**: Custom node visual representation
 - **Edge Rendering**: Custom connection visualization
 - **Interaction Handlers**: Custom user interactions
 - **Validation Rules**: Custom graph validation
 
 #### 6. Palette Extensions
+
 **Location**: `packages/core/Palette.tsx`
 **Purpose**: Add new node types to the palette
 **Extensibility**: HIGH
 
 **Extension Points**:
+
 - **Node Categories**: Group nodes by functionality
 - **Node Icons**: Custom icons for node types
 - **Drag & Drop**: Custom drag behavior
@@ -103,22 +117,26 @@ The Prompt Spaghetti extension system provides a comprehensive framework for ext
 ### Schema and Validation Extensions
 
 #### 7. Graph Schema Extensions
+
 **Location**: `packages/core/graphSchema.ts`
 **Purpose**: Add validation schemas for new node types
 **Extensibility**: HIGH
 
 **Extension Points**:
+
 - **Node Type Enum**: Add new node types to `NodeTypeEnum`
 - **Node Schemas**: Zod schemas for node validation
 - **Graph Validation**: Custom graph-level validation
 - **Migration Support**: Schema versioning and migration
 
 #### 8. Node Schema Extensions
+
 **Location**: `packages/core/nodeSchemas.ts`
 **Purpose**: Add UI schemas for form generation
 **Extensibility**: HIGH
 
 **Extension Points**:
+
 - **UI Schema Generation**: Auto-generate forms from schemas
 - **Field Validation**: Custom field validation rules
 - **Form Layout**: Custom form layouts
@@ -127,22 +145,26 @@ The Prompt Spaghetti extension system provides a comprehensive framework for ext
 ### State Management Extensions
 
 #### 9. Graph Store Extensions
+
 **Location**: `packages/core/graphStore.ts`
 **Purpose**: Add custom state management for extensions
 **Extensibility**: MEDIUM
 
 **Extension Points**:
+
 - **State Slices**: Custom state management
 - **Action Creators**: Custom actions
 - **Selectors**: Custom state selectors
 - **Middleware**: Custom state middleware
 
 #### 10. Corrections Store Extensions
+
 **Location**: `packages/core/correctionsStore.ts`
 **Purpose**: Add custom correction management
 **Extensibility**: MEDIUM
 
 **Extension Points**:
+
 - **Correction Types**: Custom correction categories
 - **Validation Rules**: Custom correction validation
 - **Statistics**: Custom metrics collection
@@ -151,22 +173,26 @@ The Prompt Spaghetti extension system provides a comprehensive framework for ext
 ### Server-Side Extensions
 
 #### 11. Engine Extensions
+
 **Location**: `server/src/engine.ts`
 **Purpose**: Add server-side execution logic
 **Extensibility**: HIGH
 
 **Extension Points**:
+
 - **Node Execution**: Server-side node processing
 - **Graph Validation**: Server-side validation
 - **Performance Optimization**: Execution optimization
 - **Error Handling**: Custom error processing
 
 #### 12. API Extensions
+
 **Location**: `server/src/index.ts`
 **Purpose**: Add new API endpoints
 **Extensibility**: HIGH
 
 **Extension Points**:
+
 - **REST Endpoints**: Custom API endpoints
 - **Middleware**: Custom request processing
 - **Authentication**: Custom auth providers
@@ -175,26 +201,31 @@ The Prompt Spaghetti extension system provides a comprehensive framework for ext
 ## 🎯 High-Value Extension Points
 
 ### 1. Custom Node Types (Priority: CRITICAL)
+
 **Value**: Allows adding entirely new functionality
 **Effort**: Medium
 **Examples**: AI model integration, database queries, web scraping
 
 ### 2. Inspector Editors (Priority: HIGH)
+
 **Value**: Custom configuration interfaces
 **Effort**: Low-Medium
 **Examples**: Visual editors, code editors, form builders
 
 ### 3. Graph Visualization (Priority: MEDIUM)
+
 **Value**: Custom graph rendering
 **Effort**: High
 **Examples**: 3D visualization, custom layouts, animations
 
 ### 4. Validation Rules (Priority: HIGH)
+
 **Value**: Custom validation logic
 **Effort**: Low
 **Examples**: Business rules, data validation, compliance checks
 
 ### 5. State Management (Priority: MEDIUM)
+
 **Value**: Custom state handling
 **Effort**: Medium
 **Examples**: Persistence, synchronization, caching
@@ -208,15 +239,15 @@ graph TD
     C --> D[Inspector Panel]
     A --> E[Engine Execution]
     E --> F[API Endpoints]
-    
+
     G[Advanced Runtime] --> A
     G --> H[I/O System]
     H --> C
-    
+
     I[Graph Store] --> D
     I --> J[Graph Editor]
     J --> K[Palette]
-    
+
     L[Corrections Store] --> M[Corrections Panel]
     M --> N[Workflow Manager]
 ```
@@ -224,6 +255,7 @@ graph TD
 ## 🔧 Extension Development Workflow
 
 ### 1. Node Extension Development
+
 ```typescript
 // 1. Create runtime node
 class CustomNode extends AdvancedRuntimeNode<string> {
@@ -231,12 +263,12 @@ class CustomNode extends AdvancedRuntimeNode<string> {
     // Custom logic
     return "result";
   }
-  
+
   validate(): ValidationResult {
     // Validation logic
     return { valid: true, errors: [], warnings: [] };
   }
-  
+
   serialize(): AdvancedNodeData {
     // Serialization logic
     return { id: this.id, type: 'Custom', config: this.config, data: {} };
@@ -263,6 +295,7 @@ export const CustomNodeEditor: React.FC<BaseNodeEditorProps> = (props) => {
 ```
 
 ### 2. UI Extension Development
+
 ```typescript
 // 1. Create custom component
 export const CustomInspectorSection: React.FC<Props> = ({ node, onChange }) => {
@@ -278,6 +311,7 @@ export const CustomInspectorSection: React.FC<Props> = ({ node, onChange }) => {
 ```
 
 ### 3. API Extension Development
+
 ```typescript
 // 1. Create API handler
 app.post('/api/custom-endpoint', async (req, res) => {
@@ -292,12 +326,14 @@ app.post('/api/custom-endpoint', async (req, res) => {
 ## 🛡️ Security Considerations
 
 ### Extension Sandboxing
+
 - **Code Isolation**: Extensions run in isolated contexts
 - **Permission System**: Granular permission control
 - **Resource Limits**: Memory and CPU limitations
 - **API Access Control**: Restricted API access
 
 ### Validation Requirements
+
 - **Schema Validation**: All extensions must provide schemas
 - **Input Sanitization**: User input validation
 - **Output Validation**: Result validation
@@ -306,12 +342,14 @@ app.post('/api/custom-endpoint', async (req, res) => {
 ## 📈 Performance Considerations
 
 ### Optimization Strategies
+
 - **Lazy Loading**: Load extensions on demand
 - **Caching**: Cache extension results
 - **Batching**: Batch extension operations
 - **Monitoring**: Performance monitoring
 
 ### Resource Management
+
 - **Memory Limits**: Per-extension memory limits
 - **Execution Timeout**: Prevent infinite loops
 - **Garbage Collection**: Proper cleanup
@@ -320,12 +358,14 @@ app.post('/api/custom-endpoint', async (req, res) => {
 ## 🔄 Version Compatibility
 
 ### API Versioning
+
 - **Semantic Versioning**: Extension API versions
 - **Backward Compatibility**: Maintain compatibility
 - **Deprecation Warnings**: Graceful deprecation
 - **Migration Tools**: Version migration utilities
 
 ### Extension Lifecycle
+
 - **Installation**: Extension installation process
 - **Activation**: Extension activation/deactivation
 - **Updates**: Extension update mechanisms
@@ -333,4 +373,4 @@ app.post('/api/custom-endpoint', async (req, res) => {
 
 ---
 
-*This extension point documentation provides the foundation for Epic 8.4 - Extension System Architecture, enabling developers to create powerful extensions that integrate seamlessly with the Prompt Spaghetti system.*
+_This extension point documentation provides the foundation for Epic 8.4 - Extension System Architecture, enabling developers to create powerful extensions that integrate seamlessly with the Prompt Spaghetti system._

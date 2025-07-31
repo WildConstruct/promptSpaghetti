@@ -1,7 +1,7 @@
 /**
  * Chargeback Tracking Service - Epic 17 Implementation
  * Task: E17-1753114397355-30EFDE - Implement chargeback tracking
- * 
+ *
  * Comprehensive service for managing chargebacks, disputes, and evidence collection
  * integrated with existing transaction and payment systems.
  */
@@ -29,14 +29,9 @@ import {
   UpdateChargebackStatusSchema,
   SubmitEvidenceSchema,
   CreatePreventionRuleSchema,
-  CreateResponseTemplateSchema
+  CreateResponseTemplateSchema,
 } from './chargeback.types.js';
-import {
-  PaymentProvider,
-  Transaction,
-  Order,
-  PaymentIntent
-} from './transaction.types.js';
+import { PaymentProvider, Transaction, Order, PaymentIntent } from './transaction.types.js';
 import { DatabaseService } from '../database/database.service.js';
 
 export class ChargebackService {
@@ -47,13 +42,13 @@ export class ChargebackService {
   constructor(fastify: FastifyInstance) {
     this.fastify = fastify;
     this.db = fastify.db;
-    
+
     if (!process.env.STRIPE_SECRET_KEY) {
       throw new Error('STRIPE_SECRET_KEY environment variable is required');
     }
-    
+
     this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-      apiVersion: '2023-10-16'
+      apiVersion: '2023-10-16',
     });
   }
 
@@ -64,7 +59,7 @@ export class ChargebackService {
   async createChargeback(chargebackData: any): Promise<ChargebackServiceResponse<Chargeback>> {
     try {
       const validated = CreateChargebackSchema.parse(chargebackData);
-      
+
       // Get related transaction and order data
       const transaction = await this.getTransactionById(validated.transaction_id);
       if (!transaction) {
@@ -72,8 +67,8 @@ export class ChargebackService {
           success: false,
           error: {
             code: 'TRANSACTION_NOT_FOUND',
-            message: 'Associated transaction not found'
-          }
+            message: 'Associated transaction not found',
+          },
         };
       }
 
@@ -87,56 +82,56 @@ export class ChargebackService {
           success: false,
           error: {
             code: 'DUPLICATE_CHARGEBACK',
-            message: 'Chargeback already exists for this provider ID'
-          }
+            message: 'Chargeback already exists for this provider ID',
+          },
         };
       }
 
       const chargebackId = crypto.randomUUID();
       const order = await this.getOrderByTransactionId(transaction.id);
-      
+
       const chargeback: Chargeback = {
         id: chargebackId,
         transaction_id: validated.transaction_id,
         order_id: order?.id || '',
         payment_intent_id: transaction.payment_intent_id,
         user_id: transaction.user_id,
-        
+
         provider: transaction.provider,
         provider_chargeback_id: validated.provider_chargeback_id,
-        
+
         type: validated.type,
         status: ChargebackStatus.INITIATED,
         reason: validated.reason,
         reason_description: validated.customer_message,
-        
+
         amount_cents: validated.amount_cents,
         fee_cents: validated.fee_cents,
         currency: validated.currency,
-        
+
         initiated_at: validated.initiated_at,
         due_date: validated.due_date,
-        
+
         evidence: [],
         evidence_submitted: false,
         evidence_submission_count: 0,
-        
+
         liability_shift: false,
-        
+
         risk_level: this.calculateRiskLevel(validated.amount_cents, validated.reason),
         auto_response_enabled: false,
         requires_manual_review: true,
         escalation_level: 1,
-        
+
         communication_history: [],
-        
+
         metadata: validated.metadata,
         tags: [],
-        
+
         created_at: new Date(),
         updated_at: new Date(),
         created_by: 'system',
-        last_updated_by: 'system'
+        last_updated_by: 'system',
       };
 
       // Save chargeback to database
@@ -148,14 +143,35 @@ export class ChargebackService {
          metadata, tags, created_at, updated_at, created_by, last_updated_by)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
-          chargebackId, chargeback.transaction_id, chargeback.order_id, chargeback.payment_intent_id,
-          chargeback.user_id, chargeback.provider, chargeback.provider_chargeback_id, chargeback.type,
-          chargeback.status, chargeback.reason, chargeback.reason_description, chargeback.amount_cents,
-          chargeback.fee_cents, chargeback.currency, chargeback.initiated_at, chargeback.due_date,
-          chargeback.evidence_submitted, chargeback.evidence_submission_count, chargeback.liability_shift,
-          chargeback.risk_level, chargeback.auto_response_enabled, chargeback.requires_manual_review,
-          chargeback.escalation_level, JSON.stringify(chargeback.metadata), JSON.stringify(chargeback.tags),
-          chargeback.created_at, chargeback.updated_at, chargeback.created_by, chargeback.last_updated_by
+          chargebackId,
+          chargeback.transaction_id,
+          chargeback.order_id,
+          chargeback.payment_intent_id,
+          chargeback.user_id,
+          chargeback.provider,
+          chargeback.provider_chargeback_id,
+          chargeback.type,
+          chargeback.status,
+          chargeback.reason,
+          chargeback.reason_description,
+          chargeback.amount_cents,
+          chargeback.fee_cents,
+          chargeback.currency,
+          chargeback.initiated_at,
+          chargeback.due_date,
+          chargeback.evidence_submitted,
+          chargeback.evidence_submission_count,
+          chargeback.liability_shift,
+          chargeback.risk_level,
+          chargeback.auto_response_enabled,
+          chargeback.requires_manual_review,
+          chargeback.escalation_level,
+          JSON.stringify(chargeback.metadata),
+          JSON.stringify(chargeback.tags),
+          chargeback.created_at,
+          chargeback.updated_at,
+          chargeback.created_by,
+          chargeback.last_updated_by,
         ]
       );
 
@@ -174,65 +190,60 @@ export class ChargebackService {
         metadata: {
           request_id: crypto.randomUUID(),
           timestamp: new Date(),
-          execution_time_ms: Date.now()
-        }
+          execution_time_ms: Date.now(),
+        },
       };
-
     } catch (error) {
       this.fastify.log.error('Error creating chargeback:', error);
       return {
         success: false,
         error: {
           code: 'CREATION_FAILED',
-          message: error instanceof Error ? error.message : 'Failed to create chargeback'
-        }
+          message: error instanceof Error ? error.message : 'Failed to create chargeback',
+        },
       };
     }
   }
 
   async getChargeback(chargebackId: string): Promise<ChargebackServiceResponse<Chargeback>> {
     try {
-      const result = await this.db.query(
-        'SELECT * FROM chargebacks WHERE id = ?',
-        [chargebackId]
-      );
+      const result = await this.db.query('SELECT * FROM chargebacks WHERE id = ?', [chargebackId]);
 
       if (result.length === 0) {
         return {
           success: false,
           error: {
             code: 'CHARGEBACK_NOT_FOUND',
-            message: 'Chargeback not found'
-          }
+            message: 'Chargeback not found',
+          },
         };
       }
 
       const chargeback = await this.mapRowToChargeback(result[0]);
-      
+
       return {
         success: true,
-        data: chargeback
+        data: chargeback,
       };
-
     } catch (error) {
       this.fastify.log.error('Error getting chargeback:', error);
       return {
         success: false,
         error: {
           code: 'FETCH_FAILED',
-          message: error instanceof Error ? error.message : 'Failed to fetch chargeback'
-        }
+          message: error instanceof Error ? error.message : 'Failed to fetch chargeback',
+        },
       };
     }
   }
 
   async updateChargebackStatus(
-    chargebackId: string, 
+    chargebackId: string,
     statusUpdate: any
   ): Promise<ChargebackServiceResponse<Chargeback>> {
     try {
       const validated = UpdateChargebackStatusSchema.parse(statusUpdate);
-      
+
       const chargeback = await this.getChargeback(chargebackId);
       if (!chargeback.success || !chargeback.data) {
         return chargeback;
@@ -244,8 +255,8 @@ export class ChargebackService {
           success: false,
           error: {
             code: 'INVALID_STATUS_TRANSITION',
-            message: `Cannot transition from ${chargeback.data.status} to ${validated.status}`
-          }
+            message: `Cannot transition from ${chargeback.data.status} to ${validated.status}`,
+          },
         };
       }
 
@@ -260,36 +271,32 @@ export class ChargebackService {
           validated.outcome_reason || null,
           validated.internal_notes || null,
           'system', // TODO: Get from request context
-          chargebackId
+          chargebackId,
         ]
       );
 
       // Set closed_at if status is final
       if (this.isFinalStatus(validated.status)) {
-        await this.db.query(
-          'UPDATE chargebacks SET closed_at = datetime(\'now\') WHERE id = ?',
-          [chargebackId]
-        );
+        await this.db.query("UPDATE chargebacks SET closed_at = datetime('now') WHERE id = ?", [chargebackId]);
       }
 
       // Get updated chargeback
       const updatedChargeback = await this.getChargeback(chargebackId);
-      
+
       // Emit status change event
       if (updatedChargeback.success && updatedChargeback.data) {
         await this.emitChargebackEvent('chargeback.updated', updatedChargeback.data);
       }
 
       return updatedChargeback;
-
     } catch (error) {
       this.fastify.log.error('Error updating chargeback status:', error);
       return {
         success: false,
         error: {
           code: 'UPDATE_FAILED',
-          message: error instanceof Error ? error.message : 'Failed to update chargeback'
-        }
+          message: error instanceof Error ? error.message : 'Failed to update chargeback',
+        },
       };
     }
   }
@@ -301,12 +308,12 @@ export class ChargebackService {
   async submitEvidence(evidenceData: any): Promise<ChargebackServiceResponse<ChargebackEvidence[]>> {
     try {
       const validated = SubmitEvidenceSchema.parse(evidenceData);
-      
+
       const chargeback = await this.getChargeback(validated.chargeback_id);
       if (!chargeback.success || !chargeback.data) {
         return {
           success: false,
-          error: chargeback.error || { code: 'CHARGEBACK_NOT_FOUND', message: 'Chargeback not found' }
+          error: chargeback.error || { code: 'CHARGEBACK_NOT_FOUND', message: 'Chargeback not found' },
         };
       }
 
@@ -316,8 +323,8 @@ export class ChargebackService {
           success: false,
           error: {
             code: 'EVIDENCE_SUBMISSION_NOT_ALLOWED',
-            message: 'Evidence cannot be submitted for this chargeback status'
-          }
+            message: 'Evidence cannot be submitted for this chargeback status',
+          },
         };
       }
 
@@ -326,7 +333,7 @@ export class ChargebackService {
       // Process each evidence item
       for (const evidenceItem of validated.evidence) {
         const evidenceId = crypto.randomUUID();
-        
+
         const evidence: ChargebackEvidence = {
           id: evidenceId,
           chargeback_id: validated.chargeback_id,
@@ -341,7 +348,7 @@ export class ChargebackService {
           created_at: new Date(),
           updated_at: new Date(),
           submitted_at: new Date(),
-          created_by: 'system' // TODO: Get from request context
+          created_by: 'system', // TODO: Get from request context
         };
 
         // Save evidence
@@ -350,10 +357,20 @@ export class ChargebackService {
            file_url, source, auto_generated, status, created_at, updated_at, submitted_at, created_by)
            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           [
-            evidenceId, evidence.chargeback_id, evidence.type, evidence.title, evidence.description,
-            evidence.text_content, evidence.file_url, evidence.source, evidence.auto_generated,
-            evidence.status, evidence.created_at, evidence.updated_at, evidence.submitted_at,
-            evidence.created_by
+            evidenceId,
+            evidence.chargeback_id,
+            evidence.type,
+            evidence.title,
+            evidence.description,
+            evidence.text_content,
+            evidence.file_url,
+            evidence.source,
+            evidence.auto_generated,
+            evidence.status,
+            evidence.created_at,
+            evidence.updated_at,
+            evidence.submitted_at,
+            evidence.created_by,
           ]
         );
 
@@ -375,17 +392,16 @@ export class ChargebackService {
 
       return {
         success: true,
-        data: submittedEvidence
+        data: submittedEvidence,
       };
-
     } catch (error) {
       this.fastify.log.error('Error submitting evidence:', error);
       return {
         success: false,
         error: {
           code: 'EVIDENCE_SUBMISSION_FAILED',
-          message: error instanceof Error ? error.message : 'Failed to submit evidence'
-        }
+          message: error instanceof Error ? error.message : 'Failed to submit evidence',
+        },
       };
     }
   }
@@ -396,7 +412,7 @@ export class ChargebackService {
       if (!chargeback.success || !chargeback.data) {
         return {
           success: false,
-          error: chargeback.error || { code: 'CHARGEBACK_NOT_FOUND', message: 'Chargeback not found' }
+          error: chargeback.error || { code: 'CHARGEBACK_NOT_FOUND', message: 'Chargeback not found' },
         };
       }
 
@@ -428,17 +444,16 @@ export class ChargebackService {
 
       return {
         success: true,
-        data: autoEvidence
+        data: autoEvidence,
       };
-
     } catch (error) {
       this.fastify.log.error('Error generating automatic evidence:', error);
       return {
         success: false,
         error: {
           code: 'AUTO_EVIDENCE_FAILED',
-          message: error instanceof Error ? error.message : 'Failed to generate automatic evidence'
-        }
+          message: error instanceof Error ? error.message : 'Failed to generate automatic evidence',
+        },
       };
     }
   }
@@ -454,29 +469,30 @@ export class ChargebackService {
   ): Promise<ChargebackServiceResponse<ChargebackAnalytics>> {
     try {
       const analytics = await this.calculateChargebackAnalytics(periodStart, periodEnd, userId);
-      
+
       return {
         success: true,
-        data: analytics
+        data: analytics,
       };
-
     } catch (error) {
       this.fastify.log.error('Error getting chargeback analytics:', error);
       return {
         success: false,
         error: {
           code: 'ANALYTICS_FAILED',
-          message: error instanceof Error ? error.message : 'Failed to generate analytics'
-        }
+          message: error instanceof Error ? error.message : 'Failed to generate analytics',
+        },
       };
     }
   }
 
-  async searchChargebacks(criteria: ChargebackSearchCriteria): Promise<ChargebackServiceResponse<ChargebackSearchResult>> {
+  async searchChargebacks(
+    criteria: ChargebackSearchCriteria
+  ): Promise<ChargebackServiceResponse<ChargebackSearchResult>> {
     try {
       const { query, params } = this.buildSearchQuery(criteria);
       const results = await this.db.query(query, params);
-      
+
       const chargebacks: Chargeback[] = [];
       for (const row of results) {
         const chargeback = await this.mapRowToChargeback(row);
@@ -494,23 +510,22 @@ export class ChargebackService {
           total_amount_cents: aggregates.total_amount_cents,
           total_fees_cents: aggregates.total_fees_cents,
           status_distribution: aggregates.status_distribution,
-          reason_distribution: aggregates.reason_distribution
-        }
+          reason_distribution: aggregates.reason_distribution,
+        },
       };
 
       return {
         success: true,
-        data: searchResult
+        data: searchResult,
       };
-
     } catch (error) {
       this.fastify.log.error('Error searching chargebacks:', error);
       return {
         success: false,
         error: {
           code: 'SEARCH_FAILED',
-          message: error instanceof Error ? error.message : 'Failed to search chargebacks'
-        }
+          message: error instanceof Error ? error.message : 'Failed to search chargebacks',
+        },
       };
     }
   }
@@ -522,9 +537,9 @@ export class ChargebackService {
   async createPreventionRule(ruleData: any): Promise<ChargebackServiceResponse<ChargebackPreventionRule>> {
     try {
       const validated = CreatePreventionRuleSchema.parse(ruleData);
-      
+
       const ruleId = crypto.randomUUID();
-      
+
       const rule: ChargebackPreventionRule = {
         id: ruleId,
         name: validated.name,
@@ -538,7 +553,7 @@ export class ChargebackService {
         false_positive_rate: 0,
         created_at: new Date(),
         updated_at: new Date(),
-        created_by: 'system' // TODO: Get from request context
+        created_by: 'system', // TODO: Get from request context
       };
 
       await this.db.query(
@@ -547,26 +562,34 @@ export class ChargebackService {
          created_at, updated_at, created_by)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
-          ruleId, rule.name, rule.description, rule.enabled, rule.priority,
-          JSON.stringify(rule.conditions), JSON.stringify(rule.actions),
-          rule.triggered_count, rule.prevented_chargebacks, rule.false_positive_rate,
-          rule.created_at, rule.updated_at, rule.created_by
+          ruleId,
+          rule.name,
+          rule.description,
+          rule.enabled,
+          rule.priority,
+          JSON.stringify(rule.conditions),
+          JSON.stringify(rule.actions),
+          rule.triggered_count,
+          rule.prevented_chargebacks,
+          rule.false_positive_rate,
+          rule.created_at,
+          rule.updated_at,
+          rule.created_by,
         ]
       );
 
       return {
         success: true,
-        data: rule
+        data: rule,
       };
-
     } catch (error) {
       this.fastify.log.error('Error creating prevention rule:', error);
       return {
         success: false,
         error: {
           code: 'RULE_CREATION_FAILED',
-          message: error instanceof Error ? error.message : 'Failed to create prevention rule'
-        }
+          message: error instanceof Error ? error.message : 'Failed to create prevention rule',
+        },
       };
     }
   }
@@ -574,9 +597,9 @@ export class ChargebackService {
   async createResponseTemplate(templateData: any): Promise<ChargebackServiceResponse<ChargebackResponseTemplate>> {
     try {
       const validated = CreateResponseTemplateSchema.parse(templateData);
-      
+
       const templateId = crypto.randomUUID();
-      
+
       const template: ChargebackResponseTemplate = {
         id: templateId,
         name: validated.name,
@@ -593,7 +616,7 @@ export class ChargebackService {
         last_updated: new Date(),
         created_at: new Date(),
         created_by: 'system', // TODO: Get from request context
-        tags: validated.tags
+        tags: validated.tags,
       };
 
       await this.db.query(
@@ -602,28 +625,37 @@ export class ChargebackService {
          usage_count, success_rate, last_updated, created_at, created_by, tags)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
-          templateId, template.name, template.description, template.reason, template.type,
-          template.response_text, JSON.stringify(template.required_evidence),
-          JSON.stringify(template.optional_evidence), template.auto_generate_evidence,
-          template.auto_submit, template.usage_count, template.success_rate,
-          template.last_updated, template.created_at, template.created_by,
-          JSON.stringify(template.tags)
+          templateId,
+          template.name,
+          template.description,
+          template.reason,
+          template.type,
+          template.response_text,
+          JSON.stringify(template.required_evidence),
+          JSON.stringify(template.optional_evidence),
+          template.auto_generate_evidence,
+          template.auto_submit,
+          template.usage_count,
+          template.success_rate,
+          template.last_updated,
+          template.created_at,
+          template.created_by,
+          JSON.stringify(template.tags),
         ]
       );
 
       return {
         success: true,
-        data: template
+        data: template,
       };
-
     } catch (error) {
       this.fastify.log.error('Error creating response template:', error);
       return {
         success: false,
         error: {
           code: 'TEMPLATE_CREATION_FAILED',
-          message: error instanceof Error ? error.message : 'Failed to create response template'
-        }
+          message: error instanceof Error ? error.message : 'Failed to create response template',
+        },
       };
     }
   }
@@ -636,17 +668,19 @@ export class ChargebackService {
     let riskScore = 0;
 
     // Amount-based risk
-    if (amountCents > 100000) riskScore += 30; // $1000+
-    else if (amountCents > 50000) riskScore += 20; // $500+
+    if (amountCents > 100000)
+      riskScore += 30; // $1000+
+    else if (amountCents > 50000)
+      riskScore += 20; // $500+
     else if (amountCents > 10000) riskScore += 10; // $100+
 
     // Reason-based risk
     const highRiskReasons = [
       ChargebackReason.FRAUDULENT,
       ChargebackReason.UNAUTHORIZED_USE,
-      ChargebackReason.CARD_NOT_PRESENT
+      ChargebackReason.CARD_NOT_PRESENT,
     ];
-    
+
     if (highRiskReasons.includes(reason)) {
       riskScore += 40;
     } else if (reason === ChargebackReason.PRODUCT_NOT_RECEIVED) {
@@ -665,35 +699,31 @@ export class ChargebackService {
         ChargebackStatus.UNDER_REVIEW,
         ChargebackStatus.EVIDENCE_REQUESTED,
         ChargebackStatus.ACCEPTED,
-        ChargebackStatus.CLOSED
+        ChargebackStatus.CLOSED,
       ],
       [ChargebackStatus.UNDER_REVIEW]: [
         ChargebackStatus.EVIDENCE_REQUESTED,
         ChargebackStatus.DISPUTED,
         ChargebackStatus.ACCEPTED,
-        ChargebackStatus.CLOSED
+        ChargebackStatus.CLOSED,
       ],
       [ChargebackStatus.EVIDENCE_REQUESTED]: [
         ChargebackStatus.EVIDENCE_SUBMITTED,
         ChargebackStatus.EXPIRED,
-        ChargebackStatus.ACCEPTED
+        ChargebackStatus.ACCEPTED,
       ],
       [ChargebackStatus.EVIDENCE_SUBMITTED]: [
         ChargebackStatus.DISPUTED,
         ChargebackStatus.WON,
         ChargebackStatus.LOST,
-        ChargebackStatus.CLOSED
+        ChargebackStatus.CLOSED,
       ],
-      [ChargebackStatus.DISPUTED]: [
-        ChargebackStatus.WON,
-        ChargebackStatus.LOST,
-        ChargebackStatus.CLOSED
-      ],
+      [ChargebackStatus.DISPUTED]: [ChargebackStatus.WON, ChargebackStatus.LOST, ChargebackStatus.CLOSED],
       [ChargebackStatus.ACCEPTED]: [],
       [ChargebackStatus.WON]: [],
       [ChargebackStatus.LOST]: [],
       [ChargebackStatus.CLOSED]: [],
-      [ChargebackStatus.EXPIRED]: []
+      [ChargebackStatus.EXPIRED]: [],
     };
 
     return validTransitions[currentStatus]?.includes(newStatus) || false;
@@ -705,7 +735,7 @@ export class ChargebackService {
       ChargebackStatus.WON,
       ChargebackStatus.LOST,
       ChargebackStatus.CLOSED,
-      ChargebackStatus.EXPIRED
+      ChargebackStatus.EXPIRED,
     ];
     return finalStatuses.includes(status);
   }
@@ -714,15 +744,15 @@ export class ChargebackService {
     const allowedStatuses = [
       ChargebackStatus.EVIDENCE_REQUESTED,
       ChargebackStatus.UNDER_REVIEW,
-      ChargebackStatus.INITIATED
+      ChargebackStatus.INITIATED,
     ];
-    
-    return allowedStatuses.includes(chargeback.status) && 
-           (chargeback.due_date ? new Date() < chargeback.due_date : true);
+
+    return (
+      allowedStatuses.includes(chargeback.status) && (chargeback.due_date ? new Date() < chargeback.due_date : true)
+    );
   }
 
   private async mapRowToChargeback(row: any): Promise<Chargeback> {
-
     // Get evidence and communication history
     const evidence = await this.getChargebackEvidence(row.id);
     const communications = await this.getChargebackCommunications(row.id);
@@ -767,19 +797,17 @@ export class ChargebackService {
       created_at: new Date(row.created_at),
       updated_at: new Date(row.updated_at),
       created_by: row.created_by,
-      last_updated_by: row.last_updated_by
+      last_updated_by: row.last_updated_by,
     };
   }
 
   // Placeholder helper methods (to be implemented)
   private async getTransactionById(transactionId: string): Promise<Transaction | null> {
-
     // Implementation would query transactions table
     return null;
   }
 
   private async getOrderByTransactionId(transactionId: string): Promise<Order | null> {
-
     // Implementation would query orders table
     return null;
   }
@@ -788,46 +816,38 @@ export class ChargebackService {
     providerChargebackId: string,
     provider: PaymentProvider
   ): Promise<Chargeback | null> {
-
     // Implementation would check for existing chargebacks
     return null;
   }
 
   private async processPreventionRules(chargeback: Chargeback): Promise<void> {
-
     // Implementation would check and apply prevention rules
   }
 
   private async generateChargebackAlert(chargeback: Chargeback): Promise<void> {
-
     // Implementation would create alerts based on risk level
   }
 
   private async emitChargebackEvent(eventType: string, chargeback: Chargeback): Promise<void> {
-
     // Implementation would emit events to event bus
     this.fastify.log.info(`Chargeback event: ${eventType} for ${chargeback.id}`);
   }
 
   private async getChargebackEvidence(chargebackId: string): Promise<ChargebackEvidence[]> {
-
     // Implementation would query evidence table
     return [];
   }
 
   private async getChargebackCommunications(chargebackId: string): Promise<any[]> {
-
     // Implementation would query communications table
     return [];
   }
 
   private async submitEvidenceToProvider(chargeback: Chargeback, evidence: ChargebackEvidence[]): Promise<void> {
-
     // Implementation would submit evidence to Stripe/other providers
   }
 
   private async generateReceiptEvidence(chargeback: Chargeback, order: Order): Promise<ChargebackEvidence | null> {
-
     // Implementation would generate receipt evidence
     return null;
   }
@@ -836,13 +856,11 @@ export class ChargebackService {
     chargeback: Chargeback,
     order: Order
   ): Promise<ChargebackEvidence | null> {
-
     // Implementation would generate communication evidence
     return null;
   }
 
   private async generateTermsEvidence(chargeback: Chargeback): Promise<ChargebackEvidence | null> {
-
     // Implementation would generate terms of service evidence
     return null;
   }
@@ -852,7 +870,6 @@ export class ChargebackService {
     periodEnd: Date,
     userId?: string
   ): Promise<ChargebackAnalytics> {
-
     // Implementation would calculate comprehensive analytics
     return {
       period_start: periodStart,
@@ -871,7 +888,7 @@ export class ChargebackService {
       reason_breakdown: [],
       provider_breakdown: [],
       risk_distribution: [],
-      monthly_trends: []
+      monthly_trends: [],
     };
   }
 
@@ -881,14 +898,13 @@ export class ChargebackService {
   }
 
   private async calculateSearchAggregates(criteria: ChargebackSearchCriteria): Promise<any> {
-
     // Implementation would calculate search aggregates
     return {
       total_count: 0,
       total_amount_cents: 0,
       total_fees_cents: 0,
       status_distribution: {},
-      reason_distribution: {}
+      reason_distribution: {},
     };
   }
 }

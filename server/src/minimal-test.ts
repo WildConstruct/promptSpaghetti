@@ -32,18 +32,18 @@ server.get('/', async (request, reply) => {
 server.get('/health', async (request, reply) => {
   try {
     const dbHealthy = healthCheck();
-    return { 
+    return {
       status: dbHealthy ? 'healthy' : 'unhealthy',
       database: dbHealthy ? 'connected' : 'disconnected',
       mode: 'minimal',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
   } catch (error) {
-    return { 
+    return {
       status: 'unhealthy',
-      database: 'error', 
+      database: 'error',
       error: error.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
   }
 });
@@ -52,32 +52,32 @@ server.get('/health', async (request, reply) => {
 server.post('/preview', async (request, reply) => {
   try {
     const graph = request.body as Graph;
-    
+
     // Basic validation
     const validation = validateGraph(graph);
     if (!validation.valid) {
       return reply.code(400).send({
         error: 'Invalid graph',
-        details: validation.errors
+        details: validation.errors,
       });
     }
-    
+
     // Execute graph (stub mode)
     const result = await executeGraph(graph);
-    
+
     return {
       outputs: result.outputs,
       executionPath: result.executionPath,
       metadata: {
         nodeCount: graph.nodes?.length || 0,
         seed: graph.seed,
-        mode: 'stub'
-      }
+        mode: 'stub',
+      },
     };
   } catch (error) {
     return reply.code(500).send({
       error: 'Graph execution failed',
-      message: error.message
+      message: error.message,
     });
   }
 });

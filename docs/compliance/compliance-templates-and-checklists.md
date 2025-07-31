@@ -1,8 +1,9 @@
 # Compliance Templates and Checklists
 
 ## Document Control
+
 - **Document ID**: CTC-2025-001
-- **Version**: 1.0  
+- **Version**: 1.0
 - **Date**: July 22, 2025
 - **Classification**: Internal Use Only
 - **Owner**: Compliance Team
@@ -25,9 +26,10 @@
 ### GDPR Compliance Checklist
 
 #### Data Processing Assessment
+
 - [ ] **Legal Basis Identification**
   - [ ] Article 6(1)(a) - Consent documented and verifiable
-  - [ ] Article 6(1)(b) - Contract necessity documented  
+  - [ ] Article 6(1)(b) - Contract necessity documented
   - [ ] Article 6(1)(c) - Legal obligation identified
   - [ ] Article 6(1)(d) - Vital interests documented
   - [ ] Article 6(1)(e) - Public task identified
@@ -61,12 +63,14 @@
 #### Data Protection Impact Assessment (DPIA) Template
 
 **Project Information**
-- Project Name: ________________________
-- Project Manager: ______________________
+
+- Project Name: **********\_\_\_\_**********
+- Project Manager: **********\_\_**********
 - DPO Review Required: ☐ Yes ☐ No
-- DPIA Completion Date: _________________
+- DPIA Completion Date: ********\_********
 
 **Step 1: Necessity and Proportionality**
+
 - [ ] Processing purpose clearly defined and documented
 - [ ] Necessity of processing for specified purpose assessed
 - [ ] Proportionality of processing methods evaluated
@@ -75,25 +79,27 @@
 **Step 2: Risk Assessment**
 | Risk Category | Likelihood (1-5) | Impact (1-5) | Risk Score | Mitigation Measures |
 |---------------|------------------|---------------|------------|-------------------|
-| Unauthorized access | __ | __ | __ | |
-| Data loss/corruption | __ | __ | __ | |
-| Unlawful processing | __ | __ | __ | |
-| Function creep | __ | __ | __ | |
-| Discrimination | __ | __ | __ | |
-| Identity theft | __ | __ | __ | |
-| Reputational damage | __ | __ | __ | |
+| Unauthorized access | ** | ** | ** | |
+| Data loss/corruption | ** | ** | ** | |
+| Unlawful processing | ** | ** | ** | |
+| Function creep | ** | ** | ** | |
+| Discrimination | ** | ** | ** | |
+| Identity theft | ** | ** | ** | |
+| Reputational damage | ** | ** | \_\_ | |
 
 **Step 3: Risk Mitigation**
+
 - [ ] Technical measures identified and documented
 - [ ] Organizational measures identified and documented
 - [ ] Residual risk assessment completed
 - [ ] Monitoring and review procedures established
 
 **DPO Sign-off**
-- DPO Name: ____________________________
-- Review Date: __________________________
+
+- DPO Name: ************\_\_\_\_************
+- Review Date: ************\_\_************
 - Recommendation: ☐ Proceed ☐ Modify ☐ Reject
-- Comments: ____________________________
+- Comments: ************\_\_\_\_************
 
 ---
 
@@ -102,10 +108,12 @@
 #### Annex A Controls Assessment
 
 **A.5 Information Security Policies**
+
 - [ ] A.5.1.1 - Information security policy document current and approved
 - [ ] A.5.1.2 - Information security policy communicated to all personnel
 
 **A.6 Organization of Information Security**
+
 - [ ] A.6.1.1 - Information security roles and responsibilities assigned
 - [ ] A.6.1.2 - Segregation of duties implemented where required
 - [ ] A.6.1.3 - Contact with authorities procedures established
@@ -113,6 +121,7 @@
 - [ ] A.6.2.1 - Mobile device policy implemented and enforced
 
 **A.7 Human Resource Security**
+
 - [ ] A.7.1.1 - Background verification procedures for all personnel
 - [ ] A.7.1.2 - Terms and conditions of employment include security responsibilities
 - [ ] A.7.2.1 - Management responsibilities for security communicated
@@ -120,6 +129,7 @@
 - [ ] A.7.3.1 - Termination procedures include return of assets
 
 **A.8 Asset Management**
+
 - [ ] A.8.1.1 - Asset inventory maintained and current
 - [ ] A.8.1.2 - Asset ownership assigned and documented
 - [ ] A.8.1.3 - Acceptable use policy for assets established
@@ -128,6 +138,7 @@
 - [ ] A.8.3.1 - Media handling procedures documented and followed
 
 **A.9 Access Control**
+
 - [ ] A.9.1.1 - Access control policy established and maintained
 - [ ] A.9.1.2 - Access to networks and network services controlled
 - [ ] A.9.2.1 - User registration and deregistration procedures established
@@ -140,9 +151,9 @@
 #### Risk Treatment Plan Template
 
 **Risk ID**: RTR-YYYY-NNN  
-**Risk Description**: ________________________________  
-**Risk Owner**: ____________________________________  
-**Assessment Date**: _______________________________
+**Risk Description**: **************\_\_\_\_**************  
+**Risk Owner**: ****************\_\_\_\_****************  
+**Assessment Date**: **************\_\_\_**************
 
 **Risk Analysis**
 | Component | Rating | Justification |
@@ -153,22 +164,25 @@
 | **Overall Risk Level** | ☐ Very Low ☐ Low ☐ Medium ☐ High ☐ Very High | |
 
 **Risk Treatment Decision**
+
 - [ ] **Accept**: Risk accepted with justification
 - [ ] **Avoid**: Activity causing risk discontinued
 - [ ] **Transfer**: Risk transferred to third party
 - [ ] **Mitigate**: Risk reduced through controls
 
 **Treatment Implementation**
-- Treatment Measures: ___________________________
-- Implementation Owner: _________________________
-- Target Completion Date: _______________________
-- Budget Required: ______________________________
-- Dependencies: ________________________________
+
+- Treatment Measures: ************\_\_\_************
+- Implementation Owner: ************\_************
+- Target Completion Date: **********\_\_\_**********
+- Budget Required: **************\_\_**************
+- Dependencies: **************\_\_\_\_**************
 
 **Monitoring and Review**
-- Review Frequency: ____________________________
-- Success Metrics: _____________________________
-- Next Review Date: ____________________________
+
+- Review Frequency: ************\_\_\_\_************
+- Success Metrics: **************\_**************
+- Next Review Date: ************\_\_\_\_************
 
 ---
 
@@ -177,6 +191,7 @@
 #### IT General Controls (ITGC) Assessment
 
 **Program Development and Change Management**
+
 - [ ] Change management policy documented and approved
 - [ ] Change approval process includes business stakeholder sign-off
 - [ ] Emergency change procedures documented and controlled
@@ -185,6 +200,7 @@
 - [ ] Change documentation standards maintained
 
 **Computer Operations**
+
 - [ ] Batch processing controls automated where possible
 - [ ] Job scheduling monitored and exception handling documented
 - [ ] Backup and recovery procedures tested regularly
@@ -192,6 +208,7 @@
 - [ ] Incident response procedures for IT operations established
 
 **Access Security**
+
 - [ ] User access management procedures documented
 - [ ] Privileged access controls implemented and monitored
 - [ ] Periodic access reviews completed and documented
@@ -201,12 +218,14 @@
 #### Financial Reporting Controls Assessment
 
 **Revenue Recognition**
+
 - [ ] Revenue recognition policies aligned with accounting standards
 - [ ] Contract review procedures ensure proper revenue treatment
 - [ ] Cut-off procedures tested and documented
 - [ ] Revenue system controls prevent unauthorized transactions
 
 **Financial Close Process**
+
 - [ ] Month-end close procedures documented and followed
 - [ ] Journal entry approval controls implemented
 - [ ] Account reconciliation procedures performed timely
@@ -219,6 +238,7 @@
 ### Pre-Audit Checklist
 
 #### 90 Days Before Audit
+
 - [ ] **Audit Planning Meeting Scheduled**
   - [ ] Audit team identified and confirmed
   - [ ] Audit scope and objectives defined
@@ -232,6 +252,7 @@
   - [ ] Remediation actions prioritized
 
 #### 30 Days Before Audit
+
 - [ ] **Final Preparations**
   - [ ] Audit documentation package compiled
   - [ ] Key personnel availability confirmed
@@ -246,30 +267,36 @@
 
 ### Audit Evidence Collection Template
 
-**Control Reference**: ___________________________  
-**Control Description**: _________________________  
+**Control Reference**: ************\_\_\_************  
+**Control Description**: ************\_************  
 **Evidence Type**: ☐ Document ☐ System Report ☐ Observation ☐ Interview
 
 **Evidence Details**
-- Evidence ID: _______________________________
-- Source System: _____________________________
-- Date Range: _______________________________
-- Prepared By: ______________________________
-- Review Date: ______________________________
+
+- Evidence ID: **************\_\_\_**************
+- Source System: **************\_**************
+- Date Range: **************\_\_\_**************
+- Prepared By: **************\_\_**************
+- Review Date: **************\_\_**************
 
 **Evidence Validation**
+
 - [ ] Evidence is complete and accurate
 - [ ] Evidence covers the required period
 - [ ] Evidence supports control objective
 - [ ] Evidence is properly authenticated
 
 **Auditor Notes**
-_________________________________________________
-_________________________________________________
+
+---
+
+---
 
 **Management Response** (if exceptions noted)
-_________________________________________________
-_________________________________________________
+
+---
+
+---
 
 ---
 
@@ -277,31 +304,34 @@ _________________________________________________
 
 ### Control Self-Assessment (CSA) Template
 
-**Assessment Period**: _________________________  
-**Business Process**: __________________________  
-**Process Owner**: _____________________________  
-**Assessment Completed By**: ____________________  
-**Completion Date**: ___________________________
+**Assessment Period**: ************\_************  
+**Business Process**: ************\_\_************  
+**Process Owner**: **************\_**************  
+**Assessment Completed By**: ********\_\_\_\_********  
+**Completion Date**: ************\_\_\_************
 
 #### Control Environment Assessment
-| Factor | Excellent | Good | Fair | Poor | Comments |
-|--------|-----------|------|------|------|----------|
-| Management Commitment | ☐ | ☐ | ☐ | ☐ | |
-| Organizational Structure | ☐ | ☐ | ☐ | ☐ | |
-| Assignment of Authority | ☐ | ☐ | ☐ | ☐ | |
-| Human Resource Policies | ☐ | ☐ | ☐ | ☐ | |
-| Performance Measurement | ☐ | ☐ | ☐ | ☐ | |
+
+| Factor                   | Excellent | Good | Fair | Poor | Comments |
+| ------------------------ | --------- | ---- | ---- | ---- | -------- |
+| Management Commitment    | ☐         | ☐    | ☐    | ☐    |          |
+| Organizational Structure | ☐         | ☐    | ☐    | ☐    |          |
+| Assignment of Authority  | ☐         | ☐    | ☐    | ☐    |          |
+| Human Resource Policies  | ☐         | ☐    | ☐    | ☐    |          |
+| Performance Measurement  | ☐         | ☐    | ☐    | ☐    |          |
 
 #### Risk Assessment
-| Risk Factor | High | Medium | Low | Mitigation Strategy |
-|-------------|------|--------|-----|-------------------|
-| Regulatory Change | ☐ | ☐ | ☐ | |
-| Technology Risk | ☐ | ☐ | ☐ | |
-| Personnel Risk | ☐ | ☐ | ☐ | |
-| Process Risk | ☐ | ☐ | ☐ | |
-| Third-Party Risk | ☐ | ☐ | ☐ | |
+
+| Risk Factor       | High | Medium | Low | Mitigation Strategy |
+| ----------------- | ---- | ------ | --- | ------------------- |
+| Regulatory Change | ☐    | ☐      | ☐   |                     |
+| Technology Risk   | ☐    | ☐      | ☐   |                     |
+| Personnel Risk    | ☐    | ☐      | ☐   |                     |
+| Process Risk      | ☐    | ☐      | ☐   |                     |
+| Third-Party Risk  | ☐    | ☐      | ☐   |                     |
 
 #### Control Activities Assessment
+
 - [ ] **Preventive Controls**
   - Authorization controls effectiveness: ☐ High ☐ Medium ☐ Low
   - Segregation of duties adequacy: ☐ High ☐ Medium ☐ Low
@@ -313,11 +343,12 @@ _________________________________________________
   - Exception reporting timeliness: ☐ Real-time ☐ Daily ☐ Weekly
 
 #### Action Items Identified
-| Issue | Priority | Owner | Due Date | Status |
-|-------|----------|--------|----------|--------|
-| | ☐ High ☐ Med ☐ Low | | | ☐ Open ☐ In Progress ☐ Complete |
-| | ☐ High ☐ Med ☐ Low | | | ☐ Open ☐ In Progress ☐ Complete |
-| | ☐ High ☐ Med ☐ Low | | | ☐ Open ☐ In Progress ☐ Complete |
+
+| Issue | Priority           | Owner | Due Date | Status                          |
+| ----- | ------------------ | ----- | -------- | ------------------------------- |
+|       | ☐ High ☐ Med ☐ Low |       |          | ☐ Open ☐ In Progress ☐ Complete |
+|       | ☐ High ☐ Med ☐ Low |       |          | ☐ Open ☐ In Progress ☐ Complete |
+|       | ☐ High ☐ Med ☐ Low |       |          | ☐ Open ☐ In Progress ☐ Complete |
 
 ---
 
@@ -326,78 +357,99 @@ _________________________________________________
 ### Compliance Incident Report Form
 
 **Incident ID**: INC-YYYY-NNNN  
-**Report Date**: _______________  
-**Reported By**: _______________  
+**Report Date**: ******\_\_\_******  
+**Reported By**: ******\_\_\_******  
 **Severity**: ☐ Critical ☐ High ☐ Medium ☐ Low
 
 #### Incident Details
-**Discovery Date/Time**: _______________________  
-**Incident Type**: 
+
+**Discovery Date/Time**: **********\_\_\_**********  
+**Incident Type**:
+
 - [ ] Data Breach/Privacy Incident
-- [ ] Security Control Failure  
+- [ ] Security Control Failure
 - [ ] Regulatory Violation
 - [ ] Policy Non-Compliance
 - [ ] Third-Party Incident
-- [ ] Other: ___________________
+- [ ] Other: ********\_\_\_********
 
-**Systems Affected**: ___________________________  
-**Data Categories Involved**: ____________________  
-**Estimated Impact**: ___________________________
+**Systems Affected**: ************\_\_\_************  
+**Data Categories Involved**: ********\_\_\_\_********  
+**Estimated Impact**: ************\_\_\_************
 
 #### Initial Assessment
+
 **Immediate Actions Taken**:
-_____________________________________________
-_____________________________________________
+
+---
+
+---
 
 **Containment Measures**:
-_____________________________________________
-_____________________________________________
+
+---
+
+---
 
 **Stakeholders Notified**:
+
 - [ ] Chief Compliance Officer
 - [ ] Legal Counsel
-- [ ] Privacy Officer  
+- [ ] Privacy Officer
 - [ ] Business Owner
 - [ ] Executive Leadership
 
 #### Regulatory Notification Requirements
+
 **GDPR (72-hour rule)**:
+
 - Threshold Met: ☐ Yes ☐ No
-- Notification Date: ____________
-- Reference Number: ___________
+- Notification Date: ****\_\_\_\_****
+- Reference Number: ****\_\_\_****
 
 **Other Regulatory Requirements**:
-- Framework: _________________
-- Requirement: ______________
-- Due Date: _________________
+
+- Framework: ********\_********
+- Requirement: ******\_\_******
+- Due Date: ********\_********
 - Completed: ☐ Yes ☐ No
 
 #### Root Cause Analysis
-**Investigation Lead**: _________________________  
-**Contributing Factors**:
-_____________________________________________
-_____________________________________________
 
-**Root Cause**: 
-_____________________________________________
-_____________________________________________
+**Investigation Lead**: ************\_************  
+**Contributing Factors**:
+
+---
+
+---
+
+**Root Cause**:
+
+---
+
+---
 
 #### Corrective Actions
-| Action Item | Owner | Due Date | Status |
-|-------------|--------|----------|--------|
-| | | | ☐ Planned ☐ In Progress ☐ Complete |
-| | | | ☐ Planned ☐ In Progress ☐ Complete |
-| | | | ☐ Planned ☐ In Progress ☐ Complete |
+
+| Action Item | Owner | Due Date | Status                             |
+| ----------- | ----- | -------- | ---------------------------------- |
+|             |       |          | ☐ Planned ☐ In Progress ☐ Complete |
+|             |       |          | ☐ Planned ☐ In Progress ☐ Complete |
+|             |       |          | ☐ Planned ☐ In Progress ☐ Complete |
 
 #### Incident Closure
-**Resolution Date**: ___________________________  
-**Lessons Learned**: ___________________________  
-______________________________________________  
-**Process Improvements**: ______________________  
-______________________________________________
 
-**Closure Approved By**: _______________________  
-**Date**: ___________________________________
+**Resolution Date**: ************\_\_\_************  
+**Lessons Learned**: ************\_\_\_************
+
+---
+
+**Process Improvements**: **********\_\_**********
+
+---
+
+**Closure Approved By**: **********\_\_\_**********  
+**Date**: ****************\_\_\_****************
 
 ---
 
@@ -406,22 +458,25 @@ ______________________________________________
 ### Compliance Training Record
 
 **Employee Information**
-- Name: __________________________________
-- Department: ____________________________
-- Position: ______________________________
-- Manager: _______________________________
+
+- Name: ****************\_\_****************
+- Department: ************\_\_\_\_************
+- Position: **************\_\_**************
+- Manager: **************\_\_\_**************
 
 **Training Details**
-- Training Program: _______________________
-- Training Date: __________________________
-- Instructor: ____________________________
+
+- Training Program: **********\_\_\_**********
+- Training Date: ************\_\_************
+- Instructor: ************\_\_\_\_************
 - Format: ☐ In-Person ☐ Online ☐ Self-Study
-- Duration: ______________________________
+- Duration: **************\_\_**************
 
 #### Training Content Covered
+
 - [ ] Regulatory Overview
   - [ ] GDPR Requirements
-  - [ ] CCPA Requirements  
+  - [ ] CCPA Requirements
   - [ ] SOX Requirements
   - [ ] Industry Standards
 
@@ -438,25 +493,29 @@ ______________________________________________
   - [ ] Escalation Procedures
 
 #### Assessment Results
-**Pre-Training Assessment**: _____ % (Passing: 70%)  
-**Post-Training Assessment**: _____ % (Passing: 80%)  
-**Practical Demonstration**: ☐ Pass ☐ Fail  
+
+**Pre-Training Assessment**: **\_** % (Passing: 70%)  
+**Post-Training Assessment**: **\_** % (Passing: 80%)  
+**Practical Demonstration**: ☐ Pass ☐ Fail
 
 **Remedial Training Required**: ☐ Yes ☐ No  
-**Remedial Training Completed**: ☐ Yes ☐ No ☐ N/A  
+**Remedial Training Completed**: ☐ Yes ☐ No ☐ N/A
 
 #### Training Effectiveness
+
 **Knowledge Transfer Rating**: ☐ Excellent ☐ Good ☐ Fair ☐ Poor  
 **Training Material Quality**: ☐ Excellent ☐ Good ☐ Fair ☐ Poor  
-**Instructor Effectiveness**: ☐ Excellent ☐ Good ☐ Fair ☐ Poor  
+**Instructor Effectiveness**: ☐ Excellent ☐ Good ☐ Fair ☐ Poor
 
 **Employee Feedback**:
-_________________________________________________
-_________________________________________________
+
+---
+
+---
 
 **Training Completion Certified By**:
-Instructor Signature: ___________________________  
-Date: _______________________________________
+Instructor Signature: ************\_\_\_************  
+Date: ******************\_\_\_******************
 
 ---
 
@@ -465,67 +524,74 @@ Date: _______________________________________
 ### Third-Party Risk Assessment
 
 **Vendor Information**
-- Vendor Name: _______________________________
-- Service/Product: ___________________________  
-- Contract Value: ____________________________
-- Contract Term: _____________________________
-- Business Owner: ____________________________
+
+- Vendor Name: **************\_\_\_**************
+- Service/Product: ************\_\_\_************
+- Contract Value: ************\_\_\_\_************
+- Contract Term: **************\_**************
+- Business Owner: ************\_\_\_\_************
 
 #### Risk Assessment Categories
 
 **Data Processing Risk**
+
 - [ ] Processes personal data: ☐ Yes ☐ No
-- [ ] Data categories: ____________________________
-- [ ] Processing locations: ________________________
+- [ ] Data categories: ************\_\_\_\_************
+- [ ] Processing locations: **********\_\_\_\_**********
 - [ ] Data Protection Agreement: ☐ Yes ☐ No
 
 **Security Risk Assessment**
-- [ ] Security certification: ☐ SOC2 ☐ ISO27001 ☐ Other: _______
-- [ ] Penetration testing: ☐ Annual ☐ Bi-annual ☐ Other: ______
+
+- [ ] Security certification: ☐ SOC2 ☐ ISO27001 ☐ Other: **\_\_\_**
+- [ ] Penetration testing: ☐ Annual ☐ Bi-annual ☐ Other: **\_\_**
 - [ ] Incident response plan: ☐ Yes ☐ No
 - [ ] Business continuity plan: ☐ Yes ☐ No
 
-**Compliance Risk Assessment**  
-- [ ] Regulatory compliance relevant: ☐ GDPR ☐ CCPA ☐ SOX ☐ Other: _____
+**Compliance Risk Assessment**
+
+- [ ] Regulatory compliance relevant: ☐ GDPR ☐ CCPA ☐ SOX ☐ Other: **\_**
 - [ ] Compliance attestation provided: ☐ Yes ☐ No
 - [ ] Right to audit clause: ☐ Yes ☐ No
 - [ ] Compliance training provided: ☐ Yes ☐ No
 
 #### Risk Rating Matrix
-| Risk Category | High | Medium | Low | Comments |
-|---------------|------|--------|-----|----------|
-| Data Security | ☐ | ☐ | ☐ | |
-| Regulatory Compliance | ☐ | ☐ | ☐ | |
-| Business Continuity | ☐ | ☐ | ☐ | |
-| Financial Stability | ☐ | ☐ | ☐ | |
-| Operational Risk | ☐ | ☐ | ☐ | |
+
+| Risk Category         | High | Medium | Low | Comments |
+| --------------------- | ---- | ------ | --- | -------- |
+| Data Security         | ☐    | ☐      | ☐   |          |
+| Regulatory Compliance | ☐    | ☐      | ☐   |          |
+| Business Continuity   | ☐    | ☐      | ☐   |          |
+| Financial Stability   | ☐    | ☐      | ☐   |          |
+| Operational Risk      | ☐    | ☐      | ☐   |          |
 
 **Overall Risk Rating**: ☐ High ☐ Medium ☐ Low
 
 #### Due Diligence Requirements
+
 - [ ] **High Risk Vendors**
   - [ ] On-site assessment required
   - [ ] Annual compliance review
   - [ ] Quarterly risk monitoring
   - [ ] Executive approval required
 
-- [ ] **Medium Risk Vendors**  
+- [ ] **Medium Risk Vendors**
   - [ ] Desktop assessment sufficient
   - [ ] Annual compliance review
   - [ ] Semi-annual risk monitoring
   - [ ] Department head approval
 
 - [ ] **Low Risk Vendors**
-  - [ ] Self-assessment acceptable  
+  - [ ] Self-assessment acceptable
   - [ ] Bi-annual compliance review
   - [ ] Annual risk monitoring
   - [ ] Standard approval process
 
 #### Approval and Monitoring
-**Risk Assessment Completed By**: ___________________  
-**Date**: ________________________________________  
-**Approved By**: __________________________________  
-**Next Review Date**: _____________________________
+
+**Risk Assessment Completed By**: ********\_\_\_********  
+**Date**: ******************\_\_\_\_******************  
+**Approved By**: ****************\_\_****************  
+**Next Review Date**: **************\_**************
 
 ---
 
@@ -533,54 +599,60 @@ Date: _______________________________________
 
 ### Quarterly Compliance Report Template
 
-**Reporting Period**: Q___ 20___  
-**Report Prepared By**: ___________________________  
-**Report Date**: ________________________________  
+**Reporting Period**: Q**_ 20_**  
+**Report Prepared By**: ************\_\_\_************  
+**Report Date**: **************\_\_\_\_**************  
 **Distribution**: Board, Executive Team, Audit Committee
 
 #### Executive Summary
+
 **Overall Compliance Status**: ☐ Compliant ☐ Minor Issues ☐ Significant Issues  
-**Critical Issues**: ______ (Current) | ______ (Previous Quarter)  
-**New Regulations**: ______ (Impacting Organization)  
-**Training Completion**: ______% (Target: 100%)
+**Critical Issues**: **\_\_** (Current) | **\_\_** (Previous Quarter)  
+**New Regulations**: **\_\_** (Impacting Organization)  
+**Training Completion**: **\_\_**% (Target: 100%)
 
 #### Framework Compliance Status
-| Framework | Status | Score | Trend | Critical Issues | Next Assessment |
-|-----------|--------|--------|-------|----------------|----------------|
-| GDPR | ☐ ☐ ☐ | ___% | ☐↑ ☐→ ☐↓ | ___ | _________ |
-| CCPA | ☐ ☐ ☐ | ___% | ☐↑ ☐→ ☐↓ | ___ | _________ |
-| SOX | ☐ ☐ ☐ | ___% | ☐↑ ☐→ ☐↓ | ___ | _________ |
-| ISO27001 | ☐ ☐ ☐ | ___% | ☐↑ ☐→ ☐↓ | ___ | _________ |
 
-*Status: 🟢 Compliant | 🟡 Minor Issues | 🔴 Significant Issues*
+| Framework | Status | Score   | Trend    | Critical Issues | Next Assessment |
+| --------- | ------ | ------- | -------- | --------------- | --------------- |
+| GDPR      | ☐ ☐ ☐  | \_\_\_% | ☐↑ ☐→ ☐↓ | \_\_\_          | ****\_****      |
+| CCPA      | ☐ ☐ ☐  | \_\_\_% | ☐↑ ☐→ ☐↓ | \_\_\_          | ****\_****      |
+| SOX       | ☐ ☐ ☐  | \_\_\_% | ☐↑ ☐→ ☐↓ | \_\_\_          | ****\_****      |
+| ISO27001  | ☐ ☐ ☐  | \_\_\_% | ☐↑ ☐→ ☐↓ | \_\_\_          | ****\_****      |
+
+_Status: 🟢 Compliant | 🟡 Minor Issues | 🔴 Significant Issues_
 
 #### Key Performance Indicators
-- **Incident Response Time**: _______ hours (Target: <2 hours)
-- **Data Subject Request Response**: _______ days (Target: <30 days)  
-- **Security Training Completion**: _______% (Target: 100%)
-- **Control Effectiveness**: _______% (Target: >95%)
-- **Audit Findings**: _______ open (Target: 0 critical)
+
+- **Incident Response Time**: **\_\_\_** hours (Target: <2 hours)
+- **Data Subject Request Response**: **\_\_\_** days (Target: <30 days)
+- **Security Training Completion**: **\_\_\_**% (Target: 100%)
+- **Control Effectiveness**: **\_\_\_**% (Target: >95%)
+- **Audit Findings**: **\_\_\_** open (Target: 0 critical)
 
 #### Significant Changes This Quarter
-- New Regulations: ________________________________
-- Policy Updates: ________________________________  
-- System Changes: _______________________________
-- Organizational Changes: _________________________
+
+- New Regulations: **************\_\_\_\_**************
+- Policy Updates: **************\_\_\_\_**************
+- System Changes: **************\_\_\_**************
+- Organizational Changes: ************\_************
 
 #### Issues and Remediation
-| Issue | Severity | Owner | Status | Due Date |
-|-------|----------|--------|---------|----------|
-| | ☐ Critical ☐ High ☐ Medium | | ☐ Open ☐ In Progress ☐ Resolved | |
-| | ☐ Critical ☐ High ☐ Medium | | ☐ Open ☐ In Progress ☐ Resolved | |
+
+| Issue | Severity                   | Owner | Status                          | Due Date |
+| ----- | -------------------------- | ----- | ------------------------------- | -------- |
+|       | ☐ Critical ☐ High ☐ Medium |       | ☐ Open ☐ In Progress ☐ Resolved |          |
+|       | ☐ Critical ☐ High ☐ Medium |       | ☐ Open ☐ In Progress ☐ Resolved |          |
 
 #### Upcoming Requirements
-- Regulatory Deadlines: _________________________
-- Certification Renewals: ________________________
-- Audit Schedules: _____________________________
-- Training Requirements: ________________________
+
+- Regulatory Deadlines: ************\_************
+- Certification Renewals: **********\_\_\_\_**********
+- Audit Schedules: **************\_**************
+- Training Requirements: **********\_\_\_\_**********
 
 ---
 
-*Document Classification: Internal Use Only*  
-*Last Updated: July 22, 2025*  
-*Next Review: January 22, 2026*
+_Document Classification: Internal Use Only_  
+_Last Updated: July 22, 2025_  
+_Next Review: January 22, 2026_

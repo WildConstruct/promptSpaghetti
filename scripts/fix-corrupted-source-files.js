@@ -20,7 +20,7 @@ class SourceFileRepairer {
       success: '✅',
       warning: '⚠️',
       error: '❌',
-      repair: '🔧'
+      repair: '🔧',
     }[type];
     console.log(`${prefix} ${message}`);
   }
@@ -65,7 +65,7 @@ class SourceFileRepairer {
         }
 
         // Pattern 6: Missing closing parentheses
-        if (line.match(/error TS1005.*expected/) || line.match(/\([^)]*$/) && !line.includes('//')) {
+        if (line.match(/error TS1005.*expected/) || (line.match(/\([^)]*$/) && !line.includes('//'))) {
           issues.push({ line: lineNum, type: 'missing_closing_paren', content: line });
         }
 
@@ -137,7 +137,7 @@ class SourceFileRepairer {
 
     for (let i = 0; i < exportLineIndex; i++) {
       const line = lines[i];
-      
+
       // Track function contexts
       if (line.match(/(function|=>|\bcreate\s*\()/)) {
         inFunction = true;
@@ -160,7 +160,7 @@ class SourceFileRepairer {
    */
   repairFile(filePath) {
     const { needsRepair, issues } = this.needsRepair(filePath);
-    
+
     if (!needsRepair) {
       return false;
     }
@@ -208,9 +208,12 @@ class SourceFileRepairer {
               let nextLineIndex = lineIndex + 1;
               while (nextLineIndex < lines.length && nextLineIndex < lineIndex + 5) {
                 const nextLine = lines[nextLineIndex];
-                if (nextLine.includes(")")) {
+                if (nextLine.includes(')')) {
                   // Combine lines and fix the CSS template
-                  const combinedContent = lines.slice(lineIndex, nextLineIndex + 1).join(' ').trim();
+                  const combinedContent = lines
+                    .slice(lineIndex, nextLineIndex + 1)
+                    .join(' ')
+                    .trim();
                   fixedLine = combinedContent.replace(/,\s*\)/g, ')');
                   lines[lineIndex] = fixedLine;
                   // Clear the combined lines
@@ -249,7 +252,11 @@ class SourceFileRepairer {
 
           case 'malformed_object_property':
             // Fix object properties missing commas or semicolons
-            if (originalLine.match(/^\s*\w+\s*:\s*[^,;}\s]+\s*$/) && !originalLine.endsWith(',') && !originalLine.endsWith(';')) {
+            if (
+              originalLine.match(/^\s*\w+\s*:\s*[^,;}\s]+\s*$/) &&
+              !originalLine.endsWith(',') &&
+              !originalLine.endsWith(';')
+            ) {
               lines[lineIndex] = originalLine + ',';
               repaired = true;
             }
@@ -389,10 +396,7 @@ class SourceFileRepairer {
       this.log('DRY RUN MODE - No files will be modified', 'warning');
     }
 
-    const targetDirs = [
-      'packages/core',
-      'client/src'
-    ];
+    const targetDirs = ['packages/core', 'client/src'];
 
     for (const dir of targetDirs) {
       if (fs.existsSync(dir)) {
@@ -410,7 +414,7 @@ class SourceFileRepairer {
       this.log('Dry run completed - no files were actually modified', 'info');
     } else if (this.repairedFiles.length > 0) {
       this.log(`Repaired ${this.repairedFiles.length} corrupted files`, 'success');
-      
+
       // Suggest next steps
       console.log('\n🔧 Next steps:');
       console.log('  1. Run: node scripts/validate-build.js');

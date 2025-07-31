@@ -31,11 +31,11 @@ jobs:
       - name: Dependency Conflict Detection
         run: |
           echo "🔍 Checking for dependency version conflicts..."
-          
+
           # Check Zod version consistency
           ZOD_VERSIONS=$(grep -r '"zod"' */package.json packages/*/package.json 2>/dev/null | grep -v node_modules | grep '"zod":' | sort -u)
           ZOD_UNIQUE=$(echo "$ZOD_VERSIONS" | awk -F'"' '{print $4}' | sort -u | wc -l)
-          
+
           if [ $ZOD_UNIQUE -gt 1 ]; then
             echo "❌ Zod version conflicts detected:"
             echo "$ZOD_VERSIONS"
@@ -44,11 +44,11 @@ jobs:
           else
             echo "✅ Zod versions are consistent"
           fi
-          
+
           # Check TypeScript version consistency
           TS_VERSIONS=$(grep -r '"typescript"' */package.json packages/*/package.json 2>/dev/null | grep -v node_modules | sort -u)
           TS_UNIQUE=$(echo "$TS_VERSIONS" | awk -F'"' '{print $4}' | sort -u | wc -l)
-          
+
           if [ $TS_UNIQUE -gt 1 ]; then
             echo "⚠️ TypeScript version inconsistencies detected:"
             echo "$TS_VERSIONS"
@@ -56,11 +56,11 @@ jobs:
           else
             echo "✅ TypeScript versions are consistent"
           fi
-          
+
           # Check Jest version consistency  
           JEST_VERSIONS=$(grep -r '"jest"' */package.json packages/*/package.json 2>/dev/null | grep -v node_modules | grep '"jest":' | sort -u)
           JEST_UNIQUE=$(echo "$JEST_VERSIONS" | awk -F'"' '{print $4}' | sort -u | wc -l)
-          
+
           if [ $JEST_UNIQUE -gt 1 ]; then
             echo "⚠️ Jest version inconsistencies detected:"
             echo "$JEST_VERSIONS"
@@ -72,51 +72,51 @@ jobs:
       - name: Security Vulnerability Scanning
         run: |
           echo "🔒 Running security vulnerability scans..."
-          
+
           # Run npm audit for each workspace
           pnpm audit --audit-level moderate || {
             echo "❌ Security vulnerabilities found!"
             echo "::error::Security vulnerabilities detected. Please review and update dependencies."
             exit 1
           }
-          
+
           echo "✅ No critical security vulnerabilities found"
 
       - name: Dependency Health Check
         run: |
           echo "📊 Checking dependency health..."
-          
+
           # Check for outdated dependencies
           pnpm outdated --depth=0 || echo "Some dependencies are outdated"
-          
+
           # Check for duplicate dependencies
           pnpm list --depth=0 --json > deps.json
-          
+
           echo "✅ Dependency health check complete"
 
       - name: Generate Dependency Report
         if: always()
         run: |
           echo "📝 Generating dependency report..."
-          
+
           echo "## Dependency Report" > dependency-report.md
           echo "Generated on: $(date)" >> dependency-report.md
           echo "" >> dependency-report.md
-          
+
           echo "### Zod Versions" >> dependency-report.md
           grep -r '"zod"' */package.json packages/*/package.json 2>/dev/null | grep -v node_modules >> dependency-report.md || echo "No Zod dependencies found" >> dependency-report.md
           echo "" >> dependency-report.md
-          
+
           echo "### TypeScript Versions" >> dependency-report.md
           grep -r '"typescript"' */package.json packages/*/package.json 2>/dev/null | grep -v node_modules >> dependency-report.md || echo "No TypeScript dependencies found" >> dependency-report.md
           echo "" >> dependency-report.md
-          
+
           echo "### Jest Versions" >> dependency-report.md
           grep -r '"jest"' */package.json packages/*/package.json 2>/dev/null | grep -v node_modules | grep '"jest":' >> dependency-report.md || echo "No Jest dependencies found" >> dependency-report.md
 
       - name: Upload Dependency Report
         if: always()
-        uses: actions/upload-artifact@v4  
+        uses: actions/upload-artifact@v4
         with:
           name: dependency-report
           path: dependency-report.md

@@ -525,7 +525,9 @@
 .playbook-execution-card:hover,
 .metric-card:hover {
   @apply transform scale-105;
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transition:
+    transform 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
 }
 
 /* Status colors */
@@ -583,7 +585,8 @@
 }
 
 @keyframes criticalPulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {

@@ -94,24 +94,28 @@ export interface BaseComponentProps {
 
 // Responsive design
 // Legacy responsive value type (for backward compatibility)
-export type ResponsiveValue<T> = T | {
-  mobile?: T;
-  tablet?: T;
-  desktop?: T;
-};
+export type ResponsiveValue<T> =
+  | T
+  | {
+      mobile?: T;
+      tablet?: T;
+      desktop?: T;
+    };
 
 // Enhanced responsive value type with all breakpoints
-export type ResponsiveValueEnhanced<T> = T | {
-  xs?: T;
-  sm?: T;
-  md?: T;
-  lg?: T;
-  xl?: T;
-  xxl?: T;
-};
+export type ResponsiveValueEnhanced<T> =
+  | T
+  | {
+      xs?: T;
+      sm?: T;
+      md?: T;
+      lg?: T;
+      xl?: T;
+      xxl?: T;
+    };
 
 // Animation presets
-export type AnimationPreset = 
+export type AnimationPreset =
   | 'fadeIn'
   | 'fadeOut'
   | 'slideUp'

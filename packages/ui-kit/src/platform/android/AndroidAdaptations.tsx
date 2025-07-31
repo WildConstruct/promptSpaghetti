@@ -15,7 +15,7 @@ export const materialElevation = {
   level2: '0 2px 4px 0 rgba(0, 0, 0, 0.06)',
   level3: '0 4px 8px 0 rgba(0, 0, 0, 0.08)',
   level4: '0 6px 12px 0 rgba(0, 0, 0, 0.10)',
-  level5: '0 8px 16px 0 rgba(0, 0, 0, 0.12)'
+  level5: '0 8px 16px 0 rgba(0, 0, 0, 0.12)',
 };
 
 /**
@@ -40,8 +40,8 @@ export const materialMotion = {
     long1: 450,
     long2: 500,
     long3: 550,
-    long4: 600
-  }
+    long4: 600,
+  },
 };
 
 /**
@@ -97,29 +97,34 @@ export const MaterialAppBar: React.FC<MaterialAppBarProps> = ({
   navigationIcon,
   actions,
   scrolled = false,
-  onNavigationClick
+  onNavigationClick,
 }) => {
   const [elevation, setElevation] = useState(0);
-  
+
   useEffect(() => {
     const handleScroll = () => {
       setElevation(window.scrollY > 0 ? 2 : 0);
     };
-    
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  
+
   const getHeight = () => {
     switch (type) {
-    case 'center': return 64;
-    case 'small': return 64;
-    case 'medium': return scrolled ? 64 : 112;
-    case 'large': return scrolled ? 64 : 152;
-    default: return 64;
+      case 'center':
+        return 64;
+      case 'small':
+        return 64;
+      case 'medium':
+        return scrolled ? 64 : 112;
+      case 'large':
+        return scrolled ? 64 : 152;
+      default:
+        return 64;
     }
   };
-  
+
   return (
     <header
       className={`material-app-bar ${type}`}
@@ -135,7 +140,7 @@ export const MaterialAppBar: React.FC<MaterialAppBarProps> = ({
         zIndex: 1000,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
       }}
     >
       <div
@@ -143,7 +148,7 @@ export const MaterialAppBar: React.FC<MaterialAppBarProps> = ({
           display: 'flex',
           alignItems: 'center',
           height: 64,
-          padding: '0 4px'
+          padding: '0 4px',
         }}
       >
         {navigationIcon && (
@@ -160,13 +165,13 @@ export const MaterialAppBar: React.FC<MaterialAppBarProps> = ({
               backgroundColor: 'transparent',
               border: 'none',
               cursor: 'pointer',
-              color: 'var(--md-sys-color-on-surface)'
+              color: 'var(--md-sys-color-on-surface)',
             }}
           >
             {navigationIcon}
           </button>
         )}
-        
+
         <h1
           style={{
             flex: 1,
@@ -176,17 +181,13 @@ export const MaterialAppBar: React.FC<MaterialAppBarProps> = ({
             padding: '0 16px',
             textAlign: type === 'center' ? 'center' : 'left',
             transition: `font-size ${materialMotion.duration.medium2}ms ${materialMotion.emphasized}`,
-            color: 'var(--md-sys-color-on-surface)'
+            color: 'var(--md-sys-color-on-surface)',
           }}
         >
           {title}
         </h1>
-        
-        {actions && (
-          <div style={{ display: 'flex', gap: '4px' }}>
-            {actions}
-          </div>
-        )}
+
+        {actions && <div style={{ display: 'flex', gap: '4px' }}>{actions}</div>}
       </div>
     </header>
   );
@@ -207,11 +208,7 @@ export interface MaterialBottomNavProps {
   onItemSelect: (id: string) => void;
 }
 
-export const MaterialBottomNav: React.FC<MaterialBottomNavProps> = ({
-  items,
-  activeItem,
-  onItemSelect
-}) => {
+export const MaterialBottomNav: React.FC<MaterialBottomNavProps> = ({ items, activeItem, onItemSelect }) => {
   return (
     <nav
       className="material-bottom-nav"
@@ -224,12 +221,12 @@ export const MaterialBottomNav: React.FC<MaterialBottomNavProps> = ({
         backgroundColor: 'var(--md-sys-color-surface-container)',
         boxShadow: materialElevation.level2,
         display: 'flex',
-        paddingBottom: 'env(safe-area-inset-bottom, 0)'
+        paddingBottom: 'env(safe-area-inset-bottom, 0)',
       }}
     >
       {items.map(item => {
         const isActive = activeItem === item.id;
-        
+
         return (
           <button
             key={item.id}
@@ -250,7 +247,7 @@ export const MaterialBottomNav: React.FC<MaterialBottomNavProps> = ({
               cursor: 'pointer',
               position: 'relative',
               color: isActive ? 'var(--md-sys-color-on-secondary-container)' : 'var(--md-sys-color-on-surface-variant)',
-              transition: `all ${materialMotion.duration.short4}ms ${materialMotion.standard}`
+              transition: `all ${materialMotion.duration.short4}ms ${materialMotion.standard}`,
             }}
           >
             <div
@@ -263,27 +260,31 @@ export const MaterialBottomNav: React.FC<MaterialBottomNavProps> = ({
                 borderRadius: '16px',
                 backgroundColor: 'var(--md-sys-color-secondary-container)',
                 transition: `width ${materialMotion.duration.medium1}ms ${materialMotion.emphasized}`,
-                opacity: isActive ? 1 : 0
+                opacity: isActive ? 1 : 0,
               }}
             />
-            
-            <div style={{ 
-              position: 'relative', 
-              fontSize: '24px',
-              transition: `transform ${materialMotion.duration.short4}ms ${materialMotion.standard}`,
-              transform: isActive ? 'translateY(-2px)' : 'translateY(0)'
-            }}>
+
+            <div
+              style={{
+                position: 'relative',
+                fontSize: '24px',
+                transition: `transform ${materialMotion.duration.short4}ms ${materialMotion.standard}`,
+                transform: isActive ? 'translateY(-2px)' : 'translateY(0)',
+              }}
+            >
               {isActive && item.activeIcon ? item.activeIcon : item.icon}
             </div>
-            
-            <span style={{ 
-              fontSize: '12px',
-              fontWeight: isActive ? 500 : 400,
-              position: 'relative'
-            }}>
+
+            <span
+              style={{
+                fontSize: '12px',
+                fontWeight: isActive ? 500 : 400,
+                position: 'relative',
+              }}
+            >
               {item.label}
             </span>
-            
+
             {item.badge && item.badge > 0 && (
               <div
                 className="badge"
@@ -298,7 +299,7 @@ export const MaterialBottomNav: React.FC<MaterialBottomNavProps> = ({
                   fontSize: '11px',
                   minWidth: '16px',
                   textAlign: 'center',
-                  fontWeight: 500
+                  fontWeight: 500,
                 }}
               >
                 {item.badge > 99 ? '99+' : item.badge}
@@ -329,14 +330,14 @@ export const MaterialFAB: React.FC<MaterialFABProps> = ({
   size = 'medium',
   extended = false,
   position = { bottom: 16, right: 16 },
-  onClick
+  onClick,
 }) => {
   const sizes = {
     small: 40,
     medium: 56,
-    large: 96
+    large: 96,
   };
-  
+
   return (
     <button
       onClick={() => {
@@ -363,13 +364,11 @@ export const MaterialFAB: React.FC<MaterialFABProps> = ({
         gap: extended ? '12px' : 0,
         cursor: 'pointer',
         transition: `all ${materialMotion.duration.medium2}ms ${materialMotion.emphasized}`,
-        fontSize: size === 'small' ? '20px' : '24px'
+        fontSize: size === 'small' ? '20px' : '24px',
       }}
     >
       {icon}
-      {extended && label && (
-        <span style={{ fontSize: '14px', fontWeight: 500 }}>{label}</span>
-      )}
+      {extended && label && <span style={{ fontSize: '14px', fontWeight: 500 }}>{label}</span>}
     </button>
   );
 };
@@ -383,11 +382,7 @@ export interface MaterialSwitchProps {
   disabled?: boolean;
 }
 
-export const MaterialSwitch: React.FC<MaterialSwitchProps> = ({
-  checked,
-  onChange,
-  disabled = false
-}) => {
+export const MaterialSwitch: React.FC<MaterialSwitchProps> = ({ checked, onChange, disabled = false }) => {
   return (
     <button
       onClick={() => !disabled && onChange(!checked)}
@@ -400,16 +395,12 @@ export const MaterialSwitch: React.FC<MaterialSwitchProps> = ({
         width: '52px',
         height: '32px',
         borderRadius: '16px',
-        backgroundColor: checked 
-          ? 'var(--md-sys-color-primary)' 
-          : 'var(--md-sys-color-surface-variant)',
-        border: `2px solid ${checked 
-          ? 'var(--md-sys-color-primary)' 
-          : 'var(--md-sys-color-outline)'}`,
+        backgroundColor: checked ? 'var(--md-sys-color-primary)' : 'var(--md-sys-color-surface-variant)',
+        border: `2px solid ${checked ? 'var(--md-sys-color-primary)' : 'var(--md-sys-color-outline)'}`,
         padding: 0,
         cursor: disabled ? 'not-allowed' : 'pointer',
         opacity: disabled ? 0.38 : 1,
-        transition: `all ${materialMotion.duration.short4}ms ${materialMotion.standard}`
+        transition: `all ${materialMotion.duration.short4}ms ${materialMotion.standard}`,
       }}
     >
       <div
@@ -418,13 +409,11 @@ export const MaterialSwitch: React.FC<MaterialSwitchProps> = ({
           width: checked ? '24px' : '16px',
           height: checked ? '24px' : '16px',
           borderRadius: '50%',
-          backgroundColor: checked 
-            ? 'var(--md-sys-color-on-primary)' 
-            : 'var(--md-sys-color-outline)',
+          backgroundColor: checked ? 'var(--md-sys-color-on-primary)' : 'var(--md-sys-color-outline)',
           top: '50%',
           transform: `translate(${checked ? '24px' : '4px'}, -50%)`,
           transition: `all ${materialMotion.duration.short4}ms ${materialMotion.standard}`,
-          boxShadow: materialElevation.level1
+          boxShadow: materialElevation.level1,
         }}
       />
     </button>
@@ -436,28 +425,28 @@ export const MaterialSwitch: React.FC<MaterialSwitchProps> = ({
  */
 export const MaterialRipple: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const rippleRef = useRef<HTMLDivElement>(null);
-  
+
   const createRipple = (e: React.MouseEvent | React.TouchEvent) => {
     if (!rippleRef.current) return;
-    
+
     const rect = rippleRef.current.getBoundingClientRect();
     const size = Math.max(rect.width, rect.height);
     const x = 'touches' in e ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
     const y = 'touches' in e ? e.touches[0].clientY - rect.top : e.clientY - rect.top;
-    
+
     const ripple = document.createElement('span');
     ripple.style.width = ripple.style.height = `${size}px`;
     ripple.style.left = `${x - size / 2}px`;
     ripple.style.top = `${y - size / 2}px`;
     ripple.classList.add('material-ripple-effect');
-    
+
     rippleRef.current.appendChild(ripple);
-    
+
     setTimeout(() => {
       ripple.remove();
     }, materialMotion.duration.long2);
   };
-  
+
   return (
     <div
       ref={rippleRef}
@@ -466,7 +455,7 @@ export const MaterialRipple: React.FC<{ children: React.ReactNode }> = ({ childr
       onTouchStart={createRipple}
       style={{
         position: 'relative',
-        overflow: 'hidden'
+        overflow: 'hidden',
       }}
     >
       {children}
@@ -487,20 +476,15 @@ export interface MaterialSnackbarProps {
   onDismiss?: () => void;
 }
 
-export const MaterialSnackbar: React.FC<MaterialSnackbarProps> = ({
-  message,
-  action,
-  duration = 4000,
-  onDismiss
-}) => {
+export const MaterialSnackbar: React.FC<MaterialSnackbarProps> = ({ message, action, duration = 4000, onDismiss }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       onDismiss?.();
     }, duration);
-    
+
     return () => clearTimeout(timer);
   }, [duration, onDismiss]);
-  
+
   return (
     <div
       className="material-snackbar"
@@ -520,11 +504,11 @@ export const MaterialSnackbar: React.FC<MaterialSnackbarProps> = ({
         justifyContent: 'space-between',
         boxShadow: materialElevation.level3,
         animation: `slideUp ${materialMotion.duration.medium1}ms ${materialMotion.emphasizedDecelerate}`,
-        zIndex: 9999
+        zIndex: 9999,
       }}
     >
       <span style={{ fontSize: '14px', lineHeight: '20px' }}>{message}</span>
-      
+
       {action && (
         <button
           onClick={action.onPress}
@@ -538,7 +522,7 @@ export const MaterialSnackbar: React.FC<MaterialSnackbarProps> = ({
             fontWeight: 500,
             cursor: 'pointer',
             textTransform: 'uppercase',
-            letterSpacing: '0.1px'
+            letterSpacing: '0.1px',
           }}
         >
           {action.label}

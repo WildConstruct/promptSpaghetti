@@ -1,6 +1,6 @@
 # Epic 18 – Catch-Up TODOs
 
-The following checklist aggregates **all stories and major tasks from Epic 18 that are NOT yet marked as complete** in `epic18plan.md` (as of 2025-07-18).  Use this document as a living backlog during catch-up work; check items off here (and in the master plan) as work progresses.
+The following checklist aggregates **all stories and major tasks from Epic 18 that are NOT yet marked as complete** in `epic18plan.md` (as of 2025-07-18). Use this document as a living backlog during catch-up work; check items off here (and in the master plan) as work progresses.
 
 ## Incomplete Stories
 
@@ -44,4 +44,4 @@ The following checklist aggregates **all stories and major tasks from Epic 18 th
 2. Check the story off once **all** of its underlying tasks are complete.
 3. Keep this file in sync with updates to `epic18plan.md` so both documents reflect the same status.
 
-> ⚠️  This is a convenience backlog, not the single source of truth.  Always update the canonical plan documents as well.
+> ⚠️ This is a convenience backlog, not the single source of truth. Always update the canonical plan documents as well.

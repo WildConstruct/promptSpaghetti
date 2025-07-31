@@ -7,21 +7,25 @@ This document provides comprehensive research on email-based verification option
 ## Email Verification Methods
 
 ### 1. Time-Based One-Time Passwords (TOTP) via Email
+
 - **Description**: Generate time-sensitive codes sent via email
 - **Validity Window**: 30 seconds to 15 minutes typical
 - **Use Case**: Secondary factor authentication
 
 ### 2. Email Verification Links
+
 - **Description**: Secure tokenized URLs with expiration
 - **Validity Window**: 1-24 hours typical
 - **Use Case**: Account activation, password reset verification
 
 ### 3. Magic Links
+
 - **Description**: Direct authentication via email link (passwordless)
 - **Validity Window**: Single-use, time-limited
 - **Use Case**: Primary authentication method
 
 ### 4. Email Verification Codes
+
 - **Description**: Numeric/alphanumeric codes sent via email
 - **Validity Window**: 5-30 minutes typical
 - **Use Case**: Step-up authentication, sensitive operations
@@ -29,6 +33,7 @@ This document provides comprehensive research on email-based verification option
 ## Recommended Node.js Libraries (2025)
 
 ### Core Authentication Libraries
+
 1. **speakeasy** (Primary TOTP)
    - Most mature TOTP implementation
    - 1.7M+ weekly downloads
@@ -45,6 +50,7 @@ This document provides comprehensive research on email-based verification option
    - Industry standard for JWT
 
 ### Email Infrastructure
+
 4. **nodemailer** (Email Delivery)
    - 1.3M+ weekly downloads
    - Most popular Node.js email library
@@ -56,6 +62,7 @@ This document provides comprehensive research on email-based verification option
    - Advanced analytics and reliability
 
 ### Security Enhancement
+
 6. **express-rate-limit** (Rate Limiting)
    - 1.2M+ weekly downloads
    - Prevents brute force attacks
@@ -69,6 +76,7 @@ This document provides comprehensive research on email-based verification option
 ## Implementation Approaches
 
 ### 1. Basic Email Code Verification
+
 ```javascript
 // Token generation with expiration
 const jwt = require('jsonwebtoken');
@@ -79,40 +87,50 @@ const generateVerificationCode = () => {
 };
 
 const createVerificationToken = (email, code) => {
-  return jwt.sign({ 
-    email,
-    code,
-    purpose: 'email_verification'
-  }, process.env.JWT_SECRET, { 
-    expiresIn: '15m' 
-  });
+  return jwt.sign(
+    {
+      email,
+      code,
+      purpose: 'email_verification',
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: '15m',
+    }
+  );
 };
 ```
 
 ### 2. TOTP-Based Email Verification
+
 ```javascript
 const speakeasy = require('speakeasy');
 
-const generateEmailTOTP = (userSecret) => {
+const generateEmailTOTP = userSecret => {
   return speakeasy.totp({
     secret: userSecret,
     encoding: 'base32',
     window: 1, // 30-second window
-    step: 30
+    step: 30,
   });
 };
 ```
 
 ### 3. Magic Link Implementation
+
 ```javascript
-const generateMagicLink = (userId) => {
-  const token = jwt.sign({
-    userId,
-    purpose: 'magic_link'
-  }, process.env.JWT_SECRET, {
-    expiresIn: '1h'
-  });
-  
+const generateMagicLink = userId => {
+  const token = jwt.sign(
+    {
+      userId,
+      purpose: 'magic_link',
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: '1h',
+    }
+  );
+
   return `https://yourapp.com/auth/verify?token=${token}`;
 };
 ```
@@ -120,6 +138,7 @@ const generateMagicLink = (userId) => {
 ## Email Service Providers
 
 ### Enterprise Solutions
+
 1. **SendGrid**
    - High deliverability rates
    - Advanced analytics
@@ -136,6 +155,7 @@ const generateMagicLink = (userId) => {
    - Bounce handling
 
 ### Development/Testing
+
 1. **Mailtrap** (Development)
    - Email testing in development
    - No real email sending
@@ -149,18 +169,21 @@ const generateMagicLink = (userId) => {
 ## Security Considerations
 
 ### Token Security
+
 - Use cryptographically secure random number generation
 - Implement proper token expiration (5-30 minutes for codes)
 - Store tokens securely (hashed in database)
 - Implement rate limiting on generation and validation
 
 ### Email Security
+
 - Use HTTPS for all verification links
 - Implement DKIM and SPF records
 - Monitor bounce rates and spam complaints
 - Validate email addresses before sending
 
 ### Implementation Security
+
 - Prevent timing attacks in token validation
 - Log all verification attempts for monitoring
 - Implement account lockout after multiple failures
@@ -169,6 +192,7 @@ const generateMagicLink = (userId) => {
 ## Vulnerabilities to Avoid (2025 Context)
 
 ### Recent Node.js Vulnerabilities
+
 1. **HashDoS Vulnerability** (V8 rapidhash)
    - Affects string hash collisions
    - Mitigated in latest Node.js versions
@@ -182,6 +206,7 @@ const generateMagicLink = (userId) => {
    - Proper header validation required
 
 ### Email-Specific Vulnerabilities
+
 1. **Code Reuse Attacks**
    - Generate new codes for each attempt
    - Invalidate codes after use
@@ -197,6 +222,7 @@ const generateMagicLink = (userId) => {
 ## Recommended Architecture
 
 ### Multi-Layer Approach
+
 1. **Primary Email Verification**
    - Account registration/activation
    - Long-lived tokens (24 hours)
@@ -210,6 +236,7 @@ const generateMagicLink = (userId) => {
    - Single-use, time-limited
 
 ### Implementation Flow
+
 ```
 1. User requests verification
 2. Generate secure code/token
@@ -223,16 +250,19 @@ const generateMagicLink = (userId) => {
 ## Testing Strategy
 
 ### Development Testing
+
 - Use Mailtrap for email capture
 - Mock email services in unit tests
 - Test token expiration scenarios
 
 ### Security Testing
+
 - Rate limiting validation
 - Token replay attack testing
 - Email content security testing
 
 ### Load Testing
+
 - Email delivery performance
 - Token validation performance
 - Database query optimization
@@ -240,11 +270,13 @@ const generateMagicLink = (userId) => {
 ## Compliance Considerations
 
 ### Data Privacy
+
 - GDPR compliance for EU users
 - Data retention policies
 - User consent management
 
 ### Security Standards
+
 - OWASP authentication guidelines
 - Industry-specific requirements (HIPAA, PCI-DSS)
 - Audit trail requirements

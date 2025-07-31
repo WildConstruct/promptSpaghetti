@@ -43,7 +43,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(
         document.addEventListener('keydown', handleKeyDown);
         // Store the previously focused element
         previousActiveElement.current = document.activeElement as HTMLElement;
-        
+
         // Focus the modal
         setTimeout(() => {
           modalRef.current?.focus();
@@ -52,7 +52,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(
 
       return () => {
         document.removeEventListener('keydown', handleKeyDown);
-        
+
         // Restore focus to previously focused element
         if (previousActiveElement.current && !isOpen) {
           previousActiveElement.current.focus();
@@ -65,7 +65,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(
       if (isOpen) {
         const originalOverflow = document.body.style.overflow;
         document.body.style.overflow = 'hidden';
-        
+
         return () => {
           document.body.style.overflow = originalOverflow;
         };
@@ -80,9 +80,9 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(
         md: { maxWidth: '600px', width: '90vw' },
         lg: { maxWidth: '800px', width: '90vw' },
         xl: { maxWidth: '1200px', width: '95vw' },
-        full: { width: '100vw', height: '100vh', maxWidth: 'none', maxHeight: 'none' }
+        full: { width: '100vw', height: '100vh', maxWidth: 'none', maxHeight: 'none' },
       };
-      
+
       return sizeMap[size];
     };
 
@@ -99,7 +99,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(
       padding: size === 'full' ? 0 : `${theme.spacing.lg}px`,
       zIndex: 1000,
       backdropFilter: 'blur(4px)',
-      WebkitBackdropFilter: 'blur(4px)'
+      WebkitBackdropFilter: 'blur(4px)',
     };
 
     const modalStyles = {
@@ -113,7 +113,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(
       outline: 'none',
       position: 'relative' as const,
       ...getSizeStyles(),
-      ...style
+      ...style,
     };
 
     const handleOverlayClick = (event: React.MouseEvent) => {
@@ -139,12 +139,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(
     );
 
     const modalContent = (
-      <div
-        className="ui-modal-overlay"
-        style={overlayStyles}
-        onClick={handleOverlayClick}
-        data-testid={testId}
-      >
+      <div className="ui-modal-overlay" style={overlayStyles} onClick={handleOverlayClick} data-testid={testId}>
         <div
           ref={ref || modalRef}
           className={cn('ui-modal', className)}
@@ -165,7 +160,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(
                 justifyContent: 'space-between',
                 padding: `${theme.spacing.lg}px`,
                 borderBottom: `1px solid ${theme.colors.border}`,
-                flexShrink: 0
+                flexShrink: 0,
               }}
             >
               {title && (
@@ -177,13 +172,13 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(
                     fontSize: `${theme.typography.fontSize.xl}px`,
                     fontWeight: theme.typography.fontWeight.semibold,
                     color: theme.colors.text,
-                    fontFamily: theme.typography.fontFamily
+                    fontFamily: theme.typography.fontFamily,
                   }}
                 >
                   {title}
                 </h2>
               )}
-              
+
               {showCloseButton && (
                 <button
                   className="ui-modal-close"
@@ -199,13 +194,13 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(
                     alignItems: 'center',
                     justifyContent: 'center',
                     transition: createTransition(['color', 'background-color']),
-                    marginLeft: `${theme.spacing.md}px`
+                    marginLeft: `${theme.spacing.md}px`,
                   }}
-                  onMouseEnter={(e) => {
+                  onMouseEnter={e => {
                     e.currentTarget.style.backgroundColor = theme.colors.surface;
                     e.currentTarget.style.color = theme.colors.text;
                   }}
-                  onMouseLeave={(e) => {
+                  onMouseLeave={e => {
                     e.currentTarget.style.backgroundColor = 'transparent';
                     e.currentTarget.style.color = theme.colors.textSecondary;
                   }}
@@ -223,7 +218,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(
             style={{
               flex: 1,
               overflow: 'auto',
-              padding: `${theme.spacing.lg}px`
+              padding: `${theme.spacing.lg}px`,
             }}
           >
             {children}
@@ -239,7 +234,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(
                 display: 'flex',
                 justifyContent: 'flex-end',
                 gap: `${theme.spacing.sm}px`,
-                flexShrink: 0
+                flexShrink: 0,
               }}
             >
               {footer}

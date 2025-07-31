@@ -2,7 +2,7 @@
 
 **Task:** T-1752989144373-142 - Standardize auth handler framework (OAuth2, API keys, webhooks)  
 **Implementation Date:** January 2025  
-**Framework Version:** 1.0  
+**Framework Version:** 1.0
 
 ## Executive Summary
 
@@ -15,7 +15,7 @@ This document outlines the implementation of a unified, standardized authenticat
 The authentication infrastructure was analyzed and found to be **85% standardized** with excellent implementations for:
 
 - ✅ **OAuth2 Framework**: Unified service supporting Google, GitHub, Microsoft
-- ✅ **API Key Management**: Enterprise-grade lifecycle management  
+- ✅ **API Key Management**: Enterprise-grade lifecycle management
 - ✅ **JWT Authentication**: Comprehensive token management
 - ✅ **Session Management**: Redis-backed session handling
 - ✅ **Security Middleware**: OWASP-compliant security controls
@@ -38,6 +38,7 @@ The primary gap identified was **webhook authentication standardization** (15% m
 A comprehensive webhook authentication service providing:
 
 #### Core Features
+
 ```typescript
 interface WebhookProvider {
   providerId: string;
@@ -53,6 +54,7 @@ interface WebhookProvider {
 ```
 
 #### Key Capabilities
+
 - **Provider Management**: Register, update, remove webhook providers
 - **Signature Verification**: HMAC-based signature validation with timing-safe comparison
 - **Replay Protection**: Event deduplication with configurable time windows
@@ -61,6 +63,7 @@ interface WebhookProvider {
 - **Performance Optimization**: Efficient event ID generation and cleanup
 
 #### Security Features
+
 - **Timing-Safe Comparison**: Prevents timing attacks on signature verification
 - **Replay Attack Prevention**: Tracks processed events to prevent duplicates
 - **Rate Limiting Integration**: Built-in abuse protection
@@ -74,22 +77,22 @@ RESTful API endpoints for webhook management:
 
 #### Provider Management Endpoints
 
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| POST | `/api/webhooks/providers` | Register new webhook provider | Admin |
-| GET | `/api/webhooks/providers` | List all providers | Admin |
-| GET | `/api/webhooks/providers/:id` | Get specific provider | Admin |
-| PUT | `/api/webhooks/providers/:id` | Update provider config | Admin |
-| DELETE | `/api/webhooks/providers/:id` | Remove provider | Admin |
-| POST | `/api/webhooks/providers/:id/test` | Test provider config | Admin |
+| Method | Endpoint                           | Description                   | Auth Required |
+| ------ | ---------------------------------- | ----------------------------- | ------------- |
+| POST   | `/api/webhooks/providers`          | Register new webhook provider | Admin         |
+| GET    | `/api/webhooks/providers`          | List all providers            | Admin         |
+| GET    | `/api/webhooks/providers/:id`      | Get specific provider         | Admin         |
+| PUT    | `/api/webhooks/providers/:id`      | Update provider config        | Admin         |
+| DELETE | `/api/webhooks/providers/:id`      | Remove provider               | Admin         |
+| POST   | `/api/webhooks/providers/:id/test` | Test provider config          | Admin         |
 
 #### Webhook Processing Endpoints
 
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| POST | `/api/webhooks/:providerId` | Generic webhook endpoint | Signature |
-| GET | `/api/webhooks/statistics` | System statistics | Admin |
-| GET | `/api/webhooks/health` | Health check | None |
+| Method | Endpoint                    | Description              | Auth Required |
+| ------ | --------------------------- | ------------------------ | ------------- |
+| POST   | `/api/webhooks/:providerId` | Generic webhook endpoint | Signature     |
+| GET    | `/api/webhooks/statistics`  | System statistics        | Admin         |
+| GET    | `/api/webhooks/health`      | Health check             | None          |
 
 #### Request/Response Schemas
 
@@ -103,7 +106,7 @@ const RegisterProviderSchema = z.object({
   signatureAlgorithm: z.enum(['sha256', 'sha1', 'sha512']),
   secretKey: z.string().min(1),
   endpoints: z.array(z.string().url()),
-  eventTypes: z.array(z.string())
+  eventTypes: z.array(z.string()),
 });
 ```
 
@@ -160,19 +163,19 @@ interface AuthOptions {
 const jwtAuth = unifiedAuth.createMiddleware({
   required: true,
   allowMethods: ['jwt'],
-  requiredPermissions: ['admin:users']
+  requiredPermissions: ['admin:users'],
 });
 
 // Allow API key or JWT
 const flexibleAuth = unifiedAuth.createMiddleware({
   allowMethods: ['jwt', 'api_key'],
-  requiredScopes: ['read:data']
+  requiredScopes: ['read:data'],
 });
 
 // Webhook-only authentication
 const webhookAuth = unifiedAuth.createMiddleware({
   allowMethods: ['webhook'],
-  allowWebhookProviders: ['github', 'stripe']
+  allowWebhookProviders: ['github', 'stripe'],
 });
 ```
 
@@ -190,7 +193,7 @@ const provider = {
   signaturePrefix: 'sha256=',
   secretKey: process.env.GITHUB_WEBHOOK_SECRET,
   endpoints: ['/webhooks/github'],
-  eventTypes: ['push', 'pull_request', 'issues']
+  eventTypes: ['push', 'pull_request', 'issues'],
 };
 
 await webhookAuthService.registerProvider(provider);
@@ -200,37 +203,47 @@ await webhookAuthService.registerProvider(provider);
 
 ```typescript
 // Protect admin route with multiple auth methods
-fastify.get('/admin/users', {
-  preHandler: [fastify.requireAuth({
-    allowMethods: ['jwt', 'api_key'],
-    requiredPermissions: ['admin:users']
-  })]
-}, async (request, reply) => {
-  const { authContext } = request;
-  // Access user info based on auth method
-  if (authContext.method === 'jwt') {
-    console.log('Authenticated via JWT:', authContext.user.email);
-  } else if (authContext.method === 'api_key') {
-    console.log('Authenticated via API key:', authContext.apiKey.keyId);
+fastify.get(
+  '/admin/users',
+  {
+    preHandler: [
+      fastify.requireAuth({
+        allowMethods: ['jwt', 'api_key'],
+        requiredPermissions: ['admin:users'],
+      }),
+    ],
+  },
+  async (request, reply) => {
+    const { authContext } = request;
+    // Access user info based on auth method
+    if (authContext.method === 'jwt') {
+      console.log('Authenticated via JWT:', authContext.user.email);
+    } else if (authContext.method === 'api_key') {
+      console.log('Authenticated via API key:', authContext.apiKey.keyId);
+    }
   }
-});
+);
 ```
 
 ### 3. Webhook Processing
 
 ```typescript
 // Handle Stripe webhooks
-fastify.post('/webhooks/stripe', {
-  preHandler: [fastify.requireWebhook(['stripe'])]
-}, async (request, reply) => {
-  const { authContext } = request;
-  const { payload, eventType } = authContext.webhook.validation;
-  
-  // Process webhook event
-  await processStripeEvent(eventType, payload);
-  
-  reply.send({ received: true });
-});
+fastify.post(
+  '/webhooks/stripe',
+  {
+    preHandler: [fastify.requireWebhook(['stripe'])],
+  },
+  async (request, reply) => {
+    const { authContext } = request;
+    const { payload, eventType } = authContext.webhook.validation;
+
+    // Process webhook event
+    await processStripeEvent(eventType, payload);
+
+    reply.send({ received: true });
+  }
+);
 ```
 
 ## Security Benefits
@@ -252,7 +265,7 @@ fastify.post('/webhooks/stripe', {
 ### 3. Compliance Integration
 
 - **SOC 2 Controls**: Automated compliance with access control requirements
-- **Audit Requirements**: Complete audit trail for all authentication events  
+- **Audit Requirements**: Complete audit trail for all authentication events
 - **Evidence Collection**: Detailed logging for compliance reporting
 - **Policy Enforcement**: Consistent application of security policies
 
@@ -281,13 +294,13 @@ private cleanupProcessedEvents(): void {
 
 ### 2. Performance Metrics
 
-| Operation | Target Performance | Implementation |
-|-----------|-------------------|----------------|
-| Webhook Signature Verification | < 10ms | HMAC with timing-safe comparison |
-| Provider Lookup | < 5ms | Map-based O(1) lookup |
-| Event Deduplication | < 1ms | Set-based O(1) lookup |
-| Authentication Method Selection | < 2ms | Sequential method attempts |
-| Audit Logging | Async | Background queue processing |
+| Operation                       | Target Performance | Implementation                   |
+| ------------------------------- | ------------------ | -------------------------------- |
+| Webhook Signature Verification  | < 10ms             | HMAC with timing-safe comparison |
+| Provider Lookup                 | < 5ms              | Map-based O(1) lookup            |
+| Event Deduplication             | < 1ms              | Set-based O(1) lookup            |
+| Authentication Method Selection | < 2ms              | Sequential method attempts       |
+| Audit Logging                   | Async              | Background queue processing      |
 
 ### 3. Scalability Considerations
 
@@ -310,6 +323,7 @@ private cleanupProcessedEvents(): void {
 ### 2. Test Categories
 
 #### Webhook Authentication Tests
+
 - Provider registration and management
 - Signature verification (valid/invalid)
 - Replay attack detection
@@ -317,12 +331,14 @@ private cleanupProcessedEvents(): void {
 - Error handling scenarios
 
 #### Unified Middleware Tests
+
 - Multi-method authentication
 - Permission and scope enforcement
 - Path bypassing functionality
 - Error handling and recovery
 
 #### Integration Tests
+
 - End-to-end authentication flows
 - Cross-method authentication attempts
 - Audit trail verification
@@ -351,15 +367,17 @@ WEBHOOK_CLEANUP_THRESHOLD=5000
 ### 2. Migration Steps
 
 1. **Update Server Configuration**
+
    ```typescript
    // Register webhook auth routes
    server.register(webhookAuthRoutes, { prefix: '/api' });
-   
+
    // Initialize unified auth middleware
    server.register(unifiedAuthPlugin);
    ```
 
 2. **Configure Webhook Providers**
+
    ```bash
    curl -X POST /api/webhooks/providers \
      -H "Authorization: Bearer ${ADMIN_TOKEN}" \
@@ -374,14 +392,19 @@ WEBHOOK_CLEANUP_THRESHOLD=5000
    ```
 
 3. **Update Route Handlers**
+
    ```typescript
    // Old way
    fastify.post('/webhooks/github', { preHandler: [customGithubAuth] }, handler);
-   
+
    // New standardized way
-   fastify.post('/webhooks/github', { 
-     preHandler: [fastify.requireWebhook(['github'])] 
-   }, handler);
+   fastify.post(
+     '/webhooks/github',
+     {
+       preHandler: [fastify.requireWebhook(['github'])],
+     },
+     handler
+   );
    ```
 
 ### 3. Monitoring Setup
@@ -410,6 +433,7 @@ GET /api/webhooks/statistics
 ### 1. Adding New Webhook Providers
 
 1. **Register Provider**
+
    ```bash
    POST /api/webhooks/providers
    {
@@ -423,6 +447,7 @@ GET /api/webhooks/statistics
    ```
 
 2. **Test Configuration**
+
    ```bash
    POST /api/webhooks/providers/new-provider/test
    {
@@ -432,12 +457,16 @@ GET /api/webhooks/statistics
 
 3. **Update Route Handler**
    ```typescript
-   fastify.post('/webhooks/new-provider', {
-     preHandler: [fastify.requireWebhook(['new-provider'])]
-   }, async (request, reply) => {
-     const { validation } = request.authContext.webhook;
-     // Process webhook
-   });
+   fastify.post(
+     '/webhooks/new-provider',
+     {
+       preHandler: [fastify.requireWebhook(['new-provider'])],
+     },
+     async (request, reply) => {
+       const { validation } = request.authContext.webhook;
+       // Process webhook
+     }
+   );
    ```
 
 ### 2. Incident Response
@@ -445,12 +474,14 @@ GET /api/webhooks/statistics
 #### Compromised Webhook Secret
 
 1. **Deactivate Provider**
+
    ```bash
    PUT /api/webhooks/providers/compromised-provider
    {"active": false}
    ```
 
 2. **Update Secret**
+
    ```bash
    PUT /api/webhooks/providers/compromised-provider
    {"secretKey": "new-secret", "active": true}
@@ -464,6 +495,7 @@ GET /api/webhooks/statistics
 #### Replay Attack Detection
 
 Automatic protection through event deduplication:
+
 - Events are tracked by unique ID
 - Duplicate events are automatically rejected
 - Audit logs capture all replay attempts

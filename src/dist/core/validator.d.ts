@@ -1,4 +1,4 @@
-import { Event, State } from "./types";
+import { Event, State } from './types';
 /**
  * Validate an event against the current state
  * Returns an array of error messages (empty if valid)

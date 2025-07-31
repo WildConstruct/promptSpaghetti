@@ -10,7 +10,7 @@
   --breakpoint-lg: 1024px;
   --breakpoint-xl: 1280px;
   --breakpoint-xxl: 1536px;
-  
+
   /* Responsive spacing scale */
   --spacing-base: 8px;
   --spacing-scale-mobile: 0.875;
@@ -73,53 +73,123 @@
 }
 
 /* Responsive display utilities */
-.hidden { display: none !important; }
-.block { display: block !important; }
-.inline-block { display: inline-block !important; }
-.inline { display: inline !important; }
-.flex { display: flex !important; }
-.inline-flex { display: inline-flex !important; }
-.grid { display: grid !important; }
+.hidden {
+  display: none !important;
+}
+.block {
+  display: block !important;
+}
+.inline-block {
+  display: inline-block !important;
+}
+.inline {
+  display: inline !important;
+}
+.flex {
+  display: flex !important;
+}
+.inline-flex {
+  display: inline-flex !important;
+}
+.grid {
+  display: grid !important;
+}
 
 /* Breakpoint-specific display */
 @media (min-width: 576px) {
-  .sm\:hidden { display: none !important; }
-  .sm\:block { display: block !important; }
-  .sm\:inline-block { display: inline-block !important; }
-  .sm\:inline { display: inline !important; }
-  .sm\:flex { display: flex !important; }
-  .sm\:inline-flex { display: inline-flex !important; }
-  .sm\:grid { display: grid !important; }
+  .sm\:hidden {
+    display: none !important;
+  }
+  .sm\:block {
+    display: block !important;
+  }
+  .sm\:inline-block {
+    display: inline-block !important;
+  }
+  .sm\:inline {
+    display: inline !important;
+  }
+  .sm\:flex {
+    display: flex !important;
+  }
+  .sm\:inline-flex {
+    display: inline-flex !important;
+  }
+  .sm\:grid {
+    display: grid !important;
+  }
 }
 
 @media (min-width: 768px) {
-  .md\:hidden { display: none !important; }
-  .md\:block { display: block !important; }
-  .md\:inline-block { display: inline-block !important; }
-  .md\:inline { display: inline !important; }
-  .md\:flex { display: flex !important; }
-  .md\:inline-flex { display: inline-flex !important; }
-  .md\:grid { display: grid !important; }
+  .md\:hidden {
+    display: none !important;
+  }
+  .md\:block {
+    display: block !important;
+  }
+  .md\:inline-block {
+    display: inline-block !important;
+  }
+  .md\:inline {
+    display: inline !important;
+  }
+  .md\:flex {
+    display: flex !important;
+  }
+  .md\:inline-flex {
+    display: inline-flex !important;
+  }
+  .md\:grid {
+    display: grid !important;
+  }
 }
 
 @media (min-width: 1024px) {
-  .lg\:hidden { display: none !important; }
-  .lg\:block { display: block !important; }
-  .lg\:inline-block { display: inline-block !important; }
-  .lg\:inline { display: inline !important; }
-  .lg\:flex { display: flex !important; }
-  .lg\:inline-flex { display: inline-flex !important; }
-  .lg\:grid { display: grid !important; }
+  .lg\:hidden {
+    display: none !important;
+  }
+  .lg\:block {
+    display: block !important;
+  }
+  .lg\:inline-block {
+    display: inline-block !important;
+  }
+  .lg\:inline {
+    display: inline !important;
+  }
+  .lg\:flex {
+    display: flex !important;
+  }
+  .lg\:inline-flex {
+    display: inline-flex !important;
+  }
+  .lg\:grid {
+    display: grid !important;
+  }
 }
 
 @media (min-width: 1280px) {
-  .xl\:hidden { display: none !important; }
-  .xl\:block { display: block !important; }
-  .xl\:inline-block { display: inline-block !important; }
-  .xl\:inline { display: inline !important; }
-  .xl\:flex { display: flex !important; }
-  .xl\:inline-flex { display: inline-flex !important; }
-  .xl\:grid { display: grid !important; }
+  .xl\:hidden {
+    display: none !important;
+  }
+  .xl\:block {
+    display: block !important;
+  }
+  .xl\:inline-block {
+    display: inline-block !important;
+  }
+  .xl\:inline {
+    display: inline !important;
+  }
+  .xl\:flex {
+    display: flex !important;
+  }
+  .xl\:inline-flex {
+    display: inline-flex !important;
+  }
+  .xl\:grid {
+    display: grid !important;
+  }
 }
 
 /* Collapsible panel styles */
@@ -403,16 +473,16 @@
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
-  
+
   .ui-tabs-list::-webkit-scrollbar {
     display: none;
   }
-  
+
   .ui-drawer {
     max-width: 90vw;
     max-height: 90vh;
   }
-  
+
   .ui-layout-sidebar {
     position: fixed;
     top: 0;
@@ -421,7 +491,7 @@
     transition: transform 0.3s ease;
     z-index: 100;
   }
-  
+
   .ui-layout-sidebar.open {
     transform: translateX(0);
   }
@@ -443,15 +513,15 @@
   .ui-drawer-close {
     display: none !important;
   }
-  
+
   .ui-adaptive-layout {
     display: block;
   }
-  
+
   .ui-layout-body {
     display: block;
   }
-  
+
   .ui-layout-sidebar {
     display: none;
   }

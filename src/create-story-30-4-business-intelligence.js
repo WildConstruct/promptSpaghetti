@@ -2,13 +2,13 @@
 
 /**
  * Create Story 30.4 Business Intelligence Integration
- * 
+ *
  * Creates a comprehensive formal user story for Story 30.4 based on the existing
- * Epic 30 breakdown. This story implements BI platform integration, advanced 
- * analytics platform, and performance monitoring integration to complete the 
+ * Epic 30 breakdown. This story implements BI platform integration, advanced
+ * analytics platform, and performance monitoring integration to complete the
  * Epic 30 marketplace analytics capabilities.
- * 
- * Builds upon Epic 1 (Analytics Foundation), Epic 16 (Marketplace System) 
+ *
+ * Builds upon Epic 1 (Analytics Foundation), Epic 16 (Marketplace System)
  * which are both complete, and requires Story 30.1, 30.2, and 30.3 for context.
  */
 
@@ -38,14 +38,22 @@ const story304Definition = {
 - Implements ML models using established frameworks (TensorFlow, PyTorch)
 - Ensures BI integration supports multiple platform types (Tableau, PowerBI, etc.)
 - Designs analytics APIs for extensibility and partner integrations`,
-  
+
   estimate: '9 developer days',
   priority: 'high',
   wipClass: 'feature',
   epic: 'Epic 30 - Marketplace Analytics Integration',
   story: 'STORY-30-4-BUSINESS-INTELLIGENCE',
-  tags: ['marketplace', 'analytics', 'business-intelligence', 'machine-learning', 'performance-monitoring', 'bi-platform', 'predictive-analytics'],
-  
+  tags: [
+    'marketplace',
+    'analytics',
+    'business-intelligence',
+    'machine-learning',
+    'performance-monitoring',
+    'bi-platform',
+    'predictive-analytics',
+  ],
+
   acceptanceCriteria: [
     'BI platform integration with automated data pipeline and reporting implemented',
     'Machine learning analytics framework with predictive capabilities functional',
@@ -56,16 +64,18 @@ const story304Definition = {
     'Predictive analytics and forecasting models implemented',
     'Automated insights generation and distribution system functional',
     'Statistical analysis and hypothesis testing tools operational',
-    'Analytics experimentation platform with A/B testing integration complete'
+    'Analytics experimentation platform with A/B testing integration complete',
   ],
-  
-  businessValue: 'Enable data-driven business decisions and optimization through comprehensive BI platform integration, machine learning analytics, and advanced performance monitoring for marketplace success',
-  
+
+  businessValue:
+    'Enable data-driven business decisions and optimization through comprehensive BI platform integration, machine learning analytics, and advanced performance monitoring for marketplace success',
+
   // Implementation broken down by the three main substories
   implementationTasks: [
     {
       title: '30.4.1 - Analyze Business Intelligence Requirements',
-      description: 'Document stakeholder BI reporting and analytics needs, evaluate BI platform options and integration approaches',
+      description:
+        'Document stakeholder BI reporting and analytics needs, evaluate BI platform options and integration approaches',
       estimate: '0.5 days',
       priority: 'high',
       tags: ['requirements-analysis', 'bi-platforms', 'stakeholder-needs'],
@@ -73,12 +83,13 @@ const story304Definition = {
         'Stakeholder BI reporting and analytics needs documented',
         'BI platform options and integration approaches evaluated',
         'Data warehouse integration architecture created',
-        'BI data model and dimensional design defined'
-      ]
+        'BI data model and dimensional design defined',
+      ],
     },
     {
       title: '30.4.1 - Implement BI Data Pipeline',
-      description: 'Build ETL processes for BI data warehouse population and create data mart design for marketplace analytics',
+      description:
+        'Build ETL processes for BI data warehouse population and create data mart design for marketplace analytics',
       estimate: '1 day',
       priority: 'high',
       tags: ['etl-processes', 'data-pipeline', 'data-warehouse'],
@@ -86,12 +97,13 @@ const story304Definition = {
         'ETL processes for BI data warehouse population built',
         'Data mart design for marketplace analytics created',
         'Automated BI data refresh and synchronization implemented',
-        'BI data quality monitoring and validation added'
-      ]
+        'BI data quality monitoring and validation added',
+      ],
     },
     {
       title: '30.4.1 - Create BI Dashboard and Reporting',
-      description: 'Build executive-level marketplace analytics dashboards and create automated BI reporting and distribution',
+      description:
+        'Build executive-level marketplace analytics dashboards and create automated BI reporting and distribution',
       estimate: '1 day',
       priority: 'high',
       tags: ['bi-dashboards', 'executive-reporting', 'automated-distribution'],
@@ -99,12 +111,13 @@ const story304Definition = {
         'Executive-level marketplace analytics dashboards built',
         'Automated BI reporting and distribution created',
         'Ad-hoc BI query and analysis capabilities implemented',
-        'BI data export and integration with external tools added'
-      ]
+        'BI data export and integration with external tools added',
+      ],
     },
     {
       title: '30.4.1 - Develop BI Analytics Automation',
-      description: 'Create automated insights generation and distribution, build predictive analytics and forecasting models',
+      description:
+        'Create automated insights generation and distribution, build predictive analytics and forecasting models',
       estimate: '1 day',
       priority: 'high',
       tags: ['automation', 'predictive-analytics', 'forecasting-models'],
@@ -112,12 +125,13 @@ const story304Definition = {
         'Automated insights generation and distribution created',
         'Predictive analytics and forecasting models built',
         'Anomaly detection and alerting for BI metrics implemented',
-        'BI-driven business optimization recommendations added'
-      ]
+        'BI-driven business optimization recommendations added',
+      ],
     },
     {
       title: '30.4.2 - Design Machine Learning Analytics Framework',
-      description: 'Create ML model training and deployment pipeline, build customer segmentation and clustering models',
+      description:
+        'Create ML model training and deployment pipeline, build customer segmentation and clustering models',
       estimate: '1 day',
       priority: 'high',
       tags: ['machine-learning', 'model-training', 'customer-segmentation'],
@@ -125,12 +139,13 @@ const story304Definition = {
         'ML model training and deployment pipeline created',
         'Customer segmentation and clustering models built',
         'Predictive analytics for revenue and growth implemented',
-        'Recommendation system optimization using ML added'
-      ]
+        'Recommendation system optimization using ML added',
+      ],
     },
     {
       title: '30.4.2 - Implement Advanced Analytics Tools',
-      description: 'Build statistical analysis and hypothesis testing tools, create time series analysis and forecasting capabilities',
+      description:
+        'Build statistical analysis and hypothesis testing tools, create time series analysis and forecasting capabilities',
       estimate: '1 day',
       priority: 'high',
       tags: ['statistical-analysis', 'time-series', 'hypothesis-testing'],
@@ -138,12 +153,13 @@ const story304Definition = {
         'Statistical analysis and hypothesis testing tools built',
         'Time series analysis and forecasting capabilities created',
         'Market basket analysis and cross-selling optimization implemented',
-        'Customer lifetime value prediction and optimization added'
-      ]
+        'Customer lifetime value prediction and optimization added',
+      ],
     },
     {
       title: '30.4.2 - Create Analytics Experimentation Platform',
-      description: 'Build A/B testing framework integration with analytics and create multivariate testing and optimization tools',
+      description:
+        'Build A/B testing framework integration with analytics and create multivariate testing and optimization tools',
       estimate: '1 day',
       priority: 'medium',
       tags: ['ab-testing', 'multivariate-testing', 'experimentation'],
@@ -151,12 +167,13 @@ const story304Definition = {
         'A/B testing framework integration with analytics built',
         'Multivariate testing and optimization tools created',
         'Statistical significance testing and reporting implemented',
-        'Automated experiment analysis and recommendation added'
-      ]
+        'Automated experiment analysis and recommendation added',
+      ],
     },
     {
       title: '30.4.2 - Develop Analytics API and Integration Platform',
-      description: 'Create analytics microservices architecture and build analytics data streaming and real-time processing',
+      description:
+        'Create analytics microservices architecture and build analytics data streaming and real-time processing',
       estimate: '1 day',
       priority: 'medium',
       tags: ['microservices', 'data-streaming', 'real-time-processing'],
@@ -164,12 +181,13 @@ const story304Definition = {
         'Analytics microservices architecture created',
         'Analytics data streaming and real-time processing built',
         'Analytics integration with external systems implemented',
-        'Analytics data syndication and partnership APIs added'
-      ]
+        'Analytics data syndication and partnership APIs added',
+      ],
     },
     {
       title: '30.4.3 - Implement Analytics Performance Monitoring',
-      description: 'Create analytics infrastructure monitoring and alerting, build analytics query performance optimization',
+      description:
+        'Create analytics infrastructure monitoring and alerting, build analytics query performance optimization',
       estimate: '0.5 days',
       priority: 'high',
       tags: ['performance-monitoring', 'infrastructure-alerting', 'query-optimization'],
@@ -177,12 +195,13 @@ const story304Definition = {
         'Analytics infrastructure monitoring and alerting created',
         'Analytics query performance optimization built',
         'Analytics data pipeline monitoring implemented',
-        'Analytics system health and availability tracking added'
-      ]
+        'Analytics system health and availability tracking added',
+      ],
     },
     {
       title: '30.4.3 - Create Analytics Optimization Tools',
-      description: 'Build analytics query optimization and caching, create analytics data partitioning and archival strategies',
+      description:
+        'Build analytics query optimization and caching, create analytics data partitioning and archival strategies',
       estimate: '0.5 days',
       priority: 'medium',
       tags: ['query-optimization', 'caching', 'data-partitioning'],
@@ -190,12 +209,13 @@ const story304Definition = {
         'Analytics query optimization and caching built',
         'Analytics data partitioning and archival strategies created',
         'Analytics cost optimization and monitoring implemented',
-        'Analytics capacity planning and scaling automation added'
-      ]
+        'Analytics capacity planning and scaling automation added',
+      ],
     },
     {
       title: '30.4.3 - Develop Analytics Reliability Engineering',
-      description: 'Create analytics disaster recovery and backup strategies, build analytics system failover and redundancy',
+      description:
+        'Create analytics disaster recovery and backup strategies, build analytics system failover and redundancy',
       estimate: '0.5 days',
       priority: 'medium',
       tags: ['disaster-recovery', 'backup-strategies', 'system-failover'],
@@ -203,8 +223,8 @@ const story304Definition = {
         'Analytics disaster recovery and backup strategies created',
         'Analytics system failover and redundancy built',
         'Analytics data consistency and integrity monitoring implemented',
-        'Analytics incident response and troubleshooting procedures added'
-      ]
+        'Analytics incident response and troubleshooting procedures added',
+      ],
     },
     {
       title: '30.4.3 - Integrate with Epic 1 Monitoring Infrastructure',
@@ -216,10 +236,10 @@ const story304Definition = {
         'Epic 1 monitoring extended to cover marketplace analytics',
         'Unified monitoring dashboard for all analytics systems created',
         'Cross-system alerting and notification implemented',
-        'Performance correlation analysis across Epic 1 and Epic 30 added'
-      ]
-    }
-  ]
+        'Performance correlation analysis across Epic 1 and Epic 30 added',
+      ],
+    },
+  ],
 };
 
 // Utility functions
@@ -231,7 +251,7 @@ function generateTaskId(prefix = 'STORY') {
 
 async function loadCurrentState() {
   const stateFile = path.join(__dirname, 'data/state.json');
-  
+
   try {
     const stateData = await fs.readFile(stateFile, 'utf8');
     return JSON.parse(stateData);
@@ -242,8 +262,8 @@ async function loadCurrentState() {
       stories: {},
       metadata: {
         created: new Date().toISOString(),
-        lastUpdated: new Date().toISOString()
-      }
+        lastUpdated: new Date().toISOString(),
+      },
     };
   }
 }
@@ -254,8 +274,8 @@ async function saveState(state) {
 }
 
 function storyExists(state, title) {
-  return Object.values(state.stories || {}).some(story => 
-    story.title && story.title.toLowerCase() === title.toLowerCase()
+  return Object.values(state.stories || {}).some(
+    story => story.title && story.title.toLowerCase() === title.toLowerCase()
   );
 }
 
@@ -285,21 +305,21 @@ function createStoryObject(storyDef, storyId) {
         phase: 'Planning',
         completedTasks: 0,
         totalTasks: storyDef.implementationTasks.length,
-        percentage: 0
+        percentage: 0,
       },
       dependencies: [
         'Epic 1 (Analytics Foundation) - COMPLETE',
-        'Epic 16 (Marketplace System) - COMPLETE', 
+        'Epic 16 (Marketplace System) - COMPLETE',
         'Story 30.1 (Revenue Analytics Foundation) - Required for revenue data',
         'Story 30.2 (Conversion Funnel Analytics) - Required for conversion data',
-        'Story 30.3 (Template Performance Analytics) - Required for template data'
+        'Story 30.3 (Template Performance Analytics) - Required for template data',
       ],
       technicalNotes: [
         'Leverage Epic 1 existing monitoring and alerting infrastructure',
         'Implement ML models using established frameworks (TensorFlow, PyTorch)',
         'Ensure BI integration supports multiple platform types (Tableau, PowerBI, etc.)',
-        'Design analytics APIs for extensibility and partner integrations'
-      ]
+        'Design analytics APIs for extensibility and partner integrations',
+      ],
     },
     created: new Date().toISOString(),
     lastUpdated: new Date().toISOString(),
@@ -313,17 +333,17 @@ function createStoryObject(storyDef, storyId) {
       story_number: '30.4',
       effort_days: 9,
       dependencies_complete: false, // Requires 30.1, 30.2, and 30.3
-      ready_for_development: false // Blocked by dependencies
-    }
+      ready_for_development: false, // Blocked by dependencies
+    },
   };
 }
 
 function createImplementationTasks(storyId, implementationTasks, state) {
   let createdTasks = [];
-  
+
   implementationTasks.forEach((taskDef, index) => {
     const taskId = generateTaskId('T-30-4');
-    
+
     const task = {
       id: taskId,
       title: taskDef.title,
@@ -339,7 +359,8 @@ function createImplementationTasks(storyId, implementationTasks, state) {
       tags: taskDef.tags,
       acceptanceCriteria: taskDef.acceptance,
       dependencies: index > 0 ? [createdTasks[index - 1].id] : [],
-      businessValue: 'Enables data-driven business decisions through comprehensive BI integration and advanced analytics',
+      businessValue:
+        'Enables data-driven business decisions through comprehensive BI integration and advanced analytics',
       assignee: 'Unassigned',
       devAgentRecord: {
         assignedAgent: null,
@@ -351,8 +372,8 @@ function createImplementationTasks(storyId, implementationTasks, state) {
           estimated: taskDef.estimate,
           actual: null,
           started: null,
-          completed: null
-        }
+          completed: null,
+        },
       },
       created: new Date().toISOString(),
       lastUpdated: new Date().toISOString(),
@@ -365,14 +386,14 @@ function createImplementationTasks(storyId, implementationTasks, state) {
         sequence_order: index + 1,
         substory_group: taskDef.title.match(/30\.4\.(\d+)/)?.[1] || 'general',
         epic_number: 30,
-        story_number: '30.4'
-      }
+        story_number: '30.4',
+      },
     };
-    
+
     state.tasks[taskId] = task;
     createdTasks.push(task);
   });
-  
+
   return createdTasks;
 }
 
@@ -381,43 +402,39 @@ async function createStory304() {
   console.log('🎯 Epic 30: Marketplace Analytics Integration');
   console.log('📊 Building BI platform integration, ML analytics, and performance monitoring');
   console.log('🔗 Dependencies: Epic 1 (Complete), Epic 16 (Complete), Stories 30.1, 30.2, 30.3 (Required)\n');
-  
+
   try {
     // Load current state
     let state = await loadCurrentState();
-    
+
     if (!state.stories) {
       state.stories = {};
     }
     if (!state.tasks) {
       state.tasks = {};
     }
-    
+
     let storiesCreated = 0;
     let tasksCreated = 0;
-    
+
     // Check if story already exists
     if (storyExists(state, story304Definition.title)) {
       console.log('⏭️  Story already exists - updating with latest requirements...');
     }
-    
+
     const storyId = generateTaskId('STORY-30-4');
     const story = createStoryObject(story304Definition, storyId);
-    
+
     state.stories[storyId] = story;
     storiesCreated++;
-    
+
     // Create implementation tasks
     console.log('📝 Creating Implementation Tasks...\n');
-    
-    const implementationTasks = createImplementationTasks(
-      storyId, 
-      story304Definition.implementationTasks, 
-      state
-    );
-    
+
+    const implementationTasks = createImplementationTasks(storyId, story304Definition.implementationTasks, state);
+
     tasksCreated = implementationTasks.length;
-    
+
     // Update state metadata
     if (!state.metadata) {
       state.metadata = {};
@@ -426,35 +443,33 @@ async function createStory304() {
     state.metadata.totalStories = Object.keys(state.stories).length;
     state.metadata.totalTasks = Object.keys(state.tasks).length;
     state.metadata.epic30StoriesCreated = (state.metadata.epic30StoriesCreated || 0) + storiesCreated;
-    
+
     // Save updated state
     await saveState(state);
-    
+
     console.log(`✅ Created Story: ${story.title}`);
     console.log(`   📊 Priority: ${story.priority} | ⏱️  Estimate: ${story.estimate}`);
     console.log(`   🎯 Business Value: ${story.businessValue}`);
     console.log(`   📋 Status: ${story.status}`);
     console.log('');
-    
+
     // Show substory groupings
     const substoryGroups = {
-      '1': 'BI Platform Integration',
-      '2': 'Advanced Analytics Platform', 
-      '3': 'Performance Monitoring Integration'
+      1: 'BI Platform Integration',
+      2: 'Advanced Analytics Platform',
+      3: 'Performance Monitoring Integration',
     };
-    
+
     Object.entries(substoryGroups).forEach(([group, name]) => {
       console.log(`🧠 Substory 30.4.${group}: ${name}`);
-      const groupTasks = implementationTasks.filter(task => 
-        task.metadata.substory_group === group
-      );
+      const groupTasks = implementationTasks.filter(task => task.metadata.substory_group === group);
       groupTasks.forEach(task => {
         console.log(`   ✅ ${task.title}`);
         console.log(`      ID: ${task.id} | ⏱️  ${task.estimate} | 📊 ${task.priority} priority`);
       });
       console.log('');
     });
-    
+
     // Generate comprehensive summary
     console.log('🧠 STORY 30.4 CREATION SUMMARY\n');
     console.log('='.repeat(60));
@@ -462,7 +477,7 @@ async function createStory304() {
     console.log(`✅ Implementation Tasks Created: ${tasksCreated}`);
     console.log(`📋 Total Stories in System: ${Object.keys(state.stories).length}`);
     console.log(`📋 Total Tasks in System: ${Object.keys(state.tasks).length}\n`);
-    
+
     // Show business impact
     console.log('💰 BUSINESS IMPACT:\n');
     console.log('🎯 VALUE DELIVERED:');
@@ -471,14 +486,14 @@ async function createStory304() {
     console.log('   • Advanced analytics platform supporting 10,000+ concurrent users');
     console.log('   • Performance monitoring integration with Epic 1 infrastructure');
     console.log('   • Analytics API supporting external integrations and partnerships\n');
-    
+
     console.log('📈 EXPECTED OUTCOMES:');
     console.log('   • Data-driven business decisions through comprehensive BI integration');
     console.log('   • Predictive analytics for revenue forecasting and growth optimization');
     console.log('   • Advanced statistical analysis and hypothesis testing capabilities');
     console.log('   • Real-time analytics processing and automated insights generation');
     console.log('   • Enterprise-grade analytics reliability and performance monitoring\n');
-    
+
     // Show technical foundation
     console.log('🔧 TECHNICAL FOUNDATION:\n');
     console.log('✅ Dependencies Complete:');
@@ -488,20 +503,18 @@ async function createStory304() {
     console.log('   • Story 30.1 (Revenue Analytics Foundation) - Revenue data for BI');
     console.log('   • Story 30.2 (Conversion Funnel Analytics) - Conversion data for BI');
     console.log('   • Story 30.3 (Template Performance Analytics) - Template data for BI\n');
-    
+
     // Show implementation sequence
     console.log('🔄 IMPLEMENTATION SEQUENCE:\n');
     Object.entries(substoryGroups).forEach(([group, name]) => {
       console.log(`🧠 Phase ${group}: ${name}`);
-      const groupTasks = implementationTasks.filter(task => 
-        task.metadata.substory_group === group
-      );
+      const groupTasks = implementationTasks.filter(task => task.metadata.substory_group === group);
       groupTasks.forEach((task, index) => {
         console.log(`   ${index + 1}. ${task.title.replace(/30\.4\.\d+ - /, '')} (${task.estimate})`);
       });
       console.log('');
     });
-    
+
     // Agent instructions
     console.log('🤖 NEXT STEPS FOR DEVELOPMENT AGENTS:\n');
     console.log('1. 🔧 Ensure Stories 30.1, 30.2, and 30.3 are complete first');
@@ -511,19 +524,18 @@ async function createStory304() {
     console.log('4. 🧠 Implement machine learning analytics framework');
     console.log('5. 📊 Build advanced analytics platform with performance monitoring');
     console.log('6. 🔗 Integrate with Epic 1 monitoring infrastructure\n');
-    
+
     console.log('🧠 Story 30.4 completes Epic 30 with comprehensive BI integration!');
     console.log('⏰ Timeline: 9 developer days (approximately 2 weeks)');
     console.log('💡 Success Metrics: BI platform integration, ML analytics, 10,000+ user support');
-    
+
     return {
       story: story,
       tasks: implementationTasks,
       created: storiesCreated,
       tasksCreated: tasksCreated,
-      total: Object.keys(state.tasks).length
+      total: Object.keys(state.tasks).length,
     };
-    
   } catch (error) {
     console.error('❌ Failed to create Story 30.4:', error);
     throw error;
@@ -538,7 +550,7 @@ if (require.main === module) {
   });
 }
 
-module.exports = { 
-  createStory304, 
-  story304Definition 
+module.exports = {
+  createStory304,
+  story304Definition,
 };

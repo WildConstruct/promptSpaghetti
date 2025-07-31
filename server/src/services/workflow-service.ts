@@ -22,7 +22,7 @@ import {
   CreateWorkflowLockSchema,
   CreateWorkflowScheduleSchema,
   ApproveWorkflowSchema,
-  RejectWorkflowSchema
+  RejectWorkflowSchema,
 } from '../database/workflow-models';
 
 export class WorkflowService {
@@ -51,8 +51,8 @@ export class WorkflowService {
         approval_requested: true,
         approval_completed: true,
         lock_acquired: true,
-        schedule_failed: true
-      }
+        schedule_failed: true,
+      },
     };
   }
 
@@ -86,7 +86,6 @@ export class WorkflowService {
   }
 
   private async emitEvent(event: WorkflowEvent): Promise<void> {
-
     const handlers = this.eventHandlers.get(event.type) || [];
     await Promise.all(handlers.map(handler => handler(event)));
   }
@@ -96,33 +95,29 @@ export class WorkflowService {
   // =============================================================================
 
   async createWorkflowState(data: z.infer<typeof CreateWorkflowStateSchema>): Promise<WorkflowState> {
-
     const state = await this.dao.createWorkflowState(data);
-    
+
     await this.emitEvent({
       type: 'state_changed',
       workspace_id: data.workspace_id,
       resource_id: '', // Not applicable for state creation
       actor_id: 'system',
       timestamp: new Date(),
-      data: { action: 'state_created', state_id: state.id, state_name: state.name }
+      data: { action: 'state_created', state_id: state.id, state_name: state.name },
     });
 
     return state;
   }
 
   async getWorkflowStates(workspaceId: string): Promise<WorkflowState[]> {
-
     return this.dao.getWorkflowStates({ workspace_id: workspaceId });
   }
 
   async updateWorkflowState(id: string, updates: Partial<WorkflowState>): Promise<WorkflowState | null> {
-
     return this.dao.updateWorkflowState(id, updates);
   }
 
   async deleteWorkflowState(id: string): Promise<boolean> {
-
     return this.dao.deleteWorkflowState(id);
   }
 
@@ -131,17 +126,14 @@ export class WorkflowService {
   // =============================================================================
 
   async createWorkflowTransition(data: z.infer<typeof CreateWorkflowTransitionSchema>): Promise<WorkflowTransition> {
-
     return this.dao.createWorkflowTransition(data);
   }
 
   async getWorkflowTransitions(workspaceId: string, fromStateId?: string): Promise<WorkflowTransition[]> {
-
     return this.dao.getWorkflowTransitions(workspaceId, fromStateId);
   }
 
   async deleteWorkflowTransition(id: string): Promise<boolean> {
-
     return this.dao.deleteWorkflowTransition(id);
   }
 
@@ -160,12 +152,11 @@ export class WorkflowService {
       lockDuration?: number; // minutes
     } = {}
   ): Promise<StateTransitionResult> {
-
     // Auto-lock resource if configured
     if (this.config.auto_lock_on_state_change) {
       await this.acquireLock(resourceId, actorId, 'state_change', {
         reason: 'Auto-lock for state transition',
-        duration: options.lockDuration || 60 // 1 hour default
+        duration: options.lockDuration || 60, // 1 hour default
       });
     }
 
@@ -174,7 +165,7 @@ export class WorkflowService {
       to_state_id: toStateId,
       comment: options.comment,
       metadata: options.metadata,
-      force: options.force
+      force: options.force,
     };
 
     const result = await this.dao.transitionResourceState(request, actorId);
@@ -188,7 +179,7 @@ export class WorkflowService {
           resource_id: resourceId,
           actor_id: actorId,
           timestamp: new Date(),
-          data: { approval_id: result.approval_id, to_state_id: toStateId }
+          data: { approval_id: result.approval_id, to_state_id: toStateId },
         });
       } else {
         await this.emitEvent({
@@ -197,7 +188,7 @@ export class WorkflowService {
           resource_id: resourceId,
           actor_id: actorId,
           timestamp: new Date(),
-          data: { new_state_id: result.new_state_id, comment: options.comment }
+          data: { new_state_id: result.new_state_id, comment: options.comment },
         });
 
         // Auto-release lock if configured
@@ -215,7 +206,6 @@ export class WorkflowService {
   // =============================================================================
 
   async createWorkflowApproval(data: z.infer<typeof CreateWorkflowApprovalSchema>): Promise<WorkflowApproval> {
-
     // Set default due date if not provided
     if (!data.due_date) {
       const dueDate = new Date();
@@ -231,19 +221,17 @@ export class WorkflowService {
       resource_id: data.resource_id,
       actor_id: data.requester_id,
       timestamp: new Date(),
-      data: { approval_id: approval.id, transition_id: data.transition_id }
+      data: { approval_id: approval.id, transition_id: data.transition_id },
     });
 
     return approval;
   }
 
   async getWorkflowApprovals(workspaceId: string, filters: any = {}): Promise<WorkflowApproval[]> {
-
     return this.dao.getWorkflowApprovals({ workspace_id: workspaceId, ...filters });
   }
 
   async approveWorkflow(approvalId: string, approverId: string, comment?: string): Promise<StateTransitionResult> {
-
     const data = { approved_by: approverId, approval_comment: comment };
     const result = await this.dao.approveWorkflow(approvalId, data);
 
@@ -254,7 +242,7 @@ export class WorkflowService {
         resource_id: '', // Will be filled by DAO
         actor_id: approverId,
         timestamp: new Date(),
-        data: { approval_id: approvalId, status: 'approved', comment }
+        data: { approval_id: approvalId, status: 'approved', comment },
       });
 
       // Auto-release locks if configured
@@ -268,7 +256,6 @@ export class WorkflowService {
   }
 
   async rejectWorkflow(approvalId: string, rejectorId: string, reason: string): Promise<boolean> {
-
     const data = { approved_by: rejectorId, rejection_reason: reason };
     const result = await this.dao.rejectWorkflow(approvalId, data);
 
@@ -279,7 +266,7 @@ export class WorkflowService {
         resource_id: '', // Will be filled by DAO
         actor_id: rejectorId,
         timestamp: new Date(),
-        data: { approval_id: approvalId, status: 'rejected', reason }
+        data: { approval_id: approvalId, status: 'rejected', reason },
       });
     }
 
@@ -300,12 +287,13 @@ export class WorkflowService {
       metadata?: Record<string, any>;
     } = {}
   ): Promise<WorkflowLock> {
-
     // Check existing locks
     const existingLocks = await this.dao.getWorkflowLocks({ resource_id: resourceId });
-    
+
     if (existingLocks.length >= this.config.max_concurrent_locks_per_resource) {
-      throw new Error(`Maximum concurrent locks (${this.config.max_concurrent_locks_per_resource}) exceeded for resource`);
+      throw new Error(
+        `Maximum concurrent locks (${this.config.max_concurrent_locks_per_resource}) exceeded for resource`
+      );
     }
 
     // Check for conflicting locks
@@ -323,7 +311,7 @@ export class WorkflowService {
       lock_type: lockType,
       lock_reason: options.reason,
       expires_at: expiresAt,
-      metadata: options.metadata || {}
+      metadata: options.metadata || {},
     };
 
     const lock = await this.dao.createWorkflowLock(lockData);
@@ -334,14 +322,13 @@ export class WorkflowService {
       resource_id: resourceId,
       actor_id: userId,
       timestamp: new Date(),
-      data: { lock_id: lock.id, lock_type: lockType, expires_at: expiresAt }
+      data: { lock_id: lock.id, lock_type: lockType, expires_at: expiresAt },
     });
 
     return lock;
   }
 
   async releaseLock(lockId: string, userId: string): Promise<boolean> {
-
     const result = await this.dao.releaseWorkflowLock(lockId, userId);
 
     if (result) {
@@ -351,7 +338,7 @@ export class WorkflowService {
         resource_id: '', // Will be filled by DAO
         actor_id: userId,
         timestamp: new Date(),
-        data: { lock_id: lockId }
+        data: { lock_id: lockId },
       });
     }
 
@@ -359,10 +346,9 @@ export class WorkflowService {
   }
 
   async releaseLocksByResource(resourceId: string, userId: string, lockType?: string): Promise<number> {
-
-    const locks = await this.dao.getWorkflowLocks({ 
-      resource_id: resourceId, 
-      lock_type: lockType as any 
+    const locks = await this.dao.getWorkflowLocks({
+      resource_id: resourceId,
+      lock_type: lockType as any,
     });
 
     let releasedCount = 0;
@@ -376,12 +362,10 @@ export class WorkflowService {
   }
 
   async getWorkflowLocks(workspaceId: string, filters: any = {}): Promise<WorkflowLock[]> {
-
     return this.dao.getWorkflowLocks({ workspace_id: workspaceId, ...filters });
   }
 
   async releaseExpiredLocks(): Promise<number> {
-
     return this.dao.releaseExpiredLocks();
   }
 
@@ -390,7 +374,6 @@ export class WorkflowService {
   // =============================================================================
 
   async getWorkflowHistory(workspaceId: string, filters: any = {}): Promise<any[]> {
-
     return this.dao.getWorkflowHistory({ workspace_id: workspaceId, ...filters });
   }
 
@@ -399,7 +382,6 @@ export class WorkflowService {
   // =============================================================================
 
   async getWorkflowStatistics(workspaceId: string): Promise<WorkflowStatistics> {
-
     return this.dao.getWorkflowStatistics(workspaceId);
   }
 
@@ -407,28 +389,28 @@ export class WorkflowService {
   // VALIDATION HELPERS
   // =============================================================================
 
-  async validateStateTransition(_____resourceId: string, _____toStateId: string): Promise<{
+  async validateStateTransition(
+    _____resourceId: string,
+    _____toStateId: string
+  ): Promise<{
     valid: boolean;
     transition?: WorkflowTransition;
     error?: string;
   }> {
-
     // This would include logic to validate if a transition is allowed
     // based on current state, user permissions, etc.
     return { valid: true };
   }
 
   async canUserTransitionState(_____userId: string, _____resourceId: string, _____toStateId: string): Promise<boolean> {
-
     // This would check user permissions against the transition requirements
     return true;
   }
 
   async isResourceLocked(resourceId: string, lockType?: string): Promise<boolean> {
-
-    const locks = await this.dao.getWorkflowLocks({ 
-      resource_id: resourceId, 
-      lock_type: lockType as any 
+    const locks = await this.dao.getWorkflowLocks({
+      resource_id: resourceId,
+      lock_type: lockType as any,
     });
     return locks.length > 0;
   }
@@ -442,18 +424,17 @@ export class WorkflowService {
     overdue_approvals: number;
     cleanup_tasks_completed: number;
   }> {
-
     const expiredLocks = await this.releaseExpiredLocks();
-    
+
     // Get overdue approvals
     const overdueApprovals = await this.dao.getWorkflowApprovals({ overdue: true });
-    
+
     // Additional cleanup tasks could be added here
-    
+
     return {
       expired_locks_released: expiredLocks,
       overdue_approvals: overdueApprovals.length,
-      cleanup_tasks_completed: 1
+      cleanup_tasks_completed: 1,
     };
   }
 }

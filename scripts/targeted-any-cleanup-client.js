@@ -12,30 +12,38 @@ const anyTypeReplacements = [
   {
     pattern: /(\w+)\s*:\s*any(?=\s*[,\)])/g,
     replacement: '$1: unknown',
-    description: 'Function parameters: any → unknown'
+    description: 'Function parameters: any → unknown',
   },
   {
     pattern: /:\s*any(?=\s*[;}])/g,
     replacement: ': unknown',
-    description: 'Object properties: any → unknown'
+    description: 'Object properties: any → unknown',
   },
   {
     pattern: /:\s*any\[\]/g,
     replacement: ': unknown[]',
-    description: 'Arrays: any[] → unknown[]'
+    description: 'Arrays: any[] → unknown[]',
   },
   {
     pattern: /<any>/g,
     replacement: '<unknown>',
-    description: 'Generics: <any> → <unknown>'
-  }
+    description: 'Generics: <any> → <unknown>',
+  },
 ];
 
 // More specific type replacements
 const specificTypeReplacements = [
   { pattern: /(error|err|e)\s*:\s*any/g, replacement: '$1: Error', description: 'Error objects: any → Error' },
-  { pattern: /(element|el|node)\s*:\s*any/g, replacement: '$1: HTMLElement', description: 'DOM elements: any → HTMLElement' },
-  { pattern: /(data|result|response)\s*:\s*any/g, replacement: '$1: Record<string, unknown>', description: 'Data objects: any → Record<string, unknown>' }
+  {
+    pattern: /(element|el|node)\s*:\s*any/g,
+    replacement: '$1: HTMLElement',
+    description: 'DOM elements: any → HTMLElement',
+  },
+  {
+    pattern: /(data|result|response)\s*:\s*any/g,
+    replacement: '$1: Record<string, unknown>',
+    description: 'Data objects: any → Record<string, unknown>',
+  },
 ];
 
 function processFile(filePath) {
@@ -44,7 +52,7 @@ function processFile(filePath) {
   }
 
   console.log(`Processing: ${path.basename(filePath)}`);
-  
+
   let content = fs.readFileSync(filePath, 'utf8');
   let fixCount = 0;
 
@@ -79,18 +87,19 @@ function processFile(filePath) {
 function processDirectory(dirPath) {
   let totalFixed = 0;
   const files = fs.readdirSync(dirPath);
-  
-  for (const file of files.slice(0, 10)) { // Process only first 10 files
+
+  for (const file of files.slice(0, 10)) {
+    // Process only first 10 files
     const filePath = path.join(dirPath, file);
     const stat = fs.statSync(filePath);
-    
+
     if (stat.isFile()) {
       totalFixed += processFile(filePath);
     } else if (stat.isDirectory() && !file.startsWith('.') && file !== 'node_modules') {
       totalFixed += processDirectory(filePath);
     }
   }
-  
+
   return totalFixed;
 }
 

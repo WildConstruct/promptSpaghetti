@@ -1,11 +1,17 @@
 /**
- * User Targeting API Routes  
+ * User Targeting API Routes
  * Epic 17.1.4 - User Targeting System
  * Routes for user segmentation and segment testing services
  */
 
 import { FastifyPluginAsync } from 'fastify';
-import { UserSegmentationService, CreateSegmentRequest, UpdateSegmentRequest, SegmentQuery, BatchEvaluationRequest } from '../services/UserSegmentationService';
+import {
+  UserSegmentationService,
+  CreateSegmentRequest,
+  UpdateSegmentRequest,
+  SegmentQuery,
+  BatchEvaluationRequest,
+} from '../services/UserSegmentationService';
 import { SegmentTestingService, TestType, BatchTestRequest } from '../services/SegmentTestingService';
 import { CohortAnalyzer } from '../analytics/CohortAnalyzer';
 import { AnalyticsDAO } from '../database/analytics-dao';
@@ -16,24 +22,24 @@ const cohortAnalyzer = new CohortAnalyzer(analyticsDAO);
 const segmentationService = new UserSegmentationService(cohortAnalyzer, analyticsDAO);
 const segmentTestingService = new SegmentTestingService(segmentationService, cohortAnalyzer, analyticsDAO);
 
-const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
+const userTargetingRoutes: FastifyPluginAsync = async fastify => {
   // User Segmentation Routes
 
   // Create a new user segment
   fastify.post<{
-    Body: CreateSegmentRequest
+    Body: CreateSegmentRequest;
   }>('/segments', async (request, reply) => {
     try {
       const segmentRequest = {
         ...request.body,
-        createdBy: request.user?.id || 'system'
+        createdBy: request.user?.id || 'system',
       };
 
       const segment = await segmentationService.createSegment(segmentRequest);
 
       reply.code(201).send({
         success: true,
-        data: segment
+        data: segment,
       });
     } catch (error) {
       fastify.log.error('Failed to create segment:', error);
@@ -41,15 +47,15 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
         success: false,
         error: {
           code: 'SEGMENT_CREATION_FAILED',
-          message: error instanceof Error ? error.message : 'Failed to create segment'
-        }
+          message: error instanceof Error ? error.message : 'Failed to create segment',
+        },
       });
     }
   });
 
   // Get a specific segment
   fastify.get<{
-    Params: { segmentId: string }
+    Params: { segmentId: string };
   }>('/segments/:segmentId', async (request, reply) => {
     try {
       const { segmentId } = request.params;
@@ -58,13 +64,13 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
       if (!segment) {
         return reply.code(404).send({
           success: false,
-          error: { code: 'SEGMENT_NOT_FOUND', message: 'Segment not found' }
+          error: { code: 'SEGMENT_NOT_FOUND', message: 'Segment not found' },
         });
       }
 
       reply.code(200).send({
         success: true,
-        data: segment
+        data: segment,
       });
     } catch (error) {
       fastify.log.error('Failed to get segment:', error);
@@ -72,8 +78,8 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
         success: false,
         error: {
           code: 'SEGMENT_FETCH_FAILED',
-          message: error instanceof Error ? error.message : 'Failed to get segment'
-        }
+          message: error instanceof Error ? error.message : 'Failed to get segment',
+        },
       });
     }
   });
@@ -91,7 +97,7 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
       sortOrder?: 'asc' | 'desc';
       limit?: number;
       offset?: number;
-    }
+    };
   }>('/segments', async (request, reply) => {
     try {
       const query: SegmentQuery = {
@@ -104,14 +110,14 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
         sortBy: request.query.sortBy as any,
         sortOrder: request.query.sortOrder || 'desc',
         limit: request.query.limit || 50,
-        offset: request.query.offset || 0
+        offset: request.query.offset || 0,
       };
 
       const result = await segmentationService.querySegments(query);
 
       reply.code(200).send({
         success: true,
-        data: result
+        data: result,
       });
     } catch (error) {
       fastify.log.error('Failed to query segments:', error);
@@ -119,22 +125,22 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
         success: false,
         error: {
           code: 'SEGMENT_QUERY_FAILED',
-          message: error instanceof Error ? error.message : 'Failed to query segments'
-        }
+          message: error instanceof Error ? error.message : 'Failed to query segments',
+        },
       });
     }
   });
 
   // Update a segment
   fastify.put<{
-    Body: Omit<UpdateSegmentRequest, 'id' | 'updatedBy'>
+    Body: Omit<UpdateSegmentRequest, 'id' | 'updatedBy'>;
   }>('/segments/:segmentId', async (request, reply) => {
     try {
       const { segmentId } = request.params as { segmentId: string };
       const updateRequest = {
         ...request.body,
         id: segmentId,
-        updatedBy: request.user?.id || 'system'
+        updatedBy: request.user?.id || 'system',
       };
 
       const updatedSegment = await segmentationService.updateSegment(updateRequest);
@@ -142,13 +148,13 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
       if (!updatedSegment) {
         return reply.code(404).send({
           success: false,
-          error: { code: 'SEGMENT_NOT_FOUND', message: 'Segment not found' }
+          error: { code: 'SEGMENT_NOT_FOUND', message: 'Segment not found' },
         });
       }
 
       reply.code(200).send({
         success: true,
-        data: updatedSegment
+        data: updatedSegment,
       });
     } catch (error) {
       fastify.log.error('Failed to update segment:', error);
@@ -156,15 +162,15 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
         success: false,
         error: {
           code: 'SEGMENT_UPDATE_FAILED',
-          message: error instanceof Error ? error.message : 'Failed to update segment'
-        }
+          message: error instanceof Error ? error.message : 'Failed to update segment',
+        },
       });
     }
   });
 
   // Delete a segment
   fastify.delete<{
-    Params: { segmentId: string }
+    Params: { segmentId: string };
   }>('/segments/:segmentId', async (request, reply) => {
     try {
       const { segmentId } = request.params;
@@ -173,13 +179,13 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
       if (!deleted) {
         return reply.code(404).send({
           success: false,
-          error: { code: 'SEGMENT_NOT_FOUND', message: 'Segment not found' }
+          error: { code: 'SEGMENT_NOT_FOUND', message: 'Segment not found' },
         });
       }
 
       reply.code(200).send({
         success: true,
-        data: { deleted: true }
+        data: { deleted: true },
       });
     } catch (error) {
       fastify.log.error('Failed to delete segment:', error);
@@ -187,15 +193,15 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
         success: false,
         error: {
           code: 'SEGMENT_DELETE_FAILED',
-          message: error instanceof Error ? error.message : 'Failed to delete segment'
-        }
+          message: error instanceof Error ? error.message : 'Failed to delete segment',
+        },
       });
     }
   });
 
   // Evaluate user for segment
   fastify.post<{
-    Body: { userId: string }
+    Body: { userId: string };
   }>('/segments/:segmentId/evaluate', async (request, reply) => {
     try {
       const { segmentId } = request.params as { segmentId: string };
@@ -205,7 +211,7 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
 
       reply.code(200).send({
         success: true,
-        data: result
+        data: result,
       });
     } catch (error) {
       fastify.log.error('Failed to evaluate user for segment:', error);
@@ -213,22 +219,22 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
         success: false,
         error: {
           code: 'EVALUATION_FAILED',
-          message: error instanceof Error ? error.message : 'Failed to evaluate user for segment'
-        }
+          message: error instanceof Error ? error.message : 'Failed to evaluate user for segment',
+        },
       });
     }
   });
 
   // Batch evaluate segments
   fastify.post<{
-    Body: BatchEvaluationRequest
+    Body: BatchEvaluationRequest;
   }>('/segments/batch-evaluate', async (request, reply) => {
     try {
       const result = await segmentationService.batchEvaluateSegments(request.body);
 
       reply.code(200).send({
         success: true,
-        data: result
+        data: result,
       });
     } catch (error) {
       fastify.log.error('Failed to batch evaluate segments:', error);
@@ -236,28 +242,27 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
         success: false,
         error: {
           code: 'BATCH_EVALUATION_FAILED',
-          message: error instanceof Error ? error.message : 'Failed to batch evaluate segments'
-        }
+          message: error instanceof Error ? error.message : 'Failed to batch evaluate segments',
+        },
       });
     }
   });
 
   // Get segment metrics
   fastify.get<{
-    Params: { segmentId: string }
-    Querystring: { start?: string; end?: string }
+    Params: { segmentId: string };
+    Querystring: { start?: string; end?: string };
   }>('/segments/:segmentId/metrics', async (request, reply) => {
     try {
       const { segmentId } = request.params;
-      const timeWindow = request.query.start && request.query.end 
-        ? { start: request.query.start, end: request.query.end }
-        : undefined;
+      const timeWindow =
+        request.query.start && request.query.end ? { start: request.query.start, end: request.query.end } : undefined;
 
       const metrics = await segmentationService.getSegmentMetrics(segmentId, timeWindow);
 
       reply.code(200).send({
         success: true,
-        data: metrics
+        data: metrics,
       });
     } catch (error) {
       fastify.log.error('Failed to get segment metrics:', error);
@@ -265,8 +270,8 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
         success: false,
         error: {
           code: 'METRICS_FETCH_FAILED',
-          message: error instanceof Error ? error.message : 'Failed to get segment metrics'
-        }
+          message: error instanceof Error ? error.message : 'Failed to get segment metrics',
+        },
       });
     }
   });
@@ -288,21 +293,21 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
         expectedValue: number | [number, number];
         severity: string;
       }>;
-    }
+    };
   }>('/segments/:segmentId/tests', async (request, reply) => {
     try {
       const { segmentId } = request.params as { segmentId: string };
       const testRequest = {
         ...request.body,
         segmentId,
-        createdBy: request.user?.id || 'system'
+        createdBy: request.user?.id || 'system',
       };
 
       const test = await segmentTestingService.createTest(testRequest);
 
       reply.code(201).send({
         success: true,
-        data: test
+        data: test,
       });
     } catch (error) {
       fastify.log.error('Failed to create segment test:', error);
@@ -310,15 +315,15 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
         success: false,
         error: {
           code: 'TEST_CREATION_FAILED',
-          message: error instanceof Error ? error.message : 'Failed to create segment test'
-        }
+          message: error instanceof Error ? error.message : 'Failed to create segment test',
+        },
       });
     }
   });
 
   // Run a segment test
   fastify.post<{
-    Params: { testId: string }
+    Params: { testId: string };
   }>('/tests/:testId/run', async (request, reply) => {
     try {
       const { testId } = request.params;
@@ -326,7 +331,7 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
 
       reply.code(200).send({
         success: true,
-        data: result
+        data: result,
       });
     } catch (error) {
       fastify.log.error('Failed to run segment test:', error);
@@ -334,15 +339,15 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
         success: false,
         error: {
           code: 'TEST_EXECUTION_FAILED',
-          message: error instanceof Error ? error.message : 'Failed to run segment test'
-        }
+          message: error instanceof Error ? error.message : 'Failed to run segment test',
+        },
       });
     }
   });
 
   // Cancel a running test
   fastify.post<{
-    Params: { testId: string }
+    Params: { testId: string };
   }>('/tests/:testId/cancel', async (request, reply) => {
     try {
       const { testId } = request.params;
@@ -350,7 +355,7 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
 
       reply.code(200).send({
         success: true,
-        data: { cancelled }
+        data: { cancelled },
       });
     } catch (error) {
       fastify.log.error('Failed to cancel segment test:', error);
@@ -358,15 +363,15 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
         success: false,
         error: {
           code: 'TEST_CANCELLATION_FAILED',
-          message: error instanceof Error ? error.message : 'Failed to cancel segment test'
-        }
+          message: error instanceof Error ? error.message : 'Failed to cancel segment test',
+        },
       });
     }
   });
 
   // Get test details
   fastify.get<{
-    Params: { testId: string }
+    Params: { testId: string };
   }>('/tests/:testId', async (request, reply) => {
     try {
       const { testId } = request.params;
@@ -375,13 +380,13 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
       if (!test) {
         return reply.code(404).send({
           success: false,
-          error: { code: 'TEST_NOT_FOUND', message: 'Test not found' }
+          error: { code: 'TEST_NOT_FOUND', message: 'Test not found' },
         });
       }
 
       reply.code(200).send({
         success: true,
-        data: test
+        data: test,
       });
     } catch (error) {
       fastify.log.error('Failed to get segment test:', error);
@@ -389,15 +394,15 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
         success: false,
         error: {
           code: 'TEST_FETCH_FAILED',
-          message: error instanceof Error ? error.message : 'Failed to get segment test'
-        }
+          message: error instanceof Error ? error.message : 'Failed to get segment test',
+        },
       });
     }
   });
 
   // Get test history for a segment
   fastify.get<{
-    Params: { segmentId: string }
+    Params: { segmentId: string };
   }>('/segments/:segmentId/test-history', async (request, reply) => {
     try {
       const { segmentId } = request.params;
@@ -405,7 +410,7 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
 
       reply.code(200).send({
         success: true,
-        data: { tests, total: tests.length }
+        data: { tests, total: tests.length },
       });
     } catch (error) {
       fastify.log.error('Failed to get test history:', error);
@@ -413,27 +418,27 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
         success: false,
         error: {
           code: 'TEST_HISTORY_FETCH_FAILED',
-          message: error instanceof Error ? error.message : 'Failed to get test history'
-        }
+          message: error instanceof Error ? error.message : 'Failed to get test history',
+        },
       });
     }
   });
 
   // Run batch tests
   fastify.post<{
-    Body: BatchTestRequest
+    Body: BatchTestRequest;
   }>('/tests/batch', async (request, reply) => {
     try {
       const batchRequest = {
         ...request.body,
-        createdBy: request.user?.id || 'system'
+        createdBy: request.user?.id || 'system',
       };
 
       const result = await segmentTestingService.runBatchTests(batchRequest);
 
       reply.code(200).send({
         success: true,
-        data: result
+        data: result,
       });
     } catch (error) {
       fastify.log.error('Failed to run batch tests:', error);
@@ -441,16 +446,16 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
         success: false,
         error: {
           code: 'BATCH_TEST_FAILED',
-          message: error instanceof Error ? error.message : 'Failed to run batch tests'
-        }
+          message: error instanceof Error ? error.message : 'Failed to run batch tests',
+        },
       });
     }
   });
 
   // Generate test report
   fastify.get<{
-    Params: { segmentId: string }
-    Querystring: { reportType?: 'summary' | 'detailed' | 'comparison' }
+    Params: { segmentId: string };
+    Querystring: { reportType?: 'summary' | 'detailed' | 'comparison' };
   }>('/segments/:segmentId/test-report', async (request, reply) => {
     try {
       const { segmentId } = request.params;
@@ -460,7 +465,7 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
 
       reply.code(200).send({
         success: true,
-        data: report
+        data: report,
       });
     } catch (error) {
       fastify.log.error('Failed to generate test report:', error);
@@ -468,8 +473,8 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
         success: false,
         error: {
           code: 'REPORT_GENERATION_FAILED',
-          message: error instanceof Error ? error.message : 'Failed to generate test report'
-        }
+          message: error instanceof Error ? error.message : 'Failed to generate test report',
+        },
       });
     }
   });
@@ -488,8 +493,8 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
         { value: 'stability', label: 'Stability Test', description: 'Test segment stability over time' },
         { value: 'integration', label: 'Integration Test', description: 'Test integration with feature toggles' },
         { value: 'load', label: 'Load Test', description: 'Load testing with high user volume' },
-        { value: 'regression', label: 'Regression Test', description: 'Regression testing after changes' }
-      ]
+        { value: 'regression', label: 'Regression Test', description: 'Regression testing after changes' },
+      ],
     });
   });
 
@@ -516,8 +521,8 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
         { value: 'not_exists', label: 'Not Exists', description: 'Field is null or undefined' },
         { value: 'between', label: 'Between', description: 'Numeric value between range' },
         { value: 'within_days', label: 'Within Days', description: 'Date within specified days' },
-        { value: 'older_than_days', label: 'Older Than Days', description: 'Date older than specified days' }
-      ]
+        { value: 'older_than_days', label: 'Older Than Days', description: 'Date older than specified days' },
+      ],
     });
   });
 
@@ -530,13 +535,18 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
         { attribute: 'registrationDate', type: 'date', label: 'Registration Date' },
         { attribute: 'lastLoginDate', type: 'date', label: 'Last Login Date' },
         { attribute: 'country', type: 'string', label: 'Country' },
-        { attribute: 'subscriptionType', type: 'string', label: 'Subscription Type', values: ['free', 'basic', 'premium'] },
+        {
+          attribute: 'subscriptionType',
+          type: 'string',
+          label: 'Subscription Type',
+          values: ['free', 'basic', 'premium'],
+        },
         { attribute: 'totalSessions', type: 'number', label: 'Total Sessions' },
         { attribute: 'deviceType', type: 'string', label: 'Device Type', values: ['desktop', 'mobile', 'tablet'] },
         { attribute: 'age', type: 'number', label: 'Age' },
         { attribute: 'plan', type: 'string', label: 'Plan Type' },
-        { attribute: 'role', type: 'string', label: 'User Role' }
-      ]
+        { attribute: 'role', type: 'string', label: 'User Role' },
+      ],
     });
   });
 
@@ -550,7 +560,7 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
         logicalOperator?: 'AND' | 'OR';
       }>;
       sampleSize?: number;
-    }
+    };
   }>('/segments/preview', async (request, reply) => {
     try {
       const { rules, sampleSize = 100 } = request.body;
@@ -560,14 +570,14 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
         name: `Preview_${Date.now()}`,
         rules,
         isActive: false,
-        createdBy: 'preview'
+        createdBy: 'preview',
       });
 
       // Get a quick evaluation
       const batchResult = await segmentationService.batchEvaluateSegments({
         segmentIds: [tempSegment.id],
         userQuery: {},
-        includeDetails: true
+        includeDetails: true,
       });
 
       // Clean up temporary segment
@@ -579,8 +589,8 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
           estimatedUsers: tempSegment.estimatedUsers,
           matchingUsers: batchResult.segmentResults[0]?.userCount || 0,
           matchRate: batchResult.segmentResults[0]?.matchRate || 0,
-          sampleResults: batchResult.segmentResults[0]?.sampleResults?.slice(0, 10) || []
-        }
+          sampleResults: batchResult.segmentResults[0]?.sampleResults?.slice(0, 10) || [],
+        },
       });
     } catch (error) {
       fastify.log.error('Failed to preview segment:', error);
@@ -588,8 +598,8 @@ const userTargetingRoutes: FastifyPluginAsync = async (fastify) => {
         success: false,
         error: {
           code: 'PREVIEW_FAILED',
-          message: error instanceof Error ? error.message : 'Failed to preview segment'
-        }
+          message: error instanceof Error ? error.message : 'Failed to preview segment',
+        },
       });
     }
   });

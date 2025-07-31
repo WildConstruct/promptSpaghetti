@@ -27,15 +27,19 @@ The performance suite consists of four main components:
 ## 🧩 Components
 
 ### PerformanceTestSuite
+
 Simulates realistic collaborative editing scenarios with multiple concurrent users performing various operations like creating nodes, editing content, moving elements, and resolving conflicts.
 
 ### MetricsCollector
+
 Continuously monitors system resources, WebSocket performance, and collaboration-specific metrics like conflict resolution time and synchronization latency.
 
 ### PerformanceDashboard
+
 Provides real-time visualization of system health, active alerts, and performance trends through a web-based dashboard.
 
 ### PerformanceOptimizer
+
 Automatically applies optimization strategies based on current performance metrics, including message batching, response caching, and connection throttling.
 
 ## 🚀 Quick Start
@@ -80,6 +84,7 @@ performanceSystem.stop();
 The performance CLI provides convenient commands for various testing scenarios:
 
 ### Health Check
+
 ```bash
 # Quick system health check
 npm run perf:health
@@ -89,6 +94,7 @@ npm run perf:health -- --url ws://localhost:8001
 ```
 
 ### Load Testing
+
 ```bash
 # Run standard test suite
 npm run perf:test
@@ -107,6 +113,7 @@ npm run perf:test -- --endurance 5
 ```
 
 ### Monitoring
+
 ```bash
 # Start real-time monitoring dashboard
 npm run perf:monitor
@@ -116,6 +123,7 @@ npm run perf:monitor -- --metrics-only
 ```
 
 ### Optimization
+
 ```bash
 # Get performance recommendations
 npm run perf:optimize
@@ -128,6 +136,7 @@ npm run perf:optimize -- --auto
 ```
 
 ### Reporting
+
 ```bash
 # Generate HTML report (last 24 hours)
 npm run perf:report
@@ -140,6 +149,7 @@ npm run perf:report -- --output my-report.html
 ```
 
 ### Available Scenarios
+
 ```bash
 # List all test scenarios
 npx ts-node src/performance/performance-cli.ts scenarios
@@ -149,13 +159,13 @@ npx ts-node src/performance/performance-cli.ts scenarios
 
 ### Predefined Scenarios
 
-| Scenario | Users | Duration | Ops/sec/user | Complexity | Description |
-|----------|-------|----------|--------------|------------|-------------|
-| `light_editing` | 2 | 1 min | 0.5 | Simple | Light collaborative editing |
-| `medium_collaboration` | 5 | 2 min | 1.0 | Medium | Medium intensity collaboration |
-| `heavy_editing` | 10 | 3 min | 2.0 | Complex | Heavy collaborative editing |
-| `stress_test` | 25 | 5 min | 3.0 | Enterprise | Maximum load stress test |
-| `conflict_heavy` | 8 | 2 min | 2.0 | Medium | High conflict rate scenario |
+| Scenario               | Users | Duration | Ops/sec/user | Complexity | Description                    |
+| ---------------------- | ----- | -------- | ------------ | ---------- | ------------------------------ |
+| `light_editing`        | 2     | 1 min    | 0.5          | Simple     | Light collaborative editing    |
+| `medium_collaboration` | 5     | 2 min    | 1.0          | Medium     | Medium intensity collaboration |
+| `heavy_editing`        | 10    | 3 min    | 2.0          | Complex    | Heavy collaborative editing    |
+| `stress_test`          | 25    | 5 min    | 3.0          | Enterprise | Maximum load stress test       |
+| `conflict_heavy`       | 8     | 2 min    | 2.0          | Medium     | High conflict rate scenario    |
 
 ### Custom Scenarios
 
@@ -172,9 +182,9 @@ const customScenario: TestScenario = {
     OperationType.CREATE_NODE,
     OperationType.UPDATE_NODE_PROPERTIES,
     OperationType.MOVE_NODE,
-    OperationType.UPDATE_CURSOR
+    OperationType.UPDATE_CURSOR,
   ],
-  documentComplexity: DocumentComplexity.COMPLEX
+  documentComplexity: DocumentComplexity.COMPLEX,
 };
 ```
 
@@ -182,15 +192,15 @@ const customScenario: TestScenario = {
 
 ### Built-in Strategies
 
-| Strategy | Priority | Trigger | Action | Description |
-|----------|----------|---------|---------|-------------|
-| `message_batching` | Medium | Latency > 500ms | Batch WebSocket messages | Reduces network overhead |
-| `response_caching` | Medium | CPU > 70% | Cache frequent responses | Reduces computation load |
-| `connection_throttling` | High | CPU > 85% | Limit new connections | Prevents overload |
-| `message_compression` | Low | Latency > 2s | Compress large messages | Reduces bandwidth usage |
-| `message_prioritization` | Medium | Latency > 1.5s | Prioritize critical messages | Improves responsiveness |
-| `memory_cleanup` | Critical | Memory > 85% | Clean up and force GC | Frees memory resources |
-| `conflict_optimization` | High | Conflict time > 3s | Batch conflict operations | Speeds conflict resolution |
+| Strategy                 | Priority | Trigger            | Action                       | Description                |
+| ------------------------ | -------- | ------------------ | ---------------------------- | -------------------------- |
+| `message_batching`       | Medium   | Latency > 500ms    | Batch WebSocket messages     | Reduces network overhead   |
+| `response_caching`       | Medium   | CPU > 70%          | Cache frequent responses     | Reduces computation load   |
+| `connection_throttling`  | High     | CPU > 85%          | Limit new connections        | Prevents overload          |
+| `message_compression`    | Low      | Latency > 2s       | Compress large messages      | Reduces bandwidth usage    |
+| `message_prioritization` | Medium   | Latency > 1.5s     | Prioritize critical messages | Improves responsiveness    |
+| `memory_cleanup`         | Critical | Memory > 85%       | Clean up and force GC        | Frees memory resources     |
+| `conflict_optimization`  | High     | Conflict time > 3s | Batch conflict operations    | Speeds conflict resolution |
 
 ### Custom Optimization
 
@@ -204,14 +214,16 @@ const customStrategy: OptimizationStrategy = {
   priority: 'high',
   triggerConditions: {
     latencyThreshold: 1000,
-    connectionCountThreshold: 50
+    connectionCountThreshold: 50,
   },
-  actions: [{
-    type: 'throttle',
-    target: 'custom_operations',
-    parameters: { maxRate: 10 },
-    description: 'Throttle custom operations'
-  }]
+  actions: [
+    {
+      type: 'throttle',
+      target: 'custom_operations',
+      parameters: { maxRate: 10 },
+      description: 'Throttle custom operations',
+    },
+  ],
 };
 
 optimizer.addStrategy(customStrategy);
@@ -220,25 +232,30 @@ optimizer.addStrategy(customStrategy);
 ## 📈 Monitoring and Metrics
 
 ### System Metrics
+
 - CPU usage percentage
-- Memory usage and heap statistics  
+- Memory usage and heap statistics
 - Network I/O statistics
 - Process uptime and health
 
 ### WebSocket Metrics
+
 - Connection count and rate
 - Message latency and throughput
 - Error rate and disconnection rate
 - Bytes transferred
 
 ### Collaboration Metrics
+
 - Conflict rate and resolution time
 - Synchronization latency
 - Operation rate and queue length
 - Document size and complexity
 
 ### Health Scoring
+
 Each system component receives a health score (0-100) based on:
+
 - **Excellent (90-100)**: All metrics within optimal ranges
 - **Good (75-89)**: Minor performance issues
 - **Warning (50-74)**: Performance degradation detected
@@ -247,6 +264,7 @@ Each system component receives a health score (0-100) based on:
 ## 💡 Examples
 
 ### Basic Load Test
+
 ```typescript
 import { LoadTestRunner } from './LoadTestRunner';
 
@@ -259,6 +277,7 @@ console.log(`Average latency: ${result.summary.averageLatency}ms`);
 ```
 
 ### Real-time Monitoring
+
 ```typescript
 import { MetricsCollector, PerformanceDashboard } from './performance';
 
@@ -269,12 +288,13 @@ collector.startCollection();
 dashboard.start();
 
 // Monitor for performance alerts
-collector.on('alert_created', (alert) => {
+collector.on('alert_created', alert => {
   console.log(`⚠️ Performance alert: ${alert.description}`);
 });
 ```
 
 ### Stress Testing
+
 ```typescript
 import { LoadTestRunner } from './LoadTestRunner';
 
@@ -290,6 +310,7 @@ console.log(`Maximum users: ${maxUsers * 10}`);
 ```
 
 ### Custom Metrics
+
 ```typescript
 import { MetricsCollector } from './MetricsCollector';
 
@@ -300,14 +321,14 @@ collector.recordWebSocketMetrics({
   connectionCount: 25,
   messageLatency: 150,
   errorRate: 2.5,
-  bytesTransferred: 50000
+  bytesTransferred: 50000,
 });
 
 // Record collaboration metrics
 collector.recordCollaborationMetrics({
   conflictRate: 0.05,
   conflictResolutionTime: 800,
-  synchronizationLatency: 200
+  synchronizationLatency: 200,
 });
 ```
 
@@ -316,21 +337,25 @@ collector.recordCollaborationMetrics({
 ### Common Issues
 
 **High CPU Usage**
+
 - Enable connection throttling
 - Implement message batching
 - Check for infinite loops in event handlers
 
 **Memory Leaks**
+
 - Enable automatic memory cleanup
 - Monitor for disconnected user sessions
 - Clear old cache entries regularly
 
 **High Latency**
+
 - Enable message compression
 - Implement response caching
 - Check network conditions
 
 **Connection Issues**
+
 - Verify WebSocket server is running
 - Check firewall settings
 - Validate server URL format
@@ -338,6 +363,7 @@ collector.recordCollaborationMetrics({
 ### Performance Thresholds
 
 Default thresholds (configurable):
+
 - CPU usage: 80%
 - Memory usage: 85%
 - Message latency: 1000ms
@@ -347,13 +373,14 @@ Default thresholds (configurable):
 ### Debugging
 
 Enable debug logging:
+
 ```typescript
 // Set environment variable
 process.env.DEBUG = 'performance:*';
 
 // Or use console logging
 const collector = new MetricsCollector({
-  enableDebugLogging: true
+  enableDebugLogging: true,
 });
 ```
 
@@ -369,6 +396,7 @@ When adding new performance tests or optimizations:
 ## 🔗 API Reference
 
 For detailed API documentation, see the TypeScript interfaces and JSDoc comments in the source files:
+
 - `PerformanceTestSuite.ts` - Load testing framework
 - `MetricsCollector.ts` - Metrics collection and monitoring
 - `PerformanceDashboard.ts` - Real-time dashboard

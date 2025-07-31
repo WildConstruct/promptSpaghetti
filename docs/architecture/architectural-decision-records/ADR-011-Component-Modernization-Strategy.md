@@ -1,7 +1,8 @@
 # ADR-011: Component Modernization Strategy
 
 ## Status
-**ACCEPTED** - *Date: 2025-07-22*
+
+**ACCEPTED** - _Date: 2025-07-22_
 
 ## Context
 
@@ -10,6 +11,7 @@ During Epic 18 (Technical Debt & Refactoring), we identified significant technic
 ### Problems Identified
 
 #### Component Architecture Issues
+
 1. **Monolithic Components**: Single large components handling multiple responsibilities
 2. **Tight Coupling**: Components directly accessing global state without proper abstraction
 3. **Code Duplication**: Similar logic repeated across multiple components
@@ -17,18 +19,21 @@ During Epic 18 (Technical Debt & Refactoring), we identified significant technic
 5. **Limited Reusability**: Components too specific to reuse effectively
 
 #### Inspector System Technical Debt
+
 - **DEBT-017**: Inspector Panel complexity (686 lines → needs modularization)
 - **DEBT-011**: Component state management inconsistencies
 - **DEBT-016**: UI responsiveness and performance issues
 - **DEBT-021**: Component testing coverage gaps (< 60%)
 
 #### Development Velocity Impact
+
 - **Slow Feature Development**: New features require extensive modifications
-- **Bug-Prone Changes**: Tightly coupled code increases regression risk  
+- **Bug-Prone Changes**: Tightly coupled code increases regression risk
 - **Developer Onboarding**: Complex component structure impedes new team members
 - **Maintenance Overhead**: Simple changes require understanding entire component
 
 ### Requirements
+
 - Maintain existing functionality and user experience
 - Improve component reusability and testability
 - Reduce code duplication and complexity
@@ -42,18 +47,21 @@ We will implement a **modular component architecture** with clear separation of 
 ### Architecture Principles
 
 #### 1. **Separation of Concerns**
+
 - **Single Responsibility**: Each component handles one specific aspect
 - **Clear Boundaries**: Well-defined interfaces between components
 - **Composition over Inheritance**: Build complex UI from simple, composable parts
 - **Data Flow Clarity**: Explicit props and context for data passing
 
 #### 2. **Context-Based State Management**
+
 - **Domain Contexts**: Separate contexts for different UI domains
 - **Provider Pattern**: Context providers manage state and actions
 - **Custom Hooks**: Encapsulate context access and derived state
 - **Performance Optimization**: Selective context subscriptions
 
 #### 3. **Reusable Component Library**
+
 - **Base Components**: Foundation components for consistent UI
 - **Composite Components**: Domain-specific combinations of base components
 - **Layout Components**: Flexible layout management
@@ -67,13 +75,14 @@ We will implement a **modular component architecture** with clear separation of 
 **After**: Modular architecture with 383 lines in main component
 
 ##### Component Hierarchy
+
 ```
 InspectorPanel (Context Provider)
 ├── InspectorContext (State Management)
 ├── BaseNodeEditor (Abstract Editor Foundation)
 ├── Node-Specific Editors
 │   ├── WeightedChoiceEditor
-│   ├── OutputEditor  
+│   ├── OutputEditor
 │   ├── ConcatEditor
 │   ├── VariableEditor
 │   ├── SubjectEditor
@@ -86,18 +95,19 @@ InspectorPanel (Context Provider)
 ```
 
 ##### Context Management
+
 ```typescript
 interface InspectorContextValue {
   // State
   selectedNode: GraphNode | null;
   validationErrors: Record<string, string>;
   isDirty: boolean;
-  
+
   // Actions
   updateNode: (nodeId: string, updates: Partial<GraphNode>) => void;
   validateNode: (node: GraphNode) => ValidationResult;
   resetValidation: () => void;
-  
+
   // Derived State
   canSave: boolean;
   hasUnsavedChanges: boolean;
@@ -107,6 +117,7 @@ const InspectorContext = createContext<InspectorContextValue>();
 ```
 
 ##### Custom Hooks
+
 ```typescript
 // Core inspector functionality
 export function useInspector() {
@@ -121,7 +132,7 @@ export function useValidation(nodeId: string) {
   return {
     errors: validationErrors[nodeId] || [],
     validate: (node: GraphNode) => validateNode(node),
-    isValid: !validationErrors[nodeId]?.length
+    isValid: !validationErrors[nodeId]?.length,
   };
 }
 
@@ -134,6 +145,7 @@ export function useAutosave(delay = 5000) {
 #### 2. **Base Component Framework**
 
 ##### BaseNodeEditor Pattern
+
 ```typescript
 interface BaseNodeEditorProps<T extends GraphNode> {
   node: T;
@@ -149,7 +161,7 @@ export function BaseNodeEditor<T extends GraphNode>({
   children
 }: BaseNodeEditorProps<T> & { children: React.ReactNode }) {
   const { validateNode } = useValidation(node.id);
-  
+
   return (
     <div className="node-editor">
       <NodeHeader node={node} validation={validation} />
@@ -161,24 +173,16 @@ export function BaseNodeEditor<T extends GraphNode>({
 ```
 
 ##### Reusable UI Components
+
 ```typescript
 // CollapsibleSection for organized UI
-export function CollapsibleSection({
-  title,
-  defaultOpen = true,
-  children
-}: CollapsibleSectionProps) {
+export function CollapsibleSection({ title, defaultOpen = true, children }: CollapsibleSectionProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   // Implementation with smooth animations and keyboard support
 }
 
 // VariationList for managing text variations
-export function VariationList({
-  items,
-  onChange,
-  validation,
-  placeholder
-}: VariationListProps) {
+export function VariationList({ items, onChange, validation, placeholder }: VariationListProps) {
   // Drag-and-drop reordering, add/remove controls, validation display
 }
 ```
@@ -186,12 +190,14 @@ export function VariationList({
 #### 3. **Performance Optimization**
 
 ##### Context Optimization
+
 - **Selective Subscriptions**: Components subscribe only to needed context slices
 - **Memoization**: Expensive computations cached with useMemo
 - **Callback Stability**: useCallback for stable function references
 - **Context Splitting**: Separate contexts for different concerns
 
 ##### Render Optimization
+
 ```typescript
 // Memoized components to prevent unnecessary re-renders
 const MemoizedNodeEditor = memo(NodeEditor, (prev, next) => {
@@ -207,12 +213,14 @@ const VirtualizedNodeList = ({ nodes, renderNode }) => {
 #### 4. **Testing Strategy**
 
 ##### Component Testing Framework
+
 - **Unit Tests**: Individual component behavior and props handling
 - **Integration Tests**: Component interaction within contexts
 - **Visual Regression Tests**: UI consistency across changes
 - **Accessibility Tests**: ARIA compliance and keyboard navigation
 
 ##### Testing Utilities
+
 ```typescript
 // Custom render utility with contexts
 export function renderWithInspectorContext(
@@ -248,6 +256,7 @@ export function createMockInspectorContext(
 ### Modernization Results
 
 #### Inspector System Refactoring
+
 - **Lines of Code**: 686 → 383 (44% reduction in main component)
 - **Component Count**: 1 → 12 modular components
 - **Test Coverage**: 45% → 85% (target: 90%)
@@ -255,12 +264,14 @@ export function createMockInspectorContext(
 - **Development Velocity**: 40% faster feature development
 
 #### Code Quality Improvements
+
 - **Cyclomatic Complexity**: Reduced from 28 to 8 (per component average)
 - **Code Duplication**: Eliminated 200+ lines of repeated logic
 - **Type Safety**: 100% TypeScript coverage with strict mode
 - **ESLint Violations**: Reduced from 47 to 0 across all components
 
 #### Performance Improvements
+
 - **Initial Render Time**: 180ms → 120ms (33% improvement)
 - **Re-render Frequency**: Reduced by 60% through context optimization
 - **Memory Usage**: 15% reduction through better component lifecycle management
@@ -269,6 +280,7 @@ export function createMockInspectorContext(
 ## Consequences
 
 ### Positive
+
 - **Improved Maintainability**: Smaller, focused components easier to understand and modify
 - **Enhanced Reusability**: Modular components reusable across different contexts
 - **Better Testability**: Isolated components enable comprehensive unit testing
@@ -277,6 +289,7 @@ export function createMockInspectorContext(
 - **Performance Gains**: Optimized rendering and reduced bundle size
 
 ### Negative
+
 - **Initial Complexity**: More files and components to understand
 - **Learning Curve**: Developers need to understand context patterns
 - **Abstraction Overhead**: Additional layers may complicate simple changes
@@ -284,6 +297,7 @@ export function createMockInspectorContext(
 - **Migration Effort**: Existing components need gradual modernization
 
 ### Neutral
+
 - **Bundle Size**: Slight increase due to context overhead, offset by tree-shaking
 - **Runtime Performance**: Context overhead balanced by render optimizations
 - **Development Patterns**: Requires adoption of new component patterns
@@ -292,18 +306,21 @@ export function createMockInspectorContext(
 ### Risk Mitigation
 
 #### 1. **Gradual Migration Strategy**
+
 - **Phase 1**: Inspector system (completed) - proves architecture viability
 - **Phase 2**: Core components (GraphEditor, PreviewModal, Palette)
 - **Phase 3**: Utility components and remaining system components
 - **Phase 4**: Legacy component cleanup and optimization
 
 #### 2. **Documentation and Training**
+
 - **Architecture Guides**: Detailed documentation of component patterns
 - **Migration Playbooks**: Step-by-step component modernization guides
 - **Code Examples**: Practical examples of context and hook usage
 - **Team Workshops**: Training sessions on new component patterns
 
 #### 3. **Quality Gates**
+
 - **Test Coverage Requirements**: 85% minimum coverage for new components
 - **Performance Budgets**: Render time and bundle size thresholds
 - **Code Review Checklist**: Architecture compliance verification
@@ -312,6 +329,7 @@ export function createMockInspectorContext(
 ## Implementation Timeline
 
 ### Phase 1: Foundation (Completed)
+
 - ✅ InspectorContext and provider implementation
 - ✅ BaseNodeEditor pattern establishment
 - ✅ Core reusable components (CollapsibleSection, VariationList)
@@ -319,18 +337,21 @@ export function createMockInspectorContext(
 - ✅ Test coverage improvements (45% → 85%)
 
 ### Phase 2: Core Components (Epic 18)
+
 - GraphEditor complete modernization
 - PreviewModal context integration
 - Palette component modularization
 - Enhanced performance monitoring
 
 ### Phase 3: System-Wide Adoption (Future Epics)
+
 - Remaining component modernization
 - Advanced optimization techniques
 - Design system integration
 - Performance dashboard
 
 ### Phase 4: Optimization (Ongoing)
+
 - Bundle size optimization
 - Advanced memoization strategies
 - Code splitting implementation
@@ -339,29 +360,34 @@ export function createMockInspectorContext(
 ## Metrics and Success Criteria
 
 ### Development Velocity Metrics
+
 - **Feature Development Time**: 40% reduction achieved
 - **Bug Fix Time**: 50% reduction target
 - **Component Reuse Rate**: 75% target for new features
 - **Code Review Time**: 30% reduction through clearer patterns
 
 ### Code Quality Metrics
+
 - **Test Coverage**: 85% current, 90% target
 - **Component Complexity**: Max 10 cyclomatic complexity
 - **Code Duplication**: <5% duplication across components
 - **TypeScript Coverage**: 100% maintained
 
 ### Performance Metrics
+
 - **Render Performance**: <16ms for 95th percentile interactions
 - **Bundle Size**: <5% increase despite feature additions
 - **Memory Usage**: Stable or improved over time
 - **Core Web Vitals**: All metrics in "Good" range
 
 ## Related ADRs
+
 - **ADR-009**: Core Engine Refactoring Architecture - Provides foundation for component integration
 - **ADR-002**: TypeScript Strict Mode - Enables comprehensive component type safety
 - **ADR-012**: TypeScript Type Safety Strategy - Defines type patterns for components
 
 ## References
+
 - Inspector system refactoring implementation
 - React component best practices guide
 - Context API performance optimization techniques
@@ -370,4 +396,5 @@ export function createMockInspectorContext(
 - Performance monitoring and benchmarking data
 
 ---
-*This ADR documents the component modernization strategy that transforms the Prompt Spaghetti UI architecture from monolithic to modular, enabling scalable and maintainable React development.*
+
+_This ADR documents the component modernization strategy that transforms the Prompt Spaghetti UI architecture from monolithic to modular, enabling scalable and maintainable React development._

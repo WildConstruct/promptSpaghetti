@@ -609,54 +609,54 @@
   .version-history {
     padding: 16px;
   }
-  
+
   .version-header {
     flex-direction: column;
     gap: 16px;
     align-items: flex-start;
   }
-  
+
   .version-filters {
     flex-direction: column;
   }
-  
+
   .version-header-item {
     flex-direction: column;
     gap: 12px;
     align-items: flex-start;
   }
-  
+
   .version-number {
     flex-wrap: wrap;
   }
-  
+
   .version-meta {
     flex-direction: column;
     align-items: flex-start;
     gap: 4px;
   }
-  
+
   .version-specs {
     grid-template-columns: 1fr;
   }
-  
+
   .comparison-content {
     margin: 10px;
     padding: 16px;
     max-height: 90vh;
   }
-  
+
   .version-compare-info {
     flex-direction: column;
     gap: 8px;
   }
-  
+
   .compatibility-summary {
     flex-direction: column;
     gap: 8px;
     align-items: flex-start;
   }
-  
+
   .change-item {
     flex-direction: column;
     gap: 4px;
@@ -669,66 +669,66 @@
     background: #111827;
     color: #f9fafb;
   }
-  
+
   .version-header h2 {
     color: #f9fafb;
   }
-  
+
   .version-filters {
     background: #374151;
   }
-  
+
   .version-filters select {
     background: #1f2937;
     border-color: #4b5563;
     color: #f9fafb;
   }
-  
+
   .version-item:hover {
     background: #374151;
   }
-  
+
   .version-item.selected {
     background: #1e3a8a;
   }
-  
+
   .number {
     color: #f9fafb;
   }
-  
+
   .release-notes,
   .feature-list,
   .version-specs {
     background: #374151;
     border-color: #4b5563;
   }
-  
+
   .comparison-content {
     background: #1f2937;
     color: #f9fafb;
   }
-  
+
   .comparison-header {
     border-bottom-color: #374151;
   }
-  
+
   .comparison-header h3 {
     color: #f9fafb;
   }
-  
+
   .close-btn {
     color: #d1d5db;
   }
-  
+
   .close-btn:hover {
     background: #374151;
     color: #f9fafb;
   }
-  
+
   .version-compare-info {
     background: #374151;
   }
-  
+
   .compatibility-summary {
     background: #1e3a8a;
     border-color: #3b82f6;

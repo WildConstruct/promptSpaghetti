@@ -1,6 +1,6 @@
 /**
  * Core Types Index - Epic 17 Implementation
- * 
+ *
  * Central export file for all policy-related TypeScript interfaces
  * and types used throughout the application.
  */
@@ -8,7 +8,7 @@
 // Temporarily commenting out problematic exports to identify issues
 // TODO: Fix duplicate export conflicts and re-enable these exports
 // export * from './PolicyInterfaces';
-// export * from './PolicyServices'; 
+// export * from './PolicyServices';
 // export * from './PolicyEvents';
 
 // Export promotion interfaces
@@ -26,34 +26,34 @@ export type {
   PolicyStatus,
   PolicyScope,
   PolicyCondition,
-  
+
   // Specific policy types
   SecurityPolicy,
   PrivacyPolicy,
   ContentPolicy,
-  
+
   // Policy management
   PolicyAssignment,
   PolicyEvaluation,
   PolicyTemplate,
   PolicyAnalytics,
-  
+
   // Service interfaces
   IPolicyService,
   IPolicyEvaluationService,
   IPolicyAssignmentService,
   IPolicyAnalyticsService,
-  
+
   // Event types
   BasePolicyEvent,
   PolicyEventType,
   IPolicyEventHandler,
   IPolicyNotificationService,
-  
+
   // Common response types
   PolicyServiceResponse,
   PolicyValidationResult,
-  EvaluationContext
+  EvaluationContext,
 } from './PolicyInterfaces';
 
 export type {
@@ -63,24 +63,24 @@ export type {
   ContentPromotion,
   BundlePromotion,
   CampaignPromotion,
-  
+
   // Promotion service interfaces
   IPromotionService,
   IPromotionEligibilityService,
   IContentPromotionService,
   ICampaignService,
   IPromotionAnalyticsService,
-  
+
   // Promotion event types
   BasePromotionEvent,
   IPromotionEventBus,
   IPromotionNotificationService,
-  
+
   // Promotion response types
   PromotionServiceResponse,
   PromotionEligibilityCheck,
   PromotionApplicationResult,
-  PromotionSearchResult
+  PromotionSearchResult,
 } from './PromotionInterfaces';
 
 export type {
@@ -88,7 +88,7 @@ export type {
   CreatePolicyRequest,
   UpdatePolicyRequest,
   PolicyTestCase,
-  PolicyTestResult
+  PolicyTestResult,
 } from './PolicyServices';
 
 export type {
@@ -98,5 +98,5 @@ export type {
   PolicyAssignmentEvent,
   ComplianceEvent,
   SecurityEvent,
-  PolicyNotification
+  PolicyNotification,
 } from './PolicyEvents';

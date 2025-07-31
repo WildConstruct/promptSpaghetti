@@ -84,15 +84,15 @@ export class PerformanceRegressionDetector {
    */
   async recordMetric(metric: PerformanceMetric): Promise<void> {
     await this.ensureDataDirectories();
-    
+
     const metrics = await this.loadMetrics();
     metrics.push(metric);
-    
+
     // Keep only last 1000 metrics to prevent unbounded growth
     if (metrics.length > 1000) {
       metrics.splice(0, metrics.length - 1000);
     }
-    
+
     await fs.writeFile(this.metricsFile, JSON.stringify(metrics, null, 2));
   }
 
@@ -114,20 +114,20 @@ export class PerformanceRegressionDetector {
       .filter(m => m.name === metricName)
       .map(m => m.value)
       .slice(-100); // Use last 100 values for baseline
-    
+
     if (metricValues.length < 10) {
       console.warn(`Insufficient data points for baseline calculation: ${metricValues.length} < 10`);
       return;
     }
-    
+
     const baselines = await this.loadBaselines();
     const existingBaseline = baselines.find(b => b.metric === metricName);
-    
+
     if (existingBaseline && !forceRecalculation) {
       // Update existing baseline incrementally
       const newMean = this.calculateMean(metricValues);
       const newStdDev = this.calculateStandardDeviation(metricValues, newMean);
-      
+
       existingBaseline.mean = (existingBaseline.mean + newMean) / 2;
       existingBaseline.standardDeviation = (existingBaseline.standardDeviation + newStdDev) / 2;
       existingBaseline.min = Math.min(existingBaseline.min, ...metricValues);
@@ -138,7 +138,7 @@ export class PerformanceRegressionDetector {
       // Create new baseline or force recalculation
       const mean = this.calculateMean(metricValues);
       const stdDev = this.calculateStandardDeviation(metricValues, mean);
-      
+
       const newBaseline: PerformanceBaseline = {
         metric: metricName,
         mean,
@@ -149,64 +149,56 @@ export class PerformanceRegressionDetector {
         lastUpdated: new Date().toISOString(),
         thresholds: {
           warning: 15, // 15% deviation triggers warning
-          critical: 30 // 30% deviation triggers critical alert
-        }
+          critical: 30, // 30% deviation triggers critical alert
+        },
       };
-      
+
       if (existingBaseline) {
         Object.assign(existingBaseline, newBaseline);
       } else {
         baselines.push(newBaseline);
       }
     }
-    
+
     await this.saveBaselines(baselines);
   }
 
   /**
    * Detect regressions in recent performance metrics
    */
-  async detectRegressions(
-    environment: string = 'development',
-    lookbackHours: number = 24
-  ): Promise<RegressionReport> {
+  async detectRegressions(environment: string = 'development', lookbackHours: number = 24): Promise<RegressionReport> {
     const metrics = await this.loadMetrics();
     const baselines = await this.loadBaselines();
-    
-    const cutoffTime = new Date(Date.now() - (lookbackHours * 60 * 60 * 1000));
+
+    const cutoffTime = new Date(Date.now() - lookbackHours * 60 * 60 * 1000);
     const recentMetrics = metrics.filter(m => new Date(m.timestamp) > cutoffTime);
-    
+
     if (recentMetrics.length === 0) {
       throw new Error('No recent metrics found for regression detection');
     }
-    
+
     const latestMetric = recentMetrics[recentMetrics.length - 1];
     const results: RegressionDetectionResult[] = [];
-    
+
     // Group metrics by name and analyze each
     const metricGroups = this.groupMetricsByName(recentMetrics);
-    
+
     for (const [metricName, metricList] of metricGroups.entries()) {
       const baseline = baselines.find(b => b.metric === metricName);
-      
+
       if (!baseline) {
         console.warn(`No baseline found for metric: ${metricName}`);
         continue;
       }
-      
+
       const currentValue = metricList[metricList.length - 1].value;
       const trend = this.calculateTrend(metricList.slice(-10)); // Last 10 values
-      
-      const result = this.analyzeMetricRegression(
-        metricName,
-        currentValue,
-        baseline,
-        trend
-      );
-      
+
+      const result = this.analyzeMetricRegression(metricName, currentValue, baseline, trend);
+
       results.push(result);
     }
-    
+
     const report: RegressionReport = {
       timestamp: new Date().toISOString(),
       environment,
@@ -216,12 +208,12 @@ export class PerformanceRegressionDetector {
         totalMetrics: results.length,
         regressions: results.filter(r => r.isRegression).length,
         warnings: results.filter(r => r.severity === 'warning').length,
-        improvements: results.filter(r => r.deviationPercent < -5).length // 5% improvement
+        improvements: results.filter(r => r.deviationPercent < -5).length, // 5% improvement
       },
       results,
-      recommendations: this.generateRecommendations(results)
+      recommendations: this.generateRecommendations(results),
     };
-    
+
     await this.saveRegressionReport(report);
     return report;
   }
@@ -236,10 +228,10 @@ export class PerformanceRegressionDetector {
     trend: 'improving' | 'stable' | 'degrading'
   ): RegressionDetectionResult {
     const deviationPercent = ((currentValue - baseline.mean) / baseline.mean) * 100;
-    
+
     let severity: 'ok' | 'warning' | 'critical' = 'ok';
     let isRegression = false;
-    
+
     if (Math.abs(deviationPercent) >= baseline.thresholds.critical) {
       severity = 'critical';
       isRegression = deviationPercent > 0; // Assuming higher values are worse
@@ -247,7 +239,7 @@ export class PerformanceRegressionDetector {
       severity = 'warning';
       isRegression = deviationPercent > 0;
     }
-    
+
     const result: RegressionDetectionResult = {
       metric: metricName,
       currentValue,
@@ -255,13 +247,13 @@ export class PerformanceRegressionDetector {
       deviationPercent,
       severity,
       isRegression,
-      trend
+      trend,
     };
-    
+
     if (isRegression) {
       result.recommendation = this.generateMetricRecommendation(metricName, deviationPercent);
     }
-    
+
     return result;
   }
 
@@ -270,10 +262,10 @@ export class PerformanceRegressionDetector {
    */
   private generateRecommendations(results: RegressionDetectionResult[]): string[] {
     const recommendations: string[] = [];
-    
+
     const criticalRegressions = results.filter(r => r.severity === 'critical' && r.isRegression);
     const warningRegressions = results.filter(r => r.severity === 'warning' && r.isRegression);
-    
+
     if (criticalRegressions.length > 0) {
       recommendations.push(
         `🚨 CRITICAL: ${criticalRegressions.length} critical performance regressions detected`,
@@ -281,42 +273,38 @@ export class PerformanceRegressionDetector {
         'Consider reverting recent changes or implementing optimizations'
       );
     }
-    
+
     if (warningRegressions.length > 0) {
       recommendations.push(
         `⚠️ WARNING: ${warningRegressions.length} performance warnings detected`,
         'Monitor closely and consider optimization opportunities'
       );
     }
-    
+
     if (criticalRegressions.length === 0 && warningRegressions.length === 0) {
       recommendations.push(
         '✅ No significant performance regressions detected',
         'Performance is within acceptable thresholds'
       );
     }
-    
+
     // Add specific metric recommendations
-    const responseTimeRegression = results.find(r => 
-      r.metric.includes('response') && r.isRegression
-    );
+    const responseTimeRegression = results.find(r => r.metric.includes('response') && r.isRegression);
     if (responseTimeRegression) {
       recommendations.push(
         'Response time regression detected - check database queries and caching',
         'Profile API endpoints for bottlenecks'
       );
     }
-    
-    const memoryRegression = results.find(r => 
-      r.metric.includes('memory') && r.isRegression
-    );
+
+    const memoryRegression = results.find(r => r.metric.includes('memory') && r.isRegression);
     if (memoryRegression) {
       recommendations.push(
         'Memory usage regression detected - check for memory leaks',
         'Review recent code changes for inefficient data structures'
       );
     }
-    
+
     return recommendations;
   }
 
@@ -325,23 +313,23 @@ export class PerformanceRegressionDetector {
    */
   private generateMetricRecommendation(metricName: string, deviationPercent: number): string {
     const metricType = metricName.toLowerCase();
-    
+
     if (metricType.includes('response') || metricType.includes('latency')) {
       return `Response time increased by ${deviationPercent.toFixed(1)}%. Check database queries, caching, and API optimizations.`;
     }
-    
+
     if (metricType.includes('memory')) {
       return `Memory usage increased by ${deviationPercent.toFixed(1)}%. Investigate potential memory leaks and optimize data structures.`;
     }
-    
+
     if (metricType.includes('cpu')) {
       return `CPU usage increased by ${deviationPercent.toFixed(1)}%. Profile code for algorithmic inefficiencies and optimization opportunities.`;
     }
-    
+
     if (metricType.includes('throughput')) {
       return `Throughput decreased by ${Math.abs(deviationPercent).toFixed(1)}%. Check for bottlenecks in request processing pipeline.`;
     }
-    
+
     return `Metric ${metricName} deviated by ${deviationPercent.toFixed(1)}% from baseline. Investigation recommended.`;
   }
 
@@ -350,16 +338,16 @@ export class PerformanceRegressionDetector {
    */
   private calculateTrend(values: PerformanceMetric[]): 'improving' | 'stable' | 'degrading' {
     if (values.length < 3) return 'stable';
-    
+
     const numericValues = values.map(v => v.value);
     const firstHalf = numericValues.slice(0, Math.floor(numericValues.length / 2));
     const secondHalf = numericValues.slice(Math.floor(numericValues.length / 2));
-    
+
     const firstAvg = this.calculateMean(firstHalf);
     const secondAvg = this.calculateMean(secondHalf);
-    
+
     const changePercent = ((secondAvg - firstAvg) / firstAvg) * 100;
-    
+
     if (changePercent < -5) return 'improving'; // Assuming lower is better for most metrics
     if (changePercent > 5) return 'degrading';
     return 'stable';
@@ -370,14 +358,14 @@ export class PerformanceRegressionDetector {
    */
   private groupMetricsByName(metrics: PerformanceMetric[]): Map<string, PerformanceMetric[]> {
     const groups = new Map<string, PerformanceMetric[]>();
-    
+
     for (const metric of metrics) {
       if (!groups.has(metric.name)) {
         groups.set(metric.name, []);
       }
       groups.get(metric.name)!.push(metric);
     }
-    
+
     return groups;
   }
 
@@ -433,11 +421,11 @@ export class PerformanceRegressionDetector {
    */
   private async saveRegressionReport(report: RegressionReport): Promise<void> {
     await this.ensureDataDirectories();
-    
+
     const timestamp = report.timestamp.replace(/[:.]/g, '-');
     const filename = `regression-report-${timestamp}.json`;
     const filepath = path.join(this.reportsDir, filename);
-    
+
     await fs.writeFile(filepath, JSON.stringify(report, null, 2));
     console.log(`📊 Regression report saved: ${filepath}`);
   }
@@ -465,21 +453,22 @@ export class PerformanceRegressionDetector {
   }> {
     try {
       const report = await this.detectRegressions('development', hours);
-      
+
       return {
         hasRegressions: report.summary.regressions > 0,
         criticalCount: report.results.filter(r => r.severity === 'critical').length,
         warningCount: report.results.filter(r => r.severity === 'warning').length,
-        summary: report.summary.regressions > 0 
-          ? `${report.summary.regressions} regressions detected`
-          : 'No regressions detected'
+        summary:
+          report.summary.regressions > 0
+            ? `${report.summary.regressions} regressions detected`
+            : 'No regressions detected',
       };
     } catch (error) {
       return {
         hasRegressions: false,
         criticalCount: 0,
         warningCount: 0,
-        summary: 'Unable to detect regressions: ' + error.message
+        summary: 'Unable to detect regressions: ' + error.message,
       };
     }
   }

@@ -4,8 +4,21 @@
  */
 import { ValidationRulesEngine, ValidationEngineConfig, ValidationReport } from './ValidationRulesEngine';
 export { ValidationRulesEngine, ValidationSeverity, ValidationCategory } from './ValidationRulesEngine';
-export type { ValidationRule, ValidationRuleResult, ValidationContext, ValidationReport, ValidationEngineConfig } from './ValidationRulesEngine';
-export { MissingRequiredPropertiesRule, DuplicateContentRule, LanguageConsistencyRule, SensitiveContentRule, ProcessingTimeRule, MemoryUsageRule } from './AdditionalValidationRules';
+export type {
+  ValidationRule,
+  ValidationRuleResult,
+  ValidationContext,
+  ValidationReport,
+  ValidationEngineConfig,
+} from './ValidationRulesEngine';
+export {
+  MissingRequiredPropertiesRule,
+  DuplicateContentRule,
+  LanguageConsistencyRule,
+  SensitiveContentRule,
+  ProcessingTimeRule,
+  MemoryUsageRule,
+} from './AdditionalValidationRules';
 /**
  * Factory function to create a validation engine with recommended configuration
  */
@@ -29,17 +42,26 @@ export declare function createPerformanceValidationEngine(): ValidationRulesEngi
 /**
  * Utility function to validate a graph with automatic platform detection
  */
-export declare function validateGraph(graph: any, targetPlatform?: string, capabilities?: any, config?: Partial<ValidationEngineConfig>): Promise<ValidationReport>;
+export declare function validateGraph(
+  graph: any,
+  targetPlatform?: string,
+  capabilities?: any,
+  config?: Partial<ValidationEngineConfig>
+): Promise<ValidationReport>;
 /**
  * Utility function to validate and auto-fix a graph
  */
-export declare function validateAndFixGraph(graph: any, targetPlatform?: string, capabilities?: any): Promise<{
-    report: ValidationReport;
-    fixes: Array<{
-        ruleId: string;
-        changes: any[];
-        success: boolean;
-    }>;
-    modifiedGraph: any;
+export declare function validateAndFixGraph(
+  graph: any,
+  targetPlatform?: string,
+  capabilities?: any
+): Promise<{
+  report: ValidationReport;
+  fixes: Array<{
+    ruleId: string;
+    changes: any[];
+    success: boolean;
+  }>;
+  modifiedGraph: any;
 }>;
 //# sourceMappingURL=index.d.ts.map

@@ -2,7 +2,7 @@
 
 /**
  * Comprehensive Automation Orchestrator
- * 
+ *
  * Central command center that orchestrates all automation tools
  * and provides intelligent workflows for development teams.
  */
@@ -20,7 +20,7 @@ const colors = {
   blue: '\x1b[34m',
   magenta: '\x1b[35m',
   cyan: '\x1b[36m',
-  bold: '\x1b[1m'
+  bold: '\x1b[1m',
 };
 
 class AutomationOrchestrator {
@@ -31,9 +31,9 @@ class AutomationOrchestrator {
       maxConcurrentProcesses: 3,
       defaultTimeout: 300000, // 5 minutes
       retryAttempts: 2,
-      healthCheckInterval: 30000 // 30 seconds
+      healthCheckInterval: 30000, // 30 seconds
     };
-    
+
     this.setupWorkflows();
   }
 
@@ -63,9 +63,9 @@ class AutomationOrchestrator {
       steps: [
         { name: 'setup-environment', script: 'setup-dev-environment.js', timeout: 120000 },
         { name: 'build-test-cache', script: 'smart-test-selector.js', args: ['--build-cache'] },
-        { name: 'initial-quality-check', script: 'dev-quality-check.js' }
+        { name: 'initial-quality-check', script: 'dev-quality-check.js' },
       ],
-      parallel: false
+      parallel: false,
     });
 
     // Quality assurance workflow
@@ -77,10 +77,10 @@ class AutomationOrchestrator {
         { name: 'security-scan', script: 'security-scanner.js' },
         { name: 'dependency-analysis', script: 'intelligent-dependency-manager.js' },
         { name: 'performance-check', script: 'performance-regression-detector.js' },
-        { name: 'quality-validation', script: 'dev-quality-check.js' }
+        { name: 'quality-validation', script: 'dev-quality-check.js' },
       ],
       parallel: true,
-      maxParallel: 3
+      maxParallel: 3,
     });
 
     // Pre-commit workflow
@@ -90,20 +90,18 @@ class AutomationOrchestrator {
       steps: [
         { name: 'smart-tests', script: 'smart-test-selector.js' },
         { name: 'security-critical', script: 'security-scanner.js', args: ['--security-only'] },
-        { name: 'quality-quick', script: 'dev-quality-check.js', args: ['--quick-check'] }
+        { name: 'quality-quick', script: 'dev-quality-check.js', args: ['--quick-check'] },
       ],
       parallel: true,
-      timeout: 60000 // 1 minute for pre-commit
+      timeout: 60000, // 1 minute for pre-commit
     });
 
     // Continuous monitoring workflow
     this.workflows.set('monitoring', {
       name: 'Continuous Quality Monitoring',
       description: 'Real-time quality monitoring dashboard',
-      steps: [
-        { name: 'quality-dashboard', script: 'quality-monitoring-dashboard.js', persistent: true }
-      ],
-      parallel: false
+      steps: [{ name: 'quality-dashboard', script: 'quality-monitoring-dashboard.js', persistent: true }],
+      parallel: false,
     });
 
     // Maintenance workflow
@@ -113,10 +111,10 @@ class AutomationOrchestrator {
       steps: [
         { name: 'dependency-updates', script: 'intelligent-dependency-manager.js', args: ['--auto-update'] },
         { name: 'performance-baseline', script: 'performance-regression-detector.js', args: ['--set-baseline'] },
-        { name: 'cache-cleanup', script: 'smart-test-selector.js', args: ['--build-cache'] }
+        { name: 'cache-cleanup', script: 'smart-test-selector.js', args: ['--build-cache'] },
       ],
       parallel: false,
-      schedule: 'weekly'
+      schedule: 'weekly',
     });
 
     // CI/CD integration workflow
@@ -127,10 +125,10 @@ class AutomationOrchestrator {
         { name: 'smart-test-selection', script: 'smart-test-selector.js' },
         { name: 'parallel-quality-checks', workflow: 'qa-full' },
         { name: 'performance-regression', script: 'performance-regression-detector.js' },
-        { name: 'final-validation', script: 'dev-quality-check.js' }
+        { name: 'final-validation', script: 'dev-quality-check.js' },
       ],
       parallel: false,
-      timeout: 600000 // 10 minutes for CI
+      timeout: 600000, // 10 minutes for CI
     });
   }
 
@@ -149,7 +147,7 @@ class AutomationOrchestrator {
       startTime: new Date().toISOString(),
       steps: [],
       success: false,
-      duration: 0
+      duration: 0,
     };
 
     try {
@@ -164,7 +162,6 @@ class AutomationOrchestrator {
 
       this.logWorkflowSummary(workflow, results);
       return results;
-
     } catch (error) {
       results.success = false;
       results.duration = Date.now() - startTime;
@@ -178,7 +175,7 @@ class AutomationOrchestrator {
   async runSequentialSteps(workflow, results, options) {
     for (const step of workflow.steps) {
       this.logStep(`Running step: ${step.name}`, 'info');
-      
+
       try {
         const stepResult = await this.executeStep(step, workflow, options);
         results.steps.push(stepResult);
@@ -186,13 +183,12 @@ class AutomationOrchestrator {
         if (!stepResult.success && !options.continueOnError) {
           throw new Error(`Step '${step.name}' failed: ${stepResult.error}`);
         }
-
       } catch (error) {
         results.steps.push({
           name: step.name,
           success: false,
           error: error.message,
-          duration: 0
+          duration: 0,
         });
 
         if (!options.continueOnError) {
@@ -208,10 +204,10 @@ class AutomationOrchestrator {
 
     for (let i = 0; i < workflow.steps.length; i += maxParallel) {
       const batch = workflow.steps.slice(i, i + maxParallel);
-      
-      const batchPromises = batch.map(async (step) => {
+
+      const batchPromises = batch.map(async step => {
         this.logStep(`Starting parallel step: ${step.name}`, 'info');
-        
+
         try {
           const stepResult = await this.executeStep(step, workflow, options);
           results.steps.push(stepResult);
@@ -221,7 +217,7 @@ class AutomationOrchestrator {
             name: step.name,
             success: false,
             error: error.message,
-            duration: 0
+            duration: 0,
           };
           results.steps.push(failedResult);
           return failedResult;
@@ -229,7 +225,7 @@ class AutomationOrchestrator {
       });
 
       const batchResults = await Promise.all(batchPromises);
-      
+
       // Check if any critical steps failed
       const criticalFailures = batchResults.filter(r => !r.success && !options.continueOnError);
       if (criticalFailures.length > 0) {
@@ -256,33 +252,32 @@ class AutomationOrchestrator {
       }
 
       const duration = Date.now() - stepStartTime;
-      
+
       this.logStep(`✅ Step '${step.name}' completed in ${duration}ms`, 'success');
 
       return {
         name: step.name,
         success: true,
         duration,
-        result
+        result,
       };
-
     } catch (error) {
       const duration = Date.now() - stepStartTime;
-      
+
       this.logStep(`❌ Step '${step.name}' failed after ${duration}ms: ${error.message}`, 'error');
 
       return {
         name: step.name,
         success: false,
         duration,
-        error: error.message
+        error: error.message,
       };
     }
   }
 
   async executeScript(step, timeout, options) {
     const scriptPath = path.join(__dirname, step.script);
-    
+
     if (!fs.existsSync(scriptPath)) {
       throw new Error(`Script not found: ${step.script}`);
     }
@@ -296,40 +291,40 @@ class AutomationOrchestrator {
 
       const child = spawn('node', [scriptPath, ...args], {
         stdio: ['pipe', 'pipe', 'pipe'],
-        timeout
+        timeout,
       });
 
       this.runningProcesses.set(step.name, child);
 
-      child.stdout.on('data', (data) => {
+      child.stdout.on('data', data => {
         output += data.toString();
         if (options.verbose) {
           process.stdout.write(data);
         }
       });
 
-      child.stderr.on('data', (data) => {
+      child.stderr.on('data', data => {
         errorOutput += data.toString();
         if (options.verbose) {
           process.stderr.write(data);
         }
       });
 
-      child.on('close', (code) => {
+      child.on('close', code => {
         this.runningProcesses.delete(step.name);
 
         if (code === 0) {
           resolve({
             exitCode: code,
             stdout: output,
-            stderr: errorOutput
+            stderr: errorOutput,
           });
         } else {
           reject(new Error(`Script exited with code ${code}: ${errorOutput || output}`));
         }
       });
 
-      child.on('error', (error) => {
+      child.on('error', error => {
         this.runningProcesses.delete(step.name);
         reject(error);
       });
@@ -361,15 +356,17 @@ class AutomationOrchestrator {
 
     if (failedSteps > 0) {
       this.log('\n❌ Failed Steps:', 'red');
-      results.steps.filter(s => !s.success).forEach(step => {
-        this.log(`   - ${step.name}: ${step.error}`, 'red');
-      });
+      results.steps
+        .filter(s => !s.success)
+        .forEach(step => {
+          this.log(`   - ${step.name}: ${step.error}`, 'red');
+        });
     }
   }
 
   async startHealthMonitoring() {
     this.logHeader('Starting Health Monitoring');
-    
+
     const healthCheck = setInterval(async () => {
       try {
         await this.performHealthCheck();
@@ -393,11 +390,11 @@ class AutomationOrchestrator {
       { name: 'Git Repository', check: () => this.checkGitStatus() },
       { name: 'Node Modules', check: () => this.checkNodeModules() },
       { name: 'Test Cache', check: () => this.checkTestCache() },
-      { name: 'Quality Infrastructure', check: () => this.checkQualityInfrastructure() }
+      { name: 'Quality Infrastructure', check: () => this.checkQualityInfrastructure() },
     ];
 
     const results = [];
-    
+
     for (const { name, check } of checks) {
       try {
         const result = await check();
@@ -447,11 +444,11 @@ class AutomationOrchestrator {
       'client/src/utils/securityUtils.ts',
       'client/src/utils/performanceMonitor.ts',
       'client/src/utils/memoryOptimization.ts',
-      'scripts/dev-quality-check.js'
+      'scripts/dev-quality-check.js',
     ];
 
     const missingFiles = requiredFiles.filter(file => !fs.existsSync(file));
-    
+
     if (missingFiles.length > 0) {
       throw new Error(`Missing quality files: ${missingFiles.join(', ')}`);
     }
@@ -461,24 +458,24 @@ class AutomationOrchestrator {
 
   stopAllProcesses() {
     this.log('Stopping all running processes...', 'yellow');
-    
+
     for (const [name, process] of this.runningProcesses.entries()) {
       this.log(`Stopping ${name}...`, 'yellow');
       process.kill('SIGTERM');
     }
-    
+
     this.runningProcesses.clear();
     this.log('All processes stopped', 'green');
   }
 
   async scheduleWorkflow(workflowName, schedule) {
     this.log(`Scheduling workflow '${workflowName}' with schedule: ${schedule}`, 'blue');
-    
+
     // Simple scheduler implementation
     const scheduleIntervals = {
-      'hourly': 60 * 60 * 1000,
-      'daily': 24 * 60 * 60 * 1000,
-      'weekly': 7 * 24 * 60 * 60 * 1000
+      hourly: 60 * 60 * 1000,
+      daily: 24 * 60 * 60 * 1000,
+      weekly: 7 * 24 * 60 * 60 * 1000,
     };
 
     const interval = scheduleIntervals[schedule];
@@ -498,7 +495,7 @@ class AutomationOrchestrator {
 
   listWorkflows() {
     this.logHeader('Available Workflows');
-    
+
     for (const [name, workflow] of this.workflows.entries()) {
       this.log(`\n📋 ${name}`, 'cyan');
       this.log(`   ${workflow.description}`, 'blue');
@@ -518,15 +515,15 @@ class AutomationOrchestrator {
         description: workflow.description,
         steps: workflow.steps.length,
         parallel: workflow.parallel,
-        schedule: workflow.schedule
+        schedule: workflow.schedule,
       })),
       runningProcesses: Array.from(this.runningProcesses.keys()),
-      systemHealth: await this.performHealthCheck()
+      systemHealth: await this.performHealthCheck(),
     };
 
     const reportFile = `automation-report-${Date.now()}.json`;
     fs.writeFileSync(reportFile, JSON.stringify(report, null, 2));
-    
+
     this.log(`📊 Report generated: ${reportFile}`, 'success');
     return report;
   }
@@ -535,9 +532,9 @@ class AutomationOrchestrator {
 // CLI execution
 if (require.main === module) {
   const orchestrator = new AutomationOrchestrator();
-  
+
   const args = process.argv.slice(2);
-  
+
   if (args.includes('--help') || args.includes('-h')) {
     console.log(`
 Comprehensive Automation Orchestrator
@@ -580,13 +577,14 @@ The orchestrator provides intelligent workflow management with:
   const workflowName = args[0];
   const options = {
     verbose: args.includes('--verbose'),
-    continueOnError: args.includes('--continue-on-error')
+    continueOnError: args.includes('--continue-on-error'),
   };
 
   if (args.includes('--list')) {
     orchestrator.listWorkflows();
   } else if (args.includes('--health-check')) {
-    orchestrator.performHealthCheck()
+    orchestrator
+      .performHealthCheck()
       .then(health => {
         console.log('✅ Health check completed');
         console.log(JSON.stringify(health, null, 2));
@@ -596,17 +594,16 @@ The orchestrator provides intelligent workflow management with:
         process.exit(1);
       });
   } else if (args.includes('--monitor')) {
-    orchestrator.startHealthMonitoring()
-      .then(() => {
-        console.log('🔄 Health monitoring active - Press Ctrl+C to stop');
-      });
+    orchestrator.startHealthMonitoring().then(() => {
+      console.log('🔄 Health monitoring active - Press Ctrl+C to stop');
+    });
   } else if (args.includes('--report')) {
-    orchestrator.generateWorkflowReport()
-      .then(() => {
-        console.log('✅ Report generated');
-      });
+    orchestrator.generateWorkflowReport().then(() => {
+      console.log('✅ Report generated');
+    });
   } else if (workflowName) {
-    orchestrator.runWorkflow(workflowName, options)
+    orchestrator
+      .runWorkflow(workflowName, options)
       .then(results => {
         console.log('✅ Workflow completed successfully');
         if (results.success) {

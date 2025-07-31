@@ -12,7 +12,7 @@ class ConfigManager {
     this.configPath = configPath || path.join(__dirname, '..', 'config');
     this.logger = getLogger('config-manager');
     this.cache = new Map();
-        
+
     // Default configuration structure
     this.defaults = {
       automation: {
@@ -21,44 +21,44 @@ class ConfigManager {
         timeout: 30000,
         batchSize: 10,
         enableLogging: true,
-        logLevel: 'INFO'
+        logLevel: 'INFO',
       },
       qa: {
         passThreshold: 3.0,
         autoApproveThreshold: 4.5,
         maxIssuesPerReject: 3,
         reviewTimeout: 300000,
-        enableBatchProcessing: true
+        enableBatchProcessing: true,
       },
       state: {
         stateFile: path.join(__dirname, '..', 'data', 'state.json'),
         backupCount: 5,
         lockTimeout: 30000,
-        atomicWrites: true
+        atomicWrites: true,
       },
       github: {
         autoCreatePR: true,
         prTemplate: 'default',
         enableWebhooks: false,
-        maxCommitsPerPR: 10
+        maxCommitsPerPR: 10,
       },
       performance: {
         enableMetrics: true,
         metricsFile: path.join(__dirname, '..', 'logs', 'performance.json'),
         cacheSize: 1000,
-        enableProfiling: false
-      }
+        enableProfiling: false,
+      },
     };
   }
 
   /**
-     * Load configuration from file or environment
-     * @param {string} configName - Configuration section name
-     * @returns {Object} Configuration object
-     */
+   * Load configuration from file or environment
+   * @param {string} configName - Configuration section name
+   * @returns {Object} Configuration object
+   */
   loadConfig(configName) {
     const cacheKey = `config_${configName}`;
-        
+
     if (this.cache.has(cacheKey)) {
       this.logger.debug(`Configuration loaded from cache: ${configName}`);
       return this.cache.get(cacheKey);
@@ -94,44 +94,45 @@ class ConfigManager {
       this.logger.info(`Configuration loaded successfully: ${configName}`, {
         source: fs.existsSync(configFile) ? 'file' : 'defaults',
         envOverrides: Object.keys(envConfig).length,
-        configKeys: Object.keys(finalConfig)
+        configKeys: Object.keys(finalConfig),
       });
 
       return finalConfig;
     } catch (error) {
       this.logger.error(`Failed to load configuration: ${configName}`, {
         error: error.message,
-        configPath: this.configPath
+        configPath: this.configPath,
       });
-            
+
       // Return defaults if loading fails
       return this.defaults[configName] || {};
     }
   }
 
   /**
-     * Load configuration overrides from environment variables
-     * @param {string} configName - Configuration section name
-     * @returns {Object} Environment configuration overrides
-     */
+   * Load configuration overrides from environment variables
+   * @param {string} configName - Configuration section name
+   * @returns {Object} Environment configuration overrides
+   */
   loadFromEnvironment(configName) {
     const envPrefix = `PS_${configName.toUpperCase()}_`;
     const envConfig = {};
 
     Object.keys(process.env).forEach(key => {
       if (key.startsWith(envPrefix)) {
-        const configKey = key
-          .substring(envPrefix.length)
-          .toLowerCase()
-          .replace(/_/g, '');
-                
+        const configKey = key.substring(envPrefix.length).toLowerCase().replace(/_/g, '');
+
         let value = process.env[key];
-                
+
         // Try to parse as JSON for complex values
         try {
-          if (value.startsWith('{') || value.startsWith('[') || 
-                        value === 'true' || value === 'false' || 
-                        !isNaN(value)) {
+          if (
+            value.startsWith('{') ||
+            value.startsWith('[') ||
+            value === 'true' ||
+            value === 'false' ||
+            !isNaN(value)
+          ) {
             value = JSON.parse(value);
           }
         } catch (e) {
@@ -143,8 +144,8 @@ class ConfigManager {
     });
 
     if (Object.keys(envConfig).length > 0) {
-      this.logger.debug(`Environment overrides loaded for ${configName}`, { 
-        keys: Object.keys(envConfig) 
+      this.logger.debug(`Environment overrides loaded for ${configName}`, {
+        keys: Object.keys(envConfig),
       });
     }
 
@@ -152,13 +153,13 @@ class ConfigManager {
   }
 
   /**
-     * Validate configuration values
-     * @param {string} configName - Configuration section name  
-     * @param {Object} config - Configuration to validate
-     */
+   * Validate configuration values
+   * @param {string} configName - Configuration section name
+   * @param {Object} config - Configuration to validate
+   */
   validateConfig(configName, config) {
     const validators = {
-      automation: (cfg) => {
+      automation: cfg => {
         if (cfg.maxRetries < 0 || cfg.maxRetries > 10) {
           throw new Error('maxRetries must be between 0 and 10');
         }
@@ -169,7 +170,7 @@ class ConfigManager {
           throw new Error('Invalid logLevel');
         }
       },
-      qa: (cfg) => {
+      qa: cfg => {
         if (cfg.passThreshold < 0 || cfg.passThreshold > 5) {
           throw new Error('passThreshold must be between 0 and 5');
         }
@@ -177,7 +178,7 @@ class ConfigManager {
           throw new Error('autoApproveThreshold must be >= passThreshold');
         }
       },
-      state: (cfg) => {
+      state: cfg => {
         if (!cfg.stateFile || typeof cfg.stateFile !== 'string') {
           throw new Error('stateFile must be a valid file path');
         }
@@ -185,11 +186,11 @@ class ConfigManager {
           throw new Error('backupCount must be between 1 and 50');
         }
       },
-      performance: (cfg) => {
+      performance: cfg => {
         if (cfg.cacheSize < 10 || cfg.cacheSize > 10000) {
           throw new Error('cacheSize must be between 10 and 10000');
         }
-      }
+      },
     };
 
     if (validators[configName]) {
@@ -197,8 +198,8 @@ class ConfigManager {
         validators[configName](config);
         this.logger.debug(`Configuration validation passed: ${configName}`);
       } catch (error) {
-        this.logger.error(`Configuration validation failed: ${configName}`, { 
-          error: error.message 
+        this.logger.error(`Configuration validation failed: ${configName}`, {
+          error: error.message,
         });
         throw error;
       }
@@ -206,10 +207,10 @@ class ConfigManager {
   }
 
   /**
-     * Save configuration to file
-     * @param {string} configName - Configuration section name
-     * @param {Object} config - Configuration to save
-     */
+   * Save configuration to file
+   * @param {string} configName - Configuration section name
+   * @param {Object} config - Configuration to save
+   */
   saveConfig(configName, config) {
     try {
       // Validate before saving
@@ -221,7 +222,7 @@ class ConfigManager {
       }
 
       const configFile = path.join(this.configPath, `${configName}.json`);
-            
+
       // Atomic write using temporary file
       const tempFile = configFile + '.tmp';
       fs.writeFileSync(tempFile, JSON.stringify(config, null, 2));
@@ -232,29 +233,30 @@ class ConfigManager {
 
       this.logger.info(`Configuration saved: ${configName}`, {
         file: configFile,
-        keys: Object.keys(config)
+        keys: Object.keys(config),
       });
     } catch (error) {
       this.logger.error(`Failed to save configuration: ${configName}`, {
-        error: error.message
+        error: error.message,
       });
       throw error;
     }
   }
 
   /**
-     * Get all available configuration sections
-     * @returns {Array} List of available configuration names
-     */
+   * Get all available configuration sections
+   * @returns {Array} List of available configuration names
+   */
   getAvailableConfigs() {
     const configs = Object.keys(this.defaults);
-        
+
     try {
       if (fs.existsSync(this.configPath)) {
-        const files = fs.readdirSync(this.configPath)
+        const files = fs
+          .readdirSync(this.configPath)
           .filter(file => file.endsWith('.json'))
           .map(file => file.replace('.json', ''));
-                
+
         // Merge with defaults, removing duplicates
         configs.push(...files.filter(f => !configs.includes(f)));
       }
@@ -266,9 +268,9 @@ class ConfigManager {
   }
 
   /**
-     * Clear configuration cache
-     * @param {string} configName - Optional specific config to clear
-     */
+   * Clear configuration cache
+   * @param {string} configName - Optional specific config to clear
+   */
   clearCache(configName = null) {
     if (configName) {
       this.cache.delete(`config_${configName}`);
@@ -280,23 +282,23 @@ class ConfigManager {
   }
 
   /**
-     * Get configuration with automatic type conversion
-     * @param {string} configName - Configuration section name
-     * @param {string} key - Configuration key
-     * @param {*} defaultValue - Default value if not found
-     * @returns {*} Configuration value
-     */
+   * Get configuration with automatic type conversion
+   * @param {string} configName - Configuration section name
+   * @param {string} key - Configuration key
+   * @param {*} defaultValue - Default value if not found
+   * @returns {*} Configuration value
+   */
   get(configName, key, defaultValue = null) {
     const config = this.loadConfig(configName);
     return config[key] !== undefined ? config[key] : defaultValue;
   }
 
   /**
-     * Set configuration value
-     * @param {string} configName - Configuration section name
-     * @param {string} key - Configuration key
-     * @param {*} value - Configuration value
-     */
+   * Set configuration value
+   * @param {string} configName - Configuration section name
+   * @param {string} key - Configuration key
+   * @param {*} value - Configuration value
+   */
   set(configName, key, value) {
     const config = this.loadConfig(configName);
     config[key] = value;
@@ -304,15 +306,15 @@ class ConfigManager {
   }
 
   /**
-     * Get configuration status for debugging
-     * @returns {Object} Status information
-     */
+   * Get configuration status for debugging
+   * @returns {Object} Status information
+   */
   getStatus() {
     return {
       configPath: this.configPath,
       cacheSize: this.cache.size,
       availableConfigs: this.getAvailableConfigs(),
-      loadedConfigs: Array.from(this.cache.keys())
+      loadedConfigs: Array.from(this.cache.keys()),
     };
   }
 }
@@ -331,5 +333,5 @@ module.exports = {
   ConfigManager,
   getConfigManager,
   // Convenience exports
-  config: getConfigManager()
+  config: getConfigManager(),
 };

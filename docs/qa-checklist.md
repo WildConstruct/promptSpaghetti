@@ -5,6 +5,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 ## Pre-Testing Setup
 
 ### Environment Preparation
+
 - [ ] Development environment running (pnpm dev)
 - [ ] All dependencies installed (pnpm install)
 - [ ] All tests passing (pnpm test)
@@ -12,6 +13,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] Build successful (pnpm build)
 
 ### Test Data Preparation
+
 - [ ] Sample graphs with 5-10 nodes
 - [ ] Sample graphs with 100+ nodes (performance testing)
 - [ ] Sample graphs with various node types
@@ -21,6 +23,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 ## Epic 1 - Foundation & Core Infrastructure
 
 ### Story 1.1 - Repo & Monorepo Tooling
+
 - [ ] Repository structure matches specification
 - [ ] pnpm workspaces configured correctly
 - [ ] All packages can be installed without errors
@@ -28,6 +31,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] ESLint and Prettier configurations active
 
 ### Story 1.2 - Dev Container & VS Code Settings
+
 - [ ] DevContainer launches successfully
 - [ ] Node 18 and Python 3.11 available
 - [ ] pnpm installed and working
@@ -35,6 +39,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] VS Code extensions loading properly
 
 ### Story 1.3 - React-Flow Canvas Skeleton
+
 - [ ] Canvas renders without errors
 - [ ] Grid and minimap visible
 - [ ] Mouse interactions work (pan, zoom)
@@ -42,6 +47,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] Responsive on different screen sizes
 
 ### Story 1.4 - CI Pipeline
+
 - [ ] GitHub Actions workflow runs on push
 - [ ] Linting step executes
 - [ ] Tests run with coverage
@@ -49,6 +55,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] Performance tests execute
 
 ### Story 1.5 - Preview Deployment
+
 - [ ] Preview URL accessible
 - [ ] Application loads correctly
 - [ ] All features work in preview
@@ -57,6 +64,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 ## Epic 2 - Editor MVP (Graph Authoring)
 
 ### Story 2.1 - Core Node Library UI
+
 - [ ] All 6 node types visible in palette
 - [ ] Node icons display correctly
 - [ ] Tooltips show on hover
@@ -65,6 +73,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] Node properties display correctly
 
 ### Story 2.2 - Node Connections & Validation
+
 - [ ] Can connect nodes with edges
 - [ ] Invalid connections highlighted in red
 - [ ] Validation errors show in status bar
@@ -73,6 +82,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] Duplicate edges prevented
 
 ### Story 2.3 - Node Inspector Forms
+
 - [ ] Selecting node opens inspector
 - [ ] Form fields match node schema
 - [ ] Changes update graph immediately
@@ -81,6 +91,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] Required fields properly marked
 
 ### Story 2.4 - Preview-5 Modal
+
 - [ ] Preview button triggers modal
 - [ ] Modal shows 5 different outputs
 - [ ] Seeds displayed with each output
@@ -89,6 +100,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] Modal closes properly
 
 ### Story 2.5 - Graph JSON Autosave
+
 - [ ] Graph saves to localStorage automatically
 - [ ] Restore prompt appears on reload
 - [ ] Restore functionality works
@@ -98,6 +110,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 ## Epic 3 - Executor & Integration
 
 ### Story 3.1 - Deterministic Graph Executor
+
 - [ ] Same seed produces identical output
 - [ ] Different seeds produce different outputs
 - [ ] All node types execute correctly
@@ -106,6 +119,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] Memory usage stays under 500MB
 
 ### Story 3.2 - CLI Wrapper
+
 - [ ] CLI installs via npm
 - [ ] Basic execution works
 - [ ] Seed parameter works
@@ -114,6 +128,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] Exit codes correct
 
 ### Story 3.3 - Export to GeneratorBundle
+
 - [ ] Export produces valid bundle
 - [ ] Bundle structure matches spec
 - [ ] Exported bundle can be imported
@@ -121,6 +136,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] Metadata preserved in export
 
 ### Story 3.4 - Import Legacy Bundle
+
 - [ ] Can import existing bundles
 - [ ] Imported graph displays correctly
 - [ ] Round-trip export/import works
@@ -128,6 +144,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] Error messages helpful
 
 ### Story 3.5 - Determinism Test Matrix
+
 - [ ] Test runs with multiple seeds
 - [ ] Outputs match expected results
 - [ ] No random variations
@@ -135,6 +152,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] Memory usage stable
 
 ### Story 3.6 - Preview API Endpoint
+
 - [ ] API endpoint responds correctly
 - [ ] Returns proper JSON format
 - [ ] Error handling works
@@ -144,6 +162,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 ## Epic 4 - Alpha Hardening & DX Polish
 
 ### Story 4.1 - Performance Profiling & Tuning
+
 - [ ] Large graphs (250+ nodes) render smoothly
 - [ ] FPS stays above 30 during interactions
 - [ ] Memory usage under 500MB
@@ -152,6 +171,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] Bundle size under 5MB
 
 ### Story 4.2 - Corrections Manager Feature Flag
+
 - [ ] Feature flag controls visibility
 - [ ] Panel opens and closes correctly
 - [ ] Can add/edit/delete rules
@@ -160,6 +180,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] Default rules load properly
 
 ### Story 4.3 - Vercel Production Deploy
+
 - [ ] Application deploys successfully
 - [ ] All API endpoints work
 - [ ] Static assets load correctly
@@ -168,6 +189,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] CORS configured properly
 
 ### Story 4.4 - Documentation & Onboarding
+
 - [ ] README is comprehensive
 - [ ] Architecture docs accurate
 - [ ] API documentation complete
@@ -176,6 +198,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] Troubleshooting guide helpful
 
 ### Story 4.5 - QA Sign-off & Release Notes
+
 - [ ] All tests passing
 - [ ] No critical bugs
 - [ ] Performance targets met
@@ -186,6 +209,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 ## Cross-Browser Testing
 
 ### Chrome (Primary)
+
 - [ ] All features work correctly
 - [ ] Performance meets targets
 - [ ] No console errors
@@ -193,6 +217,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] File operations work
 
 ### Firefox
+
 - [ ] Application loads correctly
 - [ ] Core features functional
 - [ ] Performance acceptable
@@ -200,6 +225,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] Canvas interactions work
 
 ### Safari
+
 - [ ] Application loads correctly
 - [ ] Core features functional
 - [ ] Performance acceptable
@@ -207,6 +233,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] Canvas interactions work
 
 ### Edge
+
 - [ ] Application loads correctly
 - [ ] Core features functional
 - [ ] Performance acceptable
@@ -216,6 +243,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 ## Accessibility Testing
 
 ### WCAG 2.1 AA Compliance
+
 - [ ] All interactive elements keyboard accessible
 - [ ] Proper ARIA labels on components
 - [ ] Color contrast ratios meet standards
@@ -224,6 +252,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] No keyboard traps
 
 ### Specific Accessibility Features
+
 - [ ] Canvas navigation with keyboard
 - [ ] Node selection with keyboard
 - [ ] Form inputs properly labeled
@@ -234,6 +263,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 ## Performance Testing
 
 ### Load Testing
+
 - [ ] 10-node graph: < 100ms execution
 - [ ] 50-node graph: < 500ms execution
 - [ ] 100-node graph: < 1s execution
@@ -241,6 +271,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] 500-node graph: < 5s execution
 
 ### Memory Testing
+
 - [ ] Initial load: < 100MB
 - [ ] After 10 minutes use: < 200MB
 - [ ] After creating large graph: < 500MB
@@ -248,6 +279,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] Garbage collection working
 
 ### Network Testing
+
 - [ ] Works on slow connections
 - [ ] Graceful degradation
 - [ ] Offline functionality
@@ -257,6 +289,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 ## Security Testing
 
 ### Input Validation
+
 - [ ] XSS prevention working
 - [ ] SQL injection prevention
 - [ ] File upload restrictions
@@ -264,6 +297,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] CSRF protection enabled
 
 ### Authentication & Authorization
+
 - [ ] No sensitive data exposed
 - [ ] Environment variables secure
 - [ ] API endpoints protected
@@ -273,6 +307,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 ## Error Handling
 
 ### User Experience
+
 - [ ] Friendly error messages
 - [ ] Graceful degradation
 - [ ] Recovery mechanisms
@@ -280,6 +315,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] Timeout handling
 
 ### Technical Errors
+
 - [ ] Network failures handled
 - [ ] Invalid data handled
 - [ ] Edge cases covered
@@ -289,6 +325,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 ## Integration Testing
 
 ### End-to-End Scenarios
+
 - [ ] Complete graph creation workflow
 - [ ] Export/import round trip
 - [ ] CLI execution workflow
@@ -296,6 +333,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] Cross-component interactions
 
 ### Data Flow Testing
+
 - [ ] Graph validation pipeline
 - [ ] Execution context passing
 - [ ] State management consistency
@@ -305,6 +343,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 ## Deployment Testing
 
 ### Development Environment
+
 - [ ] Local development setup works
 - [ ] Hot reload functional
 - [ ] Debug tools accessible
@@ -312,6 +351,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] All services running
 
 ### Production Environment
+
 - [ ] Vercel deployment successful
 - [ ] All endpoints accessible
 - [ ] Static assets cached
@@ -321,6 +361,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 ## Regression Testing
 
 ### Previous Features
+
 - [ ] Epic 1 features still work
 - [ ] Epic 2 features still work
 - [ ] Epic 3 features still work
@@ -328,6 +369,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] Performance maintained
 
 ### Data Compatibility
+
 - [ ] Old graphs still load
 - [ ] Old exports still work
 - [ ] Schema migrations work
@@ -337,6 +379,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 ## Final Release Criteria
 
 ### Must-Have (Blockers)
+
 - [ ] All critical bugs fixed
 - [ ] Performance targets met
 - [ ] Security review passed
@@ -344,6 +387,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] Cross-browser compatibility
 
 ### Should-Have (Important)
+
 - [ ] Documentation complete
 - [ ] User experience polished
 - [ ] Error handling comprehensive
@@ -351,6 +395,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] Rollback plan ready
 
 ### Nice-to-Have (Future)
+
 - [ ] Additional optimizations
 - [ ] Enhanced features
 - [ ] Extended browser support
@@ -360,6 +405,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 ## Sign-off
 
 ### Technical Lead
+
 - [ ] Code review complete
 - [ ] Architecture approved
 - [ ] Performance validated
@@ -367,6 +413,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] Documentation approved
 
 ### QA Lead
+
 - [ ] All tests passing
 - [ ] No critical bugs
 - [ ] Performance validated
@@ -374,6 +421,7 @@ This checklist validates all features and ensures quality standards for the v0.1
 - [ ] User experience approved
 
 ### Product Owner
+
 - [ ] Requirements met
 - [ ] User stories complete
 - [ ] Acceptance criteria satisfied
@@ -382,8 +430,8 @@ This checklist validates all features and ensures quality standards for the v0.1
 
 ---
 
-**QA Sign-off**: _________________ Date: _________________
+**QA Sign-off**: ********\_******** Date: ********\_********
 
-**Technical Sign-off**: _________________ Date: _________________
+**Technical Sign-off**: ********\_******** Date: ********\_********
 
-**Product Sign-off**: _________________ Date: _________________
+**Product Sign-off**: ********\_******** Date: ********\_********

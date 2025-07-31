@@ -34,16 +34,16 @@ interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  
+
   // Token management
   accessToken: string | null;
   refreshToken: string | null;
   tokenExpiration: number | null;
-  
+
   // UI state
   error: string | null;
   returnUrl: string | null;
-  
+
   // Authentication methods
   login: (email: string, password: string, rememberMe?: boolean) => Promise<boolean>;
   logout: () => void;
@@ -60,10 +60,11 @@ interface AuthState {
 ### 1. Email/Password Authentication
 
 #### Login Implementation
+
 ```typescript
 login: async (email: string, password: string, rememberMe: boolean = false) => {
   set({ isLoading: true, error: null });
-  
+
   try {
     const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
       method: 'POST',
@@ -78,7 +79,7 @@ login: async (email: string, password: string, rememberMe: boolean = false) => {
 
     const data = await response.json();
     const tokenExpiration = new Date(data.expiresAt).getTime();
-    
+
     set({
       user: data.user,
       isAuthenticated: true,
@@ -102,10 +103,11 @@ login: async (email: string, password: string, rememberMe: boolean = false) => {
     });
     return false;
   }
-}
+};
 ```
 
 **Features:**
+
 - ✅ Comprehensive error handling and validation
 - ✅ Loading state management during authentication
 - ✅ Token expiration calculation from server response
@@ -113,10 +115,11 @@ login: async (email: string, password: string, rememberMe: boolean = false) => {
 - ✅ Automatic state cleanup on authentication failure
 
 #### Registration Implementation
+
 ```typescript
 register: async (userData: RegisterData) => {
   set({ isLoading: true, error: null });
-  
+
   try {
     const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
       method: 'POST',
@@ -138,20 +141,21 @@ register: async (userData: RegisterData) => {
     });
     return false;
   }
-}
+};
 ```
 
 ### 2. OAuth Authentication
 
 #### OAuth Flow Initiation
+
 ```typescript
 oauthLogin: async (provider: string, returnUrl?: string) => {
   set({ isLoading: true, error: null });
-  
+
   try {
     const queryParams = new URLSearchParams({
       provider,
-      ...(returnUrl && { returnUrl })
+      ...(returnUrl && { returnUrl }),
     });
 
     const response = await fetch(`${API_BASE_URL}/api/auth/oauth/authorize?${queryParams.toString()}`, {
@@ -174,14 +178,15 @@ oauthLogin: async (provider: string, returnUrl?: string) => {
     });
     throw error;
   }
-}
+};
 ```
 
 #### OAuth Callback Processing
+
 ```typescript
 processOAuthCallback: async (provider: string, code: string, state: string) => {
   set({ isLoading: true, error: null });
-  
+
   try {
     const queryParams = new URLSearchParams({ code, state });
     const response = await fetch(`${API_BASE_URL}/api/auth/oauth/callback/${provider}?${queryParams.toString()}`, {
@@ -196,7 +201,7 @@ processOAuthCallback: async (provider: string, code: string, state: string) => {
 
     const data = await response.json();
     const tokenExpiration = new Date(data.tokens.expiresAt).getTime();
-    
+
     set({
       user: data.user,
       isAuthenticated: true,
@@ -220,21 +225,23 @@ processOAuthCallback: async (provider: string, code: string, state: string) => {
     });
     return false;
   }
-}
+};
 ```
 
 **Supported Providers:**
+
 - ✅ Google OAuth 2.0
-- ✅ GitHub OAuth 2.0  
+- ✅ GitHub OAuth 2.0
 - ✅ Extensible for additional providers
 
 ### 3. Token Management
 
 #### Automatic Token Refresh
+
 ```typescript
 refreshTokens: async () => {
   const { refreshToken } = get();
-  
+
   if (!refreshToken) {
     return false;
   }
@@ -251,7 +258,7 @@ refreshTokens: async () => {
     }
 
     const data = await response.json();
-    const tokenExpiration = Date.now() + (15 * 60 * 1000); // 15 minutes
+    const tokenExpiration = Date.now() + 15 * 60 * 1000; // 15 minutes
 
     set({
       accessToken: data.accessToken,
@@ -266,19 +273,20 @@ refreshTokens: async () => {
     get().logout();
     return false;
   }
-}
+};
 ```
 
 #### Automatic Token Refresh Setup
+
 ```typescript
 export const setupTokenRefresh = (): (() => void) => {
   const checkAndRefresh = async () => {
     const { isAuthenticated, tokenExpiration, refreshTokens } = useAuthStore.getState();
-    
+
     if (isAuthenticated && tokenExpiration) {
       // Refresh token 5 minutes before expiration
-      const refreshTime = tokenExpiration - (5 * 60 * 1000);
-      
+      const refreshTime = tokenExpiration - 5 * 60 * 1000;
+
       if (Date.now() >= refreshTime) {
         await refreshTokens();
       }
@@ -287,13 +295,14 @@ export const setupTokenRefresh = (): (() => void) => {
 
   // Check every minute
   const interval = setInterval(checkAndRefresh, 60 * 1000);
-  
+
   // Return cleanup function
   return () => clearInterval(interval);
 };
 ```
 
 **Token Features:**
+
 - ✅ Automatic refresh 5 minutes before expiration
 - ✅ Background refresh without user interruption
 - ✅ Fallback logout on refresh failure
@@ -303,10 +312,11 @@ export const setupTokenRefresh = (): (() => void) => {
 ### 4. Session Management
 
 #### Authentication Status Check
+
 ```typescript
 checkAuthStatus: async () => {
   const { accessToken, refreshToken, tokenExpiration } = get();
-  
+
   if (!accessToken || !refreshToken) {
     return false;
   }
@@ -321,7 +331,7 @@ checkAuthStatus: async () => {
   try {
     const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
       headers: {
-        'Authorization': `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
 
@@ -330,9 +340,9 @@ checkAuthStatus: async () => {
     }
 
     const userData = await response.json();
-    set({ 
+    set({
       user: userData,
-      isAuthenticated: true 
+      isAuthenticated: true,
     });
 
     return true;
@@ -340,14 +350,15 @@ checkAuthStatus: async () => {
     // Auth check failed, try to refresh
     return await get().refreshTokens();
   }
-}
+};
 ```
 
 #### Secure Logout
+
 ```typescript
 logout: () => {
   const { refreshToken } = get();
-  
+
   // Call logout endpoint to invalidate refresh token on server
   if (refreshToken) {
     fetch(`${API_BASE_URL}/api/auth/logout`, {
@@ -366,7 +377,7 @@ logout: () => {
     error: null,
     returnUrl: null,
   });
-}
+};
 ```
 
 ---
@@ -378,23 +389,25 @@ logout: () => {
 The authentication store integrates seamlessly with the existing backend API endpoints:
 
 #### Endpoint Mapping
+
 ```typescript
 const API_ENDPOINTS = {
   LOGIN: '/api/auth/login',
-  REGISTER: '/api/auth/register', 
+  REGISTER: '/api/auth/register',
   LOGOUT: '/api/auth/logout',
   REFRESH: '/api/auth/refresh',
   ME: '/api/auth/me',
   OAUTH_AUTHORIZE: '/api/auth/oauth/authorize',
   OAUTH_CALLBACK: '/api/auth/oauth/callback/:provider',
   PASSWORD_RESET_REQUEST: '/api/auth/password-reset/request',
-  PASSWORD_RESET_CONFIRM: '/api/auth/password-reset/confirm'
+  PASSWORD_RESET_CONFIRM: '/api/auth/password-reset/confirm',
 };
 ```
 
 #### Request/Response Formats
 
 **Login Request:**
+
 ```typescript
 {
   email: string;
@@ -404,6 +417,7 @@ const API_ENDPOINTS = {
 ```
 
 **Login Response:**
+
 ```typescript
 {
   accessToken: string;
@@ -425,30 +439,28 @@ const API_ENDPOINTS = {
 ### Authenticated API Calls
 
 #### Utility Functions
+
 ```typescript
 // Get auth headers for API calls
 export const getAuthHeaders = (): Record<string, string> => {
   const { accessToken } = useAuthStore.getState();
-  
+
   if (accessToken) {
     return {
-      'Authorization': `Bearer ${accessToken}`,
+      Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     };
   }
-  
+
   return {
     'Content-Type': 'application/json',
   };
 };
 
 // Make authenticated API calls with automatic retry
-export const authenticatedFetch = async (
-  url: string, 
-  options: RequestInit = {}
-): Promise<Response> => {
+export const authenticatedFetch = async (url: string, options: RequestInit = {}): Promise<Response> => {
   const authHeaders = getAuthHeaders();
-  
+
   const response = await fetch(url, {
     ...options,
     headers: {
@@ -461,7 +473,7 @@ export const authenticatedFetch = async (
   if (response.status === 401) {
     const authStore = useAuthStore.getState();
     const refreshed = await authStore.refreshTokens();
-    
+
     if (refreshed) {
       // Retry with new token
       const newAuthHeaders = getAuthHeaders();
@@ -486,6 +498,7 @@ export const authenticatedFetch = async (
 ### 1. Persistent Storage Security
 
 #### Selective Persistence
+
 ```typescript
 // Only persist essential auth data
 partialize: (state) => ({
@@ -499,6 +512,7 @@ partialize: (state) => ({
 ```
 
 **Security Benefits:**
+
 - ✅ Sensitive data excluded from persistence
 - ✅ Automatic cleanup of temporary state
 - ✅ Minimal attack surface in localStorage
@@ -507,6 +521,7 @@ partialize: (state) => ({
 ### 2. Token Security
 
 #### Token Lifecycle Management
+
 - **Short-lived Access Tokens**: 15-minute expiration for minimal exposure window
 - **Long-lived Refresh Tokens**: 24 hours to 30 days based on "remember me" selection
 - **Automatic Renewal**: Proactive refresh before expiration
@@ -514,6 +529,7 @@ partialize: (state) => ({
 - **Secure Transmission**: HTTPS-only token transmission
 
 #### Token Storage
+
 - **HTTP-Only Cookies**: Server sets secure HTTP-only cookies for enhanced security
 - **localStorage Fallback**: Client-side storage with structured data validation
 - **Automatic Cleanup**: Token cleanup on logout and authentication failure
@@ -521,6 +537,7 @@ partialize: (state) => ({
 ### 3. Error Handling & Validation
 
 #### Comprehensive Error Management
+
 ```typescript
 // Structured error handling throughout authentication flow
 try {
@@ -536,6 +553,7 @@ try {
 ```
 
 #### Input Validation
+
 - ✅ Email format validation
 - ✅ Password strength requirements
 - ✅ OAuth state parameter validation
@@ -553,10 +571,10 @@ import { useAuthStore } from './stores/authStore';
 
 function LoginComponent() {
   const { login, isLoading, error, isAuthenticated } = useAuthStore();
-  
+
   const handleLogin = async (email: string, password: string) => {
     const success = await login(email, password, true); // rememberMe = true
-    
+
     if (success) {
       console.log('Login successful!');
       // User automatically redirected by routing system
@@ -570,7 +588,7 @@ function LoginComponent() {
   }
 
   return (
-    <LoginForm 
+    <LoginForm
       onSubmit={handleLogin}
       loading={isLoading}
       error={error}
@@ -640,7 +658,7 @@ function App() {
   React.useEffect(() => {
     // Setup automatic token refresh
     const cleanup = setupTokenRefresh();
-    
+
     // Cleanup on component unmount
     return cleanup;
   }, []);
@@ -662,24 +680,26 @@ function App() {
 ### 1. Unit Tests Coverage
 
 #### Authentication Flow Tests
+
 ```typescript
 describe('Authentication Store', () => {
   it('should login successfully with valid credentials', async () => {
     const { result } = renderHook(() => useAuthStore());
-    
+
     // Mock successful API response
     mockFetch.mockResolvedValueOnce({
       ok: true,
-      json: () => Promise.resolve({
-        accessToken: 'token',
-        refreshToken: 'refresh',
-        user: { id: '1', email: 'test@example.com' },
-        expiresAt: new Date(Date.now() + 900000).toISOString()
-      })
+      json: () =>
+        Promise.resolve({
+          accessToken: 'token',
+          refreshToken: 'refresh',
+          user: { id: '1', email: 'test@example.com' },
+          expiresAt: new Date(Date.now() + 900000).toISOString(),
+        }),
     });
 
     const success = await result.current.login('test@example.com', 'password');
-    
+
     expect(success).toBe(true);
     expect(result.current.isAuthenticated).toBe(true);
     expect(result.current.user?.email).toBe('test@example.com');
@@ -687,14 +707,14 @@ describe('Authentication Store', () => {
 
   it('should handle login failure gracefully', async () => {
     const { result } = renderHook(() => useAuthStore());
-    
+
     mockFetch.mockResolvedValueOnce({
       ok: false,
-      json: () => Promise.resolve({ message: 'Invalid credentials' })
+      json: () => Promise.resolve({ message: 'Invalid credentials' }),
     });
 
     const success = await result.current.login('test@example.com', 'wrong-password');
-    
+
     expect(success).toBe(false);
     expect(result.current.isAuthenticated).toBe(false);
     expect(result.current.error).toBe('Invalid credentials');
@@ -705,6 +725,7 @@ describe('Authentication Store', () => {
 ### 2. Integration Tests
 
 #### API Endpoint Integration
+
 - ✅ Login endpoint compatibility verification
 - ✅ OAuth flow end-to-end testing
 - ✅ Token refresh mechanism validation
@@ -712,6 +733,7 @@ describe('Authentication Store', () => {
 - ✅ Error handling and recovery testing
 
 #### Browser Storage Integration
+
 - ✅ localStorage persistence validation
 - ✅ State rehydration on app reload
 - ✅ Session cleanup on logout
@@ -721,6 +743,7 @@ describe('Authentication Store', () => {
 ### 3. Security Testing
 
 #### Token Security Validation
+
 - ✅ Token expiration enforcement
 - ✅ Automatic refresh functionality
 - ✅ Secure logout and cleanup
@@ -728,6 +751,7 @@ describe('Authentication Store', () => {
 - ✅ CSRF protection validation
 
 #### Input Validation Testing
+
 - ✅ Email format validation
 - ✅ Password requirements enforcement
 - ✅ OAuth state parameter validation
@@ -739,16 +763,19 @@ describe('Authentication Store', () => {
 ## Performance Characteristics
 
 ### Memory Usage
+
 - **Minimal State**: Only essential authentication data stored
 - **Automatic Cleanup**: Expired tokens and sessions cleaned up
 - **Efficient Updates**: Selective state updates prevent unnecessary re-renders
 
-### Network Efficiency  
+### Network Efficiency
+
 - **Proactive Token Refresh**: Prevents authentication interruptions
 - **Request Optimization**: Batched authentication checks
 - **Error Recovery**: Intelligent retry mechanisms for network failures
 
 ### User Experience
+
 - **Fast Authentication**: Optimized login flow with minimal latency
 - **Seamless Transitions**: Invisible token refresh during user activity
 - **Persistent Sessions**: Reliable session management across browser sessions
@@ -760,8 +787,9 @@ describe('Authentication Store', () => {
 The Authentication Store implementation provides a robust, secure, and user-friendly authentication system for PromptScape. With comprehensive JWT token management, OAuth integration, automatic token refresh, and extensive security features, it forms the foundation for secure user authentication and authorization throughout the application.
 
 **Key Benefits:**
+
 - ✅ **Enterprise Security**: Industry-standard JWT authentication with automatic refresh
-- ✅ **Developer Experience**: Simple, intuitive API with comprehensive TypeScript support  
+- ✅ **Developer Experience**: Simple, intuitive API with comprehensive TypeScript support
 - ✅ **User Experience**: Seamless authentication flow with persistent sessions
 - ✅ **Scalability**: Extensible architecture supporting multiple authentication methods
 - ✅ **Reliability**: Comprehensive error handling and recovery mechanisms

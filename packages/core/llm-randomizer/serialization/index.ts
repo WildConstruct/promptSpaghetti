@@ -7,7 +7,7 @@ export {
   SerializationMetadata,
   SerializationOptions,
   serializeGraph,
-  createDefaultMetadata
+  createDefaultMetadata,
 } from './serializer';
 
 export {
@@ -19,5 +19,5 @@ export {
   ParsedNode,
   ParsedEdge,
   validateFormat,
-  isValidFormat
+  isValidFormat,
 } from './validator';

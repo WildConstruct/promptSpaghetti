@@ -1,9 +1,9 @@
 /**
  * Test Data Generators - Centralized Export
- * 
+ *
  * Provides a unified interface for all test data generation utilities
  * including graphs, authentication data, analytics data, and API payloads.
- * 
+ *
  * Task: E18-1753114562159-0BC5A0
  */
 
@@ -17,17 +17,14 @@ export { default as APIPayloadGenerator } from './APIPayloadGenerator';
 export { testDataGenerator } from '../utils/TestDataGenerator';
 
 // Type exports
-export type {
-  GraphGenerationOptions,
-  GraphScenario
-} from './AdvancedGraphGenerator';
+export type { GraphGenerationOptions, GraphScenario } from './AdvancedGraphGenerator';
 
 export type {
   UserRole,
   Permission,
   TestUser,
   SessionData,
-  AuthenticationScenario
+  AuthenticationScenario,
 } from './AuthenticationDataGenerator';
 
 export type {
@@ -36,14 +33,14 @@ export type {
   PerformanceMetric,
   UserBehaviorData,
   TimeSeriesData,
-  RuleUsageAnalytics
+  RuleUsageAnalytics,
 } from './AnalyticsDataGenerator';
 
 export type {
   APITestPayload,
   AuthenticationPayload,
   GraphOperationPayload,
-  RuleManagementPayload
+  RuleManagementPayload,
 } from './APIPayloadGenerator';
 
 /**
@@ -92,33 +89,29 @@ export class TestDataGeneratorFactory {
    */
   static createCompleteSuite(seed?: number) {
     const baseSeed = seed || this.DEFAULT_SEED;
-    
+
     return {
       graphGenerator: new AdvancedGraphGenerator(baseSeed),
       batchGraphGenerator: new GraphBatchGenerator(baseSeed + 1),
       authGenerator: new AuthenticationDataGenerator(baseSeed + 2),
       analyticsGenerator: new AnalyticsDataGenerator(baseSeed + 3),
-      apiPayloadGenerator: new APIPayloadGenerator(baseSeed + 4)
+      apiPayloadGenerator: new APIPayloadGenerator(baseSeed + 4),
     };
   }
 
   /**
    * Generate a complete test dataset for integration testing
    */
-  static generateIntegrationTestDataset(options: {
-    userCount?: number;
-    graphCount?: number;
-    ruleCount?: number;
-    days?: number;
-    seed?: number;
-  } = {}) {
-    const {
-      userCount = 50,
-      graphCount = 20,
-      ruleCount = 100,
-      days = 30,
-      seed = this.DEFAULT_SEED
-    } = options;
+  static generateIntegrationTestDataset(
+    options: {
+      userCount?: number;
+      graphCount?: number;
+      ruleCount?: number;
+      days?: number;
+      seed?: number;
+    } = {}
+  ) {
+    const { userCount = 50, graphCount = 20, ruleCount = 100, days = 30, seed = this.DEFAULT_SEED } = options;
 
     const suite = this.createCompleteSuite(seed);
 
@@ -129,18 +122,20 @@ export class TestDataGeneratorFactory {
 
     const graphScenarios = [];
     for (let i = 0; i < graphCount; i++) {
-      graphScenarios.push(suite.graphGenerator.generateComplexScenario({
-        nodeCount: 5 + (i * 2),
-        complexity: ['simple', 'validation', 'performance', 'security', 'edge-case'][i % 5] as any,
-        seed: seed + i,
-        includeAdvancedNodes: i > 10
-      }));
+      graphScenarios.push(
+        suite.graphGenerator.generateComplexScenario({
+          nodeCount: 5 + i * 2,
+          complexity: ['simple', 'validation', 'performance', 'security', 'edge-case'][i % 5] as any,
+          seed: seed + i,
+          includeAdvancedNodes: i > 10,
+        })
+      );
     }
 
     const analyticsData = suite.analyticsGenerator.generateAnalyticsTestSuite({
       userCount,
       ruleCount,
-      days
+      days,
     });
 
     const apiPayloads = suite.apiPayloadGenerator.generateAPITestSuite();
@@ -150,16 +145,16 @@ export class TestDataGeneratorFactory {
       users,
       sessions,
       authScenarios,
-      
+
       // Graph data
       graphScenarios,
-      
+
       // Analytics data
       analyticsData,
-      
+
       // API test data
       apiPayloads,
-      
+
       // Metadata
       metadata: {
         generatedAt: new Date(),
@@ -176,9 +171,9 @@ export class TestDataGeneratorFactory {
           systemMetrics: analyticsData.systemMetrics.length,
           userEvents: analyticsData.userEvents.length,
           performanceMetrics: analyticsData.performanceMetrics.length,
-          apiTestCases: Object.values(apiPayloads).flat().length
-        }
-      }
+          apiTestCases: Object.values(apiPayloads).flat().length,
+        },
+      },
     };
   }
 }
@@ -200,7 +195,7 @@ export class TestDataUtils {
   static generateTimestamps(count: number, startDate: Date, endDate: Date, seed: number = 12345): Date[] {
     const rng = require('seedrandom')(seed.toString());
     const timeRange = endDate.getTime() - startDate.getTime();
-    
+
     return Array.from({ length: count }, (_, i) => {
       const randomOffset = rng() * timeRange;
       return new Date(startDate.getTime() + randomOffset);
@@ -217,7 +212,7 @@ export class TestDataUtils {
       authentication: 'tests/data/auth',
       apiPayloads: 'tests/data/api',
       exports: 'tests/data/exports',
-      snapshots: 'tests/data/snapshots'
+      snapshots: 'tests/data/snapshots',
     };
   }
 
@@ -237,7 +232,7 @@ export class TestDataUtils {
       const userIds = new Set(data.users.map((u: any) => u.id));
       const sessionUserIds = data.sessions.map((s: any) => s.userId);
       const orphanedSessions = sessionUserIds.filter((id: string) => !userIds.has(id));
-      
+
       if (orphanedSessions.length > 0) {
         errors.push(`Found ${orphanedSessions.length} sessions with invalid user IDs`);
       }
@@ -254,7 +249,7 @@ export class TestDataUtils {
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 }

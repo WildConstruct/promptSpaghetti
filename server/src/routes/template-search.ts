@@ -1,10 +1,10 @@
 /**
  * Epic 16 Marketplace - Template Search API Routes
- * 
+ *
  * Advanced search API endpoints for template discovery with faceted search,
  * autocomplete, trending queries, and comprehensive filtering capabilities
  * for the knowledge base system.
- * 
+ *
  * Routes:
  * - GET /api/search/templates - Advanced template search
  * - GET /api/search/suggest - Real-time autocomplete suggestions
@@ -67,26 +67,33 @@ const requireAdmin = (req: AuthenticatedRequest, res: Response, next: Function) 
  * GET /api/search/templates
  * Advanced template search with faceted filtering
  */
-router.get('/templates',
+router.get(
+  '/templates',
   optionalAuth,
   [
     query('q').optional().isString().trim().isLength({ max: 200 }).withMessage('Query must be max 200 characters'),
-    query('categories').optional().custom((value) => {
-      if (typeof value === 'string') return true;
-      if (Array.isArray(value) && value.every(item => typeof item === 'string')) return true;
-      throw new Error('Categories must be string or array of strings');
-    }),
-    query('tags').optional().custom((value) => {
-      if (typeof value === 'string') return true;
-      if (Array.isArray(value) && value.every(item => typeof item === 'string')) return true;
-      throw new Error('Tags must be string or array of strings');
-    }),
-    query('complexity').optional().custom((value) => {
-      const validComplexity = ['beginner', 'intermediate', 'advanced'];
-      if (typeof value === 'string') return validComplexity.includes(value);
-      if (Array.isArray(value)) return value.every(item => validComplexity.includes(item));
-      throw new Error('Complexity must be beginner, intermediate, or advanced');
-    }),
+    query('categories')
+      .optional()
+      .custom(value => {
+        if (typeof value === 'string') return true;
+        if (Array.isArray(value) && value.every(item => typeof item === 'string')) return true;
+        throw new Error('Categories must be string or array of strings');
+      }),
+    query('tags')
+      .optional()
+      .custom(value => {
+        if (typeof value === 'string') return true;
+        if (Array.isArray(value) && value.every(item => typeof item === 'string')) return true;
+        throw new Error('Tags must be string or array of strings');
+      }),
+    query('complexity')
+      .optional()
+      .custom(value => {
+        const validComplexity = ['beginner', 'intermediate', 'advanced'];
+        if (typeof value === 'string') return validComplexity.includes(value);
+        if (Array.isArray(value)) return value.every(item => validComplexity.includes(item));
+        throw new Error('Complexity must be beginner, intermediate, or advanced');
+      }),
     query('minRating').optional().isFloat({ min: 0, max: 5 }).withMessage('Min rating must be 0-5'),
     query('verified').optional().isBoolean().withMessage('Verified must be boolean'),
     query('featured').optional().isBoolean().withMessage('Featured must be boolean'),
@@ -95,9 +102,12 @@ router.get('/templates',
     query('dateEnd').optional().isISO8601().withMessage('Date end must be valid ISO date'),
     query('priceMin').optional().isFloat({ min: 0 }).withMessage('Price min must be non-negative'),
     query('priceMax').optional().isFloat({ min: 0 }).withMessage('Price max must be non-negative'),
-    query('sortBy').optional().isIn(['relevance', 'newest', 'oldest', 'rating', 'popular', 'trending']).withMessage('Invalid sort option'),
+    query('sortBy')
+      .optional()
+      .isIn(['relevance', 'newest', 'oldest', 'rating', 'popular', 'trending'])
+      .withMessage('Invalid sort option'),
     query('page').optional().isInt({ min: 1 }).withMessage('Page must be positive integer'),
-    query('limit').optional().isInt({ min: 1, max: 100 }).withMessage('Limit must be 1-100')
+    query('limit').optional().isInt({ min: 1, max: 100 }).withMessage('Limit must be 1-100'),
   ],
   async (req: AuthenticatedRequest, res: Response) => {
     try {
@@ -105,7 +115,7 @@ router.get('/templates',
       if (!errors.isEmpty()) {
         return res.status(400).json({
           error: 'Validation failed',
-          details: errors.array()
+          details: errors.array(),
         });
       }
 
@@ -124,7 +134,7 @@ router.get('/templates',
         priceMax,
         sortBy = 'relevance',
         page = 1,
-        limit = 20
+        limit = 20,
       } = req.query;
 
       // Normalize arrays from query parameters
@@ -142,31 +152,36 @@ router.get('/templates',
         verified: verified ? verified === 'true' : undefined,
         featured: featured ? featured === 'true' : undefined,
         author: author as string,
-        dateRange: (dateStart || dateEnd) ? {
-          start: dateStart ? new Date(dateStart as string) : undefined,
-          end: dateEnd ? new Date(dateEnd as string) : undefined
-        } : undefined,
-        priceRange: (priceMin || priceMax) ? {
-          min: priceMin ? parseFloat(priceMin as string) : undefined,
-          max: priceMax ? parseFloat(priceMax as string) : undefined
-        } : undefined,
+        dateRange:
+          dateStart || dateEnd
+            ? {
+                start: dateStart ? new Date(dateStart as string) : undefined,
+                end: dateEnd ? new Date(dateEnd as string) : undefined,
+              }
+            : undefined,
+        priceRange:
+          priceMin || priceMax
+            ? {
+                min: priceMin ? parseFloat(priceMin as string) : undefined,
+                max: priceMax ? parseFloat(priceMax as string) : undefined,
+              }
+            : undefined,
         sortBy: sortBy as 'relevance' | 'newest' | 'oldest' | 'rating' | 'popular' | 'trending',
         page: parseInt(page as string),
-        limit: parseInt(limit as string)
+        limit: parseInt(limit as string),
       };
 
       const results = await searchService.search(searchQuery, req.user?.id);
 
       res.json({
         success: true,
-        data: results
+        data: results,
       });
-
     } catch (error) {
       console.error('Template search failed:', error);
       res.status(500).json({
         error: 'Search temporarily unavailable',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       });
     }
   }
@@ -176,11 +191,12 @@ router.get('/templates',
  * GET /api/search/suggest
  * Real-time autocomplete suggestions
  */
-router.get('/suggest',
+router.get(
+  '/suggest',
   optionalAuth,
   [
     query('q').isString().trim().isLength({ min: 1, max: 100 }).withMessage('Query must be 1-100 characters'),
-    query('limit').optional().isInt({ min: 1, max: 20 }).withMessage('Limit must be 1-20')
+    query('limit').optional().isInt({ min: 1, max: 20 }).withMessage('Limit must be 1-20'),
   ],
   async (req: AuthenticatedRequest, res: Response) => {
     try {
@@ -188,7 +204,7 @@ router.get('/suggest',
       if (!errors.isEmpty()) {
         return res.status(400).json({
           error: 'Validation failed',
-          details: errors.array()
+          details: errors.array(),
         });
       }
 
@@ -204,15 +220,14 @@ router.get('/suggest',
         success: true,
         data: {
           query: partial,
-          suggestions
-        }
+          suggestions,
+        },
       });
-
     } catch (error) {
       console.error('Autocomplete suggestions failed:', error);
       res.status(500).json({
         error: 'Suggestions temporarily unavailable',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       });
     }
   }
@@ -222,12 +237,18 @@ router.get('/suggest',
  * GET /api/search/trending
  * Get trending searches and popular queries
  */
-router.get('/trending',
+router.get(
+  '/trending',
   optionalAuth,
   [
     query('timeframe').optional().isIn(['1h', '24h', '7d', '30d']).withMessage('Invalid timeframe'),
-    query('category').optional().isString().trim().isLength({ max: 50 }).withMessage('Category must be max 50 characters'),
-    query('limit').optional().isInt({ min: 1, max: 50 }).withMessage('Limit must be 1-50')
+    query('category')
+      .optional()
+      .isString()
+      .trim()
+      .isLength({ max: 50 })
+      .withMessage('Category must be max 50 characters'),
+    query('limit').optional().isInt({ min: 1, max: 50 }).withMessage('Limit must be 1-50'),
   ],
   async (req: AuthenticatedRequest, res: Response) => {
     try {
@@ -235,15 +256,11 @@ router.get('/trending',
       if (!errors.isEmpty()) {
         return res.status(400).json({
           error: 'Validation failed',
-          details: errors.array()
+          details: errors.array(),
         });
       }
 
-      const {
-        timeframe = '24h',
-        category,
-        limit = 10
-      } = req.query;
+      const { timeframe = '24h', category, limit = 10 } = req.query;
 
       const trending = await searchService.getTrendingSearches(
         timeframe as '1h' | '24h' | '7d' | '30d',
@@ -256,15 +273,14 @@ router.get('/trending',
         data: {
           timeframe,
           category: category || null,
-          trending
-        }
+          trending,
+        },
       });
-
     } catch (error) {
       console.error('Trending searches failed:', error);
       res.status(500).json({
         error: 'Trending searches temporarily unavailable',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       });
     }
   }
@@ -274,40 +290,36 @@ router.get('/trending',
  * GET /api/search/analytics
  * Get comprehensive search analytics (admin only)
  */
-router.get('/analytics',
+router.get(
+  '/analytics',
   requireAdmin,
-  [
-    query('timeframe').optional().isIn(['24h', '7d', '30d']).withMessage('Invalid timeframe')
-  ],
+  [query('timeframe').optional().isIn(['24h', '7d', '30d']).withMessage('Invalid timeframe')],
   async (req: AuthenticatedRequest, res: Response) => {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.status(400).json({
           error: 'Validation failed',
-          details: errors.array()
+          details: errors.array(),
         });
       }
 
       const { timeframe = '7d' } = req.query;
 
-      const analytics = await searchService.getSearchAnalytics(
-        timeframe as '24h' | '7d' | '30d'
-      );
+      const analytics = await searchService.getSearchAnalytics(timeframe as '24h' | '7d' | '30d');
 
       res.json({
         success: true,
         data: {
           timeframe,
-          analytics
-        }
+          analytics,
+        },
       });
-
     } catch (error) {
       console.error('Search analytics failed:', error);
       res.status(500).json({
         error: 'Analytics temporarily unavailable',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       });
     }
   }
@@ -317,13 +329,14 @@ router.get('/analytics',
  * POST /api/search/click
  * Track when users click on search results for analytics
  */
-router.post('/click',
+router.post(
+  '/click',
   optionalAuth,
   [
     body('templateId').isUUID().withMessage('Template ID must be valid UUID'),
     body('query').isString().trim().isLength({ min: 1, max: 200 }).withMessage('Query must be 1-200 characters'),
     body('position').isInt({ min: 1 }).withMessage('Position must be positive integer'),
-    body('searchId').optional().isUUID().withMessage('Search ID must be valid UUID')
+    body('searchId').optional().isUUID().withMessage('Search ID must be valid UUID'),
   ],
   async (req: AuthenticatedRequest, res: Response) => {
     try {
@@ -331,36 +344,41 @@ router.post('/click',
       if (!errors.isEmpty()) {
         return res.status(400).json({
           error: 'Validation failed',
-          details: errors.array()
+          details: errors.array(),
         });
       }
 
       const { templateId, query, position, searchId } = req.body;
 
       // Log click event for analytics
-      await searchService['pool'].query(`
+      await searchService['pool'].query(
+        `
         INSERT INTO marketplace_search_click_events (
           user_id, template_id, query, position, search_id, timestamp
         ) VALUES ($1, $2, $3, $4, $5, NOW())
-      `, [req.user?.id, templateId, query, position, searchId]);
+      `,
+        [req.user?.id, templateId, query, position, searchId]
+      );
 
       // Update template view count
-      await searchService['pool'].query(`
+      await searchService['pool'].query(
+        `
         UPDATE marketplace_templates 
         SET view_count = view_count + 1 
         WHERE id = $1
-      `, [templateId]);
+      `,
+        [templateId]
+      );
 
       res.json({
         success: true,
-        message: 'Click tracked successfully'
+        message: 'Click tracked successfully',
       });
-
     } catch (error) {
       console.error('Click tracking failed:', error);
       res.status(500).json({
         error: 'Click tracking failed',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       });
     }
   }
@@ -370,14 +388,14 @@ router.post('/click',
  * GET /api/search/saved
  * Get user's saved searches
  */
-router.get('/saved',
-  async (req: AuthenticatedRequest, res: Response) => {
-    try {
-      if (!req.user) {
-        return res.status(401).json({ error: 'Authentication required' });
-      }
+router.get('/saved', async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ error: 'Authentication required' });
+    }
 
-      const savedSearches = await searchService['pool'].query(`
+    const savedSearches = await searchService['pool'].query(
+      `
         SELECT 
           id,
           name,
@@ -388,40 +406,41 @@ router.get('/saved',
         FROM marketplace_saved_searches 
         WHERE user_id = $1
         ORDER BY last_used DESC, created_at DESC
-      `, [req.user.id]);
+      `,
+      [req.user.id]
+    );
 
-      res.json({
-        success: true,
-        data: {
-          savedSearches: savedSearches.rows.map(row => ({
-            id: row.id,
-            name: row.name,
-            searchQuery: JSON.parse(row.search_query),
-            createdAt: row.created_at,
-            lastUsed: row.last_used,
-            useCount: row.use_count
-          }))
-        }
-      });
-
-    } catch (error) {
-      console.error('Failed to get saved searches:', error);
-      res.status(500).json({
-        error: 'Failed to retrieve saved searches',
-        details: error instanceof Error ? error.message : 'Unknown error'
-      });
-    }
+    res.json({
+      success: true,
+      data: {
+        savedSearches: savedSearches.rows.map(row => ({
+          id: row.id,
+          name: row.name,
+          searchQuery: JSON.parse(row.search_query),
+          createdAt: row.created_at,
+          lastUsed: row.last_used,
+          useCount: row.use_count,
+        })),
+      },
+    });
+  } catch (error) {
+    console.error('Failed to get saved searches:', error);
+    res.status(500).json({
+      error: 'Failed to retrieve saved searches',
+      details: error instanceof Error ? error.message : 'Unknown error',
+    });
   }
-);
+});
 
 /**
  * POST /api/search/save
  * Save a search query for quick access
  */
-router.post('/save',
+router.post(
+  '/save',
   [
     body('name').isString().trim().isLength({ min: 1, max: 100 }).withMessage('Name must be 1-100 characters'),
-    body('searchQuery').isObject().withMessage('Search query must be an object')
+    body('searchQuery').isObject().withMessage('Search query must be an object'),
   ],
   async (req: AuthenticatedRequest, res: Response) => {
     try {
@@ -433,46 +452,51 @@ router.post('/save',
       if (!errors.isEmpty()) {
         return res.status(400).json({
           error: 'Validation failed',
-          details: errors.array()
+          details: errors.array(),
         });
       }
 
       const { name, searchQuery } = req.body;
 
       // Check for duplicate names
-      const existing = await searchService['pool'].query(`
+      const existing = await searchService['pool'].query(
+        `
         SELECT id FROM marketplace_saved_searches 
         WHERE user_id = $1 AND name = $2
-      `, [req.user.id, name]);
+      `,
+        [req.user.id, name]
+      );
 
       if (existing.rows.length > 0) {
         return res.status(409).json({
-          error: 'A saved search with this name already exists'
+          error: 'A saved search with this name already exists',
         });
       }
 
       // Save the search
-      const result = await searchService['pool'].query(`
+      const result = await searchService['pool'].query(
+        `
         INSERT INTO marketplace_saved_searches (
           user_id, name, search_query, created_at, last_used, use_count
         ) VALUES ($1, $2, $3, NOW(), NOW(), 1)
         RETURNING id
-      `, [req.user.id, name, JSON.stringify(searchQuery)]);
+      `,
+        [req.user.id, name, JSON.stringify(searchQuery)]
+      );
 
       res.status(201).json({
         success: true,
         data: {
           id: result.rows[0].id,
           name,
-          message: 'Search saved successfully'
-        }
+          message: 'Search saved successfully',
+        },
       });
-
     } catch (error) {
       console.error('Failed to save search:', error);
       res.status(500).json({
         error: 'Failed to save search',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       });
     }
   }
@@ -482,10 +506,9 @@ router.post('/save',
  * DELETE /api/search/saved/:searchId
  * Delete a saved search
  */
-router.delete('/saved/:searchId',
-  [
-    param('searchId').isUUID().withMessage('Search ID must be valid UUID')
-  ],
+router.delete(
+  '/saved/:searchId',
+  [param('searchId').isUUID().withMessage('Search ID must be valid UUID')],
   async (req: AuthenticatedRequest, res: Response) => {
     try {
       if (!req.user) {
@@ -496,34 +519,36 @@ router.delete('/saved/:searchId',
       if (!errors.isEmpty()) {
         return res.status(400).json({
           error: 'Validation failed',
-          details: errors.array()
+          details: errors.array(),
         });
       }
 
       const { searchId } = req.params;
 
-      const result = await searchService['pool'].query(`
+      const result = await searchService['pool'].query(
+        `
         DELETE FROM marketplace_saved_searches 
         WHERE id = $1 AND user_id = $2
         RETURNING name
-      `, [searchId, req.user.id]);
+      `,
+        [searchId, req.user.id]
+      );
 
       if (result.rows.length === 0) {
         return res.status(404).json({
-          error: 'Saved search not found'
+          error: 'Saved search not found',
         });
       }
 
       res.json({
         success: true,
-        message: `Saved search "${result.rows[0].name}" deleted successfully`
+        message: `Saved search "${result.rows[0].name}" deleted successfully`,
       });
-
     } catch (error) {
       console.error('Failed to delete saved search:', error);
       res.status(500).json({
         error: 'Failed to delete saved search',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       });
     }
   }

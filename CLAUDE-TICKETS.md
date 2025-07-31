@@ -25,61 +25,67 @@
 Developers can now self-assign and manage tasks directly without waiting for ASSIGN/BUILD phases:
 
 1. **Check business priorities and available tasks:**
+
    ```bash
    # ALWAYS check priorities first (CRITICAL STEP)
    node src/show-priority-tasks.js
-   
-   # See team coordination dashboard 
+
+   # See team coordination dashboard
    node src/monitor-available-tasks.js
    ```
 
 2. **Grab priority tasks to work on:**
+
    ```bash
    # Grab high-priority business tasks (RECOMMENDED)
    node src/grab-tasks.js <your-dev-id> 2 --priority-only
-   
+
    # Grab authentication tasks (PRIORITY 1)
    node src/grab-tasks.js <your-dev-id> 2 --story=20.1
-   
+
    # Grab file browser tasks (PRIORITY 2)
    node src/grab-tasks.js <your-dev-id> 2 --story=20.2
-   
+
    # Basic usage (gets mixed tasks - USE WITH CAUTION)
    node src/grab-tasks.js <your-dev-id> 3
-   
+
    # Examples:
    node src/grab-tasks.js dev_A 2 --priority-only
    node src/grab-tasks.js Dev-James-Security 1 --story=20.1
    ```
-   
+
    **🎯 PRIORITY GUIDANCE**: Always use `--priority-only` or story filters to align with business priorities!
 
 3. **Complete work and submit for review:**
+
    ```bash
    # CRITICAL: ALWAYS call this when your implementation is done
    node src/finish-task.js <task-id>
-   
+
    # Other state transitions:
    node src/finish-task.js <task-id> COMPLETED
    node src/finish-task.js <task-id> BLOCKED
    ```
-   
+
    **⚠️ IMPORTANT**: Every agent MUST call `finish-task.js` when they complete implementation.
    Failing to do this leaves tasks stuck IN_PROGRESS even when the work is done.
 
 ### AGENT COORDINATION PROTOCOLS (NEW)
 
 #### **Agent Selection Guidelines**
+
 - **Development Agents**: Use for coding, implementation, bug fixes
 - **QA Agents**: Use for code review, testing, quality assurance, task cleanup
 - **Scrum Master Agents**: Use for project planning, task creation, coordination
 
 #### **Task Reservation System**
+
 - When you grab tasks, you have **2 hours maximum** to make meaningful progress
 - If blocked or unable to proceed, immediately call `finish-task.js <task-id> BLOCKED`
 - Other agents can pick up BLOCKED tasks after adding unblocking steps
 
 #### **Handoff Procedures**
+
 ```bash
 # When passing work to another agent type:
 1. Complete your current task: node src/finish-task.js <task-id>
@@ -89,18 +95,21 @@ Developers can now self-assign and manage tasks directly without waiting for ASS
 ```
 
 #### **Task Batching Strategy**
+
 - Grab **related tasks together** when working on large features
-- Example: If working on authentication, grab 2-3 AUTH-* tasks
+- Example: If working on authentication, grab 2-3 AUTH-\* tasks
 - Check dependencies before starting work
 - Coordinate with other agents via task assignment visibility
 
 #### **Escalation Process**
+
 1. **BLOCKED Tasks**: Use `finish-task.js <task-id> BLOCKED` immediately
 2. **Priority Conflicts**: Check `IMMEDIATE-PRIORITIES.md` for current focus
 3. **Technical Issues**: Create specific bug/fix tasks with details
 4. **Agent Conflicts**: Use task assignment system to avoid duplicate work
 
 ### **Task States:**
+
 - **UNASSIGNED**: Available for anyone to grab
 - **IN_PROGRESS**: Being worked on (max 2 hours without progress)
 - **REVIEW**: Work done, needs QA/review
@@ -110,13 +119,15 @@ Developers can now self-assign and manage tasks directly without waiting for ASS
 ### **Quality Gates (NEW)**
 
 #### **Before Marking Task as Complete:**
+
 - [ ] Implementation actually works (tested locally)
 - [ ] Code follows existing project conventions
-- [ ] No breaking changes to existing functionality  
+- [ ] No breaking changes to existing functionality
 - [ ] Tests pass (if project has test suite)
 - [ ] Documentation updated if needed (README, comments)
 
 #### **QA Approval Criteria:**
+
 - Code quality meets project standards
 - Security best practices followed
 - Performance considerations addressed
@@ -125,30 +136,35 @@ Developers can now self-assign and manage tasks directly without waiting for ASS
 ### **IMPORTANT NOTES FOR AGENT IMPLEMENTATION:**
 
 **For Developer Agents:**
+
 - **PRIORITY CHECK**: Always run `show-priority-tasks.js` first
 - Use `--priority-only` flag to avoid Epic 19 privacy tasks
 - Focus on authentication (Story 20.1) and file browser (Story 20.2) work
 - Call `finish-task.js` IMMEDIATELY when implementation complete
 
 **For QA Agents:**
+
 - **CRITICAL**: Use `node src/run-qa-agent.js` for reviewing tasks (NOT qa-review-workflow.js)
 - Review tasks stuck IN_PROGRESS using `node src/auto-detect-completed-tasks.js`
 - Use `node src/auto-fix-completed-tasks.js` to clean up completed work
 - Prioritize reviewing authentication and file browser features
 
 **For Scrum Master Agents:**
+
 - Monitor Epic 19 task creation - should be minimal
 - Focus task creation on authentication and file browser epics
 - Use `monitor-available-tasks.js` to track team coordination
 - Help resolve BLOCKED tasks quickly
 
 **Priority Focus (CRITICAL):**
+
 1. **Authentication System**: LOGIN functionality (Story 20.1)
-2. **File Browser**: Project save/load functionality (Story 20.2)  
+2. **File Browser**: Project save/load functionality (Story 20.2)
 3. **Epic Integration**: Making completed Epic features visible to users
 4. **🚫 AVOID**: Epic 19 privacy/compliance tasks (deprioritized)
 
 ### **Implementation Details:**
+
 - Database: SQLite with ticket persistence
 - GitHub Integration: Uses `gh` CLI for PR operations (if configured)
 - Webhooks: Triggered on APPROVED status changes
@@ -168,11 +184,13 @@ Hi team! Brief summary of what was accomplished.
 
 ### Git-Style Comments:
 ```
+
 [type](scope): Brief description
 
 - Implementation details
 - Dependencies affected
 - Test coverage information
+
 ```
 
 ### Next Steps:
@@ -184,13 +202,15 @@ Hi team! Brief summary of what was accomplished.
 ### **WORKFLOW QUALITY METRICS:**
 
 **Success Indicators:**
+
 - ✅ 80%+ agent effort on authentication + file browser tasks
-- ✅ <20% agent effort on Epic 19 privacy features  
+- ✅ <20% agent effort on Epic 19 privacy features
 - ✅ Tasks transition IN_PROGRESS → REVIEW → COMPLETED within 2 hours
 - ✅ No tasks stuck in IN_PROGRESS for >24 hours
 - ✅ Priority tasks are grabbable and being worked on
 
 **Warning Signs:**
+
 - ❌ Epic 19 tasks being grabbed by default (use `--priority-only`)
 - ❌ Multiple agents working on same task (check assignment before starting)
 - ❌ Tasks marked COMPLETED but no actual work done

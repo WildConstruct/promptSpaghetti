@@ -3,15 +3,14 @@
  * Epic 8.5: Real-Time Multi-Seed Preview - Task 2: Execution Path Visualization
  */
 export const EXECUTION_PATH_COLORS = [
-    '#3B82F6', // Blue
-    '#EF4444', // Red  
-    '#10B981', // Green
-    '#F59E0B', // Yellow
-    '#8B5CF6', // Purple
-    '#F97316', // Orange
-    '#06B6D4', // Cyan
-    '#84CC16', // Lime
-    '#EC4899', // Pink
-    '#6B7280' // Gray
+  '#3B82F6', // Blue
+  '#EF4444', // Red
+  '#10B981', // Green
+  '#F59E0B', // Yellow
+  '#8B5CF6', // Purple
+  '#F97316', // Orange
+  '#06B6D4', // Cyan
+  '#84CC16', // Lime
+  '#EC4899', // Pink
+  '#6B7280', // Gray
 ];
-;

@@ -11,7 +11,7 @@ jest.setTimeout(15000);
 
 // Polyfill for structuredClone if not available
 if (typeof structuredClone === 'undefined') {
-  global.structuredClone = (obj) => {
+  global.structuredClone = obj => {
     return JSON.parse(JSON.stringify(obj));
   };
 }
@@ -47,23 +47,34 @@ global.DOMMatrixReadOnly = class DOMMatrixReadOnly {
 
 // Enhanced HTMLElement properties for ReactFlow
 Object.defineProperties(global.HTMLElement.prototype, {
-  offsetHeight: { 
-    get() { return parseFloat(this.style.height) || 600; } 
+  offsetHeight: {
+    get() {
+      return parseFloat(this.style.height) || 600;
+    },
   },
-  offsetWidth: { 
-    get() { return parseFloat(this.style.width) || 800; } 
+  offsetWidth: {
+    get() {
+      return parseFloat(this.style.width) || 800;
+    },
   },
-  scrollWidth: { 
-    get() { return parseFloat(this.style.width) || 800; } 
+  scrollWidth: {
+    get() {
+      return parseFloat(this.style.width) || 800;
+    },
   },
-  scrollHeight: { 
-    get() { return parseFloat(this.style.height) || 600; } 
-  }
+  scrollHeight: {
+    get() {
+      return parseFloat(this.style.height) || 600;
+    },
+  },
 });
 
 // SVG getBBox mock for ReactFlow
-global.SVGElement.prototype.getBBox = () => ({ 
-  x: 0, y: 0, width: 100, height: 50 
+global.SVGElement.prototype.getBBox = () => ({
+  x: 0,
+  y: 0,
+  width: 100,
+  height: 50,
 });
 
 // Enhanced MouseEvent and DragEvent for better event simulation
@@ -78,12 +89,12 @@ Object.defineProperty(global, 'MouseEvent', {
       this.button = eventInit.button || 0;
       this.buttons = eventInit.buttons || 1;
     }
-  }
+  },
 });
 
 // Mock getComputedStyle for better CSS testing
 const originalGetComputedStyle = global.getComputedStyle;
-global.getComputedStyle = (element) => {
+global.getComputedStyle = element => {
   const computed = originalGetComputedStyle(element);
   // If element has inline styles, prefer those for testing
   if (element.style) {
@@ -93,32 +104,36 @@ global.getComputedStyle = (element) => {
           return element.style[prop];
         }
         return target[prop];
-      }
+      },
     });
   }
   return computed;
 };
 
 // Lightweight stub for @testing-library/user-event to satisfy tests without external package
-jest.mock('@testing-library/user-event', () => {
-  const mockMouseEvent = global.MouseEvent;
-  const mockEvent = global.Event;
-  
-  return {
-    __esModule: true,
-    default: {
-      click: async (el) => el.dispatchEvent(new mockMouseEvent('click', { bubbles: true })),
-      type: async (el, text) => {
-        el.value = (el.value || '') + text;
-        el.dispatchEvent(new mockEvent('input', { bubbles: true }));
+jest.mock(
+  '@testing-library/user-event',
+  () => {
+    const mockMouseEvent = global.MouseEvent;
+    const mockEvent = global.Event;
+
+    return {
+      __esModule: true,
+      default: {
+        click: async el => el.dispatchEvent(new mockMouseEvent('click', { bubbles: true })),
+        type: async (el, text) => {
+          el.value = (el.value || '') + text;
+          el.dispatchEvent(new mockEvent('input', { bubbles: true }));
+        },
+        clear: async el => {
+          el.value = '';
+          el.dispatchEvent(new mockEvent('input', { bubbles: true }));
+        },
       },
-      clear: async (el) => {
-        el.value = '';
-        el.dispatchEvent(new mockEvent('input', { bubbles: true }));
-      }
-    }
-  };
-}, { virtual: true });
+    };
+  },
+  { virtual: true }
+);
 
 // Mock URL.createObjectURL / revokeObjectURL to silence JSDOM navigation warnings
 if (!global.URL.createObjectURL) {
@@ -129,7 +144,7 @@ if (!global.URL.createObjectURL) {
 // Mock window.matchMedia for React components that use theme detection
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: jest.fn().mockImplementation((query) => ({
+  value: jest.fn().mockImplementation(query => ({
     matches: false,
     media: query,
     onchange: null,
@@ -137,6 +152,6 @@ Object.defineProperty(window, 'matchMedia', {
     removeListener: jest.fn(), // deprecated
     addEventListener: jest.fn(),
     removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn()
-  }))
+    dispatchEvent: jest.fn(),
+  })),
 });

@@ -125,7 +125,7 @@ export class ResultGallerySystem {
   private items: Map<string, GalleryItem> = new Map();
   private collections: Map<string, GalleryCollection> = new Map();
   private exports: Map<string, ExportResult> = new Map();
-  
+
   private readonly maxItems = 10000;
   private readonly maxCollections = 100;
 
@@ -151,9 +151,9 @@ export class ResultGallerySystem {
         id: itemId,
         title: title || `Generated Image ${i + 1}`,
         image,
-        originalGraph: result.prompt.metadata.originalGraphId ? 
-          await this.getGraphById(result.prompt.metadata.originalGraphId) : 
-          this.createEmptyGraph(),
+        originalGraph: result.prompt.metadata.originalGraphId
+          ? await this.getGraphById(result.prompt.metadata.originalGraphId)
+          : this.createEmptyGraph(),
         platform: result.platform,
         prompt: result.prompt.content as string,
         parameters: result.prompt.parameters,
@@ -166,11 +166,11 @@ export class ResultGallerySystem {
           downloads: 0,
           views: 0,
           shares: 0,
-          sourceRequestId: result.id
+          sourceRequestId: result.id,
         },
         tags: this.extractTags(result.prompt.content as string),
         isFavorite: false,
-        collections: ['recent']
+        collections: ['recent'],
       };
 
       // Check storage limits
@@ -231,7 +231,7 @@ export class ResultGallerySystem {
 
     // Update collection counts
     this.updateCollectionCounts(item.collections, -1);
-    
+
     this.items.delete(itemId);
     return true;
   }
@@ -248,29 +248,22 @@ export class ResultGallerySystem {
     }
 
     if (filter.tags?.length) {
-      items = items.filter(item => 
-        filter.tags!.some(tag => item.tags.includes(tag))
-      );
+      items = items.filter(item => filter.tags!.some(tag => item.tags.includes(tag)));
     }
 
     if (filter.collections?.length) {
-      items = items.filter(item => 
-        filter.collections!.some(collection => item.collections.includes(collection))
-      );
+      items = items.filter(item => filter.collections!.some(collection => item.collections.includes(collection)));
     }
 
     if (filter.dateRange) {
-      items = items.filter(item => 
-        item.metadata.created >= filter.dateRange!.start &&
-        item.metadata.created <= filter.dateRange!.end
+      items = items.filter(
+        item => item.metadata.created >= filter.dateRange!.start && item.metadata.created <= filter.dateRange!.end
       );
     }
 
     if (filter.rating) {
-      items = items.filter(item => 
-        item.rating !== undefined &&
-        item.rating >= filter.rating!.min &&
-        item.rating <= filter.rating!.max
+      items = items.filter(
+        item => item.rating !== undefined && item.rating >= filter.rating!.min && item.rating <= filter.rating!.max
       );
     }
 
@@ -280,11 +273,12 @@ export class ResultGallerySystem {
 
     if (filter.searchQuery) {
       const query = filter.searchQuery.toLowerCase();
-      items = items.filter(item => 
-        item.title?.toLowerCase().includes(query) ||
-        item.description?.toLowerCase().includes(query) ||
-        item.prompt.toLowerCase().includes(query) ||
-        item.tags.some(tag => tag.toLowerCase().includes(query))
+      items = items.filter(
+        item =>
+          item.title?.toLowerCase().includes(query) ||
+          item.description?.toLowerCase().includes(query) ||
+          item.prompt.toLowerCase().includes(query) ||
+          item.tags.some(tag => tag.toLowerCase().includes(query))
       );
     }
 
@@ -297,29 +291,29 @@ export class ResultGallerySystem {
       let bVal: any;
 
       switch (sortBy) {
-      case 'created':
-        aVal = a.metadata.created.getTime();
-        bVal = b.metadata.created.getTime();
-        break;
-      case 'modified':
-        aVal = a.metadata.modified.getTime();
-        bVal = b.metadata.modified.getTime();
-        break;
-      case 'rating':
-        aVal = a.rating || 0;
-        bVal = b.rating || 0;
-        break;
-      case 'views':
-        aVal = a.metadata.views;
-        bVal = b.metadata.views;
-        break;
-      case 'quality':
-        aVal = a.metadata.quality || 0;
-        bVal = b.metadata.quality || 0;
-        break;
-      default:
-        aVal = a.metadata.created.getTime();
-        bVal = b.metadata.created.getTime();
+        case 'created':
+          aVal = a.metadata.created.getTime();
+          bVal = b.metadata.created.getTime();
+          break;
+        case 'modified':
+          aVal = a.metadata.modified.getTime();
+          bVal = b.metadata.modified.getTime();
+          break;
+        case 'rating':
+          aVal = a.rating || 0;
+          bVal = b.rating || 0;
+          break;
+        case 'views':
+          aVal = a.metadata.views;
+          bVal = b.metadata.views;
+          break;
+        case 'quality':
+          aVal = a.metadata.quality || 0;
+          bVal = b.metadata.quality || 0;
+          break;
+        default:
+          aVal = a.metadata.created.getTime();
+          bVal = b.metadata.created.getTime();
       }
 
       const comparison = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
@@ -339,12 +333,7 @@ export class ResultGallerySystem {
   /**
    * Create a new collection
    */
-  createCollection(
-    name: string,
-    description?: string,
-    color?: string,
-    isPublic = false
-  ): string {
+  createCollection(name: string, description?: string, color?: string, isPublic = false): string {
     if (this.collections.size >= this.maxCollections) {
       throw new Error('Maximum number of collections reached');
     }
@@ -359,7 +348,7 @@ export class ResultGallerySystem {
       created: new Date(),
       modified: new Date(),
       isPublic,
-      tags: []
+      tags: [],
     };
 
     this.collections.set(collectionId, collection);
@@ -419,7 +408,7 @@ export class ResultGallerySystem {
    */
   addToCollection(itemIds: string[], collectionId: string): number {
     let added = 0;
-    
+
     for (const itemId of itemIds) {
       const item = this.items.get(itemId);
       if (item && !item.collections.includes(collectionId)) {
@@ -441,7 +430,7 @@ export class ResultGallerySystem {
    */
   removeFromCollection(itemIds: string[], collectionId: string): number {
     let removed = 0;
-    
+
     for (const itemId of itemIds) {
       const item = this.items.get(itemId);
       if (item) {
@@ -466,7 +455,7 @@ export class ResultGallerySystem {
    */
   getStats(): GalleryStats {
     const items = Array.from(this.items.values());
-    
+
     // Platform breakdown
     const platformBreakdown: Record<Platform, number> = {} as Record<Platform, number>;
     items.forEach(item => {
@@ -475,9 +464,8 @@ export class ResultGallerySystem {
 
     // Average rating
     const ratedItems = items.filter(item => item.rating !== undefined);
-    const averageRating = ratedItems.length > 0 
-      ? ratedItems.reduce((sum, item) => sum + (item.rating || 0), 0) / ratedItems.length
-      : 0;
+    const averageRating =
+      ratedItems.length > 0 ? ratedItems.reduce((sum, item) => sum + (item.rating || 0), 0) / ratedItems.length : 0;
 
     // Top tags
     const tagCounts: Record<string, number> = {};
@@ -486,7 +474,7 @@ export class ResultGallerySystem {
         tagCounts[tag] = (tagCounts[tag] || 0) + 1;
       });
     });
-    
+
     const topTags = Object.entries(tagCounts)
       .sort(([, a], [, b]) => b - a)
       .slice(0, 10)
@@ -499,7 +487,7 @@ export class ResultGallerySystem {
       .map(item => ({
         type: 'created' as const,
         itemId: item.id,
-        timestamp: item.metadata.created
+        timestamp: item.metadata.created,
       }));
 
     return {
@@ -510,25 +498,22 @@ export class ResultGallerySystem {
       totalGenerated: items.length,
       totalCost: items.reduce((sum, item) => sum + (item.metadata.cost || 0), 0),
       topTags,
-      recentActivity
+      recentActivity,
     };
   }
 
   /**
    * Export gallery data
    */
-  async exportGallery(
-    itemIds: string[],
-    options: ExportOptions
-  ): Promise<string> {
+  async exportGallery(itemIds: string[], options: ExportOptions): Promise<string> {
     const exportId = this.generateExportId();
-    
+
     const exportResult: ExportResult = {
       id: exportId,
       status: 'pending',
       format: options.format,
       itemCount: itemIds.length,
-      created: new Date()
+      created: new Date(),
     };
 
     this.exports.set(exportId, exportResult);
@@ -559,7 +544,7 @@ export class ResultGallerySystem {
       created: new Date(),
       modified: new Date(),
       isPublic: false,
-      tags: []
+      tags: [],
     });
 
     this.collections.set('favorites', {
@@ -571,7 +556,7 @@ export class ResultGallerySystem {
       created: new Date(),
       modified: new Date(),
       isPublic: false,
-      tags: []
+      tags: [],
     });
 
     this.collections.set('top-rated', {
@@ -583,7 +568,7 @@ export class ResultGallerySystem {
       created: new Date(),
       modified: new Date(),
       isPublic: false,
-      tags: []
+      tags: [],
     });
   }
 
@@ -605,13 +590,20 @@ export class ResultGallerySystem {
    */
   private extractTags(content: string): string[] {
     const tags: string[] = [];
-    
+
     // Extract style-related keywords
     const styleKeywords = [
-      'photorealistic', 'artistic', 'abstract', 'minimalist',
-      'vintage', 'modern', 'cyberpunk', 'fantasy', 'sci-fi'
+      'photorealistic',
+      'artistic',
+      'abstract',
+      'minimalist',
+      'vintage',
+      'modern',
+      'cyberpunk',
+      'fantasy',
+      'sci-fi',
     ];
-    
+
     const contentLower = content.toLowerCase();
     styleKeywords.forEach(keyword => {
       if (contentLower.includes(keyword)) {
@@ -643,15 +635,15 @@ export class ResultGallerySystem {
     // Simplified cost estimation
     const baseCosts: Record<Platform, number> = {
       'openai-dalle': 0.02,
-      'midjourney': 0.01,
+      midjourney: 0.01,
       'stable-diffusion': 0.005,
       'openai-gpt': 0,
-      'claude': 0,
-      'custom': 0
+      claude: 0,
+      custom: 0,
     };
 
     let cost = baseCosts[platform] || 0;
-    
+
     // Adjust for resolution
     if (image.width * image.height > 1024 * 1024) {
       cost *= 2; // HD pricing
@@ -665,10 +657,10 @@ export class ResultGallerySystem {
    */
   private async cleanOldItems(): Promise<void> {
     const items = Array.from(this.items.values());
-    
+
     // Sort by creation date (oldest first)
     items.sort((a, b) => a.metadata.created.getTime() - b.metadata.created.getTime());
-    
+
     // Remove oldest 10% of items
     const toRemove = Math.floor(items.length * 0.1);
     for (let i = 0; i < toRemove; i++) {
@@ -679,11 +671,7 @@ export class ResultGallerySystem {
   /**
    * Process export (mock implementation)
    */
-  private async processExport(
-    exportId: string,
-    itemIds: string[],
-    options: ExportOptions
-  ): Promise<void> {
+  private async processExport(exportId: string, itemIds: string[], options: ExportOptions): Promise<void> {
     const exportResult = this.exports.get(exportId);
     if (!exportResult) return;
 
@@ -697,7 +685,6 @@ export class ResultGallerySystem {
       exportResult.url = `https://example.com/exports/${exportId}.${options.format}`;
       exportResult.size = itemIds.length * 1024 * 1024; // 1MB per item
       exportResult.expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
-
     } catch (error) {
       exportResult.status = 'failed';
       exportResult.error = error instanceof Error ? error.message : 'Export failed';
@@ -723,9 +710,9 @@ export class ResultGallerySystem {
       metadata: {
         created: new Date(),
         modified: new Date(),
-        version: '1.0.0'
+        version: '1.0.0',
       },
-      version: '1.0.0'
+      version: '1.0.0',
     };
   }
 

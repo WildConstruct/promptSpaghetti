@@ -41,7 +41,7 @@ export const WebButton: React.FC<WebButtonProps> = ({
         onClick={handleClick}
         style={{
           ...props.style,
-          textDecoration: 'none'
+          textDecoration: 'none',
         }}
         role="link"
         aria-label={props['aria-label'] || `Navigate to ${href}`}
@@ -61,13 +61,13 @@ export const WebButton: React.FC<WebButtonProps> = ({
         // Web-specific enhancements
         transition: 'all 0.2s ease',
         userSelect: 'none',
-        WebkitTapHighlightColor: 'transparent'
+        WebkitTapHighlightColor: 'transparent',
       }}
-      onMouseDown={(e) => {
+      onMouseDown={e => {
         // Prevent text selection on mouse down
         e.preventDefault();
       }}
-      onContextMenu={(e) => {
+      onContextMenu={e => {
         // Prevent right-click context menu on buttons
         e.preventDefault();
       }}

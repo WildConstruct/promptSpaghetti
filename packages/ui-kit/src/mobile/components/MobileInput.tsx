@@ -13,17 +13,17 @@ export interface MobileInputProps extends InputProps {
    * Show clear button when input has value
    */
   clearable?: boolean;
-  
+
   /**
    * Auto-focus and scroll into view on mobile
    */
   mobileAutoFocus?: boolean;
-  
+
   /**
    * Show character count for text inputs
    */
   showCount?: boolean;
-  
+
   /**
    * Mobile-specific keyboard type hints
    */
@@ -45,10 +45,10 @@ export const MobileInput: React.FC<MobileInputProps> = ({
   const [internalValue, setInternalValue] = useState(value || '');
   const inputRef = useRef<HTMLInputElement>(null);
   const { isMobile, isTouch } = useDeviceDetection();
-  
+
   const currentValue = value !== undefined ? value : internalValue;
   const hasValue = Boolean(currentValue);
-  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     if (value === undefined) {
@@ -56,42 +56,42 @@ export const MobileInput: React.FC<MobileInputProps> = ({
     }
     onChange?.(e);
   };
-  
+
   const handleClear = () => {
     const syntheticEvent = {
       target: { value: '' },
-      currentTarget: { value: '' }
+      currentTarget: { value: '' },
     } as React.ChangeEvent<HTMLInputElement>;
-    
+
     if (value === undefined) {
       setInternalValue('');
     }
     onChange?.(syntheticEvent);
     inputRef.current?.focus();
   };
-  
+
   React.useEffect(() => {
     if (mobileAutoFocus && isMobile && inputRef.current) {
       // Delay to ensure keyboard doesn't cover input
       setTimeout(() => {
         inputRef.current?.focus();
-        inputRef.current?.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'center' 
+        inputRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
         });
       }, 300);
     }
   }, [mobileAutoFocus, isMobile]);
-  
+
   const mobileInputStyles: React.CSSProperties = {
     minHeight: TOUCH_TARGETS.preferred,
     fontSize: 16, // Prevents zoom on iOS
     padding: `${MOBILE_SPACING.sm}px ${MOBILE_SPACING.md}px`,
     paddingRight: clearable && hasValue ? TOUCH_TARGETS.preferred : undefined,
     ...mobileStyles.tapHighlight,
-    ...style
+    ...style,
   };
-  
+
   return (
     <div className={cn('mobile-input-wrapper', className)} style={{ position: 'relative' }}>
       <Input
@@ -102,12 +102,9 @@ export const MobileInput: React.FC<MobileInputProps> = ({
         maxLength={maxLength}
         inputMode={mobileInputMode}
         style={mobileInputStyles}
-        className={cn(
-          'mobile-input',
-          isTouch && 'touch-device'
-        )}
+        className={cn('mobile-input', isTouch && 'touch-device')}
       />
-      
+
       {clearable && hasValue && (
         <button
           className="mobile-input-clear"
@@ -130,21 +127,21 @@ export const MobileInput: React.FC<MobileInputProps> = ({
             color: 'var(--color-text-secondary)',
             fontSize: 18,
             ...mobileStyles.tapHighlight,
-            ...mobileStyles.noSelect
+            ...mobileStyles.noSelect,
           }}
         >
           ×
         </button>
       )}
-      
+
       {showCount && maxLength && (
-        <div 
+        <div
           className="mobile-input-count"
           style={{
             fontSize: 12,
             color: 'var(--color-text-secondary)',
             textAlign: 'right',
-            marginTop: 4
+            marginTop: 4,
           }}
         >
           {currentValue.toString().length}/{maxLength}
@@ -175,10 +172,10 @@ export const MobileSearchInput: React.FC<MobileSearchInputProps> = ({
       onSearch?.(value);
     }
   };
-  
+
   return (
     <div className="mobile-search-wrapper" style={{ position: 'relative' }}>
-      <span 
+      <span
         className="mobile-search-icon"
         style={{
           position: 'absolute',
@@ -186,7 +183,7 @@ export const MobileSearchInput: React.FC<MobileSearchInputProps> = ({
           top: '50%',
           transform: 'translateY(-50%)',
           color: 'var(--color-text-secondary)',
-          pointerEvents: 'none'
+          pointerEvents: 'none',
         }}
       >
         🔍
@@ -200,7 +197,7 @@ export const MobileSearchInput: React.FC<MobileSearchInputProps> = ({
         onKeyDown={handleKeyDown}
         style={{
           paddingLeft: TOUCH_TARGETS.minimum,
-          ...props.style
+          ...props.style,
         }}
       />
     </div>
@@ -225,7 +222,7 @@ export const MobileTextArea: React.FC<MobileTextAreaProps> = ({
   ...props
 }) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  
+
   const handleInput = () => {
     if (autoResize && textAreaRef.current) {
       const textarea = textAreaRef.current;
@@ -236,11 +233,11 @@ export const MobileTextArea: React.FC<MobileTextAreaProps> = ({
       textarea.style.height = `${Math.min(Math.max(scrollHeight, minHeight), maxHeight)}px`;
     }
   };
-  
+
   React.useEffect(() => {
     handleInput();
   }, [props.value]);
-  
+
   return (
     <div className="mobile-textarea-wrapper">
       <TextArea
@@ -254,17 +251,17 @@ export const MobileTextArea: React.FC<MobileTextAreaProps> = ({
           padding: MOBILE_SPACING.md,
           resize: autoResize ? 'none' : 'vertical',
           ...mobileStyles.tapHighlight,
-          ...style
+          ...style,
         }}
       />
       {showCount && props.maxLength && (
-        <div 
+        <div
           className="mobile-textarea-count"
           style={{
             fontSize: 12,
             color: 'var(--color-text-secondary)',
             textAlign: 'right',
-            marginTop: 4
+            marginTop: 4,
           }}
         >
           {(props.value || '').toString().length}/{props.maxLength}

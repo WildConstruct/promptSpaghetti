@@ -1,4 +1,5 @@
 # Security Intelligence Data Pipeline Architecture
+
 **Epic 31.4.1.2 - Implement security intelligence data pipeline**
 
 ## Overview
@@ -59,6 +60,7 @@ The Security Intelligence Data Pipeline is a comprehensive, high-performance sys
 ### 1. Data Ingestion System
 
 #### Ingestion Queue Management
+
 - **Capacity**: Configurable max queue size (default: 10,000 events)
 - **Batch Processing**: Configurable batch sizes (default: 100 events)
 - **Backpressure Detection**: Automatic detection at 80% capacity
@@ -67,6 +69,7 @@ The Security Intelligence Data Pipeline is a comprehensive, high-performance sys
 - **Compression**: Optional data compression for storage efficiency
 
 #### Event Validation
+
 ```typescript
 interface SecurityEvent {
   id: string;
@@ -90,6 +93,7 @@ interface SecurityEvent {
 ```
 
 #### Supported Event Types
+
 - **Network Intrusion**: Network-based security events
 - **Malware Detection**: Endpoint and file-based malware events
 - **Unauthorized Access**: Authentication and authorization failures
@@ -106,12 +110,14 @@ interface SecurityEvent {
 ### 2. Processing Engine
 
 #### Multi-Stage Processing Pipeline
+
 1. **Validation Stage**: Schema validation and structural integrity checks
 2. **Normalization Stage**: Field mapping, format standardization, and data cleansing
 3. **Enrichment Stage**: Context addition through external data sources
 4. **Storage Stage**: Multi-tier storage with intelligent data lifecycle management
 
 #### Worker Thread Management
+
 - **Parallel Processing**: Configurable worker threads (default: 4)
 - **Load Balancing**: Automatic work distribution across threads
 - **Resource Limits**: Memory and CPU usage controls
@@ -121,25 +127,27 @@ interface SecurityEvent {
 ### 3. Normalization System
 
 #### Field Mapping Engine
+
 ```typescript
 // Common field mappings from security tools
 const fieldMappings = {
-  'src_ip': 'source.ip_address',
-  'dst_ip': 'destination.ip_address',
-  'src_port': 'network_context.source_port',
-  'dst_port': 'network_context.destination_port',
-  'username': 'user_context.username',
-  'hostname': 'device_context.hostname',
-  'process_name': 'application_context.process_name',
-  'file_path': 'application_context.file_path',
-  'hash': 'threat_indicators.0.value',
-  'severity': 'severity',
-  'event_time': 'timestamp',
-  'alert_name': 'event_type'
+  src_ip: 'source.ip_address',
+  dst_ip: 'destination.ip_address',
+  src_port: 'network_context.source_port',
+  dst_port: 'network_context.destination_port',
+  username: 'user_context.username',
+  hostname: 'device_context.hostname',
+  process_name: 'application_context.process_name',
+  file_path: 'application_context.file_path',
+  hash: 'threat_indicators.0.value',
+  severity: 'severity',
+  event_time: 'timestamp',
+  alert_name: 'event_type',
 };
 ```
 
 #### Data Standardization
+
 - **IP Address Normalization**: IPv4/IPv6 standardization
 - **Timestamp Normalization**: UTC conversion and format standardization
 - **Severity Mapping**: Common severity scale (low, medium, high, critical)
@@ -148,6 +156,7 @@ const fieldMappings = {
 - **Case Normalization**: Consistent field casing
 
 #### Data Quality Assurance
+
 - **Schema Validation**: JSON schema validation against event types
 - **Data Type Validation**: Field type enforcement
 - **Required Field Validation**: Mandatory field presence checks
@@ -158,6 +167,7 @@ const fieldMappings = {
 ### 4. Enrichment Engine
 
 #### Threat Intelligence Integration
+
 - **IOC Matching**: Indicators of Compromise correlation
 - **Threat Actor Attribution**: Known threat group identification
 - **Campaign Correlation**: Related attack campaign linking
@@ -167,6 +177,7 @@ const fieldMappings = {
 #### Context Enrichment Services
 
 ##### Geo-Location Enrichment
+
 ```typescript
 interface GeoLocationData {
   country: string;
@@ -182,6 +193,7 @@ interface GeoLocationData {
 ```
 
 ##### Reputation Scoring
+
 ```typescript
 interface ReputationScore {
   score: number; // 0-100
@@ -194,6 +206,7 @@ interface ReputationScore {
 ```
 
 ##### Asset Context
+
 ```typescript
 interface AssetContext {
   asset_name: string;
@@ -209,6 +222,7 @@ interface AssetContext {
 ```
 
 ##### User Context Enhancement
+
 ```typescript
 interface EnhancedUserContext {
   department: string;
@@ -224,6 +238,7 @@ interface EnhancedUserContext {
 ```
 
 ##### Network Context
+
 ```typescript
 interface EnhancedNetworkContext {
   network_segment_name: string;
@@ -236,6 +251,7 @@ interface EnhancedNetworkContext {
 ```
 
 #### Machine Learning Scoring
+
 - **Anomaly Detection**: ML-based anomaly scoring
 - **Risk Assessment**: Multi-factor risk calculation
 - **Behavioral Analysis**: User and entity behavior scoring
@@ -245,6 +261,7 @@ interface EnhancedNetworkContext {
 ### 5. Storage System
 
 #### Multi-Tier Storage Architecture
+
 ```typescript
 interface StorageConfiguration {
   hot_storage: {
@@ -276,6 +293,7 @@ interface StorageConfiguration {
 ```
 
 #### Data Lifecycle Management
+
 - **Automatic Tiering**: Time-based data movement between storage tiers
 - **Compression**: Intelligent compression based on access patterns
 - **Encryption**: AES-256 encryption for data at rest
@@ -283,6 +301,7 @@ interface StorageConfiguration {
 - **Retention Policies**: Automated data purging based on compliance requirements
 
 #### Query Optimization
+
 - **Indexed Fields**: Strategic indexing for common queries
 - **Partitioning**: Time-based and type-based data partitioning
 - **Caching**: Intelligent query result caching
@@ -294,6 +313,7 @@ interface StorageConfiguration {
 ### Epic 1 Analytics Foundation Integration
 
 #### Event Stream Integration
+
 ```typescript
 interface Epic1EventForwarding {
   event_stream: {
@@ -317,6 +337,7 @@ interface Epic1EventForwarding {
 ```
 
 #### Performance Metrics Integration
+
 - **Ingestion Rate**: Events per second forwarded to Epic 1
 - **Processing Latency**: End-to-end processing time metrics
 - **Error Rates**: Processing and forwarding error statistics
@@ -324,6 +345,7 @@ interface Epic1EventForwarding {
 - **Resource Utilization**: CPU, memory, and storage usage
 
 #### ML Pipeline Integration
+
 - **Feature Engineering**: Security event feature extraction
 - **Model Training**: Automated model training on security data
 - **Prediction Integration**: ML predictions embedded in events
@@ -333,6 +355,7 @@ interface Epic1EventForwarding {
 ### Epic 17 Admin Systems Integration
 
 #### Health Check Framework
+
 ```typescript
 interface SecurityPipelineHealthCheck {
   id: 'security_intelligence_data_pipeline';
@@ -362,6 +385,7 @@ interface SecurityPipelineHealthCheck {
 ```
 
 #### Diagnostic Integration
+
 - **System Overview**: Complete pipeline status and configuration
 - **Performance Analysis**: Detailed performance metrics and bottlenecks
 - **Error Analysis**: Error patterns and root cause analysis
@@ -369,6 +393,7 @@ interface SecurityPipelineHealthCheck {
 - **Configuration Validation**: Settings validation and recommendations
 
 #### Alert Management
+
 ```typescript
 interface SecurityPipelineAlert {
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -378,7 +403,7 @@ interface SecurityPipelineAlert {
     'storage_failure',
     'integration_failure',
     'performance_degradation',
-    'security_breach'
+    'security_breach',
   ];
   escalation: {
     immediate: string[]; // Email addresses
@@ -396,6 +421,7 @@ interface SecurityPipelineAlert {
 ## Performance Specifications
 
 ### Throughput Requirements
+
 - **Peak Ingestion**: 100,000+ events per second
 - **Sustained Processing**: 50,000+ events per second
 - **Storage Write Rate**: 25,000+ events per second
@@ -404,6 +430,7 @@ interface SecurityPipelineAlert {
 - **Enrichment Latency**: <2 seconds for full enrichment
 
 ### Scalability Architecture
+
 - **Horizontal Scaling**: Auto-scaling based on queue depth
 - **Vertical Scaling**: Dynamic resource allocation
 - **Load Distribution**: Intelligent load balancing across workers
@@ -411,6 +438,7 @@ interface SecurityPipelineAlert {
 - **Cache Scaling**: Distributed caching for enrichment data
 
 ### Resource Optimization
+
 - **Memory Management**: Intelligent memory allocation and garbage collection
 - **CPU Optimization**: Multi-core processing optimization
 - **Network Optimization**: Bandwidth management and compression
@@ -420,6 +448,7 @@ interface SecurityPipelineAlert {
 ## Security Implementation
 
 ### Data Protection
+
 ```typescript
 interface SecurityConfiguration {
   encryption: {
@@ -445,6 +474,7 @@ interface SecurityConfiguration {
 ```
 
 ### Threat Protection
+
 - **Input Validation**: Comprehensive input sanitization
 - **Injection Prevention**: SQL, NoSQL, and command injection protection
 - **Rate Limiting**: DDoS and abuse protection
@@ -453,6 +483,7 @@ interface SecurityConfiguration {
 - **Data Integrity**: Cryptographic checksums and validation
 
 ### Compliance Framework
+
 - **GDPR Compliance**: Data protection and privacy controls
 - **SOC2 Type II**: Security controls and audit trails
 - **HIPAA Compliance**: Healthcare data handling requirements
@@ -463,6 +494,7 @@ interface SecurityConfiguration {
 ## Monitoring and Alerting
 
 ### Comprehensive Metrics
+
 ```typescript
 interface DataPipelineMetrics {
   ingestion_metrics: {
@@ -508,6 +540,7 @@ interface DataPipelineMetrics {
 ```
 
 ### Alert Categories
+
 1. **Performance Alerts**: Latency, throughput, and resource utilization
 2. **Error Alerts**: Processing failures and integration errors
 3. **Capacity Alerts**: Queue overflow and storage capacity
@@ -516,6 +549,7 @@ interface DataPipelineMetrics {
 6. **Data Quality Alerts**: Schema violations and data corruption
 
 ### Dashboard Integration
+
 - **Real-time Dashboards**: Live pipeline status and metrics
 - **Historical Analysis**: Trend analysis and capacity planning
 - **Alerting Dashboard**: Alert status and escalation tracking
@@ -525,6 +559,7 @@ interface DataPipelineMetrics {
 ## Operational Procedures
 
 ### Deployment Process
+
 1. **Environment Preparation**: Infrastructure provisioning and configuration
 2. **Configuration Management**: Pipeline configuration and validation
 3. **Health Check Validation**: Pre-deployment health verification
@@ -533,6 +568,7 @@ interface DataPipelineMetrics {
 6. **Performance Validation**: Post-deployment performance verification
 
 ### Maintenance Procedures
+
 1. **Regular Health Checks**: Automated and manual health assessments
 2. **Performance Tuning**: Configuration optimization based on metrics
 3. **Capacity Planning**: Resource scaling based on growth projections
@@ -543,27 +579,26 @@ interface DataPipelineMetrics {
 ### Troubleshooting Guide
 
 #### Common Issues and Solutions
+
 1. **High Queue Depth**
    - **Symptoms**: Ingestion queue approaching capacity
    - **Causes**: Processing bottlenecks, downstream system failures
    - **Solutions**: Scale processing workers, optimize enrichment, check storage
-   
 2. **Processing Errors**
    - **Symptoms**: High error rates in processing metrics
    - **Causes**: Invalid data formats, schema validation failures
    - **Solutions**: Review event validation, check field mappings, validate schemas
-   
 3. **Enrichment Failures**
    - **Symptoms**: Low enrichment success rates
    - **Causes**: External API failures, network connectivity issues
    - **Solutions**: Check external feeds, validate API credentials, implement fallbacks
-   
 4. **Storage Issues**
    - **Symptoms**: Storage write failures, high latency
    - **Causes**: Disk space, database connectivity, index corruption
    - **Solutions**: Check storage capacity, validate connections, rebuild indexes
 
 #### Emergency Procedures
+
 1. **Pipeline Shutdown**: Graceful shutdown with queue processing completion
 2. **Emergency Bypass**: Direct storage bypass for critical events
 3. **Fallback Mode**: Reduced functionality operation during issues
@@ -573,6 +608,7 @@ interface DataPipelineMetrics {
 ## Configuration Management
 
 ### Environment Configuration
+
 ```yaml
 # Production Configuration Example
 security_intelligence_pipeline:
@@ -583,7 +619,7 @@ security_intelligence_pipeline:
     max_queue_size: 100000
     rate_limit_per_second: 10000
     backpressure_threshold: 80000
-  
+
   processing:
     enabled: true
     worker_threads: 16
@@ -591,14 +627,14 @@ security_intelligence_pipeline:
     parallel_processing: true
     memory_limit_mb: 4096
     cpu_limit_percent: 80
-  
+
   enrichment:
     enabled: true
     threat_intelligence_enabled: true
     geo_location_enabled: true
     reputation_scoring_enabled: true
     ml_scoring_enabled: true
-  
+
   storage:
     enabled: true
     hot_storage_days: 30
@@ -606,7 +642,7 @@ security_intelligence_pipeline:
     cold_storage_days: 365
     archive_storage_years: 7
     encryption_enabled: true
-  
+
   epic_integration:
     epic1_analytics_enabled: true
     epic17_admin_enabled: true
@@ -615,6 +651,7 @@ security_intelligence_pipeline:
 ```
 
 ### Configuration Validation
+
 - **Schema Validation**: Configuration schema enforcement
 - **Dependency Validation**: Service dependency verification
 - **Resource Validation**: Resource availability verification
@@ -624,6 +661,7 @@ security_intelligence_pipeline:
 ## Future Enhancements
 
 ### Planned Features
+
 1. **Advanced ML Integration**: Deep learning models for threat detection
 2. **Stream Processing**: Real-time stream processing capabilities
 3. **Graph Analytics**: Relationship analysis for attack pattern detection
@@ -632,6 +670,7 @@ security_intelligence_pipeline:
 6. **Threat Hunting**: Advanced threat hunting capabilities
 
 ### Scalability Improvements
+
 1. **Kubernetes Integration**: Container orchestration for auto-scaling
 2. **Service Mesh**: Advanced networking and service discovery
 3. **Multi-Cloud Support**: Cloud-agnostic deployment capabilities
@@ -639,6 +678,7 @@ security_intelligence_pipeline:
 5. **Global Distribution**: Worldwide deployment with data locality
 
 ### Intelligence Enhancements
+
 1. **Custom ML Models**: Organization-specific threat detection models
 2. **Behavioral Baselining**: Dynamic baseline establishment
 3. **Threat Intelligence Fusion**: Multi-source intelligence correlation

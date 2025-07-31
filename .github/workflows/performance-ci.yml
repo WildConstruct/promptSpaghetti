@@ -1,14 +1,14 @@
 name: Performance Testing CI
 
-# Epic 18 - Technical Debt & Refactoring  
+# Epic 18 - Technical Debt & Refactoring
 # Task: E18-1753114562342-A89910 - Add performance testing
 # Automated performance testing in CI/CD pipeline
 
 on:
   push:
-    branches: [ main, develop, epic-* ]
+    branches: [main, develop, epic-*]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
   schedule:
     # Run performance tests daily at 2 AM UTC
     - cron: '0 2 * * *'
@@ -20,11 +20,11 @@ on:
         default: 'comprehensive'
         type: choice
         options:
-        - comprehensive
-        - quick
-        - load-only
-        - scenarios-only
-        - stress
+          - comprehensive
+          - quick
+          - load-only
+          - scenarios-only
+          - stress
       concurrency:
         description: 'Number of concurrent users'
         required: false
@@ -45,326 +45,326 @@ jobs:
   performance-test:
     name: Performance Testing
     runs-on: ubuntu-latest
-    
+
     strategy:
       matrix:
-        test-type: 
+        test-type:
           - quick
           - load-baseline
-        
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0  # Full history for regression analysis
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-        cache: 'npm'
-    
-    - name: Install pnpm
-      uses: pnpm/action-setup@v2
-      with:
-        version: 8.15.4
-    
-    - name: Install dependencies
-      run: pnpm install --frozen-lockfile
-    
-    - name: Build project
-      run: pnpm build
-    
-    - name: Start server in background
-      run: |
-        pnpm dev:server &
-        SERVER_PID=$!
-        echo "SERVER_PID=$SERVER_PID" >> $GITHUB_ENV
-        # Wait for server to be ready
-        timeout 60 bash -c 'until curl -f http://localhost:8000/health; do sleep 2; done'
-    
-    - name: Run performance tests - Quick
-      if: matrix.test-type == 'quick'
-      run: |
-        pnpm perf:quick
-      env:
-        PERF_OUTPUT_DIR: ./performance-results-quick
-    
-    - name: Run performance tests - Load Baseline
-      if: matrix.test-type == 'load-baseline'
-      run: |
-        pnpm load:baseline
-      env:
-        LOAD_TEST_OUTPUT_DIR: ./performance-results-load
-    
-    - name: Stop server
-      if: always()
-      run: |
-        if [ ! -z "$SERVER_PID" ]; then
-          kill $SERVER_PID || true
-        fi
-    
-    - name: Upload performance results
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: performance-results-${{ matrix.test-type }}
-        path: |
-          ./performance-results-*
-          ./performance-test-results
-        retention-days: 30
-    
-    - name: Check performance thresholds
-      if: always()
-      run: |
-        # Simple threshold checking script
-        node -e "
-        const fs = require('fs');
-        const path = require('path');
-        
-        try {
-          const resultsDir = './performance-test-results';
-          if (!fs.existsSync(resultsDir)) {
-            console.log('No performance results found, skipping threshold check');
-            process.exit(0);
-          }
-          
-          const files = fs.readdirSync(resultsDir);
-          const jsonFiles = files.filter(f => f.endsWith('.json'));
-          
-          let hasViolations = false;
-          
-          for (const file of jsonFiles) {
-            try {
-              const data = JSON.parse(fs.readFileSync(path.join(resultsDir, file), 'utf8'));
-              
-              if (data.results && data.results.global) {
-                const stats = data.results.global;
-                
-                if (stats.averageResponseTime > ${{ env.PERFORMANCE_THRESHOLD_RESPONSE_TIME }}) {
-                  console.error('❌ Response time threshold violated:', stats.averageResponseTime, '>', ${{ env.PERFORMANCE_THRESHOLD_RESPONSE_TIME }});
-                  hasViolations = true;
-                }
-                
-                if (stats.requestsPerSecond < ${{ env.PERFORMANCE_THRESHOLD_THROUGHPUT }}) {
-                  console.error('❌ Throughput threshold violated:', stats.requestsPerSecond, '<', ${{ env.PERFORMANCE_THRESHOLD_THROUGHPUT }});
-                  hasViolations = true;
-                }
-                
-                if (stats.errorRate > ${{ env.PERFORMANCE_THRESHOLD_ERROR_RATE }}) {
-                  console.error('❌ Error rate threshold violated:', stats.errorRate, '>', ${{ env.PERFORMANCE_THRESHOLD_ERROR_RATE }});
-                  hasViolations = true;
-                }
-              }
-            } catch (parseError) {
-              console.warn('Warning: Could not parse', file, ':', parseError.message);
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Full history for regression analysis
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8.15.4
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build project
+        run: pnpm build
+
+      - name: Start server in background
+        run: |
+          pnpm dev:server &
+          SERVER_PID=$!
+          echo "SERVER_PID=$SERVER_PID" >> $GITHUB_ENV
+          # Wait for server to be ready
+          timeout 60 bash -c 'until curl -f http://localhost:8000/health; do sleep 2; done'
+
+      - name: Run performance tests - Quick
+        if: matrix.test-type == 'quick'
+        run: |
+          pnpm perf:quick
+        env:
+          PERF_OUTPUT_DIR: ./performance-results-quick
+
+      - name: Run performance tests - Load Baseline
+        if: matrix.test-type == 'load-baseline'
+        run: |
+          pnpm load:baseline
+        env:
+          LOAD_TEST_OUTPUT_DIR: ./performance-results-load
+
+      - name: Stop server
+        if: always()
+        run: |
+          if [ ! -z "$SERVER_PID" ]; then
+            kill $SERVER_PID || true
+          fi
+
+      - name: Upload performance results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-results-${{ matrix.test-type }}
+          path: |
+            ./performance-results-*
+            ./performance-test-results
+          retention-days: 30
+
+      - name: Check performance thresholds
+        if: always()
+        run: |
+          # Simple threshold checking script
+          node -e "
+          const fs = require('fs');
+          const path = require('path');
+
+          try {
+            const resultsDir = './performance-test-results';
+            if (!fs.existsSync(resultsDir)) {
+              console.log('No performance results found, skipping threshold check');
+              process.exit(0);
             }
+            
+            const files = fs.readdirSync(resultsDir);
+            const jsonFiles = files.filter(f => f.endsWith('.json'));
+            
+            let hasViolations = false;
+            
+            for (const file of jsonFiles) {
+              try {
+                const data = JSON.parse(fs.readFileSync(path.join(resultsDir, file), 'utf8'));
+                
+                if (data.results && data.results.global) {
+                  const stats = data.results.global;
+                  
+                  if (stats.averageResponseTime > ${{ env.PERFORMANCE_THRESHOLD_RESPONSE_TIME }}) {
+                    console.error('❌ Response time threshold violated:', stats.averageResponseTime, '>', ${{ env.PERFORMANCE_THRESHOLD_RESPONSE_TIME }});
+                    hasViolations = true;
+                  }
+                  
+                  if (stats.requestsPerSecond < ${{ env.PERFORMANCE_THRESHOLD_THROUGHPUT }}) {
+                    console.error('❌ Throughput threshold violated:', stats.requestsPerSecond, '<', ${{ env.PERFORMANCE_THRESHOLD_THROUGHPUT }});
+                    hasViolations = true;
+                  }
+                  
+                  if (stats.errorRate > ${{ env.PERFORMANCE_THRESHOLD_ERROR_RATE }}) {
+                    console.error('❌ Error rate threshold violated:', stats.errorRate, '>', ${{ env.PERFORMANCE_THRESHOLD_ERROR_RATE }});
+                    hasViolations = true;
+                  }
+                }
+              } catch (parseError) {
+                console.warn('Warning: Could not parse', file, ':', parseError.message);
+              }
+            }
+            
+            if (hasViolations) {
+              console.error('❌ Performance thresholds violated!');
+              process.exit(1);
+            } else {
+              console.log('✅ All performance thresholds passed');
+            }
+          } catch (error) {
+            console.warn('Warning: Threshold check failed:', error.message);
           }
-          
-          if (hasViolations) {
-            console.error('❌ Performance thresholds violated!');
-            process.exit(1);
-          } else {
-            console.log('✅ All performance thresholds passed');
-          }
-        } catch (error) {
-          console.warn('Warning: Threshold check failed:', error.message);
-        }
-        "
+          "
 
   comprehensive-performance:
     name: Comprehensive Performance Testing
     runs-on: ubuntu-latest
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-        cache: 'npm'
-    
-    - name: Install pnpm
-      uses: pnpm/action-setup@v2
-      with:
-        version: 8.15.4
-    
-    - name: Install dependencies
-      run: pnpm install --frozen-lockfile
-    
-    - name: Build project
-      run: pnpm build
-    
-    - name: Start server in background
-      run: |
-        pnpm dev:server &
-        SERVER_PID=$!
-        echo "SERVER_PID=$SERVER_PID" >> $GITHUB_ENV
-        timeout 60 bash -c 'until curl -f http://localhost:8000/health; do sleep 2; done'
-    
-    - name: Run comprehensive performance tests
-      run: |
-        TEST_SUITE=${{ github.event.inputs.test_suite || 'comprehensive' }}
-        CONCURRENCY=${{ github.event.inputs.concurrency || '10' }}
-        DURATION=${{ github.event.inputs.duration || '60' }}
-        
-        pnpm perf:test --suite $TEST_SUITE --concurrency $CONCURRENCY --duration $DURATION
-      env:
-        PERF_OUTPUT_DIR: ./performance-results-comprehensive
-    
-    - name: Analyze performance regression
-      run: |
-        # Run regression detection if TypeScript files exist
-        if [ -f "tests/performance/PerformanceRegressionDetector.ts" ]; then
-          npx ts-node -e "
-          import { PerformanceRegressionDetector } from './tests/performance/PerformanceRegressionDetector';
-          
-          async function runAnalysis() {
-            const detector = new PerformanceRegressionDetector('./performance-data');
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8.15.4
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build project
+        run: pnpm build
+
+      - name: Start server in background
+        run: |
+          pnpm dev:server &
+          SERVER_PID=$!
+          echo "SERVER_PID=$SERVER_PID" >> $GITHUB_ENV
+          timeout 60 bash -c 'until curl -f http://localhost:8000/health; do sleep 2; done'
+
+      - name: Run comprehensive performance tests
+        run: |
+          TEST_SUITE=${{ github.event.inputs.test_suite || 'comprehensive' }}
+          CONCURRENCY=${{ github.event.inputs.concurrency || '10' }}
+          DURATION=${{ github.event.inputs.duration || '60' }}
+
+          pnpm perf:test --suite $TEST_SUITE --concurrency $CONCURRENCY --duration $DURATION
+        env:
+          PERF_OUTPUT_DIR: ./performance-results-comprehensive
+
+      - name: Analyze performance regression
+        run: |
+          # Run regression detection if TypeScript files exist
+          if [ -f "tests/performance/PerformanceRegressionDetector.ts" ]; then
+            npx ts-node -e "
+            import { PerformanceRegressionDetector } from './tests/performance/PerformanceRegressionDetector';
             
-            try {
-              const summary = await detector.getRegressionSummary(24);
-              console.log('Regression Analysis Summary:', summary.summary);
+            async function runAnalysis() {
+              const detector = new PerformanceRegressionDetector('./performance-data');
               
-              if (summary.criticalCount > 0) {
-                console.error('❌ Critical performance regressions detected:', summary.criticalCount);
-                process.exit(1);
-              } else if (summary.warningCount > 0) {
-                console.warn('⚠️ Performance warnings detected:', summary.warningCount);
-              } else {
-                console.log('✅ No performance regressions detected');
+              try {
+                const summary = await detector.getRegressionSummary(24);
+                console.log('Regression Analysis Summary:', summary.summary);
+                
+                if (summary.criticalCount > 0) {
+                  console.error('❌ Critical performance regressions detected:', summary.criticalCount);
+                  process.exit(1);
+                } else if (summary.warningCount > 0) {
+                  console.warn('⚠️ Performance warnings detected:', summary.warningCount);
+                } else {
+                  console.log('✅ No performance regressions detected');
+                }
+              } catch (error) {
+                console.warn('Warning: Regression analysis failed:', error.message);
               }
-            } catch (error) {
-              console.warn('Warning: Regression analysis failed:', error.message);
             }
-          }
-          
-          runAnalysis();
-          "
-        else
-          echo "Regression detector not found, skipping analysis"
-        fi
-    
-    - name: Stop server
-      if: always()
-      run: |
-        if [ ! -z "$SERVER_PID" ]; then
-          kill $SERVER_PID || true
-        fi
-    
-    - name: Upload comprehensive results
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: comprehensive-performance-results
-        path: |
-          ./performance-results-comprehensive
-          ./performance-test-results
-          ./performance-data
-        retention-days: 90
-    
-    - name: Generate performance report
-      if: always()
-      run: |
-        # Generate markdown report for GitHub
-        cat > performance-report.md << 'EOF'
-        # Performance Test Report
-        
-        **Date**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
-        **Commit**: ${{ github.sha }}
-        **Branch**: ${{ github.ref_name }}
-        **Test Suite**: ${{ github.event.inputs.test_suite || 'comprehensive' }}
-        
-        ## Test Configuration
-        - Concurrency: ${{ github.event.inputs.concurrency || '10' }} users
-        - Duration: ${{ github.event.inputs.duration || '60' }} seconds
-        - Environment: CI/CD Pipeline
-        
-        ## Results Summary
-        Performance test results have been uploaded as artifacts.
-        
-        EOF
-        
-        # Add results summary if available
-        if [ -d "./performance-test-results" ]; then
-          echo "## Performance Metrics" >> performance-report.md
-          echo "Results available in uploaded artifacts." >> performance-report.md
-        fi
-    
-    - name: Comment on PR
-      if: github.event_name == 'pull_request'
-      uses: actions/github-script@v7
-      with:
-        script: |
-          const fs = require('fs');
-          if (fs.existsSync('performance-report.md')) {
-            const report = fs.readFileSync('performance-report.md', 'utf8');
             
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: report
-            });
-          }
+            runAnalysis();
+            "
+          else
+            echo "Regression detector not found, skipping analysis"
+          fi
+
+      - name: Stop server
+        if: always()
+        run: |
+          if [ ! -z "$SERVER_PID" ]; then
+            kill $SERVER_PID || true
+          fi
+
+      - name: Upload comprehensive results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: comprehensive-performance-results
+          path: |
+            ./performance-results-comprehensive
+            ./performance-test-results
+            ./performance-data
+          retention-days: 90
+
+      - name: Generate performance report
+        if: always()
+        run: |
+          # Generate markdown report for GitHub
+          cat > performance-report.md << 'EOF'
+          # Performance Test Report
+
+          **Date**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          **Commit**: ${{ github.sha }}
+          **Branch**: ${{ github.ref_name }}
+          **Test Suite**: ${{ github.event.inputs.test_suite || 'comprehensive' }}
+
+          ## Test Configuration
+          - Concurrency: ${{ github.event.inputs.concurrency || '10' }} users
+          - Duration: ${{ github.event.inputs.duration || '60' }} seconds
+          - Environment: CI/CD Pipeline
+
+          ## Results Summary
+          Performance test results have been uploaded as artifacts.
+
+          EOF
+
+          # Add results summary if available
+          if [ -d "./performance-test-results" ]; then
+            echo "## Performance Metrics" >> performance-report.md
+            echo "Results available in uploaded artifacts." >> performance-report.md
+          fi
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            if (fs.existsSync('performance-report.md')) {
+              const report = fs.readFileSync('performance-report.md', 'utf8');
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: report
+              });
+            }
 
   stress-test:
     name: Stress Testing
     runs-on: ubuntu-latest
     if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.test_suite == 'stress')
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-        cache: 'npm'
-    
-    - name: Install pnpm
-      uses: pnpm/action-setup@v2
-      with:
-        version: 8.15.4
-    
-    - name: Install dependencies
-      run: pnpm install --frozen-lockfile
-    
-    - name: Build project
-      run: pnpm build
-    
-    - name: Start server in background
-      run: |
-        pnpm dev:server &
-        SERVER_PID=$!
-        echo "SERVER_PID=$SERVER_PID" >> $GITHUB_ENV
-        timeout 60 bash -c 'until curl -f http://localhost:8000/health; do sleep 2; done'
-    
-    - name: Run stress tests
-      run: |
-        pnpm perf:stress
-      env:
-        PERF_OUTPUT_DIR: ./performance-results-stress
-    
-    - name: Stop server
-      if: always()
-      run: |
-        if [ ! -z "$SERVER_PID" ]; then
-          kill $SERVER_PID || true
-        fi
-    
-    - name: Upload stress test results
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: stress-test-results
-        path: |
-          ./performance-results-stress
-          ./performance-test-results
-        retention-days: 30
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8.15.4
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build project
+        run: pnpm build
+
+      - name: Start server in background
+        run: |
+          pnpm dev:server &
+          SERVER_PID=$!
+          echo "SERVER_PID=$SERVER_PID" >> $GITHUB_ENV
+          timeout 60 bash -c 'until curl -f http://localhost:8000/health; do sleep 2; done'
+
+      - name: Run stress tests
+        run: |
+          pnpm perf:stress
+        env:
+          PERF_OUTPUT_DIR: ./performance-results-stress
+
+      - name: Stop server
+        if: always()
+        run: |
+          if [ ! -z "$SERVER_PID" ]; then
+            kill $SERVER_PID || true
+          fi
+
+      - name: Upload stress test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stress-test-results
+          path: |
+            ./performance-results-stress
+            ./performance-test-results
+          retention-days: 30

@@ -135,7 +135,7 @@
   border-color: #667eea;
 }
 
-.compatibility-option input[type="radio"] {
+.compatibility-option input[type='radio'] {
   margin-right: 12px;
   width: auto;
 }
@@ -388,42 +388,42 @@
     padding: 16px;
     margin: 0 16px;
   }
-  
+
   .editor-header {
     flex-direction: column;
     gap: 8px;
     align-items: flex-start;
   }
-  
+
   .compatibility-options {
     gap: 4px;
   }
-  
+
   .compatibility-option {
     padding: 8px;
   }
-  
+
   .option-content {
     gap: 8px;
   }
-  
+
   .summary-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .form-actions {
     flex-direction: column;
   }
-  
+
   .final-actions {
     flex-direction: column;
   }
-  
+
   .array-input {
     flex-direction: column;
     gap: 4px;
   }
-  
+
   .array-input button {
     align-self: flex-start;
   }
@@ -435,23 +435,23 @@
     background: #1f2937;
     color: #f9fafb;
   }
-  
+
   .editor-header {
     border-bottom-color: #374151;
   }
-  
+
   .editor-header h2 {
     color: #f9fafb;
   }
-  
+
   .step-content h3 {
     color: #f9fafb;
   }
-  
+
   .form-group label {
     color: #d1d5db;
   }
-  
+
   .form-group input,
   .form-group textarea,
   .form-group select {
@@ -459,59 +459,59 @@
     border-color: #4b5563;
     color: #f9fafb;
   }
-  
+
   .form-group input:focus,
   .form-group textarea:focus,
   .form-group select:focus {
     border-color: #667eea;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
   }
-  
+
   .code-textarea {
     background: #2d3748;
     color: #e2e8f0;
   }
-  
+
   .compatibility-option {
     background: #374151;
     border-color: #4b5563;
   }
-  
+
   .compatibility-option:hover {
     background: #4b5563;
   }
-  
+
   .option-text strong {
     color: #f9fafb;
   }
-  
+
   .version-summary {
     background: #374151;
     border-color: #4b5563;
   }
-  
+
   .version-summary h4 {
     color: #f9fafb;
   }
-  
+
   .summary-item strong {
     color: #f9fafb;
   }
-  
+
   .release-notes-summary {
     background: #1f2937;
     border-color: #374151;
   }
-  
+
   .release-notes-summary strong {
     color: #f9fafb;
   }
-  
+
   .error-message {
     background: #3c1617;
     border-color: #7c2d12;
   }
-  
+
   .form-actions {
     border-top-color: #374151;
   }

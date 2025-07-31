@@ -17,18 +17,18 @@ class StateLock {
   }
 
   /**
-     * Acquire exclusive lock on state file
-     * @returns {Promise<Function>} Release function
-     */
+   * Acquire exclusive lock on state file
+   * @returns {Promise<Function>} Release function
+   */
   async acquireLock() {
     try {
       const release = await lockfile.lock(this.stateFilePath, {
         retries: {
           retries: this.maxRetries,
           minTimeout: this.retryDelay.min,
-          maxTimeout: this.retryDelay.max
+          maxTimeout: this.retryDelay.max,
         },
-        stale: this.staleTimeout
+        stale: this.staleTimeout,
       });
 
       return release;
@@ -41,9 +41,9 @@ class StateLock {
   }
 
   /**
-     * Read state with automatic locking
-     * @returns {Promise<Object>} State object
-     */
+   * Read state with automatic locking
+   * @returns {Promise<Object>} State object
+   */
   async readState() {
     const release = await this.acquireLock();
     try {
@@ -59,10 +59,10 @@ class StateLock {
   }
 
   /**
-     * Write state with automatic locking and atomic operations
-     * @param {Object} state - State object to write
-     * @returns {Promise<void>}
-     */
+   * Write state with automatic locking and atomic operations
+   * @param {Object} state - State object to write
+   * @returns {Promise<void>}
+   */
   async writeState(state) {
     const release = await this.acquireLock();
     try {
@@ -80,10 +80,10 @@ class StateLock {
   }
 
   /**
-     * Perform atomic transaction on state
-     * @param {Function} transaction - Function that modifies state: (state) => void
-     * @returns {Promise<Object>} Updated state
-     */
+   * Perform atomic transaction on state
+   * @param {Function} transaction - Function that modifies state: (state) => void
+   * @returns {Promise<Object>} Updated state
+   */
   async transaction(transaction) {
     const release = await this.acquireLock();
     try {
@@ -115,11 +115,11 @@ class StateLock {
   }
 
   /**
-     * Update a specific task with locking
-     * @param {string} taskId - Task ID to update
-     * @param {Function|Object} updates - Function or object with updates
-     * @returns {Promise<Object>} Updated task
-     */
+   * Update a specific task with locking
+   * @param {string} taskId - Task ID to update
+   * @param {Function|Object} updates - Function or object with updates
+   * @returns {Promise<Object>} Updated task
+   */
   async updateTask(taskId, updates) {
     return this.transaction(state => {
       if (!state.tasks[taskId]) {
@@ -140,11 +140,11 @@ class StateLock {
   }
 
   /**
-     * Clear task assignment with locking
-     * @param {string} taskId - Task ID to clear assignment for
-     * @param {string} assignee - Agent to clear assignment from
-     * @returns {Promise<boolean>} True if assignment was cleared
-     */
+   * Clear task assignment with locking
+   * @param {string} taskId - Task ID to clear assignment for
+   * @param {string} assignee - Agent to clear assignment from
+   * @returns {Promise<boolean>} True if assignment was cleared
+   */
   async clearTaskAssignment(taskId, assignee = null) {
     return this.transaction(state => {
       const task = state.tasks[taskId];
@@ -163,7 +163,7 @@ class StateLock {
       }
 
       // Handle both array and comma-separated string formats
-      const taskList = Array.isArray(assignments) 
+      const taskList = Array.isArray(assignments)
         ? assignments.filter(id => id !== taskId)
         : assignments.split(',').filter(id => id !== taskId);
 
@@ -178,11 +178,11 @@ class StateLock {
   }
 
   /**
-     * Assign task to agent with locking
-     * @param {string} taskId - Task ID to assign
-     * @param {string} agentId - Agent ID to assign to
-     * @returns {Promise<boolean>} True if assignment was successful
-     */
+   * Assign task to agent with locking
+   * @param {string} taskId - Task ID to assign
+   * @param {string} agentId - Agent ID to assign to
+   * @returns {Promise<boolean>} True if assignment was successful
+   */
   async assignTask(taskId, agentId) {
     return this.transaction(state => {
       const task = state.tasks[taskId];
@@ -215,9 +215,9 @@ class StateLock {
   }
 
   /**
-     * Get current lock status for debugging
-     * @returns {Object} Lock status information
-     */
+   * Get current lock status for debugging
+   * @returns {Object} Lock status information
+   */
   getLockStatus() {
     try {
       const lockExists = fs.existsSync(this.lockFilePath);
@@ -237,9 +237,9 @@ class StateLock {
   }
 
   /**
-     * Force remove stale lock (use with caution!)
-     * @returns {boolean} True if lock was removed
-     */
+   * Force remove stale lock (use with caution!)
+   * @returns {boolean} True if lock was removed
+   */
   forceUnlock() {
     try {
       if (fs.existsSync(this.lockFilePath)) {
@@ -260,11 +260,11 @@ module.exports = {
   StateLock,
   // Convenience functions using default instance
   readState: () => defaultStateLock.readState(),
-  writeState: (state) => defaultStateLock.writeState(state),
-  transaction: (fn) => defaultStateLock.transaction(fn),
+  writeState: state => defaultStateLock.writeState(state),
+  transaction: fn => defaultStateLock.transaction(fn),
   updateTask: (taskId, updates) => defaultStateLock.updateTask(taskId, updates),
   clearTaskAssignment: (taskId, assignee) => defaultStateLock.clearTaskAssignment(taskId, assignee),
   assignTask: (taskId, agentId) => defaultStateLock.assignTask(taskId, agentId),
   getLockStatus: () => defaultStateLock.getLockStatus(),
-  forceUnlock: () => defaultStateLock.forceUnlock()
+  forceUnlock: () => defaultStateLock.forceUnlock(),
 };

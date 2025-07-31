@@ -12,18 +12,18 @@ export default defineConfig({
       // Include crypto and events for browser compatibility
       include: ['crypto', 'events'],
       // Enable globals for better compatibility
-      globals: { 
-        Buffer: true, 
-        global: true, 
-        process: true 
-      }
-    })
+      globals: {
+        Buffer: true,
+        global: true,
+        process: true,
+      },
+    }),
   ],
   build: {
     outDir: 'dist',
     sourcemap: true,
     commonjsOptions: {
-      include: [/zod/, /node_modules/]
+      include: [/zod/, /node_modules/],
     },
     rollupOptions: {
       external: ['uuid', '@juliuste/react-vimeo', 'vite-plugin-node-polyfills/shims/process'],
@@ -31,19 +31,19 @@ export default defineConfig({
         manualChunks: {
           vendor: ['react', 'react-dom'],
           flow: ['reactflow'],
-          utils: ['zod', 'zustand']
-        }
-      }
-    }
+          utils: ['zod', 'zustand'],
+        },
+      },
+    },
   },
   server: {
     port: 3000,
-    strictPort: true
+    strictPort: true,
   },
   resolve: {
     // No alias needed in production - core files are local
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'reactflow', 'zod', 'zustand']
-  }
+    include: ['react', 'react-dom', 'reactflow', 'zod', 'zustand'],
+  },
 });

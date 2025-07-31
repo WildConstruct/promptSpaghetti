@@ -2,8 +2,13 @@ import React from 'react';
 import { jest } from '@jest/globals';
 
 // Very small subset of the public API that App and our tests actually use.
-export interface XYPosition { x: number; y: number }
-export interface Viewport extends XYPosition { zoom: number }
+export interface XYPosition {
+  x: number;
+  y: number;
+}
+export interface Viewport extends XYPosition {
+  zoom: number;
+}
 export interface Node<T = Record<string, unknown>> {
   id: string;
   position: XYPosition;
@@ -73,7 +78,7 @@ export const ReactFlow: React.FC<ReactFlowProps> = ({
   onPaneClick,
   children,
   style,
-  className
+  className,
   // Additional props are accepted but not used in mock
 }) => {
   const handleDrop = (e: React.DragEvent) => {
@@ -93,37 +98,37 @@ export const ReactFlow: React.FC<ReactFlowProps> = ({
           data-testid="react-flow-pane"
           style={{ width: '100%', height: '100%', cursor: 'default' }}
           onDrop={handleDrop}
-          onDragOver={onDragOver ?? ((e) => e.preventDefault())}
+          onDragOver={onDragOver ?? (e => e.preventDefault())}
           onClick={onPaneClick}
         >
           <div data-testid="node-container">
-            {nodes.map((node) => (
+            {nodes.map(node => (
               <div
                 key={node.id}
                 data-testid={`node-${node.id}`}
                 data-selected={node.selected}
                 className={`react-flow__node ${node.selected ? 'selected' : ''}`}
-                onClick={(e) => {
+                onClick={e => {
                   e.stopPropagation();
                   onNodeClick?.(e, node);
                 }}
-                style={{ 
+                style={{
                   cursor: 'pointer',
                   position: 'absolute',
                   left: node.position.x,
-                  top: node.position.y 
+                  top: node.position.y,
                 }}
               >
                 {node.data?.label || node.id}
-                {node.data?.nodeType && (
-                  <div data-testid={`node-type-${node.id}`}>{node.data.nodeType}</div>
-                )}
+                {node.data?.nodeType && <div data-testid={`node-type-${node.id}`}>{node.data.nodeType}</div>}
               </div>
             ))}
           </div>
           <div data-testid="edge-container">
-            {edges.map((edge) => (
-              <div key={edge.id} data-testid={`edge-${edge.id}`}>{edge.id}</div>
+            {edges.map(edge => (
+              <div key={edge.id} data-testid={`edge-${edge.id}`}>
+                {edge.id}
+              </div>
             ))}
           </div>
         </div>
@@ -153,26 +158,26 @@ export const useReactFlow = () => ({
   fitView: () => {},
   zoomTo: () => {},
   zoomIn: () => {},
-  zoomOut: () => {}
+  zoomOut: () => {},
 });
 
-export const Position = { 
-  Left: 'left', 
-  Right: 'right', 
-  Top: 'top', 
-  Bottom: 'bottom' 
+export const Position = {
+  Left: 'left',
+  Right: 'right',
+  Top: 'top',
+  Bottom: 'bottom',
 } as const;
 
-export type PositionEnum = typeof Position[keyof typeof Position];
+export type PositionEnum = (typeof Position)[keyof typeof Position];
 
-export const Handle: React.FC<{ 
+export const Handle: React.FC<{
   type?: 'source' | 'target';
-  position: typeof Position[keyof typeof Position]; 
+  position: (typeof Position)[keyof typeof Position];
   style?: React.CSSProperties;
   children?: React.ReactNode;
 }> = ({ children, type, position, style }) => (
-  <div 
-    data-testid={`handle-${type}-${position}`} 
+  <div
+    data-testid={`handle-${type}-${position}`}
     className={[
       `react-flow__handle-${position}`,
       'react-flow__handle',
@@ -180,9 +185,9 @@ export const Handle: React.FC<{
       'nopan',
       type,
       'connectable',
-      'connectablestart', 
+      'connectablestart',
       'connectableend',
-      'connectionindicator'
+      'connectionindicator',
     ].join(' ')}
     data-handlepos={position}
     data-id={`null-null-${type}`}
@@ -207,13 +212,13 @@ export interface NodeProps {
 // Add missing enum exports
 export const ConnectionMode = {
   Strict: 'strict',
-  Loose: 'loose'
+  Loose: 'loose',
 } as const;
 
 // Add utility functions
 export const addEdge = jest.fn((connection: Connection, edges: Edge[]) => [
-  ...edges, 
-  { ...connection, id: `e-${Date.now()}` }
+  ...edges,
+  { ...connection, id: `e-${Date.now()}` },
 ]);
 export const useNodesState = jest.fn((initialNodes: Node[]) => [initialNodes, jest.fn<unknown[], unknown>()]);
 export const useEdgesState = jest.fn((initialEdges: Edge[]) => [initialEdges, jest.fn<unknown[], unknown>()]);
@@ -232,5 +237,5 @@ export default {
   ConnectionMode,
   addEdge,
   useNodesState,
-  useEdgesState
+  useEdgesState,
 };

@@ -67,7 +67,7 @@ The system automatically integrates with existing authentication flows:
 const userService = new UserService(config, db, audit, breachService);
 
 // Breach detection happens automatically during:
-await userService.createUser(registrationData);     // Registration
+await userService.createUser(registrationData); // Registration
 await userService.resetPassword(token, newPassword); // Password reset
 await userService.changePassword(userId, oldPass, newPass); // Password change
 ```
@@ -85,7 +85,7 @@ const result = await breachService.checkPasswordBreach('password123', 'user-456'
 const result = await breachService.checkPasswordBreach('password123', 'user-456', {
   skipCache: false,
   timeout: 3000,
-  retryAttempts: 2
+  retryAttempts: 2,
 });
 ```
 
@@ -98,6 +98,7 @@ const result = await breachService.checkPasswordBreach('password123', 'user-456'
 Check if a password has been found in known data breaches.
 
 **Parameters:**
+
 - `password: string` - The password to check
 - `userId?: string` - User ID for audit logging and rate limiting
 - `options?: BreachCheckOptions` - Check options
@@ -106,13 +107,13 @@ Check if a password has been found in known data breaches.
 
 ```typescript
 interface BreachCheckResult {
-  isBreached: boolean;        // True if password found in breach databases
-  occurrenceCount: number;    // Number of times password was seen
-  source: string;            // Data source (e.g., "HaveIBeenPwned")
-  checkedAt: Date;           // When the check was performed
-  hashPrefix: string;        // SHA-1 hash prefix used (for debugging)
-  cacheHit: boolean;         // Whether result came from cache
-  responseTime: number;      // API response time in milliseconds
+  isBreached: boolean; // True if password found in breach databases
+  occurrenceCount: number; // Number of times password was seen
+  source: string; // Data source (e.g., "HaveIBeenPwned")
+  checkedAt: Date; // When the check was performed
+  hashPrefix: string; // SHA-1 hash prefix used (for debugging)
+  cacheHit: boolean; // Whether result came from cache
+  responseTime: number; // API response time in milliseconds
 }
 ```
 
@@ -142,7 +143,7 @@ Create and send a breach notification to a user.
 const notification = await notificationService.createBreachNotification(
   'user-123',
   'HaveIBeenPwned',
-  50000  // Password seen 50,000 times
+  50000 // Password seen 50,000 times
 );
 ```
 
@@ -187,17 +188,17 @@ const breachServiceConfig = {
   retryAttempts: 3,
   cacheSettings: {
     ttl: 24 * 60 * 60 * 1000, // 24 hours
-    maxSize: 10000             // Max cached entries
+    maxSize: 10000, // Max cached entries
   },
   rateLimiting: {
-    window: 60,  // 1 minute
-    max: 10      // 10 requests per minute per user
+    window: 60, // 1 minute
+    max: 10, // 10 requests per minute per user
   },
   privacy: {
-    anonymityLevel: 5,         // K-anonymity k=5
-    enablePadding: true,       // API padding for enhanced privacy
-    logHashPrefixes: true      // Whether to log hash prefixes for debugging
-  }
+    anonymityLevel: 5, // K-anonymity k=5
+    enablePadding: true, // API padding for enhanced privacy
+    logHashPrefixes: true, // Whether to log hash prefixes for debugging
+  },
 };
 ```
 
@@ -216,9 +217,9 @@ const breachServiceConfig = {
 // Default rate limits
 const rateLimits = {
   passwordBreachCheck: {
-    window: 60,  // 1 minute window
-    max: 10      // 10 checks per user per minute
-  }
+    window: 60, // 1 minute window
+    max: 10, // 10 checks per user per minute
+  },
 };
 ```
 
@@ -283,10 +284,10 @@ The system implements comprehensive error handling:
 ```typescript
 const metrics = service.getServiceStats();
 console.log({
-  cacheSize: metrics.cacheSize,           // Current cache entries
-  cacheHitRate: metrics.cacheHitRate,     // Cache effectiveness
-  totalChecks: metrics.totalChecks,       // Lifetime breach checks
-  averageResponseTime: metrics.averageResponseTime
+  cacheSize: metrics.cacheSize, // Current cache entries
+  cacheHitRate: metrics.cacheHitRate, // Cache effectiveness
+  totalChecks: metrics.totalChecks, // Lifetime breach checks
+  averageResponseTime: metrics.averageResponseTime,
 });
 ```
 
@@ -299,16 +300,15 @@ async function registerUser(userData: RegisterRequest): Promise<User> {
   try {
     // Password validation automatically includes breach checking
     await validatePassword(userData.password);
-    
+
     const user = await createUser(userData);
     return user;
-    
   } catch (error) {
     if (error.message.includes('data breach')) {
       // Handle breach detection
       await logSecurityEvent('registration_blocked_breach', {
         email: userData.email,
-        error: error.message
+        error: error.message,
       });
     }
     throw error;
@@ -322,21 +322,17 @@ async function registerUser(userData: RegisterRequest): Promise<User> {
 async function confirmPasswordReset(token: string, newPassword: string): Promise<void> {
   // Validate token
   const user = await validateResetToken(token);
-  
+
   // Check new password for breaches
   const breachResult = await breachService.checkPasswordBreach(newPassword, user.id);
-  
+
   if (breachResult.isBreached) {
     // Send breach notification
-    await notificationService.createBreachNotification(
-      user.id,
-      'HaveIBeenPwned',
-      breachResult.occurrenceCount
-    );
-    
+    await notificationService.createBreachNotification(user.id, 'HaveIBeenPwned', breachResult.occurrenceCount);
+
     throw new Error('Password has been found in data breaches. Please choose a different password.');
   }
-  
+
   // Proceed with password reset
   await updateUserPassword(user.id, newPassword);
 }
@@ -347,50 +343,45 @@ async function confirmPasswordReset(token: string, newPassword: string): Promise
 ```typescript
 async function auditUserPasswords(userIds: string[]): Promise<AuditReport> {
   const results = [];
-  
+
   for (const userId of userIds) {
     try {
       // Get user's current password hash for comparison
       const user = await getUserById(userId);
-      
+
       // Note: In real implementation, you'd need stored password or
       // prompt user to check their password
-      
+
       const breachResult = await breachService.checkPasswordBreach(
         userProvidedPassword, // Would need secure way to get this
         userId,
         { skipCache: true } // Always check latest breach data
       );
-      
+
       if (breachResult.isBreached) {
         // Create notification
-        await notificationService.createBreachNotification(
-          userId,
-          'HaveIBeenPwned',
-          breachResult.occurrenceCount
-        );
-        
+        await notificationService.createBreachNotification(userId, 'HaveIBeenPwned', breachResult.occurrenceCount);
+
         results.push({
           userId,
           status: 'BREACHED',
-          occurrences: breachResult.occurrenceCount
+          occurrences: breachResult.occurrenceCount,
         });
       } else {
         results.push({
           userId,
-          status: 'CLEAN'
+          status: 'CLEAN',
         });
       }
-      
     } catch (error) {
       results.push({
         userId,
         status: 'ERROR',
-        error: error.message
+        error: error.message,
       });
     }
   }
-  
+
   return { results };
 }
 ```
@@ -408,10 +399,11 @@ The system automatically sends email notifications for password breaches:
 </div>
 
 <div style="padding: 20px;">
-  <p>We've detected that a password associated with your account has been found 
-     in a known data breach. This password has appeared <strong>123,456</strong> 
-     times in breach databases.</p>
-  
+  <p>
+    We've detected that a password associated with your account has been found in a known data breach. This password has
+    appeared <strong>123,456</strong> times in breach databases.
+  </p>
+
   <div style="background-color: #fff3cd; padding: 15px;">
     <h3>Immediate Action Required</h3>
     <ul>
@@ -434,8 +426,8 @@ const notification = {
   message: 'A password associated with your account was found in a data breach.',
   actions: [
     { label: 'Change Password', action: 'redirect:/settings/password' },
-    { label: 'Learn More', action: 'modal:security-tips' }
-  ]
+    { label: 'Learn More', action: 'modal:security-tips' },
+  ],
 };
 ```
 
@@ -459,14 +451,16 @@ describe('Password Breach Integration', () => {
   it('should integrate with UserService validation', async () => {
     const breachService = new PasswordBreachService(audit, rateLimit);
     const userService = new UserService(config, db, audit, breachService);
-    
+
     // Mock breached password
     mockAPI('password', { breached: true, count: 100000 });
-    
-    await expect(userService.createUser({
-      email: 'test@example.com',
-      password: 'password'
-    })).rejects.toThrow('data breach');
+
+    await expect(
+      userService.createUser({
+        email: 'test@example.com',
+        password: 'password',
+      })
+    ).rejects.toThrow('data breach');
   });
 });
 ```
@@ -484,13 +478,13 @@ const loadTest = {
   scenarios: {
     breach_check: {
       weight: 70,
-      action: 'check_password_breach'
+      action: 'check_password_breach',
     },
     cache_hit: {
       weight: 30,
-      action: 'check_cached_password'
-    }
-  }
+      action: 'check_cached_password',
+    },
+  },
 };
 ```
 
@@ -512,14 +506,14 @@ breach_detection_rate_high:
   condition: breach_rate > 15%
   window: 1h
   severity: warning
-  description: "Unusually high password breach detection rate"
+  description: 'Unusually high password breach detection rate'
 
 # API performance alert
 api_response_time_high:
   condition: avg(response_time) > 5000ms
   window: 5m
   severity: critical
-  description: "HaveIBeenPwned API response time degraded"
+  description: 'HaveIBeenPwned API response time degraded'
 ```
 
 ### Dashboard Metrics
@@ -532,8 +526,8 @@ const metrics = {
   averageResponseTime: 245,
   topBreachedPasswords: [
     { password_hash_prefix: 'A1B2C', count: 50 },
-    { password_hash_prefix: 'D3E4F', count: 32 }
-  ]
+    { password_hash_prefix: 'D3E4F', count: 32 },
+  ],
 };
 ```
 
@@ -587,7 +581,7 @@ Enable debug logging for troubleshooting:
 ```typescript
 const breachService = new PasswordBreachService(audit, rateLimit, {
   debugMode: true,
-  logLevel: 'verbose'
+  logLevel: 'verbose',
 });
 ```
 

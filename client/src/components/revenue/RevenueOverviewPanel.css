@@ -345,17 +345,17 @@
     padding: 16px;
     gap: 16px;
   }
-  
+
   .revenue-forecast__content {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
   }
-  
+
   .revenue-metric__value {
     font-size: 20px;
   }
-  
+
   .revenue-metric--primary .revenue-metric__value {
     font-size: 24px;
   }
@@ -368,20 +368,20 @@
     border-color: var(--dark-border, #374151);
     color: var(--dark-text, #f9fafb);
   }
-  
+
   .revenue-metric:hover {
     background: var(--dark-metric-hover, #374151);
   }
-  
+
   .revenue-metric--primary {
     background: var(--dark-primary-background, #1e40af);
   }
-  
+
   .revenue-overview__forecast {
     background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
     border-color: var(--dark-info-border, #3b82f6);
   }
-  
+
   .revenue-overview__insights {
     background: var(--dark-insights-background, #374151);
     border-color: var(--dark-border, #4b5563);

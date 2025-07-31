@@ -25,11 +25,11 @@ try {
 
 // Root endpoint
 server.get('/', async (request, reply) => {
-  return { 
+  return {
     status: 'PromptScape API running',
     mode: 'production',
     engine: 'basic',
-    features: ['graph-execution', 'deterministic-seeding', 'core-nodes']
+    features: ['graph-execution', 'deterministic-seeding', 'core-nodes'],
   };
 });
 
@@ -37,18 +37,18 @@ server.get('/', async (request, reply) => {
 server.get('/health', async (request, reply) => {
   try {
     const dbHealthy = healthCheck();
-    return { 
+    return {
       status: dbHealthy ? 'healthy' : 'unhealthy',
       database: dbHealthy ? 'connected' : 'disconnected',
       engine: 'basic',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
   } catch (error) {
-    return reply.code(500).send({ 
+    return reply.code(500).send({
       status: 'unhealthy',
-      database: 'error', 
+      database: 'error',
       error: error.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 });
@@ -57,19 +57,19 @@ server.get('/health', async (request, reply) => {
 server.post('/preview', async (request, reply) => {
   try {
     const graph = request.body as Graph;
-    
+
     // Basic validation
     const validation = validateGraph(graph);
     if (!validation.valid) {
       return reply.code(400).send({
         error: 'Invalid graph',
-        details: validation.errors
+        details: validation.errors,
       });
     }
-    
+
     // Execute graph with basic engine
     const result = await executeGraph(graph);
-    
+
     return {
       outputs: result.outputs,
       executionPath: result.executionPath,
@@ -77,14 +77,14 @@ server.post('/preview', async (request, reply) => {
         nodeCount: graph.nodes?.length || 0,
         seed: graph.seed,
         engine: 'basic',
-        features: ['WeightedChoice', 'Output', 'Concat', 'SetVariable', 'GetVariable', 'Include']
-      }
+        features: ['WeightedChoice', 'Output', 'Concat', 'SetVariable', 'GetVariable', 'Include'],
+      },
     };
   } catch (error) {
     console.error('Graph execution error:', error);
     return reply.code(500).send({
       error: 'Graph execution failed',
-      message: error.message
+      message: error.message,
     });
   }
 });

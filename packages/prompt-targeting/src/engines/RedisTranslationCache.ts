@@ -42,7 +42,7 @@ export class RedisTranslationCache implements TranslationCache {
     misses: 0,
     sets: 0,
     deletes: 0,
-    errors: 0
+    errors: 0,
   };
   private logger: Console = console;
 
@@ -56,13 +56,13 @@ export class RedisTranslationCache implements TranslationCache {
       keyPrefix: config.keyPrefix || 'prompt-targeting:',
       defaultTTL: config.defaultTTL || 3600,
       enableCompression: config.enableCompression || true,
-      compressionThreshold: config.compressionThreshold || 1024
+      compressionThreshold: config.compressionThreshold || 1024,
     };
 
     this.client = createClient({
       url: this.config.url,
       password: this.config.password,
-      database: this.config.database
+      database: this.config.database,
     });
 
     this.setupEventHandlers();
@@ -107,7 +107,7 @@ export class RedisTranslationCache implements TranslationCache {
     try {
       const fullKey = this.buildKey(key);
       const value = await this.client.get(fullKey);
-      
+
       if (value === null) {
         this.metrics.misses++;
         return null;
@@ -138,7 +138,7 @@ export class RedisTranslationCache implements TranslationCache {
       const expiration = ttl || this.config.defaultTTL;
 
       await this.client.setEx(fullKey, expiration, serialized);
-      
+
       this.metrics.sets++;
       this.logger.log(`Cached translation for key: ${key} (TTL: ${expiration}s)`);
     } catch (error) {
@@ -177,7 +177,7 @@ export class RedisTranslationCache implements TranslationCache {
     try {
       const fullKey = this.buildKey(key);
       await this.client.del(fullKey);
-      
+
       this.metrics.deletes++;
       this.logger.log(`Deleted cache entry for key: ${key}`);
     } catch (error) {
@@ -197,7 +197,7 @@ export class RedisTranslationCache implements TranslationCache {
     try {
       const pattern = this.buildKey('*');
       const keys = await this.client.keys(pattern);
-      
+
       if (keys.length > 0) {
         await this.client.del(keys);
         this.logger.log(`Cleared ${keys.length} cache entries`);
@@ -218,7 +218,7 @@ export class RedisTranslationCache implements TranslationCache {
     hitRate: number;
   }> {
     let size = 0;
-    
+
     if (this.connected) {
       try {
         const pattern = this.buildKey('*');
@@ -236,7 +236,7 @@ export class RedisTranslationCache implements TranslationCache {
       hits: this.metrics.hits,
       misses: this.metrics.misses,
       size,
-      hitRate
+      hitRate,
     };
   }
 
@@ -263,19 +263,19 @@ export class RedisTranslationCache implements TranslationCache {
       try {
         const info = await this.client.info('memory');
         const keyspaceInfo = await this.client.info('keyspace');
-        
+
         // Parse memory usage
         const memoryMatch = info.match(/used_memory:(\d+)/);
         const memoryUsage = memoryMatch ? parseInt(memoryMatch[1]) : undefined;
-        
+
         // Parse keyspace stats
         const hitsMatch = keyspaceInfo.match(/keyspace_hits:(\d+)/);
         const missesMatch = keyspaceInfo.match(/keyspace_misses:(\d+)/);
-        
+
         redisInfo = {
           memoryUsage,
           keyspaceHits: hitsMatch ? parseInt(hitsMatch[1]) : undefined,
-          keyspaceMisses: missesMatch ? parseInt(missesMatch[1]) : undefined
+          keyspaceMisses: missesMatch ? parseInt(missesMatch[1]) : undefined,
         };
       } catch (error) {
         this.logger.error('Error getting Redis info:', error);
@@ -288,7 +288,7 @@ export class RedisTranslationCache implements TranslationCache {
       deletes: this.metrics.deletes,
       errors: this.metrics.errors,
       connected: this.connected,
-      ...redisInfo
+      ...redisInfo,
     };
   }
 
@@ -339,14 +339,14 @@ export class RedisTranslationCache implements TranslationCache {
    */
   private async serializeValue(value: PlatformPrompt): Promise<string> {
     const json = JSON.stringify(value);
-    
+
     // Apply compression if enabled and value is large enough
     if (this.config.enableCompression && json.length > this.config.compressionThreshold) {
       // For now, just return JSON - compression can be added later
       // TODO: Implement compression using zlib
       return json;
     }
-    
+
     return json;
   }
 
@@ -363,7 +363,7 @@ export class RedisTranslationCache implements TranslationCache {
    * Setup Redis event handlers
    */
   private setupEventHandlers(): void {
-    this.client.on('error', (error) => {
+    this.client.on('error', error => {
       this.logger.error('Redis client error:', error);
       this.connected = false;
     });
@@ -396,7 +396,7 @@ export class RedisTranslationCache implements TranslationCache {
       return {
         healthy: false,
         connected: false,
-        error: 'Not connected to Redis'
+        error: 'Not connected to Redis',
       };
     }
 
@@ -404,17 +404,17 @@ export class RedisTranslationCache implements TranslationCache {
       const start = Date.now();
       await this.client.ping();
       const latency = Date.now() - start;
-      
+
       return {
         healthy: true,
         connected: true,
-        latency
+        latency,
       };
     } catch (error) {
       return {
         healthy: false,
         connected: false,
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : 'Unknown error',
       };
     }
   }

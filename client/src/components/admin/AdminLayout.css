@@ -268,7 +268,7 @@
   .mobile-header {
     display: flex;
   }
-  
+
   .admin-sidebar {
     position: fixed;
     top: 0;
@@ -277,36 +277,36 @@
     transform: translateX(-100%);
     z-index: 40;
   }
-  
+
   .admin-sidebar.open {
     transform: translateX(0);
   }
-  
+
   .sidebar-overlay {
     display: block;
   }
-  
+
   .admin-main {
     margin-top: 60px; /* Height of mobile header */
   }
-  
+
   .admin-breadcrumb {
     padding: 12px 16px;
   }
-  
+
   .nav-item-description {
     display: none;
   }
-  
+
   .user-details {
     display: none;
   }
-  
+
   .logout-btn {
     justify-content: center;
     padding: 12px;
   }
-  
+
   .logout-btn span {
     display: none;
   }
@@ -316,15 +316,15 @@
   .admin-sidebar {
     width: 100%;
   }
-  
+
   .nav-item-description {
     display: block;
   }
-  
+
   .user-details {
     display: block;
   }
-  
+
   .logout-btn span {
     display: inline;
   }

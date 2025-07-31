@@ -7,7 +7,12 @@
 import { EventEmitter } from 'events';
 import TestingFramework, { TestEnvironment, TestCategory, TestResult, TestReport } from './TestingFramework';
 import TestFixtureManager, { TestDatabaseManager, TestEnvironmentManager } from './TestFixtures';
-import { GraphDataGenerator, UserDataGenerator, APIDataGenerator, PerformanceDataGenerator } from './TestDataGenerators';
+import {
+  GraphDataGenerator,
+  UserDataGenerator,
+  APIDataGenerator,
+  PerformanceDataGenerator,
+} from './TestDataGenerators';
 import PerformanceScenarios, { PerformanceCategory } from './performance-scenarios';
 
 export interface TestHarnessConfig {
@@ -85,7 +90,7 @@ export class TestHarness extends EventEmitter {
       setupEnvironment: false,
       generateReports: true,
       outputDir: './test-results',
-      ...config
+      ...config,
     };
 
     this.framework = new TestingFramework({
@@ -93,7 +98,7 @@ export class TestHarness extends EventEmitter {
       parallel: this.config.parallel,
       coverage: this.config.coverage,
       timeout: this.config.timeout,
-      retries: this.config.retries
+      retries: this.config.retries,
     });
 
     this.fixtureManager = new TestFixtureManager();
@@ -104,7 +109,7 @@ export class TestHarness extends EventEmitter {
       graph: new GraphDataGenerator(),
       user: new UserDataGenerator(),
       api: new APIDataGenerator(),
-      performance: new PerformanceDataGenerator()
+      performance: new PerformanceDataGenerator(),
     };
 
     this.performanceScenarios = new PerformanceScenarios();
@@ -154,7 +159,7 @@ export class TestHarness extends EventEmitter {
     this.emit('testRunStarted');
 
     try {
-      const executionPlan = plan || await this.createExecutionPlan();
+      const executionPlan = plan || (await this.createExecutionPlan());
       this.emit('executionPlanCreated', executionPlan);
 
       // Pre-execution setup
@@ -162,7 +167,7 @@ export class TestHarness extends EventEmitter {
 
       // Execute tests
       const results = await this.executeTestPlan(executionPlan);
-      
+
       // Generate comprehensive report
       const report = await this.generateComprehensiveReport(results);
 
@@ -171,7 +176,6 @@ export class TestHarness extends EventEmitter {
 
       this.emit('testRunCompleted', report);
       return report;
-
     } catch (error) {
       this.emit('testRunError', error);
       throw error;
@@ -202,7 +206,7 @@ export class TestHarness extends EventEmitter {
       graphExecution: await this.benchmarkGraphExecution(),
       apiLatency: await this.benchmarkAPILatency(),
       renderingPerformance: await this.benchmarkRendering(),
-      memoryUsage: await this.benchmarkMemoryUsage()
+      memoryUsage: await this.benchmarkMemoryUsage(),
     };
 
     this.emit('performanceBenchmarksCompleted', benchmarks);
@@ -219,7 +223,7 @@ export class TestHarness extends EventEmitter {
       xssProtection: await this.testXSSProtection(),
       sqlInjectionProtection: await this.testSQLInjectionProtection(),
       authenticationSecurity: await this.testAuthenticationSecurity(),
-      inputValidation: await this.testInputValidation()
+      inputValidation: await this.testInputValidation(),
     };
 
     this.emit('securityTestsCompleted', securityResults);
@@ -237,7 +241,7 @@ export class TestHarness extends EventEmitter {
       failedTests: this.results.filter(r => r.status === 'failed').length,
       environments: this.environmentManager.listEnvironments(),
       fixtures: this.fixtureManager.list(),
-      lastRun: this.reports.length > 0 ? this.reports[this.reports.length - 1].timestamp : null
+      lastRun: this.reports.length > 0 ? this.reports[this.reports.length - 1].timestamp : null,
     };
   }
 
@@ -298,15 +302,12 @@ export class TestHarness extends EventEmitter {
       NODE_ENV: 'test',
       API_PORT: 3001,
       DATABASE_URL: 'postgresql://test:test@localhost:5433/test_db',
-      REDIS_URL: 'redis://localhost:6380'
+      REDIS_URL: 'redis://localhost:6380',
     });
   }
 
   private async setupTestDatabase(): Promise<void> {
-    const schema = [
-      'users', 'graphs', 'nodes', 'edges', 
-      'sessions', 'audit_logs', 'performance_metrics'
-    ];
+    const schema = ['users', 'graphs', 'nodes', 'edges', 'sessions', 'audit_logs', 'performance_metrics'];
     await this.databaseManager.setupTestDatabase('test-harness-db', schema);
   }
 
@@ -314,15 +315,15 @@ export class TestHarness extends EventEmitter {
     // Register Engine Tests
     const engineSuite = this.framework.registerSuite('Engine Tests', {
       category: TestCategory.ENGINE,
-      environment: this.config.environment
+      environment: this.config.environment,
     });
 
-    engineSuite.test('Graph Validation', async (context) => {
+    engineSuite.test('Graph Validation', async context => {
       const graph = context.fixtures.get('graph-simple-linear');
       context.utilities.assert.truthy(graph, 'Graph fixture should exist');
     });
 
-    engineSuite.test('Node Execution', async (context) => {
+    engineSuite.test('Node Execution', async context => {
       const graph = context.fixtures.get('graph-complex-branching');
       // Test node execution logic
       await context.utilities.wait(100); // Simulate execution time
@@ -331,13 +332,13 @@ export class TestHarness extends EventEmitter {
     // Register Frontend Tests
     const frontendSuite = this.framework.registerSuite('Frontend Tests', {
       category: TestCategory.FRONTEND,
-      environment: this.config.environment
+      environment: this.config.environment,
     });
 
-    frontendSuite.test('Component Rendering', async (context) => {
+    frontendSuite.test('Component Rendering', async context => {
       // Test component rendering
       const mockProps = context.utilities.generateData('object', {
-        keys: ['title', 'description', 'visible']
+        keys: ['title', 'description', 'visible'],
       });
       context.utilities.assert.truthy(mockProps, 'Mock props should be generated');
     });
@@ -345,10 +346,10 @@ export class TestHarness extends EventEmitter {
     // Register Backend Tests
     const backendSuite = this.framework.registerSuite('Backend Tests', {
       category: TestCategory.BACKEND,
-      environment: this.config.environment
+      environment: this.config.environment,
     });
 
-    backendSuite.test('API Endpoints', async (context) => {
+    backendSuite.test('API Endpoints', async context => {
       const apiData = context.fixtures.get('api-auth-success');
       context.utilities.assert.truthy(apiData, 'API fixture should exist');
     });
@@ -358,16 +359,16 @@ export class TestHarness extends EventEmitter {
       const performanceSuite = this.framework.registerSuite('Performance Tests', {
         category: TestCategory.WORKFLOW,
         environment: TestEnvironment.PERFORMANCE,
-        timeout: 30000
+        timeout: 30000,
       });
 
-      performanceSuite.test('Large Graph Processing', async (context) => {
+      performanceSuite.test('Large Graph Processing', async context => {
         const largeGraph = this.generators.performance.generateLargeGraph(500, 0.6);
         const startTime = Date.now();
-        
+
         // Simulate processing
         await context.utilities.wait(1000);
-        
+
         const duration = Date.now() - startTime;
         context.utilities.assert.truthy(duration < 5000, 'Processing should complete within 5 seconds');
       });
@@ -379,7 +380,7 @@ export class TestHarness extends EventEmitter {
     // Additional preparation can be done here if needed
     this.emit('fixturesReady', {
       count: this.fixtureManager.list().length,
-      categories: ['graph', 'user', 'api', 'performance', 'security']
+      categories: ['graph', 'user', 'api', 'performance', 'security'],
     });
   }
 
@@ -390,39 +391,35 @@ export class TestHarness extends EventEmitter {
         category: TestCategory.ENGINE,
         tests: [
           { name: 'Graph Validation', category: TestCategory.ENGINE, environment: this.config.environment },
-          { name: 'Node Execution', category: TestCategory.ENGINE, environment: this.config.environment }
+          { name: 'Node Execution', category: TestCategory.ENGINE, environment: this.config.environment },
         ],
-        fixtures: ['graph-simple-linear', 'graph-complex-branching']
+        fixtures: ['graph-simple-linear', 'graph-complex-branching'],
       },
       {
         name: 'Frontend Tests',
         category: TestCategory.FRONTEND,
-        tests: [
-          { name: 'Component Rendering', category: TestCategory.FRONTEND, environment: this.config.environment }
-        ],
-        fixtures: ['user-admin', 'graph-simple-linear']
+        tests: [{ name: 'Component Rendering', category: TestCategory.FRONTEND, environment: this.config.environment }],
+        fixtures: ['user-admin', 'graph-simple-linear'],
       },
       {
         name: 'Backend Tests',
         category: TestCategory.BACKEND,
-        tests: [
-          { name: 'API Endpoints', category: TestCategory.BACKEND, environment: this.config.environment }
-        ],
-        fixtures: ['api-auth-success', 'api-auth-failure']
-      }
+        tests: [{ name: 'API Endpoints', category: TestCategory.BACKEND, environment: this.config.environment }],
+        fixtures: ['api-auth-success', 'api-auth-failure'],
+      },
     ];
 
     return {
       suites,
       fixtures: this.fixtureManager.list(),
       environment: this.config.environment,
-      estimatedDuration: suites.reduce((total, suite) => total + (suite.tests.length * 2000), 0)
+      estimatedDuration: suites.reduce((total, suite) => total + suite.tests.length * 2000, 0),
     };
   }
 
   private async preExecutionSetup(plan: TestExecutionPlan): Promise<void> {
     this.emit('preExecutionSetup', plan);
-    
+
     // Load required fixtures
     for (const fixtureName of plan.fixtures) {
       const fixture = this.fixtureManager.get(fixtureName);
@@ -448,7 +445,7 @@ export class TestHarness extends EventEmitter {
     this.emit('testPlanExecuted', {
       totalTests: results.length,
       passed: results.filter(r => r.status === 'passed').length,
-      failed: results.filter(r => r.status === 'failed').length
+      failed: results.filter(r => r.status === 'failed').length,
     });
 
     return results;
@@ -462,12 +459,12 @@ export class TestHarness extends EventEmitter {
         failed: results.filter(r => r.status === 'failed').length,
         skipped: results.filter(r => r.status === 'skipped').length,
         duration: results.reduce((sum, r) => sum + r.duration, 0),
-        passRate: results.length > 0 ? (results.filter(r => r.status === 'passed').length / results.length) * 100 : 0
+        passRate: results.length > 0 ? (results.filter(r => r.status === 'passed').length / results.length) * 100 : 0,
       },
       results,
       config: this.framework['globalConfig'],
       timestamp: new Date(),
-      coverage: this.calculateOverallCoverage(results)
+      coverage: this.calculateOverallCoverage(results),
     };
 
     if (this.config.generateReports) {
@@ -487,9 +484,7 @@ export class TestHarness extends EventEmitter {
   }
 
   private calculateOverallCoverage(results: TestResult[]): any {
-    const coverageResults = results
-      .map(r => r.coverage)
-      .filter(c => c !== undefined);
+    const coverageResults = results.map(r => r.coverage).filter(c => c !== undefined);
 
     if (coverageResults.length === 0) {
       return { lines: 0, statements: 0, functions: 0, branches: 0, percentage: 0 };
@@ -500,14 +495,14 @@ export class TestHarness extends EventEmitter {
       statements: Math.round(coverageResults.reduce((sum, c) => sum + c!.statements, 0) / coverageResults.length),
       functions: Math.round(coverageResults.reduce((sum, c) => sum + c!.functions, 0) / coverageResults.length),
       branches: Math.round(coverageResults.reduce((sum, c) => sum + c!.branches, 0) / coverageResults.length),
-      percentage: Math.round(coverageResults.reduce((sum, c) => sum + c!.percentage, 0) / coverageResults.length)
+      percentage: Math.round(coverageResults.reduce((sum, c) => sum + c!.percentage, 0) / coverageResults.length),
     };
   }
 
   private async saveReportToFile(report: TestReport): Promise<void> {
     const filename = `test-report-${Date.now()}.json`;
     const filepath = `${this.config.outputDir}/${filename}`;
-    
+
     // In a real implementation, this would write to filesystem
     this.emit('reportSaved', { filepath, report });
   }
@@ -517,7 +512,7 @@ export class TestHarness extends EventEmitter {
     const graphs = [
       this.generators.graph.generateGraph({ nodeCount: 10 }),
       this.generators.graph.generateGraph({ nodeCount: 50 }),
-      this.generators.graph.generateGraph({ nodeCount: 100 })
+      this.generators.graph.generateGraph({ nodeCount: 100 }),
     ];
 
     const results = [];
@@ -528,7 +523,7 @@ export class TestHarness extends EventEmitter {
       results.push({
         nodeCount: graph.nodes.length,
         executionTime: Date.now() - startTime,
-        memoryUsage: Math.random() * 100
+        memoryUsage: Math.random() * 100,
       });
     }
 
@@ -552,7 +547,7 @@ export class TestHarness extends EventEmitter {
         endpoint,
         avgLatency: latencies.reduce((sum, l) => sum + l, 0) / latencies.length,
         minLatency: Math.min(...latencies),
-        maxLatency: Math.max(...latencies)
+        maxLatency: Math.max(...latencies),
       });
     }
 
@@ -563,7 +558,7 @@ export class TestHarness extends EventEmitter {
     const scenarios = [
       { nodeCount: 10, complexity: 'simple' },
       { nodeCount: 50, complexity: 'medium' },
-      { nodeCount: 100, complexity: 'complex' }
+      { nodeCount: 100, complexity: 'complex' },
     ];
 
     const results = [];
@@ -574,7 +569,7 @@ export class TestHarness extends EventEmitter {
       results.push({
         ...scenario,
         renderTime: Date.now() - startTime,
-        fps: 60 - Math.random() * 20
+        fps: 60 - Math.random() * 20,
       });
     }
 
@@ -588,7 +583,7 @@ export class TestHarness extends EventEmitter {
       peak: 120,
       average: 78,
       gc_count: 5,
-      gc_time: 25
+      gc_time: 25,
     };
   }
 
@@ -606,7 +601,7 @@ export class TestHarness extends EventEmitter {
     return {
       totalPayloads: xssPayloads.length,
       blockedPayloads: results.filter(r => r.blocked).length,
-      protectionRate: results.filter(r => r.blocked).length / results.length * 100
+      protectionRate: (results.filter(r => r.blocked).length / results.length) * 100,
     };
   }
 
@@ -623,7 +618,7 @@ export class TestHarness extends EventEmitter {
     return {
       totalPayloads: sqlPayloads.length,
       blockedPayloads: results.filter(r => r.blocked).length,
-      protectionRate: results.filter(r => r.blocked).length / results.length * 100
+      protectionRate: (results.filter(r => r.blocked).length / results.length) * 100,
     };
   }
 
@@ -634,7 +629,7 @@ export class TestHarness extends EventEmitter {
       sessionSecurity: true,
       passwordHashing: true,
       bruteForceProtection: true,
-      mfaSupport: false
+      mfaSupport: false,
     };
   }
 
@@ -645,7 +640,7 @@ export class TestHarness extends EventEmitter {
       typeValidation: true,
       formatValidation: true,
       sanitization: true,
-      encodingSupport: true
+      encodingSupport: true,
     };
   }
 }

@@ -1,6 +1,6 @@
 /**
  * CRDT Research Package for PromptGraph
- * 
+ *
  * This package explores Conflict-free Replicated Data Types (CRDTs)
  * for enabling real-time collaborative editing of prompt graphs.
  */

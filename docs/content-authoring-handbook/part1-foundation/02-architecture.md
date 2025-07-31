@@ -28,18 +28,21 @@ Prompt Spaghetti follows a modular, layered architecture:
 ### Key Components
 
 #### 1. Visual Editor
+
 - **React Flow Canvas**: Drag-and-drop node interface
 - **Inspector Panel**: Node configuration and properties
 - **Preview System**: Real-time generation preview
 - **Palette**: Available node types
 
 #### 2. Runtime Engine
+
 - **Node Execution**: Processes the graph structure
 - **Context Management**: Maintains variables and state
 - **Deterministic RNG**: Seeded random number generation
 - **Performance Optimization**: Caching and efficiency
 
 #### 3. Schema Layer
+
 - **Zod Validation**: Type-safe data structures
 - **Graph Validation**: Connection rules and constraints
 - **Serialization**: Save/load functionality
@@ -51,6 +54,7 @@ The heart of Prompt Spaghetti is its generator engine, which transforms node gra
 ### Execution Model
 
 1. **Graph Traversal**
+
    ```typescript
    // Simplified execution flow
    function execute(nodeId: string, context: ExecutionContext) {
@@ -77,13 +81,14 @@ Prompt Spaghetti ensures reproducible results through deterministic execution:
 
 ```javascript
 // Every execution with same seed produces identical output
-const seed = "abc123";
+const seed = 'abc123';
 const result1 = generator.execute(seed);
 const result2 = generator.execute(seed);
 console.log(result1 === result2); // true
 ```
 
 Key principles:
+
 - **Seeded RNG**: Uses seedrandom for predictable randomness
 - **Sub-seed Generation**: `hash(nodeId + parentSeed)` for node isolation
 - **No External State**: Pure functions throughout
@@ -96,22 +101,25 @@ Content generation uses a directed acyclic graph (DAG) of nodes:
 ### Node Types
 
 #### Core Nodes
+
 1. **WeightedChoice**: Probabilistic selection
+
    ```json
    {
      "type": "WeightedChoice",
      "choices": [
-       {"weight": 70, "value": "common"},
-       {"weight": 30, "value": "rare"}
+       { "weight": 70, "value": "common" },
+       { "weight": 30, "value": "rare" }
      ]
    }
    ```
 
 2. **Concat**: String concatenation
+
    ```json
    {
      "type": "Concat",
-     "inputs": ["Hello, ", {"$ref": "nameNode"}, "!"]
+     "inputs": ["Hello, ", { "$ref": "nameNode" }, "!"]
    }
    ```
 
@@ -124,12 +132,14 @@ Content generation uses a directed acyclic graph (DAG) of nodes:
    ```
 
 #### Variable Nodes
+
 1. **SetVariable**: Store values
+
    ```json
    {
      "type": "SetVariable",
      "variableName": "character_name",
-     "value": {"$ref": "nameGenerator"}
+     "value": { "$ref": "nameGenerator" }
    }
    ```
 
@@ -143,6 +153,7 @@ Content generation uses a directed acyclic graph (DAG) of nodes:
    ```
 
 #### Advanced Nodes (Epic 7)
+
 1. **Conditional**: Logic branching
 2. **Sequential**: Ordered processing
 3. **Markov**: State transitions
@@ -155,14 +166,15 @@ Nodes connect through edges that define data flow:
 ```typescript
 interface Edge {
   id: string;
-  source: string;      // Source node ID
-  target: string;      // Target node ID
+  source: string; // Source node ID
+  target: string; // Target node ID
   sourceHandle: string; // Output port
   targetHandle: string; // Input port
 }
 ```
 
 Connection rules:
+
 - No cycles allowed (DAG constraint)
 - Type compatibility enforced
 - Multiple inputs supported
@@ -189,6 +201,7 @@ Variables provide dynamic behavior within generators:
 4. **Default Values**: Fallbacks for missing variables
 
 Example context flow:
+
 ```javascript
 // Initial context
 { seed: "123", variables: {} }
@@ -207,16 +220,19 @@ Understanding how rules resolve is key to effective generator design:
 ### Rule Types
 
 1. **String Rules**
+
    ```json
    "rule": "Simple text output"
    ```
 
 2. **Array Rules** (random selection)
+
    ```json
    "rule": ["option1", "option2", "option3"]
    ```
 
 3. **Weighted Rules**
+
    ```json
    "rule": [
      {"w": 60, "v": "common"},
@@ -239,6 +255,7 @@ Understanding how rules resolve is key to effective generator design:
 5. **Final Assembly**: Combine all pieces
 
 Example resolution:
+
 ```
 Input:  "The [size] [color] [animal]"
 Step 1: "The " + resolve([size]) + " " + resolve([color]) + " " + resolve([animal])
@@ -288,16 +305,19 @@ Efficient execution is crucial for responsive generation:
 Prompt Spaghetti implements multiple security layers:
 
 ### Input Validation
+
 - Schema validation on all inputs
 - Size limits on generated content
 - Recursive depth limits
 
 ### Safe Execution
+
 - No eval() or code execution
 - Sandboxed expression evaluation
 - Pattern detection for malicious content
 
 ### Resource Limits
+
 - Maximum execution time
 - Memory usage caps
 - Recursion depth limits
@@ -307,6 +327,7 @@ Prompt Spaghetti implements multiple security layers:
 The architecture provides multiple integration options:
 
 ### API Integration
+
 ```javascript
 // JavaScript API
 import { Generator } from '@prompt-spaghetti/core';
@@ -322,12 +343,14 @@ POST /api/generate
 ```
 
 ### Extension System
+
 - Custom node types
 - Modifier plugins
 - Storage adapters
 - UI components
 
 ### Export Formats
+
 - Native JSON format
 - Generator bundles
 - Compiled executables

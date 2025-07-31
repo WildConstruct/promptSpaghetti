@@ -1,15 +1,18 @@
 # Agent Migration Guide - Phase System Removal
 
 ## Overview
+
 The task management system has been updated to remove the ASSIGN/BUILD phase system. Developers now directly self-assign tasks without waiting for phase changes.
 
 ## Key Changes
 
 ### 1. Phase System Removed
+
 - **OLD**: Tasks were assigned during ASSIGN phase, work done in BUILD phase
 - **NEW**: Developers grab tasks anytime using `grab-tasks.js`
 
 ### 2. Task States Simplified
+
 ```
 UNASSIGNED → IN_PROGRESS → REVIEW → APPROVED → COMPLETED
                                        ↓
@@ -17,6 +20,7 @@ UNASSIGNED → IN_PROGRESS → REVIEW → APPROVED → COMPLETED
 ```
 
 ### 3. New Database Integration
+
 - Tasks are now persisted in SQLite database
 - APPROVED status triggers automatic GitHub PR creation
 - Every 10 commits triggers automatic push to GitHub
@@ -24,6 +28,7 @@ UNASSIGNED → IN_PROGRESS → REVIEW → APPROVED → COMPLETED
 ## Agent Code Updates Required
 
 ### Developer Agents (`devAgentTemplate.ts`)
+
 ```typescript
 // REMOVE: Phase checking logic
 - if (ev.type === 'TASK_ASSIGNED' && this.isPhase(state, 'BUILD')) {
@@ -38,6 +43,7 @@ UNASSIGNED → IN_PROGRESS → REVIEW → APPROVED → COMPLETED
 ```
 
 ### Scrum Master Agent (`scrumMasterAgent.ts`)
+
 ```typescript
 // REMOVE: Phase transition logic
 - checkPhaseTransition(state) {
@@ -57,6 +63,7 @@ createTaskForStory(storyId, storyTitle) // Still needed
 ```
 
 ### QA Agent
+
 ```typescript
 // CRITICAL: Use the correct script for task reviews
 + // Always use: node src/run-qa-agent.js
@@ -66,7 +73,7 @@ createTaskForStory(storyId, storyTitle) // Still needed
 + // When setting task to APPROVED:
 + // - Triggers webhook to create GitHub PR
 + // - Updates commit counter for auto-push
-+ 
++
 + async approveTask(taskId: string) {
 +   // Database will handle GitHub automation
 +   await updateTaskStatus(taskId, 'APPROVED');
@@ -74,6 +81,7 @@ createTaskForStory(storyId, storyTitle) // Still needed
 ```
 
 **Important QA Agent Update**:
+
 - QA agents must use `node src/run-qa-agent.js` for reviewing tasks
 - This script properly integrates with commit tracking and GitHub automation
 - The `qa-review-workflow.js` script should NOT be used as it doesn't track commits
@@ -81,6 +89,7 @@ createTaskForStory(storyId, storyTitle) // Still needed
 ## Database Schema Reference
 
 ### Tickets Table
+
 ```sql
 CREATE TABLE tickets (
   id TEXT PRIMARY KEY,
@@ -99,6 +108,7 @@ CREATE TABLE tickets (
 ```
 
 ### GitHub Automation Config
+
 ```sql
 CREATE TABLE github_automation_config (
   enabled BOOLEAN DEFAULT true,
@@ -111,16 +121,19 @@ CREATE TABLE github_automation_config (
 ## Testing the New System
 
 1. **Monitor Available Tasks**:
+
    ```bash
    node monitor-system.js --mode tasks
    ```
 
 2. **Grab Tasks (Developer)**:
+
    ```bash
    node src/grab-tasks.js dev_A 2
    ```
 
 3. **Complete Task**:
+
    ```bash
    node src/finish-task.js T-12345 REVIEW
    ```
@@ -142,6 +155,7 @@ CREATE TABLE github_automation_config (
 ## Support
 
 For questions about the new system:
+
 - Check `dev-workflow.md` for developer workflow
 - Check `docs/ticket-system.md` for database details and GitHub automation
 - Review `github-automation-service.ts` for PR automation implementation

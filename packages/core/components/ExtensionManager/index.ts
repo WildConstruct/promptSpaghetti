@@ -25,11 +25,11 @@ export { ExtensionMarketplace } from './ExtensionMarketplace';
 export type { ExtensionMarketplaceProps } from './ExtensionMarketplace';
 
 export { useExtensionManagerStore } from './ExtensionManagerStore';
-export type { 
-  ExtensionManagerState, 
-  ExtensionStatus, 
+export type {
+  ExtensionManagerState,
+  ExtensionStatus,
   ExtensionInstallation,
-  ExtensionManagerStore 
+  ExtensionManagerStore,
 } from './ExtensionManagerStore';
 
 // Component utilities and constants
@@ -48,25 +48,30 @@ export const ExtensionManagerConstants = {
 };
 
 // Type utilities
-export type ViewMode = typeof ExtensionManagerConstants.VIEW_MODES[number];
-export type ExtensionStatusType = typeof ExtensionManagerConstants.EXTENSION_STATUSES[number];
-export type FilterType = typeof ExtensionManagerConstants.FILTER_TYPES[number];
-export type SortOption = typeof ExtensionManagerConstants.SORT_OPTIONS[number];
-export type InstallMethod = typeof ExtensionManagerConstants.INSTALL_METHODS[number];
-export type ConfigTab = typeof ExtensionManagerConstants.CONFIG_TABS[number];
+export type ViewMode = (typeof ExtensionManagerConstants.VIEW_MODES)[number];
+export type ExtensionStatusType = (typeof ExtensionManagerConstants.EXTENSION_STATUSES)[number];
+export type FilterType = (typeof ExtensionManagerConstants.FILTER_TYPES)[number];
+export type SortOption = (typeof ExtensionManagerConstants.SORT_OPTIONS)[number];
+export type InstallMethod = (typeof ExtensionManagerConstants.INSTALL_METHODS)[number];
+export type ConfigTab = (typeof ExtensionManagerConstants.CONFIG_TABS)[number];
 
 // Extension Manager Hooks and Utilities
 export const ExtensionManagerUtils = {
   /**
-  * Get extension type icon
-  */
+   * Get extension type icon
+   */
   getExtensionIcon(type: string): string {
     switch (type) {
-      case 'node': return '🔧';
-      case 'ui': return '🎨';
-      case 'transform': return '⚡';
-      case 'storage': return '💾';
-      default: return '📦';
+      case 'node':
+        return '🔧';
+      case 'ui':
+        return '🎨';
+      case 'transform':
+        return '⚡';
+      case 'storage':
+        return '💾';
+      default:
+        return '📦';
     }
   },
 
@@ -120,30 +125,24 @@ export const ExtensionManagerUtils = {
    */
   getPermissionDescription(permission: string): string {
     const descriptions: Record<string, string> = {
-  'data-processing': 'Access and process data within the application',
-  'file-system-read': 'Read files from the local file system',
-  'file-system-write': 'Write files to the local file system',
-  'network': 'Make network requests to external services',
-  'ui-components': 'Add or modify user interface components',
-  'extensions-api': 'Interact with other extensions',
-  'system-info': 'Access system information and statistics',
-  'data-storage': 'Store and retrieve persistent data',
-};
+      'data-processing': 'Access and process data within the application',
+      'file-system-read': 'Read files from the local file system',
+      'file-system-write': 'Write files to the local file system',
+      network: 'Make network requests to external services',
+      'ui-components': 'Add or modify user interface components',
+      'extensions-api': 'Interact with other extensions',
+      'system-info': 'Access system information and statistics',
+      'data-storage': 'Store and retrieve persistent data',
+    };
     return descriptions[permission] || 'Access to system functionality';
   },
   /**
    * Check if permission is dangerous
    */
   isDangerousPermission(permission: string): boolean {
-    const dangerousPermissions = [
-      'file-system-write',
-      'network',
-      'process-spawn',
-      'system-info',
-      'extensions-api'
-    ];
+    const dangerousPermissions = ['file-system-write', 'network', 'process-spawn', 'system-info', 'extensions-api'];
     return dangerousPermissions.includes(permission);
-  }
+  },
 };
 
 // Default extension manager configuration
@@ -167,7 +166,7 @@ export const DefaultExtensionManagerConfig = {
   // Performance settings
   maxConcurrentInstalls: 3,
   installTimeout: 30000,
-  updateCheckInterval: 3600000 // 1 hour,
+  updateCheckInterval: 3600000, // 1 hour,
 };
 
 // Extension manager event types
@@ -183,4 +182,4 @@ export const ExtensionManagerEvents = {
   FILTER_CHANGED: 'filter-changed',
 } as const;
 
-export type ExtensionManagerEventType = typeof ExtensionManagerEvents[keyof typeof ExtensionManagerEvents];
+export type ExtensionManagerEventType = (typeof ExtensionManagerEvents)[keyof typeof ExtensionManagerEvents];

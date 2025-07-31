@@ -1,7 +1,7 @@
 /**
  * Promotion Types Index - Epic 17 Implementation
  * Task: E17-1753114397317-A8CDBE - Design promotion interfaces
- * 
+ *
  * Central export file for all promotion-related TypeScript interfaces,
  * types, and enums used throughout the application.
  */
@@ -23,35 +23,35 @@ export type {
   ContentPromotion,
   BundlePromotion,
   CampaignPromotion,
-  
+
   // Configuration types
   DiscountConfiguration,
   PromotionTargetingRule,
   ContentSelectionCriteria,
   BundleConfiguration,
-  
+
   // Metrics and analytics
   PromotionPerformanceMetrics,
   ContentPromotionMetrics,
   CampaignMetrics,
-  
+
   // Service interfaces
   IPromotionService,
   IPromotionEligibilityService,
   IContentPromotionService,
   ICampaignService,
   IPromotionAnalyticsService,
-  
+
   // Event interfaces
   BasePromotionEvent,
   IPromotionEventBus,
   IPromotionNotificationService,
-  
+
   // API types
   PromotionServiceResponse,
   PromotionEligibilityCheck,
   PromotionApplicationResult,
-  PromotionSearchResult
+  PromotionSearchResult,
 } from './PromotionInterfaces';
 
 export type {
@@ -61,16 +61,16 @@ export type {
   EligibilityCheckRequest,
   ApplyPromotionRequest,
   PromotionSearchCriteria,
-  
+
   // Analytics types
   PromotionPerformanceReport,
   RevenueAnalyticsReport,
   UserPromotionHistory,
-  
+
   // Management types
   PromotionRule,
   PromotionTemplate,
-  PromotionAuditLog
+  PromotionAuditLog,
 } from './PromotionServices';
 
 export type {
@@ -79,16 +79,16 @@ export type {
   PromotionLifecycleEventData,
   PromotionUsageEventData,
   PromotionPerformanceEventData,
-  
+
   // Event handling types
   EventHandlerConfig,
   PromotionEventSubscription,
   EventDeliveryConfig,
-  
+
   // Notification types
   NotificationRecipient,
   NotificationTemplate,
-  NotificationContent
+  NotificationContent,
 } from './PromotionEvents';
 
 export {
@@ -98,15 +98,15 @@ export {
   PromotionTargetType,
   PromotionApplicationType,
   DiscountApplicationScope,
-  
+
   // Event enums
   PromotionEventType,
   EventPriority,
   EventDeliveryMethod,
-  
+
   // Validation schemas
   CreatePromotionSchema,
   UpdatePromotionSchema,
   ApplyPromotionSchema,
-  CheckEligibilitySchema
+  CheckEligibilitySchema,
 } from './PromotionInterfaces';

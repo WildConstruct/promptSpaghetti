@@ -15,18 +15,18 @@ describe('WebAdapter', () => {
     it('handles press events', () => {
       const callback = jest.fn();
       const pressHandler = adapter.handlePress(callback);
-      
+
       expect(pressHandler).toHaveProperty('onClick');
       expect(pressHandler).toHaveProperty('onKeyDown');
-      
+
       // Test click
       pressHandler.onClick();
       expect(callback).toHaveBeenCalledTimes(1);
-      
+
       // Test Enter key
       pressHandler.onKeyDown({ key: 'Enter', preventDefault: jest.fn() } as any);
       expect(callback).toHaveBeenCalledTimes(2);
-      
+
       // Test Space key
       pressHandler.onKeyDown({ key: ' ', preventDefault: jest.fn() } as any);
       expect(callback).toHaveBeenCalledTimes(3);
@@ -35,14 +35,14 @@ describe('WebAdapter', () => {
     it('handles long press events', () => {
       const callback = jest.fn();
       const longPressHandler = adapter.handleLongPress(callback);
-      
+
       expect(longPressHandler).toHaveProperty('onMouseDown');
       expect(longPressHandler).toHaveProperty('onMouseUp');
       expect(longPressHandler).toHaveProperty('onMouseLeave');
-      
+
       // Test long press
       longPressHandler.onMouseDown();
-      
+
       // Fast-forward time to trigger callback
       jest.advanceTimersByTime(500);
       expect(callback).toHaveBeenCalledTimes(1);
@@ -51,7 +51,7 @@ describe('WebAdapter', () => {
     it('handles hover events', () => {
       const callback = jest.fn();
       const hoverHandler = adapter.handleHover(callback);
-      
+
       expect(hoverHandler).toHaveProperty('onMouseEnter');
       hoverHandler.onMouseEnter();
       expect(callback).toHaveBeenCalledTimes(1);
@@ -68,7 +68,7 @@ describe('WebAdapter', () => {
     it('resolves styles', () => {
       const singleStyle = { color: 'red' };
       expect(adapter.resolveStyle(singleStyle)).toBe(singleStyle);
-      
+
       const arrayStyles = [{ color: 'red' }, { fontSize: '16px' }];
       const resolved = adapter.resolveStyle(arrayStyles);
       expect(resolved).toEqual({ color: 'red', fontSize: '16px' });
@@ -86,7 +86,7 @@ describe('WebAdapter', () => {
     it('goes back', () => {
       const mockBack = jest.spyOn(window.history, 'back').mockImplementation();
       Object.defineProperty(window.history, 'length', { value: 2 });
-      
+
       adapter.goBack();
       expect(mockBack).toHaveBeenCalled();
       mockBack.mockRestore();
@@ -130,7 +130,7 @@ describe('WebAdapter', () => {
     it('shares content', async () => {
       navigator.share = jest.fn().mockResolvedValue(undefined);
       const content = { title: 'Test', text: 'Test content' };
-      
+
       await adapter.shareContent(content);
       expect(navigator.share).toHaveBeenCalledWith(content);
     });
@@ -138,10 +138,10 @@ describe('WebAdapter', () => {
     it('falls back to clipboard for sharing when share API unavailable', async () => {
       navigator.share = undefined;
       navigator.clipboard.writeText = jest.fn().mockResolvedValue(undefined);
-      
+
       const content = { title: 'Test', text: 'Test content', url: 'https://example.com' };
       await adapter.shareContent(content);
-      
+
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith('Test\nTest content\nhttps://example.com');
     });
   });
@@ -153,10 +153,10 @@ describe('WebAdapter', () => {
           width: 100,
           height: 50,
           left: 10,
-          top: 20
-        })
+          top: 20,
+        }),
       };
-      
+
       const result = await adapter.measureElement(mockElement as any);
       expect(result).toEqual({ width: 100, height: 50, x: 10, y: 20 });
     });
@@ -166,11 +166,11 @@ describe('WebAdapter', () => {
     it('creates animations', () => {
       const config = { duration: 500, easing: 'ease-in-out' };
       const animation = adapter.createAnimation(config);
-      
+
       expect(animation).toEqual({
         duration: 500,
         easing: 'ease-in-out',
-        fill: 'forwards'
+        fill: 'forwards',
       });
     });
   });
@@ -185,22 +185,22 @@ describe('WebAdapter', () => {
     it('writes files', async () => {
       const mockCreateObjectURL = jest.spyOn(URL, 'createObjectURL').mockReturnValue('mock-url');
       const mockRevokeObjectURL = jest.spyOn(URL, 'revokeObjectURL').mockImplementation();
-      
+
       const mockLink = {
         href: '',
         download: '',
-        click: jest.fn()
+        click: jest.fn(),
       };
       const mockCreateElement = jest.spyOn(document, 'createElement').mockReturnValue(mockLink as any);
       const mockAppendChild = jest.spyOn(document.body, 'appendChild').mockImplementation();
       const mockRemoveChild = jest.spyOn(document.body, 'removeChild').mockImplementation();
-      
+
       await adapter.writeFile('test.txt', 'test content');
-      
+
       expect(mockCreateElement).toHaveBeenCalledWith('a');
       expect(mockLink.download).toBe('test.txt');
       expect(mockLink.click).toHaveBeenCalled();
-      
+
       mockCreateObjectURL.mockRestore();
       mockRevokeObjectURL.mockRestore();
       mockCreateElement.mockRestore();

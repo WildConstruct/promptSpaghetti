@@ -8,7 +8,7 @@ import {
   TranslationRequest,
   ConsoleLogger,
   MemoryCache,
-  MemoryMetrics
+  MemoryMetrics,
 } from '../index.js';
 
 /**
@@ -40,7 +40,7 @@ export class PromptTargetingExample {
       logger: this.logger,
       cache: this.cache,
       metrics: this.metrics,
-      config: {}
+      config: {},
     };
 
     // Register OpenAI GPT adaptor
@@ -52,7 +52,7 @@ export class PromptTargetingExample {
     this.engine.registerAdaptor('midjourney', midjourneyAdaptor);
 
     this.logger.info('Adaptors registered', {
-      platforms: this.engine.getRegisteredPlatforms()
+      platforms: this.engine.getRegisteredPlatforms(),
     });
   }
 
@@ -73,28 +73,28 @@ export class PromptTargetingExample {
             content: 'Write a short story about a robot discovering emotions',
             parameters: {
               temperature: 0.8,
-              max_tokens: 500
-            }
+              max_tokens: 500,
+            },
           },
-          position: { x: 0, y: 0 }
-        }
+          position: { x: 0, y: 0 },
+        },
       ],
       edges: [],
       metadata: {
         name: 'Simple Story Prompt',
         created: new Date(),
         modified: new Date(),
-        version: '1.0'
-      }
+        version: '1.0',
+      },
     };
 
     const request: TranslationRequest = {
       graph,
-      targetPlatform: 'openai-gpt' as Platform
+      targetPlatform: 'openai-gpt' as Platform,
     };
 
     const response = await this.engine.translate(request);
-    
+
     if (response.success) {
       console.log('✅ Translation successful');
       console.log('Target Platform:', response.targetPrompt?.platform);
@@ -120,28 +120,28 @@ export class PromptTargetingExample {
           id: 'subject-node',
           type: 'text',
           data: { content: 'A majestic dragon' },
-          position: { x: 0, y: 0 }
+          position: { x: 0, y: 0 },
         },
         {
           id: 'setting-node',
           type: 'text',
           data: { content: 'perched on a mountain peak at sunset' },
-          position: { x: 200, y: 0 }
+          position: { x: 200, y: 0 },
         },
         {
           id: 'style-node',
           type: 'style',
           data: {
             style: 'fantasy art, highly detailed, cinematic lighting',
-            content: 'epic fantasy illustration'
+            content: 'epic fantasy illustration',
           },
-          position: { x: 100, y: 100 }
+          position: { x: 100, y: 100 },
         },
         {
           id: 'concat-node',
           type: 'concat',
           data: { label: 'Combine elements' },
-          position: { x: 100, y: 200 }
+          position: { x: 100, y: 200 },
         },
         {
           id: 'output-node',
@@ -151,44 +151,44 @@ export class PromptTargetingExample {
             parameters: {
               aspect_ratio: '16:9',
               stylize: 250,
-              quality: 2
-            }
+              quality: 2,
+            },
           },
-          position: { x: 100, y: 300 }
-        }
+          position: { x: 100, y: 300 },
+        },
       ],
       edges: [
         { id: 'e1', source: 'subject-node', target: 'concat-node' },
         { id: 'e2', source: 'setting-node', target: 'concat-node' },
         { id: 'e3', source: 'style-node', target: 'concat-node' },
-        { id: 'e4', source: 'concat-node', target: 'output-node' }
+        { id: 'e4', source: 'concat-node', target: 'output-node' },
       ],
       metadata: {
         name: 'Fantasy Dragon Scene',
         created: new Date(),
         modified: new Date(),
-        version: '1.0'
-      }
+        version: '1.0',
+      },
     };
 
     // Translate to both platforms
     const platforms: Platform[] = ['openai-gpt', 'midjourney'];
-    
+
     for (const platform of platforms) {
       console.log(`\n--- Translating to ${platform} ---`);
-      
+
       const request: TranslationRequest = {
         graph,
-        targetPlatform: platform
+        targetPlatform: platform,
       };
 
       const response = await this.engine.translate(request);
-      
+
       if (response.success) {
         console.log('✅ Translation successful');
         console.log('Quality Score:', response.quality?.overall);
         console.log('Warnings:', response.validationResults.filter(r => r.type === 'warning').length);
-        
+
         if (platform === 'midjourney') {
           console.log('Midjourney Prompt:', response.targetPrompt?.content);
         } else {
@@ -216,36 +216,34 @@ export class PromptTargetingExample {
           id: 'disconnected-node',
           type: 'text',
           data: { content: 'This node is disconnected' },
-          position: { x: 0, y: 0 }
+          position: { x: 0, y: 0 },
         },
         {
           id: 'main-node',
           type: 'text',
-          data: { 
+          data: {
             content: 'Main prompt content',
             parameters: {
               temperature: 5.0, // Invalid value
-              invalid_param: 'should not exist'
-            }
+              invalid_param: 'should not exist',
+            },
           },
-          position: { x: 200, y: 0 }
+          position: { x: 200, y: 0 },
         },
         {
           id: 'image-node',
           type: 'image',
           data: { url: 'https://example.com/image.jpg' },
-          position: { x: 100, y: 100 }
-        }
+          position: { x: 100, y: 100 },
+        },
       ],
-      edges: [
-        { id: 'e1', source: 'main-node', target: 'image-node' }
-      ],
+      edges: [{ id: 'e1', source: 'main-node', target: 'image-node' }],
       metadata: {
         name: 'Problematic Graph',
         created: new Date(),
         modified: new Date(),
-        version: '1.0'
-      }
+        version: '1.0',
+      },
     };
 
     // Get all adaptors for validation
@@ -253,20 +251,17 @@ export class PromptTargetingExample {
       logger: this.logger,
       cache: this.cache,
       metrics: this.metrics,
-      config: {}
+      config: {},
     });
 
     const midjourneyAdaptor = new MidjourneyAdaptor({
       logger: this.logger,
       cache: this.cache,
       metrics: this.metrics,
-      config: {}
+      config: {},
     });
 
-    const report = await this.validator.validateGraph(
-      problematicGraph,
-      [gptAdaptor, midjourneyAdaptor]
-    );
+    const report = await this.validator.validateGraph(problematicGraph, [gptAdaptor, midjourneyAdaptor]);
 
     console.log('Validation Report:');
     console.log('Overall Valid:', report.overallValid);
@@ -310,21 +305,21 @@ export class PromptTargetingExample {
           id: 'test-node',
           type: 'text',
           data: { content: 'Performance test prompt' },
-          position: { x: 0, y: 0 }
-        }
+          position: { x: 0, y: 0 },
+        },
       ],
       edges: [],
       metadata: {
         name: 'Performance Test',
         created: new Date(),
         modified: new Date(),
-        version: '1.0'
-      }
+        version: '1.0',
+      },
     };
 
     const request: TranslationRequest = {
       graph,
-      targetPlatform: 'openai-gpt' as Platform
+      targetPlatform: 'openai-gpt' as Platform,
     };
 
     // First translation (cache miss)
@@ -364,17 +359,16 @@ export class PromptTargetingExample {
       await this.performanceExample();
 
       console.log('\n✅ All examples completed successfully!');
-      
+
       // Show final stats
       console.log('\nEngine Statistics:');
       const stats = this.engine.getStats();
       console.log(`Registered Adaptors: ${stats.registeredAdaptors}`);
       console.log(`Supported Platforms: ${stats.supportedPlatforms.join(', ')}`);
-      
+
       console.log('\nCache Statistics:');
       const cacheStats = this.cache.getStats();
       console.log(`Cache Size: ${cacheStats.size} entries`);
-
     } catch (error) {
       console.error('❌ Example failed:', error);
     }

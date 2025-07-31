@@ -51,31 +51,21 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "api/deployment-gate.js",
-        "api/export.js",
-        "api/health.js",
-        "api/preview.js"
-      ]
+      "uncoveredFiles": ["api/deployment-gate.js", "api/export.js", "api/health.js", "api/preview.js"]
     },
     "client/__mocks__/@pkgr": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "client/__mocks__/@pkgr/core.js"
-      ]
+      "uncoveredFiles": ["client/__mocks__/@pkgr/core.js"]
     },
     "client/__mocks__": {
       "totalFiles": 2,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "client/__mocks__/reactflow.tsx",
-        "client/__mocks__/synckit.js"
-      ]
+      "uncoveredFiles": ["client/__mocks__/reactflow.tsx", "client/__mocks__/synckit.js"]
     },
     "client/coverage/lcov-report": {
       "totalFiles": 3,
@@ -108,12 +98,7 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "client/src/App.js",
-        "client/src/App.tsx",
-        "client/src/main.js",
-        "client/src/main.tsx"
-      ]
+      "uncoveredFiles": ["client/src/App.js", "client/src/App.tsx", "client/src/main.js", "client/src/main.tsx"]
     },
     "client/src/components": {
       "totalFiles": 8,
@@ -360,18 +345,14 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "client/src/components/policy/PolicyPreviewDashboard.tsx"
-      ]
+      "uncoveredFiles": ["client/src/components/policy/PolicyPreviewDashboard.tsx"]
     },
     "client/src/components/preferences": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "client/src/components/preferences/PreferenceCenter.tsx"
-      ]
+      "uncoveredFiles": ["client/src/components/preferences/PreferenceCenter.tsx"]
     },
     "client/src/components/quality": {
       "totalFiles": 7,
@@ -418,18 +399,14 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "client/src/components/transparency/UserDataTransparencyDashboard.tsx"
-      ]
+      "uncoveredFiles": ["client/src/components/transparency/UserDataTransparencyDashboard.tsx"]
     },
     "client/src/config": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "client/src/config/environment.ts"
-      ]
+      "uncoveredFiles": ["client/src/config/environment.ts"]
     },
     "client/src/core": {
       "totalFiles": 29,
@@ -584,20 +561,14 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "client/src/core/types/NodeTypes.js",
-        "client/src/core/types/NodeTypes.ts"
-      ]
+      "uncoveredFiles": ["client/src/core/types/NodeTypes.js", "client/src/core/types/NodeTypes.ts"]
     },
     "client/src/core/utils": {
       "totalFiles": 2,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "client/src/core/utils/nodeDataUtils.js",
-        "client/src/core/utils/nodeDataUtils.ts"
-      ]
+      "uncoveredFiles": ["client/src/core/utils/nodeDataUtils.js", "client/src/core/utils/nodeDataUtils.ts"]
     },
     "client/src/crdt-research/benchmarks": {
       "totalFiles": 4,
@@ -678,10 +649,7 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "client/src/services/DeviceFingerprintService.ts",
-        "client/src/services/analyticsService.ts"
-      ]
+      "uncoveredFiles": ["client/src/services/DeviceFingerprintService.ts", "client/src/services/analyticsService.ts"]
     },
     "client/src/stores": {
       "totalFiles": 1,
@@ -708,10 +676,7 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "client/src/utils/clientPerformanceProfiler.ts",
-        "client/src/utils/payloadEncryption.ts"
-      ]
+      "uncoveredFiles": ["client/src/utils/clientPerformanceProfiler.ts", "client/src/utils/payloadEncryption.ts"]
     },
     "coverage/lcov-report": {
       "totalFiles": 3,
@@ -750,18 +715,14 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "docs/developer-portal/playground/playground.js"
-      ]
+      "uncoveredFiles": ["docs/developer-portal/playground/playground.js"]
     },
     "examples/extensions/text-processor-extension/src": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "examples/extensions/text-processor-extension/src/TextProcessorNode.ts"
-      ]
+      "uncoveredFiles": ["examples/extensions/text-processor-extension/src/TextProcessorNode.ts"]
     },
     "load-tests": {
       "totalFiles": 6,
@@ -782,10 +743,7 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "load-tests/scenarios/LoadTestScenarios.js",
-        "load-tests/scenarios/run-load-scenarios.js"
-      ]
+      "uncoveredFiles": ["load-tests/scenarios/LoadTestScenarios.js", "load-tests/scenarios/run-load-scenarios.js"]
     },
     "packages/analytics-sdk/src": {
       "totalFiles": 5,
@@ -818,11 +776,7 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/cli/cli.js",
-        "packages/cli/engine-wrapper.js",
-        "packages/cli/extension-points.js"
-      ]
+      "uncoveredFiles": ["packages/cli/cli.js", "packages/cli/engine-wrapper.js", "packages/cli/extension-points.js"]
     },
     "packages/core": {
       "totalFiles": 56,
@@ -924,27 +878,21 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/core/__tests__/collaboration/GraphCRDTAdapter.test.d.ts"
-      ]
+      "uncoveredFiles": ["packages/core/__tests__/collaboration/GraphCRDTAdapter.test.d.ts"]
     },
     "packages/core/__tests__/components/Inspector": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/core/__tests__/components/Inspector/PreviewSection.test.d.ts"
-      ]
+      "uncoveredFiles": ["packages/core/__tests__/components/Inspector/PreviewSection.test.d.ts"]
     },
     "packages/core/__tests__/executor": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/core/__tests__/executor/executor.test.d.ts"
-      ]
+      "uncoveredFiles": ["packages/core/__tests__/executor/executor.test.d.ts"]
     },
     "packages/core/accessibility": {
       "totalFiles": 1,
@@ -1790,9 +1738,7 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/core/fileFormats/psg.ts"
-      ]
+      "uncoveredFiles": ["packages/core/fileFormats/psg.ts"]
     },
     "packages/core/hooks": {
       "totalFiles": 43,
@@ -1850,9 +1796,7 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/core/llm-randomizer/__tests__/serialization.test.d.ts"
-      ]
+      "uncoveredFiles": ["packages/core/llm-randomizer/__tests__/serialization.test.d.ts"]
     },
     "packages/core/llm-randomizer/agents/examples": {
       "totalFiles": 3,
@@ -1909,9 +1853,7 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/core/llm-randomizer/generator/__tests__/generator.test.d.ts"
-      ]
+      "uncoveredFiles": ["packages/core/llm-randomizer/generator/__tests__/generator.test.d.ts"]
     },
     "packages/core/llm-randomizer/generator": {
       "totalFiles": 3,
@@ -1987,9 +1929,7 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/core/llm-randomizer/parser/__tests__/parser.test.d.ts"
-      ]
+      "uncoveredFiles": ["packages/core/llm-randomizer/parser/__tests__/parser.test.d.ts"]
     },
     "packages/core/llm-randomizer/parser": {
       "totalFiles": 6,
@@ -2048,9 +1988,7 @@
       "testedFiles": 1,
       "coverage": 50,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/core/mfa/ValidationService.ts"
-      ]
+      "uncoveredFiles": ["packages/core/mfa/ValidationService.ts"]
     },
     "packages/core/mutations": {
       "totalFiles": 7,
@@ -2315,9 +2253,7 @@
       "testedFiles": 5,
       "coverage": 83.33333333333334,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/core/services/ClassificationInheritanceService.ts"
-      ]
+      "uncoveredFiles": ["packages/core/services/ClassificationInheritanceService.ts"]
     },
     "packages/core/storage": {
       "totalFiles": 3,
@@ -2425,10 +2361,7 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/core/validation/security.d.ts",
-        "packages/core/validation/security.ts"
-      ]
+      "uncoveredFiles": ["packages/core/validation/security.d.ts", "packages/core/validation/security.ts"]
     },
     "packages/core/version-history": {
       "totalFiles": 6,
@@ -2491,20 +2424,14 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/custom-node-sdk/src/cli/index.ts",
-        "packages/custom-node-sdk/src/cli/scaffold.ts"
-      ]
+      "uncoveredFiles": ["packages/custom-node-sdk/src/cli/index.ts", "packages/custom-node-sdk/src/cli/scaffold.ts"]
     },
     "packages/custom-node-sdk/src": {
       "totalFiles": 2,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/custom-node-sdk/src/index.ts",
-        "packages/custom-node-sdk/src/types.ts"
-      ]
+      "uncoveredFiles": ["packages/custom-node-sdk/src/index.ts", "packages/custom-node-sdk/src/types.ts"]
     },
     "packages/custom-node-sdk/src/runtime": {
       "totalFiles": 5,
@@ -2559,10 +2486,7 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/prompt-target-core/index.ts",
-        "packages/prompt-target-core/jest.config.js"
-      ]
+      "uncoveredFiles": ["packages/prompt-target-core/index.ts", "packages/prompt-target-core/jest.config.js"]
     },
     "packages/prompt-target-core/src/adaptors": {
       "totalFiles": 7,
@@ -2584,81 +2508,63 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/prompt-target-core/src/configuration/ConfigurationManager.ts"
-      ]
+      "uncoveredFiles": ["packages/prompt-target-core/src/configuration/ConfigurationManager.ts"]
     },
     "packages/prompt-target-core/src/engine": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/prompt-target-core/src/engine/MappingEngine.ts"
-      ]
+      "uncoveredFiles": ["packages/prompt-target-core/src/engine/MappingEngine.ts"]
     },
     "packages/prompt-target-core/src/examples": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/prompt-target-core/src/examples/PromptTargetingExample.ts"
-      ]
+      "uncoveredFiles": ["packages/prompt-target-core/src/examples/PromptTargetingExample.ts"]
     },
     "packages/prompt-target-core/src/export": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/prompt-target-core/src/export/ExportSystem.ts"
-      ]
+      "uncoveredFiles": ["packages/prompt-target-core/src/export/ExportSystem.ts"]
     },
     "packages/prompt-target-core/src/gallery": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/prompt-target-core/src/gallery/ResultGallerySystem.ts"
-      ]
+      "uncoveredFiles": ["packages/prompt-target-core/src/gallery/ResultGallerySystem.ts"]
     },
     "packages/prompt-target-core/src": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/prompt-target-core/src/index.ts"
-      ]
+      "uncoveredFiles": ["packages/prompt-target-core/src/index.ts"]
     },
     "packages/prompt-target-core/src/mapping": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/prompt-target-core/src/mapping/ParameterMappingSystem.ts"
-      ]
+      "uncoveredFiles": ["packages/prompt-target-core/src/mapping/ParameterMappingSystem.ts"]
     },
     "packages/prompt-target-core/src/metadata": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/prompt-target-core/src/metadata/MetadataManager.ts"
-      ]
+      "uncoveredFiles": ["packages/prompt-target-core/src/metadata/MetadataManager.ts"]
     },
     "packages/prompt-target-core/src/preview": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/prompt-target-core/src/preview/PreviewGenerationSystem.ts"
-      ]
+      "uncoveredFiles": ["packages/prompt-target-core/src/preview/PreviewGenerationSystem.ts"]
     },
     "packages/prompt-target-core/src/testing": {
       "totalFiles": 2,
@@ -2675,9 +2581,7 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/prompt-target-core/src/types/index.ts"
-      ]
+      "uncoveredFiles": ["packages/prompt-target-core/src/types/index.ts"]
     },
     "packages/prompt-target-core/src/ui": {
       "totalFiles": 2,
@@ -2706,9 +2610,7 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/prompt-target-core/src/validation/ValidationEngine.ts"
-      ]
+      "uncoveredFiles": ["packages/prompt-target-core/src/validation/ValidationEngine.ts"]
     },
     "packages/prompt-targeting/examples": {
       "totalFiles": 2,
@@ -2753,9 +2655,7 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/prompt-targeting/src/config/ConfigurationManager.ts"
-      ]
+      "uncoveredFiles": ["packages/prompt-targeting/src/config/ConfigurationManager.ts"]
     },
     "packages/prompt-targeting/src/engines": {
       "totalFiles": 2,
@@ -2772,36 +2672,28 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/prompt-targeting/src/factory.ts"
-      ]
+      "uncoveredFiles": ["packages/prompt-targeting/src/factory.ts"]
     },
     "packages/prompt-targeting/src/testing": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/prompt-targeting/src/testing/AdaptorTestFramework.ts"
-      ]
+      "uncoveredFiles": ["packages/prompt-targeting/src/testing/AdaptorTestFramework.ts"]
     },
     "packages/prompt-targeting/src/types": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/prompt-targeting/src/types/index.ts"
-      ]
+      "uncoveredFiles": ["packages/prompt-targeting/src/types/index.ts"]
     },
     "packages/prompt-targeting/src/ui/components": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/prompt-targeting/src/ui/components/ConfigurationPanel.tsx"
-      ]
+      "uncoveredFiles": ["packages/prompt-targeting/src/ui/components/ConfigurationPanel.tsx"]
     },
     "packages/prompt-targeting/src/validation": {
       "totalFiles": 3,
@@ -2818,46 +2710,35 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/ui-kit/.storybook/main.ts",
-        "packages/ui-kit/.storybook/preview.tsx"
-      ]
+      "uncoveredFiles": ["packages/ui-kit/.storybook/main.ts", "packages/ui-kit/.storybook/preview.tsx"]
     },
     "packages/ui-kit/__tests__": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/ui-kit/__tests__/setup.ts"
-      ]
+      "uncoveredFiles": ["packages/ui-kit/__tests__/setup.ts"]
     },
     "packages/ui-kit": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/ui-kit/jest.setup.js"
-      ]
+      "uncoveredFiles": ["packages/ui-kit/jest.setup.js"]
     },
     "packages/ui-kit/src/__tests__": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/ui-kit/src/__tests__/index.ts"
-      ]
+      "uncoveredFiles": ["packages/ui-kit/src/__tests__/index.ts"]
     },
     "packages/ui-kit/src/__tests__/setup": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/ui-kit/src/__tests__/setup/test-framework.ts"
-      ]
+      "uncoveredFiles": ["packages/ui-kit/src/__tests__/setup/test-framework.ts"]
     },
     "packages/ui-kit/src/adapters": {
       "totalFiles": 5,
@@ -2969,19 +2850,14 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/ui-kit/src/mobile/design-system.ts",
-        "packages/ui-kit/src/mobile/index.ts"
-      ]
+      "uncoveredFiles": ["packages/ui-kit/src/mobile/design-system.ts", "packages/ui-kit/src/mobile/index.ts"]
     },
     "packages/ui-kit/src/mobile/layouts": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/ui-kit/src/mobile/layouts/MobileAppLayout.tsx"
-      ]
+      "uncoveredFiles": ["packages/ui-kit/src/mobile/layouts/MobileAppLayout.tsx"]
     },
     "packages/ui-kit/src/platform": {
       "totalFiles": 4,
@@ -3000,27 +2876,21 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/ui-kit/src/platform/android/AndroidAdaptations.tsx"
-      ]
+      "uncoveredFiles": ["packages/ui-kit/src/platform/android/AndroidAdaptations.tsx"]
     },
     "packages/ui-kit/src/platform/desktop": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/ui-kit/src/platform/desktop/DesktopAdaptations.tsx"
-      ]
+      "uncoveredFiles": ["packages/ui-kit/src/platform/desktop/DesktopAdaptations.tsx"]
     },
     "packages/ui-kit/src/platform/ios": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "packages/ui-kit/src/platform/ios/IOSAdaptations.tsx"
-      ]
+      "uncoveredFiles": ["packages/ui-kit/src/platform/ios/IOSAdaptations.tsx"]
     },
     "packages/ui-kit/src/responsive": {
       "totalFiles": 4,
@@ -3139,14 +3009,8 @@
       "totalFiles": 2,
       "testedFiles": 0,
       "coverage": 0,
-      "criticalFiles": [
-        "server/src/auth/database/DatabaseService.ts",
-        "server/src/auth/database/RedisService.ts"
-      ],
-      "uncoveredFiles": [
-        "server/src/auth/database/DatabaseService.ts",
-        "server/src/auth/database/RedisService.ts"
-      ]
+      "criticalFiles": ["server/src/auth/database/DatabaseService.ts", "server/src/auth/database/RedisService.ts"],
+      "uncoveredFiles": ["server/src/auth/database/DatabaseService.ts", "server/src/auth/database/RedisService.ts"]
     },
     "server/src/auth/middleware": {
       "totalFiles": 6,
@@ -3293,30 +3157,22 @@
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
-      "criticalFiles": [
-        "server/src/auth/templates/OAuthPolicyTemplates.ts"
-      ],
-      "uncoveredFiles": [
-        "server/src/auth/templates/OAuthPolicyTemplates.ts"
-      ]
+      "criticalFiles": ["server/src/auth/templates/OAuthPolicyTemplates.ts"],
+      "uncoveredFiles": ["server/src/auth/templates/OAuthPolicyTemplates.ts"]
     },
     "server/src/cli": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "server/src/cli/rule-testing-cli.ts"
-      ]
+      "uncoveredFiles": ["server/src/cli/rule-testing-cli.ts"]
     },
     "server/src/collaboration": {
       "totalFiles": 3,
       "testedFiles": 2,
       "coverage": 66.66666666666666,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "server/src/collaboration/ConflictMonitoringDashboard.ts"
-      ]
+      "uncoveredFiles": ["server/src/collaboration/ConflictMonitoringDashboard.ts"]
     },
     "server/src/config": {
       "totalFiles": 2,
@@ -3366,17 +3222,13 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "server/src/database/migrations/001-create-consent-storage-schema.js"
-      ]
+      "uncoveredFiles": ["server/src/database/migrations/001-create-consent-storage-schema.js"]
     },
     "server/src": {
       "totalFiles": 8,
       "testedFiles": 2,
       "coverage": 25,
-      "criticalFiles": [
-        "server/src/engine.ts"
-      ],
+      "criticalFiles": ["server/src/engine.ts"],
       "uncoveredFiles": [
         "server/src/engine.ts",
         "server/src/index.ts",
@@ -3483,10 +3335,7 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "server/src/plugins/consent-enforcement-plugin.ts",
-        "server/src/plugins/referrer-policy.ts"
-      ]
+      "uncoveredFiles": ["server/src/plugins/consent-enforcement-plugin.ts", "server/src/plugins/referrer-policy.ts"]
     },
     "server/src/routes": {
       "totalFiles": 78,
@@ -3579,9 +3428,7 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "server/src/security/tls-config.ts"
-      ]
+      "uncoveredFiles": ["server/src/security/tls-config.ts"]
     },
     "server/src/services": {
       "totalFiles": 105,
@@ -3807,9 +3654,7 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "server/src/utils/logger.ts"
-      ]
+      "uncoveredFiles": ["server/src/utils/logger.ts"]
     },
     "server/src/websocket": {
       "totalFiles": 11,
@@ -3944,10 +3789,7 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "src/integrations/stale-task-integration.js",
-        "src/integrations/tracker-integration.js"
-      ]
+      "uncoveredFiles": ["src/integrations/stale-task-integration.js", "src/integrations/tracker-integration.js"]
     },
     "src/utils": {
       "totalFiles": 18,
@@ -3980,27 +3822,21 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "tests/__mocks__/fileMock.js"
-      ]
+      "uncoveredFiles": ["tests/__mocks__/fileMock.js"]
     },
     "tests/automation": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "tests/automation/TestAutomationFramework.ts"
-      ]
+      "uncoveredFiles": ["tests/automation/TestAutomationFramework.ts"]
     },
     "tests/coverage": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "tests/coverage/CoverageReportingFramework.ts"
-      ]
+      "uncoveredFiles": ["tests/coverage/CoverageReportingFramework.ts"]
     },
     "tests/documentation": {
       "totalFiles": 5,
@@ -4019,18 +3855,14 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "tests/edge-cases/EdgeCaseTestSuite.ts"
-      ]
+      "uncoveredFiles": ["tests/edge-cases/EdgeCaseTestSuite.ts"]
     },
     "tests/frameworks": {
       "totalFiles": 1,
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "tests/frameworks/ComprehensiveTestFramework.ts"
-      ]
+      "uncoveredFiles": ["tests/frameworks/ComprehensiveTestFramework.ts"]
     },
     "tests/generators": {
       "totalFiles": 5,
@@ -4096,9 +3928,7 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "tests/mocks/data/template-db.ts"
-      ]
+      "uncoveredFiles": ["tests/mocks/data/template-db.ts"]
     },
     "tests/performance": {
       "totalFiles": 4,
@@ -4116,10 +3946,7 @@
       "testedFiles": 0,
       "coverage": 0,
       "criticalFiles": [],
-      "uncoveredFiles": [
-        "tests/setup/globalSetup.js",
-        "tests/setup/globalTeardown.js"
-      ]
+      "uncoveredFiles": ["tests/setup/globalSetup.js", "tests/setup/globalTeardown.js"]
     },
     "tests/utils": {
       "totalFiles": 21,

@@ -14,57 +14,58 @@ const meta: Meta<typeof Input> = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Form input components including text inputs and text areas. Supports validation, different sizes, icons, and various input types.'
-      }
-    }
+        component:
+          'Form input components including text inputs and text areas. Supports validation, different sizes, icons, and various input types.',
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {
     type: {
       control: 'select',
       options: ['text', 'email', 'password', 'number', 'tel', 'url', 'search'],
-      description: 'HTML input type'
+      description: 'HTML input type',
     },
     size: {
       control: 'select',
       options: ['sm', 'md', 'lg'],
-      description: 'Size of the input'
+      description: 'Size of the input',
     },
     invalid: {
       control: 'boolean',
-      description: 'Shows error state styling'
+      description: 'Shows error state styling',
     },
     disabled: {
       control: 'boolean',
-      description: 'Disables the input'
+      description: 'Disables the input',
     },
     readOnly: {
       control: 'boolean',
-      description: 'Makes input read-only'
+      description: 'Makes input read-only',
     },
     required: {
       control: 'boolean',
-      description: 'Marks input as required'
+      description: 'Marks input as required',
     },
     icon: {
       control: 'text',
-      description: 'Icon to display (emoji or text)'
+      description: 'Icon to display (emoji or text)',
     },
     iconPosition: {
       control: 'select',
       options: ['left', 'right'],
-      description: 'Position of the icon'
+      description: 'Position of the icon',
     },
     onChange: {
       action: 'changed',
-      description: 'Function called when input value changes'
-    }
+      description: 'Function called when input value changes',
+    },
   },
   args: {
     onChange: action('changed'),
     onFocus: action('focused'),
-    onBlur: action('blurred')
-  }
+    onBlur: action('blurred'),
+  },
 };
 
 export default meta;
@@ -73,24 +74,24 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     label: 'Default Input',
-    placeholder: 'Enter text...'
-  }
+    placeholder: 'Enter text...',
+  },
 };
 
 export const WithLabel: Story = {
   args: {
     label: 'Email Address',
     type: 'email',
-    placeholder: 'your.email@example.com'
-  }
+    placeholder: 'your.email@example.com',
+  },
 };
 
 export const WithHint: Story = {
   args: {
     label: 'Password',
     type: 'password',
-    hint: 'Must be at least 8 characters long'
-  }
+    hint: 'Must be at least 8 characters long',
+  },
 };
 
 export const WithError: Story = {
@@ -98,8 +99,8 @@ export const WithError: Story = {
     label: 'Username',
     value: 'invalid username!',
     error: 'Username can only contain letters, numbers, and underscores',
-    invalid: true
-  }
+    invalid: true,
+  },
 };
 
 export const Sizes: Story = {
@@ -113,44 +114,27 @@ export const Sizes: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Different input sizes available'
-      }
-    }
-  }
+        story: 'Different input sizes available',
+      },
+    },
+  },
 };
 
 export const WithIcons: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '300px' }}>
-      <Input 
-        label="Search" 
-        icon="🔍" 
-        iconPosition="left" 
-        placeholder="Search..." 
-      />
-      <Input 
-        label="Email" 
-        type="email"
-        icon="📧" 
-        iconPosition="right" 
-        placeholder="your.email@example.com" 
-      />
-      <Input 
-        label="Phone" 
-        type="tel"
-        icon="📞" 
-        iconPosition="left" 
-        placeholder="+1 (555) 123-4567" 
-      />
+      <Input label="Search" icon="🔍" iconPosition="left" placeholder="Search..." />
+      <Input label="Email" type="email" icon="📧" iconPosition="right" placeholder="your.email@example.com" />
+      <Input label="Phone" type="tel" icon="📞" iconPosition="left" placeholder="+1 (555) 123-4567" />
     </div>
   ),
   parameters: {
     docs: {
       description: {
-        story: 'Inputs with icons in different positions'
-      }
-    }
-  }
+        story: 'Inputs with icons in different positions',
+      },
+    },
+  },
 };
 
 export const InputTypes: Story = {
@@ -167,10 +151,10 @@ export const InputTypes: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Different HTML input types supported'
-      }
-    }
-  }
+        story: 'Different HTML input types supported',
+      },
+    },
+  },
 };
 
 export const States: Story = {
@@ -186,16 +170,16 @@ export const States: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Different input states including disabled, read-only, required, and invalid'
-      }
-    }
-  }
+        story: 'Different input states including disabled, read-only, required, and invalid',
+      },
+    },
+  },
 };
 
 export const Controlled: Story = {
   render: () => {
     const [value, setValue] = useState('');
-    
+
     return (
       <div style={{ width: '300px' }}>
         <Input
@@ -211,10 +195,10 @@ export const Controlled: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Controlled input with state management. The hint shows the current value.'
-      }
-    }
-  }
+        story: 'Controlled input with state management. The hint shows the current value.',
+      },
+    },
+  },
 };
 
 // TextArea stories
@@ -225,37 +209,37 @@ const textAreaMeta: Meta<typeof TextArea> = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Multi-line text input component with support for auto-resize, different sizes, and validation.'
-      }
-    }
+        component: 'Multi-line text input component with support for auto-resize, different sizes, and validation.',
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {
     rows: {
       control: 'number',
-      description: 'Number of visible text lines'
+      description: 'Number of visible text lines',
     },
     resize: {
       control: 'select',
       options: ['none', 'both', 'horizontal', 'vertical'],
-      description: 'Resize behavior'
+      description: 'Resize behavior',
     },
     autoResize: {
       control: 'boolean',
-      description: 'Automatically adjusts height based on content'
-    }
-  }
+      description: 'Automatically adjusts height based on content',
+    },
+  },
 };
 
 export const TextAreaDefault: StoryObj<typeof TextArea> = {
   args: {
     label: 'Description',
     placeholder: 'Enter a description...',
-    rows: 4
+    rows: 4,
   },
   parameters: {
-    ...textAreaMeta.parameters
-  }
+    ...textAreaMeta.parameters,
+  },
 };
 
 export const TextAreaAutoResize: StoryObj<typeof TextArea> = {
@@ -263,15 +247,15 @@ export const TextAreaAutoResize: StoryObj<typeof TextArea> = {
     label: 'Auto-resizing TextArea',
     placeholder: 'This textarea will grow as you type...',
     autoResize: true,
-    rows: 3
+    rows: 3,
   },
   parameters: {
     docs: {
       description: {
-        story: 'TextArea that automatically adjusts its height based on content'
-      }
-    }
-  }
+        story: 'TextArea that automatically adjusts its height based on content',
+      },
+    },
+  },
 };
 
 export const TextAreaPlayground: StoryObj<typeof TextArea> = {
@@ -279,13 +263,13 @@ export const TextAreaPlayground: StoryObj<typeof TextArea> = {
     label: 'Playground TextArea',
     placeholder: 'Test different configurations...',
     rows: 5,
-    resize: 'vertical'
+    resize: 'vertical',
   },
   parameters: {
     docs: {
       description: {
-        story: 'Playground for testing different TextArea configurations'
-      }
-    }
-  }
+        story: 'Playground for testing different TextArea configurations',
+      },
+    },
+  },
 };

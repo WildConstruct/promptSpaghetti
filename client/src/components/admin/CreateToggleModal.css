@@ -17,7 +17,9 @@
 .modal-content {
   background: white;
   border-radius: 12px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
   max-width: 600px;
   width: 100%;
   max-height: 90vh;
@@ -98,7 +100,9 @@
   border: 1px solid #d1d5db;
   border-radius: 6px;
   font-size: 14px;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
 .form-group input:focus,
@@ -115,7 +119,7 @@
   border-color: #dc2626;
 }
 
-.form-group input[type="checkbox"] {
+.form-group input[type='checkbox'] {
   width: auto;
   margin-right: 8px;
 }
@@ -204,7 +208,7 @@
 }
 
 /* Checkbox Labels */
-.form-group label:has(input[type="checkbox"]) {
+.form-group label:has(input[type='checkbox']) {
   display: flex;
   align-items: center;
   font-weight: normal;
@@ -216,31 +220,31 @@
   .modal-overlay {
     padding: 16px;
   }
-  
+
   .modal-content {
     max-height: 95vh;
   }
-  
+
   .modal-header,
   .modal-body,
   .modal-footer {
     padding-left: 16px;
     padding-right: 16px;
   }
-  
+
   .variant-row {
     grid-template-columns: 1fr;
     gap: 4px;
   }
-  
+
   .date-inputs {
     grid-template-columns: 1fr;
   }
-  
+
   .modal-footer {
     flex-direction: column-reverse;
   }
-  
+
   .modal-footer .btn {
     width: 100%;
     justify-content: center;

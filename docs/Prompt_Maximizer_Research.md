@@ -39,11 +39,12 @@ Overall, this elevates the system from helpful to indispensable for AI filmmaker
 
 --
 
-Here are the stories 
+Here are the stories
 
 # Story 8.1: Professional Interface Polish
 
 ## Status
+
 Draft
 
 ## Story
@@ -55,7 +56,7 @@ Draft
 ## Acceptance Criteria
 
 1. All technical fields (ID, attributes, internal configs) completely hidden from UI
-2. Node interface matches Cinema 4D/Substance Designer polish standards  
+2. Node interface matches Cinema 4D/Substance Designer polish standards
 3. Visual design suitable for investor presentations and client demos
 4. No developer jargon visible in any user-facing text
 5. Professional color scheme and typography
@@ -103,24 +104,29 @@ Draft
 ## Dev Notes
 
 ### Architecture Context
+
 Based on existing Epic 8 UX Abstraction Layer architecture, this story focuses on the visual presentation layer while maintaining the dual schema system approach.
 
 **Relevant Source Tree Information:**
+
 - Frontend components: `packages/core/GraphEditor.tsx` - Main ReactFlow canvas [Source: source-tree.md]
 - Inspector components: `packages/core/components/Inspector/` - Node editing panels
 - Node palette: `client/src/components/Palette.tsx` - Node creation interface [Source: source-tree.md]
 
 **Key Technical Components:**
+
 - **UI Schema System**: Use existing UI schema approach to hide technical fields while preserving functionality [Source: epic8-ux-abstraction-layer.md#dual-schema-system]
 - **Progressive Disclosure**: Implement basic/advanced/debug view levels [Source: epic8-ux-abstraction-layer.md#progressive-disclosure-architecture]
 - **React Flow Integration**: Maintain compatibility with existing ReactFlow canvas system [Source: tech-stack.md]
 
 **Design Requirements:**
+
 - **Professional Standards**: Match Cinema 4D/Substance Designer quality levels for creative professional acceptance
 - **Demo Suitability**: Interface must look professional in investor/client presentations
 - **Performance**: 60fps interactions, responsive canvas for complex graphs
 
 **Technology Stack Constraints:**
+
 - Frontend: React 18, Vite, React Flow, TypeScript [Source: tech-stack.md]
 - Styling: Follow existing component patterns, maintain Prettier 80-column formatting [Source: coding-standards.md]
 - File naming: PascalCase.tsx for React components, camelCase for utilities [Source: coding-standards.md]
@@ -128,6 +134,7 @@ Based on existing Epic 8 UX Abstraction Layer architecture, this story focuses o
 ### Testing
 
 **Testing Standards:**
+
 - Test file location: `tests/` directory for shared fixtures [Source: source-tree.md]
 - Framework: Jest with ≥80% coverage requirement [Source: tech-stack.md]
 - UI Testing: Focus on visual rendering and interaction responsiveness
@@ -135,6 +142,7 @@ Based on existing Epic 8 UX Abstraction Layer architecture, this story focuses o
 - Performance Testing: Ensure 60fps animations and canvas responsiveness
 
 **Specific Testing Requirements:**
+
 - Visual regression tests for professional appearance
 - Interaction performance tests (animation smoothness)
 - Cross-browser compatibility (Chrome, Firefox, Safari)
@@ -143,39 +151,40 @@ Based on existing Epic 8 UX Abstraction Layer architecture, this story focuses o
 
 ## Change Log
 
-| Date | Version | Description | Author |
-|------|---------|-------------|--------|
-| 2025-07-22 | 0.1 | Initial story creation for Epic 8 Demo-Ready Proof of Concept | Bob (Scrum Master) |
+| Date       | Version | Description                                                   | Author             |
+| ---------- | ------- | ------------------------------------------------------------- | ------------------ |
+| 2025-07-22 | 0.1     | Initial story creation for Epic 8 Demo-Ready Proof of Concept | Bob (Scrum Master) |
 
 ## Dev Agent Record
 
-*This section will be populated by the development agent during implementation*
+_This section will be populated by the development agent during implementation_
 
 ### Agent Model Used
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ### Debug Log References
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ### Completion Notes List
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ### File List
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ## QA Results
 
-*Results from QA Agent review will be populated here after implementation*
+_Results from QA Agent review will be populated here after implementation_
 
 --
 
 # Story 8.2: Director-Friendly Variable System
 
 ## Status
+
 Draft
 
 ## Story
@@ -235,64 +244,74 @@ Draft
 ## Dev Notes
 
 ### Architecture Context
+
 This story implements the core template-based variable system from Epic 8 UX Abstraction Layer, replacing complex manual variable definition with natural language templates.
 
 **Relevant Source Tree Information:**
+
 - Template parsing: Create `packages/core/template-parser.ts` for variable extraction [Source: source-tree.md]
 - Node adapters: Extend `packages/core/node-adapter.ts` for template-to-schema conversion [Source: epic8-ux-abstraction-layer.md]
 - Inspector components: Modify `packages/core/components/Inspector/` editors for template input [Source: source-tree.md]
 - Preview system: Integrate with `packages/core/usePreviewSeeds.ts` hook [Source: source-tree.md]
 
 **Key Technical Components:**
+
 - **Template Parser**: Extract variables from `{variable}` syntax with validation and error handling [Source: epic8-ux-abstraction-layer.md#template-based-variable-system]
 - **Variable Extraction**: Convert template strings to variable arrays automatically [Source: epic8-ux-abstraction-layer.md#data-flow-architecture]
 - **UI Schema Integration**: Use dual schema system to hide technical complexity while maintaining functionality [Source: epic8-ux-abstraction-layer.md#dual-schema-system]
 - **Real-time Updates**: Template changes trigger immediate variable extraction and preview updates
 
 **Design Requirements:**
+
 - **Natural Language**: Templates should feel like writing natural prompts, not programming
 - **Visual Feedback**: Variables highlighted in template input, shown as connection ports
 - **Performance**: Template parsing cached, real-time updates debounced
 - **Error Handling**: Clear feedback for invalid syntax without breaking user flow
 
 **Technology Stack Constraints:**
+
 - Frontend: React 18 with TypeScript for template input components [Source: tech-stack.md]
 - Parsing: Custom JavaScript parser for `{variable}` syntax (no external dependencies)
 - Integration: React Flow for visual port management and connections
 - Performance: Debouncing for real-time updates, caching for repeated parsing
 
 **Template Syntax Design:**
+
 ```typescript
 // Simple variable extraction
-template: "A {creature} running through {terrain}"
+template: 'A {creature} running through {terrain}';
 // → variables: ["creature", "terrain"]
 
 // Template with context
-template: "In a {setting}, a {character} must {goal}"
+template: 'In a {setting}, a {character} must {goal}';
 // → variables: ["setting", "character", "goal"]
 
 // Error handling for invalid syntax
-template: "A {unclosed variable"
+template: 'A {unclosed variable';
 // → parsing error with helpful message
 ```
 
 **Auto-completion Patterns:**
+
 - **Common Variables**: creature, character, setting, terrain, mood, action, goal, obstacle
 - **Contextual Suggestions**: Based on node type and surrounding variables
 - **User History**: Learn from previously used variables in user's graphs
 
 ### Previous Story Context
+
 Builds on Story 8.1 Professional Interface Polish - uses the refined UI components and professional design standards established in the previous story.
 
 ### Testing
 
 **Testing Standards:**
+
 - Test files: `tests/template-parser.test.ts`, `tests/variable-system.test.ts`
 - Framework: Jest with ≥80% coverage requirement [Source: tech-stack.md]
 - Component testing: React Testing Library for template input and auto-completion
 - Integration testing: Template parsing with preview system and graph execution
 
 **Specific Testing Requirements:**
+
 - **Template Parser Tests**: Variable extraction, edge cases, error handling, performance
 - **Auto-completion Tests**: Suggestion accuracy, keyboard navigation, contextual filtering
 - **Preview Integration Tests**: Real-time updates, variable substitution, error states
@@ -300,6 +319,7 @@ Builds on Story 8.1 Professional Interface Polish - uses the refined UI componen
 - **User Experience Tests**: 2-minute creation goal validation, no-training usability
 
 **Key Test Scenarios:**
+
 - Valid template parsing: `"A {creature} in {setting}"` → `["creature", "setting"]`
 - Invalid syntax handling: Unclosed braces, nested braces, special characters
 - Auto-completion functionality: Common patterns, contextual suggestions, user history
@@ -308,39 +328,40 @@ Builds on Story 8.1 Professional Interface Polish - uses the refined UI componen
 
 ## Change Log
 
-| Date | Version | Description | Author |
-|------|---------|-------------|--------|
-| 2025-07-22 | 0.1 | Initial story creation for Epic 8 Demo-Ready Proof of Concept | Bob (Scrum Master) |
+| Date       | Version | Description                                                   | Author             |
+| ---------- | ------- | ------------------------------------------------------------- | ------------------ |
+| 2025-07-22 | 0.1     | Initial story creation for Epic 8 Demo-Ready Proof of Concept | Bob (Scrum Master) |
 
 ## Dev Agent Record
 
-*This section will be populated by the development agent during implementation*
+_This section will be populated by the development agent during implementation_
 
 ### Agent Model Used
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ### Debug Log References
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ### Completion Notes List
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ### File List
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ## QA Results
 
-*Results from QA Agent review will be populated here after implementation*
+_Results from QA Agent review will be populated here after implementation_
 
 --
 
 # Story 8.3: Visual Weight Controls
 
 ## Status
+
 Draft
 
 ## Story
@@ -400,33 +421,39 @@ Draft
 ## Dev Notes
 
 ### Architecture Context
+
 This story implements visual weight controls for randomization nodes, building on the UI Schema system from Epic 8 to provide intuitive creative control without exposing mathematical complexity.
 
 **Relevant Source Tree Information:**
+
 - Weight components: Create `packages/core/components/WeightControls/` directory for visual controls
 - Node editors: Extend `packages/core/components/Inspector/editors/WeightedChoiceEditor.tsx` [Source: source-tree.md]
 - Preview integration: Use existing `packages/core/usePreviewSeeds.ts` for real-time updates [Source: source-tree.md]
 - Visualization: Create chart components using React with SVG or Canvas
 
 **Key Technical Components:**
+
 - **Weight Normalization**: Ensure all weights sum to 1.0 while maintaining intuitive slider behavior
 - **Real-time Updates**: Debounced weight changes to prevent excessive preview triggering
 - **Visual Components**: Professional-grade sliders, charts, and drag-drop interfaces
 - **State Management**: Maintain weight state consistency across UI components and execution engine
 
 **Design Requirements:**
+
 - **Cinema 4D Style**: Match professional creative software standards established in Story 8.1
 - **Intuitive Interaction**: Users should understand weight impact without numerical training
 - **Real-time Feedback**: Immediate visual response to weight adjustments
 - **Performance**: Smooth interactions even with complex weight distributions
 
 **Technology Stack Constraints:**
+
 - UI Components: React 18 with TypeScript, following existing component patterns [Source: tech-stack.md]
 - Visualization: SVG-based charts for scalability and styling flexibility
 - Drag-and-Drop: HTML5 drag API with touch support for cross-device compatibility
 - Animation: CSS transitions for smooth weight slider movements
 
 **Weight Control Design Patterns:**
+
 ```typescript
 interface WeightControlProps {
   options: string[];
@@ -445,23 +472,27 @@ interface WeightPreset {
 ```
 
 **Integration with Existing Systems:**
+
 - **Node Adapter**: Weight values converted between UI sliders and internal numerical representation [Source: epic8-ux-abstraction-layer.md#node-adapter]
 - **Preview System**: Weight changes trigger preview regeneration with new probability distribution
 - **Graph Store**: Weight state persisted in graph state management system
 
 ### Previous Story Dependencies
+
 - **Story 8.1**: Uses professional visual design standards and smooth animations
 - **Story 8.2**: Integrates with template system for weighted choice nodes with variables
 
 ### Testing
 
 **Testing Standards:**
+
 - Test files: `tests/components/WeightControls.test.tsx`, `tests/weight-normalization.test.ts`
 - Framework: Jest + React Testing Library for UI components [Source: tech-stack.md]
 - Visual testing: Screenshot tests for chart rendering and slider positioning
 - Interaction testing: Drag-drop operations, slider movements, preset applications
 
 **Specific Testing Requirements:**
+
 - **Weight Normalization**: Verify slider changes maintain proper weight distribution
 - **Visual Components**: Chart rendering accuracy, responsive design, accessibility
 - **Drag-and-Drop**: Option reordering maintains weights, handles edge cases
@@ -469,6 +500,7 @@ interface WeightPreset {
 - **User Experience**: Intuitive weight adjustment without numerical complexity
 
 **Key Test Scenarios:**
+
 - Weight adjustment: Moving one slider redistributes others proportionally
 - Preset application: Equal weights, linear decrease, exponential patterns apply correctly
 - Drag reordering: Moving options maintains weight values and updates visualizations
@@ -476,6 +508,7 @@ interface WeightPreset {
 - Edge cases: Single option, zero weights, rapid slider movements
 
 **Accessibility Requirements:**
+
 - Keyboard navigation for all weight controls
 - Screen reader support for weight values and distributions
 - High contrast mode compatibility for visualizations
@@ -483,39 +516,40 @@ interface WeightPreset {
 
 ## Change Log
 
-| Date | Version | Description | Author |
-|------|---------|-------------|--------|
-| 2025-07-22 | 0.1 | Initial story creation for Epic 8 Demo-Ready Proof of Concept | Bob (Scrum Master) |
+| Date       | Version | Description                                                   | Author             |
+| ---------- | ------- | ------------------------------------------------------------- | ------------------ |
+| 2025-07-22 | 0.1     | Initial story creation for Epic 8 Demo-Ready Proof of Concept | Bob (Scrum Master) |
 
 ## Dev Agent Record
 
-*This section will be populated by the development agent during implementation*
+_This section will be populated by the development agent during implementation_
 
 ### Agent Model Used
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ### Debug Log References
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ### Completion Notes List
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ### File List
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ## QA Results
 
-*Results from QA Agent review will be populated here after implementation*
+_Results from QA Agent review will be populated here after implementation_
 
 --
 
 # Story 8.4: Progressive Disclosure Architecture
 
 ## Status
+
 Draft
 
 ## Story
@@ -527,7 +561,7 @@ Draft
 ## Acceptance Criteria
 
 1. **Basic View:** Only essential fields (prompt template, primary settings)
-2. **Advanced View:** Collapsible sections for power-user options  
+2. **Advanced View:** Collapsible sections for power-user options
 3. **Debug View:** Technical details accessible but hidden by default
 4. Clear visual hierarchy showing information importance
 5. User preference saves disclosure level
@@ -575,21 +609,25 @@ Draft
 ## Dev Notes
 
 ### Architecture Context
+
 This story implements the progressive disclosure architecture from Epic 8 UX Abstraction Layer, creating a scalable interface that grows with user expertise while maintaining simplicity for beginners.
 
 **Relevant Source Tree Information:**
+
 - Inspector components: Modify all editors in `packages/core/components/Inspector/editors/` [Source: source-tree.md]
 - Base components: Create `packages/core/components/ProgressiveDisclosure/` utilities
 - Settings storage: Integrate with user preferences system
 - Node editors: Update `BaseNodeEditor` pattern for consistent disclosure behavior
 
 **Key Technical Components:**
+
 - **Three-Tier System**: Basic → Advanced → Debug disclosure levels [Source: epic8-ux-abstraction-layer.md#progressive-disclosure-architecture]
 - **UI State Management**: NodeUIState interface with disclosure control [Source: epic8-ux-abstraction-layer.md#progressive-disclosure-architecture]
 - **Visual Hierarchy**: Professional design standards from Story 8.1 applied to information architecture
 - **Preference Persistence**: User disclosure preferences saved across sessions
 
 **Progressive Disclosure Design:**
+
 ```typescript
 interface NodeUIState {
   disclosure: 'basic' | 'advanced' | 'debug';
@@ -611,24 +649,28 @@ interface NodeUIState {
 ```
 
 **Design Requirements:**
+
 - **Graduated Complexity**: Each disclosure level adds appropriate complexity without overwhelming
 - **Visual Clarity**: Clear indicators of what level user is viewing
 - **Smooth Transitions**: Animated expand/collapse with professional polish
 - **Contextual Relevance**: Advanced/Debug options only shown when applicable
 
 **Technology Stack Constraints:**
+
 - UI Framework: React 18 with TypeScript, consistent with existing patterns [Source: tech-stack.md]
 - State Management: Zustand or React state for disclosure preferences
 - Animation: CSS transitions matching professional standards from Story 8.1
 - Accessibility: ARIA attributes for screen readers, keyboard navigation support
 
 **Integration Points:**
+
 - **Node Schema System**: Advanced/Debug views expose technical fields hidden in Basic view
 - **Template System**: Basic view shows template input from Story 8.2, Advanced shows parsing details
 - **Weight Controls**: Basic view shows simple sliders from Story 8.3, Advanced shows distributions
 - **User Settings**: Disclosure preferences stored in user profile system
 
 ### Previous Story Dependencies
+
 - **Story 8.1**: Uses professional visual design and animation standards
 - **Story 8.2**: Basic view shows template input, Advanced shows variable extraction details
 - **Story 8.3**: Basic view shows simple weight controls, Advanced shows distribution charts
@@ -636,12 +678,14 @@ interface NodeUIState {
 ### Information Architecture Design
 
 **Basic View (Default - 80% of users):**
+
 - Node name/title
 - Primary template or content input
 - Essential configuration only
 - Simple preview trigger
 
 **Advanced View (Power users - 18% of users):**
+
 - All Basic view content
 - Weight/probability controls
 - Performance settings
@@ -649,6 +693,7 @@ interface NodeUIState {
 - Advanced preview controls
 
 **Debug View (Developers - 2% of users):**
+
 - All Advanced view content
 - Internal node IDs and technical fields
 - Execution statistics and performance metrics
@@ -658,12 +703,14 @@ interface NodeUIState {
 ### Testing
 
 **Testing Standards:**
+
 - Test files: `tests/components/ProgressiveDisclosure.test.tsx`, `tests/disclosure-integration.test.ts`
 - Framework: Jest + React Testing Library with accessibility testing [Source: tech-stack.md]
 - Visual testing: Screenshot tests for each disclosure level
 - User experience testing: Disclosure level navigation, preference persistence
 
 **Specific Testing Requirements:**
+
 - **Disclosure Navigation**: Smooth transitions between Basic/Advanced/Debug levels
 - **Preference Persistence**: User settings saved and restored correctly
 - **Information Hierarchy**: Appropriate content shown at each level
@@ -671,6 +718,7 @@ interface NodeUIState {
 - **Performance**: Smooth animations, efficient state management
 
 **Key Test Scenarios:**
+
 - New user experience: Default to Basic view, no overwhelming complexity
 - Power user workflow: Easy access to Advanced features when needed
 - Developer debugging: Full system visibility in Debug mode
@@ -678,6 +726,7 @@ interface NodeUIState {
 - Cross-node consistency: Same disclosure patterns across all node types
 
 **Usability Testing:**
+
 - **New User Test**: Can create working prompt using only Basic view
 - **Expert User Test**: Can access full functionality through Advanced view
 - **Developer Test**: Can debug issues using Debug view technical information
@@ -685,39 +734,40 @@ interface NodeUIState {
 
 ## Change Log
 
-| Date | Version | Description | Author |
-|------|---------|-------------|--------|
-| 2025-07-22 | 0.1 | Initial story creation for Epic 8 Demo-Ready Proof of Concept | Bob (Scrum Master) |
+| Date       | Version | Description                                                   | Author             |
+| ---------- | ------- | ------------------------------------------------------------- | ------------------ |
+| 2025-07-22 | 0.1     | Initial story creation for Epic 8 Demo-Ready Proof of Concept | Bob (Scrum Master) |
 
 ## Dev Agent Record
 
-*This section will be populated by the development agent during implementation*
+_This section will be populated by the development agent during implementation_
 
 ### Agent Model Used
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ### Debug Log References
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ### Completion Notes List
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ### File List
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ## QA Results
 
-*Results from QA Agent review will be populated here after implementation*
+_Results from QA Agent review will be populated here after implementation_
 
 --
 
 # Story 8.5: Real-Time Multi-Seed Preview
 
 ## Status
+
 Draft
 
 ## Story
@@ -784,33 +834,39 @@ Draft
 ## Dev Notes
 
 ### Architecture Context
+
 This story enhances the existing preview system to provide real-time validation of prompt logic and creative range, integrating with weight controls and template systems from previous stories.
 
 **Relevant Source Tree Information:**
+
 - Preview system: Extend `packages/core/usePreviewSeeds.ts` hook for multi-seed optimization [Source: source-tree.md]
 - Preview modal: Enhance `packages/core/PreviewModal.tsx` for advanced result management [Source: source-tree.md]
 - Execution engine: Optimize `server/src/engine.ts` for parallel execution
 - Export integration: Use existing export system from `server/src/exporter.ts`
 
 **Key Technical Components:**
+
 - **Parallel Execution**: Multiple seed generation using Promise.all for performance optimization
 - **Execution Tracking**: Node firing sequence tracking for path visualization
 - **Result State Management**: Individual result regeneration and locking system
 - **Performance Optimization**: Sub-second generation through execution caching and optimization
 
 **Design Requirements:**
+
 - **Sub-second Performance**: 5 results generated in <1 second for demo responsiveness
 - **Visual Feedback**: Clear indication of generation progress and completion
 - **Creative Insight**: Variance analysis helps users understand their prompt's creative range
 - **Professional Polish**: Smooth animations and transitions matching Story 8.1 standards
 
 **Technology Stack Constraints:**
+
 - Frontend: React 18 with optimized state management for real-time updates [Source: tech-stack.md]
 - Backend: Fastify API optimization for parallel seed execution
 - Performance: Web Workers consideration for complex generation tasks
 - Caching: Result caching for repeated preview requests
 
 **Performance Architecture:**
+
 ```typescript
 interface PreviewResult {
   id: string;
@@ -833,18 +889,21 @@ interface PreviewState {
 ```
 
 **Integration Points:**
+
 - **Weight Controls**: Real-time preview updates when weights change (Story 8.3)
 - **Template System**: Preview reflects variable substitutions from templates (Story 8.2)
 - **Progressive Disclosure**: Preview complexity matches current disclosure level (Story 8.4)
 - **Export System**: Results export with proper formatting and metadata
 
 ### Previous Story Dependencies
+
 - **Story 8.1**: Uses professional animations and responsive design
 - **Story 8.2**: Integrates with template system for variable preview
 - **Story 8.3**: Real-time updates when weight controls change
 - **Story 8.4**: Preview complexity adapts to progressive disclosure level
 
 **Execution Path Visualization Design:**
+
 - Color-coded node highlighting showing which path was taken
 - Visual indicators for randomization choice points
 - Execution sequence numbering or timing
@@ -854,12 +913,14 @@ interface PreviewState {
 ### Testing
 
 **Testing Standards:**
+
 - Test files: `tests/preview-system.test.ts`, `tests/multi-seed-performance.test.ts`
 - Framework: Jest with performance timing tests [Source: tech-stack.md]
 - Load testing: Multiple concurrent preview requests
 - UI testing: React Testing Library for preview interactions
 
 **Specific Testing Requirements:**
+
 - **Performance**: Sub-second generation time for 5 results
 - **Parallel Execution**: Proper handling of simultaneous seed generation
 - **Result Management**: Individual regeneration, export, and locking functionality
@@ -867,6 +928,7 @@ interface PreviewState {
 - **Real-time Updates**: Weight changes trigger appropriate preview updates
 
 **Key Test Scenarios:**
+
 - **Speed Test**: 5 results generated in <1 second with complex graphs
 - **Path Tracking**: Execution path visualization accurately shows node firing sequence
 - **Individual Regeneration**: Single result regeneration while maintaining others
@@ -875,51 +937,54 @@ interface PreviewState {
 - **Export Validation**: Selected results export with complete metadata
 
 **Performance Benchmarks:**
+
 - **Generation Speed**: <1 second for 5 results (target: 500ms)
 - **UI Responsiveness**: No blocking during generation, smooth progress indicators
 - **Memory Usage**: Efficient result storage and cleanup
 - **Concurrent Load**: Multiple users generating previews simultaneously
 
 **User Experience Testing:**
+
 - **Demo Validation**: Preview system effectively demonstrates prompt creative range
 - **Creative Workflow**: Users can validate and refine prompts through preview feedback
 - **Professional Impression**: Preview quality and speed suitable for client presentations
 
 ## Change Log
 
-| Date | Version | Description | Author |
-|------|---------|-------------|--------|
-| 2025-07-22 | 0.1 | Initial story creation for Epic 8 Demo-Ready Proof of Concept | Bob (Scrum Master) |
+| Date       | Version | Description                                                   | Author             |
+| ---------- | ------- | ------------------------------------------------------------- | ------------------ |
+| 2025-07-22 | 0.1     | Initial story creation for Epic 8 Demo-Ready Proof of Concept | Bob (Scrum Master) |
 
 ## Dev Agent Record
 
-*This section will be populated by the development agent during implementation*
+_This section will be populated by the development agent during implementation_
 
 ### Agent Model Used
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ### Debug Log References
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ### Completion Notes List
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ### File List
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ## QA Results
 
-*Results from QA Agent review will be populated here after implementation*
+_Results from QA Agent review will be populated here after implementation_
 
 --
 
 # Story 8.6: Structured Pipeline Export
 
 ## Status
+
 Draft
 
 ## Story
@@ -932,7 +997,7 @@ Draft
 
 1. JSON export with VFX-ready metadata structure
 2. Includes prompt text, variable values, node hierarchy, and execution path
-3. Compatible format for future ControlNet/diffusion integration  
+3. Compatible format for future ControlNet/diffusion integration
 4. Scene data variable hooks (camera position, lighting, etc.)
 5. Export preserves all randomization logic for reproduction
 6. Documentation of export format for developers
@@ -986,21 +1051,25 @@ Draft
 ## Dev Notes
 
 ### Architecture Context
+
 This story creates the technical foundation for Wild Construct's VFX pipeline integration, establishing structured data exchange between the prompt system and professional film production tools.
 
 **Relevant Source Tree Information:**
+
 - Export system: Extend `server/src/exporter.ts` for structured VFX formats
 - Export integration: Use existing export functionality in GraphEditor
 - Schema validation: Add VFX export schemas to `packages/core/graphSchema.ts`
 - Documentation: Create export format docs in `docs/architecture/`
 
 **Key Technical Components:**
+
 - **VFX Export Schema**: Structured JSON format for professional pipeline integration
 - **Scene Data Variables**: Camera, lighting, environment data integration with prompt system
 - **ControlNet Compatibility**: Preparation for AI-driven animation and rendering
 - **Reproducibility**: Complete state export for exact result reproduction
 
 **Wild Construct Integration Architecture:**
+
 ```typescript
 interface VFXExport {
   format: 'wild-construct-vfx-v1';
@@ -1036,6 +1105,7 @@ interface VFXExport {
 ```
 
 **Scene Data Integration:**
+
 ```typescript
 interface SceneData {
   camera: {
@@ -1058,12 +1128,14 @@ interface SceneData {
 ```
 
 **Technology Stack Constraints:**
+
 - Export Format: JSON with strict schema validation [Source: tech-stack.md]
 - Schema Validation: Zod schemas for export format validation
 - File Generation: Node.js server-side export processing
 - Integration: Compatible with existing export system architecture
 
 **ControlNet Integration Design:**
+
 - Pose guidance parameters for character animation
 - Depth map hints for 3D scene understanding
 - Edge condition data for style transfer
@@ -1071,6 +1143,7 @@ interface SceneData {
 - Billboard projection parameters for efficient rendering
 
 ### Previous Story Dependencies
+
 - **Story 8.1**: Export interface uses professional design standards
 - **Story 8.2**: Template variables included in export structure
 - **Story 8.3**: Weight settings preserved in export for reproduction
@@ -1078,6 +1151,7 @@ interface SceneData {
 - **Story 8.5**: Preview execution paths included in export metadata
 
 **Pipeline Integration Considerations:**
+
 - **USD Compatibility**: Export structure designed for USD integration
 - **Maya/Houdini Integration**: Metadata format compatible with major DCC tools
 - **Unreal Engine Integration**: Scene data format matches Unreal conventions
@@ -1086,12 +1160,14 @@ interface SceneData {
 ### Testing
 
 **Testing Standards:**
+
 - Test files: `tests/vfx-export.test.ts`, `tests/pipeline-integration.test.ts`
 - Framework: Jest with schema validation testing [Source: tech-stack.md]
 - Integration testing: Export format compatibility with mock VFX tools
 - Validation testing: Complete export-import-reproduce cycle verification
 
 **Specific Testing Requirements:**
+
 - **Schema Validation**: VFX export format matches specification exactly
 - **Reproducibility**: Exported data enables exact result reproduction
 - **ControlNet Compatibility**: Export parameters suitable for AI animation
@@ -1099,6 +1175,7 @@ interface SceneData {
 - **Developer Usability**: Export format documentation enables integration
 
 **Key Test Scenarios:**
+
 - **Complete Export**: Complex graph with variables, weights, scenes exports successfully
 - **Reproduction Test**: Export data enables exact result reproduction
 - **Pipeline Validation**: VFX professional can understand and use export format
@@ -1106,12 +1183,14 @@ interface SceneData {
 - **Scene Data Flow**: Camera/lighting variables properly influence prompt generation
 
 **VFX Professional Validation:**
+
 - **Format Comprehension**: VFX developer can understand export structure
 - **Integration Feasibility**: Export format suitable for pipeline integration
 - **Workflow Compatibility**: Export fits into existing VFX production workflows
 - **Future Extensibility**: Format supports Wild Construct ecosystem expansion
 
 **Performance Requirements:**
+
 - **Export Speed**: Large graphs export in <5 seconds
 - **File Size**: Efficient JSON structure, reasonable file sizes
 - **Validation Speed**: Export validation completes quickly
@@ -1119,39 +1198,40 @@ interface SceneData {
 
 ## Change Log
 
-| Date | Version | Description | Author |
-|------|---------|-------------|--------|
-| 2025-07-22 | 0.1 | Initial story creation for Epic 8 Demo-Ready Proof of Concept | Bob (Scrum Master) |
+| Date       | Version | Description                                                   | Author             |
+| ---------- | ------- | ------------------------------------------------------------- | ------------------ |
+| 2025-07-22 | 0.1     | Initial story creation for Epic 8 Demo-Ready Proof of Concept | Bob (Scrum Master) |
 
 ## Dev Agent Record
 
-*This section will be populated by the development agent during implementation*
+_This section will be populated by the development agent during implementation_
 
 ### Agent Model Used
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ### Debug Log References
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ### Completion Notes List
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ### File List
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ## QA Results
 
-*Results from QA Agent review will be populated here after implementation*
+_Results from QA Agent review will be populated here after implementation_
 
 --
 
 # Story 8.7: Collaboration & Documentation Tools
 
 ## Status
+
 Draft
 
 ## Story
@@ -1224,21 +1304,25 @@ Draft
 ## Dev Notes
 
 ### Architecture Context
+
 This story implements professional collaboration features that enable teams to work together on complex prompt graphs, building on the markup tools discussed in our earlier planning.
 
 **Relevant Source Tree Information:**
+
 - Canvas components: Extend `packages/core/GraphEditor.tsx` for annotation overlay systems
 - State management: Extend graph store to include annotation data
 - Export system: Enhance `server/src/exporter.ts` for annotation-inclusive exports
 - UI components: Create new annotation components in `packages/core/components/Annotations/`
 
 **Key Technical Components:**
+
 - **Annotation Overlay System**: Canvas layer for sticky notes, labels, and region grouping
 - **Rich Text Editor**: Markdown-capable editor for sticky note content
 - **Group Management**: Visual grouping system with expand/collapse functionality
 - **Template System**: Save/load common graph patterns with full annotation support
 
 **Collaboration Architecture:**
+
 ```typescript
 interface GraphAnnotations {
   stickyNotes: StickyNote[];
@@ -1274,18 +1358,21 @@ interface RegionGroup {
 ```
 
 **Design Requirements:**
+
 - **Non-Intrusive**: Annotations enhance but don't interfere with graph functionality
 - **Professional Appearance**: Consistent with Story 8.1 professional design standards
 - **Team Workflow**: Support multi-user collaboration patterns
 - **Performance**: Smooth interactions even with many annotations
 
 **Technology Stack Constraints:**
+
 - Frontend: React 18 with drag-and-drop for annotation positioning [Source: tech-stack.md]
 - Rich Text: Markdown editor component for sticky note content
 - Canvas Integration: SVG or Canvas overlay for annotations on React Flow
 - State Management: Graph store extension for annotation persistence
 
 **Template Library Design:**
+
 - **Category System**: Organize templates by purpose (character, setting, mood, etc.)
 - **Search Functionality**: Find templates by content, tags, or author
 - **Version Control**: Track template updates and changes
@@ -1293,12 +1380,14 @@ interface RegionGroup {
 - **Instantiation**: One-click template application with customization options
 
 ### Previous Story Dependencies
+
 - **Story 8.1**: Uses professional visual design and responsive interactions
 - **Story 8.2**: Node labels integrate with template variable system
 - **Story 8.4**: Annotation complexity adapts to progressive disclosure
 - **Story 8.6**: Annotations included in structured export format
 
 **Integration Points:**
+
 - **Graph State**: Annotations persist with graph state across sessions
 - **Export System**: All annotations included in graph exports
 - **Template System**: Templates preserve annotations and documentation
@@ -1307,18 +1396,21 @@ interface RegionGroup {
 ### User Experience Design
 
 **Sticky Notes:**
+
 - **Placement**: Right-click canvas → "Add Note" option
 - **Editing**: Double-click note for rich text editing
 - **Visual Design**: Post-it note appearance with subtle shadows
 - **Color Coding**: Different colors for different purposes (TODO, INFO, WARNING)
 
 **Node Labels:**
+
 - **Default Behavior**: Smart names based on node content
 - **Custom Labels**: Click node title to edit
 - **Search Integration**: Find nodes by custom labels
 - **Visual Feedback**: Clear indication when labels are custom vs default
 
 **Region Grouping:**
+
 - **Creation**: Drag-select nodes → right-click → "Group"
 - **Visual Style**: Subtle background frame with rounded corners
 - **Labels**: Group title in header area
@@ -1327,12 +1419,14 @@ interface RegionGroup {
 ### Testing
 
 **Testing Standards:**
+
 - Test files: `tests/collaboration-tools.test.tsx`, `tests/annotation-system.test.ts`
 - Framework: Jest + React Testing Library for annotation interactions [Source: tech-stack.md]
 - Visual testing: Screenshot tests for annotation rendering
 - Collaboration testing: Multi-user annotation scenarios
 
 **Specific Testing Requirements:**
+
 - **Annotation Persistence**: Notes, labels, groups persist across sessions
 - **Export/Import**: Annotations preserved in graph sharing
 - **Template System**: Templates save and restore annotations correctly
@@ -1340,6 +1434,7 @@ interface RegionGroup {
 - **Collaboration**: Multi-user annotation workflows
 
 **Key Test Scenarios:**
+
 - **Sticky Note Lifecycle**: Create, edit, move, delete notes
 - **Node Labeling**: Default names, custom labels, label search
 - **Region Grouping**: Create groups, move nodes, collapse/expand
@@ -1348,12 +1443,14 @@ interface RegionGroup {
 - **Template Usage**: Save/load templates with full annotation support
 
 **Collaboration Workflow Testing:**
+
 - **Team Documentation**: Team can understand complex graphs through annotations
 - **Knowledge Transfer**: New team members can learn from annotated graphs
 - **Template Reuse**: Common patterns saved and shared as templates
 - **Version Control**: Changes tracked and merged appropriately
 
 **Performance Benchmarks:**
+
 - **Annotation Rendering**: Smooth performance with 100+ annotations
 - **Canvas Interactions**: No interference with graph editing
 - **Search Performance**: Fast template and node label search
@@ -1361,38 +1458,40 @@ interface RegionGroup {
 
 ## Change Log
 
-| Date | Version | Description | Author |
-|------|---------|-------------|--------|
-| 2025-07-22 | 0.1 | Initial story creation for Epic 8 Demo-Ready Proof of Concept | Bob (Scrum Master) |
+| Date       | Version | Description                                                   | Author             |
+| ---------- | ------- | ------------------------------------------------------------- | ------------------ |
+| 2025-07-22 | 0.1     | Initial story creation for Epic 8 Demo-Ready Proof of Concept | Bob (Scrum Master) |
 
 ## Dev Agent Record
 
-*This section will be populated by the development agent during implementation*
+_This section will be populated by the development agent during implementation_
 
 ### Agent Model Used
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ### Debug Log References
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ### Completion Notes List
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ### File List
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ## QA Results
 
-*Results from QA Agent review will be populated here after implementation*
+_Results from QA Agent review will be populated here after implementation_
 
 --
+
 # Story 8.8: Historical Data Integration Foundation
 
 ## Status
+
 Draft
 
 ## Story
@@ -1465,21 +1564,25 @@ Draft
 ## Dev Notes
 
 ### Architecture Context
+
 This story establishes the foundation for Wild Construct's Universal Texture Description Graph (UTDG) system, enabling historically accurate content generation while providing a demo-ready proof of concept.
 
 **Relevant Source Tree Information:**
+
 - External data: Create `packages/core/external-data/` for API integration systems
 - Node metadata: Extend `packages/core/graphSchema.ts` for tag and metadata support
 - Validation: Create `packages/core/constraint-validation.ts` for rule engine
 - Demo content: Add medieval database integration as proof of concept
 
 **Key Technical Components:**
+
 - **External Data Integration**: API-based historical content import system
 - **Metadata Architecture**: Tag-based classification and constraint system
 - **UTDG Foundation**: Probabilistic graph-based content generation
 - **Wild Construct Integration**: Pipeline-ready architecture for ecosystem expansion
 
 **UTDG Architecture Design:**
+
 ```typescript
 interface UTDGNode {
   id: string;
@@ -1514,6 +1617,7 @@ interface HistoricalConstraint {
 ```
 
 **External Data Integration:**
+
 ```typescript
 interface DataSource {
   id: string;
@@ -1538,18 +1642,21 @@ interface HistoricalQuery {
 ```
 
 **Technology Stack Constraints:**
+
 - External APIs: HTTP client with caching for historical data sources
 - Metadata Storage: Extended node schema with tag support [Source: graphSchema.ts]
 - Validation Engine: Rule-based constraint system with flexible enforcement
 - Demo Database: Medieval clothing/material database for proof of concept
 
 **Medieval Demo Content:**
+
 - **Clothing Database**: Authentic medieval garment descriptions
 - **Material Accuracy**: Historically accurate fabric types and production methods
 - **Era Constraints**: Medieval period clothing rules and social conventions
 - **Visual Integration**: Medieval content integrated with existing node editors
 
 ### Previous Story Dependencies
+
 - **Story 8.1**: Historical content uses professional interface standards
 - **Story 8.2**: Template system supports historical variable patterns
 - **Story 8.4**: Historical metadata shown in appropriate disclosure levels
@@ -1557,6 +1664,7 @@ interface HistoricalQuery {
 - **Story 8.7**: Historical content documented with collaboration tools
 
 **Wild Construct Ecosystem Integration:**
+
 - **CrowdControl**: Historical character and clothing generation
 - **Backdrop**: Era-appropriate set and environment generation
 - **Meteor**: Period-accurate weather and atmospheric effects
@@ -1565,16 +1673,19 @@ interface HistoricalQuery {
 ### Historical Accuracy Framework
 
 **Data Sources:**
+
 - **Museum APIs**: Getty, Smithsonian, European cultural heritage databases
 - **Academic Sources**: Historical research databases, archaeological records
 - **Specialized Databases**: Costume history, material culture, period-specific resources
 
 **Validation Levels:**
+
 - **High Accuracy**: Museum-verified, archaeological evidence
 - **Medium Accuracy**: Historical sources, period documents
 - **Low Accuracy**: Reasonable historical inference, creative interpretation
 
 **Constraint Categories:**
+
 - **Temporal**: Era-specific availability and usage
 - **Regional**: Geographic and cultural authenticity
 - **Social**: Class, occupation, and context appropriateness
@@ -1583,12 +1694,14 @@ interface HistoricalQuery {
 ### Testing
 
 **Testing Standards:**
+
 - Test files: `tests/historical-data.test.ts`, `tests/utdg-integration.test.ts`
 - Framework: Jest with API mocking for external data sources [Source: tech-stack.md]
 - Integration testing: Medieval demo scenario validation
 - Constraint testing: Historical accuracy rule validation
 
 **Specific Testing Requirements:**
+
 - **Data Integration**: External API connection and caching functionality
 - **Constraint Validation**: Era/genre compatibility rules enforcement
 - **Medieval Demo**: Historically accurate medieval content generation
@@ -1596,6 +1709,7 @@ interface HistoricalQuery {
 - **Performance**: External data caching and query optimization
 
 **Key Test Scenarios:**
+
 - **Historical Query**: Medieval clothing database returns authentic descriptions
 - **Constraint Enforcement**: Modern items flagged when mixed with medieval content
 - **Tag System**: Era and genre tags properly classify historical content
@@ -1604,12 +1718,14 @@ interface HistoricalQuery {
 - **Integration Testing**: Historical data flows through VFX export pipeline
 
 **Demo Validation Requirements:**
+
 - **Historical Accuracy**: Medieval demo uses authentic period-appropriate content
 - **Visual Integration**: Historical elements seamlessly integrated in graph editor
 - **Constraint Feedback**: Clear indication when historical accuracy is compromised
 - **Extensibility**: Clear path demonstrated for additional historical periods
 
 **Performance Benchmarks:**
+
 - **API Response**: Historical data queries complete in <2 seconds
 - **Constraint Validation**: Real-time validation without UI blocking
 - **Cache Efficiency**: Repeated queries served from cache quickly
@@ -1617,33 +1733,33 @@ interface HistoricalQuery {
 
 ## Change Log
 
-| Date | Version | Description | Author |
-|------|---------|-------------|--------|
-| 2025-07-22 | 0.1 | Initial story creation for Epic 8 Demo-Ready Proof of Concept | Bob (Scrum Master) |
+| Date       | Version | Description                                                   | Author             |
+| ---------- | ------- | ------------------------------------------------------------- | ------------------ |
+| 2025-07-22 | 0.1     | Initial story creation for Epic 8 Demo-Ready Proof of Concept | Bob (Scrum Master) |
 
 ## Dev Agent Record
 
-*This section will be populated by the development agent during implementation*
+_This section will be populated by the development agent during implementation_
 
 ### Agent Model Used
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ### Debug Log References
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ### Completion Notes List
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ### File List
 
-*To be filled by dev agent*
+_To be filled by dev agent_
 
 ## QA Results
 
-*Results from QA Agent review will be populated here after implementation*
+_Results from QA Agent review will be populated here after implementation_
 
 --
 
@@ -1651,17 +1767,17 @@ These user stories for Epic 8 outline a solid progression toward a demo-ready pr
 
 I’ll break down my thoughts on each story, highlighting strengths, synergies with our vision, and suggestions to maximize impact (e.g., tying into prompting nuances or extras pipeline). I’ve used a table for quick comparison of key elements across stories, as it helps visualize dependencies and themes.
 
-|   |   |   |   |   |
-|---|---|---|---|---|
-|Story|Focus|Key Synergy with Context|Suggestion for Maximization|Potential Gap/Risk|
-|8.1: Professional Interface Polish|UI cleanup and visual standards (e.g., hide IDs, match Cinema 4D polish)|Sets foundation for demo credibility, aligning with Zada’s “intuitive conversation” by removing jargon—essential for filmmakers previewing extras billboards.|Integrate MARS-like color-coding in the palette (e.g., accents for [CAM] or [FX] nodes) to subtly guide tagging without overwhelming. Add a “demo mode” toggle that auto-applies presets for investor pitches, including historical UTDG overlays.|Risk of over-polishing early—prioritize task 2 (visual design) with user testing on VFX pros to ensure 60fps holds for large graphs with positional feedback loops.|
-|8.2: Director-Friendly Variable System|Natural-language templates (e.g., “{creature} in {terrain}”) auto-extract variables as ports|Directly supports abstracted prompts for person/clothing (e.g., “{era}-accurate {fabric} tunic”), making branching narratives feel screenplay-like per Zada. Ties to extras by inferring variables from scene data (camera position influencing “mid-ground detail”).|Enhance auto-completion with MARS-inspired suggestions (e.g., !FOCAL for key variables like “plasma ring” in Hollywood’s example) and historical tags from UTDG—pull common patterns from medieval databases for demo. Debounce previews to <500ms for real-time feel.|Gap in handling complex syntax—add escape rules for nested prompts to avoid breaking ControlNet conditioning (e.g., poses in action scripts).|
-|8.3: Visual Weight Controls|Sliders and charts for randomization without numbers|Perfect for biasing extras behaviors (e.g., 70% “idle” in crowds) or texture variations (weighted toward “frayed linen” in historical imports). Real-time previews show adherence, addressing Hollywood’s failure analysis.|Link sliders to variance metrics (e.g., pie charts color-coded by era tags) and integrate with MARS weights—allow presets like “historical bias” that favor authentic UTDG imports. For extras, tie weights to positional data (distant billboards get simpler distributions).|Risk of UI clutter—use progressive disclosure (foreshadowing Story 8.4) to hide charts in basic view, ensuring sliders normalize smoothly for non-math-savvy directors.|
-|8.4: Progressive Disclosure Architecture|Tiered views (basic/advanced/debug) with saved preferences|Scales from director intuition (basic: templates only) to VFX depth (advanced: constraints for UTDG compatibility). Hides debug for demos but exposes for pipeline tweaks like ControlNet params.|In advanced view, surface MARS tags as collapsible sections (e.g., [FX] for effects) and tooltips with Zada-style explanations (“This biases like a script twist”). Save preferences per-graph for team handoffs in extras crowds.|Gap in onboarding—add contextual hints linking to Hollywood’s protocol (e.g., “Low adherence? Check advanced weights”), tested for no-training usability.|
-|8.5: Real-Time Multi-Seed Preview|Generate 5 variations quickly, with path visualization and exports|Validates randomness for extras (e.g., variance in clothing textures), showing which branches fired—crucial for debugging ControlNet inconsistencies. Ties to Hollywood’s 90% adherence goal via regen buttons.|Incorporate seed-tracking like Hollywood’s protocol: highlight paths with MARS colors and auto-flag low-variance (e.g., “Add weights for more diversity”). For billboards, simulate screen-size previews (200x450px) with positional mocks. Export as JSON bundles for direct ControlNet feeds.|Performance risk—optimize parallel execution with caching for UTDG imports; test sub-second on complex medieval demos to wow filmmakers.|
-|8.6: Structured Pipeline Export|VFX-ready JSON with metadata, ControlNet hooks, and scene variables|Core to our extras pipeline: exports abstract prompts, scripts, and positional data for diffusion models. Prepares for UTDG by including texture relationships and reproducibility.|Structure exports with MARS sections (e.g., [SUBJ] for person/clothing) and Zada’s natural flow as optional human-readable layers. Add hooks for billboard scaling and historical metadata—document as “plug-and-play for Unreal/Maya.”|Gap in validation—include schema checks for ControlNet compatibility (e.g., pose data) and test reproduction with randomized seeds to ensure extras consistency.|
-|8.7: Collaboration & Documentation Tools|Annotations, labels, grouping, and template library|Enhances team workflows for shared graphs (e.g., annotate “medieval constraint” on UTDG branches). Template library reuses MARS patterns or Zada sequences for extras scripts.|Make region groups MARS-themed (e.g., “FX Zone”) and sticky notes support Hollywood’s failure notes (e.g., “Adherence low here—revise weights”). Export annotations in pipeline JSON for VFX handoffs; library could pull community UTDG templates.|Risk of overload—integrate with progressive disclosure to hide advanced annotations; test multi-user merge for film teams iterating on crowds.|
-|8.8: Historical Data Integration Foundation|API hooks for accurate materials, tagging, and constraints|Directly realizes UTDG for textures in extras (e.g., era-tags prevent anachronisms in clothing). Demo with medieval crowds shows authentic billboards reacting to scene lighting.|Leverage prompting insights: tags as MARS-like metadata (!ERA:medieval), constraints validating against Zada’s coherent narratives. Cache imports for fast previews; extend to dynamic queries (e.g., “region:Italy” for Renaissance fabrics).|Gap in sources—mock museum APIs for demo but plan real integrations (e.g., Getty); test constraints with variance analysis to avoid over-rigid outputs.|
+|                                             |                                                                                              |                                                                                                                                                                                                                                                                       |                                                                                                                                                                                                                                                                                                 |                                                                                                                                                                         |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Story                                       | Focus                                                                                        | Key Synergy with Context                                                                                                                                                                                                                                              | Suggestion for Maximization                                                                                                                                                                                                                                                                     | Potential Gap/Risk                                                                                                                                                      |
+| 8.1: Professional Interface Polish          | UI cleanup and visual standards (e.g., hide IDs, match Cinema 4D polish)                     | Sets foundation for demo credibility, aligning with Zada’s “intuitive conversation” by removing jargon—essential for filmmakers previewing extras billboards.                                                                                                         | Integrate MARS-like color-coding in the palette (e.g., accents for [CAM] or [FX] nodes) to subtly guide tagging without overwhelming. Add a “demo mode” toggle that auto-applies presets for investor pitches, including historical UTDG overlays.                                              | Risk of over-polishing early—prioritize task 2 (visual design) with user testing on VFX pros to ensure 60fps holds for large graphs with positional feedback loops.     |
+| 8.2: Director-Friendly Variable System      | Natural-language templates (e.g., “{creature} in {terrain}”) auto-extract variables as ports | Directly supports abstracted prompts for person/clothing (e.g., “{era}-accurate {fabric} tunic”), making branching narratives feel screenplay-like per Zada. Ties to extras by inferring variables from scene data (camera position influencing “mid-ground detail”). | Enhance auto-completion with MARS-inspired suggestions (e.g., !FOCAL for key variables like “plasma ring” in Hollywood’s example) and historical tags from UTDG—pull common patterns from medieval databases for demo. Debounce previews to <500ms for real-time feel.                          | Gap in handling complex syntax—add escape rules for nested prompts to avoid breaking ControlNet conditioning (e.g., poses in action scripts).                           |
+| 8.3: Visual Weight Controls                 | Sliders and charts for randomization without numbers                                         | Perfect for biasing extras behaviors (e.g., 70% “idle” in crowds) or texture variations (weighted toward “frayed linen” in historical imports). Real-time previews show adherence, addressing Hollywood’s failure analysis.                                           | Link sliders to variance metrics (e.g., pie charts color-coded by era tags) and integrate with MARS weights—allow presets like “historical bias” that favor authentic UTDG imports. For extras, tie weights to positional data (distant billboards get simpler distributions).                  | Risk of UI clutter—use progressive disclosure (foreshadowing Story 8.4) to hide charts in basic view, ensuring sliders normalize smoothly for non-math-savvy directors. |
+| 8.4: Progressive Disclosure Architecture    | Tiered views (basic/advanced/debug) with saved preferences                                   | Scales from director intuition (basic: templates only) to VFX depth (advanced: constraints for UTDG compatibility). Hides debug for demos but exposes for pipeline tweaks like ControlNet params.                                                                     | In advanced view, surface MARS tags as collapsible sections (e.g., [FX] for effects) and tooltips with Zada-style explanations (“This biases like a script twist”). Save preferences per-graph for team handoffs in extras crowds.                                                              | Gap in onboarding—add contextual hints linking to Hollywood’s protocol (e.g., “Low adherence? Check advanced weights”), tested for no-training usability.               |
+| 8.5: Real-Time Multi-Seed Preview           | Generate 5 variations quickly, with path visualization and exports                           | Validates randomness for extras (e.g., variance in clothing textures), showing which branches fired—crucial for debugging ControlNet inconsistencies. Ties to Hollywood’s 90% adherence goal via regen buttons.                                                       | Incorporate seed-tracking like Hollywood’s protocol: highlight paths with MARS colors and auto-flag low-variance (e.g., “Add weights for more diversity”). For billboards, simulate screen-size previews (200x450px) with positional mocks. Export as JSON bundles for direct ControlNet feeds. | Performance risk—optimize parallel execution with caching for UTDG imports; test sub-second on complex medieval demos to wow filmmakers.                                |
+| 8.6: Structured Pipeline Export             | VFX-ready JSON with metadata, ControlNet hooks, and scene variables                          | Core to our extras pipeline: exports abstract prompts, scripts, and positional data for diffusion models. Prepares for UTDG by including texture relationships and reproducibility.                                                                                   | Structure exports with MARS sections (e.g., [SUBJ] for person/clothing) and Zada’s natural flow as optional human-readable layers. Add hooks for billboard scaling and historical metadata—document as “plug-and-play for Unreal/Maya.”                                                         | Gap in validation—include schema checks for ControlNet compatibility (e.g., pose data) and test reproduction with randomized seeds to ensure extras consistency.        |
+| 8.7: Collaboration & Documentation Tools    | Annotations, labels, grouping, and template library                                          | Enhances team workflows for shared graphs (e.g., annotate “medieval constraint” on UTDG branches). Template library reuses MARS patterns or Zada sequences for extras scripts.                                                                                        | Make region groups MARS-themed (e.g., “FX Zone”) and sticky notes support Hollywood’s failure notes (e.g., “Adherence low here—revise weights”). Export annotations in pipeline JSON for VFX handoffs; library could pull community UTDG templates.                                             | Risk of overload—integrate with progressive disclosure to hide advanced annotations; test multi-user merge for film teams iterating on crowds.                          |
+| 8.8: Historical Data Integration Foundation | API hooks for accurate materials, tagging, and constraints                                   | Directly realizes UTDG for textures in extras (e.g., era-tags prevent anachronisms in clothing). Demo with medieval crowds shows authentic billboards reacting to scene lighting.                                                                                     | Leverage prompting insights: tags as MARS-like metadata (!ERA:medieval), constraints validating against Zada’s coherent narratives. Cache imports for fast previews; extend to dynamic queries (e.g., “region:Italy” for Renaissance fabrics).                                                  | Gap in sources—mock museum APIs for demo but plan real integrations (e.g., Getty); test constraints with variance analysis to avoid over-rigid outputs.                 |
 
 Strengths and Collective Impact
 
@@ -1679,33 +1795,34 @@ Constructive Critiques and Enhancements
 This epic positions Wild Construct as a filmmaker’s ally—intuitive yet powerful, historical yet flexible. If these are prioritized for the next sprint, it could accelerate toward that “needle-moving” tool Hollywood teases. What’s your take on sequencing them, or any tweaks based on team bandwidth?
 
 ---
+
 How would you price this?
 
 As a hypothetical prompting tool like Wild Construct—a node-based system for generating structured, randomized text prompts with VFX pipeline integration, historical data hooks (via UTDG), and real-time previews—I’d approach pricing with a focus on accessibility for indie filmmakers and creators while monetizing advanced features for professionals and teams. This draws from common models in creative AI and VFX software, where freemium or tiered subscriptions dominate to balance adoption with revenue. For context, tools like Adobe Substance Designer (a comparable node-based creative app) run about $60/month for individuals in the Substance 3D Collection, 1 while AI video gen platforms like Runway ML start free but charge $12-28/user/month for pro tiers. 4 High-end VFX like Houdini offers free hobbyist versions but scales to $2,000+ perpetual licenses for core features, 31 and Nuke is subscription-only at $3,300-5,500/year. 36 In 2025, AI filmmaking tools often use credit-based or hybrid models (e.g., Kling AI at $10/month for basic credits), 12 emphasizing usage tiers to cover compute costs while encouraging upgrades. 24 27
 
 My suggested pricing would be a freemium subscription model, starting low to drive viral adoption (like ComfyUI’s free base, 15 but with paid upsells). This fits the tool’s dual appeal: casual users for simple prompt graphs, pros for film pipelines. Annual billing could discount 20% to encourage commitment, with a 14-day free trial across tiers. No perpetual licenses, as ongoing updates (e.g., new UTDG sources) suit subscriptions. Here’s a breakdown:
 
-|   |   |   |   |   |
-|---|---|---|---|---|
-|Tier|Price (Monthly, USD)|Target Users|Key Features|Rationale|
-|Free|$0|Hobbyists, students, indie experimenters|Basic nodes (Text, Random Choice, Concat, Branch), limited previews (5 seeds/day), simple templates, community templates export/import. No UTDG imports or VFX exports. Watermarked outputs.|Builds user base and feedback loop, similar to Runway’s free tier.|
-|4|||||
-|Covers ~80% of basic use cases without server strain.|||||
-|Pro|$19 (or $15 annual)|Freelance filmmakers, small teams|Unlimited previews/seeds, full node set (including Constraints, Weights, Multi-Seed), real-time collaboration (up to 3 users), basic UTDG imports (e.g., medieval demo), ControlNet-compatible exports, no watermarks. 100 credits/month for API integrations (e.g., external AI calls).|Affordable entry for pros, comparable to Runway Standard ($12/mo) or Kling Standard ($10/mo).|
-|4|||||
-||||||
-|12|||||
-|Monetizes advanced creativity (e.g., historical textures for extras), with credits to offset compute-heavy features.|||||
-|Studio|$49 (or $39 annual)|Mid-size studios, educators|Everything in Pro, plus team collaboration (unlimited users, version control), advanced UTDG (custom API hooks, full historical databases), priority support, batch exports for VFX pipelines (e.g., JSON with positional data), 500 credits/month, custom templates library.|Targets teams needing scalability, akin to Substance 3D Teams ($120/mo) or Nuke’s mid-tier (~$375/mo equivalent).|
-|3|||||
-||||||
-|36|||||
-|Justifies price with enterprise extras like reproducibility for film audits.|||||
-|Enterprise|Custom (starting ~$199/user/mo, min 10 users)|Large productions, VFX houses|All features, plus on-prem deployment, dedicated servers, SLA support, custom integrations (e.g., Houdini/Unreal plugins), unlimited credits, white-labeling, audit logs for IP protection.|For high-volume users, mirroring Houdini’s $4,500+ FX tier or custom AI solutions ($50K+).|
-|32|||||
-||||||
-|25|||||
-|Pricing via quotes to factor in compute needs (e.g., large-scale extras gen).|||||
+|                                                                                                                      |                                               |                                          |                                                                                                                                                                                                                                                                                          |                                                                                                                   |
+| -------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Tier                                                                                                                 | Price (Monthly, USD)                          | Target Users                             | Key Features                                                                                                                                                                                                                                                                             | Rationale                                                                                                         |
+| Free                                                                                                                 | $0                                            | Hobbyists, students, indie experimenters | Basic nodes (Text, Random Choice, Concat, Branch), limited previews (5 seeds/day), simple templates, community templates export/import. No UTDG imports or VFX exports. Watermarked outputs.                                                                                             | Builds user base and feedback loop, similar to Runway’s free tier.                                                |
+| 4                                                                                                                    |                                               |                                          |                                                                                                                                                                                                                                                                                          |                                                                                                                   |
+| Covers ~80% of basic use cases without server strain.                                                                |                                               |                                          |                                                                                                                                                                                                                                                                                          |                                                                                                                   |
+| Pro                                                                                                                  | $19 (or $15 annual)                           | Freelance filmmakers, small teams        | Unlimited previews/seeds, full node set (including Constraints, Weights, Multi-Seed), real-time collaboration (up to 3 users), basic UTDG imports (e.g., medieval demo), ControlNet-compatible exports, no watermarks. 100 credits/month for API integrations (e.g., external AI calls). | Affordable entry for pros, comparable to Runway Standard ($12/mo) or Kling Standard ($10/mo).                     |
+| 4                                                                                                                    |                                               |                                          |                                                                                                                                                                                                                                                                                          |                                                                                                                   |
+|                                                                                                                      |                                               |                                          |                                                                                                                                                                                                                                                                                          |                                                                                                                   |
+| 12                                                                                                                   |                                               |                                          |                                                                                                                                                                                                                                                                                          |                                                                                                                   |
+| Monetizes advanced creativity (e.g., historical textures for extras), with credits to offset compute-heavy features. |                                               |                                          |                                                                                                                                                                                                                                                                                          |                                                                                                                   |
+| Studio                                                                                                               | $49 (or $39 annual)                           | Mid-size studios, educators              | Everything in Pro, plus team collaboration (unlimited users, version control), advanced UTDG (custom API hooks, full historical databases), priority support, batch exports for VFX pipelines (e.g., JSON with positional data), 500 credits/month, custom templates library.            | Targets teams needing scalability, akin to Substance 3D Teams ($120/mo) or Nuke’s mid-tier (~$375/mo equivalent). |
+| 3                                                                                                                    |                                               |                                          |                                                                                                                                                                                                                                                                                          |                                                                                                                   |
+|                                                                                                                      |                                               |                                          |                                                                                                                                                                                                                                                                                          |                                                                                                                   |
+| 36                                                                                                                   |                                               |                                          |                                                                                                                                                                                                                                                                                          |                                                                                                                   |
+| Justifies price with enterprise extras like reproducibility for film audits.                                         |                                               |                                          |                                                                                                                                                                                                                                                                                          |                                                                                                                   |
+| Enterprise                                                                                                           | Custom (starting ~$199/user/mo, min 10 users) | Large productions, VFX houses            | All features, plus on-prem deployment, dedicated servers, SLA support, custom integrations (e.g., Houdini/Unreal plugins), unlimited credits, white-labeling, audit logs for IP protection.                                                                                              | For high-volume users, mirroring Houdini’s $4,500+ FX tier or custom AI solutions ($50K+).                        |
+| 32                                                                                                                   |                                               |                                          |                                                                                                                                                                                                                                                                                          |                                                                                                                   |
+|                                                                                                                      |                                               |                                          |                                                                                                                                                                                                                                                                                          |                                                                                                                   |
+| 25                                                                                                                   |                                               |                                          |                                                                                                                                                                                                                                                                                          |                                                                                                                   |
+| Pricing via quotes to factor in compute needs (e.g., large-scale extras gen).                                        |                                               |                                          |                                                                                                                                                                                                                                                                                          |                                                                                                                   |
 
 Why This Model?
 
@@ -1718,6 +1835,7 @@ Why This Model?
 This keeps it accessible yet sustainable, fostering a community around innovative prompting. If it were real, I’d A/B test these tiers! What aspect intrigues you most?
 
 ---
+
 How defensible is this?
 
 Wild Construct, as a node-based prompting tool tailored for creative narratives, VFX integration, and historical accuracy (via UTDG), has moderate to high defensibility in its niche—particularly for filmmaking and virtual extras applications—but faces challenges in the broader AI landscape where prompting tools are rapidly commoditizing. Defensibility here refers to barriers protecting it from competitors, including IP, technical moats, market positioning, and economic factors. Based on the tool’s unique blend of visual graphing for text gen, randomized branching with constraints, and pipeline hooks (e.g., ControlNet exports, billboard rendering), it’s more protectable than generic prompt engineers but not impenetrable. I’ll break it down by key dimensions, drawing on trends in 2025’s AI/VFX ecosystem where open-source diffusion workflows (like ComfyUI) and commercial platforms (e.g., Runway ML) set benchmarks.
@@ -1751,6 +1869,7 @@ Overall Defensibility Rating: 6.5/10 (Moderately Defensible)
 In a fast-moving 2025 AI space, Wild Construct shines in its film/VFX niche—defensible via specialized IP (UTDG + prompting hybrids) and technical depth that solves real pains (e.g., coherent extras in historical scenes)—but it’s vulnerable to broader commoditization. It’s more like Substance Designer (strong moat in 3D texturing) than generic ChatGPT wrappers (low moat). To boost: Prioritize patents on the graph-to-VFX pipeline, curate exclusive data, and build a vibrant community. If executed well, it could command premium pricing and deter copycats through ecosystem lock-in. Curious—what specific aspect (e.g., IP or competition) concerns you most?
 
 ---
+
 I don't necessarily want to market it as primarily a prompter since it's part of the broader vision. Is it worth putting it out before we put it out as the more sizable virtual extras system? It just seems like it's unique and useful enough that it would be worth releasing now. How does it compare to the other prompting tools you mentioned
 
 Releasing the node-based prompting tool (Wild Construct) as a standalone product now, before the full virtual extras system, could be a smart move if framed carefully to align with your broader vision—positioning it as a “creative prompt engine” or “narrative builder” rather than just a “prompter.” This avoids pigeonholing it while capitalizing on its unique utility for writers, game designers, and early-adopter filmmakers tinkering with AI-assisted storytelling. In 2025’s AI landscape, where tools like Runway ML and Kling AI dominate video generation but often rely on clunky text inputs, a visual, modular system like yours fills a gap for structured yet creative prompt crafting. Based on current trends, it’s worth an early release for market validation, feedback loops, and revenue generation, but with caveats to protect the bigger picture. Let me break this down, then compare it to the tools I’ve mentioned (and similar ones from recent searches).
@@ -1779,28 +1898,29 @@ Comparison to Other Prompting Tools
 
 Wild Construct differentiates through its visual, node-based approach for text prompts with procedural depth—more like a “prompt IDE” than linear tools—making it stronger for complex, randomized narratives in film/VFX. Most competitors focus on general AI (e.g., ChatGPT for brainstorming) or video gen (e.g., Runway), with prompting as a side feature. Node-based rivals exist in image/AI workflows (e.g., ComfyUI), but few target text prompting for storytelling/extras. From 2025 trends, tools emphasize integration and adherence, 0 1 but yours stands out with historical constraints and pipeline exports. Here’s a table comparing to tools I’ve mentioned (and similar ones from recent data):
 
-|   |   |   |   |   |   |   |
-|---|---|---|---|---|---|---|
-|Tool|Type|Key Features|Strengths vs. Wild Construct|Weaknesses vs. Wild Construct|Price (2025)|Best For|
-|Substance Designer (Adobe)|Node-based material/texture tool|Visual graphs for procedural textures; exports to VFX pipelines.|Established polish, strong in 3D/VFX integration (e.g., USD exports).|Not for text prompts/storytelling; focuses on visuals, no randomization for narratives or historical imports.|$60/mo (in Substance 3D Collection)|Material artists; less overlap, but inspires your UTDG.|
-|Runway ML|AI video gen with prompting|Text-to-video, image-to-video; editing tools like inpainting.|Direct video output from prompts; filmmaker-focused (e.g., Gen-4 for scenes).||||
-|1|||||||
-||||||||
-|3|||||||
-||Linear prompting lacks your branching/constraints; no node graphs for modular reuse or historical accuracy.|Free tier; $12-28/user/mo Pro|Quick video prototypes; you’d complement it with better prompt building.||||
-|ComfyUI|Open-source node-based AI workflow|Graphs for Stable Diffusion pipelines; custom nodes for image gen.|Highly customizable nodes; community extensions for prompting tweaks.|Image-focused, not text/narrative; lacks your UTDG or VFX extras hooks (e.g., ControlNet is add-on, not core).|Free (open-source)|SD users; yours is more user-friendly for non-tech filmmakers.|
-|Kling AI|AI video generator|Text-to-video with advanced motion; prompt optimization.|High-quality outputs; credits for usage.||||
-|11|||||||
-||Basic prompting UI; no visual graphing or randomization logic for branching stories.|$10/mo basic|Indie video gen; your tool could feed it refined prompts for better adherence.||||
-|PromptLayer / Orq.ai|Prompt engineering platforms|Tracking/optimizing prompts for LLMs; versioning.|Analytics for adherence (like MARS protocol); API integrations.|Text-based, no nodes or visual flow; geared toward devs, not creatives/film.|$20-100/mo|Enterprise LLM users; yours adds creative flair with graphs.|
-|Anthropic’s Prompt Generator (via Claude)|Built-in LLM tool|Auto-generates/refines prompts for Claude models.|Free within Claude; natural-language focus like Zada.|Linear and model-specific; no modularity, randomization, or VFX exports.|Free (with Claude access)|Quick tweaks; yours scales to complex systems like extras crowds.|
-|Shai Creative (Emerging 2025 tool)|AI pre-production suite|Storyboarding, script gen from prompts; video from images.|||||
-|6|||||||
-||All-in-one for filmmakers; prompt-to-visual flow.|No node-based depth; less emphasis on randomization/constraints or historical UTDG.|$15-50/mo (estimated)|Pre-prod workflows; yours could integrate as a prompt backend.|||
+|                                           |                                                                                                             |                                                                                     |                                                                                |                                                                                                                |                                     |                                                                   |
+| ----------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------- | ----------------------------------- | ----------------------------------------------------------------- |
+| Tool                                      | Type                                                                                                        | Key Features                                                                        | Strengths vs. Wild Construct                                                   | Weaknesses vs. Wild Construct                                                                                  | Price (2025)                        | Best For                                                          |
+| Substance Designer (Adobe)                | Node-based material/texture tool                                                                            | Visual graphs for procedural textures; exports to VFX pipelines.                    | Established polish, strong in 3D/VFX integration (e.g., USD exports).          | Not for text prompts/storytelling; focuses on visuals, no randomization for narratives or historical imports.  | $60/mo (in Substance 3D Collection) | Material artists; less overlap, but inspires your UTDG.           |
+| Runway ML                                 | AI video gen with prompting                                                                                 | Text-to-video, image-to-video; editing tools like inpainting.                       | Direct video output from prompts; filmmaker-focused (e.g., Gen-4 for scenes).  |                                                                                                                |                                     |                                                                   |
+| 1                                         |                                                                                                             |                                                                                     |                                                                                |                                                                                                                |                                     |                                                                   |
+|                                           |                                                                                                             |                                                                                     |                                                                                |                                                                                                                |                                     |                                                                   |
+| 3                                         |                                                                                                             |                                                                                     |                                                                                |                                                                                                                |                                     |                                                                   |
+|                                           | Linear prompting lacks your branching/constraints; no node graphs for modular reuse or historical accuracy. | Free tier; $12-28/user/mo Pro                                                       | Quick video prototypes; you’d complement it with better prompt building.       |                                                                                                                |                                     |                                                                   |
+| ComfyUI                                   | Open-source node-based AI workflow                                                                          | Graphs for Stable Diffusion pipelines; custom nodes for image gen.                  | Highly customizable nodes; community extensions for prompting tweaks.          | Image-focused, not text/narrative; lacks your UTDG or VFX extras hooks (e.g., ControlNet is add-on, not core). | Free (open-source)                  | SD users; yours is more user-friendly for non-tech filmmakers.    |
+| Kling AI                                  | AI video generator                                                                                          | Text-to-video with advanced motion; prompt optimization.                            | High-quality outputs; credits for usage.                                       |                                                                                                                |                                     |                                                                   |
+| 11                                        |                                                                                                             |                                                                                     |                                                                                |                                                                                                                |                                     |                                                                   |
+|                                           | Basic prompting UI; no visual graphing or randomization logic for branching stories.                        | $10/mo basic                                                                        | Indie video gen; your tool could feed it refined prompts for better adherence. |                                                                                                                |                                     |                                                                   |
+| PromptLayer / Orq.ai                      | Prompt engineering platforms                                                                                | Tracking/optimizing prompts for LLMs; versioning.                                   | Analytics for adherence (like MARS protocol); API integrations.                | Text-based, no nodes or visual flow; geared toward devs, not creatives/film.                                   | $20-100/mo                          | Enterprise LLM users; yours adds creative flair with graphs.      |
+| Anthropic’s Prompt Generator (via Claude) | Built-in LLM tool                                                                                           | Auto-generates/refines prompts for Claude models.                                   | Free within Claude; natural-language focus like Zada.                          | Linear and model-specific; no modularity, randomization, or VFX exports.                                       | Free (with Claude access)           | Quick tweaks; yours scales to complex systems like extras crowds. |
+| Shai Creative (Emerging 2025 tool)        | AI pre-production suite                                                                                     | Storyboarding, script gen from prompts; video from images.                          |                                                                                |                                                                                                                |                                     |                                                                   |
+| 6                                         |                                                                                                             |                                                                                     |                                                                                |                                                                                                                |                                     |                                                                   |
+|                                           | All-in-one for filmmakers; prompt-to-visual flow.                                                           | No node-based depth; less emphasis on randomization/constraints or historical UTDG. | $15-50/mo (estimated)                                                          | Pre-prod workflows; yours could integrate as a prompt backend.                                                 |                                     |                                                                   |
 
 In summary, Wild Construct’s uniqueness (visual nodes for text with film-specific twists) makes it worth an early release to carve a niche—few tools combine prompting with procedural logic and VFX readiness like yours does. 20 It outperforms in modularity and coherence for narratives/extras, but lags in direct video output compared to Runway/Kling. If released now, it could complement those tools, building toward your vision without delay. What release timeline are you thinking?
 
 ---
+
 Sxsw as an extras launch?
 
 Got it—aiming for a Q1 2026 release at SXSW (March 12-18, 2026) for the virtual extras system makes perfect sense, especially given Austin’s vibrant tech and film scene. With the current date being July 22, 2025, you’ve got about 7-8 months to polish both the prompting tool (Wild Construct Core) and the extras layer, ensuring a cohesive launch. This timeline aligns well with the Epic 8 stories, which focus on demo-readiness and pipeline integration, positioning you to wow attendees with a live demo of historically accurate, positionally reactive extras crowds. Let’s reassess the standalone prompting tool’s release in this context, compare it to other tools, and strategize for maximum impact at SXSW.
@@ -1834,30 +1954,30 @@ Comparison to Other Prompting Tools (Updated for 2025-2026 Context)
 
 Wild Construct Core’s node-based, randomized prompting with film/VFX twists (e.g., UTDG, ControlNet hooks) makes it uniquely positioned for early release, especially compared to tools that focus on linear text or video outputs. Here’s how it stacks up, considering 2025-2026 trends where AI filmmaking tools emphasize integration, adherence, and community: 0 1
 
-|   |   |   |   |   |   |   |   |
-|---|---|---|---|---|---|---|---|
-|Tool|Type|Key Features (2025-2026)|Strengths vs. Wild Construct|Weaknesses vs. Wild Construct|Price (Est. 2026)|Best For|Relevance to Extras Vision|
-|Substance Designer (Adobe)|Node-based material/texture|Visual graphs for 3D textures; USD exports for VFX.|Established ecosystem, strong in 3D/VFX (e.g., Pixar integration). By 2026, likely AI-enhanced for procedural gen.|||||
-|1||||||||
-||Not for text prompts or narratives; lacks randomization for storytelling or historical accuracy. No extras focus.|$65-70/mo (in Substance 3D Collection)|Material artists; less overlap, but inspires UTDG.|Complementary—could feed your UTDG textures into extras.||||
-|Runway ML|AI video gen with prompting|Text-to-video (Gen-4), image-to-video; advanced editing (e.g., inpainting, style transfer). By 2026, expect deeper prompt optimization.||||||
-|3||||||||
-||Direct video output from prompts; filmmaker community (e.g., SXSW presence).|Linear prompting UI; no node graphs for modular reuse or branching logic. Lacks historical/UTDG depth.|Free tier; $15-30/user/mo Pro|Quick video prototypes; yours could refine inputs for better scenes.|Indirect—your tool could be a prompt backend for Runway’s video gen in extras.|||
-|ComfyUI|Open-source node-based AI workflow|Graphs for Stable Diffusion; custom nodes for image/video. By 2026, community likely adds text prompting nodes.||||||
-|15||||||||
-||Highly customizable; free and extensible.|Image/video-focused, not text/narrative; no built-in UTDG or VFX exports. Less user-friendly for non-tech users.|Free (open-source)|SD enthusiasts; yours is more accessible for creatives.|Could be a competitor if text nodes emerge, but your UTDG and film focus differentiate.|||
-|Kling AI|AI video generator|Text-to-video with motion control; prompt credits system. By 2026, expect adherence improvements.||||||
-|11||||||||
-||High-quality outputs; scalable with credits.|Basic prompting; no visual graphing or randomization for complex narratives. No historical accuracy.|$12-35/mo (estimated)|Indie video gen; your tool could feed it structured prompts.|Indirect—your prompts could enhance Kling’s video for extras scenes.|||
-|PromptLayer / Orq.ai|Prompt engineering platforms|LLM prompt tracking, optimization, versioning. By 2026, deeper AI integrations.||||||
-|18||||||||
-||Analytics for adherence; API-heavy for enterprises.|Text-based, no nodes or visual flow; geared toward devs, not creatives. No film/VFX focus.|$25-120/mo|Enterprise LLM users; yours adds creative depth.|Minimal overlap; your tool could export to their platforms for LLM-backed extras gen.|||
-|Anthropic’s Prompt Generator (Claude)|Built-in LLM tool|Auto-generates/refines prompts for Claude models. By 2026, likely more creative features.||||||
-|19||||||||
-||Free within Claude; natural-language focus.|Linear and model-specific; no modularity, randomization, or VFX exports. Not standalone.|Free (with Claude)|Quick tweaks; yours scales to complex systems.|Complementary—your tool could use Claude for backend gen in extras.|||
-|Shai Creative (Emerging)|AI pre-production suite|Storyboarding, script gen from prompts; video from images. By 2026, expect narrative AI advancements.||||||
-|6||||||||
-||All-in-one for filmmakers; prompt-to-visual flow.|No node-based depth; less emphasis on randomization/constraints or historical UTDG.|$20-60/mo (estimated)|Pre-prod workflows; yours could integrate as a prompt backend.|Direct competitor for narrative building; your tool could feed Shai’s video layers for extras.|||
+|                                       |                                                                                                                   |                                                                                                                                         |                                                                                                                    |                                                                      |                                                                                                |          |                            |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | -------- | -------------------------- |
+| Tool                                  | Type                                                                                                              | Key Features (2025-2026)                                                                                                                | Strengths vs. Wild Construct                                                                                       | Weaknesses vs. Wild Construct                                        | Price (Est. 2026)                                                                              | Best For | Relevance to Extras Vision |
+| Substance Designer (Adobe)            | Node-based material/texture                                                                                       | Visual graphs for 3D textures; USD exports for VFX.                                                                                     | Established ecosystem, strong in 3D/VFX (e.g., Pixar integration). By 2026, likely AI-enhanced for procedural gen. |                                                                      |                                                                                                |          |                            |
+| 1                                     |                                                                                                                   |                                                                                                                                         |                                                                                                                    |                                                                      |                                                                                                |          |                            |
+|                                       | Not for text prompts or narratives; lacks randomization for storytelling or historical accuracy. No extras focus. | $65-70/mo (in Substance 3D Collection)                                                                                                  | Material artists; less overlap, but inspires UTDG.                                                                 | Complementary—could feed your UTDG textures into extras.             |                                                                                                |          |                            |
+| Runway ML                             | AI video gen with prompting                                                                                       | Text-to-video (Gen-4), image-to-video; advanced editing (e.g., inpainting, style transfer). By 2026, expect deeper prompt optimization. |                                                                                                                    |                                                                      |                                                                                                |          |                            |
+| 3                                     |                                                                                                                   |                                                                                                                                         |                                                                                                                    |                                                                      |                                                                                                |          |                            |
+|                                       | Direct video output from prompts; filmmaker community (e.g., SXSW presence).                                      | Linear prompting UI; no node graphs for modular reuse or branching logic. Lacks historical/UTDG depth.                                  | Free tier; $15-30/user/mo Pro                                                                                      | Quick video prototypes; yours could refine inputs for better scenes. | Indirect—your tool could be a prompt backend for Runway’s video gen in extras.                 |          |                            |
+| ComfyUI                               | Open-source node-based AI workflow                                                                                | Graphs for Stable Diffusion; custom nodes for image/video. By 2026, community likely adds text prompting nodes.                         |                                                                                                                    |                                                                      |                                                                                                |          |                            |
+| 15                                    |                                                                                                                   |                                                                                                                                         |                                                                                                                    |                                                                      |                                                                                                |          |                            |
+|                                       | Highly customizable; free and extensible.                                                                         | Image/video-focused, not text/narrative; no built-in UTDG or VFX exports. Less user-friendly for non-tech users.                        | Free (open-source)                                                                                                 | SD enthusiasts; yours is more accessible for creatives.              | Could be a competitor if text nodes emerge, but your UTDG and film focus differentiate.        |          |                            |
+| Kling AI                              | AI video generator                                                                                                | Text-to-video with motion control; prompt credits system. By 2026, expect adherence improvements.                                       |                                                                                                                    |                                                                      |                                                                                                |          |                            |
+| 11                                    |                                                                                                                   |                                                                                                                                         |                                                                                                                    |                                                                      |                                                                                                |          |                            |
+|                                       | High-quality outputs; scalable with credits.                                                                      | Basic prompting; no visual graphing or randomization for complex narratives. No historical accuracy.                                    | $12-35/mo (estimated)                                                                                              | Indie video gen; your tool could feed it structured prompts.         | Indirect—your prompts could enhance Kling’s video for extras scenes.                           |          |                            |
+| PromptLayer / Orq.ai                  | Prompt engineering platforms                                                                                      | LLM prompt tracking, optimization, versioning. By 2026, deeper AI integrations.                                                         |                                                                                                                    |                                                                      |                                                                                                |          |                            |
+| 18                                    |                                                                                                                   |                                                                                                                                         |                                                                                                                    |                                                                      |                                                                                                |          |                            |
+|                                       | Analytics for adherence; API-heavy for enterprises.                                                               | Text-based, no nodes or visual flow; geared toward devs, not creatives. No film/VFX focus.                                              | $25-120/mo                                                                                                         | Enterprise LLM users; yours adds creative depth.                     | Minimal overlap; your tool could export to their platforms for LLM-backed extras gen.          |          |                            |
+| Anthropic’s Prompt Generator (Claude) | Built-in LLM tool                                                                                                 | Auto-generates/refines prompts for Claude models. By 2026, likely more creative features.                                               |                                                                                                                    |                                                                      |                                                                                                |          |                            |
+| 19                                    |                                                                                                                   |                                                                                                                                         |                                                                                                                    |                                                                      |                                                                                                |          |                            |
+|                                       | Free within Claude; natural-language focus.                                                                       | Linear and model-specific; no modularity, randomization, or VFX exports. Not standalone.                                                | Free (with Claude)                                                                                                 | Quick tweaks; yours scales to complex systems.                       | Complementary—your tool could use Claude for backend gen in extras.                            |          |                            |
+| Shai Creative (Emerging)              | AI pre-production suite                                                                                           | Storyboarding, script gen from prompts; video from images. By 2026, expect narrative AI advancements.                                   |                                                                                                                    |                                                                      |                                                                                                |          |                            |
+| 6                                     |                                                                                                                   |                                                                                                                                         |                                                                                                                    |                                                                      |                                                                                                |          |                            |
+|                                       | All-in-one for filmmakers; prompt-to-visual flow.                                                                 | No node-based depth; less emphasis on randomization/constraints or historical UTDG.                                                     | $20-60/mo (estimated)                                                                                              | Pre-prod workflows; yours could integrate as a prompt backend.       | Direct competitor for narrative building; your tool could feed Shai’s video layers for extras. |          |                            |
 
 Wild Construct’s Edge: Its node-based, randomized prompting with film/VFX readiness (e.g., UTDG for historical accuracy, ControlNet exports for animation) makes it uniquely positioned for early release. By Q4 2025, it could capture indie filmmakers and writers, building toward the extras demo at SXSW 2026. Compared to others, it excels in modularity and coherence for narratives, but lags in direct video output—position it as a “prompt IDE for creative AI,” complementing video gen tools.
 
@@ -1872,7 +1992,8 @@ To ensure both the prompting tool and extras system shine at SXSW, consider:
 This timeline leverages the prompting tool’s uniqueness now while building toward a blockbuster extras reveal. What’s your gut on the beta launch timing—October or wait until December?
 
 ---
-Launching the node tool in mid August 
+
+Launching the node tool in mid August
 
 I totally get the clarification—leveraging “crowd funding” in the sense of organic marketplace participation (e.g., early users paying for access or subscriptions) to bootstrap development, rather than a structured campaign like Kickstarter. That’s a smart, low-friction way to generate revenue without the overhead of a formal crowdfund, while keeping full ownership intact until you’re ready for a proper raise. It fits perfectly with a SaaS model for the prompting tool (Wild Construct Core), where paying users essentially “fund” the project through their participation in the ecosystem—buying Pro tiers, providing feedback, and spreading word-of-mouth. This approach has worked well for indie AI tools in 2025, like how early betas of Shai Creative or AI content platforms turned users into de facto investors via recurring subs, often raising $50K-200K in initial months without equity dilution.
 

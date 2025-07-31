@@ -21,18 +21,18 @@ const mimeTypes = {
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.gif': 'image/gif',
-  '.ico': 'image/x-icon'
+  '.ico': 'image/x-icon',
 };
 
 const server = http.createServer((req, res) => {
   const parsedUrl = url.parse(req.url, true);
   const pathname = parsedUrl.pathname;
-  
+
   // Enable CORS for all requests
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  
+
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
     res.writeHead(200);
@@ -48,30 +48,33 @@ const server = http.createServer((req, res) => {
       const statePath = path.join(__dirname, 'data', 'state.json');
       const stateData = fs.readFileSync(statePath, 'utf8');
       const state = JSON.parse(stateData);
-      
+
       // Convert tasks to array and add metadata
       const tasks = Object.entries(state.tasks || {}).map(([id, task]) => ({
         ...task,
         id: id,
-        _loadedAt: new Date().toISOString()
+        _loadedAt: new Date().toISOString(),
       }));
-      
+
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({
-        success: true,
-        totalTasks: tasks.length,
-        tasks: tasks,
-        loadedAt: new Date().toISOString()
-      }));
-      
+      res.end(
+        JSON.stringify({
+          success: true,
+          totalTasks: tasks.length,
+          tasks: tasks,
+          loadedAt: new Date().toISOString(),
+        })
+      );
     } catch (error) {
       console.error('Error loading tasks:', error);
       res.writeHead(500, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({
-        success: false,
-        error: error.message,
-        suggestion: 'Make sure src/data/state.json exists and contains valid JSON'
-      }));
+      res.end(
+        JSON.stringify({
+          success: false,
+          error: error.message,
+          suggestion: 'Make sure src/data/state.json exists and contains valid JSON',
+        })
+      );
     }
     return;
   }
@@ -81,14 +84,13 @@ const server = http.createServer((req, res) => {
     try {
       const htmlPath = path.join(__dirname, 'complete-dashboard.html');
       const html = fs.readFileSync(htmlPath, 'utf8');
-      
+
       // Update the HTML to use our API endpoint instead of direct file access
-      const updatedHtml = html.replace(
-        'const response = await fetch(\'./data/state.json\');',
-        'const response = await fetch(\'/api/tasks\');'
-      ).replace(
-        'const state = await response.json();',
-        `const apiResponse = await response.json();
+      const updatedHtml = html
+        .replace("const response = await fetch('./data/state.json');", "const response = await fetch('/api/tasks');")
+        .replace(
+          'const state = await response.json();',
+          `const apiResponse = await response.json();
         if (!apiResponse.success) {
           throw new Error(apiResponse.error + (apiResponse.suggestion ? ' (' + apiResponse.suggestion + ')' : ''));
         }
@@ -96,11 +98,10 @@ const server = http.createServer((req, res) => {
         apiResponse.tasks.forEach(task => {
           state.tasks[task.id] = task;
         });`
-      );
-      
+        );
+
       res.writeHead(200, { 'Content-Type': 'text/html' });
       res.end(updatedHtml);
-      
     } catch (error) {
       console.error('Error serving dashboard:', error);
       res.writeHead(500, { 'Content-Type': 'text/html' });
@@ -119,7 +120,7 @@ const server = http.createServer((req, res) => {
 
   // Serve static files
   let filePath = path.join(__dirname, pathname === '/' ? 'complete-dashboard.html' : pathname);
-  
+
   // Security check - prevent directory traversal
   if (!filePath.startsWith(__dirname)) {
     res.writeHead(403, { 'Content-Type': 'text/plain' });
@@ -147,7 +148,7 @@ const server = http.createServer((req, res) => {
     } else {
       const ext = path.extname(filePath).toLowerCase();
       const contentType = mimeTypes[ext] || 'application/octet-stream';
-      
+
       res.writeHead(200, { 'Content-Type': contentType });
       res.end(content);
     }
@@ -188,7 +189,7 @@ process.on('SIGINT', () => {
 });
 
 // Handle uncaught errors
-process.on('uncaughtException', (err) => {
+process.on('uncaughtException', err => {
   console.error('❌ Uncaught Exception:', err);
   process.exit(1);
 });

@@ -30,12 +30,12 @@ export class MemoryMetrics implements MetricsInterface {
   timer(name: string): { end(): void } {
     const startTime = Date.now();
     const timerId = `${name}-${Math.random()}`;
-    
+
     return {
       end: () => {
         const duration = Date.now() - startTime;
         this.histogram(name, duration);
-      }
+      },
     };
   }
 
@@ -45,17 +45,20 @@ export class MemoryMetrics implements MetricsInterface {
   getMetrics(): {
     counters: Record<string, number>;
     gauges: Record<string, number>;
-    histograms: Record<string, {
-      count: number;
-      min: number;
-      max: number;
-      avg: number;
-      p95: number;
-      p99: number;
-    }>;
-    } {
+    histograms: Record<
+      string,
+      {
+        count: number;
+        min: number;
+        max: number;
+        avg: number;
+        p95: number;
+        p99: number;
+      }
+    >;
+  } {
     const histogramStats: Record<string, any> = {};
-    
+
     for (const [key, values] of this.histograms.entries()) {
       if (values.length > 0) {
         const sorted = [...values].sort((a, b) => a - b);
@@ -68,7 +71,7 @@ export class MemoryMetrics implements MetricsInterface {
         const p99Index = Math.floor(count * 0.99);
         const p95 = sorted[p95Index] || max;
         const p99 = sorted[p99Index] || max;
-        
+
         histogramStats[key] = { count, min, max, avg, p95, p99 };
       }
     }
@@ -76,7 +79,7 @@ export class MemoryMetrics implements MetricsInterface {
     return {
       counters: Object.fromEntries(this.counters),
       gauges: Object.fromEntries(this.gauges),
-      histograms: histogramStats
+      histograms: histogramStats,
     };
   }
 
@@ -94,12 +97,12 @@ export class MemoryMetrics implements MetricsInterface {
     if (!tags || Object.keys(tags).length === 0) {
       return name;
     }
-    
+
     const tagString = Object.entries(tags)
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([key, value]) => `${key}=${value}`)
       .join(',');
-    
+
     return `${name}{${tagString}}`;
   }
 }

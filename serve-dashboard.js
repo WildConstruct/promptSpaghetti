@@ -2,7 +2,7 @@
 
 /**
  * Simple Dashboard Server
- * 
+ *
  * Serves the integrated ticket dashboard using Python's built-in server
  * Access: http://localhost:8000/src/integrated-ticket-dashboard.html
  */
@@ -15,25 +15,25 @@ console.log('🎯 Starting Ticketing Dashboard Server...\n');
 // Use Python's built-in HTTP server (available on most systems)
 const server = spawn('python3', ['-m', 'http.server', '8000'], {
   stdio: 'inherit',
-  cwd: __dirname
+  cwd: __dirname,
 });
 
-server.on('error', (error) => {
+server.on('error', error => {
   console.error('❌ Python3 not found, trying python...');
-  
+
   // Fallback to python (Python 2 or systems where python3 is called python)
   const server2 = spawn('python', ['-m', 'SimpleHTTPServer', '8000'], {
     stdio: 'inherit',
-    cwd: __dirname
+    cwd: __dirname,
   });
-  
-  server2.on('error', (error2) => {
+
+  server2.on('error', error2 => {
     console.error('❌ Failed to start server. Please install Python or use:');
     console.error('   node src/ticket-dashboard-server.js');
     process.exit(1);
   });
 
-  server2.on('close', (code) => {
+  server2.on('close', code => {
     if (code !== 0) {
       console.error(`❌ Server exited with code ${code}`);
     }
@@ -48,7 +48,7 @@ server.on('error', (error) => {
   return;
 });
 
-server.on('close', (code) => {
+server.on('close', code => {
   if (code !== 0) {
     console.error(`❌ Server exited with code ${code}`);
   }

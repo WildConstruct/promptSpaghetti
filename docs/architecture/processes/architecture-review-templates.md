@@ -26,9 +26,10 @@ This document provides standardized templates and procedures for conducting arch
 **Reviewer(s)**: [Names of assigned reviewers]  
 **Created**: YYYY-MM-DD  
 **Updated**: YYYY-MM-DD  
-**Implementation Target**: [Sprint/Quarter]  
+**Implementation Target**: [Sprint/Quarter]
 
 ## Quick Reference
+
 - **Impact**: Low | Medium | High | Critical
 - **Effort**: Small | Medium | Large | Extra Large
 - **Risk**: Low | Medium | High | Critical
@@ -46,79 +47,98 @@ This document provides standardized templates and procedures for conducting arch
 ## 2. Motivation
 
 ### 2.1 Problem Statement
+
 [What problem are we solving? Why is this important?]
 
 ### 2.2 Goals
+
 - [Primary goal]
 - [Secondary goal]
 - [Optional goal]
 
 ### 2.3 Non-Goals
+
 - [What this RFC explicitly does not address]
 - [Scope limitations]
 
 ## 3. Background and Context
 
 ### 3.1 Current State
+
 [Description of how things work today]
 
 ### 3.2 Historical Context
+
 [Why do things work the way they do today?]
 
 ### 3.3 Related Work
+
 [Similar solutions, previous attempts, industry standards]
 
 ## 4. Detailed Design
 
 ### 4.1 High-Level Architecture
+
 [Architecture diagrams, system overview]
 
 ### 4.2 Component Design
+
 [Detailed component specifications]
 
 ### 4.3 Interface Design
+
 [API specifications, data contracts]
 
 ### 4.4 Data Design
+
 [Database schemas, data flow diagrams]
 
 ### 4.5 Security Considerations
+
 [Security implications, threat model updates]
 
 ### 4.6 Performance Considerations
+
 [Performance impact analysis, optimization strategies]
 
 ## 5. Implementation Plan
 
 ### 5.1 Phases
+
 1. **Phase 1**: [Description, timeline]
 2. **Phase 2**: [Description, timeline]
 3. **Phase 3**: [Description, timeline]
 
 ### 5.2 Migration Strategy
+
 [How to migrate from current to new state]
 
 ### 5.3 Rollback Plan
+
 [How to revert if implementation fails]
 
 ### 5.4 Testing Strategy
+
 [Unit tests, integration tests, performance tests]
 
 ## 6. Impact Assessment
 
 ### 6.1 System Impact
+
 - **Performance**: [Expected impact on system performance]
 - **Scalability**: [Impact on system scalability]
 - **Reliability**: [Impact on system reliability]
 - **Security**: [Security implications]
 
 ### 6.2 Team Impact
+
 - **Development**: [Impact on development team]
 - **Operations**: [Impact on operations team]
 - **Documentation**: [Documentation requirements]
 - **Training**: [Training requirements]
 
 ### 6.3 User Impact
+
 - **End Users**: [Impact on end users]
 - **API Consumers**: [Impact on API consumers]
 - **Breaking Changes**: [List of breaking changes]
@@ -126,12 +146,14 @@ This document provides standardized templates and procedures for conducting arch
 ## 7. Alternatives Considered
 
 ### 7.1 Alternative 1: [Name]
+
 - **Description**: [Description of alternative]
 - **Pros**: [Advantages]
 - **Cons**: [Disadvantages]
 - **Reason for rejection**: [Why not chosen]
 
 ### 7.2 Alternative 2: [Name]
+
 - **Description**: [Description of alternative]
 - **Pros**: [Advantages]
 - **Cons**: [Disadvantages]
@@ -140,11 +162,13 @@ This document provides standardized templates and procedures for conducting arch
 ## 8. Success Criteria
 
 ### 8.1 Technical Metrics
+
 - [Measurable technical success criteria]
 - [Performance benchmarks]
 - [Quality metrics]
 
 ### 8.2 Business Metrics
+
 - [Business value indicators]
 - [User experience improvements]
 - [Operational efficiency gains]
@@ -152,18 +176,21 @@ This document provides standardized templates and procedures for conducting arch
 ## 9. Risks and Mitigation
 
 ### 9.1 Technical Risks
+
 - **Risk**: [Description]
   - **Probability**: Low | Medium | High
   - **Impact**: Low | Medium | High | Critical
   - **Mitigation**: [Mitigation strategy]
 
 ### 9.2 Schedule Risks
+
 - **Risk**: [Description]
   - **Probability**: Low | Medium | High
   - **Impact**: Low | Medium | High | Critical
   - **Mitigation**: [Mitigation strategy]
 
 ### 9.3 Operational Risks
+
 - **Risk**: [Description]
   - **Probability**: Low | Medium | High
   - **Impact**: Low | Medium | High | Critical
@@ -178,10 +205,12 @@ This document provides standardized templates and procedures for conducting arch
 ## 11. Dependencies
 
 ### 11.1 Technical Dependencies
+
 - [Dependency 1]: [Description, timeline]
 - [Dependency 2]: [Description, timeline]
 
 ### 11.2 Team Dependencies
+
 - [Team 1]: [Required support, timeline]
 - [Team 2]: [Required support, timeline]
 
@@ -204,6 +233,7 @@ This document provides standardized templates and procedures for conducting arch
 ---
 
 **Change Log**:
+
 - YYYY-MM-DD: Initial draft
 - YYYY-MM-DD: Community feedback incorporated
 - YYYY-MM-DD: Final revisions
@@ -221,9 +251,10 @@ This document provides standardized templates and procedures for conducting arch
 **Review Type**: Initial Design | Implementation | Post-Implementation  
 **Date**: YYYY-MM-DD  
 **Reviewer**: [Name]  
-**System/Component**: [Name]  
+**System/Component**: [Name]
 
 ### Documentation Review
+
 - [ ] RFC or design document available
 - [ ] Architecture diagrams provided
 - [ ] API specifications documented
@@ -232,6 +263,7 @@ This document provides standardized templates and procedures for conducting arch
 - [ ] Performance requirements specified
 
 ### Stakeholder Alignment
+
 - [ ] Product requirements understood
 - [ ] Technical requirements clarified
 - [ ] Success criteria defined
@@ -239,6 +271,7 @@ This document provides standardized templates and procedures for conducting arch
 - [ ] Timeline established
 
 ### Technical Preparation
+
 - [ ] Current architecture understood
 - [ ] Dependencies identified
 - [ ] Constraints documented
@@ -253,80 +286,85 @@ This document provides standardized templates and procedures for conducting arch
 
 **Reviewer**: [Name]  
 **Date**: YYYY-MM-DD  
-**Rating Scale**: 1 (Poor) - 5 (Excellent)  
+**Rating Scale**: 1 (Poor) - 5 (Excellent)
 
 ### Architectural Principles Adherence
-- [ ] **Modularity** (Rating: ___/5)
+
+- [ ] **Modularity** (Rating: \_\_\_/5)
   - Clear module boundaries
   - Loose coupling between components
   - High cohesion within modules
   - Notes: [Comments]
 
-- [ ] **Type Safety** (Rating: ___/5)
+- [ ] **Type Safety** (Rating: \_\_\_/5)
   - Comprehensive type definitions
   - Runtime validation where needed
   - Type-safe interfaces
   - Notes: [Comments]
 
-- [ ] **Performance by Design** (Rating: ___/5)
+- [ ] **Performance by Design** (Rating: \_\_\_/5)
   - Performance requirements considered
   - Scalability addressed
   - Optimization opportunities identified
   - Notes: [Comments]
 
-- [ ] **Security by Default** (Rating: ___/5)
+- [ ] **Security by Default** (Rating: \_\_\_/5)
   - Security requirements addressed
   - Threat model considerations
   - Access control design
   - Notes: [Comments]
 
 ### Design Quality
-- [ ] **Clarity** (Rating: ___/5)
+
+- [ ] **Clarity** (Rating: \_\_\_/5)
   - Design is easy to understand
   - Documentation is clear
   - Diagrams are helpful
   - Notes: [Comments]
 
-- [ ] **Completeness** (Rating: ___/5)
+- [ ] **Completeness** (Rating: \_\_\_/5)
   - All requirements addressed
   - Edge cases considered
   - Error handling defined
   - Notes: [Comments]
 
-- [ ] **Feasibility** (Rating: ___/5)
+- [ ] **Feasibility** (Rating: \_\_\_/5)
   - Technically achievable
   - Resource requirements realistic
   - Timeline reasonable
   - Notes: [Comments]
 
 ### Implementation Planning
-- [ ] **Migration Strategy** (Rating: ___/5)
+
+- [ ] **Migration Strategy** (Rating: \_\_\_/5)
   - Clear migration path
   - Rollback plan defined
   - Risk mitigation addressed
   - Notes: [Comments]
 
-- [ ] **Testing Strategy** (Rating: ___/5)
+- [ ] **Testing Strategy** (Rating: \_\_\_/5)
   - Test plan comprehensive
   - Test automation considered
   - Performance testing included
   - Notes: [Comments]
 
 ### Decision Quality
-- [ ] **Alternatives Evaluation** (Rating: ___/5)
+
+- [ ] **Alternatives Evaluation** (Rating: \_\_\_/5)
   - Multiple options considered
   - Trade-offs clearly explained
   - Decision rationale sound
   - Notes: [Comments]
 
-- [ ] **Future Flexibility** (Rating: ___/5)
+- [ ] **Future Flexibility** (Rating: \_\_\_/5)
   - Design allows for evolution
   - Extension points identified
   - Backward compatibility considered
   - Notes: [Comments]
 
 ### Overall Assessment
-- **Overall Rating**: ___/5
+
+- **Overall Rating**: \_\_\_/5
 - **Recommendation**: Approve | Approve with Conditions | Request Changes | Reject
 - **Key Strengths**: [Bullet points]
 - **Key Concerns**: [Bullet points]
@@ -340,9 +378,10 @@ This document provides standardized templates and procedures for conducting arch
 
 **System/Component**: [Name]  
 **Reviewer**: [Security Team Member]  
-**Date**: YYYY-MM-DD  
+**Date**: YYYY-MM-DD
 
 ### Authentication & Authorization
+
 - [ ] Authentication mechanism appropriate
 - [ ] Authorization model clearly defined
 - [ ] Role-based access control implemented
@@ -350,6 +389,7 @@ This document provides standardized templates and procedures for conducting arch
 - [ ] Session management secure
 
 ### Data Protection
+
 - [ ] Data classification performed
 - [ ] Encryption at rest addressed
 - [ ] Encryption in transit addressed
@@ -357,6 +397,7 @@ This document provides standardized templates and procedures for conducting arch
 - [ ] PII handling compliant
 
 ### Input Validation
+
 - [ ] Input validation comprehensive
 - [ ] SQL injection protection
 - [ ] XSS protection implemented
@@ -364,6 +405,7 @@ This document provides standardized templates and procedures for conducting arch
 - [ ] File upload security
 
 ### API Security
+
 - [ ] API authentication required
 - [ ] Rate limiting implemented
 - [ ] CORS policy appropriate
@@ -371,6 +413,7 @@ This document provides standardized templates and procedures for conducting arch
 - [ ] API versioning secure
 
 ### Infrastructure Security
+
 - [ ] Network security addressed
 - [ ] Container security considered
 - [ ] Secrets management proper
@@ -378,6 +421,7 @@ This document provides standardized templates and procedures for conducting arch
 - [ ] Monitoring suspicious activity
 
 ### Compliance
+
 - [ ] GDPR requirements addressed
 - [ ] SOC 2 controls implemented
 - [ ] Industry standards followed
@@ -385,6 +429,7 @@ This document provides standardized templates and procedures for conducting arch
 - [ ] Data retention policy compliant
 
 ### Action Items
+
 - [ ] [Action item 1] - Owner: [Name] - Due: [Date]
 - [ ] [Action item 2] - Owner: [Name] - Due: [Date]
 
@@ -398,9 +443,10 @@ This document provides standardized templates and procedures for conducting arch
 
 **System/Component**: [Name]  
 **Reviewer**: [Performance Team Member]  
-**Date**: YYYY-MM-DD  
+**Date**: YYYY-MM-DD
 
 ### Performance Requirements
+
 - [ ] Performance requirements clearly defined
 - [ ] SLA targets specified
 - [ ] Load expectations documented
@@ -408,6 +454,7 @@ This document provides standardized templates and procedures for conducting arch
 - [ ] Performance budgets established
 
 ### Design Analysis
+
 - [ ] Algorithm complexity analyzed
 - [ ] Database query performance considered
 - [ ] Caching strategy appropriate
@@ -415,6 +462,7 @@ This document provides standardized templates and procedures for conducting arch
 - [ ] Resource utilization optimized
 
 ### Scalability
+
 - [ ] Horizontal scaling addressed
 - [ ] Vertical scaling limits understood
 - [ ] Bottlenecks identified
@@ -422,6 +470,7 @@ This document provides standardized templates and procedures for conducting arch
 - [ ] Auto-scaling capabilities
 
 ### Monitoring & Measurement
+
 - [ ] Performance metrics defined
 - [ ] Monitoring strategy established
 - [ ] Alerting thresholds set
@@ -429,6 +478,7 @@ This document provides standardized templates and procedures for conducting arch
 - [ ] Benchmarking approach
 
 ### Optimization Opportunities
+
 - [ ] Code-level optimizations identified
 - [ ] Database optimizations planned
 - [ ] Infrastructure optimizations considered
@@ -450,26 +500,31 @@ This document provides standardized templates and procedures for conducting arch
 **Date**: YYYY-MM-DD  
 **Time**: HH:MM - HH:MM  
 **Location**: [Meeting room/Video conference]  
-**RFC**: RFC-YYYY-MM-DD-[short-name]  
+**RFC**: RFC-YYYY-MM-DD-[short-name]
 
 ## Attendees
+
 **Required**:
+
 - [Architecture Board members]
 - [RFC Author]
 - [Technical Lead]
 
 **Optional**:
+
 - [Subject Matter Experts]
 - [Stakeholders]
 
 ## Agenda (120 minutes)
 
 ### 1. Introduction (5 minutes)
+
 - Welcome and introductions
 - Meeting objectives
 - Review process explanation
 
 ### 2. RFC Presentation (20 minutes)
+
 - **Presenter**: [RFC Author]
 - Problem statement and motivation
 - Proposed solution overview
@@ -477,6 +532,7 @@ This document provides standardized templates and procedures for conducting arch
 - Implementation timeline
 
 ### 3. Technical Deep Dive (30 minutes)
+
 - **Moderator**: [Technical Lead]
 - Architecture details
 - Interface specifications
@@ -485,12 +541,14 @@ This document provides standardized templates and procedures for conducting arch
 - Performance implications
 
 ### 4. Alternative Solutions (15 minutes)
+
 - **Moderator**: [Architecture Board member]
 - Alternatives considered
 - Trade-off analysis
 - Decision rationale
 
 ### 5. Impact Assessment (20 minutes)
+
 - **Moderator**: [Architecture Board member]
 - System impact
 - Team impact
@@ -498,24 +556,28 @@ This document provides standardized templates and procedures for conducting arch
 - Risk assessment
 
 ### 6. Questions & Discussion (25 minutes)
+
 - Open floor for questions
 - Concerns and clarifications
 - Missing considerations
 - Additional requirements
 
 ### 7. Decision & Next Steps (5 minutes)
+
 - Board decision
 - Conditions (if any)
 - Action items
 - Timeline for follow-up
 
 ## Pre-Meeting Preparation
+
 - [ ] RFC document reviewed by all attendees
 - [ ] Technical questions prepared
 - [ ] Subject matter experts consulted
 - [ ] Supporting materials distributed
 
 ## Decision Options
+
 - **Approve**: RFC approved as presented
 - **Approve with Conditions**: RFC approved with specific modifications
 - **Request Changes**: RFC requires significant changes before approval
@@ -523,6 +585,7 @@ This document provides standardized templates and procedures for conducting arch
 - **Reject**: RFC rejected
 
 ## Follow-up Actions Template
+
 - **Action Item**: [Description]
 - **Owner**: [Name]
 - **Due Date**: [Date]
@@ -537,9 +600,10 @@ This document provides standardized templates and procedures for conducting arch
 **System/Component**: [Name]  
 **Implementation Date**: YYYY-MM-DD  
 **Review Date**: YYYY-MM-DD  
-**Original RFC**: RFC-YYYY-MM-DD-[short-name]  
+**Original RFC**: RFC-YYYY-MM-DD-[short-name]
 
 ## Review Participants
+
 - **Review Lead**: [Name]
 - **Implementation Team**: [Names]
 - **Operations Team**: [Names]
@@ -548,7 +612,9 @@ This document provides standardized templates and procedures for conducting arch
 ## Implementation Assessment
 
 ### 1. Success Criteria Evaluation
+
 **Original Criteria**:
+
 - [Criterion 1]: ☐ Met ☐ Partially Met ☐ Not Met
 - [Criterion 2]: ☐ Met ☐ Partially Met ☐ Not Met
 - [Criterion 3]: ☐ Met ☐ Partially Met ☐ Not Met
@@ -556,6 +622,7 @@ This document provides standardized templates and procedures for conducting arch
 **Notes**: [Detailed assessment]
 
 ### 2. Performance Analysis
+
 - **Response Time**: Target: [X]ms, Actual: [Y]ms
 - **Throughput**: Target: [X] req/sec, Actual: [Y] req/sec
 - **Error Rate**: Target: <[X]%, Actual: [Y]%
@@ -564,12 +631,14 @@ This document provides standardized templates and procedures for conducting arch
 **Performance Assessment**: ☐ Exceeds Expectations ☐ Meets Expectations ☐ Below Expectations
 
 ### 3. Security Assessment
+
 - **Security Tests Passed**: [X]/[Y]
 - **Vulnerabilities Found**: [Number and severity]
 - **Compliance Status**: ☐ Compliant ☐ Minor Issues ☐ Major Issues
 - **Security Incidents**: [Number and description]
 
 ### 4. Operational Impact
+
 - **Deployment Success**: ☐ Smooth ☐ Minor Issues ☐ Major Issues
 - **Monitoring Coverage**: ☐ Complete ☐ Adequate ☐ Insufficient
 - **Support Burden**: ☐ Low ☐ Moderate ☐ High
@@ -578,11 +647,13 @@ This document provides standardized templates and procedures for conducting arch
 ## Lessons Learned
 
 ### What Went Well
+
 1. [Positive outcome 1]
 2. [Positive outcome 2]
 3. [Positive outcome 3]
 
 ### What Could Be Improved
+
 1. [Improvement area 1]
    - **Impact**: [Description]
    - **Root Cause**: [Analysis]
@@ -594,6 +665,7 @@ This document provides standardized templates and procedures for conducting arch
    - **Recommendation**: [Action]
 
 ### Unexpected Challenges
+
 1. [Challenge 1]
    - **Description**: [What happened]
    - **Resolution**: [How it was resolved]
@@ -602,11 +674,13 @@ This document provides standardized templates and procedures for conducting arch
 ## Architecture Decision Validation
 
 ### Original Assumptions
+
 - **Assumption 1**: ☐ Validated ☐ Partially Validated ☐ Invalid
 - **Assumption 2**: ☐ Validated ☐ Partially Validated ☐ Invalid
 - **Assumption 3**: ☐ Validated ☐ Partially Validated ☐ Invalid
 
 ### Design Decision Outcomes
+
 - **Decision 1**: [Original decision] → [Actual outcome]
 - **Decision 2**: [Original decision] → [Actual outcome]
 - **Decision 3**: [Original decision] → [Actual outcome]
@@ -614,18 +688,22 @@ This document provides standardized templates and procedures for conducting arch
 ## Recommendations
 
 ### Short-term Actions (1-3 months)
+
 - [ ] [Action 1] - Owner: [Name] - Due: [Date]
 - [ ] [Action 2] - Owner: [Name] - Due: [Date]
 
 ### Long-term Improvements (3-12 months)
+
 - [ ] [Improvement 1] - Owner: [Name] - Due: [Date]
 - [ ] [Improvement 2] - Owner: [Name] - Due: [Date]
 
 ### Process Improvements
+
 - [ ] [Process change 1] - Owner: [Name] - Due: [Date]
 - [ ] [Process change 2] - Owner: [Name] - Due: [Date]
 
 ## Overall Assessment
+
 **Implementation Success**: ☐ Highly Successful ☐ Successful ☐ Partially Successful ☐ Unsuccessful
 
 **Key Success Factors**: [What made this successful]
@@ -637,6 +715,7 @@ This document provides standardized templates and procedures for conducting arch
 **Rationale**: [Explanation of assessment]
 
 ---
+
 **Review Status**: ☐ Complete ☐ Follow-up Required  
 **Next Review Date**: [If applicable]  
 **Distribution**: [List of stakeholders who should receive this review]
@@ -679,12 +758,12 @@ graph TD
 
 ### 5.2 Architecture Review Types Matrix
 
-| Change Type | Review Level | Approvers | Timeline | Documentation |
-|-------------|--------------|-----------|----------|---------------|
-| **Strategic** | AGB Full Review | AGB Unanimous | 4-6 weeks | Full RFC |
-| **Significant** | AGB Standard | AGB Majority | 2-4 weeks | Full RFC |
-| **Tactical** | Technical Review | Lead + SMEs | 1-2 weeks | Design Doc |
-| **Operational** | Peer Review | 2 Senior Engineers | 2-5 days | Code Review |
+| Change Type     | Review Level     | Approvers          | Timeline  | Documentation |
+| --------------- | ---------------- | ------------------ | --------- | ------------- |
+| **Strategic**   | AGB Full Review  | AGB Unanimous      | 4-6 weeks | Full RFC      |
+| **Significant** | AGB Standard     | AGB Majority       | 2-4 weeks | Full RFC      |
+| **Tactical**    | Technical Review | Lead + SMEs        | 1-2 weeks | Design Doc    |
+| **Operational** | Peer Review      | 2 Senior Engineers | 2-5 days  | Code Review   |
 
 ---
 
@@ -696,17 +775,20 @@ graph TD
 ## Review Calendar Template
 
 ### Architecture Board Reviews
+
 - **Schedule**: Bi-weekly Wednesdays, 2:00-4:00 PM
 - **Advance Notice**: 1 week minimum
 - **Materials Due**: 3 days before meeting
 - **Emergency Reviews**: 24-48 hour notice for critical changes
 
 ### Technical Reviews
+
 - **Schedule**: On-demand, scheduled within 1 week of request
 - **Duration**: 1-2 hours depending on complexity
 - **Participants**: Relevant technical leads + SMEs
 
 ### Guild Reviews
+
 - **Schedule**: Monthly guild meetings + ad-hoc
 - **Format**: Presentation + discussion
 - **Follow-up**: Recommendations to AGB if needed
@@ -718,16 +800,16 @@ graph TD
 ## Document Organization
 
 /docs/architecture/reviews/
-├── templates/                 # All review templates
-├── rfcs/                     # All RFC documents
-│   ├── approved/             # Approved RFCs
-│   ├── rejected/             # Rejected RFCs with rationale
-│   └── draft/                # Draft RFCs in progress
-├── decisions/                # Architecture Decision Records
-├── reviews/                  # Review meeting notes and outcomes
-│   ├── YYYY/                 # Year-based organization
-│   └── post-implementation/   # Post-implementation reviews
-└── processes/                # Process documentation
+├── templates/ # All review templates
+├── rfcs/ # All RFC documents
+│ ├── approved/ # Approved RFCs
+│ ├── rejected/ # Rejected RFCs with rationale
+│ └── draft/ # Draft RFCs in progress
+├── decisions/ # Architecture Decision Records
+├── reviews/ # Review meeting notes and outcomes
+│ ├── YYYY/ # Year-based organization
+│ └── post-implementation/ # Post-implementation reviews
+└── processes/ # Process documentation
 ```
 
 ### 6.3 Review Quality Metrics
@@ -736,21 +818,25 @@ graph TD
 ## Review Effectiveness Metrics
 
 ### Timeliness Metrics
+
 - RFC review cycle time (target: <21 days)
 - Time from approval to implementation start (target: <7 days)
 - Review meeting scheduling time (target: <7 days)
 
 ### Quality Metrics
+
 - Post-implementation success rate (target: >90%)
 - Review decision reversal rate (target: <5%)
 - Implementation deviation from RFC (target: <10%)
 
 ### Process Metrics
+
 - Meeting attendance rate (target: >90%)
 - On-time material submission (target: >95%)
 - Action item completion rate (target: >90%)
 
 ### Satisfaction Metrics
+
 - Developer satisfaction with review process (target: >4.0/5.0)
 - Stakeholder confidence in decisions (target: >4.0/5.0)
 - Process efficiency rating (target: >4.0/5.0)

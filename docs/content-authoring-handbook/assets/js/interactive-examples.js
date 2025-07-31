@@ -12,14 +12,14 @@ class InteractiveExample {
       defaultSeed: '12345',
       autoRun: true,
       syntaxHighlight: true,
-      ...options
+      ...options,
     };
-    
+
     this.editor = null;
     this.preview = null;
     this.controls = null;
     this.generatorData = null;
-    
+
     this.init();
   }
 
@@ -29,7 +29,7 @@ class InteractiveExample {
     this.setupControls();
     this.setupPreview();
     this.loadInitialContent();
-    
+
     if (this.options.autoRun) {
       this.runGenerator();
     }
@@ -86,7 +86,7 @@ class InteractiveExample {
 
   setupEditor() {
     const editorEl = this.container.querySelector(`#${this.container.id}-editor`);
-    
+
     // Use Monaco Editor if available, fallback to textarea
     if (window.monaco) {
       this.editor = monaco.editor.create(editorEl, {
@@ -98,9 +98,9 @@ class InteractiveExample {
         fontSize: 14,
         lineNumbers: 'on',
         renderWhitespace: 'selection',
-        automaticLayout: true
+        automaticLayout: true,
       });
-      
+
       // Real-time validation
       this.editor.onDidChangeModelContent(() => {
         this.validateJSON();
@@ -113,7 +113,7 @@ class InteractiveExample {
       editorEl.innerHTML = `
         <textarea class="code-textarea" spellcheck="false"></textarea>
       `;
-      
+
       const textarea = editorEl.querySelector('textarea');
       textarea.addEventListener('input', () => {
         this.validateJSON();
@@ -121,48 +121,50 @@ class InteractiveExample {
           this.debounceRun();
         }
       });
-      
+
       this.editor = {
         getValue: () => textarea.value,
-        setValue: (val) => { textarea.value = val; },
-        focus: () => textarea.focus()
+        setValue: val => {
+          textarea.value = val;
+        },
+        focus: () => textarea.focus(),
       };
     }
-    
+
     editorEl.style.height = this.options.editorHeight;
   }
 
   setupControls() {
     const controls = this.container.querySelector('.example-controls');
-    
+
     // Run button
     controls.querySelector('.btn-run').addEventListener('click', () => {
       this.runGenerator();
     });
-    
+
     // Reset button
     controls.querySelector('.btn-reset').addEventListener('click', () => {
       this.resetContent();
     });
-    
+
     // Copy button
     controls.querySelector('.btn-copy').addEventListener('click', () => {
       this.copyCode();
     });
-    
+
     // Download button
     controls.querySelector('.btn-download').addEventListener('click', () => {
       this.downloadJSON();
     });
-    
+
     // Seed controls
     const seedInput = this.container.querySelector('.seed-input');
     const randomSeedBtn = this.container.querySelector('.btn-random-seed');
-    
+
     seedInput.addEventListener('change', () => {
       this.runGenerator();
     });
-    
+
     randomSeedBtn.addEventListener('click', () => {
       seedInput.value = Math.random().toString(36).substr(2, 9);
       this.runGenerator();
@@ -173,9 +175,9 @@ class InteractiveExample {
     this.preview = {
       output: this.container.querySelector('.preview-output'),
       variations: this.container.querySelector('.preview-variations'),
-      error: this.container.querySelector('.error-display')
+      error: this.container.querySelector('.error-display'),
     };
-    
+
     const previewContent = this.container.querySelector('.preview-content');
     previewContent.style.height = this.options.previewHeight;
   }
@@ -187,21 +189,25 @@ class InteractiveExample {
   }
 
   getDefaultGenerator() {
-    return JSON.stringify({
-      meta: {
-        name: 'Example Generator',
-        version: '1.0.0'
+    return JSON.stringify(
+      {
+        meta: {
+          name: 'Example Generator',
+          version: '1.0.0',
+        },
+        grammar: {
+          start: 'Hello, [subject]!',
+          subject: ['world', 'friend', 'there'],
+        },
       },
-      grammar: {
-        start: 'Hello, [subject]!',
-        subject: ['world', 'friend', 'there']
-      }
-    }, null, 2);
+      null,
+      2
+    );
   }
 
   validateJSON() {
     const statusEl = this.container.querySelector('.editor-status');
-    
+
     try {
       const content = this.editor.getValue();
       JSON.parse(content);
@@ -219,31 +225,30 @@ class InteractiveExample {
 
   async runGenerator() {
     if (!this.validateJSON()) return;
-    
+
     const startTime = performance.now();
-    
+
     try {
       const generatorJSON = JSON.parse(this.editor.getValue());
       const seed = this.container.querySelector('.seed-input').value;
-      
+
       // Simulate generator execution (replace with actual engine call)
       const result = await this.executeGenerator(generatorJSON, seed);
-      
+
       // Display main output
       this.preview.output.innerHTML = `
         <div class="output-text">${this.escapeHtml(result.output)}</div>
         <div class="output-path">Path: ${result.path || 'start'}</div>
       `;
-      
+
       // Show variations with different seeds
       if (this.options.showVariations) {
         this.showVariations(generatorJSON);
       }
-      
+
       // Update stats
       const execTime = Math.round(performance.now() - startTime);
       this.updateStats(result.output.length, execTime);
-      
     } catch (e) {
       this.preview.error.textContent = `Execution Error: ${e.message}`;
       this.preview.output.textContent = '';
@@ -253,21 +258,21 @@ class InteractiveExample {
   async executeGenerator(generatorJSON, seed) {
     // This is a simplified mock execution
     // In production, this would call the actual Prompt Spaghetti engine
-    
+
     if (!generatorJSON.grammar || !generatorJSON.grammar.start) {
       throw new Error('Generator must have grammar.start');
     }
-    
+
     // Simple mock execution
     const start = generatorJSON.grammar.start;
     let output = start;
-    
+
     if (Array.isArray(start)) {
       // Random selection based on seed
       const index = this.seedRandom(seed) % start.length;
       output = start[index];
     }
-    
+
     // Simple reference expansion
     output = output.replace(/\[(\w+)\]/g, (match, ruleName) => {
       const rule = generatorJSON.grammar[ruleName];
@@ -277,11 +282,11 @@ class InteractiveExample {
       }
       return rule || match;
     });
-    
+
     return {
       output,
       path: 'start',
-      seed
+      seed,
     };
   }
 
@@ -289,7 +294,7 @@ class InteractiveExample {
     // Simple seed-based pseudo-random
     let hash = 0;
     for (let i = 0; i < seed.length; i++) {
-      hash = ((hash << 5) - hash) + seed.charCodeAt(i);
+      hash = (hash << 5) - hash + seed.charCodeAt(i);
       hash = hash & hash;
     }
     return Math.abs(hash);
@@ -298,11 +303,13 @@ class InteractiveExample {
   showVariations(generatorJSON) {
     const variations = [];
     const seeds = ['abc', '123', 'xyz', 'test', 'demo'];
-    
+
     seeds.forEach(seed => {
       this.executeGenerator(generatorJSON, seed).then(result => {
-        variations.push(`<div class="variation"><span class="seed">${seed}:</span> ${this.escapeHtml(result.output)}</div>`);
-        
+        variations.push(
+          `<div class="variation"><span class="seed">${seed}:</span> ${this.escapeHtml(result.output)}</div>`
+        );
+
         if (variations.length === seeds.length) {
           this.preview.variations.innerHTML = `
             <div class="variations-header">Other variations:</div>
@@ -347,11 +354,11 @@ class InteractiveExample {
     toast.className = 'toast-message';
     toast.textContent = message;
     this.container.appendChild(toast);
-    
+
     setTimeout(() => {
       toast.classList.add('show');
     }, 10);
-    
+
     setTimeout(() => {
       toast.classList.remove('show');
       setTimeout(() => toast.remove(), 300);
@@ -382,9 +389,9 @@ document.addEventListener('DOMContentLoaded', () => {
       title: el.dataset.title,
       initialCode: el.dataset.code,
       showVariations: el.dataset.variations === 'true',
-      ...JSON.parse(el.dataset.options || '{}')
+      ...JSON.parse(el.dataset.options || '{}'),
     };
-    
+
     new InteractiveExample(el.id, options);
   });
 });

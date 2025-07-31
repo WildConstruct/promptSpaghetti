@@ -29,6 +29,7 @@ const strategy = new DocumentationLocalizationStrategy(config);
 ```
 
 **Key Features:**
+
 - Translation loading and caching
 - Cultural adaptation management
 - Content validation for cultural sensitivity
@@ -80,6 +81,7 @@ interface CulturalAdaptation {
 ## Supported Languages
 
 ### Primary Languages (Tier 1)
+
 - **English (en)** - Primary language with complete coverage
 - **Spanish (es)** - Full localization with regional variants (ES, MX, AR)
 - **French (fr)** - Complete localization (FR, CA, BE)
@@ -87,46 +89,38 @@ interface CulturalAdaptation {
 - **Japanese (ja)** - Specialized cultural adaptation for formal communication
 
 ### Secondary Languages (Tier 2)
+
 - **Korean (ko)** - Growing market with specific platform preferences
 - **Chinese (zh)** - Simplified and Traditional variants (CN, TW, HK)
 - **Portuguese (pt)** - Brazilian and European variants (BR, PT)
 - **Russian (ru)** - Eastern European market coverage
 
 ### Specialized Languages (Tier 3)
+
 - **Arabic (ar)** - RTL support with cultural sensitivity guidelines
 
 ## Cultural Adaptations
 
 ### Japanese (ja)
+
 ```typescript
 const japaneseCulture = {
   communicationStyle: 'formal',
-  culturalSensitivity: [
-    'Avoid direct confrontation',
-    'Use honorific language',
-    'Respect hierarchical structures'
-  ],
+  culturalSensitivity: ['Avoid direct confrontation', 'Use honorific language', 'Respect hierarchical structures'],
   platformConsiderations: {
     openai: ['Use polite, formal language', 'Avoid direct criticism'],
-    midjourney: ['Respect traditional art styles', 'Be mindful of cultural symbols']
-  }
+    midjourney: ['Respect traditional art styles', 'Be mindful of cultural symbols'],
+  },
 };
 ```
 
 ### Arabic (ar)
+
 ```typescript
 const arabicCulture = {
   communicationStyle: 'formal',
-  culturalSensitivity: [
-    'Respect religious practices',
-    'Use appropriate greetings',
-    'Be mindful of cultural values'
-  ],
-  restrictions: [
-    'explicit content',
-    'alcohol references',
-    'inappropriate imagery'
-  ]
+  culturalSensitivity: ['Respect religious practices', 'Use appropriate greetings', 'Be mindful of cultural values'],
+  restrictions: ['explicit content', 'alcohol references', 'inappropriate imagery'],
 };
 ```
 
@@ -138,12 +132,9 @@ const arabicCulture = {
 import { defaultLocalizationStrategy } from './LocalizationStrategy';
 
 // Get localized string
-const localizedText = await defaultLocalizationStrategy.getLocalizedString(
-  'api.adaptor.description',
-  'es',
-  'api',
-  { platform: 'OpenAI' }
-);
+const localizedText = await defaultLocalizationStrategy.getLocalizedString('api.adaptor.description', 'es', 'api', {
+  platform: 'OpenAI',
+});
 
 // Load cultural adaptation
 const culturalGuidelines = await defaultLocalizationStrategy.loadCulturalAdaptation('ja');
@@ -183,10 +174,7 @@ console.log(spanishDocs);
 
 ```typescript
 // Validate prompt for Japanese cultural appropriateness
-const validation = await strategy.validatePromptContent(
-  'Create a detailed analysis of political controversies',
-  'ja'
-);
+const validation = await strategy.validatePromptContent('Create a detailed analysis of political controversies', 'ja');
 
 if (!validation.isValid) {
   console.log('Warnings:', validation.warnings);
@@ -239,6 +227,7 @@ console.log(report);
 ### Quality Metrics
 
 The system tracks:
+
 - **Translation Completion Percentage** per language
 - **User Ratings** for translation quality
 - **Reported Issues** and pending reviews
@@ -256,11 +245,7 @@ import { LocalizationUtils } from './LocalizationStrategy';
 const userLang = LocalizationUtils.detectUserLanguage(); // 'es'
 
 // Format text for RTL languages
-const rtlText = LocalizationUtils.formatTextForRTL(
-  'Hello World',
-  'ar',
-  config
-); // '\u202EHello World\u202C'
+const rtlText = LocalizationUtils.formatTextForRTL('Hello World', 'ar', config); // '\u202EHello World\u202C'
 
 // Validate language codes
 const isValid = LocalizationUtils.isValidLanguageCode('en-US'); // true
@@ -274,14 +259,15 @@ const displayName = LocalizationUtils.getLanguageDisplayName('ja'); // '日本�
 ### Adding New Languages
 
 1. **Update Configuration**
+
    ```typescript
    const config = {
      ...defaultConfig,
      supportedLanguages: [...defaultConfig.supportedLanguages, 'it'],
      regionalVariants: {
        ...defaultConfig.regionalVariants,
-       'it': ['it-IT', 'it-CH']
-     }
+       it: ['it-IT', 'it-CH'],
+     },
    };
    ```
 
@@ -312,22 +298,26 @@ const displayName = LocalizationUtils.getLanguageDisplayName('ja'); // '日本�
 ### Best Practices
 
 #### Translation Keys
+
 - Use descriptive, hierarchical keys: `tutorials.quickstart.step1.title`
 - Avoid overly generic keys: `button.ok` → `dialog.confirmation.accept`
 - Include context in key names when ambiguous
 
 #### Interpolation
+
 - Use consistent placeholder syntax: `{{variable}}`
 - Provide clear variable names: `{{userName}}` not `{{u}}`
 - Document expected interpolation values
 
 #### Cultural Sensitivity
+
 - Research cultural norms before translation
 - Avoid literal translations that may be inappropriate
 - Consider religious, political, and social sensitivities
 - Test with native speakers from target regions
 
 #### Technical Considerations
+
 - Support RTL languages with proper text direction
 - Handle different date/time formats appropriately
 - Consider character encoding (UTF-8) for all languages
@@ -359,13 +349,13 @@ npm test -- LocalizationStrategy.test.ts
 // Example integration test
 it('completes full localization workflow', async () => {
   const strategy = new DocumentationLocalizationStrategy(config);
-  
+
   // Load translation → cultural adaptation → validate → generate docs
   const translation = await strategy.loadTranslation('es');
   const adaptation = await strategy.loadCulturalAdaptation('es');
   const validation = await strategy.validatePromptContent(content, 'es');
   const docs = await strategy.generateLocalizedDocumentation('es');
-  
+
   // Verify complete workflow
   expect(docs.language).toBe('es');
   expect(validation.isValid).toBe(true);
@@ -415,6 +405,7 @@ The modular architecture allows for easy extension to new languages and cultures
 **Implementation Status**: ✅ **COMPLETE** - Epic 10.2.6 Localization Strategy
 
 **Related Documentation**:
+
 - [Epic 10 Implementation Plan](../../../docs/epic10plan.md)
 - [Prompt Targeting Architecture](./architecture.md)
 - [API Documentation](./api-reference.md)

@@ -41,7 +41,7 @@ export const RNGraphCanvas: React.FC<RNGraphCanvasProps> = ({
     scale: 1,
     translateX: 0,
     translateY: 0,
-    rotation: 0
+    rotation: 0,
   });
 
   // Try to use React Native gesture handling if available
@@ -59,56 +59,68 @@ export const RNGraphCanvas: React.FC<RNGraphCanvasProps> = ({
   }
 
   // Gesture handlers
-  const handlePanGesture = useCallback((event: any) => {
-    if (!scrollEnabled) return;
-    
-    const { translationX, translationY } = event.nativeEvent;
-    setGestureState(prev => ({
-      ...prev,
-      translateX: prev.translateX + translationX,
-      translateY: prev.translateY + translationY
-    }));
-  }, [scrollEnabled]);
+  const handlePanGesture = useCallback(
+    (event: any) => {
+      if (!scrollEnabled) return;
 
-  const handlePinchGesture = useCallback((event: any) => {
-    if (!zoomEnabled || !enablePinchZoom) return;
-    
-    const { scale } = event.nativeEvent;
-    const clampedScale = Math.max(minimumZoomScale, Math.min(maximumZoomScale, scale));
-    
-    setGestureState(prev => ({
-      ...prev,
-      scale: clampedScale
-    }));
-  }, [zoomEnabled, enablePinchZoom, minimumZoomScale, maximumZoomScale]);
+      const { translationX, translationY } = event.nativeEvent;
+      setGestureState(prev => ({
+        ...prev,
+        translateX: prev.translateX + translationX,
+        translateY: prev.translateY + translationY,
+      }));
+    },
+    [scrollEnabled]
+  );
+
+  const handlePinchGesture = useCallback(
+    (event: any) => {
+      if (!zoomEnabled || !enablePinchZoom) return;
+
+      const { scale } = event.nativeEvent;
+      const clampedScale = Math.max(minimumZoomScale, Math.min(maximumZoomScale, scale));
+
+      setGestureState(prev => ({
+        ...prev,
+        scale: clampedScale,
+      }));
+    },
+    [zoomEnabled, enablePinchZoom, minimumZoomScale, maximumZoomScale]
+  );
 
   const handleDoubleTap = useCallback(() => {
     if (!enableDoubleTapZoom) return;
-    
+
     // Toggle between fit-to-screen and 1:1 zoom
     const targetScale = gestureState.scale === 1 ? 2 : 1;
     setGestureState(prev => ({
       ...prev,
       scale: targetScale,
       translateX: targetScale === 1 ? 0 : prev.translateX,
-      translateY: targetScale === 1 ? 0 : prev.translateY
+      translateY: targetScale === 1 ? 0 : prev.translateY,
     }));
-    
+
     // Haptic feedback for double tap
     adapter.hapticFeedback('light');
   }, [enableDoubleTapZoom, gestureState.scale, adapter]);
 
-  const handleNodePress = useCallback((node: any) => {
-    // Haptic feedback for node selection
-    adapter.hapticFeedback('light');
-    onNodeSelect?.(node);
-  }, [onNodeSelect, adapter]);
+  const handleNodePress = useCallback(
+    (node: any) => {
+      // Haptic feedback for node selection
+      adapter.hapticFeedback('light');
+      onNodeSelect?.(node);
+    },
+    [onNodeSelect, adapter]
+  );
 
-  const handleLongPress = useCallback((node: any) => {
-    // Stronger haptic feedback for long press
-    adapter.hapticFeedback('medium');
-    // Could show context menu or enter edit mode
-  }, [adapter]);
+  const handleLongPress = useCallback(
+    (node: any) => {
+      // Stronger haptic feedback for long press
+      adapter.hapticFeedback('medium');
+      // Could show context menu or enter edit mode
+    },
+    [adapter]
+  );
 
   // React Native specific touch handling
   const touchProps = {
@@ -118,12 +130,12 @@ export const RNGraphCanvas: React.FC<RNGraphCanvasProps> = ({
     onTouchMove: (e: any) => {
       // Handle touch move for node dragging
       if (props.readOnly) return;
-      
+
       // Touch-based node dragging logic
     },
     onTouchEnd: (e: any) => {
       // Handle touch end
-    }
+    },
   };
 
   const containerStyle = {
@@ -134,8 +146,8 @@ export const RNGraphCanvas: React.FC<RNGraphCanvasProps> = ({
       { scale: gestureState.scale },
       { translateX: gestureState.translateX },
       { translateY: gestureState.translateY },
-      ...(enableRotation ? [{ rotate: `${gestureState.rotation}deg` }] : [])
-    ]
+      ...(enableRotation ? [{ rotate: `${gestureState.rotation}deg` }] : []),
+    ],
   };
 
   // Enhanced GraphCanvas with React Native optimizations
@@ -152,8 +164,8 @@ export const RNGraphCanvas: React.FC<RNGraphCanvasProps> = ({
       // Remove web-specific properties
       cursor: undefined,
       userSelect: undefined,
-      WebkitUserSelect: undefined
-    }
+      WebkitUserSelect: undefined,
+    },
   };
 
   if (PanGestureHandler !== 'div' && PinchGestureHandler !== 'div') {
@@ -173,20 +185,16 @@ export const RNGraphCanvas: React.FC<RNGraphCanvasProps> = ({
 
   // Fallback to basic touch handling
   return (
-    <div 
-      style={containerStyle}
-      testID={testID}
-      {...touchProps}
-    >
+    <div style={containerStyle} testID={testID} {...touchProps}>
       <GraphCanvas {...enhancedProps} />
-      
+
       {/* Touch-friendly controls overlay */}
       <div
         style={{
           position: 'absolute',
           bottom: 20,
           right: 20,
-          flexDirection: 'column'
+          flexDirection: 'column',
         }}
       >
         {/* Zoom controls optimized for touch */}
@@ -198,7 +206,7 @@ export const RNGraphCanvas: React.FC<RNGraphCanvasProps> = ({
             backgroundColor: 'rgba(0, 0, 0, 0.7)',
             justifyContent: 'center',
             alignItems: 'center',
-            marginBottom: 10
+            marginBottom: 10,
           }}
           onTouchEnd={() => {
             adapter.hapticFeedback('light');
@@ -209,7 +217,7 @@ export const RNGraphCanvas: React.FC<RNGraphCanvasProps> = ({
         >
           <span style={{ color: 'white', fontSize: 24 }}>+</span>
         </div>
-        
+
         <div
           style={{
             width: 60,
@@ -217,7 +225,7 @@ export const RNGraphCanvas: React.FC<RNGraphCanvasProps> = ({
             borderRadius: 30,
             backgroundColor: 'rgba(0, 0, 0, 0.7)',
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
           }}
           onTouchEnd={() => {
             adapter.hapticFeedback('light');

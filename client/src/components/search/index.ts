@@ -1,8 +1,8 @@
 /**
  * Search System Exports
- * 
+ *
  * FILE-985116-5A41: Build Search and Filter System
- * 
+ *
  * Centralized exports for the complete search and filter system.
  * Provides both individual components and the unified system.
  */
@@ -26,11 +26,8 @@ export {
   type FilterOperator,
   type SortCondition,
   type SortDirection,
-  type SavedSearch
+  type SavedSearch,
 } from './SearchContext';
 
 // Re-export for convenience
-export {
-  SearchProvider as SearchContextProvider,
-  UnifiedSearchSystem as SearchSystem
-} from './UnifiedSearchSystem';
+export { SearchProvider as SearchContextProvider, UnifiedSearchSystem as SearchSystem } from './UnifiedSearchSystem';

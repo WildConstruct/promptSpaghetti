@@ -11,7 +11,7 @@
       }
     },
     {
-      "id": "archetype-2", 
+      "id": "archetype-2",
       "type": "logic",
       "position": { "x": 350, "y": 50 },
       "data": {
@@ -22,7 +22,7 @@
     },
     {
       "id": "aesthetic-3",
-      "type": "logic", 
+      "type": "logic",
       "position": { "x": 350, "y": 150 },
       "data": {
         "label": "Aesthetic Influence",
@@ -35,7 +35,7 @@
       "type": "logic",
       "position": { "x": 600, "y": 50 },
       "data": {
-        "label": "Faction Alignment", 
+        "label": "Faction Alignment",
         "description": "Empire/Corporate, Rebel/Resistance, Civilian/Smuggler, etc.",
         "category": "logic"
       }

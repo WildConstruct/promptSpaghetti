@@ -5,6 +5,7 @@ This guide explains how to integrate and use the Epic 23 collaboration telemetry
 ## Overview
 
 The Epic 23 telemetry system provides comprehensive tracking of:
+
 - Real-time collaboration sessions and presence
 - Conflict resolution activities and success rates
 - Performance metrics (latency, throughput, reliability)
@@ -103,29 +104,29 @@ mysql -u your_user -p your_database < server/src/database/migrations/collaborati
 
 ```typescript
 // Automatically tracked when users join/leave collaborative sessions
-CollaborationEventType.COLLABORATIVE_SESSION_START
-CollaborationEventType.COLLABORATIVE_SESSION_END
-CollaborationEventType.COLLABORATIVE_SESSION_HEARTBEAT
-CollaborationEventType.USER_PRESENCE_UPDATE
+CollaborationEventType.COLLABORATIVE_SESSION_START;
+CollaborationEventType.COLLABORATIVE_SESSION_END;
+CollaborationEventType.COLLABORATIVE_SESSION_HEARTBEAT;
+CollaborationEventType.USER_PRESENCE_UPDATE;
 ```
 
 ### Real-time Editing Events
 
 ```typescript
 // Tracked during concurrent editing activities
-CollaborationEventType.SIMULTANEOUS_EDIT_DETECTED
-CollaborationEventType.CONFLICT_RESOLUTION_TRIGGERED
-CollaborationEventType.CONFLICT_RESOLUTION_COMPLETED
-CollaborationEventType.OPERATIONAL_TRANSFORM_APPLIED
+CollaborationEventType.SIMULTANEOUS_EDIT_DETECTED;
+CollaborationEventType.CONFLICT_RESOLUTION_TRIGGERED;
+CollaborationEventType.CONFLICT_RESOLUTION_COMPLETED;
+CollaborationEventType.OPERATIONAL_TRANSFORM_APPLIED;
 ```
 
 ### Performance Events
 
 ```typescript
 // Automated performance measurement
-CollaborationEventType.COLLABORATION_LATENCY_MEASURED
-CollaborationEventType.WEBSOCKET_CONNECTION_QUALITY
-CollaborationEventType.SYNC_PERFORMANCE_MEASURED
+CollaborationEventType.COLLABORATION_LATENCY_MEASURED;
+CollaborationEventType.WEBSOCKET_CONNECTION_QUALITY;
+CollaborationEventType.SYNC_PERFORMANCE_MEASURED;
 ```
 
 ## Epic 23 Success Criteria
@@ -137,8 +138,9 @@ The system automatically tracks these success metrics:
 3. **Workspace Adoption Rate**: Target ≥ 80%
 
 Access via API:
+
 ```javascript
-GET /api/collaboration/epic23/status
+GET / api / collaboration / epic23 / status;
 ```
 
 ## Dashboard Integration
@@ -146,11 +148,13 @@ GET /api/collaboration/epic23/status
 ### Real-time Collaboration Dashboard
 
 Access dashboard data:
+
 ```javascript
-GET /api/collaboration/dashboard
+GET / api / collaboration / dashboard;
 ```
 
 Response includes:
+
 - Epic 23 progress metrics
 - Active collaboration statistics
 - Performance metrics
@@ -159,17 +163,18 @@ Response includes:
 ### WebSocket Real-time Updates
 
 Connect to analytics WebSocket for live updates:
+
 ```javascript
 const ws = new WebSocket('ws://localhost:8001');
 
-ws.on('message', (data) => {
+ws.on('message', data => {
   const event = JSON.parse(data);
-  
+
   if (event.topic === 'collaboration_analytics') {
     // Handle real-time collaboration event
     updateDashboard(event.data);
   }
-  
+
   if (event.topic === 'epic23_alerts') {
     // Handle Epic 23 success criteria alerts
     showAlert(event.data);
@@ -195,7 +200,7 @@ await collaborationAnalytics.recordCollaborationEvent({
     sessionId: 'session_abc',
     userId: 'user_def',
     userRole: 'collaborator',
-    timestamp: new Date()
+    timestamp: new Date(),
   },
   data: {
     commentId: 'comment_123',
@@ -205,8 +210,8 @@ await collaborationAnalytics.recordCollaborationEvent({
     mentionedUsers: ['user_ghi'],
     attachmentCount: 1,
     isReply: false,
-    threadDepth: 1
-  }
+    threadDepth: 1,
+  },
 });
 ```
 
@@ -214,24 +219,17 @@ await collaborationAnalytics.recordCollaborationEvent({
 
 ```typescript
 // Record custom latency measurement
-await collaborationAnalytics.recordCollaborationLatency(
-  context,
-  latencyMs,
-  'custom_operation'
-);
+await collaborationAnalytics.recordCollaborationLatency(context, latencyMs, 'custom_operation');
 
 // Record conflict resolution
-await collaborationAnalytics.recordConflictResolution(
-  context,
-  {
-    conflictId: 'conflict_123',
-    conflictType: 'node_edit',
-    involvedUsers: ['user_1', 'user_2'],
-    resolutionStrategy: 'operational_transform',
-    resolutionTimeMs: 250,
-    success: true
-  }
-);
+await collaborationAnalytics.recordConflictResolution(context, {
+  conflictId: 'conflict_123',
+  conflictType: 'node_edit',
+  involvedUsers: ['user_1', 'user_2'],
+  resolutionStrategy: 'operational_transform',
+  resolutionTimeMs: 250,
+  success: true,
+});
 ```
 
 ## Monitoring and Alerts
@@ -239,8 +237,9 @@ await collaborationAnalytics.recordConflictResolution(
 ### Health Monitoring
 
 Check telemetry system health:
+
 ```javascript
-GET /api/collaboration/telemetry/health
+GET / api / collaboration / telemetry / health;
 ```
 
 ### Epic 23 Success Alerts
@@ -293,6 +292,7 @@ The system automatically emits alerts when Epic 23 criteria are at risk:
 ### Debug Logging
 
 Enable detailed logging:
+
 ```env
 DEBUG=collaboration:telemetry
 ```
@@ -300,6 +300,7 @@ DEBUG=collaboration:telemetry
 ### Validation
 
 Test the telemetry system:
+
 ```bash
 # Health check
 curl http://localhost:8000/api/collaboration/telemetry/health
@@ -324,6 +325,7 @@ curl http://localhost:8000/api/collaboration/epic23/status
 ### Event Schema Validation
 
 All events use Zod schemas for validation:
+
 ```typescript
 import { CollaborationTelemetrySchemas } from './analytics/CollaborationTelemetry';
 

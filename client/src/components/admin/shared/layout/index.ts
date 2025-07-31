@@ -1,7 +1,7 @@
 /**
  * Layout Components Index
  * REFACTOR-002: Admin Dashboard Architecture Consolidation
- * 
+ *
  * Centralized exports for admin layout components
  */
 

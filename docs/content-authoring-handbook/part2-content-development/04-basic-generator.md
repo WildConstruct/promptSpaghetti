@@ -151,25 +151,17 @@ Building complex outputs from simple parts:
 {
   "grammar": {
     "start": "[setup]. [conflict]. [resolution].",
-    
-    "setup": [
-      "Once upon a time in [location]",
-      "Long ago in [location]",
-      "In the distant land of [location]"
-    ],
-    
-    "location": [
-      "a magical forest",
-      "an ancient kingdom",
-      "a hidden valley"
-    ],
-    
+
+    "setup": ["Once upon a time in [location]", "Long ago in [location]", "In the distant land of [location]"],
+
+    "location": ["a magical forest", "an ancient kingdom", "a hidden valley"],
+
     "conflict": [
       "A terrible curse befell the land",
       "An evil wizard threatened the peace",
       "A mysterious plague spread rapidly"
     ],
-    
+
     "resolution": [
       "But a hero arose to save the day",
       "Until a brave soul discovered the cure",
@@ -186,12 +178,8 @@ Some outputs need more detail than others:
 ```json
 {
   "grammar": {
-    "character": [
-      "[name]",
-      "[name] the [adjective]",
-      "[name] the [adjective] [profession]"
-    ],
-    
+    "character": ["[name]", "[name] the [adjective]", "[name] the [adjective] [profession]"],
+
     "name": ["Alex", "Morgan", "Jordan", "Casey"],
     "adjective": ["brave", "clever", "mysterious"],
     "profession": ["warrior", "scholar", "merchant"]
@@ -243,6 +231,7 @@ Learn from these frequent beginner errors:
 ### Mistake 1: Circular References
 
 ❌ **Wrong:**
+
 ```json
 {
   "grammar": {
@@ -253,6 +242,7 @@ Learn from these frequent beginner errors:
 ```
 
 ✅ **Right:**
+
 ```json
 {
   "grammar": {
@@ -265,6 +255,7 @@ Learn from these frequent beginner errors:
 ### Mistake 2: Missing References
 
 ❌ **Wrong:**
+
 ```json
 {
   "grammar": {
@@ -276,6 +267,7 @@ Learn from these frequent beginner errors:
 ```
 
 ✅ **Right:**
+
 ```json
 {
   "grammar": {
@@ -289,6 +281,7 @@ Learn from these frequent beginner errors:
 ### Mistake 3: Inconsistent Formatting
 
 ❌ **Wrong:**
+
 ```json
 {
   "grammar": {
@@ -298,9 +291,11 @@ Learn from these frequent beginner errors:
   }
 }
 ```
+
 This creates inconsistent spacing.
 
 ✅ **Right:**
+
 ```json
 {
   "grammar": {
@@ -314,6 +309,7 @@ This creates inconsistent spacing.
 ### Mistake 4: Unescaped Special Characters
 
 ❌ **Wrong:**
+
 ```json
 {
   "grammar": {
@@ -324,6 +320,7 @@ This creates inconsistent spacing.
 ```
 
 ✅ **Right:**
+
 ```json
 {
   "grammar": {
@@ -342,11 +339,13 @@ Let's create a more sophisticated generator step by step:
 **Goal**: Generate descriptions of items in a fantasy shop.
 
 **Step 1**: Plan the structure
+
 ```
 [quality] [item] of [property] - [price] gold
 ```
 
 **Step 2**: Create the base generator
+
 ```json
 {
   "meta": {
@@ -357,30 +356,20 @@ Let's create a more sophisticated generator step by step:
   },
   "grammar": {
     "start": "[quality] [item] of [property] - [price] gold",
-    
-    "quality": [
-      "Common", "Uncommon", "Rare", "Legendary"
-    ],
-    
-    "item": [
-      "sword", "shield", "potion", "scroll", 
-      "ring", "amulet", "cloak", "boots"
-    ],
-    
-    "property": [
-      "fire", "ice", "lightning", "healing",
-      "strength", "wisdom", "speed", "protection"
-    ],
-    
-    "price": [
-      "10", "25", "50", "100", 
-      "250", "500", "1000", "5000"
-    ]
+
+    "quality": ["Common", "Uncommon", "Rare", "Legendary"],
+
+    "item": ["sword", "shield", "potion", "scroll", "ring", "amulet", "cloak", "boots"],
+
+    "property": ["fire", "ice", "lightning", "healing", "strength", "wisdom", "speed", "protection"],
+
+    "price": ["10", "25", "50", "100", "250", "500", "1000", "5000"]
   }
 }
 ```
 
 **Step 3**: Add variation and polish
+
 ```json
 {
   "meta": {
@@ -391,56 +380,69 @@ Let's create a more sophisticated generator step by step:
   },
   "grammar": {
     "start": "[item_description]\n[price_line]",
-    
+
     "item_description": [
       "[quality] [item] of [property]",
       "[quality] [material] [item]",
       "[quality] [item] with [enhancement]"
     ],
-    
-    "price_line": [
-      "Price: [price] gold",
-      "Cost: [price] gold pieces",
-      "Yours for only [price] gold!"
-    ],
-    
-    "quality": [
-      "Common", "Uncommon", "Rare", "Epic", "Legendary"
-    ],
-    
+
+    "price_line": ["Price: [price] gold", "Cost: [price] gold pieces", "Yours for only [price] gold!"],
+
+    "quality": ["Common", "Uncommon", "Rare", "Epic", "Legendary"],
+
     "item": [
-      "sword", "shield", "potion", "scroll", 
-      "ring", "amulet", "cloak", "boots",
-      "helm", "gauntlets", "staff", "bow"
+      "sword",
+      "shield",
+      "potion",
+      "scroll",
+      "ring",
+      "amulet",
+      "cloak",
+      "boots",
+      "helm",
+      "gauntlets",
+      "staff",
+      "bow"
     ],
-    
-    "material": [
-      "iron", "steel", "silver", "gold",
-      "mithril", "adamantine", "crystal", "dragon scale"
-    ],
-    
+
+    "material": ["iron", "steel", "silver", "gold", "mithril", "adamantine", "crystal", "dragon scale"],
+
     "property": [
-      "fire", "ice", "lightning", "healing",
-      "strength", "wisdom", "speed", "protection",
-      "invisibility", "telepathy", "regeneration", "luck"
+      "fire",
+      "ice",
+      "lightning",
+      "healing",
+      "strength",
+      "wisdom",
+      "speed",
+      "protection",
+      "invisibility",
+      "telepathy",
+      "regeneration",
+      "luck"
     ],
-    
+
     "enhancement": [
-      "+1 attack", "+2 defense", "glowing runes",
-      "ancient enchantment", "blessed by priests",
-      "forged in dragon fire", "moon-touched",
-      "star-blessed", "demon-ward", "fey-crafted"
+      "+1 attack",
+      "+2 defense",
+      "glowing runes",
+      "ancient enchantment",
+      "blessed by priests",
+      "forged in dragon fire",
+      "moon-touched",
+      "star-blessed",
+      "demon-ward",
+      "fey-crafted"
     ],
-    
-    "price": [
-      "10", "25", "50", "100", "250", 
-      "500", "1000", "2500", "5000", "10000"
-    ]
+
+    "price": ["10", "25", "50", "100", "250", "500", "1000", "2500", "5000", "10000"]
   }
 }
 ```
 
 **Sample Outputs**:
+
 - "Rare mithril sword\nPrice: 1000 gold"
 - "Epic ring of telepathy\nYours for only 2500 gold!"
 - "Legendary cloak with star-blessed\nCost: 10000 gold pieces"
@@ -463,8 +465,9 @@ Now that you understand the basics:
 ### Moving Forward
 
 You've learned the fundamentals of generator creation. In the next chapters, we'll explore:
+
 - Advanced rule syntax and weighted choices
-- Variables and conditional logic  
+- Variables and conditional logic
 - Modularization for large projects
 - Performance optimization
 

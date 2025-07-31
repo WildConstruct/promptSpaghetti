@@ -9,11 +9,13 @@ This guide provides step-by-step instructions for implementing the selected test
 #### 1. MSW (Mock Service Worker) Setup
 
 **Step 1: Install Dependencies**
+
 ```bash
 pnpm add -D msw @mswjs/data @types/msw
 ```
 
 **Step 2: Create Mock Handlers**
+
 ```typescript
 // tests/mocks/handlers.ts
 import { rest } from 'msw';
@@ -27,17 +29,18 @@ export const handlers = [
   rest.get('/api/templates/:id', templateMocks.getTemplate),
   rest.put('/api/templates/:id', templateMocks.updateTemplate),
   rest.delete('/api/templates/:id', templateMocks.deleteTemplate),
-  
+
   // Auth API mocks
   rest.post('/api/auth/login', authMocks.login),
   rest.post('/api/auth/register', authMocks.register),
   rest.get('/api/auth/profile', authMocks.getProfile),
-  
+
   // Add more endpoints as needed
 ];
 ```
 
 **Step 3: Create Mock Data Factories**
+
 ```typescript
 // tests/mocks/template-mocks.ts
 import { factory, primaryKey } from '@mswjs/data';
@@ -58,16 +61,16 @@ const db = factory({
         {
           id: faker.string.uuid(),
           type: 'input',
-          data: { label: faker.lorem.words(2) }
-        }
+          data: { label: faker.lorem.words(2) },
+        },
       ],
-      edges: []
+      edges: [],
     }),
     variables: () => [],
     customization_points: () => [],
     created_at: () => faker.date.past(),
-    updated_at: () => faker.date.recent()
-  }
+    updated_at: () => faker.date.recent(),
+  },
 });
 
 export const templateMocks = {
@@ -75,29 +78,30 @@ export const templateMocks = {
     const templates = db.template.getAll();
     return res(ctx.json({ templates, total: templates.length }));
   },
-  
+
   createTemplate: (req, res, ctx) => {
     const templateData = req.body;
     const template = db.template.create(templateData);
     return res(ctx.status(201), ctx.json(template));
   },
-  
+
   getTemplate: (req, res, ctx) => {
     const { id } = req.params;
     const template = db.template.findFirst({ where: { id: { equals: id } } });
-    
+
     if (!template) {
       return res(ctx.status(404), ctx.json({ error: 'Template not found' }));
     }
-    
+
     return res(ctx.json(template));
-  }
-  
+  },
+
   // Add more mock handlers...
 };
 ```
 
 **Step 4: Test Setup Integration**
+
 ```typescript
 // tests/utils/mswSetup.ts
 import { setupServer } from 'msw/node';
@@ -107,8 +111,8 @@ export const server = setupServer(...handlers);
 
 // Setup MSW
 beforeAll(() => {
-  server.listen({ 
-    onUnhandledRequest: 'error'  // Catch unmocked requests
+  server.listen({
+    onUnhandledRequest: 'error', // Catch unmocked requests
   });
 });
 
@@ -124,11 +128,13 @@ afterAll(() => {
 #### 2. Accessibility Testing Setup
 
 **Step 1: Install Dependencies**
+
 ```bash
 pnpm add -D jest-axe @axe-core/react
 ```
 
 **Step 2: Create Accessibility Test Utilities**
+
 ```typescript
 // tests/utils/axeSetup.ts
 import { configureAxe, toHaveNoViolations } from 'jest-axe';
@@ -140,17 +146,17 @@ const axe = configureAxe({
     'color-contrast': { enabled: false },
     // Keep other accessibility rules active
     'aria-hidden-focus': { enabled: true },
-    'keyboard-navigation': { enabled: true }
+    'keyboard-navigation': { enabled: true },
   },
   tags: ['wcag2a', 'wcag2aa', 'wcag21aa'],
-  restoreScroll: true
+  restoreScroll: true,
 });
 
 // Extend Jest matchers
 expect.extend(toHaveNoViolations);
 
 // Helper function for component accessibility testing
-export const testAccessibility = async (component) => {
+export const testAccessibility = async component => {
   const results = await axe(component);
   expect(results).toHaveNoViolations();
 };
@@ -159,6 +165,7 @@ export { axe };
 ```
 
 **Step 3: Component Test Integration**
+
 ```typescript
 // Example component test with accessibility
 import { render } from '@testing-library/react';
@@ -170,21 +177,21 @@ describe('TemplateCreationWizard Accessibility', () => {
     const { container } = render(
       <TemplateCreationWizard onComplete={jest.fn()} onCancel={jest.fn()} />
     );
-    
+
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });
-  
+
   it('should support keyboard navigation', async () => {
     const { getByRole } = render(
       <TemplateCreationWizard onComplete={jest.fn()} onCancel={jest.fn()} />
     );
-    
+
     const firstInput = getByRole('textbox', { name: /template name/i });
     firstInput.focus();
-    
+
     expect(firstInput).toHaveFocus();
-    
+
     // Test tab navigation
     userEvent.tab();
     const secondInput = getByRole('textbox', { name: /description/i });
@@ -196,11 +203,13 @@ describe('TemplateCreationWizard Accessibility', () => {
 #### 3. Visual Regression Testing Setup
 
 **Step 1: Install Percy**
+
 ```bash
 pnpm add -D @percy/playwright @percy/cli
 ```
 
 **Step 2: Configure Percy**
+
 ```yaml
 # .percy.yml
 version: 2
@@ -211,10 +220,10 @@ snapshot:
     /* Hide dynamic elements */
     .loading-spinner { display: none !important; }
     .timestamp { visibility: hidden; }
-  
+
 discovery:
   disable-cache: true
-  
+
 agent:
   asset-discovery:
     network-idle-timeout: 750
@@ -224,6 +233,7 @@ agent:
 ```
 
 **Step 3: Integrate with Playwright Tests**
+
 ```typescript
 // tests/visual/template-visual.spec.ts
 import { test } from '@playwright/test';
@@ -232,29 +242,29 @@ import percySnapshot from '@percy/playwright';
 test.describe('Template Creation Visual Tests', () => {
   test('template creation wizard appearance', async ({ page }) => {
     await page.goto('/templates/create');
-    
+
     // Wait for page to load completely
     await page.waitForSelector('[data-testid="template-wizard"]');
-    
+
     // Take Percy snapshot
     await percySnapshot(page, 'Template Creation Wizard - Step 1');
-    
+
     // Navigate through wizard steps and snapshot each
     await page.fill('[data-testid="template-name"]', 'Visual Test Template');
     await page.fill('[data-testid="template-description"]', 'Testing visual appearance');
     await page.click('[data-testid="next-button"]');
-    
+
     await page.waitForSelector('[data-testid="graph-canvas"]');
     await percySnapshot(page, 'Template Creation Wizard - Step 2 Graph Design');
   });
-  
+
   test('template gallery responsive layout', async ({ page }) => {
     await page.goto('/templates');
-    
+
     // Test different viewport sizes
     await page.setViewportSize({ width: 768, height: 1024 });
     await percySnapshot(page, 'Template Gallery - Tablet');
-    
+
     await page.setViewportSize({ width: 1920, height: 1080 });
     await percySnapshot(page, 'Template Gallery - Desktop');
   });
@@ -262,6 +272,7 @@ test.describe('Template Creation Visual Tests', () => {
 ```
 
 **Step 4: Update Package Scripts**
+
 ```json
 {
   "scripts": {
@@ -274,11 +285,13 @@ test.describe('Template Creation Visual Tests', () => {
 #### 4. Database Testing with Testcontainers
 
 **Step 1: Install Dependencies**
+
 ```bash
 pnpm add -D testcontainers @testcontainers/postgresql
 ```
 
 **Step 2: Create Database Test Utilities**
+
 ```typescript
 // tests/utils/databaseTestSetup.ts
 import { PostgreSqlContainer, StartedPostgreSqlContainer } from '@testcontainers/postgresql';
@@ -309,7 +322,7 @@ class DatabaseTestManager {
     });
 
     await this.client.connect();
-    
+
     // Run migrations
     await this.runMigrations();
   }
@@ -319,7 +332,7 @@ class DatabaseTestManager {
       await this.client.end();
       this.client = null;
     }
-    
+
     if (this.container) {
       await this.container.stop();
       this.container = null;
@@ -328,7 +341,8 @@ class DatabaseTestManager {
 
   async runMigrations(): Promise<void> {
     const migrationsDir = path.join(__dirname, '../../server/src/database/migrations');
-    const migrationFiles = fs.readdirSync(migrationsDir)
+    const migrationFiles = fs
+      .readdirSync(migrationsDir)
       .filter(file => file.endsWith('.sql'))
       .sort();
 
@@ -351,13 +365,8 @@ class DatabaseTestManager {
 
   async cleanup(): Promise<void> {
     // Clean all data but keep schema
-    const tables = [
-      'template_favorites',
-      'template_usages', 
-      'template_reviews',
-      'project_templates'
-    ];
-    
+    const tables = ['template_favorites', 'template_usages', 'template_reviews', 'project_templates'];
+
     for (const table of tables) {
       await this.client!.query(`DELETE FROM ${table}`);
     }
@@ -375,6 +384,7 @@ export const dbManager = new DatabaseTestManager();
 ```
 
 **Step 3: Integration Test Setup**
+
 ```typescript
 // tests/integration/template-database.test.ts
 import { dbManager } from '../utils/databaseTestSetup';
@@ -405,50 +415,56 @@ describe('Template Database Integration', () => {
       tags: ['integration', 'test'],
       graph_data: { nodes: [], edges: [] },
       variables: [],
-      customization_points: []
+      customization_points: [],
     };
 
     const result = await templateDAO.createTemplate(templateData, 123);
-    
+
     expect(result.id).toBeDefined();
     expect(result.name).toBe(templateData.name);
-    
+
     // Test foreign key constraints
     await expect(
-      templateDAO.createTemplate({
-        ...templateData,
-        category_id: 999 // Non-existent category
-      }, 123)
+      templateDAO.createTemplate(
+        {
+          ...templateData,
+          category_id: 999, // Non-existent category
+        },
+        123
+      )
     ).rejects.toThrow();
   });
 
   it('should handle complex JSONB queries', async () => {
     // Test PostgreSQL-specific JSONB functionality
-    const complexTemplate = await templateDAO.createTemplate({
-      name: 'Complex JSONB Template',
-      description: 'Testing JSONB operations',
-      category_id: 1,
-      tags: ['jsonb', 'complex'],
-      graph_data: {
-        nodes: [
-          {
-            id: 'test-node',
-            type: 'complex',
-            data: {
-              config: {
-                nested: {
-                  array: [1, 2, 3],
-                  object: { key: 'value' }
-                }
-              }
-            }
-          }
-        ],
-        edges: []
+    const complexTemplate = await templateDAO.createTemplate(
+      {
+        name: 'Complex JSONB Template',
+        description: 'Testing JSONB operations',
+        category_id: 1,
+        tags: ['jsonb', 'complex'],
+        graph_data: {
+          nodes: [
+            {
+              id: 'test-node',
+              type: 'complex',
+              data: {
+                config: {
+                  nested: {
+                    array: [1, 2, 3],
+                    object: { key: 'value' },
+                  },
+                },
+              },
+            },
+          ],
+          edges: [],
+        },
+        variables: [],
+        customization_points: [],
       },
-      variables: [],
-      customization_points: []
-    }, 123);
+      123
+    );
 
     // Query using PostgreSQL JSONB operators
     const result = await dbManager.getClient().query(`
@@ -465,6 +481,7 @@ describe('Template Database Integration', () => {
 ### Additional Configuration Files
 
 #### Jest Configuration Update
+
 ```javascript
 // jest.config.js
 /** @type {import('ts-jest').JestConfigWithTsJest} */
@@ -475,22 +492,18 @@ module.exports = {
   testMatch: [
     '**/__tests__/**/*.(spec|test).[tj]s?(x)',
     '**/?(*.)+(spec|test).[tj]s?(x)',
-    '**/tests/**/*.(spec|test).[tj]s?(x)'
+    '**/tests/**/*.(spec|test).[tj]s?(x)',
   ],
-  testPathIgnorePatterns: [
-    '/node_modules/', 
-    'tests/performance/', 
-    '.*\\.spec\\.jsx$'
-  ],
+  testPathIgnorePatterns: ['/node_modules/', 'tests/performance/', '.*\\.spec\\.jsx$'],
   setupFilesAfterEnv: [
     '<rootDir>/jest.setup.js',
     '<rootDir>/tests/utils/globalTestSetup.ts',
     '<rootDir>/tests/utils/mswSetup.ts',
-    '<rootDir>/tests/utils/axeSetup.ts'
+    '<rootDir>/tests/utils/axeSetup.ts',
   ],
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
-    '^reactflow$': '<rootDir>/client/__mocks__/reactflow.tsx'
+    '^reactflow$': '<rootDir>/client/__mocks__/reactflow.tsx',
   },
   collectCoverageFrom: [
     'packages/**/*.{ts,tsx}',
@@ -499,24 +512,25 @@ module.exports = {
     'tests/utils/**/*.{ts,tsx}',
     '!**/node_modules/**',
     '!**/*.d.ts',
-    '!tests/**/*.test.{ts,tsx}'
+    '!tests/**/*.test.{ts,tsx}',
   ],
   coverageThreshold: {
     global: {
       branches: 85,
       functions: 85,
       lines: 85,
-      statements: 85
-    }
+      statements: 85,
+    },
   },
   maxWorkers: '50%',
   testTimeout: 30000, // Increased for container tests
   globalSetup: '<rootDir>/tests/utils/globalSetup.js',
-  globalTeardown: '<rootDir>/tests/utils/globalTeardown.js'
+  globalTeardown: '<rootDir>/tests/utils/globalTeardown.js',
 };
 ```
 
 #### GitHub Actions Workflow
+
 ```yaml
 # .github/workflows/comprehensive-tests.yml
 name: Comprehensive Test Suite
@@ -544,10 +558,10 @@ jobs:
         with:
           node-version: '18'
           cache: 'pnpm'
-      
+
       - run: pnpm install --frozen-lockfile
       - run: pnpm test:unit
-      
+
       - uses: codecov/codecov-action@v3
         with:
           file: ./coverage/lcov.info
@@ -568,7 +582,7 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
-    
+
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v2
@@ -578,14 +592,14 @@ jobs:
         with:
           node-version: '18'
           cache: 'pnpm'
-      
+
       - run: pnpm install --frozen-lockfile
       - run: pnpm test:integration
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
 
   visual-tests:
-    name: Visual Regression Tests  
+    name: Visual Regression Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -596,11 +610,11 @@ jobs:
         with:
           node-version: '18'
           cache: 'pnpm'
-      
+
       - run: pnpm install --frozen-lockfile
       - run: npx playwright install --with-deps
       - run: pnpm test:visual
-        
+
   accessibility-tests:
     name: Accessibility Tests
     runs-on: ubuntu-latest
@@ -613,10 +627,10 @@ jobs:
         with:
           node-version: '18'
           cache: 'pnpm'
-      
+
       - run: pnpm install --frozen-lockfile
       - run: pnpm test:a11y
-      
+
       # Upload accessibility report
       - uses: actions/upload-artifact@v3
         if: failure()
@@ -631,16 +645,16 @@ jobs:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v2
         with:
-          version: 8  
+          version: 8
       - uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'pnpm'
-      
+
       - run: pnpm install --frozen-lockfile
       - run: npx playwright install --with-deps
       - run: pnpm test:e2e
-      
+
       - uses: actions/upload-artifact@v3
         if: failure()
         with:

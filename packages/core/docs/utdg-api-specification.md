@@ -8,16 +8,17 @@ This document defines the API specifications for Universal Texture Description G
 
 ```yaml
 api:
-  version: "v1"
-  baseUrl: "https://api.wildconstruct.com/utdg/v1"
-  authentication: "OAuth 2.0 / API Key"
-  contentType: "application/json"
+  version: 'v1'
+  baseUrl: 'https://api.wildconstruct.com/utdg/v1'
+  authentication: 'OAuth 2.0 / API Key'
+  contentType: 'application/json'
   rateLimit: 1000/hour
 ```
 
 ## Authentication
 
 ### OAuth 2.0 Flow
+
 ```typescript
 interface AuthenticationConfig {
   type: 'oauth2' | 'apikey';
@@ -40,9 +41,11 @@ interface AuthenticationConfig {
 ### 1. Historical Data Query API
 
 #### GET /historical/query
+
 Query historical databases for period-accurate content.
 
 **Request Parameters:**
+
 ```typescript
 interface HistoricalQueryRequest {
   era: {
@@ -65,6 +68,7 @@ interface HistoricalQueryRequest {
 ```
 
 **Response:**
+
 ```typescript
 interface HistoricalQueryResponse {
   data: HistoricalItem[];
@@ -111,9 +115,11 @@ interface HistoricalItem {
 ### 2. Constraint Validation API
 
 #### POST /validation/constraints
+
 Validate historical accuracy of content combinations.
 
 **Request:**
+
 ```typescript
 interface ConstraintValidationRequest {
   items: HistoricalItem[];
@@ -128,6 +134,7 @@ interface ConstraintValidationRequest {
 ```
 
 **Response:**
+
 ```typescript
 interface ConstraintValidationResponse {
   valid: boolean;
@@ -152,9 +159,11 @@ interface ConstraintViolation {
 ### 3. UTDG Node Management API
 
 #### POST /utdg/nodes
+
 Create or update UTDG nodes.
 
 **Request:**
+
 ```typescript
 interface UTDGNodeRequest {
   nodes: UTDGNodeData[];
@@ -176,6 +185,7 @@ interface UTDGNodeData {
 ```
 
 **Response:**
+
 ```typescript
 interface UTDGNodeResponse {
   nodes: UTDGNode[];
@@ -185,9 +195,11 @@ interface UTDGNodeResponse {
 ```
 
 #### GET /utdg/nodes/{nodeId}
+
 Retrieve specific UTDG node with historical context.
 
 **Response:**
+
 ```typescript
 interface UTDGNodeDetails {
   node: UTDGNode;
@@ -200,9 +212,11 @@ interface UTDGNodeDetails {
 ### 4. VFX Export API
 
 #### POST /export/vfx
+
 Export UTDG graph for VFX pipeline integration.
 
 **Request:**
+
 ```typescript
 interface VFXExportRequest {
   graphId: string;
@@ -219,6 +233,7 @@ interface VFXExportRequest {
 ```
 
 **Response:**
+
 ```typescript
 interface VFXExportResponse {
   exportId: string;
@@ -233,9 +248,11 @@ interface VFXExportResponse {
 ### 5. Wild Construct System Integration API
 
 #### POST /integration/systems
+
 Register and configure Wild Construct system integrations.
 
 **Request:**
+
 ```typescript
 interface SystemIntegrationRequest {
   system: 'crowdcontrol' | 'backdrop' | 'meteor' | 'maestro';
@@ -246,6 +263,7 @@ interface SystemIntegrationRequest {
 ```
 
 **Response:**
+
 ```typescript
 interface SystemIntegrationResponse {
   integrationId: string;
@@ -256,9 +274,11 @@ interface SystemIntegrationResponse {
 ```
 
 #### GET /integration/systems/{systemId}/status
+
 Check integration health and performance.
 
 **Response:**
+
 ```typescript
 interface SystemStatusResponse {
   system: string;
@@ -277,9 +297,11 @@ interface SystemStatusResponse {
 ### 6. Data Pipeline API
 
 #### POST /pipeline/execute
+
 Execute UTDG data processing pipeline.
 
 **Request:**
+
 ```typescript
 interface PipelineExecutionRequest {
   pipeline: {
@@ -301,6 +323,7 @@ interface PipelineExecutionRequest {
 ```
 
 **Response:**
+
 ```typescript
 interface PipelineExecutionResponse {
   executionId: string;
@@ -314,6 +337,7 @@ interface PipelineExecutionResponse {
 ## WebSocket API for Real-time Updates
 
 ### Connection
+
 ```typescript
 // WebSocket endpoint
 ws://api.wildconstruct.com/utdg/v1/ws
@@ -323,6 +347,7 @@ ws://api.wildconstruct.com/utdg/v1/ws?token={auth_token}
 ```
 
 ### Event Types
+
 ```typescript
 interface WebSocketEvent {
   type: 'constraint_violation' | 'validation_complete' | 'export_ready' | 'system_status';
@@ -335,6 +360,7 @@ interface WebSocketEvent {
 ## Error Handling
 
 ### Standard Error Response
+
 ```typescript
 interface APIError {
   error: {
@@ -350,6 +376,7 @@ interface APIError {
 ```
 
 ### Error Codes
+
 - `INVALID_ERA`: Era specification is invalid or unsupported
 - `CONSTRAINT_VIOLATION`: Historical constraints violated
 - `DATA_NOT_FOUND`: Requested historical data not available
@@ -378,16 +405,18 @@ interface RateLimitInfo {
 ## Caching Strategy
 
 ### Cache Headers
+
 ```typescript
 interface CacheHeaders {
   'Cache-Control': 'max-age=3600'; // 1 hour for historical data
-  'ETag': string;
+  ETag: string;
   'Last-Modified': string;
   'X-Cache-Status': 'hit' | 'miss' | 'stale';
 }
 ```
 
 ### Cache Keys
+
 - Historical queries: `historical:{era}:{region}:{category}:{hash}`
 - Validation results: `validation:{items_hash}:{context_hash}`
 - UTDG nodes: `utdg:node:{nodeId}:{version}`
@@ -395,12 +424,14 @@ interface CacheHeaders {
 ## Performance Specifications
 
 ### Response Time SLAs
+
 - Historical queries: < 2 seconds (95th percentile)
 - Constraint validation: < 500ms (95th percentile)
 - VFX export: < 30 seconds (95th percentile)
 - System integration calls: < 1 second (95th percentile)
 
 ### Availability
+
 - API availability: 99.9% uptime
 - Historical data availability: 99.5%
 - Real-time features: 99.0%
@@ -408,12 +439,14 @@ interface CacheHeaders {
 ## API Versioning
 
 ### Version Strategy
+
 - URL-based versioning: `/v1/`, `/v2/`
 - Backward compatibility for at least 12 months
 - Deprecation notices 90 days before removal
 - Migration guides for breaking changes
 
 ### Version Information
+
 ```typescript
 interface APIVersion {
   version: string;

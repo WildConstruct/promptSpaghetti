@@ -1,4 +1,4 @@
-import { jsx as _jsx } from "react/jsx-runtime";
+import { jsx as _jsx } from 'react/jsx-runtime';
 /**
  * Region Groups Manager
  * Epic 8.7 Task 3: Main manager component for region grouping system
@@ -15,30 +15,40 @@ import { useViewport } from 'reactflow';
 import { useGraphStore } from '../../graphStore';
 import { RegionGroupsLayer } from '../Annotations/RegionGroupsLayer';
 {
-    const { nodes, annotations, setRegionGroups } = useGraphStore();
-    const viewport = useViewport();
-    const [hoveredGroupId, setHoveredGroupId] = useState(null);
-    // Handle region groups changes from the layer
-    const handleRegionGroupsChange = useCallback((groups) => {
-        setRegionGroups(groups);
-    }, [setRegionGroups]);
-    // Handle group hover state
+  const { nodes, annotations, setRegionGroups } = useGraphStore();
+  const viewport = useViewport();
+  const [hoveredGroupId, setHoveredGroupId] = useState(null);
+  // Handle region groups changes from the layer
+  const handleRegionGroupsChange = useCallback(
+    groups => {
+      setRegionGroups(groups);
+    },
+    [setRegionGroups]
+  );
+  // Handle group hover state
 }
 [onGroupHover];
-;
 [onGroupSelect];
-;
 // Get canvas size and offset from ReactFlow
 const canvasOffset = {
-    x: viewport.x,
-    y: viewport.y,
+  x: viewport.x,
+  y: viewport.y,
 };
 // Don't render if disabled
 if (disabled) {
-    return null;
-    return;
-    _jsx(RegionGroupsLayer, { nodes: nodes, regionGroups: annotations.regionGroups, onRegionGroupsChange: handleRegionGroupsChange, groupPreferences: annotations.regionGroupPreferences, selectedGroupId: selectedGroupId, hoveredGroupId: hoveredGroupId, author: author, readOnly: readonly, canvasOffset: canvasOffset, zoom: viewport.zoom });
-    ;
+  return null;
+  return;
+  _jsx(RegionGroupsLayer, {
+    nodes: nodes,
+    regionGroups: annotations.regionGroups,
+    onRegionGroupsChange: handleRegionGroupsChange,
+    groupPreferences: annotations.regionGroupPreferences,
+    selectedGroupId: selectedGroupId,
+    hoveredGroupId: hoveredGroupId,
+    author: author,
+    readOnly: readonly,
+    canvasOffset: canvasOffset,
+    zoom: viewport.zoom,
+  });
 }
-;
 export default RegionGroupsManager;

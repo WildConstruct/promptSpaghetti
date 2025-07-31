@@ -2,7 +2,7 @@
 
 /**
  * Dashboard Status Checker
- * 
+ *
  * Simple script to check if the secure dashboard is running and accessible.
  */
 
@@ -13,27 +13,30 @@ const DEFAULT_PORT = process.env.PORT || 8080;
 const DEFAULT_HOST = process.env.HOST || 'localhost';
 
 function checkPort(port, host = 'localhost') {
-  return new Promise((resolve) => {
-    const req = http.request({
-      hostname: host,
-      port: port,
-      path: '/login',
-      method: 'GET',
-      timeout: 5000
-    }, (res) => {
-      resolve({
-        running: true,
-        status: res.statusCode,
+  return new Promise(resolve => {
+    const req = http.request(
+      {
+        hostname: host,
         port: port,
-        host: host
-      });
-    });
+        path: '/login',
+        method: 'GET',
+        timeout: 5000,
+      },
+      res => {
+        resolve({
+          running: true,
+          status: res.statusCode,
+          port: port,
+          host: host,
+        });
+      }
+    );
 
     req.on('error', () => {
       resolve({
         running: false,
         port: port,
-        host: host
+        host: host,
       });
     });
 
@@ -43,7 +46,7 @@ function checkPort(port, host = 'localhost') {
         running: false,
         port: port,
         host: host,
-        error: 'timeout'
+        error: 'timeout',
       });
     });
 
@@ -61,12 +64,12 @@ async function checkDashboardStatus() {
   for (const port of ports) {
     const result = await checkPort(port);
     results.push(result);
-        
+
     if (result.running) {
       console.log(`✅ Dashboard RUNNING on port ${port}`);
       console.log(`   Login URL: http://${result.host}:${port}/login`);
       console.log(`   Status: HTTP ${result.status}`);
-            
+
       // Try to get network IP
       try {
         const networkIP = execSync('hostname -I 2>/dev/null || hostname', { encoding: 'utf8' }).trim().split(' ')[0];
@@ -76,7 +79,7 @@ async function checkDashboardStatus() {
       } catch (e) {
         // Ignore hostname errors
       }
-            
+
       console.log('');
     } else {
       console.log(`❌ No dashboard on port ${port}`);
@@ -84,7 +87,7 @@ async function checkDashboardStatus() {
   }
 
   const runningCount = results.filter(r => r.running).length;
-    
+
   if (runningCount === 0) {
     console.log('\n🚨 Secure Dashboard is NOT running');
     console.log('\n📋 To start the dashboard:');
@@ -93,19 +96,19 @@ async function checkDashboardStatus() {
     console.log('   npm start');
     console.log('   # or');
     console.log('   node secure-dashboard-server.js');
-        
+
     return false;
   } else if (runningCount > 1) {
     console.log(`\n⚠️  Multiple dashboard instances running (${runningCount})`);
     console.log('   Consider stopping duplicates to avoid conflicts');
   } else {
     console.log('\n✅ Dashboard is running and accessible!');
-        
+
     console.log('\n📋 Default Login Credentials:');
     console.log('   Username: admin');
     console.log('   Password: dashboard123');
     console.log('   🔐 Change these in production!');
-        
+
     console.log('\n🌟 Dashboard Features:');
     console.log('   📊 Epic Status & Progress Tracking');
     console.log('   📈 Approval History & Charts');
@@ -141,17 +144,17 @@ async function checkProcesses() {
 function checkFiles() {
   const fs = require('fs');
   const path = require('path');
-    
+
   console.log('\n📁 File System Status:');
-    
+
   const files = [
     'secure-dashboard-server.js',
-    'complete-dashboard.html', 
+    'complete-dashboard.html',
     'package.json',
     'data/state.json',
-    'data/agent-broadcast.json'
+    'data/agent-broadcast.json',
   ];
-    
+
   files.forEach(file => {
     const exists = fs.existsSync(path.join(__dirname, file));
     console.log(`   ${exists ? '✅' : '❌'} ${file}`);
@@ -161,18 +164,18 @@ function checkFiles() {
 // Main execution
 async function main() {
   const isRunning = await checkDashboardStatus();
-    
+
   if (process.argv.includes('--detailed') || process.argv.includes('-d')) {
     await checkProcesses();
     checkFiles();
   }
-    
+
   if (process.argv.includes('--json')) {
     const status = {
       running: isRunning,
       timestamp: new Date().toISOString(),
       port: DEFAULT_PORT,
-      host: DEFAULT_HOST
+      host: DEFAULT_HOST,
     };
     console.log(JSON.stringify(status, null, 2));
   }

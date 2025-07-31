@@ -1,6 +1,6 @@
 /**
  * Policy Versioning API Routes - E17-1753114397372-E7CDD1
- * 
+ *
  * RESTful API endpoints for policy versioning system.
  * Handles policy and version management operations.
  */
@@ -14,7 +14,7 @@ import {
   CreatePolicyVersionRequest,
   UpdatePolicyVersionRequest,
   PublishPolicyVersionRequest,
-  PolicyVersionSearchQuery
+  PolicyVersionSearchQuery,
 } from '../../../packages/core/types/PolicyVersionTypes';
 
 // Initialize service with database connection
@@ -30,10 +30,7 @@ const policyVersionService = new PolicyVersionService(policyVersionDAO);
  * Create a new policy
  * POST /api/policies
  */
-export async function createPolicy(
-  request: FastifyRequest<{ Body: CreatePolicyRequest }>,
-  reply: FastifyReply
-) {
+export async function createPolicy(request: FastifyRequest<{ Body: CreatePolicyRequest }>, reply: FastifyReply) {
   try {
     const { body } = request;
     const userId = 'current-user-id'; // TODO: Extract from JWT token
@@ -42,7 +39,7 @@ export async function createPolicy(
     if (!body.policyKey || !body.name || !body.category) {
       return reply.status(400).send({
         error: 'Validation failed',
-        message: 'policyKey, name, and category are required'
+        message: 'policyKey, name, and category are required',
       });
     }
 
@@ -51,22 +48,21 @@ export async function createPolicy(
     reply.status(201).send({
       success: true,
       data: policy,
-      message: 'Policy created successfully'
+      message: 'Policy created successfully',
     });
-
   } catch (error) {
     console.error('Error creating policy:', error);
-    
+
     if (error.message.includes('already exists')) {
       return reply.status(409).send({
         error: 'Conflict',
-        message: error.message
+        message: error.message,
       });
     }
 
     reply.status(500).send({
       error: 'Internal server error',
-      message: 'Failed to create policy'
+      message: 'Failed to create policy',
     });
   }
 }
@@ -75,10 +71,7 @@ export async function createPolicy(
  * Get policy by ID
  * GET /api/policies/:policyId
  */
-export async function getPolicy(
-  request: FastifyRequest<{ Params: { policyId: string } }>,
-  reply: FastifyReply
-) {
+export async function getPolicy(request: FastifyRequest<{ Params: { policyId: string } }>, reply: FastifyReply) {
   try {
     const { policyId } = request.params;
 
@@ -86,22 +79,21 @@ export async function getPolicy(
 
     reply.send({
       success: true,
-      data: policy
+      data: policy,
     });
-
   } catch (error) {
     console.error('Error getting policy:', error);
-    
+
     if (error.message.includes('not found')) {
       return reply.status(404).send({
         error: 'Not found',
-        message: error.message
+        message: error.message,
       });
     }
 
     reply.status(500).send({
       error: 'Internal server error',
-      message: 'Failed to retrieve policy'
+      message: 'Failed to retrieve policy',
     });
   }
 }
@@ -110,10 +102,7 @@ export async function getPolicy(
  * Get policy by key
  * GET /api/policies/by-key/:policyKey
  */
-export async function getPolicyByKey(
-  request: FastifyRequest<{ Params: { policyKey: string } }>,
-  reply: FastifyReply
-) {
+export async function getPolicyByKey(request: FastifyRequest<{ Params: { policyKey: string } }>, reply: FastifyReply) {
   try {
     const { policyKey } = request.params;
 
@@ -121,22 +110,21 @@ export async function getPolicyByKey(
 
     reply.send({
       success: true,
-      data: policy
+      data: policy,
     });
-
   } catch (error) {
     console.error('Error getting policy by key:', error);
-    
+
     if (error.message.includes('not found')) {
       return reply.status(404).send({
         error: 'Not found',
-        message: error.message
+        message: error.message,
       });
     }
 
     reply.status(500).send({
       error: 'Internal server error',
-      message: 'Failed to retrieve policy'
+      message: 'Failed to retrieve policy',
     });
   }
 }
@@ -150,9 +138,9 @@ export async function getPolicyByKey(
  * POST /api/policies/:policyId/versions
  */
 export async function createPolicyVersion(
-  request: FastifyRequest<{ 
+  request: FastifyRequest<{
     Params: { policyId: string };
-    Body: CreatePolicyVersionRequest 
+    Body: CreatePolicyVersionRequest;
   }>,
   reply: FastifyReply
 ) {
@@ -165,7 +153,7 @@ export async function createPolicyVersion(
     if (!body.title || !body.content) {
       return reply.status(400).send({
         error: 'Validation failed',
-        message: 'title and content are required'
+        message: 'title and content are required',
       });
     }
 
@@ -174,29 +162,28 @@ export async function createPolicyVersion(
     reply.status(201).send({
       success: true,
       data: version,
-      message: 'Policy version created successfully'
+      message: 'Policy version created successfully',
     });
-
   } catch (error) {
     console.error('Error creating policy version:', error);
-    
+
     if (error.message.includes('not found')) {
       return reply.status(404).send({
         error: 'Not found',
-        message: error.message
+        message: error.message,
       });
     }
 
     if (error.message.includes('Validation failed')) {
       return reply.status(400).send({
         error: 'Validation failed',
-        message: error.message
+        message: error.message,
       });
     }
 
     reply.status(500).send({
       error: 'Internal server error',
-      message: 'Failed to create policy version'
+      message: 'Failed to create policy version',
     });
   }
 }
@@ -216,22 +203,21 @@ export async function getPolicyVersion(
 
     reply.send({
       success: true,
-      data: version
+      data: version,
     });
-
   } catch (error) {
     console.error('Error getting policy version:', error);
-    
+
     if (error.message.includes('not found')) {
       return reply.status(404).send({
         error: 'Not found',
-        message: error.message
+        message: error.message,
       });
     }
 
     reply.status(500).send({
       error: 'Internal server error',
-      message: 'Failed to retrieve policy version'
+      message: 'Failed to retrieve policy version',
     });
   }
 }
@@ -241,8 +227,8 @@ export async function getPolicyVersion(
  * GET /api/policies/:policyId/versions/:versionNumber
  */
 export async function getPolicyVersionByNumber(
-  request: FastifyRequest<{ 
-    Params: { policyId: string; versionNumber: string } 
+  request: FastifyRequest<{
+    Params: { policyId: string; versionNumber: string };
   }>,
   reply: FastifyReply
 ) {
@@ -253,22 +239,21 @@ export async function getPolicyVersionByNumber(
 
     reply.send({
       success: true,
-      data: version
+      data: version,
     });
-
   } catch (error) {
     console.error('Error getting policy version by number:', error);
-    
+
     if (error.message.includes('not found')) {
       return reply.status(404).send({
         error: 'Not found',
-        message: error.message
+        message: error.message,
       });
     }
 
     reply.status(500).send({
       error: 'Internal server error',
-      message: 'Failed to retrieve policy version'
+      message: 'Failed to retrieve policy version',
     });
   }
 }
@@ -278,9 +263,9 @@ export async function getPolicyVersionByNumber(
  * PATCH /api/policies/versions/:versionId
  */
 export async function updatePolicyVersion(
-  request: FastifyRequest<{ 
+  request: FastifyRequest<{
     Params: { versionId: string };
-    Body: UpdatePolicyVersionRequest 
+    Body: UpdatePolicyVersionRequest;
   }>,
   reply: FastifyReply
 ) {
@@ -294,29 +279,28 @@ export async function updatePolicyVersion(
     reply.send({
       success: true,
       data: version,
-      message: 'Policy version updated successfully'
+      message: 'Policy version updated successfully',
     });
-
   } catch (error) {
     console.error('Error updating policy version:', error);
-    
+
     if (error.message.includes('not found')) {
       return reply.status(404).send({
         error: 'Not found',
-        message: error.message
+        message: error.message,
       });
     }
 
     if (error.message.includes('Cannot modify') || error.message.includes('Validation failed')) {
       return reply.status(400).send({
         error: 'Bad request',
-        message: error.message
+        message: error.message,
       });
     }
 
     reply.status(500).send({
       error: 'Internal server error',
-      message: 'Failed to update policy version'
+      message: 'Failed to update policy version',
     });
   }
 }
@@ -337,29 +321,28 @@ export async function deletePolicyVersion(
 
     reply.send({
       success: true,
-      message: 'Policy version deleted successfully'
+      message: 'Policy version deleted successfully',
     });
-
   } catch (error) {
     console.error('Error deleting policy version:', error);
-    
+
     if (error.message.includes('not found')) {
       return reply.status(404).send({
         error: 'Not found',
-        message: error.message
+        message: error.message,
       });
     }
 
     if (error.message.includes('Only draft versions')) {
       return reply.status(400).send({
         error: 'Bad request',
-        message: error.message
+        message: error.message,
       });
     }
 
     reply.status(500).send({
       error: 'Internal server error',
-      message: 'Failed to delete policy version'
+      message: 'Failed to delete policy version',
     });
   }
 }
@@ -373,9 +356,9 @@ export async function deletePolicyVersion(
  * GET /api/policies/:policyId/versions
  */
 export async function listPolicyVersions(
-  request: FastifyRequest<{ 
+  request: FastifyRequest<{
     Params: { policyId: string };
-    Querystring: PolicyVersionSearchQuery 
+    Querystring: PolicyVersionSearchQuery;
   }>,
   reply: FastifyReply
 ) {
@@ -387,22 +370,21 @@ export async function listPolicyVersions(
 
     reply.send({
       success: true,
-      data: result
+      data: result,
     });
-
   } catch (error) {
     console.error('Error listing policy versions:', error);
-    
+
     if (error.message.includes('not found')) {
       return reply.status(404).send({
         error: 'Not found',
-        message: error.message
+        message: error.message,
       });
     }
 
     reply.status(500).send({
       error: 'Internal server error',
-      message: 'Failed to list policy versions'
+      message: 'Failed to list policy versions',
     });
   }
 }
@@ -423,20 +405,19 @@ export async function getCurrentPolicyVersion(
     if (!currentVersion) {
       return reply.status(404).send({
         error: 'Not found',
-        message: 'No published version found for this policy'
+        message: 'No published version found for this policy',
       });
     }
 
     reply.send({
       success: true,
-      data: currentVersion
+      data: currentVersion,
     });
-
   } catch (error) {
     console.error('Error getting current policy version:', error);
     reply.status(500).send({
       error: 'Internal server error',
-      message: 'Failed to retrieve current policy version'
+      message: 'Failed to retrieve current policy version',
     });
   }
 }
@@ -459,23 +440,22 @@ export async function getPolicyVersionHistory(
       data: {
         policyId,
         versions: history,
-        totalVersions: history.length
-      }
+        totalVersions: history.length,
+      },
     });
-
   } catch (error) {
     console.error('Error getting policy version history:', error);
-    
+
     if (error.message.includes('not found')) {
       return reply.status(404).send({
         error: 'Not found',
-        message: error.message
+        message: error.message,
       });
     }
 
     reply.status(500).send({
       error: 'Internal server error',
-      message: 'Failed to retrieve policy version history'
+      message: 'Failed to retrieve policy version history',
     });
   }
 }
@@ -489,8 +469,8 @@ export async function getPolicyVersionHistory(
  * POST /api/policies/versions/compare
  */
 export async function comparePolicyVersions(
-  request: FastifyRequest<{ 
-    Body: { fromVersionId: string; toVersionId: string } 
+  request: FastifyRequest<{
+    Body: { fromVersionId: string; toVersionId: string };
   }>,
   reply: FastifyReply
 ) {
@@ -500,7 +480,7 @@ export async function comparePolicyVersions(
     if (!fromVersionId || !toVersionId) {
       return reply.status(400).send({
         error: 'Bad request',
-        message: 'fromVersionId and toVersionId are required'
+        message: 'fromVersionId and toVersionId are required',
       });
     }
 
@@ -508,29 +488,28 @@ export async function comparePolicyVersions(
 
     reply.send({
       success: true,
-      data: comparison
+      data: comparison,
     });
-
   } catch (error) {
     console.error('Error comparing policy versions:', error);
-    
+
     if (error.message.includes('not found')) {
       return reply.status(404).send({
         error: 'Not found',
-        message: error.message
+        message: error.message,
       });
     }
 
     if (error.message.includes('Cannot compare')) {
       return reply.status(400).send({
         error: 'Bad request',
-        message: error.message
+        message: error.message,
       });
     }
 
     reply.status(500).send({
       error: 'Internal server error',
-      message: 'Failed to compare policy versions'
+      message: 'Failed to compare policy versions',
     });
   }
 }
@@ -544,9 +523,9 @@ export async function comparePolicyVersions(
  * POST /api/policies/versions/:versionId/publish
  */
 export async function publishPolicyVersion(
-  request: FastifyRequest<{ 
+  request: FastifyRequest<{
     Params: { versionId: string };
-    Body: PublishPolicyVersionRequest 
+    Body: PublishPolicyVersionRequest;
   }>,
   reply: FastifyReply
 ) {
@@ -560,29 +539,28 @@ export async function publishPolicyVersion(
     reply.send({
       success: true,
       data: publishedVersion,
-      message: 'Policy version published successfully'
+      message: 'Policy version published successfully',
     });
-
   } catch (error) {
     console.error('Error publishing policy version:', error);
-    
+
     if (error.message.includes('not found')) {
       return reply.status(404).send({
         error: 'Not found',
-        message: error.message
+        message: error.message,
       });
     }
 
     if (error.message.includes('Cannot publish')) {
       return reply.status(400).send({
         error: 'Bad request',
-        message: error.message
+        message: error.message,
       });
     }
 
     reply.status(500).send({
       error: 'Internal server error',
-      message: 'Failed to publish policy version'
+      message: 'Failed to publish policy version',
     });
   }
 }
@@ -602,22 +580,21 @@ export async function getPolicyVersionWorkflow(
 
     reply.send({
       success: true,
-      data: workflowState
+      data: workflowState,
     });
-
   } catch (error) {
     console.error('Error getting policy version workflow:', error);
-    
+
     if (error.message.includes('not found')) {
       return reply.status(404).send({
         error: 'Not found',
-        message: error.message
+        message: error.message,
       });
     }
 
     reply.status(500).send({
       error: 'Internal server error',
-      message: 'Failed to retrieve workflow state'
+      message: 'Failed to retrieve workflow state',
     });
   }
 }

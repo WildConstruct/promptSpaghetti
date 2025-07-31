@@ -52,9 +52,9 @@ for (const [filePath, missingNames] of missingImports.entries()) {
     const moduleImports = new Map(); // module -> Set of imports
 
     // Find existing export statements to understand where names come from
-    const exportLines = content.split('\n').filter(line => 
-      line.trim().startsWith('export {') && line.includes('} from ')
-    );
+    const exportLines = content
+      .split('\n')
+      .filter(line => line.trim().startsWith('export {') && line.includes('} from '));
 
     // For each missing name, try to find which module it should be imported from
     missingNames.forEach(missingName => {
@@ -77,11 +77,11 @@ for (const [filePath, missingNames] of missingImports.entries()) {
     moduleImports.forEach((names, modulePath) => {
       const namesList = Array.from(names).sort().join(', ');
       const importStatement = `import { ${namesList} } from '${modulePath}';`;
-      
+
       // Find a good place to insert the import (after existing imports)
       const lines = updatedContent.split('\n');
       let insertIndex = -1;
-      
+
       // Look for existing imports from this module to extend them
       for (let i = 0; i < lines.length; i++) {
         const line = lines[i].trim();
@@ -98,13 +98,13 @@ for (const [filePath, missingNames] of missingImports.entries()) {
             return;
           }
         }
-        
+
         // Find insertion point after existing imports/exports
         if (line.startsWith('export {') && line.includes('} from ')) {
           insertIndex = i + 1;
         }
       }
-      
+
       // If no existing import found, insert new one
       if (insertIndex !== -1) {
         lines.splice(insertIndex, 0, '', `// Import ${namesList} for local use`, importStatement);
@@ -113,12 +113,11 @@ for (const [filePath, missingNames] of missingImports.entries()) {
         console.log(`✅ ${path.relative('.', filePath)}: Added import for ${namesList}`);
       }
     });
-    
+
     if (updatedContent !== content) {
       fs.writeFileSync(filePath, updatedContent);
       filesProcessed++;
     }
-    
   } catch (error) {
     console.error(`❌ Error processing ${filePath}:`, error.message);
   }

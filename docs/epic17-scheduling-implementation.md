@@ -200,16 +200,16 @@ const schedule = {
   type: 'recurring',
   action: 'enable',
   startTime: '2024-01-07T02:00:00.000Z', // Sunday 2 AM
-  endTime: '2024-01-07T06:00:00.000Z',   // Sunday 6 AM
+  endTime: '2024-01-07T06:00:00.000Z', // Sunday 6 AM
   timezone: 'America/New_York',
   recurrence: {
     type: 'weekly',
     interval: 1,
-    daysOfWeek: [0] // Sunday
+    daysOfWeek: [0], // Sunday
   },
   actionConfig: {},
   priority: 1,
-  conflictResolution: 'override'
+  conflictResolution: 'override',
 };
 ```
 
@@ -228,11 +228,11 @@ const rolloutSchedule = {
     gradualRollout: {
       startPercentage: 10,
       endPercentage: 100,
-      incrementMinutes: 120 // Increase every 2 hours
-    }
+      incrementMinutes: 120, // Increase every 2 hours
+    },
   },
   priority: 2,
-  conflictResolution: 'skip'
+  conflictResolution: 'skip',
 };
 ```
 
@@ -263,6 +263,7 @@ BASE_URL=https://app.example.com
 ### Default Notification Templates
 
 The system includes pre-configured templates for:
+
 - Execution success notifications
 - Execution failure notifications
 - Conflict detection alerts

@@ -7,47 +7,58 @@ The parser converts LLM-generated serialized graph format back into executable G
 ## Architecture Components
 
 ### 1. Lexical Analysis (`lexer/`)
+
 **Purpose**: Convert raw text into structured tokens
 **Responsibilities**:
+
 - Tokenize YAML-like input
 - Handle section delimiters (`---NODES---`, `---EDGES---`, `---END---`)
 - Track line/column positions for error reporting
 - Normalize whitespace and indentation
 
 **Key Classes**:
+
 - `GraphLexer`: Main tokenization engine
 - `Token`: Individual lexical units
 - `LexerPosition`: Track location for error reporting
 
 ### 2. AST Construction (`ast/`)
+
 **Purpose**: Build Abstract Syntax Tree from tokens
 **Responsibilities**:
+
 - Parse token stream into structured tree
 - Handle nested YAML structures
 - Build intermediate representation
 - Maintain source position mapping
 
 **Key Classes**:
+
 - `ASTBuilder`: Constructs syntax tree
 - `ASTNode`: Base node for syntax tree
 - `GraphAST`: Root AST representation
 
 ### 3. Semantic Analysis (`semantic/`)
+
 **Purpose**: Validate and transform AST into Graph objects
 **Responsibilities**:
+
 - Type checking and validation
 - Reference resolution (node ID -> node object)
 - Cycle detection
 - Property validation by node type
 
 **Key Classes**:
-- `SemanticAnalyzer`: Main analysis engine  
+
+- `SemanticAnalyzer`: Main analysis engine
 - `GraphBuilder`: Converts AST to Graph objects
 - `ValidationContext`: Tracks validation state
 
 ### 4. Error Handling
+
 **Purpose**: Comprehensive error reporting with recovery
 **Responsibilities**:
+
 - Collect and categorize errors
 - Provide helpful error messages
 - Support error recovery for partial parsing
@@ -65,12 +76,14 @@ Raw Text → Lexer → Tokens → AST Builder → AST → Semantic Analyzer → 
 ## Error Handling Strategy
 
 ### Error Categories
+
 1. **Lexical Errors**: Invalid characters, malformed tokens
 2. **Syntax Errors**: Invalid structure, missing sections
 3. **Semantic Errors**: Type mismatches, invalid references
 4. **Validation Errors**: Business rule violations
 
 ### Error Recovery
+
 - **Synchronization Points**: Section boundaries for recovery
 - **Error Tolerance**: Continue parsing after recoverable errors
 - **Partial Results**: Return partial graphs when possible
@@ -86,7 +99,9 @@ Raw Text → Lexer → Tokens → AST Builder → AST → Semantic Analyzer → 
 ## Design Patterns
 
 ### Visitor Pattern
+
 For AST traversal and transformation:
+
 ```typescript
 interface ASTVisitor {
   visitNode(node: ASTNode): void;
@@ -96,7 +111,9 @@ interface ASTVisitor {
 ```
 
 ### Strategy Pattern
+
 For different validation strategies:
+
 ```typescript
 interface ValidationStrategy {
   validate(node: ASTNode, context: ValidationContext): ValidationResult;
@@ -104,7 +121,9 @@ interface ValidationStrategy {
 ```
 
 ### Builder Pattern
+
 For incremental graph construction:
+
 ```typescript
 class GraphBuilder {
   addNode(node: NodeDefinition): GraphBuilder;
@@ -116,16 +135,19 @@ class GraphBuilder {
 ## Integration Points
 
 ### With Serialization System
+
 - Share validation logic with validator
 - Consistent error message format
 - Round-trip compatibility testing
 
 ### With Graph Schema
+
 - Leverage existing Zod schemas
 - Type-safe node construction
 - Schema evolution support
 
 ### With Runtime System
+
 - Direct Graph object creation
 - Validation for executable graphs
 - Performance optimization hooks
@@ -133,11 +155,13 @@ class GraphBuilder {
 ## Security Considerations
 
 ### Input Sanitization
+
 - Prevent code injection in property values
 - Limit memory usage for large inputs
 - Validate against malicious patterns
 
 ### Safe Property Handling
+
 - Escape special characters
 - Validate property types strictly
 - Prevent prototype pollution
@@ -145,16 +169,19 @@ class GraphBuilder {
 ## Testing Strategy
 
 ### Unit Testing
+
 - Individual component testing
 - Mock input generation
 - Error case coverage
 
 ### Integration Testing
+
 - Round-trip serialization/parsing
 - LLM output compatibility
 - Performance benchmarking
 
 ### Fuzz Testing
+
 - Random input generation
 - Edge case discovery
 - Robustness validation

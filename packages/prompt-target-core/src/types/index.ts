@@ -2,14 +2,14 @@
 
 export type Platform = 'openai-gpt' | 'openai-dalle' | 'midjourney' | 'stable-diffusion' | 'claude' | 'custom';
 
-export type NodeType = 
-  | 'text' 
-  | 'image' 
-  | 'style' 
-  | 'parameter' 
-  | 'conditional' 
-  | 'weighted' 
-  | 'concat' 
+export type NodeType =
+  | 'text'
+  | 'image'
+  | 'style'
+  | 'parameter'
+  | 'conditional'
+  | 'weighted'
+  | 'concat'
   | 'output'
   | 'custom';
 
@@ -354,33 +354,38 @@ export class PromptTargetingError extends Error {
 }
 
 export class ValidationError extends PromptTargetingError {
-  constructor(message: string, public validationResults: ValidationResult[]) {
+  constructor(
+    message: string,
+    public validationResults: ValidationResult[]
+  ) {
     super(message, 'VALIDATION_ERROR', { validationResults }, false);
     this.name = 'ValidationError';
   }
 }
 
 export class TransformationError extends PromptTargetingError {
-  constructor(message: string, public nodeId?: string, public step?: string) {
+  constructor(
+    message: string,
+    public nodeId?: string,
+    public step?: string
+  ) {
     super(message, 'TRANSFORMATION_ERROR', { nodeId, step }, true);
     this.name = 'TransformationError';
   }
 }
 
 export class AdaptorError extends PromptTargetingError {
-  constructor(message: string, public adaptorId: string) {
+  constructor(
+    message: string,
+    public adaptorId: string
+  ) {
     super(message, 'ADAPTOR_ERROR', { adaptorId }, true);
     this.name = 'AdaptorError';
   }
 }
 
 export class TranslationError extends PromptTargetingError {
-  constructor(
-    message: string,
-    code: string,
-    details?: Record<string, any>,
-    recoverable: boolean = true
-  ) {
+  constructor(message: string, code: string, details?: Record<string, any>, recoverable: boolean = true) {
     super(message, code, details, recoverable);
     this.name = 'TranslationError';
   }

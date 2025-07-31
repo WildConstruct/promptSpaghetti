@@ -13,7 +13,7 @@ import { CRDTNode, CRDTEdge, GraphOperation, NodeOperation, EdgeOperation } from
 export class YGraph extends Y.AbstractType<any> {
   nodes: Y.Map<CRDTNode>;
   edges: Y.Map<CRDTEdge>;
-  
+
   constructor() {
     super();
     this.nodes = new Y.Map<CRDTNode>();
@@ -89,7 +89,7 @@ export class YGraph extends Y.AbstractType<any> {
       this.doc.transact(() => {
         // Delete the node
         this.nodes.delete(nodeId);
-        
+
         // Delete all connected edges
         this.edges.forEach((edge, edgeId) => {
           if (edge.source === nodeId || edge.target === nodeId) {
@@ -193,37 +193,37 @@ export class YGraph extends Y.AbstractType<any> {
 
   private _applyNodeOperation(operation: NodeOperation): void {
     switch (operation.action) {
-    case 'create':
-      if (operation.data) {
-        this.addNode(operation.data);
-      }
-      break;
-    case 'update':
-      if (operation.data) {
-        this.updateNode(operation.targetId, operation.data);
-      }
-      break;
-    case 'delete':
-      this.deleteNode(operation.targetId);
-      break;
+      case 'create':
+        if (operation.data) {
+          this.addNode(operation.data);
+        }
+        break;
+      case 'update':
+        if (operation.data) {
+          this.updateNode(operation.targetId, operation.data);
+        }
+        break;
+      case 'delete':
+        this.deleteNode(operation.targetId);
+        break;
     }
   }
 
   private _applyEdgeOperation(operation: EdgeOperation): void {
     switch (operation.action) {
-    case 'create':
-      if (operation.data) {
-        this.addEdge(operation.data);
-      }
-      break;
-    case 'update':
-      if (operation.data) {
-        this.updateEdge(operation.targetId, operation.data);
-      }
-      break;
-    case 'delete':
-      this.deleteEdge(operation.targetId);
-      break;
+      case 'create':
+        if (operation.data) {
+          this.addEdge(operation.data);
+        }
+        break;
+      case 'update':
+        if (operation.data) {
+          this.updateEdge(operation.targetId, operation.data);
+        }
+        break;
+      case 'delete':
+        this.deleteEdge(operation.targetId);
+        break;
     }
   }
 
@@ -233,7 +233,7 @@ export class YGraph extends Y.AbstractType<any> {
   toJSON(): { nodes: CRDTNode[]; edges: CRDTEdge[] } {
     return {
       nodes: this.getNodes(),
-      edges: this.getEdges()
+      edges: this.getEdges(),
     };
   }
 
@@ -245,12 +245,12 @@ export class YGraph extends Y.AbstractType<any> {
       // Clear existing data
       this.nodes.clear();
       this.edges.clear();
-      
+
       // Load nodes
       data.nodes.forEach(node => {
         this.nodes.set(node.id, node);
       });
-      
+
       // Load edges
       data.edges.forEach(edge => {
         this.edges.set(edge.id, edge);

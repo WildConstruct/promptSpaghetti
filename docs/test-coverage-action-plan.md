@@ -9,31 +9,34 @@
 ### 🚨 **Critical Priority - Security Tests**
 
 #### 1. Authentication Service Test Suite
+
 **Target Files:** `server/src/auth/services/`
 
 **Create Test Files:**
+
 ```bash
 # Week 1 - Day 1-2
 server/src/auth/services/__tests__/
 ├── TOTPService.test.ts                    # 2FA validation testing
-├── PasswordBreachService.test.ts          # Breach detection testing  
+├── PasswordBreachService.test.ts          # Breach detection testing
 ├── PasswordResetService.test.ts           # Reset flow testing
 ├── RBACService.test.ts                    # Role-based access testing
 └── SessionService.test.ts                 # Session management testing
 ```
 
 **Test Scenarios per Service:**
+
 ```typescript
 // TOTPService.test.ts - Example structure
 describe('TOTPService Security Tests', () => {
   describe('Token Validation', () => {
     it('validates correct TOTP tokens');
-    it('rejects expired tokens'); 
+    it('rejects expired tokens');
     it('handles clock skew within tolerance');
     it('prevents token reuse attacks');
     it('rate limits validation attempts');
   });
-  
+
   describe('Security Hardening', () => {
     it('prevents brute force attacks');
     it('logs failed validation attempts');
@@ -47,9 +50,11 @@ describe('TOTPService Security Tests', () => {
 **Coverage Target:** 90%+ statement coverage
 
 #### 2. Security Middleware Test Suite
+
 **Target Files:** `server/src/middleware/`
 
 **Create Test Files:**
+
 ```bash
 # Week 1 - Day 3-4
 server/src/middleware/__tests__/
@@ -62,6 +67,7 @@ server/src/middleware/__tests__/
 ```
 
 **Security Test Scenarios:**
+
 ```typescript
 // auth.test.ts - Security-focused tests
 describe('Authentication Middleware Security', () => {
@@ -72,7 +78,7 @@ describe('Authentication Middleware Security', () => {
     it('validates token signatures');
     it('prevents token manipulation');
   });
-  
+
   describe('Attack Prevention', () => {
     it('prevents header injection attacks');
     it('sanitizes user input');
@@ -88,6 +94,7 @@ describe('Authentication Middleware Security', () => {
 ### 🔧 **Testing Infrastructure Setup**
 
 #### 3. Security Test Utilities
+
 **Create:** `tests/utils/security/`
 
 ```typescript
@@ -112,6 +119,7 @@ export class EncryptionTestUtils {
 **Estimated Time:** 6-8 hours
 
 #### 4. Mock Security Services
+
 **Create:** `tests/mocks/security/`
 
 ```typescript
@@ -136,9 +144,11 @@ export class MockAuthProvider {
 ### 🏗️ **Core Engine & Business Logic Tests**
 
 #### 5. Enhanced Engine Testing
+
 **Target Files:** `server/src/engine.ts`, `server/src/exporter.ts`
 
 **Create Test Files:**
+
 ```bash
 # Week 2 - Day 1-3
 server/src/__tests__/engine/
@@ -151,6 +161,7 @@ server/src/__tests__/engine/
 ```
 
 **Test Focus Areas:**
+
 ```typescript
 // engine-comprehensive.test.ts
 describe('Graph Engine Comprehensive Tests', () => {
@@ -161,14 +172,14 @@ describe('Graph Engine Comprehensive Tests', () => {
     it('processes loops and conditionals');
     it('validates node connection integrity');
   });
-  
+
   describe('Error Handling', () => {
     it('handles malformed graph structures');
     it('recovers from node execution failures');
     it('validates input sanitization');
     it('manages memory limits properly');
   });
-  
+
   describe('Performance Validation', () => {
     it('executes within time limits');
     it('handles large graphs efficiently');
@@ -181,9 +192,11 @@ describe('Graph Engine Comprehensive Tests', () => {
 **Coverage Target:** 85%+ statement coverage
 
 #### 6. Service Layer Comprehensive Testing
+
 **Target Files:** `server/src/services/RuleEvaluationEngine.ts`, etc.
 
 **Create Test Files:**
+
 ```bash
 # Week 2-3 - Day 4-5
 server/src/services/__tests__/
@@ -206,9 +219,11 @@ server/src/services/__tests__/
 ### 🖥️ **Client-Side & Integration Testing**
 
 #### 7. Authentication UI Component Tests
+
 **Target Files:** `client/src/pages/`, `client/src/components/auth/`
 
 **Create Test Files:**
+
 ```bash
 # Week 4 - Day 1-2
 client/src/__tests__/auth/
@@ -220,6 +235,7 @@ client/src/__tests__/auth/
 ```
 
 **React Testing Focus:**
+
 ```typescript
 // LoginPage.test.tsx
 describe('Login Page Component', () => {
@@ -229,7 +245,7 @@ describe('Login Page Component', () => {
     it('shows appropriate error messages');
     it('handles network errors gracefully');
   });
-  
+
   describe('Security Features', () => {
     it('prevents CSRF attacks');
     it('sanitizes user input');
@@ -243,9 +259,11 @@ describe('Login Page Component', () => {
 **Coverage Target:** 75%+ statement coverage
 
 #### 8. Integration Test Suite
+
 **Create:** `tests/integration/`
 
 **Test Suites:**
+
 ```bash
 # Week 5-6
 tests/integration/
@@ -257,6 +275,7 @@ tests/integration/
 ```
 
 **Integration Test Examples:**
+
 ```typescript
 // auth-flow-complete.test.ts
 describe('Complete Authentication Flow', () => {
@@ -280,51 +299,53 @@ describe('Complete Authentication Flow', () => {
 ### **Test Quality Standards**
 
 #### Code Coverage Requirements
+
 ```typescript
 // jest.config.js - Coverage thresholds
 module.exports = {
   coverageThreshold: {
     global: {
       statements: 70,
-      branches: 70, 
+      branches: 70,
       functions: 70,
-      lines: 70
+      lines: 70,
     },
     './server/src/auth/': {
       statements: 90,
       branches: 85,
       functions: 90,
-      lines: 90
+      lines: 90,
     },
     './server/src/middleware/': {
       statements: 85,
       branches: 80,
       functions: 85,
-      lines: 85
+      lines: 85,
     },
     './server/src/engine.ts': {
       statements: 85,
       branches: 80,
       functions: 85,
-      lines: 85
-    }
-  }
+      lines: 85,
+    },
+  },
 };
 ```
 
 #### Security Test Standards
+
 ```typescript
 // Security test patterns
 describe('Security Validation', () => {
   describe('Input Sanitization', () => {
     const maliciousInputs = [
       '<script>alert("xss")</script>',
-      '\'; DROP TABLE users; --',
+      "'; DROP TABLE users; --",
       '../../etc/passwd',
       'null\x00byte',
-      'unicode\u0000chars'
+      'unicode\u0000chars',
     ];
-    
+
     maliciousInputs.forEach(input => {
       it(`should reject malicious input: ${input}`, () => {
         // Test implementation
@@ -337,15 +358,16 @@ describe('Security Validation', () => {
 ### **Test Environment Configuration**
 
 #### Isolated Test Databases
+
 ```typescript
 // tests/setup/database.ts
 export class TestDatabase {
   static async createIsolatedInstance(): Promise<Database> {
-    const testDb = new Database(`:memory:`); 
+    const testDb = new Database(`:memory:`);
     await this.seedTestData(testDb);
     return testDb;
   }
-  
+
   static async cleanup(db: Database): Promise<void> {
     await db.close();
   }
@@ -353,6 +375,7 @@ export class TestDatabase {
 ```
 
 #### Security Mock Services
+
 ```typescript
 // tests/mocks/securityMocks.ts
 export class SecurityMocks {
@@ -365,6 +388,7 @@ export class SecurityMocks {
 ### **Continuous Integration Integration**
 
 #### CI Pipeline Updates
+
 ```yaml
 # .github/workflows/test-coverage.yml
 name: Test Coverage Validation
@@ -383,7 +407,7 @@ jobs:
           npm run test:middleware
 
   coverage-check:
-    runs-on: ubuntu-latest  
+    runs-on: ubuntu-latest
     steps:
       - name: Generate Coverage Report
         run: npm run test:coverage
@@ -396,18 +420,21 @@ jobs:
 ## Success Metrics
 
 ### **Coverage Improvement Targets**
+
 - **Week 1:** Authentication services reach 90%+ coverage
-- **Week 2:** Core engine reaches 85%+ coverage  
+- **Week 2:** Core engine reaches 85%+ coverage
 - **Week 4:** Client auth components reach 75%+ coverage
 - **Week 6:** Overall project coverage reaches 75%+
 
 ### **Quality Gates**
+
 - All security-critical code must pass penetration testing scenarios
 - Performance tests must validate response times <200ms for critical paths
 - Integration tests must cover complete user workflows
 - All tests must be deterministic and reliable in CI/CD
 
 ### **Risk Mitigation Validation**
+
 - OWASP Top 10 vulnerabilities addressed
 - Authentication bypass scenarios tested
 - Input validation comprehensive coverage

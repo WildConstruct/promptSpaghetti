@@ -3,7 +3,7 @@
 **Version:** 1.0  
 **Document Owner:** Security Engineering Team  
 **Last Updated:** July 2025  
-**Review Cycle:** Semi-Annual  
+**Review Cycle:** Semi-Annual
 
 ## Table of Contents
 
@@ -40,29 +40,32 @@
 
 ### 🔧 Integration Methods
 
-| Method | Use Case | Complexity | Real-time | Authentication |
-|--------|----------|------------|-----------|---------------|
-| **REST API** | Custom integrations | Medium | Yes | Bearer Token |
-| **Webhooks** | Event-driven alerts | Low | Yes | Signature/Token |
-| **Log Shipping** | SIEM integration | Low | Near real-time | TLS/API Key |
-| **SNMP/Syslog** | Network devices | Low | Yes | Community/TLS |
-| **Database** | Data warehouse | High | No | Connection String |
+| Method           | Use Case            | Complexity | Real-time      | Authentication    |
+| ---------------- | ------------------- | ---------- | -------------- | ----------------- |
+| **REST API**     | Custom integrations | Medium     | Yes            | Bearer Token      |
+| **Webhooks**     | Event-driven alerts | Low        | Yes            | Signature/Token   |
+| **Log Shipping** | SIEM integration    | Low        | Near real-time | TLS/API Key       |
+| **SNMP/Syslog**  | Network devices     | Low        | Yes            | Community/TLS     |
+| **Database**     | Data warehouse      | High       | No             | Connection String |
 
 ### 📊 Supported Integration Patterns
 
 #### **Push Integration (Recommended)**
+
 - External tools push alerts to PromptScape
 - Real-time alert processing
 - Automatic correlation and response
 - Lower system overhead
 
 #### **Pull Integration**
+
 - PromptScape polls external systems
 - Suitable for batch processing
 - Higher latency but more reliable
 - Used for reporting integrations
 
 #### **Bidirectional Integration**
+
 - Two-way communication
 - Status updates and acknowledgments
 - Complex but provides full visibility
@@ -75,6 +78,7 @@
 #### **Configuration Steps:**
 
 1. **Install PromptScape Security App:**
+
    ```bash
    # Download and install the custom Splunk app
    cd $SPLUNK_HOME/etc/apps/
@@ -84,6 +88,7 @@
    ```
 
 2. **Configure Data Inputs:**
+
    ```conf
    # inputs.conf
    [http://promptscape_security_events]
@@ -94,10 +99,11 @@
    ```
 
 3. **Alert Forwarding Configuration:**
+
    ```python
    # alert_forwarder.py
    import splunklib.client as client
-   
+
    def send_to_splunk(alert_data):
        service = client.connect(
            host='splunk.company.com',
@@ -105,12 +111,13 @@
            username='promptscape_svc',
            password='[SERVICE_PASSWORD]'
        )
-       
+
        index = service.indexes['security_events']
        index.submit(json.dumps(alert_data))
    ```
 
 #### **Custom Splunk Searches:**
+
 ```spl
 # High-severity security events
 index=security_events sourcetype=promptscape:security:json severity=critical OR severity=high
@@ -137,6 +144,7 @@ index=security_events event_type="*BREACH*" OR tags="data_exposure"
 ### 🔍 QRadar Integration
 
 #### **DSM Configuration:**
+
 ```xml
 <!-- QRadar Device Support Module (DSM) -->
 <device-extension-properties>
@@ -149,6 +157,7 @@ index=security_events event_type="*BREACH*" OR tags="data_exposure"
 ```
 
 #### **Log Source Configuration:**
+
 - **Log Source Type:** PromptScape Security
 - **Protocol:** Syslog
 - **Port:** 514 (or custom)
@@ -156,6 +165,7 @@ index=security_events event_type="*BREACH*" OR tags="data_exposure"
 - **Store Event Payload:** Yes
 
 #### **Custom Properties Mapping:**
+
 ```json
 {
   "event_mappings": {
@@ -172,6 +182,7 @@ index=security_events event_type="*BREACH*" OR tags="data_exposure"
 ### 📈 Elastic Security (ELK) Integration
 
 #### **Logstash Configuration:**
+
 ```ruby
 # logstash.conf
 input {
@@ -187,11 +198,11 @@ filter {
     mutate {
       add_field => { "[@metadata][index]" => "security-events-%{+YYYY.MM}" }
     }
-    
+
     date {
       match => [ "timestamp", "ISO8601" ]
     }
-    
+
     if [source_ip] {
       geoip {
         source => "source_ip"
@@ -212,6 +223,7 @@ output {
 ```
 
 #### **Elasticsearch Index Template:**
+
 ```json
 {
   "template": "security-events-*",
@@ -222,7 +234,7 @@ output {
       "severity": { "type": "keyword" },
       "source_ip": { "type": "ip" },
       "threat_level": { "type": "integer" },
-      "description": { 
+      "description": {
         "type": "text",
         "fields": {
           "keyword": { "type": "keyword" }
@@ -245,6 +257,7 @@ output {
 ### 🔌 REST API Endpoints
 
 #### **Alert Ingestion Endpoint:**
+
 ```http
 POST /api/v1/security/alerts
 Content-Type: application/json
@@ -278,16 +291,13 @@ Authorization: Bearer YOUR_API_TOKEN
 ```
 
 #### **Response Format:**
+
 ```json
 {
   "status": "accepted",
   "alert_id": "AL-2025072210300001",
   "correlation_id": "CORR-001234",
-  "actions_triggered": [
-    "ip_block",
-    "notification_sent",
-    "escalation_created"
-  ],
+  "actions_triggered": ["ip_block", "notification_sent", "escalation_created"],
   "processing_time_ms": 150
 }
 ```
@@ -295,6 +305,7 @@ Authorization: Bearer YOUR_API_TOKEN
 ### 🔑 API Authentication
 
 #### **Bearer Token Authentication:**
+
 ```bash
 # Generate API token
 curl -X POST https://security.promptscape.com/api/v1/auth/token \
@@ -307,6 +318,7 @@ curl -X POST https://security.promptscape.com/api/v1/auth/token \
 ```
 
 #### **Token Usage:**
+
 ```python
 import requests
 
@@ -331,6 +343,7 @@ response = requests.post(
 ### 📊 Bulk Alert Submission
 
 #### **Batch Endpoint:**
+
 ```http
 POST /api/v1/security/alerts/batch
 Content-Type: application/json
@@ -345,7 +358,7 @@ Authorization: Bearer YOUR_API_TOKEN
       // ... alert data
     },
     {
-      "event_id": "event-002", 
+      "event_id": "event-002",
       "event_type": "CODE_INJECTION_ATTEMPT",
       "severity": "high",
       // ... alert data
@@ -355,6 +368,7 @@ Authorization: Bearer YOUR_API_TOKEN
 ```
 
 #### **Batch Processing Rules:**
+
 - Maximum 100 alerts per batch request
 - Request timeout: 30 seconds
 - Rate limit: 1000 requests per hour
@@ -365,6 +379,7 @@ Authorization: Bearer YOUR_API_TOKEN
 ### 🔗 Webhook Configuration
 
 #### **Webhook Registration:**
+
 ```json
 {
   "webhook_url": "https://external-system.com/security/webhook",
@@ -372,11 +387,7 @@ Authorization: Bearer YOUR_API_TOKEN
     "type": "hmac_sha256",
     "secret": "webhook_secret_key"
   },
-  "events": [
-    "alert.created",
-    "alert.escalated",
-    "incident.resolved"
-  ],
+  "events": ["alert.created", "alert.escalated", "incident.resolved"],
   "filters": {
     "severity": ["critical", "high"],
     "event_types": ["AUTHENTICATION_FAILURE", "CODE_INJECTION_ATTEMPT"]
@@ -389,6 +400,7 @@ Authorization: Bearer YOUR_API_TOKEN
 ```
 
 #### **Webhook Payload Format:**
+
 ```json
 {
   "event": "alert.created",
@@ -409,6 +421,7 @@ Authorization: Bearer YOUR_API_TOKEN
 ### 🔒 Webhook Security
 
 #### **HMAC Signature Validation:**
+
 ```python
 import hmac
 import hashlib
@@ -420,7 +433,7 @@ def validate_webhook(payload, signature, secret):
         payload.encode('utf-8'),
         hashlib.sha256
     ).hexdigest()
-    
+
     return hmac.compare_digest(
         f"sha256={expected_signature}",
         signature
@@ -437,6 +450,7 @@ else:
 ```
 
 #### **IP Whitelist Configuration:**
+
 ```bash
 # Webhook source IP addresses
 WEBHOOK_ALLOWED_IPS="
@@ -449,12 +463,14 @@ WEBHOOK_ALLOWED_IPS="
 ### 🔄 Webhook Retry Logic
 
 #### **Retry Configuration:**
+
 - **Initial Retry:** 1 minute after failure
-- **Second Retry:** 5 minutes after failure  
+- **Second Retry:** 5 minutes after failure
 - **Final Retry:** 15 minutes after failure
 - **Failure Actions:** Log failure, create support ticket
 
 #### **Webhook Health Monitoring:**
+
 ```python
 def monitor_webhook_health():
     webhook_stats = {
@@ -463,7 +479,7 @@ def monitor_webhook_health():
         'avg_response_time': get_avg_response_time(),
         'failed_endpoints': get_failed_endpoints()
     }
-    
+
     if webhook_stats['success_rate'] < 0.95:
         send_alert('webhook_degraded', webhook_stats)
 ```
@@ -473,6 +489,7 @@ def monitor_webhook_health():
 ### 🛡️ CrowdStrike Falcon Integration
 
 #### **API Configuration:**
+
 ```python
 from falconpy import Hosts
 
@@ -486,10 +503,10 @@ def get_crowdstrike_alerts():
     response = falcon.QueryDevicesByFilterScroll(
         filter="status:'contained'+severity:'high'"
     )
-    
+
     for device_id in response['body']['resources']:
         device_info = falcon.GetDeviceDetails(ids=device_id)
-        
+
         # Convert to PromptScape format
         alert = {
             'event_type': 'ENDPOINT_THREAT_DETECTED',
@@ -498,13 +515,14 @@ def get_crowdstrike_alerts():
             'system_component': device_info['hostname'],
             'description': f"CrowdStrike threat detected on {device_info['hostname']}"
         }
-        
+
         send_to_promptscape(alert)
 ```
 
 ### 🌐 AWS Security Hub Integration
 
 #### **CloudFormation Template:**
+
 ```yaml
 AWSTemplateFormatVersion: '2010-09-09'
 Description: 'PromptScape Security Hub Integration'
@@ -521,11 +539,11 @@ Resources:
     Type: AWS::Events::Rule
     Properties:
       EventPattern:
-        source: ["aws.securityhub"]
-        detail-type: ["Security Hub Findings - Custom Action"]
+        source: ['aws.securityhub']
+        detail-type: ['Security Hub Findings - Custom Action']
       Targets:
         - Arn: !GetAtt ForwardingFunction.Arn
-          Id: "PromptScapeForwarder"
+          Id: 'PromptScapeForwarder'
 
   ForwardingFunction:
     Type: AWS::Lambda::Function
@@ -536,7 +554,7 @@ Resources:
         ZipFile: |
           import json
           import requests
-          
+
           def lambda_handler(event, context):
               # Transform Security Hub finding to PromptScape format
               finding = event['detail']['findings'][0]
@@ -566,33 +584,34 @@ Resources:
 ### 🔍 Qualys VMDR Integration
 
 #### **API Integration Script:**
+
 ```python
 import requests
 from xml.etree import ElementTree as ET
 
 def get_qualys_vulnerabilities():
     auth = ('username', 'password')
-    
+
     # Get scan results
     response = requests.post(
         'https://qualysapi.qualys.com/api/2.0/fo/scan/',
         auth=auth,
         data={'action': 'list', 'state': 'Finished'}
     )
-    
+
     # Parse XML response
     root = ET.fromstring(response.content)
-    
+
     for scan in root.findall('.//SCAN'):
         scan_id = scan.find('ID').text
-        
+
         # Get scan details
         details_response = requests.post(
             'https://qualysapi.qualys.com/api/2.0/fo/scan/',
             auth=auth,
             data={'action': 'fetch', 'scan_ref': scan_id}
         )
-        
+
         # Convert high/critical vulnerabilities to alerts
         convert_vulnerabilities_to_alerts(details_response.content)
 
@@ -610,7 +629,7 @@ def convert_vulnerabilities_to_alerts(scan_data):
                 'patch_available': vuln['solution_available']
             }
         }
-        
+
         send_to_promptscape(alert)
 ```
 
@@ -619,6 +638,7 @@ def convert_vulnerabilities_to_alerts(scan_data):
 ### 📊 Grafana Integration
 
 #### **Data Source Configuration:**
+
 ```yaml
 # grafana/provisioning/datasources/promptscape.yaml
 apiVersion: 1
@@ -637,6 +657,7 @@ datasources:
 ```
 
 #### **Security Metrics Dashboard:**
+
 ```json
 {
   "dashboard": {
@@ -677,6 +698,7 @@ datasources:
 ### 📈 Custom Dashboard API
 
 #### **Dashboard Data Endpoint:**
+
 ```http
 GET /api/v1/security/dashboard/metrics
 Authorization: Bearer YOUR_API_TOKEN
@@ -696,6 +718,7 @@ Authorization: Bearer YOUR_API_TOKEN
 ```
 
 #### **Response Format:**
+
 ```json
 {
   "metrics": {
@@ -727,6 +750,7 @@ Authorization: Bearer YOUR_API_TOKEN
 ### 🔗 Correlation Rules Engine
 
 #### **Rule Definition Format:**
+
 ```json
 {
   "rule_id": "CORR_001",
@@ -764,36 +788,37 @@ Authorization: Bearer YOUR_API_TOKEN
 ```
 
 #### **Custom Correlation Logic:**
+
 ```python
 class SecurityEventCorrelator:
     def __init__(self):
         self.event_window = {}
         self.correlation_rules = load_correlation_rules()
-    
+
     def process_event(self, event):
         # Add to time window
         self.add_to_window(event)
-        
+
         # Check correlation rules
         for rule in self.correlation_rules:
             if self.evaluate_rule(rule, event):
                 self.trigger_correlation(rule, event)
-    
+
     def evaluate_rule(self, rule, event):
         # Get events in time window
         window_events = self.get_window_events(
             rule['conditions']['time_window']
         )
-        
+
         # Apply filters
         filtered_events = self.apply_filters(
-            window_events, 
+            window_events,
             rule['conditions']['filters']
         )
-        
+
         # Check threshold
         return len(filtered_events) >= rule['conditions']['threshold']
-    
+
     def trigger_correlation(self, rule, triggering_event):
         correlation_alert = {
             'event_type': 'CORRELATED_ATTACK',
@@ -802,22 +827,23 @@ class SecurityEventCorrelator:
             'correlation_rule': rule['rule_id'],
             'triggering_events': self.get_related_events(rule, triggering_event)
         }
-        
+
         self.create_alert(correlation_alert)
 ```
 
 ### 📊 Correlation Analytics
 
 #### **Pattern Detection Queries:**
+
 ```sql
 -- Detect potential lateral movement
-SELECT 
+SELECT
     source_ip,
     COUNT(DISTINCT system_component) as systems_accessed,
     COUNT(*) as total_events,
     MIN(timestamp) as first_seen,
     MAX(timestamp) as last_seen
-FROM security_events 
+FROM security_events
 WHERE event_type IN ('AUTHENTICATION_SUCCESS', 'PRIVILEGE_ESCALATION')
     AND timestamp >= NOW() - INTERVAL '1 hour'
 GROUP BY source_ip
@@ -825,12 +851,12 @@ HAVING COUNT(DISTINCT system_component) > 3
 ORDER BY systems_accessed DESC;
 
 -- Identify coordinated attacks
-SELECT 
+SELECT
     target_user,
     COUNT(DISTINCT source_ip) as attack_sources,
     COUNT(*) as attack_attempts,
     STRING_AGG(DISTINCT source_ip, ', ') as source_ips
-FROM security_events 
+FROM security_events
 WHERE event_type = 'AUTHENTICATION_FAILURE'
     AND timestamp >= NOW() - INTERVAL '10 minutes'
 GROUP BY target_user
@@ -843,6 +869,7 @@ ORDER BY attack_attempts DESC;
 ### 🏥 Integration Health Monitoring
 
 #### **Health Check Endpoints:**
+
 ```http
 GET /api/v1/integrations/health
 
@@ -856,7 +883,7 @@ GET /api/v1/integrations/health
       "error_rate": 0.02
     },
     "webhook_endpoints": {
-      "status": "degraded", 
+      "status": "degraded",
       "active_endpoints": 8,
       "failed_endpoints": 2,
       "avg_response_time": "1.2s"
@@ -871,6 +898,7 @@ GET /api/v1/integrations/health
 ```
 
 #### **Automated Health Checks:**
+
 ```python
 def perform_health_checks():
     checks = {
@@ -880,12 +908,12 @@ def perform_health_checks():
         'alert_processing': check_alert_pipeline(),
         'correlation_engine': check_correlation_health()
     }
-    
+
     overall_health = all(check['status'] == 'healthy' for check in checks.values())
-    
+
     if not overall_health:
         send_health_alert(checks)
-    
+
     return {
         'overall_status': 'healthy' if overall_health else 'degraded',
         'checks': checks,
@@ -896,6 +924,7 @@ def perform_health_checks():
 ### 📈 Performance Monitoring
 
 #### **Key Performance Indicators:**
+
 ```python
 INTEGRATION_KPIS = {
     'event_ingestion_rate': {
@@ -918,6 +947,7 @@ INTEGRATION_KPIS = {
 ```
 
 #### **Performance Alert Rules:**
+
 ```yaml
 # Prometheus alerting rules
 groups:
@@ -929,20 +959,21 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "High API latency detected"
-          
+          summary: 'High API latency detected'
+
       - alert: WebhookFailureRate
         expr: rate(webhook_failures_total[5m]) > 0.05
         for: 2m
         labels:
           severity: critical
         annotations:
-          summary: "High webhook failure rate"
+          summary: 'High webhook failure rate'
 ```
 
 ### 🔍 Integration Logging
 
 #### **Structured Logging Format:**
+
 ```json
 {
   "timestamp": "2025-07-22T10:30:00Z",
@@ -961,6 +992,7 @@ groups:
 ```
 
 #### **Log Aggregation Configuration:**
+
 ```bash
 # Fluentd configuration for integration logs
 <source>
@@ -991,6 +1023,7 @@ groups:
 ### 🔧 Common Integration Issues
 
 #### **Authentication Failures:**
+
 ```bash
 # Check API token validity
 curl -H "Authorization: Bearer YOUR_TOKEN" \
@@ -1000,6 +1033,7 @@ curl -H "Authorization: Bearer YOUR_TOKEN" \
 ```
 
 #### **Webhook Delivery Failures:**
+
 ```python
 # Webhook troubleshooting checklist
 def troubleshoot_webhook(webhook_url):
@@ -1010,11 +1044,12 @@ def troubleshoot_webhook(webhook_url):
         'response_time': measure_response_time(webhook_url),
         'authentication': test_webhook_auth(webhook_url)
     }
-    
+
     return checks
 ```
 
 #### **SIEM Integration Issues:**
+
 ```bash
 # Splunk troubleshooting
 # Check HEC token status
@@ -1024,21 +1059,23 @@ curl -k https://splunk:8088/services/collector/health \
 # Verify index permissions
 ./splunk search "index=security_events | head 10"
 
-# Check parsing issues  
+# Check parsing issues
 ./splunk search "index=security_events sourcetype=promptscape:security:json | head 10"
 ```
 
 ### 📞 Support Escalation
 
 #### **Support Tiers:**
-| Issue Severity | Response Time | Escalation Path |
-|----------------|---------------|-----------------|
-| **Critical** | 15 minutes | On-call → Manager → Director |
-| **High** | 1 hour | Support Team → Senior Engineer |
-| **Medium** | 4 hours | Support Queue → Assignment |
-| **Low** | Next business day | Standard Support Process |
+
+| Issue Severity | Response Time     | Escalation Path                |
+| -------------- | ----------------- | ------------------------------ |
+| **Critical**   | 15 minutes        | On-call → Manager → Director   |
+| **High**       | 1 hour            | Support Team → Senior Engineer |
+| **Medium**     | 4 hours           | Support Queue → Assignment     |
+| **Low**        | Next business day | Standard Support Process       |
 
 #### **Issue Reporting Template:**
+
 ```markdown
 ## Integration Support Request
 
@@ -1047,35 +1084,43 @@ curl -k https://splunk:8088/services/collector/health \
 **Issue Type:** [Authentication/Connectivity/Performance/Data]
 
 ### Problem Description
+
 [Detailed description of the issue]
 
 ### Steps to Reproduce
+
 1. [Step 1]
 2. [Step 2]
 3. [Result]
 
 ### Expected Behavior
+
 [What should happen]
 
-### Current Behavior  
+### Current Behavior
+
 [What actually happens]
 
 ### Environment Information
+
 - Integration Type: [API/Webhook/Log Shipping]
 - Tool Version: [Version number]
 - Last Working: [Date/time when it worked]
 - Error Messages: [Exact error messages]
 
 ### Troubleshooting Attempted
+
 - [ ] Checked authentication
-- [ ] Verified network connectivity  
+- [ ] Verified network connectivity
 - [ ] Reviewed logs
 - [ ] Tested with curl/postman
 - [ ] Checked rate limits
 
 ### Log Excerpts
 ```
+
 [Relevant log entries]
+
 ```
 
 ### Additional Context
@@ -1085,6 +1130,7 @@ curl -k https://splunk:8088/services/collector/health \
 ### 🔄 Integration Maintenance
 
 #### **Regular Maintenance Tasks:**
+
 ```bash
 #!/bin/bash
 # Weekly integration maintenance script
@@ -1111,6 +1157,7 @@ echo "Generating health report..."
 ```
 
 #### **Quarterly Reviews:**
+
 - Integration performance analysis
 - Security tool effectiveness assessment
 - Cost optimization review
@@ -1122,10 +1169,12 @@ echo "Generating health report..."
 ## Version Control
 
 **Version History:**
+
 - v1.0 (July 2025): Initial document creation
 - Next Review: January 2026
 
 **Approval:**
+
 - **Document Owner:** Security Engineering Team
 - **Technical Review:** CISO Office
 - **Operations Review:** SOC Team
@@ -1133,4 +1182,4 @@ echo "Generating health report..."
 
 ---
 
-*This document contains technical configuration details for security integrations. Access is restricted to authorized security and engineering personnel only.*
+_This document contains technical configuration details for security integrations. Access is restricted to authorized security and engineering personnel only._

@@ -18,7 +18,9 @@ The testing infrastructure consists of several interconnected components:
 ## 📁 Components
 
 ### 1. TestingFramework.ts
+
 Core testing framework providing:
+
 - Test suite registration and management
 - Individual test case execution
 - Event-driven architecture
@@ -27,14 +29,18 @@ Core testing framework providing:
 - Comprehensive assertion utilities
 
 ### 2. TestDataGenerators.ts
+
 Deterministic data generators for:
+
 - **GraphDataGenerator**: Creates realistic graph structures with nodes and edges
 - **UserDataGenerator**: Generates user profiles, authentication data, and preferences
 - **APIDataGenerator**: Creates request/response pairs for API testing
 - **PerformanceDataGenerator**: Generates large datasets for performance testing
 
 ### 3. TestFixtures.ts
+
 Pre-configured test data including:
+
 - Standard graph patterns (linear, branching, circular)
 - User archetypes (admin, regular, deactivated)
 - API scenarios (success, failure, rate limits)
@@ -42,7 +48,9 @@ Pre-configured test data including:
 - Performance benchmarks
 
 ### 4. TestHarness.ts
+
 Comprehensive test orchestration providing:
+
 - Multi-environment test execution
 - Performance benchmarking
 - Security testing
@@ -63,7 +71,7 @@ const harness = new TestHarness({
   environment: TestEnvironment.INTEGRATION,
   categories: [TestCategory.ENGINE, TestCategory.FRONTEND],
   parallel: false,
-  coverage: true
+  coverage: true,
 });
 
 // Initialize and run tests
@@ -99,14 +107,14 @@ const graphGen = new GraphDataGenerator('my-seed-123');
 const graph = graphGen.generateGraph({
   nodeCount: 10,
   edgeCount: 8,
-  complexity: 'medium'
+  complexity: 'medium',
 });
 
 // Generate test users
 const userGen = new UserDataGenerator();
 const users = userGen.generateUsers(5, {
   includeAuth: true,
-  roles: ['admin', 'user']
+  roles: ['admin', 'user'],
 });
 ```
 
@@ -132,6 +140,7 @@ fixtures.register('my-custom-graph', {
 ## 🎯 Test Categories
 
 ### Engine Tests (TestCategory.ENGINE)
+
 - Graph validation and execution
 - Node type functionality
 - Variable management
@@ -139,6 +148,7 @@ fixtures.register('my-custom-graph', {
 - Error handling
 
 ### Frontend Tests (TestCategory.FRONTEND)
+
 - Component rendering
 - User interactions
 - State management
@@ -146,6 +156,7 @@ fixtures.register('my-custom-graph', {
 - Accessibility
 
 ### Backend Tests (TestCategory.BACKEND)
+
 - API endpoint functionality
 - Authentication and authorization
 - Database operations
@@ -153,12 +164,14 @@ fixtures.register('my-custom-graph', {
 - Rate limiting
 
 ### Integration Tests (TestCategory.WORKFLOW)
+
 - End-to-end workflows
 - Cross-component interactions
 - Data flow validation
 - User journey testing
 
 ### Performance Tests (TestCategory.PERFORMANCE)
+
 - Load testing
 - Stress testing
 - Memory usage monitoring
@@ -170,12 +183,14 @@ fixtures.register('my-custom-graph', {
 The infrastructure includes comprehensive security testing:
 
 ### XSS Protection Testing
+
 ```typescript
 const securityResults = await harness.runSecurityTests();
 console.log(`XSS Protection: ${securityResults.xssProtection.protectionRate}% blocked`);
 ```
 
 ### SQL Injection Testing
+
 ```typescript
 // Uses predefined SQL injection payloads
 const sqlResults = securityResults.sqlInjectionProtection;
@@ -183,6 +198,7 @@ console.log(`SQL Injection blocked: ${sqlResults.blockedPayloads}/${sqlResults.t
 ```
 
 ### Authentication Security
+
 - Token validation
 - Session security
 - Password hashing verification
@@ -192,6 +208,7 @@ console.log(`SQL Injection blocked: ${sqlResults.blockedPayloads}/${sqlResults.t
 ## 📊 Performance Benchmarking
 
 ### Graph Execution Benchmarks
+
 ```typescript
 const benchmarks = await harness.runPerformanceBenchmarks();
 
@@ -201,6 +218,7 @@ benchmarks.graphExecution.forEach(benchmark => {
 ```
 
 ### API Latency Testing
+
 ```typescript
 benchmarks.apiLatency.forEach(result => {
   console.log(`${result.endpoint}: ${result.avgLatency}ms average`);
@@ -208,6 +226,7 @@ benchmarks.apiLatency.forEach(result => {
 ```
 
 ### Memory Usage Monitoring
+
 ```typescript
 const memory = benchmarks.memoryUsage;
 console.log(`Memory: ${memory.baseline}MB baseline, ${memory.peak}MB peak`);
@@ -216,22 +235,24 @@ console.log(`Memory: ${memory.baseline}MB baseline, ${memory.peak}MB peak`);
 ## 🔧 Configuration Options
 
 ### TestHarnessConfig
+
 ```typescript
 interface TestHarnessConfig {
-  environment: TestEnvironment;          // Test environment type
-  categories: TestCategory[];            // Categories to test
-  parallel: boolean;                     // Run tests in parallel
-  coverage: boolean;                     // Collect coverage data
-  timeout: number;                       // Test timeout (ms)
-  retries: number;                       // Retry failed tests
-  setupDatabase: boolean;                // Setup test database
-  setupEnvironment: boolean;             // Setup test environment
-  generateReports: boolean;              // Generate test reports
-  outputDir: string;                     // Output directory
+  environment: TestEnvironment; // Test environment type
+  categories: TestCategory[]; // Categories to test
+  parallel: boolean; // Run tests in parallel
+  coverage: boolean; // Collect coverage data
+  timeout: number; // Test timeout (ms)
+  retries: number; // Retry failed tests
+  setupDatabase: boolean; // Setup test database
+  setupEnvironment: boolean; // Setup test environment
+  generateReports: boolean; // Generate test reports
+  outputDir: string; // Output directory
 }
 ```
 
 ### Environment Types
+
 - `TestEnvironment.UNIT`: Unit testing
 - `TestEnvironment.INTEGRATION`: Integration testing
 - `TestEnvironment.E2E`: End-to-end testing
@@ -241,7 +262,9 @@ interface TestHarnessConfig {
 ## 📈 Reporting
 
 ### Test Reports
+
 The infrastructure generates comprehensive reports including:
+
 - Test summary (pass/fail counts, duration)
 - Individual test results with timing
 - Coverage information
@@ -249,6 +272,7 @@ The infrastructure generates comprehensive reports including:
 - Error details and stack traces
 
 ### Example Report Structure
+
 ```typescript
 {
   summary: {
@@ -276,6 +300,7 @@ The infrastructure generates comprehensive reports including:
 The testing infrastructure uses an event-driven architecture:
 
 ### Available Events
+
 - `testRunStarted`: Test execution begins
 - `testResult`: Individual test completes
 - `suiteComplete`: Test suite completes
@@ -284,14 +309,15 @@ The testing infrastructure uses an event-driven architecture:
 - `securityTestsCompleted`: Security tests finished
 
 ### Event Handling Example
+
 ```typescript
-harness.on('testResult', (result) => {
+harness.on('testResult', result => {
   if (result.status === 'failed') {
     console.error(`Test failed: ${result.name}`, result.error);
   }
 });
 
-harness.on('reportGenerated', (report) => {
+harness.on('reportGenerated', report => {
   console.log(`Tests completed with ${report.summary.passRate}% pass rate`);
 });
 ```
@@ -299,13 +325,17 @@ harness.on('reportGenerated', (report) => {
 ## 🧪 Best Practices
 
 ### 1. Use Deterministic Data
+
 Always use seeded generators for reproducible tests:
+
 ```typescript
 const generator = new GraphDataGenerator('consistent-seed-123');
 ```
 
 ### 2. Isolate Test Data
+
 Use fresh fixtures for each test to avoid interference:
+
 ```typescript
 beforeEach(async () => {
   await fixtures.reset();
@@ -313,17 +343,25 @@ beforeEach(async () => {
 ```
 
 ### 3. Test Categorization
+
 Organize tests by category for better maintainability:
+
 ```typescript
 // Engine tests focus on core functionality
-suite.test('Node Execution', async (context) => { /* ... */ });
+suite.test('Node Execution', async context => {
+  /* ... */
+});
 
-// Frontend tests focus on UI behavior  
-suite.test('Component Rendering', async (context) => { /* ... */ });
+// Frontend tests focus on UI behavior
+suite.test('Component Rendering', async context => {
+  /* ... */
+});
 ```
 
 ### 4. Performance Monitoring
+
 Always include performance assertions in critical tests:
+
 ```typescript
 const startTime = Date.now();
 await executeGraph(largeGraph);
@@ -332,7 +370,9 @@ expect(duration).toBeLessThan(5000); // Max 5 seconds
 ```
 
 ### 5. Security First
+
 Include security validation in all user-input tests:
+
 ```typescript
 const xssPayload = '<script>alert("xss")</script>';
 const result = await processInput(xssPayload);
@@ -342,6 +382,7 @@ expect(result).not.toContain('<script>');
 ## 🛠️ Extending the Framework
 
 ### Adding New Generators
+
 ```typescript
 export class CustomDataGenerator extends BaseTestDataGenerator {
   generateCustomData(options: CustomOptions): CustomData {
@@ -351,19 +392,23 @@ export class CustomDataGenerator extends BaseTestDataGenerator {
 ```
 
 ### Adding New Test Categories
+
 ```typescript
 export enum TestCategory {
   // ... existing categories
-  CUSTOM = 'custom'
+  CUSTOM = 'custom',
 }
 ```
 
 ### Adding New Fixtures
+
 ```typescript
 fixtures.register('custom-scenario', {
   category: 'custom',
-  data: { /* custom test data */ },
-  metadata: { description: 'Custom test scenario' }
+  data: {
+    /* custom test data */
+  },
+  metadata: { description: 'Custom test scenario' },
 });
 ```
 
@@ -386,7 +431,7 @@ describe('My Component', () => {
   it('should use test infrastructure', async () => {
     const fixtures = harness['fixtureManager'];
     const testData = fixtures.get('graph-simple-linear');
-    
+
     // Your test logic using the fixture
     expect(testData).toBeDefined();
   });

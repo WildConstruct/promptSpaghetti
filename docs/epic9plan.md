@@ -3,11 +3,12 @@
 This document provides granular implementation plans for each story in Epic 9, breaking down tasks into specific, actionable items for development. For architectural rationale and detailed design decisions, refer to [Epic 9 Detailed Design](epic9details.md).
 
 ## 📊 **Progress Overview**
+
 - **Story 9.1.1**: ✅ **COMPLETED** - CRDT Implementation Research and Selection
-- **Story 9.1.2**: ✅ **COMPLETED** - CRDT Integration with Graph Model  
+- **Story 9.1.2**: ✅ **COMPLETED** - CRDT Integration with Graph Model
 - **Story 9.1.3**: ✅ **COMPLETED** - WebSocket Server Implementation
 - **Story 9.1.4**: ✅ **COMPLETED** - User Presence and Awareness
-- **Story 9.1.5**: ✅ **COMPLETED** - Conflict Resolution and Synchronization  
+- **Story 9.1.5**: ✅ **COMPLETED** - Conflict Resolution and Synchronization
 - **Story 9.1.6**: ✅ **COMPLETED** - Performance Testing and Optimization
 - **Story 9.1.7**: ✅ **COMPLETED** - Network Resilience Implementation
 - **Story 9.2.1**: ✅ **COMPLETED** - Workspace Data Model Design
@@ -32,6 +33,7 @@ This document provides granular implementation plans for each story in Epic 9, b
 ### Implementation Tasks
 
 #### 9.1.1 CRDT Implementation Research and Selection (3 days) ✅ **COMPLETED**
+
 - [x] Research available CRDT algorithms and implementations
   - [x] Evaluate Yjs, Automerge, and Diamond Types
   - [x] Assess performance characteristics with graph structures
@@ -49,6 +51,7 @@ This document provides granular implementation plans for each story in Epic 9, b
   - [x] Document findings and selection rationale
 
 #### 9.1.2 CRDT Integration with Graph Model (5 days) ✅ **COMPLETED**
+
 - [x] Refactor graph data model for CRDT compatibility
   - [x] Modify data structures to accommodate CRDT operations
   - [x] Add unique identifiers for all graph elements
@@ -66,6 +69,7 @@ This document provides granular implementation plans for each story in Epic 9, b
   - [x] Implement garbage collection for old operations
 
 #### 9.1.3 WebSocket Server Implementation (4 days) ✅ **COMPLETED**
+
 - [x] Design WebSocket server architecture
   - [x] Create connection handling and authentication
   - [x] Design message protocol format
@@ -83,6 +87,7 @@ This document provides granular implementation plans for each story in Epic 9, b
   - [x] Create error handling and user feedback
 
 #### 9.1.4 User Presence and Awareness (3 days) ✅ **COMPLETED**
+
 - [x] Design user presence system
   - [x] Create data model for user metadata
   - [x] Define presence update protocol
@@ -100,6 +105,7 @@ This document provides granular implementation plans for each story in Epic 9, b
   - [x] Add hover tooltips with user information
 
 #### 9.1.5 Conflict Resolution and Synchronization (4 days) ✅ **COMPLETED**
+
 - [x] Implement detailed conflict resolution strategies
   - [x] Create rules for node position conflicts
   - [x] Implement property merge strategies
@@ -117,6 +123,7 @@ This document provides granular implementation plans for each story in Epic 9, b
   - [x] Create undo/redo specifically for conflict resolution
 
 #### 9.1.6 Performance Testing and Optimization (3 days) ✅ **COMPLETED**
+
 - [x] Design performance testing methodology
   - [x] Create simulated editing scenarios
   - [x] Define metrics for responsiveness and consistency
@@ -134,6 +141,7 @@ This document provides granular implementation plans for each story in Epic 9, b
   - [x] Add background processing for non-critical operations
 
 #### 9.1.7 Network Resilience Implementation (3 days) ✅ **COMPLETED**
+
 - [x] Design offline functionality
   - [x] Create local operation queue (OfflineOperationQueue)
   - [x] Implement optimistic UI updates with priority-based queuing
@@ -155,6 +163,7 @@ This document provides granular implementation plans for each story in Epic 9, b
 ### Implementation Tasks
 
 #### 9.2.1 Workspace Data Model Design (3 days) ✅ **COMPLETED**
+
 - [x] Design workspace and project data models
   - [x] Create schema for workspaces, projects, and resources
   - [x] Define relationships between entities
@@ -172,6 +181,7 @@ This document provides granular implementation plans for each story in Epic 9, b
   - [x] Document consistency guarantees (ACID transactions)
 
 #### 9.2.2 Access Control System (4 days) ✅ **COMPLETED**
+
 - [x] Design role-based access control system
   - [x] Define core roles (admin, editor, viewer, commenter) with ROLE_PERMISSIONS
   - [x] Create permission structure for resources (21 permission types with bitmasks)
@@ -197,6 +207,7 @@ This document provides granular implementation plans for each story in Epic 9, b
   - [x] Integration testing with WorkspaceDAO
 
 #### 9.2.3 Activity Feed Implementation (3 days) ✅ **COMPLETED**
+
 - [x] Design activity tracking system
   - [x] Define activity types and structure (activity_events table with JSONB data)
   - [x] Create aggregation strategy for high-volume activities (aggregation_key field)
@@ -214,6 +225,7 @@ This document provides granular implementation plans for each story in Epic 9, b
   - [ ] Create React components for feed display
 
 #### 9.2.4 Commenting System (3 days) ✅ **COMPLETED**
+
 - [x] Design commenting architecture
   - [x] Create data model for comments (comments table with target_type, target_data)
   - [x] Define comment targeting (resource, node, region support)
@@ -232,6 +244,7 @@ This document provides granular implementation plans for each story in Epic 9, b
   - [ ] Create comment resolution workflow
 
 #### 9.2.5 Notification System (3 days)
+
 - [ ] Design notification architecture
   - [ ] Define notification types and priorities
   - [ ] Create delivery channels (in-app, email, etc.)
@@ -249,6 +262,7 @@ This document provides granular implementation plans for each story in Epic 9, b
   - [ ] Create preference management UI
 
 #### 9.2.6 Project Templates (2 days) ✅ **COMPLETED**
+
 - [x] Design template system
   - [x] Create template data structure (project_templates table with JSONB template_data)
   - [x] Define customization points (customizable_fields, validation_rules, default_values)
@@ -273,6 +287,7 @@ This document provides granular implementation plans for each story in Epic 9, b
 ### Implementation Tasks
 
 #### 9.3.1 Version History Implementation (4 days) ✅ **COMPLETED**
+
 - [x] Design version history system
   - [x] Create version snapshot model (version_snapshots table with S3 storage)
   - [x] Define trigger points for versions (manual, auto, milestone, backup)
@@ -290,6 +305,7 @@ This document provides granular implementation plans for each story in Epic 9, b
   - [x] Add version grouping capabilities (branch-based organization)
 
 #### 9.3.2 Visual Diff Tool (5 days) ✅ **COMPLETED**
+
 - [x] Design graph comparison algorithm
   - [x] Create node and edge matching logic (GraphComparisonService with multi-phase matching)
   - [x] Define difference types (added, removed, modified, exact, similar)
@@ -313,6 +329,7 @@ This document provides granular implementation plans for each story in Epic 9, b
   - [x] TypeScript types (comprehensive type definitions for all comparison interfaces)
 
 #### 9.3.3 Version Restoration (3 days)
+
 - [x] Design restoration process
   - [x] Create restoration workflow (RestorationService with comprehensive workflow)
   - [x] Define strategy for conflicts with current state (3-way merge with user resolution)
@@ -336,6 +353,7 @@ This document provides granular implementation plans for each story in Epic 9, b
   - [x] TypeScript types (comprehensive type definitions for restoration interfaces)
 
 #### 9.3.4 Change Attribution (2 days) ✅ **COMPLETED**
+
 - [x] Design attribution tracking
   - [x] Create change authorship model (comprehensive attribution system with granular tracking)
   - [x] Define granularity of attribution (node, edge, property, position, graph level tracking)
@@ -360,6 +378,7 @@ This document provides granular implementation plans for each story in Epic 9, b
   - [x] React hooks (useAttribution hook for API integration)
 
 #### 9.3.5 Branching Capability (4 days) ✅ **COMPLETED**
+
 - [x] Design branching model
   - [x] Create branch data structure (comprehensive branching system with Git-like model)
   - [x] Define branch relationships (hierarchical branches with parent-child relationships)
@@ -384,6 +403,7 @@ This document provides granular implementation plans for each story in Epic 9, b
   - [x] React hooks (useBranching hook for comprehensive API integration)
 
 #### 9.3.6 Version Export (2 days) ✅ **COMPLETED**
+
 - [x] Design export formats
   - [x] Define human-readable export format (comprehensive export system with 8 formats)
   - [x] Create machine-readable export structure (JSON, YAML, XML, CSV with full metadata)
@@ -412,6 +432,7 @@ This document provides granular implementation plans for each story in Epic 9, b
 ### Implementation Tasks
 
 #### 9.4.1 Workflow State System (3 days)
+
 - [ ] Design workflow state model
   - [ ] Define core states (draft, review, approved, published)
   - [ ] Create state transition rules
@@ -429,6 +450,7 @@ This document provides granular implementation plans for each story in Epic 9, b
   - [ ] Create state filtering in project list
 
 #### 9.4.2 Approval Processes (4 days)
+
 - [ ] Design approval workflow
   - [ ] Create approval request model
   - [ ] Define reviewer assignment
@@ -446,6 +468,7 @@ This document provides granular implementation plans for each story in Epic 9, b
   - [ ] Create approval statistics
 
 #### 9.4.3 Locking Mechanism (2 days)
+
 - [ ] Design locking system
   - [ ] Define lock types and scopes
   - [ ] Create lock acquisition rules
@@ -463,6 +486,7 @@ This document provides granular implementation plans for each story in Epic 9, b
   - [ ] Create lock status overview
 
 #### 9.4.4 Audit Trail (3 days)
+
 - [ ] Design audit system
   - [ ] Define audit event types
   - [ ] Create audit record structure
@@ -480,6 +504,7 @@ This document provides granular implementation plans for each story in Epic 9, b
   - [ ] Create audit visualizations
 
 #### 9.4.5 API Integration (3 days)
+
 - [ ] Design external API
   - [ ] Define endpoints for workflow integration
   - [ ] Create authentication and authorization
@@ -497,6 +522,7 @@ This document provides granular implementation plans for each story in Epic 9, b
   - [ ] Create integration testing tools
 
 #### 9.4.6 Scheduled Execution (3 days)
+
 - [ ] Design scheduling system
   - [ ] Create schedule specification format
   - [ ] Define execution parameters
@@ -516,11 +542,13 @@ This document provides granular implementation plans for each story in Epic 9, b
 ## Schedule and Resource Planning
 
 ### Timeline Overview
+
 - Total estimated development time: 74 developer days
 - Recommended team: 3 frontend developers, 2 backend developers, 1 DevOps engineer
 - Estimated calendar duration: 10-12 weeks
 
 ### Sprint Breakdown
+
 - Sprint 1 (2 weeks): Stories 9.1.1-9.1.3 and 9.2.1
 - Sprint 2 (2 weeks): Stories 9.1.4-9.1.5, 9.2.2-9.2.3, and 9.3.1
 - Sprint 3 (2 weeks): Stories 9.1.6-9.1.7, 9.2.4-9.2.5, and 9.3.2
@@ -529,12 +557,14 @@ This document provides granular implementation plans for each story in Epic 9, b
 - Sprint 6 (2 weeks): Performance optimization, security review, and documentation
 
 ### Dependencies
+
 - Story 9.1 (Real-Time Collaboration Foundation) is a prerequisite for all other stories
 - Story 9.2 (Collaborative Workspace) depends on authentication and user management systems
 - Story 9.3 (Version History) builds on the CRDT implementation from 9.1
 - Story 9.4 (Workflow Orchestration) depends on all previous stories being substantially complete
 
 ### Risk Mitigation
+
 - Early prototype of CRDT implementation to validate approach with graph structures
 - Progressive feature rollout starting with core collaboration features
 - Load testing with simulated user behavior to identify scaling issues early
@@ -543,9 +573,11 @@ This document provides granular implementation plans for each story in Epic 9, b
 ## Architecture Overview
 
 ### Microservices Architecture
+
 The Epic 9 implementation adopts a microservices architecture to ensure scalability, maintainability, and independent deployment:
 
 #### Core Services
+
 1. **Collaboration Service** (`collaboration-service`)
    - Purpose: Real-time CRDT-based graph editing and user presence
    - Technology: Node.js, Yjs, WebSocket (`ws` library)
@@ -571,6 +603,7 @@ The Epic 9 implementation adopts a microservices architecture to ensure scalabil
    - Scale: Event-driven architecture with message queues
 
 #### Infrastructure Components
+
 - **NATS JetStream**: Message broker for service communication and event streaming
 - **Redis**: Caching layer for presence, locks, and session management
 - **PostgreSQL**: Primary database for persistent data
@@ -579,38 +612,39 @@ The Epic 9 implementation adopts a microservices architecture to ensure scalabil
 - **OpenTelemetry**: Distributed tracing
 
 ### Component Interaction Diagram
+
 ```mermaid
 graph TB
     subgraph "Client Layer"
         C[Client Application]
     end
-    
+
     subgraph "Gateway Layer"
         G[API Gateway]
         WSG[WebSocket Gateway]
     end
-    
+
     subgraph "Core Services"
         CS[Collaboration Service]
         WS[Workspace Service]
         VS[Versioning Service]
         WFS[Workflow Service]
     end
-    
+
     subgraph "Infrastructure"
         N[NATS JetStream]
         R[Redis]
         P[PostgreSQL]
         S3[S3 Storage]
     end
-    
+
     C --> G
     C --> WSG
     G --> WS
     G --> VS
     G --> WFS
     WSG --> CS
-    
+
     CS --> N
     CS --> R
     WS --> P
@@ -624,6 +658,7 @@ graph TB
 ```
 
 ### Data Flow Architecture
+
 ```mermaid
 sequenceDiagram
     participant Client
@@ -633,7 +668,7 @@ sequenceDiagram
     participant NATS
     participant Redis
     participant PostgreSQL
-    
+
     Note over Client,PostgreSQL: Real-time Collaboration Flow
     Client->>WSGateway: WebSocket Connection + JWT
     WSGateway->>WorkspaceService: Validate Token & Permissions
@@ -641,13 +676,13 @@ sequenceDiagram
     WSGateway->>CollabService: Forward Connection
     CollabService->>Redis: Update Presence
     CollabService->>Client: Send Current State
-    
+
     Client->>CollabService: Y.Update (Edit Operation)
     CollabService->>CollabService: Apply CRDT Operation
     CollabService->>NATS: Publish Change Event
     CollabService->>Redis: Update Presence
     CollabService->>Client: Broadcast to All Clients
-    
+
     Note over NATS,PostgreSQL: Async Processing
     NATS->>WorkspaceService: Activity Event
     WorkspaceService->>PostgreSQL: Record Activity
@@ -661,18 +696,21 @@ sequenceDiagram
 ### Story 9.1 - Real-Time Collaboration Foundation
 
 #### CRDT Implementation Details
+
 - **Engine**: Yjs with custom `Y.Graph` type for graph-specific operations
 - **Transport**: Binary WebSocket frames (33% more efficient than JSON)
 - **Operations**: Node creation/deletion, edge connection/disconnection, property updates, position changes
 - **Conflict Resolution**: Last-writer-wins for scalar properties, merge for complex objects
 
 #### WebSocket Architecture
+
 - **Connection Management**: Sticky load balancing by document ID
 - **Authentication**: JWT validation on connection with role-based permissions
 - **Rate Limiting**: Per-connection rate limiting to prevent abuse
 - **Heartbeat**: Configurable heartbeat interval for connection health
 
 #### Performance Targets
+
 - **Latency**: <100ms for operation propagation
 - **Throughput**: 1000 operations/second per document
 - **Concurrency**: 100 simultaneous users per document
@@ -681,6 +719,7 @@ sequenceDiagram
 ### Story 9.2 - Collaborative Workspace
 
 #### Database Schema Details
+
 ```sql
 -- Core workspace tables
 CREATE TABLE workspaces (
@@ -752,7 +791,8 @@ CREATE TABLE notifications (
 ```
 
 #### Permission System
-- **Permissions Bitmask**: 
+
+- **Permissions Bitmask**:
   - `READ = 1`, `WRITE = 2`, `DELETE = 4`, `ADMIN = 8`
   - `COMMENT = 16`, `APPROVE = 32`, `MANAGE_USERS = 64`
 - **Default Roles**: Owner, Admin, Editor, Viewer, Commenter
@@ -761,12 +801,14 @@ CREATE TABLE notifications (
 ### Story 9.3 - Version History & Comparison
 
 #### Versioning Architecture
+
 - **Snapshot Storage**: Compressed Yjs state in S3 with metadata in PostgreSQL
 - **Diff Algorithm**: Graph-aware diff using node/edge matching with position tolerance
 - **Trigger Points**: Manual snapshots, time-based (every 5 minutes), size-based (1MB changes)
 - **Retention Policy**: Configurable retention with automatic cleanup
 
 #### Version Schema
+
 ```sql
 CREATE TABLE version_snapshots (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -800,12 +842,14 @@ CREATE TABLE branches (
 ### Story 9.4 - Workflow Orchestration
 
 #### State Machine Design
+
 - **States**: draft, review, approved, published, archived
 - **Transitions**: Configurable rules with role-based permissions
 - **Metadata**: State timestamps, transition reasons, approver information
 - **Notifications**: Automatic notifications on state changes
 
 #### Locking Mechanism
+
 - **Lock Types**: Read locks, write locks, exclusive locks
 - **Scope**: Document-level, node-level, or custom regions
 - **TTL**: Configurable timeout with automatic release
@@ -814,30 +858,35 @@ CREATE TABLE branches (
 ## Testing Strategy
 
 ### Unit Testing
+
 - **CRDT Operations**: Comprehensive test suite for conflict resolution scenarios
 - **Graph Algorithms**: Test suite for diff computation and matching algorithms
 - **Permission System**: Role-based access control validation
 - **State Transitions**: Workflow state machine testing
 
 ### Integration Testing
+
 - **Service Communication**: End-to-end message flow testing
 - **Database Transactions**: Multi-service transaction consistency
 - **Real-time Updates**: WebSocket message delivery and ordering
 - **File Storage**: S3 integration for snapshots and exports
 
 ### Performance Testing
+
 - **Load Testing**: Artillery-based testing with 50+ concurrent users
 - **Stress Testing**: Large graph performance (10,000+ nodes)
 - **Memory Testing**: Memory usage under sustained load
 - **Network Testing**: Latency and throughput measurement
 
 ### End-to-End Testing
+
 - **User Workflows**: Complete collaboration scenarios
 - **Browser Compatibility**: Cross-browser testing for WebSocket features
 - **Mobile Testing**: Touch and responsive behavior
 - **Offline Testing**: Offline operation and synchronization
 
 ### Chaos Testing
+
 - **Service Failures**: Graceful degradation testing
 - **Network Partitions**: Split-brain scenario handling
 - **Data Corruption**: Recovery from corrupted state
@@ -846,18 +895,21 @@ CREATE TABLE branches (
 ## Security Considerations
 
 ### Authentication & Authorization
+
 - **JWT Tokens**: Short-lived tokens with refresh mechanism
 - **Role-Based Access**: Granular permissions with audit trails
 - **API Security**: Rate limiting and request validation
 - **Session Management**: Secure session handling with timeout
 
 ### Data Protection
+
 - **Encryption**: At-rest and in-transit encryption
 - **Data Isolation**: Tenant-level data separation
 - **Audit Logging**: Comprehensive audit trail for compliance
 - **Backup Security**: Encrypted backups with access controls
 
 ### Network Security
+
 - **TLS Termination**: End-to-end encryption for WebSocket connections
 - **CORS Policy**: Strict cross-origin resource sharing
 - **Rate Limiting**: Protection against DDoS and abuse
@@ -866,18 +918,21 @@ CREATE TABLE branches (
 ## Monitoring & Observability
 
 ### Metrics Collection
+
 - **Application Metrics**: Request latency, error rates, throughput
 - **Business Metrics**: User engagement, document activity, collaboration patterns
 - **Infrastructure Metrics**: CPU, memory, disk, network usage
 - **Custom Metrics**: CRDT operation counts, conflict resolution frequency
 
 ### Distributed Tracing
+
 - **OpenTelemetry**: End-to-end request tracing across services
 - **Correlation IDs**: Request tracking through microservices
 - **Performance Profiling**: Bottleneck identification and optimization
 - **Error Tracking**: Exception tracking and alerting
 
 ### Alerting
+
 - **SLA Monitoring**: Uptime and performance SLA tracking
 - **Error Rate Alerts**: Threshold-based error rate monitoring
 - **Resource Alerts**: CPU, memory, and disk usage alerts
@@ -886,18 +941,21 @@ CREATE TABLE branches (
 ## Deployment Strategy
 
 ### Infrastructure as Code
+
 - **Terraform**: Infrastructure provisioning and management
 - **Kubernetes**: Container orchestration and scaling
 - **Helm Charts**: Application deployment and configuration
 - **CI/CD Pipeline**: Automated testing and deployment
 
 ### Environment Strategy
+
 - **Development**: Local development with Docker Compose
 - **Staging**: Production-like environment for integration testing
 - **Production**: High-availability deployment with monitoring
 - **Disaster Recovery**: Cross-region backup and failover
 
 ### Rollout Plan
+
 - **Phase 1**: Core collaboration features (Stories 9.1-9.2)
 - **Phase 2**: Version history and comparison (Story 9.3)
 - **Phase 3**: Workflow orchestration (Story 9.4)

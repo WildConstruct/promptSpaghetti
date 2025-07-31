@@ -37,7 +37,10 @@
 }
 
 /* Buttons */
-.btn-primary, .btn-secondary, .btn-warning, .btn-danger {
+.btn-primary,
+.btn-secondary,
+.btn-warning,
+.btn-danger {
   padding: 8px 16px;
   border: none;
   border-radius: 6px;
@@ -261,7 +264,7 @@
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.form-field input[type="checkbox"] {
+.form-field input[type='checkbox'] {
   width: auto;
   margin-right: 8px;
 }
@@ -273,7 +276,7 @@
   gap: 12px;
 }
 
-.range-input input[type="range"] {
+.range-input input[type='range'] {
   flex: 1;
 }
 
@@ -418,27 +421,27 @@
   .configuration-panel {
     padding: 16px;
   }
-  
+
   .config-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
   }
-  
+
   .config-actions {
     width: 100%;
     justify-content: flex-end;
   }
-  
+
   .config-tabs {
     overflow-x: auto;
     white-space: nowrap;
   }
-  
+
   .preset-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .preset-actions {
     flex-direction: column;
   }
@@ -450,50 +453,50 @@
     background: #1f2937;
     color: #f9fafb;
   }
-  
+
   .config-header {
     border-bottom-color: #374151;
   }
-  
+
   .config-header h2 {
     color: #f9fafb;
   }
-  
+
   .config-section {
     border-color: #374151;
   }
-  
+
   .section-header {
     background: #374151;
     border-bottom-color: #4b5563;
   }
-  
+
   .section-header h3 {
     color: #f9fafb;
   }
-  
+
   .form-field input,
   .form-field select {
     background: #374151;
     border-color: #4b5563;
     color: #f9fafb;
   }
-  
+
   .preset-card {
     background: #374151;
     border-color: #4b5563;
   }
-  
+
   .preset-card.selected {
     background: #1e3a8a;
   }
-  
+
   .btn-secondary {
     background: #374151;
     color: #f9fafb;
     border-color: #4b5563;
   }
-  
+
   .create-preset-form {
     background: #374151;
     border-color: #4b5563;

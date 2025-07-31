@@ -1,6 +1,7 @@
 # ADR-001: Use Repository Pattern for Data Access
 
 ## Status
+
 Accepted
 
 ## Context
@@ -55,20 +56,20 @@ Each repository interface will have multiple implementations to support differen
 // File-based implementation for local development
 class FileSystemGraphRepository implements GraphRepository {
   constructor(private basePath: string) {}
-  
+
   async save(graph: Graph): Promise<GraphId> {
     const filePath = path.join(this.basePath, `${graph.id}.json`);
     await fs.writeFile(filePath, JSON.stringify(graph, null, 2));
     return graph.id;
   }
-  
+
   // ... other methods
 }
 
 // Database implementation for server deployments
 class DatabaseGraphRepository implements GraphRepository {
   constructor(private db: Database) {}
-  
+
   async save(graph: Graph): Promise<GraphId> {
     const stmt = this.db.prepare(`
       INSERT OR REPLACE INTO graphs (id, user_id, name, data, updated_at)
@@ -77,7 +78,7 @@ class DatabaseGraphRepository implements GraphRepository {
     stmt.run(graph.id, graph.userId, graph.name, JSON.stringify(graph), Date.now());
     return graph.id;
   }
-  
+
   // ... other methods
 }
 ```
@@ -93,20 +94,20 @@ class GraphService {
     private userRepository: UserRepository,
     private logger: Logger
   ) {}
-  
+
   async createGraph(userId: UserId, request: CreateGraphRequest): Promise<Graph> {
     // Verify user exists
     const user = await this.userRepository.findById(userId);
     if (!user) {
       throw new NotFoundError('User not found');
     }
-    
+
     // Create graph
     const graph = Graph.create(userId, request);
-    
+
     // Save graph
     await this.graphRepository.save(graph);
-    
+
     return graph;
   }
 }
@@ -129,7 +130,7 @@ class ProductionRepositoryFactory implements RepositoryFactory {
     private redis: Redis,
     private config: StorageConfig
   ) {}
-  
+
   createGraphRepository(): GraphRepository {
     if (this.config.storage === 'file') {
       return new FileSystemGraphRepository(this.config.dataPath);
@@ -137,7 +138,7 @@ class ProductionRepositoryFactory implements RepositoryFactory {
       return new DatabaseGraphRepository(this.db);
     }
   }
-  
+
   // ... other repository factories
 }
 ```
@@ -160,17 +161,17 @@ interface GraphRepository {
 class GraphService {
   async moveGraphToUser(graphId: GraphId, newUserId: UserId): Promise<void> {
     const tx = await this.repositoryFactory.createTransaction();
-    
+
     try {
       const graph = await this.graphRepository.findById(graphId);
       if (!graph) throw new NotFoundError('Graph not found');
-      
+
       graph.userId = newUserId;
       await this.graphRepository.saveWithTransaction(graph, tx);
-      
+
       // Update user's graph count
       await this.userRepository.updateGraphCountWithTransaction(newUserId, +1, tx);
-      
+
       await tx.commit();
     } catch (error) {
       await tx.rollback();
@@ -213,22 +214,26 @@ class GraphService {
 ## Implementation Notes
 
 ### Phase 1: Core Repositories
+
 - `GraphRepository` - Graph CRUD operations
-- `UserRepository` - User management  
+- `UserRepository` - User management
 - `SessionRepository` - User session handling
 
 ### Phase 2: Extended Repositories
+
 - `AnalyticsRepository` - Event and metrics storage
 - `AuditRepository` - Audit log persistence
 - `CacheRepository` - Caching abstraction
 
 ### Phase 3: Advanced Features
+
 - Transaction support across repositories
 - Repository middleware (logging, metrics, caching)
 - Query builder integration for complex queries
 - Connection pooling and optimization
 
 ### Testing Strategy
+
 - Unit tests for each repository implementation
 - Integration tests with real databases
 - Performance tests comparing different implementations

@@ -3,12 +3,7 @@
  * Epic 10.1.2 - Common Interface Definition
  */
 
-import {
-  ModelAdaptor,
-  AdaptorRegistry,
-  PlatformCapabilities,
-  AdaptorError
-} from '../types';
+import { ModelAdaptor, AdaptorRegistry, PlatformCapabilities, AdaptorError } from '../types';
 import { EventEmitter } from 'events';
 import semver from 'semver';
 
@@ -85,11 +80,7 @@ export class DefaultAdaptorRegistry extends EventEmitter implements AdaptorRegis
   public async unregister(adaptorId: string): Promise<void> {
     const adaptor = this.adaptors.get(adaptorId);
     if (!adaptor) {
-      throw new AdaptorError(
-        `Adaptor ${adaptorId} not found in registry`,
-        adaptorId,
-        'ADAPTOR_NOT_FOUND'
-      );
+      throw new AdaptorError(`Adaptor ${adaptorId} not found in registry`, adaptorId, 'ADAPTOR_NOT_FOUND');
     }
 
     try {
@@ -173,18 +164,14 @@ export class DefaultAdaptorRegistry extends EventEmitter implements AdaptorRegis
   public async refreshCapabilities(adaptorId: string): Promise<PlatformCapabilities> {
     const adaptor = this.adaptors.get(adaptorId);
     if (!adaptor) {
-      throw new AdaptorError(
-        `Adaptor ${adaptorId} not found`,
-        adaptorId,
-        'ADAPTOR_NOT_FOUND'
-      );
+      throw new AdaptorError(`Adaptor ${adaptorId} not found`, adaptorId, 'ADAPTOR_NOT_FOUND');
     }
 
     try {
       const capabilities = await adaptor.capabilities();
       this.capabilitiesCache.set(adaptorId, capabilities);
       this.updateCapabilityIndex(adaptor, capabilities);
-      
+
       this.emit('capabilities:changed', adaptorId, capabilities);
       return capabilities;
     } catch (error) {
@@ -223,7 +210,7 @@ export class DefaultAdaptorRegistry extends EventEmitter implements AdaptorRegis
     }
   ): ModelAdaptor | undefined {
     const candidates = this.findByPlatform(platform);
-    
+
     if (candidates.length === 0) {
       return undefined;
     }
@@ -231,9 +218,7 @@ export class DefaultAdaptorRegistry extends EventEmitter implements AdaptorRegis
     // Filter by version requirement
     let filtered = candidates;
     if (requirements?.minVersion) {
-      filtered = candidates.filter(adaptor => 
-        semver.gte(adaptor.version, requirements.minVersion!)
-      );
+      filtered = candidates.filter(adaptor => semver.gte(adaptor.version, requirements.minVersion!));
     }
 
     // Filter by required capabilities
@@ -241,10 +226,8 @@ export class DefaultAdaptorRegistry extends EventEmitter implements AdaptorRegis
       filtered = filtered.filter(adaptor => {
         const capabilities = this.capabilitiesCache.get(adaptor.id);
         if (!capabilities) return false;
-        
-        return requirements.requiredCapabilities!.every(req =>
-          capabilities.features.includes(req)
-        );
+
+        return requirements.requiredCapabilities!.every(req => capabilities.features.includes(req));
       });
     }
 
@@ -258,7 +241,7 @@ export class DefaultAdaptorRegistry extends EventEmitter implements AdaptorRegis
       if (requirements?.preferredCapabilities) {
         const aCapabilities = this.capabilitiesCache.get(a.id);
         const bCapabilities = this.capabilitiesCache.get(b.id);
-        
+
         if (aCapabilities && bCapabilities) {
           const aScore = requirements.preferredCapabilities.filter(pref =>
             aCapabilities.features.includes(pref)
@@ -266,7 +249,7 @@ export class DefaultAdaptorRegistry extends EventEmitter implements AdaptorRegis
           const bScore = requirements.preferredCapabilities.filter(pref =>
             bCapabilities.features.includes(pref)
           ).length;
-          
+
           if (aScore !== bScore) {
             return bScore - aScore; // Higher score first
           }
@@ -286,7 +269,7 @@ export class DefaultAdaptorRegistry extends EventEmitter implements AdaptorRegis
   private validateAdaptor(adaptor: ModelAdaptor): void {
     const required = ['id', 'version', 'name', 'description', 'platforms'];
     const missing = required.filter(prop => !(prop in adaptor));
-    
+
     if (missing.length > 0) {
       throw new AdaptorError(
         `Adaptor missing required properties: ${missing.join(', ')}`,
@@ -296,55 +279,32 @@ export class DefaultAdaptorRegistry extends EventEmitter implements AdaptorRegis
     }
 
     if (!semver.valid(adaptor.version)) {
-      throw new AdaptorError(
-        `Adaptor version must be valid semver: ${adaptor.version}`,
-        adaptor.id,
-        'INVALID_VERSION'
-      );
+      throw new AdaptorError(`Adaptor version must be valid semver: ${adaptor.version}`, adaptor.id, 'INVALID_VERSION');
     }
 
     if (!Array.isArray(adaptor.platforms) || adaptor.platforms.length === 0) {
-      throw new AdaptorError(
-        'Adaptor must support at least one platform',
-        adaptor.id,
-        'NO_PLATFORMS_SUPPORTED'
-      );
+      throw new AdaptorError('Adaptor must support at least one platform', adaptor.id, 'NO_PLATFORMS_SUPPORTED');
     }
 
     if (typeof adaptor.capabilities !== 'function') {
-      throw new AdaptorError(
-        'Adaptor must implement capabilities() method',
-        adaptor.id,
-        'MISSING_CAPABILITIES_METHOD'
-      );
+      throw new AdaptorError('Adaptor must implement capabilities() method', adaptor.id, 'MISSING_CAPABILITIES_METHOD');
     }
 
     if (typeof adaptor.validate !== 'function') {
-      throw new AdaptorError(
-        'Adaptor must implement validate() method',
-        adaptor.id,
-        'MISSING_VALIDATE_METHOD'
-      );
+      throw new AdaptorError('Adaptor must implement validate() method', adaptor.id, 'MISSING_VALIDATE_METHOD');
     }
 
     if (typeof adaptor.transform !== 'function') {
-      throw new AdaptorError(
-        'Adaptor must implement transform() method',
-        adaptor.id,
-        'MISSING_TRANSFORM_METHOD'
-      );
+      throw new AdaptorError('Adaptor must implement transform() method', adaptor.id, 'MISSING_TRANSFORM_METHOD');
     }
   }
 
   /**
    * Handle version conflicts when registering adaptors
    */
-  private async handleVersionConflict(
-    existing: ModelAdaptor,
-    incoming: ModelAdaptor
-  ): Promise<void> {
+  private async handleVersionConflict(existing: ModelAdaptor, incoming: ModelAdaptor): Promise<void> {
     const comparison = semver.compare(incoming.version, existing.version);
-    
+
     if (comparison > 0) {
       // Incoming version is newer
       this.logger.log(`Updating adaptor ${incoming.id} from v${existing.version} to v${incoming.version}`);
@@ -426,11 +386,13 @@ export class DefaultAdaptorRegistry extends EventEmitter implements AdaptorRegis
    * Setup event handlers for registry management
    */
   private setupEventHandlers(): void {
-    this.on('adaptor:registered', (adaptor) => {
-      this.logger.log(`✓ Adaptor registered: ${adaptor.id} v${adaptor.version} (platforms: ${adaptor.platforms.join(', ')})`);
+    this.on('adaptor:registered', adaptor => {
+      this.logger.log(
+        `✓ Adaptor registered: ${adaptor.id} v${adaptor.version} (platforms: ${adaptor.platforms.join(', ')})`
+      );
     });
 
-    this.on('adaptor:unregistered', (adaptorId) => {
+    this.on('adaptor:unregistered', adaptorId => {
       this.logger.log(`✓ Adaptor unregistered: ${adaptorId}`);
     });
 
@@ -452,7 +414,7 @@ export class DefaultAdaptorRegistry extends EventEmitter implements AdaptorRegis
     capabilityCount: number;
     adaptorsByPlatform: Record<string, number>;
     mostCommonCapabilities: Array<{ capability: string; count: number }>;
-    } {
+  } {
     const adaptorsByPlatform: Record<string, number> = {};
     this.platformIndex.forEach((adaptors, platform) => {
       adaptorsByPlatform[platform] = adaptors.size;
@@ -467,7 +429,7 @@ export class DefaultAdaptorRegistry extends EventEmitter implements AdaptorRegis
       platformCount: this.platformIndex.size,
       capabilityCount: this.capabilityIndex.size,
       adaptorsByPlatform,
-      mostCommonCapabilities: capabilityCounts.slice(0, 10)
+      mostCommonCapabilities: capabilityCounts.slice(0, 10),
     };
   }
 }

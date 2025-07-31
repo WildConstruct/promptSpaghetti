@@ -9,10 +9,7 @@ interface ResponsiveCorrectionsPanelProps {
   onClose: () => void;
 }
 
-export const ResponsiveCorrectionsPanel: React.FC<ResponsiveCorrectionsPanelProps> = ({
-  isOpen,
-  onClose
-}) => {
+export const ResponsiveCorrectionsPanel: React.FC<ResponsiveCorrectionsPanelProps> = ({ isOpen, onClose }) => {
   const isEnabled = useCorrectionsEnabled();
   const [isMobile, setIsMobile] = useState(false);
   const [showStats, setShowStats] = useState(false);
@@ -29,22 +26,11 @@ export const ResponsiveCorrectionsPanel: React.FC<ResponsiveCorrectionsPanelProp
   return (
     <>
       {isMobile ? (
-        <MobileCorrectionsPanel 
-          isOpen={isOpen} 
-          onClose={onClose}
-        />
+        <MobileCorrectionsPanel isOpen={isOpen} onClose={onClose} />
       ) : (
-        <CorrectionsManagerPanel 
-          isOpen={isOpen} 
-          onClose={onClose}
-        />
+        <CorrectionsManagerPanel isOpen={isOpen} onClose={onClose} />
       )}
-      {showStats && (
-        <CorrectionsStatsDashboard 
-          isOpen={showStats} 
-          onClose={() => setShowStats(false)}
-        />
-      )}
+      {showStats && <CorrectionsStatsDashboard isOpen={showStats} onClose={() => setShowStats(false)} />}
     </>
   );
 };
@@ -67,6 +53,6 @@ export const useCorrectionsPanel = () => {
     togglePanel,
     openStats,
     closeStats,
-    toggleStats
+    toggleStats,
   };
 };

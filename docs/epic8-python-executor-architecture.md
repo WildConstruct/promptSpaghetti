@@ -1,27 +1,33 @@
 # Epic 8.1 - Python Executor Bridge Architecture
 
 ## Overview
+
 This document defines the microservice architecture for the Python Executor Bridge, enabling secure and scalable execution of Python code within prompt-spaghetti node graphs.
 
 ## Service Boundaries and Responsibilities
 
 ### 1. Main Application (Node.js/TypeScript)
+
 **Responsibilities:**
+
 - Graph execution orchestration
-- Node lifecycle management  
+- Node lifecycle management
 - User interface and experience
 - Authentication and authorization
 - Graph persistence and state management
 - Client-side validation and security
 
 **Boundaries:**
+
 - Does NOT execute Python code directly
 - Does NOT manage Python environments
 - Does NOT handle Python package dependencies
 - Delegates Python execution to executor service
 
 ### 2. Python Executor Service (Python/FastAPI)
+
 **Responsibilities:**
+
 - Secure Python code execution in sandboxed environments
 - Python package management and dependency resolution
 - Resource monitoring and enforcement (CPU, memory, time)
@@ -30,13 +36,16 @@ This document defines the microservice architecture for the Python Executor Brid
 - Audit logging for executed code
 
 **Boundaries:**
+
 - Does NOT manage user authentication (trusts main app)
 - Does NOT persist user data or graphs
 - Does NOT handle UI concerns
 - Focused solely on Python execution environment
 
 ### 3. Redis Cache Layer (Optional - Future Enhancement)
+
 **Responsibilities:**
+
 - Caching execution results for identical code/input combinations
 - Session storage for long-running executions
 - Rate limiting and throttling state
@@ -46,6 +55,7 @@ This document defines the microservice architecture for the Python Executor Brid
 ### Main Application → Python Executor
 
 #### Execute Code Endpoint
+
 ```http
 POST /v1/execute
 Authorization: Bearer <jwt-token>
@@ -62,6 +72,7 @@ Content-Type: application/json
 ```
 
 #### Response Format
+
 ```json
 {
   "success": true,
@@ -78,6 +89,7 @@ Content-Type: application/json
 ```
 
 #### Error Response
+
 ```json
 {
   "success": false,
@@ -98,12 +110,14 @@ Content-Type: application/json
 ### Health and Management Endpoints
 
 #### Health Check
+
 ```http
 GET /health
 → 200 OK: {"status": "healthy", "python_version": "3.11.0", "active_executions": 0}
 ```
 
 #### Metrics
+
 ```http
 GET /metrics
 → 200 OK: {"executions_total": 1234, "avg_execution_time": 0.045, "active_workers": 4}
@@ -112,13 +126,15 @@ GET /metrics
 ## Data Flow and Transformation Pipeline
 
 ### 1. Request Initiation
+
 ```
-Main App (PythonTransform Node) 
+Main App (PythonTransform Node)
   ↓ HTTP Request
 Python Executor Service
 ```
 
 ### 2. Security Validation Pipeline
+
 ```
 Incoming Request
   ↓
@@ -132,6 +148,7 @@ Module Allowlist Check
 ```
 
 ### 3. Execution Pipeline
+
 ```
 Validated Request
   ↓
@@ -149,6 +166,7 @@ Format Response
 ```
 
 ### 4. Response Flow
+
 ```
 Execution Results
   ↓
@@ -162,6 +180,7 @@ Integration with Node Graph Execution
 ## Deployment Architecture
 
 ### Development Environment
+
 ```
 ┌─────────────────┐    ┌─────────────────────┐
 │   Main App      │    │  Python Executor    │
@@ -174,6 +193,7 @@ Integration with Node Graph Execution
 ```
 
 ### Production Environment
+
 ```
 ┌────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Load Balancer │    │  Main App       │    │ Python Executor │
@@ -195,6 +215,7 @@ Integration with Node Graph Execution
 ```
 
 ### Security Layers
+
 ```
 ┌─────────────────────────────────────────────────┐
 │                Load Balancer                    │
@@ -225,7 +246,9 @@ Integration with Node Graph Execution
 ## Technology Selection
 
 ### Python Web Framework: FastAPI
+
 **Rationale:**
+
 - High performance (comparable to Node.js)
 - Automatic API documentation generation (OpenAPI)
 - Built-in request validation with Pydantic
@@ -233,7 +256,9 @@ Integration with Node Graph Execution
 - Type hints and modern Python features
 
 ### Communication Protocol: REST over HTTP
+
 **Rationale:**
+
 - Simplicity and universality
 - Excellent debugging and monitoring tools
 - Native browser support for development
@@ -241,19 +266,23 @@ Integration with Node Graph Execution
 - Familiar to development teams
 
 **Alternative Considered:** gRPC
+
 - **Pros:** Better performance, streaming support
 - **Cons:** Additional complexity, less debugging tools
 - **Decision:** Start with REST, migrate to gRPC if performance requires
 
 ### Containerization: Docker + Kubernetes
+
 **Rationale:**
+
 - Container isolation provides security boundaries
 - Resource limiting built into containers
 - Easy scaling and deployment
 - Consistent environments across dev/staging/prod
 - Kubernetes provides orchestration and health management
 
-### Security Framework: 
+### Security Framework:
+
 - **RestrictedPython** for code execution safety
 - **Docker seccomp profiles** for system call restrictions
 - **Resource limits** via cgroups
@@ -262,14 +291,16 @@ Integration with Node Graph Execution
 ## Operational Requirements
 
 ### Scaling Strategy
+
 - **Horizontal scaling:** Multiple Python executor containers
 - **Auto-scaling triggers:** CPU > 70%, Memory > 80%, Queue depth > 10
 - **Load balancing:** Round-robin with health checks
-- **Resource allocation:** 
+- **Resource allocation:**
   - Development: 1 CPU, 512MB RAM per container
   - Production: 2 CPU, 1GB RAM per container
 
 ### Monitoring and Logging
+
 - **Application metrics:** Execution time, success rate, active executions
 - **System metrics:** CPU, memory, disk usage per container
 - **Business metrics:** Most used Python modules, error patterns
@@ -277,6 +308,7 @@ Integration with Node Graph Execution
 - **Log aggregation:** Structured JSON logs to centralized system
 
 ### Disaster Recovery and High Availability
+
 - **RTO (Recovery Time Objective):** 5 minutes
 - **RPO (Recovery Point Objective):** 0 (stateless service)
 - **Multi-AZ deployment** in production
@@ -287,24 +319,28 @@ Integration with Node Graph Execution
 ## Integration Points with Existing Architecture
 
 ### Epic 7 Advanced Node Integration
+
 - `PythonTransform` node extends `AdvancedRuntimeNode`
 - Leverages existing state management and caching systems
 - Uses `measureExecution` for performance tracking
 - Integrates with validation framework
 
 ### Inspector Panel Integration
+
 - Code editor component with Python syntax highlighting
 - Real-time execution preview in inspector
 - Error display with line numbers and highlighting
 - Module management interface for allowed libraries
 
 ### Graph Engine Integration
+
 - Seamless integration with existing node execution pipeline
 - Maintains deterministic behavior with execution context
 - Supports async execution without blocking graph processing
 - Error handling propagates through graph execution chain
 
 ## Next Steps (8.1.2 - 8.1.6)
+
 1. **REST API Implementation** - Detailed FastAPI service implementation
 2. **Sandboxed Execution Environment** - Docker container security setup
 3. **Main Application Integration** - PythonTransform node implementation

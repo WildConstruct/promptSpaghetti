@@ -42,7 +42,7 @@ class CollaborationClient {
   private userName: string;
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
-  
+
   // Event handlers
   public onConnected: (() => void) | null = null;
   public onDisconnected: (() => void) | null = null;
@@ -50,58 +50,60 @@ class CollaborationClient {
   public onUserLeave: ((userId: string) => void) | null = null;
   public onGraphUpdate: ((update: any) => void) | null = null;
   public onCursorUpdate: ((userId: string, cursor: any) => void) | null = null;
-  
+
   constructor(documentId: string, userId: string, userName: string) {
     this.documentId = documentId;
     this.userId = userId;
     this.userName = userName;
   }
-  
+
   connect() {
     this.ws = new WebSocket('ws://localhost:8000');
-    
+
     this.ws.onopen = () => {
       console.log('Connected to collaboration server');
       this.authenticate();
       this.onConnected?.();
     };
-    
-    this.ws.onmessage = (event) => {
+
+    this.ws.onmessage = event => {
       const message = JSON.parse(event.data);
       this.handleMessage(message);
     };
-    
+
     this.ws.onclose = () => {
       console.log('Disconnected from collaboration server');
       this.onDisconnected?.();
       this.handleReconnection();
     };
-    
-    this.ws.onerror = (error) => {
+
+    this.ws.onerror = error => {
       console.error('WebSocket error:', error);
     };
   }
-  
+
   private authenticate() {
     this.send('auth_request', {
       userId: this.userId,
       documentId: this.documentId,
       userName: this.userName,
-      platform: 'web'
+      platform: 'web',
     });
   }
-  
+
   private send(type: string, payload: any) {
     if (this.ws?.readyState === WebSocket.OPEN) {
-      this.ws.send(JSON.stringify({
-        type,
-        payload,
-        timestamp: Date.now(),
-        messageId: uuidv4()
-      }));
+      this.ws.send(
+        JSON.stringify({
+          type,
+          payload,
+          timestamp: Date.now(),
+          messageId: uuidv4(),
+        })
+      );
     }
   }
-  
+
   private handleMessage(message: any) {
     switch (message.type) {
       case 'auth_response':
@@ -111,50 +113,50 @@ class CollaborationClient {
           console.error('Authentication failed:', message.payload.message);
         }
         break;
-        
+
       case 'user_join':
         this.onUserJoin?.(message.payload);
         break;
-        
+
       case 'user_leave':
         this.onUserLeave?.(message.payload.userId);
         break;
-        
+
       case 'graph_update':
         this.onGraphUpdate?.(message.payload);
         break;
-        
+
       case 'presence_update':
         this.onCursorUpdate?.(message.payload.userId, message.payload.cursor);
         break;
     }
   }
-  
+
   // Public methods
   sendGraphUpdate(operations: any[]) {
     this.send('graph_update', {
       documentId: this.documentId,
       operations,
-      version: this.getCurrentVersion()
+      version: this.getCurrentVersion(),
     });
   }
-  
+
   sendCursorUpdate = throttle(50, (x: number, y: number) => {
     this.send('presence_update', {
       cursor: { x, y },
-      status: 'active'
+      status: 'active',
     });
   });
-  
+
   disconnect() {
     this.ws?.close();
   }
-  
+
   private getCurrentVersion(): number {
     // Return current document version
     return 1;
   }
-  
+
   private handleReconnection() {
     if (this.reconnectAttempts < this.maxReconnectAttempts) {
       const delay = Math.pow(2, this.reconnectAttempts) * 1000;
@@ -170,18 +172,14 @@ class CollaborationClient {
 ### 3. Basic Usage
 
 ```typescript
-const collaboration = new CollaborationClient(
-  'document-uuid-here',
-  'user-uuid-here', 
-  'John Doe'
-);
+const collaboration = new CollaborationClient('document-uuid-here', 'user-uuid-here', 'John Doe');
 
-collaboration.onUserJoin = (user) => {
+collaboration.onUserJoin = user => {
   console.log('User joined:', user.userName);
   updateUsersList();
 };
 
-collaboration.onGraphUpdate = (update) => {
+collaboration.onGraphUpdate = update => {
   console.log('Graph updated:', update);
   applyGraphUpdate(update);
 };
@@ -211,14 +209,14 @@ export const collaborationConfig: Record<string, CollaborationConfig> = {
     websocketUrl: 'ws://localhost:8000',
     reconnectAttempts: 5,
     heartbeatInterval: 30000,
-    cursorThrottle: 50
+    cursorThrottle: 50,
   },
   production: {
     websocketUrl: 'wss://api.promptscape.com/ws',
     reconnectAttempts: 3,
     heartbeatInterval: 30000,
-    cursorThrottle: 50
-  }
+    cursorThrottle: 50,
+  },
 };
 
 export const getConfig = (): CollaborationConfig => {
@@ -235,33 +233,33 @@ enum ConnectionState {
   CONNECTING = 'connecting',
   CONNECTED = 'connected',
   AUTHENTICATED = 'authenticated',
-  ERROR = 'error'
+  ERROR = 'error',
 }
 
 class ConnectionManager {
   private state: ConnectionState = ConnectionState.DISCONNECTED;
   private listeners: Map<ConnectionState, Function[]> = new Map();
-  
+
   setState(newState: ConnectionState) {
     const previousState = this.state;
     this.state = newState;
-    
+
     // Notify listeners
     const callbacks = this.listeners.get(newState) || [];
     callbacks.forEach(callback => callback(newState, previousState));
   }
-  
+
   onStateChange(state: ConnectionState, callback: Function) {
     if (!this.listeners.has(state)) {
       this.listeners.set(state, []);
     }
     this.listeners.get(state)!.push(callback);
   }
-  
+
   getState(): ConnectionState {
     return this.state;
   }
-  
+
   isConnected(): boolean {
     return this.state === ConnectionState.AUTHENTICATED;
   }
@@ -282,31 +280,31 @@ interface AuthConfig {
 
 class AuthenticatedCollaborationClient extends CollaborationClient {
   private authConfig: AuthConfig;
-  
+
   constructor(documentId: string, userId: string, userName: string, authConfig: AuthConfig) {
     super(documentId, userId, userName);
     this.authConfig = authConfig;
   }
-  
+
   protected async authenticate() {
     try {
       const token = await this.authConfig.getToken();
-      
+
       this.send('auth_request', {
         userId: this.userId,
         documentId: this.documentId,
         userName: this.userName,
         token: token,
-        platform: 'web'
+        platform: 'web',
       });
     } catch (error) {
       this.authConfig.onAuthError('Failed to get authentication token');
     }
   }
-  
+
   protected handleMessage(message: any) {
     super.handleMessage(message);
-    
+
     if (message.type === 'auth_response' && !message.payload.success) {
       this.authConfig.onAuthError(message.payload.message);
     }
@@ -314,21 +312,16 @@ class AuthenticatedCollaborationClient extends CollaborationClient {
 }
 
 // Usage
-const authClient = new AuthenticatedCollaborationClient(
-  documentId,
-  userId,
-  userName,
-  {
-    getToken: async () => {
-      return localStorage.getItem('auth_token') || '';
-    },
-    onAuthError: (error) => {
-      console.error('Auth error:', error);
-      // Redirect to login page
-      window.location.href = '/login';
-    }
-  }
-);
+const authClient = new AuthenticatedCollaborationClient(documentId, userId, userName, {
+  getToken: async () => {
+    return localStorage.getItem('auth_token') || '';
+  },
+  onAuthError: error => {
+    console.error('Auth error:', error);
+    // Redirect to login page
+    window.location.href = '/login';
+  },
+});
 ```
 
 ### Permission Checking
@@ -346,22 +339,22 @@ class PermissionManager {
     canEdit: false,
     canComment: false,
     canInvite: false,
-    isAdmin: false
+    isAdmin: false,
   };
-  
+
   updatePermissions(permissionsBitmask: number) {
     this.permissions = {
       canEdit: (permissionsBitmask & 0b10) !== 0,
       canComment: (permissionsBitmask & 0b1000000000000) !== 0,
       canInvite: (permissionsBitmask & 0b1000000000000000) !== 0,
-      isAdmin: (permissionsBitmask & 0b100) !== 0
+      isAdmin: (permissionsBitmask & 0b100) !== 0,
     };
   }
-  
+
   getPermissions(): UserPermissions {
     return { ...this.permissions };
   }
-  
+
   canPerformAction(action: keyof UserPermissions): boolean {
     return this.permissions[action];
   }
@@ -389,16 +382,16 @@ class GraphUpdateManager {
   private pendingOperations: GraphOperation[] = [];
   private version: number = 0;
   private collaborationClient: CollaborationClient;
-  
+
   constructor(collaborationClient: CollaborationClient) {
     this.collaborationClient = collaborationClient;
-    
+
     // Listen for remote updates
-    collaborationClient.onGraphUpdate = (update) => {
+    collaborationClient.onGraphUpdate = update => {
       this.applyRemoteUpdate(update);
     };
   }
-  
+
   // Local operations
   addNode(node: any) {
     const operation: GraphOperation = {
@@ -406,13 +399,13 @@ class GraphUpdateManager {
       nodeId: node.id,
       data: node,
       timestamp: Date.now(),
-      userId: this.collaborationClient.userId
+      userId: this.collaborationClient.userId,
     };
-    
+
     this.applyLocalOperation(operation);
     this.sendOperation(operation);
   }
-  
+
   updateNode(nodeId: string, newData: any, oldData: any) {
     const operation: GraphOperation = {
       type: 'node_update',
@@ -420,32 +413,32 @@ class GraphUpdateManager {
       data: newData,
       oldValue: oldData,
       timestamp: Date.now(),
-      userId: this.collaborationClient.userId
+      userId: this.collaborationClient.userId,
     };
-    
+
     this.applyLocalOperation(operation);
     this.sendOperation(operation);
   }
-  
+
   removeNode(nodeId: string) {
     const operation: GraphOperation = {
       type: 'node_remove',
       nodeId,
       data: null,
       timestamp: Date.now(),
-      userId: this.collaborationClient.userId
+      userId: this.collaborationClient.userId,
     };
-    
+
     this.applyLocalOperation(operation);
     this.sendOperation(operation);
   }
-  
+
   private applyLocalOperation(operation: GraphOperation) {
     // Apply operation to local graph state
     this.executeOperation(operation);
     this.version++;
   }
-  
+
   private applyRemoteUpdate(update: any) {
     // Apply remote operations to local state
     update.operations.forEach((op: GraphOperation) => {
@@ -453,10 +446,10 @@ class GraphUpdateManager {
         this.executeOperation(op);
       }
     });
-    
+
     this.version = update.version;
   }
-  
+
   private executeOperation(operation: GraphOperation) {
     switch (operation.type) {
       case 'node_add':
@@ -471,20 +464,20 @@ class GraphUpdateManager {
       // Handle edge operations similarly
     }
   }
-  
+
   private sendOperation(operation: GraphOperation) {
     this.collaborationClient.sendGraphUpdate([operation]);
   }
-  
+
   // Graph manipulation methods (implement based on your graph library)
   private addNodeToGraph(nodeData: any) {
     // Implementation specific to your graph library
   }
-  
+
   private updateNodeInGraph(nodeId: string, newData: any) {
     // Implementation specific to your graph library
   }
-  
+
   private removeNodeFromGraph(nodeId: string) {
     // Implementation specific to your graph library
   }
@@ -497,32 +490,32 @@ class GraphUpdateManager {
 class OperationalTransform {
   static transform(op1: GraphOperation, op2: GraphOperation): [GraphOperation, GraphOperation] {
     // Implement operational transform logic based on operation types
-    
+
     if (op1.type === 'node_update' && op2.type === 'node_update' && op1.nodeId === op2.nodeId) {
       // Both operations update the same node - need to merge
       return OperationalTransform.transformNodeUpdate(op1, op2);
     }
-    
+
     if (op1.type === 'node_remove' && op2.type === 'node_update' && op1.nodeId === op2.nodeId) {
       // One removes, one updates - removal wins
       return [op1, { ...op2, type: 'node_remove' }];
     }
-    
+
     // No conflict, operations can be applied as-is
     return [op1, op2];
   }
-  
+
   private static transformNodeUpdate(op1: GraphOperation, op2: GraphOperation): [GraphOperation, GraphOperation] {
     // Merge properties from both updates
     const mergedData = {
       ...op1.oldValue,
       ...op1.data,
-      ...op2.data
+      ...op2.data,
     };
-    
+
     return [
       { ...op1, data: mergedData },
-      { ...op2, data: mergedData }
+      { ...op2, data: mergedData },
     ];
   }
 }
@@ -548,61 +541,61 @@ class CursorManager {
   private cursors: Map<string, CursorData> = new Map();
   private collaborationClient: CollaborationClient;
   private cursorColors: string[] = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7'];
-  
+
   constructor(collaborationClient: CollaborationClient) {
     this.collaborationClient = collaborationClient;
-    
+
     collaborationClient.onCursorUpdate = (userId, cursor) => {
       this.updateCursor(userId, cursor);
     };
-    
-    collaborationClient.onUserJoin = (user) => {
+
+    collaborationClient.onUserJoin = user => {
       this.addUser(user);
     };
-    
-    collaborationClient.onUserLeave = (userId) => {
+
+    collaborationClient.onUserLeave = userId => {
       this.removeUser(userId);
     };
   }
-  
+
   private addUser(user: any) {
     const color = this.cursorColors[this.cursors.size % this.cursorColors.length];
-    
+
     this.cursors.set(user.userId, {
       x: 0,
       y: 0,
       userId: user.userId,
       userName: user.userName,
-      color: color
+      color: color,
     });
-    
+
     this.renderCursors();
   }
-  
+
   private removeUser(userId: string) {
     this.cursors.delete(userId);
     this.renderCursors();
   }
-  
+
   private updateCursor(userId: string, cursor: any) {
     const existingCursor = this.cursors.get(userId);
     if (existingCursor) {
       existingCursor.x = cursor.x;
       existingCursor.y = cursor.y;
       existingCursor.nodeId = cursor.nodeId;
-      
+
       this.renderCursors();
     }
   }
-  
+
   sendCursorPosition(x: number, y: number, nodeId?: string) {
     this.collaborationClient.sendCursorUpdate(x, y);
   }
-  
+
   private renderCursors() {
     // Remove existing cursor elements
     document.querySelectorAll('.collaboration-cursor').forEach(el => el.remove());
-    
+
     // Render each cursor
     this.cursors.forEach(cursor => {
       if (cursor.userId !== this.collaborationClient.userId) {
@@ -610,7 +603,7 @@ class CursorManager {
       }
     });
   }
-  
+
   private renderCursor(cursor: CursorData) {
     const cursorElement = document.createElement('div');
     cursorElement.className = 'collaboration-cursor';
@@ -626,7 +619,7 @@ class CursorManager {
       pointer-events: none;
       z-index: 1000;
     `;
-    
+
     // Add user name label
     const label = document.createElement('div');
     label.textContent = cursor.userName;
@@ -642,7 +635,7 @@ class CursorManager {
       white-space: nowrap;
       transform: rotate(45deg);
     `;
-    
+
     cursorElement.appendChild(label);
     document.body.appendChild(cursorElement);
   }
@@ -655,33 +648,33 @@ class CursorManager {
 class SelectionManager {
   private selections: Map<string, string[]> = new Map();
   private collaborationClient: CollaborationClient;
-  
+
   constructor(collaborationClient: CollaborationClient) {
     this.collaborationClient = collaborationClient;
-    
+
     collaborationClient.onSelectionUpdate = (userId, selection) => {
       this.updateUserSelection(userId, selection);
     };
   }
-  
+
   updateLocalSelection(selectedIds: string[]) {
     this.collaborationClient.send('selection_update', {
       nodeIds: selectedIds,
-      edgeIds: []
+      edgeIds: [],
     });
-    
+
     this.renderSelections();
   }
-  
+
   private updateUserSelection(userId: string, selection: string[]) {
     this.selections.set(userId, selection);
     this.renderSelections();
   }
-  
+
   private renderSelections() {
     // Remove existing selection indicators
     document.querySelectorAll('.collaboration-selection').forEach(el => el.remove());
-    
+
     // Render each user's selection
     this.selections.forEach((selection, userId) => {
       if (userId !== this.collaborationClient.userId) {
@@ -689,7 +682,7 @@ class SelectionManager {
       }
     });
   }
-  
+
   private renderUserSelection(userId: string, selection: string[]) {
     selection.forEach(nodeId => {
       const nodeElement = document.querySelector(`[data-node-id="${nodeId}"]`);
@@ -706,13 +699,13 @@ class SelectionManager {
           border-radius: 4px;
           pointer-events: none;
         `;
-        
+
         nodeElement.style.position = 'relative';
         nodeElement.appendChild(indicator);
       }
     });
   }
-  
+
   private getUserColor(userId: string): string {
     // Return consistent color for user
     const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7'];
@@ -741,22 +734,22 @@ interface ConflictInfo {
 class ConflictResolver {
   private activeConflicts: Map<string, ConflictInfo> = new Map();
   private collaborationClient: CollaborationClient;
-  
+
   constructor(collaborationClient: CollaborationClient) {
     this.collaborationClient = collaborationClient;
-    
-    collaborationClient.onConflictDetected = (conflict) => {
+
+    collaborationClient.onConflictDetected = conflict => {
       this.handleConflictDetected(conflict);
     };
-    
-    collaborationClient.onConflictResolved = (resolution) => {
+
+    collaborationClient.onConflictResolved = resolution => {
       this.handleConflictResolved(resolution);
     };
   }
-  
+
   private handleConflictDetected(conflict: ConflictInfo) {
     this.activeConflicts.set(conflict.conflictId, conflict);
-    
+
     if (conflict.requiresResolution) {
       this.showConflictResolutionDialog(conflict);
     } else {
@@ -764,7 +757,7 @@ class ConflictResolver {
       this.resolveConflict(conflict.conflictId, 'auto');
     }
   }
-  
+
   private showConflictResolutionDialog(conflict: ConflictInfo) {
     const dialog = document.createElement('div');
     dialog.className = 'conflict-resolution-dialog';
@@ -785,42 +778,42 @@ class ConflictResolver {
         </div>
       </div>
     `;
-    
+
     document.body.appendChild(dialog);
-    
+
     // Make resolution function globally available
     (window as any).resolveConflict = (conflictId: string, strategy: string) => {
       this.resolveConflict(conflictId, strategy);
       dialog.remove();
     };
   }
-  
+
   private resolveConflict(conflictId: string, strategy: string, userSelection?: any) {
     this.collaborationClient.send('resolve_conflict', {
       conflictId,
       strategy,
-      userSelection
+      userSelection,
     });
   }
-  
+
   private handleConflictResolved(resolution: any) {
     const conflict = this.activeConflicts.get(resolution.conflictId);
     if (conflict) {
       this.activeConflicts.delete(resolution.conflictId);
-      
+
       // Apply resolution to local state
       this.applyConflictResolution(resolution);
-      
+
       // Show success message
       this.showResolutionSuccess(conflict);
     }
   }
-  
+
   private applyConflictResolution(resolution: any) {
     // Apply the resolved state to the document
     console.log('Conflict resolved:', resolution);
   }
-  
+
   private showResolutionSuccess(conflict: ConflictInfo) {
     const notification = document.createElement('div');
     notification.className = 'conflict-resolution-success';
@@ -835,9 +828,9 @@ class ConflictResolver {
       border-radius: 4px;
       z-index: 1001;
     `;
-    
+
     document.body.appendChild(notification);
-    
+
     setTimeout(() => notification.remove(), 3000);
   }
 }
@@ -874,28 +867,24 @@ export const useCollaboration = (options: UseCollaborationOptions): UseCollabora
   const [isConnected, setIsConnected] = useState(false);
   const [connectedUsers, setConnectedUsers] = useState<any[]>([]);
   const [cursors, setCursors] = useState<Map<string, any>>(new Map());
-  
+
   useEffect(() => {
-    const collaborationClient = new CollaborationClient(
-      options.documentId,
-      options.userId,
-      options.userName
-    );
-    
+    const collaborationClient = new CollaborationClient(options.documentId, options.userId, options.userName);
+
     // Set up event handlers
     collaborationClient.onConnected = () => {
       setIsConnected(true);
     };
-    
+
     collaborationClient.onDisconnected = () => {
       setIsConnected(false);
     };
-    
-    collaborationClient.onUserJoin = (user) => {
+
+    collaborationClient.onUserJoin = user => {
       setConnectedUsers(prev => [...prev, user]);
     };
-    
-    collaborationClient.onUserLeave = (userId) => {
+
+    collaborationClient.onUserLeave = userId => {
       setConnectedUsers(prev => prev.filter(u => u.userId !== userId));
       setCursors(prev => {
         const newCursors = new Map(prev);
@@ -903,40 +892,46 @@ export const useCollaboration = (options: UseCollaborationOptions): UseCollabora
         return newCursors;
       });
     };
-    
+
     collaborationClient.onCursorUpdate = (userId, cursor) => {
       setCursors(prev => new Map(prev.set(userId, cursor)));
     };
-    
+
     // Connect to server
     collaborationClient.connect();
     setClient(collaborationClient);
-    
+
     // Cleanup on unmount
     return () => {
       collaborationClient.disconnect();
     };
   }, [options.documentId, options.userId, options.userName]);
-  
-  const sendGraphUpdate = useCallback((operations: any[]) => {
-    client?.sendGraphUpdate(operations);
-  }, [client]);
-  
-  const sendCursorUpdate = useCallback((x: number, y: number) => {
-    client?.sendCursorUpdate(x, y);
-  }, [client]);
-  
+
+  const sendGraphUpdate = useCallback(
+    (operations: any[]) => {
+      client?.sendGraphUpdate(operations);
+    },
+    [client]
+  );
+
+  const sendCursorUpdate = useCallback(
+    (x: number, y: number) => {
+      client?.sendCursorUpdate(x, y);
+    },
+    [client]
+  );
+
   const disconnect = useCallback(() => {
     client?.disconnect();
   }, [client]);
-  
+
   return {
     isConnected,
     connectedUsers,
     cursors,
     sendGraphUpdate,
     sendCursorUpdate,
-    disconnect
+    disconnect,
   };
 };
 ```
@@ -953,41 +948,35 @@ interface CollaborativeGraphEditorProps {
   userName: string;
 }
 
-export const CollaborativeGraphEditor: React.FC<CollaborativeGraphEditorProps> = ({
-  documentId,
-  userId,
-  userName
-}) => {
+export const CollaborativeGraphEditor: React.FC<CollaborativeGraphEditorProps> = ({ documentId, userId, userName }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  
-  const {
-    isConnected,
-    connectedUsers,
-    cursors,
-    sendGraphUpdate,
-    sendCursorUpdate
-  } = useCollaboration({ documentId, userId, userName });
-  
+
+  const { isConnected, connectedUsers, cursors, sendGraphUpdate, sendCursorUpdate } = useCollaboration({
+    documentId,
+    userId,
+    userName,
+  });
+
   // Handle mouse movement for cursor sharing
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    
+
     const handleMouseMove = (event: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
       const x = event.clientX - rect.left;
       const y = event.clientY - rect.top;
-      
+
       sendCursorUpdate(x, y);
     };
-    
+
     canvas.addEventListener('mousemove', handleMouseMove);
-    
+
     return () => {
       canvas.removeEventListener('mousemove', handleMouseMove);
     };
   }, [sendCursorUpdate]);
-  
+
   // Render cursors
   const renderCursors = () => {
     return Array.from(cursors.entries()).map(([userId, cursor]) => (
@@ -998,7 +987,7 @@ export const CollaborativeGraphEditor: React.FC<CollaborativeGraphEditorProps> =
           position: 'absolute',
           left: cursor.x,
           top: cursor.y,
-          pointerEvents: 'none'
+          pointerEvents: 'none',
         }}
       >
         <div className="cursor-pointer" />
@@ -1006,7 +995,7 @@ export const CollaborativeGraphEditor: React.FC<CollaborativeGraphEditorProps> =
       </div>
     ));
   };
-  
+
   return (
     <div className="collaborative-editor">
       <div className="connection-status">
@@ -1016,7 +1005,7 @@ export const CollaborativeGraphEditor: React.FC<CollaborativeGraphEditorProps> =
           <span className="disconnected">Connecting...</span>
         )}
       </div>
-      
+
       <div className="users-list">
         <h4>Active Users ({connectedUsers.length})</h4>
         {connectedUsers.map(user => (
@@ -1026,14 +1015,9 @@ export const CollaborativeGraphEditor: React.FC<CollaborativeGraphEditorProps> =
           </div>
         ))}
       </div>
-      
+
       <div className="editor-container" style={{ position: 'relative' }}>
-        <canvas
-          ref={canvasRef}
-          width={800}
-          height={600}
-          style={{ border: '1px solid #ccc' }}
-        />
+        <canvas ref={canvasRef} width={800} height={600} style={{ border: '1px solid #ccc' }} />
         {renderCursors()}
       </div>
     </div>

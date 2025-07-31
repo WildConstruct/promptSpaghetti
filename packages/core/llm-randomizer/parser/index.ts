@@ -3,23 +3,10 @@
 // Public API exports for parser system
 
 // Main parser interface
-export {
-  GraphParser,
-  ParserResult,
-  ParserError,
-  ParserOptions,
-  parseGraph,
-  validateGraph
-} from './graph-parser';
+export { GraphParser, ParserResult, ParserError, ParserOptions, parseGraph, validateGraph } from './graph-parser';
 
 // Lexer
-export {
-  GraphLexer,
-  Token,
-  TokenType,
-  LexerPosition,
-  LexerError
-} from './lexer/graph-lexer';
+export { GraphLexer, Token, TokenType, LexerPosition, LexerError } from './lexer/graph-lexer';
 
 // AST
 export {
@@ -31,7 +18,7 @@ export {
   MetadataNode,
   PropertyNode,
   ArrayNode,
-  ParseError
+  ParseError,
 } from './ast/ast-builder';
 
 // Semantic Analysis
@@ -39,5 +26,5 @@ export {
   SemanticAnalyzer,
   SemanticError,
   ValidationContext,
-  SemanticAnalysisResult
+  SemanticAnalysisResult,
 } from './semantic/semantic-analyzer';

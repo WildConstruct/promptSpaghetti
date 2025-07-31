@@ -7,6 +7,7 @@ The Referrer Policy implementation provides comprehensive control over referrer 
 ## Features
 
 ### Core Functionality
+
 - **Dynamic Policy Configuration**: Create and manage multiple referrer policies with different scopes
 - **Path-Specific Policies**: Apply different policies based on URL paths and patterns
 - **Domain-Specific Policies**: Configure policies for specific domains and subdomains
@@ -14,12 +15,14 @@ The Referrer Policy implementation provides comprehensive control over referrer 
 - **Violation Detection**: Monitor and log policy violations with detailed analytics
 
 ### Security Features
+
 - **Strict Mode**: Block requests with unsafe referrers
 - **Downgrade Prevention**: Prevent HTTPS-to-HTTP referrer leakage
 - **Origin Blocking**: Block requests from specific origins
 - **Emergency Override**: Allow emergency access bypassing normal policies
 
 ### Monitoring and Analytics
+
 - **Comprehensive Statistics**: Track policy effectiveness and violation patterns
 - **Policy Recommendations**: AI-driven recommendations based on usage patterns
 - **Real-time Reporting**: Monitor policy applications and violations
@@ -90,6 +93,7 @@ The system automatically creates a default configuration with secure settings:
 ### Policy Management
 
 #### Create Policy Configuration
+
 ```http
 POST /api/referrer-policy/configs
 Content-Type: application/json
@@ -121,6 +125,7 @@ Content-Type: application/json
 ```
 
 #### Update Policy Configuration
+
 ```http
 PUT /api/referrer-policy/configs/{id}
 Content-Type: application/json
@@ -132,11 +137,13 @@ Content-Type: application/json
 ```
 
 #### Get Statistics
+
 ```http
 GET /api/referrer-policy/statistics?start=2023-01-01&end=2023-12-31&severities=high,critical
 ```
 
 #### Get Recommendations
+
 ```http
 GET /api/referrer-policy/recommendations?start=2023-01-01&end=2023-12-31
 ```
@@ -144,6 +151,7 @@ GET /api/referrer-policy/recommendations?start=2023-01-01&end=2023-12-31
 ### Response Examples
 
 #### Statistics Response
+
 ```json
 {
   "timeRange": {
@@ -178,6 +186,7 @@ GET /api/referrer-policy/recommendations?start=2023-01-01&end=2023-12-31
 ```
 
 #### Recommendations Response
+
 ```json
 {
   "recommendations": [
@@ -197,36 +206,41 @@ GET /api/referrer-policy/recommendations?start=2023-01-01&end=2023-12-31
 
 ### Available Referrer Policies
 
-| Policy | Description | Use Case |
-|--------|-------------|----------|
-| `no-referrer` | Never send referrer | Highly sensitive pages |
-| `no-referrer-when-downgrade` | Send referrer except HTTPS→HTTP | Default browser behavior |
-| `origin` | Send only origin | Balance security/functionality |
-| `origin-when-cross-origin` | Full URL same-origin, origin cross-origin | Common choice |
-| `same-origin` | Send referrer only to same origin | Strict same-origin policy |
-| `strict-origin` | Origin only, no HTTPS→HTTP | Secure origin-only |
-| `strict-origin-when-cross-origin` | Full URL same-origin, origin cross-origin, no downgrade | Recommended secure default |
-| `unsafe-url` | Always send full URL | Generally not recommended |
+| Policy                            | Description                                             | Use Case                       |
+| --------------------------------- | ------------------------------------------------------- | ------------------------------ |
+| `no-referrer`                     | Never send referrer                                     | Highly sensitive pages         |
+| `no-referrer-when-downgrade`      | Send referrer except HTTPS→HTTP                         | Default browser behavior       |
+| `origin`                          | Send only origin                                        | Balance security/functionality |
+| `origin-when-cross-origin`        | Full URL same-origin, origin cross-origin               | Common choice                  |
+| `same-origin`                     | Send referrer only to same origin                       | Strict same-origin policy      |
+| `strict-origin`                   | Origin only, no HTTPS→HTTP                              | Secure origin-only             |
+| `strict-origin-when-cross-origin` | Full URL same-origin, origin cross-origin, no downgrade | Recommended secure default     |
+| `unsafe-url`                      | Always send full URL                                    | Generally not recommended      |
 
 ### Security Recommendations by Route Type
 
 #### Admin Routes (`/admin/*`)
+
 - **Recommended**: `no-referrer`
 - **Reason**: Prevent leakage of admin URLs to external sites
 
 #### Authentication Routes (`/api/auth/*`)
+
 - **Recommended**: `no-referrer`
 - **Reason**: Protect authentication flows and sensitive parameters
 
 #### Payment Routes (`/api/payment/*`)
+
 - **Recommended**: `no-referrer`
 - **Reason**: Prevent financial information leakage
 
 #### Public Content (`/public/*`, `/content/*`)
+
 - **Recommended**: `strict-origin-when-cross-origin`
 - **Reason**: Balance functionality with privacy
 
 #### API Endpoints (`/api/*`)
+
 - **Recommended**: `origin` or `strict-origin`
 - **Reason**: Limit information while maintaining functionality
 
@@ -259,25 +273,30 @@ GET /api/referrer-policy/recommendations?start=2023-01-01&end=2023-12-31
 ### Attack Vectors Prevented
 
 #### Referrer Leakage
+
 - **Problem**: Sensitive URLs leaked to third-party sites
 - **Solution**: Path-specific `no-referrer` policies for sensitive routes
 
 #### Cross-Site Information Disclosure
+
 - **Problem**: Internal URLs exposed through referrer headers
 - **Solution**: `strict-origin` policies for cross-origin requests
 
 #### HTTPS Downgrade Attacks
+
 - **Problem**: HTTPS URLs leaked to HTTP sites
 - **Solution**: `strict-*` policies prevent HTTPS→HTTP referrer sending
 
 ### Compliance Benefits
 
 #### GDPR Compliance
+
 - Prevents accidental sharing of personal data in URLs
 - Reduces third-party data exposure
 - Enhances user privacy controls
 
 #### Security Standards
+
 - Follows OWASP security guidelines
 - Implements defense-in-depth strategy
 - Provides comprehensive audit trails
@@ -287,16 +306,19 @@ GET /api/referrer-policy/recommendations?start=2023-01-01&end=2023-12-31
 ### Key Metrics to Monitor
 
 #### Security Metrics
+
 - **Violation Rate**: Percentage of requests with policy violations
 - **Block Rate**: Percentage of requests blocked due to unsafe referrers
 - **Critical Violations**: High-severity policy violations requiring attention
 
 #### Performance Metrics
+
 - **Policy Application Time**: Latency introduced by policy processing
 - **Cache Hit Rate**: Effectiveness of policy caching
 - **Memory Usage**: Memory consumption of violation history
 
 #### Compliance Metrics
+
 - **Policy Coverage**: Percentage of requests covered by explicit policies
 - **Configuration Compliance**: Adherence to security best practices
 - **Audit Completeness**: Coverage of audit logging
@@ -308,16 +330,16 @@ GET /api/referrer-policy/recommendations?start=2023-01-01&end=2023-12-31
 const alertingConfig = {
   criticalViolations: {
     threshold: 10, // per hour
-    severity: 'critical'
+    severity: 'critical',
   },
   blockRate: {
     threshold: 5, // percent
-    severity: 'warning'
+    severity: 'warning',
   },
   policyCompliance: {
     threshold: 95, // percent
-    severity: 'warning'
-  }
+    severity: 'warning',
+  },
 };
 ```
 
@@ -337,21 +359,21 @@ const alertingConfig = {
 const policyPatterns = {
   // Administrative interfaces
   admin: 'no-referrer',
-  
+
   // Authentication flows
   auth: 'no-referrer',
-  
+
   // Financial transactions
   payment: 'no-referrer',
-  
+
   // User-generated content
   profile: 'strict-origin-when-cross-origin',
-  
+
   // Public APIs
   api: 'origin',
-  
+
   // Static content
-  assets: 'no-referrer-when-downgrade'
+  assets: 'no-referrer-when-downgrade',
 };
 ```
 
@@ -367,16 +389,19 @@ const policyPatterns = {
 ### Common Issues
 
 #### Policy Not Applied
+
 - **Check**: Policy scope and priority settings
 - **Verify**: Request matches policy conditions
 - **Debug**: Enable verbose logging to trace policy resolution
 
 #### Blocked Legitimate Requests
+
 - **Review**: Strict mode configuration
 - **Check**: Allowed origins list
 - **Consider**: Adding temporary exemptions
 
 #### High Violation Rate
+
 - **Analyze**: Violation patterns in statistics
 - **Review**: Policy recommendations
 - **Adjust**: Policies based on actual usage patterns
@@ -394,6 +419,7 @@ GET /api/referrer-policy/debug?url=/admin/users&method=GET
 ## Migration Guide
 
 ### From Manual Headers
+
 If currently setting referrer policy headers manually:
 
 1. **Audit Current Implementation**: Document existing header configurations
@@ -403,6 +429,7 @@ If currently setting referrer policy headers manually:
 5. **Remove Manual Headers**: Clean up manual header setting code
 
 ### Version Compatibility
+
 - **Breaking Changes**: Policy ID format changed in v2.0
 - **Migration Script**: Use provided migration utility for database updates
 - **Rollback Plan**: Keep previous configuration as backup
@@ -410,12 +437,14 @@ If currently setting referrer policy headers manually:
 ## Future Enhancements
 
 ### Planned Features
+
 - **Machine Learning**: AI-powered policy optimization
 - **Integration**: Enhanced integration with WAF systems
 - **Reporting**: Advanced analytics dashboard
 - **Automation**: Automated policy updates based on security intelligence
 
 ### API Evolution
+
 - **GraphQL Support**: GraphQL endpoint for complex queries
 - **Webhooks**: Real-time violation notifications
 - **Bulk Operations**: Batch policy management endpoints

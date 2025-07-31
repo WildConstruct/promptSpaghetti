@@ -3,24 +3,29 @@
 This document provides granular implementation plans for each story in Epic 11, breaking down tasks into specific, actionable items for development. For architectural rationale and design details, see [Epic 11 Detailed Design](epic11details.md).
 
 ## 📋 PLAN UPDATE PROCESS
+
 **IMPORTANT:** This plan must be updated after each task is completed to maintain accuracy.
-- Mark completed tasks with `[x]` 
+
+- Mark completed tasks with `[x]`
 - Update completion percentages for each story
 - Add implementation notes and file locations for completed features
 - Date stamp updates in git commits with format: `docs(epic11): update plan - Story X.Y.Z complete`
 
 ## 🎯 CURRENT STATUS OVERVIEW
+
 **Last Updated:** 2025-01-17
 
 ### Story Completion Status:
+
 - **Story 11.1 - Authentication Foundation**: 🟡 **80% COMPLETE** (Implementation exists but needs OAuth & session management)
-- **Story 11.2 - User Profile & Preferences**: ⚪ **0% COMPLETE** (Not started)  
+- **Story 11.2 - User Profile & Preferences**: ⚪ **0% COMPLETE** (Not started)
 - **Story 11.3 - Access Control System**: ⚪ **0% COMPLETE** (Not started)
 - **Story 11.4 - Teams & Organizations**: ⚪ **0% COMPLETE** (Not started)
 
 ### Implementation Locations:
+
 - **Backend Auth**: `/server/src/auth/` - Complete service architecture
-- **Frontend Auth**: `/client/src/components/auth/` - Complete UI components  
+- **Frontend Auth**: `/client/src/components/auth/` - Complete UI components
 - **Documentation**: `/docs/epic11-auth-framework-research.md`, `/docs/epic11-authentication-guide.md`
 
 ## Story 11.1 - Authentication Foundation
@@ -28,6 +33,7 @@ This document provides granular implementation plans for each story in Epic 11, 
 ### Implementation Tasks
 
 #### 11.1.1 Authentication Service Architecture (4 days) ✅ **COMPLETE**
+
 - [x] Research authentication frameworks and libraries
   - [x] Evaluate Auth0, Firebase Auth, Supabase, and custom solutions
   - [x] Compare features, pricing, and integration complexity
@@ -44,12 +50,14 @@ This document provides granular implementation plans for each story in Epic 11, 
   - [x] Create token management strategy (refresh, expiry)
   - [x] Document OWASP security considerations
 
-**Implementation:** 
+**Implementation:**
+
 - Architecture research: `/docs/epic11-auth-framework-research.md`
 - Database schema: `/server/src/auth/schema.sql`
 - Security services: `/server/src/auth/services/RateLimitService.ts`, `/server/src/auth/services/TokenService.ts`
 
 #### 11.1.2 User Registration Implementation (3 days) ✅ **COMPLETE**
+
 - [x] Implement registration backend
   - [x] Create user account creation API endpoint
   - [x] Add email verification flow
@@ -67,12 +75,14 @@ This document provides granular implementation plans for each story in Epic 11, 
   - [x] Set up monitoring for registration issues
 
 **Implementation:**
+
 - Backend service: `/server/src/auth/services/RegistrationService.ts`
 - Frontend component: `/client/src/components/auth/RegistrationForm.tsx`
 - Analytics: `/server/src/auth/services/AnalyticsService.ts`
 - Database migrations: `/server/src/auth/migrations/002_registration_analytics.sql`
 
 #### 11.1.3 Login System Implementation (3 days) ✅ **COMPLETE**
+
 - [x] Implement login backend
   - [x] Create login API endpoint
   - [x] Add security measures (rate limiting, account locking)
@@ -85,6 +95,7 @@ This document provides granular implementation plans for each story in Epic 11, 
   - [x] Create error states and security messaging
 
 **Implementation:**
+
 - Backend service: `/server/src/auth/services/LoginService.ts`
 - Frontend component: `/client/src/components/auth/LoginForm.tsx`
 - Rate limiting: `/server/src/auth/services/RateLimitService.ts`
@@ -97,10 +108,12 @@ This document provides granular implementation plans for each story in Epic 11, 
   - [x] Create account recovery analytics
 
 **Account Recovery Implementation:**
+
 - Component: `/client/src/components/auth/AccountRecovery.tsx`
 - Analytics hooks: `/client/src/hooks/useLoginAnalytics.ts`
 
 #### 11.1.4 Password Reset Implementation (2 days) ✅ **COMPLETE**
+
 - [x] Implement password reset backend
   - [x] Create password reset token generation
   - [x] Add secure email delivery of reset links
@@ -118,6 +131,7 @@ This document provides granular implementation plans for each story in Epic 11, 
   - [x] Implement suspicious activity detection
 
 **Implementation:**
+
 - Backend service: `/server/src/auth/services/PasswordResetService.ts`
 - Frontend component: `/client/src/components/auth/PasswordResetForm.tsx`
 - Frontend page: `/client/src/pages/PasswordResetPage.tsx`
@@ -125,6 +139,7 @@ This document provides granular implementation plans for each story in Epic 11, 
 - Email service: `/server/src/auth/services/EmailService.ts`
 
 #### 11.1.5 OAuth Integration (3 days)
+
 - [ ] Research and select OAuth providers
   - [ ] Evaluate Google, GitHub, Microsoft, etc.
   - [ ] Document setup requirements for each provider
@@ -142,6 +157,7 @@ This document provides granular implementation plans for each story in Epic 11, 
   - [ ] Create account linking interface
 
 #### 11.1.6 Session Management (3 days)
+
 - [ ] Design session architecture
   - [ ] Define session data structure
   - [ ] Create session storage strategy
@@ -159,6 +175,7 @@ This document provides granular implementation plans for each story in Epic 11, 
   - [ ] Build active sessions management UI
 
 #### 11.1.7 API Authentication (2 days)
+
 - [ ] Design API authentication system
   - [ ] Create JWT structure and claims
   - [ ] Define token issuance and validation
@@ -180,6 +197,7 @@ This document provides granular implementation plans for each story in Epic 11, 
 ### Implementation Tasks
 
 #### 11.2.1 User Profile Data Model (2 days)
+
 - [ ] Design user profile schema
   - [ ] Define core profile attributes
   - [ ] Plan for extensible custom attributes
@@ -197,6 +215,7 @@ This document provides granular implementation plans for each story in Epic 11, 
   - [ ] Implement profile data versioning
 
 #### 11.2.2 Profile UI Implementation (3 days)
+
 - [ ] Design profile interface
   - [ ] Create wireframes for profile pages
   - [ ] Define information architecture for settings
@@ -214,6 +233,7 @@ This document provides granular implementation plans for each story in Epic 11, 
   - [ ] Build profile sharing capabilities (if applicable)
 
 #### 11.2.3 Profile Image Management (2 days)
+
 - [ ] Design image upload system
   - [ ] Define image requirements and limitations
   - [ ] Plan image storage architecture
@@ -231,6 +251,7 @@ This document provides granular implementation plans for each story in Epic 11, 
   - [ ] Build gallery for uploaded images
 
 #### 11.2.4 User Preferences System (3 days)
+
 - [ ] Design preferences architecture
   - [ ] Define preference categories and structure
   - [ ] Create default preference sets
@@ -248,6 +269,7 @@ This document provides granular implementation plans for each story in Epic 11, 
   - [ ] Build preference reset capabilities
 
 #### 11.2.5 Notification Preferences (2 days)
+
 - [ ] Design notification system
   - [ ] Define notification types and categories
   - [ ] Create notification channels (email, in-app, etc.)
@@ -265,6 +287,7 @@ This document provides granular implementation plans for each story in Epic 11, 
   - [ ] Build notification preview functionality
 
 #### 11.2.6 Account Linking (2 days)
+
 - [ ] Design account linking architecture
   - [ ] Create data model for linked accounts
   - [ ] Define linking workflows and verification
@@ -282,6 +305,7 @@ This document provides granular implementation plans for each story in Epic 11, 
   - [ ] Build unlinking confirmation process
 
 #### 11.2.7 Account Deletion (2 days)
+
 - [ ] Design account deletion process
   - [ ] Define data retention and deletion policies
   - [ ] Create staged deletion workflow
@@ -303,6 +327,7 @@ This document provides granular implementation plans for each story in Epic 11, 
 ### Implementation Tasks
 
 #### 11.3.1 RBAC System Design (3 days)
+
 - [ ] Research RBAC approaches
   - [ ] Evaluate existing RBAC frameworks
   - [ ] Analyze application-specific requirements
@@ -320,6 +345,7 @@ This document provides granular implementation plans for each story in Epic 11, 
   - [ ] Write administrator guide
 
 #### 11.3.2 RBAC Implementation (4 days)
+
 - [ ] Implement core RBAC backend
   - [ ] Create role and permission data models
   - [ ] Build role assignment system
@@ -337,6 +363,7 @@ This document provides granular implementation plans for each story in Epic 11, 
   - [ ] Add performance testing for permission checks
 
 #### 11.3.3 Permission Management UI (3 days)
+
 - [ ] Design permission management interfaces
   - [ ] Create wireframes for role management
   - [ ] Design permission assignment UI
@@ -354,6 +381,7 @@ This document provides granular implementation plans for each story in Epic 11, 
   - [ ] Create permission audit visualization
 
 #### 11.3.4 Resource-Level Permissions (3 days)
+
 - [ ] Design resource permission model
   - [ ] Define resource types and permissions
   - [ ] Create inheritance model for resources
@@ -371,6 +399,7 @@ This document provides granular implementation plans for each story in Epic 11, 
   - [ ] Build permission inheritance display
 
 #### 11.3.5 User Invitation System (2 days)
+
 - [ ] Design invitation workflow
   - [ ] Create invitation data model
   - [ ] Define invitation states and transitions
@@ -388,6 +417,7 @@ This document provides granular implementation plans for each story in Epic 11, 
   - [ ] Build invitation reminder system
 
 #### 11.3.6 Admin Panel (3 days)
+
 - [ ] Design admin interface
   - [ ] Create information architecture for admin panel
   - [ ] Design dashboard with key metrics
@@ -405,6 +435,7 @@ This document provides granular implementation plans for each story in Epic 11, 
   - [ ] Build system logs viewer
 
 #### 11.3.7 Security Audit Logging (2 days)
+
 - [ ] Design audit system
   - [ ] Define audit events and categories
   - [ ] Create audit record structure
@@ -426,6 +457,7 @@ This document provides granular implementation plans for each story in Epic 11, 
 ### Implementation Tasks
 
 #### 11.4.1 Organization Data Model (3 days)
+
 - [ ] Design organization schema
   - [ ] Define organization core attributes
   - [ ] Create relationships with users and teams
@@ -443,6 +475,7 @@ This document provides granular implementation plans for each story in Epic 11, 
   - [ ] Create data migration tools
 
 #### 11.4.2 Team Management Implementation (3 days)
+
 - [ ] Design team architecture
   - [ ] Define team data model
   - [ ] Create team-user relationships
@@ -460,6 +493,7 @@ This document provides granular implementation plans for each story in Epic 11, 
   - [ ] Build team settings configuration
 
 #### 11.4.3 User Assignment System (2 days)
+
 - [ ] Design user assignment workflow
   - [ ] Create assignment data models
   - [ ] Define roles within teams
@@ -477,6 +511,7 @@ This document provides granular implementation plans for each story in Epic 11, 
   - [ ] Build assignment history and audit
 
 #### 11.4.4 Team-Based Permissions (3 days)
+
 - [ ] Design team permission model
   - [ ] Define team-level roles and permissions
   - [ ] Create inheritance from organization
@@ -494,6 +529,7 @@ This document provides granular implementation plans for each story in Epic 11, 
   - [ ] Build permission audit for teams
 
 #### 11.4.5 Organization Settings (2 days)
+
 - [ ] Design settings architecture
   - [ ] Define organization-wide settings
   - [ ] Create settings inheritance model
@@ -511,6 +547,7 @@ This document provides granular implementation plans for each story in Epic 11, 
   - [ ] Build settings comparison tools
 
 #### 11.4.6 Organization Branding (2 days)
+
 - [ ] Design branding system
   - [ ] Define customizable brand elements
   - [ ] Create theme architecture
@@ -528,6 +565,7 @@ This document provides granular implementation plans for each story in Epic 11, 
   - [ ] Build theme template selection
 
 #### 11.4.7 Team Dashboards (2 days)
+
 - [ ] Design dashboard architecture
   - [ ] Define dashboard components and layouts
   - [ ] Create data sources for metrics
@@ -547,11 +585,13 @@ This document provides granular implementation plans for each story in Epic 11, 
 ## Schedule and Resource Planning
 
 ### Timeline Overview
+
 - Total estimated development time: 76 developer days
 - Recommended team: 2 frontend developers, 2 backend developers, 1 UX designer, 1 security specialist
 - Estimated calendar duration: 10-12 weeks
 
 ### Sprint Breakdown
+
 - Sprint 1 (2 weeks): Stories 11.1.1-11.1.4 and 11.2.1
 - Sprint 2 (2 weeks): Stories 11.1.5-11.1.7, 11.2.2-11.2.4, and 11.3.1
 - Sprint 3 (2 weeks): Stories 11.2.5-11.2.7, 11.3.2-11.3.4, and 11.4.1
@@ -560,11 +600,13 @@ This document provides granular implementation plans for each story in Epic 11, 
 - Sprint 6 (2 weeks): Security review, performance optimization, and documentation
 
 ### Dependencies
+
 - Story 11.1 (Authentication Foundation) is a prerequisite for all other stories
 - Story 11.3 (Access Control System) depends on the user model from 11.1
 - Story 11.4 (Teams & Organizations) depends on the access control system from 11.3
 
 ### Risk Mitigation
+
 - Early security review of authentication design
 - Progressive feature rollout starting with core authentication
 - Comprehensive testing of security-sensitive components

@@ -1,51 +1,51 @@
 #!/usr/bin/env node
-"use strict";
+'use strict';
 // src/scripts/initSystem.ts
 // Initialize the system with basic data
-Object.defineProperty(exports, "__esModule", { value: true });
-const events_1 = require("../core/events");
-const state_1 = require("../core/state");
+Object.defineProperty(exports, '__esModule', { value: true });
+const events_1 = require('../core/events');
+const state_1 = require('../core/state');
 console.log('🚀 Initializing PromptScape coordination system...');
 // Create initial state
 const initialState = (0, state_1.emptyState)();
 // Add some initial goals
 const goals = [
-    {
-        id: 'G-1',
-        title: 'Launch MVP',
-        why: 'Get initial version to users for feedback',
-        success_metrics: {
-            users: 100,
-            satisfaction: 4.0
-        },
-        status: 'ACTIVE'
+  {
+    id: 'G-1',
+    title: 'Launch MVP',
+    why: 'Get initial version to users for feedback',
+    success_metrics: {
+      users: 100,
+      satisfaction: 4.0,
     },
-    {
-        id: 'G-2',
-        title: 'Performance Optimization',
-        why: 'Ensure smooth experience for large graphs',
-        success_metrics: {
-            load_time: '<2s',
-            fps: 60
-        },
-        status: 'ACTIVE'
-    }
+    status: 'ACTIVE',
+  },
+  {
+    id: 'G-2',
+    title: 'Performance Optimization',
+    why: 'Ensure smooth experience for large graphs',
+    success_metrics: {
+      load_time: '<2s',
+      fps: 60,
+    },
+    status: 'ACTIVE',
+  },
 ];
 initialState.product_goals = goals;
 // Create initial snapshot event
 const snapshotEvent = (0, events_1.append)({
-    type: 'INIT_SNAPSHOT',
-    actor: 'system',
-    payload: { state: initialState },
-    version: 1
+  type: 'INIT_SNAPSHOT',
+  actor: 'system',
+  payload: { state: initialState },
+  version: 1,
 });
 console.log(`✅ Created initial snapshot event (ID: ${snapshotEvent.id})`);
 // Start in PLAN phase
 const phaseEvent = (0, events_1.append)({
-    type: 'PHASE_CHANGED',
-    actor: 'system',
-    payload: { phase: 'PLAN' },
-    version: 1
+  type: 'PHASE_CHANGED',
+  actor: 'system',
+  payload: { phase: 'PLAN' },
+  version: 1,
 });
 console.log(`✅ Set initial phase to PLAN (ID: ${phaseEvent.id})`);
 // Save initial state

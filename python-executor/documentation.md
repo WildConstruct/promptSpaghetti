@@ -28,6 +28,7 @@ The Python Executor Service is a high-performance, secure microservice that enab
 ## Features
 
 ### ✅ **Story 8.1.1 - Microservice Architecture**
+
 - FastAPI-based REST API with async support
 - JWT authentication and authorization
 - Rate limiting and request validation
@@ -35,6 +36,7 @@ The Python Executor Service is a high-performance, secure microservice that enab
 - Prometheus metrics collection
 
 ### ✅ **Story 8.1.2 - REST API Implementation**
+
 - `/v1/execute` - Execute Python code with security validation
 - `/v1/validate` - Validate Python code without execution
 - `/health` - Health check endpoint
@@ -42,6 +44,7 @@ The Python Executor Service is a high-performance, secure microservice that enab
 - Complete OpenAPI documentation
 
 ### ✅ **Story 8.1.3 - Sandboxed Execution Environment**
+
 - Enhanced Docker security with read-only filesystem
 - Seccomp profiles for syscall filtering
 - Real-time security monitoring and threat detection
@@ -49,6 +52,7 @@ The Python Executor Service is a high-performance, secure microservice that enab
 - Kubernetes deployment with security policies
 
 ### ✅ **Story 8.1.4 - Main Application Integration**
+
 - PythonTransform node type for prompt graphs
 - TypeScript client with retry logic and fallback
 - Rich UI editor with syntax highlighting
@@ -56,6 +60,7 @@ The Python Executor Service is a high-performance, secure microservice that enab
 - Comprehensive error handling
 
 ### ✅ **Story 8.1.5 - Performance Monitoring & Optimization**
+
 - Real-time performance metrics collection
 - Automatic parameter optimization based on performance data
 - Performance trends analysis and alerting
@@ -63,6 +68,7 @@ The Python Executor Service is a high-performance, secure microservice that enab
 - Throughput and latency monitoring
 
 ### ✅ **Story 8.1.6 - Documentation & Examples**
+
 - Complete API documentation
 - Performance benchmarking suite
 - Security best practices guide
@@ -100,7 +106,7 @@ from python_executor_client import PythonExecutorClient
 
 async def main():
     client = PythonExecutorClient("http://localhost:8001")
-    
+
     # Execute Python code
     result = await client.execute({
         "code": '''
@@ -112,7 +118,7 @@ def transform(input_data):
         "memory_limit": "128MB",
         "allowed_modules": ["json", "math"]
     })
-    
+
     print(f"Result: {result.result}")
     print(f"Execution time: {result.execution_time}s")
 
@@ -144,6 +150,7 @@ Authorization: Bearer <jwt-token>
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -172,6 +179,7 @@ Authorization: Bearer <jwt-token>
 ```
 
 **Response:**
+
 ```json
 {
   "valid": true,
@@ -189,6 +197,7 @@ GET /health
 ```
 
 **Response:**
+
 ```json
 {
   "status": "healthy",
@@ -212,6 +221,7 @@ Authorization: Bearer <jwt-token>
 ```
 
 **Response:**
+
 ```json
 {
   "execution_metrics": {
@@ -267,6 +277,7 @@ The automatic optimization engine monitors performance and adjusts parameters:
 ### Code Validation
 
 All code goes through comprehensive validation for dangerous patterns including:
+
 - `eval()`, `exec()`, `__import__`
 - File system access (`open()`, `file()`)
 - Network access (`socket`, `urllib`, `requests`)
@@ -276,6 +287,7 @@ All code goes through comprehensive validation for dangerous patterns including:
 ### Module Restrictions
 
 Only approved modules are allowed:
+
 ```python
 APPROVED_MODULES = [
     'json', 'math', 'datetime', 'random', 'string',
@@ -287,6 +299,7 @@ APPROVED_MODULES = [
 ### Resource Limits
 
 Strict resource limits prevent abuse:
+
 - **Memory**: Maximum 1GB per execution
 - **CPU**: Maximum 80% CPU usage
 - **Time**: Maximum 5 minutes execution time
@@ -369,14 +382,14 @@ result = await client.execute({
     "code": '''
 def transform(input_data):
     import json
-    
+
     data = json.loads(input_data)
     processed = {
         "processed": True,
         "item_count": len(data.get("items", [])),
         "items": [item["name"].upper() for item in data.get("items", [])]
     }
-    
+
     return json.dumps(processed)
     ''',
     "input_data": '{"items": [{"name": "item1"}, {"name": "item2"}]}',
@@ -395,9 +408,9 @@ result = await client.execute({
 def transform(input_data):
     import json
     import math
-    
+
     numbers = json.loads(input_data)
-    
+
     stats = {
         "count": len(numbers),
         "sum": sum(numbers),
@@ -406,7 +419,7 @@ def transform(input_data):
         "max": max(numbers),
         "std_dev": math.sqrt(sum((x - sum(numbers)/len(numbers))**2 for x in numbers) / len(numbers))
     }
-    
+
     return json.dumps(stats)
     ''',
     "input_data": '[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]',
@@ -420,53 +433,57 @@ print(result.result)
 
 ### Execution Performance
 
-| Operation | Mean Duration | P95 Duration | Success Rate |
-|-----------|---------------|--------------|--------------|
-| Simple Transform | 0.045s | 0.12s | 99.8% |
-| JSON Processing | 0.156s | 0.34s | 99.5% |
-| Mathematical | 0.234s | 0.56s | 99.2% |
-| Text Processing | 0.089s | 0.23s | 99.7% |
+| Operation        | Mean Duration | P95 Duration | Success Rate |
+| ---------------- | ------------- | ------------ | ------------ |
+| Simple Transform | 0.045s        | 0.12s        | 99.8%        |
+| JSON Processing  | 0.156s        | 0.34s        | 99.5%        |
+| Mathematical     | 0.234s        | 0.56s        | 99.2%        |
+| Text Processing  | 0.089s        | 0.23s        | 99.7%        |
 
 ### Concurrency Performance
 
 | Concurrent Requests | Success Rate | Avg Response Time | Throughput |
-|-------------------|--------------|-------------------|------------|
-| 10 | 98.5% | 0.234s | 42.7 RPS |
-| 50 | 96.2% | 0.567s | 88.1 RPS |
-| 100 | 94.1% | 1.234s | 80.9 RPS |
+| ------------------- | ------------ | ----------------- | ---------- |
+| 10                  | 98.5%        | 0.234s            | 42.7 RPS   |
+| 50                  | 96.2%        | 0.567s            | 88.1 RPS   |
+| 100                 | 94.1%        | 1.234s            | 80.9 RPS   |
 
 ### Memory Usage
 
 | Code Complexity | Mean Memory | Peak Memory | Success Rate |
-|----------------|-------------|-------------|--------------|
-| Simple | 12MB | 18MB | 99.8% |
-| JSON Processing | 25MB | 45MB | 99.5% |
-| Mathematical | 18MB | 32MB | 99.2% |
-| Large Data | 89MB | 128MB | 98.9% |
+| --------------- | ----------- | ----------- | ------------ |
+| Simple          | 12MB        | 18MB        | 99.8%        |
+| JSON Processing | 25MB        | 45MB        | 99.5%        |
+| Mathematical    | 18MB        | 32MB        | 99.2%        |
+| Large Data      | 89MB        | 128MB       | 98.9%        |
 
 ## Troubleshooting
 
 ### Common Issues
 
 #### 1. Authentication Errors
+
 ```
 Error: Invalid authentication token
 Solution: Ensure JWT token is valid and not expired
 ```
 
 #### 2. Code Validation Failures
+
 ```
 Error: Code validation failed: eval() not allowed
 Solution: Remove dangerous patterns from code
 ```
 
 #### 3. Resource Limit Exceeded
+
 ```
 Error: Memory limit exceeded
 Solution: Increase memory limit or optimize code
 ```
 
 #### 4. Module Import Errors
+
 ```
 Error: Module 'requests' not in allowed modules
 Solution: Add module to allowed_modules list
@@ -533,21 +550,27 @@ pytest --cov=app tests/
 ## Epic 8 Implementation Summary
 
 ### ✅ **Story 8.1.1 - Microservice Architecture Design**
+
 Complete microservice architecture with FastAPI, async support, and comprehensive monitoring.
 
 ### ✅ **Story 8.1.2 - REST API Implementation**
+
 Full REST API with authentication, validation, rate limiting, and structured responses.
 
 ### ✅ **Story 8.1.3 - Sandboxed Execution Environment**
+
 Multi-layered security with RestrictedPython, container isolation, and real-time monitoring.
 
 ### ✅ **Story 8.1.4 - Main Application Integration**
+
 Complete integration with TypeScript client, UI components, and configuration management.
 
 ### ✅ **Story 8.1.5 - Performance Monitoring & Optimization**
+
 Comprehensive performance monitoring, automatic optimization, and real-time dashboard.
 
 ### ✅ **Story 8.1.6 - Documentation & Examples**
+
 Complete documentation, examples, performance benchmarks, and deployment guides.
 
 The Python Executor Service provides a robust, secure, and high-performance solution for executing Python code within prompt graphs, with comprehensive monitoring, optimization, and security features.

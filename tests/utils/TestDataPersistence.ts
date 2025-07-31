@@ -55,11 +55,11 @@ export class TestDataPersistence {
       encryption: false,
       maxFileSize: 10 * 1024 * 1024, // 10MB
       backupRetention: 7,
-      ...config
+      ...config,
     };
 
     this.memoryStore = new Map();
-    
+
     if (this.config.storage === 'sqlite') {
       this.initializeSQLite();
     }
@@ -72,7 +72,7 @@ export class TestDataPersistence {
     const id = this.generateId();
     const now = new Date().toISOString();
     const serializedData = this.serialize(data);
-    
+
     const storedData: StoredTestData = {
       id,
       key,
@@ -83,23 +83,23 @@ export class TestDataPersistence {
         accessCount: 0,
         size: this.calculateSize(serializedData),
         checksum: this.calculateChecksum(serializedData),
-        tags: options.tags || []
+        tags: options.tags || [],
       },
-      expiry: options.ttl ? new Date(Date.now() + options.ttl * 1000).toISOString() : undefined
+      expiry: options.ttl ? new Date(Date.now() + options.ttl * 1000).toISOString() : undefined,
     };
 
     switch (this.config.storage) {
-    case 'file':
-      await this.storeToFile(storedData);
-      break;
-    case 'memory':
-      this.memoryStore.set(key, storedData);
-      break;
-    case 'sqlite':
-      await this.storeToSQLite(storedData);
-      break;
-    default:
-      throw new Error(`Unsupported storage type: ${this.config.storage}`);
+      case 'file':
+        await this.storeToFile(storedData);
+        break;
+      case 'memory':
+        this.memoryStore.set(key, storedData);
+        break;
+      case 'sqlite':
+        await this.storeToSQLite(storedData);
+        break;
+      default:
+        throw new Error(`Unsupported storage type: ${this.config.storage}`);
     }
 
     return id;
@@ -112,17 +112,17 @@ export class TestDataPersistence {
     let storedData: StoredTestData | null = null;
 
     switch (this.config.storage) {
-    case 'file':
-      storedData = await this.retrieveFromFile(key);
-      break;
-    case 'memory':
-      storedData = this.memoryStore.get(key) || null;
-      break;
-    case 'sqlite':
-      storedData = await this.retrieveFromSQLite(key);
-      break;
-    default:
-      throw new Error(`Unsupported storage type: ${this.config.storage}`);
+      case 'file':
+        storedData = await this.retrieveFromFile(key);
+        break;
+      case 'memory':
+        storedData = this.memoryStore.get(key) || null;
+        break;
+      case 'sqlite':
+        storedData = await this.retrieveFromSQLite(key);
+        break;
+      default:
+        throw new Error(`Unsupported storage type: ${this.config.storage}`);
     }
 
     if (!storedData) {
@@ -138,7 +138,7 @@ export class TestDataPersistence {
     // Update access count
     storedData.metadata.accessCount++;
     storedData.metadata.updatedAt = new Date().toISOString();
-    
+
     // Save updated metadata (fire and forget)
     this.updateMetadata(key, storedData.metadata).catch(() => {});
 
@@ -163,20 +163,20 @@ export class TestDataPersistence {
         updatedAt: new Date().toISOString(),
         size: this.calculateSize(serializedData),
         checksum: this.calculateChecksum(serializedData),
-        tags: options.tags || existing.metadata.tags
-      }
+        tags: options.tags || existing.metadata.tags,
+      },
     };
 
     switch (this.config.storage) {
-    case 'file':
-      await this.storeToFile(updated);
-      break;
-    case 'memory':
-      this.memoryStore.set(key, updated);
-      break;
-    case 'sqlite':
-      await this.updateInSQLite(updated);
-      break;
+      case 'file':
+        await this.storeToFile(updated);
+        break;
+      case 'memory':
+        this.memoryStore.set(key, updated);
+        break;
+      case 'sqlite':
+        await this.updateInSQLite(updated);
+        break;
     }
 
     return true;
@@ -187,14 +187,14 @@ export class TestDataPersistence {
    */
   async delete(key: string): Promise<boolean> {
     switch (this.config.storage) {
-    case 'file':
-      return await this.deleteFromFile(key);
-    case 'memory':
-      return this.memoryStore.delete(key);
-    case 'sqlite':
-      return await this.deleteFromSQLite(key);
-    default:
-      return false;
+      case 'file':
+        return await this.deleteFromFile(key);
+      case 'memory':
+        return this.memoryStore.delete(key);
+      case 'sqlite':
+        return await this.deleteFromSQLite(key);
+      default:
+        return false;
     }
   }
 
@@ -205,15 +205,15 @@ export class TestDataPersistence {
     let results: StoredTestData[] = [];
 
     switch (this.config.storage) {
-    case 'file':
-      results = await this.queryFiles(options);
-      break;
-    case 'memory':
-      results = this.queryMemory(options);
-      break;
-    case 'sqlite':
-      results = await this.querySQLite(options);
-      break;
+      case 'file':
+        results = await this.queryFiles(options);
+        break;
+      case 'memory':
+        results = this.queryMemory(options);
+        break;
+      case 'sqlite':
+        results = await this.querySQLite(options);
+        break;
     }
 
     // Apply filters
@@ -238,7 +238,7 @@ export class TestDataPersistence {
     let cleanedCount = 0;
 
     const allData = await this.query({ includeExpired: true });
-    
+
     for (const stored of allData) {
       if (stored.expiry && new Date(stored.expiry) < now) {
         await this.delete(stored.key);
@@ -255,13 +255,13 @@ export class TestDataPersistence {
   async backup(): Promise<string> {
     const backupId = `backup_${Date.now()}`;
     const backupPath = path.join(this.config.directory, 'backups', `${backupId}.json`);
-    
+
     const allData = await this.query();
     const backup = {
       id: backupId,
       createdAt: new Date().toISOString(),
       count: allData.length,
-      data: allData
+      data: allData,
     };
 
     await fs.mkdir(path.dirname(backupPath), { recursive: true });
@@ -283,7 +283,7 @@ export class TestDataPersistence {
     for (const stored of backupData.data) {
       try {
         await this.store(stored.key, this.deserialize(stored.data), {
-          tags: stored.metadata.tags
+          tags: stored.metadata.tags,
         });
         restoredCount++;
       } catch (error) {
@@ -307,9 +307,9 @@ export class TestDataPersistence {
   }> {
     const allData = await this.query();
     const totalSize = allData.reduce((sum, item) => sum + item.metadata.size, 0);
-    
-    const sortedByDate = allData.sort((a, b) => 
-      new Date(a.metadata.createdAt).getTime() - new Date(b.metadata.createdAt).getTime()
+
+    const sortedByDate = allData.sort(
+      (a, b) => new Date(a.metadata.createdAt).getTime() - new Date(b.metadata.createdAt).getTime()
     );
 
     return {
@@ -318,7 +318,7 @@ export class TestDataPersistence {
       storageType: this.config.storage,
       oldestItem: sortedByDate[0]?.metadata.createdAt || '',
       newestItem: sortedByDate[sortedByDate.length - 1]?.metadata.createdAt || '',
-      averageSize: allData.length > 0 ? Math.round(totalSize / allData.length) : 0
+      averageSize: allData.length > 0 ? Math.round(totalSize / allData.length) : 0,
     };
   }
 
@@ -327,15 +327,15 @@ export class TestDataPersistence {
    */
   async clear(): Promise<void> {
     switch (this.config.storage) {
-    case 'file':
-      await this.clearFiles();
-      break;
-    case 'memory':
-      this.memoryStore.clear();
-      break;
-    case 'sqlite':
-      await this.clearSQLite();
-      break;
+      case 'file':
+        await this.clearFiles();
+        break;
+      case 'memory':
+        this.memoryStore.clear();
+        break;
+      case 'sqlite':
+        await this.clearSQLite();
+        break;
     }
   }
 
@@ -370,7 +370,7 @@ export class TestDataPersistence {
     let hash = 0;
     for (let i = 0; i < data.length; i++) {
       const char = data.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
+      hash = (hash << 5) - hash + char;
       hash = hash & hash; // Convert to 32-bit integer
     }
     return hash.toString(16);
@@ -478,29 +478,32 @@ export class TestDataPersistence {
     if (!this.sqliteDb) return;
 
     const run = promisify(this.sqliteDb.run.bind(this.sqliteDb));
-    await run(`
+    await run(
+      `
       INSERT OR REPLACE INTO test_data 
       (id, key, data, created_at, updated_at, access_count, size, checksum, tags, expiry)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `, [
-      storedData.id,
-      storedData.key,
-      storedData.data,
-      storedData.metadata.createdAt,
-      storedData.metadata.updatedAt,
-      storedData.metadata.accessCount,
-      storedData.metadata.size,
-      storedData.metadata.checksum,
-      JSON.stringify(storedData.metadata.tags),
-      storedData.expiry || null
-    ]);
+    `,
+      [
+        storedData.id,
+        storedData.key,
+        storedData.data,
+        storedData.metadata.createdAt,
+        storedData.metadata.updatedAt,
+        storedData.metadata.accessCount,
+        storedData.metadata.size,
+        storedData.metadata.checksum,
+        JSON.stringify(storedData.metadata.tags),
+        storedData.expiry || null,
+      ]
+    );
   }
 
   private async retrieveFromSQLite(key: string): Promise<StoredTestData | null> {
     if (!this.sqliteDb) return null;
 
     const get = promisify(this.sqliteDb.get.bind(this.sqliteDb));
-    const row = await get('SELECT * FROM test_data WHERE key = ?', [key]) as unknown;
+    const row = (await get('SELECT * FROM test_data WHERE key = ?', [key])) as unknown;
 
     if (!row) return null;
 
@@ -514,9 +517,9 @@ export class TestDataPersistence {
         accessCount: row.access_count,
         size: row.size,
         checksum: row.checksum,
-        tags: JSON.parse(row.tags || '[]')
+        tags: JSON.parse(row.tags || '[]'),
       },
-      expiry: row.expiry
+      expiry: row.expiry,
     };
   }
 
@@ -528,7 +531,7 @@ export class TestDataPersistence {
     if (!this.sqliteDb) return false;
 
     const run = promisify(this.sqliteDb.run.bind(this.sqliteDb));
-    const result = await run('DELETE FROM test_data WHERE key = ?', [key]) as unknown;
+    const result = (await run('DELETE FROM test_data WHERE key = ?', [key])) as unknown;
     return result.changes > 0;
   }
 
@@ -536,7 +539,7 @@ export class TestDataPersistence {
     if (!this.sqliteDb) return [];
 
     const all = promisify(this.sqliteDb.all.bind(this.sqliteDb));
-    const rows = await all('SELECT * FROM test_data') as unknown[];
+    const rows = (await all('SELECT * FROM test_data')) as unknown[];
 
     return rows.map(row => ({
       id: row.id,
@@ -548,9 +551,9 @@ export class TestDataPersistence {
         accessCount: row.access_count,
         size: row.size,
         checksum: row.checksum,
-        tags: JSON.parse(row.tags || '[]')
+        tags: JSON.parse(row.tags || '[]'),
       },
-      expiry: row.expiry
+      expiry: row.expiry,
     }));
   }
 
@@ -565,14 +568,14 @@ export class TestDataPersistence {
 
   private async getStoredData(key: string): Promise<StoredTestData | null> {
     switch (this.config.storage) {
-    case 'file':
-      return await this.retrieveFromFile(key);
-    case 'memory':
-      return this.memoryStore.get(key) || null;
-    case 'sqlite':
-      return await this.retrieveFromSQLite(key);
-    default:
-      return null;
+      case 'file':
+        return await this.retrieveFromFile(key);
+      case 'memory':
+        return this.memoryStore.get(key) || null;
+      case 'sqlite':
+        return await this.retrieveFromSQLite(key);
+      default:
+        return null;
     }
   }
 
@@ -581,15 +584,15 @@ export class TestDataPersistence {
     if (existing) {
       existing.metadata = metadata;
       switch (this.config.storage) {
-      case 'file':
-        await this.storeToFile(existing);
-        break;
-      case 'memory':
-        this.memoryStore.set(key, existing);
-        break;
-      case 'sqlite':
-        await this.updateInSQLite(existing);
-        break;
+        case 'file':
+          await this.storeToFile(existing);
+          break;
+        case 'memory':
+          this.memoryStore.set(key, existing);
+          break;
+        case 'sqlite':
+          await this.updateInSQLite(existing);
+          break;
       }
     }
   }
@@ -598,9 +601,7 @@ export class TestDataPersistence {
     return results.filter(item => {
       // Filter by tags
       if (options.tags && options.tags.length > 0) {
-        const hasMatchingTag = options.tags.some(tag => 
-          item.metadata.tags.includes(tag)
-        );
+        const hasMatchingTag = options.tags.some(tag => item.metadata.tags.includes(tag));
         if (!hasMatchingTag) return false;
       }
 
@@ -630,23 +631,23 @@ export class TestDataPersistence {
       let dateB: Date;
 
       switch (orderBy) {
-      case 'updated':
-        dateA = new Date(a.metadata.updatedAt);
-        dateB = new Date(b.metadata.updatedAt);
-        break;
-      case 'accessed':
-        // Sort by access count (descending) then by updated date
-        if (a.metadata.accessCount !== b.metadata.accessCount) {
-          return b.metadata.accessCount - a.metadata.accessCount;
-        }
-        dateA = new Date(a.metadata.updatedAt);
-        dateB = new Date(b.metadata.updatedAt);
-        break;
-      case 'created':
-      default:
-        dateA = new Date(a.metadata.createdAt);
-        dateB = new Date(b.metadata.createdAt);
-        break;
+        case 'updated':
+          dateA = new Date(a.metadata.updatedAt);
+          dateB = new Date(b.metadata.updatedAt);
+          break;
+        case 'accessed':
+          // Sort by access count (descending) then by updated date
+          if (a.metadata.accessCount !== b.metadata.accessCount) {
+            return b.metadata.accessCount - a.metadata.accessCount;
+          }
+          dateA = new Date(a.metadata.updatedAt);
+          dateB = new Date(b.metadata.updatedAt);
+          break;
+        case 'created':
+        default:
+          dateA = new Date(a.metadata.createdAt);
+          dateB = new Date(b.metadata.createdAt);
+          break;
       }
 
       return dateB.getTime() - dateA.getTime(); // Most recent first
@@ -658,7 +659,7 @@ export class TestDataPersistence {
     try {
       const files = await fs.readdir(backupsDir);
       const backupFiles = files.filter(f => f.startsWith('backup_') && f.endsWith('.json'));
-      
+
       if (backupFiles.length > this.config.backupRetention) {
         // Sort by creation time (extracted from filename)
         const sorted = backupFiles.sort((a, b) => {

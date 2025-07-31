@@ -22,6 +22,7 @@ This guide explains how to expand, modularize, and maintain generator content fo
 - `entryPoints`: Default and alternative entry points for generation
 
 ### Example: metadata
+
 ```json
 "metadata": {
   "name": "Televangelist Generator",
@@ -36,7 +37,9 @@ This guide explains how to expand, modularize, and maintain generator content fo
 ```
 
 ### Category Details
+
 For each `grammar` category:
+
 - **Purpose:** What this category controls in output
 - **Example:**
   - `platforms`: ["Instagram Live", "Facebook", "Satellite TV", ...]
@@ -48,9 +51,9 @@ For each `grammar` category:
   - Keep entries concise and punchy
 
 ### Advanced Features
+
 - Weighted entries, conditional logic, and nested categories are allowed (see core engine docs for syntax).
 - Use `advancedFields` and `uiText` for UI-driven features.
-
 
 ### UI & Lockable Rule Guidelines (Advanced Options Modal)
 
@@ -59,7 +62,7 @@ These rules ensure generator packs integrate cleanly with the Randomizer’s dyn
 - **Lockable Rules**: Any grammar key whose value is
   - An array of strings, or
   - An array of objects using `{ "label": "...", "value": "..." }`
-  qualifies as *lockable* and will appear in the modal.
+    qualifies as _lockable_ and will appear in the modal.
 - **Input Type Mapping**
   - Arrays of simple strings → single-select dropdown.
   - Arrays of `{label,value}` objects → single-select dropdown using `label` for UI and `value` for output.
@@ -84,9 +87,11 @@ These rules ensure generator packs integrate cleanly with the Randomizer’s dyn
 ## 2. Modularization Guidelines
 
 ### When to Modularize
+
 - If a category is large or likely to be expanded independently, move it to a subfile (e.g., `mediaContexts.json`).
 
 ### How to Modularize
+
 - Create a camelCase-named JSON file (e.g., `mediaContexts.json`).
 - In the main generator JSON, reference it with:
   ```json
@@ -96,7 +101,7 @@ These rules ensure generator packs integrate cleanly with the Randomizer’s dyn
 
 ### Include Arrays, `_meta` Merge Pattern & Error-Handling
 
-Sometimes you need both `_meta` information **and** to pull in large external data via `$include`. Use the two-element *array* pattern introduced in July 2025:
+Sometimes you need both `_meta` information **and** to pull in large external data via `$include`. Use the two-element _array_ pattern introduced in July 2025:
 
 ```jsonc
 "platforms": [
@@ -108,23 +113,24 @@ Sometimes you need both `_meta` information **and** to pull in large external da
 When the loader encounters this pattern it merges the included array **immediately after** the `_meta` object, so metadata is preserved while all fetched values remain editable in place.
 
 #### Error-handling & validation rules
-* If the included file fails to fetch (`404`/network), or its JSON is malformed, the original `$include` node is preserved so the author can spot the issue in generated output.
-* Non-JSON responses (wrong MIME) are treated the same as malformed JSON.
-* `$include` values must be strings; other types trigger a warning and the node is left unchanged.
-* Multiple `$include` entries inside one array are flattened in order of appearance.
-* The depth cap of 20 ensures pathological chains don’t blow the stack.
-* Relative paths are resolved against the generator root ("/pack.json" → "/pack/").
+
+- If the included file fails to fetch (`404`/network), or its JSON is malformed, the original `$include` node is preserved so the author can spot the issue in generated output.
+- Non-JSON responses (wrong MIME) are treated the same as malformed JSON.
+- `$include` values must be strings; other types trigger a warning and the node is left unchanged.
+- Multiple `$include` entries inside one array are flattened in order of appearance.
+- The depth cap of 20 ensures pathological chains don’t blow the stack.
+- Relative paths are resolved against the generator root ("/pack.json" → "/pack/").
 
 Guidelines:
 • Keep the `_meta` object first in the array.
-• Append any additional hard-coded values *after* the `$include` entry to avoid confusion.
+• Append any additional hard-coded values _after_ the `$include` entry to avoid confusion.
 • Avoid circular includes – the resolver logs the full include-chain and aborts gracefully when a cycle is detected. Unit tests covering 2- and 3-file cycles live in `tests/generatorLoader_includes.test.js` and `tests/generatorLoader_circular.test.js`. The resolver also applies a hard recursion depth cap (20) to guard against excessively deep chains.
 
 ---
 
 ## 3. Slot Taxonomy Overview
 
-The Smart Prompt Rewriter stitches grammar *chips* into natural-language prompts according to the slot order defined in `docs/slot_taxonomy.md`.
+The Smart Prompt Rewriter stitches grammar _chips_ into natural-language prompts according to the slot order defined in `docs/slot_taxonomy.md`.
 
 ```
 subject → style → condition → size → age → purpose → materials → colour → texture → controls → displays → lighting → sound → motion → background → markings → density → provenance → setting → view
@@ -135,13 +141,14 @@ Key points:
 • Connectors are either auto-selected from defaults in the taxonomy table or overridden per-chip via `_meta.connector`.
 • Missing slots are skipped; duplicate slots are deduped in order of appearance.
 
-When adding **new categories** to a generator, pick an appropriate slot from the list (e.g. `mood` falls under *mood/ambience*). If none fits, update `slot_taxonomy.md` first and then reference the new slot here.
+When adding **new categories** to a generator, pick an appropriate slot from the list (e.g. `mood` falls under _mood/ambience_). If none fits, update `slot_taxonomy.md` first and then reference the new slot here.
 
 > Tip: run `npm run dev` and enable the debug overlay to see each chip’s slot and connector in real time.
 
 ---
 
 ### Validating Modular Packs
+
 - Use the loader to check for missing or malformed subfiles.
 - Optionally, use a schema validator (if available).
 
@@ -150,14 +157,17 @@ When adding **new categories** to a generator, pick an appropriate slot from the
 ## 3. Expansion Recipes for LLMs
 
 ### Adding New Entries
+
 - "Add 10 new 1980s TV platforms to `platforms.json`."
 - "Expand `downfalls.json` with 5 more social media scandals."
 
 ### Creating New Categories
+
 - "Create a new category `miracleTypes` for use in flavor text."
 - "Add a new subfile `taglines.json` with 20 humorous televangelist taglines."
 
 ### Writing for Style and Variety
+
 - Use humor, exaggeration, and period-appropriate language.
 - Avoid duplicating existing entries.
 - Keep entries concise and punchy.
@@ -177,28 +187,29 @@ When developing or troubleshooting generator content, the Randomizer application
 
 **Enabling the Debug Overlay:**
 
-*   To activate development mode and enable the overlay, append the query parameter `?dev=1` to the application's URL in your browser.
-    *   Example: `http://localhost:xxxx/?dev=1` (if running locally) or `https://your-app-url.com/?dev=1`.
+- To activate development mode and enable the overlay, append the query parameter `?dev=1` to the application's URL in your browser.
+  - Example: `http://localhost:xxxx/?dev=1` (if running locally) or `https://your-app-url.com/?dev=1`.
 
 **Toggling Overlay Visibility:**
 
-*   Once enabled via the URL, you can show or hide the debug overlay by pressing the `Ctrl + \` (Control plus Backslash) keyboard shortcut. On macOS, this is `Cmd + \` (Command plus Backslash).
+- Once enabled via the URL, you can show or hide the debug overlay by pressing the `Ctrl + \` (Control plus Backslash) keyboard shortcut. On macOS, this is `Cmd + \` (Command plus Backslash).
 
 **Purpose:**
 
-*   The debug overlay is designed to provide insights into how the Randomizer Engine processes your generator rules.
-*   Currently, it establishes the framework for these tools. Future enhancements will include an "Expansion Tree View" within this overlay, allowing you to see a hierarchical list of segments, rules, text, modifiers, and slots used to produce the final output. This will be invaluable for understanding complex interactions and debugging unexpected results.
+- The debug overlay is designed to provide insights into how the Randomizer Engine processes your generator rules.
+- Currently, it establishes the framework for these tools. Future enhancements will include an "Expansion Tree View" within this overlay, allowing you to see a hierarchical list of segments, rules, text, modifiers, and slots used to produce the final output. This will be invaluable for understanding complex interactions and debugging unexpected results.
 
 **Tips:**
 
-*   Always use the `?dev=1` parameter when you are actively working on or testing new generator rules.
-*   The keyboard shortcut provides a quick way to get the overlay out of the way when you need to see the main UI, and bring it back instantly.
+- Always use the `?dev=1` parameter when you are actively working on or testing new generator rules.
+- The keyboard shortcut provides a quick way to get the overlay out of the way when you need to see the main UI, and bring it back instantly.
 
 ---
 
 ## 5. Example Templates
 
 ### Generator Pack Template
+
 ```json
 {
   "metadata": { ... },
@@ -214,6 +225,7 @@ When developing or troubleshooting generator content, the Randomizer application
 ```
 
 ### Subfile Template (`mediaContexts.json`)
+
 ```json
 [
   {
@@ -230,18 +242,18 @@ When developing or troubleshooting generator content, the Randomizer application
 
 ## 6. Modifier Reference Table
 
-| Modifier | Purpose | Example Before | Example After |
-|----------|---------|----------------|---------------|
-| `capitalize` | Capitalizes first character | `hello` | `Hello` |
-| `upper` | Converts to UPPERCASE | `hello` | `HELLO` |
-| `lower` | Converts to lowercase | `HELLO` | `hello` |
-| `a_an` | Prepends correct indefinite article | `apple` | `an apple` |
-| `plural` | Naïve English pluralization | `cat` | `cats` |
-| `past` | Converts verb to simple past (heuristic) | `walk` | `walked` |
-| `possessive` | Adds `'s` | `dog` | `dog's` |
-| `trim` | Removes leading/trailing whitespace | `  text  ` | `text` |
-| `snake` | snake_case conversion | `Foo Bar` | `foo_bar` |
-| `kebab` | kebab-case conversion | `Foo Bar` | `foo-bar` |
+| Modifier     | Purpose                                  | Example Before | Example After |
+| ------------ | ---------------------------------------- | -------------- | ------------- |
+| `capitalize` | Capitalizes first character              | `hello`        | `Hello`       |
+| `upper`      | Converts to UPPERCASE                    | `hello`        | `HELLO`       |
+| `lower`      | Converts to lowercase                    | `HELLO`        | `hello`       |
+| `a_an`       | Prepends correct indefinite article      | `apple`        | `an apple`    |
+| `plural`     | Naïve English pluralization              | `cat`          | `cats`        |
+| `past`       | Converts verb to simple past (heuristic) | `walk`         | `walked`      |
+| `possessive` | Adds `'s`                                | `dog`          | `dog's`       |
+| `trim`       | Removes leading/trailing whitespace      | `  text  `     | `text`        |
+| `snake`      | snake_case conversion                    | `Foo Bar`      | `foo_bar`     |
+| `kebab`      | kebab-case conversion                    | `Foo Bar`      | `foo-bar`     |
 
 Custom modifiers can be registered via `engine.registerModifier(name, fn)` in JavaScript or `engine.register_modifier` in Python.
 
@@ -267,33 +279,38 @@ Use the GIF as a quick visual reference when onboarding new contributors.
 
 The Randomizer web app automatically stores a small snippet of user state in `localStorage` so that preferences survive a page reload.
 
-### 6.1  JSON schema (v1)
+### 6.1 JSON schema (v1)
+
 ```jsonc
 {
-  "version": 1,              // bump when breaking changes are introduced
+  "version": 1, // bump when breaking changes are introduced
   "generator": "televangelist", // id of last selected generator (string | null)
-  "lockedValues": {           // values the user locked via Advanced Options
-    "preacher_name": "Reverend Bob"
+  "lockedValues": {
+    // values the user locked via Advanced Options
+    "preacher_name": "Reverend Bob",
   },
   "lastPrompt": {
-    "raw": "Beloved congregation …"  // full text of last generated prompt
+    "raw": "Beloved congregation …", // full text of last generated prompt
   },
-  "theme": "light",          // reserved for future use
-  "seed": 123456789           // optional future deterministic mode
+  "theme": "light", // reserved for future use
+  "seed": 123456789, // optional future deterministic mode
 }
 ```
-* Size budget: **≤ 10 KB** – keep additions minimal.
-* Unknown extra keys are ignored by the loader (forward-compat).
 
-### 6.2  Versioning / migrations
+- Size budget: **≤ 10 KB** – keep additions minimal.
+- Unknown extra keys are ignored by the loader (forward-compat).
+
+### 6.2 Versioning / migrations
+
 1. **Minor additions** (non-breaking) can reuse the current version. New code must tolerate the key being absent.
 2. **Breaking changes** (renamed or re-typed fields) require incrementing `version` and bumping the constant in `src/services/persistence.js`. Loader will then ignore outdated payloads and fall back to defaults.
 3. Provide a one-off migration in `loadState()` only if the old data is valuable and trivial to convert.
 
-### 6.3  Best practices for contributors
-* When you introduce a new *lockable* grammar key, ensure the UI marks it as lockable so it can be serialized under `lockedValues`.
-* Avoid storing huge blobs. Persist only primitive or short string data.
-* If you must grow the schema, document it here and update unit tests in `tests/persistence.test.js`.
+### 6.3 Best practices for contributors
+
+- When you introduce a new _lockable_ grammar key, ensure the UI marks it as lockable so it can be serialized under `lockedValues`.
+- Avoid storing huge blobs. Persist only primitive or short string data.
+- If you must grow the schema, document it here and update unit tests in `tests/persistence.test.js`.
 
 ---
 

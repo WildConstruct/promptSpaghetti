@@ -2,7 +2,7 @@
 
 **Task**: E17-1753114397211-324330 - Design API management system  
 **Epic**: 17 - Backstage Admin Controls Implementation  
-**Story**: 17.4.4 - API Management  
+**Story**: 17.4.4 - API Management
 
 ## Overview
 
@@ -41,12 +41,14 @@ The API Management System provides comprehensive administrative control over API
 ### 1. Comprehensive API Key Management
 
 #### Dashboard Interface
+
 - **Overview Tab**: System-wide metrics and KPIs
 - **Keys Management Tab**: Detailed key listing with filtering
 - **Analytics Tab**: Usage patterns and performance metrics
 - **Security Tab**: Real-time security monitoring and alerts
 
 #### Key Lifecycle Operations
+
 - **Creation**: Secure key generation with scope assignment
 - **Rotation**: Automated rotation with grace periods
 - **Suspension**: Temporary key deactivation
@@ -56,6 +58,7 @@ The API Management System provides comprehensive administrative control over API
 ### 2. Advanced Usage Analytics
 
 #### Real-time Metrics
+
 ```typescript
 interface RealtimeMetrics {
   requestsPerSecond: number;
@@ -68,6 +71,7 @@ interface RealtimeMetrics {
 ```
 
 #### Key-specific Analytics
+
 - Total API calls and error counts
 - Performance metrics (latency percentiles)
 - Usage patterns and trends
@@ -75,6 +79,7 @@ interface RealtimeMetrics {
 - Geographic distribution
 
 #### System Health Monitoring
+
 - Overall system performance
 - Service uptime tracking
 - Resource utilization metrics
@@ -83,12 +88,14 @@ interface RealtimeMetrics {
 ### 3. Security Monitoring & Alerting
 
 #### Alert Types
+
 - **Rate Limit Violations**: Excessive request rates
 - **Error Spikes**: Abnormal error rate increases
 - **Unusual Activity**: Suspicious usage patterns
 - **Security Threats**: Potential malicious behavior
 
 #### Alert Configuration
+
 ```typescript
 interface AlertConfiguration {
   id: string;
@@ -116,17 +123,20 @@ interface AlertConfiguration {
 ### 4. Usage Reports & Export
 
 #### Report Types
+
 - **Usage Reports**: Detailed API call analytics
 - **Performance Reports**: Latency and reliability metrics
 - **Security Reports**: Security incidents and patterns
 - **Compliance Reports**: Audit trails and access logs
 
 #### Export Formats
+
 - JSON for programmatic processing
 - CSV for spreadsheet analysis
 - Excel for business reporting
 
 #### Data Export Features
+
 ```typescript
 interface ExportRequest {
   format: 'json' | 'csv' | 'excel';
@@ -143,11 +153,13 @@ interface ExportRequest {
 ### 5. Rate Limiting & Quotas
 
 #### Multi-tier Rate Limiting
+
 - Per-minute limits for burst protection
 - Per-hour limits for sustained usage
 - Per-day limits for billing control
 
 #### Quota Management
+
 ```typescript
 interface ApiKeyQuota {
   quotaType: 'monthly' | 'daily' | 'custom';
@@ -165,28 +177,34 @@ interface ApiKeyQuota {
 ### Core Tables
 
 #### API Call Logs (`api_call_logs`)
+
 Comprehensive logging of all API requests for analytics and monitoring:
+
 - Request/response metadata
 - Performance metrics
 - Error tracking
 - IP and user agent information
 
 #### Alert Management (`api_alert_configs`, `api_alert_incidents`)
+
 - Alert rule configuration
 - Incident tracking and resolution
 - Escalation management
 
 #### Usage Reporting (`api_usage_reports`)
+
 - Generated report tracking
 - Export file management
 - Download history
 
 #### Performance Metrics (`api_performance_metrics`)
+
 - Latency percentile tracking
 - Throughput measurements
 - Availability monitoring
 
 #### System Configuration (`api_management_config`)
+
 - Feature flags
 - System limits and thresholds
 - Environment-specific settings
@@ -194,18 +212,19 @@ Comprehensive logging of all API requests for analytics and monitoring:
 ### Key Indexes
 
 High-performance indexes for analytics queries:
+
 ```sql
 -- Time-series analysis
-CREATE INDEX idx_api_call_logs_time_series 
+CREATE INDEX idx_api_call_logs_time_series
 ON api_call_logs (created_at DESC, key_id, status);
 
 -- Real-time analytics
-CREATE INDEX idx_api_call_logs_analytics 
+CREATE INDEX idx_api_call_logs_analytics
 ON api_call_logs (key_id, endpoint, created_at);
 
 -- Error analysis
-CREATE INDEX idx_api_call_logs_recent_errors 
-ON api_call_logs (created_at, key_id, error_message) 
+CREATE INDEX idx_api_call_logs_recent_errors
+ON api_call_logs (created_at, key_id, error_message)
 WHERE status = 'error';
 ```
 
@@ -214,12 +233,15 @@ WHERE status = 'error';
 ### Dashboard Data Endpoints
 
 #### GET `/admin/api-management/dashboard`
+
 Real-time dashboard metrics with configurable time ranges.
 
 **Query Parameters:**
+
 - `timeRange`: '1h' | '6h' | '24h' | '7d' | '30d'
 
 **Response:**
+
 ```typescript
 {
   metrics: {
@@ -239,22 +261,26 @@ Real-time dashboard metrics with configurable time ranges.
       requests: number;
       errors: number;
     }>;
-  };
+  }
   timestamp: string;
   timeRange: string;
 }
 ```
 
 #### GET `/admin/api-management/health`
+
 System health and performance metrics.
 
 #### GET `/admin/api-management/analytics/:keyId`
+
 Detailed analytics for a specific API key.
 
 #### POST `/admin/api-management/reports`
+
 Generate comprehensive usage reports.
 
 **Request Body:**
+
 ```typescript
 {
   keyId?: string;
@@ -266,40 +292,48 @@ Generate comprehensive usage reports.
 ```
 
 #### GET `/admin/api-management/realtime`
+
 Real-time statistics for monitoring dashboards.
 
 ### Administrative Operations
 
 #### POST `/admin/api-management/bulk-operations`
+
 Bulk operations on multiple API keys.
 
 **Supported Operations:**
+
 - `revoke`: Revoke multiple keys
-- `suspend`: Suspend multiple keys  
+- `suspend`: Suspend multiple keys
 - `update_limits`: Update rate limits
 - `extend_expiry`: Extend expiration dates
 
 #### POST `/admin/api-management/alerts`
+
 Configure monitoring alerts.
 
 #### POST `/admin/api-management/export`
+
 Export usage data in various formats.
 
 ## Security Features
 
 ### Access Control
+
 - Admin-only endpoints with role-based authorization
 - Comprehensive audit logging
 - IP-based access controls
 - Scope-based permission enforcement
 
 ### Security Monitoring
+
 - Real-time threat detection
 - Anomaly pattern recognition
 - Suspicious activity alerts
 - Rate limit violation tracking
 
 ### Data Protection
+
 - Secure key storage with hashing
 - PII anonymization in logs
 - Configurable data retention
@@ -308,18 +342,21 @@ Export usage data in various formats.
 ## Performance Optimizations
 
 ### Database Performance
+
 - Strategic indexing for analytics queries
 - Partitioned tables for time-series data
 - Automatic data archiving
 - Read replica support for reporting
 
 ### Caching Strategy
+
 - In-memory key validation cache
 - Dashboard metrics caching
 - Aggregated statistics pre-computation
 - CDN integration for static assets
 
 ### Scalability Features
+
 - Horizontal scaling support
 - Load balancer integration
 - Database connection pooling
@@ -328,18 +365,21 @@ Export usage data in various formats.
 ## Monitoring & Observability
 
 ### Health Checks
+
 - Service availability monitoring
 - Database connectivity checks
 - External dependency validation
 - Performance threshold monitoring
 
 ### Metrics Collection
+
 - Request/response metrics
 - Error rate tracking
 - Latency percentile monitoring
 - Resource utilization metrics
 
 ### Alerting Integration
+
 - Email notifications
 - Webhook integrations
 - Slack/Teams notifications
@@ -348,32 +388,34 @@ Export usage data in various formats.
 ## Configuration Management
 
 ### Default Settings
+
 ```typescript
 const DEFAULT_CONFIG = {
   rateLimiting: {
     defaultLimits: {
       requestsPerMinute: 100,
       requestsPerHour: 3000,
-      requestsPerDay: 50000
-    }
+      requestsPerDay: 50000,
+    },
   },
   security: {
     keyRotationPolicy: {
       warningDays: 30,
       enforceRotation: true,
-      maxKeyAge: 365
-    }
+      maxKeyAge: 365,
+    },
   },
   features: {
     ipWhitelisting: true,
     scopeBasedAccess: true,
     usageAnalytics: true,
-    realTimeMonitoring: true
-  }
+    realTimeMonitoring: true,
+  },
 };
 ```
 
 ### Environment-Specific Configuration
+
 - Development: Relaxed limits, verbose logging
 - Staging: Production-like settings, test data
 - Production: Strict security, optimized performance
@@ -381,12 +423,14 @@ const DEFAULT_CONFIG = {
 ## Integration Points
 
 ### Wild Construct Platform Integration
+
 - Seamless integration with existing authentication
 - Shared user management and roles
 - Common audit logging framework
 - Unified admin interface patterns
 
 ### External System Integration
+
 - Monitoring system webhooks
 - Business intelligence tool exports
 - Customer support ticket creation
@@ -395,6 +439,7 @@ const DEFAULT_CONFIG = {
 ## Future Enhancements
 
 ### Planned Features
+
 1. **Machine Learning Analytics**
    - Predictive usage modeling
    - Anomaly detection improvements
@@ -418,6 +463,7 @@ const DEFAULT_CONFIG = {
 ## Implementation Status
 
 ### ✅ Completed Components
+
 - Comprehensive API Management Dashboard interface
 - Enhanced API Key Management Service with analytics
 - Admin API routes with full CRUD operations
@@ -427,6 +473,7 @@ const DEFAULT_CONFIG = {
 - Real-time metrics and performance tracking
 
 ### 🏗️ Implementation Notes
+
 - All components are designed for production deployment
 - Full backward compatibility with existing API key system
 - Comprehensive error handling and validation

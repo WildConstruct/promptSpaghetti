@@ -5,6 +5,7 @@ A secure, remotely accessible version of the Complete Ticketing Dashboard with a
 ## 🚀 Quick Start
 
 ### Option 1: Use Startup Script (Recommended)
+
 ```bash
 # Development mode (with auto-restart)
 ./start-secure-dashboard.sh
@@ -14,6 +15,7 @@ A secure, remotely accessible version of the Complete Ticketing Dashboard with a
 ```
 
 ### Option 2: Direct Node.js
+
 ```bash
 # Install dependencies
 npm install
@@ -28,11 +30,13 @@ npm run dev
 ## 🌐 Access the Dashboard
 
 Once running, the dashboard will be available at:
+
 - **Local**: http://localhost:8080
 - **Network**: http://your-ip-address:8080
 - **Login Page**: http://your-ip-address:8080/login
 
 ### Default Credentials
+
 - **Username**: `admin`
 - **Password**: `dashboard123`
 
@@ -41,6 +45,7 @@ Once running, the dashboard will be available at:
 ## 🔧 Configuration
 
 ### Environment Variables
+
 Set these via environment variables or `.env` file:
 
 ```bash
@@ -60,6 +65,7 @@ NODE_ENV=production
 ```
 
 ### Create .env file
+
 ```bash
 cp .env.example .env
 # Edit .env with your settings
@@ -68,6 +74,7 @@ cp .env.example .env
 ## 🔐 Security Features
 
 ### Authentication
+
 - ✅ Password-based login with bcrypt hashing
 - ✅ Session management with secure cookies
 - ✅ Rate limiting (5 login attempts per 15 minutes)
@@ -75,12 +82,14 @@ cp .env.example .env
 - ✅ Automatic logout functionality
 
 ### API Protection
+
 - ✅ All API endpoints require authentication
 - ✅ Session-based access control
 - ✅ Protected task data and broadcasts
 - ✅ Input validation and error handling
 
 ### Security Headers
+
 - ✅ HTTP-only session cookies
 - ✅ CSRF protection via sessions
 - ✅ Error message sanitization
@@ -89,12 +98,14 @@ cp .env.example .env
 ## 📢 Agent Broadcasting System
 
 ### From Dashboard
+
 1. Login to dashboard
 2. Click "📢 Agent Broadcast" tab
 3. Type message and select priority
 4. Send to all agents instantly
 
 ### From CLI (Agents)
+
 ```bash
 # Check for broadcasts
 node src/broadcast-to-agents.js check
@@ -107,6 +118,7 @@ node src/broadcast-to-agents.js clear
 ```
 
 ### Quick Templates
+
 - 🔍 Request QA Pipeline
 - 🎯 Epic 8 Priority Shift
 - ⚠️ Maintenance Warning
@@ -117,11 +129,13 @@ node src/broadcast-to-agents.js clear
 ## 🌍 Remote Access Setup
 
 ### Local Network Access
+
 1. Find your IP address:
+
    ```bash
    # Mac/Linux
    hostname -I
-   
+
    # Windows
    ipconfig
    ```
@@ -132,6 +146,7 @@ node src/broadcast-to-agents.js clear
    ```
 
 ### Internet Access (Advanced)
+
 For internet access, you'll need:
 
 1. **Port Forwarding**: Configure router to forward port 8080
@@ -140,6 +155,7 @@ For internet access, you'll need:
 4. **Firewall**: Configure firewall rules appropriately
 
 ### Cloud Deployment
+
 Deploy to cloud platforms:
 
 ```bash
@@ -156,24 +172,28 @@ doctl apps create --spec app.yaml
 ## 📊 Dashboard Features
 
 ### Epic Status
+
 - ✅ Real-time epic progress tracking
 - ✅ Dynamic completion percentages
 - ✅ Clickable epic cards with task details
 - ✅ Business value indicators
 
-### Approval History  
+### Approval History
+
 - ✅ Daily approval charts
 - ✅ Weekly velocity trends
 - ✅ Properly sized chart containers
 - ✅ Historical data visualization
 
 ### Task Management
+
 - ✅ Task filtering and search
 - ✅ Epic assignment controls
 - ✅ Real-time task updates
 - ✅ Clickable task details
 
 ### Agent Broadcasting
+
 - ✅ Priority-based messaging
 - ✅ Real-time message display
 - ✅ Acknowledgment tracking
@@ -182,6 +202,7 @@ doctl apps create --spec app.yaml
 ## 🛠️ Development
 
 ### File Structure
+
 ```
 src/
 ├── secure-dashboard-server.js  # Main server file
@@ -196,12 +217,14 @@ src/
 ```
 
 ### Adding Features
+
 1. **New API Endpoints**: Add to `secure-dashboard-server.js`
 2. **UI Changes**: Modify `complete-dashboard.html`
 3. **Authentication**: Update login/session handling
 4. **Security**: Review and test security measures
 
 ### Testing
+
 ```bash
 # Test login
 curl -X POST http://localhost:8080/login \
@@ -238,27 +261,33 @@ Before deploying to production:
 ### Common Issues
 
 **Dashboard not loading**
+
 - Check if server is running on correct port
 - Verify firewall allows connections
 - Check browser console for errors
 
-**Login not working** 
+**Login not working**
+
 - Verify credentials are correct
 - Check for rate limiting (wait 15 minutes)
 - Clear browser cookies and try again
 
 **Remote access fails**
+
 - Confirm HOST=0.0.0.0 (not localhost)
 - Check network firewall rules
 - Verify IP address is correct
 
 **Broadcasts not saving**
+
 - Ensure data/ directory exists
 - Check file permissions
 - Verify disk space available
 
 ### Logs
+
 Server logs show:
+
 - Login attempts and results
 - Broadcast messages sent
 - API endpoint access
@@ -267,6 +296,7 @@ Server logs show:
 ## 📞 Support
 
 Need help? Check:
+
 1. Server console output for errors
 2. Browser developer tools
 3. Network connectivity

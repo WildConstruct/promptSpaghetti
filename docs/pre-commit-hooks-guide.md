@@ -7,6 +7,7 @@ This project uses a comprehensive pre-commit hook system to enforce code quality
 ## Pre-Commit Hooks Installed
 
 ### Standard Quality Checks
+
 - **Prettier** - Code formatting consistency
 - **ESLint** - JavaScript/TypeScript linting with Airbnb config
 - **TypeScript** - Type checking
@@ -14,6 +15,7 @@ This project uses a comprehensive pre-commit hook system to enforce code quality
 - **SQL Formatting** - Database migration formatting
 
 ### Epic 17 Custom Quality Checks
+
 - **Naming Conventions** - Enforces camelCase/PascalCase/CONSTANT_CASE standards
 - **Security Patterns** - Detects security vulnerabilities and anti-patterns
 - **API Documentation** - Ensures all API routes have proper JSDoc documentation
@@ -35,9 +37,11 @@ pre-commit run --all-files
 ## How It Works
 
 ### Automatic Execution
+
 Pre-commit hooks run automatically on every `git commit`. If any hook fails, the commit is blocked until issues are resolved.
 
 ### Manual Execution
+
 ```bash
 # Run all hooks on staged files
 pre-commit run
@@ -58,12 +62,14 @@ git commit --no-verify
 ### 1. Naming Conventions (`epic17-naming-conventions`)
 
 **Requirements:**
+
 - Functions, methods, variables: `camelCase`
-- Classes, interfaces, types: `PascalCase`  
+- Classes, interfaces, types: `PascalCase`
 - Constants: `SCREAMING_SNAKE_CASE`
 - React components: `PascalCase` (automatically detected)
 
 **Example:**
+
 ```typescript
 // ✅ Good
 const userName = 'john';
@@ -81,6 +87,7 @@ const user_component = () => <div />;
 ### 2. Security Patterns (`epic17-security-check`)
 
 **Detects:**
+
 - SQL injection vulnerabilities
 - XSS risks (unsafe HTML manipulation)
 - Code injection (eval, Function constructor)
@@ -89,12 +96,13 @@ const user_component = () => <div />;
 - Authentication bypasses
 
 **Example:**
+
 ```typescript
 // ❌ Dangerous
 const query = `SELECT * FROM users WHERE id = ${userId}`;
-element.innerHTML = userInput + "<script>";
+element.innerHTML = userInput + '<script>';
 eval(userCode);
-const apiKey = "sk-1234567890abcdef";
+const apiKey = 'sk-1234567890abcdef';
 
 // ✅ Safe
 const query = `SELECT * FROM users WHERE id = ?`;
@@ -106,6 +114,7 @@ const apiKey = process.env.API_KEY;
 ### 3. API Documentation (`epic17-api-documentation`)
 
 **Requirements:**
+
 - All API routes must have JSDoc comments
 - Include `@description`, `@route`, `@method`, `@access`
 - Document parameters with `@param`
@@ -113,6 +122,7 @@ const apiKey = process.env.API_KEY;
 - Document errors with `@throws`
 
 **Example:**
+
 ```typescript
 /**
  * @description Get user profile information
@@ -132,6 +142,7 @@ fastify.get('/api/users/:id', async (request, reply) => {
 ### 4. Migration Safety (`database-migration-check`)
 
 **Requirements:**
+
 - Follow naming convention: `NNN_descriptive_name.sql`
 - Include rollback strategy for destructive operations
 - Wrap operations in transactions
@@ -139,6 +150,7 @@ fastify.get('/api/users/:id', async (request, reply) => {
 - Include Epic 17 task references
 
 **Example:**
+
 ```sql
 -- Task: E17-1753114396XXX-XXXXXX
 -- ROLLBACK: DROP TABLE user_preferences;
@@ -163,6 +175,7 @@ COMMIT;
 ## Bypassing Hooks
 
 ### Temporary Bypass (Emergency Only)
+
 ```bash
 # Skip all hooks (use sparingly)
 git commit --no-verify
@@ -173,7 +186,9 @@ eval(safeCode); // security-disable: code-injection
 ```
 
 ### File Exclusions
+
 Some files are automatically excluded:
+
 - Test files (`*.test.*`, `*.spec.*`)
 - Development tools (`cypress/`, `jest/`)
 - Lock files (`package-lock.json`, `pnpm-lock.yaml`)
@@ -183,6 +198,7 @@ Some files are automatically excluded:
 ### Common Issues
 
 **1. TypeScript Errors**
+
 ```bash
 # Fix type errors first
 pnpm typecheck
@@ -191,6 +207,7 @@ git commit
 ```
 
 **2. ESLint Failures**
+
 ```bash
 # Auto-fix where possible
 pnpm lint --fix
@@ -198,11 +215,13 @@ pnpm lint --fix
 ```
 
 **3. Naming Convention Violations**
+
 - Rename variables to follow camelCase
 - Use PascalCase for React components
 - Use SCREAMING_SNAKE_CASE for constants
 
 **4. Security Pattern Detections**
+
 - Review flagged patterns carefully
 - Use environment variables for secrets
 - Implement proper input validation
@@ -225,18 +244,21 @@ pnpm lint --fix
 ## Benefits
 
 ### Code Quality
+
 - Consistent naming conventions across codebase
 - Automated security vulnerability detection
 - Comprehensive API documentation requirements
 - Database migration safety guarantees
 
 ### Development Velocity
+
 - Catch issues before code review
 - Automated formatting and linting
 - Prevent security vulnerabilities early
 - Maintain documentation standards
 
 ### Epic 17 Standards
+
 - Enforce Epic 17 specific requirements
 - Task ID tracking in migrations
 - Security considerations for admin features

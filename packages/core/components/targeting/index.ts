@@ -1,6 +1,6 @@
 /**
  * Targeting UI Components Export Index (Epic 17)
- * 
+ *
  * DEPLOYMENT BLOCKER FIX: Central export point for all targeting UI components
  */
 
@@ -13,7 +13,7 @@ export {
   type TargetingCondition,
   type UserSegment,
   type TargetingAudience,
-  type TargetingPreview
+  type TargetingPreview,
 } from './TargetingUIComponents';
 
 // Re-export for convenience

@@ -6,16 +6,14 @@
 export { default as LoadingState } from './LoadingState';
 export type { LoadingStateProps } from './LoadingState';
 
-export { 
-  default as ErrorState
-} from './ErrorState';
+export { default as ErrorState } from './ErrorState';
 export type { ErrorStateProps } from './ErrorState';
 
-export { 
+export {
   default as EmptyState,
   EmptySearchState,
   EmptyFilterState,
   EmptyCreateState,
-  EmptyChartState
+  EmptyChartState,
 } from './EmptyState';
 export type { EmptyStateProps } from './EmptyState';

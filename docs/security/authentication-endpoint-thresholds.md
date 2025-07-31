@@ -34,6 +34,7 @@ This document defines the comprehensive rate limiting strategy and thresholds fo
 **Category**: Primary authentication endpoint
 
 #### Rate Limits
+
 ```yaml
 limits:
   per_second: 2 requests
@@ -43,6 +44,7 @@ limits:
 ```
 
 #### Backoff Strategy
+
 ```yaml
 strategy: exponential
 base_delay: 5 seconds
@@ -51,6 +53,7 @@ multiplier: 2.0
 ```
 
 #### Threat-Based Adaptive Limits
+
 ```yaml
 threat_adjustments:
   low: 100% of base limits
@@ -67,6 +70,7 @@ threat_adjustments:
 **Category**: Secondary authentication factor
 
 #### Rate Limits
+
 ```yaml
 limits:
   per_second: 1 request
@@ -76,6 +80,7 @@ limits:
 ```
 
 #### Backoff Strategy
+
 ```yaml
 strategy: fibonacci
 base_delay: 10 seconds
@@ -84,6 +89,7 @@ multiplier: 1.0
 ```
 
 #### Threat-Based Adaptive Limits
+
 ```yaml
 threat_adjustments:
   low: 100% of base limits
@@ -100,6 +106,7 @@ threat_adjustments:
 **Category**: Account recovery endpoint
 
 #### Rate Limits
+
 ```yaml
 limits:
   per_second: 1 request
@@ -109,6 +116,7 @@ limits:
 ```
 
 #### Backoff Strategy
+
 ```yaml
 strategy: linear
 base_delay: 60 seconds
@@ -117,6 +125,7 @@ multiplier: 1.5
 ```
 
 #### Threat-Based Adaptive Limits
+
 ```yaml
 threat_adjustments:
   low: 100% of base limits
@@ -133,6 +142,7 @@ threat_adjustments:
 **Category**: Account creation endpoint
 
 #### Rate Limits
+
 ```yaml
 limits:
   per_second: 1 request
@@ -142,6 +152,7 @@ limits:
 ```
 
 #### Backoff Strategy
+
 ```yaml
 strategy: exponential
 base_delay: 30 seconds
@@ -150,6 +161,7 @@ multiplier: 3.0
 ```
 
 #### Threat-Based Adaptive Limits
+
 ```yaml
 threat_adjustments:
   low: 100% of base limits
@@ -165,24 +177,28 @@ threat_adjustments:
 ### Threat Level Assessment
 
 #### Low Threat (Score: 0-29)
+
 - Normal request patterns
 - Successful authentication attempts
 - Familiar geographic location
 - Consistent user behavior
 
 #### Medium Threat (Score: 30-59)
+
 - Moderate failure rate (3-5 consecutive failures)
 - Requests from multiple endpoints
 - Slightly elevated request frequency
 - New device or location
 
 #### High Threat (Score: 60-79)
+
 - High failure rate (6-10 consecutive failures)
 - Rapid requests (>20 in 5 minutes)
 - Multiple endpoint attacks
 - Suspicious geographic patterns
 
 #### Critical Threat (Score: 80-100)
+
 - Very high failure rate (>10 consecutive failures)
 - Extreme request volume (>30 in 5 minutes)
 - Known attack patterns
@@ -199,25 +215,31 @@ threat_adjustments:
 ## Backoff Algorithm Implementations
 
 ### Exponential Backoff
+
 ```typescript
-delay = baseDelay * Math.pow(multiplier, attemptNumber - 1)
+delay = baseDelay * Math.pow(multiplier, attemptNumber - 1);
 ```
+
 - Used for: Login, Registration
 - Provides rapid escalation for repeated failures
 - Effective against automated attacks
 
 ### Fibonacci Backoff
+
 ```typescript
-delay = baseDelay * fibonacci(attemptNumber)
+delay = baseDelay * fibonacci(attemptNumber);
 ```
+
 - Used for: MFA Verification
 - Provides moderate escalation
 - Balances security with user experience
 
 ### Linear Backoff
+
 ```typescript
-delay = baseDelay * attemptNumber * multiplier
+delay = baseDelay * attemptNumber * multiplier;
 ```
+
 - Used for: Password Reset
 - Provides predictable escalation
 - Suitable for email-based flows
@@ -290,13 +312,13 @@ delay = baseDelay * attemptNumber * multiplier
 
 ### Key Performance Indicators
 
-| Metric | Target | Alert Threshold |
-|--------|--------|----------------|
-| Legitimate requests blocked | <0.1% | >0.5% |
-| Attack requests blocked | >95% | <90% |
-| Response time impact | <1ms | >5ms |
-| Memory usage | <100MB | >500MB |
-| False positive rate | <0.01% | >0.1% |
+| Metric                      | Target | Alert Threshold |
+| --------------------------- | ------ | --------------- |
+| Legitimate requests blocked | <0.1%  | >0.5%           |
+| Attack requests blocked     | >95%   | <90%            |
+| Response time impact        | <1ms   | >5ms            |
+| Memory usage                | <100MB | >500MB          |
+| False positive rate         | <0.01% | >0.1%           |
 
 ### Alert Conditions
 
@@ -358,6 +380,7 @@ delay = baseDelay * attemptNumber * multiplier
 This comprehensive rate limiting strategy provides robust protection against authentication attacks while maintaining optimal user experience. The multi-tier approach with adaptive limits ensures effectiveness against evolving threats while the sophisticated backoff strategies prevent legitimate user lockout.
 
 Key benefits:
+
 - **🛡️ Comprehensive Protection**: Defense against all major attack vectors
 - **🎯 Adaptive Response**: Dynamic adjustment to threat landscape
 - **⚖️ Balanced Approach**: Security without compromising usability

@@ -1,7 +1,7 @@
 /**
  * Shared Hooks Index
  * REFACTOR-002: Admin Dashboard Architecture Consolidation
- * 
+ *
  * Centralized exports for all shared admin hooks
  */
 

@@ -25,15 +25,7 @@
     },
     "project": "./tsconfig.json"
   },
-  "plugins": [
-    "@typescript-eslint",
-    "react",
-    "react-hooks",
-    "sonarjs",
-    "security",
-    "import",
-    "jsx-a11y"
-  ],
+  "plugins": ["@typescript-eslint", "react", "react-hooks", "sonarjs", "security", "import", "jsx-a11y"],
   "rules": {
     // Code Quality Rules
     "no-unused-vars": "off",
@@ -43,43 +35,46 @@
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-non-null-assertion": "warn",
-    
+
     // Complexity Rules
     "complexity": ["warn", 10],
     "max-depth": ["warn", 4],
     "max-lines": ["warn", 300],
     "max-lines-per-function": ["warn", 50],
     "max-params": ["warn", 4],
-    
+
     // Code Style Rules (following coding standards)
     "camelcase": ["error", { "properties": "never" }],
     "prefer-const": "error",
     "no-var": "error",
-    
+
     // React Rules
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    
+
     // Performance Rules
     "no-await-in-loop": "warn",
     "prefer-promise-reject-errors": "error",
-    
+
     // Security Rules
     "security/detect-object-injection": "warn",
     "security/detect-non-literal-regexp": "warn",
     "security/detect-unsafe-regex": "error",
-    
+
     // Import Rules
-    "import/order": ["error", {
-      "groups": ["builtin", "external", "internal", "parent", "sibling", "index"],
-      "newlines-between": "always",
-      "alphabetize": { "order": "asc", "caseInsensitive": true }
-    }],
+    "import/order": [
+      "error",
+      {
+        "groups": ["builtin", "external", "internal", "parent", "sibling", "index"],
+        "newlines-between": "always",
+        "alphabetize": { "order": "asc", "caseInsensitive": true }
+      }
+    ],
     "import/no-unresolved": "off",
     "import/no-duplicates": "error",
-    
+
     // Accessibility Rules
     "jsx-a11y/alt-text": "error",
     "jsx-a11y/anchor-has-content": "error",

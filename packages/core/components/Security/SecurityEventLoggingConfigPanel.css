@@ -10,7 +10,13 @@
   min-height: 100vh;
   background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
   color: #ffffff;
-  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    'SF Pro Display',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
 }
 
 .config-header {
@@ -421,41 +427,41 @@
   .security-logging-config {
     padding: 1rem;
   }
-  
+
   .config-header {
     flex-direction: column;
     gap: 1rem;
   }
-  
+
   .header-actions {
     width: 100%;
     justify-content: flex-start;
   }
-  
+
   .tabs-list {
     flex-wrap: wrap;
   }
-  
+
   .tab-content {
     padding: 1rem;
   }
-  
+
   .status-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .destinations-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .event-types-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .action-buttons {
     flex-direction: column;
   }
-  
+
   .manager-header {
     flex-direction: column;
     align-items: stretch;
@@ -504,8 +510,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Focus States for Accessibility */
@@ -748,7 +758,7 @@ button:focus {
   .security-logging-config {
     background: #000000;
   }
-  
+
   .destination-card,
   .category-card,
   .config-tabs,
@@ -757,7 +767,7 @@ button:focus {
   .validation-rule {
     border-color: #ffffff;
   }
-  
+
   .status-item,
   .event-type-item,
   .policy-item {

@@ -2,7 +2,7 @@
 
 /**
  * Direct Database Task Creation (Backup for GitHub automation)
- * 
+ *
  * Creates integration tasks directly in the database when GitHub automation fails
  */
 
@@ -37,7 +37,9 @@ db.exec(`
 // Generate task ID
 function generateTaskId(prefix = 'EPIC-INT') {
   const timestamp = Date.now();
-  const random = Math.floor(Math.random() * 10000).toString(16).toUpperCase();
+  const random = Math.floor(Math.random() * 10000)
+    .toString(16)
+    .toUpperCase();
   return `${prefix}-${timestamp}-${random}`;
 }
 
@@ -62,12 +64,12 @@ const integrationTasks = [
     tags: 'palette,ui,advanced-nodes,quick-fix',
     estimated_hours: 1,
     work_class: 'integration',
-    business_value: 'Advanced nodes visible in organized palette categories'
+    business_value: 'Advanced nodes visible in organized palette categories',
   },
 
   {
     id: generateTaskId('EXPORT'),
-    title: 'Create Advanced Export Dialog Component', 
+    title: 'Create Advanced Export Dialog Component',
     description: `**Export Integration**: Create UI component for advanced export formats
 
 **Current**: GraphEditor has handleExportBundle but could be enhanced with dialog
@@ -85,12 +87,12 @@ const integrationTasks = [
 
 **Time**: 2-3 hours
 **Impact**: Users get professional export capabilities`,
-    status: 'TODO', 
+    status: 'TODO',
     priority: 'HIGH',
     tags: 'export,ui,dialog,formats',
     estimated_hours: 3,
     work_class: 'feature',
-    business_value: 'Professional export formats for user presentations/documentation'
+    business_value: 'Professional export formats for user presentations/documentation',
   },
 
   {
@@ -118,12 +120,12 @@ const integrationTasks = [
 **Time**: 3-4 hours  
 **Impact**: Users can save/load named projects (critical for retention)`,
     status: 'TODO',
-    priority: 'HIGH', 
+    priority: 'HIGH',
     tags: 'backend,api,projects,persistence',
     estimated_hours: 4,
     work_class: 'backend',
-    business_value: 'Users can save/load projects without losing work'
-  }
+    business_value: 'Users can save/load projects without losing work',
+  },
 ];
 
 // Insert tasks
@@ -141,7 +143,7 @@ for (const task of integrationTasks) {
   try {
     insertStmt.run(
       task.id,
-      task.title, 
+      task.title,
       task.description,
       task.status,
       task.priority,
@@ -150,7 +152,7 @@ for (const task of integrationTasks) {
       task.work_class,
       task.business_value
     );
-    
+
     console.log(`✅ Created: ${task.id}`);
     console.log(`   Title: ${task.title}`);
     console.log(`   Priority: ${task.priority} | Est: ${task.estimated_hours}h`);
@@ -167,7 +169,7 @@ console.log(`   Total effort: ${integrationTasks.reduce((sum, t) => sum + t.esti
 
 console.log('\n🚀 Next steps:');
 console.log('   1. node src/grab-tasks.js <your-dev-id> 2 --priority-only');
-console.log('   2. Focus on quick wins: Palette categories (15 min)');  
+console.log('   2. Focus on quick wins: Palette categories (15 min)');
 console.log('   3. Check progress: node src/monitor-available-tasks.js');
 
 db.close();

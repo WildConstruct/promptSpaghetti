@@ -57,8 +57,8 @@
 
 .auto-refresh-btn.active {
   background: #e8f5e8;
-  border-color: #4CAF50;
-  color: #4CAF50;
+  border-color: #4caf50;
+  color: #4caf50;
 }
 
 .auto-refresh-btn:hover {
@@ -70,7 +70,7 @@
   align-items: center;
   gap: 6px;
   padding: 8px 12px;
-  background: #2196F3;
+  background: #2196f3;
   border: none;
   border-radius: 6px;
   color: white;
@@ -80,7 +80,7 @@
 }
 
 .refresh-btn:hover {
-  background: #1976D2;
+  background: #1976d2;
 }
 
 .refresh-btn:disabled {
@@ -93,8 +93,12 @@
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Status Cards Grid */
@@ -126,19 +130,19 @@
 }
 
 .status-card.success::before {
-  background: #4CAF50;
+  background: #4caf50;
 }
 
 .status-card.warning::before {
-  background: #FF9800;
+  background: #ff9800;
 }
 
 .status-card.danger::before {
-  background: #F44336;
+  background: #f44336;
 }
 
 .status-card.info::before {
-  background: #2196F3;
+  background: #2196f3;
 }
 
 .status-card:hover {
@@ -166,22 +170,22 @@
 
 .status-card.success .card-icon {
   background: #e8f5e8;
-  color: #4CAF50;
+  color: #4caf50;
 }
 
 .status-card.warning .card-icon {
   background: #fff3e0;
-  color: #FF9800;
+  color: #ff9800;
 }
 
 .status-card.danger .card-icon {
   background: #ffebee;
-  color: #F44336;
+  color: #f44336;
 }
 
 .status-card.info .card-icon {
   background: #e3f2fd;
-  color: #2196F3;
+  color: #2196f3;
 }
 
 .card-title-section h3 {
@@ -221,11 +225,11 @@
 }
 
 .change.positive {
-  color: #4CAF50;
+  color: #4caf50;
 }
 
 .change.negative {
-  color: #F44336;
+  color: #f44336;
 }
 
 .change-label {
@@ -428,13 +432,13 @@
   justify-content: center;
   padding: 48px;
   gap: 12px;
-  color: #F44336;
+  color: #f44336;
   background: #ffebee;
   border: 1px solid #ffcdd2;
 }
 
 .error-icon {
-  color: #F44336;
+  color: #f44336;
 }
 
 .retry-btn {
@@ -442,7 +446,7 @@
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  background: #F44336;
+  background: #f44336;
   border: none;
   border-radius: 4px;
   color: white;

@@ -27,23 +27,27 @@ packages/crdt-research/
 ## Key Research Areas
 
 ### 1. Graph CRDT Design
+
 - Node creation/deletion operations
 - Edge manipulation with referential integrity
 - Property updates with merge semantics
 - Metadata synchronization
 
 ### 2. Operation Types
+
 - **Commutative Operations**: Operations that can be applied in any order
 - **Idempotent Operations**: Operations safe to apply multiple times
 - **Causal Ordering**: Maintaining operation dependencies
 
 ### 3. Performance Considerations
+
 - Memory overhead of CRDT metadata
 - Computational complexity of merge operations
 - Network bandwidth for operation synchronization
 - Garbage collection strategies
 
 ### 4. Implementation Approaches
+
 - **Operation-based CRDTs**: Transmit operations between peers
 - **State-based CRDTs**: Merge full state representations
 - **Hybrid Approaches**: Combine operation and state-based techniques

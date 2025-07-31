@@ -126,7 +126,9 @@
   padding: 1.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   border: 1px solid #e2e8f0;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .performance-card:hover {
@@ -228,7 +230,7 @@
   .content-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .performance-cards {
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   }
@@ -238,48 +240,48 @@
   .dashboard-overview {
     gap: 1.5rem;
   }
-  
+
   .metrics-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
+
   .secondary-metrics {
     flex-direction: column;
     gap: 1rem;
     text-align: center;
   }
-  
+
   .metric-item {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
   }
-  
+
   .performance-cards {
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
   }
-  
+
   .performance-card {
     padding: 1rem;
   }
-  
+
   .performance-value {
     font-size: 1.5rem;
   }
-  
+
   .chart-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
-  
+
   .chart-controls {
     width: 100%;
     justify-content: center;
   }
-  
+
   .action-item {
     padding: 0.75rem;
   }
@@ -289,27 +291,27 @@
   .performance-cards {
     grid-template-columns: 1fr;
   }
-  
+
   .secondary-metrics {
     padding: 1rem;
   }
-  
+
   .metric-label {
     font-size: 0.8rem;
   }
-  
+
   .metric-value {
     font-size: 1rem;
   }
-  
+
   .chart-container {
     padding: 1rem;
   }
-  
+
   .action-items {
     padding: 1rem;
   }
-  
+
   .action-item {
     flex-direction: column;
     text-align: center;

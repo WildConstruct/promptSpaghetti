@@ -2,7 +2,7 @@
 
 /**
  * Load Test Reporting and Metrics System
- * 
+ *
  * Comprehensive reporting system for load test results including:
  * - Aggregated metrics across all test runs
  * - Performance trend analysis
@@ -10,7 +10,7 @@
  * - Comparison between test runs
  * - Performance threshold alerts
  * - Real-time dashboard data
- * 
+ *
  * Task: T-1752989144295-507 - Implement automated load test scripts for key user flows
  */
 
@@ -31,8 +31,8 @@ class LoadTestReporter {
         responseTime: options.responseTime || 2000, // ms
         successRate: options.successRate || 95, // %
         requestsPerSecond: options.requestsPerSecond || 10,
-        errorRate: options.errorRate || 5 // %
-      }
+        errorRate: options.errorRate || 5, // %
+      },
     };
   }
 
@@ -46,13 +46,13 @@ class LoadTestReporter {
 
       // Process and aggregate results
       const aggregatedData = this.aggregateResults(testResults);
-      
+
       // Generate different report formats
       const reports = {
         json: await this.generateJSONReport(aggregatedData, reportName),
         html: await this.generateHTMLReport(aggregatedData, reportName),
         csv: await this.generateCSVReport(aggregatedData, reportName),
-        summary: await this.generateSummaryReport(aggregatedData, reportName)
+        summary: await this.generateSummaryReport(aggregatedData, reportName),
       };
 
       // Generate PDF if requested
@@ -76,9 +76,8 @@ class LoadTestReporter {
       return {
         reports,
         alerts,
-        aggregatedData
+        aggregatedData,
       };
-
     } catch (error) {
       console.error('❌ Failed to generate load test report:', error);
       throw error;
@@ -97,7 +96,7 @@ class LoadTestReporter {
       metadata: {
         generatedAt: new Date().toISOString(),
         totalTestRuns: testResults.length,
-        testPeriod: this.calculateTestPeriod(testResults)
+        testPeriod: this.calculateTestPeriod(testResults),
       },
       summary: {
         totalRequests: 0,
@@ -110,17 +109,17 @@ class LoadTestReporter {
         minResponseTime: Number.MAX_VALUE,
         totalDuration: 0,
         requestsPerSecond: 0,
-        concurrentUsers: 0
+        concurrentUsers: 0,
       },
       testBreakdown: [],
       performanceMetrics: {
         responseTimeDistribution: {},
         errorDistribution: {},
         throughputOverTime: [],
-        userLoadPattern: []
+        userLoadPattern: [],
       },
       alerts: [],
-      recommendations: []
+      recommendations: [],
     };
 
     let totalResponseTime = 0;
@@ -131,27 +130,24 @@ class LoadTestReporter {
     // Process each test result
     testResults.forEach(testResult => {
       const { testName, results, filename } = testResult;
-      
+
       if (!results || !results.global) {
         console.warn(`⚠️  Invalid test result for ${testName}, skipping`);
         return;
       }
 
       const global = results.global;
-      
+
       // Update summary metrics
       aggregated.summary.totalRequests += global.totalRequests || 0;
       aggregated.summary.totalSuccessfulRequests += global.successfulRequests || 0;
       aggregated.summary.totalFailedRequests += global.failedRequests || 0;
-      
+
       totalResponseTime += (global.averageResponseTime || 0) * (global.totalRequests || 0);
       allResponseTimes.push(...(global.responseTimes || []));
-      
-      aggregated.summary.maxResponseTime = Math.max(
-        aggregated.summary.maxResponseTime,
-        global.maxResponseTime || 0
-      );
-      
+
+      aggregated.summary.maxResponseTime = Math.max(aggregated.summary.maxResponseTime, global.maxResponseTime || 0);
+
       aggregated.summary.minResponseTime = Math.min(
         aggregated.summary.minResponseTime,
         global.minResponseTime || Number.MAX_VALUE
@@ -171,9 +167,9 @@ class LoadTestReporter {
           requestsPerSecond: global.requestsPerSecond || 0,
           duration: global.duration || 0,
           concurrency: global.concurrency || 0,
-          errors: global.errors || []
+          errors: global.errors || [],
         },
-        alerts: this.generateTestAlerts(global, testName)
+        alerts: this.generateTestAlerts(global, testName),
       });
 
       // Update performance distributions
@@ -182,11 +178,10 @@ class LoadTestReporter {
 
     // Calculate final summary metrics
     if (aggregated.summary.totalRequests > 0) {
-      aggregated.summary.overallSuccessRate = 
+      aggregated.summary.overallSuccessRate =
         (aggregated.summary.totalSuccessfulRequests / aggregated.summary.totalRequests) * 100;
-      
-      aggregated.summary.averageResponseTime = 
-        totalResponseTime / aggregated.summary.totalRequests;
+
+      aggregated.summary.averageResponseTime = totalResponseTime / aggregated.summary.totalRequests;
     }
 
     if (allResponseTimes.length > 0) {
@@ -197,10 +192,9 @@ class LoadTestReporter {
 
     aggregated.summary.totalDuration = totalDuration;
     aggregated.summary.concurrentUsers = maxConcurrency;
-    
+
     if (totalDuration > 0) {
-      aggregated.summary.requestsPerSecond = 
-        aggregated.summary.totalRequests / (totalDuration / 1000);
+      aggregated.summary.requestsPerSecond = aggregated.summary.totalRequests / (totalDuration / 1000);
     }
 
     // Generate recommendations
@@ -215,9 +209,9 @@ class LoadTestReporter {
   async generateJSONReport(aggregatedData, reportName) {
     const filename = `${reportName}-${Date.now()}.json`;
     const filepath = path.join(this.options.outputDir, filename);
-    
+
     await fs.writeFile(filepath, JSON.stringify(aggregatedData, null, 2));
-    
+
     return { filename, filepath };
   }
 
@@ -227,10 +221,10 @@ class LoadTestReporter {
   async generateHTMLReport(aggregatedData, reportName) {
     const filename = `${reportName}-${Date.now()}.html`;
     const filepath = path.join(this.options.outputDir, filename);
-    
+
     const htmlContent = this.generateHTMLContent(aggregatedData);
     await fs.writeFile(filepath, htmlContent);
-    
+
     return { filename, filepath };
   }
 
@@ -240,10 +234,10 @@ class LoadTestReporter {
   async generateCSVReport(aggregatedData, reportName) {
     const filename = `${reportName}-${Date.now()}.csv`;
     const filepath = path.join(this.options.outputDir, filename);
-    
+
     const csvContent = this.generateCSVContent(aggregatedData);
     await fs.writeFile(filepath, csvContent);
-    
+
     return { filename, filepath };
   }
 
@@ -253,10 +247,10 @@ class LoadTestReporter {
   async generateSummaryReport(aggregatedData, reportName) {
     const filename = `${reportName}-summary-${Date.now()}.txt`;
     const filepath = path.join(this.options.outputDir, filename);
-    
+
     const summaryContent = this.generateSummaryContent(aggregatedData);
     await fs.writeFile(filepath, summaryContent);
-    
+
     return { filename, filepath };
   }
 
@@ -443,7 +437,9 @@ class LoadTestReporter {
                         </tr>
                     </thead>
                     <tbody>
-                        ${data.testBreakdown.map(test => `
+                        ${data.testBreakdown
+                          .map(
+                            test => `
                         <tr>
                             <td><strong>${test.testName}</strong></td>
                             <td>${test.metrics.totalRequests}</td>
@@ -452,18 +448,24 @@ class LoadTestReporter {
                             <td>${test.metrics.requestsPerSecond.toFixed(1)}</td>
                             <td>${(test.metrics.duration / 1000).toFixed(1)}</td>
                             <td>
-                                ${test.metrics.successRate >= 95 
-    ? '<span style="color: #28a745;">✅ Passed</span>' 
-    : '<span style="color: #dc3545;">❌ Failed</span>'}
+                                ${
+                                  test.metrics.successRate >= 95
+                                    ? '<span style="color: #28a745;">✅ Passed</span>'
+                                    : '<span style="color: #dc3545;">❌ Failed</span>'
+                                }
                             </td>
                         </tr>
-                        `).join('')}
+                        `
+                          )
+                          .join('')}
                     </tbody>
                 </table>
             </div>
         </div>
 
-        ${data.recommendations.length > 0 ? `
+        ${
+          data.recommendations.length > 0
+            ? `
         <div class="section">
             <h2>💡 Recommendations</h2>
             <div class="recommendations">
@@ -473,7 +475,9 @@ class LoadTestReporter {
                 </ul>
             </div>
         </div>
-        ` : ''}
+        `
+            : ''
+        }
 
         <div class="section">
             <h2>📈 Performance Summary</h2>
@@ -506,7 +510,7 @@ class LoadTestReporter {
    */
   generateCSVContent(data) {
     let csv = 'Test Name,Total Requests,Success Rate (%),Avg Response Time (ms),Requests/Second,Duration (s),Errors\n';
-    
+
     data.testBreakdown.forEach(test => {
       csv += `"${test.testName}",${test.metrics.totalRequests},${test.metrics.successRate.toFixed(1)},${test.metrics.averageResponseTime.toFixed(0)},${test.metrics.requestsPerSecond.toFixed(1)},${(test.metrics.duration / 1000).toFixed(1)},"${test.metrics.errors.length}"\n`;
     });
@@ -542,20 +546,28 @@ ${data.summary.requestsPerSecond >= this.options.thresholds.requestsPerSecond ? 
 
 TEST BREAKDOWN
 ==============
-${data.testBreakdown.map(test => 
-    `${test.testName}:
+${data.testBreakdown
+  .map(
+    test =>
+      `${test.testName}:
   - Requests: ${test.metrics.totalRequests}
   - Success Rate: ${test.metrics.successRate.toFixed(1)}%
   - Avg Response: ${test.metrics.averageResponseTime.toFixed(0)}ms
   - RPS: ${test.metrics.requestsPerSecond.toFixed(1)}
   - Status: ${test.metrics.successRate >= 95 ? 'PASSED' : 'FAILED'}
-`).join('\n')}
+`
+  )
+  .join('\n')}
 
-${data.recommendations.length > 0 ? `
+${
+  data.recommendations.length > 0
+    ? `
 RECOMMENDATIONS
 ===============
 ${data.recommendations.map(rec => `- ${rec}`).join('\n')}
-` : ''}
+`
+    : ''
+}
 `;
   }
 
@@ -571,7 +583,7 @@ ${data.recommendations.map(rec => `- ${rec}`).join('\n')}
         type: 'error',
         title: 'Low Success Rate',
         message: `Overall success rate of ${data.summary.overallSuccessRate.toFixed(1)}% is below threshold of ${this.options.thresholds.successRate}%`,
-        recommendation: 'Investigate error patterns and optimize error handling'
+        recommendation: 'Investigate error patterns and optimize error handling',
       });
     }
 
@@ -581,7 +593,7 @@ ${data.recommendations.map(rec => `- ${rec}`).join('\n')}
         type: 'warning',
         title: 'High Response Time',
         message: `Average response time of ${data.summary.averageResponseTime.toFixed(0)}ms exceeds threshold of ${this.options.thresholds.responseTime}ms`,
-        recommendation: 'Optimize database queries, implement caching, or scale infrastructure'
+        recommendation: 'Optimize database queries, implement caching, or scale infrastructure',
       });
     }
 
@@ -591,7 +603,7 @@ ${data.recommendations.map(rec => `- ${rec}`).join('\n')}
         type: 'warning',
         title: 'Low Throughput',
         message: `Throughput of ${data.summary.requestsPerSecond.toFixed(2)} RPS is below threshold of ${this.options.thresholds.requestsPerSecond} RPS`,
-        recommendation: 'Scale application instances or optimize request processing'
+        recommendation: 'Scale application instances or optimize request processing',
       });
     }
 
@@ -650,9 +662,7 @@ ${data.recommendations.map(rec => `- ${rec}`).join('\n')}
   calculateTestPeriod(testResults) {
     if (testResults.length === 0) return 'N/A';
 
-    const timestamps = testResults.map(result => 
-      new Date(result.timestamp || Date.now())
-    ).sort();
+    const timestamps = testResults.map(result => new Date(result.timestamp || Date.now())).sort();
 
     const start = timestamps[0];
     const end = timestamps[timestamps.length - 1];
@@ -684,11 +694,18 @@ ${data.recommendations.map(rec => `- ${rec}`).join('\n')}
   async saveAlerts(alerts, reportName) {
     const filename = `${reportName}-alerts-${Date.now()}.json`;
     const filepath = path.join(this.options.outputDir, filename);
-    
-    await fs.writeFile(filepath, JSON.stringify({
-      generatedAt: new Date().toISOString(),
-      alerts
-    }, null, 2));
+
+    await fs.writeFile(
+      filepath,
+      JSON.stringify(
+        {
+          generatedAt: new Date().toISOString(),
+          alerts,
+        },
+        null,
+        2
+      )
+    );
 
     return { filename, filepath };
   }
@@ -711,20 +728,20 @@ ${data.recommendations.map(rec => `- ${rec}`).join('\n')}
 async function generateLoadTestReport(testResultsPattern, options = {}) {
   try {
     const reporter = new LoadTestReporter(options);
-    
+
     // Load test results from files
     const testResults = await loadTestResultFiles(testResultsPattern);
-    
+
     if (testResults.length === 0) {
       console.log('⚠️  No test results found');
       return;
     }
 
     console.log(`📊 Generating report for ${testResults.length} test result(s)`);
-    
+
     // Generate comprehensive report
     const reportData = await reporter.generateReport(testResults, 'comprehensive-load-test-report');
-    
+
     // Print summary to console
     console.log('\n📈 LOAD TEST SUMMARY');
     console.log('===================');
@@ -732,7 +749,7 @@ async function generateLoadTestReport(testResultsPattern, options = {}) {
     console.log(`Success Rate: ${reportData.aggregatedData.summary.overallSuccessRate.toFixed(2)}%`);
     console.log(`Average Response Time: ${reportData.aggregatedData.summary.averageResponseTime.toFixed(0)}ms`);
     console.log(`Requests/Second: ${reportData.aggregatedData.summary.requestsPerSecond.toFixed(2)}`);
-    
+
     if (reportData.alerts.length > 0) {
       console.log('\n🚨 PERFORMANCE ALERTS:');
       reportData.alerts.forEach(alert => {
@@ -741,7 +758,6 @@ async function generateLoadTestReport(testResultsPattern, options = {}) {
     }
 
     return reportData;
-
   } catch (error) {
     console.error('❌ Failed to generate load test report:', error);
     throw error;
@@ -753,11 +769,11 @@ async function generateLoadTestReport(testResultsPattern, options = {}) {
  */
 async function loadTestResultFiles(pattern) {
   const testResults = [];
-  
+
   try {
     const files = await fs.readdir('./');
-    const resultFiles = files.filter(file => 
-      file.includes('load-test') && file.endsWith('.json') && !file.includes('report')
+    const resultFiles = files.filter(
+      file => file.includes('load-test') && file.endsWith('.json') && !file.includes('report')
     );
 
     for (const file of resultFiles) {
@@ -768,7 +784,7 @@ async function loadTestResultFiles(pattern) {
           testName: data.testName || file.replace('.json', ''),
           results: data,
           filename: file,
-          timestamp: data.timestamp || Date.now()
+          timestamp: data.timestamp || Date.now(),
         });
       } catch (error) {
         console.warn(`⚠️  Failed to load result file ${file}:`, error.message);
@@ -785,16 +801,16 @@ async function loadTestResultFiles(pattern) {
 module.exports = {
   LoadTestReporter,
   generateLoadTestReport,
-  loadTestResultFiles
+  loadTestResultFiles,
 };
 
 // Run if called directly
 if (require.main === module) {
   const args = process.argv.slice(2);
   const pattern = args[0] || '*load-test*.json';
-  
+
   generateLoadTestReport(pattern, {
     generatePDF: args.includes('--pdf'),
-    includeCharts: !args.includes('--no-charts')
+    includeCharts: !args.includes('--no-charts'),
   }).catch(console.error);
 }

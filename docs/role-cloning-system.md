@@ -61,11 +61,12 @@ UI Validation → Auth Check → Business Logic → Data Persistence → History
 Clone an existing role with specified configuration.
 
 **Request Body:**
+
 ```json
 {
   "sourceRoleId": "string",
   "targetName": "string",
-  "targetDescription": "string", 
+  "targetDescription": "string",
   "targetScope": "global|organization|team",
   "organizationId": "string",
   "includePermissions": ["permission_id1", "permission_id2"],
@@ -78,6 +79,7 @@ Clone an existing role with specified configuration.
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -104,6 +106,7 @@ Clone an existing role with specified configuration.
 Retrieve the clone history for a specific role.
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -114,7 +117,7 @@ Retrieve the clone history for a specific role.
     "clonedTo": [
       {
         "roleId": "string",
-        "roleName": "string", 
+        "roleName": "string",
         "clonedAt": "string",
         "clonedBy": "string"
       }
@@ -134,17 +137,19 @@ Retrieve the clone history for a specific role.
 Get roles commonly used as templates (sorted by clone frequency).
 
 **Query Parameters:**
+
 - `organizationId` (optional): Filter by organization
 - `limit` (optional): Maximum number of templates to return (default: 10)
 
 **Response:**
+
 ```json
 {
   "success": true,
   "templates": [
     {
       "id": "string",
-      "name": "string", 
+      "name": "string",
       "description": "string",
       "scope": "string",
       "permissions": ["string"],
@@ -164,6 +169,7 @@ Get roles commonly used as templates (sorted by clone frequency).
 Validate a clone request without performing the actual clone.
 
 **Request Body:**
+
 ```json
 {
   "sourceRoleId": "string",
@@ -175,6 +181,7 @@ Validate a clone request without performing the actual clone.
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -201,11 +208,13 @@ Validate a clone request without performing the actual clone.
 Get recent clone operations for monitoring and auditing.
 
 **Query Parameters:**
+
 - `limit`: Maximum number of operations (default: 20)
 - `offset`: Pagination offset (default: 0)
 - `organizationId`: Filter by organization
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -214,7 +223,7 @@ Get recent clone operations for monitoring and auditing.
       "operationId": "string",
       "sourceRoleId": "string",
       "sourceRoleName": "string",
-      "clonedRoleId": "string", 
+      "clonedRoleId": "string",
       "clonedRoleName": "string",
       "timestamp": "string",
       "clonedBy": "string",
@@ -251,7 +260,7 @@ const response = await fetch('/api/roles/clone', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`
+    Authorization: `Bearer ${token}`,
   },
   body: JSON.stringify({
     sourceRoleId: 'role_admin',
@@ -259,12 +268,8 @@ const response = await fetch('/api/roles/clone', {
     targetDescription: 'Custom project management role',
     targetScope: 'organization',
     organizationId: 'org_123',
-    includePermissions: [
-      'perm_read_projects',
-      'perm_edit_projects',
-      'perm_share_projects'
-    ]
-  })
+    includePermissions: ['perm_read_projects', 'perm_edit_projects', 'perm_share_projects'],
+  }),
 });
 
 const result = await response.json();
@@ -287,7 +292,7 @@ const cloneRequest = {
   targetScope: 'team',
   organizationId: 'org_456',
   includePermissions: ['perm_read_projects', 'perm_edit_projects'],
-  excludePermissions: ['perm_delete_projects']
+  excludePermissions: ['perm_delete_projects'],
 };
 
 const result = await roleCloneService.cloneRole(cloneRequest, userId);
@@ -300,7 +305,7 @@ const result = await roleCloneService.cloneRole(cloneRequest, userId);
 Users must have the following permissions to use role cloning:
 
 - `perm_clone_roles`: Create new roles by cloning existing ones
-- `perm_view_clone_history`: View role cloning history and operations  
+- `perm_view_clone_history`: View role cloning history and operations
 - `perm_manage_role_templates`: Create and manage role templates
 
 ### Database Configuration
@@ -340,7 +345,7 @@ CLONE_HISTORY_RETENTION_DAYS=365
 ### Security Considerations
 
 1. **Principle of Least Privilege**: Default to minimal permission sets
-2. **Scope Validation**: Always validate permission scopes against target role scope  
+2. **Scope Validation**: Always validate permission scopes against target role scope
 3. **Audit Everything**: Log all clone operations for security review
 4. **Rate Limiting**: Prevent abuse of clone operations
 
@@ -380,7 +385,7 @@ All clone operations generate structured logs:
   "operation": "role_clone",
   "operationId": "clone_1234567890_abc123",
   "sourceRoleId": "role_admin",
-  "clonedRoleId": "role_1234567890_def456", 
+  "clonedRoleId": "role_1234567890_def456",
   "clonedBy": "user_admin",
   "duration": 1250,
   "permissionsCloned": 15,
@@ -421,6 +426,7 @@ DEBUG_ROLE_CLONING=true
 ```
 
 This will provide detailed logs of:
+
 - Validation steps
 - Permission resolution process
 - Database queries
@@ -447,6 +453,7 @@ npm run migrate -- --name=033_role_cloning_system
 ```
 
 This will:
+
 - Add clone metadata columns to the roles table
 - Create clone tracking tables
 - Set up indexes for performance
@@ -463,7 +470,7 @@ This will:
 4. **Permission Dependencies**: Auto-include dependent permissions
 5. **Clone Approval Workflow**: Require approval for sensitive role clones
 
-### Integration Opportunities  
+### Integration Opportunities
 
 1. **Active Directory**: Import/sync role clones with AD groups
 2. **Compliance Frameworks**: Map cloned roles to compliance requirements

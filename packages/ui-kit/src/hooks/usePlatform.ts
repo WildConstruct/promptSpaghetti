@@ -4,13 +4,13 @@
 
 import { useState, useEffect } from 'react';
 import { Platform, DeviceCapabilities } from '../types';
-import { 
-  detectPlatform, 
-  getPlatformCapabilities, 
+import {
+  detectPlatform,
+  getPlatformCapabilities,
   getPlatformOptimizations,
   isReducedMotion,
   isTouchDevice,
-  isApplePlatform
+  isApplePlatform,
 } from '../platform';
 
 export interface PlatformState {
@@ -28,7 +28,7 @@ export function usePlatform(): PlatformState {
     const platform = detectPlatform();
     const capabilities = getPlatformCapabilities();
     const optimizations = getPlatformOptimizations(platform);
-    
+
     return {
       platform,
       capabilities,
@@ -36,7 +36,7 @@ export function usePlatform(): PlatformState {
       isReducedMotion: isReducedMotion(),
       isTouchDevice: isTouchDevice(),
       isApplePlatform: isApplePlatform(),
-      isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true
+      isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
     };
   });
 
@@ -45,7 +45,7 @@ export function usePlatform(): PlatformState {
       const platform = detectPlatform();
       const capabilities = getPlatformCapabilities();
       const optimizations = getPlatformOptimizations(platform);
-      
+
       setPlatformState(prev => ({
         ...prev,
         platform,
@@ -53,7 +53,7 @@ export function usePlatform(): PlatformState {
         optimizations,
         isReducedMotion: isReducedMotion(),
         isTouchDevice: isTouchDevice(),
-        isApplePlatform: isApplePlatform()
+        isApplePlatform: isApplePlatform(),
       }));
     };
 
@@ -61,16 +61,16 @@ export function usePlatform(): PlatformState {
     if (typeof window !== 'undefined') {
       const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
       const hoverQuery = window.matchMedia('(hover: hover)');
-      
+
       const handleMediaChange = () => updatePlatformState();
-      
+
       reducedMotionQuery.addEventListener('change', handleMediaChange);
       hoverQuery.addEventListener('change', handleMediaChange);
-      
+
       // Listen for online/offline changes
       const handleOnline = () => setPlatformState(prev => ({ ...prev, isOnline: true }));
       const handleOffline = () => setPlatformState(prev => ({ ...prev, isOnline: false }));
-      
+
       window.addEventListener('online', handleOnline);
       window.addEventListener('offline', handleOffline);
 

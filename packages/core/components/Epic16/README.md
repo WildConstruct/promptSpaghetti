@@ -15,6 +15,7 @@ The Epic 16 component library provides a complete set of UI components for build
 ### Marketplace Components
 
 #### MarketplaceCard
+
 Display marketplace templates with consistent design patterns.
 
 ```tsx
@@ -34,12 +35,13 @@ const template: MarketplaceTemplate = {
 <MarketplaceCard
   template={template}
   variant="grid" // 'grid' | 'list' | 'featured'
-  onPreview={(template) => console.log('Preview:', template)}
-  onPurchase={(template) => console.log('Purchase:', template)}
-/>
+  onPreview={template => console.log('Preview:', template)}
+  onPurchase={template => console.log('Purchase:', template)}
+/>;
 ```
 
 **Props:**
+
 - `template: MarketplaceTemplate` - Template data
 - `variant?: 'grid' | 'list' | 'featured'` - Display variant
 - `showActions?: boolean` - Show action buttons
@@ -49,6 +51,7 @@ const template: MarketplaceTemplate = {
 - `onShare?: (template) => void` - Share callback
 
 #### TemplatePreviewModal
+
 Modal for previewing templates with Claude integration.
 
 ```tsx
@@ -67,15 +70,16 @@ import { TemplatePreviewModal } from '@/components/Epic16';
       qualityScore: 4.5,
       tokens: 150,
       model: 'claude-3-haiku',
-      executionTime: 1200
+      executionTime: 1200,
     };
   }}
   isPurchased={false}
   currentUser={{ id: 'user-1', name: 'John Doe', tier: 'pro' }}
-/>
+/>;
 ```
 
 **Features:**
+
 - Live Claude preview with sandboxed content protection
 - Model selection and rate limiting
 - Tabbed interface (Preview, Details, Reviews)
@@ -83,6 +87,7 @@ import { TemplatePreviewModal } from '@/components/Epic16';
 - Cost and performance metrics
 
 #### MarketplaceSearch
+
 Advanced search with autocomplete and filters.
 
 ```tsx
@@ -96,19 +101,18 @@ const handleSearch = (query: string, filters: SearchFilters) => {
 <MarketplaceSearch
   onSearch={handleSearch}
   availableTags={['story', 'business', 'creative']}
-  availableCreators={[
-    { id: 'creator-1', name: 'John Smith', templateCount: 15 }
-  ]}
+  availableCreators={[{ id: 'creator-1', name: 'John Smith', templateCount: 15 }]}
   searchSuggestions={[
     { text: 'story prompts', type: 'query', count: 42 },
-    { text: 'creative writing', type: 'tag', count: 28 }
+    { text: 'creative writing', type: 'tag', count: 28 },
   ]}
   isLoading={false}
   resultCount={156}
-/>
+/>;
 ```
 
 **Features:**
+
 - Real-time autocomplete suggestions
 - Advanced filter panel (price, rating, compatibility, content type)
 - Sort options (relevance, price, rating, downloads, date)
@@ -118,6 +122,7 @@ const handleSearch = (query: string, filters: SearchFilters) => {
 ### Community Components
 
 #### CommunityForumCard
+
 Display forum posts and discussions.
 
 ```tsx
@@ -134,7 +139,7 @@ const post: ForumPost = {
     reputation: 1250,
     badges: ['Expert', 'Helper'],
     isVerified: true,
-    isModerator: false
+    isModerator: false,
   },
   likes: 45,
   replies: 12,
@@ -146,13 +151,14 @@ const post: ForumPost = {
   post={post}
   variant="detailed" // 'compact' | 'detailed' | 'featured'
   currentUser={currentUser}
-  onLike={(postId) => console.log('Like post:', postId)}
-  onReply={(postId) => console.log('Reply to:', postId)}
-  onClick={(post) => console.log('View post:', post)}
-/>
+  onLike={postId => console.log('Like post:', postId)}
+  onReply={postId => console.log('Reply to:', postId)}
+  onClick={post => console.log('View post:', post)}
+/>;
 ```
 
 **Features:**
+
 - Multiple display variants (compact, detailed, featured)
 - User badges and verification status
 - Engagement actions (like, dislike, bookmark, reply)
@@ -163,6 +169,7 @@ const post: ForumPost = {
 ### Integration Components
 
 #### Epic16TicketIntegration
+
 Complete ticket management system.
 
 ```tsx
@@ -174,13 +181,14 @@ import { Epic16TicketIntegration } from '@/components/Epic16';
   config={{
     enabled: true,
     autoAssignment: true,
-    slaTracking: true
+    slaTracking: true,
   }}
-  onConfigChange={(config) => console.log('Config updated:', config)}
-/>
+  onConfigChange={config => console.log('Config updated:', config)}
+/>;
 ```
 
 **Features:**
+
 - Dashboard view with ticket overview
 - Detailed ticket management
 - Real-time notifications
@@ -197,7 +205,7 @@ import { Epic16ComponentTheme, defaultEpic16Theme } from '@/components/Epic16';
 const customTheme: Epic16ComponentTheme = {
   ...defaultEpic16Theme,
   primary: '#7c3aed', // Custom primary color
-  accent: '#f59e0b',  // Custom accent color
+  accent: '#f59e0b', // Custom accent color
 };
 
 // Apply theme via CSS custom properties or styled-components
@@ -226,18 +234,21 @@ All components follow WCAG 2.1 AA guidelines:
 ## Best Practices
 
 ### Performance
+
 - Components use React.memo() for performance optimization
 - Large lists should implement virtualization
 - Images use lazy loading and proper sizing
 - Search implements debouncing to reduce API calls
 
 ### Error Handling
+
 - All async operations include error boundaries
 - Graceful degradation for missing data
 - User-friendly error messages
 - Retry mechanisms for failed operations
 
 ### Security
+
 - Input sanitization for user-generated content
 - XSS protection for rendered HTML
 - Rate limiting integration for API calls
@@ -249,12 +260,7 @@ All components follow WCAG 2.1 AA guidelines:
 
 ```tsx
 import React, { useState } from 'react';
-import {
-  MarketplaceSearch,
-  MarketplaceCard,
-  TemplatePreviewModal,
-  SearchFilters
-} from '@/components/Epic16';
+import { MarketplaceSearch, MarketplaceCard, TemplatePreviewModal, SearchFilters } from '@/components/Epic16';
 
 export const MarketplacePage = () => {
   const [templates, setTemplates] = useState([]);
@@ -273,15 +279,11 @@ export const MarketplacePage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <MarketplaceSearch
-        onSearch={handleSearch}
-        isLoading={isLoading}
-        resultCount={templates.length}
-      />
-      
+      <MarketplaceSearch onSearch={handleSearch} isLoading={isLoading} resultCount={templates.length} />
+
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {templates.map((template) => (
+          {templates.map(template => (
             <MarketplaceCard
               key={template.id}
               template={template}
@@ -325,15 +327,15 @@ export const ForumPage = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="space-y-6">
-        {posts.map((post) => (
+        {posts.map(post => (
           <CommunityForumCard
             key={post.id}
             post={post}
             variant="detailed"
             currentUser={currentUser}
-            onLike={(id) => handlePostInteraction(id, 'like')}
-            onReply={(id) => handlePostInteraction(id, 'reply')}
-            onClick={(post) => navigateToPost(post.id)}
+            onLike={id => handlePostInteraction(id, 'like')}
+            onReply={id => handlePostInteraction(id, 'reply')}
+            onClick={post => navigateToPost(post.id)}
           />
         ))}
       </div>

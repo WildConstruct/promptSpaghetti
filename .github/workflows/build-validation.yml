@@ -2,116 +2,116 @@ name: Build Validation
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   validate-build:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        cache: 'npm'
-        
-    - name: Install pnpm
-      run: npm install -g pnpm@10.13.1
-      
-    - name: Install dependencies
-      run: pnpm install --frozen-lockfile
-      
-    - name: Validate TypeScript compilation
-      run: |
-        echo "=== TypeScript Compilation Validation ==="
-        cd packages/core
-        pnpm tsc --noEmit
-        
-    - name: Check for malformed JS files
-      run: |
-        echo "=== Checking for malformed transpiled files ==="
-        
-        # Function to check if a JS file has malformed structure
-        check_malformed_js() {
-          local file="$1"
-          local basename=$(basename "$file" .js)
-          local dirname=$(dirname "$file")
-          
-          # Skip if corresponding .ts or .tsx exists (these are likely transpiled)
-          if [ -f "${dirname}/${basename}.ts" ] || [ -f "${dirname}/${basename}.tsx" ]; then
-            echo "⚠️  Malformed: $file (has .ts/.tsx counterpart)"
-            return 1
-          fi
-          
-          # Check for orphaned return statements
-          if grep -q "^return " "$file" 2>/dev/null; then
-            if ! grep -q "function\|=>" "$file" 2>/dev/null; then
-              echo "❌ Malformed: $file (orphaned return statement)"
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install pnpm
+        run: npm install -g pnpm@10.13.1
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate TypeScript compilation
+        run: |
+          echo "=== TypeScript Compilation Validation ==="
+          cd packages/core
+          pnpm tsc --noEmit
+
+      - name: Check for malformed JS files
+        run: |
+          echo "=== Checking for malformed transpiled files ==="
+
+          # Function to check if a JS file has malformed structure
+          check_malformed_js() {
+            local file="$1"
+            local basename=$(basename "$file" .js)
+            local dirname=$(dirname "$file")
+            
+            # Skip if corresponding .ts or .tsx exists (these are likely transpiled)
+            if [ -f "${dirname}/${basename}.ts" ] || [ -f "${dirname}/${basename}.tsx" ]; then
+              echo "⚠️  Malformed: $file (has .ts/.tsx counterpart)"
               return 1
             fi
-          fi
-          
-          # Check for orphaned JSX outside functions
-          if grep -q "_jsx\|_jsxs" "$file" 2>/dev/null; then
-            if ! grep -q "function\|const.*=\|export.*=" "$file" 2>/dev/null; then
-              echo "❌ Malformed: $file (orphaned JSX)"
-              return 1
+            
+            # Check for orphaned return statements
+            if grep -q "^return " "$file" 2>/dev/null; then
+              if ! grep -q "function\|=>" "$file" 2>/dev/null; then
+                echo "❌ Malformed: $file (orphaned return statement)"
+                return 1
+              fi
             fi
-          fi
-          
-          return 0
-        }
-        
-        # Check all JS files in core package
-        malformed_count=0
-        if [ -d "packages/core" ]; then
-          while IFS= read -r -d '' file; do
-            if ! check_malformed_js "$file"; then
-              ((malformed_count++))
+            
+            # Check for orphaned JSX outside functions
+            if grep -q "_jsx\|_jsxs" "$file" 2>/dev/null; then
+              if ! grep -q "function\|const.*=\|export.*=" "$file" 2>/dev/null; then
+                echo "❌ Malformed: $file (orphaned JSX)"
+                return 1
+              fi
             fi
-          done < <(find packages/core -name "*.js" -not -path "*/node_modules/*" -not -path "*/dist/*" -print0)
-        fi
-        
-        if [ $malformed_count -gt 0 ]; then
-          echo "❌ Found $malformed_count malformed JS files"
-          echo "These files should be removed as they have .ts/.tsx counterparts"
-          exit 1
-        else
-          echo "✅ No malformed JS files found"
-        fi
-        
-    - name: Validate build process
-      run: |
-        echo "=== Build Process Validation ==="
-        cd client
-        npm run build
-        
-        # Check if build output exists
-        if [ ! -d "dist" ]; then
-          echo "❌ Build failed - no dist directory created"
-          exit 1
-        fi
-        
-        # Check for essential files in build output
-        if [ ! -f "dist/index.html" ]; then
-          echo "❌ Build failed - no index.html in output"
-          exit 1
-        fi
-        
-        echo "✅ Build validation successful"
-        
-    - name: Lint check
-      run: |
-        echo "=== Linting Validation ==="
-        pnpm lint
-        
-    - name: Type check
-      run: |
-        echo "=== Type Checking ==="
-        cd packages/core
-        pnpm tsc --noEmit --strict
+            
+            return 0
+          }
+
+          # Check all JS files in core package
+          malformed_count=0
+          if [ -d "packages/core" ]; then
+            while IFS= read -r -d '' file; do
+              if ! check_malformed_js "$file"; then
+                ((malformed_count++))
+              fi
+            done < <(find packages/core -name "*.js" -not -path "*/node_modules/*" -not -path "*/dist/*" -print0)
+          fi
+
+          if [ $malformed_count -gt 0 ]; then
+            echo "❌ Found $malformed_count malformed JS files"
+            echo "These files should be removed as they have .ts/.tsx counterparts"
+            exit 1
+          else
+            echo "✅ No malformed JS files found"
+          fi
+
+      - name: Validate build process
+        run: |
+          echo "=== Build Process Validation ==="
+          cd client
+          npm run build
+
+          # Check if build output exists
+          if [ ! -d "dist" ]; then
+            echo "❌ Build failed - no dist directory created"
+            exit 1
+          fi
+
+          # Check for essential files in build output
+          if [ ! -f "dist/index.html" ]; then
+            echo "❌ Build failed - no index.html in output"
+            exit 1
+          fi
+
+          echo "✅ Build validation successful"
+
+      - name: Lint check
+        run: |
+          echo "=== Linting Validation ==="
+          pnpm lint
+
+      - name: Type check
+        run: |
+          echo "=== Type Checking ==="
+          cd packages/core
+          pnpm tsc --noEmit --strict

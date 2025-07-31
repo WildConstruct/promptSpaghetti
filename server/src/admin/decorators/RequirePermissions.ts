@@ -1,9 +1,9 @@
 /**
  * Require Permissions Decorator - Epic 17.5.4
- * 
+ *
  * Decorator for specifying required admin permissions on controller methods.
  * Works with AdminAuthGuard to enforce role-based access control.
- * 
+ *
  * Part of Epic 17 - Backstage Admin Controls
  */
 
@@ -11,24 +11,23 @@ import { SetMetadata } from '@nestjs/common';
 
 /**
  * Decorator to specify required permissions for admin endpoints
- * 
+ *
  * @param permissions Array of permission strings required to access the endpoint
- * 
+ *
  * @example
  * ```typescript
  * @RequirePermissions(['admin:policy:read'])
  * async getPolicies() {
  *   // Only users with admin:policy:read permission can access this
  * }
- * 
+ *
  * @RequirePermissions(['admin:policy:create', 'admin:policy:update'])
  * async createPolicy() {
  *   // User needs BOTH permissions to access this
  * }
  * ```
  */
-export const RequirePermissions = (permissions: string[]) => 
-  SetMetadata('permissions', permissions);
+export const RequirePermissions = (permissions: string[]) => SetMetadata('permissions', permissions);
 
 /**
  * Common permission constants for Epic 17 admin system
@@ -65,7 +64,7 @@ export const AdminPermissions = {
   // Wildcard permissions
   ALL_POLICY_PERMISSIONS: 'admin:policy:*',
   ALL_ENFORCEMENT_PERMISSIONS: 'admin:enforcement:*',
-  ALL_ADMIN_PERMISSIONS: 'admin:*'
+  ALL_ADMIN_PERMISSIONS: 'admin:*',
 } as const;
 
 /**
@@ -80,14 +79,14 @@ export const PermissionGroups = {
     AdminPermissions.POLICY_PUBLISH,
     AdminPermissions.POLICY_ARCHIVE,
     AdminPermissions.POLICY_ROLLBACK,
-    AdminPermissions.ANALYTICS_READ
+    AdminPermissions.ANALYTICS_READ,
   ],
 
   POLICY_REVIEWER: [
     AdminPermissions.POLICY_READ,
     AdminPermissions.POLICY_UPDATE,
     AdminPermissions.ENFORCEMENT_READ,
-    AdminPermissions.ENFORCEMENT_REVIEW
+    AdminPermissions.ENFORCEMENT_REVIEW,
   ],
 
   ENFORCEMENT_MANAGER: [
@@ -96,42 +95,38 @@ export const PermissionGroups = {
     AdminPermissions.ENFORCEMENT_CREATE,
     AdminPermissions.ENFORCEMENT_UPDATE,
     AdminPermissions.ENFORCEMENT_BULK_RESOLVE,
-    AdminPermissions.ANALYTICS_READ
+    AdminPermissions.ANALYTICS_READ,
   ],
 
   ANALYTICS_VIEWER: [
     AdminPermissions.POLICY_READ,
     AdminPermissions.ENFORCEMENT_READ,
     AdminPermissions.ANALYTICS_READ,
-    AdminPermissions.ANALYTICS_EXPORT
+    AdminPermissions.ANALYTICS_EXPORT,
   ],
 
-  SYSTEM_ADMINISTRATOR: [
-    AdminPermissions.ALL_ADMIN_PERMISSIONS
-  ]
+  SYSTEM_ADMINISTRATOR: [AdminPermissions.ALL_ADMIN_PERMISSIONS],
 } as const;
 
 /**
  * Helper decorator for common permission combinations
  */
-export export export 
-/**
+export type /**
  * Decorator for endpoints that require any admin access (any permission)
  */
 
 /**
  * Type definitions for TypeScript support
  */
-export type AdminPermissionType = typeof AdminPermissions[keyof typeof AdminPermissions];
-export type PermissionGroup = typeof PermissionGroups[keyof typeof PermissionGroups];
+AdminPermissionType = (typeof AdminPermissions)[keyof typeof AdminPermissions];
+export type PermissionGroup = (typeof PermissionGroups)[keyof typeof PermissionGroups];
 
 /**
  * Utility function to check if a permission is valid
  */
 export function isValidPermission(permission: string): boolean {
   const allPermissions = Object.values(AdminPermissions);
-  return allPermissions.includes(permission as AdminPermissionType) || 
-         permission.match(/^admin:[a-z]+(\:[a-z\*]+)*$/);
+  return allPermissions.includes(permission as AdminPermissionType) || permission.match(/^admin:[a-z]+(\:[a-z\*]+)*$/);
 }
 
 /**
@@ -146,9 +141,7 @@ export function expandWildcardPermissions(permissions: string[]): string[] {
       allSpecificPermissions.forEach(p => expanded.add(p));
     } else if (permission.endsWith(':*')) {
       const prefix = permission.slice(0, -1);
-      allSpecificPermissions
-        .filter(p => p.startsWith(prefix))
-        .forEach(p => expanded.add(p));
+      allSpecificPermissions.filter(p => p.startsWith(prefix)).forEach(p => expanded.add(p));
     } else {
       expanded.add(permission);
     }

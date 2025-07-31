@@ -692,7 +692,6 @@ _{Professional background and expertise}_
 ## Quick Start
 
 1. **Prepare Data Files** (place in `bmad-core/data/`):
-
    - `{file1}.{ext}` - {description}
    - `{file2}.{ext}` - {description}
 

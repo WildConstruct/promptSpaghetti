@@ -1,7 +1,7 @@
 /**
  * Graph Editor Command Palette
  * Task T-1752989144320-364: Integrate generation flow into editor command palette
- * 
+ *
  * Professional command palette with generation flow integration for Wild Construct
  */
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
@@ -94,11 +94,11 @@ const GenerationWizard: React.FC<GenerationWizardProps> = ({
   onStepChange,
   onExecute,
   onCancel,
-  theme
+  theme,
 }) => {
   const step = flow.steps[currentStep];
   const isLastStep = currentStep === flow.steps.length - 1;
-  
+
   const getThemeStyles = () => {
     const themes = {
       light: {
@@ -121,13 +121,13 @@ const GenerationWizard: React.FC<GenerationWizardProps> = ({
         border: '#ff7c00',
         text: '#ffffff',
         accent: '#ff7c00',
-      }
+      },
     };
     return themes[theme];
   };
-  
+
   const styles = getThemeStyles();
-  
+
   return (
     <div
       style={{
@@ -138,102 +138,110 @@ const GenerationWizard: React.FC<GenerationWizardProps> = ({
         borderRadius: '16px',
         boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
         overflow: 'hidden',
-        fontFamily: 'Inter, system-ui, sans-serif'
+        fontFamily: 'Inter, system-ui, sans-serif',
       }}
-      onClick={(e) => e.stopPropagation()}
+      onClick={e => e.stopPropagation()}
     >
       {/* Header */}
-      <div style={{
-        padding: '24px',
-        borderBottom: `1px solid ${styles.border}`,
-        background: styles.secondary
-      }}>
+      <div
+        style={{
+          padding: '24px',
+          borderBottom: `1px solid ${styles.border}`,
+          background: styles.secondary,
+        }}
+      >
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
           <span style={{ fontSize: '24px' }}>{flow.icon}</span>
-          <h2 style={{ margin: 0, fontSize: '20px', fontWeight: 600, color: styles.text }}>
-            {flow.name}
-          </h2>
-          <span style={{
-            padding: '4px 8px',
-            background: styles.accent + '20',
-            color: styles.accent,
-            fontSize: '12px',
-            borderRadius: '6px',
-            fontWeight: 500,
-          }}>
+          <h2 style={{ margin: 0, fontSize: '20px', fontWeight: 600, color: styles.text }}>{flow.name}</h2>
+          <span
+            style={{
+              padding: '4px 8px',
+              background: styles.accent + '20',
+              color: styles.accent,
+              fontSize: '12px',
+              borderRadius: '6px',
+              fontWeight: 500,
+            }}
+          >
             {flow.complexity.toUpperCase()}
           </span>
         </div>
-        <p style={{ margin: 0, color: styles.text, opacity: 0.7 }}>
-          {flow.description}
-        </p>
+        <p style={{ margin: 0, color: styles.text, opacity: 0.7 }}>{flow.description}</p>
         {/* Progress Bar */}
-        <div style={{
-          marginTop: '16px',
-          background: styles.border,
-          borderRadius: '4px',
-          height: '4px',
-          overflow: 'hidden',
-        }}>
+        <div
+          style={{
+            marginTop: '16px',
+            background: styles.border,
+            borderRadius: '4px',
+            height: '4px',
+            overflow: 'hidden',
+          }}
+        >
           <div
             style={{
               width: `${((currentStep + 1) / flow.steps.length) * 100}%`,
               height: '100%',
               background: styles.accent,
-              transition: 'width 0.3s ease'
+              transition: 'width 0.3s ease',
             }}
           />
         </div>
-        <div style={{
-          marginTop: '8px',
-          fontSize: '12px',
-          color: styles.text,
-          opacity: 0.7,
-        }}>
+        <div
+          style={{
+            marginTop: '8px',
+            fontSize: '12px',
+            color: styles.text,
+            opacity: 0.7,
+          }}
+        >
           Step {currentStep + 1} of {flow.steps.length} • {flow.estimatedTime}
         </div>
       </div>
-      
+
       {/* Step Content */}
       <div style={{ padding: '24px', maxHeight: '400px', overflow: 'auto' }}>
-        <h3 style={{
-          margin: '0 0 8px 0',
-          fontSize: '18px',
-          fontWeight: 600,
-          color: styles.accent,
-        }}>
+        <h3
+          style={{
+            margin: '0 0 8px 0',
+            fontSize: '18px',
+            fontWeight: 600,
+            color: styles.accent,
+          }}
+        >
           {step.title}
         </h3>
-        <p style={{
-          margin: '0 0 20px 0',
-          color: styles.text,
-          opacity: 0.7,
-          lineHeight: 1.5,
-        }}>
+        <p
+          style={{
+            margin: '0 0 20px 0',
+            color: styles.text,
+            opacity: 0.7,
+            lineHeight: 1.5,
+          }}
+        >
           {step.description}
         </p>
-        
+
         {/* Step Fields */}
         {step.fields?.map(field => (
           <div key={field.id} style={{ marginBottom: '20px' }}>
-            <label style={{
-              display: 'block',
-              marginBottom: '6px',
-              fontSize: '14px',
-              fontWeight: 500,
-              color: styles.text,
-            }}>
+            <label
+              style={{
+                display: 'block',
+                marginBottom: '6px',
+                fontSize: '14px',
+                fontWeight: 500,
+                color: styles.text,
+              }}
+            >
               {field.label}
-              {field.validation?.required && (
-                <span style={{ color: '#ef4444', marginLeft: '4px' }}>*</span>
-              )}
+              {field.validation?.required && <span style={{ color: '#ef4444', marginLeft: '4px' }}>*</span>}
             </label>
-            
+
             {field.type === 'text' && (
               <input
                 type="text"
                 value={params[field.id] || ''}
-                onChange={(e) => onParamsChange({ ...params, [field.id]: e.target.value })}
+                onChange={e => onParamsChange({ ...params, [field.id]: e.target.value })}
                 placeholder={field.placeholder}
                 style={{
                   width: '100%',
@@ -243,15 +251,15 @@ const GenerationWizard: React.FC<GenerationWizardProps> = ({
                   background: styles.secondary,
                   color: styles.text,
                   fontSize: '14px',
-                  outline: 'none'
+                  outline: 'none',
                 }}
               />
             )}
-            
+
             {field.type === 'textarea' && (
               <textarea
                 value={params[field.id] || ''}
-                onChange={(e) => onParamsChange({ ...params, [field.id]: e.target.value })}
+                onChange={e => onParamsChange({ ...params, [field.id]: e.target.value })}
                 placeholder={field.placeholder}
                 rows={3}
                 style={{
@@ -264,15 +272,15 @@ const GenerationWizard: React.FC<GenerationWizardProps> = ({
                   fontSize: '14px',
                   outline: 'none',
                   resize: 'vertical',
-                  fontFamily: 'inherit'
+                  fontFamily: 'inherit',
                 }}
               />
             )}
-            
+
             {field.type === 'select' && (
               <select
                 value={params[field.id] || field.defaultValue || ''}
-                onChange={(e) => onParamsChange({ ...params, [field.id]: e.target.value })}
+                onChange={e => onParamsChange({ ...params, [field.id]: e.target.value })}
                 style={{
                   width: '100%',
                   padding: '10px 12px',
@@ -281,7 +289,7 @@ const GenerationWizard: React.FC<GenerationWizardProps> = ({
                   background: styles.secondary,
                   color: styles.text,
                   fontSize: '14px',
-                  outline: 'none'
+                  outline: 'none',
                 }}
               >
                 <option value="">Select an option...</option>
@@ -295,16 +303,18 @@ const GenerationWizard: React.FC<GenerationWizardProps> = ({
           </div>
         ))}
       </div>
-      
+
       {/* Footer */}
-      <div style={{
-        padding: '20px 24px',
-        borderTop: `1px solid ${styles.border}`,
-        background: styles.secondary,
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}>
+      <div
+        style={{
+          padding: '20px 24px',
+          borderTop: `1px solid ${styles.border}`,
+          background: styles.secondary,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
         <button
           onClick={onCancel}
           style={{
@@ -314,7 +324,7 @@ const GenerationWizard: React.FC<GenerationWizardProps> = ({
             borderRadius: '6px',
             color: styles.text,
             fontSize: '14px',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           Cancel
@@ -330,7 +340,7 @@ const GenerationWizard: React.FC<GenerationWizardProps> = ({
                 borderRadius: '6px',
                 color: styles.accent,
                 fontSize: '14px',
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
             >
               Previous
@@ -373,7 +383,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   onTemplateApply,
   theme = 'cinema',
   recentCommands = [],
-  customActions = []
+  customActions = [],
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -409,7 +419,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
               label: 'Character Name',
               type: 'text',
               placeholder: 'e.g., Sarah McKenzie',
-              validation: { required: true, minLength: 2 }
+              validation: { required: true, minLength: 2 },
             },
             {
               id: 'character-role',
@@ -420,8 +430,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                 { value: 'antagonist', label: 'Antagonist' },
                 { value: 'supporting', label: 'Supporting Character' },
                 { value: 'mentor', label: 'Mentor' },
-                { value: 'comic-relief', label: 'Comic Relief' }
-              ]
+                { value: 'comic-relief', label: 'Comic Relief' },
+              ],
             },
             {
               id: 'genre',
@@ -433,13 +443,13 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                 { value: 'comedy', label: 'Comedy' },
                 { value: 'thriller', label: 'Thriller' },
                 { value: 'sci-fi', label: 'Sci-Fi' },
-                { value: 'fantasy', label: 'Fantasy' }
-              ]
-            }
-          ]
-        }
-      ]
-    }
+                { value: 'fantasy', label: 'Fantasy' },
+              ],
+            },
+          ],
+        },
+      ],
+    },
   ];
 
   // Build command actions
@@ -454,9 +464,9 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         icon: flow.icon,
         shortcut: flow.id === 'character-development' ? '⌘G' : undefined,
         keywords: [flow.name.toLowerCase(), flow.category.toLowerCase(), 'generate', 'create'],
-        action: () => startGenerationFlow(flow)
+        action: () => startGenerationFlow(flow),
       })),
-      
+
       // Node creation commands
       {
         id: 'create-weighted-choice',
@@ -468,7 +478,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         keywords: ['weighted', 'choice', 'random', 'probability'],
         action: () => createNodeAtCenter('WeightedChoice'),
       },
-      
+
       // Export commands
       {
         id: 'export-json',
@@ -480,7 +490,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         keywords: ['export', 'save', 'json', 'file'],
         action: () => onExport('json'),
       },
-      
+
       // Navigation commands
       {
         id: 'fit-view',
@@ -490,11 +500,11 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         icon: '🔍',
         shortcut: '⌘0',
         keywords: ['fit', 'center', 'view', 'zoom'],
-        action: () => reactFlowInstance?.fitView({ padding: 0.1 })
+        action: () => reactFlowInstance?.fitView({ padding: 0.1 }),
       },
-      
+
       // Add custom actions
-      ...customActions
+      ...customActions,
     ];
     return actions;
   }, [selectedNodes, customActions, onExport, onTemplateApply, onNodeDelete, reactFlowInstance]);
@@ -506,10 +516,12 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     }
     const query = searchQuery.toLowerCase();
     return commandActions.filter(action => {
-      return action.title.toLowerCase().includes(query) ||
+      return (
+        action.title.toLowerCase().includes(query) ||
         action.description.toLowerCase().includes(query) ||
         action.keywords.some(keyword => keyword.includes(query)) ||
-        action.category.includes(query);
+        action.category.includes(query)
+      );
     });
   }, [commandActions, searchQuery]);
 
@@ -572,15 +584,18 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   }, [isOpen]);
 
   // Helper functions
-  const createNodeAtCenter = useCallback((nodeType: string) => {
-    const viewport = reactFlowInstance?.getViewport();
-    const center = {
-      x: viewport ? -viewport.x + 400 : 400,
-      y: viewport ? -viewport.y + 300 : 300,
-    };
-    onNodeCreate(nodeType, center);
-    onClose();
-  }, [reactFlowInstance, onNodeCreate, onClose]);
+  const createNodeAtCenter = useCallback(
+    (nodeType: string) => {
+      const viewport = reactFlowInstance?.getViewport();
+      const center = {
+        x: viewport ? -viewport.x + 400 : 400,
+        y: viewport ? -viewport.y + 300 : 300,
+      };
+      onNodeCreate(nodeType, center);
+      onClose();
+    },
+    [reactFlowInstance, onNodeCreate, onClose]
+  );
 
   const startGenerationFlow = useCallback((flow: GenerationFlow) => {
     setActiveGenerationFlow(flow);
@@ -641,7 +656,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         accent: '#ff7c00',
         hover: '#2d2d2d',
         overlay: 'rgba(0, 0, 0, 0.8)',
-      }
+      },
     };
     return themes[theme];
   };
@@ -680,20 +695,22 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
               borderRadius: '12px',
               boxShadow: `0 20px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px ${styles.border}`,
               overflow: 'hidden',
-              fontFamily: 'Inter, system-ui, sans-serif'
+              fontFamily: 'Inter, system-ui, sans-serif',
             }}
-            onClick={(e) => e.stopPropagation()}
+            onClick={e => e.stopPropagation()}
           >
             {/* Search Input */}
-            <div style={{
-              padding: '16px',
-              borderBottom: `1px solid ${styles.border}`
-            }}>
+            <div
+              style={{
+                padding: '16px',
+                borderBottom: `1px solid ${styles.border}`,
+              }}
+            >
               <input
                 ref={searchInputRef}
                 type="text"
                 value={searchQuery}
-                onChange={(e) => {
+                onChange={e => {
                   setSearchQuery(e.target.value);
                   setSelectedIndex(0);
                 }}
@@ -712,21 +729,25 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             </div>
 
             {/* Commands List */}
-            <div style={{
-              maxHeight: '400px',
-              overflow: 'auto',
-              padding: '8px',
-            }}>
+            <div
+              style={{
+                maxHeight: '400px',
+                overflow: 'auto',
+                padding: '8px',
+              }}
+            >
               {Object.entries(groupedActions).map(([category, actions]) => (
                 <div key={category} style={{ marginBottom: '16px' }}>
-                  <div style={{
-                    padding: '8px 12px 4px',
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    color: styles.textSecondary,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.5px',
-                  }}>
+                  <div
+                    style={{
+                      padding: '8px 12px 4px',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      color: styles.textSecondary,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px',
+                    }}
+                  >
                     {categoryIcons[category]} {category}
                   </div>
                   {actions.map((action, actionIndex) => {
@@ -747,37 +768,43 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                           display: 'flex',
                           alignItems: 'center',
                           gap: '12px',
-                          transition: 'all 0.15s ease'
+                          transition: 'all 0.15s ease',
                         }}
                       >
                         <span style={{ fontSize: '20px' }}>{action.icon}</span>
                         <div style={{ flex: 1 }}>
-                          <div style={{
-                            fontSize: '14px',
-                            fontWeight: 600,
-                            color: styles.text,
-                            marginBottom: '2px',
-                          }}>
+                          <div
+                            style={{
+                              fontSize: '14px',
+                              fontWeight: 600,
+                              color: styles.text,
+                              marginBottom: '2px',
+                            }}
+                          >
                             {action.title}
                           </div>
-                          <div style={{
-                            fontSize: '12px',
-                            color: styles.textSecondary,
-                            lineHeight: 1.4,
-                          }}>
+                          <div
+                            style={{
+                              fontSize: '12px',
+                              color: styles.textSecondary,
+                              lineHeight: 1.4,
+                            }}
+                          >
                             {action.description}
                           </div>
                         </div>
                         {action.shortcut && (
-                          <div style={{
-                            padding: '4px 8px',
-                            background: styles.secondary,
-                            border: `1px solid ${styles.border}`,
-                            borderRadius: '4px',
-                            fontSize: '11px',
-                            color: styles.textSecondary,
-                            fontFamily: 'Monaco, monospace'
-                          }}>
+                          <div
+                            style={{
+                              padding: '4px 8px',
+                              background: styles.secondary,
+                              border: `1px solid ${styles.border}`,
+                              borderRadius: '4px',
+                              fontSize: '11px',
+                              color: styles.textSecondary,
+                              fontFamily: 'Monaco, monospace',
+                            }}
+                          >
                             {action.shortcut}
                           </div>
                         )}
@@ -786,13 +813,15 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                   })}
                 </div>
               ))}
-              
+
               {filteredActions.length === 0 && (
-                <div style={{
-                  padding: '40px 20px',
-                  textAlign: 'center',
-                  color: styles.textSecondary,
-                }}>
+                <div
+                  style={{
+                    padding: '40px 20px',
+                    textAlign: 'center',
+                    color: styles.textSecondary,
+                  }}
+                >
                   <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔍</div>
                   <div style={{ fontSize: '14px' }}>No commands found</div>
                   <div style={{ fontSize: '12px', marginTop: '4px' }}>
@@ -803,16 +832,18 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             </div>
 
             {/* Footer */}
-            <div style={{
-              padding: '12px 16px',
-              borderTop: `1px solid ${styles.border}`,
-              background: styles.secondary,
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              fontSize: '12px',
-              color: styles.textSecondary
-            }}>
+            <div
+              style={{
+                padding: '12px 16px',
+                borderTop: `1px solid ${styles.border}`,
+                background: styles.secondary,
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                fontSize: '12px',
+                color: styles.textSecondary,
+              }}
+            >
               <div>↑↓ Navigate • Enter Execute • Esc Close</div>
               <div>🎬 Wild Construct Command Palette</div>
             </div>

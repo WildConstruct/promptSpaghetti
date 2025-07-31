@@ -2,7 +2,7 @@
 
 /**
  * Secure Dashboard Server
- * 
+ *
  * Express server that serves the Complete Ticketing Dashboard with authentication.
  * Supports remote access with login/password protection.
  */
@@ -25,7 +25,7 @@ const CONFIG = {
   defaultPassword: process.env.DASHBOARD_PASSWORD || 'dashboard123',
   sessionSecret: process.env.SESSION_SECRET || 'change-this-secret-key-' + Math.random(),
   maxLoginAttempts: 5,
-  lockoutDuration: 15 * 60 * 1000 // 15 minutes
+  lockoutDuration: 15 * 60 * 1000, // 15 minutes
 };
 
 // In-memory storage for demo (use database in production)
@@ -39,9 +39,9 @@ async function initializeUsers() {
     username: CONFIG.defaultUsername,
     password: hashedPassword,
     role: 'admin',
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
   };
-    
+
   console.log('📋 Default admin user created:');
   console.log(`   Username: ${CONFIG.defaultUsername}`);
   console.log(`   Password: ${CONFIG.defaultPassword}`);
@@ -53,10 +53,10 @@ const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: CONFIG.maxLoginAttempts, // Limit each IP to 5 requests per windowMs
   message: {
-    error: 'Too many login attempts, please try again in 15 minutes'
+    error: 'Too many login attempts, please try again in 15 minutes',
   },
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
 });
 
 // Middleware
@@ -64,24 +64,30 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Session configuration
-app.use(session({
-  secret: CONFIG.sessionSecret,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: false, // Set to true if using HTTPS
-    httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours
-  }
-}));
+app.use(
+  session({
+    secret: CONFIG.sessionSecret,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false, // Set to true if using HTTPS
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    },
+  })
+);
 
 // Static files middleware (protected)
-app.use('/static', (req, res, next) => {
-  if (!req.session.authenticated) {
-    return res.status(401).json({ error: 'Authentication required' });
-  }
-  next();
-}, express.static(path.join(__dirname)));
+app.use(
+  '/static',
+  (req, res, next) => {
+    if (!req.session.authenticated) {
+      return res.status(401).json({ error: 'Authentication required' });
+    }
+    next();
+  },
+  express.static(path.join(__dirname))
+);
 
 // Authentication middleware
 function requireAuth(req, res, next) {
@@ -96,20 +102,19 @@ function requireAuth(req, res, next) {
 function isLockedOut(ip) {
   const attempts = loginAttempts[ip];
   if (!attempts) return false;
-    
+
   const now = Date.now();
-  return attempts.count >= CONFIG.maxLoginAttempts && 
-           (now - attempts.lastAttempt) < CONFIG.lockoutDuration;
+  return attempts.count >= CONFIG.maxLoginAttempts && now - attempts.lastAttempt < CONFIG.lockoutDuration;
 }
 
 // Record login attempt
 function recordLoginAttempt(ip, success) {
   const now = Date.now();
-    
+
   if (!loginAttempts[ip]) {
     loginAttempts[ip] = { count: 0, lastAttempt: now };
   }
-    
+
   if (success) {
     delete loginAttempts[ip]; // Clear attempts on success
   } else {
@@ -125,7 +130,7 @@ app.get('/login', (req, res) => {
   if (req.session.authenticated) {
     return res.redirect('/dashboard');
   }
-    
+
   const loginHtml = `
     <!DOCTYPE html>
     <html lang="en">
@@ -260,7 +265,7 @@ app.get('/login', (req, res) => {
     </body>
     </html>
     `;
-    
+
   res.send(loginHtml);
 });
 
@@ -268,25 +273,25 @@ app.get('/login', (req, res) => {
 app.post('/login', loginLimiter, async (req, res) => {
   const { username, password } = req.body;
   const clientIp = req.ip;
-    
+
   if (isLockedOut(clientIp)) {
-    return res.status(429).json({ 
-      error: 'Account temporarily locked due to too many failed attempts. Try again in 15 minutes.' 
+    return res.status(429).json({
+      error: 'Account temporarily locked due to too many failed attempts. Try again in 15 minutes.',
     });
   }
-    
+
   const user = users[username];
-    
-  if (!user || !await bcrypt.compare(password, user.password)) {
+
+  if (!user || !(await bcrypt.compare(password, user.password))) {
     recordLoginAttempt(clientIp, false);
     return res.status(401).json({ error: 'Invalid credentials' });
   }
-    
+
   recordLoginAttempt(clientIp, true);
   req.session.authenticated = true;
   req.session.username = username;
   req.session.role = user.role;
-    
+
   console.log(`✅ Login successful: ${username} from ${clientIp}`);
   res.redirect('/dashboard');
 });
@@ -301,14 +306,14 @@ app.post('/logout', (req, res) => {
 // Dashboard route (protected)
 app.get('/dashboard', requireAuth, (req, res) => {
   const dashboardPath = path.join(__dirname, 'complete-dashboard.html');
-    
+
   if (!fs.existsSync(dashboardPath)) {
     return res.status(404).send('Dashboard file not found');
   }
-    
+
   // Read and modify the dashboard HTML to add logout functionality
   let dashboardHtml = fs.readFileSync(dashboardPath, 'utf8');
-    
+
   // Add logout button to the header
   const logoutButton = `
         <div style="position: absolute; top: 20px; right: 20px; z-index: 1000;">
@@ -325,17 +330,17 @@ app.get('/dashboard', requireAuth, (req, res) => {
             }
         </script>
     `;
-    
+
   // Insert logout button after <body> tag
   dashboardHtml = dashboardHtml.replace('<body>', '<body>' + logoutButton);
-    
+
   res.send(dashboardHtml);
 });
 
 // API endpoints (protected)
 app.get('/api/broadcasts', requireAuth, (req, res) => {
   const broadcastPath = path.join(__dirname, 'data', 'agent-broadcast.json');
-    
+
   try {
     if (fs.existsSync(broadcastPath)) {
       const data = JSON.parse(fs.readFileSync(broadcastPath, 'utf8'));
@@ -351,43 +356,43 @@ app.get('/api/broadcasts', requireAuth, (req, res) => {
 
 app.post('/api/broadcasts', requireAuth, (req, res) => {
   const { message, priority = 'normal' } = req.body;
-    
+
   if (!message || !message.trim()) {
     return res.status(400).json({ error: 'Message is required' });
   }
-    
+
   const broadcastPath = path.join(__dirname, 'data', 'agent-broadcast.json');
-    
+
   try {
     let data = { messages: [], lastUpdate: null };
-        
+
     if (fs.existsSync(broadcastPath)) {
       data = JSON.parse(fs.readFileSync(broadcastPath, 'utf8'));
     }
-        
+
     const newMessage = {
       id: `broadcast-${Date.now()}`,
       message: message.trim(),
       timestamp: new Date().toISOString(),
       priority: priority,
       acknowledged: [],
-      author: req.session.username
+      author: req.session.username,
     };
-        
+
     data.messages.unshift(newMessage);
     data.lastUpdate = new Date().toISOString();
-        
+
     // Keep only last 10 messages
     data.messages = data.messages.slice(0, 10);
-        
+
     // Ensure data directory exists
     const dataDir = path.dirname(broadcastPath);
     if (!fs.existsSync(dataDir)) {
       fs.mkdirSync(dataDir, { recursive: true });
     }
-        
+
     fs.writeFileSync(broadcastPath, JSON.stringify(data, null, 2));
-        
+
     console.log(`📢 Broadcast sent by ${req.session.username}: ${message}`);
     res.json(newMessage);
   } catch (error) {
@@ -399,7 +404,7 @@ app.post('/api/broadcasts', requireAuth, (req, res) => {
 // Data API endpoints (protected)
 app.get('/api/tasks', requireAuth, (req, res) => {
   const tasksPath = path.join(__dirname, 'data', 'state.json');
-    
+
   try {
     if (fs.existsSync(tasksPath)) {
       const data = JSON.parse(fs.readFileSync(tasksPath, 'utf8'));
@@ -435,7 +440,7 @@ app.use((err, req, res, next) => {
 // Start server
 async function startServer() {
   await initializeUsers();
-    
+
   app.listen(PORT, HOST, () => {
     console.log('🚀 Secure Dashboard Server running:');
     console.log(`   Local:    http://localhost:${PORT}`);
@@ -444,7 +449,7 @@ async function startServer() {
     console.log('');
     console.log('🔐 Security Features:');
     console.log('   ✅ Password authentication');
-    console.log('   ✅ Session management');  
+    console.log('   ✅ Session management');
     console.log(`   ✅ Rate limiting (${CONFIG.maxLoginAttempts} attempts per 15 min)`);
     console.log('   ✅ Account lockout protection');
     console.log('   ✅ Protected API endpoints');

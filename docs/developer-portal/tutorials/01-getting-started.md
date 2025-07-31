@@ -5,6 +5,7 @@ Welcome to custom node development for PromptScape! This tutorial will guide you
 ## What You'll Build
 
 By the end of this tutorial, you'll have created a "Text Capitalizer" node that:
+
 - Takes text input
 - Converts it to uppercase
 - Returns the processed result
@@ -34,14 +35,14 @@ The CLI will ask you several questions. For this tutorial, use these answers:
 
 ```
 ? Node type identifier: my-company.text-capitalizer
-? Display name: Text Capitalizer  
+? Display name: Text Capitalizer
 ? Description: Converts text to uppercase with validation
 ? Category: Text Processing
 ? Author name: Your Name
 ? Author email: your.email@example.com
 ? Does this node maintain state between executions? No
 ? Can results be cached for performance? Yes
-? Does this node need file system access? No  
+? Does this node need file system access? No
 ? Does this node need network access? No
 
 # For inputs:
@@ -53,7 +54,7 @@ The CLI will ask you several questions. For this tutorial, use these answers:
 
 # For outputs:
 ? Output name: result
-? Output type: string  
+? Output type: string
 ? Output description: Capitalized text
 ? Output name: (leave empty to continue)
 ```
@@ -80,7 +81,7 @@ import {
   CustomNodeConfig,
   CustomNodeRuntime,
   CustomNodeResult,
-  ValidationResult
+  ValidationResult,
 } from '@prompt-spaghetti/custom-node-sdk';
 
 /**
@@ -96,7 +97,7 @@ export class TextCapitalizer extends CustomNodeBase {
     return {
       valid: true,
       errors: [],
-      warnings: []
+      warnings: [],
     };
   }
 
@@ -112,8 +113,8 @@ export class TextCapitalizer extends CustomNodeBase {
 
       return {
         outputs: {
-          result
-        }
+          result,
+        },
       };
     } catch (error) {
       utils.log('error', 'Node execution failed', { error: error.message });
@@ -138,7 +139,7 @@ validate(): ValidationResult {
   }
 
   // Warn about potential performance with very long strings
-  if (this.config.schema.inputs.text?.maxLength && 
+  if (this.config.schema.inputs.text?.maxLength &&
       this.config.schema.inputs.text.maxLength > 10000) {
     warnings.push('Processing very long strings may impact performance');
   }
@@ -156,7 +157,7 @@ async execute(runtime: CustomNodeRuntime): Promise<CustomNodeResult> {
   try {
     // Extract and validate inputs
     const text = inputs.text;
-    
+
     if (typeof text !== 'string') {
       throw new Error('Input must be a string');
     }
@@ -167,25 +168,25 @@ async execute(runtime: CustomNodeRuntime): Promise<CustomNodeResult> {
     }
 
     // Log processing for debugging
-    utils.log('info', 'Processing text capitalization', { 
-      inputLength: text.length 
+    utils.log('info', 'Processing text capitalization', {
+      inputLength: text.length
     });
 
     // Implement the core logic
     const result = text.toUpperCase().trim();
 
-    utils.log('info', 'Text capitalization completed', { 
-      outputLength: result.length 
+    utils.log('info', 'Text capitalization completed', {
+      outputLength: result.length
     });
 
     return {
       outputs: { result }
     };
-    
+
   } catch (error) {
-    utils.log('error', 'Node execution failed', { 
+    utils.log('error', 'Node execution failed', {
       error: error.message,
-      input: inputs.text 
+      input: inputs.text
     });
     throw error;
   }
@@ -241,7 +242,8 @@ Now let's test your node in the PromptScape interactive playground:
 
 2. **Load Your Node**: Use the "Load Custom Node" feature to import your built node
 
-3. **Test with Sample Data**: 
+3. **Test with Sample Data**:
+
    ```json
    {
      "text": "hello world, this is my first custom node!"
@@ -269,8 +271,8 @@ export const nodeMetadata = {
   version: '1.0.0',
   author: {
     name: 'Your Name',
-    email: 'your.email@example.com'
-  }
+    email: 'your.email@example.com',
+  },
 };
 
 // Export node schema
@@ -279,19 +281,20 @@ export const nodeSchema = {
     text: {
       type: 'string',
       required: true,
-      description: 'Text to capitalize'
-    }
+      description: 'Text to capitalize',
+    },
   },
   outputs: {
     result: {
       type: 'string',
-      description: 'Capitalized text'
-    }
-  }
+      description: 'Capitalized text',
+    },
+  },
 };
 ```
 
 This metadata is used by PromptScape to:
+
 - Display the node in the palette
 - Generate the inspector UI
 - Validate connections between nodes
@@ -302,11 +305,13 @@ This metadata is used by PromptScape to:
 Congratulations! You've created your first custom node. Here's what to explore next:
 
 ### Immediate Next Steps
+
 1. **[Try the Interactive Playground](./02-playground-basics.html)** - Test your node in real-time
 2. **[Learn Basic Patterns](./03-basic-patterns.html)** - Common implementation patterns
 3. **[Explore Sample Projects](../sample-projects/index.html)** - See more complex examples
 
-### Advanced Topics  
+### Advanced Topics
+
 4. **[Advanced I/O Handling](./04-advanced-io.html)** - Complex input validation and transformation
 5. **[State Management](./05-state-management.html)** - Building stateful nodes
 6. **[External API Integration](./06-api-integration.html)** - Connecting to external services
@@ -318,6 +323,7 @@ Congratulations! You've created your first custom node. Here's what to explore n
 **Issue**: `Cannot find module '@prompt-spaghetti/custom-node-sdk'`
 
 **Solution**: Ensure the SDK is installed and built:
+
 ```bash
 cd /path/to/promptscape-workspace
 pnpm install
@@ -329,6 +335,7 @@ pnpm build
 **Issue**: Tests fail with context-related errors
 
 **Solution**: Ensure you're using the latest SDK testing utilities:
+
 ```typescript
 import { MockContextFactory } from '@prompt-spaghetti/custom-node-sdk/testing';
 ```
@@ -342,12 +349,13 @@ import { MockContextFactory } from '@prompt-spaghetti/custom-node-sdk/testing';
 ## Summary
 
 You've successfully:
+
 - ✅ Created a custom node using CLI scaffolding
 - ✅ Enhanced the implementation with validation and error handling
-- ✅ Written and run comprehensive tests  
+- ✅ Written and run comprehensive tests
 - ✅ Built the project and verified the output
 - ✅ Understood the metadata and schema system
 
-Your text capitalizer node is now ready to be integrated into PromptScape graphs! 
+Your text capitalizer node is now ready to be integrated into PromptScape graphs!
 
 **Continue to:** [Interactive Playground Basics →](./02-playground-basics.html)

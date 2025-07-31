@@ -5,7 +5,7 @@ import {
   ModelAdaptor,
   AutoFixAction,
   Logger,
-  MetricsInterface
+  MetricsInterface,
 } from '../types/index.js';
 
 /**
@@ -30,10 +30,10 @@ export class ValidationEngine {
     options: ValidationOptions = {}
   ): Promise<ValidationReport> {
     const startTime = Date.now();
-    
+
     this.logger.info('Starting graph validation', {
       graphId: graph.id,
-      adaptorCount: adaptors.length
+      adaptorCount: adaptors.length,
     });
 
     const report: ValidationReport = {
@@ -46,19 +46,19 @@ export class ValidationEngine {
         criticalErrors: 0,
         highErrors: 0,
         mediumWarnings: 0,
-        lowInfos: 0
+        lowInfos: 0,
       },
       autoFixSuggestions: [],
-      crossPlatformIssues: []
+      crossPlatformIssues: [],
     };
 
     try {
       // Structural validation (platform-agnostic)
       const structuralResults = await this.validateStructure(graph);
-      
+
       // Custom rule validation
       const customResults = await this.validateCustomRules(graph);
-      
+
       // Platform-specific validation
       for (const adaptor of adaptors) {
         const platformResults = await this.validateForPlatform(graph, adaptor);
@@ -66,9 +66,7 @@ export class ValidationEngine {
       }
 
       // Cross-platform analysis
-      report.crossPlatformIssues = this.analyzeCrossPlatformCompatibility(
-        Array.from(report.platformResults.values())
-      );
+      report.crossPlatformIssues = this.analyzeCrossPlatformCompatibility(Array.from(report.platformResults.values()));
 
       // Add structural and custom results to each platform result
       report.platformResults.forEach((platformResult, platform) => {
@@ -77,31 +75,30 @@ export class ValidationEngine {
 
       // Aggregate results
       this.aggregateResults(report, structuralResults, customResults);
-      
+
       // Generate auto-fix suggestions
       report.autoFixSuggestions = this.generateAutoFixSuggestions(report);
 
       const duration = Date.now() - startTime;
-      
+
       this.logger.info('Graph validation completed', {
         graphId: graph.id,
         overallValid: report.overallValid,
         totalIssues: report.totalIssues,
-        duration
+        duration,
       });
 
       this.metrics.histogram('validation.duration', duration);
       this.metrics.counter('validation.completed', 1, {
-        valid: report.overallValid.toString()
+        valid: report.overallValid.toString(),
       });
 
       return report;
-
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       this.logger.error('Graph validation failed', {
         graphId: graph.id,
-        error: errorMessage
+        error: errorMessage,
       });
 
       this.metrics.counter('validation.failed', 1);
@@ -123,7 +120,7 @@ export class ValidationEngine {
         severity: 'critical',
         message: 'Graph is empty',
         description: 'The prompt graph contains no nodes',
-        autoFixable: false
+        autoFixable: false,
       });
       return results;
     }
@@ -138,15 +135,17 @@ export class ValidationEngine {
         message: 'Circular dependency detected',
         description: `Cycle involves nodes: ${cycle.join(' → ')}`,
         autoFixable: true,
-        suggestions: [{
-          type: 'fix',
-          description: 'Remove one edge to break the cycle',
-          action: {
-            type: 'edge_remove',
-            targetId: `${cycle[cycle.length - 1]}-${cycle[0]}`,
-            changes: {}
-          }
-        }]
+        suggestions: [
+          {
+            type: 'fix',
+            description: 'Remove one edge to break the cycle',
+            action: {
+              type: 'edge_remove',
+              targetId: `${cycle[cycle.length - 1]}-${cycle[0]}`,
+              changes: {},
+            },
+          },
+        ],
       });
     });
 
@@ -160,15 +159,17 @@ export class ValidationEngine {
         message: 'Graph has disconnected components',
         description: `Found ${components.length} separate components`,
         autoFixable: true,
-        suggestions: [{
-          type: 'fix',
-          description: 'Connect disconnected components or remove isolated nodes',
-          action: {
-            type: 'node_modify',
-            targetId: 'disconnected-components',
-            changes: {}
-          }
-        }]
+        suggestions: [
+          {
+            type: 'fix',
+            description: 'Connect disconnected components or remove isolated nodes',
+            action: {
+              type: 'node_modify',
+              targetId: 'disconnected-components',
+              changes: {},
+            },
+          },
+        ],
       });
     }
 
@@ -189,15 +190,17 @@ export class ValidationEngine {
           description: `Node "${node.data.label || node.id}" is not connected`,
           nodeId: node.id,
           autoFixable: true,
-          suggestions: [{
-            type: 'fix',
-            description: 'Remove orphaned node or connect it to the graph',
-            action: {
-              type: 'node_remove',
-              targetId: node.id,
-              changes: {}
-            }
-          }]
+          suggestions: [
+            {
+              type: 'fix',
+              description: 'Remove orphaned node or connect it to the graph',
+              action: {
+                type: 'node_remove',
+                targetId: node.id,
+                changes: {},
+              },
+            },
+          ],
         });
       }
     });
@@ -213,10 +216,12 @@ export class ValidationEngine {
           description: `Node "${node.id}" has no data object`,
           nodeId: node.id,
           autoFixable: true,
-          suggestions: [{
-            type: 'fix',
-            description: 'Add default data object to node'
-          }]
+          suggestions: [
+            {
+              type: 'fix',
+              description: 'Add default data object to node',
+            },
+          ],
         });
       }
     });
@@ -238,7 +243,7 @@ export class ValidationEngine {
         const errorMessage = error instanceof Error ? error.message : String(error);
         this.logger.warn('Custom rule validation failed', {
           ruleId: rule.id,
-          error: errorMessage
+          error: errorMessage,
         });
       }
     }
@@ -249,12 +254,9 @@ export class ValidationEngine {
   /**
    * Validate graph for specific platform
    */
-  private async validateForPlatform(
-    graph: PromptGraph,
-    adaptor: ModelAdaptor
-  ): Promise<PlatformValidationResult> {
+  private async validateForPlatform(graph: PromptGraph, adaptor: ModelAdaptor): Promise<PlatformValidationResult> {
     const startTime = Date.now();
-    
+
     try {
       const results = await adaptor.validate(graph);
       const capabilities = await adaptor.capabilities();
@@ -268,34 +270,36 @@ export class ValidationEngine {
         capabilities,
         quality,
         compatible: results.filter(r => r.type === 'error').length === 0,
-        duration: Date.now() - startTime
+        duration: Date.now() - startTime,
       };
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       this.logger.error('Platform validation failed', {
         platform: adaptor.platform,
         adaptorId: adaptor.id,
-        error: errorMessage
+        error: errorMessage,
       });
 
       return {
         platform: adaptor.platform,
         adaptorId: adaptor.id,
         adaptorVersion: adaptor.version,
-        results: [{
-          id: 'validation-failed',
-          type: 'error',
-          severity: 'critical',
-          message: 'Platform validation failed',
-          description: errorMessage,
-          autoFixable: false
-        }],
+        results: [
+          {
+            id: 'validation-failed',
+            type: 'error',
+            severity: 'critical',
+            message: 'Platform validation failed',
+            description: errorMessage,
+            autoFixable: false,
+          },
+        ],
         capabilities: {
           supportedNodeTypes: [],
           parameters: [],
           limitations: [],
           features: [],
-          supportedFormats: []
+          supportedFormats: [],
         },
         quality: {
           overall: 0,
@@ -308,11 +312,11 @@ export class ValidationEngine {
             parameterMapping: 0,
             featureSupport: 0,
             semanticPreservation: 0,
-            syntaxValidity: 0
-          }
+            syntaxValidity: 0,
+          },
         },
         compatible: false,
-        duration: Date.now() - startTime
+        duration: Date.now() - startTime,
       };
     }
   }
@@ -320,9 +324,7 @@ export class ValidationEngine {
   /**
    * Analyze cross-platform compatibility issues
    */
-  private analyzeCrossPlatformCompatibility(
-    platformResults: PlatformValidationResult[]
-  ): CrossPlatformIssue[] {
+  private analyzeCrossPlatformCompatibility(platformResults: PlatformValidationResult[]): CrossPlatformIssue[] {
     const issues: CrossPlatformIssue[] = [];
 
     // Find features supported by some but not all platforms
@@ -331,11 +333,9 @@ export class ValidationEngine {
 
     platformResults.forEach(result => {
       const features = new Set<string>(
-        result.capabilities.features
-          .filter((f: any) => f.supported)
-          .map((f: any) => f.name)
+        result.capabilities.features.filter((f: any) => f.supported).map((f: any) => f.name)
       );
-      
+
       platformFeatures.set(result.platform, features);
       features.forEach((f: string) => allFeatures.add(f));
     });
@@ -351,18 +351,16 @@ export class ValidationEngine {
           severity: 'medium',
           feature,
           supportingPlatforms,
-          unsupportedPlatforms: platformResults
-            .map(r => r.platform)
-            .filter(p => !supportingPlatforms.includes(p)),
+          unsupportedPlatforms: platformResults.map(r => r.platform).filter(p => !supportingPlatforms.includes(p)),
           description: `Feature "${feature}" is not supported across all platforms`,
-          impact: 'Reduced functionality on some platforms'
+          impact: 'Reduced functionality on some platforms',
         });
       }
     });
 
     // Find node types with compatibility issues
     const nodeTypeSupport = new Map<string, Platform[]>();
-    
+
     platformResults.forEach(result => {
       result.capabilities.supportedNodeTypes.forEach((nodeType: any) => {
         if (!nodeTypeSupport.has(nodeType)) {
@@ -388,16 +386,15 @@ export class ValidationEngine {
     const allResults = [
       ...structuralResults,
       ...customResults,
-      ...Array.from(report.platformResults.values())
-        .flatMap(pr => pr.results)
+      ...Array.from(report.platformResults.values()).flatMap(pr => pr.results),
     ];
 
     allResults.forEach(result => {
       report.totalIssues++;
-      
+
       if (result.type === 'error') {
         report.overallValid = false;
-        
+
         if (result.severity === 'critical') {
           report.summary.criticalErrors++;
         } else {
@@ -419,7 +416,7 @@ export class ValidationEngine {
 
     // Collect all auto-fixable issues from all platform results
     const autoFixableIssues: ValidationResult[] = [];
-    
+
     report.platformResults.forEach(platformResult => {
       const fixableResults = platformResult.results.filter(r => r.autoFixable);
       autoFixableIssues.push(...fixableResults);
@@ -427,19 +424,19 @@ export class ValidationEngine {
 
     // Group by issue type and create suggestions
     const fixGroups = new Map<string, ValidationResult[]>();
-    
+
     autoFixableIssues.forEach(issue => {
       if (issue.suggestions && issue.suggestions.length > 0) {
         issue.suggestions.forEach(suggestion => {
           let key: string;
-          
+
           if (suggestion.action && suggestion.action.targetId) {
             key = `${suggestion.action.type}:${suggestion.action.targetId}`;
           } else {
             // Fallback grouping by issue type for suggestions without actions
             key = `${issue.type}:${issue.severity}:${suggestion.type}`;
           }
-          
+
           if (!fixGroups.has(key)) {
             fixGroups.set(key, []);
           }
@@ -459,7 +456,7 @@ export class ValidationEngine {
     fixGroups.forEach((issues, key) => {
       const firstIssue = issues[0];
       let suggestion: any;
-      
+
       if (firstIssue.suggestions && firstIssue.suggestions.length > 0) {
         suggestion = firstIssue.suggestions[0];
       } else {
@@ -470,11 +467,11 @@ export class ValidationEngine {
           action: {
             type: 'node_modify',
             targetId: firstIssue.nodeId || firstIssue.edgeId || 'unknown',
-            changes: {}
-          }
+            changes: {},
+          },
         };
       }
-      
+
       suggestions.push({
         id: `autofix-${key.replace(/:/g, '-')}`,
         type: suggestion.type || 'fix',
@@ -482,11 +479,11 @@ export class ValidationEngine {
         action: suggestion.action || {
           type: 'node_modify',
           targetId: 'unknown',
-          changes: {}
+          changes: {},
         },
         affectedIssues: issues.map(i => i.id),
         confidence: this.calculateFixConfidence(issues),
-        impact: this.assessFixImpact(issues)
+        impact: this.assessFixImpact(issues),
       });
     });
 
@@ -503,12 +500,12 @@ export class ValidationEngine {
     const path: string[] = [];
 
     const adjacencyList = new Map<string, string[]>();
-    
+
     // Build adjacency list
     graph.nodes.forEach(node => {
       adjacencyList.set(node.id, []);
     });
-    
+
     graph.edges?.forEach(edge => {
       const targets = adjacencyList.get(edge.source) || [];
       targets.push(edge.target);
@@ -521,7 +518,7 @@ export class ValidationEngine {
       path.push(nodeId);
 
       const neighbors = adjacencyList.get(nodeId) || [];
-      
+
       for (const neighbor of neighbors) {
         if (!visited.has(neighbor)) {
           if (dfs(neighbor)) {
@@ -557,19 +554,19 @@ export class ValidationEngine {
     const components: string[][] = [];
 
     const adjacencyList = new Map<string, string[]>();
-    
+
     // Build undirected adjacency list
     graph.nodes.forEach(node => {
       adjacencyList.set(node.id, []);
     });
-    
+
     graph.edges?.forEach(edge => {
       const sourceTargets = adjacencyList.get(edge.source) || [];
       const targetTargets = adjacencyList.get(edge.target) || [];
-      
+
       sourceTargets.push(edge.target);
       targetTargets.push(edge.source);
-      
+
       adjacencyList.set(edge.source, sourceTargets);
       adjacencyList.set(edge.target, targetTargets);
     });
@@ -603,10 +600,11 @@ export class ValidationEngine {
   private calculateFixConfidence(issues: ValidationResult[]): number {
     // Simple heuristic: more severe issues = lower confidence for auto-fix
     const severityWeights = { critical: 0.1, high: 0.3, medium: 0.7, low: 0.9 };
-    
-    const avgConfidence = issues.reduce((sum, issue) => {
-      return sum + (severityWeights[issue.severity] || 0.5);
-    }, 0) / issues.length;
+
+    const avgConfidence =
+      issues.reduce((sum, issue) => {
+        return sum + (severityWeights[issue.severity] || 0.5);
+      }, 0) / issues.length;
 
     return Math.round(avgConfidence * 100);
   }
@@ -615,10 +613,8 @@ export class ValidationEngine {
    * Assess impact of an auto-fix
    */
   private assessFixImpact(issues: ValidationResult[]): 'low' | 'medium' | 'high' {
-    const hasHighSeverity = issues.some(i => 
-      i.severity === 'critical' || i.severity === 'high'
-    );
-    
+    const hasHighSeverity = issues.some(i => i.severity === 'critical' || i.severity === 'high');
+
     if (hasHighSeverity) return 'high';
     if (issues.length > 3) return 'medium';
     return 'low';

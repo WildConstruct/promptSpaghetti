@@ -2,7 +2,7 @@
 
 /**
  * Daily Ticket Tracker CLI
- * 
+ *
  * Command-line interface for the Daily Ticket Tracker utility.
  * Provides commands to track tickets, view stats, and manage the system.
  */
@@ -26,34 +26,34 @@ class DailyTrackerCLI {
       await this.initialize();
 
       switch (command) {
-      case 'track-approval':
-        await this.trackApproval(args[1], args[2]);
-        break;
-      case 'track-push':
-        await this.trackPush(args[1], args[2], args[3]);
-        break;
-      case 'stats':
-        await this.showStats(args[1]);
-        break;
-      case 'report':
-        await this.generateReport(args[1] === '--timeline');
-        break;
-      case 'history':
-        await this.showHistory(parseInt(args[1]) || 7);
-        break;
-      case 'reset':
-        await this.resetTracker();
-        break;
-      case 'config':
-        await this.showConfig();
-        break;
-      case 'monitor':
-        await this.startMonitor();
-        break;
-      case 'help':
-      default:
-        this.showHelp();
-        break;
+        case 'track-approval':
+          await this.trackApproval(args[1], args[2]);
+          break;
+        case 'track-push':
+          await this.trackPush(args[1], args[2], args[3]);
+          break;
+        case 'stats':
+          await this.showStats(args[1]);
+          break;
+        case 'report':
+          await this.generateReport(args[1] === '--timeline');
+          break;
+        case 'history':
+          await this.showHistory(parseInt(args[1]) || 7);
+          break;
+        case 'reset':
+          await this.resetTracker();
+          break;
+        case 'config':
+          await this.showConfig();
+          break;
+        case 'monitor':
+          await this.startMonitor();
+          break;
+        case 'help':
+        default:
+          this.showHelp();
+          break;
       }
     } catch (error) {
       console.error('❌ Error:', error.message);
@@ -78,9 +78,7 @@ class DailyTrackerCLI {
       return;
     }
 
-    const ticketIds = ticketsInput.includes(',') 
-      ? ticketsInput.split(',').map(id => id.trim())
-      : [ticketsInput];
+    const ticketIds = ticketsInput.includes(',') ? ticketsInput.split(',').map(id => id.trim()) : [ticketsInput];
 
     await this.tracker.trackPush(ticketIds, agentId, commitHash);
     console.log(`🚀 Tracked push: ${ticketIds.length} ticket(s) by ${agentId}`);
@@ -97,7 +95,9 @@ class DailyTrackerCLI {
       console.log('\n📊 DETAILED DAILY STATISTICS');
       console.log('═'.repeat(50));
       console.log(`Date: ${stats.date}`);
-      console.log(`Total Tickets: ${stats.summary.totalTickets} (${stats.metrics.approved} approved + ${stats.metrics.pushed} pushed)`);
+      console.log(
+        `Total Tickets: ${stats.summary.totalTickets} (${stats.metrics.approved} approved + ${stats.metrics.pushed} pushed)`
+      );
       console.log(`Active Agents: ${stats.agents.count}`);
       console.log(`Session Duration: ${stats.timeAnalysis.hoursActive} hours`);
       console.log(`Productivity: ${stats.summary.productivity} tickets/hour`);
@@ -135,7 +135,9 @@ class DailyTrackerCLI {
 
   async showQuickStats() {
     const stats = this.tracker.getCurrentStats();
-    console.log(`\n📊 Today (${stats.date}): ${stats.summary.totalTickets} tickets | ${stats.metrics.approved} approved | ${stats.metrics.pushed} pushed | ${stats.agents.count} agents`);
+    console.log(
+      `\n📊 Today (${stats.date}): ${stats.summary.totalTickets} tickets | ${stats.metrics.approved} approved | ${stats.metrics.pushed} pushed | ${stats.agents.count} agents`
+    );
   }
 
   async generateReport(includeTimeline = false) {
@@ -169,9 +171,9 @@ class DailyTrackerCLI {
     if (Object.keys(report.agents.breakdown).length > 0) {
       console.log('\n👥 TOP AGENTS TODAY:');
       const sortedAgents = Object.entries(report.agents.breakdown)
-        .sort(([,a], [,b]) => b.total - a.total)
+        .sort(([, a], [, b]) => b.total - a.total)
         .slice(0, 5);
-      
+
       sortedAgents.forEach(([agent, data], index) => {
         const rank = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'][index] || '•';
         console.log(`   ${rank} ${agent}: ${data.total} tickets`);
@@ -180,8 +182,12 @@ class DailyTrackerCLI {
 
     // Show complexity and type distribution
     console.log('\n📊 TYPE DISTRIBUTION:');
-    console.log(`Features: ${report.typeDistribution.features} | Bugfixes: ${report.typeDistribution.bugfixes} | Refactoring: ${report.typeDistribution.refactoring}`);
-    console.log(`Documentation: ${report.typeDistribution.documentation} | Tests: ${report.typeDistribution.tests} | Infrastructure: ${report.typeDistribution.infrastructure}`);
+    console.log(
+      `Features: ${report.typeDistribution.features} | Bugfixes: ${report.typeDistribution.bugfixes} | Refactoring: ${report.typeDistribution.refactoring}`
+    );
+    console.log(
+      `Documentation: ${report.typeDistribution.documentation} | Tests: ${report.typeDistribution.tests} | Infrastructure: ${report.typeDistribution.infrastructure}`
+    );
 
     if (includeTimeline && report.timeline) {
       console.log('\n⏰ ACTIVITY TIMELINE:');
@@ -189,9 +195,7 @@ class DailyTrackerCLI {
       report.timeline.forEach(event => {
         const time = new Date(event.timestamp).toLocaleTimeString();
         const type = event.type === 'approval' ? '📋' : '🚀';
-        const details = event.type === 'push' && event.count > 1 
-          ? ` (${event.count} tickets)` 
-          : '';
+        const details = event.type === 'push' && event.count > 1 ? ` (${event.count} tickets)` : '';
         console.log(`${time} ${type} ${event.type} by ${event.agentId}${details}`);
       });
     }
@@ -223,13 +227,13 @@ class DailyTrackerCLI {
   }
 
   async resetTracker() {
-    console.log('⚠️  WARNING: This will reset today\'s counters!');
-    
+    console.log("⚠️  WARNING: This will reset today's counters!");
+
     // Simple confirmation
     const readline = require('readline');
     const rl = readline.createInterface({
       input: process.stdin,
-      output: process.stdout
+      output: process.stdout,
     });
 
     const answer = await new Promise(resolve => {
@@ -266,7 +270,9 @@ class DailyTrackerCLI {
     const interval = setInterval(async () => {
       process.stdout.write('\r' + ' '.repeat(80) + '\r'); // Clear line
       const stats = this.tracker.getCurrentStats();
-      process.stdout.write(`📊 Live: ${stats.summary.totalTickets} tickets | ${stats.agents.count} agents | ${stats.summary.productivity}/hr | ${new Date().toLocaleTimeString()}`);
+      process.stdout.write(
+        `📊 Live: ${stats.summary.totalTickets} tickets | ${stats.agents.count} agents | ${stats.summary.productivity}/hr | ${new Date().toLocaleTimeString()}`
+      );
     }, 5000);
 
     // Handle graceful shutdown

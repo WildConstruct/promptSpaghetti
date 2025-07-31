@@ -49,18 +49,21 @@ This document describes the comprehensive deployment approval gating system that
 #### Custom Actions Created
 
 **`.github/actions/request-approval/action.yml`**
+
 - Creates approval requests via API
 - Integrates with existing approval system
 - Posts PR comments with approval status
 - Creates GitHub checks for visibility
 
 **`.github/actions/wait-approval/action.yml`**
+
 - Polls for approval completion
 - Handles timeouts and escalation
 - Updates GitHub checks with progress
 - Supports cancellation and rejection
 
 **`.github/actions/check-approval-status/action.yml`**
+
 - Quick status checks for approval requests
 - Provides detailed approval progress
 - Extractable approval metadata
@@ -68,6 +71,7 @@ This document describes the comprehensive deployment approval gating system that
 #### Deployment Workflow
 
 **`.github/workflows/deployment-approval.yml`**
+
 - Triggered on main branch pushes
 - Environment-specific deployment gates
 - Auto-approval for eligible changes
@@ -80,12 +84,14 @@ This document describes the comprehensive deployment approval gating system that
 **`api/deployment-gate.js`** - Vercel serverless function providing:
 
 #### Core Features
+
 - Environment-specific approval validation
 - Auto-approval criteria evaluation
 - Real-time approval status checking
 - Integration with existing approval database
 
 #### Auto-Approval Conditions
+
 ```javascript
 const AUTO_APPROVAL_CONDITIONS = {
   production: {
@@ -94,18 +100,19 @@ const AUTO_APPROVAL_CONDITIONS = {
     maxRegressionPercent: 5,
     breakingChanges: false,
     maxChangedFiles: 10,
-    maxLinesChanged: 500
+    maxLinesChanged: 500,
   },
   staging: {
     testCoverage: 80,
     securityScan: 'passed',
     maxRegressionPercent: 15,
-    breakingChanges: true
-  }
+    breakingChanges: true,
+  },
 };
 ```
 
 #### API Endpoints
+
 - `GET /api/deployment-gate` - Check approval status
 - `POST /api/deployment-gate` - Validate and create approvals
 
@@ -114,25 +121,23 @@ const AUTO_APPROVAL_CONDITIONS = {
 **`server/src/config/deployment-approval-rules.ts`**
 
 #### Environment Rules
+
 ```typescript
 const DEPLOYMENT_APPROVAL_RULES = {
   production: {
     required: true,
     minimumApprovals: 2,
-    requiredCriteria: [
-      'security-review',
-      'performance-impact', 
-      'business-approval'
-    ],
+    requiredCriteria: ['security-review', 'performance-impact', 'business-approval'],
     escalationRules: [
       { triggerAfterHours: 4, escalateTo: ['engineering-manager'] },
-      { triggerAfterHours: 8, escalateTo: ['cto'] }
-    ]
-  }
+      { triggerAfterHours: 8, escalateTo: ['cto'] },
+    ],
+  },
 };
 ```
 
 #### Reviewer Assignment
+
 - **Automatic**: System-assigned based on expertise
 - **Round-robin**: Balanced workload distribution
 - **Load-balanced**: Assignment based on current capacity
@@ -141,9 +146,11 @@ const DEPLOYMENT_APPROVAL_RULES = {
 ### 4. Dashboard Integration
 
 #### Deployment Approval Dashboard
+
 **`packages/core/components/DeploymentApprovalDashboard.tsx`**
 
 Features:
+
 - Real-time deployment approval status
 - Environment-specific filtering
 - Progress tracking and metrics
@@ -151,7 +158,9 @@ Features:
 - Auto-refresh and live updates
 
 #### API Routes
+
 **`server/src/routes/deployment-approvals.ts`**
+
 - `GET /api/approval/deployment-requests` - List deployments
 - `POST /api/approval/deployment-requests` - Create approval
 - `GET /api/approval/deployment-requests/:id` - Get details
@@ -160,7 +169,9 @@ Features:
 ### 5. Configuration
 
 #### Vercel Integration
+
 Updated `vercel.json`:
+
 ```json
 {
   "functions": {
@@ -172,6 +183,7 @@ Updated `vercel.json`:
 ```
 
 #### Environment Variables Required
+
 - `APPROVAL_API_TOKEN` - Authentication for approval API
 - `VERCEL_TOKEN` - Vercel deployment token
 - `GITHUB_TOKEN` - GitHub API access
@@ -182,16 +194,18 @@ Updated `vercel.json`:
 ### Setting Up Approval Gating
 
 1. **Configure Environment Rules**
+
    ```typescript
    // Update deployment-approval-rules.ts
    const rules = {
      environment: 'production',
      minimumApprovals: 2,
-     requiredCriteria: ['security-review', 'business-approval']
+     requiredCriteria: ['security-review', 'business-approval'],
    };
    ```
 
 2. **Set Repository Secrets**
+
    ```bash
    # GitHub repository secrets
    APPROVAL_API_TOKEN=<your-api-token>
@@ -208,6 +222,7 @@ Updated `vercel.json`:
 ### Manual Deployment Approval
 
 1. **Trigger Workflow**
+
    ```bash
    # Manual workflow dispatch
    gh workflow run "Deployment Approval Gates" \
@@ -236,25 +251,28 @@ const autoApprovalCriteria = {
   performanceRegression: '< 5%',
   breakingChanges: false,
   changedFiles: '< 10',
-  businessHours: 'optional' // for production
+  businessHours: 'optional', // for production
 };
 ```
 
 ## Monitoring & Analytics
 
 ### Deployment Metrics
+
 - Approval request frequency and duration
 - Auto-approval success rates
 - Review time by environment and reviewer
 - Escalation patterns and bottlenecks
 
 ### Quality Metrics
+
 - Test coverage impact on approvals
 - Security scan effectiveness
 - Performance regression detection
 - Breaking change identification accuracy
 
 ### Dashboard Features
+
 - Real-time approval queue status
 - Reviewer workload distribution
 - Environment-specific approval rates
@@ -263,18 +281,21 @@ const autoApprovalCriteria = {
 ## Security Considerations
 
 ### Access Control
+
 - Approval reviewers assigned by role and expertise
 - Environment-specific permissions
 - Audit trail for all approval actions
 - Rate limiting on approval API endpoints
 
 ### Validation
+
 - Input sanitization on all approval data
 - SQL injection protection in database queries
 - CORS and authentication on all endpoints
 - Encrypted storage of sensitive approval metadata
 
 ### Compliance
+
 - Complete audit trail of deployment decisions
 - Reviewer assignment transparency
 - Approval criteria documentation
@@ -303,12 +324,14 @@ const autoApprovalCriteria = {
 ### Debugging
 
 1. **API Logs**
+
    ```bash
    # Check Vercel function logs
    vercel logs --follow api/deployment-gate
    ```
 
 2. **GitHub Actions**
+
    ```bash
    # Check workflow run status
    gh run list --workflow="Deployment Approval Gates"
@@ -317,14 +340,15 @@ const autoApprovalCriteria = {
 3. **Database Queries**
    ```sql
    -- Check approval request status
-   SELECT * FROM approval_requests 
-   WHERE resource_id LIKE 'deploy-%' 
+   SELECT * FROM approval_requests
+   WHERE resource_id LIKE 'deploy-%'
    ORDER BY created_at DESC;
    ```
 
 ## Integration Examples
 
 ### Custom Approval Criteria
+
 ```typescript
 // Add custom validation step
 const customCriterion = {
@@ -335,20 +359,21 @@ const customCriterion = {
     {
       name: 'Data Privacy Scan',
       automatable: true,
-      command: 'npm run privacy:scan'
-    }
-  ]
+      command: 'npm run privacy:scan',
+    },
+  ],
 };
 ```
 
 ### External Tool Integration
+
 ```yaml
 # GitHub Actions workflow extension
 - name: External Security Scan
   run: |
     # Integrate with external security tools
     security-scanner --format json > scan-results.json
-    
+
     # Update approval metadata
     curl -X POST /api/deployment-gate \
       -d "scan_results=$(cat scan-results.json)"
@@ -357,6 +382,7 @@ const customCriterion = {
 ## Future Enhancements
 
 ### Planned Features
+
 1. **Machine Learning**: Predictive approval recommendations
 2. **A/B Testing**: Approval criteria optimization
 3. **Integration**: Slack/Teams approval workflows
@@ -364,6 +390,7 @@ const customCriterion = {
 5. **Mobile**: Mobile app for approval reviews
 
 ### Extensibility
+
 - Plugin architecture for custom approval criteria
 - Webhook system for external tool integration
 - GraphQL API for advanced dashboard customization

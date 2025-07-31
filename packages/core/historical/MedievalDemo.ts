@@ -1,7 +1,7 @@
 /**
  * Medieval Demo Database Schema and Content
  * Epic 8.8: Historical Data Integration Foundation
- * 
+ *
  * Provides historically accurate medieval content for Wild Construct demo
  */
 import {
@@ -11,7 +11,7 @@ import {
   HistoricalConstraint,
   HISTORICAL_ERAS,
   SocialClass,
-  Variation
+  Variation,
 } from '../types/UTDG';
 
 /**
@@ -46,23 +46,32 @@ export class MedievalDemoDatabase {
   /**
    * Get clothing items by criteria
    */
-  getClothing(criteria: {
-    era?: Era;
-    social_class?: SocialClass;
-    gender?: 'male' | 'female' | 'unisex';
-    garment_type?: string;
-    ceremonial?: boolean;
-  } = {}): MedievalClothing[] {
+  getClothing(
+    criteria: {
+      era?: Era;
+      social_class?: SocialClass;
+      gender?: 'male' | 'female' | 'unisex';
+      garment_type?: string;
+      ceremonial?: boolean;
+    } = {}
+  ): MedievalClothing[] {
     return this.clothingDatabase.filter(item => {
       if (criteria.era && !this.eraMatches(item.metadata.era, criteria.era)) {
         return false;
       }
-      if (criteria.social_class &&
-          (!item.metadata.social_class || !item.metadata.social_class.includes(criteria.social_class))) {
+      if (
+        criteria.social_class &&
+        (!item.metadata.social_class || !item.metadata.social_class.includes(criteria.social_class))
+      ) {
         return false;
       }
-      if (criteria.gender && criteria.gender !== 'unisex' &&
-          item.metadata.gender && item.metadata.gender !== criteria.gender && item.metadata.gender !== 'unisex') {
+      if (
+        criteria.gender &&
+        criteria.gender !== 'unisex' &&
+        item.metadata.gender &&
+        item.metadata.gender !== criteria.gender &&
+        item.metadata.gender !== 'unisex'
+      ) {
         return false;
       }
       if (criteria.garment_type && item.medieval_specific.garment_type !== criteria.garment_type) {
@@ -78,11 +87,13 @@ export class MedievalDemoDatabase {
   /**
    * Get materials by criteria
    */
-  getMaterials(criteria: {
-    era?: Era;
-    fabric_type?: string;
-    availability?: 'common' | 'expensive' | 'rare'
-  } = {}): UTDGNode[] {
+  getMaterials(
+    criteria: {
+      era?: Era;
+      fabric_type?: string;
+      availability?: 'common' | 'expensive' | 'rare';
+    } = {}
+  ): UTDGNode[] {
     return this.materialDatabase.filter(item => {
       if (criteria.era && !this.eraMatches(item.metadata.era, criteria.era)) {
         return false;
@@ -97,17 +108,21 @@ export class MedievalDemoDatabase {
   /**
    * Get accessories by criteria
    */
-  getAccessories(criteria: {
-    era?: Era;
-    social_class?: SocialClass;
-    type?: string;
-  } = {}): UTDGNode[] {
+  getAccessories(
+    criteria: {
+      era?: Era;
+      social_class?: SocialClass;
+      type?: string;
+    } = {}
+  ): UTDGNode[] {
     return this.accessoryDatabase.filter(item => {
       if (criteria.era && !this.eraMatches(item.metadata.era, criteria.era)) {
         return false;
       }
-      if (criteria.social_class &&
-          (!item.metadata.social_class || !item.metadata.social_class.includes(criteria.social_class))) {
+      if (
+        criteria.social_class &&
+        (!item.metadata.social_class || !item.metadata.social_class.includes(criteria.social_class))
+      ) {
         return false;
       }
       return true;
@@ -122,7 +137,7 @@ export class MedievalDemoDatabase {
     social_class: SocialClass;
     gender: 'male' | 'female';
     occasion?: 'daily' | 'ceremonial' | 'work' | 'travel';
-    season?: 'spring' | 'summer' | 'autumn' | 'winter'
+    season?: 'spring' | 'summer' | 'autumn' | 'winter';
   }): {
     outfit: (MedievalClothing | UTDGNode)[];
     description: string;
@@ -136,24 +151,22 @@ export class MedievalDemoDatabase {
       era: criteria.era,
       social_class: criteria.social_class,
       gender: criteria.gender,
-    }).filter(item =>
-      item.medieval_specific.garment_type === 'chemise' || 
-      item.medieval_specific.garment_type === 'braies'
+    }).filter(
+      item => item.medieval_specific.garment_type === 'chemise' || item.medieval_specific.garment_type === 'braies'
     );
     if (undergarments.length > 0) {
       outfit.push(undergarments[0]);
       historical_notes.push('Medieval people wore linen undergarments for hygiene and warmth');
     }
-    
+
     // Main garment
     const mainGarments = this.getClothing({
       era: criteria.era,
       social_class: criteria.social_class,
       gender: criteria.gender,
       ceremonial: criteria.occasion === 'ceremonial',
-    }).filter(item =>
-      item.medieval_specific.garment_type === 'tunic' || 
-      item.medieval_specific.garment_type === 'gown'
+    }).filter(
+      item => item.medieval_specific.garment_type === 'tunic' || item.medieval_specific.garment_type === 'gown'
     );
     if (mainGarments.length > 0) {
       outfit.push(mainGarments[0]);
@@ -163,7 +176,7 @@ export class MedievalDemoDatabase {
         historical_notes.push('Peasant clothing was practical, made from coarse wool or hemp');
       }
     }
-    
+
     // Outer layer for cold weather
     if (criteria.season === 'winter' || criteria.season === 'autumn') {
       const cloaks = this.getClothing({
@@ -175,7 +188,7 @@ export class MedievalDemoDatabase {
         historical_notes.push('Cloaks were essential for warmth and weather protection');
       }
     }
-      
+
     // Accessories
     const accessories = this.getAccessories({
       era: criteria.era,
@@ -184,16 +197,16 @@ export class MedievalDemoDatabase {
     if (accessories.length > 0) {
       outfit.push(accessories[0]);
     }
-    
+
     // Generate description
     const description = this.generateOutfitDescription(outfit, criteria);
     return {
       outfit,
       description,
-      historical_notes
+      historical_notes,
     };
   }
-  
+
   /**
    * Initialize the medieval demo database with historically accurate content
    */
@@ -202,18 +215,19 @@ export class MedievalDemoDatabase {
     this.materialDatabase = this.createMedievalMaterials();
     this.accessoryDatabase = this.createMedievalAccessories();
   }
-  
+
   /**
    * Create medieval clothing database
    */
   private createMedievalClothing(): MedievalClothing[] {
     const clothing: MedievalClothing[] = [];
-    
+
     // Peasant Male Tunic
     clothing.push({
       id: 'medieval_peasant_male_tunic_001',
       type: 'garment',
-      content: 'A simple woolen tunic reaching to mid-thigh, made of coarse brown wool with minimal decoration. The sleeves are long and loose, practical for farm work.',
+      content:
+        'A simple woolen tunic reaching to mid-thigh, made of coarse brown wool with minimal decoration. The sleeves are long and loose, practical for farm work.',
       description: 'Basic peasant tunic for daily wear',
       metadata: {
         era: [MEDIEVAL_PERIODS.HIGH_MEDIEVAL],
@@ -241,9 +255,9 @@ export class MedievalDemoDatabase {
             type: 'condition',
             value: 'patched and mended',
             probability: 0.6,
-            era_specific: true
-          }
-        ]
+            era_specific: true,
+          },
+        ],
       },
       constraints: [],
       medieval_specific: {
@@ -252,15 +266,16 @@ export class MedievalDemoDatabase {
         fabric_type: 'wool',
         dye_availability: 'common',
         seasonal_use: 'all_season',
-      }
+      },
     });
-    
+
     // Noble Female Gown
     clothing.push({
       id: 'medieval_noble_female_gown_001',
       type: 'garment',
-      content: 'An elegant gown of fine blue wool with fitted bodice and flowing skirt reaching to the ankles. Decorated with embroidered trim and silver thread.',
-      description: 'Noble lady\'s formal gown',
+      content:
+        'An elegant gown of fine blue wool with fitted bodice and flowing skirt reaching to the ankles. Decorated with embroidered trim and silver thread.',
+      description: "Noble lady's formal gown",
       metadata: {
         era: [MEDIEVAL_PERIODS.HIGH_MEDIEVAL, MEDIEVAL_PERIODS.LATE_MEDIEVAL],
         authenticity: 0.95,
@@ -280,9 +295,9 @@ export class MedievalDemoDatabase {
             type: 'texture',
             value: 'silk imported from Byzantine',
             probability: 0.2,
-            era_specific: true
-          }
-        ]
+            era_specific: true,
+          },
+        ],
       },
       constraints: [],
       medieval_specific: {
@@ -292,15 +307,16 @@ export class MedievalDemoDatabase {
         dye_availability: 'expensive',
         seasonal_use: 'all_season',
         ceremonial_context: 'court',
-      }
+      },
     });
-    
+
     // Monk's Robe
     clothing.push({
       id: 'medieval_monk_robe_001',
       type: 'garment',
-      content: 'A simple brown woolen robe with wide sleeves and a rope belt. The fabric is rough and undyed, symbolizing humility and poverty.',
-      description: 'Benedictine monk\'s habit',
+      content:
+        'A simple brown woolen robe with wide sleeves and a rope belt. The fabric is rough and undyed, symbolizing humility and poverty.',
+      description: "Benedictine monk's habit",
       metadata: {
         era: [MEDIEVAL_PERIODS.HIGH_MEDIEVAL],
         authenticity: 0.98,
@@ -325,23 +341,24 @@ export class MedievalDemoDatabase {
         dye_availability: 'impossible',
         seasonal_use: 'all_season',
         ceremonial_context: 'religious',
-      }
+      },
     });
-    
+
     return clothing;
   }
-  
+
   /**
    * Create medieval materials database
    */
   private createMedievalMaterials(): UTDGNode[] {
     const materials: UTDGNode[] = [];
-    
+
     // Wool Material
     materials.push({
       id: 'medieval_wool_material_001',
       type: 'material',
-      content: 'Coarse woolen cloth woven from sheep\'s wool, the most common fabric in medieval Europe. Available in natural colors and dyed with local plants.',
+      content:
+        "Coarse woolen cloth woven from sheep's wool, the most common fabric in medieval Europe. Available in natural colors and dyed with local plants.",
       description: 'Basic wool fabric for medieval clothing',
       metadata: {
         era: [MEDIEVAL_PERIODS.EARLY_MEDIEVAL, MEDIEVAL_PERIODS.HIGH_MEDIEVAL, MEDIEVAL_PERIODS.LATE_MEDIEVAL],
@@ -369,17 +386,18 @@ export class MedievalDemoDatabase {
             probability: 0.6,
             era_specific: true,
             social_class: ['peasant'],
-          }
-        ]
+          },
+        ],
       },
-      constraints: []
+      constraints: [],
     });
-    
+
     // Linen Material
     materials.push({
       id: 'medieval_linen_material_001',
       type: 'material',
-      content: 'Fine linen cloth woven from flax fibers, prized for undergarments and shirts. Naturally white or cream colored, sometimes bleached.',
+      content:
+        'Fine linen cloth woven from flax fibers, prized for undergarments and shirts. Naturally white or cream colored, sometimes bleached.',
       description: 'Linen fabric for medieval undergarments',
       metadata: {
         era: [MEDIEVAL_PERIODS.HIGH_MEDIEVAL, MEDIEVAL_PERIODS.LATE_MEDIEVAL],
@@ -393,18 +411,18 @@ export class MedievalDemoDatabase {
         incompatible: ['medieval_peasant_only_001'],
         variations: [],
       },
-      constraints: []
+      constraints: [],
     });
-    
+
     return materials;
   }
-  
+
   /**
    * Create medieval accessories database
    */
   private createMedievalAccessories(): UTDGNode[] {
     const accessories: UTDGNode[] = [];
-    
+
     // Leather Belt
     accessories.push({
       id: 'medieval_leather_belt_001',
@@ -427,45 +445,45 @@ export class MedievalDemoDatabase {
             type: 'decoration',
             value: 'bronze buckle with decoration',
             probability: 0.3,
-            social_class: ['merchant', 'noble']
-          }
-        ]
+            social_class: ['merchant', 'noble'],
+          },
+        ],
       },
-      constraints: []
+      constraints: [],
     });
-    
+
     return accessories;
   }
-  
+
   /**
    * Check if era matches criteria
    */
   private eraMatches(itemEras: Era[], targetEra: Era): boolean {
-    return itemEras.some(era => 
-      era.name === targetEra.name ||
-      (era.period.start <= targetEra.period.end && era.period.end >= targetEra.period.start)
+    return itemEras.some(
+      era =>
+        era.name === targetEra.name ||
+        (era.period.start <= targetEra.period.end && era.period.end >= targetEra.period.start)
     );
   }
 
   /**
    * Generate outfit description
    */
-  private generateOutfitDescription(
-    outfit: (MedievalClothing | UTDGNode)[],
-    criteria: any
-  ): string {
+  private generateOutfitDescription(outfit: (MedievalClothing | UTDGNode)[], criteria: any): string {
     const garmentNames = outfit.map(item => {
       if ('medieval_specific' in item) {
         return item.medieval_specific.garment_type;
       }
       return item.type;
     });
-    
+
     const socialClass = criteria.social_class;
     const gender = criteria.gender;
     const era = criteria.era.name;
-    return `A ${era} ${gender} ${socialClass} wearing ${garmentNames.join(', ')}. ` +
-           'This outfit reflects the social status, practical needs, and fashion conventions of the period.';
+    return (
+      `A ${era} ${gender} ${socialClass} wearing ${garmentNames.join(', ')}. ` +
+      'This outfit reflects the social status, practical needs, and fashion conventions of the period.'
+    );
   }
 }
 
@@ -478,33 +496,33 @@ export const MEDIEVAL_DEMO_CONSTRAINTS: HistoricalConstraint[] = [
     rule: 'era_compatibility',
     eras: [
       { name: 'High Medieval', period: { start: 1000, end: 1300 }, region: ['Europe'], accuracy: 'high' as const },
-      { name: 'Late Medieval', period: { start: 1300, end: 1500 }, region: ['Europe'], accuracy: 'high' as const }
+      { name: 'Late Medieval', period: { start: 1300, end: 1500 }, region: ['Europe'], accuracy: 'high' as const },
     ],
     enforcement: 'strict' as const,
     message: 'Clothing items should match medieval period accuracy',
-    historical_basis: 'Medieval clothing was highly regulated by sumptuary laws and social class distinctions'
+    historical_basis: 'Medieval clothing was highly regulated by sumptuary laws and social class distinctions',
   },
   {
     id: 'medieval-material-availability',
     rule: 'material_availability',
     eras: [
-      { name: 'Medieval Period', period: { start: 1000, end: 1500 }, region: ['Europe'], accuracy: 'high' as const }
+      { name: 'Medieval Period', period: { start: 1000, end: 1500 }, region: ['Europe'], accuracy: 'high' as const },
     ],
     enforcement: 'warning' as const,
     message: 'Some materials may have been rare or unavailable in medieval Europe',
-    historical_basis: 'Trade routes and material availability varied significantly in medieval times'
+    historical_basis: 'Trade routes and material availability varied significantly in medieval times',
   },
   {
     id: 'social-class-restrictions',
     rule: 'social_class_appropriateness',
     eras: [
-      { name: 'Medieval Period', period: { start: 1000, end: 1500 }, region: ['Europe'], accuracy: 'high' as const }
+      { name: 'Medieval Period', period: { start: 1000, end: 1500 }, region: ['Europe'], accuracy: 'high' as const },
     ],
     social_classes: ['peasant', 'artisan', 'merchant', 'noble'] as const,
     enforcement: 'suggestion' as const,
     message: 'Consider social class appropriateness for clothing and accessories',
-    historical_basis: 'Medieval society had strict hierarchies reflected in clothing and possessions'
-  }
+    historical_basis: 'Medieval society had strict hierarchies reflected in clothing and possessions',
+  },
 ];
 
 export default MedievalDemoDatabase;

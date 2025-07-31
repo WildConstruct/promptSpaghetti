@@ -59,20 +59,16 @@ export class ParameterMappingSystem {
   /**
    * Map parameters from one platform to another
    */
-  mapParameters(
-    sourceParams: Record<string, any>,
-    fromPlatform: Platform,
-    toPlatform: Platform
-  ): MappingResult {
+  mapParameters(sourceParams: Record<string, any>, fromPlatform: Platform, toPlatform: Platform): MappingResult {
     const key = `${fromPlatform}->${toPlatform}`;
     const ruleSet = this.ruleSets.get(key);
-    
+
     if (!ruleSet) {
       return {
         mappedParameters: { ...sourceParams },
         warnings: [`No mapping rules defined for ${fromPlatform} -> ${toPlatform}`],
         incompatible: [],
-        transformations: []
+        transformations: [],
       };
     }
 
@@ -80,34 +76,30 @@ export class ParameterMappingSystem {
       mappedParameters: { ...ruleSet.defaultParameters },
       warnings: [],
       incompatible: [],
-      transformations: []
+      transformations: [],
     };
 
     // Apply mappings
     for (const [sourceParam, sourceValue] of Object.entries(sourceParams)) {
       const mapping = ruleSet.mappings.find(m => m.sourceParam === sourceParam);
-      
+
       if (mapping) {
         // Check condition if present
         if (mapping.condition && !mapping.condition(sourceParams)) {
-          result.warnings.push(
-            `Parameter ${sourceParam} mapping skipped due to condition`
-          );
+          result.warnings.push(`Parameter ${sourceParam} mapping skipped due to condition`);
           continue;
         }
 
         // Apply transformation
         let targetValue = sourceValue;
         let transformationDesc = 'Direct mapping';
-        
+
         if (mapping.transform) {
           try {
             targetValue = mapping.transform(sourceValue);
             transformationDesc = 'Custom transformation';
           } catch (error) {
-            result.warnings.push(
-              `Failed to transform ${sourceParam}: ${error}`
-            );
+            result.warnings.push(`Failed to transform ${sourceParam}: ${error}`);
             continue;
           }
         }
@@ -118,14 +110,12 @@ export class ParameterMappingSystem {
           targetParam: mapping.targetParam,
           sourceValue,
           targetValue,
-          transformation: transformationDesc
+          transformation: transformationDesc,
         });
       } else if (ruleSet.incompatibleParameters?.includes(sourceParam)) {
         result.incompatible.push(sourceParam);
       } else {
-        result.warnings.push(
-          `No mapping found for parameter: ${sourceParam}`
-        );
+        result.warnings.push(`No mapping found for parameter: ${sourceParam}`);
       }
     }
 
@@ -155,19 +145,19 @@ export class ParameterMappingSystem {
           sourceParam: 'aspect_ratio',
           targetParam: 'size',
           transform: this.aspectRatioToSize,
-          description: 'Convert aspect ratio to DALL-E size format'
+          description: 'Convert aspect ratio to DALL-E size format',
         },
         {
           sourceParam: 'stylize',
           targetParam: 'style',
-          transform: (value: number) => value > 500 ? 'vivid' : 'natural',
-          description: 'Map stylization level to DALL-E style'
+          transform: (value: number) => (value > 500 ? 'vivid' : 'natural'),
+          description: 'Map stylization level to DALL-E style',
         },
         {
           sourceParam: 'quality',
           targetParam: 'quality',
-          transform: (value: number) => value >= 1 ? 'hd' : 'standard',
-          description: 'Map quality level to DALL-E quality'
+          transform: (value: number) => (value >= 1 ? 'hd' : 'standard'),
+          description: 'Map quality level to DALL-E quality',
         },
         {
           sourceParam: 'version',
@@ -176,17 +166,17 @@ export class ParameterMappingSystem {
             if (value === 'v6' || value === 'v5.2') return 'dall-e-3';
             return 'dall-e-2';
           },
-          description: 'Map Midjourney version to DALL-E model'
-        }
+          description: 'Map Midjourney version to DALL-E model',
+        },
       ],
       defaultParameters: {
         model: 'dall-e-3',
         size: '1024x1024',
         quality: 'standard',
         style: 'vivid',
-        n: 1
+        n: 1,
       },
-      incompatibleParameters: ['chaos', 'weird', 'tile']
+      incompatibleParameters: ['chaos', 'weird', 'tile'],
     });
 
     // DALL-E to Midjourney mappings
@@ -198,34 +188,34 @@ export class ParameterMappingSystem {
           sourceParam: 'size',
           targetParam: 'aspect_ratio',
           transform: this.sizeToAspectRatio,
-          description: 'Convert DALL-E size to aspect ratio'
+          description: 'Convert DALL-E size to aspect ratio',
         },
         {
           sourceParam: 'style',
           targetParam: 'stylize',
-          transform: (value: string) => value === 'vivid' ? 200 : 100,
-          description: 'Map DALL-E style to stylization level'
+          transform: (value: string) => (value === 'vivid' ? 200 : 100),
+          description: 'Map DALL-E style to stylization level',
         },
         {
           sourceParam: 'quality',
           targetParam: 'quality',
-          transform: (value: string) => value === 'hd' ? 2 : 1,
-          description: 'Map DALL-E quality to Midjourney quality'
+          transform: (value: string) => (value === 'hd' ? 2 : 1),
+          description: 'Map DALL-E quality to Midjourney quality',
         },
         {
           sourceParam: 'model',
           targetParam: 'version',
-          transform: (value: string) => value === 'dall-e-3' ? 'v6' : 'v5',
-          description: 'Map DALL-E model to Midjourney version'
-        }
+          transform: (value: string) => (value === 'dall-e-3' ? 'v6' : 'v5'),
+          description: 'Map DALL-E model to Midjourney version',
+        },
       ],
       defaultParameters: {
         aspect_ratio: '1:1',
         stylize: 100,
         quality: 1,
-        version: 'v6'
+        version: 'v6',
       },
-      incompatibleParameters: ['n', 'response_format']
+      incompatibleParameters: ['n', 'response_format'],
     });
 
     // Universal text-to-image mappings
@@ -240,27 +230,27 @@ export class ParameterMappingSystem {
             // This would need access to height parameter - simplified for now
             return '1:1';
           },
-          condition: (params) => 'height' in params,
-          description: 'Convert width/height to aspect ratio'
+          condition: params => 'height' in params,
+          description: 'Convert width/height to aspect ratio',
         },
         {
           sourceParam: 'style_strength',
           targetParam: 'stylize',
           transform: (value: number) => Math.round(value * 1000),
-          description: 'Convert normalized style strength to Midjourney stylize'
+          description: 'Convert normalized style strength to Midjourney stylize',
         },
         {
           sourceParam: 'detail_level',
           targetParam: 'quality',
           transform: (value: number) => Math.max(0.25, Math.min(2, value)),
-          description: 'Map detail level to quality parameter'
-        }
+          description: 'Map detail level to quality parameter',
+        },
       ],
       defaultParameters: {
         aspect_ratio: '1:1',
         stylize: 100,
-        version: 'v6'
-      }
+        version: 'v6',
+      },
     });
 
     this.registerMappingRuleSet({
@@ -274,28 +264,28 @@ export class ParameterMappingSystem {
             // This would need access to height parameter - simplified for now
             return '1024x1024';
           },
-          condition: (params) => 'height' in params,
-          description: 'Convert width/height to DALL-E size'
+          condition: params => 'height' in params,
+          description: 'Convert width/height to DALL-E size',
         },
         {
           sourceParam: 'style_strength',
           targetParam: 'style',
-          transform: (value: number) => value > 0.5 ? 'vivid' : 'natural',
-          description: 'Convert style strength to DALL-E style'
+          transform: (value: number) => (value > 0.5 ? 'vivid' : 'natural'),
+          description: 'Convert style strength to DALL-E style',
         },
         {
           sourceParam: 'detail_level',
           targetParam: 'quality',
-          transform: (value: number) => value > 0.5 ? 'hd' : 'standard',
-          description: 'Map detail level to quality'
-        }
+          transform: (value: number) => (value > 0.5 ? 'hd' : 'standard'),
+          description: 'Map detail level to quality',
+        },
       ],
       defaultParameters: {
         model: 'dall-e-3',
         size: '1024x1024',
         quality: 'standard',
-        style: 'vivid'
-      }
+        style: 'vivid',
+      },
     });
   }
 
@@ -310,7 +300,7 @@ export class ParameterMappingSystem {
       '4:5': '1024x1792', // Portrait
       '5:4': '1792x1024', // Landscape
       '16:9': '1792x1024', // Widescreen
-      '9:16': '1024x1792'  // Vertical
+      '9:16': '1024x1792', // Vertical
     };
 
     return ratioMap[aspectRatio] || '1024x1024';
@@ -325,7 +315,7 @@ export class ParameterMappingSystem {
       '512x512': '1:1',
       '1024x1024': '1:1',
       '1792x1024': '16:9',
-      '1024x1792': '9:16'
+      '1024x1792': '9:16',
     };
 
     return sizeMap[size] || '1:1';
@@ -342,10 +332,10 @@ export class ParameterMappingSystem {
     // Round to common aspect ratios
     const ratio = w / h;
     if (Math.abs(ratio - 1) < 0.1) return '1:1';
-    if (Math.abs(ratio - 16/9) < 0.1) return '16:9';
-    if (Math.abs(ratio - 9/16) < 0.1) return '9:16';
-    if (Math.abs(ratio - 4/3) < 0.1) return '4:3';
-    if (Math.abs(ratio - 3/4) < 0.1) return '3:4';
+    if (Math.abs(ratio - 16 / 9) < 0.1) return '16:9';
+    if (Math.abs(ratio - 9 / 16) < 0.1) return '9:16';
+    if (Math.abs(ratio - 4 / 3) < 0.1) return '4:3';
+    if (Math.abs(ratio - 3 / 4) < 0.1) return '3:4';
 
     return `${w}:${h}`;
   }
@@ -359,7 +349,7 @@ export class ParameterMappingSystem {
     if (Math.abs(ratio - 1) < 0.1) return '1024x1024';
     if (ratio > 1.3) return '1792x1024'; // Landscape
     if (ratio < 0.7) return '1024x1792'; // Portrait
-    
+
     return '1024x1024'; // Default square
   }
 

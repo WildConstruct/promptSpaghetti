@@ -16,9 +16,4 @@ export * from './components/MobileGraphCanvas';
 export * from './layouts/MobileAppLayout';
 
 // Re-export responsive utilities for mobile use
-export {
-  useDeviceDetection,
-  useBreakpointValue,
-  useEnhancedResponsive,
-  useVisibility
-} from '../responsive/utilities';
+export { useDeviceDetection, useBreakpointValue, useEnhancedResponsive, useVisibility } from '../responsive/utilities';

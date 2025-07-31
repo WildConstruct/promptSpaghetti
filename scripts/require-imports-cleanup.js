@@ -41,10 +41,13 @@ function fixRequireImports(content, filePath) {
   });
 
   // Pattern 2: const { destructured } = require('module')
-  fixed = fixed.replace(/const\s*\{\s*([^}]+)\s*\}\s*=\s*require\(['"`]([^'"`]+)['"`]\)/g, (match, destructured, modulePath) => {
-    changes++;
-    return `import { ${destructured.trim()} } from '${modulePath}'`;
-  });
+  fixed = fixed.replace(
+    /const\s*\{\s*([^}]+)\s*\}\s*=\s*require\(['"`]([^'"`]+)['"`]\)/g,
+    (match, destructured, modulePath) => {
+      changes++;
+      return `import { ${destructured.trim()} } from '${modulePath}'`;
+    }
+  );
 
   // Pattern 3: import = require() (TypeScript style)
   fixed = fixed.replace(/import\s+(\w+)\s*=\s*require\(['"`]([^'"`]+)['"`]\)/g, (match, varName, modulePath) => {
@@ -62,10 +65,10 @@ function fixRequireImports(content, filePath) {
 async function processFile(filePath) {
   try {
     if (!fs.existsSync(filePath)) return 0;
-    
+
     const content = fs.readFileSync(filePath, 'utf8');
     const { content: newContent, changes } = fixRequireImports(content, filePath);
-    
+
     if (changes > 0) {
       fs.writeFileSync(filePath, newContent);
       console.log(`   ✅ Fixed ${changes} require imports in: ${path.basename(filePath)}`);
@@ -111,10 +114,12 @@ async function main() {
   console.log('\n🔄 Checking impact...');
   const finalViolations = getRequireViolations();
   console.log(`📉 Require import violations: ${finalViolations.length} (was ${initialViolations.length})`);
-  
+
   const improvement = initialViolations.length - finalViolations.length;
   if (improvement > 0) {
-    console.log(`✅ Reduced require import violations by ${improvement} (${Math.round(improvement/initialViolations.length*100)}%)`);
+    console.log(
+      `✅ Reduced require import violations by ${improvement} (${Math.round((improvement / initialViolations.length) * 100)}%)`
+    );
   }
 }
 

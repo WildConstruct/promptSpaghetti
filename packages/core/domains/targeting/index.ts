@@ -1,7 +1,7 @@
 /**
  * Targeting Domain - Main Export
  * REFACTOR-005: Domain-Driven Architecture
- * 
+ *
  * Main entry point for the targeting domain (Epic 17 - Advanced Targeting)
  */
 
@@ -16,6 +16,6 @@ export const createTargetingDomain = (config?: any) => {
     hooks: {},
     services: {},
     events: {},
-    utils: {}
+    utils: {},
   };
 };

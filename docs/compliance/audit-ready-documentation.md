@@ -1,6 +1,7 @@
 # Audit-Ready Documentation Package
 
 ## Document Control
+
 - **Document ID**: ARD-2025-001
 - **Version**: 1.0
 - **Date**: July 22, 2025
@@ -34,6 +35,7 @@ As Chief Executive Officer of Wild Construct, I hereby assert and certify that:
 ### Specific Framework Assertions
 
 #### GDPR Compliance (EU General Data Protection Regulation)
+
 - ✅ All data processing activities have documented legal basis
 - ✅ Data subject rights mechanisms are operational and effective
 - ✅ Data Protection Officer is appointed and fulfilling duties
@@ -41,6 +43,7 @@ As Chief Executive Officer of Wild Construct, I hereby assert and certify that:
 - ✅ Privacy-by-design principles are embedded in system development
 
 #### ISO 27001 Information Security Management
+
 - ✅ Information Security Management System (ISMS) is certified and operational
 - ✅ All 114 Annex A controls have been implemented as applicable
 - ✅ Risk treatment plans are current and effectively implemented
@@ -48,6 +51,7 @@ As Chief Executive Officer of Wild Construct, I hereby assert and certify that:
 - ✅ Continuous improvement processes are active and effective
 
 #### Sarbanes-Oxley Act (SOX) Compliance
+
 - ✅ Internal controls over financial reporting are designed and operating effectively
 - ✅ Management assessment of ICFR effectiveness completed for fiscal year 2024
 - ✅ No material weaknesses in internal controls identified
@@ -59,27 +63,30 @@ As Chief Executive Officer of Wild Construct, I hereby assert and certify that:
 Based on our evaluation as of June 30, 2025, management has identified the following control deficiencies:
 
 **Minor Deficiency - Software Vulnerability Management (A.12.6.1)**
-- *Description*: Patch deployment tracking automation requires enhancement
-- *Impact*: Low - No security incidents related to unpatched vulnerabilities
-- *Remediation*: Enhancement project 75% complete, due August 15, 2025
-- *Responsible Owner*: Chief Information Security Officer
 
-**Documentation Gap - Incident Analysis (A.16.1.7)**  
-- *Description*: Incident analysis documentation template needs updating
-- *Impact*: Very Low - Incident analysis continues effectively
-- *Remediation*: Template update 90% complete, due July 31, 2025
-- *Responsible Owner*: Incident Response Team Lead
+- _Description_: Patch deployment tracking automation requires enhancement
+- _Impact_: Low - No security incidents related to unpatched vulnerabilities
+- _Remediation_: Enhancement project 75% complete, due August 15, 2025
+- _Responsible Owner_: Chief Information Security Officer
+
+**Documentation Gap - Incident Analysis (A.16.1.7)**
+
+- _Description_: Incident analysis documentation template needs updating
+- _Impact_: Very Low - Incident analysis continues effectively
+- _Remediation_: Template update 90% complete, due July 31, 2025
+- _Responsible Owner_: Incident Response Team Lead
 
 ### Management Conclusion
 
 Based on our assessment, we conclude that our compliance controls are effective and provide reasonable assurance that:
+
 - Applicable laws and regulations are being complied with
 - Financial reporting is reliable and accurate
 - Information assets are appropriately protected
 - Privacy rights are respected and protected
 - Regulatory requirements are met in all material respects
 
-**Chief Executive Officer Signature**: ________________________  
+**Chief Executive Officer Signature**: **********\_\_\_\_**********  
 **Date**: July 22, 2025
 
 ---
@@ -101,6 +108,7 @@ Based on our assessment, we conclude that our compliance controls are effective 
 | PA-006 | Customer Support | Art. 6(1)(b) Contract | Personal data, Communication records | Support + 3 years | Jun 2025 ✅ |
 
 **Evidence Available**:
+
 - ✅ Processing activity register (current as of June 2025)
 - ✅ Legal basis assessment documentation
 - ✅ Data flow mapping diagrams
@@ -120,6 +128,7 @@ Based on our assessment, we conclude that our compliance controls are effective 
 | Staff Training | ✅ Implemented | Training records | Q2 2025 | 100% completion |
 
 **Evidence Available**:
+
 - ✅ Security architecture documentation
 - ✅ Encryption implementation records
 - ✅ Access control configuration exports
@@ -136,6 +145,7 @@ Based on our assessment, we conclude that our compliance controls are effective 
 | INC-2025-003 | May 8 | 12 | Low - Email misconfiguration | Not required | Not required |
 
 **Evidence Available**:
+
 - ✅ Breach assessment forms for all incidents
 - ✅ 72-hour notification decision documentation
 - ✅ Incident response timeline records
@@ -146,6 +156,7 @@ Based on our assessment, we conclude that our compliance controls are effective 
 #### A.9 Access Control Implementation
 
 **A.9.2.1 User Registration and Deregistration**
+
 - **Evidence Type**: Process documentation + System reports
 - **Implementation Date**: January 2024
 - **Last Review**: April 2025
@@ -154,32 +165,36 @@ Based on our assessment, we conclude that our compliance controls are effective 
 **Control Description**: Formal user registration and deregistration process ensures appropriate access provisioning and timely access removal.
 
 **Evidence Package**:
+
 1. **Policy Documentation**: User Access Management Policy v2.3
 2. **Procedure Documents**: User Onboarding/Offboarding Procedures v1.8
-3. **System Reports**: 
+3. **System Reports**:
    - Monthly access provisioning reports (Jan-Jun 2025)
    - Terminated employee access removal reports
    - Exception reports for delayed access removal
 4. **Test Results**: Access control testing results (Q1-Q2 2025)
 
 **Control Effectiveness Metrics**:
+
 - Average access provisioning time: 2.3 hours (Target: <4 hours)
 - Average access removal time: 47 minutes (Target: <2 hours)
 - Access review completion rate: 100% (Target: 100%)
 - Exception rate: 0.8% (Target: <2%)
 
 **A.9.2.6 Removal of Access Rights**
+
 - **Control Status**: ✅ Effective
 - **Testing Frequency**: Monthly
 - **Last Exception**: None (June 2025)
 
 **Detailed Evidence**:
+
 ```
 Employee Termination Test - June 2025
 Test Sample: 12 terminated employees
 Results:
 - Active Directory account disabled: 12/12 (100%) - Avg 23 minutes
-- Application access removed: 12/12 (100%) - Avg 41 minutes  
+- Application access removed: 12/12 (100%) - Avg 41 minutes
 - VPN access revoked: 12/12 (100%) - Avg 15 minutes
 - Physical access deactivated: 12/12 (100%) - Avg 67 minutes
 Overall Compliance: 100%
@@ -188,6 +203,7 @@ Overall Compliance: 100%
 #### A.12 Operations Security
 
 **A.12.4.1 Event Logging**
+
 - **Control Implementation**: Comprehensive logging across all systems
 - **Log Retention**: 2 years (regulatory requirement compliance)
 - **Monitoring**: 24/7 SIEM monitoring with automated alerting
@@ -208,6 +224,7 @@ Overall Compliance: 100%
 **Control Objective**: Ensure all changes to production systems are authorized, tested, and properly implemented to maintain system integrity and financial reporting reliability.
 
 **Control Procedures**:
+
 1. **Change Request Process**
    - All changes require formal change request (CR) submission
    - Business justification and risk assessment required
@@ -215,7 +232,7 @@ Overall Compliance: 100%
 
 2. **Change Approval Process**
    - Business stakeholder approval for functional changes
-   - IT management approval for technical changes  
+   - IT management approval for technical changes
    - Change Advisory Board (CAB) approval for high-risk changes
    - Emergency change process with retroactive approval
 
@@ -232,6 +249,7 @@ Overall Compliance: 100%
    - Post-implementation validation required
 
 **Evidence Package Available**:
+
 - ✅ Change management policy document (v3.1, April 2025)
 - ✅ Change request forms and approval documentation (Q1-Q2 2025: 127 changes)
 - ✅ Testing evidence and sign-off documentation
@@ -241,6 +259,7 @@ Overall Compliance: 100%
 - ✅ System access audit trails for change implementation
 
 **Control Testing Results (Q2 2025)**:
+
 - Sample Size: 25 changes (20% of total changes)
 - Changes with proper authorization: 25/25 (100%)
 - Changes with adequate testing: 25/25 (100%)
@@ -252,6 +271,7 @@ Overall Compliance: 100%
 **Control Objective**: Ensure only authorized individuals have access to IT systems and financial applications, and that access is appropriate for job responsibilities.
 
 **Access Provisioning Controls**:
+
 - Role-based access control (RBAC) implementation
 - Principle of least privilege enforcement
 - Segregation of duties matrix for financial processes
@@ -259,6 +279,7 @@ Overall Compliance: 100%
 - Manager attestation for access appropriateness
 
 **Access Review Controls**:
+
 - Quarterly access reviews by application owners
 - Annual comprehensive access certification
 - Terminated employee access removal monitoring
@@ -266,6 +287,7 @@ Overall Compliance: 100%
 - Exception reporting and remediation tracking
 
 **Evidence Available**:
+
 - ✅ Access control policy and procedures (v2.4, March 2025)
 - ✅ Role definitions and segregation of duties matrix
 - ✅ Q2 2025 quarterly access review results:
@@ -288,13 +310,14 @@ Overall Compliance: 100%
 
 #### Executive Summary
 
-Management has conducted an evaluation of the effectiveness of Wild Construct's internal controls over financial reporting as of December 31, 2024, based on the framework established in *Internal Control - Integrated Framework* issued by the Committee of Sponsoring Organizations of the Treadway Commission (2013 COSO Framework).
+Management has conducted an evaluation of the effectiveness of Wild Construct's internal controls over financial reporting as of December 31, 2024, based on the framework established in _Internal Control - Integrated Framework_ issued by the Committee of Sponsoring Organizations of the Treadway Commission (2013 COSO Framework).
 
 #### Scope of Assessment
 
 The assessment covered controls over the following financial statement areas:
+
 - Revenue recognition and accounts receivable
-- Accounts payable and accrued expenses  
+- Accounts payable and accrued expenses
 - Payroll and employee benefits
 - Fixed assets and depreciation
 - Cash and cash equivalents
@@ -303,6 +326,7 @@ The assessment covered controls over the following financial statement areas:
 #### Entity-Level Controls Assessment
 
 **Control Environment**
+
 - ✅ Board independence and oversight effectiveness confirmed
 - ✅ Management philosophy and operating style assessment completed
 - ✅ Organizational structure and assignment of authority verified
@@ -310,12 +334,14 @@ The assessment covered controls over the following financial statement areas:
 - ✅ Code of conduct acknowledgment 100% completion
 
 **Risk Assessment Process**
+
 - ✅ Financial reporting risk identification process documented
 - ✅ Risk assessment updated for business changes
 - ✅ Risk mitigation strategies implemented and monitored
 - ✅ Fraud risk assessment conducted and documented
 
 **Information Systems**
+
 - ✅ IT general controls assessment completed (no material weaknesses)
 - ✅ Application controls testing performed (effective)
 - ✅ Data integrity and completeness validated
@@ -324,12 +350,14 @@ The assessment covered controls over the following financial statement areas:
 #### Process-Level Controls Assessment
 
 **Revenue Recognition**
+
 - ✅ Contract review and approval process effective
 - ✅ Revenue cut-off procedures tested and operating effectively
 - ✅ Revenue recognition policy compliant with ASC 606
 - ✅ Billing system controls preventing duplicate/erroneous billing
 
-**Financial Close Process**  
+**Financial Close Process**
+
 - ✅ Month-end close procedures documented and followed
 - ✅ Account reconciliations completed timely and reviewed
 - ✅ Journal entry controls preventing unauthorized entries
@@ -339,19 +367,20 @@ The assessment covered controls over the following financial statement areas:
 
 **Material Weaknesses**: None identified
 
-**Significant Deficiencies**: None identified  
+**Significant Deficiencies**: None identified
 
 **Minor Control Deficiencies**:
+
 1. **Manual Journal Entry Review Process**: While effective, the manual review process for journal entries >$10,000 could benefit from system-enforced approval workflows.
-   - *Management Response*: System enhancement planned for Q3 2025
-   - *Risk Rating*: Low
-   - *Compensating Controls*: Monthly controller review of all journal entries
+   - _Management Response_: System enhancement planned for Q3 2025
+   - _Risk Rating_: Low
+   - _Compensating Controls_: Monthly controller review of all journal entries
 
 #### Management Conclusion
 
 Based on our assessment, we conclude that Wild Construct maintained effective internal controls over financial reporting as of December 31, 2024, and throughout fiscal year 2024.
 
-**Chief Financial Officer Signature**: ________________________  
+**Chief Financial Officer Signature**: **********\_\_\_\_**********  
 **Date**: March 15, 2025
 
 ---
@@ -368,6 +397,7 @@ Based on our assessment, we conclude that Wild Construct maintained effective in
 #### Assessment Scope
 
 **Systems Assessed**:
+
 - Wild Construct production environment (AWS cloud infrastructure)
 - Customer-facing web applications and APIs
 - Internal administrative systems and databases
@@ -375,6 +405,7 @@ Based on our assessment, we conclude that Wild Construct maintained effective in
 - Employee workstations and mobile devices (sample)
 
 **Assessment Methodology**:
+
 - Document review and gap analysis
 - Technical configuration reviews
 - Penetration testing (external and internal)
@@ -392,6 +423,7 @@ Based on our assessment, we conclude that Wild Construct maintained effective in
 #### Detailed Assessment Results
 
 **Infrastructure Security**
+
 - ✅ Network segmentation properly implemented
 - ✅ Firewall configurations follow security baselines
 - ✅ Intrusion detection/prevention systems effective
@@ -399,6 +431,7 @@ Based on our assessment, we conclude that Wild Construct maintained effective in
 - ⚠️ **Finding**: One Windows server missing latest security patches (Remediated 4/12/2025)
 
 **Application Security**
+
 - ✅ Web application security controls effective
 - ✅ API security implementation follows OWASP standards
 - ✅ Authentication and authorization controls robust
@@ -406,6 +439,7 @@ Based on our assessment, we conclude that Wild Construct maintained effective in
 - ⚠️ **Finding**: Minor XSS vulnerability in admin panel (Low impact, remediated 4/14/2025)
 
 **Data Protection**
+
 - ✅ Encryption implementation exceeds requirements (AES-256)
 - ✅ Key management practices follow industry standards
 - ✅ Database access controls properly configured
@@ -413,6 +447,7 @@ Based on our assessment, we conclude that Wild Construct maintained effective in
 - ✅ Data retention and deletion policies implemented
 
 **Access Management**
+
 - ✅ Identity and access management system well-configured
 - ✅ Multi-factor authentication enforced for privileged accounts
 - ✅ Regular access reviews conducted and documented
@@ -420,6 +455,7 @@ Based on our assessment, we conclude that Wild Construct maintained effective in
 - ⚠️ **Finding**: Two service accounts with excessive privileges (Remediated 4/13/2025)
 
 **Incident Response**
+
 - ✅ Incident response plan current and comprehensive
 - ✅ Incident response team trained and capable
 - ✅ Incident detection capabilities effective
@@ -429,14 +465,16 @@ Based on our assessment, we conclude that Wild Construct maintained effective in
 #### Penetration Testing Results
 
 **External Testing**:
+
 - **Scope**: Public-facing systems and applications
 - **Duration**: 40 hours over 5 days
 - **Critical Findings**: 0
-- **High Findings**: 0  
+- **High Findings**: 0
 - **Medium Findings**: 2
 - **Low/Info Findings**: 7
 
 **Internal Testing**:
+
 - **Scope**: Internal network simulation (assume breach scenario)
 - **Duration**: 32 hours over 4 days
 - **Critical Findings**: 0
@@ -447,10 +485,12 @@ Based on our assessment, we conclude that Wild Construct maintained effective in
 #### Recommendations
 
 **Priority 1 (High)**:
+
 1. Complete Windows server patching automation (Target: 30 days)
 2. Review and reduce service account privileges (Target: 15 days)
 
 **Priority 2 (Medium)**:
+
 1. Expand incident response tabletop exercises (Target: 60 days)
 2. Implement additional API rate limiting controls (Target: 45 days)
 3. Enhance security awareness training with latest threat vectors (Target: 90 days)
@@ -459,7 +499,7 @@ Based on our assessment, we conclude that Wild Construct maintained effective in
 
 Wild Construct demonstrates a mature and effective information security program. The organization has successfully maintained its ISO 27001 certification and demonstrates strong commitment to security governance. The few findings identified are minor and have been or are being promptly addressed.
 
-**Lead Assessor Signature**: ________________________  
+**Lead Assessor Signature**: **********\_\_\_\_**********  
 **Date**: April 15, 2025
 
 ---
@@ -475,6 +515,7 @@ Wild Construct demonstrates a mature and effective information security program.
 #### DPO Activities Summary
 
 **Data Protection Impact Assessments (DPIAs)**:
+
 - DPIAs Reviewed: 8
 - DPIAs Requiring Significant Changes: 2
 - DPIAs Approved Without Changes: 6
@@ -482,6 +523,7 @@ Wild Construct demonstrates a mature and effective information security program.
 - Consultation with Supervisory Authority: 0 (none required)
 
 **Data Subject Rights Management**:
+
 - Total Requests Received: 72
 - Average Response Time: 12.3 days (Target: <30 days)
 - Requests Resolved Within Timeframe: 100%
@@ -489,6 +531,7 @@ Wild Construct demonstrates a mature and effective information security program.
 - Requests Referred to External Counsel: 1
 
 **Breach Assessment and Notification**:
+
 - Privacy Incidents Investigated: 5
 - Incidents Meeting Notification Threshold: 0
 - Supervisory Authority Notifications: 0
@@ -496,6 +539,7 @@ Wild Construct demonstrates a mature and effective information security program.
 - Average Investigation Time: 48 hours
 
 **Training and Awareness**:
+
 - Privacy Training Sessions Conducted: 12
 - Employees Trained: 247 (100% of workforce)
 - Management Briefings: 4 quarterly sessions
@@ -507,13 +551,15 @@ Wild Construct demonstrates a mature and effective information security program.
 **Overall GDPR Compliance Rating**: 94.2%
 
 **Areas of Strong Compliance**:
+
 - ✅ Data subject rights response processes
 - ✅ Legal basis documentation and review
-- ✅ Data retention policy implementation  
+- ✅ Data retention policy implementation
 - ✅ Employee training and awareness
 - ✅ Vendor data processing agreement coverage
 
 **Areas Requiring Attention**:
+
 - 🔄 Data mapping documentation update (In progress - 85% complete)
 - 🔄 Cookie consent mechanism enhancement (Planned Q2 2025)
 - 🔄 Cross-border transfer documentation review (Scheduled Q3 2025)
@@ -528,18 +574,19 @@ Wild Construct demonstrates a mature and effective information security program.
 #### DPO Independence Confirmation
 
 I confirm that throughout the reporting period, I have maintained the independence required for the DPO role under Article 38(3) GDPR. I have:
+
 - ✅ Reported directly to the highest management level
 - ✅ Been free from conflicts of interest
 - ✅ Received adequate resources to perform DPO tasks
 - ✅ Been consulted on all data protection matters
 - ✅ Maintained professional secrecy regarding DPO duties
 
-**Data Protection Officer Signature**: ________________________  
+**Data Protection Officer Signature**: **********\_\_\_\_**********  
 **Date**: February 28, 2025
 
 ---
 
-*This document contains confidential business information and is protected by attorney-client privilege where applicable. Distribution is limited to authorized compliance stakeholders, external auditors, and regulatory authorities as required.*
+_This document contains confidential business information and is protected by attorney-client privilege where applicable. Distribution is limited to authorized compliance stakeholders, external auditors, and regulatory authorities as required._
 
 **Document Classification**: Restricted Access  
 **Retention Period**: 10 years  

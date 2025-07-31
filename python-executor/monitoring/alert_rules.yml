@@ -15,8 +15,8 @@ groups:
           severity: warning
           service: python-executor
         annotations:
-          summary: "High execution error rate in Python Executor"
-          description: "Error rate is {{ $value | humanizePercentage }} for the last 5 minutes"
+          summary: 'High execution error rate in Python Executor'
+          description: 'Error rate is {{ $value | humanizePercentage }} for the last 5 minutes'
 
       # Critical error rate alert
       - alert: CriticalExecutionErrorRate
@@ -30,8 +30,8 @@ groups:
           severity: critical
           service: python-executor
         annotations:
-          summary: "Critical execution error rate in Python Executor"
-          description: "Error rate is {{ $value | humanizePercentage }} for the last 5 minutes"
+          summary: 'Critical execution error rate in Python Executor'
+          description: 'Error rate is {{ $value | humanizePercentage }} for the last 5 minutes'
 
       # High response time alert
       - alert: HighResponseTime
@@ -44,8 +44,8 @@ groups:
           severity: warning
           service: python-executor
         annotations:
-          summary: "High response time in Python Executor"
-          description: "95th percentile response time is {{ $value }}s"
+          summary: 'High response time in Python Executor'
+          description: '95th percentile response time is {{ $value }}s'
 
       # Service down alert
       - alert: ServiceDown
@@ -55,8 +55,8 @@ groups:
           severity: critical
           service: python-executor
         annotations:
-          summary: "Python Executor service is down"
-          description: "Python Executor service has been down for more than 1 minute"
+          summary: 'Python Executor service is down'
+          description: 'Python Executor service has been down for more than 1 minute'
 
       # High memory usage alert
       - alert: HighMemoryUsage
@@ -69,8 +69,8 @@ groups:
           severity: warning
           service: python-executor
         annotations:
-          summary: "High memory usage in Python Executor"
-          description: "Memory usage is {{ $value | humanizeBytes }}"
+          summary: 'High memory usage in Python Executor'
+          description: 'Memory usage is {{ $value | humanizeBytes }}'
 
       # High active executions alert
       - alert: HighActiveExecutions
@@ -80,8 +80,8 @@ groups:
           severity: warning
           service: python-executor
         annotations:
-          summary: "High number of active executions"
-          description: "{{ $value }} executions are currently active"
+          summary: 'High number of active executions'
+          description: '{{ $value }} executions are currently active'
 
       # Rate limiting alert
       - alert: HighRateLimitHits
@@ -92,8 +92,8 @@ groups:
           severity: warning
           service: python-executor
         annotations:
-          summary: "High rate limit violations"
-          description: "Rate limit violations: {{ $value }} per second"
+          summary: 'High rate limit violations'
+          description: 'Rate limit violations: {{ $value }} per second'
 
       # Security violations alert
       - alert: SecurityViolations
@@ -104,8 +104,8 @@ groups:
           severity: critical
           service: python-executor
         annotations:
-          summary: "Security violations detected"
-          description: "Security violations detected: {{ $value }} per second"
+          summary: 'Security violations detected'
+          description: 'Security violations detected: {{ $value }} per second'
 
       # Authentication failures alert
       - alert: HighAuthFailures
@@ -116,8 +116,8 @@ groups:
           severity: warning
           service: python-executor
         annotations:
-          summary: "High authentication failure rate"
-          description: "Authentication failures: {{ $value }} per second"
+          summary: 'High authentication failure rate'
+          description: 'Authentication failures: {{ $value }} per second'
 
   - name: system_alerts
     rules:
@@ -133,8 +133,8 @@ groups:
           severity: warning
           service: python-executor
         annotations:
-          summary: "Low disk space"
-          description: "Disk space is below 10%: {{ $value | humanizePercentage }} remaining"
+          summary: 'Low disk space'
+          description: 'Disk space is below 10%: {{ $value | humanizePercentage }} remaining'
 
       # High CPU usage alert
       - alert: HighCpuUsage
@@ -147,8 +147,8 @@ groups:
           severity: warning
           service: python-executor
         annotations:
-          summary: "High CPU usage"
-          description: "CPU usage is {{ $value }}%"
+          summary: 'High CPU usage'
+          description: 'CPU usage is {{ $value }}%'
 
       # High memory usage alert (system level)
       - alert: HighSystemMemoryUsage
@@ -161,5 +161,5 @@ groups:
           severity: warning
           service: python-executor
         annotations:
-          summary: "High system memory usage"
-          description: "Memory usage is {{ $value | humanizePercentage }}"
+          summary: 'High system memory usage'
+          description: 'Memory usage is {{ $value | humanizePercentage }}'

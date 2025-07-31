@@ -3,38 +3,38 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [react()],
-    build: {
-        outDir: 'dist',
-        sourcemap: true,
-        commonjsOptions: {
-            include: [/zod/, /node_modules/]
+  plugins: [react()],
+  build: {
+    outDir: 'dist',
+    sourcemap: true,
+    commonjsOptions: {
+      include: [/zod/, /node_modules/],
+    },
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          flow: ['reactflow'],
+          utils: ['zod', 'zustand'],
         },
-        rollupOptions: {
-            output: {
-                manualChunks: {
-                    vendor: ['react', 'react-dom'],
-                    flow: ['reactflow'],
-                    utils: ['zod', 'zustand']
-                }
-            }
-        }
+      },
     },
-    server: {
-        port: 3000,
-        strictPort: true
+  },
+  server: {
+    port: 3000,
+    strictPort: true,
+  },
+  resolve: {
+    alias: {
+      '@promptscape/core': path.resolve(__dirname, '../packages/core'),
     },
-    resolve: {
-        alias: {
-            '@promptscape/core': path.resolve(__dirname, '../packages/core'),
-        },
-        dedupe: ['react', 'react-dom', 'zod', 'zustand', 'reactflow']
-    },
-    optimizeDeps: {
-        include: ['react', 'react-dom', 'reactflow', 'zod', 'zustand', 'seedrandom']
-    },
-    define: {
-        // Ensure process.env is available for any Node.js checks
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
-    }
+    dedupe: ['react', 'react-dom', 'zod', 'zustand', 'reactflow'],
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'reactflow', 'zod', 'zustand', 'seedrandom'],
+  },
+  define: {
+    // Ensure process.env is available for any Node.js checks
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
+  },
 });

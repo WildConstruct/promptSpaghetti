@@ -33,14 +33,14 @@ export const MobileGraphCanvas: React.FC<MobileGraphCanvasProps> = ({
   onAddNode,
   readOnly = false,
   className,
-  style
+  style,
 }) => {
   const canvasRef = useRef<HTMLDivElement>(null);
   const [viewTransform, setViewTransform] = useState<ViewTransform>({ x: 0, y: 0, scale: 1 });
   const [showControls, setShowControls] = useState(true);
   const [isPanning, setIsPanning] = useState(false);
   const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null);
-  
+
   // Touch handlers
   const handleTouchStart = (e: React.TouchEvent) => {
     if (e.touches.length === 1) {
@@ -49,44 +49,44 @@ export const MobileGraphCanvas: React.FC<MobileGraphCanvasProps> = ({
       setIsPanning(true);
     }
   };
-  
+
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!isPanning || !touchStart || e.touches.length !== 1) return;
-    
+
     const touch = e.touches[0];
     const deltaX = touch.clientX - touchStart.x;
     const deltaY = touch.clientY - touchStart.y;
-    
+
     setViewTransform(prev => ({
       ...prev,
       x: prev.x + deltaX,
-      y: prev.y + deltaY
+      y: prev.y + deltaY,
     }));
-    
+
     setTouchStart({ x: touch.clientX, y: touch.clientY });
   };
-  
+
   const handleTouchEnd = () => {
     setIsPanning(false);
     setTouchStart(null);
   };
-  
+
   // Pinch zoom
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault();
     const delta = e.deltaY > 0 ? 0.9 : 1.1;
     const newScale = Math.max(0.5, Math.min(2, viewTransform.scale * delta));
-    
+
     setViewTransform(prev => ({
       ...prev,
-      scale: newScale
+      scale: newScale,
     }));
   };
-  
+
   // Node selection
   const handleNodeClick = (nodeId: string) => {
     onNodeSelect?.(nodeId);
-    
+
     // Auto-open editor on mobile
     if (!readOnly) {
       setTimeout(() => {
@@ -94,25 +94,25 @@ export const MobileGraphCanvas: React.FC<MobileGraphCanvasProps> = ({
       }, 100);
     }
   };
-  
+
   // Fit view
   const fitToView = () => {
     if (!canvasRef.current || !graph.nodes.length) return;
-    
+
     const bounds = calculateGraphBounds(graph.nodes);
     const container = canvasRef.current.getBoundingClientRect();
-    
+
     const scaleX = container.width / (bounds.width + 100);
     const scaleY = container.height / (bounds.height + 100);
     const scale = Math.min(scaleX, scaleY, 1);
-    
+
     setViewTransform({
       x: (container.width - bounds.width * scale) / 2 - bounds.minX * scale,
       y: (container.height - bounds.height * scale) / 2 - bounds.minY * scale,
-      scale
+      scale,
     });
   };
-  
+
   // Center on selected node
   useEffect(() => {
     if (selectedNodeId && canvasRef.current) {
@@ -122,12 +122,12 @@ export const MobileGraphCanvas: React.FC<MobileGraphCanvasProps> = ({
         setViewTransform(prev => ({
           ...prev,
           x: container.width / 2 - node.position.x * prev.scale,
-          y: container.height / 2 - node.position.y * prev.scale
+          y: container.height / 2 - node.position.y * prev.scale,
         }));
       }
     }
   }, [selectedNodeId]);
-  
+
   return (
     <div
       ref={canvasRef}
@@ -139,7 +139,7 @@ export const MobileGraphCanvas: React.FC<MobileGraphCanvasProps> = ({
         overflow: 'hidden',
         touchAction: 'none',
         backgroundColor: 'var(--color-surface)',
-        ...style
+        ...style,
       }}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
@@ -155,7 +155,7 @@ export const MobileGraphCanvas: React.FC<MobileGraphCanvasProps> = ({
           transition: isPanning ? 'none' : 'transform 0.2s ease',
           position: 'absolute',
           top: 0,
-          left: 0
+          left: 0,
         }}
       >
         {/* Render edges */}
@@ -166,15 +166,15 @@ export const MobileGraphCanvas: React.FC<MobileGraphCanvasProps> = ({
             left: 0,
             width: '100%',
             height: '100%',
-            pointerEvents: 'none'
+            pointerEvents: 'none',
           }}
         >
           {graph.edges.map(edge => {
             const sourceNode = graph.nodes.find(n => n.id === edge.source);
             const targetNode = graph.nodes.find(n => n.id === edge.target);
-            
+
             if (!sourceNode?.position || !targetNode?.position) return null;
-            
+
             return (
               <line
                 key={edge.id}
@@ -188,7 +188,7 @@ export const MobileGraphCanvas: React.FC<MobileGraphCanvasProps> = ({
             );
           })}
         </svg>
-        
+
         {/* Render nodes */}
         {graph.nodes.map(node => (
           <MobileNode
@@ -199,7 +199,7 @@ export const MobileGraphCanvas: React.FC<MobileGraphCanvasProps> = ({
           />
         ))}
       </div>
-      
+
       {/* Canvas controls */}
       {showControls && (
         <div
@@ -210,7 +210,7 @@ export const MobileGraphCanvas: React.FC<MobileGraphCanvasProps> = ({
             left: MOBILE_SPACING.md,
             display: 'flex',
             flexDirection: 'column',
-            gap: MOBILE_SPACING.sm
+            gap: MOBILE_SPACING.sm,
           }}
         >
           <button
@@ -227,23 +227,15 @@ export const MobileGraphCanvas: React.FC<MobileGraphCanvasProps> = ({
           >
             −
           </button>
-          <button
-            onClick={fitToView}
-            style={controlButtonStyle}
-            aria-label="Fit to view"
-          >
+          <button onClick={fitToView} style={controlButtonStyle} aria-label="Fit to view">
             ⊡
           </button>
         </div>
       )}
-      
+
       {/* Add node FAB */}
       {!readOnly && (
-        <MobileFAB
-          position="bottom-right"
-          onClick={onAddNode}
-          hapticFeedback
-        >
+        <MobileFAB position="bottom-right" onClick={onAddNode} hapticFeedback>
           +
         </MobileFAB>
       )}
@@ -268,9 +260,9 @@ const MobileNode: React.FC<MobileNodeProps> = ({ node, isSelected, onClick }) =>
     weightedChoice: '🎲',
     output: '📤',
     concat: '🔗',
-    variable: '📦'
+    variable: '📦',
   };
-  
+
   return (
     <div
       className={cn('mobile-node', isSelected && 'selected')}
@@ -292,22 +284,22 @@ const MobileNode: React.FC<MobileNodeProps> = ({ node, isSelected, onClick }) =>
         cursor: 'pointer',
         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
         ...mobileStyles.tapHighlight,
-        ...mobileStyles.noSelect
+        ...mobileStyles.noSelect,
       }}
       onClick={onClick}
     >
-      <div style={{ fontSize: 24, marginBottom: 4 }}>
-        {nodeIcons[node.type] || '📦'}
-      </div>
-      <div style={{
-        fontSize: 12,
-        fontWeight: 500,
-        textAlign: 'center',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-        width: '100%'
-      }}>
+      <div style={{ fontSize: 24, marginBottom: 4 }}>{nodeIcons[node.type] || '📦'}</div>
+      <div
+        style={{
+          fontSize: 12,
+          fontWeight: 500,
+          textAlign: 'center',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+          width: '100%',
+        }}
+      >
         {node.type}
       </div>
     </div>
@@ -328,15 +320,18 @@ const controlButtonStyle: React.CSSProperties = {
   fontSize: 20,
   fontWeight: 'bold',
   cursor: 'pointer',
-  ...mobileStyles.tapHighlight
+  ...mobileStyles.tapHighlight,
 };
 
 // Calculate graph bounds
 function calculateGraphBounds(nodes: GraphNode[]) {
   if (!nodes.length) return { minX: 0, minY: 0, width: 0, height: 0 };
-  
-  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-  
+
+  let minX = Infinity,
+    minY = Infinity,
+    maxX = -Infinity,
+    maxY = -Infinity;
+
   nodes.forEach(node => {
     if (node.position) {
       minX = Math.min(minX, node.position.x);
@@ -345,11 +340,11 @@ function calculateGraphBounds(nodes: GraphNode[]) {
       maxY = Math.max(maxY, node.position.y + 60);
     }
   });
-  
+
   return {
     minX,
     minY,
     width: maxX - minX,
-    height: maxY - minY
+    height: maxY - minY,
   };
 }

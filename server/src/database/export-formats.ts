@@ -19,14 +19,16 @@ export const ExportedCorrectionRuleSchema = z.object({
   tags: z.array(z.string()).optional(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
-  
+
   // Optional metadata
-  metadata: z.object({
-    version: z.string().optional(),
-    author: z.string().optional(),
-    usage_count: z.number().int().optional(),
-    effectiveness_score: z.number().min(0).max(100).optional()
-  }).optional()
+  metadata: z
+    .object({
+      version: z.string().optional(),
+      author: z.string().optional(),
+      usage_count: z.number().int().optional(),
+      effectiveness_score: z.number().min(0).max(100).optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -42,42 +44,56 @@ export const ExportedCorrectionSetSchema = z.object({
     updated_at: z.string().datetime(),
     author: z.string().optional(),
     license: z.string().optional(),
-    compatibility: z.object({
-      min_version: z.string().optional(),
-      max_version: z.string().optional()
-    }).optional()
+    compatibility: z
+      .object({
+        min_version: z.string().optional(),
+        max_version: z.string().optional(),
+      })
+      .optional(),
   }),
-  
+
   rules: z.array(ExportedCorrectionRuleSchema),
-  
+
   // Optional sections
-  categories: z.array(z.object({
-    id: z.string(),
-    name: z.string(),
-    description: z.string().optional(),
-    color: z.string().optional()
-  })).optional(),
-  
-  tags: z.array(z.object({
-    id: z.string(),
-    name: z.string(),
-    description: z.string().optional()
-  })).optional(),
-  
-  settings: z.object({
-    auto_apply: z.boolean().optional(),
-    priority_mode: z.enum(['sequence', 'weighted']).optional(),
-    performance_mode: z.enum(['fast', 'thorough']).optional()
-  }).optional(),
-  
+  categories: z
+    .array(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        description: z.string().optional(),
+        color: z.string().optional(),
+      })
+    )
+    .optional(),
+
+  tags: z
+    .array(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        description: z.string().optional(),
+      })
+    )
+    .optional(),
+
+  settings: z
+    .object({
+      auto_apply: z.boolean().optional(),
+      priority_mode: z.enum(['sequence', 'weighted']).optional(),
+      performance_mode: z.enum(['fast', 'thorough']).optional(),
+    })
+    .optional(),
+
   // Statistics and metrics
-  statistics: z.object({
-    total_rules: z.number().int(),
-    active_rules: z.number().int(),
-    total_executions: z.number().int().optional(),
-    success_rate: z.number().min(0).max(100).optional(),
-    avg_execution_time: z.number().min(0).optional()
-  }).optional()
+  statistics: z
+    .object({
+      total_rules: z.number().int(),
+      active_rules: z.number().int(),
+      total_executions: z.number().int().optional(),
+      success_rate: z.number().min(0).max(100).optional(),
+      avg_execution_time: z.number().min(0).optional(),
+    })
+    .optional(),
 });
 
 // Type definitions
@@ -101,11 +117,11 @@ export function ruleToExportFormat(rule: CorrectionRule): ExportedCorrectionRule
     priority: rule.priority,
     createdAt: rule.created_at,
     updatedAt: rule.updated_at,
-    
+
     metadata: {
-      version: rule.version.toString()
+      version: rule.version.toString(),
       // Additional metadata would be populated from statistics
-    }
+    },
   };
 }
 
@@ -130,7 +146,7 @@ export function exportFormatToRule(exportedRule: ExportedCorrectionRule): {
     replace_with: exportedRule.replaceWith,
     is_regex: exportedRule.isRegex,
     is_active: exportedRule.isActive,
-    priority: exportedRule.priority
+    priority: exportedRule.priority,
   };
 }
 
@@ -149,7 +165,7 @@ export function exportToJSON(correctionSet: ExportedCorrectionSet): string {
 export function exportToYAML(correctionSet: ExportedCorrectionSet): string {
   // Simple YAML serialization - in production, use a proper YAML library
   const yamlLines: string[] = [];
-  
+
   // Meta section
   yamlLines.push('meta:');
   yamlLines.push(`  name: "${correctionSet.meta.name}"`);
@@ -160,11 +176,11 @@ export function exportToYAML(correctionSet: ExportedCorrectionSet): string {
   yamlLines.push(`  format_version: "${correctionSet.meta.format_version}"`);
   yamlLines.push(`  created_at: "${correctionSet.meta.created_at}"`);
   yamlLines.push(`  updated_at: "${correctionSet.meta.updated_at}"`);
-  
+
   // Rules section
   yamlLines.push('');
   yamlLines.push('rules:');
-  
+
   correctionSet.rules.forEach(rule => {
     yamlLines.push(`  - id: "${rule.id}"`);
     yamlLines.push(`    name: "${rule.name}"`);
@@ -180,7 +196,7 @@ export function exportToYAML(correctionSet: ExportedCorrectionSet): string {
     yamlLines.push(`    updatedAt: "${rule.updatedAt}"`);
     yamlLines.push('');
   });
-  
+
   // Statistics section
   if (correctionSet.statistics) {
     yamlLines.push('statistics:');
@@ -196,7 +212,7 @@ export function exportToYAML(correctionSet: ExportedCorrectionSet): string {
       yamlLines.push(`  avg_execution_time: ${correctionSet.statistics.avg_execution_time}`);
     }
   }
-  
+
   return yamlLines.join('\n');
 }
 
@@ -205,37 +221,41 @@ export function exportToYAML(correctionSet: ExportedCorrectionSet): string {
  */
 export function exportToCSV(correctionSet: ExportedCorrectionSet): string {
   const csvLines: string[] = [];
-  
+
   // CSV header
-  csvLines.push([
-    'id',
-    'name',
-    'description',
-    'findPattern',
-    'replaceWith',
-    'isRegex',
-    'isActive',
-    'priority',
-    'createdAt',
-    'updatedAt'
-  ].join(','));
-  
+  csvLines.push(
+    [
+      'id',
+      'name',
+      'description',
+      'findPattern',
+      'replaceWith',
+      'isRegex',
+      'isActive',
+      'priority',
+      'createdAt',
+      'updatedAt',
+    ].join(',')
+  );
+
   // CSV rows
   correctionSet.rules.forEach(rule => {
-    csvLines.push([
-      rule.id,
-      `"${rule.name.replace(/"/g, '""')}"`,
-      rule.description ? `"${rule.description.replace(/"/g, '""')}"` : '',
-      `"${rule.findPattern.replace(/"/g, '""')}"`,
-      `"${rule.replaceWith.replace(/"/g, '""')}"`,
-      rule.isRegex.toString(),
-      rule.isActive.toString(),
-      rule.priority.toString(),
-      rule.createdAt,
-      rule.updatedAt
-    ].join(','));
+    csvLines.push(
+      [
+        rule.id,
+        `"${rule.name.replace(/"/g, '""')}"`,
+        rule.description ? `"${rule.description.replace(/"/g, '""')}"` : '',
+        `"${rule.findPattern.replace(/"/g, '""')}"`,
+        `"${rule.replaceWith.replace(/"/g, '""')}"`,
+        rule.isRegex.toString(),
+        rule.isActive.toString(),
+        rule.priority.toString(),
+        rule.createdAt,
+        rule.updatedAt,
+      ].join(',')
+    );
   });
-  
+
   return csvLines.join('\n');
 }
 
@@ -256,23 +276,23 @@ export function parseFromYAML(yamlString: string): ExportedCorrectionSet {
   // This is a simplified YAML parser - in production, use a proper YAML library
   const lines = yamlString.split('\n');
   const result: Record<string, unknown> = { meta: {}, rules: [] };
-  
+
   let currentSection = '';
   let currentRule: Error = null;
-  
+
   for (const line of lines) {
     const trimmed = line.trim();
-    
+
     if (trimmed === 'meta:') {
       currentSection = 'meta';
       continue;
     }
-    
+
     if (trimmed === 'rules:') {
       currentSection = 'rules';
       continue;
     }
-    
+
     if (trimmed.startsWith('- id:')) {
       if (currentRule) {
         (result.rules as any[]).push(currentRule);
@@ -282,14 +302,14 @@ export function parseFromYAML(yamlString: string): ExportedCorrectionSet {
       if (id) currentRule.id = id;
       continue;
     }
-    
+
     if (currentSection === 'meta' && trimmed.includes(':')) {
       const [key, value] = trimmed.split(': ', 2);
       if (key && value) {
         result.meta[key] = value.replace(/"/g, '');
       }
     }
-    
+
     if (currentSection === 'rules' && currentRule && trimmed.includes(':')) {
       const [key, value] = trimmed.split(': ', 2);
       if (key && value) {
@@ -303,11 +323,11 @@ export function parseFromYAML(yamlString: string): ExportedCorrectionSet {
       }
     }
   }
-  
+
   if (currentRule) {
     (result.rules as any[]).push(currentRule);
   }
-  
+
   return ExportedCorrectionSetSchema.parse(result);
 }
 
@@ -317,45 +337,45 @@ export function parseFromYAML(yamlString: string): ExportedCorrectionSet {
 export function parseFromCSV(csvString: string): ExportedCorrectionSet {
   const lines = csvString.split('\n');
   const headers = lines[0].split(',');
-  
+
   const rules: ExportedCorrectionRule[] = [];
-  
+
   for (let i = 1; i < lines.length; i++) {
     const line = lines[i].trim();
     if (!line) continue;
-    
+
     const values = parseCSVLine(line);
-    
+
     if (values.length >= headers.length) {
       const rule: Error = {};
       headers.forEach((header, index) => {
         const value = values[index];
         switch (header) {
-        case 'isRegex':
-        case 'isActive':
-          rule[header] = value === 'true';
-          break;
-        case 'priority':
-          rule[header] = parseInt(value, 10);
-          break;
-        default:
-          rule[header] = value;
+          case 'isRegex':
+          case 'isActive':
+            rule[header] = value === 'true';
+            break;
+          case 'priority':
+            rule[header] = parseInt(value, 10);
+            break;
+          default:
+            rule[header] = value;
         }
       });
-      
+
       rules.push(rule);
     }
   }
-  
+
   // Create minimal meta for CSV import
   const meta = {
     name: 'Imported Correction Set',
     version: '1.0.0',
     format_version: '1.0',
     created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
+    updated_at: new Date().toISOString(),
   };
-  
+
   return ExportedCorrectionSetSchema.parse({ meta, rules });
 }
 
@@ -366,10 +386,10 @@ function parseCSVLine(line: string): string[] {
   const result: string[] = [];
   let current = '';
   let inQuotes = false;
-  
+
   for (let i = 0; i < line.length; i++) {
     const char = line[i];
-    
+
     if (char === '"' && !inQuotes) {
       inQuotes = true;
     } else if (char === '"' && inQuotes) {
@@ -386,7 +406,7 @@ function parseCSVLine(line: string): string[] {
       current += char;
     }
   }
-  
+
   result.push(current);
   return result;
 }
@@ -403,19 +423,19 @@ export function validateImportedSet(data: Record<string, unknown>): {
 } {
   const errors: string[] = [];
   const warnings: string[] = [];
-  
+
   try {
     const validatedSet = ExportedCorrectionSetSchema.parse(data);
-    
+
     // Additional validation
     if (validatedSet.rules.length === 0) {
       warnings.push('No correction rules found in the imported set');
     }
-    
+
     if (validatedSet.rules.length > 500) {
       warnings.push(`Large number of rules (${validatedSet.rules.length}) - import may be slow`);
     }
-    
+
     // Check for regex validity
     validatedSet.rules.forEach((rule, index) => {
       if (rule.isRegex) {
@@ -426,21 +446,20 @@ export function validateImportedSet(data: Record<string, unknown>): {
         }
       }
     });
-    
+
     // Check for duplicate names
     const names = validatedSet.rules.map(r => r.name);
     const duplicates = names.filter((name, index) => names.indexOf(name) !== index);
     if (duplicates.length > 0) {
       warnings.push(
-        `Duplicate rule names found: ${duplicates.slice(0,
-        5
-      ).join(', ')}${duplicates.length > 5 ? '...' : ''}`);
+        `Duplicate rule names found: ${duplicates.slice(0, 5).join(', ')}${duplicates.length > 5 ? '...' : ''}`
+      );
     }
-    
+
     return {
       valid: errors.length === 0,
       errors,
-      warnings
+      warnings,
     };
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -450,11 +469,11 @@ export function validateImportedSet(data: Record<string, unknown>): {
     } else {
       errors.push(`Validation failed: ${error instanceof Error ? error.message : String(error)}`);
     }
-    
+
     return {
       valid: false,
       errors,
-      warnings
+      warnings,
     };
   }
 }
@@ -468,13 +487,13 @@ export function detectFormat(filename: string, content: string): 'json' | 'yaml'
   if (ext === 'json') return 'json';
   if (ext === 'yaml' || ext === 'yml') return 'yaml';
   if (ext === 'csv') return 'csv';
-  
+
   // Check content
   const trimmed = content.trim();
   if (trimmed.startsWith('{') && trimmed.endsWith('}')) return 'json';
   if (trimmed.startsWith('[') && trimmed.endsWith(']')) return 'json';
   if (trimmed.includes('meta:') && trimmed.includes('rules:')) return 'yaml';
   if (trimmed.includes('id,name,description,findPattern')) return 'csv';
-  
+
   return 'unknown';
 }

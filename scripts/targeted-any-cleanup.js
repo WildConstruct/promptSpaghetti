@@ -17,14 +17,14 @@ function getAnyTypeFiles() {
   try {
     const output = execSync('pnpm lint 2>&1 | grep "no-explicit-any"', { encoding: 'utf8' });
     const lines = output.split('\n').filter(line => line.trim());
-    
+
     // Extract file paths from full lint output
     const fullLintOutput = execSync('pnpm lint', { encoding: 'utf8' });
     const lintLines = fullLintOutput.split('\n');
-    
+
     const fileViolations = new Map();
     let currentFile = '';
-    
+
     for (const line of lintLines) {
       if (line.startsWith('/')) {
         currentFile = line.trim();
@@ -32,12 +32,11 @@ function getAnyTypeFiles() {
         fileViolations.set(currentFile, (fileViolations.get(currentFile) || 0) + 1);
       }
     }
-    
+
     // Convert to array and sort by violation count
     return Array.from(fileViolations.entries())
       .sort((a, b) => b[1] - a[1])
       .slice(0, 20); // Top 20 files
-      
   } catch (error) {
     console.log('Using fallback method to find files...');
     return [];
@@ -84,10 +83,10 @@ function fixAnyTypes(content, filePath) {
 async function processFile(filePath, expectedCount) {
   try {
     if (!fs.existsSync(filePath)) return 0;
-    
+
     const content = fs.readFileSync(filePath, 'utf8');
     const { content: newContent, changes } = fixAnyTypes(content, filePath);
-    
+
     if (changes > 0) {
       fs.writeFileSync(filePath, newContent);
       console.log(`   ✅ Fixed ${changes}/${expectedCount} any types in: ${path.basename(filePath)}`);
@@ -106,31 +105,27 @@ async function processFile(filePath, expectedCount) {
 async function main() {
   console.log('📊 Finding files with highest any type density...');
   const topFiles = getAnyTypeFiles();
-  
+
   if (topFiles.length === 0) {
     console.log('✅ No files found or using manual list...');
     // Fallback to known problematic directories
-    const fallbackDirs = [
-      'packages/core/components',
-      'client/src/components/admin',
-      'server/src/database'
-    ];
-    
+    const fallbackDirs = ['packages/core/components', 'client/src/components/admin', 'server/src/database'];
+
     console.log('🎯 Processing fallback directories for any types...\n');
-    
+
     for (const dir of fallbackDirs) {
       console.log(`\n🚀 Processing directory: ${dir}`);
-      
+
       if (!fs.existsSync(dir)) {
         console.log(`   ⚠️  Directory not found: ${dir}`);
         continue;
       }
-      
+
       // Find TypeScript files in directory
       const files = execSync(`find ${dir} -name "*.ts" -o -name "*.tsx" | head -5`, { encoding: 'utf8' })
         .split('\n')
         .filter(f => f.trim());
-        
+
       let dirFixed = 0;
       for (const file of files) {
         if (file.trim()) {
@@ -139,7 +134,7 @@ async function main() {
           dirFixed += fixed;
         }
       }
-      
+
       console.log(`   🎉 Directory summary: ${dirFixed} any types fixed`);
     }
     return;

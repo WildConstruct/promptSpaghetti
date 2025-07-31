@@ -149,32 +149,32 @@ interface DataProtectionRule {
 ```python
 def detect_conflicts(rules: List[Rule]) -> List[Conflict]:
     conflicts = []
-    
+
     for i, rule1 in enumerate(rules):
         for j, rule2 in enumerate(rules[i+1:], i+1):
             conflict = analyze_rule_pair(rule1, rule2)
             if conflict:
                 conflicts.append(conflict)
-    
+
     return conflicts
 
 def analyze_rule_pair(rule1: Rule, rule2: Rule) -> Optional[Conflict]:
     # Check scope overlap
     if not scopes_overlap(rule1.scope, rule2.scope):
         return None
-    
+
     # Check direct conflicts
     if actions_conflict(rule1.actions, rule2.actions):
         return create_conflict(rule1, rule2, ConflictType.DIRECT)
-    
+
     # Check resource conflicts
     if resources_conflict(rule1.resources, rule2.resources):
         return create_conflict(rule1, rule2, ConflictType.RESOURCE)
-    
+
     # Check temporal conflicts
     if temporal_conflict(rule1.schedule, rule2.schedule):
         return create_conflict(rule1, rule2, ConflictType.TEMPORAL)
-    
+
     return None
 ```
 
@@ -194,16 +194,19 @@ def resolve_by_priority(conflicting_rules: List[Rule]) -> Rule:
 Special handling for specific domains:
 
 #### Legal vs Business Rules
+
 - Legal rules always take precedence
 - Document business impact of legal override
 - Require legal review for exceptions
 
 #### Security vs Usability
+
 - Security requirements generally prevail
 - Risk assessment determines exceptions
 - User experience degradation documented
 
 #### Performance vs Compliance
+
 - Compliance requirements take precedence
 - Performance impact documented
 - Alternative solutions explored
@@ -239,10 +242,7 @@ interface ResolutionContext {
   timeConstraints: TimeConstraints;
 }
 
-function resolveWithContext(
-  conflicts: Conflict[],
-  context: ResolutionContext
-): Resolution {
+function resolveWithContext(conflicts: Conflict[], context: ResolutionContext): Resolution {
   // Apply context-specific resolution logic
   // Consider jurisdiction-specific requirements
   // Factor in business process criticality

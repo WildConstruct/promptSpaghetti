@@ -13,11 +13,11 @@ export function initDatabase(databasePath: string = ':memory:'): Database.Databa
 
   // Create in-memory database for testing
   db = new Database(databasePath);
-  
+
   // Enable basic settings
   db.pragma('journal_mode = WAL');
   db.pragma('foreign_keys = ON');
-  
+
   // Create minimal schema inline
   db.exec(`
     CREATE TABLE IF NOT EXISTS corrections (
@@ -26,7 +26,7 @@ export function initDatabase(databasePath: string = ':memory:'): Database.Databa
       data TEXT
     );
   `);
-  
+
   console.log('Minimal database initialized successfully');
   return db;
 }

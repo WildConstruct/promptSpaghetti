@@ -1,4 +1,5 @@
 # Security Dashboard Operational Guidance
+
 **Task T-1752989143998-466: Create security dashboard guidance**  
 **Epic 19 - Security & Compliance Framework**
 
@@ -9,7 +10,9 @@ This document provides comprehensive operational guidance for the Wild Construct
 ## 🎯 Dashboard Overview
 
 ### Purpose and Scope
+
 The Security Dashboard provides real-time visibility into:
+
 - **Threat Detection**: Current security threats and their status
 - **System Health**: Overall security posture and risk assessment
 - **Alert Management**: Active security alerts requiring attention
@@ -19,26 +22,31 @@ The Security Dashboard provides real-time visibility into:
 ### Dashboard Components
 
 #### 🛡️ Security Metrics Grid
+
 Four primary metrics cards provide at-a-glance system status:
 
 ```typescript
 interface SecurityMetrics {
-  totalThreats: number;      // All detected threats in current period
-  blockedThreats: number;    // Successfully mitigated threats
-  activeIncidents: number;   // Open incidents requiring action
-  riskScore: number;         // Overall system risk (0-10 scale)
+  totalThreats: number; // All detected threats in current period
+  blockedThreats: number; // Successfully mitigated threats
+  activeIncidents: number; // Open incidents requiring action
+  riskScore: number; // Overall system risk (0-10 scale)
 }
 ```
 
 #### 🚨 Recent Security Alerts Section
+
 Dynamic list showing:
+
 - Alert severity levels (Critical, High, Medium, Low)
 - Alert status (Open, Investigating, Resolved)
 - Time-based information and source systems
 - Quick action buttons for investigation
 
 #### ⚡ Quick Actions Panel
+
 Direct access to common security operations:
+
 - Active Sessions monitoring
 - Security Policies management
 - System Health checks
@@ -47,6 +55,7 @@ Direct access to common security operations:
 ## 📊 Metric Interpretation Guide
 
 ### Total Threats Detected
+
 ```yaml
 Metric: Total Threats Detected
 Description: Cumulative count of security threats identified by all detection systems
@@ -66,6 +75,7 @@ Action Thresholds:
 ```
 
 ### Threats Blocked
+
 ```yaml
 Metric: Threats Blocked
 Description: Successfully mitigated threats showing security control effectiveness
@@ -89,6 +99,7 @@ Action Items:
 ```
 
 ### Active Incidents
+
 ```yaml
 Metric: Active Incidents
 Description: Open security incidents requiring immediate attention
@@ -113,29 +124,30 @@ Management Actions:
 ```
 
 ### Risk Score
+
 ```yaml
 Metric: Risk Score (0-10 scale)
 Description: Overall system security posture assessment
 Target Range: 0-4 (Low Risk)
-Color Coding: 
+Color Coding:
   - Green (0-4): Low risk, good security posture
   - Orange (4-6): Medium risk, attention needed
   - Yellow (6-8): Elevated risk, immediate action required
   - Red (8-10): Critical risk, emergency response needed
 
 Risk Score Factors:
-- Threat volume and sophistication
-- Control effectiveness rate
-- System vulnerabilities
-- Compliance status
-- Recent security events
+  - Threat volume and sophistication
+  - Control effectiveness rate
+  - System vulnerabilities
+  - Compliance status
+  - Recent security events
 
 Interpretation Guidelines:
-- 0-2: Excellent security posture, maintain current controls
-- 2-4: Good security posture, monitor trends
-- 4-6: Moderate risk, review controls and processes
-- 6-8: Elevated risk, immediate attention required
-- 8-10: Critical risk, activate emergency procedures
+  - 0-2: Excellent security posture, maintain current controls
+  - 2-4: Good security posture, monitor trends
+  - 4-6: Moderate risk, review controls and processes
+  - 6-8: Elevated risk, immediate attention required
+  - 8-10: Critical risk, activate emergency procedures
 ```
 
 ## 🔍 Alert Investigation Procedures
@@ -143,6 +155,7 @@ Interpretation Guidelines:
 ### Alert Severity Levels
 
 #### 🔴 Critical Alerts
+
 ```yaml
 Response Time: Immediate (< 5 minutes)
 Indicators:
@@ -167,6 +180,7 @@ Common Critical Alert Types:
 ```
 
 #### 🟠 High Priority Alerts
+
 ```yaml
 Response Time: 15 minutes
 Indicators:
@@ -190,6 +204,7 @@ Common High Alert Types:
 ```
 
 #### 🟡 Medium Priority Alerts
+
 ```yaml
 Response Time: 1 hour
 Indicators:
@@ -215,6 +230,7 @@ Common Medium Alert Types:
 ### Alert Status Management
 
 #### Status Transitions
+
 ```typescript
 type AlertStatus = 'open' | 'investigating' | 'resolved';
 
@@ -223,45 +239,50 @@ const statusTransitions = {
     description: 'Alert created, awaiting initial response',
     sla: 'Acknowledge within target time',
     color: 'bg-red-100 text-red-800',
-    actions: ['acknowledge', 'investigate', 'escalate']
+    actions: ['acknowledge', 'investigate', 'escalate'],
   },
   investigating: {
     description: 'Alert acknowledged, investigation in progress',
     sla: 'Provide updates every 30 minutes for critical',
     color: 'bg-yellow-100 text-yellow-800',
-    actions: ['update', 'resolve', 'escalate']
+    actions: ['update', 'resolve', 'escalate'],
   },
   resolved: {
     description: 'Alert investigated and resolved',
     sla: 'Document resolution within 24 hours',
     color: 'bg-green-100 text-green-800',
-    actions: ['reopen', 'create_knowledge_article']
-  }
+    actions: ['reopen', 'create_knowledge_article'],
+  },
 };
 ```
 
 #### Investigation Documentation
+
 ```markdown
 For each alert investigation, document:
 
 INITIAL ASSESSMENT:
+
 - Alert validation (true positive/false positive)
 - Preliminary impact assessment
 - Initial containment actions taken
 
 INVESTIGATION FINDINGS:
+
 - Root cause analysis
 - Affected systems and data
 - Timeline of events
 - Evidence collected
 
 RESOLUTION ACTIONS:
+
 - Remediation steps performed
 - Control improvements implemented
 - Prevention measures added
 - Follow-up actions required
 
 LESSONS LEARNED:
+
 - Detection effectiveness
 - Response time analysis
 - Process improvements identified
@@ -271,6 +292,7 @@ LESSONS LEARNED:
 ## 🕐 Time-Based Analysis
 
 ### Alert Timing Patterns
+
 ```typescript
 interface AlertTiming {
   timestamp: Date;
@@ -284,19 +306,20 @@ const analyzeAlertTiming = (alerts: AlertTiming[]) => {
     business_hours: alerts.filter(a => isBusinessHours(a.timestamp)),
     after_hours: alerts.filter(a => !isBusinessHours(a.timestamp)),
     weekends: alerts.filter(a => isWeekend(a.timestamp)),
-    holidays: alerts.filter(a => isHoliday(a.timestamp))
+    holidays: alerts.filter(a => isHoliday(a.timestamp)),
   };
 
   return {
     suspiciousPatterns: patterns.after_hours.length > patterns.business_hours.length,
     weekendActivity: patterns.weekends.length > 0,
     holidayActivity: patterns.holidays.length > 0,
-    recommendations: generateTimingRecommendations(patterns)
+    recommendations: generateTimingRecommendations(patterns),
   };
 };
 ```
 
 ### Historical Trend Analysis
+
 ```yaml
 Time-based Trend Indicators:
 
@@ -320,6 +343,7 @@ Peak Activity Windows:
 ## 🔧 Quick Actions Guide
 
 ### Active Sessions Monitoring
+
 ```bash
 Purpose: Monitor current user sessions for anomalies
 
@@ -344,6 +368,7 @@ GET /api/security/sessions/analytics
 ```
 
 ### Security Policies Management
+
 ```typescript
 Purpose: Review and manage security policy enforcement
 
@@ -373,6 +398,7 @@ interface SecurityPolicy {
 ```
 
 ### System Health Monitoring
+
 ```yaml
 Purpose: Comprehensive security system health assessment
 
@@ -404,6 +430,7 @@ GET /api/security/health/trends
 ```
 
 ### Audit Logs Review
+
 ```typescript
 Purpose: Access and analyze security audit logs
 
@@ -435,35 +462,37 @@ interface AuditLogEntry {
 ## 📈 Dashboard Performance Optimization
 
 ### Loading Performance
+
 ```yaml
 Dashboard Load Time Targets:
-- Initial load: <2 seconds
-- Metric updates: <500ms
-- Alert refresh: <1 second
-- Quick actions: <1 second
+  - Initial load: <2 seconds
+  - Metric updates: <500ms
+  - Alert refresh: <1 second
+  - Quick actions: <1 second
 
 Performance Monitoring:
-- Track dashboard response times
-- Monitor API endpoint performance
-- Analyze user interaction patterns
-- Identify bottlenecks in data loading
+  - Track dashboard response times
+  - Monitor API endpoint performance
+  - Analyze user interaction patterns
+  - Identify bottlenecks in data loading
 
 Optimization Strategies:
-- Implement caching for static metrics
-- Use pagination for large alert lists
-- Lazy load non-critical components
-- Optimize database queries
-- Implement real-time updates via websockets
+  - Implement caching for static metrics
+  - Use pagination for large alert lists
+  - Lazy load non-critical components
+  - Optimize database queries
+  - Implement real-time updates via websockets
 ```
 
 ### Real-Time Updates
+
 ```typescript
 // Dashboard real-time update configuration
 interface DashboardUpdateConfig {
-  metricsRefresh: number;        // 30 seconds
-  alertsRefresh: number;         // 15 seconds
-  quickActionsRefresh: number;   // 60 seconds
-  riskScoreRefresh: number;      // 60 seconds
+  metricsRefresh: number; // 30 seconds
+  alertsRefresh: number; // 15 seconds
+  quickActionsRefresh: number; // 60 seconds
+  riskScoreRefresh: number; // 60 seconds
 }
 
 // Implement efficient update mechanisms
@@ -472,14 +501,20 @@ class DashboardUpdater {
 
   startRealTimeUpdates(config: DashboardUpdateConfig) {
     // Metrics update
-    this.updateIntervals.set('metrics', setInterval(() => {
-      this.updateMetrics();
-    }, config.metricsRefresh * 1000));
+    this.updateIntervals.set(
+      'metrics',
+      setInterval(() => {
+        this.updateMetrics();
+      }, config.metricsRefresh * 1000)
+    );
 
     // Alerts update
-    this.updateIntervals.set('alerts', setInterval(() => {
-      this.updateAlerts();
-    }, config.alertsRefresh * 1000));
+    this.updateIntervals.set(
+      'alerts',
+      setInterval(() => {
+        this.updateAlerts();
+      }, config.alertsRefresh * 1000)
+    );
   }
 
   private async updateMetrics() {
@@ -499,6 +534,7 @@ class DashboardUpdater {
 ### Common Issues and Solutions
 
 #### Dashboard Not Loading
+
 ```bash
 Symptoms:
 - Blank dashboard screen
@@ -524,6 +560,7 @@ Common Causes:
 ```
 
 #### Metrics Not Updating
+
 ```typescript
 // Diagnostic steps
 const troubleshootMetrics = async () => {
@@ -539,7 +576,7 @@ const troubleshootMetrics = async () => {
   if (window.WebSocket) {
     const ws = new WebSocket('wss://api.example.com/security/realtime');
     ws.onopen = () => console.log('WebSocket connected');
-    ws.onerror = (error) => console.error('WebSocket error:', error);
+    ws.onerror = error => console.error('WebSocket error:', error);
   }
 
   // Verify database connectivity
@@ -549,6 +586,7 @@ const troubleshootMetrics = async () => {
 ```
 
 #### Alerts Not Displaying
+
 ```yaml
 Issue: Alerts section empty or outdated
 
@@ -569,7 +607,7 @@ Resolution Steps:
      -d '{"type": "test", "severity": "low"}'
 
 3. Check alert database:
-   SELECT COUNT(*) FROM security_alerts 
+   SELECT COUNT(*) FROM security_alerts
    WHERE created_at > NOW() - INTERVAL '24 hours';
 
 4. Review user permissions:
@@ -580,6 +618,7 @@ Resolution Steps:
 ```
 
 #### Performance Issues
+
 ```bash
 Symptoms:
 - Slow dashboard loading (>5 seconds)
@@ -606,17 +645,18 @@ Optimization Actions:
 ## 📱 Mobile and Accessibility
 
 ### Mobile Dashboard Usage
+
 ```css
 /* Mobile-responsive design considerations */
 @media (max-width: 768px) {
   .security-dashboard {
     padding: 16px;
   }
-  
+
   .metrics-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .alert-item {
     flex-direction: column;
   }
@@ -624,6 +664,7 @@ Optimization Actions:
 ```
 
 ### Accessibility Features
+
 ```typescript
 interface AccessibilityFeatures {
   screenReader: {
@@ -648,86 +689,93 @@ const keyboardShortcuts = {
   'Alt+M': 'Focus on metrics section',
   'Alt+A': 'Focus on alerts section',
   'Alt+Q': 'Focus on quick actions',
-  'Escape': 'Close modal/return to main view',
-  'Enter': 'Activate selected item',
-  'Space': 'Toggle item state'
+  Escape: 'Close modal/return to main view',
+  Enter: 'Activate selected item',
+  Space: 'Toggle item state',
 };
 ```
 
 ## 🔐 Security and Privacy
 
 ### Data Privacy Considerations
+
 ```yaml
 Personal Data Protection:
-- User identifiers anonymized in logs
-- IP addresses pseudonymized after 24 hours
-- Access logs retention limited to 90 days
-- Personal data deletion on request
+  - User identifiers anonymized in logs
+  - IP addresses pseudonymized after 24 hours
+  - Access logs retention limited to 90 days
+  - Personal data deletion on request
 
 Data Classification:
-- Public: System health metrics, general statistics
-- Internal: Alert patterns, system configuration
-- Confidential: User behavior analytics, threat details
-- Restricted: Investigation findings, compliance data
+  - Public: System health metrics, general statistics
+  - Internal: Alert patterns, system configuration
+  - Confidential: User behavior analytics, threat details
+  - Restricted: Investigation findings, compliance data
 
 Access Controls:
-- Role-based dashboard access
-- Field-level data restrictions
-- Audit trail for all access
-- Multi-factor authentication required
+  - Role-based dashboard access
+  - Field-level data restrictions
+  - Audit trail for all access
+  - Multi-factor authentication required
 ```
 
 ### Compliance Frameworks
+
 ```typescript
 const complianceMapping = {
   GDPR: {
     requirements: ['data_minimization', 'purpose_limitation', 'consent_management'],
     implementation: 'Privacy-by-design dashboard features',
-    monitoring: 'Automated compliance reporting'
+    monitoring: 'Automated compliance reporting',
   },
   SOX: {
     requirements: ['audit_trails', 'access_controls', 'data_integrity'],
     implementation: 'Financial control monitoring',
-    monitoring: 'SOX compliance dashboard section'
+    monitoring: 'SOX compliance dashboard section',
   },
   HIPAA: {
     requirements: ['access_logs', 'encryption', 'minimum_necessary'],
     implementation: 'Healthcare data protection controls',
-    monitoring: 'PHI access monitoring'
+    monitoring: 'PHI access monitoring',
   },
   PCI_DSS: {
     requirements: ['access_monitoring', 'vulnerability_management', 'secure_networks'],
     implementation: 'Payment data security controls',
-    monitoring: 'PCI compliance metrics'
-  }
+    monitoring: 'PCI compliance metrics',
+  },
 };
 ```
 
 ## 📋 Standard Operating Procedures
 
 ### Daily Dashboard Review Checklist
+
 ```markdown
 ## Morning Security Dashboard Review (15 minutes)
 
 ### 1. Overnight Metrics Review (5 minutes)
+
 - [ ] Check risk score - should be <4
 - [ ] Review total threats detected - note any spikes
 - [ ] Verify blocked threats percentage >95%
 - [ ] Confirm active incidents <5
 
 ### 2. Alert Triage (5 minutes)
+
 - [ ] Address any critical alerts (red indicators)
 - [ ] Review high-priority alerts for investigation
 - [ ] Check alert status progression
 - [ ] Validate alert source systems are operational
 
 ### 3. System Health Verification (3 minutes)
+
 - [ ] Verify "Last scan" timestamp <10 minutes
 - [ ] Check quick actions responsiveness
 - [ ] Review any system warnings or errors
 - [ ] Confirm real-time updates functioning
 
 ### 4. Documentation (2 minutes)
+
 - [ ] Note any unusual patterns or metrics
 - [ ] Update incident tracking for open issues
 - [ ] Schedule follow-up actions for aging alerts
@@ -735,6 +783,7 @@ const complianceMapping = {
 ```
 
 ### Weekly Dashboard Maintenance
+
 ```bash
 #!/bin/bash
 # Weekly dashboard maintenance script
@@ -765,6 +814,7 @@ echo "Weekly maintenance completed: $(date)"
 ## 📊 Reporting and Analytics
 
 ### Executive Dashboard Summary
+
 ```typescript
 interface ExecutiveDashboardSummary {
   period: string;
@@ -796,22 +846,23 @@ interface ExecutiveDashboardSummary {
 const generateExecutiveSummary = async (): Promise<ExecutiveDashboardSummary> => {
   const metrics = await securityDashboard.getMetrics({ period: '7d' });
   const alerts = await securityDashboard.getAlerts({ period: '7d', status: 'all' });
-  
+
   return {
     period: 'Last 7 Days',
     securityPosture: {
       overallScore: calculateOverallScore(metrics),
       trendDirection: analyzeTrend(metrics.historical),
-      keyMetrics: extractKeyMetrics(metrics)
+      keyMetrics: extractKeyMetrics(metrics),
     },
     riskAssessment: assessCurrentRisk(metrics, alerts),
     alertSummary: summarizeAlerts(alerts),
-    recommendations: generateRecommendations(metrics, alerts)
+    recommendations: generateRecommendations(metrics, alerts),
   };
 };
 ```
 
 ### Custom Dashboard Views
+
 ```typescript
 // Configure role-based dashboard views
 const dashboardViews = {
@@ -819,35 +870,38 @@ const dashboardViews = {
     sections: ['metrics', 'alerts', 'quick_actions'],
     metrics: ['threats', 'blocked_threats', 'active_incidents'],
     alerts: ['all_severities'],
-    permissions: ['investigate', 'acknowledge', 'escalate']
+    permissions: ['investigate', 'acknowledge', 'escalate'],
   },
   security_manager: {
     sections: ['metrics', 'alerts', 'quick_actions', 'trends'],
     metrics: ['all'],
     alerts: ['all_severities'],
-    permissions: ['all_analyst_permissions', 'modify_thresholds', 'generate_reports']
+    permissions: ['all_analyst_permissions', 'modify_thresholds', 'generate_reports'],
   },
   executive: {
     sections: ['executive_summary', 'risk_overview', 'key_incidents'],
     metrics: ['risk_score', 'major_incidents', 'compliance_status'],
     alerts: ['critical_only'],
-    permissions: ['view_only', 'generate_executive_reports']
-  }
+    permissions: ['view_only', 'generate_executive_reports'],
+  },
 };
 ```
 
 ## 🎓 Training and Certification
 
 ### Security Dashboard Certification Program
+
 ```markdown
 ## Level 1: Dashboard User Certification
 
 ### Prerequisites:
+
 - Basic security awareness training
 - Platform access credentials
 - Assigned security role
 
 ### Curriculum:
+
 1. Dashboard Navigation (2 hours)
    - Interface overview
    - Metric interpretation
@@ -864,25 +918,30 @@ const dashboardViews = {
    - Audit log review
 
 ### Practical Assessment:
+
 - Navigate dashboard efficiently
 - Interpret metrics correctly
 - Respond to sample alerts appropriately
 - Demonstrate quick action usage
 
 ### Certification Validity: 12 months
+
 ### Recertification: Annual assessment
 ```
 
 ### Advanced Dashboard Operations
+
 ```markdown
 ## Level 2: Dashboard Administrator Certification
 
 ### Prerequisites:
+
 - Level 1 certification
 - 6 months dashboard experience
 - Security team member role
 
 ### Advanced Topics:
+
 1. Performance Optimization (4 hours)
    - Query optimization
    - Caching strategies
@@ -904,6 +963,7 @@ const dashboardViews = {
    - Issue resolution
 
 ### Certification Projects:
+
 - Design custom dashboard for specific use case
 - Optimize existing dashboard performance
 - Troubleshoot complex dashboard issues
@@ -913,6 +973,7 @@ const dashboardViews = {
 ## 🔗 Integration Guidelines
 
 ### API Integration Examples
+
 ```typescript
 // Dashboard API client implementation
 class SecurityDashboardAPI {
@@ -927,15 +988,15 @@ class SecurityDashboardAPI {
   async getMetrics(filters?: MetricFilters): Promise<SecurityMetrics> {
     const response = await fetch(`${this.apiBase}/api/security/metrics`, {
       headers: {
-        'Authorization': `Bearer ${this.authToken}`,
-        'Content-Type': 'application/json'
-      }
+        Authorization: `Bearer ${this.authToken}`,
+        'Content-Type': 'application/json',
+      },
     });
-    
+
     if (!response.ok) {
       throw new Error(`Failed to fetch metrics: ${response.statusText}`);
     }
-    
+
     return response.json();
   }
 
@@ -943,11 +1004,11 @@ class SecurityDashboardAPI {
     const queryParams = new URLSearchParams(filters);
     const response = await fetch(`${this.apiBase}/api/security/alerts?${queryParams}`, {
       headers: {
-        'Authorization': `Bearer ${this.authToken}`,
-        'Content-Type': 'application/json'
-      }
+        Authorization: `Bearer ${this.authToken}`,
+        'Content-Type': 'application/json',
+      },
     });
-    
+
     return response.json();
   }
 
@@ -955,15 +1016,16 @@ class SecurityDashboardAPI {
     await fetch(`${this.apiBase}/api/security/alerts/${alertId}/acknowledge`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${this.authToken}`,
-        'Content-Type': 'application/json'
-      }
+        Authorization: `Bearer ${this.authToken}`,
+        'Content-Type': 'application/json',
+      },
     });
   }
 }
 ```
 
 ### Webhook Integration
+
 ```typescript
 // Dashboard webhook configuration
 interface DashboardWebhookConfig {
@@ -1007,23 +1069,25 @@ interface AlertWebhookPayload {
 ## 🎯 Quick Reference
 
 ### Dashboard Navigation Shortcuts
+
 ```yaml
 Keyboard Shortcuts:
-- 'Alt + M': Jump to Metrics section
-- 'Alt + A': Jump to Alerts section  
-- 'Alt + Q': Jump to Quick Actions
-- 'Ctrl + R': Refresh dashboard data
-- 'Esc': Close modal/popup windows
-- 'Tab': Navigate between interactive elements
+  - 'Alt + M': Jump to Metrics section
+  - 'Alt + A': Jump to Alerts section
+  - 'Alt + Q': Jump to Quick Actions
+  - 'Ctrl + R': Refresh dashboard data
+  - 'Esc': Close modal/popup windows
+  - 'Tab': Navigate between interactive elements
 
 Mouse Shortcuts:
-- Click metric card: View detailed metric history
-- Click alert title: Open alert details
-- Right-click alert: Context menu with actions
-- Double-click quick action: Execute immediately
+  - Click metric card: View detailed metric history
+  - Click alert title: Open alert details
+  - Right-click alert: Context menu with actions
+  - Double-click quick action: Execute immediately
 ```
 
 ### Essential URLs
+
 ```bash
 # Dashboard endpoints
 https://security.wildconstruct.com/dashboard          # Main dashboard
@@ -1039,37 +1103,39 @@ GET    /api/security/health                           # System health
 ```
 
 ### Color Code Reference
+
 ```yaml
 Risk Scores:
-- Green (0-4): Low risk, optimal security posture
-- Orange (4-6): Medium risk, monitoring recommended  
-- Yellow (6-8): Elevated risk, action required
-- Red (8-10): Critical risk, emergency response
+  - Green (0-4): Low risk, optimal security posture
+  - Orange (4-6): Medium risk, monitoring recommended
+  - Yellow (6-8): Elevated risk, action required
+  - Red (8-10): Critical risk, emergency response
 
 Alert Severities:
-- Red XCircle: Critical alerts requiring immediate action
-- Orange AlertCircle: High priority alerts needing attention
-- Yellow AlertTriangle: Medium priority routine alerts
-- Blue CheckCircle: Low priority informational alerts
+  - Red XCircle: Critical alerts requiring immediate action
+  - Orange AlertCircle: High priority alerts needing attention
+  - Yellow AlertTriangle: Medium priority routine alerts
+  - Blue CheckCircle: Low priority informational alerts
 
 Status Indicators:
-- Red background: Open alerts requiring action
-- Yellow background: Investigating, work in progress
-- Green background: Resolved, completed successfully
+  - Red background: Open alerts requiring action
+  - Yellow background: Investigating, work in progress
+  - Green background: Resolved, completed successfully
 ```
 
 ### Contact Information
+
 ```yaml
 Security Operations:
-- Dashboard Support: dashboard-support@wildconstruct.com
-- Security Team: security-team@wildconstruct.com
-- Emergency Hotline: +1-XXX-XXX-XXXX
-- On-Call Engineer: oncall@wildconstruct.com
+  - Dashboard Support: dashboard-support@wildconstruct.com
+  - Security Team: security-team@wildconstruct.com
+  - Emergency Hotline: +1-XXX-XXX-XXXX
+  - On-Call Engineer: oncall@wildconstruct.com
 
 Technical Support:
-- API Issues: api-support@wildconstruct.com
-- Integration Help: integrations@wildconstruct.com
-- Performance Issues: performance@wildconstruct.com
+  - API Issues: api-support@wildconstruct.com
+  - Integration Help: integrations@wildconstruct.com
+  - Performance Issues: performance@wildconstruct.com
 ```
 
 ---

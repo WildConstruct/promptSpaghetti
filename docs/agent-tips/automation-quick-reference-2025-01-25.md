@@ -18,11 +18,12 @@ node scripts/smart-test-selector.js
 ## ⚡ **Essential Commands**
 
 ### **🔧 Core Workflows:**
+
 ```bash
 # Complete QA pipeline
 node scripts/automation-orchestrator.js qa-full
 
-# Pre-commit validation  
+# Pre-commit validation
 node scripts/automation-orchestrator.js pre-commit
 
 # Real-time dashboard
@@ -30,12 +31,13 @@ node scripts/quality-monitoring-dashboard.js
 ```
 
 ### **📊 Individual Tools:**
+
 ```bash
 # Quality validation
 node scripts/dev-quality-check.js
 
 # Security scanning
-node scripts/security-scanner.js  
+node scripts/security-scanner.js
 
 # Performance check
 node scripts/performance-regression-detector.js
@@ -52,11 +54,13 @@ node scripts/smart-test-selector.js
 ## 🎯 **Use Cases**
 
 ### **🚨 Before Committing:**
+
 ```bash
 node scripts/automation-orchestrator.js pre-commit
 ```
 
 ### **🔍 During Development:**
+
 ```bash
 # Start monitoring
 node scripts/quality-monitoring-dashboard.js &
@@ -66,11 +70,13 @@ node scripts/smart-test-selector.js
 ```
 
 ### **🛠️ Weekly Maintenance:**
+
 ```bash
 node scripts/automation-orchestrator.js maintenance
 ```
 
 ### **🚀 CI/CD Simulation:**
+
 ```bash
 node scripts/automation-orchestrator.js ci-pipeline
 ```
@@ -80,7 +86,7 @@ node scripts/automation-orchestrator.js ci-pipeline
 ## 📋 **Key Benefits**
 
 - **⚡ 60-80% faster testing** through smart selection
-- **🛡️ Zero tolerance** for critical security issues  
+- **🛡️ Zero tolerance** for critical security issues
 - **📈 Real-time monitoring** with web dashboard
 - **🧠 Intelligent automation** with risk assessment
 - **⚙️ One-command setup** for new environments

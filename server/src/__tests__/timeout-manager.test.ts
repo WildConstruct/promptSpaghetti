@@ -19,7 +19,7 @@ describe('TimeoutManager', () => {
   describe('Configuration', () => {
     it('should use default configuration', () => {
       const config = timeoutManager.getConfig();
-      
+
       expect(config.database.connect).toBe(10000);
       expect(config.database.query).toBe(30000);
       expect(config.redis.connect).toBe(5000);
@@ -29,7 +29,7 @@ describe('TimeoutManager', () => {
     it('should accept custom configuration', () => {
       const customConfig = {
         database: { query: 15000 },
-        redis: { operation: 8000 }
+        redis: { operation: 8000 },
       };
 
       const customManager = new TimeoutManager(customConfig);
@@ -43,7 +43,7 @@ describe('TimeoutManager', () => {
     it('should update configuration', () => {
       const updates = {
         database: { query: 20000 },
-        auth: { login: 8000 }
+        auth: { login: 8000 },
       };
 
       timeoutManager.updateConfig(updates);
@@ -57,12 +57,8 @@ describe('TimeoutManager', () => {
   describe('Timeout Execution', () => {
     it('should execute operation successfully within timeout', async () => {
       const operation = jest.fn<unknown[], unknown>().mockResolvedValue('success' as unknown as unknown);
-      
-      const result = await timeoutManager.executeWithTimeout(
-        operation,
-        'database',
-        'query'
-      );
+
+      const result = await timeoutManager.executeWithTimeout(operation, 'database', 'query');
 
       expect(result.success).toBe(true);
       expect(result.data).toBe('success');
@@ -74,18 +70,14 @@ describe('TimeoutManager', () => {
     it('should timeout operation that takes too long', async () => {
       // Create manager with very short timeout
       const shortTimeoutManager = new TimeoutManager({
-        database: { query: 100 }
+        database: { query: 100 },
       });
 
-      const operation = jest.fn<unknown[], unknown>().mockImplementation(() => 
-        new Promise(resolve => setTimeout(() => resolve('late'), 200))
-      );
-      
-      const result = await shortTimeoutManager.executeWithTimeout(
-        operation,
-        'database',
-        'query'
-      );
+      const operation = jest
+        .fn<unknown[], unknown>()
+        .mockImplementation(() => new Promise(resolve => setTimeout(() => resolve('late'), 200)));
+
+      const result = await shortTimeoutManager.executeWithTimeout(operation, 'database', 'query');
 
       expect(result.success).toBe(false);
       expect(result.timedOut).toBe(true);
@@ -93,16 +85,13 @@ describe('TimeoutManager', () => {
     });
 
     it('should retry failed operations', async () => {
-      const operation = jest.fn<unknown[], unknown>()
+      const operation = jest
+        .fn<unknown[], unknown>()
         .mockRejectedValueOnce(new Error('First failure'))
         .mockRejectedValueOnce(new Error('Second failure'))
         .mockResolvedValue('success' as unknown as unknown);
-      
-      const result = await timeoutManager.executeWithTimeout(
-        operation,
-        'database',
-        'query'
-      );
+
+      const result = await timeoutManager.executeWithTimeout(operation, 'database', 'query');
 
       expect(result.success).toBe(true);
       expect(result.data).toBe('success');
@@ -112,12 +101,8 @@ describe('TimeoutManager', () => {
 
     it('should respect maximum retry attempts', async () => {
       const operation = jest.fn<unknown[], unknown>().mockRejectedValue(new Error('Always fails'));
-      
-      const result = await timeoutManager.executeWithTimeout(
-        operation,
-        'database',
-        'query'
-      );
+
+      const result = await timeoutManager.executeWithTimeout(operation, 'database', 'query');
 
       expect(result.success).toBe(false);
       expect(result.attempts).toBe(4); // 1 initial + 3 retries
@@ -138,36 +123,37 @@ describe('TimeoutManager', () => {
 
     it('should open circuit breaker after threshold failures', async () => {
       const operation = jest.fn<unknown[], unknown>().mockRejectedValue(new Error('Failure'));
-      
+
       // First failure
       await circuitBreakerManager.executeWithTimeout(operation, 'database', 'query');
       // Second failure - should open circuit breaker
       await circuitBreakerManager.executeWithTimeout(operation, 'database', 'query');
-      
+
       // Third attempt should be blocked by circuit breaker
       const result = await circuitBreakerManager.executeWithTimeout(operation, 'database', 'query');
-      
+
       expect(result.success).toBe(false);
       expect(result.circuitBreakerOpen).toBe(true);
       expect(result.attempts).toBe(0);
     });
 
     it('should reset circuit breaker after timeout', async () => {
-      const operation = jest.fn<unknown[], unknown>()
+      const operation = jest
+        .fn<unknown[], unknown>()
         .mockRejectedValueOnce(new Error('Failure'))
         .mockRejectedValueOnce(new Error('Failure'))
         .mockResolvedValue('success' as unknown as unknown);
-      
+
       // Trigger circuit breaker
       await circuitBreakerManager.executeWithTimeout(operation, 'database', 'query');
       await circuitBreakerManager.executeWithTimeout(operation, 'database', 'query');
-      
+
       // Wait for reset timeout (optimized for speed)
       await new Promise(resolve => setTimeout(resolve, 10));
-      
+
       // Should be able to execute again
       const result = await circuitBreakerManager.executeWithTimeout(operation, 'database', 'query');
-      
+
       expect(result.success).toBe(true);
       expect(result.circuitBreakerOpen).toBe(false);
     });
@@ -176,14 +162,11 @@ describe('TimeoutManager', () => {
   describe('Fallback Operations', () => {
     it('should execute fallback when primary fails', async () => {
       const primaryOperation = jest.fn<unknown[], unknown>().mockRejectedValue(new Error('Primary failed'));
-      const fallbackOperation = jest.fn<unknown[], unknown>().mockResolvedValue('fallback success' as unknown as unknown);
-      
-      const result = await timeoutManager.executeWithFallback(
-        primaryOperation,
-        fallbackOperation,
-        'database',
-        'query'
-      );
+      const fallbackOperation = jest
+        .fn<unknown[], unknown>()
+        .mockResolvedValue('fallback success' as unknown as unknown);
+
+      const result = await timeoutManager.executeWithFallback(primaryOperation, fallbackOperation, 'database', 'query');
 
       expect(result.success).toBe(true);
       expect(result.data).toBe('fallback success');
@@ -193,14 +176,11 @@ describe('TimeoutManager', () => {
 
     it('should use primary result when it succeeds', async () => {
       const primaryOperation = jest.fn<unknown[], unknown>().mockResolvedValue('primary success' as unknown as unknown);
-      const fallbackOperation = jest.fn<unknown[], unknown>().mockResolvedValue('fallback success' as unknown as unknown);
-      
-      const result = await timeoutManager.executeWithFallback(
-        primaryOperation,
-        fallbackOperation,
-        'database',
-        'query'
-      );
+      const fallbackOperation = jest
+        .fn<unknown[], unknown>()
+        .mockResolvedValue('fallback success' as unknown as unknown);
+
+      const result = await timeoutManager.executeWithFallback(primaryOperation, fallbackOperation, 'database', 'query');
 
       expect(result.success).toBe(true);
       expect(result.data).toBe('primary success');
@@ -211,16 +191,9 @@ describe('TimeoutManager', () => {
 
   describe('Operation Management', () => {
     it('should track active operations', async () => {
-      const slowOperation = () => new Promise(resolve => 
-        setTimeout(() => resolve('done'), 100)
-      );
-      
-      const promise = timeoutManager.executeWithTimeout(
-        slowOperation,
-        'database',
-        'query',
-        'test-operation'
-      );
+      const slowOperation = () => new Promise(resolve => setTimeout(() => resolve('done'), 100));
+
+      const promise = timeoutManager.executeWithTimeout(slowOperation, 'database', 'query', 'test-operation');
 
       // Check that operation is tracked
       const healthBefore = timeoutManager.getHealthStatus();
@@ -234,16 +207,12 @@ describe('TimeoutManager', () => {
     });
 
     it('should cancel active operation', async () => {
-      const slowOperation = () => new Promise(resolve => 
-        setTimeout(() => resolve('done'), 10) // Reduced from 1000ms to 10ms
-      );
-      
-      const promise = timeoutManager.executeWithTimeout(
-        slowOperation,
-        'database',
-        'query',
-        'test-operation'
-      );
+      const slowOperation = () =>
+        new Promise(
+          resolve => setTimeout(() => resolve('done'), 10) // Reduced from 1000ms to 10ms
+        );
+
+      const promise = timeoutManager.executeWithTimeout(slowOperation, 'database', 'query', 'test-operation');
 
       // Cancel the operation
       const cancelled = timeoutManager.cancelOperation('test-operation');
@@ -255,15 +224,16 @@ describe('TimeoutManager', () => {
     });
 
     it('should cancel all operations', async () => {
-      const slowOperation = () => new Promise(resolve => 
-        setTimeout(() => resolve('done'), 10) // Reduced from 1000ms to 10ms
-      );
-      
+      const slowOperation = () =>
+        new Promise(
+          resolve => setTimeout(() => resolve('done'), 10) // Reduced from 1000ms to 10ms
+        );
+
       // Start multiple operations
       const promises = [
         timeoutManager.executeWithTimeout(slowOperation, 'database', 'query', 'op1'),
         timeoutManager.executeWithTimeout(slowOperation, 'database', 'query', 'op2'),
-        timeoutManager.executeWithTimeout(slowOperation, 'database', 'query', 'op3')
+        timeoutManager.executeWithTimeout(slowOperation, 'database', 'query', 'op3'),
       ];
 
       // Cancel all operations
@@ -281,9 +251,9 @@ describe('TimeoutManager', () => {
   describe('Metrics Collection', () => {
     it('should collect metrics for operations', async () => {
       const operation = jest.fn<unknown[], unknown>().mockResolvedValue('success' as unknown as unknown);
-      
+
       await timeoutManager.executeWithTimeout(operation, 'database', 'query');
-      
+
       const metrics = timeoutManager.getMetrics('database.query');
       expect(metrics).toBeDefined();
       expect(metrics!.totalOperations).toBe(1);
@@ -292,15 +262,13 @@ describe('TimeoutManager', () => {
 
     it('should track timeout metrics', async () => {
       const shortTimeoutManager = new TimeoutManager({
-        database: { query: 50 }
+        database: { query: 50 },
       });
 
-      const slowOperation = () => new Promise(resolve => 
-        setTimeout(() => resolve('done'), 100)
-      );
-      
+      const slowOperation = () => new Promise(resolve => setTimeout(() => resolve('done'), 100));
+
       await shortTimeoutManager.executeWithTimeout(slowOperation, 'database', 'query');
-      
+
       const metrics = shortTimeoutManager.getMetrics('database.query');
       expect(metrics!.timeouts).toBe(1);
       expect(metrics!.lastTimeout).toBeDefined();
@@ -308,7 +276,7 @@ describe('TimeoutManager', () => {
 
     it('should provide health status', () => {
       const health = timeoutManager.getHealthStatus();
-      
+
       expect(health).toHaveProperty('activeOperations');
       expect(health).toHaveProperty('openCircuitBreakers');
       expect(health).toHaveProperty('totalTimeouts');
@@ -321,14 +289,14 @@ describe('TimeoutManager', () => {
     it('should return same instance for getTimeoutManager', () => {
       const instance1 = getTimeoutManager();
       const instance2 = getTimeoutManager();
-      
+
       expect(instance1).toBe(instance2);
     });
 
     it('should create new instance with initializeTimeoutManager', () => {
       const customConfig = { database: { query: 25000 } };
       const newInstance = initializeTimeoutManager(customConfig);
-      
+
       expect(newInstance).toBeDefined();
       expect(newInstance.getConfig().database.query).toBe(25000);
     });
@@ -358,41 +326,35 @@ describe('TimeoutMonitoringService', () => {
         const timeout = setTimeout(() => {
           reject(new Error('Timeout event not received within 3s'));
         }, 3000);
-        
-        shortMonitoring.on('timeout_recorded', (event) => {
+
+        shortMonitoring.on('timeout_recorded', event => {
           expect(event.metricKey).toBeDefined();
           clearTimeout(timeout);
           resolve();
         });
       });
 
-      const slowOperation = () => new Promise(resolve => 
-        setTimeout(() => resolve('done'), 100)
-      );
-      
+      const slowOperation = () => new Promise(resolve => setTimeout(() => resolve('done'), 100));
+
       try {
         await shortTimeoutManager.executeWithTimeout(slowOperation, 'database', 'query');
       } catch (error) {
         // Expected timeout error
       }
-      
+
       await timeoutPromise;
     });
 
     it('should handle circuit breaker events', async () => {
-      const circuitBreakerManager = new TimeoutManager(
-        {},
-        {},
-        { failureThreshold: 1 }
-      );
+      const circuitBreakerManager = new TimeoutManager({}, {}, { failureThreshold: 1 });
       const circuitMonitoring = createTimeoutMonitoringService(circuitBreakerManager);
-      
+
       const circuitBreakerPromise = new Promise<void>((resolve, reject) => {
         const timeout = setTimeout(() => {
           reject(new Error('Circuit breaker event not received within 3s'));
         }, 3000);
-        
-        circuitMonitoring.on('circuit_breaker_opened', (event) => {
+
+        circuitMonitoring.on('circuit_breaker_opened', event => {
           expect(event.metricKey).toBeDefined();
           clearTimeout(timeout);
           resolve();
@@ -400,13 +362,13 @@ describe('TimeoutMonitoringService', () => {
       });
 
       const failingOperation = () => Promise.reject(new Error('Failure'));
-      
+
       try {
         await circuitBreakerManager.executeWithTimeout(failingOperation, 'database', 'query');
       } catch (error) {
         // Expected to fail
       }
-      
+
       await circuitBreakerPromise;
     });
   });
@@ -414,9 +376,9 @@ describe('TimeoutMonitoringService', () => {
   describe('Performance Metrics', () => {
     it('should calculate performance metrics', async () => {
       const operation = jest.fn<unknown[], unknown>().mockResolvedValue('success' as unknown as unknown);
-      
+
       await timeoutManager.executeWithTimeout(operation, 'database', 'query');
-      
+
       const metrics = monitoringService.getPerformanceMetrics('database.query');
       expect(metrics).toBeDefined();
       expect(metrics!.operation).toBe('database.query');
@@ -426,10 +388,10 @@ describe('TimeoutMonitoringService', () => {
 
     it('should get all performance metrics', async () => {
       const operation = jest.fn<unknown[], unknown>().mockResolvedValue('success' as unknown as unknown);
-      
+
       await timeoutManager.executeWithTimeout(operation, 'database', 'query');
       await timeoutManager.executeWithTimeout(operation, 'redis', 'operation');
-      
+
       const allMetrics = monitoringService.getAllPerformanceMetrics();
       expect(allMetrics).toHaveLength(2);
       expect(allMetrics.map(m => m.operation)).toContain('database.query');
@@ -441,8 +403,8 @@ describe('TimeoutMonitoringService', () => {
     it('should create alerts for excessive timeouts', async () => {
       const alertConfig = { timeoutThreshold: 1 };
       const alertMonitoring = createTimeoutMonitoringService(timeoutManager, alertConfig);
-      
-      alertMonitoring.on('alert_created', (alert) => {
+
+      alertMonitoring.on('alert_created', alert => {
         expect(alert.type).toBe('timeout');
         expect(alert.severity).toBeDefined();
       });
@@ -450,21 +412,19 @@ describe('TimeoutMonitoringService', () => {
       // Create a timeout to trigger alert
       const shortTimeoutManager = new TimeoutManager({ database: { query: 50 } });
       const shortMonitoring = createTimeoutMonitoringService(shortTimeoutManager, alertConfig);
-      
+
       let alertCreated = false;
       shortMonitoring.on('alert_created', () => {
         alertCreated = true;
       });
 
-      const slowOperation = () => new Promise(resolve => 
-        setTimeout(() => resolve('done'), 100)
-      );
-      
+      const slowOperation = () => new Promise(resolve => setTimeout(() => resolve('done'), 100));
+
       await shortTimeoutManager.executeWithTimeout(slowOperation, 'database', 'query');
-      
+
       // Small delay to allow event processing
       await new Promise(resolve => setTimeout(resolve, 10));
-      
+
       expect(alertCreated).toBe(true);
     });
 
@@ -477,15 +437,15 @@ describe('TimeoutMonitoringService', () => {
         message: 'Test alert',
         timestamp: new Date(),
         resolved: false,
-        metrics: {}
+        metrics: {},
       };
 
       // Manually add alert to test resolution
       (monitoringService as any).activeAlerts.set(alert.id, alert);
-      
+
       const resolved = monitoringService.resolveAlert(alert.id);
       expect(resolved).toBe(true);
-      
+
       const alerts = monitoringService.getActiveAlerts();
       expect(alerts).toHaveLength(0);
     });
@@ -495,15 +455,15 @@ describe('TimeoutMonitoringService', () => {
     it('should provide dashboard data', async () => {
       const operation = jest.fn<unknown[], unknown>().mockResolvedValue('success' as unknown as unknown);
       await timeoutManager.executeWithTimeout(operation, 'database', 'query');
-      
+
       const dashboard = monitoringService.getDashboardData();
-      
+
       expect(dashboard).toHaveProperty('overview');
       expect(dashboard).toHaveProperty('performanceMetrics');
       expect(dashboard).toHaveProperty('recentAlerts');
       expect(dashboard).toHaveProperty('circuitBreakerStates');
       expect(dashboard).toHaveProperty('healthStatus');
-      
+
       expect(dashboard.overview.totalOperations).toBeGreaterThan(0);
     });
   });
@@ -512,16 +472,16 @@ describe('TimeoutMonitoringService', () => {
     it('should add and remove alert channels', () => {
       const slackChannel = {
         type: 'slack' as const,
-        config: { webhookUrl: 'https://hooks.slack.com/test' }
+        config: { webhookUrl: 'https://hooks.slack.com/test' },
       };
 
       monitoringService.addAlertChannel(slackChannel);
-      
+
       // Verify channel was added (internal state)
       expect((monitoringService as any).alertChannels).toHaveLength(1);
-      
+
       monitoringService.removeAlertChannel('slack');
-      
+
       // Verify channel was removed
       expect((monitoringService as any).alertChannels).toHaveLength(0);
     });
@@ -532,11 +492,11 @@ describe('TimeoutMonitoringService', () => {
       const updates = {
         timeoutThreshold: 10,
         circuitBreakerThreshold: 3,
-        errorRateThreshold: 0.15
+        errorRateThreshold: 0.15,
       };
 
       monitoringService.updateAlertConfig(updates);
-      
+
       // Verify configuration was updated
       const config = (monitoringService as any).alertConfig;
       expect(config.timeoutThreshold).toBe(10);
@@ -556,14 +516,14 @@ describe('TimeoutMonitoringService', () => {
         message: 'Old alert',
         timestamp: new Date(Date.now() - 25 * 60 * 60 * 1000), // 25 hours ago
         resolved: false,
-        metrics: {}
+        metrics: {},
       };
 
       (monitoringService as any).activeAlerts.set(oldAlert.id, oldAlert);
-      
+
       // Cleanup with 24 hour max age
       monitoringService.cleanup(24 * 60 * 60 * 1000);
-      
+
       // Old alert should be removed
       const alerts = monitoringService.getAllAlerts();
       expect(alerts).toHaveLength(0);

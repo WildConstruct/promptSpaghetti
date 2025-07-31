@@ -17,16 +17,7 @@
     "dryRun": false
   },
   "exclusions": {
-    "skipPatterns": [
-      "URGENT",
-      "HOTFIX",
-      "CRITICAL",
-      "PRODUCTION"
-    ],
-    "skipAgents": [
-      "build-bot",
-      "deploy-agent",
-      "monitoring-service"
-    ]
+    "skipPatterns": ["URGENT", "HOTFIX", "CRITICAL", "PRODUCTION"],
+    "skipAgents": ["build-bot", "deploy-agent", "monitoring-service"]
   }
 }

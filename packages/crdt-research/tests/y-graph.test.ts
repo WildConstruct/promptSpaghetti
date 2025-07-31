@@ -20,10 +20,10 @@ describe('YGraph CRDT Implementation', () => {
     // Create two documents to simulate concurrent editing
     doc1 = new Y.Doc();
     doc2 = new Y.Doc();
-    
+
     graph1 = new YGraph();
     graph2 = new YGraph();
-    
+
     doc1.getMap('graph').set('root', graph1);
     doc2.getMap('graph').set('root', graph2);
   });
@@ -50,11 +50,11 @@ describe('YGraph CRDT Implementation', () => {
         type: 'WeightedChoice',
         position: { x: 100, y: 100 },
         data: { choices: [] },
-        metadata: {}
+        metadata: {},
       };
 
       graph1.addNode(node);
-      
+
       expect(graph1.getNode('node1')).toEqual(node);
       expect(graph1.getNodes()).toHaveLength(1);
     });
@@ -65,7 +65,7 @@ describe('YGraph CRDT Implementation', () => {
         type: 'WeightedChoice',
         position: { x: 100, y: 100 },
         data: { choices: [] },
-        metadata: {}
+        metadata: {},
       };
 
       graph1.addNode(node);
@@ -81,7 +81,7 @@ describe('YGraph CRDT Implementation', () => {
         type: 'WeightedChoice',
         position: { x: 100, y: 100 },
         data: {},
-        metadata: {}
+        metadata: {},
       };
 
       const node2: CRDTNode = {
@@ -89,7 +89,7 @@ describe('YGraph CRDT Implementation', () => {
         type: 'Output',
         position: { x: 200, y: 200 },
         data: {},
-        metadata: {}
+        metadata: {},
       };
 
       const edge: CRDTEdge = {
@@ -98,7 +98,7 @@ describe('YGraph CRDT Implementation', () => {
         target: 'node2',
         sourceHandle: 'output',
         targetHandle: 'input',
-        metadata: {}
+        metadata: {},
       };
 
       graph1.addNode(node1);
@@ -122,7 +122,7 @@ describe('YGraph CRDT Implementation', () => {
         type: 'WeightedChoice',
         position: { x: 100, y: 100 },
         data: {},
-        metadata: {}
+        metadata: {},
       };
 
       const node2: CRDTNode = {
@@ -130,7 +130,7 @@ describe('YGraph CRDT Implementation', () => {
         type: 'Output',
         position: { x: 200, y: 200 },
         data: {},
-        metadata: {}
+        metadata: {},
       };
 
       const edge: CRDTEdge = {
@@ -139,7 +139,7 @@ describe('YGraph CRDT Implementation', () => {
         target: 'node2',
         sourceHandle: 'output',
         targetHandle: 'input',
-        metadata: {}
+        metadata: {},
       };
 
       graph1.addNode(node1);
@@ -156,7 +156,7 @@ describe('YGraph CRDT Implementation', () => {
         target: 'node2',
         sourceHandle: 'output',
         targetHandle: 'input',
-        metadata: {}
+        metadata: {},
       };
 
       graph1.addEdge(edge);
@@ -169,7 +169,7 @@ describe('YGraph CRDT Implementation', () => {
         type: 'WeightedChoice',
         position: { x: 100, y: 100 },
         data: {},
-        metadata: {}
+        metadata: {},
       };
 
       const node2: CRDTNode = {
@@ -177,7 +177,7 @@ describe('YGraph CRDT Implementation', () => {
         type: 'Output',
         position: { x: 200, y: 200 },
         data: {},
-        metadata: {}
+        metadata: {},
       };
 
       const edge: CRDTEdge = {
@@ -186,7 +186,7 @@ describe('YGraph CRDT Implementation', () => {
         target: 'node2',
         sourceHandle: 'output',
         targetHandle: 'input',
-        metadata: { label: 'Initial' }
+        metadata: { label: 'Initial' },
       };
 
       graph1.addNode(node1);
@@ -206,7 +206,7 @@ describe('YGraph CRDT Implementation', () => {
         type: 'WeightedChoice',
         position: { x: 100, y: 100 },
         data: {},
-        metadata: {}
+        metadata: {},
       };
 
       const node2: CRDTNode = {
@@ -214,12 +214,12 @@ describe('YGraph CRDT Implementation', () => {
         type: 'Output',
         position: { x: 200, y: 200 },
         data: {},
-        metadata: {}
+        metadata: {},
       };
 
       // User 1 adds node1
       graph1.addNode(node1);
-      
+
       // User 2 adds node2
       graph2.addNode(node2);
 
@@ -241,7 +241,7 @@ describe('YGraph CRDT Implementation', () => {
         type: 'WeightedChoice',
         position: { x: 100, y: 100 },
         data: { label: 'Initial' },
-        metadata: {}
+        metadata: {},
       };
 
       // Both users start with the same node
@@ -250,7 +250,7 @@ describe('YGraph CRDT Implementation', () => {
 
       // User 1 updates position
       graph1.updateNode('node1', { position: { x: 150, y: 150 } });
-      
+
       // User 2 updates data
       graph2.updateNode('node1', { data: { label: 'Updated' } });
 
@@ -273,7 +273,7 @@ describe('YGraph CRDT Implementation', () => {
         type: 'WeightedChoice',
         position: { x: 100, y: 100 },
         data: {},
-        metadata: {}
+        metadata: {},
       };
 
       const node2: CRDTNode = {
@@ -281,7 +281,7 @@ describe('YGraph CRDT Implementation', () => {
         type: 'Output',
         position: { x: 200, y: 200 },
         data: {},
-        metadata: {}
+        metadata: {},
       };
 
       // Both users start with the same nodes
@@ -296,7 +296,7 @@ describe('YGraph CRDT Implementation', () => {
         target: 'node2',
         sourceHandle: 'output',
         targetHandle: 'input',
-        metadata: {}
+        metadata: {},
       };
       graph1.addEdge(edge);
 
@@ -327,7 +327,7 @@ describe('YGraph CRDT Implementation', () => {
         type: 'WeightedChoice',
         position: { x: 100, y: 100 },
         data: { choices: ['A', 'B', 'C'] },
-        metadata: {}
+        metadata: {},
       };
 
       const node2: CRDTNode = {
@@ -335,7 +335,7 @@ describe('YGraph CRDT Implementation', () => {
         type: 'Output',
         position: { x: 200, y: 200 },
         data: {},
-        metadata: {}
+        metadata: {},
       };
 
       const edge: CRDTEdge = {
@@ -344,7 +344,7 @@ describe('YGraph CRDT Implementation', () => {
         target: 'node2',
         sourceHandle: 'output',
         targetHandle: 'input',
-        metadata: {}
+        metadata: {},
       };
 
       graph1.addNode(node1);
@@ -352,7 +352,7 @@ describe('YGraph CRDT Implementation', () => {
       graph1.addEdge(edge);
 
       const json = graph1.toJSON();
-      
+
       expect(json.nodes).toHaveLength(2);
       expect(json.edges).toHaveLength(1);
 
@@ -360,7 +360,7 @@ describe('YGraph CRDT Implementation', () => {
       const newGraph = new YGraph();
       const newDoc = new Y.Doc();
       newDoc.getMap('graph').set('root', newGraph);
-      
+
       newGraph.fromJSON(json);
 
       expect(newGraph.getNodes()).toHaveLength(2);
@@ -380,10 +380,10 @@ describe('YGraph CRDT Implementation', () => {
           type: 'WeightedChoice' as const,
           position: { x: 100, y: 100 },
           data: {},
-          metadata: {}
+          metadata: {},
         },
         timestamp: Date.now(),
-        userId: 'user1'
+        userId: 'user1',
       };
 
       graph1.applyOperation(createOp);
@@ -395,7 +395,7 @@ describe('YGraph CRDT Implementation', () => {
         targetId: 'node1',
         data: { position: { x: 200, y: 200 } },
         timestamp: Date.now(),
-        userId: 'user1'
+        userId: 'user1',
       };
 
       graph1.applyOperation(updateOp);
@@ -406,7 +406,7 @@ describe('YGraph CRDT Implementation', () => {
         action: 'delete' as const,
         targetId: 'node1',
         timestamp: Date.now(),
-        userId: 'user1'
+        userId: 'user1',
       };
 
       graph1.applyOperation(deleteOp);
@@ -415,9 +415,9 @@ describe('YGraph CRDT Implementation', () => {
   });
 
   describe('Observer Pattern', () => {
-    test('should notify observers of changes', (done) => {
+    test('should notify observers of changes', done => {
       let changeCount = 0;
-      
+
       const observer = (event: Y.YEvent<any>) => {
         changeCount++;
         if (changeCount === 2) {
@@ -433,7 +433,7 @@ describe('YGraph CRDT Implementation', () => {
         type: 'WeightedChoice',
         position: { x: 100, y: 100 },
         data: {},
-        metadata: {}
+        metadata: {},
       };
 
       graph1.addNode(node);

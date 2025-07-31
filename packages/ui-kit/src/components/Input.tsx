@@ -36,7 +36,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const theme = useTheme();
     const [isFocused, setIsFocused] = useState(false);
     const [internalValue, setInternalValue] = useState(value || defaultValue || '');
-    
+
     const inputId = generateId('input');
     const errorId = error ? `${inputId}-error` : undefined;
     const hintId = hint ? `${inputId}-hint` : undefined;
@@ -46,24 +46,33 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       ...createSizeStyles(size, theme, 'input'),
       ...(leftIcon && { paddingLeft: `${theme.spacing.xl}px` }),
       ...(rightIcon && { paddingRight: `${theme.spacing.xl}px` }),
-      ...style
+      ...style,
     };
 
-    const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-      const newValue = event.target.value;
-      setInternalValue(newValue);
-      onChange?.(newValue);
-    }, [onChange]);
+    const handleChange = useCallback(
+      (event: React.ChangeEvent<HTMLInputElement>) => {
+        const newValue = event.target.value;
+        setInternalValue(newValue);
+        onChange?.(newValue);
+      },
+      [onChange]
+    );
 
-    const handleFocus = useCallback((event: React.FocusEvent<HTMLInputElement>) => {
-      setIsFocused(true);
-      onFocus?.();
-    }, [onFocus]);
+    const handleFocus = useCallback(
+      (event: React.FocusEvent<HTMLInputElement>) => {
+        setIsFocused(true);
+        onFocus?.();
+      },
+      [onFocus]
+    );
 
-    const handleBlur = useCallback((event: React.FocusEvent<HTMLInputElement>) => {
-      setIsFocused(false);
-      onBlur?.();
-    }, [onBlur]);
+    const handleBlur = useCallback(
+      (event: React.FocusEvent<HTMLInputElement>) => {
+        setIsFocused(false);
+        onBlur?.();
+      },
+      [onBlur]
+    );
 
     const currentValue = value !== undefined ? value : internalValue;
 
@@ -79,7 +88,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               fontSize: `${theme.typography.fontSize.sm}px`,
               fontWeight: theme.typography.fontWeight.medium,
               color: error ? theme.colors.error : theme.colors.text,
-              fontFamily: theme.typography.fontFamily
+              fontFamily: theme.typography.fontFamily,
             }}
           >
             {label}
@@ -88,7 +97,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                 className="ui-input-required"
                 style={{
                   color: theme.colors.error,
-                  marginLeft: `${theme.spacing.xs / 2}px`
+                  marginLeft: `${theme.spacing.xs / 2}px`,
                 }}
               >
                 *
@@ -96,13 +105,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             )}
           </label>
         )}
-        
+
         <div
           className="ui-input-wrapper"
           style={{
             position: 'relative',
             display: 'flex',
-            alignItems: 'center'
+            alignItems: 'center',
           }}
         >
           {leftIcon && (
@@ -115,13 +124,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                 alignItems: 'center',
                 color: disabled ? theme.colors.textSecondary : theme.colors.textSecondary,
                 pointerEvents: 'none',
-                zIndex: 1
+                zIndex: 1,
               }}
             >
               {leftIcon}
             </div>
           )}
-          
+
           <input
             ref={ref}
             id={inputId}
@@ -141,7 +150,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             aria-invalid={!!error}
             {...props}
           />
-          
+
           {rightIcon && (
             <div
               className="ui-input-icon-right"
@@ -152,14 +161,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                 alignItems: 'center',
                 color: disabled ? theme.colors.textSecondary : theme.colors.textSecondary,
                 pointerEvents: 'none',
-                zIndex: 1
+                zIndex: 1,
               }}
             >
               {rightIcon}
             </div>
           )}
         </div>
-        
+
         {error && (
           <div
             id={errorId}
@@ -168,13 +177,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               marginTop: `${theme.spacing.xs}px`,
               fontSize: `${theme.typography.fontSize.sm}px`,
               color: theme.colors.error,
-              fontFamily: theme.typography.fontFamily
+              fontFamily: theme.typography.fontFamily,
             }}
           >
             {error}
           </div>
         )}
-        
+
         {hint && !error && (
           <div
             id={hintId}
@@ -183,7 +192,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               marginTop: `${theme.spacing.xs}px`,
               fontSize: `${theme.typography.fontSize.sm}px`,
               color: theme.colors.textSecondary,
-              fontFamily: theme.typography.fontFamily
+              fontFamily: theme.typography.fontFamily,
             }}
           >
             {hint}
@@ -224,7 +233,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, InputProps & { rows?: nu
   ) => {
     const theme = useTheme();
     const [internalValue, setInternalValue] = useState(value || defaultValue || '');
-    
+
     const inputId = generateId('textarea');
     const errorId = error ? `${inputId}-error` : undefined;
     const hintId = hint ? `${inputId}-hint` : undefined;
@@ -235,14 +244,17 @@ export const TextArea = forwardRef<HTMLTextAreaElement, InputProps & { rows?: nu
       minHeight: `${rows * 1.5}em`,
       resize: resize ? 'vertical' : 'none',
       lineHeight: theme.typography.lineHeight.normal,
-      ...style
+      ...style,
     };
 
-    const handleChange = useCallback((event: React.ChangeEvent<HTMLTextAreaElement>) => {
-      const newValue = event.target.value;
-      setInternalValue(newValue);
-      onChange?.(newValue);
-    }, [onChange]);
+    const handleChange = useCallback(
+      (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const newValue = event.target.value;
+        setInternalValue(newValue);
+        onChange?.(newValue);
+      },
+      [onChange]
+    );
 
     const currentValue = value !== undefined ? value : internalValue;
 
@@ -258,7 +270,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, InputProps & { rows?: nu
               fontSize: `${theme.typography.fontSize.sm}px`,
               fontWeight: theme.typography.fontWeight.medium,
               color: error ? theme.colors.error : theme.colors.text,
-              fontFamily: theme.typography.fontFamily
+              fontFamily: theme.typography.fontFamily,
             }}
           >
             {label}
@@ -267,7 +279,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, InputProps & { rows?: nu
                 className="ui-textarea-required"
                 style={{
                   color: theme.colors.error,
-                  marginLeft: `${theme.spacing.xs / 2}px`
+                  marginLeft: `${theme.spacing.xs / 2}px`,
                 }}
               >
                 *
@@ -275,7 +287,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, InputProps & { rows?: nu
             )}
           </label>
         )}
-        
+
         <textarea
           ref={ref}
           id={inputId}
@@ -293,9 +305,9 @@ export const TextArea = forwardRef<HTMLTextAreaElement, InputProps & { rows?: nu
           data-testid={testId}
           aria-describedby={[errorId, hintId].filter(Boolean).join(' ') || undefined}
           aria-invalid={!!error}
-          {...props as any}
+          {...(props as any)}
         />
-        
+
         {error && (
           <div
             id={errorId}
@@ -304,13 +316,13 @@ export const TextArea = forwardRef<HTMLTextAreaElement, InputProps & { rows?: nu
               marginTop: `${theme.spacing.xs}px`,
               fontSize: `${theme.typography.fontSize.sm}px`,
               color: theme.colors.error,
-              fontFamily: theme.typography.fontFamily
+              fontFamily: theme.typography.fontFamily,
             }}
           >
             {error}
           </div>
         )}
-        
+
         {hint && !error && (
           <div
             id={hintId}
@@ -319,7 +331,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, InputProps & { rows?: nu
               marginTop: `${theme.spacing.xs}px`,
               fontSize: `${theme.typography.fontSize.sm}px`,
               color: theme.colors.textSecondary,
-              fontFamily: theme.typography.fontFamily
+              fontFamily: theme.typography.fontFamily,
             }}
           >
             {hint}

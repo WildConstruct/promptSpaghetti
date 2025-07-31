@@ -1,6 +1,6 @@
 /**
  * Stale Task Integration
- * 
+ *
  * Integrates stale task cleanup with the task management system.
  * Can be scheduled to run automatically or triggered by events.
  */
@@ -14,20 +14,20 @@ class StaleTaskIntegration {
     this.cleanup = new StaleTaskCleanup();
     this.initialized = false;
     this.scheduledTimer = null;
-    
+
     // Integration configuration
     this.config = {
       autoRunEnabled: true,
       runInterval: 6 * 60 * 60 * 1000, // Run every 6 hours
       runOnStartup: true,
       quietMode: false, // Set to true to reduce console output
-      
+
       // Trigger conditions
       triggers: {
-        onTaskOverflow: true,     // Run when too many assigned tasks
-        onAgentInactive: true,    // Run when agents go inactive
-        maxAssignedTasks: 50      // Trigger if more than 50 assigned tasks
-      }
+        onTaskOverflow: true, // Run when too many assigned tasks
+        onAgentInactive: true, // Run when agents go inactive
+        maxAssignedTasks: 50, // Trigger if more than 50 assigned tasks
+      },
     };
   }
 
@@ -38,21 +38,20 @@ class StaleTaskIntegration {
     try {
       await this.cleanup.initialize();
       this.initialized = true;
-      
+
       if (!this.config.quietMode) {
         console.log('🔗 Stale Task Integration initialized');
       }
-      
+
       // Run on startup if configured
       if (this.config.runOnStartup) {
         await this.runCleanup({ source: 'startup' });
       }
-      
+
       // Schedule automatic runs
       if (this.config.autoRunEnabled) {
         this.scheduleAutomaticRuns();
       }
-      
     } catch (error) {
       console.error('❌ Failed to initialize Stale Task Integration:', error);
       throw error;
@@ -69,7 +68,7 @@ class StaleTaskIntegration {
 
     try {
       const { source = 'manual', dryRun = false } = options;
-      
+
       if (!this.config.quietMode) {
         console.log(`🧹 Running stale task cleanup (triggered by: ${source})`);
       }
@@ -85,22 +84,21 @@ class StaleTaskIntegration {
       // Run the cleanup
       const originalDryRun = this.cleanup.config.actions.dryRun;
       this.cleanup.config.actions.dryRun = dryRun;
-      
+
       const result = await this.cleanup.cleanup();
-      
+
       // Restore original dry run setting
       this.cleanup.config.actions.dryRun = originalDryRun;
-      
+
       // Post-cleanup actions
       if (result.cleaned > 0) {
         await this.notifyCleanupComplete(result, source);
       }
-      
+
       // Update last run time
       await this.updateLastRun(result);
-      
+
       return { ...result, source };
-      
     } catch (error) {
       console.error('❌ Stale task cleanup failed:', error);
       throw error;
@@ -116,32 +114,28 @@ class StaleTaskIntegration {
       const stateFile = path.join(__dirname, '../data/state.json');
       const stateData = await fs.readFile(stateFile, 'utf8');
       const state = JSON.parse(stateData);
-      
+
       if (!state.tasks) return false;
-      
+
       const tasks = Object.values(state.tasks);
-      const assignedTasks = tasks.filter(task => 
-        task.assignee && task.assignee !== 'Unassigned'
-      );
-      
+      const assignedTasks = tasks.filter(task => task.assignee && task.assignee !== 'Unassigned');
+
       // Check if we have too many assigned tasks
-      if (this.config.triggers.onTaskOverflow && 
-          assignedTasks.length > this.config.triggers.maxAssignedTasks) {
+      if (this.config.triggers.onTaskOverflow && assignedTasks.length > this.config.triggers.maxAssignedTasks) {
         return true;
       }
-      
+
       // Check for very old assigned tasks
       const now = new Date();
       const veryOldTasks = assignedTasks.filter(task => {
         const lastUpdate = task.lastUpdated ? new Date(task.lastUpdated) : null;
         if (!lastUpdate) return false;
-        
+
         const ageHours = (now.getTime() - lastUpdate.getTime()) / (1000 * 60 * 60);
         return ageHours > 48; // Consider 48+ hour old tasks as definitely needing cleanup
       });
-      
+
       return veryOldTasks.length > 0;
-      
     } catch (error) {
       console.warn('Warning: Could not check cleanup conditions:', error.message);
       return true; // Default to running cleanup if we can't check
@@ -155,7 +149,7 @@ class StaleTaskIntegration {
     if (this.scheduledTimer) {
       clearInterval(this.scheduledTimer);
     }
-    
+
     this.scheduledTimer = setInterval(async () => {
       try {
         await this.runCleanup({ source: 'scheduled' });
@@ -163,7 +157,7 @@ class StaleTaskIntegration {
         console.error('Scheduled cleanup failed:', error);
       }
     }, this.config.runInterval);
-    
+
     if (!this.config.quietMode) {
       const intervalHours = this.config.runInterval / (1000 * 60 * 60);
       console.log(`⏰ Scheduled automatic cleanup every ${intervalHours} hours`);
@@ -180,10 +174,10 @@ class StaleTaskIntegration {
       try {
         const stateData = await fs.readFile(stateFile, 'utf8');
         const state = JSON.parse(stateData);
-        const assignedCount = Object.values(state.tasks || {}).filter(task => 
-          task.assignee && task.assignee !== 'Unassigned'
+        const assignedCount = Object.values(state.tasks || {}).filter(
+          task => task.assignee && task.assignee !== 'Unassigned'
         ).length;
-        
+
         if (assignedCount > this.config.triggers.maxAssignedTasks) {
           await this.runCleanup({ source: 'task_overflow' });
         }
@@ -208,10 +202,10 @@ class StaleTaskIntegration {
    */
   async manualCleanup(options = {}) {
     const { force = false, dryRun = false } = options;
-    
-    return await this.runCleanup({ 
+
+    return await this.runCleanup({
       source: force ? 'forced' : 'manual',
-      dryRun 
+      dryRun,
     });
   }
 
@@ -221,15 +215,15 @@ class StaleTaskIntegration {
   async getStats() {
     const cleanupStats = await this.cleanup.getStats(30);
     const lastRun = await this.getLastRun();
-    
+
     return {
       integration: {
         autoRunEnabled: this.config.autoRunEnabled,
         runInterval: this.config.runInterval / (1000 * 60 * 60), // hours
         lastRun: lastRun?.timestamp || null,
-        lastResult: lastRun?.result || null
+        lastResult: lastRun?.result || null,
       },
-      cleanup: cleanupStats
+      cleanup: cleanupStats,
     };
   }
 
@@ -238,21 +232,21 @@ class StaleTaskIntegration {
    */
   async notifyCleanupComplete(result, source) {
     if (result.cleaned === 0) return;
-    
+
     const notification = {
       type: 'stale_task_cleanup_complete',
       source,
       tasksProcessed: result.processed,
       tasksCleaned: result.cleaned,
       errors: result.errors,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
-    
+
     // This could be extended to send to Slack, email, etc.
     if (!this.config.quietMode) {
       console.log(`📧 Cleanup notification: ${result.cleaned} tasks cleaned from ${source} trigger`);
     }
-    
+
     // Save notification to log
     await this.cleanup.log('NOTIFICATION', `Cleanup completed: ${JSON.stringify(notification)}`);
   }
@@ -264,9 +258,9 @@ class StaleTaskIntegration {
     const lastRunFile = path.join(__dirname, '../data/stale-cleanup-last-run.json');
     const lastRun = {
       timestamp: new Date().toISOString(),
-      result
+      result,
     };
-    
+
     try {
       await fs.writeFile(lastRunFile, JSON.stringify(lastRun, null, 2));
     } catch (error) {
@@ -294,7 +288,7 @@ class StaleTaskIntegration {
     if (this.scheduledTimer) {
       clearInterval(this.scheduledTimer);
     }
-    
+
     if (!this.config.quietMode) {
       console.log('🔗 Stale Task Integration shutdown complete');
     }
@@ -350,5 +344,5 @@ module.exports = {
   manualCleanup,
   getStats,
   onTaskAssigned,
-  onAgentInactive
+  onAgentInactive,
 };

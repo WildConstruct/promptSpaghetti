@@ -16,7 +16,7 @@ export class TestEnvironmentManager {
 
   static async setupEnvironment(name: string, config: Record<string, unknown>): Promise<void> {
     this.environments.set(name, config);
-    
+
     // Setup environment variables
     for (const [key, value] of Object.entries(config)) {
       process.env[key] = String(value);
@@ -33,7 +33,7 @@ export class TestEnvironmentManager {
       cleanup: async () => {
         await this.cleanupEnvironment(name);
       },
-      createdAt: Date.now()
+      createdAt: Date.now(),
     };
 
     // Setup ReactFlow mocks if configured
@@ -44,10 +44,10 @@ export class TestEnvironmentManager {
           getNodes: jest.fn(() => []),
           getEdges: jest.fn(() => []),
           setNodes: jest.fn<unknown[], unknown>(),
-          setEdges: jest.fn<unknown[], unknown>()
+          setEdges: jest.fn<unknown[], unknown>(),
         })),
         useNodesState: jest.fn(() => [[], jest.fn<unknown[], unknown>()]),
-        useEdgesState: jest.fn(() => [[], jest.fn<unknown[], unknown>()])
+        useEdgesState: jest.fn(() => [[], jest.fn<unknown[], unknown>()]),
       });
     }
 
@@ -57,9 +57,9 @@ export class TestEnvironmentManager {
         send: jest.fn<unknown[], unknown>(),
         close: jest.fn<unknown[], unknown>(),
         addEventListener: jest.fn<unknown[], unknown>(),
-        removeEventListener: jest.fn<unknown[], unknown>()
+        removeEventListener: jest.fn<unknown[], unknown>(),
       }));
-      
+
       environment.mocks.set('WebSocket', WebSocketMock);
       Object.defineProperty(global, 'WebSocket', { value: WebSocketMock });
     }
@@ -70,7 +70,7 @@ export class TestEnvironmentManager {
         getItem: jest.fn<unknown[], unknown>(),
         setItem: jest.fn<unknown[], unknown>(),
         removeItem: jest.fn<unknown[], unknown>(),
-        clear: jest.fn<unknown[], unknown>()
+        clear: jest.fn<unknown[], unknown>(),
       };
       environment.mocks.set('localStorage', localStorageMock);
       Object.defineProperty(global, 'localStorage', { value: localStorageMock });
@@ -90,7 +90,7 @@ export class TestEnvironmentManager {
       await cleanup();
       this.cleanup.delete(name);
     }
-    
+
     const config = this.environments.get(name);
     if (config) {
       // Cleanup environment variables
@@ -104,7 +104,7 @@ export class TestEnvironmentManager {
   static async cleanupAll(): Promise<void> {
     const cleanupPromises = Array.from(this.cleanup.values()).map(fn => fn());
     await Promise.all(cleanupPromises);
-    
+
     this.environments.clear();
     this.cleanup.clear();
   }
@@ -125,7 +125,7 @@ export class TestEnvironmentManager {
 export class TestDataUtils {
   private seed: string;
   private counter: number = 0;
-  
+
   constructor(seed: string = 'test-seed-123') {
     this.seed = seed;
   }
@@ -149,12 +149,12 @@ export class TestDataUtils {
     const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
     const seedNum = this.simpleHash(this.seed);
-    
+
     for (let i = 0; i < length; i++) {
       const index = (seedNum + i) % chars.length;
       result += chars[index];
     }
-    
+
     return result;
   }
 
@@ -181,7 +181,7 @@ export class TestDataUtils {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
+      hash = (hash << 5) - hash + char;
       hash = hash & hash; // Convert to 32-bit integer
     }
     return Math.abs(hash);
@@ -240,7 +240,7 @@ export class TestAssertionHelpers {
     interval: number = 100
   ): Promise<void> {
     const startTime = Date.now();
-    
+
     while (Date.now() - startTime < timeout) {
       const result = await Promise.resolve(condition());
       if (result) {
@@ -248,7 +248,7 @@ export class TestAssertionHelpers {
       }
       await this.delay(interval);
     }
-    
+
     throw new Error(`Condition not met within ${timeout}ms`);
   }
 
@@ -256,10 +256,7 @@ export class TestAssertionHelpers {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  static async expectToThrowAsync(
-    fn: () => Promise<unknown>,
-    expectedError?: string | RegExp
-  ): Promise<void> {
+  static async expectToThrowAsync(fn: () => Promise<unknown>, expectedError?: string | RegExp): Promise<void> {
     let thrown = false;
     try {
       await fn();
@@ -274,7 +271,7 @@ export class TestAssertionHelpers {
         }
       }
     }
-    
+
     if (!thrown) {
       throw new Error('Expected function to throw, but it did not');
     }
@@ -301,7 +298,7 @@ export class MockFactory {
       role: 'user',
       isActive: true,
       createdAt: new Date().toISOString(),
-      ...overrides
+      ...overrides,
     };
   }
 
@@ -313,7 +310,7 @@ export class MockFactory {
       name: 'Mock Graph',
       description: 'A mock graph for testing',
       createdAt: new Date().toISOString(),
-      ...overrides
+      ...overrides,
     };
   }
 
@@ -323,7 +320,7 @@ export class MockFactory {
       type,
       data: {},
       position: { x: 0, y: 0 },
-      ...overrides
+      ...overrides,
     };
   }
 
@@ -332,7 +329,7 @@ export class MockFactory {
       id: `edge-${source}-${target}`,
       source,
       target,
-      type: 'default'
+      type: 'default',
     };
   }
 
@@ -342,7 +339,7 @@ export class MockFactory {
       ok: status >= 200 && status < 300,
       data,
       headers: {},
-      statusText: status === 200 ? 'OK' : 'Error'
+      statusText: status === 200 ? 'OK' : 'Error',
     };
   }
 }
@@ -357,22 +354,22 @@ export class PerformanceTestUtils {
   ): Promise<{ result: T; executionTime: number; memoryUsage: unknown }> {
     const startTime = process.hrtime.bigint();
     const startMemory = process.memoryUsage();
-    
+
     const result = await Promise.resolve(fn());
-    
+
     const endTime = process.hrtime.bigint();
     const endMemory = process.memoryUsage();
-    
+
     const executionTime = Number(endTime - startTime) / 1000000; // Convert to milliseconds
-    
+
     const memoryUsage = {
       baseline: startMemory.heapUsed,
       peak: endMemory.heapUsed,
       average: (startMemory.heapUsed + endMemory.heapUsed) / 2,
       gcCount: 0, // Would need more sophisticated tracking
-      gcTime: 0
+      gcTime: 0,
     };
-    
+
     return { result, executionTime, memoryUsage };
   }
 
@@ -383,7 +380,7 @@ export class PerformanceTestUtils {
     return {
       concurrency,
       iterations,
-      totalOperations: concurrency * iterations
+      totalOperations: concurrency * iterations,
     };
   }
 }
@@ -402,7 +399,7 @@ export const testUtils = {
   expectDeepEqual: TestAssertionHelpers.expectDeepEqual,
   expectApproximately: TestAssertionHelpers.expectApproximately,
   measureExecution: PerformanceTestUtils.measureExecution,
-  generateLoadTest: PerformanceTestUtils.generateLoadTest
+  generateLoadTest: PerformanceTestUtils.generateLoadTest,
 };
 
 // Export AsyncTestingUtils as an alias for TestAssertionHelpers to maintain compatibility
@@ -425,5 +422,5 @@ export default {
   TestAssertionHelpers,
   MockFactory,
   PerformanceTestUtils,
-  testUtils
+  testUtils,
 };

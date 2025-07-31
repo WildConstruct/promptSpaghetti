@@ -47,34 +47,34 @@ export const AdaptiveNavigation: React.FC<AdaptiveNavigationProps> = ({
   onBack,
   actions,
   showBackButton = false,
-  variant = 'auto'
+  variant = 'auto',
 }) => {
   const platform = deviceDetector.getPlatform();
   const os = deviceDetector.getOS();
   const breakpoint = useBreakpoint();
   const [isCollapsed, setIsCollapsed] = useState(false);
-  
+
   // Determine navigation variant based on platform and screen size
   const getNavigationVariant = () => {
     if (variant !== 'auto') return variant;
-    
+
     if (platform === 'mobile') {
       return 'bottom';
     }
-    
+
     if (breakpoint === 'xs' || breakpoint === 'sm') {
       return 'bottom';
     }
-    
+
     if (breakpoint === 'md') {
       return 'rail';
     }
-    
+
     return 'side';
   };
-  
+
   const navVariant = getNavigationVariant();
-  
+
   // Mobile bottom navigation
   if (navVariant === 'bottom') {
     const bottomItems = items.slice(0, 5).map(item => ({
@@ -82,9 +82,9 @@ export const AdaptiveNavigation: React.FC<AdaptiveNavigationProps> = ({
       label: item.label,
       icon: item.icon,
       activeIcon: item.activeIcon,
-      badge: item.badge
+      badge: item.badge,
     }));
-    
+
     if (os === 'iOS') {
       return (
         <>
@@ -96,65 +96,64 @@ export const AdaptiveNavigation: React.FC<AdaptiveNavigationProps> = ({
               onBack={showBackButton ? onBack : undefined}
             />
           )}
-          <IOSTabBar
-            items={bottomItems}
-            activeItem={activeItem}
-            onItemSelect={onNavigate}
-          />
+          <IOSTabBar items={bottomItems} activeItem={activeItem} onItemSelect={onNavigate} />
         </>
       );
     }
-    
+
     return (
       <>
         {title && (
           <MaterialAppBar
             title={title}
-            navigationIcon={showBackButton && onBack ? (
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-              </svg>
-            ) : undefined}
+            navigationIcon={
+              showBackButton && onBack ? (
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+                </svg>
+              ) : undefined
+            }
             actions={actions}
             onNavigationClick={onBack}
           />
         )}
-        <MaterialBottomNav
-          items={bottomItems}
-          activeItem={activeItem}
-          onItemSelect={onNavigate}
-        />
+        <MaterialBottomNav items={bottomItems} activeItem={activeItem} onItemSelect={onNavigate} />
       </>
     );
   }
-  
+
   // Desktop side navigation
   if (navVariant === 'side') {
     return (
-      <div className="adaptive-navigation-side" style={{
-        display: 'flex',
-        height: '100vh'
-      }}>
-        <nav style={{
-          width: isCollapsed ? '64px' : '280px',
-          backgroundColor: 'var(--color-surface)',
-          borderRight: '1px solid var(--color-border)',
-          transition: 'width 0.3s ease',
-          overflow: 'hidden',
+      <div
+        className="adaptive-navigation-side"
+        style={{
           display: 'flex',
-          flexDirection: 'column'
-        }}>
-          {/* Header */}
-          <div style={{
-            padding: '16px',
-            borderBottom: '1px solid var(--color-border)',
+          height: '100vh',
+        }}
+      >
+        <nav
+          style={{
+            width: isCollapsed ? '64px' : '280px',
+            backgroundColor: 'var(--color-surface)',
+            borderRight: '1px solid var(--color-border)',
+            transition: 'width 0.3s ease',
+            overflow: 'hidden',
             display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-          }}>
-            {!isCollapsed && title && (
-              <h2 style={{ margin: 0, fontSize: '20px' }}>{title}</h2>
-            )}
+            flexDirection: 'column',
+          }}
+        >
+          {/* Header */}
+          <div
+            style={{
+              padding: '16px',
+              borderBottom: '1px solid var(--color-border)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            {!isCollapsed && title && <h2 style={{ margin: 0, fontSize: '20px' }}>{title}</h2>}
             <button
               onClick={() => setIsCollapsed(!isCollapsed)}
               style={{
@@ -166,18 +165,15 @@ export const AdaptiveNavigation: React.FC<AdaptiveNavigationProps> = ({
                 backgroundColor: 'transparent',
                 border: 'none',
                 borderRadius: '4px',
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
             >
               <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                <path d={isCollapsed ? 
-                  'M7 4L13 10L7 16' : 
-                  'M13 16L7 10L13 4'
-                }/>
+                <path d={isCollapsed ? 'M7 4L13 10L7 16' : 'M13 16L7 10L13 4'} />
               </svg>
             </button>
           </div>
-          
+
           {/* Navigation items */}
           <div style={{ flex: 1, padding: '8px' }}>
             {items.map(item => (
@@ -190,16 +186,18 @@ export const AdaptiveNavigation: React.FC<AdaptiveNavigationProps> = ({
               />
             ))}
           </div>
-          
+
           {/* Actions */}
           {actions && (
-            <div style={{
-              padding: '16px',
-              borderTop: '1px solid var(--color-border)',
-              display: 'flex',
-              gap: '8px',
-              justifyContent: isCollapsed ? 'center' : 'flex-end'
-            }}>
+            <div
+              style={{
+                padding: '16px',
+                borderTop: '1px solid var(--color-border)',
+                display: 'flex',
+                gap: '8px',
+                justifyContent: isCollapsed ? 'center' : 'flex-end',
+              }}
+            >
               {actions}
             </div>
           )}
@@ -207,23 +205,26 @@ export const AdaptiveNavigation: React.FC<AdaptiveNavigationProps> = ({
       </div>
     );
   }
-  
+
   // Navigation rail (narrow side nav)
   if (navVariant === 'rail') {
     return (
-      <nav className="adaptive-navigation-rail" style={{
-        position: 'fixed',
-        left: 0,
-        top: 0,
-        bottom: 0,
-        width: '80px',
-        backgroundColor: 'var(--color-surface)',
-        borderRight: '1px solid var(--color-border)',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: '16px 0'
-      }}>
+      <nav
+        className="adaptive-navigation-rail"
+        style={{
+          position: 'fixed',
+          left: 0,
+          top: 0,
+          bottom: 0,
+          width: '80px',
+          backgroundColor: 'var(--color-surface)',
+          borderRight: '1px solid var(--color-border)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          padding: '16px 0',
+        }}
+      >
         {items.slice(0, 7).map(item => (
           <button
             key={item.id}
@@ -242,7 +243,7 @@ export const AdaptiveNavigation: React.FC<AdaptiveNavigationProps> = ({
               cursor: 'pointer',
               margin: '4px 0',
               position: 'relative',
-              color: activeItem === item.id ? 'var(--color-on-primary-container)' : 'var(--color-on-surface)'
+              color: activeItem === item.id ? 'var(--color-on-primary-container)' : 'var(--color-on-surface)',
             }}
           >
             <div style={{ fontSize: '24px' }}>
@@ -250,17 +251,19 @@ export const AdaptiveNavigation: React.FC<AdaptiveNavigationProps> = ({
             </div>
             <span style={{ fontSize: '12px' }}>{item.label}</span>
             {item.badge && item.badge > 0 && (
-              <div style={{
-                position: 'absolute',
-                top: '8px',
-                right: '8px',
-                backgroundColor: 'var(--color-error)',
-                color: 'white',
-                borderRadius: '10px',
-                padding: '2px 6px',
-                fontSize: '10px',
-                minWidth: '16px'
-              }}>
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '8px',
+                  right: '8px',
+                  backgroundColor: 'var(--color-error)',
+                  color: 'white',
+                  borderRadius: '10px',
+                  padding: '2px 6px',
+                  fontSize: '10px',
+                  minWidth: '16px',
+                }}
+              >
                 {item.badge > 99 ? '99+' : item.badge}
               </div>
             )}
@@ -269,22 +272,25 @@ export const AdaptiveNavigation: React.FC<AdaptiveNavigationProps> = ({
       </nav>
     );
   }
-  
+
   // Top navigation (desktop)
   return (
-    <nav className="adaptive-navigation-top" style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      height: '64px',
-      backgroundColor: 'var(--color-surface)',
-      borderBottom: '1px solid var(--color-border)',
-      display: 'flex',
-      alignItems: 'center',
-      padding: '0 16px',
-      zIndex: 1000
-    }}>
+    <nav
+      className="adaptive-navigation-top"
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: '64px',
+        backgroundColor: 'var(--color-surface)',
+        borderBottom: '1px solid var(--color-border)',
+        display: 'flex',
+        alignItems: 'center',
+        padding: '0 16px',
+        zIndex: 1000,
+      }}
+    >
       {showBackButton && onBack && (
         <button
           onClick={onBack}
@@ -297,20 +303,18 @@ export const AdaptiveNavigation: React.FC<AdaptiveNavigationProps> = ({
             backgroundColor: 'transparent',
             border: 'none',
             cursor: 'pointer',
-            color: 'var(--color-primary)'
+            color: 'var(--color-primary)',
           }}
         >
           <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M15 18l-8-8 8-8"/>
+            <path d="M15 18l-8-8 8-8" />
           </svg>
           Back
         </button>
       )}
-      
-      {title && (
-        <h1 style={{ margin: 0, fontSize: '20px', marginRight: 'auto' }}>{title}</h1>
-      )}
-      
+
+      {title && <h1 style={{ margin: 0, fontSize: '20px', marginRight: 'auto' }}>{title}</h1>}
+
       <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
         {items.slice(0, 6).map(item => (
           <button
@@ -326,7 +330,7 @@ export const AdaptiveNavigation: React.FC<AdaptiveNavigationProps> = ({
               borderBottom: activeItem === item.id ? '2px solid var(--color-primary)' : '2px solid transparent',
               cursor: 'pointer',
               color: activeItem === item.id ? 'var(--color-primary)' : 'var(--color-on-surface)',
-              fontWeight: activeItem === item.id ? 600 : 400
+              fontWeight: activeItem === item.id ? 600 : 400,
             }}
           >
             {item.icon}
@@ -334,12 +338,8 @@ export const AdaptiveNavigation: React.FC<AdaptiveNavigationProps> = ({
           </button>
         ))}
       </div>
-      
-      {actions && (
-        <div style={{ display: 'flex', gap: '8px', marginLeft: '24px' }}>
-          {actions}
-        </div>
-      )}
+
+      {actions && <div style={{ display: 'flex', gap: '8px', marginLeft: '24px' }}>{actions}</div>}
     </nav>
   );
 };
@@ -356,7 +356,7 @@ interface NavItemProps {
 
 const NavItem: React.FC<NavItemProps> = ({ item, isActive, isCollapsed, onClick }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  
+
   return (
     <div>
       <button
@@ -379,31 +379,33 @@ const NavItem: React.FC<NavItemProps> = ({ item, isActive, isCollapsed, onClick 
           cursor: 'pointer',
           color: isActive ? 'var(--color-on-primary-container)' : 'var(--color-on-surface)',
           transition: 'all 0.2s ease',
-          position: 'relative'
+          position: 'relative',
         }}
       >
         <div style={{ fontSize: '20px', width: '20px', flexShrink: 0 }}>
           {isActive && item.activeIcon ? item.activeIcon : item.icon}
         </div>
-        
+
         {!isCollapsed && (
           <>
             <span style={{ flex: 1, textAlign: 'left' }}>{item.label}</span>
-            
+
             {item.badge && item.badge > 0 && (
-              <div style={{
-                backgroundColor: 'var(--color-error)',
-                color: 'white',
-                borderRadius: '10px',
-                padding: '2px 8px',
-                fontSize: '12px',
-                minWidth: '20px',
-                textAlign: 'center'
-              }}>
+              <div
+                style={{
+                  backgroundColor: 'var(--color-error)',
+                  color: 'white',
+                  borderRadius: '10px',
+                  padding: '2px 8px',
+                  fontSize: '12px',
+                  minWidth: '20px',
+                  textAlign: 'center',
+                }}
+              >
                 {item.badge > 99 ? '99+' : item.badge}
               </div>
             )}
-            
+
             {item.children && (
               <svg
                 width="16"
@@ -412,27 +414,21 @@ const NavItem: React.FC<NavItemProps> = ({ item, isActive, isCollapsed, onClick 
                 fill="currentColor"
                 style={{
                   transform: isExpanded ? 'rotate(90deg)' : 'rotate(0)',
-                  transition: 'transform 0.2s ease'
+                  transition: 'transform 0.2s ease',
                 }}
               >
-                <path d="M6 4L10 8L6 12"/>
+                <path d="M6 4L10 8L6 12" />
               </svg>
             )}
           </>
         )}
       </button>
-      
+
       {/* Nested items */}
       {!isCollapsed && item.children && isExpanded && (
         <div style={{ marginLeft: '32px', marginTop: '4px' }}>
           {item.children.map(child => (
-            <NavItem
-              key={child.id}
-              item={child}
-              isActive={isActive}
-              isCollapsed={isCollapsed}
-              onClick={onClick}
-            />
+            <NavItem key={child.id} item={child} isActive={isActive} isCollapsed={isCollapsed} onClick={onClick} />
           ))}
         </div>
       )}
@@ -454,25 +450,24 @@ export interface AdaptiveBreadcrumbProps {
   onNavigate: (item: BreadcrumbItem) => void;
 }
 
-export const AdaptiveBreadcrumb: React.FC<AdaptiveBreadcrumbProps> = ({
-  items,
-  onNavigate
-}) => {
+export const AdaptiveBreadcrumb: React.FC<AdaptiveBreadcrumbProps> = ({ items, onNavigate }) => {
   const platform = deviceDetector.getPlatform();
-  
+
   if (platform === 'mobile') {
     // Mobile: Show only current and parent
     const current = items[items.length - 1];
     const parent = items.length > 1 ? items[items.length - 2] : null;
-    
+
     return (
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        padding: '8px 16px',
-        fontSize: '14px'
-      }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          padding: '8px 16px',
+          fontSize: '14px',
+        }}
+      >
         {parent && (
           <>
             <button
@@ -482,7 +477,7 @@ export const AdaptiveBreadcrumb: React.FC<AdaptiveBreadcrumbProps> = ({
                 border: 'none',
                 color: 'var(--color-primary)',
                 cursor: 'pointer',
-                padding: '4px'
+                padding: '4px',
               }}
             >
               {parent.label}
@@ -494,21 +489,21 @@ export const AdaptiveBreadcrumb: React.FC<AdaptiveBreadcrumbProps> = ({
       </div>
     );
   }
-  
+
   // Desktop: Show full breadcrumb
   return (
-    <nav style={{
-      display: 'flex',
-      alignItems: 'center',
-      gap: '8px',
-      padding: '8px 16px',
-      fontSize: '14px'
-    }}>
+    <nav
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        padding: '8px 16px',
+        fontSize: '14px',
+      }}
+    >
       {items.map((item, index) => (
         <React.Fragment key={item.id}>
-          {index > 0 && (
-            <span style={{ color: 'var(--color-text-secondary)' }}>›</span>
-          )}
+          {index > 0 && <span style={{ color: 'var(--color-text-secondary)' }}>›</span>}
           {index < items.length - 1 ? (
             <button
               onClick={() => onNavigate(item)}
@@ -518,21 +513,19 @@ export const AdaptiveBreadcrumb: React.FC<AdaptiveBreadcrumbProps> = ({
                 color: 'var(--color-primary)',
                 cursor: 'pointer',
                 padding: '4px',
-                textDecoration: 'none'
+                textDecoration: 'none',
               }}
-              onMouseEnter={(e) => {
+              onMouseEnter={e => {
                 e.currentTarget.style.textDecoration = 'underline';
               }}
-              onMouseLeave={(e) => {
+              onMouseLeave={e => {
                 e.currentTarget.style.textDecoration = 'none';
               }}
             >
               {item.label}
             </button>
           ) : (
-            <span style={{ fontWeight: 600, color: 'var(--color-text)' }}>
-              {item.label}
-            </span>
+            <span style={{ fontWeight: 600, color: 'var(--color-text)' }}>{item.label}</span>
           )}
         </React.Fragment>
       ))}

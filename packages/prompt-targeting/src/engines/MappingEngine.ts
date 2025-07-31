@@ -11,7 +11,7 @@ import {
   AdaptorRegistry,
   TranslationError,
   ValidationException,
-  TranslationCache
+  TranslationCache,
 } from '../types';
 import { createHash } from 'crypto';
 
@@ -41,11 +41,7 @@ export class DefaultMappingEngine implements MappingEngine {
   private logger: Console = console;
   private activeTranslations = new Map<string, Promise<PlatformPrompt>>();
 
-  constructor(
-    registry: AdaptorRegistry,
-    cache?: TranslationCache,
-    config: MappingEngineConfig = {}
-  ) {
+  constructor(registry: AdaptorRegistry, cache?: TranslationCache, config: MappingEngineConfig = {}) {
     this.registry = registry;
     this.cache = cache;
     this.config = {
@@ -54,20 +50,16 @@ export class DefaultMappingEngine implements MappingEngine {
       maxConcurrency: 10,
       translationTimeout: 30000, // 30 seconds
       enableLogging: true,
-      ...config
+      ...config,
     };
   }
 
   /**
    * Execute translation pipeline for a single platform
    */
-  public async translate(
-    graph: any,
-    targetPlatform: string,
-    config?: AdaptorConfig
-  ): Promise<PlatformPrompt> {
+  public async translate(graph: any, targetPlatform: string, config?: AdaptorConfig): Promise<PlatformPrompt> {
     const startTime = Date.now();
-    
+
     try {
       // Generate cache key
       const cacheKey = this.generateCacheKey(graph, targetPlatform, config);
@@ -99,9 +91,9 @@ export class DefaultMappingEngine implements MappingEngine {
           await this.cache.set(cacheKey, result, this.config.cacheTTL);
         }
 
-        this.logPerformance('translate', startTime, { 
+        this.logPerformance('translate', startTime, {
           platform: targetPlatform,
-          qualityScore: result.metadata.qualityScore 
+          qualityScore: result.metadata.qualityScore,
         });
 
         return result;
@@ -123,7 +115,7 @@ export class DefaultMappingEngine implements MappingEngine {
     config?: AdaptorConfig
   ): Promise<Record<string, PlatformPrompt>> {
     const startTime = Date.now();
-    
+
     try {
       // Limit concurrency
       const results: Record<string, PlatformPrompt> = {};
@@ -140,7 +132,7 @@ export class DefaultMappingEngine implements MappingEngine {
         });
 
         const chunkResults = await Promise.all(promises);
-        
+
         for (const { platform, result, error } of chunkResults) {
           if (result) {
             results[platform] = result;
@@ -151,9 +143,9 @@ export class DefaultMappingEngine implements MappingEngine {
         }
       }
 
-      this.logPerformance('translateBatch', startTime, { 
+      this.logPerformance('translateBatch', startTime, {
         platformCount: targetPlatforms.length,
-        successCount: Object.keys(results).length 
+        successCount: Object.keys(results).length,
       });
 
       return results;
@@ -172,20 +164,22 @@ export class DefaultMappingEngine implements MappingEngine {
     config?: AdaptorConfig
   ): Promise<ValidationResult> {
     const startTime = Date.now();
-    
+
     try {
       // Find adaptor for platform
       const adaptor = this.findBestAdaptor(targetPlatform);
       if (!adaptor) {
         return {
           valid: false,
-          errors: [{
-            code: 'NO_ADAPTOR_FOUND',
-            message: `No adaptor found for platform: ${targetPlatform}`,
-            severity: 'error'
-          }],
+          errors: [
+            {
+              code: 'NO_ADAPTOR_FOUND',
+              message: `No adaptor found for platform: ${targetPlatform}`,
+              severity: 'error',
+            },
+          ],
           warnings: [],
-          compatibilityScore: 0
+          compatibilityScore: 0,
         };
       }
 
@@ -196,10 +190,10 @@ export class DefaultMappingEngine implements MappingEngine {
         `Validation timeout for ${targetPlatform}`
       );
 
-      this.logPerformance('validateTranslation', startTime, { 
+      this.logPerformance('validateTranslation', startTime, {
         platform: targetPlatform,
         valid: result.valid,
-        compatibilityScore: result.compatibilityScore 
+        compatibilityScore: result.compatibilityScore,
       });
 
       return result;
@@ -245,7 +239,7 @@ export class DefaultMappingEngine implements MappingEngine {
       if (error instanceof ValidationException) {
         throw error;
       }
-      
+
       throw new TranslationError(
         `Translation failed for ${targetPlatform}: ${error instanceof Error ? error.message : 'Unknown error'}`,
         targetPlatform,
@@ -260,7 +254,7 @@ export class DefaultMappingEngine implements MappingEngine {
    */
   private findBestAdaptor(platform: string) {
     const adaptors = this.registry.findByPlatform(platform);
-    
+
     if (adaptors.length === 0) {
       return undefined;
     }
@@ -277,7 +271,7 @@ export class DefaultMappingEngine implements MappingEngine {
     const graphString = JSON.stringify(graph, Object.keys(graph).sort());
     const configString = JSON.stringify(config || {}, Object.keys(config || {}).sort());
     const combined = `${graphString}:${platform}:${configString}`;
-    
+
     return createHash('sha256').update(combined).digest('hex').substring(0, 32);
   }
 
@@ -286,46 +280,26 @@ export class DefaultMappingEngine implements MappingEngine {
    */
   private validateTranslationResult(result: PlatformPrompt, platform: string): void {
     if (!result.platform) {
-      throw new TranslationError(
-        'Translation result missing platform identifier',
-        platform,
-        'INVALID_RESULT_FORMAT'
-      );
+      throw new TranslationError('Translation result missing platform identifier', platform, 'INVALID_RESULT_FORMAT');
     }
 
     if (!result.prompt) {
-      throw new TranslationError(
-        'Translation result missing prompt text',
-        platform,
-        'INVALID_RESULT_FORMAT'
-      );
+      throw new TranslationError('Translation result missing prompt text', platform, 'INVALID_RESULT_FORMAT');
     }
 
     if (!result.metadata) {
-      throw new TranslationError(
-        'Translation result missing metadata',
-        platform,
-        'INVALID_RESULT_FORMAT'
-      );
+      throw new TranslationError('Translation result missing metadata', platform, 'INVALID_RESULT_FORMAT');
     }
 
     if (!result.metadata.sourceHash) {
-      throw new TranslationError(
-        'Translation result missing source hash',
-        platform,
-        'INVALID_RESULT_FORMAT'
-      );
+      throw new TranslationError('Translation result missing source hash', platform, 'INVALID_RESULT_FORMAT');
     }
   }
 
   /**
    * Execute a promise with timeout
    */
-  private async withTimeout<T>(
-    promise: Promise<T>,
-    timeoutMs: number,
-    timeoutMessage: string
-  ): Promise<T> {
+  private async withTimeout<T>(promise: Promise<T>, timeoutMs: number, timeoutMessage: string): Promise<T> {
     const timeoutPromise = new Promise<never>((_, reject) => {
       setTimeout(() => {
         reject(new Error(timeoutMessage));
@@ -382,12 +356,12 @@ export class DefaultMappingEngine implements MappingEngine {
     cacheEnabled: boolean;
     cacheStats?: any;
     configuration: MappingEngineConfig;
-    } {
+  } {
     return {
       activeTranslations: this.activeTranslations.size,
       cacheEnabled: this.config.enableCaching && !!this.cache,
       cacheStats: this.cache ? undefined : undefined, // TODO: Implement cache.stats()
-      configuration: this.config
+      configuration: this.config,
     };
   }
 

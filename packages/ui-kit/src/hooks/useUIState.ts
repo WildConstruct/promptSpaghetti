@@ -38,29 +38,29 @@ export const useUIStore = create<UIStore>()(
       paletteOpen: true,
 
       // Actions
-      setTheme: (themeOverrides) => {
+      setTheme: themeOverrides => {
         const currentTheme = get().theme;
         const newTheme = { ...currentTheme, ...themeOverrides };
         set({ theme: newTheme });
       },
 
-      setSelectedNodeId: (nodeId) => {
+      setSelectedNodeId: nodeId => {
         set({ selectedNodeId: nodeId });
       },
 
       toggleInspector: () => {
-        set((state) => ({ inspectorOpen: !state.inspectorOpen }));
+        set(state => ({ inspectorOpen: !state.inspectorOpen }));
       },
 
       togglePalette: () => {
-        set((state) => ({ paletteOpen: !state.paletteOpen }));
+        set(state => ({ paletteOpen: !state.paletteOpen }));
       },
 
-      setInspectorOpen: (open) => {
+      setInspectorOpen: open => {
         set({ inspectorOpen: open });
       },
 
-      setPaletteOpen: (open) => {
+      setPaletteOpen: open => {
         set({ paletteOpen: open });
       },
 
@@ -68,7 +68,7 @@ export const useUIStore = create<UIStore>()(
         const { width } = getViewportSize();
         const breakpoint = getBreakpoint(width);
         set({ breakpoint });
-      }
+      },
     };
   })
 );
@@ -81,33 +81,33 @@ export function useUIState() {
 
 // Specific UI state hooks
 export function useSelectedNode() {
-  const selectedNodeId = useUIStore((state) => state.selectedNodeId);
-  const setSelectedNodeId = useUIStore((state) => state.setSelectedNodeId);
-  
+  const selectedNodeId = useUIStore(state => state.selectedNodeId);
+  const setSelectedNodeId = useUIStore(state => state.setSelectedNodeId);
+
   return { selectedNodeId, setSelectedNodeId };
 }
 
 export function useInspectorState() {
-  const inspectorOpen = useUIStore((state) => state.inspectorOpen);
-  const toggleInspector = useUIStore((state) => state.toggleInspector);
-  const setInspectorOpen = useUIStore((state) => state.setInspectorOpen);
-  
+  const inspectorOpen = useUIStore(state => state.inspectorOpen);
+  const toggleInspector = useUIStore(state => state.toggleInspector);
+  const setInspectorOpen = useUIStore(state => state.setInspectorOpen);
+
   return { inspectorOpen, toggleInspector, setInspectorOpen };
 }
 
 export function usePaletteState() {
-  const paletteOpen = useUIStore((state) => state.paletteOpen);
-  const togglePalette = useUIStore((state) => state.togglePalette);
-  const setPaletteOpen = useUIStore((state) => state.setPaletteOpen);
-  
+  const paletteOpen = useUIStore(state => state.paletteOpen);
+  const togglePalette = useUIStore(state => state.togglePalette);
+  const setPaletteOpen = useUIStore(state => state.setPaletteOpen);
+
   return { paletteOpen, togglePalette, setPaletteOpen };
 }
 
 // Theme-specific hooks
 export function useThemeState() {
-  const theme = useUIStore((state) => state.theme);
-  const setTheme = useUIStore((state) => state.setTheme);
-  
+  const theme = useUIStore(state => state.theme);
+  const setTheme = useUIStore(state => state.setTheme);
+
   return { theme, setTheme };
 }
 

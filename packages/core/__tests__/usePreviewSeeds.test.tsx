@@ -35,7 +35,7 @@ describe('usePreviewSeeds', () => {
     expect(result.current.loading).toBe(false);
     expect(result.current.results.length).toBe(5);
     // Each result should have seed defined
-    result.current.results.forEach((r) => {
+    result.current.results.forEach(r => {
       expect(r.seed).toBeDefined();
     });
   });

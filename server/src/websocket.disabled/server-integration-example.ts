@@ -14,10 +14,10 @@ export class EnhancedWebSocketServer {
   constructor(config: WSServerConfig) {
     // Initialize the existing WebSocket server
     this.wsServer = new WebSocketServer(config);
-    
+
     // Add collaboration service integration
     this.collaborationIntegration = new CollaborationServiceIntegration(this.wsServer);
-    
+
     this.setupHealthEndpoints();
   }
 
@@ -25,7 +25,6 @@ export class EnhancedWebSocketServer {
    * Start the enhanced WebSocket server
    */
   async start(server?: any): Promise<void> {
-
     await this.wsServer.start(server);
     console.log('Enhanced WebSocket server started with collaboration features');
   }
@@ -34,7 +33,6 @@ export class EnhancedWebSocketServer {
    * Stop the enhanced WebSocket server
    */
   async stop(): Promise<void> {
-
     this.collaborationIntegration.cleanup();
     await this.wsServer.stop();
     console.log('Enhanced WebSocket server stopped');
@@ -46,7 +44,7 @@ export class EnhancedWebSocketServer {
   getEnhancedHealthMetrics(): any {
     const baseMetrics = this.wsServer.getHealthMetrics();
     const collaborationStats = this.collaborationIntegration.getCollaborationStats();
-    
+
     return {
       ...baseMetrics,
       collaboration: collaborationStats,
@@ -57,8 +55,8 @@ export class EnhancedWebSocketServer {
         presenceIndicators: true,
         versionSnapshots: true,
         sessionAnalytics: true,
-        advancedConflictResolution: true
-      }
+        advancedConflictResolution: true,
+      },
     };
   }
 
@@ -82,7 +80,6 @@ export class EnhancedWebSocketServer {
   private setupHealthEndpoints(): void {
     // This would integrate with your existing health check system
     // Example: Express.js routes, Fastify routes, etc.
-    
     /*
     // Example Express.js integration:
     app.get('/api/websocket/health', (req, res) => {
@@ -122,18 +119,18 @@ export const DEFAULT_ENHANCED_CONFIG: WSServerConfig = {
   maxConnections: 1000,
   enableAuthentication: true,
   corsOrigins: ['http://localhost:3000', 'https://yourdomain.com'],
-  jwtSecret: process.env.JWT_SECRET || 'your-secret-key'
+  jwtSecret: process.env.JWT_SECRET || 'your-secret-key',
 };
 
 /**
  * Example usage:
- * 
+ *
  * const server = createEnhancedWebSocketServer(DEFAULT_ENHANCED_CONFIG);
  * await server.start();
- * 
+ *
  * // Get collaboration service for external API endpoints
  * const collaborationService = server.getCollaborationService();
- * 
+ *
  * // Create a collaboration session from API
  * const session = collaborationService.createSession(
  *   'document-123',
@@ -145,6 +142,6 @@ export const DEFAULT_ENHANCED_CONFIG: WSServerConfig = {
  *     maxParticipants: 10
  *   }
  * );
- * 
+ *
  * console.log('Created session:', session.sessionId);
  */

@@ -1,20 +1,11 @@
-import {
-  ModelAdaptor,
-  Capabilities,
-  ParameterSpec,
-  Feature,
-  Limitation,
-  Platform
-} from '../types/index.js';
+import { ModelAdaptor, Capabilities, ParameterSpec, Feature, Limitation, Platform } from '../types/index.js';
 import { AdaptorTestResults } from './AdaptorTestFramework.js';
 
 /**
  * Automated documentation generator for adaptors
  */
 export class DocumentationGenerator {
-  constructor(
-    private logger: any
-  ) {}
+  constructor(private logger: any) {}
 
   /**
    * Generate comprehensive documentation for an adaptor
@@ -26,12 +17,12 @@ export class DocumentationGenerator {
   ): Promise<AdaptorDocumentation> {
     this.logger.info('Generating adaptor documentation', {
       adaptorId: adaptor.id,
-      platform: adaptor.platform
+      platform: adaptor.platform,
     });
 
     try {
       const capabilities = await adaptor.capabilities();
-      
+
       const documentation: AdaptorDocumentation = {
         metadata: {
           adaptorId: adaptor.id,
@@ -40,7 +31,7 @@ export class DocumentationGenerator {
           name: adaptor.name || adaptor.id,
           description: adaptor.description || 'No description provided',
           generatedAt: new Date(),
-          generatorVersion: '1.0.0'
+          generatorVersion: '1.0.0',
         },
         overview: this.generateOverview(adaptor, capabilities),
         capabilities: this.generateCapabilitiesDocumentation(capabilities),
@@ -51,24 +42,24 @@ export class DocumentationGenerator {
         apiReference: this.generateAPIReference(adaptor),
         troubleshooting: this.generateTroubleshooting(adaptor, capabilities),
         testResults: testResults ? this.generateTestDocumentation(testResults) : undefined,
-        changelog: options.changelog || []
+        changelog: options.changelog || [],
       };
 
       // Generate different formats
       const formats: DocumentationFormats = {
         markdown: this.generateMarkdown(documentation),
         html: this.generateHTML(documentation),
-        json: JSON.stringify(documentation, null, 2)
+        json: JSON.stringify(documentation, null, 2),
       };
 
       return {
         ...documentation,
-        formats
+        formats,
       };
     } catch (error) {
       this.logger.error('Documentation generation failed', {
         adaptorId: adaptor.id,
-        error: error instanceof Error ? error.message : String(error)
+        error: error instanceof Error ? error.message : String(error),
       });
       throw error;
     }
@@ -83,13 +74,13 @@ export class DocumentationGenerator {
       platformInfo: {
         platform: adaptor.platform,
         version: adaptor.version,
-        supportedFormats: capabilities.supportedFormats
+        supportedFormats: capabilities.supportedFormats,
       },
       keyFeatures: capabilities.features
         .filter(f => f.supported)
         .slice(0, 5)
         .map(f => f.name),
-      quickStart: this.generateQuickStart(adaptor)
+      quickStart: this.generateQuickStart(adaptor),
     };
   }
 
@@ -101,15 +92,15 @@ export class DocumentationGenerator {
       supportedNodeTypes: capabilities.supportedNodeTypes.map(type => ({
         type,
         description: this.getNodeTypeDescription(type),
-        examples: this.getNodeTypeExamples(type)
+        examples: this.getNodeTypeExamples(type),
       })),
       maxNodes: capabilities.maxNodes,
       maxPromptLength: capabilities.maxPromptLength,
       supportedFormats: capabilities.supportedFormats.map(format => ({
         format,
         description: this.getFormatDescription(format),
-        mimeType: this.getFormatMimeType(format)
-      }))
+        mimeType: this.getFormatMimeType(format),
+      })),
     };
   }
 
@@ -122,8 +113,8 @@ export class DocumentationGenerator {
       parameters: parameters.map(param => ({
         ...param,
         examples: this.generateParameterExamples(param),
-        validation: this.generateParameterValidation(param)
-      }))
+        validation: this.generateParameterValidation(param),
+      })),
     };
   }
 
@@ -137,13 +128,13 @@ export class DocumentationGenerator {
     return {
       supported: supported.map(feature => ({
         ...feature,
-        usageExample: this.generateFeatureExample(feature)
+        usageExample: this.generateFeatureExample(feature),
       })),
       unsupported: unsupported.map(feature => ({
         ...feature,
-        workarounds: feature.alternatives || []
+        workarounds: feature.alternatives || [],
       })),
-      summary: `${supported.length} supported features, ${unsupported.length} unsupported`
+      summary: `${supported.length} supported features, ${unsupported.length} unsupported`,
     };
   }
 
@@ -151,13 +142,16 @@ export class DocumentationGenerator {
    * Generate limitations documentation
    */
   private generateLimitationsDocumentation(limitations: Limitation[]): LimitationsSection {
-    const byType = limitations.reduce((acc, limitation) => {
-      if (!acc[limitation.type]) {
-        acc[limitation.type] = [];
-      }
-      acc[limitation.type].push(limitation);
-      return acc;
-    }, {} as Record<string, Limitation[]>);
+    const byType = limitations.reduce(
+      (acc, limitation) => {
+        if (!acc[limitation.type]) {
+          acc[limitation.type] = [];
+        }
+        acc[limitation.type].push(limitation);
+        return acc;
+      },
+      {} as Record<string, Limitation[]>
+    );
 
     return {
       byType,
@@ -166,18 +160,15 @@ export class DocumentationGenerator {
         .filter(l => l.severity !== 'error')
         .map(l => ({
           limitation: l.description,
-          workaround: this.generateWorkaround(l)
-        }))
+          workaround: this.generateWorkaround(l),
+        })),
     };
   }
 
   /**
    * Generate usage examples
    */
-  private async generateExamples(
-    adaptor: ModelAdaptor,
-    options: DocumentationOptions
-  ): Promise<ExamplesSection> {
+  private async generateExamples(adaptor: ModelAdaptor, options: DocumentationOptions): Promise<ExamplesSection> {
     const examples: UsageExample[] = [];
 
     // Basic example
@@ -185,7 +176,7 @@ export class DocumentationGenerator {
       title: 'Basic Usage',
       description: 'Simple prompt translation example',
       code: this.generateBasicExample(adaptor),
-      output: 'Example output would appear here'
+      output: 'Example output would appear here',
     });
 
     // Advanced example
@@ -193,7 +184,7 @@ export class DocumentationGenerator {
       title: 'Advanced Configuration',
       description: 'Using custom parameters and options',
       code: this.generateAdvancedExample(adaptor),
-      output: 'Advanced output would appear here'
+      output: 'Advanced output would appear here',
     });
 
     // Error handling example
@@ -201,12 +192,12 @@ export class DocumentationGenerator {
       title: 'Error Handling',
       description: 'Handling validation errors and recovery',
       code: this.generateErrorExample(adaptor),
-      output: 'Error handling demonstration'
+      output: 'Error handling demonstration',
     });
 
     return {
       examples,
-      tutorials: options.includeTutorials ? this.generateTutorials(adaptor) : []
+      tutorials: options.includeTutorials ? this.generateTutorials(adaptor) : [],
     };
   }
 
@@ -222,7 +213,7 @@ export class DocumentationGenerator {
           description: 'Returns the capabilities of this adaptor',
           parameters: [],
           returns: 'Promise<Capabilities>',
-          examples: ['const caps = await adaptor.capabilities();']
+          examples: ['const caps = await adaptor.capabilities();'],
         },
         {
           name: 'validate',
@@ -232,11 +223,11 @@ export class DocumentationGenerator {
             {
               name: 'graph',
               type: 'PromptGraph',
-              description: 'The prompt graph to validate'
-            }
+              description: 'The prompt graph to validate',
+            },
           ],
           returns: 'Promise<ValidationResult[]>',
-          examples: ['const results = await adaptor.validate(graph);']
+          examples: ['const results = await adaptor.validate(graph);'],
         },
         {
           name: 'transform',
@@ -246,17 +237,17 @@ export class DocumentationGenerator {
             {
               name: 'graph',
               type: 'PromptGraph',
-              description: 'The prompt graph to transform'
+              description: 'The prompt graph to transform',
             },
             {
               name: 'options',
               type: 'TransformOptions',
               description: 'Optional transformation options',
-              optional: true
-            }
+              optional: true,
+            },
           ],
           returns: 'Promise<TargetPrompt>',
-          examples: ['const result = await adaptor.transform(graph, { optimize: true });']
+          examples: ['const result = await adaptor.transform(graph, { optimize: true });'],
         },
         {
           name: 'estimateQuality',
@@ -266,14 +257,14 @@ export class DocumentationGenerator {
             {
               name: 'graph',
               type: 'PromptGraph',
-              description: 'The prompt graph to evaluate'
-            }
+              description: 'The prompt graph to evaluate',
+            },
           ],
           returns: 'Promise<QualityScore>',
-          examples: ['const quality = await adaptor.estimateQuality(graph);']
-        }
+          examples: ['const quality = await adaptor.estimateQuality(graph);'],
+        },
       ],
-      types: this.generateTypeDocumentation()
+      types: this.generateTypeDocumentation(),
     };
   }
 
@@ -287,31 +278,31 @@ export class DocumentationGenerator {
           issue: 'Validation errors with unsupported node types',
           cause: `This adaptor only supports: ${capabilities.supportedNodeTypes.join(', ')}`,
           solution: 'Use supported node types or choose a different adaptor',
-          code: 'Check validation results for specific unsupported nodes'
+          code: 'Check validation results for specific unsupported nodes',
         },
         {
           issue: 'Transformation fails with parameter errors',
           cause: 'Invalid parameter values for this platform',
           solution: 'Check parameter specifications and use valid values',
-          code: 'const caps = await adaptor.capabilities(); // Check caps.parameters'
+          code: 'const caps = await adaptor.capabilities(); // Check caps.parameters',
         },
         {
           issue: 'Poor quality scores',
           cause: 'Graph structure not optimized for this platform',
           solution: 'Simplify graph or use platform-specific features',
-          code: 'const quality = await adaptor.estimateQuality(graph);'
-        }
+          code: 'const quality = await adaptor.estimateQuality(graph);',
+        },
       ],
       debugging: {
         enableLogging: 'Set log level to debug for detailed information',
         validateFirst: 'Always validate graphs before transformation',
-        checkCapabilities: 'Review adaptor capabilities for compatibility'
+        checkCapabilities: 'Review adaptor capabilities for compatibility',
       },
       support: {
         documentation: 'Check the API reference for detailed method documentation',
         examples: 'Review usage examples for common patterns',
-        community: 'Search existing issues or create new ones for help'
-      }
+        community: 'Search existing issues or create new ones for help',
+      },
     };
   }
 
@@ -323,29 +314,29 @@ export class DocumentationGenerator {
       summary: {
         passed: testResults.overall.passed,
         score: testResults.overall.score,
-        description: testResults.overall.summary
+        description: testResults.overall.summary,
       },
       compliance: {
         interfaceCompliance: testResults.compliance.interfaceCompliance,
         lifecycleCompliance: testResults.compliance.lifecycleCompliance,
         validationCompliance: testResults.compliance.validationCompliance,
         transformationCompliance: testResults.compliance.transformationCompliance,
-        errors: testResults.compliance.errors
+        errors: testResults.compliance.errors,
       },
       performance: {
         validationTime: `${testResults.performance.validationTime.toFixed(2)}ms`,
         transformationTime: `${testResults.performance.transformationTime.toFixed(2)}ms`,
         memoryUsage: `${Math.round(testResults.performance.memoryUsage / 1024 / 1024)}MB`,
         cacheEfficiency: `${testResults.performance.cacheEfficiency.toFixed(1)}%`,
-        errors: testResults.performance.errors
+        errors: testResults.performance.errors,
       },
       functionality: {
         basicFunctionality: testResults.functionality.basicFunctionality,
         errorHandling: testResults.functionality.errorHandling,
         edgeCases: testResults.functionality.edgeCases,
         qualityScoring: testResults.functionality.qualityScoring,
-        errors: testResults.functionality.errors
-      }
+        errors: testResults.functionality.errors,
+      },
     };
   }
 
@@ -381,7 +372,9 @@ export class DocumentationGenerator {
     md.push('\n| Parameter | Type | Required | Default | Description |');
     md.push('|-----------|------|----------|---------|-------------|');
     doc.parameters.parameters.forEach(param => {
-      md.push(`| ${param.name} | ${param.type} | ${param.required ? 'Yes' : 'No'} | ${param.default || 'N/A'} | ${param.description} |`);
+      md.push(
+        `| ${param.name} | ${param.type} | ${param.required ? 'Yes' : 'No'} | ${param.default || 'N/A'} | ${param.description} |`
+      );
     });
 
     // Features
@@ -542,10 +535,10 @@ console.log('Generated prompt:', result.content);`;
           'Create a plugin context',
           'Initialize the adaptor',
           'Create your first prompt graph',
-          'Validate and transform the graph'
+          'Validate and transform the graph',
         ],
-        code: this.generateQuickStart(adaptor)
-      }
+        code: this.generateQuickStart(adaptor),
+      },
     ];
   }
 
@@ -557,7 +550,7 @@ console.log('Generated prompt:', result.content);`;
       concat: 'Concatenates multiple inputs',
       conditional: 'Conditional branching logic',
       weighted: 'Weighted random selection',
-      output: 'Final output node'
+      output: 'Final output node',
     };
     return descriptions[type] || 'Custom node type';
   }
@@ -566,32 +559,32 @@ console.log('Generated prompt:', result.content);`;
     const examples: Record<string, string[]> = {
       text: ['{ type: "text", data: { content: "Hello world" } }'],
       image: ['{ type: "image", data: { url: "https://example.com/image.jpg" } }'],
-      style: ['{ type: "style", data: { style: "photorealistic, 8k" } }']
+      style: ['{ type: "style", data: { style: "photorealistic, 8k" } }'],
     };
     return examples[type] || [];
   }
 
   private getFormatDescription(format: string): string {
     const descriptions: Record<string, string> = {
-      'chat_completion': 'OpenAI chat completion format',
-      'midjourney_prompt': 'Midjourney command-line format',
-      'text_completion': 'Simple text completion format'
+      chat_completion: 'OpenAI chat completion format',
+      midjourney_prompt: 'Midjourney command-line format',
+      text_completion: 'Simple text completion format',
     };
     return descriptions[format] || 'Custom format';
   }
 
   private getFormatMimeType(format: string): string {
     const mimeTypes: Record<string, string> = {
-      'chat_completion': 'application/json',
-      'midjourney_prompt': 'text/plain',
-      'text_completion': 'text/plain'
+      chat_completion: 'application/json',
+      midjourney_prompt: 'text/plain',
+      text_completion: 'text/plain',
     };
     return mimeTypes[format] || 'text/plain';
   }
 
   private generateParameterExamples(param: ParameterSpec): string[] {
     const examples: string[] = [];
-    
+
     if (param.type === 'number' && param.min !== undefined && param.max !== undefined) {
       examples.push(`${param.min} (minimum)`);
       examples.push(`${param.max} (maximum)`);
@@ -603,13 +596,13 @@ console.log('Generated prompt:', result.content);`;
     } else if (param.default !== undefined) {
       examples.push(String(param.default));
     }
-    
+
     return examples;
   }
 
   private generateParameterValidation(param: ParameterSpec): string {
     const validations: string[] = [];
-    
+
     if (param.required) validations.push('Required');
     if (param.type === 'number' && param.min !== undefined) {
       validations.push(`Minimum: ${param.min}`);
@@ -620,7 +613,7 @@ console.log('Generated prompt:', result.content);`;
     if (param.type === 'enum' && param.options) {
       validations.push(`Options: ${param.options.join(', ')}`);
     }
-    
+
     return validations.join(', ');
   }
 
@@ -632,9 +625,9 @@ console.log('Generated prompt:', result.content);`;
 
   private generateWorkaround(limitation: Limitation): string {
     const workarounds: Record<string, string> = {
-      'prompt_length': 'Split long prompts into smaller chunks',
-      'node_count': 'Simplify graph structure or use fewer nodes',
-      'feature': 'Use alternative approaches or different adaptor'
+      prompt_length: 'Split long prompts into smaller chunks',
+      node_count: 'Simplify graph structure or use fewer nodes',
+      feature: 'Use alternative approaches or different adaptor',
     };
     return workarounds[limitation.type] || 'No known workaround';
   }
@@ -648,8 +641,8 @@ console.log('Generated prompt:', result.content);`;
           { name: 'id', type: 'string', description: 'Unique identifier' },
           { name: 'nodes', type: 'PromptNode[]', description: 'Array of nodes' },
           { name: 'edges', type: 'PromptEdge[]', description: 'Array of edges' },
-          { name: 'metadata', type: 'GraphMetadata', description: 'Graph metadata' }
-        ]
+          { name: 'metadata', type: 'GraphMetadata', description: 'Graph metadata' },
+        ],
       },
       {
         name: 'ValidationResult',
@@ -658,9 +651,9 @@ console.log('Generated prompt:', result.content);`;
           { name: 'id', type: 'string', description: 'Unique result identifier' },
           { name: 'type', type: '"error" | "warning" | "info"', description: 'Result type' },
           { name: 'severity', type: '"critical" | "high" | "medium" | "low"', description: 'Issue severity' },
-          { name: 'message', type: 'string', description: 'Human-readable message' }
-        ]
-      }
+          { name: 'message', type: 'string', description: 'Human-readable message' },
+        ],
+      },
     ];
   }
 
@@ -756,19 +749,25 @@ export interface CapabilitiesSection {
 
 export interface ParametersSection {
   summary: string;
-  parameters: Array<ParameterSpec & {
-    examples: string[];
-    validation: string;
-  }>;
+  parameters: Array<
+    ParameterSpec & {
+      examples: string[];
+      validation: string;
+    }
+  >;
 }
 
 export interface FeaturesSection {
-  supported: Array<Feature & {
-    usageExample: string;
-  }>;
-  unsupported: Array<Feature & {
-    workarounds: string[];
-  }>;
+  supported: Array<
+    Feature & {
+      usageExample: string;
+    }
+  >;
+  unsupported: Array<
+    Feature & {
+      workarounds: string[];
+    }
+  >;
   summary: string;
 }
 

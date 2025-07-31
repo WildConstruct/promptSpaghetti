@@ -4,7 +4,7 @@
     "environment": "production",
     "lastUpdated": "2025-01-22T08:34:00.000Z"
   },
-  
+
   "defaultPolicies": [
     {
       "name": "Performance Critical Alert Response",
@@ -81,7 +81,7 @@
         "response_time": 1000
       }
     },
-    
+
     {
       "name": "Database Performance Optimization",
       "description": "Optimize database performance automatically",
@@ -132,7 +132,7 @@
         "cache_hit_ratio": 90
       }
     },
-    
+
     {
       "name": "User Experience Optimization",
       "description": "Optimize user-facing performance metrics",
@@ -201,7 +201,7 @@
       }
     }
   ],
-  
+
   "defaultProfiles": [
     {
       "name": "Production High Performance",
@@ -243,9 +243,7 @@
         }
       },
       "businessRules": {
-        "peakHours": [
-          { "start": "08:00", "end": "18:00" }
-        ],
+        "peakHours": [{ "start": "08:00", "end": "18:00" }],
         "maintenanceWindows": [
           {
             "windowId": "prod_maintenance",
@@ -256,11 +254,7 @@
             "timezone": "UTC"
           }
         ],
-        "criticalFeatures": [
-          "authentication",
-          "payment_processing",
-          "data_storage"
-        ],
+        "criticalFeatures": ["authentication", "payment_processing", "data_storage"],
         "performanceBudgets": [
           {
             "budgetId": "api_response_time",
@@ -279,7 +273,7 @@
         ]
       }
     },
-    
+
     {
       "name": "Development Optimized",
       "description": "Balanced configuration for development environment",
@@ -335,7 +329,7 @@
       }
     }
   ],
-  
+
   "recommendationTemplates": [
     {
       "templateId": "cache_optimization",
@@ -408,7 +402,7 @@
         ]
       }
     },
-    
+
     {
       "templateId": "database_query_optimization",
       "category": "performance",
@@ -468,7 +462,7 @@
       }
     }
   ],
-  
+
   "quickActions": [
     {
       "actionId": "clear_all_caches",
@@ -515,7 +509,7 @@
       "rollbackSupported": true
     }
   ],
-  
+
   "alertThresholds": {
     "system": {
       "cpu_usage": { "warning": 70, "critical": 90 },
@@ -534,7 +528,7 @@
       "lock_wait_time": { "warning": 100, "critical": 500 }
     }
   },
-  
+
   "optimizationCategories": {
     "performance": {
       "name": "Performance Optimization",

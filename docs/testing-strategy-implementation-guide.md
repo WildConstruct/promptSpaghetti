@@ -13,14 +13,10 @@ This guide provides specific implementation instructions for the comprehensive t
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
-  
+
   // Test discovery patterns
-  testMatch: [
-    '**/__tests__/**/*.test.{ts,tsx}',
-    '**/*.{test,spec}.{ts,tsx}',
-    '**/tests/**/*.{test,spec}.{ts,tsx}'
-  ],
-  
+  testMatch: ['**/__tests__/**/*.test.{ts,tsx}', '**/*.{test,spec}.{ts,tsx}', '**/tests/**/*.{test,spec}.{ts,tsx}'],
+
   // Coverage configuration
   collectCoverageFrom: [
     'packages/*/src/**/*.{ts,tsx}',
@@ -29,72 +25,75 @@ module.exports = {
     '!**/*.d.ts',
     '!**/node_modules/**',
     '!**/__tests__/**',
-    '!**/coverage/**'
+    '!**/coverage/**',
   ],
-  
+
   // Enhanced coverage thresholds
   coverageThreshold: {
     global: {
       branches: 80,
       functions: 80,
       lines: 80,
-      statements: 80
+      statements: 80,
     },
     // Critical components require higher coverage
     'packages/core/runtime/': {
       branches: 90,
       functions: 95,
       lines: 95,
-      statements: 95
+      statements: 95,
     },
     'server/src/engine.ts': {
       branches: 100,
       functions: 100,
       lines: 100,
-      statements: 100
+      statements: 100,
     },
     'packages/core/validation/': {
       branches: 95,
       functions: 95,
       lines: 95,
-      statements: 95
-    }
+      statements: 95,
+    },
   },
-  
+
   // Setup files
-  setupFilesAfterEnv: [
-    '<rootDir>/jest.setup.js',
-    '<rootDir>/tests/utils/setupCustomMatchers.ts'
-  ],
-  
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js', '<rootDir>/tests/utils/setupCustomMatchers.ts'],
+
   // Module mapping for aliases
   moduleNameMapping: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@core/(.*)$': '<rootDir>/packages/core/src/$1',
-    '^@utils/(.*)$': '<rootDir>/tests/utils/$1'
+    '^@utils/(.*)$': '<rootDir>/tests/utils/$1',
   },
-  
+
   // Test timeout configuration
   testTimeout: 10000, // 10 seconds default
-  
+
   // Reporters configuration
   reporters: [
     'default',
-    ['jest-html-reporter', {
-      pageTitle: 'Test Results',
-      outputPath: 'coverage/test-results.html',
-      includeFailureMsg: true
-    }],
-    ['jest-junit', {
-      outputDirectory: 'coverage',
-      outputName: 'junit.xml'
-    }]
+    [
+      'jest-html-reporter',
+      {
+        pageTitle: 'Test Results',
+        outputPath: 'coverage/test-results.html',
+        includeFailureMsg: true,
+      },
+    ],
+    [
+      'jest-junit',
+      {
+        outputDirectory: 'coverage',
+        outputName: 'junit.xml',
+      },
+    ],
   ],
-  
+
   // Performance monitoring
   maxWorkers: '50%',
   collectCoverage: true,
-  coverageReporters: ['json', 'lcov', 'text', 'clover', 'html']
+  coverageReporters: ['json', 'lcov', 'text', 'clover', 'html'],
 };
 ```
 
@@ -108,28 +107,28 @@ import { registerCustomMatchers } from '../utils/CustomMatchers';
 export class TestHarness {
   private static initialized = false;
   private static environments: Map<string, any> = new Map();
-  
+
   /**
    * Initialize test harness
    */
   static async initialize(): Promise<void> {
     if (this.initialized) return;
-    
+
     // Register custom matchers
     registerCustomMatchers();
-    
+
     // Setup test environments
     await this.setupTestEnvironments();
-    
+
     // Initialize performance monitoring
     this.setupPerformanceMonitoring();
-    
+
     // Setup cleanup handlers
     this.setupCleanupHandlers();
-    
+
     this.initialized = true;
   }
-  
+
   /**
    * Setup test environments
    */
@@ -139,43 +138,48 @@ export class TestHarness {
       NODE_ENV: 'test',
       DATABASE_URL: 'postgresql://test:test@localhost:5432/test',
       REDIS_URL: 'redis://localhost:6379/1',
-      LOG_LEVEL: 'error'
+      LOG_LEVEL: 'error',
     });
-    
+
     // CI environment
     await TestEnvironmentManager.setupEnvironment('ci', {
       NODE_ENV: 'test',
       CI: 'true',
       DATABASE_URL: process.env.TEST_DATABASE_URL,
       REDIS_URL: process.env.TEST_REDIS_URL,
-      LOG_LEVEL: 'silent'
+      LOG_LEVEL: 'silent',
     });
   }
-  
+
   /**
    * Setup performance monitoring
    */
   private static setupPerformanceMonitoring(): void {
     // Track test execution times
     const originalIt = global.it;
-    global.it = function(name: string, fn?: jest.ProvidesCallback, timeout?: number) {
-      return originalIt(name, async function(this: any, ...args: any[]) {
-        const startTime = process.hrtime.bigint();
-        const result = await fn?.apply(this, args);
-        const endTime = process.hrtime.bigint();
-        
-        const executionTime = Number(endTime - startTime) / 1000000; // ms
-        
-        // Log slow tests
-        if (executionTime > 1000) { // > 1 second
-          console.warn(`⚠️  Slow test detected: "${name}" took ${executionTime.toFixed(2)}ms`);
-        }
-        
-        return result;
-      }, timeout);
+    global.it = function (name: string, fn?: jest.ProvidesCallback, timeout?: number) {
+      return originalIt(
+        name,
+        async function (this: any, ...args: any[]) {
+          const startTime = process.hrtime.bigint();
+          const result = await fn?.apply(this, args);
+          const endTime = process.hrtime.bigint();
+
+          const executionTime = Number(endTime - startTime) / 1000000; // ms
+
+          // Log slow tests
+          if (executionTime > 1000) {
+            // > 1 second
+            console.warn(`⚠️  Slow test detected: "${name}" took ${executionTime.toFixed(2)}ms`);
+          }
+
+          return result;
+        },
+        timeout
+      );
     };
   }
-  
+
   /**
    * Setup cleanup handlers
    */
@@ -184,55 +188,55 @@ export class TestHarness {
     afterAll(async () => {
       await TestEnvironmentManager.cleanupAll();
     });
-    
+
     // Reset between test suites
     afterEach(async () => {
       // Reset mocks
       jest.clearAllMocks();
-      
+
       // Clear timers
       jest.clearAllTimers();
-      
+
       // Restore original implementations
       jest.restoreAllMocks();
     });
   }
-  
+
   /**
    * Create test suite with standardized setup
    */
   static createTestSuite(name: string, setup: TestSuiteSetup): void {
     describe(name, () => {
       let testData: TestDataUtils;
-      
+
       beforeAll(async () => {
         await this.initialize();
-        
+
         if (setup.environment) {
           await TestEnvironmentManager.setupEnvironment(`${name}-env`, setup.environment);
         }
-        
+
         testData = new TestDataUtils(setup.seed || `${name}-seed`);
       });
-      
+
       beforeEach(async () => {
         if (setup.beforeEach) {
           await setup.beforeEach(testData);
         }
       });
-      
+
       afterEach(async () => {
         if (setup.afterEach) {
           await setup.afterEach(testData);
         }
       });
-      
+
       afterAll(async () => {
         if (setup.environment) {
           await TestEnvironmentManager.cleanupEnvironment(`${name}-env`);
         }
       });
-      
+
       // Execute test definitions
       setup.tests(testData);
     });
@@ -265,19 +269,17 @@ export class PerformanceTestSuite {
     TestHarness.createTestSuite(`Performance: ${name}`, {
       seed: config.seed,
       environment: config.environment,
-      tests: (testData) => {
+      tests: testData => {
         describe('Load Testing', () => {
           config.loadTests?.forEach(test => {
             it(test.name, async () => {
-              const { result, executionTime, memoryUsage } = await PerformanceTestUtils.measureExecution(
-                async () => {
-                  const promises = Array(test.concurrency).fill(0).map(() => 
-                    test.testFunction(testData)
-                  );
-                  return await Promise.all(promises);
-                }
-              );
-              
+              const { result, executionTime, memoryUsage } = await PerformanceTestUtils.measureExecution(async () => {
+                const promises = Array(test.concurrency)
+                  .fill(0)
+                  .map(() => test.testFunction(testData));
+                return await Promise.all(promises);
+              });
+
               // Assert performance thresholds
               expect(executionTime).toBeLessThanOrEqual(test.maxExecutionTime);
               expect(memoryUsage.peak).toBeLessThanOrEqual(test.maxMemoryUsage);
@@ -285,17 +287,17 @@ export class PerformanceTestSuite {
             });
           });
         });
-        
+
         describe('Stress Testing', () => {
           config.stressTests?.forEach(test => {
             it(test.name, async () => {
               let failures = 0;
               const results = [];
-              
+
               for (let i = 0; i < test.iterations; i++) {
                 try {
-                  const { result, executionTime } = await PerformanceTestUtils.measureExecution(
-                    () => test.testFunction(testData)
+                  const { result, executionTime } = await PerformanceTestUtils.measureExecution(() =>
+                    test.testFunction(testData)
                   );
                   results.push({ result, executionTime, iteration: i });
                 } catch (error) {
@@ -305,7 +307,7 @@ export class PerformanceTestSuite {
                   }
                 }
               }
-              
+
               // Validate results
               const avgExecutionTime = results.reduce((sum, r) => sum + r.executionTime, 0) / results.length;
               expect(avgExecutionTime).toBeLessThanOrEqual(test.maxAvgExecutionTime);
@@ -313,7 +315,7 @@ export class PerformanceTestSuite {
             });
           });
         });
-      }
+      },
     });
   }
 }
@@ -358,34 +360,34 @@ PerformanceTestSuite.createSuite('Graph Execution', {
       concurrency: 50,
       maxExecutionTime: 1000, // 1 second for 50 concurrent
       maxMemoryUsage: 100 * 1024 * 1024, // 100MB
-      testFunction: async (testData) => {
+      testFunction: async testData => {
         const graph: Graph = testData.createMockGraph({
-          nodes: [
-            { id: 'wc1', type: 'WeightedChoice', choices: [{ value: 'Option A', weight: 1 }] }
-          ]
+          nodes: [{ id: 'wc1', type: 'WeightedChoice', choices: [{ value: 'Option A', weight: 1 }] }],
         });
         return await executeGraph(graph);
-      }
+      },
     },
     {
       name: 'should handle large graph execution under load',
       concurrency: 10,
       maxExecutionTime: 5000, // 5 seconds for 10 concurrent large graphs
       maxMemoryUsage: 500 * 1024 * 1024, // 500MB
-      testFunction: async (testData) => {
-        const nodes = Array(100).fill(0).map((_, i) => ({
-          id: `wc${i}`,
-          type: 'WeightedChoice',
-          choices: [
-            { value: `Option ${i}A`, weight: 1 },
-            { value: `Option ${i}B`, weight: 2 }
-          ]
-        }));
-        
+      testFunction: async testData => {
+        const nodes = Array(100)
+          .fill(0)
+          .map((_, i) => ({
+            id: `wc${i}`,
+            type: 'WeightedChoice',
+            choices: [
+              { value: `Option ${i}A`, weight: 1 },
+              { value: `Option ${i}B`, weight: 2 },
+            ],
+          }));
+
         const graph: Graph = testData.createMockGraph({ nodes });
         return await executeGraph(graph);
-      }
-    }
+      },
+    },
   ],
   stressTests: [
     {
@@ -393,16 +395,14 @@ PerformanceTestSuite.createSuite('Graph Execution', {
       iterations: 1000,
       maxFailures: 5, // 0.5% failure rate
       maxAvgExecutionTime: 100, // 100ms average
-      testFunction: async (testData) => {
+      testFunction: async testData => {
         const graph: Graph = testData.createMockGraph({
-          nodes: [
-            { id: 'wc1', type: 'WeightedChoice', choices: [{ value: 'Test', weight: 1 }] }
-          ]
+          nodes: [{ id: 'wc1', type: 'WeightedChoice', choices: [{ value: 'Test', weight: 1 }] }],
         });
         return await executeGraph(graph);
-      }
-    }
-  ]
+      },
+    },
+  ],
 });
 ```
 
@@ -420,7 +420,7 @@ export class SecurityTestSuite {
     TestHarness.createTestSuite(`Security: ${name}`, {
       seed: config.seed,
       environment: config.environment,
-      tests: (testData) => {
+      tests: testData => {
         describe('Input Validation', () => {
           config.inputValidationTests?.forEach(test => {
             it(`should prevent ${test.name}`, async () => {
@@ -432,7 +432,7 @@ export class SecurityTestSuite {
             });
           });
         });
-        
+
         describe('Authentication & Authorization', () => {
           config.authTests?.forEach(test => {
             it(test.name, async () => {
@@ -441,7 +441,7 @@ export class SecurityTestSuite {
             });
           });
         });
-      }
+      },
     });
   }
 }
@@ -482,10 +482,10 @@ export class ComprehensiveTestDataGenerator extends TestDataUtils {
       [TestScenario.COMPLEX_BRANCHING]: this.generateComplexBranchingGraph(),
       [TestScenario.CIRCULAR_DEPENDENCY]: this.generateCircularDependencyGraph(),
       [TestScenario.DEEP_NESTING]: this.generateDeepNestingGraph(),
-      [TestScenario.MEMORY_INTENSIVE]: this.generateMemoryIntensiveGraph()
+      [TestScenario.MEMORY_INTENSIVE]: this.generateMemoryIntensiveGraph(),
     };
   }
-  
+
   private generateSimpleLinearGraph(): Graph {
     return {
       id: this.generateId('simple-linear'),
@@ -493,30 +493,30 @@ export class ComprehensiveTestDataGenerator extends TestDataUtils {
         {
           id: 'start',
           type: 'WeightedChoice',
-          choices: [{ value: 'Hello', weight: 1 }]
+          choices: [{ value: 'Hello', weight: 1 }],
         },
         {
           id: 'middle',
-          type: 'WeightedChoice', 
-          choices: [{ value: 'World', weight: 1 }]
+          type: 'WeightedChoice',
+          choices: [{ value: 'World', weight: 1 }],
         },
         {
           id: 'end',
           type: 'Output',
-          template: '{{start}} {{middle}}'
-        }
+          template: '{{start}} {{middle}}',
+        },
       ],
       edges: [
         { id: 'e1', source: 'start', target: 'middle' },
-        { id: 'e2', source: 'middle', target: 'end' }
-      ]
+        { id: 'e2', source: 'middle', target: 'end' },
+      ],
     };
   }
-  
+
   private generateComplexBranchingGraph(): Graph {
     const nodes = [];
     const edges = [];
-    
+
     // Create branching structure with multiple paths
     for (let i = 0; i < 20; i++) {
       nodes.push({
@@ -525,10 +525,10 @@ export class ComprehensiveTestDataGenerator extends TestDataUtils {
         choices: [
           { value: `Branch ${i}A`, weight: 1 },
           { value: `Branch ${i}B`, weight: 2 },
-          { value: `Branch ${i}C`, weight: 1 }
-        ]
+          { value: `Branch ${i}C`, weight: 1 },
+        ],
       });
-      
+
       if (i > 0) {
         // Connect to previous nodes with branching
         const sourceCount = Math.min(3, i);
@@ -536,64 +536,66 @@ export class ComprehensiveTestDataGenerator extends TestDataUtils {
           edges.push({
             id: `e-${i}-${j}`,
             source: `branch-${i - j - 1}`,
-            target: `branch-${i}`
+            target: `branch-${i}`,
           });
         }
       }
     }
-    
+
     nodes.push({
       id: 'output',
       type: 'Output',
-      template: 'Result: {{branch-19}}'
+      template: 'Result: {{branch-19}}',
     });
-    
+
     edges.push({
       id: 'final-edge',
       source: 'branch-19',
-      target: 'output'
+      target: 'output',
     });
-    
+
     return {
       id: this.generateId('complex-branching'),
       nodes,
-      edges
+      edges,
     };
   }
-  
+
   private generateMemoryIntensiveGraph(): Graph {
     const nodes = [];
     const edges = [];
-    
+
     // Create a graph with large data structures
     for (let i = 0; i < 500; i++) {
-      const largeChoices = Array(100).fill(0).map((_, j) => ({
-        value: `Large choice ${i}-${j} with substantial text content that will consume memory`,
-        weight: Math.random()
-      }));
-      
+      const largeChoices = Array(100)
+        .fill(0)
+        .map((_, j) => ({
+          value: `Large choice ${i}-${j} with substantial text content that will consume memory`,
+          weight: Math.random(),
+        }));
+
       nodes.push({
         id: `memory-${i}`,
         type: 'WeightedChoice',
-        choices: largeChoices
+        choices: largeChoices,
       });
-      
+
       if (i > 0) {
         edges.push({
           id: `mem-edge-${i}`,
           source: `memory-${i - 1}`,
-          target: `memory-${i}`
+          target: `memory-${i}`,
         });
       }
     }
-    
+
     return {
       id: this.generateId('memory-intensive'),
       nodes,
-      edges
+      edges,
     };
   }
-  
+
   /**
    * Generate user test data with various roles and permissions
    */
@@ -603,10 +605,10 @@ export class ComprehensiveTestDataGenerator extends TestDataUtils {
       editor: this.generateUser('editor', ['create', 'read', 'update']),
       viewer: this.generateUser('viewer', ['read']),
       guest: this.generateUser('guest', []),
-      suspended: this.generateUser('suspended', [], { isActive: false })
+      suspended: this.generateUser('suspended', [], { isActive: false }),
     };
   }
-  
+
   private generateUser(role: string, permissions: string[], overrides: any = {}): User {
     return {
       id: this.generateId(role),
@@ -616,7 +618,7 @@ export class ComprehensiveTestDataGenerator extends TestDataUtils {
       permissions,
       isActive: true,
       createdAt: new Date().toISOString(),
-      ...overrides
+      ...overrides,
     };
   }
 }
@@ -626,7 +628,7 @@ export enum TestScenario {
   COMPLEX_BRANCHING = 'complex-branching',
   CIRCULAR_DEPENDENCY = 'circular-dependency',
   DEEP_NESTING = 'deep-nesting',
-  MEMORY_INTENSIVE = 'memory-intensive'
+  MEMORY_INTENSIVE = 'memory-intensive',
 }
 ```
 
@@ -640,9 +642,9 @@ name: Comprehensive Testing Pipeline
 
 on:
   push:
-    branches: [ main, develop, epic-* ]
+    branches: [main, develop, epic-*]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
 
 jobs:
   # Pre-flight checks
@@ -655,7 +657,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      
+
       - name: Detect changes
         id: changes
         run: |
@@ -674,30 +676,30 @@ jobs:
         node-version: [18, 20]
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
-      
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      
+
       - name: Run static analysis
         run: |
           pnpm lint
           pnpm typecheck
-      
+
       - name: Run unit tests
         run: pnpm test:unit-only
-      
+
       - name: Run integration tests
         run: pnpm test:integration
         env:
           DATABASE_URL: postgresql://test:test@localhost:5432/test
           REDIS_URL: redis://localhost:6379/1
-      
+
       - name: Upload coverage reports
         uses: codecov/codecov-action@v3
         with:
@@ -712,21 +714,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
           cache: 'pnpm'
-      
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      
+
       - name: Run performance tests
         run: pnpm test:performance-only
         env:
           PERFORMANCE_THRESHOLD_MULTIPLIER: 1.2 # Allow 20% variance in CI
-      
+
       - name: Analyze performance results
         run: |
           node scripts/analyze-performance-results.js
@@ -739,19 +741,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
           cache: 'pnpm'
-      
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      
+
       - name: Run security tests
         run: pnpm test:security-scan
-      
+
       - name: Run vulnerability scan
         run: pnpm audit --audit-level high
 
@@ -761,25 +763,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
           cache: 'pnpm'
-      
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      
+
       - name: Install Playwright
         run: npx playwright install --with-deps
-      
+
       - name: Build application
         run: pnpm build
-      
+
       - name: Run E2E tests
         run: pnpm test:e2e
-      
+
       - name: Upload test results
         if: failure()
         uses: actions/upload-artifact@v3
@@ -831,58 +833,59 @@ export class TestHealthMonitor {
       failedTests: testResults.filter(r => !r.passed).length,
       flakyTests: this.identifyFlakyTests(testResults),
       slowTests: this.identifySlowTests(testResults),
-      recommendations: []
+      recommendations: [],
     };
-    
+
     // Generate recommendations
     if (report.flakyTests.length > 0) {
       report.recommendations.push(`${report.flakyTests.length} flaky tests detected - investigate and fix`);
     }
-    
+
     if (report.slowTests.length > 0) {
       report.recommendations.push(`${report.slowTests.length} slow tests detected - consider optimization`);
     }
-    
+
     const failureRate = report.failedTests / report.totalTests;
-    if (failureRate > 0.05) { // 5% failure rate threshold
+    if (failureRate > 0.05) {
+      // 5% failure rate threshold
       report.recommendations.push(`High failure rate (${(failureRate * 100).toFixed(1)}%) - review test stability`);
     }
-    
+
     return report;
   }
-  
+
   /**
    * Generate test maintenance tasks
    */
   static generateMaintenanceTasks(healthReport: TestHealthReport): MaintenanceTask[] {
     const tasks: MaintenanceTask[] = [];
-    
+
     // Flaky test fixes
     for (const flakyTest of healthReport.flakyTests) {
       tasks.push({
         type: 'fix-flaky-test',
         priority: 'high',
         description: `Fix flaky test: ${flakyTest.name}`,
-        test: flakyTest
+        test: flakyTest,
       });
     }
-    
+
     // Performance optimization
     for (const slowTest of healthReport.slowTests) {
       tasks.push({
         type: 'optimize-test',
         priority: 'medium',
         description: `Optimize slow test: ${slowTest.name} (${slowTest.avgExecutionTime}ms)`,
-        test: slowTest
+        test: slowTest,
       });
     }
-    
+
     return tasks;
   }
-  
+
   private static identifyFlakyTests(results: TestResult[]): FlakyTest[] {
     const testGroups = new Map<string, TestResult[]>();
-    
+
     // Group results by test name
     for (const result of results) {
       if (!testGroups.has(result.testName)) {
@@ -890,34 +893,34 @@ export class TestHealthMonitor {
       }
       testGroups.get(result.testName)!.push(result);
     }
-    
+
     const flakyTests: FlakyTest[] = [];
-    
+
     // Identify tests with inconsistent results
     for (const [testName, testResults] of testGroups) {
       if (testResults.length < 5) continue; // Need multiple runs to detect flakiness
-      
+
       const successRate = testResults.filter(r => r.passed).length / testResults.length;
-      
+
       // Test is flaky if success rate is between 20% and 80%
       if (successRate > 0.2 && successRate < 0.8) {
         flakyTests.push({
           name: testName,
           successRate,
           totalRuns: testResults.length,
-          failures: testResults.filter(r => !r.passed).length
+          failures: testResults.filter(r => !r.passed).length,
         });
       }
     }
-    
+
     return flakyTests;
   }
-  
+
   private static identifySlowTests(results: TestResult[]): SlowTest[] {
     const SLOW_TEST_THRESHOLD = 5000; // 5 seconds
-    
+
     const testGroups = new Map<string, number[]>();
-    
+
     // Group execution times by test name
     for (const result of results) {
       if (!testGroups.has(result.testName)) {
@@ -925,22 +928,22 @@ export class TestHealthMonitor {
       }
       testGroups.get(result.testName)!.push(result.executionTime);
     }
-    
+
     const slowTests: SlowTest[] = [];
-    
+
     for (const [testName, executionTimes] of testGroups) {
       const avgExecutionTime = executionTimes.reduce((sum, time) => sum + time, 0) / executionTimes.length;
-      
+
       if (avgExecutionTime > SLOW_TEST_THRESHOLD) {
         slowTests.push({
           name: testName,
           avgExecutionTime,
           maxExecutionTime: Math.max(...executionTimes),
-          runCount: executionTimes.length
+          runCount: executionTimes.length,
         });
       }
     }
-    
+
     return slowTests.sort((a, b) => b.avgExecutionTime - a.avgExecutionTime);
   }
 }
@@ -949,6 +952,7 @@ export class TestHealthMonitor {
 ## 7. Implementation Checklist
 
 ### Phase 1: Foundation (Week 1)
+
 - [ ] Update Jest configuration with enhanced thresholds
 - [ ] Implement TestHarness framework
 - [ ] Setup custom matchers and utilities
@@ -956,6 +960,7 @@ export class TestHealthMonitor {
 - [ ] Establish performance testing baseline
 
 ### Phase 2: Advanced Testing (Week 2)
+
 - [ ] Implement security test framework
 - [ ] Create load testing infrastructure
 - [ ] Setup CI/CD pipeline integration
@@ -963,6 +968,7 @@ export class TestHealthMonitor {
 - [ ] Create test maintenance automation
 
 ### Phase 3: Optimization (Week 3)
+
 - [ ] Fine-tune performance thresholds
 - [ ] Optimize test execution speed
 - [ ] Implement flaky test detection

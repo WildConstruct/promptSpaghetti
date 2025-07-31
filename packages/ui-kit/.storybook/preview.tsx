@@ -62,21 +62,23 @@ const preview: Preview = {
       ],
     },
   },
-  
+
   decorators: [
     (Story, context) => {
       const { parameters } = context;
       const platform = parameters.platform || 'web';
       const colorMode = parameters.colorMode || 'light';
-      
+
       return (
         <PlatformProvider platform={platform}>
           <ThemeProvider defaultColorMode={colorMode}>
-            <div style={{ 
-              padding: '20px',
-              minHeight: '100vh',
-              fontFamily: 'system-ui, -apple-system, sans-serif'
-            }}>
+            <div
+              style={{
+                padding: '20px',
+                minHeight: '100vh',
+                fontFamily: 'system-ui, -apple-system, sans-serif',
+              }}
+            >
               <Story />
             </div>
           </ThemeProvider>
@@ -84,7 +86,7 @@ const preview: Preview = {
       );
     },
   ],
-  
+
   globalTypes: {
     platform: {
       description: 'Platform environment',

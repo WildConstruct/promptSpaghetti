@@ -2,10 +2,10 @@
 
 /**
  * Stale Task Cleanup Utility
- * 
- * Identifies and automatically reassigns tasks that have been assigned 
+ *
+ * Identifies and automatically reassigns tasks that have been assigned
  * but haven't been updated in more than 24 hours back to the available pool.
- * 
+ *
  * Features:
  * - Configurable stale timeout (default 24 hours)
  * - Dry-run mode for testing
@@ -23,51 +23,42 @@ class StaleTaskCleanup {
     this.stateFile = path.join(this.dataDir, 'state.json');
     this.configFile = path.join(this.dataDir, 'stale-cleanup-config.json');
     this.logFile = path.join(this.dataDir, 'stale-cleanup.log');
-    
+
     // Default configuration
     this.config = {
       // Stale timeouts by status (in hours)
       staleTimeouts: {
-        'IN_PROGRESS': 4,     // 4 hours for in-progress tasks (autonomous agents work quickly)
-        'ASSIGNED': 4,        // 4 hours for newly assigned tasks (should start immediately)
-        'REVIEW': 48,         // 48 hours for review tasks (longer grace period)
-        'BLOCKED': 72         // 72 hours for blocked tasks (even longer)
+        IN_PROGRESS: 4, // 4 hours for in-progress tasks (autonomous agents work quickly)
+        ASSIGNED: 4, // 4 hours for newly assigned tasks (should start immediately)
+        REVIEW: 48, // 48 hours for review tasks (longer grace period)
+        BLOCKED: 72, // 72 hours for blocked tasks (even longer)
       },
-      
+
       // Grace periods for different task types/priorities
       gracePeriods: {
-        'high': 6,      // High priority gets 6 extra hours
-        'medium': 0,    // No extra time for medium
-        'low': -6       // Low priority gets 6 hours less (18 hours total)
+        high: 6, // High priority gets 6 extra hours
+        medium: 0, // No extra time for medium
+        low: -6, // Low priority gets 6 hours less (18 hours total)
       },
-      
+
       // Actions to take
       actions: {
         reassignToAvailable: true,
         notifyOriginalAssignee: true,
         logDetailed: true,
-        dryRun: false
+        dryRun: false,
       },
-      
+
       // Exclusions
       exclusions: {
         // Skip tasks with these patterns in title/description
-        skipPatterns: [
-          'URGENT',
-          'HOTFIX', 
-          'CRITICAL',
-          'PRODUCTION'
-        ],
-        
+        skipPatterns: ['URGENT', 'HOTFIX', 'CRITICAL', 'PRODUCTION'],
+
         // Skip specific agents (e.g., long-running bots)
-        skipAgents: [
-          'build-bot',
-          'deploy-agent',
-          'monitoring-service'
-        ]
-      }
+        skipAgents: ['build-bot', 'deploy-agent', 'monitoring-service'],
+      },
     };
-    
+
     this.initialized = false;
   }
 
@@ -78,12 +69,11 @@ class StaleTaskCleanup {
     try {
       await this.ensureDataDirectory();
       await this.loadConfig();
-      
+
       this.initialized = true;
       console.log('✅ Stale Task Cleanup utility initialized');
-      
+
       await this.log('SYSTEM', 'Stale task cleanup utility initialized');
-      
     } catch (error) {
       console.error('❌ Failed to initialize Stale Task Cleanup:', error);
       throw error;
@@ -100,7 +90,7 @@ class StaleTaskCleanup {
 
     try {
       console.log('🧹 Starting stale task cleanup...');
-      
+
       // Load current state
       const state = await this.loadState();
       if (!state || !state.tasks) {
@@ -110,9 +100,9 @@ class StaleTaskCleanup {
 
       const tasks = Object.entries(state.tasks);
       const staleTask = this.findStaleTasks(tasks);
-      
+
       console.log(`📊 Found ${staleTask.length} stale tasks out of ${tasks.length} total tasks`);
-      
+
       if (staleTask.length === 0) {
         console.log('✅ No stale tasks found - all tasks are current');
         return { processed: tasks.length, cleaned: 0, errors: 0 };
@@ -129,7 +119,7 @@ class StaleTaskCleanup {
         await this.log('INFO', `Dry run: found ${staleTask.length} stale tasks`);
       } else {
         console.log(`\n🔄 Processing ${staleTask.length} stale tasks...`);
-        
+
         for (const { taskId, task, staleDuration } of staleTask) {
           try {
             await this.cleanupStaleTask(taskId, task, staleDuration, state);
@@ -151,14 +141,13 @@ class StaleTaskCleanup {
         processed: tasks.length,
         cleaned: cleanedCount,
         errors: errorCount,
-        staleTasks: staleTask.length
+        staleTasks: staleTask.length,
       };
 
       await this.log('SUMMARY', `Cleanup complete: ${JSON.stringify(summary)}`);
       console.log('\n📊 Cleanup Summary:', summary);
 
       return summary;
-
     } catch (error) {
       console.error('❌ Cleanup process failed:', error);
       await this.log('ERROR', `Cleanup process failed: ${error.message}`);
@@ -200,14 +189,14 @@ class StaleTaskCleanup {
       }
 
       const timeSinceUpdate = now.getTime() - lastUpdate.getTime();
-      
+
       if (timeSinceUpdate > staleThresholdMs) {
         staleTask.push({
           taskId,
           task,
           lastUpdate,
           staleDuration: timeSinceUpdate,
-          thresholdHours: staleThresholdHours
+          thresholdHours: staleThresholdHours,
         });
       }
     }
@@ -244,7 +233,7 @@ class StaleTaskCleanup {
   calculateStaleThreshold(task) {
     const baseTimeout = this.config.staleTimeouts[task.state] || 24;
     const gracePeriod = this.config.gracePeriods[task.priority] || 0;
-    
+
     return Math.max(1, baseTimeout + gracePeriod); // Minimum 1 hour
   }
 
@@ -253,13 +242,7 @@ class StaleTaskCleanup {
    */
   getLastUpdateTime(task) {
     // Try various timestamp fields
-    const timeFields = [
-      'lastUpdated',
-      'lastModified', 
-      'updatedAt',
-      'assignedAt',
-      'created'
-    ];
+    const timeFields = ['lastUpdated', 'lastModified', 'updatedAt', 'assignedAt', 'created'];
 
     for (const field of timeFields) {
       if (task[field]) {
@@ -281,20 +264,22 @@ class StaleTaskCleanup {
 
     console.log('\n📋 STALE TASKS FOUND:');
     console.log('═'.repeat(100));
-    console.log('ID'.padEnd(20) + 'Assignee'.padEnd(15) + 'State'.padEnd(12) + 'Stale For'.padEnd(12) + 'Title'.padEnd(35));
+    console.log(
+      'ID'.padEnd(20) + 'Assignee'.padEnd(15) + 'State'.padEnd(12) + 'Stale For'.padEnd(12) + 'Title'.padEnd(35)
+    );
     console.log('-'.repeat(100));
 
     for (const { taskId, task, staleDuration, thresholdHours } of staleTask) {
       const staleHours = Math.floor(staleDuration / (1000 * 60 * 60));
       const staleDays = Math.floor(staleHours / 24);
       const staleDisplay = staleDays > 0 ? `${staleDays}d ${staleHours % 24}h` : `${staleHours}h`;
-      
+
       console.log(
         taskId.padEnd(20) +
-        (task.assignee || 'Unknown').padEnd(15) +
-        (task.state || 'Unknown').padEnd(12) +
-        staleDisplay.padEnd(12) +
-        (task.title || 'No title').substring(0, 34).padEnd(35)
+          (task.assignee || 'Unknown').padEnd(15) +
+          (task.state || 'Unknown').padEnd(12) +
+          staleDisplay.padEnd(12) +
+          (task.title || 'No title').substring(0, 34).padEnd(35)
       );
     }
     console.log('═'.repeat(100));
@@ -314,17 +299,19 @@ class StaleTaskCleanup {
       originalState: task.state,
       staleHours,
       cleanupTime: new Date().toISOString(),
-      reason: 'Stale task cleanup - no activity for 24+ hours'
+      reason: 'Stale task cleanup - no activity for 24+ hours',
     };
 
     // Update task
     task.assignee = 'Unassigned';
     task.state = 'TODO'; // Reset to available state
     task.lastUpdated = new Date().toISOString();
-    
+
     // Add cleanup note to task
     if (!task.notes) task.notes = [];
-    task.notes.push(`[AUTOMATED] Task reassigned due to inactivity (${staleHours}h stale) - was assigned to ${originalAssignee}`);
+    task.notes.push(
+      `[AUTOMATED] Task reassigned due to inactivity (${staleHours}h stale) - was assigned to ${originalAssignee}`
+    );
 
     // Log the action
     await this.log('CLEANUP', `Task ${taskId} reassigned from ${originalAssignee} (stale for ${staleHours}h)`);
@@ -350,13 +337,12 @@ class StaleTaskCleanup {
         taskTitle: task.title,
         staleHours,
         message: `Task ${taskId} ("${task.title}") has been reassigned due to ${staleHours} hours of inactivity. If you were still working on this task, please reassign it to yourself.`,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
 
       // For now, just log the notification
       await this.log('NOTIFICATION', `Notification queued for ${assignee}: ${notification.message}`);
       console.log(`📧 Notification queued for ${assignee} about task ${taskId}`);
-
     } catch (error) {
       console.warn(`⚠️  Failed to notify ${assignee}:`, error.message);
     }
@@ -369,19 +355,20 @@ class StaleTaskCleanup {
     try {
       const logs = await this.getLogs(days);
       const cleanupEvents = logs.filter(log => log.type === 'CLEANUP');
-      
+
       const stats = {
         period: `${days} days`,
         totalCleanups: cleanupEvents.length,
-        affectedAgents: [...new Set(cleanupEvents.map(event => 
-          event.message.match(/from (\w+)/)?.[1]
-        ).filter(Boolean))],
-        avgStaleHours: cleanupEvents.length > 0 
-          ? cleanupEvents.reduce((sum, event) => {
-            const hours = event.message.match(/\((\d+)h stale\)/)?.[1];
-            return sum + (parseInt(hours) || 0);
-          }, 0) / cleanupEvents.length 
-          : 0
+        affectedAgents: [
+          ...new Set(cleanupEvents.map(event => event.message.match(/from (\w+)/)?.[1]).filter(Boolean)),
+        ],
+        avgStaleHours:
+          cleanupEvents.length > 0
+            ? cleanupEvents.reduce((sum, event) => {
+                const hours = event.message.match(/\((\d+)h stale\)/)?.[1];
+                return sum + (parseInt(hours) || 0);
+              }, 0) / cleanupEvents.length
+            : 0,
       };
 
       return stats;
@@ -433,7 +420,7 @@ class StaleTaskCleanup {
     const logEntry = {
       timestamp: new Date().toISOString(),
       type,
-      message
+      message,
     };
 
     try {
@@ -452,17 +439,17 @@ class StaleTaskCleanup {
     try {
       const logContent = await fs.readFile(this.logFile, 'utf8');
       const lines = logContent.trim().split('\n').filter(Boolean);
-      const cutoffDate = new Date(Date.now() - (days * 24 * 60 * 60 * 1000));
-      
+      const cutoffDate = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+
       return lines
         .map(line => {
           const match = line.match(/^(.+?) \[(.+?)\] (.+)$/);
           if (!match) return null;
-          
+
           return {
             timestamp: new Date(match[1]),
             type: match[2],
-            message: match[3]
+            message: match[3],
           };
         })
         .filter(log => log && log.timestamp >= cutoffDate);
@@ -476,40 +463,40 @@ class StaleTaskCleanup {
    */
   async interactive() {
     console.log('🔧 Interactive Stale Task Cleanup Mode\n');
-    
+
     const readline = require('readline');
     const rl = readline.createInterface({
       input: process.stdin,
-      output: process.stdout
+      output: process.stdout,
     });
 
-    const ask = (question) => new Promise(resolve => rl.question(question, resolve));
+    const ask = question => new Promise(resolve => rl.question(question, resolve));
 
     try {
       console.log('Current configuration:');
       console.log(`- Stale timeout for IN_PROGRESS: ${this.config.staleTimeouts.IN_PROGRESS} hours`);
       console.log(`- Dry run mode: ${this.config.actions.dryRun}`);
-      
+
       const action = await ask('\nChoose action: (c)leanup, (s)tats, (d)ry-run, (q)uit: ');
-      
+
       switch (action.toLowerCase()) {
-      case 'c':
-        this.config.actions.dryRun = false;
-        await this.cleanup();
-        break;
-      case 's':
-        const stats = await this.getStats();
-        console.log('\n📊 Cleanup Statistics:', stats);
-        break;
-      case 'd':
-        this.config.actions.dryRun = true;
-        await this.cleanup();
-        break;
-      case 'q':
-        console.log('👋 Goodbye!');
-        break;
-      default:
-        console.log('❌ Invalid option');
+        case 'c':
+          this.config.actions.dryRun = false;
+          await this.cleanup();
+          break;
+        case 's':
+          const stats = await this.getStats();
+          console.log('\n📊 Cleanup Statistics:', stats);
+          break;
+        case 'd':
+          this.config.actions.dryRun = true;
+          await this.cleanup();
+          break;
+        case 'q':
+          console.log('👋 Goodbye!');
+          break;
+        default:
+          console.log('❌ Invalid option');
       }
     } finally {
       rl.close();
@@ -520,34 +507,34 @@ class StaleTaskCleanup {
 // CLI mode
 if (require.main === module) {
   const cleanup = new StaleTaskCleanup();
-  
+
   const args = process.argv.slice(2);
   const command = args[0];
 
   async function main() {
     try {
       switch (command) {
-      case 'cleanup':
-      case 'clean':
-        await cleanup.cleanup();
-        break;
-      case 'dry-run':
-      case 'dryrun':
-        cleanup.config.actions.dryRun = true;
-        await cleanup.cleanup();
-        break;
-      case 'stats':
-        const days = parseInt(args[1]) || 7;
-        const stats = await cleanup.getStats(days);
-        console.log('📊 Cleanup Statistics:', stats);
-        break;
-      case 'interactive':
-      case 'i':
-        await cleanup.interactive();
-        break;
-      case 'help':
-      default:
-        console.log(`
+        case 'cleanup':
+        case 'clean':
+          await cleanup.cleanup();
+          break;
+        case 'dry-run':
+        case 'dryrun':
+          cleanup.config.actions.dryRun = true;
+          await cleanup.cleanup();
+          break;
+        case 'stats':
+          const days = parseInt(args[1]) || 7;
+          const stats = await cleanup.getStats(days);
+          console.log('📊 Cleanup Statistics:', stats);
+          break;
+        case 'interactive':
+        case 'i':
+          await cleanup.interactive();
+          break;
+        case 'help':
+        default:
+          console.log(`
 🧹 Stale Task Cleanup Utility
 
 USAGE:
@@ -573,7 +560,7 @@ CONFIGURATION:
   - Exclusion patterns and agents
   - Notification settings
 `);
-        break;
+          break;
       }
     } catch (error) {
       console.error('❌ Error:', error.message);

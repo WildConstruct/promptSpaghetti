@@ -4,6 +4,7 @@
 
 **Status**: Complete  
 **Files Created**:
+
 - `packages/core/runtime/advanced.ts` - Core foundation classes
 - `packages/core/runtime/__tests__/advanced.test.ts` - Comprehensive test suite
 - `packages/core/runtime/index.ts` - Updated exports
@@ -16,6 +17,7 @@
 ### Enhanced Runtime Base Classes
 
 #### `AdvancedRuntimeNode<TOutput>`
+
 - **Extends**: `RuntimeNode` from Epic 3 foundation
 - **Purpose**: Abstract base class for all Epic 7 advanced nodes
 - **Key Features**:
@@ -26,6 +28,7 @@
   - Configuration-driven behavior
 
 #### `AdvancedExecutionContext`
+
 - **Extends**: `ExecutionContext` from Epic 3
 - **Purpose**: Enhanced execution context for stateful and complex nodes
 - **Key Features**:
@@ -37,13 +40,15 @@
 ### Core Capabilities Implemented
 
 #### 1. **State Management** ✅
+
 ```typescript
 // Stateful nodes can maintain state between executions
 protected getState(ctx: AdvancedExecutionContext): any
 protected setState(ctx: AdvancedExecutionContext, state: any): void
 ```
 
-#### 2. **Performance Optimization** ✅  
+#### 2. **Performance Optimization** ✅
+
 ```typescript
 // Intelligent caching for expensive operations
 protected withCache<T>(ctx: AdvancedExecutionContext, key: string, computation: () => T): T
@@ -53,18 +58,21 @@ protected measureExecution<T>(ctx: AdvancedExecutionContext, operation: string, 
 ```
 
 #### 3. **Deterministic Execution** ✅
+
 ```typescript
 // Seeded random number generation per node
 protected createSeededRNG(seed: string | number, nodeSpecificSeed?: string): () => number
 ```
 
 #### 4. **Validation System** ✅
+
 ```typescript
 // Comprehensive validation framework
 abstract validate(): ValidationResult
 ```
 
 #### 5. **Serialization Support** ✅
+
 ```typescript
 // Full node state serialization
 abstract serialize(): AdvancedNodeData
@@ -73,40 +81,47 @@ abstract serialize(): AdvancedNodeData
 ### Utility Classes Implemented
 
 #### `AdvancedExecutionUtils`
+
 - Context enhancement and management
 - State cleanup and isolation
 - Infinite loop detection
 - Execution statistics
 
 #### `ValidationHelpers`
+
 - Standard validation patterns
 - Required field validation
 - Array and numeric range validation
 - Result construction utilities
 
 #### `SerializationHelpers`
+
 - Node data serialization
 - Metadata management
 - Validation of serialized data
 
 ## 🎯 Key Design Decisions
 
-### 1. **Backward Compatibility** 
+### 1. **Backward Compatibility**
+
 - Zero impact on existing Epic 3 nodes
 - Advanced nodes gracefully degrade with basic `ExecutionContext`
 - `isCompatibleWithBasicContext()` method for compatibility checking
 
 ### 2. **Performance First**
+
 - Optional caching with `cacheable` config flag
 - Performance metrics built-in for optimization
 - Lazy state initialization
 
 ### 3. **Type Safety**
+
 - Full TypeScript support with generics
 - Zod-compatible validation system
 - Comprehensive interfaces and type guards
 
 ### 4. **Testing Excellence**
+
 - 25 comprehensive test cases
 - 94.87% code coverage
 - Performance, state isolation, and determinism testing
@@ -115,13 +130,17 @@ abstract serialize(): AdvancedNodeData
 ## 🚀 Usage Examples
 
 ### Basic Advanced Node
+
 ```typescript
 class MyAdvancedNode extends AdvancedRuntimeNode<string> {
-  constructor(id: string, private value: string) {
-    super(id, { 
-      deterministic: true, 
-      cacheable: true, 
-      stateful: false 
+  constructor(
+    id: string,
+    private value: string
+  ) {
+    super(id, {
+      deterministic: true,
+      cacheable: true,
+      stateful: false,
     });
   }
 
@@ -135,34 +154,34 @@ class MyAdvancedNode extends AdvancedRuntimeNode<string> {
 
   validate(): ValidationResult {
     const errors = ValidationHelpers.validateRequired(this.value, 'value');
-    return errors.length > 0 
-      ? ValidationHelpers.createInvalidResult(errors)
-      : ValidationHelpers.createValidResult();
+    return errors.length > 0 ? ValidationHelpers.createInvalidResult(errors) : ValidationHelpers.createValidResult();
   }
 
   serialize(): AdvancedNodeData {
-    return SerializationHelpers.createAdvancedNodeData(
-      this.id, 'MyAdvanced', this.config, { value: this.value }
-    );
+    return SerializationHelpers.createAdvancedNodeData(this.id, 'MyAdvanced', this.config, { value: this.value });
   }
 }
 ```
 
 ### Stateful Advanced Node
+
 ```typescript
 class CounterNode extends AdvancedRuntimeNode<number> {
-  constructor(id: string, private increment: number = 1) {
-    super(id, { 
-      deterministic: true, 
-      cacheable: false, 
-      stateful: true 
+  constructor(
+    id: string,
+    private increment: number = 1
+  ) {
+    super(id, {
+      deterministic: true,
+      cacheable: false,
+      stateful: true,
     });
   }
 
   run(ctx: AdvancedExecutionContext): number {
     const state = this.getState(ctx) || { count: 0 };
     const newCount = state.count + this.increment;
-    
+
     this.setState(ctx, { count: newCount });
     return newCount;
   }
@@ -172,32 +191,32 @@ class CounterNode extends AdvancedRuntimeNode<number> {
 ## 🔧 Integration Points
 
 ### Runtime Integration
+
 ```typescript
 // Advanced nodes export from packages/core/runtime/index.ts
-import { 
-  AdvancedRuntimeNode, 
-  AdvancedExecutionContext,
-  AdvancedExecutionUtils 
-} from '@promptscape/core/runtime';
+import { AdvancedRuntimeNode, AdvancedExecutionContext, AdvancedExecutionUtils } from '@promptscape/core/runtime';
 ```
 
 ### Engine Integration
+
 ```typescript
 // Enhanced context creation in server/src/engine.ts
 const ctx: AdvancedExecutionContext = AdvancedExecutionUtils.enhanceContext({
   variables: {},
-  seed: graph.seed ?? Date.now()
+  seed: graph.seed ?? Date.now(),
 });
 ```
 
 ## 📊 Performance Metrics
 
 ### Test Performance
+
 - **Test Suite Runtime**: 7.171s for 25 tests
 - **Memory Usage**: Minimal overhead for enhanced context
 - **Deterministic Validation**: 100% consistent across multiple runs
 
 ### Foundation Benchmarks
+
 - **Context Enhancement**: ~0.1ms overhead
 - **State Management**: O(1) get/set operations
 - **Seeded RNG**: Identical performance to Epic 3 implementation
@@ -208,9 +227,10 @@ const ctx: AdvancedExecutionContext = AdvancedExecutionUtils.enhanceContext({
 The advanced node foundation is complete and ready for Epic 7 node implementations:
 
 ### Immediate Tasks Available:
+
 1. **Story 7.1.1 Remaining Tasks**:
    - ✅ Unified interface (Complete)
-   - 🔄 Standardized I/O handling 
+   - 🔄 Standardized I/O handling
    - 🔄 Serialization approach (Base implemented)
    - 🔄 Backward compatibility strategy
    - 🔄 Executor extensions

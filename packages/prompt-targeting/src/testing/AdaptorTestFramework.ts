@@ -3,13 +3,7 @@
  * Epic 10.2.1 - Testing Framework for Adaptors
  */
 
-import {
-  ModelAdaptor,
-  PlatformCapabilities,
-  ValidationResult,
-  PlatformPrompt,
-  AdaptorConfig
-} from '../types';
+import { ModelAdaptor, PlatformCapabilities, ValidationResult, PlatformPrompt, AdaptorConfig } from '../types';
 
 /**
  * Test case interface
@@ -101,7 +95,7 @@ export class AdaptorTestFramework {
   public async runTestSuite(config: TestSuiteConfig): Promise<TestSuiteResult> {
     const startTime = Date.now();
     const results: TestResult[] = [];
-    
+
     this.logger.log(`\n🧪 Running test suite: ${config.name}`);
     this.logger.log(`   Adaptor: ${config.adaptor.name} v${config.adaptor.version}`);
     this.logger.log(`   Test cases: ${config.testCases.length}`);
@@ -121,10 +115,10 @@ export class AdaptorTestFramework {
       for (let i = 0; i < config.testCases.length; i++) {
         const testCase = config.testCases[i];
         this.logger.log(`\n   [${i + 1}/${config.testCases.length}] ${testCase.name}`);
-        
+
         const result = await this.runTestCase(config.adaptor, testCase);
         results.push(result);
-        
+
         if (result.passed) {
           this.logger.log(`     ✅ PASSED (${result.duration}ms)`);
         } else {
@@ -141,7 +135,6 @@ export class AdaptorTestFramework {
       if (!config.skipInitialization) {
         await config.adaptor.cleanup?.();
       }
-
     } catch (error) {
       this.logger.error('Test suite setup/teardown failed:', error);
     }
@@ -155,7 +148,7 @@ export class AdaptorTestFramework {
       validationTests: results.filter(r => r.details.validation).length,
       translationTests: results.filter(r => r.details.translation).length,
       capabilityTests: results.filter(r => r.details.capabilities).length,
-      performanceTests: results.filter(r => r.duration > 1000).length
+      performanceTests: results.filter(r => r.duration > 1000).length,
     };
 
     const suiteResult: TestSuiteResult = {
@@ -165,7 +158,7 @@ export class AdaptorTestFramework {
       failedTests,
       duration,
       results,
-      summary
+      summary,
     };
 
     this.printSummary(suiteResult);
@@ -309,7 +302,6 @@ export class AdaptorTestFramework {
         true,
         'Expected capabilities to have features array'
       );
-
     } catch (err) {
       error = err as Error;
     }
@@ -323,7 +315,7 @@ export class AdaptorTestFramework {
       duration,
       error,
       details,
-      assertions
+      assertions,
     };
   }
 
@@ -337,21 +329,19 @@ export class AdaptorTestFramework {
         description: 'Test validation of empty graph',
         graph: { nodes: [], edges: [] },
         expectedValid: true,
-        expectedWarnings: ['EMPTY_GRAPH']
+        expectedWarnings: ['EMPTY_GRAPH'],
       },
       {
         name: 'Simple Text Content',
         description: 'Test basic text content translation',
         graph: {
-          nodes: [
-            { id: '1', type: 'output', data: { text: 'Hello, world!' } }
-          ],
-          edges: []
+          nodes: [{ id: '1', type: 'output', data: { text: 'Hello, world!' } }],
+          edges: [],
         },
         expectedValid: true,
         shouldTranslate: true,
         expectedPromptContains: ['Hello, world!'],
-        minCompatibilityScore: 0.8
+        minCompatibilityScore: 0.8,
       },
       {
         name: 'Complex Graph Structure',
@@ -360,59 +350,57 @@ export class AdaptorTestFramework {
           nodes: [
             { id: '1', type: 'subject', data: { text: 'A robot' } },
             { id: '2', type: 'action', data: { text: 'walking in a garden' } },
-            { id: '3', type: 'style', data: { text: 'futuristic' } }
+            { id: '3', type: 'style', data: { text: 'futuristic' } },
           ],
           edges: [
             { id: 'e1', source: '1', target: '2' },
-            { id: 'e2', source: '2', target: '3' }
-          ]
+            { id: 'e2', source: '2', target: '3' },
+          ],
         },
         expectedValid: true,
         shouldTranslate: true,
         expectedPromptContains: ['robot', 'walking', 'garden'],
-        minCompatibilityScore: 0.7
+        minCompatibilityScore: 0.7,
       },
       {
         name: 'High Quality Configuration',
         description: 'Test high quality preference',
         graph: {
-          nodes: [
-            { id: '1', type: 'output', data: { text: 'Write a detailed analysis' } }
-          ],
-          edges: []
+          nodes: [{ id: '1', type: 'output', data: { text: 'Write a detailed analysis' } }],
+          edges: [],
         },
         config: {
           qualityPreference: 0.9,
-          enableOptimizations: true
+          enableOptimizations: true,
         },
         expectedValid: true,
         shouldTranslate: true,
-        minCompatibilityScore: 0.8
+        minCompatibilityScore: 0.8,
       },
       {
         name: 'Long Content Warning',
         description: 'Test very long content generates warnings',
         graph: {
           nodes: [
-            { 
-              id: '1', 
-              type: 'output', 
-              data: { 
-                text: 'Lorem ipsum '.repeat(1000) // Very long text
-              } 
-            }
+            {
+              id: '1',
+              type: 'output',
+              data: {
+                text: 'Lorem ipsum '.repeat(1000), // Very long text
+              },
+            },
           ],
-          edges: []
+          edges: [],
         },
         expectedValid: true,
-        expectedWarnings: ['CONTENT_TOO_LONG', 'CONTENT_NEAR_LIMIT']
+        expectedWarnings: ['CONTENT_TOO_LONG', 'CONTENT_NEAR_LIMIT'],
       },
       {
         name: 'Invalid Graph Structure',
         description: 'Test invalid graph structure',
         graph: null,
         expectedValid: false,
-        expectedErrors: ['MISSING_GRAPH']
+        expectedErrors: ['MISSING_GRAPH'],
       },
       {
         name: 'Performance Test',
@@ -421,18 +409,18 @@ export class AdaptorTestFramework {
           nodes: Array.from({ length: 50 }, (_, i) => ({
             id: `node-${i}`,
             type: 'text',
-            data: { text: `Content ${i}` }
+            data: { text: `Content ${i}` },
           })),
           edges: Array.from({ length: 40 }, (_, i) => ({
             id: `edge-${i}`,
             source: `node-${i}`,
-            target: `node-${i + 1}`
-          }))
+            target: `node-${i + 1}`,
+          })),
         },
         expectedValid: true,
         shouldTranslate: true,
-        timeout: 5000
-      }
+        timeout: 5000,
+      },
     ];
   }
 
@@ -448,55 +436,55 @@ export class AdaptorTestFramework {
         graph: {
           nodes: [
             { id: '1', type: 'system', data: { text: 'You are a helpful assistant' } },
-            { id: '2', type: 'user', data: { text: 'Hello!' } }
+            { id: '2', type: 'user', data: { text: 'Hello!' } },
           ],
-          edges: [{ id: 'e1', source: '1', target: '2' }]
+          edges: [{ id: 'e1', source: '1', target: '2' }],
         },
         expectedValid: true,
         shouldTranslate: true,
         expectedParameters: {
-          system: 'You are a helpful assistant'
-        }
+          system: 'You are a helpful assistant',
+        },
       },
       {
         name: 'Function Calling',
         description: 'Test function calling capabilities',
         graph: {
           nodes: [
-            { 
-              id: '1', 
-              type: 'function', 
-              data: { 
+            {
+              id: '1',
+              type: 'function',
+              data: {
                 name: 'get_weather',
                 description: 'Get current weather',
-                parameters: { location: { type: 'string' } }
-              } 
-            }
+                parameters: { location: { type: 'string' } },
+              },
+            },
           ],
-          edges: []
+          edges: [],
         },
         expectedValid: true,
-        shouldTranslate: true
+        shouldTranslate: true,
       },
       {
         name: 'JSON Output Request',
         description: 'Test JSON output format',
         graph: {
           nodes: [
-            { 
-              id: '1', 
-              type: 'output', 
-              data: { 
+            {
+              id: '1',
+              type: 'output',
+              data: {
                 text: 'Return the result in JSON format',
-                outputFormat: 'json'
-              } 
-            }
+                outputFormat: 'json',
+              },
+            },
           ],
-          edges: []
+          edges: [],
         },
         expectedValid: true,
-        shouldTranslate: true
-      }
+        shouldTranslate: true,
+      },
     ];
   }
 
@@ -512,13 +500,13 @@ export class AdaptorTestFramework {
         graph: {
           nodes: [
             { id: '1', type: 'subject', data: { text: 'A dragon' } },
-            { id: '2', type: 'style', data: { style: 'fantasy' } }
+            { id: '2', type: 'style', data: { style: 'fantasy' } },
           ],
-          edges: [{ id: 'e1', source: '1', target: '2' }]
+          edges: [{ id: 'e1', source: '1', target: '2' }],
         },
         expectedValid: true,
         shouldTranslate: true,
-        expectedPromptContains: ['/imagine prompt:', 'dragon', 'fantasy', 'magical']
+        expectedPromptContains: ['/imagine prompt:', 'dragon', 'fantasy', 'magical'],
       },
       {
         name: 'Aspect Ratio Handling',
@@ -526,51 +514,49 @@ export class AdaptorTestFramework {
         graph: {
           nodes: [
             { id: '1', type: 'subject', data: { text: 'A landscape' } },
-            { id: '2', type: 'aspectRatio', data: { aspectRatio: 'landscape' } }
+            { id: '2', type: 'aspectRatio', data: { aspectRatio: 'landscape' } },
           ],
-          edges: [{ id: 'e1', source: '1', target: '2' }]
+          edges: [{ id: 'e1', source: '1', target: '2' }],
         },
         expectedValid: true,
         shouldTranslate: true,
         expectedPromptContains: ['--ar 16:9'],
         expectedParameters: {
-          aspect: '16:9'
-        }
+          aspect: '16:9',
+        },
       },
       {
         name: 'Quality Configuration',
         description: 'Test quality parameter mapping',
         graph: {
-          nodes: [
-            { id: '1', type: 'subject', data: { text: 'A portrait' } }
-          ],
-          edges: []
+          nodes: [{ id: '1', type: 'subject', data: { text: 'A portrait' } }],
+          edges: [],
         },
         config: {
           qualityPreference: 0.9,
-          stylePreference: 'photorealistic'
+          stylePreference: 'photorealistic',
         },
         expectedValid: true,
-        shouldTranslate: true
+        shouldTranslate: true,
       },
       {
         name: 'Text-Only Content Warning',
         description: 'Test warning for text-focused content',
         graph: {
           nodes: [
-            { 
-              id: '1', 
-              type: 'output', 
-              data: { 
-                text: 'Write a detailed article about economic policy and financial markets'
-              } 
-            }
+            {
+              id: '1',
+              type: 'output',
+              data: {
+                text: 'Write a detailed article about economic policy and financial markets',
+              },
+            },
           ],
-          edges: []
+          edges: [],
         },
         expectedValid: true,
-        expectedWarnings: ['TEXT_ONLY_CONTENT']
-      }
+        expectedWarnings: ['TEXT_ONLY_CONTENT'],
+      },
     ];
   }
 
@@ -590,7 +576,7 @@ export class AdaptorTestFramework {
       passed,
       actual,
       expected,
-      message
+      message,
     });
   }
 
@@ -601,21 +587,21 @@ export class AdaptorTestFramework {
     if (a === b) return true;
     if (a == null || b == null) return a === b;
     if (typeof a !== typeof b) return false;
-    
+
     if (typeof a === 'object') {
       const aKeys = Object.keys(a as object);
       const bKeys = Object.keys(b as object);
-      
+
       if (aKeys.length !== bKeys.length) return false;
-      
+
       for (const key of aKeys) {
         if (!bKeys.includes(key)) return false;
         if (!this.deepEqual((a as any)[key], (b as any)[key])) return false;
       }
-      
+
       return true;
     }
-    
+
     return false;
   }
 
@@ -629,7 +615,7 @@ export class AdaptorTestFramework {
     this.logger.log(`   ❌ Failed: ${result.failedTests}`);
     this.logger.log(`   ⏱️  Duration: ${result.duration}ms`);
     this.logger.log(`   📈 Success Rate: ${((result.passedTests / result.totalTests) * 100).toFixed(1)}%`);
-    
+
     this.logger.log('\n📋 Test Breakdown:');
     this.logger.log(`   Validation Tests: ${result.summary.validationTests}`);
     this.logger.log(`   Translation Tests: ${result.summary.translationTests}`);
@@ -642,7 +628,7 @@ export class AdaptorTestFramework {
         .filter(r => !r.passed)
         .forEach(r => {
           this.logger.log(`   • ${r.testCase}: ${r.error?.message || 'Assertion failed'}`);
-          
+
           // Show failed assertions
           const failedAssertions = r.assertions.filter(a => !a.passed);
           if (failedAssertions.length > 0) {
@@ -665,24 +651,24 @@ export class AdaptorTestFramework {
   } {
     const allResults = results.flatMap(suite => suite.results);
     const durations = allResults.map(r => r.duration);
-    
+
     const averageDuration = durations.reduce((sum, d) => sum + d, 0) / durations.length;
-    const slowestResult = allResults.reduce((slowest, current) => 
+    const slowestResult = allResults.reduce((slowest, current) =>
       current.duration > slowest.duration ? current : slowest
     );
-    const fastestResult = allResults.reduce((fastest, current) => 
+    const fastestResult = allResults.reduce((fastest, current) =>
       current.duration < fastest.duration ? current : fastest
     );
-    
+
     // Performance score: higher is better, based on speed and consistency
     const maxDuration = Math.max(...durations);
-    const performanceScore = Math.max(0, 100 - (averageDuration / 10) - (maxDuration / 100));
-    
+    const performanceScore = Math.max(0, 100 - averageDuration / 10 - maxDuration / 100);
+
     return {
       averageDuration,
       slowestTest: slowestResult.testCase,
       fastestTest: fastestResult.testCase,
-      performanceScore
+      performanceScore,
     };
   }
 }

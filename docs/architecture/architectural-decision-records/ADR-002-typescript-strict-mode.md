@@ -1,6 +1,7 @@
 # ADR-002: Enable TypeScript Strict Mode
 
 ## Status
+
 Accepted
 
 ## Context
@@ -14,6 +15,7 @@ The Prompt Spaghetti platform is built with TypeScript, but currently uses lenie
 - **Code quality varies** across different modules and contributors
 
 The current TypeScript configuration allows:
+
 - Implicit `any` types when type inference fails
 - Unsafe property access without null checks
 - Function returns without explicit return types
@@ -23,6 +25,7 @@ The current TypeScript configuration allows:
 As the platform grows and more developers contribute, these issues compound and create technical debt. Additionally, the advanced node execution engine (Epic 7) relies heavily on type safety for security validation and runtime correctness.
 
 Recent analysis shows:
+
 - **23% of runtime errors** could be prevented with stricter typing
 - **40% of debugging time** is spent on null/undefined errors
 - **Integration tests fail** due to type mismatches that should be caught at compile time
@@ -46,13 +49,13 @@ We will enable TypeScript strict mode across the entire codebase with the follow
     "strictPropertyInitialization": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    
+
     // Additional strictness
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
-    
+
     // Quality enforcement
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -65,21 +68,25 @@ We will enable TypeScript strict mode across the entire codebase with the follow
 ### 2. Progressive Migration Strategy
 
 **Phase 1: Infrastructure (Week 1)**
+
 - Enable strict mode in new packages first
 - Create type-safe utility functions and helpers
 - Establish patterns for common scenarios
 
 **Phase 2: Core Domain (Weeks 2-3)**
+
 - Migrate core business logic (`packages/core/`)
 - Fix type issues in runtime engine
 - Ensure security validation has proper types
 
-**Phase 3: UI Components (Weeks 4-5)**  
+**Phase 3: UI Components (Weeks 4-5)**
+
 - Migrate React components (`packages/ui-kit/`, `client/`)
 - Add proper props typing
 - Fix event handler types
 
 **Phase 4: Server & Services (Weeks 6-7)**
+
 - Migrate server-side code (`server/`)
 - Add request/response typing
 - Fix middleware and route handler types
@@ -87,6 +94,7 @@ We will enable TypeScript strict mode across the entire codebase with the follow
 ### 3. Required Type Patterns
 
 **Explicit Return Types**
+
 ```typescript
 // ✅ Required: Explicit return types for public functions
 function executeGraph(graph: Graph): Promise<ExecutionResult> {
@@ -95,14 +103,12 @@ function executeGraph(graph: Graph): Promise<ExecutionResult> {
 
 // ✅ Required: Type guards for runtime checks
 function isWeightedChoiceNode(node: unknown): node is WeightedChoiceNode {
-  return typeof node === 'object' && 
-         node !== null && 
-         'type' in node && 
-         node.type === 'WeightedChoice';
+  return typeof node === 'object' && node !== null && 'type' in node && node.type === 'WeightedChoice';
 }
 ```
 
 **Null Safety Patterns**
+
 ```typescript
 // ✅ Required: Proper null handling
 function getNodeById(id: string): Node | null {
@@ -113,7 +119,7 @@ function processNode(node: Node | null): void {
   if (!node) {
     throw new Error('Node is required');
   }
-  
+
   // node is guaranteed to be non-null here
   console.log(node.id);
 }
@@ -123,6 +129,7 @@ const result = user?.profile?.displayName ?? 'Anonymous';
 ```
 
 **Generic Constraints**
+
 ```typescript
 // ✅ Required: Proper generic constraints
 interface Repository<T extends { id: string }> {
@@ -131,27 +138,23 @@ interface Repository<T extends { id: string }> {
 }
 
 // ✅ Required: Conditional types for complex scenarios
-type ApiResponse<T> = T extends string 
-  ? { message: T } 
-  : { data: T };
+type ApiResponse<T> = T extends string ? { message: T } : { data: T };
 ```
 
 ### 4. Error Handling Patterns
 
 ```typescript
 // ✅ Required: Result types for operations that can fail
-type Result<T, E = Error> = 
-  | { success: true; data: T }
-  | { success: false; error: E };
+type Result<T, E = Error> = { success: true; data: T } | { success: false; error: E };
 
 async function executeGraph(graph: Graph): Promise<Result<ExecutionResult>> {
   try {
     const result = await engine.execute(graph);
     return { success: true, data: result };
   } catch (error) {
-    return { 
-      success: false, 
-      error: error instanceof Error ? error : new Error(String(error))
+    return {
+      success: false,
+      error: error instanceof Error ? error : new Error(String(error)),
     };
   }
 }
@@ -160,6 +163,7 @@ async function executeGraph(graph: Graph): Promise<Result<ExecutionResult>> {
 ### 5. Migration Tools and Automation
 
 **Pre-commit Hooks**
+
 ```json
 {
   "husky": {
@@ -168,29 +172,24 @@ async function executeGraph(graph: Graph): Promise<Result<ExecutionResult>> {
     }
   },
   "lint-staged": {
-    "*.{ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ]
+    "*.{ts,tsx}": ["eslint --fix", "prettier --write"]
   }
 }
 ```
 
 **ESLint Rules**
+
 ```javascript
 module.exports = {
-  extends: [
-    '@typescript-eslint/recommended',
-    '@typescript-eslint/recommended-requiring-type-checking'
-  ],
+  extends: ['@typescript-eslint/recommended', '@typescript-eslint/recommended-requiring-type-checking'],
   rules: {
     '@typescript-eslint/no-explicit-any': 'error',
     '@typescript-eslint/no-unsafe-member-access': 'error',
     '@typescript-eslint/no-unsafe-call': 'error',
     '@typescript-eslint/explicit-function-return-type': 'warn',
     '@typescript-eslint/prefer-nullish-coalescing': 'error',
-    '@typescript-eslint/prefer-optional-chain': 'error'
-  }
+    '@typescript-eslint/prefer-optional-chain': 'error',
+  },
 };
 ```
 
@@ -230,30 +229,35 @@ module.exports = {
 ## Implementation Plan
 
 ### Week 1: Foundation
+
 - [ ] Update `tsconfig.json` in all packages
 - [ ] Create type utility library (`packages/core/types/`)
 - [ ] Establish patterns for common scenarios
 - [ ] Update build scripts and CI/CD
 
 ### Week 2-3: Core Domain
+
 - [ ] Migrate `packages/core/runtime/`
 - [ ] Fix types in graph schema and validation
 - [ ] Update security validation with proper types
 - [ ] Ensure all node types are properly typed
 
 ### Week 4-5: UI Components
+
 - [ ] Migrate React components with proper props
 - [ ] Fix event handler types
 - [ ] Update state management with proper typing
 - [ ] Ensure GraphQL/API integration is type-safe
 
 ### Week 6-7: Server & Services
+
 - [ ] Migrate Fastify routes with proper typing
 - [ ] Fix database query result types
 - [ ] Update middleware and authentication
 - [ ] Ensure all API endpoints have proper types
 
 ### Week 8: Validation & Documentation
+
 - [ ] Run full type check across codebase
 - [ ] Update documentation with type examples
 - [ ] Create developer guidelines for strict TypeScript

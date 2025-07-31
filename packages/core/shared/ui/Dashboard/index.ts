@@ -1,7 +1,7 @@
 /**
  * Dashboard Components - Complete Export
  * REFACTOR-003: Dashboard Component Architecture Consolidation
- * 
+ *
  * Unified dashboard system for 95+ dashboard components consolidation
  */
 
@@ -26,30 +26,16 @@ export * from './visualization';
 export { default as DashboardShell, useDashboard } from './core/DashboardShell';
 
 // Type exports
-export type { 
-  DashboardShellProps, 
-  TabConfig, 
-  TimeRangeOption,
-  DashboardContextValue
-} from './core';
+export type { DashboardShellProps, TabConfig, TimeRangeOption, DashboardContextValue } from './core';
 
-export type { 
+export type {
   MetricsGridProps,
-  MetricCardProps, 
-  MetricValue, 
+  MetricCardProps,
+  MetricValue,
   MetricTrend,
-  TrendIndicatorProps 
+  TrendIndicatorProps,
 } from './metrics/MetricCard';
 
-export type { 
-  ChartProps, 
-  ChartType, 
-  ChartDataPoint, 
-  ChartSeries 
-} from './charts/Chart';
+export type { ChartProps, ChartType, ChartDataPoint, ChartSeries } from './charts/Chart';
 
-export type { 
-  DataTableProps, 
-  TableColumn, 
-  TableAction 
-} from './visualization/DataTable';
+export type { DataTableProps, TableColumn, TableAction } from './visualization/DataTable';

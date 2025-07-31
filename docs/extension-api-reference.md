@@ -67,7 +67,7 @@ Interface for creating node extensions.
 ```typescript
 interface NodeExtension extends BaseExtension {
   readonly extensionType: 'node';
-  
+
   registerNodeTypes(): Promise<void>;
   getNodeTypes(): NodeTypeInfo[];
 }
@@ -231,7 +231,7 @@ class ValidationHelpers {
   static isBoolean(value: any): boolean;
   static isArray(value: any): boolean;
   static isObject(value: any): boolean;
-  
+
   // Constraint builders
   static lengthConstraint(min?: number, max?: number): ValidationConstraint;
   static rangeConstraint(min?: number, max?: number): ValidationConstraint;
@@ -245,15 +245,15 @@ class ValidationHelpers {
 ```typescript
 protected validateInputs(inputs: any): ValidationResult {
   const errors: string[] = [];
-  
+
   if (!ValidationHelpers.isString(inputs.text)) {
     errors.push('Text must be a string');
   }
-  
+
   if (inputs.text && inputs.text.length > 1000) {
     errors.push('Text must be less than 1000 characters');
   }
-  
+
   return {
     valid: errors.length === 0,
     errors
@@ -270,7 +270,7 @@ Interface for creating UI extensions.
 ```typescript
 interface UIExtension extends BaseExtension {
   readonly extensionType: 'ui';
-  
+
   registerComponents(): Promise<void>;
   registerThemes(): Promise<void>;
   getComponents(): ComponentInfo[];
@@ -317,7 +317,7 @@ export const MyCustomButton: ExtensionComponent = ({ config, onAction }) => {
   };
 
   return (
-    <button 
+    <button
       onClick={handleClick}
       className={config?.className}
       style={config?.style}
@@ -384,7 +384,7 @@ Interface for creating transform extensions.
 ```typescript
 interface TransformExtension extends BaseExtension {
   readonly extensionType: 'transform';
-  
+
   transform(data: any, options?: any): Promise<any>;
   getTransformInfo(): TransformInfo;
 }
@@ -399,7 +399,7 @@ abstract class DataProcessor {
   constructor(config: ProcessorConfig);
 
   abstract process(data: any, options?: any): Promise<any>;
-  
+
   // Virtual methods
   protected validateInput(data: any): ValidationResult;
   protected validateOutput(data: any): ValidationResult;
@@ -413,7 +413,7 @@ abstract class DataProcessor {
 ```typescript
 export class TextTransformExtension implements TransformExtension {
   readonly extensionType = 'transform' as const;
-  
+
   async transform(data: any, options: any = {}): Promise<any> {
     if (typeof data === 'string') {
       switch (options.mode) {
@@ -427,22 +427,20 @@ export class TextTransformExtension implements TransformExtension {
           return data;
       }
     }
-    
+
     if (Array.isArray(data)) {
       return Promise.all(data.map(item => this.transform(item, options)));
     }
-    
+
     return data;
   }
-  
+
   getTransformInfo(): TransformInfo {
     return {
       name: 'Text Transform',
       description: 'Transform text data',
       supportedTypes: ['string', 'array'],
-      options: [
-        { name: 'mode', type: 'string', values: ['uppercase', 'lowercase', 'reverse'] }
-      ]
+      options: [{ name: 'mode', type: 'string', values: ['uppercase', 'lowercase', 'reverse'] }],
     };
   }
 }
@@ -457,7 +455,7 @@ Interface for creating storage extensions.
 ```typescript
 interface StorageExtension extends BaseExtension {
   readonly extensionType: 'storage';
-  
+
   getStorageProvider(): StorageProvider;
 }
 ```
@@ -473,7 +471,7 @@ interface StorageProvider {
   delete(key: string): Promise<void>;
   list(): Promise<string[]>;
   exists(key: string): Promise<boolean>;
-  
+
   // Optional methods
   backup?(): Promise<void>;
   restore?(backupId: string): Promise<void>;
@@ -486,34 +484,32 @@ interface StorageProvider {
 ```typescript
 export class FileStorageProvider implements StorageProvider {
   private basePath: string;
-  
+
   constructor(basePath: string) {
     this.basePath = basePath;
   }
-  
+
   async save(key: string, data: any): Promise<void> {
     const filePath = path.join(this.basePath, `${key}.json`);
     await fs.promises.writeFile(filePath, JSON.stringify(data, null, 2));
   }
-  
+
   async load(key: string): Promise<any> {
     const filePath = path.join(this.basePath, `${key}.json`);
     const content = await fs.promises.readFile(filePath, 'utf8');
     return JSON.parse(content);
   }
-  
+
   async delete(key: string): Promise<void> {
     const filePath = path.join(this.basePath, `${key}.json`);
     await fs.promises.unlink(filePath);
   }
-  
+
   async list(): Promise<string[]> {
     const files = await fs.promises.readdir(this.basePath);
-    return files
-      .filter(f => f.endsWith('.json'))
-      .map(f => f.replace('.json', ''));
+    return files.filter(f => f.endsWith('.json')).map(f => f.replace('.json', ''));
   }
-  
+
   async exists(key: string): Promise<boolean> {
     const filePath = path.join(this.basePath, `${key}.json`);
     try {
@@ -569,7 +565,7 @@ type MessageHandler = (message: ExtensionMessage, sender: string) => any;
 // Send a message to another extension
 const response = await ExtensionMessaging.send('other-extension', {
   type: 'data-request',
-  payload: { query: 'user-data' }
+  payload: { query: 'user-data' },
 });
 
 // Listen for messages
@@ -618,19 +614,19 @@ class ExtensionManager {
   static install(manifestPath: string): Promise<void>;
   static installFromUrl(url: string): Promise<void>;
   static installFromManifest(manifest: ExtensionManifest): Promise<void>;
-  
+
   // Management
   static enable(extensionId: string): Promise<void>;
   static disable(extensionId: string): Promise<void>;
   static uninstall(extensionId: string): Promise<void>;
   static update(extensionId: string): Promise<void>;
-  
+
   // Information
   static getExtension(extensionId: string): ExtensionInfo | null;
   static getInstalledExtensions(): ExtensionInfo[];
   static getAvailableExtensions(): ExtensionInfo[];
   static getStatus(extensionId: string): ExtensionStatus;
-  
+
   // Events
   static onExtensionInstalled(handler: (extensionId: string) => void): void;
   static onExtensionEnabled(handler: (extensionId: string) => void): void;
@@ -763,7 +759,7 @@ The extension API follows semantic versioning:
 ### Compatibility Matrix
 
 | Extension API | System Version | Support Level |
-|---------------|----------------|---------------|
+| ------------- | -------------- | ------------- |
 | 1.0.x         | 1.0.x          | ✅ Full       |
 | 1.0.x         | 1.1.x          | ✅ Full       |
 | 1.1.x         | 1.0.x          | ⚠️ Limited    |

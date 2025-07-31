@@ -3,7 +3,13 @@
  * Epic 10.2.3 - Validation Rules System Extensions
  */
 
-import { ValidationRule, ValidationRuleResult, ValidationContext, ValidationCategory, ValidationSeverity } from './ValidationRulesEngine';
+import {
+  ValidationRule,
+  ValidationRuleResult,
+  ValidationContext,
+  ValidationCategory,
+  ValidationSeverity,
+} from './ValidationRulesEngine';
 
 /**
  * Validates that all nodes have valid and required properties
@@ -17,27 +23,29 @@ export class MissingRequiredPropertiesRule implements ValidationRule {
   enabled = true;
 
   private readonly requiredPropertiesByType: Record<string, string[]> = {
-    'output': ['text', 'content'],
-    'input': ['name'],
-    'transform': ['template', 'content'],
-    'conditional': ['condition'],
-    'loop': ['iterations'],
-    'variable': ['name', 'value']
+    output: ['text', 'content'],
+    input: ['name'],
+    transform: ['template', 'content'],
+    conditional: ['condition'],
+    loop: ['iterations'],
+    variable: ['name', 'value'],
   };
 
-  applies() { return true; }
+  applies() {
+    return true;
+  }
 
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     const { graph } = context;
-    
+
     if (!graph.nodes || graph.nodes.length === 0) {
       return {
         passed: true,
-        message: 'No nodes to validate'
+        message: 'No nodes to validate',
       };
     }
 
-    const missingPropsNodes: Array<{nodeId: string, missing: string[]}> = [];
+    const missingPropsNodes: Array<{ nodeId: string; missing: string[] }> = [];
 
     for (const node of graph.nodes) {
       const nodeType = (node.type || node.data?.type || '').toLowerCase();
@@ -75,16 +83,16 @@ export class MissingRequiredPropertiesRule implements ValidationRule {
         details: {
           affectedNodeCount: missingPropsNodes.length,
           totalMissingProperties: totalMissing,
-          missingByNode: missingPropsNodes
+          missingByNode: missingPropsNodes,
         },
-        affectedNodes
+        affectedNodes,
       };
     }
 
     return {
       passed: true,
       message: 'All nodes have required properties',
-      details: { nodesChecked: graph.nodes.length }
+      details: { nodesChecked: graph.nodes.length },
     };
   }
 
@@ -107,13 +115,13 @@ export class MissingRequiredPropertiesRule implements ValidationRule {
             // Add default value based on property type
             const defaultValue = this.getDefaultValue(prop, nodeType);
             nodeData[prop] = defaultValue;
-            
+
             fixed = true;
             changes.push({
               nodeId: node.id,
               type: 'property_added',
               property: prop,
-              value: defaultValue
+              value: defaultValue,
             });
           }
         }
@@ -131,7 +139,7 @@ export class MissingRequiredPropertiesRule implements ValidationRule {
       name: `${nodeType}_${Date.now()}`,
       condition: 'true',
       iterations: '1',
-      value: ''
+      value: '',
     };
 
     return defaults[property] || `[${property}]`;
@@ -149,15 +157,17 @@ export class DuplicateContentRule implements ValidationRule {
   severity = ValidationSeverity.WARNING;
   enabled = true;
 
-  applies() { return true; }
+  applies() {
+    return true;
+  }
 
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     const { graph } = context;
-    
+
     if (!graph.nodes || graph.nodes.length < 2) {
       return {
         passed: true,
-        message: 'Insufficient nodes for duplicate detection'
+        message: 'Insufficient nodes for duplicate detection',
       };
     }
 
@@ -167,12 +177,13 @@ export class DuplicateContentRule implements ValidationRule {
     // Extract and normalize content from all nodes
     for (const node of graph.nodes) {
       const nodeData = node.data || {};
-      
+
       for (const field of contentFields) {
         if (nodeData[field]) {
           const content = String(nodeData[field]).trim().toLowerCase();
-          
-          if (content.length > 10) { // Only check substantial content
+
+          if (content.length > 10) {
+            // Only check substantial content
             if (!contentMap.has(content)) {
               contentMap.set(content, []);
             }
@@ -183,8 +194,7 @@ export class DuplicateContentRule implements ValidationRule {
     }
 
     // Find duplicates
-    const duplicates = Array.from(contentMap.entries())
-      .filter(([_, nodeIds]) => nodeIds.length > 1);
+    const duplicates = Array.from(contentMap.entries()).filter(([_, nodeIds]) => nodeIds.length > 1);
 
     if (duplicates.length > 0) {
       const totalDuplicateNodes = duplicates.reduce((sum, [_, nodeIds]) => sum + nodeIds.length, 0);
@@ -199,17 +209,17 @@ export class DuplicateContentRule implements ValidationRule {
           duplicates: duplicates.map(([content, nodeIds]) => ({
             content: content.substring(0, 50) + (content.length > 50 ? '...' : ''),
             nodeIds,
-            duplicateCount: nodeIds.length
-          }))
+            duplicateCount: nodeIds.length,
+          })),
         },
-        affectedNodes
+        affectedNodes,
       };
     }
 
     return {
       passed: true,
       message: 'No duplicate content detected',
-      details: { contentPatternsChecked: contentMap.size }
+      details: { contentPatternsChecked: contentMap.size },
     };
   }
 
@@ -230,47 +240,38 @@ export class LanguageConsistencyRule implements ValidationRule {
   enabled = true;
 
   private readonly languagePatterns: Record<string, RegExp[]> = {
-    english: [
-      /\b(the|and|or|but|in|on|at|to|for|of|with|by)\b/gi,
-      /\b(this|that|these|those|here|there)\b/gi
-    ],
-    spanish: [
-      /\b(el|la|los|las|y|o|pero|en|de|con|por|para)\b/gi,
-      /\b(este|esta|estos|estas|aquí|allí)\b/gi
-    ],
-    french: [
-      /\b(le|la|les|et|ou|mais|dans|de|avec|par|pour)\b/gi,
-      /\b(ce|cette|ces|ici|là)\b/gi
-    ],
-    german: [
-      /\b(der|die|das|und|oder|aber|in|auf|mit|von|für)\b/gi,
-      /\b(dieser|diese|dieses|hier|dort)\b/gi
-    ]
+    english: [/\b(the|and|or|but|in|on|at|to|for|of|with|by)\b/gi, /\b(this|that|these|those|here|there)\b/gi],
+    spanish: [/\b(el|la|los|las|y|o|pero|en|de|con|por|para)\b/gi, /\b(este|esta|estos|estas|aquí|allí)\b/gi],
+    french: [/\b(le|la|les|et|ou|mais|dans|de|avec|par|pour)\b/gi, /\b(ce|cette|ces|ici|là)\b/gi],
+    german: [/\b(der|die|das|und|oder|aber|in|auf|mit|von|für)\b/gi, /\b(dieser|diese|dieses|hier|dort)\b/gi],
   };
 
-  applies() { return true; }
+  applies() {
+    return true;
+  }
 
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     const { graph } = context;
-    
+
     if (!graph.nodes || graph.nodes.length === 0) {
       return {
         passed: true,
-        message: 'No content to analyze for language consistency'
+        message: 'No content to analyze for language consistency',
       };
     }
 
-    const contentTexts: Array<{nodeId: string, content: string}> = [];
+    const contentTexts: Array<{ nodeId: string; content: string }> = [];
     const contentFields = ['text', 'content', 'prompt', 'template'];
 
     // Extract content from all nodes
     for (const node of graph.nodes) {
       const nodeData = node.data || {};
-      
+
       for (const field of contentFields) {
         if (nodeData[field]) {
           const content = String(nodeData[field]).trim();
-          if (content.length > 20) { // Only analyze substantial content
+          if (content.length > 20) {
+            // Only analyze substantial content
             contentTexts.push({ nodeId: node.id, content });
           }
         }
@@ -280,7 +281,7 @@ export class LanguageConsistencyRule implements ValidationRule {
     if (contentTexts.length < 2) {
       return {
         passed: true,
-        message: 'Insufficient content for language consistency analysis'
+        message: 'Insufficient content for language consistency analysis',
       };
     }
 
@@ -288,7 +289,7 @@ export class LanguageConsistencyRule implements ValidationRule {
     const languageDetections = contentTexts.map(({ nodeId, content }) => ({
       nodeId,
       content,
-      languages: this.detectLanguages(content)
+      languages: this.detectLanguages(content),
     }));
 
     // Find language inconsistencies
@@ -299,13 +300,12 @@ export class LanguageConsistencyRule implements ValidationRule {
       }
     }
 
-    const primaryLanguage = Array.from(languageCounts.entries())
-      .sort(([,a], [,b]) => b - a)[0]?.[0];
+    const primaryLanguage = Array.from(languageCounts.entries()).sort(([, a], [, b]) => b - a)[0]?.[0];
 
     if (!primaryLanguage) {
       return {
         passed: true,
-        message: 'Unable to determine primary language'
+        message: 'Unable to determine primary language',
       };
     }
 
@@ -314,7 +314,8 @@ export class LanguageConsistencyRule implements ValidationRule {
       .map(detection => detection.nodeId);
 
     if (inconsistentNodes.length > 0) {
-      const consistencyScore = ((languageDetections.length - inconsistentNodes.length) / languageDetections.length) * 100;
+      const consistencyScore =
+        ((languageDetections.length - inconsistentNodes.length) / languageDetections.length) * 100;
 
       return {
         passed: consistencyScore >= 80,
@@ -324,10 +325,10 @@ export class LanguageConsistencyRule implements ValidationRule {
           consistencyScore: Math.round(consistencyScore),
           inconsistentNodeCount: inconsistentNodes.length,
           totalContentNodes: languageDetections.length,
-          languageDistribution: Object.fromEntries(languageCounts)
+          languageDistribution: Object.fromEntries(languageCounts),
         },
         affectedNodes: inconsistentNodes,
-        metrics: { consistencyScore: consistencyScore / 100 }
+        metrics: { consistencyScore: consistencyScore / 100 },
       };
     }
 
@@ -337,34 +338,35 @@ export class LanguageConsistencyRule implements ValidationRule {
       details: {
         primaryLanguage,
         consistencyScore: 100,
-        contentNodesAnalyzed: languageDetections.length
+        contentNodesAnalyzed: languageDetections.length,
       },
-      metrics: { consistencyScore: 1 }
+      metrics: { consistencyScore: 1 },
     };
   }
 
   private detectLanguages(content: string): string[] {
     const detectedLanguages: string[] = [];
-    
+
     for (const [language, patterns] of Object.entries(this.languagePatterns)) {
       let matchCount = 0;
-      
+
       for (const pattern of patterns) {
         const matches = content.match(pattern);
         if (matches) {
           matchCount += matches.length;
         }
       }
-      
+
       // If we found enough matches, consider this language present
       const wordCount = content.split(/\s+/).length;
       const matchRatio = matchCount / wordCount;
-      
-      if (matchRatio > 0.05) { // At least 5% of words match language patterns
+
+      if (matchRatio > 0.05) {
+        // At least 5% of words match language patterns
         detectedLanguages.push(language);
       }
     }
-    
+
     return detectedLanguages.length > 0 ? detectedLanguages : ['unknown'];
   }
 
@@ -389,32 +391,34 @@ export class SensitiveContentRule implements ValidationRule {
     /\b\d{3}-\d{2}-\d{4}\b/g, // SSN pattern
     /\b\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}\b/g, // Credit card pattern
     /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g, // Email pattern
-    
+
     // Potentially harmful content
     /\b(password|secret|confidential|classified)\b/gi,
     /\b(violence|harm|hate|discrimination)\b/gi,
     /\b(illegal|fraud|scam|phishing)\b/gi,
-    
+
     // Inappropriate content indicators
-    /\b(explicit|nsfw|adult|mature)\b/gi
+    /\b(explicit|nsfw|adult|mature)\b/gi,
   ];
 
   private readonly sensitiveCategories = [
     'Personal Information',
     'Confidential Data',
     'Potentially Harmful',
-    'Inappropriate Content'
+    'Inappropriate Content',
   ];
 
-  applies() { return true; }
+  applies() {
+    return true;
+  }
 
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     const { graph } = context;
-    
+
     if (!graph.nodes || graph.nodes.length === 0) {
       return {
         passed: true,
-        message: 'No content to scan for sensitive information'
+        message: 'No content to scan for sensitive information',
       };
     }
 
@@ -429,21 +433,21 @@ export class SensitiveContentRule implements ValidationRule {
 
     for (const node of graph.nodes) {
       const nodeData = node.data || {};
-      
+
       for (const field of contentFields) {
         if (nodeData[field]) {
           const content = String(nodeData[field]);
-          
+
           for (let i = 0; i < this.sensitivePatterns.length; i++) {
             const pattern = this.sensitivePatterns[i];
             const matches = content.match(pattern);
-            
+
             if (matches && matches.length > 0) {
               sensitiveFindings.push({
                 nodeId: node.id,
                 category: this.sensitiveCategories[Math.floor(i / 2)] || 'Unknown',
                 pattern: pattern.source,
-                matches: matches.length
+                matches: matches.length,
               });
             }
           }
@@ -463,19 +467,19 @@ export class SensitiveContentRule implements ValidationRule {
           affectedNodeCount: affectedNodes.length,
           totalMatches,
           categories: [...new Set(sensitiveFindings.map(f => f.category))],
-          findings: sensitiveFindings.slice(0, 10) // Limit to first 10 findings
+          findings: sensitiveFindings.slice(0, 10), // Limit to first 10 findings
         },
-        affectedNodes
+        affectedNodes,
       };
     }
 
     return {
       passed: true,
       message: 'No sensitive content patterns detected',
-      details: { 
+      details: {
         patternsChecked: this.sensitivePatterns.length,
-        nodesScanned: graph.nodes.length
-      }
+        nodesScanned: graph.nodes.length,
+      },
     };
   }
 
@@ -512,7 +516,7 @@ export class SensitiveContentRule implements ValidationRule {
                 type: 'content_sanitized',
                 field,
                 original: originalContent.substring(0, 100),
-                sanitized: sanitizedContent.substring(0, 100)
+                sanitized: sanitizedContent.substring(0, 100),
               });
             }
           }
@@ -536,26 +540,28 @@ export class ProcessingTimeRule implements ValidationRule {
   enabled = true;
 
   private readonly nodeProcessingTimes: Record<string, number> = {
-    'output': 0.1,
-    'input': 0.05,
-    'transform': 0.5,
-    'conditional': 0.2,
-    'loop': 1.0,
-    'variable': 0.05,
+    output: 0.1,
+    input: 0.05,
+    transform: 0.5,
+    conditional: 0.2,
+    loop: 1.0,
+    variable: 0.05,
     'api-call': 2.0,
-    'ai-generation': 5.0
+    'ai-generation': 5.0,
   };
 
-  applies() { return true; }
+  applies() {
+    return true;
+  }
 
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     const { graph, metadata } = context;
-    
+
     if (!graph.nodes || graph.nodes.length === 0) {
       return {
         passed: true,
         message: 'No nodes to estimate processing time',
-        metrics: { estimatedTime: 0 }
+        metrics: { estimatedTime: 0 },
       };
     }
 
@@ -566,24 +572,24 @@ export class ProcessingTimeRule implements ValidationRule {
     for (const node of graph.nodes) {
       const nodeType = (node.type || node.data?.type || 'output').toLowerCase();
       const baseTime = this.nodeProcessingTimes[nodeType] || 0.1;
-      
+
       // Factor in content complexity
       const content = this.extractContent(node.data || {});
       const contentComplexity = Math.min(5, content.length / 1000); // Max 5x multiplier
-      
+
       totalEstimatedTime += baseTime * (1 + contentComplexity);
     }
 
     // Factor in graph complexity
     const nodeCount = graph.nodes.length;
     const edgeCount = graph.edges?.length || 0;
-    
+
     if (nodeCount > 20) {
-      complexityMultiplier *= 1 + ((nodeCount - 20) * 0.1);
+      complexityMultiplier *= 1 + (nodeCount - 20) * 0.1;
     }
-    
+
     if (edgeCount > nodeCount) {
-      complexityMultiplier *= 1 + ((edgeCount - nodeCount) * 0.05);
+      complexityMultiplier *= 1 + (edgeCount - nodeCount) * 0.05;
     }
 
     totalEstimatedTime *= complexityMultiplier;
@@ -618,24 +624,24 @@ export class ProcessingTimeRule implements ValidationRule {
         nodeCount,
         edgeCount,
         warningThreshold,
-        errorThreshold
+        errorThreshold,
       },
       metrics: {
         estimatedTime: totalEstimatedTime,
-        complexity: complexityMultiplier
-      }
+        complexity: complexityMultiplier,
+      },
     };
   }
 
   private extractContent(nodeData: any): string {
     const contentFields = ['text', 'content', 'prompt', 'template'];
-    
+
     for (const field of contentFields) {
       if (nodeData[field] && typeof nodeData[field] === 'string') {
         return nodeData[field].trim();
       }
     }
-    
+
     return '';
   }
 
@@ -656,26 +662,28 @@ export class MemoryUsageRule implements ValidationRule {
   enabled = true;
 
   private readonly nodeMemoryUsage: Record<string, number> = {
-    'output': 1, // 1KB base
-    'input': 0.5,
-    'transform': 2,
-    'conditional': 1,
-    'loop': 5,
-    'variable': 0.5,
+    output: 1, // 1KB base
+    input: 0.5,
+    transform: 2,
+    conditional: 1,
+    loop: 5,
+    variable: 0.5,
     'api-call': 10,
-    'ai-generation': 50
+    'ai-generation': 50,
   };
 
-  applies() { return true; }
+  applies() {
+    return true;
+  }
 
   async validate(context: ValidationContext): Promise<ValidationRuleResult> {
     const { graph } = context;
-    
+
     if (!graph.nodes || graph.nodes.length === 0) {
       return {
         passed: true,
         message: 'No nodes to estimate memory usage',
-        metrics: { estimatedMemoryKB: 0 }
+        metrics: { estimatedMemoryKB: 0 },
       };
     }
 
@@ -685,22 +693,22 @@ export class MemoryUsageRule implements ValidationRule {
     for (const node of graph.nodes) {
       const nodeType = (node.type || node.data?.type || 'output').toLowerCase();
       const baseMemory = this.nodeMemoryUsage[nodeType] || 1;
-      
+
       // Factor in content size
       const content = this.extractContent(node.data || {});
       const contentMemoryKB = content.length / 1024; // Rough estimate
-      
+
       totalMemoryKB += baseMemory + contentMemoryKB;
     }
 
     // Add overhead for graph structure
-    const graphOverheadKB = (graph.nodes.length * 0.1) + ((graph.edges?.length || 0) * 0.05);
+    const graphOverheadKB = graph.nodes.length * 0.1 + (graph.edges?.length || 0) * 0.05;
     totalMemoryKB += graphOverheadKB;
 
     // Determine if memory usage is acceptable
     const warningThresholdMB = 100; // 100MB
     const errorThresholdMB = 500; // 500MB
-    
+
     const totalMemoryMB = totalMemoryKB / 1024;
 
     let passed = true;
@@ -723,24 +731,24 @@ export class MemoryUsageRule implements ValidationRule {
         nodeCount: graph.nodes.length,
         edgeCount: graph.edges?.length || 0,
         warningThresholdMB,
-        errorThresholdMB
+        errorThresholdMB,
       },
       metrics: {
         memoryKB: totalMemoryKB,
-        memoryMB: totalMemoryMB
-      }
+        memoryMB: totalMemoryMB,
+      },
     };
   }
 
   private extractContent(nodeData: any): string {
     const contentFields = ['text', 'content', 'prompt', 'template'];
-    
+
     for (const field of contentFields) {
       if (nodeData[field] && typeof nodeData[field] === 'string') {
         return nodeData[field];
       }
     }
-    
+
     return '';
   }
 

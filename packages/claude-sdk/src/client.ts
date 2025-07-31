@@ -17,13 +17,13 @@ export class ClaudeClient {
       {
         text: 'Create a character description',
         confidence: 0.9,
-        reasoning: 'Based on the current graph structure, this seems like a character generation workflow'
+        reasoning: 'Based on the current graph structure, this seems like a character generation workflow',
       },
       {
         text: 'Generate story elements',
         confidence: 0.8,
-        reasoning: 'The nodes suggest narrative content generation'
-      }
+        reasoning: 'The nodes suggest narrative content generation',
+      },
     ];
 
     return mockSuggestions;
@@ -35,8 +35,8 @@ export class ClaudeClient {
       text: `Enhanced: ${prompt}`,
       usage: {
         inputTokens: prompt.length / 4,
-        outputTokens: prompt.length / 3
-      }
+        outputTokens: prompt.length / 3,
+      },
     };
   }
 
@@ -46,8 +46,8 @@ export class ClaudeClient {
       text: 'This graph appears to be a prompt generation workflow with multiple branching paths.',
       usage: {
         inputTokens: 100,
-        outputTokens: 50
-      }
+        outputTokens: 50,
+      },
     };
   }
 }

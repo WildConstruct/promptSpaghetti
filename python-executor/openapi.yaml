@@ -3,7 +3,7 @@ info:
   title: Python Executor Service
   description: |
     Secure Python code execution service for prompt-spaghetti node graphs.
-    
+
     This service provides sandboxed execution of Python code with resource monitoring,
     security validation, and comprehensive error handling.
   version: 1.0.0
@@ -28,7 +28,7 @@ paths:
       summary: Execute Python code
       description: |
         Execute Python code in a secure, sandboxed environment with resource monitoring.
-        
+
         The code must define a `transform` function that accepts input data and returns
         the transformed result. The execution environment has restricted access to system
         resources and only allows approved Python modules.
@@ -50,16 +50,16 @@ paths:
                   code: |
                     def transform(input_text):
                         return input_text.upper()
-                  input: "hello world"
+                  input: 'hello world'
                   timeout: 30
-                  execution_id: "node-abc123-exec-456"
+                  execution_id: 'node-abc123-exec-456'
               complex_transform:
                 summary: Complex transformation with modules
                 value:
                   code: |
                     import re
                     import json
-                    
+
                     def transform(input_data):
                         # Parse JSON input
                         data = json.loads(input_data)
@@ -75,9 +75,9 @@ paths:
                         }
                   input: '{"text": "Hello, World! How are you?"}'
                   timeout: 60
-                  memory_limit: "256MB"
-                  allowed_modules: ["re", "json", "datetime"]
-                  execution_id: "node-def789-exec-123"
+                  memory_limit: '256MB'
+                  allowed_modules: ['re', 'json', 'datetime']
+                  execution_id: 'node-def789-exec-123'
       responses:
         '200':
           description: Code executed successfully
@@ -90,14 +90,14 @@ paths:
                   summary: Successful execution
                   value:
                     success: true
-                    result: "HELLO WORLD"
+                    result: 'HELLO WORLD'
                     execution_time: 0.045
-                    memory_used: "12MB"
+                    memory_used: '12MB'
                     warnings: []
                     metadata:
-                      execution_id: "node-abc123-exec-456"
-                      python_version: "3.11.0"
-                      modules_imported: ["re"]
+                      execution_id: 'node-abc123-exec-456'
+                      python_version: '3.11.0'
+                      modules_imported: ['re']
         '400':
           description: Invalid request or code validation failed
           content:
@@ -110,11 +110,11 @@ paths:
                   value:
                     success: false
                     error:
-                      type: "ValidationError"
-                      message: "Code contains prohibited operations: eval"
-                      code: "CODE_VALIDATION_FAILED"
+                      type: 'ValidationError'
+                      message: 'Code contains prohibited operations: eval'
+                      code: 'CODE_VALIDATION_FAILED'
                       details:
-                        prohibited_operations: ["eval"]
+                        prohibited_operations: ['eval']
                         line: 3
         '401':
           description: Authentication failed
@@ -145,14 +145,14 @@ paths:
                   value:
                     success: false
                     error:
-                      type: "ExecutionError"
+                      type: 'ExecutionError'
                       message: "NameError: name 'undefined_var' is not defined"
-                      code: "EXECUTION_FAILED"
+                      code: 'EXECUTION_FAILED'
                       line: 3
                       traceback: "Traceback (most recent call last):\n  File \"<string>\", line 3, in transform\nNameError: name 'undefined_var' is not defined"
                     execution_time: 0.012
                     metadata:
-                      execution_id: "node-abc123-exec-456"
+                      execution_id: 'node-abc123-exec-456'
 
   /health:
     get:
@@ -169,8 +169,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/HealthResponse'
               example:
-                status: "healthy"
-                python_version: "3.11.0"
+                status: 'healthy'
+                python_version: '3.11.0'
                 active_executions: 0
                 system_info:
                   memory_usage_percent: 45.2
@@ -202,7 +202,7 @@ paths:
                 # HELP python_executor_requests_total Total requests to Python executor
                 # TYPE python_executor_requests_total counter
                 python_executor_requests_total{method="POST",endpoint="/v1/execute",status="200"} 1234
-                
+
                 # HELP python_executor_execution_seconds Time spent executing Python code
                 # TYPE python_executor_execution_seconds histogram
                 python_executor_execution_seconds_bucket{le="0.1"} 500
@@ -263,12 +263,12 @@ components:
             - type: string
             - type: object
             - type: array
-          example: "hello world"
+          example: 'hello world'
         execution_id:
           type: string
           description: Unique identifier for this execution request
           pattern: '^[a-zA-Z0-9\-_]{1,64}$'
-          example: "node-abc123-exec-456"
+          example: 'node-abc123-exec-456'
         timeout:
           type: integer
           description: Maximum execution time in seconds
@@ -280,22 +280,22 @@ components:
           type: string
           description: Maximum memory usage (e.g., "128MB", "1GB")
           pattern: '^[0-9]+[KMGT]?B$'
-          default: "128MB"
-          example: "256MB"
+          default: '128MB'
+          example: '256MB'
         allowed_modules:
           type: array
           items:
             type: string
           description: List of Python modules allowed for import
-          default: ["re", "json", "datetime", "math", "random"]
-          example: ["re", "json", "datetime"]
+          default: ['re', 'json', 'datetime', 'math', 'random']
+          example: ['re', 'json', 'datetime']
         context:
           type: object
           description: Additional context data available during execution
           additionalProperties: true
           example:
-            user_id: "user123"
-            environment: "production"
+            user_id: 'user123'
+            environment: 'production'
 
     ExecuteResponse:
       type: object
@@ -321,27 +321,27 @@ components:
         memory_used:
           type: string
           description: Peak memory usage during execution
-          example: "12MB"
+          example: '12MB'
         warnings:
           type: array
           items:
             type: string
           description: Non-fatal warnings during execution
-          example: ["Deprecated function used", "Large memory allocation"]
+          example: ['Deprecated function used', 'Large memory allocation']
         metadata:
           type: object
           properties:
             execution_id:
               type: string
-              example: "node-abc123-exec-456"
+              example: 'node-abc123-exec-456'
             python_version:
               type: string
-              example: "3.11.0"
+              example: '3.11.0'
             modules_imported:
               type: array
               items:
                 type: string
-              example: ["re", "json"]
+              example: ['re', 'json']
             cache_hit:
               type: boolean
               description: Whether result was served from cache
@@ -365,8 +365,17 @@ components:
           properties:
             type:
               type: string
-              enum: ["ValidationError", "ExecutionError", "TimeoutError", "MemoryError", "SecurityError", "AuthenticationError", "RateLimitError"]
-              example: "ExecutionError"
+              enum:
+                [
+                  'ValidationError',
+                  'ExecutionError',
+                  'TimeoutError',
+                  'MemoryError',
+                  'SecurityError',
+                  'AuthenticationError',
+                  'RateLimitError',
+                ]
+              example: 'ExecutionError'
             message:
               type: string
               description: Human-readable error message
@@ -374,8 +383,17 @@ components:
             code:
               type: string
               description: Machine-readable error code
-              enum: ["CODE_VALIDATION_FAILED", "EXECUTION_FAILED", "EXECUTION_TIMEOUT", "MEMORY_LIMIT_EXCEEDED", "SECURITY_VIOLATION", "INVALID_TOKEN", "RATE_LIMIT_EXCEEDED"]
-              example: "EXECUTION_FAILED"
+              enum:
+                [
+                  'CODE_VALIDATION_FAILED',
+                  'EXECUTION_FAILED',
+                  'EXECUTION_TIMEOUT',
+                  'MEMORY_LIMIT_EXCEEDED',
+                  'SECURITY_VIOLATION',
+                  'INVALID_TOKEN',
+                  'RATE_LIMIT_EXCEEDED',
+                ]
+              example: 'EXECUTION_FAILED'
             line:
               type: integer
               description: Line number where error occurred (if applicable)
@@ -399,7 +417,7 @@ components:
           properties:
             execution_id:
               type: string
-              example: "node-abc123-exec-456"
+              example: 'node-abc123-exec-456'
 
     ValidateRequest:
       type: object
@@ -414,7 +432,7 @@ components:
           items:
             type: string
           description: List of allowed modules for validation
-          default: ["re", "json", "datetime", "math", "random"]
+          default: ['re', 'json', 'datetime', 'math', 'random']
 
     ValidateResponse:
       type: object
@@ -431,7 +449,7 @@ components:
             properties:
               type:
                 type: string
-                enum: ["SyntaxError", "SecurityError", "ImportError"]
+                enum: ['SyntaxError', 'SecurityError', 'ImportError']
               message:
                 type: string
               line:
@@ -468,10 +486,10 @@ components:
       properties:
         status:
           type: string
-          enum: ["healthy", "unhealthy", "degraded"]
+          enum: ['healthy', 'unhealthy', 'degraded']
         python_version:
           type: string
-          example: "3.11.0"
+          example: '3.11.0'
         active_executions:
           type: integer
           minimum: 0

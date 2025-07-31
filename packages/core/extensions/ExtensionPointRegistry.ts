@@ -13,7 +13,7 @@ export enum ExtensionPointCategory {
   STATE = 'state',
   VALIDATION = 'validation',
   VISUALIZATION = 'visualization',
-  STORAGE = 'storage'
+  STORAGE = 'storage',
 }
 
 // Extension Point Lifecycle
@@ -21,7 +21,7 @@ export enum ExtensionPointLifecycle {
   EXPERIMENTAL = 'experimental',
   STABLE = 'stable',
   DEPRECATED = 'deprecated',
-  REMOVED = 'removed'
+  REMOVED = 'removed',
 }
 
 // Extension Point Priority
@@ -29,7 +29,7 @@ export enum ExtensionPointPriority {
   CRITICAL = 'critical',
   HIGH = 'high',
   MEDIUM = 'medium',
-  LOW = 'low'
+  LOW = 'low',
 }
 
 // Extension Point Definition Schema
@@ -43,45 +43,59 @@ export const ExtensionPointSchema = z.object({
   version: z.string(),
   location: z.object({
     file: z.string(),
-  line: z.number().optional(),
-  function: z.string().optional(),
-}),
-  interfaces: z.array(z.object({
-    name: z.string(),
-  description: z.string(),
-  parameters: z.array(z.object({
-    name: z.string(),
-  type: z.string(),
-  required: z.boolean(),
-  description: z.string(),
-  defaultValue: z.any().optional(),
-})),
-    returnType: z.string(),
-    examples: z.array(z.string()).optional()
-  })),
+    line: z.number().optional(),
+    function: z.string().optional(),
+  }),
+  interfaces: z.array(
+    z.object({
+      name: z.string(),
+      description: z.string(),
+      parameters: z.array(
+        z.object({
+          name: z.string(),
+          type: z.string(),
+          required: z.boolean(),
+          description: z.string(),
+          defaultValue: z.any().optional(),
+        })
+      ),
+      returnType: z.string(),
+      examples: z.array(z.string()).optional(),
+    })
+  ),
   dependencies: z.array(z.string()).optional(),
-  examples: z.array(z.object({
-    name: z.string(),
-  description: z.string(),
-  code: z.string(),
-  language: z.string(),
-})).optional(),
-  constraints: z.object({
-    performance: z.object({
-  maxExecutionTime: z.number().optional(),
-  maxMemoryUsage: z.number().optional(),
-}).optional(),
-    security: z.object({
-      permissions: z.array(z.string()).optional(),
-  sandboxed: z.boolean().optional(),
-}).optional()
-  }).optional(),
+  examples: z
+    .array(
+      z.object({
+        name: z.string(),
+        description: z.string(),
+        code: z.string(),
+        language: z.string(),
+      })
+    )
+    .optional(),
+  constraints: z
+    .object({
+      performance: z
+        .object({
+          maxExecutionTime: z.number().optional(),
+          maxMemoryUsage: z.number().optional(),
+        })
+        .optional(),
+      security: z
+        .object({
+          permissions: z.array(z.string()).optional(),
+          sandboxed: z.boolean().optional(),
+        })
+        .optional(),
+    })
+    .optional(),
   metadata: z.object({
     addedIn: z.string(),
     deprecatedIn: z.string().optional(),
     removedIn: z.string().optional(),
     replacedBy: z.string().optional(),
-  })
+  }),
 });
 
 export type ExtensionPoint = z.infer<typeof ExtensionPointSchema>;
@@ -172,10 +186,11 @@ export class ExtensionPointRegistry {
    */
   public search(query: string): ExtensionPoint[] {
     const lowercaseQuery = query.toLowerCase();
-    return this.getAll().filter(ep =>
-      ep.name.toLowerCase().includes(lowercaseQuery) ||
-      ep.description.toLowerCase().includes(lowercaseQuery) ||
-      ep.id.toLowerCase().includes(lowercaseQuery)
+    return this.getAll().filter(
+      ep =>
+        ep.name.toLowerCase().includes(lowercaseQuery) ||
+        ep.description.toLowerCase().includes(lowercaseQuery) ||
+        ep.id.toLowerCase().includes(lowercaseQuery)
     );
   }
 
@@ -192,7 +207,7 @@ export class ExtensionPointRegistry {
       total: this.extensionPoints.size,
       byCategory: {} as Record<ExtensionPointCategory, number>,
       byPriority: {} as Record<ExtensionPointPriority, number>,
-      byLifecycle: {} as Record<ExtensionPointLifecycle, number>
+      byLifecycle: {} as Record<ExtensionPointLifecycle, number>,
     };
     // Initialize counters
     Object.values(ExtensionPointCategory).forEach(cat => {
@@ -216,7 +231,10 @@ export class ExtensionPointRegistry {
   /**
    * Validate extension point compatibility
    */
-  public validateCompatibility(extensionPointId: string, version: string): {
+  public validateCompatibility(
+    extensionPointId: string,
+    version: string
+  ): {
     compatible: boolean;
     warnings: string[];
     errors: string[];
@@ -226,7 +244,7 @@ export class ExtensionPointRegistry {
       return {
         compatible: false,
         warnings: [],
-        errors: [`Extension point ${extensionPointId} not found`]
+        errors: [`Extension point ${extensionPointId} not found`],
       };
     }
     const warnings: string[] = [];
@@ -248,7 +266,7 @@ export class ExtensionPointRegistry {
     return {
       compatible: errors.length === 0,
       warnings,
-      errors
+      errors,
     };
   }
 
@@ -268,29 +286,30 @@ export class ExtensionPointRegistry {
       location: {
         file: 'packages/core/runtime/index.ts',
         line: 12,
-        function: 'RuntimeNode'
+        function: 'RuntimeNode',
       },
-      interfaces: [{
-        name: 'RuntimeNode',
-        description: 'Base class for all runtime nodes',
-        parameters: [
-          {
-            name: 'id',
-            type: 'string',
-            required: true,
-            description: 'Unique node identifier'
-          }
-        ],
-        returnType: 'TOutput',
-        examples: [
-          'class CustomNode extends RuntimeNode<string> { ... }'
-        ]
-      }],
+      interfaces: [
+        {
+          name: 'RuntimeNode',
+          description: 'Base class for all runtime nodes',
+          parameters: [
+            {
+              name: 'id',
+              type: 'string',
+              required: true,
+              description: 'Unique node identifier',
+            },
+          ],
+          returnType: 'TOutput',
+          examples: ['class CustomNode extends RuntimeNode<string> { ... }'],
+        },
+      ],
       dependencies: ['runtime.context'],
-      examples: [{
-        name: 'Basic Custom Node',
-        description: 'Simple custom node implementation',
-        code: `class CustomNode extends RuntimeNode<string> {
+      examples: [
+        {
+          name: 'Basic Custom Node',
+          description: 'Simple custom node implementation',
+          code: `class CustomNode extends RuntimeNode<string> {
   constructor(id: string, private customData: string) {
     super(id);
   }
@@ -298,21 +317,22 @@ export class ExtensionPointRegistry {
     return this.customData + ' processed';
   }
 }`,
-        language: 'typescript'
-      }],
+          language: 'typescript',
+        },
+      ],
       constraints: {
         performance: {
           maxExecutionTime: 5000,
-          maxMemoryUsage: 100 * 1024 * 1024
+          maxMemoryUsage: 100 * 1024 * 1024,
         },
         security: {
           permissions: ['runtime.execute'],
-          sandboxed: true
-        }
+          sandboxed: true,
+        },
       },
       metadata: {
-        addedIn: '1.0.0'
-      }
+        addedIn: '1.0.0',
+      },
     });
     this.register({
       id: 'runtime.node.advanced',
@@ -325,34 +345,34 @@ export class ExtensionPointRegistry {
       location: {
         file: 'packages/core/runtime/advanced.ts',
         line: 61,
-        function: 'AdvancedRuntimeNode'
+        function: 'AdvancedRuntimeNode',
       },
-      interfaces: [{
-        name: 'AdvancedRuntimeNode',
-        description: 'Advanced base class with state management',
-        parameters: [
-          {
-            name: 'id',
-            type: 'string',
-            required: true,
-            description: 'Unique node identifier'
-          },
-          {
-            name: 'config',
-            type: 'AdvancedNodeConfig',
-            required: true,
-            description: 'Advanced node configuration'
-          }
-        ],
-        returnType: 'TOutput',
-        examples: [
-          'class AdvancedCustomNode extends AdvancedRuntimeNode<string> { ... }'
-        ]
-      }],
+      interfaces: [
+        {
+          name: 'AdvancedRuntimeNode',
+          description: 'Advanced base class with state management',
+          parameters: [
+            {
+              name: 'id',
+              type: 'string',
+              required: true,
+              description: 'Unique node identifier',
+            },
+            {
+              name: 'config',
+              type: 'AdvancedNodeConfig',
+              required: true,
+              description: 'Advanced node configuration',
+            },
+          ],
+          returnType: 'TOutput',
+          examples: ['class AdvancedCustomNode extends AdvancedRuntimeNode<string> { ... }'],
+        },
+      ],
       dependencies: ['runtime.context.advanced', 'runtime.validation'],
       metadata: {
-        addedIn: '1.0.0'
-      }
+        addedIn: '1.0.0',
+      },
     });
     // UI Extension Points
     this.register({
@@ -366,34 +386,34 @@ export class ExtensionPointRegistry {
       location: {
         file: 'packages/core/components/Inspector/BaseNodeEditor.tsx',
         line: 1,
-        function: 'BaseNodeEditor'
+        function: 'BaseNodeEditor',
       },
-      interfaces: [{
-        name: 'BaseNodeEditor',
-        description: 'Base component for node editors',
-        parameters: [
-          {
-            name: 'node',
-            type: 'any',
-            required: true,
-            description: 'Node data object'
-          },
-          {
-            name: 'onChange',
-            type: '(partial: Record<string, unknown>) => void',
-            required: true,
-            description: 'Change handler function'
-          }
-        ],
-        returnType: 'React.ReactElement',
-        examples: [
-          'export const CustomEditor: React.FC<BaseNodeEditorProps> = (props) => { ... }'
-        ]
-      }],
+      interfaces: [
+        {
+          name: 'BaseNodeEditor',
+          description: 'Base component for node editors',
+          parameters: [
+            {
+              name: 'node',
+              type: 'any',
+              required: true,
+              description: 'Node data object',
+            },
+            {
+              name: 'onChange',
+              type: '(partial: Record<string, unknown>) => void',
+              required: true,
+              description: 'Change handler function',
+            },
+          ],
+          returnType: 'React.ReactElement',
+          examples: ['export const CustomEditor: React.FC<BaseNodeEditorProps> = (props) => { ... }'],
+        },
+      ],
       dependencies: ['ui.inspector.context'],
       metadata: {
-        addedIn: '1.0.0'
-      }
+        addedIn: '1.0.0',
+      },
     });
     // Schema Extension Points
     this.register({
@@ -407,28 +427,28 @@ export class ExtensionPointRegistry {
       location: {
         file: 'packages/core/graphSchema.ts',
         line: 7,
-        function: 'NodeTypeEnum'
+        function: 'NodeTypeEnum',
       },
-      interfaces: [{
-        name: 'NodeSchema',
-        description: 'Zod schema for node validation',
-        parameters: [
-          {
-            name: 'type',
-            type: 'z.literal',
-            required: true,
-            description: 'Node type literal'
-          }
-        ],
-        returnType: 'ZodSchema',
-        examples: [
-          'export const CustomNodeSchema = BaseNode.extend({ ... })'
-        ]
-      }],
+      interfaces: [
+        {
+          name: 'NodeSchema',
+          description: 'Zod schema for node validation',
+          parameters: [
+            {
+              name: 'type',
+              type: 'z.literal',
+              required: true,
+              description: 'Node type literal',
+            },
+          ],
+          returnType: 'ZodSchema',
+          examples: ['export const CustomNodeSchema = BaseNode.extend({ ... })'],
+        },
+      ],
       dependencies: ['schema.base'],
       metadata: {
-        addedIn: '1.0.0'
-      }
+        addedIn: '1.0.0',
+      },
     });
     // API Extension Points
     this.register({
@@ -442,34 +462,34 @@ export class ExtensionPointRegistry {
       location: {
         file: 'server/src/index.ts',
         line: 1,
-        function: 'app'
+        function: 'app',
       },
-      interfaces: [{
-        name: 'APIEndpoint',
-        description: 'Fastify route handler',
-        parameters: [
-          {
-            name: 'request',
-            type: 'FastifyRequest',
-            required: true,
-            description: 'HTTP request object'
-          },
-          {
-            name: 'reply',
-            type: 'FastifyReply',
-            required: true,
-            description: 'HTTP reply object'
-          }
-        ],
-        returnType: 'Promise<void>',
-        examples: [
-          'app.post("/api/custom", async (req, reply) => { ... })'
-        ]
-      }],
+      interfaces: [
+        {
+          name: 'APIEndpoint',
+          description: 'Fastify route handler',
+          parameters: [
+            {
+              name: 'request',
+              type: 'FastifyRequest',
+              required: true,
+              description: 'HTTP request object',
+            },
+            {
+              name: 'reply',
+              type: 'FastifyReply',
+              required: true,
+              description: 'HTTP reply object',
+            },
+          ],
+          returnType: 'Promise<void>',
+          examples: ['app.post("/api/custom", async (req, reply) => { ... })'],
+        },
+      ],
       dependencies: ['api.authentication'],
       metadata: {
-        addedIn: '1.0.0'
-      }
+        addedIn: '1.0.0',
+      },
     });
   }
   /**
@@ -486,7 +506,6 @@ export class ExtensionPointRegistry {
     }
     return 0;
   }
-
 }
 
 // Export singleton instance

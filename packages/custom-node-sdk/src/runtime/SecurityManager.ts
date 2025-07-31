@@ -21,7 +21,7 @@ export class SecurityManager {
       allowNetworkAccess: false,
       maxExecutionTime: 30000, // 30 seconds default
       memoryLimit: 100 * 1024 * 1024, // 100MB default
-      ...securityConfig
+      ...securityConfig,
     };
   }
 
@@ -55,7 +55,7 @@ export class SecurityManager {
     return {
       valid: errors.length === 0,
       errors,
-      warnings
+      warnings,
     };
   }
 
@@ -96,7 +96,9 @@ export class SecurityManager {
 
     // Check execution time
     if (this.securityConfig?.maxExecutionTime && executionTime > this.securityConfig.maxExecutionTime) {
-      throw new SecurityError(`Execution time limit exceeded: ${executionTime}ms > ${this.securityConfig.maxExecutionTime}ms`);
+      throw new SecurityError(
+        `Execution time limit exceeded: ${executionTime}ms > ${this.securityConfig.maxExecutionTime}ms`
+      );
     }
 
     // Check memory usage
@@ -122,7 +124,7 @@ export class SecurityManager {
       'Object',
       'Map',
       'Set',
-      'Promise'
+      'Promise',
     ];
 
     const sandbox: SandboxEnvironment = {
@@ -138,7 +140,7 @@ export class SecurityManager {
       require: this.securityConfig?.allowFileAccess ? require : undefined,
 
       // Security monitoring
-      __securityManager: this
+      __securityManager: this,
     };
 
     return sandbox;
@@ -159,7 +161,7 @@ export class SecurityManager {
       { pattern: /global\s*\./g, message: 'Global object access is not allowed for security reasons' },
       { pattern: /__dirname|__filename/g, message: 'File system path access is restricted' },
       { pattern: /require\s*\(/g, message: 'Require is only allowed if file access is enabled' },
-      { pattern: /import\s+.*\s+from/g, message: 'Dynamic imports may be restricted' }
+      { pattern: /import\s+.*\s+from/g, message: 'Dynamic imports may be restricted' },
     ];
 
     for (const { pattern, message } of dangerousPatterns) {
@@ -175,7 +177,7 @@ export class SecurityManager {
     const warningPatterns = [
       { pattern: /setTimeout|setInterval/g, message: 'Timers should be used carefully to avoid blocking execution' },
       { pattern: /while\s*\(.*true.*\)/g, message: 'Infinite loops detected - ensure they have break conditions' },
-      { pattern: /for\s*\(.*;;.*\)/g, message: 'Infinite loops detected - ensure they have break conditions' }
+      { pattern: /for\s*\(.*;;.*\)/g, message: 'Infinite loops detected - ensure they have break conditions' },
     ];
 
     for (const { pattern, message } of warningPatterns) {
@@ -187,7 +189,7 @@ export class SecurityManager {
     return {
       valid: errors.length === 0,
       errors,
-      warnings
+      warnings,
     };
   }
 
@@ -208,8 +210,8 @@ export class SecurityManager {
       memoryUsed,
       withinLimits: {
         time: !this.securityConfig?.maxExecutionTime || executionTime <= this.securityConfig.maxExecutionTime,
-        memory: !this.securityConfig?.memoryLimit || memoryUsed <= this.securityConfig.memoryLimit
-      }
+        memory: !this.securityConfig?.memoryLimit || memoryUsed <= this.securityConfig.memoryLimit,
+      },
     };
   }
 

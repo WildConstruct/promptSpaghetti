@@ -13,16 +13,17 @@ The `scripts/unused-var-cleanup.js` script, while seemingly helpful, creates **m
 ### Evidence of Problems
 
 1. **Excessive Underscore Prefixes**: Script adds multiple underscores creating unreadable variables:
-   - `setZoom` → `_____setZoom` 
+   - `setZoom` → `_____setZoom`
    - `isCreating` → `_____isCreating`
    - `nodeId` → `_______nodeId`
 
 2. **Agent Interference**: Another agent reported:
+
    > "The system reminders show many files are being automatically modified with underscore prefixes which suggests automated unused variable handling that's creating malformed code."
 
-3. **No Real Error Reduction**: 
+3. **No Real Error Reduction**:
    - **Before**: 26,268 lint problems
-   - **After**: 26,282 lint problems  
+   - **After**: 26,282 lint problems
    - **Net Change**: +14 problems (actually worse!)
 
 4. **Massive File Modification**: Modified **742 files** with questionable changes
@@ -30,6 +31,7 @@ The `scripts/unused-var-cleanup.js` script, while seemingly helpful, creates **m
 ## Root Cause Analysis
 
 The script uses a flawed strategy:
+
 - Adds `_` prefixes to unused variables to suppress ESLint warnings
 - Accumulates multiple prefixes when run repeatedly (hence `_____` prefixes)
 - Creates unreadable, malformed code that passes linting but fails human review
@@ -38,7 +40,8 @@ The script uses a flawed strategy:
 ## Previous Agent Notes Were Misleading
 
 The `lint-cleanup-success-guide.md` incorrectly reported this script as successful:
-- Claimed "2,098 problems fixed automatically"  
+
+- Claimed "2,098 problems fixed automatically"
 - Did not account for code quality degradation
 - Did not consider multi-agent interference
 - Measured quantity over quality
@@ -46,16 +49,19 @@ The `lint-cleanup-success-guide.md` incorrectly reported this script as successf
 ## ✅ Better Alternatives
 
 ### 1. Manual Unused Variable Review
+
 - Manually review if variables are actually needed
 - Remove truly unused variables instead of prefixing
 - Keep necessary variables with proper names
 
 ### 2. ESLint Configuration Changes
+
 - Use eslint-disable comments for specific cases
 - Adjust rules in `.eslintrc.js` for unused parameters in callbacks
 - Configure rules per file type where appropriate
 
 ### 3. Targeted Manual Fixes
+
 - Fix unused variables in context of their usage
 - Consider if parameter is needed for interface compliance
 - Use meaningful variable names even if unused (e.g., `_event` not `_____event`)
@@ -70,9 +76,11 @@ The `lint-cleanup-success-guide.md` incorrectly reported this script as successf
 ## Updated Lint Strategy Recommendation
 
 ### ❌ Avoid These Scripts:
+
 - `scripts/unused-var-cleanup.js` (creates malformed code)
 
 ### ✅ Use These Instead:
+
 - `scripts/typescript-any-cleanup.js` (proven effective for type safety)
 - `scripts/missing-import-fix.js` (adds needed imports)
 - Manual React Hook fixes (proven pattern from agent notes)
@@ -81,6 +89,7 @@ The `lint-cleanup-success-guide.md` incorrectly reported this script as successf
 ## Metrics to Track
 
 **Quality over Quantity:**
+
 - Code readability (are variable names meaningful?)
 - Agent interference (are other agents reporting issues?)
 - Actual error resolution (not just lint rule suppression)

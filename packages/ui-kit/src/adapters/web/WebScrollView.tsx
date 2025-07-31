@@ -16,76 +16,76 @@ export interface WebScrollViewProps extends React.HTMLAttributes<HTMLDivElement>
   keyboardShouldPersistTaps?: 'always' | 'never' | 'handled';
 }
 
-export const WebScrollView = forwardRef<HTMLDivElement, WebScrollViewProps>(({
-  children,
-  horizontal = false,
-  showsVerticalScrollIndicator = true,
-  showsHorizontalScrollIndicator = true,
-  bounces = true,
-  pagingEnabled = false,
-  scrollEnabled = true,
-  contentContainerStyle,
-  style,
-  className,
-  ...props
-}, ref) => {
-  const theme = useTheme();
+export const WebScrollView = forwardRef<HTMLDivElement, WebScrollViewProps>(
+  (
+    {
+      children,
+      horizontal = false,
+      showsVerticalScrollIndicator = true,
+      showsHorizontalScrollIndicator = true,
+      bounces = true,
+      pagingEnabled = false,
+      scrollEnabled = true,
+      contentContainerStyle,
+      style,
+      className,
+      ...props
+    },
+    ref
+  ) => {
+    const theme = useTheme();
 
-  const scrollViewStyles: React.CSSProperties = {
-    overflow: scrollEnabled ? 'auto' : 'hidden',
-    overflowX: horizontal ? 'auto' : 'hidden',
-    overflowY: !horizontal ? 'auto' : 'hidden',
-    // Custom scrollbar styling
-    scrollbarWidth: 'thin',
-    scrollbarColor: `${theme.colors.border} ${theme.colors.surface}`,
-    // Webkit scrollbar styling
-    ...(!showsVerticalScrollIndicator && {
-      scrollbarWidth: 'none',
-      msOverflowStyle: 'none'
-    }),
-    ...(!showsHorizontalScrollIndicator && horizontal && {
-      scrollbarWidth: 'none',
-      msOverflowStyle: 'none'
-    }),
-    // Smooth scrolling
-    scrollBehavior: 'smooth',
-    // Momentum scrolling on iOS Safari
-    WebkitOverflowScrolling: 'touch',
-    // Paging
-    ...(pagingEnabled && {
-      scrollSnapType: horizontal ? 'x mandatory' : 'y mandatory'
-    }),
-    // Bouncing effect (approximated with CSS)
-    ...(bounces && {
-      overscrollBehavior: 'contain'
-    }),
-    ...style
-  };
+    const scrollViewStyles: React.CSSProperties = {
+      overflow: scrollEnabled ? 'auto' : 'hidden',
+      overflowX: horizontal ? 'auto' : 'hidden',
+      overflowY: !horizontal ? 'auto' : 'hidden',
+      // Custom scrollbar styling
+      scrollbarWidth: 'thin',
+      scrollbarColor: `${theme.colors.border} ${theme.colors.surface}`,
+      // Webkit scrollbar styling
+      ...(!showsVerticalScrollIndicator && {
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none',
+      }),
+      ...(!showsHorizontalScrollIndicator &&
+        horizontal && {
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
+        }),
+      // Smooth scrolling
+      scrollBehavior: 'smooth',
+      // Momentum scrolling on iOS Safari
+      WebkitOverflowScrolling: 'touch',
+      // Paging
+      ...(pagingEnabled && {
+        scrollSnapType: horizontal ? 'x mandatory' : 'y mandatory',
+      }),
+      // Bouncing effect (approximated with CSS)
+      ...(bounces && {
+        overscrollBehavior: 'contain',
+      }),
+      ...style,
+    };
 
-  const contentStyles: React.CSSProperties = {
-    display: horizontal ? 'flex' : 'block',
-    flexDirection: horizontal ? 'row' : undefined,
-    minWidth: horizontal ? 'max-content' : undefined,
-    minHeight: !horizontal ? 'max-content' : undefined,
-    ...(pagingEnabled && {
-      scrollSnapAlign: 'start'
-    }),
-    ...contentContainerStyle
-  };
+    const contentStyles: React.CSSProperties = {
+      display: horizontal ? 'flex' : 'block',
+      flexDirection: horizontal ? 'row' : undefined,
+      minWidth: horizontal ? 'max-content' : undefined,
+      minHeight: !horizontal ? 'max-content' : undefined,
+      ...(pagingEnabled && {
+        scrollSnapAlign: 'start',
+      }),
+      ...contentContainerStyle,
+    };
 
-  return (
-    <div
-      ref={ref}
-      className={`web-scroll-view ${className || ''}`}
-      style={scrollViewStyles}
-      {...props}
-    >
-      <div className="web-scroll-view-content" style={contentStyles}>
-        {children}
-      </div>
-      
-      {/* Custom scrollbar styles */}
-      <style>{`
+    return (
+      <div ref={ref} className={`web-scroll-view ${className || ''}`} style={scrollViewStyles} {...props}>
+        <div className="web-scroll-view-content" style={contentStyles}>
+          {children}
+        </div>
+
+        {/* Custom scrollbar styles */}
+        <style>{`
         .web-scroll-view::-webkit-scrollbar {
           width: ${showsVerticalScrollIndicator ? '8px' : '0px'};
           height: ${showsHorizontalScrollIndicator ? '8px' : '0px'};
@@ -110,20 +110,29 @@ export const WebScrollView = forwardRef<HTMLDivElement, WebScrollViewProps>(({
           background: ${theme.colors.surface};
         }
         
-        ${!showsVerticalScrollIndicator ? `
+        ${
+          !showsVerticalScrollIndicator
+            ? `
           .web-scroll-view::-webkit-scrollbar:vertical {
             display: none;
           }
-        ` : ''}
+        `
+            : ''
+        }
         
-        ${!showsHorizontalScrollIndicator ? `
+        ${
+          !showsHorizontalScrollIndicator
+            ? `
           .web-scroll-view::-webkit-scrollbar:horizontal {
             display: none;
           }
-        ` : ''}
+        `
+            : ''
+        }
       `}</style>
-    </div>
-  );
-});
+      </div>
+    );
+  }
+);
 
 WebScrollView.displayName = 'WebScrollView';

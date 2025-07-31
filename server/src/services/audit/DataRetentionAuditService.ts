@@ -3,16 +3,16 @@
 // Epic: 19 - Security & Compliance Framework
 
 import { Pool } from 'pg';
-import { 
-  DataRetentionAuditRecord, 
-  DataSubjectRightsAuditRecord, 
+import {
+  DataRetentionAuditRecord,
+  DataSubjectRightsAuditRecord,
   ComplianceMonitoringAuditRecord,
   DataRetentionAuditSummary,
   DataSubjectRightsSummary,
   ComplianceViolationsSummary,
   AuditExportOptions,
   AuditExportResult,
-  AuditConfiguration
+  AuditConfiguration,
 } from '../../types/audit';
 
 export class DataRetentionAuditService {
@@ -21,7 +21,6 @@ export class DataRetentionAuditService {
   // Data Retention Audit Methods
 
   async logDataRetentionOperation(audit: Partial<DataRetentionAuditRecord>): Promise<string> {
-
     const query = `
       INSERT INTO data_retention_audit (
         operation_id, correlation_id, operation_type, operation_status,
@@ -95,7 +94,7 @@ export class DataRetentionAuditService {
       audit.userAgent,
       audit.ipAddress,
       audit.geographicLocation,
-      JSON.stringify(audit.metadata || {})
+      JSON.stringify(audit.metadata || {}),
     ];
 
     try {
@@ -108,7 +107,6 @@ export class DataRetentionAuditService {
   }
 
   async updateDataRetentionOperation(auditId: string, updates: Partial<DataRetentionAuditRecord>): Promise<void> {
-
     const setClause = [];
     const values = [];
     let paramIndex = 1;
@@ -169,7 +167,6 @@ export class DataRetentionAuditService {
   // Data Subject Rights Audit Methods
 
   async logDataSubjectRightsRequest(audit: Partial<DataSubjectRightsAuditRecord>): Promise<string> {
-
     const query = `
       INSERT INTO data_subject_rights_audit (
         request_id, data_subject_id, data_subject_email, data_subject_identifier,
@@ -211,7 +208,7 @@ export class DataRetentionAuditService {
       JSON.stringify(audit.supportingDocuments || []),
       JSON.stringify(audit.communicationLog || []),
       audit.auditNotes,
-      JSON.stringify(audit.metadata || {})
+      JSON.stringify(audit.metadata || {}),
     ];
 
     try {
@@ -226,7 +223,6 @@ export class DataRetentionAuditService {
   // Compliance Monitoring Audit Methods
 
   async logComplianceMonitoringEvent(audit: Partial<ComplianceMonitoringAuditRecord>): Promise<string> {
-
     const query = `
       INSERT INTO compliance_monitoring_audit (
         monitoring_event_id, compliance_framework, monitoring_type, scope_description,
@@ -280,7 +276,7 @@ export class DataRetentionAuditService {
       audit.followUpRequired || false,
       audit.followUpDate,
       audit.followUpCompleted || false,
-      JSON.stringify(audit.metadata || {})
+      JSON.stringify(audit.metadata || {}),
     ];
 
     try {
@@ -299,7 +295,6 @@ export class DataRetentionAuditService {
     endDate?: Date,
     complianceFramework?: string
   ): Promise<DataRetentionAuditSummary[]> {
-
     let query = 'SELECT * FROM data_retention_audit_summary WHERE 1=1';
     const values: unknown[] = [];
     let paramIndex = 1;
@@ -328,11 +323,7 @@ export class DataRetentionAuditService {
     }
   }
 
-  async getDataSubjectRightsSummary(
-    startDate?: Date,
-    endDate?: Date
-  ): Promise<DataSubjectRightsSummary[]> {
-
+  async getDataSubjectRightsSummary(startDate?: Date, endDate?: Date): Promise<DataSubjectRightsSummary[]> {
     let query = 'SELECT * FROM data_subject_rights_summary WHERE 1=1';
     const values: unknown[] = [];
     let paramIndex = 1;
@@ -358,7 +349,6 @@ export class DataRetentionAuditService {
   }
 
   async getComplianceViolationsSummary(): Promise<ComplianceViolationsSummary[]> {
-
     const query = 'SELECT * FROM compliance_violations_summary ORDER BY compliance_framework';
 
     try {
@@ -371,14 +361,8 @@ export class DataRetentionAuditService {
   }
 
   async exportAuditData(options: AuditExportOptions): Promise<AuditExportResult[]> {
-
     const query = 'SELECT * FROM export_audit_data($1, $2, $3, $4)';
-    const values = [
-      options.startDate,
-      options.endDate,
-      options.complianceFramework,
-      options.operationType
-    ];
+    const values = [options.startDate, options.endDate, options.complianceFramework, options.operationType];
 
     try {
       const result = await this.db.query(query, values);
@@ -392,7 +376,6 @@ export class DataRetentionAuditService {
   // Integrity and Maintenance Methods
 
   async verifyAuditIntegrity(auditId: string): Promise<boolean> {
-
     const query = `
       SELECT audit_trail_hash, 
              generate_audit_trail_hash(id) as calculated_hash
@@ -415,7 +398,6 @@ export class DataRetentionAuditService {
   }
 
   async performAuditMaintenance(): Promise<{ deletedRecords: number }> {
-
     const query = 'SELECT cleanup_audit_data()';
 
     try {
@@ -436,7 +418,6 @@ export class DataRetentionAuditService {
     endDate?: Date,
     limit: number = 100
   ): Promise<DataRetentionAuditRecord[]> {
-
     let query = `
       SELECT * FROM data_retention_audit 
       WHERE (
@@ -481,7 +462,6 @@ export class DataRetentionAuditService {
     avgExecutionTime: number;
     complianceScore: number;
   }> {
-
     const query = `
       SELECT 
         COUNT(*) as total_operations,
@@ -501,7 +481,7 @@ export class DataRetentionAuditService {
         operationsLast24h: parseInt(row.operations_last_24h) || 0,
         failedOperationsLast24h: parseInt(row.failed_operations_last_24h) || 0,
         avgExecutionTime: parseFloat(row.avg_execution_time) || 0,
-        complianceScore: parseFloat(row.compliance_score) || 0
+        complianceScore: parseFloat(row.compliance_score) || 0,
       };
     } catch (error) {
       console.error('Error getting audit metrics:', error);

@@ -3,7 +3,7 @@
   "description": "Epic 17 Health Check Performance Thresholds Configuration",
   "lastUpdated": "2025-07-22",
   "updatedBy": "Quinn - QA Architect",
-  
+
   "environments": {
     "development": {
       "multiplier": 1.5,
@@ -22,7 +22,7 @@
       "description": "Tighter thresholds for film industry demo environment"
     }
   },
-  
+
   "alerting": {
     "channels": {
       "critical": ["slack", "pagerduty", "email"],
@@ -48,7 +48,7 @@
       }
     }
   },
-  
+
   "monitoring": {
     "sampling": {
       "adminOperations": 1.0,
@@ -62,7 +62,7 @@
       "aggregations": "90d"
     }
   },
-  
+
   "businessImpact": {
     "adminOperations": {
       "userProductivity": "High - Admin workflow efficiency directly impacts operational costs",
@@ -85,7 +85,7 @@
       "systemStability": "High - Configuration deployment and system recovery"
     }
   },
-  
+
   "qualityGates": {
     "preDeployment": {
       "performanceRegression": {
@@ -108,7 +108,7 @@
       }
     }
   },
-  
+
   "integrations": {
     "existingSystems": {
       "PerformanceMonitor": {
@@ -140,7 +140,7 @@
       }
     }
   },
-  
+
   "compliance": {
     "requirements": {
       "sla": {

@@ -2,7 +2,7 @@
 
 /**
  * Advanced Code Quality Monitoring Dashboard
- * 
+ *
  * Real-time dashboard that monitors code quality metrics, trends, and
  * provides actionable insights for development teams.
  */
@@ -21,7 +21,7 @@ const colors = {
   blue: '\x1b[34m',
   magenta: '\x1b[35m',
   cyan: '\x1b[36m',
-  bold: '\x1b[1m'
+  bold: '\x1b[1m',
 };
 
 class QualityMonitoringDashboard {
@@ -34,9 +34,9 @@ class QualityMonitoringDashboard {
       security: {},
       performance: {},
       trends: {},
-      alerts: []
+      alerts: [],
     };
-    
+
     this.refreshInterval = 30000; // 30 seconds
     this.monitoringActive = false;
   }
@@ -48,11 +48,11 @@ class QualityMonitoringDashboard {
 
   async startDashboard() {
     this.log('🚀 Starting Quality Monitoring Dashboard...', 'cyan');
-    
+
     await this.initializeDataDirectory();
     await this.startWebServer();
     await this.startMonitoring();
-    
+
     this.log(`📊 Dashboard available at http://localhost:${this.port}`, 'green');
     this.log('Press Ctrl+C to stop monitoring', 'yellow');
   }
@@ -69,7 +69,7 @@ class QualityMonitoringDashboard {
       this.handleRequest(req, res);
     });
 
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       server.listen(this.port, () => {
         this.server = server;
         this.log(`Web server started on port ${this.port}`, 'green');
@@ -80,12 +80,12 @@ class QualityMonitoringDashboard {
 
   handleRequest(req, res) {
     const url = req.url;
-    
+
     // Set CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    
+
     if (req.method === 'OPTIONS') {
       res.writeHead(200);
       res.end();
@@ -139,10 +139,10 @@ class QualityMonitoringDashboard {
   async startMonitoring() {
     this.monitoringActive = true;
     await this.collectInitialMetrics();
-    
+
     const monitoringLoop = async () => {
       if (!this.monitoringActive) return;
-      
+
       try {
         await this.updateMetrics();
         await this.checkAlerts();
@@ -150,33 +150,29 @@ class QualityMonitoringDashboard {
       } catch (error) {
         this.log(`Monitoring error: ${error.message}`, 'red');
       }
-      
+
       setTimeout(monitoringLoop, this.refreshInterval);
     };
-    
+
     monitoringLoop();
   }
 
   async collectInitialMetrics() {
     this.log('📊 Collecting initial metrics...', 'blue');
-    
+
     await this.updateQualityMetrics();
     await this.updateSecurityMetrics();
     await this.updatePerformanceMetrics();
     await this.calculateTrends();
-    
+
     this.log('Initial metrics collection completed', 'green');
   }
 
   async updateMetrics() {
     this.log('🔄 Updating metrics...', 'blue');
-    
-    await Promise.all([
-      this.updateQualityMetrics(),
-      this.updateSecurityMetrics(), 
-      this.updatePerformanceMetrics()
-    ]);
-    
+
+    await Promise.all([this.updateQualityMetrics(), this.updateSecurityMetrics(), this.updatePerformanceMetrics()]);
+
     await this.calculateTrends();
   }
 
@@ -185,7 +181,7 @@ class QualityMonitoringDashboard {
       // Run quality improvement tests
       const { runQualityTests } = require('../client/src/utils/__tests__/testRunner.js');
       const report = await runQualityTests();
-      
+
       this.metrics.quality = {
         totalTests: report.totalTests,
         passedTests: report.passedTests,
@@ -193,18 +189,17 @@ class QualityMonitoringDashboard {
         coverage: report.coverage,
         categories: report.categories,
         overallHealth: this.calculateQualityHealth(report),
-        lastUpdated: new Date().toISOString()
+        lastUpdated: new Date().toISOString(),
       };
-      
+
       // Check for quality regressions
       if (report.failedTests > 0) {
         this.addAlert('quality', 'Quality tests failing', 'warning');
       }
-      
     } catch (error) {
       this.metrics.quality = {
         error: error.message,
-        lastUpdated: new Date().toISOString()
+        lastUpdated: new Date().toISOString(),
       };
       this.addAlert('quality', 'Quality metrics collection failed', 'error');
     }
@@ -216,7 +211,7 @@ class QualityMonitoringDashboard {
       const { SecurityScanner } = require('./security-scanner.js');
       const scanner = new SecurityScanner();
       const report = await scanner.runComprehensiveScan();
-      
+
       this.metrics.security = {
         vulnerabilities: report.summary.total,
         critical: report.summary.critical,
@@ -224,20 +219,19 @@ class QualityMonitoringDashboard {
         medium: report.summary.medium,
         low: report.summary.low,
         securityHealth: this.calculateSecurityHealth(report.summary),
-        lastUpdated: new Date().toISOString()
+        lastUpdated: new Date().toISOString(),
       };
-      
+
       // Check for critical security issues
       if (report.summary.critical > 0) {
         this.addAlert('security', `${report.summary.critical} critical vulnerabilities found`, 'critical');
       } else if (report.summary.high > 0) {
         this.addAlert('security', `${report.summary.high} high severity vulnerabilities found`, 'warning');
       }
-      
     } catch (error) {
       this.metrics.security = {
         error: error.message,
-        lastUpdated: new Date().toISOString()
+        lastUpdated: new Date().toISOString(),
       };
       this.addAlert('security', 'Security metrics collection failed', 'error');
     }
@@ -248,23 +242,22 @@ class QualityMonitoringDashboard {
       // Run performance regression detector
       const { PerformanceRegressionDetector } = require('./performance-regression-detector.js');
       const detector = new PerformanceRegressionDetector();
-      
+
       // Collect current metrics without full regression analysis
       await detector.collectCurrentMetrics();
-      
+
       this.metrics.performance = {
         testExecution: detector.currentMetrics.testExecution?.duration || null,
         bundleSize: detector.currentMetrics.bundle?.total || null,
         buildTime: detector.currentMetrics.build?.duration || null,
         memoryUsage: detector.currentMetrics.memory?.heapUsedDelta || null,
         performanceHealth: this.calculatePerformanceHealth(detector.currentMetrics),
-        lastUpdated: new Date().toISOString()
+        lastUpdated: new Date().toISOString(),
       };
-      
     } catch (error) {
       this.metrics.performance = {
         error: error.message,
-        lastUpdated: new Date().toISOString()
+        lastUpdated: new Date().toISOString(),
       };
       this.addAlert('performance', 'Performance metrics collection failed', 'error');
     }
@@ -272,71 +265,73 @@ class QualityMonitoringDashboard {
 
   calculateQualityHealth(report) {
     if (!report || report.totalTests === 0) return 0;
-    
+
     const testScore = (report.passedTests / report.totalTests) * 40;
-    const coverageScore = Object.values(report.coverage || {}).reduce((sum, val) => sum + val, 0) / Object.keys(report.coverage || {}).length * 0.6;
-    
+    const coverageScore =
+      (Object.values(report.coverage || {}).reduce((sum, val) => sum + val, 0) /
+        Object.keys(report.coverage || {}).length) *
+      0.6;
+
     return Math.round(testScore + coverageScore);
   }
 
   calculateSecurityHealth(summary) {
     if (!summary) return 0;
-    
+
     const total = summary.total || 0;
     if (total === 0) return 100;
-    
+
     // Weighted scoring: critical=-40, high=-20, medium=-10, low=-5
-    const score = 100 - (
-      (summary.critical || 0) * 40 +
-      (summary.high || 0) * 20 +
-      (summary.medium || 0) * 10 +
-      (summary.low || 0) * 5
-    );
-    
+    const score =
+      100 -
+      ((summary.critical || 0) * 40 + (summary.high || 0) * 20 + (summary.medium || 0) * 10 + (summary.low || 0) * 5);
+
     return Math.max(0, Math.round(score));
   }
 
   calculatePerformanceHealth(metrics) {
     if (!metrics) return 0;
-    
+
     let score = 100;
-    
+
     // Penalize slow performance
     if (metrics.testExecution?.duration > 2000) score -= 20;
     if (metrics.buildTime?.duration > 10000) score -= 15;
     if (metrics.bundleSize?.total > 1024 * 1024) score -= 10; // > 1MB
-    
+
     return Math.max(0, score);
   }
 
   async calculateTrends() {
     const historicalData = this.loadRecentHistoricalData();
-    
+
     if (historicalData.length < 2) {
       this.metrics.trends = { insufficient_data: true };
       return;
     }
-    
+
     this.metrics.trends = {
       quality: this.calculateTrendDirection(historicalData, 'quality.overallHealth'),
       security: this.calculateTrendDirection(historicalData, 'security.securityHealth'),
       performance: this.calculateTrendDirection(historicalData, 'performance.performanceHealth'),
       testExecution: this.calculateTrendDirection(historicalData, 'performance.testExecution'),
-      lastCalculated: new Date().toISOString()
+      lastCalculated: new Date().toISOString(),
     };
   }
 
   calculateTrendDirection(data, metricPath) {
-    const values = data.map(entry => {
-      const value = metricPath.split('.').reduce((obj, key) => obj?.[key], entry);
-      return typeof value === 'number' ? value : null;
-    }).filter(v => v !== null);
-    
+    const values = data
+      .map(entry => {
+        const value = metricPath.split('.').reduce((obj, key) => obj?.[key], entry);
+        return typeof value === 'number' ? value : null;
+      })
+      .filter(v => v !== null);
+
     if (values.length < 2) return 'unknown';
-    
+
     const recent = values.slice(-3); // Last 3 values
     const trend = recent[recent.length - 1] - recent[0];
-    
+
     if (Math.abs(trend) < 5) return 'stable';
     return trend > 0 ? 'improving' : 'declining';
   }
@@ -347,26 +342,24 @@ class QualityMonitoringDashboard {
       category,
       message,
       severity,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
-    
+
     this.metrics.alerts.unshift(alert);
-    
+
     // Keep only last 50 alerts
     if (this.metrics.alerts.length > 50) {
       this.metrics.alerts = this.metrics.alerts.slice(0, 50);
     }
-    
+
     this.log(`🚨 Alert [${severity}]: ${message}`, severity === 'critical' ? 'red' : 'yellow');
   }
 
   async checkAlerts() {
     // Clear old alerts (older than 1 hour)
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
-    this.metrics.alerts = this.metrics.alerts.filter(alert => 
-      new Date(alert.timestamp) > oneHourAgo
-    );
-    
+    this.metrics.alerts = this.metrics.alerts.filter(alert => new Date(alert.timestamp) > oneHourAgo);
+
     // Check for system health degradation
     const overallHealth = this.calculateOverallHealth();
     if (overallHealth < 70) {
@@ -378,46 +371,47 @@ class QualityMonitoringDashboard {
     const weights = { quality: 0.4, security: 0.4, performance: 0.2 };
     let totalScore = 0;
     let totalWeight = 0;
-    
+
     if (this.metrics.quality.overallHealth !== undefined) {
       totalScore += this.metrics.quality.overallHealth * weights.quality;
       totalWeight += weights.quality;
     }
-    
+
     if (this.metrics.security.securityHealth !== undefined) {
       totalScore += this.metrics.security.securityHealth * weights.security;
       totalWeight += weights.security;
     }
-    
+
     if (this.metrics.performance.performanceHealth !== undefined) {
       totalScore += this.metrics.performance.performanceHealth * weights.performance;
       totalWeight += weights.performance;
     }
-    
+
     return totalWeight > 0 ? Math.round(totalScore / totalWeight) : 0;
   }
 
   async saveMetricsSnapshot() {
     const snapshot = {
       timestamp: new Date().toISOString(),
-      ...this.metrics
+      ...this.metrics,
     };
-    
+
     const filename = `metrics-${Date.now()}.json`;
     const filepath = path.join(this.dataDir, filename);
-    
+
     fs.writeFileSync(filepath, JSON.stringify(snapshot, null, 2));
-    
+
     // Clean up old snapshots (keep last 100)
     this.cleanupOldSnapshots();
   }
 
   cleanupOldSnapshots() {
-    const files = fs.readdirSync(this.dataDir)
+    const files = fs
+      .readdirSync(this.dataDir)
       .filter(file => file.startsWith('metrics-'))
       .sort()
       .reverse();
-    
+
     if (files.length > 100) {
       files.slice(100).forEach(file => {
         fs.unlinkSync(path.join(this.dataDir, file));
@@ -426,33 +420,36 @@ class QualityMonitoringDashboard {
   }
 
   loadRecentHistoricalData() {
-    const files = fs.readdirSync(this.dataDir)
+    const files = fs
+      .readdirSync(this.dataDir)
       .filter(file => file.startsWith('metrics-'))
       .sort()
       .reverse()
       .slice(0, 10); // Last 10 snapshots
-    
-    return files.map(file => {
-      try {
-        const data = fs.readFileSync(path.join(this.dataDir, file), 'utf8');
-        return JSON.parse(data);
-      } catch (error) {
-        return null;
-      }
-    }).filter(Boolean);
+
+    return files
+      .map(file => {
+        try {
+          const data = fs.readFileSync(path.join(this.dataDir, file), 'utf8');
+          return JSON.parse(data);
+        } catch (error) {
+          return null;
+        }
+      })
+      .filter(Boolean);
   }
 
   loadHistoricalData(metric) {
     const historicalData = this.loadRecentHistoricalData();
     return historicalData.map(entry => ({
       timestamp: entry.timestamp,
-      value: metric.split('.').reduce((obj, key) => obj?.[key], entry)
+      value: metric.split('.').reduce((obj, key) => obj?.[key], entry),
     }));
   }
 
   generateDashboardHTML() {
     const overallHealth = this.calculateOverallHealth();
-    
+
     return `
 <!DOCTYPE html>
 <html lang="en">
@@ -695,10 +692,14 @@ class QualityMonitoringDashboard {
 
   getTrendIcon(trend) {
     switch (trend) {
-      case 'improving': return '📈';
-      case 'declining': return '📉';
-      case 'stable': return '➡️';
-      default: return '❓';
+      case 'improving':
+        return '📈';
+      case 'declining':
+        return '📉';
+      case 'stable':
+        return '➡️';
+      default:
+        return '❓';
     }
   }
 
@@ -706,25 +707,30 @@ class QualityMonitoringDashboard {
     if (!this.metrics.alerts || this.metrics.alerts.length === 0) {
       return '<p style="color: #48bb78;">✅ No active alerts</p>';
     }
-    
-    return this.metrics.alerts.slice(0, 10).map(alert => `
+
+    return this.metrics.alerts
+      .slice(0, 10)
+      .map(
+        alert => `
       <div class="alert-item alert-${alert.severity}">
         <strong>${alert.category.toUpperCase()}</strong>: ${alert.message}
         <div style="font-size: 0.8rem; color: #718096; margin-top: 0.25rem;">
           ${new Date(alert.timestamp).toLocaleString()}
         </div>
       </div>
-    `).join('');
+    `
+      )
+      .join('');
   }
 
   async stopDashboard() {
     this.monitoringActive = false;
-    
+
     if (this.server) {
       this.server.close();
       this.log('Web server stopped', 'yellow');
     }
-    
+
     this.log('Quality monitoring dashboard stopped', 'yellow');
   }
 }
@@ -732,7 +738,7 @@ class QualityMonitoringDashboard {
 // CLI execution
 if (require.main === module) {
   const dashboard = new QualityMonitoringDashboard();
-  
+
   const args = process.argv.slice(2);
   if (args.includes('--help') || args.includes('-h')) {
     console.log(`
@@ -757,26 +763,26 @@ to help development teams maintain high code quality standards.
 `);
     process.exit(0);
   }
-  
+
   // Handle custom port
   const portIndex = args.indexOf('--port');
   if (portIndex !== -1 && args[portIndex + 1]) {
     dashboard.port = parseInt(args[portIndex + 1]);
   }
-  
+
   // Handle custom refresh interval
   const intervalIndex = args.indexOf('--interval');
   if (intervalIndex !== -1 && args[intervalIndex + 1]) {
     dashboard.refreshInterval = parseInt(args[intervalIndex + 1]);
   }
-  
+
   // Handle graceful shutdown
   process.on('SIGINT', async () => {
     console.log('\n🛑 Shutting down dashboard...');
     await dashboard.stopDashboard();
     process.exit(0);
   });
-  
+
   dashboard.startDashboard().catch(error => {
     console.error('Dashboard failed to start:', error);
     process.exit(1);

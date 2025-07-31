@@ -402,7 +402,7 @@
   border-color: #d1d5db;
 }
 
-.checkbox-item input[type="checkbox"] {
+.checkbox-item input[type='checkbox'] {
   width: auto !important;
   margin: 0;
 }
@@ -426,26 +426,26 @@
     width: 95vw;
     margin: 20px;
   }
-  
+
   .rule-manager-filters {
     flex-direction: column;
     gap: 12px;
   }
-  
+
   .constraint-editor {
     width: 95vw;
     margin: 20px;
   }
-  
+
   .checkbox-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .rule-scope {
     flex-direction: column;
     gap: 8px;
   }
-  
+
   .header-actions {
     flex-wrap: wrap;
     gap: 8px;
@@ -458,58 +458,58 @@
     background: #1f2937;
     color: #f9fafb;
   }
-  
+
   .rule-manager-header {
     background: #111827;
     border-color: #374151;
   }
-  
+
   .rule-manager-header h2 {
     color: #f9fafb;
   }
-  
+
   .rule-manager-filters {
     background: #111827;
     border-color: #374151;
   }
-  
+
   .filter-group select {
     background: #374151;
     border-color: #4b5563;
     color: #f9fafb;
   }
-  
+
   .constraint-rule-item {
     background: #111827;
     border-color: #374151;
   }
-  
+
   .constraint-rule-item:hover {
     border-color: #3b82f6;
   }
-  
+
   .rule-type {
     background: #374151;
     color: #d1d5db;
   }
-  
+
   .rule-details {
     border-color: #374151;
   }
-  
+
   .historical-basis {
     background: #374151;
   }
-  
+
   .constraint-editor {
     background: #1f2937;
   }
-  
+
   .editor-header {
     background: #111827;
     border-color: #374151;
   }
-  
+
   .form-group input,
   .form-group select,
   .form-group textarea {
@@ -517,12 +517,12 @@
     border-color: #4b5563;
     color: #f9fafb;
   }
-  
+
   .checkbox-item {
     background: #374151;
     border-color: #4b5563;
   }
-  
+
   .checkbox-item:hover {
     background: #4b5563;
   }

@@ -91,9 +91,15 @@
 }
 
 @keyframes pulse {
-  0% { opacity: 1; }
-  50% { opacity: 0.5; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .header-center {
@@ -196,7 +202,9 @@
   box-shadow: 0 2px 4px var(--dashboard-shadow);
   display: flex;
   flex-direction: column;
-  transition: box-shadow 0.2s, transform 0.2s;
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s;
   overflow: hidden;
 }
 
@@ -239,7 +247,9 @@
   padding: 0.25rem;
   border-radius: 0.25rem;
   opacity: 0.6;
-  transition: opacity 0.2s, background-color 0.2s;
+  transition:
+    opacity 0.2s,
+    background-color 0.2s;
 }
 
 .widget-controls button:hover {
@@ -490,7 +500,11 @@
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  background: conic-gradient(var(--dashboard-success) 0deg, var(--dashboard-success) calc(var(--health-percentage) * 3.6deg), var(--dashboard-bg) calc(var(--health-percentage) * 3.6deg));
+  background: conic-gradient(
+    var(--dashboard-success) 0deg,
+    var(--dashboard-success) calc(var(--health-percentage) * 3.6deg),
+    var(--dashboard-bg) calc(var(--health-percentage) * 3.6deg)
+  );
   display: flex;
   align-items: center;
   justify-content: center;
@@ -691,8 +705,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .dashboard-error h3 {
@@ -732,7 +750,7 @@
   .dashboard-grid.layout-grid {
     grid-template-columns: repeat(8, 1fr);
   }
-  
+
   .metric-badges {
     gap: 1rem;
   }
@@ -744,28 +762,28 @@
     gap: 1rem;
     padding: 1rem;
   }
-  
+
   .header-left,
   .header-center,
   .header-right {
     width: 100%;
     justify-content: center;
   }
-  
+
   .metric-badges {
     flex-wrap: wrap;
     justify-content: center;
   }
-  
+
   .dashboard-grid {
     padding: 1rem;
   }
-  
+
   .dashboard-grid.layout-grid {
     grid-template-columns: 1fr;
     grid-auto-rows: 300px;
   }
-  
+
   .footer-info {
     flex-direction: column;
     gap: 0.5rem;
@@ -776,16 +794,16 @@
   .dashboard-grid.layout-grid {
     grid-auto-rows: 250px;
   }
-  
+
   .widget-content {
     padding: 0.75rem;
   }
-  
+
   .event-item {
     grid-template-columns: 1fr;
     gap: 0.5rem;
   }
-  
+
   .source-item {
     grid-template-columns: 1fr;
     gap: 0.5rem;

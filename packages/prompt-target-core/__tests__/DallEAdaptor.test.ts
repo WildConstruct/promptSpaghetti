@@ -8,21 +8,21 @@ describe('DallEAdaptor', () => {
         debug: jest.fn(),
         info: jest.fn(),
         warn: jest.fn(),
-        error: jest.fn()
+        error: jest.fn(),
       },
       metrics: {
         counter: jest.fn(),
         gauge: jest.fn(),
         histogram: jest.fn(),
-        timer: jest.fn(() => ({ end: jest.fn() }))
+        timer: jest.fn(() => ({ end: jest.fn() })),
       },
       cache: {
         get: jest.fn().mockResolvedValue(null),
         set: jest.fn().mockResolvedValue(undefined),
         del: jest.fn().mockResolvedValue(undefined),
-        exists: jest.fn().mockResolvedValue(false)
+        exists: jest.fn().mockResolvedValue(false),
       },
-      config: {}
+      config: {},
     };
     adaptor = new DallEAdaptor(mockContext);
   });
@@ -60,9 +60,7 @@ describe('DallEAdaptor', () => {
   describe('validation', () => {
     it('should validate prompt length', async () => {
       const longContent = 'A'.repeat(5000); // Exceeds 4000 char limit
-      const graph = createTestGraph([
-        { id: 'node1', type: 'text', data: { content: longContent } }
-      ]);
+      const graph = createTestGraph([{ id: 'node1', type: 'text', data: { content: longContent } }]);
       const results = await adaptor.validate(graph);
       const lengthError = results.find(r => r.id === 'prompt-too-long');
       expect(lengthError).toBeDefined();
@@ -77,10 +75,10 @@ describe('DallEAdaptor', () => {
             content: 'A test prompt',
             parameters: {
               model: 'dall-e-3',
-              n: 4 // Invalid for DALL-E 3
-            }
-          }
-        }
+              n: 4, // Invalid for DALL-E 3
+            },
+          },
+        },
       ]);
       const results = await adaptor.validate(graph);
       const multiImageError = results.find(r => r.id === 'dalle3-multiple-images');
@@ -96,10 +94,10 @@ describe('DallEAdaptor', () => {
             content: 'A test prompt',
             parameters: {
               model: 'dall-e-2',
-              quality: 'hd' // Not supported in DALL-E 2
-            }
-          }
-        }
+              quality: 'hd', // Not supported in DALL-E 2
+            },
+          },
+        },
       ]);
       const results = await adaptor.validate(graph);
       const qualityWarning = results.find(r => r.id === 'dalle2-quality-not-supported');
@@ -111,8 +109,8 @@ describe('DallEAdaptor', () => {
         {
           id: 'node1',
           type: 'text',
-          data: { content: 'violent scene with weapons and blood' }
-        }
+          data: { content: 'violent scene with weapons and blood' },
+        },
       ]);
       const results = await adaptor.validate(graph);
       const policyWarning = results.find(r => r.id?.startsWith('content-policy'));
@@ -128,10 +126,10 @@ describe('DallEAdaptor', () => {
             content: 'Test prompt',
             parameters: {
               n: 'invalid', // Should be number
-              size: 'invalid-size' // Should be valid enum
-            }
-          }
-        }
+              size: 'invalid-size', // Should be valid enum
+            },
+          },
+        },
       ]);
       const results = await adaptor.validate(graph);
       expect(results.some(r => r.id === 'invalid-param-n')).toBe(true);
@@ -141,7 +139,7 @@ describe('DallEAdaptor', () => {
   describe('transformation', () => {
     it('should transform simple text prompt', async () => {
       const graph = createTestGraph([
-        { id: 'node1', type: 'text', data: { content: 'A beautiful sunset over mountains' } }
+        { id: 'node1', type: 'text', data: { content: 'A beautiful sunset over mountains' } },
       ]);
       const result = await adaptor.transform(graph);
       expect(result.platform).toBe('openai-dalle');
@@ -161,10 +159,10 @@ describe('DallEAdaptor', () => {
               model: 'dall-e-3',
               size: '1792x1024',
               quality: 'hd',
-              style: 'vivid'
-            }
-          }
-        }
+              style: 'vivid',
+            },
+          },
+        },
       ]);
       const result = await adaptor.transform(graph);
       expect(result.parameters.model).toBe('dall-e-3');
@@ -179,12 +177,13 @@ describe('DallEAdaptor', () => {
       expect(apiParams.style).toBe('vivid');
     });
     it('should handle style nodes correctly', async () => {
-      const graph = createTestGraph([
-        { id: 'text1', type: 'text', data: { content: 'A portrait of a woman' } },
-        { id: 'style1', type: 'style', data: { style: 'renaissance painting' } }
-      ], [
-        { id: 'edge1', source: 'text1', target: 'style1' }
-      ]);
+      const graph = createTestGraph(
+        [
+          { id: 'text1', type: 'text', data: { content: 'A portrait of a woman' } },
+          { id: 'style1', type: 'style', data: { style: 'renaissance painting' } },
+        ],
+        [{ id: 'edge1', source: 'text1', target: 'style1' }]
+      );
       const result = await adaptor.transform(graph);
       expect(result.content).toContain('portrait of a woman');
       expect(result.content).toContain('renaissance painting style');
@@ -197,10 +196,10 @@ describe('DallEAdaptor', () => {
           data: {
             options: [
               { text: 'sunny day', weight: 0.7 },
-              { text: 'rainy evening', weight: 0.3 }
-            ]
-          }
-        }
+              { text: 'rainy evening', weight: 0.3 },
+            ],
+          },
+        },
       ]);
       const result = await adaptor.transform(graph);
       // Should select first option (simplified implementation)
@@ -214,16 +213,16 @@ describe('DallEAdaptor', () => {
           data: {
             condition: 'true',
             trueBranch: 'bright colors',
-            falseBranch: 'muted tones'
-          }
-        }
+            falseBranch: 'muted tones',
+          },
+        },
       ]);
       const result = await adaptor.transform(graph);
       expect(result.content).toContain('bright colors');
     });
     it('should enhance simple prompts', async () => {
       const graph = createTestGraph([
-        { id: 'node1', type: 'text', data: { content: 'cat' } } // Very simple
+        { id: 'node1', type: 'text', data: { content: 'cat' } }, // Very simple
       ]);
       const result = await adaptor.transform(graph);
       expect(result.content).toContain('A detailed image of cat');
@@ -235,9 +234,9 @@ describe('DallEAdaptor', () => {
           type: 'text',
           data: {
             content: 'A landscape scene',
-            parameters: { quality: 'hd' }
-          }
-        }
+            parameters: { quality: 'hd' },
+          },
+        },
       ]);
       const result = await adaptor.transform(graph);
       expect(result.content).toContain('highly detailed and sharp');
@@ -249,18 +248,16 @@ describe('DallEAdaptor', () => {
           type: 'text',
           data: {
             content: 'A flower garden',
-            parameters: { style: 'vivid' }
-          }
-        }
+            parameters: { style: 'vivid' },
+          },
+        },
       ]);
       const result = await adaptor.transform(graph);
       expect(result.content).toContain('with vibrant colors');
     });
     it('should truncate overly long prompts', async () => {
       const longContent = 'A very long prompt that exceeds the maximum length limit for DALL-E. '.repeat(200);
-      const graph = createTestGraph([
-        { id: 'node1', type: 'text', data: { content: longContent } }
-      ]);
+      const graph = createTestGraph([{ id: 'node1', type: 'text', data: { content: longContent } }]);
       const result = await adaptor.transform(graph);
       expect(result.content.length).toBeLessThanOrEqual(4000);
       expect(result.content).toMatch(/\.\.\.$/); // ends with ...
@@ -279,10 +276,10 @@ describe('DallEAdaptor', () => {
               model: 'dall-e-2',
               n: 3, // Valid for DALL-E 2
               quality: 'hd', // Should be ignored
-              style: 'natural' // Should be ignored
-            }
-          }
-        }
+              style: 'natural', // Should be ignored
+            },
+          },
+        },
       ]);
       const result = await adaptor.transform(graph);
       const apiParams = result.metadata?.apiParameters;
@@ -296,8 +293,8 @@ describe('DallEAdaptor', () => {
         {
           id: 'node1',
           type: 'text',
-          data: { content: 'Test prompt' }
-        }
+          data: { content: 'Test prompt' },
+        },
       ]);
       const result = await adaptor.transform(graph);
       expect(result.metadata).toBeDefined();
@@ -312,17 +309,18 @@ describe('DallEAdaptor', () => {
   });
   describe('quality estimation', () => {
     it('should calculate quality score based on graph complexity', async () => {
-      const simpleGraph = createTestGraph([
-        { id: 'node1', type: 'text', data: { content: 'cat' } }
-      ]);
-      const complexGraph = createTestGraph([
-        { id: 'text1', type: 'text', data: { content: 'A majestic mountain landscape' } },
-        { id: 'style1', type: 'style', data: { style: 'photorealistic' } },
-        { id: 'output1', type: 'output', data: {} }
-      ], [
-        { id: 'edge1', source: 'text1', target: 'style1' },
-        { id: 'edge2', source: 'style1', target: 'output1' }
-      ]);
+      const simpleGraph = createTestGraph([{ id: 'node1', type: 'text', data: { content: 'cat' } }]);
+      const complexGraph = createTestGraph(
+        [
+          { id: 'text1', type: 'text', data: { content: 'A majestic mountain landscape' } },
+          { id: 'style1', type: 'style', data: { style: 'photorealistic' } },
+          { id: 'output1', type: 'output', data: {} },
+        ],
+        [
+          { id: 'edge1', source: 'text1', target: 'style1' },
+          { id: 'edge2', source: 'style1', target: 'output1' },
+        ]
+      );
       const simpleQuality = await adaptor.estimateQuality(simpleGraph);
       const complexQuality = await adaptor.estimateQuality(complexGraph);
       expect(typeof simpleQuality.overall).toBe('number');
@@ -349,10 +347,10 @@ describe('DallEAdaptor', () => {
             parameters: {
               size: 'invalid-size',
               quality: 'invalid-quality',
-              n: -1
-            }
-          }
-        }
+              n: -1,
+            },
+          },
+        },
       ]);
       // Should not throw, but normalize invalid values
       const result = await adaptor.transform(graph);
@@ -370,21 +368,21 @@ describe('DallEAdaptor', () => {
         type: node.type || 'text',
         data: node.data || {},
         position: { x: 0, y: 0 },
-        ...node
+        ...node,
       })),
       edges: edges.map((edge, index) => ({
         id: edge.id || `edge${index}`,
         source: edge.source || '',
         target: edge.target || '',
-        ...edge
+        ...edge,
       })),
       metadata: {
         name: 'Test Graph',
         created: new Date(),
         modified: new Date(),
-        version: '1.0.0'
+        version: '1.0.0',
       },
-      version: '1.0.0'
+      version: '1.0.0',
     };
   }
 });

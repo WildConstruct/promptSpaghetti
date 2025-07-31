@@ -19,7 +19,7 @@ describe('Performance Benchmarks', () => {
       const graph = createSimpleGraph();
       const request = {
         graph,
-        targetPlatform: 'openai-gpt'
+        targetPlatform: 'openai-gpt',
       };
       const start = performance.now();
       const response = await engine.translate(request);
@@ -31,7 +31,7 @@ describe('Performance Benchmarks', () => {
       const graph = createMediumGraph();
       const request = {
         graph,
-        targetPlatform: 'midjourney'
+        targetPlatform: 'midjourney',
       };
       const start = performance.now();
       const response = await engine.translate(request);
@@ -43,7 +43,7 @@ describe('Performance Benchmarks', () => {
       const graph = createLargeGraph();
       const request = {
         graph,
-        targetPlatform: 'openai-gpt'
+        targetPlatform: 'openai-gpt',
       };
       const start = performance.now();
       const response = await engine.translate(request);
@@ -58,11 +58,11 @@ describe('Performance Benchmarks', () => {
         createSimpleGraph(),
         createMediumGraph(),
         createSimpleGraph(), // Repeat
-        createMediumGraph() // Repeat
+        createMediumGraph(), // Repeat
       ];
       const requests = graphs.map(graph => ({
         graph,
-        targetPlatform: 'openai-gpt'
+        targetPlatform: 'openai-gpt',
       }));
       // First round - populate cache
       await Promise.all(requests.map(req => engine.translate(req)));
@@ -80,7 +80,7 @@ describe('Performance Benchmarks', () => {
       const graphs = Array.from({ length: 20 }, (_, i) => createVariableGraph(i));
       const requests = graphs.map(graph => ({
         graph,
-        targetPlatform: 'openai-gpt'
+        targetPlatform: 'openai-gpt',
       }));
       const start = performance.now();
       const responses = await Promise.all(requests.map(req => engine.translate(req)));
@@ -97,7 +97,7 @@ describe('Performance Benchmarks', () => {
       const concurrentRequests = 10;
       const requests = Array.from({ length: concurrentRequests }, (_, i) => ({
         graph: createVariableGraph(i),
-        targetPlatform: (i % 2 === 0 ? 'openai-gpt' : 'midjourney')
+        targetPlatform: i % 2 === 0 ? 'openai-gpt' : 'midjourney',
       }));
       const start = performance.now();
       const responses = await Promise.all(requests.map(req => engine.translate(req)));
@@ -118,7 +118,7 @@ describe('Performance Benchmarks', () => {
       while (performance.now() - startTime < loadTestDuration) {
         const request = {
           graph: createSimpleGraph(),
-          targetPlatform: 'openai-gpt'
+          targetPlatform: 'openai-gpt',
         };
         const response = await engine.translate(request);
         responses.push(response);
@@ -145,7 +145,7 @@ describe('Performance Benchmarks', () => {
       for (let i = 0; i < iterations; i++) {
         const request = {
           graph: createVariableGraph(i),
-          targetPlatform: 'openai-gpt'
+          targetPlatform: 'openai-gpt',
         };
         await engine.translate(request);
         // Occasionally check memory
@@ -167,7 +167,7 @@ describe('Performance Benchmarks', () => {
       // Fill cache with many translations
       const requests = Array.from({ length: 50 }, (_, i) => ({
         graph: createVariableGraph(i),
-        targetPlatform: 'openai-gpt'
+        targetPlatform: 'openai-gpt',
       }));
       await Promise.all(requests.map(req => engine.translate(req)));
       const finalCacheSize = cache.getStats().size;
@@ -186,7 +186,7 @@ describe('Performance Benchmarks', () => {
       for (let i = 0; i < rapidRequests; i++) {
         const request = {
           graph: createSimpleGraph(),
-          targetPlatform: 'openai-gpt'
+          targetPlatform: 'openai-gpt',
         };
         requests.push(engine.translate(request));
       }
@@ -212,32 +212,32 @@ function createSimpleGraph() {
         id: 'node1',
         type: 'text',
         data: { content: 'Simple test prompt' },
-        position: { x: 0, y: 0 }
-      }
+        position: { x: 0, y: 0 },
+      },
     ],
     edges: [],
     metadata: {
       created: new Date(),
       modified: new Date(),
-      version: '1.0'
-    }
+      version: '1.0',
+    },
   };
 }
 function createMediumGraph() {
   const nodeCount = 8;
   const nodes = Array.from({ length: nodeCount }, (_, i) => ({
     id: `node${i}`,
-    type: (i % 3 === 0 ? 'text' : i % 3 === 1 ? 'style' : 'concat'),
+    type: i % 3 === 0 ? 'text' : i % 3 === 1 ? 'style' : 'concat',
     data: {
       content: `Content for node ${i}`,
-      style: i % 3 === 1 ? 'artistic style' : undefined
+      style: i % 3 === 1 ? 'artistic style' : undefined,
     },
-    position: { x: i * 100, y: 0 }
+    position: { x: i * 100, y: 0 },
   }));
   const edges = Array.from({ length: nodeCount - 1 }, (_, i) => ({
     id: `edge${i}`,
     source: `node${i}`,
-    target: `node${i + 1}`
+    target: `node${i + 1}`,
   }));
   return {
     id: `medium-${Date.now()}-${Math.random()}`,
@@ -247,8 +247,8 @@ function createMediumGraph() {
     metadata: {
       created: new Date(),
       modified: new Date(),
-      version: '1.0'
-    }
+      version: '1.0',
+    },
   };
 }
 function createLargeGraph() {
@@ -259,24 +259,24 @@ function createLargeGraph() {
     data: {
       content: `Complex content for node ${i} with detailed description`,
       style: i % 5 === 1 ? 'detailed artistic style with modifiers' : undefined,
-      parameters: i % 5 === 0 ? { temperature: 0.7, max_tokens: 500 } : undefined
+      parameters: i % 5 === 0 ? { temperature: 0.7, max_tokens: 500 } : undefined,
     },
-    position: { x: (i % 5) * 150, y: Math.floor(i / 5) * 100 }
+    position: { x: (i % 5) * 150, y: Math.floor(i / 5) * 100 },
   }));
-    // Create more complex edge structure
+  // Create more complex edge structure
   const edges = [];
   for (let i = 0; i < nodeCount - 1; i++) {
     edges.push({
       id: `edge${i}`,
       source: `node${i}`,
-      target: `node${i + 1}`
+      target: `node${i + 1}`,
     });
     // Add some branching edges
     if (i % 3 === 0 && i + 5 < nodeCount) {
       edges.push({
         id: `branch${i}`,
         source: `node${i}`,
-        target: `node${i + 5}`
+        target: `node${i + 5}`,
       });
     }
   }
@@ -288,8 +288,8 @@ function createLargeGraph() {
     metadata: {
       created: new Date(),
       modified: new Date(),
-      version: '1.0'
-    }
+      version: '1.0',
+    },
   };
 }
 function createVariableGraph(seed) {
@@ -298,12 +298,12 @@ function createVariableGraph(seed) {
     id: `var_node${seed}_${i}`,
     type: 'text',
     data: { content: `Variable content ${seed}-${i}` },
-    position: { x: i * 100, y: 0 }
+    position: { x: i * 100, y: 0 },
   }));
   const edges = Array.from({ length: nodeCount - 1 }, (_, i) => ({
     id: `var_edge${seed}_${i}`,
     source: `var_node${seed}_${i}`,
-    target: `var_node${seed}_${i + 1}`
+    target: `var_node${seed}_${i + 1}`,
   }));
   return {
     id: `variable-${seed}-${Date.now()}`,
@@ -313,7 +313,7 @@ function createVariableGraph(seed) {
     metadata: {
       created: new Date(),
       modified: new Date(),
-      version: '1.0'
-    }
+      version: '1.0',
+    },
   };
 }

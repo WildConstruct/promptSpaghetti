@@ -21,6 +21,7 @@ Welcome to the **UI Kit** component library! This library provides a comprehensi
 ## 📦 Components
 
 ### Base Components
+
 - **Button** - Versatile button with multiple variants and states
 - **Input/TextArea** - Form inputs with validation and icons
 - **Card** - Container component with header, content, and footer
@@ -28,11 +29,13 @@ Welcome to the **UI Kit** component library! This library provides a comprehensi
 - **Layout** - Flex, Grid, Stack, and Container layout components
 
 ### Graph Components
+
 - **GraphCanvas** - Interactive graph visualization and editing
 - **NodePalette** - Drag-and-drop node palette with search
 - **InspectorPanel** - Property editor for selected nodes
 
 ### Platform Adapters
+
 - **WebAdapter** - Web-specific optimizations and APIs
 - **ReactNativeAdapter** - React Native optimizations and APIs
 - **PlatformProvider** - Context for platform-specific functionality
@@ -45,15 +48,12 @@ The UI Kit includes a comprehensive theming system:
 import { ThemeProvider } from '@prompt-spaghetti/ui-kit';
 
 function App() {
-  return (
-    <ThemeProvider defaultColorMode="system">
-      {/* Your app components */}
-    </ThemeProvider>
-  );
+  return <ThemeProvider defaultColorMode="system">{/* Your app components */}</ThemeProvider>;
 }
 ```
 
 ### Theme Features
+
 - Light and dark mode support
 - System preference detection
 - Custom color schemes
@@ -72,9 +72,7 @@ function App() {
   return (
     <PlatformProvider platform="web">
       <ThemeProvider>
-        <Button hapticFeedback="light">
-          Platform-aware Button
-        </Button>
+        <Button hapticFeedback="light">Platform-aware Button</Button>
       </ThemeProvider>
     </PlatformProvider>
   );
@@ -82,6 +80,7 @@ function App() {
 ```
 
 ### Platform Features
+
 - Automatic platform detection
 - Platform-specific optimizations
 - Touch vs. mouse interactions
@@ -112,26 +111,27 @@ Built-in accessibility features include:
 ## 🚀 Getting Started
 
 1. Install the package:
+
 ```bash
 npm install @prompt-spaghetti/ui-kit
 ```
 
 2. Wrap your app with providers:
+
 ```tsx
 import { PlatformProvider, ThemeProvider } from '@prompt-spaghetti/ui-kit';
 
 function App() {
   return (
     <PlatformProvider>
-      <ThemeProvider>
-        {/* Your app */}
-      </ThemeProvider>
+      <ThemeProvider>{/* Your app */}</ThemeProvider>
     </PlatformProvider>
   );
 }
 ```
 
 3. Use components:
+
 ```tsx
 import { Button, Input, GraphCanvas } from '@prompt-spaghetti/ui-kit';
 ```
@@ -157,7 +157,7 @@ test('renders button', () => {
       <Button>Click me</Button>
     </ThemeProvider>
   );
-  
+
   expect(screen.getByRole('button')).toBeInTheDocument();
 });
 ```

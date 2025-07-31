@@ -13,17 +13,17 @@ export const Events = {
   SYNC_COMPLETED: 'sync_completed',
   SYNC_CONFLICT: 'sync_conflict',
   PERFORMANCE_FPS: 'performance_fps',
-  PERFORMANCE_MEMORY: 'performance_memory'
+  PERFORMANCE_MEMORY: 'performance_memory',
 } as const;
 
-export type EventName = typeof Events[keyof typeof Events];
+export type EventName = (typeof Events)[keyof typeof Events];
 
 export function createEvent(
-  name: EventName, 
+  name: EventName,
   properties: Record<string, unknown> = {}
 ): Omit<AnalyticsEvent, 'timestamp' | 'platform'> {
   return {
     name,
-    properties
+    properties,
   };
 }

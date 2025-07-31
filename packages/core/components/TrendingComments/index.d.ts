@@ -8,6 +8,19 @@
  */
 export { TrendingCommentsList } from './TrendingCommentsList';
 export { TrendingCommentCard } from './TrendingCommentCard';
-export type { TrendingComment, CommentScore, CommentEngagement, TrendingResults, CommentAnalytics, TrendingAlgorithmConfig, GetTrendingCommentsRequest, TrendingCommentsResponse, CommentableResourceType, CommentSortOrder, CommentEngagementType, TrendingPeriod } from '../../types/TrendingCommentsTypes';
+export type {
+  TrendingComment,
+  CommentScore,
+  CommentEngagement,
+  TrendingResults,
+  CommentAnalytics,
+  TrendingAlgorithmConfig,
+  GetTrendingCommentsRequest,
+  TrendingCommentsResponse,
+  CommentableResourceType,
+  CommentSortOrder,
+  CommentEngagementType,
+  TrendingPeriod,
+} from '../../types/TrendingCommentsTypes';
 export { TrendingCommentsService } from '../../services/TrendingCommentsService';
 //# sourceMappingURL=index.d.ts.map

@@ -1,8 +1,8 @@
 /**
  * OAuth Components - Epic 19.5
- * 
+ *
  * Export all OAuth-related components for the configuration UI framework.
- * 
+ *
  * Task: T-1752989143998-560 - Build OAuth configuration UI
  * Part of Epic 19.5 - OAuth Implementation & Framework
  */
@@ -26,16 +26,16 @@ export type {
   ValidationResult,
   ValidationError,
   ValidationWarning,
-  
-  // From OAuthProviderManager  
+
+  // From OAuthProviderManager
   ProviderStatistics,
   ProviderTestResult,
-  
+
   // From OAuthUserAccountManager
   LinkedOAuthAccount,
   Permission,
   AccountMetadata,
   AvailableProvider,
   ProviderScope,
-  LinkingResult
+  LinkingResult,
 } from './OAuthConfigurationInterface';

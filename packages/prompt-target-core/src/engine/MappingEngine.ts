@@ -10,7 +10,7 @@ import {
   MetricsInterface,
   TranslationError,
   ValidationError,
-  PromptTargetingError
+  PromptTargetingError,
 } from '../types/index.js';
 
 /**
@@ -22,11 +22,7 @@ export class MappingEngine {
   private cache: CacheInterface;
   private metrics: MetricsInterface;
 
-  constructor(
-    logger: Logger,
-    cache: CacheInterface,
-    metrics: MetricsInterface
-  ) {
+  constructor(logger: Logger, cache: CacheInterface, metrics: MetricsInterface) {
     this.logger = logger;
     this.cache = cache;
     this.metrics = metrics;
@@ -40,12 +36,12 @@ export class MappingEngine {
     this.logger.info('Adaptor registered', {
       platform,
       adaptorId: adaptor.id,
-      version: adaptor.version
+      version: adaptor.version,
     });
-    
+
     this.metrics.counter('mapping_engine.adaptor.registered', 1, {
       platform,
-      adaptor_id: adaptor.id
+      adaptor_id: adaptor.id,
     });
   }
 
@@ -58,12 +54,12 @@ export class MappingEngine {
       this.adaptors.delete(platform);
       this.logger.info('Adaptor unregistered', {
         platform,
-        adaptorId: adaptor.id
+        adaptorId: adaptor.id,
       });
-      
+
       this.metrics.counter('mapping_engine.adaptor.unregistered', 1, {
         platform,
-        adaptor_id: adaptor.id
+        adaptor_id: adaptor.id,
       });
     }
   }
@@ -95,15 +91,15 @@ export class MappingEngine {
   async translate(request: TranslationRequest): Promise<TranslationResponse> {
     const startTime = Date.now();
     const requestId = request.requestId || this.generateRequestId();
-    
+
     this.logger.info('Translation started', {
       requestId,
       graphId: request.graph.id,
-      targetPlatform: request.targetPlatform
+      targetPlatform: request.targetPlatform,
     });
 
     this.metrics.counter('mapping_engine.translation.started', 1, {
-      platform: request.targetPlatform
+      platform: request.targetPlatform,
     });
 
     try {
@@ -126,9 +122,9 @@ export class MappingEngine {
       const cached = await this.checkCache(cacheKey);
       if (cached) {
         this.metrics.counter('mapping_engine.translation.cache_hit', 1, {
-          platform: request.targetPlatform
+          platform: request.targetPlatform,
         });
-        
+
         return {
           requestId,
           success: true,
@@ -139,8 +135,8 @@ export class MappingEngine {
             total: Date.now() - startTime,
             validation: 0,
             transformation: 0,
-            postProcessing: 0
-          }
+            postProcessing: 0,
+          },
         };
       }
 
@@ -150,15 +146,10 @@ export class MappingEngine {
       const validationTime = Date.now() - validationStart;
 
       // Check for critical errors
-      const criticalErrors = validationResults.filter(
-        r => r.type === 'error' && r.severity === 'critical'
-      );
-      
+      const criticalErrors = validationResults.filter(r => r.type === 'error' && r.severity === 'critical');
+
       if (criticalErrors.length > 0) {
-        throw new ValidationError(
-          'Critical validation errors prevent translation',
-          criticalErrors
-        );
+        throw new ValidationError('Critical validation errors prevent translation', criticalErrors);
       }
 
       // Transform
@@ -175,7 +166,7 @@ export class MappingEngine {
       await this.cacheResult(cacheKey, {
         targetPrompt,
         quality,
-        validationResults
+        validationResults,
       });
 
       const totalTime = Date.now() - startTime;
@@ -185,15 +176,15 @@ export class MappingEngine {
         graphId: request.graph.id,
         targetPlatform: request.targetPlatform,
         quality: quality.overall,
-        duration: totalTime
+        duration: totalTime,
       });
 
       this.metrics.counter('mapping_engine.translation.success', 1, {
-        platform: request.targetPlatform
+        platform: request.targetPlatform,
       });
 
       this.metrics.histogram('mapping_engine.translation.duration', totalTime, {
-        platform: request.targetPlatform
+        platform: request.targetPlatform,
       });
 
       return {
@@ -206,26 +197,25 @@ export class MappingEngine {
           total: totalTime,
           validation: validationTime,
           transformation: transformTime,
-          postProcessing: postProcessTime
-        }
+          postProcessing: postProcessTime,
+        },
       };
-
     } catch (error) {
       const totalTime = Date.now() - startTime;
       const errorMessage = error instanceof Error ? error.message : String(error);
       const errorType = error instanceof Error ? error.constructor.name : 'UnknownError';
-      
+
       this.logger.error('Translation failed', {
         requestId,
         graphId: request.graph.id,
         targetPlatform: request.targetPlatform,
         error: errorMessage,
-        duration: totalTime
+        duration: totalTime,
       });
 
       this.metrics.counter('mapping_engine.translation.error', 1, {
         platform: request.targetPlatform,
-        error_type: errorType
+        error_type: errorType,
       });
 
       if (error instanceof PromptTargetingError) {
@@ -238,14 +228,14 @@ export class MappingEngine {
             message: error.message,
             details: error.details,
             recoverable: error.recoverable,
-            name: error.name
+            name: error.name,
           },
           timing: {
             total: totalTime,
             validation: 0,
             transformation: 0,
-            postProcessing: 0
-          }
+            postProcessing: 0,
+          },
         };
       }
 
@@ -259,14 +249,14 @@ export class MappingEngine {
           message: 'An unexpected error occurred during translation',
           details: { originalError: errorMessage },
           recoverable: true,
-          name: 'UnexpectedError'
+          name: 'UnexpectedError',
         },
         timing: {
           total: totalTime,
           validation: 0,
           transformation: 0,
-          postProcessing: 0
-        }
+          postProcessing: 0,
+        },
       };
     }
   }
@@ -276,35 +266,20 @@ export class MappingEngine {
    */
   private validateRequest(request: TranslationRequest): void {
     if (!request.graph) {
-      throw new TranslationError(
-        'Graph is required',
-        'INVALID_REQUEST',
-        {},
-        false
-      );
+      throw new TranslationError('Graph is required', 'INVALID_REQUEST', {}, false);
     }
 
     if (!request.targetPlatform) {
-      throw new TranslationError(
-        'Target platform is required',
-        'INVALID_REQUEST',
-        {},
-        false
-      );
+      throw new TranslationError('Target platform is required', 'INVALID_REQUEST', {}, false);
     }
 
     if (!request.graph.nodes || request.graph.nodes.length === 0) {
-      throw new TranslationError(
-        'Graph must contain at least one node',
-        'INVALID_GRAPH',
-        {},
-        false
-      );
+      throw new TranslationError('Graph must contain at least one node', 'INVALID_GRAPH', {}, false);
     }
 
     // Validate graph structure
     const nodeIds = new Set(request.graph.nodes.map(n => n.id));
-    
+
     for (const edge of request.graph.edges || []) {
       if (!nodeIds.has(edge.source)) {
         throw new TranslationError(
@@ -314,7 +289,7 @@ export class MappingEngine {
           false
         );
       }
-      
+
       if (!nodeIds.has(edge.target)) {
         throw new TranslationError(
           `Edge references invalid target node: ${edge.target}`,
@@ -332,15 +307,15 @@ export class MappingEngine {
   private generateCacheKey(request: TranslationRequest): string {
     const adaptor = this.getAdaptor(request.targetPlatform);
     const adaptorVersion = adaptor?.version || 'unknown';
-    
+
     const graphHash = this.hashObject({
       nodes: request.graph.nodes,
       edges: request.graph.edges,
-      version: request.graph.version
+      version: request.graph.version,
     });
-    
+
     const optionsHash = request.options ? this.hashObject(request.options) : 'none';
-    
+
     return `translation:${request.targetPlatform}:${adaptorVersion}:${graphHash}:${optionsHash}`;
   }
 
@@ -358,10 +333,10 @@ export class MappingEngine {
       const errorMessage = error instanceof Error ? error.message : String(error);
       this.logger.warn('Cache lookup failed', {
         cacheKey,
-        error: errorMessage
+        error: errorMessage,
       });
     }
-    
+
     return null;
   }
 
@@ -373,17 +348,17 @@ export class MappingEngine {
       const cacheEntry = {
         ...result,
         timestamp: new Date(),
-        version: '1.0'
+        version: '1.0',
       };
-      
+
       await this.cache.set(cacheKey, cacheEntry, 3600); // 1 hour TTL
-      
+
       this.logger.debug('Result cached', { cacheKey });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       this.logger.warn('Cache storage failed', {
         cacheKey,
-        error: errorMessage
+        error: errorMessage,
       });
     }
   }
@@ -393,10 +368,10 @@ export class MappingEngine {
    */
   private isCacheValid(cached: any): boolean {
     if (!cached.timestamp) return false;
-    
+
     const age = Date.now() - new Date(cached.timestamp).getTime();
     const maxAge = 3600 * 1000; // 1 hour in milliseconds
-    
+
     return age < maxAge;
   }
 
@@ -413,13 +388,13 @@ export class MappingEngine {
   private hashObject(obj: any): string {
     const str = JSON.stringify(obj, Object.keys(obj).sort());
     let hash = 0;
-    
+
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
+      hash = (hash << 5) - hash + char;
       hash = hash & hash;
     }
-    
+
     return Math.abs(hash).toString(36);
   }
 
@@ -435,18 +410,18 @@ export class MappingEngine {
       version: string;
       name: string;
     }>;
-    } {
+  } {
     const adaptorInfo = Array.from(this.adaptors.entries()).map(([platform, adaptor]) => ({
       platform,
       id: adaptor.id,
       version: adaptor.version,
-      name: adaptor.name
+      name: adaptor.name,
     }));
 
     return {
       registeredAdaptors: this.adaptors.size,
       supportedPlatforms: Array.from(this.adaptors.keys()),
-      adaptorInfo
+      adaptorInfo,
     };
   }
 }

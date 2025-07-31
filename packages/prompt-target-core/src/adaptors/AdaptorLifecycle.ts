@@ -166,17 +166,17 @@ export class AdaptorRegistry {
     try {
       await adaptor.initialize(context);
       this.adaptors.set(id, adaptor);
-      
+
       const health = await adaptor.healthCheck();
       this.healthStatuses.set(id, health);
-      
-      this.logger.info('Adaptor registered successfully', { 
+
+      this.logger.info('Adaptor registered successfully', {
         adaptorId: id,
-        healthy: health.healthy 
+        healthy: health.healthy,
       });
 
       this.metrics.counter('adaptor.registered', 1, { adaptor_id: id });
-      
+
       // Start health checking if this is the first adaptor
       if (this.adaptors.size === 1) {
         this.startHealthChecking();
@@ -184,7 +184,7 @@ export class AdaptorRegistry {
     } catch (error) {
       this.logger.error('Failed to register adaptor', {
         adaptorId: id,
-        error: error instanceof Error ? error.message : String(error)
+        error: error instanceof Error ? error.message : String(error),
       });
       throw error;
     }
@@ -200,10 +200,10 @@ export class AdaptorRegistry {
         await adaptor.destroy();
         this.adaptors.delete(id);
         this.healthStatuses.delete(id);
-        
+
         this.logger.info('Adaptor unregistered successfully', { adaptorId: id });
         this.metrics.counter('adaptor.unregistered', 1, { adaptor_id: id });
-        
+
         // Stop health checking if no adaptors remain
         if (this.adaptors.size === 0) {
           this.stopHealthChecking();
@@ -211,7 +211,7 @@ export class AdaptorRegistry {
       } catch (error) {
         this.logger.error('Error during adaptor cleanup', {
           adaptorId: id,
-          error: error instanceof Error ? error.message : String(error)
+          error: error instanceof Error ? error.message : String(error),
         });
       }
     }
@@ -243,15 +243,15 @@ export class AdaptorRegistry {
    */
   async checkHealth(): Promise<Map<string, AdaptorHealthStatus>> {
     const results = new Map<string, AdaptorHealthStatus>();
-    
+
     for (const [id, adaptor] of this.adaptors.entries()) {
       try {
         const health = await adaptor.healthCheck();
         this.healthStatuses.set(id, health);
         results.set(id, health);
-        
+
         this.metrics.gauge('adaptor.health.status', health.healthy ? 1 : 0, {
-          adaptor_id: id
+          adaptor_id: id,
         });
       } catch (error) {
         const unhealthyStatus: AdaptorHealthStatus = {
@@ -261,11 +261,11 @@ export class AdaptorRegistry {
           details: {
             connectivity: {
               reachable: false,
-              errorMessage: error instanceof Error ? error.message : String(error)
+              errorMessage: error instanceof Error ? error.message : String(error),
             },
             capabilities: { available: false },
             configuration: { valid: false },
-            dependencies: []
+            dependencies: [],
           },
           metrics: {
             uptime: 0,
@@ -276,21 +276,21 @@ export class AdaptorRegistry {
             lastError: {
               timestamp: new Date(),
               message: error instanceof Error ? error.message : String(error),
-              type: error instanceof Error ? error.constructor.name : 'Unknown'
-            }
-          }
+              type: error instanceof Error ? error.constructor.name : 'Unknown',
+            },
+          },
         };
-        
+
         this.healthStatuses.set(id, unhealthyStatus);
         results.set(id, unhealthyStatus);
-        
+
         this.logger.error('Health check failed', {
           adaptorId: id,
-          error: error instanceof Error ? error.message : String(error)
+          error: error instanceof Error ? error.message : String(error),
         });
       }
     }
-    
+
     return results;
   }
 
@@ -307,7 +307,7 @@ export class AdaptorRegistry {
     }, this.healthCheckIntervalMs);
 
     this.logger.info('Started adaptor health checking', {
-      intervalMs: this.healthCheckIntervalMs
+      intervalMs: this.healthCheckIntervalMs,
     });
   }
 
@@ -318,7 +318,7 @@ export class AdaptorRegistry {
     if (this.healthCheckInterval) {
       clearInterval(this.healthCheckInterval);
       this.healthCheckInterval = undefined;
-      
+
       this.logger.info('Stopped adaptor health checking');
     }
   }
@@ -328,13 +328,11 @@ export class AdaptorRegistry {
    */
   async destroy(): Promise<void> {
     this.stopHealthChecking();
-    
-    const cleanupPromises = Array.from(this.adaptors.keys()).map(id => 
-      this.unregister(id)
-    );
-    
+
+    const cleanupPromises = Array.from(this.adaptors.keys()).map(id => this.unregister(id));
+
     await Promise.all(cleanupPromises);
-    
+
     this.logger.info('Adaptor registry destroyed');
   }
 }

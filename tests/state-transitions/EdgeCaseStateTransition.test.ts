@@ -16,15 +16,15 @@ describe('Edge Case State Transition Tests', () => {
   beforeEach(async () => {
     testStateFile = path.join(__dirname, '..', '..', 'test-data', `edge-case-state-${Date.now()}.json`);
     await fs.mkdir(path.dirname(testStateFile), { recursive: true });
-    
+
     const initialState = {
       meta: { cycle: 1, updated: new Date().toISOString() },
       tasks: {},
-      assignments: {}
+      assignments: {},
     };
-    
+
     await fs.writeFile(testStateFile, JSON.stringify(initialState, null, 2));
-    
+
     framework = new StateTransitionTestFramework(testStateFile);
     stateLock = new StateLock(testStateFile);
     framework.defineTaskStates();
@@ -43,12 +43,12 @@ describe('Edge Case State Transition Tests', () => {
   describe('Malformed Task Data', () => {
     it('should handle task with missing required fields', async () => {
       const taskId = 'malformed-task-1';
-      
+
       // Create task with minimal/missing data
       await stateLock.transaction(state => {
         state.tasks[taskId] = {
           id: taskId,
-          status: 'IN_PROGRESS'
+          status: 'IN_PROGRESS',
           // Missing title, epic, created timestamp, assignee
         };
       });
@@ -67,13 +67,13 @@ describe('Edge Case State Transition Tests', () => {
 
     it('should handle task with null/undefined status', async () => {
       const taskId = 'null-status-task';
-      
+
       await stateLock.transaction(state => {
         state.tasks[taskId] = {
           id: taskId,
           title: 'Test Task',
           status: null,
-          epic: 'E18'
+          epic: 'E18',
         };
       });
 
@@ -87,13 +87,13 @@ describe('Edge Case State Transition Tests', () => {
 
     it('should handle task with invalid status value', async () => {
       const taskId = 'invalid-status-task';
-      
+
       await stateLock.transaction(state => {
         state.tasks[taskId] = {
           id: taskId,
           title: 'Test Task',
           status: 'INVALID_STATE',
-          epic: 'E18'
+          epic: 'E18',
         };
       });
 
@@ -107,28 +107,25 @@ describe('Edge Case State Transition Tests', () => {
 
     it('should handle circular references in task data', async () => {
       const taskId = 'circular-ref-task';
-      
+
       await stateLock.transaction(state => {
         const task = {
           id: taskId,
           title: 'Circular Reference Task',
           status: 'UNASSIGNED',
           epic: 'E18',
-          created: new Date().toISOString()
+          created: new Date().toISOString(),
         };
-        
+
         // Create circular reference (this tests JSON serialization)
         (task as any).self = task;
         state.tasks[taskId] = task;
       });
 
       // This should handle the circular reference gracefully
-      const event = await framework.testValidTransition(
-        taskId,
-        'UNASSIGNED',
-        'IN_PROGRESS', 
-        { assignee: 'test-agent' }
-      );
+      const event = await framework.testValidTransition(taskId, 'UNASSIGNED', 'IN_PROGRESS', {
+        assignee: 'test-agent',
+      });
 
       expect(event.success).toBe(true);
     });
@@ -139,12 +136,9 @@ describe('Edge Case State Transition Tests', () => {
       await fs.unlink(testStateFile);
 
       // Framework should create new state or handle missing file
-      const event = await framework.testValidTransition(
-        'new-task',
-        'UNASSIGNED',
-        'IN_PROGRESS',
-        { assignee: 'test-agent' }
-      );
+      const event = await framework.testValidTransition('new-task', 'UNASSIGNED', 'IN_PROGRESS', {
+        assignee: 'test-agent',
+      });
 
       expect(event.success).toBe(true);
     });
@@ -163,12 +157,9 @@ describe('Edge Case State Transition Tests', () => {
     it('should handle state file with missing structure', async () => {
       await fs.writeFile(testStateFile, JSON.stringify({ someField: 'value' }));
 
-      const event = await framework.testValidTransition(
-        'new-task',
-        'UNASSIGNED',
-        'IN_PROGRESS',
-        { assignee: 'test-agent' }
-      );
+      const event = await framework.testValidTransition('new-task', 'UNASSIGNED', 'IN_PROGRESS', {
+        assignee: 'test-agent',
+      });
 
       expect(event.success).toBe(true);
     });
@@ -177,7 +168,7 @@ describe('Edge Case State Transition Tests', () => {
       const corruptState = {
         meta: { cycle: 1, updated: new Date().toISOString() },
         tasks: 'not an object', // Should be object
-        assignments: {}
+        assignments: {},
       };
 
       await fs.writeFile(testStateFile, JSON.stringify(corruptState));
@@ -194,14 +185,14 @@ describe('Edge Case State Transition Tests', () => {
   describe('Extreme Load and Timing', () => {
     it('should handle rapid-fire transitions on same task', async () => {
       const taskId = 'rapid-fire-task';
-      
+
       await stateLock.transaction(state => {
         state.tasks[taskId] = {
           id: taskId,
           title: 'Rapid Fire Task',
           status: 'UNASSIGNED',
           epic: 'E18',
-          created: new Date().toISOString()
+          created: new Date().toISOString(),
         };
       });
 
@@ -209,15 +200,15 @@ describe('Edge Case State Transition Tests', () => {
       const promises = [
         framework.testValidTransition(taskId, 'UNASSIGNED', 'IN_PROGRESS', { assignee: 'agent1' }),
         framework.testValidTransition(taskId, 'UNASSIGNED', 'CANCELLED', { reason: 'cancel' }),
-        framework.testValidTransition(taskId, 'UNASSIGNED', 'IN_PROGRESS', { assignee: 'agent2' })
+        framework.testValidTransition(taskId, 'UNASSIGNED', 'IN_PROGRESS', { assignee: 'agent2' }),
       ];
 
       const results = await Promise.allSettled(promises);
-      
+
       // Only one should succeed due to state locks
       const successes = results.filter(r => r.status === 'fulfilled').length;
       const failures = results.filter(r => r.status === 'rejected').length;
-      
+
       expect(successes).toBe(1);
       expect(failures).toBe(2);
     });
@@ -231,23 +222,18 @@ describe('Edge Case State Transition Tests', () => {
         promises.push(
           (async () => {
             const taskId = `micro-timing-task-${i}`;
-            
+
             await stateLock.transaction(state => {
               state.tasks[taskId] = {
                 id: taskId,
                 title: `Micro Timing Task ${i}`,
                 status: 'UNASSIGNED',
                 epic: 'E18',
-                created: new Date().toISOString()
+                created: new Date().toISOString(),
               };
             });
 
-            return framework.testValidTransition(
-              taskId,
-              'UNASSIGNED', 
-              'IN_PROGRESS',
-              { assignee: `agent-${i}` }
-            );
+            return framework.testValidTransition(taskId, 'UNASSIGNED', 'IN_PROGRESS', { assignee: `agent-${i}` });
           })()
         );
       }
@@ -269,7 +255,7 @@ describe('Edge Case State Transition Tests', () => {
     it('should handle very large task objects', async () => {
       const taskId = 'large-task';
       const largeData = 'x'.repeat(1000000); // 1MB string
-      
+
       await stateLock.transaction(state => {
         state.tasks[taskId] = {
           id: taskId,
@@ -280,17 +266,14 @@ describe('Edge Case State Transition Tests', () => {
           largeField: largeData,
           metadata: {
             description: largeData,
-            notes: largeData
-          }
+            notes: largeData,
+          },
         };
       });
 
-      const event = await framework.testValidTransition(
-        taskId,
-        'UNASSIGNED',
-        'IN_PROGRESS',
-        { assignee: 'test-agent' }
-      );
+      const event = await framework.testValidTransition(taskId, 'UNASSIGNED', 'IN_PROGRESS', {
+        assignee: 'test-agent',
+      });
 
       expect(event.success).toBe(true);
 
@@ -301,16 +284,16 @@ describe('Edge Case State Transition Tests', () => {
 
     it('should handle tasks with deeply nested structures', async () => {
       const taskId = 'nested-task';
-      
+
       // Create deeply nested structure
       const deeplyNested: any = { level: 0 };
       let current = deeplyNested;
-      
+
       for (let i = 1; i <= 100; i++) {
         current.next = { level: i };
         current = current.next;
       }
-      
+
       await stateLock.transaction(state => {
         state.tasks[taskId] = {
           id: taskId,
@@ -318,23 +301,20 @@ describe('Edge Case State Transition Tests', () => {
           status: 'UNASSIGNED',
           epic: 'E18',
           created: new Date().toISOString(),
-          nestedData: deeplyNested
+          nestedData: deeplyNested,
         };
       });
 
-      const event = await framework.testValidTransition(
-        taskId,
-        'UNASSIGNED',
-        'IN_PROGRESS',
-        { assignee: 'test-agent' }
-      );
+      const event = await framework.testValidTransition(taskId, 'UNASSIGNED', 'IN_PROGRESS', {
+        assignee: 'test-agent',
+      });
 
       expect(event.success).toBe(true);
     });
 
     it('should handle state with thousands of tasks', async () => {
       const taskCount = 1000;
-      
+
       // Create many tasks at once
       await stateLock.transaction(state => {
         for (let i = 0; i < taskCount; i++) {
@@ -343,19 +323,16 @@ describe('Edge Case State Transition Tests', () => {
             title: `Bulk Task ${i}`,
             status: 'UNASSIGNED',
             epic: 'E18',
-            created: new Date().toISOString()
+            created: new Date().toISOString(),
           };
         }
       });
 
       // Transition a specific task
       const targetTask = 'bulk-task-500';
-      const event = await framework.testValidTransition(
-        targetTask,
-        'UNASSIGNED',
-        'IN_PROGRESS',
-        { assignee: 'test-agent' }
-      );
+      const event = await framework.testValidTransition(targetTask, 'UNASSIGNED', 'IN_PROGRESS', {
+        assignee: 'test-agent',
+      });
 
       expect(event.success).toBe(true);
 
@@ -378,23 +355,20 @@ describe('Edge Case State Transition Tests', () => {
 
     it('should handle very long task IDs', async () => {
       const longTaskId = 'task-' + 'x'.repeat(10000);
-      
+
       await stateLock.transaction(state => {
         state.tasks[longTaskId] = {
           id: longTaskId,
           title: 'Long ID Task',
           status: 'UNASSIGNED',
           epic: 'E18',
-          created: new Date().toISOString()
+          created: new Date().toISOString(),
         };
       });
 
-      const event = await framework.testValidTransition(
-        longTaskId,
-        'UNASSIGNED',
-        'IN_PROGRESS',
-        { assignee: 'test-agent' }
-      );
+      const event = await framework.testValidTransition(longTaskId, 'UNASSIGNED', 'IN_PROGRESS', {
+        assignee: 'test-agent',
+      });
 
       expect(event.success).toBe(true);
     });
@@ -402,7 +376,7 @@ describe('Edge Case State Transition Tests', () => {
     it('should handle special characters in task data', async () => {
       const taskId = 'special-char-task';
       const specialChars = '!@#$%^&*()_+-={}[]|\\:";\'<>?,./';
-      
+
       await stateLock.transaction(state => {
         state.tasks[taskId] = {
           id: taskId,
@@ -410,19 +384,14 @@ describe('Edge Case State Transition Tests', () => {
           status: 'UNASSIGNED',
           epic: 'E18',
           created: new Date().toISOString(),
-          specialField: specialChars
+          specialField: specialChars,
         };
       });
 
-      const event = await framework.testValidTransition(
-        taskId,
-        'UNASSIGNED',
-        'IN_PROGRESS',
-        { 
-          assignee: 'test-agent',
-          notes: `Notes with ${specialChars}` 
-        }
-      );
+      const event = await framework.testValidTransition(taskId, 'UNASSIGNED', 'IN_PROGRESS', {
+        assignee: 'test-agent',
+        notes: `Notes with ${specialChars}`,
+      });
 
       expect(event.success).toBe(true);
     });
@@ -430,26 +399,21 @@ describe('Edge Case State Transition Tests', () => {
     it('should handle Unicode and emoji in task data', async () => {
       const taskId = 'unicode-task';
       const unicodeText = '🚀 测试 العربية русский 日本語 𝕌𝕟𝕚𝕔𝕠𝕕𝕖';
-      
+
       await stateLock.transaction(state => {
         state.tasks[taskId] = {
           id: taskId,
           title: `Unicode Task ${unicodeText}`,
           status: 'UNASSIGNED',
           epic: 'E18',
-          created: new Date().toISOString()
+          created: new Date().toISOString(),
         };
       });
 
-      const event = await framework.testValidTransition(
-        taskId,
-        'UNASSIGNED',
-        'IN_PROGRESS',
-        { 
-          assignee: 'test-agent',
-          description: unicodeText
-        }
-      );
+      const event = await framework.testValidTransition(taskId, 'UNASSIGNED', 'IN_PROGRESS', {
+        assignee: 'test-agent',
+        description: unicodeText,
+      });
 
       expect(event.success).toBe(true);
 
@@ -462,7 +426,7 @@ describe('Edge Case State Transition Tests', () => {
   describe('Time-based Edge Cases', () => {
     it('should handle transitions at exact midnight boundaries', async () => {
       const taskId = 'midnight-task';
-      
+
       // Mock system time to be near midnight
       const originalNow = Date.now;
       Date.now = jest.fn(() => new Date('2023-12-31T23:59:59.999Z').getTime());
@@ -474,16 +438,13 @@ describe('Edge Case State Transition Tests', () => {
             title: 'Midnight Task',
             status: 'UNASSIGNED',
             epic: 'E18',
-            created: new Date().toISOString()
+            created: new Date().toISOString(),
           };
         });
 
-        const event = await framework.testValidTransition(
-          taskId,
-          'UNASSIGNED',
-          'IN_PROGRESS',
-          { assignee: 'midnight-agent' }
-        );
+        const event = await framework.testValidTransition(taskId, 'UNASSIGNED', 'IN_PROGRESS', {
+          assignee: 'midnight-agent',
+        });
 
         expect(event.success).toBe(true);
         expect(event.timestamp).toContain('23:59:59');
@@ -494,46 +455,40 @@ describe('Edge Case State Transition Tests', () => {
 
     it('should handle transitions with leap year timestamps', async () => {
       const taskId = 'leap-year-task';
-      
+
       await stateLock.transaction(state => {
         state.tasks[taskId] = {
           id: taskId,
           title: 'Leap Year Task',
           status: 'UNASSIGNED',
           epic: 'E18',
-          created: '2024-02-29T12:00:00.000Z' // Leap year date
+          created: '2024-02-29T12:00:00.000Z', // Leap year date
         };
       });
 
-      const event = await framework.testValidTransition(
-        taskId,
-        'UNASSIGNED',
-        'IN_PROGRESS',
-        { assignee: 'leap-agent' }
-      );
+      const event = await framework.testValidTransition(taskId, 'UNASSIGNED', 'IN_PROGRESS', {
+        assignee: 'leap-agent',
+      });
 
       expect(event.success).toBe(true);
     });
 
     it('should handle historical timestamps (far past)', async () => {
       const taskId = 'historical-task';
-      
+
       await stateLock.transaction(state => {
         state.tasks[taskId] = {
           id: taskId,
           title: 'Historical Task',
           status: 'UNASSIGNED',
           epic: 'E18',
-          created: '1970-01-01T00:00:01.000Z' // Near Unix epoch
+          created: '1970-01-01T00:00:01.000Z', // Near Unix epoch
         };
       });
 
-      const event = await framework.testValidTransition(
-        taskId,
-        'UNASSIGNED',
-        'IN_PROGRESS',
-        { assignee: 'historical-agent' }
-      );
+      const event = await framework.testValidTransition(taskId, 'UNASSIGNED', 'IN_PROGRESS', {
+        assignee: 'historical-agent',
+      });
 
       expect(event.success).toBe(true);
     });
@@ -543,7 +498,7 @@ describe('Edge Case State Transition Tests', () => {
     it('should handle cyclic task references', async () => {
       const taskId1 = 'cyclic-task-1';
       const taskId2 = 'cyclic-task-2';
-      
+
       await stateLock.transaction(state => {
         state.tasks[taskId1] = {
           id: taskId1,
@@ -551,33 +506,23 @@ describe('Edge Case State Transition Tests', () => {
           status: 'UNASSIGNED',
           epic: 'E18',
           created: new Date().toISOString(),
-          dependsOn: taskId2
+          dependsOn: taskId2,
         };
-        
+
         state.tasks[taskId2] = {
           id: taskId2,
           title: 'Cyclic Task 2',
           status: 'UNASSIGNED',
           epic: 'E18',
           created: new Date().toISOString(),
-          dependsOn: taskId1 // Creates cycle
+          dependsOn: taskId1, // Creates cycle
         };
       });
 
       // Both transitions should work despite the cycle
-      const event1 = await framework.testValidTransition(
-        taskId1,
-        'UNASSIGNED',
-        'IN_PROGRESS',
-        { assignee: 'agent1' }
-      );
-      
-      const event2 = await framework.testValidTransition(
-        taskId2,
-        'UNASSIGNED',
-        'IN_PROGRESS',
-        { assignee: 'agent2' }
-      );
+      const event1 = await framework.testValidTransition(taskId1, 'UNASSIGNED', 'IN_PROGRESS', { assignee: 'agent1' });
+
+      const event2 = await framework.testValidTransition(taskId2, 'UNASSIGNED', 'IN_PROGRESS', { assignee: 'agent2' });
 
       expect(event1.success).toBe(true);
       expect(event2.success).toBe(true);
@@ -586,7 +531,7 @@ describe('Edge Case State Transition Tests', () => {
     it('should maintain referential integrity across transitions', async () => {
       const parentTaskId = 'parent-task';
       const childTaskId = 'child-task';
-      
+
       await stateLock.transaction(state => {
         state.tasks[parentTaskId] = {
           id: parentTaskId,
@@ -594,26 +539,21 @@ describe('Edge Case State Transition Tests', () => {
           status: 'UNASSIGNED',
           epic: 'E18',
           created: new Date().toISOString(),
-          children: [childTaskId]
+          children: [childTaskId],
         };
-        
+
         state.tasks[childTaskId] = {
           id: childTaskId,
           title: 'Child Task',
           status: 'UNASSIGNED',
           epic: 'E18',
           created: new Date().toISOString(),
-          parent: parentTaskId
+          parent: parentTaskId,
         };
       });
 
       // Transition parent task
-      await framework.testValidTransition(
-        parentTaskId,
-        'UNASSIGNED',
-        'IN_PROGRESS',
-        { assignee: 'parent-agent' }
-      );
+      await framework.testValidTransition(parentTaskId, 'UNASSIGNED', 'IN_PROGRESS', { assignee: 'parent-agent' });
 
       // Verify child task reference is maintained
       const state = await stateLock.readState();

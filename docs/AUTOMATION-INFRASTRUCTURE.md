@@ -9,12 +9,14 @@ This document provides comprehensive documentation for the unified automation in
 The automation infrastructure consists of four foundational utilities and five consolidated systems working together as a cohesive automation platform:
 
 ### Foundation Layer
+
 - **StateLock**: Atomic state management with transaction support
 - **AutomationLogger**: Comprehensive logging with structured output
 - **ConfigManager**: Standardized configuration management
 - **Database Schema v2.0.0**: Enhanced indexing for epic/story management
 
 ### Automation Systems Layer
+
 - **Epic Creation System**: Unified task creation and batch management
 - **Analytics Dashboard**: Consolidated system analysis and reporting
 - **Fix System**: Modular repair and maintenance automation
@@ -28,12 +30,14 @@ The automation infrastructure consists of four foundational utilities and five c
 **Purpose**: Provides atomic state management with proper locking to prevent race conditions in concurrent automation operations.
 
 **Key Features**:
+
 - Atomic transactions with automatic rollback
 - High-level task management methods
 - Assignment management with consistency checks
 - Retry logic with exponential backoff
 
 **Usage**:
+
 ```javascript
 const { StateLock } = require('./utils/StateLock');
 const stateLock = new StateLock();
@@ -46,6 +50,7 @@ await stateLock.transaction(state => {
 ```
 
 **API Methods**:
+
 - `transaction(fn)` - Execute atomic state changes
 - `updateTask(taskId, updates)` - High-level task updates
 - `assignTask(taskId, assignee)` - Safe task assignment
@@ -56,17 +61,19 @@ await stateLock.transaction(state => {
 **Purpose**: Comprehensive logging framework with structured output and performance tracking.
 
 **Key Features**:
+
 - Multiple log levels (debug, info, warn, error)
 - QA-specific methods (qaStart, qaApprove, qaReject)
 - Performance measurement with timing
 - File rotation and error handling
 
 **Usage**:
+
 ```javascript
 const { getLogger } = require('./utils/AutomationLogger');
 const logger = getLogger('my-script', {
   logLevel: 'info',
-  enableLogging: true
+  enableLogging: true,
 });
 
 logger.start('Operation started');
@@ -75,8 +82,9 @@ logger.finish('Operation completed');
 ```
 
 **Log Methods**:
+
 - `start(message, data)` - Start operation logging
-- `finish(message, data)` - Complete operation logging  
+- `finish(message, data)` - Complete operation logging
 - `taskStart/taskComplete` - Task-specific logging
 - `qaApprove/qaReject` - QA workflow logging
 - `measureExecution(fn)` - Performance measurement
@@ -86,12 +94,14 @@ logger.finish('Operation completed');
 **Purpose**: Standardized configuration management with environment variable support and validation.
 
 **Key Features**:
+
 - JSON configuration files with environment overrides
 - Hot-reload capabilities
 - Configuration validation and caching
 - Multiple configuration sections
 
 **Usage**:
+
 ```javascript
 const { getConfigManager } = require('./utils/ConfigManager');
 const configManager = getConfigManager();
@@ -103,6 +113,7 @@ const logLevel = automationConfig.logLevel;
 ```
 
 **Configuration Files**:
+
 - `src/config/automation.json` - Automation settings
 - `src/config/qa.json` - QA workflow configuration
 
@@ -111,12 +122,14 @@ const logLevel = automationConfig.logLevel;
 **Purpose**: Enhanced database schema with epic/story indexing and markdown integration for 5,906+ tasks.
 
 **Key Enhancements**:
+
 - Epic/story metadata for all tasks
 - Performance indexes for fast sorting/filtering
 - Search optimization with keyword categorization
 - API endpoints for dashboard integration
 
 **Usage**:
+
 ```bash
 node src/enhance-database-schema.js --migrate
 node src/enhance-database-schema.js --validate
@@ -132,12 +145,14 @@ node src/enhance-database-schema.js --validate
 **Purpose**: Unified system for creating epic tasks with intelligent parsing and batch processing.
 
 **Features**:
+
 - Supports all epics (6-29) with metadata
 - Intelligent task parsing and estimation
 - Batch processing with filtering capabilities
 - Dry-run mode for safe preview
 
 **Usage**:
+
 ```bash
 # Create tasks for specific epic
 node src/create-epic-tasks-unified.js 20 --story="20.1"
@@ -147,10 +162,11 @@ node src/create-epic-batch-manager.js --epic-range="18-21" --priority=high --dry
 ```
 
 **Epic Metadata**:
+
 ```javascript
 const EPIC_METADATA = {
-  18: { title: "Security Vulnerability Assessment", category: "security" },
-  20: { title: "Authentication System", category: "auth" },
+  18: { title: 'Security Vulnerability Assessment', category: 'security' },
+  20: { title: 'Authentication System', category: 'auth' },
   // ... all epics defined
 };
 ```
@@ -163,14 +179,16 @@ const EPIC_METADATA = {
 **Purpose**: Comprehensive system analysis with multiple reporting modes and export capabilities.
 
 **Modes Available**:
+
 - `overview` - System-wide statistics and health
-- `epics` - Epic progress and completion analysis  
+- `epics` - Epic progress and completion analysis
 - `assignments` - Agent workload and distribution
 - `distribution` - Priority and category analysis
 - `performance` - System performance metrics
 - `health` - Health monitoring and diagnostics
 
 **Usage**:
+
 ```bash
 # Full system overview
 node src/analyze-system.js overview
@@ -190,13 +208,15 @@ node src/analyze-system.js performance
 **Purpose**: Modular repair system with comprehensive health checking and automated fixes.
 
 **Modules**:
+
 - `completed-tasks` - Move completed tasks to REVIEW
-- `epic-assignments` - Assign missing epic classifications  
+- `epic-assignments` - Assign missing epic classifications
 - `rejected-tasks` - Fix QA rejected tasks
 - `specific-fixes` - Targeted repairs for individual tasks
 - `data-integrity` - Fix missing fields and consistency
 
 **Usage**:
+
 ```bash
 # System health check
 node src/fix-system.js --health-check
@@ -212,6 +232,7 @@ node src/fix-system.js --target T-12345 --verbose
 ```
 
 **Health Scoring**:
+
 - 100-90: Excellent system health
 - 89-70: Good health with minor issues
 - 69-50: Moderate health, attention needed
@@ -225,6 +246,7 @@ node src/fix-system.js --target T-12345 --verbose
 **Purpose**: Real-time monitoring dashboard with agent compliance tracking and system health scoring.
 
 **Monitoring Modes**:
+
 - `full` - Complete dashboard with all sections
 - `agents` - Agent workflow compliance and violations
 - `tasks` - Task allocation and priority management
@@ -232,6 +254,7 @@ node src/fix-system.js --target T-12345 --verbose
 - `health` - System health overview and recommendations
 
 **Usage**:
+
 ```bash
 # Full monitoring dashboard
 node src/monitor-system.js
@@ -247,6 +270,7 @@ node src/monitor-system.js --export
 ```
 
 **Key Metrics**:
+
 - System health score (0-100)
 - Agent workflow compliance (percentage)
 - Task state distribution
@@ -260,14 +284,16 @@ node src/monitor-system.js --export
 **Purpose**: Intelligent automation workflow chaining with conditional execution and error recovery.
 
 **Predefined Workflows**:
+
 - `daily-maintenance` - Daily system health and maintenance (5 steps)
 - `epic-completion` - Complete epic workflow with documentation (5 steps)
 - `qa-pipeline` - QA processing pipeline with validation (5 steps)
-- `health-check` - System health assessment and repair (5 steps)  
+- `health-check` - System health assessment and repair (5 steps)
 - `full-automation` - Complete automation suite execution (5 steps)
 - `priority-setup` - Priority task setup with parallel execution (3 steps)
 
 **Usage**:
+
 ```bash
 # List available workflows
 node src/workflow-orchestrator.js --list
@@ -283,6 +309,7 @@ node src/workflow-orchestrator.js --custom my-workflow.json
 ```
 
 **Workflow Features**:
+
 - Sequential and parallel execution modes
 - Conditional step execution based on system state
 - Error recovery with checkpoints and rollback
@@ -292,6 +319,7 @@ node src/workflow-orchestrator.js --custom my-workflow.json
 ## 📊 System Metrics & Performance
 
 ### Current System Health
+
 - **Overall Health Score**: 93-96/100
 - **Total Tasks Managed**: 5,906
 - **Agent Compliance**: 98%
@@ -299,6 +327,7 @@ node src/workflow-orchestrator.js --custom my-workflow.json
 - **Code Reduction**: 85-99.7% across all systems
 
 ### Performance Benchmarks
+
 - Epic task creation: 5,903 tasks processed in <2 seconds
 - Health check execution: Complete system scan in <30 seconds
 - Analytics generation: Full system analysis in <60 seconds
@@ -306,6 +335,7 @@ node src/workflow-orchestrator.js --custom my-workflow.json
 - Monitoring updates: Real-time dashboard refresh in <5 seconds
 
 ### Resource Usage
+
 - Memory footprint: Optimized for concurrent operations
 - CPU usage: Efficient batch processing with configurable limits
 - Disk I/O: Atomic writes with proper locking mechanisms
@@ -314,21 +344,25 @@ node src/workflow-orchestrator.js --custom my-workflow.json
 ## 🔄 Common Workflows
 
 ### Daily Maintenance Workflow
+
 ```bash
 # Automated daily maintenance
 node src/workflow-orchestrator.js --workflow daily-maintenance
 ```
+
 1. System health check
 2. Fix workflow violations (if any)
 3. Update epic assignments
 4. Process QA reviews (if pending)
 5. Generate monitoring report
 
-### Epic Completion Workflow  
+### Epic Completion Workflow
+
 ```bash
 # Complete epic processing
 node src/workflow-orchestrator.js --workflow epic-completion
 ```
+
 1. Analyze epic progress
 2. Move completed tasks to review
 3. Process QA reviews
@@ -336,10 +370,12 @@ node src/workflow-orchestrator.js --workflow epic-completion
 5. Generate epic completion report
 
 ### QA Processing Pipeline
+
 ```bash
 # Full QA automation
-node src/workflow-orchestrator.js --workflow qa-pipeline  
+node src/workflow-orchestrator.js --workflow qa-pipeline
 ```
+
 1. Detect completed tasks
 2. Move tasks to review (if any detected)
 3. Execute QA reviews
@@ -351,18 +387,21 @@ node src/workflow-orchestrator.js --workflow qa-pipeline
 ### Common Issues and Solutions
 
 **Issue**: Tasks stuck in IN_PROGRESS state
+
 ```bash
 # Solution: Use fix system to detect and move completed tasks
 node src/fix-system.js --module completed-tasks
 ```
 
 **Issue**: Assignment inconsistencies
+
 ```bash
 # Solution: Run data integrity fixes
 node src/fix-system.js --module data-integrity
 ```
 
 **Issue**: Low system health score
+
 ```bash
 # Solution: Run comprehensive health check and fixes
 node src/fix-system.js --health-check
@@ -370,6 +409,7 @@ node src/fix-system.js --all
 ```
 
 **Issue**: Epic assignments missing
+
 ```bash
 # Solution: Update epic assignments
 node src/fix-system.js --module epic-assignments
@@ -385,6 +425,7 @@ node src/fix-system.js --module epic-assignments
 ## 📝 Configuration Reference
 
 ### Automation Configuration (`src/config/automation.json`)
+
 ```json
 {
   "maxRetries": 5,
@@ -399,6 +440,7 @@ node src/fix-system.js --module epic-assignments
 ```
 
 ### QA Configuration (`src/config/qa.json`)
+
 ```json
 {
   "reviewTimeout": 300000,
@@ -409,6 +451,7 @@ node src/fix-system.js --module epic-assignments
 ```
 
 ### Environment Variables
+
 - `AUTOMATION_LOG_LEVEL`: Override log level (debug, info, warn, error)
 - `AUTOMATION_BATCH_SIZE`: Override batch processing size
 - `AUTOMATION_MAX_RETRIES`: Override retry attempts
@@ -417,12 +460,14 @@ node src/fix-system.js --module epic-assignments
 ## 🔒 Security Considerations
 
 ### State Management Security
+
 - Atomic transactions prevent data corruption
 - File-based locking with proper-lockfile
 - No external network dependencies for core operations
 - Input validation and sanitization
 
 ### Access Control
+
 - All operations require proper file system permissions
 - No elevated privileges required
 - Audit logging for all state changes
@@ -431,12 +476,14 @@ node src/fix-system.js --module epic-assignments
 ## 🧪 Testing & Validation
 
 ### Automated Testing
+
 - Comprehensive health checks with 96/100 score validation
 - Dry-run modes for safe operation preview
 - Integration testing with real system state
 - Performance benchmarking and regression testing
 
 ### Manual Validation
+
 ```bash
 # Validate system health
 node src/fix-system.js --health-check
@@ -451,17 +498,20 @@ node src/workflow-orchestrator.js --workflow health-check --dry-run
 ## 📚 Additional Resources
 
 ### Related Documentation
+
 - `CLAUDE.md` - Development guidance and common commands
 - `docs/TASK-COMPLETION-WORKFLOW.md` - Task completion procedures
 - `docs/QA-AUTOMATION-GUIDE.md` - QA workflow documentation
 
 ### API Documentation
+
 - `src/api-examples.json` - Database API endpoints and examples
 - Individual script help: Use `--help` flag with any automation script
 
 ### Support Files
+
 - Ticket creation scripts for documentation and tracking
-- Performance monitoring and analytics utilities  
+- Performance monitoring and analytics utilities
 - Integration examples and usage patterns
 
 ---
@@ -476,7 +526,7 @@ node src/workflow-orchestrator.js --workflow daily-maintenance
 node src/fix-system.js --health-check
 node src/monitor-system.js --mode health
 
-# Task Management  
+# Task Management
 node src/fix-system.js --all
 node src/create-epic-tasks-unified.js [epic-number]
 

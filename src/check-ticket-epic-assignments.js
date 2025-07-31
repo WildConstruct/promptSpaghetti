@@ -21,7 +21,7 @@ const examples = {
   story: [],
   tags: [],
   source: [],
-  untagged: []
+  untagged: [],
 };
 
 tasks.forEach(task => {
@@ -29,17 +29,17 @@ tasks.forEach(task => {
     withStoryField++;
     if (examples.story.length < 5) examples.story.push(task);
   }
-  
+
   if (task.tags && task.tags.length > 0) {
     withTagsField++;
     if (examples.tags.length < 5) examples.tags.push(task);
   }
-  
+
   if (task.metadata && task.metadata.source) {
     withSourceField++;
     if (examples.source.length < 5) examples.source.push(task);
   }
-  
+
   if (!task.story && (!task.tags || task.tags.length === 0) && (!task.metadata || !task.metadata.source)) {
     completelyUntagged++;
     if (examples.untagged.length < 10) examples.untagged.push(task);
@@ -47,10 +47,14 @@ tasks.forEach(task => {
 });
 
 console.log('📊 EPIC ASSIGNMENT STATUS:');
-console.log(`   📖 Tasks with story field: ${withStoryField} (${Math.round(withStoryField/tasks.length*100)}%)`);
-console.log(`   🏷️  Tasks with tags field: ${withTagsField} (${Math.round(withTagsField/tasks.length*100)}%)`);
-console.log(`   📋 Tasks with source field: ${withSourceField} (${Math.round(withSourceField/tasks.length*100)}%)`);
-console.log(`   ❌ Completely untagged: ${completelyUntagged} (${Math.round(completelyUntagged/tasks.length*100)}%)`);
+console.log(`   📖 Tasks with story field: ${withStoryField} (${Math.round((withStoryField / tasks.length) * 100)}%)`);
+console.log(`   🏷️  Tasks with tags field: ${withTagsField} (${Math.round((withTagsField / tasks.length) * 100)}%)`);
+console.log(
+  `   📋 Tasks with source field: ${withSourceField} (${Math.round((withSourceField / tasks.length) * 100)}%)`
+);
+console.log(
+  `   ❌ Completely untagged: ${completelyUntagged} (${Math.round((completelyUntagged / tasks.length) * 100)}%)`
+);
 
 console.log('\n🔍 EXAMPLES OF EACH CATEGORY:\n');
 
@@ -88,11 +92,15 @@ examples.untagged.forEach(task => {
 
 console.log('\n🎯 DIAGNOSIS:');
 if (completelyUntagged > tasks.length * 0.8) {
-  console.log(`❌ MAJOR PROBLEM: ${Math.round(completelyUntagged/tasks.length*100)}% of tickets have no epic assignments!`);
+  console.log(
+    `❌ MAJOR PROBLEM: ${Math.round((completelyUntagged / tasks.length) * 100)}% of tickets have no epic assignments!`
+  );
   console.log('   The tickets themselves are not properly tagged with their source epic.');
-  console.log('   This means agents can\'t filter by epic and the dashboard can\'t show proper categories.');
+  console.log("   This means agents can't filter by epic and the dashboard can't show proper categories.");
 } else if (completelyUntagged > tasks.length * 0.5) {
-  console.log(`⚠️  MODERATE PROBLEM: ${Math.round(completelyUntagged/tasks.length*100)}% of tickets lack epic assignments.`);
+  console.log(
+    `⚠️  MODERATE PROBLEM: ${Math.round((completelyUntagged / tasks.length) * 100)}% of tickets lack epic assignments.`
+  );
 } else {
   console.log('✅ GOOD: Most tickets have proper epic assignments.');
 }

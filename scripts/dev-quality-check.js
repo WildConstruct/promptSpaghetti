@@ -2,7 +2,7 @@
 
 /**
  * Development Quality Check Script
- * 
+ *
  * Automated quality validation tool for developers to run before commits.
  * Integrates all quality improvements into a single workflow.
  */
@@ -20,7 +20,7 @@ const colors = {
   blue: '\x1b[34m',
   magenta: '\x1b[35m',
   cyan: '\x1b[36m',
-  bold: '\x1b[1m'
+  bold: '\x1b[1m',
 };
 
 class QualityChecker {
@@ -30,7 +30,7 @@ class QualityChecker {
       performance: { passed: 0, failed: 0, issues: [] },
       accessibility: { passed: 0, failed: 0, issues: [] },
       testing: { passed: 0, failed: 0, issues: [] },
-      linting: { passed: 0, failed: 0, issues: [] }
+      linting: { passed: 0, failed: 0, issues: [] },
     };
     this.startTime = Date.now();
   }
@@ -54,24 +54,24 @@ class QualityChecker {
 
   async runSecurityChecks() {
     this.logHeader('Security Validation');
-    
+
     const checks = [
       {
         name: 'Check for dangerous patterns',
-        run: () => this.scanForDangerousPatterns()
+        run: () => this.scanForDangerousPatterns(),
       },
       {
         name: 'Validate security utilities',
-        run: () => this.validateSecurityUtils()
+        run: () => this.validateSecurityUtils(),
       },
       {
         name: 'Check for hardcoded secrets',
-        run: () => this.scanForSecrets()
+        run: () => this.scanForSecrets(),
       },
       {
         name: 'Validate input sanitization',
-        run: () => this.checkInputSanitization()
-      }
+        run: () => this.checkInputSanitization(),
+      },
     ];
 
     for (const check of checks) {
@@ -100,29 +100,29 @@ class QualityChecker {
       { pattern: /document\.write\s*\(/g, message: 'Use of document.write detected' },
       { pattern: /javascript:/gi, message: 'JavaScript URL detected' },
       { pattern: /vbscript:/gi, message: 'VBScript URL detected' },
-      { pattern: /on\w+\s*=\s*['"]/g, message: 'Inline event handler detected' }
+      { pattern: /on\w+\s*=\s*['"]/g, message: 'Inline event handler detected' },
     ];
 
     const issues = [];
     const clientDir = path.join(process.cwd(), 'client/src');
-    
+
     if (!fs.existsSync(clientDir)) {
       return { passed: true, issues: [] };
     }
 
-    const scanDirectory = (dir) => {
+    const scanDirectory = dir => {
       const files = fs.readdirSync(dir);
-      
+
       for (const file of files) {
         const filePath = path.join(dir, file);
         const stat = fs.statSync(filePath);
-        
+
         if (stat.isDirectory() && !file.startsWith('.') && file !== 'node_modules') {
           scanDirectory(filePath);
         } else if (file.match(/\.(ts|tsx|js|jsx)$/)) {
           const content = fs.readFileSync(filePath, 'utf8');
           const relativePath = path.relative(process.cwd(), filePath);
-          
+
           dangerousPatterns.forEach(({ pattern, message }) => {
             const matches = content.match(pattern);
             if (matches) {
@@ -139,7 +139,7 @@ class QualityChecker {
 
   validateSecurityUtils() {
     const securityUtilsPath = path.join(process.cwd(), 'client/src/utils/securityUtils.ts');
-    
+
     if (!fs.existsSync(securityUtilsPath)) {
       return { passed: false, issues: ['Security utilities not found'] };
     }
@@ -150,7 +150,7 @@ class QualityChecker {
       'validateUrl',
       'validateInput',
       'generateCSRFToken',
-      'validateCSRFToken'
+      'validateCSRFToken',
     ];
 
     const issues = [];
@@ -170,42 +170,43 @@ class QualityChecker {
       { pattern: /secret\s*[=:]\s*['"][^'"]{10,}/gi, message: 'Hardcoded secret' },
       { pattern: /token\s*[=:]\s*['"][^'"]{20,}/gi, message: 'Hardcoded token' },
       { pattern: /sk_[a-zA-Z0-9]{20,}/g, message: 'Stripe secret key' },
-      { pattern: /pk_[a-zA-Z0-9]{20,}/g, message: 'Stripe publishable key' }
+      { pattern: /pk_[a-zA-Z0-9]{20,}/g, message: 'Stripe publishable key' },
     ];
 
     const issues = [];
     const clientDir = path.join(process.cwd(), 'client/src');
-    
+
     if (!fs.existsSync(clientDir)) {
       return { passed: true, issues: [] };
     }
 
-    const scanDirectory = (dir) => {
+    const scanDirectory = dir => {
       const files = fs.readdirSync(dir);
-      
+
       for (const file of files) {
         const filePath = path.join(dir, file);
         const stat = fs.statSync(filePath);
-        
+
         if (stat.isDirectory() && !file.startsWith('.') && file !== 'node_modules') {
           scanDirectory(filePath);
         } else if (file.match(/\.(ts|tsx|js|jsx)$/)) {
           const content = fs.readFileSync(filePath, 'utf8');
           const relativePath = path.relative(process.cwd(), filePath);
-          
+
           secretPatterns.forEach(({ pattern, message }) => {
             const matches = content.match(pattern);
             if (matches) {
               // Filter out common false positives
-              const filtered = matches.filter(match => 
-                !match.includes('process.env') &&
-                !match.includes('import.meta.env') &&
-                !match.includes('example') &&
-                !match.includes('placeholder') &&
-                !match.includes('YOUR_') &&
-                !match.includes('xxx')
+              const filtered = matches.filter(
+                match =>
+                  !match.includes('process.env') &&
+                  !match.includes('import.meta.env') &&
+                  !match.includes('example') &&
+                  !match.includes('placeholder') &&
+                  !match.includes('YOUR_') &&
+                  !match.includes('xxx')
               );
-              
+
               if (filtered.length > 0) {
                 issues.push(`${relativePath}: ${message} detected`);
               }
@@ -222,36 +223,37 @@ class QualityChecker {
   checkInputSanitization() {
     const issues = [];
     const clientDir = path.join(process.cwd(), 'client/src');
-    
+
     if (!fs.existsSync(clientDir)) {
       return { passed: true, issues: [] };
     }
 
-    const scanDirectory = (dir) => {
+    const scanDirectory = dir => {
       const files = fs.readdirSync(dir);
-      
+
       for (const file of files) {
         const filePath = path.join(dir, file);
         const stat = fs.statSync(filePath);
-        
+
         if (stat.isDirectory() && !file.startsWith('.') && file !== 'node_modules') {
           scanDirectory(filePath);
         } else if (file.match(/\.(ts|tsx)$/)) {
           const content = fs.readFileSync(filePath, 'utf8');
           const relativePath = path.relative(process.cwd(), filePath);
-          
+
           // Check for form inputs without validation
           const formInputPattern = /<input[^>]*type\s*=\s*["'](?:text|email|url|search)[^>]*>/gi;
           const matches = content.match(formInputPattern);
-          
+
           if (matches) {
             // Check if validation is present nearby
-            const hasValidation = content.includes('validateInput') || 
-                                 content.includes('validation') ||
-                                 content.includes('sanitize') ||
-                                 content.includes('Zod') ||
-                                 content.includes('yup');
-            
+            const hasValidation =
+              content.includes('validateInput') ||
+              content.includes('validation') ||
+              content.includes('sanitize') ||
+              content.includes('Zod') ||
+              content.includes('yup');
+
             if (!hasValidation) {
               issues.push(`${relativePath}: Form inputs found without apparent validation`);
             }
@@ -266,24 +268,24 @@ class QualityChecker {
 
   async runPerformanceChecks() {
     this.logHeader('Performance Validation');
-    
+
     const checks = [
       {
         name: 'Check for performance monitoring',
-        run: () => this.checkPerformanceMonitoring()
+        run: () => this.checkPerformanceMonitoring(),
       },
       {
         name: 'Validate memory optimization',
-        run: () => this.checkMemoryOptimization()
+        run: () => this.checkMemoryOptimization(),
       },
       {
         name: 'Check for React performance patterns',
-        run: () => this.checkReactPerformance()
+        run: () => this.checkReactPerformance(),
       },
       {
         name: 'Validate image optimization',
-        run: () => this.checkImageOptimization()
-      }
+        run: () => this.checkImageOptimization(),
+      },
     ];
 
     for (const check of checks) {
@@ -307,19 +309,13 @@ class QualityChecker {
 
   checkPerformanceMonitoring() {
     const performanceMonitorPath = path.join(process.cwd(), 'client/src/utils/performanceMonitor.ts');
-    
+
     if (!fs.existsSync(performanceMonitorPath)) {
       return { passed: false, issues: ['Performance monitor not found'] };
     }
 
     const content = fs.readFileSync(performanceMonitorPath, 'utf8');
-    const requiredFeatures = [
-      'measureExecution',
-      'trackApiCall',
-      'trackInteraction',
-      'getStats',
-      'flush'
-    ];
+    const requiredFeatures = ['measureExecution', 'trackApiCall', 'trackInteraction', 'getStats', 'flush'];
 
     const issues = [];
     requiredFeatures.forEach(feature => {
@@ -333,7 +329,7 @@ class QualityChecker {
 
   checkMemoryOptimization() {
     const memoryUtilsPath = path.join(process.cwd(), 'client/src/utils/memoryOptimization.ts');
-    
+
     if (!fs.existsSync(memoryUtilsPath)) {
       return { passed: false, issues: ['Memory optimization utilities not found'] };
     }
@@ -344,7 +340,7 @@ class QualityChecker {
       'useResourceManager',
       'useVirtualScrolling',
       'useLazyLoading',
-      'useMemoryMonitoring'
+      'useMemoryMonitoring',
     ];
 
     const issues = [];
@@ -360,35 +356,35 @@ class QualityChecker {
   checkReactPerformance() {
     const issues = [];
     const clientDir = path.join(process.cwd(), 'client/src');
-    
+
     if (!fs.existsSync(clientDir)) {
       return { passed: true, issues: [] };
     }
 
-    const scanDirectory = (dir) => {
+    const scanDirectory = dir => {
       const files = fs.readdirSync(dir);
-      
+
       for (const file of files) {
         const filePath = path.join(dir, file);
         const stat = fs.statSync(filePath);
-        
+
         if (stat.isDirectory() && !file.startsWith('.') && file !== 'node_modules') {
           scanDirectory(filePath);
         } else if (file.match(/\.(tsx)$/)) {
           const content = fs.readFileSync(filePath, 'utf8');
           const relativePath = path.relative(process.cwd(), filePath);
-          
+
           // Check for missing React.memo on large components
           if (content.length > 5000 && !content.includes('React.memo') && !content.includes('memo(')) {
             issues.push(`${relativePath}: Large component without React.memo optimization`);
           }
-          
+
           // Check for inline object creation in JSX
           const inlineObjectPattern = /\w+\s*=\s*\{\{[^}]+\}\}/g;
           if (inlineObjectPattern.test(content)) {
             issues.push(`${relativePath}: Inline object creation detected - consider useMemo`);
           }
-          
+
           // Check for inline function creation in JSX
           const inlineFunctionPattern = /\w+\s*=\s*\(\s*\)\s*=>/g;
           if (inlineFunctionPattern.test(content)) {
@@ -405,31 +401,31 @@ class QualityChecker {
   checkImageOptimization() {
     const issues = [];
     const clientDir = path.join(process.cwd(), 'client/src');
-    
+
     if (!fs.existsSync(clientDir)) {
       return { passed: true, issues: [] };
     }
 
-    const scanDirectory = (dir) => {
+    const scanDirectory = dir => {
       const files = fs.readdirSync(dir);
-      
+
       for (const file of files) {
         const filePath = path.join(dir, file);
         const stat = fs.statSync(filePath);
-        
+
         if (stat.isDirectory() && !file.startsWith('.') && file !== 'node_modules') {
           scanDirectory(filePath);
         } else if (file.match(/\.(tsx|ts)$/)) {
           const content = fs.readFileSync(filePath, 'utf8');
           const relativePath = path.relative(process.cwd(), filePath);
-          
+
           // Check for img tags without lazy loading
           const imgPattern = /<img[^>]*src\s*=/gi;
           const lazyPattern = /loading\s*=\s*["']lazy["']/gi;
-          
+
           const imgMatches = content.match(imgPattern);
           const lazyMatches = content.match(lazyPattern);
-          
+
           if (imgMatches && (!lazyMatches || lazyMatches.length < imgMatches.length)) {
             issues.push(`${relativePath}: Images without lazy loading detected`);
           }
@@ -443,24 +439,24 @@ class QualityChecker {
 
   async runAccessibilityChecks() {
     this.logHeader('Accessibility Validation');
-    
+
     const checks = [
       {
         name: 'Check for ARIA attributes',
-        run: () => this.checkAriaAttributes()
+        run: () => this.checkAriaAttributes(),
       },
       {
         name: 'Validate semantic HTML',
-        run: () => this.checkSemanticHTML()
+        run: () => this.checkSemanticHTML(),
       },
       {
         name: 'Check for form accessibility',
-        run: () => this.checkFormAccessibility()
+        run: () => this.checkFormAccessibility(),
       },
       {
         name: 'Validate color contrast',
-        run: () => this.checkColorContrast()
-      }
+        run: () => this.checkColorContrast(),
+      },
     ];
 
     for (const check of checks) {
@@ -485,28 +481,28 @@ class QualityChecker {
   checkAriaAttributes() {
     const issues = [];
     const clientDir = path.join(process.cwd(), 'client/src');
-    
+
     if (!fs.existsSync(clientDir)) {
       return { passed: true, issues: [] };
     }
 
-    const scanDirectory = (dir) => {
+    const scanDirectory = dir => {
       const files = fs.readdirSync(dir);
-      
+
       for (const file of files) {
         const filePath = path.join(dir, file);
         const stat = fs.statSync(filePath);
-        
+
         if (stat.isDirectory() && !file.startsWith('.') && file !== 'node_modules') {
           scanDirectory(filePath);
         } else if (file.match(/\.(tsx)$/)) {
           const content = fs.readFileSync(filePath, 'utf8');
           const relativePath = path.relative(process.cwd(), filePath);
-          
+
           // Check for buttons without ARIA labels
           const buttonPattern = /<button[^>]*>/gi;
           const buttons = content.match(buttonPattern) || [];
-          
+
           buttons.forEach(button => {
             if (!button.includes('aria-label') && !button.includes('aria-labelledby')) {
               // Check if button has text content or is icon-only
@@ -515,11 +511,11 @@ class QualityChecker {
               }
             }
           });
-          
+
           // Check for interactive elements without proper roles
           const interactivePattern = /<div[^>]*onClick[^>]*>/gi;
           const interactiveElements = content.match(interactivePattern) || [];
-          
+
           interactiveElements.forEach(element => {
             if (!element.includes('role=') && !element.includes('tabIndex')) {
               issues.push(`${relativePath}: Interactive div without proper role/tabIndex`);
@@ -536,33 +532,33 @@ class QualityChecker {
   checkSemanticHTML() {
     const issues = [];
     const clientDir = path.join(process.cwd(), 'client/src');
-    
+
     if (!fs.existsSync(clientDir)) {
       return { passed: true, issues: [] };
     }
 
-    const scanDirectory = (dir) => {
+    const scanDirectory = dir => {
       const files = fs.readdirSync(dir);
-      
+
       for (const file of files) {
         const filePath = path.join(dir, file);
         const stat = fs.statSync(filePath);
-        
+
         if (stat.isDirectory() && !file.startsWith('.') && file !== 'node_modules') {
           scanDirectory(filePath);
         } else if (file.match(/\.(tsx)$/)) {
           const content = fs.readFileSync(filePath, 'utf8');
           const relativePath = path.relative(process.cwd(), filePath);
-          
+
           // Check for div usage where semantic elements would be better
           const semanticOpportunities = [
             { pattern: /<div[^>]*className\s*=\s*["'][^"']*header/gi, suggestion: 'header' },
             { pattern: /<div[^>]*className\s*=\s*["'][^"']*nav/gi, suggestion: 'nav' },
             { pattern: /<div[^>]*className\s*=\s*["'][^"']*main/gi, suggestion: 'main' },
             { pattern: /<div[^>]*className\s*=\s*["'][^"']*footer/gi, suggestion: 'footer' },
-            { pattern: /<div[^>]*className\s*=\s*["'][^"']*sidebar/gi, suggestion: 'aside' }
+            { pattern: /<div[^>]*className\s*=\s*["'][^"']*sidebar/gi, suggestion: 'aside' },
           ];
-          
+
           semanticOpportunities.forEach(({ pattern, suggestion }) => {
             if (pattern.test(content)) {
               issues.push(`${relativePath}: Consider using <${suggestion}> instead of div`);
@@ -579,28 +575,28 @@ class QualityChecker {
   checkFormAccessibility() {
     const issues = [];
     const clientDir = path.join(process.cwd(), 'client/src');
-    
+
     if (!fs.existsSync(clientDir)) {
       return { passed: true, issues: [] };
     }
 
-    const scanDirectory = (dir) => {
+    const scanDirectory = dir => {
       const files = fs.readdirSync(dir);
-      
+
       for (const file of files) {
         const filePath = path.join(dir, file);
         const stat = fs.statSync(filePath);
-        
+
         if (stat.isDirectory() && !file.startsWith('.') && file !== 'node_modules') {
           scanDirectory(filePath);
         } else if (file.match(/\.(tsx)$/)) {
           const content = fs.readFileSync(filePath, 'utf8');
           const relativePath = path.relative(process.cwd(), filePath);
-          
+
           // Check for inputs without labels
           const inputPattern = /<input[^>]*type\s*=\s*["'](?:text|email|password|number)[^>]*>/gi;
           const inputs = content.match(inputPattern) || [];
-          
+
           inputs.forEach(input => {
             if (!input.includes('aria-label') && !input.includes('aria-labelledby')) {
               // Check for nearby label elements
@@ -610,7 +606,7 @@ class QualityChecker {
               }
             }
           });
-          
+
           // Check for forms without fieldsets for grouped inputs
           if (content.includes('<input') && content.includes('type="radio"') && !content.includes('<fieldset')) {
             issues.push(`${relativePath}: Radio buttons without fieldset grouping`);
@@ -626,31 +622,31 @@ class QualityChecker {
   checkColorContrast() {
     const issues = [];
     const clientDir = path.join(process.cwd(), 'client/src');
-    
+
     // This is a basic check for CSS color patterns that might have contrast issues
     const lowContrastPatterns = [
       /color:\s*#[89a-f][89a-f][89a-f]/gi, // Light gray text
-      /background:\s*#[0-3][0-3][0-3]/gi,   // Very dark backgrounds with potential light text
-      /color:\s*#[fde][fde][fde].*background:\s*#[fde][fde][fde]/gi // Light on light
+      /background:\s*#[0-3][0-3][0-3]/gi, // Very dark backgrounds with potential light text
+      /color:\s*#[fde][fde][fde].*background:\s*#[fde][fde][fde]/gi, // Light on light
     ];
-    
+
     if (!fs.existsSync(clientDir)) {
       return { passed: true, issues: [] };
     }
 
-    const scanDirectory = (dir) => {
+    const scanDirectory = dir => {
       const files = fs.readdirSync(dir);
-      
+
       for (const file of files) {
         const filePath = path.join(dir, file);
         const stat = fs.statSync(filePath);
-        
+
         if (stat.isDirectory() && !file.startsWith('.') && file !== 'node_modules') {
           scanDirectory(filePath);
         } else if (file.match(/\.(css|scss|tsx)$/)) {
           const content = fs.readFileSync(filePath, 'utf8');
           const relativePath = path.relative(process.cwd(), filePath);
-          
+
           lowContrastPatterns.forEach(pattern => {
             if (pattern.test(content)) {
               issues.push(`${relativePath}: Potential color contrast issue detected`);
@@ -666,20 +662,20 @@ class QualityChecker {
 
   async runTestingChecks() {
     this.logHeader('Testing Infrastructure Validation');
-    
+
     const checks = [
       {
         name: 'Check test coverage',
-        run: () => this.checkTestCoverage()
+        run: () => this.checkTestCoverage(),
       },
       {
         name: 'Validate test runner',
-        run: () => this.validateTestRunner()
+        run: () => this.validateTestRunner(),
       },
       {
         name: 'Check test file structure',
-        run: () => this.checkTestStructure()
-      }
+        run: () => this.checkTestStructure(),
+      },
     ];
 
     for (const check of checks) {
@@ -707,7 +703,7 @@ class QualityChecker {
       'client/src/utils/__tests__/performanceMonitor.test.ts',
       'client/src/utils/__tests__/memoryOptimization.test.ts',
       'client/src/services/__tests__/fileService.integration.test.ts',
-      'client/src/utils/__tests__/testRunner.ts'
+      'client/src/utils/__tests__/testRunner.ts',
     ];
 
     const issues = [];
@@ -723,7 +719,7 @@ class QualityChecker {
 
   validateTestRunner() {
     const testRunnerPath = path.join(process.cwd(), 'client/src/utils/__tests__/testRunner.ts');
-    
+
     if (!fs.existsSync(testRunnerPath)) {
       return { passed: false, issues: ['Test runner not found'] };
     }
@@ -734,7 +730,7 @@ class QualityChecker {
       'runSecurityTests',
       'runPerformanceTests',
       'runMemoryTests',
-      'runIntegrationTests'
+      'runIntegrationTests',
     ];
 
     const issues = [];
@@ -748,10 +744,7 @@ class QualityChecker {
   }
 
   checkTestStructure() {
-    const testDirs = [
-      'client/src/utils/__tests__',
-      'client/src/services/__tests__'
-    ];
+    const testDirs = ['client/src/utils/__tests__', 'client/src/services/__tests__'];
 
     const issues = [];
     testDirs.forEach(testDir => {
@@ -766,7 +759,7 @@ class QualityChecker {
 
   async runLintingChecks() {
     this.logHeader('Code Quality & Linting');
-    
+
     try {
       // Run TypeScript compilation check
       this.logStep('Running TypeScript compilation check...', 'info');
@@ -790,7 +783,6 @@ class QualityChecker {
         this.logStep('ESLint: ISSUES FOUND', 'warning');
         this.results.linting.issues.push('ESLint issues detected');
       }
-
     } catch (error) {
       this.logStep(`Linting check failed: ${error.message}`, 'error');
       this.results.linting.failed++;
@@ -800,30 +792,32 @@ class QualityChecker {
   generateReport() {
     const endTime = Date.now();
     const totalDuration = endTime - this.startTime;
-    
+
     this.logHeader('Quality Check Report');
-    
+
     const categories = Object.keys(this.results);
     let totalPassed = 0;
     let totalFailed = 0;
-    
+
     categories.forEach(category => {
       const { passed, failed } = this.results[category];
       totalPassed += passed;
       totalFailed += failed;
-      
+
       const total = passed + failed;
       const percentage = total > 0 ? Math.round((passed / total) * 100) : 100;
       const status = percentage >= 90 ? 'success' : percentage >= 75 ? 'warning' : 'error';
-      
+
       this.logStep(`${category.padEnd(15)}: ${passed}/${total} (${percentage}%)`, status);
     });
-    
+
     this.log('\n' + '='.repeat(60), 'cyan');
-    this.log(`📊 Overall: ${totalPassed}/${totalPassed + totalFailed} checks passed`, 
-             totalFailed === 0 ? 'green' : 'yellow');
+    this.log(
+      `📊 Overall: ${totalPassed}/${totalPassed + totalFailed} checks passed`,
+      totalFailed === 0 ? 'green' : 'yellow'
+    );
     this.log(`⏱️  Duration: ${totalDuration}ms`, 'blue');
-    
+
     if (totalFailed > 0) {
       this.log('\n❌ Issues Found:', 'red');
       categories.forEach(category => {
@@ -837,21 +831,21 @@ class QualityChecker {
     } else {
       this.log('\n✅ All quality checks passed! 🎉', 'green');
     }
-    
+
     return totalFailed === 0;
   }
 
   async run() {
     this.log('🚀 Starting comprehensive quality validation...', 'bold');
-    
+
     await this.runSecurityChecks();
     await this.runPerformanceChecks();
     await this.runAccessibilityChecks();
     await this.runTestingChecks();
     await this.runLintingChecks();
-    
+
     const success = this.generateReport();
-    
+
     if (success) {
       this.log('\n🎯 Quality validation completed successfully!', 'green');
       process.exit(0);

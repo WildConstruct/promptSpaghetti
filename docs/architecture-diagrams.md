@@ -3,7 +3,7 @@
 **Task**: E18-1753114562020-546CB8 - Create architecture diagrams  
 **Epic**: 18 - Technical Debt & Refactoring  
 **Author**: Claude Code  
-**Date**: 2025-07-22  
+**Date**: 2025-07-22
 
 ## Overview
 
@@ -48,7 +48,7 @@ graph TB
             EXPORT_API[Export API<br/>/export endpoint]
             HEALTH_API[Health Check<br/>/health endpoint]
         end
-        
+
         subgraph "CLI Package"
             CLI_ENGINE[CLI Engine<br/>Commander.js]
             BATCH_EXECUTOR[Batch Executor<br/>File Processing]
@@ -73,24 +73,24 @@ graph TB
     UI --> GRAPH_EDITOR
     UI --> INSPECTOR
     UI --> PALETTE
-    
+
     GRAPH_EDITOR --> RUNTIME
     INSPECTOR --> SCHEMAS
     PREVIEW --> GRAPH_API
-    
+
     CLI --> CLI_ENGINE
     CLI_ENGINE --> RUNTIME
-    
+
     GRAPH_API --> RUNTIME
     EXPORT_API --> RUNTIME
-    
+
     RUNTIME --> TYPES
     SCHEMAS --> TYPES
-    
+
     GRAPH_EDITOR --> LOCAL_STORAGE
     CLI_ENGINE --> FILE_SYSTEM
     RUNTIME --> MEMORY_CACHE
-    
+
     VERCEL --> GRAPH_EDITOR
     EDGE_FUNCTIONS --> GRAPH_API
     CDN --> GRAPH_EDITOR
@@ -117,7 +117,7 @@ graph TB
 graph TB
     subgraph "PromptScape Monorepo"
         ROOT[Root Package<br/>promptscape-graph]
-        
+
         subgraph "Packages"
             CORE_PKG[packages/core<br/>Shared Library]
             CLI_PKG[packages/cli<br/>Command Line Tool]
@@ -125,19 +125,19 @@ graph TB
             UI_KIT[packages/ui-kit<br/>UI Components]
             GRAPH_CORE[packages/graph-core<br/>Graph Utilities]
         end
-        
+
         subgraph "Applications"
             CLIENT_APP[client/<br/>React Frontend]
             SERVER_APP[server/<br/>Fastify API]
         end
-        
+
         subgraph "Supporting"
             DOCS[docs/<br/>Documentation]
             TESTS[tests/<br/>Cross-package Tests]
             SCRIPTS[scripts/<br/>Build & Automation]
             API_FUNCTIONS[api/<br/>Vercel Functions]
         end
-        
+
         subgraph "Configuration"
             PACKAGE_JSON[package.json<br/>Workspace Config]
             PNPM_WORKSPACE[pnpm-workspace.yaml]
@@ -150,18 +150,18 @@ graph TB
     CLIENT_APP --> CORE_PKG
     CLIENT_APP --> UI_KIT
     CLIENT_APP --> ANALYTICS
-    
+
     SERVER_APP --> CORE_PKG
     SERVER_APP --> GRAPH_CORE
-    
+
     CLI_PKG --> CORE_PKG
-    
+
     API_FUNCTIONS --> CORE_PKG
-    
+
     TESTS --> CORE_PKG
     TESTS --> CLIENT_APP
     TESTS --> SERVER_APP
-    
+
     ROOT --> PACKAGE_JSON
     ROOT --> PNPM_WORKSPACE
     ROOT --> TURBO_CONFIG
@@ -193,25 +193,25 @@ sequenceDiagram
     User->>GraphEditor: Create/Edit Graph
     GraphEditor->>Inspector: Select Node
     Inspector->>GraphEditor: Configure Node Properties
-    
+
     User->>GraphEditor: Request Preview
     GraphEditor->>API: POST /preview {graph, seeds}
-    
+
     API->>Engine: executeGraph(graph, seedArray)
-    
+
     loop For each seed
         Engine->>Context: Create ExecutionContext(seed)
         Engine->>Nodes: Traverse graph depth-first
-        
+
         loop For each node
             Nodes->>Context: Get input values
             Nodes->>Nodes: Execute node logic
             Nodes->>Context: Store result
         end
-        
+
         Engine->>Engine: Collect output nodes
     end
-    
+
     Engine->>API: Return results array
     API->>GraphEditor: Return preview results
     GraphEditor->>User: Display preview modal
@@ -289,14 +289,14 @@ graph TB
             EDGE_RENDERER[Edge Renderer]
             MINIMAP[Minimap]
         end
-        
+
         subgraph "Inspector System"
             INSPECTOR_PANEL[Inspector Panel]
             NODE_EDITORS[Node-Specific Editors]
             COLLAPSIBLE_SECTIONS[Collapsible Sections]
             VARIATION_LIST[Variation List]
         end
-        
+
         subgraph "UI Controls"
             PALETTE_PANEL[Palette Panel]
             TOOLBAR[Toolbar]
@@ -329,18 +329,18 @@ graph TB
     CANVAS --> GRAPH_STORE_STATE
     NODE_RENDERER --> NODE_EDITORS
     INSPECTOR_PANEL --> VALIDATION_SERVICE
-    
+
     PALETTE_PANEL --> GRAPH_STORE_STATE
     TOOLBAR --> EXECUTION_SERVICE
     STATUS_BAR_COMP --> VALIDATION_SERVICE
-    
+
     GRAPH_STORE_STATE --> USE_GRAPH
     UI_SETTINGS --> USE_VALIDATION
-    
+
     USE_GRAPH --> AUTOSAVE_SERVICE
     USE_PREVIEW --> EXECUTION_SERVICE
     USE_VALIDATION --> VALIDATION_SERVICE
-    
+
     EXECUTION_SERVICE --> PERFORMANCE_CACHE
     EXPORT_SERVICE --> GRAPH_STORE_STATE
 
@@ -368,7 +368,7 @@ graph TB
 
     subgraph "Node Type Hierarchy"
         BASE_NODE[RuntimeNode<br/>Abstract Base]
-        
+
         subgraph "Basic Nodes (Epic 3)"
             WEIGHTED_CHOICE[WeightedChoiceNode<br/>Random Selection]
             CONCAT_NODE[ConcatNode<br/>String Joining]
@@ -377,7 +377,7 @@ graph TB
             SET_VAR_NODE[SetVariableNode<br/>State Storage]
             GET_VAR_NODE[GetVariableNode<br/>State Retrieval]
         end
-        
+
         subgraph "Advanced Nodes (Epic 7)"
             ADVANCED_BASE[AdvancedRuntimeNode<br/>Enhanced Base]
             WEIGHTED_ADV[WeightedAdvanced<br/>Complex Distributions]
@@ -444,14 +444,14 @@ graph TB
             UI_SETTINGS_STORE[UI Settings Store<br/>User Preferences]
             PERFORMANCE_STORE[Performance Store<br/>Metrics & Cache]
         end
-        
+
         subgraph "State Slices"
             NODES_SLICE[Nodes Slice<br/>Node Data & Config]
             EDGES_SLICE[Edges Slice<br/>Connection Data]
             VIEWPORT_SLICE[Viewport Slice<br/>Canvas Position]
             SELECTION_SLICE[Selection Slice<br/>Selected Elements]
         end
-        
+
         subgraph "Persistence Layer"
             LOCAL_STORAGE_PERSIST[LocalStorage<br/>Persistence]
             SESSION_STORAGE[SessionStorage<br/>Temporary State]
@@ -511,14 +511,14 @@ graph TB
     subgraph "API Layer"
         subgraph "Fastify Server (Port 8000)"
             FASTIFY_APP[Fastify App<br/>Main Server]
-            
+
             subgraph "Route Handlers"
                 PREVIEW_ROUTE[POST /preview<br/>Graph Execution]
                 EXPORT_ROUTE[POST /export<br/>Bundle Generation]
                 HEALTH_ROUTE[GET /health<br/>Health Check]
                 ANALYTICS_ROUTE[POST /analytics<br/>Usage Metrics]
             end
-            
+
             subgraph "Middleware"
                 CORS_MIDDLEWARE[CORS<br/>Cross-Origin]
                 HELMET_MIDDLEWARE[Helmet<br/>Security Headers]
@@ -526,7 +526,7 @@ graph TB
                 VALIDATION_MIDDLEWARE[Validation<br/>Request Schema]
             end
         end
-        
+
         subgraph "Vercel Edge Functions"
             PREVIEW_EDGE[api/preview.js<br/>Serverless Preview]
             EXPORT_EDGE[api/export.js<br/>Serverless Export]
@@ -604,7 +604,7 @@ graph TB
             DEBOUNCED_OPS[Debounced Operations<br/>Reduced Computation]
             LAZY_LOADING[Lazy Loading<br/>Code Splitting]
         end
-        
+
         subgraph "Backend Optimizations"
             CONTEXT_POOLING[Context Pooling<br/>Object Reuse]
             RESULT_CACHING[Result Caching<br/>Execution Memoization]
@@ -680,7 +680,7 @@ graph TB
             SECURITY_SCAN[Security Scan<br/>Vulnerability Check]
             PERFORMANCE_TEST[Performance Test<br/>Regression Check]
         end
-        
+
         subgraph "Deployment Targets"
             VERCEL_PREVIEW[Vercel Preview<br/>PR Deployments]
             VERCEL_PROD[Vercel Production<br/>Main Branch]
@@ -694,7 +694,7 @@ graph TB
             EDGE_FUNCTIONS_INFRA[Edge Functions<br/>Serverless API]
             CDN_GLOBAL[Global CDN<br/>Asset Distribution]
         end
-        
+
         subgraph "Monitoring & Analytics"
             VERCEL_ANALYTICS[Vercel Analytics<br/>Usage Metrics]
             ERROR_TRACKING[Error Tracking<br/>Issue Monitoring]

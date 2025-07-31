@@ -15,7 +15,7 @@ describe('Configuration System', () => {
   describe('ConfigurationManager', () => {
     test('should initialize with default configuration', () => {
       const config = configManager.getConfig();
-      
+
       expect(config.qualityPreference).toBe(0.7);
       expect(config.stylePreference).toBe('default');
       expect(config.enableOptimizations).toBe(true);
@@ -29,9 +29,9 @@ describe('Configuration System', () => {
         platformOverrides: {
           openai: {
             model: 'gpt-4' as const,
-            temperature: 0.2
-          }
-        }
+            temperature: 0.2,
+          },
+        },
       };
 
       const manager = new ConfigurationManager(customConfig);
@@ -46,12 +46,12 @@ describe('Configuration System', () => {
     test('should validate configuration updates', () => {
       const result = configManager.updateConfig({
         qualityPreference: 0.8,
-        stylePreference: 'artistic'
+        stylePreference: 'artistic',
       });
 
       expect(result.valid).toBe(true);
       expect(result.errors).toHaveLength(0);
-      
+
       const config = configManager.getConfig();
       expect(config.qualityPreference).toBe(0.8);
       expect(config.stylePreference).toBe('artistic');
@@ -59,12 +59,12 @@ describe('Configuration System', () => {
 
     test('should reject invalid configuration updates', () => {
       const result = configManager.updateConfig({
-        qualityPreference: 2.5 // Invalid: must be 0-1
+        qualityPreference: 2.5, // Invalid: must be 0-1
       } as any);
 
       expect(result.valid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
-      
+
       // Original config should remain unchanged
       const config = configManager.getConfig();
       expect(config.qualityPreference).toBe(0.7);
@@ -72,7 +72,7 @@ describe('Configuration System', () => {
 
     test('should set and get specific configuration values', () => {
       const result = configManager.setConfigValue('platformOverrides.openai.temperature', 0.3);
-      
+
       expect(result.valid).toBe(true);
       expect(configManager.getConfigValue('platformOverrides.openai.temperature')).toBe(0.3);
     });
@@ -80,7 +80,7 @@ describe('Configuration System', () => {
     test('should provide business logic warnings', () => {
       const result = configManager.updateConfig({
         qualityPreference: 0.9,
-        stylePreference: 'minimal' // Conflicting: high quality + minimal style
+        stylePreference: 'minimal', // Conflicting: high quality + minimal style
       });
 
       expect(result.valid).toBe(true);
@@ -91,9 +91,9 @@ describe('Configuration System', () => {
     test('should track configuration history', () => {
       configManager.updateConfig({ qualityPreference: 0.8 }, 'Test update 1');
       configManager.updateConfig({ qualityPreference: 0.9 }, 'Test update 2');
-      
+
       const history = configManager.getConfigHistory(5);
-      
+
       expect(history).toHaveLength(2);
       expect(history[0].reason).toBe('Test update 1');
       expect(history[1].reason).toBe('Test update 2');
@@ -103,14 +103,14 @@ describe('Configuration System', () => {
       // Modify config
       configManager.updateConfig({
         qualityPreference: 0.9,
-        stylePreference: 'artistic'
+        stylePreference: 'artistic',
       });
 
       // Reset to defaults
       const result = configManager.resetToDefaults();
-      
+
       expect(result.valid).toBe(true);
-      
+
       const config = configManager.getConfig();
       expect(config.qualityPreference).toBe(0.7);
       expect(config.stylePreference).toBe('default');
@@ -120,12 +120,12 @@ describe('Configuration System', () => {
   describe('Configuration Presets', () => {
     test('should have built-in presets', () => {
       const presets = configManager.listPresets();
-      
+
       expect(presets.length).toBeGreaterThan(0);
-      
+
       const builtInPresets = presets.filter(p => p.isBuiltIn);
       expect(builtInPresets.length).toBeGreaterThan(0);
-      
+
       // Check for expected built-in presets
       const presetNames = presets.map(p => p.name);
       expect(presetNames).toContain('High Quality');
@@ -134,16 +134,14 @@ describe('Configuration System', () => {
     });
 
     test('should create custom presets', () => {
-      configManager.createPreset(
-        'test-preset',
-        'Test preset description',
-        { qualityPreference: 0.8 },
-        ['test', 'custom']
-      );
+      configManager.createPreset('test-preset', 'Test preset description', { qualityPreference: 0.8 }, [
+        'test',
+        'custom',
+      ]);
 
       const presets = configManager.listPresets();
       const testPreset = presets.find(p => p.name === 'test-preset');
-      
+
       expect(testPreset).toBeDefined();
       expect(testPreset?.description).toBe('Test preset description');
       expect(testPreset?.isBuiltIn).toBe(false);
@@ -153,9 +151,9 @@ describe('Configuration System', () => {
 
     test('should apply presets', () => {
       const result = configManager.applyPreset('high-quality');
-      
+
       expect(result.valid).toBe(true);
-      
+
       const config = configManager.getConfig();
       expect(config.qualityPreference).toBe(0.9);
       expect(config.stylePreference).toBe('photorealistic');
@@ -167,7 +165,7 @@ describe('Configuration System', () => {
       configManager.createPreset('preset3', 'Desc3', {}, ['tag3']);
 
       const tag2Presets = configManager.listPresets(['tag2']);
-      
+
       expect(tag2Presets).toHaveLength(2);
       expect(tag2Presets.map(p => p.name)).toContain('preset1');
       expect(tag2Presets.map(p => p.name)).toContain('preset2');
@@ -175,10 +173,10 @@ describe('Configuration System', () => {
 
     test('should delete custom presets', () => {
       configManager.createPreset('deletable', 'Will be deleted', {});
-      
+
       const success = configManager.deletePreset('deletable');
       expect(success).toBe(true);
-      
+
       const presets = configManager.listPresets();
       expect(presets.find(p => p.name === 'deletable')).toBeUndefined();
     });
@@ -191,7 +189,7 @@ describe('Configuration System', () => {
 
     test('should handle non-existent preset application', () => {
       const result = configManager.applyPreset('non-existent');
-      
+
       expect(result.valid).toBe(false);
       expect(result.errors[0].code).toBe('PRESET_NOT_FOUND');
     });
@@ -201,12 +199,12 @@ describe('Configuration System', () => {
     test('should export configuration as JSON', () => {
       configManager.updateConfig({
         qualityPreference: 0.8,
-        stylePreference: 'artistic'
+        stylePreference: 'artistic',
       });
 
       const exported = configManager.exportConfig('json');
       const parsed = JSON.parse(exported);
-      
+
       expect(parsed.qualityPreference).toBe(0.8);
       expect(parsed.stylePreference).toBe('artistic');
     });
@@ -214,11 +212,11 @@ describe('Configuration System', () => {
     test('should export configuration as YAML', () => {
       configManager.updateConfig({
         qualityPreference: 0.8,
-        stylePreference: 'artistic'
+        stylePreference: 'artistic',
       });
 
       const exported = configManager.exportConfig('yaml');
-      
+
       expect(typeof exported).toBe('string');
       expect(exported).toContain('qualityPreference: 0.8');
       expect(exported).toContain('stylePreference: artistic');
@@ -228,13 +226,13 @@ describe('Configuration System', () => {
       const configData = JSON.stringify({
         qualityPreference: 0.6,
         stylePreference: 'minimal',
-        enableOptimizations: false
+        enableOptimizations: false,
       });
 
       const result = configManager.importConfig(configData, 'json');
-      
+
       expect(result.valid).toBe(true);
-      
+
       const config = configManager.getConfig();
       expect(config.qualityPreference).toBe(0.6);
       expect(config.stylePreference).toBe('minimal');
@@ -243,7 +241,7 @@ describe('Configuration System', () => {
 
     test('should handle invalid JSON import', () => {
       const result = configManager.importConfig('invalid json', 'json');
-      
+
       expect(result.valid).toBe(false);
       expect(result.errors[0].code).toBe('IMPORT_ERROR');
     });
@@ -256,9 +254,9 @@ enableOptimizations: false
       `.trim();
 
       const result = configManager.importConfig(yamlData, 'yaml');
-      
+
       expect(result.valid).toBe(true);
-      
+
       const config = configManager.getConfig();
       expect(config.qualityPreference).toBe(0.6);
       expect(config.stylePreference).toBe('minimal');
@@ -272,12 +270,12 @@ enableOptimizations: false
         qualityPreference: 0.9,
         platformOverrides: {
           openai: { model: 'gpt-4' },
-          midjourney: { version: '6' }
-        }
+          midjourney: { version: '6' },
+        },
       });
 
       const summary = configManager.getConfigSummary();
-      
+
       expect(summary.platforms).toContain('openai');
       expect(summary.platforms).toContain('midjourney');
       expect(summary.qualityLevel).toBe('High');
@@ -309,9 +307,9 @@ enableOptimizations: false
         platformOverrides: {
           openai: {
             model: 'gpt-4',
-            temperature: 0.7
-          }
-        }
+            temperature: 0.7,
+          },
+        },
       };
 
       expect(() => GlobalConfigSchema.parse(validConfig)).not.toThrow();
@@ -320,7 +318,7 @@ enableOptimizations: false
     test('should reject invalid schema values', () => {
       const invalidConfig = {
         qualityPreference: 2.0, // Invalid: > 1
-        stylePreference: 'invalid-style' // Invalid enum value
+        stylePreference: 'invalid-style', // Invalid enum value
       };
 
       expect(() => GlobalConfigSchema.parse(invalidConfig)).toThrow();
@@ -328,11 +326,11 @@ enableOptimizations: false
 
     test('should apply default values for missing fields', () => {
       const partialConfig = {
-        qualityPreference: 0.8
+        qualityPreference: 0.8,
       };
 
       const parsed = GlobalConfigSchema.parse(partialConfig);
-      
+
       expect(parsed.stylePreference).toBe('default');
       expect(parsed.enableOptimizations).toBe(true);
       expect(parsed.platformOverrides).toEqual({});
@@ -340,7 +338,7 @@ enableOptimizations: false
   });
 
   describe('Event System', () => {
-    test('should emit config change events', (done) => {
+    test('should emit config change events', done => {
       configManager.on('config:changed', (path, newValue, oldValue) => {
         expect(path).toBe('qualityPreference');
         expect(newValue).toBe(0.8);
@@ -351,8 +349,8 @@ enableOptimizations: false
       configManager.setConfigValue('qualityPreference', 0.8);
     });
 
-    test('should emit validation events', (done) => {
-      configManager.on('config:validated', (result) => {
+    test('should emit validation events', done => {
+      configManager.on('config:validated', result => {
         expect(result.valid).toBe(true);
         done();
       });
@@ -360,7 +358,7 @@ enableOptimizations: false
       configManager.updateConfig({ qualityPreference: 0.8 });
     });
 
-    test('should emit preset application events', (done) => {
+    test('should emit preset application events', done => {
       configManager.on('config:preset:applied', (presetName, config) => {
         expect(presetName).toBe('creative');
         expect(config.stylePreference).toBe('artistic');
@@ -370,7 +368,7 @@ enableOptimizations: false
       configManager.applyPreset('creative');
     });
 
-    test('should emit export events', (done) => {
+    test('should emit export events', done => {
       configManager.on('config:exported', (format, config) => {
         expect(format).toBe('json');
         expect(config.qualityPreference).toBe(0.7);
@@ -380,7 +378,7 @@ enableOptimizations: false
       configManager.exportConfig('json');
     });
 
-    test('should emit import events', (done) => {
+    test('should emit import events', done => {
       configManager.on('config:imported', (source, config) => {
         expect(source).toBe('json');
         expect(config.qualityPreference).toBe(0.6);
@@ -395,12 +393,12 @@ enableOptimizations: false
   describe('Error Handling', () => {
     test('should handle malformed configuration gracefully', () => {
       const result = configManager.updateConfig({
-        qualityPreference: 'invalid' as any
+        qualityPreference: 'invalid' as any,
       });
 
       expect(result.valid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
-      
+
       // Original config should remain unchanged
       const config = configManager.getConfig();
       expect(config.qualityPreference).toBe(0.7);
@@ -408,18 +406,16 @@ enableOptimizations: false
 
     test('should handle missing nested properties', () => {
       const result = configManager.setConfigValue('nonexistent.deeply.nested.path', 'value');
-      
+
       expect(result.valid).toBe(true);
       expect(configManager.getConfigValue('nonexistent.deeply.nested.path')).toBe('value');
     });
 
     test('should handle concurrent updates safely', async () => {
-      const promises = Array.from({ length: 10 }, (_, i) =>
-        configManager.updateConfig({ qualityPreference: i / 10 })
-      );
+      const promises = Array.from({ length: 10 }, (_, i) => configManager.updateConfig({ qualityPreference: i / 10 }));
 
       const results = await Promise.all(promises);
-      
+
       // All updates should succeed individually
       results.forEach(result => {
         expect(result.valid).toBe(true);

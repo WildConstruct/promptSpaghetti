@@ -866,13 +866,17 @@
 }
 
 @keyframes helpPulse {
-  0%, 70%, 100% {
+  0%,
+  70%,
+  100% {
     transform: scale(1);
     box-shadow: var(--help-shadow-lg);
   }
   35% {
     transform: scale(1.1);
-    box-shadow: var(--help-shadow-lg), 0 0 0 10px rgba(59, 130, 246, 0.2);
+    box-shadow:
+      var(--help-shadow-lg),
+      0 0 0 10px rgba(59, 130, 246, 0.2);
   }
 }
 
@@ -882,32 +886,32 @@
     width: calc(100vw - 40px);
     max-width: 350px;
   }
-  
+
   .help-panel-right,
   .help-panel-left {
     right: 20px;
     left: 20px;
   }
-  
+
   .guided-tour {
     left: 20px;
     right: 20px;
     max-width: none;
   }
-  
+
   .help-tours-grid,
   .help-content-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .help-hub {
     margin: 0 16px;
   }
-  
+
   .help-hub-tabs {
     flex-wrap: wrap;
   }
-  
+
   .quick-help-popup {
     width: calc(100vw - 40px);
     right: -16px;
@@ -922,20 +926,20 @@
     width: auto;
     max-height: calc(100vh - 20px);
   }
-  
+
   .tour-navigation {
     flex-direction: column;
     gap: 12px;
   }
-  
+
   .tour-step-indicators {
     order: -1;
   }
-  
+
   .help-hub-content {
     padding: 16px;
   }
-  
+
   .help-section {
     margin-bottom: 24px;
   }
@@ -950,7 +954,7 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  
+
   .quick-help-trigger {
     animation: none;
   }
@@ -980,7 +984,7 @@
     --help-background: #ffffff;
     --help-primary: #0000ff;
   }
-  
+
   .help-tooltip,
   .help-panel,
   .tour-card,

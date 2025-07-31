@@ -14,7 +14,10 @@ export { AdvancedRuntimeNode, AdvancedExecutionContext, AdvancedNodeConfig } fro
 /* ------------------------- Core node runtimes ------------------------- */
 
 export class WeightedChoiceNode extends RuntimeNode<string> {
-  constructor(id: string, private choices: Array<{ value: string; weight: number }>) {
+  constructor(
+    id: string,
+    private choices: Array<{ value: string; weight: number }>
+  ) {
     super(id);
   }
 
@@ -30,7 +33,10 @@ export class WeightedChoiceNode extends RuntimeNode<string> {
 }
 
 export class ConcatNode extends RuntimeNode<string> {
-  constructor(id: string, private inputs: string[]) {
+  constructor(
+    id: string,
+    private inputs: string[]
+  ) {
     super(id);
   }
 
@@ -38,8 +44,11 @@ export class ConcatNode extends RuntimeNode<string> {
     return this.inputs.join('');
   }
 }
-  export class OutputNode extends RuntimeNode<string> {
-  constructor(id: string, private input: string) {
+export class OutputNode extends RuntimeNode<string> {
+  constructor(
+    id: string,
+    private input: string
+  ) {
     super(id);
   }
 
@@ -49,7 +58,11 @@ export class ConcatNode extends RuntimeNode<string> {
 }
 
 export class IncludeNode extends RuntimeNode<string> {
-  constructor(id: string, private name: string, private lookup: Record<string, string>) {
+  constructor(
+    id: string,
+    private name: string,
+    private lookup: Record<string, string>
+  ) {
     super(id);
   }
 
@@ -59,10 +72,12 @@ export class IncludeNode extends RuntimeNode<string> {
       return ctx.variables['defaultText'] || '';
     }
     // Security: Prevent prototype pollution and dangerous property access
-    if (this.name.includes('__proto__') ||
-        this.name.includes('constructor') ||
-        this.name.includes('prototype') ||
-        !Object.prototype.hasOwnProperty.call(this.lookup, this.name)) {
+    if (
+      this.name.includes('__proto__') ||
+      this.name.includes('constructor') ||
+      this.name.includes('prototype') ||
+      !Object.prototype.hasOwnProperty.call(this.lookup, this.name)
+    ) {
       return ctx.variables['defaultText'] || '';
     }
     const result = this.lookup[this.name];
@@ -75,7 +90,11 @@ export class IncludeNode extends RuntimeNode<string> {
 }
 
 export class SetVariableNode extends RuntimeNode<void> {
-  constructor(id: string, private key: string, private value: any) {
+  constructor(
+    id: string,
+    private key: string,
+    private value: any
+  ) {
     super(id);
   }
   run(ctx: ExecutionContext): void {
@@ -83,13 +102,13 @@ export class SetVariableNode extends RuntimeNode<void> {
     if (!SecurityValidation.validateVariableName(this.key)) {
       return; // Silently ignore invalid variable names
     }
-    
+
     // Security: Validate value is safe
     if (this.value === null || this.value === undefined) {
       ctx.variables[this.key] = this.value;
       return;
     }
-    
+
     // Only allow safe primitive types and simple objects/arrays
     const valueType = typeof this.value;
     if (valueType === 'string' || valueType === 'number' || valueType === 'boolean') {
@@ -108,7 +127,10 @@ export class SetVariableNode extends RuntimeNode<void> {
 }
 
 export class GetVariableNode extends RuntimeNode<unknown> {
-  constructor(id: string, private key: string) {
+  constructor(
+    id: string,
+    private key: string
+  ) {
     super(id);
   }
 

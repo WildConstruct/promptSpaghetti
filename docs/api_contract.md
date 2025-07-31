@@ -13,6 +13,7 @@ This document defines the contract for PromptSpaghetti APIs and CLI interfaces. 
 Executes a graph with multiple seeds and returns the generated outputs.
 
 **Request:**
+
 ```json
 {
   "graph": {
@@ -32,6 +33,7 @@ Executes a graph with multiple seeds and returns the generated outputs.
 ```
 
 **Response:**
+
 ```json
 {
   "results": [
@@ -44,6 +46,7 @@ Executes a graph with multiple seeds and returns the generated outputs.
 ```
 
 **Status Codes:**
+
 - `200 OK`: Graph executed successfully
 - `400 Bad Request`: Invalid request format or parameters
 - `503 Service Unavailable`: Preview API is disabled via feature flag
@@ -51,6 +54,7 @@ Executes a graph with multiple seeds and returns the generated outputs.
 **Feature Flag:** `ENABLE_PREVIEW_API` (defaults to `true`)
 
 **Example:**
+
 ```
 POST /preview
 {
@@ -63,7 +67,7 @@ POST /preview
       },
       {
         "id": "template1",
-        "type": "Template", 
+        "type": "Template",
         "inputs": [],
         "config": {
           "template": "Hello world! Random number: {{rand}}"
@@ -77,6 +81,7 @@ POST /preview
 ```
 
 **Response:**
+
 ```json
 {
   "results": [
@@ -97,6 +102,7 @@ POST /preview
 Executes a graph once with an optional seed and returns the output.
 
 **Request:**
+
 ```json
 {
   "graph": {
@@ -114,6 +120,7 @@ Executes a graph once with an optional seed and returns the output.
 ```
 
 **Response:**
+
 ```json
 {
   "outputs": ["string"]
@@ -121,6 +128,7 @@ Executes a graph once with an optional seed and returns the output.
 ```
 
 **Status Codes:**
+
 - `200 OK`: Graph executed successfully
 - `400 Bad Request`: Invalid request format or parameters
 
@@ -129,6 +137,7 @@ Executes a graph once with an optional seed and returns the output.
 Converts a graph to a GeneratorBundle format.
 
 **Request:**
+
 ```json
 {
   "graph": {
@@ -145,6 +154,7 @@ Converts a graph to a GeneratorBundle format.
 ```
 
 **Response:**
+
 ```json
 {
   "bundle": {
@@ -154,6 +164,7 @@ Converts a graph to a GeneratorBundle format.
 ```
 
 **Status Codes:**
+
 - `200 OK`: Graph converted successfully
 - `400 Bad Request`: Invalid graph format
 
@@ -162,6 +173,7 @@ Converts a graph to a GeneratorBundle format.
 Converts a GeneratorBundle to a graph format.
 
 **Request:**
+
 ```json
 {
   "bundle": {
@@ -171,6 +183,7 @@ Converts a GeneratorBundle to a graph format.
 ```
 
 **Response:**
+
 ```json
 {
   "graph": {
@@ -187,6 +200,7 @@ Converts a GeneratorBundle to a graph format.
 ```
 
 **Status Codes:**
+
 - `200 OK`: Bundle imported successfully
 - `400 Bad Request`: Invalid bundle format
 
@@ -199,11 +213,13 @@ prompt-spaghetti execute <file.json> [options]
 ```
 
 **Options:**
+
 - `--seed <n>`: Set random seed (default: current timestamp)
 - `--output <file>`: Write output to file instead of stdout
 - `--quiet`: Suppress warnings and info messages
 
 **Exit Codes:**
+
 - `0`: Success
 - `1`: Runtime error
 - `2`: Invalid arguments or file
@@ -215,10 +231,12 @@ prompt-spaghetti export <graph.json> <output.bundle.json> [options]
 ```
 
 **Options:**
+
 - `--format <format>`: Output format (default: `bundle`)
 - `--quiet`: Suppress warnings and info messages
 
 **Exit Codes:**
+
 - `0`: Success
 - `1`: Export error
 - `2`: Invalid arguments or file
@@ -230,10 +248,12 @@ prompt-spaghetti import <bundle.json> <output.graph.json> [options]
 ```
 
 **Options:**
+
 - `--format <format>`: Input format (default: `bundle`)
 - `--quiet`: Suppress warnings and info messages
 
 **Exit Codes:**
+
 - `0`: Success
 - `1`: Import error
 - `2`: Invalid arguments or file
@@ -247,9 +267,10 @@ The API and CLI interfaces are versioned using [Semantic Versioning](https://sem
 3. **PATCH version** changes make backward-compatible bug fixes
 
 For any breaking changes:
+
 1. The API will maintain backward compatibility for at least 3 months
 2. Deprecation notices will be provided in the documentation and responses
-3. New major versions will be deployed with a different endpoint path (/v2/*)
+3. New major versions will be deployed with a different endpoint path (/v2/\*)
 
 ## 4. Error Response Format
 
@@ -259,13 +280,14 @@ All API error responses follow this format:
 {
   "error": "Error message",
   "code": "ERROR_CODE",
-  "details": { 
+  "details": {
     // Optional additional context
   }
 }
 ```
 
 Common error codes:
+
 - `INVALID_REQUEST`: Request format or parameters are invalid
 - `GRAPH_VALIDATION_ERROR`: Graph structure is invalid
 - `EXECUTION_ERROR`: Error during graph execution

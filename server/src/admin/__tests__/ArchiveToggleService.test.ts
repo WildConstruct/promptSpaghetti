@@ -1,6 +1,6 @@
 /**
  * Archive Toggle Service Tests (Epic 19)
- * 
+ *
  * Comprehensive test suite for the Archive Toggle Service functionality
  * covering all aspects of toggle-based archiving control including:
  * - Toggle configuration management
@@ -22,32 +22,25 @@ import {
   ComplianceStatus,
   CreateArchiveToggleRequest,
   UpdateArchiveToggleRequest,
-  ArchiveToggleEvaluationContext
+  ArchiveToggleEvaluationContext,
 } from '../ArchiveToggleTypes';
-import {
-  ArchiveType,
-  ArchiveCategory,
-  DataClassification
-} from '../ArchiveManagementService';
+import { ArchiveType, ArchiveCategory, DataClassification } from '../ArchiveManagementService';
 
 // Mock implementations
 class MockDatabaseService extends EventEmitter {
   async query(sql: string, params?: any[]): Promise<any> {
-
     return { rows: [], rowCount: 0 };
   }
 }
 
 class MockAuditService extends EventEmitter {
   async logAction(action: any): Promise<void> {
-
     return Promise.resolve();
   }
 }
 
 class MockArchiveManagementService extends EventEmitter {
   async createArchive(...args: any[]): Promise<any> {
-
     return { id: 'mock-archive-id', name: 'Mock Archive' };
   }
 }
@@ -62,12 +55,8 @@ describe('ArchiveToggleService', () => {
     mockDbService = new MockDatabaseService();
     mockAuditService = new MockAuditService();
     mockArchiveService = new MockArchiveManagementService();
-    
-    service = new ArchiveToggleService(
-      mockDbService as any,
-      mockAuditService as any,
-      mockArchiveService as any
-    );
+
+    service = new ArchiveToggleService(mockDbService as any, mockAuditService as any, mockArchiveService as any);
   });
 
   afterEach(() => {
@@ -87,7 +76,7 @@ describe('ArchiveToggleService', () => {
           mode: ArchiveToggleMode.MANUAL_ONLY,
           enabledByDefault: false,
           requiresExplicitConsent: true,
-          complianceRequired: true
+          complianceRequired: true,
         };
 
         const config = await service.createArchiveToggle(request, 'test-user');
@@ -110,7 +99,7 @@ describe('ArchiveToggleService', () => {
           description: 'Testing state creation',
           scope: ArchiveToggleScope.GLOBAL,
           mode: ArchiveToggleMode.AUTOMATIC,
-          enabledByDefault: true
+          enabledByDefault: true,
         };
 
         const config = await service.createArchiveToggle(request, 'test-user');
@@ -134,7 +123,7 @@ describe('ArchiveToggleService', () => {
           name: 'Event Test Toggle',
           description: 'Testing event emission',
           scope: ArchiveToggleScope.LOG_DATA,
-          mode: ArchiveToggleMode.SCHEDULED
+          mode: ArchiveToggleMode.SCHEDULED,
         };
 
         const config = await service.createArchiveToggle(request, 'test-user');
@@ -147,7 +136,7 @@ describe('ArchiveToggleService', () => {
           name: 'Audit Test Toggle',
           description: 'Testing audit trail',
           scope: ArchiveToggleScope.COMPLIANCE_DATA,
-          mode: ArchiveToggleMode.COMPLIANCE_ONLY
+          mode: ArchiveToggleMode.COMPLIANCE_ONLY,
         };
 
         const config = await service.createArchiveToggle(request, 'test-user');
@@ -167,7 +156,7 @@ describe('ArchiveToggleService', () => {
           name: 'Original Toggle',
           description: 'Original description',
           scope: ArchiveToggleScope.USER_DATA,
-          mode: ArchiveToggleMode.MANUAL_ONLY
+          mode: ArchiveToggleMode.MANUAL_ONLY,
         };
 
         const original = await service.createArchiveToggle(createRequest, 'creator');
@@ -179,7 +168,7 @@ describe('ArchiveToggleService', () => {
           description: 'Updated description',
           mode: ArchiveToggleMode.AUTOMATIC,
           enabledByDefault: true,
-          reason: 'Updating for better automation'
+          reason: 'Updating for better automation',
         };
 
         const updated = await service.updateArchiveToggle(updateRequest, 'updater');
@@ -197,7 +186,7 @@ describe('ArchiveToggleService', () => {
           name: 'Mode Test Toggle',
           description: 'Testing mode changes',
           scope: ArchiveToggleScope.SYSTEM_DATA,
-          mode: ArchiveToggleMode.MANUAL_ONLY
+          mode: ArchiveToggleMode.MANUAL_ONLY,
         };
 
         const config = await service.createArchiveToggle(createRequest, 'test-user');
@@ -208,7 +197,7 @@ describe('ArchiveToggleService', () => {
         const updateRequest: UpdateArchiveToggleRequest = {
           id: config.id,
           mode: ArchiveToggleMode.SCHEDULED,
-          reason: 'Switching to scheduled mode'
+          reason: 'Switching to scheduled mode',
         };
 
         await service.updateArchiveToggle(updateRequest, 'test-user');
@@ -221,41 +210,51 @@ describe('ArchiveToggleService', () => {
         const updateRequest: UpdateArchiveToggleRequest = {
           id: 'non-existent-id',
           name: 'Should Fail',
-          reason: 'This should fail'
+          reason: 'This should fail',
         };
 
-        await expect(service.updateArchiveToggle(updateRequest, 'test-user'))
-          .rejects.toThrow('Archive toggle configuration not found');
+        await expect(service.updateArchiveToggle(updateRequest, 'test-user')).rejects.toThrow(
+          'Archive toggle configuration not found'
+        );
       });
     });
 
     describe('listToggleConfigs', () => {
       beforeEach(async () => {
         // Create test toggles
-        await service.createArchiveToggle({
-          name: 'Global Toggle',
-          description: 'Global scope toggle',
-          scope: ArchiveToggleScope.GLOBAL,
-          mode: ArchiveToggleMode.AUTOMATIC,
-          enabledByDefault: true
-        }, 'test-user');
+        await service.createArchiveToggle(
+          {
+            name: 'Global Toggle',
+            description: 'Global scope toggle',
+            scope: ArchiveToggleScope.GLOBAL,
+            mode: ArchiveToggleMode.AUTOMATIC,
+            enabledByDefault: true,
+          },
+          'test-user'
+        );
 
-        await service.createArchiveToggle({
-          name: 'User Data Toggle',
-          description: 'User data scope toggle',
-          scope: ArchiveToggleScope.USER_DATA,
-          mode: ArchiveToggleMode.MANUAL_ONLY,
-          enabledByDefault: false
-        }, 'test-user');
+        await service.createArchiveToggle(
+          {
+            name: 'User Data Toggle',
+            description: 'User data scope toggle',
+            scope: ArchiveToggleScope.USER_DATA,
+            mode: ArchiveToggleMode.MANUAL_ONLY,
+            enabledByDefault: false,
+          },
+          'test-user'
+        );
 
-        await service.createArchiveToggle({
-          name: 'Compliance Toggle',
-          description: 'Compliance scope toggle',
-          scope: ArchiveToggleScope.COMPLIANCE_DATA,
-          mode: ArchiveToggleMode.COMPLIANCE_ONLY,
-          enabledByDefault: true,
-          complianceRequired: true
-        }, 'test-user');
+        await service.createArchiveToggle(
+          {
+            name: 'Compliance Toggle',
+            description: 'Compliance scope toggle',
+            scope: ArchiveToggleScope.COMPLIANCE_DATA,
+            mode: ArchiveToggleMode.COMPLIANCE_ONLY,
+            enabledByDefault: true,
+            complianceRequired: true,
+          },
+          'test-user'
+        );
       });
 
       it('should list all toggles without filters', () => {
@@ -264,16 +263,16 @@ describe('ArchiveToggleService', () => {
       });
 
       it('should filter by scope', () => {
-        const configs = service.listToggleConfigs({ 
-          scope: ArchiveToggleScope.USER_DATA 
+        const configs = service.listToggleConfigs({
+          scope: ArchiveToggleScope.USER_DATA,
         });
         expect(configs.length).toBeGreaterThanOrEqual(1);
         expect(configs[0].scope).toBe(ArchiveToggleScope.USER_DATA);
       });
 
       it('should filter by mode', () => {
-        const configs = service.listToggleConfigs({ 
-          mode: ArchiveToggleMode.MANUAL_ONLY 
+        const configs = service.listToggleConfigs({
+          mode: ArchiveToggleMode.MANUAL_ONLY,
         });
         expect(configs.length).toBeGreaterThanOrEqual(1);
         expect(configs[0].mode).toBe(ArchiveToggleMode.MANUAL_ONLY);
@@ -282,17 +281,16 @@ describe('ArchiveToggleService', () => {
       it('should filter by enabled state', () => {
         const enabledConfigs = service.listToggleConfigs({ enabled: true });
         const disabledConfigs = service.listToggleConfigs({ enabled: false });
-        
+
         expect(enabledConfigs.length).toBeGreaterThan(0);
         expect(disabledConfigs.length).toBeGreaterThan(0);
       });
 
       it('should sort by updated_at descending', () => {
         const configs = service.listToggleConfigs();
-        
+
         for (let i = 1; i < configs.length; i++) {
-          expect(configs[i].updatedAt.getTime())
-            .toBeLessThanOrEqual(configs[i - 1].updatedAt.getTime());
+          expect(configs[i].updatedAt.getTime()).toBeLessThanOrEqual(configs[i - 1].updatedAt.getTime());
         }
       });
     });
@@ -302,24 +300,22 @@ describe('ArchiveToggleService', () => {
     let testToggleId: string;
 
     beforeEach(async () => {
-      const config = await service.createArchiveToggle({
-        name: 'State Test Toggle',
-        description: 'For testing state management',
-        scope: ArchiveToggleScope.GLOBAL,
-        mode: ArchiveToggleMode.MANUAL_ONLY,
-        enabledByDefault: false
-      }, 'test-user');
+      const config = await service.createArchiveToggle(
+        {
+          name: 'State Test Toggle',
+          description: 'For testing state management',
+          scope: ArchiveToggleScope.GLOBAL,
+          mode: ArchiveToggleMode.MANUAL_ONLY,
+          enabledByDefault: false,
+        },
+        'test-user'
+      );
       testToggleId = config.id;
     });
 
     describe('setToggleState', () => {
       it('should enable toggle when disabled', async () => {
-        const state = await service.setToggleState(
-          testToggleId, 
-          true, 
-          'Enabling for testing', 
-          'test-user'
-        );
+        const state = await service.setToggleState(testToggleId, true, 'Enabling for testing', 'test-user');
 
         expect(state.isEnabled).toBe(true);
         expect(state.lastToggleTime).toBeDefined();
@@ -330,27 +326,22 @@ describe('ArchiveToggleService', () => {
       it('should disable toggle when enabled', async () => {
         // First enable it
         await service.setToggleState(testToggleId, true, 'Enable first', 'test-user');
-        
+
         // Then disable it
-        const state = await service.setToggleState(
-          testToggleId, 
-          false, 
-          'Disabling for testing', 
-          'test-user'
-        );
+        const state = await service.setToggleState(testToggleId, false, 'Disabling for testing', 'test-user');
 
         expect(state.isEnabled).toBe(false);
         expect(state.toggleReason).toBe('Disabling for testing');
       });
 
       it('should throw error when toggle not found', async () => {
-        await expect(service.setToggleState('invalid-id', true, 'reason', 'user'))
-          .rejects.toThrow('Toggle not found');
+        await expect(service.setToggleState('invalid-id', true, 'reason', 'user')).rejects.toThrow('Toggle not found');
       });
 
       it('should throw error when state unchanged', async () => {
-        await expect(service.setToggleState(testToggleId, false, 'reason', 'user'))
-          .rejects.toThrow('Toggle is already disabled');
+        await expect(service.setToggleState(testToggleId, false, 'reason', 'user')).rejects.toThrow(
+          'Toggle is already disabled'
+        );
       });
 
       it('should emit toggle_enabled event', async () => {
@@ -359,34 +350,26 @@ describe('ArchiveToggleService', () => {
 
         const state = await service.setToggleState(testToggleId, true, 'reason', 'user');
 
-        expect(eventSpy).toHaveBeenCalledWith(
-          state, 
-          expect.objectContaining({ id: testToggleId })
-        );
+        expect(eventSpy).toHaveBeenCalledWith(state, expect.objectContaining({ id: testToggleId }));
       });
 
       it('should emit toggle_disabled event', async () => {
         // Enable first
         await service.setToggleState(testToggleId, true, 'enable', 'user');
-        
+
         const eventSpy = jest.fn();
         service.on('toggle_disabled', eventSpy);
 
         const state = await service.setToggleState(testToggleId, false, 'reason', 'user');
 
-        expect(eventSpy).toHaveBeenCalledWith(
-          state, 
-          expect.objectContaining({ id: testToggleId })
-        );
+        expect(eventSpy).toHaveBeenCalledWith(state, expect.objectContaining({ id: testToggleId }));
       });
 
       it('should create audit trail entries', async () => {
         await service.setToggleState(testToggleId, true, 'Testing audit', 'test-user');
-        
+
         const state = service.getToggleState(testToggleId);
-        const auditEntries = state!.auditTrail.filter(
-          entry => entry.action === ArchiveToggleAction.ENABLED
-        );
+        const auditEntries = state!.auditTrail.filter(entry => entry.action === ArchiveToggleAction.ENABLED);
 
         expect(auditEntries.length).toBe(1);
         expect(auditEntries[0].actorId).toBe('test-user');
@@ -398,14 +381,17 @@ describe('ArchiveToggleService', () => {
     describe('applyEmergencyOverride', () => {
       beforeEach(async () => {
         // Create toggle that allows emergency override
-        const config = await service.createArchiveToggle({
-          name: 'Emergency Test Toggle',
-          description: 'For testing emergency override',
-          scope: ArchiveToggleScope.GLOBAL,
-          mode: ArchiveToggleMode.MANUAL_ONLY,
-          enabledByDefault: false,
-          customSettings: { allowEmergencyOverride: true }
-        }, 'test-user');
+        const config = await service.createArchiveToggle(
+          {
+            name: 'Emergency Test Toggle',
+            description: 'For testing emergency override',
+            scope: ArchiveToggleScope.GLOBAL,
+            mode: ArchiveToggleMode.MANUAL_ONLY,
+            enabledByDefault: false,
+            customSettings: { allowEmergencyOverride: true },
+          },
+          'test-user'
+        );
 
         // Update the config to allow emergency override
         service.getToggleConfig(config.id)!.allowEmergencyOverride = true;
@@ -426,7 +412,7 @@ describe('ArchiveToggleService', () => {
         expect(state.overrideReason).toBe('Emergency archiving needed for critical data');
         expect(state.overrideApprovedBy).toBe('admin-user');
         expect(state.overrideExpiresAt).toBeDefined();
-        
+
         const ttlMillis = state.overrideExpiresAt!.getTime() - Date.now();
         expect(ttlMillis).toBeGreaterThan(119 * 60 * 1000); // Should be close to 2 hours
         expect(ttlMillis).toBeLessThan(121 * 60 * 1000);
@@ -434,36 +420,32 @@ describe('ArchiveToggleService', () => {
 
       it('should throw error when override not allowed', async () => {
         // Create toggle without emergency override permission
-        const config = await service.createArchiveToggle({
-          name: 'No Override Toggle',
-          description: 'Toggle without override permission',
-          scope: ArchiveToggleScope.USER_DATA,
-          mode: ArchiveToggleMode.MANUAL_ONLY
-        }, 'test-user');
+        const config = await service.createArchiveToggle(
+          {
+            name: 'No Override Toggle',
+            description: 'Toggle without override permission',
+            scope: ArchiveToggleScope.USER_DATA,
+            mode: ArchiveToggleMode.MANUAL_ONLY,
+          },
+          'test-user'
+        );
 
-        await expect(service.applyEmergencyOverride(
-          config.id, true, 'Should fail', 60, 'admin'
-        )).rejects.toThrow('Emergency override not allowed for this toggle');
+        await expect(service.applyEmergencyOverride(config.id, true, 'Should fail', 60, 'admin')).rejects.toThrow(
+          'Emergency override not allowed for this toggle'
+        );
       });
 
       it('should emit emergency_override_applied event', async () => {
         const eventSpy = jest.fn();
         service.on('emergency_override_applied', eventSpy);
 
-        const state = await service.applyEmergencyOverride(
-          testToggleId, true, 'Emergency test', 60, 'admin'
-        );
+        const state = await service.applyEmergencyOverride(testToggleId, true, 'Emergency test', 60, 'admin');
 
-        expect(eventSpy).toHaveBeenCalledWith(
-          state,
-          expect.objectContaining({ id: testToggleId })
-        );
+        expect(eventSpy).toHaveBeenCalledWith(state, expect.objectContaining({ id: testToggleId }));
       });
 
       it('should create emergency audit trail entry', async () => {
-        await service.applyEmergencyOverride(
-          testToggleId, true, 'Emergency override test', 60, 'admin-user'
-        );
+        await service.applyEmergencyOverride(testToggleId, true, 'Emergency override test', 60, 'admin-user');
 
         const state = service.getToggleState(testToggleId);
         const emergencyEntries = state!.auditTrail.filter(
@@ -476,20 +458,27 @@ describe('ArchiveToggleService', () => {
         expect(emergencyEntries[0].reason).toBe('Emergency override test');
       });
 
-      it('should schedule override expiration', (done) => {
+      it('should schedule override expiration', done => {
         // Use short TTL for testing
-        service.applyEmergencyOverride(
-          testToggleId, true, 'Quick expiry test', 0.01, 'admin' // ~0.6 seconds
-        ).then((state) => {
-          expect(state.isOverridden).toBe(true);
+        service
+          .applyEmergencyOverride(
+            testToggleId,
+            true,
+            'Quick expiry test',
+            0.01,
+            'admin' // ~0.6 seconds
+          )
+          .then(state => {
+            expect(state.isOverridden).toBe(true);
 
-          // Set up event listener for expiration
-          service.once('override_expired', (expiredState) => {
-            expect(expiredState.isOverridden).toBe(false);
-            expect(expiredState.overrideReason).toBeUndefined();
-            done();
-          });
-        }).catch(done);
+            // Set up event listener for expiration
+            service.once('override_expired', expiredState => {
+              expect(expiredState.isOverridden).toBe(false);
+              expect(expiredState.overrideReason).toBeUndefined();
+              done();
+            });
+          })
+          .catch(done);
       }, 2000); // 2 second timeout
     });
   });
@@ -501,33 +490,42 @@ describe('ArchiveToggleService', () => {
 
     beforeEach(async () => {
       // Create test toggles for different scenarios
-      const globalConfig = await service.createArchiveToggle({
-        name: 'Global Evaluation Toggle',
-        description: 'Global scope for evaluation testing',
-        scope: ArchiveToggleScope.GLOBAL,
-        mode: ArchiveToggleMode.AUTOMATIC,
-        enabledByDefault: true
-      }, 'test-user');
+      const globalConfig = await service.createArchiveToggle(
+        {
+          name: 'Global Evaluation Toggle',
+          description: 'Global scope for evaluation testing',
+          scope: ArchiveToggleScope.GLOBAL,
+          mode: ArchiveToggleMode.AUTOMATIC,
+          enabledByDefault: true,
+        },
+        'test-user'
+      );
       globalToggleId = globalConfig.id;
 
-      const userDataConfig = await service.createArchiveToggle({
-        name: 'User Data Evaluation Toggle',
-        description: 'User data scope for evaluation testing',
-        scope: ArchiveToggleScope.USER_DATA,
-        mode: ArchiveToggleMode.MANUAL_ONLY,
-        enabledByDefault: true,
-        requiresExplicitConsent: true
-      }, 'test-user');
+      const userDataConfig = await service.createArchiveToggle(
+        {
+          name: 'User Data Evaluation Toggle',
+          description: 'User data scope for evaluation testing',
+          scope: ArchiveToggleScope.USER_DATA,
+          mode: ArchiveToggleMode.MANUAL_ONLY,
+          enabledByDefault: true,
+          requiresExplicitConsent: true,
+        },
+        'test-user'
+      );
       userDataToggleId = userDataConfig.id;
 
-      const complianceConfig = await service.createArchiveToggle({
-        name: 'Compliance Evaluation Toggle',
-        description: 'Compliance scope for evaluation testing',
-        scope: ArchiveToggleScope.COMPLIANCE_DATA,
-        mode: ArchiveToggleMode.COMPLIANCE_ONLY,
-        enabledByDefault: true,
-        complianceRequired: true
-      }, 'test-user');
+      const complianceConfig = await service.createArchiveToggle(
+        {
+          name: 'Compliance Evaluation Toggle',
+          description: 'Compliance scope for evaluation testing',
+          scope: ArchiveToggleScope.COMPLIANCE_DATA,
+          mode: ArchiveToggleMode.COMPLIANCE_ONLY,
+          enabledByDefault: true,
+          complianceRequired: true,
+        },
+        'test-user'
+      );
       complianceToggleId = complianceConfig.id;
     });
 
@@ -541,7 +539,7 @@ describe('ArchiveToggleService', () => {
           dataClassification: DataClassification.INTERNAL,
           sourceIdentifier: 'test-data-source',
           triggeredBy: 'system',
-          timestamp: new Date()
+          timestamp: new Date(),
         };
 
         const result = await service.evaluateArchiving(context);
@@ -563,7 +561,7 @@ describe('ArchiveToggleService', () => {
           dataClassification: DataClassification.CONFIDENTIAL,
           sourceIdentifier: 'user-data-source',
           triggeredBy: 'system',
-          timestamp: new Date()
+          timestamp: new Date(),
         };
 
         const automaticResult = await service.evaluateArchiving(automaticContext);
@@ -585,7 +583,7 @@ describe('ArchiveToggleService', () => {
           dataClassification: DataClassification.RESTRICTED,
           sourceIdentifier: 'compliance-data',
           triggeredBy: 'system',
-          timestamp: new Date()
+          timestamp: new Date(),
         };
 
         const noComplianceResult = await service.evaluateArchiving(noComplianceContext);
@@ -594,7 +592,7 @@ describe('ArchiveToggleService', () => {
 
         const withComplianceContext = {
           ...noComplianceContext,
-          complianceRequirements: ['GDPR', 'SOX']
+          complianceRequirements: ['GDPR', 'SOX'],
         };
 
         const withComplianceResult = await service.evaluateArchiving(withComplianceContext);
@@ -614,7 +612,7 @@ describe('ArchiveToggleService', () => {
           dataClassification: DataClassification.INTERNAL,
           sourceIdentifier: 'test-source',
           triggeredBy: 'system',
-          timestamp: new Date()
+          timestamp: new Date(),
         };
 
         const result = await service.evaluateArchiving(context);
@@ -636,7 +634,7 @@ describe('ArchiveToggleService', () => {
           sourceIdentifier: 'emergency-backup',
           triggeredBy: 'emergency',
           isEmergency: true,
-          timestamp: new Date()
+          timestamp: new Date(),
         };
 
         const result = await service.evaluateArchiving(context);
@@ -655,7 +653,7 @@ describe('ArchiveToggleService', () => {
           dataClassification: DataClassification.INTERNAL,
           sourceIdentifier: 'system-logs',
           triggeredBy: 'system',
-          timestamp: new Date()
+          timestamp: new Date(),
         };
 
         await service.evaluateArchiving(context);
@@ -678,7 +676,7 @@ describe('ArchiveToggleService', () => {
           dataClassification: DataClassification.PUBLIC,
           sourceIdentifier: 'media-files',
           triggeredBy: 'user',
-          timestamp: new Date()
+          timestamp: new Date(),
         };
 
         const result = await service.evaluateArchiving(context);
@@ -693,7 +691,7 @@ describe('ArchiveToggleService', () => {
   describe('Integration and Events', () => {
     it('should initialize predefined toggles on startup', () => {
       const configs = service.listToggleConfigs();
-      
+
       // Should have at least the predefined toggles
       const gdprToggle = configs.find(c => c.name.includes('GDPR'));
       const systemLogsToggle = configs.find(c => c.name.includes('System Logs'));
@@ -713,7 +711,7 @@ describe('ArchiveToggleService', () => {
         category: ArchiveCategory.USER_DATA,
         dataClassification: DataClassification.CONFIDENTIAL,
         sourceIdentifier: 'user-data-123',
-        createdBy: 'test-user'
+        createdBy: 'test-user',
       };
 
       // Simulate archive created event
@@ -726,7 +724,7 @@ describe('ArchiveToggleService', () => {
 
     it('should emit events for all major operations', async () => {
       const events: string[] = [];
-      
+
       service.on('toggle_created', () => events.push('toggle_created'));
       service.on('toggle_updated', () => events.push('toggle_updated'));
       service.on('toggle_enabled', () => events.push('toggle_enabled'));
@@ -734,20 +732,26 @@ describe('ArchiveToggleService', () => {
       service.on('emergency_override_applied', () => events.push('emergency_override_applied'));
 
       // Create toggle
-      const config = await service.createArchiveToggle({
-        name: 'Event Test Toggle',
-        description: 'Testing all events',
-        scope: ArchiveToggleScope.GLOBAL,
-        mode: ArchiveToggleMode.MANUAL_ONLY,
-        customSettings: { allowEmergencyOverride: true }
-      }, 'test-user');
+      const config = await service.createArchiveToggle(
+        {
+          name: 'Event Test Toggle',
+          description: 'Testing all events',
+          scope: ArchiveToggleScope.GLOBAL,
+          mode: ArchiveToggleMode.MANUAL_ONLY,
+          customSettings: { allowEmergencyOverride: true },
+        },
+        'test-user'
+      );
 
       // Update toggle
-      await service.updateArchiveToggle({
-        id: config.id,
-        name: 'Updated Event Test Toggle',
-        reason: 'Testing update event'
-      }, 'test-user');
+      await service.updateArchiveToggle(
+        {
+          id: config.id,
+          name: 'Updated Event Test Toggle',
+          reason: 'Testing update event',
+        },
+        'test-user'
+      );
 
       // Enable toggle
       await service.setToggleState(config.id, true, 'Enable for test', 'test-user');
@@ -772,12 +776,17 @@ describe('ArchiveToggleService', () => {
       // Mock database service to throw error
       mockDbService.query = jest.fn().mockRejectedValue(new Error('Database connection failed'));
 
-      await expect(service.createArchiveToggle({
-        name: 'DB Error Test',
-        description: 'Should fail',
-        scope: ArchiveToggleScope.GLOBAL,
-        mode: ArchiveToggleMode.MANUAL_ONLY
-      }, 'test-user')).rejects.toThrow('Database connection failed');
+      await expect(
+        service.createArchiveToggle(
+          {
+            name: 'DB Error Test',
+            description: 'Should fail',
+            scope: ArchiveToggleScope.GLOBAL,
+            mode: ArchiveToggleMode.MANUAL_ONLY,
+          },
+          'test-user'
+        )
+      ).rejects.toThrow('Database connection failed');
     });
 
     it('should validate toggle configuration requirements', async () => {
@@ -786,7 +795,7 @@ describe('ArchiveToggleService', () => {
         name: 'Invalid Toggle',
         description: 'Testing validation',
         scope: 'invalid_scope' as any,
-        mode: ArchiveToggleMode.MANUAL_ONLY
+        mode: ArchiveToggleMode.MANUAL_ONLY,
       };
 
       // This would typically be caught by schema validation at the API level
@@ -803,12 +812,15 @@ describe('ArchiveToggleService', () => {
       mockAuditService.logAction = jest.fn().mockRejectedValue(new Error('Audit logging failed'));
 
       // Service should still work even if audit logging fails
-      const config = await service.createArchiveToggle({
-        name: 'Audit Fail Test',
-        description: 'Testing audit failure resilience',
-        scope: ArchiveToggleScope.GLOBAL,
-        mode: ArchiveToggleMode.MANUAL_ONLY
-      }, 'test-user');
+      const config = await service.createArchiveToggle(
+        {
+          name: 'Audit Fail Test',
+          description: 'Testing audit failure resilience',
+          scope: ArchiveToggleScope.GLOBAL,
+          mode: ArchiveToggleMode.MANUAL_ONLY,
+        },
+        'test-user'
+      );
 
       expect(config).toBeDefined();
       expect(config.name).toBe('Audit Fail Test');
@@ -818,20 +830,25 @@ describe('ArchiveToggleService', () => {
   describe('Performance and Scalability', () => {
     it('should handle large numbers of toggles efficiently', async () => {
       const startTime = Date.now();
-      
+
       // Create multiple toggles
       const promises = [];
       for (let i = 0; i < 50; i++) {
-        promises.push(service.createArchiveToggle({
-          name: `Performance Test Toggle ${i}`,
-          description: `Testing performance with toggle ${i}`,
-          scope: ArchiveToggleScope.GLOBAL,
-          mode: ArchiveToggleMode.MANUAL_ONLY
-        }, 'perf-test-user'));
+        promises.push(
+          service.createArchiveToggle(
+            {
+              name: `Performance Test Toggle ${i}`,
+              description: `Testing performance with toggle ${i}`,
+              scope: ArchiveToggleScope.GLOBAL,
+              mode: ArchiveToggleMode.MANUAL_ONLY,
+            },
+            'perf-test-user'
+          )
+        );
       }
 
       await Promise.all(promises);
-      
+
       const creationTime = Date.now() - startTime;
       expect(creationTime).toBeLessThan(5000); // Should complete within 5 seconds
 
@@ -839,27 +856,25 @@ describe('ArchiveToggleService', () => {
       const listStartTime = Date.now();
       const configs = service.listToggleConfigs();
       const listTime = Date.now() - listStartTime;
-      
+
       expect(configs.length).toBeGreaterThanOrEqual(50);
       expect(listTime).toBeLessThan(100); // Should list within 100ms
     });
 
     it('should limit audit trail entries to prevent memory issues', async () => {
-      const config = await service.createArchiveToggle({
-        name: 'Audit Limit Test',
-        description: 'Testing audit trail limits',
-        scope: ArchiveToggleScope.GLOBAL,
-        mode: ArchiveToggleMode.MANUAL_ONLY
-      }, 'test-user');
+      const config = await service.createArchiveToggle(
+        {
+          name: 'Audit Limit Test',
+          description: 'Testing audit trail limits',
+          scope: ArchiveToggleScope.GLOBAL,
+          mode: ArchiveToggleMode.MANUAL_ONLY,
+        },
+        'test-user'
+      );
 
       // Generate many audit entries by toggling state repeatedly
       for (let i = 0; i < 150; i++) {
-        await service.setToggleState(
-          config.id, 
-          i % 2 === 0, 
-          `Toggle operation ${i}`, 
-          'test-user'
-        );
+        await service.setToggleState(config.id, i % 2 === 0, `Toggle operation ${i}`, 'test-user');
       }
 
       const state = service.getToggleState(config.id);

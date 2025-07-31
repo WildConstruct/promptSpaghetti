@@ -11,6 +11,7 @@ The TLS system provides secure HTTPS communication, certificate management, and 
 ### Core Components
 
 #### 1. TLSConfigManager
+
 The central class responsible for managing TLS configuration, validation, and security settings.
 
 ```typescript
@@ -21,6 +22,7 @@ const tlsManager = new TLSConfigManager(tlsConfig);
 ```
 
 #### 2. CertificateManager
+
 Handles certificate loading, validation, and information extraction.
 
 ```typescript
@@ -31,6 +33,7 @@ const certInfo = CertificateManager.getCertificateInfo('/path/to/cert.crt');
 ```
 
 #### 3. EnhancedServer
+
 Enhanced Fastify server with built-in TLS support and HTTP/HTTPS dual-mode operation.
 
 ```typescript
@@ -71,6 +74,7 @@ NODE_ENV=production                 # Automatically enables TLS in production
 ### Configuration Presets
 
 #### Development Configuration
+
 ```typescript
 import { createDevelopmentTLSConfig } from './security/tls-config';
 
@@ -83,6 +87,7 @@ const devConfig = createDevelopmentTLSConfig();
 ```
 
 #### Production Configuration
+
 ```typescript
 import { createProductionTLSConfig } from './security/tls-config';
 
@@ -118,10 +123,11 @@ For development, use the included certificate generation script:
 For production, obtain certificates from a trusted Certificate Authority (CA):
 
 1. **Let's Encrypt (Recommended)**
+
    ```bash
    # Using Certbot
    certbot certonly --standalone -d yourdomain.com
-   
+
    # Certificates will be in:
    # /etc/letsencrypt/live/yourdomain.com/fullchain.pem
    # /etc/letsencrypt/live/yourdomain.com/privkey.pem
@@ -278,11 +284,13 @@ if (testResult.connected) {
 ### Health Checks
 
 #### Basic Health Check
+
 ```bash
 GET /health
 ```
 
 Response:
+
 ```json
 {
   "status": "healthy",
@@ -300,11 +308,13 @@ Response:
 ```
 
 #### TLS-Specific Health Check
+
 ```bash
 GET /health/tls
 ```
 
 Response:
+
 ```json
 {
   "status": "tls-healthy",
@@ -358,8 +368,8 @@ services:
   promptscape:
     build: .
     ports:
-      - "8000:8000"  # HTTP
-      - "8443:8443"  # HTTPS
+      - '8000:8000' # HTTP
+      - '8443:8443' # HTTPS
     environment:
       - NODE_ENV=production
       - TLS_ENABLED=true
@@ -389,34 +399,34 @@ spec:
         app: promptscape
     spec:
       containers:
-      - name: promptscape
-        image: promptscape:latest
-        ports:
-        - containerPort: 8000
-        - containerPort: 8443
-        env:
-        - name: NODE_ENV
-          value: "production"
-        - name: TLS_ENABLED
-          value: "true"
-        - name: TLS_CERT_PATH
-          value: "/etc/ssl/certs/tls.crt"
-        - name: TLS_KEY_PATH
-          value: "/etc/ssl/private/tls.key"
-        volumeMounts:
-        - name: tls-certs
-          mountPath: /etc/ssl/certs
-          readOnly: true
-        - name: tls-keys
-          mountPath: /etc/ssl/private
-          readOnly: true
+        - name: promptscape
+          image: promptscape:latest
+          ports:
+            - containerPort: 8000
+            - containerPort: 8443
+          env:
+            - name: NODE_ENV
+              value: 'production'
+            - name: TLS_ENABLED
+              value: 'true'
+            - name: TLS_CERT_PATH
+              value: '/etc/ssl/certs/tls.crt'
+            - name: TLS_KEY_PATH
+              value: '/etc/ssl/private/tls.key'
+          volumeMounts:
+            - name: tls-certs
+              mountPath: /etc/ssl/certs
+              readOnly: true
+            - name: tls-keys
+              mountPath: /etc/ssl/private
+              readOnly: true
       volumes:
-      - name: tls-certs
-        secret:
-          secretName: tls-certificates
-      - name: tls-keys
-        secret:
-          secretName: tls-private-keys
+        - name: tls-certs
+          secret:
+            secretName: tls-certificates
+        - name: tls-keys
+          secret:
+            secretName: tls-private-keys
 ---
 apiVersion: v1
 kind: Service
@@ -426,12 +436,12 @@ spec:
   selector:
     app: promptscape
   ports:
-  - name: http
-    port: 80
-    targetPort: 8000
-  - name: https
-    port: 443
-    targetPort: 8443
+    - name: http
+      port: 80
+      targetPort: 8000
+    - name: https
+      port: 443
+      targetPort: 8443
   type: LoadBalancer
 ```
 
@@ -458,16 +468,16 @@ server {
 
     ssl_certificate /etc/ssl/certs/promptscape.crt;
     ssl_certificate_key /etc/ssl/private/promptscape.key;
-    
+
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_ciphers ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256;
     ssl_prefer_server_ciphers off;
-    
+
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
-    
+
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
-    
+
     location / {
         proxy_pass https://promptscape;
         proxy_ssl_verify off;  # Since backend uses self-signed certs
@@ -504,6 +514,7 @@ backend promptscape_backend
 ### Common Issues
 
 #### 1. Certificate Not Trusted
+
 ```bash
 # Check certificate validity
 openssl x509 -in certs/localhost.crt -text -noout
@@ -516,6 +527,7 @@ openssl s_client -connect localhost:8443 -servername localhost
 ```
 
 #### 2. Permission Errors
+
 ```bash
 # Check file permissions
 ls -la certs/
@@ -526,6 +538,7 @@ chmod 600 certs/*.key
 ```
 
 #### 3. Port Already in Use
+
 ```bash
 # Check what's using the port
 lsof -i :8443
@@ -535,6 +548,7 @@ kill -9 <PID>
 ```
 
 #### 4. HTTPS Redirect Loop
+
 - Ensure HTTP server is properly configured for redirects
 - Check that HTTPS server is listening on correct port
 - Verify proxy configuration if using reverse proxy
@@ -573,18 +587,21 @@ curl -k https://localhost:8443/health/tls
 ## Security Best Practices
 
 ### Certificate Management
+
 1. **Use strong key sizes**: Minimum 2048-bit RSA or 256-bit ECC
 2. **Regular rotation**: Renew certificates before expiration
 3. **Secure storage**: Protect private keys with appropriate permissions
 4. **Monitor expiration**: Set up alerts for certificate expiry
 
 ### TLS Configuration
+
 1. **Modern protocols only**: Disable TLS 1.0/1.1, prefer TLS 1.3
 2. **Strong cipher suites**: Use AEAD ciphers, avoid deprecated ciphers
 3. **Perfect Forward Secrecy**: Use ECDHE key exchange
 4. **HSTS enabled**: Enforce HTTPS with appropriate max-age
 
 ### Operational Security
+
 1. **Regular updates**: Keep TLS libraries and certificates current
 2. **Monitoring**: Track TLS connections and certificate status
 3. **Incident response**: Have procedures for certificate compromise
@@ -593,12 +610,14 @@ curl -k https://localhost:8443/health/tls
 ## Performance Considerations
 
 ### TLS Optimization
+
 - **Session resumption**: Enable TLS session caching
 - **OCSP stapling**: Reduce client-side certificate validation overhead
 - **HTTP/2**: Enable for improved performance over TLS
 - **Certificate chains**: Optimize certificate chain length
 
 ### Load Balancing
+
 - **TLS termination**: Consider terminating TLS at load balancer
 - **Connection pooling**: Reuse TLS connections when possible
 - **Health checks**: Monitor TLS endpoint availability
@@ -606,12 +625,14 @@ curl -k https://localhost:8443/health/tls
 ## Compliance and Standards
 
 ### Supported Standards
+
 - **TLS 1.2/1.3**: Modern transport security
 - **RFC 7525**: Recommendations for Secure Use of TLS
 - **FIPS 140-2**: Federal cryptographic standards (when required)
 - **Common Criteria**: Security evaluation standards
 
 ### Compliance Frameworks
+
 - **SOC 2**: Security controls for service organizations
 - **ISO 27001**: Information security management
 - **PCI DSS**: Payment card industry security

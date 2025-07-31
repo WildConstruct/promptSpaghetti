@@ -102,15 +102,15 @@ function performLogin(user) {
       headers: { 'Content-Type': 'application/json' },
       timeout: '10s',
       tags: { auth_action: 'login' },
-    },
+    }
   );
 
   const loginTime = Date.now() - startTime;
   authLatency.add(loginTime);
 
   const loginSuccess = check(loginResponse, {
-    'login status is 200': (r) => r.status === 200,
-    'login response has token': (r) => {
+    'login status is 200': r => r.status === 200,
+    'login response has token': r => {
       try {
         const body = JSON.parse(r.body);
         return body.token && body.refreshToken;
@@ -118,7 +118,7 @@ function performLogin(user) {
         return false;
       }
     },
-    'login response time < 2s': (r) => r.timings.duration < 2000,
+    'login response time < 2s': r => r.timings.duration < 2000,
   });
 
   if (!loginSuccess) {
@@ -178,7 +178,7 @@ function refreshToken(authData) {
       headers: { 'Content-Type': 'application/json' },
       timeout: '10s',
       tags: { auth_action: 'refresh' },
-    },
+    }
   );
 
   const refreshTime = Date.now() - startTime;
@@ -222,7 +222,7 @@ function performLogout(authData) {
       },
       timeout: '5s',
       tags: { auth_action: 'logout' },
-    },
+    }
   );
 
   const logoutTime = Date.now() - startTime;
@@ -242,8 +242,8 @@ function testOAuthFlow() {
 
   // Should redirect to OAuth provider
   return check(oauthResponse, {
-    'oauth redirect received': (r) => r.status === 302 || r.status === 200,
-    'oauth response time < 1s': (r) => r.timings.duration < 1000,
+    'oauth redirect received': r => r.status === 302 || r.status === 200,
+    'oauth response time < 1s': r => r.timings.duration < 1000,
   });
 }
 
@@ -253,9 +253,7 @@ export default function () {
   const user = testUsers[userId % testUsers.length];
   const pattern = getAuthenticationPattern(userId);
 
-  console.log(
-    `User ${userId} starting authentication test with ${pattern.loginFrequency} frequency pattern`,
-  );
+  console.log(`User ${userId} starting authentication test with ${pattern.loginFrequency} frequency pattern`);
 
   // 1. Perform Login
   const authData = performLogin(user);
@@ -268,8 +266,7 @@ export default function () {
   console.log(`User ${userId} logged in successfully`);
 
   // 2. Simulate session activity with validation
-  const sessionDuration =
-    pattern.sessionDuration === 'short' ? 15 : pattern.sessionDuration === 'medium' ? 45 : 120; // seconds
+  const sessionDuration = pattern.sessionDuration === 'short' ? 15 : pattern.sessionDuration === 'medium' ? 45 : 120; // seconds
 
   const sessionStart = Date.now();
   let currentAuthData = authData;

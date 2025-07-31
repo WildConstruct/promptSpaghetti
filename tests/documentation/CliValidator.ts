@@ -1,9 +1,9 @@
 /**
  * CLI Validator - Documentation Testing
- * 
+ *
  * Validates CLI commands and shell scripts in documentation for syntax correctness,
  * command availability, and safe execution patterns.
- * 
+ *
  * Task: E18-1753114562748-32EEBC - Implement doc testing
  */
 
@@ -36,23 +36,23 @@ export interface CommandInfo {
 export class CliValidator {
   private options: CliValidationOptions;
   private commandCache = new Map<string, boolean>();
-  
+
   constructor(options: CliValidationOptions) {
     this.options = {
       safetyChecks: true,
       shellPath: '/bin/bash',
       timeout: 10000,
-      ...options
+      ...options,
     };
   }
-  
+
   /**
    * Validate a CLI code block
    */
   async validateCodeBlock(codeBlock: CodeBlock): Promise<CodeBlockTestResult> {
     const errors: string[] = [];
     let validationType: CodeBlockTestResult['validationType'] = 'syntax';
-    
+
     try {
       // Check if this is a supported shell language
       if (!this.isSupportedShellLanguage(codeBlock.language)) {
@@ -62,37 +62,37 @@ export class CliValidator {
           lineNumber: codeBlock.lineNumber,
           passed: false,
           errors: [`Unsupported shell language: ${codeBlock.language}`],
-          validationType: 'syntax'
+          validationType: 'syntax',
         };
       }
-      
+
       // Parse commands from code block
       const commands = this.parseCommands(codeBlock.content);
-      
+
       // Syntax validation
       if (this.options.validateSyntax) {
         for (const command of commands) {
           const syntaxErrors = await this.validateCommandSyntax(command);
           errors.push(...syntaxErrors);
         }
-        
+
         if (errors.length === 0) {
           validationType = 'syntax';
         }
       }
-      
+
       // Command availability validation
       if (this.options.validateCommands && errors.length === 0) {
         for (const command of commands) {
           const commandErrors = await this.validateCommandAvailability(command);
           errors.push(...commandErrors);
         }
-        
+
         if (errors.length === 0) {
           validationType = 'execution';
         }
       }
-      
+
       // Safety validation
       if (this.options.safetyChecks) {
         for (const command of commands) {
@@ -100,16 +100,15 @@ export class CliValidator {
           errors.push(...safetyErrors);
         }
       }
-      
+
       return {
         language: codeBlock.language,
         content: codeBlock.content,
         lineNumber: codeBlock.lineNumber,
         passed: errors.length === 0,
         errors,
-        validationType
+        validationType,
       };
-      
     } catch (error) {
       return {
         language: codeBlock.language,
@@ -117,26 +116,26 @@ export class CliValidator {
         lineNumber: codeBlock.lineNumber,
         passed: false,
         errors: [`CLI validation failed: ${error instanceof Error ? error.message : String(error)}`],
-        validationType: 'syntax'
+        validationType: 'syntax',
       };
     }
   }
-  
+
   /**
    * Parse commands from shell script content
    */
   private parseCommands(content: string): Array<{ command: string; args: string[]; line: number; fullLine: string }> {
     const commands: Array<{ command: string; args: string[]; line: number; fullLine: string }> = [];
     const lines = content.split('\n');
-    
+
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i].trim();
-      
+
       // Skip empty lines and comments
       if (line === '' || line.startsWith('#')) {
         continue;
       }
-      
+
       // Skip variable assignments (unless they contain command substitution)
       if (line.match(/^[A-Za-z_][A-Za-z0-9_]*=/)) {
         if (line.includes('$(') || line.includes('`')) {
@@ -151,36 +150,36 @@ export class CliValidator {
         }
         continue;
       }
-      
+
       // Parse command line
       const parsed = this.parseCommandLine(line);
       if (parsed) {
         commands.push({ ...parsed, line: i + 1, fullLine: line });
       }
-      
+
       // Handle multi-line commands (ending with backslash)
       if (line.endsWith('\\')) {
         let fullCommand = line.slice(0, -1).trim();
         let j = i + 1;
-        
+
         while (j < lines.length && lines[j - 1].endsWith('\\')) {
           const continuationLine = lines[j].trim();
           fullCommand += ' ' + continuationLine.replace(/\\$/, '').trim();
           j++;
         }
-        
+
         const parsed = this.parseCommandLine(fullCommand);
         if (parsed) {
           commands.push({ ...parsed, line: i + 1, fullLine: fullCommand });
         }
-        
+
         i = j - 1; // Skip the continuation lines
       }
     }
-    
+
     return commands;
   }
-  
+
   /**
    * Parse a single command line
    */
@@ -190,24 +189,24 @@ export class CliValidator {
       .replace(/\s*[;&|]+\s*$/, '') // Remove trailing operators
       .split(/\s*[;&|]+\s*/)[0] // Take first command in chain
       .trim();
-    
+
     if (cleaned === '') {
       return null;
     }
-    
+
     // Simple argument parsing (doesn't handle all shell quoting perfectly)
     const parts = this.parseShellArguments(cleaned);
-    
+
     if (parts.length === 0) {
       return null;
     }
-    
+
     return {
       command: parts[0],
-      args: parts.slice(1)
+      args: parts.slice(1),
     };
   }
-  
+
   /**
    * Parse shell arguments (basic implementation)
    */
@@ -217,31 +216,31 @@ export class CliValidator {
     let inSingleQuote = false;
     let inDoubleQuote = false;
     let escapeNext = false;
-    
+
     for (let i = 0; i < line.length; i++) {
       const char = line[i];
-      
+
       if (escapeNext) {
         currentArg += char;
         escapeNext = false;
         continue;
       }
-      
+
       if (char === '\\' && !inSingleQuote) {
         escapeNext = true;
         continue;
       }
-      
-      if (char === '\'' && !inDoubleQuote) {
+
+      if (char === "'" && !inDoubleQuote) {
         inSingleQuote = !inSingleQuote;
         continue;
       }
-      
+
       if (char === '"' && !inSingleQuote) {
         inDoubleQuote = !inDoubleQuote;
         continue;
       }
-      
+
       if (char === ' ' && !inSingleQuote && !inDoubleQuote) {
         if (currentArg !== '') {
           args.push(currentArg);
@@ -249,65 +248,68 @@ export class CliValidator {
         }
         continue;
       }
-      
+
       currentArg += char;
     }
-    
+
     if (currentArg !== '') {
       args.push(currentArg);
     }
-    
+
     return args;
   }
-  
+
   /**
    * Extract command substitutions from line
    */
   private extractCommandSubstitutions(line: string): string[] {
     const commands: string[] = [];
-    
+
     // Extract $(command) patterns
     const dollarParenMatches = line.matchAll(/\$\(([^)]+)\)/g);
     for (const match of dollarParenMatches) {
       commands.push(match[1]);
     }
-    
+
     // Extract `command` patterns
     const backtickMatches = line.matchAll(/`([^`]+)`/g);
     for (const match of backtickMatches) {
       commands.push(match[1]);
     }
-    
+
     return commands;
   }
-  
+
   /**
    * Validate command syntax
    */
-  private async validateCommandSyntax(
-    commandInfo: { command: string; args: string[]; line: number; fullLine: string }
-  ): Promise<string[]> {
+  private async validateCommandSyntax(commandInfo: {
+    command: string;
+    args: string[];
+    line: number;
+    fullLine: string;
+  }): Promise<string[]> {
     const errors: string[] = [];
-    
+
     // Check for common syntax errors
     const fullLine = commandInfo.fullLine;
-    
+
     // Unmatched quotes
     if (this.hasUnmatchedQuotes(fullLine)) {
       errors.push(`Line ${commandInfo.line}: Unmatched quotes`);
     }
-    
+
     // Unmatched parentheses
     if (this.hasUnmatchedParentheses(fullLine)) {
       errors.push(`Line ${commandInfo.line}: Unmatched parentheses`);
     }
-    
+
     // Invalid redirections
     const invalidRedirections = this.findInvalidRedirections(fullLine);
     if (invalidRedirections.length > 0) {
       errors.push(`Line ${commandInfo.line}: Invalid redirections: ${invalidRedirections.join(', ')}`);
     }
-    
+
     // Potentially dangerous patterns
     if (this.options.safetyChecks) {
       const dangerousPatterns = this.findDangerousPatterns(fullLine);
@@ -315,30 +317,32 @@ export class CliValidator {
         errors.push(`Line ${commandInfo.line}: Potentially dangerous patterns: ${dangerousPatterns.join(', ')}`);
       }
     }
-    
+
     return errors;
   }
-  
+
   /**
    * Validate command availability
    */
-  private async validateCommandAvailability(
-    commandInfo: { command: string; args: string[]; line: number }
-  ): Promise<string[]> {
+  private async validateCommandAvailability(commandInfo: {
+    command: string;
+    args: string[];
+    line: number;
+  }): Promise<string[]> {
     const errors: string[] = [];
     const command = commandInfo.command;
-    
+
     // Skip built-in shell commands and operators
     if (this.isShellBuiltin(command)) {
       return errors;
     }
-    
+
     // Check if command is in allowed list
     if (this.options.allowedCommands.length > 0 && !this.options.allowedCommands.includes(command)) {
       errors.push(`Line ${commandInfo.line}: Command not in allowed list: ${command}`);
       return errors;
     }
-    
+
     // Check if command is available
     const isAvailable = await this.isCommandAvailable(command);
     if (!isAvailable) {
@@ -346,28 +350,45 @@ export class CliValidator {
       const errorMsg = `Line ${commandInfo.line}: Command not found: ${command}`;
       errors.push(suggestion ? `${errorMsg} (try: ${suggestion})` : errorMsg);
     }
-    
+
     return errors;
   }
-  
+
   /**
    * Validate command safety
    */
-  private validateCommandSafety(
-    commandInfo: { command: string; args: string[]; line: number; fullLine: string }
-  ): string[] {
+  private validateCommandSafety(commandInfo: {
+    command: string;
+    args: string[];
+    line: number;
+    fullLine: string;
+  }): string[] {
     const errors: string[] = [];
     const command = commandInfo.command;
     const args = commandInfo.args;
     const fullLine = commandInfo.fullLine;
-    
+
     // Dangerous commands
     const dangerousCommands = [
-      'rm', 'rmdir', 'dd', 'mkfs', 'fdisk', 'parted',
-      'chmod', 'chown', 'sudo', 'su', 'init', 'shutdown',
-      'reboot', 'halt', 'poweroff', 'kill', 'killall'
+      'rm',
+      'rmdir',
+      'dd',
+      'mkfs',
+      'fdisk',
+      'parted',
+      'chmod',
+      'chown',
+      'sudo',
+      'su',
+      'init',
+      'shutdown',
+      'reboot',
+      'halt',
+      'poweroff',
+      'kill',
+      'killall',
     ];
-    
+
     if (dangerousCommands.includes(command)) {
       // Check for particularly dangerous usage
       if (command === 'rm' && (args.includes('-rf') || args.includes('-r'))) {
@@ -380,22 +401,22 @@ export class CliValidator {
         errors.push(`Line ${commandInfo.line}: Potentially dangerous command: ${command}`);
       }
     }
-    
+
     // Check for wildcards in dangerous contexts
     if (fullLine.includes('*') && ['rm', 'chmod', 'chown'].includes(command)) {
       errors.push(`Line ${commandInfo.line}: Wildcard usage with potentially dangerous command`);
     }
-    
+
     // Network operations
     const networkCommands = ['curl', 'wget', 'ssh', 'scp', 'rsync', 'ftp', 'sftp'];
     if (networkCommands.includes(command)) {
       // This is just a warning for documentation
       // In real validation, you might want to check for HTTPS, etc.
     }
-    
+
     return errors;
   }
-  
+
   /**
    * Check if command is available on system
    */
@@ -404,7 +425,7 @@ export class CliValidator {
     if (this.commandCache.has(command)) {
       return this.commandCache.get(command)!;
     }
-    
+
     try {
       const result = await this.executeCommand('which', [command]);
       const available = result.exitCode === 0;
@@ -415,41 +436,41 @@ export class CliValidator {
       return false;
     }
   }
-  
+
   /**
    * Execute a command (used for validation, not from documentation)
    */
   private executeCommand(
-    command: string, 
+    command: string,
     args: string[]
   ): Promise<{ exitCode: number; stdout: string; stderr: string }> {
     return new Promise((resolve, reject) => {
       const child = spawn(command, args, {
         timeout: this.options.timeout,
-        stdio: ['ignore', 'pipe', 'pipe']
+        stdio: ['ignore', 'pipe', 'pipe'],
       });
-      
+
       let stdout = '';
       let stderr = '';
-      
-      child.stdout?.on('data', (data) => {
+
+      child.stdout?.on('data', data => {
         stdout += data.toString();
       });
-      
-      child.stderr?.on('data', (data) => {
+
+      child.stderr?.on('data', data => {
         stderr += data.toString();
       });
-      
-      child.on('close', (exitCode) => {
+
+      child.on('close', exitCode => {
         resolve({ exitCode: exitCode || 0, stdout, stderr });
       });
-      
-      child.on('error', (error) => {
+
+      child.on('error', error => {
         reject(error);
       });
     });
   }
-  
+
   /**
    * Check if language is supported shell language
    */
@@ -457,45 +478,86 @@ export class CliValidator {
     const shellLanguages = ['bash', 'sh', 'shell', 'zsh', 'fish', 'csh', 'tcsh'];
     return shellLanguages.includes(language.toLowerCase());
   }
-  
+
   /**
    * Check if command is a shell builtin
    */
   private isShellBuiltin(command: string): boolean {
     const builtins = [
-      'cd', 'pwd', 'echo', 'printf', 'test', '[', 'eval', 'exec',
-      'exit', 'return', 'break', 'continue', 'shift', 'set', 'unset',
-      'export', 'source', '.', 'alias', 'unalias', 'history',
-      'jobs', 'bg', 'fg', 'wait', 'read', 'getopts', 'let',
-      'declare', 'typeset', 'readonly', 'local', 'trap',
-      'if', 'then', 'else', 'elif', 'fi', 'case', 'esac',
-      'for', 'while', 'until', 'do', 'done', 'function',
-      'time', 'coproc', 'select'
+      'cd',
+      'pwd',
+      'echo',
+      'printf',
+      'test',
+      '[',
+      'eval',
+      'exec',
+      'exit',
+      'return',
+      'break',
+      'continue',
+      'shift',
+      'set',
+      'unset',
+      'export',
+      'source',
+      '.',
+      'alias',
+      'unalias',
+      'history',
+      'jobs',
+      'bg',
+      'fg',
+      'wait',
+      'read',
+      'getopts',
+      'let',
+      'declare',
+      'typeset',
+      'readonly',
+      'local',
+      'trap',
+      'if',
+      'then',
+      'else',
+      'elif',
+      'fi',
+      'case',
+      'esac',
+      'for',
+      'while',
+      'until',
+      'do',
+      'done',
+      'function',
+      'time',
+      'coproc',
+      'select',
     ];
-    
+
     return builtins.includes(command);
   }
-  
+
   /**
    * Suggest alternative command
    */
   private suggestAlternativeCommand(command: string): string | undefined {
     const alternatives: Record<string, string> = {
-      'node': 'nodejs',
-      'python': 'python3',
-      'pip': 'pip3',
-      'vim': 'nano',
-      'emacs': 'nano',
-      'cat': 'less',
-      'less': 'more',
-      'grep': 'rg',
-      'find': 'fd',
-      'ls': 'exa'
+      node: 'nodejs',
+      python: 'python3',
+      pip: 'pip3',
+      vim: 'nano',
+      emacs: 'nano',
+      cat: 'less',
+      less: 'more',
+      grep: 'rg',
+      find: 'fd',
+      ls: 'exa',
     };
-    
+
     return alternatives[command];
   }
-  
+
   /**
    * Check for unmatched quotes
    */
@@ -503,25 +565,25 @@ export class CliValidator {
     let singleQuotes = 0;
     let doubleQuotes = 0;
     let escapeNext = false;
-    
+
     for (const char of line) {
       if (escapeNext) {
         escapeNext = false;
         continue;
       }
-      
+
       if (char === '\\') {
         escapeNext = true;
         continue;
       }
-      
-      if (char === '\'') singleQuotes++;
+
+      if (char === "'") singleQuotes++;
       if (char === '"') doubleQuotes++;
     }
-    
-    return (singleQuotes % 2 !== 0) || (doubleQuotes % 2 !== 0);
+
+    return singleQuotes % 2 !== 0 || doubleQuotes % 2 !== 0;
   }
-  
+
   /**
    * Check for unmatched parentheses
    */
@@ -529,81 +591,81 @@ export class CliValidator {
     let count = 0;
     let inQuotes = false;
     let quoteChar = '';
-    
+
     for (const char of line) {
-      if (!inQuotes && (char === '"' || char === '\'')) {
+      if (!inQuotes && (char === '"' || char === "'")) {
         inQuotes = true;
         quoteChar = char;
         continue;
       }
-      
+
       if (inQuotes && char === quoteChar) {
         inQuotes = false;
         continue;
       }
-      
+
       if (!inQuotes) {
         if (char === '(') count++;
         if (char === ')') count--;
       }
     }
-    
+
     return count !== 0;
   }
-  
+
   /**
    * Find invalid redirections
    */
   private findInvalidRedirections(line: string): string[] {
     const invalid: string[] = [];
-    
+
     // Check for malformed redirections
     const redirections = line.match(/[<>]+\s*[<>]/g);
     if (redirections) {
       invalid.push(...redirections);
     }
-    
+
     // Check for redirections to dangerous locations
     if (line.match(/>\s*\/dev\/null/)) {
       // This is actually OK, but worth noting
     }
-    
+
     if (line.match(/>\s*\/dev\/zero/)) {
       invalid.push('> /dev/zero');
     }
-    
+
     return invalid;
   }
-  
+
   /**
    * Find dangerous patterns
    */
   private findDangerousPatterns(line: string): string[] {
     const patterns: string[] = [];
-    
+
     // Command injection patterns
     if (line.includes('$(curl') || line.includes('`curl')) {
       patterns.push('remote code execution');
     }
-    
+
     if (line.includes('eval') && line.includes('$')) {
       patterns.push('eval with variable expansion');
     }
-    
+
     // File system dangers
     if (line.includes('rm -rf /')) {
       patterns.push('recursive deletion from root');
     }
-    
+
     if (line.includes('chmod -R 777')) {
       patterns.push('recursive permission change to 777');
     }
-    
+
     // Network dangers
     if (line.match(/curl.*\|\s*(sh|bash|zsh)/)) {
       patterns.push('pipe from curl to shell');
     }
-    
+
     return patterns;
   }
 }
@@ -629,35 +691,35 @@ export class CliAnalyzer {
       lineNumber: number;
       context: string;
     }> = [];
-    
+
     for (const block of codeBlocks) {
       if (this.isShellLanguage(block.language)) {
         const validator = new CliValidator({
           validateSyntax: false,
           validateCommands: false,
           allowedCommands: [],
-          skipExecution: true
+          skipExecution: true,
         });
-        
+
         const parsedCommands = (
           validator as unknown as { parseCommands: (content: string) => unknown[] }
         ).parseCommands(block.content);
-        
+
         for (const cmd of parsedCommands) {
           commands.push({
             command: `${cmd.command} ${cmd.args.join(' ')}`.trim(),
             language: block.language,
             file: 'unknown',
             lineNumber: block.lineNumber + cmd.line - 1,
-            context: block.content
+            context: block.content,
           });
         }
       }
     }
-    
+
     return commands;
   }
-  
+
   /**
    * Get statistics about CLI usage in documentation
    */
@@ -672,33 +734,33 @@ export class CliAnalyzer {
     const commandFrequency: Record<string, number> = {};
     const languageDistribution: Record<string, number> = {};
     let totalCommands = 0;
-    
+
     for (const block of shellBlocks) {
       languageDistribution[block.language] = (languageDistribution[block.language] || 0) + 1;
-      
+
       const commands = this.extractAllCommands([block]);
       totalCommands += commands.length;
-      
+
       for (const cmd of commands) {
         const baseCommand = cmd.command.split(' ')[0];
         commandFrequency[baseCommand] = (commandFrequency[baseCommand] || 0) + 1;
       }
     }
-    
+
     const mostCommonCommands = Object.entries(commandFrequency)
       .map(([command, count]) => ({ command, count }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
-    
+
     return {
       totalShellBlocks: shellBlocks.length,
       totalCommands,
       commandFrequency,
       languageDistribution,
-      mostCommonCommands
+      mostCommonCommands,
     };
   }
-  
+
   /**
    * Check if language is a shell language
    */

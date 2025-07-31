@@ -4,11 +4,11 @@ on:
   # Run on pushes to main and development branches
   push:
     branches: [main, dev, alpha]
-  
+
   # Run on pull requests to main
   pull_request:
     branches: [main]
-  
+
   # Manual trigger with configurable parameters
   workflow_dispatch:
     inputs:
@@ -57,7 +57,7 @@ jobs:
       scenario: ${{ steps.config.outputs.scenario }}
       environment: ${{ steps.config.outputs.environment }}
       should-run-performance: ${{ steps.config.outputs.should-run-performance }}
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -93,7 +93,7 @@ jobs:
           else
             echo "should-run-performance=false" >> $GITHUB_OUTPUT
           fi
-          
+
           echo "🔧 Performance test configuration:"
           echo "   Test suite: $(cat $GITHUB_OUTPUT | grep test-suite | cut -d= -f2)"
           echo "   Scenario: $(cat $GITHUB_OUTPUT | grep scenario | cut -d= -f2)"
@@ -105,7 +105,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: setup
     if: needs.setup.outputs.should-run-performance == 'true'
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -137,7 +137,7 @@ jobs:
 
       - name: Build client
         run: pnpm --filter client build
-        
+
       - name: Build server
         run: pnpm --filter server build
 
@@ -146,13 +146,13 @@ jobs:
           # Create in-memory SQLite database for testing
           mkdir -p server/data
           echo "Setting up test database..."
-          
+
       - name: Start PromptScape server in background
         run: |
           echo "Starting PromptScape server for performance testing..."
           cd server
           nohup pnpm start > server.log 2>&1 &
-          
+
           # Wait for server to be ready
           echo "Waiting for server to start..."
           for i in {1..30}; do
@@ -167,7 +167,7 @@ jobs:
             fi
             sleep 1
           done
-          
+
           # Verify WebSocket server
           echo "Checking WebSocket server on port 8001..."
           netstat -tuln | grep :8001 || echo "⚠️ WebSocket server may not be running"
@@ -175,18 +175,18 @@ jobs:
       - name: Server health check
         run: |
           echo "🏥 Performing comprehensive server health check..."
-          
+
           # API health check
           response=$(curl -s http://localhost:8000/health)
           echo "Health response: $response"
-          
+
           if echo "$response" | grep -q "ok"; then
             echo "✅ API server health check passed"
           else
             echo "❌ API server health check failed"
             exit 1
           fi
-          
+
           # Performance endpoint check
           if curl -f -X POST http://localhost:8000/preview \
                -H "Content-Type: application/json" \
@@ -208,23 +208,23 @@ jobs:
   # Install and configure k6
   install-k6:
     name: Install k6
-    runs-on: ubuntu-latest  
+    runs-on: ubuntu-latest
     needs: setup
     if: needs.setup.outputs.should-run-performance == 'true'
-    
+
     steps:
       - name: Download and install k6
         run: |
           echo "📦 Installing k6 version ${{ env.K6_VERSION }}..."
-          
+
           # Download k6 binary
           curl -LO "https://github.com/grafana/k6/releases/download/v${{ env.K6_VERSION }}/k6-v${{ env.K6_VERSION }}-linux-amd64.tar.gz"
           tar -xzf "k6-v${{ env.K6_VERSION }}-linux-amd64.tar.gz"
           sudo mv "k6-v${{ env.K6_VERSION }}-linux-amd64/k6" /usr/local/bin/
-          
+
           # Verify installation
           k6 version
-          
+
           echo "✅ k6 installed successfully"
 
       - name: Cache k6 binary
@@ -232,19 +232,19 @@ jobs:
         with:
           path: /usr/local/bin/k6
           key: k6-${{ env.K6_VERSION }}-linux-amd64
-          
+
   # Run k6 performance tests
   performance-tests:
     name: k6 Performance Tests
     runs-on: ubuntu-latest
     needs: [setup, build-and-start, install-k6]
     if: needs.setup.outputs.should-run-performance == 'true'
-    
+
     strategy:
       matrix:
         test: [graph-execution-load, websocket-collaboration, auth-load]
       fail-fast: false
-      
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -269,10 +269,10 @@ jobs:
           echo "   Suite: ${{ needs.setup.outputs.test-suite }}"
           echo "   Scenario: ${{ needs.setup.outputs.scenario }}"
           echo "   Environment: ${{ needs.setup.outputs.environment }}"
-          
+
           # Create results directory
           mkdir -p performance-results
-          
+
           # Set test configuration based on suite
           if [[ "${{ needs.setup.outputs.test-suite }}" == "smoke" ]]; then
             TEST_DURATION="2m"
@@ -284,10 +284,10 @@ jobs:
             TEST_DURATION="10m" 
             MAX_VUS="200"
           fi
-          
+
           echo "   Duration: $TEST_DURATION"
           echo "   Max VUs: $MAX_VUS"
-          
+
           # Run the k6 test with comprehensive output
           k6 run \
             --out json=performance-results/${{ matrix.test }}-results.json \
@@ -296,7 +296,7 @@ jobs:
             --env SCENARIO=${{ needs.setup.outputs.scenario }} \
             --env ENVIRONMENT=${{ needs.setup.outputs.environment }} \
             server/src/performance/k6-tests/${{ matrix.test }}.js
-          
+
         continue-on-error: ${{ needs.setup.outputs.test-suite == 'smoke' }}
 
       - name: Upload test results
@@ -308,11 +308,11 @@ jobs:
 
   # Analyze results and detect regressions
   analyze-results:
-    name: Performance Analysis & Regression Detection  
+    name: Performance Analysis & Regression Detection
     runs-on: ubuntu-latest
     needs: [setup, performance-tests]
     if: always() && needs.setup.outputs.should-run-performance == 'true'
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -338,19 +338,19 @@ jobs:
       - name: Performance regression analysis
         run: |
           echo "📊 Analyzing performance test results..."
-          
+
           # Initialize analysis utilities
           mkdir -p src/data/{logs,reports,tracking,estimation,quality,health}
           chmod +x src/utils/*.js
-          
+
           # Create combined results directory
           mkdir -p combined-results
           find performance-results/ -name "*.json" -exec cp {} combined-results/ \;
           find performance-results/ -name "*.csv" -exec cp {} combined-results/ \;
-          
+
           echo "📁 Results collected:"
           ls -la combined-results/
-          
+
           # Run performance analysis using existing infrastructure
           node server/src/performance/performance-cli.ts analyze \
             --input combined-results \
@@ -360,7 +360,7 @@ jobs:
       - name: Generate performance report
         run: |
           echo "📝 Generating comprehensive performance report..."
-          
+
           # Generate HTML report with charts and analysis
           node server/src/performance/performance-cli.ts report \
             --input combined-results \
@@ -379,15 +379,15 @@ jobs:
       - name: Performance threshold validation
         run: |
           echo "🎯 Validating performance against Epic 20 thresholds..."
-          
+
           # Use existing performance validation
           VALIDATION_EXIT_CODE=0
-          
+
           node server/src/performance/performance-cli.ts validate \
             --input combined-results \
             --thresholds epic20 \
             --suite ${{ needs.setup.outputs.test-suite }} || VALIDATION_EXIT_CODE=$?
-          
+
           if [[ $VALIDATION_EXIT_CODE -eq 0 ]]; then
             echo "✅ All performance thresholds met"
             echo "performance_status=passed" >> $GITHUB_OUTPUT
@@ -405,7 +405,7 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
           echo "📈 Updating performance baselines for future regression detection..."
-          
+
           node server/src/performance/performance-cli.ts baseline \
             --input combined-results \
             --update main \
@@ -427,7 +427,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [setup, analyze-results]
     if: github.event_name == 'pull_request' && always()
-    
+
     steps:
       - name: Download performance reports
         uses: actions/download-artifact@v3
@@ -440,7 +440,7 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            
+
             // Read performance summary
             let summary = {};
             try {
@@ -449,37 +449,37 @@ jobs:
               console.log('Could not read performance summary');
               return;
             }
-            
+
             // Format comment
             const comment = `## 🚀 Performance Test Results
-            
+
             **Test Suite**: ${{ needs.setup.outputs.test-suite }}
             **Scenario**: ${{ needs.setup.outputs.scenario }}
             **Status**: ${summary.overall_status || 'Unknown'}
-            
+
             ### Key Metrics
             | Test | Response Time (p95) | Error Rate | Throughput |
             |------|---------------------|------------|------------|
             ${summary.tests?.map(test => 
               `| ${test.name} | ${test.response_time_p95}ms | ${test.error_rate}% | ${test.throughput}/s |`
             ).join('\n') || '| No data available | - | - | - |'}
-            
+
             ### Epic 20 Targets
             - **Graph Execution**: ${summary.graph_execution?.status || 'Unknown'}
             - **WebSocket Collaboration**: ${summary.websocket?.status || 'Unknown'}  
             - **Authentication**: ${summary.auth?.status || 'Unknown'}
-            
+
             ${summary.regression_detected ? '⚠️ **Performance regression detected!**' : '✅ No performance regressions'}
-            
+
             <details>
             <summary>View detailed results</summary>
-            
+
             ${summary.recommendations ? `### Recommendations
             ${summary.recommendations.map(rec => `- ${rec}`).join('\n')}` : ''}
-            
+
             [📊 Full Performance Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
             </details>`;
-            
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
@@ -493,7 +493,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [setup, analyze-results]
     if: failure() && github.ref == 'refs/heads/main'
-    
+
     steps:
       - name: Notify performance degradation
         run: |
@@ -502,7 +502,7 @@ jobs:
           echo "- Development team via Slack"
           echo "- Performance monitoring dashboards" 
           echo "- Epic 20 stakeholders"
-          
+
           # In real implementation, integrate with:
           # - Slack webhooks
           # - PagerDuty alerts  

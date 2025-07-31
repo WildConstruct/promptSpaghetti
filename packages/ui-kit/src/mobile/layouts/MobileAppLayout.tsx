@@ -4,12 +4,7 @@
 
 import React, { useState } from 'react';
 import { GraphDocument, GraphNode } from '@prompt-spaghetti/graph-core';
-import { 
-  MobileHeader, 
-  BottomNavigation, 
-  SlideMenu,
-  HamburgerMenu
-} from '../components/MobileNavigation';
+import { MobileHeader, BottomNavigation, SlideMenu, HamburgerMenu } from '../components/MobileNavigation';
 import { MobileGraphCanvas } from '../components/MobileGraphCanvas';
 import { MobileNodeEditor } from '../components/MobileNodeEditor';
 import { MobileButton } from '../components/MobileButton';
@@ -23,45 +18,38 @@ export interface MobileAppLayoutProps {
   style?: React.CSSProperties;
 }
 
-export const MobileAppLayout: React.FC<MobileAppLayoutProps> = ({
-  graph,
-  onGraphUpdate,
-  className,
-  style
-}) => {
+export const MobileAppLayout: React.FC<MobileAppLayoutProps> = ({ graph, onGraphUpdate, className, style }) => {
   const [activeView, setActiveView] = useState<'canvas' | 'nodes' | 'preview' | 'settings'>('canvas');
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [editingNode, setEditingNode] = useState<GraphNode | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  
+
   const selectedNode = selectedNodeId ? graph.nodes.find(n => n.id === selectedNodeId) : null;
-  
+
   // Bottom navigation items
   const bottomNavItems = [
     { id: 'canvas', label: 'Canvas', icon: '🎨' },
     { id: 'nodes', label: 'Nodes', icon: '📦' },
     { id: 'preview', label: 'Preview', icon: '👁️' },
-    { id: 'settings', label: 'Settings', icon: '⚙️' }
+    { id: 'settings', label: 'Settings', icon: '⚙️' },
   ];
-  
+
   const handleNodeSelect = (nodeId: string | null) => {
     setSelectedNodeId(nodeId);
   };
-  
+
   const handleNodeEdit = (nodeId: string) => {
     const node = graph.nodes.find(n => n.id === nodeId);
     if (node) {
       setEditingNode(node);
     }
   };
-  
+
   const handleNodeUpdate = (nodeId: string, updates: Partial<GraphNode>) => {
-    const updatedNodes = graph.nodes.map(node => 
-      node.id === nodeId ? { ...node, ...updates } : node
-    );
+    const updatedNodes = graph.nodes.map(node => (node.id === nodeId ? { ...node, ...updates } : node));
     onGraphUpdate?.({ ...graph, nodes: updatedNodes });
   };
-  
+
   const handleNodeDelete = (nodeId: string) => {
     const updatedNodes = graph.nodes.filter(n => n.id !== nodeId);
     const updatedEdges = graph.edges.filter(e => e.source !== nodeId && e.target !== nodeId);
@@ -69,12 +57,12 @@ export const MobileAppLayout: React.FC<MobileAppLayoutProps> = ({
     setSelectedNodeId(null);
     setEditingNode(null);
   };
-  
+
   const handleAddNode = () => {
     // Open node palette or add node dialog
     setActiveView('nodes');
   };
-  
+
   return (
     <div
       className={cn('mobile-app-layout', className)}
@@ -84,7 +72,7 @@ export const MobileAppLayout: React.FC<MobileAppLayoutProps> = ({
         flexDirection: 'column',
         backgroundColor: 'var(--color-background)',
         ...mobileStyles.fullHeight,
-        ...style
+        ...style,
       }}
     >
       {/* Header */}
@@ -93,23 +81,23 @@ export const MobileAppLayout: React.FC<MobileAppLayoutProps> = ({
         leftAction={{
           icon: <HamburgerMenu isOpen={menuOpen} onToggle={() => setMenuOpen(!menuOpen)} />,
           onClick: () => setMenuOpen(!menuOpen),
-          label: 'Menu'
+          label: 'Menu',
         }}
         rightActions={[
           {
             icon: '💾',
             onClick: () => console.log('Save'),
-            label: 'Save'
-          }
+            label: 'Save',
+          },
         ]}
       />
-      
+
       {/* Main content */}
       <main
         style={{
           flex: 1,
           overflow: 'hidden',
-          position: 'relative'
+          position: 'relative',
         }}
       >
         {/* Canvas View */}
@@ -122,7 +110,7 @@ export const MobileAppLayout: React.FC<MobileAppLayoutProps> = ({
             onAddNode={handleAddNode}
           />
         )}
-        
+
         {/* Nodes List View */}
         {activeView === 'nodes' && (
           <div
@@ -130,11 +118,11 @@ export const MobileAppLayout: React.FC<MobileAppLayoutProps> = ({
               height: '100%',
               overflowY: 'auto',
               padding: MOBILE_SPACING.md,
-              ...mobileStyles.smoothScroll
+              ...mobileStyles.smoothScroll,
             }}
           >
             <h2 style={{ marginTop: 0, marginBottom: MOBILE_SPACING.lg }}>Nodes</h2>
-            
+
             {/* Add node button */}
             <MobileButton
               variant="primary"
@@ -144,7 +132,7 @@ export const MobileAppLayout: React.FC<MobileAppLayoutProps> = ({
             >
               + Add New Node
             </MobileButton>
-            
+
             {/* Nodes list */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: MOBILE_SPACING.sm }}>
               {graph.nodes.map(node => (
@@ -159,7 +147,7 @@ export const MobileAppLayout: React.FC<MobileAppLayoutProps> = ({
             </div>
           </div>
         )}
-        
+
         {/* Preview View */}
         {activeView === 'preview' && (
           <div
@@ -167,16 +155,14 @@ export const MobileAppLayout: React.FC<MobileAppLayoutProps> = ({
               height: '100%',
               overflowY: 'auto',
               padding: MOBILE_SPACING.md,
-              ...mobileStyles.smoothScroll
+              ...mobileStyles.smoothScroll,
             }}
           >
             <h2 style={{ marginTop: 0, marginBottom: MOBILE_SPACING.lg }}>Preview</h2>
-            <p style={{ color: 'var(--color-text-secondary)' }}>
-              Preview functionality coming soon...
-            </p>
+            <p style={{ color: 'var(--color-text-secondary)' }}>Preview functionality coming soon...</p>
           </div>
         )}
-        
+
         {/* Settings View */}
         {activeView === 'settings' && (
           <div
@@ -184,49 +170,59 @@ export const MobileAppLayout: React.FC<MobileAppLayoutProps> = ({
               height: '100%',
               overflowY: 'auto',
               padding: MOBILE_SPACING.md,
-              ...mobileStyles.smoothScroll
+              ...mobileStyles.smoothScroll,
             }}
           >
             <h2 style={{ marginTop: 0, marginBottom: MOBILE_SPACING.lg }}>Settings</h2>
-            <p style={{ color: 'var(--color-text-secondary)' }}>
-              Settings coming soon...
-            </p>
+            <p style={{ color: 'var(--color-text-secondary)' }}>Settings coming soon...</p>
           </div>
         )}
       </main>
-      
+
       {/* Bottom Navigation */}
-      <BottomNavigation
-        items={bottomNavItems}
-        activeId={activeView}
-        onItemClick={(id) => setActiveView(id as any)}
-      />
-      
+      <BottomNavigation items={bottomNavItems} activeId={activeView} onItemClick={id => setActiveView(id as any)} />
+
       {/* Side Menu */}
-      <SlideMenu
-        isOpen={menuOpen}
-        onClose={() => setMenuOpen(false)}
-        position="left"
-      >
+      <SlideMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} position="left">
         <div style={{ padding: MOBILE_SPACING.lg }}>
           <h2>Menu</h2>
           <nav>
-            <MenuItem onClick={() => { console.log('New'); setMenuOpen(false); }}>
+            <MenuItem
+              onClick={() => {
+                console.log('New');
+                setMenuOpen(false);
+              }}
+            >
               📄 New Graph
             </MenuItem>
-            <MenuItem onClick={() => { console.log('Open'); setMenuOpen(false); }}>
+            <MenuItem
+              onClick={() => {
+                console.log('Open');
+                setMenuOpen(false);
+              }}
+            >
               📂 Open
             </MenuItem>
-            <MenuItem onClick={() => { console.log('Export'); setMenuOpen(false); }}>
+            <MenuItem
+              onClick={() => {
+                console.log('Export');
+                setMenuOpen(false);
+              }}
+            >
               📤 Export
             </MenuItem>
-            <MenuItem onClick={() => { console.log('Help'); setMenuOpen(false); }}>
+            <MenuItem
+              onClick={() => {
+                console.log('Help');
+                setMenuOpen(false);
+              }}
+            >
               ❓ Help
             </MenuItem>
           </nav>
         </div>
       </SlideMenu>
-      
+
       {/* Node Editor Modal */}
       {editingNode && (
         <div
@@ -234,7 +230,7 @@ export const MobileAppLayout: React.FC<MobileAppLayoutProps> = ({
             position: 'fixed',
             inset: 0,
             backgroundColor: 'var(--color-background)',
-            zIndex: 1002
+            zIndex: 1002,
           }}
         >
           <MobileNodeEditor
@@ -267,9 +263,9 @@ const NodeListItem: React.FC<NodeListItemProps> = ({ node, isSelected, onSelect,
     weightedChoice: '🎲',
     output: '📤',
     concat: '🔗',
-    variable: '📦'
+    variable: '📦',
   };
-  
+
   return (
     <div
       style={{
@@ -280,29 +276,29 @@ const NodeListItem: React.FC<NodeListItemProps> = ({ node, isSelected, onSelect,
         color: isSelected ? 'white' : 'var(--color-text)',
         borderRadius: 8,
         cursor: 'pointer',
-        ...mobileStyles.tapHighlight
+        ...mobileStyles.tapHighlight,
       }}
       onClick={onSelect}
     >
-      <div style={{ fontSize: 24, marginRight: MOBILE_SPACING.md }}>
-        {nodeIcons[node.type] || '📦'}
-      </div>
+      <div style={{ fontSize: 24, marginRight: MOBILE_SPACING.md }}>{nodeIcons[node.type] || '📦'}</div>
       <div style={{ flex: 1 }}>
         <div style={{ fontWeight: 500 }}>{node.type}</div>
-        <div style={{ 
-          fontSize: 12, 
-          opacity: 0.8,
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap'
-        }}>
+        <div
+          style={{
+            fontSize: 12,
+            opacity: 0.8,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+          }}
+        >
           {node.id}
         </div>
       </div>
       <MobileButton
         size="sm"
         variant={isSelected ? 'secondary' : 'ghost'}
-        onClick={(e) => {
+        onClick={e => {
           e.stopPropagation();
           onEdit();
         }}
@@ -331,7 +327,7 @@ const MenuItem: React.FC<{ onClick: () => void; children: React.ReactNode }> = (
       cursor: 'pointer',
       borderRadius: 8,
       transition: 'background-color 0.2s',
-      ...mobileStyles.tapHighlight
+      ...mobileStyles.tapHighlight,
     }}
   >
     {children}

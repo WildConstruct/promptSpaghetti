@@ -9,12 +9,14 @@ This document describes the comprehensive testing framework setup for the Prompt
 ### Testing Stack
 
 **Core Frameworks:**
+
 - **Jest**: Primary test runner with TypeScript support
 - **React Testing Library**: Component testing with user-centric approach
 - **Playwright**: End-to-end and cross-browser testing
 - **Custom Test Infrastructure**: Advanced testing utilities and workflows
 
 **Additional Tools:**
+
 - **ts-jest**: TypeScript transformation
 - **babel-jest**: JavaScript/JSX transformation
 - **@testing-library/jest-dom**: Custom DOM matchers
@@ -23,30 +25,35 @@ This document describes the comprehensive testing framework setup for the Prompt
 ### Test Categories
 
 #### 1. Unit Tests (`tests/unit/`)
+
 - Individual component/function testing
 - Isolated business logic validation
 - Mock-heavy, fast execution
 - Target: 90%+ coverage for core modules
 
 #### 2. Integration Tests (`tests/integration/`)
+
 - Multi-component interaction testing
 - API endpoint validation
 - Database integration testing
 - Service-to-service communication
 
 #### 3. End-to-End Tests (`tests/e2e/`)
+
 - Complete user workflow testing
 - Cross-browser compatibility
 - Mobile responsiveness
 - Real environment validation
 
 #### 4. Performance Tests (`tests/performance/`)
+
 - Load testing and benchmarking
 - Memory usage monitoring
 - Execution time validation
 - Scalability assessment
 
 #### 5. Security Tests (`tests/security/`)
+
 - Authentication/authorization testing
 - Input validation testing
 - XSS/CSRF protection validation
@@ -57,6 +64,7 @@ This document describes the comprehensive testing framework setup for the Prompt
 ### Jest Configuration (`jest.config.js`)
 
 Enhanced configuration supporting:
+
 - **TypeScript Integration**: Full ts-jest support with ESM
 - **Coverage Thresholds**: 80% global, 90% core modules
 - **Module Mapping**: Path aliases and mock mappings
@@ -69,11 +77,11 @@ module.exports = {
   testEnvironment: 'jsdom',
   coverageThreshold: {
     global: { branches: 80, functions: 80, lines: 80, statements: 80 },
-    'packages/core/': { branches: 90, functions: 90, lines: 90, statements: 90 }
+    'packages/core/': { branches: 90, functions: 90, lines: 90, statements: 90 },
   },
   setupFilesAfterEnv: ['<rootDir>/tests/utils/globalTestSetup.ts'],
   globalSetup: '<rootDir>/tests/utils/globalSetup.js',
-  globalTeardown: '<rootDir>/tests/utils/globalTeardown.js'
+  globalTeardown: '<rootDir>/tests/utils/globalTeardown.js',
 };
 ```
 
@@ -82,7 +90,7 @@ module.exports = {
 ```
 tests/
 ├── unit/                 # Unit tests
-├── integration/         # Integration tests  
+├── integration/         # Integration tests
 ├── e2e/                 # End-to-end tests
 ├── performance/         # Performance benchmarks
 ├── security/           # Security validation
@@ -185,7 +193,7 @@ export const simpleLinearGraph: TestGraph = {
 export const testUsers: TestUser[] = [
   {
     id: 'user-1',
-    username: 'testuser1', 
+    username: 'testuser1',
     role: 'admin',
     permissions: ['create', 'read', 'update', 'delete']
   }
@@ -209,7 +217,7 @@ export const performanceTestData = {
 ```json
 {
   "test": "jest --coverage",
-  "test:unit": "jest --testPathIgnorePatterns=\"tests/(integration|e2e|performance)/\"", 
+  "test:unit": "jest --testPathIgnorePatterns=\"tests/(integration|e2e|performance)/\"",
   "test:integration": "jest tests/integration/",
   "test:e2e": "npm run test:cross-browser",
   "test:performance": "npm run test:performance-only",
@@ -231,15 +239,15 @@ class TestRunner {
   async runAll() {
     const suites = [
       ['unit', 'npm run test:unit'],
-      ['integration', 'npm run test:integration'], 
+      ['integration', 'npm run test:integration'],
       ['e2e', 'npm run test:cross-browser'],
-      ['performance', 'npm run test:performance-only']
+      ['performance', 'npm run test:performance-only'],
     ];
-    
+
     for (const [type, command] of suites) {
       await this.runTestSuite(type, command);
     }
-    
+
     this.generateReport();
   }
 }
@@ -265,8 +273,8 @@ projects: [
   { name: 'firefox', use: devices['Desktop Firefox'] },
   { name: 'webkit', use: devices['Desktop Safari'] },
   { name: 'mobile-chrome', use: devices['Pixel 5'] },
-  { name: 'mobile-safari', use: devices['iPhone 12'] }
-]
+  { name: 'mobile-safari', use: devices['iPhone 12'] },
+];
 ```
 
 ## Testing Patterns
@@ -276,33 +284,33 @@ projects: [
 ```typescript
 describe('GraphValidator', () => {
   let validator: GraphValidator;
-  
+
   beforeEach(() => {
     validator = new GraphValidator();
   });
-  
+
   afterEach(() => {
     jest.clearAllMocks();
   });
-  
+
   describe('validateGraph', () => {
     it('should validate a simple linear graph', () => {
       const graph = fixtures.graphs.simple;
       const result = validator.validateGraph(graph);
-      
+
       expect(result.valid).toBe(true);
       expect(result.errors).toHaveLength(0);
     });
-    
+
     it('should detect cycles in graph', () => {
       const cyclicGraph = fixtures.graphs.edgeCases.cyclicGraph;
       const result = validator.validateGraph(cyclicGraph);
-      
+
       expect(result.valid).toBe(false);
       expect(result.errors).toContainEqual(
         expect.objectContaining({
           type: 'CYCLE_DETECTED',
-          message: expect.stringContaining('cycle')
+          message: expect.stringContaining('cycle'),
         })
       );
     });
@@ -315,21 +323,21 @@ describe('GraphValidator', () => {
 ```typescript
 describe('GraphEditor', () => {
   const mockGraph = fixtures.graphs.simple;
-  
+
   it('should render nodes and edges', () => {
     renderWithProviders(<GraphEditor initialGraph={mockGraph} />);
-    
+
     expect(screen.getByTestId('react-flow-canvas')).toBeInTheDocument();
     expect(screen.getAllByTestId(/^node-/)).toHaveLength(mockGraph.nodes.length);
   });
-  
+
   it('should handle node creation', async () => {
     const user = setupUserEvent();
     renderWithProviders(<GraphEditor />);
-    
+
     await user.click(screen.getByTestId('palette-WeightedChoice'));
     await user.click(screen.getByTestId('react-flow-canvas'));
-    
+
     expect(screen.getByTestId(/^node-/)).toBeInTheDocument();
   });
 });
@@ -340,28 +348,28 @@ describe('GraphEditor', () => {
 ```typescript
 describe('Graph Execution API', () => {
   let server: TestServer;
-  
+
   beforeAll(async () => {
     server = new TestServer();
     await server.start();
   });
-  
+
   afterAll(async () => {
     await server.stop();
   });
-  
+
   it('should execute graph and return results', async () => {
     const response = await fetch('/api/execute', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         graph: fixtures.graphs.simple,
-        seeds: [1234, 5678]
-      })
+        seeds: [1234, 5678],
+      }),
     });
-    
+
     const data = await response.json();
-    
+
     expect(response.ok).toBe(true);
     expect(data.results).toHaveLength(2);
     expect(data.executionTime).toBeGreaterThan(0);
@@ -374,25 +382,25 @@ describe('Graph Execution API', () => {
 ```typescript
 describe('Large Graph Performance', () => {
   const performanceThresholds = fixtures.performance.expectedExecutionTime;
-  
+
   it('should execute large graphs within time limits', async () => {
     const largeGraph = fixtures.graphs.large(200);
-    
+
     const executionTime = await measurePerformance(async () => {
       await executeGraph(largeGraph, 1234);
     });
-    
+
     expect(executionTime).toBeLessThan(performanceThresholds.large);
   });
-  
+
   it('should not exceed memory thresholds', async () => {
     const initialMemory = process.memoryUsage().heapUsed;
-    
+
     await executeGraph(fixtures.graphs.large(500), 1234);
-    
+
     const finalMemory = process.memoryUsage().heapUsed;
     const memoryIncrease = finalMemory - initialMemory;
-    
+
     expect(memoryIncrease).toBeLessThan(fixtures.performance.memoryThresholds.xlarge);
   });
 });
@@ -437,6 +445,7 @@ describe('Large Graph Performance', () => {
 ### Common Issues
 
 #### 1. Test Timeouts
+
 ```javascript
 // Increase timeout for slow operations
 jest.setTimeout(30000);
@@ -448,6 +457,7 @@ it('slow test', async () => {
 ```
 
 #### 2. Async Testing
+
 ```javascript
 // Proper async/await usage
 it('should handle async operations', async () => {
@@ -458,6 +468,7 @@ it('should handle async operations', async () => {
 ```
 
 #### 3. Mock Issues
+
 ```javascript
 // Reset mocks between tests
 afterEach(() => {
@@ -489,19 +500,19 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
-      
+
       - name: Install Dependencies
         run: npm ci
-      
+
       - name: Run Unit Tests
         run: npm run test:unit
-      
-      - name: Run Integration Tests  
+
+      - name: Run Integration Tests
         run: npm run test:integration
-      
+
       - name: Run E2E Tests
         run: npm run test:cross-browser
-      
+
       - name: Upload Coverage
         uses: codecov/codecov-action@v3
         with:
@@ -551,16 +562,19 @@ jobs:
 ## Resources
 
 ### Documentation Links
+
 - [Jest Documentation](https://jestjs.io/docs/getting-started)
 - [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
 - [Playwright Testing](https://playwright.dev/docs/intro)
 
 ### Internal Resources
+
 - [Cross-Browser Testing Guide](./cross-browser-testing.md)
 - [Performance Testing Guide](./performance-testing.md)
 - [API Testing Standards](./api-testing.md)
 
 ### Support
+
 - **Testing Infrastructure**: DevOps Team
 - **Framework Issues**: Frontend/Backend Teams
 - **Performance Issues**: Performance Team

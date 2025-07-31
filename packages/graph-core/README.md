@@ -61,13 +61,13 @@ const crdt = createGraphCRDT();
 crdt.addNode({
   id: 'node1',
   type: 'WeightedChoice',
-  data: { choices: [{ value: 'Hello', weight: 1 }] }
+  data: { choices: [{ value: 'Hello', weight: 1 }] },
 });
 
 crdt.addEdge({
   id: 'edge1',
   source: 'node1',
-  target: 'node2'
+  target: 'node2',
 });
 
 // Convert to GraphDocument for execution
@@ -161,21 +161,25 @@ interface GraphEdge {
 ## Validation Features
 
 ### Structure Validation
+
 - Required field presence
 - Type consistency
 - Node and edge relationships
 
 ### Cycle Detection
+
 - Detects circular dependencies
 - Provides detailed cycle paths
 - Prevents infinite execution loops
 
 ### Performance Analysis
+
 - Large graph warnings (>100 nodes)
 - High edge-to-node ratio alerts
 - Deep execution chain detection
 
 ### Connectivity Analysis
+
 - Disconnected node detection
 - Missing output node warnings
 - Input/output relationship validation
@@ -185,11 +189,7 @@ interface GraphEdge {
 ### Complete Workflow
 
 ```typescript
-import { 
-  GraphEngine, 
-  createGraphCRDT, 
-  GraphValidator 
-} from '@prompt-spaghetti/graph-core';
+import { GraphEngine, createGraphCRDT, GraphValidator } from '@prompt-spaghetti/graph-core';
 
 // 1. Create graph using CRDT
 const crdt = createGraphCRDT();
@@ -200,21 +200,21 @@ crdt.addNode({
   data: {
     choices: [
       { value: 'Hello', weight: 0.7 },
-      { value: 'Hi', weight: 0.3 }
-    ]
-  }
+      { value: 'Hi', weight: 0.3 },
+    ],
+  },
 });
 
 crdt.addNode({
   id: 'output',
   type: 'Output',
-  data: { text: '{{greeting}} World!' }
+  data: { text: '{{greeting}} World!' },
 });
 
 crdt.addEdge({
   id: 'edge1',
   source: 'greeting',
-  target: 'output'
+  target: 'output',
 });
 
 // 2. Validate graph
@@ -226,9 +226,9 @@ if (validation.valid) {
   // 3. Execute graph
   const engine = new GraphEngine();
   const result = await engine.execute(graph, 'deterministic-seed');
-  
+
   console.log(result.outputs); // ["Hello World!"] or ["Hi World!"]
-  
+
   // 4. Same seed produces same result
   const result2 = await engine.execute(graph, 'deterministic-seed');
   console.log(result.outputs === result2.outputs); // true
@@ -244,7 +244,7 @@ const crdt1 = createGraphCRDT();
 const crdt2 = createGraphCRDT();
 
 // Set up change listeners
-crdt1.onChange((events) => {
+crdt1.onChange(events => {
   console.log('CRDT1 changed:', events.length, 'events');
 });
 
@@ -252,7 +252,7 @@ crdt1.onChange((events) => {
 crdt1.addNode({
   id: 'shared-node',
   type: 'Output',
-  data: { text: 'Shared content' }
+  data: { text: 'Shared content' },
 });
 
 // Sync to second instance

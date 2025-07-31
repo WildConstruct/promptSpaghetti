@@ -2,7 +2,7 @@
 
 /**
  * Agent Broadcasting System
- * 
+ *
  * Allows posting broadcast messages that all connected Claude Code agents can check.
  * Messages are stored in a shared file that agents can periodically check.
  */
@@ -19,7 +19,7 @@ function initializeBroadcastFile() {
   if (!fs.existsSync(BROADCAST_FILE)) {
     const initialData = {
       messages: [],
-      lastUpdate: new Date().toISOString()
+      lastUpdate: new Date().toISOString(),
     };
     fs.writeFileSync(BROADCAST_FILE, JSON.stringify(initialData, null, 2));
   }
@@ -28,25 +28,25 @@ function initializeBroadcastFile() {
 // Post a broadcast message
 function postBroadcast(message) {
   initializeBroadcastFile();
-    
+
   const data = JSON.parse(fs.readFileSync(BROADCAST_FILE, 'utf8'));
-    
+
   const newMessage = {
     id: `broadcast-${Date.now()}`,
     message: message,
     timestamp: new Date().toISOString(),
     priority: 'normal',
-    acknowledged: []
+    acknowledged: [],
   };
-    
+
   data.messages.unshift(newMessage);
   data.lastUpdate = new Date().toISOString();
-    
+
   // Keep only last 10 messages
   data.messages = data.messages.slice(0, 10);
-    
+
   fs.writeFileSync(BROADCAST_FILE, JSON.stringify(data, null, 2));
-    
+
   console.log('📢 Broadcast sent to all agents:');
   console.log(`   Message: ${message}`);
   console.log(`   Time: ${newMessage.timestamp}`);
@@ -57,17 +57,17 @@ function postBroadcast(message) {
 // Check for broadcast messages
 function checkBroadcasts() {
   initializeBroadcastFile();
-    
+
   const data = JSON.parse(fs.readFileSync(BROADCAST_FILE, 'utf8'));
-    
+
   if (data.messages.length === 0) {
     console.log('📭 No broadcast messages');
     return;
   }
-    
+
   console.log(`📢 Agent Broadcast Messages (${data.messages.length}):`);
-  console.log('=' .repeat(50));
-    
+  console.log('='.repeat(50));
+
   data.messages.forEach((msg, index) => {
     const age = Math.round((new Date() - new Date(msg.timestamp)) / (1000 * 60));
     console.log(`${index + 1}. [${msg.id}] (${age}m ago)`);
@@ -80,10 +80,10 @@ function checkBroadcasts() {
 // Acknowledge a message
 function acknowledgeBroadcast(messageId, agentId = 'claude-agent') {
   initializeBroadcastFile();
-    
+
   const data = JSON.parse(fs.readFileSync(BROADCAST_FILE, 'utf8'));
   const message = data.messages.find(m => m.id === messageId);
-    
+
   if (message && !message.acknowledged.includes(agentId)) {
     message.acknowledged.push(agentId);
     fs.writeFileSync(BROADCAST_FILE, JSON.stringify(data, null, 2));
@@ -95,7 +95,7 @@ function acknowledgeBroadcast(messageId, agentId = 'claude-agent') {
 function clearBroadcasts() {
   const data = {
     messages: [],
-    lastUpdate: new Date().toISOString()
+    lastUpdate: new Date().toISOString(),
   };
   fs.writeFileSync(BROADCAST_FILE, JSON.stringify(data, null, 2));
   console.log('🗑️  All broadcast messages cleared');

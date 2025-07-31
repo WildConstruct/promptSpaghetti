@@ -6,7 +6,7 @@ import type { StorybookConfig } from '@storybook/react-vite';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.stories.@(js|jsx|ts|tsx|mdx)'],
-  
+
   addons: [
     '@storybook/addon-essentials',
     '@storybook/addon-interactions',
@@ -17,47 +17,47 @@ const config: StorybookConfig = {
     '@storybook/addon-backgrounds',
     '@storybook/addon-measure',
     '@storybook/addon-outline',
-    '@storybook/addon-a11y'
+    '@storybook/addon-a11y',
   ],
-  
+
   framework: {
     name: '@storybook/react-vite',
-    options: {}
+    options: {},
   },
-  
+
   features: {
     buildStoriesJson: true,
-    storyStoreV7: true
+    storyStoreV7: true,
   },
-  
+
   core: {
-    disableTelemetry: true
+    disableTelemetry: true,
   },
-  
+
   typescript: {
     check: false,
     reactDocgen: 'react-docgen-typescript',
     reactDocgenTypescriptOptions: {
       shouldExtractLiteralValuesFromEnum: true,
-      propFilter: (prop) => (prop.parent ? !/node_modules/.test(prop.parent.fileName) : true),
+      propFilter: prop => (prop.parent ? !/node_modules/.test(prop.parent.fileName) : true),
     },
   },
-  
+
   docs: {
     autodocs: 'tag',
-    defaultName: 'Documentation'
+    defaultName: 'Documentation',
   },
-  
-  viteFinal: async (config) => {
+
+  viteFinal: async config => {
     // Customize Vite config for Storybook
     return {
       ...config,
       define: {
         ...config.define,
-        global: 'globalThis'
-      }
+        global: 'globalThis',
+      },
     };
-  }
+  },
 };
 
 export default config;

@@ -92,9 +92,17 @@ export abstract class BaseTestDataGenerator {
  */
 export class GraphDataGenerator extends BaseTestDataGenerator {
   private nodeTypes = [
-    'output', 'concat', 'weightedChoice', 'include', 
-    'setVariable', 'getVariable', 'conditional', 
-    'sequential', 'markov', 'subject', 'action'
+    'output',
+    'concat',
+    'weightedChoice',
+    'include',
+    'setVariable',
+    'getVariable',
+    'conditional',
+    'sequential',
+    'markov',
+    'subject',
+    'action',
   ];
 
   private nodePositions: { x: number; y: number }[] = [];
@@ -102,16 +110,11 @@ export class GraphDataGenerator extends BaseTestDataGenerator {
   /**
    * Generate a complete graph with nodes and edges
    */
-  generateGraph(options: GraphGeneratorOptions = {}): { nodes: Node[], edges: Edge[] } {
-    const {
-      nodeCount = 10,
-      edgeCount = 8,
-      nodeTypes = this.nodeTypes,
-      complexity = 'medium'
-    } = options;
+  generateGraph(options: GraphGeneratorOptions = {}): { nodes: Node[]; edges: Edge[] } {
+    const { nodeCount = 10, edgeCount = 8, nodeTypes = this.nodeTypes, complexity = 'medium' } = options;
 
     this.initializePositions(nodeCount);
-    
+
     const nodes = this.generateNodes(nodeCount, nodeTypes, complexity);
     const edges = this.generateEdges(edgeCount, nodes, complexity);
 
@@ -121,7 +124,11 @@ export class GraphDataGenerator extends BaseTestDataGenerator {
   /**
    * Generate array of nodes
    */
-  generateNodes(count: number, nodeTypes: string[] = this.nodeTypes, complexity: 'simple' | 'medium' | 'complex' = 'medium'): Node[] {
+  generateNodes(
+    count: number,
+    nodeTypes: string[] = this.nodeTypes,
+    complexity: 'simple' | 'medium' | 'complex' = 'medium'
+  ): Node[] {
     const nodes: Node[] = [];
 
     for (let i = 0; i < count; i++) {
@@ -134,7 +141,7 @@ export class GraphDataGenerator extends BaseTestDataGenerator {
         position,
         data: this.generateNodeData(nodeType, complexity),
         draggable: true,
-        selectable: true
+        selectable: true,
       };
 
       nodes.push(node);
@@ -169,7 +176,7 @@ export class GraphDataGenerator extends BaseTestDataGenerator {
         target: nodes[targetIndex].id,
         type: this.getEdgeType(complexity),
         animated: this.randomBoolean(),
-        style: this.getEdgeStyle(complexity)
+        style: this.getEdgeStyle(complexity),
       };
 
       edges.push(edge);
@@ -184,71 +191,71 @@ export class GraphDataGenerator extends BaseTestDataGenerator {
   private generateNodeData(nodeType: string, complexity: 'simple' | 'medium' | 'complex'): any {
     const baseData = {
       label: `${nodeType} ${this.randomString(5)}`,
-      description: `Generated ${nodeType} node for testing`
+      description: `Generated ${nodeType} node for testing`,
     };
 
     switch (nodeType) {
-    case 'output':
-      return {
-        ...baseData,
-        text: `Output: ${this.randomString(20)}`,
-        variables: this.generateVariables(complexity === 'simple' ? 1 : 3)
-      };
+      case 'output':
+        return {
+          ...baseData,
+          text: `Output: ${this.randomString(20)}`,
+          variables: this.generateVariables(complexity === 'simple' ? 1 : 3),
+        };
 
-    case 'concat':
-      return {
-        ...baseData,
-        parts: Array.from({ length: this.randomNumber(2, 5) }, () => this.randomString(10)),
-        separator: this.randomChoice([' ', ', ', '\n', ''])
-      };
+      case 'concat':
+        return {
+          ...baseData,
+          parts: Array.from({ length: this.randomNumber(2, 5) }, () => this.randomString(10)),
+          separator: this.randomChoice([' ', ', ', '\n', '']),
+        };
 
-    case 'weightedChoice':
-      return {
-        ...baseData,
-        choices: Array.from({ length: this.randomNumber(2, 6) }, (_, i) => ({
-          text: `Choice ${i + 1}: ${this.randomString(15)}`,
-          weight: this.randomNumber(1, 10)
-        }))
-      };
+      case 'weightedChoice':
+        return {
+          ...baseData,
+          choices: Array.from({ length: this.randomNumber(2, 6) }, (_, i) => ({
+            text: `Choice ${i + 1}: ${this.randomString(15)}`,
+            weight: this.randomNumber(1, 10),
+          })),
+        };
 
-    case 'conditional':
-      return {
-        ...baseData,
-        condition: `variable_${this.randomString(5)} === "${this.randomString(8)}"`,
-        trueBranch: `True: ${this.randomString(15)}`,
-        falseBranch: `False: ${this.randomString(15)}`
-      };
+      case 'conditional':
+        return {
+          ...baseData,
+          condition: `variable_${this.randomString(5)} === "${this.randomString(8)}"`,
+          trueBranch: `True: ${this.randomString(15)}`,
+          falseBranch: `False: ${this.randomString(15)}`,
+        };
 
-    case 'sequential':
-      return {
-        ...baseData,
-        items: Array.from({ length: this.randomNumber(3, 8) }, () => this.randomString(12)),
-        pattern: this.randomChoice(['linear', 'cyclical', 'random', 'weighted'])
-      };
+      case 'sequential':
+        return {
+          ...baseData,
+          items: Array.from({ length: this.randomNumber(3, 8) }, () => this.randomString(12)),
+          pattern: this.randomChoice(['linear', 'cyclical', 'random', 'weighted']),
+        };
 
-    case 'markov':
-      return {
-        ...baseData,
-        states: this.generateMarkovStates(),
-        initialState: 'start'
-      };
+      case 'markov':
+        return {
+          ...baseData,
+          states: this.generateMarkovStates(),
+          initialState: 'start',
+        };
 
-    case 'setVariable':
-      return {
-        ...baseData,
-        variableName: `var_${this.randomString(6)}`,
-        value: this.randomString(15)
-      };
+      case 'setVariable':
+        return {
+          ...baseData,
+          variableName: `var_${this.randomString(6)}`,
+          value: this.randomString(15),
+        };
 
-    case 'getVariable':
-      return {
-        ...baseData,
-        variableName: `var_${this.randomString(6)}`,
-        defaultValue: this.randomString(10)
-      };
+      case 'getVariable':
+        return {
+          ...baseData,
+          variableName: `var_${this.randomString(6)}`,
+          defaultValue: this.randomString(10),
+        };
 
-    default:
-      return baseData;
+      default:
+        return baseData;
     }
   }
 
@@ -258,7 +265,7 @@ export class GraphDataGenerator extends BaseTestDataGenerator {
       variables[`var_${i + 1}`] = this.randomChoice([
         this.randomString(10),
         this.randomNumber(1, 100),
-        this.randomBoolean()
+        this.randomBoolean(),
       ]);
     }
     return variables;
@@ -271,7 +278,7 @@ export class GraphDataGenerator extends BaseTestDataGenerator {
     states.forEach(state => {
       const transitions: Record<string, number> = {};
       const numTransitions = this.randomNumber(1, 3);
-      
+
       for (let i = 0; i < numTransitions; i++) {
         const targetState = this.randomChoice(states.filter(s => s !== state));
         transitions[targetState] = this.randomNumber(1, 10) / 10;
@@ -279,7 +286,7 @@ export class GraphDataGenerator extends BaseTestDataGenerator {
 
       stateData[state] = {
         text: `${state}: ${this.randomString(15)}`,
-        transitions
+        transitions,
       };
     });
 
@@ -289,22 +296,20 @@ export class GraphDataGenerator extends BaseTestDataGenerator {
   private initializePositions(nodeCount: number): void {
     this.nodePositions = [];
     const gridSize = Math.ceil(Math.sqrt(nodeCount));
-    
+
     for (let i = 0; i < nodeCount; i++) {
       const row = Math.floor(i / gridSize);
       const col = i % gridSize;
-      
+
       this.nodePositions.push({
         x: col * 200 + this.randomNumber(-50, 50),
-        y: row * 150 + this.randomNumber(-30, 30)
+        y: row * 150 + this.randomNumber(-30, 30),
       });
     }
   }
 
   private getEdgeType(complexity: 'simple' | 'medium' | 'complex'): string {
-    const types = complexity === 'simple' 
-      ? ['default'] 
-      : ['default', 'straight', 'step', 'smoothstep'];
+    const types = complexity === 'simple' ? ['default'] : ['default', 'straight', 'step', 'smoothstep'];
     return this.randomChoice(types);
   }
 
@@ -316,7 +321,7 @@ export class GraphDataGenerator extends BaseTestDataGenerator {
     return {
       strokeWidth: this.randomNumber(1, 4),
       stroke: this.randomChoice(['#666', '#888', '#aaa', '#333']),
-      strokeDasharray: this.randomBoolean() ? `${this.randomNumber(5, 15)},${this.randomNumber(3, 8)}` : undefined
+      strokeDasharray: this.randomBoolean() ? `${this.randomNumber(5, 15)},${this.randomNumber(3, 8)}` : undefined,
     };
   }
 }
@@ -327,13 +332,33 @@ export class GraphDataGenerator extends BaseTestDataGenerator {
  */
 export class UserDataGenerator extends BaseTestDataGenerator {
   private firstNames = [
-    'Alice', 'Bob', 'Charlie', 'Diana', 'Edward', 'Fiona', 
-    'George', 'Hannah', 'Ian', 'Julia', 'Kevin', 'Laura'
+    'Alice',
+    'Bob',
+    'Charlie',
+    'Diana',
+    'Edward',
+    'Fiona',
+    'George',
+    'Hannah',
+    'Ian',
+    'Julia',
+    'Kevin',
+    'Laura',
   ];
 
   private lastNames = [
-    'Anderson', 'Brown', 'Clark', 'Davis', 'Evans', 'Fisher',
-    'Garcia', 'Harris', 'Johnson', 'King', 'Lee', 'Miller'
+    'Anderson',
+    'Brown',
+    'Clark',
+    'Davis',
+    'Evans',
+    'Fisher',
+    'Garcia',
+    'Harris',
+    'Johnson',
+    'King',
+    'Lee',
+    'Miller',
   ];
 
   private domains = ['example.com', 'test.org', 'demo.net'];
@@ -343,11 +368,7 @@ export class UserDataGenerator extends BaseTestDataGenerator {
    * Generate a single user
    */
   generateUser(options: UserGeneratorOptions = {}): any {
-    const {
-      includeAuth = true,
-      includeProfile = true,
-      roles = this.roles
-    } = options;
+    const { includeAuth = true, includeProfile = true, roles = this.roles } = options;
 
     const firstName = this.randomChoice(this.firstNames);
     const lastName = this.randomChoice(this.lastNames);
@@ -362,7 +383,7 @@ export class UserDataGenerator extends BaseTestDataGenerator {
       role: this.randomChoice(roles),
       isActive: this.randomBoolean(),
       createdAt: this.generateRandomDate(new Date(2020, 0, 1), new Date()),
-      lastLogin: this.generateRandomDate(new Date(2024, 0, 1), new Date())
+      lastLogin: this.generateRandomDate(new Date(2024, 0, 1), new Date()),
     };
 
     if (includeAuth) {
@@ -371,7 +392,7 @@ export class UserDataGenerator extends BaseTestDataGenerator {
         salt: this.randomString(16),
         twoFactorEnabled: this.randomBoolean(),
         loginAttempts: this.randomNumber(0, 5),
-        lockedUntil: this.randomBoolean() ? this.generateRandomDate(new Date(), new Date(Date.now() + 86400000)) : null
+        lockedUntil: this.randomBoolean() ? this.generateRandomDate(new Date(), new Date(Date.now() + 86400000)) : null,
       };
     }
 
@@ -383,13 +404,13 @@ export class UserDataGenerator extends BaseTestDataGenerator {
           theme: this.randomChoice(['light', 'dark', 'auto']),
           language: this.randomChoice(['en', 'es', 'fr', 'de']),
           notifications: this.randomBoolean(),
-          newsletter: this.randomBoolean()
+          newsletter: this.randomBoolean(),
         },
         metadata: {
           lastIpAddress: this.generateRandomIP(),
           userAgent: this.generateRandomUserAgent(),
-          timezone: this.randomChoice(['UTC', 'EST', 'PST', 'CET'])
-        }
+          timezone: this.randomChoice(['UTC', 'EST', 'PST', 'CET']),
+        },
       };
     }
 
@@ -426,8 +447,14 @@ export class UserDataGenerator extends BaseTestDataGenerator {
  */
 export class APIDataGenerator extends BaseTestDataGenerator {
   private endpoints = [
-    '/api/users', '/api/graphs', '/api/auth/login', '/api/auth/register',
-    '/api/nodes', '/api/edges', '/api/execute', '/api/preview'
+    '/api/users',
+    '/api/graphs',
+    '/api/auth/login',
+    '/api/auth/register',
+    '/api/nodes',
+    '/api/edges',
+    '/api/execute',
+    '/api/preview',
   ];
 
   private methods = ['GET', 'POST', 'PUT', 'DELETE'] as const;
@@ -437,10 +464,7 @@ export class APIDataGenerator extends BaseTestDataGenerator {
    * Generate API request data
    */
   generateRequest(options: APIGeneratorOptions = {}): any {
-    const {
-      endpoints = this.endpoints,
-      methods = this.methods
-    } = options;
+    const { endpoints = this.endpoints, methods = this.methods } = options;
 
     const endpoint = this.randomChoice(endpoints);
     const method = this.randomChoice(methods);
@@ -452,7 +476,7 @@ export class APIDataGenerator extends BaseTestDataGenerator {
       params: this.generateParams(endpoint),
       body: ['POST', 'PUT'].includes(method) ? this.generateBody(endpoint) : undefined,
       timestamp: new Date().toISOString(),
-      requestId: `req-${this.randomString(12)}`
+      requestId: `req-${this.randomString(12)}`,
     };
   }
 
@@ -460,9 +484,7 @@ export class APIDataGenerator extends BaseTestDataGenerator {
    * Generate API response data
    */
   generateResponse(request: any, options: APIGeneratorOptions = {}): any {
-    const {
-      statusCodes = this.statusCodes
-    } = options;
+    const { statusCodes = this.statusCodes } = options;
 
     const statusCode = this.randomChoice(statusCodes);
     const success = statusCode < 400;
@@ -475,19 +497,19 @@ export class APIDataGenerator extends BaseTestDataGenerator {
       headers: {
         'content-type': 'application/json',
         'x-request-id': request.requestId,
-        'x-response-time': `${this.randomNumber(50, 500)}ms`
+        'x-response-time': `${this.randomNumber(50, 500)}ms`,
       },
       timestamp: new Date().toISOString(),
-      duration: this.randomNumber(50, 2000)
+      duration: this.randomNumber(50, 2000),
     };
   }
 
   private generateHeaders(): Record<string, string> {
     return {
       'content-type': 'application/json',
-      'authorization': `Bearer ${this.randomString(32)}`,
+      authorization: `Bearer ${this.randomString(32)}`,
       'user-agent': 'PromptSpaghetti-Test/1.0',
-      'accept': 'application/json'
+      accept: 'application/json',
     };
   }
 
@@ -511,7 +533,7 @@ export class APIDataGenerator extends BaseTestDataGenerator {
     if (endpoint.includes('login')) {
       return {
         email: 'test@example.com',
-        password: 'password123'
+        password: 'password123',
       };
     }
 
@@ -520,7 +542,7 @@ export class APIDataGenerator extends BaseTestDataGenerator {
         email: `test-${this.randomString(5)}@example.com`,
         password: 'password123',
         firstName: this.randomString(8),
-        lastName: this.randomString(8)
+        lastName: this.randomString(8),
       };
     }
 
@@ -533,8 +555,8 @@ export class APIDataGenerator extends BaseTestDataGenerator {
       data: this.randomString(20),
       metadata: {
         source: 'test-generator',
-        timestamp: new Date().toISOString()
-      }
+        timestamp: new Date().toISOString(),
+      },
     };
   }
 
@@ -546,8 +568,8 @@ export class APIDataGenerator extends BaseTestDataGenerator {
         pagination: {
           total: this.randomNumber(100, 1000),
           page: 1,
-          limit: 10
-        }
+          limit: 10,
+        },
       };
     }
 
@@ -561,14 +583,14 @@ export class APIDataGenerator extends BaseTestDataGenerator {
         result: this.randomString(50),
         execution_time: this.randomNumber(100, 5000),
         variables: {
-          output: this.randomString(30)
-        }
+          output: this.randomString(30),
+        },
       };
     }
 
     return {
       message: 'Success',
-      data: this.randomString(30)
+      data: this.randomString(30),
     };
   }
 
@@ -579,14 +601,14 @@ export class APIDataGenerator extends BaseTestDataGenerator {
       403: 'Forbidden - Insufficient permissions',
       404: 'Not Found - Resource does not exist',
       422: 'Unprocessable Entity - Validation failed',
-      500: 'Internal Server Error - Something went wrong'
+      500: 'Internal Server Error - Something went wrong',
     };
 
     return {
       code: statusCode,
       message: errorMessages[statusCode as keyof typeof errorMessages] || 'Unknown error',
       details: `Error generated for testing: ${this.randomString(20)}`,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
   }
 }
@@ -599,12 +621,12 @@ export class PerformanceDataGenerator extends BaseTestDataGenerator {
   /**
    * Generate large graph for performance testing
    */
-  generateLargeGraph(nodeCount: number = 1000, edgeRatio: number = 0.8): { nodes: Node[], edges: Edge[] } {
+  generateLargeGraph(nodeCount: number = 1000, edgeRatio: number = 0.8): { nodes: Node[]; edges: Edge[] } {
     const graphGen = new GraphDataGenerator(this.seed);
     return graphGen.generateGraph({
       nodeCount,
       edgeCount: Math.floor(nodeCount * edgeRatio),
-      complexity: 'complex'
+      complexity: 'complex',
     });
   }
 
@@ -619,7 +641,7 @@ export class PerformanceDataGenerator extends BaseTestDataGenerator {
       networkRequests: this.randomNumber(5, 50),
       renderTime: this.randomNumber(50, 1000),
       bundleSize: this.randomNumber(1000, 10000),
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
   }
 
@@ -632,15 +654,9 @@ export class PerformanceDataGenerator extends BaseTestDataGenerator {
       scenario: this.randomChoice(['light', 'medium', 'heavy']),
       requestsPerSecond: this.randomNumber(1, 10),
       duration: this.randomNumber(60, 300),
-      expectedLatency: this.randomNumber(100, 1000)
+      expectedLatency: this.randomNumber(100, 1000),
     }));
   }
 }
 
-export {
-  BaseTestDataGenerator,
-  GraphDataGenerator,
-  UserDataGenerator,
-  APIDataGenerator,
-  PerformanceDataGenerator
-};
+export { BaseTestDataGenerator, GraphDataGenerator, UserDataGenerator, APIDataGenerator, PerformanceDataGenerator };

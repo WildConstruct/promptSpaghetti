@@ -1,4 +1,5 @@
 # Security Intelligence Dashboard Architecture & User Guide
+
 **Epic 31.4.1.3 - Create security intelligence dashboard and analysis**
 
 ## Executive Summary
@@ -79,6 +80,7 @@ The Security Intelligence Dashboard is a comprehensive, real-time security analy
 ### 1. Dashboard Management System
 
 #### Dashboard Widget Framework
+
 The dashboard supports 12 specialized widget types, each optimized for specific security analytics use cases:
 
 ```typescript
@@ -94,11 +96,12 @@ enum DashboardWidgetType {
   ASSET_SECURITY_STATUS = 'asset_security_status',
   USER_BEHAVIOR_ANALYTICS = 'user_behavior_analytics',
   NETWORK_SECURITY_OVERVIEW = 'network_security_overview',
-  MALWARE_ANALYSIS = 'malware_analysis'
+  MALWARE_ANALYSIS = 'malware_analysis',
 }
 ```
 
 #### Widget Configuration Architecture
+
 Each widget is highly configurable with position, size, visualization settings, data sources, and filters:
 
 ```typescript
@@ -107,20 +110,21 @@ interface DashboardWidget {
   type: DashboardWidgetType;
   title: string;
   description: string;
-  position: WidgetPosition;      // X, Y, Z-index
-  size: WidgetSize;              // Width, height, min/max constraints
-  data_source: string;           // Data source identifier
+  position: WidgetPosition; // X, Y, Z-index
+  size: WidgetSize; // Width, height, min/max constraints
+  data_source: string; // Data source identifier
   query_params: Record<string, unknown>;
   visualization_config: VisualizationConfig;
-  refresh_rate_ms: number;       // Auto-refresh interval
-  filters: DashboardFilter[];    // Applied filters
-  permissions: string[];         // Access control
+  refresh_rate_ms: number; // Auto-refresh interval
+  filters: DashboardFilter[]; // Applied filters
+  permissions: string[]; // Access control
   created_at: number;
   updated_at: number;
 }
 ```
 
 #### Visualization Engine
+
 Supports 10 chart types with advanced configuration options:
 
 - **Line Charts**: Time-series trend analysis
@@ -137,6 +141,7 @@ Supports 10 chart types with advanced configuration options:
 ### 2. Analytics Engine
 
 #### Security Metrics Collection
+
 The dashboard aggregates comprehensive security metrics across multiple dimensions:
 
 ```typescript
@@ -168,6 +173,7 @@ interface SecurityAnalytics {
 ```
 
 #### Real-time Analytics Processing
+
 - **Event Processing**: Sub-second processing of security events
 - **Trend Analysis**: Automated trend detection and forecasting
 - **Anomaly Detection**: ML-powered anomaly identification
@@ -177,6 +183,7 @@ interface SecurityAnalytics {
 ### 3. Real-time Update System
 
 #### WebSocket Integration
+
 The dashboard provides real-time updates through WebSocket connections:
 
 ```typescript
@@ -189,6 +196,7 @@ interface WebSocketMessage {
 ```
 
 #### Event Streaming Architecture
+
 - **Security Events**: Real-time security event notifications
 - **Threat Intelligence**: Live threat intelligence updates
 - **Dashboard Metrics**: Performance and usage metrics
@@ -198,6 +206,7 @@ interface WebSocketMessage {
 ### 4. Performance Optimization
 
 #### Multi-tier Caching System
+
 ```typescript
 interface CachingStrategy {
   query_cache: {
@@ -219,6 +228,7 @@ interface CachingStrategy {
 ```
 
 #### Query Optimization
+
 - **Indexed Queries**: Strategic indexing for common query patterns
 - **Pagination**: Efficient large dataset handling
 - **Lazy Loading**: On-demand data loading
@@ -228,9 +238,11 @@ interface CachingStrategy {
 ## Widget Types and Capabilities
 
 ### 1. Threat Overview Widget
+
 Provides comprehensive threat landscape visualization:
 
 **Key Metrics:**
+
 - Total threats detected
 - Threat distribution by severity (Critical, High, Medium, Low)
 - Threat categorization by type
@@ -239,6 +251,7 @@ Provides comprehensive threat landscape visualization:
 - Threat intelligence correlation statistics
 
 **Visualization Options:**
+
 - Multi-dimensional bar charts
 - Threat severity pie charts
 - Geographic threat heat maps
@@ -246,9 +259,11 @@ Provides comprehensive threat landscape visualization:
 - Top sources tables with risk scoring
 
 ### 2. Security Events Timeline Widget
+
 Interactive timeline visualization of security events:
 
 **Features:**
+
 - 24-hour, 7-day, 30-day timeline views
 - Event density visualization
 - Severity-based color coding
@@ -257,6 +272,7 @@ Interactive timeline visualization of security events:
 - Custom time range selection
 
 **Data Points:**
+
 - Event count per time interval
 - Severity distribution over time
 - Event type breakdown
@@ -264,9 +280,11 @@ Interactive timeline visualization of security events:
 - Anomaly highlighting
 
 ### 3. Threat Intelligence Map Widget
+
 Geographic visualization of global threat landscape:
 
 **Capabilities:**
+
 - World map with threat hotspots
 - Country-level threat aggregation
 - Risk level color coding
@@ -275,6 +293,7 @@ Geographic visualization of global threat landscape:
 - Attack campaign tracking
 
 **Data Sources:**
+
 - External threat intelligence feeds
 - Internal threat detection
 - Geographic IP attribution
@@ -282,9 +301,11 @@ Geographic visualization of global threat landscape:
 - IOC geographic correlation
 
 ### 4. Incident Status Board Widget
+
 Real-time incident management dashboard:
 
 **Status Tracking:**
+
 - Active incident count
 - Incident severity distribution
 - Assignment status
@@ -293,6 +314,7 @@ Real-time incident management dashboard:
 - Escalation monitoring
 
 **Management Features:**
+
 - Quick incident assignment
 - Status update notifications
 - Priority-based sorting
@@ -301,9 +323,11 @@ Real-time incident management dashboard:
 - Integration with SOAR platforms
 
 ### 5. Risk Assessment Matrix Widget
+
 Visual risk analysis and prioritization:
 
 **Matrix Dimensions:**
+
 - Impact vs. Likelihood plotting
 - Risk score calculation
 - Asset criticality weighting
@@ -312,15 +336,18 @@ Visual risk analysis and prioritization:
 - Mitigation status tracking
 
 **Risk Categories:**
+
 - Critical (9-10): Immediate action required
 - High (7-8): Urgent attention needed
 - Medium (4-6): Planned remediation
 - Low (1-3): Monitor and track
 
 ### 6. Compliance Dashboard Widget
+
 Regulatory compliance monitoring and reporting:
 
 **Compliance Frameworks:**
+
 - SOC2 Type II compliance tracking
 - GDPR privacy compliance
 - HIPAA healthcare compliance
@@ -329,6 +356,7 @@ Regulatory compliance monitoring and reporting:
 - Custom framework support
 
 **Metrics:**
+
 - Overall compliance score
 - Framework-specific scores
 - Violation tracking
@@ -337,9 +365,11 @@ Regulatory compliance monitoring and reporting:
 - Control effectiveness
 
 ### 7. Performance Metrics Widget
+
 System and security performance monitoring:
 
 **System Performance:**
+
 - CPU, memory, disk utilization
 - Network throughput
 - Database performance
@@ -348,6 +378,7 @@ System and security performance monitoring:
 - Resource allocation
 
 **Security Performance:**
+
 - Events processed per second
 - Threat detection accuracy
 - False positive rates
@@ -356,9 +387,11 @@ System and security performance monitoring:
 - Automation effectiveness
 
 ### 8. Alert Management Widget
+
 Centralized alert monitoring and management:
 
 **Alert Categories:**
+
 - Critical security alerts
 - System performance alerts
 - Compliance violation alerts
@@ -367,6 +400,7 @@ Centralized alert monitoring and management:
 - Predictive alerts
 
 **Management Features:**
+
 - Alert acknowledgment
 - Escalation tracking
 - Bulk operations
@@ -375,9 +409,11 @@ Centralized alert monitoring and management:
 - Automated response triggers
 
 ### 9. Asset Security Status Widget
+
 Enterprise asset security posture:
 
 **Asset Categories:**
+
 - Servers and infrastructure
 - Workstations and endpoints
 - Network devices
@@ -386,6 +422,7 @@ Enterprise asset security posture:
 - IoT devices
 
 **Security Metrics:**
+
 - Patch compliance rates
 - Configuration compliance
 - Vulnerability exposure
@@ -394,9 +431,11 @@ Enterprise asset security posture:
 - Remediation tracking
 
 ### 10. User Behavior Analytics Widget
+
 User and entity behavior analysis:
 
 **Behavioral Analysis:**
+
 - Login pattern analysis
 - Access anomaly detection
 - Privilege usage monitoring
@@ -405,6 +444,7 @@ User and entity behavior analysis:
 - Baseline deviation alerts
 
 **Risk Indicators:**
+
 - Unusual access times
 - Geographic anomalies
 - Large data transfers
@@ -413,9 +453,11 @@ User and entity behavior analysis:
 - Insider threat indicators
 
 ### 11. Network Security Overview Widget
+
 Network security posture and monitoring:
 
 **Network Segments:**
+
 - DMZ security status
 - Internal network monitoring
 - Guest network isolation
@@ -424,6 +466,7 @@ Network security posture and monitoring:
 - VPN and remote access
 
 **Security Metrics:**
+
 - Traffic analysis
 - Intrusion detection
 - Firewall effectiveness
@@ -432,9 +475,11 @@ Network security posture and monitoring:
 - Connection monitoring
 
 ### 12. Malware Analysis Widget
+
 Malware detection and analysis dashboard:
 
 **Detection Metrics:**
+
 - Malware family identification
 - Detection rate statistics
 - Quarantine effectiveness
@@ -443,6 +488,7 @@ Malware detection and analysis dashboard:
 - Sandbox analysis status
 
 **Analysis Capabilities:**
+
 - Sample categorization
 - Threat actor attribution
 - Campaign correlation
@@ -453,15 +499,16 @@ Malware detection and analysis dashboard:
 ## Real-time Capabilities
 
 ### WebSocket Integration
+
 The dashboard provides real-time updates through WebSocket connections:
 
 ```javascript
 // Client-side WebSocket connection
 const ws = new WebSocket('ws://localhost:8000/api/security-intelligence/realtime');
 
-ws.onmessage = (event) => {
+ws.onmessage = event => {
   const message = JSON.parse(event.data);
-  
+
   switch (message.type) {
     case 'security_event':
       updateSecurityEventWidget(message.data);
@@ -477,14 +524,17 @@ ws.onmessage = (event) => {
 ```
 
 ### Live Data Streaming
+
 - **Security Events**: Real-time security event notifications
-- **Threat Intelligence**: Live threat intelligence updates  
+- **Threat Intelligence**: Live threat intelligence updates
 - **Performance Metrics**: System performance monitoring
 - **Alert Notifications**: Immediate alert propagation
 - **Status Updates**: System health and operational status
 
 ### Event-Driven Updates
+
 The dashboard automatically updates widgets based on:
+
 - New security events from the data pipeline
 - Threat intelligence feed updates
 - System performance changes
@@ -496,6 +546,7 @@ The dashboard automatically updates widgets based on:
 ### Dashboard Management Endpoints
 
 #### Create Dashboard
+
 ```http
 POST /api/security-intelligence/dashboards
 Content-Type: application/json
@@ -518,12 +569,14 @@ Authorization: Bearer <token>
 ```
 
 #### Get Dashboard
+
 ```http
 GET /api/security-intelligence/dashboards/{dashboardId}
 Authorization: Bearer <token>
 ```
 
 #### Update Dashboard
+
 ```http
 PUT /api/security-intelligence/dashboards/{dashboardId}
 Content-Type: application/json
@@ -535,6 +588,7 @@ Authorization: Bearer <token>
 ```
 
 #### Delete Dashboard
+
 ```http
 DELETE /api/security-intelligence/dashboards/{dashboardId}
 Authorization: Bearer <token>
@@ -543,6 +597,7 @@ Authorization: Bearer <token>
 ### Widget Data Endpoints
 
 #### Get Widget Data
+
 ```http
 GET /api/security-intelligence/dashboards/{dashboardId}/widgets/{widgetId}/data
 Authorization: Bearer <token>
@@ -554,6 +609,7 @@ Query Parameters:
 ### Analytics Endpoints
 
 #### Get Security Analytics
+
 ```http
 GET /api/security-intelligence/analytics
 Authorization: Bearer <token>
@@ -564,6 +620,7 @@ Query Parameters:
 ```
 
 #### Get Dashboard Metrics
+
 ```http
 GET /api/security-intelligence/metrics
 Authorization: Bearer <token>
@@ -572,6 +629,7 @@ Authorization: Bearer <token>
 ### Export Endpoints
 
 #### Export Dashboard
+
 ```http
 GET /api/security-intelligence/dashboards/{dashboardId}/export
 Authorization: Bearer <token>
@@ -582,11 +640,13 @@ Query Parameters:
 ### Health and Status Endpoints
 
 #### Health Check
+
 ```http
 GET /api/security-intelligence/health
 ```
 
 #### System Status
+
 ```http
 GET /api/security-intelligence/status
 ```
@@ -596,6 +656,7 @@ GET /api/security-intelligence/status
 ### Epic 1 Analytics Foundation Integration
 
 #### Event Stream Integration
+
 ```typescript
 interface Epic1EventForwarding {
   integration_points: {
@@ -622,6 +683,7 @@ interface Epic1EventForwarding {
 ```
 
 #### Performance Metrics Integration
+
 - **Dashboard Metrics**: Forwarded to Epic 1 analytics
 - **Query Metrics**: Performance tracking integration
 - **User Engagement**: Analytics data collection
@@ -631,6 +693,7 @@ interface Epic1EventForwarding {
 ### Epic 17 Admin Systems Integration
 
 #### Authentication & Authorization
+
 ```typescript
 interface Epic17SecurityIntegration {
   authentication: {
@@ -655,6 +718,7 @@ interface Epic17SecurityIntegration {
 ```
 
 #### Health Check Integration
+
 - **Dashboard Health**: Integrated with Epic 17 health monitoring
 - **Performance Monitoring**: System performance tracking
 - **Error Tracking**: Centralized error logging
@@ -664,6 +728,7 @@ interface Epic17SecurityIntegration {
 ## Security Framework
 
 ### Data Protection
+
 ```typescript
 interface SecurityConfiguration {
   encryption: {
@@ -688,6 +753,7 @@ interface SecurityConfiguration {
 ```
 
 ### Threat Protection
+
 - **Input Validation**: Comprehensive input sanitization
 - **SQL Injection Prevention**: Parameterized queries
 - **XSS Protection**: Content Security Policy implementation
@@ -698,6 +764,7 @@ interface SecurityConfiguration {
 ## Performance Specifications
 
 ### System Requirements
+
 - **CPU**: Multi-core processing for concurrent operations
 - **Memory**: 8GB+ RAM for caching and real-time processing
 - **Storage**: SSD storage for optimal query performance
@@ -705,6 +772,7 @@ interface SecurityConfiguration {
 - **Database**: Optimized for analytical workloads
 
 ### Performance Targets
+
 ```typescript
 interface PerformanceTargets {
   response_times: {
@@ -728,6 +796,7 @@ interface PerformanceTargets {
 ```
 
 ### Scalability Features
+
 - **Horizontal Scaling**: Multi-instance deployment
 - **Load Balancing**: Request distribution
 - **Caching Layers**: Multi-tier caching strategy
@@ -739,6 +808,7 @@ interface PerformanceTargets {
 ### Getting Started
 
 #### Dashboard Creation
+
 1. **Access the Dashboard**: Navigate to the Security Intelligence Dashboard
 2. **Create New Dashboard**: Click "Create New Dashboard"
 3. **Configure Layout**: Drag and drop widgets to desired positions
@@ -746,6 +816,7 @@ interface PerformanceTargets {
 5. **Save Dashboard**: Save configuration for future use
 
 #### Widget Configuration
+
 1. **Select Widget Type**: Choose from 12 available widget types
 2. **Position and Size**: Set widget position and dimensions
 3. **Data Source**: Configure data source and query parameters
@@ -756,6 +827,7 @@ interface PerformanceTargets {
 ### Advanced Features
 
 #### Custom Filters
+
 ```typescript
 // Filter configuration example
 const customFilter: DashboardFilter = {
@@ -765,17 +837,19 @@ const customFilter: DashboardFilter = {
   field: 'severity',
   operator: FilterOperator.IN,
   value: ['critical', 'high'],
-  enabled: true
+  enabled: true,
 };
 ```
 
 #### Real-time Monitoring
+
 1. **Enable Real-time Updates**: Toggle real-time mode
 2. **Configure Notifications**: Set up alert notifications
 3. **Monitor Performance**: Track dashboard performance
 4. **Manage Subscriptions**: Subscribe to specific event types
 
 #### Export and Sharing
+
 1. **Export Dashboard**: Export in JSON, CSV, or PDF format
 2. **Share Configuration**: Share dashboard configurations
 3. **Schedule Reports**: Automate report generation
@@ -784,6 +858,7 @@ const customFilter: DashboardFilter = {
 ### Best Practices
 
 #### Dashboard Design
+
 - **Focus on Key Metrics**: Display most important security metrics
 - **Logical Grouping**: Group related widgets together
 - **Color Coding**: Use consistent color schemes for severity levels
@@ -791,6 +866,7 @@ const customFilter: DashboardFilter = {
 - **User Experience**: Design for clarity and ease of use
 
 #### Performance Optimization
+
 - **Cache Management**: Optimize cache settings for your use case
 - **Refresh Rates**: Set appropriate refresh intervals
 - **Filter Usage**: Use filters to reduce data volume
@@ -800,6 +876,7 @@ const customFilter: DashboardFilter = {
 ### Troubleshooting
 
 #### Common Issues
+
 1. **Slow Dashboard Loading**
    - Check network connectivity
    - Verify database performance
@@ -819,6 +896,7 @@ const customFilter: DashboardFilter = {
    - Validate query parameters
 
 #### Performance Issues
+
 1. **High Memory Usage**
    - Review cache settings
    - Optimize query complexity
@@ -834,6 +912,7 @@ const customFilter: DashboardFilter = {
 ## Monitoring and Maintenance
 
 ### Health Monitoring
+
 ```typescript
 interface HealthChecks {
   dashboard_service: {
@@ -856,6 +935,7 @@ interface HealthChecks {
 ```
 
 ### Maintenance Procedures
+
 1. **Regular Health Checks**: Monitor system health continuously
 2. **Performance Tuning**: Optimize based on usage patterns
 3. **Cache Maintenance**: Regular cache cleanup and optimization
@@ -863,6 +943,7 @@ interface HealthChecks {
 5. **Backup and Recovery**: Regular backup of dashboard configurations
 
 ### Operational Metrics
+
 - **System Uptime**: Target 99.99% availability
 - **Response Times**: Monitor API and dashboard response times
 - **Error Rates**: Track and investigate error patterns
@@ -872,6 +953,7 @@ interface HealthChecks {
 ## Future Enhancements
 
 ### Planned Features
+
 1. **Advanced AI Integration**: Machine learning-powered insights
 2. **Custom Widget Development**: SDK for custom widget creation
 3. **Advanced Collaboration**: Team collaboration features
@@ -880,6 +962,7 @@ interface HealthChecks {
 6. **Advanced Export Options**: Additional export formats
 
 ### Roadmap
+
 - **Q1**: Advanced filtering and search capabilities
 - **Q2**: Mobile application development
 - **Q3**: Custom widget SDK release

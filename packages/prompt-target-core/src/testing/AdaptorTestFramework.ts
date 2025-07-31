@@ -7,7 +7,7 @@ import {
   Capabilities,
   QualityScore,
   Platform,
-  PluginContext
+  PluginContext,
 } from '../types/index.js';
 import { AdaptorLifecycle, AdaptorHealthStatus } from '../adaptors/AdaptorLifecycle.js';
 
@@ -21,27 +21,27 @@ export class AdaptorTestFramework {
       lifecycleCompliance: false,
       validationCompliance: false,
       transformationCompliance: false,
-      errors: []
+      errors: [],
     },
     performance: {
       validationTime: 0,
       transformationTime: 0,
       memoryUsage: 0,
       cacheEfficiency: 0,
-      errors: []
+      errors: [],
     },
     functionality: {
       basicFunctionality: false,
       errorHandling: false,
       edgeCases: false,
       qualityScoring: false,
-      errors: []
+      errors: [],
     },
     overall: {
       passed: false,
       score: 0,
-      summary: ''
-    }
+      summary: '',
+    },
   };
 
   constructor(
@@ -59,7 +59,7 @@ export class AdaptorTestFramework {
   ): Promise<AdaptorTestResults> {
     this.logger.info('Starting adaptor test suite', {
       adaptorId: adaptor.id,
-      platform: adaptor.platform
+      platform: adaptor.platform,
     });
 
     try {
@@ -77,7 +77,7 @@ export class AdaptorTestFramework {
       this.logger.info('Adaptor test suite completed', {
         adaptorId: adaptor.id,
         passed: this.testResults.overall.passed,
-        score: this.testResults.overall.score
+        score: this.testResults.overall.score,
       });
 
       return this.testResults;
@@ -85,12 +85,12 @@ export class AdaptorTestFramework {
       const errorMessage = error instanceof Error ? error.message : String(error);
       this.logger.error('Adaptor test suite failed', {
         adaptorId: adaptor.id,
-        error: errorMessage
+        error: errorMessage,
       });
 
       this.testResults.overall.passed = false;
       this.testResults.overall.summary = `Test suite failed: ${errorMessage}`;
-      
+
       return this.testResults;
     }
   }
@@ -121,12 +121,11 @@ export class AdaptorTestFramework {
       // Test transformation compliance
       await this.testTransformationCompliance(adaptor);
       this.testResults.compliance.transformationCompliance = true;
-
     } catch (error) {
       this.testResults.compliance.errors.push({
         test: 'compliance',
         error: error instanceof Error ? error.message : String(error),
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
   }
@@ -168,10 +167,7 @@ export class AdaptorTestFramework {
   /**
    * Test lifecycle compliance
    */
-  private async testLifecycleCompliance(
-    adaptor: AdaptorLifecycle,
-    context: PluginContext
-  ): Promise<void> {
+  private async testLifecycleCompliance(adaptor: AdaptorLifecycle, context: PluginContext): Promise<void> {
     // Test initialization
     await adaptor.initialize(context);
 
@@ -192,7 +188,7 @@ export class AdaptorTestFramework {
    */
   private async testValidationCompliance(adaptor: ModelAdaptor): Promise<void> {
     const testGraph = this.createTestGraph();
-    
+
     // Test basic validation
     const results = await adaptor.validate(testGraph);
     if (!Array.isArray(results)) {
@@ -216,17 +212,17 @@ export class AdaptorTestFramework {
    */
   private async testTransformationCompliance(adaptor: ModelAdaptor): Promise<void> {
     const testGraph = this.createTestGraph();
-    
+
     // Test basic transformation
     const result = await adaptor.transform(testGraph);
     if (!result) throw new Error('transform() returned null/undefined');
-    
+
     // Validate result structure
     if (!result.platform) throw new Error('TargetPrompt missing platform');
     if (!result.content) throw new Error('TargetPrompt missing content');
     if (!result.format) throw new Error('TargetPrompt missing format');
     if (!result.metadata) throw new Error('TargetPrompt missing metadata');
-    
+
     // Test quality estimation
     const quality = await adaptor.estimateQuality(testGraph);
     if (!quality) throw new Error('estimateQuality() returned null/undefined');
@@ -260,12 +256,11 @@ export class AdaptorTestFramework {
 
       // Test cache efficiency
       await this.testCacheEfficiency(adaptor, testGraphs);
-
     } catch (error) {
       this.testResults.performance.errors.push({
         test: 'performance',
         error: error instanceof Error ? error.message : String(error),
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
   }
@@ -273,10 +268,7 @@ export class AdaptorTestFramework {
   /**
    * Test validation performance
    */
-  private async testValidationPerformance(
-    adaptor: ModelAdaptor,
-    testGraphs: PromptGraph[]
-  ): Promise<void> {
+  private async testValidationPerformance(adaptor: ModelAdaptor, testGraphs: PromptGraph[]): Promise<void> {
     const times: number[] = [];
 
     for (const graph of testGraphs) {
@@ -286,15 +278,14 @@ export class AdaptorTestFramework {
       times.push(duration);
     }
 
-    this.testResults.performance.validationTime = 
-      times.reduce((sum, time) => sum + time, 0) / times.length;
+    this.testResults.performance.validationTime = times.reduce((sum, time) => sum + time, 0) / times.length;
 
     // Validation should complete within 200ms on average
     if (this.testResults.performance.validationTime > 200) {
       this.testResults.performance.errors.push({
         test: 'validation_performance',
         error: `Average validation time ${this.testResults.performance.validationTime}ms exceeds 200ms threshold`,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
   }
@@ -302,10 +293,7 @@ export class AdaptorTestFramework {
   /**
    * Test transformation performance
    */
-  private async testTransformationPerformance(
-    adaptor: ModelAdaptor,
-    testGraphs: PromptGraph[]
-  ): Promise<void> {
+  private async testTransformationPerformance(adaptor: ModelAdaptor, testGraphs: PromptGraph[]): Promise<void> {
     const times: number[] = [];
 
     for (const graph of testGraphs) {
@@ -315,15 +303,14 @@ export class AdaptorTestFramework {
       times.push(duration);
     }
 
-    this.testResults.performance.transformationTime = 
-      times.reduce((sum, time) => sum + time, 0) / times.length;
+    this.testResults.performance.transformationTime = times.reduce((sum, time) => sum + time, 0) / times.length;
 
     // Transformation should complete within 500ms on average
     if (this.testResults.performance.transformationTime > 500) {
       this.testResults.performance.errors.push({
         test: 'transformation_performance',
         error: `Average transformation time ${this.testResults.performance.transformationTime}ms exceeds 500ms threshold`,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
   }
@@ -331,10 +318,7 @@ export class AdaptorTestFramework {
   /**
    * Test memory usage patterns
    */
-  private async testMemoryUsage(
-    adaptor: ModelAdaptor,
-    testGraphs: PromptGraph[]
-  ): Promise<void> {
+  private async testMemoryUsage(adaptor: ModelAdaptor, testGraphs: PromptGraph[]): Promise<void> {
     // Force garbage collection if available
     if (global.gc) {
       global.gc();
@@ -354,15 +338,14 @@ export class AdaptorTestFramework {
     }
 
     const finalMemory = process.memoryUsage();
-    this.testResults.performance.memoryUsage = 
-      finalMemory.heapUsed - initialMemory.heapUsed;
+    this.testResults.performance.memoryUsage = finalMemory.heapUsed - initialMemory.heapUsed;
 
     // Memory growth should be reasonable (less than 50MB)
     if (this.testResults.performance.memoryUsage > 50 * 1024 * 1024) {
       this.testResults.performance.errors.push({
         test: 'memory_usage',
         error: `Memory growth ${Math.round(this.testResults.performance.memoryUsage / 1024 / 1024)}MB exceeds 50MB threshold`,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
   }
@@ -370,10 +353,7 @@ export class AdaptorTestFramework {
   /**
    * Test cache efficiency
    */
-  private async testCacheEfficiency(
-    adaptor: ModelAdaptor,
-    testGraphs: PromptGraph[]
-  ): Promise<void> {
+  private async testCacheEfficiency(adaptor: ModelAdaptor, testGraphs: PromptGraph[]): Promise<void> {
     // Warm up cache
     const testGraph = testGraphs[0];
     await adaptor.transform(testGraph);
@@ -388,16 +368,18 @@ export class AdaptorTestFramework {
     }
 
     const avgCacheTime = times.reduce((sum, time) => sum + time, 0) / times.length;
-    
+
     // Cache hits should be significantly faster
-    this.testResults.performance.cacheEfficiency = 
-      Math.max(0, 100 - (avgCacheTime / this.testResults.performance.transformationTime) * 100);
+    this.testResults.performance.cacheEfficiency = Math.max(
+      0,
+      100 - (avgCacheTime / this.testResults.performance.transformationTime) * 100
+    );
 
     if (this.testResults.performance.cacheEfficiency < 50) {
       this.testResults.performance.errors.push({
         test: 'cache_efficiency',
         error: `Cache efficiency ${this.testResults.performance.cacheEfficiency}% below 50% threshold`,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
   }
@@ -428,12 +410,11 @@ export class AdaptorTestFramework {
       // Test quality scoring
       await this.testQualityScoring(adaptor);
       this.testResults.functionality.qualityScoring = true;
-
     } catch (error) {
       this.testResults.functionality.errors.push({
         test: 'functionality',
         error: error instanceof Error ? error.message : String(error),
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
   }
@@ -442,16 +423,12 @@ export class AdaptorTestFramework {
    * Test basic functionality
    */
   private async testBasicFunctionality(adaptor: ModelAdaptor): Promise<void> {
-    const graphs = [
-      this.createSimpleTextGraph(),
-      this.createMultiNodeGraph(),
-      this.createComplexGraph()
-    ];
+    const graphs = [this.createSimpleTextGraph(), this.createMultiNodeGraph(), this.createComplexGraph()];
 
     for (const graph of graphs) {
       // Test validation
       const validationResults = await adaptor.validate(graph);
-      
+
       // Test transformation (if validation passes)
       const errors = validationResults.filter(r => r.type === 'error');
       if (errors.length === 0) {
@@ -474,11 +451,7 @@ export class AdaptorTestFramework {
    */
   private async testErrorHandling(adaptor: ModelAdaptor): Promise<void> {
     // Test with invalid graphs
-    const invalidGraphs = [
-      this.createEmptyGraph(),
-      this.createInvalidGraph(),
-      this.createCyclicGraph()
-    ];
+    const invalidGraphs = [this.createEmptyGraph(), this.createInvalidGraph(), this.createCyclicGraph()];
 
     for (const graph of invalidGraphs) {
       try {
@@ -498,11 +471,7 @@ export class AdaptorTestFramework {
    * Test edge cases
    */
   private async testEdgeCases(adaptor: ModelAdaptor): Promise<void> {
-    const edgeCaseGraphs = [
-      this.createLargeGraph(),
-      this.createDeepGraph(),
-      this.createDisconnectedGraph()
-    ];
+    const edgeCaseGraphs = [this.createLargeGraph(), this.createDeepGraph(), this.createDisconnectedGraph()];
 
     for (const graph of edgeCaseGraphs) {
       await adaptor.validate(graph);
@@ -530,27 +499,25 @@ export class AdaptorTestFramework {
    * Calculate overall test results
    */
   private calculateOverallResults(): void {
-    const complianceScore = [
-      this.testResults.compliance.interfaceCompliance,
-      this.testResults.compliance.lifecycleCompliance,
-      this.testResults.compliance.validationCompliance,
-      this.testResults.compliance.transformationCompliance
-    ].filter(Boolean).length * 25;
+    const complianceScore =
+      [
+        this.testResults.compliance.interfaceCompliance,
+        this.testResults.compliance.lifecycleCompliance,
+        this.testResults.compliance.validationCompliance,
+        this.testResults.compliance.transformationCompliance,
+      ].filter(Boolean).length * 25;
 
-    const performanceScore = Math.max(0, 100 - (
-      this.testResults.performance.errors.length * 20
-    ));
+    const performanceScore = Math.max(0, 100 - this.testResults.performance.errors.length * 20);
 
-    const functionalityScore = [
-      this.testResults.functionality.basicFunctionality,
-      this.testResults.functionality.errorHandling,
-      this.testResults.functionality.edgeCases,
-      this.testResults.functionality.qualityScoring
-    ].filter(Boolean).length * 25;
+    const functionalityScore =
+      [
+        this.testResults.functionality.basicFunctionality,
+        this.testResults.functionality.errorHandling,
+        this.testResults.functionality.edgeCases,
+        this.testResults.functionality.qualityScoring,
+      ].filter(Boolean).length * 25;
 
-    this.testResults.overall.score = Math.round(
-      (complianceScore + performanceScore + functionalityScore) / 3
-    );
+    this.testResults.overall.score = Math.round((complianceScore + performanceScore + functionalityScore) / 3);
 
     this.testResults.overall.passed = this.testResults.overall.score >= 80;
 
@@ -561,7 +528,7 @@ export class AdaptorTestFramework {
    * Generate test summary
    */
   private generateSummary(): string {
-    const totalErrors = 
+    const totalErrors =
       this.testResults.compliance.errors.length +
       this.testResults.performance.errors.length +
       this.testResults.functionality.errors.length;
@@ -583,27 +550,27 @@ export class AdaptorTestFramework {
         lifecycleCompliance: false,
         validationCompliance: false,
         transformationCompliance: false,
-        errors: []
+        errors: [],
       },
       performance: {
         validationTime: 0,
         transformationTime: 0,
         memoryUsage: 0,
         cacheEfficiency: 0,
-        errors: []
+        errors: [],
       },
       functionality: {
         basicFunctionality: false,
         errorHandling: false,
         edgeCases: false,
         qualityScoring: false,
-        errors: []
+        errors: [],
       },
       overall: {
         passed: false,
         score: 0,
-        summary: ''
-      }
+        summary: '',
+      },
     };
   }
 
@@ -623,15 +590,15 @@ export class AdaptorTestFramework {
             id: `node-${i}`,
             type: 'text',
             data: { content: `Test content ${i}` },
-            position: { x: 0, y: 0 }
-          }
+            position: { x: 0, y: 0 },
+          },
         ],
         edges: [],
         metadata: {
           created: new Date(),
           modified: new Date(),
-          version: '1.0'
-        }
+          version: '1.0',
+        },
       });
     }
     return graphs;
@@ -646,15 +613,15 @@ export class AdaptorTestFramework {
           id: 'text-node',
           type: 'text',
           data: { content: 'Simple text content' },
-          position: { x: 0, y: 0 }
-        }
+          position: { x: 0, y: 0 },
+        },
       ],
       edges: [],
       metadata: {
         created: new Date(),
         modified: new Date(),
-        version: '1.0'
-      }
+        version: '1.0',
+      },
     };
   }
 
@@ -667,30 +634,30 @@ export class AdaptorTestFramework {
           id: 'node1',
           type: 'text',
           data: { content: 'First node' },
-          position: { x: 0, y: 0 }
+          position: { x: 0, y: 0 },
         },
         {
           id: 'node2',
           type: 'text',
           data: { content: 'Second node' },
-          position: { x: 100, y: 0 }
+          position: { x: 100, y: 0 },
         },
         {
           id: 'concat',
           type: 'concat',
           data: {},
-          position: { x: 200, y: 0 }
-        }
+          position: { x: 200, y: 0 },
+        },
       ],
       edges: [
         { id: 'e1', source: 'node1', target: 'concat' },
-        { id: 'e2', source: 'node2', target: 'concat' }
+        { id: 'e2', source: 'node2', target: 'concat' },
       ],
       metadata: {
         created: new Date(),
         modified: new Date(),
-        version: '1.0'
-      }
+        version: '1.0',
+      },
     };
   }
 
@@ -702,18 +669,18 @@ export class AdaptorTestFramework {
         id: `node-${i}`,
         type: i % 2 === 0 ? 'text' : 'concat',
         data: { content: `Node ${i} content` },
-        position: { x: i * 50, y: 0 }
+        position: { x: i * 50, y: 0 },
       })),
       edges: Array.from({ length: 9 }, (_, i) => ({
         id: `edge-${i}`,
         source: `node-${i}`,
-        target: `node-${i + 1}`
+        target: `node-${i + 1}`,
       })),
       metadata: {
         created: new Date(),
         modified: new Date(),
-        version: '1.0'
-      }
+        version: '1.0',
+      },
     };
   }
 
@@ -726,8 +693,8 @@ export class AdaptorTestFramework {
       metadata: {
         created: new Date(),
         modified: new Date(),
-        version: '1.0'
-      }
+        version: '1.0',
+      },
     };
   }
 
@@ -740,17 +707,15 @@ export class AdaptorTestFramework {
           id: 'node1',
           type: 'text',
           data: { content: 'Valid node' },
-          position: { x: 0, y: 0 }
-        }
+          position: { x: 0, y: 0 },
+        },
       ],
-      edges: [
-        { id: 'invalid-edge', source: 'node1', target: 'nonexistent' }
-      ],
+      edges: [{ id: 'invalid-edge', source: 'node1', target: 'nonexistent' }],
       metadata: {
         created: new Date(),
         modified: new Date(),
-        version: '1.0'
-      }
+        version: '1.0',
+      },
     };
   }
 
@@ -763,24 +728,24 @@ export class AdaptorTestFramework {
           id: 'node1',
           type: 'text',
           data: { content: 'Node 1' },
-          position: { x: 0, y: 0 }
+          position: { x: 0, y: 0 },
         },
         {
           id: 'node2',
           type: 'text',
           data: { content: 'Node 2' },
-          position: { x: 100, y: 0 }
-        }
+          position: { x: 100, y: 0 },
+        },
       ],
       edges: [
         { id: 'e1', source: 'node1', target: 'node2' },
-        { id: 'e2', source: 'node2', target: 'node1' } // Creates cycle
+        { id: 'e2', source: 'node2', target: 'node1' }, // Creates cycle
       ],
       metadata: {
         created: new Date(),
         modified: new Date(),
-        version: '1.0'
-      }
+        version: '1.0',
+      },
     };
   }
 
@@ -792,18 +757,18 @@ export class AdaptorTestFramework {
         id: `node-${i}`,
         type: 'text',
         data: { content: `Large graph node ${i}` },
-        position: { x: i * 20, y: 0 }
+        position: { x: i * 20, y: 0 },
       })),
       edges: Array.from({ length: 49 }, (_, i) => ({
         id: `edge-${i}`,
         source: `node-${i}`,
-        target: `node-${i + 1}`
+        target: `node-${i + 1}`,
       })),
       metadata: {
         created: new Date(),
         modified: new Date(),
-        version: '1.0'
-      }
+        version: '1.0',
+      },
     };
   }
 
@@ -816,18 +781,18 @@ export class AdaptorTestFramework {
         id: `level-${i}`,
         type: 'text',
         data: { content: `Deep level ${i}` },
-        position: { x: 0, y: i * 50 }
+        position: { x: 0, y: i * 50 },
       })),
       edges: Array.from({ length: depth - 1 }, (_, i) => ({
         id: `deep-edge-${i}`,
         source: `level-${i}`,
-        target: `level-${i + 1}`
+        target: `level-${i + 1}`,
       })),
       metadata: {
         created: new Date(),
         modified: new Date(),
-        version: '1.0'
-      }
+        version: '1.0',
+      },
     };
   }
 
@@ -840,29 +805,27 @@ export class AdaptorTestFramework {
           id: 'connected1',
           type: 'text',
           data: { content: 'Connected 1' },
-          position: { x: 0, y: 0 }
+          position: { x: 0, y: 0 },
         },
         {
           id: 'connected2',
           type: 'text',
           data: { content: 'Connected 2' },
-          position: { x: 100, y: 0 }
+          position: { x: 100, y: 0 },
         },
         {
           id: 'isolated',
           type: 'text',
           data: { content: 'Isolated node' },
-          position: { x: 300, y: 0 }
-        }
+          position: { x: 300, y: 0 },
+        },
       ],
-      edges: [
-        { id: 'conn-edge', source: 'connected1', target: 'connected2' }
-      ],
+      edges: [{ id: 'conn-edge', source: 'connected1', target: 'connected2' }],
       metadata: {
         created: new Date(),
         modified: new Date(),
-        version: '1.0'
-      }
+        version: '1.0',
+      },
     };
   }
 
@@ -876,17 +839,17 @@ export class AdaptorTestFramework {
           type: 'text',
           data: {
             content: 'Well-formed content with proper structure',
-            parameters: { temperature: 0.7 }
+            parameters: { temperature: 0.7 },
           },
-          position: { x: 0, y: 0 }
-        }
+          position: { x: 0, y: 0 },
+        },
       ],
       edges: [],
       metadata: {
         created: new Date(),
         modified: new Date(),
-        version: '1.0'
-      }
+        version: '1.0',
+      },
     };
   }
 
@@ -900,17 +863,17 @@ export class AdaptorTestFramework {
           type: 'unsupported-type' as any,
           data: {
             content: '', // Empty content
-            parameters: { invalid_param: 'bad_value' }
+            parameters: { invalid_param: 'bad_value' },
           },
-          position: { x: 0, y: 0 }
-        }
+          position: { x: 0, y: 0 },
+        },
       ],
       edges: [],
       metadata: {
         created: new Date(),
         modified: new Date(),
-        version: '1.0'
-      }
+        version: '1.0',
+      },
     };
   }
 }

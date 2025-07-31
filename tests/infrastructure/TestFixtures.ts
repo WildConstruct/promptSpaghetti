@@ -35,7 +35,7 @@ export class TestFixtureManager {
     this.generators = {
       graph: new GraphDataGenerator(seed),
       user: new UserDataGenerator(seed),
-      api: new APIDataGenerator(seed)
+      api: new APIDataGenerator(seed),
     };
 
     this.initializeDefaultFixtures();
@@ -97,27 +97,27 @@ export class TestFixtureManager {
             id: 'start',
             type: 'subject',
             position: { x: 100, y: 100 },
-            data: { text: 'The quick brown fox' }
+            data: { text: 'The quick brown fox' },
           },
           {
             id: 'middle',
             type: 'action',
             position: { x: 300, y: 100 },
-            data: { text: 'jumps over' }
+            data: { text: 'jumps over' },
           },
           {
             id: 'end',
             type: 'output',
             position: { x: 500, y: 100 },
-            data: { text: 'the lazy dog' }
-          }
+            data: { text: 'the lazy dog' },
+          },
         ],
         edges: [
           { id: 'e1', source: 'start', target: 'middle' },
-          { id: 'e2', source: 'middle', target: 'end' }
-        ]
+          { id: 'e2', source: 'middle', target: 'end' },
+        ],
       },
-      metadata: { description: 'Simple three-node linear graph for basic testing' }
+      metadata: { description: 'Simple three-node linear graph for basic testing' },
     });
 
     // Complex branching graph
@@ -126,9 +126,9 @@ export class TestFixtureManager {
       data: this.generators.graph.generateGraph({
         nodeCount: 20,
         edgeCount: 18,
-        complexity: 'complex'
+        complexity: 'complex',
       }),
-      metadata: { description: 'Complex graph with multiple branches and node types' }
+      metadata: { description: 'Complex graph with multiple branches and node types' },
     });
 
     // Circular dependency graph (for validation testing)
@@ -138,34 +138,32 @@ export class TestFixtureManager {
         nodes: [
           { id: 'a', type: 'concat', position: { x: 100, y: 100 }, data: { text: 'Node A' } },
           { id: 'b', type: 'concat', position: { x: 300, y: 100 }, data: { text: 'Node B' } },
-          { id: 'c', type: 'output', position: { x: 200, y: 200 }, data: { text: 'Node C' } }
+          { id: 'c', type: 'output', position: { x: 200, y: 200 }, data: { text: 'Node C' } },
         ],
         edges: [
           { id: 'e1', source: 'a', target: 'b' },
           { id: 'e2', source: 'b', target: 'c' },
-          { id: 'e3', source: 'c', target: 'a' } // Creates circular dependency
-        ]
+          { id: 'e3', source: 'c', target: 'a' }, // Creates circular dependency
+        ],
       },
-      metadata: { description: 'Graph with circular dependency for validation testing' }
+      metadata: { description: 'Graph with circular dependency for validation testing' },
     });
 
     // Empty graph
     this.register('graph-empty', {
       category: 'graph',
       data: { nodes: [], edges: [] },
-      metadata: { description: 'Empty graph for edge case testing' }
+      metadata: { description: 'Empty graph for edge case testing' },
     });
 
     // Single node graph
     this.register('graph-single-node', {
       category: 'graph',
       data: {
-        nodes: [
-          { id: 'only', type: 'output', position: { x: 200, y: 200 }, data: { text: 'Single output' } }
-        ],
-        edges: []
+        nodes: [{ id: 'only', type: 'output', position: { x: 200, y: 200 }, data: { text: 'Single output' } }],
+        edges: [],
       },
-      metadata: { description: 'Graph with only one node' }
+      metadata: { description: 'Graph with only one node' },
     });
   }
 
@@ -184,13 +182,13 @@ export class TestFixtureManager {
         auth: {
           hashedPassword: 'hashed_admin_password',
           twoFactorEnabled: true,
-          loginAttempts: 0
+          loginAttempts: 0,
         },
         profile: {
-          preferences: { theme: 'dark', notifications: true }
-        }
+          preferences: { theme: 'dark', notifications: true },
+        },
       },
-      metadata: { description: 'Standard admin user for authentication testing' }
+      metadata: { description: 'Standard admin user for authentication testing' },
     });
 
     // Standard regular user
@@ -207,10 +205,10 @@ export class TestFixtureManager {
         auth: {
           hashedPassword: 'hashed_user_password',
           twoFactorEnabled: false,
-          loginAttempts: 0
-        }
+          loginAttempts: 0,
+        },
       },
-      metadata: { description: 'Standard regular user for basic functionality testing' }
+      metadata: { description: 'Standard regular user for basic functionality testing' },
     });
 
     // Deactivated user
@@ -224,16 +222,16 @@ export class TestFixtureManager {
         role: 'user',
         isActive: false,
         createdAt: '2024-01-01T00:00:00Z',
-        deactivatedAt: '2024-06-01T00:00:00Z'
+        deactivatedAt: '2024-06-01T00:00:00Z',
       },
-      metadata: { description: 'Deactivated user for access control testing' }
+      metadata: { description: 'Deactivated user for access control testing' },
     });
 
     // Multiple users batch
     this.register('users-batch', {
       category: 'user',
       data: this.generators.user.generateUsers(10, { roles: ['admin', 'user', 'moderator'] }),
-      metadata: { description: 'Batch of 10 users with different roles' }
+      metadata: { description: 'Batch of 10 users with different roles' },
     });
   }
 
@@ -247,8 +245,8 @@ export class TestFixtureManager {
           endpoint: '/api/auth/login',
           body: {
             email: 'user@promptspaghetti.test',
-            password: 'correct-password'
-          }
+            password: 'correct-password',
+          },
         },
         response: {
           statusCode: 200,
@@ -257,12 +255,12 @@ export class TestFixtureManager {
             user: {
               id: 'user-001',
               email: 'user@promptspaghetti.test',
-              role: 'user'
-            }
-          }
-        }
+              role: 'user',
+            },
+          },
+        },
       },
-      metadata: { description: 'Successful authentication API interaction' }
+      metadata: { description: 'Successful authentication API interaction' },
     });
 
     // Failed authentication
@@ -274,19 +272,19 @@ export class TestFixtureManager {
           endpoint: '/api/auth/login',
           body: {
             email: 'user@promptspaghetti.test',
-            password: 'wrong-password'
-          }
+            password: 'wrong-password',
+          },
         },
         response: {
           statusCode: 401,
           error: {
             code: 401,
             message: 'Invalid credentials',
-            details: 'Email or password is incorrect'
-          }
-        }
+            details: 'Email or password is incorrect',
+          },
+        },
       },
-      metadata: { description: 'Failed authentication API interaction' }
+      metadata: { description: 'Failed authentication API interaction' },
     });
 
     // Graph execution request
@@ -298,19 +296,19 @@ export class TestFixtureManager {
           endpoint: '/api/execute',
           body: {
             graph: this.fixtures.get('graph-simple-linear')?.data,
-            seed: 12345
-          }
+            seed: 12345,
+          },
         },
         response: {
           statusCode: 200,
           data: {
             result: 'The quick brown fox jumps over the lazy dog',
             executionTime: 150,
-            variables: {}
-          }
-        }
+            variables: {},
+          },
+        },
       },
-      metadata: { description: 'Graph execution API request/response' }
+      metadata: { description: 'Graph execution API request/response' },
     });
 
     // Rate limit exceeded
@@ -322,16 +320,16 @@ export class TestFixtureManager {
           error: {
             code: 429,
             message: 'Rate limit exceeded',
-            details: 'Too many requests. Try again later.'
+            details: 'Too many requests. Try again later.',
           },
           headers: {
             'x-rate-limit-limit': '100',
             'x-rate-limit-remaining': '0',
-            'x-rate-limit-reset': '1640995200'
-          }
-        }
+            'x-rate-limit-reset': '1640995200',
+          },
+        },
       },
-      metadata: { description: 'Rate limit exceeded response' }
+      metadata: { description: 'Rate limit exceeded response' },
     });
   }
 
@@ -346,9 +344,9 @@ export class TestFixtureManager {
         bundleSize: 2048,
         nodeCount: 10,
         executionTime: 89,
-        timestamp: '2024-01-01T00:00:00Z'
+        timestamp: '2024-01-01T00:00:00Z',
       },
-      metadata: { description: 'Baseline performance metrics for comparison' }
+      metadata: { description: 'Baseline performance metrics for comparison' },
     });
 
     // Large graph performance data
@@ -362,9 +360,9 @@ export class TestFixtureManager {
         executionTime: 1450,
         memoryUsage: 256,
         peakMemory: 512,
-        cpuUsage: 78
+        cpuUsage: 78,
       },
-      metadata: { description: 'Performance metrics for large graph processing' }
+      metadata: { description: 'Performance metrics for large graph processing' },
     });
 
     // Load test scenarios
@@ -373,9 +371,9 @@ export class TestFixtureManager {
       data: [
         { users: 10, duration: 60, expectedRps: 50 },
         { users: 50, duration: 300, expectedRps: 200 },
-        { users: 100, duration: 600, expectedRps: 350 }
+        { users: 100, duration: 600, expectedRps: 350 },
       ],
-      metadata: { description: 'Load testing scenarios with different user counts' }
+      metadata: { description: 'Load testing scenarios with different user counts' },
     });
   }
 
@@ -389,22 +387,22 @@ export class TestFixtureManager {
         '<img src="x" onerror="alert(\'xss\')">',
         '<svg onload="alert(\'xss\')">',
         '"><script>alert("xss")</script>',
-        '\';alert("xss");//'
+        '\';alert("xss");//',
       ],
-      metadata: { description: 'Common XSS attack payloads for security testing' }
+      metadata: { description: 'Common XSS attack payloads for security testing' },
     });
 
     // SQL injection attempts
     this.register('security-sql-injection', {
       category: 'security',
       data: [
-        '\'; DROP TABLE users; --',
-        '\' OR \'1\'=\'1',
-        '\' UNION SELECT password FROM users --',
-        '\'; DELETE FROM graphs; --',
-        '\' OR 1=1 --'
+        "'; DROP TABLE users; --",
+        "' OR '1'='1",
+        "' UNION SELECT password FROM users --",
+        "'; DELETE FROM graphs; --",
+        "' OR 1=1 --",
       ],
-      metadata: { description: 'SQL injection attack patterns' }
+      metadata: { description: 'SQL injection attack patterns' },
     });
 
     // Invalid JWT tokens
@@ -415,9 +413,9 @@ export class TestFixtureManager {
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.invalid.signature',
         'expired.token.here',
         '',
-        'Bearer malformed-token'
+        'Bearer malformed-token',
       ],
-      metadata: { description: 'Invalid JWT tokens for authentication testing' }
+      metadata: { description: 'Invalid JWT tokens for authentication testing' },
     });
 
     // Malicious file upload attempts
@@ -427,9 +425,9 @@ export class TestFixtureManager {
         { filename: 'test.php', content: '<?php system($_GET["cmd"]); ?>' },
         { filename: 'test.js', content: 'require("child_process").exec("rm -rf /")' },
         { filename: 'test.exe', content: 'binary executable content' },
-        { filename: '../../../etc/passwd', content: 'path traversal attempt' }
+        { filename: '../../../etc/passwd', content: 'path traversal attempt' },
       ],
-      metadata: { description: 'Malicious file upload attempts for security testing' }
+      metadata: { description: 'Malicious file upload attempts for security testing' },
     });
   }
 }
@@ -494,7 +492,7 @@ export class TestEnvironmentManager {
    */
   async setupEnvironment(name: string, config: any): Promise<void> {
     console.log(`Setting up test environment: ${name}`);
-    
+
     // Environment setup would include:
     // - Setting environment variables
     // - Starting services (Redis, databases, etc.)
@@ -506,7 +504,7 @@ export class TestEnvironmentManager {
       config,
       startedAt: new Date(),
       services: ['redis', 'postgres', 'api-server'],
-      ports: { api: 3001, redis: 6380, postgres: 5433 }
+      ports: { api: 3001, redis: 6380, postgres: 5433 },
     });
   }
 
@@ -516,7 +514,7 @@ export class TestEnvironmentManager {
   async cleanupEnvironment(name: string): Promise<void> {
     console.log(`Cleaning up test environment: ${name}`);
     const env = this.environments.get(name);
-    
+
     if (env) {
       // Stop services, clean up ports, reset configurations
       this.environments.delete(name);

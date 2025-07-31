@@ -27,17 +27,20 @@ This comprehensive guide will help you develop extensions for the PromptSpaghett
 ### Development Environment Setup
 
 1. **Clone the extension template:**
+
 ```bash
 npx create-prompt-extension my-extension
 cd my-extension
 ```
 
 2. **Install dependencies:**
+
 ```bash
 npm install
 ```
 
 3. **Start development mode:**
+
 ```bash
 npm run dev
 ```
@@ -58,12 +61,14 @@ The PromptSpaghetti extension system supports four types of extensions:
 Node extensions add new node types to the graph editor with custom functionality.
 
 **Use cases:**
+
 - Custom data processing nodes
 - Integration with external APIs
 - Specialized computation nodes
 - Advanced node behaviors
 
 **Key interfaces:**
+
 - `NodeExtension`
 - `AdvancedRuntimeNode`
 - `IOSpecBuilder`
@@ -73,12 +78,14 @@ Node extensions add new node types to the graph editor with custom functionality
 UI extensions customize the user interface, add themes, and provide new UI components.
 
 **Use cases:**
+
 - Custom themes and styling
 - New UI components
 - Layout modifications
 - Accessibility enhancements
 
 **Key interfaces:**
+
 - `UIExtension`
 - `ThemeProvider`
 - `ComponentRegistry`
@@ -88,12 +95,14 @@ UI extensions customize the user interface, add themes, and provide new UI compo
 Transform extensions process and transform data within the application.
 
 **Use cases:**
+
 - Text processing pipelines
 - Data format conversions
 - Content validation
 - Custom transformations
 
 **Key interfaces:**
+
 - `TransformExtension`
 - `DataProcessor`
 - `ValidationHelpers`
@@ -103,12 +112,14 @@ Transform extensions process and transform data within the application.
 Storage extensions connect to external storage systems and services.
 
 **Use cases:**
+
 - Database integrations
 - Cloud storage connections
 - API integrations
 - Data synchronization
 
 **Key interfaces:**
+
 - `StorageExtension`
 - `StorageProvider`
 - `DataConnector`
@@ -163,16 +174,16 @@ export class TextUppercaseNode extends AdvancedRuntimeNode {
   protected getIOSpec() {
     return new IOSpecBuilder()
       .input('text', 'string')
-        .required()
-        .description('Text to convert to uppercase')
+      .required()
+      .description('Text to convert to uppercase')
       .output('result', 'string')
-        .description('Uppercase text')
+      .description('Uppercase text')
       .build();
   }
 
   protected async executeImplementation(inputs: any): Promise<any> {
     const text = inputs.text as string;
-    
+
     // Validate input
     if (!ValidationHelpers.isString(text)) {
       throw new Error('Input must be a string');
@@ -191,7 +202,7 @@ export class TextUppercaseNode extends AdvancedRuntimeNode {
       displayName: 'Text Uppercase',
       description: 'Converts input text to uppercase',
       category: 'Text Processing',
-      icon: '🔤'
+      icon: '🔤',
     };
   }
 }
@@ -264,42 +275,42 @@ The manifest file is the heart of your extension. It defines metadata, dependenc
 
 ```typescript
 interface ExtensionManifest {
-  manifest_version: "1.0";
-  id: string;                    // Unique identifier
-  name: string;                  // Display name
-  version: string;               // Semantic version
-  description?: string;          // Description
-  author?: string;               // Author name
+  manifest_version: '1.0';
+  id: string; // Unique identifier
+  name: string; // Display name
+  version: string; // Semantic version
+  description?: string; // Description
+  author?: string; // Author name
   extension_type: ExtensionType; // "node" | "ui" | "transform" | "storage"
-  
+
   // Capabilities
   capabilities?: {
-    provides?: string[];         // What this extension provides
-    requires?: string[];         // What this extension requires
+    provides?: string[]; // What this extension provides
+    requires?: string[]; // What this extension requires
   };
-  
+
   // Dependencies
   dependencies?: {
-    system_version?: string;     // Required system version
+    system_version?: string; // Required system version
     extensions?: Record<string, string>; // Extension dependencies
   };
-  
+
   // Permissions
-  permissions?: string[];        // Required permissions
-  
+  permissions?: string[]; // Required permissions
+
   // Runtime configuration (for node/transform extensions)
   runtime?: {
-    entry_point: string;         // Main file
-    node_types?: string[];       // Node types (for node extensions)
+    entry_point: string; // Main file
+    node_types?: string[]; // Node types (for node extensions)
     storage_providers?: string[]; // Storage providers (for storage extensions)
   };
-  
+
   // UI configuration (for UI extensions)
   ui?: {
-    themes?: string[];           // Available themes
-    components?: string[];       // UI components
+    themes?: string[]; // Available themes
+    components?: string[]; // UI components
   };
-  
+
   // Security settings
   security?: {
     sandbox?: {
@@ -308,7 +319,7 @@ interface ExtensionManifest {
     content_security_policy?: string;
     trusted_domains?: string[];
   };
-  
+
   // Compatibility
   compatibility?: {
     min_system_version?: string;
@@ -318,11 +329,11 @@ interface ExtensionManifest {
     deprecated?: boolean;
     deprecationMessage?: string;
   };
-  
+
   // Development settings
   development?: {
-    path?: string;               // Development path
-    auto_reload?: boolean;       // Auto-reload on changes
+    path?: string; // Development path
+    auto_reload?: boolean; // Auto-reload on changes
   };
 }
 ```
@@ -330,6 +341,7 @@ interface ExtensionManifest {
 ### Common Manifest Examples
 
 #### Node Extension Manifest
+
 ```json
 {
   "manifest_version": "1.0",
@@ -350,6 +362,7 @@ interface ExtensionManifest {
 ```
 
 #### UI Extension Manifest
+
 ```json
 {
   "manifest_version": "1.0",
@@ -382,7 +395,7 @@ interface BaseExtension {
   readonly id: string;
   readonly name: string;
   readonly version: string;
-  
+
   initialize(): Promise<void>;
   activate(): Promise<void>;
   deactivate(): Promise<void>;
@@ -397,7 +410,7 @@ For creating node extensions:
 ```typescript
 interface NodeExtension extends BaseExtension {
   readonly extensionType: 'node';
-  
+
   // Node-specific methods
   registerNodeTypes(): Promise<void>;
   getNodeTypes(): NodeTypeInfo[];
@@ -412,18 +425,18 @@ Base class for creating custom nodes:
 abstract class AdvancedRuntimeNode {
   // Define inputs and outputs
   protected abstract getIOSpec(): IOSpec;
-  
+
   // Main execution logic
   protected abstract executeImplementation(inputs: any): Promise<any>;
-  
+
   // Validation (optional)
   protected validateInputs(inputs: any): ValidationResult;
   protected validateOutputs(outputs: any): ValidationResult;
-  
+
   // State management (optional)
   protected initializeState(): NodeState;
   protected updateState(newState: Partial<NodeState>): void;
-  
+
   // Performance tracking
   protected measureExecution<T>(operation: () => T): T;
 }
@@ -437,10 +450,10 @@ Builder for defining node inputs and outputs:
 class IOSpecBuilder {
   // Input definition
   input(name: string, type: IOType): InputBuilder;
-  
+
   // Output definition
   output(name: string, type: IOType): OutputBuilder;
-  
+
   // Build the specification
   build(): IOSpec;
 }
@@ -466,7 +479,7 @@ class ValidationHelpers {
   static isBoolean(value: any): boolean;
   static isArray(value: any): boolean;
   static isObject(value: any): boolean;
-  
+
   // Validation constraints
   static lengthConstraint(min?: number, max?: number): ValidationConstraint;
   static rangeConstraint(min?: number, max?: number): ValidationConstraint;
@@ -482,7 +495,7 @@ class SerializationHelpers {
   // Serialize node data
   static serialize(data: any): string;
   static deserialize(serialized: string): any;
-  
+
   // Handle complex types
   static serializeWithTypes(data: any): SerializedData;
   static deserializeWithTypes(data: SerializedData): any;
@@ -523,16 +536,19 @@ const available = extensionManager.getAvailableExtensions();
 ### 1. Extension Design
 
 **Keep it focused:**
+
 - Each extension should have a single, clear purpose
 - Avoid creating monolithic extensions
 - Split complex functionality into multiple extensions
 
 **Use semantic versioning:**
+
 - Follow semantic versioning (MAJOR.MINOR.PATCH)
 - Document breaking changes clearly
 - Provide migration guides for major versions
 
 **Design for compatibility:**
+
 - Use the extension API instead of internal APIs
 - Test with multiple system versions
 - Handle missing dependencies gracefully
@@ -540,6 +556,7 @@ const available = extensionManager.getAvailableExtensions();
 ### 2. Performance
 
 **Optimize execution:**
+
 ```typescript
 // Use async operations appropriately
 async executeImplementation(inputs: any): Promise<any> {
@@ -556,7 +573,7 @@ protected executeImplementation(inputs: any): Promise<any> {
   if (this.cache.has(cacheKey)) {
     return Promise.resolve(this.cache.get(cacheKey));
   }
-  
+
   const result = this.computeExpensiveOperation(inputs);
   this.cache.set(cacheKey, result);
   return Promise.resolve(result);
@@ -564,15 +581,16 @@ protected executeImplementation(inputs: any): Promise<any> {
 ```
 
 **Memory management:**
+
 ```typescript
 // Clean up resources
 async dispose(): Promise<void> {
   // Clear caches
   this.cache.clear();
-  
+
   // Remove event listeners
   this.eventEmitter.removeAllListeners();
-  
+
   // Clean up timers
   clearInterval(this.refreshTimer);
 }
@@ -581,6 +599,7 @@ async dispose(): Promise<void> {
 ### 3. Error Handling
 
 **Provide clear error messages:**
+
 ```typescript
 protected validateInputs(inputs: any): ValidationResult {
   if (!inputs.text) {
@@ -589,19 +608,20 @@ protected validateInputs(inputs: any): ValidationResult {
       errors: ['Text input is required']
     };
   }
-  
+
   if (typeof inputs.text !== 'string') {
     return {
       valid: false,
       errors: ['Text input must be a string, received: ' + typeof inputs.text]
     };
   }
-  
+
   return { valid: true, errors: [] };
 }
 ```
 
 **Handle edge cases:**
+
 ```typescript
 protected async executeImplementation(inputs: any): Promise<any> {
   try {
@@ -611,7 +631,7 @@ protected async executeImplementation(inputs: any): Promise<any> {
   } catch (error) {
     // Log error for debugging
     console.error('Extension execution failed:', error);
-    
+
     // Return user-friendly error
     throw new Error(`Processing failed: ${error.message}`);
   }
@@ -621,6 +641,7 @@ protected async executeImplementation(inputs: any): Promise<any> {
 ### 4. Security
 
 **Validate all inputs:**
+
 ```typescript
 // Never trust user input
 protected validateInputs(inputs: any): ValidationResult {
@@ -628,17 +649,18 @@ protected validateInputs(inputs: any): ValidationResult {
   if (typeof inputs.url === 'string') {
     inputs.url = this.sanitizeUrl(inputs.url);
   }
-  
+
   // Validate file paths
   if (inputs.filePath && !this.isValidPath(inputs.filePath)) {
     return { valid: false, errors: ['Invalid file path'] };
   }
-  
+
   return { valid: true, errors: [] };
 }
 ```
 
 **Use minimal permissions:**
+
 ```json
 {
   "permissions": [
@@ -649,6 +671,7 @@ protected validateInputs(inputs: any): ValidationResult {
 ```
 
 **Implement sandboxing:**
+
 ```json
 {
   "security": {
@@ -663,47 +686,49 @@ protected validateInputs(inputs: any): ValidationResult {
 ### 5. Testing
 
 **Write comprehensive tests:**
+
 ```typescript
 import { describe, it, expect } from '@jest/globals';
 import { TextUppercaseNode } from '../src/TextUppercaseNode';
 
 describe('TextUppercaseNode', () => {
   let node: TextUppercaseNode;
-  
+
   beforeEach(() => {
     node = new TextUppercaseNode('test-node', {});
   });
-  
+
   it('should convert text to uppercase', async () => {
     const inputs = { text: 'hello world' };
     const result = await node.execute(inputs, {});
-    
+
     expect(result.result).toBe('HELLO WORLD');
   });
-  
+
   it('should handle empty strings', async () => {
     const inputs = { text: '' };
     const result = await node.execute(inputs, {});
-    
+
     expect(result.result).toBe('');
   });
-  
+
   it('should throw error for non-string input', async () => {
     const inputs = { text: 123 };
-    
+
     await expect(node.execute(inputs, {})).rejects.toThrow();
   });
 });
 ```
 
 **Test with real data:**
+
 ```typescript
 it('should handle real-world text', async () => {
   const inputs = {
-    text: 'The quick brown fox jumps over the lazy dog. 123!@#'
+    text: 'The quick brown fox jumps over the lazy dog. 123!@#',
   };
   const result = await node.execute(inputs, {});
-  
+
   expect(result.result).toBe('THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG. 123!@#');
 });
 ```
@@ -713,6 +738,7 @@ it('should handle real-world text', async () => {
 ### Development Testing
 
 **Use the development mode:**
+
 ```bash
 # Install in development mode
 prompt-extensions install ./manifest.json --dev
@@ -722,6 +748,7 @@ npm run dev
 ```
 
 **Enable debug logging:**
+
 ```typescript
 // In your extension
 if (process.env.NODE_ENV === 'development') {
@@ -730,6 +757,7 @@ if (process.env.NODE_ENV === 'development') {
 ```
 
 **Test with the Extension Tester:**
+
 ```bash
 # Test extension without installing
 prompt-extensions test ./manifest.json
@@ -741,6 +769,7 @@ prompt-extensions test ./manifest.json --scenario performance
 ### Debugging Tools
 
 **Use the Extension Inspector:**
+
 ```typescript
 // Add debug information
 export class MyExtension implements NodeExtension {
@@ -748,23 +777,24 @@ export class MyExtension implements NodeExtension {
     return {
       state: this.currentState,
       performance: this.performanceMetrics,
-      lastError: this.lastError
+      lastError: this.lastError,
     };
   }
 }
 ```
 
 **Performance profiling:**
+
 ```typescript
 protected async executeImplementation(inputs: any): Promise<any> {
   const startTime = performance.now();
-  
+
   try {
     const result = await this.processData(inputs);
-    
+
     const duration = performance.now() - startTime;
     this.recordPerformance(duration);
-    
+
     return result;
   } catch (error) {
     this.recordError(error);
@@ -776,6 +806,7 @@ protected async executeImplementation(inputs: any): Promise<any> {
 ### Integration Testing
 
 **Test with different system versions:**
+
 ```bash
 # Test compatibility
 prompt-extensions test ./manifest.json --system-version 1.0.0
@@ -783,6 +814,7 @@ prompt-extensions test ./manifest.json --system-version 1.1.0
 ```
 
 **Test with other extensions:**
+
 ```bash
 # Test with dependencies
 prompt-extensions test ./manifest.json --with-extension other-extension
@@ -793,11 +825,13 @@ prompt-extensions test ./manifest.json --with-extension other-extension
 ### Preparation
 
 1. **Update version:**
+
 ```bash
 npm version patch  # or minor/major
 ```
 
 2. **Run full test suite:**
+
 ```bash
 npm run test
 npm run lint
@@ -805,6 +839,7 @@ npm run build
 ```
 
 3. **Update documentation:**
+
 ```bash
 npm run docs
 ```
@@ -812,6 +847,7 @@ npm run docs
 ### Package Creation
 
 **Create distribution package:**
+
 ```bash
 # Build for distribution
 npm run build:dist
@@ -826,6 +862,7 @@ prompt-extensions verify ./my-extension-1.0.0.pext
 ### Publishing to Registry
 
 **Publish to extension registry:**
+
 ```bash
 # Login to registry
 prompt-extensions login
@@ -840,33 +877,42 @@ prompt-extensions tag my-extension@1.0.0 latest
 ### Documentation
 
 **Include comprehensive README:**
+
 ```markdown
 # My Extension
 
 ## Description
+
 Brief description of what your extension does.
 
 ## Installation
+
 \`\`\`bash
 prompt-extensions install my-extension
 \`\`\`
 
 ## Usage
+
 How to use your extension...
 
 ## Configuration
+
 Available configuration options...
 
 ## API
+
 If your extension provides an API...
 
 ## Examples
+
 Usage examples...
 
 ## Contributing
+
 How others can contribute...
 
 ## License
+
 License information...
 ```
 
@@ -875,12 +921,13 @@ License information...
 ### Custom UI Components
 
 **Creating UI extensions:**
+
 ```typescript
 import { UIExtension, ComponentRegistry } from '@prompt-spaghetti/core';
 
 export class MyUIExtension implements UIExtension {
   readonly extensionType = 'ui' as const;
-  
+
   async activate(): Promise<void> {
     ComponentRegistry.register('MyButton', MyButtonComponent);
     ComponentRegistry.register('MyDialog', MyDialogComponent);
@@ -889,13 +936,14 @@ export class MyUIExtension implements UIExtension {
 ```
 
 **React component example:**
+
 ```typescript
 import React from 'react';
 import { ExtensionComponent } from '@prompt-spaghetti/ui';
 
 export const MyButtonComponent: ExtensionComponent = ({ config, onAction }) => {
   return (
-    <button 
+    <button
       onClick={() => onAction('click', config.data)}
       className={config.theme?.buttonClass}
     >
@@ -908,36 +956,38 @@ export const MyButtonComponent: ExtensionComponent = ({ config, onAction }) => {
 ### Complex Node Behaviors
 
 **Stateful nodes:**
+
 ```typescript
 export class StatefulNode extends AdvancedRuntimeNode {
   private state: NodeState = {
     counter: 0,
-    history: []
+    history: [],
   };
-  
+
   protected initializeState(): NodeState {
     return {
       counter: 0,
-      history: []
+      history: [],
     };
   }
-  
+
   protected async executeImplementation(inputs: any): Promise<any> {
     // Update state
     this.updateState({
       counter: this.state.counter + 1,
-      history: [...this.state.history, inputs.data]
+      history: [...this.state.history, inputs.data],
     });
-    
+
     return {
       count: this.state.counter,
-      lastItems: this.state.history.slice(-5)
+      lastItems: this.state.history.slice(-5),
     };
   }
 }
 ```
 
 **Conditional execution:**
+
 ```typescript
 export class ConditionalNode extends AdvancedRuntimeNode {
   protected getIOSpec() {
@@ -948,7 +998,7 @@ export class ConditionalNode extends AdvancedRuntimeNode {
       .output('result', 'any')
       .build();
   }
-  
+
   protected async executeImplementation(inputs: any): Promise<any> {
     const result = inputs.condition ? inputs.trueValue : inputs.falseValue;
     return { result };
@@ -959,12 +1009,13 @@ export class ConditionalNode extends AdvancedRuntimeNode {
 ### Storage Extensions
 
 **Creating storage providers:**
+
 ```typescript
 import { StorageExtension, StorageProvider } from '@prompt-spaghetti/core';
 
 export class CloudStorageExtension implements StorageExtension {
   readonly extensionType = 'storage' as const;
-  
+
   async activate(): Promise<void> {
     const provider = new CloudStorageProvider(this.config);
     StorageRegistry.register('cloud-storage', provider);
@@ -975,15 +1026,15 @@ class CloudStorageProvider implements StorageProvider {
   async save(key: string, data: any): Promise<void> {
     // Implement cloud save
   }
-  
+
   async load(key: string): Promise<any> {
     // Implement cloud load
   }
-  
+
   async delete(key: string): Promise<void> {
     // Implement cloud delete
   }
-  
+
   async list(): Promise<string[]> {
     // Implement listing
   }
@@ -993,13 +1044,14 @@ class CloudStorageProvider implements StorageProvider {
 ### Extension Communication
 
 **Inter-extension communication:**
+
 ```typescript
 import { ExtensionMessaging } from '@prompt-spaghetti/core';
 
 // Send message to another extension
 ExtensionMessaging.send('other-extension-id', {
   type: 'data-request',
-  payload: { query: 'user data' }
+  payload: { query: 'user data' },
 });
 
 // Listen for messages
@@ -1013,6 +1065,7 @@ ExtensionMessaging.onMessage((message, sender) => {
 ```
 
 **Shared services:**
+
 ```typescript
 import { ServiceRegistry } from '@prompt-spaghetti/core';
 
@@ -1038,6 +1091,7 @@ const result = await dataService.processData(myData);
 #### Extension Won't Load
 
 **Check manifest syntax:**
+
 ```bash
 # Validate manifest
 prompt-extensions validate ./manifest.json
@@ -1050,6 +1104,7 @@ prompt-extensions validate ./manifest.json
 ```
 
 **Check dependencies:**
+
 ```bash
 # Verify all dependencies are available
 prompt-extensions deps-check ./manifest.json
@@ -1061,17 +1116,19 @@ npm install missing-dependency
 #### Runtime Errors
 
 **Check permissions:**
+
 ```json
 {
   "permissions": [
-    "data-processing",  // Required for data operations
+    "data-processing", // Required for data operations
     "file-system-read", // Required for file access
-    "network"           // Required for network requests
+    "network" // Required for network requests
   ]
 }
 ```
 
 **Check compatibility:**
+
 ```bash
 # Test compatibility
 prompt-extensions compat-check ./manifest.json
@@ -1082,21 +1139,22 @@ prompt-extensions compat-check ./manifest.json
 #### Performance Issues
 
 **Profile extension performance:**
+
 ```typescript
 // Add performance monitoring
 protected async executeImplementation(inputs: any): Promise<any> {
   const metrics = performance.mark('start');
-  
+
   try {
     const result = await this.processData(inputs);
-    
+
     performance.mark('end');
     const measure = performance.measure('execution', 'start', 'end');
-    
+
     if (measure.duration > 1000) {
       console.warn('Slow execution detected:', measure.duration + 'ms');
     }
-    
+
     return result;
   } finally {
     performance.clearMarks();
@@ -1105,6 +1163,7 @@ protected async executeImplementation(inputs: any): Promise<any> {
 ```
 
 **Optimize common bottlenecks:**
+
 ```typescript
 // Cache expensive operations
 private cache = new LRUCache<string, any>(100);
@@ -1113,7 +1172,7 @@ private cache = new LRUCache<string, any>(100);
 async processBatch(items: any[]): Promise<any[]> {
   const batchSize = 10;
   const results = [];
-  
+
   for (let i = 0; i < items.length; i += batchSize) {
     const batch = items.slice(i, i + batchSize);
     const batchResults = await Promise.all(
@@ -1121,7 +1180,7 @@ async processBatch(items: any[]): Promise<any[]> {
     );
     results.push(...batchResults);
   }
-  
+
   return results;
 }
 ```
@@ -1129,16 +1188,19 @@ async processBatch(items: any[]): Promise<any[]> {
 ### Getting Help
 
 **Community resources:**
+
 - Extension Development Forum
 - GitHub Discussions
 - Discord #extension-dev channel
 
 **Documentation:**
+
 - API Reference: `/docs/api/`
 - Examples Repository: `/examples/`
 - Video Tutorials: `/docs/tutorials/`
 
 **Debugging tools:**
+
 ```bash
 # Enable debug mode
 export DEBUG=prompt-extensions:*
@@ -1151,6 +1213,7 @@ prompt-extensions debug-report
 ```
 
 **Submit bug reports:**
+
 ```bash
 # Create bug report with system info
 prompt-extensions bug-report --extension my-extension

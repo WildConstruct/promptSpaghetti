@@ -1,7 +1,7 @@
 /**
  * Security Domain - Main Export
  * REFACTOR-005: Domain-Driven Architecture
- * 
+ *
  * Main entry point for the security domain
  */
 
@@ -24,6 +24,6 @@ export const createSecurityDomain = (config?: any) => {
     hooks: {},
     services: {},
     events: {},
-    utils: {}
+    utils: {},
   };
 };

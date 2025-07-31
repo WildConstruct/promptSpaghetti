@@ -14,16 +14,21 @@ All ADRs in this project follow this standardized format:
 # ADR-XXX: [Decision Title]
 
 ## Status
+
 [Proposed | Accepted | Superseded | Deprecated]
 
 ## Context
+
 What is the issue that we're seeing that is motivating this decision or change?
 
 ## Decision
+
 What is the change that we're actually proposing or doing?
 
 ## Consequences
+
 What becomes easier or more difficult to do because of this change?
+
 - Positive: [Benefits of this decision]
 - Negative: [Drawbacks or challenges]
 - Neutral: [Other impacts]
@@ -31,13 +36,13 @@ What becomes easier or more difficult to do because of this change?
 
 ## Current ADRs
 
-| ADR | Title | Status | Date |
-|-----|-------|--------|------|
-| [ADR-001](./ADR-001-repository-pattern.md) | Use Repository Pattern for Data Access | Accepted | 2024-01-15 |
-| [ADR-002](./ADR-002-typescript-strict-mode.md) | Enable TypeScript Strict Mode | Accepted | 2024-01-15 |
-| [ADR-003](./ADR-003-monorepo-architecture.md) | Adopt Monorepo Architecture with pnpm | Accepted | 2024-01-15 |
-| [ADR-004](./ADR-004-security-validation-framework.md) | Implement Security Validation Framework | Accepted | 2024-01-15 |
-| [ADR-005](./ADR-005-event-driven-architecture.md) | Adopt Event-Driven Architecture for Analytics | Accepted | 2024-01-15 |
+| ADR                                                   | Title                                         | Status   | Date       |
+| ----------------------------------------------------- | --------------------------------------------- | -------- | ---------- |
+| [ADR-001](./ADR-001-repository-pattern.md)            | Use Repository Pattern for Data Access        | Accepted | 2024-01-15 |
+| [ADR-002](./ADR-002-typescript-strict-mode.md)        | Enable TypeScript Strict Mode                 | Accepted | 2024-01-15 |
+| [ADR-003](./ADR-003-monorepo-architecture.md)         | Adopt Monorepo Architecture with pnpm         | Accepted | 2024-01-15 |
+| [ADR-004](./ADR-004-security-validation-framework.md) | Implement Security Validation Framework       | Accepted | 2024-01-15 |
+| [ADR-005](./ADR-005-event-driven-architecture.md)     | Adopt Event-Driven Architecture for Analytics | Accepted | 2024-01-15 |
 
 ## Creating New ADRs
 
@@ -48,7 +53,8 @@ What becomes easier or more difficult to do because of this change?
    - Introduce new technologies or frameworks
    - Establish patterns that other developers should follow
 
-2. **Create the ADR file**: 
+2. **Create the ADR file**:
+
    ```bash
    # Use the next sequential number
    touch docs/architecture/architectural-decision-records/ADR-006-your-decision-title.md
@@ -62,7 +68,7 @@ What becomes easier or more difficult to do because of this change?
 
 4. **Review process**: ADRs should be reviewed by:
    - Technical leads
-   - Affected team members  
+   - Affected team members
    - Security team (if applicable)
    - Architecture team
 
@@ -78,21 +84,25 @@ What becomes easier or more difficult to do because of this change?
 ## Guidelines for Writing ADRs
 
 ### Context Section
+
 - Describe the forces at play (technical, political, social, project local)
 - Explain why this decision is necessary
 - Include relevant background information
 - Reference related ADRs or external documentation
 
 ### Decision Section
+
 - State the architecture decision clearly
 - Explain why this decision was chosen over alternatives
 - Include any implementation details that affect the architecture
 - Reference any standards or patterns being adopted
 
 ### Consequences Section
+
 Be honest about both positive and negative consequences:
 
 **Positive consequences might include:**
+
 - Improved performance or scalability
 - Better developer experience
 - Reduced complexity
@@ -100,6 +110,7 @@ Be honest about both positive and negative consequences:
 - Better alignment with business goals
 
 **Negative consequences might include:**
+
 - Increased complexity in certain areas
 - Learning curve for team members
 - Migration effort required
@@ -120,6 +131,7 @@ Consider creating ADRs for decisions like:
 ## Reviewing and Updating ADRs
 
 ADRs should be:
+
 - **Living documents** that can be updated as circumstances change
 - **Reviewed regularly** to ensure they remain relevant
 - **Referenced** in code reviews and architectural discussions

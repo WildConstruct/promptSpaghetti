@@ -90,14 +90,10 @@ export interface CRDTEdge {
   deleted?: boolean;
 }
 
-
 /**
  * Conflict resolution strategy
  */
-export type ConflictResolutionStrategy = 
-  | 'lastWriteWins'
-  | 'multiValue'
-  | 'custom';
+export type ConflictResolutionStrategy = 'lastWriteWins' | 'multiValue' | 'custom';
 
 /**
  * CRDT implementation configuration

@@ -1,7 +1,7 @@
 /**
  * Update Notifications System
  * Epic 8.3 Story 8.3.5 - Version Control and Updates
- * 
+ *
  * Handles update notifications, version checking, and user alerts
  */
 
@@ -12,7 +12,7 @@ class UpdateNotifier {
     this.checkInterval = 30 * 60 * 1000; // 30 minutes
     this.lastCheck = 0;
     this.settings = this.loadSettings();
-    
+
     this.init();
   }
 
@@ -23,7 +23,7 @@ class UpdateNotifier {
     this.createNotificationContainer();
     this.setupEventListeners();
     this.scheduleChecks();
-    
+
     // Check for updates on page load
     setTimeout(() => this.checkForUpdates(), 2000);
   }
@@ -42,18 +42,20 @@ class UpdateNotifier {
   loadSettings() {
     try {
       const settings = localStorage.getItem('handbook-notification-settings');
-      return settings ? JSON.parse(settings) : {
-        enabled: true,
-        frequency: 'normal', // 'off', 'minimal', 'normal', 'all'
-        autoUpdate: false,
-        showChangelog: true
-      };
+      return settings
+        ? JSON.parse(settings)
+        : {
+            enabled: true,
+            frequency: 'normal', // 'off', 'minimal', 'normal', 'all'
+            autoUpdate: false,
+            showChangelog: true,
+          };
     } catch (error) {
       return {
         enabled: true,
         frequency: 'normal',
         autoUpdate: false,
-        showChangelog: true
+        showChangelog: true,
       };
     }
   }
@@ -234,7 +236,7 @@ class UpdateNotifier {
         }
       </style>
     `;
-    
+
     document.body.appendChild(this.notificationContainer);
   }
 
@@ -280,11 +282,7 @@ class UpdateNotifier {
 
     try {
       // Check multiple sources for update information
-      const sources = [
-        this.checkVersionAPI(),
-        this.checkGitHubReleases(),
-        this.checkMetadata()
-      ];
+      const sources = [this.checkVersionAPI(), this.checkGitHubReleases(), this.checkMetadata()];
 
       const results = await Promise.allSettled(sources);
       const updates = results
@@ -306,20 +304,20 @@ class UpdateNotifier {
     try {
       const response = await fetch('/api/version-check', {
         method: 'GET',
-        headers: { 'Cache-Control': 'no-cache' }
+        headers: { 'Cache-Control': 'no-cache' },
       });
 
       if (!response.ok) throw new Error('API request failed');
 
       const data = await response.json();
-      
+
       if (this.isNewerVersion(data.version, this.currentVersion)) {
         return {
           type: 'version',
           version: data.version,
           changes: data.changes,
           releaseDate: data.releaseDate,
-          source: 'api'
+          source: 'api',
         };
       }
     } catch (error) {
@@ -338,7 +336,7 @@ class UpdateNotifier {
 
       const release = await response.json();
       const version = release.tag_name.replace(/^handbook-v/, '');
-      
+
       if (this.isNewerVersion(version, this.currentVersion)) {
         return {
           type: 'release',
@@ -346,7 +344,7 @@ class UpdateNotifier {
           changes: release.body,
           releaseDate: release.published_at,
           downloadUrl: release.html_url,
-          source: 'github'
+          source: 'github',
         };
       }
     } catch (error) {
@@ -363,18 +361,18 @@ class UpdateNotifier {
       if (!response.ok) throw new Error('Metadata request failed');
 
       const metadata = await response.json();
-      
+
       // Check if content has been updated recently
       const lastUpdated = new Date(metadata.lastUpdated);
       const lastNotified = new Date(localStorage.getItem('handbook-last-notified') || '2000-01-01');
-      
+
       if (lastUpdated > lastNotified && metadata.recentChanges.length > 0) {
         return {
           type: 'content',
           version: metadata.version,
           changes: metadata.recentChanges,
           lastUpdated: metadata.lastUpdated,
-          source: 'metadata'
+          source: 'metadata',
         };
       }
     } catch (error) {
@@ -386,13 +384,15 @@ class UpdateNotifier {
    * Compare version strings
    */
   isNewerVersion(newVersion, currentVersion) {
-    const parseVersion = (v) => v.split('.').map(Number);
+    const parseVersion = v => v.split('.').map(Number);
     const [newMajor, newMinor, newPatch] = parseVersion(newVersion);
     const [currentMajor, currentMinor, currentPatch] = parseVersion(currentVersion);
 
-    return newMajor > currentMajor ||
-           (newMajor === currentMajor && newMinor > currentMinor) ||
-           (newMajor === currentMajor && newMinor === currentMinor && newPatch > currentPatch);
+    return (
+      newMajor > currentMajor ||
+      (newMajor === currentMajor && newMinor > currentMinor) ||
+      (newMajor === currentMajor && newMinor === currentMinor && newPatch > currentPatch)
+    );
   }
 
   /**
@@ -411,11 +411,11 @@ class UpdateNotifier {
    */
   shouldShowNotification(update) {
     const frequency = this.settings.frequency;
-    
+
     if (frequency === 'off') return false;
     if (frequency === 'minimal' && update.type === 'content') return false;
     if (frequency === 'normal' && update.type === 'content' && update.changes.length < 3) return false;
-    
+
     return true;
   }
 
@@ -425,7 +425,7 @@ class UpdateNotifier {
   showUpdateNotification(update) {
     const notification = document.createElement('div');
     notification.className = `update-notification ${this.getNotificationType(update)}`;
-    
+
     notification.innerHTML = `
       <div class="update-notification-header">
         <div class="update-notification-title">
@@ -442,9 +442,9 @@ class UpdateNotifier {
         ${this.getNotificationActions(update)}
       </div>
     `;
-    
+
     this.notificationContainer.appendChild(notification);
-    
+
     // Auto-dismiss after 10 seconds for content updates
     if (update.type === 'content') {
       setTimeout(() => {
@@ -453,7 +453,7 @@ class UpdateNotifier {
         }
       }, 10000);
     }
-    
+
     // Update last notified timestamp
     localStorage.setItem('handbook-last-notified', new Date().toISOString());
   }
@@ -463,13 +463,13 @@ class UpdateNotifier {
    */
   getNotificationType(update) {
     switch (update.type) {
-    case 'version':
-    case 'release':
-      return 'info';
-    case 'content':
-      return 'success';
-    default:
-      return 'info';
+      case 'version':
+      case 'release':
+        return 'info';
+      case 'content':
+        return 'success';
+      default:
+        return 'info';
     }
   }
 
@@ -478,13 +478,13 @@ class UpdateNotifier {
    */
   getNotificationTitle(update) {
     switch (update.type) {
-    case 'version':
-    case 'release':
-      return `Handbook Updated to <span class="update-notification-version">v${update.version}</span>`;
-    case 'content':
-      return 'New Content Available';
-    default:
-      return 'Handbook Update';
+      case 'version':
+      case 'release':
+        return `Handbook Updated to <span class="update-notification-version">v${update.version}</span>`;
+      case 'content':
+        return 'New Content Available';
+      default:
+        return 'Handbook Update';
     }
   }
 
@@ -493,15 +493,15 @@ class UpdateNotifier {
    */
   getNotificationContent(update) {
     switch (update.type) {
-    case 'version':
-    case 'release':
-      return 'A new version of the handbook is available with improvements and new content.';
-    case 'content':
-      const changeCount = update.changes.length;
-      const recentChange = update.changes[0];
-      return `${changeCount} recent ${changeCount === 1 ? 'change' : 'changes'} including: ${recentChange.description}`;
-    default:
-      return 'The handbook has been updated with new content.';
+      case 'version':
+      case 'release':
+        return 'A new version of the handbook is available with improvements and new content.';
+      case 'content':
+        const changeCount = update.changes.length;
+        const recentChange = update.changes[0];
+        return `${changeCount} recent ${changeCount === 1 ? 'change' : 'changes'} including: ${recentChange.description}`;
+      default:
+        return 'The handbook has been updated with new content.';
     }
   }
 
@@ -510,23 +510,27 @@ class UpdateNotifier {
    */
   getNotificationActions(update) {
     let actions = [];
-    
+
     switch (update.type) {
-    case 'version':
-    case 'release':
-      actions.push('<button class="update-notification-button" onclick="location.reload()">Refresh Page</button>');
-      if (update.downloadUrl) {
-        actions.push(`<a href="${update.downloadUrl}" class="update-notification-button secondary" target="_blank">View Release</a>`);
-      }
-      break;
-    case 'content':
-      actions.push('<button class="update-notification-button" onclick="location.reload()">Refresh Page</button>');
-      if (this.settings.showChangelog) {
-        actions.push('<a href="/CHANGELOG.md" class="update-notification-button secondary" target="_blank">View Changes</a>');
-      }
-      break;
+      case 'version':
+      case 'release':
+        actions.push('<button class="update-notification-button" onclick="location.reload()">Refresh Page</button>');
+        if (update.downloadUrl) {
+          actions.push(
+            `<a href="${update.downloadUrl}" class="update-notification-button secondary" target="_blank">View Release</a>`
+          );
+        }
+        break;
+      case 'content':
+        actions.push('<button class="update-notification-button" onclick="location.reload()">Refresh Page</button>');
+        if (this.settings.showChangelog) {
+          actions.push(
+            '<a href="/CHANGELOG.md" class="update-notification-button secondary" target="_blank">View Changes</a>'
+          );
+        }
+        break;
     }
-    
+
     return actions.join('');
   }
 
@@ -562,7 +566,7 @@ class UpdateNotifier {
         </div>
       </div>
     `;
-    
+
     document.body.appendChild(modal);
   }
 
@@ -581,9 +585,9 @@ class UpdateNotifier {
       type: 'info',
       version: this.currentVersion,
       changes: [],
-      message: 'Checking for updates...'
+      message: 'Checking for updates...',
     });
-    
+
     this.checkForUpdates();
   }
 }

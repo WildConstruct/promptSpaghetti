@@ -70,7 +70,7 @@ import { Epic16PrerequisiteSystem, Epic16PrerequisiteRunner } from '@/services/E
 // Basic system usage
 const system = new Epic16PrerequisiteSystem({
   environment: 'production',
-  autoFixEnabled: true
+  autoFixEnabled: true,
 });
 
 const report = await system.runAllChecks();
@@ -80,7 +80,7 @@ console.log('Overall status:', report.overall.passed);
 const runner = new Epic16PrerequisiteRunner({
   format: 'json',
   autoFix: true,
-  verbose: true
+  verbose: true,
 });
 
 const result = await runner.run();
@@ -143,12 +143,14 @@ Use with: `node scripts/epic16-prerequisites.js --config config.json`
 ### Epic 11 (Auth/RBAC) Checks
 
 #### epic11_auth_service
+
 - **Description**: Verify Epic 11 authentication service is available
 - **Critical**: Yes
 - **Auto-fix**: Service deployment (manual intervention required)
 - **Validation**: HTTP health check to auth service endpoint
 
 #### epic11_rbac_roles
+
 - **Description**: Verify required marketplace roles exist
 - **Critical**: Yes
 - **Auto-fix**: Create missing roles (buyer, creator, admin, moderator)
@@ -157,11 +159,13 @@ Use with: `node scripts/epic16-prerequisites.js --config config.json`
 ### Epic 13 (Analytics) Checks
 
 #### epic13_analytics_service
+
 - **Description**: Verify Epic 13 analytics infrastructure is operational
 - **Critical**: High
 - **Auto-fix**: Service deployment (manual intervention required)
 
 #### epic13_clickhouse
+
 - **Description**: Verify ClickHouse database with required tables
 - **Critical**: High
 - **Dependencies**: epic13_analytics_service
@@ -170,18 +174,21 @@ Use with: `node scripts/epic16-prerequisites.js --config config.json`
 ### Infrastructure Checks
 
 #### elasticsearch_cluster
+
 - **Description**: Verify Elasticsearch 8 cluster for template search
 - **Critical**: Yes
 - **Auto-fix**: Create missing indices
 - **Required Indices**: templates, kb_articles
 
 #### redis_cache
+
 - **Description**: Verify Redis cache availability and performance
 - **Critical**: Yes
 - **Auto-fix**: Limited (connection issues require manual intervention)
 - **Performance**: Response time must be < 50ms
 
 #### postgres_database
+
 - **Description**: Verify PostgreSQL 15 with marketplace schemas
 - **Critical**: Yes
 - **Auto-fix**: Run database migrations
@@ -190,12 +197,14 @@ Use with: `node scripts/epic16-prerequisites.js --config config.json`
 ### Service Integration Checks
 
 #### stripe_integration
+
 - **Description**: Verify Stripe API keys and webhook configuration
 - **Critical**: Yes
 - **Auto-fix**: Limited (API keys require manual configuration)
 - **Validation**: API connectivity test
 
 #### claude_api_access
+
 - **Description**: Verify Claude API access for template previews
 - **Critical**: Yes
 - **Auto-fix**: Limited (API keys require manual configuration)
@@ -204,12 +213,14 @@ Use with: `node scripts/epic16-prerequisites.js --config config.json`
 ### Security Checks
 
 #### ssl_certificates
+
 - **Description**: Verify SSL certificates for marketplace domains
 - **Critical**: High
 - **Auto-fix**: Not available (certificate management required)
 - **Validation**: Certificate validity and expiration (> 30 days)
 
 #### security_headers
+
 - **Description**: Verify security headers configuration
 - **Critical**: Medium
 - **Auto-fix**: Update server configuration
@@ -281,9 +292,7 @@ Structured JSON output for automation:
       "message": "Epic 11 authentication service is healthy"
     }
   },
-  "recommendations": [
-    "Address critical failures immediately"
-  ]
+  "recommendations": ["Address critical failures immediately"]
 }
 ```
 
@@ -305,11 +314,11 @@ GitHub-friendly markdown format:
 
 ## ✅ Overall Status: PASSED
 
-| Metric | Value |
-|--------|-------|
-| Total Checks | 15 |
-| Passed | 13 |
-| Failed | 2 |
+| Metric       | Value |
+| ------------ | ----- |
+| Total Checks | 15    |
+| Passed       | 13    |
+| Failed       | 2     |
 ```
 
 ## Monitoring Integration
@@ -333,7 +342,7 @@ node scripts/epic16-prerequisites.js --health
       --env production \
       --format json \
       --output epic16-report.json
-  
+
 - name: Upload Report
   uses: actions/upload-artifact@v3
   with:
@@ -404,9 +413,9 @@ import { Epic16PrerequisiteSystem } from './Epic16PrerequisiteSystem';
 describe('Epic16PrerequisiteSystem', () => {
   it('should validate Epic 11 auth service', async () => {
     const system = new Epic16PrerequisiteSystem({
-      services: { authService: 'https://test-auth.example.com' }
+      services: { authService: 'https://test-auth.example.com' },
     });
-    
+
     const results = await system.runChecks(['epic11_auth_service']);
     expect(results.epic11_auth_service.passed).toBe(true);
   });
@@ -418,32 +427,42 @@ describe('Epic16PrerequisiteSystem', () => {
 ### Common Issues
 
 #### Epic 11 Auth Service Not Found
+
 ```
 ❌ epic11_auth_service: Epic 11 auth service endpoint not configured
 ```
+
 **Solution**: Set `EPIC11_AUTH_SERVICE_URL` environment variable
 
 #### Database Connection Failed
+
 ```
 ❌ postgres_database: PostgreSQL is not responding
 ```
+
 **Solutions**:
+
 1. Check `DATABASE_URL` format
 2. Verify database server is running
 3. Check network connectivity
 4. Validate credentials
 
 #### Stripe Integration Issues
+
 ```
 ❌ stripe_integration: Stripe secret key not configured
 ```
+
 **Solution**: Set `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET`
 
 #### High Prerequisites Failure Rate
+
 ```
 ⚠️ High failure rate detected - consider reviewing Epic 16 prerequisites documentation
 ```
+
 **Solutions**:
+
 1. Review this documentation
 2. Check Epic 16 deployment guide
 3. Verify all dependencies are properly deployed

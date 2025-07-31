@@ -20,9 +20,9 @@ export const platformGestureConfigs = {
     swipeVelocity: 0.2, // Faster swipe detection
     bounceScroll: true, // Rubber band scrolling
     momentumScrolling: true, // Inertial scrolling
-    overscrollBehavior: 'bounce'
+    overscrollBehavior: 'bounce',
   },
-  
+
   android: {
     // Android-specific gestures
     edgeSwipe: false, // No edge swipe by default
@@ -30,9 +30,9 @@ export const platformGestureConfigs = {
     doubleTapDelay: 300, // Standard Material timing
     swipeVelocity: 0.3, // Standard swipe speed
     overscrollBehavior: 'glow', // Overscroll glow effect
-    pullToRefresh: true // Native pull-to-refresh
+    pullToRefresh: true, // Native pull-to-refresh
   },
-  
+
   desktop: {
     // Desktop-specific interactions
     rightClick: true, // Context menu on right click
@@ -40,8 +40,8 @@ export const platformGestureConfigs = {
     wheelZoom: true, // Ctrl+wheel zoom
     hoverDelay: 300, // Tooltip hover delay
     dragThreshold: 5, // Smaller drag threshold
-    preciseCursor: true // Sub-pixel positioning
-  }
+    preciseCursor: true, // Sub-pixel positioning
+  },
 };
 
 /**
@@ -50,11 +50,11 @@ export const platformGestureConfigs = {
 export function getPlatformGestureConfig() {
   const platform = deviceDetector.getPlatform();
   const os = deviceDetector.getOS();
-  
+
   if (platform === 'mobile') {
     return os === 'iOS' ? platformGestureConfigs.ios : platformGestureConfigs.android;
   }
-  
+
   return platformGestureConfigs.desktop;
 }
 
@@ -73,37 +73,38 @@ export interface PlatformGestureHandlerProps {
 export const PlatformGestureHandler: React.FC<PlatformGestureHandlerProps> = ({
   children,
   onGesture,
-  enablePlatformSpecific = true
+  enablePlatformSpecific = true,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const platform = deviceDetector.getPlatform();
   const os = deviceDetector.getOS();
-  
+
   useEffect(() => {
     if (!containerRef.current || !enablePlatformSpecific) return;
-    
+
     const config = getPlatformGestureConfig();
     const cleanup: (() => void)[] = [];
-    
+
     // iOS-specific gestures
     if (os === 'iOS') {
       // Edge swipe for back navigation
       if (config.edgeSwipe) {
         const handleEdgeSwipe = (e: TouchEvent) => {
           const touch = e.touches[0];
-          if (touch.clientX < 20) { // Left edge
+          if (touch.clientX < 20) {
+            // Left edge
             onGesture?.('edgeSwipeRight', {
               x: touch.clientX,
               y: touch.clientY,
-              timestamp: Date.now()
+              timestamp: Date.now(),
             });
           }
         };
-        
+
         containerRef.current.addEventListener('touchstart', handleEdgeSwipe);
         cleanup.push(() => containerRef.current?.removeEventListener('touchstart', handleEdgeSwipe));
       }
-      
+
       // Force touch detection
       if ('ontouchforcechange' in document) {
         const handleForceTouch = (e: any) => {
@@ -111,51 +112,51 @@ export const PlatformGestureHandler: React.FC<PlatformGestureHandlerProps> = ({
             onGesture?.('forceTouch', {
               force: e.touches[0].force,
               x: e.touches[0].clientX,
-              y: e.touches[0].clientY
+              y: e.touches[0].clientY,
             });
             iOSHaptics.impact('heavy');
           }
         };
-        
+
         containerRef.current.addEventListener('touchforcechange', handleForceTouch);
         cleanup.push(() => containerRef.current?.removeEventListener('touchforcechange', handleForceTouch));
       }
     }
-    
+
     // Android-specific gestures
     if (os === 'Android') {
       // Pull to refresh
       if (config.pullToRefresh) {
         let startY = 0;
         let isPulling = false;
-        
+
         const handleTouchStart = (e: TouchEvent) => {
           if (window.scrollY === 0) {
             startY = e.touches[0].clientY;
             isPulling = true;
           }
         };
-        
+
         const handleTouchMove = (e: TouchEvent) => {
           if (!isPulling) return;
-          
+
           const currentY = e.touches[0].clientY;
           const distance = currentY - startY;
-          
+
           if (distance > 50) {
             onGesture?.('pullToRefresh', { distance });
             HapticFeedback.getInstance().trigger('light');
           }
         };
-        
+
         const handleTouchEnd = () => {
           isPulling = false;
         };
-        
+
         containerRef.current.addEventListener('touchstart', handleTouchStart);
         containerRef.current.addEventListener('touchmove', handleTouchMove);
         containerRef.current.addEventListener('touchend', handleTouchEnd);
-        
+
         cleanup.push(() => {
           containerRef.current?.removeEventListener('touchstart', handleTouchStart);
           containerRef.current?.removeEventListener('touchmove', handleTouchMove);
@@ -163,7 +164,7 @@ export const PlatformGestureHandler: React.FC<PlatformGestureHandlerProps> = ({
         });
       }
     }
-    
+
     // Desktop-specific interactions
     if (platform === 'desktop') {
       // Right-click context menu
@@ -173,14 +174,14 @@ export const PlatformGestureHandler: React.FC<PlatformGestureHandlerProps> = ({
           onGesture?.('rightClick', {
             x: e.clientX,
             y: e.clientY,
-            target: e.target
+            target: e.target,
           });
         };
-        
+
         containerRef.current.addEventListener('contextmenu', handleContextMenu);
         cleanup.push(() => containerRef.current?.removeEventListener('contextmenu', handleContextMenu));
       }
-      
+
       // Middle click
       if (config.middleClick) {
         const handleMiddleClick = (e: MouseEvent) => {
@@ -189,15 +190,15 @@ export const PlatformGestureHandler: React.FC<PlatformGestureHandlerProps> = ({
             onGesture?.('middleClick', {
               x: e.clientX,
               y: e.clientY,
-              target: e.target
+              target: e.target,
             });
           }
         };
-        
+
         containerRef.current.addEventListener('mousedown', handleMiddleClick);
         cleanup.push(() => containerRef.current?.removeEventListener('mousedown', handleMiddleClick));
       }
-      
+
       // Ctrl+Wheel zoom
       if (config.wheelZoom) {
         const handleWheel = (e: WheelEvent) => {
@@ -207,21 +208,21 @@ export const PlatformGestureHandler: React.FC<PlatformGestureHandlerProps> = ({
             onGesture?.('wheelZoom', {
               scale: delta,
               x: e.clientX,
-              y: e.clientY
+              y: e.clientY,
             });
           }
         };
-        
+
         containerRef.current.addEventListener('wheel', handleWheel, { passive: false });
         cleanup.push(() => containerRef.current?.removeEventListener('wheel', handleWheel));
       }
     }
-    
+
     return () => {
       cleanup.forEach(fn => fn());
     };
   }, [platform, os, enablePlatformSpecific, onGesture]);
-  
+
   return (
     <div ref={containerRef} style={{ width: '100%', height: '100%' }}>
       {children}
@@ -243,46 +244,46 @@ export const PlatformScrollView: React.FC<PlatformScrollViewProps> = ({
   children,
   onScroll,
   onRefresh,
-  refreshing = false
+  refreshing = false,
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const platform = deviceDetector.getPlatform();
   const os = deviceDetector.getOS();
-  
+
   useEffect(() => {
     if (!scrollRef.current) return;
-    
+
     const config = getPlatformGestureConfig();
-    
+
     // iOS momentum scrolling
     if (os === 'iOS' && config.momentumScrolling) {
       scrollRef.current.style.webkitOverflowScrolling = 'touch';
     }
-    
+
     // Platform-specific overscroll behavior
     if (config.overscrollBehavior === 'bounce') {
       scrollRef.current.style.overscrollBehavior = 'auto';
     } else if (config.overscrollBehavior === 'glow') {
       scrollRef.current.style.overscrollBehavior = 'contain';
     }
-    
+
     // Handle scroll events
     const handleScroll = () => {
       if (scrollRef.current) {
         onScroll?.({
           scrollTop: scrollRef.current.scrollTop,
-          scrollLeft: scrollRef.current.scrollLeft
+          scrollLeft: scrollRef.current.scrollLeft,
         });
       }
     };
-    
+
     scrollRef.current.addEventListener('scroll', handleScroll);
-    
+
     return () => {
       scrollRef.current?.removeEventListener('scroll', handleScroll);
     };
   }, [platform, os, onScroll]);
-  
+
   return (
     <div
       ref={scrollRef}
@@ -291,7 +292,7 @@ export const PlatformScrollView: React.FC<PlatformScrollViewProps> = ({
         width: '100%',
         height: '100%',
         overflow: 'auto',
-        position: 'relative'
+        position: 'relative',
       }}
     >
       {/* Pull to refresh indicator for Android */}
@@ -311,7 +312,7 @@ export const PlatformScrollView: React.FC<PlatformScrollViewProps> = ({
             alignItems: 'center',
             justifyContent: 'center',
             transition: 'top 0.3s ease',
-            zIndex: 10
+            zIndex: 10,
           }}
         >
           <div
@@ -322,12 +323,12 @@ export const PlatformScrollView: React.FC<PlatformScrollViewProps> = ({
               border: '2px solid transparent',
               borderTop: '2px solid white',
               borderRadius: '50%',
-              animation: refreshing ? 'spin 1s linear infinite' : 'none'
+              animation: refreshing ? 'spin 1s linear infinite' : 'none',
             }}
           />
         </div>
       )}
-      
+
       {children}
     </div>
   );
@@ -351,14 +352,14 @@ export const PlatformButton: React.FC<PlatformButtonProps> = ({
   size = 'medium',
   fullWidth = false,
   disabled = false,
-  onClick
+  onClick,
 }) => {
   const platform = deviceDetector.getPlatform();
   const os = deviceDetector.getOS();
-  
+
   const handleClick = () => {
     if (disabled) return;
-    
+
     // Platform-specific haptic feedback
     if (platform === 'mobile') {
       if (os === 'iOS') {
@@ -367,10 +368,10 @@ export const PlatformButton: React.FC<PlatformButtonProps> = ({
         HapticFeedback.getInstance().trigger('selection');
       }
     }
-    
+
     onClick?.();
   };
-  
+
   const getButtonStyles = (): React.CSSProperties => {
     const baseStyles: React.CSSProperties = {
       display: 'inline-flex',
@@ -382,48 +383,63 @@ export const PlatformButton: React.FC<PlatformButtonProps> = ({
       width: fullWidth ? '100%' : 'auto',
       transition: 'all 0.2s ease',
       fontSize: size === 'small' ? '14px' : size === 'large' ? '18px' : '16px',
-      fontWeight: os === 'iOS' ? 600 : 500
+      fontWeight: os === 'iOS' ? 600 : 500,
     };
-    
+
     // iOS styles
     if (os === 'iOS') {
       return {
         ...baseStyles,
         padding: size === 'small' ? '8px 16px' : size === 'large' ? '16px 32px' : '12px 24px',
         borderRadius: variant === 'text' ? 0 : 10,
-        backgroundColor: variant === 'primary' ? 'var(--color-primary)' : 
-          variant === 'secondary' ? 'var(--color-secondary)' : 'transparent',
-        color: variant === 'text' ? 'var(--color-primary)' : 'white'
+        backgroundColor:
+          variant === 'primary'
+            ? 'var(--color-primary)'
+            : variant === 'secondary'
+              ? 'var(--color-secondary)'
+              : 'transparent',
+        color: variant === 'text' ? 'var(--color-primary)' : 'white',
       };
     }
-    
+
     // Android Material styles
     if (os === 'Android') {
       return {
         ...baseStyles,
         padding: size === 'small' ? '6px 16px' : size === 'large' ? '14px 24px' : '10px 20px',
         borderRadius: 20,
-        backgroundColor: variant === 'primary' ? 'var(--md-sys-color-primary)' : 
-          variant === 'secondary' ? 'var(--md-sys-color-secondary-container)' : 'transparent',
-        color: variant === 'primary' ? 'var(--md-sys-color-on-primary)' :
-          variant === 'secondary' ? 'var(--md-sys-color-on-secondary-container)' :
-            'var(--md-sys-color-primary)',
+        backgroundColor:
+          variant === 'primary'
+            ? 'var(--md-sys-color-primary)'
+            : variant === 'secondary'
+              ? 'var(--md-sys-color-secondary-container)'
+              : 'transparent',
+        color:
+          variant === 'primary'
+            ? 'var(--md-sys-color-on-primary)'
+            : variant === 'secondary'
+              ? 'var(--md-sys-color-on-secondary-container)'
+              : 'var(--md-sys-color-primary)',
         textTransform: 'uppercase',
-        letterSpacing: '0.5px'
+        letterSpacing: '0.5px',
       };
     }
-    
+
     // Desktop styles
     return {
       ...baseStyles,
       padding: size === 'small' ? '6px 12px' : size === 'large' ? '12px 24px' : '8px 16px',
       borderRadius: 4,
-      backgroundColor: variant === 'primary' ? 'var(--color-primary)' : 
-        variant === 'secondary' ? 'var(--color-secondary)' : 'transparent',
-      color: variant === 'text' ? 'var(--color-primary)' : 'white'
+      backgroundColor:
+        variant === 'primary'
+          ? 'var(--color-primary)'
+          : variant === 'secondary'
+            ? 'var(--color-secondary)'
+            : 'transparent',
+      color: variant === 'text' ? 'var(--color-primary)' : 'white',
     };
   };
-  
+
   return (
     <button
       onClick={handleClick}

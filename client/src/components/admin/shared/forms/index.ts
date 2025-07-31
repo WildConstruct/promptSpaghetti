@@ -1,7 +1,7 @@
 /**
  * Form Components Index
  * REFACTOR-002: Admin Dashboard Architecture Consolidation
- * 
+ *
  * Centralized exports for form components
  */
 

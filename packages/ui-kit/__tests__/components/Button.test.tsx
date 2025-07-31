@@ -26,17 +26,17 @@ describe('Button', () => {
   it('handles click events', async () => {
     const handleClick = jest.fn();
     renderButton({ onClick: handleClick });
-    
+
     const button = screen.getByRole('button');
     await userEvent.click(button);
-    
+
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
   it('supports different variants', () => {
     const { rerender } = renderButton({ variant: 'primary' });
     expect(screen.getByRole('button')).toHaveClass('ui-button--primary');
-    
+
     rerender(
       <ThemeProvider>
         <Button variant="secondary">Test Button</Button>
@@ -48,7 +48,7 @@ describe('Button', () => {
   it('supports different sizes', () => {
     const { rerender } = renderButton({ size: 'sm' });
     expect(screen.getByRole('button')).toHaveClass('ui-button--sm');
-    
+
     rerender(
       <ThemeProvider>
         <Button size="lg">Test Button</Button>
@@ -84,23 +84,23 @@ describe('Button', () => {
   it('handles keyboard navigation', async () => {
     const handleClick = jest.fn();
     renderButton({ onClick: handleClick });
-    
+
     const button = screen.getByRole('button');
     button.focus();
-    
+
     await userEvent.keyboard('{Enter}');
     expect(handleClick).toHaveBeenCalledTimes(1);
-    
+
     await userEvent.keyboard(' ');
     expect(handleClick).toHaveBeenCalledTimes(2);
   });
 
   it('supports accessibility attributes', () => {
-    renderButton({ 
+    renderButton({
       'aria-label': 'Custom button label',
-      'aria-describedby': 'button-description'
+      'aria-describedby': 'button-description',
     });
-    
+
     const button = screen.getByRole('button');
     expect(button).toHaveAttribute('aria-label', 'Custom button label');
     expect(button).toHaveAttribute('aria-describedby', 'button-description');
@@ -109,20 +109,20 @@ describe('Button', () => {
   it('prevents multiple clicks when loading', async () => {
     const handleClick = jest.fn();
     renderButton({ onClick: handleClick, loading: true });
-    
+
     const button = screen.getByRole('button');
     await userEvent.click(button);
     await userEvent.click(button);
-    
+
     expect(handleClick).not.toHaveBeenCalled();
   });
 
   it('applies custom className and styles', () => {
-    renderButton({ 
+    renderButton({
       className: 'custom-button',
-      style: { backgroundColor: 'red' }
+      style: { backgroundColor: 'red' },
     });
-    
+
     const button = screen.getByRole('button');
     expect(button).toHaveClass('custom-button');
     expect(button).toHaveStyle({ backgroundColor: 'red' });
@@ -135,7 +135,7 @@ describe('Button', () => {
         <Button ref={ref}>Test Button</Button>
       </ThemeProvider>
     );
-    
+
     expect(ref.current).toBeInstanceOf(HTMLButtonElement);
   });
 });

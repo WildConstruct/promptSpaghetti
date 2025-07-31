@@ -14,7 +14,7 @@ class TypeScriptAutoFixer {
     this.stats = {
       filesProcessed: 0,
       issuesFixed: 0,
-      errors: []
+      errors: [],
     };
   }
 
@@ -34,7 +34,7 @@ class TypeScriptAutoFixer {
         const cleanImp = imp.replace(/\s+as\s+\w+/, ''); // Remove 'as alias'
         return fixed.includes(cleanImp) && fixed.indexOf(cleanImp) !== fixed.indexOf(match);
       });
-      
+
       if (usedImports.length === 0) {
         changesMade = true;
         return '';
@@ -52,14 +52,17 @@ class TypeScriptAutoFixer {
         // Mock objects
         { pattern: /as\s+any\s+as\s+jest\.Mocked<([^>]+)>/g, replacement: 'as jest.Mocked<$1>' },
         { pattern: /:\s*any\s*=\s*{([^}]+)}\s*as\s+any/g, replacement: ': unknown = {$1}' },
-        
+
         // Function mocks
         { pattern: /jest\.fn\(\)\s*as\s+any/g, replacement: 'jest.fn()' },
         { pattern: /mockImplementation\(.*?\)\s*as\s+any/g, replacement: 'mockImplementation(() => ({}))' },
-        
+
         // Simple any replacements for tests
         { pattern: /:\s*any(\s*[=;,)])/g, replacement: ': unknown$1' },
-        { pattern: /expect\(([^)]+)\)\.toHaveProperty\('([^']+)',\s*any\)/g, replacement: 'expect($1).toHaveProperty(\'$2\', expect.anything())' }
+        {
+          pattern: /expect\(([^)]+)\)\.toHaveProperty\('([^']+)',\s*any\)/g,
+          replacement: "expect($1).toHaveProperty('$2', expect.anything())",
+        },
       ];
 
       anyReplacements.forEach(({ pattern, replacement }) => {
@@ -75,7 +78,8 @@ class TypeScriptAutoFixer {
       // Check if variable is used elsewhere
       const usage = new RegExp(`\\b${varName}\\b`, 'g');
       const matches = (fixed.match(usage) || []).length;
-      if (matches <= 1) { // Only declaration, no usage
+      if (matches <= 1) {
+        // Only declaration, no usage
         changesMade = true;
         return '';
       }
@@ -98,13 +102,16 @@ class TypeScriptAutoFixer {
             }
           }
         }
-        
+
         // Break long function calls
         if (line.includes('(') && line.includes(')')) {
           const funcMatch = line.match(/^(\s*)(.+?)(\([^)]*\))(.*)$/);
           if (funcMatch && line.includes(',')) {
             const [, indent, beforeParen, params, afterParen] = funcMatch;
-            const paramList = params.slice(1, -1).split(',').map(p => p.trim());
+            const paramList = params
+              .slice(1, -1)
+              .split(',')
+              .map(p => p.trim());
             if (paramList.length > 1) {
               changesMade = true;
               return `${indent}${beforeParen}(\n${paramList.map(p => `${indent}  ${p}`).join(',\n')}\n${indent})${afterParen}`;
@@ -121,7 +128,7 @@ class TypeScriptAutoFixer {
       // Mock function types
       { pattern: /jest\.fn\(\)/g, replacement: 'jest.fn<unknown[], unknown>()' },
       { pattern: /mockResolvedValue\(([^)]+)\)/g, replacement: 'mockResolvedValue($1 as unknown)' },
-      { pattern: /mockReturnValue\(([^)]+)\)/g, replacement: 'mockReturnValue($1 as unknown)' }
+      { pattern: /mockReturnValue\(([^)]+)\)/g, replacement: 'mockReturnValue($1 as unknown)' },
     ];
 
     typingFixes.forEach(({ pattern, replacement }) => {
@@ -155,7 +162,6 @@ class TypeScriptAutoFixer {
       }
 
       this.stats.filesProcessed++;
-
     } catch (error) {
       this.stats.errors.push({ file: filePath, error: error.message });
       console.error(`❌ Error processing ${filePath}: ${error.message}`);
@@ -173,7 +179,7 @@ class TypeScriptAutoFixer {
       '**/*.{test,spec}.{ts,tsx}', // Test files first
       'server/src/**/*.ts',
       'packages/core/**/*.ts',
-      'src/**/*.ts'
+      'src/**/*.ts',
     ];
 
     const filesToCheck = [];
@@ -196,8 +202,10 @@ class TypeScriptAutoFixer {
         const allTsFiles = execSync(
           'find . -name "*.ts" -o -name "*.tsx" | grep -E "(test|spec|server/src|packages/core)" | head -20',
           { encoding: 'utf8' }
-        ).split('\n').filter(f => f.length > 0);
-        
+        )
+          .split('\n')
+          .filter(f => f.length > 0);
+
         filesToCheck.push(...allTsFiles);
       } catch (error) {
         console.log('Could not find files to check');
@@ -219,7 +227,7 @@ class TypeScriptAutoFixer {
     console.log('\n📊 Auto-fix Summary:');
     console.log(`Files processed: ${this.stats.filesProcessed}`);
     console.log(`Issues fixed: ${this.stats.issuesFixed}`);
-    
+
     if (this.stats.errors.length > 0) {
       console.log('\n❌ Errors encountered:');
       this.stats.errors.forEach(({ file, error }) => {

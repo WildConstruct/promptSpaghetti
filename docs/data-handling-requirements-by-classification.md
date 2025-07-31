@@ -11,6 +11,7 @@ This document defines specific handling, storage, transmission, and processing r
 **Characteristics**: Information that can be freely shared without restriction
 
 #### Storage Requirements
+
 - **Encryption**: Not required, but recommended for consistency
 - **Access Controls**: Read access for all users, write access by role
 - **Backup**: Standard backup procedures sufficient
@@ -18,18 +19,21 @@ This document defines specific handling, storage, transmission, and processing r
 - **Location**: Any approved storage location
 
 #### Transmission Requirements
+
 - **Encryption in Transit**: Not required but recommended (TLS 1.2+)
 - **Network Restrictions**: None
 - **Logging**: Standard access logging
 - **Compression**: Allowed without restrictions
 
 #### Processing Requirements
+
 - **Environment**: Any approved environment (dev, staging, prod)
 - **Logging**: Standard application logging
 - **Caching**: Unrestricted caching allowed
 - **Third-party Processing**: Allowed with standard vendor agreements
 
 #### Access Control Requirements
+
 - **Authentication**: Standard user authentication
 - **Authorization**: Role-based access sufficient
 - **Audit Logging**: Standard access logging
@@ -40,6 +44,7 @@ This document defines specific handling, storage, transmission, and processing r
 **Characteristics**: Information for internal use only, not for external distribution
 
 #### Storage Requirements
+
 - **Encryption**: AES-256 at rest encryption required
 - **Access Controls**: Internal users only, role-based restrictions
 - **Backup**: Encrypted backups required
@@ -47,18 +52,21 @@ This document defines specific handling, storage, transmission, and processing r
 - **Location**: Internal infrastructure only, approved cloud regions
 
 #### Transmission Requirements
+
 - **Encryption in Transit**: TLS 1.3 required for all transmissions
 - **Network Restrictions**: Internal networks only, VPN required for remote access
 - **Logging**: Enhanced logging with user identification
 - **Compression**: Allowed with encrypted channels only
 
 #### Processing Requirements
+
 - **Environment**: Production and staging only (dev with approval)
 - **Logging**: Detailed processing logs with data access tracking
 - **Caching**: Encrypted caching only, limited duration
 - **Third-party Processing**: Requires explicit approval and DPA
 
 #### Access Control Requirements
+
 - **Authentication**: Multi-factor authentication required
 - **Authorization**: Role-based with principle of least privilege
 - **Audit Logging**: Comprehensive audit trail required
@@ -69,6 +77,7 @@ This document defines specific handling, storage, transmission, and processing r
 **Characteristics**: Sensitive information requiring strict access controls
 
 #### Storage Requirements
+
 - **Encryption**: AES-256 at rest with key rotation every 90 days
 - **Access Controls**: Need-to-know basis only, manager approval required
 - **Backup**: Encrypted backups with separate key management
@@ -76,18 +85,21 @@ This document defines specific handling, storage, transmission, and processing r
 - **Location**: Hardened infrastructure, specific approved regions only
 
 #### Transmission Requirements
+
 - **Encryption in Transit**: TLS 1.3 with certificate pinning
 - **Network Restrictions**: Secured networks only, no public internet transmission
 - **Logging**: Full transmission logging with data classification tagging
 - **Compression**: Encrypted compression only, approved algorithms
 
 #### Processing Requirements
+
 - **Environment**: Production only, isolated processing environments
 - **Logging**: Detailed audit logs with data lineage tracking
 - **Caching**: Encrypted caching with TTL limits, secure cache eviction
 - **Third-party Processing**: Prohibited without explicit security assessment
 
 #### Access Control Requirements
+
 - **Authentication**: Strong MFA required (hardware tokens preferred)
 - **Authorization**: Explicit approval required, time-limited access
 - **Audit Logging**: Real-time audit logging with anomaly detection
@@ -98,6 +110,7 @@ This document defines specific handling, storage, transmission, and processing r
 **Characteristics**: Highly sensitive information with severe restrictions
 
 #### Storage Requirements
+
 - **Encryption**: AES-256 with hardware security modules (HSM)
 - **Access Controls**: Named individuals only, security clearance required
 - **Backup**: Air-gapped encrypted backups with dual control
@@ -105,18 +118,21 @@ This document defines specific handling, storage, transmission, and processing r
 - **Location**: Dedicated secure infrastructure, on-premises preferred
 
 #### Transmission Requirements
+
 - **Encryption in Transit**: End-to-end encryption with perfect forward secrecy
 - **Network Restrictions**: Dedicated secure channels only, no shared networks
 - **Logging**: Real-time monitoring with immediate alerting
 - **Compression**: Prohibited to prevent information leakage
 
 #### Processing Requirements
+
 - **Environment**: Dedicated secure environments only
 - **Logging**: Complete audit trail with cryptographic integrity
 - **Caching**: Prohibited unless in secure, isolated cache
 - **Third-party Processing**: Prohibited without regulatory approval
 
 #### Access Control Requirements
+
 - **Authentication**: Multi-layered authentication with biometrics
 - **Authorization**: Dual approval required, time and purpose limited
 - **Audit Logging**: Real-time logging with tamper detection
@@ -207,12 +223,12 @@ class DataHandlingService {
     }
     return requirements;
   }
-  
+
   validateHandling(data: any, classification: string, operation: string): ValidationResult {
     const requirements = this.getHandlingRequirements(classification);
     return this.validateOperation(data, requirements, operation);
   }
-  
+
   enforceHandling(data: any, classification: string, context: OperationContext): Promise<void> {
     const requirements = this.getHandlingRequirements(classification);
     return this.applyRequirements(data, requirements, context);
@@ -227,35 +243,35 @@ class DataHandlingService {
 class ClassificationEncryptionService {
   async encryptData(data: any, classification: string): Promise<EncryptedData> {
     const requirements = this.getEncryptionRequirements(classification);
-    
+
     switch (classification) {
       case 'PUBLIC':
         return data; // No encryption required
-        
+
       case 'INTERNAL':
         return this.aes256Encrypt(data, await this.getInternalKey());
-        
+
       case 'CONFIDENTIAL':
         return this.aes256EncryptWithRotation(data, await this.getConfidentialKey());
-        
+
       case 'RESTRICTED':
         return this.hsmEncrypt(data, await this.getRestrictedKey());
-        
+
       default:
         throw new Error(`Unknown classification: ${classification}`);
     }
   }
-  
+
   async decryptData(encryptedData: EncryptedData, classification: string): Promise<any> {
     // Implementation with appropriate decryption based on classification
   }
-  
+
   private getEncryptionRequirements(classification: string): EncryptionRequirements {
     return {
-      'PUBLIC': { required: false },
-      'INTERNAL': { required: true, algorithm: 'AES-256-GCM', keyRotation: 365 },
-      'CONFIDENTIAL': { required: true, algorithm: 'AES-256-GCM', keyRotation: 90 },
-      'RESTRICTED': { required: true, algorithm: 'AES-256-GCM', keyRotation: 30, hsm: true }
+      PUBLIC: { required: false },
+      INTERNAL: { required: true, algorithm: 'AES-256-GCM', keyRotation: 365 },
+      CONFIDENTIAL: { required: true, algorithm: 'AES-256-GCM', keyRotation: 90 },
+      RESTRICTED: { required: true, algorithm: 'AES-256-GCM', keyRotation: 30, hsm: true },
     }[classification];
   }
 }
@@ -270,53 +286,53 @@ class ClassificationAccessControl {
     const classification = await this.getDataClassification(dataId);
     const userPermissions = await this.getUserPermissions(userId);
     const requirements = this.getAccessRequirements(classification);
-    
+
     // Check authentication level
     if (!this.validateAuthenticationLevel(userPermissions.authLevel, requirements.authenticationLevel)) {
       return false;
     }
-    
+
     // Check authorization
-    if (requirements.authorizationRequired && !await this.checkApproval(userId, dataId, operation)) {
+    if (requirements.authorizationRequired && !(await this.checkApproval(userId, dataId, operation))) {
       return false;
     }
-    
+
     // Check time restrictions
     if (!this.validateTimeRestrictions(userPermissions, requirements)) {
       return false;
     }
-    
+
     // Log access attempt
     await this.logAccess(userId, dataId, operation, classification, true);
     return true;
   }
-  
+
   private getAccessRequirements(classification: string): AccessRequirements {
     return {
-      'PUBLIC': {
+      PUBLIC: {
         authenticationLevel: 'STANDARD',
         authorizationRequired: false,
         auditLogging: 'STANDARD',
-        exportRestrictions: false
+        exportRestrictions: false,
       },
-      'INTERNAL': {
+      INTERNAL: {
         authenticationLevel: 'MFA',
         authorizationRequired: false,
         auditLogging: 'ENHANCED',
-        exportRestrictions: false
+        exportRestrictions: false,
       },
-      'CONFIDENTIAL': {
+      CONFIDENTIAL: {
         authenticationLevel: 'STRONG_MFA',
         authorizationRequired: true,
         auditLogging: 'REALTIME',
-        exportRestrictions: true
+        exportRestrictions: true,
       },
-      'RESTRICTED': {
+      RESTRICTED: {
         authenticationLevel: 'BIOMETRIC',
         authorizationRequired: true,
         auditLogging: 'REALTIME',
-        exportRestrictions: true
-      }
+        exportRestrictions: true,
+      },
     }[classification];
   }
 }
@@ -325,24 +341,28 @@ class ClassificationAccessControl {
 ## Compliance Mapping
 
 ### GDPR Compliance
+
 - **Personal Data**: Automatically classified as CONFIDENTIAL minimum
 - **Special Categories**: Classified as RESTRICTED
 - **Right to be Forgotten**: Automated deletion capabilities
 - **Data Portability**: Controlled export mechanisms
 
 ### HIPAA Compliance
+
 - **PHI**: Classified as RESTRICTED
 - **Minimum Necessary**: Access controls enforce need-to-know
 - **Audit Trail**: Comprehensive logging for all access
 - **Encryption**: End-to-end encryption required
 
 ### PCI DSS Compliance
+
 - **CHD**: Classified as RESTRICTED
 - **Network Segmentation**: Dedicated secure environments
 - **Access Controls**: Strong authentication and authorization
 - **Key Management**: HSM-based key protection
 
 ### SOC 2 Compliance
+
 - **Type II Controls**: Automated control implementation
 - **Change Management**: Classification change approval workflows
 - **Monitoring**: Real-time compliance monitoring
@@ -358,27 +378,27 @@ class ClassificationMonitoringService {
   async monitorDataAccess(event: DataAccessEvent): Promise<void> {
     const classification = await this.getDataClassification(event.dataId);
     const requirements = this.getMonitoringRequirements(classification);
-    
+
     // Check for anomalous access patterns
     if (await this.detectAnomalousAccess(event, classification)) {
       await this.triggerSecurityAlert(event, 'ANOMALOUS_ACCESS');
     }
-    
+
     // Check compliance with handling requirements
-    if (!await this.validateHandlingCompliance(event, requirements)) {
+    if (!(await this.validateHandlingCompliance(event, requirements))) {
       await this.triggerComplianceAlert(event, 'HANDLING_VIOLATION');
     }
-    
+
     // Log for audit trail
     await this.logEvent(event, classification, requirements);
   }
-  
+
   private getMonitoringRequirements(classification: string) {
     return {
-      'PUBLIC': { alerting: false, anomalyDetection: false },
-      'INTERNAL': { alerting: true, anomalyDetection: true, threshold: 'LOW' },
-      'CONFIDENTIAL': { alerting: true, anomalyDetection: true, threshold: 'MEDIUM' },
-      'RESTRICTED': { alerting: true, anomalyDetection: true, threshold: 'HIGH', realtime: true }
+      PUBLIC: { alerting: false, anomalyDetection: false },
+      INTERNAL: { alerting: true, anomalyDetection: true, threshold: 'LOW' },
+      CONFIDENTIAL: { alerting: true, anomalyDetection: true, threshold: 'MEDIUM' },
+      RESTRICTED: { alerting: true, anomalyDetection: true, threshold: 'HIGH', realtime: true },
     }[classification];
   }
 }
@@ -393,17 +413,17 @@ class ClassificationComplianceReporter {
     const classifications = await this.getAllClassifications();
     const violations = await this.getViolations(period);
     const accessPatterns = await this.getAccessPatterns(period);
-    
+
     return {
       period,
       summary: {
         totalDataElements: classifications.length,
         violationCount: violations.length,
-        complianceScore: this.calculateComplianceScore(violations, classifications)
+        complianceScore: this.calculateComplianceScore(violations, classifications),
       },
       byClassification: this.groupByClassification(classifications, violations),
       recommendations: this.generateRecommendations(violations),
-      trends: this.analyzeTrends(accessPatterns)
+      trends: this.analyzeTrends(accessPatterns),
     };
   }
 }
@@ -412,6 +432,7 @@ class ClassificationComplianceReporter {
 ## Implementation Checklist
 
 ### Development Phase
+
 - [ ] Database schema for classification metadata
 - [ ] Classification service implementation
 - [ ] Encryption service with classification support
@@ -420,6 +441,7 @@ class ClassificationComplianceReporter {
 - [ ] API integration for handling requirements
 
 ### Testing Phase
+
 - [ ] Unit tests for classification logic
 - [ ] Integration tests for access controls
 - [ ] Security tests for encryption
@@ -428,6 +450,7 @@ class ClassificationComplianceReporter {
 - [ ] Penetration testing for bypass attempts
 
 ### Deployment Phase
+
 - [ ] Production infrastructure hardening
 - [ ] Key management system setup
 - [ ] Monitoring dashboard configuration
@@ -436,6 +459,7 @@ class ClassificationComplianceReporter {
 - [ ] Incident response procedures
 
 ### Operational Phase
+
 - [ ] Staff training on classification requirements
 - [ ] Regular compliance audits
 - [ ] Classification review processes
@@ -446,13 +470,15 @@ class ClassificationComplianceReporter {
 ## Metrics and KPIs
 
 ### Security Metrics
+
 - Classification compliance rate
 - Unauthorized access attempts
 - Encryption coverage percentage
 - Key rotation compliance
 - Security incident frequency
 
-### Operational Metrics  
+### Operational Metrics
+
 - Classification accuracy rate
 - Access request processing time
 - System performance impact
@@ -460,6 +486,7 @@ class ClassificationComplianceReporter {
 - Cost of compliance implementation
 
 ### Compliance Metrics
+
 - Regulatory audit findings
 - Violation remediation time
 - Training completion rates

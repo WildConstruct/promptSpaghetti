@@ -7,11 +7,13 @@
 This handbook is organized into six main parts, designed to take you from basic concepts to advanced techniques:
 
 ### [Part 1: Foundation](part1-foundation/)
+
 - Introduction & Overview
-- Architecture & Core Concepts  
+- Architecture & Core Concepts
 - Generator JSON Schema Reference
 
 ### [Part 2: Content Development](part2-content-development/)
+
 - Basic Generator Creation
 - Advanced Rule Syntax
 - Modularization & Organization
@@ -19,6 +21,7 @@ This handbook is organized into six main parts, designed to take you from basic 
 - Slot Taxonomy & Prompt Assembly
 
 ### [Part 3: Engine Reference](part3-engine-reference/)
+
 - Engine API Documentation
 - Modifier System
 - Variable System
@@ -26,18 +29,21 @@ This handbook is organized into six main parts, designed to take you from basic 
 - Performance Optimization
 
 ### [Part 4: Practical Guides](part4-practical-guides/)
+
 - Step-by-Step Generator Creation
 - Expansion Recipes for LLMs
 - Testing & Quality Assurance
 - Debug Tools & Troubleshooting
 
 ### [Part 5: Advanced Topics](part5-advanced-topics/)
+
 - Custom Extensions
 - Security Best Practices
 - Integration Patterns
 - Generator Design Patterns
 
 ### [Part 6: Reference Materials](part6-reference-materials/)
+
 - Quick Reference Tables
 - Templates & Boilerplates
 - Common Pitfalls & Solutions
@@ -54,16 +60,19 @@ New to Prompt Spaghetti? Start here:
 ## 📖 How to Use This Handbook
 
 ### For Content Creators
+
 - Start with Part 2 for generator creation basics
 - Use Part 4 for practical tutorials and recipes
 - Reference Part 6 for quick lookups
 
 ### For Developers
+
 - Part 1 provides architectural understanding
 - Part 3 offers complete engine documentation
 - Part 5 covers advanced integration topics
 
 ### For LLM Integration
+
 - See [Expansion Recipes](part4-practical-guides/02-expansion-recipes.md)
 - Review [LLM-specific patterns](part2-content-development/05-slot-taxonomy.md)
 
@@ -89,4 +98,4 @@ This handbook is maintained as part of the Prompt Spaghetti project. To contribu
 
 ---
 
-*This handbook is part of Epic 8.3 - Content Authoring Handbook implementation*
+_This handbook is part of Epic 8.3 - Content Authoring Handbook implementation_

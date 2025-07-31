@@ -12,7 +12,7 @@ import {
   CacheInterface,
   MetricsInterface,
   TransformationError,
-  ValidationError
+  ValidationError,
 } from '../types/index.js';
 
 /**
@@ -49,52 +49,52 @@ export abstract class BaseAdaptor implements ModelAdaptor {
    */
   async validate(graph: PromptGraph): Promise<ValidationResult[]> {
     const timer = this.metrics.timer('adaptor.validate.duration');
-    
+
     try {
-      this.logger.debug('Starting validation', { 
-        adaptorId: this.id, 
-        graphId: graph.id 
+      this.logger.debug('Starting validation', {
+        adaptorId: this.id,
+        graphId: graph.id,
       });
 
       // Basic structural validation
       const structuralResults = await this.validateStructure(graph);
-      
+
       // Adaptor-specific validation
       const adaptorResults = await this.doValidate(graph);
-      
+
       const allResults = [...structuralResults, ...adaptorResults];
-      
-      this.metrics.counter('adaptor.validate.total', 1, { 
+
+      this.metrics.counter('adaptor.validate.total', 1, {
         adaptor: this.id,
-        platform: this.platform 
+        platform: this.platform,
       });
-      
-      this.metrics.counter('adaptor.validate.issues', allResults.length, { 
+
+      this.metrics.counter('adaptor.validate.issues', allResults.length, {
         adaptor: this.id,
-        platform: this.platform 
+        platform: this.platform,
       });
 
       this.logger.info('Validation completed', {
         adaptorId: this.id,
         graphId: graph.id,
-        issueCount: allResults.length
+        issueCount: allResults.length,
       });
 
       return allResults;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
-      
-      this.metrics.counter('adaptor.validate.error', 1, { 
+
+      this.metrics.counter('adaptor.validate.error', 1, {
         adaptor: this.id,
-        platform: this.platform 
+        platform: this.platform,
       });
-      
+
       this.logger.error('Validation failed', {
         adaptorId: this.id,
         graphId: graph.id,
-        error: errorMessage
+        error: errorMessage,
       });
-      
+
       throw new ValidationError(`Validation failed: ${errorMessage}`, []);
     } finally {
       timer.end();
@@ -106,18 +106,18 @@ export abstract class BaseAdaptor implements ModelAdaptor {
    */
   async transform(graph: PromptGraph, options?: TransformOptions): Promise<TargetPrompt> {
     const timer = this.metrics.timer('adaptor.transform.duration');
-    
+
     try {
       this.logger.debug('Starting transformation', {
         adaptorId: this.id,
         graphId: graph.id,
-        options
+        options,
       });
 
       // Validate first
       const validationResults = await this.validate(graph);
       const errors = validationResults.filter(r => r.type === 'error');
-      
+
       if (errors.length > 0) {
         throw new ValidationError('Graph validation failed', validationResults);
       }
@@ -125,63 +125,63 @@ export abstract class BaseAdaptor implements ModelAdaptor {
       // Check cache
       const cacheKey = this.generateCacheKey(graph, options);
       const cached = await this.cache.get(cacheKey);
-      
+
       if (cached) {
-        this.metrics.counter('adaptor.transform.cache.hit', 1, { 
+        this.metrics.counter('adaptor.transform.cache.hit', 1, {
           adaptor: this.id,
-          platform: this.platform 
+          platform: this.platform,
         });
-        
+
         this.logger.debug('Cache hit for transformation', {
           adaptorId: this.id,
           graphId: graph.id,
-          cacheKey
+          cacheKey,
         });
-        
+
         return cached;
       }
 
       // Perform transformation
       const result = await this.doTransform(graph, options);
-      
+
       // Cache the result
       await this.cache.set(cacheKey, result, this.getCacheTTL());
-      
-      this.metrics.counter('adaptor.transform.success', 1, { 
+
+      this.metrics.counter('adaptor.transform.success', 1, {
         adaptor: this.id,
-        platform: this.platform 
+        platform: this.platform,
       });
-      
-      this.metrics.counter('adaptor.transform.cache.miss', 1, { 
+
+      this.metrics.counter('adaptor.transform.cache.miss', 1, {
         adaptor: this.id,
-        platform: this.platform 
+        platform: this.platform,
       });
 
       this.logger.info('Transformation completed', {
         adaptorId: this.id,
         graphId: graph.id,
-        quality: result.metadata.quality.overall
+        quality: result.metadata.quality.overall,
       });
 
       return result;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
-      
-      this.metrics.counter('adaptor.transform.error', 1, { 
+
+      this.metrics.counter('adaptor.transform.error', 1, {
         adaptor: this.id,
-        platform: this.platform 
+        platform: this.platform,
       });
-      
+
       this.logger.error('Transformation failed', {
         adaptorId: this.id,
         graphId: graph.id,
-        error: errorMessage
+        error: errorMessage,
       });
-      
+
       if (error instanceof ValidationError || error instanceof TransformationError) {
         throw error;
       }
-      
+
       throw new TransformationError(`Transformation failed: ${errorMessage}`);
     } finally {
       timer.end();
@@ -195,16 +195,16 @@ export abstract class BaseAdaptor implements ModelAdaptor {
     try {
       const capabilities = await this.capabilities();
       const validationResults = await this.validate(graph);
-      
+
       return this.calculateQualityScore(graph, capabilities, validationResults);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       this.logger.warn('Quality estimation failed', {
         adaptorId: this.id,
         graphId: graph.id,
-        error: errorMessage
+        error: errorMessage,
       });
-      
+
       // Return a low quality score if estimation fails
       return {
         overall: 10,
@@ -217,8 +217,8 @@ export abstract class BaseAdaptor implements ModelAdaptor {
           parameterMapping: 10,
           featureSupport: 10,
           semanticPreservation: 10,
-          syntaxValidity: 10
-        }
+          syntaxValidity: 10,
+        },
       };
     }
   }
@@ -228,7 +228,7 @@ export abstract class BaseAdaptor implements ModelAdaptor {
    */
   protected async validateStructure(graph: PromptGraph): Promise<ValidationResult[]> {
     const results: ValidationResult[] = [];
-    
+
     // Check for empty graph
     if (!graph.nodes || graph.nodes.length === 0) {
       results.push({
@@ -237,19 +237,19 @@ export abstract class BaseAdaptor implements ModelAdaptor {
         severity: 'critical',
         message: 'Graph is empty',
         description: 'The prompt graph contains no nodes',
-        autoFixable: false
+        autoFixable: false,
       });
     }
-    
+
     // Check for disconnected nodes
     const nodeIds = new Set(graph.nodes.map(n => n.id));
     const connectedNodes = new Set<string>();
-    
+
     graph.edges.forEach(edge => {
       connectedNodes.add(edge.source);
       connectedNodes.add(edge.target);
     });
-    
+
     graph.nodes.forEach(node => {
       if (!connectedNodes.has(node.id) && graph.nodes.length > 1) {
         results.push({
@@ -260,14 +260,16 @@ export abstract class BaseAdaptor implements ModelAdaptor {
           description: `Node "${node.data.label || node.id}" is not connected to the graph`,
           nodeId: node.id,
           autoFixable: true,
-          suggestions: [{
-            type: 'fix',
-            description: 'Remove disconnected node or connect it to the graph'
-          }]
+          suggestions: [
+            {
+              type: 'fix',
+              description: 'Remove disconnected node or connect it to the graph',
+            },
+          ],
         });
       }
     });
-    
+
     // Check for invalid edges
     graph.edges.forEach(edge => {
       if (!nodeIds.has(edge.source)) {
@@ -278,10 +280,10 @@ export abstract class BaseAdaptor implements ModelAdaptor {
           message: 'Invalid edge source',
           description: `Edge "${edge.id}" references non-existent source node "${edge.source}"`,
           edgeId: edge.id,
-          autoFixable: true
+          autoFixable: true,
         });
       }
-      
+
       if (!nodeIds.has(edge.target)) {
         results.push({
           id: `invalid-edge-target-${edge.id}`,
@@ -290,11 +292,11 @@ export abstract class BaseAdaptor implements ModelAdaptor {
           message: 'Invalid edge target',
           description: `Edge "${edge.id}" references non-existent target node "${edge.target}"`,
           edgeId: edge.id,
-          autoFixable: true
+          autoFixable: true,
         });
       }
     });
-    
+
     return results;
   }
 
@@ -308,31 +310,28 @@ export abstract class BaseAdaptor implements ModelAdaptor {
   ): QualityScore {
     const errors = validationResults.filter(r => r.type === 'error').length;
     const warnings = validationResults.filter(r => r.type === 'warning').length;
-    
+
     // Node type support analysis
-    const unsupportedNodes = graph.nodes.filter(
-      node => !capabilities.supportedNodeTypes.includes(node.type)
-    ).length;
-    
+    const unsupportedNodes = graph.nodes.filter(node => !capabilities.supportedNodeTypes.includes(node.type)).length;
+
     const nodeSupport = Math.max(0, 100 - (unsupportedNodes / graph.nodes.length) * 100);
-    
+
     // Error/warning impact
     const errorImpact = Math.max(0, 100 - errors * 25);
     const warningImpact = Math.max(0, 100 - warnings * 10);
-    
+
     // Feature completeness
-    const featureSupport = capabilities.features
-      .filter(f => f.supported)
-      .length / Math.max(1, capabilities.features.length) * 100;
-    
+    const featureSupport =
+      (capabilities.features.filter(f => f.supported).length / Math.max(1, capabilities.features.length)) * 100;
+
     // Overall calculations
     const fidelity = (nodeSupport + errorImpact) / 2;
     const compatibility = (nodeSupport + featureSupport) / 2;
     const performance = warningImpact;
     const completeness = featureSupport;
-    
+
     const overall = (fidelity + compatibility + performance + completeness) / 4;
-    
+
     return {
       overall: Math.round(overall),
       fidelity: Math.round(fidelity),
@@ -344,8 +343,8 @@ export abstract class BaseAdaptor implements ModelAdaptor {
         parameterMapping: Math.round(featureSupport),
         featureSupport: Math.round(featureSupport),
         semanticPreservation: Math.round(fidelity),
-        syntaxValidity: Math.round(errorImpact)
-      }
+        syntaxValidity: Math.round(errorImpact),
+      },
     };
   }
 
@@ -356,11 +355,11 @@ export abstract class BaseAdaptor implements ModelAdaptor {
     const graphHash = this.hashObject({
       nodes: graph.nodes,
       edges: graph.edges,
-      version: graph.version
+      version: graph.version,
     });
-    
+
     const optionsHash = options ? this.hashObject(options) : 'none';
-    
+
     return `${this.id}:${this.version}:${graphHash}:${optionsHash}`;
   }
 
@@ -370,13 +369,13 @@ export abstract class BaseAdaptor implements ModelAdaptor {
   protected hashObject(obj: any): string {
     const str = JSON.stringify(obj, Object.keys(obj).sort());
     let hash = 0;
-    
+
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
+      hash = (hash << 5) - hash + char;
       hash = hash & hash; // Convert to 32-bit integer
     }
-    
+
     return Math.abs(hash).toString(36);
   }
 
@@ -412,7 +411,7 @@ export abstract class BaseAdaptor implements ModelAdaptor {
       nodeId: options.nodeId,
       edgeId: options.edgeId,
       autoFixable: options.autoFixable || false,
-      suggestions: options.suggestions || []
+      suggestions: options.suggestions || [],
     };
   }
 }

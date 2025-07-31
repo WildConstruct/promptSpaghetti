@@ -12,7 +12,7 @@ jobs:
   validate-dependency-updates:
     if: ${{ github.actor == 'dependabot[bot]' || contains(github.event.pull_request.labels.*.name, 'dependencies') }}
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout PR
         uses: actions/checkout@v4
@@ -36,11 +36,11 @@ jobs:
         id: validation
         run: |
           echo "🔍 Validating dependency updates..."
-          
+
           # Critical dependency consistency checks
           ZOD_VERSIONS=$(grep -r '"zod"' */package.json packages/*/package.json 2>/dev/null | grep -v node_modules | grep '"zod":')
           ZOD_UNIQUE=$(echo "$ZOD_VERSIONS" | awk -F'"' '{print $4}' | sort -u | wc -l)
-          
+
           if [ $ZOD_UNIQUE -gt 1 ]; then
             echo "validation_failed=true" >> $GITHUB_OUTPUT
             echo "❌ CRITICAL: Zod version inconsistency detected!"
@@ -48,11 +48,11 @@ jobs:
             echo "::error::Dependency update introduces Zod version conflicts"
             exit 1
           fi
-          
+
           # React versions should be consistent
           REACT_VERSIONS=$(grep -r '"react"' */package.json packages/*/package.json 2>/dev/null | grep -v node_modules | grep '"react":' | awk -F'"' '{print $4}' | sort -u)
           REACT_COUNT=$(echo "$REACT_VERSIONS" | wc -l)
-          
+
           if [ $REACT_COUNT -gt 1 ]; then
             echo "validation_failed=true" >> $GITHUB_OUTPUT
             echo "❌ CRITICAL: React version inconsistency detected!"
@@ -60,7 +60,7 @@ jobs:
             echo "::error::Dependency update introduces React version conflicts"
             exit 1
           fi
-          
+
           echo "✅ Dependency consistency validation passed"
 
       - name: Security Vulnerability Check
@@ -76,39 +76,39 @@ jobs:
       - name: Build Validation
         run: |
           echo "🏗️ Validating builds with updated dependencies..."
-          
+
           # Try building all packages
           pnpm --filter client build || {
             echo "❌ Client build failed!"
             echo "::error::Client build fails with dependency updates"
             exit 1
           }
-          
+
           pnpm --filter server build || {
             echo "❌ Server build failed!"
             echo "::error::Server build fails with dependency updates"
             exit 1
           }
-          
+
           echo "✅ All builds successful with updated dependencies"
 
       - name: Test Validation
         run: |
           echo "🧪 Running critical tests with updated dependencies..."
-          
+
           # Run tests with updated dependencies
           pnpm test --testPathPattern="(validation|schema|zod)" --passWithNoTests || {
             echo "❌ Critical tests failed!"
             echo "::error::Critical validation tests fail with dependency updates"
             exit 1
           }
-          
+
           echo "✅ Critical tests pass with updated dependencies"
 
       - name: Integration Test
         run: |
           echo "🔗 Testing React Flow integration..."
-          
+
           # Test specific integration points
           node -e "
             const { z } = require('zod');
@@ -123,19 +123,19 @@ jobs:
             echo "::error::Zod integration broken with dependency updates"
             exit 1
           }
-          
+
           echo "✅ Integration tests passed"
 
       - name: Performance Impact Check
         run: |
           echo "⚡ Checking performance impact..."
-          
+
           # Simple performance check - installation time
           start_time=$(date +%s)
           pnpm install --force >/dev/null 2>&1
           end_time=$(date +%s)
           install_time=$((end_time - start_time))
-          
+
           if [ $install_time -gt 300 ]; then
             echo "⚠️ WARNING: Installation time increased significantly ($install_time seconds)"
             echo "::warning::Dependency update may impact installation performance"
@@ -147,10 +147,10 @@ jobs:
         if: ${{ github.actor == 'dependabot[bot]' && success() }}
         run: |
           echo "🤖 Auto-approving safe dependency update..."
-          
+
           # Check if it's a patch or minor update
           PR_TITLE="${{ github.event.pull_request.title }}"
-          
+
           if [[ "$PR_TITLE" == *"patch"* ]] || [[ "$PR_TITLE" == *"minor"* ]]; then
             echo "✅ Safe update detected - would auto-approve in production"
             echo "Update type: patch/minor"
@@ -165,9 +165,9 @@ jobs:
           script: |
             const success = '${{ job.status }}' === 'success';
             const validationFailed = '${{ steps.validation.outputs.validation_failed }}' === 'true';
-            
+
             let comment = '## 🔍 Dependency Update Validation Results\n\n';
-            
+
             if (success && !validationFailed) {
               comment += '✅ **All validation checks passed!**\n\n';
               comment += '- ✅ Dependency consistency maintained\n';
@@ -184,7 +184,7 @@ jobs:
               comment += '- All builds and tests pass\n\n';
               comment += '**This PR requires manual review before merging.**';
             }
-            
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,

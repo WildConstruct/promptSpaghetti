@@ -5,8 +5,16 @@
  */
 
 import { FastifyPluginAsync } from 'fastify';
-import { ScheduleCancellationService, CancellationRequest, BulkCancellationRequest } from '../services/ScheduleCancellationService';
-import { ScheduleModificationService, ModificationRequest, BatchModificationRequest } from '../services/ScheduleModificationService';
+import {
+  ScheduleCancellationService,
+  CancellationRequest,
+  BulkCancellationRequest,
+} from '../services/ScheduleCancellationService';
+import {
+  ScheduleModificationService,
+  ModificationRequest,
+  BatchModificationRequest,
+} from '../services/ScheduleModificationService';
 import { SchedulingDAO } from '../database/scheduling-dao';
 import { FeatureToggleDAO } from '../database/feature-toggle-dao';
 
@@ -16,9 +24,9 @@ const featureToggleDAO = new FeatureToggleDAO();
 const cancellationService = new ScheduleCancellationService(schedulingDAO, featureToggleDAO);
 const modificationService = new ScheduleModificationService(schedulingDAO, featureToggleDAO);
 
-const scheduleOperationsRoutes: FastifyPluginAsync = async (fastify) => {
+const scheduleOperationsRoutes: FastifyPluginAsync = async fastify => {
   // Schedule Cancellation Routes
-  
+
   // Cancel single schedule
   fastify.post<{
     Body: {
@@ -28,7 +36,7 @@ const scheduleOperationsRoutes: FastifyPluginAsync = async (fastify) => {
       comment?: string;
       scheduledTime?: string;
       rollbackPreviousExecutions?: boolean;
-    }
+    };
   }>('/schedules/:scheduleId/cancel', async (request, reply) => {
     try {
       const { scheduleId } = request.params as { scheduleId: string };
@@ -40,12 +48,12 @@ const scheduleOperationsRoutes: FastifyPluginAsync = async (fastify) => {
         mode: mode || 'immediate',
         comment,
         rollbackPreviousExecutions: rollbackPreviousExecutions || false,
-        cancelledBy: request.user?.id || 'system'
+        cancelledBy: request.user?.id || 'system',
       });
 
       reply.code(200).send({
         success: true,
-        data: result
+        data: result,
       });
     } catch (error) {
       fastify.log.error('Schedule cancellation failed:', error);
@@ -53,20 +61,20 @@ const scheduleOperationsRoutes: FastifyPluginAsync = async (fastify) => {
         success: false,
         error: {
           code: 'CANCELLATION_FAILED',
-          message: error instanceof Error ? error.message : 'Schedule cancellation failed'
-        }
+          message: error instanceof Error ? error.message : 'Schedule cancellation failed',
+        },
       });
     }
   });
 
   // Cancel multiple schedules
   fastify.post<{
-    Body: CancellationRequest
+    Body: CancellationRequest;
   }>('/schedules/cancel-multiple', async (request, reply) => {
     try {
       const cancellationRequest = {
         ...request.body,
-        cancelledBy: request.user?.id || 'system'
+        cancelledBy: request.user?.id || 'system',
       };
 
       const results = await cancellationService.cancelMultipleSchedules(cancellationRequest);
@@ -78,9 +86,9 @@ const scheduleOperationsRoutes: FastifyPluginAsync = async (fastify) => {
           summary: {
             total: results.length,
             successful: results.filter(r => r.status === 'success').length,
-            failed: results.filter(r => r.status === 'failed').length
-          }
-        }
+            failed: results.filter(r => r.status === 'failed').length,
+          },
+        },
       });
     } catch (error) {
       fastify.log.error('Bulk cancellation failed:', error);
@@ -88,27 +96,27 @@ const scheduleOperationsRoutes: FastifyPluginAsync = async (fastify) => {
         success: false,
         error: {
           code: 'BULK_CANCELLATION_FAILED',
-          message: error instanceof Error ? error.message : 'Bulk cancellation failed'
-        }
+          message: error instanceof Error ? error.message : 'Bulk cancellation failed',
+        },
       });
     }
   });
 
   // Bulk cancel schedules with filters
   fastify.post<{
-    Body: BulkCancellationRequest
+    Body: BulkCancellationRequest;
   }>('/schedules/bulk-cancel', async (request, reply) => {
     try {
       const bulkRequest = {
         ...request.body,
-        cancelledBy: request.user?.id || 'system'
+        cancelledBy: request.user?.id || 'system',
       };
 
       const result = await cancellationService.bulkCancelSchedules(bulkRequest);
 
       reply.code(200).send({
         success: true,
-        data: result
+        data: result,
       });
     } catch (error) {
       fastify.log.error('Bulk cancel operation failed:', error);
@@ -116,31 +124,31 @@ const scheduleOperationsRoutes: FastifyPluginAsync = async (fastify) => {
         success: false,
         error: {
           code: 'BULK_CANCEL_FAILED',
-          message: error instanceof Error ? error.message : 'Bulk cancel operation failed'
-        }
+          message: error instanceof Error ? error.message : 'Bulk cancel operation failed',
+        },
       });
     }
   });
 
   // Schedule Modification Routes
-  
+
   // Modify single schedule
   fastify.post<{
-    Body: ModificationRequest
+    Body: ModificationRequest;
   }>('/schedules/:scheduleId/modify', async (request, reply) => {
     try {
       const { scheduleId } = request.params as { scheduleId: string };
       const modificationRequest = {
         ...request.body,
         scheduleId,
-        requestedBy: request.user?.id || 'system'
+        requestedBy: request.user?.id || 'system',
       };
 
       const result = await modificationService.modifySchedule(modificationRequest);
 
       reply.code(200).send({
         success: true,
-        data: result
+        data: result,
       });
     } catch (error) {
       fastify.log.error('Schedule modification failed:', error);
@@ -148,27 +156,27 @@ const scheduleOperationsRoutes: FastifyPluginAsync = async (fastify) => {
         success: false,
         error: {
           code: 'MODIFICATION_FAILED',
-          message: error instanceof Error ? error.message : 'Schedule modification failed'
-        }
+          message: error instanceof Error ? error.message : 'Schedule modification failed',
+        },
       });
     }
   });
 
   // Modify multiple schedules
   fastify.post<{
-    Body: BatchModificationRequest
+    Body: BatchModificationRequest;
   }>('/schedules/modify-batch', async (request, reply) => {
     try {
       const batchRequest = {
         ...request.body,
-        requestedBy: request.user?.id || 'system'
+        requestedBy: request.user?.id || 'system',
       };
 
       const result = await modificationService.modifyMultipleSchedules(batchRequest);
 
       reply.code(200).send({
         success: true,
-        data: result
+        data: result,
       });
     } catch (error) {
       fastify.log.error('Batch modification failed:', error);
@@ -176,8 +184,8 @@ const scheduleOperationsRoutes: FastifyPluginAsync = async (fastify) => {
         success: false,
         error: {
           code: 'BATCH_MODIFICATION_FAILED',
-          message: error instanceof Error ? error.message : 'Batch modification failed'
-        }
+          message: error instanceof Error ? error.message : 'Batch modification failed',
+        },
       });
     }
   });
@@ -188,7 +196,7 @@ const scheduleOperationsRoutes: FastifyPluginAsync = async (fastify) => {
       scheduleId: string;
       changes: Record<string, any>;
       modificationType: string;
-    }
+    };
   }>('/schedules/:scheduleId/analyze-modification', async (request, reply) => {
     try {
       const { scheduleId } = request.params as { scheduleId: string };
@@ -199,7 +207,7 @@ const scheduleOperationsRoutes: FastifyPluginAsync = async (fastify) => {
       if (!schedule) {
         return reply.code(404).send({
           success: false,
-          error: { code: 'SCHEDULE_NOT_FOUND', message: 'Schedule not found' }
+          error: { code: 'SCHEDULE_NOT_FOUND', message: 'Schedule not found' },
         });
       }
 
@@ -208,14 +216,14 @@ const scheduleOperationsRoutes: FastifyPluginAsync = async (fastify) => {
         modificationType: modificationType as any,
         changes,
         reason: 'Analysis request',
-        requestedBy: request.user?.id || 'system'
+        requestedBy: request.user?.id || 'system',
       };
 
       const analysis = await modificationService.analyzeModificationImpact(schedule, mockRequest);
 
       reply.code(200).send({
         success: true,
-        data: analysis
+        data: analysis,
       });
     } catch (error) {
       fastify.log.error('Impact analysis failed:', error);
@@ -223,15 +231,15 @@ const scheduleOperationsRoutes: FastifyPluginAsync = async (fastify) => {
         success: false,
         error: {
           code: 'ANALYSIS_FAILED',
-          message: error instanceof Error ? error.message : 'Impact analysis failed'
-        }
+          message: error instanceof Error ? error.message : 'Impact analysis failed',
+        },
       });
     }
   });
 
   // Get modification history for a schedule
   fastify.get<{
-    Params: { scheduleId: string }
+    Params: { scheduleId: string };
   }>('/schedules/:scheduleId/modification-history', async (request, reply) => {
     try {
       const { scheduleId } = request.params;
@@ -240,7 +248,7 @@ const scheduleOperationsRoutes: FastifyPluginAsync = async (fastify) => {
 
       reply.code(200).send({
         success: true,
-        data: history
+        data: history,
       });
     } catch (error) {
       fastify.log.error('Failed to get modification history:', error);
@@ -248,8 +256,8 @@ const scheduleOperationsRoutes: FastifyPluginAsync = async (fastify) => {
         success: false,
         error: {
           code: 'HISTORY_FETCH_FAILED',
-          message: error instanceof Error ? error.message : 'Failed to get modification history'
-        }
+          message: error instanceof Error ? error.message : 'Failed to get modification history',
+        },
       });
     }
   });
@@ -270,8 +278,8 @@ const scheduleOperationsRoutes: FastifyPluginAsync = async (fastify) => {
         { value: 'resource_unavailable', label: 'Resource Unavailable', description: 'Required resources unavailable' },
         { value: 'policy_change', label: 'Policy Change', description: 'Organization policy change' },
         { value: 'maintenance_window', label: 'Maintenance Window', description: 'System maintenance required' },
-        { value: 'rollback_request', label: 'Rollback Request', description: 'Rollback to previous state' }
-      ]
+        { value: 'rollback_request', label: 'Rollback Request', description: 'Rollback to previous state' },
+      ],
     });
   });
 
@@ -289,8 +297,8 @@ const scheduleOperationsRoutes: FastifyPluginAsync = async (fastify) => {
         { value: 'enable_disable', label: 'Enable/Disable', description: 'Enable/disable schedule' },
         { value: 'reschedule', label: 'Reschedule', description: 'Move to different time' },
         { value: 'extend', label: 'Extend', description: 'Extend end time' },
-        { value: 'truncate', label: 'Truncate', description: 'Reduce end time' }
-      ]
+        { value: 'truncate', label: 'Truncate', description: 'Reduce end time' },
+      ],
     });
   });
 
@@ -300,7 +308,7 @@ const scheduleOperationsRoutes: FastifyPluginAsync = async (fastify) => {
       operation: 'cancel' | 'modify';
       scheduleIds: string[];
       parameters: Record<string, any>;
-    }
+    };
   }>('/schedules/validate-operation', async (request, reply) => {
     try {
       const { operation, scheduleIds, parameters } = request.body;
@@ -314,7 +322,7 @@ const scheduleOperationsRoutes: FastifyPluginAsync = async (fastify) => {
           validationResults.push({
             scheduleId,
             valid: false,
-            error: 'Schedule not found'
+            error: 'Schedule not found',
           });
           continue;
         }
@@ -347,7 +355,7 @@ const scheduleOperationsRoutes: FastifyPluginAsync = async (fastify) => {
           currentStatus: schedule.status,
           valid,
           error: valid ? undefined : error,
-          warnings: valid ? [] : undefined
+          warnings: valid ? [] : undefined,
         });
       }
 
@@ -358,8 +366,8 @@ const scheduleOperationsRoutes: FastifyPluginAsync = async (fastify) => {
           totalSchedules: scheduleIds.length,
           validSchedules: validationResults.filter(r => r.valid).length,
           invalidSchedules: validationResults.filter(r => !r.valid).length,
-          results: validationResults
-        }
+          results: validationResults,
+        },
       });
     } catch (error) {
       fastify.log.error('Operation validation failed:', error);
@@ -367,8 +375,8 @@ const scheduleOperationsRoutes: FastifyPluginAsync = async (fastify) => {
         success: false,
         error: {
           code: 'VALIDATION_FAILED',
-          message: error instanceof Error ? error.message : 'Operation validation failed'
-        }
+          message: error instanceof Error ? error.message : 'Operation validation failed',
+        },
       });
     }
   });

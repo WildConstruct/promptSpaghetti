@@ -7,6 +7,7 @@ This guide helps content creators build effective prompt generation graphs using
 ### Basic Concepts
 
 **Graphs** are visual representations of your prompt logic, consisting of:
+
 - **Nodes**: Individual components that perform specific functions
 - **Edges**: Connections that define the flow of data between nodes
 - **Seeds**: Numbers that ensure reproducible random generation
@@ -22,99 +23,123 @@ This guide helps content creators build effective prompt generation graphs using
 ## Node Types Reference
 
 ### WeightedChoice
+
 **Purpose**: Randomly selects from multiple options based on weights
 
 **Configuration**:
+
 - `choices`: Array of text options
 - `weights`: Array of numbers (must sum to 1.0)
 
 **Example Use Cases**:
+
 - Character selection: `["warrior", "mage", "rogue"]` with weights `[0.4, 0.3, 0.3]`
 - Style variation: `["realistic", "stylized", "abstract"]` with weights `[0.5, 0.3, 0.2]`
 - Mood selection: `["happy", "serious", "mysterious"]` with weights `[0.33, 0.33, 0.34]`
 
 **Best Practices**:
+
 - Keep choices thematically related
 - Use weights to bias toward preferred options
 - Avoid too many choices (max 5-7 for readability)
 
 ### Concat
+
 **Purpose**: Combines multiple inputs into a single output
 
 **Configuration**:
+
 - `separator`: String to place between combined inputs (default: space)
 
 **Example Use Cases**:
+
 - Sentence building: subject + verb + object
 - Style combination: color + texture + pattern
 - Attribute stacking: size + shape + material
 
 **Best Practices**:
+
 - Use appropriate separators (space, comma, "and", etc.)
 - Consider the natural flow of language
 - Test with different input combinations
 
 ### Output
+
 **Purpose**: Marks the final result of your graph
 
 **Configuration**:
+
 - `template`: Optional template string with {{value}} placeholder
 
 **Example Use Cases**:
+
 - Simple output: Just pass through the final result
 - Formatted output: "Create a {{value}} character"
 - Structured output: "Style: {{value}}, Mood: confident"
 
 **Best Practices**:
+
 - Use templates for consistent formatting
 - Keep templates simple and readable
 - Test with various input types
 
 ### SetVariable
+
 **Purpose**: Stores a value for use elsewhere in the graph
 
 **Configuration**:
+
 - `variableName`: Name of the variable to store
 - `value`: Value to store (can be input from previous nodes)
 
 **Example Use Cases**:
+
 - Remember character type for later use
 - Store art style for consistent application
 - Keep track of chosen mood across the graph
 
 **Best Practices**:
+
 - Use descriptive variable names
 - Avoid overwriting important variables
 - Document variable usage in complex graphs
 
 ### GetVariable
+
 **Purpose**: Retrieves a previously stored variable value
 
 **Configuration**:
+
 - `variableName`: Name of the variable to retrieve
 
 **Example Use Cases**:
+
 - Reuse previously chosen character type
 - Apply consistent style across elements
 - Reference earlier choices in final output
 
 **Best Practices**:
+
 - Ensure variable is set before getting it
 - Use consistent naming conventions
 - Handle missing variables gracefully
 
 ### Include
+
 **Purpose**: References another graph or bundle
 
 **Configuration**:
+
 - `bundleName`: Name of the bundle/graph to include
 
 **Example Use Cases**:
+
 - Modular prompt components
 - Reusable style libraries
 - Shared character generators
 
 **Best Practices**:
+
 - Keep included graphs focused and reusable
 - Document dependencies clearly
 - Test included graphs independently
@@ -156,6 +181,7 @@ Start broad and narrow down to specific details.
 ### Weight Balancing
 
 When using WeightedChoice nodes, consider:
+
 - **Equal weights**: `[0.33, 0.33, 0.34]` for balanced selection
 - **Biased weights**: `[0.6, 0.3, 0.1]` to favor certain options
 - **Extreme weights**: `[0.9, 0.05, 0.05]` for mostly one option with rare alternatives
@@ -163,6 +189,7 @@ When using WeightedChoice nodes, consider:
 ### Variable Chaining
 
 Create complex dependencies:
+
 ```
 [Style] → [SetVariable: "style"]
 [Character] → [SetVariable: "character"]
@@ -174,6 +201,7 @@ Create complex dependencies:
 ### Modular Design
 
 Break complex graphs into reusable components:
+
 - **Character Generator**: Separate graph for character creation
 - **Style Library**: Dedicated graph for art styles
 - **Mood System**: Specialized graph for emotional tone
@@ -234,18 +262,21 @@ Break complex graphs into reusable components:
 ## Best Practices Summary
 
 ### Content Creation
+
 - Start with simple structures and expand gradually
 - Use real-world examples to test effectiveness
 - Maintain consistent terminology and style
 - Document complex graphs for future reference
 
 ### Graph Design
+
 - Follow left-to-right flow conventions
 - Group related functionality together
 - Use clear, descriptive node names
 - Avoid unnecessary complexity
 
 ### Quality Assurance
+
 - Test with multiple seeds regularly
 - Validate all possible output paths
 - Check for edge cases and error conditions
@@ -269,7 +300,7 @@ Break complex graphs into reusable components:
 
 ```
 [Setting] → WeightedChoice → SetVariable["setting"]
-[Character] → WeightedChoice → SetVariable["character"]  
+[Character] → WeightedChoice → SetVariable["character"]
 [Conflict] → WeightedChoice → SetVariable["conflict"]
                     ↓
 [Template] → "A {{character}} in {{setting}} facing {{conflict}}"
@@ -294,9 +325,11 @@ Break complex graphs into reusable components:
 ## Domain-Specific Toolkits
 
 ### Content Creation & Media Toolkit
+
 For advanced content creation workflows including script writing, story development, and media production, see the dedicated [Content Creation & Media Toolkit Documentation](content-creation-media-toolkit.md).
 
 This specialized toolkit includes:
+
 - **Creative Writing Components**: Plot generation, character development, and tone adaptation
 - **Script Generation**: Screenplay, podcast, and video script templates
 - **Media Accessibility**: Alt-text generation and audio description tools
@@ -304,13 +337,14 @@ This specialized toolkit includes:
 - **Advanced Features**: Multi-modal content integration and collaborative tools
 
 ### Other Available Toolkits
+
 - **Healthcare & Life Sciences**: Medical text processing and HIPAA-compliant workflows
 - **Financial Services**: Transaction analysis and regulatory compliance tools
 - **Legal & Regulatory**: Contract analysis and legal document processing
 - **E-commerce & Retail**: Product descriptions and customer service automation
 
-*For more information on domain-specific toolkits, see [Epic 28 Implementation Plan](epic28plan.md).*
+_For more information on domain-specific toolkits, see [Epic 28 Implementation Plan](epic28plan.md)._
 
 ---
 
-*Happy creating! Remember that great prompts come from thoughtful design and thorough testing.*
+_Happy creating! Remember that great prompts come from thoughtful design and thorough testing._

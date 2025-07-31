@@ -5,6 +5,7 @@ A comprehensive GDPR-compliant consent management system with contextual just-in
 ## Overview
 
 This system provides:
+
 - **Contextual Consent Prompts**: Prompts appear exactly when consent is needed
 - **Multiple Display Modes**: Modal, banner, sidebar, tooltip, and inline styles
 - **Automatic Trigger Detection**: Data attributes for declarative consent requirements
@@ -27,7 +28,7 @@ function App() {
       <JustInTimeConsentProvider>
         {/* Your app content */}
         <MainContent />
-        
+
         {/* Add consent banner for initial consent */}
         <ConsentBanner />
       </JustInTimeConsentProvider>
@@ -75,16 +76,12 @@ function MyComponent() {
       const granted = await promptForConsent('analytics_dashboard', 'view');
       if (!granted) return;
     }
-    
+
     // Proceed with analytics action
     trackEvent('user_action');
   };
 
-  return (
-    <button onClick={handleAnalyticsAction}>
-      View Analytics
-    </button>
-  );
+  return <button onClick={handleAnalyticsAction}>View Analytics</button>;
 }
 ```
 
@@ -115,26 +112,28 @@ const DEFAULT_PROMPT_CONFIGS: Record<string, JustInTimePromptConfig> = {
     triggerId: 'analytics_view',
     title: 'Analytics Consent',
     message: 'Allow analytics tracking to help us improve your experience?',
-    contexts: [{
-      feature: 'analytics_dashboard',
-      action: 'view'
-    }],
+    contexts: [
+      {
+        feature: 'analytics_dashboard',
+        action: 'view',
+      },
+    ],
     appearance: {
-      style: 'modal',        // modal, banner, sidebar, tooltip, inline
-      theme: 'light',        // light, dark, auto
-      size: 'medium',        // small, medium, large
+      style: 'modal', // modal, banner, sidebar, tooltip, inline
+      theme: 'light', // light, dark, auto
+      size: 'medium', // small, medium, large
       showIcon: true,
-      iconType: 'info'       // info, warning, question, shield
+      iconType: 'info', // info, warning, question, shield
     },
     behavior: {
-      showOnce: false,       // Show only once per session
-      cooldownPeriod: 60,    // Minutes before showing again
+      showOnce: false, // Show only once per session
+      cooldownPeriod: 60, // Minutes before showing again
       maxShowsPerSession: 3, // Maximum shows per session
       requireResponse: true, // Block until user responds
-      allowDismiss: true,    // Allow dismissing without response
-      blockInteraction: true // Block original action until consent
-    }
-  }
+      allowDismiss: true, // Allow dismissing without response
+      blockInteraction: true, // Block original action until consent
+    },
+  },
 };
 ```
 
@@ -147,7 +146,7 @@ const CONSENT_TYPE_MAPPING: Record<string, ConsentType> = {
   analytics_view: ConsentType.ANALYTICS,
   marketing_newsletter: ConsentType.MARKETING,
   social_sharing: ConsentType.SOCIAL_MEDIA,
-  personalization_features: ConsentType.PERSONALIZATION
+  personalization_features: ConsentType.PERSONALIZATION,
 };
 ```
 

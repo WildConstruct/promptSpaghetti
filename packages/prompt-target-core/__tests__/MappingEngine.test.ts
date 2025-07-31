@@ -18,7 +18,7 @@ describe('MappingEngine', () => {
       logger,
       cache,
       metrics,
-      config: {}
+      config: {},
     };
     gptAdaptor = new OpenAIGPTAdaptor(context);
     midjourneyAdaptor = new MidjourneyAdaptor(context);
@@ -57,19 +57,19 @@ describe('MappingEngine', () => {
             id: 'text-node',
             type: 'text',
             data: { content: 'Write a story about robots' },
-            position: { x: 0, y: 0 }
-          }
+            position: { x: 0, y: 0 },
+          },
         ],
         edges: [],
         metadata: {
           created: new Date(),
           modified: new Date(),
-          version: '1.0'
-        }
+          version: '1.0',
+        },
       };
       const request = {
         graph,
-        targetPlatform: 'openai-gpt'
+        targetPlatform: 'openai-gpt',
       };
       const response = await engine.translate(request);
       expect(response.success).toBe(true);
@@ -88,34 +88,34 @@ describe('MappingEngine', () => {
             id: 'subject',
             type: 'text',
             data: { content: 'A magical forest' },
-            position: { x: 0, y: 0 }
+            position: { x: 0, y: 0 },
           },
           {
             id: 'style',
             type: 'style',
             data: { style: 'fantasy art, detailed' },
-            position: { x: 100, y: 0 }
+            position: { x: 100, y: 0 },
           },
           {
             id: 'concat',
             type: 'concat',
             data: { label: 'Combine' },
-            position: { x: 200, y: 0 }
-          }
+            position: { x: 200, y: 0 },
+          },
         ],
         edges: [
           { id: 'e1', source: 'subject', target: 'concat' },
-          { id: 'e2', source: 'style', target: 'concat' }
+          { id: 'e2', source: 'style', target: 'concat' },
         ],
         metadata: {
           created: new Date(),
           modified: new Date(),
-          version: '1.0'
-        }
+          version: '1.0',
+        },
       };
       const request = {
         graph,
-        targetPlatform: 'midjourney'
+        targetPlatform: 'midjourney',
       };
       const response = await engine.translate(request);
       expect(response.success).toBe(true);
@@ -134,19 +134,19 @@ describe('MappingEngine', () => {
             id: 'node',
             type: 'text',
             data: { content: 'Test' },
-            position: { x: 0, y: 0 }
-          }
+            position: { x: 0, y: 0 },
+          },
         ],
         edges: [],
         metadata: {
           created: new Date(),
           modified: new Date(),
-          version: '1.0'
-        }
+          version: '1.0',
+        },
       };
       const request = {
         graph,
-        targetPlatform: 'unsupported-platform'
+        targetPlatform: 'unsupported-platform',
       };
       const response = await engine.translate(request);
       expect(response.success).toBe(false);
@@ -162,12 +162,12 @@ describe('MappingEngine', () => {
         metadata: {
           created: new Date(),
           modified: new Date(),
-          version: '1.0'
-        }
+          version: '1.0',
+        },
       };
       const request = {
         graph: invalidGraph,
-        targetPlatform: 'openai-gpt'
+        targetPlatform: 'openai-gpt',
       };
       const response = await engine.translate(request);
       expect(response.success).toBe(false);
@@ -182,21 +182,19 @@ describe('MappingEngine', () => {
             id: 'valid-node',
             type: 'text',
             data: { content: 'Valid content' },
-            position: { x: 0, y: 0 }
-          }
+            position: { x: 0, y: 0 },
+          },
         ],
-        edges: [
-          { id: 'bad-edge', source: 'valid-node', target: 'nonexistent-node' }
-        ],
+        edges: [{ id: 'bad-edge', source: 'valid-node', target: 'nonexistent-node' }],
         metadata: {
           created: new Date(),
           modified: new Date(),
-          version: '1.0'
-        }
+          version: '1.0',
+        },
       };
       const request = {
         graph: graphWithInvalidEdges,
-        targetPlatform: 'openai-gpt'
+        targetPlatform: 'openai-gpt',
       };
       const response = await engine.translate(request);
       expect(response.success).toBe(false);
@@ -217,19 +215,19 @@ describe('MappingEngine', () => {
             id: 'node',
             type: 'text',
             data: { content: 'Cache test content' },
-            position: { x: 0, y: 0 }
-          }
+            position: { x: 0, y: 0 },
+          },
         ],
         edges: [],
         metadata: {
           created: new Date(),
           modified: new Date(),
-          version: '1.0'
-        }
+          version: '1.0',
+        },
       };
       const request = {
         graph,
-        targetPlatform: 'openai-gpt'
+        targetPlatform: 'openai-gpt',
       };
       // First translation - should miss cache
       const response1 = await engine.translate(request);
@@ -238,8 +236,7 @@ describe('MappingEngine', () => {
       const response2 = await engine.translate(request);
       expect(response2.success).toBe(true);
       // Both should have the same translation ID (from cache)
-      expect(response1.targetPrompt?.metadata.translationId)
-        .toBe(response2.targetPrompt?.metadata.translationId);
+      expect(response1.targetPrompt?.metadata.translationId).toBe(response2.targetPrompt?.metadata.translationId);
       // Second request should be faster (from cache)
       expect(response2.timing.total).toBeLessThanOrEqual(response1.timing.total);
     });
@@ -252,33 +249,32 @@ describe('MappingEngine', () => {
             id: 'node',
             type: 'text',
             data: { content: 'Options test' },
-            position: { x: 0, y: 0 }
-          }
+            position: { x: 0, y: 0 },
+          },
         ],
         edges: [],
         metadata: {
           created: new Date(),
           modified: new Date(),
-          version: '1.0'
-        }
+          version: '1.0',
+        },
       };
       const request1 = {
         graph,
         targetPlatform: 'openai-gpt',
-        options: { optimize: true }
+        options: { optimize: true },
       };
       const request2 = {
         graph,
         targetPlatform: 'openai-gpt',
-        options: { optimize: false }
+        options: { optimize: false },
       };
       const response1 = await engine.translate(request1);
       const response2 = await engine.translate(request2);
       expect(response1.success).toBe(true);
       expect(response2.success).toBe(true);
       // Should have different translation IDs (different cache entries)
-      expect(response1.targetPrompt?.metadata.translationId)
-        .not.toBe(response2.targetPrompt?.metadata.translationId);
+      expect(response1.targetPrompt?.metadata.translationId).not.toBe(response2.targetPrompt?.metadata.translationId);
     });
   });
   describe('error handling', () => {
@@ -289,7 +285,7 @@ describe('MappingEngine', () => {
       // Create a mock adaptor that throws an error
       const errorAdaptor = {
         ...gptAdaptor,
-        transform: jest.fn().mockRejectedValue(new Error('Adaptor error'))
+        transform: jest.fn().mockRejectedValue(new Error('Adaptor error')),
       };
       engine.registerAdaptor('error-platform', errorAdaptor);
       const graph = {
@@ -300,19 +296,19 @@ describe('MappingEngine', () => {
             id: 'node',
             type: 'text',
             data: { content: 'Error test' },
-            position: { x: 0, y: 0 }
-          }
+            position: { x: 0, y: 0 },
+          },
         ],
         edges: [],
         metadata: {
           created: new Date(),
           modified: new Date(),
-          version: '1.0'
-        }
+          version: '1.0',
+        },
       };
       const request = {
         graph,
-        targetPlatform: 'error-platform'
+        targetPlatform: 'error-platform',
       };
       const response = await engine.translate(request);
       expect(response.success).toBe(false);
@@ -325,7 +321,7 @@ describe('MappingEngine', () => {
         get: jest.fn().mockRejectedValue(new Error('Cache error')),
         set: jest.fn().mockRejectedValue(new Error('Cache error')),
         del: jest.fn(),
-        exists: jest.fn()
+        exists: jest.fn(),
       };
       const errorEngine = new MappingEngine(logger, errorCache, metrics);
       errorEngine.registerAdaptor('openai-gpt', gptAdaptor);
@@ -337,19 +333,19 @@ describe('MappingEngine', () => {
             id: 'node',
             type: 'text',
             data: { content: 'Cache error test' },
-            position: { x: 0, y: 0 }
-          }
+            position: { x: 0, y: 0 },
+          },
         ],
         edges: [],
         metadata: {
           created: new Date(),
           modified: new Date(),
-          version: '1.0'
-        }
+          version: '1.0',
+        },
       };
       const request = {
         graph,
-        targetPlatform: 'openai-gpt'
+        targetPlatform: 'openai-gpt',
       };
       // Should still succeed despite cache errors
       const response = await errorEngine.translate(request);
@@ -383,22 +379,22 @@ describe('MappingEngine', () => {
           id: `node-${i}`,
           type: 'text',
           data: { content: `Content ${i}` },
-          position: { x: i * 50, y: 0 }
+          position: { x: i * 50, y: 0 },
         })),
         edges: Array.from({ length: 9 }, (_, i) => ({
           id: `edge-${i}`,
           source: `node-${i}`,
-          target: `node-${i + 1}`
+          target: `node-${i + 1}`,
         })),
         metadata: {
           created: new Date(),
           modified: new Date(),
-          version: '1.0'
-        }
+          version: '1.0',
+        },
       };
       const request = {
         graph,
-        targetPlatform: 'openai-gpt'
+        targetPlatform: 'openai-gpt',
       };
       const startTime = Date.now();
       const response = await engine.translate(request);

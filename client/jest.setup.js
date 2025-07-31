@@ -28,7 +28,13 @@ global.IntersectionObserver = class {
   constructor(callback) {
     this.callback = callback;
   }
-  observe() { /* do nothing */ }
-  unobserve() { /* do nothing */ }
-  disconnect() { /* do nothing */ }
+  observe() {
+    /* do nothing */
+  }
+  unobserve() {
+    /* do nothing */
+  }
+  disconnect() {
+    /* do nothing */
+  }
 };

@@ -1,10 +1,10 @@
 /**
  * Storage Management and Retention Policy Admin Test Suite - Epic 17
- * 
+ *
  * Comprehensive tests for storage lifecycle management and retention policy
  * administration within the backstage admin controls framework.
- * 
- * Tasks: 
+ *
+ * Tasks:
  * - E17-1753114397274-7F58CB - Implement storage management
  * - E17-1753114397273-EF37D9 - Create retention policies
  * Epic: 17 - Backstage Admin Controls
@@ -20,31 +20,31 @@ import {
   StorageTier,
   PerformanceClass,
   HealthStatus,
-  OptimizationType
+  OptimizationType,
 } from '../../server/src/admin/StorageManagementService';
 import {
   RetentionPolicyAdminService,
   AdminRetentionPolicy,
   PolicyTemplate,
   RetentionException,
-  ExceptionType
+  ExceptionType,
 } from '../../server/src/admin/RetentionPolicyAdminService';
 import { DataRetentionFrameworkService } from '../../server/src/services/DataRetentionFrameworkService';
 import { DataCategory, Jurisdiction } from '../../server/src/types/DataRetentionPeriods';
 
 // Mock dependencies
 const mockDatabase = {
-  query: jest.fn()
+  query: jest.fn(),
 } as unknown as Database;
 
 const mockAuditService = {
-  logEvent: jest.fn()
+  logEvent: jest.fn(),
 } as unknown as AuditService;
 
 const mockRetentionFramework = {
   createPolicy: jest.fn(),
   getAllPolicies: jest.fn(),
-  getPolicy: jest.fn()
+  getPolicy: jest.fn(),
 } as unknown as DataRetentionFrameworkService;
 
 describe('Storage Management and Retention Policy Admin Systems', () => {
@@ -53,18 +53,10 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    
-    storageService = new StorageManagementService(
-      mockDatabase,
-      mockAuditService,
-      mockRetentionFramework
-    );
-    
-    retentionService = new RetentionPolicyAdminService(
-      mockDatabase,
-      mockAuditService,
-      mockRetentionFramework
-    );
+
+    storageService = new StorageManagementService(mockDatabase, mockAuditService, mockRetentionFramework);
+
+    retentionService = new RetentionPolicyAdminService(mockDatabase, mockAuditService, mockRetentionFramework);
   });
 
   describe('StorageManagementService', () => {
@@ -87,7 +79,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
           costPerGB: 0.12,
           location: 'us-east-1',
           isActive: true,
-          tags: ['production', 'high-performance', 'encrypted']
+          tags: ['production', 'high-performance', 'encrypted'],
         };
 
         const result = await storageService.createStoragePool(poolData, 'admin');
@@ -101,7 +93,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
         expect(mockAuditService.logEvent).toHaveBeenCalledWith(
           expect.objectContaining({
             action: 'storage_pool_created',
-            userId: 'admin'
+            userId: 'admin',
           })
         );
       });
@@ -126,15 +118,15 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
               is_active: true,
               created_at: new Date(),
               health_status: 'healthy',
-              tags: '["production", "hot"]'
-            }
-          ]
+              tags: '["production", "hot"]',
+            },
+          ],
         });
 
         const result = await storageService.getStoragePools({
           storageType: StorageType.HOT,
           tier: StorageTier.PREMIUM,
-          isActive: true
+          isActive: true,
         });
 
         expect(result).toHaveLength(1);
@@ -164,7 +156,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
           created_at: new Date(),
           last_optimized: null,
           health_status: 'healthy',
-          tags: '["test"]'
+          tags: '["test"]',
         };
 
         const updatedPoolRow = {
@@ -172,7 +164,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
           name: 'updated_test_pool',
           compression_enabled: true,
           encryption_enabled: true,
-          updated_at: new Date()
+          updated_at: new Date(),
         };
 
         // Mock database calls
@@ -184,7 +176,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
         const updates = {
           name: 'updated_test_pool',
           compressionEnabled: true,
-          encryptionEnabled: true
+          encryptionEnabled: true,
         };
 
         const result = await storageService.updateStoragePool('pool-1', updates, 'admin');
@@ -194,7 +186,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
         expect(result.encryptionEnabled).toBe(true);
         expect(mockAuditService.logEvent).toHaveBeenCalledWith(
           expect.objectContaining({
-            action: 'storage_pool_updated'
+            action: 'storage_pool_updated',
           })
         );
       });
@@ -213,7 +205,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
           warningThreshold: 80, // percentage
           criticalThreshold: 95,
           autoCleanup: true,
-          notificationEnabled: true
+          notificationEnabled: true,
         };
 
         const result = await storageService.createStorageQuota(quotaData, 'admin');
@@ -224,7 +216,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
         expect(result.quotaExceeded).toBe(false); // 75 < 100
         expect(mockAuditService.logEvent).toHaveBeenCalledWith(
           expect.objectContaining({
-            action: 'storage_quota_created'
+            action: 'storage_quota_created',
           })
         );
       });
@@ -239,7 +231,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
           warningThreshold: 80,
           criticalThreshold: 95,
           autoCleanup: true,
-          notificationEnabled: true
+          notificationEnabled: true,
         };
 
         const result = await storageService.createStorageQuota(quotaData, 'admin');
@@ -254,7 +246,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
           targetType: 'category' as const,
           dataCategories: [DataCategory.BEHAVIORAL],
           storageTypes: [StorageType.WARM],
-          ageThreshold: 90
+          ageThreshold: 90,
         };
 
         const parameters = {
@@ -262,7 +254,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
           compressionLevel: 3,
           deduplicationScope: 'pool' as const,
           cleanupDryRun: false,
-          notifyUsers: true
+          notifyUsers: true,
         };
 
         const result = await storageService.scheduleOptimization(
@@ -279,7 +271,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
         expect(result.estimatedSavings).toBeGreaterThan(0);
         expect(mockAuditService.logEvent).toHaveBeenCalledWith(
           expect.objectContaining({
-            action: 'storage_optimization_scheduled'
+            action: 'storage_optimization_scheduled',
           })
         );
       });
@@ -288,21 +280,24 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
         // Mock database calls for optimization storage and retrieval
         (mockDatabase.query as jest.Mock)
           .mockResolvedValueOnce({ rows: [] }) // Store optimization
-          .mockResolvedValueOnce({ // Get optimization for execution
-            rows: [{
-              optimization_id: 'opt-test-123',
-              optimization_type: 'DEDUPLICATION',
-              target: '{"targetType":"global","dataCategories":["TECHNICAL"],"storageTypes":["HOT","WARM"]}',
-              status: 'scheduled',
-              scheduled_at: new Date(),
-              estimated_savings: 100,
-              actual_savings: null,
-              config: '{"deduplicationScope":"global","cleanupDryRun":false}',
-              results: null,
-              created_at: new Date(),
-              completed_at: null,
-              error: null
-            }]
+          .mockResolvedValueOnce({
+            // Get optimization for execution
+            rows: [
+              {
+                optimization_id: 'opt-test-123',
+                optimization_type: 'DEDUPLICATION',
+                target: '{"targetType":"global","dataCategories":["TECHNICAL"],"storageTypes":["HOT","WARM"]}',
+                status: 'scheduled',
+                scheduled_at: new Date(),
+                estimated_savings: 100,
+                actual_savings: null,
+                config: '{"deduplicationScope":"global","cleanupDryRun":false}',
+                results: null,
+                created_at: new Date(),
+                completed_at: null,
+                error: null,
+              },
+            ],
           })
           .mockResolvedValueOnce({ rows: [] }); // Update optimization
 
@@ -312,11 +307,11 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
           {
             targetType: 'global' as const,
             dataCategories: [DataCategory.TECHNICAL],
-            storageTypes: [StorageType.HOT, StorageType.WARM]
+            storageTypes: [StorageType.HOT, StorageType.WARM],
           },
           {
             deduplicationScope: 'global' as const,
-            cleanupDryRun: false
+            cleanupDryRun: false,
           },
           'admin'
         );
@@ -348,9 +343,9 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
           costPerGB: 0.12,
           healthScore: 85,
           criticalIssues: 0,
-          recommendationCount: 3
+          recommendationCount: 3,
         };
-        
+
         // Mock the internal methods that getOptimizationRecommendations relies on
         jest.spyOn(storageService as any, 'getCurrentStorageMetrics').mockResolvedValue(mockMetrics);
         jest.spyOn(storageService as any, 'findOldData').mockResolvedValue({ size: 150 });
@@ -360,7 +355,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
 
         expect(recommendations).toBeInstanceOf(Array);
         expect(recommendations.length).toBeGreaterThan(0);
-        
+
         for (const recommendation of recommendations) {
           expect(recommendation.type).toBeDefined();
           expect(recommendation.estimatedSavings).toBeGreaterThan(0);
@@ -381,15 +376,15 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
             capacity: 1000,
             used: 300,
             available: 700,
-            isActive: true
-          }
+            isActive: true,
+          },
         ];
-        
+
         jest.spyOn(storageService as any, 'getStoragePools').mockResolvedValue(mockPools);
         jest.spyOn(storageService as any, 'calculatePoolMetrics').mockResolvedValue({
           healthScore: 85,
           performance: 90,
-          efficiency: 75
+          efficiency: 75,
         });
         jest.spyOn(storageService as any, 'calculateGrowthRate').mockResolvedValue(5);
         jest.spyOn(storageService as any, 'calculateCompressionRatio').mockResolvedValue(0.8);
@@ -415,14 +410,10 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
         const period = {
           startDate: new Date('2024-01-01'),
           endDate: new Date('2024-01-31'),
-          granularity: 'day' as const
+          granularity: 'day' as const,
         };
 
-        const report = await storageService.generateStorageReport(
-          'usage',
-          period,
-          'admin'
-        );
+        const report = await storageService.generateStorageReport('usage', period, 'admin');
 
         expect(report).toBeDefined();
         expect(report.reportId).toBeTruthy();
@@ -434,7 +425,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
         expect(report.nextActions).toBeInstanceOf(Array);
         expect(mockAuditService.logEvent).toHaveBeenCalledWith(
           expect.objectContaining({
-            action: 'storage_report_generated'
+            action: 'storage_report_generated',
           })
         );
       });
@@ -452,9 +443,9 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
         enabled: true,
         createdAt: new Date(),
         updatedAt: new Date(),
-        rules: []
+        rules: [],
       };
-      
+
       (mockRetentionFramework.createPolicy as jest.Mock).mockResolvedValue(mockPolicyData);
       (mockRetentionFramework.getPolicy as jest.Mock).mockResolvedValue(mockPolicyData);
     });
@@ -467,7 +458,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
           categories: [DataCategory.PERSONAL_IDENTIFIABLE],
           jurisdiction: [Jurisdiction.GDPR],
           enabled: true,
-          rules: []
+          rules: [],
         };
 
         const adminSettings = {
@@ -479,14 +470,10 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
           exemptionLimit: 5,
           auditRequired: true,
           riskAssessment: 'high' as const,
-          businessJustification: 'Legal compliance requirement for GDPR'
+          businessJustification: 'Legal compliance requirement for GDPR',
         };
 
-        const result = await retentionService.createAdminRetentionPolicy(
-          policyData,
-          adminSettings,
-          'admin'
-        );
+        const result = await retentionService.createAdminRetentionPolicy(policyData, adminSettings, 'admin');
 
         expect(result).toBeDefined();
         expect(result.policyId).toBeTruthy();
@@ -497,7 +484,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
         expect(result.compliance.isCompliant).toBe(true);
         expect(mockAuditService.logEvent).toHaveBeenCalledWith(
           expect.objectContaining({
-            action: 'admin_retention_policy_created'
+            action: 'admin_retention_policy_created',
           })
         );
       });
@@ -509,28 +496,28 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
             name: 'GDPR Policy',
             categories: [DataCategory.PERSONAL_IDENTIFIABLE],
             jurisdiction: [Jurisdiction.GDPR],
-            enabled: true
+            enabled: true,
           },
           {
             policyId: 'policy-2',
             name: 'CCPA Policy',
             categories: [DataCategory.PERSONAL_IDENTIFIABLE],
             jurisdiction: [Jurisdiction.CCPA],
-            enabled: true
-          }
+            enabled: true,
+          },
         ]);
 
         const filters = {
           category: [DataCategory.PERSONAL_IDENTIFIABLE],
           jurisdiction: [Jurisdiction.GDPR],
-          isActive: true
+          isActive: true,
         };
 
         const result = await retentionService.getAdminRetentionPolicies(filters);
 
         expect(result).toBeInstanceOf(Array);
         expect(result.length).toBeGreaterThan(0);
-        
+
         for (const policy of result) {
           expect(policy.adminSettings).toBeDefined();
           expect(policy.statistics).toBeDefined();
@@ -544,14 +531,10 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
           autoEnforcement: false,
           escalationLevel: 'legal' as const,
           reviewFrequency: 'monthly' as const,
-          riskAssessment: 'critical' as const
+          riskAssessment: 'critical' as const,
         };
 
-        const result = await retentionService.updateAdminPolicySettings(
-          'policy-123',
-          settings,
-          'admin'
-        );
+        const result = await retentionService.updateAdminPolicySettings('policy-123', settings, 'admin');
 
         expect(result.adminSettings.autoEnforcement).toBe(false);
         expect(result.adminSettings.escalationLevel).toBe('legal');
@@ -559,7 +542,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
         expect(result.adminSettings.riskAssessment).toBe('critical');
         expect(mockAuditService.logEvent).toHaveBeenCalledWith(
           expect.objectContaining({
-            action: 'admin_policy_settings_updated'
+            action: 'admin_policy_settings_updated',
           })
         );
       });
@@ -581,10 +564,10 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
             reviewFrequency: 'quarterly' as const,
             exemptionLimit: 3,
             auditRequired: true,
-            riskAssessment: 'high' as const
+            riskAssessment: 'high' as const,
           },
           applicableDataTypes: [DataCategory.PERSONAL_IDENTIFIABLE, DataCategory.BEHAVIORAL],
-          isPublic: true
+          isPublic: true,
         };
 
         const result = await retentionService.createPolicyTemplate(templateData, 'admin');
@@ -597,7 +580,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
         expect(result.usageCount).toBe(0);
         expect(mockAuditService.logEvent).toHaveBeenCalledWith(
           expect.objectContaining({
-            action: 'policy_template_created'
+            action: 'policy_template_created',
           })
         );
       });
@@ -608,15 +591,11 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
           description: 'Customized policy for marketing data retention',
           adminSettings: {
             reviewFrequency: 'monthly' as const,
-            exemptionLimit: 2
-          }
+            exemptionLimit: 2,
+          },
         };
 
-        const result = await retentionService.createPolicyFromTemplate(
-          'template-123',
-          overrides,
-          'admin'
-        );
+        const result = await retentionService.createPolicyFromTemplate('template-123', overrides, 'admin');
 
         expect(result).toBeDefined();
         expect(result.name).toBe('Custom GDPR Policy for Marketing Data');
@@ -634,18 +613,11 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
           reason: 'Ongoing litigation requires data preservation',
           businessJustification: 'Legal department has requested hold for case #2024-001',
           riskAssessment: 'Medium risk - litigation exposure if deleted',
-          conditions: [
-            'Review monthly',
-            'Release when litigation concluded',
-            'Notify legal team of any access'
-          ],
-          reviewRequired: true
+          conditions: ['Review monthly', 'Release when litigation concluded', 'Notify legal team of any access'],
+          reviewRequired: true,
         };
 
-        const result = await retentionService.createRetentionException(
-          exceptionData,
-          'legal-admin'
-        );
+        const result = await retentionService.createRetentionException(exceptionData, 'legal-admin');
 
         expect(result).toBeDefined();
         expect(result.exceptionId).toBeTruthy();
@@ -655,7 +627,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
         expect(result.conditions).toHaveLength(3);
         expect(mockAuditService.logEvent).toHaveBeenCalledWith(
           expect.objectContaining({
-            action: 'retention_exception_requested'
+            action: 'retention_exception_requested',
           })
         );
       });
@@ -673,7 +645,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
         expect(result.approvedAt).toBeInstanceOf(Date);
         expect(mockAuditService.logEvent).toHaveBeenCalledWith(
           expect.objectContaining({
-            action: 'retention_exception_approved'
+            action: 'retention_exception_approved',
           })
         );
       });
@@ -690,7 +662,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
         expect(result.approvedBy).toBe('compliance-officer');
         expect(mockAuditService.logEvent).toHaveBeenCalledWith(
           expect.objectContaining({
-            action: 'retention_exception_denied'
+            action: 'retention_exception_denied',
           })
         );
       });
@@ -704,7 +676,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
           jurisdictions: [Jurisdiction.GDPR, Jurisdiction.CCPA],
           departments: ['marketing', 'sales'],
           includeExceptions: true,
-          includeArchived: false
+          includeArchived: false,
         };
 
         const result = await retentionService.performComplianceAssessment(scope, 'compliance-admin');
@@ -721,7 +693,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
         expect(result.keyIndicators).toBeInstanceOf(Array);
         expect(mockAuditService.logEvent).toHaveBeenCalledWith(
           expect.objectContaining({
-            action: 'compliance_assessment_performed'
+            action: 'compliance_assessment_performed',
           })
         );
       });
@@ -733,21 +705,16 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
           jurisdictions: [Jurisdiction.GDPR],
           departments: ['all'],
           includeExceptions: true,
-          includeArchived: true
+          includeArchived: true,
         };
 
         const period = {
           startDate: new Date('2024-01-01'),
           endDate: new Date('2024-03-31'),
-          granularity: 'month' as const
+          granularity: 'month' as const,
         };
 
-        const result = await retentionService.generateRetentionReport(
-          'compliance_audit',
-          scope,
-          period,
-          'audit-admin'
-        );
+        const result = await retentionService.generateRetentionReport('compliance_audit', scope, period, 'audit-admin');
 
         expect(result).toBeDefined();
         expect(result.reportId).toBeTruthy();
@@ -764,7 +731,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
         expect(result.distributionList).toBeInstanceOf(Array);
         expect(mockAuditService.logEvent).toHaveBeenCalledWith(
           expect.objectContaining({
-            action: 'retention_report_generated'
+            action: 'retention_report_generated',
           })
         );
       });
@@ -775,7 +742,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
         const scope = {
           policyIds: ['policy-1', 'policy-2'],
           dataCategories: [DataCategory.BEHAVIORAL],
-          ageThreshold: 365
+          ageThreshold: 365,
         };
 
         const parameters = {
@@ -784,15 +751,10 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
           delayMs: 1000,
           requireApproval: false,
           notifyAffected: true,
-          reason: 'Quarterly cleanup of old behavioral data'
+          reason: 'Quarterly cleanup of old behavioral data',
         };
 
-        const result = await retentionService.executeBulkOperation(
-          'bulk_archive',
-          scope,
-          parameters,
-          'admin'
-        );
+        const result = await retentionService.executeBulkOperation('bulk_archive', scope, parameters, 'admin');
 
         expect(result).toBeDefined();
         expect(result.operationId).toBeTruthy();
@@ -804,7 +766,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
         expect(result.initiatedBy).toBe('admin');
         expect(mockAuditService.logEvent).toHaveBeenCalledWith(
           expect.objectContaining({
-            action: 'bulk_operation_initiated'
+            action: 'bulk_operation_initiated',
           })
         );
       });
@@ -812,21 +774,16 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
       test('should handle bulk operation with dry run', async () => {
         const scope = {
           dataCategories: [DataCategory.TECHNICAL],
-          ageThreshold: 30
+          ageThreshold: 30,
         };
 
         const parameters = {
           dryRun: true,
           batchSize: 50,
-          reason: 'Test cleanup impact before execution'
+          reason: 'Test cleanup impact before execution',
         };
 
-        const result = await retentionService.executeBulkOperation(
-          'bulk_delete',
-          scope,
-          parameters,
-          'admin'
-        );
+        const result = await retentionService.executeBulkOperation('bulk_delete', scope, parameters, 'admin');
 
         expect(result.parameters.dryRun).toBe(true);
         expect(result.type).toBe('bulk_delete');
@@ -843,7 +800,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
         categories: [DataCategory.BEHAVIORAL, DataCategory.TECHNICAL],
         jurisdiction: [Jurisdiction.GDPR],
         enabled: true,
-        rules: []
+        rules: [],
       };
 
       const adminSettings = {
@@ -854,14 +811,10 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
         reviewFrequency: 'quarterly' as const,
         exemptionLimit: 10,
         auditRequired: false,
-        riskAssessment: 'low' as const
+        riskAssessment: 'low' as const,
       };
 
-      const retentionPolicy = await retentionService.createAdminRetentionPolicy(
-        policyData,
-        adminSettings,
-        'system'
-      );
+      const retentionPolicy = await retentionService.createAdminRetentionPolicy(policyData, adminSettings, 'system');
 
       // Schedule storage optimization
       const optimization = await storageService.scheduleOptimization(
@@ -870,12 +823,12 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
           targetType: 'category',
           dataCategories: [DataCategory.BEHAVIORAL, DataCategory.TECHNICAL],
           storageTypes: [StorageType.HOT, StorageType.WARM],
-          ageThreshold: 90
+          ageThreshold: 90,
         },
         {
           archivalTier: StorageTier.ARCHIVE,
           preserveAccess: true,
-          notifyUsers: false
+          notifyUsers: false,
         },
         'system'
       );
@@ -885,36 +838,42 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
       expect(optimization.optimizationId).toBeTruthy();
       expect(retentionPolicy.categories).toEqual([DataCategory.BEHAVIORAL, DataCategory.TECHNICAL]);
       expect(optimization.target.dataCategories).toEqual([DataCategory.BEHAVIORAL, DataCategory.TECHNICAL]);
-      
+
       // Verify audit trail
       expect(mockAuditService.logEvent).toHaveBeenCalledTimes(2);
     });
 
     test('should handle storage quota violations with retention enforcement', async () => {
       // Create storage quota
-      const quota = await storageService.createStorageQuota({
-        resourceType: 'user',
-        resourceId: 'user-heavy-usage',
-        category: DataCategory.PERSONAL_IDENTIFIABLE,
-        maxStorage: 50, // GB
-        currentUsage: 45,
-        warningThreshold: 80,
-        criticalThreshold: 90,
-        autoCleanup: true,
-        notificationEnabled: true
-      }, 'admin');
+      const quota = await storageService.createStorageQuota(
+        {
+          resourceType: 'user',
+          resourceId: 'user-heavy-usage',
+          category: DataCategory.PERSONAL_IDENTIFIABLE,
+          maxStorage: 50, // GB
+          currentUsage: 45,
+          warningThreshold: 80,
+          criticalThreshold: 90,
+          autoCleanup: true,
+          notificationEnabled: true,
+        },
+        'admin'
+      );
 
       // Create retention exception for critical data
-      const exception = await retentionService.createRetentionException({
-        policyId: 'policy-personal-data',
-        recordId: 'critical-user-data',
-        type: ExceptionType.BUSINESS_NEED,
-        reason: 'User has active premium subscription',
-        businessJustification: 'Premium users get extended data retention',
-        riskAssessment: 'Low risk - user consent exists',
-        conditions: ['Review when subscription expires'],
-        reviewRequired: true
-      }, 'customer-success');
+      const exception = await retentionService.createRetentionException(
+        {
+          policyId: 'policy-personal-data',
+          recordId: 'critical-user-data',
+          type: ExceptionType.BUSINESS_NEED,
+          reason: 'User has active premium subscription',
+          businessJustification: 'Premium users get extended data retention',
+          riskAssessment: 'Low risk - user consent exists',
+          conditions: ['Review when subscription expires'],
+          reviewRequired: true,
+        },
+        'customer-success'
+      );
 
       expect(quota.quotaId).toBeTruthy();
       expect(exception.exceptionId).toBeTruthy();
@@ -929,7 +888,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
         {
           startDate: new Date('2024-01-01'),
           endDate: new Date('2024-03-31'),
-          granularity: 'month'
+          granularity: 'month',
         },
         'compliance-officer'
       );
@@ -943,12 +902,12 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
           jurisdictions: [Jurisdiction.GDPR],
           departments: ['all'],
           includeExceptions: true,
-          includeArchived: true
+          includeArchived: true,
         },
         {
           startDate: new Date('2024-01-01'),
           endDate: new Date('2024-03-31'),
-          granularity: 'month'
+          granularity: 'month',
         },
         'compliance-officer'
       );
@@ -959,7 +918,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
       expect(storageReport.summary).toBeDefined();
       expect(retentionReport.summary).toBeDefined();
       expect(retentionReport.compliance.overallScore).toBeGreaterThan(0);
-      
+
       // Both reports should have recommendations
       expect(storageReport.recommendations.length).toBeGreaterThan(0);
       expect(retentionReport.recommendations.length).toBeGreaterThan(0);
@@ -983,7 +942,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
         costPerGB: 0.08,
         location: 'test',
         isActive: true,
-        tags: []
+        tags: [],
       };
 
       // Should still create but with warning health status
@@ -995,31 +954,22 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
     test('should handle invalid retention exception approval', async () => {
       // Try to approve non-existent exception
       await expect(
-        retentionService.processRetentionException(
-          'non-existent-exception',
-          'approve',
-          'admin'
-        )
+        retentionService.processRetentionException('non-existent-exception', 'approve', 'admin')
       ).rejects.toThrow('Exception not found');
     });
 
     test('should handle bulk operation with no matching records', async () => {
       const scope = {
         dataCategories: [DataCategory.HEALTH], // Assume no health data exists
-        ageThreshold: 1000
+        ageThreshold: 1000,
       };
 
       const parameters = {
         dryRun: true,
-        batchSize: 100
+        batchSize: 100,
       };
 
-      const result = await retentionService.executeBulkOperation(
-        'bulk_delete',
-        scope,
-        parameters,
-        'admin'
-      );
+      const result = await retentionService.executeBulkOperation('bulk_delete', scope, parameters, 'admin');
 
       expect(result).toBeDefined();
       expect(result.status).toBe('queued');

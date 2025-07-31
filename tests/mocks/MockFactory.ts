@@ -1,9 +1,9 @@
 /**
  * Mock Factory - Central Mock Creation and Management System
- * 
+ *
  * Provides a unified factory pattern for creating and managing all types of mocks
  * including API mocks, database mocks, service mocks, and component mocks.
- * 
+ *
  * Task: E18-1753114562158-DAD671
  */
 
@@ -39,15 +39,7 @@ export interface MockBehavior {
   statusCode?: number;
 }
 
-export type MockType = 
-  | 'api' 
-  | 'database' 
-  | 'service' 
-  | 'component' 
-  | 'filesystem' 
-  | 'network' 
-  | 'auth' 
-  | 'analytics';
+export type MockType = 'api' | 'database' | 'service' | 'component' | 'filesystem' | 'network' | 'auth' | 'analytics';
 
 export class MockFactory extends EventEmitter {
   private mocks: Map<string, MockInstance> = new Map();
@@ -63,11 +55,11 @@ export class MockFactory extends EventEmitter {
       enableLogging: false,
       persistence: false,
       environment: 'test',
-      ..._config
+      ..._config,
     };
-    
+
     this.rng = seedrandom(this.globalConfig.seed?.toString() || '12345');
-    
+
     if (this.globalConfig.enableLogging) {
       console.log('🏭 Mock Factory initialized with config:', this.globalConfig);
     }
@@ -79,7 +71,7 @@ export class MockFactory extends EventEmitter {
   createMock<T>(type: MockType, id: string, config: Partial<MockConfig> = {}): T {
     const mockConfig: MockConfig = {
       ...this.globalConfig,
-      ...config
+      ...config,
     };
 
     const mockInstance: MockInstance = {
@@ -88,21 +80,21 @@ export class MockFactory extends EventEmitter {
       config: mockConfig,
       active: true,
       createdAt: new Date(),
-      callCount: 0
+      callCount: 0,
     };
 
     // Create specific mock based on type
     const mock = this.createSpecificMock<T>(type, id, mockConfig);
-    
+
     // Store mock instance
     this.mocks.set(id, mockInstance);
-    
+
     if (mockConfig.enableLogging) {
       console.log(`🎭 Created ${type} mock: ${id}`);
     }
 
     this.emit('mockCreated', { type, id, config: mockConfig });
-    
+
     return mock;
   }
 
@@ -128,13 +120,13 @@ export class MockFactory extends EventEmitter {
       instance.active = false;
       this.mocks.delete(id);
       this.behaviors.delete(id);
-      
+
       this.emit('mockRemoved', { id, type: instance.type });
-      
+
       if (instance.config.enableLogging) {
         console.log(`🗑️ Removed mock: ${id}`);
       }
-      
+
       return true;
     }
     return false;
@@ -147,9 +139,9 @@ export class MockFactory extends EventEmitter {
     if (!this.behaviors.has(mockId)) {
       this.behaviors.set(mockId, []);
     }
-    
+
     this.behaviors.get(mockId)!.push(behavior);
-    
+
     if (this.globalConfig.enableLogging) {
       console.log(`🎯 Added behavior "${behavior.name}" to mock: ${mockId}`);
     }
@@ -168,14 +160,14 @@ export class MockFactory extends EventEmitter {
   async executeBehavior(mockId: string, request: unknown): Promise<unknown> {
     const behaviors = this.getBehaviors(mockId);
     const instance = this.mocks.get(mockId);
-    
+
     if (!instance) {
       throw new Error(`Mock ${mockId} not found`);
     }
 
     // Find matching behavior
     const behavior = behaviors.find(b => !b.condition || b.condition(request));
-    
+
     if (!behavior) {
       throw new Error(`No matching behavior found for mock ${mockId}`);
     }
@@ -206,7 +198,7 @@ export class MockFactory extends EventEmitter {
     if (behavior.statusCode) {
       response = {
         ...response,
-        statusCode: behavior.statusCode
+        statusCode: behavior.statusCode,
       };
     }
 
@@ -231,7 +223,7 @@ export class MockFactory extends EventEmitter {
     mocksByType: Record<string, number>;
     totalCalls: number;
     averageCallsPerMock: number;
-    } {
+  } {
     const activeMocks = this.listMocks();
     const mocksByType: Record<string, number> = {};
     let totalCalls = 0;
@@ -246,7 +238,7 @@ export class MockFactory extends EventEmitter {
       activeMocks: activeMocks.length,
       mocksByType,
       totalCalls,
-      averageCallsPerMock: activeMocks.length > 0 ? totalCalls / activeMocks.length : 0
+      averageCallsPerMock: activeMocks.length > 0 ? totalCalls / activeMocks.length : 0,
     };
   }
 
@@ -258,9 +250,9 @@ export class MockFactory extends EventEmitter {
       instance.callCount = 0;
       instance.lastUsed = undefined;
     }
-    
+
     this.emit('allMocksReset');
-    
+
     if (this.globalConfig.enableLogging) {
       console.log('🔄 All mocks reset to initial state');
     }
@@ -272,9 +264,9 @@ export class MockFactory extends EventEmitter {
   cleanup(): void {
     const mockIds = Array.from(this.mocks.keys());
     mockIds.forEach(id => this.removeMock(id));
-    
+
     this.removeAllListeners();
-    
+
     if (this.globalConfig.enableLogging) {
       console.log('🧹 Mock factory cleanup completed');
     }
@@ -285,24 +277,24 @@ export class MockFactory extends EventEmitter {
    */
   private createSpecificMock<T>(type: MockType, id: string, _config: MockConfig): T {
     switch (type) {
-    case 'api':
-      return this.createAPIMock(id, _config) as T;
-    case 'database':
-      return this.createDatabaseMock(id, _config) as T;
-    case 'service':
-      return this.createServiceMock(id, _config) as T;
-    case 'component':
-      return this.createComponentMock(id, _config) as T;
-    case 'filesystem':
-      return this.createFilesystemMock(id, _config) as T;
-    case 'network':
-      return this.createNetworkMock(id, _config) as T;
-    case 'auth':
-      return this.createAuthMock(id, _config) as T;
-    case 'analytics':
-      return this.createAnalyticsMock(id, _config) as T;
-    default:
-      throw new Error(`Unknown mock type: ${type}`);
+      case 'api':
+        return this.createAPIMock(id, _config) as T;
+      case 'database':
+        return this.createDatabaseMock(id, _config) as T;
+      case 'service':
+        return this.createServiceMock(id, _config) as T;
+      case 'component':
+        return this.createComponentMock(id, _config) as T;
+      case 'filesystem':
+        return this.createFilesystemMock(id, _config) as T;
+      case 'network':
+        return this.createNetworkMock(id, _config) as T;
+      case 'auth':
+        return this.createAuthMock(id, _config) as T;
+      case 'analytics':
+        return this.createAnalyticsMock(id, _config) as T;
+      default:
+        throw new Error(`Unknown mock type: ${type}`);
     }
   }
 
@@ -314,13 +306,13 @@ export class MockFactory extends EventEmitter {
       post: async (path: string, data?: unknown) => this.executeBehavior(id, { method: 'POST', path, data }),
       put: async (path: string, data?: unknown) => this.executeBehavior(id, { method: 'PUT', path, data }),
       delete: async (path: string) => this.executeBehavior(id, { method: 'DELETE', path }),
-      patch: async (path: string, data?: unknown) => this.executeBehavior(id, { method: 'PATCH', path, data })
+      patch: async (path: string, data?: unknown) => this.executeBehavior(id, { method: 'PATCH', path, data }),
     };
   }
 
   private createDatabaseMock(id: string, _config: MockConfig): unknown {
     const mockData = new Map();
-    
+
     return {
       id,
       type: 'database',
@@ -335,10 +327,10 @@ export class MockFactory extends EventEmitter {
         }
         return this.executeBehavior(id, { type: 'insert', table, data });
       },
-      update: async (table: string, conditions: unknown, data: unknown) => 
+      update: async (table: string, conditions: unknown, data: unknown) =>
         this.executeBehavior(id, { type: 'update', table, conditions, data }),
-      delete: async (table: string, conditions: unknown) => 
-        this.executeBehavior(id, { type: 'delete', table, conditions })
+      delete: async (table: string, conditions: unknown) =>
+        this.executeBehavior(id, { type: 'delete', table, conditions }),
     };
   }
 
@@ -348,28 +340,30 @@ export class MockFactory extends EventEmitter {
       type: 'service',
       call: async (method: string, args?: unknown[]) => this.executeBehavior(id, { method, args }),
       isAvailable: () => true,
-      getStatus: () => ({ status: 'active', uptime: Date.now() - this.mocks.get(id)!.createdAt.getTime() })
+      getStatus: () => ({ status: 'active', uptime: Date.now() - this.mocks.get(id)!.createdAt.getTime() }),
     };
   }
 
   private createComponentMock(id: string, _config: MockConfig): unknown {
     const mockProps: unknown = {};
     const mockMethods: unknown = {};
-    
+
     return {
       id,
       type: 'component',
       props: mockProps,
       methods: mockMethods,
       trigger: async (event: string, data?: unknown) => this.executeBehavior(id, { event, data }),
-      setState: (state: unknown) => { mockProps.state = { ...mockProps.state, ...state }; },
-      getState: () => mockProps.state || {}
+      setState: (state: unknown) => {
+        mockProps.state = { ...mockProps.state, ...state };
+      },
+      getState: () => mockProps.state || {},
     };
   }
 
   private createFilesystemMock(id: string, _config: MockConfig): unknown {
     const mockFiles = new Map();
-    
+
     return {
       id,
       type: 'filesystem',
@@ -399,7 +393,7 @@ export class MockFactory extends EventEmitter {
           return { success: true, existed };
         }
         return this.executeBehavior(id, { operation: 'delete', path });
-      }
+      },
     };
   }
 
@@ -407,19 +401,18 @@ export class MockFactory extends EventEmitter {
     return {
       id,
       type: 'network',
-      fetch: async (url: string, options?: RequestInit) => 
-        this.executeBehavior(id, { type: 'fetch', url, options }),
+      fetch: async (url: string, options?: RequestInit) => this.executeBehavior(id, { type: 'fetch', url, options }),
       websocket: {
         connect: async (url: string) => this.executeBehavior(id, { type: 'websocket_connect', url }),
         send: async (data: unknown) => this.executeBehavior(id, { type: 'websocket_send', data }),
-        close: async () => this.executeBehavior(id, { type: 'websocket_close' })
-      }
+        close: async () => this.executeBehavior(id, { type: 'websocket_close' }),
+      },
     };
   }
 
   private createAuthMock(id: string, _config: MockConfig): unknown {
     const sessions = new Map();
-    
+
     return {
       id,
       type: 'auth',
@@ -447,13 +440,13 @@ export class MockFactory extends EventEmitter {
         }
         return this.executeBehavior(id, { type: 'validateToken', token });
       },
-      refreshToken: async (refreshToken: string) => this.executeBehavior(id, { type: 'refreshToken', refreshToken })
+      refreshToken: async (refreshToken: string) => this.executeBehavior(id, { type: 'refreshToken', refreshToken }),
     };
   }
 
   private createAnalyticsMock(id: string, _config: MockConfig): unknown {
     const events: unknown[] = [];
-    
+
     return {
       id,
       type: 'analytics',
@@ -464,11 +457,10 @@ export class MockFactory extends EventEmitter {
         }
         return this.executeBehavior(id, { type: 'track', event, properties });
       },
-      identify: async (userId: string, traits?: unknown) => 
+      identify: async (userId: string, traits?: unknown) =>
         this.executeBehavior(id, { type: 'identify', userId, traits }),
-      page: async (name: string, properties?: unknown) => 
-        this.executeBehavior(id, { type: 'page', name, properties }),
-      getEvents: () => config.deterministic ? events : []
+      page: async (name: string, properties?: unknown) => this.executeBehavior(id, { type: 'page', name, properties }),
+      getEvents: () => (config.deterministic ? events : []),
     };
   }
 
@@ -485,22 +477,22 @@ export class MockFactory extends EventEmitter {
         seed: 12345,
         deterministic: true,
         enableLogging: false,
-        environment: 'test'
+        environment: 'test',
       }),
-      
+
       development: new MockFactory({
         seed: Date.now(),
         deterministic: false,
         enableLogging: true,
-        environment: 'development'
+        environment: 'development',
       }),
-      
+
       performance: new MockFactory({
         seed: 12345,
         deterministic: true,
         enableLogging: false,
-        environment: 'test'
-      })
+        environment: 'test',
+      }),
     };
   }
 }

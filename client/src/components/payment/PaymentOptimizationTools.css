@@ -838,47 +838,47 @@
     padding: 16px;
     gap: 16px;
   }
-  
+
   .panel-header {
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   .recommendations-summary {
     justify-content: space-between;
   }
-  
+
   .recommendation-header {
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
   }
-  
+
   .improvements-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .action-item {
     grid-template-columns: 1fr;
     gap: 4px;
     text-align: left;
   }
-  
+
   .recommendation-actions {
     justify-content: stretch;
   }
-  
+
   .action-button {
     flex: 1;
     text-align: center;
   }
-  
+
   .providers-grid,
   .thresholds-grid,
   .trends-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .modal-content {
     width: 95%;
     margin: 20px;
@@ -892,7 +892,7 @@
     border-color: var(--dark-border, #374151);
     color: var(--dark-text, #f9fafb);
   }
-  
+
   .recommendation-card,
   .provider-card,
   .rule-card,
@@ -900,11 +900,11 @@
     background: var(--dark-surface-light, #374151);
     border-color: var(--dark-border, #4b5563);
   }
-  
+
   .threshold-item {
     background: var(--dark-surface-light, #374151);
   }
-  
+
   .modal-content {
     background: var(--dark-surface, #1f2937);
     color: var(--dark-text, #f9fafb);

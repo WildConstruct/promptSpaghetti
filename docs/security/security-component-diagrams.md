@@ -3,7 +3,7 @@
 **Document Version**: 1.0  
 **Last Updated**: 2025-07-22  
 **Epic**: 19 - Security & Compliance Framework  
-**Classification**: CONFIDENTIAL  
+**Classification**: CONFIDENTIAL
 
 ---
 
@@ -23,38 +23,38 @@ graph TB
     User[👤 Users]
     OAuth[🔐 OAuth Providers<br/>Google, GitHub, Microsoft]
     ThirdParty[🌐 Third-Party APIs<br/>Location, Email, etc.]
-    
+
     %% Security Perimeter
     subgraph "Security Perimeter"
         %% Load Balancer & Edge Security
         LB[🛡️ Load Balancer<br/>TLS Termination<br/>DDoS Protection]
-        
+
         %% API Gateway with Security
         subgraph "API Gateway Security Layer"
             Gateway[🚪 API Gateway<br/>Rate Limiting<br/>Authentication<br/>Authorization]
             WAF[🔥 Web Application Firewall<br/>SQL Injection Prevention<br/>XSS Protection]
         end
-        
+
         %% Application Layer Security
         subgraph "Application Security Layer"
             %% Client Application
             Client[💻 React Client<br/>Port 3000<br/>CSP Headers<br/>Secure Cookies]
-            
+
             %% Main API Server
             APIServer[⚙️ Fastify API Server<br/>Port 8000<br/>JWT Validation<br/>RBAC Authorization]
-            
+
             %% Microservices
             PythonExec[🐍 Python Executor<br/>Port 8001<br/>Sandboxed Execution]
             WSServer[📡 WebSocket Server<br/>Real-time Collaboration<br/>Session Management]
         end
-        
+
         %% Security Services
         subgraph "Security Services Layer"
             AuthService[🔑 Authentication Service<br/>JWT Management<br/>MFA Support]
             AuditService[📋 Audit Service<br/>Security Event Logging<br/>Compliance Tracking]
             SecurityMonitor[👁️ Security Monitor<br/>Anomaly Detection<br/>Threat Analysis]
         end
-        
+
         %% Data Layer Security
         subgraph "Data Layer Security"
             PostgreSQL[(🗃️ PostgreSQL<br/>TLS Encryption<br/>Row-level Security)]
@@ -62,45 +62,45 @@ graph TB
             FileStorage[📁 Secure File Storage<br/>Virus Scanning<br/>Access Controls]
         end
     end
-    
+
     %% External Security Services
     subgraph "External Security Services"
         VirusScanner[🦠 Virus Scanner<br/>File Upload Security]
         GeoLocation[🌍 Geolocation Services<br/>IP-based Location<br/>Anomaly Detection]
     end
-    
+
     %% Connections
     User -->|HTTPS/WSS| LB
     LB --> Gateway
     Gateway --> WAF
     WAF --> Client
     WAF --> APIServer
-    
+
     Client -->|Authenticated Requests| APIServer
     APIServer --> AuthService
     APIServer --> AuditService
     APIServer --> SecurityMonitor
-    
+
     APIServer -->|Secure Connection| PostgreSQL
     APIServer -->|Encrypted Channel| Redis
     APIServer -->|Secure Upload| FileStorage
-    
+
     APIServer -->|JWT Authentication| PythonExec
     APIServer -->|Session Validation| WSServer
-    
+
     OAuth -->|OAuth Callback| Gateway
     ThirdParty -->|Webhook/API| Gateway
-    
+
     FileStorage --> VirusScanner
     SecurityMonitor --> GeoLocation
-    
+
     %% Styling
     classDef userClass fill:#e1f5fe,stroke:#01579b,stroke-width:2px
     classDef securityClass fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
     classDef appClass fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
     classDef dataClass fill:#fff3e0,stroke:#e65100,stroke-width:2px
     classDef externalClass fill:#fce4ec,stroke:#880e4f,stroke-width:2px
-    
+
     class User,OAuth,ThirdParty userClass
     class LB,Gateway,WAF,AuthService,AuditService,SecurityMonitor securityClass
     class Client,APIServer,PythonExec,WSServer appClass
@@ -161,14 +161,14 @@ sequenceDiagram
     participant Gateway as 🚪 API Gateway
     participant AuthService as 🔑 Auth Service
     participant DB as 🗃️ Database
-    
+
     User->>Client: Login Request (email/password)
     Client->>Gateway: POST /auth/login
     Gateway->>AuthService: Validate Credentials
     AuthService->>DB: Verify User & Password Hash
     DB-->>AuthService: User Record + Hash
     AuthService->>AuthService: Validate Password (bcrypt)
-    
+
     alt Valid Credentials
         AuthService->>AuthService: Generate JWT (RS256)
         AuthService->>AuthService: Generate Refresh Token
@@ -178,7 +178,7 @@ sequenceDiagram
         Client->>Client: Store JWT in Memory
         Client->>Client: Store Refresh Token (HttpOnly Cookie)
         Client-->>User: Login Success
-        
+
         Note over Client,Gateway: Subsequent API Requests
         Client->>Gateway: API Request + JWT Bearer Token
         Gateway->>Gateway: Validate JWT Signature & Claims
@@ -203,7 +203,7 @@ sequenceDiagram
     participant AuthService as 🔑 Auth Service
     participant OAuth as 🔐 OAuth Provider
     participant DB as 🗃️ Database
-    
+
     User->>Client: Click "Login with Google"
     Client->>Client: Generate PKCE code_verifier
     Client->>Client: Generate code_challenge (SHA256)
@@ -213,22 +213,22 @@ sequenceDiagram
     AuthService->>DB: Store state + code_verifier (10min TTL)
     AuthService-->>Gateway: Authorization URL + state
     Gateway-->>Client: Redirect to OAuth Provider
-    
+
     Client-->>OAuth: Redirect User to Authorization
     User->>OAuth: Grant Authorization
     OAuth-->>Client: Redirect with code + state
-    
+
     Client->>Gateway: GET /auth/oauth/callback?code=xxx&state=yyy
     Gateway->>AuthService: Process OAuth Callback
     AuthService->>DB: Validate state parameter
     DB-->>AuthService: code_verifier + user context
-    
+
     AuthService->>OAuth: POST /token (code + code_verifier)
     OAuth-->>AuthService: Access Token + Refresh Token
-    
+
     AuthService->>OAuth: GET /userinfo (Access Token)
     OAuth-->>AuthService: User Profile Data
-    
+
     AuthService->>DB: Create/Update User Record
     AuthService->>AuthService: Generate Internal JWT
     AuthService->>DB: Store Encrypted Refresh Token
@@ -247,17 +247,17 @@ sequenceDiagram
     participant AuthService as 🔑 Auth Service
     participant MFAService as 🔒 MFA Service
     participant DB as 🗃️ Database
-    
+
     User->>Client: Login (email/password)
     Client->>Gateway: POST /auth/login
     Gateway->>AuthService: Validate Credentials
     AuthService->>DB: Check User + MFA Status
     DB-->>AuthService: User Valid + MFA Enabled
-    
+
     AuthService-->>Gateway: MFA Challenge Required
     Gateway-->>Client: 202 MFA Required
     Client-->>User: Show MFA Input
-    
+
     alt TOTP Authenticator
         User->>Client: Enter TOTP Code
         Client->>Gateway: POST /auth/mfa/totp
@@ -273,13 +273,13 @@ sequenceDiagram
         MFAService->>MFAService: Generate 6-digit Code
         MFAService->>DB: Store Code (5min TTL)
         MFAService->>MFAService: Send SMS (Rate Limited)
-        
+
         User->>Client: Enter SMS Code
         Client->>Gateway: POST /auth/mfa/sms/verify
         Gateway->>MFAService: Verify SMS Code
         MFAService->>DB: Validate Code + Expiry
     end
-    
+
     alt MFA Valid
         MFAService-->>Gateway: MFA Success
         Gateway->>AuthService: Complete Authentication
@@ -313,61 +313,61 @@ graph TB
         EmailAPI[📧 Email Service<br/>Template Security]
         WebhookAPI[🪝 Webhook Providers<br/>Signature Validation]
     end
-    
+
     %% API Gateway Security Layer
     subgraph "API Gateway Security"
         RateLimit[⏱️ Rate Limiter<br/>Per-Service Limits]
         Validator[✅ Request Validator<br/>Schema Validation]
         SignatureVerify[✍️ Signature Verifier<br/>HMAC Validation]
     end
-    
+
     %% Integration Security Services
     subgraph "Integration Security Services"
         OAuthManager[🔑 OAuth Manager<br/>PKCE + State Validation<br/>Token Encryption]
         APIClient[🌐 Secure API Client<br/>TLS 1.2+ Only<br/>Certificate Validation]
         WebhookHandler[🪝 Webhook Handler<br/>IP Whitelisting<br/>Timestamp Validation]
     end
-    
+
     %% Security Storage
     subgraph "Security Storage"
         TokenStore[(🔐 Encrypted Token Store<br/>Redis + AES-256-GCM)]
         StateStore[(⏳ OAuth State Store<br/>10-min TTL)]
         WebhookSecrets[(🗝️ Webhook Secrets<br/>Encrypted Storage)]
     end
-    
+
     %% Main Application
     MainApp[⚙️ PromptScape API<br/>JWT-Authenticated Requests]
-    
+
     %% Connections with Security Labels
     Google -->|OAuth 2.0 + PKCE| RateLimit
     GitHub -->|OAuth 2.0 + PKCE| RateLimit
     Microsoft -->|OAuth 2.0 + PKCE| RateLimit
-    
+
     LocationAPI -->|API Key + TLS| RateLimit
     EmailAPI -->|API Key + TLS| RateLimit
     WebhookAPI -->|HMAC-SHA256| RateLimit
-    
+
     RateLimit --> Validator
     Validator --> SignatureVerify
     SignatureVerify --> OAuthManager
     SignatureVerify --> APIClient
     SignatureVerify --> WebhookHandler
-    
+
     OAuthManager <--> TokenStore
     OAuthManager <--> StateStore
     WebhookHandler <--> WebhookSecrets
-    
+
     OAuthManager --> MainApp
     APIClient --> MainApp
     WebhookHandler --> MainApp
-    
+
     %% Styling
     classDef externalClass fill:#ffebee,stroke:#c62828,stroke-width:2px
     classDef securityClass fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
     classDef serviceClass fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
     classDef storageClass fill:#fff3e0,stroke:#f57c00,stroke-width:2px
     classDef appClass fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
-    
+
     class Google,GitHub,Microsoft,LocationAPI,EmailAPI,WebhookAPI externalClass
     class RateLimit,Validator,SignatureVerify securityClass
     class OAuthManager,APIClient,WebhookHandler serviceClass
@@ -447,7 +447,7 @@ graph TB
         App[⚙️ PromptScape API<br/>Connection Pooling<br/>Query Parameterization]
         ORM[🗂️ Database ORM<br/>SQL Injection Prevention<br/>Schema Validation]
     end
-    
+
     %% Database Security Layer
     subgraph "Database Security Layer"
         %% Connection Security
@@ -456,20 +456,20 @@ graph TB
             Auth[🔑 SCRAM-SHA-256<br/>Strong Password Policy<br/>90-day Rotation]
             Pool[🏊 Connection Pool<br/>Max 20 Connections<br/>Idle Timeout: 10min]
         end
-        
+
         %% Access Control
         subgraph "Access Control"
             RBAC[👥 Role-Based Access<br/>Principle of Least Privilege<br/>Service Account Separation]
             RLS[🛡️ Row-Level Security<br/>User Data Isolation<br/>Tenant Separation]
         end
-        
+
         %% Query Security
         subgraph "Query Security"
             Prepared[📝 Prepared Statements<br/>Parameter Binding<br/>No Dynamic SQL]
             QueryLog[📋 Query Auditing<br/>Slow Query Detection<br/>Suspicious Pattern Alert]
         end
     end
-    
+
     %% Database Storage
     subgraph "PostgreSQL Database"
         %% Data Encryption
@@ -477,21 +477,21 @@ graph TB
             Encryption[🔐 Data at Rest<br/>AES-256 Encryption<br/>Transparent Data Encryption]
             Backup[💾 Encrypted Backups<br/>Point-in-Time Recovery<br/>Cross-Region Replication]
         end
-        
+
         %% Monitoring
         subgraph "Monitoring & Auditing"
             Monitor[👁️ Real-time Monitoring<br/>Connection Tracking<br/>Performance Metrics]
             Audit[📊 Audit Logging<br/>DDL/DML Tracking<br/>Failed Login Attempts]
         end
     end
-    
+
     %% Redis Security
     subgraph "Redis Security"
         RedisAuth[🔑 Redis AUTH<br/>Strong Password<br/>ACL Configuration]
         RedisEncrypt[🔒 Data Encryption<br/>Sensitive Data Only<br/>Key-Value Encryption]
         RedisNetwork[🌐 Network Security<br/>Bind Restrictions<br/>TLS in Production]
     end
-    
+
     %% Connections
     App --> TLS
     App --> ORM
@@ -501,21 +501,21 @@ graph TB
     Pool --> RBAC
     RBAC --> RLS
     RLS --> Encryption
-    
+
     Prepared --> QueryLog
     QueryLog --> Monitor
     Monitor --> Audit
-    
+
     App --> RedisAuth
     RedisAuth --> RedisEncrypt
     RedisEncrypt --> RedisNetwork
-    
+
     %% Styling
     classDef appClass fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
     classDef securityClass fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
     classDef dbClass fill:#fff3e0,stroke:#f57c00,stroke-width:2px
     classDef redisClass fill:#ffebee,stroke:#c62828,stroke-width:2px
-    
+
     class App,ORM appClass
     class TLS,Auth,Pool,RBAC,RLS,Prepared,QueryLog securityClass
     class Encryption,Backup,Monitor,Audit dbClass
@@ -626,58 +626,58 @@ graph TB
             S1[🎭 User Identity Spoofing<br/>• JWT Token Theft<br/>• Session Hijacking<br/>• OAuth State Attack]
             S2[🏢 Service Impersonation<br/>• API Key Compromise<br/>• Certificate Spoofing<br/>• DNS Poisoning]
         end
-        
+
         %% Tampering
         subgraph "Tampering Threats"
             T1[📝 Data Tampering<br/>• SQL Injection<br/>• NoSQL Injection<br/>• Parameter Pollution]
             T2[🔧 Request Tampering<br/>• Header Manipulation<br/>• Payload Modification<br/>• Replay Attacks]
         end
-        
+
         %% Repudiation
         subgraph "Repudiation Threats"
             R1[🚫 Action Denial<br/>• Audit Log Tampering<br/>• Non-repudiation Bypass<br/>• Log Injection]
         end
-        
+
         %% Information Disclosure
         subgraph "Information Disclosure"
             I1[📊 Data Leakage<br/>• Error Message Info<br/>• Debug Info Exposure<br/>• Side-Channel Attacks]
             I2[🔍 Reconnaissance<br/>• API Enumeration<br/>• Timing Attacks<br/>• Metadata Leakage]
         end
-        
+
         %% Denial of Service
         subgraph "Denial of Service"
             D1[💥 Resource Exhaustion<br/>• Rate Limit Bypass<br/>• Memory/CPU DoS<br/>• Database Connection Pool]
             D2[🌊 Distributed DoS<br/>• Application Layer DDoS<br/>• Slowloris Attacks<br/>• XML Bomb]
         end
-        
+
         %% Elevation of Privilege
         subgraph "Elevation of Privilege"
             E1[⬆️ Privilege Escalation<br/>• Horizontal Escalation<br/>• Vertical Escalation<br/>• RBAC Bypass]
             E2[🔓 Authorization Bypass<br/>• JWT Claims Manipulation<br/>• Path Traversal<br/>• IDOR Attacks]
         end
     end
-    
+
     %% Security Controls (Mitigations)
     subgraph "Security Controls"
         %% Authentication Controls
         Auth[🔐 Strong Authentication<br/>• MFA Required<br/>• JWT RS256<br/>• OAuth PKCE]
-        
+
         %% Input Validation
         Validation[✅ Input Validation<br/>• Zod Schema Validation<br/>• Parameterized Queries<br/>• Sanitization]
-        
+
         %% Audit & Monitoring
         Monitoring[👁️ Comprehensive Monitoring<br/>• Security Event Logging<br/>• Anomaly Detection<br/>• Real-time Alerts]
-        
+
         %% Access Control
         AccessControl[🛡️ Access Control<br/>• RBAC Implementation<br/>• Resource Authorization<br/>• Principle of Least Privilege]
-        
+
         %% Rate Limiting
         RateLimit[⏱️ Rate Limiting<br/>• Request Throttling<br/>• Resource Limits<br/>• Circuit Breakers]
-        
+
         %% Encryption
         Encryption[🔒 End-to-End Encryption<br/>• Data in Transit (TLS)<br/>• Data at Rest (AES-256)<br/>• Key Management]
     end
-    
+
     %% Threat to Control Mapping
     S1 --> Auth
     S2 --> Auth
@@ -690,11 +690,11 @@ graph TB
     D2 --> RateLimit
     E1 --> AccessControl
     E2 --> AccessControl
-    
+
     %% Styling
     classDef threatClass fill:#ffebee,stroke:#c62828,stroke-width:2px
     classDef controlClass fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
-    
+
     class S1,S2,T1,T2,R1,I1,I2,D1,D2,E1,E2 threatClass
     class Auth,Validation,Monitoring,AccessControl,RateLimit,Encryption controlClass
 ```
@@ -813,13 +813,13 @@ graph TB
         SystemLogs[💻 System Logs<br/>Resource Usage<br/>Error Events]
         SecurityEvents[🚨 Security Events<br/>Anomaly Detection<br/>Threat Indicators]
     end
-    
+
     %% Log Aggregation
     subgraph "Log Aggregation Layer"
         LogCollector[📥 Log Collector<br/>Fluentd/Filebeat<br/>Real-time Streaming]
         LogBuffer[📊 Message Queue<br/>Redis/RabbitMQ<br/>Buffer & Route]
     end
-    
+
     %% Security Analytics
     subgraph "Security Analytics Engine"
         SIEM[🧠 SIEM System<br/>Security Information<br/>Event Management]
@@ -827,7 +827,7 @@ graph TB
         ThreatIntel[🎯 Threat Intelligence<br/>IOC Matching<br/>Risk Scoring]
         CorrelationEngine[🔗 Event Correlation<br/>Attack Pattern Detection<br/>Timeline Analysis]
     end
-    
+
     %% Alerting & Response
     subgraph "Alerting & Response"
         AlertManager[📢 Alert Manager<br/>Priority Classification<br/>De-duplication]
@@ -835,14 +835,14 @@ graph TB
         AutoResponse[🤖 Automated Response<br/>IP Blocking<br/>Account Lockout]
         Dashboard[📊 Security Dashboard<br/>Real-time Metrics<br/>Investigation Tools]
     end
-    
+
     %% Security Storage
     subgraph "Security Data Storage"
         LongTerm[(🗄️ Long-term Storage<br/>Elasticsearch<br/>30-day Retention)]
         Compliance[(📋 Compliance Storage<br/>Encrypted Archive<br/>7-year Retention)]
         ThreatDB[(🦠 Threat Database<br/>IOCs, Attack Patterns<br/>Threat Intelligence)]
     end
-    
+
     %% Connections
     WebLogs --> LogCollector
     APILogs --> LogCollector
@@ -850,31 +850,31 @@ graph TB
     AuthLogs --> LogCollector
     SystemLogs --> LogCollector
     SecurityEvents --> LogCollector
-    
+
     LogCollector --> LogBuffer
     LogBuffer --> SIEM
     LogBuffer --> AnomalyDetection
-    
+
     SIEM --> CorrelationEngine
     AnomalyDetection --> CorrelationEngine
     ThreatIntel --> CorrelationEngine
-    
+
     CorrelationEngine --> AlertManager
     AlertManager --> Notification
     AlertManager --> AutoResponse
     AlertManager --> Dashboard
-    
+
     SIEM --> LongTerm
     LongTerm --> Compliance
     ThreatIntel --> ThreatDB
-    
+
     %% Styling
     classDef sourceClass fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
     classDef aggregationClass fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
     classDef analyticsClass fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
     classDef responseClass fill:#fff3e0,stroke:#f57c00,stroke-width:2px
     classDef storageClass fill:#ffebee,stroke:#c62828,stroke-width:2px
-    
+
     class WebLogs,APILogs,DBLogs,AuthLogs,SystemLogs,SecurityEvents sourceClass
     class LogCollector,LogBuffer aggregationClass
     class SIEM,AnomalyDetection,ThreatIntel,CorrelationEngine analyticsClass
@@ -979,57 +979,57 @@ QUICK ACTIONS:
 flowchart TD
     %% Incident Detection
     Detection[🚨 Incident Detection<br/>• Automated Alerts<br/>• User Reports<br/>• Monitoring Systems]
-    
+
     %% Initial Response
     Initial{🔍 Initial Assessment<br/>Severity Classification}
-    
+
     %% Severity Branches
     P0[🔴 P0 - Critical<br/>• Complete service outage<br/>• Data breach confirmed<br/>• Active attack in progress]
     P1[🟠 P1 - High<br/>• Major feature impacted<br/>• Suspected data exposure<br/>• Authentication bypass]
     P2[🟡 P2 - Medium<br/>• Minor feature affected<br/>• Security violation detected<br/>• Performance degradation]
     P3[🟢 P3 - Low<br/>• Monitoring alerts<br/>• Policy violations<br/>• Informational events]
-    
+
     %% Immediate Actions
     Escalate[📞 Immediate Escalation<br/>• CTO notification<br/>• Security team activation<br/>• Emergency procedures]
     Contain[🛡️ Containment<br/>• Isolate affected systems<br/>• Block malicious IPs<br/>• Disable compromised accounts]
-    
+
     %% Investigation
     Investigate[🔍 Investigation<br/>• Log analysis<br/>• Forensic data collection<br/>• Impact assessment<br/>• Root cause analysis]
-    
+
     %% Response Actions
     Respond[🚑 Response Actions<br/>• Patch vulnerabilities<br/>• Strengthen controls<br/>• User notifications<br/>• System recovery]
-    
+
     %% Recovery
     Recover[🔄 Recovery<br/>• System restoration<br/>• Service validation<br/>• Monitoring enhancement<br/>• Normal operations]
-    
+
     %% Post-Incident
     PostIncident[📋 Post-Incident<br/>• Lessons learned<br/>• Process improvements<br/>• Documentation update<br/>• Prevention measures]
-    
+
     %% Flow
     Detection --> Initial
     Initial --> P0
     Initial --> P1
     Initial --> P2
     Initial --> P3
-    
+
     P0 --> Escalate
     P1 --> Escalate
     P2 --> Contain
     P3 --> Investigate
-    
+
     Escalate --> Contain
     Contain --> Investigate
     Investigate --> Respond
     Respond --> Recover
     Recover --> PostIncident
-    
+
     %% Styling
     classDef criticalClass fill:#ffebee,stroke:#c62828,stroke-width:3px
     classDef highClass fill:#fff3e0,stroke:#f57c00,stroke-width:2px
     classDef mediumClass fill:#f9fbe7,stroke:#689f38,stroke-width:2px
     classDef lowClass fill:#e8f5e8,stroke:#2e7d32,stroke-width:1px
     classDef processClass fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
-    
+
     class P0 criticalClass
     class P1,Escalate,Contain highClass
     class P2,Investigate,Respond mediumClass
@@ -1157,60 +1157,60 @@ graph TB
     subgraph "Data Subject Rights"
         DSR[👤 Data Subject Requests<br/>Right to Access<br/>Right to Rectification<br/>Right to Erasure<br/>Right to Portability]
     end
-    
+
     %% Privacy Portal
     subgraph "Privacy Management"
         PrivacyPortal[🔐 Privacy Portal<br/>User Dashboard<br/>Consent Management<br/>Request Submission]
         ConsentManager[✅ Consent Manager<br/>Granular Permissions<br/>Consent Tracking<br/>Withdrawal Process]
     end
-    
+
     %% Data Processing
     subgraph "Data Processing Engine"
         DataMapper[🗺️ Data Mapper<br/>Personal Data Discovery<br/>Data Classification<br/>Processing Inventory]
         RetentionEngine[⏰ Retention Engine<br/>Automated Deletion<br/>Legal Hold Management<br/>Retention Policies]
         AnonymizationEngine[🔒 Anonymization<br/>Data Pseudonymization<br/>Statistical Disclosure<br/>K-anonymity]
     end
-    
+
     %% Compliance Monitoring
     subgraph "Compliance Monitoring"
         AuditTrail[📋 Audit Trail<br/>Processing Activities<br/>Legal Basis Tracking<br/>Data Transfer Logs]
         ComplianceReports[📊 Compliance Reports<br/>DPIA Documentation<br/>Processing Records<br/>Breach Notifications]
         PrivacyMetrics[📈 Privacy Metrics<br/>Consent Rates<br/>Request Processing<br/>Retention Compliance]
     end
-    
+
     %% Data Storage with Privacy Controls
     subgraph "Privacy-Enhanced Storage"
         EncryptedDB[(🔐 Encrypted Database<br/>Field-Level Encryption<br/>Right to Erasure<br/>Pseudonymization)]
         BackupSystem[💾 Privacy-Aware Backups<br/>Encrypted Backups<br/>Retention Alignment<br/>Selective Restoration]
     end
-    
+
     %% External Integrations
     subgraph "Third-Party Privacy"
         DPAManager[📜 DPA Manager<br/>Data Processing Agreements<br/>Vendor Assessment<br/>Transfer Mechanisms]
         TransferControls[🌐 Transfer Controls<br/>Adequacy Decisions<br/>Standard Contractual Clauses<br/>Binding Corporate Rules]
     end
-    
+
     %% Connections
     DSR --> PrivacyPortal
     PrivacyPortal --> ConsentManager
     ConsentManager --> DataMapper
-    
+
     DataMapper --> RetentionEngine
     DataMapper --> AnonymizationEngine
     DataMapper --> EncryptedDB
-    
+
     RetentionEngine --> EncryptedDB
     RetentionEngine --> BackupSystem
     AnonymizationEngine --> EncryptedDB
-    
+
     ConsentManager --> AuditTrail
     RetentionEngine --> AuditTrail
     AuditTrail --> ComplianceReports
     ComplianceReports --> PrivacyMetrics
-    
+
     DataMapper --> DPAManager
     DPAManager --> TransferControls
-    
+
     %% Styling
     classDef subjectClass fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
     classDef privacyClass fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
@@ -1218,7 +1218,7 @@ graph TB
     classDef complianceClass fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
     classDef storageClass fill:#ffebee,stroke:#c62828,stroke-width:2px
     classDef externalClass fill:#f9fbe7,stroke:#689f38,stroke-width:2px
-    
+
     class DSR subjectClass
     class PrivacyPortal,ConsentManager privacyClass
     class DataMapper,RetentionEngine,AnonymizationEngine processingClass
@@ -1457,64 +1457,64 @@ SPECIALIZED SECURITY CONTACTS:
 flowchart TD
     %% Emergency Detection
     Emergency[🚨 SECURITY EMERGENCY<br/>• Data breach detected<br/>• Active attack in progress<br/>• System compromise confirmed<br/>• Critical vulnerability exploited]
-    
+
     %% Immediate Response (0-15 minutes)
     Immediate[⚡ IMMEDIATE RESPONSE<br/>0-15 MINUTES]
-    
+
     %% Parallel Emergency Actions
     Notify[📞 EMERGENCY NOTIFICATION<br/>• Call security hotline<br/>• Alert #security-critical<br/>• Page on-call security team<br/>• Notify incident commander]
-    
+
     Isolate[🔒 IMMEDIATE ISOLATION<br/>• Disconnect affected systems<br/>• Block malicious traffic<br/>• Revoke compromised credentials<br/>• Enable defensive mode]
-    
+
     Preserve[💾 EVIDENCE PRESERVATION<br/>• Capture system snapshots<br/>• Save log files<br/>• Document attack vectors<br/>• Preserve forensic data]
-    
+
     %% Short-term Response (15-60 minutes)
     ShortTerm[⏱️ SHORT-TERM RESPONSE<br/>15-60 MINUTES]
-    
+
     Assess[🔍 DAMAGE ASSESSMENT<br/>• Scope of compromise<br/>• Data impact analysis<br/>• System inventory review<br/>• Timeline reconstruction]
-    
+
     Contain[🛡️ FULL CONTAINMENT<br/>• Patch critical vulnerabilities<br/>• Strengthen access controls<br/>• Deploy additional monitoring<br/>• Coordinate with vendors]
-    
+
     Communicate[📢 STAKEHOLDER COMMUNICATION<br/>• Executive briefing<br/>• Customer notification<br/>• Regulatory reporting<br/>• Public relations coordination]
-    
+
     %% Long-term Recovery (1+ hours)
     LongTerm[🔄 RECOVERY & REMEDIATION<br/>1+ HOURS]
-    
+
     Recover[🚑 SYSTEM RECOVERY<br/>• Restore from clean backups<br/>• Rebuild compromised systems<br/>• Validate system integrity<br/>• Gradual service restoration]
-    
+
     Strengthen[🔧 SECURITY HARDENING<br/>• Deploy additional controls<br/>• Update security policies<br/>• Enhance monitoring rules<br/>• Conduct security reviews]
-    
+
     Document[📋 INCIDENT DOCUMENTATION<br/>• Complete incident report<br/>• Timeline documentation<br/>• Lessons learned analysis<br/>• Process improvements]
-    
+
     %% Flow
     Emergency --> Immediate
     Immediate --> Notify
     Immediate --> Isolate
     Immediate --> Preserve
-    
+
     Notify --> ShortTerm
     Isolate --> ShortTerm
     Preserve --> ShortTerm
-    
+
     ShortTerm --> Assess
     ShortTerm --> Contain
     ShortTerm --> Communicate
-    
+
     Assess --> LongTerm
     Contain --> LongTerm
     Communicate --> LongTerm
-    
+
     LongTerm --> Recover
     LongTerm --> Strengthen
     LongTerm --> Document
-    
+
     %% Styling
     classDef emergencyClass fill:#ffebee,stroke:#c62828,stroke-width:3px
     classDef immediateClass fill:#fff3e0,stroke:#f57c00,stroke-width:2px
     classDef shortTermClass fill:#f9fbe7,stroke:#689f38,stroke-width:2px
     classDef longTermClass fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
     classDef actionClass fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
-    
+
     class Emergency emergencyClass
     class Immediate,Notify,Isolate,Preserve immediateClass
     class ShortTerm,Assess,Contain,Communicate shortTermClass
@@ -1527,16 +1527,16 @@ flowchart TD
 
 ### 11.1 Review and Update Schedule
 
-| Component | Review Frequency | Next Review | Owner |
-|-----------|-----------------|-------------|--------|
-| **System Architecture** | Quarterly | 2025-10-22 | Security Architecture Team |
-| **Authentication Flows** | Semi-annually | 2026-01-22 | Identity & Access Management |
-| **Integration Security** | Quarterly | 2025-10-22 | Integration Security Team |
-| **Database Security** | Semi-annually | 2026-01-22 | Database Security Team |
-| **Threat Model** | Annually | 2026-07-22 | Threat Intelligence Team |
-| **Monitoring Architecture** | Quarterly | 2025-10-22 | Security Operations Team |
-| **Incident Response** | Semi-annually | 2026-01-22 | Incident Response Team |
-| **Compliance Architecture** | Annually | 2026-07-22 | Compliance & Privacy Team |
+| Component                   | Review Frequency | Next Review | Owner                        |
+| --------------------------- | ---------------- | ----------- | ---------------------------- |
+| **System Architecture**     | Quarterly        | 2025-10-22  | Security Architecture Team   |
+| **Authentication Flows**    | Semi-annually    | 2026-01-22  | Identity & Access Management |
+| **Integration Security**    | Quarterly        | 2025-10-22  | Integration Security Team    |
+| **Database Security**       | Semi-annually    | 2026-01-22  | Database Security Team       |
+| **Threat Model**            | Annually         | 2026-07-22  | Threat Intelligence Team     |
+| **Monitoring Architecture** | Quarterly        | 2025-10-22  | Security Operations Team     |
+| **Incident Response**       | Semi-annually    | 2026-01-22  | Incident Response Team       |
+| **Compliance Architecture** | Annually         | 2026-07-22  | Compliance & Privacy Team    |
 
 ### 11.2 Change Control Process
 
@@ -1554,8 +1554,8 @@ All changes to this security architecture documentation must follow the establis
 **Document Classification**: CONFIDENTIAL  
 **Document Owner**: Security Architecture Team  
 **Approval Authority**: Chief Information Security Officer (CISO)  
-**Next Scheduled Review**: 2025-10-22  
+**Next Scheduled Review**: 2025-10-22
 
 ---
 
-*This document contains confidential security information and should be handled according to PromptScape's information security policy. Distribution is restricted to authorized personnel only.*
+_This document contains confidential security information and should be handled according to PromptScape's information security policy. Distribution is restricted to authorized personnel only._

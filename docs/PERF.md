@@ -46,12 +46,12 @@ This document tracks performance metrics, optimizations, and benchmarks for the 
 
 ### Baseline Measurements
 
-| Metric | Target | Current | Status |
-|--------|---------|---------|---------|
-| 250-node graph FPS | ≥30 FPS | TBD | ⏳ Pending |
-| Memory usage (250 nodes) | <500 MB | TBD | ⏳ Pending |
-| Graph execution (5 variants) | <1 second | TBD | ⏳ Pending |
-| Bundle size | <5 MB | TBD | ⏳ Pending |
+| Metric                       | Target    | Current | Status     |
+| ---------------------------- | --------- | ------- | ---------- |
+| 250-node graph FPS           | ≥30 FPS   | TBD     | ⏳ Pending |
+| Memory usage (250 nodes)     | <500 MB   | TBD     | ⏳ Pending |
+| Graph execution (5 variants) | <1 second | TBD     | ⏳ Pending |
+| Bundle size                  | <5 MB     | TBD     | ⏳ Pending |
 
 ### Test Scenarios
 
@@ -87,6 +87,7 @@ npm run dev
 ### CI Performance Monitoring
 
 Performance tests run automatically on:
+
 - Pull requests to main branch
 - Nightly builds
 - Release candidates
@@ -109,6 +110,7 @@ npm run analyze-bundle
 ```
 
 **Target breakdown:**
+
 - Core application: <2MB
 - React-Flow: ~1MB
 - Dependencies: <2MB
@@ -160,7 +162,7 @@ if (process.env.NODE_ENV === 'development') {
       console.log('Memory usage:', {
         used: Math.round(performance.memory.usedJSHeapSize / 1024 / 1024),
         total: Math.round(performance.memory.totalJSHeapSize / 1024 / 1024),
-        limit: Math.round(performance.memory.jsHeapSizeLimit / 1024 / 1024)
+        limit: Math.round(performance.memory.jsHeapSizeLimit / 1024 / 1024),
       });
     }
   }, 10000);
@@ -272,5 +274,5 @@ npm run analyze:bundle
 
 ---
 
-*Last updated: 2025-07-15*
-*Next review: 2025-08-15*
+_Last updated: 2025-07-15_
+_Next review: 2025-08-15_

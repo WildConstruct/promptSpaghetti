@@ -9,6 +9,7 @@ This guide provides detailed instructions for deploying Wild Construct with comp
 ### Pre-Deployment Security Requirements
 
 #### Infrastructure Security ✅
+
 - [ ] Network segmentation configured (DMZ, App, DB zones)
 - [ ] Firewall rules implemented and tested
 - [ ] Load balancer with SSL termination configured
@@ -17,6 +18,7 @@ This guide provides detailed instructions for deploying Wild Construct with comp
 - [ ] Security groups/NACLs configured with least privilege
 
 #### Application Security ✅
+
 - [ ] Environment variables secured (no hardcoded secrets)
 - [ ] Database encryption enabled (TDE)
 - [ ] Redis encryption and authentication configured
@@ -26,6 +28,7 @@ This guide provides detailed instructions for deploying Wild Construct with comp
 - [ ] Security headers configured
 
 #### Certificate Management ✅
+
 - [ ] SSL/TLS certificates installed and valid
 - [ ] Certificate auto-renewal configured
 - [ ] Certificate monitoring and alerting setup
@@ -38,13 +41,14 @@ This guide provides detailed instructions for deploying Wild Construct with comp
 ### Network Architecture Setup
 
 #### AWS VPC Configuration
+
 ```terraform
 # Main VPC with security-first design
 resource "aws_vpc" "wild_construct" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_hostnames = true
   enable_dns_support   = true
-  
+
   tags = {
     Name        = "wild-construct-vpc"
     Environment = var.environment
@@ -59,9 +63,9 @@ resource "aws_subnet" "dmz" {
   vpc_id            = aws_vpc.wild_construct.id
   cidr_block        = "10.0.${count.index + 1}.0/24"
   availability_zone = data.aws_availability_zones.available.names[count.index]
-  
+
   map_public_ip_on_launch = true
-  
+
   tags = {
     Name = "wild-construct-dmz-${count.index + 1}"
     Tier = "dmz"
@@ -75,7 +79,7 @@ resource "aws_subnet" "app" {
   vpc_id            = aws_vpc.wild_construct.id
   cidr_block        = "10.0.${count.index + 10}.0/24"
   availability_zone = data.aws_availability_zones.available.names[count.index]
-  
+
   tags = {
     Name = "wild-construct-app-${count.index + 1}"
     Tier = "application"
@@ -89,7 +93,7 @@ resource "aws_subnet" "db" {
   vpc_id            = aws_vpc.wild_construct.id
   cidr_block        = "10.0.${count.index + 20}.0/24"
   availability_zone = data.aws_availability_zones.available.names[count.index]
-  
+
   tags = {
     Name = "wild-construct-db-${count.index + 1}"
     Tier = "database"
@@ -99,12 +103,13 @@ resource "aws_subnet" "db" {
 ```
 
 #### Security Groups Configuration
+
 ```terraform
 # DMZ Security Group - Load Balancer
 resource "aws_security_group" "dmz_lb" {
   name_prefix = "wild-construct-dmz-lb-"
   vpc_id      = aws_vpc.wild_construct.id
-  
+
   # HTTPS only
   ingress {
     from_port   = 443
@@ -113,7 +118,7 @@ resource "aws_security_group" "dmz_lb" {
     cidr_blocks = ["0.0.0.0/0"]
     description = "HTTPS from internet"
   }
-  
+
   # HTTP redirect to HTTPS
   ingress {
     from_port   = 80
@@ -122,7 +127,7 @@ resource "aws_security_group" "dmz_lb" {
     cidr_blocks = ["0.0.0.0/0"]
     description = "HTTP redirect to HTTPS"
   }
-  
+
   # Outbound to app servers only
   egress {
     from_port       = 8080
@@ -131,7 +136,7 @@ resource "aws_security_group" "dmz_lb" {
     security_groups = [aws_security_group.app_servers.id]
     description     = "To app servers"
   }
-  
+
   tags = {
     Name = "wild-construct-dmz-lb"
     Tier = "dmz"
@@ -142,7 +147,7 @@ resource "aws_security_group" "dmz_lb" {
 resource "aws_security_group" "app_servers" {
   name_prefix = "wild-construct-app-"
   vpc_id      = aws_vpc.wild_construct.id
-  
+
   # From load balancer only
   ingress {
     from_port       = 8080
@@ -151,7 +156,7 @@ resource "aws_security_group" "app_servers" {
     security_groups = [aws_security_group.dmz_lb.id]
     description     = "From load balancer"
   }
-  
+
   # SSH from bastion host only
   ingress {
     from_port       = 22
@@ -160,7 +165,7 @@ resource "aws_security_group" "app_servers" {
     security_groups = [aws_security_group.bastion.id]
     description     = "SSH from bastion"
   }
-  
+
   # To database
   egress {
     from_port       = 5432
@@ -169,7 +174,7 @@ resource "aws_security_group" "app_servers" {
     security_groups = [aws_security_group.database.id]
     description     = "To PostgreSQL"
   }
-  
+
   # To Redis
   egress {
     from_port       = 6379
@@ -178,7 +183,7 @@ resource "aws_security_group" "app_servers" {
     security_groups = [aws_security_group.redis.id]
     description     = "To Redis cache"
   }
-  
+
   # HTTPS for external APIs
   egress {
     from_port   = 443
@@ -187,7 +192,7 @@ resource "aws_security_group" "app_servers" {
     cidr_blocks = ["0.0.0.0/0"]
     description = "HTTPS for external APIs"
   }
-  
+
   tags = {
     Name = "wild-construct-app-servers"
     Tier = "application"
@@ -198,7 +203,7 @@ resource "aws_security_group" "app_servers" {
 resource "aws_security_group" "database" {
   name_prefix = "wild-construct-db-"
   vpc_id      = aws_vpc.wild_construct.id
-  
+
   # From app servers only
   ingress {
     from_port       = 5432
@@ -207,7 +212,7 @@ resource "aws_security_group" "database" {
     security_groups = [aws_security_group.app_servers.id]
     description     = "From app servers"
   }
-  
+
   # From bastion for administration
   ingress {
     from_port       = 5432
@@ -216,7 +221,7 @@ resource "aws_security_group" "database" {
     security_groups = [aws_security_group.bastion.id]
     description     = "Admin access from bastion"
   }
-  
+
   tags = {
     Name = "wild-construct-database"
     Tier = "database"
@@ -227,6 +232,7 @@ resource "aws_security_group" "database" {
 ### Container Security Configuration
 
 #### Docker Security Best Practices
+
 ```dockerfile
 # Multi-stage build for smaller attack surface
 FROM node:18-alpine AS builder
@@ -274,6 +280,7 @@ CMD ["npm", "start"]
 ```
 
 #### Kubernetes Security Configuration
+
 ```yaml
 # Security-hardened Kubernetes deployment
 apiVersion: apps/v1
@@ -309,105 +316,106 @@ spec:
         fsGroup: 1001
         seccompProfile:
           type: RuntimeDefault
-      
+
       # Service Account with minimal permissions
       serviceAccountName: wild-construct-app
       automountServiceAccountToken: false
-      
+
       containers:
-      - name: app
-        image: wild-construct:latest
-        imagePullPolicy: Always
-        
-        # Container Security Context
-        securityContext:
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
-          runAsUser: 1001
-          capabilities:
-            drop:
-            - ALL
-        
-        # Resource limits
-        resources:
-          limits:
-            memory: "1Gi"
-            cpu: "500m"
-            ephemeral-storage: "1Gi"
-          requests:
-            memory: "512Mi"
-            cpu: "250m"
-            ephemeral-storage: "512Mi"
-        
-        # Environment variables from secrets
-        envFrom:
-        - secretRef:
-            name: wild-construct-secrets
-        - configMapRef:
-            name: wild-construct-config
-            
-        # Health checks
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 3000
-          initialDelaySeconds: 30
-          periodSeconds: 10
-          timeoutSeconds: 5
-          failureThreshold: 3
-          
-        readinessProbe:
-          httpGet:
-            path: /ready
-            port: 3000
-          initialDelaySeconds: 5
-          periodSeconds: 5
-          timeoutSeconds: 3
-          failureThreshold: 3
-        
-        # Writable volumes for temporary data
-        volumeMounts:
-        - name: tmp-volume
-          mountPath: /tmp
-        - name: cache-volume
-          mountPath: /app/.next/cache
-          
+        - name: app
+          image: wild-construct:latest
+          imagePullPolicy: Always
+
+          # Container Security Context
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+            capabilities:
+              drop:
+                - ALL
+
+          # Resource limits
+          resources:
+            limits:
+              memory: '1Gi'
+              cpu: '500m'
+              ephemeral-storage: '1Gi'
+            requests:
+              memory: '512Mi'
+              cpu: '250m'
+              ephemeral-storage: '512Mi'
+
+          # Environment variables from secrets
+          envFrom:
+            - secretRef:
+                name: wild-construct-secrets
+            - configMapRef:
+                name: wild-construct-config
+
+          # Health checks
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+
+          # Writable volumes for temporary data
+          volumeMounts:
+            - name: tmp-volume
+              mountPath: /tmp
+            - name: cache-volume
+              mountPath: /app/.next/cache
+
       volumes:
-      - name: tmp-volume
-        emptyDir:
-          sizeLimit: "1Gi"
-      - name: cache-volume
-        emptyDir:
-          sizeLimit: "512Mi"
-      
+        - name: tmp-volume
+          emptyDir:
+            sizeLimit: '1Gi'
+        - name: cache-volume
+          emptyDir:
+            sizeLimit: '512Mi'
+
       # Pod Security
       hostNetwork: false
       hostPID: false
       hostIPC: false
-      
+
       # Node selection
       nodeSelector:
-        node-type: "application"
-      
+        node-type: 'application'
+
       # Pod anti-affinity for availability
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - wild-construct
-              topologyKey: kubernetes.io/hostname
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - wild-construct
+                topologyKey: kubernetes.io/hostname
 ```
 
 ## 🔐 Application Security Configuration
 
 ### Environment Variables Security
+
 ```bash
 #!/bin/bash
 # secure-env-setup.sh - Secure environment variable management
@@ -463,6 +471,7 @@ echo "✅ Security environment configured"
 ```
 
 ### Application Security Headers
+
 ```typescript
 // security-middleware.ts
 import helmet from 'helmet';
@@ -475,68 +484,52 @@ export const securityMiddleware = [
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        styleSrc: [
-          "'self'", 
-          "'unsafe-inline'",
-          "https://fonts.googleapis.com"
-        ],
+        styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
         scriptSrc: [
           "'self'",
           "'unsafe-eval'", // Required for React
-          "https://cdn.jsdelivr.net"
+          'https://cdn.jsdelivr.net',
         ],
-        imgSrc: [
-          "'self'", 
-          "data:", 
-          "https:",
-          "blob:"
-        ],
-        connectSrc: [
-          "'self'",
-          "wss:",
-          "https://api.wildConstruct.com"
-        ],
-        fontSrc: [
-          "'self'",
-          "https://fonts.gstatic.com"
-        ],
+        imgSrc: ["'self'", 'data:', 'https:', 'blob:'],
+        connectSrc: ["'self'", 'wss:', 'https://api.wildConstruct.com'],
+        fontSrc: ["'self'", 'https://fonts.gstatic.com'],
         objectSrc: ["'none'"],
         mediaSrc: ["'self'"],
         frameSrc: ["'none'"],
         childSrc: ["'none'"],
-        workerSrc: ["'self'"]
-      }
+        workerSrc: ["'self'"],
+      },
     },
-    
+
     // Strict Transport Security
     hsts: {
       maxAge: 31536000, // 1 year
       includeSubDomains: true,
-      preload: true
+      preload: true,
     },
-    
+
     // Expect Certificate Transparency
     expectCt: {
       maxAge: 30,
-      enforce: true
+      enforce: true,
     },
-    
+
     // Referrer Policy
     referrerPolicy: {
-      policy: ["strict-origin-when-cross-origin"]
+      policy: ['strict-origin-when-cross-origin'],
     },
-    
+
     // Permissions Policy
     permissionsPolicy: {
       features: {
         camera: ["'none'"],
         microphone: ["'none'"],
         geolocation: ["'none'"],
-        notifications: ["'self'"]
-      }
-    }
+        notifications: ["'self'"],
+      },
+    },
   }),
-  
+
   // Rate limiting
   rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -544,42 +537,43 @@ export const securityMiddleware = [
     message: 'Too many requests from this IP, please try again later.',
     standardHeaders: true,
     legacyHeaders: false,
-    
+
     // Custom key generator for authenticated users
-    keyGenerator: (req) => {
+    keyGenerator: req => {
       return req.user?.id || req.ip;
     },
-    
+
     // Skip successful requests for authenticated users
-    skip: (req) => {
+    skip: req => {
       return req.user && req.rateLimit.remaining > 10;
-    }
+    },
   }),
-  
+
   // Custom security headers
   (req: Request, res: Response, next: NextFunction) => {
     // Server information hiding
     res.removeHeader('X-Powered-By');
     res.setHeader('Server', 'Wild Construct');
-    
+
     // Custom security headers
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Download-Options', 'noopen');
     res.setHeader('X-Permitted-Cross-Domain-Policies', 'none');
-    
+
     // Cache control for sensitive pages
     if (req.path.includes('/api/') || req.path.includes('/dashboard/')) {
       res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
       res.setHeader('Pragma', 'no-cache');
       res.setHeader('Expires', '0');
     }
-    
+
     next();
-  }
+  },
 ];
 ```
 
 ### Database Security Configuration
+
 ```sql
 -- PostgreSQL security configuration
 
@@ -652,6 +646,7 @@ SELECT pg_reload_conf();
 ## 📊 Security Monitoring Deployment
 
 ### SIEM Configuration
+
 ```yaml
 # ELK Stack for security monitoring
 version: '3.8'
@@ -668,10 +663,10 @@ services:
       - elasticsearch-data:/usr/share/elasticsearch/data
       - ./certs:/usr/share/elasticsearch/config/certs
     ports:
-      - "9200:9200"
+      - '9200:9200'
     networks:
       - elk
-    
+
   kibana:
     image: kibana:8.8.0
     environment:
@@ -682,12 +677,12 @@ services:
     volumes:
       - ./certs:/usr/share/kibana/config/certs
     ports:
-      - "5601:5601"
+      - '5601:5601'
     networks:
       - elk
     depends_on:
       - elasticsearch
-  
+
   logstash:
     image: logstash:8.8.0
     volumes:
@@ -697,8 +692,8 @@ services:
     environment:
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
     ports:
-      - "5044:5044"
-      - "9600:9600"
+      - '5044:5044'
+      - '9600:9600'
     networks:
       - elk
     depends_on:
@@ -712,6 +707,7 @@ networks:
 ```
 
 ### Security Monitoring Configuration
+
 ```ruby
 # logstash/pipeline/security.conf
 input {
@@ -721,7 +717,7 @@ input {
     ssl_certificate => "/usr/share/logstash/config/certs/logstash.crt"
     ssl_key => "/usr/share/logstash/config/certs/logstash.key"
   }
-  
+
   http {
     port => 8080
     codec => "json"
@@ -735,22 +731,22 @@ filter {
   # Parse application logs
   if [fields][logtype] == "application" {
     grok {
-      match => { 
+      match => {
         "message" => "\[%{TIMESTAMP_ISO8601:timestamp}\] %{LOGLEVEL:level}: %{GREEDYDATA:msg}"
       }
     }
-    
+
     date {
       match => [ "timestamp", "ISO8601" ]
     }
   }
-  
+
   # Security event enrichment
   if [fields][logtype] == "security" {
     mutate {
       add_field => { "event_category" => "security" }
     }
-    
+
     # Detect brute force attacks
     if [event_type] == "login_failed" {
       aggregate {
@@ -767,7 +763,7 @@ filter {
         timeout => 300
       }
     }
-    
+
     # Detect privilege escalation
     if [event_type] == "permission_change" {
       if [details][permission_level] == "admin" {
@@ -778,7 +774,7 @@ filter {
       }
     }
   }
-  
+
   # GeoIP enrichment
   geoip {
     source => "client_ip"
@@ -795,7 +791,7 @@ output {
     cacert => "/usr/share/logstash/config/certs/ca.crt"
     index => "security-logs-%{+YYYY.MM.dd}"
   }
-  
+
   # Send security alerts to dedicated index
   if [security_alert] {
     elasticsearch {
@@ -806,7 +802,7 @@ output {
       index => "security-alerts-%{+YYYY.MM.dd}"
     }
   }
-  
+
   # Send to stdout for debugging
   stdout {
     codec => rubydebug
@@ -817,6 +813,7 @@ output {
 ## 🚨 Security Alerting Configuration
 
 ### Prometheus Security Metrics
+
 ```yaml
 # prometheus.yml - Security monitoring configuration
 global:
@@ -824,14 +821,14 @@ global:
   evaluation_interval: 15s
 
 rule_files:
-  - "security_rules.yml"
-  - "application_rules.yml"
+  - 'security_rules.yml'
+  - 'application_rules.yml'
 
 alerting:
   alertmanagers:
     - static_configs:
         - targets:
-          - alertmanager:9093
+            - alertmanager:9093
 
 scrape_configs:
   # Application metrics
@@ -840,17 +837,17 @@ scrape_configs:
       - targets: ['app:3000']
     scrape_interval: 10s
     metrics_path: '/metrics'
-    
+
   # Node exporter for system metrics
   - job_name: 'node'
     static_configs:
       - targets: ['node-exporter:9100']
-    
+
   # Database metrics
   - job_name: 'postgres'
     static_configs:
       - targets: ['postgres-exporter:9187']
-  
+
   # Security-specific metrics
   - job_name: 'security-metrics'
     static_configs:
@@ -859,6 +856,7 @@ scrape_configs:
 ```
 
 ### Security Alert Rules
+
 ```yaml
 # security_rules.yml
 groups:
@@ -872,9 +870,9 @@ groups:
           severity: warning
           category: security
         annotations:
-          summary: "High failed login rate detected"
-          description: "Failed login rate is {{ $value }} per second over the last 5 minutes"
-          
+          summary: 'High failed login rate detected'
+          description: 'Failed login rate is {{ $value }} per second over the last 5 minutes'
+
       # Brute force attack detection
       - alert: BruteForceAttack
         expr: increase(auth_login_failed_total[1m]) > 10
@@ -883,9 +881,9 @@ groups:
           severity: critical
           category: security
         annotations:
-          summary: "Potential brute force attack detected"
-          description: "{{ $value }} failed login attempts in the last minute"
-          
+          summary: 'Potential brute force attack detected'
+          description: '{{ $value }} failed login attempts in the last minute'
+
       # Unusual data access patterns
       - alert: UnusualDataAccess
         expr: rate(data_access_bytes_total[10m]) > 100000000 # 100MB/sec
@@ -894,9 +892,9 @@ groups:
           severity: warning
           category: security
         annotations:
-          summary: "Unusual data access pattern detected"
-          description: "Data access rate is {{ $value }} bytes/sec, which is unusually high"
-          
+          summary: 'Unusual data access pattern detected'
+          description: 'Data access rate is {{ $value }} bytes/sec, which is unusually high'
+
       # SSL certificate expiration
       - alert: SSLCertificateExpiring
         expr: probe_ssl_earliest_cert_expiry - time() < 86400 * 7 # 7 days
@@ -905,9 +903,9 @@ groups:
           severity: warning
           category: infrastructure
         annotations:
-          summary: "SSL certificate expiring soon"
-          description: "SSL certificate for {{ $labels.instance }} expires in {{ $value }} seconds"
-          
+          summary: 'SSL certificate expiring soon'
+          description: 'SSL certificate for {{ $labels.instance }} expires in {{ $value }} seconds'
+
       # Database connection anomalies
       - alert: DatabaseConnectionSpike
         expr: rate(database_connections_total[5m]) > 50
@@ -916,13 +914,14 @@ groups:
           severity: warning
           category: infrastructure
         annotations:
-          summary: "Database connection spike detected"
-          description: "Database connection rate is {{ $value }} per second"
+          summary: 'Database connection spike detected'
+          description: 'Database connection rate is {{ $value }} per second'
 ```
 
 ## 🔧 Operational Security Procedures
 
 ### Security Incident Response Runbook
+
 ```bash
 #!/bin/bash
 # security-incident-response.sh
@@ -943,7 +942,7 @@ log() {
 alert() {
     local message="$1"
     log "ALERT: ${message}"
-    
+
     if [[ -n "${ALERT_WEBHOOK}" ]]; then
         curl -X POST "${ALERT_WEBHOOK}" \
             -H "Content-Type: application/json" \
@@ -954,13 +953,13 @@ alert() {
 # Phase 1: Immediate Response
 immediate_response() {
     log "=== PHASE 1: IMMEDIATE RESPONSE ==="
-    
+
     case "${SEVERITY}" in
         critical)
             log "CRITICAL incident detected. Initiating emergency procedures."
             # Activate incident response team
             alert "CRITICAL SECURITY INCIDENT - All hands on deck"
-            
+
             # Consider temporary service shutdown
             read -p "Shutdown service temporarily? (y/N): " -n 1 -r
             if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -969,16 +968,16 @@ immediate_response() {
                 systemctl stop nginx
             fi
             ;;
-            
+
         high)
             log "HIGH severity incident. Escalating to security team."
             alert "HIGH PRIORITY: Security incident requires immediate attention"
             ;;
-            
+
         medium)
             log "MEDIUM severity incident. Standard response procedures."
             ;;
-            
+
         low)
             log "LOW severity incident. Monitoring and documentation."
             ;;
@@ -988,7 +987,7 @@ immediate_response() {
 # Phase 2: Assessment and Containment
 assess_and_contain() {
     log "=== PHASE 2: ASSESSMENT AND CONTAINMENT ==="
-    
+
     # Collect system state
     log "Collecting system state..."
     {
@@ -996,27 +995,27 @@ assess_and_contain() {
         uname -a
         date
         uptime
-        
+
         echo "=== PROCESS LIST ==="
         ps auxf
-        
+
         echo "=== NETWORK CONNECTIONS ==="
         netstat -tulpn
-        
+
         echo "=== RECENT LOGINS ==="
         last -n 20
-        
+
         echo "=== FAILED LOGINS ==="
         grep "Failed password" /var/log/auth.log | tail -20
-        
+
         echo "=== DISK USAGE ==="
         df -h
-        
+
         echo "=== MEMORY USAGE ==="
         free -h
-        
+
     } > "/tmp/system-state-${INCIDENT_ID}.txt"
-    
+
     # Check for specific incident types
     case "${INCIDENT_TYPE}" in
         brute_force)
@@ -1031,18 +1030,18 @@ assess_and_contain() {
                     fi
                 done
             ;;
-            
+
         data_breach)
             log "Potential data breach detected. Preserving evidence..."
             # Create memory dump
             if command -v gcore >/dev/null; then
                 gcore -o "/tmp/memory-dump-${INCIDENT_ID}" "$(pgrep -f wild-construct)"
             fi
-            
+
             # Preserve logs
             cp -r /var/log/wild-construct "/tmp/logs-backup-${INCIDENT_ID}"
             ;;
-            
+
         malware)
             log "Malware detection. Isolating system..."
             # Disconnect from network
@@ -1056,34 +1055,34 @@ assess_and_contain() {
 # Phase 3: Evidence Collection
 collect_evidence() {
     log "=== PHASE 3: EVIDENCE COLLECTION ==="
-    
+
     local evidence_dir="/tmp/evidence-${INCIDENT_ID}"
     mkdir -p "${evidence_dir}"
-    
+
     # Application logs
     log "Collecting application logs..."
     cp -r /var/log/wild-construct "${evidence_dir}/app-logs" 2>/dev/null || true
-    
+
     # System logs
     log "Collecting system logs..."
     journalctl --since "1 hour ago" > "${evidence_dir}/system-journal.log"
     cp /var/log/auth.log "${evidence_dir}/" 2>/dev/null || true
     cp /var/log/syslog "${evidence_dir}/" 2>/dev/null || true
-    
+
     # Database logs (if accessible)
     log "Collecting database logs..."
     sudo -u postgres psql -c "\copy (SELECT * FROM audit_log WHERE created_at >= NOW() - INTERVAL '1 hour') TO '${evidence_dir}/database-audit.csv' CSV HEADER" wild_construct 2>/dev/null || true
-    
+
     # Network captures
     if command -v tcpdump >/dev/null; then
         log "Starting network capture..."
         timeout 60 tcpdump -i any -w "${evidence_dir}/network-capture.pcap" 2>/dev/null &
     fi
-    
+
     # File system integrity
     log "Checking file integrity..."
     find /etc/wild-construct -type f -exec sha256sum {} \; > "${evidence_dir}/file-checksums.txt"
-    
+
     # Create evidence archive
     tar -czf "/tmp/evidence-${INCIDENT_ID}.tar.gz" "${evidence_dir}"
     log "Evidence collected: /tmp/evidence-${INCIDENT_ID}.tar.gz"
@@ -1092,20 +1091,20 @@ collect_evidence() {
 # Phase 4: Recovery
 recovery() {
     log "=== PHASE 4: RECOVERY ==="
-    
+
     # Restore from clean backup if necessary
     if [[ "${SEVERITY}" == "critical" ]]; then
         log "Considering system restore from clean backup..."
         # Implementation depends on backup strategy
     fi
-    
+
     # Restart services if they were stopped
     if ! systemctl is-active --quiet wild-construct; then
         log "Restarting Wild Construct services..."
         systemctl start wild-construct
         systemctl start nginx
     fi
-    
+
     # Update security configurations
     log "Updating security configurations..."
     # Force password resets for affected users
@@ -1116,7 +1115,7 @@ recovery() {
 # Phase 5: Post-Incident
 post_incident() {
     log "=== PHASE 5: POST-INCIDENT ==="
-    
+
     # Generate incident report
     cat > "/tmp/incident-report-${INCIDENT_ID}.md" <<EOF
 # Security Incident Report
@@ -1156,13 +1155,13 @@ EOF
 main() {
     log "Starting security incident response for ID: ${INCIDENT_ID}"
     log "Severity: ${SEVERITY}, Type: ${INCIDENT_TYPE}"
-    
+
     immediate_response
     assess_and_contain
     collect_evidence
     recovery
     post_incident
-    
+
     log "Security incident response completed for ID: ${INCIDENT_ID}"
 }
 
@@ -1174,6 +1173,7 @@ main "$@"
 ```
 
 ### Backup and Recovery Security
+
 ```bash
 #!/bin/bash
 # secure-backup.sh
@@ -1195,15 +1195,15 @@ log() {
 backup_database() {
     local timestamp=$(date +%Y%m%d_%H%M%S)
     local backup_file="${BACKUP_DIR}/database_${timestamp}.sql.gz.gpg"
-    
+
     log "Starting encrypted database backup..."
-    
+
     # Create encrypted database dump
     pg_dump wild_construct | \
         gzip | \
         gpg --trust-model always --encrypt --recipient "${GPG_RECIPIENT}" \
         > "${backup_file}"
-    
+
     # Verify backup integrity
     if gpg --quiet --decrypt "${backup_file}" | gunzip | head -10 >/dev/null 2>&1; then
         log "Database backup verified: ${backup_file}"
@@ -1211,12 +1211,12 @@ backup_database() {
         log "ERROR: Database backup verification failed!"
         return 1
     fi
-    
+
     # Upload to secure cloud storage
     aws s3 cp "${backup_file}" "s3://${S3_BUCKET}/database/" \
         --server-side-encryption AES256 \
         --storage-class STANDARD_IA
-    
+
     log "Database backup completed and uploaded"
 }
 
@@ -1224,9 +1224,9 @@ backup_database() {
 backup_application() {
     local timestamp=$(date +%Y%m%d_%H%M%S)
     local backup_file="${BACKUP_DIR}/application_${timestamp}.tar.gz.gpg"
-    
+
     log "Starting application data backup..."
-    
+
     # Create encrypted application backup
     tar -czf - \
         /opt/wild-construct/data \
@@ -1235,22 +1235,22 @@ backup_application() {
         --exclude="*.log" | \
     gpg --trust-model always --encrypt --recipient "${GPG_RECIPIENT}" \
         > "${backup_file}"
-    
+
     # Upload to cloud storage
     aws s3 cp "${backup_file}" "s3://${S3_BUCKET}/application/" \
         --server-side-encryption AES256 \
         --storage-class STANDARD_IA
-    
+
     log "Application backup completed and uploaded"
 }
 
 # Cleanup old backups
 cleanup_old_backups() {
     log "Cleaning up backups older than ${RETENTION_DAYS} days..."
-    
+
     # Local cleanup
     find "${BACKUP_DIR}" -type f -mtime +${RETENTION_DAYS} -delete
-    
+
     # S3 cleanup (relies on lifecycle policies)
     log "Local backup cleanup completed"
 }
@@ -1258,7 +1258,7 @@ cleanup_old_backups() {
 # Verify backup integrity
 verify_backups() {
     log "Verifying backup integrity..."
-    
+
     # Check latest database backup
     latest_db_backup=$(ls -t "${BACKUP_DIR}"/database_*.sql.gz.gpg 2>/dev/null | head -1)
     if [[ -n "${latest_db_backup}" ]]; then
@@ -1268,7 +1268,7 @@ verify_backups() {
             log "❌ Database backup integrity check failed"
         fi
     fi
-    
+
     # Check S3 backups
     if aws s3 ls "s3://${S3_BUCKET}/" >/dev/null 2>&1; then
         log "✅ S3 backup access verified"
@@ -1281,22 +1281,22 @@ verify_backups() {
 main() {
     # Ensure backup directory exists
     mkdir -p "${BACKUP_DIR}"
-    
+
     # Check prerequisites
     command -v pg_dump >/dev/null || { log "ERROR: pg_dump not found"; exit 1; }
     command -v gpg >/dev/null || { log "ERROR: gpg not found"; exit 1; }
     command -v aws >/dev/null || { log "ERROR: aws cli not found"; exit 1; }
-    
+
     # Perform backups
     backup_database
     backup_application
-    
+
     # Verify backups
     verify_backups
-    
+
     # Cleanup
     cleanup_old_backups
-    
+
     log "Secure backup process completed successfully"
 }
 
@@ -1307,6 +1307,7 @@ main "$@"
 ## 📋 Security Deployment Validation
 
 ### Security Testing Checklist
+
 - [ ] Vulnerability scanning completed (OWASP ZAP, Nessus)
 - [ ] Penetration testing performed
 - [ ] SSL/TLS configuration validated (SSLLabs A+ rating)
@@ -1319,13 +1320,14 @@ main "$@"
 - [ ] Incident response procedures rehearsed
 
 ### Production Security Sign-off
+
 ```yaml
 # security-signoff.yml
 security_review:
-  date: "2025-07-22"
-  reviewer: "Chief Information Security Officer"
-  version: "v1.0.0"
-  
+  date: '2025-07-22'
+  reviewer: 'Chief Information Security Officer'
+  version: 'v1.0.0'
+
   checklist:
     infrastructure_security: ✅
     application_security: ✅
@@ -1335,20 +1337,21 @@ security_review:
     backup_recovery: ✅
     compliance_review: ✅
     penetration_testing: ✅
-    
-  approval: "APPROVED FOR PRODUCTION DEPLOYMENT"
+
+  approval: 'APPROVED FOR PRODUCTION DEPLOYMENT'
   conditions:
-    - "Security monitoring must be active before deployment"
-    - "Incident response team must be on standby"
-    - "Backup procedures must be verified"
-    - "SSL certificates must be monitored"
-    
-  next_review: "2025-10-22"
+    - 'Security monitoring must be active before deployment'
+    - 'Incident response team must be on standby'
+    - 'Backup procedures must be verified'
+    - 'SSL certificates must be monitored'
+
+  next_review: '2025-10-22'
 ```
 
 ---
 
 **Document Control**:
+
 - Version: 1.0
 - Classification: Internal - Technical
 - Last Updated: July 2025

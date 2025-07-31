@@ -1,9 +1,9 @@
 /**
  * Visual Regression Testing Framework
- * 
+ *
  * Provides comprehensive visual regression testing capabilities including
  * screenshot capture, comparison, and automated visual diff detection.
- * 
+ *
  * Task: E18-1753114562152-28B905
  */
 
@@ -66,9 +66,7 @@ export class VisualRegressionTester {
   private diffDir: string;
   private browsers: Map<string, Browser> = new Map();
 
-  constructor(
-    private screenshotDir: string = './tests/visual/screenshots'
-  ) {
+  constructor(private screenshotDir: string = './tests/visual/screenshots') {
     this.baselineDir = path.join(screenshotDir, 'baseline');
     this.currentDir = path.join(screenshotDir, 'current');
     this.diffDir = path.join(screenshotDir, 'diff');
@@ -117,12 +115,12 @@ export class VisualRegressionTester {
       // Merge global config with test config
       const mergedConfig: VisualTestConfig = {
         ...testConfig,
-        url: suite.globalConfig?.baseUrl ? 
-          new URL(testConfig.url, suite.globalConfig.baseUrl).toString() : 
-          testConfig.url,
+        url: suite.globalConfig?.baseUrl
+          ? new URL(testConfig.url, suite.globalConfig.baseUrl).toString()
+          : testConfig.url,
         viewport: testConfig.viewport || suite.globalConfig?.viewport,
         threshold: testConfig.threshold ?? suite.globalConfig?.threshold,
-        waitFor: testConfig.waitFor ?? suite.globalConfig?.waitFor
+        waitFor: testConfig.waitFor ?? suite.globalConfig?.waitFor,
       };
 
       const testResults = await this.runVisualTest(mergedConfig);
@@ -137,7 +135,7 @@ export class VisualRegressionTester {
    */
   async updateBaselines(testNames?: string[]): Promise<void> {
     const currentFiles = await fs.readdir(this.currentDir);
-    
+
     for (const file of currentFiles) {
       if (testNames && !testNames.some(name => file.includes(name))) {
         continue;
@@ -145,7 +143,7 @@ export class VisualRegressionTester {
 
       const currentPath = path.join(this.currentDir, file);
       const baselinePath = path.join(this.baselineDir, file);
-      
+
       await fs.copyFile(currentPath, baselinePath);
       console.log(`✅ Updated baseline: ${file}`);
     }
@@ -162,12 +160,12 @@ export class VisualRegressionTester {
         passed: results.filter(r => r.passed).length,
         failed: results.filter(r => !r.passed).length,
         avgCaptureTime: results.reduce((sum, r) => sum + r.metrics.captureTime, 0) / results.length,
-        avgComparisonTime: results.reduce((sum, r) => sum + r.metrics.comparisonTime, 0) / results.length
+        avgComparisonTime: results.reduce((sum, r) => sum + r.metrics.comparisonTime, 0) / results.length,
       },
       results: results.map(result => ({
         ...result,
-        timestamp: result.timestamp.toISOString()
-      }))
+        timestamp: result.timestamp.toISOString(),
+      })),
     };
 
     const reportPath = path.join(this.screenshotDir, 'report.json');
@@ -190,15 +188,15 @@ export class VisualRegressionTester {
     cutoffDate.setDate(cutoffDate.getDate() - daysToKeep);
 
     const directories = [this.currentDir, this.diffDir];
-    
+
     for (const dir of directories) {
       try {
         const files = await fs.readdir(dir);
-        
+
         for (const file of files) {
           const filePath = path.join(dir, file);
           const stats = await fs.stat(filePath);
-          
+
           if (stats.mtime < cutoffDate) {
             await fs.unlink(filePath);
             console.log(`🗑️ Cleaned up old file: ${file}`);
@@ -211,13 +209,13 @@ export class VisualRegressionTester {
   }
 
   private async runTestOnBrowser(
-    config: VisualTestConfig, 
-    browser: Browser, 
+    config: VisualTestConfig,
+    browser: Browser,
     browserType: string
   ): Promise<VisualTestResult> {
     const startTime = Date.now();
     const page = await browser.newPage();
-    
+
     try {
       // Set viewport
       if (config.viewport) {
@@ -262,12 +260,8 @@ export class VisualRegressionTester {
       // Compare with baseline
       const baselineImagePath = path.join(this.baselineDir, `${testId}.png`);
       const comparisonStartTime = Date.now();
-      
-      const comparisonResult = await this.compareImages(
-        baselineImagePath, 
-        currentImagePath, 
-        config.threshold || 0.1
-      );
+
+      const comparisonResult = await this.compareImages(baselineImagePath, currentImagePath, config.threshold || 0.1);
 
       const comparisonEndTime = Date.now();
 
@@ -283,10 +277,9 @@ export class VisualRegressionTester {
         metrics: {
           captureTime: captureEndTime - captureTime,
           comparisonTime: comparisonEndTime - comparisonStartTime,
-          imageSize
-        }
+          imageSize,
+        },
       };
-
     } catch (error) {
       return {
         testName: config.name,
@@ -299,8 +292,8 @@ export class VisualRegressionTester {
         metrics: {
           captureTime: Date.now() - startTime,
           comparisonTime: 0,
-          imageSize: 0
-        }
+          imageSize: 0,
+        },
       };
     } finally {
       await page.close();
@@ -310,7 +303,7 @@ export class VisualRegressionTester {
   private async captureScreenshot(page: Page, config: VisualTestConfig): Promise<Buffer> {
     const options: any = {
       type: 'png',
-      fullPage: !config.selector
+      fullPage: !config.selector,
     };
 
     if (config.selector) {
@@ -326,29 +319,29 @@ export class VisualRegressionTester {
 
     for (const action of actions) {
       switch (action.type) {
-      case 'click':
-        if (action.selector) {
-          await page.click(action.selector);
-        }
-        break;
-      case 'hover':
-        if (action.selector) {
-          await page.hover(action.selector);
-        }
-        break;
-      case 'scroll':
-        if (action.selector) {
-          await page.locator(action.selector).scrollIntoViewIfNeeded();
-        }
-        break;
-      case 'type':
-        if (action.selector && action.text) {
-          await page.fill(action.selector, action.text);
-        }
-        break;
-      case 'wait':
-        await page.waitForTimeout(action.delay || 1000);
-        break;
+        case 'click':
+          if (action.selector) {
+            await page.click(action.selector);
+          }
+          break;
+        case 'hover':
+          if (action.selector) {
+            await page.hover(action.selector);
+          }
+          break;
+        case 'scroll':
+          if (action.selector) {
+            await page.locator(action.selector).scrollIntoViewIfNeeded();
+          }
+          break;
+        case 'type':
+          if (action.selector && action.text) {
+            await page.fill(action.selector, action.text);
+          }
+          break;
+        case 'wait':
+          await page.waitForTimeout(action.delay || 1000);
+          break;
       }
 
       // Small delay between actions
@@ -359,14 +352,14 @@ export class VisualRegressionTester {
   private async maskElements(page: Page, selectors: string[]): Promise<void> {
     for (const selector of selectors) {
       await page.addStyleTag({
-        content: `${selector} { opacity: 0 !important; }`
+        content: `${selector} { opacity: 0 !important; }`,
       });
     }
   }
 
   private async compareImages(
-    baselinePath: string, 
-    currentPath: string, 
+    baselinePath: string,
+    currentPath: string,
     threshold: number
   ): Promise<{ passed: boolean; difference?: number; diffImagePath?: string }> {
     try {
@@ -414,18 +407,18 @@ export class VisualRegressionTester {
       }
       return differences / baseline.length;
     }
-    
+
     return Math.abs(baseline.length - current.length) / Math.max(baseline.length, current.length);
   }
 
   private async generateDiffImage(baselinePath: string, currentPath: string): Promise<string> {
     const testId = path.basename(baselinePath, '.png');
     const diffPath = path.join(this.diffDir, `${testId}-diff.png`);
-    
+
     // For now, just copy the current image as diff
     // TODO: Generate actual diff highlighting differences
     await fs.copyFile(currentPath, diffPath);
-    
+
     return diffPath;
   }
 
@@ -434,7 +427,7 @@ export class VisualRegressionTester {
       .update(config.name + config.url + browser)
       .digest('hex')
       .substring(0, 8);
-    
+
     return `${config.name.replace(/[^a-zA-Z0-9]/g, '-')}-${browser}-${hash}`;
   }
 
@@ -515,7 +508,9 @@ export class VisualRegressionTester {
         </div>
         
         <div class="test-results">
-            ${reportData.results.map((result: any) => `
+            ${reportData.results
+              .map(
+                (result: any) => `
                 <div class="test-result">
                     <div class="test-header ${result.passed ? 'passed' : 'failed'}">
                         ${result.testName} (${result.browser}) - ${result.passed ? 'PASSED' : 'FAILED'}
@@ -528,7 +523,9 @@ export class VisualRegressionTester {
                             <div>Comparison Time: ${result.metrics.comparisonTime}ms</div>
                             <div>Image Size: ${Math.round(result.metrics.imageSize / 1024)}KB</div>
                         </div>
-                        ${!result.error ? `
+                        ${
+                          !result.error
+                            ? `
                             <div class="test-images">
                                 <div class="image-container">
                                     <h4>Baseline</h4>
@@ -538,17 +535,25 @@ export class VisualRegressionTester {
                                     <h4>Current</h4>
                                     <img src="${path.relative(this.screenshotDir, result.currentImagePath)}" alt="Current">
                                 </div>
-                                ${result.diffImagePath ? `
+                                ${
+                                  result.diffImagePath
+                                    ? `
                                     <div class="image-container">
                                         <h4>Diff</h4>
                                         <img src="${path.relative(this.screenshotDir, result.diffImagePath)}" alt="Diff">
                                     </div>
-                                ` : ''}
+                                `
+                                    : ''
+                                }
                             </div>
-                        ` : ''}
+                        `
+                            : ''
+                        }
                     </div>
                 </div>
-            `).join('')}
+            `
+              )
+              .join('')}
         </div>
     </div>
 </body>
@@ -584,29 +589,27 @@ export const VisualTestSuites = {
       baseUrl: 'http://localhost:3000',
       viewport: { width: 1280, height: 720 },
       threshold: 0.1,
-      waitFor: 1000
+      waitFor: 1000,
     },
     tests: [
       {
         name: 'header-component',
         url: '/',
-        selector: 'header'
+        selector: 'header',
       },
       {
         name: 'navigation-menu',
         url: '/',
         selector: 'nav',
-        actions: [
-          { type: 'hover', selector: 'nav .menu-item:first-child' }
-        ]
+        actions: [{ type: 'hover', selector: 'nav .menu-item:first-child' }],
       },
       {
         name: 'graph-editor',
         url: '/editor',
         waitFor: '[data-testid="graph-canvas"]',
-        maskElements: ['.timestamp', '.user-avatar']
-      }
-    ]
+        maskElements: ['.timestamp', '.user-avatar'],
+      },
+    ],
   }),
 
   /**
@@ -616,21 +619,21 @@ export const VisualTestSuites = {
     suiteName: 'Cross-Browser Compatibility',
     globalConfig: {
       baseUrl: 'http://localhost:3000',
-      viewport: { width: 1280, height: 720 }
+      viewport: { width: 1280, height: 720 },
     },
     tests: [
       {
         name: 'landing-page',
         url: '/',
-        browserTypes: ['chromium', 'firefox', 'webkit']
+        browserTypes: ['chromium', 'firefox', 'webkit'],
       },
       {
         name: 'graph-editor',
         url: '/editor',
         browserTypes: ['chromium', 'firefox', 'webkit'],
-        waitFor: '[data-testid="graph-canvas"]'
-      }
-    ]
+        waitFor: '[data-testid="graph-canvas"]',
+      },
+    ],
   }),
 
   /**
@@ -639,26 +642,26 @@ export const VisualTestSuites = {
   responsive: (): VisualTestSuite => ({
     suiteName: 'Responsive Design',
     globalConfig: {
-      baseUrl: 'http://localhost:3000'
+      baseUrl: 'http://localhost:3000',
     },
     tests: [
       {
         name: 'mobile-portrait',
         url: '/',
-        viewport: { width: 375, height: 812 }
+        viewport: { width: 375, height: 812 },
       },
       {
         name: 'tablet-landscape',
         url: '/',
-        viewport: { width: 1024, height: 768 }
+        viewport: { width: 1024, height: 768 },
       },
       {
         name: 'desktop-large',
         url: '/',
-        viewport: { width: 1920, height: 1080 }
-      }
-    ]
-  })
+        viewport: { width: 1920, height: 1080 },
+      },
+    ],
+  }),
 };
 
 export default VisualRegressionTester;

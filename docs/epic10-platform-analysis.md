@@ -1,6 +1,7 @@
 # Epic 10 - Platform Analysis and Prompt Format Research
 
 ## Overview
+
 This document analyzes major AI platforms and their prompt formatting requirements to inform the design of our prompt targeting system.
 
 ## Platform Analysis
@@ -8,9 +9,10 @@ This document analyzes major AI platforms and their prompt formatting requiremen
 ### 1. OpenAI GPT Models (Text-to-Text)
 
 #### Prompt Structure
+
 - **Basic format**: Simple text strings
 - **Advanced format**: Chat completion format with system/user/assistant roles
-- **Parameters**: 
+- **Parameters**:
   - `temperature` (0.0-2.0): Controls randomness
   - `max_tokens`: Maximum response length
   - `top_p` (0.0-1.0): Nucleus sampling
@@ -18,6 +20,7 @@ This document analyzes major AI platforms and their prompt formatting requiremen
   - `presence_penalty` (-2.0-2.0): Encourages new topics
 
 #### Example Formats
+
 ```json
 // Simple completion
 {
@@ -40,6 +43,7 @@ This document analyzes major AI platforms and their prompt formatting requiremen
 ### 2. DALL-E / OpenAI Images (Text-to-Image)
 
 #### Prompt Structure
+
 - **Format**: Natural language descriptions
 - **Style modifiers**: Art styles, photography terms, lighting
 - **Parameters**:
@@ -48,6 +52,7 @@ This document analyzes major AI platforms and their prompt formatting requiremen
   - `style`: "vivid", "natural"
 
 #### Example
+
 ```json
 {
   "prompt": "A serene landscape with mountains and a lake, digital art style, golden hour lighting",
@@ -60,6 +65,7 @@ This document analyzes major AI platforms and their prompt formatting requiremen
 ### 3. Midjourney (Text-to-Image)
 
 #### Prompt Structure
+
 - **Format**: Natural language with parameter flags
 - **Aspect ratios**: `--ar 16:9`, `--ar 4:3`, etc.
 - **Stylization**: `--s 0-1000` (default 100)
@@ -68,6 +74,7 @@ This document analyzes major AI platforms and their prompt formatting requiremen
 - **Version**: `--v 6`, `--v 5.2`, etc.
 
 #### Example
+
 ```
 A majestic mountain landscape at sunset, hyperrealistic photography, 8k resolution --ar 16:9 --s 250 --q 2 --v 6
 ```
@@ -75,6 +82,7 @@ A majestic mountain landscape at sunset, hyperrealistic photography, 8k resoluti
 ### 4. Stable Diffusion (Text-to-Image)
 
 #### Prompt Structure
+
 - **Positive prompt**: Desired elements
 - **Negative prompt**: Elements to avoid
 - **Parameters**:
@@ -84,6 +92,7 @@ A majestic mountain landscape at sunset, hyperrealistic photography, 8k resoluti
   - `width/height`: Image dimensions
 
 #### Example
+
 ```json
 {
   "prompt": "beautiful landscape, mountains, sunset, highly detailed, 8k, photorealistic",
@@ -98,13 +107,15 @@ A majestic mountain landscape at sunset, hyperrealistic photography, 8k resoluti
 ### 5. Claude (Anthropic) - Text-to-Text
 
 #### Prompt Structure
+
 - **Format**: Conversational with clear instructions
 - **Best practices**: Use XML tags for structure
-- **Parameters**: 
+- **Parameters**:
   - `max_tokens`: Response length limit
   - `temperature`: 0.0-1.0 (lower for consistency)
 
 #### Example
+
 ```xml
 <instructions>
 Write a short story about a robot discovering emotions.
@@ -120,16 +131,19 @@ Write a short story about a robot discovering emotions.
 ## Cross-Platform Translation Challenges
 
 ### 1. Parameter Mapping
+
 - **Temperature scales**: Different ranges (0-1 vs 0-2)
 - **Quality controls**: Different mechanisms (steps vs quality settings)
 - **Output control**: Various length/size limitations
 
 ### 2. Prompt Style Differences
+
 - **Structured vs Natural**: XML/JSON vs natural language
 - **Negative prompts**: Not all platforms support explicit negative prompts
 - **Style modifiers**: Platform-specific syntax and terminology
 
 ### 3. Capability Gaps
+
 - **Aspect ratios**: Different supported ratios across platforms
 - **Advanced features**: Some platforms have unique capabilities
 - **Version differences**: Model versions with different capabilities
@@ -137,21 +151,25 @@ Write a short story about a robot discovering emotions.
 ## Translation Strategies
 
 ### 1. Semantic Mapping
+
 - Extract intent from source prompt
 - Map to target platform's optimal format
 - Preserve core meaning while adapting syntax
 
 ### 2. Parameter Normalization
+
 - Create universal parameter scale (0-1)
 - Map to platform-specific ranges
 - Handle missing parameters gracefully
 
 ### 3. Style Translation
+
 - Maintain style libraries for each platform
 - Translate artistic terms appropriately
 - Handle platform-specific modifiers
 
 ### 4. Fallback Mechanisms
+
 - Graceful degradation for unsupported features
 - Warning system for significant capability losses
 - Alternative approaches for incompatible elements
@@ -159,21 +177,25 @@ Write a short story about a robot discovering emotions.
 ## Implementation Recommendations
 
 ### 1. Adaptor Pattern
+
 - Platform-specific adaptors implementing common interface
 - Capability discovery and reporting
 - Version-aware transformations
 
 ### 2. Validation Framework
+
 - Pre-translation validation
 - Post-translation quality checks
 - Compatibility scoring system
 
 ### 3. Optimization Strategies
+
 - Caching for common translations
 - Batch processing capabilities
 - Performance monitoring and analytics
 
 ## Next Steps
+
 1. Design common interface based on platform analysis
 2. Create prototype adaptors for OpenAI GPT and Midjourney
 3. Implement core mapping algorithms

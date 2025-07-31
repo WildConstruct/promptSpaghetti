@@ -34,12 +34,13 @@ const result = await service.evaluateToggle('analytics_feature', {
   userId: 'user123',
   consents: {
     [ConsentType.ANALYTICS]: ConsentStatus.GRANTED,
-    [ConsentType.MARKETING]: ConsentStatus.DENIED
-  }
+    [ConsentType.MARKETING]: ConsentStatus.DENIED,
+  },
 });
 ```
 
 **Key Features**:
+
 - Extends existing FeatureToggleService
 - Maps features to consent requirements
 - Supports AND/OR logic for multiple consents
@@ -98,21 +99,18 @@ React hooks for seamless feature toggle integration:
 ```typescript
 // Single toggle evaluation
 const { result, isLoading, consentInfo } = useConsentAwareToggle('analytics_feature', {
-  autoRefreshOnConsentChange: true
+  autoRefreshOnConsentChange: true,
 });
 
 // Batch toggle evaluation
-const { results, getToggle } = useBatchConsentAwareToggle([
-  'analytics_feature',
-  'marketing_feature'
-]);
+const { results, getToggle } = useBatchConsentAwareToggle(['analytics_feature', 'marketing_feature']);
 ```
 
 **React Component Integration**:
 
 ```typescript
 // Conditional rendering component
-<ConsentAwareFeature 
+<ConsentAwareFeature
   toggleKey="analytics_dashboard"
   fallback={<BasicDashboard />}
   onConsentRequired={(consents) => showConsentBanner(consents)}
@@ -122,7 +120,7 @@ const { results, getToggle } = useBatchConsentAwareToggle([
 
 // Higher-order component
 const ConsentAwareAnalytics = withConsentAwareToggle(
-  AnalyticsComponent, 
+  AnalyticsComponent,
   'analytics_feature'
 );
 ```
@@ -141,11 +139,7 @@ const consents = await adapter.getConsents('user123', 'session456');
 const hasAnalytics = await adapter.hasConsent(ConsentType.ANALYTICS, 'user123');
 
 // Check multiple consents
-const hasRequired = await adapter.hasConsents(
-  [ConsentType.ANALYTICS, ConsentType.PERSONALIZATION],
-  'AND',
-  'user123'
-);
+const hasRequired = await adapter.hasConsents([ConsentType.ANALYTICS, ConsentType.PERSONALIZATION], 'AND', 'user123');
 ```
 
 ## Feature-Consent Mapping System
@@ -160,7 +154,7 @@ const mapping: FeatureConsentMapping = {
   requiredConsents: [ConsentType.PERSONALIZATION, ConsentType.ANALYTICS],
   requiredConsentLogic: 'AND',
   fallbackBehavior: 'minimal',
-  consentExplanation: 'Personalized recommendations require personalization and analytics consent'
+  consentExplanation: 'Personalized recommendations require personalization and analytics consent',
 };
 ```
 
@@ -168,13 +162,13 @@ const mapping: FeatureConsentMapping = {
 
 The system includes default mappings for common features:
 
-| Feature | Required Consents | Logic | Fallback |
-|---------|------------------|-------|-----------|
-| `analytics_tracking` | Analytics | AND | Disable |
-| `marketing_features` | Marketing | AND | Disable |
-| `personalized_recommendations` | Personalization, Analytics | AND | Minimal |
-| `social_sharing` | Social Media | AND | Disable |
-| `performance_monitoring` | Performance | AND | Minimal |
+| Feature                        | Required Consents          | Logic | Fallback |
+| ------------------------------ | -------------------------- | ----- | -------- |
+| `analytics_tracking`           | Analytics                  | AND   | Disable  |
+| `marketing_features`           | Marketing                  | AND   | Disable  |
+| `personalized_recommendations` | Personalization, Analytics | AND   | Minimal  |
+| `social_sharing`               | Social Media               | AND   | Disable  |
+| `performance_monitoring`       | Performance                | AND   | Minimal  |
 
 ### Consent Types
 
@@ -192,6 +186,7 @@ Supports comprehensive consent categorization:
 ## Fallback Behaviors
 
 ### 1. Disable (`disable`)
+
 Complete feature disabling when consent is not granted:
 
 ```typescript
@@ -202,7 +197,8 @@ Complete feature disabling when consent is not granted:
 }
 ```
 
-### 2. Minimal (`minimal`) 
+### 2. Minimal (`minimal`)
+
 Provide basic functionality without consent-required features:
 
 ```typescript
@@ -214,6 +210,7 @@ Provide basic functionality without consent-required features:
 ```
 
 ### 3. Default (`default`)
+
 Use original toggle result but log consent issue:
 
 ```typescript
@@ -227,6 +224,7 @@ Use original toggle result but log consent issue:
 ## Security & Compliance Features
 
 ### 1. Audit Logging
+
 Comprehensive logging for compliance:
 
 ```typescript
@@ -239,12 +237,14 @@ Comprehensive logging for compliance:
 ```
 
 ### 2. Data Protection
+
 - No sensitive consent data in logs
 - Secure consent data caching
 - Automatic cache expiration
 - GDPR-compliant data handling
 
 ### 3. Privacy Controls
+
 - User-controlled consent granularity
 - Real-time consent updates
 - Automatic feature adjustment on consent changes
@@ -253,18 +253,21 @@ Comprehensive logging for compliance:
 ## Performance Optimizations
 
 ### 1. Intelligent Caching
+
 - Consent data cached per user/session
 - Configurable cache timeout (default 15 minutes)
 - Automatic cache invalidation on consent changes
 - Batch evaluation for multiple toggles
 
 ### 2. Efficient Evaluation
+
 - Pre-fetch consent data for batch operations
 - Lazy evaluation when consent not required
 - Parallel toggle evaluation
 - Minimal database queries
 
 ### 3. Client-Side Optimization
+
 - Debounced consent change updates
 - Local toggle result caching
 - Background consent refresh
@@ -273,6 +276,7 @@ Comprehensive logging for compliance:
 ## Error Handling
 
 ### 1. Graceful Degradation
+
 ```typescript
 // Non-strict mode: fallback to base toggle evaluation
 if (!this.config.strictMode) {
@@ -282,11 +286,12 @@ if (!this.config.strictMode) {
 // Strict mode: deny access on consent errors
 return {
   enabled: false,
-  reason: 'Consent evaluation error (strict mode)'
+  reason: 'Consent evaluation error (strict mode)',
 };
 ```
 
 ### 2. Comprehensive Error Types
+
 - Consent service unavailable
 - Invalid consent data format
 - Network timeouts
@@ -294,6 +299,7 @@ return {
 - Configuration errors
 
 ### 3. Recovery Mechanisms
+
 - Automatic retry with exponential backoff
 - Fallback to cached consent data
 - Default consent status configuration
@@ -315,6 +321,7 @@ return {
 - ✅ **Edge cases**: expired, withdrawn, pending consent
 
 ### Test Results
+
 - **95+ test cases** covering all scenarios
 - **100% code coverage** for core functionality
 - **Integration tests** with actual consent data
@@ -329,7 +336,7 @@ return {
 // Initialize service
 const service = new ConsentFeatureToggleService(dao, {
   enableConsentChecking: true,
-  strictMode: process.env.NODE_ENV === 'production'
+  strictMode: process.env.NODE_ENV === 'production',
 });
 
 // Register feature mappings
@@ -338,14 +345,14 @@ service.registerConsentMappings([
     featureKey: 'advanced_analytics',
     requiredConsents: [ConsentType.ANALYTICS, ConsentType.PERFORMANCE],
     requiredConsentLogic: 'AND',
-    fallbackBehavior: 'minimal'
-  }
+    fallbackBehavior: 'minimal',
+  },
 ]);
 
 // Evaluate feature
 const result = await service.evaluateToggle('advanced_analytics', {
   userId: 'user123',
-  sessionId: 'session456'
+  sessionId: 'session456',
 });
 
 if (result.enabled) {
@@ -377,7 +384,7 @@ function AnalyticsDashboard() {
     );
   }
 
-  return result.value === 'minimal' 
+  return result.value === 'minimal'
     ? <BasicAnalytics />
     : <AdvancedAnalytics />;
 }
@@ -388,18 +395,14 @@ function AnalyticsDashboard() {
 ```typescript
 // Automatically updates when consent changes
 function useFeatureAvailability() {
-  const { results } = useBatchConsentAwareToggle([
-    'analytics_tracking',
-    'personalized_content',
-    'marketing_features'
-  ]);
+  const { results } = useBatchConsentAwareToggle(['analytics_tracking', 'personalized_content', 'marketing_features']);
 
   useEffect(() => {
     // Configure services based on available features
     if (results.analytics_tracking?.enabled) {
       enableAnalyticsTracking();
     }
-    
+
     if (results.personalized_content?.enabled) {
       loadPersonalizationEngine();
     }
@@ -412,16 +415,19 @@ function useFeatureAvailability() {
 ## Integration Points
 
 ### 1. Existing Feature Toggle System
+
 - **Extends** `FeatureToggleService` without breaking changes
 - **Maintains** all existing toggle functionality
 - **Adds** consent awareness as optional layer
 
 ### 2. Epic 19 Consent Management
+
 - **Integrates** with `useConsent` hook
 - **Respects** all consent types and statuses
 - **Updates** in real-time with consent changes
 
 ### 3. Authentication System
+
 - **Works** with user authentication context
 - **Supports** both authenticated and anonymous users
 - **Handles** session-based consent for anonymous users
@@ -450,13 +456,14 @@ const service = new ConsentFeatureToggleService(dao, {
   strictMode: process.env.CONSENT_STRICT_MODE === 'true',
   defaultConsentStatus: ConsentStatus.DENIED,
   auditConsentUsage: process.env.CONSENT_AUDIT_ENABLED === 'true',
-  consentCacheTimeout: parseInt(process.env.CONSENT_CACHE_TIMEOUT) || 15
+  consentCacheTimeout: parseInt(process.env.CONSENT_CACHE_TIMEOUT) || 15,
 });
 ```
 
 ## Monitoring & Observability
 
 ### 1. Metrics
+
 - Feature toggle evaluation rates
 - Consent check success/failure rates
 - Fallback behavior usage statistics
@@ -464,12 +471,14 @@ const service = new ConsentFeatureToggleService(dao, {
 - API response times
 
 ### 2. Alerts
+
 - High consent service error rates
 - Frequent cache misses
 - Unusual fallback behavior usage
 - Performance degradation
 
 ### 3. Dashboards
+
 - Real-time consent compliance status
 - Feature availability by consent type
 - User consent distribution
@@ -478,6 +487,7 @@ const service = new ConsentFeatureToggleService(dao, {
 ## Future Enhancements
 
 ### Planned Features
+
 - **Machine Learning**: Intelligent consent prediction
 - **A/B Testing**: Consent-aware experiment targeting
 - **Advanced Analytics**: Consent impact on user engagement

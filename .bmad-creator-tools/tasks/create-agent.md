@@ -69,7 +69,6 @@ Created during agent setup:
 
 1. Copy the template from `.bmad-core/templates/agent-tmpl.md`
 2. Replace all placeholders with gathered information:
-
    - `[AGENT_ID]` → agent id
    - `[AGENT_NAME]` → agent name
    - `[AGENT_TITLE]` → agent title
@@ -157,13 +156,11 @@ persona:
 When a required task or template doesn't exist:
 
 1. **For Missing Tasks**: Create using `.bmad-core/templates/task-template.md`
-
    - Name it descriptively (e.g., `analyze-metrics.md`)
    - Define clear steps for the action
    - Include any required inputs/outputs
 
 2. **For Missing Templates**: Create a basic structure
-
    - Name it descriptively (e.g., `metrics-report-template.md`)
    - Include placeholders for expected content
    - Add sections relevant to the document type

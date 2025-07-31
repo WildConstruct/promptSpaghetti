@@ -21,12 +21,12 @@ describe('GraphCRDT', () => {
       const node: GraphNode = {
         id: 'node1',
         type: 'Output',
-        data: { text: 'Hello World' }
+        data: { text: 'Hello World' },
       };
 
       crdt.addNode(node);
       const graph = crdt.toGraphDocument();
-      
+
       expect(graph.nodes.has('node1')).toBe(true);
       expect(graph.nodes.get('node1')?.type).toBe('Output');
     });
@@ -35,12 +35,12 @@ describe('GraphCRDT', () => {
       const node: GraphNode = {
         id: 'node1',
         type: 'Output',
-        data: { text: 'Hello' }
+        data: { text: 'Hello' },
       };
 
       crdt.addNode(node);
       crdt.updateNode('node1', { data: { text: 'Hello World' } });
-      
+
       const graph = crdt.toGraphDocument();
       expect(graph.nodes.get('node1')?.data.text).toBe('Hello World');
     });
@@ -49,17 +49,17 @@ describe('GraphCRDT', () => {
       const node1: GraphNode = {
         id: 'node1',
         type: 'Output',
-        data: {}
+        data: {},
       };
       const node2: GraphNode = {
         id: 'node2',
         type: 'Concat',
-        data: {}
+        data: {},
       };
       const edge: GraphEdge = {
         id: 'edge1',
         source: 'node2',
-        target: 'node1'
+        target: 'node1',
       };
 
       crdt.addNode(node1);
@@ -70,7 +70,7 @@ describe('GraphCRDT', () => {
 
       crdt.removeNode('node1');
       const graph = crdt.toGraphDocument();
-      
+
       expect(graph.nodes.has('node1')).toBe(false);
       expect(graph.edges.has('edge1')).toBe(false);
     });
@@ -89,12 +89,12 @@ describe('GraphCRDT', () => {
       const edge: GraphEdge = {
         id: 'edge1',
         source: 'node2',
-        target: 'node1'
+        target: 'node1',
       };
 
       crdt.addEdge(edge);
       const graph = crdt.toGraphDocument();
-      
+
       expect(graph.edges.has('edge1')).toBe(true);
       expect(graph.edges.get('edge1')?.source).toBe('node2');
     });
@@ -103,7 +103,7 @@ describe('GraphCRDT', () => {
       const edge: GraphEdge = {
         id: 'edge1',
         source: 'nonexistent',
-        target: 'node1'
+        target: 'node1',
       };
 
       expect(() => crdt.addEdge(edge)).toThrow();
@@ -113,7 +113,7 @@ describe('GraphCRDT', () => {
       const edge: GraphEdge = {
         id: 'edge1',
         source: 'node2',
-        target: 'node1'
+        target: 'node1',
       };
 
       crdt.addEdge(edge);
@@ -128,15 +128,13 @@ describe('GraphCRDT', () => {
     it('should convert to and from GraphDocument', () => {
       const originalGraph: GraphDocument = {
         id: 'test-graph',
-        nodes: new Map([
-          ['node1', { id: 'node1', type: 'Output', data: { text: 'Hello' } }]
-        ]),
+        nodes: new Map([['node1', { id: 'node1', type: 'Output', data: { text: 'Hello' } }]]),
         edges: new Map(),
         metadata: {
           version: '1.0.0',
           created: new Date(),
-          modified: new Date()
-        }
+          modified: new Date(),
+        },
       };
 
       crdt.fromGraphDocument(originalGraph);
@@ -153,7 +151,7 @@ describe('GraphCRDT', () => {
       const node: GraphNode = {
         id: 'node1',
         type: 'Output',
-        data: { text: 'Hello' }
+        data: { text: 'Hello' },
       };
 
       crdt.addNode(node);
@@ -201,9 +199,9 @@ describe('GraphCRDT', () => {
   });
 
   describe('Change Tracking', () => {
-    it('should track changes with listeners', (done) => {
+    it('should track changes with listeners', done => {
       let changeCount = 0;
-      
+
       const unsubscribe = crdt.onChange(() => {
         changeCount++;
         if (changeCount === 2) {
@@ -223,7 +221,7 @@ describe('GraphCRDT', () => {
 
       const history = crdt.getHistory();
       expect(history.length).toBe(3);
-      
+
       // Each history item should be an array with operation data
       if (Array.isArray(history[0])) {
         expect(history[0][0].type).toBe('addNode');
@@ -240,24 +238,20 @@ describe('GraphCRDT', () => {
     it('should merge multiple graphs', () => {
       const graph1: GraphDocument = {
         id: 'graph1',
-        nodes: new Map([
-          ['node1', { id: 'node1', type: 'Output', data: { text: 'Graph 1' } }]
-        ]),
+        nodes: new Map([['node1', { id: 'node1', type: 'Output', data: { text: 'Graph 1' } }]]),
         edges: new Map(),
-        metadata: { version: '1.0.0', created: new Date(), modified: new Date() }
+        metadata: { version: '1.0.0', created: new Date(), modified: new Date() },
       };
 
       const graph2: GraphDocument = {
         id: 'graph2',
-        nodes: new Map([
-          ['node2', { id: 'node2', type: 'Concat', data: { text: 'Graph 2' } }]
-        ]),
+        nodes: new Map([['node2', { id: 'node2', type: 'Concat', data: { text: 'Graph 2' } }]]),
         edges: new Map(),
-        metadata: { version: '1.0.0', created: new Date(), modified: new Date() }
+        metadata: { version: '1.0.0', created: new Date(), modified: new Date() },
       };
 
       const merged = mergeGraphs([graph1, graph2]);
-      
+
       expect(merged.nodes.has('node1')).toBe(true);
       expect(merged.nodes.has('node2')).toBe(true);
     });
@@ -269,11 +263,9 @@ describe('GraphCRDT', () => {
     it('should return single graph unchanged', () => {
       const graph: GraphDocument = {
         id: 'single',
-        nodes: new Map([
-          ['node1', { id: 'node1', type: 'Output', data: {} }]
-        ]),
+        nodes: new Map([['node1', { id: 'node1', type: 'Output', data: {} }]]),
         edges: new Map(),
-        metadata: { version: '1.0.0', created: new Date(), modified: new Date() }
+        metadata: { version: '1.0.0', created: new Date(), modified: new Date() },
       };
 
       const result = mergeGraphs([graph]);

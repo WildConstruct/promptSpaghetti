@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { ExportService } from '../services/export-service';
-import { 
+import {
   CreateExportTemplateSchema,
   UpdateExportTemplateSchema,
   CreateExportJobSchema,
@@ -13,7 +13,7 @@ import {
   ExportFormat,
   ExportType,
   ExportJobStatus,
-  validateExportOptions
+  validateExportOptions,
 } from '../../../packages/core/types/export';
 import { z } from 'zod';
 import { logger } from '../utils/logger';
@@ -22,25 +22,23 @@ import * as path from 'path';
 
 // Request parameter schemas
 const ProjectParamsSchema = z.object({
-  projectId: z.string().uuid()
+  projectId: z.string().uuid(),
 });
 
 const TemplateParamsSchema = z.object({
-  templateId: z.string().uuid()
+  templateId: z.string().uuid(),
 });
 
 const JobParamsSchema = z.object({
-  jobId: z.string().uuid()
+  jobId: z.string().uuid(),
 });
-
-
 
 // Query parameter schemas
 const ExportTemplateQuerySchema = z.object({
   format: z.enum(['json', 'yaml', 'xml', 'csv', 'markdown', 'pdf', 'html', 'zip']).optional(),
   isPublic: z.boolean().optional(),
   limit: z.number().int().min(1).max(100).default(20).optional(),
-  offset: z.number().int().min(0).default(0).optional()
+  offset: z.number().int().min(0).default(0).optional(),
 });
 
 const ExportJobQuerySchema = z.object({
@@ -48,14 +46,14 @@ const ExportJobQuerySchema = z.object({
   format: z.enum(['json', 'yaml', 'xml', 'csv', 'markdown', 'pdf', 'html', 'zip']).optional(),
   userId: z.string().uuid().optional(),
   limit: z.number().int().min(1).max(100).default(20).optional(),
-  offset: z.number().int().min(0).default(0).optional()
+  offset: z.number().int().min(0).default(0).optional(),
 });
 
 export async function exportRoutes(fastify: FastifyInstance) {
   const exportService = new ExportService(fastify.db);
 
   // Export Templates
-  
+
   // GET /api/projects/:projectId/export/templates
   fastify.get<{
     Params: z.infer<typeof ProjectParamsSchema>;
@@ -64,23 +62,23 @@ export async function exportRoutes(fastify: FastifyInstance) {
     try {
       const { projectId } = ProjectParamsSchema.parse(request.params);
       const queryOptions = ExportTemplateQuerySchema.parse(request.query);
-      
+
       const templates = await exportService.getExportTemplates(projectId, queryOptions);
-      
+
       reply.send({
         success: true,
         data: templates,
         pagination: {
           limit: queryOptions.limit,
           offset: queryOptions.offset,
-          total: templates.length
-        }
+          total: templates.length,
+        },
       });
     } catch (error) {
       logger.error('Failed to get export templates:', error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to retrieve export templates'
+        error: 'Failed to retrieve export templates',
       });
     }
   });
@@ -94,20 +92,20 @@ export async function exportRoutes(fastify: FastifyInstance) {
       const { projectId } = ProjectParamsSchema.parse(request.params);
       const templateData = CreateExportTemplateSchema.parse({
         ...request.body,
-        project_id: projectId
+        project_id: projectId,
       });
-      
+
       const template = await exportService.createExportTemplate(templateData);
-      
+
       reply.status(201).send({
         success: true,
-        data: template
+        data: template,
       });
     } catch (error) {
       logger.error('Failed to create export template:', error);
       reply.status(400).send({
         success: false,
-        error: error.message || 'Failed to create export template'
+        error: error.message || 'Failed to create export template',
       });
     }
   });
@@ -119,23 +117,23 @@ export async function exportRoutes(fastify: FastifyInstance) {
     try {
       const { templateId } = TemplateParamsSchema.parse(request.params);
       const template = await exportService.getExportTemplate(templateId);
-      
+
       if (!template) {
         return reply.status(404).send({
           success: false,
-          error: 'Export template not found'
+          error: 'Export template not found',
         });
       }
-      
+
       reply.send({
         success: true,
-        data: template
+        data: template,
       });
     } catch (error) {
       logger.error('Failed to get export template:', error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to retrieve export template'
+        error: 'Failed to retrieve export template',
       });
     }
   });
@@ -147,23 +145,23 @@ export async function exportRoutes(fastify: FastifyInstance) {
     try {
       const { templateId } = TemplateParamsSchema.parse(request.params);
       const templateWithStats = await exportService.getExportTemplateWithStats(templateId);
-      
+
       if (!templateWithStats) {
         return reply.status(404).send({
           success: false,
-          error: 'Export template not found'
+          error: 'Export template not found',
         });
       }
-      
+
       reply.send({
         success: true,
-        data: templateWithStats
+        data: templateWithStats,
       });
     } catch (error) {
       logger.error('Failed to get export template with stats:', error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to retrieve export template with stats'
+        error: 'Failed to retrieve export template with stats',
       });
     }
   });
@@ -176,25 +174,25 @@ export async function exportRoutes(fastify: FastifyInstance) {
     try {
       const { templateId } = TemplateParamsSchema.parse(request.params);
       const updates = UpdateExportTemplateSchema.parse(request.body);
-      
+
       const template = await exportService.updateExportTemplate(templateId, updates);
-      
+
       if (!template) {
         return reply.status(404).send({
           success: false,
-          error: 'Export template not found'
+          error: 'Export template not found',
         });
       }
-      
+
       reply.send({
         success: true,
-        data: template
+        data: template,
       });
     } catch (error) {
       logger.error('Failed to update export template:', error);
       reply.status(400).send({
         success: false,
-        error: error.message || 'Failed to update export template'
+        error: error.message || 'Failed to update export template',
       });
     }
   });
@@ -206,23 +204,23 @@ export async function exportRoutes(fastify: FastifyInstance) {
     try {
       const { templateId } = TemplateParamsSchema.parse(request.params);
       const deleted = await exportService.deleteExportTemplate(templateId);
-      
+
       if (!deleted) {
         return reply.status(404).send({
           success: false,
-          error: 'Export template not found'
+          error: 'Export template not found',
         });
       }
-      
+
       reply.send({
         success: true,
-        message: 'Export template deleted successfully'
+        message: 'Export template deleted successfully',
       });
     } catch (error) {
       logger.error('Failed to delete export template:', error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to delete export template'
+        error: 'Failed to delete export template',
       });
     }
   });
@@ -237,23 +235,23 @@ export async function exportRoutes(fastify: FastifyInstance) {
     try {
       const { projectId } = ProjectParamsSchema.parse(request.params);
       const queryOptions = ExportJobQuerySchema.parse(request.query);
-      
+
       const jobs = await exportService.getExportJobs(projectId, queryOptions);
-      
+
       reply.send({
         success: true,
         data: jobs,
         pagination: {
           limit: queryOptions.limit,
           offset: queryOptions.offset,
-          total: jobs.length
-        }
+          total: jobs.length,
+        },
       });
     } catch (error) {
       logger.error('Failed to get export jobs:', error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to retrieve export jobs'
+        error: 'Failed to retrieve export jobs',
       });
     }
   });
@@ -268,20 +266,20 @@ export async function exportRoutes(fastify: FastifyInstance) {
       const jobData = CreateExportJobSchema.parse({
         ...request.body,
         project_id: projectId,
-        initiated_by: request.user?.id || 'system' // Assuming user context
+        initiated_by: request.user?.id || 'system', // Assuming user context
       });
-      
+
       const job = await exportService.createExportJob(jobData);
-      
+
       reply.status(201).send({
         success: true,
-        data: job
+        data: job,
       });
     } catch (error) {
       logger.error('Failed to create export job:', error);
       reply.status(400).send({
         success: false,
-        error: error.message || 'Failed to create export job'
+        error: error.message || 'Failed to create export job',
       });
     }
   });
@@ -293,23 +291,23 @@ export async function exportRoutes(fastify: FastifyInstance) {
     try {
       const { jobId } = JobParamsSchema.parse(request.params);
       const job = await exportService.getExportJob(jobId);
-      
+
       if (!job) {
         return reply.status(404).send({
           success: false,
-          error: 'Export job not found'
+          error: 'Export job not found',
         });
       }
-      
+
       reply.send({
         success: true,
-        data: job
+        data: job,
       });
     } catch (error) {
       logger.error('Failed to get export job:', error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to retrieve export job'
+        error: 'Failed to retrieve export job',
       });
     }
   });
@@ -321,23 +319,23 @@ export async function exportRoutes(fastify: FastifyInstance) {
     try {
       const { jobId } = JobParamsSchema.parse(request.params);
       const jobWithTemplate = await exportService.getExportJobWithTemplate(jobId);
-      
+
       if (!jobWithTemplate) {
         return reply.status(404).send({
           success: false,
-          error: 'Export job not found'
+          error: 'Export job not found',
         });
       }
-      
+
       reply.send({
         success: true,
-        data: jobWithTemplate
+        data: jobWithTemplate,
       });
     } catch (error) {
       logger.error('Failed to get export job details:', error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to retrieve export job details'
+        error: 'Failed to retrieve export job details',
       });
     }
   });
@@ -349,23 +347,23 @@ export async function exportRoutes(fastify: FastifyInstance) {
     try {
       const { jobId } = JobParamsSchema.parse(request.params);
       const progress = await exportService.getExportProgress(jobId);
-      
+
       if (!progress) {
         return reply.status(404).send({
           success: false,
-          error: 'Export job not found'
+          error: 'Export job not found',
         });
       }
-      
+
       reply.send({
         success: true,
-        data: progress
+        data: progress,
       });
     } catch (error) {
       logger.error('Failed to get export progress:', error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to retrieve export progress'
+        error: 'Failed to retrieve export progress',
       });
     }
   });
@@ -377,23 +375,23 @@ export async function exportRoutes(fastify: FastifyInstance) {
     try {
       const { jobId } = JobParamsSchema.parse(request.params);
       const cancelled = await exportService.cancelExportJob(jobId);
-      
+
       if (!cancelled) {
         return reply.status(400).send({
           success: false,
-          error: 'Export job cannot be cancelled'
+          error: 'Export job cannot be cancelled',
         });
       }
-      
+
       reply.send({
         success: true,
-        message: 'Export job cancelled successfully'
+        message: 'Export job cancelled successfully',
       });
     } catch (error) {
       logger.error('Failed to cancel export job:', error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to cancel export job'
+        error: 'Failed to cancel export job',
       });
     }
   });
@@ -405,27 +403,30 @@ export async function exportRoutes(fastify: FastifyInstance) {
     try {
       const { jobId } = JobParamsSchema.parse(request.params);
       const job = await exportService.getExportJob(jobId);
-      
+
       if (!job) {
         return reply.status(404).send({
           success: false,
-          error: 'Export job not found'
+          error: 'Export job not found',
         });
       }
 
       if (job.status !== 'completed' || !job.output_file_path) {
         return reply.status(400).send({
           success: false,
-          error: 'Export file not available'
+          error: 'Export file not available',
         });
       }
 
       // Check if file exists
-      const fileExists = await fs.access(job.output_file_path).then(() => true).catch(() => false);
+      const fileExists = await fs
+        .access(job.output_file_path)
+        .then(() => true)
+        .catch(() => false);
       if (!fileExists) {
         return reply.status(404).send({
           success: false,
-          error: 'Export file not found'
+          error: 'Export file not found',
         });
       }
 
@@ -441,12 +442,11 @@ export async function exportRoutes(fastify: FastifyInstance) {
       // Stream the file
       const stream = await fs.readFile(job.output_file_path);
       reply.send(stream);
-
     } catch (error) {
       logger.error('Failed to download export file:', error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to download export file'
+        error: 'Failed to download export file',
       });
     }
   });
@@ -460,16 +460,16 @@ export async function exportRoutes(fastify: FastifyInstance) {
     try {
       const { projectId } = ProjectParamsSchema.parse(request.params);
       const statistics = await exportService.getExportStatistics(projectId);
-      
+
       reply.send({
         success: true,
-        data: statistics
+        data: statistics,
       });
     } catch (error) {
       logger.error('Failed to get export statistics:', error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to retrieve export statistics'
+        error: 'Failed to retrieve export statistics',
       });
     }
   });
@@ -480,16 +480,16 @@ export async function exportRoutes(fastify: FastifyInstance) {
   fastify.get('/export/formats', async (request, reply) => {
     try {
       const formats = await exportService.getExportFormats();
-      
+
       reply.send({
         success: true,
-        data: formats
+        data: formats,
       });
     } catch (error) {
       logger.error('Failed to get export formats:', error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to retrieve export formats'
+        error: 'Failed to retrieve export formats',
       });
     }
   });
@@ -501,23 +501,23 @@ export async function exportRoutes(fastify: FastifyInstance) {
     try {
       const { formatName } = request.params;
       const format = await exportService.getExportFormat(formatName);
-      
+
       if (!format) {
         return reply.status(404).send({
           success: false,
-          error: 'Export format not found'
+          error: 'Export format not found',
         });
       }
-      
+
       reply.send({
         success: true,
-        data: format
+        data: format,
       });
     } catch (error) {
       logger.error('Failed to get export format:', error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to retrieve export format'
+        error: 'Failed to retrieve export format',
       });
     }
   });
@@ -530,22 +530,22 @@ export async function exportRoutes(fastify: FastifyInstance) {
     try {
       const { formatName } = request.params;
       const options = request.body;
-      
+
       const validation = validateExportOptions(formatName as ExportFormat, options);
-      
+
       reply.send({
         success: true,
         data: {
           valid: validation.success,
           errors: validation.success ? [] : validation.error.errors,
-          validatedOptions: validation.success ? validation.data : null
-        }
+          validatedOptions: validation.success ? validation.data : null,
+        },
       });
     } catch (error) {
       logger.error('Failed to validate export options:', error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to validate export options'
+        error: 'Failed to validate export options',
       });
     }
   });
@@ -556,19 +556,19 @@ export async function exportRoutes(fastify: FastifyInstance) {
   fastify.post('/export/cleanup/expired', async (request, reply) => {
     try {
       const cleanedCount = await exportService.cleanupExpiredJobs();
-      
+
       reply.send({
         success: true,
         data: {
           cleaned_count: cleanedCount,
-          message: `${cleanedCount} expired export jobs cleaned up`
-        }
+          message: `${cleanedCount} expired export jobs cleaned up`,
+        },
       });
     } catch (error) {
       logger.error('Failed to cleanup expired jobs:', error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to cleanup expired jobs'
+        error: 'Failed to cleanup expired jobs',
       });
     }
   });
@@ -580,57 +580,61 @@ export async function exportRoutes(fastify: FastifyInstance) {
     try {
       const { olderThanDays = 7 } = request.body;
       const cleanedCount = await exportService.cleanupFailedJobs(olderThanDays);
-      
+
       reply.send({
         success: true,
         data: {
           cleaned_count: cleanedCount,
-          message: `${cleanedCount} failed export jobs cleaned up`
-        }
+          message: `${cleanedCount} failed export jobs cleaned up`,
+        },
       });
     } catch (error) {
       logger.error('Failed to cleanup failed jobs:', error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to cleanup failed jobs'
+        error: 'Failed to cleanup failed jobs',
       });
     }
   });
 
   // WebSocket for real-time export progress
-  fastify.register(async function(fastify) {
+  fastify.register(async function (fastify) {
     if (fastify.websocketServer) {
       fastify.get('/export/jobs/:jobId/progress-stream', { websocket: true }, (connection, req) => {
         const jobId = (req.params as any).jobId;
-        
+
         const sendProgress = async () => {
           try {
             const progress = await exportService.getExportProgress(jobId);
             if (progress) {
-              connection.send(JSON.stringify({
-                type: 'progress',
-                data: progress
-              }));
-              
+              connection.send(
+                JSON.stringify({
+                  type: 'progress',
+                  data: progress,
+                })
+              );
+
               // Stop sending if job is complete
               if (progress.status === 'completed' || progress.status === 'failed' || progress.status === 'cancelled') {
                 return;
               }
             }
           } catch (error) {
-            connection.send(JSON.stringify({
-              type: 'error',
-              error: 'Failed to get progress'
-            }));
+            connection.send(
+              JSON.stringify({
+                type: 'error',
+                error: 'Failed to get progress',
+              })
+            );
           }
         };
 
         // Send initial progress
         sendProgress();
-        
+
         // Send progress updates every 2 seconds
         const interval = setInterval(sendProgress, 2000);
-        
+
         connection.on('close', () => {
           clearInterval(interval);
         });

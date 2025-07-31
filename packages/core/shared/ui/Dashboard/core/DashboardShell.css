@@ -354,39 +354,39 @@
     gap: 16px;
     align-items: stretch;
   }
-  
+
   .header-title-section {
     gap: 12px;
   }
-  
+
   .header-title {
     font-size: 24px;
   }
-  
+
   .header-controls {
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 8px;
   }
-  
+
   .time-range-select {
     min-width: 120px;
   }
-  
+
   .header-action-btn {
     padding: 8px 12px;
     font-size: 13px;
   }
-  
+
   .dashboard-padding-medium,
   .dashboard-padding-large {
     padding: 16px;
   }
-  
+
   .tabs-list {
     padding: 0 16px;
   }
-  
+
   .tab-trigger {
     padding: 10px 16px;
     font-size: 13px;
@@ -397,20 +397,20 @@
   .header-content {
     padding: 16px;
   }
-  
+
   .header-title {
     font-size: 20px;
   }
-  
+
   .header-description {
     font-size: 14px;
   }
-  
+
   .header-icon {
     width: 40px;
     height: 40px;
   }
-  
+
   .dashboard-padding-small,
   .dashboard-padding-medium,
   .dashboard-padding-large {

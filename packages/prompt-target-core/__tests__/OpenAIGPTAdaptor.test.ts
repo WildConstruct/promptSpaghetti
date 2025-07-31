@@ -8,7 +8,7 @@ describe('OpenAIGPTAdaptor', () => {
       logger: new ConsoleLogger('Test'),
       cache: new MemoryCache(),
       metrics: new MemoryMetrics(),
-      config: {}
+      config: {},
     };
     adaptor = new OpenAIGPTAdaptor(context);
   });
@@ -32,16 +32,16 @@ describe('OpenAIGPTAdaptor', () => {
             id: 'node1',
             type: 'text',
             data: { content: 'Hello world' },
-            position: { x: 0, y: 0 }
-          }
+            position: { x: 0, y: 0 },
+          },
         ],
         edges: [],
         metadata: {
           name: 'Test Graph',
           created: new Date(),
           modified: new Date(),
-          version: '1.0'
-        }
+          version: '1.0',
+        },
       };
       const results = await adaptor.validate(graph);
       expect(Array.isArray(results)).toBe(true);
@@ -58,16 +58,16 @@ describe('OpenAIGPTAdaptor', () => {
             id: 'node1',
             type: 'image',
             data: { content: 'image.jpg' },
-            position: { x: 0, y: 0 }
-          }
+            position: { x: 0, y: 0 },
+          },
         ],
         edges: [],
         metadata: {
           name: 'Test Graph',
           created: new Date(),
           modified: new Date(),
-          version: '1.0'
-        }
+          version: '1.0',
+        },
       };
       const results = await adaptor.validate(graph);
       const imageWarnings = results.filter(r => r.message.includes('Image node not supported'));
@@ -83,8 +83,8 @@ describe('OpenAIGPTAdaptor', () => {
           name: 'Empty Graph',
           created: new Date(),
           modified: new Date(),
-          version: '1.0'
-        }
+          version: '1.0',
+        },
       };
       const results = await adaptor.validate(graph);
       const emptyGraphErrors = results.filter(r => r.id === 'empty-graph');
@@ -103,16 +103,16 @@ describe('OpenAIGPTAdaptor', () => {
             id: 'node1',
             type: 'text',
             data: { content: 'Write a story about robots' },
-            position: { x: 0, y: 0 }
-          }
+            position: { x: 0, y: 0 },
+          },
         ],
         edges: [],
         metadata: {
           name: 'Test Graph',
           created: new Date(),
           modified: new Date(),
-          version: '1.0'
-        }
+          version: '1.0',
+        },
       };
       const result = await adaptor.transform(graph);
       expect(result).toHaveProperty('platform', 'openai-gpt');
@@ -125,7 +125,7 @@ describe('OpenAIGPTAdaptor', () => {
       expect(Array.isArray(content.messages)).toBe(true);
       expect(content.messages.length).toBeGreaterThan(0);
       // Should have system and user messages
-      const userMessage = content.messages.find((m) => m.role === 'user');
+      const userMessage = content.messages.find(m => m.role === 'user');
       expect(userMessage).toBeDefined();
       expect(userMessage.content).toContain('robots');
     });
@@ -138,16 +138,16 @@ describe('OpenAIGPTAdaptor', () => {
             id: 'node1',
             type: 'text',
             data: { content: 'Test prompt' },
-            position: { x: 0, y: 0 }
-          }
+            position: { x: 0, y: 0 },
+          },
         ],
         edges: [],
         metadata: {
           name: 'Test Graph',
           created: new Date(),
           modified: new Date(),
-          version: '1.0'
-        }
+          version: '1.0',
+        },
       };
       const result = await adaptor.transform(graph);
       expect(result.parameters).toHaveProperty('temperature');
@@ -169,16 +169,16 @@ describe('OpenAIGPTAdaptor', () => {
             id: 'node1',
             type: 'text',
             data: { content: 'Test prompt' },
-            position: { x: 0, y: 0 }
-          }
+            position: { x: 0, y: 0 },
+          },
         ],
         edges: [],
         metadata: {
           name: 'Test Graph',
           created: new Date(),
           modified: new Date(),
-          version: '1.0'
-        }
+          version: '1.0',
+        },
       };
       const quality = await adaptor.estimateQuality(graph);
       expect(quality).toHaveProperty('overall');

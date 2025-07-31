@@ -27,7 +27,7 @@
   .metrics-grid {
     grid-template-columns: 1fr !important;
   }
-  
+
   .metrics-grid.gap-medium,
   .metrics-grid.gap-large {
     gap: 16px;

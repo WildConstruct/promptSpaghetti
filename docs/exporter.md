@@ -39,7 +39,7 @@ The `graphToBundle` function is the main entry point:
 
 ```typescript
 export function graphToBundle(
-  graph: Graph, 
+  graph: Graph,
   options: {
     name: string;
     version?: string;
@@ -61,14 +61,14 @@ The conversion process follows these steps:
 
 Each node type has a specific conversion pattern:
 
-| Graph Node Type | GeneratorBundle Rule Type | Notes |
-|----------------|---------------------------|-------|
-| WeightedChoice | Weighted Array Rule | Maps choices to array items with weights |
-| Concat | Sequential Rule | Creates a rule with references to inputs |
-| Output | Simple Array Rule | References input node as content |
-| Include | Include Rule | Creates `$include` reference |
-| SetVariable | (Side effect) | Captured in variables section |
-| GetVariable | Variable Reference | Creates reference to variable |
+| Graph Node Type | GeneratorBundle Rule Type | Notes                                    |
+| --------------- | ------------------------- | ---------------------------------------- |
+| WeightedChoice  | Weighted Array Rule       | Maps choices to array items with weights |
+| Concat          | Sequential Rule           | Creates a rule with references to inputs |
+| Output          | Simple Array Rule         | References input node as content         |
+| Include         | Include Rule              | Creates `$include` reference             |
+| SetVariable     | (Side effect)             | Captured in variables section            |
+| GetVariable     | Variable Reference        | Creates reference to variable            |
 
 ### Validation
 
@@ -96,13 +96,13 @@ const graph = {
   seed: 123,
   nodes: [
     // Node definitions...
-  ]
+  ],
 };
 
 const bundle = graphToBundle(graph, {
   name: 'My Generated Bundle',
   version: '1.0.0',
-  author: 'PromptScape User'
+  author: 'PromptScape User',
 });
 ```
 

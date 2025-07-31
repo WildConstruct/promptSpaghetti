@@ -96,46 +96,28 @@ export interface ErrorMetrics {
 // Error Classification System
 export class ErrorClassifier {
   private static patterns = {
-    network: [
-      /connection.*refused/i,
-      /timeout/i,
-      /network.*error/i,
-      /fetch.*failed/i,
-      /websocket.*error/i
-    ],
-    validation: [
-      /validation.*error/i,
-      /invalid.*input/i,
-      /schema.*mismatch/i,
-      /type.*error/i,
-      /missing.*required/i
-    ],
-    authentication: [
-      /auth.*failed/i,
-      /token.*expired/i,
-      /unauthorized/i,
-      /forbidden/i,
-      /invalid.*credentials/i
-    ],
+    network: [/connection.*refused/i, /timeout/i, /network.*error/i, /fetch.*failed/i, /websocket.*error/i],
+    validation: [/validation.*error/i, /invalid.*input/i, /schema.*mismatch/i, /type.*error/i, /missing.*required/i],
+    authentication: [/auth.*failed/i, /token.*expired/i, /unauthorized/i, /forbidden/i, /invalid.*credentials/i],
     system: [
       /out.*of.*memory/i,
       /stack.*overflow/i,
       /resource.*exhausted/i,
       /system.*error/i,
-      /internal.*server.*error/i
+      /internal.*server.*error/i,
     ],
     performance: [
       /performance.*degraded/i,
       /slow.*response/i,
       /high.*latency/i,
       /resource.*contention/i,
-      /bottleneck/i
-    ]
+      /bottleneck/i,
+    ],
   };
 
   static classifyError(error: Error): ErrorDetails['type'] {
     const message = error.message.toLowerCase();
-    
+
     for (const [type, patterns] of Object.entries(this.patterns)) {
       for (const pattern of patterns) {
         if (pattern.test(message)) {
@@ -143,36 +125,38 @@ export class ErrorClassifier {
         }
       }
     }
-    
+
     return 'unknown';
   }
 
   static determineSeverity(error: Error, context: ErrorContext): ErrorDetails['severity'] {
     const message = error.message.toLowerCase();
-    
+
     // Critical errors
-    if (message.includes('security') || 
-        message.includes('data loss') ||
-        message.includes('corruption') ||
-        context.testSuite.includes('critical')) {
+    if (
+      message.includes('security') ||
+      message.includes('data loss') ||
+      message.includes('corruption') ||
+      context.testSuite.includes('critical')
+    ) {
       return 'critical';
     }
-    
+
     // High severity
-    if (message.includes('authentication') ||
-        message.includes('authorization') ||
-        message.includes('system') ||
-        context.testSuite.includes('integration')) {
+    if (
+      message.includes('authentication') ||
+      message.includes('authorization') ||
+      message.includes('system') ||
+      context.testSuite.includes('integration')
+    ) {
       return 'high';
     }
-    
+
     // Medium severity
-    if (message.includes('validation') ||
-        message.includes('network') ||
-        context.testSuite.includes('api')) {
+    if (message.includes('validation') || message.includes('network') || context.testSuite.includes('api')) {
       return 'medium';
     }
-    
+
     return 'low';
   }
 
@@ -187,7 +171,7 @@ export class ErrorClassifier {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
+      hash = (hash << 5) - hash + char;
       hash = hash & hash; // Convert to 32-bit integer
     }
     return Math.abs(hash).toString(16).substring(0, 6).toUpperCase();
@@ -213,8 +197,8 @@ export class EnhancedErrorReporter {
   }
 
   reportError(
-    error: Error, 
-    context: ErrorContext, 
+    error: Error,
+    context: ErrorContext,
     options: {
       reproducible?: boolean;
       reproductionSteps?: string[];
@@ -231,14 +215,14 @@ export class EnhancedErrorReporter {
 
     const errorType = ErrorClassifier.classifyError(error);
     const severity = ErrorClassifier.determineSeverity(error, context);
-    
+
     const errorDetails: ErrorDetails = {
       type: errorType,
       severity,
       code: '',
       message: error.message,
       stack: error.stack,
-      metadata: options.metadata
+      metadata: options.metadata,
     };
 
     errorDetails.code = ErrorClassifier.generateErrorCode(errorDetails);
@@ -254,12 +238,12 @@ export class EnhancedErrorReporter {
       workaround: options.workaround,
       resolution: undefined,
       tags: options.tags ?? [],
-      attachments: []
+      attachments: [],
     };
 
     this.reports.push(report);
     this.saveReport(report);
-    
+
     return report;
   }
 
@@ -268,7 +252,7 @@ export class EnhancedErrorReporter {
 
     const reportPath = join(this.outputDirectory, `test-feedback-${Date.now()}.json`);
     writeFileSync(reportPath, JSON.stringify(feedback, null, 2));
-    
+
     console.log(`Test feedback saved: ${reportPath}`);
   }
 
@@ -278,9 +262,7 @@ export class EnhancedErrorReporter {
     const oneDay = 24 * oneHour;
     const oneWeek = 7 * oneDay;
 
-    const recentReports = this.reports.filter(
-      report => new Date(report.context.timestamp).getTime() > now - oneWeek
-    );
+    const recentReports = this.reports.filter(report => new Date(report.context.timestamp).getTime() > now - oneWeek);
 
     // Error counts by type
     const errorsByType: Record<string, number> = {};
@@ -295,7 +277,7 @@ export class EnhancedErrorReporter {
     const errorTrends = [
       { timeframe: '1h', count: this.getErrorCountInTimeframe(oneHour), growth: 0 },
       { timeframe: '24h', count: this.getErrorCountInTimeframe(oneDay), growth: 0 },
-      { timeframe: '7d', count: this.getErrorCountInTimeframe(oneWeek), growth: 0 }
+      { timeframe: '7d', count: this.getErrorCountInTimeframe(oneWeek), growth: 0 },
     ];
 
     // Calculate growth rates
@@ -305,7 +287,7 @@ export class EnhancedErrorReporter {
 
     // Top errors by frequency
     const errorCodeCounts: Record<string, { count: number; lastOccurrence: string }> = {};
-    
+
     recentReports.forEach(report => {
       const code = report.error.code;
       if (!errorCodeCounts[code]) {
@@ -325,16 +307,15 @@ export class EnhancedErrorReporter {
     // Resolution metrics
     const resolvedReports = this.reports.filter(r => r.resolution);
     const resolutionRate = this.reports.length > 0 ? resolvedReports.length / this.reports.length : 0;
-    
+
     const resolutionTimes = resolvedReports.map(report => {
       const errorTime = new Date(report.context.timestamp).getTime();
       const resolutionTime = Date.now(); // Simplified - would use actual resolution timestamp
       return resolutionTime - errorTime;
     });
 
-    const averageResolutionTime = resolutionTimes.length > 0 
-      ? resolutionTimes.reduce((sum, time) => sum + time, 0) / resolutionTimes.length 
-      : 0;
+    const averageResolutionTime =
+      resolutionTimes.length > 0 ? resolutionTimes.reduce((sum, time) => sum + time, 0) / resolutionTimes.length : 0;
 
     this.analytics = {
       totalErrors: recentReports.length,
@@ -343,7 +324,7 @@ export class EnhancedErrorReporter {
       errorTrends,
       topErrors,
       resolutionRate,
-      averageResolutionTime
+      averageResolutionTime,
     };
 
     return this.analytics;
@@ -351,15 +332,13 @@ export class EnhancedErrorReporter {
 
   private getErrorCountInTimeframe(timeframe: number): number {
     const cutoff = Date.now() - timeframe;
-    return this.reports.filter(
-      report => new Date(report.context.timestamp).getTime() > cutoff
-    ).length;
+    return this.reports.filter(report => new Date(report.context.timestamp).getTime() > cutoff).length;
   }
 
   private calculateGrowthRate(currentTimeframe: number, previousTimeframe: number): number {
     const currentCount = this.getErrorCountInTimeframe(currentTimeframe);
     const previousCount = this.getErrorCountInTimeframe(previousTimeframe) - currentCount;
-    
+
     if (previousCount === 0) return currentCount > 0 ? 100 : 0;
     return ((currentCount - previousCount) / previousCount) * 100;
   }
@@ -391,15 +370,15 @@ export class EnhancedErrorReporter {
 
   exportReports(format: 'json' | 'csv' | 'xml' = 'json'): string {
     const analytics = this.generateAnalytics();
-    
+
     const exportData = {
       metadata: {
         exportTime: new Date().toISOString(),
         totalReports: this.reports.length,
-        format
+        format,
       },
       analytics,
-      reports: this.reports
+      reports: this.reports,
     };
 
     const fileName = `error-export-${Date.now()}.${format}`;
@@ -420,8 +399,17 @@ export class EnhancedErrorReporter {
 
   private convertToCSV(reports: ErrorReport[]): string {
     const headers = [
-      'ID', 'Timestamp', 'TestSuite', 'TestCase', 'ErrorType', 'Severity', 
-      'Code', 'Message', 'Reproducible', 'Resolution', 'Tags'
+      'ID',
+      'Timestamp',
+      'TestSuite',
+      'TestCase',
+      'ErrorType',
+      'Severity',
+      'Code',
+      'Message',
+      'Reproducible',
+      'Resolution',
+      'Tags',
     ];
 
     const rows = reports.map(report => [
@@ -435,7 +423,7 @@ export class EnhancedErrorReporter {
       `"${report.error.message.replace(/"/g, '""')}"`,
       report.reproducible,
       report.resolution || '',
-      report.tags.join(';')
+      report.tags.join(';'),
     ]);
 
     return [headers, ...rows].map(row => row.join(',')).join('\n');
@@ -449,31 +437,31 @@ export class EnhancedErrorReporter {
 
   private objectToXML(obj: Record<string, unknown>, rootName = 'root'): string {
     const indent = '  ';
-    
+
     const toXML = (value: unknown, key: string, level = 0): string => {
       const indentation = indent.repeat(level);
-      
+
       if (Array.isArray(value)) {
         return value.map(item => toXML(item, key, level)).join('');
       }
-      
+
       if (typeof value === 'object' && value !== null) {
         const children = Object.entries(value)
           .map(([k, v]) => toXML(v, k, level + 1))
           .join('');
         return `${indentation}<${key}>\n${children}${indentation}</${key}>\n`;
       }
-      
+
       const escapedValue = String(value)
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&apos;');
-      
+
       return `${indentation}<${key}>${escapedValue}</${key}>\n`;
     };
-    
+
     return toXML(obj, rootName);
   }
 
@@ -493,10 +481,10 @@ export class EnhancedErrorReporter {
   // Integration with Jest/Testing Framework
   static createJestReporter(outputDir?: string): EnhancedErrorReporter {
     const reporter = new EnhancedErrorReporter(outputDir);
-    
+
     // Add to global test environment
     (global as Record<string, unknown>).__errorReporter = reporter;
-    
+
     return reporter;
   }
 
@@ -505,31 +493,25 @@ export class EnhancedErrorReporter {
     const reporter = (global as Record<string, unknown>).__errorReporter as EnhancedErrorReporter;
     if (!reporter) return;
 
-    const errors = reporter.getReports().filter(
-      report => report.context.testSuite === testSuite
-    );
+    const errors = reporter.getReports().filter(report => report.context.testSuite === testSuite);
 
     if (errors.length > 0) {
       const errorMessages = errors.map(e => `${e.error.code}: ${e.error.message}`);
       throw new Error(
         `Expected no errors in test suite "${testSuite}", but found ${errors.length} errors:\n` +
-        errorMessages.join('\n')
+          errorMessages.join('\n')
       );
     }
   }
 
   // Utility for creating error context
-  static createContext(
-    testSuite: string, 
-    testCase: string, 
-    environment = 'test'
-  ): ErrorContext {
+  static createContext(testSuite: string, testCase: string, environment = 'test'): ErrorContext {
     return {
       testSuite,
       testCase,
       timestamp: new Date().toISOString(),
       environment,
-      executionId: `exec-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`
+      executionId: `exec-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,
     };
   }
 }
@@ -541,5 +523,5 @@ export const globalErrorReporter = new EnhancedErrorReporter();
 export default {
   EnhancedErrorReporter,
   ErrorClassifier,
-  globalErrorReporter
+  globalErrorReporter,
 };

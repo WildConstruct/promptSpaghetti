@@ -13,7 +13,7 @@ export class WebAdapter implements PlatformAdapter {
         e.preventDefault();
         callback();
       }
-    }
+    },
   });
 
   handleLongPress = (callback: () => void) => {
@@ -27,12 +27,12 @@ export class WebAdapter implements PlatformAdapter {
       },
       onMouseLeave: () => {
         clearTimeout(timeout);
-      }
+      },
     };
   };
 
   handleHover = (callback: () => void) => ({
-    onMouseEnter: callback
+    onMouseEnter: callback,
   });
 
   // Styling
@@ -88,7 +88,7 @@ export class WebAdapter implements PlatformAdapter {
       const patterns = {
         light: 10,
         medium: 20,
-        heavy: 50
+        heavy: 50,
       };
       navigator.vibrate(patterns[type]);
     }
@@ -130,14 +130,14 @@ export class WebAdapter implements PlatformAdapter {
 
   // Layout measurements
   measureElement = async (element: HTMLElement): Promise<{ width: number; height: number; x: number; y: number }> => {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       if (element.getBoundingClientRect) {
         const rect = element.getBoundingClientRect();
         resolve({
           width: rect.width,
           height: rect.height,
           x: rect.left,
-          y: rect.top
+          y: rect.top,
         });
       } else {
         resolve({ width: 0, height: 0, x: 0, y: 0 });
@@ -146,15 +146,11 @@ export class WebAdapter implements PlatformAdapter {
   };
 
   // Animation (using Web Animations API or CSS transitions)
-  createAnimation = (config: {
-    duration?: number;
-    easing?: string;
-    fill?: 'forwards' | 'backwards' | 'both';
-  }) => {
+  createAnimation = (config: { duration?: number; easing?: string; fill?: 'forwards' | 'backwards' | 'both' }) => {
     return {
       duration: config.duration || 300,
       easing: config.easing || 'ease',
-      fill: config.fill || 'forwards'
+      fill: config.fill || 'forwards',
     };
   };
 
@@ -194,12 +190,12 @@ export class WebAdapter implements PlatformAdapter {
   getDeviceInfo = () => {
     const userAgent = navigator.userAgent;
     const platform = navigator.platform;
-    
+
     return {
       model: platform,
       brand: 'Web',
       osVersion: userAgent,
-      appVersion: typeof process !== 'undefined' ? process.env.npm_package_version : '1.0.0'
+      appVersion: typeof process !== 'undefined' ? process.env.npm_package_version : '1.0.0',
     };
   };
 }

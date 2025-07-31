@@ -19,27 +19,25 @@ export interface DeviceInfo {
  */
 export function detectDeviceType(): DeviceInfo['type'] {
   if (typeof window === 'undefined') return 'desktop';
-  
+
   const ua = navigator.userAgent.toLowerCase();
   const width = window.screen.width;
-  
+
   // TV detection
-  if (ua.includes('smart-tv') || ua.includes('smarttv') || 
-      ua.includes('googletv') || ua.includes('appletv')) {
+  if (ua.includes('smart-tv') || ua.includes('smarttv') || ua.includes('googletv') || ua.includes('appletv')) {
     return 'tv';
   }
-  
+
   // Mobile detection
   if (/mobile|android|iphone|ipod|blackberry|opera mini|iemobile/i.test(ua)) {
     return 'mobile';
   }
-  
+
   // Tablet detection
-  if (/ipad|tablet|playbook|silk/i.test(ua) || 
-      (width >= 768 && width <= 1024 && 'ontouchstart' in window)) {
+  if (/ipad|tablet|playbook|silk/i.test(ua) || (width >= 768 && width <= 1024 && 'ontouchstart' in window)) {
     return 'tablet';
   }
-  
+
   return 'desktop';
 }
 
@@ -48,10 +46,10 @@ export function detectDeviceType(): DeviceInfo['type'] {
  */
 export function detectOS(): DeviceInfo['os'] {
   if (typeof window === 'undefined') return 'unknown';
-  
+
   const ua = navigator.userAgent.toLowerCase();
   const platform = navigator.platform.toLowerCase();
-  
+
   if (ua.includes('iphone') || ua.includes('ipad') || platform.includes('mac')) {
     return 'ios';
   }
@@ -59,7 +57,7 @@ export function detectOS(): DeviceInfo['os'] {
   if (ua.includes('windows') || platform.includes('win')) return 'windows';
   if (platform.includes('mac')) return 'macos';
   if (platform.includes('linux')) return 'linux';
-  
+
   return 'unknown';
 }
 
@@ -68,15 +66,15 @@ export function detectOS(): DeviceInfo['os'] {
  */
 export function detectBrowser(): DeviceInfo['browser'] {
   if (typeof window === 'undefined') return 'unknown';
-  
+
   const ua = navigator.userAgent.toLowerCase();
-  
+
   if (ua.includes('chrome') && !ua.includes('edge')) return 'chrome';
   if (ua.includes('firefox')) return 'firefox';
   if (ua.includes('safari') && !ua.includes('chrome')) return 'safari';
   if (ua.includes('edge')) return 'edge';
   if (ua.includes('opera') || ua.includes('opr')) return 'opera';
-  
+
   return 'unknown';
 }
 
@@ -85,11 +83,11 @@ export function detectBrowser(): DeviceInfo['browser'] {
  */
 export function detectOrientation(): DeviceInfo['orientation'] {
   if (typeof window === 'undefined') return 'portrait';
-  
+
   if ('orientation' in window) {
     return Math.abs(window.orientation as number) === 90 ? 'landscape' : 'portrait';
   }
-  
+
   return (window as any).innerWidth > (window as any).innerHeight ? 'landscape' : 'portrait';
 }
 
@@ -98,14 +96,14 @@ export function detectOrientation(): DeviceInfo['orientation'] {
  */
 export function detectGPU(): DeviceInfo['gpu'] {
   if (typeof window === 'undefined') return 'medium';
-  
+
   // Simple heuristic based on device pixel ratio and screen size
   const dpr = window.devicePixelRatio || 1;
   const screenPixels = window.screen.width * window.screen.height;
-  
+
   if (dpr >= 3 && screenPixels > 2000000) return 'high';
   if (dpr < 2 || screenPixels < 1000000) return 'low';
-  
+
   return 'medium';
 }
 
@@ -114,20 +112,19 @@ export function detectGPU(): DeviceInfo['gpu'] {
  */
 export function detectConnection(): DeviceInfo['connection'] {
   if (typeof window === 'undefined') return 'fast';
-  
+
   if (!navigator.onLine) return 'offline';
-  
+
   // Use Network Information API if available
-  const connection = (navigator as any).connection || 
-                    (navigator as any).mozConnection || 
-                    (navigator as any).webkitConnection;
-  
+  const connection =
+    (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+
   if (connection) {
     const effectiveType = connection.effectiveType;
     if (effectiveType === 'slow-2g' || effectiveType === '2g') return 'slow';
     if (effectiveType === '3g') return 'slow';
   }
-  
+
   return 'fast';
 }
 
@@ -144,7 +141,7 @@ export function getDeviceInfo(): DeviceInfo {
     retina: window.devicePixelRatio > 1,
     dpr: window.devicePixelRatio || 1,
     gpu: detectGPU(),
-    connection: detectConnection()
+    connection: detectConnection(),
   };
 }
 
@@ -158,7 +155,8 @@ export const deviceCapabilities = {
   hasKeyboard: () => !deviceCapabilities.hasTouch() || detectDeviceType() === 'desktop',
   hasNotch: () => {
     // iOS notch detection
-    const hasNotch = (window as any).CSS && 
+    const hasNotch =
+      (window as any).CSS &&
       CSS.supports('padding-top: env(safe-area-inset-top)') &&
       parseInt(getComputedStyle(document.documentElement).getPropertyValue('env(safe-area-inset-top)') || '0') > 0;
     return hasNotch;
@@ -167,11 +165,11 @@ export const deviceCapabilities = {
   supportsClipboard: () => 'clipboard' in navigator,
   supportsShare: () => 'share' in navigator,
   supportsNotifications: () => 'Notification' in window,
-  supportsFullscreen: () => 
+  supportsFullscreen: () =>
     'requestFullscreen' in document.documentElement ||
     'webkitRequestFullscreen' in document.documentElement ||
     'mozRequestFullScreen' in document.documentElement ||
-    'msRequestFullscreen' in document.documentElement
+    'msRequestFullscreen' in document.documentElement,
 };
 
 /**
@@ -180,7 +178,7 @@ export const deviceCapabilities = {
 export function getPerformanceFeatures() {
   const info = getDeviceInfo();
   const isLowEnd = info.gpu === 'low' || info.connection === 'slow';
-  
+
   return {
     enableAnimations: !isLowEnd && !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
     enableParallax: !isLowEnd && info.type === 'desktop',
@@ -189,7 +187,7 @@ export function getPerformanceFeatures() {
     enableTransitions: !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
     maxConcurrentAnimations: isLowEnd ? 2 : 10,
     debounceDelay: isLowEnd ? 500 : 250,
-    throttleDelay: isLowEnd ? 100 : 50
+    throttleDelay: isLowEnd ? 100 : 50,
   };
 }
 
@@ -198,34 +196,42 @@ export function getPerformanceFeatures() {
  */
 export function getPlatformAdjustments() {
   const info = getDeviceInfo();
-  
+
   return {
     // Touch target sizes
     minTouchTarget: info.touch ? 44 : 24,
-    
+
     // Scroll behavior
     scrollBehavior: info.os === 'ios' ? '-webkit-overflow-scrolling: touch' : 'auto',
-    
+
     // Safe areas for notched devices
-    safeAreaInsets: deviceCapabilities.hasNotch() ? {
-      top: 'env(safe-area-inset-top)',
-      right: 'env(safe-area-inset-right)',
-      bottom: 'env(safe-area-inset-bottom)',
-      left: 'env(safe-area-inset-left)'
-    } : null,
-    
+    safeAreaInsets: deviceCapabilities.hasNotch()
+      ? {
+          top: 'env(safe-area-inset-top)',
+          right: 'env(safe-area-inset-right)',
+          bottom: 'env(safe-area-inset-bottom)',
+          left: 'env(safe-area-inset-left)',
+        }
+      : null,
+
     // Font adjustments
-    fontSmoothing: info.os === 'macos' || info.os === 'ios' ? {
-      '-webkit-font-smoothing': 'antialiased',
-      '-moz-osx-font-smoothing': 'grayscale'
-    } : {},
-    
+    fontSmoothing:
+      info.os === 'macos' || info.os === 'ios'
+        ? {
+            '-webkit-font-smoothing': 'antialiased',
+            '-moz-osx-font-smoothing': 'grayscale',
+          }
+        : {},
+
     // Input adjustments
-    inputMode: info.type === 'mobile' ? {
-      autoComplete: 'off',
-      autoCorrect: 'off',
-      autoCapitalize: 'off',
-      spellCheck: false
-    } : {}
+    inputMode:
+      info.type === 'mobile'
+        ? {
+            autoComplete: 'off',
+            autoCorrect: 'off',
+            autoCapitalize: 'off',
+            spellCheck: false,
+          }
+        : {},
   };
 }

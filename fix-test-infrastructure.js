@@ -27,11 +27,11 @@ const criticalPatterns = [];
 testFiles.forEach(filePath => {
   try {
     if (!fs.existsSync(filePath)) return;
-    
+
     const content = fs.readFileSync(filePath, 'utf8');
     let updatedContent = content;
     let hasChanges = false;
-    
+
     // Pattern 1: Fix unknown database service mocks
     if (content.includes('as unknown') && content.includes('DatabaseService')) {
       const mockDbPattern = /mockDb.*=.*\{\}.*as unknown/g;
@@ -45,7 +45,7 @@ testFiles.forEach(filePath => {
         console.log(`✅ ${path.relative('.', filePath)}: Fixed database service mock`);
       }
     }
-    
+
     // Pattern 2: Fix client.query mock issues
     if (content.includes('mockClient') && content.includes('query')) {
       const clientPattern = /mockClient.*=.*\{\}.*as unknown/g;
@@ -59,8 +59,8 @@ testFiles.forEach(filePath => {
         console.log(`✅ ${path.relative('.', filePath)}: Fixed client mock`);
       }
     }
-    
-    // Pattern 3: Fix Redis mock issues  
+
+    // Pattern 3: Fix Redis mock issues
     if (content.includes('mockRedis') && content.includes('as unknown')) {
       const redisPattern = /mockRedis.*=.*\{\}.*as unknown/g;
       if (content.match(redisPattern)) {
@@ -73,7 +73,7 @@ testFiles.forEach(filePath => {
         console.log(`✅ ${path.relative('.', filePath)}: Fixed Redis mock`);
       }
     }
-    
+
     // Pattern 4: Fix unknown type constraint violations in jest.fn calls
     const jestFnPattern = /jest\.fn<unknown\[\], unknown>\(\)/g;
     if (content.match(jestFnPattern)) {
@@ -82,7 +82,7 @@ testFiles.forEach(filePath => {
       issuesFixed++;
       console.log(`✅ ${path.relative('.', filePath)}: Fixed jest.fn type constraints`);
     }
-    
+
     // Pattern 5: Fix constructor argument issues
     if (content.includes('new DatabaseService() as jest.Mocked')) {
       updatedContent = updatedContent.replace(
@@ -93,7 +93,7 @@ testFiles.forEach(filePath => {
       issuesFixed++;
       console.log(`✅ ${path.relative('.', filePath)}: Fixed DatabaseService constructor`);
     }
-    
+
     // Pattern 6: Fix AuditService constructor issues
     if (content.includes('new AuditService(mockDatabaseService) as jest.Mocked')) {
       updatedContent = updatedContent.replace(
@@ -104,12 +104,12 @@ testFiles.forEach(filePath => {
       issuesFixed++;
       console.log(`✅ ${path.relative('.', filePath)}: Fixed AuditService constructor`);
     }
-    
+
     if (hasChanges) {
       fs.writeFileSync(filePath, updatedContent);
       filesProcessed++;
     }
-    
+
     // Track problematic patterns for analysis
     if (content.includes('TS2345') || content.includes('TS2339') || content.includes('TS2307')) {
       criticalPatterns.push({
@@ -117,10 +117,9 @@ testFiles.forEach(filePath => {
         hasTypeErrors: true,
         hasDatabaseIssues: content.includes('DatabaseService'),
         hasImportIssues: content.includes('Cannot find module'),
-        hasEnumIssues: content.includes('only refers to a type')
+        hasEnumIssues: content.includes('only refers to a type'),
       });
     }
-    
   } catch (error) {
     console.error(`❌ Error processing ${filePath}:`, error.message);
   }

@@ -17,7 +17,7 @@ export {
   IOSActionSheet,
   IOSActionSheetProps,
   iOSHaptics,
-  iOSStyles
+  iOSStyles,
 } from './ios/IOSAdaptations';
 
 // Android adaptations
@@ -36,7 +36,7 @@ export {
   MaterialRipple,
   MaterialSnackbar,
   MaterialSnackbarProps,
-  materialStyles
+  materialStyles,
 } from './android/AndroidAdaptations';
 
 // Desktop adaptations
@@ -52,7 +52,7 @@ export {
   DesktopWindowControls,
   DesktopWindowControlsProps,
   desktopShortcuts,
-  desktopHoverStyles
+  desktopHoverStyles,
 } from './desktop/DesktopAdaptations';
 
 // Platform gestures
@@ -65,7 +65,7 @@ export {
   PlatformScrollViewProps,
   PlatformButton,
   PlatformButtonProps,
-  platformGestureStyles
+  platformGestureStyles,
 } from './PlatformGestures';
 
 // Adaptive navigation
@@ -75,7 +75,7 @@ export {
   AdaptiveNavigationProps,
   BreadcrumbItem,
   AdaptiveBreadcrumb,
-  AdaptiveBreadcrumbProps
+  AdaptiveBreadcrumbProps,
 } from './AdaptiveNavigation';
 
 // Platform optimizations
@@ -89,7 +89,7 @@ export {
   OptimizedAnimation,
   OptimizedAnimationProps,
   usePlatformOptimization,
-  platformOptimizationStyles
+  platformOptimizationStyles,
 } from './PlatformOptimizations';
 
 /**
@@ -105,28 +105,24 @@ export function initializePlatformAdaptations(options?: {
   enableOptimizations?: boolean;
   customStyles?: boolean;
 }): void {
-  const { 
-    enableHaptics = true, 
-    enableOptimizations = true,
-    customStyles = true 
-  } = options || {};
-  
+  const { enableHaptics = true, enableOptimizations = true, customStyles = true } = options || {};
+
   if (typeof window === 'undefined') return;
-  
+
   // Add platform-specific styles
   if (customStyles) {
     const styleId = 'platform-adaptation-styles';
     if (!document.getElementById(styleId)) {
       const style = document.createElement('style');
       style.id = styleId;
-      
+
       // Import all platform styles
       const { iOSStyles } = require('./ios/IOSAdaptations');
       const { materialStyles } = require('./android/AndroidAdaptations');
       const { desktopHoverStyles } = require('./desktop/DesktopAdaptations');
       const { platformGestureStyles } = require('./PlatformGestures');
       const { platformOptimizationStyles } = require('./PlatformOptimizations');
-      
+
       style.textContent = `
         ${iOSStyles}
         ${materialStyles}
@@ -134,19 +130,19 @@ export function initializePlatformAdaptations(options?: {
         ${platformGestureStyles}
         ${platformOptimizationStyles}
       `;
-      
+
       document.head.appendChild(style);
     }
   }
-  
+
   // Add platform class to body
   const { deviceDetector } = require('../responsive/device-detection');
   const platform = deviceDetector.getPlatform();
   const os = deviceDetector.getOS();
-  
+
   document.body.classList.add(`platform-${platform}`);
   document.body.classList.add(`os-${os.toLowerCase().replace(/\s+/g, '-')}`);
-  
+
   // Set CSS variables for safe areas (iOS)
   if (os === 'iOS') {
     const updateViewport = () => {
@@ -160,14 +156,14 @@ export function initializePlatformAdaptations(options?: {
     };
     updateViewport();
   }
-  
+
   // Enable platform-specific optimizations
   if (enableOptimizations) {
     // Disable hover effects on touch devices
     if (platform === 'mobile') {
       document.body.classList.add('touch-device');
     }
-    
+
     // Enable hardware acceleration for animations
     if (platform === 'desktop' || os === 'iOS') {
       document.body.classList.add('hardware-acceleration');
@@ -183,7 +179,7 @@ export function usePlatformFeatures() {
   const platform = deviceDetector.getPlatform();
   const os = deviceDetector.getOS();
   const browser = deviceDetector.getBrowser();
-  
+
   return {
     platform,
     os,
@@ -197,6 +193,6 @@ export function usePlatformFeatures() {
     isWindows: os === 'Windows',
     supportsTouch: 'ontouchstart' in window,
     supportsHaptics: 'vibrate' in navigator,
-    supportsHover: window.matchMedia('(hover: hover)').matches
+    supportsHover: window.matchMedia('(hover: hover)').matches,
   };
 }

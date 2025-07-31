@@ -42,6 +42,7 @@ abstract class RuntimeNode {
 ```
 
 **Core Node Types**:
+
 - **WeightedChoiceNode**: Probabilistic selection from weighted options
 - **ConcatNode**: String concatenation with flexible joining
 - **OutputNode**: Final output generation and formatting
@@ -73,24 +74,28 @@ abstract class AdvancedRuntimeNode extends RuntimeNode {
 #### Epic 7 Advanced Node Types
 
 **WeightedAdvanced** (`runtime/nodes/WeightedAdvanced.ts`):
+
 - Complex probability distributions (exponential, gaussian, custom)
 - Dynamic weight calculation based on context
 - Performance optimization with caching
 - Statistical validation and bias detection
 
 **Conditional** (`runtime/nodes/Conditional.ts`):
+
 - Safe expression evaluation using AST parsing
 - Comprehensive security framework preventing code injection
 - Support for complex boolean logic and variable access
 - Built-in utility functions (startsWith, includes, getType, etc.)
 
 **Sequential** (`runtime/nodes/Sequential.ts`):
+
 - Stateful sequence processing with history tracking
 - Multiple traversal patterns: linear, cyclical, random, weighted
 - Pattern detection and loop prevention
 - State persistence and restoration
 
 **Markov** (`runtime/nodes/Markov.ts`):
+
 - State transition matrices with configurable probabilities
 - Termination condition evaluation and loop detection
 - State history tracking and analysis
@@ -123,7 +128,7 @@ class IOSpecBuilder {
 class ExpressionEvaluator {
   evaluate(expression: string, context: Record<string, any>): any;
   validateExpression(expression: string): SecurityValidationResult;
-  
+
   // Security features:
   // - Blocks eval, Function constructor, prototype pollution
   // - Whitelist-based function access
@@ -134,7 +139,7 @@ class ExpressionEvaluator {
 ### Integration Points
 
 - **Server Engine**: Automatic detection of node types, context management
-- **Security System**: Expression validation, dangerous pattern detection  
+- **Security System**: Expression validation, dangerous pattern detection
 - **Analytics**: Performance tracking, execution metrics
 - **Caching**: Result caching for expensive operations
 - **Error Handling**: Comprehensive error recovery and reporting
@@ -164,7 +169,7 @@ The Graph Management system provides comprehensive validation, schema enforcemen
 const GraphSchema = z.object({
   nodes: z.array(NodeSchema),
   edges: z.array(EdgeSchema),
-  metadata: GraphMetadataSchema
+  metadata: GraphMetadataSchema,
 });
 
 // Discriminated union supporting all node types
@@ -183,9 +188,15 @@ const NodeSchema = z.discriminatedUnion('type', [
 // UI-focused schemas for form generation
 export const NodeUISchemas = {
   WeightedChoice: {
-    formConfig: { /* form configuration */ },
-    validationRules: { /* client validation */ },
-    defaultValues: { /* default form values */ }
+    formConfig: {
+      /* form configuration */
+    },
+    validationRules: {
+      /* client validation */
+    },
+    defaultValues: {
+      /* default form values */
+    },
   },
   // ... other node UI schemas
 };
@@ -212,6 +223,7 @@ class GraphValidator {
 ```
 
 **Validation Features**:
+
 - **Cycle Detection**: Prevents infinite loops in graph execution
 - **Connection Validation**: Ensures type compatibility between connected nodes
 - **Node Configuration**: Validates individual node settings and parameters
@@ -228,6 +240,7 @@ class SecurityValidator {
 ```
 
 **Security Features**:
+
 - **Code Injection Prevention**: Blocks eval, constructor access, prototype pollution
 - **Pattern Detection**: Identifies potentially malicious code patterns
 - **Input Sanitization**: Cleans and validates user-provided content
@@ -244,12 +257,12 @@ interface GraphStore {
   graph: Graph;
   selectedNodes: Set<string>;
   validationResult: ValidationResult;
-  
+
   // Actions
   updateNode: (nodeId: string, updates: Partial<Node>) => void;
   addEdge: (edge: Edge) => void;
   validateGraph: () => void;
-  
+
   // Advanced features
   undo: () => void;
   redo: () => void;
@@ -258,6 +271,7 @@ interface GraphStore {
 ```
 
 **State Management Features**:
+
 - **Undo/Redo**: Complete history management with branching
 - **Auto-save**: Debounced saving with conflict resolution
 - **Real-time Validation**: Continuous validation with performance optimization
@@ -295,6 +309,7 @@ const GraphEditor: React.FC = () => {
 ```
 
 **Key Features**:
+
 - **Modular Design**: Reduced from 686 to 383 lines through component extraction
 - **Performance**: Debounced operations, virtualized rendering
 - **Accessibility**: Full keyboard navigation, screen reader support
@@ -359,9 +374,15 @@ class BaseNodeEditor extends React.Component {
 }
 
 // Specialized editors for each node type
-export const WeightedChoiceEditor: React.FC = () => { /* ... */ };
-export const ConditionalEditor: React.FC = () => { /* ... */ };
-export const SequentialEditor: React.FC = () => { /* ... */ };
+export const WeightedChoiceEditor: React.FC = () => {
+  /* ... */
+};
+export const ConditionalEditor: React.FC = () => {
+  /* ... */
+};
+export const SequentialEditor: React.FC = () => {
+  /* ... */
+};
 ```
 
 ### Feature-Rich Components
@@ -410,9 +431,15 @@ interface InspectorContextValue {
 
 ```typescript
 // Reusable logic extraction
-export const useValidation = (node: Node) => { /* ... */ };
-export const useAutosave = (data: any, delay: number) => { /* ... */ };
-export const useNodeUtils = () => { /* ... */ };
+export const useValidation = (node: Node) => {
+  /* ... */
+};
+export const useAutosave = (data: any, delay: number) => {
+  /* ... */
+};
+export const useNodeUtils = () => {
+  /* ... */
+};
 ```
 
 ### Integration Points
@@ -440,15 +467,15 @@ class DatabaseService {
   constructor() {
     this.db = new Database(dbPath, {
       verbose: console.log,
-      fileMustExist: false
+      fileMustExist: false,
     });
-    
+
     // Performance optimizations
     this.db.pragma('journal_mode = WAL');
     this.db.pragma('synchronous = NORMAL');
     this.db.pragma('cache_size = 1000000');
   }
-  
+
   // Connection pooling and management
   async transaction<T>(callback: (db: Database) => T): Promise<T>;
   async migrate(): Promise<void>;
@@ -461,13 +488,13 @@ class DatabaseService {
 // Standardized data access pattern
 abstract class BaseDAO {
   protected db: DatabaseService;
-  
+
   // Common operations
   abstract create(data: any): Promise<any>;
   abstract findById(id: string): Promise<any>;
   abstract update(id: string, updates: any): Promise<any>;
   abstract delete(id: string): Promise<boolean>;
-  
+
   // Performance features
   protected prepareStatement(sql: string): Statement;
   protected executeWithRetry<T>(operation: () => T): Promise<T>;
@@ -475,6 +502,7 @@ abstract class BaseDAO {
 ```
 
 **Specialized DAOs**:
+
 - **WorkspaceDAO**: Project and workspace management
 - **AnalyticsDAO**: Performance metrics and usage data
 - **CorrectionsDAO**: Graph correction and validation data
@@ -499,7 +527,7 @@ class ProjectManager {
   async saveProject(project: Project, filePath: string): Promise<void>;
   async loadProject(filePath: string): Promise<Project>;
   async exportProject(project: Project, format: ExportFormat): Promise<Buffer>;
-  
+
   // Version management
   async createVersion(project: Project, message: string): Promise<Version>;
   async restoreVersion(project: Project, versionId: string): Promise<Project>;
@@ -515,11 +543,11 @@ class ProjectManager {
 class CacheService {
   private redis: RedisClient;
   private memoryCache: Map<string, CacheEntry>;
-  
+
   async get<T>(key: string, fallback?: () => Promise<T>): Promise<T>;
   async set(key: string, value: any, ttl?: number): Promise<void>;
   async invalidate(pattern: string): Promise<void>;
-  
+
   // Performance features
   async mget(keys: string[]): Promise<any[]>;
   async pipeline(operations: CacheOperation[]): Promise<any[]>;
@@ -532,10 +560,10 @@ class CacheService {
 // Prepared statements and query optimization
 class QueryOptimizer {
   private statements: Map<string, Statement> = new Map();
-  
+
   prepare(sql: string): Statement;
   execute<T>(sql: string, params: any[]): T[];
-  
+
   // Performance monitoring
   measureQuery<T>(operation: () => T): { result: T; duration: number };
   getQueryMetrics(): QueryMetrics;
@@ -567,11 +595,11 @@ class AuthenticationService {
   // Multi-factor authentication
   async enableMFA(userId: string, method: MFAMethod): Promise<MFASetup>;
   async verifyMFA(userId: string, token: string): Promise<boolean>;
-  
+
   // Session management
   async createSession(user: User, device: DeviceInfo): Promise<Session>;
   async validateSession(sessionId: string): Promise<SessionValidation>;
-  
+
   // Security monitoring
   async logSecurityEvent(event: SecurityEvent): Promise<void>;
   async detectAnomalies(user: User, request: Request): Promise<AnomalyScore>;
@@ -586,14 +614,10 @@ class UserService {
   // Registration and onboarding
   async createUser(data: RegisterRequest): Promise<User>;
   async verifyEmail(token: string): Promise<boolean>;
-  
+
   // Password security with breach detection
-  private async validatePassword(
-    password: string, 
-    userId?: string, 
-    skipBreachCheck: boolean = false
-  ): Promise<void>;
-  
+  private async validatePassword(password: string, userId?: string, skipBreachCheck: boolean = false): Promise<void>;
+
   // Account security
   async enableAccountLockout(userId: string, reason: string): Promise<void>;
   async trackFailedAttempts(userId: string): Promise<void>;
@@ -610,7 +634,7 @@ class BehaviorAnalyzer {
   async analyzeLoginPattern(user: User, request: LoginRequest): Promise<RiskScore>;
   async detectLocationAnomalies(user: User, location: Location): Promise<boolean>;
   async trackDeviceFingerprint(request: Request): Promise<DeviceFingerprint>;
-  
+
   // Machine learning integration
   async updateUserModel(user: User, behavior: BehaviorData): Promise<void>;
   async predictRisk(user: User, action: UserAction): Promise<RiskPrediction>;
@@ -624,13 +648,13 @@ class BehaviorAnalyzer {
 class SecurityValidator {
   // Expression validation
   validateExpression(expression: string): SecurityValidationResult;
-  
+
   // Pattern detection
   scanForDangerousPatterns(content: string): PatternDetectionResult;
-  
+
   // Input sanitization
   sanitizeInput(input: any, context: SecurityContext): any;
-  
+
   // Security policies
   enforceSecurityPolicy(action: Action, context: SecurityContext): PolicyResult;
 }
@@ -642,15 +666,12 @@ class SecurityValidator {
 // Privacy-preserving password breach checking
 class PasswordBreachService {
   // K-anonymity implementation (k=5)
-  async checkPasswordBreach(
-    password: string, 
-    userId?: string
-  ): Promise<BreachCheckResult>;
-  
+  async checkPasswordBreach(password: string, userId?: string): Promise<BreachCheckResult>;
+
   // Privacy features
   private generateSHA1Hash(password: string): string;
   private queryBreachAPI(hashPrefix: string): Promise<APIResponse>;
-  
+
   // Performance optimization
   private cacheResult(prefix: string, result: BreachCheckResult): void;
   private checkRateLimit(userId: string): Promise<boolean>;
@@ -681,8 +702,8 @@ The API and Server Architecture provides a high-performance, scalable backend wi
 const server = fastify({
   logger: {
     level: process.env.LOG_LEVEL || 'info',
-    prettyPrint: process.env.NODE_ENV !== 'production'
-  }
+    prettyPrint: process.env.NODE_ENV !== 'production',
+  },
 });
 
 // Middleware stack
@@ -698,16 +719,12 @@ await server.register(analyticsPlugin);
 ```typescript
 // Sophisticated graph execution with analytics
 class GraphEngine {
-  async executeGraph(
-    graph: Graph, 
-    seeds: number[], 
-    options: ExecutionOptions
-  ): Promise<ExecutionResult[]>;
-  
+  async executeGraph(graph: Graph, seeds: number[], options: ExecutionOptions): Promise<ExecutionResult[]>;
+
   // Performance optimization
   private detectNodeType(node: Node): 'basic' | 'advanced';
   private createExecutionContext(seed: number): ExecutionContext;
-  
+
   // Analytics integration
   private trackExecution(execution: ExecutionMetrics): void;
   private optimizePerformance(graph: Graph): OptimizationSuggestions;
@@ -723,7 +740,7 @@ class GraphEngine {
 abstract class BaseService {
   protected db: DatabaseService;
   protected audit: AuditService;
-  
+
   // Common service patterns
   protected validate(data: any, schema: Schema): ValidationResult;
   protected authorize(user: User, action: Action): boolean;
@@ -731,9 +748,15 @@ abstract class BaseService {
 }
 
 // Specialized services
-class WorkspaceService extends BaseService { /* ... */ }
-class AnalyticsService extends BaseService { /* ... */ }
-class CollaborationService extends BaseService { /* ... */ }
+class WorkspaceService extends BaseService {
+  /* ... */
+}
+class AnalyticsService extends BaseService {
+  /* ... */
+}
+class CollaborationService extends BaseService {
+  /* ... */
+}
 ```
 
 #### Event-Driven Architecture
@@ -742,11 +765,11 @@ class CollaborationService extends BaseService { /* ... */ }
 // Publisher/subscriber pattern for loose coupling
 class EventBus {
   private subscribers: Map<string, EventHandler[]> = new Map();
-  
+
   subscribe(event: string, handler: EventHandler): void;
   publish(event: string, data: any): Promise<void>;
   unsubscribe(event: string, handler: EventHandler): void;
-  
+
   // Advanced features
   publishAsync(event: string, data: any): Promise<void>;
   createEventStream(pattern: string): EventStream;
@@ -763,11 +786,11 @@ class WebSocketServer {
   private io: Server;
   private presence: PresenceManager;
   private collaboration: CollaborationManager;
-  
+
   // Core features
   handleConnection(socket: Socket): void;
   broadcastUpdate(roomId: string, update: Update): void;
-  
+
   // Advanced features
   handlePresence(socket: Socket, presence: PresenceData): void;
   handleCollaboration(socket: Socket, operation: Operation): void;
@@ -784,7 +807,7 @@ class WebSocketServer {
 class RequestMonitor {
   trackRequest(request: FastifyRequest): RequestMetrics;
   trackResponse(response: FastifyReply): ResponseMetrics;
-  
+
   // Performance analysis
   analyzePerformance(): PerformanceReport;
   identifyBottlenecks(): BottleneckReport;
@@ -799,7 +822,7 @@ class RequestMonitor {
 class CircuitBreaker {
   private state: 'CLOSED' | 'OPEN' | 'HALF_OPEN' = 'CLOSED';
   private failureCount = 0;
-  
+
   async execute<T>(operation: () => Promise<T>): Promise<T>;
   private shouldTripBreaker(): boolean;
   private canAttemptReset(): boolean;
@@ -809,7 +832,7 @@ class CircuitBreaker {
 ### Integration Points
 
 - **Database Layer**: Service-to-DAO communication
-- **Authentication**: Middleware integration on all routes  
+- **Authentication**: Middleware integration on all routes
 - **Analytics**: Request/response metrics collection
 - **WebSocket**: Real-time feature coordination
 
@@ -823,11 +846,11 @@ class CircuitBreaker {
 // Environment-based configuration with validation
 class ConfigManager {
   private config: Map<string, any> = new Map();
-  
+
   load(environment: string): void;
   get<T>(key: string, defaultValue?: T): T;
   validate(): ConfigValidationResult;
-  
+
   // Dynamic configuration
   watch(key: string, callback: (value: any) => void): void;
   update(key: string, value: any): Promise<void>;
@@ -841,10 +864,10 @@ class ConfigManager {
 class ErrorManager {
   // Structured error responses
   formatError(error: Error, context: RequestContext): ErrorResponse;
-  
+
   // Error classification
   classifyError(error: Error): ErrorClassification;
-  
+
   // Recovery strategies
   handleRecoverableError(error: Error): RecoveryAction;
   escalateUnrecoverableError(error: Error): void;
@@ -864,12 +887,8 @@ interface CacheLayer {
 }
 
 class CacheManager {
-  private layers: CacheLayer[] = [
-    new MemoryCache(),
-    new RedisCache(),
-    new DatabaseCache()
-  ];
-  
+  private layers: CacheLayer[] = [new MemoryCache(), new RedisCache(), new DatabaseCache()];
+
   async get(key: string): Promise<any>;
   async set(key: string, value: any): Promise<void>;
 }
@@ -882,13 +901,13 @@ class CacheManager {
 class PerformanceMonitor {
   // Request-level metrics
   trackRequestPerformance(request: Request): PerformanceMetrics;
-  
-  // System-level metrics  
+
+  // System-level metrics
   collectSystemMetrics(): SystemMetrics;
-  
+
   // Application-level metrics
   trackFeatureUsage(feature: string, metrics: UsageMetrics): void;
-  
+
   // Analysis and reporting
   generatePerformanceReport(): PerformanceReport;
   identifyPerformanceIssues(): PerformanceIssue[];
@@ -910,11 +929,11 @@ interface Event {
 class EventSystem {
   private bus: EventBus;
   private processors: Map<string, EventProcessor[]>;
-  
+
   // Event processing
   process(event: Event): Promise<void>;
   subscribe(eventType: string, processor: EventProcessor): void;
-  
+
   // Advanced features
   createEventStream(filter: EventFilter): EventStream;
   replayEvents(from: Date, to: Date): Promise<Event[]>;
@@ -934,11 +953,11 @@ interface Extension {
 
 class ExtensionManager {
   private extensions: Map<string, Extension> = new Map();
-  
+
   // Extension lifecycle
   loadExtension(extension: Extension): Promise<void>;
   unloadExtension(name: string): Promise<void>;
-  
+
   // Extension communication
   callExtension(name: string, method: string, args: any[]): Promise<any>;
   broadcastToExtensions(event: ExtensionEvent): Promise<void>;

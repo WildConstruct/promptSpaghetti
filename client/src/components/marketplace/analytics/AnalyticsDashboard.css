@@ -73,8 +73,12 @@
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Dashboard Tabs */
@@ -190,8 +194,12 @@
 }
 
 @keyframes loading {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 /* Error State */
@@ -274,7 +282,7 @@
   .dashboard-content {
     flex-direction: column;
   }
-  
+
   .sidebar-content {
     width: 100%;
     border-left: none;
@@ -290,32 +298,32 @@
     gap: 1rem;
     padding: 1rem;
   }
-  
+
   .header-controls {
     width: 100%;
     justify-content: space-between;
   }
-  
+
   .dashboard-tabs {
     padding: 0 1rem;
     overflow-x: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
-  
+
   .dashboard-tabs::-webkit-scrollbar {
     display: none;
   }
-  
+
   .tab-button {
     white-space: nowrap;
     padding: 0.75rem 1rem;
   }
-  
+
   .main-content {
     padding: 1rem;
   }
-  
+
   .skeleton-row {
     flex-direction: column;
   }
@@ -325,17 +333,17 @@
   .title-section h1 {
     font-size: 1.5rem;
   }
-  
+
   .refresh-button {
     padding: 0.5rem 0.75rem;
     font-size: 0.8rem;
   }
-  
+
   .tab-button {
     padding: 0.75rem 0.75rem;
     font-size: 0.8rem;
   }
-  
+
   .tab-icon {
     font-size: 0.875rem;
   }

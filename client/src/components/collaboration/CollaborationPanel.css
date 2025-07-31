@@ -55,7 +55,7 @@
   font-size: 14px;
 }
 
-.invite-form button[type="submit"] {
+.invite-form button[type='submit'] {
   background: #28a745;
   color: white;
   border: none;
@@ -64,7 +64,7 @@
   cursor: pointer;
 }
 
-.invite-form button[type="button"] {
+.invite-form button[type='button'] {
   background: #6c757d;
   color: white;
   border: none;

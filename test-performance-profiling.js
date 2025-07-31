@@ -2,13 +2,13 @@
 
 /**
  * Performance Profiling Test Script
- * 
+ *
  * Demonstrates and tests the complete performance profiling system including:
  * - Server-side performance profiling during load
  * - Client-side metrics collection
  * - Integration with load testing framework
  * - Report generation and analysis
- * 
+ *
  * Task: T-1752989144295-168 - Profile server and client performance under load
  */
 
@@ -23,21 +23,21 @@ const TEST_CONFIG = {
   server: {
     baseUrl: process.env.API_BASE_URL || 'http://localhost:8000',
     profileDuration: 120000, // 2 minutes for demo
-    sampleInterval: 2000    // 2 seconds for demo
+    sampleInterval: 2000, // 2 seconds for demo
   },
   loadTest: {
     concurrency: 8,
-    duration: 90000,  // 1.5 minutes
-    testSuite: 'auth-flow-load-test.js'
+    duration: 90000, // 1.5 minutes
+    testSuite: 'auth-flow-load-test.js',
   },
   client: {
     profileDuration: 120000,
-    browserTestUrl: 'http://localhost:3000'
+    browserTestUrl: 'http://localhost:3000',
   },
   reporting: {
     outputDir: './performance-profiling-demo',
-    generateReport: true
-  }
+    generateReport: true,
+  },
 };
 
 /**
@@ -51,7 +51,7 @@ class PerformanceProfilingTester {
       loadTestProcess: null,
       startTime: null,
       endTime: null,
-      success: false
+      success: false,
     };
   }
 
@@ -67,41 +67,40 @@ class PerformanceProfilingTester {
     try {
       // Setup
       await this.setupTestEnvironment();
-      
+
       // Test 1: Server Performance Profiling
       console.log('📊 Test 1: Server Performance Profiling');
       await this.testServerProfiling();
-      
+
       // Test 2: Load Testing Integration
       console.log('\n🎯 Test 2: Load Testing with Profiling');
       await this.testLoadTestingIntegration();
-      
+
       // Test 3: Client Performance Profiling
       console.log('\n🌐 Test 3: Client Performance Profiling');
       await this.testClientProfiling();
-      
+
       // Test 4: API Endpoints
       console.log('\n🔗 Test 4: Performance API Endpoints');
       await this.testPerformanceAPI();
-      
+
       // Test 5: Report Generation
       console.log('\n📊 Test 5: Report Generation');
       await this.testReportGeneration();
-      
+
       this.results.success = true;
       this.results.endTime = new Date();
-      
+
       // Generate final summary
       await this.generateTestSummary();
-      
+
       console.log('\n✅ Performance Profiling Test Complete!');
       return this.results;
-      
     } catch (error) {
       console.error('\n❌ Performance Profiling Test Failed:', error.message);
       this.results.endTime = new Date();
       this.results.success = false;
-      
+
       // Cleanup on failure
       await this.cleanup();
       throw error;
@@ -113,14 +112,14 @@ class PerformanceProfilingTester {
    */
   async setupTestEnvironment() {
     console.log('🔧 Setting up test environment...');
-    
+
     // Create output directory
     try {
       await fs.access(this.config.reporting.outputDir);
     } catch (error) {
       await fs.mkdir(this.config.reporting.outputDir, { recursive: true });
     }
-    
+
     // Check server availability
     try {
       const response = await fetch(`${this.config.server.baseUrl}/health`);
@@ -132,7 +131,7 @@ class PerformanceProfilingTester {
       console.warn('⚠️  Server might not be running:', error.message);
       console.log('   Make sure to start the server with: pnpm --filter server dev');
     }
-    
+
     console.log('✅ Test environment ready');
   }
 
@@ -141,46 +140,47 @@ class PerformanceProfilingTester {
    */
   async testServerProfiling() {
     console.log('   Starting server performance profiling...');
-    
+
     try {
       // Start profiling via API
       const startResponse = await fetch(`${this.config.server.baseUrl}/api/performance/start`, {
-        method: 'POST'
+        method: 'POST',
       });
-      
+
       if (!startResponse.ok) {
         throw new Error('Failed to start server profiling');
       }
-      
+
       console.log('   ✅ Server profiling started');
-      
+
       // Monitor for a short period
       let monitorCount = 0;
       const maxMonitors = 5;
-      
+
       while (monitorCount < maxMonitors) {
         await this.delay(5000); // 5 second intervals
-        
+
         const statsResponse = await fetch(`${this.config.server.baseUrl}/api/performance/stats`);
         if (statsResponse.ok) {
           const stats = await statsResponse.json();
           if (stats.success && stats.data) {
-            console.log(`   📊 CPU: ${stats.data.cpu}%, Memory: ${stats.data.memory}%, Response: ${stats.data.responseTime}ms`);
+            console.log(
+              `   📊 CPU: ${stats.data.cpu}%, Memory: ${stats.data.memory}%, Response: ${stats.data.responseTime}ms`
+            );
           }
         }
-        
+
         monitorCount++;
       }
-      
+
       // Stop profiling
       const stopResponse = await fetch(`${this.config.server.baseUrl}/api/performance/stop`, {
-        method: 'POST'
+        method: 'POST',
       });
-      
+
       if (stopResponse.ok) {
         console.log('   ✅ Server profiling stopped');
       }
-      
     } catch (error) {
       console.error('   ❌ Server profiling test failed:', error.message);
     }
@@ -191,7 +191,7 @@ class PerformanceProfilingTester {
    */
   async testLoadTestingIntegration() {
     console.log('   Starting load test with integrated profiling...');
-    
+
     try {
       // Create a lightweight load test script for demonstration
       const demoLoadTest = `
@@ -252,33 +252,32 @@ class SimpleLoadTester {
 const tester = new SimpleLoadTester('${this.config.server.baseUrl}', ${this.config.loadTest.concurrency}, ${this.config.loadTest.duration});
 tester.runTest().catch(console.error);
 `;
-      
+
       const scriptPath = path.join(this.config.reporting.outputDir, 'demo-load-test.js');
       await fs.writeFile(scriptPath, demoLoadTest);
-      
+
       // Start server profiling
       await fetch(`${this.config.server.baseUrl}/api/performance/start`, { method: 'POST' });
-      
+
       // Run the demo load test
       const loadTestProcess = spawn('node', [scriptPath], {
-        stdio: 'pipe'
+        stdio: 'pipe',
       });
-      
-      loadTestProcess.stdout.on('data', (data) => {
+
+      loadTestProcess.stdout.on('data', data => {
         console.log(`   ${data.toString().trim()}`);
       });
-      
+
       // Wait for load test to complete
-      await new Promise((resolve) => {
+      await new Promise(resolve => {
         loadTestProcess.on('exit', resolve);
         setTimeout(resolve, this.config.loadTest.duration + 10000); // Safety timeout
       });
-      
+
       // Stop server profiling
       await fetch(`${this.config.server.baseUrl}/api/performance/stop`, { method: 'POST' });
-      
+
       console.log('   ✅ Load testing integration complete');
-      
     } catch (error) {
       console.error('   ❌ Load testing integration failed:', error.message);
     }
@@ -289,7 +288,7 @@ tester.runTest().catch(console.error);
    */
   async testClientProfiling() {
     console.log('   Creating client profiling demo...');
-    
+
     try {
       // Create a standalone HTML file for client profiling demo
       const clientDemo = `
@@ -496,10 +495,9 @@ tester.runTest().catch(console.error);
 
       const htmlPath = path.join(this.config.reporting.outputDir, 'client-performance-demo.html');
       await fs.writeFile(htmlPath, clientDemo);
-      
+
       console.log(`   ✅ Client profiling demo created: ${htmlPath}`);
       console.log('   📂 Open this file in a browser to see client-side profiling');
-      
     } catch (error) {
       console.error('   ❌ Client profiling test failed:', error.message);
     }
@@ -510,33 +508,37 @@ tester.runTest().catch(console.error);
    */
   async testPerformanceAPI() {
     console.log('   Testing performance API endpoints...');
-    
+
     const endpoints = [
       { method: 'GET', path: '/api/performance/status', description: 'Get profiling status' },
       { method: 'GET', path: '/api/performance/health', description: 'Get health with performance data' },
-      { method: 'POST', path: '/api/performance/metric', description: 'Add custom metric', body: { key: 'test_metric', value: 42 } }
+      {
+        method: 'POST',
+        path: '/api/performance/metric',
+        description: 'Add custom metric',
+        body: { key: 'test_metric', value: 42 },
+      },
     ];
-    
+
     for (const endpoint of endpoints) {
       try {
         const options = {
           method: endpoint.method,
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 'Content-Type': 'application/json' },
         };
-        
+
         if (endpoint.body) {
           options.body = JSON.stringify(endpoint.body);
         }
-        
+
         const response = await fetch(`${this.config.server.baseUrl}${endpoint.path}`, options);
         const data = await response.json();
-        
+
         console.log(`   ✅ ${endpoint.method} ${endpoint.path}: ${response.status} - ${endpoint.description}`);
-        
+
         if (response.ok && data.success) {
           console.log('      📊 Response data available');
         }
-        
       } catch (error) {
         console.error(`   ❌ ${endpoint.method} ${endpoint.path}: ${error.message}`);
       }
@@ -548,7 +550,7 @@ tester.runTest().catch(console.error);
    */
   async testReportGeneration() {
     console.log('   Testing report generation...');
-    
+
     try {
       // Create a mock performance report
       const mockReport = {
@@ -556,7 +558,7 @@ tester.runTest().catch(console.error);
           testName: 'Performance Profiling Demo',
           startTime: this.results.startTime,
           endTime: new Date(),
-          duration: Date.now() - this.results.startTime.getTime()
+          duration: Date.now() - this.results.startTime.getTime(),
         },
         serverMetrics: {
           samplesCollected: 30,
@@ -564,34 +566,33 @@ tester.runTest().catch(console.error);
           averageMemory: 62.8,
           averageResponseTime: 185,
           peakCPU: 78.5,
-          peakMemory: 89.2
+          peakMemory: 89.2,
         },
         clientMetrics: {
           samplesCollected: 25,
           averageRenderTime: 12.4,
           averageMemoryUsage: 58.3,
-          totalInteractions: 15
+          totalInteractions: 15,
         },
         recommendations: [
           'CPU usage is within acceptable range',
           'Memory usage could be optimized for better performance',
           'Client render times are excellent',
-          'Consider implementing performance monitoring alerts'
-        ]
+          'Consider implementing performance monitoring alerts',
+        ],
       };
 
       const reportPath = path.join(this.config.reporting.outputDir, 'demo-performance-report.json');
       await fs.writeFile(reportPath, JSON.stringify(mockReport, null, 2));
-      
+
       console.log(`   ✅ Mock report generated: ${reportPath}`);
 
       // Generate HTML report
       const htmlReport = this.generateHTMLReport(mockReport);
       const htmlPath = path.join(this.config.reporting.outputDir, 'demo-performance-report.html');
       await fs.writeFile(htmlPath, htmlReport);
-      
+
       console.log(`   ✅ HTML report generated: ${htmlPath}`);
-      
     } catch (error) {
       console.error('   ❌ Report generation test failed:', error.message);
     }
@@ -680,12 +681,12 @@ tester.runTest().catch(console.error);
   async generateTestSummary() {
     console.log('\n📈 PERFORMANCE PROFILING TEST SUMMARY');
     console.log('====================================');
-    
+
     const duration = this.results.endTime - this.results.startTime;
     console.log(`Duration: ${Math.round(duration / 1000)}s`);
     console.log(`Success: ${this.results.success ? 'YES' : 'NO'}`);
     console.log(`Output Directory: ${this.config.reporting.outputDir}`);
-    
+
     // List generated files
     try {
       const files = await fs.readdir(this.config.reporting.outputDir);
@@ -727,7 +728,7 @@ tester.runTest().catch(console.error);
  */
 async function runPerformanceProfilingTest() {
   const tester = new PerformanceProfilingTester();
-  
+
   try {
     const results = await tester.runPerformanceProfilingTest();
     console.log('\n🎉 Performance Profiling System is ready for production use!');

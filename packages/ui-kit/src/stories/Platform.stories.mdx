@@ -11,13 +11,15 @@ The UI Kit provides platform-specific adapters that allow components to work sea
 ## Platform Types
 
 ### Web Platform
+
 - **Browser APIs**: Full access to DOM, localStorage, clipboard
 - **Keyboard Shortcuts**: Ctrl+Z for undo, Ctrl+C for copy, etc.
 - **Mouse Interactions**: Hover states, right-click context menus
 - **File System**: File downloads, drag-and-drop uploads
 - **Navigation**: window.open, history management
 
-### Mobile Platform  
+### Mobile Platform
+
 - **Touch Interactions**: Tap, long press, pinch-to-zoom gestures
 - **Haptic Feedback**: Light, medium, and heavy vibration patterns
 - **Device Features**: Camera, contacts, native sharing
@@ -25,6 +27,7 @@ The UI Kit provides platform-specific adapters that allow components to work sea
 - **Performance**: Optimized rendering for mobile devices
 
 ### Desktop Platform
+
 - **Native Menus**: Context menus, keyboard shortcuts
 - **File System**: Full file system access, drag-and-drop
 - **Window Management**: Multiple windows, always on top
@@ -48,16 +51,12 @@ function App() {
 
 function MyComponent() {
   const adapter = usePlatformAdapter();
-  
+
   const handleCopy = async () => {
     await adapter.copyToClipboard('Hello World');
   };
-  
-  return (
-    <button {...adapter.handlePress(handleCopy)}>
-      Copy Text
-    </button>
-  );
+
+  return <button {...adapter.handlePress(handleCopy)}>Copy Text</button>;
 }
 ```
 
@@ -104,7 +103,7 @@ await adapter.copyToClipboard('text');
 await adapter.shareContent({
   title: 'Share Title',
   text: 'Content to share',
-  url: 'https://example.com'
+  url: 'https://example.com',
 });
 
 // File operations
@@ -144,7 +143,7 @@ import { WebButton, WebInput, WebModal } from '@prompt-spaghetti/ui-kit/web';
   Open Link
 </WebButton>
 
-<WebInput 
+<WebInput
   autoComplete="email"
   spellCheck={true}
   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
@@ -156,7 +155,7 @@ import { WebButton, WebInput, WebModal } from '@prompt-spaghetti/ui-kit/web';
 ```tsx
 import { RNButton, RNInput, RNModal } from '@prompt-spaghetti/ui-kit/react-native';
 
-<RNButton 
+<RNButton
   hapticFeedback="light"
   accessibilityHint="Opens settings screen"
 >
@@ -180,11 +179,11 @@ import { useResponsive, usePlatform } from '@prompt-spaghetti/ui-kit';
 function ResponsiveComponent() {
   const { isMobile, isTablet, isDesktop } = useResponsive();
   const { platform } = usePlatform();
-  
+
   if (platform === 'mobile' || isMobile) {
     return <MobileLayout />;
   }
-  
+
   return <DesktopLayout />;
 }
 ```
@@ -196,12 +195,12 @@ function ResponsiveComponent() {
 You can override platform capabilities:
 
 ```tsx
-<PlatformProvider 
+<PlatformProvider
   platform="web"
   capabilities={{
     touchSupport: true,
     hoverSupport: false,
-    maxViewportWidth: 768
+    maxViewportWidth: 768,
   }}
 >
   <App />
@@ -214,14 +213,14 @@ Create custom platform adapters:
 
 ```tsx
 class CustomAdapter implements PlatformAdapter {
-  handlePress = (callback) => ({ onClick: callback });
+  handlePress = callback => ({ onClick: callback });
   // ... implement other methods
 }
 
 // Use with provider
 <PlatformProvider adapter={new CustomAdapter()}>
   <App />
-</PlatformProvider>
+</PlatformProvider>;
 ```
 
 ## Best Practices
@@ -239,16 +238,16 @@ class CustomAdapter implements PlatformAdapter {
 ```tsx
 function CrossPlatformButton({ onPress, children }) {
   const adapter = usePlatformAdapter();
-  
+
   return (
-    <button 
+    <button
       {...adapter.handlePress(() => {
         adapter.hapticFeedback('light');
         onPress?.();
       })}
       style={{
         minHeight: 44, // Touch-friendly size
-        cursor: adapter.capabilities.hoverSupport ? 'pointer' : 'default'
+        cursor: adapter.capabilities.hoverSupport ? 'pointer' : 'default',
       }}
     >
       {children}
@@ -262,27 +261,17 @@ function CrossPlatformButton({ onPress, children }) {
 ```tsx
 function PlatformModal({ isOpen, onClose, children }) {
   const { platform } = usePlatform();
-  
+
   if (platform === 'mobile') {
     return (
-      <RNModal 
-        animationType="slide"
-        presentationStyle="pageSheet"
-        visible={isOpen}
-        onRequestClose={onClose}
-      >
+      <RNModal animationType="slide" presentationStyle="pageSheet" visible={isOpen} onRequestClose={onClose}>
         {children}
       </RNModal>
     );
   }
-  
+
   return (
-    <WebModal
-      isOpen={isOpen}
-      onClose={onClose}
-      backdrop="clickable"
-      keyboard={true}
-    >
+    <WebModal isOpen={isOpen} onClose={onClose} backdrop="clickable" keyboard={true}>
       {children}
     </WebModal>
   );

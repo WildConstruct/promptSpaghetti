@@ -10,7 +10,7 @@ export default defineConfig({
     sourcemap: false, // Disable sourcemaps to simplify build
     commonjsOptions: {
       include: [/zod/, /node_modules/],
-      transformMixedEsModules: true // Help with mixed module formats
+      transformMixedEsModules: true, // Help with mixed module formats
     },
     rollupOptions: {
       external: ['uuid', '@juliuste/react-vimeo', 'vite-plugin-node-polyfills/shims/process'],
@@ -18,8 +18,8 @@ export default defineConfig({
         manualChunks: {
           vendor: ['react', 'react-dom'],
           flow: ['reactflow'],
-          utils: ['zod', 'zustand']
-        }
+          utils: ['zod', 'zustand'],
+        },
       },
       // Add onwarn to suppress circular dependency warnings
       onwarn(warning, warn) {
@@ -29,12 +29,12 @@ export default defineConfig({
         if (warning.code === 'EVAL') return;
         // Use default for everything else
         warn(warning);
-      }
-    }
+      },
+    },
   },
   server: {
     port: 3000,
-    strictPort: true
+    strictPort: true,
   },
   resolve: {
     // No alias needed in production - core files are local
@@ -44,8 +44,8 @@ export default defineConfig({
     esbuildOptions: {
       // Allow overwriting CommonJS variables
       define: {
-        global: 'globalThis'
-      }
-    }
-  }
+        global: 'globalThis',
+      },
+    },
+  },
 });

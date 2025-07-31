@@ -1,9 +1,9 @@
 /**
  * Epic 16 Marketplace Sharing Components - Index
- * 
+ *
  * Central export file for all sharing-related components.
  * Provides a clean API for importing sharing functionality throughout the application.
- * 
+ *
  * Task: E16-1753114247020-65B7A3 - Design sharing system
  */
 
@@ -26,7 +26,7 @@ export type {
   CreateShareRequest,
   ShareResponse,
   ShareCollection,
-  SocialIntegration
+  SocialIntegration,
 } from '../../types/sharingTypes';
 
 // Re-export service for convenience

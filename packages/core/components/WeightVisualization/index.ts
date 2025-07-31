@@ -5,8 +5,5 @@
 
 export { WeightDistributionChart } from './WeightDistributionChart';
 export { WeightVisualizationPanel } from './WeightVisualizationPanel';
-export type { 
-  WeightDistributionChartProps,
-  ChartType 
-} from './WeightDistributionChart';
+export type { WeightDistributionChartProps, ChartType } from './WeightDistributionChart';
 export type { WeightVisualizationPanelProps } from './WeightVisualizationPanel';

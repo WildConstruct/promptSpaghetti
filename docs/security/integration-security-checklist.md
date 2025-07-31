@@ -2,15 +2,16 @@
 
 **Document Version**: 1.0  
 **Last Updated**: 2025-07-22  
-**Epic**: 19 - Security & Compliance Framework  
+**Epic**: 19 - Security & Compliance Framework
 
 ---
 
 ## Quick Reference
 
 ### 🚨 Critical Security Requirements
+
 - [ ] All endpoints require authentication (JWT/API Key/OAuth)
-- [ ] Input validation using Zod schemas  
+- [ ] Input validation using Zod schemas
 - [ ] Rate limiting implemented
 - [ ] Security headers included in all responses
 - [ ] Sensitive data encrypted in transit and at rest
@@ -21,6 +22,7 @@
 ## 1. New API Endpoint Checklist
 
 ### 1.1 Authentication & Authorization
+
 - [ ] **Authentication Method Selected**
   - [ ] JWT Bearer token validation for user endpoints
   - [ ] API Key validation for service-to-service
@@ -42,13 +44,14 @@
     }
     const decoded = jwt.verify(token.slice(7), PUBLIC_KEY, {
       algorithms: ['RS256'],
-      issuer: 'promptscape.app'
+      issuer: 'promptscape.app',
     });
     return decoded;
   };
   ```
 
 ### 1.2 Input Validation & Sanitization
+
 - [ ] **Zod Schema Validation**
   - [ ] Request body validation schema defined
   - [ ] Query parameter validation
@@ -60,22 +63,23 @@
   - [ ] SQL injection prevention (parameterized queries only)
   - [ ] Path traversal prevention
   - [ ] Command injection prevention
-  
 - [ ] **Size Limits Applied**
   - [ ] Request body ≤ 10MB
-  - [ ] File uploads ≤ 100MB  
+  - [ ] File uploads ≤ 100MB
   - [ ] Query string ≤ 8KB
   - [ ] Headers ≤ 4KB each
 
 ### 1.3 Rate Limiting
+
 - [ ] **Rate Limits Configured**
+
   ```typescript
   // Example rate limit configuration
   const rateLimits = {
-    auth: { windowMs: 60000, max: 5 },      // 5/min for auth
-    api: { windowMs: 60000, max: 60 },      // 60/min for general API  
-    upload: { windowMs: 60000, max: 10 },   // 10/min for uploads
-    websocket: { windowMs: 60000, max: 10 } // 10/min for WS connections
+    auth: { windowMs: 60000, max: 5 }, // 5/min for auth
+    api: { windowMs: 60000, max: 60 }, // 60/min for general API
+    upload: { windowMs: 60000, max: 10 }, // 10/min for uploads
+    websocket: { windowMs: 60000, max: 10 }, // 10/min for WS connections
   };
   ```
 
@@ -85,7 +89,9 @@
   - [ ] `X-Rate-Limit-Limit` header
 
 ### 1.4 Response Security
+
 - [ ] **Security Headers Added**
+
   ```http
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
@@ -106,8 +112,10 @@
   - [ ] Sensitive data filtering
   - [ ] Content-Type header set correctly
 
-### 1.5 Logging & Monitoring  
+### 1.5 Logging & Monitoring
+
 - [ ] **Security Events Logged**
+
   ```typescript
   // Required log events
   logger.security({
@@ -118,13 +126,13 @@
     ip: req.ip,
     userAgent: req.get('User-Agent'),
     requestId: req.id,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
   ```
 
 - [ ] **Error Logging**
   - [ ] Authentication failures
-  - [ ] Authorization failures  
+  - [ ] Authorization failures
   - [ ] Validation errors
   - [ ] Rate limit exceeded
   - [ ] Suspicious request patterns
@@ -134,6 +142,7 @@
 ## 2. Third-Party Integration Checklist
 
 ### 2.1 OAuth Integration
+
 - [ ] **OAuth Provider Approved**
   - [ ] Google OAuth configured with minimal scopes
   - [ ] GitHub OAuth configured with user:email scope only
@@ -153,19 +162,20 @@
     if (!isValidState(state)) {
       throw new Error('Invalid OAuth state');
     }
-    
+
     // Exchange code for tokens with PKCE
     const tokens = await exchangeCodeForTokens(code, codeVerifier);
-    
+
     // Encrypt and store refresh token
     const encryptedRefreshToken = encrypt(tokens.refresh_token);
     await storeRefreshToken(userId, encryptedRefreshToken);
-    
+
     return tokens.access_token; // Short-lived, not stored
   };
   ```
 
 ### 2.2 External API Integration
+
 - [ ] **API Security Configuration**
   - [ ] TLS 1.2+ required for all external calls
   - [ ] Certificate validation enabled
@@ -186,6 +196,7 @@
   - [ ] Sensitive data purged after processing
 
 ### 2.3 Webhook Integration
+
 - [ ] **Inbound Webhook Security**
   - [ ] Signature verification (HMAC-SHA256)
   - [ ] Timestamp validation (5-minute window)
@@ -194,19 +205,14 @@
   - [ ] Payload size limits
 
 - [ ] **Webhook Verification**
+
   ```typescript
   const verifyWebhook = (payload: string, signature: string, secret: string) => {
-    const expectedSignature = crypto
-      .createHmac('sha256', secret)
-      .update(payload)
-      .digest('hex');
-    
+    const expectedSignature = crypto.createHmac('sha256', secret).update(payload).digest('hex');
+
     const providedSignature = signature.replace('sha256=', '');
-    
-    if (!crypto.timingSafeEqual(
-      Buffer.from(expectedSignature, 'hex'),
-      Buffer.from(providedSignature, 'hex')
-    )) {
+
+    if (!crypto.timingSafeEqual(Buffer.from(expectedSignature, 'hex'), Buffer.from(providedSignature, 'hex'))) {
       throw new Error('Invalid webhook signature');
     }
   };
@@ -223,6 +229,7 @@
 ## 3. Database Integration Checklist
 
 ### 3.1 Connection Security
+
 - [ ] **PostgreSQL Security**
   - [ ] SSL/TLS encryption enabled
   - [ ] SCRAM-SHA-256 authentication
@@ -238,6 +245,7 @@
   - [ ] Sensitive data encryption before storage
 
 ### 3.2 Query Security
+
 - [ ] **SQL Injection Prevention**
   - [ ] Parameterized queries only
   - [ ] No dynamic SQL construction
@@ -255,6 +263,7 @@
 ## 4. WebSocket Integration Checklist
 
 ### 4.1 Connection Security
+
 - [ ] **WebSocket Authentication**
   - [ ] JWT token validation on connection
   - [ ] Heartbeat mechanism (30s timeout)
@@ -268,6 +277,7 @@
   - [ ] Content sanitization
 
 ### 4.2 Authorization & Isolation
+
 - [ ] **Room/Channel Authorization**
   - [ ] Explicit permission required for room access
   - [ ] User presence verification
@@ -279,6 +289,7 @@
 ## 5. File Upload/Download Checklist
 
 ### 5.1 Upload Security
+
 - [ ] **File Validation**
   - [ ] File type whitelist enforcement
   - [ ] File size limits (100MB max)
@@ -293,6 +304,7 @@
   - [ ] Metadata extraction security
 
 ### 5.2 Download Security
+
 - [ ] **Access Control**
   - [ ] Authentication required
   - [ ] Resource ownership validation
@@ -310,6 +322,7 @@
 ## 6. Monitoring & Alerting Checklist
 
 ### 6.1 Security Event Monitoring
+
 - [ ] **Critical Events Monitored**
   - [ ] Authentication failures
   - [ ] Authorization violations
@@ -324,6 +337,7 @@
   - [ ] Monthly risk assessments
 
 ### 6.2 Performance Monitoring
+
 - [ ] **API Performance**
   - [ ] Response time tracking
   - [ ] Error rate monitoring
@@ -341,6 +355,7 @@
 ## 7. Testing & Validation Checklist
 
 ### 7.1 Security Testing
+
 - [ ] **Authentication Testing**
   - [ ] Token validation bypass attempts
   - [ ] Session fixation testing
@@ -355,6 +370,7 @@
   - [ ] File upload security testing
 
 ### 7.2 Integration Testing
+
 - [ ] **Load Testing**
   - [ ] Rate limit effectiveness
   - [ ] Performance under load
@@ -372,6 +388,7 @@
 ## 8. Documentation & Compliance
 
 ### 8.1 Documentation Requirements
+
 - [ ] **API Documentation**
   - [ ] Endpoint security requirements documented
   - [ ] Authentication methods described
@@ -385,6 +402,7 @@
   - [ ] Incident response procedures
 
 ### 8.2 Compliance Verification
+
 - [ ] **GDPR Compliance**
   - [ ] Data processing basis documented
   - [ ] User consent mechanisms
@@ -403,6 +421,7 @@
 ## 9. Pre-Production Review
 
 ### 9.1 Security Review
+
 - [ ] **Code Review Completed**
   - [ ] Security-focused code review
   - [ ] Static security analysis passed
@@ -416,6 +435,7 @@
   - [ ] Communication security testing
 
 ### 9.2 Performance Review
+
 - [ ] **Load Testing Results**
   - [ ] Sustained load handling verified
   - [ ] Peak load capacity tested
@@ -427,6 +447,7 @@
 ## 10. Post-Deployment Checklist
 
 ### 10.1 Monitoring Setup
+
 - [ ] **Security Monitoring Active**
   - [ ] Real-time security alerts configured
   - [ ] Log aggregation and analysis setup
@@ -434,6 +455,7 @@
   - [ ] Security dashboard configured
 
 ### 10.2 Ongoing Maintenance
+
 - [ ] **Regular Security Tasks**
   - [ ] Weekly security log review
   - [ ] Monthly vulnerability scanning
@@ -451,11 +473,13 @@
 ## Emergency Contact Information
 
 ### Security Incidents
+
 - **Critical Security Issue**: Slack #security-critical
 - **Incident Response Team**: security-incident@promptscape.app
 - **Emergency Phone**: +1-XXX-XXX-XXXX
 
 ### Technical Support
+
 - **Integration Issues**: Slack #engineering-alerts
 - **Performance Issues**: Slack #performance-alerts
 - **Database Issues**: Slack #database-alerts

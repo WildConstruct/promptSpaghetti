@@ -11,6 +11,7 @@ The Compliance Baseline Tracking System provides comprehensive monitoring and an
 The core service that manages compliance baselines and measurements.
 
 **Key Features:**
+
 - **Baseline Management**: Define and manage compliance baselines for different frameworks
 - **Real-time Measurement Recording**: Track actual performance against baselines
 - **Deviation Detection**: Automatic detection of baseline deviations with alert generation
@@ -19,24 +20,25 @@ The core service that manages compliance baselines and measurements.
 
 **Default Baselines Included:**
 
-| Framework | Baseline | Target Value | Tolerance |
-|-----------|----------|--------------|-----------|
-| GDPR | Data Protection Compliance Score | 95% | ±5% |
-| GDPR | User Consent Coverage | 100% | ±2% |
-| GDPR | Data Retention Policy Compliance | 98% | ±3% |
-| SOC2 | Security Controls Score | 92% | ±5% |
-| SOC2 | Access Control Effectiveness | 99% | ±1% |
-| SOC2 | Audit Log Completeness | 100% | ±1% |
-| MPA | Pre-Release Content Encryption Rate | 100% | 0% |
-| MPA | Content Access Audit Coverage | 100% | ±1% |
-| INTERNAL | SSL Certificate Health Score | 100% | ±5% |
-| INTERNAL | Security Patch Compliance | 95% | ±5% |
+| Framework | Baseline                            | Target Value | Tolerance |
+| --------- | ----------------------------------- | ------------ | --------- |
+| GDPR      | Data Protection Compliance Score    | 95%          | ±5%       |
+| GDPR      | User Consent Coverage               | 100%         | ±2%       |
+| GDPR      | Data Retention Policy Compliance    | 98%          | ±3%       |
+| SOC2      | Security Controls Score             | 92%          | ±5%       |
+| SOC2      | Access Control Effectiveness        | 99%          | ±1%       |
+| SOC2      | Audit Log Completeness              | 100%         | ±1%       |
+| MPA       | Pre-Release Content Encryption Rate | 100%         | 0%        |
+| MPA       | Content Access Audit Coverage       | 100%         | ±1%       |
+| INTERNAL  | SSL Certificate Health Score        | 100%         | ±5%       |
+| INTERNAL  | Security Patch Compliance           | 95%          | ±5%       |
 
 ### 2. ComplianceHistoricalAnalyzer (`packages/core/services/ComplianceHistoricalAnalyzer.ts`)
 
 Provides historical trend analysis and forecasting capabilities.
 
 **Key Features:**
+
 - **Historical Data Management**: Store and analyze 90+ days of compliance data
 - **Trend Report Generation**: Comprehensive trend analysis for any time period
 - **Compliance Forecasting**: Predict future compliance performance with confidence intervals
@@ -45,6 +47,7 @@ Provides historical trend analysis and forecasting capabilities.
 - **Data Export**: Export historical data for external analysis
 
 **Forecasting Capabilities:**
+
 - 7-30 day forecast horizon with confidence intervals
 - Risk level assessment (low/medium/high)
 - Seasonal pattern recognition
@@ -55,6 +58,7 @@ Provides historical trend analysis and forecasting capabilities.
 Integration layer that combines baseline tracking with existing compliance monitoring.
 
 **Enhanced Dashboard Features:**
+
 - **Baseline Integration**: Real-time baseline health scoring
 - **Historical Trends**: Improving/declining/stable metric counts
 - **Forecast Alerts**: Proactive alerts for predicted compliance issues
@@ -66,6 +70,7 @@ Integration layer that combines baseline tracking with existing compliance monit
 React component providing director-friendly compliance visualization.
 
 **Dashboard Sections:**
+
 - **Key Metrics**: Overall health, baseline health, baselines met, critical issues
 - **Framework Navigation**: Toggle between overview and framework-specific views
 - **Framework Health**: Status overview for each compliance framework
@@ -84,9 +89,9 @@ import { complianceBaselineTracker } from './services/ComplianceBaselineTracker'
 await complianceBaselineTracker.recordMeasurement(
   'gdpr_data_protection_score',
   92, // Current measurement value
-  { 
+  {
     component: 'data_processor',
-    environment: 'production' 
+    environment: 'production',
   },
   'Monthly compliance review measurement'
 );
@@ -128,7 +133,7 @@ console.log('Improvement Trend:', trendReport.summary.improvementTrend);
 ```typescript
 // Generate 7-day forecast for a specific baseline
 const forecast = await complianceHistoricalAnalyzer.generateForecast(
-  'gdpr_consent_coverage', 
+  'gdpr_consent_coverage',
   7 // 7-day horizon
 );
 
@@ -145,12 +150,10 @@ The baseline tracker automatically integrates with the existing `ComplianceMonit
 
 ```typescript
 // Recording measurements updates both systems
-await enhancedComplianceMonitor.recordComplianceMeasurement(
-  'GDPR',
-  'data_protection',
-  94,
-  { source: 'automated_scan', scan_id: '12345' }
-);
+await enhancedComplianceMonitor.recordComplianceMeasurement('GDPR', 'data_protection', 94, {
+  source: 'automated_scan',
+  scan_id: '12345',
+});
 ```
 
 ### Authentication Service Integration
@@ -162,12 +165,11 @@ The system can be integrated with the authentication service for compliance-rela
 import { enhancedComplianceMonitor } from '../../../packages/core/services/ComplianceMonitor';
 
 // Record authentication-related compliance measurements
-await enhancedComplianceMonitor.recordComplianceMeasurement(
-  'SOC2',
-  'access_control',
-  99.2,
-  { event: 'mfa_enforcement_check', total_users: 1000, mfa_enabled: 992 }
-);
+await enhancedComplianceMonitor.recordComplianceMeasurement('SOC2', 'access_control', 99.2, {
+  event: 'mfa_enforcement_check',
+  total_users: 1000,
+  mfa_enabled: 992,
+});
 ```
 
 ## Director-Friendly Features
@@ -233,7 +235,7 @@ await complianceBaselineTracker.createCustomBaseline({
   toleranceThreshold: 3,
   measurementUnit: 'percentage',
   measurementFrequency: 'daily',
-  isActive: true
+  isActive: true,
 });
 ```
 
@@ -244,7 +246,7 @@ Baseline thresholds can be updated to match organizational requirements:
 ```typescript
 await complianceBaselineTracker.updateBaseline('gdpr_data_protection_score', {
   targetValue: 97, // Increase target from 95% to 97%
-  toleranceThreshold: 2 // Reduce tolerance from 5% to 2%
+  toleranceThreshold: 2, // Reduce tolerance from 5% to 2%
 });
 ```
 
@@ -253,7 +255,7 @@ await complianceBaselineTracker.updateBaseline('gdpr_data_protection_score', {
 The UI dashboard supports customization:
 
 - **Refresh Intervals**: Configurable auto-refresh timing
-- **Time Range Selection**: 7/30/90-day view options  
+- **Time Range Selection**: 7/30/90-day view options
 - **Framework Focus**: Framework-specific detailed views
 - **Alert Thresholds**: Customizable alert sensitivity levels
 
@@ -323,6 +325,7 @@ The UI dashboard supports customization:
 ---
 
 **Document Control:**
+
 - Version: 1.0
 - Author: Wild Construct Development Team
 - Classification: Internal Use

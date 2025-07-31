@@ -14,7 +14,7 @@ describe('Graph Engine Error Scenarios', () => {
   beforeEach(async () => {
     testEnv = await TestEnvironmentManager.createEnvironment('graph-engine-errors', {
       seed: 'engine-error-test',
-      timeout: 10000
+      timeout: 10000,
     });
   });
 
@@ -35,16 +35,16 @@ describe('Graph Engine Error Scenarios', () => {
               choices: [
                 { value: 'Option A', weight: -1 }, // Negative weight
                 { value: 'Option B', weight: 'invalid' as unknown }, // Non-numeric weight
-                { value: 'Option C', weight: Infinity } // Infinite weight
-              ]
+                { value: 'Option C', weight: Infinity }, // Infinite weight
+              ],
             },
             {
               id: 'output1',
               type: 'Output',
               inputs: ['choice1'],
-              data: { template: '{{choice1}}' }
-            }
-          ]
+              data: { template: '{{choice1}}' },
+            },
+          ],
         };
 
         try {
@@ -70,16 +70,16 @@ describe('Graph Engine Error Scenarios', () => {
               choices: [
                 { value: 'Option A', weight: 0 },
                 { value: 'Option B', weight: 0 },
-                { value: 'Option C', weight: 0 }
-              ]
+                { value: 'Option C', weight: 0 },
+              ],
             },
             {
               id: 'output1',
               type: 'Output',
               inputs: ['choice1'],
-              data: { template: '{{choice1}}' }
-            }
-          ]
+              data: { template: '{{choice1}}' },
+            },
+          ],
         };
 
         try {
@@ -102,17 +102,17 @@ describe('Graph Engine Error Scenarios', () => {
               type: 'WeightedChoice',
               inputs: [],
               data: {},
-              choices: [{ value: 'Test Value', weight: 1 }]
+              choices: [{ value: 'Test Value', weight: 1 }],
             },
             {
               id: 'output1',
               type: 'Output',
               inputs: ['choice1'],
-              data: { 
-                template: '{{unclosed_bracket' // Missing closing bracket
-              }
-            }
-          ]
+              data: {
+                template: '{{unclosed_bracket', // Missing closing bracket
+              },
+            },
+          ],
         };
 
         try {
@@ -132,27 +132,27 @@ describe('Graph Engine Error Scenarios', () => {
               id: 'set-var',
               type: 'SetVariable',
               inputs: [],
-              data: { 
+              data: {
                 key: 'testVar',
-                value: 42 // Number
-              }
+                value: 42, // Number
+              },
             },
             {
               id: 'get-var',
               type: 'GetVariable',
               inputs: ['set-var'],
-              data: { 
+              data: {
                 key: 'testVar',
-                expectedType: 'string' // Expecting string but getting number
-              }
+                expectedType: 'string', // Expecting string but getting number
+              },
             },
             {
               id: 'output1',
               type: 'Output',
               inputs: ['get-var'],
-              data: { template: '{{get-var}}' }
-            }
-          ]
+              data: { template: '{{get-var}}' },
+            },
+          ],
         };
 
         // Should handle gracefully with type coercion or error
@@ -177,16 +177,16 @@ describe('Graph Engine Error Scenarios', () => {
               data: {
                 condition: 'invalid javascript syntax !!!', // Invalid JS
                 trueValue: 'True branch',
-                falseValue: 'False branch'
-              }
+                falseValue: 'False branch',
+              },
             },
             {
               id: 'output1',
               type: 'Output',
               inputs: ['conditional1'],
-              data: { template: '{{conditional1}}' }
-            }
-          ]
+              data: { template: '{{conditional1}}' },
+            },
+          ],
         };
 
         try {
@@ -209,16 +209,16 @@ describe('Graph Engine Error Scenarios', () => {
               data: {
                 items: ['A', 'B', 'C'],
                 pattern: 'invalid-pattern' as unknown, // Invalid pattern type
-                currentIndex: 0
-              }
+                currentIndex: 0,
+              },
             },
             {
               id: 'output1',
               type: 'Output',
               inputs: ['sequential1'],
-              data: { template: '{{sequential1}}' }
-            }
-          ]
+              data: { template: '{{sequential1}}' },
+            },
+          ],
         };
 
         try {
@@ -243,18 +243,18 @@ describe('Graph Engine Error Scenarios', () => {
                 transitionMatrix: [
                   [0.5, 0.3], // Row doesn't sum to 1 and wrong length
                   [0.2, 0.8, 0.1], // Row sums > 1
-                  [0.4, 0.6, 0.2] // Row sums > 1
+                  [0.4, 0.6, 0.2], // Row sums > 1
                 ],
-                currentState: 'A'
-              }
+                currentState: 'A',
+              },
             },
             {
               id: 'output1',
               type: 'Output',
               inputs: ['markov1'],
-              data: { template: '{{markov1}}' }
-            }
-          ]
+              data: { template: '{{markov1}}' },
+            },
+          ],
         };
 
         try {
@@ -277,20 +277,20 @@ describe('Graph Engine Error Scenarios', () => {
               data: {},
               choices: [
                 { value: 'A', weight: 1 },
-                { value: 'B', weight: 1 }
+                { value: 'B', weight: 1 },
               ],
               distributionConfig: {
                 type: 'invalid-distribution' as unknown, // Invalid distribution type
-                parameters: {}
-              }
+                parameters: {},
+              },
             },
             {
               id: 'output1',
               type: 'Output',
               inputs: ['weighted-adv1'],
-              data: { template: '{{weighted-adv1}}' }
-            }
-          ]
+              data: { template: '{{weighted-adv1}}' },
+            },
+          ],
         };
 
         try {
@@ -314,13 +314,14 @@ describe('Graph Engine Error Scenarios', () => {
               id: 'node1',
               type: 'Output',
               inputs: ['node1'], // Self-reference
-              data: { template: '{{node1}}' }
-            }
-          ]
+              data: { template: '{{node1}}' },
+            },
+          ],
         };
 
-        await expect(executeGraph(selfRefGraph, 'test-seed'))
-          .rejects.toThrow(/Maximum execution depth exceeded|self.*reference|circular/i);
+        await expect(executeGraph(selfRefGraph, 'test-seed')).rejects.toThrow(
+          /Maximum execution depth exceeded|self.*reference|circular/i
+        );
       });
 
       it('should detect complex circular dependencies', async () => {
@@ -331,26 +332,27 @@ describe('Graph Engine Error Scenarios', () => {
               type: 'WeightedChoice',
               inputs: ['nodeC'], // Depends on C
               data: {},
-              choices: [{ value: 'A', weight: 1 }]
+              choices: [{ value: 'A', weight: 1 }],
             },
             {
               id: 'nodeB',
               type: 'WeightedChoice',
               inputs: ['nodeA'], // Depends on A
               data: {},
-              choices: [{ value: 'B', weight: 1 }]
+              choices: [{ value: 'B', weight: 1 }],
             },
             {
               id: 'nodeC',
               type: 'Output',
               inputs: ['nodeB'], // Depends on B, creating A->C->B->A cycle
-              data: { template: '{{nodeB}}' }
-            }
-          ]
+              data: { template: '{{nodeB}}' },
+            },
+          ],
         };
 
-        await expect(executeGraph(circularGraph, 'test-seed'))
-          .rejects.toThrow(/Maximum execution depth exceeded|circular.*dependency/i);
+        await expect(executeGraph(circularGraph, 'test-seed')).rejects.toThrow(
+          /Maximum execution depth exceeded|circular.*dependency/i
+        );
       });
 
       it('should handle orphaned nodes', async () => {
@@ -361,22 +363,22 @@ describe('Graph Engine Error Scenarios', () => {
               type: 'WeightedChoice',
               inputs: [],
               data: {},
-              choices: [{ value: 'Connected', weight: 1 }]
+              choices: [{ value: 'Connected', weight: 1 }],
             },
             {
               id: 'output1',
               type: 'Output',
               inputs: ['connected1'],
-              data: { template: '{{connected1}}' }
+              data: { template: '{{connected1}}' },
             },
             {
               id: 'orphan1',
               type: 'WeightedChoice',
               inputs: [],
               data: {},
-              choices: [{ value: 'Orphaned', weight: 1 }]
-            }
-          ]
+              choices: [{ value: 'Orphaned', weight: 1 }],
+            },
+          ],
         };
 
         // Should execute successfully - orphaned nodes don't affect connected graph execution
@@ -395,13 +397,13 @@ describe('Graph Engine Error Scenarios', () => {
               type: 'WeightedChoice',
               inputs: [],
               data: {},
-              choices: [{ value: 'Component 1', weight: 1 }]
+              choices: [{ value: 'Component 1', weight: 1 }],
             },
             {
               id: 'comp1-output',
               type: 'Output',
               inputs: ['comp1-choice'],
-              data: { template: '{{comp1-choice}}' }
+              data: { template: '{{comp1-choice}}' },
             },
             // Component 2 (disconnected)
             {
@@ -409,15 +411,15 @@ describe('Graph Engine Error Scenarios', () => {
               type: 'WeightedChoice',
               inputs: [],
               data: {},
-              choices: [{ value: 'Component 2', weight: 1 }]
+              choices: [{ value: 'Component 2', weight: 1 }],
             },
             {
               id: 'comp2-output',
               type: 'Output',
               inputs: ['comp2-choice'],
-              data: { template: '{{comp2-choice}}' }
-            }
-          ]
+              data: { template: '{{comp2-choice}}' },
+            },
+          ],
         };
 
         // Should execute and return outputs from all output nodes
@@ -438,22 +440,22 @@ describe('Graph Engine Error Scenarios', () => {
               type: 'WeightedChoice',
               inputs: [],
               data: {},
-              choices: [{ value: 'Normal', weight: 1 }]
+              choices: [{ value: 'Normal', weight: 1 }],
             },
             {
               id: 'corrupting-node',
               type: 'WeightedChoice',
               inputs: ['normal-node'],
               data: null as unknown, // Corrupted data
-              choices: [{ value: 'Corrupted', weight: 1 }]
+              choices: [{ value: 'Corrupted', weight: 1 }],
             },
             {
               id: 'output1',
               type: 'Output',
               inputs: ['corrupting-node'],
-              data: { template: '{{corrupting-node}}' }
-            }
-          ]
+              data: { template: '{{corrupting-node}}' },
+            },
+          ],
         };
 
         // The current implementation is resilient and handles null data gracefully
@@ -473,17 +475,17 @@ describe('Graph Engine Error Scenarios', () => {
               id: 'get-undefined-var',
               type: 'GetVariable',
               inputs: [],
-              data: { 
-                key: 'undefinedVariable' // Variable never set
-              }
+              data: {
+                key: 'undefinedVariable', // Variable never set
+              },
             },
             {
               id: 'output1',
               type: 'Output',
               inputs: ['get-undefined-var'],
-              data: { template: '{{get-undefined-var}}' }
-            }
-          ]
+              data: { template: '{{get-undefined-var}}' },
+            },
+          ],
         };
 
         try {
@@ -509,42 +511,41 @@ describe('Graph Engine Error Scenarios', () => {
               type: 'WeightedChoice',
               inputs: [],
               data: {},
-              choices: Array(1000000).fill().map((_, i) => ({ 
-                value: `Option ${i}`, 
-                weight: 1 
-              }))
+              choices: Array(1000000)
+                .fill()
+                .map((_, i) => ({
+                  value: `Option ${i}`,
+                  weight: 1,
+                })),
             },
             {
               id: 'output1',
               type: 'Output',
               inputs: ['loop-node'],
-              data: { template: '{{loop-node}}' }
-            }
-          ]
+              data: { template: '{{loop-node}}' },
+            },
+          ],
         };
 
         // Test timeout handling with Promise.race
         try {
           const result = await Promise.race([
             executeGraph(infiniteLoopGraph, 'test-seed'),
-            new Promise((_, reject) => 
-              setTimeout(() => reject(new Error('Execution timeout')), 5000)
-            )
+            new Promise((_, reject) => setTimeout(() => reject(new Error('Execution timeout')), 5000)),
           ]);
-          
+
           // If execution completes, verify it didn't hang
           expect(result.outputs).toBeDefined();
         } catch (error) {
           // Should timeout or complete quickly
           expect(error.message).toMatch(/timeout|execution/i);
         }
-
       });
 
       it('should handle excessive recursion in node dependencies', async () => {
         // Create a graph with deep dependency chain
         const deepDependencyGraph: Graph = {
-          nodes: []
+          nodes: [],
         };
 
         // Create chain: node0 -> node1 -> node2 -> ... -> node999
@@ -552,9 +553,9 @@ describe('Graph Engine Error Scenarios', () => {
           deepDependencyGraph.nodes.push({
             id: `node${i}`,
             type: 'WeightedChoice',
-            inputs: i > 0 ? [`node${i-1}`] : [],
+            inputs: i > 0 ? [`node${i - 1}`] : [],
             data: {},
-            choices: [{ value: `Value ${i}`, weight: 1 }]
+            choices: [{ value: `Value ${i}`, weight: 1 }],
           });
         }
 
@@ -562,7 +563,7 @@ describe('Graph Engine Error Scenarios', () => {
           id: 'final-output',
           type: 'Output',
           inputs: ['node999'],
-          data: { template: '{{node999}}' }
+          data: { template: '{{node999}}' },
         });
 
         // The current implementation has depth protection and handles deep chains efficiently
@@ -584,15 +585,15 @@ describe('Graph Engine Error Scenarios', () => {
               type: 'WeightedChoice',
               inputs: [],
               data: {},
-              choices: [{ value: 'Shared Value', weight: 1 }]
+              choices: [{ value: 'Shared Value', weight: 1 }],
             },
             {
               id: 'output1',
               type: 'Output',
               inputs: ['shared-node'],
-              data: { template: '{{shared-node}}' }
-            }
-          ]
+              data: { template: '{{shared-node}}' },
+            },
+          ],
         };
 
         // Execute same graph concurrently with different seeds
@@ -601,11 +602,11 @@ describe('Graph Engine Error Scenarios', () => {
           executeGraph(sharedGraph, 'seed2'),
           executeGraph(sharedGraph, 'seed3'),
           executeGraph(sharedGraph, 'seed4'),
-          executeGraph(sharedGraph, 'seed5')
+          executeGraph(sharedGraph, 'seed5'),
         ];
 
         const results = await Promise.allSettled(promises);
-        
+
         // All executions should complete without interfering with each other
         results.forEach((result, index) => {
           if (result.status === 'rejected') {
@@ -627,21 +628,21 @@ describe('Graph Engine Error Scenarios', () => {
               data: {
                 items: ['A', 'B', 'C', 'D', 'E'],
                 pattern: 'linear',
-                currentIndex: 0
-              }
+                currentIndex: 0,
+              },
             },
             {
               id: 'output1',
               type: 'Output',
               inputs: ['sequential-node'],
-              data: { template: '{{sequential-node}}' }
-            }
-          ]
+              data: { template: '{{sequential-node}}' },
+            },
+          ],
         };
 
         // Start execution
         const execution1 = executeGraph(statefulGraph, 'seed1');
-        
+
         // Modify graph state during execution (simulate concurrent modification)
         setTimeout(() => {
           if (statefulGraph.nodes[0].data) {
@@ -650,7 +651,7 @@ describe('Graph Engine Error Scenarios', () => {
         }, 50);
 
         const result = await execution1;
-        
+
         // Execution should complete (state modifications during execution don't affect deterministic results)
         expect(result.outputs).toBeDefined();
         expect(result.outputs.length).toBeGreaterThan(0);
@@ -662,11 +663,11 @@ describe('Graph Engine Error Scenarios', () => {
     describe('Boundary Condition Errors', () => {
       it('should handle empty graph', async () => {
         const emptyGraph: Graph = {
-          nodes: []
+          nodes: [],
         };
 
         const result = await executeGraph(emptyGraph, 'test-seed');
-        
+
         // Empty graph should return empty outputs
         expect(result.outputs).toEqual([]);
       });
@@ -679,19 +680,19 @@ describe('Graph Engine Error Scenarios', () => {
               type: 'WeightedChoice',
               inputs: [],
               data: {},
-              choices: [{ value: 'No Output', weight: 1 }]
+              choices: [{ value: 'No Output', weight: 1 }],
             },
             {
               id: 'set-var',
               type: 'SetVariable',
               inputs: ['choice1'],
-              data: { key: 'testVar', value: '{{choice1}}' }
-            }
-          ]
+              data: { key: 'testVar', value: '{{choice1}}' },
+            },
+          ],
         };
 
         const result = await executeGraph(noOutputGraph, 'test-seed');
-        
+
         // Should return empty outputs array when there are no Output nodes
         expect(result.outputs).toEqual([]);
       });
@@ -704,21 +705,21 @@ describe('Graph Engine Error Scenarios', () => {
               type: 'WeightedChoice',
               inputs: [],
               data: {},
-              choices: [{ value: 'Test', weight: 1 }]
+              choices: [{ value: 'Test', weight: 1 }],
             },
             {
               id: 'output1',
               type: 'Output',
               inputs: ['choice1'],
-              data: { template: '{{choice1}}' }
-            }
-          ]
+              data: { template: '{{choice1}}' },
+            },
+          ],
         };
 
         const extremeSeeds = [
           Number.MAX_SAFE_INTEGER.toString(),
           Number.MAX_VALUE.toString(),
-          'extremely-long-seed-' + 'x'.repeat(1000000)
+          'extremely-long-seed-' + 'x'.repeat(1000000),
         ];
 
         for (const seed of extremeSeeds) {
@@ -749,16 +750,16 @@ describe('Graph Engine Error Scenarios', () => {
                 { value: 'true', weight: 1 },
                 { value: 'null', weight: 1 },
                 { value: '{"obj":"value"}', weight: 1 },
-                { value: '[1,2,3]', weight: 1 }
-              ]
+                { value: '[1,2,3]', weight: 1 },
+              ],
             },
             {
               id: 'output1',
               type: 'Output',
               inputs: ['mixed-choice'],
-              data: { template: '{{mixed-choice}}' }
-            }
-          ]
+              data: { template: '{{mixed-choice}}' },
+            },
+          ],
         };
 
         // Should handle mixed types by converting to string

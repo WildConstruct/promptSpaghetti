@@ -1,4 +1,5 @@
 # Technical Architecture Specification
+
 **Epic 18 - Define Target Architecture (E18-1753114562000-E0CC67)**
 
 ## Overview
@@ -28,13 +29,13 @@ export class NodeFramework extends EventEmitter {
   public readonly config: NodeFrameworkConfig;
   public readonly registry: NodeRegistry;
   public readonly validationService: NodeValidationService;
-  
+
   // Core Methods
   async createNode(type: string, id: string, config: AdvancedNodeConfig, data: any): Promise<FrameworkNode>;
   getNode(id: string): FrameworkNode | undefined;
   async destroyNode(id: string): Promise<void>;
   registerLifecycleHooks(type: string, hooks: NodeLifecycleHooks): void;
-  
+
   // Metrics & Management
   getMetrics(): NodeFrameworkMetrics;
   getAllNodes(): FrameworkNode[];
@@ -56,16 +57,22 @@ export interface NodeCreationOptions {
 }
 
 export class NodeFactory {
-  async createNode(type: string, id: string, config: AdvancedNodeConfig, data: any, options?: NodeCreationOptions): Promise<FrameworkNode>;
+  async createNode(
+    type: string,
+    id: string,
+    config: AdvancedNodeConfig,
+    data: any,
+    options?: NodeCreationOptions
+  ): Promise<FrameworkNode>;
   async createFromTemplate(templateId: string, nodeId: string, overrides?: Partial<NodeConfig>): Promise<FrameworkNode>;
   async createNodeBatch(specs: NodeCreationSpec[]): Promise<FrameworkNode[]>;
   async cloneNode(sourceId: string, newId: string, overrides?: NodeOverrides): Promise<FrameworkNode>;
-  
+
   // Template Management
   registerTemplate(template: NodeTemplate): void;
   getTemplates(category?: string): NodeTemplate[];
   getTemplate(id: string): NodeTemplate | undefined;
-  
+
   // Statistics & Optimization
   getStatistics(): FactoryStatistics;
   createOptimizedNode(type: string, id: string, config: AdvancedNodeConfig, data: any): Promise<FrameworkNode>;
@@ -91,10 +98,10 @@ export class NodeValidationFramework {
   addSecurityRule(rule: SecurityValidationRule): void;
   addPerformanceRule(rule: PerformanceValidationRule): void;
   addTypeRule(rule: TypeValidationRule): void;
-  
+
   // Batch Operations
   async validateNodeBatch(nodes: AdvancedNodeData[]): Promise<NodeValidationResult[]>;
-  
+
   // Statistics
   getValidationStatistics(): ValidationStatistics;
   getSecurityReport(): SecurityValidationReport;
@@ -117,7 +124,10 @@ export interface ContextValidationConfig {
 }
 
 export class ContextValidationFramework extends EventEmitter {
-  async validateContext(context: AdvancedExecutionContext, config?: AdvancedNodeConfig): Promise<ContextValidationResult>;
+  async validateContext(
+    context: AdvancedExecutionContext,
+    config?: AdvancedNodeConfig
+  ): Promise<ContextValidationResult>;
   addRule(rule: ContextValidationRule): void;
   removeRule(name: string): void;
   getRules(): ContextValidationRule[];
@@ -146,14 +156,19 @@ export interface PerformanceMonitorConfig {
 
 export class PerformanceMonitor extends EventEmitter {
   startExecution(nodeId: string, nodeType: string, context: AdvancedExecutionContext): string;
-  endExecution(trackingId: string, context: AdvancedExecutionContext, result?: any, error?: Error): PerformanceMetrics | null;
-  
+  endExecution(
+    trackingId: string,
+    context: AdvancedExecutionContext,
+    result?: any,
+    error?: Error
+  ): PerformanceMetrics | null;
+
   // Data Retrieval
   getNodeMetrics(nodeId: string): PerformanceMetrics[];
   getAggregatedMetrics(nodeType: string): AggregatedMetrics | null;
   getAlerts(resolved?: boolean): PerformanceAlert[];
   getStatisticsSummary(): PerformanceStatisticsSummary;
-  
+
   // Management
   resolveAlert(alertId: string): boolean;
   clear(): void;
@@ -168,12 +183,12 @@ export class PerformanceAnalytics extends EventEmitter {
   generateReport(timeRange?: TimeRange): PerformanceReport;
   setBenchmark(nodeType: string, benchmark: BenchmarkTargets): void;
   generateInsights(): PerformanceInsight[];
-  
+
   // Data Access
   getBenchmarkStatus(): PerformanceBenchmark[];
   getInsights(category?: InsightCategory, limit?: number): PerformanceInsight[];
   getReportHistory(limit?: number): HistoricalReport[];
-  
+
   // Export
   exportData(): AnalyticsExportData;
 }
@@ -345,64 +360,38 @@ type ValidationError {
 type Query {
   graph(id: ID!): Graph
   graphs(filter: GraphFilter): [Graph!]!
-  
-  performanceMetrics(
-    nodeType: String
-    timeRange: TimeRange
-    limit: Int = 50
-  ): [NodePerformanceMetrics!]!
-  
-  performanceReport(
-    graphId: ID
-    timeRange: TimeRange
-  ): PerformanceReport!
-  
+
+  performanceMetrics(nodeType: String, timeRange: TimeRange, limit: Int = 50): [NodePerformanceMetrics!]!
+
+  performanceReport(graphId: ID, timeRange: TimeRange): PerformanceReport!
+
   validationReport(graphId: ID!): ValidationReport!
-  
-  performanceInsights(
-    category: InsightCategory
-    limit: Int = 10
-  ): [PerformanceInsight!]!
+
+  performanceInsights(category: InsightCategory, limit: Int = 10): [PerformanceInsight!]!
 }
 
 # Mutations
 type Mutation {
-  executeGraph(
-    id: ID!
-    config: ExecutionConfig
-  ): ExecutionResult!
-  
+  executeGraph(id: ID!, config: ExecutionConfig): ExecutionResult!
+
   validateGraph(id: ID!): ValidationReport!
-  
-  updateNodeData(
-    nodeId: ID!
-    data: JSON!
-  ): Node!
-  
-  createPerformanceBenchmark(
-    input: BenchmarkInput!
-  ): PerformanceBenchmark!
-  
-  resolvePerformanceAlert(
-    alertId: ID!
-  ): PerformanceAlert!
+
+  updateNodeData(nodeId: ID!, data: JSON!): Node!
+
+  createPerformanceBenchmark(input: BenchmarkInput!): PerformanceBenchmark!
+
+  resolvePerformanceAlert(alertId: ID!): PerformanceAlert!
 }
 
 # Subscriptions
 type Subscription {
   graphUpdated(graphId: ID!): Graph!
-  
-  performanceAlert(
-    severity: [AlertSeverity!]
-  ): PerformanceAlert!
-  
-  validationStatusChanged(
-    graphId: ID!
-  ): ValidationStatus!
-  
-  executionProgress(
-    executionId: ID!
-  ): ExecutionProgress!
+
+  performanceAlert(severity: [AlertSeverity!]): PerformanceAlert!
+
+  validationStatusChanged(graphId: ID!): ValidationStatus!
+
+  executionProgress(executionId: ID!): ExecutionProgress!
 }
 ```
 
@@ -481,7 +470,7 @@ CREATE TABLE graphs (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   deleted_at TIMESTAMP NULL,
-  
+
   -- Indexes
   INDEX idx_graphs_created_by (created_by),
   INDEX idx_graphs_created_at (created_at),
@@ -499,7 +488,7 @@ CREATE TABLE node_types (
   metadata JSON,
   deprecated BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  
+
   INDEX idx_node_types_category (category)
 );
 
@@ -510,34 +499,34 @@ CREATE TABLE performance_metrics (
   node_id TEXT NOT NULL,
   node_type TEXT NOT NULL,
   execution_id TEXT,
-  
+
   -- Timing Metrics
   start_time REAL NOT NULL,
   end_time REAL NOT NULL,
   duration REAL NOT NULL,
-  
+
   -- Resource Metrics
   memory_before INTEGER,
   memory_after INTEGER,
   memory_peak INTEGER,
   memory_delta INTEGER,
-  
+
   -- Context Metrics
   variable_count INTEGER,
   state_count INTEGER,
   cache_size INTEGER,
   evaluation_depth INTEGER,
-  
+
   -- Status
   cache_hit BOOLEAN DEFAULT FALSE,
   success BOOLEAN DEFAULT TRUE,
   error_message TEXT,
-  
+
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  
+
   -- Foreign Keys
   FOREIGN KEY (graph_id) REFERENCES graphs(id) ON DELETE CASCADE,
-  
+
   -- Indexes
   INDEX idx_perf_node_type (node_type),
   INDEX idx_perf_created_at (created_at),
@@ -551,22 +540,22 @@ CREATE TABLE validation_results (
   graph_id TEXT,
   node_id TEXT,
   validation_type TEXT NOT NULL, -- 'node', 'context', 'security', 'performance'
-  
+
   -- Results
   valid BOOLEAN NOT NULL,
   score REAL NOT NULL,
   errors JSON, -- Array of error objects
   warnings JSON, -- Array of warning objects
   recommendations JSON, -- Array of recommendation strings
-  
+
   -- Context
   context_data JSON, -- Additional context for validation
-  
+
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  
+
   -- Foreign Keys
   FOREIGN KEY (graph_id) REFERENCES graphs(id) ON DELETE CASCADE,
-  
+
   -- Indexes
   INDEX idx_validation_graph_id (graph_id),
   INDEX idx_validation_type (validation_type),
@@ -578,28 +567,28 @@ CREATE TABLE performance_alerts (
   id TEXT PRIMARY KEY,
   alert_type TEXT NOT NULL, -- 'duration', 'memory', 'error_rate', 'context_size'
   severity TEXT NOT NULL, -- 'low', 'medium', 'high', 'critical'
-  
+
   -- Context
   node_id TEXT,
   node_type TEXT,
   graph_id TEXT,
-  
+
   -- Alert Details
   message TEXT NOT NULL,
   details JSON,
   threshold_value REAL,
   actual_value REAL,
-  
+
   -- Status
   resolved BOOLEAN DEFAULT FALSE,
   resolved_at TIMESTAMP NULL,
   resolved_by TEXT NULL,
-  
+
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  
+
   -- Foreign Keys
   FOREIGN KEY (graph_id) REFERENCES graphs(id) ON DELETE SET NULL,
-  
+
   -- Indexes
   INDEX idx_alerts_severity (severity),
   INDEX idx_alerts_resolved (resolved),
@@ -612,21 +601,21 @@ CREATE TABLE user_sessions (
   id TEXT PRIMARY KEY,
   user_id TEXT NOT NULL,
   graph_id TEXT NOT NULL,
-  
+
   -- Session Data
   cursor_position JSON,
   selection JSON,
   viewport JSON,
-  
+
   -- Status
   active BOOLEAN DEFAULT TRUE,
   last_activity TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  
+
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  
+
   -- Foreign Keys
   FOREIGN KEY (graph_id) REFERENCES graphs(id) ON DELETE CASCADE,
-  
+
   -- Indexes
   INDEX idx_sessions_user_id (user_id),
   INDEX idx_sessions_graph_id (graph_id),
@@ -638,23 +627,23 @@ CREATE TABLE execution_history (
   id TEXT PRIMARY KEY,
   graph_id TEXT NOT NULL,
   execution_config JSON NOT NULL,
-  
+
   -- Results
   seeds JSON NOT NULL, -- Array of seed values
   results JSON NOT NULL, -- Array of execution results
-  
+
   -- Performance
   total_execution_time REAL NOT NULL,
   node_count INTEGER NOT NULL,
   success BOOLEAN DEFAULT TRUE,
   error_message TEXT,
-  
+
   created_by TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  
+
   -- Foreign Keys
   FOREIGN KEY (graph_id) REFERENCES graphs(id) ON DELETE CASCADE,
-  
+
   -- Indexes
   INDEX idx_execution_graph_id (graph_id),
   INDEX idx_execution_created_at (created_at),
@@ -667,24 +656,24 @@ CREATE TABLE graph_templates (
   name TEXT NOT NULL,
   description TEXT,
   category TEXT NOT NULL,
-  
+
   -- Template Data
   graph_data JSON NOT NULL,
   preview_image TEXT,
   tags JSON, -- Array of tag strings
-  
+
   -- Usage Stats
   usage_count INTEGER DEFAULT 0,
   rating REAL DEFAULT 0.0,
-  
+
   -- Status
   featured BOOLEAN DEFAULT FALSE,
   published BOOLEAN DEFAULT FALSE,
-  
+
   created_by TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  
+
   -- Indexes
   INDEX idx_templates_category (category),
   INDEX idx_templates_published (published),
@@ -700,22 +689,22 @@ CREATE TABLE graph_templates (
 interface CacheKeyPatterns {
   // Execution Results
   execution: `execution:${string}:${number}`; // graphId:seed
-  
-  // Validation Results  
+
+  // Validation Results
   validation: `validation:${string}:${string}`; // nodeType:dataHash
-  
+
   // Performance Metrics
   performance: `perf:${string}:${string}`; // nodeType:timeWindow
-  
+
   // Node Definitions
   nodeDefinition: `node:${string}:${string}`; // nodeType:version
-  
+
   // User Sessions
   session: `session:${string}:${string}`; // userId:graphId
-  
+
   // Rate Limiting
   rateLimit: `rate:${string}:${string}`; // userId:endpoint
-  
+
   // Template Cache
   template: `template:${string}`; // templateId
 }
@@ -765,6 +754,7 @@ interface CachedUserSession {
 ### 4.1 Performance Targets
 
 #### Response Time Targets
+
 ```typescript
 interface PerformanceTargets {
   api: {
@@ -773,34 +763,34 @@ interface PerformanceTargets {
       p95: 200; // ms
       p99: 500; // ms
     };
-    
+
     validation: {
       p50: 50; // ms
       p95: 100; // ms
       p99: 200; // ms
     };
-    
+
     performanceMetrics: {
       p50: 20; // ms
       p95: 50; // ms
       p99: 100; // ms
     };
   };
-  
+
   ui: {
     initialLoad: 2000; // ms
     navigationTransition: 300; // ms
     graphRender: 100; // ms for 100 nodes
     frameRate: 60; // fps
   };
-  
+
   database: {
     queryResponse: {
       simple: 10; // ms
       complex: 50; // ms
       analytics: 200; // ms
     };
-    
+
     throughput: {
       readsPerSecond: 1000;
       writesPerSecond: 200;
@@ -810,6 +800,7 @@ interface PerformanceTargets {
 ```
 
 #### Resource Utilization Targets
+
 ```typescript
 interface ResourceTargets {
   memory: {
@@ -818,17 +809,17 @@ interface ResourceTargets {
     databaseCache: 512 * 1024 * 1024; // 512MB
     redisCache: 1024 * 1024 * 1024; // 1GB
   };
-  
+
   cpu: {
     serverUtilization: 0.70; // 70% max sustained
     clientUtilization: 0.50; // 50% max sustained
   };
-  
+
   network: {
     bandwidthPerUser: 1024 * 1024; // 1MB/s per user
     latency: 100; // ms max
   };
-  
+
   storage: {
     databaseGrowth: 100 * 1024 * 1024; // 100MB per month
     cacheHitRate: 0.85; // 85% minimum
@@ -839,6 +830,7 @@ interface ResourceTargets {
 ### 4.2 Scalability Specifications
 
 #### Horizontal Scaling Configuration
+
 ```typescript
 interface ScalingConfiguration {
   application: {
@@ -849,7 +841,7 @@ interface ScalingConfiguration {
     scaleUpCooldown: 300; // seconds
     scaleDownCooldown: 900; // seconds
   };
-  
+
   database: {
     connectionPool: {
       min: 5;
@@ -857,21 +849,21 @@ interface ScalingConfiguration {
       idle: 10000; // ms
       acquire: 5000; // ms
     };
-    
+
     readReplicas: {
       min: 1;
       max: 3;
       lagThreshold: 1000; // ms
     };
   };
-  
+
   cache: {
     clusterNodes: 3;
     memoryPerNode: 1024 * 1024 * 1024; // 1GB
     evictionPolicy: 'allkeys-lru';
     maxConnections: 100;
   };
-  
+
   loadBalancer: {
     algorithm: 'round_robin';
     healthCheckInterval: 30; // seconds
@@ -888,6 +880,7 @@ interface ScalingConfiguration {
 ### 5.1 Authentication & Authorization
 
 #### JWT Token Specification
+
 ```typescript
 interface JWTPayload {
   sub: string; // User ID
@@ -895,12 +888,12 @@ interface JWTPayload {
   exp: number; // Expiration
   aud: string; // Audience
   iss: string; // Issuer
-  
+
   // Custom Claims
   role: 'admin' | 'user' | 'viewer';
   permissions: Permission[];
   subscription: 'basic' | 'pro' | 'enterprise';
-  
+
   // Rate Limiting
   rateLimitTier: 'basic' | 'premium' | 'unlimited';
 }
@@ -918,7 +911,7 @@ interface TokenStrategy {
     algorithm: 'RS256';
     issuer: 'prompt-spaghetti-auth';
   };
-  
+
   refreshToken: {
     expiration: 30 * 24 * 60 * 60; // 30 days
     rotationEnabled: true;
@@ -928,6 +921,7 @@ interface TokenStrategy {
 ```
 
 #### Role-Based Access Control (RBAC)
+
 ```typescript
 interface RBACConfiguration {
   roles: {
@@ -935,44 +929,38 @@ interface RBACConfiguration {
       permissions: ['*']; // All permissions
       restrictions: []; // No restrictions
     };
-    
+
     user: {
       permissions: [
         'graphs:read',
         'graphs:write',
         'graphs:delete', // Own graphs only
         'templates:read',
-        'analytics:read' // Own data only
+        'analytics:read', // Own data only
       ];
-      restrictions: [
-        'maxGraphs: 100',
-        'maxNodesPerGraph: 500',
-        'maxExecutionsPerHour: 1000'
-      ];
+      restrictions: ['maxGraphs: 100', 'maxNodesPerGraph: 500', 'maxExecutionsPerHour: 1000'];
     };
-    
+
     viewer: {
       permissions: [
         'graphs:read', // Shared graphs only
-        'templates:read'
+        'templates:read',
       ];
-      restrictions: [
-        'maxExecutionsPerHour: 100'
-      ];
+      restrictions: ['maxExecutionsPerHour: 100'];
     };
   };
-  
+
   resources: {
     graphs: {
       ownership: true; // Users can only access their own graphs
       sharing: true; // Graphs can be shared with explicit permissions
     };
-    
+
     analytics: {
       dataIsolation: true; // Users can only see their own analytics
       aggregatedViews: false; // No cross-user analytics
     };
-    
+
     templates: {
       publicAccess: true; // Templates can be public
       approvalRequired: true; // New templates require approval
@@ -984,6 +972,7 @@ interface RBACConfiguration {
 ### 5.2 Data Protection Specifications
 
 #### Encryption Configuration
+
 ```typescript
 interface EncryptionConfiguration {
   dataAtRest: {
@@ -993,13 +982,13 @@ interface EncryptionConfiguration {
       intervalDays: 90;
       retainOldKeys: 2; // For decryption of old data
     };
-    
+
     databaseEncryption: {
       enabled: true;
       tablespace: 'encrypted';
       keyManagement: 'external'; // Use external key management service
     };
-    
+
     fileEncryption: {
       enabled: true;
       extensions: ['.json', '.txt', '.md'];
@@ -1007,18 +996,14 @@ interface EncryptionConfiguration {
       iterations: 100000;
     };
   };
-  
+
   dataInTransit: {
     tls: {
       minVersion: '1.3';
-      cipherSuites: [
-        'TLS_AES_256_GCM_SHA384',
-        'TLS_CHACHA20_POLY1305_SHA256',
-        'TLS_AES_128_GCM_SHA256'
-      ];
+      cipherSuites: ['TLS_AES_256_GCM_SHA384', 'TLS_CHACHA20_POLY1305_SHA256', 'TLS_AES_128_GCM_SHA256'];
       certificateValidation: 'strict';
     };
-    
+
     apiSecurity: {
       requireHttps: true;
       hsts: {
@@ -1029,12 +1014,12 @@ interface EncryptionConfiguration {
       };
     };
   };
-  
+
   keyManagement: {
     provider: 'aws-kms'; // or 'azure-keyvault', 'google-kms'
     keySpec: 'AES_256';
     keyUsage: ['ENCRYPT_DECRYPT'];
-    
+
     rotation: {
       automatic: true;
       schedule: 'rate(90 days)';
@@ -1045,11 +1030,12 @@ interface EncryptionConfiguration {
 ```
 
 #### Input Validation & Sanitization
+
 ```typescript
 interface ValidationConfiguration {
   inputSanitization: {
     enabled: true;
-    
+
     stringFields: {
       maxLength: 10000;
       allowedCharacters: /^[\w\s\-_.,:;!?()[\]{}'"\/\\@#$%^&*+=<>|~`]*$/;
@@ -1061,14 +1047,14 @@ interface ValidationConfiguration {
         /Function\s*\(/i
       ];
     };
-    
+
     jsonFields: {
       maxDepth: 10;
       maxKeys: 1000;
       maxArrayLength: 10000;
       forbiddenKeys: ['__proto__', 'constructor', 'prototype'];
     };
-    
+
     fileUploads: {
       maxSize: 10 * 1024 * 1024; // 10MB
       allowedTypes: ['.json', '.txt', '.md', '.png', '.jpg', '.jpeg'];
@@ -1076,24 +1062,24 @@ interface ValidationConfiguration {
       contentTypeValidation: true;
     };
   };
-  
+
   rateLimiting: {
     global: {
       windowMs: 15 * 60 * 1000; // 15 minutes
       max: 1000; // requests per window
     };
-    
+
     perUser: {
       windowMs: 15 * 60 * 1000; // 15 minutes
       max: 100; // requests per window per user
     };
-    
+
     perEndpoint: {
       '/api/graphs/execute': {
         windowMs: 60 * 1000; // 1 minute
         max: 10; // executions per minute
       };
-      
+
       '/api/graphs': {
         windowMs: 60 * 1000; // 1 minute
         max: 50; // graph operations per minute
@@ -1117,7 +1103,7 @@ interface TestCoverageRequirements {
     functions: 90;
     lines: 90;
   };
-  
+
   critical: {
     // Critical business logic must have higher coverage
     nodeExecution: 95;
@@ -1125,13 +1111,8 @@ interface TestCoverageRequirements {
     security: 98;
     performance: 90;
   };
-  
-  exemptions: [
-    'src/**/*.test.ts',
-    'src/**/*.spec.ts',
-    'src/**/test-utils.ts',
-    'src/**/mocks/**'
-  ];
+
+  exemptions: ['src/**/*.test.ts', 'src/**/*.spec.ts', 'src/**/test-utils.ts', 'src/**/mocks/**'];
 }
 
 interface TestTypeRequirements {
@@ -1140,19 +1121,19 @@ interface TestTypeRequirements {
     maxExecutionTime: 5000; // ms per test suite
     isolated: true; // No external dependencies
   };
-  
+
   integration: {
     coverage: 70;
     maxExecutionTime: 30000; // ms per test suite
     databaseCleanup: true;
   };
-  
+
   e2e: {
     coverage: 50;
     maxExecutionTime: 300000; // ms per test suite
     parallelization: true;
   };
-  
+
   performance: {
     benchmarkTargets: PerformanceTargets;
     loadTesting: {
@@ -1167,63 +1148,65 @@ interface TestTypeRequirements {
 ### 6.2 Testing Infrastructure
 
 #### Test Environment Configuration
+
 ```typescript
 interface TestEnvironment {
   unit: {
     framework: 'jest';
     environment: 'node';
-    
+
     mocks: {
       database: 'in-memory-sqlite';
       redis: 'redis-memory-server';
       external-apis: 'msw';
       file-system: 'memfs';
     };
-    
+
     setup: [
       'src/test-setup/unit-test-setup.ts'
     ];
-    
+
     timeout: 10000; // ms
   };
-  
+
   integration: {
     framework: 'jest';
     environment: 'node';
-    
+
     services: {
       database: 'docker-sqlite';
       redis: 'docker-redis';
       server: 'test-server-instance';
     };
-    
+
     setup: [
       'src/test-setup/integration-test-setup.ts',
       'src/test-setup/database-migrations.ts'
     ];
-    
+
     timeout: 30000; // ms
   };
-  
+
   e2e: {
     framework: 'playwright';
     browsers: ['chromium', 'firefox', 'webkit'];
-    
+
     services: {
       fullStack: 'docker-compose-test';
     };
-    
+
     setup: [
       'src/test-setup/e2e-test-setup.ts',
       'src/test-setup/test-data-seeding.ts'
     ];
-    
+
     timeout: 60000; // ms
   };
 }
 ```
 
 #### Mock Specifications
+
 ```typescript
 // Node Framework Mocks
 interface MockNodeFramework {
@@ -1263,6 +1246,7 @@ interface TestDataFactories {
 ### 7.1 Container Specifications
 
 #### Dockerfile Configuration
+
 ```dockerfile
 # Node.js Application Container
 FROM node:18-alpine AS base
@@ -1309,6 +1293,7 @@ CMD ["node", "dist/server/src/index.js"]
 ```
 
 #### Docker Compose Configuration
+
 ```yaml
 version: '3.8'
 
@@ -1318,24 +1303,24 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
-      - "8000:8000"
+      - '3000:3000'
+      - '8000:8000'
     environment:
       NODE_ENV: production
       DATABASE_URL: sqlite:///data/app.db
       REDIS_URL: redis://redis:6379
       JWT_SECRET: ${JWT_SECRET}
-      
+
     volumes:
       - app-data:/data
       - ./uploads:/app/uploads
-      
+
     depends_on:
       redis:
         condition: service_healthy
-        
+
     restart: unless-stopped
-    
+
     deploy:
       resources:
         limits:
@@ -1348,39 +1333,39 @@ services:
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
-      
+      - '6379:6379'
+
     volumes:
       - redis-data:/data
-      
+
     command: >
       redis-server 
       --appendonly yes 
       --appendfsync everysec
       --maxmemory 512mb
       --maxmemory-policy allkeys-lru
-      
+
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ['CMD', 'redis-cli', 'ping']
       interval: 30s
       timeout: 10s
       retries: 3
-      
+
     restart: unless-stopped
 
   nginx:
     image: nginx:alpine
     ports:
-      - "80:80"
-      - "443:443"
-      
+      - '80:80'
+      - '443:443'
+
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - ./ssl:/etc/nginx/ssl:ro
-      
+
     depends_on:
       - app
-      
+
     restart: unless-stopped
 
 volumes:
@@ -1391,18 +1376,19 @@ volumes:
 ### 7.2 Infrastructure as Code
 
 #### Terraform Configuration
+
 ```hcl
 # AWS Infrastructure Configuration
 terraform {
   required_version = ">= 1.0"
-  
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
   }
-  
+
   backend "s3" {
     bucket = "prompt-spaghetti-terraform-state"
     key    = "production/terraform.tfstate"
@@ -1415,7 +1401,7 @@ resource "aws_vpc" "main" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_hostnames = true
   enable_dns_support   = true
-  
+
   tags = {
     Name = "prompt-spaghetti-vpc"
     Environment = var.environment
@@ -1425,14 +1411,14 @@ resource "aws_vpc" "main" {
 # ECS Cluster
 resource "aws_ecs_cluster" "main" {
   name = "prompt-spaghetti-cluster"
-  
+
   capacity_providers = ["FARGATE"]
-  
+
   default_capacity_provider_strategy {
     capacity_provider = "FARGATE"
     weight           = 100
   }
-  
+
   setting {
     name  = "containerInsights"
     value = "enabled"
@@ -1446,9 +1432,9 @@ resource "aws_lb" "main" {
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb.id]
   subnets           = aws_subnet.public[*].id
-  
+
   enable_deletion_protection = true
-  
+
   access_logs {
     bucket  = aws_s3_bucket.alb_logs.bucket
     prefix  = "alb"
@@ -1459,35 +1445,35 @@ resource "aws_lb" "main" {
 # RDS Database
 resource "aws_rds_instance" "main" {
   identifier = "prompt-spaghetti-db"
-  
+
   engine         = "postgres"
   engine_version = "15.4"
   instance_class = "db.r6g.large"
-  
+
   allocated_storage     = 100
   max_allocated_storage = 1000
   storage_type         = "gp3"
   storage_encrypted    = true
-  
+
   db_name  = "prompt_spaghetti"
   username = "admin"
   password = var.db_password
-  
+
   vpc_security_group_ids = [aws_security_group.rds.id]
   db_subnet_group_name   = aws_db_subnet_group.main.name
-  
+
   backup_retention_period = 7
   backup_window          = "03:00-04:00"
   maintenance_window     = "sun:04:00-sun:05:00"
-  
+
   deletion_protection = true
   skip_final_snapshot = false
   final_snapshot_identifier = "prompt-spaghetti-final-snapshot"
-  
+
   performance_insights_enabled = true
   monitoring_interval         = 60
   monitoring_role_arn        = aws_iam_role.rds_enhanced_monitoring.arn
-  
+
   tags = {
     Name = "prompt-spaghetti-database"
     Environment = var.environment
@@ -1498,32 +1484,32 @@ resource "aws_rds_instance" "main" {
 resource "aws_elasticache_replication_group" "main" {
   replication_group_id       = "prompt-spaghetti-redis"
   description               = "Redis cluster for prompt-spaghetti"
-  
+
   node_type                 = "cache.r6g.large"
   port                      = 6379
   parameter_group_name      = "default.redis7"
-  
+
   num_cache_clusters        = 3
   automatic_failover_enabled = true
   multi_az_enabled          = true
-  
+
   subnet_group_name = aws_elasticache_subnet_group.main.name
   security_group_ids = [aws_security_group.redis.id]
-  
+
   at_rest_encryption_enabled = true
   transit_encryption_enabled = true
-  
+
   maintenance_window = "sun:05:00-sun:06:00"
   snapshot_window    = "03:00-05:00"
   snapshot_retention_limit = 7
-  
+
   log_delivery_configuration {
     destination      = aws_cloudwatch_log_group.redis_slow.name
     destination_type = "cloudwatch-logs"
     log_format      = "text"
     log_type        = "slow-log"
   }
-  
+
   tags = {
     Name = "prompt-spaghetti-redis"
     Environment = var.environment
@@ -1534,32 +1520,28 @@ resource "aws_elasticache_replication_group" "main" {
 ### 7.3 Monitoring & Observability
 
 #### CloudWatch Configuration
+
 ```typescript
 interface MonitoringConfiguration {
   metrics: {
     application: {
       namespace: 'PromptSpaghetti/Application';
-      
+
       customMetrics: [
         'GraphExecutions',
         'NodeValidations',
         'PerformanceAlerts',
         'ActiveUsers',
         'ErrorRate',
-        'ResponseTime'
+        'ResponseTime',
       ];
-      
-      dimensions: [
-        'Environment',
-        'Service',
-        'NodeType',
-        'UserTier'
-      ];
+
+      dimensions: ['Environment', 'Service', 'NodeType', 'UserTier'];
     };
-    
+
     infrastructure: {
       namespace: 'AWS/ECS';
-      
+
       alarms: [
         {
           name: 'HighCPUUtilization';
@@ -1569,7 +1551,7 @@ interface MonitoringConfiguration {
           period: 300;
           evaluationPeriods: 2;
         },
-        
+
         {
           name: 'HighMemoryUtilization';
           metric: 'MemoryUtilization';
@@ -1577,11 +1559,11 @@ interface MonitoringConfiguration {
           comparison: 'GreaterThanThreshold';
           period: 300;
           evaluationPeriods: 2;
-        }
+        },
       ];
     };
   };
-  
+
   logging: {
     retention: {
       application: 30; // days
@@ -1589,38 +1571,23 @@ interface MonitoringConfiguration {
       error: 365; // days
       audit: 2555; // days (7 years)
     };
-    
+
     format: 'json';
     level: 'info';
-    
+
     sensitiveDataMasking: {
       enabled: true;
-      patterns: [
-        'password',
-        'token',
-        'secret',
-        'key',
-        'authorization'
-      ];
+      patterns: ['password', 'token', 'secret', 'key', 'authorization'];
     };
   };
-  
+
   tracing: {
     enabled: true;
     samplingRate: 0.1; // 10%
-    
-    services: [
-      'prompt-spaghetti-api',
-      'prompt-spaghetti-worker',
-      'prompt-spaghetti-scheduler'
-    ];
-    
-    customTags: [
-      'user.id',
-      'graph.id',
-      'node.type',
-      'execution.id'
-    ];
+
+    services: ['prompt-spaghetti-api', 'prompt-spaghetti-worker', 'prompt-spaghetti-scheduler'];
+
+    customTags: ['user.id', 'graph.id', 'node.type', 'execution.id'];
   };
 }
 ```

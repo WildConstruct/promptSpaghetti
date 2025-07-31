@@ -1,4 +1,4 @@
-// src/agents/productOwnerAgent-updated.ts  
+// src/agents/productOwnerAgent-updated.ts
 // Product Owner agent - focuses on story creation and prioritization
 
 import { AgentRunner } from './agentBase';
@@ -18,9 +18,9 @@ export class ProductOwnerAgent extends AgentRunner {
       'METRICS_ANALYZED',
       'TASK_COMPLETED',
       'TASK_APPROVED',
-      'PR_MERGED'  // New: Track completed work via merged PRs
+      'PR_MERGED', // New: Track completed work via merged PRs
     ];
-    
+
     return events.filter(ev => relevantTypes.includes(ev.type));
   }
 
@@ -29,32 +29,32 @@ export class ProductOwnerAgent extends AgentRunner {
    */
   async decide(ev: any, state: any): Promise<any> {
     switch (ev.type) {
-    case 'GOAL_CREATED':
-      // Create stories for new goals
-      const goal = ev.payload.goal;
-      if (goal && this.getStoriesForGoal(state, goal.id).length === 0) {
-        return this.createStoryForGoal(goal);
-      }
-      break;
+      case 'GOAL_CREATED':
+        // Create stories for new goals
+        const goal = ev.payload.goal;
+        if (goal && this.getStoriesForGoal(state, goal.id).length === 0) {
+          return this.createStoryForGoal(goal);
+        }
+        break;
 
-    case 'METRICS_ANALYZED':
-      // Review metrics and adjust priorities
-      const metrics = ev.payload;
-      if (metrics.velocity < 5) {
-        return this.createEvent('PRIORITY_ADJUSTED', {
-          reason: 'Low velocity detected, simplifying upcoming stories',
-          velocity: metrics.velocity
+      case 'METRICS_ANALYZED':
+        // Review metrics and adjust priorities
+        const metrics = ev.payload;
+        if (metrics.velocity < 5) {
+          return this.createEvent('PRIORITY_ADJUSTED', {
+            reason: 'Low velocity detected, simplifying upcoming stories',
+            velocity: metrics.velocity,
+          });
+        }
+        break;
+
+      case 'PR_MERGED':
+        // Track feature completion
+        return this.createEvent('FEATURE_COMPLETED', {
+          task_id: ev.payload.task_id,
+          pr_number: ev.payload.pr_number,
+          completed_at: new Date().toISOString(),
         });
-      }
-      break;
-
-    case 'PR_MERGED':
-      // Track feature completion
-      return this.createEvent('FEATURE_COMPLETED', {
-        task_id: ev.payload.task_id,
-        pr_number: ev.payload.pr_number,
-        completed_at: new Date().toISOString()
-      });
     }
 
     // Check if we need more stories
@@ -83,19 +83,14 @@ export class ProductOwnerAgent extends AgentRunner {
           'Users can register with email',
           'Users can login securely',
           'Password reset functionality',
-          'Session management'
+          'Session management',
         ],
-        priority: 1
+        priority: 1,
       },
       {
         title: 'Data visualization dashboard',
-        acceptance: [
-          'Display key metrics',
-          'Interactive charts',
-          'Export functionality',
-          'Real-time updates'
-        ],
-        priority: 2
+        acceptance: ['Display key metrics', 'Interactive charts', 'Export functionality', 'Real-time updates'],
+        priority: 2,
       },
       {
         title: 'API rate limiting',
@@ -103,15 +98,15 @@ export class ProductOwnerAgent extends AgentRunner {
           'Implement token bucket algorithm',
           'Per-user rate limits',
           'Admin override capability',
-          'Rate limit headers in responses'
+          'Rate limit headers in responses',
         ],
-        priority: 3
-      }
+        priority: 3,
+      },
     ];
 
     // Select a template
     const template = storyTemplates[Math.floor(Math.random() * storyTemplates.length)];
-    
+
     const story = {
       id: `S-${Date.now()}`,
       goal_id: goal.id,
@@ -119,7 +114,7 @@ export class ProductOwnerAgent extends AgentRunner {
       acceptance: template.acceptance,
       priority: template.priority,
       status: 'READY',
-      tasks: [] // Scrum Master will create tasks
+      tasks: [], // Scrum Master will create tasks
     };
 
     return this.createEvent('STORY_CREATED', { story });
@@ -131,9 +126,7 @@ export class ProductOwnerAgent extends AgentRunner {
   private checkStoryBacklog(state: any): any {
     const readyStories = state.stories.filter((s: any) => s.status === 'READY');
     const totalTasks = Object.keys(state.tasks).length;
-    const unassignedTasks = Object.values(state.tasks).filter(
-      (t: any) => t.state === 'UNASSIGNED'
-    ).length;
+    const unassignedTasks = Object.values(state.tasks).filter((t: any) => t.state === 'UNASSIGNED').length;
 
     // If we have few ready stories and most tasks are assigned, create more
     if (readyStories.length < 3 && unassignedTasks < 5) {
@@ -162,24 +155,18 @@ export class ProductOwnerAgent extends AgentRunner {
       const stories = this.getStoriesForGoal(state, goal.id);
       const completedStories = stories.filter((s: any) => {
         // Story is complete if all its tasks are completed or approved
-        const storyTasks = Object.values(state.tasks).filter(
-          (t: any) => t.story_id === s.id
-        );
-        return storyTasks.length > 0 && storyTasks.every(
-          (t: any) => ['COMPLETED', 'APPROVED'].includes(t.state)
-        );
+        const storyTasks = Object.values(state.tasks).filter((t: any) => t.story_id === s.id);
+        return storyTasks.length > 0 && storyTasks.every((t: any) => ['COMPLETED', 'APPROVED'].includes(t.state));
       });
 
-      const progress = stories.length > 0 
-        ? (completedStories.length / stories.length) * 100 
-        : 0;
+      const progress = stories.length > 0 ? (completedStories.length / stories.length) * 100 : 0;
 
       if (progress >= 80) {
         return this.createEvent('GOAL_NEARING_COMPLETION', {
           goal_id: goal.id,
           progress: progress,
           completed_stories: completedStories.length,
-          total_stories: stories.length
+          total_stories: stories.length,
         });
       }
     }
@@ -201,10 +188,10 @@ export class ProductOwnerAgent extends AgentRunner {
  * 2. Monitoring story backlog levels
  * 3. Tracking feature completion via PR merges
  * 4. Adjusting priorities based on metrics
- * 
+ *
  * Stories are automatically converted to tasks by Scrum Master
  * Developers self-assign tasks using grab-tasks.js
  * Completed work tracked through GitHub PR merges
- * 
+ *
  * See docs/ticket-system.md for GitHub automation details
  */

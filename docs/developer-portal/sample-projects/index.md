@@ -81,6 +81,7 @@ Explore comprehensive examples of custom nodes with progressive complexity. Each
 ## 📚 Learning Path
 
 ### Level 1: Foundation (Beginner)
+
 **Prerequisites**: Basic TypeScript knowledge  
 **Time**: 2-3 hours total
 
@@ -88,23 +89,26 @@ Explore comprehensive examples of custom nodes with progressive complexity. Each
 2. **[Math Operations](./math-operations/)** - Understand input validation and error handling
 3. **[Array Utilities](./array-utilities/)** - Work with complex data types and transformations
 
-**Skills Learned**: 
+**Skills Learned**:
+
 - Custom node class structure
 - Input/output validation
 - Error handling patterns
 - Basic testing strategies
 - TypeScript best practices
 
-### Level 2: Integration (Intermediate)  
+### Level 2: Integration (Intermediate)
+
 **Prerequisites**: Completed Level 1  
 **Time**: 4-6 hours total
 
 4. **[Weather API](./weather-api/)** - External API integration and network security
-5. **[Data Transformer](./data-transformer/)** - Format conversion and schema validation  
+5. **[Data Transformer](./data-transformer/)** - Format conversion and schema validation
 6. **[File Processor](./file-processor/)** - File system operations with security constraints
 7. **[Database Connector](./database-connector/)** - Database operations and connection pooling
 
 **Skills Learned**:
+
 - External service integration
 - Security and permissions management
 - Caching strategies
@@ -112,6 +116,7 @@ Explore comprehensive examples of custom nodes with progressive complexity. Each
 - Data format handling
 
 ### Level 3: Advanced Patterns (Advanced)
+
 **Prerequisites**: Completed Level 2  
 **Time**: 8-12 hours total
 
@@ -121,6 +126,7 @@ Explore comprehensive examples of custom nodes with progressive complexity. Each
 11. **[Performance Monitor](./performance-monitor/)** - Advanced monitoring and metrics collection
 
 **Skills Learned**:
+
 - Stateful node development
 - Advanced runtime integration
 - Performance monitoring
@@ -130,6 +136,7 @@ Explore comprehensive examples of custom nodes with progressive complexity. Each
 ## 🎯 Quick Start Guide
 
 ### Option 1: Browse Online
+
 Click any project link above to explore the code, documentation, and usage examples in your browser.
 
 ### Option 2: Download & Run Locally
@@ -149,6 +156,7 @@ npm run build
 ```
 
 ### Option 3: Interactive Playground
+
 Open any project in the [Interactive Playground](../playground/) to experiment with code changes in real-time.
 
 ## 🏗️ Project Structure
@@ -182,6 +190,7 @@ project-name/
 ## 🔧 Development Tools
 
 ### Code Generation
+
 Each project includes scripts to generate boilerplate code:
 
 ```bash
@@ -191,6 +200,7 @@ npm run generate:docs      # Generate API documentation
 ```
 
 ### Quality Assurance
+
 Consistent quality checks across all projects:
 
 ```bash
@@ -201,6 +211,7 @@ npm run test:integration  # End-to-end integration tests
 ```
 
 ### Build & Distribution
+
 Production-ready build processes:
 
 ```bash
@@ -213,18 +224,21 @@ npm run publish         # Publish to registry (if configured)
 ## 📖 Additional Resources
 
 ### Documentation
+
 - [API Reference](../api-reference/) - Complete SDK documentation
 - [Best Practices](../guides/best-practices.html) - Coding standards and patterns
 - [Security Guide](../guides/security.html) - Security considerations and practices
 - [Testing Guide](../guides/testing.html) - Testing strategies and utilities
 
 ### Tools & Utilities
+
 - [Interactive Playground](../playground/) - Real-time development environment
 - [CLI Tools](../cli-reference.html) - Command-line utilities and scaffolding
 - [VS Code Extension](../tools/vscode-extension/) - IDE integration and debugging
 - [Template Generator](../tools/template-generator/) - Custom project templates
 
 ### Community
+
 - [GitHub Repository](https://github.com/promptspaghetti/custom-node-examples) - Source code and issues
 - [Discussion Forum](https://github.com/promptspaghetti/promptscape/discussions) - Community Q&A
 - [Discord Server](https://discord.gg/promptscape) - Real-time community support
@@ -237,6 +251,7 @@ npm run publish         # Publish to registry (if configured)
 Want to contribute your own sample project? Follow these steps:
 
 1. **Use the Template Generator**:
+
    ```bash
    npx @prompt-spaghetti/custom-node-sdk scaffold --template sample-project
    ```

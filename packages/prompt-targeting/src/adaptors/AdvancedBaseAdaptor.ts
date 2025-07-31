@@ -12,7 +12,7 @@ import {
   TranslationContext,
   AdaptorError,
   ValidationException,
-  TranslationError
+  TranslationError,
 } from '../types';
 import { BaseAdaptor } from './BaseAdaptor';
 import { EventEmitter } from 'events';
@@ -106,7 +106,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
       validations: 0,
       errors: 0,
       totalDuration: 0,
-      avgDuration: 0
+      avgDuration: 0,
     };
     this.initializePipeline();
   }
@@ -121,7 +121,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
 
     try {
       this.emitEvent('pipeline:start', context);
-      
+
       // Execute pipeline stages
       let currentData = graph;
       for (const stage of this.pipeline) {
@@ -130,9 +130,9 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
         }
 
         const stageResult = await this.executeStage(stage, currentData, context);
-        
+
         this.emitEvent('pipeline:stage', stage.name, stageResult, context);
-        
+
         if (!stageResult.success) {
           throw new TranslationError(
             `Pipeline stage '${stage.name}' failed: ${stageResult.error?.message}`,
@@ -147,13 +147,13 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
 
       // Finalize result
       const result = await this.finalizeTranslation(currentData as PlatformPrompt, context);
-      
+
       // Update statistics
       const duration = Date.now() - startTime;
       this.updateStats(duration, false);
 
       this.emitEvent('pipeline:complete', result, context);
-      
+
       return result;
     } catch (error) {
       this.updateStats(Date.now() - startTime, true);
@@ -171,17 +171,17 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
 
     try {
       this.emitEvent('validation:start', graph, context);
-      
+
       // Multi-stage validation
       const validationStages = [
         () => this.validateGraphStructure(graph),
         () => this.validatePlatformConstraints(graph, config),
         () => this.validateContentQuality(graph, config),
-        () => this.validatePerformanceImpact(graph, config)
+        () => this.validatePerformanceImpact(graph, config),
       ];
 
       const results: ValidationResult[] = [];
-      
+
       for (const stage of validationStages) {
         try {
           const result = await stage();
@@ -189,25 +189,27 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
         } catch (error) {
           results.push({
             valid: false,
-            errors: [{
-              code: 'VALIDATION_STAGE_ERROR',
-              message: `Validation stage failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-              severity: 'error'
-            }],
+            errors: [
+              {
+                code: 'VALIDATION_STAGE_ERROR',
+                message: `Validation stage failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+                severity: 'error',
+              },
+            ],
             warnings: [],
-            compatibilityScore: 0
+            compatibilityScore: 0,
           });
         }
       }
 
       // Combine validation results
       const finalResult = this.combineValidationResults(...results);
-      
+
       // Update statistics
       this.stats.validations++;
-      
+
       this.emitEvent('validation:complete', finalResult, context);
-      
+
       return finalResult;
     } catch (error) {
       this.stats.errors++;
@@ -228,7 +230,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
       this.createValidationStage(),
       this.createOptimizationStage(),
       this.createTransformationStage(),
-      this.createPostprocessingStage()
+      this.createPostprocessingStage(),
     ];
   }
 
@@ -245,16 +247,16 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
           return {
             success: true,
             data: preprocessed,
-            duration: Date.now() - startTime
+            duration: Date.now() - startTime,
           };
         } catch (error) {
           return {
             success: false,
             error: error as Error,
-            duration: Date.now() - startTime
+            duration: Date.now() - startTime,
           };
         }
-      }
+      },
     };
   }
 
@@ -268,32 +270,32 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
         const startTime = Date.now();
         try {
           const validation = await this.performPlatformValidation(graph, context.config);
-          
+
           if (!validation.valid) {
             return {
               success: false,
               error: new ValidationException('Graph validation failed', validation.errors),
               data: validation,
-              duration: Date.now() - startTime
+              duration: Date.now() - startTime,
             };
           }
 
           return {
             success: true,
             data: { graph, validation },
-            duration: Date.now() - startTime
+            duration: Date.now() - startTime,
           };
         } catch (error) {
           return {
             success: false,
             error: error as Error,
-            duration: Date.now() - startTime
+            duration: Date.now() - startTime,
           };
         }
       },
       shouldSkip: async (graph: any, context: TranslationContext) => {
         return context.config?.pipeline?.skipValidation === true;
-      }
+      },
     };
   }
 
@@ -308,7 +310,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
         try {
           const { graph } = data;
           const optimizations = await this.applyOptimizations(graph, context);
-          
+
           // Emit optimization events
           optimizations.forEach(opt => {
             this.emitEvent('optimization:applied', opt, context);
@@ -317,19 +319,19 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
           return {
             success: true,
             data: { ...data, optimizations },
-            duration: Date.now() - startTime
+            duration: Date.now() - startTime,
           };
         } catch (error) {
           return {
             success: false,
             error: error as Error,
-            duration: Date.now() - startTime
+            duration: Date.now() - startTime,
           };
         }
       },
       shouldSkip: async (data: any, context: TranslationContext) => {
         return context.config?.pipeline?.skipOptimization === true;
-      }
+      },
     };
   }
 
@@ -344,20 +346,20 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
         try {
           const { graph } = data;
           const result = await this.performTransformation(graph, context.config);
-          
+
           return {
             success: true,
             data: result,
-            duration: Date.now() - startTime
+            duration: Date.now() - startTime,
           };
         } catch (error) {
           return {
             success: false,
             error: error as Error,
-            duration: Date.now() - startTime
+            duration: Date.now() - startTime,
           };
         }
-      }
+      },
     };
   }
 
@@ -374,16 +376,16 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
           return {
             success: true,
             data: postprocessed,
-            duration: Date.now() - startTime
+            duration: Date.now() - startTime,
           };
         } catch (error) {
           return {
             success: false,
             error: error as Error,
-            duration: Date.now() - startTime
+            duration: Date.now() - startTime,
           };
         }
-      }
+      },
     };
   }
 
@@ -399,8 +401,8 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
         startTime: new Date(),
         sessionId: uuidv4(),
         adaptorId: this.id,
-        adaptorVersion: this.version
-      }
+        adaptorVersion: this.version,
+      },
     };
   }
 
@@ -413,56 +415,57 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
     context: TranslationContext
   ): Promise<PipelineStageResult> {
     const retries = context.config?.pipeline?.retries;
-    const maxAttempts = (typeof retries === 'object' && retries !== null) ? (retries.maxAttempts || 1) : (typeof retries === 'number' ? retries : 1);
-    const backoffMs = (typeof retries === 'object' && retries !== null) ? (retries.backoffMs || 100) : 100;
-    
+    const maxAttempts =
+      typeof retries === 'object' && retries !== null
+        ? retries.maxAttempts || 1
+        : typeof retries === 'number'
+          ? retries
+          : 1;
+    const backoffMs = typeof retries === 'object' && retries !== null ? retries.backoffMs || 100 : 100;
+
     let lastError: Error | undefined;
-    
+
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
       try {
         const result = await stage.execute(data, context);
-        
+
         if (result.success) {
           return result;
         }
-        
+
         lastError = result.error;
-        
+
         // Check if error is retryable
         if (attempt < maxAttempts && result.error && this.isRetryableError(result.error, context)) {
           await this.delay(backoffMs * attempt);
           continue;
         }
-        
+
         // Handle error through stage error handler
         if (stage.onError) {
           return await stage.onError(result.error!, data, context);
         }
-        
+
         return result;
       } catch (error) {
         lastError = error as Error;
-        
+
         if (attempt < maxAttempts && this.isRetryableError(error as Error, context)) {
           await this.delay(backoffMs * attempt);
           continue;
         }
-        
+
         throw error;
       }
     }
-    
+
     throw lastError || new Error(`Stage ${stage.name} failed after ${maxAttempts} attempts`);
   }
 
   /**
    * Check if stage should be skipped
    */
-  protected async shouldSkipStage(
-    stage: PipelineStage,
-    data: any,
-    context: TranslationContext
-  ): Promise<boolean> {
+  protected async shouldSkipStage(stage: PipelineStage, data: any, context: TranslationContext): Promise<boolean> {
     if (stage.shouldSkip) {
       return await stage.shouldSkip(data, context);
     }
@@ -474,16 +477,11 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
    */
   protected isRetryableError(error: Error, context: TranslationContext): boolean {
     const retries = context.config?.pipeline?.retries;
-    const retryableErrors = (typeof retries === 'object' && retries !== null) ? (retries.retryableErrors || [
-      'NETWORK_ERROR',
-      'TIMEOUT_ERROR',
-      'RATE_LIMIT_ERROR'
-    ]) : [
-      'NETWORK_ERROR',
-      'TIMEOUT_ERROR',
-      'RATE_LIMIT_ERROR'
-    ];
-    
+    const retryableErrors =
+      typeof retries === 'object' && retries !== null
+        ? retries.retryableErrors || ['NETWORK_ERROR', 'TIMEOUT_ERROR', 'RATE_LIMIT_ERROR']
+        : ['NETWORK_ERROR', 'TIMEOUT_ERROR', 'RATE_LIMIT_ERROR'];
+
     return retryableErrors.some((code: string) => error.message.includes(code));
   }
 
@@ -497,13 +495,10 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
   /**
    * Finalize translation result with metadata
    */
-  protected async finalizeTranslation(
-    result: PlatformPrompt,
-    context: TranslationContext
-  ): Promise<PlatformPrompt> {
+  protected async finalizeTranslation(result: PlatformPrompt, context: TranslationContext): Promise<PlatformPrompt> {
     const sourceHash = this.generateGraphHash(context.sourceGraph);
     const optimizations = await this.getAppliedOptimizations(context.sourceGraph, context.config);
-    
+
     return {
       ...result,
       metadata: {
@@ -514,9 +509,9 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
         optimizations,
         pipeline: {
           stages: this.pipeline.map(stage => stage.name),
-          version: this.version
-        }
-      }
+          version: this.version,
+        },
+      },
     };
   }
 
@@ -532,7 +527,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
       errors.push({
         code: 'INVALID_GRAPH_STRUCTURE',
         message: 'Graph structure is invalid or corrupted',
-        severity: 'error'
+        severity: 'error',
       });
     }
 
@@ -541,7 +536,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
       errors.push({
         code: 'GRAPH_HAS_CYCLES',
         message: 'Graph contains cycles which may cause infinite loops',
-        severity: 'error'
+        severity: 'error',
       });
     }
 
@@ -550,7 +545,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
       warnings.push({
         code: 'LARGE_GRAPH',
         message: 'Graph is very large and may impact performance',
-        optimization: 'Consider breaking into smaller subgraphs'
+        optimization: 'Consider breaking into smaller subgraphs',
       });
     }
 
@@ -558,17 +553,14 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
       valid: errors.length === 0,
       errors,
       warnings,
-      compatibilityScore: errors.length === 0 ? 0.9 : 0.3
+      compatibilityScore: errors.length === 0 ? 0.9 : 0.3,
     };
   }
 
   /**
    * Validate platform-specific constraints
    */
-  protected async validatePlatformConstraints(
-    graph: any,
-    config?: AdvancedAdaptorConfig
-  ): Promise<ValidationResult> {
+  protected async validatePlatformConstraints(graph: any, config?: AdvancedAdaptorConfig): Promise<ValidationResult> {
     // Delegate to existing platform validation
     return this.performPlatformValidation(graph, config);
   }
@@ -576,21 +568,18 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
   /**
    * Validate content quality and coherence
    */
-  protected async validateContentQuality(
-    graph: any,
-    config?: AdvancedAdaptorConfig
-  ): Promise<ValidationResult> {
+  protected async validateContentQuality(graph: any, config?: AdvancedAdaptorConfig): Promise<ValidationResult> {
     const errors: any[] = [];
     const warnings: any[] = [];
 
     const textContent = this.extractTextContent(graph);
-    
+
     // Content length validation
     if (textContent.length === 0) {
       warnings.push({
         code: 'EMPTY_CONTENT',
         message: 'Graph produces no text content',
-        optimization: 'Add content nodes to generate meaningful output'
+        optimization: 'Add content nodes to generate meaningful output',
       });
     }
 
@@ -599,7 +588,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
       warnings.push({
         code: 'INCOHERENT_CONTENT',
         message: 'Content may be incoherent or contradictory',
-        optimization: 'Review node connections and content flow'
+        optimization: 'Review node connections and content flow',
       });
     }
 
@@ -607,27 +596,24 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
       valid: errors.length === 0,
       errors,
       warnings,
-      compatibilityScore: 0.8
+      compatibilityScore: 0.8,
     };
   }
 
   /**
    * Validate performance impact
    */
-  protected async validatePerformanceImpact(
-    graph: any,
-    config?: AdvancedAdaptorConfig
-  ): Promise<ValidationResult> {
+  protected async validatePerformanceImpact(graph: any, config?: AdvancedAdaptorConfig): Promise<ValidationResult> {
     const warnings: any[] = [];
 
     // Estimate processing complexity
     const complexity = this.estimateComplexity(graph);
-    
+
     if (complexity > 100) {
       warnings.push({
         code: 'HIGH_COMPLEXITY',
         message: 'Graph has high processing complexity',
-        optimization: 'Simplify graph structure or use caching'
+        optimization: 'Simplify graph structure or use caching',
       });
     }
 
@@ -635,7 +621,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
       valid: true,
       errors: [],
       warnings,
-      compatibilityScore: complexity > 100 ? 0.7 : 0.9
+      compatibilityScore: complexity > 100 ? 0.7 : 0.9,
     };
   }
 
@@ -645,10 +631,10 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
   protected async preprocessGraph(graph: any, context: TranslationContext): Promise<any> {
     // Normalize node structure
     const normalized = this.normalizeGraphStructure(graph);
-    
+
     // Apply preprocessing optimizations
     const optimized = await this.applyPreprocessingOptimizations(normalized, context);
-    
+
     return optimized;
   }
 
@@ -657,21 +643,21 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
    */
   protected async applyOptimizations(graph: any, context: TranslationContext): Promise<string[]> {
     const optimizations: string[] = [];
-    
+
     // Content optimization
     if (this.canOptimizeContent(graph)) {
       optimizations.push('content-optimization');
     }
-    
+
     // Structure optimization
     if (this.canOptimizeStructure(graph)) {
       optimizations.push('structure-optimization');
     }
-    
+
     // Platform-specific optimizations
     const platformOpts = await this.getPlatformOptimizations(graph, context.config);
     optimizations.push(...platformOpts);
-    
+
     return optimizations;
   }
 
@@ -681,7 +667,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
   protected async postprocessResult(result: any, context: TranslationContext): Promise<any> {
     // Apply post-processing filters
     const filtered = this.applyPostprocessingFilters(result, context);
-    
+
     // Validate final result
     const isValid = this.validateFinalResult(filtered);
     if (!isValid) {
@@ -691,7 +677,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
         'POSTPROCESSING_VALIDATION_FAILED'
       );
     }
-    
+
     return filtered;
   }
 
@@ -713,7 +699,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
     } else {
       this.stats.translations++;
     }
-    
+
     this.stats.totalDuration += duration;
     this.stats.avgDuration = this.stats.totalDuration / (this.stats.translations + this.stats.errors);
   }

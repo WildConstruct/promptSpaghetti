@@ -4,19 +4,20 @@
 
 ## Emergency Contacts (Speed Dial)
 
-| Contact | Primary | Backup | When to Call |
-|---------|---------|---------|--------------|
-| **CISO** | [Phone] | [Phone] | CRITICAL alerts immediately |
-| **Security Manager** | [Phone] | [Phone] | HIGH alerts within 30 min |
-| **Incident Response Lead** | [Phone] | [Phone] | All security incidents |
-| **SOC Team Lead** | [Phone] | [Phone] | Escalation issues |
-| **Compliance Officer** | [Phone] | [Phone] | Regulatory violations |
+| Contact                    | Primary | Backup  | When to Call                |
+| -------------------------- | ------- | ------- | --------------------------- |
+| **CISO**                   | [Phone] | [Phone] | CRITICAL alerts immediately |
+| **Security Manager**       | [Phone] | [Phone] | HIGH alerts within 30 min   |
+| **Incident Response Lead** | [Phone] | [Phone] | All security incidents      |
+| **SOC Team Lead**          | [Phone] | [Phone] | Escalation issues           |
+| **Compliance Officer**     | [Phone] | [Phone] | Regulatory violations       |
 
 ## Critical Alert Response Checklists
 
 ### 🔥 CRITICAL Severity (0-15 minutes)
 
 #### Data Breach Suspected
+
 ```bash
 □ IMMEDIATE: Block suspected source IP
 □ IMMEDIATE: Preserve evidence (logs, network captures)
@@ -28,6 +29,7 @@
 ```
 
 #### Active Network Attack
+
 ```bash
 □ IMMEDIATE: Isolate affected network segments
 □ IMMEDIATE: Block attack source IPs at firewall
@@ -39,6 +41,7 @@
 ```
 
 #### Authentication System Compromise
+
 ```bash
 □ IMMEDIATE: Disable affected authentication service
 □ IMMEDIATE: Reset admin passwords
@@ -52,6 +55,7 @@
 ### ⚡ HIGH Severity (15-60 minutes)
 
 #### Brute Force Attack
+
 ```bash
 □ 15min: Verify attack pattern and scope
 □ 15min: Implement IP blocking
@@ -62,6 +66,7 @@
 ```
 
 #### SQL Injection Attempt
+
 ```bash
 □ 15min: Block source IP and preserve payload
 □ 15min: Analyze injection technique and target
@@ -72,6 +77,7 @@
 ```
 
 #### Privilege Escalation Detected
+
 ```bash
 □ 15min: Suspend affected user account
 □ 15min: Review recent access and changes
@@ -114,6 +120,7 @@
 **Subject:** [CRITICAL] Security Incident - [Type] - [Time]
 
 **Immediate Actions Required:**
+
 - Alert: [Brief description]
 - Systems: [Affected systems]
 - Status: [Contained/Active/Under Investigation]
@@ -125,6 +132,7 @@
 ### 📞 Escalation Phone Script
 
 **"This is [Name] from PromptScape Security. We have a [SEVERITY] security incident requiring immediate attention:**
+
 - **Incident:** [Brief description]
 - **Impact:** [Systems/data affected]
 - **Actions:** [What we've done]
@@ -134,6 +142,7 @@
 ## Tool Access Quick Links
 
 ### 🖥️ Security Dashboards
+
 - **Primary SOC Dashboard:** [URL]
 - **SIEM Platform:** [URL]
 - **Incident Tracking:** [URL]
@@ -141,6 +150,7 @@
 - **Compliance Dashboard:** [URL]
 
 ### 🔧 Emergency Tools
+
 - **Network Isolation:** [Emergency access]
 - **IP Blocking Interface:** [URL]
 - **Account Management:** [URL]
@@ -151,15 +161,16 @@
 
 ### ⏰ Regulatory Notification Timelines
 
-| Framework | Internal Notification | External Notification |
-|-----------|----------------------|----------------------|
-| **GDPR** | DPO: 1 hour | Supervisory Authority: 72 hours |
-| **CCPA** | Privacy Officer: 2 hours | AG Office: As required |
-| **SOX** | Compliance: 4 hours | Auditors: As required |
-| **HIPAA** | Privacy Officer: 1 hour | HHS: 60 days |
-| **PCI-DSS** | QSA: 24 hours | Card Brands: Immediately |
+| Framework   | Internal Notification    | External Notification           |
+| ----------- | ------------------------ | ------------------------------- |
+| **GDPR**    | DPO: 1 hour              | Supervisory Authority: 72 hours |
+| **CCPA**    | Privacy Officer: 2 hours | AG Office: As required          |
+| **SOX**     | Compliance: 4 hours      | Auditors: As required           |
+| **HIPAA**   | Privacy Officer: 1 hour  | HHS: 60 days                    |
+| **PCI-DSS** | QSA: 24 hours            | Card Brands: Immediately        |
 
 ### 📋 Documentation Requirements
+
 ```bash
 □ Incident timeline with UTC timestamps
 □ Systems and data affected
@@ -174,6 +185,7 @@
 ## Evidence Preservation Checklist
 
 ### 💾 Digital Evidence
+
 ```bash
 □ System logs (with exact timestamps)
 □ Network traffic captures
@@ -186,6 +198,7 @@
 ```
 
 ### 📝 Documentation Evidence
+
 ```bash
 □ Initial incident report
 □ Investigation notes and findings
@@ -199,6 +212,7 @@
 ## Recovery Procedures
 
 ### 🔄 System Recovery Priorities
+
 1. **Life Safety Systems** (if applicable)
 2. **Revenue-Critical Systems**
 3. **Customer-Facing Services**
@@ -206,6 +220,7 @@
 5. **Development/Test Systems**
 
 ### ✅ Recovery Validation
+
 ```bash
 □ System integrity verified
 □ Security controls restored
@@ -220,6 +235,7 @@
 ## Post-Incident Actions
 
 ### 📊 Immediate Post-Incident (0-24 hours)
+
 ```bash
 □ Secure all evidence and documentation
 □ Brief leadership on incident resolution
@@ -229,6 +245,7 @@
 ```
 
 ### 📈 Short-term Follow-up (1-7 days)
+
 ```bash
 □ Complete detailed incident report
 □ Conduct post-incident review meeting
@@ -238,6 +255,7 @@
 ```
 
 ### 🔍 Long-term Improvements (1-4 weeks)
+
 ```bash
 □ Implement systemic security enhancements
 □ Update policies and procedures
@@ -249,6 +267,7 @@
 ## Training Scenarios
 
 ### 🎯 Monthly Drill Scenarios
+
 - **Phishing Attack Response**
 - **Ransomware Detection**
 - **Data Breach Simulation**
@@ -256,6 +275,7 @@
 - **Third-Party Compromise**
 
 ### 🧪 Quarterly Exercises
+
 - **Multi-Vector Attack**
 - **Supply Chain Compromise**
 - **Advanced Persistent Threat**
@@ -265,6 +285,7 @@
 ---
 
 ## Version Control
+
 - **Version:** 1.0
 - **Last Updated:** July 2025
 - **Next Review:** October 2025
@@ -274,4 +295,4 @@
 
 ---
 
-*For detailed procedures, refer to the complete Security Alerting Procedures document. This quick guide is for immediate incident response reference only.*
+_For detailed procedures, refer to the complete Security Alerting Procedures document. This quick guide is for immediate incident response reference only._

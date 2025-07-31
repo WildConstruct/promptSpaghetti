@@ -1,10 +1,10 @@
 /**
  * Security Dashboard Components - Main Export
  * Task T-1752989143998-955: Implement security dashboard
- * 
+ *
  * Main export file for security dashboard components providing a unified
  * interface for importing and using all security dashboard functionality.
- * 
+ *
  * @author Security Engineering Team
  * @version 1.0.0
  * @since 2025-07-22
@@ -15,11 +15,11 @@ export { default as SecurityDashboardMain } from './SecurityDashboardMain';
 export { default as SecurityDashboardDataService } from './SecurityDashboardDataService';
 
 // Core Framework Components (re-exported for convenience)
-export { 
+export {
   SecurityDashboardFramework,
   DashboardType,
   SecurityRole,
-  DashboardTheme
+  DashboardTheme,
 } from '../../security/dashboard/SecurityDashboardFramework';
 
 export { SecurityDashboardWorkflow } from '../../security/dashboard/SecurityDashboardWorkflow';
@@ -34,14 +34,10 @@ export type {
   SecurityAlert,
   ResponseAction,
   ComplianceStatus,
-  ComplianceViolation
+  ComplianceViolation,
 } from './SecurityDashboardMain';
 
-export type {
-  SecurityAction,
-  DataServiceConfig,
-  ApiResponse
-} from './SecurityDashboardDataService';
+export type { SecurityAction, DataServiceConfig, ApiResponse } from './SecurityDashboardDataService';
 
 // Framework Types (re-exported for convenience)
 export type {
@@ -49,7 +45,7 @@ export type {
   WidgetConfiguration,
   DashboardLayout,
   DashboardPermissions,
-  SecurityDashboardFrameworkOptions
+  SecurityDashboardFrameworkOptions,
 } from '../../security/dashboard/SecurityDashboardFramework';
 
 export type {
@@ -57,5 +53,5 @@ export type {
   SecurityEventType,
   SecuritySeverity,
   SecurityActionType,
-  SecurityWorkflowConfig
+  SecurityWorkflowConfig,
 } from '../../security/dashboard/SecurityDashboardWorkflow';

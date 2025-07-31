@@ -19,17 +19,17 @@ This document provides the technical specification for PromptScape's WebSocket-b
 ```javascript
 const ws = new WebSocket('ws://localhost:8000', ['promptscape-collaboration-v1']);
 
-ws.onopen = (event) => {
+ws.onopen = event => {
   console.log('WebSocket connection established');
   // Client must authenticate within 30 seconds
   startAuthenticationFlow();
 };
 
-ws.onerror = (error) => {
+ws.onerror = error => {
   console.error('WebSocket connection error:', error);
 };
 
-ws.onclose = (event) => {
+ws.onclose = event => {
   console.log('WebSocket connection closed:', event.code, event.reason);
   // Implement reconnection logic based on close code
 };
@@ -44,7 +44,7 @@ Immediately after connection, client must send authentication request:
   "type": "auth_request",
   "payload": {
     "userId": "user-uuid-here",
-    "documentId": "document-uuid-here", 
+    "documentId": "document-uuid-here",
     "userName": "John Doe",
     "userAvatar": "https://example.com/avatar.jpg",
     "token": "jwt-token-here",
@@ -59,7 +59,7 @@ Server responds with authentication result:
 
 ```json
 {
-  "type": "auth_response", 
+  "type": "auth_response",
   "payload": {
     "success": true,
     "message": "Authentication successful",
@@ -79,7 +79,7 @@ After successful authentication, server automatically joins user to document and
   "type": "user_join",
   "payload": {
     "userId": "user-uuid-here",
-    "userName": "John Doe", 
+    "userName": "John Doe",
     "userAvatar": "https://example.com/avatar.jpg",
     "timestamp": 1640995200002
   },
@@ -121,12 +121,12 @@ All WebSocket messages must conform to this format:
 
 ```typescript
 interface WSMessage {
-  type: string;           // Required: Message type identifier
-  payload: object;        // Required: Message-specific data
-  timestamp: number;      // Required: Unix timestamp in milliseconds
-  messageId: string;      // Required: Unique message identifier (UUID)
-  documentId?: string;    // Optional: Document context (server adds if missing)
-  userId?: string;        // Optional: Message author (server adds from session)
+  type: string; // Required: Message type identifier
+  payload: object; // Required: Message-specific data
+  timestamp: number; // Required: Unix timestamp in milliseconds
+  messageId: string; // Required: Unique message identifier (UUID)
+  documentId?: string; // Optional: Document context (server adds if missing)
+  userId?: string; // Optional: Message author (server adds from session)
 }
 ```
 
@@ -141,7 +141,7 @@ const WSMessageSchema = z.object({
   timestamp: z.number().int().positive(),
   messageId: z.string().uuid(),
   documentId: z.string().uuid().optional(),
-  userId: z.string().optional()
+  userId: z.string().optional(),
 });
 ```
 
@@ -168,24 +168,26 @@ Invalid messages result in error response:
 **Purpose**: Authenticate user for collaboration session
 
 **Payload Schema**:
+
 ```typescript
 {
   userId: string;         // UUID of authenticated user
   documentId: string;     // UUID of document to join
   userName: string;       // Display name for other users
   userAvatar?: string;    // Profile image URL (optional)
-  token?: string;         // JWT authentication token (optional)  
+  token?: string;         // JWT authentication token (optional)
   platform?: string;     // Client platform: 'web', 'desktop', 'mobile'
 }
 ```
 
 **Example**:
+
 ```json
 {
   "type": "auth_request",
   "payload": {
     "userId": "550e8400-e29b-41d4-a716-446655440001",
-    "documentId": "550e8400-e29b-41d4-a716-446655440002", 
+    "documentId": "550e8400-e29b-41d4-a716-446655440002",
     "userName": "Alice Smith",
     "userAvatar": "https://example.com/avatars/alice.jpg",
     "platform": "web"
@@ -200,6 +202,7 @@ Invalid messages result in error response:
 **Purpose**: Authentication result
 
 **Payload Schema**:
+
 ```typescript
 {
   success: boolean;       // Authentication success/failure
@@ -215,14 +218,15 @@ Invalid messages result in error response:
 **Purpose**: Real-time graph modifications with conflict detection
 
 **Payload Schema**:
+
 ```typescript
 {
   documentId: string;     // Document being modified
   operations: Array<{    // Atomic operations to apply
-    type: 'node_add' | 'node_update' | 'node_remove' | 
+    type: 'node_add' | 'node_update' | 'node_remove' |
           'edge_add' | 'edge_update' | 'edge_remove';
     nodeId?: string;      // Target node ID (if applicable)
-    edgeId?: string;      // Target edge ID (if applicable) 
+    edgeId?: string;      // Target edge ID (if applicable)
     data: any;            // Operation data (new values)
     oldValue?: any;       // Previous values (for updates)
     timestamp: number;    // Operation timestamp
@@ -234,6 +238,7 @@ Invalid messages result in error response:
 ```
 
 **Example**:
+
 ```json
 {
   "type": "graph_update",
@@ -268,6 +273,7 @@ Invalid messages result in error response:
 **Purpose**: Server response to graph update
 
 **Payload Schema**:
+
 ```typescript
 {
   success: boolean;           // Update success/failure
@@ -288,15 +294,16 @@ Invalid messages result in error response:
 **Purpose**: User presence, cursor, and selection updates
 
 **Payload Schema**:
+
 ```typescript
 {
   cursor?: {              // Cursor position (optional)
     x: number;            // Absolute X coordinate
-    y: number;            // Absolute Y coordinate  
+    y: number;            // Absolute Y coordinate
     nodeId?: string;      // Node being hovered/edited
     viewportBounds?: {    // Client viewport info
       x: number;
-      y: number; 
+      y: number;
       width: number;
       height: number;
     };
@@ -312,6 +319,7 @@ Invalid messages result in error response:
 ```
 
 **Example**:
+
 ```json
 {
   "type": "presence_update",
@@ -338,6 +346,7 @@ Invalid messages result in error response:
 **Purpose**: Notification when user joins document
 
 **Payload Schema**:
+
 ```typescript
 {
   userId: string;         // Joining user ID
@@ -352,11 +361,12 @@ Invalid messages result in error response:
 **Purpose**: Notification when user leaves document
 
 **Payload Schema**:
+
 ```typescript
 {
-  userId: string;         // Leaving user ID
-  userName: string;       // Display name
-  timestamp: number;      // Leave timestamp
+  userId: string; // Leaving user ID
+  userName: string; // Display name
+  timestamp: number; // Leave timestamp
 }
 ```
 
@@ -367,6 +377,7 @@ Invalid messages result in error response:
 **Purpose**: Request document state synchronization
 
 **Payload Schema**:
+
 ```typescript
 {
   clientVersion: number;  // Client's current document version
@@ -380,6 +391,7 @@ Invalid messages result in error response:
 **Purpose**: Server synchronization response
 
 **Payload Schema**:
+
 ```typescript
 {
   syncType: 'up_to_date' | 'patch' | 'full_sync';  // Sync operation type
@@ -398,6 +410,7 @@ Invalid messages result in error response:
 **Purpose**: Server notification of editing conflict
 
 **Payload Schema**:
+
 ```typescript
 {
   conflictId: string;             // Unique conflict identifier
@@ -419,6 +432,7 @@ Invalid messages result in error response:
 **Purpose**: Client conflict resolution request
 
 **Payload Schema**:
+
 ```typescript
 {
   conflictId: string;                                    // Conflict to resolve
@@ -435,9 +449,10 @@ Invalid messages result in error response:
 **Purpose**: Heartbeat/latency measurement
 
 **Payload Schema**:
+
 ```typescript
 {
-  timestamp: number;      // Client timestamp for latency calculation
+  timestamp: number; // Client timestamp for latency calculation
 }
 ```
 
@@ -446,9 +461,10 @@ Invalid messages result in error response:
 **Purpose**: Heartbeat response
 
 **Payload Schema**:
+
 ```typescript
 {
-  timestamp: number;      // Server timestamp
+  timestamp: number; // Server timestamp
   clientTimestamp: number; // Original client timestamp
 }
 ```
@@ -458,11 +474,12 @@ Invalid messages result in error response:
 **Purpose**: Error notification
 
 **Payload Schema**:
+
 ```typescript
 {
-  error: string;          // Error type/code
-  details: string;        // Detailed error message
-  recoverable: boolean;   // Whether client should retry
+  error: string; // Error type/code
+  details: string; // Detailed error message
+  recoverable: boolean; // Whether client should retry
 }
 ```
 
@@ -470,15 +487,15 @@ Invalid messages result in error response:
 
 ### Error Codes
 
-| Code | Description | Action |
-|------|-------------|--------|
-| `AUTHENTICATION_FAILED` | Invalid credentials | Re-authenticate |
-| `PERMISSION_DENIED` | Insufficient permissions | Show error to user |
-| `DOCUMENT_NOT_FOUND` | Document doesn't exist | Redirect to document list |
-| `VERSION_CONFLICT` | Document version mismatch | Trigger full sync |
-| `INVALID_MESSAGE` | Malformed message | Fix client implementation |
-| `RATE_LIMITED` | Too many messages | Implement throttling |
-| `SERVER_ERROR` | Internal server error | Retry with backoff |
+| Code                    | Description               | Action                    |
+| ----------------------- | ------------------------- | ------------------------- |
+| `AUTHENTICATION_FAILED` | Invalid credentials       | Re-authenticate           |
+| `PERMISSION_DENIED`     | Insufficient permissions  | Show error to user        |
+| `DOCUMENT_NOT_FOUND`    | Document doesn't exist    | Redirect to document list |
+| `VERSION_CONFLICT`      | Document version mismatch | Trigger full sync         |
+| `INVALID_MESSAGE`       | Malformed message         | Fix client implementation |
+| `RATE_LIMITED`          | Too many messages         | Implement throttling      |
+| `SERVER_ERROR`          | Internal server error     | Retry with backoff        |
 
 ### Error Response Format
 
@@ -498,12 +515,12 @@ Invalid messages result in error response:
 ### Client Error Handling
 
 ```typescript
-ws.onmessage = (event) => {
+ws.onmessage = event => {
   const message = JSON.parse(event.data);
-  
+
   if (message.type === 'error') {
     const { error, details, recoverable } = message.payload;
-    
+
     switch (error) {
       case 'AUTHENTICATION_FAILED':
         // Redirect to login
@@ -549,12 +566,14 @@ ws.onmessage = (event) => {
 ```typescript
 // Throttle cursor updates to 20 FPS maximum
 const throttledCursorUpdate = throttle((x, y) => {
-  ws.send(JSON.stringify({
-    type: 'cursor_update',
-    payload: { x, y },
-    timestamp: Date.now(),
-    messageId: generateUUID()
-  }));
+  ws.send(
+    JSON.stringify({
+      type: 'cursor_update',
+      payload: { x, y },
+      timestamp: Date.now(),
+      messageId: generateUUID(),
+    })
+  );
 }, 50); // 50ms = 20 FPS
 ```
 
@@ -564,9 +583,9 @@ const throttledCursorUpdate = throttle((x, y) => {
 // Batch multiple graph operations into single message
 const batchedOperations = [];
 
-const addOperation = (operation) => {
+const addOperation = operation => {
   batchedOperations.push(operation);
-  
+
   // Send batch when it reaches certain size or after timeout
   if (batchedOperations.length >= 10) {
     sendGraphUpdate(batchedOperations);
@@ -590,7 +609,7 @@ class CollaborationWebSocket {
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
   private reconnectDelay = 1000; // Start with 1 second
-  
+
   private reconnect() {
     if (this.reconnectAttempts < this.maxReconnectAttempts) {
       setTimeout(() => {
@@ -600,7 +619,7 @@ class CollaborationWebSocket {
       }, this.reconnectDelay);
     }
   }
-  
+
   private onOpen() {
     this.reconnectAttempts = 0;
     this.reconnectDelay = 1000; // Reset delay

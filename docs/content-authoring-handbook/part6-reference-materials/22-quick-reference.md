@@ -6,30 +6,31 @@ This chapter provides quick-lookup tables for common generator development tasks
 
 Modifiers transform text after rule expansion. Apply them using dot notation: `[rule.modifier]`
 
-| Modifier | Purpose | Example Input | Example Output |
-|----------|---------|---------------|----------------|
-| `capitalize` | Capitalizes first character | `hello world` | `Hello world` |
-| `upper` | Converts to UPPERCASE | `hello world` | `HELLO WORLD` |
-| `lower` | Converts to lowercase | `Hello World` | `hello world` |
-| `a_an` | Prepends correct article | `apple` | `an apple` |
-| `plural` | Basic English pluralization | `cat` | `cats` |
-| `past` | Simple past tense | `walk` | `walked` |
-| `possessive` | Adds possessive form | `dog` | `dog's` |
-| `trim` | Removes whitespace | `  text  ` | `text` |
-| `snake` | Converts to snake_case | `Hello World` | `hello_world` |
-| `kebab` | Converts to kebab-case | `Hello World` | `hello-world` |
+| Modifier     | Purpose                     | Example Input | Example Output |
+| ------------ | --------------------------- | ------------- | -------------- |
+| `capitalize` | Capitalizes first character | `hello world` | `Hello world`  |
+| `upper`      | Converts to UPPERCASE       | `hello world` | `HELLO WORLD`  |
+| `lower`      | Converts to lowercase       | `Hello World` | `hello world`  |
+| `a_an`       | Prepends correct article    | `apple`       | `an apple`     |
+| `plural`     | Basic English pluralization | `cat`         | `cats`         |
+| `past`       | Simple past tense           | `walk`        | `walked`       |
+| `possessive` | Adds possessive form        | `dog`         | `dog's`        |
+| `trim`       | Removes whitespace          | `  text  `    | `text`         |
+| `snake`      | Converts to snake_case      | `Hello World` | `hello_world`  |
+| `kebab`      | Converts to kebab-case      | `Hello World` | `hello-world`  |
 
 ### Usage Examples
+
 ```json
 {
   "grammar": {
     "item": "[object.a_an.capitalize]",
     "object": ["apple", "sword", "umbrella"],
-    
+
     "title": "[name.upper] the [epithet.capitalize]",
     "name": ["aragorn", "gandalf"],
     "epithet": ["brave", "wise"],
-    
+
     "filename": "[project.snake]_[version]",
     "project": ["My Cool Project", "Test File"],
     "version": ["v1", "v2"]
@@ -41,54 +42,54 @@ Modifiers transform text after rule expansion. Apply them using dot notation: `[
 
 ### Basic Nodes
 
-| Node Type | Purpose | Key Properties |
-|-----------|---------|----------------|
+| Node Type        | Purpose                       | Key Properties               |
+| ---------------- | ----------------------------- | ---------------------------- |
 | `WeightedChoice` | Random selection with weights | `choices: [{value, weight}]` |
-| `Concat` | Combine multiple inputs | `inputs: [node_ids]` |
-| `Output` | Produce final result | `template: string` |
-| `Include` | Reference external rule | `name: string` |
-| `SetVariable` | Store a value | `key: string, value: any` |
-| `GetVariable` | Retrieve a value | `key: string` |
+| `Concat`         | Combine multiple inputs       | `inputs: [node_ids]`         |
+| `Output`         | Produce final result          | `template: string`           |
+| `Include`        | Reference external rule       | `name: string`               |
+| `SetVariable`    | Store a value                 | `key: string, value: any`    |
+| `GetVariable`    | Retrieve a value              | `key: string`                |
 
 ### Advanced Nodes (Epic 7)
 
-| Node Type | Purpose | Key Properties |
-|-----------|---------|----------------|
+| Node Type          | Purpose               | Key Properties                           |
+| ------------------ | --------------------- | ---------------------------------------- |
 | `WeightedAdvanced` | Complex distributions | `distributionConfig: {type, parameters}` |
-| `Conditional` | If-then-else logic | `branches: [{condition, output}]` |
-| `Sequential` | Ordered processing | `sequence: [items], pattern: {type}` |
-| `Markov` | State transitions | `states: {state: {next: probability}}` |
+| `Conditional`      | If-then-else logic    | `branches: [{condition, output}]`        |
+| `Sequential`       | Ordered processing    | `sequence: [items], pattern: {type}`     |
+| `Markov`           | State transitions     | `states: {state: {next: probability}}`   |
 
 ### Python Integration (Epic 8)
 
-| Node Type | Purpose | Key Properties |
-|-----------|---------|----------------|
+| Node Type         | Purpose             | Key Properties                  |
+| ----------------- | ------------------- | ------------------------------- |
 | `PythonTransform` | Execute Python code | `code: string, timeout: number` |
 
 ## Variable Functions Reference
 
 Built-in functions available in conditional expressions:
 
-| Function | Purpose | Example |
-|----------|---------|---------|
-| `startsWith(str, prefix)` | Check string prefix | `startsWith({name}, 'A')` |
-| `endsWith(str, suffix)` | Check string suffix | `endsWith({file}, '.txt')` |
-| `includes(str, sub)` | Check substring | `includes({text}, 'magic')` |
-| `getType(value)` | Get value type | `getType({data}) == 'array'` |
-| `toNumber(value)` | Convert to number | `toNumber({score}) > 50` |
-| `toString(value)` | Convert to string | `toString({id}) == '123'` |
+| Function                  | Purpose             | Example                      |
+| ------------------------- | ------------------- | ---------------------------- |
+| `startsWith(str, prefix)` | Check string prefix | `startsWith({name}, 'A')`    |
+| `endsWith(str, suffix)`   | Check string suffix | `endsWith({file}, '.txt')`   |
+| `includes(str, sub)`      | Check substring     | `includes({text}, 'magic')`  |
+| `getType(value)`          | Get value type      | `getType({data}) == 'array'` |
+| `toNumber(value)`         | Convert to number   | `toNumber({score}) > 50`     |
+| `toString(value)`         | Convert to string   | `toString({id}) == '123'`    |
 
 ### Operators
 
-| Operator | Purpose | Example |
-|----------|---------|---------|
-| `==` | Equality | `{level} == 5` |
-| `!=` | Inequality | `{class} != 'warrior'` |
-| `>`, `<` | Greater/Less than | `{health} > 0` |
-| `>=`, `<=` | Greater/Less or equal | `{age} >= 18` |
-| `&&` | Logical AND | `{level} > 5 && {class} == 'mage'` |
-| `\|\|` | Logical OR | `{race} == 'elf' \|\| {race} == 'human'` |
-| `!` | Logical NOT | `!{isDead}` |
+| Operator   | Purpose               | Example                                  |
+| ---------- | --------------------- | ---------------------------------------- |
+| `==`       | Equality              | `{level} == 5`                           |
+| `!=`       | Inequality            | `{class} != 'warrior'`                   |
+| `>`, `<`   | Greater/Less than     | `{health} > 0`                           |
+| `>=`, `<=` | Greater/Less or equal | `{age} >= 18`                            |
+| `&&`       | Logical AND           | `{level} > 5 && {class} == 'mage'`       |
+| `\|\|`     | Logical OR            | `{race} == 'elf' \|\| {race} == 'human'` |
+| `!`        | Logical NOT           | `!{isDead}`                              |
 
 ## Grammar Pattern Quick Reference
 
@@ -144,6 +145,7 @@ Built-in functions available in conditional expressions:
 ## Common Rule Structures
 
 ### Character Generator Pattern
+
 ```json
 {
   "character": "[name] the [adjective] [class]",
@@ -154,6 +156,7 @@ Built-in functions available in conditional expressions:
 ```
 
 ### Item Generator Pattern
+
 ```json
 {
   "item": "[quality] [material] [type] of [property]",
@@ -165,6 +168,7 @@ Built-in functions available in conditional expressions:
 ```
 
 ### Story Prompt Pattern
+
 ```json
 {
   "prompt": "[genre]: [protagonist] must [goal] before [deadline]",
@@ -178,6 +182,7 @@ Built-in functions available in conditional expressions:
 ## File Organization Reference
 
 ### Recommended Structure
+
 ```
 my-generator/
 ├── generator.json          # Main generator file
@@ -195,6 +200,7 @@ my-generator/
 ```
 
 ### Include Syntax
+
 ```json
 // Basic include
 "names": {"$include": "./data/names.json"}
@@ -208,12 +214,12 @@ my-generator/
 
 ## Performance Guidelines
 
-| Optimization | Impact | When to Use |
-|--------------|--------|-------------|
-| Variable caching | High | Repeated values |
-| Shallow nesting | Medium | Complex generators |
-| Array limits | Low | Large choice lists |
-| Include splitting | High | 1000+ line files |
+| Optimization      | Impact | When to Use        |
+| ----------------- | ------ | ------------------ |
+| Variable caching  | High   | Repeated values    |
+| Shallow nesting   | Medium | Complex generators |
+| Array limits      | Low    | Large choice lists |
+| Include splitting | High   | 1000+ line files   |
 
 ### Performance Patterns
 
@@ -248,23 +254,23 @@ my-generator/
 
 ## Keyboard Shortcuts
 
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl+\` | Toggle debug overlay |
-| `Ctrl+S` | Save generator |
-| `Ctrl+P` | Preview generation |
-| `Ctrl+Z` | Undo |
-| `Ctrl+Shift+Z` | Redo |
+| Shortcut       | Action               |
+| -------------- | -------------------- |
+| `Ctrl+\`       | Toggle debug overlay |
+| `Ctrl+S`       | Save generator       |
+| `Ctrl+P`       | Preview generation   |
+| `Ctrl+Z`       | Undo                 |
+| `Ctrl+Shift+Z` | Redo                 |
 
 ## Error Messages Quick Fix
 
-| Error | Likely Cause | Fix |
-|-------|--------------|-----|
-| "Unknown rule: [x]" | Missing rule definition | Add rule "x" to grammar |
-| "Circular reference" | Rules reference each other | Break the cycle |
-| "Invalid JSON" | Syntax error | Check quotes and commas |
-| "Variable not found" | Uninitialized variable | Set variable before use |
-| "Maximum depth exceeded" | Too much nesting | Simplify rule structure |
+| Error                    | Likely Cause               | Fix                     |
+| ------------------------ | -------------------------- | ----------------------- |
+| "Unknown rule: [x]"      | Missing rule definition    | Add rule "x" to grammar |
+| "Circular reference"     | Rules reference each other | Break the cycle         |
+| "Invalid JSON"           | Syntax error               | Check quotes and commas |
+| "Variable not found"     | Uninitialized variable     | Set variable before use |
+| "Maximum depth exceeded" | Too much nesting           | Simplify rule structure |
 
 ---
 

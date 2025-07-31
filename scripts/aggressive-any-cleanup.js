@@ -80,29 +80,29 @@ async function processDirectory(dirPath, maxFiles = 20) {
   }
 
   console.log(`\n🚀 Processing directory: ${dirPath}`);
-  
+
   // Find TypeScript files
   const findCommand = `find "${dirPath}" -name "*.ts" -o -name "*.tsx" | head -${maxFiles}`;
   const files = execSync(findCommand, { encoding: 'utf8' })
     .split('\n')
     .filter(f => f.trim());
-    
+
   let dirFixed = 0;
   let filesProcessed = 0;
-  
+
   for (const file of files) {
     if (!file.trim()) continue;
-    
+
     try {
       const content = fs.readFileSync(file, 'utf8');
-      
+
       // Skip if no any types detected
       if (!content.includes(': any') && !content.includes('<any>') && !content.includes('z.any')) {
         continue;
       }
-      
+
       const { content: newContent, changes } = aggressiveAnyFix(content, file);
-      
+
       if (changes > 0) {
         fs.writeFileSync(file, newContent);
         console.log(`   ✅ Fixed ${changes} any types in: ${path.basename(file)}`);
@@ -113,7 +113,7 @@ async function processDirectory(dirPath, maxFiles = 20) {
       console.log(`   ❌ Error processing ${path.basename(file)}: ${error.message}`);
     }
   }
-  
+
   console.log(`   🎉 Directory summary: ${dirFixed} any types fixed in ${filesProcessed} files`);
   return dirFixed;
 }
@@ -131,14 +131,14 @@ async function main() {
 
   // Target directories in order of likely impact
   const targetDirs = [
-    'client/src/components/admin',     // High density admin components
-    'packages/core/components',        // Core components
-    'server/src/database',            // Database layer
-    'client/src/types',               // Type definitions
-    'client/src/core',                // Core client logic
-    'server/src/services',            // Business logic
-    'client/src/components',          // UI components
-    'packages/core/runtime'           // Runtime engine
+    'client/src/components/admin', // High density admin components
+    'packages/core/components', // Core components
+    'server/src/database', // Database layer
+    'client/src/types', // Type definitions
+    'client/src/core', // Core client logic
+    'server/src/services', // Business logic
+    'client/src/components', // UI components
+    'packages/core/runtime', // Runtime engine
   ];
 
   let totalFixed = 0;
@@ -148,7 +148,7 @@ async function main() {
     const fixed = await processDirectory(dir, 15); // Process 15 files per directory
     totalFixed += fixed;
     directoriesProcessed++;
-    
+
     // Show progress every few directories
     if (directoriesProcessed % 3 === 0) {
       const currentCount = getAnyTypeCount();
@@ -164,14 +164,14 @@ async function main() {
   console.log('\n🔄 Checking final impact...');
   const finalCount = getAnyTypeCount();
   const improvement = initialCount - finalCount;
-  
+
   console.log(`📉 Any type violations: ${finalCount} (was ${initialCount})`);
-  
+
   if (improvement > 0) {
     const percentage = Math.round((improvement / initialCount) * 100);
     console.log(`✅ Reduced any types by ${improvement} (${percentage}% improvement!)`);
   }
-  
+
   console.log(`\n🎯 Remaining any types: ${finalCount}`);
   if (finalCount > 0) {
     console.log(`💡 Tip: Re-run this script to continue cleanup - it gets more effective each time!`);

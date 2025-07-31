@@ -3,7 +3,7 @@
 **Document Version**: 1.0  
 **Last Updated**: 2025-07-22  
 **Epic**: 19 - Security & Compliance Framework  
-**Classification**: CONFIDENTIAL  
+**Classification**: CONFIDENTIAL
 
 ---
 
@@ -12,7 +12,9 @@
 This document establishes comprehensive security requirements for all external integrations within the PromptScape system. These requirements ensure secure data exchange, protect against common attack vectors, and maintain compliance with privacy regulations while enabling robust third-party functionality.
 
 ### 1.1 Scope
+
 This document covers security requirements for:
+
 - **API Endpoints** (REST, GraphQL, WebSocket)
 - **Third-Party Service Integrations** (OAuth, Payment, Analytics)
 - **Database Connections** (PostgreSQL, Redis, SQLite)
@@ -28,6 +30,7 @@ This document covers security requirements for:
 ### 2.1 Authentication & Authorization
 
 #### 2.1.1 API Authentication Standards
+
 **REQUIREMENT**: All API endpoints MUST implement one of the following authentication methods:
 
 1. **JWT Bearer Tokens** (Primary)
@@ -59,6 +62,7 @@ This document covers security requirements for:
    - **Redirect URI**: Strict whitelist validation
 
 #### 2.1.2 Authorization Framework
+
 **REQUIREMENT**: Implement Role-Based Access Control (RBAC) with:
 
 ```typescript
@@ -78,6 +82,7 @@ interface Permission {
 ```
 
 **Standard Roles**:
+
 - `viewer` (0): Read-only access to own resources
 - `editor` (2): Full access to own resources
 - `collaborator` (4): Access to shared resources
@@ -87,17 +92,19 @@ interface Permission {
 ### 2.2 Request Security
 
 #### 2.2.1 Input Validation
+
 **REQUIREMENT**: All API inputs MUST be validated using:
 
 1. **Schema Validation** (Zod-based)
+
    ```typescript
    const ApiRequestSchema = z.object({
      data: z.any(), // Specific schema per endpoint
      metadata: z.object({
        requestId: z.string().uuid(),
        timestamp: z.number().int().positive(),
-       clientVersion: z.string().regex(/^\d+\.\d+\.\d+$/)
-     })
+       clientVersion: z.string().regex(/^\d+\.\d+\.\d+$/),
+     }),
    });
    ```
 
@@ -114,19 +121,21 @@ interface Permission {
    - Header values: 4KB maximum
 
 #### 2.2.2 Rate Limiting
+
 **REQUIREMENT**: Implement tiered rate limiting:
 
-| Endpoint Category | Authenticated Users | Anonymous Users | API Keys |
-|------------------|-------------------|-----------------|----------|
-| **Authentication** | 5/min | 3/min | N/A |
-| **Graph Operations** | 60/min | 10/min | 600/min |
-| **File Upload** | 10/min | 2/min | 100/min |
-| **WebSocket Connect** | 10/min | 2/min | 60/min |
-| **Admin Operations** | 30/min | N/A | N/A |
+| Endpoint Category     | Authenticated Users | Anonymous Users | API Keys |
+| --------------------- | ------------------- | --------------- | -------- |
+| **Authentication**    | 5/min               | 3/min           | N/A      |
+| **Graph Operations**  | 60/min              | 10/min          | 600/min  |
+| **File Upload**       | 10/min              | 2/min           | 100/min  |
+| **WebSocket Connect** | 10/min              | 2/min           | 60/min   |
+| **Admin Operations**  | 30/min              | N/A             | N/A      |
 
 ### 2.3 Response Security
 
 #### 2.3.1 Security Headers
+
 **REQUIREMENT**: All API responses MUST include:
 
 ```http
@@ -141,7 +150,9 @@ X-Rate-Limit-Reset: {timestamp}
 ```
 
 #### 2.3.2 Error Handling
+
 **REQUIREMENT**: Error responses MUST NOT expose:
+
 - Internal server paths or stack traces
 - Database schema information
 - Internal service names or versions
@@ -149,6 +160,7 @@ X-Rate-Limit-Reset: {timestamp}
 - System configuration details
 
 **Standard Error Format**:
+
 ```json
 {
   "error": {
@@ -168,6 +180,7 @@ X-Rate-Limit-Reset: {timestamp}
 ### 3.1 OAuth Provider Requirements
 
 #### 3.1.1 Supported OAuth Providers
+
 **REQUIREMENT**: Only approved OAuth providers may be integrated:
 
 1. **Google OAuth 2.0**
@@ -186,6 +199,7 @@ X-Rate-Limit-Reset: {timestamp}
    - **Multi-tenant Support**: Explicit tenant allow-listing
 
 #### 3.1.2 OAuth Security Implementation
+
 **REQUIREMENT**: All OAuth integrations MUST implement:
 
 ```typescript
@@ -207,6 +221,7 @@ interface OAuthSecurityConfig {
 ### 3.2 External Service Integration
 
 #### 3.2.1 Geolocation Services
+
 **REQUIREMENT**: Location detection services MUST implement:
 
 - **Provider Diversity**: Multiple provider failover (IPGeolocation, IPStack, MaxMind)
@@ -215,6 +230,7 @@ interface OAuthSecurityConfig {
 - **Anonymization**: Location data aggregated to city-level minimum
 
 #### 3.2.2 Email Service Integration
+
 **REQUIREMENT**: Email services MUST implement:
 
 - **Template Security**: All email templates sanitized and validated
@@ -223,6 +239,7 @@ interface OAuthSecurityConfig {
 - **Tracking Prevention**: No email tracking pixels or external links
 
 #### 3.2.3 Python Execution Service
+
 **REQUIREMENT**: Python executor MUST implement:
 
 ```typescript
@@ -256,6 +273,7 @@ interface PythonExecutorSecurity {
 ### 4.1 Connection Security
 
 #### 4.1.1 PostgreSQL Security
+
 **REQUIREMENT**: PostgreSQL connections MUST implement:
 
 ```typescript
@@ -286,6 +304,7 @@ interface PostgreSQLSecurity {
 ```
 
 #### 4.1.2 Redis Security
+
 **REQUIREMENT**: Redis connections MUST implement:
 
 - **Authentication**: Strong password with AUTH command
@@ -297,14 +316,15 @@ interface PostgreSQLSecurity {
 ### 4.2 Data Classification
 
 #### 4.2.1 Data Sensitivity Levels
+
 **REQUIREMENT**: All integrated data MUST be classified:
 
-| Level | Examples | Storage Requirements | Encryption |
-|-------|----------|---------------------|------------|
-| **PUBLIC** | Documentation, public APIs | Standard security | None required |
-| **INTERNAL** | User preferences, graph metadata | Access controls | Transit only |
-| **CONFIDENTIAL** | User graphs, collaboration data | Encryption + access controls | Transit + rest |
-| **RESTRICTED** | Authentication tokens, PII | Full encryption + audit | Transit + rest + key rotation |
+| Level            | Examples                         | Storage Requirements         | Encryption                    |
+| ---------------- | -------------------------------- | ---------------------------- | ----------------------------- |
+| **PUBLIC**       | Documentation, public APIs       | Standard security            | None required                 |
+| **INTERNAL**     | User preferences, graph metadata | Access controls              | Transit only                  |
+| **CONFIDENTIAL** | User graphs, collaboration data  | Encryption + access controls | Transit + rest                |
+| **RESTRICTED**   | Authentication tokens, PII       | Full encryption + audit      | Transit + rest + key rotation |
 
 ---
 
@@ -313,6 +333,7 @@ interface PostgreSQLSecurity {
 ### 5.1 WebSocket Connection Security
 
 #### 5.1.1 Connection Requirements
+
 **REQUIREMENT**: WebSocket connections MUST implement:
 
 ```typescript
@@ -336,6 +357,7 @@ interface WebSocketSecurity {
 ```
 
 #### 5.1.2 Collaboration Security
+
 **REQUIREMENT**: Real-time collaboration MUST implement:
 
 - **Conflict Resolution**: Cryptographically secure operational transforms
@@ -350,6 +372,7 @@ interface WebSocketSecurity {
 ### 6.1 Webhook Authentication
 
 #### 6.1.1 Signature Verification
+
 **REQUIREMENT**: All incoming webhooks MUST implement:
 
 ```typescript
@@ -375,6 +398,7 @@ interface WebhookSecurity {
 ### 6.2 Outbound Webhook Security
 
 #### 6.2.1 Webhook Delivery
+
 **REQUIREMENT**: Outbound webhooks MUST implement:
 
 - **Retry Logic**: Exponential backoff with maximum 5 attempts
@@ -389,6 +413,7 @@ interface WebhookSecurity {
 ### 7.1 Security Event Detection
 
 #### 7.1.1 Monitored Events
+
 **REQUIREMENT**: The following integration events MUST be logged:
 
 ```typescript
@@ -400,36 +425,37 @@ enum IntegrationSecurityEvent {
   API_KEY_AUTHENTICATION_FAILED = 'api_key_authentication_failed',
   JWT_TOKEN_EXPIRED = 'jwt_token_expired',
   JWT_TOKEN_INVALID = 'jwt_token_invalid',
-  
+
   // Rate Limiting Events
   RATE_LIMIT_EXCEEDED = 'rate_limit_exceeded',
   SUSPICIOUS_REQUEST_PATTERN = 'suspicious_request_pattern',
-  
+
   // Integration Events
   EXTERNAL_SERVICE_FAILURE = 'external_service_failure',
   WEBHOOK_SIGNATURE_INVALID = 'webhook_signature_invalid',
   DATABASE_CONNECTION_FAILURE = 'database_connection_failure',
   WEBSOCKET_CONNECTION_REJECTED = 'websocket_connection_rejected',
-  
+
   // Security Events
   SQL_INJECTION_ATTEMPT = 'sql_injection_attempt',
   XSS_ATTEMPT = 'xss_attempt',
   PATH_TRAVERSAL_ATTEMPT = 'path_traversal_attempt',
-  UNAUTHORIZED_API_ACCESS = 'unauthorized_api_access'
+  UNAUTHORIZED_API_ACCESS = 'unauthorized_api_access',
 }
 ```
 
 ### 7.2 Incident Response
 
 #### 7.2.1 Automated Response Actions
+
 **REQUIREMENT**: The system MUST automatically respond to:
 
-| Threat Level | Event Type | Automated Action | Manual Review Required |
-|-------------|------------|------------------|----------------------|
-| **LOW** | Single failed auth | Log only | No |
-| **MEDIUM** | 5+ failed auths | Temporary account lock | Within 24h |
-| **HIGH** | Injection attempt | IP block + alert | Within 1h |
-| **CRITICAL** | Mass unauthorized access | Service isolation + alert | Immediate |
+| Threat Level | Event Type               | Automated Action          | Manual Review Required |
+| ------------ | ------------------------ | ------------------------- | ---------------------- |
+| **LOW**      | Single failed auth       | Log only                  | No                     |
+| **MEDIUM**   | 5+ failed auths          | Temporary account lock    | Within 24h             |
+| **HIGH**     | Injection attempt        | IP block + alert          | Within 1h              |
+| **CRITICAL** | Mass unauthorized access | Service isolation + alert | Immediate              |
 
 ---
 
@@ -438,6 +464,7 @@ enum IntegrationSecurityEvent {
 ### 8.1 Data Protection Regulation Compliance
 
 #### 8.1.1 GDPR Requirements
+
 **REQUIREMENT**: All integrations MUST support:
 
 - **Right to Access**: API endpoints for user data retrieval
@@ -447,6 +474,7 @@ enum IntegrationSecurityEvent {
 - **Consent Management**: Granular consent tracking for all integrations
 
 #### 8.1.2 SOC 2 Type II Requirements
+
 **REQUIREMENT**: Integration controls MUST demonstrate:
 
 - **Security**: Encryption, access controls, monitoring
@@ -462,6 +490,7 @@ enum IntegrationSecurityEvent {
 ### 9.1 Security Testing
 
 #### 9.1.1 Required Security Tests
+
 **REQUIREMENT**: All integrations MUST pass:
 
 1. **Authentication Testing**
@@ -488,6 +517,7 @@ enum IntegrationSecurityEvent {
 ### 9.2 Performance & Availability Testing
 
 #### 9.2.1 Load Testing Requirements
+
 **REQUIREMENT**: All integrations MUST handle:
 
 - **Sustained Load**: 100 requests/second for 1 hour
@@ -500,6 +530,7 @@ enum IntegrationSecurityEvent {
 ## 10. Implementation Checklist
 
 ### 10.1 Pre-Production Checklist
+
 **REQUIREMENT**: Before production deployment, verify:
 
 - [ ] **Authentication implemented**: JWT/OAuth/API key validation
@@ -514,6 +545,7 @@ enum IntegrationSecurityEvent {
 - [ ] **Documentation**: Integration security documentation complete
 
 ### 10.2 Post-Production Monitoring
+
 **REQUIREMENT**: After deployment, monitor:
 
 - [ ] **Security events**: Review security logs daily
@@ -527,11 +559,13 @@ enum IntegrationSecurityEvent {
 ## 11. Contact Information
 
 ### 11.1 Security Team Contacts
+
 - **Security Lead**: security-lead@promptscape.app
 - **Incident Response**: security-incident@promptscape.app
 - **Compliance Officer**: compliance@promptscape.app
 
 ### 11.2 Emergency Procedures
+
 - **Critical Security Incident**: Slack #security-critical or call +1-XXX-XXX-XXXX
 - **Service Outage**: Slack #engineering-alerts
 - **Compliance Violation**: Email compliance@promptscape.app

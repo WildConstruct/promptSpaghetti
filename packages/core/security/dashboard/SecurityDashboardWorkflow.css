@@ -26,13 +26,13 @@
   --security-bg-tertiary: #2a2d36;
   --security-surface: #363a47;
   --security-surface-elevated: #464a58;
-  
+
   /* Text Colors */
   --security-text-primary: #e8eaed;
   --security-text-secondary: #c3c5c8;
   --security-text-muted: #9aa0a6;
   --security-text-inverse: #202124;
-  
+
   /* Security Status Colors */
   --security-critical: #ea4335;
   --security-high: #ff6d00;
@@ -40,41 +40,41 @@
   --security-low: #34a853;
   --security-info: #1976d2;
   --security-clear: #0f9d58;
-  
+
   /* Action Colors */
   --security-approve: #34a853;
   --security-reject: #ea4335;
   --security-warning: #ff6d00;
   --security-neutral: #5f6368;
-  
+
   /* Border and Shadow */
   --security-border: #5f6368;
   --security-border-light: #80868b;
-  --security-shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
-  --security-shadow-md: 0 4px 8px rgba(0,0,0,0.6);
-  --security-shadow-lg: 0 8px 16px rgba(0,0,0,0.8);
-  
+  --security-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --security-shadow-md: 0 4px 8px rgba(0, 0, 0, 0.6);
+  --security-shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.8);
+
   /* Spacing */
   --security-space-xs: 4px;
   --security-space-sm: 8px;
   --security-space-md: 16px;
   --security-space-lg: 24px;
   --security-space-xl: 32px;
-  
+
   /* Typography */
   --security-font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --security-font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
-  
+
   /* Animations */
   --security-transition-fast: 0.15s ease-out;
   --security-transition-normal: 0.3s ease-out;
   --security-transition-slow: 0.5s ease-out;
-  
+
   /* Layout */
   --security-header-height: 64px;
   --security-sidebar-width: 280px;
   --security-content-max-width: 1400px;
-  
+
   /* Grid */
   --security-grid-gap: var(--security-space-md);
   --security-widget-border-radius: 8px;
@@ -111,8 +111,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .security-dashboard-loading p {
@@ -227,8 +231,13 @@
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
 
 .dashboard-controls {
@@ -346,17 +355,17 @@
     grid-template-columns: 2fr 1fr;
     grid-template-rows: auto auto auto;
   }
-  
+
   .security-events-widget {
     grid-column: 1 / 2;
     grid-row: 1 / 3;
   }
-  
+
   .workflow-status-widget {
     grid-column: 2 / 3;
     grid-row: 1 / 2;
   }
-  
+
   .approvals-widget {
     grid-column: 2 / 3;
     grid-row: 2 / 3;
@@ -687,45 +696,45 @@
   .dashboard-header {
     padding: 0 var(--security-space-md);
   }
-  
+
   .dashboard-title h1 {
     font-size: 18px;
   }
-  
+
   .dashboard-controls {
     flex-direction: column;
     align-items: flex-end;
     gap: var(--security-space-xs);
   }
-  
+
   .dashboard-grid {
     padding: var(--security-space-md);
     gap: var(--security-space-md);
   }
-  
+
   .widget-header {
     padding: var(--security-space-sm) var(--security-space-md);
   }
-  
+
   .widget-content {
     padding: var(--security-space-sm);
   }
-  
+
   .events-table {
     font-size: 12px;
   }
-  
+
   .events-table th,
   .events-table td {
     padding: var(--security-space-xs) var(--security-space-sm);
   }
-  
+
   .approval-item {
     flex-direction: column;
     align-items: stretch;
     gap: var(--security-space-sm);
   }
-  
+
   .approval-actions {
     justify-content: flex-end;
   }
@@ -738,35 +747,35 @@
     padding: var(--security-space-sm);
     gap: var(--security-space-sm);
   }
-  
+
   .dashboard-title {
     align-self: stretch;
     justify-content: space-between;
   }
-  
+
   .dashboard-controls {
     align-self: stretch;
     justify-content: space-between;
     flex-direction: row;
   }
-  
+
   .active-alerts-banner {
     flex-direction: column;
     gap: var(--security-space-sm);
     text-align: center;
   }
-  
-  .events-table th:nth-child(n+4),
-  .events-table td:nth-child(n+4) {
+
+  .events-table th:nth-child(n + 4),
+  .events-table td:nth-child(n + 4) {
     display: none;
   }
-  
+
   .status-overview {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--security-space-xs);
   }
-  
+
   .status-item {
     flex-direction: column;
     text-align: center;
@@ -780,7 +789,7 @@
     background: white;
     color: black;
   }
-  
+
   .dashboard-header,
   .active-alerts-banner,
   .widget-actions,
@@ -788,7 +797,7 @@
   .approval-actions {
     display: none;
   }
-  
+
   .dashboard-widget {
     break-inside: avoid;
     box-shadow: none;

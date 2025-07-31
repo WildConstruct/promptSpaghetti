@@ -12,7 +12,9 @@ const { execSync } = require('child_process');
 console.log('🧹 Starting Jest function type cleanup...');
 
 // Find all test files with the problematic pattern
-const testFiles = execSync(`find . -name "*.test.ts" -o -name "*.test.tsx" | xargs grep -l "jest\\.fn<unknown\\[\\], unknown>()"`)
+const testFiles = execSync(
+  `find . -name "*.test.ts" -o -name "*.test.tsx" | xargs grep -l "jest\\.fn<unknown\\[\\], unknown>()"`
+)
   .toString()
   .trim()
   .split('\n')
@@ -26,27 +28,26 @@ let filesProcessed = 0;
 testFiles.forEach(filePath => {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
-    
+
     // Count occurrences before replacement
     const beforeCount = (content.match(/jest\.fn<unknown\[\], unknown>\(\)/g) || []).length;
-    
+
     if (beforeCount === 0) return;
-    
+
     // Replace the pattern
     const updatedContent = content.replace(/jest\.fn<unknown\[\], unknown>\(\)/g, 'jest.fn()');
-    
+
     // Count occurrences after replacement (should be 0)
     const afterCount = (updatedContent.match(/jest\.fn<unknown\[\], unknown>\(\)/g) || []).length;
-    
+
     if (beforeCount > afterCount) {
       fs.writeFileSync(filePath, updatedContent);
       const replacements = beforeCount - afterCount;
       totalReplacements += replacements;
       filesProcessed++;
-      
+
       console.log(`✅ ${path.relative('.', filePath)}: ${replacements} replacements`);
     }
-    
   } catch (error) {
     console.error(`❌ Error processing ${filePath}:`, error.message);
   }

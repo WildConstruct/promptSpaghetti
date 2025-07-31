@@ -8,39 +8,42 @@ import {
   ConfigurationManager,
   ConfigurationPanel,
   // useConfiguration,
-  ConfigurationProvider
+  ConfigurationProvider,
 } from '../index';
 
 // Mock React DOM for demo purposes
 // declare global {
-  // namespace JSX {
-    // interface IntrinsicElements {
-      // div: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
-      // button: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
-      // h1: React.DetailedHTMLProps<React.HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;
-      // h2: React.DetailedHTMLProps<React.HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;
-      // p: React.DetailedHTMLProps<React.HTMLAttributes<HTMLParagraphElement>, HTMLParagraphElement>;
-      // pre: React.DetailedHTMLProps<React.HTMLAttributes<HTMLPreElement>, HTMLPreElement>;
-      // code: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
-    // }
-  // }
+// namespace JSX {
+// interface IntrinsicElements {
+// div: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
+// button: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
+// h1: React.DetailedHTMLProps<React.HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;
+// h2: React.DetailedHTMLProps<React.HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;
+// p: React.DetailedHTMLProps<React.HTMLAttributes<HTMLParagraphElement>, HTMLParagraphElement>;
+// pre: React.DetailedHTMLProps<React.HTMLAttributes<HTMLPreElement>, HTMLPreElement>;
+// code: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+// }
+// }
 // }
 
 /**
  * Main demo component
  */
 const ConfigurationDemo: React.FC = () => {
-  const [configManager] = useState(() => new ConfigurationManager({
-    qualityPreference: 0.7,
-    stylePreference: 'default',
-    enableOptimizations: true
-  }));
+  const [configManager] = useState(
+    () =>
+      new ConfigurationManager({
+        qualityPreference: 0.7,
+        stylePreference: 'default',
+        enableOptimizations: true,
+      })
+  );
 
   return (
     <ConfigurationProvider configManager={configManager}>
       <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
         <h1>Prompt Targeting Configuration Demo</h1>
-        
+
         <DemoTabs />
       </div>
     </ConfigurationProvider>
@@ -59,36 +62,36 @@ const DemoTabs: React.FC = () => {
       <div style={{ marginBottom: '20px', borderBottom: '1px solid #ccc' }}>
         <button
           onClick={() => setActiveTab('panel')}
-          style={{ 
-            padding: '10px 20px', 
-            border: 'none', 
+          style={{
+            padding: '10px 20px',
+            border: 'none',
             background: activeTab === 'panel' ? '#007bff' : 'transparent',
             color: activeTab === 'panel' ? 'white' : 'black',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           Configuration Panel
         </button>
         <button
           onClick={() => setActiveTab('hooks')}
-          style={{ 
-            padding: '10px 20px', 
-            border: 'none', 
+          style={{
+            padding: '10px 20px',
+            border: 'none',
             background: activeTab === 'hooks' ? '#007bff' : 'transparent',
             color: activeTab === 'hooks' ? 'white' : 'black',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           React Hooks
         </button>
         <button
           onClick={() => setActiveTab('examples')}
-          style={{ 
-            padding: '10px 20px', 
-            border: 'none', 
+          style={{
+            padding: '10px 20px',
+            border: 'none',
             background: activeTab === 'examples' ? '#007bff' : 'transparent',
             color: activeTab === 'examples' ? 'white' : 'black',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           Code Examples
@@ -113,13 +116,13 @@ const ConfigurationPanelDemo: React.FC = () => {
     <div>
       <h2>Interactive Configuration Panel</h2>
       <p>This is the full configuration UI that can be embedded in any React application:</p>
-      
+
       <ConfigurationPanel
         configManager={configManager}
-        onConfigChanged={(config) => {
+        onConfigChanged={config => {
           console.log('Configuration changed:', config);
         }}
-        onValidationResult={(result) => {
+        onValidationResult={result => {
           console.log('Validation result:', result);
         }}
       />
@@ -136,45 +139,46 @@ const ReactHooksDemo: React.FC = () => {
 
   const runHookExample = (example: string) => {
     let result = '';
-    
+
     switch (example) {
-    case 'getConfig':
-      result = JSON.stringify(configHook.config, null, 2);
-      break;
-        
-    case 'updateConfig': {
-      const updateResult = configHook.updateConfig({
-        qualityPreference: 0.9,
-        stylePreference: 'photorealistic'
-      });
-      result = `Update result: ${updateResult.valid ? 'Success' : 'Failed'}\n` +
-                 `Errors: ${updateResult.errors.length}\n` +
-                 `Warnings: ${updateResult.warnings.length}`;
-      break;
+      case 'getConfig':
+        result = JSON.stringify(configHook.config, null, 2);
+        break;
+
+      case 'updateConfig': {
+        const updateResult = configHook.updateConfig({
+          qualityPreference: 0.9,
+          stylePreference: 'photorealistic',
+        });
+        result =
+          `Update result: ${updateResult.valid ? 'Success' : 'Failed'}\n` +
+          `Errors: ${updateResult.errors.length}\n` +
+          `Warnings: ${updateResult.warnings.length}`;
+        break;
+      }
+
+      case 'setConfigValue':
+        const setResult = configHook.setConfigValue('platformOverrides.openai.temperature', 0.2);
+        result =
+          'Set temperature to 0.2\n' +
+          `Result: ${setResult.valid ? 'Success' : 'Failed'}\n` +
+          `Current value: ${configHook.getConfigValue('platformOverrides.openai.temperature')}`;
+        break;
+
+      case 'presets':
+        result = 'Available presets:\n' + configHook.presets.map(p => `- ${p.name}: ${p.description}`).join('\n');
+        break;
+
+      case 'summary':
+        const summary = configHook.getConfigSummary();
+        result = JSON.stringify(summary, null, 2);
+        break;
+
+      case 'export':
+        result = configHook.exportConfig('json');
+        break;
     }
-        
-    case 'setConfigValue':
-      const setResult = configHook.setConfigValue('platformOverrides.openai.temperature', 0.2);
-      result = 'Set temperature to 0.2\n' +
-                 `Result: ${setResult.valid ? 'Success' : 'Failed'}\n` +
-                 `Current value: ${configHook.getConfigValue('platformOverrides.openai.temperature')}`;
-      break;
-        
-    case 'presets':
-      result = 'Available presets:\n' +
-                 configHook.presets.map(p => `- ${p.name}: ${p.description}`).join('\n');
-      break;
-        
-    case 'summary':
-      const summary = configHook.getConfigSummary();
-      result = JSON.stringify(summary, null, 2);
-      break;
-        
-    case 'export':
-      result = configHook.exportConfig('json');
-      break;
-    }
-    
+
     setOutput(result);
   };
 
@@ -182,31 +186,19 @@ const ReactHooksDemo: React.FC = () => {
     <div>
       <h2>React Hooks API</h2>
       <p>Demonstration of the useConfiguration hook:</p>
-      
+
       <div style={{ display: 'flex', gap: '20px' }}>
         <div style={{ flex: 1 }}>
           <h3>Available Methods:</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <button onClick={() => runHookExample('getConfig')}>
-              Get Current Config
-            </button>
-            <button onClick={() => runHookExample('updateConfig')}>
-              Update Config (High Quality)
-            </button>
-            <button onClick={() => runHookExample('setConfigValue')}>
-              Set OpenAI Temperature
-            </button>
-            <button onClick={() => runHookExample('presets')}>
-              List Presets
-            </button>
-            <button onClick={() => runHookExample('summary')}>
-              Get Config Summary
-            </button>
-            <button onClick={() => runHookExample('export')}>
-              Export as JSON
-            </button>
+            <button onClick={() => runHookExample('getConfig')}>Get Current Config</button>
+            <button onClick={() => runHookExample('updateConfig')}>Update Config (High Quality)</button>
+            <button onClick={() => runHookExample('setConfigValue')}>Set OpenAI Temperature</button>
+            <button onClick={() => runHookExample('presets')}>List Presets</button>
+            <button onClick={() => runHookExample('summary')}>Get Config Summary</button>
+            <button onClick={() => runHookExample('export')}>Export as JSON</button>
           </div>
-          
+
           <div style={{ marginTop: '20px' }}>
             <h3>State:</h3>
             <p>Is Dirty: {configHook.isDirty ? 'Yes' : 'No'}</p>
@@ -215,18 +207,20 @@ const ReactHooksDemo: React.FC = () => {
             <p>Presets: {configHook.presets.length}</p>
           </div>
         </div>
-        
+
         <div style={{ flex: 1 }}>
           <h3>Output:</h3>
-          <pre style={{ 
-            background: '#f5f5f5', 
-            padding: '15px', 
-            border: '1px solid #ddd',
-            borderRadius: '4px',
-            overflow: 'auto',
-            maxHeight: '400px',
-            fontSize: '12px'
-          }}>
+          <pre
+            style={{
+              background: '#f5f5f5',
+              padding: '15px',
+              border: '1px solid #ddd',
+              borderRadius: '4px',
+              overflow: 'auto',
+              maxHeight: '400px',
+              fontSize: '12px',
+            }}
+          >
             {output || 'Click a button to see output...'}
           </pre>
         </div>
@@ -242,7 +236,7 @@ const CodeExamplesDemo: React.FC = () => {
   return (
     <div>
       <h2>Code Examples</h2>
-      
+
       <div style={{ marginBottom: '30px' }}>
         <h3>1. Basic Configuration Manager Usage</h3>
         <pre style={{ background: '#f8f9fa', padding: '15px', borderRadius: '4px' }}>
@@ -417,23 +411,39 @@ const useConfigurationContext = () => {
           retries: {
             maxAttempts: 3,
             backoffMs: 100,
-            retryableErrors: []
-          }
+            retryableErrors: [],
+          },
         },
         monitoring: {
           enableTiming: true,
           enableMemoryTracking: false,
           enableEvents: true,
-          enableLogging: true
+          enableLogging: true,
         },
-        customMappings: {}
+        customMappings: {},
       },
       isLoading: false,
       isDirty: false,
       validationResult: { valid: true, errors: [], warnings: [] },
       presets: [
-        { name: 'high-quality', description: 'High quality preset', tags: ['quality'], isBuiltIn: true, created: new Date(), updated: new Date(), config: {} as any },
-        { name: 'creative', description: 'Creative preset', tags: ['creative'], isBuiltIn: true, created: new Date(), updated: new Date(), config: {} as any }
+        {
+          name: 'high-quality',
+          description: 'High quality preset',
+          tags: ['quality'],
+          isBuiltIn: true,
+          created: new Date(),
+          updated: new Date(),
+          config: {} as any,
+        },
+        {
+          name: 'creative',
+          description: 'Creative preset',
+          tags: ['creative'],
+          isBuiltIn: true,
+          created: new Date(),
+          updated: new Date(),
+          config: {} as any,
+        },
       ],
       updateConfig: () => ({ valid: true, errors: [], warnings: [] }),
       setConfigValue: () => ({ valid: true, errors: [], warnings: [] }),
@@ -450,10 +460,10 @@ const useConfigurationContext = () => {
         qualityLevel: 'Medium',
         optimizationsEnabled: true,
         presetCount: 3,
-        lastUpdated: new Date()
+        lastUpdated: new Date(),
       }),
-      getConfigHistory: () => []
-    }
+      getConfigHistory: () => [],
+    },
   };
 };
 

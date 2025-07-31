@@ -29,7 +29,7 @@ describe('GraphSyncHandler', () => {
         type: 'WeightedChoice',
         position: { x: 100, y: 100 },
         data: {},
-        metadata: {}
+        metadata: {},
       });
 
       // Create sync message from user 1
@@ -70,7 +70,7 @@ describe('GraphSyncHandler', () => {
         type: 'WeightedChoice',
         position: { x: 100, y: 100 },
         data: {},
-        metadata: {}
+        metadata: {},
       });
 
       // User 2 adds node2
@@ -79,13 +79,13 @@ describe('GraphSyncHandler', () => {
         type: 'Output',
         position: { x: 200, y: 200 },
         data: {},
-        metadata: {}
+        metadata: {},
       });
 
       // Exchange updates
       const update1 = sync1.getStateAsUpdate();
       const update2 = sync2.getStateAsUpdate();
-      
+
       sync1.applyUpdate(update2);
       sync2.applyUpdate(update1);
 
@@ -100,7 +100,7 @@ describe('GraphSyncHandler', () => {
 
     test('should handle incremental updates', () => {
       const graph1 = sync1.getGraph();
-      
+
       // Get initial state vector from user 2
       const initialVector = sync2.getStateVector();
 
@@ -110,7 +110,7 @@ describe('GraphSyncHandler', () => {
         type: 'WeightedChoice',
         position: { x: 100, y: 100 },
         data: {},
-        metadata: {}
+        metadata: {},
       });
 
       graph1.addNode({
@@ -118,7 +118,7 @@ describe('GraphSyncHandler', () => {
         type: 'Output',
         position: { x: 200, y: 200 },
         data: {},
-        metadata: {}
+        metadata: {},
       });
 
       graph1.addEdge({
@@ -127,12 +127,12 @@ describe('GraphSyncHandler', () => {
         target: 'node2',
         sourceHandle: 'output',
         targetHandle: 'input',
-        metadata: {}
+        metadata: {},
       });
 
       // Get diff update from initial state
       const diffUpdate = sync1.getDiffUpdate(initialVector);
-      
+
       // Apply to user 2
       sync2.applyUpdate(diffUpdate);
 
@@ -151,11 +151,11 @@ describe('GraphSyncHandler', () => {
         selection: ['node1'],
         color: '#ff0000',
         name: 'User 1',
-        timestamp: Date.now()
+        timestamp: Date.now(),
       };
 
       sync1.setLocalPresence(presence1);
-      
+
       const awareness = sync1.getAwareness();
       expect(awareness.size).toBe(1);
       expect(awareness.get('user1')).toBeTruthy();
@@ -169,24 +169,24 @@ describe('GraphSyncHandler', () => {
         selection: ['node2'],
         color: '#00ff00',
         name: 'User 2',
-        timestamp: Date.now()
+        timestamp: Date.now(),
       };
 
       sync1.updateAwareness('user2', presence2);
-      
+
       const awareness = sync1.getAwareness();
       expect(awareness.size).toBe(1);
       expect(awareness.get('user2')?.name).toBe('User 2');
     });
 
-    test('should clean up stale presence', (done) => {
+    test('should clean up stale presence', done => {
       const oldPresence: UserPresence = {
         userId: 'user3',
         cursor: undefined,
         selection: [],
         color: '#0000ff',
         name: 'User 3',
-        timestamp: Date.now() - 35000 // 35 seconds ago
+        timestamp: Date.now() - 35000, // 35 seconds ago
       };
 
       const currentPresence: UserPresence = {
@@ -195,7 +195,7 @@ describe('GraphSyncHandler', () => {
         selection: [],
         color: '#00ff00',
         name: 'User 2',
-        timestamp: Date.now()
+        timestamp: Date.now(),
       };
 
       sync1.updateAwareness('user3', oldPresence);
@@ -206,12 +206,12 @@ describe('GraphSyncHandler', () => {
       expect(awareness.size).toBe(1);
       expect(awareness.has('user3')).toBe(false);
       expect(awareness.has('user2')).toBe(true);
-      
+
       done();
     });
 
-    test('should notify awareness changes', (done) => {
-      sync1.onAwarenessChange((awareness) => {
+    test('should notify awareness changes', done => {
+      sync1.onAwarenessChange(awareness => {
         expect(awareness.size).toBe(1);
         expect(awareness.get('user2')).toBeTruthy();
         done();
@@ -223,7 +223,7 @@ describe('GraphSyncHandler', () => {
         selection: [],
         color: '#00ff00',
         name: 'User 2',
-        timestamp: Date.now()
+        timestamp: Date.now(),
       };
 
       sync1.updateAwareness('user2', presence);
@@ -233,14 +233,14 @@ describe('GraphSyncHandler', () => {
   describe('Snapshots', () => {
     test('should create and restore from snapshot', () => {
       const graph1 = sync1.getGraph();
-      
+
       // Add some content
       graph1.addNode({
         id: 'node1',
         type: 'WeightedChoice',
         position: { x: 100, y: 100 },
         data: { choices: ['A', 'B', 'C'] },
-        metadata: {}
+        metadata: {},
       });
 
       graph1.addNode({
@@ -248,7 +248,7 @@ describe('GraphSyncHandler', () => {
         type: 'Output',
         position: { x: 200, y: 200 },
         data: {},
-        metadata: {}
+        metadata: {},
       });
 
       // Create snapshot
@@ -279,7 +279,7 @@ describe('GraphSyncHandler', () => {
 
     test('should calculate document size', () => {
       const graph1 = sync1.getGraph();
-      
+
       // Empty document should have minimal size
       const initialSize = sync1.getDocumentSize();
       expect(initialSize).toBeGreaterThan(0);
@@ -291,7 +291,7 @@ describe('GraphSyncHandler', () => {
           type: 'WeightedChoice',
           position: { x: i * 100, y: i * 100 },
           data: { choices: ['Option A', 'Option B', 'Option C'] },
-          metadata: { description: 'This is a test node with some metadata' }
+          metadata: { description: 'This is a test node with some metadata' },
         });
       }
 
@@ -302,27 +302,27 @@ describe('GraphSyncHandler', () => {
   });
 
   describe('Update Notifications', () => {
-    test('should notify on document updates', (done) => {
+    test('should notify on document updates', done => {
       let updateCount = 0;
-      
+
       sync1.onDocumentUpdate((update, origin) => {
         updateCount++;
         expect(update).toBeDefined();
         expect(update.length).toBeGreaterThan(0);
-        
+
         if (updateCount === 2) {
           done();
         }
       });
 
       const graph1 = sync1.getGraph();
-      
+
       graph1.addNode({
         id: 'node1',
         type: 'WeightedChoice',
         position: { x: 100, y: 100 },
         data: {},
-        metadata: {}
+        metadata: {},
       });
 
       graph1.updateNode('node1', { position: { x: 200, y: 200 } });

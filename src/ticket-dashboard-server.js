@@ -2,7 +2,7 @@
 
 /**
  * Ticketing System Dashboard Server
- * 
+ *
  * Serves the Visual Ticket Dashboard with integrated Epic completion tracking
  * Access: http://localhost:8080
  */
@@ -1042,7 +1042,7 @@ function handleDashboard(req, res) {
 </body>
 </html>
   `;
-  
+
   res.writeHead(200, { 'Content-Type': 'text/html' });
   res.end(dashboardHTML);
 }

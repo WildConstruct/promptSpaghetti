@@ -2,7 +2,7 @@
 
 /**
  * Developer Environment Setup Script
- * 
+ *
  * Sets up the comprehensive quality infrastructure and development workflow
  * for new developers joining the project.
  */
@@ -20,7 +20,7 @@ const colors = {
   blue: '\x1b[34m',
   magenta: '\x1b[35m',
   cyan: '\x1b[36m',
-  bold: '\x1b[1m'
+  bold: '\x1b[1m',
 };
 
 class DeveloperEnvironmentSetup {
@@ -59,10 +59,9 @@ class DeveloperEnvironmentSetup {
       await this.setupGitHooks();
       await this.runInitialQualityCheck();
       await this.createDeveloperGuide();
-      
+
       this.logHeader('Setup Complete!');
       this.showNextSteps();
-      
     } catch (error) {
       this.log(`❌ Setup failed: ${error.message}`, 'red');
       process.exit(1);
@@ -75,7 +74,7 @@ class DeveloperEnvironmentSetup {
     const prerequisites = [
       { name: 'Node.js', command: 'node --version', minVersion: '18.0.0' },
       { name: 'pnpm', command: 'pnpm --version', minVersion: '8.0.0' },
-      { name: 'git', command: 'git --version', minVersion: '2.0.0' }
+      { name: 'git', command: 'git --version', minVersion: '2.0.0' },
     ];
 
     for (const prereq of prerequisites) {
@@ -105,7 +104,7 @@ class DeveloperEnvironmentSetup {
       'scripts',
       '.githooks',
       'docs/testing',
-      'coverage-reports'
+      'coverage-reports',
     ];
 
     directories.forEach(dir => {
@@ -136,7 +135,7 @@ class DeveloperEnvironmentSetup {
       '@typescript-eslint/parser',
       'prettier',
       'husky',
-      'lint-staged'
+      'lint-staged',
     ];
 
     this.logStep('Checking development dependencies...', 'info');
@@ -144,7 +143,7 @@ class DeveloperEnvironmentSetup {
     const existingDevDeps = packageJson.devDependencies || {};
 
     const missingDeps = devDependencies.filter(dep => !existingDevDeps[dep]);
-    
+
     if (missingDeps.length > 0) {
       this.logStep(`Installing missing dev dependencies: ${missingDeps.join(', ')}`, 'info');
       try {
@@ -165,7 +164,7 @@ class DeveloperEnvironmentSetup {
       'client/src/utils/performanceMonitor.ts',
       'client/src/utils/memoryOptimization.ts',
       'client/src/utils/__tests__/testRunner.ts',
-      'scripts/dev-quality-check.js'
+      'scripts/dev-quality-check.js',
     ];
 
     let missingFiles = [];
@@ -237,7 +236,7 @@ class DeveloperEnvironmentSetup {
     try {
       const output = execSync('node scripts/dev-quality-check.js', { encoding: 'utf8' });
       this.logStep('Initial quality check completed', 'success');
-      
+
       // Parse and display summary
       const lines = output.split('\n');
       const summaryStart = lines.findIndex(line => line.includes('Overall:'));
@@ -359,19 +358,19 @@ Happy coding! 🎉
     this.log('   2. Run `pnpm dev` to start development servers', 'blue');
     this.log('   3. Run `node scripts/dev-quality-check.js` to validate your setup', 'blue');
     this.log('   4. Make your first commit to see quality gates in action', 'blue');
-    
+
     this.log('\n🛡️ Quality Infrastructure Active:', 'cyan');
     this.log('   ✅ Pre-commit hooks configured', 'green');
     this.log('   ✅ CI/CD quality gates ready', 'green');
     this.log('   ✅ Comprehensive testing suite available', 'green');
     this.log('   ✅ Security, performance, and memory optimization utilities ready', 'green');
-    
+
     this.log('\n📚 Resources:', 'cyan');
     this.log('   📖 Developer Guide: DEVELOPER_GUIDE.md', 'blue');
     this.log('   🧪 Testing Docs: docs/testing/quality-improvements-testing.md', 'blue');
     this.log('   🔧 Quality Check: node scripts/dev-quality-check.js', 'blue');
     this.log('   🚀 Start Development: pnpm dev', 'blue');
-    
+
     this.log('\n✨ Happy coding!', 'magenta');
   }
 }
@@ -379,7 +378,7 @@ Happy coding! 🎉
 // CLI execution
 if (require.main === module) {
   const setup = new DeveloperEnvironmentSetup();
-  
+
   // Handle command line arguments
   const args = process.argv.slice(2);
   if (args.includes('--help') || args.includes('-h')) {
@@ -407,7 +406,7 @@ enterprise-grade quality assurance built in.
 `);
     process.exit(0);
   }
-  
+
   setup.run().catch(error => {
     console.error('Setup failed:', error);
     process.exit(1);

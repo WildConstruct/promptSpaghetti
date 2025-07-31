@@ -22,27 +22,17 @@ export const ResponsiveButton: React.FC<ResponsiveButtonProps> = ({
   children,
   ...props
 }) => {
-  const responsiveSize = useBreakpointValue(
-    typeof size === 'object' ? size : { xs: size },
-    'md'
-  );
-  
-  const responsiveFullWidth = useBreakpointValue(
-    typeof fullWidth === 'object' ? fullWidth : { xs: fullWidth },
-    false
-  );
-  
+  const responsiveSize = useBreakpointValue(typeof size === 'object' ? size : { xs: size }, 'md');
+
+  const responsiveFullWidth = useBreakpointValue(typeof fullWidth === 'object' ? fullWidth : { xs: fullWidth }, false);
+
   const { isMobile, isTouch } = useDeviceDetection();
-  
+
   // Adjust for touch devices
   const touchSize = isTouch && responsiveSize === 'sm' ? 'md' : responsiveSize;
-  
+
   return (
-    <Button
-      {...props}
-      size={touchSize}
-      fullWidth={responsiveFullWidth}
-    >
+    <Button {...props} size={touchSize} fullWidth={responsiveFullWidth}>
       {children}
     </Button>
   );

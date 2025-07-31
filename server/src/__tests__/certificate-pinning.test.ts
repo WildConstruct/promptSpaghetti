@@ -4,12 +4,12 @@
  * Epic 19: Authentication Enhancement & Security Hardening
  */
 
-import { 
+import {
   CertificatePinningManager,
   CertificatePin,
   createDevelopmentPinConfig,
   createProductionPinConfig,
-  loadPinConfigFromEnv
+  loadPinConfigFromEnv,
 } from '../security/tls-config';
 import crypto from 'crypto';
 import tls from 'tls';
@@ -17,7 +17,7 @@ import https from 'https';
 
 describe('Certificate Pinning', () => {
   let pinningManager: CertificatePinningManager;
-  
+
   beforeEach(() => {
     pinningManager = new CertificatePinningManager(createDevelopmentPinConfig());
   });
@@ -42,7 +42,7 @@ describe('Certificate Pinning', () => {
         type: 'sha256',
         value: 'test-pin-value',
         description: 'Test pin',
-        createdAt: new Date()
+        createdAt: new Date(),
       };
 
       pinningManager.addPin('test.example.com', testPin);
@@ -75,7 +75,7 @@ describe('Certificate Pinning', () => {
 
     it('should validate OAuth provider pins are configured', () => {
       const config = pinningManager.getConfig();
-      
+
       // Verify Google OAuth pins
       expect(config.pins['oauth2.googleapis.com']).toBeDefined();
       expect(config.pins['oauth2.googleapis.com'].length).toBeGreaterThan(0);
@@ -98,7 +98,7 @@ describe('Certificate Pinning', () => {
         value: 'expired-pin',
         description: 'Expired test pin',
         createdAt: new Date('2024-01-01'),
-        expiresAt: new Date('2024-06-01') // Already expired
+        expiresAt: new Date('2024-06-01'), // Already expired
       };
 
       pinningManager.addPin('test.example.com', expiredPin);
@@ -129,7 +129,7 @@ describe('Certificate Pinning', () => {
         type: 'sha256',
         value: 'KwccWaCgrnaw6tsrrSO61FgLacNgG2MMLq8GE6+oP5I=',
         description: 'SHA256 test pin',
-        createdAt: new Date()
+        createdAt: new Date(),
       };
 
       expect(sha256Pin.type).toBe('sha256');
@@ -141,7 +141,7 @@ describe('Certificate Pinning', () => {
         type: 'sha1',
         value: 'uUwZgwDOxcBXrQcntwu+kYFpkiVkOaezL0WYEZ3anJc=',
         description: 'SHA1 test pin',
-        createdAt: new Date()
+        createdAt: new Date(),
       };
 
       expect(sha1Pin.type).toBe('sha1');
@@ -153,7 +153,7 @@ describe('Certificate Pinning', () => {
         type: 'spki',
         value: 'FEzVOUp4dF3gI0ZVPRJhFbsd5E9tpuQdnee2qMBn/bU=',
         description: 'SPKI test pin',
-        createdAt: new Date()
+        createdAt: new Date(),
       };
 
       expect(spkiPin.type).toBe('spki');
@@ -165,7 +165,7 @@ describe('Certificate Pinning', () => {
         type: 'subject',
         value: 'CN=example.com,O=Example Corp,C=US',
         description: 'Subject test pin',
-        createdAt: new Date()
+        createdAt: new Date(),
       };
 
       expect(subjectPin.type).toBe('subject');
@@ -217,15 +217,15 @@ describe('Certificate Pinning', () => {
   describe('Pin Validation Logic', () => {
     it('should allow connections when pinning is disabled', async () => {
       const disabledManager = new CertificatePinningManager({ enabled: false });
-      
+
       // Create a mock certificate
       const mockCert = new crypto.X509Certificate(
         '-----BEGIN CERTIFICATE-----\n' +
-        'MIIC+DCCAeCgAwIBAgIJAKmXVAOA4Xg2MA0GCSqGSIb3DQEBCwUAMBQxEjAQBgNV\n' +
-        'BAMMCWxvY2FsaG9zdDAeFw0yNTAxMDEwMDAwMDBaFw0yNjAxMDEwMDAwMDBaMBQx\n' +
-        'EjAQBgNVBAMMCWxvY2FsaG9zdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC\n' +
-        'ggEBAK8/8dQMXa2Xm4o5vZ9+Xf5QzNmKaLl2eT8c6M8vR4qF2s1h7VzB3fV6k9L\n' +
-        '-----END CERTIFICATE-----'
+          'MIIC+DCCAeCgAwIBAgIJAKmXVAOA4Xg2MA0GCSqGSIb3DQEBCwUAMBQxEjAQBgNV\n' +
+          'BAMMCWxvY2FsaG9zdDAeFw0yNTAxMDEwMDAwMDBaFw0yNjAxMDEwMDAwMDBaMBQx\n' +
+          'EjAQBgNVBAMMCWxvY2FsaG9zdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC\n' +
+          'ggEBAK8/8dQMXa2Xm4o5vZ9+Xf5QzNmKaLl2eT8c6M8vR4qF2s1h7VzB3fV6k9L\n' +
+          '-----END CERTIFICATE-----'
       );
 
       const result = await disabledManager.validateCertificatePin('test.example.com', mockCert);
@@ -235,15 +235,15 @@ describe('Certificate Pinning', () => {
 
     it('should allow connections for unpinned domains', async () => {
       const enabledManager = new CertificatePinningManager({ enabled: true });
-      
+
       // Create a mock certificate
       const mockCert = new crypto.X509Certificate(
         '-----BEGIN CERTIFICATE-----\n' +
-        'MIIC+DCCAeCgAwIBAgIJAKmXVAOA4Xg2MA0GCSqGSIb3DQEBCwUAMBQxEjAQBgNV\n' +
-        'BAMMCWxvY2FsaG9zdDAeFw0yNTAxMDEwMDAwMDBaFw0yNjAxMDEwMDAwMDBaMBQx\n' +
-        'EjAQBgNVBAMMCWxvY2FsaG9zdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC\n' +
-        'ggEBAK8/8dQMXa2Xm4o5vZ9+Xf5QzNmKaLl2eT8c6M8vR4qF2s1h7VzB3fV6k9L\n' +
-        '-----END CERTIFICATE-----'
+          'MIIC+DCCAeCgAwIBAgIJAKmXVAOA4Xg2MA0GCSqGSIb3DQEBCwUAMBQxEjAQBgNV\n' +
+          'BAMMCWxvY2FsaG9zdDAeFw0yNTAxMDEwMDAwMDBaFw0yNjAxMDEwMDAwMDBaMBQx\n' +
+          'EjAQBgNVBAMMCWxvY2FsaG9zdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC\n' +
+          'ggEBAK8/8dQMXa2Xm4o5vZ9+Xf5QzNmKaLl2eT8c6M8vR4qF2s1h7VzB3fV6k9L\n' +
+          '-----END CERTIFICATE-----'
       );
 
       const result = await enabledManager.validateCertificatePin('unpinned.example.com', mockCert);
@@ -256,22 +256,22 @@ describe('Certificate Pinning', () => {
     it('should cache validation results', async () => {
       const mockCert = new crypto.X509Certificate(
         '-----BEGIN CERTIFICATE-----\n' +
-        'MIIC+DCCAeCgAwIBAgIJAKmXVAOA4Xg2MA0GCSqGSIb3DQEBCwUAMBQxEjAQBgNV\n' +
-        'BAMMCWxvY2FsaG9zdDAeFw0yNTAxMDEwMDAwMDBaFw0yNjAxMDEwMDAwMDBaMBQx\n' +
-        'EjAQBgNVBAMMCWxvY2FsaG9zdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC\n' +
-        'ggEBAK8/8dQMXa2Xm4o5vZ9+Xf5QzNmKaLl2eT8c6M8vR4qF2s1h7VzB3fV6k9L\n' +
-        '-----END CERTIFICATE-----'
+          'MIIC+DCCAeCgAwIBAgIJAKmXVAOA4Xg2MA0GCSqGSIb3DQEBCwUAMBQxEjAQBgNV\n' +
+          'BAMMCWxvY2FsaG9zdDAeFw0yNTAxMDEwMDAwMDBaFw0yNjAxMDEwMDAwMDBaMBQx\n' +
+          'EjAQBgNVBAMMCWxvY2FsaG9zdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC\n' +
+          'ggEBAK8/8dQMXa2Xm4o5vZ9+Xf5QzNmKaLl2eT8c6M8vR4qF2s1h7VzB3fV6k9L\n' +
+          '-----END CERTIFICATE-----'
       );
 
       // First validation
       await pinningManager.validateCertificatePin('test.example.com', mockCert);
-      
+
       const statsAfterFirst = pinningManager.getStatistics();
       expect(statsAfterFirst.cacheSize).toBe(1);
 
       // Second validation should use cache
       await pinningManager.validateCertificatePin('test.example.com', mockCert);
-      
+
       const statsAfterSecond = pinningManager.getStatistics();
       expect(statsAfterSecond.cacheSize).toBe(1); // Still only 1 entry
     });
@@ -286,7 +286,7 @@ describe('Certificate Pinning', () => {
   describe('Security Features', () => {
     it('should have pre-configured pins for major OAuth providers', () => {
       const config = pinningManager.getConfig();
-      
+
       // Test that all major OAuth providers have pins
       const requiredProviders = [
         'oauth2.googleapis.com',
@@ -294,13 +294,13 @@ describe('Certificate Pinning', () => {
         'github.com',
         'api.github.com',
         'login.microsoftonline.com',
-        'graph.microsoft.com'
+        'graph.microsoft.com',
       ];
 
       for (const provider of requiredProviders) {
         expect(config.pins[provider]).toBeDefined();
         expect(config.pins[provider].length).toBeGreaterThan(0);
-        
+
         // Check that each pin has required properties
         for (const pin of config.pins[provider]) {
           expect(pin.type).toMatch(/^(sha256|sha1|spki|subject)$/);
@@ -327,7 +327,7 @@ describe('Certificate Pinning', () => {
 
     it('should support pin expiration', () => {
       const config = pinningManager.getConfig();
-      
+
       // Check that some pins have expiration dates
       for (const [hostname, pins] of Object.entries(config.pins)) {
         for (const pin of pins) {

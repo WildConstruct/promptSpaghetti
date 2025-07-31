@@ -7,21 +7,25 @@ This document defines the user experience and technical requirements for Multi-F
 ## Design Principles
 
 ### 1. **Security First**
+
 - Multiple authentication factors available
 - Secure by default with optional convenience features
 - Protection against common attack vectors
 
 ### 2. **User Experience Priority**
+
 - Minimize friction during enrollment
 - Clear, actionable instructions
 - Progressive enhancement based on user comfort level
 
 ### 3. **Flexibility & Choice**
+
 - Multiple MFA method options
 - User preference storage
 - Graceful degradation for unsupported methods
 
 ### 4. **Accessibility & Inclusion**
+
 - Mobile-first responsive design
 - Support for assistive technologies
 - Alternative methods for users with disabilities
@@ -29,6 +33,7 @@ This document defines the user experience and technical requirements for Multi-F
 ## MFA Method Hierarchy
 
 ### Tier 1: Recommended (Most Secure)
+
 1. **TOTP Authenticator Apps**
    - Google Authenticator, Microsoft Authenticator, Authy
    - Offline capability, no network dependency
@@ -40,12 +45,14 @@ This document defines the user experience and technical requirements for Multi-F
    - Real-time fraud detection
 
 ### Tier 2: Standard (Balanced Security/UX)
+
 3. **SMS Verification**
    - Universal mobile phone support
    - Built-in fraud detection with CAPTCHA
    - Rate limiting: 1 request/30 seconds with exponential backoff
 
 ### Tier 3: Backup (Convenience Factor)
+
 4. **Email Verification**
    - Widely accessible
    - Considered least secure option
@@ -54,6 +61,7 @@ This document defines the user experience and technical requirements for Multi-F
 ## Enrollment Flow Design
 
 ### Phase 1: Pre-Enrollment Assessment
+
 ```
 1. User Profile Analysis
    ├── Device Capabilities Assessment
@@ -71,6 +79,7 @@ This document defines the user experience and technical requirements for Multi-F
 ```
 
 ### Phase 2: Method Selection & Education
+
 ```
 User Journey: Method Selection
 ┌─────────────────────────────────────┐
@@ -103,14 +112,15 @@ User Journey: Method Selection
 ### Phase 3: TOTP Authenticator Enrollment
 
 #### Step 1: App Installation Guidance
+
 ```html
 <div class="enrollment-step">
   <h3>📱 Install an Authenticator App</h3>
   <p>Choose one of these recommended apps:</p>
-  
+
   <div class="app-options">
     <div class="app-card recommended">
-      <img src="microsoft-auth-icon.png" alt="Microsoft Authenticator">
+      <img src="microsoft-auth-icon.png" alt="Microsoft Authenticator" />
       <h4>Microsoft Authenticator</h4>
       <p>Supports push notifications</p>
       <div class="download-links">
@@ -118,9 +128,9 @@ User Journey: Method Selection
         <a href="play-store-link" class="btn-download">🤖 Android</a>
       </div>
     </div>
-    
+
     <div class="app-card">
-      <img src="google-auth-icon.png" alt="Google Authenticator">
+      <img src="google-auth-icon.png" alt="Google Authenticator" />
       <h4>Google Authenticator</h4>
       <p>Simple and reliable</p>
       <div class="download-links">
@@ -129,7 +139,7 @@ User Journey: Method Selection
       </div>
     </div>
   </div>
-  
+
   <div class="installation-help">
     <details>
       <summary>Need help installing?</summary>
@@ -141,7 +151,7 @@ User Journey: Method Selection
       </ol>
     </details>
   </div>
-  
+
   <div class="step-actions">
     <button id="app-installed-btn" class="btn-primary">✅ App Installed</button>
     <button id="different-method-btn" class="btn-secondary">Use Different Method</button>
@@ -150,10 +160,11 @@ User Journey: Method Selection
 ```
 
 #### Step 2: QR Code Setup
+
 ```html
 <div class="enrollment-step">
   <h3>🔗 Connect Your Authenticator App</h3>
-  
+
   <div class="qr-setup-container">
     <div class="qr-code-section">
       <div class="qr-code-display">
@@ -163,7 +174,7 @@ User Journey: Method Selection
         </p>
       </div>
     </div>
-    
+
     <div class="qr-instructions">
       <h4>In your authenticator app:</h4>
       <ol class="step-list">
@@ -186,7 +197,7 @@ User Journey: Method Selection
       </ol>
     </div>
   </div>
-  
+
   <div class="manual-entry-option">
     <details>
       <summary>Can't scan? Enter manually</summary>
@@ -200,7 +211,7 @@ User Journey: Method Selection
       </div>
     </details>
   </div>
-  
+
   <div class="step-actions">
     <button id="qr-scanned-btn" class="btn-primary">✅ QR Code Scanned</button>
     <button id="need-help-btn" class="btn-secondary">❓ Need Help</button>
@@ -209,40 +220,39 @@ User Journey: Method Selection
 ```
 
 #### Step 3: Verification Test
+
 ```html
 <div class="enrollment-step">
   <h3>🔐 Test Your Setup</h3>
-  
+
   <div class="verification-test">
-    <p class="instruction">
-      Open your authenticator app and enter the 6-digit code for <strong>YourApp</strong>:
-    </p>
-    
+    <p class="instruction">Open your authenticator app and enter the 6-digit code for <strong>YourApp</strong>:</p>
+
     <div class="code-input-container">
       <div class="code-input-group">
-        <input type="text" 
-               id="verification-code" 
-               class="code-input" 
-               maxlength="6" 
-               pattern="[0-9]{6}"
-               placeholder="000000"
-               autocomplete="one-time-code">
+        <input
+          type="text"
+          id="verification-code"
+          class="code-input"
+          maxlength="6"
+          pattern="[0-9]{6}"
+          placeholder="000000"
+          autocomplete="one-time-code"
+        />
         <label for="verification-code" class="sr-only">6-digit verification code</label>
       </div>
-      
+
       <div class="input-help">
         <p class="help-text">Enter the 6-digit number from your app</p>
-        <div class="code-refresh-timer">
-          Code refreshes in: <span id="refresh-timer">25</span>s
-        </div>
+        <div class="code-refresh-timer">Code refreshes in: <span id="refresh-timer">25</span>s</div>
       </div>
     </div>
-    
+
     <div class="verification-status" id="verification-status">
       <!-- Success/Error messages appear here -->
     </div>
   </div>
-  
+
   <div class="step-actions">
     <button id="verify-code-btn" class="btn-primary">✅ Verify Code</button>
     <button id="rescan-qr-btn" class="btn-secondary">🔄 Re-scan QR Code</button>
@@ -255,13 +265,11 @@ User Journey: Method Selection
 ```html
 <div class="enrollment-step">
   <h3>📲 SMS Verification Setup</h3>
-  
+
   <div class="sms-setup-container">
     <div class="phone-input-section">
-      <label for="phone-number" class="input-label">
-        📱 Enter Your Mobile Number
-      </label>
-      
+      <label for="phone-number" class="input-label"> 📱 Enter Your Mobile Number </label>
+
       <div class="phone-input-group">
         <select id="country-code" class="country-select">
           <option value="+1">🇺🇸 +1</option>
@@ -269,32 +277,26 @@ User Journey: Method Selection
           <option value="+33">🇫🇷 +33</option>
           <!-- More country codes -->
         </select>
-        
-        <input type="tel" 
-               id="phone-number" 
-               class="phone-input"
-               placeholder="(555) 123-4567"
-               autocomplete="tel">
+
+        <input type="tel" id="phone-number" class="phone-input" placeholder="(555) 123-4567" autocomplete="tel" />
       </div>
-      
+
       <div class="input-help">
-        <p class="help-text">
-          We'll send a verification code to this number
-        </p>
-        <p class="security-notice">
-          ⚠️ SMS is less secure than authenticator apps
-        </p>
+        <p class="help-text">We'll send a verification code to this number</p>
+        <p class="security-notice">⚠️ SMS is less secure than authenticator apps</p>
       </div>
     </div>
-    
+
     <div class="fraud-protection-notice">
       <div class="notice-card">
         <h4>🛡️ Fraud Protection Active</h4>
-        <p>We automatically detect suspicious activity. You may be asked to complete a CAPTCHA if fraud is suspected.</p>
+        <p>
+          We automatically detect suspicious activity. You may be asked to complete a CAPTCHA if fraud is suspected.
+        </p>
       </div>
     </div>
   </div>
-  
+
   <div class="step-actions">
     <button id="send-sms-btn" class="btn-primary">📤 Send Verification Code</button>
     <button id="different-method-btn" class="btn-secondary">Use Different Method</button>
@@ -307,38 +309,33 @@ User Journey: Method Selection
 ```html
 <div class="enrollment-step">
   <h3>📧 Email Verification Setup</h3>
-  
+
   <div class="email-setup-container">
     <div class="email-security-warning">
       <div class="warning-card">
         <h4>⚠️ Security Notice</h4>
-        <p>Email verification is the least secure MFA option. We recommend using an authenticator app for better protection.</p>
+        <p>
+          Email verification is the least secure MFA option. We recommend using an authenticator app for better
+          protection.
+        </p>
         <p><strong>Important:</strong> Make sure your email account has strong security (including its own MFA).</p>
       </div>
     </div>
-    
+
     <div class="email-input-section">
-      <label for="email-address" class="input-label">
-        📧 Confirm Your Email Address
-      </label>
-      
+      <label for="email-address" class="input-label"> 📧 Confirm Your Email Address </label>
+
       <div class="email-input-group">
-        <input type="email" 
-               id="email-address" 
-               class="email-input"
-               value="user@example.com"
-               readonly>
+        <input type="email" id="email-address" class="email-input" value="user@example.com" readonly />
         <button id="change-email-btn" class="btn-link">✏️ Change</button>
       </div>
-      
+
       <div class="input-help">
-        <p class="help-text">
-          Verification codes will be sent to this email address
-        </p>
+        <p class="help-text">Verification codes will be sent to this email address</p>
       </div>
     </div>
   </div>
-  
+
   <div class="step-actions">
     <button id="setup-email-mfa-btn" class="btn-primary">📤 Set Up Email MFA</button>
     <button id="upgrade-security-btn" class="btn-recommended">🔒 Use Authenticator Instead</button>
@@ -351,18 +348,16 @@ User Journey: Method Selection
 ```html
 <div class="enrollment-step">
   <h3>🔑 Set Up Account Recovery</h3>
-  
+
   <div class="recovery-setup-container">
     <div class="recovery-intro">
-      <p class="section-description">
-        Choose backup methods in case you lose access to your primary MFA method:
-      </p>
+      <p class="section-description">Choose backup methods in case you lose access to your primary MFA method:</p>
     </div>
-    
+
     <div class="recovery-options">
       <div class="recovery-option">
         <label class="option-card">
-          <input type="checkbox" name="recovery-method" value="recovery-codes">
+          <input type="checkbox" name="recovery-method" value="recovery-codes" />
           <div class="option-content">
             <h4>🎫 Recovery Codes</h4>
             <p>One-time backup codes you can save securely</p>
@@ -370,20 +365,20 @@ User Journey: Method Selection
           </div>
         </label>
       </div>
-      
+
       <div class="recovery-option">
         <label class="option-card">
-          <input type="checkbox" name="recovery-method" value="backup-email">
+          <input type="checkbox" name="recovery-method" value="backup-email" />
           <div class="option-content">
             <h4>📨 Backup Email</h4>
             <p>Different email address for recovery</p>
           </div>
         </label>
       </div>
-      
+
       <div class="recovery-option">
         <label class="option-card">
-          <input type="checkbox" name="recovery-method" value="backup-phone">
+          <input type="checkbox" name="recovery-method" value="backup-phone" />
           <div class="option-content">
             <h4>📞 Backup Phone</h4>
             <p>Alternative phone number for SMS</p>
@@ -391,12 +386,12 @@ User Journey: Method Selection
         </label>
       </div>
     </div>
-    
+
     <div class="recovery-method-details" id="recovery-details">
       <!-- Dynamic content based on selections -->
     </div>
   </div>
-  
+
   <div class="step-actions">
     <button id="setup-recovery-btn" class="btn-primary">✅ Set Up Recovery</button>
     <button id="skip-recovery-btn" class="btn-secondary">⏭️ Skip for Now</button>
@@ -413,7 +408,7 @@ User Journey: Method Selection
     <h2>MFA Setup Complete!</h2>
     <p class="success-message">Your account is now more secure with multi-factor authentication.</p>
   </div>
-  
+
   <div class="setup-summary">
     <h3>Your Security Setup:</h3>
     <div class="security-methods">
@@ -425,7 +420,7 @@ User Journey: Method Selection
         </div>
         <span class="method-status">✅ Active</span>
       </div>
-      
+
       <div class="method-item backup">
         <span class="method-icon">🎫</span>
         <div class="method-details">
@@ -436,7 +431,7 @@ User Journey: Method Selection
       </div>
     </div>
   </div>
-  
+
   <div class="next-steps">
     <h3>Next Steps:</h3>
     <div class="action-cards">
@@ -445,13 +440,13 @@ User Journey: Method Selection
         <p>Download and securely store your backup codes</p>
         <button class="btn-action">Download Codes</button>
       </div>
-      
+
       <div class="action-card">
         <h4>🧪 Test Your Setup</h4>
         <p>Try logging out and back in to test MFA</p>
         <button class="btn-action">Test Login</button>
       </div>
-      
+
       <div class="action-card">
         <h4>⚙️ Manage Settings</h4>
         <p>Add additional methods or change preferences</p>
@@ -459,7 +454,7 @@ User Journey: Method Selection
       </div>
     </div>
   </div>
-  
+
   <div class="completion-actions">
     <button id="continue-to-app-btn" class="btn-primary">🚀 Continue to App</button>
     <button id="security-settings-btn" class="btn-secondary">⚙️ Security Settings</button>
@@ -470,6 +465,7 @@ User Journey: Method Selection
 ## Mobile-First Responsive Design
 
 ### Breakpoint Strategy
+
 ```css
 /* Mobile First Approach */
 .enrollment-container {
@@ -492,7 +488,7 @@ User Journey: Method Selection
     padding: 32px;
     max-width: 800px;
   }
-  
+
   .qr-setup-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -502,9 +498,11 @@ User Journey: Method Selection
 ```
 
 ### Touch-Friendly Interactions
+
 ```css
 /* Minimum touch target size */
-.btn-primary, .btn-secondary {
+.btn-primary,
+.btn-secondary {
   min-height: 44px;
   min-width: 44px;
   padding: 12px 24px;
@@ -512,7 +510,9 @@ User Journey: Method Selection
 }
 
 /* Large input fields for mobile */
-.code-input, .phone-input, .email-input {
+.code-input,
+.phone-input,
+.email-input {
   font-size: 16px;
   padding: 16px;
   min-height: 48px;
@@ -529,11 +529,12 @@ User Journey: Method Selection
 ## Accessibility Features
 
 ### Screen Reader Support
+
 ```html
 <!-- Semantic HTML structure -->
 <main role="main" aria-labelledby="enrollment-title">
   <h1 id="enrollment-title">Multi-Factor Authentication Setup</h1>
-  
+
   <!-- Progress indicator -->
   <nav aria-label="Setup progress" class="progress-nav">
     <ol class="progress-steps">
@@ -543,7 +544,7 @@ User Journey: Method Selection
       <li>Complete</li>
     </ol>
   </nav>
-  
+
   <!-- Step content with proper landmarks -->
   <section aria-labelledby="current-step-title">
     <h2 id="current-step-title">Choose Your MFA Method</h2>
@@ -553,6 +554,7 @@ User Journey: Method Selection
 ```
 
 ### Keyboard Navigation
+
 ```css
 /* Focus indicators */
 .btn-primary:focus,
@@ -581,6 +583,7 @@ select:focus {
 ```
 
 ### High Contrast Support
+
 ```css
 @media (prefers-contrast: high) {
   .enrollment-container {
@@ -588,7 +591,7 @@ select:focus {
     color: black;
     border: 2px solid black;
   }
-  
+
   .btn-primary {
     background: black;
     color: white;
@@ -600,6 +603,7 @@ select:focus {
 ## Error Handling & Recovery
 
 ### Graceful Error States
+
 ```html
 <div class="error-state" role="alert" aria-live="polite">
   <div class="error-icon">⚠️</div>
@@ -616,12 +620,13 @@ select:focus {
 ```
 
 ### Progressive Enhancement
+
 ```javascript
 // Check for required capabilities
 const features = {
   camera: 'mediaDevices' in navigator,
   clipboard: 'clipboard' in navigator,
-  serviceWorker: 'serviceWorker' in navigator
+  serviceWorker: 'serviceWorker' in navigator,
 };
 
 // Provide alternatives for unsupported features
@@ -634,40 +639,42 @@ if (!features.camera) {
 ## Technical Implementation Requirements
 
 ### API Endpoints
+
 ```javascript
 // MFA Enrollment API Structure
 const mfaEnrollmentAPI = {
   // Initialize enrollment session
   POST: '/api/mfa/enrollment/start',
-  
+
   // Generate TOTP secret and QR code
   POST: '/api/mfa/totp/generate',
-  
+
   // Verify TOTP setup
   POST: '/api/mfa/totp/verify',
-  
+
   // Setup SMS verification
   POST: '/api/mfa/sms/setup',
-  
+
   // Setup email verification
   POST: '/api/mfa/email/setup',
-  
+
   // Generate recovery codes
   POST: '/api/mfa/recovery/generate',
-  
+
   // Complete enrollment
-  POST: '/api/mfa/enrollment/complete'
+  POST: '/api/mfa/enrollment/complete',
 };
 ```
 
 ### Security Considerations
+
 ```javascript
 // Rate limiting for enrollment attempts
 const enrollmentRateLimit = {
   qrGeneration: '5 requests per 15 minutes',
   smsVerification: '3 requests per 15 minutes',
   emailVerification: '5 requests per 15 minutes',
-  totpVerification: '10 attempts per 15 minutes'
+  totpVerification: '10 attempts per 15 minutes',
 };
 
 // Session security
@@ -675,39 +682,41 @@ const enrollmentSession = {
   duration: '30 minutes',
   encryption: 'AES-256',
   csrfProtection: true,
-  secureHeaders: ['X-Frame-Options', 'X-Content-Type-Options']
+  secureHeaders: ['X-Frame-Options', 'X-Content-Type-Options'],
 };
 ```
 
 ### Analytics & Monitoring
+
 ```javascript
 // Track enrollment metrics
 const enrollmentMetrics = {
   // Completion rates by method
-  'totp_completion_rate': 0.85,
-  'sms_completion_rate': 0.92,
-  'email_completion_rate': 0.78,
-  
+  totp_completion_rate: 0.85,
+  sms_completion_rate: 0.92,
+  email_completion_rate: 0.78,
+
   // User preferences
-  'method_selection_distribution': {
-    'totp': 0.45,
-    'sms': 0.40,
-    'email': 0.15
+  method_selection_distribution: {
+    totp: 0.45,
+    sms: 0.4,
+    email: 0.15,
   },
-  
+
   // Drop-off points
-  'abandonment_analysis': {
-    'method_selection': 0.05,
-    'app_installation': 0.12,
-    'qr_scanning': 0.08,
-    'verification': 0.06
-  }
+  abandonment_analysis: {
+    method_selection: 0.05,
+    app_installation: 0.12,
+    qr_scanning: 0.08,
+    verification: 0.06,
+  },
 };
 ```
 
 ## Testing Strategy
 
 ### User Acceptance Testing
+
 1. **Cross-device Testing**
    - iOS Safari, Chrome, Firefox
    - Android Chrome, Samsung Internet
@@ -724,6 +733,7 @@ const enrollmentMetrics = {
    - Form submission < 2 seconds
 
 ### Security Testing
+
 1. **Vulnerability Assessment**
    - CSRF token validation
    - Rate limiting enforcement
@@ -739,7 +749,8 @@ const enrollmentMetrics = {
 This MFA enrollment flow design balances security requirements with user experience best practices for 2025. The progressive enhancement approach ensures compatibility across devices while the layered security model provides robust protection against common attack vectors.
 
 Key success metrics:
+
 - 📈 85%+ enrollment completion rate
-- 🔒 95%+ security compliance score  
+- 🔒 95%+ security compliance score
 - ⚡ < 5 minutes average enrollment time
 - ♿ WCAG 2.1 AA accessibility compliance

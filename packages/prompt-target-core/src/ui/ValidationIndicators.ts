@@ -1,7 +1,4 @@
-import {
-  ValidationReport,
-  PlatformValidationResult
-} from '../validation/ValidationEngine.js';
+import { ValidationReport, PlatformValidationResult } from '../validation/ValidationEngine.js';
 import { ValidationResult } from '../types/index.js';
 import { Platform } from '../types/index.js';
 
@@ -30,7 +27,7 @@ export class ValidationIndicators {
       position: { x: 0, y: 0 },
       style: this.getIndicatorStyle(results),
       tooltip: this.generateTooltip(results),
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     this.indicators.set(elementId, indicator);
@@ -100,7 +97,7 @@ export class ValidationIndicators {
    */
   createDetailView(results: ValidationResult[]): ValidationDetailView {
     const groupedResults = this.groupResultsBySeverity(results);
-    
+
     return {
       id: `detail-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       results,
@@ -110,20 +107,18 @@ export class ValidationIndicators {
         errors: results.filter(r => r.type === 'error').length,
         warnings: results.filter(r => r.type === 'warning').length,
         infos: results.filter(r => r.type === 'info').length,
-        autoFixable: results.filter(r => r.autoFixable).length
+        autoFixable: results.filter(r => r.autoFixable).length,
       },
       sections: this.createDetailSections(groupedResults),
       filters: this.createDetailFilters(results),
-      actions: this.createDetailActions(results)
+      actions: this.createDetailActions(results),
     };
   }
 
   /**
    * Create platform comparison view
    */
-  createPlatformComparisonView(
-    validationReport: ValidationReport
-  ): PlatformComparisonView {
+  createPlatformComparisonView(validationReport: ValidationReport): PlatformComparisonView {
     const platforms = Array.from(validationReport.platformResults.keys());
     const comparison: PlatformComparison[] = [];
 
@@ -139,10 +134,10 @@ export class ValidationIndicators {
           capabilities: {
             supportedNodeTypes: result.capabilities.supportedNodeTypes?.length || 0,
             totalFeatures: result.capabilities.features?.length || 0,
-            supportedFeatures: result.capabilities.features?.filter((f: any) => f.supported).length || 0
+            supportedFeatures: result.capabilities.features?.filter((f: any) => f.supported).length || 0,
           },
           performance: result.duration,
-          recommendations: this.generatePlatformRecommendations(result)
+          recommendations: this.generatePlatformRecommendations(result),
         });
       }
     });
@@ -155,29 +150,24 @@ export class ValidationIndicators {
       crossPlatformIssues: validationReport.crossPlatformIssues,
       overallCompatibility: this.calculateOverallCompatibility(comparison),
       bestPlatform: this.identifyBestPlatform(comparison),
-      recommendations: this.generateCrossPlatformRecommendations(comparison)
+      recommendations: this.generateCrossPlatformRecommendations(comparison),
     };
   }
 
   /**
    * Generate auto-fix preview
    */
-  generateAutoFixPreview(
-    suggestion: any,
-    currentResults: ValidationResult[]
-  ): AutoFixPreview {
+  generateAutoFixPreview(suggestion: any, currentResults: ValidationResult[]): AutoFixPreview {
     return {
       id: `preview-${suggestion.id}`,
       suggestion,
-      currentIssues: currentResults.filter(r => 
-        suggestion.affectedIssues.includes(r.id)
-      ),
+      currentIssues: currentResults.filter(r => suggestion.affectedIssues.includes(r.id)),
       expectedChanges: this.predictAutoFixChanges(suggestion),
       risks: this.assessAutoFixRisks(suggestion),
       confidence: suggestion.confidence,
       impact: suggestion.impact,
       preview: this.generatePreviewDescription(suggestion),
-      warnings: this.generateAutoFixWarnings(suggestion)
+      warnings: this.generateAutoFixWarnings(suggestion),
     };
   }
 
@@ -217,35 +207,45 @@ export class ValidationIndicators {
     const hasAutoFix = results.some(r => r.autoFixable);
 
     const baseStyle: IndicatorStyle = {
-      color: severity === 'critical' ? '#ef4444' : severity === 'high' ? '#f59e0b' : severity === 'medium' ? '#eab308' : '#6b7280',
+      color:
+        severity === 'critical'
+          ? '#ef4444'
+          : severity === 'high'
+            ? '#f59e0b'
+            : severity === 'medium'
+              ? '#eab308'
+              : '#6b7280',
       border: severity === 'critical' ? '2px solid #ef4444' : '1px solid #d1d5db',
       size: results.length > 3 ? 'large' : results.length > 1 ? 'medium' : 'small',
       shape: hasAutoFix ? 'circle-with-fix' : 'circle',
       animation: severity === 'critical' ? 'pulse' : 'none',
-      badge: results.length > 1 ? results.length.toString() : undefined
+      badge: results.length > 1 ? results.length.toString() : undefined,
     };
 
     switch (severity) {
-    case 'critical':
-      return { ...baseStyle, color: '#d32f2f', border: '2px solid #f44336' };
-    case 'high':
-      return { ...baseStyle, color: '#f57c00', border: '2px solid #ff9800' };
-    case 'medium':
-      return { ...baseStyle, color: '#fbc02d', border: '2px solid #ffeb3b' };
-    case 'low':
-      return { ...baseStyle, color: '#1976d2', border: '2px solid #2196f3' };
-    default:
-      return { ...baseStyle, color: '#9e9e9e', border: '1px solid #bdbdbd' };
+      case 'critical':
+        return { ...baseStyle, color: '#d32f2f', border: '2px solid #f44336' };
+      case 'high':
+        return { ...baseStyle, color: '#f57c00', border: '2px solid #ff9800' };
+      case 'medium':
+        return { ...baseStyle, color: '#fbc02d', border: '2px solid #ffeb3b' };
+      case 'low':
+        return { ...baseStyle, color: '#1976d2', border: '2px solid #2196f3' };
+      default:
+        return { ...baseStyle, color: '#9e9e9e', border: '1px solid #bdbdbd' };
     }
   }
 
   private generateTooltip(results: ValidationResult[]): string {
     if (results.length === 0) return '';
 
-    const summary = results.reduce((acc, result) => {
-      acc[result.type] = (acc[result.type] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const summary = results.reduce(
+      (acc, result) => {
+        acc[result.type] = (acc[result.type] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
 
     const parts = [];
     if (summary.error) parts.push(`${summary.error} error${summary.error > 1 ? 's' : ''}`);
@@ -260,7 +260,7 @@ export class ValidationIndicators {
       critical: results.filter(r => r.severity === 'critical'),
       high: results.filter(r => r.severity === 'high'),
       medium: results.filter(r => r.severity === 'medium'),
-      low: results.filter(r => r.severity === 'low')
+      low: results.filter(r => r.severity === 'low'),
     };
   }
 
@@ -273,7 +273,7 @@ export class ValidationIndicators {
         severity: 'critical',
         items: groupedResults.critical,
         collapsed: false,
-        icon: 'error'
+        icon: 'error',
       });
     }
 
@@ -283,7 +283,7 @@ export class ValidationIndicators {
         severity: 'high',
         items: groupedResults.high,
         collapsed: false,
-        icon: 'warning'
+        icon: 'warning',
       });
     }
 
@@ -293,7 +293,7 @@ export class ValidationIndicators {
         severity: 'medium',
         items: groupedResults.medium,
         collapsed: true,
-        icon: 'caution'
+        icon: 'caution',
       });
     }
 
@@ -303,7 +303,7 @@ export class ValidationIndicators {
         severity: 'low',
         items: groupedResults.low,
         collapsed: true,
-        icon: 'info'
+        icon: 'info',
       });
     }
 
@@ -318,8 +318,8 @@ export class ValidationIndicators {
         options: [...new Set(results.map(r => r.type))].map(type => ({
           value: type,
           label: type.charAt(0).toUpperCase() + type.slice(1),
-          count: results.filter(r => r.type === type).length
-        }))
+          count: results.filter(r => r.type === type).length,
+        })),
       },
       {
         id: 'severity',
@@ -327,8 +327,8 @@ export class ValidationIndicators {
         options: [...new Set(results.map(r => r.severity))].map(severity => ({
           value: severity,
           label: severity.charAt(0).toUpperCase() + severity.slice(1),
-          count: results.filter(r => r.severity === severity).length
-        }))
+          count: results.filter(r => r.severity === severity).length,
+        })),
       },
       {
         id: 'autoFixable',
@@ -337,15 +337,15 @@ export class ValidationIndicators {
           {
             value: 'true',
             label: 'Auto-fixable',
-            count: results.filter(r => r.autoFixable).length
+            count: results.filter(r => r.autoFixable).length,
           },
           {
             value: 'false',
             label: 'Manual fix required',
-            count: results.filter(r => !r.autoFixable).length
-          }
-        ]
-      }
+            count: results.filter(r => !r.autoFixable).length,
+          },
+        ],
+      },
     ];
   }
 
@@ -359,7 +359,7 @@ export class ValidationIndicators {
         label: `Auto-fix ${autoFixableCount} issue${autoFixableCount > 1 ? 's' : ''}`,
         type: 'primary',
         icon: 'auto-fix',
-        enabled: true
+        enabled: true,
       });
     }
 
@@ -369,14 +369,14 @@ export class ValidationIndicators {
         label: 'Export Issues',
         type: 'secondary',
         icon: 'download',
-        enabled: true
+        enabled: true,
       },
       {
         id: 'refresh-validation',
         label: 'Re-validate',
         type: 'secondary',
         icon: 'refresh',
-        enabled: true
+        enabled: true,
       }
     );
 
@@ -403,7 +403,7 @@ export class ValidationIndicators {
 
   private calculateOverallCompatibility(comparison: PlatformComparison[]): number {
     if (comparison.length === 0) return 0;
-    
+
     const compatibleCount = comparison.filter(p => p.compatible).length;
     return Math.round((compatibleCount / comparison.length) * 100);
   }
@@ -427,13 +427,13 @@ export class ValidationIndicators {
 
   private calculatePlatformScore(platform: PlatformComparison): number {
     let score = 0;
-    
+
     if (platform.compatible) score += 40;
     score += (platform.quality / 100) * 30;
     score += Math.max(0, 20 - platform.errors) * 1;
     score += Math.max(0, 10 - platform.warnings) * 0.5;
     score += (platform.capabilities.supportedFeatures / Math.max(1, platform.capabilities.totalFeatures)) * 10;
-    
+
     return Math.round(score);
   }
 
@@ -457,17 +457,17 @@ export class ValidationIndicators {
     const changes: string[] = [];
 
     switch (suggestion.action.type) {
-    case 'node_remove':
-      changes.push(`Remove node: ${suggestion.action.targetId}`);
-      break;
-    case 'edge_remove':
-      changes.push(`Remove edge: ${suggestion.action.targetId}`);
-      break;
-    case 'node_update':
-      changes.push(`Update node: ${suggestion.action.targetId}`);
-      break;
-    default:
-      changes.push('Apply suggested fix');
+      case 'node_remove':
+        changes.push(`Remove node: ${suggestion.action.targetId}`);
+        break;
+      case 'edge_remove':
+        changes.push(`Remove edge: ${suggestion.action.targetId}`);
+        break;
+      case 'node_update':
+        changes.push(`Update node: ${suggestion.action.targetId}`);
+        break;
+      default:
+        changes.push('Apply suggested fix');
     }
 
     return changes;

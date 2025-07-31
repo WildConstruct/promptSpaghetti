@@ -1,9 +1,9 @@
 // Epic 16 Marketplace Data Access Object
 import { Pool, PoolClient } from 'pg';
-import { 
-  MarketplaceTemplate, 
-  TemplateVersion, 
-  MarketplacePurchase, 
+import {
+  MarketplaceTemplate,
+  TemplateVersion,
+  MarketplacePurchase,
   TemplateReview,
   TemplateCategory,
   MarketplaceEvent,
@@ -16,7 +16,7 @@ import {
   TemplateStatus,
   PurchaseStatus,
   ModerationStatus,
-  EventType
+  EventType,
 } from './types';
 
 export class MarketplaceDAO {
@@ -24,9 +24,8 @@ export class MarketplaceDAO {
 
   // Template operations
   async createTemplate(template: Partial<MarketplaceTemplate>, client?: PoolClient): Promise<MarketplaceTemplate> {
-
     const useClient = client || this.pool;
-    
+
     const query = `
       INSERT INTO marketplace_templates (
         owner_id, title, description, tags, price_cents, 
@@ -34,7 +33,7 @@ export class MarketplaceDAO {
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
       RETURNING *
     `;
-    
+
     const values = [
       template.owner_id,
       template.title,
@@ -44,7 +43,7 @@ export class MarketplaceDAO {
       template.is_ai_generated || false,
       template.claude_compat || ['claude-3-sonnet'],
       template.status || TemplateStatus.DRAFT,
-      template.stats || {}
+      template.stats || {},
     ];
 
     const result = await useClient.query(query, values);
@@ -52,7 +51,6 @@ export class MarketplaceDAO {
   }
 
   async getTemplate(id: string): Promise<TemplateWithStats | null> {
-
     const query = `
       SELECT 
         t.*,
@@ -80,9 +78,9 @@ export class MarketplaceDAO {
     `;
 
     const result = await this.pool.query(query, [id]);
-    
+
     if (result.rows.length === 0) return null;
-    
+
     const row = result.rows[0];
     return {
       ...row,
@@ -97,15 +95,18 @@ export class MarketplaceDAO {
         id: row.owner_id,
         name: row.owner_name,
         email: row.owner_email,
-        verified: true // TODO: Add verification logic
-      }
+        verified: true, // TODO: Add verification logic
+      },
     };
   }
 
-  async updateTemplate(id: string, updates: Partial<MarketplaceTemplate>, client?: PoolClient): Promise<MarketplaceTemplate | null> {
-
+  async updateTemplate(
+    id: string,
+    updates: Partial<MarketplaceTemplate>,
+    client?: PoolClient
+  ): Promise<MarketplaceTemplate | null> {
     const useClient = client || this.pool;
-    
+
     const setClause = [];
     const values = [];
     let valueIndex = 1;
@@ -154,9 +155,8 @@ export class MarketplaceDAO {
   }
 
   async deleteTemplate(id: string, client?: PoolClient): Promise<boolean> {
-
     const useClient = client || this.pool;
-    
+
     const query = 'DELETE FROM marketplace_templates WHERE id = $1';
     const result = await useClient.query(query, [id]);
     return result.rowCount > 0;
@@ -164,7 +164,6 @@ export class MarketplaceDAO {
 
   // Search functionality
   async searchTemplates(filters: SearchFilters): Promise<SearchResult> {
-
     const page = filters.page || 1;
     const limit = Math.min(filters.limit || 20, 100);
     const offset = (page - 1) * limit;
@@ -231,32 +230,33 @@ export class MarketplaceDAO {
     // Sorting
     let orderBy = '';
     switch (filters.sort_by) {
-    case 'price_asc':
-      orderBy = 'ORDER BY t.price_cents ASC, t.created_at DESC';
-      break;
-    case 'price_desc':
-      orderBy = 'ORDER BY t.price_cents DESC, t.created_at DESC';
-      break;
-    case 'rating':
-      orderBy = 'ORDER BY t.avg_rating DESC, t.total_reviews DESC, t.created_at DESC';
-      break;
-    case 'popularity':
-      orderBy = 'ORDER BY t.total_purchases DESC, t.avg_rating DESC, t.created_at DESC';
-      break;
-    case 'newest':
-      orderBy = 'ORDER BY t.created_at DESC';
-      break;
-    case 'oldest':
-      orderBy = 'ORDER BY t.created_at ASC';
-      break;
-    case 'relevance':
-    default:
-      if (filters.query) {
-        orderBy = 'ORDER BY ts_rank(t.search_vector, plainto_tsquery(\'english\', $1)) DESC, t.featured_at DESC NULLS LAST, t.avg_rating DESC';
-      } else {
-        orderBy = 'ORDER BY t.featured_at DESC NULLS LAST, t.avg_rating DESC, t.total_purchases DESC';
-      }
-      break;
+      case 'price_asc':
+        orderBy = 'ORDER BY t.price_cents ASC, t.created_at DESC';
+        break;
+      case 'price_desc':
+        orderBy = 'ORDER BY t.price_cents DESC, t.created_at DESC';
+        break;
+      case 'rating':
+        orderBy = 'ORDER BY t.avg_rating DESC, t.total_reviews DESC, t.created_at DESC';
+        break;
+      case 'popularity':
+        orderBy = 'ORDER BY t.total_purchases DESC, t.avg_rating DESC, t.created_at DESC';
+        break;
+      case 'newest':
+        orderBy = 'ORDER BY t.created_at DESC';
+        break;
+      case 'oldest':
+        orderBy = 'ORDER BY t.created_at ASC';
+        break;
+      case 'relevance':
+      default:
+        if (filters.query) {
+          orderBy =
+            "ORDER BY ts_rank(t.search_vector, plainto_tsquery('english', $1)) DESC, t.featured_at DESC NULLS LAST, t.avg_rating DESC";
+        } else {
+          orderBy = 'ORDER BY t.featured_at DESC NULLS LAST, t.avg_rating DESC, t.total_purchases DESC';
+        }
+        break;
     }
 
     // Get total count
@@ -274,7 +274,7 @@ export class MarketplaceDAO {
       ${orderBy}
       LIMIT $${valueIndex++} OFFSET $${valueIndex++}
     `;
-    
+
     values.push(limit, offset);
     const result = await this.pool.query(selectQuery, values);
 
@@ -283,15 +283,14 @@ export class MarketplaceDAO {
       total,
       page,
       limit,
-      has_more: (page * limit) < total
+      has_more: page * limit < total,
     };
   }
 
   // Version operations
   async createVersion(version: Partial<TemplateVersion>, client?: PoolClient): Promise<TemplateVersion> {
-
     const useClient = client || this.pool;
-    
+
     // Get next version number
     const versionQuery = `
       SELECT COALESCE(MAX(version_number), 0) + 1 as next_version
@@ -320,7 +319,7 @@ export class MarketplaceDAO {
       version.hash,
       version.token_per_run_estimate || 0,
       version.safety_score || 0.0,
-      version.s3_asset_key || null
+      version.s3_asset_key || null,
     ];
 
     const result = await useClient.query(query, values);
@@ -328,19 +327,17 @@ export class MarketplaceDAO {
   }
 
   async getTemplateVersions(templateId: string): Promise<TemplateVersion[]> {
-
     const query = `
       SELECT * FROM template_versions 
       WHERE template_id = $1 
       ORDER BY version_number DESC
     `;
-    
+
     const result = await this.pool.query(query, [templateId]);
     return result.rows;
   }
 
   async getVersion(id: string): Promise<TemplateVersion | null> {
-
     const query = 'SELECT * FROM template_versions WHERE id = $1';
     const result = await this.pool.query(query, [id]);
     return result.rows[0] || null;
@@ -348,9 +345,8 @@ export class MarketplaceDAO {
 
   // Purchase operations
   async createPurchase(purchase: Partial<MarketplacePurchase>, client?: PoolClient): Promise<MarketplacePurchase> {
-
     const useClient = client || this.pool;
-    
+
     const query = `
       INSERT INTO marketplace_purchases (
         buyer_id, template_id, version_id, stripe_payment_intent_id,
@@ -366,17 +362,20 @@ export class MarketplaceDAO {
       purchase.stripe_payment_intent_id || null,
       purchase.amount_cents,
       purchase.status || PurchaseStatus.PENDING,
-      purchase.refund_amount_cents || 0
+      purchase.refund_amount_cents || 0,
     ];
 
     const result = await useClient.query(query, values);
     return result.rows[0];
   }
 
-  async updatePurchase(id: string, updates: Partial<MarketplacePurchase>, client?: PoolClient): Promise<MarketplacePurchase | null> {
-
+  async updatePurchase(
+    id: string,
+    updates: Partial<MarketplacePurchase>,
+    client?: PoolClient
+  ): Promise<MarketplacePurchase | null> {
     const useClient = client || this.pool;
-    
+
     const setClause = [];
     const values = [];
     let valueIndex = 1;
@@ -413,14 +412,12 @@ export class MarketplaceDAO {
   }
 
   async getPurchaseByStripeIntent(stripeIntentId: string): Promise<MarketplacePurchase | null> {
-
     const query = 'SELECT * FROM marketplace_purchases WHERE stripe_payment_intent_id = $1';
     const result = await this.pool.query(query, [stripeIntentId]);
     return result.rows[0] || null;
   }
 
   async getUserPurchases(userId: string, limit: number = 50): Promise<PurchaseWithDetails[]> {
-
     const query = `
       SELECT 
         p.*,
@@ -442,16 +439,15 @@ export class MarketplaceDAO {
       template: {
         id: row.template_id,
         title: row.template_title,
-        description: row.template_description
-      }
+        description: row.template_description,
+      },
     }));
   }
 
   // Review operations
   async createReview(review: Partial<TemplateReview>, client?: PoolClient): Promise<TemplateReview> {
-
     const useClient = client || this.pool;
-    
+
     // Check if user has purchased the template
     const purchaseQuery = `
       SELECT id FROM marketplace_purchases 
@@ -477,7 +473,7 @@ export class MarketplaceDAO {
       review.stars,
       review.comment || null,
       verifiedPurchase,
-      ModerationStatus.PENDING
+      ModerationStatus.PENDING,
     ];
 
     const result = await useClient.query(query, values);
@@ -485,7 +481,6 @@ export class MarketplaceDAO {
   }
 
   async getTemplateReviews(templateId: string, limit: number = 20): Promise<ReviewWithDetails[]> {
-
     const query = `
       SELECT 
         r.*,
@@ -503,16 +498,15 @@ export class MarketplaceDAO {
       buyer: {
         id: row.buyer_id,
         name: row.buyer_name,
-        verified: row.verified_purchase
-      }
+        verified: row.verified_purchase,
+      },
     }));
   }
 
   // Analytics and events
   async recordEvent(event: Partial<MarketplaceEvent>, client?: PoolClient): Promise<void> {
-
     const useClient = client || this.pool;
-    
+
     const query = `
       INSERT INTO marketplace_events (
         event_type, user_id, template_id, version_id,
@@ -528,7 +522,7 @@ export class MarketplaceDAO {
       event.session_id || null,
       event.metadata || {},
       event.ip_address || null,
-      event.user_agent || null
+      event.user_agent || null,
     ];
 
     await useClient.query(query, values);
@@ -536,25 +530,22 @@ export class MarketplaceDAO {
 
   // Categories
   async getCategories(): Promise<TemplateCategory[]> {
-
     const query = `
       SELECT * FROM template_categories 
       WHERE is_active = true 
       ORDER BY sort_order, name
     `;
-    
+
     const result = await this.pool.query(query);
     return result.rows;
   }
 
   // Utility methods
   async refreshSearchIndex(): Promise<void> {
-
     await this.pool.query('SELECT refresh_marketplace_search_index()');
   }
 
   async transaction<T>(callback: (client: PoolClient) => Promise<T>): Promise<T> {
-
     const client = await this.pool.connect();
     try {
       await client.query('BEGIN');

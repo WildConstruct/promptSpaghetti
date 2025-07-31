@@ -2,7 +2,7 @@
 
 /**
  * Refactoring CLI - Command Line Interface for Code Transformations
- * 
+ *
  * Unified interface for all refactoring and modernization tools
  * - Interactive refactoring sessions
  * - Batch transformations
@@ -20,35 +20,35 @@ class RefactoringCLI {
   constructor() {
     this.rl = readline.createInterface({
       input: process.stdin,
-      output: process.stdout
+      output: process.stdout,
     });
-    
+
     this.commands = {
-      'analyze': this.analyzeCommand.bind(this),
-      'migrate': this.migrateCommand.bind(this),
-      'modernize': this.modernizeCommand.bind(this),
-      'validate': this.validateCommand.bind(this),
-      'plan': this.planCommand.bind(this),
-      'interactive': this.interactiveCommand.bind(this),
-      'help': this.helpCommand.bind(this),
-      'status': this.statusCommand.bind(this)
+      analyze: this.analyzeCommand.bind(this),
+      migrate: this.migrateCommand.bind(this),
+      modernize: this.modernizeCommand.bind(this),
+      validate: this.validateCommand.bind(this),
+      plan: this.planCommand.bind(this),
+      interactive: this.interactiveCommand.bind(this),
+      help: this.helpCommand.bind(this),
+      status: this.statusCommand.bind(this),
     };
-    
+
     this.session = {
       analysisResults: null,
       currentPlan: null,
       safeMode: true,
-      dryRun: false
+      dryRun: false,
     };
   }
 
   async run(args = []) {
     const command = args[0] || 'help';
     const options = this.parseOptions(args.slice(1));
-    
+
     this.session.dryRun = options.dryRun || false;
     this.session.safeMode = options.safeMode !== false;
-    
+
     try {
       if (this.commands[command]) {
         await this.commands[command](options);
@@ -68,37 +68,34 @@ class RefactoringCLI {
 
   async analyzeCommand(options) {
     console.log('🔍 Analyzing codebase for refactoring opportunities...\n');
-    
+
     const framework = new RefactoringFramework();
     const modernizer = new CodeModernizer();
-    
+
     // Run both analyzers
     console.log('📊 Running structural analysis...');
     const structuralAnalysis = await framework.analyzeLegacyCode();
-    
+
     console.log('🚀 Running modernization analysis...');
     const modernizationAnalysis = await modernizer.analyzeCodebase();
-    
+
     // Combine results
     this.session.analysisResults = {
       structural: structuralAnalysis,
       modernization: modernizationAnalysis,
       timestamp: new Date().toISOString(),
-      summary: this.createAnalysisSummary(structuralAnalysis, modernizationAnalysis)
+      summary: this.createAnalysisSummary(structuralAnalysis, modernizationAnalysis),
     };
-    
+
     // Save detailed analysis
-    await fs.writeFile(
-      'refactoring-analysis.json',
-      JSON.stringify(this.session.analysisResults, null, 2)
-    );
-    
+    await fs.writeFile('refactoring-analysis.json', JSON.stringify(this.session.analysisResults, null, 2));
+
     console.log('\n📋 Analysis Summary:');
     console.log('===================');
     this.printAnalysisSummary(this.session.analysisResults.summary);
-    
+
     console.log('\n💾 Detailed results saved to refactoring-analysis.json');
-    
+
     if (!options.skipSuggestions) {
       await this.suggestNextSteps();
     }
@@ -106,12 +103,12 @@ class RefactoringCLI {
 
   async migrateCommand(options) {
     console.log('🔄 Starting JavaScript to TypeScript migration...\n');
-    
+
     if (options.interactive) {
       await this.interactiveMigration();
     } else {
       const framework = new RefactoringFramework();
-      
+
       if (this.session.dryRun) {
         console.log('🔍 DRY RUN MODE - No files will be changed\n');
         // Show what would be migrated
@@ -121,18 +118,16 @@ class RefactoringCLI {
           console.log(`   • ${path.relative(process.cwd(), file)}`);
         });
       } else {
-        await framework.migrateJavaScriptToTypeScript(
-          this.session.analysisResults?.structural?.jsFiles || []
-        );
+        await framework.migrateJavaScriptToTypeScript(this.session.analysisResults?.structural?.jsFiles || []);
       }
     }
   }
 
   async modernizeCommand(options) {
     console.log('🚀 Starting code modernization...\n');
-    
+
     const modernizer = new CodeModernizer();
-    
+
     if (options.patterns) {
       await this.modernizeSpecificPatterns(options.patterns.split(','));
     } else if (options.interactive) {
@@ -149,19 +144,14 @@ class RefactoringCLI {
 
   async validateCommand(options) {
     console.log('✅ Validating refactoring results...\n');
-    
-    const validations = [
-      this.validateTypeScript(),
-      this.validateESLint(),
-      this.validateTests(),
-      this.validateBuild()
-    ];
-    
+
+    const validations = [this.validateTypeScript(), this.validateESLint(), this.validateTests(), this.validateBuild()];
+
     const results = await Promise.allSettled(validations);
-    
+
     console.log('📋 Validation Results:');
     console.log('=====================');
-    
+
     const validationNames = ['TypeScript', 'ESLint', 'Tests', 'Build'];
     results.forEach((result, index) => {
       if (result.status === 'fulfilled') {
@@ -179,23 +169,23 @@ class RefactoringCLI {
 
   async planCommand(options) {
     console.log('📋 Creating refactoring plan...\n');
-    
+
     if (!this.session.analysisResults) {
       console.log('⚠️  No analysis results found. Running analysis first...\n');
       await this.analyzeCommand({ skipSuggestions: true });
     }
-    
+
     const plan = this.createRefactoringPlan(this.session.analysisResults);
     this.session.currentPlan = plan;
-    
+
     await fs.writeFile('refactoring-plan.json', JSON.stringify(plan, null, 2));
-    
+
     console.log('🎯 Refactoring Plan Generated:');
     console.log('==============================');
     this.printRefactoringPlan(plan);
-    
+
     console.log('\n💾 Plan saved to refactoring-plan.json');
-    
+
     if (options.execute) {
       await this.executePlan(plan);
     }
@@ -205,22 +195,22 @@ class RefactoringCLI {
     console.log('🎮 Interactive Refactoring Mode\n');
     console.log('Available commands:');
     console.log('  analyze    - Analyze codebase');
-    console.log('  migrate    - Migrate JS to TS');  
+    console.log('  migrate    - Migrate JS to TS');
     console.log('  modernize  - Modernize code patterns');
     console.log('  validate   - Validate changes');
     console.log('  plan       - Create refactoring plan');
     console.log('  status     - Show current status');
     console.log('  exit       - Exit interactive mode\n');
-    
+
     while (true) {
       const command = await this.prompt('refactor> ');
       const [cmd, ...args] = command.trim().split(' ');
-      
+
       if (cmd === 'exit') {
         console.log('👋 Goodbye!');
         break;
       }
-      
+
       if (this.commands[cmd]) {
         try {
           await this.commands[cmd](this.parseOptions(args));
@@ -231,7 +221,7 @@ class RefactoringCLI {
         console.log(`❌ Unknown command: ${cmd}`);
         console.log('Type "help" for available commands.');
       }
-      
+
       console.log(); // Add spacing
     }
   }
@@ -273,10 +263,10 @@ Examples:
 
   async statusCommand(options) {
     console.log('📊 Refactoring Session Status\n');
-    
+
     console.log(`Session Mode: ${this.session.safeMode ? '🔒 Safe' : '⚠️ Unrestricted'}`);
     console.log(`Dry Run: ${this.session.dryRun ? '🔍 Enabled' : '💾 Disabled'}`);
-    
+
     if (this.session.analysisResults) {
       console.log('\n📈 Analysis Results Available:');
       console.log(`   Timestamp: ${this.session.analysisResults.timestamp}`);
@@ -285,7 +275,7 @@ Examples:
       console.log('\n❌ No analysis results available');
       console.log('   Run "analyze" command first');
     }
-    
+
     if (this.session.currentPlan) {
       console.log('\n📋 Active Refactoring Plan:');
       console.log(`   Phases: ${this.session.currentPlan.phases.length}`);
@@ -294,7 +284,7 @@ Examples:
       console.log('\n❌ No refactoring plan available');
       console.log('   Run "plan" command to create one');
     }
-    
+
     // Show recent activity
     try {
       const recentFiles = await this.getRecentlyModifiedFiles();
@@ -319,7 +309,7 @@ Examples:
       legacyPatterns: modernization.legacyPatterns?.length || 0,
       codeSmells: modernization.codeSmells?.length || 0,
       performanceIssues: modernization.performanceIssues?.length || 0,
-      modernizationOpportunities: modernization.modernizationOpportunities?.length || 0
+      modernizationOpportunities: modernization.modernizationOpportunities?.length || 0,
     };
   }
 
@@ -337,23 +327,23 @@ Examples:
   async suggestNextSteps() {
     console.log('\n💡 Suggested Next Steps:');
     console.log('========================');
-    
+
     if (this.session.analysisResults.summary.securityIssues > 0) {
       console.log('🔒 HIGH PRIORITY: Address security issues first');
     }
-    
+
     if (this.session.analysisResults.summary.jsFilesToMigrate > 0) {
       console.log('🔄 Run migration: node refactoring-cli.js migrate');
     }
-    
+
     if (this.session.analysisResults.summary.performanceIssues > 0) {
       console.log('🚀 Fix performance issues: node refactoring-cli.js modernize');
     }
-    
+
     if (this.session.analysisResults.summary.codeSmells > 0) {
       console.log('💨 Address code quality: node refactoring-cli.js modernize');
     }
-    
+
     console.log('📋 Create execution plan: node refactoring-cli.js plan --execute');
     console.log('✅ Validate results: node refactoring-cli.js validate');
   }
@@ -364,7 +354,7 @@ Examples:
       phases: [],
       totalEstimatedDays: 0,
       risks: [],
-      prerequisites: []
+      prerequisites: [],
     };
 
     // Phase 1: Security and Critical Issues
@@ -374,7 +364,7 @@ Examples:
         priority: 1,
         estimatedDays: 1,
         tasks: [`Fix ${analysisResults.summary.securityIssues} security issues`],
-        validation: ['Security scan', 'Manual review']
+        validation: ['Security scan', 'Manual review'],
       });
     }
 
@@ -385,7 +375,7 @@ Examples:
         priority: 2,
         estimatedDays: Math.ceil(analysisResults.summary.jsFilesToMigrate / 10),
         tasks: [`Migrate ${analysisResults.summary.jsFilesToMigrate} JS files to TS`],
-        validation: ['Type checking', 'Build validation']
+        validation: ['Type checking', 'Build validation'],
       });
     }
 
@@ -397,9 +387,9 @@ Examples:
         estimatedDays: 3,
         tasks: [
           `Address ${analysisResults.summary.performanceIssues} performance issues`,
-          `Apply ${analysisResults.summary.modernizationOpportunities} modernization opportunities`
+          `Apply ${analysisResults.summary.modernizationOpportunities} modernization opportunities`,
         ],
-        validation: ['Performance tests', 'Code review']
+        validation: ['Performance tests', 'Code review'],
       });
     }
 
@@ -411,14 +401,14 @@ Examples:
         estimatedDays: 2,
         tasks: [
           `Fix ${analysisResults.summary.codeSmells} code smells`,
-          `Remove ${analysisResults.summary.duplicatesFound} duplicate code blocks`
+          `Remove ${analysisResults.summary.duplicatesFound} duplicate code blocks`,
         ],
-        validation: ['Code coverage', 'Lint checks']
+        validation: ['Code coverage', 'Lint checks'],
       });
     }
 
     plan.totalEstimatedDays = plan.phases.reduce((sum, phase) => sum + phase.estimatedDays, 0);
-    
+
     return plan;
   }
 
@@ -432,36 +422,36 @@ Examples:
       console.log('   Validation:');
       phase.validation.forEach(validation => console.log(`     ✓ ${validation}`));
     });
-    
+
     console.log(`\n⏱️  Total Estimated Time: ${plan.totalEstimatedDays} days`);
   }
 
   async executePlan(plan) {
     console.log('\n🚀 Executing Refactoring Plan...\n');
-    
+
     for (const phase of plan.phases) {
       console.log(`📋 Starting Phase: ${phase.name}`);
-      
+
       const proceed = await this.prompt(`Continue with ${phase.name}? (y/n): `);
       if (proceed.toLowerCase() !== 'y') {
         console.log('⏸️  Plan execution paused');
         return;
       }
-      
+
       // Execute phase tasks (simplified)
       if (phase.name.includes('Migration')) {
         await this.migrateCommand({ interactive: false });
       } else if (phase.name.includes('Modernization')) {
         await this.modernizeCommand({ interactive: false });
       }
-      
+
       // Run validation
       console.log('✅ Running validation...');
       await this.validateCommand({});
-      
+
       console.log(`✅ Phase ${phase.name} completed\n`);
     }
-    
+
     console.log('🎉 Refactoring plan execution completed!');
   }
 
@@ -471,13 +461,13 @@ Examples:
       const { exec } = require('child_process');
       const util = require('util');
       const execAsync = util.promisify(exec);
-      
+
       const result = await execAsync('npx tsc --noEmit');
       return { passed: true };
     } catch (error) {
-      return { 
-        passed: false, 
-        errors: [error.stdout || error.message]
+      return {
+        passed: false,
+        errors: [error.stdout || error.message],
       };
     }
   }
@@ -487,13 +477,13 @@ Examples:
       const { exec } = require('child_process');
       const util = require('util');
       const execAsync = util.promisify(exec);
-      
+
       const result = await execAsync('npm run lint');
       return { passed: true };
     } catch (error) {
-      return { 
-        passed: false, 
-        errors: [error.stdout || error.message]
+      return {
+        passed: false,
+        errors: [error.stdout || error.message],
       };
     }
   }
@@ -503,13 +493,13 @@ Examples:
       const { exec } = require('child_process');
       const util = require('util');
       const execAsync = util.promisify(exec);
-      
+
       const result = await execAsync('npm test -- --passWithNoTests');
       return { passed: true };
     } catch (error) {
-      return { 
-        passed: false, 
-        errors: [error.stdout || error.message]
+      return {
+        passed: false,
+        errors: [error.stdout || error.message],
       };
     }
   }
@@ -519,13 +509,13 @@ Examples:
       const { exec } = require('child_process');
       const util = require('util');
       const execAsync = util.promisify(exec);
-      
+
       const result = await execAsync('npm run build');
       return { passed: true };
     } catch (error) {
-      return { 
-        passed: false, 
-        errors: [error.stdout || error.message]
+      return {
+        passed: false,
+        errors: [error.stdout || error.message],
       };
     }
   }
@@ -537,13 +527,13 @@ Examples:
 
   parseOptions(args) {
     const options = {};
-    
+
     for (let i = 0; i < args.length; i++) {
       const arg = args[i];
-      
+
       if (arg.startsWith('--')) {
         const key = arg.substring(2);
-        
+
         if (key.includes('=')) {
           const [optKey, optValue] = key.split('=');
           options[optKey] = optValue;
@@ -552,12 +542,12 @@ Examples:
         }
       }
     }
-    
+
     return options;
   }
 
   prompt(question) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       this.rl.question(question, resolve);
     });
   }

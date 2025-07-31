@@ -17,18 +17,12 @@ export {
   ComponentTestingUtils,
   AsyncTestingUtils,
   MockDataUtils,
-  PerformanceTestingUtils
+  PerformanceTestingUtils,
 } from './TestingUtilities';
 
-export {
-  MigrationTestHelper,
-  LegacySystemMock,
-  RefactoringValidator
-} from './RefactoringTestUtils';
+export { MigrationTestHelper, LegacySystemMock, RefactoringValidator } from './RefactoringTestUtils';
 
-export {
-  registerCustomMatchers
-} from './CustomMatchers';
+export { registerCustomMatchers } from './CustomMatchers';
 
 // Testing framework info
 export const TESTING_UTILITIES_VERSION = '1.0.0';

@@ -3,27 +3,24 @@
     // Essential formatters and linters
     "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint",
-    
+
     // TypeScript support
     "ms-vscode.vscode-typescript-next",
-    
+
     // React support
     "bradlc.vscode-tailwindcss",
-    
+
     // Markdown support
     "yzhang.markdown-all-in-one",
-    
+
     // Git support
     "eamodio.gitlens",
-    
+
     // Package management
     "christian-kohler.npm-intellisense",
-    
+
     // JSON support
     "zainchen.json"
   ],
-  "unwantedRecommendations": [
-    "ms-vscode.vscode-json",
-    "hookyqr.beautify"
-  ]
+  "unwantedRecommendations": ["ms-vscode.vscode-json", "hookyqr.beautify"]
 }

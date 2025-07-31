@@ -28,7 +28,9 @@ Our feature flag system supports sophisticated rollout strategies with Claude-sp
 ## Feature Flag Types
 
 ### 1. Boolean Toggles
+
 **Use Case**: Simple on/off switches
+
 ```typescript
 {
   type: ToggleType.BOOLEAN,
@@ -37,11 +39,13 @@ Our feature flag system supports sophisticated rollout strategies with Claude-sp
 ```
 
 ### 2. Percentage Rollout
+
 **Use Case**: Gradual feature deployment
+
 ```typescript
 {
   type: ToggleType.PERCENTAGE_ROLLOUT,
-  value: { 
+  value: {
     percentage: 25,
     saltKey: "feature_xyz_2024"
   }
@@ -49,7 +53,9 @@ Our feature flag system supports sophisticated rollout strategies with Claude-sp
 ```
 
 ### 3. Multivariate Testing
+
 **Use Case**: A/B/C testing with multiple variants
+
 ```typescript
 {
   type: ToggleType.MULTIVARIATE,
@@ -64,7 +70,9 @@ Our feature flag system supports sophisticated rollout strategies with Claude-sp
 ```
 
 ### 4. Scheduled Toggles
+
 **Use Case**: Time-based feature activation
+
 ```typescript
 {
   type: ToggleType.SCHEDULED,
@@ -78,7 +86,9 @@ Our feature flag system supports sophisticated rollout strategies with Claude-sp
 ```
 
 ### 5. Segmentation
+
 **Use Case**: User-specific targeting
+
 ```typescript
 {
   type: ToggleType.SEGMENTATION,
@@ -98,25 +108,31 @@ Our feature flag system supports sophisticated rollout strategies with Claude-sp
 ## Rollout Strategies
 
 ### 1. Canary Rollout (Recommended)
+
 **Timeline**: Gradual increase over 7-14 days
+
 - Day 1: 1% of users
-- Day 3: 5% of users  
+- Day 3: 5% of users
 - Day 5: 10% of users
 - Day 7: 25% of users
 - Day 10: 50% of users
 - Day 14: 100% of users
 
 ### 2. Ring-based Deployment
+
 **Target Segments**:
+
 - Ring 0: Internal users (0.1%)
 - Ring 1: Beta users (1%)
 - Ring 2: Premium users (10%)
 - Ring 3: All users (100%)
 
 ### 3. Geographic Rollout
+
 **Regions**:
+
 - Phase 1: US West Coast
-- Phase 2: US East Coast  
+- Phase 2: US East Coast
 - Phase 3: Europe
 - Phase 4: Asia-Pacific
 - Phase 5: Global
@@ -126,6 +142,7 @@ Our feature flag system supports sophisticated rollout strategies with Claude-sp
 ### Phase 1: Pre-Rollout (1-2 days)
 
 #### 1.1 Create Feature Toggle
+
 ```bash
 curl -X POST /api/feature-toggles \
   -H "Content-Type: application/json" \
@@ -142,6 +159,7 @@ curl -X POST /api/feature-toggles \
 ```
 
 #### 1.2 Verify Dependencies
+
 ```bash
 # Check for conflicting toggles
 curl -X GET /api/feature-toggles/new_corrections_ui/dependencies
@@ -151,6 +169,7 @@ curl -X GET /api/feature-toggles/claude-compatibility?feature=new_corrections_ui
 ```
 
 #### 1.3 Set Up Monitoring
+
 ```bash
 # Configure metrics collection
 curl -X POST /api/feature-toggles/new_corrections_ui/monitoring \
@@ -166,6 +185,7 @@ curl -X POST /api/feature-toggles/new_corrections_ui/monitoring \
 ### Phase 2: Initial Rollout (Day 1-3)
 
 #### 2.1 Start with Internal Users (0.1%)
+
 ```bash
 # Update to target internal users only
 curl -X PUT /api/feature-toggles/new_corrections_ui \
@@ -174,7 +194,7 @@ curl -X PUT /api/feature-toggles/new_corrections_ui \
     "value": {
       "rules": [{
         "attribute": "user_type",
-        "operator": "equals", 
+        "operator": "equals",
         "value": "internal"
       }],
       "defaultValue": false
@@ -183,12 +203,14 @@ curl -X PUT /api/feature-toggles/new_corrections_ui \
 ```
 
 #### 2.2 Monitor for 24-48 hours
+
 - Check error rates < 1%
 - Verify Claude API costs within expected range
 - Monitor user feedback
 - Review performance metrics
 
 #### 2.3 Expand to 1% General Population
+
 ```bash
 curl -X PUT /api/feature-toggles/new_corrections_ui \
   -d '{
@@ -200,12 +222,13 @@ curl -X PUT /api/feature-toggles/new_corrections_ui \
 ### Phase 3: Gradual Expansion (Day 3-14)
 
 #### 3.1 Daily Percentage Increases
+
 ```bash
 # Day 3: 5%
 curl -X PUT /api/feature-toggles/new_corrections_ui/value \
   -d '{ "percentage": 5 }'
 
-# Day 5: 10%  
+# Day 5: 10%
 curl -X PUT /api/feature-toggles/new_corrections_ui/value \
   -d '{ "percentage": 10 }'
 
@@ -223,7 +246,9 @@ curl -X PUT /api/feature-toggles/new_corrections_ui/value \
 ```
 
 #### 3.2 Quality Gates Between Phases
+
 Before each increase, verify:
+
 - [ ] Error rate < 2%
 - [ ] Claude cost impact within 10% of baseline
 - [ ] User satisfaction score > 4.0/5.0
@@ -233,7 +258,9 @@ Before each increase, verify:
 ### Phase 4: Full Rollout & Graduation (Day 14+)
 
 #### 4.1 Complete Feature Flag Removal
+
 After 30 days of 100% rollout:
+
 ```bash
 # Archive the toggle
 curl -X DELETE /api/feature-toggles/new_corrections_ui \
@@ -241,6 +268,7 @@ curl -X DELETE /api/feature-toggles/new_corrections_ui \
 ```
 
 #### 4.2 Code Cleanup
+
 - Remove feature flag checks from code
 - Update documentation
 - Archive related monitoring dashboards
@@ -250,12 +278,14 @@ curl -X DELETE /api/feature-toggles/new_corrections_ui \
 ### Key Metrics to Track
 
 #### 1. Toggle Health Metrics
+
 ```bash
 # Get toggle health status
 curl -X GET /api/feature-toggles/new_corrections_ui/health
 ```
 
 Expected Response:
+
 ```json
 {
   "status": "healthy",
@@ -267,12 +297,14 @@ Expected Response:
 ```
 
 #### 2. Business Impact Metrics
+
 - User engagement changes
 - Claude API cost variations
 - Performance improvements/degradations
 - Error rates and user complaints
 
 #### 3. Technical Metrics
+
 - Feature flag evaluation latency
 - Cache hit rates
 - Database query performance
@@ -281,6 +313,7 @@ Expected Response:
 ### Monitoring Dashboard Access
 
 Visit the [Feature Toggle Dashboard](http://localhost:3000/admin/feature-toggles) to view:
+
 - Real-time toggle status
 - Performance metrics graphs
 - User distribution charts
@@ -292,6 +325,7 @@ Visit the [Feature Toggle Dashboard](http://localhost:3000/admin/feature-toggles
 ### Immediate Rollback (< 5 minutes)
 
 #### 1. Emergency Disable
+
 ```bash
 # Instant disable with TTL
 curl -X POST /api/feature-toggles/new_corrections_ui/emergency-override \
@@ -303,6 +337,7 @@ curl -X POST /api/feature-toggles/new_corrections_ui/emergency-override \
 ```
 
 #### 2. Partial Rollback
+
 ```bash
 # Reduce to 10% immediately
 curl -X PUT /api/feature-toggles/new_corrections_ui/value \
@@ -312,16 +347,19 @@ curl -X PUT /api/feature-toggles/new_corrections_ui/value \
 ### Escalation Procedures
 
 **Level 1** (Warning): Error rate 2-5%
+
 - Reduce rollout percentage by 50%
 - Investigate within 30 minutes
 - Notify on-call engineer
 
 **Level 2** (Critical): Error rate 5-10%
+
 - Reduce rollout to 1%
 - Page primary developer
 - Create incident ticket
 
 **Level 3** (Emergency): Error rate >10%
+
 - Immediate emergency disable
 - Page entire on-call team
 - Create P0 incident
@@ -329,29 +367,34 @@ curl -X PUT /api/feature-toggles/new_corrections_ui/value \
 ## Best Practices
 
 ### 1. Feature Flag Naming
+
 - Use descriptive, kebab-case names
 - Include epic/story identifier
 - Examples: `epic17-corrections-export`, `story-42-dark-mode`
 
 ### 2. Documentation Requirements
+
 - Document Claude compatibility impacts
 - List dependent features/toggles
 - Provide rollback procedures
 - Include success criteria
 
 ### 3. Testing Guidelines
+
 - Test all toggle states in CI/CD
 - Verify feature works at 0%, 50%, and 100%
 - Test emergency override scenarios
 - Validate performance under load
 
 ### 4. Gradual Rollout Rules
+
 - Never increase rollout >2x in single day
 - Maintain 24-hour observation periods
 - Have automatic rollback triggers
 - Monitor weekend/holiday impacts
 
 ### 5. Claude-Specific Considerations
+
 - Track prompt token usage changes
 - Monitor output quality metrics
 - Test with different Claude model versions
@@ -362,13 +405,16 @@ curl -X PUT /api/feature-toggles/new_corrections_ui/value \
 ### Common Issues
 
 #### 1. Toggle Not Evaluating
+
 **Symptoms**: Always returns false/default value
 **Causes**:
+
 - Toggle disabled or archived
 - Cache corruption
 - Invalid scoping rules
 
 **Resolution**:
+
 ```bash
 # Check toggle status
 curl -X GET /api/feature-toggles/toggle_key/debug
@@ -381,13 +427,16 @@ curl -X GET /api/feature-toggles/toggle_key/scopes
 ```
 
 #### 2. High Evaluation Latency
+
 **Symptoms**: Slow page loads, timeout errors
 **Causes**:
+
 - Complex segmentation rules
 - Database query performance
 - Cache misses
 
 **Resolution**:
+
 ```bash
 # Simplify rules temporarily
 curl -X PUT /api/feature-toggles/toggle_key/rules \
@@ -401,13 +450,16 @@ curl -X POST /api/feature-toggles/toggle_key/warm-cache
 ```
 
 #### 3. Inconsistent Behavior
+
 **Symptoms**: Users see different states
 **Causes**:
+
 - Cache inconsistency
 - Multiple evaluation contexts
 - Race conditions
 
 **Resolution**:
+
 ```bash
 # Force cache refresh
 curl -X POST /api/feature-toggles/refresh-all-caches
@@ -435,7 +487,7 @@ curl -X GET /api/feature-toggles/evaluate-all?userId=user123
 # Export toggle configuration
 curl -X GET /api/feature-toggles/export > toggles-backup.json
 
-# Import toggle configuration  
+# Import toggle configuration
 curl -X POST /api/feature-toggles/import -d @toggles-backup.json
 ```
 
@@ -446,14 +498,16 @@ curl -X POST /api/feature-toggles/import -d @toggles-backup.json
 Use this checklist for each feature flag rollout:
 
 ### Pre-Rollout
+
 - [ ] Feature toggle created and configured
 - [ ] Dependencies verified
-- [ ] Monitoring dashboards set up  
+- [ ] Monitoring dashboards set up
 - [ ] Emergency contacts notified
 - [ ] Rollback procedures documented
 - [ ] Success criteria defined
 
 ### During Rollout
+
 - [ ] Error rates monitored at each phase
 - [ ] User feedback collected
 - [ ] Performance metrics tracked
@@ -461,6 +515,7 @@ Use this checklist for each feature flag rollout:
 - [ ] Quality gates passed before increases
 
 ### Post-Rollout
+
 - [ ] Feature toggle archived after 30 days
 - [ ] Code cleanup completed
 - [ ] Documentation updated
@@ -469,6 +524,6 @@ Use this checklist for each feature flag rollout:
 
 ---
 
-*Last updated: January 2024*
-*Document version: 1.0*
-*Owner: Feature Flags Team*
+_Last updated: January 2024_
+_Document version: 1.0_
+_Owner: Feature Flags Team_

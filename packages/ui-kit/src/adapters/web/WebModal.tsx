@@ -30,20 +30,23 @@ export const WebModal: React.FC<WebModalProps> = ({
   const adapter = usePlatformAdapter();
 
   // Enhanced escape key handling
-  const handleEscapeKey = useCallback((e: KeyboardEvent) => {
-    if (keyboard && e.key === 'Escape' && isOpen) {
-      e.preventDefault();
-      onClose();
-    }
-  }, [keyboard, isOpen, onClose]);
+  const handleEscapeKey = useCallback(
+    (e: KeyboardEvent) => {
+      if (keyboard && e.key === 'Escape' && isOpen) {
+        e.preventDefault();
+        onClose();
+      }
+    },
+    [keyboard, isOpen, onClose]
+  );
 
   useEffect(() => {
     if (isOpen) {
       document.addEventListener('keydown', handleEscapeKey);
-      
+
       // Prevent body scroll when modal is open
       document.body.style.overflow = 'hidden';
-      
+
       // Focus management - focus the modal when it opens
       const modal = document.querySelector('[data-modal="true"]') as HTMLElement;
       if (modal) {
@@ -107,17 +110,17 @@ export const WebModal: React.FC<WebModalProps> = ({
         ...(animation && {
           transition: 'all 0.3s ease',
           opacity: isOpen ? 1 : 0,
-          transform: isOpen ? 'scale(1)' : 'scale(0.95)'
+          transform: isOpen ? 'scale(1)' : 'scale(0.95)',
         }),
         ...(centered && {
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'center',
         }),
         ...(scrollable && {
           maxHeight: '90vh',
-          overflow: 'auto'
-        })
+          overflow: 'auto',
+        }),
       }}
       data-modal="true"
       tabIndex={-1}

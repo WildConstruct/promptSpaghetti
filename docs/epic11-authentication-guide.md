@@ -83,6 +83,7 @@ npm run dev
 ### Authentication
 
 #### POST /auth/register
+
 Register a new user account.
 
 ```json
@@ -96,6 +97,7 @@ Register a new user account.
 ```
 
 **Response:**
+
 ```json
 {
   "user": {
@@ -111,6 +113,7 @@ Register a new user account.
 ```
 
 #### POST /auth/login
+
 Authenticate user and get tokens.
 
 ```json
@@ -126,6 +129,7 @@ Authenticate user and get tokens.
 ```
 
 **Response:**
+
 ```json
 {
   "accessToken": "eyJhbGciOiJSUzI1NiIs...",
@@ -143,6 +147,7 @@ Authenticate user and get tokens.
 ```
 
 #### POST /auth/refresh
+
 Refresh access token using refresh token.
 
 ```json
@@ -152,6 +157,7 @@ Refresh access token using refresh token.
 ```
 
 #### POST /auth/logout
+
 Logout and revoke tokens.
 
 Headers: `Authorization: Bearer <access_token>`
@@ -159,6 +165,7 @@ Headers: `Authorization: Bearer <access_token>`
 ### Password Management
 
 #### POST /auth/password-reset/request
+
 Request password reset email.
 
 ```json
@@ -168,6 +175,7 @@ Request password reset email.
 ```
 
 #### POST /auth/password-reset/confirm
+
 Confirm password reset with token.
 
 ```json
@@ -178,6 +186,7 @@ Confirm password reset with token.
 ```
 
 #### POST /auth/change-password
+
 Change password for authenticated user.
 
 ```json
@@ -190,11 +199,13 @@ Change password for authenticated user.
 ### User Profile
 
 #### GET /auth/me
+
 Get current user profile.
 
 Headers: `Authorization: Bearer <access_token>`
 
 #### POST /auth/verify-email
+
 Verify email address with token.
 
 ```json
@@ -207,17 +218,18 @@ Verify email address with token.
 
 The system implements comprehensive rate limiting:
 
-| Endpoint | Window | Limit | 
-|----------|--------|-------|
-| Login | 1 minute | 5 attempts |
-| Register | 1 minute | 3 attempts |
-| Password Reset | 5 minutes | 3 attempts |
-| Password Change | 5 minutes | 3 attempts |
-| General API | 1 minute | 100 requests |
+| Endpoint        | Window    | Limit        |
+| --------------- | --------- | ------------ |
+| Login           | 1 minute  | 5 attempts   |
+| Register        | 1 minute  | 3 attempts   |
+| Password Reset  | 5 minutes | 3 attempts   |
+| Password Change | 5 minutes | 3 attempts   |
+| General API     | 1 minute  | 100 requests |
 
 ## JWT Token Structure
 
 ### Access Token (15 minutes)
+
 ```json
 {
   "sub": "user-id",
@@ -234,6 +246,7 @@ The system implements comprehensive rate limiting:
 ```
 
 ### Refresh Token (7 days)
+
 ```json
 {
   "sub": "user-id",
@@ -259,6 +272,7 @@ The system implements comprehensive rate limiting:
 Permissions follow the pattern: `resource:action:scope`
 
 Examples:
+
 - `graphs:create:own` - Create own graphs
 - `users:read:organization` - Read users in organization
 - `teams:update:team` - Update team data
@@ -312,6 +326,7 @@ GET /auth/health
 ```
 
 Response:
+
 ```json
 {
   "status": "healthy",
@@ -325,6 +340,7 @@ Response:
 ### Audit Logs
 
 All security events are logged:
+
 - Login attempts (success/failure)
 - Password changes/resets
 - Account lockouts
@@ -334,6 +350,7 @@ All security events are logged:
 ### Metrics
 
 Monitor these key metrics:
+
 - Login success/failure rates
 - Token issuance/validation rates
 - Rate limit violations
@@ -345,18 +362,21 @@ Monitor these key metrics:
 ### Common Issues
 
 1. **JWT Key Errors**
+
    ```bash
    # Regenerate keys
    ts-node src/auth/setup.ts setup
    ```
 
 2. **Database Connection**
+
    ```bash
    # Check PostgreSQL status
    pg_isready -h localhost -p 5432
    ```
 
 3. **Redis Connection**
+
    ```bash
    # Test Redis connectivity
    redis-cli ping
@@ -371,6 +391,7 @@ Monitor these key metrics:
 ### Debug Mode
 
 Set environment variables for debugging:
+
 ```env
 NODE_ENV=development
 LOG_LEVEL=debug
@@ -438,6 +459,7 @@ npm test -- --coverage auth
 ## Support
 
 For issues or questions:
+
 1. Check troubleshooting section
 2. Review audit logs for security events
 3. Monitor health check endpoints

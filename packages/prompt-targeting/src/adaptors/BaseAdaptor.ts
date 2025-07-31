@@ -11,7 +11,7 @@ import {
   AdaptorConfig,
   AdaptorError,
   ValidationException,
-  TranslationError
+  TranslationError,
 } from '../types';
 import { createHash } from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
@@ -73,14 +73,14 @@ export abstract class BaseAdaptor implements ModelAdaptor {
    */
   public async validate(graph: any, config?: AdaptorConfig): Promise<ValidationResult> {
     this.ensureInitialized();
-    
+
     try {
       // Base validation checks
       const baseValidation = await this.performBaseValidation(graph, config);
-      
+
       // Platform-specific validation
       const platformValidation = await this.performPlatformValidation(graph, config);
-      
+
       // Combine results
       return this.combineValidationResults(baseValidation, platformValidation);
     } catch (error) {
@@ -97,7 +97,7 @@ export abstract class BaseAdaptor implements ModelAdaptor {
    */
   public async transform(graph: any, config?: AdaptorConfig): Promise<PlatformPrompt> {
     this.ensureInitialized();
-    
+
     try {
       // Validate first
       const validation = await this.validate(graph, config);
@@ -123,8 +123,8 @@ export abstract class BaseAdaptor implements ModelAdaptor {
           timestamp: new Date(),
           qualityScore: validation.compatibilityScore,
           optimizations: await this.getAppliedOptimizations(graph, config),
-          transformTime
-        }
+          transformTime,
+        },
       };
 
       this.logger.log(`Transform completed for ${this.id} in ${transformTime}ms`);
@@ -149,7 +149,7 @@ export abstract class BaseAdaptor implements ModelAdaptor {
     return {
       enableOptimizations: true,
       qualityPreference: 0.7,
-      stylePreference: 'default'
+      stylePreference: 'default',
     };
   }
 
@@ -170,10 +170,7 @@ export abstract class BaseAdaptor implements ModelAdaptor {
   /**
    * Platform-specific validation implementation
    */
-  protected abstract performPlatformValidation(
-    graph: any,
-    config?: AdaptorConfig
-  ): Promise<ValidationResult>;
+  protected abstract performPlatformValidation(graph: any, config?: AdaptorConfig): Promise<ValidationResult>;
 
   /**
    * Platform-specific transformation implementation
@@ -186,10 +183,7 @@ export abstract class BaseAdaptor implements ModelAdaptor {
   /**
    * Base validation checks common to all platforms
    */
-  protected async performBaseValidation(
-    graph: any,
-    config?: AdaptorConfig
-  ): Promise<ValidationResult> {
+  protected async performBaseValidation(graph: any, config?: AdaptorConfig): Promise<ValidationResult> {
     const errors: any[] = [];
     const warnings: any[] = [];
 
@@ -198,7 +192,7 @@ export abstract class BaseAdaptor implements ModelAdaptor {
       errors.push({
         code: 'MISSING_GRAPH',
         message: 'No graph provided for validation',
-        severity: 'error' as const
+        severity: 'error' as const,
       });
       return { valid: false, errors, warnings, compatibilityScore: 0 };
     }
@@ -208,7 +202,7 @@ export abstract class BaseAdaptor implements ModelAdaptor {
       errors.push({
         code: 'INVALID_GRAPH_STRUCTURE',
         message: 'Graph must contain a nodes array',
-        severity: 'error' as const
+        severity: 'error' as const,
       });
     }
 
@@ -216,7 +210,7 @@ export abstract class BaseAdaptor implements ModelAdaptor {
       errors.push({
         code: 'INVALID_GRAPH_STRUCTURE',
         message: 'Graph must contain an edges array',
-        severity: 'error' as const
+        severity: 'error' as const,
       });
     }
 
@@ -225,7 +219,7 @@ export abstract class BaseAdaptor implements ModelAdaptor {
       warnings.push({
         code: 'EMPTY_GRAPH',
         message: 'Graph contains no nodes',
-        optimization: 'Add content nodes to generate meaningful output'
+        optimization: 'Add content nodes to generate meaningful output',
       });
     }
 
@@ -233,7 +227,7 @@ export abstract class BaseAdaptor implements ModelAdaptor {
     const errorWeight = 0.5;
     const warningWeight = 0.1;
     const maxScore = 1.0;
-    
+
     const errorPenalty = errors.length * errorWeight;
     const warningPenalty = warnings.length * warningWeight;
     const compatibilityScore = Math.max(0, maxScore - errorPenalty - warningPenalty);
@@ -242,7 +236,7 @@ export abstract class BaseAdaptor implements ModelAdaptor {
       valid: errors.length === 0,
       errors,
       warnings,
-      compatibilityScore
+      compatibilityScore,
     };
   }
 
@@ -258,7 +252,7 @@ export abstract class BaseAdaptor implements ModelAdaptor {
       valid: allErrors.length === 0,
       errors: allErrors,
       warnings: allWarnings,
-      compatibilityScore: avgCompatibilityScore
+      compatibilityScore: avgCompatibilityScore,
     };
   }
 
@@ -273,15 +267,12 @@ export abstract class BaseAdaptor implements ModelAdaptor {
   /**
    * Get list of optimizations applied during transformation
    */
-  protected async getAppliedOptimizations(
-    graph: any,
-    config?: AdaptorConfig
-  ): Promise<string[]> {
+  protected async getAppliedOptimizations(graph: any, config?: AdaptorConfig): Promise<string[]> {
     const optimizations: string[] = [];
-    
+
     if (config?.enableOptimizations !== false) {
       optimizations.push('parameter-normalization');
-      
+
       // Add platform-specific optimizations
       const platformOptimizations = await this.getPlatformOptimizations(graph, config);
       optimizations.push(...platformOptimizations);
@@ -293,10 +284,7 @@ export abstract class BaseAdaptor implements ModelAdaptor {
   /**
    * Get platform-specific optimizations (override in subclasses)
    */
-  protected async getPlatformOptimizations(
-    graph: any,
-    config?: AdaptorConfig
-  ): Promise<string[]> {
+  protected async getPlatformOptimizations(graph: any, config?: AdaptorConfig): Promise<string[]> {
     return [];
   }
 
@@ -305,31 +293,23 @@ export abstract class BaseAdaptor implements ModelAdaptor {
    */
   protected ensureInitialized(): void {
     if (!this.initialized) {
-      throw new AdaptorError(
-        `Adaptor ${this.id} must be initialized before use`,
-        this.id,
-        'NOT_INITIALIZED'
-      );
+      throw new AdaptorError(`Adaptor ${this.id} must be initialized before use`, this.id, 'NOT_INITIALIZED');
     }
   }
 
   /**
    * Normalize parameter value to platform range
    */
-  protected normalizeParameter(
-    value: number,
-    sourceRange: [number, number],
-    targetRange: [number, number]
-  ): number {
+  protected normalizeParameter(value: number, sourceRange: [number, number], targetRange: [number, number]): number {
     const [sourceMin, sourceMax] = sourceRange;
     const [targetMin, targetMax] = targetRange;
-    
+
     // Clamp to source range
     const clampedValue = Math.max(sourceMin, Math.min(sourceMax, value));
-    
+
     // Normalize to 0-1
     const normalized = (clampedValue - sourceMin) / (sourceMax - sourceMin);
-    
+
     // Scale to target range
     return targetMin + normalized * (targetMax - targetMin);
   }
@@ -354,7 +334,7 @@ export abstract class BaseAdaptor implements ModelAdaptor {
    */
   protected extractStyleInfo(graph: any): Record<string, unknown> {
     const style: Record<string, unknown> = {};
-    
+
     if (!graph.nodes || !Array.isArray(graph.nodes)) {
       return style;
     }

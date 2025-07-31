@@ -127,30 +127,30 @@
     padding: 24px 16px;
     min-height: 160px;
   }
-  
+
   .empty-icon-container {
     width: 80px;
     height: 80px;
     margin-bottom: 16px;
   }
-  
+
   .empty-icon {
     width: 48px;
     height: 48px;
   }
-  
+
   .empty-title {
     font-size: 18px;
   }
-  
+
   .empty-description {
     font-size: 14px;
   }
-  
+
   .empty-text {
     margin-bottom: 20px;
   }
-  
+
   .empty-action-btn {
     width: 100%;
     justify-content: center;

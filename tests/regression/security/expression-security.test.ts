@@ -1,10 +1,10 @@
 /**
  * Security Regression Tests - Expression Security
- * 
+ *
  * These tests ensure security boundaries remain intact across code changes.
  * Focuses on preventing code injection, prototype pollution, and other
  * security vulnerabilities in expression evaluation.
- * 
+ *
  * CRITICAL: Security regressions can lead to system compromise.
  */
 
@@ -12,7 +12,6 @@ import { executeGraph } from '../../../server/src/engine';
 import { Graph } from '../../packages/core/graphSchema';
 
 describe('Security Regression Tests - Expression Security', () => {
-
   describe('Code Injection Prevention', () => {
     it('should block eval() expressions', async () => {
       const maliciousGraph: Graph = {
@@ -22,20 +21,16 @@ describe('Security Regression Tests - Expression Security', () => {
           {
             id: 'conditional1',
             type: 'Conditional',
-            branches: [
-              { condition: 'eval("process.exit(1)")', output: 'Malicious code executed' }
-            ],
-            defaultOutput: 'Safe output'
+            branches: [{ condition: 'eval("process.exit(1)")', output: 'Malicious code executed' }],
+            defaultOutput: 'Safe output',
           },
           {
             id: 'output1',
             type: 'Output',
-            inputs: ['conditional1']
-          }
+            inputs: ['conditional1'],
+          },
         ],
-        edges: [
-          { id: 'e1', source: 'conditional1', target: 'output1' }
-        ]
+        edges: [{ id: 'e1', source: 'conditional1', target: 'output1' }],
       };
 
       await expect(executeGraph(maliciousGraph)).rejects.toThrow(/dangerous|eval|forbidden/i);
@@ -49,20 +44,16 @@ describe('Security Regression Tests - Expression Security', () => {
           {
             id: 'conditional1',
             type: 'Conditional',
-            branches: [
-              { condition: 'Function("return process")().exit(1)', output: 'Malicious code executed' }
-            ],
-            defaultOutput: 'Safe output'
+            branches: [{ condition: 'Function("return process")().exit(1)', output: 'Malicious code executed' }],
+            defaultOutput: 'Safe output',
           },
           {
             id: 'output1',
             type: 'Output',
-            inputs: ['conditional1']
-          }
+            inputs: ['conditional1'],
+          },
         ],
-        edges: [
-          { id: 'e1', source: 'conditional1', target: 'output1' }
-        ]
+        edges: [{ id: 'e1', source: 'conditional1', target: 'output1' }],
       };
 
       await expect(executeGraph(maliciousGraph)).rejects.toThrow(/dangerous|constructor|forbidden/i);
@@ -78,19 +69,17 @@ describe('Security Regression Tests - Expression Security', () => {
             type: 'Conditional',
             branches: [
               { condition: 'global.process.exit(1)', output: 'Global access succeeded' },
-              { condition: 'globalThis.process.exit(1)', output: 'GlobalThis access succeeded' }
+              { condition: 'globalThis.process.exit(1)', output: 'GlobalThis access succeeded' },
             ],
-            defaultOutput: 'Safe output'
+            defaultOutput: 'Safe output',
           },
           {
             id: 'output1',
             type: 'Output',
-            inputs: ['conditional1']
-          }
+            inputs: ['conditional1'],
+          },
         ],
-        edges: [
-          { id: 'e1', source: 'conditional1', target: 'output1' }
-        ]
+        edges: [{ id: 'e1', source: 'conditional1', target: 'output1' }],
       };
 
       await expect(executeGraph(maliciousGraph)).rejects.toThrow(/dangerous|global|forbidden/i);
@@ -106,20 +95,16 @@ describe('Security Regression Tests - Expression Security', () => {
           {
             id: 'conditional1',
             type: 'Conditional',
-            branches: [
-              { condition: 'Object.__proto__.isEvil = true', output: 'Prototype polluted' }
-            ],
-            defaultOutput: 'Safe output'
+            branches: [{ condition: 'Object.__proto__.isEvil = true', output: 'Prototype polluted' }],
+            defaultOutput: 'Safe output',
           },
           {
             id: 'output1',
             type: 'Output',
-            inputs: ['conditional1']
-          }
+            inputs: ['conditional1'],
+          },
         ],
-        edges: [
-          { id: 'e1', source: 'conditional1', target: 'output1' }
-        ]
+        edges: [{ id: 'e1', source: 'conditional1', target: 'output1' }],
       };
 
       await expect(executeGraph(maliciousGraph)).rejects.toThrow(/dangerous|proto|forbidden/i);
@@ -134,19 +119,17 @@ describe('Security Regression Tests - Expression Security', () => {
             id: 'conditional1',
             type: 'Conditional',
             branches: [
-              { condition: '{}.constructor.prototype.isEvil = true', output: 'Constructor pollution succeeded' }
+              { condition: '{}.constructor.prototype.isEvil = true', output: 'Constructor pollution succeeded' },
             ],
-            defaultOutput: 'Safe output'
+            defaultOutput: 'Safe output',
           },
           {
             id: 'output1',
             type: 'Output',
-            inputs: ['conditional1']
-          }
+            inputs: ['conditional1'],
+          },
         ],
-        edges: [
-          { id: 'e1', source: 'conditional1', target: 'output1' }
-        ]
+        edges: [{ id: 'e1', source: 'conditional1', target: 'output1' }],
       };
 
       await expect(executeGraph(maliciousGraph)).rejects.toThrow(/dangerous|constructor|forbidden/i);
@@ -164,19 +147,17 @@ describe('Security Regression Tests - Expression Security', () => {
             type: 'Conditional',
             branches: [
               { condition: '2 + 2 === 4', output: 'Math works' },
-              { condition: 'Math.max(1, 2, 3) === 3', output: 'Math.max works' }
+              { condition: 'Math.max(1, 2, 3) === 3', output: 'Math.max works' },
             ],
-            defaultOutput: 'Math failed'
+            defaultOutput: 'Math failed',
           },
           {
             id: 'output1',
             type: 'Output',
-            inputs: ['conditional1']
-          }
+            inputs: ['conditional1'],
+          },
         ],
-        edges: [
-          { id: 'e1', source: 'conditional1', target: 'output1' }
-        ]
+        edges: [{ id: 'e1', source: 'conditional1', target: 'output1' }],
       };
 
       const result = await executeGraph(safeGraph);
@@ -192,28 +173,28 @@ describe('Security Regression Tests - Expression Security', () => {
             id: 'setVar1',
             type: 'SetVariable',
             key: 'testString',
-            value: 'Hello World'
+            value: 'Hello World',
           },
           {
             id: 'conditional1',
             type: 'Conditional',
             branches: [
               { condition: 'getVariable("testString").includes("Hello")', output: 'String includes works' },
-              { condition: 'getVariable("testString").startsWith("Hello")', output: 'String startsWith works' }
+              { condition: 'getVariable("testString").startsWith("Hello")', output: 'String startsWith works' },
             ],
             defaultOutput: 'String operations failed',
-            inputs: ['setVar1']
+            inputs: ['setVar1'],
           },
           {
             id: 'output1',
             type: 'Output',
-            inputs: ['conditional1']
-          }
+            inputs: ['conditional1'],
+          },
         ],
         edges: [
           { id: 'e1', source: 'setVar1', target: 'conditional1' },
-          { id: 'e2', source: 'conditional1', target: 'output1' }
-        ]
+          { id: 'e2', source: 'conditional1', target: 'output1' },
+        ],
       };
 
       const result = await executeGraph(safeGraph);
@@ -229,27 +210,25 @@ describe('Security Regression Tests - Expression Security', () => {
             id: 'setVar1',
             type: 'SetVariable',
             key: 'number',
-            value: '42'
+            value: '42',
           },
           {
             id: 'conditional1',
             type: 'Conditional',
-            branches: [
-              { condition: 'parseInt(getVariable("number")) === 42', output: 'Variable access works' }
-            ],
+            branches: [{ condition: 'parseInt(getVariable("number")) === 42', output: 'Variable access works' }],
             defaultOutput: 'Variable access failed',
-            inputs: ['setVar1']
+            inputs: ['setVar1'],
           },
           {
             id: 'output1',
             type: 'Output',
-            inputs: ['conditional1']
-          }
+            inputs: ['conditional1'],
+          },
         ],
         edges: [
           { id: 'e1', source: 'setVar1', target: 'conditional1' },
-          { id: 'e2', source: 'conditional1', target: 'output1' }
-        ]
+          { id: 'e2', source: 'conditional1', target: 'output1' },
+        ],
       };
 
       const result = await executeGraph(safeGraph);
@@ -266,20 +245,16 @@ describe('Security Regression Tests - Expression Security', () => {
           {
             id: 'conditional1',
             type: 'Conditional',
-            branches: [
-              { condition: 'while(true) { /* infinite loop */ }', output: 'Loop completed' }
-            ],
-            defaultOutput: 'Safe output'
+            branches: [{ condition: 'while(true) { /* infinite loop */ }', output: 'Loop completed' }],
+            defaultOutput: 'Safe output',
           },
           {
             id: 'output1',
             type: 'Output',
-            inputs: ['conditional1']
-          }
+            inputs: ['conditional1'],
+          },
         ],
-        edges: [
-          { id: 'e1', source: 'conditional1', target: 'output1' }
-        ]
+        edges: [{ id: 'e1', source: 'conditional1', target: 'output1' }],
       };
 
       await expect(executeGraph(maliciousGraph)).rejects.toThrow(/dangerous|loop|forbidden/i);
@@ -287,7 +262,7 @@ describe('Security Regression Tests - Expression Security', () => {
 
     it('should limit expression complexity', async () => {
       const complexExpression = 'true && '.repeat(1000) + 'true'; // Very long expression
-      
+
       const complexGraph: Graph = {
         id: 'complex-expression-test',
         seed: 12345,
@@ -295,23 +270,19 @@ describe('Security Regression Tests - Expression Security', () => {
           {
             id: 'conditional1',
             type: 'Conditional',
-            branches: [
-              { condition: complexExpression, output: 'Complex expression executed' }
-            ],
+            branches: [{ condition: complexExpression, output: 'Complex expression executed' }],
             defaultOutput: 'Safe output',
             conditionalConfig: {
-              maxExpressionLength: 100 // Should reject expressions longer than 100 chars
-            }
+              maxExpressionLength: 100, // Should reject expressions longer than 100 chars
+            },
           },
           {
             id: 'output1',
             type: 'Output',
-            inputs: ['conditional1']
-          }
+            inputs: ['conditional1'],
+          },
         ],
-        edges: [
-          { id: 'e1', source: 'conditional1', target: 'output1' }
-        ]
+        edges: [{ id: 'e1', source: 'conditional1', target: 'output1' }],
       };
 
       await expect(executeGraph(complexGraph)).rejects.toThrow(/length|complex|forbidden/i);
@@ -328,24 +299,24 @@ describe('Security Regression Tests - Expression Security', () => {
             id: 'setVar1',
             type: 'SetVariable',
             key: '__proto__',
-            value: '{ "isEvil": true }'
+            value: '{ "isEvil": true }',
           },
           {
             id: 'getVar1',
             type: 'GetVariable',
             key: '__proto__',
-            inputs: ['setVar1']
+            inputs: ['setVar1'],
           },
           {
             id: 'output1',
             type: 'Output',
-            inputs: ['getVar1']
-          }
+            inputs: ['getVar1'],
+          },
         ],
         edges: [
           { id: 'e1', source: 'setVar1', target: 'getVar1' },
-          { id: 'e2', source: 'getVar1', target: 'output1' }
-        ]
+          { id: 'e2', source: 'getVar1', target: 'output1' },
+        ],
       };
 
       // Should either reject the dangerous key name or sanitize it
@@ -362,28 +333,28 @@ describe('Security Regression Tests - Expression Security', () => {
             id: 'setVar1',
             type: 'SetVariable',
             key: 'safeKey',
-            value: '<script>alert("xss")</script>'
+            value: '<script>alert("xss")</script>',
           },
           {
             id: 'getVar1',
             type: 'GetVariable',
             key: 'safeKey',
-            inputs: ['setVar1']
+            inputs: ['setVar1'],
           },
           {
             id: 'output1',
             type: 'Output',
-            inputs: ['getVar1']
-          }
+            inputs: ['getVar1'],
+          },
         ],
         edges: [
           { id: 'e1', source: 'setVar1', target: 'getVar1' },
-          { id: 'e2', source: 'getVar1', target: 'output1' }
-        ]
+          { id: 'e2', source: 'getVar1', target: 'output1' },
+        ],
       };
 
       const result = await executeGraph(safeGraph);
-      
+
       // Should return the value as string, not execute it
       expect(result[0]).toBe('<script>alert("xss")</script>');
     });
@@ -398,20 +369,16 @@ describe('Security Regression Tests - Expression Security', () => {
           {
             id: 'conditional1',
             type: 'Conditional',
-            branches: [
-              { condition: 'process.env.DATABASE_PASSWORD', output: 'Got password' }
-            ],
-            defaultOutput: 'Safe output'
+            branches: [{ condition: 'process.env.DATABASE_PASSWORD', output: 'Got password' }],
+            defaultOutput: 'Safe output',
           },
           {
             id: 'output1',
             type: 'Output',
-            inputs: ['conditional1']
-          }
+            inputs: ['conditional1'],
+          },
         ],
-        edges: [
-          { id: 'e1', source: 'conditional1', target: 'output1' }
-        ]
+        edges: [{ id: 'e1', source: 'conditional1', target: 'output1' }],
       };
 
       try {
@@ -433,7 +400,7 @@ describe('Security Regression Tests - Expression Security', () => {
         'window["Function"]("return process")()',
         '(function(){return eval})()("malicious")',
         'Object["getPrototypeOf"]({})',
-        '[].__proto__.constructor("malicious")'
+        '[].__proto__.constructor("malicious")',
       ];
 
       for (const attempt of bypassAttempts) {
@@ -444,27 +411,22 @@ describe('Security Regression Tests - Expression Security', () => {
             {
               id: 'conditional1',
               type: 'Conditional',
-              branches: [
-                { condition: attempt, output: 'Bypass succeeded' }
-              ],
-              defaultOutput: 'Safe output'
+              branches: [{ condition: attempt, output: 'Bypass succeeded' }],
+              defaultOutput: 'Safe output',
             },
             {
               id: 'output1',
               type: 'Output',
-              inputs: ['conditional1']
-            }
+              inputs: ['conditional1'],
+            },
           ],
-          edges: [
-            { id: 'e1', source: 'conditional1', target: 'output1' }
-          ]
+          edges: [{ id: 'e1', source: 'conditional1', target: 'output1' }],
         };
 
         await expect(executeGraph(maliciousGraph)).rejects.toThrow(/dangerous|forbidden/i);
       }
     });
   });
-
 });
 
-export {};  // Make this a module
+export {}; // Make this a module

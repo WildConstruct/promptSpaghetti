@@ -9,7 +9,7 @@ import {
   TestDataUtils,
   TestAssertionHelpers,
   MockFactory,
-  PerformanceTestUtils
+  PerformanceTestUtils,
 } from '../TestingUtilities';
 
 describe('Testing Utilities', () => {
@@ -23,7 +23,7 @@ describe('Testing Utilities', () => {
         seed: 'test-seed-123',
         mockReactFlow: true,
         mockWebSocket: false,
-        mockLocalStorage: true
+        mockLocalStorage: true,
       };
 
       const env = await TestEnvironmentManager.createEnvironment('test-env', config);
@@ -42,7 +42,7 @@ describe('Testing Utilities', () => {
 
     test('should setup ReactFlow mocks when configured', async () => {
       const env = await TestEnvironmentManager.createEnvironment('react-flow-env', {
-        mockReactFlow: true
+        mockReactFlow: true,
       });
 
       const reactFlowMock = env.mocks.get('reactFlow');
@@ -54,7 +54,7 @@ describe('Testing Utilities', () => {
 
     test('should setup WebSocket mocks when configured', async () => {
       const env = await TestEnvironmentManager.createEnvironment('websocket-env', {
-        mockWebSocket: true
+        mockWebSocket: true,
       });
 
       expect((global as any).WebSocket).toBeDefined();
@@ -63,7 +63,7 @@ describe('Testing Utilities', () => {
 
     test('should setup localStorage mocks when configured', async () => {
       const env = await TestEnvironmentManager.createEnvironment('storage-env', {
-        mockLocalStorage: true
+        mockLocalStorage: true,
       });
 
       const mockStorage = env.mocks.get('localStorage');
@@ -74,7 +74,7 @@ describe('Testing Utilities', () => {
 
     test('should cleanup environments properly', async () => {
       const env = await TestEnvironmentManager.createEnvironment('cleanup-test', {
-        mockLocalStorage: true
+        mockLocalStorage: true,
       });
 
       expect(TestEnvironmentManager.getEnvironment('cleanup-test')).toBeDefined();
@@ -88,10 +88,10 @@ describe('Testing Utilities', () => {
   describe('TestDataUtils', () => {
     test('should generate deterministic data with seed', () => {
       const dataUtils = new TestDataUtils('test-123');
-      
+
       const id1 = dataUtils.generateId('test');
       const id2 = dataUtils.generateId('test');
-      
+
       expect(id1).toMatch(/^test-\d+$/);
       expect(id2).toMatch(/^test-\d+$/);
       expect(id1).not.toBe(id2); // Should be different due to timestamp
@@ -99,9 +99,9 @@ describe('Testing Utilities', () => {
 
     test('should generate consistent email addresses', () => {
       const dataUtils = new TestDataUtils('test-email');
-      
+
       const email = dataUtils.generateEmail();
-      
+
       expect(email).toMatch(/^[a-z0-9]+@example\.com$/);
       expect(email.length).toBeGreaterThan(10);
     });
@@ -110,26 +110,18 @@ describe('Testing Utilities', () => {
   describe('TestAssertionHelpers', () => {
     test('should wait for condition with success', async () => {
       let conditionMet = false;
-      
+
       setTimeout(() => {
         conditionMet = true;
       }, 100);
 
-      await TestAssertionHelpers.waitForCondition(
-        () => conditionMet,
-        1000,
-        50
-      );
+      await TestAssertionHelpers.waitForCondition(() => conditionMet, 1000, 50);
     });
 
     test('should timeout when condition is not met', async () => {
-      await expect(
-        TestAssertionHelpers.waitForCondition(
-          () => false,
-          100,
-          25
-        )
-      ).rejects.toThrow('Condition not met within 100ms');
+      await expect(TestAssertionHelpers.waitForCondition(() => false, 100, 25)).rejects.toThrow(
+        'Condition not met within 100ms'
+      );
     });
 
     test('should handle delays correctly', async () => {
@@ -179,7 +171,7 @@ describe('Testing Utilities', () => {
       const overrides = {
         name: 'Custom User',
         role: 'admin',
-        isActive: false
+        isActive: false,
       };
 
       const user = MockFactory.createMockUser(overrides);
@@ -234,10 +226,7 @@ describe('Testing Utilities', () => {
         return 'result';
       };
 
-      const measurement = await PerformanceTestUtils.measureExecution(
-        testFunction,
-        'testFunction'
-      );
+      const measurement = await PerformanceTestUtils.measureExecution(testFunction, 'testFunction');
 
       expect(measurement.result).toBe('result');
       expect(measurement.executionTime).toBeGreaterThan(50); // 50ms minimum
@@ -253,6 +242,5 @@ describe('Testing Utilities', () => {
       expect(loadTest.iterations).toBe(20);
       expect(loadTest.totalOperations).toBe(100); // 5 * 20
     });
-
   });
 });

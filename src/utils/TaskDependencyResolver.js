@@ -2,10 +2,10 @@
 
 /**
  * Task Dependency Resolver
- * 
+ *
  * Automatically detects task dependencies, visualizes dependency chains,
  * identifies blockers, and suggests optimal task ordering for improved workflow.
- * 
+ *
  * Key Features:
  * - Automatic dependency detection using NLP and pattern matching
  * - Visual dependency chain mapping with D3.js/Mermaid support
@@ -25,68 +25,80 @@ class TaskDependencyResolver {
     this.dependencyFile = path.join(this.dataDir, 'task-dependencies.json');
     this.visualizationFile = path.join(this.dataDir, 'dependency-graph.html');
     this.analysisFile = path.join(this.dataDir, 'dependency-analysis.json');
-    
+
     // Configuration for dependency detection
     this.config = {
       detection: {
         // Keywords that indicate dependencies
         dependencyKeywords: [
-          'depends on', 'requires', 'needs', 'after', 'once', 'when',
-          'following', 'prerequisite', 'blocked by', 'waiting for',
-          'based on', 'building on', 'extends', 'uses', 'leverages'
+          'depends on',
+          'requires',
+          'needs',
+          'after',
+          'once',
+          'when',
+          'following',
+          'prerequisite',
+          'blocked by',
+          'waiting for',
+          'based on',
+          'building on',
+          'extends',
+          'uses',
+          'leverages',
         ],
-        
+
         // Task reference patterns
         taskReferencePatterns: [
-          /T-\d{13}-[a-f0-9]{6}/g,           // Task IDs
-          /task\s+([A-Z0-9-]+)/gi,           // "task ABC-123"
-          /ticket\s+([A-Z0-9-]+)/gi,         // "ticket XYZ-456"
-          /story\s+([A-Z0-9-]+)/gi,          // "story S-123"
-          /epic\s+(\d+)/gi,                  // "epic 7"
-          /feature\s+([A-Z][A-Z0-9-]*)/gi    // "feature AUTH"
+          /T-\d{13}-[a-f0-9]{6}/g, // Task IDs
+          /task\s+([A-Z0-9-]+)/gi, // "task ABC-123"
+          /ticket\s+([A-Z0-9-]+)/gi, // "ticket XYZ-456"
+          /story\s+([A-Z0-9-]+)/gi, // "story S-123"
+          /epic\s+(\d+)/gi, // "epic 7"
+          /feature\s+([A-Z][A-Z0-9-]*)/gi, // "feature AUTH"
         ],
-        
+
         // File/component patterns
         filePatterns: [
           /src\/[a-zA-Z0-9\/.-]+\.(js|ts|jsx|tsx)/g,
           /packages\/[a-zA-Z0-9\/.-]+/g,
-          /components?\/[a-zA-Z0-9\/.-]+/g
+          /components?\/[a-zA-Z0-9\/.-]+/g,
         ],
-        
+
         // Priority for different dependency types
         dependencyWeights: {
-          explicit: 1.0,        // Explicitly mentioned task IDs
-          keyword: 0.8,         // Keyword-based dependencies
-          file: 0.6,            // File-based dependencies
-          epic: 0.7,            // Epic-level dependencies
-          semantic: 0.5         // Semantic similarity
-        }
+          explicit: 1.0, // Explicitly mentioned task IDs
+          keyword: 0.8, // Keyword-based dependencies
+          file: 0.6, // File-based dependencies
+          epic: 0.7, // Epic-level dependencies
+          semantic: 0.5, // Semantic similarity
+        },
       },
-      
+
       analysis: {
         // Thresholds for analysis
         criticalPathMinLength: 3,
         maxDependencyDepth: 10,
         circularDependencyLimit: 50,
-        
+
         // Weights for task prioritization
         priorityWeights: {
-          blockerCount: 0.4,      // Number of tasks blocked by this one
-          dependencyCount: 0.2,   // Number of dependencies this task has
-          priority: 0.3,          // Original task priority
-          effort: 0.1            // Task effort/complexity
-        }
+          blockerCount: 0.4, // Number of tasks blocked by this one
+          dependencyCount: 0.2, // Number of dependencies this task has
+          priority: 0.3, // Original task priority
+          effort: 0.1, // Task effort/complexity
+        },
       },
-      
+
       visualization: {
-        layout: 'hierarchical',   // 'hierarchical', 'force', 'circular'
+        layout: 'hierarchical', // 'hierarchical', 'force', 'circular'
         showLabels: true,
         highlightCriticalPath: true,
         maxNodesPerGraph: 100,
-        clusterByEpic: true
-      }
+        clusterByEpic: true,
+      },
     };
-    
+
     this.dependencies = new Map();
     this.dependencyGraph = new Map();
     this.analysis = {
@@ -94,7 +106,7 @@ class TaskDependencyResolver {
       blockers: [],
       cycles: [],
       recommendations: [],
-      lastAnalyzed: null
+      lastAnalyzed: null,
     };
   }
 
@@ -105,10 +117,9 @@ class TaskDependencyResolver {
     try {
       await this.ensureDataDirectory();
       await this.loadExistingDependencies();
-      
+
       console.log('✅ Task Dependency Resolver initialized');
       console.log(`📊 Loaded ${this.dependencies.size} existing dependency relationships`);
-      
     } catch (error) {
       console.error('❌ Failed to initialize Task Dependency Resolver:', error);
       throw error;
@@ -120,55 +131,54 @@ class TaskDependencyResolver {
    */
   async analyzeAllTasks() {
     console.log('🔍 Analyzing task dependencies...\n');
-    
+
     try {
       // Load current task state
       const tasks = await this.loadTasks();
-      
+
       // Clear existing dependencies for fresh analysis
       this.dependencies.clear();
       this.dependencyGraph.clear();
-      
+
       let dependenciesFound = 0;
-      
+
       // Analyze each task for dependencies
       for (const [taskId, task] of Object.entries(tasks)) {
         const taskDependencies = await this.analyzeTaskDependencies(taskId, task, tasks);
-        
+
         if (taskDependencies.length > 0) {
           this.dependencies.set(taskId, taskDependencies);
           dependenciesFound += taskDependencies.length;
-          
+
           console.log(`📋 ${taskId}: Found ${taskDependencies.length} dependencies`);
           taskDependencies.forEach(dep => {
             console.log(`   └─ ${dep.type}: ${dep.targetId} (${dep.reason})`);
           });
         }
       }
-      
+
       // Build dependency graph
       this.buildDependencyGraph();
-      
+
       // Perform analysis
       await this.performDependencyAnalysis();
-      
+
       // Save results
       await this.saveDependencies();
       await this.saveAnalysis();
-      
+
       console.log('\n✅ Dependency analysis complete:');
       console.log(`📊 Found ${dependenciesFound} dependency relationships`);
       console.log(`🔗 Generated dependency graph with ${this.dependencyGraph.size} nodes`);
       console.log(`⚠️  Identified ${this.analysis.blockers.length} potential blockers`);
       console.log(`🔄 Found ${this.analysis.cycles.length} circular dependencies`);
-      
+
       return {
         dependenciesFound,
         blockers: this.analysis.blockers.length,
         cycles: this.analysis.cycles.length,
-        criticalPathLength: this.analysis.criticalPath.length
+        criticalPathLength: this.analysis.criticalPath.length,
       };
-      
     } catch (error) {
       console.error('❌ Dependency analysis failed:', error);
       throw error;
@@ -180,11 +190,12 @@ class TaskDependencyResolver {
    */
   async analyzeTaskDependencies(taskId, task, allTasks) {
     const dependencies = [];
-    
+
     if (!task || !task.description) return dependencies;
-    
-    const text = `${task.title || ''} ${task.description || ''} ${(task.acceptanceCriteria || []).join(' ')}`.toLowerCase();
-    
+
+    const text =
+      `${task.title || ''} ${task.description || ''} ${(task.acceptanceCriteria || []).join(' ')}`.toLowerCase();
+
     // 1. Explicit task ID references
     const taskIds = this.extractTaskReferences(text);
     for (const refId of taskIds) {
@@ -194,25 +205,25 @@ class TaskDependencyResolver {
           targetId: refId,
           reason: 'Direct task reference',
           weight: this.config.detection.dependencyWeights.explicit,
-          detected: 'task_reference'
+          detected: 'task_reference',
         });
       }
     }
-    
+
     // 2. Keyword-based dependency detection
     const keywordDeps = this.detectKeywordDependencies(text, taskId, allTasks);
     dependencies.push(...keywordDeps);
-    
+
     // 3. Epic-level dependencies
     if (task.epic) {
       const epicDeps = this.detectEpicDependencies(task.epic, taskId, allTasks);
       dependencies.push(...epicDeps);
     }
-    
+
     // 4. File-based dependencies
     const fileDeps = this.detectFileDependencies(text, taskId, allTasks);
     dependencies.push(...fileDeps);
-    
+
     // 5. Remove duplicates and sort by weight
     return this.deduplicateDependencies(dependencies);
   }
@@ -222,7 +233,7 @@ class TaskDependencyResolver {
    */
   extractTaskReferences(text) {
     const references = new Set();
-    
+
     for (const pattern of this.config.detection.taskReferencePatterns) {
       const matches = text.match(pattern);
       if (matches) {
@@ -235,7 +246,7 @@ class TaskDependencyResolver {
         });
       }
     }
-    
+
     return Array.from(references);
   }
 
@@ -244,7 +255,7 @@ class TaskDependencyResolver {
    */
   detectKeywordDependencies(text, taskId, allTasks) {
     const dependencies = [];
-    
+
     for (const keyword of this.config.detection.dependencyKeywords) {
       const keywordIndex = text.indexOf(keyword);
       if (keywordIndex !== -1) {
@@ -252,7 +263,7 @@ class TaskDependencyResolver {
         const contextStart = Math.max(0, keywordIndex - 100);
         const contextEnd = Math.min(text.length, keywordIndex + 100);
         const context = text.slice(contextStart, contextEnd);
-        
+
         const nearbyTasks = this.extractTaskReferences(context);
         for (const refId of nearbyTasks) {
           if (refId !== taskId && allTasks[refId]) {
@@ -261,21 +272,23 @@ class TaskDependencyResolver {
               targetId: refId,
               reason: `Keyword "${keyword}" suggests dependency`,
               weight: this.config.detection.dependencyWeights.keyword,
-              detected: 'keyword_proximity'
+              detected: 'keyword_proximity',
             });
           }
         }
-        
+
         // Also check for component/epic dependencies
         const relatedTasks = this.findRelatedTasks(context, taskId, allTasks);
-        dependencies.push(...relatedTasks.map(dep => ({
-          ...dep,
-          reason: `Keyword "${keyword}" + ${dep.reason}`,
-          weight: dep.weight * this.config.detection.dependencyWeights.keyword
-        })));
+        dependencies.push(
+          ...relatedTasks.map(dep => ({
+            ...dep,
+            reason: `Keyword "${keyword}" + ${dep.reason}`,
+            weight: dep.weight * this.config.detection.dependencyWeights.keyword,
+          }))
+        );
       }
     }
-    
+
     return dependencies;
   }
 
@@ -284,32 +297,32 @@ class TaskDependencyResolver {
    */
   detectEpicDependencies(epic, taskId, allTasks) {
     const dependencies = [];
-    
+
     // Find other tasks in the same epic that might be prerequisites
-    const epicTasks = Object.entries(allTasks).filter(([id, task]) => 
-      id !== taskId && task.epic === epic
-    );
-    
+    const epicTasks = Object.entries(allTasks).filter(([id, task]) => id !== taskId && task.epic === epic);
+
     // Simple heuristic: tasks created earlier in the epic might be dependencies
     const currentTask = allTasks[taskId];
     const currentCreated = new Date(currentTask.created || '1970-01-01');
-    
+
     for (const [id, task] of epicTasks) {
       const taskCreated = new Date(task.created || '1970-01-01');
-      
+
       // If this task was created before the current one and has a higher priority
-      if (taskCreated < currentCreated && 
-          this.getPriorityWeight(task.priority) > this.getPriorityWeight(currentTask.priority)) {
+      if (
+        taskCreated < currentCreated &&
+        this.getPriorityWeight(task.priority) > this.getPriorityWeight(currentTask.priority)
+      ) {
         dependencies.push({
           type: 'epic',
           targetId: id,
           reason: `Earlier task in same epic (${epic})`,
           weight: this.config.detection.dependencyWeights.epic,
-          detected: 'epic_sequence'
+          detected: 'epic_sequence',
         });
       }
     }
-    
+
     return dependencies;
   }
 
@@ -318,7 +331,7 @@ class TaskDependencyResolver {
    */
   detectFileDependencies(text, taskId, allTasks) {
     const dependencies = [];
-    
+
     // Extract file references from current task
     const currentFiles = new Set();
     for (const pattern of this.config.detection.filePatterns) {
@@ -327,23 +340,23 @@ class TaskDependencyResolver {
         matches.forEach(file => currentFiles.add(file.toLowerCase()));
       }
     }
-    
+
     if (currentFiles.size === 0) return dependencies;
-    
+
     // Find other tasks that work on the same files
     for (const [id, task] of Object.entries(allTasks)) {
       if (id === taskId || !task.description) continue;
-      
+
       const otherText = `${task.title || ''} ${task.description || ''}`.toLowerCase();
       const otherFiles = new Set();
-      
+
       for (const pattern of this.config.detection.filePatterns) {
         const matches = otherText.match(pattern);
         if (matches) {
           matches.forEach(file => otherFiles.add(file.toLowerCase()));
         }
       }
-      
+
       // Check for file overlap
       const overlap = [...currentFiles].filter(file => otherFiles.has(file));
       if (overlap.length > 0) {
@@ -352,11 +365,11 @@ class TaskDependencyResolver {
           targetId: id,
           reason: `Shared files: ${overlap.join(', ')}`,
           weight: this.config.detection.dependencyWeights.file,
-          detected: 'file_overlap'
+          detected: 'file_overlap',
         });
       }
     }
-    
+
     return dependencies;
   }
 
@@ -367,28 +380,29 @@ class TaskDependencyResolver {
     // Simple implementation - could be enhanced with NLP libraries
     const dependencies = [];
     const contextWords = context.split(/\s+/).filter(word => word.length > 3);
-    
+
     for (const [id, task] of Object.entries(allTasks)) {
       if (id === taskId || !task.description) continue;
-      
+
       const taskText = `${task.title || ''} ${task.description || ''}`.toLowerCase();
       const taskWords = taskText.split(/\s+/).filter(word => word.length > 3);
-      
+
       // Calculate word overlap
       const overlap = contextWords.filter(word => taskWords.includes(word));
       const similarity = overlap.length / Math.max(contextWords.length, taskWords.length);
-      
-      if (similarity > 0.3) { // 30% word overlap threshold
+
+      if (similarity > 0.3) {
+        // 30% word overlap threshold
         dependencies.push({
           type: 'semantic',
           targetId: id,
           reason: `Text similarity (${Math.round(similarity * 100)}%)`,
           weight: this.config.detection.dependencyWeights.semantic * similarity,
-          detected: 'semantic_similarity'
+          detected: 'semantic_similarity',
         });
       }
     }
-    
+
     return dependencies;
   }
 
@@ -397,14 +411,14 @@ class TaskDependencyResolver {
    */
   deduplicateDependencies(dependencies) {
     const seen = new Map();
-    
+
     for (const dep of dependencies) {
       const key = `${dep.targetId}-${dep.type}`;
       if (!seen.has(key) || seen.get(key).weight < dep.weight) {
         seen.set(key, dep);
       }
     }
-    
+
     return Array.from(seen.values()).sort((a, b) => b.weight - a.weight);
   }
 
@@ -413,27 +427,27 @@ class TaskDependencyResolver {
    */
   buildDependencyGraph() {
     this.dependencyGraph.clear();
-    
+
     // Initialize nodes
     for (const taskId of this.dependencies.keys()) {
       if (!this.dependencyGraph.has(taskId)) {
         this.dependencyGraph.set(taskId, { incoming: [], outgoing: [] });
       }
-      
+
       const deps = this.dependencies.get(taskId);
       for (const dep of deps) {
         if (!this.dependencyGraph.has(dep.targetId)) {
           this.dependencyGraph.set(dep.targetId, { incoming: [], outgoing: [] });
         }
-        
+
         // Add edges
         this.dependencyGraph.get(taskId).outgoing.push({
           target: dep.targetId,
-          ...dep
+          ...dep,
         });
         this.dependencyGraph.get(dep.targetId).incoming.push({
           source: taskId,
-          ...dep
+          ...dep,
         });
       }
     }
@@ -448,9 +462,9 @@ class TaskDependencyResolver {
       blockers: this.identifyBlockers(),
       cycles: this.detectCircularDependencies(),
       recommendations: [],
-      lastAnalyzed: new Date().toISOString()
+      lastAnalyzed: new Date().toISOString(),
     };
-    
+
     // Generate recommendations
     this.analysis.recommendations = this.generateRecommendations();
   }
@@ -460,7 +474,7 @@ class TaskDependencyResolver {
    */
   findCriticalPath() {
     let longestPath = [];
-    
+
     // Find all root nodes (no incoming dependencies)
     const rootNodes = [];
     for (const [nodeId, node] of this.dependencyGraph.entries()) {
@@ -468,7 +482,7 @@ class TaskDependencyResolver {
         rootNodes.push(nodeId);
       }
     }
-    
+
     // DFS from each root to find longest path
     for (const rootId of rootNodes) {
       const path = this.dfsLongestPath(rootId, new Set());
@@ -476,7 +490,7 @@ class TaskDependencyResolver {
         longestPath = path;
       }
     }
-    
+
     return longestPath;
   }
 
@@ -485,15 +499,15 @@ class TaskDependencyResolver {
    */
   dfsLongestPath(nodeId, visited) {
     if (visited.has(nodeId)) return []; // Avoid cycles
-    
+
     visited.add(nodeId);
     const node = this.dependencyGraph.get(nodeId);
-    
+
     if (!node || node.outgoing.length === 0) {
       visited.delete(nodeId);
       return [nodeId];
     }
-    
+
     let longestSubPath = [];
     for (const edge of node.outgoing) {
       const subPath = this.dfsLongestPath(edge.target, visited);
@@ -501,7 +515,7 @@ class TaskDependencyResolver {
         longestSubPath = subPath;
       }
     }
-    
+
     visited.delete(nodeId);
     return [nodeId, ...longestSubPath];
   }
@@ -511,18 +525,19 @@ class TaskDependencyResolver {
    */
   identifyBlockers() {
     const blockers = [];
-    
+
     for (const [nodeId, node] of this.dependencyGraph.entries()) {
-      if (node.incoming.length > 2) { // Tasks with many dependents are potential blockers
+      if (node.incoming.length > 2) {
+        // Tasks with many dependents are potential blockers
         blockers.push({
           taskId: nodeId,
           blockingCount: node.incoming.length,
           blockedTasks: node.incoming.map(edge => edge.source),
-          severity: this.calculateBlockerSeverity(node.incoming.length)
+          severity: this.calculateBlockerSeverity(node.incoming.length),
         });
       }
     }
-    
+
     return blockers.sort((a, b) => b.blockingCount - a.blockingCount);
   }
 
@@ -533,7 +548,7 @@ class TaskDependencyResolver {
     const cycles = [];
     const visited = new Set();
     const recursionStack = new Set();
-    
+
     for (const nodeId of this.dependencyGraph.keys()) {
       if (!visited.has(nodeId)) {
         const cycle = this.dfsCycleDetection(nodeId, visited, recursionStack, []);
@@ -542,7 +557,7 @@ class TaskDependencyResolver {
         }
       }
     }
-    
+
     return cycles;
   }
 
@@ -553,7 +568,7 @@ class TaskDependencyResolver {
     visited.add(nodeId);
     recursionStack.add(nodeId);
     path.push(nodeId);
-    
+
     const node = this.dependencyGraph.get(nodeId);
     if (node) {
       for (const edge of node.outgoing) {
@@ -567,7 +582,7 @@ class TaskDependencyResolver {
         }
       }
     }
-    
+
     recursionStack.delete(nodeId);
     return [];
   }
@@ -577,7 +592,7 @@ class TaskDependencyResolver {
    */
   generateRecommendations() {
     const recommendations = [];
-    
+
     // Critical path recommendations
     if (this.analysis.criticalPath.length >= this.config.analysis.criticalPathMinLength) {
       recommendations.push({
@@ -585,21 +600,22 @@ class TaskDependencyResolver {
         priority: 'high',
         message: `Critical path identified with ${this.analysis.criticalPath.length} tasks. Focus on completing these sequentially.`,
         tasks: this.analysis.criticalPath,
-        action: 'prioritize_sequence'
+        action: 'prioritize_sequence',
       });
     }
-    
+
     // Blocker recommendations
-    for (const blocker of this.analysis.blockers.slice(0, 3)) { // Top 3 blockers
+    for (const blocker of this.analysis.blockers.slice(0, 3)) {
+      // Top 3 blockers
       recommendations.push({
         type: 'blocker',
         priority: blocker.severity,
         message: `Task ${blocker.taskId} is blocking ${blocker.blockingCount} other tasks. Consider prioritizing.`,
         tasks: [blocker.taskId],
-        action: 'prioritize_blocker'
+        action: 'prioritize_blocker',
       });
     }
-    
+
     // Cycle resolution recommendations
     for (const cycle of this.analysis.cycles) {
       recommendations.push({
@@ -607,10 +623,10 @@ class TaskDependencyResolver {
         priority: 'medium',
         message: `Circular dependency detected: ${cycle.join(' → ')}. Review and break the cycle.`,
         tasks: cycle,
-        action: 'resolve_cycle'
+        action: 'resolve_cycle',
       });
     }
-    
+
     // Parallel work opportunities
     const parallelizable = this.findParallelizableTasks();
     if (parallelizable.length > 0) {
@@ -619,10 +635,10 @@ class TaskDependencyResolver {
         priority: 'low',
         message: `${parallelizable.length} tasks can be worked on in parallel to speed up delivery.`,
         tasks: parallelizable,
-        action: 'parallel_execution'
+        action: 'parallel_execution',
       });
     }
-    
+
     return recommendations;
   }
 
@@ -631,14 +647,14 @@ class TaskDependencyResolver {
    */
   findParallelizableTasks() {
     const parallelizable = [];
-    
+
     // Find tasks with no dependencies that aren't blockers
     for (const [nodeId, node] of this.dependencyGraph.entries()) {
       if (node.outgoing.length === 0 && node.incoming.length <= 1) {
         parallelizable.push(nodeId);
       }
     }
-    
+
     return parallelizable;
   }
 
@@ -650,17 +666,17 @@ class TaskDependencyResolver {
     const inDegree = new Map();
     const queue = [];
     const result = [];
-    
+
     // Initialize in-degree count
     for (const nodeId of this.dependencyGraph.keys()) {
       const node = this.dependencyGraph.get(nodeId);
       inDegree.set(nodeId, node.incoming.length);
-      
+
       if (node.incoming.length === 0) {
         queue.push(nodeId);
       }
     }
-    
+
     // Process nodes with priority weighting
     while (queue.length > 0) {
       // Sort queue by priority and blocker count
@@ -669,21 +685,21 @@ class TaskDependencyResolver {
         const bNode = this.dependencyGraph.get(b);
         return bNode.incoming.length - aNode.incoming.length; // Prioritize blockers
       });
-      
+
       const nodeId = queue.shift();
       result.push(nodeId);
-      
+
       const node = this.dependencyGraph.get(nodeId);
       for (const edge of node.outgoing) {
         const newInDegree = inDegree.get(edge.target) - 1;
         inDegree.set(edge.target, newInDegree);
-        
+
         if (newInDegree === 0) {
           queue.push(edge.target);
         }
       }
     }
-    
+
     return result;
   }
 
@@ -730,12 +746,16 @@ class TaskDependencyResolver {
     
     <div class="recommendations">
         <h3>💡 Recommendations</h3>
-        ${this.analysis.recommendations.map(rec => `
+        ${this.analysis.recommendations
+          .map(
+            rec => `
             <div class="recommendation ${rec.priority}">
                 <strong>${rec.type.replace(/_/g, ' ').toUpperCase()}:</strong> ${rec.message}
                 ${rec.tasks.length > 0 ? `<br><small>Tasks: ${rec.tasks.join(', ')}</small>` : ''}
             </div>
-        `).join('')}
+        `
+          )
+          .join('')}
     </div>
     
     <div class="graph-container">
@@ -839,7 +859,7 @@ class TaskDependencyResolver {
     </script>
 </body>
 </html>`;
-    
+
     await fs.writeFile(this.visualizationFile, html);
     console.log(`📊 Dependency visualization saved to: ${this.visualizationFile}`);
   }
@@ -852,7 +872,7 @@ class TaskDependencyResolver {
     const links = [];
     const criticalPathSet = new Set(this.analysis.criticalPath);
     const blockerSet = new Set(this.analysis.blockers.map(b => b.taskId));
-    
+
     // Create nodes
     for (const [nodeId, node] of this.dependencyGraph.entries()) {
       nodes.push({
@@ -860,10 +880,10 @@ class TaskDependencyResolver {
         dependencies: node.incoming.length,
         critical: criticalPathSet.has(nodeId),
         blocker: blockerSet.has(nodeId),
-        title: nodeId // Would be populated with actual task title in real implementation
+        title: nodeId, // Would be populated with actual task title in real implementation
       });
     }
-    
+
     // Create links
     for (const [sourceId, node] of this.dependencyGraph.entries()) {
       for (const edge of node.outgoing) {
@@ -872,11 +892,11 @@ class TaskDependencyResolver {
           target: edge.target,
           type: edge.type,
           weight: edge.weight,
-          critical: criticalPathSet.has(sourceId) && criticalPathSet.has(edge.target)
+          critical: criticalPathSet.has(sourceId) && criticalPathSet.has(edge.target),
         });
       }
     }
-    
+
     return { nodes, links };
   }
 
@@ -901,11 +921,11 @@ class TaskDependencyResolver {
     try {
       const data = await fs.readFile(this.dependencyFile, 'utf8');
       const dependencies = JSON.parse(data);
-      
+
       for (const [taskId, deps] of Object.entries(dependencies)) {
         this.dependencies.set(taskId, deps);
       }
-      
+
       this.buildDependencyGraph();
     } catch {
       // No existing dependencies
@@ -939,14 +959,16 @@ class TaskDependencyResolver {
     return {
       totalTasks: this.dependencyGraph.size,
       totalDependencies: Array.from(this.dependencies.values()).reduce((sum, deps) => sum + deps.length, 0),
-      averageDependencies: this.dependencyGraph.size > 0 
-        ? Array.from(this.dependencies.values()).reduce((sum, deps) => sum + deps.length, 0) / this.dependencyGraph.size 
-        : 0,
+      averageDependencies:
+        this.dependencyGraph.size > 0
+          ? Array.from(this.dependencies.values()).reduce((sum, deps) => sum + deps.length, 0) /
+            this.dependencyGraph.size
+          : 0,
       criticalPathLength: this.analysis.criticalPath.length,
       blockerCount: this.analysis.blockers.length,
       circularDependencies: this.analysis.cycles.length,
       recommendationCount: this.analysis.recommendations.length,
-      lastAnalyzed: this.analysis.lastAnalyzed
+      lastAnalyzed: this.analysis.lastAnalyzed,
     };
   }
 
@@ -955,62 +977,69 @@ class TaskDependencyResolver {
    */
   async exportDependencies(format = 'json') {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    
+
     switch (format) {
-    case 'json':
-      const jsonFile = path.join(this.dataDir, `dependencies-export-${timestamp}.json`);
-      await fs.writeFile(jsonFile, JSON.stringify({
-        dependencies: Object.fromEntries(this.dependencies),
-        analysis: this.analysis,
-        statistics: await this.getStatistics()
-      }, null, 2));
-      return jsonFile;
-        
-    case 'csv':
-      const csvFile = path.join(this.dataDir, `dependencies-export-${timestamp}.csv`);
-      const csvContent = this.generateCSV();
-      await fs.writeFile(csvFile, csvContent);
-      return csvFile;
-        
-    case 'mermaid':
-      const mermaidFile = path.join(this.dataDir, `dependencies-diagram-${timestamp}.md`);
-      const mermaidContent = this.generateMermaidDiagram();
-      await fs.writeFile(mermaidFile, mermaidContent);
-      return mermaidFile;
-        
-    default:
-      throw new Error(`Unsupported export format: ${format}`);
+      case 'json':
+        const jsonFile = path.join(this.dataDir, `dependencies-export-${timestamp}.json`);
+        await fs.writeFile(
+          jsonFile,
+          JSON.stringify(
+            {
+              dependencies: Object.fromEntries(this.dependencies),
+              analysis: this.analysis,
+              statistics: await this.getStatistics(),
+            },
+            null,
+            2
+          )
+        );
+        return jsonFile;
+
+      case 'csv':
+        const csvFile = path.join(this.dataDir, `dependencies-export-${timestamp}.csv`);
+        const csvContent = this.generateCSV();
+        await fs.writeFile(csvFile, csvContent);
+        return csvFile;
+
+      case 'mermaid':
+        const mermaidFile = path.join(this.dataDir, `dependencies-diagram-${timestamp}.md`);
+        const mermaidContent = this.generateMermaidDiagram();
+        await fs.writeFile(mermaidFile, mermaidContent);
+        return mermaidFile;
+
+      default:
+        throw new Error(`Unsupported export format: ${format}`);
     }
   }
 
   generateCSV() {
     const lines = ['Source Task,Target Task,Dependency Type,Weight,Reason'];
-    
+
     for (const [sourceId, deps] of this.dependencies.entries()) {
       for (const dep of deps) {
         lines.push(`${sourceId},${dep.targetId},${dep.type},${dep.weight},"${dep.reason}"`);
       }
     }
-    
+
     return lines.join('\n');
   }
 
   generateMermaidDiagram() {
     const lines = ['```mermaid', 'graph TD'];
-    
+
     // Add nodes
     for (const nodeId of this.dependencyGraph.keys()) {
       const shortId = nodeId.split('-').pop().substring(0, 6);
       lines.push(`    ${nodeId}[${shortId}]`);
     }
-    
+
     // Add edges
     for (const [sourceId, deps] of this.dependencies.entries()) {
       for (const dep of deps) {
         lines.push(`    ${dep.targetId} --> ${sourceId}`);
       }
     }
-    
+
     lines.push('```');
     return lines.join('\n');
   }
@@ -1019,50 +1048,50 @@ class TaskDependencyResolver {
 // CLI mode
 if (require.main === module) {
   const resolver = new TaskDependencyResolver();
-  
+
   const args = process.argv.slice(2);
   const command = args[0];
 
   async function main() {
     try {
       await resolver.initialize();
-      
+
       switch (command) {
-      case 'analyze':
-        console.log('🔍 Analyzing all task dependencies...\n');
-        const result = await resolver.analyzeAllTasks();
-        await resolver.generateVisualization();
-        console.log(`\n✅ Analysis complete! Found ${result.dependenciesFound} dependencies`);
-        break;
-          
-      case 'visualize':
-        await resolver.generateVisualization();
-        console.log('📊 Visualization generated successfully');
-        break;
-          
-      case 'order':
-        const ordering = resolver.getOptimalTaskOrdering();
-        console.log('📋 Optimal task ordering:');
-        ordering.forEach((taskId, index) => {
-          console.log(`${index + 1}. ${taskId}`);
-        });
-        break;
-          
-      case 'stats':
-        const stats = await resolver.getStatistics();
-        console.log('📊 Dependency Statistics:');
-        console.log(JSON.stringify(stats, null, 2));
-        break;
-          
-      case 'export':
-        const format = args[1] || 'json';
-        const exportFile = await resolver.exportDependencies(format);
-        console.log(`📤 Dependencies exported to: ${exportFile}`);
-        break;
-          
-      case 'help':
-      default:
-        console.log(`
+        case 'analyze':
+          console.log('🔍 Analyzing all task dependencies...\n');
+          const result = await resolver.analyzeAllTasks();
+          await resolver.generateVisualization();
+          console.log(`\n✅ Analysis complete! Found ${result.dependenciesFound} dependencies`);
+          break;
+
+        case 'visualize':
+          await resolver.generateVisualization();
+          console.log('📊 Visualization generated successfully');
+          break;
+
+        case 'order':
+          const ordering = resolver.getOptimalTaskOrdering();
+          console.log('📋 Optimal task ordering:');
+          ordering.forEach((taskId, index) => {
+            console.log(`${index + 1}. ${taskId}`);
+          });
+          break;
+
+        case 'stats':
+          const stats = await resolver.getStatistics();
+          console.log('📊 Dependency Statistics:');
+          console.log(JSON.stringify(stats, null, 2));
+          break;
+
+        case 'export':
+          const format = args[1] || 'json';
+          const exportFile = await resolver.exportDependencies(format);
+          console.log(`📤 Dependencies exported to: ${exportFile}`);
+          break;
+
+        case 'help':
+        default:
+          console.log(`
 🔗 Task Dependency Resolver
 
 USAGE:
@@ -1088,7 +1117,7 @@ OUTPUT FILES:
   - dependency-graph.html      Interactive visualization
   - dependencies-export-*.csv  CSV export
 `);
-        break;
+          break;
       }
     } catch (error) {
       console.error('❌ Error:', error.message);
