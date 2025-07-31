@@ -84,11 +84,10 @@ export interface Project {
   description?: string;
   rootFolder: ProjectFolder;
   settings: {
-  autoSave: boolean;
-  backupEnabled: boolean;
-  collaborationEnabled: boolean;
-  visibility: 'private' | 'shared' | 'public'
-}
+    autoSave: boolean;
+    backupEnabled: boolean;
+    collaborationEnabled: boolean;
+    visibility: 'private' | 'shared' | 'public';
   };
   created: Date;
   lastModified: Date;
