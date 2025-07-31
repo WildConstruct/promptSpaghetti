@@ -98,8 +98,6 @@ const professionalShadows = {
   }
 };
 
-}
-
 interface EnhancedGraphEditorProps {
   initialNodes?: unknown;
   initialEdges?: unknown;
@@ -114,7 +112,6 @@ interface NodeData {
     label: string;
     value: string;
     weight?: number;
-}
   }>;
 }
 

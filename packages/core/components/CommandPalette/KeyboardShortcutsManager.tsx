@@ -7,7 +7,6 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Node, Edge } from 'reactflow';
 
-}
 export interface KeyboardShortcut {
   id: string;
   key: string;
@@ -18,9 +17,7 @@ export interface KeyboardShortcut {
   enabled: boolean;
   global?: boolean; // Whether shortcut works globally or only when editor is focused
 }
-}
 
-}
 export interface KeyboardShortcutsManagerProps {
   onCommandPalette: () => void;
   onUndo: () => void;
@@ -39,7 +36,6 @@ export interface KeyboardShortcutsManagerProps {
   customShortcuts?: KeyboardShortcut[];
   theme?: 'light' | 'dark' | 'cinema';
   disabled?: boolean;
-}
 }
 
 export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> = ({
