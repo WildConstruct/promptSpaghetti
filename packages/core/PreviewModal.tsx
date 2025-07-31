@@ -122,15 +122,16 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
           selectedForComparison,
           options
         );
+      }
 
       // Handle the export result
       if (exportResult.shouldDownload) {
         downloadExportResult(exportResult, format);
-
+      }
     } catch (error) {
       console.error('Export failed:', error);
       throw error;
-
+    }
   };
   const downloadExportResult = (exportResult: { data: string; mimeType: string }, format: ExportFormat) => {
     const blob = new Blob([exportResult.data], { type: exportResult.mimeType });

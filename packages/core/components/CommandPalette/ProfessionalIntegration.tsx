@@ -12,7 +12,6 @@ import { MultiSelectionManager } from './MultiSelectionManager';
 import { AutosaveManager } from './AutosaveManager';
 import { KeyboardShortcutsManager } from './KeyboardShortcutsManager';
 
-}
 export interface ProfessionalIntegrationProps {
   nodes: Node[];
   edges: Edge[];

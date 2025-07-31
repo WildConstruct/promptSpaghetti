@@ -51,7 +51,7 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
       >
         {collapsed ? '»' : '«'}
       </button>
-      <div style={{ flex: 1, overflowY: 'auto', padding: collapsed ? 0 : 8 }>
+      <div style={{ flex: 1, overflowY: 'auto', padding: collapsed ? 0 : 8 }}>
         {collapsed ? (
           // Collapsed view - show icons only
           nodes.map((node) => (

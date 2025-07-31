@@ -112,6 +112,7 @@ interface GraphEditorProps {
   initialNodes: Node[];
   initialEdges: Edge[];
   validateConnection?: (edges: Edge[], nodes: Node[]) => ValidationError | null;
+}
 
 const NODE_TYPES: NodeMeta[] = [
   // Content Building Blocks

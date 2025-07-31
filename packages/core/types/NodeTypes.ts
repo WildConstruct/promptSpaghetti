@@ -1,5 +1,4 @@
 // Enhanced data model reflecting actual editor usage patterns
-}
 export interface BaseNodeData {
   // Core identification
   id: string;
