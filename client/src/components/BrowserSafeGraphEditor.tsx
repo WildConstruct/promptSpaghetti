@@ -108,7 +108,7 @@ const defaultNodes: Node = [
     data: { label: 'End', description: 'Final output' }
   }
 ];
-const defaultEdges: Edge = [
+const defaultEdges: Edge[] = [
   { id: 'e1-2', source: '1', target: '2' },
   { id: 'e2-3', source: '2', target: '3' }];
 
@@ -116,36 +116,36 @@ export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({
   initialNodes = [],
   initialEdges = []
 }) => {
-  const [nodes, setNodes, onNodesChange] = useNodesState()
-  initialNodes.length > 0 ? (initialNodes as Node) : defaultNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState()
-  initialEdges.length > 0 ? (initialEdges as Edge) : defaultEdges);
-  const onConnect = useCallback(;);
-  (params: Connection) => setEdges((eds) => addEdge(params, eds)),
-  [setEdges]
+  const [nodes, setNodes, onNodesChange] = useNodesState(
+    initialNodes.length > 0 ? (initialNodes as Node[]) : defaultNodes
+  );
+  const [edges, setEdges, onEdgesChange] = useEdgesState(
+    initialEdges.length > 0 ? (initialEdges as Edge[]) : defaultEdges
+  );
+  const onConnect = useCallback(
+    (params: Connection) => setEdges((eds) => addEdge(params, eds)),
+    [setEdges]
   );
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
-  const onNodeClick = useCallback(;);
-  (_event: React.MouseEvent, node: Node) => {
-  setSelectedNode(node);
-}
+  const onNodeClick = useCallback(
+    (_event: React.MouseEvent, node: Node) => {
+      setSelectedNode(node);
+    },
     []
   );
   const addNode = useCallback((type: string) => {
-    const newNode: Node = {,
-  id: `node_${Date.now()}`}
-}
+    const newNode: Node = {
+      id: `node_${Date.now()}`,
       type,
       position: {
-  x: Math.random() * 400 + 100,
-  y: Math.random() * 300 + 100
-},
-  data: {
-  label: `New ${type}`}
-},
-  description: `${type} node created ${new Date().toLocaleTimeString()}` }
+        x: Math.random() * 400 + 100,
+        y: Math.random() * 300 + 100
+      },
+      data: {
+        label: `New ${type}`,
+        description: `${type} node created ${new Date().toLocaleTimeString()}`
       }
-};
+    };
     setNodes((nds) => [...nds, newNode]);
   }, [setNodes]);
   const deleteSelectedNode = useCallback(() => {
@@ -274,7 +274,7 @@ export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({
           </div>
         </div>
         {/* Node Inspector */}
-        {selectedNode && ()
+        {selectedNode && (
           <div style={{ marginBottom: '20px' }}>
             <h4 style={{ margin: '0 0 10px 0', color: '#666', fontSize: '14px' }}>Selected Node</h4>
             <div style={{
