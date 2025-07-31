@@ -5,8 +5,6 @@
  */
 import { Graph } from './graphSchema';
 import { ProjectMetadata, PSGFile, SaveProjectOptions, LoadProjectResult, SaveProjectResult } from './projectManager';
-
-}
 export interface ServerProjectMetadata extends ProjectMetadata {
   id: string;
   userId?: number;

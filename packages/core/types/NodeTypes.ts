@@ -15,10 +15,8 @@ export interface BaseNodeData {
   transformations?: string[];
   contextHints?: string[];
 }
-}
 
 // Extended UI-only node types (rich text generation)
-}
 export interface SubjectNodeData extends BaseNodeData {
   type: 'Subject';
   grammaticalNumber?: 'singular' | 'plural' | 'both';
