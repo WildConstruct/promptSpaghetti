@@ -13,6 +13,7 @@ import { DatabaseService } from '../../database/DatabaseService';
 import { AuditService } from '../../auth/services/AuditService';
 
 }
+}
 export interface ApiOptimizationRecommendation {
   id: string;
   type: 'performance' | 'security' | 'cost' | 'reliability' | 'scalability';
@@ -24,6 +25,7 @@ export interface ApiOptimizationRecommendation {
     performanceImprovement?: number; // Percentage improvement
     securityRisk?: 'low' | 'medium' | 'high' | 'critical';
     reliabilityImprovement?: number; // Uptime improvement percentage
+}
 }
   };
   recommendation: {
@@ -43,12 +45,14 @@ export interface ApiOptimizationRecommendation {
 }
 
 }
+}
 export interface ApiOptimizationInsights {
   summary: {
     totalRecommendations: number;
     criticalIssues: number;
     estimatedSavings: number;
     performanceGains: number;
+}
 }
   };
   recommendations: ApiOptimizationRecommendation[];
@@ -72,11 +76,13 @@ export interface ApiOptimizationInsights {
 }
 
 }
+}
 export interface OptimizationAnalysisConfig {
   timeWindow: number; // Days to analyze
   includeBenchmarks: boolean;
   focusAreas: Array<'performance' | 'security' | 'cost' | 'reliability'>;
   minimumUsage: number; // Minimum API calls to include in analysis
+}
 }
 }
 

@@ -9,6 +9,7 @@ import { CostTracker, BudgetConfig, CostAlert } from './CostTracker';
  * Analytics dashboard configuration
  */
 }
+}
 export interface AnalyticsDashboardConfig {
   refreshInterval: number;
   historyWindow: number;
@@ -18,10 +19,12 @@ export interface AnalyticsDashboardConfig {
   exportFormats: string[];
 }
 }
+}
 
 /**
  * Analytics dashboard data structure
  */
+}
 }
 export interface AnalyticsDashboardData extends DashboardData {
   analytics: {
@@ -56,6 +59,7 @@ export interface AnalyticsDashboardData extends DashboardData {
  * Heat map data point
  */
 }
+}
 export interface HeatMapPoint {
   x: number;
   y: number;
@@ -63,13 +67,16 @@ export interface HeatMapPoint {
   interactions: number;
 }
 }
+}
 
 /**
  * Usage pattern data
  */
 }
+}
 export interface UsagePattern {
   type: 'hourly' | 'daily' | 'weekly';
+}
 }
   data: Array<{ period: string; value: number }>;
   trend: 'increasing' | 'decreasing' | 'stable';

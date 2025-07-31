@@ -6,6 +6,7 @@
  */
 import React from 'react';
 
+}
 export interface VFXChecklistItem {
     id: string;
     title: string;
@@ -32,6 +33,7 @@ export interface VFXChecklistItem {
     comments: VFXChecklistComment[];
     history: VFXChecklistHistoryEntry[];
 
+}
 export interface VFXChecklistSubtask {
     id: string;
     title: string;
@@ -41,6 +43,7 @@ export interface VFXChecklistSubtask {
     description?: string;
     estimatedMinutes?: number;
 
+}
 export interface VFXChecklistAttachment {
     id: string;
     name: string;
@@ -51,6 +54,7 @@ export interface VFXChecklistAttachment {
     uploadedBy: VFXTeamMember;
     uploadedAt: string;
 
+}
 export interface VFXAssetReference {
     id: string;
     name: string;
@@ -61,6 +65,7 @@ export interface VFXAssetReference {
     complexity?: number;
     dependencies: string[];
 
+}
 export interface VFXQualityGate {
     id: string;
     name: string;
@@ -72,6 +77,7 @@ export interface VFXQualityGate {
     checkedAt?: string;
     required: boolean;
 
+}
 export interface VFXChecklistComment {
     id: string;
     content: string;
@@ -81,8 +87,10 @@ export interface VFXChecklistComment {
     mentions: string[];
     reactions: {
         [emoji: string]: VFXTeamMember[];
+}
     };
 
+}
 export interface VFXChecklistHistoryEntry {
     id: string;
     action: string;
@@ -93,6 +101,7 @@ export interface VFXChecklistHistoryEntry {
     timestamp: string;
     description: string;
 
+}
 export interface VFXTeamMember {
     id: string;
     name: string;
@@ -103,6 +112,7 @@ export interface VFXTeamMember {
     isOnline?: boolean;
     permissions: VFXPermissions;
 
+}
 export interface VFXPermissions {
     canCreate: boolean;
     canEdit: boolean;
@@ -114,6 +124,7 @@ export interface VFXPermissions {
 export type VFXChecklistCategory = 'pre_production' | 'asset_creation' | 'animation' | 'fx' | 'lighting' | 'compositing' | 'rendering' | 'post_production' | 'review' | 'delivery';
 export type VFXProductionPhase = 'concept' | 'previs' | 'asset_build' | 'animation' | 'fx' | 'lighting' | 'comp' | 'render' | 'review' | 'final';
 
+}
 export interface VFXChecklist {
     id: string;
     name: string;
@@ -133,6 +144,7 @@ export interface VFXChecklist {
     tags: string[];
     metadata: VFXChecklistMetadata;
 
+}
 export interface VFXChecklistTemplate {
     id: string;
     name: string;
@@ -144,6 +156,7 @@ export interface VFXChecklistTemplate {
     createdBy: VFXTeamMember;
     usageCount: number;
 
+}
 export interface VFXChecklistMetadata {
     totalItems: number;
     completedItems: number;
@@ -156,6 +169,7 @@ export interface VFXChecklistMetadata {
     lastActivity: string;
     collaborators: number;
 
+}
 export interface VFXChecklistSystemProps {
     checklist: VFXChecklist;
     currentUser: VFXTeamMember;
@@ -172,3 +186,4 @@ export interface VFXChecklistSystemProps {
 export declare const VFXChecklistSystem: React.FC<VFXChecklistSystemProps>;
 export default VFXChecklistSystem;
 //# sourceMappingURL=VFXChecklistSystem.d.ts.map
+}

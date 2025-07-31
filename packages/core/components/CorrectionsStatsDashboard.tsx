@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+}
 interface PerformanceMetrics {
   total_rules: number;
   active_rules: number;
@@ -23,6 +24,7 @@ interface PerformanceMetrics {
   complexity_score: number;
   usage_trend: 'increasing' | 'decreasing' | 'stable';
   performance_trend: 'improving' | 'degrading' | 'stable'
+}
   }>;
   performance_trends: Array<{
   date: string;
@@ -51,9 +53,11 @@ interface PerformanceMetrics {
   poor_rules: number;
 }
 
+}
 interface CorrectionsStatsDashboardProps {
   isOpen: boolean;
   onClose: () => void;
+}
 }
 export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps> = ({
   isOpen,

@@ -1,5 +1,6 @@
 import React from 'react';
 import { WorkflowState, WorkflowStateConfig } from '../../types/WorkflowTypes';
+}
 interface WorkflowStateIndicatorProps {
     state: WorkflowState;
     stateConfig?: WorkflowStateConfig;
@@ -9,13 +10,15 @@ interface WorkflowStateIndicatorProps {
 
 export declare const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps>;
 export declare const isCurrent: (stateId: WorkflowState) => boolean;
+}
 interface WorkflowStateHistoryProps {
-    history: Array<{,
+    history: Array<{
         state: WorkflowState;
         stateConfig?: WorkflowStateConfig;
         timestamp: string;
         actor?: string;
         comment?: string;
+}
     }>;
     className?: string;
 

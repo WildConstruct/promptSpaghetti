@@ -25,6 +25,7 @@ export const RevenueTimeRange = {
 
 // Revenue Metrics Summary
 
+}
 export interface RevenueMetrics {
   // Core Revenue Metrics
   totalRevenue: number;,
@@ -47,6 +48,8 @@ export interface RevenueMetrics {
   forecastConfidence?: number;
   // Revenue Trend Data Point
 }
+}
+}
 export interface RevenueTrendPoint {
   date: string; // ISO date string,
   revenue: number;,
@@ -55,6 +58,8 @@ export interface RevenueTrendPoint {
   averageOrderValue: number;
   refunds: number;
   // Geographic Revenue Distribution
+}
+}
 }
 export interface GeographicRevenueData {
   countryCode: string;,
@@ -65,6 +70,8 @@ export interface GeographicRevenueData {
   marketShare: number; // Percentage of total revenue,
   // Payment Method Performance
 }
+}
+}
 export interface PaymentMethodData {
   provider: PaymentProvider;,
   revenue: number;
@@ -74,6 +81,8 @@ export interface PaymentMethodData {
   fees: number;
   // Top Performing Template
 }
+}
+}
 export interface TopTemplate {
   id: string;,
   name: string;
@@ -82,13 +91,15 @@ export interface TopTemplate {
   revenue: number;,
   transactions: number;
   conversionRate: number;,
-  licenseBreakdown: Array<{,
+  licenseBreakdown: Array<{
   licenseType: LicenseType;,
   count: number;
   revenue: number;
+}
 }>;
 
 // Top Performing Creator
+}
 }
 export interface TopCreator {
   id: string;,
@@ -100,6 +111,8 @@ export interface TopCreator {
   transactions: number;,
   averageTemplateRevenue: number;
   // Creator Payout Information
+}
+}
 }
 export interface CreatorPayout {
   id: string;,
@@ -116,6 +129,8 @@ export interface CreatorPayout {
   periodEnd: Date;
   // Revenue Dashboard Filters
 }
+}
+}
 export interface RevenueFilters {
   paymentProviders: PaymentProvider;,
   licenseTypes: LicenseType;
@@ -126,6 +141,8 @@ export interface RevenueFilters {
   maxAmount?: number;
   excludeRefunds?: boolean;
   // Revenue Forecast Data
+}
+}
 }
 export interface RevenueForecast {
   id: string;,
@@ -138,11 +155,12 @@ export interface RevenueForecast {
   upperBound: number;
   lowerBound: number;
   // Daily Breakdown
-  dailyForecast: Array<{,
+  dailyForecast: Array<{
   date: Date;,
   predictedRevenue: number;
   confidenceIntervalUpper: number;,
   confidenceIntervalLower: number;
+}
 }>;
   // Model Performance
   mae: number; // Mean Absolute Error,
@@ -153,11 +171,12 @@ export interface RevenueForecast {
 
 // Real-time Revenue Data
 }
+}
 export interface RealtimeRevenueData {
   timestamp: Date;,
   totalRevenueToday: number;
   transactionsToday: number;,
-  recentTransactions: Array<{,
+  recentTransactions: Array<{
   id: string;,
   amount: number;
   currency: string;
@@ -165,14 +184,16 @@ export interface RealtimeRevenueData {
   creatorName?: string;
   country?: string;
   timestamp: Date;
+}
 }>;
-  hourlyTrend: Array<{,
+  hourlyTrend: Array<{
   hour: number;
   revenue: number;,
   transactions: number;
 }>;
 
 // Complete Dashboard Data Structure
+}
 }
 export interface RevenueDashboardData {
   // Summary Metrics
@@ -194,13 +215,15 @@ export interface RevenueDashboardData {
   // Metadata
   lastUpdated: Date;,
   dataQuality: number; // 0-1 score,
-  timeRange: {,
+  timeRange: {
   start: Date;,
   end: Date;
+}
 };
   filters: RevenueFilters;
 
 // Chart Configuration
+}
 }
 export interface RevenueChartConfig {
   type: 'line' | 'bar' | 'area' | 'pie' | 'donut';
@@ -212,14 +235,17 @@ export interface RevenueChartConfig {
   responsive?: boolean;
   // Export Options
 }
+}
+}
 export interface RevenueExportOptions {
   format: 'csv' | 'xlsx' | 'pdf';,
   scope: 'global' | 'creator' | 'template';
   entityId?: string;
   timeRange: RevenueTimeRange;
-  customDateRange?: {,
+  customDateRange?: {
   start: Date | null;,
   end: Date | null;
+}
 };
   filters: RevenueFilters;
   includeForecast?: boolean;
@@ -227,6 +253,7 @@ export interface RevenueExportOptions {
   includeRawData?: boolean;
 
 // Widget Configuration
+}
 }
 export interface RevenueWidgetConfig {
   id: string;,
@@ -239,6 +266,8 @@ export interface RevenueWidgetConfig {
   filters?: Partial<RevenueFilters>;
   // Dashboard Layout Configuration
 }
+}
+}
 export interface RevenueDashboardLayout {
   name: string;,
   description: string;
@@ -247,6 +276,8 @@ export interface RevenueDashboardLayout {
   autoLayout?: boolean;
   responsive?: boolean;
   // Analytics Event Tracking
+}
+}
 }
 export interface RevenueAnalyticsEvent {
   eventType: 'view_dashboard' | 'export_data' | 'apply_filters' | 'generate_forecast' | 'view_details';,
@@ -257,11 +288,13 @@ export interface RevenueAnalyticsEvent {
   metadata?: Record<string, unknown>;
   // API Response Types
 }
+}
+}
 export interface RevenueAPIResponse<T> {
   success: boolean;,
   data: T;
   error?: string;
-  metadata?: {,
+  metadata?: {
   totalCount?: number;
   pageSize?: number;
   currentPage?: number;
@@ -272,6 +305,7 @@ export interface RevenueAPIResponse<T> {
 
 // Revenue Service Configuration
 
+}
 export interface RevenueServiceConfig {
   baseURL: string;,
   apiKey: string;
@@ -283,17 +317,21 @@ export interface RevenueServiceConfig {
   forecastingEnabled: boolean;
   // Cohort Analysis Data
 }
+}
+}
 export interface RevenueCohortData {
   cohortMonth: string; // YYYY-MM format,
   customerCount: number;,
-  revenueByPeriod: Array<{,
+  revenueByPeriod: Array<{
   period: number; // 0-based months since cohort,
   revenue: number;,
   customers: number;
   retentionRate: number;
+}
 }>;
 
 // Revenue Attribution Data
+}
 }
 export interface RevenueAttributionData {
   channel: string;,
@@ -306,6 +344,8 @@ export interface RevenueAttributionData {
   costPerAcquisition?: number;
   returnOnAdSpend?: number;
   // Template Revenue Analytics
+}
+}
 }
 export interface TemplateRevenueAnalytics {
   templateId: string;,
@@ -322,14 +362,15 @@ export interface TemplateRevenueAnalytics {
   repeatPurchaseRate: number;,
   conversionRate: number;
   // License Performance
-  licenseBreakdown: Array<{,
+  licenseBreakdown: Array<{
   licenseType: LicenseType;,
   count: number;
   revenue: number;,
   averagePrice: number;
+}
 }>;
   // Geographic Performance
-  topCountries: Array<{,
+  topCountries: Array<{
   countryCode: string;
   countryName: string;,
   revenue: number;
@@ -344,12 +385,14 @@ export interface TemplateRevenueAnalytics {
 
 // Error Types
 }
+}
 export interface RevenueError {
   code: string;,
   message: string;
   details?: Record<string, unknown>;
   timestamp: Date;,
   retryable: boolean;
+}
 }
 export type {
   RevenueTimeRange,

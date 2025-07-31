@@ -18,6 +18,7 @@ import { AnalyticsCollector } from './AnalyticsCollector';
 // =============================================================================
 
 }
+}
 export interface IntegrationEvent {
   eventId: string;
   timestamp: Date;
@@ -52,7 +53,9 @@ export interface IntegrationEvent {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface IntegrationMetrics {
   integrationId: string;
@@ -70,6 +73,7 @@ export interface IntegrationMetrics {
     peakUsageHour: number;
     dataTransferred: number; // bytes
     averagePayloadSize: number; // bytes
+}
 }
   };
   
@@ -123,6 +127,7 @@ export interface IntegrationMetrics {
 }
 
 }
+}
 export interface IntegrationAnalyticsDashboard {
   // Overview Statistics
   overview: {
@@ -135,6 +140,7 @@ export interface IntegrationAnalyticsDashboard {
     overallSuccessRate: number;
     totalCost: number;
     costSavings: number;
+}
 }
   };
   
@@ -238,12 +244,14 @@ export interface IntegrationAnalyticsDashboard {
 }
 
 }
+}
 export interface IntegrationAnalyticsReport {
   reportId: string;
   generatedAt: Date;
   period: {
     startDate: Date;
     endDate: Date;
+}
 }
   };
   
@@ -368,6 +376,7 @@ export enum ErrorCategory {
 
 // Supporting interfaces
 }
+}
 export interface IntegrationOperationDetails {
   endpoint?: string;
   method?: string;
@@ -377,7 +386,9 @@ export interface IntegrationOperationDetails {
   query?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ResourceUsage {
   cpuUsage?: number;
@@ -387,7 +398,9 @@ export interface ResourceUsage {
   connectionCount?: number;
 }
 }
+}
 
+}
 }
 export interface CostData {
   baseCost: number;
@@ -399,7 +412,9 @@ export interface CostData {
   billingUnit: string;
 }
 }
+}
 
+}
 }
 export interface IntegrationContext {
   userId?: string;
@@ -412,7 +427,9 @@ export interface IntegrationContext {
   tenantId?: string;
 }
 }
+}
 
+}
 }
 export interface ErrorPattern {
   pattern: string;
@@ -423,7 +440,9 @@ export interface ErrorPattern {
   impact: 'low' | 'medium' | 'high' | 'critical';
 }
 }
+}
 
+}
 }
 export interface IntegrationError {
   errorId: string;
@@ -438,7 +457,9 @@ export interface IntegrationError {
   resolvedAt?: Date;
 }
 }
+}
 
+}
 }
 export interface CostTrend {
   direction: 'increasing' | 'decreasing' | 'stable';
@@ -448,9 +469,11 @@ export interface CostTrend {
     date: Date;
     cost: number;
 }
+}
   }>;
 }
 
+}
 }
 export interface CostOptimization {
   type: 'reduce_requests' | 'optimize_payload' | 'use_cache' | 'batch_operations' | 'upgrade_plan' | 'switch_provider';
@@ -462,7 +485,9 @@ export interface CostOptimization {
   priority: number;
 }
 }
+}
 
+}
 }
 export interface UsageTrend {
   integrationId: string;
@@ -472,9 +497,11 @@ export interface UsageTrend {
     date: Date;
     value: number;
 }
+}
   }>;
 }
 
+}
 }
 export interface PerformanceTrend {
   integrationId: string;
@@ -485,9 +512,11 @@ export interface PerformanceTrend {
     date: Date;
     value: number;
 }
+}
   }>;
 }
 
+}
 }
 export interface ErrorTrend {
   integrationId: string;
@@ -498,9 +527,11 @@ export interface ErrorTrend {
     date: Date;
     count: number;
 }
+}
   }>;
 }
 
+}
 }
 export interface PerformanceRecommendation {
   type: 'connection_pooling' | 'caching' | 'load_balancing' | 'retry_strategy' | 'timeout_optimization';
@@ -511,7 +542,9 @@ export interface PerformanceRecommendation {
   priority: number;
 }
 }
+}
 
+}
 }
 export interface ReliabilityRecommendation {
   type: 'circuit_breaker' | 'health_checks' | 'failover' | 'monitoring' | 'alerting';
@@ -522,7 +555,9 @@ export interface ReliabilityRecommendation {
   priority: number;
 }
 }
+}
 
+}
 }
 export interface SecurityRecommendation {
   type: 'authentication' | 'authorization' | 'encryption' | 'audit_logging' | 'access_control';
@@ -533,7 +568,9 @@ export interface SecurityRecommendation {
   priority: number;
 }
 }
+}
 
+}
 }
 export interface UsageProjection {
   integrationId: string;
@@ -543,7 +580,9 @@ export interface UsageProjection {
   factors: string[];
 }
 }
+}
 
+}
 }
 export interface CapacityProjection {
   integrationId: string;
@@ -554,7 +593,9 @@ export interface CapacityProjection {
   timeframe: string;
 }
 }
+}
 
+}
 }
 export interface CostProjection {
   integrationId: string;
@@ -565,7 +606,9 @@ export interface CostProjection {
   confidence: number;
 }
 }
+}
 
+}
 }
 export interface RiskAssessment {
   integrationId: string;
@@ -575,6 +618,7 @@ export interface RiskAssessment {
   likelihood: number;
   impact: number;
   mitigationSteps: string[];
+}
 }
 }
 
@@ -1003,12 +1047,14 @@ export class IntegrationAnalyticsService extends EventEmitter {
 
 // Configuration interface
 }
+}
 export interface IntegrationAnalyticsConfig {
   eventCollection: {
     enabled: boolean;
     interval: number; // milliseconds
     maxEventsInMemory: number;
     persistenceBatchSize: number;
+}
 }
   };
   

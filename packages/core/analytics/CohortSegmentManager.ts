@@ -26,6 +26,7 @@ import {
   FunnelSegmentMetrics
 } from './ConversionDataModel';
 
+}
 export interface CohortAnalysisResult {
   cohortId: string;
   analysisDate: number;
@@ -38,6 +39,7 @@ export interface CohortAnalysisResult {
   churnRate: number;
   averageLifetimeValue: number;
   averageTimeToConvert: number;
+}
 };
   // Behavioral analysis
   behavior: {
@@ -67,6 +69,7 @@ export interface CohortAnalysisResult {
   confidence: number;
 };
 }
+}
 export interface SegmentAnalysisResult {
   segmentId: string;
   analysisDate: number;
@@ -77,6 +80,7 @@ export interface SegmentAnalysisResult {
   demographicBreakdown: DemographicBreakdown;
   behavioralProfile: BehavioralProfile;
   valueDistribution: ValueDistribution;
+}
 };
   // Performance metrics
   performance: {
@@ -102,6 +106,7 @@ export interface SegmentAnalysisResult {
   interventions: InterventionRecommendation;
 };
 }
+}
 export interface PathwayAnalysis {
   pathway: string;
   frequency: number;
@@ -110,6 +115,8 @@ export interface PathwayAnalysis {
   averageValue: number;
   dropOffPoints: string;
 }
+}
+}
 export interface DropOffAnalysis {
   totalDropOffs: number;
   dropOffRate: number;
@@ -117,18 +124,24 @@ export interface DropOffAnalysis {
   recoveryOpportunities: RecoveryOpportunity;
   seasonalPatterns: SeasonalDropOff;
 }
+}
+}
 export interface RecoveryOpportunity {
   dropOffPoint: string;
   potentialRecovery: number;
   recommendedActions: string;
   estimatedImpact: number;
   implementationComplexity: 'low' | 'medium' | 'high'
+}
   }
+}
 export interface SeasonalDropOff {
   period: string;
   dropOffMultiplier: number;
   affectedSegments: string;
   confidence: number;
+}
+}
 }
 export interface EngagementPattern {
   patternType: 'temporal' | 'behavioral' | 'contextual' | 'value-based';
@@ -139,9 +152,12 @@ export interface EngagementPattern {
   retentionImpact: number;
   recommendations: string;
 }
+}
+}
 export interface ValueSegmentation {
-  segments: Array<{,
+  segments: Array<{
   name: string;
+}
     range: { min: number; max: number };
     size: number;
   percentage: number;
@@ -154,6 +170,7 @@ export interface ValueSegmentation {
   percentiles: Map<number, number>;
 };
 }
+}
 export interface CohortComparison {
   cohortId: string;
   comparisonPeriod: string;
@@ -163,6 +180,8 @@ export interface CohortComparison {
   significance: number;
   insights: string;
 }
+}
+}
 export interface CohortBenchmark {
   benchmarkCohortId: string;
   benchmarkName: string;
@@ -171,9 +190,11 @@ export interface CohortBenchmark {
   conversionComparison: Map<number, number>;
   valueComparison: number;
   engagementComparison: number;
+}
 };
   relativePerformance: number; // -1 to 1 scale,
   insights: string;
+}
 }
 export interface IndustryBenchmark {
   industry: string;
@@ -183,9 +204,11 @@ export interface IndustryBenchmark {
   averageLTV: number;
   averageOrderValue: number;
   churnRate: number;
+}
 };
   dataSource: string;
   lastUpdated: number;
+}
 }
 export interface InterventionPoint {
   day: number;
@@ -197,7 +220,9 @@ export interface InterventionPoint {
   revenueImpact: number;
   costOfIntervention: number;
   roi: number;
+}
 };
+}
 }
 export interface DemographicBreakdown {
   ageGroups: Map<string, number>;
@@ -205,6 +230,8 @@ export interface DemographicBreakdown {
   deviceTypes: Map<string, number>;
   acquisitionChannels: Map<string, number>;
   accountTypes: Map<string, number>;
+}
+}
 }
 export interface BehavioralProfile {
   averageSessionsPerUser: number;
@@ -215,6 +242,8 @@ export interface BehavioralProfile {
   preferredTimes: Map<string, number>; // hour -> frequency,
   contentPreferences: Map<string, number>;
 }
+}
+}
 export interface ValueDistribution {
   totalValue: number;
   averageValue: number;
@@ -224,12 +253,16 @@ export interface ValueDistribution {
   highValueUsers: number;
   valueGrowthRate: number;
 }
+}
+}
 export interface SegmentConversionMetrics {
   overallConversionRate: number;
   conversionsByFunnel: Map<string, number>;
   averageTimeToConvert: number;
   conversionValueDistribution: ValueDistribution;
   topConversionPaths: PathwayAnalysis;
+}
+}
 }
 export interface SegmentEngagementMetrics {
   averageEngagementScore: number;
@@ -238,6 +271,7 @@ export interface SegmentEngagementMetrics {
   averageDuration: number;
   bounceRate: number;
   returningUserRate: number;
+}
 };
   contentEngagement: Map<string, number>;
   featureUsage: Map<string, number>;
@@ -246,6 +280,7 @@ export interface SegmentEngagementMetrics {
   likeRate: number;
   commentRate: number;
 };
+}
 }
 export interface SegmentRevenueMetrics {
   totalRevenue: number;
@@ -256,6 +291,8 @@ export interface SegmentRevenueMetrics {
   customerLifetimeValue: number;
   paybackPeriod: number;
 }
+}
+}
 export interface SegmentRetentionMetrics {
   retentionRates: Map<number, number>; // day -> retention rate,
   churnRate: number;
@@ -264,6 +301,8 @@ export interface SegmentRetentionMetrics {
   seasonalRetention: Map<string, number>; // season -> retention,
   retentionByChannel: Map<string, number>;
 }
+}
+}
 export interface SegmentTransition {
   fromSegment: string;
   toSegment: string;
@@ -271,6 +310,8 @@ export interface SegmentTransition {
   averageTimeToTransition: number;
   triggerEvents: string;
   transitionValue: number;
+}
+}
 }
 export interface SegmentOptimization {
   area: string;
@@ -282,10 +323,12 @@ export interface SegmentOptimization {
   revenueImpact: number;
   conversionImprovement: number;
   retentionImprovement: number;
+}
 };
   implementationEffort: 'low' | 'medium' | 'high';
   priority: 'high' | 'medium' | 'low'
   }
+}
 export interface TargetingRecommendation {
   channel: string;
   targetingCriteria: string;
@@ -296,6 +339,8 @@ export interface TargetingRecommendation {
   roi: number;
   confidence: number;
 }
+}
+}
 export interface PersonalizationSuggestion {
   feature: string;
   personalizationType: 'content' | 'ui' | 'messaging' | 'pricing' | 'timing';
@@ -303,6 +348,8 @@ export interface PersonalizationSuggestion {
   expectedImpact: number;
   implementationComplexity: 'low' | 'medium' | 'high';
   dataRequirements: string;
+}
+}
 }
 export interface InterventionRecommendation {
   triggerCondition: string;
@@ -316,6 +363,7 @@ export interface InterventionRecommendation {
   * Cohort and Segment Manager
   * Manages the complete lifecycle of cohorts and segments
   */
+}
 }
 export class CohortSegmentManager {
   private cohorts: Map<string, ConversionCohort> = new Map();
@@ -467,6 +515,7 @@ export class CohortSegmentManager {
    * Analyze cohort performance
    */
   public async analyzeCohort(cohortId: string, options: AnalysisOptions = {}): Promise<CohortAnalysisResult> {
+
     const cacheKey = `cohort_${cohortId}_${JSON.stringify(options)}`;}
     if (options.useCache !== false) {
       const cached = this.analysisCache.get(cacheKey);
@@ -486,6 +535,7 @@ export class CohortSegmentManager {
    * Analyze segment performance
    */
   public async analyzeSegment(segmentId: string, options: AnalysisOptions = {}): Promise<SegmentAnalysisResult> {
+
     const cacheKey = `segment_${segmentId}_${JSON.stringify(options)}`;}
     if (options.useCache !== false) {
       const cached = this.analysisCache.get(cacheKey);
@@ -550,6 +600,7 @@ export class CohortSegmentManager {
 };
   // Private methods
   private async performCohortAnalysis(cohort: ConversionCohort, options: AnalysisOptions): Promise<CohortAnalysisResult> {
+
   // Get cohort users
   const cohortUsers = this.getCohortUsers(cohort.id);
   // Calculate core metrics
@@ -570,6 +621,7 @@ export class CohortSegmentManager {
   dataQuality: this.assessDataQuality(cohortUsers),
 };
   private async performSegmentAnalysis(segment: UserSegment, options: AnalysisOptions): Promise<SegmentAnalysisResult> {
+
   // Get segment users
   const segmentUsers = this.getSegmentUsers(segment.id);
   // Analyze composition
@@ -627,6 +679,7 @@ export class CohortSegmentManager {
   averageTimeToConvert: 432000000 // 5 days in milliseconds,
 };
   private async analyzeCohortBehavior(cohort: ConversionCohort, users: string): Promise<CohortAnalysisResult['behavior']> {
+
   return {
   commonPathways: [,
   {
@@ -730,6 +783,7 @@ export class CohortSegmentManager {
   roi: 5.25];
   };
   private async generateCohortComparison(cohort: ConversionCohort, options: AnalysisOptions): Promise<CohortAnalysisResult['comparison']> {
+
   return {
   previousPeriod: {
   cohortId: 'previous_month',
@@ -820,6 +874,7 @@ export class CohortSegmentManager {
 };
   // Additional helper methods would go here...
   private async analyzeSegmentComposition(segment: UserSegment, users: string): Promise<SegmentAnalysisResult['composition']> {
+
   // Simplified implementation
   return {
   currentSize: users.length,
@@ -850,6 +905,7 @@ export class CohortSegmentManager {
   valueGrowthRate: 0.12,
 };
   private async calculateSegmentPerformance(segment: UserSegment, users: string): Promise<SegmentAnalysisResult['performance']> {
+
   // Simplified implementation
   return {
   conversionMetrics: {
@@ -920,6 +976,7 @@ export class CohortSegmentManager {
 }]
     ]);
   private async analyzeSegmentLifecycle(segment: UserSegment, users: string): Promise<SegmentAnalysisResult['lifecycle']> {
+
   // Simplified implementation
   return {
   acquisitionSources: new Map([['organic', 0.4], ['paid', 0.35], ['referral', 0.25]]),
@@ -997,12 +1054,15 @@ export class CohortSegmentManager {
 
 // Additional interfaces for cross-segment analysis
 
+}
 export interface AnalysisOptions {
   useCache?: boolean;
   includePredictions?: boolean;
   includeComparisons?: boolean;
+}
   timeRange?: { start: number; end: number };
   customMetrics?: string;
+}
 }
 export interface CrossSegmentInsights {
   segmentOverlaps: SegmentOverlap;
@@ -1010,6 +1070,8 @@ export interface CrossSegmentInsights {
   cohortTrends: CohortTrend;
   opportunityAnalysis: OptimizationOpportunity;
   recommendations: CrossSegmentRecommendation;
+}
+}
 }
 export interface SegmentOverlap {
   segmentIds: string;
@@ -1020,13 +1082,17 @@ export interface SegmentOverlap {
   conversionRate: number;
   retentionRate: number;
   averageValue: number;
+}
 };
+}
 }
 export interface PerformanceComparison {
   segmentIds: string;
   metrics: Record<string, number>;
   significance: number;
   insights: string;
+}
+}
 }
 export interface CohortTrend {
   metric: string;
@@ -1035,6 +1101,8 @@ export interface CohortTrend {
   confidence: number;
   affectedCohorts: string;
 }
+}
+}
 export interface OptimizationOpportunity {
   area: string;
   segments: string;
@@ -1042,7 +1110,9 @@ export interface OptimizationOpportunity {
   potentialImprovement: number;
   estimatedImpact: number;
   implementationEffort: 'low' | 'medium' | 'high'
+}
   }
+}
 export interface CrossSegmentRecommendation {
   type: 'consolidation' | 'split' | 'targeting' | 'optimization';
   description: string;
@@ -1052,6 +1122,7 @@ export interface CrossSegmentRecommendation {
   /**
   * Factory function to create CohortSegmentManager
   */
+}
 }
 export const createCohortSegmentManager = (): CohortSegmentManager => {
   return new CohortSegmentManager();

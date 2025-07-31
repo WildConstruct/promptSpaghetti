@@ -128,6 +128,7 @@ enum VerificationStatus {
   export interface BackupVerificationDashboardProps {
   className?: string;
 }
+}
 export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardProps> = ({ className }) => {
   const [activeTab, setActiveTab] = useState('overview');
   const [loading, setLoading] = useState(false);

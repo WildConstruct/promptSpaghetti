@@ -5,6 +5,7 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { KeyManagementService, KeyGenerationRequest, KeyOperationContext } from '../services/KeyManagementService';
 
 }
+}
 interface GenerateKeyRequest {
   purpose: 'data_encryption' | 'key_encryption' | 'token_signing' | 'api_signing' | 'session_encryption' | 'backup_encryption' | 'audit_signing';
   algorithm?: string;
@@ -14,16 +15,20 @@ interface GenerateKeyRequest {
   maxUsageCount?: number;
   makePrimary?: boolean;
 }
+}
   complianceTags?: { [key: string]: any };
 }
 
+}
 }
 interface RotateKeyRequest {
   keyId: string;
   reason?: string;
 }
 }
+}
 
+}
 }
 interface DestroyKeyRequest {
   keyId: string;
@@ -31,7 +36,9 @@ interface DestroyKeyRequest {
   confirmDestruction: boolean;
 }
 }
+}
 
+}
 }
 interface CreateBackupRequest {
   keyId: string;
@@ -39,7 +46,9 @@ interface CreateBackupRequest {
   storageLocation?: string;
 }
 }
+}
 
+}
 }
 interface ListKeysQuery {
   purpose?: string;
@@ -47,6 +56,7 @@ interface ListKeysQuery {
   securityLevel?: string;
   page?: number;
   limit?: number;
+}
 }
 }
 

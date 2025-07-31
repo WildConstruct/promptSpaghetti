@@ -5,10 +5,12 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import { TokenService } from '../services/TokenService';
 
 }
+}
 export interface ScopeAuthOptions {
   requiredScopes: string[];
   requireAll?: boolean; // If true, user must have ALL scopes. If false, user must have AT LEAST ONE scope
   allowUser?: boolean; // If true, allow regular user tokens (not just API tokens)
+}
 }
 }
 
@@ -165,6 +167,7 @@ export function createScopeAuthPlugin(tokenService: TokenService) {
 declare module 'fastify' {
   interface FastifyInstance {
     scopeAuth: ReturnType<typeof createScopeAuthMiddleware>;
+}
 }
   }
 }

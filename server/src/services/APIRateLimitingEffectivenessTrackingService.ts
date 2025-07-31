@@ -20,6 +20,7 @@ import { MetricsCollector } from '../performance/MetricsCollector';
 // ============================================================================
 
 }
+}
 export interface APIRateLimitingEffectivenessConfig {
   // Effectiveness tracking configuration
   effectiveness_tracking: {
@@ -29,6 +30,7 @@ export interface APIRateLimitingEffectivenessConfig {
     baseline_establishment_days: number;
     effectiveness_calculation_algorithm: 'weighted_composite' | 'ml_based' | 'business_focused' | 'hybrid';
     real_time_monitoring: boolean;
+}
 }
   };
   
@@ -155,10 +157,12 @@ export interface APIRateLimitingEffectivenessConfig {
 }
 
 }
+}
 export interface EffectivenessMetrics {
   // Core effectiveness metrics
   overall_effectiveness_score: number;
   effectiveness_trend: 'improving' | 'stable' | 'degrading';
+}
 }
   confidence_interval: { lower: number; upper: number };
   measurement_timestamp: number;
@@ -202,6 +206,7 @@ export interface EffectivenessMetrics {
 }
 
 }
+}
 export interface OptimizationRecommendation {
   recommendation_id: string;
   recommendation_type: 'threshold_adjustment' | 'algorithm_change' | 'configuration_update' | 'architecture_change';
@@ -211,6 +216,7 @@ export interface OptimizationRecommendation {
     effectiveness_score: number;
     key_metrics: Record<string, number>;
     identified_issues: string[];
+}
 }
   };
   
@@ -254,6 +260,7 @@ export interface OptimizationRecommendation {
 }
 
 }
+}
 export interface EffectivenessAnalysisResult {
   analysis_metadata: {
     analysis_id: string;
@@ -261,6 +268,7 @@ export interface EffectivenessAnalysisResult {
     analysis_duration_ms: number;
     data_coverage_percentage: number;
     analysis_confidence: number;
+}
 }
   };
   
@@ -316,6 +324,7 @@ export interface EffectivenessAnalysisResult {
 // ============================================================================
 
 }
+}
 interface EffectivenessPredictionModel {
   model_id: string;
   model_type: 'regression' | 'classification' | 'time_series' | 'ensemble';
@@ -327,12 +336,14 @@ interface EffectivenessPredictionModel {
     f1_score: number;
     mean_absolute_error: number;
 }
+}
   };
   prediction_horizon_hours: number;
   last_trained: number;
   model_state: Record<string, unknown>;
 }
 
+}
 }
 interface OptimizationEngine {
   optimization_algorithms: Array<{
@@ -344,6 +355,7 @@ interface OptimizationEngine {
       timestamp: number;
       objective_value: number;
       solution_quality: number;
+}
 }
     }>;
   }>;

@@ -15,6 +15,7 @@ import AuditEvidenceMapper from './AuditEvidenceMapper';
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 export interface EvidenceSigningRequest {
   evidenceId: string;
   evidenceType: string;
@@ -26,7 +27,9 @@ export interface EvidenceSigningRequest {
   signingPurpose: SigningPurpose;
 }
 }
+}
 
+}
 }
 export interface EvidenceSignature {
   signatureId: string;
@@ -44,7 +47,9 @@ export interface EvidenceSignature {
   verificationMetadata: VerificationMetadata;
 }
 }
+}
 
+}
 }
 export interface ComplianceContext {
   frameworks: string[];
@@ -55,7 +60,9 @@ export interface ComplianceContext {
   classification: DataClassification;
 }
 }
+}
 
+}
 }
 export interface VerificationMetadata {
   created: Date;
@@ -67,7 +74,9 @@ export interface VerificationMetadata {
   witnessSignatures?: WitnessSignature[];
 }
 }
+}
 
+}
 }
 export interface WitnessSignature {
   witnessId: string;
@@ -76,7 +85,9 @@ export interface WitnessSignature {
   role: string;
 }
 }
+}
 
+}
 }
 export interface SignatureVerificationResult {
   valid: boolean;
@@ -95,7 +106,9 @@ export interface SignatureVerificationResult {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ComplianceValidationResult {
   frameworkCompliance: Record<string, boolean>;
@@ -105,7 +118,9 @@ export interface ComplianceValidationResult {
   recommendations: string[];
 }
 }
+}
 
+}
 }
 export interface EvidenceBatch {
   batchId: string;
@@ -115,7 +130,9 @@ export interface EvidenceBatch {
   timestamp: Date;
 }
 }
+}
 
+}
 }
 export interface ChainOfCustody {
   evidenceId: string;
@@ -124,7 +141,9 @@ export interface ChainOfCustody {
   integrityMaintained: boolean;
 }
 }
+}
 
+}
 }
 export interface CustodyEvent {
   eventId: string;
@@ -135,6 +154,7 @@ export interface CustodyEvent {
   signature: string;
   witness?: string;
   reason: string;
+}
 }
 }
 

@@ -9,6 +9,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface DataPipelineConfig {
     enableRealTimeProcessing: boolean;
     batchProcessingInterval: number;
@@ -23,6 +24,7 @@ export interface DataPipelineConfig {
     outputFormats: OutputFormat[];
 
 
+}
 export interface DataQualityThresholds {
     completeness: number;
     accuracy: number;
@@ -39,6 +41,7 @@ export declare enum OutputFormat {
     KAFKA = "kafka",
     DATABASE = "database"
 
+}
 export interface PipelineStage {
     stageId: string;
     stageName: string;
@@ -63,6 +66,7 @@ export declare enum StageType {
     OUTPUT = "output",
     ARCHIVAL = "archival"
 
+}
 export interface DataSchema {
     schemaId: string;
     version: string;
@@ -70,6 +74,7 @@ export interface DataSchema {
     constraints: SchemaConstraint[];
 
 
+}
 export interface SchemaField {
     name: string;
     type: FieldType;
@@ -91,6 +96,7 @@ export declare enum FieldType {
     IP_ADDRESS = "ip_address",
     EMAIL = "email"
 
+}
 export interface SchemaConstraint {
     constraintType: ConstraintType;
     field: string;
@@ -107,6 +113,7 @@ export declare enum ConstraintType {
     NOT_NULL = "not_null",
     CUSTOM = "custom"
 
+}
 export interface DataTransformation {
     transformationId: string;
     transformationType: TransformationType;
@@ -130,6 +137,7 @@ export declare enum TransformationType {
     HASH = "hash",
     CLASSIFY = "classify"
 
+}
 export interface ValidationRule {
     ruleId: string;
     ruleName: string;
@@ -156,6 +164,7 @@ export declare enum ValidationSeverity {
     ERROR = "error",
     CRITICAL = "critical"
 
+}
 export interface ErrorHandlingStrategy {
     onValidationError: ErrorAction;
     onTransformationError: ErrorAction;
@@ -173,6 +182,7 @@ export declare enum ErrorAction {
     LOG_AND_CONTINUE = "log_and_continue",
     APPLY_DEFAULT = "apply_default"
 
+}
 export interface StageMetrics {
     recordsProcessed: number;
     recordsSuccessful: number;
@@ -184,6 +194,7 @@ export interface StageMetrics {
     performanceTrends: PerformanceTrend[];
 
 
+}
 export interface PerformanceTrend {
     timestamp: Date;
     metric: string;
@@ -191,6 +202,7 @@ export interface PerformanceTrend {
     trend: 'increasing' | 'decreasing' | 'stable';
 
 
+}
 export interface PipelineExecution {
     executionId: string;
     pipelineId: string;
@@ -211,6 +223,7 @@ export declare enum ExecutionStatus {
     CANCELLED = "cancelled",
     RETRYING = "retrying"
 
+}
 export interface StageExecution {
     stageId: string;
     stageName: string;
@@ -225,6 +238,7 @@ export interface StageExecution {
     errors: string[];
 
 
+}
 export interface ExecutionError {
     errorId: string;
     timestamp: Date;
@@ -246,6 +260,7 @@ export declare enum ErrorType {
     TIMEOUT_ERROR = "timeout_error",
     UNKNOWN_ERROR = "unknown_error"
 
+}
 export interface ExecutionMetrics {
     totalDuration: number;
     recordThroughput: number;
@@ -256,6 +271,7 @@ export interface ExecutionMetrics {
     diskBytesWritten: number;
 
 
+}
 export interface DataSource {
     sourceId: string;
     sourceName: string;
@@ -279,6 +295,7 @@ export declare enum SourceType {
     SNMP = "snmp",
     WMI = "wmi"
 
+}
 export interface ConnectionConfig {
     endpoint?: string;
     credentials?: {
@@ -287,6 +304,7 @@ export interface ConnectionConfig {
         apiKey?: string;
         certificate?: string;
 
+}
     };
     timeout?: number;
     maxConnections?: number;
@@ -300,6 +318,7 @@ export interface ConnectionConfig {
         certificatePath?: string;
     };
 
+}
 export interface ProcessingSchedule {
     scheduleType: ScheduleType;
     cronExpression?: string;
@@ -315,6 +334,7 @@ export declare enum ScheduleType {
     INTERVAL = "interval",
     EVENT_DRIVEN = "event_driven"
 
+}
 export interface SourceMetrics {
     recordsIngested: number;
     bytesIngested: number;
@@ -324,6 +344,7 @@ export interface SourceMetrics {
     averageLatency: number;
 
 
+}
 export interface DataDestination {
     destinationId: string;
     destinationName: string;
@@ -345,6 +366,7 @@ export declare enum DestinationType {
     CLOUD_STORAGE = "cloud_storage",
     SEARCH_INDEX = "search_index"
 
+}
 export interface DestinationMetrics {
     recordsWritten: number;
     bytesWritten: number;
@@ -354,6 +376,7 @@ export interface DestinationMetrics {
     averageLatency: number;
 
 
+}
 export interface PipelineAlert {
     alertId: string;
     timestamp: Date;
@@ -437,6 +460,7 @@ export declare class SecurityIntelligenceDataPipeline extends EventEmitter {
     private calculateErrorRate;
     private getStageMetrics;
 
+}
 export interface PipelineMetrics {
     totalExecutions: number;
     successfulExecutions: number;
@@ -456,3 +480,4 @@ export declare class SecurityIntelligenceDataPipelineFactory {
 
 export default SecurityIntelligenceDataPipeline;
 //# sourceMappingURL=SecurityIntelligenceDataPipeline.d.ts.map
+}

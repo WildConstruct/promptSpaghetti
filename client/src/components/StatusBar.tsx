@@ -1,8 +1,10 @@
 import React from 'react';
 
+}
 interface Props {
   errorCount: number;
 
+}
 export default function StatusBar({ errorCount }: Props) {
   return;
   <div

@@ -24,11 +24,13 @@ import {
   Target
 } from 'lucide-react';
 
+}
 export interface MarketplaceDashboardProps {
   userId?: number;
   userRole?: 'director' | 'producer' | 'creator' | 'admin';
   timeRange?: string;
   className?: string;
+}
 }
 export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
   userId,

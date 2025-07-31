@@ -13,6 +13,7 @@ import { PolicyAuthoringService } from './PolicyAuthoringService';
 import { PolicyNotificationService } from './PolicyNotificationService';
 
 }
+}
 export interface ComplianceReport {
   reportId: string;
   reportType: ComplianceReportType;
@@ -32,7 +33,9 @@ export interface ComplianceReport {
   metadata: ReportMetadata;
 }
 }
+}
 
+}
 }
 export interface ReportScope {
   scopeId: string;
@@ -47,7 +50,9 @@ export interface ReportScope {
   exclusions: ScopeExclusion[];
 }
 }
+}
 
+}
 }
 export interface DataScope {
   dataCategory: string;
@@ -58,7 +63,9 @@ export interface DataScope {
   transfers: TransferScope[];
 }
 }
+}
 
+}
 }
 export interface ProcessingScope {
   purpose: string;
@@ -69,7 +76,9 @@ export interface ProcessingScope {
   profiling: boolean;
 }
 }
+}
 
+}
 }
 export interface RetentionScope {
   retentionPeriod: number;
@@ -78,7 +87,9 @@ export interface RetentionScope {
   archivalPolicy: string;
 }
 }
+}
 
+}
 }
 export interface TransferScope {
   recipientCountry: string;
@@ -87,7 +98,9 @@ export interface TransferScope {
   purposes: string[];
 }
 }
+}
 
+}
 }
 export interface TimeScope {
   startDate: Date;
@@ -97,7 +110,9 @@ export interface TimeScope {
   forecastPeriods: number;
 }
 }
+}
 
+}
 }
 export interface ScopeExclusion {
   exclusionType: 'SYSTEM' | 'POLICY' | 'PROCESS' | 'DATA' | 'GEOGRAPHIC';
@@ -108,7 +123,9 @@ export interface ScopeExclusion {
   expiresAt?: Date;
 }
 }
+}
 
+}
 }
 export interface ReportPeriod {
   periodType: 'MONTHLY' | 'QUARTERLY' | 'ANNUAL' | 'CUSTOM';
@@ -119,7 +136,9 @@ export interface ReportPeriod {
   holidayAdjustments: boolean;
 }
 }
+}
 
+}
 }
 export interface ComparisonPeriod {
   name: string;
@@ -128,7 +147,9 @@ export interface ComparisonPeriod {
   comparisonType: 'YEAR_OVER_YEAR' | 'QUARTER_OVER_QUARTER' | 'MONTH_OVER_MONTH' | 'BASELINE';
 }
 }
+}
 
+}
 }
 export interface ReportContent {
   executiveSummary: ExecutiveSummary;
@@ -138,7 +159,9 @@ export interface ReportContent {
   references: ReportReference[];
 }
 }
+}
 
+}
 }
 export interface ExecutiveSummary {
   overallCompliance: number;
@@ -150,7 +173,9 @@ export interface ExecutiveSummary {
   nextActions: string[];
 }
 }
+}
 
+}
 }
 export interface ReportSection {
   sectionId: string;
@@ -164,7 +189,9 @@ export interface ReportSection {
   pageBreak: boolean;
 }
 }
+}
 
+}
 }
 export interface ReportSubsection {
   subsectionId: string;
@@ -176,7 +203,9 @@ export interface ReportSubsection {
   tables: TableConfiguration[];
 }
 }
+}
 
+}
 }
 export interface ChartConfiguration {
   chartId: string;
@@ -187,7 +216,9 @@ export interface ChartConfiguration {
   interactivity: ChartInteractivity;
 }
 }
+}
 
+}
 }
 export interface ChartData {
   datasets: Dataset[];
@@ -196,7 +227,9 @@ export interface ChartData {
   aggregation: DataAggregation;
 }
 }
+}
 
+}
 }
 export interface Dataset {
   name: string;
@@ -205,7 +238,9 @@ export interface Dataset {
   styling: DatasetStyling;
 }
 }
+}
 
+}
 }
 export interface DatasetStyling {
   color: string;
@@ -214,7 +249,9 @@ export interface DatasetStyling {
   transparency: number;
 }
 }
+}
 
+}
 }
 export interface DataFilter {
   field: string;
@@ -223,7 +260,9 @@ export interface DataFilter {
   active: boolean;
 }
 }
+}
 
+}
 }
 export interface DataAggregation {
   method: 'SUM' | 'AVERAGE' | 'COUNT' | 'MIN' | 'MAX' | 'MEDIAN';
@@ -231,7 +270,9 @@ export interface DataAggregation {
   period: 'DAY' | 'WEEK' | 'MONTH' | 'QUARTER' | 'YEAR';
 }
 }
+}
 
+}
 }
 export interface ChartStyling {
   theme: string;
@@ -242,7 +283,9 @@ export interface ChartStyling {
   showAxes: boolean;
 }
 }
+}
 
+}
 }
 export interface ChartInteractivity {
   drillDown: boolean;
@@ -251,7 +294,9 @@ export interface ChartInteractivity {
   tooltip: TooltipConfiguration;
 }
 }
+}
 
+}
 }
 export interface TooltipConfiguration {
   enabled: boolean;
@@ -260,7 +305,9 @@ export interface TooltipConfiguration {
   customContent: string;
 }
 }
+}
 
+}
 }
 export interface TableConfiguration {
   tableId: string;
@@ -272,7 +319,9 @@ export interface TableConfiguration {
   filtering: TableFiltering;
 }
 }
+}
 
+}
 }
 export interface TableData {
   headers: TableHeader[];
@@ -281,7 +330,9 @@ export interface TableData {
   totals: TableTotals;
 }
 }
+}
 
+}
 }
 export interface TableHeader {
   column: string;
@@ -293,7 +344,9 @@ export interface TableHeader {
   filterable: boolean;
 }
 }
+}
 
+}
 }
 export interface TableRow {
   rowId: string;
@@ -302,7 +355,9 @@ export interface TableRow {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface TableCell {
   value: Error;
@@ -312,7 +367,9 @@ export interface TableCell {
   tooltip: string;
 }
 }
+}
 
+}
 }
 export interface CellFormatting {
   color: string;
@@ -322,7 +379,9 @@ export interface CellFormatting {
   alignment: 'LEFT' | 'CENTER' | 'RIGHT';
 }
 }
+}
 
+}
 }
 export interface RowStyling {
   backgroundColor: string;
@@ -331,7 +390,9 @@ export interface RowStyling {
   strikethrough: boolean;
 }
 }
+}
 
+}
 }
 export interface TableFooter {
   enabled: boolean;
@@ -339,7 +400,9 @@ export interface TableFooter {
   styling: RowStyling;
 }
 }
+}
 
+}
 }
 export interface TableTotals {
   enabled: boolean;
@@ -348,7 +411,9 @@ export interface TableTotals {
   formatting: CellFormatting;
 }
 }
+}
 
+}
 }
 export interface TableFormatting {
   striped: boolean;
@@ -358,7 +423,9 @@ export interface TableFormatting {
   theme: string;
 }
 }
+}
 
+}
 }
 export interface TablePagination {
   enabled: boolean;
@@ -367,7 +434,9 @@ export interface TablePagination {
   showPageInfo: boolean;
 }
 }
+}
 
+}
 }
 export interface TableSorting {
   enabled: boolean;
@@ -375,7 +444,9 @@ export interface TableSorting {
   multiColumn: boolean;
 }
 }
+}
 
+}
 }
 export interface TableSort {
   column: string;
@@ -383,7 +454,9 @@ export interface TableSort {
   priority: number;
 }
 }
+}
 
+}
 }
 export interface TableFiltering {
   enabled: boolean;
@@ -391,7 +464,9 @@ export interface TableFiltering {
   columnFilters: ColumnFilter[];
 }
 }
+}
 
+}
 }
 export interface ColumnFilter {
   column: string;
@@ -400,7 +475,9 @@ export interface ColumnFilter {
   defaultValue: Error;
 }
 }
+}
 
+}
 }
 export interface ReportAppendix {
   appendixId: string;
@@ -410,7 +487,9 @@ export interface ReportAppendix {
   references: string[];
 }
 }
+}
 
+}
 }
 export interface ReportGlossary {
   term: string;
@@ -419,7 +498,9 @@ export interface ReportGlossary {
   references: string[];
 }
 }
+}
 
+}
 }
 export interface ReportReference {
   referenceId: string;
@@ -431,7 +512,9 @@ export interface ReportReference {
   citation: string;
 }
 }
+}
 
+}
 }
 export interface ComplianceMetrics {
   overallScore: number;
@@ -442,7 +525,9 @@ export interface ComplianceMetrics {
   gaps: ComplianceGap[];
 }
 }
+}
 
+}
 }
 export interface FrameworkScore {
   framework: string;
@@ -454,7 +539,9 @@ export interface FrameworkScore {
   components: ComponentScore[];
 }
 }
+}
 
+}
 }
 export interface ComponentScore {
   component: string;
@@ -465,7 +552,9 @@ export interface ComponentScore {
   issues: ComponentIssue[];
 }
 }
+}
 
+}
 }
 export interface ComponentIssue {
   issueId: string;
@@ -475,7 +564,9 @@ export interface ComponentIssue {
   remediation: string;
 }
 }
+}
 
+}
 }
 export interface MetricTrend {
   metric: string;
@@ -485,7 +576,9 @@ export interface MetricTrend {
   forecast: TrendForecast[];
 }
 }
+}
 
+}
 }
 export interface TrendValue {
   date: Date;
@@ -493,7 +586,9 @@ export interface TrendValue {
   context: string;
 }
 }
+}
 
+}
 }
 export interface TrendForecast {
   date: Date;
@@ -502,7 +597,9 @@ export interface TrendForecast {
   scenario: 'OPTIMISTIC' | 'REALISTIC' | 'PESSIMISTIC';
 }
 }
+}
 
+}
 }
 export interface MetricBenchmark {
   metric: string;
@@ -514,7 +611,9 @@ export interface MetricBenchmark {
   industryAverage: number;
 }
 }
+}
 
+}
 }
 export interface KPIMetric {
   kpiId: string;
@@ -527,7 +626,9 @@ export interface KPIMetric {
   trend: 'UP' | 'DOWN' | 'STABLE';
 }
 }
+}
 
+}
 }
 export interface ComplianceGap {
   gapId: string;
@@ -542,7 +643,9 @@ export interface ComplianceGap {
   priority: number;
 }
 }
+}
 
+}
 }
 export interface ComplianceFinding {
   findingId: string;
@@ -561,7 +664,9 @@ export interface ComplianceFinding {
   progress: FindingProgress;
 }
 }
+}
 
+}
 }
 export interface FindingEvidence {
   evidenceId: string;
@@ -574,7 +679,9 @@ export interface FindingEvidence {
   verifiedAt: Date;
 }
 }
+}
 
+}
 }
 export interface FindingImpact {
   riskLevel: RiskLevel;
@@ -585,7 +692,9 @@ export interface FindingImpact {
   businessImpact: string;
 }
 }
+}
 
+}
 }
 export interface PotentialPenalty {
   framework: string;
@@ -596,7 +705,9 @@ export interface PotentialPenalty {
   currency: string;
 }
 }
+}
 
+}
 }
 export interface FindingRecommendation {
   priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
@@ -608,7 +719,9 @@ export interface FindingRecommendation {
   risks: string[];
 }
 }
+}
 
+}
 }
 export interface RecommendedAction {
   actionId: string;
@@ -619,7 +732,9 @@ export interface RecommendedAction {
   deliverables: string[];
 }
 }
+}
 
+}
 }
 export interface FindingProgress {
   status: FindingStatus;
@@ -629,7 +744,9 @@ export interface FindingProgress {
   comments: ProgressComment[];
 }
 }
+}
 
+}
 }
 export interface ProgressMilestone {
   milestoneId: string;
@@ -639,7 +756,9 @@ export interface ProgressMilestone {
   status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'DELAYED';
 }
 }
+}
 
+}
 }
 export interface ProgressComment {
   commentId: string;
@@ -649,7 +768,9 @@ export interface ProgressComment {
   visibility: 'PUBLIC' | 'INTERNAL' | 'RESTRICTED';
 }
 }
+}
 
+}
 }
 export interface ComplianceRecommendation {
   recommendationId: string;
@@ -665,7 +786,9 @@ export interface ComplianceRecommendation {
   approval: RecommendationApproval;
 }
 }
+}
 
+}
 }
 export interface ImplementationPlan {
   phases: ImplementationPhase[];
@@ -677,7 +800,9 @@ export interface ImplementationPlan {
   milestones: PlanMilestone[];
 }
 }
+}
 
+}
 }
 export interface ImplementationPhase {
   phaseId: string;
@@ -689,7 +814,9 @@ export interface ImplementationPhase {
   success_criteria: string[];
 }
 }
+}
 
+}
 }
 export interface RequiredResource {
   resourceType: 'HUMAN' | 'TECHNICAL' | 'FINANCIAL' | 'EXTERNAL';
@@ -699,7 +826,9 @@ export interface RequiredResource {
   availability: string;
 }
 }
+}
 
+}
 }
 export interface PlanMilestone {
   milestoneId: string;
@@ -710,7 +839,9 @@ export interface PlanMilestone {
   dependencies: string[];
 }
 }
+}
 
+}
 }
 export interface RecommendationBenefit {
   category: 'COMPLIANCE' | 'RISK_REDUCTION' | 'EFFICIENCY' | 'COST_SAVINGS' | 'REPUTATION';
@@ -721,7 +852,9 @@ export interface RecommendationBenefit {
   timeframe: number;
 }
 }
+}
 
+}
 }
 export interface RecommendationRisk {
   category: 'IMPLEMENTATION' | 'OPERATIONAL' | 'FINANCIAL' | 'TECHNICAL' | 'REGULATORY';
@@ -731,7 +864,9 @@ export interface RecommendationRisk {
   mitigation: string;
 }
 }
+}
 
+}
 }
 export interface Alternative {
   alternativeId: string;
@@ -744,7 +879,9 @@ export interface Alternative {
   feasibility: number;
 }
 }
+}
 
+}
 }
 export interface RecommendationApproval {
   required: boolean;
@@ -756,7 +893,9 @@ export interface RecommendationApproval {
   comments: string;
 }
 }
+}
 
+}
 }
 export interface ReportEvidence {
   evidenceId: string;
@@ -771,7 +910,9 @@ export interface ReportEvidence {
   access: EvidenceAccess;
 }
 }
+}
 
+}
 }
 export interface VerificationDetails {
   verifiedBy: string;
@@ -782,7 +923,9 @@ export interface VerificationDetails {
   witnesses: string[];
 }
 }
+}
 
+}
 }
 export interface EvidenceRetention {
   retentionPeriod: number;
@@ -792,7 +935,9 @@ export interface EvidenceRetention {
   legalHold: boolean;
 }
 }
+}
 
+}
 }
 export interface EvidenceAccess {
   classification: 'PUBLIC' | 'INTERNAL' | 'CONFIDENTIAL' | 'RESTRICTED';
@@ -802,7 +947,9 @@ export interface EvidenceAccess {
   auditAccess: boolean;
 }
 }
+}
 
+}
 }
 export interface ReportCertification {
   certified: boolean;
@@ -814,7 +961,9 @@ export interface ReportCertification {
   digitalSignature: DigitalSignature;
 }
 }
+}
 
+}
 }
 export interface CertificationAttestation {
   statement: string;
@@ -825,7 +974,9 @@ export interface CertificationAttestation {
   assumptions: string[];
 }
 }
+}
 
+}
 }
 export interface CertificationApproval {
   role: string;
@@ -836,7 +987,9 @@ export interface CertificationApproval {
   comments: string;
 }
 }
+}
 
+}
 }
 export interface DigitalSignature {
   algorithm: string;
@@ -847,7 +1000,9 @@ export interface DigitalSignature {
   verificationDetails: string;
 }
 }
+}
 
+}
 }
 export interface ReportDistribution {
   distributionList: ReportRecipient[];
@@ -857,7 +1012,9 @@ export interface ReportDistribution {
   tracking: DistributionTracking;
 }
 }
+}
 
+}
 }
 export interface ReportRecipient {
   recipientId: string;
@@ -870,7 +1027,9 @@ export interface ReportRecipient {
   notificationPreference: string[];
 }
 }
+}
 
+}
 }
 export interface DeliveryMethod {
   method: 'EMAIL' | 'PORTAL' | 'API' | 'PRINT' | 'SECURE_TRANSFER';
@@ -880,7 +1039,9 @@ export interface DeliveryMethod {
   format: 'PDF' | 'HTML' | 'DOCX' | 'XLSX' | 'JSON';
 }
 }
+}
 
+}
 }
 export interface ReportAccessControl {
   controlType: 'VIEW' | 'DOWNLOAD' | 'SHARE' | 'EDIT' | 'DELETE';
@@ -890,7 +1051,9 @@ export interface ReportAccessControl {
   timeLimit: number;
 }
 }
+}
 
+}
 }
 export interface DistributionNotification {
   notificationType: 'GENERATION' | 'DELIVERY' | 'ACCESS' | 'EXPIRATION';
@@ -899,7 +1062,9 @@ export interface DistributionNotification {
   timing: 'IMMEDIATE' | 'SCHEDULED' | 'ON_DEMAND';
 }
 }
+}
 
+}
 }
 export interface DistributionTracking {
   trackDelivery: boolean;
@@ -909,7 +1074,9 @@ export interface DistributionTracking {
   reportingFrequency: 'REAL_TIME' | 'DAILY' | 'WEEKLY';
 }
 }
+}
 
+}
 }
 export interface ReportMetadata {
   version: string;
@@ -924,6 +1091,7 @@ export interface ReportMetadata {
   relatedReports: string[];
   supersedes: string[];
   validUntil: Date;
+}
 }
 }
 
@@ -1027,6 +1195,7 @@ export type EvidenceType =
   | 'THIRD_PARTY_ASSESSMENT';
 
 }
+}
 export interface ComplianceReportRequest {
   reportType: ComplianceReportType;
   framework: ComplianceFramework;
@@ -1038,7 +1207,9 @@ export interface ComplianceReportRequest {
   customizations?: ReportCustomization[];
 }
 }
+}
 
+}
 }
 export interface ReportCustomization {
   section: string;
@@ -1046,6 +1217,7 @@ export interface ReportCustomization {
   content?: unknown;
   position?: number;
   conditions?: string[];
+}
 }
 }
 
@@ -1628,6 +1800,7 @@ export class ComplianceReportingService {
 
 // Supporting interfaces
 }
+}
 export interface ComplianceData {
   policies: unknown[];
   controls: unknown[];
@@ -1638,7 +1811,9 @@ export interface ComplianceData {
   metrics: Map<string, number>;
 }
 }
+}
 
+}
 }
 export interface ComplianceDashboard {
   summary: ComplianceSummary;
@@ -1651,7 +1826,9 @@ export interface ComplianceDashboard {
   reportingSchedule: ReportingSchedule;
 }
 }
+}
 
+}
 }
 export interface ComplianceSummary {
   overallCompliance: number;
@@ -1667,7 +1844,9 @@ export interface ComplianceSummary {
   trend: 'IMPROVING' | 'DECLINING' | 'STABLE';
 }
 }
+}
 
+}
 }
 export interface FrameworkStatus {
   framework: string;
@@ -1679,7 +1858,9 @@ export interface FrameworkStatus {
   criticalIssues: number;
 }
 }
+}
 
+}
 }
 export interface ComplianceTrend {
   framework: string;
@@ -1689,7 +1870,9 @@ export interface ComplianceTrend {
   direction: 'UP' | 'DOWN' | 'STABLE';
 }
 }
+}
 
+}
 }
 export interface ComplianceDeadline {
   deadlineId: string;
@@ -1701,7 +1884,9 @@ export interface ComplianceDeadline {
   progress: number;
 }
 }
+}
 
+}
 }
 export interface RiskHeatmap {
   categories: string[];
@@ -1709,7 +1894,9 @@ export interface RiskHeatmap {
   matrix: number[][];
 }
 }
+}
 
+}
 }
 export interface RiskItem {
   risk: string;
@@ -1719,7 +1906,9 @@ export interface RiskItem {
   score: number;
 }
 }
+}
 
+}
 }
 export interface ActionItem {
   itemId: string;
@@ -1732,7 +1921,9 @@ export interface ActionItem {
   framework: string;
 }
 }
+}
 
+}
 }
 export interface ReportingSchedule {
   upcomingReports: ScheduledReport[];
@@ -1740,7 +1931,9 @@ export interface ReportingSchedule {
   scheduledReports: ScheduledReport[];
 }
 }
+}
 
+}
 }
 export interface ScheduledReport {
   reportId: string;
@@ -1751,7 +1944,9 @@ export interface ScheduledReport {
   status: 'SCHEDULED' | 'IN_PROGRESS' | 'COMPLETED' | 'OVERDUE';
 }
 }
+}
 
+}
 }
 export interface ComplianceMetricsHistory {
   framework: ComplianceFramework;
@@ -1763,7 +1958,9 @@ export interface ComplianceMetricsHistory {
   alerts: MetricAlert[];
 }
 }
+}
 
+}
 }
 export interface HistoricalMetric {
   date: Date;
@@ -1772,7 +1969,9 @@ export interface HistoricalMetric {
   context: string;
 }
 }
+}
 
+}
 }
 export interface MetricAlert {
   alertId: string;
@@ -1782,5 +1981,6 @@ export interface MetricAlert {
   severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   triggered: Date;
   status: 'ACTIVE' | 'ACKNOWLEDGED' | 'RESOLVED';
+}
 }
 }

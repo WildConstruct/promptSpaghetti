@@ -7,6 +7,7 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
 
+}
 export interface UserPreferenceLearningSystemProps {
   analyticsInfrastructure: ConversionAnalyticsInfrastructure;
   learningConfig: PreferenceLearningConfig;
@@ -15,12 +16,16 @@ export interface UserPreferenceLearningSystemProps {
   onLearningInsight?: (insight: LearningInsight) => void;
   onExport?: (data: PreferenceLearningExportData) => void;
 }
+}
+}
 export interface PreferenceLearningConfig {
   algorithms: LearningAlgorithm;
   dataCollection: DataCollectionSettings;
   realTimeUpdates: boolean;
   privacySettings: PrivacySettings;
   modelValidation: ValidationSettings;
+}
+}
 }
 export interface PreferenceModelingConfig {
   modelTypes: ModelType;
@@ -30,6 +35,8 @@ export interface PreferenceModelingConfig {
   monitoring: ModelMonitoringSettings;
   // Core data structures
 }
+}
+}
 export interface UserPreferenceProfile {
   userId: string;
   preferenceVector: PreferenceVector;
@@ -38,11 +45,15 @@ export interface UserPreferenceProfile {
   confidenceMetrics: ConfidenceMetrics;
   lastUpdated: number;
 }
+}
+}
 export interface PreferenceVector {
   dimensions: PreferenceDimension;
   embeddings: number;
   weights: number;
   uncertainty: number;
+}
+}
 }
 export interface PreferenceDimension {
   dimension: string;
@@ -50,6 +61,8 @@ export interface PreferenceDimension {
   confidence: number;
   evidence: Evidence;
   temporal: TemporalPattern;
+}
+}
 }
 export interface LearningEvent {
   eventId: string;
@@ -59,6 +72,7 @@ export interface LearningEvent {
   impact: LearningImpact;
   modelVersion: string;
 }
+}
 export type LearningEventType = 
   | 'explicit_feedback' 
   | 'implicit_signal' 
@@ -66,6 +80,7 @@ export type LearningEventType =
   | 'contextual_cue' 
   | 'social_signal';
 
+}
 export interface PreferenceModel {
   modelId: string;
   version: string;
@@ -74,6 +89,7 @@ export interface PreferenceModel {
   performance: ModelPerformance;
   features: ModelFeature;
   training: TrainingMetadata;
+}
 }
 export type ModelType = 
   | 'collaborative_filtering'
@@ -485,11 +501,14 @@ export const UserPreferenceLearningSystem: React.FC<UserPreferenceLearningSystem
 
 // Supporting interfaces (condensed)
 
+}
 export interface LearningAlgorithm {
   algorithmId: string;
   name: string;
   type: 'supervised' | 'unsupervised' | 'reinforcement';
   parameters: Record<string, any>;
+}
+}
 }
 export interface DataCollectionSettings {
   sources: string;
@@ -497,11 +516,15 @@ export interface DataCollectionSettings {
   batchSize: number;
   qualityThreshold: number;
 }
+}
+}
 export interface PrivacySettings {
   anonymization: boolean;
   consentRequired: boolean;
   dataRetention: number;
   rightToForgotten: boolean;
+}
+}
 }
 export interface ValidationSettings {
   crossValidation: boolean;
@@ -509,11 +532,15 @@ export interface ValidationSettings {
   validationMetrics: string;
   minimumAccuracy: number;
 }
+}
+}
 export interface ModelFeature {
   featureId: string;
   name: string;
   type: 'numerical' | 'categorical' | 'embedding';
   importance: number;
+}
+}
 }
 export interface TrainingSettings {
   batchSize: number;
@@ -522,15 +549,21 @@ export interface TrainingSettings {
   optimizer: string;
   regularization: number;
 }
+}
+}
 export interface ModelDeploymentSettings {
   environment: 'staging' | 'production';
   rolloutStrategy: 'blue_green' | 'canary' | 'rolling';
   monitoringEnabled: boolean;
 }
+}
+}
 export interface ModelMonitoringSettings {
   metrics: string;
   alertThresholds: Record<string, number>;
   reportingFrequency: number;
+}
+}
 }
 export interface Evidence {
   type: string;
@@ -538,10 +571,14 @@ export interface Evidence {
   timestamp: number;
   weight: number;
 }
+}
+}
 export interface TemporalPattern {
   trend: 'increasing' | 'decreasing' | 'stable';
   seasonality: boolean;
   changePoints: number;
+}
+}
 }
 export interface LearningImpact {
   magnitude: number;
@@ -549,11 +586,15 @@ export interface LearningImpact {
   confidence: number;
   duration: number;
 }
+}
+}
 export interface ModelArchitecture {
   layers: number;
   parameters: number;
   inputDimensions: number;
   outputDimensions: number;
+}
+}
 }
 export interface ModelPerformance {
   accuracy: number;
@@ -563,12 +604,16 @@ export interface ModelPerformance {
   ndcg: number;
   auc: number;
 }
+}
+}
 export interface TrainingMetadata {
   trainingTime: number; // hours,
   datasetSize: number;
   epochs: number;
   convergence: boolean;
   lastTrained: number;
+}
+}
 }
 export interface ModelPrediction {
   predictionId: string;
@@ -577,10 +622,14 @@ export interface ModelPrediction {
   confidence: number;
   actual?: unknown;
 }
+}
+}
 export interface ConfidenceMetrics {
   overall: number;
   byDimension: Record<string, number>;
   temporal: number;
+}
+}
 }
 export interface LearningInsight {
   insightId: string;
@@ -590,6 +639,8 @@ export interface LearningInsight {
   impact: 'low' | 'medium' | 'high';
   recommendations: string;
 }
+}
+}
 export interface PreferenceLearningExportData {
   userProfiles: UserPreferenceProfile;
   models: PreferenceModel;
@@ -598,6 +649,7 @@ export interface PreferenceLearningExportData {
   averageConfidence: number;
   bestModel: PreferenceModel;
   learningRate: number;
+}
 };
   exportTimestamp: number;
 }

@@ -4,6 +4,7 @@
  * Defines all interfaces and types used across the file browser system
  */
 
+}
 export interface FileItem {
   id: string;,
   name: string;
@@ -18,6 +19,8 @@ export interface FileItem {
   isShared?: boolean;
   permissions?: FilePermissions;
 }
+}
+}
 export interface FileMetadata {
   nodeCount?: number;
   edgeCount?: number;
@@ -26,11 +29,15 @@ export interface FileMetadata {
   version?: string;
   thumbnail?: string; // Base64 encoded thumbnail,
 }
+}
+}
 export interface FilePermissions {
   read: boolean;,
   write: boolean;
   delete: boolean;,
   share: boolean;
+}
+}
 }
 export interface FolderNode extends FileItem {
   type: 'folder';,
@@ -58,11 +65,15 @@ export interface FolderNode extends FileItem {
   isLoading: boolean;
   error: string | null;
 }
+}
+}
 export interface ContextMenuOptions {
   x: number;,
   y: number;
   items: ContextMenuItem;
   targetItem?: FileItem;
+}
+}
 }
 export interface ContextMenuItem {
   id: string;,
@@ -73,10 +84,14 @@ export interface ContextMenuItem {
   onClick?: () => void;
   submenu?: ContextMenuItem;
 }
+}
+}
 export interface DragDropData {
   sourceItems: FileItem;,
   targetPath: string;
   operation: 'move' | 'copy';
+}
+}
 }
 export interface FileOperation {
   id: string;,
@@ -87,12 +102,16 @@ export interface FileOperation {
   status: 'pending' | 'success' | 'error';
   error?: string;
 }
+}
+}
 export interface FileUploadProgress {
   fileId: string;,
   filename: string;
   progress: number; // 0-100,
   status: 'uploading' | 'processing' | 'complete' | 'error';
   error?: string;
+}
+}
 }
 export interface SearchOptions {
   query: string;,
@@ -101,10 +120,14 @@ export interface SearchOptions {
   regex?: boolean;
   includeFolders?: boolean;
 }
+}
+}
 export interface SortOptions {
   field: 'name' | 'date' | 'size' | 'type';,
   order: 'asc' | 'desc';
   // Props interfaces for components
+}
+}
 }
 export interface FileBrowserProps {
   initialPath?: string;
@@ -117,6 +140,8 @@ export interface FileBrowserProps {
   height?: number | string;
   className?: string;
 }
+}
+}
 export interface FolderTreeProps {
   nodes: TreeNode;,
   selectedItems: string;
@@ -127,6 +152,8 @@ export interface FolderTreeProps {
   onContextMenu: (item: FileItem, x: number, y: number) => void;,
   onDrop: (dragData: DragDropData) => void;
   className?: string;
+}
+}
 }
 export interface FileItemProps {
   item: FileItem;,
@@ -142,8 +169,11 @@ export interface FileItemProps {
   onDrop?: (targetItem: FileItem, dragData: DragDropData) => void;
   className?: string;
 }
+}
+}
 export interface ContextMenuProps {
   options: ContextMenuOptions | null;,
   onClose: () => void;
   onItemClick: (item: ContextMenuItem) => void;
+}
 }

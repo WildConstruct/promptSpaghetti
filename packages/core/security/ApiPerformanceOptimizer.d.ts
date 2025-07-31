@@ -9,6 +9,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface ApiPerformanceConfig {
     enableAutomaticOptimization: boolean;
     optimizationInterval: number;
@@ -19,6 +20,7 @@ export interface ApiPerformanceConfig {
     monitoringConfig: MonitoringConfig;
     alertingConfig: AlertingConfig;
 
+}
 export interface PerformanceThresholds {
     responseTimeMs: number;
     throughputRps: number;
@@ -28,6 +30,7 @@ export interface PerformanceThresholds {
     cacheHitRatePercent: number;
     queueDepth: number;
 
+}
 export interface CachingStrategy {
     enableQueryCaching: boolean;
     enableResultCaching: boolean;
@@ -46,6 +49,7 @@ export declare enum CacheEvictionPolicy {
     TTL_BASED = "ttl_based",
     ADAPTIVE = "adaptive"
 
+}
 export interface CacheWarmupStrategy {
     strategyType: WarmupStrategyType;
     schedule: WarmupSchedule;
@@ -60,12 +64,14 @@ export declare enum WarmupStrategyType {
     USER_PATTERN_BASED = "user_pattern_based",
     TIME_BASED = "time_based"
 
+}
 export interface WarmupSchedule {
     cronExpression?: string;
     intervalMinutes?: number;
     triggerEvents?: string[];
     conditions?: string[];
 
+}
 export interface RateLimitingConfig {
     enableRateLimiting: boolean;
     enableAdaptiveRateLimiting: boolean;
@@ -75,6 +81,7 @@ export interface RateLimitingConfig {
     burstAllowance: number;
     rateLimitingAlgorithm: RateLimitingAlgorithm;
 
+}
 export interface RateLimit {
     requestsPerSecond: number;
     requestsPerMinute: number;
@@ -90,6 +97,7 @@ export declare enum RateLimitingAlgorithm {
     SLIDING_WINDOW = "sliding_window",
     ADAPTIVE = "adaptive"
 
+}
 export interface QueryOptimizationConfig {
     enableQueryOptimization: boolean;
     enableQueryRewriting: boolean;
@@ -98,6 +106,7 @@ export interface QueryOptimizationConfig {
     optimizationStrategies: OptimizationStrategy[];
     queryAnalysisConfig: QueryAnalysisConfig;
 
+}
 export interface OptimizationStrategy {
     strategyId: string;
     strategyType: OptimizationStrategyType;
@@ -115,6 +124,7 @@ export declare enum OptimizationStrategyType {
     JOIN_OPTIMIZATION = "join_optimization",
     AGGREGATION_OPTIMIZATION = "aggregation_optimization"
 
+}
 export interface OptimizationCondition {
     conditionType: ConditionType;
     field: string;
@@ -130,6 +140,7 @@ export declare enum ConditionType {
     FREQUENCY = "frequency",
     USER_TIER = "user_tier"
 
+}
 export interface OptimizationAction {
     actionType: OptimizationActionType;
     parameters: Record<string, unknown>;
@@ -145,6 +156,7 @@ export declare enum OptimizationActionType {
     PARTITION_QUERY = "partition_query",
     DEFER_EXPENSIVE_OPERATIONS = "defer_expensive_operations"
 
+}
 export interface QueryAnalysisConfig {
     enableStaticAnalysis: boolean;
     enableRuntimeAnalysis: boolean;
@@ -153,6 +165,7 @@ export interface QueryAnalysisConfig {
     identifySlowQueries: boolean;
     generateOptimizationSuggestions: boolean;
 
+}
 export interface MonitoringConfig {
     enableRealTimeMonitoring: boolean;
     metricsCollectionInterval: number;
@@ -160,6 +173,7 @@ export interface MonitoringConfig {
     alertingThresholds: AlertingThresholds;
     customMetrics: CustomMetric[];
 
+}
 export interface AlertingThresholds {
     responseTimeDegradation: number;
     errorRateIncrease: number;
@@ -167,6 +181,7 @@ export interface AlertingThresholds {
     resourceUtilizationHigh: number;
     cacheHitRateDecrease: number;
 
+}
 export interface CustomMetric {
     metricName: string;
     metricType: MetricType;
@@ -190,12 +205,14 @@ export declare enum AggregationType {
     PERCENTILE = "percentile",
     COUNT = "count"
 
+}
 export interface AlertingConfig {
     enableAlerting: boolean;
     alertChannels: AlertChannel[];
     escalationRules: EscalationRule[];
     suppressionRules: SuppressionRule[];
 
+}
 export interface AlertChannel {
     channelId: string;
     channelType: AlertChannelType;
@@ -210,6 +227,7 @@ export declare enum AlertChannelType {
     PAGER_DUTY = "pager_duty",
     TEAMS = "teams"
 
+}
 export interface EscalationRule {
     ruleId: string;
     severity: AlertSeverity;
@@ -224,6 +242,7 @@ export declare enum AlertSeverity {
     ERROR = "error",
     CRITICAL = "critical"
 
+}
 export interface SuppressionRule {
     ruleId: string;
     suppressionPattern: string;
@@ -231,6 +250,7 @@ export interface SuppressionRule {
     conditions: string[];
     enabled: boolean;
 
+}
 export interface ApiEndpoint {
     endpointId: string;
     path: string;
@@ -260,6 +280,7 @@ export declare enum SecurityLevel {
     PRIVILEGED = "privileged",
     ADMIN_ONLY = "admin_only"
 
+}
 export interface CachingRule {
     ruleId: string;
     cachingStrategy: CachingStrategy;
@@ -268,6 +289,7 @@ export interface CachingRule {
     priority: number;
     enabled: boolean;
 
+}
 export interface OptimizationHint {
     hintType: OptimizationHintType;
     hintValue: string;
@@ -281,6 +303,7 @@ export declare enum OptimizationHintType {
     PROJECTION_HINT = "projection_hint",
     JOIN_HINT = "join_hint"
 
+}
 export interface EndpointMetrics {
     totalRequests: number;
     successfulRequests: number;
@@ -294,6 +317,7 @@ export interface EndpointMetrics {
     lastUpdated: Date;
     trends: MetricTrend[];
 
+}
 export interface MetricTrend {
     metricName: string;
     trend: TrendDirection;
@@ -307,6 +331,7 @@ export declare enum TrendDirection {
     STABLE = "stable",
     VOLATILE = "volatile"
 
+}
 export interface PerformanceOptimization {
     optimizationId: string;
     timestamp: Date;
@@ -327,6 +352,7 @@ export declare enum OptimizationType {
     INDEX_OPTIMIZATION = "index_optimization",
     CONNECTION_POOLING = "connection_pooling"
 
+}
 export interface PerformanceSnapshot {
     timestamp: Date;
     responseTime: number;
@@ -335,6 +361,7 @@ export interface PerformanceSnapshot {
     resourceUtilization: ResourceUtilization;
     cacheMetrics: CacheMetrics;
 
+}
 export interface ResourceUtilization {
     cpuPercent: number;
     memoryPercent: number;
@@ -342,6 +369,7 @@ export interface ResourceUtilization {
     diskUtilization: number;
     connectionCount: number;
 
+}
 export interface CacheMetrics {
     hitRate: number;
     missRate: number;
@@ -349,6 +377,7 @@ export interface CacheMetrics {
     cacheSize: number;
     averageKeySize: number;
 
+}
 export interface OptimizationImpact {
     expectedResponseTimeImprovement: number;
     expectedThroughputImprovement: number;
@@ -364,12 +393,14 @@ export declare enum OptimizationStatus {
     ROLLED_BACK = "rolled_back",
     FAILED = "failed"
 
+}
 export interface PerformanceReport {
     reportId: string;
     generatedAt: Date;
     reportPeriod: {
         start: Date;
         end: Date;
+}
     };
     summary: PerformanceSummary;
     endpointAnalysis: EndpointAnalysis[];
@@ -377,6 +408,7 @@ export interface PerformanceReport {
     trends: PerformanceTrend[];
     incidents: PerformanceIncident[];
 
+}
 export interface PerformanceSummary {
     totalRequests: number;
     averageResponseTime: number;
@@ -388,6 +420,7 @@ export interface PerformanceSummary {
     optimizationsApplied: number;
     performanceImprovement: number;
 
+}
 export interface EndpointAnalysis {
     endpointId: string;
     requestVolume: number;
@@ -403,6 +436,7 @@ export declare enum PerformanceGrade {
     POOR = "poor",
     CRITICAL = "critical"
 
+}
 export interface OptimizationRecommendation {
     recommendationId: string;
     priority: number;
@@ -425,6 +459,7 @@ export declare enum RiskLevel {
     HIGH = "high",
     CRITICAL = "critical"
 
+}
 export interface PerformanceTrend {
     metricName: string;
     trend: TrendDirection;
@@ -440,6 +475,7 @@ export declare enum TrendSignificance {
     SIGNIFICANT = "significant",
     CRITICAL = "critical"
 
+}
 export interface PerformanceIncident {
     incidentId: string;
     timestamp: Date;
@@ -451,6 +487,7 @@ export interface PerformanceIncident {
     duration: number;
     impact: IncidentImpact;
 
+}
 export interface IncidentImpact {
     requestsAffected: number;
     usersAffected: number;
@@ -521,6 +558,7 @@ export declare class ApiPerformanceOptimizer extends EventEmitter {
     private generateEndpointRecommendations;
     private calculateOptimizationPotential;
     private sleep;
+}
 interface RateLimitResult {
     allowed: boolean;
     remainingRequests: number;
@@ -535,3 +573,4 @@ export declare class ApiPerformanceOptimizerFactory {
 
 export default ApiPerformanceOptimizer;
 //# sourceMappingURL=ApiPerformanceOptimizer.d.ts.map
+}

@@ -6,6 +6,7 @@
  */
 import { BaseAIModel, ModelMetadata, ModelCapabilities, CostEstimate } from '../BaseAIModel';
 
+}
 export interface HTTPConfig {
     baseURL: string;
     apiKey?: string;
@@ -16,6 +17,7 @@ export interface HTTPConfig {
     healthEndpoint?: string;
 
 
+}
 export interface HTTPRequestOptions {
     endpoint?: string;
     method?: 'POST' | 'GET' | 'PUT' | 'PATCH';
@@ -25,6 +27,7 @@ export interface HTTPRequestOptions {
     parameters?: Record<string, unknown>;
 
 
+}
 export interface HTTPRequestMapping {
     inputPath: string;
     outputPath: string;
@@ -34,6 +37,7 @@ export interface HTTPRequestMapping {
     statusPath?: string;
 
 
+}
 export interface GenericHTTPResponse {
     status: number;
     data: unknown;
@@ -43,6 +47,7 @@ export interface GenericHTTPResponse {
         output_tokens?: number;
         total_tokens?: number;
 
+}
     };
 
 export declare class GenericHTTPAdapter extends BaseAIModel {

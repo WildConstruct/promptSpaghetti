@@ -71,6 +71,7 @@ export enum AlertStatus {
 }
 
 }
+}
 export interface UnifiedAlert {
   id: string;
   title: string;
@@ -123,7 +124,9 @@ export interface UnifiedAlert {
   escalationRules: string[];
 }
 }
+}
 
+}
 }
 export interface AlertResponseAction {
   id: string;
@@ -140,9 +143,11 @@ export interface AlertResponseAction {
     message: string;
     details?: unknown;
 }
+}
   };
 }
 
+}
 }
 export interface AlertComment {
   id: string;
@@ -154,7 +159,9 @@ export interface AlertComment {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface AlertAttachment {
   id: string;
@@ -168,7 +175,9 @@ export interface AlertAttachment {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface AlertRule {
   id: string;
@@ -197,7 +206,9 @@ export interface AlertRule {
   triggerCount: number;
 }
 }
+}
 
+}
 }
 export interface AlertCondition {
   field: string;
@@ -206,7 +217,9 @@ export interface AlertCondition {
   weight: number; // 0-1, importance of this condition
 }
 }
+}
 
+}
 }
 export interface RuleAction {
   type: 'EMAIL' | 'SMS' | 'WEBHOOK' | 'SLACK' | 'TEAMS' | 'PAGER' | 'EXECUTE_SCRIPT' | 'UPDATE_STATUS' | 'ASSIGN';
@@ -215,7 +228,9 @@ export interface RuleAction {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface ActionCondition {
   condition: string;
@@ -223,7 +238,9 @@ export interface ActionCondition {
   operator: string;
 }
 }
+}
 
+}
 }
 export interface AlertingConfiguration {
   // General settings
@@ -258,7 +275,9 @@ export interface AlertingConfiguration {
   escalationChain: EscalationRule[];
 }
 }
+}
 
+}
 }
 export interface NotificationChannel {
   id: string;
@@ -272,9 +291,11 @@ export interface NotificationChannel {
     maxPerHour: number;
     maxPerDay: number;
 }
+}
   };
 }
 
+}
 }
 export interface ChannelCondition {
   field: string;
@@ -282,7 +303,9 @@ export interface ChannelCondition {
   value: Error;
 }
 }
+}
 
+}
 }
 export interface EscalationRule {
   level: number;
@@ -292,14 +315,18 @@ export interface EscalationRule {
   assignTo?: string[];
 }
 }
+}
 
+}
 }
 export interface EscalationCondition {
   condition: string;
   value: Error;
 }
 }
+}
 
+}
 }
 export interface AlertMetrics {
   totalAlerts: number;
@@ -319,6 +346,7 @@ export interface AlertMetrics {
     daily: number[];
     weekly: number[];
 }
+}
   };
   
   topAlertTypes: Array<{
@@ -335,6 +363,7 @@ export interface AlertMetrics {
 }
 
 }
+}
 export interface AlertDashboard {
   summary: {
     totalActive: number;
@@ -342,6 +371,7 @@ export interface AlertDashboard {
     high: number;
     newAlerts: number;
     unassigned: number;
+}
 }
   };
   

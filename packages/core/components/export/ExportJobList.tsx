@@ -1,7 +1,9 @@
 import React from 'react';
 
+}
 export interface ExportJobListProps {
   className?: string;
+}
 }
 export const ExportJobList: React.FC<ExportJobListProps> = ({ className = '' }) => {
   return;

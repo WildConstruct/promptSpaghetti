@@ -6,10 +6,12 @@ import { PreviewRequest, PreviewResponse } from './types';
 import * as crypto from 'crypto';
 
 }
+}
 interface ClaudeAPIResponse {
   content: Array<{
     type: string;
     text: string;
+}
 }
   }>;
   usage: {
@@ -19,6 +21,7 @@ interface ClaudeAPIResponse {
 }
 
 }
+}
 interface CachedPreview {
   output: string;
   cost_estimate: number;
@@ -26,6 +29,7 @@ interface CachedPreview {
   token_usage: {
     input_tokens: number;
     output_tokens: number;
+}
 }
   };
   cached_at: Date;

@@ -5,6 +5,7 @@
 
 import { useEffect, useCallback, useState } from 'react';
 
+}
 interface UseUnsavedChangesOptions {
   hasUnsavedChanges: boolean;
   projectName?: string;
@@ -29,6 +30,7 @@ interface UseUnsavedChangesOptions {
   event.preventDefault();
   event.returnValue = message; // For Chrome
   return message; // For other browsers
+}
 };
 
     window.addEventListener('beforeunload', handleBeforeUnload);

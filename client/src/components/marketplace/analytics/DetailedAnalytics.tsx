@@ -7,6 +7,7 @@ import { MetricSelector } from './MetricSelector';
 import { TemplateSelector } from './TemplateSelector';
 import { analyticsService } from '../../../services/analyticsService';
 import './DetailedAnalytics.css';
+}
 interface DetailedAnalyticsProps {
   creatorId: string;,
   timeRange: TimeRange;
@@ -22,6 +23,7 @@ interface DetailedAnalyticsProps {
   timeRange,
   startDate,
   endDate
+}
 }) => {
   const [templates, setTemplates] = useState<Template>([]);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>('');

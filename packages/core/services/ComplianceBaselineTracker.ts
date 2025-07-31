@@ -4,6 +4,7 @@
  * for GDPR, SOC2, MPA, and internal security standards
  */
 
+}
 export interface ComplianceBaseline {
   id: string;
   framework: 'GDPR' | 'CCPA' | 'SOC2' | 'ISO27001' | 'MPA' | 'INTERNAL';
@@ -18,6 +19,8 @@ export interface ComplianceBaseline {
   lastUpdatedAt: Date;
   isActive: boolean;
 }
+}
+}
 export interface ComplianceMeasurement {
   id: string;
   baselineId: string;
@@ -28,6 +31,8 @@ export interface ComplianceMeasurement {
   measuredAt: Date;
   context?: Record<string, any>;
   notes?: string;
+}
+}
 }
 export interface BaselineTrend {
   baselineId: string;
@@ -41,6 +46,8 @@ export interface BaselineTrend {
   lastMeasurement: ComplianceMeasurement;
   recommendedActions: string;
 }
+}
+}
 export interface BaselineDashboard {
   overallHealthScore: number; // 0-100,
   frameworkHealth: Record<string, {,
@@ -49,6 +56,7 @@ export interface BaselineDashboard {
   baselinesTracked: number;
   baselinesMet: number;
   criticalDeviations: number;
+}
 }>;
   recentDeviations: ComplianceMeasurement;
   trendAnalysis: BaselineTrend;
@@ -291,6 +299,7 @@ export class ComplianceBaselineTracker {
     context?: Record<string, any>,
     notes?: string
   ): Promise<ComplianceMeasurement> {
+
     const baseline = this.baselines.get(baselineId);
     if (!baseline) {
       throw new Error(`Baseline not found: ${baselineId}`);}
@@ -361,6 +370,7 @@ export class ComplianceBaselineTracker {
    * Generate comprehensive baseline dashboard
    */
   async generateDashboard(): Promise<BaselineDashboard> {
+
     const frameworkHealth: Record<string, any> = {};
     const trendAnalysis: BaselineTrend = [];
     const recentDeviations: ComplianceMeasurement = [];
@@ -424,6 +434,7 @@ export class ComplianceBaselineTracker {
   async updateBaseline(baselineId: string)
     updates: Partial<Pick<ComplianceBaseline, 'targetValue' | 'toleranceThreshold' | 'isActive'>>
   ): Promise<void> {
+
     const baseline = this.baselines.get(baselineId);
     if (!baseline) {
       throw new Error(`Baseline not found: ${baselineId}`);}
@@ -439,6 +450,7 @@ export class ComplianceBaselineTracker {
    */
   async createCustomBaseline(baseline: Omit<ComplianceBaseline, 'id' | 'baselineEstablishedAt' | 'lastUpdatedAt'>)
   ): Promise<ComplianceBaseline> {
+
     const customBaseline: ComplianceBaseline = {
       ...baseline,
       id: `custom_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`}
@@ -571,7 +583,7 @@ export class ComplianceBaselineTracker {
         const impact = gap > 20 ? 'high' : gap > 10 ? 'medium' : 'low';
         const difficulty: 'low' | 'medium' | 'high' = trend.framework === 'GDPR' ? 'high' : 
           trend.framework === 'SOC2' ? 'medium' : 'low';
-        const timeframe = difficulty === 'high' ? '3-6 months' :;
+        const timeframe = difficulty === 'high' ? '3-6 months' :
           difficulty === 'medium' ? '1-3 months' : '2-4 weeks';
         return {
           baselineId: trend.baselineId,
@@ -591,6 +603,7 @@ export class ComplianceBaselineTracker {
   baselineId: string;
   measurement: ComplianceMeasurement;
 }): Promise<void> {
+
     const alert = {
       id: `alert_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`}
 },

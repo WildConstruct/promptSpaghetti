@@ -7,6 +7,7 @@
  */
 import React from 'react';
 
+}
 interface RealTimePreviewPanelProps {
     visible?: boolean;
     onClose?: () => void;
@@ -17,3 +18,4 @@ interface RealTimePreviewPanelProps {
 export declare const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps>;
 export default RealTimePreviewPanel;
 //# sourceMappingURL=RealTimePreviewPanel.d.ts.map
+}

@@ -1,6 +1,7 @@
 import { Edge, Node } from 'reactflow';
 import { ValidationError } from '../validation';
 
+}
 interface UseValidationReturn {
     errors: ValidationError[];
     styledEdges: Edge[];
@@ -8,6 +9,7 @@ interface UseValidationReturn {
     runValidation: (edges: Edge[], nodes: Node[]) => void;
 
 
+}
 interface UseValidationProps {
     edges: Edge[];
     nodes: Node[];
@@ -20,6 +22,7 @@ export declare const useValidation: ()
   nodes,
   highlightNodeIds,
   highlightEdgeIds,
+}
   validateConnection: customValidateConnection }: UseValidationProps
 ) => UseValidationReturn;
 export {};

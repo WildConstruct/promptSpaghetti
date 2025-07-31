@@ -24,6 +24,7 @@ import type {
   TOTPEnrollmentData, 
   MFAEnrollmentResponse 
 } from '../../types/MFATypes';
+}
 interface MFAEnrollmentWorkflowProps {
   userId: string;,
   onComplete: (methodType: MFAMethodType, configId: string) => void;,
@@ -44,7 +45,7 @@ interface MFAEnrollmentWorkflowProps {
   error: string | null;,
   timeRemaining: number;
   const MFA_METHOD_CONFIG = {
-  [MFAMethodType.TOTP]: {,
+  [MFAMethodType.TOTP]: {
   title: 'Authenticator App',
   description: 'Most secure option using Google Authenticator, Authy, or similar apps',
   icon: Smartphone,
@@ -52,6 +53,7 @@ interface MFAEnrollmentWorkflowProps {
   convenience: 'High',
   recommended: true,
   requirements: ['Smartphone', 'Authenticator app installed'],
+}
 }
   [MFAMethodType.EMAIL]: {
   title: 'Email Verification',

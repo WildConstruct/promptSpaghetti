@@ -9,6 +9,7 @@
  */
 import React, { useState, useEffect, useCallback } from 'react';
 import { ConsentCategory, ConsentOption, ConsentPreference } from '../../types/consent';
+}
 interface GranularConsentInterfaceProps {
   userId: string;,
   onSave: (preferences: ConsentPreference) => Promise<void>;
@@ -16,12 +17,14 @@ interface GranularConsentInterfaceProps {
   initialPreferences?: ConsentPreference;
   readOnly?: boolean;
   complianceMode?: 'GDPR' | 'CCPA' | 'LGPD' | 'PIPEDA';
+}
 interface CategoryState {
   expanded: boolean;,
   allEnabled: boolean;
   someEnabled: boolean;
 
 export const [categories, setCategories] = useState<ConsentCategory>([]);
+}
   const [categoryStates, setCategoryStates] = useState<Record<string, CategoryState>>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -110,7 +113,7 @@ export const [categories, setCategories] = useState<ConsentCategory>([]);
   const toggleCategoryExpansion = (categoryId: string) => {
   setCategoryStates(prev => ({)
   ...prev,
-  [categoryId]: {,
+  [categoryId]: {
   ...prev[categoryId],
   expanded: !prev[categoryId]?.expanded,
 }));

@@ -6,6 +6,7 @@
  */
 import React from 'react';
 
+}
 export interface SearchFilters {
     priceRange: [number, number];
     tags: string[];
@@ -16,6 +17,7 @@ export interface SearchFilters {
     creatorId?: string;
 
 
+}
 interface SearchSuggestion {
     text: string;
     type: 'query' | 'tag' | 'creator' | 'template';
@@ -23,6 +25,7 @@ interface SearchSuggestion {
     icon?: string;
 
 
+}
 interface MarketplaceSearchProps {
     onSearch: (query: string, filters: SearchFilters) => void;
     onFiltersChange?: (filters: SearchFilters) => void;
@@ -32,6 +35,7 @@ interface MarketplaceSearchProps {
         name: string;
         templateCount: number;
 
+}
     }>;
     availableModels?: string[];
     searchSuggestions?: SearchSuggestion[];

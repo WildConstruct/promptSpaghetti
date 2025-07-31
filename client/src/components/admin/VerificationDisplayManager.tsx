@@ -32,6 +32,7 @@ import {
   Copy,
   Download
 } from 'lucide-react';
+}
 interface VerificationDisplayConfig {
   // Display Settings
   showTrustScores: boolean;,
@@ -44,33 +45,38 @@ interface VerificationDisplayConfig {
   colorScheme: 'default' | 'professional' | 'vibrant';,
   animationsEnabled: boolean;
   // Visibility Rules
-  publicDisplaySettings: {,
+  publicDisplaySettings: {
   unverifiedUsers: boolean;,
   lowReputationUsers: boolean;
   flaggedUsers: boolean;
+}
 };
   // Thresholds
-  displayThresholds: {,
+  displayThresholds: {
   minTrustScore: number;
   minBadgeCount: number;,
   hideUnverified: boolean;
 };
+}
 interface TrustDisplayPreview {
   userId: string;,
   username: string;
   trustScore: number;,
   reputationLevel: string;
   verificationLevel: string;,
-  badges: Array<{,
+  badges: Array<{
   badgeType: string;,
   name: string;
   verified: boolean;,
   rarity: string;
+}
 }>;
   flagged: boolean;
+}
 interface VerificationDisplayManagerProps {
   className?: string;
 
+}
 export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProps> = ({ className }) => {
   const [previewData, setPreviewData] = useState<TrustDisplayPreview>([]);
   const [selectedDevice, setSelectedDevice] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
@@ -87,12 +93,12 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
   trustIndicatorSize: 'medium',
   colorScheme: 'default',
   animationsEnabled: true,
-  publicDisplaySettings: {,
+  publicDisplaySettings: {
   unverifiedUsers: true,
   lowReputationUsers: true,
   flaggedUsers: false,
 },
-  displayThresholds: {,
+  displayThresholds: {
   minTrustScore: 0,
   minBadgeCount: 0,
   hideUnverified: false,

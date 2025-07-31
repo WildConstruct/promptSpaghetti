@@ -19,6 +19,7 @@ import {
 import { LoadingSpinner, EmptyState } from './LoadingStates';
 import './AdminTable.css';
 
+}
 export interface TableColumn<T = any> {
   key: string;,
   title: string;
@@ -32,6 +33,7 @@ export interface TableColumn<T = any> {
   align?: 'left' | 'center' | 'right';
   fixed?: 'left' | 'right';
 
+}
 export interface TableAction<T = any> {
   key: string;,
   label: string;
@@ -43,6 +45,7 @@ export interface TableAction<T = any> {
   title: string;,
   description: string;
 };
+}
 interface AdminTableProps<T = any> {
   columns: TableColumn<T>[];,
   data: T;
@@ -54,7 +57,7 @@ interface AdminTableProps<T = any> {
   selectedRows?: T;
   onSelectionChange?: (selectedRows: T) => void;
   // Pagination
-  pagination?: {,
+  pagination?: {
   current: number;,
   pageSize: number;
   total: number;,

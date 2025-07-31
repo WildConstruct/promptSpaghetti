@@ -15,6 +15,7 @@ import {
 import { PerformanceBaseline, BaselineSnapshot } from './PerformanceBaseline';
 import { PerformanceMonitoringDashboard, DashboardAlert } from './PerformanceMonitoringDashboard';
 
+}
 export interface KPIAlert {
   id: string;
   kpiId: string;
@@ -30,6 +31,8 @@ export interface KPIAlert {
   timestamp: number;
   acknowledged: boolean;
 }
+}
+}
 export interface KPIMonitoringConfig {
   monitoringInterval: number;        // Monitoring frequency in ms,
   alertingEnabled: boolean;          // Enable/disable alerting,
@@ -37,6 +40,7 @@ export interface KPIMonitoringConfig {
   critical: number;                // Alert after N critical violations,
   consecutive: number;             // Alert after N consecutive violations,
   degradationThreshold: number;   // Alert on performance degradation %,
+}
 };
   kpiFilters: {
   categories: string;            // Monitor only specific categories,
@@ -55,6 +59,7 @@ export interface KPIMonitoringConfig {
   emailRecipients: string;
 };
 }
+}
 export interface KPITrendAnalysis {
   kpiId: string;
   trend: 'improving' | 'stable' | 'degrading';
@@ -65,6 +70,7 @@ export interface KPITrendAnalysis {
   nextWeek: number;
   nextMonth: number;
   confidence: number;
+}
 };
 /**
  * KPI Monitoring Service
@@ -116,6 +122,7 @@ export class KPIMonitoringService extends EventEmitter {
    * Start KPI monitoring
    */
   async startMonitoring(): Promise<void> {
+
     if (this.isMonitoring) {
       console.log('🔍 KPI monitoring is already running');
       return;
@@ -190,6 +197,7 @@ export class KPIMonitoringService extends EventEmitter {
    * Process a KPI snapshot and generate alerts if needed
    */
   private async processKPISnapshot(snapshot: KPISnapshot): Promise<void> {
+
     // Add to history
     if (!this.kpiHistory.has(snapshot.kpiId)) {
       this.kpiHistory.set(snapshot.kpiId, []);
@@ -206,6 +214,7 @@ export class KPIMonitoringService extends EventEmitter {
    * Check alerting conditions for a KPI snapshot
    */
   private async checkAlertingConditions(snapshot: KPISnapshot): Promise<void> {
+
     const kpi = corePerformanceKPIs.find(k => k.id === snapshot.kpiId);
     if (!kpi) return;
     // Check for critical/warning status
@@ -385,7 +394,7 @@ export class KPIMonitoringService extends EventEmitter {
   alertsActive: number;
   averageScore: number;
 };
-    kpiStatus: Array<{,
+    kpiStatus: Array<{
   kpiId: string;
   name: string;
   category: string;
@@ -532,6 +541,7 @@ export class KPIMonitoringService extends EventEmitter {
    * Force immediate monitoring cycle
    */
   async triggerMonitoringCycle(): Promise<void> {
+
   if (!this.isMonitoring) {
   throw new Error('Monitoring is not running');
   await this.performMonitoringCycle();

@@ -13,6 +13,7 @@ import {
   ValidationResult
 } from '../types/DataClassification';
 
+}
 export interface HandlingRule {
     id: string;
     name: string;
@@ -27,6 +28,7 @@ export interface HandlingRule {
     complianceFramework: string[];
 
 
+}
 export interface HandlingRuleViolation {
     id: string;
     ruleId: string;
@@ -42,6 +44,7 @@ export interface HandlingRuleViolation {
     status: 'OPEN' | 'INVESTIGATING' | 'REMEDIATED' | 'ACCEPTED_RISK';
 
 
+}
 export interface ComplianceCheck {
     ruleId: string;
     dataElement: string;
@@ -145,3 +148,4 @@ export declare class ClassificationHandlingRulesService {
 
 export default ClassificationHandlingRulesService;
 //# sourceMappingURL=ClassificationHandlingRulesService.d.ts.map
+}

@@ -13,6 +13,7 @@
  */
 import { EnhancedConversionEvent, TouchPoint, AttributionModel } from './ConversionFunnelArchitecture';
 
+}
 export interface ConversionFunnelDefinition {
   id: string;
   name: string;
@@ -26,6 +27,7 @@ export interface ConversionFunnelDefinition {
   requireSequentialSteps: boolean;
   enableParallelPaths: boolean;
   dropOffGracePeriod: number; // milliseconds,
+}
 };
   // Step definitions
   steps: ConversionStep;
@@ -51,6 +53,7 @@ export interface ConversionFunnelDefinition {
   benchmarkData?: BenchmarkData;
 };
 }
+}
 export interface ConversionStep {
   id: string;
   name: string;
@@ -70,6 +73,7 @@ export interface ConversionStep {
   maxTimeFromPrevious?: number; // milliseconds,
   maxTimeFromStart?: number; // milliseconds,
   allowedTimeWindows?: TimeWindow;
+}
 };
   // Success metrics
   successMetrics: {
@@ -104,12 +108,15 @@ export type FunnelCategory =
   | 'retention'       // User retention
   | 'referral';       // User referral/advocacy
 
+}
 export interface EventCriteria {
   eventType: string;
   eventPattern?: string; // Regex pattern for flexible matching,
   propertyMatchers: PropertyMatcher;
   valueConstraints?: ValueConstraint;
   contextRequirements?: ContextRequirement;
+}
+}
 }
 export interface PropertyMatcher {
   propertyPath: string; // Dot notation: "user.profile.tier",
@@ -118,6 +125,8 @@ export interface PropertyMatcher {
   caseSensitive?: boolean;
   required?: boolean;
 }
+}
+}
 export interface ValueConstraint {
   field: 'value' | 'timestamp' | 'duration';
   min?: number;
@@ -125,10 +134,14 @@ export interface ValueConstraint {
   exactValues?: number;
   excludeValues?: number;
 }
+}
+}
 export interface ContextRequirement {
   type: 'device' | 'location' | 'session' | 'user_attribute' | 'time_of_day' | 'referrer';
   condition: string;
   value: any;
+}
+}
 }
 export interface StepCondition {
   id: string;
@@ -137,10 +150,14 @@ export interface StepCondition {
   logic: ConditionLogic;
   weight: number; // For scoring complex conditions,
 }
+}
+}
 export interface ConditionLogic {
   operator: 'AND' | 'OR' | 'NOT';
   conditions: SimpleCondition;
   customValidator?: string; // JavaScript function body for custom logic,
+}
+}
 }
 export interface SimpleCondition {
   field: string;
@@ -148,11 +165,15 @@ export interface SimpleCondition {
   value: any;
   metadata?: Record<string, any>;
 }
+}
+}
 export interface TimeWindow {
   start: string; // ISO time format "HH:MM",
   end: string;   // ISO time format "HH:MM",
   daysOfWeek: number; // 0=Sunday, 6=Saturday,
   timezone?: string;
+}
+}
 }
 export interface StepBranch {
   id: string;
@@ -163,7 +184,9 @@ export interface StepBranch {
   metadata: {
   description: string;
   expectedFlow: number; // Percentage of users expected to take this branch,
+}
 };
+}
 }
 export interface ConditionalPath {
   id: string;
@@ -174,13 +197,16 @@ export interface ConditionalPath {
   priority: number;
   isDefault: boolean;
 }
+}
+}
 export interface SuccessCriteria {
   primary: {
   stepId: string;
   requirements: ConditionLogic;
   weight: number;
+}
 };
-  secondary: Array<{,
+  secondary: Array<{
   stepId: string;
   requirements: ConditionLogic;
   weight: number;
@@ -190,6 +216,7 @@ export interface SuccessCriteria {
   method: 'weighted' | 'binary' | 'progressive' | 'custom';
   customFormula?: string;
 };
+}
 }
 export interface SegmentationRule {
   id: string;
@@ -202,7 +229,9 @@ export interface SegmentationRule {
   expectedSize: number;
   businessValue: string;
   trackingPeriod: number; // days,
+}
 };
+}
 }
 export interface BenchmarkData {
   industryAverageConversionRate: number;
@@ -211,12 +240,16 @@ export interface BenchmarkData {
   goalConversionRate: number;
   lastUpdated: number;
 }
+}
+}
 export interface CompetitorBenchmark {
   name: string;
   conversionRate: number;
   averageTimeToConvert: number;
   dropOffPoints: string;
   strengths: string;
+}
+}
 }
 export interface HistoricalBenchmark {
   period: string;
@@ -228,6 +261,8 @@ export interface HistoricalBenchmark {
   * Enhanced Conversion Event Schema
   * Extends the base conversion event with flexible property validation
   */
+}
+}
 }
 export interface FlexibleConversionEvent extends EnhancedConversionEvent {
   // Flexible properties with schema validation
@@ -286,6 +321,7 @@ export interface FlexibleConversionEvent extends EnhancedConversionEvent {
   locationData?: LocationData;
 };
 
+}
 export interface FlexibleProperty {
   value: any;
   type: PropertyType;
@@ -295,6 +331,7 @@ export interface FlexibleProperty {
   confidence: number;
   lastUpdated: number;
   validationStatus: 'valid' | 'invalid' | 'pending'
+}
   };
 }
 export type PropertyType = 
@@ -308,6 +345,7 @@ export type PropertyType =
   | 'json' 
   | 'custom';
 
+}
 export interface PropertySchema {
   type: PropertyType;
   required: boolean;
@@ -316,21 +354,29 @@ export interface PropertySchema {
   transformations?: PropertyTransformation;
   relationships?: PropertyRelationship;
 }
+}
+}
 export interface PropertyConstraint {
   type: 'format' | 'range' | 'length' | 'pattern' | 'custom';
   value: any;
   errorMessage: string;
   severity: 'error' | 'warning' | 'info'
+}
   }
+}
 export interface PropertyTransformation {
   type: 'normalize' | 'encode' | 'hash' | 'encrypt' | 'custom';
   config: Record<string, any>;
   conditions?: ConditionLogic;
 }
+}
+}
 export interface PropertyRelationship {
   type: 'depends_on' | 'conflicts_with' | 'derives_from' | 'validates_against';
   targetProperty: string;
   relationship: string;
+}
+}
 }
 export interface ValidationError {
   propertyPath: string;
@@ -339,12 +385,16 @@ export interface ValidationError {
   severity: 'critical' | 'major' | 'minor';
   suggestedFix?: string;
 }
+}
+}
 export interface ValidationWarning {
   propertyPath: string;
   issue: string;
   message: string;
   impact: string;
   recommendation?: string;
+}
+}
 }
 export interface LocationData {
   country: string;
@@ -355,11 +405,13 @@ export interface LocationData {
   latitude: number;
   longitude: number;
   accuracy: number;
+}
 };
   ipHash: string; // Privacy-compliant hashed IP
 /**
  * Cohort Tracking Structures
  */
+}
 }
 export interface ConversionCohort {
   id: string;
@@ -372,6 +424,7 @@ export interface ConversionCohort {
   timeWindow: number; // milliseconds,
   maxSize?: number;
   minSize?: number;
+}
 };
   // Analysis configuration
   analysis: {
@@ -405,6 +458,7 @@ export interface ConversionCohort {
   owner: string;
 };
 }
+}
 export interface UserSegment {
   id: string;
   name: string;
@@ -415,6 +469,7 @@ export interface UserSegment {
   operator: 'AND' | 'OR';
   updateFrequency: 'real_time' | 'hourly' | 'daily' | 'weekly';
   isStatic: boolean; // If true, membership doesn't change after initial assignment,
+}
 };
   // Current state
   state: {
@@ -443,6 +498,7 @@ export interface UserSegment {
   customAttributes: Record<string, any>;
 };
 }
+}
 export interface MetricCalculation {
   id: string;
   name: string;
@@ -451,10 +507,14 @@ export interface MetricCalculation {
   aggregationPeriod: 'hour' | 'day' | 'week' | 'month';
   customFormula?: string;
 }
+}
+}
 export interface TimeSeriesData {
   timestamp: number;
   value: number;
   metadata?: Record<string, any>;
+}
+}
 }
 export interface DropOffPoint {
   stepId: string;
@@ -465,6 +525,8 @@ export interface DropOffPoint {
   commonExitActions: string;
   recoveryOpportunities: string;
 }
+}
+}
 export interface ValueMetrics {
   totalRevenue: number;
   averageOrderValue: number;
@@ -472,6 +534,8 @@ export interface ValueMetrics {
   revenuePerUser: number;
   costPerAcquisition: number;
   returnOnInvestment: number;
+}
+}
 }
 export interface BehaviorPattern {
   id: string;
@@ -483,7 +547,9 @@ export interface BehaviorPattern {
   preferredDays: number;
   preferredHours: number;
   seasonality?: string;
+}
 };
+}
 }
 export interface FunnelSegmentMetrics {
   funnelId: string;
@@ -493,6 +559,8 @@ export interface FunnelSegmentMetrics {
   completionRate: number;
   backtrackingRate: number;
   pathPreferences: PathPreference;
+}
+}
 }
 export interface PathPreference {
   pathId: string;
@@ -504,6 +572,8 @@ export interface PathPreference {
   * Entity Relationship Structures
   */
 }
+}
+}
 export interface UserEntity {
   id: string;
   // Basic information
@@ -513,6 +583,7 @@ export interface UserEntity {
   registrationDate: number;
   verificationStatus: 'verified' | 'pending' | 'suspended';
   accountType: 'free' | 'premium' | 'enterprise'
+}
   };
   // Conversion history
   conversionHistory: {
@@ -555,6 +626,7 @@ export interface UserEntity {
   notificationSettings: NotificationSettings;
 };
 }
+}
 export interface TemplateEntity {
   id: string;
   // Basic information
@@ -567,6 +639,7 @@ export interface TemplateEntity {
   tags: string;
   createdDate: number;
   lastUpdated: number;
+}
 };
   // Conversion performance
   conversionMetrics: {
@@ -614,6 +687,7 @@ export interface TemplateEntity {
   qualityScore: number;
 };
 }
+}
 export interface ConversionSummary {
   funnelId: string;
   totalConversions: number;
@@ -622,11 +696,15 @@ export interface ConversionSummary {
   lastConversionDate: number;
   preferredPath?: string;
 }
+}
+}
 export interface DevicePreference {
   deviceType: string;
   usagePercentage: number;
   conversionRate: number;
   lastUsed: number;
+}
+}
 }
 export interface ActivityPattern {
   type: 'temporal' | 'behavioral' | 'contextual';
@@ -634,7 +712,9 @@ export interface ActivityPattern {
   frequency: number;
   strength: number;
   impact: 'positive' | 'negative' | 'neutral'
+}
   }
+}
 export interface SegmentChange {
   date: number;
   fromSegment: string;
@@ -642,12 +722,16 @@ export interface SegmentChange {
   reason: string;
   triggerEvent?: string;
 }
+}
+}
 export interface CohortMembership {
   cohortId: string;
   joinDate: number;
   status: 'active' | 'graduated' | 'churned';
   daysActive: number;
   conversionAchieved: boolean;
+}
+}
 }
 export interface PrivacySettings {
   trackingConsent: boolean;
@@ -657,16 +741,22 @@ export interface PrivacySettings {
   dataRetentionPeriod: number;
   rightToErasure: boolean;
 }
+}
+}
 export interface CommunicationPreference {
   channel: 'email' | 'sms' | 'push' | 'in_app';
   frequency: 'immediate' | 'daily' | 'weekly' | 'monthly' | 'never';
   topics: string;
+}
+}
 }
 export interface ContentPreference {
   category: string;
   interest: number; // 0-1 scale,
   lastInteraction: number;
   conversionHistory: number;
+}
+}
 }
 export interface NotificationSettings {
   marketing: boolean;
@@ -677,7 +767,9 @@ export interface NotificationSettings {
   start: string;
   end: string;
   timezone: string;
+}
 };
+}
 }
 export interface TemplateFunnelMetrics {
   funnelId: string;
@@ -688,12 +780,16 @@ export interface TemplateFunnelMetrics {
   dropOffPoints: DropOffPoint;
   topSegments: string;
 }
+}
+}
 export interface PriceChange {
   date: number;
   oldPrice: number;
   newPrice: number;
   reason: string;
   impactOnConversions: number;
+}
+}
 }
 export interface TrendData {
   direction: 'up' | 'down' | 'stable';
@@ -702,11 +798,14 @@ export interface TrendData {
   timeframe: string;
   dataPoints: TimeSeriesData;
 }
+}
+}
 export interface SeasonalityData {
   pattern: 'weekly' | 'monthly' | 'quarterly' | 'yearly';
-  peaks: Array<{,
+  peaks: Array<{
   period: string;
   multiplier: number;
+}
 }>;
   confidence: number;
 /**
@@ -722,8 +821,7 @@ export class ConversionDataRelationshipManager {
   /**
   * Build enriched conversion event with full entity relationships
   */
-  public async enrichConversionEvent(()
-  baseEvent: EnhancedConversionEvent,
+  public async enrichConversionEvent((baseEvent: EnhancedConversionEvent,
   includeRelatedData: boolean = true): Promise<FlexibleConversionEvent> {,
   const userEntity = await this.getUserEntity(baseEvent.userId);
   const templateEntity = baseEvent.properties?.templateId ;
@@ -764,6 +862,7 @@ export class ConversionDataRelationshipManager {
    * Get or create user entity
    */
   private async getUserEntity(userId: string): Promise<UserEntity> {
+
     let user = this.userCache.get(userId);
     if (!user) {
       // In production, this would fetch from database
@@ -774,6 +873,7 @@ export class ConversionDataRelationshipManager {
    * Get or create template entity
    */
   private async getTemplateEntity(templateId: string): Promise<TemplateEntity> {
+
     let template = this.templateCache.get(templateId);
     if (!template) {
       // In production, this would fetch from database

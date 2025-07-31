@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { WebSocketClient, WebSocketClientConfig, ConnectionState } from '../websocket/WebSocketClient';
 import { GraphUpdatePayload, PresenceUpdatePayload } from '../../../server/src/websocket/types';
 
+}
 export interface UseWebSocketOptions {
   url?: string;
   documentId: string;
@@ -15,6 +16,8 @@ export interface UseWebSocketOptions {
   onUserJoin?: (user: any) => void;
   onUserLeave?: (user: any) => void;
   onError?: (error: any) => void;
+}
+}
 }
 export interface UseWebSocketReturn {
   connectionState: ConnectionState;
@@ -32,6 +35,7 @@ export interface UseWebSocketReturn {
   heartbeatInterval: 30000,
   connectionTimeout: 10000,
   enableOfflineQueue: true,
+}
 };
 }
 export function useWebSocket(options: UseWebSocketOptions): UseWebSocketReturn {

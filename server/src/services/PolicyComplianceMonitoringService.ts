@@ -16,6 +16,7 @@ import { PolicyEffectivenessTrackingService } from './PolicyEffectivenessTrackin
 import { OperationContext } from '../../../packages/core/types/DataClassification';
 
 }
+}
 export interface ComplianceViolation {
   violationId: string;
   userId: string;
@@ -65,7 +66,9 @@ export interface ComplianceViolation {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ViolationContext {
   requestId?: string;
@@ -98,7 +101,9 @@ export interface ViolationContext {
   managedDevice: boolean;
 }
 }
+}
 
+}
 }
 export interface ViolationImpact {
   // Data Impact
@@ -126,7 +131,9 @@ export interface ViolationImpact {
   mediaAttentionLikelihood: MediaAttentionLikelihood;
 }
 }
+}
 
+}
 }
 export interface RemediationAction {
   actionId: string;
@@ -164,7 +171,9 @@ export interface RemediationAction {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ComplianceMonitoringRule {
   ruleId: string;
@@ -208,7 +217,9 @@ export interface ComplianceMonitoringRule {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ComplianceDashboard {
   // Overview Metrics
@@ -245,9 +256,11 @@ export interface ComplianceDashboard {
   generatedAt: Date;
   dataFreshness: Date;
 }
+}
   coveragePeriod: { start: Date; end: Date };
 }
 
+}
 }
 export interface ComplianceScore {
   score: number; // 0-100
@@ -256,13 +269,16 @@ export interface ComplianceScore {
   lastUpdated: Date;
 }
 }
+}
 
+}
 }
 export interface ScoreFactor {
   factor: string;
   impact: number; // -100 to 100
   description: string;
   recommendation?: string;
+}
 }
 }
 
@@ -373,6 +389,7 @@ export enum EvaluationFrequency {
 // Supporting Interfaces
 
 }
+}
 export interface RiskFactor {
   factor: string;
   weight: number;
@@ -380,16 +397,20 @@ export interface RiskFactor {
   mitigation?: string;
 }
 }
+}
 
+}
 }
 export interface GeoLocation {
   country: string;
   region: string;
   city: string;
 }
+}
   coordinates?: { latitude: number; longitude: number };
 }
 
+}
 }
 export interface ViolationAuditEntry {
   timestamp: Date;
@@ -398,7 +419,9 @@ export interface ViolationAuditEntry {
   details: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface RecurrencePattern {
   frequency: 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'SPORADIC';
@@ -407,7 +430,9 @@ export interface RecurrencePattern {
   pattern: string;
 }
 }
+}
 
+}
 }
 export interface ConsentStatus {
   hasValidConsent: boolean;
@@ -416,7 +441,9 @@ export interface ConsentStatus {
   expiresAt?: Date;
 }
 }
+}
 
+}
 }
 export interface LegalBasisType {
   basis: string;
@@ -424,7 +451,9 @@ export interface LegalBasisType {
   justification: string;
 }
 }
+}
 
+}
 }
 export interface FinancialImpact {
   estimatedCost: number;
@@ -432,7 +461,9 @@ export interface FinancialImpact {
   costCategory: string;
 }
 }
+}
 
+}
 }
 export interface RegulatoryImplication {
   regulation: string;
@@ -441,7 +472,9 @@ export interface RegulatoryImplication {
   reportingRequired: boolean;
 }
 }
+}
 
+}
 }
 export interface ReportingDeadline {
   regulation: string;
@@ -449,21 +482,27 @@ export interface ReportingDeadline {
   status: 'PENDING' | 'COMPLETED' | 'OVERDUE';
 }
 }
+}
 
+}
 }
 export interface PublicExposureRisk {
   level: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   factors: string[];
 }
 }
+}
 
+}
 }
 export interface MediaAttentionLikelihood {
   likelihood: 'LOW' | 'MEDIUM' | 'HIGH';
   factors: string[];
 }
 }
+}
 
+}
 }
 export interface ActionEvidence {
   type: 'SCREENSHOT' | 'LOG_ENTRY' | 'DOCUMENT' | 'TIMESTAMP';
@@ -471,7 +510,9 @@ export interface ActionEvidence {
   timestamp: Date;
 }
 }
+}
 
+}
 }
 export interface TriggerCondition {
   field: string;
@@ -480,14 +521,18 @@ export interface TriggerCondition {
   caseSensitive?: boolean;
 }
 }
+}
 
+}
 }
 export interface DetectionCriteria {
   rules: DetectionRule[];
   logic: 'AND' | 'OR';
 }
 }
+}
 
+}
 }
 export interface DetectionRule {
   field: string;
@@ -496,7 +541,9 @@ export interface DetectionRule {
   timeWindow?: number; // minutes
 }
 }
+}
 
+}
 }
 export interface ComplianceThreshold {
   metric: string;
@@ -505,14 +552,18 @@ export interface ComplianceThreshold {
   unit: string;
 }
 }
+}
 
+}
 }
 export interface UserScope {
   type: 'ALL' | 'DEPARTMENT' | 'ROLE' | 'USER_LIST';
   values: string[];
 }
 }
+}
 
+}
 }
 export interface NotificationTarget {
   type: 'EMAIL' | 'SMS' | 'SLACK' | 'WEBHOOK';
@@ -520,7 +571,9 @@ export interface NotificationTarget {
   urgency: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 }
 }
+}
 
+}
 }
 export interface EscalationRule {
   triggerAfter: number; // minutes
@@ -528,7 +581,9 @@ export interface EscalationRule {
   notificationTargets: NotificationTarget[];
 }
 }
+}
 
+}
 }
 export interface TrendData {
   timestamp: Date;
@@ -536,7 +591,9 @@ export interface TrendData {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ViolationTypeMetrics {
   violationType: ComplianceViolationType;
@@ -545,7 +602,9 @@ export interface ViolationTypeMetrics {
   trend: 'INCREASING' | 'DECREASING' | 'STABLE';
 }
 }
+}
 
+}
 }
 export interface UserRiskMetrics {
   userId: string;
@@ -555,7 +614,9 @@ export interface UserRiskMetrics {
   lastViolation?: Date;
 }
 }
+}
 
+}
 }
 export interface PolicyRiskMetrics {
   policyId: string;
@@ -565,7 +626,9 @@ export interface PolicyRiskMetrics {
   riskScore: number;
 }
 }
+}
 
+}
 }
 export interface RegulatoryComplianceStatus {
   regulation: string;
@@ -575,7 +638,9 @@ export interface RegulatoryComplianceStatus {
   nextAssessment: Date;
 }
 }
+}
 
+}
 }
 export interface ComplianceDeadline {
   description: string;
@@ -585,7 +650,9 @@ export interface ComplianceDeadline {
   daysRemaining: number;
 }
 }
+}
 
+}
 }
 export interface PredictedViolation {
   violationType: ComplianceViolationType;
@@ -594,13 +661,16 @@ export interface PredictedViolation {
   factors: string[];
 }
 }
+}
 
+}
 }
 export interface RiskFactorAnalysis {
   factor: string;
   impact: number;
   prevalence: number;
   recommendation: string;
+}
 }
 }
 

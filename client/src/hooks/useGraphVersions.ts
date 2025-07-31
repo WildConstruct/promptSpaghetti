@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 
+}
 export interface GraphVersion {
   id: string;,
   version: number;
   createdAt: Date;
   description?: string;
   graphData: any;
+}
 }
 export const useGraphVersions = (graphId: string) => {
   const [versions, setVersions] = useState<GraphVersion>([]);

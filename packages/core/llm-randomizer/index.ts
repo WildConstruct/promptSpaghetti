@@ -23,6 +23,7 @@ export * from './generator';
  * Provides end-to-end graph generation workflow
  */
 
+}
 export interface LLMRandomizerWorkflow {
   // 1. Generate graph using LLM agent
   generateWithLLM: (request: any, provider?: string) => Promise<any>;
@@ -39,6 +40,7 @@ export interface LLMRandomizerWorkflow {
   serializedGraph: string;
   errors: any;
   warnings: any;
+}
 }>;
 
 /**

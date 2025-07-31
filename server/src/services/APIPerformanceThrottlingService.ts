@@ -19,6 +19,7 @@ import { MetricsCollector } from '../performance/MetricsCollector';
 // ============================================================================
 
 }
+}
 export interface APIPerformanceThrottlingConfig {
   // Performance-based throttling configuration
   performance_monitoring: {
@@ -28,6 +29,7 @@ export interface APIPerformanceThrottlingConfig {
     system_health_weight: number;
     predictive_analytics_weight: number;
     historical_data_window_minutes: number;
+}
 }
   };
   
@@ -166,6 +168,7 @@ export interface APIPerformanceThrottlingConfig {
 }
 
 }
+}
 export interface PerformanceMetrics {
   // Response time metrics
   response_time: {
@@ -175,6 +178,7 @@ export interface PerformanceMetrics {
     p99_ms: number;
     max_ms: number;
     trend: 'improving' | 'stable' | 'degrading';
+}
 }
   };
   
@@ -215,6 +219,7 @@ export interface PerformanceMetrics {
 }
 
 }
+}
 export interface ThrottlingAdjustment {
   id: string;
   timestamp: Date;
@@ -230,7 +235,9 @@ export interface ThrottlingAdjustment {
   auto_applied: boolean;
 }
 }
+}
 
+}
 }
 export interface PerformanceTier {
   tier_name: string;
@@ -242,6 +249,7 @@ export interface PerformanceTier {
     min_availability_percent: number;
     max_error_rate_percent: number;
 }
+}
   };
   throttling_parameters: {
     requests_per_minute: number;
@@ -252,6 +260,7 @@ export interface PerformanceTier {
 }
 
 }
+}
 export interface PerformanceBasedThrottlingAnalytics {
   // Overall performance analytics
   performance_summary: {
@@ -260,6 +269,7 @@ export interface PerformanceBasedThrottlingAnalytics {
     sla_compliance_percentage: number;
     throttling_effectiveness_score: number;
     optimization_opportunities: number;
+}
 }
   };
   

@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import './VersionHistory.css';
+}
 interface EnhancedTemplateVersion {
   id: string;,
   template_id: string;
@@ -36,13 +37,14 @@ interface EnhancedTemplateVersion {
   from_version: EnhancedTemplateVersion;,
   to_version: EnhancedTemplateVersion;
   differences: unknown;,
-  compatibility_impact: {,
+  compatibility_impact: {
   is_breaking: boolean;,
   affected_components: string;
   required_updates: string;,
   optional_updates: string;
   deprecation_warnings: string;,
   risk_level: 'low' | 'medium' | 'high';
+}
 };
   migration_complexity: 'simple' | 'moderate' | 'complex';,
   estimated_migration_time: number;
@@ -85,7 +87,7 @@ export const VersionHistory: React.FC = () => {
       params.append('include_private', 'true');
       const response = await fetch(`/api/marketplace/templates/${templateId}/versions?${params}`, {)}
   },
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
       });
       if (!response.ok) {
@@ -117,7 +119,7 @@ export const VersionHistory: React.FC = () => {
       setIsLoading(true);
       const response = await fetch('/api/marketplace/versions/compare', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
   },
@@ -144,7 +146,7 @@ export const VersionHistory: React.FC = () => {
       const response = await fetch(`/api/marketplace/versions/${versionId}/deploy`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
   },

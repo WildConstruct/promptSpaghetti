@@ -32,6 +32,7 @@ import {
 } from '../../../../packages/core/types/DisputeTypes';
 
 }
+}
 export interface DisputeCreationRequest {
   transactionId: string;
   type: DisputeType;
@@ -47,7 +48,9 @@ export interface DisputeCreationRequest {
   dueDate?: Date;
 }
 }
+}
 
+}
 }
 export interface DisputeUpdateRequest {
   status?: DisputeStatus;
@@ -56,6 +59,7 @@ export interface DisputeUpdateRequest {
   merchantResponse?: string;
   notes?: string;
   evidence?: Partial<DisputeEvidence>[];
+}
 }
 }
 

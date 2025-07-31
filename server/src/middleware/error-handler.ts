@@ -17,6 +17,7 @@ import {
 import { logger } from '../utils/logger';
 
 }
+}
 interface ErrorResponse {
   error: {
     code: string;
@@ -32,10 +33,12 @@ interface ErrorResponse {
       method?: string;
       requestId?: string;
 }
+}
     };
   };
 }
 
+}
 }
 interface ErrorMetrics {
   totalErrors: number;
@@ -43,6 +46,7 @@ interface ErrorMetrics {
   errorsBySeverity: Record<ErrorSeverity, number>;
   errorsByEndpoint: Record<string, number>;
   lastReset: Date;
+}
 }
 }
 

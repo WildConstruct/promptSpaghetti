@@ -8,6 +8,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface SecuritySystemNode {
     id: string;
     name: string;
@@ -20,6 +21,7 @@ export interface SecuritySystemNode {
         authentication: {
             type: 'none' | 'basic' | 'bearer' | 'api_key' | 'oauth2' | 'certificate';
             credentials?: Record<string, string>;
+}
         };
         connection_timeout_ms: number;
         read_timeout_ms: number;
@@ -30,7 +32,7 @@ export interface SecuritySystemNode {
         timeout_ms: number;
         retry_attempts: number;
         retry_delay_ms: number;
-        checks: Array<{,
+        checks: Array<{
             type: 'ping' | 'http_status' | 'database_query' | 'custom_script' | 'port_check' | 'ssl_cert' | 'disk_space' | 'memory_usage' | 'cpu_usage';
             name: string;
             configuration: Record<string, any>;
@@ -95,6 +97,7 @@ export interface SecuritySystemNode {
     last_updated: number;
     enabled: boolean;
 
+}
 export interface SuccessCriteria {
     expected_status_code?: number;
     expected_response_time_ms?: number;
@@ -102,6 +105,7 @@ export interface SuccessCriteria {
     minimum_success_rate?: number;
     custom_validation?: string;
 
+}
 export interface MaintenanceWindow {
     id: string;
     name: string;
@@ -113,6 +117,7 @@ export interface MaintenanceWindow {
     recurring: boolean;
     exclude_from_sla: boolean;
 
+}
 export interface HealthCheckResult {
     id: string;
     system_id: string;
@@ -133,6 +138,7 @@ export interface HealthCheckResult {
         connection_count?: number;
         thread_count?: number;
         queue_size?: number;
+}
     };
     health_impact: {
         weight: number;
@@ -140,12 +146,14 @@ export interface HealthCheckResult {
         severity: 'info' | 'warning' | 'critical'
   };
 
+}
 export interface AvailabilityReport {
     system_id: string;
     reporting_period: {
         start_time: number;
         end_time: number;
         duration_hours: number;
+}
     };
     availability: {
         uptime_minutes: number;
@@ -154,7 +162,7 @@ export interface AvailabilityReport {
         target_availability_percent: number;
         sla_compliance: boolean;
     };
-    downtime_incidents: Array<{,
+    downtime_incidents: Array<{
         start_time: number;
         end_time: number;
         duration_minutes: number;
@@ -179,6 +187,7 @@ export interface AvailabilityReport {
         recommendation_priority: 'low' | 'medium' | 'high'
   };
 
+}
 export interface SystemAlert {
     id: string;
     system_id: string;
@@ -194,6 +203,7 @@ export interface SystemAlert {
         affected_checks: string[];
         dependency_impact: string[];
         estimated_impact: 'none' | 'low' | 'medium' | 'high' | 'critical'
+}
   };
     resolution: {
         acknowledged: boolean;
@@ -213,6 +223,7 @@ export interface SystemAlert {
         escalation_level: number;
     };
 
+}
 export interface HealthTrackerConfig {
     global_settings: {
         default_check_interval_ms: number;
@@ -221,6 +232,7 @@ export interface HealthTrackerConfig {
         max_concurrent_checks: number;
         enable_dependency_checking: boolean;
         enable_predictive_analysis: boolean;
+}
     };
     alerting: {
         enabled: boolean;
@@ -244,6 +256,7 @@ export interface HealthTrackerConfig {
         performance_metrics_days: number;
     };
 
+}
 export interface EscalationRule {
     id: string;
     name: string;
@@ -252,6 +265,7 @@ export interface EscalationRule {
         system_types: SecuritySystemNode['type'][];
         consecutive_failures?: number;
         duration_minutes?: number;
+}
     };
     actions: {
         notify_users: string[];

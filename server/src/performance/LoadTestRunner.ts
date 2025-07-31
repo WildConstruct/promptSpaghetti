@@ -9,6 +9,7 @@ import { join } from 'path';
  * Load test configuration
  */
 }
+}
 export interface LoadTestConfig {
   name: string;
   description: string;
@@ -23,10 +24,12 @@ export interface LoadTestConfig {
   generateReport: boolean;
 }
 }
+}
 
 /**
  * Load test result
  */
+}
 }
 export interface LoadTestResult {
   config: LoadTestConfig;
@@ -39,6 +42,7 @@ export interface LoadTestResult {
       statistics: any;
       success: boolean;
       errorCount: number;
+}
 }
     };
   };

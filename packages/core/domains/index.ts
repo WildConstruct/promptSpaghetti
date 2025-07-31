@@ -33,6 +33,7 @@ export * from '../shared/ui/Dashboard';
 
 // Domain registry for dynamic loading
 
+}
 export interface DomainRegistry {
   'graph-editor': () => Promise<any>;
   'admin-dashboard': () => Promise<any>;
@@ -40,6 +41,7 @@ export interface DomainRegistry {
   'targeting': () => Promise<any>;
   'runtime': () => Promise<any>;
   // Domain factory registry
+}
 }
 export const createDomainRegistry = (): DomainRegistry => ({)
   'graph-editor': () => import('./graph-editor'),
@@ -111,6 +113,7 @@ export type DomainName = keyof typeof DOMAIN_METADATA;
 
 // Domain status tracking
 
+}
 export interface DomainStatus {
   name: DomainName;
   loaded: boolean;
@@ -118,6 +121,7 @@ export interface DomainStatus {
   error?: Error;
   loadTime?: number;
   // Domain manager for coordinating domain loading and communication
+}
 }
 export class DomainManager {
   private domains = new Map<DomainName, any>();
@@ -134,6 +138,7 @@ export class DomainManager {
 });
     });
   async loadDomain(name: DomainName): Promise<any> {
+
   if (this.domains.has(name)) {
   return this.domains.get(name);
   const startTime = Date.now();

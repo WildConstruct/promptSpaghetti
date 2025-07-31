@@ -25,21 +25,25 @@ export declare enum ResetStep {
     RESET = "reset",
     SUCCESS = "success"
 
+}
 export interface PasswordResetRequest {
     email: string;
     ipAddress?: string;
     userAgent?: string;
     metadata?: Record<string, any>;
 
+}
 export interface TokenVerification {
     token: string;
     email: string;
 
+}
 export interface PasswordResetData {
     token: string;
     newPassword: string;
     confirmPassword: string;
 
+}
 export interface PasswordValidation {
     isValid: boolean;
     strength: PasswordStrength;
@@ -51,8 +55,10 @@ export interface PasswordValidation {
         lowercase: boolean;
         numbers: boolean;
         symbols: boolean;
+}
     };
 
+}
 export interface PasswordResetFlowProps {
     onResetComplete?: (success: boolean, email: string) => void;
     onStepChange?: (step: ResetStep) => void;
@@ -74,3 +80,4 @@ export declare enum SecurityEvent {
 
 export default PasswordResetFlow;
 //# sourceMappingURL=PasswordResetFlow.d.ts.map
+}

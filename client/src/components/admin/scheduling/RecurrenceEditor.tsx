@@ -21,6 +21,7 @@ import {
   Repeat as RepeatIcon
 } from '@mui/icons-material';
 
+}
 export interface RecurrenceData {
   type: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'custom';,
   interval: number;
@@ -30,11 +31,13 @@ export interface RecurrenceData {
   cronExpression?: string;
   maxOccurrences?: number;
   endDate?: Date;
+}
 interface RecurrenceEditorProps {
   value?: RecurrenceData;
   onChange: (recurrence: RecurrenceData | undefined) => void;
   error?: string;
 const RECURRENCE_TYPES = [;
+}
   { value: 'daily', label: 'Daily', description: 'Repeat every day(s)' },
   { value: 'weekly', label: 'Weekly', description: 'Repeat every week(s)' },
   { value: 'monthly', label: 'Monthly', description: 'Repeat every month(s)' },

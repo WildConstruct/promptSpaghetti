@@ -10,6 +10,7 @@ import { OptimizedGraphStorage } from './OptimizedGraphStorage';
  * Serialization format options
  */
 
+}
 export interface SerializationOptions {
   format: 'json' | 'binary' | 'compressed';
   compression?: 'gzip' | 'lz4' | 'brotli';
@@ -20,6 +21,8 @@ export interface SerializationOptions {
   /**
   * Serialization result with performance metrics
   */
+}
+}
 }
 export interface SerializationResult {
   data: string | ArrayBuffer;
@@ -40,6 +43,7 @@ export interface SerializationResult {
   * Performance-optimized serialization system
   */
 }
+}
 export class OptimizedSerializer {
   private static readonly LARGE_GRAPH_THRESHOLD = 10 * 1024 * 1024; // 10MB
   private static readonly COMPRESSION_THRESHOLD = 1024; // 1KB
@@ -47,10 +51,11 @@ export class OptimizedSerializer {
   /**
    * Serialize project with optimal format selection
    */
-  async serialize(()
+  async serialize(((
     projectData: PSGFile,
     options: SerializationOptions = { format: 'json' }
   ): Promise<SerializationResult> {
+
   const startTime = performance.now();
   try {
   // Auto-detect optimal format for large graphs
@@ -75,6 +80,7 @@ export class OptimizedSerializer {
    * Deserialize with automatic format detection
    */
   async deserialize(data: string | ArrayBuffer): Promise<PSGFile> {
+
   const startTime = performance.now();
   try {
   let parsedData: any;
@@ -105,6 +111,7 @@ export class OptimizedSerializer {
     projectId: string,
     options: SerializationOptions = { format: 'json', incremental: true }
   ): Promise<SerializationResult & { isIncremental: boolean; deltaSize: number }> {
+
   const state = this.incrementalState.get(projectId);
   const currentTime = Date.now();
   if (!state || !options.incremental) {
@@ -178,8 +185,7 @@ export class OptimizedSerializer {
   return estimatedSize;
 } catch (error) {
   return 0;
-  private async serializeToJSON(()
-  projectData: PSGFile,
+  private async serializeToJSON((projectData: PSGFile,
   options: SerializationOptions): Promise<SerializationResult> {,
   const optimizedGraph = OptimizedGraphStorage.fromStorageFormat(projectData.graph);
   const serializedData = optimizedGraph.toCompressedFormat();
@@ -204,10 +210,11 @@ export class OptimizedSerializer {
   format: 'json',
   size: originalSize,
 };
-  private async serializeToBinary(()
+  private async serializeToBinary(((
     projectData: PSGFile,
-    options: SerializationOptions,
+    options: SerializationOptions
   ): Promise<SerializationResult> {
+
   // Binary serialization for maximum efficiency
   const encoder = new TextEncoder();
   // Create binary format with headers
@@ -225,10 +232,11 @@ export class OptimizedSerializer {
   format: 'binary',
   size: result.length,
 };
-  private async serializeCompressed(()
+  private async serializeCompressed(((
     projectData: PSGFile,
-    options: SerializationOptions,
+    options: SerializationOptions
   ): Promise<SerializationResult> {
+
   // Use optimized graph storage first
   const jsonResult = await this.serializeToJSON(projectData, { )
   ...options,
@@ -247,6 +255,7 @@ export class OptimizedSerializer {
       compressionRatio: compressed.byteLength / jsonResult.size;
   };
   private async deserializeBinary(data: ArrayBuffer): Promise<any> {
+
     const view = new DataView(data);
     const magic = view.getUint32(0);
     if (magic !== 0x50534742) { // "PSGB"
@@ -256,6 +265,7 @@ export class OptimizedSerializer {
     const jsonString = new TextDecoder().decode(jsonData);
     return JSON.parse(jsonString);
   private async compressString(data: string, algorithm: string): Promise<ArrayBuffer> {
+
     if (typeof CompressionStream !== 'undefined') {
       // Use native compression if available (modern browsers)
       const stream = new CompressionStream(algorithm as CompressionFormat);
@@ -279,9 +289,11 @@ export class OptimizedSerializer {
     // Fallback: simple LZ-style compression
     return this.simpleLZCompress(data);
   private decompressData(compressedData: any): Promise<any> {
+
     // Decompression implementation
     throw new Error('Decompression not implemented');
   private reassembleChunks(chunkedData: any): Promise<any> {
+
     // Chunk reassembly implementation
     throw new Error('Chunk reassembly not implemented');
   private async createDelta(projectData: PSGFile, state: IncrementalState): Promise<Partial<PSGFile>> {
@@ -297,6 +309,7 @@ export class OptimizedSerializer {
 } as any
     };
   private async calculateChecksum(data: string | ArrayBuffer): Promise<string> {
+
     const buffer = typeof data === 'string' ;
       ? new TextEncoder().encode(data).buffer 
       : data;

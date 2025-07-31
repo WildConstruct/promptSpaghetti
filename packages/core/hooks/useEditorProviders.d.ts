@@ -4,6 +4,7 @@
  */
 import { Node, Edge } from 'reactflow';
 
+}
 export interface EditorStateContext {
     nodes: Node[];
     edges: Edge[];
@@ -13,6 +14,7 @@ export interface EditorStateContext {
     validationErrors: any[];
 
 
+}
 export interface EditorActions {
     addNode: (node: Node) => void;
     updateNode: (nodeId: string, data: Record<string, unknown>) => void;
@@ -26,11 +28,13 @@ export interface EditorActions {
         nodes: Node[];
         edges: Edge[];
 
+}
     }) => void;
     exportGraph: (format?: string) => any;
     validateGraph: () => void;
     executeGraph: () => Promise<any>;
 
+}
 export interface ProviderHook {
     id: string;
     name: string;
@@ -60,6 +64,7 @@ export interface ProviderHook {
     customActions?: Record<string, (context: EditorStateContext, ...args: any[]) => any>;
 
 
+}
 export interface ProviderRegistry {
     register: (hook: ProviderHook) => void;
     unregister: (hookId: string) => void;
@@ -78,5 +83,6 @@ export declare const useEditorProviders: ()
     editorContext: EditorStateContext;
     editorActions: EditorActions;
     isLoading: boolean;
+}
 };
 export declare export declare export declare export declare //# sourceMappingURL=useEditorProviders.d.ts.map

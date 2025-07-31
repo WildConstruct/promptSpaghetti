@@ -18,6 +18,7 @@ import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 export interface PerformanceMetric {
   metricId: string;
   metricType: MetricType;
@@ -42,7 +43,9 @@ export interface PerformanceMetric {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface PerformanceContext {
   // System Context
@@ -69,7 +72,9 @@ export interface PerformanceContext {
   loadAverage: number[];
 }
 }
+}
 
+}
 }
 export interface MetricStatistics {
   count: number;
@@ -84,11 +89,13 @@ export interface MetricStatistics {
     p95: number;
     p99: number;
 }
+}
   };
   standardDeviation: number;
   variance: number;
 }
 
+}
 }
 export interface PerformanceThreshold {
   level: 'info' | 'warning' | 'critical' | 'emergency';
@@ -97,7 +104,9 @@ export interface PerformanceThreshold {
   description: string;
 }
 }
+}
 
+}
 }
 export interface PerformanceBenchmark {
   benchmarkId: string;
@@ -111,6 +120,7 @@ export interface PerformanceBenchmark {
     timestamp: Date;
     context: PerformanceContext;
     version: string;
+}
 }
   };
   
@@ -139,6 +149,7 @@ export interface PerformanceBenchmark {
 }
 
 }
+}
 export interface PerformanceAlert {
   alertId: string;
   metricId: string;
@@ -165,6 +176,7 @@ export interface PerformanceAlert {
   escalationLevel: number;
   notificationsSent: number;
   lastNotificationAt?: Date;
+}
 }
 }
 
@@ -1406,11 +1418,13 @@ export class PerformanceMonitor extends EventEmitter {
 
 // Supporting interfaces
 }
+}
 export interface PerformanceMonitorConfig {
   // System Monitoring
   systemMonitoring: {
     enabled: boolean;
     interval: number; // milliseconds
+}
 }
   };
   
@@ -1433,12 +1447,14 @@ export interface PerformanceMonitorConfig {
 }
 
 }
+}
 export interface PerformanceDashboard {
   systemOverview: {
     totalMetrics: number;
     activeBenchmarks: number;
     activeAlerts: number;
     monitoringUptime: number;
+}
 }
   };
   recentMetrics: Array<{
@@ -1463,6 +1479,7 @@ export interface PerformanceDashboard {
 }
 
 }
+}
 export interface SystemHealth {
   score: number; // 0-100
   status: 'healthy' | 'warning' | 'degraded' | 'critical';
@@ -1471,7 +1488,9 @@ export interface SystemHealth {
   timestamp: Date;
 }
 }
+}
 
+}
 }
 export interface PerformanceReport {
   reportId: string;
@@ -1479,6 +1498,7 @@ export interface PerformanceReport {
   period: {
     startDate: Date;
     endDate: Date;
+}
 }
   };
   categories: BenchmarkCategory[];

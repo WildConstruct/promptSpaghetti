@@ -48,10 +48,12 @@ import {
   Lock
 } from 'lucide-react';
 
+}
 export interface PolicyManagementDashboardProps {
   userId: string;
   userRole: string;
   className?: string;
+}
 }
 export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps> = ({)
   userId,

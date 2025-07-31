@@ -20,6 +20,7 @@ import {
   FiCopy,
   FiUpload
 } from 'react-icons/fi';
+}
 interface TemplateVersionHistoryProps {
   template: ProjectTemplate;
   onVersionSelect?: (version: TemplateVersion) => void;
@@ -27,12 +28,14 @@ interface TemplateVersionHistoryProps {
   onVersionRestore?: (version: TemplateVersion) => void;
   onVersionExport?: (version: TemplateVersion) => void;
   className?: string;
+}
 interface VersionNode {
   version: TemplateVersion;
   level: number;
   isLast: boolean;
   hasBranches: boolean;
 
+}
 export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ _____templateId, onVersionSelect }) => {
   const [selectedVersions, setSelectedVersions] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(false);

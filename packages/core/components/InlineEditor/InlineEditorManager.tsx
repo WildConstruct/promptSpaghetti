@@ -2,16 +2,20 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Node, useReactFlow } from 'reactflow';
 import { NodeData } from '../../types/NodeTypes';
 import { InlineNodeEditor } from './InlineNodeEditor';
+}
 interface InlineEditorState {
   nodeId: string | null;
+}
   position: { x: number; y: number };
   isActive: boolean;
 }
 
+}
 export interface InlineEditorManagerProps {
   nodes: Node<NodeData>[];
   onNodeUpdate: (nodeId: string, updates: Partial<NodeData>) => void;
   canvasRef?: React.RefObject<HTMLDivElement>;
+}
 }
 export const InlineEditorManager: React.FC<InlineEditorManagerProps> = ({
   nodes,
@@ -135,10 +139,12 @@ export const InlineEditorManager: React.FC<InlineEditorManagerProps> = ({
 };
 
 // Component to handle click events on individual nodes
+}
 interface NodeClickHandlerProps {
   node: Node<NodeData>;
   onClick: (event: React.MouseEvent, nodeId: string) => void;
   isEditorActive: boolean;
+}
 }
 
 const NodeClickHandler: React.FC<NodeClickHandlerProps> = ({

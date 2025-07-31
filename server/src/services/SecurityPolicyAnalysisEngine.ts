@@ -11,6 +11,7 @@ import { SecurityAPIIntegrationPlatform } from './SecurityAPIIntegrationPlatform
 import { SecurityOptimizationEngine } from './SecurityOptimizationEngine';
 
 }
+}
 export interface SecurityPolicyConfig {
   analysis_settings: {
     enabled: boolean;
@@ -18,6 +19,7 @@ export interface SecurityPolicyConfig {
     impact_simulation_enabled: boolean;
     compliance_checking_enabled: boolean;
     historical_analysis_enabled: boolean;
+}
 }
   };
   
@@ -58,6 +60,7 @@ export interface SecurityPolicyConfig {
 }
 
 }
+}
 export interface SecurityPolicy {
   id: string;
   name: string;
@@ -71,6 +74,7 @@ export interface SecurityPolicy {
     conditions: PolicyCondition[];
     actions: PolicyAction[];
     exceptions: PolicyException[];
+}
 }
   }[];
   
@@ -92,6 +96,7 @@ export interface SecurityPolicy {
 }
 
 }
+}
 export interface PolicyCondition {
   field: string;
   operator: 'equals' | 'not_equals' | 'contains' | 'not_contains' | 'greater_than' | 'less_than' | 'in' | 'not_in';
@@ -99,7 +104,9 @@ export interface PolicyCondition {
   logical_operator?: 'and' | 'or';
 }
 }
+}
 
+}
 }
 export interface PolicyAction {
   action_type: 'allow' | 'deny' | 'log' | 'alert' | 'quarantine' | 'redirect' | 'rate_limit';
@@ -107,7 +114,9 @@ export interface PolicyAction {
   notification_enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface PolicyException {
   exception_id: string;
@@ -117,7 +126,9 @@ export interface PolicyException {
   approved_by: string;
 }
 }
+}
 
+}
 }
 export interface PolicyImpactAnalysis {
   policy_id: string;
@@ -132,6 +143,7 @@ export interface PolicyImpactAnalysis {
       workflow_disruptions: string[];
       training_requirements: string[];
       user_experience_score: number; // 0-100
+}
 }
     };
     
@@ -203,6 +215,7 @@ export interface PolicyImpactAnalysis {
 }
 
 }
+}
 export interface PolicyValidationError {
   error_id: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -212,7 +225,9 @@ export interface PolicyValidationError {
   suggested_fix: string;
 }
 }
+}
 
+}
 }
 export interface PolicyValidationWarning {
   warning_id: string;
@@ -222,7 +237,9 @@ export interface PolicyValidationWarning {
   recommendation: string;
 }
 }
+}
 
+}
 }
 export interface ComplianceViolation {
   violation_id: string;
@@ -234,7 +251,9 @@ export interface ComplianceViolation {
   risk_level: 'low' | 'medium' | 'high' | 'critical';
 }
 }
+}
 
+}
 }
 export interface SimulationScenario {
   scenario_id: string;
@@ -245,6 +264,7 @@ export interface SimulationScenario {
   actual_outcomes: Record<string, any>;
   success_criteria_met: boolean;
   performance_metrics: Record<string, number>;
+}
 }
 }
 

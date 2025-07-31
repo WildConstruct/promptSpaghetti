@@ -17,12 +17,15 @@ import {
   ModelUnavailableError
 } from '../BaseAIModel';
 
+}
 export interface OpenAITTSConfig {
   apiKey: string;
   baseURL?: string;
   timeout?: number;
   maxRetries?: number;
   organization?: string;
+}
+}
 }
 export interface TTSRequestOptions {
   // Core parameters
@@ -38,6 +41,7 @@ export interface TTSRequestOptions {
   similarity_boost?: number; // 0-1,
   style?: number; // 0-1,
   use_speaker_boost?: boolean;
+}
 };
   // SSML support
   use_ssml?: boolean;
@@ -45,6 +49,7 @@ export interface TTSRequestOptions {
   // Output options
   chunk_length_s?: number;
   normalize_audio?: boolean;
+}
 }
 export interface TTSGenerationResult {
   audio: {
@@ -54,6 +59,7 @@ export interface TTSGenerationResult {
   sample_rate: number;
   channels: number;
   bitrate?: number;
+}
 };
   metadata: {
   voice: string;
@@ -69,6 +75,7 @@ export interface TTSGenerationResult {
   cost: number;
 };
 }
+}
 export interface VoiceInfo {
   id: string;
   name: string;
@@ -78,6 +85,7 @@ export interface VoiceInfo {
   age?: 'young' | 'middle' | 'old';
   style?: string;
   preview_url?: string;
+}
 }
 export class OpenAITTSAdapter extends BaseAIModel {
   private config: OpenAITTSConfig;
@@ -123,6 +131,7 @@ export class OpenAITTSAdapter extends BaseAIModel {
     this.config = config;
     this._initializeVoices();
   async initialize(): Promise<void> {
+
     try {
       this._status = AIModelStatus.INITIALIZING;
       if (!this.config.apiKey) {
@@ -197,6 +206,7 @@ export class OpenAITTSAdapter extends BaseAIModel {
 };
   // TTS-specific methods
   async getAvailableVoices(): Promise<VoiceInfo> {
+
   return [...this.availableVoices];
   async generateWithCustomVoice(text: string)
   voiceId: string,
@@ -211,6 +221,7 @@ export class OpenAITTSAdapter extends BaseAIModel {
     voice?: string,
     options?: Partial<TTSRequestOptions>
   ): Promise<TTSGenerationResult> {
+
   const ttsOptions: TTSRequestOptions = {,
   text: ssmlText,
   voice: voice as any,
@@ -221,6 +232,7 @@ export class OpenAITTSAdapter extends BaseAIModel {
   async batchGenerate(texts: string)
     options?: TTSRequestOptions
   ): Promise<TTSGenerationResult> {
+
   const results: TTSGenerationResult = [];
   for (const text of texts) {
   try {
@@ -300,6 +312,7 @@ export class OpenAITTSAdapter extends BaseAIModel {
         style: ['gentle', 'soothing', 'calm']
     ];
   private async _testConnection(): Promise<void> {
+
     try {
       // Test with a minimal TTS request
       const response = await fetch('https://api.openai.com/v1/audio/speech', {
@@ -357,6 +370,7 @@ export class OpenAITTSAdapter extends BaseAIModel {
     processed.speed = Math.max(0.25, Math.min(4.0, processed.speed));
     return processed as Required<Pick<TTSRequestOptions, 'voice' | 'model' | 'response_format' | 'speed' | 'text'>> & Omit<TTSRequestOptions, 'text'> & { text: string };
   private async _generateSpeech(text: string, options: TTSRequestOptions): Promise<ArrayBuffer> {
+
     const url = `${this.config.baseURL || 'https://api.openai.com'}/v1/audio/speech`;}
     const payload = {
   model: options.model,
@@ -426,6 +440,7 @@ export class OpenAITTSAdapter extends BaseAIModel {
     const costPerCharacter = OpenAITTSAdapter.getModelCostPerCharacter(model);
     return characterCount * costPerCharacter;
   protected async _performHealthCheck(): Promise<void> {
+
     await this._testConnection();
 
 export default OpenAITTSAdapter;

@@ -25,6 +25,7 @@ import { MetricsCollector } from '../performance/MetricsCollector';
 // ============================================================================
 
 }
+}
 interface APIResponse {
   success: boolean;
   data?: unknown;
@@ -33,7 +34,9 @@ interface APIResponse {
   request_id: string;
 }
 }
+}
 
+}
 }
 interface InitializeLifecycleManagementRequest {
   config: APILifecycleManagementConfig;
@@ -42,7 +45,9 @@ interface InitializeLifecycleManagementRequest {
   enable_predictive_analytics: boolean;
 }
 }
+}
 
+}
 }
 interface RunLifecycleAnalysisRequest {
   analysis_scope: 'single_api' | 'api_portfolio' | 'service_ecosystem';
@@ -53,7 +58,9 @@ interface RunLifecycleAnalysisRequest {
   include_governance_compliance: boolean;
 }
 }
+}
 
+}
 }
 interface GetAPIGuidanceRequest {
   api_id: string;
@@ -62,7 +69,9 @@ interface GetAPIGuidanceRequest {
   include_implementation_plan: boolean;
 }
 }
+}
 
+}
 }
 interface UpdateLifecycleStageRequest {
   api_id: string;
@@ -73,15 +82,18 @@ interface UpdateLifecycleStageRequest {
     risk_assessment_completed: boolean;
     migration_plan?: Record<string, unknown>;
 }
+}
   };
   automated_transition: boolean;
 }
 
 }
+}
 interface GeneratePortfolioReportRequest {
   report_type: 'executive_summary' | 'strategic_analysis' | 'operational_overview' | 'governance_compliance' | 'innovation_assessment';
   portfolio_scope?: string[];
   time_period: 'current' | 'quarterly' | 'annual' | 'custom';
+}
 }
   custom_date_range?: { start_date: number; end_date: number };
   include_benchmarks: boolean;
@@ -89,12 +101,14 @@ interface GeneratePortfolioReportRequest {
 }
 
 }
+}
 interface ConfigureGovernancePolicyRequest {
   policy_updates: {
     design_standards?: Record<string, unknown>;
     security_policies?: Record<string, unknown>;
     compliance_requirements?: Record<string, unknown>;
     quality_gates?: Record<string, unknown>;
+}
 }
   };
   enforcement_level: 'advisory' | 'warning' | 'blocking';

@@ -30,11 +30,13 @@ import {
   ArrowRight
 } from 'lucide-react';
 
+}
 export interface UserEngagementDemoProps {
   userId?: string;
   showFullFeatures?: boolean;
   enableInteractiveTutorials?: boolean;
   className?: string;
+}
 }
 export const UserEngagementDemo: React.FC<UserEngagementDemoProps> = ({)
   userId = 'demo-user-001',

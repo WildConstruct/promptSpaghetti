@@ -10,6 +10,7 @@ import { LockStatusOverview } from './LockStatusOverview';
 import { LockQueueVisualization } from './LockQueueVisualization';
 import { LockNotifications } from './LockNotifications';
 import { LockPolicyEditor } from './LockPolicyEditor';
+}
 interface LockingManagerProps {
   workspaceId: string;
   userId: string;
@@ -18,6 +19,7 @@ interface LockingManagerProps {
   workspaceId,
   userId,
   onLockStateChange
+}
 }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'locks' | 'queue' | 'notifications' | 'policy'>('overview');
   const [selectedResource, setSelectedResource] = useState<string | null>(null);

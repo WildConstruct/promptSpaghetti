@@ -4,6 +4,7 @@
  */
 import { WorkspaceWithMembership, CreateWorkspace, UpdateWorkspace } from '../types/workspace';
 
+}
 interface UseWorkspacesOptions {
     autoRefresh?: boolean;
     refreshInterval?: number;
@@ -17,6 +18,7 @@ export declare function useWorkspaces(userId: string, options?: UseWorkspacesOpt
     archiveWorkspace: (workspaceId: string) => Promise<void>;
     inviteUser: (workspaceId: string, userIdToInvite: string, role: string) => Promise<void>;
     refreshWorkspaces: () => void;
+}
 };
 export {};
 //# sourceMappingURL=useWorkspaces.d.ts.map

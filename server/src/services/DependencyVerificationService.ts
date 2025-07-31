@@ -23,6 +23,7 @@ import semver from 'semver';
 // =============================================================================
 
 }
+}
 export interface DependencyVerificationContext {
   operationType: AdminOperationType;
   resourceType: string;
@@ -32,6 +33,7 @@ export interface DependencyVerificationContext {
   timestamp: Date;
   criticalityLevel: CriticalityLevel;
   metadata?: Record<string, any>;
+}
 }
 }
 
@@ -48,6 +50,7 @@ export type AdminOperationType =
 export type CriticalityLevel = 'low' | 'medium' | 'high' | 'critical' | 'emergency';
 
 }
+}
 export interface DependencyVerificationResult {
   isVerified: boolean;
   overallHealth: HealthStatus;
@@ -61,9 +64,11 @@ export interface DependencyVerificationResult {
   metadata: Record<string, any>;
 }
 }
+}
 
 export type HealthStatus = 'healthy' | 'degraded' | 'unhealthy' | 'critical' | 'unknown';
 
+}
 }
 export interface DependencyCheckResult {
   dependencyId: string;
@@ -78,6 +83,7 @@ export interface DependencyCheckResult {
   lastChecked: Date;
   errors?: DependencyError[];
   warnings?: string[];
+}
 }
 }
 
@@ -97,6 +103,7 @@ export type DependencyType =
 export type CompatibilityStatus = 'compatible' | 'compatible_with_warnings' | 'incompatible' | 'unknown';
 
 }
+}
 export interface DependencyDetails {
   endpoint?: string;
   port?: number;
@@ -108,7 +115,9 @@ export interface DependencyDetails {
   securityInfo?: DependencySecurityInfo;
 }
 }
+}
 
+}
 }
 export interface ConnectionPoolInfo {
   maxConnections: number;
@@ -118,7 +127,9 @@ export interface ConnectionPoolInfo {
   avgConnectionTime: number;
 }
 }
+}
 
+}
 }
 export interface DependencyMetrics {
   averageResponseTime: number;
@@ -129,7 +140,9 @@ export interface DependencyMetrics {
   uptimeDuration: number; // milliseconds
 }
 }
+}
 
+}
 }
 export interface DependencySecurityInfo {
   tlsVersion?: string;
@@ -139,7 +152,9 @@ export interface DependencySecurityInfo {
   vulnerabilities?: SecurityVulnerability[];
 }
 }
+}
 
+}
 }
 export interface SecurityVulnerability {
   id: string;
@@ -150,7 +165,9 @@ export interface SecurityVulnerability {
   cveId?: string;
 }
 }
+}
 
+}
 }
 export interface DependencyError {
   errorType: string;
@@ -161,7 +178,9 @@ export interface DependencyError {
   recoveryAction?: string;
 }
 }
+}
 
+}
 }
 export interface VerificationRecommendation {
   type: RecommendationType;
@@ -170,6 +189,7 @@ export interface VerificationRecommendation {
   action: string;
   automated: boolean;
   estimatedImpact: string;
+}
 }
 }
 
@@ -184,6 +204,7 @@ export type RecommendationType =
   | 'maintenance_required';
 
 }
+}
 export interface DependencyWarning {
   warningType: string;
   message: string;
@@ -192,7 +213,9 @@ export interface DependencyWarning {
   recommendations: string[];
 }
 }
+}
 
+}
 }
 export interface FailureImpactAssessment {
   overallImpact: ImpactLevel;
@@ -205,9 +228,11 @@ export interface FailureImpactAssessment {
   recoveryTimeEstimate: number; // minutes
 }
 }
+}
 
 export type ImpactLevel = 'none' | 'minimal' | 'moderate' | 'significant' | 'severe' | 'catastrophic';
 
+}
 }
 export interface BusinessFunctionImpact {
   functionName: string;
@@ -216,7 +241,9 @@ export interface BusinessFunctionImpact {
   mitigationStrategies: string[];
 }
 }
+}
 
+}
 }
 export interface UserImpactAssessment {
   affectedUserCount: number;
@@ -226,7 +253,9 @@ export interface UserImpactAssessment {
   alternativeWorkflows: string[];
 }
 }
+}
 
+}
 }
 export interface GracefulDegradationOption {
   optionId: string;
@@ -239,11 +268,13 @@ export interface GracefulDegradationOption {
   activationTime: number; // seconds
 }
 }
+}
 
 // =============================================================================
 // Dependency Configuration
 // =============================================================================
 
+}
 }
 export interface DependencyConfiguration {
   id: string;
@@ -266,7 +297,9 @@ export interface DependencyConfiguration {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface AuthConfig {
   type: 'none' | 'basic' | 'bearer' | 'api_key' | 'oauth';
@@ -274,7 +307,9 @@ export interface AuthConfig {
   headers?: Record<string, string>;
 }
 }
+}
 
+}
 }
 export interface VersionRequirement {
   component: string;
@@ -284,7 +319,9 @@ export interface VersionRequirement {
   deprecatedVersions?: string[];
 }
 }
+}
 
+}
 }
 export interface CircuitBreakerConfig {
   failureThreshold: number;
@@ -293,12 +330,15 @@ export interface CircuitBreakerConfig {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface FallbackStrategy {
   type: 'cache' | 'default_value' | 'alternative_service' | 'graceful_degradation';
   config: Record<string, any>;
   enabled: boolean;
+}
 }
 }
 
@@ -1157,6 +1197,7 @@ export class DependencyVerificationService {
 // =============================================================================
 
 }
+}
 interface CircuitBreakerState {
   state: 'closed' | 'open' | 'half_open';
   failures: number;
@@ -1164,10 +1205,13 @@ interface CircuitBreakerState {
   nextAttemptTime: number;
 }
 }
+}
 
+}
 }
 interface CachedVerificationResult {
   result: DependencyCheckResult;
   timestamp: number;
+}
 }
 }

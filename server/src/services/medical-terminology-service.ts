@@ -46,13 +46,16 @@ type TerminologySearchOptions = z.infer<typeof TerminologySearchOptionsSchema>;
 type ConceptValidation = z.infer<typeof ConceptValidationSchema>;
 
 }
+}
 interface TerminologySearchResult {
   concepts: MedicalConcept[];
   total: number;
   searchTime: number;
 }
 }
+}
 
+}
 }
 interface VocabularyInfo {
   name: string;
@@ -60,6 +63,7 @@ interface VocabularyInfo {
   description: string;
   totalConcepts: number;
   lastUpdated: string;
+}
 }
 }
 

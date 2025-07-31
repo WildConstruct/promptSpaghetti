@@ -28,6 +28,7 @@ export type FrequencyType = 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'YEARLY';
 
 // Policy Structure Interfaces
 }
+}
 export interface PolicyAuthoringRequest {
   policyType: PolicyType;
   title: string;
@@ -40,7 +41,9 @@ export interface PolicyAuthoringRequest {
   customizations?: PolicyCustomization[];
 }
 }
+}
 
+}
 }
 export interface PolicyCustomization {
   customizationId: string;
@@ -52,7 +55,9 @@ export interface PolicyCustomization {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface CustomizationCondition {
   conditionId: string;
@@ -62,7 +67,9 @@ export interface CustomizationCondition {
   logicalOperator?: 'AND' | 'OR' | 'NOT';
 }
 }
+}
 
+}
 }
 export interface PolicyUpdateRequest {
   policyId: string;
@@ -74,7 +81,9 @@ export interface PolicyUpdateRequest {
   notificationRequired: boolean;
 }
 }
+}
 
+}
 }
 export interface PolicyChange {
   changeId: string;
@@ -88,7 +97,9 @@ export interface PolicyChange {
   metadata?: ChangeMetadata;
 }
 }
+}
 
+}
 }
 export interface ChangeMetadata {
   timestamp: Date;
@@ -101,7 +112,9 @@ export interface ChangeMetadata {
   compliance: ComplianceImpact;
 }
 }
+}
 
+}
 }
 export interface ComplianceImpact {
   affectedFrameworks: string[];
@@ -111,7 +124,9 @@ export interface ComplianceImpact {
   evidenceRequired: boolean;
 }
 }
+}
 
+}
 }
 export interface PolicyDeploymentRequest {
   policyId: string;
@@ -122,7 +137,9 @@ export interface PolicyDeploymentRequest {
   notificationSettings: NotificationSettings;
 }
 }
+}
 
+}
 }
 export interface RolloutStrategy {
   type: RolloutType;
@@ -131,7 +148,9 @@ export interface RolloutStrategy {
   monitoringPeriod: number;
 }
 }
+}
 
+}
 }
 export interface RolloutPhase {
   phaseId: string;
@@ -145,7 +164,9 @@ export interface RolloutPhase {
   monitoring: PhaseMonitoring;
 }
 }
+}
 
+}
 }
 export interface SuccessCriteria {
   criteriaId: string;
@@ -156,7 +177,9 @@ export interface SuccessCriteria {
   weight: number;
 }
 }
+}
 
+}
 }
 export interface PhaseMonitoring {
   enabled: boolean;
@@ -166,7 +189,9 @@ export interface PhaseMonitoring {
   automatedActions: AutomatedAction[];
 }
 }
+}
 
+}
 }
 export interface AutomatedAction {
   actionId: string;
@@ -176,7 +201,9 @@ export interface AutomatedAction {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface ActionTrigger {
   triggerId: string;
@@ -185,7 +212,9 @@ export interface ActionTrigger {
   cooldown: number;
 }
 }
+}
 
+}
 }
 export interface TriggerCondition {
   metric: string;
@@ -195,7 +224,9 @@ export interface TriggerCondition {
   consecutive: boolean;
 }
 }
+}
 
+}
 }
 export interface RollbackCriteria {
   criteriaId: string;
@@ -205,7 +236,9 @@ export interface RollbackCriteria {
   action: 'IMMEDIATE' | 'GRACEFUL' | 'PHASED';
 }
 }
+}
 
+}
 }
 export interface RollbackCondition {
   type: 'ERROR_RATE' | 'METRIC_THRESHOLD' | 'MANUAL_TRIGGER' | 'TIME_LIMIT';
@@ -214,7 +247,9 @@ export interface RollbackCondition {
   consecutive: boolean;
 }
 }
+}
 
+}
 }
 export interface NotificationSettings {
   enabled: boolean;
@@ -224,7 +259,9 @@ export interface NotificationSettings {
   scheduling: NotificationScheduling;
 }
 }
+}
 
+}
 }
 export interface NotificationChannelConfig {
   type: NotificationChannel;
@@ -234,7 +271,9 @@ export interface NotificationChannelConfig {
   fallback?: NotificationChannel;
 }
 }
+}
 
+}
 }
 export interface NotificationScheduling {
   immediate: boolean;
@@ -243,7 +282,9 @@ export interface NotificationScheduling {
   reminders?: ReminderConfig[];
 }
 }
+}
 
+}
 }
 export interface RecurringSchedule {
   frequency: FrequencyType;
@@ -253,7 +294,9 @@ export interface RecurringSchedule {
   exceptions: Date[];
 }
 }
+}
 
+}
 }
 export interface ReminderConfig {
   daysBefore: number;
@@ -262,8 +305,10 @@ export interface ReminderConfig {
   enabled: boolean;
 }
 }
+}
 
 // Policy Document Interfaces
+}
 }
 export interface PolicyDocument {
   policyId: string;
@@ -288,7 +333,9 @@ export interface PolicyDocument {
   deployment: PolicyDeployment;
 }
 }
+}
 
+}
 }
 export interface PolicyContent {
   sections: PolicySection[];
@@ -298,7 +345,9 @@ export interface PolicyContent {
   customizations: PolicyCustomization[];
 }
 }
+}
 
+}
 }
 export interface PolicySection {
   sectionId: string;
@@ -312,7 +361,9 @@ export interface PolicySection {
   conditionalLogic?: ConditionalLogic;
 }
 }
+}
 
+}
 }
 export interface SectionVariable {
   variableId: string;
@@ -323,7 +374,9 @@ export interface SectionVariable {
   validation: VariableValidation;
 }
 }
+}
 
+}
 }
 export interface VariableValidation {
   rules: ValidationRule[];
@@ -331,7 +384,9 @@ export interface VariableValidation {
   warningMessage?: string;
 }
 }
+}
 
+}
 }
 export interface ValidationRule {
   ruleId: string;
@@ -340,7 +395,9 @@ export interface ValidationRule {
   message: string;
 }
 }
+}
 
+}
 }
 export interface ConditionalLogic {
   conditionId: string;
@@ -349,7 +406,9 @@ export interface ConditionalLogic {
   hideConditions: LogicCondition[];
 }
 }
+}
 
+}
 }
 export interface LogicCondition {
   field: string;
@@ -357,7 +416,9 @@ export interface LogicCondition {
   value: Error;
 }
 }
+}
 
+}
 }
 export interface PolicyVariable {
   variableId: string;
@@ -371,7 +432,9 @@ export interface PolicyVariable {
   metadata: VariableMetadata;
 }
 }
+}
 
+}
 }
 export interface VariableMetadata {
   description: string;
@@ -382,7 +445,9 @@ export interface VariableMetadata {
   dependsOn: string[];
 }
 }
+}
 
+}
 }
 export interface PolicyAttachment {
   attachmentId: string;
@@ -396,7 +461,9 @@ export interface PolicyAttachment {
   public: boolean;
 }
 }
+}
 
+}
 }
 export interface TemplateReference {
   templateId: string;
@@ -406,7 +473,9 @@ export interface TemplateReference {
   customizations: string[];
 }
 }
+}
 
+}
 }
 export interface PolicyMetadata {
   riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
@@ -420,7 +489,9 @@ export interface PolicyMetadata {
   analytics: PolicyAnalytics;
 }
 }
+}
 
+}
 }
 export interface DataClassification {
   level: 'PUBLIC' | 'INTERNAL' | 'CONFIDENTIAL' | 'RESTRICTED';
@@ -428,7 +499,9 @@ export interface DataClassification {
   access: AccessControl;
 }
 }
+}
 
+}
 }
 export interface AccessControl {
   readRoles: string[];
@@ -437,7 +510,9 @@ export interface AccessControl {
   publishRoles: string[];
 }
 }
+}
 
+}
 }
 export interface RetentionPolicy {
   period: number;
@@ -446,7 +521,9 @@ export interface RetentionPolicy {
   exceptions: string[];
 }
 }
+}
 
+}
 }
 export interface PolicyAnalytics {
   views: number;
@@ -457,7 +534,9 @@ export interface PolicyAnalytics {
   dropoffPoints: DropoffPoint[];
 }
 }
+}
 
+}
 }
 export interface DropoffPoint {
   section: string;
@@ -465,7 +544,9 @@ export interface DropoffPoint {
   reasons: string[];
 }
 }
+}
 
+}
 }
 export interface PolicyLifecycle {
   stages: LifecycleStage[];
@@ -475,7 +556,9 @@ export interface PolicyLifecycle {
   milestones: LifecycleMilestone[];
 }
 }
+}
 
+}
 }
 export interface LifecycleStage {
   stageId: string;
@@ -488,7 +571,9 @@ export interface LifecycleStage {
   requirements: StageRequirement[];
 }
 }
+}
 
+}
 }
 export interface StageRequirement {
   requirementId: string;
@@ -499,7 +584,9 @@ export interface StageRequirement {
   status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'FAILED';
 }
 }
+}
 
+}
 }
 export interface LifecycleTransition {
   transitionId: string;
@@ -511,7 +598,9 @@ export interface LifecycleTransition {
   triggeredAt?: Date;
 }
 }
+}
 
+}
 }
 export interface TransitionCondition {
   conditionId: string;
@@ -520,7 +609,9 @@ export interface TransitionCondition {
   status: 'PENDING' | 'MET' | 'FAILED';
 }
 }
+}
 
+}
 }
 export interface LifecycleApproval {
   approvalId: string;
@@ -533,7 +624,9 @@ export interface LifecycleApproval {
   conditions?: string[];
 }
 }
+}
 
+}
 }
 export interface LifecycleMilestone {
   milestoneId: string;
@@ -545,7 +638,9 @@ export interface LifecycleMilestone {
   dependencies: string[];
 }
 }
+}
 
+}
 }
 export interface PolicyDeployment {
   deploymentId: string;
@@ -559,7 +654,9 @@ export interface PolicyDeployment {
   monitoring: DeploymentMonitoring;
 }
 }
+}
 
+}
 }
 export interface DeploymentPhase {
   phaseId: string;
@@ -572,7 +669,9 @@ export interface DeploymentPhase {
   metrics: PhaseMetrics;
 }
 }
+}
 
+}
 }
 export interface PhaseMetrics {
   acceptanceRate: number;
@@ -582,7 +681,9 @@ export interface PhaseMetrics {
   technicalMetrics: TechnicalMetrics;
 }
 }
+}
 
+}
 }
 export interface UserFeedback {
   feedbackId: string;
@@ -593,7 +694,9 @@ export interface UserFeedback {
   category: string;
 }
 }
+}
 
+}
 }
 export interface TechnicalMetrics {
   responseTime: number;
@@ -603,7 +706,9 @@ export interface TechnicalMetrics {
   availability: number;
 }
 }
+}
 
+}
 }
 export interface DeploymentMonitoring {
   enabled: boolean;
@@ -612,7 +717,9 @@ export interface DeploymentMonitoring {
   healthChecks: HealthCheck[];
 }
 }
+}
 
+}
 }
 export interface DeploymentAlert {
   alertId: string;
@@ -623,7 +730,9 @@ export interface DeploymentAlert {
   resolved: boolean;
 }
 }
+}
 
+}
 }
 export interface HealthCheck {
   checkId: string;
@@ -632,6 +741,7 @@ export interface HealthCheck {
   lastChecked: Date;
   responseTime: number;
   details?: string;
+}
 }
 }
 
@@ -1203,6 +1313,7 @@ export class PolicyAuthoringService {
 
 // Additional interfaces for templates
 }
+}
 interface PolicyTemplate {
   templateId: string;
   name: string;
@@ -1211,5 +1322,6 @@ interface PolicyTemplate {
   variables: PolicyVariable[];
   suggestions: string[];
   defaultVariables?: Record<string, any>;
+}
 }
 }

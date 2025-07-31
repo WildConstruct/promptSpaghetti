@@ -20,12 +20,14 @@ import {
 import { DataCategory, Jurisdiction } from '../types/DataRetentionPeriods';
 
 }
+}
 export interface AdminRetentionPolicy extends RetentionPolicy {
   adminSettings: AdminPolicySettings;
   statistics: PolicyStatistics;
   compliance: ComplianceStatus;
 }
 
+}
 }
 export interface AdminPolicySettings {
   autoEnforcement: boolean;
@@ -37,6 +39,7 @@ export interface AdminPolicySettings {
   auditRequired: boolean;
   riskAssessment: RiskLevel;
   businessJustification?: string;
+}
 }
 }
 
@@ -64,6 +67,7 @@ export enum RiskLevel {
 }
 
 }
+}
 export interface PolicyStatistics {
   recordsManaged: number;
   recordsDeleted: number;
@@ -77,7 +81,9 @@ export interface PolicyStatistics {
   nextScheduledReview: Date;
 }
 }
+}
 
+}
 }
 export interface ComplianceStatus {
   isCompliant: boolean;
@@ -89,7 +95,9 @@ export interface ComplianceStatus {
   riskAssessment: RiskAssessment;
 }
 }
+}
 
+}
 }
 export interface ComplianceIssue {
   issueId: string;
@@ -101,6 +109,7 @@ export interface ComplianceIssue {
   resolvedAt?: Date;
   resolution?: string;
   assignedTo?: string;
+}
 }
 }
 
@@ -130,6 +139,7 @@ export enum CertificationStatus {
 }
 
 }
+}
 export interface RiskAssessment {
   overallRisk: RiskLevel;
   dataVolume: number;
@@ -138,6 +148,7 @@ export interface RiskAssessment {
   businessImpact: BusinessImpact;
   recommendedActions: string[];
   lastAssessment: Date;
+}
 }
 }
 
@@ -158,6 +169,7 @@ export enum BusinessImpact {
 }
 
 }
+}
 export interface PolicyTemplate {
   templateId: string;
   name: string;
@@ -174,6 +186,7 @@ export interface PolicyTemplate {
   averageCompliance: number;
 }
 }
+}
 
 export enum PolicyCategory {
   PERSONAL_DATA = 'personal_data',
@@ -185,6 +198,7 @@ export enum PolicyCategory {
   LEGAL = 'legal'
 }
 
+}
 }
 export interface RetentionException {
   exceptionId: string;
@@ -202,6 +216,7 @@ export interface RetentionException {
   riskAssessment: string;
   conditions: string[];
   reviewRequired: boolean;
+}
 }
 }
 
@@ -223,6 +238,7 @@ export enum ExceptionStatus {
 }
 
 }
+}
 export interface RetentionReport {
   reportId: string;
   reportType: RetentionReportType;
@@ -238,6 +254,7 @@ export interface RetentionReport {
   distributionList: string[];
 }
 }
+}
 
 export enum RetentionReportType {
   COMPLIANCE_AUDIT = 'compliance_audit',
@@ -249,6 +266,7 @@ export enum RetentionReportType {
 }
 
 }
+}
 export interface ReportScope {
   policies: string[];
   dataCategories: DataCategory[];
@@ -258,7 +276,9 @@ export interface ReportScope {
   includeArchived: boolean;
 }
 }
+}
 
+}
 }
 export interface ReportPeriod {
   startDate: Date;
@@ -266,7 +286,9 @@ export interface ReportPeriod {
   granularity: 'day' | 'week' | 'month' | 'quarter' | 'year';
 }
 }
+}
 
+}
 }
 export interface RetentionReportSummary {
   totalRecords: number;
@@ -280,7 +302,9 @@ export interface RetentionReportSummary {
   recommendations: number;
 }
 }
+}
 
+}
 }
 export interface ReportFinding {
   findingId: string;
@@ -295,6 +319,7 @@ export interface ReportFinding {
   assignedTo?: string;
 }
 }
+}
 
 export enum FindingType {
   NON_COMPLIANCE = 'non_compliance',
@@ -304,6 +329,7 @@ export enum FindingType {
   ANOMALY = 'anomaly'
 }
 
+}
 }
 export interface ComplianceMetrics {
   overallScore: number; // 0-100
@@ -316,7 +342,9 @@ export interface ComplianceMetrics {
   keyIndicators: KeyIndicator[];
 }
 }
+}
 
+}
 }
 export interface KeyIndicator {
   name: string;
@@ -324,6 +352,7 @@ export interface KeyIndicator {
   target: number;
   trend: 'improving' | 'stable' | 'declining';
   importance: 'low' | 'medium' | 'high';
+}
 }
 }
 
@@ -335,6 +364,7 @@ export enum ExportFormat {
   XML = 'xml'
 }
 
+}
 }
 export interface BulkPolicyOperation {
   operationId: string;
@@ -349,6 +379,7 @@ export interface BulkPolicyOperation {
   initiatedBy: string;
 }
 }
+}
 
 export enum BulkOperationType {
   APPLY_POLICY = 'apply_policy',
@@ -361,6 +392,7 @@ export enum BulkOperationType {
 }
 
 }
+}
 export interface BulkOperationScope {
   policyIds?: string[];
   dataCategories?: DataCategory[];
@@ -369,7 +401,9 @@ export interface BulkOperationScope {
   ageThreshold?: number; // days
 }
 }
+}
 
+}
 }
 export interface BulkOperationParameters {
   dryRun?: boolean;
@@ -378,6 +412,7 @@ export interface BulkOperationParameters {
   requireApproval?: boolean;
   notifyAffected?: boolean;
   reason?: string;
+}
 }
 }
 
@@ -391,6 +426,7 @@ export enum BulkOperationStatus {
 }
 
 }
+}
 export interface BulkOperationResults {
   recordsProcessed: number;
   recordsSucceeded: number;
@@ -400,12 +436,15 @@ export interface BulkOperationResults {
   summary: string;
 }
 }
+}
 
+}
 }
 export interface BulkOperationError {
   recordId: string;
   error: string;
   code: string;
+}
 }
 }
 

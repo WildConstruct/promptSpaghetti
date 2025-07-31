@@ -14,8 +14,10 @@ jest.mock('../../../stores/authStore');
 const mockUseAuthStore = useAuthStore as jest.MockedFunction<typeof useAuthStore>;
 
 // Type for mock auth store data
+}
 interface MockAuthStore {
   isAuthenticated?: boolean;
+}
   user?: { id: string; email: string; roles: string } | null;
   checkAuthStatus?: jest.Mock;
   setReturnUrl?: jest.Mock;

@@ -15,6 +15,7 @@ import { ErrorFactory } from '../errors/ErrorFactory';
 
 // Core condition interfaces
 
+}
 export interface ToggleCondition {
   id: string;
   toggleId: string;
@@ -28,6 +29,7 @@ export interface ToggleCondition {
   metadata: ConditionMetadata;
   created: Date;
   lastModified: Date;
+}
 }
 export enum ConditionType {
   USER_ATTRIBUTE = 'user_attribute',       // Based on user properties (id, email, role, etc.)
@@ -71,11 +73,14 @@ export enum ConditionType {
   customVariables?: Record<string, any>;
   functions?: Record<string, Function>;
 }
+}
+}
 export interface UserAttributeParams {
-  attributes: Array<{,
+  attributes: Array<{
   key: string;
   operator: ComparisonOperator;
   value: any;
+}
 }>;
   logic: 'AND' | 'OR'
   }
@@ -98,13 +103,17 @@ export enum ComparisonOperator {
   hoursOfDay?: number; // 0-23,
   recurring?: boolean;
   recurrencePattern?: 'daily' | 'weekly' | 'monthly'
+}
   }
+}
 export interface ExperimentParams {
   experimentId: string;
   variant: string;
   trafficAllocation: number; // 0-100,
   stickiness?: 'user' | 'session' | 'device'
+}
   }
+}
 export interface ConditionMetadata {
   category: string;
   tags: string;
@@ -118,6 +127,8 @@ export interface ConditionMetadata {
   reviewedAt?: Date;
   // Evaluation interfaces
 }
+}
+}
 export interface EvaluationContext {
   user?: UserContext;
   request?: RequestContext;
@@ -126,6 +137,8 @@ export interface EvaluationContext {
   experiments?: Record<string, string>;
   timestamp?: Date;
   customData?: Record<string, any>;
+}
+}
 }
 export interface UserContext {
   id: string;
@@ -136,6 +149,8 @@ export interface UserContext {
   groups?: string;
   permissions?: string;
 }
+}
+}
 export interface RequestContext {
   ip?: string;
   userAgent?: string;
@@ -145,11 +160,15 @@ export interface RequestContext {
   device?: DeviceInfo;
   session?: SessionInfo;
 }
+}
+}
 export interface DeviceInfo {
   type: 'mobile' | 'tablet' | 'desktop' | 'unknown';
   platform: string;
   browser?: string;
   version?: string;
+}
+}
 }
 export interface SessionInfo {
   id: string;
@@ -157,12 +176,16 @@ export interface SessionInfo {
   duration: number; // seconds,
   pageViews: number;
 }
+}
+}
 export interface EnvironmentContext {
   environment: 'development' | 'staging' | 'production';
   region: string;
   timezone: string;
   version: string;
   // Evaluation results
+}
+}
 }
 export interface ConditionEvaluationResult {
   conditionId: string;
@@ -174,7 +197,9 @@ export interface ConditionEvaluationResult {
   evaluatedAt: Date;
   contextHash: string;
   intermediateValues?: Record<string, any>;
+}
 };
+}
 }
 export interface ToggleEvaluationResult {
   toggleId: string;
@@ -187,9 +212,11 @@ export interface ToggleEvaluationResult {
   evaluatedAt: Date;
   totalExecutionTime: number;
   cacheHit: boolean;
+}
 };
 
 // Service configuration
+}
 }
 export interface ToggleConditionsConfig {
   evaluation: {
@@ -198,6 +225,7 @@ export interface ToggleConditionsConfig {
   maxConditionsPerToggle: number;
   evaluationTimeout: number; // milliseconds,
   strictMode: boolean;
+}
 };
   security: {
   allowCustomExpressions: boolean;
@@ -295,6 +323,7 @@ export class ToggleConditionsService {
    * Remove a condition
    */
   async removeCondition(conditionId: string): Promise<boolean> {
+
   const condition = this.conditions.get(conditionId);
   if (!condition) {
   return false;
@@ -372,6 +401,7 @@ export class ToggleConditionsService {
    * Evaluate a single condition
    */
   async evaluateCondition(condition: ToggleCondition, context: EvaluationContext): Promise<ConditionEvaluationResult> {
+
     const startTime = Date.now();
     const contextHash = this.generateContextHash(context);
     // Check cache first
@@ -563,6 +593,7 @@ export class ToggleConditionsService {
   variant: experiment.variant,
 };
   private async evaluateCustomExpression(condition: ToggleCondition, context: EvaluationContext): Promise<boolean> {
+
   if (!this.config.security.allowCustomExpressions) {
   return false;
   try {
@@ -682,6 +713,7 @@ export class ToggleConditionsService {
     const successfulEvaluations = results.filter(r => !r.reason.includes('error')).length;
     return successfulEvaluations / results.length;
   private async validateCondition(condition: ToggleCondition): Promise<{ valid: boolean; errors: string; warnings: string }> {
+
   const errors: string = [];
   const warnings: string = [];
   // Validate expression for custom expressions

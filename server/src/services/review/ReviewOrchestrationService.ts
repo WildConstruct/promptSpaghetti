@@ -39,6 +39,7 @@ import {
 } from '../../../../packages/core/types/ReviewTools';
 
 }
+}
 export interface ReviewOrchestrationConfig {
   enabled: boolean;
   maxConcurrentReviews: number;
@@ -48,6 +49,7 @@ export interface ReviewOrchestrationConfig {
   enableEscalation: boolean;
   auditRetentionDays: number;
   performanceTracking: boolean;
+}
 }
 }
 
@@ -914,6 +916,7 @@ export class ReviewOrchestrationService {
 
 // Supporting interfaces
 }
+}
 interface ReviewDashboardSummary {
   totalActiveReviews: number;
   pendingAssignments: number;
@@ -923,5 +926,6 @@ interface ReviewDashboardSummary {
   reviewerUtilization: number;
   qualityScore: number;
   throughput: number;
+}
 }
 }

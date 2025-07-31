@@ -85,6 +85,7 @@ export enum ExemptionType {
   userEmail: string;
   role: AdminRole;
   timestamp: Date;
+}
 };
   approvedBy?: {
   userId: string;
@@ -143,7 +144,7 @@ export enum ExemptionType {
   usage: {;
   timesUsed: number;
   lastUsed?: Date;
-  usageHistory: Array<{,
+  usageHistory: Array<{
   timestamp: Date;
   context: Record<string, any>;
   source: string;
@@ -151,6 +152,7 @@ export enum ExemptionType {
   };
 
 // Exemption Audit Entry
+}
 }
 export interface ExemptionAuditEntry {
   id: string;
@@ -161,12 +163,14 @@ export interface ExemptionAuditEntry {
   userEmail: string;
   role?: AdminRole;
   type: 'user' | 'admin' | 'system'
+}
   };
   details: Record<string, any>;
   ipAddress?: string;
   userAgent?: string;
 
 // Exemption Request
+}
 }
 export interface ExemptionRequest {
   type: ExemptionType;
@@ -184,6 +188,8 @@ export interface ExemptionRequest {
   emergencyOverride?: boolean;
   // Exemption Usage Context
 }
+}
+}
 export interface ExemptionUsageContext {
   endpoint?: string;
   ipAddress?: string;
@@ -193,6 +199,8 @@ export interface ExemptionUsageContext {
   sessionId?: string;
   metadata?: Record<string, any>;
   // Exemption Query
+}
+}
 }
 export interface ExemptionQuery {
   types?: ExemptionType;
@@ -211,6 +219,8 @@ export interface ExemptionQuery {
   offset?: number;
   // Exemption Policy
 }
+}
+}
 export interface ExemptionPolicy {
   type: ExemptionType;
   scope: ExemptionScope;
@@ -226,6 +236,7 @@ export interface ExemptionPolicy {
   * Comprehensive exemption management service
   */
 }
+}
 export class ExemptionManager extends EventEmitter {
   private exemptions: Map<string, SecurityExemption> = new Map();
   private policies: Map<string, ExemptionPolicy> = new Map();
@@ -237,7 +248,7 @@ export class ExemptionManager extends EventEmitter {
   /**
    * Request a new security exemption
    */
-  public async requestExemption()
+  public async requestExemption(
     request: ExemptionRequest,
     requestorId: string,
     requestorEmail: string,
@@ -319,13 +330,14 @@ export class ExemptionManager extends EventEmitter {
   /**
    * Approve a pending exemption request
    */
-  public async approveExemption()
+  public async approveExemption(
     exemptionId: string,
     approverId: string,
     approverEmail: string,
     approverRole: AdminRole,
     comments?: string
   ): Promise<boolean> {
+
     const exemption = this.exemptions.get(exemptionId);
     if (!exemption) {
       throw new Error(`Exemption not found: ${exemptionId}`);}
@@ -362,7 +374,7 @@ export class ExemptionManager extends EventEmitter {
   /**
    * Deny a pending exemption request
    */
-  public async denyExemption()
+  public async denyExemption(
     exemptionId: string,
     approverId: string,
     approverEmail: string,
@@ -480,7 +492,7 @@ export class ExemptionManager extends EventEmitter {
   /**
    * Create emergency exemption with bypass approval
    */
-  public async createEmergencyExemption()
+  public async createEmergencyExemption(
     request: ExemptionRequest,
     requestorId: string,
     requestorEmail: string,
@@ -716,9 +728,9 @@ export class ExemptionManager extends EventEmitter {
         if (hourlyUsage >= quota.maxUsesPerHour) {
           return { valid: false, reason: 'Hourly usage quota exceeded' };
     return { valid: true };
-  private recordExemptionUsage(()
+  private recordExemptionUsage(((
     exemption: SecurityExemption,
-    context: ExemptionUsageContext,
+    context: ExemptionUsageContext
   ): void {
   exemption.usage.timesUsed++;
   exemption.usage.lastUsed = new Date();
@@ -756,10 +768,11 @@ export class ExemptionManager extends EventEmitter {
       [AdminRole.COMPLIANCE_OFFICER]: /^EMERGENCY-CO-[A-Z0-9]{8}$/
     };
     return emergencyPatterns[role]?.test(code) || false;
-  private async notifyApprovers(()
+  private async notifyApprovers(((
     exemption: SecurityExemption,
-    policy: ExemptionPolicy,
+    policy: ExemptionPolicy
   ): Promise<void> {
+
     // In production, integrate with notification service
     console.log(`Notification: Exemption ${exemption.id} requires approval from roles:`, policy.approverRoles);}
     this.emit('approvalRequired', { exemption, policy });

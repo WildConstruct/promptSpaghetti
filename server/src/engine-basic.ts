@@ -6,10 +6,12 @@ import { v4 as uuidv4 } from 'uuid';
 /**
  * Basic execution context for graph execution
  */
+}
 interface ExecutionContext {
   variables: Record<string, any>;
   seed: number;
   rng: seedrandom.PRNG;
+}
 }
 
 /**
@@ -26,6 +28,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
   outputs: string[];
   executionPath?: any;
 }> {
+
   console.log(`[BASIC] Executing graph with ${graph.nodes?.length || 0} nodes`);
   
   // Create execution context
@@ -55,6 +58,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
    * Execute a single node recursively
    */
   async function executeNode(nodeId: string, depth: number = 0): Promise<any> {
+
     // Prevent infinite recursion
     if (depth > 100) {
       throw new Error(`Maximum execution depth exceeded at node ${nodeId}`);
@@ -195,6 +199,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
  * Legacy wrapper for backward compatibility
  */
 export async function executeGraphLegacy(graph: Graph, sessionId?: string, userId?: number): Promise<string[]> {
+
   const result = await executeGraph(graph, sessionId, userId);
   return result.outputs;
 }

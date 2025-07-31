@@ -43,6 +43,7 @@ export class SharingService {
    * Create a new share configuration and link
    */
   async createShare(request: CreateShareRequest): Promise<ShareResponse> {
+
     const validatedRequest = validateCreateShareRequest(request);
     // Generate share configuration
     const shareConfig: ShareConfig = {,
@@ -80,6 +81,7 @@ export class SharingService {
    * Generate a shareable link with short code
    */
   private async generateShareLink(config: ShareConfig): Promise<ShareLink> {
+
     const shortCode = this.generateShortCode();
     const fullUrl = `${this.baseUrl}/share/${config.resourceType}/${config.resourceId}`;}
     const shortUrl = `${this.baseUrl}/s/${shortCode}`;}
@@ -190,10 +192,11 @@ export class SharingService {
   /**
    * Track sharing analytics event
    */
-  async trackAnalyticsEvent(shareLinkId: string)
+  async trackAnalyticsEvent(shareLinkId: string(
     eventType: ShareAnalyticsEvent['eventType'],
     contextData: Partial<ShareAnalyticsEvent> = {}
   ): Promise<void> {
+
     if (!this.analyticsEnabled) return;
     const event: ShareAnalyticsEvent = {,
   id: uuidv4(),
@@ -216,10 +219,11 @@ export class SharingService {
   /**
    * Get sharing metrics for a resource
    */
-  async getShareMetrics(()
+  async getShareMetrics(((
     shareLinkId: string,
     timeRange: { start: Date; end: Date }
   ): Promise<ShareMetrics> {
+
   // TODO: Implement actual metrics aggregation from analytics data,
   const mockMetrics: ShareMetrics = {,
   shareLinkId,
@@ -302,10 +306,11 @@ export class SharingService {
   /**
    * Update share permissions
    */
-  async updateSharePermissions(()
+  async updateSharePermissions(((
     shareConfigId: string,
-    permissions: Partial<SharePermission>,
+    permissions: Partial<SharePermission>
   ): Promise<ShareConfig> {
+
   // TODO: Implement actual database update,
   throw new Error('Not implemented');
   /**
@@ -320,7 +325,7 @@ export class SharingService {
   async getShareDashboard(userId: string): Promise<{,
   totalShares: number;
   totalViews: number;
-  topPerformers: Array<{,
+  topPerformers: Array<{
   resourceId: string;
   title: string;
   views: number;

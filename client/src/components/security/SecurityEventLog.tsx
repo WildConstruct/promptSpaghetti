@@ -18,6 +18,7 @@ import {
   ExternalLink
 } from 'lucide-react';
 import { format } from 'date-fns';
+}
 interface SecurityEvent {
   id: string;,
   timestamp: Date;
@@ -34,10 +35,11 @@ interface SecurityEvent {
   metadata?: Record<string, unknown>;
   interface SecurityEventLogProps {
   onEventClick?: (event: SecurityEvent) => void;
-  initialFilters?: {,
+  initialFilters?: {
   severity?: string;
   category?: string;
   dateRange?: [Date, Date];
+}
 };
 const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ )
   onEventClick, 

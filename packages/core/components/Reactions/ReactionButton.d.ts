@@ -7,6 +7,7 @@
  */
 import React from 'react';
 
+}
 export interface ReactionType {
     id: string;
     emoji: string;
@@ -15,6 +16,7 @@ export interface ReactionType {
     weight: number;
     description: string;
 
+}
 export interface ReactionData {
     reactionId: string;
     contentId: string;
@@ -24,20 +26,23 @@ export interface ReactionData {
     timestamp: Date;
     metadata?: Record<string, unknown>;
 
+}
 export interface ReactionSummary {
     contentId: string;
     totalReactions: number;
     reactionCounts: Record<string, number>;
     userReaction?: string;
-    topReactions: Array<{,
+    topReactions: Array<{
         type: string;
         emoji: string;
         count: number;
         percentage: number;
+}
     }>;
     sentimentScore: number;
     engagementLevel: 'low' | 'medium' | 'high' | 'viral';
 
+}
 export interface ReactionButtonProps {
     contentId: string;
     contentType: 'template' | 'comment' | 'review' | 'project' | 'user';
@@ -55,3 +60,4 @@ export interface ReactionButtonProps {
 export declare const ReactionButton: React.FC<ReactionButtonProps>;
 export default ReactionButton;
 //# sourceMappingURL=ReactionButton.d.ts.map
+}

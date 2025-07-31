@@ -44,8 +44,7 @@ export class ConflictResolver extends EventEmitter {
   /**
   * Check for conflicts with recent operations
   */
-  async checkConflicts(()
-  operation: GraphOperation,
+  async checkConflicts((operation: GraphOperation,
   currentState: GraphState): Promise<ConflictResult> {,
   const conflicts: OperationConflict = [];
   const currentUserId = operation.userId || 'anonymous';
@@ -69,10 +68,11 @@ export class ConflictResolver extends EventEmitter {
   /**
    * Resolve conflicts using the configured strategy
    */
-  async resolve(()
+  async resolve(((
     operation: GraphOperation,
-    conflictResult: ConflictResult,
+    conflictResult: ConflictResult
   ): Promise<GraphOperation> {
+
   if (!conflictResult.hasConflicts) {
   return operation;
   switch (this.config.strategy) {
@@ -270,22 +270,19 @@ export class ConflictResolver extends EventEmitter {
   this.config.autoResolve &&
   conflict.resolutionOptions.some(option => option.automated && option.confidence > 0.7);
   // PRIVATE RESOLUTION METHODS
-  private resolveLastWriterWins(()
-  operation: GraphOperation,
+  private resolveLastWriterWins((operation: GraphOperation,
   conflictResult: ConflictResult): GraphOperation {,
   // Simply return the local operation - it "wins"
   this.emitConflictResolved(operation, conflictResult.conflicts[0], ConflictResolutionStrategy.LAST_WRITER_WINS);
   return operation;
-  private async resolveOperationalTransform(()
-  operation: GraphOperation,
+  private async resolveOperationalTransform((operation: GraphOperation,
   conflictResult: ConflictResult): Promise<GraphOperation> {,
   let transformedOperation = operation;
   for (const conflict of conflictResult.conflicts) {
   transformedOperation = await this.transformOperation(transformedOperation, conflict.remoteOperation);
   this.emitConflictResolved(transformedOperation, conflict, ConflictResolutionStrategy.OPERATIONAL_TRANSFORM);
   return transformedOperation;
-  private async resolveMerge(()
-  operation: GraphOperation,
+  private async resolveMerge((operation: GraphOperation,
   conflictResult: ConflictResult): Promise<GraphOperation> {,
   // For merge resolution, we need to combine the changes
   let mergedOperation = operation;
@@ -297,8 +294,7 @@ export class ConflictResolver extends EventEmitter {
   );
   this.emitConflictResolved(mergedOperation, conflict, ConflictResolutionStrategy.MERGE);
   return mergedOperation;
-  private async transformOperation(()
-  localOp: GraphOperation,
+  private async transformOperation((localOp: GraphOperation,
   remoteOp: GraphOperation): Promise<GraphOperation> {,
   // Basic operational transformation
   // This is a simplified implementation - real OT is much more complex
@@ -310,8 +306,7 @@ export class ConflictResolver extends EventEmitter {
   return localOp;
   // For other cases, return the original operation
   return localOp;
-  private async mergeNodeUpdates(()
-  localOp: NodeUpdateOperation,
+  private async mergeNodeUpdates((localOp: NodeUpdateOperation,
   remoteOp: NodeUpdateOperation): Promise<GraphOperation> {,
   // Merge the updates from both operations
   const mergedUpdates = {

@@ -8,6 +8,7 @@ import bcrypt from 'bcrypt';
 import { EventEmitter } from 'events';
 
 }
+}
 export interface PasswordRotationPolicy {
   id: string;
   name: string;
@@ -20,6 +21,7 @@ export interface PasswordRotationPolicy {
     enforceRotation: boolean; // Force rotation at expiry
     preventReuse: number; // Number of previous passwords to remember
     requireReason?: boolean; // Require reason for manual rotation
+}
 }
   };
   applicableRoles: string[];
@@ -54,6 +56,7 @@ export interface PasswordRotationPolicy {
 }
 
 }
+}
 export interface PasswordRotationRecord {
   id: string;
   userId: string;
@@ -73,9 +76,11 @@ export interface PasswordRotationRecord {
     warningsIssued: number;
     complianceFlags: string[];
 }
+}
   };
 }
 
+}
 }
 export interface UserPasswordStatus {
   userId: string;
@@ -94,10 +99,12 @@ export interface UserPasswordStatus {
     setAt: Date;
     strength: number;
 }
+}
   }>;
   complianceFlags: string[];
 }
 
+}
 }
 export interface RotationNotification {
   id: string;
@@ -109,6 +116,7 @@ export interface RotationNotification {
   escalationLevel: number;
   policyId: string;
   metadata: Record<string, any>;
+}
 }
 }
 

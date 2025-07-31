@@ -67,10 +67,12 @@ const exportRequestSchema = z.object({
 });
 
 }
+}
 interface AdminRouteContext {
   databaseService: DatabaseService;
   auditService: AuditService;
   apiKeyService: ApiKeyManagementService;
+}
 }
 }
 

@@ -62,9 +62,11 @@ const notificationPreferencesSchema = z.object({
 });
 
 }
+}
 interface ProfileRouteContext {
   authService: AuthenticationService;
   profileService: ProfileService;
+}
 }
 }
 

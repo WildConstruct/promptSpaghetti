@@ -16,6 +16,7 @@ import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 export interface UserReputation {
   userId: string;
   reputationId: string;
@@ -31,6 +32,7 @@ export interface UserReputation {
     templatePerformance: number; // 0-200
     verificationStatus: number; // 0-200
     platformContributions: number; // 0-200
+}
 }
   };
   
@@ -105,6 +107,7 @@ export interface UserReputation {
 }
 
 }
+}
 export interface UserBadge {
   badgeId: string;
   badgeType: BadgeType;
@@ -123,7 +126,9 @@ export interface UserBadge {
   rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
 }
 }
+}
 
+}
 }
 export interface ReputationMetrics {
   // System Overview
@@ -134,6 +139,7 @@ export interface ReputationMetrics {
     medium: number;
     low: number;
     veryLow: number;
+}
 }
   };
   
@@ -183,6 +189,7 @@ export interface ReputationMetrics {
 }
 
 }
+}
 export interface ReputationAlert {
   alertId: string;
   userId: string;
@@ -209,6 +216,7 @@ export interface ReputationAlert {
   assignedTo?: string;
   priority: number;
   escalated: boolean;
+}
 }
 }
 
@@ -246,6 +254,7 @@ export type ReputationAlertType =
   | 'bot_behavior_detected';
 
 }
+}
 export interface BadgeCriteria {
   requirements: Array<{
     metric: string;
@@ -253,10 +262,12 @@ export interface BadgeCriteria {
     value: number;
     timeframe?: string;
 }
+}
   }>;
   additionalConditions?: string[];
 }
 
+}
 }
 export interface ReputationHistoryPoint {
   timestamp: Date;
@@ -266,7 +277,9 @@ export interface ReputationHistoryPoint {
   componentChanges: Record<string, number>;
 }
 }
+}
 
+}
 }
 export interface ReputationConfig {
   // Score Calculation Weights
@@ -276,6 +289,7 @@ export interface ReputationConfig {
     templatePerformance: number;
     verificationStatus: number;
     platformContributions: number;
+}
 }
   };
   

@@ -341,9 +341,9 @@ export class NodeGenerator {
   /**
    * Validate the generated graph for consistency and correctness
    */
-  private validateGeneratedGraph(()
+  private validateGeneratedGraph(((
     nodes: Node,
-    edges: Edge,
+    edges: Edge
   ): { errors: ValidationError; warnings: ValidationWarning } {
   const errors: ValidationError = [];
   const warnings: ValidationWarning = [];

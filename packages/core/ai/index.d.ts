@@ -45,6 +45,7 @@ export declare }, id: string, modelName: string, apiKey: string) => unknown;
 export declare }, id: string, modelName: string, apiKey: string) => unknown;
 export declare }, id: string, modelName: string, endpoint: string) => unknown;
 
+}
 interface HTTPRequestMapping {
     inputPath: string;
     outputPath: string;
@@ -52,3 +53,4 @@ interface HTTPRequestMapping {
     headers?: Record<string, string>;
 
 export declare //# sourceMappingURL=index.d.ts.map
+}

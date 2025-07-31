@@ -21,6 +21,7 @@ import {
   ConfigurationError
 } from './index';
 
+}
 export interface ErrorFactoryOptions {
   userId?: string;
   sessionId?: string;
@@ -30,6 +31,7 @@ export interface ErrorFactoryOptions {
   /**
   * Factory class for creating structured errors with consistent context
   */
+}
 }
 export class ErrorFactory {
   private static defaultContext: Partial<ErrorContext> = {};
@@ -41,7 +43,7 @@ export class ErrorFactory {
   /**
    * Create enhanced context by merging provided context with defaults
    */
-  private static createContext(operation: string)
+  private static createContext(operation: string(
     options: ErrorFactoryOptions = {},
     additional: Partial<ErrorContext> = {}
   ): Partial<ErrorContext> {
@@ -57,7 +59,7 @@ export class ErrorFactory {
   /**
    * Create a graph validation error with detailed validation context
    */
-  static createGraphValidationError(()
+  static createGraphValidationError(((
     validationErrors: Array<{ field: string; value: any; expected: string }>,
     options: ErrorFactoryOptions = {}
   ): GraphValidationError {
@@ -107,7 +109,7 @@ export class ErrorFactory {
   /**
    * Create a connection factory error
    */
-  static createConnectionFactoryError(()
+  static createConnectionFactoryError(((
     message: string = 'No connection factory set',
     options: ErrorFactoryOptions = {}
   ): ConnectionFactoryError {
@@ -117,7 +119,7 @@ export class ErrorFactory {
   /**
    * Create an authentication error with user context
    */
-  static createAuthenticationError(()
+  static createAuthenticationError(((
     message: string,
     options: ErrorFactoryOptions = {}
   ): AuthenticationError {
@@ -126,7 +128,7 @@ export class ErrorFactory {
   /**
    * Create MFA-specific errors with recovery guidance
    */
-  static createMFAError(message: string)
+  static createMFAError(message: string(
     mfaType: string,
     options: ErrorFactoryOptions = {}
   ): MFAError {
@@ -150,7 +152,7 @@ export class ErrorFactory {
   /**
    * Create MFA verification errors
    */
-  static createMFAVerificationError(()
+  static createMFAVerificationError(((
     type: 'expired' | 'invalid_code' | 'too_many_attempts' | 'method_not_active' | 'rate_limit',
     options: ErrorFactoryOptions = {}
   ): MFAError {
@@ -177,7 +179,7 @@ export class ErrorFactory {
   /**
    * Create permission denied errors
    */
-  static createPermissionDeniedError(resource: string)
+  static createPermissionDeniedError(resource: string(
     action: string,
     options: ErrorFactoryOptions = {}
   ): AuthenticationError {
@@ -242,7 +244,7 @@ export class ErrorFactory {
   /**
    * Create entropy validation errors
    */
-  static createEntropyError(()
+  static createEntropyError(((
     codeType: string,
     options: ErrorFactoryOptions = {}
   ): ValidationError {
@@ -268,7 +270,7 @@ export class ErrorFactory {
   /**
    * Wrap unknown errors in structured format
    */
-  static wrapUnknownError(error: unknown)
+  static wrapUnknownError(error: unknown(
     operation: string,
     options: ErrorFactoryOptions = {}
   ): BaseError {

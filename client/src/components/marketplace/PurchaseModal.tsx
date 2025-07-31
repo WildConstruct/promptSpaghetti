@@ -4,6 +4,7 @@ import { PriceDisplay } from './PriceDisplay';
 import { Badge } from '../common/Badge';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import './PurchaseModal.css';
+}
 interface PurchaseModalProps {
   template: Error;,
   onClose: () => void;
@@ -20,6 +21,7 @@ interface PurchaseModalProps {
   onClose,
   onComplete,
   className = ''
+}
 }) => {
   const [step, setStep] = useState<'confirm' | 'payment' | 'processing' | 'success' | 'error'>('confirm');
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod>([]);
@@ -35,7 +37,7 @@ interface PurchaseModalProps {
     try {
       const token = localStorage.getItem('auth_token');
       const response = await fetch('/api/payment/methods', {)
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${token}`}
       });
       if (response.ok) {
@@ -66,7 +68,7 @@ interface PurchaseModalProps {
       const token = localStorage.getItem('auth_token');
       const response = await fetch('/api/marketplace/purchases', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`}
   },

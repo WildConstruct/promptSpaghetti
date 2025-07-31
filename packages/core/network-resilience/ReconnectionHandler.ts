@@ -15,7 +15,9 @@ export enum ReconnectionState {
   error?: Error;
   backoffDelay: number;
   connectionType: 'websocket' | 'http' | 'custom'
+}
   }
+}
 export interface ReconnectionConfig {
   maxAttempts: number;
   initialDelay: number;
@@ -31,6 +33,8 @@ export interface ReconnectionConfig {
   quickReconnectWindow: number;
   quickReconnectAttempts: number;
 }
+}
+}
 export interface ReconnectionStats {
   totalAttempts: number;
   successfulAttempts: number;
@@ -43,6 +47,7 @@ export interface ReconnectionStats {
   lastSuccessTime: number | null;
   lastFailureTime: number | null;
   circuitBreakerTrips: number;
+}
 }
 export class ReconnectionHandler extends EventEmitter {
   private state: ReconnectionState = ReconnectionState.IDLE;
@@ -97,6 +102,7 @@ export class ReconnectionHandler extends EventEmitter {
    * Start reconnection process
    */
   async startReconnection(): Promise<void> {
+
     if (this.state === ReconnectionState.ATTEMPTING || )
         this.state === ReconnectionState.BACKING_OFF) {
       console.log('Reconnection already in progress');
@@ -210,6 +216,7 @@ export class ReconnectionHandler extends EventEmitter {
    * Attempt reconnection with backoff
    */
   private async attemptReconnection(): Promise<void> {
+
     if (this.currentAttempt >= this.config.maxAttempts) {
       console.log(`Max reconnection attempts (${this.config.maxAttempts}) reached`);}
       this.setState(ReconnectionState.FAILED);
@@ -269,6 +276,7 @@ export class ReconnectionHandler extends EventEmitter {
    * Schedule next reconnection attempt
    */
   private async scheduleNextAttempt(delay: number): Promise<void> {
+
     this.setState(ReconnectionState.BACKING_OFF);
     console.log(`Scheduling next attempt in ${delay}ms`);}
     this.emit('reconnection_scheduled', {)

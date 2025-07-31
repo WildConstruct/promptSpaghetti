@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import { type FieldPriority } from '../VisualHierarchy/HierarchyDesignSystem';
 
+}
 export interface ProgressiveDisclosureSectionProps {
     title: string;
     level: 'basic' | 'advanced' | 'debug';
@@ -24,3 +25,4 @@ export interface ProgressiveDisclosureSectionProps {
 declare const ProgressiveDisclosureSection: React.FC<ProgressiveDisclosureSectionProps>;
 export default ProgressiveDisclosureSection;
 //# sourceMappingURL=ProgressiveDisclosureSection.d.ts.map
+}

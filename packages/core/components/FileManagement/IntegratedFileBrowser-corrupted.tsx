@@ -8,6 +8,7 @@
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { ProjectManager, PSGFile, ProjectFolder } from '../../projectManager';
 
+}
 export interface IntegratedFileBrowserProps {
   onFileSelected?: (file: PSGFile) => void;
   onProjectLoad?: (file: PSGFile) => void;
@@ -18,7 +19,9 @@ export interface IntegratedFileBrowserProps {
   showCreateControls?: boolean;
   currentProject?: string;
 }
+}
 
+}
 interface FileContextMenuAction {
   id: string;
   label: string;
@@ -27,13 +30,16 @@ interface FileContextMenuAction {
   separator?: boolean;
   destructive?: boolean;
 }
+}
 
+}
 interface FolderViewState {
   viewMode: 'list' | 'grid' | 'details';
   sortBy: 'name' | 'modified' | 'size' | 'type';
   sortDirection: 'asc' | 'desc';
   showHidden: boolean;
   filterText: string;
+}
 }
 export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({
   onFileSelected,

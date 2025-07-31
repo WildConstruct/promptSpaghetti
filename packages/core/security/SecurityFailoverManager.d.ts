@@ -8,6 +8,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface SecuritySystemNode {
     id: string;
     name: string;
@@ -24,6 +25,7 @@ export interface SecuritySystemNode {
             memory_gb: number;
             storage_gb: number;
             network_bandwidth_mbps: number;
+}
         };
     };
     status: 'healthy' | 'degraded' | 'unhealthy' | 'offline' | 'maintenance';
@@ -65,6 +67,7 @@ export interface SecuritySystemNode {
         description: string;
     };
 
+}
 export interface FailoverPolicy {
     id: string;
     name: string;
@@ -76,6 +79,7 @@ export interface FailoverPolicy {
             consecutive_failed_checks: number;
             check_interval: number;
             timeout_threshold: number;
+}
         };
         performance_degradation: {
             enabled: boolean;
@@ -121,6 +125,7 @@ export interface FailoverPolicy {
     created_at: number;
     last_modified: number;
 
+}
 export interface FailoverEvent {
     id: string;
     policy_id: string;
@@ -141,6 +146,7 @@ export interface FailoverEvent {
         performance_impact: 'none' | 'minimal' | 'moderate' | 'significant';
         users_affected: number;
         transactions_lost: number;
+}
     };
     results: {
         success: boolean;
@@ -159,6 +165,7 @@ export interface FailoverEvent {
     };
     created_by: string;
 
+}
 export interface FailoverTimelineEntry {
     id: string;
     timestamp: number;
@@ -169,6 +176,7 @@ export interface FailoverTimelineEntry {
     duration?: number;
     error_message?: string;
 
+}
 export interface RedundancyGroup {
     id: string;
     name: string;
@@ -183,6 +191,7 @@ export interface RedundancyGroup {
         data_replication: 'synchronous' | 'asynchronous' | 'semi_synchronous';
         consistency_level: 'strong' | 'eventual' | 'weak';
         partition_tolerance: boolean;
+}
     };
     health: {
         overall_status: 'healthy' | 'degraded' | 'critical' | 'offline';
@@ -202,6 +211,7 @@ export interface RedundancyGroup {
     created_at: number;
     last_updated: number;
 
+}
 export interface FailoverMetrics {
     availability: {
         uptime_percentage: number;
@@ -209,6 +219,7 @@ export interface FailoverMetrics {
         mean_time_between_failures: number;
         mean_time_to_recovery: number;
         availability_sla_compliance: number;
+}
     };
     failover_performance: {
         total_failovers: number;
@@ -247,6 +258,7 @@ export interface FailoverMetrics {
         end: number;
     };
 
+}
 export interface FailoverConfig {
     enabled: boolean;
     default_failover_timeout: number;
@@ -257,6 +269,7 @@ export interface FailoverConfig {
         timeout: number;
         retries: number;
         parallel_checks: boolean;
+}
     };
     load_balancing: {
         enabled: boolean;

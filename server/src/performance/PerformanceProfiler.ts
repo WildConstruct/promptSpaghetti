@@ -19,6 +19,7 @@ import { join } from 'path';
  * Performance metrics collection interfaces
  */
 }
+}
 export interface CPUMetrics {
   user: number;
   system: number;
@@ -27,7 +28,9 @@ export interface CPUMetrics {
   loadAverage: number[];
 }
 }
+}
 
+}
 }
 export interface MemoryMetrics {
   rss: number;
@@ -38,7 +41,9 @@ export interface MemoryMetrics {
   heapUtilization: number;
 }
 }
+}
 
+}
 }
 export interface DatabaseMetrics {
   connectionCount: number;
@@ -49,7 +54,9 @@ export interface DatabaseMetrics {
   connectionPoolUtilization: number;
 }
 }
+}
 
+}
 }
 export interface ApplicationMetrics {
   requestsPerSecond: number;
@@ -61,7 +68,9 @@ export interface ApplicationMetrics {
   gcDuration: number;
 }
 }
+}
 
+}
 }
 export interface SystemMetrics {
   diskUsage: number;
@@ -71,11 +80,13 @@ export interface SystemMetrics {
     packetsIn: number;
     packetsOut: number;
 }
+}
   };
   fileDescriptors: number;
   threadCount: number;
 }
 
+}
 }
 export interface PerformanceSnapshot {
   timestamp: number;
@@ -87,7 +98,9 @@ export interface PerformanceSnapshot {
   customMetrics: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ProfilingConfig {
   sampleInterval: number; // milliseconds
@@ -101,6 +114,7 @@ export interface ProfilingConfig {
     memoryUsage: number;
     responseTime: number;
     errorRate: number;
+}
 }
   };
 }

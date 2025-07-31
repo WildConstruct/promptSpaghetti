@@ -10,6 +10,7 @@ import { GraphOperation, CollaborativeMessage, UserPresence, MutationEngineConfi
  * WebSocket service interface for collaborative features
  */
 
+}
 export interface WebSocketService {
     connect(url: string): Promise<void>;
     disconnect(): Promise<void>;
@@ -93,3 +94,4 @@ export declare class CollaborativeSync extends EventEmitter {
     private generateSessionId;
 
 //# sourceMappingURL=CollaborativeSync.d.ts.map
+}

@@ -25,7 +25,7 @@ export const EmailVerificationPage: React.FC = () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/auth/verify-email`, {},}
   method: 'POST',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({ token: verificationToken })
@@ -60,7 +60,7 @@ export const EmailVerificationPage: React.FC = () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/auth/resend-verification`, {},}
   method: 'POST',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({ email: emailToUse })

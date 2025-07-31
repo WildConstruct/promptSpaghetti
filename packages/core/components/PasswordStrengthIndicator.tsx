@@ -14,6 +14,7 @@ import {
 // Types and Interfaces
 // ========================================
 
+}
 export interface PasswordStrengthIndicatorProps {
   password: string;
   context?: PasswordValidationContext;
@@ -27,6 +28,8 @@ export interface PasswordStrengthIndicatorProps {
   className?: string;
   onValidationChange?: (result: PasswordValidationResult) => void;
   debounceMs?: number;
+}
+}
 }
 export interface PasswordStrengthDisplayProps {
   result: PasswordValidationResult;
@@ -44,6 +47,7 @@ export interface PasswordStrengthDisplayProps {
   strength: PasswordValidationResult['strength'];
   compact: boolean;
   theme: 'light' | 'dark'
+}
   }> = ({ score, strength, compact, theme }) => {
   const getStrengthColor = (strength: PasswordValidationResult['strength']): string => {,
   const colors = {

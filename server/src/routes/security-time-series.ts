@@ -24,6 +24,7 @@ import { SecurityPatternRecognitionEngine } from '../services/SecurityPatternRec
 let timeSeriesEngine: SecurityTimeSeriesAnalysisEngine | null = null;
 
 }
+}
 interface APIResponse<T = unknown> {
   success: boolean;
   data?: T;
@@ -32,6 +33,7 @@ interface APIResponse<T = unknown> {
   timestamp: number;
 }
 
+}
 }
 interface AnalyzeTimeSeriesRequest {
   time_series_data: {
@@ -43,6 +45,7 @@ interface AnalyzeTimeSeriesRequest {
       value: number;
       confidence?: number;
       metadata?: Record<string, unknown>;
+}
 }
     }[];
     metadata?: {
@@ -76,6 +79,7 @@ interface AnalyzeTimeSeriesRequest {
 }
 
 }
+}
 interface CreateForecastRequest {
   series_id: string;
   forecast_configuration: {
@@ -89,6 +93,7 @@ interface CreateForecastRequest {
       trend_adjustment?: boolean;
       external_factors?: string[];
 }
+}
     };
   };
   business_context?: {
@@ -100,6 +105,7 @@ interface CreateForecastRequest {
 }
 
 }
+}
 interface DetectAnomaliesRequest {
   series_id: string;
   detection_configuration?: {
@@ -108,6 +114,7 @@ interface DetectAnomaliesRequest {
     time_window?: {
       start: number;
       end: number;
+}
 }
     };
     anomaly_types: string[];
@@ -125,6 +132,7 @@ interface DetectAnomaliesRequest {
 }
 
 }
+}
 interface AnalyzeCorrelationsRequest {
   series_ids: string[];
   correlation_configuration?: {
@@ -133,6 +141,7 @@ interface AnalyzeCorrelationsRequest {
     lag_analysis: boolean;
     max_lag_periods: number;
     min_correlation_strength: number;
+}
 }
   };
   analysis_scope?: {
@@ -146,12 +155,14 @@ interface AnalyzeCorrelationsRequest {
 }
 
 }
+}
 interface GenerateReportRequest {
   report_type: 'summary' | 'detailed' | 'executive' | 'technical';
   report_scope: {
     time_range?: {
       start: number;
       end: number;
+}
 }
     };
     series_ids?: string[];

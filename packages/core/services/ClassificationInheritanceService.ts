@@ -13,6 +13,7 @@ import {
   CLASSIFICATION_LEVELS
 } from '../types/DataClassification';
 
+}
 export interface InheritanceRule {
   id: string;
   name: string;
@@ -23,6 +24,8 @@ export interface InheritanceRule {
   action: InheritanceAction;
   overridePolicy: OverridePolicy;
 }
+}
+}
 export interface InheritanceCondition {
   type: 'PARENT_TYPE' | 'PARENT_CLASSIFICATION' | 'CHILD_TYPE' | 'RELATIONSHIP_TYPE' | 'CONTEXT_MATCH';
   field: string;
@@ -30,17 +33,23 @@ export interface InheritanceCondition {
   value: string | string;
   required: boolean;
 }
+}
+}
 export interface InheritanceAction {
   type: 'INHERIT_EXACT' | 'INHERIT_ELEVATED' | 'INHERIT_REDUCED' | 'APPLY_MINIMUM' | 'APPLY_CUSTOM';
   customClassification?: DataClassificationLevel;
   elevationLevel?: number; // 1 = one level up, -1 = one level down,
   rationale: string;
 }
+}
+}
 export interface OverridePolicy {
   allowManualOverride: boolean;
   requireApprovalForOverride: boolean;
   maxOverrideLevel?: DataClassificationLevel;
   overrideReasons: string;
+}
+}
 }
 export interface DataRelationship {
   parentId: string;
@@ -49,12 +58,15 @@ export interface DataRelationship {
   strength: 'WEAK' | 'MODERATE' | 'STRONG' | 'ABSOLUTE';
   metadata?: Record<string, any>;
 }
+}
+}
 export interface InheritanceContext {
   parentElement: {
   id: string;
   type: string;
   classification?: DataClassification;
   metadata?: Record<string, any>;
+}
 };
   childElement: {
   id: string;
@@ -65,6 +77,7 @@ export interface InheritanceContext {
   relationship: DataRelationship;
   businessContext?: ClassificationContext;
 }
+}
 export interface InheritanceResult {
   elementId: string;
   inheritedClassification: DataClassification;
@@ -72,6 +85,8 @@ export interface InheritanceResult {
   confidence: number;
   requiresReview: boolean;
   validationResult: ValidationResult;
+}
+}
 }
 export interface AppliedRule {
   ruleId: string;
@@ -82,6 +97,7 @@ export interface AppliedRule {
   /**
   * Service for managing classification inheritance rules and applying them
   */
+}
 }
 export class ClassificationInheritanceService {
   private rules: Map<string, InheritanceRule> = new Map();
@@ -455,9 +471,9 @@ export class ClassificationInheritanceService {
   /**
    * Validate inherited classification
    */
-  private validateInheritedClassification(()
+  private validateInheritedClassification(((
     classification: DataClassification,
-    context: InheritanceContext,
+    context: InheritanceContext
   ): ValidationResult {
   const errors: string = [];
   const warnings: string = [];

@@ -7,11 +7,13 @@ import { EventEmitter } from 'events';
 
 // Web Vitals Configuration
 
+}
 export interface WebVitalsConfig {
   enabled: boolean;
   reportAllChanges: boolean;
   samplingRate: number;        // 0-1 for sampling percentage,
   thresholds: {;
+}
   fcp: { good: number; poor: number };      // First Contentful Paint (ms)
     lcp: { good: number; poor: number };      // Largest Contentful Paint (ms)
     fid: { good: number; poor: number };      // First Input Delay (ms)
@@ -24,6 +26,7 @@ export interface WebVitalsConfig {
 
 // Enhanced Metric with Rating
 }
+}
 export interface EnhancedMetric extends Metric {
   rating: 'good' | 'needs-improvement' | 'poor';
   timestamp: number;
@@ -35,11 +38,13 @@ export interface EnhancedMetric extends Metric {
 
 // Web Vitals Analytics Data
 
+}
 export interface WebVitalsAnalytics {
   sessionId: string;
   timestamp: number;
   metrics: EnhancedMetric;
   summary: {;
+}
   fcp: { value: number; rating: string };
     lcp: { value: number; rating: string };
     fid: { value: number; rating: string };
@@ -123,6 +128,7 @@ export class WebVitalsIntegration extends EventEmitter {
    * Get current Web Vitals snapshot
    */
   getCurrentVitals(): Promise<WebVitalsAnalytics> {
+
     return new Promise((resolve) => {
       if (typeof window === 'undefined') {
         resolve(this.createEmptyAnalytics());

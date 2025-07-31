@@ -3,6 +3,7 @@
  * Handles version restoration with conflict detection, preview, and selective restore capabilities
  */
 
+}
 export interface RestoreOptions {
     create_backup?: boolean;
     backup_title?: string;
@@ -13,6 +14,7 @@ export interface RestoreOptions {
     restore_workflow_state?: boolean;
     notify_collaborators?: boolean;
 
+}
 export interface RestoreConflict {
     id: string;
     type: 'data_conflict' | 'workflow_conflict' | 'permission_conflict' | 'dependency_conflict';
@@ -25,6 +27,7 @@ export interface RestoreConflict {
     severity: 'low' | 'medium' | 'high' | 'critical';
     auto_resolvable: boolean;
 
+}
 export interface RestorePreview {
     restore_id: string;
     snapshot_id: string;
@@ -37,6 +40,7 @@ export interface RestorePreview {
         edges_to_remove: number;
         edges_to_modify: number;
         properties_to_change: number;
+}
     };
     estimated_duration: number;
     risk_level: 'low' | 'medium' | 'high' | 'critical';
@@ -47,6 +51,7 @@ export interface RestorePreview {
         recommended_actions: string[];
     };
 
+}
 export interface RestoreResult {
     success: boolean;
     restore_id: string;
@@ -61,11 +66,13 @@ export interface RestoreResult {
         edges_removed: number;
         edges_modified: number;
         properties_changed: number;
+}
     };
     duration_ms: number;
     warnings: string[];
     errors: string[];
 
+}
 export interface RestoreState {
     id: string;
     status: 'pending' | 'in_progress' | 'completed' | 'failed' | 'cancelled';
@@ -94,6 +101,7 @@ export declare class VersionRestoreManager {
     ): Promise<{
         restoreId: string;
         result: Promise<RestoreResult>;
+}
     }>;
     private performRestore;
     private createBackupSnapshot;

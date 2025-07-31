@@ -13,6 +13,7 @@ const requestUnlockSchema = z.object({)
 });
 type UnlockAccountData = z.infer<typeof unlockAccountSchema>;
 type RequestUnlockData = z.infer<typeof requestUnlockSchema>;
+}
 interface AccountRecoveryProps {
   onSuccess?: (message: string) => void;
   onError?: (error: string) => void;
@@ -24,6 +25,7 @@ interface AccountRecoveryProps {
   onError,
   initialEmail = '',
   unlockToken = ''
+}
 }) => {
   const [mode, setMode] = useState<RecoveryMode>(unlockToken ? 'unlock' : 'request');
   const [isLoading, setIsLoading] = useState(false);

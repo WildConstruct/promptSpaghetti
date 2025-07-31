@@ -5,6 +5,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Comment, CreateComment, UpdateComment, PaginatedResponse } from '../types/workspace';
 const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:8000/api';
+}
 interface UseCommentsOptions {
   workspaceId: string;
   targetType: string;
@@ -24,6 +25,7 @@ interface UseCommentsOptions {
   sortOrder = 'desc',
   autoRefresh = false,
   refreshInterval = 30000
+}
 } = options;
   const [comments, setComments] = useState<Comment>([]);
   const [loading, setLoading] = useState(true);

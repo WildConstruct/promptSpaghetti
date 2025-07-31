@@ -14,15 +14,20 @@ export type FilterOperator = 'equals' | 'contains' | 'startsWith' | 'endsWith' |
 
 export type SortDirection = 'asc' | 'desc';
 
+}
 export interface FilterCondition {
   field: string;,
   operator: FilterOperator;
   value: unknown;
   values?: unknown; // For 'in' and 'between' operators,
 }
+}
+}
 export interface SortCondition {
   field: string;,
   direction: SortDirection;
+}
+}
 }
 export interface SearchQuery {
   text: string;,
@@ -30,12 +35,15 @@ export interface SearchQuery {
   sorts: SortCondition;
   facets?: string;
 }
+}
+}
 export interface SearchResult<T = unknown> {
   items: T;,
   totalCount: number;
   facets?: Record<string, Array<{ value: string; count: number }>>;
   executionTime?: number;
 
+}
 export interface SavedSearch {
   id: string;,
   name: string;
@@ -44,6 +52,7 @@ export interface SavedSearch {
   lastUsedAt: string;
 
 // Search State
+}
 interface SearchState {
   currentQuery: SearchQuery;,
   results: SearchResult | null;
@@ -55,6 +64,7 @@ interface SearchState {
 
 // Search Actions
 type SearchAction =
+}
   | { type: 'SET_QUERY'; payload: Partial<SearchQuery> }
   | { type: 'SET_TEXT'; payload: string }
   | { type: 'ADD_FILTER'; payload: FilterCondition }
@@ -75,7 +85,7 @@ type SearchAction =
 
 // Initial state
 const initialState: SearchState = {,
-  currentQuery: {,
+  currentQuery: {
   text: '',
   filters: [],
   sorts: [],
@@ -105,21 +115,21 @@ const searchReducer = (state: SearchState, action: SearchAction): SearchState =>
   case 'ADD_FILTER':
     return {
   ...state,
-  currentQuery: {,
+  currentQuery: {
   ...state.currentQuery,
   filters: [...state.currentQuery.filters, action.payload],
 };
   case 'REMOVE_FILTER':
     return {
   ...state,
-  currentQuery: {,
+  currentQuery: {
   ...state.currentQuery,
   filters: state.currentQuery.filters.filter((_, index) => index !== action.payload),
 };
   case 'UPDATE_FILTER':
     return {
   ...state,
-  currentQuery: {,
+  currentQuery: {
   ...state.currentQuery,
   filters: state.currentQuery.filters.map((filter, index) =>,
   index === action.payload.index ? action.payload.filter : filter,
@@ -134,14 +144,14 @@ const searchReducer = (state: SearchState, action: SearchAction): SearchState =>
   const existingSorts = state.currentQuery.sorts.filter(s => s.field !== action.payload.field);
   return {
   ...state,
-  currentQuery: {,
+  currentQuery: {
   ...state.currentQuery,
   sorts: [...existingSorts, action.payload],
 };
   case 'REMOVE_SORT':
     return {
   ...state,
-  currentQuery: {,
+  currentQuery: {
   ...state.currentQuery,
   sorts: state.currentQuery.sorts.filter((_, index) => index !== action.payload),
 };
@@ -204,6 +214,7 @@ const searchReducer = (state: SearchState, action: SearchAction): SearchState =>
 };
 
 // Context
+}
 interface SearchContextValue {
   // State
   query: SearchQuery;,
@@ -240,6 +251,7 @@ interface SearchContextValue {
   interface SearchProviderProps {
   children: React.ReactNode;
   // Provider Component
+}
 }
 export const SearchProvider = ({ children }: SearchProviderProps) => {
   const [state, dispatch] = useReducer(searchReducer, initialState);

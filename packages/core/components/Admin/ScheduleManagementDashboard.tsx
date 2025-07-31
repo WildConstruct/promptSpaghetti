@@ -50,6 +50,7 @@ import {
   ContentItem,
   SchedulingStats as ContentStats
 } from '../../services/ContentSchedulingService';
+}
 interface ScheduleItem {
   id: string;
   name: string;
@@ -79,26 +80,29 @@ interface ScheduleItem {
   featureToggleSchedules: number;
   contentSchedules: number;
   // Recent executions
-  recentExecutions: Array<{,
+  recentExecutions: Array<{
   id: string;
   name: string;
   type: string;
   status: 'success' | 'failed';
   executedAt: Date;
   duration: number;
+}
 }>;
   // Upcoming schedules
-  upcomingSchedules: Array<{,
+  upcomingSchedules: Array<{
   id: string;
   name: string;
   type: string;
   nextExecution: Date;
 }>;
+}
 interface ScheduleManagementDashboardProps {
   className?: string;
   userId?: string;
   userRole?: string;
 const STATUS_CONFIG = {
+}
   pending: { color: 'text-yellow-600 bg-yellow-100', icon: Clock },
   active: { color: 'text-blue-600 bg-blue-100', icon: PlayCircle },
   completed: { color: 'text-green-600 bg-green-100', icon: CheckCircle },

@@ -15,6 +15,7 @@ import { AdaptiveThrottlingRulesEngine } from './AdaptiveThrottlingRules';
 // Performance Metrics Types
 // ========================================
 
+}
 export interface RateLimitingMetricsConfig {
   enableRealTimeMetrics: boolean;
   metricsRetentionPeriod: number; // hours,
@@ -23,6 +24,7 @@ export interface RateLimitingMetricsConfig {
   throughput: number; // requests/second,
   errorRate: number; // percentage,
   blockRate: number; // percentage,
+}
 };
   visualizationOptions: {
   enableCharts: boolean;
@@ -41,6 +43,7 @@ export interface RateLimitingMetricsConfig {
 };
   };
 }
+}
 export interface PerformanceMetrics {
   timestamp: Date;
   responseTime: {
@@ -49,6 +52,7 @@ export interface PerformanceMetrics {
   p95: number;
   p99: number;
   max: number;
+}
 };
   throughput: {
   requestsPerSecond: number;
@@ -76,6 +80,7 @@ export interface PerformanceMetrics {
   adaptiveAdjustments: number;
 };
 }
+}
 export interface MetricsVisualizationData {
   timeSeriesData: {
   timestamps: Date;
@@ -83,6 +88,7 @@ export interface MetricsVisualizationData {
   throughput: number;
   blockRate: number;
   errorRate: number;
+}
 };
   heatmapData: {
   endpoints: string;
@@ -91,7 +97,7 @@ export interface MetricsVisualizationData {
   blockMatrix: number[];
 };
   geospatialData: {
-  locations: Array<{,
+  locations: Array<{
   latitude: number;
   longitude: number;
   requestCount: number;
@@ -106,6 +112,7 @@ export interface MetricsVisualizationData {
     userAgentDistribution: Record<string, number>;
   };
 }
+}
 export interface AlertCondition {
   alertId: string;
   timestamp: Date;
@@ -117,6 +124,8 @@ export interface AlertCondition {
   affectedEndpoints: string;
   recommendedActions: string;
   metadata: Record<string, unknown>;
+}
+}
 }
 export interface DashboardWidget {
   widgetId: string;
@@ -132,6 +141,7 @@ export interface DashboardWidget {
   filters?: Record<string, unknown>;
   dimensions?: string;
   metrics?: string;
+}
 };
   position: {
   x: number;
@@ -223,6 +233,7 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
    * Collect current performance metrics
    */
   private async collectCurrentMetrics(): Promise<void> {
+
   const startTime = Date.now();
   try {
   // Get rate limiting statistics

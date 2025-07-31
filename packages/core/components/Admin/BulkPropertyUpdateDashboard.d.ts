@@ -9,6 +9,7 @@
  */
 import React from 'react';
 
+}
 interface BulkPropertyUpdateDashboardProps {
     className?: string;
     userId?: string;
@@ -17,3 +18,4 @@ interface BulkPropertyUpdateDashboardProps {
 export declare const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardProps>;
 export default BulkPropertyUpdateDashboard;
 //# sourceMappingURL=BulkPropertyUpdateDashboard.d.ts.map
+}

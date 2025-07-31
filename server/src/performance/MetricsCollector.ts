@@ -8,6 +8,7 @@ import { join } from 'path';
  * System resource metrics
  */
 }
+}
 export interface SystemMetrics {
   timestamp: number;
   cpuUsage: number;
@@ -15,6 +16,7 @@ export interface SystemMetrics {
     used: number;
     total: number;
     percentage: number;
+}
 }
   };
   networkStats: {
@@ -41,6 +43,7 @@ export interface SystemMetrics {
  * WebSocket performance metrics
  */
 }
+}
 export interface WebSocketMetrics {
   timestamp: number;
   connectionCount: number;
@@ -53,10 +56,12 @@ export interface WebSocketMetrics {
   averageUsersPerDocument: number;
 }
 }
+}
 
 /**
  * Collaboration-specific metrics
  */
+}
 }
 export interface CollaborationMetrics {
   timestamp: number;
@@ -71,10 +76,12 @@ export interface CollaborationMetrics {
   conflictQueueLength: number;
 }
 }
+}
 
 /**
  * Performance thresholds for alerting
  */
+}
 }
 export interface PerformanceThresholds {
   maxCpuUsage: number;
@@ -86,10 +93,12 @@ export interface PerformanceThresholds {
   maxErrorRate: number;
 }
 }
+}
 
 /**
  * Performance alert
  */
+}
 }
 export interface PerformanceAlert {
   id: string;
@@ -102,10 +111,12 @@ export interface PerformanceAlert {
   resolved: boolean;
 }
 }
+}
 
 /**
  * Metrics aggregation window
  */
+}
 }
 export interface MetricsWindow {
   windowStart: number;
@@ -114,6 +125,7 @@ export interface MetricsWindow {
   systemMetrics: SystemMetrics[];
   webSocketMetrics: WebSocketMetrics[];
   collaborationMetrics: CollaborationMetrics[];
+}
 }
 }
 

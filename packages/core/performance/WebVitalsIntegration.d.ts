@@ -5,6 +5,7 @@
 import { Metric } from 'web-vitals';
 import { EventEmitter } from 'events';
 
+}
 export interface WebVitalsConfig {
     enabled: boolean;
     reportAllChanges: boolean;
@@ -13,6 +14,7 @@ export interface WebVitalsConfig {
         fcp: {
             good: number;
             poor: number;
+}
         };
         lcp: {
             good: number;
@@ -35,6 +37,7 @@ export interface WebVitalsConfig {
     enableAnalytics: boolean;
     analyticsEndpoint?: string;
 
+}
 export interface EnhancedMetric extends Metric {
     rating: 'good' | 'needs-improvement' | 'poor';
     timestamp: number;
@@ -44,6 +47,7 @@ export interface EnhancedMetric extends Metric {
     deviceMemory?: number;
     effectiveType?: string;
 
+}
 export interface WebVitalsAnalytics {
     sessionId: string;
     timestamp: number;
@@ -52,6 +56,7 @@ export interface WebVitalsAnalytics {
         fcp: {
             value: number;
             rating: string;
+}
         };
         lcp: {
             value: number;

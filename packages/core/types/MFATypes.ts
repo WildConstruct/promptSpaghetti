@@ -43,6 +43,8 @@ export enum MFAMethodType {
   // TOTP Configuration
   // ========================================
 }
+}
+}
 export interface TOTPConfiguration extends BaseMFAConfiguration {
   methodType: MFAMethodType.TOTP;
   encryptedSecret: string;       // AES-256 encrypted TOTP secret,
@@ -59,6 +61,8 @@ export interface TOTPConfiguration extends BaseMFAConfiguration {
   issuer: string;          // "PromptScape",
   accountName: string;     // User identifier,
 }
+}
+}
 export interface TOTPEnrollmentData {
   configurationId: string;
   secret: TOTPSecret;
@@ -67,6 +71,8 @@ export interface TOTPEnrollmentData {
   // ========================================
   // Email Configuration
   // ========================================
+}
+}
 }
 export interface EmailConfiguration extends BaseMFAConfiguration {
   methodType: MFAMethodType.EMAIL;
@@ -86,11 +92,13 @@ export interface EmailConfiguration extends BaseMFAConfiguration {
   userAgent: string;
   location?: string;
   riskScore: number;       // 0-100 risk assessment,
+}
 };
 
 // ========================================
 // SMS Configuration
 // ========================================
+}
 }
 export interface SMSConfiguration extends BaseMFAConfiguration {
   methodType: MFAMethodType.SMS;
@@ -103,6 +111,7 @@ export interface SMSConfiguration extends BaseMFAConfiguration {
   riskScore: number;       // 0-100 carrier risk assessment,
 };
 
+}
 export interface SMSVerification {
   id: string;
   userId: string;
@@ -116,11 +125,13 @@ export interface SMSVerification {
   userAgent: string;
   carrierResponse?: string; // Gateway response,
   deliveryStatus?: 'sent' | 'delivered' | 'failed'
+}
   };
 
 // ========================================
 // Backup Codes
 // ========================================
+}
 }
 export interface BackupCode {
   id: string;
@@ -132,8 +143,10 @@ export interface BackupCode {
   ipAddress: string;
   userAgent: string;
   location?: string;
+}
 };
   createdAt: Date;
+}
 }
 export interface BackupCodeSet {
   userId: string;
@@ -144,6 +157,8 @@ export interface BackupCodeSet {
   // MFA Session & Verification
   // ========================================
 }
+}
+}
 export interface MFAChallenge {
   id: string;
   userId: string;
@@ -153,6 +168,8 @@ export interface MFAChallenge {
   attempts: number;
   maxAttempts: number;
   createdAt: Date;
+}
+}
 }
 export interface MFAVerificationAttempt {
   id: string;
@@ -168,7 +185,9 @@ export interface MFAVerificationAttempt {
   codeLength?: number;
   timeSkew?: number;       // For TOTP,
   riskScore?: number;
+}
 };
+}
 }
 export interface MFASession {
   id: string;
@@ -184,6 +203,8 @@ export interface MFASession {
   // Rate Limiting & Security
   // ========================================
 }
+}
+}
 export interface RateLimitRule {
   action: string;           // 'totp_verify', 'email_send', 'sms_send',
   userLimit: number;        // Per user limit,
@@ -193,6 +214,8 @@ export interface RateLimitRule {
   globalLimit: number;      // Global system limit,
   globalWindow: number;     // Time window in seconds,
 }
+}
+}
 export interface RateLimitState {
   userId?: string;
   ipAddress?: string;
@@ -200,6 +223,8 @@ export interface RateLimitState {
   count: number;
   windowStart: Date;
   blockedUntil?: Date;
+}
+}
 }
 export interface SecurityEvent {
   id: string;
@@ -213,6 +238,7 @@ export interface SecurityEvent {
   location?: string;
   methodType?: MFAMethodType;
   attemptCount?: number;
+}
 };
   createdAt: Date;
   resolved: boolean;
@@ -221,6 +247,7 @@ export interface SecurityEvent {
 // ========================================
 // User MFA Profile
 // ========================================
+}
 }
 export interface UserMFAProfile {
   userId: string;
@@ -231,6 +258,7 @@ export interface UserMFAProfile {
   lastUsed?: {
   methodType: MFAMethodType;
   timestamp: Date;
+}
 };
   securityMetrics: {
   totalAttempts: number;
@@ -340,11 +368,14 @@ export function isTOTPConfiguration(config: BaseMFAConfiguration): config is TOT
 // API Request/Response Types
 // ========================================
 
+}
 export interface MFAEnrollmentRequest {
   methodType: MFAMethodType;
   displayName: string;
   emailAddress?: string;    // For email method,
   phoneNumber?: string;     // For SMS method,
+}
+}
 }
 export interface MFAEnrollmentResponse {
   configurationId: string;
@@ -353,10 +384,14 @@ export interface MFAEnrollmentResponse {
   requiresVerification: boolean;
   expiresAt: Date;
 }
+}
+}
 export interface MFAVerificationRequest {
   configurationId: string;
   code: string;
   backupCode?: boolean;     // True if using backup code,
+}
+}
 }
 export interface MFAVerificationResponse {
   success: boolean;
@@ -365,6 +400,8 @@ export interface MFAVerificationResponse {
   lockoutDuration?: number; // Seconds until unlock,
   nextMethodSuggested?: MFAMethodType;
 }
+}
+}
 export interface MFAListResponse {
   configurations: BaseMFAConfiguration;
   profile: UserMFAProfile;
@@ -372,6 +409,7 @@ export interface MFAListResponse {
   // ========================================
   // Constants
   // ========================================
+}
 }
 export const MFA_CONSTANTS = {
   TOTP: {

@@ -12,6 +12,7 @@ import {
 } from '../../services/Epic16TicketIntegrationService';
 import TicketManagementDashboard from './TicketManagementDashboard';
 import TicketDetailsView from './TicketDetailsView';
+}
 interface Epic16TicketIntegrationProps {
   userId: string;
   userRole: 'user' | 'agent' | 'admin';
@@ -22,6 +23,7 @@ interface Epic16TicketIntegrationProps {
   userRole,
   config,
   onConfigChange
+}
 }) => {
   // Service instance
   const ticketService = useMemo(() => {
@@ -209,12 +211,14 @@ interface Epic16TicketIntegrationProps {
 };
 
 // Settings Component
+}
 interface IntegrationSettingsProps {
   ticketService: Epic16TicketIntegrationService;
   onConfigChange?: (config: TicketIntegrationConfig) => void;
   const IntegrationSettings: React.FC<IntegrationSettingsProps> = ({,)
   ticketService,
   onConfigChange
+}
 }) => {
   return;
   <div className="p-6">
@@ -295,12 +299,14 @@ interface IntegrationSettingsProps {
 };
 
 // Notification System Component
+}
 interface NotificationSystemProps {
-  notifications: Array<{,
+  notifications: Array<{
   id: string;
   type: 'success' | 'error' | 'info' | 'warning';
   message: string;
   timestamp: Date;
+}
 }>;
 const NotificationSystem: React.FC<NotificationSystemProps> = ({ notifications }) => {
   if (notifications.length === 0) return null;

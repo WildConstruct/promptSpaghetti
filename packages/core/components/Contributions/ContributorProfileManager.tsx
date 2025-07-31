@@ -12,11 +12,13 @@ import {
   validateContributorProfile 
 } from '../../types/contributions';
 
+}
 export interface ContributorProfileManagerProps {
   profile: ContributorProfile;
   onProfileUpdate: (profile: ContributorProfile) => void;
   readOnly?: boolean;
   className?: string;
+}
 }
 export const ContributorProfileManager: React.FC<ContributorProfileManagerProps> = ({)
   profile,

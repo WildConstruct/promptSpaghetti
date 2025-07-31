@@ -4,6 +4,7 @@
  */
 import { ComplianceBaseline, ComplianceMeasurement, BaselineTrend } from './ComplianceBaselineTracker';
 
+}
 export interface HistoricalDataPoint {
   timestamp: Date;
   value: number;
@@ -14,6 +15,8 @@ export interface HistoricalDataPoint {
   category: string;
   metric: string;
 }
+}
+}
 export interface ComplianceTrendReport {
   reportId: string;
   generatedAt: Date;
@@ -21,6 +24,7 @@ export interface ComplianceTrendReport {
   startDate: Date;
   endDate: Date;
   duration: string;
+}
 };
   framework: string;
   summary: {;
@@ -53,6 +57,7 @@ export interface ComplianceTrendReport {
   changeType: 'improvement' | 'degradation' | 'stable'
   };
 }
+}
 export interface ComplianceForecasting {
   baselineId: string;
   forecastHorizon: number; // days,
@@ -62,6 +67,7 @@ export interface ComplianceForecasting {
   confidenceInterval: {
   lower: number;
   upper: number;
+}
 };
     riskLevel: 'low' | 'medium' | 'high'
   }[];
@@ -73,11 +79,13 @@ export interface ComplianceForecasting {
   likelihood: number; // 0-100,
 }[];
 }
+}
 export interface ComplianceAuditTrail {
   auditId: string;
   auditPeriod: {
   startDate: Date;
   endDate: Date;
+}
 };
   framework: string;
   auditType: 'internal' | 'external' | 'certification';
@@ -249,10 +257,11 @@ export class ComplianceHistoricalAnalyzer {
   /**
    * Generate compliance forecasting
    */
-  async generateForecast(()
+  async generateForecast(((
     baselineId: string,
-    forecastHorizon: number = 30,
+    forecastHorizon: number = 30
   ): Promise<ComplianceForecasting> {
+
   // Get historical data for the baseline
   const historicalKey = this.findHistoricalKeyForBaseline(baselineId);
   const historicalData = this.historicalData.get(historicalKey) || [];
@@ -305,6 +314,7 @@ export class ComplianceHistoricalAnalyzer {
    * Create audit trail entry
    */
   async createAuditTrail(auditData: Omit<ComplianceAuditTrail, 'auditId'>): Promise<ComplianceAuditTrail> {
+
     const auditTrail: ComplianceAuditTrail = {
       ...auditData,
       auditId: `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`}

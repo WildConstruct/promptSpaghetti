@@ -7,6 +7,7 @@ import { performance } from 'perf_hooks';
  * Performance metrics collected during testing
  */
 }
+}
 export interface PerformanceMetrics {
   // WebSocket performance
   connectionTime: number;
@@ -35,10 +36,12 @@ export interface PerformanceMetrics {
   userCount: number;
 }
 }
+}
 
 /**
  * Test scenario configuration
  */
+}
 }
 export interface TestScenario {
   name: string;
@@ -49,6 +52,7 @@ export interface TestScenario {
   operationTypes: OperationType[];
   documentComplexity: DocumentComplexity;
   networkConditions?: NetworkConditions;
+}
 }
 }
 
@@ -82,11 +86,13 @@ export enum DocumentComplexity {
  * Network conditions simulation
  */
 }
+}
 export interface NetworkConditions {
   latency: number; // in milliseconds
   bandwidth: number; // in kbps
   packetLoss: number; // percentage (0-100)
   jitter: number; // in milliseconds
+}
 }
 }
 

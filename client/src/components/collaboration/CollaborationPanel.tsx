@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+}
 interface CollaborationUser {
   id: string;,
   name: string;
@@ -30,6 +31,7 @@ interface CollaborationUser {
   onInviteUser,
   onChangeUserRole,
   onRemoveUser
+}
 }) => {
   const [activeTab, setActiveTab] = useState<'users' | 'activity'>('users');
   const [inviteEmail, setInviteEmail] = useState('');

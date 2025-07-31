@@ -54,6 +54,7 @@ export enum EnforcementStatus {
 
 // Core interfaces
 }
+}
 export interface PolicyViolation {
   id: string;
   policy_id: string;
@@ -75,7 +76,9 @@ export interface PolicyViolation {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ViolationEvidence {
   type: 'content' | 'behavior' | 'metadata' | 'transaction' | 'user_report';
@@ -86,7 +89,9 @@ export interface ViolationEvidence {
   ai_analysis?: AIAnalysisResult;
 }
 }
+}
 
+}
 }
 export interface EvidenceAttachment {
   id: string;
@@ -97,7 +102,9 @@ export interface EvidenceAttachment {
   size: number;
 }
 }
+}
 
+}
 }
 export interface AIAnalysisResult {
   model_version: string;
@@ -108,7 +115,9 @@ export interface AIAnalysisResult {
   processed_at: Date;
 }
 }
+}
 
+}
 }
 export interface Prediction {
   category: string;
@@ -116,7 +125,9 @@ export interface Prediction {
   explanation: string;
 }
 }
+}
 
+}
 }
 export interface ViolationResolution {
   resolution_type: 'dismissed' | 'warning_issued' | 'action_taken' | 'escalated';
@@ -127,7 +138,9 @@ export interface ViolationResolution {
   resolved_by: string;
 }
 }
+}
 
+}
 }
 export interface EnforcementAction {
   id: string;
@@ -145,7 +158,9 @@ export interface EnforcementAction {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface EnforcementParameters {
   duration_hours?: number;
@@ -157,7 +172,9 @@ export interface EnforcementParameters {
   escalation_triggers?: EscalationTrigger[];
 }
 }
+}
 
+}
 }
 export interface EscalationTrigger {
   condition: string;
@@ -165,7 +182,9 @@ export interface EscalationTrigger {
   notify_roles: string[];
 }
 }
+}
 
+}
 }
 export interface ViolationDetectionRule {
   id: string;
@@ -183,7 +202,9 @@ export interface ViolationDetectionRule {
   created_by: string;
 }
 }
+}
 
+}
 }
 export interface DetectionCondition {
   field: string;
@@ -193,7 +214,9 @@ export interface DetectionCondition {
   logical_operator?: 'and' | 'or';
 }
 }
+}
 
+}
 }
 export interface AIModelConfig {
   model_name: string;
@@ -203,7 +226,9 @@ export interface AIModelConfig {
   preprocessing: PreprocessingConfig;
 }
 }
+}
 
+}
 }
 export interface PreprocessingConfig {
   text_normalization: boolean;
@@ -211,7 +236,9 @@ export interface PreprocessingConfig {
   feature_engineering: string[];
 }
 }
+}
 
+}
 }
 export interface RuleEnforcementConfig {
   severity_mapping: Record<string, ViolationSeverity>;
@@ -220,7 +247,9 @@ export interface RuleEnforcementConfig {
   grace_period_hours: number;
 }
 }
+}
 
+}
 }
 export interface AutomaticAction {
   trigger_confidence: number;
@@ -229,7 +258,9 @@ export interface AutomaticAction {
   requires_review: boolean;
 }
 }
+}
 
+}
 }
 export interface EscalationRule {
   condition: EscalationCondition;
@@ -238,7 +269,9 @@ export interface EscalationRule {
   delay_hours: number;
 }
 }
+}
 
+}
 }
 export interface EscalationCondition {
   type: 'violation_count' | 'severity_threshold' | 'time_elapsed' | 'appeal_filed';
@@ -246,7 +279,9 @@ export interface EscalationCondition {
   time_window_hours?: number;
 }
 }
+}
 
+}
 }
 export interface ViolationReport {
   reporter_id?: string;
@@ -260,7 +295,9 @@ export interface ViolationReport {
   anonymous: boolean;
 }
 }
+}
 
+}
 }
 export interface EnforcementDashboard {
   summary: EnforcementSummary;
@@ -271,7 +308,9 @@ export interface EnforcementDashboard {
   analytics: EnforcementAnalytics;
 }
 }
+}
 
+}
 }
 export interface EnforcementSummary {
   total_violations: number;
@@ -283,7 +322,9 @@ export interface EnforcementSummary {
   avg_resolution_time_hours: number;
 }
 }
+}
 
+}
 }
 export interface EnforcementAnalytics {
   detection_accuracy: number;
@@ -293,7 +334,9 @@ export interface EnforcementAnalytics {
   trend_data: TrendData[];
 }
 }
+}
 
+}
 }
 export interface EffectivenessMetric {
   usage_count: number;
@@ -302,13 +345,16 @@ export interface EffectivenessMetric {
   appeal_rate: number;
 }
 }
+}
 
+}
 }
 export interface TrendData {
   date: Date;
   violation_count: number;
   action_count: number;
   resolution_time: number;
+}
 }
 }
 

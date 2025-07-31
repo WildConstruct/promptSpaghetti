@@ -19,6 +19,7 @@ export declare enum CodeFormat {
     HEX = "hex",// 1a2b3c4d
     UUID = "uuid"
 
+}
 export interface CodeGenerationOptions {
     type: CodeType;
     format: CodeFormat;
@@ -28,11 +29,13 @@ export interface CodeGenerationOptions {
         userId: string;
         ipAddress: string;
         userAgent: string;
+}
     };
     customCharset?: string;
     excludeSimilar?: boolean;
     enforceComplexity?: boolean;
 
+}
 export interface GeneratedCode {
     code: string;
     hashedCode: string;
@@ -46,8 +49,10 @@ export interface GeneratedCode {
         ipAddress?: string;
         entropy: number;
         algorithm: string;
+}
     };
 
+}
 export interface CodeValidationResult {
     valid: boolean;
     reason?: 'expired' | 'invalid' | 'rate_limited' | 'used' | 'format_mismatch';
@@ -56,8 +61,10 @@ export interface CodeValidationResult {
         validatedAt: Date;
         timingAttackSafe: boolean;
         processingTimeMs: number;
+}
     };
 
+}
 export interface CodeValidationOptions {
     allowExpired?: boolean;
     constantTimeValidation?: boolean;
@@ -89,6 +96,7 @@ export declare class CodeGenerationService {
         qrCodeData: string;
         manualEntryKey: string;
         backupCodes: string[];
+}
     }>;
     /**
      * Generate recovery token for account recovery

@@ -5,6 +5,7 @@ import { Transaction } from '../marketplace/transaction.types.js';
 // import { PaymentProvider } from '../marketplace/transaction.types.js';
 
 }
+}
 export interface TransactionAnomalyPattern {
   patternType: 'velocity' | 'amount' | 'location' | 'time' | 'behavior' | 'payment_method';
   threshold: number;
@@ -14,7 +15,9 @@ export interface TransactionAnomalyPattern {
   description: string;
 }
 }
+}
 
+}
 }
 export interface TransactionAnomaly {
   id: string;
@@ -33,7 +36,9 @@ export interface TransactionAnomaly {
   resolution?: string;
 }
 }
+}
 
+}
 }
 export interface FraudRing {
   id: string;
@@ -44,6 +49,7 @@ export interface FraudRing {
   transactionCount: number;
   detectedAt: Date;
   status: 'suspected' | 'confirmed' | 'dismissed';
+}
 }
 }
 

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { WeightControlOption } from '../components/Inspector/WeightControlSlider';
 import { substituteVariables } from '../utils/templateParser';
 
+}
 export interface PreviewVariant {
   id: string;
   seed: number;
@@ -11,11 +12,15 @@ export interface PreviewVariant {
   weightSnapshot: WeightControlOption;
   variables: Record<string, string>;
 }
+}
+}
 export interface PreviewPerformance {
   averageExecutionTime: number;
   totalGenerations: number;
   successRate: number;
   lastUpdate: number;
+}
+}
 }
 export interface RealTimePreviewConfig {
   maxVariants: number;
@@ -29,6 +34,7 @@ export interface RealTimePreviewConfig {
   maxExecutionTime: 2000,
   enablePerformanceTracking: true,
   autoRefresh: true,
+}
 };
 }
 export const useRealTimePreview = (graph: GraphData, seedConfig: SeedConfig = {}) => {

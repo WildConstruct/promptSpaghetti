@@ -65,6 +65,7 @@ export enum AssistiveTechnology {
   EYE_TRACKING = 'eye_tracking'
 }
 
+}
 export interface UserAccessibilityProfile {
   userId: string;
   needs: AccessibilityNeed[];
@@ -81,6 +82,7 @@ export interface UserAccessibilityProfile {
     hapticEnabled: boolean;
     animationsReduced: boolean;
     colorBlindnessType?: string;
+}
   };
   verificationMethods: {
     primary: string[];
@@ -105,6 +107,7 @@ export interface UserAccessibilityProfile {
 
 // Accessibility Context
 
+}
 export interface AccessibilityContext {
   userAgent: string;
   screenReaderDetected: boolean;
@@ -115,6 +118,7 @@ export interface AccessibilityContext {
     hasTouch: boolean;
     hasKeyboard: boolean;
     hasMouse: boolean;
+}
     screenSize: { width: number; height: number };
     colorDepth: number;
   };
@@ -133,6 +137,7 @@ export interface AccessibilityContext {
 }
 
 // Fallback Configuration
+}
 export interface FallbackConfiguration {
   method: FallbackMethod;
   enabled: boolean;
@@ -143,6 +148,7 @@ export interface FallbackConfiguration {
     needsInteraction: boolean;
     minimumTime: number; // seconds
     maximumTime: number; // seconds
+}
   };
   accessibility: {
     supportedNeeds: AccessibilityNeed[];
@@ -162,6 +168,7 @@ export interface FallbackConfiguration {
 }
 
 // Accessibility Validation Result
+}
 export interface AccessibilityValidationResult {
   isAccessible: boolean;
   fallbacksRequired: FallbackMethod[];
@@ -171,12 +178,14 @@ export interface AccessibilityValidationResult {
     description: string;
     wcagReference: string;
     recommendation: string;
+}
   }>;
   score: number; // 0-100 accessibility score
   complianceLevel: 'A' | 'AA' | 'AAA' | 'Non-compliant';
 }
 
 // Emergency Accessibility Bypass
+}
 export interface EmergencyBypass {
   id: string;
   userId: string;
@@ -188,6 +197,7 @@ export interface EmergencyBypass {
   maxUsages: number;
   conditions: {
     ipRestriction?: string;
+}
     timeRestriction?: { start: string; end: string };
     requiresNotification: boolean;
     requiresFollowUp: boolean;
@@ -218,6 +228,7 @@ export class AccessibilityManager extends EventEmitter {
     userId: string,
     profileData: Partial<UserAccessibilityProfile>
   ): Promise<UserAccessibilityProfile> {
+
   const existingProfile = this.userProfiles.get(userId);
     const profile: UserAccessibilityProfile = {
       userId,
@@ -306,7 +317,7 @@ export class AccessibilityManager extends EventEmitter {
   // Add need-specific accommodations
   if (profile.needs.includes(AccessibilityNeed.VISUAL_IMPAIRMENT)) {
   fallbacks.push(FallbackMethod.AUDIO_CAPTCHA, FallbackMethod.VOICE_AUTHENTICATION);
-  adaptations.push()
+  adaptations.push(
   InterfaceAdaptation.FONT_SIZE_INCREASE,
   InterfaceAdaptation.CONTRAST_ENHANCEMENT,
   InterfaceAdaptation.AUDIO_DESCRIPTIONS
@@ -316,13 +327,13 @@ export class AccessibilityManager extends EventEmitter {
   adaptations.push(InterfaceAdaptation.CAPTIONS);
   if (profile.needs.includes(AccessibilityNeed.MOTOR_IMPAIRMENT)) {
   fallbacks.push(FallbackMethod.VOICE_AUTHENTICATION, FallbackMethod.ASSISTED_INPUT);
-  adaptations.push()
+  adaptations.push(
   InterfaceAdaptation.TIMEOUT_EXTENSION,
   InterfaceAdaptation.SIMPLIFIED_LAYOUT
   );
   if (profile.needs.includes(AccessibilityNeed.COGNITIVE_IMPAIRMENT)) {
   fallbacks.push(FallbackMethod.SIMPLIFIED_INTERFACE, FallbackMethod.HUMAN_ASSISTANCE);
-  adaptations.push()
+  adaptations.push(
   InterfaceAdaptation.SIMPLIFIED_LAYOUT,
   InterfaceAdaptation.ERROR_CLARIFICATION,
   InterfaceAdaptation.TIMEOUT_EXTENSION
@@ -346,8 +357,7 @@ export class AccessibilityManager extends EventEmitter {
   /**
    * Validate accessibility compliance for authentication flow
    */
-  public validateAccessibilityCompliance()
-    authenticationFlow: unknown,
+  public validateAccessibilityCompliance(authenticationFlow: unknown,
     userProfile?: UserAccessibilityProfile
   ): AccessibilityValidationResult {
   const issues: AccessibilityValidationResult['issues'] = [];
@@ -447,7 +457,7 @@ export class AccessibilityManager extends EventEmitter {
   /**
    * Create emergency accessibility bypass
    */
-  public async createEmergencyBypass()
+  public async createEmergencyBypass(
     userId: string,
     reason: string,
     authorizedBy: string,
@@ -503,11 +513,11 @@ export class AccessibilityManager extends EventEmitter {
   /**
    * Get accessibility adaptation recommendations
    */
-  public getAdaptationRecommendations(()
+  public getAdaptationRecommendations(((
     userId: string,
-    _currentInterface: unknown,
+    _currentInterface: unknown
   ): {
-  adaptations: Array<{,
+  adaptations: Array<{
   type: InterfaceAdaptation;
   priority: 'high' | 'medium' | 'low';
   implementation: {
@@ -602,7 +612,7 @@ export class AccessibilityManager extends EventEmitter {
   used: number;
   expired: number;
 };
-    topIssues: Array<{,
+    topIssues: Array<{
   issue: string;
   frequency: number;
   severity: 'critical' | 'major' | 'minor'
@@ -677,7 +687,7 @@ export class AccessibilityManager extends EventEmitter {
   if (context.sessionContext.attemptCount > 3) score += 15;
   return Math.min(100, score);
   private generateAuthenticationAlternatives(context: AccessibilityContext)
-  profile?: UserAccessibilityProfile): Array<{,
+  profile?: UserAccessibilityProfile): Array<{
   method: string;
   accessibility: number;
   estimated_time: number;

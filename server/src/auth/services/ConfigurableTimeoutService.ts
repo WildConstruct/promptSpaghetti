@@ -8,6 +8,7 @@ import { DatabaseService } from '../database/DatabaseService';
 import { RedisService } from '../database/RedisService';
 
 }
+}
 export interface TimeoutConfiguration {
   id: string;
   name: string;
@@ -23,6 +24,7 @@ export interface TimeoutConfiguration {
     validated: boolean;
     deployedAt?: Date;
     lastModified: Date;
+}
 }
   };
   
@@ -147,11 +149,13 @@ export interface TimeoutConfiguration {
 }
 
 }
+}
 export interface TimeoutMetrics {
   configurationId: string;
   timeRange: {
     start: Date;
     end: Date;
+}
 }
   };
   usage: {
@@ -182,6 +186,7 @@ export interface TimeoutMetrics {
 }
 
 }
+}
 export interface TimeoutTemplate {
   id: string;
   name: string;
@@ -201,6 +206,7 @@ export interface TimeoutTemplate {
       pattern?: string;
       required?: boolean;
 }
+}
     };
   }>;
   
@@ -211,6 +217,7 @@ export interface TimeoutTemplate {
   }>;
 }
 
+}
 }
 export interface TimeoutAdjustment {
   id: string;
@@ -226,6 +233,7 @@ export interface TimeoutAdjustment {
       metric: string;
       threshold: number;
       actualValue: number;
+}
 }
     };
   };
@@ -259,8 +267,10 @@ export interface TimeoutAdjustment {
 }
 
 }
+}
 export interface TimeoutMetrics {
   configurationId: string;
+}
 }
   timeRange: { start: Date; end: Date };
   

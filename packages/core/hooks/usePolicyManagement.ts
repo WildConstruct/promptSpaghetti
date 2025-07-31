@@ -17,11 +17,14 @@ import {
   ComplianceFramework
 } from '../services/PolicyManagement';
 
+}
 export interface PolicyManagementHookConfig {
   autoEvaluate?: boolean;
   cacheTimeout?: number; // milliseconds,
   enableRealTimeUpdates?: boolean;
   complianceFrameworks?: ComplianceFramework;
+}
+}
 }
 export interface PolicyEvaluationOptions {
   userId?: string;
@@ -31,6 +34,7 @@ export interface PolicyEvaluationOptions {
   type: string;
   parameters: Record<string, any>;
   riskLevel?: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'
+}
   };
   contentContext?: {
   historicalPeriod?: string;

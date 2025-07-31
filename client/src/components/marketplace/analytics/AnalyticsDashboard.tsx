@@ -8,12 +8,14 @@ import { InsightsPanel } from './InsightsPanel';
 import { TimeRangeSelector } from './TimeRangeSelector';
 import { analyticsService } from '../../../services/analyticsService';
 import './AnalyticsDashboard.css';
+}
 interface AnalyticsDashboardProps {
   creatorId: string;
   className?: string;
   export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({,)
   creatorId,
   className = ''
+}
 }) => {
   const [dashboard, setDashboard] = useState<CreatorDashboard | null>(null);
   const [insights, setInsights] = useState<AnalyticsInsight>([]);

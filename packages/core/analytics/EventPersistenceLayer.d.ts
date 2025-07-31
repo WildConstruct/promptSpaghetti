@@ -69,6 +69,7 @@ export declare const StoredEventSchema: z.ZodObject<{
 }>;
 export type StoredEvent = z.infer<typeof StoredEventSchema>;
 
+}
 export interface EventQueryOptions {
     filter?: EventFilter;
     sortBy?: 'timestamp' | 'type' | 'severity' | 'source';
@@ -77,10 +78,12 @@ export interface EventQueryOptions {
     offset?: number;
     includeMetadata?: boolean;
 
+}
 export interface EventStatistics {
     totalEvents: number;
     eventsByType: {
         [type: string]: number;
+}
     };
     eventsByCategory: {
         [category: string]: number;
@@ -97,6 +100,7 @@ export interface EventStatistics {
     };
     storageSize: number;
 
+}
 export interface EventAggregation {
     groupBy: string;
     timeGranularity?: 'hour' | 'day' | 'week' | 'month';
@@ -107,6 +111,7 @@ export interface EventAggregation {
         uniqueSources: number;
         uniqueUsers: number;
         uniqueSessions: number;
+}
     };
 /**
  * Event Repository Interface
@@ -114,6 +119,7 @@ export interface EventAggregation {
  * Following repository pattern from Story 1.4 for consistent data access
  */
 
+}
 export interface EventRepository {
     save(event: UnifiedAnalyticsEvent): Promise<string>;
     saveBatch(events: UnifiedAnalyticsEvent[]): Promise<string[]>;
@@ -127,6 +133,7 @@ export interface EventRepository {
     getTimeSeriesData(metric: string, granularity: string, filter?: EventFilter): Promise<Array<{
         timestamp: number;
         value: number;
+}
     }>>;
     cleanup(retentionDays: number): Promise<number>;
     archive(beforeDate: number): Promise<number>;

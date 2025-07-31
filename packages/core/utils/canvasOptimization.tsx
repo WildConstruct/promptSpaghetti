@@ -7,12 +7,15 @@
 import React from 'react';
 import { Edge, Node, Viewport } from 'reactflow';
 
+}
 export interface PerformanceConfig {
   maxVisibleNodes: number;
   cullingThreshold: number;
   animationFrameThrottle: number;
   renderDebounce: number;
   memoryCleanupInterval: number;
+}
+}
 }
 export interface CanvasMetrics {
   fps: number;
@@ -21,6 +24,7 @@ export interface CanvasMetrics {
   visibleNodes: number;
   memoryUsage: number;
   lastUpdateTime: number;
+}
 }
 export class CanvasOptimizer {
   private config: PerformanceConfig;
@@ -137,7 +141,7 @@ export class CanvasOptimizer {
   /**
    * Cull nodes outside viewport
    */
-  private cullInvisibleNodes(nodes: Node, )
+  private cullInvisibleNodes(nodes: Node, (
     viewport: Viewport,
     canvasSize: { width: number; height: number }
   ): Node {
@@ -235,9 +239,9 @@ export class CanvasOptimizer {
   /**
    * Throttled render function
    */
-  createThrottledRenderer<T extends (...args: any) => void>((;)
-  fn: T,
-    delay: number = this.config.renderDebounce,
+  createThrottledRenderer<T extends (...args: any) => void>((;(
+    fn: T,
+    delay: number = this.config.renderDebounce
   ): T {
   let timeoutId: NodeJS.Timeout;
   let lastArgs: Parameters<T>;
@@ -325,9 +329,11 @@ export class CanvasOptimizer {
  * Performance monitoring component
  */
 
+}
 export interface PerformanceMonitorProps {
   optimizer: CanvasOptimizer;
   visible?: boolean;
+}
 }
 export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({ optimizer, visible = true }) => {
   const [metrics, setMetrics] = React.useState<PerformanceMetrics>(optimizer.getMetrics());

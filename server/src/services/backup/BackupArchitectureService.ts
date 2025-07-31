@@ -60,6 +60,7 @@ export type EncryptionAlgorithm = 'none' | 'aes256' | 'aes128' | 'chacha20';
 // =============================================================================
 
 }
+}
 export interface BackupJob {
   job_id: string;
   policy_id: string;
@@ -75,6 +76,7 @@ export interface BackupJob {
     include_patterns?: string[];
     exclude_patterns?: string[];
     filter_conditions?: Record<string, any>;
+}
 }
   };
   
@@ -120,6 +122,7 @@ export interface BackupJob {
   next_execution_at?: Date;
 }
 
+}
 }
 export interface BackupExecution {
   execution_id: string;
@@ -167,7 +170,9 @@ export interface BackupExecution {
   executed_by: string;
 }
 }
+}
 
+}
 }
 export interface BackupValidationResult {
   validation_id: string;
@@ -180,6 +185,7 @@ export interface BackupValidationResult {
     check_name: string;
     check_result: 'pass' | 'fail' | 'warning';
     check_details?: string;
+}
 }
   }[];
   
@@ -196,6 +202,7 @@ export interface BackupValidationResult {
 }
 
 }
+}
 export interface BackupError {
   error_id: string;
   error_code: string;
@@ -208,7 +215,9 @@ export interface BackupError {
   occurred_at: Date;
 }
 }
+}
 
+}
 }
 export interface BackupWarning {
   warning_id: string;
@@ -220,7 +229,9 @@ export interface BackupWarning {
   occurred_at: Date;
 }
 }
+}
 
+}
 }
 export interface StorageManifest {
   manifest_id: string;
@@ -240,6 +251,7 @@ export interface StorageManifest {
     compression_algorithm: CompressionAlgorithm;
     encryption_status: boolean;
     created_at: Date;
+}
 }
   }[];
   
@@ -261,9 +273,11 @@ export interface StorageManifest {
 }
 
 }
+}
 export interface BackupArchitectureMetrics {
   metrics_id: string;
   collection_timestamp: Date;
+}
 }
   time_period: { start: Date; end: Date };
   

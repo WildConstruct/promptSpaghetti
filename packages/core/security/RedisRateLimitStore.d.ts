@@ -5,11 +5,13 @@
  */
 import { RateLimitStore, RateLimitData } from './RateLimiter';
 
+}
 export interface RedisClient {
     get(key: string): Promise<string | null>;
     set(key: string, value: string, options?: {)
         EX?: number;
         PX?: number;
+}
     }): Promise<string | null>;
     incr(key: string): Promise<number>;
     expire(key: string, seconds: number): Promise<number>;
@@ -24,6 +26,7 @@ export interface RedisClient {
         count?: number;
     }): AsyncIterable<string[]>;
 
+}
 export interface RedisRateLimitConfig {
     keyPrefix?: string;
     client: RedisClient;
@@ -55,6 +58,7 @@ export declare class RedisRateLimitStore implements RateLimitStore {
     increment(key: string, windowMs: number): Promise<{
         hits: number;
         resetTime: Date;
+}
     }>;
     /**
      * Reset rate limit for a key
@@ -100,7 +104,7 @@ export declare class RedisConnectionFactory {
      * Create Redis cluster client
      */
     static createClusterClient(_config: {)
-        nodes: Array<{,
+        nodes: Array<{
             host: string;
             port: number;
         }>;

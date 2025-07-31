@@ -9,9 +9,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
 
+}
 export interface DirectorAnalyticsViewProps {
   conversionData: unknown;
   performanceData: unknown;
+}
   timeRange: { startTime: number; endTime: number };
   userId?: number;
   loading: boolean;

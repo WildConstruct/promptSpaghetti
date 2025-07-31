@@ -4,6 +4,7 @@
  */
 import React, { useState } from 'react';
 import { ActivityEventFilter } from '../../types/workspace';
+}
 interface ActivityFiltersProps {
   filters: ActivityEventFilter;
   eventTypes: string;
@@ -14,6 +15,7 @@ interface ActivityFiltersProps {
   eventTypes,
   onFilterChange,
   className = ''
+}
 }) => {
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [dateRange, setDateRange] = useState({)

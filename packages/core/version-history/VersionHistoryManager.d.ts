@@ -3,6 +3,7 @@
  * Manages version snapshots, branching, and change tracking for projects
  */
 
+}
 export interface VersionSnapshot {
     id: string;
     project_id: string;
@@ -27,6 +28,7 @@ export interface VersionSnapshot {
     workflow_state: string;
     approval_status?: string;
 
+}
 export interface VersionDiff {
     id: string;
     from_snapshot_id: string;
@@ -40,10 +42,12 @@ export interface VersionDiff {
         removed: number;
         modified: number;
         complexity: number;
+}
     };
     similarity_score: number;
     created_at: string;
 
+}
 export interface Branch {
     id: string;
     project_id: string;
@@ -61,6 +65,7 @@ export interface Branch {
     visibility: 'private' | 'workspace' | 'public';
     total_commits: number;
 
+}
 export interface ChangeEvent {
     id: string;
     project_id: string;
@@ -81,6 +86,7 @@ export interface ChangeEvent {
     workflow_state?: string;
     approval_required: boolean;
 
+}
 export interface VersionAnnotation {
     id: string;
     snapshot_id: string;
@@ -97,11 +103,13 @@ export interface VersionAnnotation {
     target_coordinates?: {
         x: number;
         y: number;
+}
     };
     resolved_by?: string;
     resolved_at?: string;
     resolution_note?: string;
 
+}
 export interface VersionHistoryFilter {
     branch_name?: string;
     author_id?: string;
@@ -112,6 +120,7 @@ export interface VersionHistoryFilter {
     offset?: number;
     include_annotations?: boolean;
 
+}
 export interface SnapshotCreationOptions {
     title?: string;
     description?: string;
@@ -135,6 +144,7 @@ export declare class VersionHistoryManager {
     getSnapshots(filter?: VersionHistoryFilter): Promise<{
         snapshots: VersionSnapshot[];
         total: number;
+}
     }>;
     getSnapshot(snapshotId: string): Promise<VersionSnapshot>;
     getSnapshotData(snapshotId: string): Promise<any>;
@@ -195,15 +205,15 @@ export declare class VersionHistoryManager {
         total_snapshots: number;
         total_branches: number;
         total_changes: number;
-        most_active_authors: Array<{,
+        most_active_authors: Array<{
             author_id: string;
             change_count: number;
         }>;
-        change_frequency: Array<{,
+        change_frequency: Array<{
             date: string;
             count: number;
         }>;
-        branch_activity: Array<{,
+        branch_activity: Array<{
             branch_name: string;
             snapshot_count: number;
         }>;

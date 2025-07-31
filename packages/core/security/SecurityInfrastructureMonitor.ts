@@ -10,6 +10,7 @@ import { EventEmitter } from 'events';
 import * as os from 'os';
 import * as fs from 'fs/promises';
 
+}
 export interface InfrastructureComponent {
   id: string;
   name: string;
@@ -24,6 +25,7 @@ export interface InfrastructureComponent {
   region: string;
   availability_zone?: string;
   tags: Record<string, string>;
+}
 };
   // Monitoring settings
   monitoring: {
@@ -72,6 +74,7 @@ export interface InfrastructureComponent {
   last_updated: number;
   enabled: boolean;
 }
+}
 export interface HealthCheckConfig {
   id: string;
   name: string;
@@ -87,6 +90,7 @@ export interface HealthCheckConfig {
   script_path?: string;
   threshold_value?: number;
   threshold_unit?: string;
+}
 };
   // Check behavior
   success_criteria: {
@@ -96,6 +100,7 @@ export interface HealthCheckConfig {
 };
   enabled: boolean;
   weight: number; // Impact on overall health score (0-1)
+}
 }
 export interface CustomMetricConfig {
   id: string;
@@ -108,6 +113,7 @@ export interface CustomMetricConfig {
   source: string;
   parsing_rule?: string;
   aggregation_method?: 'sum' | 'avg' | 'min' | 'max' | 'count'
+}
   };
   // Alerting thresholds
   thresholds: {
@@ -117,6 +123,7 @@ export interface CustomMetricConfig {
   };
   unit: string;
   enabled: boolean;
+}
 }
 export interface AlertThreshold {
   id: string;
@@ -128,10 +135,12 @@ export interface AlertThreshold {
   value_max?: number; // For 'between' conditions,
   duration_minutes?: number; // How long condition must persist,
   evaluation_window_minutes?: number; // Time window for evaluation,
+}
 };
   severity: 'info' | 'warning' | 'critical';
   enabled: boolean;
   priority: number;
+}
 }
 export interface NotificationChannel {
   id: string;
@@ -145,6 +154,7 @@ export interface NotificationChannel {
   phone_numbers?: string;
   channel_id?: string;
   template?: string;
+}
 };
   // Filtering and routing
   routing: {
@@ -166,16 +176,18 @@ export interface NotificationChannel {
 };
   enabled: boolean;
 }
+}
 export interface EscalationPolicy {
   id: string;
   name: string;
   description: string;
   // Escalation rules
-  escalation_levels: Array<{,
+  escalation_levels: Array<{
   level: number;
   delay_minutes: number;
   notification_channels: string;
   actions: EscalationAction;
+}
 }>;
   // Trigger conditions
   trigger_conditions: {
@@ -193,11 +205,14 @@ export interface EscalationPolicy {
   enabled: boolean;
   priority: number;
 }
+}
 export interface EscalationAction {
   action_type: 'notify_oncall' | 'create_incident' | 'run_automation' | 'scale_resources' | 'failover' | 'custom_webhook';
   parameters: Record<string, any>;
   timeout_minutes?: number;
   retry_attempts?: number;
+}
+}
 }
 export interface SuppressionRule {
   id: string;
@@ -209,6 +224,7 @@ export interface SuppressionRule {
   alert_patterns: string;
   severity_levels: ('info' | 'warning' | 'critical')[];
   maintenance_windows?: MaintenanceWindow;
+}
 };
   // Suppression behavior
   behavior: {
@@ -227,6 +243,7 @@ export interface SuppressionRule {
   enabled: boolean;
   priority: number;
 }
+}
 export interface MaintenanceWindow {
   id: string;
   name: string;
@@ -237,12 +254,14 @@ export interface MaintenanceWindow {
   timezone: string;
   recurring: boolean;
   recurrence_pattern?: string;
+}
 };
   affected_components: string;
   suppress_all_alerts: boolean;
   alternative_monitoring: boolean;
   created_by: string;
   created_at: number;
+}
 }
 export interface InfrastructureMetrics {
   component_id: string;
@@ -259,6 +278,7 @@ export interface InfrastructureMetrics {
   load_average_1m: number;
   load_average_5m: number;
   load_average_15m: number;
+}
 };
   // Application metrics
   application?: {
@@ -285,6 +305,7 @@ export interface InfrastructureMetrics {
   // Custom metrics
   custom_metrics: Record<string, number>;
 }
+}
 export interface InfrastructureAlert {
   id: string;
   component_id: string;
@@ -304,6 +325,7 @@ export interface InfrastructureAlert {
   affected_services: string;
   root_cause_analysis?: string;
   impact_assessment: 'none' | 'low' | 'medium' | 'high' | 'critical'
+}
   };
   // Resolution tracking
   resolution: {
@@ -321,7 +343,7 @@ export interface InfrastructureAlert {
   escalation: {
   escalated: boolean;
   escalation_level: number;
-  escalation_history: Array<{,
+  escalation_history: Array<{
   level: number;
   escalated_at: number;
   escalated_to: string;
@@ -336,6 +358,7 @@ export interface InfrastructureAlert {
   suppressed: boolean;
   suppression_reason?: string;
 };
+}
 }
 export interface InfrastructureEvent {
   id: string;
@@ -352,6 +375,7 @@ export interface InfrastructureEvent {
   triggered_by?: string;
   correlation_id?: string;
   tags: Record<string, string>;
+}
 };
   // Impact assessment
   impact: {
@@ -368,6 +392,7 @@ export interface InfrastructureEvent {
   lessons_learned?: string;
 };
 }
+}
 export interface MonitoringReport {
   report_id: string;
   generated_at: number;
@@ -375,6 +400,7 @@ export interface MonitoringReport {
   start_time: number;
   end_time: number;
   duration_hours: number;
+}
 };
   // Overall health summary
   health_summary: {
@@ -406,7 +432,7 @@ export interface MonitoringReport {
   false_positive_rate_percent: number;
 };
   // Top issues
-  top_issues: Array<{,
+  top_issues: Array<{
   component_id: string;
   component_name: string;
   issue_type: string;
@@ -477,6 +503,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
       }, 900000);
   // Component registration and management
   async registerComponent(component: Omit<InfrastructureComponent, 'id' | 'created_at' | 'status'>): Promise<string> {
+
     const componentId = `comp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
     const newComponent: InfrastructureComponent = {
   ...component,
@@ -500,6 +527,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
     this.emit('component_registered', componentId, newComponent);
     return componentId;
   async updateComponent(componentId: string, updates: Partial<InfrastructureComponent>): Promise<void> {
+
     const component = this.components.get(componentId);
     if (!component) {
       throw new Error(`Component ${componentId} not found`);}
@@ -550,6 +578,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
       this.metricsCollectionIntervals.delete(metricsInterval);
   // Health checking implementation
   private async performComponentHealthCheck(componentId: string): Promise<void> {
+
     const component = this.components.get(componentId);
     if (!component) return;
     const startTime = Date.now();
@@ -589,10 +618,11 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
         responseTime: Date.now() - startTime,
         error: error instanceof Error ? error.message : String(error);
   });
-  private async executeHealthCheck(()
+  private async executeHealthCheck(((
     componentId: string,
-    healthCheck: HealthCheckConfig,
+    healthCheck: HealthCheckConfig
   ): Promise<{ check: HealthCheckConfig; success: boolean; responseTime: number; error?: string }> {
+
     const startTime = Date.now();
     const component = this.components.get(componentId)!;
     try {
@@ -657,10 +687,11 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
   error: error instanceof Error ? error.message : String(error),
 };
   // Individual health check implementations
-  private async performHttpHealthCheck(()
+  private async performHttpHealthCheck(((
     component: InfrastructureComponent,
-    healthCheck: HealthCheckConfig,
+    healthCheck: HealthCheckConfig
   ): Promise<{ success: boolean; error?: string }> {
+
     // Simulate HTTP health check
     const endpoint = healthCheck.parameters.endpoint || `http://${component.configuration.hostname}:${component.configuration.port || 80}/health`;}
         const expectedResponseTime = healthCheck.parameters.expected_response_time_ms || 5000;
@@ -672,34 +703,39 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
     if (responseTime > expectedResponseTime) {
       return { success: false, error: `Response time ${responseTime}ms exceeds threshold ${expectedResponseTime}ms` };}
     return { success: true };
-  private async performTcpHealthCheck(()
+  private async performTcpHealthCheck(((
     component: InfrastructureComponent,
-    healthCheck: HealthCheckConfig,
+    healthCheck: HealthCheckConfig
   ): Promise<boolean> {
+
     // Simulate TCP connection test
     return Math.random() > 0.02; // 98% success rate
-  private async performPingHealthCheck(()
+  private async performPingHealthCheck(((
     component: InfrastructureComponent,
-    healthCheck: HealthCheckConfig,
+    healthCheck: HealthCheckConfig
   ): Promise<boolean> {
+
     // Simulate ping test
     return Math.random() > 0.01; // 99% success rate
-  private async performDnsHealthCheck(()
+  private async performDnsHealthCheck(((
     component: InfrastructureComponent,
-    healthCheck: HealthCheckConfig,
+    healthCheck: HealthCheckConfig
   ): Promise<boolean> {
+
     // Simulate DNS resolution test
     return Math.random() > 0.005; // 99.5% success rate
-  private async performSslCertHealthCheck(()
+  private async performSslCertHealthCheck(((
     component: InfrastructureComponent,
-    healthCheck: HealthCheckConfig,
+    healthCheck: HealthCheckConfig
   ): Promise<boolean> {
+
     // Simulate SSL certificate validation
     return Math.random() > 0.01; // 99% success rate
-  private async performDiskSpaceHealthCheck(()
+  private async performDiskSpaceHealthCheck(((
     component: InfrastructureComponent,
-    healthCheck: HealthCheckConfig,
+    healthCheck: HealthCheckConfig
   ): Promise<{ success: boolean; error?: string }> {
+
     // Simulate disk space check
     const currentUsage = Math.random() * 100; // 0-100%;
     const threshold = healthCheck.parameters.threshold_value || 85;
@@ -709,10 +745,11 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
         error: `Disk usage ${currentUsage.toFixed(1)}% exceeds threshold ${threshold}%` }
       };
     return { success: true };
-  private async performMemoryHealthCheck(()
+  private async performMemoryHealthCheck(((
     component: InfrastructureComponent,
-    healthCheck: HealthCheckConfig,
+    healthCheck: HealthCheckConfig
   ): Promise<{ success: boolean; error?: string }> {
+
     // Simulate memory usage check
     const currentUsage = Math.random() * 100; // 0-100%;
     const threshold = healthCheck.parameters.threshold_value || 90;
@@ -722,10 +759,11 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
         error: `Memory usage ${currentUsage.toFixed(1)}% exceeds threshold ${threshold}%` }
       };
     return { success: true };
-  private async performCpuHealthCheck(()
+  private async performCpuHealthCheck(((
     component: InfrastructureComponent,
-    healthCheck: HealthCheckConfig,
+    healthCheck: HealthCheckConfig
   ): Promise<{ success: boolean; error?: string }> {
+
     // Simulate CPU usage check
     const currentUsage = Math.random() * 100; // 0-100%;
     const threshold = healthCheck.parameters.threshold_value || 95;
@@ -735,16 +773,18 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
         error: `CPU usage ${currentUsage.toFixed(1)}% exceeds threshold ${threshold}%` }
       };
     return { success: true };
-  private async performProcessHealthCheck(()
+  private async performProcessHealthCheck(((
     component: InfrastructureComponent,
-    healthCheck: HealthCheckConfig,
+    healthCheck: HealthCheckConfig
   ): Promise<boolean> {
+
     // Simulate process existence check
     return Math.random() > 0.02; // 98% success rate
-  private async performCustomScriptHealthCheck(()
+  private async performCustomScriptHealthCheck(((
     component: InfrastructureComponent,
-    healthCheck: HealthCheckConfig,
+    healthCheck: HealthCheckConfig
   ): Promise<{ success: boolean; error?: string }> {
+
     // Simulate custom script execution
     const success = Math.random() > 0.03; // 97% success rate;
     if (!success) {
@@ -767,6 +807,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
     return { status, avgResponseTime, performanceScore: Math.round(performanceScore) };
   // Metrics collection
   private async collectComponentMetrics(componentId: string): Promise<void> {
+
     const component = this.components.get(componentId);
     if (!component) return;
     try {
@@ -802,6 +843,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
     } catch (error) {
       console.error(`Metrics collection failed for component ${componentId}:`, error);}
   private async collectSystemMetrics(component: InfrastructureComponent): Promise<InfrastructureMetrics['system']> {
+
   // Simulate system metrics collection
   return {
   cpu_usage_percent: Math.random() * 80 + 10, // 10-90%,
@@ -816,6 +858,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
   load_average_15m: Math.random() * 2 + 0.5 // 0.5-2.5,
 };
   private async collectApplicationMetrics(component: InfrastructureComponent): Promise<InfrastructureMetrics['application']> {
+
   // Simulate application metrics collection
   return {
   request_rate_per_second: Math.random() * 1000 + 10, // 10-1010 req/s,
@@ -828,6 +871,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
   gc_time_ms: Math.random() * 100 + 5 // 5-105ms,
 };
   private async collectDatabaseMetrics(component: InfrastructureComponent): Promise<InfrastructureMetrics['database']> {
+
   // Simulate database metrics collection
   return {
   connections_active: Math.floor(Math.random() * 50 + 5), // 5-55 connections,
@@ -840,6 +884,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
   index_hit_ratio: 0.85 + Math.random() * 0.14 // 85-99%,
 };
   private async collectCustomMetric(component: InfrastructureComponent, config: CustomMetricConfig): Promise<number> {
+
     // Simulate custom metric collection based on type
     switch (config.metric_type) {
       case 'gauge':
@@ -858,6 +903,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
     newStatus: InfrastructureComponent['status']['health_status'],
     healthCheckResults: Array<{ check: HealthCheckConfig; success: boolean; responseTime: number; error?: string }>
   ): Promise<void> {
+
     const component = this.components.get(componentId)!;
     const failedChecks = healthCheckResults.filter(r => !r.success);
     let severity: InfrastructureAlert['severity'];
@@ -880,10 +926,11 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
       const alert = this.getAlert(alertId);
       if (alert) {
         alert.context.root_cause_analysis = failedChecks.map(f => `${f.check.name}: ${f.error || 'Check failed'}`).join('; ');}
-  private async generateHealthCheckAlert(()
+  private async generateHealthCheckAlert(((
     componentId: string,
     result: { check: HealthCheckConfig; success: boolean; responseTime: number; error?: string }
   ): Promise<void> {
+
     if (result.success) return;
     const component = this.components.get(componentId)!;
     await this.generateAlert(componentId, {)
@@ -902,6 +949,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
   impact_assessment: result.check.weight > 0.7 ? 'high' : 'medium',
 });
   private async checkThresholdAlerts(componentId: string, metrics: InfrastructureMetrics): Promise<void> {
+
     const component = this.components.get(componentId)!;
     for (const threshold of component.alerting.alert_thresholds) {
       if (!threshold.enabled) continue;
@@ -1005,6 +1053,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
       case 'not_between': return true; // Would need threshold.condition.value_max
       default: return false;
   private async generateAlert(componentId: string, alertData: Partial<InfrastructureAlert>): Promise<string> {
+
     const alertId = `alert_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
     const alert: InfrastructureAlert = {,
   id: alertId,
@@ -1091,12 +1140,14 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
     // In a real implementation, this would track actual notification counts
     return Math.random() > 0.1; // 90% pass rate for simulation
   private async sendNotification(alert: InfrastructureAlert, channel: NotificationChannel): Promise<void> {
+
     // Simulate notification sending
     console.log(`Sending ${alert.severity} alert via ${channel.type}: ${alert.title}`);}
     // In a real implementation, this would integrate with actual notification services
     const delay = Math.random() * 1000 + 100; // 100-1100ms delay;
     await new Promise(resolve => setTimeout(resolve, delay));
   private async checkEscalationPolicies(alert: InfrastructureAlert, component: InfrastructureComponent): Promise<void> {
+
     for (const policy of component.alerting.escalation_policies) {
       if (!policy.enabled) continue;
       if (this.matchesEscalationPolicy(alert, policy)) {
@@ -1139,6 +1190,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
 });
     this.emit('alert_escalated', alert, policy, currentLevel);
   private async executeEscalationAction(alert: InfrastructureAlert, action: EscalationAction): Promise<void> {
+
     switch (action.action_type) {
       case 'notify_oncall':
         console.log(`Notifying on-call personnel for alert ${alert.id}`);}
@@ -1193,8 +1245,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
   return false;
   return true;
   // Availability tracking
-  private async updateAvailabilityMetrics(()
-  componentId: string,
+  private async updateAvailabilityMetrics((componentId: string,
   status: InfrastructureComponent['status']['health_status']): Promise<void> {,
   const component = this.components.get(componentId);
   if (!component) return;
@@ -1215,6 +1266,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
   availability_30d: availability30d,
 });
   private async calculateAvailability(componentId: string, startTime: number, endTime: number): Promise<number> {
+
     // Simplified availability calculation
     // In a real implementation, this would analyze historical status data
     const baseAvailability = 95 + Math.random() * 4; // 95-99%;
@@ -1256,6 +1308,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
     this.emit('infrastructure_event', event);
   // Global monitoring and analysis
   private async performGlobalHealthCheck(): Promise<void> {
+
     const allComponents = Array.from(this.components.values());
     const healthyCount = allComponents.filter(c => c.status.health_status === 'healthy').length;
     const warningCount = allComponents.filter(c => c.status.health_status === 'warning').length;
@@ -1275,6 +1328,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
   overall_health_score: overallHealthScore,
 });
   private async generatePredictiveAlerts(): Promise<void> {
+
   // Analyze trends and generate predictive alerts
   for (const [componentId, componentMetrics] of this.metrics.entries()) {
   if (componentMetrics.length < 10) continue; // Need enough data points
@@ -1325,6 +1379,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
 };
   // Data cleanup and maintenance
   private async performDataCleanup(): Promise<void> {
+
   const now = Date.now();
   const metricsRetentionMs = this.globalConfig.metrics_retention_days * 24 * 60 * 60 * 1000;
   const cutoffTime = now - metricsRetentionMs;
@@ -1396,6 +1451,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
       if (alert) return alert;
     return undefined;
   async acknowledgeAlert(alertId: string, acknowledgedBy: string): Promise<void> {
+
     const alert = this.getAlert(alertId);
     if (!alert) {
       throw new Error(`Alert ${alertId} not found`);}
@@ -1404,6 +1460,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
     alert.resolution.acknowledged_at = Date.now();
     this.emit('alert_acknowledged', alert);
   async resolveAlert(alertId: string, resolvedBy: string, notes?: string): Promise<void> {
+
     const alert = this.getAlert(alertId);
     if (!alert) {
       throw new Error(`Alert ${alertId} not found`);}
@@ -1414,6 +1471,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
     alert.resolution.resolution_time_minutes = (Date.now() - alert.detected_at) / (1000 * 60);
     this.emit('alert_resolved', alert);
   async createMaintenanceWindow(window: Omit<MaintenanceWindow, 'id' | 'created_at'>): Promise<string> {
+
     const windowId = `maint_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
     const maintenanceWindow: MaintenanceWindow = {
   ...window,
@@ -1424,6 +1482,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
     this.emit('maintenance_window_created', maintenanceWindow);
     return windowId;
   async generateMonitoringReport(hours: number = 24): Promise<MonitoringReport> {
+
     const endTime = Date.now();
     const startTime = endTime - hours * 60 * 60 * 1000;
     const reportId = `report_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
@@ -1586,12 +1645,14 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
 };
   // Cleanup and shutdown
   async performMaintenance(): Promise<void> {
+
   await this.performDataCleanup();
   this.emit('maintenance_completed', {)
   completed_at: Date.now(),
   components_processed: this.components.size,
 });
   async shutdown(): Promise<void> {
+
     // Stop all monitoring intervals
     for (const interval of this.monitoringIntervals.values()) {
       clearInterval(interval);

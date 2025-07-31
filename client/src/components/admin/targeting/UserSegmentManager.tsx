@@ -19,6 +19,7 @@ import { Badge } from '../../common/Badge';
 import { LoadingSpinner } from '../../common/LoadingSpinner';
 import { TargetingRuleBuilder } from './TargetingRuleBuilder';
 import './TargetingRuleBuilder.css';
+}
 interface TargetingRule {
   id: string;,
   attribute: string;
@@ -45,6 +46,7 @@ interface TargetingRule {
   // const [testingSegment, setTestingSegment] = useState<string | null>(null); // TODO: Implement segment testing feature,
   useEffect(() => {
   fetchSegments();
+}
 }, []);
   const fetchSegments = async () => {
   setLoading(true);
@@ -341,10 +343,12 @@ interface TargetingRule {
 };
 
 // Segment Creation/Edit Modal
+}
 interface SegmentModalProps {
   segment?: UserSegment | null;
   onClose: () => void;,
   onSave: (segment: UserSegment) => void;,
+}
   onTestRules: (rules: TargetingRule) => Promise<{ matches: boolean; userCount: number }>;
 const SegmentModal: React.FC<SegmentModalProps> = ({)
   segment,

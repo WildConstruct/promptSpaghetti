@@ -38,6 +38,7 @@ export {
   VersionStatus
 };
 
+}
 export interface PolicyPreviewConfig {
   enableStagingEnvironments: boolean;
   enableImpactSimulation: boolean;
@@ -47,6 +48,8 @@ export interface PolicyPreviewConfig {
   maxConcurrentPreviews: number;
   stagingEnvironments: StagingEnvironment;
   defaultValidations: ValidationType;
+}
+}
 }
 export interface StagingEnvironment {
   environmentId: string;
@@ -60,10 +63,13 @@ export interface StagingEnvironment {
   monitoringEnabled: boolean;
   features: EnvironmentFeature;
 }
+}
+}
 export interface EnvironmentFeature {
   feature: string;
   enabled: boolean;
   configuration: Record<string, any>;
+}
 }
 export enum EnvironmentType {
   DEVELOPMENT = 'DEVELOPMENT',
@@ -89,6 +95,8 @@ export enum EnvironmentType {
   userFeedback: UserFeedback;
   metadata: Record<string, any>;
 }
+}
+}
 export interface PreviewChange {
   changeId: string;
   section: string;
@@ -99,6 +107,7 @@ export interface PreviewChange {
   impactLevel: 'low' | 'medium' | 'high' | 'critical';
   userVisible: boolean;
   requiresConsent: boolean;
+}
 }
 export enum PreviewStatus {
   DRAFT = 'DRAFT',
@@ -120,6 +129,7 @@ export enum PreviewStatus {
   rollbackTriggers: RollbackTrigger;
   autoRollbackEnabled: boolean;
 }
+}
 export enum StagingDeploymentStatus {
   DEPLOYING = 'DEPLOYING',
   ACTIVE = 'ACTIVE',
@@ -139,6 +149,8 @@ export enum StagingDeploymentStatus {
   accessibilityScore: number;
   securityScore: number;
 }
+}
+}
 export interface StagingIssue {
   issueId: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -148,6 +160,7 @@ export interface StagingIssue {
   affectedUsers: string;
   resolution?: IssueResolution;
   status: IssueStatus;
+}
 }
 export enum IssueCategory {
   LEGAL = 'LEGAL',
@@ -170,12 +183,15 @@ export enum IssueCategory {
   changeRequired: boolean;
   fixApplied: boolean;
 }
+}
+}
 export interface RollbackTrigger {
   triggerType: RollbackTriggerType;
   threshold: number;
   description: string;
   enabled: boolean;
   conditions: string;
+}
 }
 export enum RollbackTriggerType {
   ERROR_RATE = 'ERROR_RATE',
@@ -196,6 +212,8 @@ export enum RollbackTriggerType {
   validatedAt: Date;
   validatorInfo: ValidatorInfo;
 }
+}
+}
 export interface ValidationFinding {
   findingId: string;
   severity: 'info' | 'warning' | 'error' | 'critical';
@@ -206,11 +224,15 @@ export interface ValidationFinding {
   suggestion?: string;
   autoFixable: boolean;
 }
+}
+}
 export interface ValidatorInfo {
   validatorId: string;
   validatorType: 'automated' | 'human' | 'hybrid';
   version: string;
   credentials?: string;
+}
+}
 }
 export interface ImpactSimulation {
   simulationId: string;
@@ -221,6 +243,8 @@ export interface ImpactSimulation {
   duration: number; // minutes,
   methodology: string;
 }
+}
+}
 export interface SimulationScenario {
   scenarioId: string;
   name: string;
@@ -230,17 +254,23 @@ export interface SimulationScenario {
   simulatedActions: SimulatedAction;
   expectedOutcomes: ExpectedOutcome;
 }
+}
+}
 export interface SimulatedAction {
   action: string;
   parameters: Record<string, any>;
   expectedResponse: string;
   timing: number; // seconds from start,
 }
+}
+}
 export interface ExpectedOutcome {
   metric: string;
   expectedValue: number;
   tolerance: number;
   critical: boolean;
+}
+}
 }
 export interface SimulationResult {
   scenarioId: string;
@@ -251,12 +281,16 @@ export interface SimulationResult {
   failedTests: number;
   recommendations: string;
 }
+}
+}
 export interface ActualOutcome {
   metric: string;
   actualValue: number;
   expectedValue: number;
   variance: number;
   acceptable: boolean;
+}
+}
 }
 export interface OutcomeDeviation {
   metric: string;
@@ -265,6 +299,8 @@ export interface OutcomeDeviation {
   description: string;
   impact: string;
   recommendedAction: string;
+}
+}
 }
 export interface UserFeedback {
   feedbackId: string;
@@ -277,6 +313,7 @@ export interface UserFeedback {
   submittedAt: Date;
   processed: boolean;
   actionRequired: boolean;
+}
 }
 export enum FeedbackType {
   USABILITY = 'USABILITY',
@@ -303,17 +340,23 @@ export enum FeedbackType {
   userJourney: UserJourneyStep;
   conversionFunnel: ConversionStep;
 }
+}
+}
 export interface DropOffPoint {
   section: string;
   dropOffRate: number;
   userCount: number;
   commonReasons: string;
 }
+}
+}
 export interface HeatmapData {
   element: string;
   interactionType: string;
   frequency: number;
+}
   coordinates: { x: number; y: number };
+}
 }
 export interface UserJourneyStep {
   step: number;
@@ -322,12 +365,16 @@ export interface UserJourneyStep {
   averageTime: number;
   successRate: number;
 }
+}
+}
 export interface ConversionStep {
   stepName: string;
   usersEntered: number;
   usersCompleted: number;
   conversionRate: number;
   averageTime: number;
+}
+}
 }
 export interface PolicyComparisonReport {
   comparisonId: string;
@@ -339,6 +386,8 @@ export interface PolicyComparisonReport {
   complianceComparison: ComplianceComparison;
   generatedAt: Date;
 }
+}
+}
 export interface PolicyDifference {
   section: string;
   type: 'added' | 'removed' | 'modified' | 'moved';
@@ -348,19 +397,25 @@ export interface PolicyDifference {
   userVisible: boolean;
   legalImplications: string;
 }
+}
+}
 export interface ComparisonImpactAnalysis {
   overallRisk: RiskLevel;
   affectedUserSegments: string;
   requiredActions: RequiredAction;
   timelineRecommendations: TimelineRecommendation;
   rollbackComplexity: 'simple' | 'moderate' | 'complex' | 'very_complex'
+}
   }
+}
 export interface RequiredAction {
   action: string;
   priority: UpdatePriority;
   deadline: Date;
   responsible: string;
   dependencies: string;
+}
+}
 }
 export interface TimelineRecommendation {
   phase: string;
@@ -369,12 +424,16 @@ export interface TimelineRecommendation {
   dependencies: string;
   risks: string;
 }
+}
+}
 export interface UserImpactAssessment {
   totalAffectedUsers: number;
   segmentBreakdown: SegmentImpact;
   communicationRequirements: CommunicationRequirement;
   trainingRequirements: TrainingRequirement;
   supportTicketEstimate: number;
+}
+}
 }
 export interface SegmentImpact {
   segment: string;
@@ -383,13 +442,17 @@ export interface SegmentImpact {
   specificChanges: string;
   requiredActions: string;
 }
+}
+}
 export interface CommunicationRequirement {
   channel: string;
   audience: string;
   message: string;
   timing: string;
   priority: 'low' | 'medium' | 'high' | 'urgent'
+}
   }
+}
 export interface TrainingRequirement {
   audience: string;
   trainingType: string;
@@ -397,12 +460,16 @@ export interface TrainingRequirement {
   materials: string;
   deadline: Date;
 }
+}
+}
 export interface ComplianceComparison {
   frameworks: FrameworkComparison;
   overallComplianceChange: 'improved' | 'maintained' | 'degraded';
   newRequirements: string;
   removedRequirements: string;
   modifiedRequirements: string;
+}
+}
 }
 export interface FrameworkComparison {
   framework: string;
@@ -414,6 +481,7 @@ export interface FrameworkComparison {
   /**
   * Main Policy Preview and Staging Service
   */
+}
 }
 export class PolicyPreviewStagingService extends EventEmitter {
   private config: PolicyPreviewConfig;
@@ -427,7 +495,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
   /**
    * Create a new policy preview with staging capabilities
    */
-  public async createPolicyPreview()
+  public async createPolicyPreview(
     policyId: string,
     baseVersion: string,
     changes: PreviewChange,
@@ -439,6 +507,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
       enableSimulation?: boolean;
       targetEnvironments?: string;
   ): Promise<PolicyPreview> {
+
     const previewId = this.generatePreviewId();
     const expiresAt = new Date(Date.now() + (options.expirationDays || this.config.previewRetentionDays) * 24 * 60 * 60 * 1000);
     const preview: PolicyPreview = {
@@ -479,7 +548,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
   /**
    * Deploy preview to staging environment
    */
-  public async deployToStaging()
+  public async deployToStaging(
     previewId: string,
     environmentId: string,
     options: {
@@ -488,6 +557,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
   monitoringDuration?: number; // hours,
 } = {}
   ): Promise<StagingDeployment> {
+
   const preview = this.activePreviews.get(previewId);
   if (!preview) {
   throw new Error('Preview not found');
@@ -545,10 +615,11 @@ export class PolicyPreviewStagingService extends EventEmitter {
   /**
    * Run comprehensive validation on policy preview
    */
-  public async runValidations(()
+  public async runValidations(((
     preview: PolicyPreview,
-    validationTypes: ValidationType,
+    validationTypes: ValidationType
   ): Promise<PreviewValidationResult> {
+
   const results: PreviewValidationResult = [];
   for (const validationType of validationTypes) {
   const result = await this.executeValidation(preview, validationType);
@@ -564,7 +635,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
   /**
    * Generate policy comparison report
    */
-  public async generateComparisonReport()
+  public async generateComparisonReport(
     baseVersion: string,
     compareVersion: string,
     policyId: string): Promise<PolicyComparisonReport> {,
@@ -593,7 +664,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
   /**
    * Collect user feedback for preview
    */
-  public async collectUserFeedback()
+  public async collectUserFeedback(
     previewId: string,
     userId: string,
     feedback: {
@@ -630,6 +701,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
    * Get preview analytics
    */
   public async getPreviewAnalytics(previewId: string): Promise<PreviewAnalytics> {
+
     const preview = this.activePreviews.get(previewId);
     if (!preview) {
       throw new Error('Preview not found');
@@ -638,13 +710,14 @@ export class PolicyPreviewStagingService extends EventEmitter {
   /**
    * Promote preview to production
    */
-  public async promoteToProduction()
+  public async promoteToProduction(
     previewId: string,
     options: {
   approvedBy: string;
       effectiveDate: Date;
       rolloutStrategy?: string;
   ): Promise<{ promoted: boolean; productionVersion: string }> {
+
     const preview = this.activePreviews.get(previewId);
     if (!preview) {
       throw new Error('Preview not found');
@@ -678,10 +751,11 @@ export class PolicyPreviewStagingService extends EventEmitter {
   /**
    * Rollback staging deployment
    */
-  public async rollbackStagingDeployment()
+  public async rollbackStagingDeployment(
     deploymentId: string,
     reason: string,
     triggeredBy: string): Promise<{ success: boolean }> {
+
   const deployment = this.stagingDeployments.get(deploymentId);
   if (!deployment) {
   throw new Error('Staging deployment not found');
@@ -710,6 +784,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
       throw error;
   // Private implementation methods...
   private async runImpactSimulation(preview: PolicyPreview): Promise<ImpactSimulation> {
+
   // Implementation would create realistic simulation scenarios
   const simulationId = this.generateSimulationId();
   return {
@@ -721,10 +796,11 @@ export class PolicyPreviewStagingService extends EventEmitter {
   duration: 30,
   methodology: 'Monte Carlo simulation with user behavior modeling',
 };
-  private async executeValidation(()
+  private async executeValidation(((
     preview: PolicyPreview,
-    validationType: ValidationType,
+    validationType: ValidationType
   ): Promise<PreviewValidationResult> {
+
   const validationId = this.generateValidationId();
   // Implementation would run specific validation based on type
   const findings: ValidationFinding = [];
@@ -758,6 +834,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
         version: '1.0.0';
   };
   private async executeStageDeployment(deployment: StagingDeployment, environment: StagingEnvironment): Promise<void> {
+
   // Implementation would handle actual staging deployment
   // This might involve updating configuration, deploying to test servers, etc.
   await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate deployment time
@@ -786,12 +863,14 @@ export class PolicyPreviewStagingService extends EventEmitter {
 });
     }, durationHours * 60 * 60 * 1000);
   private async collectMetrics(deployment: StagingDeployment): Promise<void> {
+
     // Implementation would collect real metrics
     deployment.metrics.userInteractions += Math.floor(Math.random() * 10);
     deployment.metrics.consentRates = 0.85 + Math.random() * 0.1;
     deployment.metrics.errorRates = Math.random() * 0.05;
     deployment.metrics.userSatisfactionScore = 4.2 + Math.random() * 0.6;
   private async checkRollbackTriggers(deployment: StagingDeployment): Promise<void> {
+
     for (const trigger of deployment.rollbackTriggers) {
       if (!trigger.enabled) continue;
       let triggerValue = 0;
@@ -873,9 +952,9 @@ export class PolicyPreviewStagingService extends EventEmitter {
   }
   private async aggregateAnalytics(preview: PolicyPreview): Promise<PreviewAnalytics> { return {} as any; }
   private async validateProductionReadiness(preview: PolicyPreview): Promise<{ ready: boolean; reasons: string }> { return { ready: true, reasons: [] }; }
-  private async createProductionVersion(()
+  private async createProductionVersion(((
     preview: PolicyPreview,
-    options: any,
+    options: any
   ): Promise<string> { return `v${Date.now()}`; }
   private async cleanupStagingDeployments(preview: PolicyPreview): Promise<void> { /* Implementation */ }
   private async executeRollback(deployment: StagingDeployment): Promise<void> { /* Implementation */ }

@@ -8,7 +8,7 @@ export const panelArchetypeTemplate: NodeTemplate = {,
   id: "archetype-2",
   type: "logic",
   position: { x: 500, y: 50 },
-  data: {,
+  data: {
   label: "Panel Archetype",
   description: "Choose panel type: Cockpit, Bridge Console, Engineering Panel, etc.",
   category: "logic",

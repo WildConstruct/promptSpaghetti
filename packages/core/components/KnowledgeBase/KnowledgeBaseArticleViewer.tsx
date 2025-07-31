@@ -15,6 +15,7 @@ import {
   InteractiveElementType,
   AIRecommendation
 } from '../../services/Epic16KnowledgeBaseService';
+}
 interface KnowledgeBaseArticleViewerProps {
   article: KnowledgeBaseArticle;
   knowledgeService: Epic16KnowledgeBaseService;
@@ -38,6 +39,7 @@ interface KnowledgeBaseArticleViewerProps {
   userId,
   onArticleSelect,
   onClose
+}
 }) => {
   // State management
   const [viewerState, setViewerState] = useState<ViewerState>({)

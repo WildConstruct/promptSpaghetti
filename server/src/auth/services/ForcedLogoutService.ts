@@ -11,6 +11,7 @@ import { AuditService } from './AuditService';
 import { EmailService } from './EmailService';
 
 }
+}
 export interface ForcedLogoutRequest {
   id: string;
   targetUserId: string;
@@ -24,6 +25,7 @@ export interface ForcedLogoutRequest {
     description: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
     evidence?: string[];
+}
 }
   };
   
@@ -72,6 +74,7 @@ export interface ForcedLogoutRequest {
 }
 
 }
+}
 export interface LogoutPolicy {
   id: string;
   name: string;
@@ -86,6 +89,7 @@ export interface LogoutPolicy {
       operator: 'equals' | 'contains' | 'greater' | 'less' | 'matches';
       value: any;
       weight: number;
+}
 }
     }>;
     threshold: number; // Combined weight threshold for triggering
@@ -124,6 +128,7 @@ export interface LogoutPolicy {
 }
 
 }
+}
 export interface LogoutEvent {
   id: string;
   userId: string;
@@ -135,6 +140,7 @@ export interface LogoutEvent {
     source: string;
     requestId?: string;
     policyId?: string;
+}
 }
   };
   
@@ -171,6 +177,7 @@ export interface LogoutEvent {
   };
 }
 
+}
 }
 export interface LogoutStatistics {
   timeRange: { start: Date; end: Date };

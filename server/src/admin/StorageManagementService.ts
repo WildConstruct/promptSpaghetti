@@ -15,6 +15,7 @@ import { DataRetentionFrameworkService } from '../services/DataRetentionFramewor
 import { DataCategory } from '../types/DataRetentionPeriods';
 
 }
+}
 export interface StoragePool {
   poolId: string;
   name: string;
@@ -35,6 +36,7 @@ export interface StoragePool {
   lastOptimized?: Date;
   healthStatus: HealthStatus;
   tags: string[];
+}
 }
 }
 
@@ -72,6 +74,7 @@ export enum HealthStatus {
 }
 
 }
+}
 export interface StorageQuota {
   quotaId: string;
   resourceType: ResourceType;
@@ -89,6 +92,7 @@ export interface StorageQuota {
   exemptions: QuotaExemption[];
 }
 }
+}
 
 export enum ResourceType {
   USER = 'user',
@@ -102,6 +106,7 @@ export enum ResourceType {
 }
 
 }
+}
 export interface QuotaExemption {
   exemptionId: string;
   reason: string;
@@ -111,7 +116,9 @@ export interface QuotaExemption {
   createdAt: Date;
 }
 }
+}
 
+}
 }
 export interface StorageOptimization {
   optimizationId: string;
@@ -129,6 +136,7 @@ export interface StorageOptimization {
   errors: string[];
 }
 }
+}
 
 export enum OptimizationType {
   COMPRESSION = 'compression',
@@ -141,6 +149,7 @@ export enum OptimizationType {
 }
 
 }
+}
 export interface OptimizationTarget {
   targetType: 'pool' | 'category' | 'user' | 'system' | 'global';
   targetId?: string;
@@ -148,6 +157,7 @@ export interface OptimizationTarget {
   storageTypes: StorageType[];
   ageThreshold?: number; // days
   accessThreshold?: number; // days since last access
+}
 }
 }
 
@@ -161,6 +171,7 @@ export enum OptimizationStatus {
 }
 
 }
+}
 export interface OptimizationParameters {
   compressionAlgorithm?: 'gzip' | 'lz4' | 'zstd';
   compressionLevel?: number;
@@ -172,7 +183,9 @@ export interface OptimizationParameters {
   notifyUsers?: boolean;
 }
 }
+}
 
+}
 }
 export interface OptimizationResults {
   filesProcessed: number;
@@ -186,7 +199,9 @@ export interface OptimizationResults {
   performanceImpact: PerformanceImpact;
 }
 }
+}
 
+}
 }
 export interface PerformanceImpact {
   cpuUsage: number; // percentage
@@ -196,7 +211,9 @@ export interface PerformanceImpact {
   duration: number; // seconds
 }
 }
+}
 
+}
 }
 export interface StorageMetrics {
   timestamp: Date;
@@ -215,7 +232,9 @@ export interface StorageMetrics {
   poolMetrics: StoragePoolMetrics[];
 }
 }
+}
 
+}
 }
 export interface StoragePoolMetrics {
   poolId: string;
@@ -230,7 +249,9 @@ export interface StoragePoolMetrics {
   healthScore: number;
 }
 }
+}
 
+}
 }
 export interface StorageAlert {
   alertId: string;
@@ -248,6 +269,7 @@ export interface StorageAlert {
   actionsTaken: string[];
   suppressed: boolean;
   suppressedUntil?: Date;
+}
 }
 }
 
@@ -270,6 +292,7 @@ export enum AlertSeverity {
 }
 
 }
+}
 export interface StorageReport {
   reportId: string;
   reportType: ReportType;
@@ -281,6 +304,7 @@ export interface StorageReport {
   recommendations: string[];
   nextActions: string[];
   exportFormats: ExportFormat[];
+}
 }
 }
 
@@ -295,13 +319,16 @@ export enum ReportType {
 }
 
 }
+}
 export interface ReportPeriod {
   start: Date;
   end: Date;
   granularity: 'hour' | 'day' | 'week' | 'month';
 }
 }
+}
 
+}
 }
 export interface ReportSummary {
   totalStorage: number;
@@ -312,6 +339,7 @@ export interface ReportSummary {
   healthScore: number;
   criticalIssues: number;
   recommendationCount: number;
+}
 }
 }
 

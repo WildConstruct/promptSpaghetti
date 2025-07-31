@@ -13,9 +13,11 @@ import {
   MARSRegionTemplate,
   ZadaPromptPattern
 } from '../../services/AdvancedPromptingCollaborationService';
+}
 interface AdvancedPromptingCollaborationDemoProps {
   className?: string;
 
+}
 export const AdvancedPromptingCollaborationDemo: React.FC<AdvancedPromptingCollaborationDemoProps> = ({ className }) => {
   const [showPanel, setShowPanel] = useState(false);
   const [demoStep, setDemoStep] = useState(0);

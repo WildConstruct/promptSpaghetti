@@ -19,6 +19,7 @@ import { MetricsCollector } from '../performance/MetricsCollector';
 // ============================================================================
 
 }
+}
 export interface CapacityBottleneckAnalysisConfig {
   // Analysis configuration
   analysis: {
@@ -28,6 +29,7 @@ export interface CapacityBottleneckAnalysisConfig {
     capacity_threshold_warning: number;
     capacity_threshold_critical: number;
     historical_analysis_window_hours: number;
+}
 }
   };
   
@@ -153,6 +155,7 @@ export interface CapacityBottleneckAnalysisConfig {
 }
 
 }
+}
 export interface CapacityAnalysisResult {
   analysis_id: string;
   analysis_timestamp: Date;
@@ -164,6 +167,7 @@ export interface CapacityAnalysisResult {
     resource_utilization: ResourceUtilizationDetails;
     capacity_headroom: CapacityHeadroom;
     performance_impact: PerformanceImpactAssessment;
+}
 }
   };
   
@@ -202,6 +206,7 @@ export interface CapacityAnalysisResult {
 }
 
 }
+}
 export interface ResourceUtilizationDetails {
   cpu: {
     current_utilization_percent: number;
@@ -210,6 +215,7 @@ export interface ResourceUtilizationDetails {
     utilization_trend: 'increasing' | 'stable' | 'decreasing';
     efficiency_score: number;
     bottleneck_indicators: string[];
+}
 }
   };
   
@@ -251,6 +257,7 @@ export interface ResourceUtilizationDetails {
 }
 
 }
+}
 export interface CapacityHeadroom {
   overall_headroom_percent: number;
   resource_headroom: {
@@ -258,6 +265,7 @@ export interface CapacityHeadroom {
     memory_headroom_percent: number;
     network_headroom_percent: number;
     storage_headroom_percent: number;
+}
 }
   };
   time_to_capacity_exhaustion: {
@@ -269,6 +277,7 @@ export interface CapacityHeadroom {
 }
 
 }
+}
 export interface PerformanceImpactAssessment {
   current_performance_score: number;
   capacity_related_performance_degradation: number;
@@ -277,7 +286,9 @@ export interface PerformanceImpactAssessment {
   sla_compliance_impact: SLAComplianceImpact;
 }
 }
+}
 
+}
 }
 export interface BottleneckDetails {
   bottleneck_id: string;
@@ -299,6 +310,7 @@ export interface BottleneckDetails {
     affected_operations: string[];
     user_impact_level: number;
     business_impact_score: number;
+}
 }
   };
   
@@ -328,6 +340,7 @@ export interface BottleneckDetails {
 }
 
 }
+}
 export interface BottleneckSeverityAssessment {
   critical_bottlenecks: number;
   high_severity_bottlenecks: number;
@@ -338,7 +351,9 @@ export interface BottleneckSeverityAssessment {
   resolution_priority_ranking: string[];
 }
 }
+}
 
+}
 }
 export interface BottleneckCorrelationAnalysis {
   correlated_bottlenecks: BottleneckCorrelation[];
@@ -347,7 +362,9 @@ export interface BottleneckCorrelationAnalysis {
   timing_correlations: TimingCorrelation[];
 }
 }
+}
 
+}
 }
 export interface BottleneckResolutionRecommendation {
   recommendation_id: string;
@@ -362,6 +379,7 @@ export interface BottleneckResolutionRecommendation {
     required_resources: string[];
     dependencies: string[];
     risks: string[];
+}
 }
   };
   
@@ -380,6 +398,7 @@ export interface BottleneckResolutionRecommendation {
 }
 
 }
+}
 export interface CapacityForecast {
   forecast_period: string;
   forecast_confidence: number;
@@ -389,6 +408,7 @@ export interface CapacityForecast {
     memory_utilization_forecast: ForecastData[];
     network_utilization_forecast: ForecastData[];
     storage_utilization_forecast: ForecastData[];
+}
 }
   };
   
@@ -406,6 +426,7 @@ export interface CapacityForecast {
 }
 
 }
+}
 export interface GrowthProjection {
   metric_name: string;
   current_value: number;
@@ -415,7 +436,9 @@ export interface GrowthProjection {
   uncertainty_factors: string[];
 }
 }
+}
 
+}
 }
 export interface CapacityPlanningRecommendation {
   recommendation_id: string;
@@ -429,6 +452,7 @@ export interface CapacityPlanningRecommendation {
     cost_implications: CostImplication[];
     risk_assessment: PlanningRiskAssessment;
 }
+}
   };
   
   decision_support: {
@@ -441,6 +465,7 @@ export interface CapacityPlanningRecommendation {
 
 // Additional supporting interfaces
 }
+}
 export interface MemoryAllocationPattern {
   pattern_type: string;
   allocation_rate_mb_per_second: number;
@@ -449,7 +474,9 @@ export interface MemoryAllocationPattern {
   memory_efficiency: number;
 }
 }
+}
 
+}
 }
 export interface NetworkLatencyStats {
   average_latency_ms: number;
@@ -459,7 +486,9 @@ export interface NetworkLatencyStats {
   latency_distribution: LatencyDistribution[];
 }
 }
+}
 
+}
 }
 export interface NetworkThroughputStats {
   current_throughput_mbps: number;
@@ -468,7 +497,9 @@ export interface NetworkThroughputStats {
   throughput_efficiency: number;
 }
 }
+}
 
+}
 }
 export interface IOPattern {
   pattern_type: 'sequential' | 'random';
@@ -478,7 +509,9 @@ export interface IOPattern {
   efficiency_score: number;
 }
 }
+}
 
+}
 }
 export interface CapacityBottleneckAnalytics {
   // Overall capacity analytics
@@ -488,6 +521,7 @@ export interface CapacityBottleneckAnalytics {
     critical_bottlenecks_count: number;
     average_capacity_utilization: number;
     capacity_efficiency_score: number;
+}
 }
   };
   
@@ -529,6 +563,7 @@ export interface CapacityBottleneckAnalytics {
 
 // Supporting data structures
 }
+}
 export interface TimeToExhaustion {
   resource_type: string;
   estimated_days: number;
@@ -536,7 +571,9 @@ export interface TimeToExhaustion {
   growth_rate_assumption: number;
 }
 }
+}
 
+}
 }
 export interface HeadroomRecommendation {
   resource_type: string;
@@ -546,7 +583,9 @@ export interface HeadroomRecommendation {
   implementation_options: string[];
 }
 }
+}
 
+}
 }
 export interface BottleneckPerformanceImpact {
   bottleneck_id: string;
@@ -555,7 +594,9 @@ export interface BottleneckPerformanceImpact {
   user_visible_impact: boolean;
 }
 }
+}
 
+}
 }
 export interface UserExperienceImpact {
   response_time_impact: number;
@@ -564,7 +605,9 @@ export interface UserExperienceImpact {
   user_satisfaction_score_impact: number;
 }
 }
+}
 
+}
 }
 export interface SLAComplianceImpact {
   sla_violations_risk: number;
@@ -573,7 +616,9 @@ export interface SLAComplianceImpact {
   mitigation_urgency: 'low' | 'medium' | 'high' | 'critical';
 }
 }
+}
 
+}
 }
 export interface OptimizationOpportunity {
   opportunity_id: string;
@@ -585,7 +630,9 @@ export interface OptimizationOpportunity {
   estimated_roi: number;
 }
 }
+}
 
+}
 }
 export interface CostOptimizationOpportunity {
   opportunity_id: string;
@@ -596,7 +643,9 @@ export interface CostOptimizationOpportunity {
   payback_period_months: number;
 }
 }
+}
 
+}
 }
 export interface PerformanceImprovementOpportunity {
   opportunity_id: string;
@@ -607,7 +656,9 @@ export interface PerformanceImprovementOpportunity {
   implementation_timeline: string;
 }
 }
+}
 
+}
 }
 export interface CapacityRisk {
   risk_id: string;
@@ -619,7 +670,9 @@ export interface CapacityRisk {
   timeline: string;
 }
 }
+}
 
+}
 }
 export interface PerformanceRisk {
   risk_id: string;
@@ -629,7 +682,9 @@ export interface PerformanceRisk {
   mitigation_priority: number;
 }
 }
+}
 
+}
 }
 export interface AvailabilityRisk {
   risk_id: string;
@@ -639,7 +694,9 @@ export interface AvailabilityRisk {
   business_impact: number;
 }
 }
+}
 
+}
 }
 export interface RiskMitigationStrategy {
   strategy_id: string;
@@ -649,13 +706,16 @@ export interface RiskMitigationStrategy {
   effectiveness_score: number;
 }
 }
+}
 
+}
 }
 export interface TrendData {
   timestamp: Date;
   value: number;
   trend_direction: 'increasing' | 'stable' | 'decreasing';
   trend_strength: number;
+}
 }
 }
 
@@ -1634,6 +1694,7 @@ export class APICapacityBottleneckAnalysisService extends EventEmitter {
 
 // Additional interfaces for completeness
 }
+}
 interface ForecastData {
   timestamp: Date;
   value: number;
@@ -1641,7 +1702,9 @@ interface ForecastData {
   trend: 'increasing' | 'stable' | 'decreasing';
 }
 }
+}
 
+}
 }
 interface ProjectedValue {
   timestamp: Date;
@@ -1649,7 +1712,9 @@ interface ProjectedValue {
   confidence: number;
 }
 }
+}
 
+}
 }
 interface CostImplication {
   cost_type: string;
@@ -1658,7 +1723,9 @@ interface CostImplication {
   cost_justification: string;
 }
 }
+}
 
+}
 }
 interface PlanningRiskAssessment {
   implementation_risks: string[];
@@ -1667,21 +1734,27 @@ interface PlanningRiskAssessment {
   mitigation_strategies: string[];
 }
 }
+}
 
+}
 }
 interface LatencyDistribution {
   latency_range: string;
   percentage: number;
 }
 }
+}
 
+}
 }
 interface BlockSizeDistribution {
   block_size: string;
   percentage: number;
 }
 }
+}
 
+}
 }
 interface ResolutionHistoryItem {
   resolution_id: string;
@@ -1691,7 +1764,9 @@ interface ResolutionHistoryItem {
   improvement_achieved: number;
 }
 }
+}
 
+}
 }
 interface BottleneckPatternAnalysis {
   recurring_pattern: boolean;
@@ -1699,7 +1774,9 @@ interface BottleneckPatternAnalysis {
   seasonal_correlation: boolean;
 }
 }
+}
 
+}
 }
 interface BottleneckCorrelation {
   bottleneck_1: string;
@@ -1708,7 +1785,9 @@ interface BottleneckCorrelation {
   correlation_type: string;
 }
 }
+}
 
+}
 }
 interface CascadeEffect {
   trigger_bottleneck: string;
@@ -1717,7 +1796,9 @@ interface CascadeEffect {
   impact_multiplier: number;
 }
 }
+}
 
+}
 }
 interface DependencyRelationship {
   upstream_component: string;
@@ -1726,7 +1807,9 @@ interface DependencyRelationship {
   failure_propagation_risk: number;
 }
 }
+}
 
+}
 }
 interface TimingCorrelation {
   event_1: string;
@@ -1735,7 +1818,9 @@ interface TimingCorrelation {
   correlation_strength: number;
 }
 }
+}
 
+}
 }
 interface CapacityExhaustionEvent {
   resource_type: string;
@@ -1744,7 +1829,9 @@ interface CapacityExhaustionEvent {
   severity: string;
 }
 }
+}
 
+}
 }
 interface PerformanceDegradationEvent {
   degradation_type: string;
@@ -1753,7 +1840,9 @@ interface PerformanceDegradationEvent {
   confidence: number;
 }
 }
+}
 
+}
 }
 interface ScalingEvent {
   scaling_type: string;
@@ -1762,7 +1851,9 @@ interface ScalingEvent {
   justification: string;
 }
 }
+}
 
+}
 }
 interface BottleneckResolutionResult {
   bottleneck_id: string;
@@ -1774,5 +1865,6 @@ interface BottleneckResolutionResult {
   resolution_duration_minutes: number;
   rollback_required: boolean;
   lessons_learned: string[];
+}
 }
 }

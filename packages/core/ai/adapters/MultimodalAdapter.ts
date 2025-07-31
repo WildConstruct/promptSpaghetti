@@ -17,6 +17,7 @@ import {
   ModelUnavailableError
 } from '../BaseAIModel';
 
+}
 export interface MultimodalConfig {
   provider: 'openai' | 'anthropic' | 'google' | 'custom';
   apiKey: string;
@@ -25,6 +26,8 @@ export interface MultimodalConfig {
   timeout?: number;
   maxRetries?: number;
 }
+}
+}
 export interface MultimodalInput {
   type: 'text' | 'image' | 'audio' | 'video';
   content: string | ArrayBuffer | File | Blob;
@@ -32,9 +35,11 @@ export interface MultimodalInput {
     role?: 'user' | 'assistant' | 'system';
     mime_type?: string;
     duration?: number;
+}
     resolution?: { width: number; height: number };
     description?: string;
   };
+}
 }
 export interface MultimodalRequestOptions {
   // Core parameters
@@ -60,17 +65,20 @@ export interface MultimodalRequestOptions {
   transcribe_speech?: boolean;
   analyze_sentiment?: boolean;
 }
+}
+}
 export interface MultimodalAnalysis {
   content_type: string;
   confidence: number;
-  detected_elements: Array<{,
+  detected_elements: Array<{
   type: 'text' | 'object' | 'person' | 'scene' | 'emotion' | 'concept';
     value: string;
   confidence: number;
+}
     bounding_box?: { x: number; y: number; width: number; height: number };
     timestamp?: { start: number; end: number };
   }>;
-  relationships: Array<{,
+  relationships: Array<{
   source: string;
   target: string;
   relationship: string;
@@ -78,16 +86,18 @@ export interface MultimodalAnalysis {
 }>;
   metadata: Record<string, unknown>;
 }
+}
 export interface MultimodalUnderstandingResult {
   understanding: {
   summary: string;
   key_insights: string;
   content_analysis: MultimodalAnalysis;
-  cross_modal_connections: Array<{,
+  cross_modal_connections: Array<{
   modalities: string;
   connection_type: 'temporal' | 'semantic' | 'causal' | 'spatial';
   description: string;
   confidence: number;
+}
 }>;
   };
   extracted_data: {
@@ -159,6 +169,7 @@ export class MultimodalAdapter extends BaseAIModel {
     super(id, metadata, capabilities);
     this.config = config;
   async initialize(): Promise<void> {
+
     try {
       this._status = AIModelStatus.INITIALIZING;
       if (!this.config.apiKey) {
@@ -216,6 +227,7 @@ export class MultimodalAdapter extends BaseAIModel {
   async understandContent(inputs: MultimodalInput)
     options?: Partial<MultimodalRequestOptions>
   ): Promise<MultimodalUnderstandingResult> {
+
   const multimodalOptions: MultimodalRequestOptions = {,
   inputs,
   task: 'understand',
@@ -231,6 +243,7 @@ export class MultimodalAdapter extends BaseAIModel {
     comparisonAspects: string = ['content', 'style', 'emotion', 'quality'],
     options?: Partial<MultimodalRequestOptions>
   ): Promise<MultimodalUnderstandingResult> {
+
   const multimodalOptions: MultimodalRequestOptions = {,
   inputs,
   task: 'compare',
@@ -244,6 +257,7 @@ export class MultimodalAdapter extends BaseAIModel {
     detailLevel: 'brief' | 'detailed' | 'comprehensive' = 'detailed',
     options?: Partial<MultimodalRequestOptions>
   ): Promise<MultimodalUnderstandingResult> {
+
   const multimodalOptions: MultimodalRequestOptions = {,
   inputs,
   task: 'describe',
@@ -258,6 +272,7 @@ export class MultimodalAdapter extends BaseAIModel {
     analysisTypes: string = ['entities', 'emotions', 'sentiment', 'topics'],
     options?: Partial<MultimodalRequestOptions>
   ): Promise<MultimodalUnderstandingResult> {
+
   const multimodalOptions: MultimodalRequestOptions = {,
   inputs,
   task: 'analyze',
@@ -274,6 +289,7 @@ export class MultimodalAdapter extends BaseAIModel {
     summaryLength: 'short' | 'medium' | 'long' = 'medium',
     options?: Partial<MultimodalRequestOptions>
   ): Promise<MultimodalUnderstandingResult> {
+
     const tokenLimits = { short: 150, medium: 500, long: 1000 };
     const multimodalOptions: MultimodalRequestOptions = {
   inputs,
@@ -355,6 +371,7 @@ export class MultimodalAdapter extends BaseAIModel {
 };
     return costs[provider] || 0.01;
   private async _testConnection(): Promise<void> {
+
   try {
   // Create a minimal test request based on provider
   const testInput = MultimodalAdapter.createTextInput('Test connection');
@@ -419,6 +436,7 @@ export class MultimodalAdapter extends BaseAIModel {
       return [MultimodalAdapter.createTextInput(input)];
     return null;
   private async _validateInputs(inputs: MultimodalInput): Promise<void> {
+
     for (const input of inputs) {
       if (!this.supportedModalities.includes(input.type)) {
         throw new Error(`Unsupported modality: ${input.type}`);}
@@ -462,6 +480,7 @@ export class MultimodalAdapter extends BaseAIModel {
     options: Omit<MultimodalRequestOptions,
     'inputs'>
   ): Promise<MultimodalUnderstandingResult> {
+
   const payload = this._buildProviderPayload(inputs, options);
   const endpoint = this._getProviderEndpoint();
   const response = await this._makeRequest(endpoint, payload);
@@ -602,6 +621,7 @@ export class MultimodalAdapter extends BaseAIModel {
 };
     return endpoints[this.config.provider] || endpoints['openai'];
   private async _makeRequest(endpoint: string, payload: any): Promise<any> {
+
     const url = `${this.config.baseURL || this._getDefaultBaseURL()}${endpoint}`;}
     let lastError: Error | null = null;
     const maxRetries = this.config.maxRetries ?? 3;
@@ -826,6 +846,7 @@ export class MultimodalAdapter extends BaseAIModel {
     });
     return topics.sort((a, b) => b.relevance - a.relevance);
   private async _estimateInputTokens(inputs: MultimodalInput): Promise<number> {
+
   let totalTokens = 0;
   for (const input of inputs) {
   switch (input.type) {
@@ -863,6 +884,7 @@ export class MultimodalAdapter extends BaseAIModel {
     const outputCost = outputTokens * this._getOutputTokenCost();
     return inputCost + outputCost;
   protected async _performHealthCheck(): Promise<void> {
+
     await this._testConnection();
 
 export default MultimodalAdapter;

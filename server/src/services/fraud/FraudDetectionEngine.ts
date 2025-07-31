@@ -40,6 +40,7 @@ import {
 } from '../../../../packages/core/types/FraudMonitoring';
 
 }
+}
 export interface FraudDetectionRequest {
   type: 'payment' | 'account' | 'transaction' | 'login' | 'registration';
   userId?: string;
@@ -52,7 +53,9 @@ export interface FraudDetectionRequest {
   context: FraudContext;
 }
 }
+}
 
+}
 }
 export interface FraudContext {
   ipAddress: string;
@@ -61,6 +64,7 @@ export interface FraudContext {
   source: string;
   environment: 'web' | 'mobile' | 'api';
   requestId: string;
+}
 }
 }
 

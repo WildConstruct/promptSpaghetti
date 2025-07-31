@@ -6,6 +6,7 @@
  */
 import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelMetadata, ModelCapabilities, CostEstimate, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
 
+}
 export interface StableDiffusionConfig {
   endpoint: string; // API endpoint (e.g., Automatic1111, ComfyUI, or hosted service),
   apiType: 'automatic1111' | 'comfyui' | 'stability-ai' | 'replicate' | 'custom';
@@ -13,6 +14,8 @@ export interface StableDiffusionConfig {
   timeout?: number;
   maxRetries?: number;
   defaultModel?: string;
+}
+}
 }
 export interface StableDiffusionRequestOptions {
   // Core parameters
@@ -38,9 +41,10 @@ export interface StableDiffusionRequestOptions {
   mask?: string;
   inpaint_full_res?: boolean;
   // LoRA and ControlNet
-  lora_models?: Array<{,
+  lora_models?: Array<{
   name: string;
   strength: number;
+}
 }>;
   controlnet?: Array<{
   model: string;
@@ -59,13 +63,16 @@ export interface StableDiffusionRequestOptions {
   hr_resize_x?: number;
   hr_resize_y?: number;
 }
+}
 export interface StableDiffusionResponse {
   images: string; // Base64 encoded images,
   parameters: Record<string, any>;
   info: string;
 }
+}
+}
 export interface StableDiffusionGenerationResult {
-  images: Array<{,
+  images: Array<{
   base64: string;
   url?: string;
   seed: number;
@@ -75,6 +82,7 @@ export interface StableDiffusionGenerationResult {
   steps: number;
   cfg_scale: number;
   size: string;
+}
 };
   }>;
   originalPrompt: string;
@@ -86,6 +94,7 @@ export interface StableDiffusionGenerationResult {
   estimatedCost: number;
 };
 }
+}
 export interface ModelInfo {
   name: string;
   filename: string;
@@ -93,6 +102,7 @@ export interface ModelInfo {
   size?: number;
   description?: string;
   tags?: string;
+}
 }
 export class StableDiffusionAdapter extends BaseAIModel {
   private config: StableDiffusionConfig;
@@ -135,6 +145,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
     super(id, metadata, capabilities);
     this.config = config;
   async initialize(): Promise<void> {
+
     try {
       this._status = AIModelStatus.INITIALIZING;
       if (!this.config.endpoint) {
@@ -187,6 +198,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
 };
   // Stable Diffusion specific methods
   async getAvailableModels(): Promise<ModelInfo> {
+
   return [...this.availableModels];
   async getAvailableSamplers(): Promise<string> {,
   return [...this.availableSamplers];
@@ -203,6 +215,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
     prompt: string,
     options?: Partial<StableDiffusionRequestOptions>
   ): Promise<StableDiffusionGenerationResult> {
+
   const img2imgOptions: StableDiffusionRequestOptions = {,
   prompt,
   init_image: initImage,
@@ -215,6 +228,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
     prompt: string,
     options?: Partial<StableDiffusionRequestOptions>
   ): Promise<StableDiffusionGenerationResult> {
+
   const inpaintOptions: StableDiffusionRequestOptions = {,
   prompt,
   init_image: initImage,
@@ -285,6 +299,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
     return latencies[apiType] || 15000;
   // Private helper methods
   private async _testConnection(): Promise<void> {
+
     try {
       let testEndpoint = '/';
       switch (this.config.apiType) {
@@ -319,6 +334,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
         headers['Authorization'] = `Bearer ${this.config.apiKey}`;}
     return headers;
   private async _makeRequest(endpoint: string, method: 'GET' | 'POST' = 'POST', payload?: any): Promise<any> {
+
     const url = `${this.config.endpoint}${endpoint}`;}
     const options: RequestInit = {
   method,
@@ -397,6 +413,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
 };
     return { ...defaultOptions, ...options };
   private async _generateImages(options: StableDiffusionRequestOptions): Promise<StableDiffusionResponse> {
+
   let endpoint: string;
   let payload: any;
   switch (this.config.apiType) {
@@ -504,6 +521,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
       // Fallback to random seed
     return Math.floor(Math.random() * 2147483647);
   protected async _performHealthCheck(): Promise<void> {
+
     await this._testConnection();
 
 export default StableDiffusionAdapter;

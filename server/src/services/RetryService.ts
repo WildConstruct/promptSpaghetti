@@ -6,6 +6,7 @@ import { logger } from '../utils/logger';
 import { isRetryableError, TimeoutError, ExternalServiceError, DatabaseError } from '../types/errors';
 
 }
+}
 export interface RetryOptions {
   maxAttempts: number;
   initialDelayMs: number;
@@ -17,7 +18,9 @@ export interface RetryOptions {
   name?: string;               // Operation name for logging
 }
 }
+}
 
+}
 }
 export interface RetryResult<T> {
   result: T;
@@ -26,6 +29,7 @@ export interface RetryResult<T> {
   errors: unknown[];
 }
 
+}
 }
 export interface RetryMetrics {
   operationName: string;
@@ -41,6 +45,7 @@ export interface RetryMetrics {
     error: string;
     count: number;
     percentage: number;
+}
 }
   }>;
 }

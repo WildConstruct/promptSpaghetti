@@ -23,6 +23,7 @@ const uiColors = {
   disabled: '#6b7280',
 };
 
+}
 export interface TemperatureControlsProps {
   settings: TemperatureSettings;
   onChange: (settings: TemperatureSettings) => void;
@@ -30,6 +31,7 @@ export interface TemperatureControlsProps {
   * Temperature Settings Controls Component
   * Manages randomness/creativity level for execution
   */
+}
 }
 export const TemperatureControls: React.FC<TemperatureControlsProps> = ({)
   settings,

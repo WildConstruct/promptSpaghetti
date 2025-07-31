@@ -5,6 +5,7 @@
  * tracking director-friendly interface responsiveness and graph execution performance.
  */
 
+}
 export interface PerformanceMetric {
     name: string;
     value: number;
@@ -13,13 +14,16 @@ export interface PerformanceMetric {
     threshold?: {
         warning: number;
         critical: number;
+}
     };
 
+}
 export interface PerformanceReport {
     period: {
         start: number;
         end: number;
         duration: number;
+}
     };
     metrics: {
         [key: string]: {
@@ -34,6 +38,7 @@ export interface PerformanceReport {
     };
     alerts: PerformanceAlert[];
 
+}
 export interface PerformanceAlert {
     metric: string;
     level: 'warning' | 'critical';
@@ -78,6 +83,7 @@ export declare class PerformanceMonitor {
         p95: number;
         p99: number;
         recent: number[];
+}
     } | null;
     /**
      * Generate comprehensive performance report

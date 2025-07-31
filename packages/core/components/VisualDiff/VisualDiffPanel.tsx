@@ -19,6 +19,7 @@ import {
   EdgeChange
 } from '../../types/comparison';
 
+}
 export interface VisualDiffPanelProps {
   graphId: string;
   initialSourceVersionId?: string;
@@ -32,6 +33,7 @@ export interface VisualDiffPanelProps {
   initialTargetVersionId,
   onClose,
   className = ''
+}
 }) => {
   const [targetVersionId, setTargetVersionId] = useState<string>(initialTargetVersionId || '');
   const [viewMode, setViewMode] = useState<ViewMode>('side-by-side');

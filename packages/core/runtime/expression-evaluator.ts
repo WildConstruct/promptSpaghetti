@@ -23,6 +23,7 @@ enum TokenType {
 /**
  * Token interface
  */
+}
 interface Token {
   type: TokenType;
   value: string;
@@ -31,6 +32,7 @@ interface Token {
  * AST Node types
  */
 type ASTNode = 
+}
   | { type: 'Literal'; value: number | string | boolean | null }
   | { type: 'Identifier'; name: string }
   | { type: 'BinaryExpression'; operator: string; left: ASTNode; right: ASTNode }
@@ -302,6 +304,7 @@ class Parser {
 /**
  * Extended acorn Node type to include all necessary AST node types
  */
+}
 type ExtendedAcornNode = acorn.Node & {
   operator?: string;
   left?: ExtendedAcornNode;

@@ -16,6 +16,7 @@ import { DatabaseService } from '../database/DatabaseService';
 import { AUDIT_EVENTS, RATE_LIMIT_RULES } from '../config';
 
 }
+}
 export interface RegistrationAnalytics {
   totalRegistrations: number;
   dailyRegistrations: number;
@@ -27,6 +28,7 @@ export interface RegistrationAnalytics {
     profileCompleted: number;
     firstLogin: number;
 }
+}
   };
   dropOffPoints: Array<{
     step: string;
@@ -36,12 +38,14 @@ export interface RegistrationAnalytics {
 }
 
 }
+}
 export interface RegistrationValidation {
   isValid: boolean;
   errors: Array<{
     field: string;
     message: string;
     code: string;
+}
 }
   }>;
   warnings: Array<{

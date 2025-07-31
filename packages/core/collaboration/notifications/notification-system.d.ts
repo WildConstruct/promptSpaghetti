@@ -2,11 +2,13 @@ import { EventEmitter } from 'events';
 import { WorkspaceId, ProjectId, UserId, ResourceId, NotificationType, Notification } from '../types/workspace';
 import { WorkspaceDAO } from '../dao/workspace-dao';
 
+}
 export interface NotificationChannel {
     type: 'in_app' | 'email' | 'slack' | 'webhook';
     enabled: boolean;
     config: Record<string, unknown>;
 
+}
 export interface NotificationPreferences {
     userId: UserId;
     channels: NotificationChannel[];
@@ -15,13 +17,16 @@ export interface NotificationPreferences {
         enabled: boolean;
         frequency: 'immediate' | 'hourly' | 'daily' | 'weekly';
         time?: string;
+}
     };
 
+}
 export interface NotificationFilter {
     type: 'workspace' | 'project' | 'activity_type' | 'user';
     value: string;
     action: 'include' | 'exclude';
 
+}
 export interface NotificationTemplate {
     type: NotificationType;
     channels: {
@@ -29,9 +34,11 @@ export interface NotificationTemplate {
             subject: string;
             body: string;
             metadata?: Record<string, unknown>;
+}
         };
     };
 
+}
 export interface NotificationContext {
     workspaceId: WorkspaceId;
     projectId?: ProjectId;
@@ -40,6 +47,7 @@ export interface NotificationContext {
     targetUserIds: UserId[];
     data: Record<string, unknown>;
 
+}
 export interface NotificationDelivery {
     id: string;
     notificationId: string;
@@ -92,3 +100,4 @@ export declare class WorkspaceNotificationSystem extends EventEmitter {
     shutdown(): Promise<void>;
 
 //# sourceMappingURL=notification-system.d.ts.map
+}

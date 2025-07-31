@@ -4,6 +4,7 @@
  * Epic 19: Authentication Enhancement & Security Hardening
  */
 
+}
 export interface RateLimitConfig {
     windowMs: number;
     maxRequests: number;
@@ -19,6 +20,7 @@ export interface RateLimitConfig {
     statusCode?: number;
 
 
+}
 export interface RateLimitContext {
     ip?: string;
     userId?: string;
@@ -33,6 +35,7 @@ export interface RateLimitContext {
     organizationId?: string;
 
 
+}
 export interface RateLimitInfo {
     totalHits: number;
     totalHitsInWindow: number;
@@ -44,6 +47,7 @@ export interface RateLimitInfo {
     retryAfter?: number;
 
 
+}
 export interface RateLimitResult {
     allowed: boolean;
     info: RateLimitInfo;
@@ -51,6 +55,7 @@ export interface RateLimitResult {
     error?: string;
 
 
+}
 export interface RateLimitStore {
     get(key: string): Promise<RateLimitData | null>;
     set(key: string, data: RateLimitData, ttlMs: number): Promise<void>;
@@ -58,10 +63,12 @@ export interface RateLimitStore {
         hits: number;
         resetTime: Date;
 
+}
     }>;
     reset(key: string): Promise<void>;
     cleanup(): Promise<void>;
 
+}
 export interface RateLimitData {
     hits: number;
     resetTime: number;
@@ -89,6 +96,7 @@ export declare class MemoryRateLimitStore implements RateLimitStore {
     increment(key: string, windowMs: number): Promise<{
         hits: number;
         resetTime: Date;
+}
     }>;
     reset(key: string): Promise<void>;
     cleanup(): Promise<void>;

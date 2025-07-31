@@ -21,6 +21,7 @@ import * as crypto from 'crypto';
 // =============================================================================
 
 }
+}
 export interface ClassificationReportingConfig {
   enabled: boolean;
   autoGenerateReports: boolean;
@@ -53,7 +54,9 @@ export interface ClassificationReportingConfig {
   reportTimeout: number; // milliseconds
 }
 }
+}
 
+}
 }
 export interface ClassificationDistributionReport {
   reportId: string;
@@ -90,7 +93,9 @@ export interface ClassificationDistributionReport {
   metadata: ReportMetadata;
 }
 }
+}
 
+}
 }
 export interface ReportParameters {
   // Scope filters
@@ -120,7 +125,9 @@ export interface ReportParameters {
   customFilters?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ClassificationSummary {
   // Overall statistics
@@ -154,7 +161,9 @@ export interface ClassificationSummary {
   complianceScore: number; // 0-1
 }
 }
+}
 
+}
 }
 export interface ClassificationDistribution {
   // Distribution category
@@ -179,6 +188,7 @@ export interface ClassificationDistribution {
     sizeChange: number;
     percentageChange: number;
 }
+}
   };
   
   // Risk analysis
@@ -188,6 +198,7 @@ export interface ClassificationDistribution {
   metadata: Record<string, any>;
 }
 
+}
 }
 export interface ClassificationDistributionItem {
   classification: DataClassification;
@@ -216,7 +227,9 @@ export interface ClassificationDistributionItem {
   deletedCount: number;
 }
 }
+}
 
+}
 }
 export interface ClassificationTrends {
   // Trend period
@@ -237,7 +250,9 @@ export interface ClassificationTrends {
   forecasts?: ClassificationForecast[];
 }
 }
+}
 
+}
 }
 export interface TrendDataPoint {
   timestamp: Date;
@@ -262,7 +277,9 @@ export interface TrendDataPoint {
   deletedItems: number;
 }
 }
+}
 
+}
 }
 export interface ComplianceAnalysis {
   // Overall compliance status
@@ -285,7 +302,9 @@ export interface ComplianceAnalysis {
   complianceTrends?: ComplianceTrend[];
 }
 }
+}
 
+}
 }
 export interface ClassificationAnomaly {
   anomalyId: string;
@@ -308,6 +327,7 @@ export interface ClassificationAnomaly {
     start: Date;
     end: Date;
 }
+}
   };
   scope: AnomalyScope;
   
@@ -324,6 +344,7 @@ export interface ClassificationAnomaly {
   metadata: Record<string, any>;
 }
 
+}
 }
 export interface ClassificationRecommendation {
   recommendationId: string;
@@ -364,7 +385,9 @@ export interface ClassificationRecommendation {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface VisualizationData {
   // Chart configurations
@@ -380,7 +403,9 @@ export interface VisualizationData {
   exportOptions: ExportConfiguration[];
 }
 }
+}
 
+}
 }
 export interface ChartConfiguration {
   chartId: string;
@@ -409,11 +434,13 @@ export interface ChartConfiguration {
   metadata: Record<string, any>;
 }
 }
+}
 
 // =============================================================================
 // Supporting Interfaces
 // =============================================================================
 
+}
 }
 export interface ClassificationCount {
   classification: DataClassification;
@@ -421,7 +448,9 @@ export interface ClassificationCount {
   size?: number;
 }
 }
+}
 
+}
 }
 export interface ClassificationPercentage {
   classification: DataClassification;
@@ -429,7 +458,9 @@ export interface ClassificationPercentage {
   sizePercentage?: number;
 }
 }
+}
 
+}
 }
 export interface ClassificationSource {
   source: 'AUTOMATIC' | 'MANUAL' | 'INHERITED' | 'POLICY' | 'MIGRATION';
@@ -438,7 +469,9 @@ export interface ClassificationSource {
   accuracy?: number;
 }
 }
+}
 
+}
 }
 export interface RiskDistribution {
   lowRisk: number;
@@ -447,7 +480,9 @@ export interface RiskDistribution {
   criticalRisk: number;
 }
 }
+}
 
+}
 }
 export interface TrendAnalysis {
   // Overall trend direction
@@ -470,7 +505,9 @@ export interface TrendAnalysis {
   significantEvents: SignificantEvent[];
 }
 }
+}
 
+}
 }
 export interface SeasonalPattern {
   patternType: 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'QUARTERLY' | 'YEARLY';
@@ -480,7 +517,9 @@ export interface SeasonalPattern {
   description: string;
 }
 }
+}
 
+}
 }
 export interface ClassificationForecast {
   forecastDate: Date;
@@ -489,11 +528,13 @@ export interface ClassificationForecast {
     lower: ClassificationCount[];
     upper: ClassificationCount[];
 }
+}
   };
   confidence: number; // 0-1
   model: string;
 }
 
+}
 }
 export interface FrameworkComplianceAnalysis {
   frameworkId: string;
@@ -511,7 +552,9 @@ export interface FrameworkComplianceAnalysis {
   recommendations: string[];
 }
 }
+}
 
+}
 }
 export interface PolicyComplianceAnalysis {
   policyId: string;
@@ -525,7 +568,9 @@ export interface PolicyComplianceAnalysis {
   classificationCompliance: ClassificationCompliance[];
 }
 }
+}
 
+}
 }
 export interface ComplianceGap {
   gapId: string;
@@ -537,7 +582,9 @@ export interface ComplianceGap {
   estimatedEffort: string;
 }
 }
+}
 
+}
 }
 export interface ImpactAssessment {
   // Scope of impact
@@ -560,7 +607,9 @@ export interface ImpactAssessment {
   roi?: number;
 }
 }
+}
 
+}
 }
 export interface ImplementationStep {
   stepNumber: number;
@@ -571,7 +620,9 @@ export interface ImplementationStep {
   successCriteria: string[];
 }
 }
+}
 
+}
 }
 export interface QuantifiedBenefit {
   benefitType: string;
@@ -582,7 +633,9 @@ export interface QuantifiedBenefit {
   confidence: number; // 0-1
 }
 }
+}
 
+}
 }
 export interface SignificantEvent {
   timestamp: Date;
@@ -592,7 +645,9 @@ export interface SignificantEvent {
   affectedClassifications: DataClassification[];
 }
 }
+}
 
+}
 }
 export interface RequirementCompliance {
   requirementId: string;
@@ -603,7 +658,9 @@ export interface RequirementCompliance {
   gaps: string[];
 }
 }
+}
 
+}
 }
 export interface PolicyViolation {
   violationId: string;
@@ -614,7 +671,9 @@ export interface PolicyViolation {
   detectedAt: Date;
 }
 }
+}
 
+}
 }
 export interface ClassificationCompliance {
   classification: DataClassification;
@@ -623,7 +682,9 @@ export interface ClassificationCompliance {
   recommendations: string[];
 }
 }
+}
 
+}
 }
 export interface ReportMetadata {
   version: string;
@@ -649,6 +710,7 @@ export interface ReportMetadata {
   
   // Custom fields
   customMetadata: Record<string, any>;
+}
 }
 }
 
@@ -808,11 +870,13 @@ export type ViolationSeverity =
   | 'CRITICAL';
 
 }
+}
 export type DataClassificationAccessMap = {
   [key in DataClassification]: string[]; // List of roles that can access this classification level
 };
 
 // Configuration interfaces
+}
 }
 export interface AxisConfiguration {
   title: string;
@@ -822,7 +886,9 @@ export interface AxisConfiguration {
   tickFormat?: string;
 }
 }
+}
 
+}
 }
 export interface SeriesConfiguration {
   name: string;
@@ -831,7 +897,9 @@ export interface SeriesConfiguration {
   type?: 'line' | 'bar' | 'area';
 }
 }
+}
 
+}
 }
 export interface DrilldownConfiguration {
   enabled: boolean;
@@ -839,7 +907,9 @@ export interface DrilldownConfiguration {
   dataSource: string;
 }
 }
+}
 
+}
 }
 export interface DashboardConfiguration {
   dashboardId: string;
@@ -850,7 +920,9 @@ export interface DashboardConfiguration {
   filters: string[]; // Filter IDs
 }
 }
+}
 
+}
 }
 export interface LayoutConfiguration {
   columns: number;
@@ -858,7 +930,9 @@ export interface LayoutConfiguration {
   chartPositions: ChartPosition[];
 }
 }
+}
 
+}
 }
 export interface ChartPosition {
   chartId: string;
@@ -868,7 +942,9 @@ export interface ChartPosition {
   height: number;
 }
 }
+}
 
+}
 }
 export interface FilterConfiguration {
   filterId: string;
@@ -878,20 +954,25 @@ export interface FilterConfiguration {
   defaultValue?: unknown;
 }
 }
+}
 
+}
 }
 export interface FilterOption {
   label: string;
   value: Error;
 }
 }
+}
 
+}
 }
 export interface ExportConfiguration {
   format: ReportFormat;
   enabled: boolean;
   requiresAuth: boolean;
   maxRecords?: number;
+}
 }
 }
 

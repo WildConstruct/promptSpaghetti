@@ -8,6 +8,7 @@
 import React from 'react';
 import { Template } from './TemplatePreviewModal';
 
+}
 export interface SocialPlatformIntegrationProps {
     template: Template;
     platforms?: SocialPlatform[];
@@ -19,6 +20,7 @@ export interface SocialPlatformIntegrationProps {
     customizations?: SocialCustomizations;
 
 
+}
 export interface SocialPlatform {
     id: string;
     name: string;
@@ -34,6 +36,7 @@ export interface SocialPlatform {
     analytics: PlatformAnalytics;
 
 
+}
 export interface PlatformConfig {
     apiEndpoint?: string;
     clientId?: string;
@@ -44,6 +47,7 @@ export interface PlatformConfig {
     rateLimit: RateLimitConfig;
 
 
+}
 export interface RateLimitConfig {
     requestsPerMinute: number;
     requestsPerHour: number;
@@ -51,6 +55,7 @@ export interface RateLimitConfig {
     retryAfter: number;
 
 
+}
 export interface PlatformFeatures {
     directPosting: boolean;
     scheduledPosting: boolean;
@@ -63,6 +68,7 @@ export interface PlatformFeatures {
     engagement: boolean;
 
 
+}
 export interface PlatformLimits {
     maxTextLength: number;
     maxImages: number;
@@ -73,6 +79,7 @@ export interface PlatformLimits {
     videoLength: number;
 
 
+}
 export interface PlatformAnalytics {
     impressions: number;
     engagements: number;
@@ -82,6 +89,7 @@ export interface PlatformAnalytics {
     lastUpdated: Date;
 
 
+}
 export interface ShareRecord {
     id: string;
     templateId: string;
@@ -96,6 +104,7 @@ export interface ShareRecord {
 
 export type ShareType = 'direct' | 'link' | 'embed' | 'download' | 'preview';
 
+}
 export interface ShareContent {
     title: string;
     description: string;
@@ -107,6 +116,7 @@ export interface ShareContent {
     customText?: string;
 
 
+}
 export interface ShareAnalytics {
     views: number;
     clicks: number;
@@ -117,6 +127,7 @@ export interface ShareAnalytics {
     performance: PerformanceMetrics;
 
 
+}
 export interface DemographicData {
     ageGroups: Record<string, number>;
     geoLocations: Record<string, number>;
@@ -124,6 +135,7 @@ export interface DemographicData {
     devices: Record<string, number>;
 
 
+}
 export interface PerformanceMetrics {
     clickThroughRate: number;
     conversionRate: number;
@@ -132,6 +144,7 @@ export interface PerformanceMetrics {
     timeToConversion: number;
 
 
+}
 export interface ShareMetadata {
     userAgent?: string;
     referrer?: string;
@@ -142,6 +155,7 @@ export interface ShareMetadata {
     medium?: string;
 
 
+}
 export interface SocialCustomizations {
     autoHashtags: boolean;
     customBranding: boolean;
@@ -154,6 +168,7 @@ export declare const ShareContentGenerator: {
     generateTitle: (template: Template, platform: string) => string;
     generateDescription: (template: Template, platform: string) => string;
     generateHashtags: (template: Template, platform: string) => string[];
+}
 };
 export declare const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>;
 export default SocialPlatformIntegration;

@@ -12,6 +12,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 // Quality Metrics Types (matching backend service)
 // =============================================================================
 
+}
 export interface QualityMetrics {
   timestamp: Date;,
   overall: OverallQualityScore;
@@ -24,27 +25,30 @@ export interface QualityMetrics {
   trends: QualityTrends;,
   recommendations: QualityRecommendation;
   alerts: QualityAlert;,
-  metadata: {,
+  metadata: {
   collectionDuration: number;,
   dataSourcesActive: string;
   lastUpdated: Date;,
   version: string;
+}
 };
+}
 }
 export interface OverallQualityScore {
   score: number;,
   grade: 'A+' | 'A' | 'B+' | 'B' | 'C+' | 'C' | 'D' | 'F';
   status: 'excellent' | 'good' | 'fair' | 'poor' | 'critical';,
   improvement: number;
-  componentScores: {,
+  componentScores: {
   testCoverage: number;,
   codeQuality: number;
   performance: number;,
   security: number;
   documentation: number;,
   buildHealth: number;
+}
 };
-  weights: {,
+  weights: {
   testCoverage: number;
   codeQuality: number;,
   performance: number;
@@ -53,8 +57,9 @@ export interface OverallQualityScore {
   buildHealth: number;
 };
 }
+}
 export interface TestCoverageMetrics {
-  overall: {,
+  overall: {
   percentage: number;,
   linesTotal: number;
   linesCovered: number;,
@@ -62,21 +67,22 @@ export interface TestCoverageMetrics {
   branchesCovered: number;,
   functionsTotal: number;
   functionsCovered: number;
+}
 };
-  byPackage: Array<{,
+  byPackage: Array<{
   name: string;
   percentage: number;,
   linesTotal: number;
   linesCovered: number;
 }>;
-  byComponent: Array<{,
+  byComponent: Array<{
   name: string;
   type: 'component' | 'service' | 'utility';,
   percentage: number;
   criticalPaths: number;,
   uncoveredPaths: number;
 }>;
-  trends: {,
+  trends: {
   last7Days: number;
   last30Days: number;,
   changeFromLastWeek: number;
@@ -91,32 +97,34 @@ export interface TestCoverageMetrics {
   reason: string;
 }>;
 }
+}
 export interface CodeQualityMetrics {
-  complexity: {,
+  complexity: {
   average: number;,
   maximum: number;
-  distribution: {,
+  distribution: {
   '1-5': number;
   '6-10': number;
   '11-20': number;
   '21-50': number;
   '50+': number;
+}
 };
     highComplexityFiles: string;
   };
-  duplication: {,
+  duplication: {
   percentage: number;
   duplicatedLines: number;,
   totalLines: number;
-  duplicatedBlocks: Array<{,
+  duplicatedBlocks: Array<{
   lines: number;,
   files: string;
   similarity: number;
 }>;
   };
-  maintainability: {,
+  maintainability: {
   index: number;
-  byFile: Array<{,
+  byFile: Array<{
   file: string;,
   index: number;
   complexity: number;,
@@ -125,11 +133,11 @@ export interface CodeQualityMetrics {
 }>;
     trends: number;
   };
-  linting: {,
+  linting: {
   totalIssues: number;
   errorCount: number;,
   warningCount: number;
-  ruleBreakdowns: Array<{,
+  ruleBreakdowns: Array<{
   rule: string;,
   count: number;
   severity: 'error' | 'warning';,
@@ -137,9 +145,9 @@ export interface CodeQualityMetrics {
 }>;
     trends: number;
   };
-  technicalDebt: {,
+  technicalDebt: {
   totalMinutes: number;
-  breakdown: Array<{,
+  breakdown: Array<{
   category: string;,
   minutes: number;
   files: string;,
@@ -148,42 +156,44 @@ export interface CodeQualityMetrics {
     priority: 'low' | 'medium' | 'high' | 'critical';
   };
 }
+}
 export interface PerformanceQualityMetrics {
-  responseTime: {,
+  responseTime: {
   average: number;,
   p50: number;
   p90: number;,
   p95: number;
   p99: number;
+}
 };
-  throughput: {,
+  throughput: {
   requestsPerSecond: number;
   peakRps: number;,
   trends: number;
 };
-  resourceUtilization: {,
-  cpu: {,
+  resourceUtilization: {
+  cpu: {
   average: number;,
   peak: number;
   trends: number;
 };
-    memory: {,
+    memory: {
   average: number;
   peak: number;,
   trends: number;
 };
-    disk: {,
+    disk: {
   usage: number;
   iops: number;
 };
   };
-  errorRates: {,
+  errorRates: {
   overall: number;
   by4xx: number;,
   by5xx: number;
   trends: number;
 };
-  loadTestResults: Array<{,
+  loadTestResults: Array<{
   timestamp: Date;
   duration: number;,
   virtualUsers: number;
@@ -193,37 +203,39 @@ export interface PerformanceQualityMetrics {
   passed: boolean;
 }>;
 }
+}
 export interface SecurityQualityMetrics {
-  vulnerabilities: {,
+  vulnerabilities: {
   total: number;,
   critical: number;
   high: number;,
   medium: number;
   low: number;,
   trends: number;
+}
 };
-  dependencies: {,
+  dependencies: {
   total: number;
   outdated: number;,
   vulnerable: number;
-  licenses: Array<{,
+  licenses: Array<{
   license: string;,
   count: number;
   compatible: boolean;,
   risk: 'low' | 'medium' | 'high';
 }>;
   };
-  codeSecurityIssues: {,
+  codeSecurityIssues: {
   total: number;
-  byCategory: Array<{,
+  byCategory: Array<{
   category: string;,
   count: number;
   severity: 'low' | 'medium' | 'high' | 'critical';
 }>;
     highRiskFiles: string;
   };
-  compliance: {,
-  frameworks: Array<{,
+  compliance: {
+  frameworks: Array<{
   framework: string;,
   score: number;
   status: 'compliant' | 'non_compliant' | 'partial';,
@@ -237,53 +249,57 @@ export interface SecurityQualityMetrics {
   priority: 'low' | 'medium' | 'high' | 'critical';
 }>;
   };
-  accessControl: {,
+  accessControl: {
   privilegedAccounts: number;
   dormantAccounts: number;,
   lastSecurityReview: Date;
 };
 }
+}
 export interface DocumentationQualityMetrics {
-  coverage: {,
+  coverage: {
   apiDocumentation: number;,
   codeDocumentation: number;
   userGuides: number;,
   overall: number;
+}
 };
-  accuracy: {,
+  accuracy: {
   validCodeExamples: number;
   validApiExamples: number;,
   brokenLinks: number;
   outdatedSections: string;
 };
-  completeness: {,
+  completeness: {
   missingApiDocs: string;
   missingUserGuides: string;,
   incompleteSections: string;
 };
-  maintenance: {,
+  maintenance: {
   lastUpdated: Date;
   staleSections: string;,
   maintenanceScore: number;
 };
 }
+}
 export interface BuildHealthMetrics {
-  builds: {,
+  builds: {
   successRate: number;,
   averageDuration: number;
-  failureReasons: Array<{,
+  failureReasons: Array<{
   reason: string;,
   count: number;
   percentage: number;,
   trend: 'increasing' | 'stable' | 'decreasing';
+}
 }>;
     trends: number;
   };
-  tests: {,
+  tests: {
   passRate: number;
   totalTests: number;,
   flakyTests: string;
-  slowTests: Array<{,
+  slowTests: Array<{
   name: string;,
   duration: number;
   file: string;,
@@ -291,14 +307,14 @@ export interface BuildHealthMetrics {
 }>;
     trends: number;
   };
-  deployments: {,
+  deployments: {
   successRate: number;
   frequency: number;,
   rollbackRate: number;
   averageDeployTime: number;
 };
-  pipeline: {,
-  stages: Array<{,
+  pipeline: {
+  stages: Array<{
   name: string;,
   averageDuration: number;
   successRate: number;,
@@ -307,6 +323,7 @@ export interface BuildHealthMetrics {
     bottlenecks: string;,
   healthScore: number;
   };
+}
 }
 export interface QualityTrends {
   overall: TrendData;,
@@ -317,6 +334,8 @@ export interface QualityTrends {
   documentation: TrendData;
   buildHealth: TrendData;
 }
+}
+}
 export interface TrendData {
   daily: number;,
   weekly: number;
@@ -324,6 +343,8 @@ export interface TrendData {
   direction: 'improving' | 'stable' | 'degrading';
   velocity: number;,
   projection: number;
+}
+}
 }
 export interface QualityRecommendation {
   id: string;,
@@ -333,13 +354,14 @@ export interface QualityRecommendation {
   description: string;,
   impact: 'low' | 'medium' | 'high';
   effort: 'low' | 'medium' | 'high';,
-  actions: Array<{,
+  actions: Array<{
   description: string;,
   type: 'code_change' | 'configuration' | 'process' | 'tooling';
   effort: 'low' | 'medium' | 'high';,
   automated: boolean;
+}
 }>;
-  expectedImprovement: {,
+  expectedImprovement: {
   metric: string;
   currentValue: number;,
   projectedValue: number;
@@ -350,6 +372,7 @@ export interface QualityRecommendation {
   status: 'new' | 'acknowledged' | 'in_progress' | 'completed' | 'dismissed';,
   createdAt: Date;
   updatedAt: Date;
+}
 }
 export interface QualityAlert {
   id: string;,
@@ -371,12 +394,16 @@ export interface QualityAlert {
   // Hook Configuration
   // =============================================================================
 }
+}
+}
 export interface UseQualityMetricsOptions {
   refreshInterval?: number; // milliseconds, 0 to disable auto-refresh,
   enableCache?: boolean;
   cacheTimeout?: number; // milliseconds,
   onError?: (error: Error) => void;
   onMetricsUpdate?: (metrics: QualityMetrics) => void;
+}
+}
 }
 export interface UseQualityMetricsReturn {
   // Data
@@ -397,6 +424,7 @@ export interface UseQualityMetricsReturn {
   // =============================================================================
   // Quality Metrics Hook Implementation
   // =============================================================================
+}
 }
 export function useQualityMetrics(options: UseQualityMetricsOptions = {}): UseQualityMetricsReturn {
   const {
@@ -433,7 +461,7 @@ export function useQualityMetrics(options: UseQualityMetricsOptions = {}): UseQu
       const transformedMetrics: QualityMetrics = {
   ...data,
   timestamp: new Date(data.timestamp),
-  metadata: {,
+  metadata: {
   ...data.metadata,
   lastUpdated: new Date(data.metadata.lastUpdated),
 },
@@ -514,7 +542,7 @@ export function useQualityMetrics(options: UseQualityMetricsOptions = {}): UseQu
       const response = await fetch(`${API_BASE}/alerts/${alertId}/acknowledge`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 });
       if (!response.ok) {
@@ -536,7 +564,7 @@ export function useQualityMetrics(options: UseQualityMetricsOptions = {}): UseQu
       const response = await fetch(`${API_BASE}/recommendations/${recommendationId}`, {)}
   },
   method: 'PATCH',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({ status })
@@ -571,7 +599,7 @@ export function useQualityMetrics(options: UseQualityMetricsOptions = {}): UseQu
       return data.map((metrics: any) => ({)
   ...metrics,
   timestamp: new Date(metrics.timestamp),
-  metadata: {,
+  metadata: {
   ...metrics.metadata,
   lastUpdated: new Date(metrics.metadata.lastUpdated),
 }));

@@ -25,6 +25,7 @@ import {
  * Template storage interface - can be implemented for local/server storage
  */
 
+}
 export interface TemplateStorage {
   save(template: Template): Promise<Template>;
   load(id: string): Promise<Template | null>;
@@ -35,6 +36,7 @@ export interface TemplateStorage {
   /**
   * Local storage implementation
   */
+}
 }
 export class LocalTemplateStorage implements TemplateStorage {
   private readonly storageKey = 'wild-construct-templates';
@@ -52,6 +54,7 @@ export class LocalTemplateStorage implements TemplateStorage {
       console.error('Failed to save templates to localStorage:', error);
       throw new Error('Template storage failed: disk full or quota exceeded');
   async save(template: Template): Promise<Template> {
+
     const templates = this.getStoredTemplates();
     // Check for duplicate names
     const existing = templates.find(t => t.name === template.name && t.id !== template.id);
@@ -61,11 +64,14 @@ export class LocalTemplateStorage implements TemplateStorage {
     this.saveStoredTemplates(templates);
     return template;
   async load(id: string): Promise<Template | null> {
+
     const templates = this.getStoredTemplates();
     return templates.find(t => t.id === id) || null;
   async loadAll(): Promise<Template> {
+
     return this.getStoredTemplates();
   async update(id: string, updates: Partial<Template>): Promise<Template> {
+
     const templates = this.getStoredTemplates();
     const index = templates.findIndex(t => t.id === id);
     if (index === -1) {
@@ -75,12 +81,14 @@ export class LocalTemplateStorage implements TemplateStorage {
     this.saveStoredTemplates(templates);
     return updated;
   async delete(id: string): Promise<void> {
+
     const templates = this.getStoredTemplates();
     const filtered = templates.filter(t => t.id !== id);
     if (filtered.length === templates.length) {
       throw new Error(`Template with id "${id}" not found`);}
     this.saveStoredTemplates(filtered);
   async search(filter: TemplateFilter): Promise<Template> {
+
   const templates = this.getStoredTemplates();
   let filtered = templates;
   // Apply filters
@@ -198,21 +206,25 @@ export class TemplateService {
    * Load template by ID
    */
   async loadTemplate(id: string): Promise<Template | null> {
+
     return await this.storage.load(id);
   /**
    * Search templates with filters
    */
   async searchTemplates(filter: TemplateFilter = {}): Promise<Template> {
+
     return await this.storage.search(filter);
   /**
    * Get templates by category
    */
   async getTemplatesByCategory(category: TemplateCategory): Promise<Template> {
+
     return await this.searchTemplates({ category });
   /**
    * Get popular templates
    */
   async getPopularTemplates(limit: number = 10): Promise<Template> {
+
   const templates = await this.searchTemplates({)
   sortBy: 'rating',
   sortOrder: 'desc',
@@ -222,6 +234,7 @@ export class TemplateService {
    * Get recent templates
    */
   async getRecentTemplates(limit: number = 10): Promise<Template> {
+
   const templates = await this.searchTemplates({)
   sortBy: 'created',
   sortOrder: 'desc',
@@ -230,10 +243,11 @@ export class TemplateService {
   /**
    * Instantiate template into current graph
    */
-  async instantiateTemplate(()
+  async instantiateTemplate(((
     templateId: string,
-    options: TemplateInstantiationOptions,
+    options: TemplateInstantiationOptions
   ): Promise<GraphData> {
+
     const template = await this.storage.load(templateId);
     if (!template) {
       throw new Error(`Template with id "${templateId}" not found`);}
@@ -316,6 +330,7 @@ export class TemplateService {
    * Add review to template
    */
   async addReview(templateId: string, review: Omit<Review, 'id' | 'timestamp'>): Promise<Review> {
+
     const template = await this.storage.load(templateId);
     if (!template) {
       throw new Error(`Template with id "${templateId}" not found`);}
@@ -336,11 +351,13 @@ export class TemplateService {
    * Delete template
    */
   async deleteTemplate(id: string): Promise<void> {
+
     await this.storage.delete(id);
   /**
    * Validate template structure
    */
   async validateTemplate(template: Template): Promise<TemplateValidation> {
+
     const errors: string = [];
     const warnings: string = [];
     // Basic validation

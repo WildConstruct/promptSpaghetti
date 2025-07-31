@@ -5,6 +5,7 @@ import {
   DEFAULT_CORRECTION_RULES,
   useCorrectionsEnabled
 } from './correctionsStore';
+}
 interface CorrectionsPanelProps {
   isOpen: boolean;
   onClose: () => void;
@@ -16,6 +17,7 @@ interface CorrectionsPanelProps {
   toggleRule,
   clearAllRules,
   applyCorrections
+}
 } = useCorrectionsStore();
   const [editingRule, setEditingRule] = useState<CorrectionRule | null>(null);
   const [newRule, setNewRule] = useState({)

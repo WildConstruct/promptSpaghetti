@@ -4,12 +4,14 @@
  * Provides utilities for monitoring React component performance, API calls,
  * and user interactions with minimal overhead.
  */
+}
 interface PerformanceMetric {
   name: string;,
   duration: number;
   timestamp: number;,
   type: 'component' | 'api' | 'user_interaction' | 'custom';
   metadata?: Record<string, unknown>;
+}
 interface PerformanceConfig {
   enableLogging: boolean;,
   sampleRate: number; // 0-1, percentage of operations to monitor
@@ -20,6 +22,7 @@ class PerformanceMonitor {
   private config: PerformanceConfig;
   private flushTimer?: number;
   private observers: Map<string, PerformanceObserver> = new Map();
+}
   constructor(config: Partial<PerformanceConfig> = {}) {
   this.config = {
   enableLogging: process.env.NODE_ENV === 'development',
@@ -47,7 +50,7 @@ class PerformanceMonitor {
   duration: entry.duration,
   timestamp: entry.startTime,
   type: 'custom',
-  metadata: {,
+  metadata: {
   entryType: entry.entryType,
   name: entry.name,
 });
@@ -68,7 +71,7 @@ class PerformanceMonitor {
   duration: entry.duration,
   timestamp: entry.startTime,
   type: 'custom',
-  metadata: {,
+  metadata: {
   name: entry.name,
   transferSize: (entry as PerformanceResourceTiming).transferSize,
   type: (entry as PerformanceResourceTiming).initiatorType,
@@ -262,7 +265,7 @@ export function usePerformanceTracking(componentName: string, dependencies: unkn
   duration: renderDuration,
       timestamp: renderStart,
       type: 'component',
-      metadata: {,
+      metadata: {
   componentName,
   dependencyCount: dependencies.length,
 });

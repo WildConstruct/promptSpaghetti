@@ -18,6 +18,7 @@ import seedrandom from 'seedrandom';
  * Configuration for different sequence patterns
  */
 
+}
 export interface SequencePatternConfig {
   /** For weighted pattern: weights corresponding to sequence items */,
   weights?: number;
@@ -29,12 +30,16 @@ export interface SequencePatternConfig {
   * Sequence pattern interface for different traversal strategies
   */
 }
+}
+}
 export interface SequencePattern {
   type: 'linear' | 'cyclical' | 'random' | 'weighted';
   getNext(sequence: string, state: SequenceState, ctx: AdvancedExecutionContext): string;
   /**
   * State tracking for sequential processing
   */
+}
+}
 }
 export interface SequenceState {
   /** Current index in the sequence */
@@ -46,6 +51,7 @@ export interface SequenceState {
   /**
   * Linear sequence pattern - goes through items in order, then stops
   */
+}
 }
 export class LinearPattern implements SequencePattern {
   type: 'linear' = 'linear';
@@ -115,7 +121,7 @@ export class WeightedPattern implements SequencePattern {
 /**
  * Factory function to create sequence patterns
  */
-export function createSequencePattern(()
+export function createSequencePattern(((
     type: SequencePattern['type'],
     config: SequencePatternConfig = {}
   ): SequencePattern {

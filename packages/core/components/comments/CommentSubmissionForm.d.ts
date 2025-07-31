@@ -8,6 +8,7 @@
  */
 import React from 'react';
 
+}
 export interface CommentSubmissionData {
     content: string;
     contentType: 'text' | 'markdown' | 'rich';
@@ -20,6 +21,7 @@ export interface CommentSubmissionData {
     attachments: CommentAttachment[];
     metadata?: Record<string, unknown>;
 
+}
 export interface CommentAttachment {
     id: string;
     name: string;
@@ -29,6 +31,7 @@ export interface CommentAttachment {
     preview?: string;
     metadata?: Record<string, unknown>;
 
+}
 export interface CommentSubmissionConfig {
     enableRichText: boolean;
     enableMarkdown: boolean;
@@ -49,8 +52,10 @@ export interface CommentSubmissionConfig {
         requireApproval: boolean;
         enableAutoModeration: boolean;
         flagSuspiciousContent: boolean;
+}
     };
 
+}
 export interface CommentSubmissionFormProps {
     resourceId: string;
     resourceType: 'template' | 'project' | 'user' | 'marketplace_item';
@@ -69,3 +74,4 @@ export interface CommentSubmissionFormProps {
 export declare const CommentSubmissionForm: React.FC<CommentSubmissionFormProps>;
 export default CommentSubmissionForm;
 //# sourceMappingURL=CommentSubmissionForm.d.ts.map
+}

@@ -3,6 +3,7 @@ import { WeightVisualization, WeightLegend } from '../WeightControls/WeightVisua
 import { DragReorderList } from '../WeightControls/DragReorderList';
 import { WeightPresets, WeightPreset } from '../WeightControls/WeightPresets';
 
+}
 export interface WeightControlOption {
   id: string;
   text: string;
@@ -21,6 +22,7 @@ export interface WeightControlOption {
   customPresets?: WeightPreset;
   onSaveCustomPreset?: (preset: Omit<WeightPreset, 'id'>) => void;
   className?: string;
+}
 }
 export const WeightControlSlider: React.FC<WeightControlSliderProps> = ({)
   options,

@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { CommentMentions } from './CommentMentions';
 
+}
 interface CommentEditorProps {
   initialContent?: string;
   onSave: (content: string, mentions: string) => void;
@@ -35,6 +36,7 @@ export const [isPreview, setIsPreview] = useState(false);
   const [cursorPosition, setCursorPosition] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+}
   const mentionPositionRef = useRef({ start: 0, end: 0 });
   useEffect(() => {
     if (textareaRef.current) {

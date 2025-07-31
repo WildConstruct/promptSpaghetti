@@ -4,6 +4,7 @@
 import React, { useState } from 'react';
 import { WeightControlOption } from '../Inspector/WeightControlSlider';
 
+}
 export interface WeightPreset {
   id: string;
   name: string;
@@ -12,6 +13,8 @@ export interface WeightPreset {
   pattern: (options: WeightControlOption) => number;
   icon?: string;
   preview?: string;
+}
+}
 }
 export interface WeightPresetsProps {
   options: WeightControlOption;
@@ -22,6 +25,7 @@ export interface WeightPresetsProps {
   showCategories?: boolean;
   compact?: boolean;
   // Built-in preset patterns
+}
 }
 export const BUILT_IN_PRESETS: WeightPreset = [
   // Basic Patterns

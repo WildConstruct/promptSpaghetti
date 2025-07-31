@@ -18,6 +18,7 @@ import { ConflictResolver } from './ConflictResolver';
  * WebSocket service interface for collaborative features
  */
 
+}
 export interface WebSocketService {
   connect(url: string): Promise<void>;
   disconnect(): Promise<void>;
@@ -29,6 +30,7 @@ export interface WebSocketService {
   /**
   * Simple WebSocket implementation for collaborative editing
   */
+}
 }
 export class SimpleWebSocketService extends EventEmitter implements WebSocketService {
   private ws: WebSocket | null = null;
@@ -63,6 +65,7 @@ export class SimpleWebSocketService extends EventEmitter implements WebSocketSer
         reject(error);
     });
   async disconnect(): Promise<void> {
+
   if (this.ws) {
   this.ws.close();
   this.ws = null;
@@ -107,6 +110,7 @@ export class CollaborativeSync extends EventEmitter {
    * Initialize collaborative session
    */
   async initialize(user: UserPresence, serverUrl: string): Promise<void> {
+
     this.currentUser = user;
     try {
       await this.webSocketService.connect(serverUrl);
@@ -122,6 +126,7 @@ export class CollaborativeSync extends EventEmitter {
    * Disconnect from collaborative session
    */
   async disconnect(): Promise<void> {
+
   if (this.currentUser) {
   // Broadcast offline presence
   await this.broadcastPresence(false);
@@ -156,6 +161,7 @@ export class CollaborativeSync extends EventEmitter {
    * Update user presence (cursor position, selection, etc.)
    */
   async updatePresence(presence: Partial<UserPresence>): Promise<void> {
+
   if (!this.currentUser || !this.webSocketService.isConnected()) {
   return;
   this.currentUser = {
@@ -204,6 +210,7 @@ export class CollaborativeSync extends EventEmitter {
       this.emit('conflict_resolved', data);
     });
   private async handleRemoteMessage(message: CollaborativeMessage): Promise<void> {
+
   try {
   switch (message.type) {
   case 'GRAPH_MUTATION':,
@@ -223,6 +230,7 @@ export class CollaborativeSync extends EventEmitter {
 } catch (error) {
       this.emit('message_handling_error', { message, error });
   private async handleRemoteMutation(message: CollaborativeMessage): Promise<void> {
+
   if (!message.operation) {
   console.error('Remote mutation message missing operation data');
   return;
@@ -268,6 +276,7 @@ export class CollaborativeSync extends EventEmitter {
   error
 });
   private async handleCursorUpdate(message: CollaborativeMessage): Promise<void> {
+
   const user = this.connectedUsers.get(message.userId);
   if (user && message.data?.cursor) {
   const updatedUser: UserPresence = {,
@@ -278,6 +287,7 @@ export class CollaborativeSync extends EventEmitter {
       this.connectedUsers.set(message.userId, updatedUser);
       this.emit('user_cursor_updated', { user: updatedUser });
   private async handleSelectionChange(message: CollaborativeMessage): Promise<void> {
+
   const user = this.connectedUsers.get(message.userId);
   if (user && message.data?.selection) {
   const updatedUser: UserPresence = {,
@@ -288,6 +298,7 @@ export class CollaborativeSync extends EventEmitter {
       this.connectedUsers.set(message.userId, updatedUser);
       this.emit('user_selection_updated', { user: updatedUser });
   private async handlePresenceUpdate(message: CollaborativeMessage): Promise<void> {
+
     if (message.data?.user) {
       const user = message.data.user as UserPresence;
       if (user.isActive) {
@@ -300,11 +311,13 @@ export class CollaborativeSync extends EventEmitter {
   connectedUsers: this.getConnectedUsers(),
 });
   private async checkMutationConflicts(remoteOperation: GraphOperation): Promise<ConflictResult> {
+
     // Create a simplified current state for conflict checking
     // In a real implementation, this would come from the mutation engine
     const mockState = { nodes: [], edges: [] };
     return await this.conflictResolver.checkConflicts(remoteOperation, mockState);
   private async broadcastPresence(isActive: boolean = true): Promise<void> {
+
   if (!this.currentUser || !this.webSocketService.isConnected()) {
   return;
   const message: CollaborativeMessage = {,
@@ -320,6 +333,7 @@ export class CollaborativeSync extends EventEmitter {
 };
     await this.webSocketService.broadcast(message);
   private async processQueuedOperations(): Promise<void> {
+
     if (this.isProcessingQueue || this.operationQueue.length === 0) {
       return;
     this.isProcessingQueue = true;

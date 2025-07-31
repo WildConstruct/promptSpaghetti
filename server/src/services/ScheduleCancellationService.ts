@@ -36,6 +36,7 @@ export type CancellationMode =
   | 'scheduled'; // Cancel at a specific future time
 
 }
+}
 export interface CancellationRequest {
   scheduleIds: string[];
   reason: CancellationReason;
@@ -47,7 +48,9 @@ export interface CancellationRequest {
   cancelledBy: string;
 }
 }
+}
 
+}
 }
 export interface CancellationResult {
   id: string;
@@ -81,9 +84,11 @@ export interface CancellationResult {
     message: string;
     recoverable: boolean;
 }
+}
   };
 }
 
+}
 }
 export interface CancellationAction {
   id: string;
@@ -95,7 +100,9 @@ export interface CancellationAction {
   error?: string;
 }
 }
+}
 
+}
 }
 export interface BulkCancellationRequest {
   filters: {
@@ -106,6 +113,7 @@ export interface BulkCancellationRequest {
     startDateFrom?: string;
     startDateTo?: string;
 }
+}
   };
   reason: CancellationReason;
   mode: CancellationMode;
@@ -115,6 +123,7 @@ export interface BulkCancellationRequest {
   cancelledBy: string;
 }
 
+}
 }
 export interface BulkCancellationResult {
   requestId: string;
@@ -132,6 +141,7 @@ export interface BulkCancellationResult {
     togglesAffected: string[];
     totalExecutionsAffected: number;
     totalRollbacksPerformed: number;
+}
 }
   };
   

@@ -104,6 +104,7 @@ export declare class ExtensionLifecycleManager {
     private createAPIContext;
     private isValidVersion;
 
+}
 interface ExtensionStatistics {
     total: number;
     byState: Record<ExtensionLifecycleState, number>;
@@ -112,5 +113,6 @@ interface ExtensionStatistics {
     healthy: number;
 
 export declare const extensionLifecycleManager: ExtensionLifecycleManager;
+}
 export {};
 //# sourceMappingURL=ExtensionLifecycleManager.d.ts.map

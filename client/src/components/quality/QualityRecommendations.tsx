@@ -37,11 +37,13 @@ import { QualityRecommendation } from '../../hooks/useQualityMetrics';
 // Quality Recommendations Component
 // =============================================================================
 
+}
 export interface QualityRecommendationsProps {
   recommendations: QualityRecommendation;
   onRecommendationAction?: (recommendationId: string, action: 'acknowledge' | 'start' | 'complete' | 'dismiss') => void;
   compact?: boolean;
   className?: string;
+}
 }
 export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({)
   recommendations,

@@ -6,6 +6,7 @@ import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 export interface RegulatoryReport {
   reportId: string;
   regulation: ComplianceRegulation;
@@ -17,6 +18,7 @@ export interface RegulatoryReport {
   summary: ReportSummary;
   sections: ReportSection[];
   metadata: ReportMetadata;
+}
 }
 }
 
@@ -39,6 +41,7 @@ export enum ReportType {
 }
 
 }
+}
 export interface ReportSummary {
   totalDataSubjects: number;
   totalConsentRecords: number;
@@ -48,7 +51,9 @@ export interface ReportSummary {
   recommendations: string[];
 }
 }
+}
 
+}
 }
 export interface ReportSection {
   sectionId: string;
@@ -58,7 +63,9 @@ export interface ReportSection {
   compliance: SectionCompliance;
 }
 }
+}
 
+}
 }
 export interface ReportData {
   category: string;
@@ -66,7 +73,9 @@ export interface ReportData {
   details: unknown[];
 }
 }
+}
 
+}
 }
 export interface ChartData {
   type: 'bar' | 'line' | 'pie' | 'table';
@@ -74,12 +83,15 @@ export interface ChartData {
   data: Record<string, unknown>[];
 }
 }
+}
 
+}
 }
 export interface SectionCompliance {
   status: ComplianceStatus;
   score: number;
   issues: ComplianceIssue[];
+}
 }
 }
 
@@ -91,6 +103,7 @@ export enum ComplianceStatus {
 }
 
 }
+}
 export interface ComplianceIssue {
   severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   description: string;
@@ -98,7 +111,9 @@ export interface ComplianceIssue {
   dueDate?: Date;
 }
 }
+}
 
+}
 }
 export interface ReportMetadata {
   version: string;
@@ -107,6 +122,7 @@ export interface ReportMetadata {
   nextReviewDate: Date;
   approvalRequired: boolean;
   confidentiality: 'PUBLIC' | 'INTERNAL' | 'CONFIDENTIAL' | 'RESTRICTED';
+}
 }
 }
 

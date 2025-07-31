@@ -6,6 +6,7 @@
  */
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
 
+}
 export interface MultimodalConfig {
     provider: 'openai' | 'anthropic' | 'google' | 'custom';
     apiKey: string;
@@ -14,6 +15,7 @@ export interface MultimodalConfig {
     timeout?: number;
     maxRetries?: number;
 
+}
 export interface MultimodalInput {
     type: 'text' | 'image' | 'audio' | 'video';
     content: string | ArrayBuffer | File | Blob;
@@ -24,10 +26,12 @@ export interface MultimodalInput {
         resolution?: {
             width: number;
             height: number;
+}
         };
         description?: string;
     };
 
+}
 export interface MultimodalRequestOptions {
     inputs: MultimodalInput[];
     task?: 'understand' | 'describe' | 'analyze' | 'transform' | 'generate' | 'compare' | 'summarize';
@@ -47,10 +51,11 @@ export interface MultimodalRequestOptions {
     transcribe_speech?: boolean;
     analyze_sentiment?: boolean;
 
+}
 export interface MultimodalAnalysis {
     content_type: string;
     confidence: number;
-    detected_elements: Array<{,
+    detected_elements: Array<{
         type: 'text' | 'object' | 'person' | 'scene' | 'emotion' | 'concept';
         value: string;
         confidence: number;
@@ -59,13 +64,14 @@ export interface MultimodalAnalysis {
             y: number;
             width: number;
             height: number;
+}
         };
         timestamp?: {
             start: number;
             end: number;
         };
     }>;
-    relationships: Array<{,
+    relationships: Array<{
         source: string;
         target: string;
         relationship: string;
@@ -73,16 +79,18 @@ export interface MultimodalAnalysis {
     }>;
     metadata: Record<string, unknown>;
 
+}
 export interface MultimodalUnderstandingResult {
     understanding: {
         summary: string;
         key_insights: string[];
         content_analysis: MultimodalAnalysis[];
-        cross_modal_connections: Array<{,
+        cross_modal_connections: Array<{
             modalities: string[];
             connection_type: 'temporal' | 'semantic' | 'causal' | 'spatial';
             description: string;
             confidence: number;
+}
         }>;
     };
     extracted_data: {

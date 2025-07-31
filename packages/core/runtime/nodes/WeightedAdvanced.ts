@@ -21,12 +21,15 @@ export type WeightDistributionType = 'linear' | 'exponential' | 'gaussian' | 'cu
  * A weighted choice with value and weight
  */
 
+}
 export interface WeightedChoice {
   value: string;
   weight: number;
   /**
   * Configuration for weight distribution algorithms
   */
+}
+}
 }
 export interface WeightDistributionConfig {
   type: WeightDistributionType;
@@ -44,6 +47,7 @@ export interface WeightDistributionConfig {
   * - Performance optimization with caching
   * - Comprehensive validation
   */
+}
 }
 export class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
   private ioHandler: AdvancedIOHandler;

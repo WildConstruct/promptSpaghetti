@@ -21,6 +21,7 @@ import { DiagnosticService } from '../admin/DiagnosticService';
 import { HealthCheckFramework } from '../admin/HealthCheckFramework';
 
 }
+}
 export interface SecurityIntelligenceDashboardConfig {
   dashboard: {
     enabled: boolean;
@@ -30,6 +31,7 @@ export interface SecurityIntelligenceDashboardConfig {
     historical_data_retention_days: number;
     cache_ttl_seconds: number;
     max_concurrent_dashboards: number;
+}
 }
   };
   analytics: {
@@ -77,6 +79,7 @@ export interface SecurityIntelligenceDashboardConfig {
 }
 
 }
+}
 export interface DashboardWidget {
   id: string;
   type: DashboardWidgetType;
@@ -92,6 +95,7 @@ export interface DashboardWidget {
   permissions: string[];
   created_at: number;
   updated_at: number;
+}
 }
 }
 
@@ -111,13 +115,16 @@ export enum DashboardWidgetType {
 }
 
 }
+}
 export interface WidgetPosition {
   x: number;
   y: number;
   z_index: number;
 }
 }
+}
 
+}
 }
 export interface WidgetSize {
   width: number;
@@ -128,7 +135,9 @@ export interface WidgetSize {
   max_height: number;
 }
 }
+}
 
+}
 }
 export interface VisualizationConfig {
   chart_type: ChartType;
@@ -138,6 +147,7 @@ export interface VisualizationConfig {
   axis_configuration: AxisConfiguration;
   legend_configuration: LegendConfiguration;
   tooltip_configuration: TooltipConfiguration;
+}
 }
 }
 
@@ -155,6 +165,7 @@ export enum ChartType {
 }
 
 }
+}
 export interface DashboardFilter {
   id: string;
   name: string;
@@ -163,6 +174,7 @@ export interface DashboardFilter {
   operator: FilterOperator;
   value: unknown;
   enabled: boolean;
+}
 }
 }
 
@@ -187,6 +199,7 @@ export enum FilterOperator {
 }
 
 }
+}
 export interface SecurityAnalytics {
   threat_metrics: ThreatMetrics;
   security_metrics: SecurityMetrics;
@@ -196,7 +209,9 @@ export interface SecurityAnalytics {
   operational_metrics: OperationalMetrics;
 }
 }
+}
 
+}
 }
 export interface ThreatMetrics {
   total_threats_detected: number;
@@ -209,7 +224,9 @@ export interface ThreatMetrics {
   mean_time_to_detection: number;
 }
 }
+}
 
+}
 }
 export interface SecurityMetrics {
   security_events_per_hour: number;
@@ -221,7 +238,9 @@ export interface SecurityMetrics {
   security_awareness_score: number;
 }
 }
+}
 
+}
 }
 export interface ThreatTrend {
   timestamp: number;
@@ -231,7 +250,9 @@ export interface ThreatTrend {
   confidence: number;
 }
 }
+}
 
+}
 }
 export interface ThreatSource {
   source_ip: string;
@@ -242,7 +263,9 @@ export interface ThreatSource {
   last_seen: number;
 }
 }
+}
 
+}
 }
 export interface ResponseTimeMetrics {
   mean_time_to_detection: number;
@@ -251,7 +274,9 @@ export interface ResponseTimeMetrics {
   mean_time_to_resolution: number;
 }
 }
+}
 
+}
 }
 export interface VulnerabilityMetrics {
   total_vulnerabilities: number;
@@ -263,6 +288,7 @@ export interface VulnerabilityMetrics {
   vulnerability_age_distribution: Record<string, number>;
 }
 }
+}
 
 export enum RiskLevel {
   LOW = 'low',
@@ -271,6 +297,7 @@ export enum RiskLevel {
   CRITICAL = 'critical'
 }
 
+}
 }
 export interface DashboardMetrics {
   active_dashboards: number;
@@ -281,7 +308,9 @@ export interface DashboardMetrics {
   system_resource_usage: ResourceUsageMetrics;
 }
 }
+}
 
+}
 }
 export interface QueryPerformanceMetrics {
   average_query_time_ms: number;
@@ -291,7 +320,9 @@ export interface QueryPerformanceMetrics {
   concurrent_queries: number;
 }
 }
+}
 
+}
 }
 export interface UserEngagementMetrics {
   active_users: number;
@@ -301,7 +332,9 @@ export interface UserEngagementMetrics {
   export_requests: number;
 }
 }
+}
 
+}
 }
 export interface ResourceUsageMetrics {
   cpu_utilization_percent: number;
@@ -311,12 +344,15 @@ export interface ResourceUsageMetrics {
   database_connections: number;
 }
 }
+}
 
+}
 }
 export interface InteractiveFeature {
   type: InteractionType;
   enabled: boolean;
   configuration: Record<string, unknown>;
+}
 }
 }
 
@@ -331,12 +367,15 @@ export enum InteractionType {
 }
 
 }
+}
 export interface AxisConfiguration {
   x_axis: AxisSettings;
   y_axis: AxisSettings;
 }
 }
+}
 
+}
 }
 export interface AxisSettings {
   label: string;
@@ -345,6 +384,7 @@ export interface AxisSettings {
   max_value?: number;
   format: string;
   grid_lines: boolean;
+}
 }
 }
 
@@ -356,11 +396,13 @@ export enum ScaleType {
 }
 
 }
+}
 export interface LegendConfiguration {
   enabled: boolean;
   position: LegendPosition;
   orientation: LegendOrientation;
   max_items: number;
+}
 }
 }
 
@@ -377,11 +419,13 @@ export enum LegendOrientation {
 }
 
 }
+}
 export interface TooltipConfiguration {
   enabled: boolean;
   format: string;
   fields: string[];
   delay_ms: number;
+}
 }
 }
 

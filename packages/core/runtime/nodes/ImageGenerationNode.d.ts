@@ -7,6 +7,7 @@
 import { AdvancedRuntimeNode, AdvancedExecutionContext, NodeExecutionResult } from '../advanced';
 import { TypedInputs } from '../io-system';
 
+}
 export interface ImageGenerationConfig {
     provider: 'dalle' | 'midjourney' | 'stable-diffusion';
     model?: string;
@@ -15,6 +16,7 @@ export interface ImageGenerationConfig {
     defaultParameters?: Record<string, any>;
 
 
+}
 export interface ImageMetadata {
     width: number;
     height: number;
@@ -28,6 +30,7 @@ export interface ImageMetadata {
     negativePrompt?: string;
 
 
+}
 export interface GeneratedImage {
     url?: string;
     base64?: string;
@@ -62,3 +65,4 @@ export declare class ImageEditNode extends AdvancedRuntimeNode {
     validateInputs(inputs: Record<string, any>): Promise<string[]>;
 
 //# sourceMappingURL=ImageGenerationNode.d.ts.map
+}

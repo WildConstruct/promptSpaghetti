@@ -8,7 +8,7 @@ export const wearLevelTemplate: NodeTemplate = {,
   id: "wear-5",
   type: "transform",
   position: { x: 800, y: 200 },
-  data: {,
+  data: {
   label: "Wear Level",
   description: "Condition: Pristine, Lightly Used, Battle-Scarred, etc.",
   category: "transform",

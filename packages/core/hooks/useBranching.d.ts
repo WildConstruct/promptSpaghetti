@@ -20,6 +20,7 @@ import {
   MergeRequestFilter
 } from '../types/branching';
 
+}
 interface UseBranchingReturn {
     loading: boolean;
     error: string | null;
@@ -44,6 +45,7 @@ interface UseBranchingReturn {
         start: Date;
         end: Date;
 
+}
     }) => Promise<BranchTimelineResponse>;
     getBranchHierarchy: (projectId: string) => Promise<BranchHierarchy[]>;
     compareBranches: (sourceBranchId: string, targetBranchId: string) => Promise<BranchComparisonResponse>;

@@ -20,6 +20,7 @@ import { MetricsCollector } from '../performance/MetricsCollector';
 // ============================================================================
 
 }
+}
 export interface APIQuotaManagementConfig {
   // Quota management configuration
   quota_management: {
@@ -29,6 +30,7 @@ export interface APIQuotaManagementConfig {
     auto_quota_adjustment: boolean;
     quota_buffer_percentage: number;
     emergency_quota_management: boolean;
+}
 }
   };
   
@@ -102,6 +104,7 @@ export interface APIQuotaManagementConfig {
 }
 
 }
+}
 export interface UsageForecastingData {
   forecast_metadata: {
     forecast_id: string;
@@ -110,6 +113,7 @@ export interface UsageForecastingData {
     confidence_level: number;
     algorithm_used: string;
     data_quality_score: number;
+}
 }
   };
   
@@ -163,6 +167,7 @@ export interface UsageForecastingData {
 }
 
 }
+}
 export interface QuotaManagementData {
   quota_status: {
     global_quota: {
@@ -171,6 +176,7 @@ export interface QuotaManagementData {
       utilization_percentage: number;
       projected_exhaustion_time: number | null;
       buffer_remaining: number;
+}
 }
     };
     tenant_quotas: Array<{
@@ -233,6 +239,7 @@ export interface QuotaManagementData {
 }
 
 }
+}
 export interface QuotaAdjustmentRecommendation {
   recommendation_id: string;
   recommendation_type: 'increase' | 'decrease' | 'redistribute' | 'tier_change';
@@ -248,6 +255,7 @@ export interface QuotaAdjustmentRecommendation {
       predicted_usage: number;
       confidence_level: number;
       forecast_horizon: string;
+}
 }
     };
     business_impact: {
@@ -275,6 +283,7 @@ export interface QuotaAdjustmentRecommendation {
 }
 
 }
+}
 export interface APIQuotaAnalysisResult {
   analysis_metadata: {
     analysis_id: string;
@@ -282,6 +291,7 @@ export interface APIQuotaAnalysisResult {
     analysis_duration_ms: number;
     data_sources: string[];
     analysis_scope: string;
+}
 }
   };
   
@@ -318,6 +328,7 @@ export interface APIQuotaAnalysisResult {
 // ============================================================================
 
 }
+}
 interface ForecastingModel {
   model_id: string;
   model_type: string;
@@ -327,13 +338,16 @@ interface ForecastingModel {
   last_trained: number;
 }
 }
+}
 
+}
 }
 interface OptimizationEngine {
   objective_functions: Array<{
     name: string;
     weight: number;
     optimization_direction: 'minimize' | 'maximize';
+}
 }
   }>;
   constraints: Array<{

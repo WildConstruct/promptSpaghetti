@@ -373,6 +373,7 @@ export class ExtensionManifestParser {
       if (v1Part < v2Part) return -1;
     return 0;
   private async readFile(filePath: string): Promise<string> {
+
     // In a real implementation, this would use fs.readFile
     // For now, we'll simulate reading a file
     return Promise.resolve('{}');
@@ -390,8 +391,7 @@ export class ExtensionManifestValidator {
   /**
   * Comprehensive manifest validation
   */
-  public validateManifest(()
-  manifest: ExtensionManifest,
+  public validateManifest((manifest: ExtensionManifest,
   context: ValidationContext): ExtensionValidationResult {,
   const errors: string = [];
   const warnings: string = [];
@@ -420,9 +420,9 @@ export class ExtensionManifestValidator {
   /**
    * Validate manifest permissions
    */
-  private validatePermissions(()
+  private validatePermissions(((
     manifest: ExtensionManifest,
-    grantedPermissions: string,
+    grantedPermissions: string
   ): ExtensionValidationResult {
     const errors: string = [];
     const warnings: string = [];
@@ -470,11 +470,12 @@ export class ExtensionManifestValidator {
   success: boolean;
   data?: T;
   error?: string;
-  details?: Array<{,
+  details?: Array<{
   path: string;
   message: string;
   code: string;
 }>;
+}
 interface ManifestTemplateOptions {
   id: string;
   name: string;
@@ -499,6 +500,7 @@ interface ManifestTemplateOptions {
   uiComponents?: Record<string, string>;
   transforms?: string;
   storageProviders?: string;
+}
 interface ValidationContext {
   systemVersion: string;
   platform: string;
@@ -508,3 +510,4 @@ interface ValidationContext {
 // Export singletons
 export const extensionManifestParser = ExtensionManifestParser.getInstance();
 export const extensionManifestValidator = ExtensionManifestValidator.getInstance();
+}

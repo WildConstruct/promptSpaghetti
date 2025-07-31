@@ -33,10 +33,12 @@ export enum CodeType {
   userId: string;
   ipAddress: string;
   userAgent: string;
+}
 };
   customCharset?: string;
   excludeSimilar?: boolean;      // Exclude 0, O, I, l, 1
   enforceComplexity?: boolean;   // For passwords/tokens
+}
 }
 export interface GeneratedCode {
   code: string;
@@ -51,7 +53,9 @@ export interface GeneratedCode {
   ipAddress?: string;
   entropy: number;
   algorithm: string;
+}
 };
+}
 }
 export interface CodeValidationResult {
   valid: boolean;
@@ -61,7 +65,9 @@ export interface CodeValidationResult {
   validatedAt: Date;
   timingAttackSafe: boolean;
   processingTimeMs: number;
+}
 };
+}
 }
 export interface CodeValidationOptions {
   allowExpired?: boolean;
@@ -77,6 +83,7 @@ export interface CodeValidationOptions {
   [CodeFormat.ALPHANUMERIC]: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
   [CodeFormat.BASE32]: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567',
   [CodeFormat.HEX]: '0123456789ABCDEF',
+}
 };
 const SIMILAR_CHARACTERS = ['0', 'O', 'I', 'l', '1'];
 const CODE_PATTERNS = {
@@ -170,6 +177,7 @@ class EntropyCalculator {
 // ========================================
 // Rate Limiting Service
 // ========================================
+}
 interface RateLimitState {
   attempts: number;
   windowStart: Date;
@@ -177,6 +185,7 @@ interface RateLimitState {
 class RateLimitService {
   private limitStates: Map<string, RateLimitState> = new Map();
   private readonly limits = {
+}
     [CodeType.EMAIL_VERIFICATION]: { maxAttempts: 5, windowMinutes: 15 },
     [CodeType.SMS_VERIFICATION]: { maxAttempts: 3, windowMinutes: 15 },
     [CodeType.TOTP_SECRET]: { maxAttempts: 10, windowMinutes: 60 },
@@ -258,6 +267,7 @@ export class CodeGenerationService {
    * Generate a secure code based on specified options
    */
   async generateCode(options: CodeGenerationOptions): Promise<GeneratedCode> {
+
     // Validate input
     const validatedOptions = CodeGenerationSchema.parse(options);
     // Generate the actual code
@@ -292,10 +302,11 @@ export class CodeGenerationService {
   /**
    * Validate a code against stored hash
    */
-  async validateCode(inputCode: string)
+  async validateCode(inputCode: string(
     storedData: GeneratedCode,
     options: CodeValidationOptions = {}
   ): Promise<CodeValidationResult> {
+
   const startTime = Date.now();
   const defaultOptions: Required<CodeValidationOptions> = {,
   allowExpired: false,
@@ -384,6 +395,7 @@ export class CodeGenerationService {
   manualEntryKey: string;
   backupCodes: string;
 }> {
+
     // Generate 32-byte secret for TOTP
     const secretOptions: CodeGenerationOptions = {,
   type: CodeType.TOTP_SECRET,
@@ -421,6 +433,7 @@ export class CodeGenerationService {
    * Generate recovery token for account recovery
    */
   async generateRecoveryToken(userId: string): Promise<GeneratedCode> {
+
     return this.generateCode({)
   type: CodeType.RECOVERY_TOKEN,
       format: CodeFormat.HEX,
@@ -432,6 +445,7 @@ export class CodeGenerationService {
    * Generate API token
    */
   async generateAPIToken(userId: string, expiryDays?: number): Promise<GeneratedCode> {
+
     return this.generateCode({)
   type: CodeType.API_TOKEN,
       format: CodeFormat.HEX,

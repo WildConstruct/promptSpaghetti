@@ -22,6 +22,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { UploaderService } from './UploaderArchitecture';
 
 }
+}
 export interface ArchiveRecord {
   id: string;
   name: string;
@@ -79,7 +80,9 @@ export interface ArchiveRecord {
   lastAccessedBy?: string;
 }
 }
+}
 
+}
 }
 export interface SourceMetadata {
   // Database source metadata
@@ -89,6 +92,7 @@ export interface SourceMetadata {
   dateRange?: {
     start: Date;
     end: Date;
+}
 }
   };
   
@@ -114,6 +118,7 @@ export interface SourceMetadata {
 }
 
 }
+}
 export interface RetentionPolicy {
   id: string;
   name: string;
@@ -124,7 +129,9 @@ export interface RetentionPolicy {
   exceptions?: RetentionException[];
 }
 }
+}
 
+}
 }
 export interface StorageTransition {
   afterDays: number;
@@ -132,7 +139,9 @@ export interface StorageTransition {
   conditions?: TransitionCondition[];
 }
 }
+}
 
+}
 }
 export interface TransitionCondition {
   type: 'access_frequency' | 'size' | 'age' | 'custom';
@@ -140,7 +149,9 @@ export interface TransitionCondition {
   value: unknown;
 }
 }
+}
 
+}
 }
 export interface NotificationSettings {
   notifyBeforeExpiration: boolean;
@@ -149,12 +160,15 @@ export interface NotificationSettings {
   channels: NotificationChannel[];
 }
 }
+}
 
+}
 }
 export interface RetentionException {
   condition: string; // JSON logic expression
   action: 'extend' | 'preserve' | 'accelerate';
   parameters: Record<string, unknown>;
+}
 }
 }
 
@@ -295,6 +309,7 @@ export enum NotificationChannel {
 }
 
 }
+}
 export interface ArchiveJob {
   id: string;
   archiveId: string;
@@ -332,6 +347,7 @@ export interface ArchiveJob {
   nextRetryAt?: Date;
 }
 }
+}
 
 export enum ArchiveJobType {
   CREATE_ARCHIVE = 'create_archive',
@@ -357,6 +373,7 @@ export enum ArchiveJobStatus {
 }
 
 }
+}
 export interface ArchiveJobConfig {
   sourceConfig: any;
   compressionConfig?: CompressionConfig;
@@ -367,7 +384,9 @@ export interface ArchiveJobConfig {
   customConfig?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface CompressionConfig {
   algorithm: CompressionAlgorithm;
@@ -377,7 +396,9 @@ export interface CompressionConfig {
   skipUncompressible?: boolean;
 }
 }
+}
 
+}
 }
 export interface EncryptionConfig {
   algorithm: EncryptionAlgorithm;
@@ -386,7 +407,9 @@ export interface EncryptionConfig {
   keyRotationDays: number;
 }
 }
+}
 
+}
 }
 export interface StorageConfig {
   provider: string;
@@ -397,7 +420,9 @@ export interface StorageConfig {
   serverSideEncryption?: boolean;
 }
 }
+}
 
+}
 }
 export interface ValidationConfig {
   checksumAlgorithm: ChecksumAlgorithm;
@@ -406,7 +431,9 @@ export interface ValidationConfig {
   validationFrequencyDays: number;
 }
 }
+}
 
+}
 }
 export interface NotificationConfig {
   enabled: boolean;
@@ -415,7 +442,9 @@ export interface NotificationConfig {
   template?: string;
 }
 }
+}
 
+}
 }
 export interface ArchiveQuery {
   archiveTypes?: ArchiveType[];
@@ -426,6 +455,7 @@ export interface ArchiveQuery {
   dateRange?: {
     start: Date;
     end: Date;
+}
 }
   };
   tags?: string[];
@@ -465,6 +495,7 @@ export enum ArchiveSortField {
 }
 
 }
+}
 export interface ArchiveStatistics {
   totalArchives: number;
   totalSize: number;
@@ -502,7 +533,9 @@ export interface ArchiveStatistics {
   lastValidationRun?: Date;
 }
 }
+}
 
+}
 }
 export interface RestoreRequest {
   archiveId: string;
@@ -516,6 +549,7 @@ export interface RestoreRequest {
   expiresAt?: Date;
 }
 }
+}
 
 export enum RestoreType {
   FULL_RESTORE = 'full_restore',
@@ -526,12 +560,14 @@ export enum RestoreType {
 }
 
 }
+}
 export interface PartialRestoreConfig {
   filePattern?: string;
   directoryPaths?: string[];
   dateRange?: {
     start: Date;
     end: Date;
+}
 }
   };
   maxFiles?: number;
@@ -1012,6 +1048,7 @@ export class ArchiveManagementService extends EventEmitter {
 }
 
 }
+}
 export interface ArchiveConfig {
   defaultCompressionAlgorithm: CompressionAlgorithm;
   defaultStorageProvider: string;
@@ -1026,6 +1063,7 @@ export interface ArchiveConfig {
   validateOnCreate: boolean;
   regularValidationEnabled: boolean;
   notificationsEnabled: boolean;
+}
 }
 }
 

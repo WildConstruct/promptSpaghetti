@@ -13,6 +13,7 @@ import {
   ModuleProgress,
   Epic16LearningPathService
 } from '../../services/Epic16LearningPathService';
+}
 interface LearningPathViewerProps {
   path: LearningPath;
   learningService: Epic16LearningPathService;
@@ -27,6 +28,7 @@ interface LearningPathViewerProps {
   enrollment,
   onProgress,
   onComplete
+}
 }) => {
   // State management
   const [currentModule, setCurrentModule] = useState<LearningModule | null>(null);
@@ -464,6 +466,7 @@ interface LearningPathViewerProps {
 };
 
 // Activity Viewer Component
+}
 interface ActivityViewerProps {
   activity: LearningActivity;
   onComplete: () => void;
@@ -472,6 +475,7 @@ interface ActivityViewerProps {
   activity,
   onComplete,
   loading = false
+}
 }) => {
   const [completed, setCompleted] = useState(false);
   const handleComplete = () => {

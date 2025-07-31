@@ -41,6 +41,7 @@ import {
   ActivityImpact,
   ActivitySource as _ActivitySource
 } from '../../services/ActivityTimeline';
+}
 interface ActivityTimelineProps {
   userId?: string;
   workspaceId?: string;
@@ -58,6 +59,7 @@ interface ActivityTimelineProps {
   icon: User,
   color: 'text-blue-600 bg-blue-50 border-blue-200',
   badgeColor: 'bg-blue-100 text-blue-800',
+}
 },
   system_event: {
   icon: Settings,
@@ -416,6 +418,7 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({)
 /**
  * Timeline View Component
  */
+}
 interface TimelineViewProps {
   groupedActivities: Record<string, ActivityEvent>;
   onSelectActivity: (activity: ActivityEvent) => void;
@@ -424,6 +427,7 @@ interface TimelineViewProps {
   groupedActivities,
   onSelectActivity,
   compact
+}
 }) => {
   const dates = Object.keys(groupedActivities).sort((a, b) => ;
     new Date(b).getTime() - new Date(a).getTime()
@@ -474,6 +478,7 @@ interface TimelineViewProps {
 /**
  * List View Component
  */
+}
 interface ListViewProps {
   activities: ActivityEvent;
   onSelectActivity: (activity: ActivityEvent) => void;
@@ -482,6 +487,7 @@ interface ListViewProps {
   activities,
   onSelectActivity,
   compact
+}
 }) => {
   if (activities.length === 0) {
     return;
@@ -508,9 +514,11 @@ interface ListViewProps {
 /**
  * Analytics View Component
  */
+}
 interface AnalyticsViewProps {
   stats: ActivityStats | null;
   activities: ActivityEvent;
+}
 const AnalyticsView: React.FC<AnalyticsViewProps> = ({ stats, _activities }) => {
   if (!stats) return null;
   return;
@@ -604,6 +612,7 @@ const AnalyticsView: React.FC<AnalyticsViewProps> = ({ stats, _activities }) => 
 /**
  * Activity Card Component
  */
+}
 interface ActivityCardProps {
   activity: ActivityEvent;
   onClick: () => void;
@@ -616,6 +625,7 @@ interface ActivityCardProps {
   compact = false,
   showTimestamp = false,
   showDate = false
+}
 }) => {
   const typeConfig = ACTIVITY_TYPE_CONFIG[activity.type];
   const impactConfig = IMPACT_CONFIG[activity.impact];
@@ -685,12 +695,14 @@ interface ActivityCardProps {
 /**
  * Activity Detail Modal
  */
+}
 interface ActivityDetailModalProps {
   activity: ActivityEvent;
   onClose: () => void;
   const ActivityDetailModal: React.FC<ActivityDetailModalProps> = ({,)
   activity,
   onClose
+}
 }) => {
   const typeConfig = ACTIVITY_TYPE_CONFIG[activity.type];
   const TypeIcon = typeConfig?.icon || ActivityIcon;

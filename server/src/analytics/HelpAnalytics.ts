@@ -64,6 +64,7 @@ export enum HelpEventType {
 
 // Help analytics event interfaces
 }
+}
 export interface HelpEvent extends AnalyticsEvent {
   type: HelpEventType;
   helpSessionId: string;
@@ -71,6 +72,7 @@ export interface HelpEvent extends AnalyticsEvent {
   userExperience?: 'beginner' | 'intermediate' | 'advanced';
 }
 
+}
 }
 export interface HelpSearchEvent extends HelpEvent {
   type: HelpEventType.HELP_SEARCH | HelpEventType.DOCS_SEARCH;
@@ -87,6 +89,7 @@ export interface HelpSearchEvent extends HelpEvent {
   };
 }
 
+}
 }
 export interface HelpContentEvent extends HelpEvent {
   type: HelpEventType.HELP_ARTICLE_VIEW | 
@@ -109,6 +112,7 @@ export interface HelpContentEvent extends HelpEvent {
 }
 
 }
+}
 export interface HelpFeedbackEvent extends HelpEvent {
   type: HelpEventType.HELP_ARTICLE_HELPFUL | 
         HelpEventType.HELP_ARTICLE_NOT_HELPFUL |
@@ -126,6 +130,7 @@ export interface HelpFeedbackEvent extends HelpEvent {
   };
 }
 
+}
 }
 export interface HelpJourneyEvent extends HelpEvent {
   type: HelpEventType.HELP_FLOW_STARTED | 
@@ -149,6 +154,7 @@ export interface HelpJourneyEvent extends HelpEvent {
 }
 
 }
+}
 export interface SupportInteractionEvent extends HelpEvent {
   type: HelpEventType.SUPPORT_TICKET_CREATED |
         HelpEventType.SUPPORT_CHAT_STARTED |
@@ -170,10 +176,12 @@ export interface SupportInteractionEvent extends HelpEvent {
 
 // Help analytics aggregation interfaces
 }
+}
 export interface HelpAnalyticsSummary {
   timeRange: {
     startTime: number;
     endTime: number;
+}
 }
   };
   overallMetrics: {
@@ -205,6 +213,7 @@ export interface HelpAnalyticsSummary {
 }
 
 }
+}
 export interface ContentMetric {
   contentId: string;
   title: string;
@@ -217,7 +226,9 @@ export interface ContentMetric {
   exitRate: number;
 }
 }
+}
 
+}
 }
 export interface SearchTermMetric {
   query: string;
@@ -228,7 +239,9 @@ export interface SearchTermMetric {
   refinementRate: number;
 }
 }
+}
 
+}
 }
 export interface DropoffPoint {
   stepName: string;
@@ -238,7 +251,9 @@ export interface DropoffPoint {
   avgTimeAtStep: number;
 }
 }
+}
 
+}
 }
 export interface UserPath {
   path: string[];
@@ -248,8 +263,10 @@ export interface UserPath {
   conversionRate: number;
 }
 }
+}
 
 // Help analytics configuration
+}
 }
 export interface HelpAnalyticsConfig {
   trackDetailedInteractions: boolean;
@@ -260,6 +277,7 @@ export interface HelpAnalyticsConfig {
   enableRealTimeAlerts: boolean;
   contentAnalysisEnabled: boolean;
   userJourneyTrackingEnabled: boolean;
+}
 }
 }
 
@@ -959,6 +977,7 @@ export class HelpAnalytics extends EventEmitter {
 
 // Supporting interfaces
 }
+}
 interface HelpSession {
   id: string;
   userId?: string;
@@ -972,7 +991,9 @@ interface HelpSession {
   context: Record<string, any>;
 }
 }
+}
 
+}
 }
 interface ContentPerformance {
   contentId: string;
@@ -986,7 +1007,9 @@ interface ContentPerformance {
   exitRate?: number;
 }
 }
+}
 
+}
 }
 interface SearchPerformance {
   query: string;
@@ -999,7 +1022,9 @@ interface SearchPerformance {
   noResultsRate?: number;
 }
 }
+}
 
+}
 }
 interface ContentGap {
   query: string;
@@ -1007,6 +1032,7 @@ interface ContentGap {
   noResultsRate: number;
   suggestedContentType: string;
   priority: number;
+}
 }
 }
 

@@ -3,9 +3,11 @@
 import React from 'react';
 import { HighlightMode } from '../../types/comparison';
 
+}
 export interface DiffLegendProps {
   highlightMode: HighlightMode;
   className?: string;
+}
 }
 export const DiffLegend: React.FC<DiffLegendProps> = ({)
   highlightMode,

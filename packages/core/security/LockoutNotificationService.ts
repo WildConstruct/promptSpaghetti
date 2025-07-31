@@ -67,6 +67,8 @@ export enum NotificationChannel {
   estimatedResolution?: string;
   // Notification Template
 }
+}
+}
 export interface NotificationTemplate {
   id: string;
   type: NotificationType;
@@ -82,6 +84,8 @@ export interface NotificationTemplate {
   metadata: Record<string, any>;
   // Retry Policy
 }
+}
+}
 export interface RetryPolicy {
   maxAttempts: number;
   backoffMultiplier: number;
@@ -90,12 +94,15 @@ export interface RetryPolicy {
   retryOn: string;
   // User Notification Preferences
 }
+}
+}
 export interface UserNotificationPreferences {
   userId: string;
   channels: {
   email: boolean;
   sms: boolean;
   push: boolean;
+}
 };
   language: string;
   timezone: string;
@@ -113,6 +120,7 @@ export interface UserNotificationPreferences {
 
 // Notification Request
 }
+}
 export interface NotificationRequest {
   id: string;
   type: NotificationType;
@@ -126,6 +134,8 @@ export interface NotificationRequest {
   metadata: Record<string, any>;
   // Notification Delivery
 }
+}
+}
 export interface NotificationDelivery {
   id: string;
   requestId: string;
@@ -137,6 +147,7 @@ export interface NotificationDelivery {
   subject?: string;
   body: string;
   html?: string;
+}
 };
   sentAt?: Date;
   deliveredAt?: Date;
@@ -147,11 +158,13 @@ export interface NotificationDelivery {
 
 // Admin Notification Rules
 }
+}
 export interface AdminNotificationRule {
   id: string;
   trigger: {
   event: string;
   conditions: Record<string, any>;
+}
 };
   recipients: {
   roles: AdminRole;
@@ -179,7 +192,7 @@ export class LockoutNotificationService extends EventEmitter {
   /**
   * Send lockout notification to user
   */
-  public async sendLockoutNotification()
+  public async sendLockoutNotification(
   lockout: AccountLockout,
   channels?: NotificationChannel): Promise<string> {,
   const userPrefs = this.getUserPreferences(lockout.userId);
@@ -204,10 +217,11 @@ export class LockoutNotificationService extends EventEmitter {
   /**
    * Send unlock notification to user
    */
-  public async sendUnlockNotification()
+  public async sendUnlockNotification(
     lockout: AccountLockout,
     adminName?: string
   ): Promise<string> {
+
     const userPrefs = this.getUserPreferences(lockout.userId);
     const channels = this.getPreferredChannels(userPrefs);
     const variables = this.buildTemplateVariables(lockout, { adminName });
@@ -229,10 +243,11 @@ export class LockoutNotificationService extends EventEmitter {
   /**
    * Send security alert notification
    */
-  public async sendSecurityAlert()
+  public async sendSecurityAlert(
     lockout: AccountLockout,
     alertDetails: Record<string, any>
   ): Promise<string> {
+
   const userPrefs = this.getUserPreferences(lockout.userId);
   const channels = [NotificationChannel.EMAIL, NotificationChannel.PUSH]; // Security alerts always use multiple channels;
   const variables = this.buildTemplateVariables(lockout, alertDetails);
@@ -254,12 +269,13 @@ export class LockoutNotificationService extends EventEmitter {
   /**
    * Send admin notification for approval required
    */
-  public async sendAdminNotification()
+  public async sendAdminNotification(
     type: NotificationType,
     lockout: AccountLockout,
     adminRoles: AdminRole,
     details: Record<string, any>
   ): Promise<string> {
+
   const notifications: string = [];
   for (const role of adminRoles) {
   const recipients = this.getAdminRecipients(role);
@@ -285,9 +301,9 @@ export class LockoutNotificationService extends EventEmitter {
   /**
    * Update user notification preferences
    */
-  public updateUserPreferences(()
+  public updateUserPreferences(((
     userId: string,
-    preferences: Partial<UserNotificationPreferences>,
+    preferences: Partial<UserNotificationPreferences>
   ): void {
     const current = this.getUserPreferences(userId);
     const updated = { ...current, ...preferences, userId };
@@ -322,9 +338,9 @@ export class LockoutNotificationService extends EventEmitter {
   /**
    * Get user notification history
    */
-  public getUserNotificationHistory(()
+  public getUserNotificationHistory(((
     userId: string,
-    limit: number = 50,
+    limit: number = 50
   ): NotificationRequest {
   return Array.from(this.notifications.values())
   .filter(n => n.metadata.userId === userId)
@@ -345,7 +361,7 @@ export class LockoutNotificationService extends EventEmitter {
   /**
    * Test notification delivery
    */
-  public async testNotification()
+  public async testNotification(
     recipient: string,
     channel: NotificationChannel,
     templateId: string,
@@ -419,6 +435,7 @@ export class LockoutNotificationService extends EventEmitter {
     };
   // Private helper methods
   private async queueNotification(request: NotificationRequest): Promise<string> {
+
   request.metadata.createdAt = Date.now();
   request.metadata.queuedAt = Date.now();
   this.notifications.set(request.id, request);
@@ -491,6 +508,7 @@ export class LockoutNotificationService extends EventEmitter {
     await new Promise(resolve => setTimeout(resolve, 100 + Math.random() * 200));
     return random < successRate;
   private async scheduleRetry(delivery: NotificationDelivery): Promise<void> {
+
     const template = this.templates.get(this.notifications.get(delivery.requestId)?.templateId || '');
     if (!template || delivery.attempts >= template.retryPolicy.maxAttempts) {
       return;
@@ -505,6 +523,7 @@ export class LockoutNotificationService extends EventEmitter {
   private async renderTemplate(templateId: string)
     variables: TemplateVariables,
     channel: NotificationChannel): Promise<{ subject?: string; body: string; html?: string }> {
+
     const template = this.templates.get(templateId);
     if (!template) {
       throw new Error(`Template not found: ${templateId}`);}

@@ -10,6 +10,7 @@ import { EventRepository } from './EventPersistenceLayer';
 import { AnalyticsAuthorizationService, AuthContext } from './AnalyticsAuthorization';
 import './RealTimeDashboard.css';
 
+}
 interface DashboardConfig {
     refreshInterval: number;
     maxEventsDisplay: number;
@@ -33,6 +34,7 @@ export declare enum WidgetType {
     INTEGRATION_STATUS = "integration_status",
     SECURITY_EVENTS = "security_events"
 
+}
 interface RealTimeDashboardProps {
     eventBus: UnifiedEventBus;
     eventRepository: EventRepository;
@@ -48,3 +50,4 @@ interface RealTimeDashboardProps {
 export declare const RealTimeDashboard: React.FC<RealTimeDashboardProps>;
 export default RealTimeDashboard;
 //# sourceMappingURL=RealTimeDashboard.d.ts.map
+}

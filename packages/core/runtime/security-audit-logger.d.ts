@@ -47,6 +47,7 @@ export declare enum SecurityEventCategory {
  * Security event context information
  */
 
+}
 export interface SecurityEventContext {
     nodeId?: string;
     userId?: string;
@@ -67,6 +68,7 @@ export interface SecurityEventContext {
  * Security audit event
  */
 
+}
 export interface SecurityAuditEvent {
     id: string;
     timestamp: number;
@@ -79,21 +81,24 @@ export interface SecurityAuditEvent {
  * Event aggregation statistics
  */
 
+}
 export interface SecurityEventStats {
     totalEvents: number;
     eventsByCategory: Record<SecurityEventCategory, number>;
     eventsBySeverity: Record<SecuritySeverity, number>;
     blockedOperations: number;
     uniqueExpressions: number;
-    topBlockedPatterns: Array<{,
+    topBlockedPatterns: Array<{
         pattern: string;
         count: number;
+}
     }>;
     recentCriticalEvents: SecurityAuditEvent[];
 /**
  * Security audit logger configuration
  */
 
+}
 export interface SecurityAuditConfig {
     maxEvents: number;
     enableConsoleLogging: boolean;
@@ -143,6 +148,7 @@ export declare class SecurityAuditLogger {
         startTime?: number;
         endTime?: number;
         blocked?: boolean;
+}
     }): SecurityAuditEvent[];
     /**
      * Get event statistics

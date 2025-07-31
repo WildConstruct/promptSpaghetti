@@ -16,6 +16,7 @@ import { Database } from '../database/DatabaseService';
 import { AuditService } from './AuditService';
 
 }
+}
 export interface RetentionPolicy {
   id: string;
   name: string;
@@ -28,7 +29,9 @@ export interface RetentionPolicy {
   updatedAt: Date;
 }
 }
+}
 
+}
 }
 export interface DataType {
   type: string;
@@ -38,7 +41,9 @@ export interface DataType {
   sensitive: boolean; // Requires special handling
 }
 }
+}
 
+}
 }
 export interface RetentionSchedule {
   policyId: string;
@@ -50,7 +55,9 @@ export interface RetentionSchedule {
   errors?: string[];
 }
 }
+}
 
+}
 }
 export interface DataExportRequest {
   id: string;
@@ -64,7 +71,9 @@ export interface DataExportRequest {
   createdAt: Date;
 }
 }
+}
 
+}
 }
 export interface RetentionReport {
   periodStart: Date;
@@ -76,6 +85,7 @@ export interface RetentionReport {
   storageFreed: number; // Bytes
   errors: string[];
   executionTime: number; // Milliseconds
+}
 }
 }
 

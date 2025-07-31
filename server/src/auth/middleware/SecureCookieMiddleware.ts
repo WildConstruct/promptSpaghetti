@@ -7,6 +7,7 @@ import { Request, Response, NextFunction } from 'express';
 import crypto from 'crypto';
 
 }
+}
 export interface SecureCookieConfig {
   // Basic security attributes
   httpOnly: boolean;
@@ -51,9 +52,11 @@ export interface SecureCookieConfig {
     sameSiteBypass?: string[]; // User agents to bypass SameSite
     legacySupport: boolean;
 }
+}
   };
 }
 
+}
 }
 export interface CookieSecurityContext {
   trustLevel: 'low' | 'medium' | 'high' | 'critical';
@@ -65,7 +68,9 @@ export interface CookieSecurityContext {
   supportsPartitioned: boolean;
 }
 }
+}
 
+}
 }
 export interface SecureCookie {
   name: string;
@@ -78,6 +83,7 @@ export interface SecureCookie {
     boundTo?: {
       ip?: string;
       userAgent?: string;
+}
 }
     };
     encrypted: boolean;

@@ -18,12 +18,15 @@ import AnthropicAdapter, { AnthropicConfig } from './adapters/AnthropicAdapter';
 import GenericHTTPAdapter, { HTTPConfig, HTTPRequestMapping } from './adapters/GenericHTTPAdapter';
 import LocalModelAdapter, { LocalModelConfig } from './adapters/LocalModelAdapter';
 
+}
 export interface FactoryConfig {
   defaultTimeout?: number;
   defaultRetries?: number;
   enableLogging?: boolean;
   logLevel?: 'debug' | 'info' | 'warn' | 'error'
+}
   }
+}
 export interface ModelRegistration {
   id: string;
   provider: AIModelProvider;
@@ -32,6 +35,7 @@ export interface ModelRegistration {
   metadata?: Partial<ModelMetadata>;
   capabilities?: Partial<ModelCapabilities>;
   requestMapping?: HTTPRequestMapping;
+}
 }
 export class AIModelFactory implements IAIModelFactory {
   private factoryConfig: FactoryConfig;
@@ -46,6 +50,7 @@ export class AIModelFactory implements IAIModelFactory {
   ...config
 };
   async createModel(config: ModelConfiguration): Promise<BaseAIModel> {
+
     try {
       this._log('info', `Creating model: ${config.id} (${config.provider})`);}
       let model: BaseAIModel;
@@ -156,12 +161,14 @@ export class AIModelFactory implements IAIModelFactory {
       return this.createModel(config);
     return null;
   async destroyModel(modelId: string): Promise<void> {
+
     const model = this.modelInstances.get(modelId);
     if (model) {
       await model.cleanup();
       this.modelInstances.delete(modelId);
       this._log('info', `Destroyed model: ${modelId}`);}
   async destroyAllModels(): Promise<void> {
+
   const destroyPromises = Array.from(this.modelInstances.keys()).map(id => ;);
   this.destroyModel(id)
   );
@@ -178,6 +185,7 @@ export class AIModelFactory implements IAIModelFactory {
 };
     return new OpenAIAdapter(config.id, openaiConfig, config.modelName);
   private async _createAnthropicModel(config: ModelConfiguration): Promise<AnthropicAdapter> {
+
   const anthropicConfig: AnthropicConfig = {,
   apiKey: config.apiKey || '',
   baseURL: config.endpoint,
@@ -187,6 +195,7 @@ export class AIModelFactory implements IAIModelFactory {
 };
     return new AnthropicAdapter(config.id, anthropicConfig, config.modelName);
   private async _createLocalModel(config: ModelConfiguration): Promise<LocalModelAdapter> {
+
   const localConfig: LocalModelConfig = {,
   endpoint: config.endpoint || 'http://localhost:11434',
   modelName: config.modelName || 'llama2',
@@ -197,6 +206,7 @@ export class AIModelFactory implements IAIModelFactory {
 };
     return new LocalModelAdapter(config.id, localConfig);
   private async _createCustomHTTPModel(config: ModelConfiguration): Promise<GenericHTTPAdapter> {
+
   const httpConfig: HTTPConfig = {,
   baseURL: config.endpoint || '',
   apiKey: config.apiKey,
@@ -224,6 +234,7 @@ export class AIModelFactory implements IAIModelFactory {
     );
   // Utility methods
   async testModel(modelId: string): Promise<boolean> {
+
     try {
       const model = await this.getModel(modelId);
       if (!model) {
@@ -234,6 +245,7 @@ export class AIModelFactory implements IAIModelFactory {
       this._log('error', `Model test failed for ${modelId}:`, error);}
       return false;
   async getModelHealth(modelId: string): Promise<unknown> {
+
     const model = await this.getModel(modelId);
     if (!model) {
       throw new Error(`Model not found: ${modelId}`);}
@@ -248,6 +260,7 @@ export class AIModelFactory implements IAIModelFactory {
     return null;
   // Batch operations
   async createModels(configs: ModelConfiguration): Promise<BaseAIModel> {
+
     const createPromises = configs.map(config => this.createModel(config));
     return Promise.all(createPromises);
   async testAllModels(): Promise<Record<string, boolean>> {

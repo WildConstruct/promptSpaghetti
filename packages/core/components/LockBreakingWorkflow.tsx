@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, AlertTriangle, Shield, Clock, User, FileText } from 'lucide-react';
 import { WorkflowLock } from '../types/locking';
+}
 interface LockBreakingWorkflowProps {
   isOpen: boolean;
   onClose: () => void;
@@ -15,6 +16,7 @@ interface LockBreakingWorkflowProps {
   resourceId,
   onBreakLock,
   userId
+}
 }) => {
   const [currentStep, setCurrentStep] = useState<'select' | 'confirm' | 'justification'>('select');
   const [selectedLock, setSelectedLock] = useState<WorkflowLock | null>(null);

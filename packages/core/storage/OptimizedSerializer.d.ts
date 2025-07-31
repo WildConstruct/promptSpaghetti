@@ -7,6 +7,7 @@ import { PSGFile } from '../projectManager';
  * Serialization format options
  */
 
+}
 export interface SerializationOptions {
     format: 'json' | 'binary' | 'compressed';
     compression?: 'gzip' | 'lz4' | 'brotli';
@@ -18,6 +19,7 @@ export interface SerializationOptions {
  * Serialization result with performance metrics
  */
 
+}
 export interface SerializationResult {
     data: string | ArrayBuffer;
     format: string;
@@ -50,6 +52,7 @@ export declare class OptimizedSerializer {
     ): Promise<SerializationResult & {
         isIncremental: boolean;
         deltaSize: number;
+}
     }>;
     /**
      * Get serialization performance metrics

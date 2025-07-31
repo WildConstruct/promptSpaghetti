@@ -27,6 +27,7 @@ import './HelpIntegrationWidget.css';
 // Types and Interfaces
 // =============================================================================
 
+}
 export interface HelpIntegrationProps {
   // Current context
   currentSystem: 'graph-editor' | 'marketplace';
@@ -44,6 +45,8 @@ export interface HelpIntegrationProps {
   minimized?: boolean;
   hidden?: boolean;
 }
+}
+}
 export interface HelpSession {
   id: string;
   sessionType: string;
@@ -55,8 +58,10 @@ export interface HelpSession {
   completedActions: string;
   skippedContent: string;
   ratings: Record<string, number>;
+}
 };
   escalationLevel: number;
+}
 }
 export interface TransitionContext {
   fromSystem: 'graph-editor' | 'marketplace';
@@ -67,6 +72,7 @@ export interface TransitionContext {
   // =============================================================================
   // Help Integration Widget Component
   // =============================================================================
+}
 }
 export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
   currentSystem,
@@ -539,6 +545,7 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
 // =============================================================================
 // Helper Components
 // =============================================================================
+}
 interface HelpContentCardProps {
   content: HelpContent;
   isActive: boolean;
@@ -559,6 +566,7 @@ interface HelpContentCardProps {
   onComplete,
   onSkip,
   onRate
+}
 }) => {
   const [rating, setRating] = useState(0);
   const [_____showActions, _____setShowActions] = useState(false);

@@ -24,6 +24,7 @@ export type StorageBackend =
   | 'WEB_WORKER'
   | 'OPFS';         // Origin Private File System
 
+}
 export interface PersistenceRule {
   strategy: PersistenceStrategy;
   storage: StorageBackend;
@@ -47,7 +48,9 @@ export interface PersistenceRule {
   interval?: string;
   maxBackups?: number;
   compression?: boolean;
+}
 };
+}
 }
 export interface PersistenceTask {
   id: string;
@@ -62,6 +65,8 @@ export interface PersistenceTask {
   scheduled?: number;
   metadata?: Record<string, any>;
 }
+}
+}
 export interface StorageAdapter {
   name: StorageBackend;
   isAvailable(): boolean;
@@ -72,6 +77,8 @@ export interface StorageAdapter {
   size(): Promise<number>;
   keys(): Promise<string>;
   supports(feature: string): boolean;
+}
+}
 }
 export interface PersistenceMetrics {
   totalWrites: number;
@@ -86,6 +93,8 @@ export interface PersistenceMetrics {
   dataCorruption: number;
   recoveryTime: number;
 }
+}
+}
 export interface BackupMetadata {
   timestamp: number;
   domain: string;
@@ -94,6 +103,7 @@ export interface BackupMetadata {
   version: string;
   compressionRatio?: number;
   // Main persistence manager
+}
 }
 export class StatePersistenceManager extends EventEmitter {
   private persistenceRules = new Map<string, PersistenceRule>();
@@ -204,6 +214,7 @@ export class StatePersistenceManager extends EventEmitter {
   immediate?: boolean;
   metadata?: Record<string, any>;
 } = {}): Promise<void> {
+
     const rule = this.persistenceRules.get(domain);
     if (!rule) {
       throw new Error(`No persistence rule configured for domain: ${domain}`);}
@@ -224,6 +235,7 @@ export class StatePersistenceManager extends EventEmitter {
     };
     await this.enqueuePersistenceTask(task);
   async load(domain: string, key?: string): Promise<any> {
+
     const rule = this.persistenceRules.get(domain);
     if (!rule) {
       throw new Error(`No persistence rule configured for domain: ${domain}`);}
@@ -258,6 +270,7 @@ export class StatePersistenceManager extends EventEmitter {
           return backupData;
       throw new Error(`Failed to load data for ${domain}: ${error.message}`);}
   async clear(domain: string, key?: string): Promise<void> {
+
     const rule = this.persistenceRules.get(domain);
     if (!rule) {
       throw new Error(`No persistence rule configured for domain: ${domain}`);}
@@ -269,6 +282,7 @@ export class StatePersistenceManager extends EventEmitter {
     this.emit('dataCleared', { domain, key: storageKey });
   // Task queue management
   private async enqueuePersistenceTask(task: PersistenceTask): Promise<void> {
+
     switch (task.strategy) {
       case 'IMMEDIATE':
         await this.executeTask(task);
@@ -326,6 +340,7 @@ export class StatePersistenceManager extends EventEmitter {
       await this.processBatchQueue();
     }, 100);
   private async processBatchQueue(): Promise<void> {
+
     if (this.isProcessing || this.persistenceQueue.length === 0) return;
     this.isProcessing = true;
     try {
@@ -355,6 +370,7 @@ export class StatePersistenceManager extends EventEmitter {
 });
     return groups;
   private async executeBatch(domain: string, tasks: PersistenceTask): Promise<void> {
+
     const rule = this.persistenceRules.get(domain)!;
     const adapter = this.storageAdapters.get(rule.storage);
     if (!adapter) {
@@ -385,6 +401,7 @@ export class StatePersistenceManager extends EventEmitter {
     await this.executeTask(batchTask);
   // Task execution
   private async executeTask(task: PersistenceTask): Promise<void> {
+
     const rule = this.persistenceRules.get(task.domain)!;
     const adapter = this.storageAdapters.get(task.storage);
     if (!adapter || !adapter.isAvailable()) {
@@ -625,6 +642,7 @@ export class StatePersistenceManager extends EventEmitter {
     const [ amount, unit] = match;
     return parseInt(amount) * units[unit as keyof typeof units];
   private async compress(data: any): Promise<string> {
+
     // Simple compression (could use better algorithm)
     const json = JSON.stringify(data);
     if (typeof CompressionStream !== 'undefined') {
@@ -650,6 +668,7 @@ export class StatePersistenceManager extends EventEmitter {
       // Fallback to simple compression
       return json.replace(/\s+/g, ' ').replace(/"/g, "'");
   private async decompress(data: string): Promise<any> {
+
     try {
       if (typeof DecompressionStream !== 'undefined') {
         // Use native decompression if available
@@ -698,6 +717,7 @@ export class StatePersistenceManager extends EventEmitter {
     } else {
       return [existing, newData];
   private async validateData(domain: string, data: any): Promise<void> {
+
     // Basic validation - could be enhanced with schema validation
     if (data === null || data === undefined) {
       throw new Error(`Invalid data for domain ${domain}: null or undefined`);}
@@ -708,10 +728,12 @@ export class StatePersistenceManager extends EventEmitter {
       this.metrics.dataCorruption++;
       throw new Error(`Data corruption detected for domain ${domain}: ${error.message}`);}
   private async getCurrentDomainState(domain: string): Promise<any> {
+
     // This would integrate with the state containers to get current state
     // For now, return null as placeholder
     return null;
   private async createBackup(domain: string, key: string, data: any): Promise<void> {
+
     const rule = this.persistenceRules.get(domain)!;
     if (!rule.backup?.enabled) return;
     const backupKey = `${key}_backup_${Date.now()}`;}
@@ -733,6 +755,7 @@ export class StatePersistenceManager extends EventEmitter {
       backups.splice(0, backups.length - maxBackups);
     this.metrics.lastBackup = Date.now();
   private async loadFromBackup(domain: string, key?: string): Promise<any> {
+
     const backups = this.backupStorage.get(domain);
     if (!backups || backups.length === 0) return null;
     // Get most recent backup
@@ -817,11 +840,13 @@ export class StatePersistenceManager extends EventEmitter {
     return usage;
   // Manual persistence control
   async flushDomain(domain: string): Promise<void> {
+
     const tasksToFlush = this.persistenceQueue.filter(task => task.domain === domain);
     for (const task of tasksToFlush) {
       await this.executeTask(task);
     this.persistenceQueue = this.persistenceQueue.filter(task => task.domain !== domain);
   async flushAll(): Promise<void> {
+
     await this.processBatchQueue();
   // Configuration updates
   updateDomainRule(domain: string, rule: Partial<PersistenceRule>): void {

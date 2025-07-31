@@ -9,6 +9,7 @@ import { TrendingUp, TrendingDown, Minus, Target, Info } from 'lucide-react';
 import { TrendIndicator } from './TrendIndicator';
 import './MetricCard.css';
 
+}
 export interface MetricValue {
   current: number | string;
   previous?: number;
@@ -18,11 +19,15 @@ export interface MetricValue {
   suffix?: string;
   prefix?: string;
 }
+}
+}
 export interface MetricTrend {
   value: number;
   direction: 'up' | 'down' | 'neutral';
   period?: string;
   isGoodTrend?: boolean;
+}
+}
 }
 export interface MetricCardProps {
   // Core content
@@ -30,6 +35,7 @@ export interface MetricCardProps {
   value: MetricValue;
   description?: string;
   // Visual elements
+}
   icon?: React.ComponentType<{ size?: number; className?: string }>;
   trend?: MetricTrend;
   // Styling and behavior

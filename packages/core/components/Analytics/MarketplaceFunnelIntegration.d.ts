@@ -18,6 +18,7 @@ import React from 'react';
 import { ConversionFunnelDefinition } from '../../analytics/ConversionDataModel';
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
 
+}
 export interface MarketplaceFunnelIntegrationProps {
     funnelDefinition: ConversionFunnelDefinition;
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
@@ -30,6 +31,7 @@ export interface MarketplaceFunnelIntegrationProps {
     onExport?: (data: MarketplaceIntegrationExportData) => void;
 
 
+}
 export interface MarketplaceContext {
     marketplaceId: string;
     marketplaceName: string;
@@ -40,6 +42,7 @@ export interface MarketplaceContext {
     permissions: MarketplacePermission[];
 
 
+}
 export interface TemplateContext {
     templateId: string;
     templateName: string;
@@ -53,6 +56,7 @@ export interface TemplateContext {
     performance: TemplatePerformance;
 
 
+}
 export interface TemplatePricing {
     priceType: 'free' | 'premium' | 'subscription';
     price?: number;
@@ -60,6 +64,7 @@ export interface TemplatePricing {
     discounts: TemplateDiscount[];
 
 
+}
 export interface TemplateDiscount {
     type: 'percentage' | 'fixed';
     value: number;
@@ -67,6 +72,7 @@ export interface TemplateDiscount {
     conditions: string[];
 
 
+}
 export interface TemplatePerformance {
     downloads: number;
     views: number;
@@ -77,6 +83,7 @@ export interface TemplatePerformance {
     lastUpdated: number;
 
 
+}
 export interface CreatorContext {
     creatorId: string;
     creatorName: string;
@@ -89,6 +96,7 @@ export interface CreatorContext {
     achievements: CreatorAchievement[];
 
 
+}
 export interface CreatorAchievement {
     achievementId: string;
     name: string;
@@ -97,6 +105,7 @@ export interface CreatorAchievement {
     badge: string;
 
 
+}
 export interface AdminContext {
     adminId: string;
     adminRole: 'super_admin' | 'marketplace_admin' | 'analytics_admin';
@@ -108,6 +117,7 @@ export type MarketplacePermission = 'view_basic_analytics' | 'view_advanced_anal
 export type IntegrationMode = 'embedded_widget' | 'full_dashboard' | 'recommendation_panel' | 'alert_center' | 'performance_overlay';
 export type UserRole = 'creator' | 'admin' | 'viewer' | 'manager';
 
+}
 export interface WidgetConfiguration {
     widgets: WidgetType[];
     layout: WidgetLayout;
@@ -118,6 +128,7 @@ export interface WidgetConfiguration {
 
 export type WidgetType = 'conversion_summary' | 'performance_chart' | 'optimization_recommendations' | 'anomaly_alerts' | 'attribution_insights' | 'predictive_forecast' | 'template_performance' | 'creator_dashboard';
 
+}
 export interface WidgetLayout {
     columns: number;
     rows: number;
@@ -126,6 +137,7 @@ export interface WidgetLayout {
     widgetSizes: Record<WidgetType, WidgetSize>;
 
 
+}
 export interface WidgetSize {
     width: number;
     height: number;
@@ -134,6 +146,7 @@ export interface WidgetSize {
     resizable: boolean;
 
 
+}
 export interface WidgetCustomization {
     widgetType: WidgetType;
     title?: string;
@@ -144,6 +157,7 @@ export interface WidgetCustomization {
     displayMode: 'compact' | 'standard' | 'detailed';
 
 
+}
 export interface MarketplaceIntegrationData {
     funnelSummary: FunnelSummaryData;
     templateInsights: TemplateInsightData[];
@@ -154,6 +168,7 @@ export interface MarketplaceIntegrationData {
     integrationHealth: IntegrationHealthData;
 
 
+}
 export interface FunnelSummaryData {
     overallConversionRate: number;
     totalConversions: number;
@@ -165,6 +180,7 @@ export interface FunnelSummaryData {
     lastUpdated: number;
 
 
+}
 export interface StepPerformanceData {
     stepId: string;
     stepName: string;
@@ -175,6 +191,7 @@ export interface StepPerformanceData {
     optimizationPotential: number;
 
 
+}
 export interface TemplateInsightData {
     templateId: string;
     templateName: string;
@@ -185,6 +202,7 @@ export interface TemplateInsightData {
     competitivePosition: TemplateCompetitivePosition;
 
 
+}
 export interface TemplateConversionMetrics {
     viewToDownloadRate: number;
     downloadToUseRate: number;
@@ -194,6 +212,7 @@ export interface TemplateConversionMetrics {
     userRetentionRate: number;
 
 
+}
 export interface TemplatePerformanceInsight {
     insightType: TemplateInsightType;
     title: string;
@@ -205,6 +224,7 @@ export interface TemplatePerformanceInsight {
 
 export type TemplateInsightType = 'conversion_opportunity' | 'pricing_optimization' | 'content_improvement' | 'marketing_efficiency' | 'user_experience' | 'competitive_advantage';
 
+}
 export interface TemplateRecommendation {
     action: string;
     expectedImpact: number;
@@ -214,6 +234,7 @@ export interface TemplateRecommendation {
     resources: string[];
 
 
+}
 export interface TemplateOptimizationOpportunity {
     opportunity: string;
     currentPerformance: number;
@@ -223,6 +244,7 @@ export interface TemplateOptimizationOpportunity {
     successProbability: number;
 
 
+}
 export interface OptimizationStep {
     step: string;
     description: string;
@@ -231,6 +253,7 @@ export interface OptimizationStep {
     dependencies: string[];
 
 
+}
 export interface TemplateCompetitivePosition {
     categoryRank: number;
     totalInCategory: number;
@@ -240,6 +263,7 @@ export interface TemplateCompetitivePosition {
     trendDirection: 'gaining' | 'losing' | 'stable';
 
 
+}
 export interface CreatorOptimizationData {
     creatorId: string;
     creatorName: string;
@@ -249,6 +273,7 @@ export interface CreatorOptimizationData {
     growthOpportunities: CreatorGrowthOpportunity[];
 
 
+}
 export interface CreatorPortfolioMetrics {
     totalTemplates: number;
     totalRevenue: number;
@@ -259,6 +284,7 @@ export interface CreatorPortfolioMetrics {
     marketPenetration: number;
 
 
+}
 export interface CreatorOptimizationRecommendation {
     recommendationType: CreatorRecommendationType;
     title: string;
@@ -269,6 +295,7 @@ export interface CreatorOptimizationRecommendation {
 
 export type CreatorRecommendationType = 'template_optimization' | 'pricing_strategy' | 'portfolio_expansion' | 'marketing_improvement' | 'user_engagement' | 'quality_enhancement';
 
+}
 export interface CreatorImpactProjection {
     revenueIncrease: number;
     conversionImprovement: number;
@@ -277,6 +304,7 @@ export interface CreatorImpactProjection {
     confidenceLevel: number;
 
 
+}
 export interface CreatorActionItem {
     action: string;
     instructions: string;
@@ -286,6 +314,7 @@ export interface CreatorActionItem {
     success_criteria: string[];
 
 
+}
 export interface CreatorPerformanceTrend {
     metric: string;
     currentValue: number;
@@ -295,6 +324,7 @@ export interface CreatorPerformanceTrend {
     factors: TrendFactor[];
 
 
+}
 export interface TrendFactor {
     factor: string;
     impact: number;
@@ -302,6 +332,7 @@ export interface TrendFactor {
     recommendation: string;
 
 
+}
 export interface CreatorGrowthOpportunity {
     opportunity: string;
     description: string;
@@ -312,6 +343,7 @@ export interface CreatorGrowthOpportunity {
     expectedROI: number;
 
 
+}
 export interface MarketplaceMetricData {
     totalConversions: number;
     totalRevenue: number;
@@ -322,6 +354,7 @@ export interface MarketplaceMetricData {
     healthScore: MarketplaceHealthScore;
 
 
+}
 export interface CategoryPerformance {
     category: string;
     conversionRate: number;
@@ -331,6 +364,7 @@ export interface CategoryPerformance {
     growthRate: number;
 
 
+}
 export interface UserAcquisitionMetrics {
     newUsersLastPeriod: number;
     acquisitionCost: number;
@@ -338,6 +372,7 @@ export interface UserAcquisitionMetrics {
     conversionByChannel: ChannelConversion[];
 
 
+}
 export interface AcquisitionChannel {
     channel: string;
     users: number;
@@ -346,6 +381,7 @@ export interface AcquisitionChannel {
     quality: number;
 
 
+}
 export interface ChannelConversion {
     channel: string;
     conversionRate: number;
@@ -353,6 +389,7 @@ export interface ChannelConversion {
     retentionRate: number;
 
 
+}
 export interface RetentionMetrics {
     overallRetentionRate: number;
     cohortRetention: CohortRetentionData[];
@@ -360,6 +397,7 @@ export interface RetentionMetrics {
     reactivationRate: number;
 
 
+}
 export interface CohortRetentionData {
     cohort: string;
     retentionRate: number;
@@ -367,6 +405,7 @@ export interface CohortRetentionData {
     totalValue: number;
 
 
+}
 export interface MarketplaceHealthScore {
     overallScore: number;
     components: HealthScoreComponent[];
@@ -374,6 +413,7 @@ export interface MarketplaceHealthScore {
     criticalIssues: string[];
 
 
+}
 export interface HealthScoreComponent {
     component: string;
     score: number;
@@ -381,6 +421,7 @@ export interface HealthScoreComponent {
     status: 'excellent' | 'good' | 'fair' | 'poor';
 
 
+}
 export interface RecommendedAction {
     actionId: string;
     type: ActionType;
@@ -394,6 +435,7 @@ export interface RecommendedAction {
 
 export type ActionType = 'optimization' | 'alert_response' | 'strategic_improvement' | 'operational_fix' | 'growth_initiative';
 
+}
 export interface ActionImpact {
     revenueImpact: number;
     conversionImpact: number;
@@ -402,6 +444,7 @@ export interface ActionImpact {
     confidenceLevel: number;
 
 
+}
 export interface ActionImplementation {
     steps: ImplementationStep[];
     resources: string[];
@@ -410,6 +453,7 @@ export interface ActionImplementation {
     riskLevel: 'low' | 'medium' | 'high';
 
 
+}
 export interface ImplementationStep {
     step: string;
     description: string;
@@ -418,6 +462,7 @@ export interface ImplementationStep {
     dependencies: string[];
 
 
+}
 export interface ActionProgress {
     status: 'pending' | 'in_progress' | 'completed' | 'paused' | 'cancelled';
     completionPercentage: number;
@@ -426,6 +471,7 @@ export interface ActionProgress {
     blockers: string[];
 
 
+}
 export interface PerformanceAlert {
     alertId: string;
     type: AlertType;
@@ -439,6 +485,7 @@ export interface PerformanceAlert {
 
 export type AlertType = 'conversion_drop' | 'revenue_anomaly' | 'template_underperforming' | 'creator_churn_risk' | 'system_issue' | 'market_opportunity';
 
+}
 export interface AffectedEntity {
     entityType: 'template' | 'creator' | 'category' | 'marketplace';
     entityId: string;
@@ -446,6 +493,7 @@ export interface AffectedEntity {
     impactLevel: number;
 
 
+}
 export interface AlertResolution {
     status: 'open' | 'investigating' | 'resolved' | 'false_positive';
     assignedTo?: string;
@@ -453,6 +501,7 @@ export interface AlertResolution {
     resolutionTime?: number;
 
 
+}
 export interface ResolutionStep {
     step: string;
     completedAt?: number;
@@ -460,6 +509,7 @@ export interface ResolutionStep {
     notes?: string;
 
 
+}
 export interface IntegrationHealthData {
     connectionStatus: 'connected' | 'degraded' | 'disconnected';
     lastSync: number;
@@ -469,6 +519,7 @@ export interface IntegrationHealthData {
     performance: IntegrationPerformance;
 
 
+}
 export interface IntegrationError {
     errorId: string;
     errorType: string;
@@ -478,6 +529,7 @@ export interface IntegrationError {
     impact: 'low' | 'medium' | 'high';
 
 
+}
 export interface IntegrationPerformance {
     averageResponseTime: number;
     throughput: number;
@@ -485,6 +537,7 @@ export interface IntegrationPerformance {
     availability: number;
 
 
+}
 export interface OptimizationAction {
     actionType: 'implement_recommendation' | 'dismiss_alert' | 'export_data' | 'configure_widget';
     details: Record<string, any>;
@@ -492,6 +545,7 @@ export interface OptimizationAction {
     timestamp: number;
 
 
+}
 export interface InsightInteraction {
     interactionType: 'view' | 'click' | 'share' | 'bookmark';
     insightId: string;
@@ -500,6 +554,7 @@ export interface InsightInteraction {
     context: Record<string, any>;
 
 
+}
 export interface MarketplaceIntegrationExportData {
     funnelSummary: FunnelSummaryData;
     templateInsights: TemplateInsightData[];
@@ -511,3 +566,4 @@ export interface MarketplaceIntegrationExportData {
 
 export declare const MarketplaceFunnelIntegration: React.FC<MarketplaceFunnelIntegrationProps>;
 //# sourceMappingURL=MarketplaceFunnelIntegration.d.ts.map
+}

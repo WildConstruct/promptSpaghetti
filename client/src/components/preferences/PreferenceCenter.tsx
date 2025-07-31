@@ -17,6 +17,7 @@ import {
   SecuritySettings,
   AccessibilitySettings
 } from '../../types/preferences';
+}
 interface PreferenceCenterProps {
   userId: string;
   onClose?: () => void;
@@ -45,6 +46,7 @@ interface PreferenceCenterProps {
   label: 'Privacy & Consent',
   icon: <ShieldIcon />,
   description: 'Control how your data is collected and used',
+}
 }
     {
   id: 'communication',
@@ -100,7 +102,7 @@ interface PreferenceCenterProps {
   if (!preferences) return;
   setPreferences(prev => ({)
   ...prev!,
-  [section]: {,
+  [section]: {
   ...prev![section],
   ...updates
 }));

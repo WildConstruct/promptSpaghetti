@@ -18,7 +18,7 @@ import {
 // Mock Implementations
 // ========================================
 class MockEmailService {
-  public sentEmails: Array<{,
+  public sentEmails: Array<{
   to: string;
   template: any;
   variables: Record<string, string>;
@@ -33,8 +33,10 @@ class MockEmailService {
     this.sentEmails.push({ to, template, variables, result });
     return result;
   async validateEmailAddress(email: string): Promise<boolean> {
+
     return email.includes('@') && email.includes('.') && !email.includes('invalid');
   async checkEmailReputation(email: string): Promise<{ valid: boolean; risk: number }> {
+
     if (email.includes('risky')) {
       return { valid: true, risk: 80 };
     if (email.includes('invalid')) {
@@ -50,45 +52,58 @@ class MockStorage {
   private events: any = [];
   // Configuration methods
   async saveConfiguration(config: EmailConfiguration): Promise<void> {
+
     this.configurations.set(config.id, { ...config });
   async getConfiguration(userId: string): Promise<EmailConfiguration | null> {
+
     for (const config of this.configurations.values()) {
       if (config.userId === userId) {
         return { ...config };
     return null;
   async getConfigurationById(configId: string): Promise<EmailConfiguration | null> {
+
     const config = this.configurations.get(configId);
     return config ? { ...config } : null;
   async updateConfiguration(configId: string, updates: Partial<EmailConfiguration>): Promise<void> {
+
     const existing = this.configurations.get(configId);
     if (existing) {
       this.configurations.set(configId, { ...existing, ...updates });
   async deleteConfiguration(configId: string): Promise<void> {
+
     this.configurations.delete(configId);
   // Verification methods
   async saveVerification(verification: EmailVerification): Promise<void> {
+
     this.verifications.set(verification.id, { ...verification });
   async getVerification(verificationId: string): Promise<EmailVerification | null> {
+
     const verification = this.verifications.get(verificationId);
     return verification ? { ...verification } : null;
   async getActiveVerifications(userId: string): Promise<EmailVerification> {
+
     return Array.from(this.verifications.values())
       .filter(v => v.userId === userId)
       .map(v => ({ ...v }));
   async deleteVerification(verificationId: string): Promise<void> {
+
     this.verifications.delete(verificationId);
   // Rate limiting
   async getRateLimitState(userId: string, action: string): Promise<{ count: number; windowStart: Date } | null> {
+
     const key = `${userId}:${action}`;}
     const state = this.rateLimits.get(key);
     return state ? { ...state } : null;
   async updateRateLimitState(userId: string, action: string, count: number): Promise<void> {
+
     const key = `${userId}:${action}`;}
     this.rateLimits.set(key, { count, windowStart: new Date() });
   // Logging
   async logVerificationAttempt(attempt: any): Promise<void> {
+
     this.attempts.push({ ...attempt });
   async logSecurityEvent(event: any): Promise<void> {
+
     this.events.push({ ...event });
   // Test helpers
   reset() {

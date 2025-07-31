@@ -25,6 +25,7 @@ export type PolicySeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
 
 export type PolicyCheckStatus = 'passed' | 'failed' | 'warning' | 'requires_review';
 
+}
 export interface PolicyCheckResult {
   checkId: string;
   policyType: PolicyType;
@@ -39,6 +40,8 @@ export interface PolicyCheckResult {
   timestamp: string;
   executionTimeMs: number;
 }
+}
+}
 export interface PolicyViolation {
   id: string;
   ruleId: string;
@@ -51,6 +54,8 @@ export interface PolicyViolation {
   location?: string;
   context?: Record<string, any>;
 }
+}
+}
 export interface PolicyCheckRequest {
   id: string;
   resourceType: 'content' | 'user' | 'template' | 'api_request' | 'system_config';
@@ -62,9 +67,11 @@ export interface PolicyCheckRequest {
   source: string;
   timestamp: string;
   metadata?: Record<string, any>;
+}
 };
   checksRequested?: PolicyType;
   skipCache?: boolean;
+}
 }
 export interface PolicyRule {
   id: string;
@@ -89,6 +96,8 @@ export interface PolicyRule {
   updatedAt: string;
   createdBy: string;
 }
+}
+}
 export interface RuleCondition {
   id: string;
   field: string;
@@ -96,11 +105,15 @@ export interface RuleCondition {
   value: any;
   caseSensitive?: boolean;
 }
+}
+}
 export interface RuleAction {
   id: string;
   type: 'block' | 'warn' | 'flag' | 'require_review' | 'auto_fix' | 'notify';
   parameters?: Record<string, any>;
   // Policy Checker Interface
+}
+}
 }
 export interface PolicyChecker {
   name: string;
@@ -109,6 +122,7 @@ export interface PolicyChecker {
   check(request: PolicyCheckRequest): Promise<PolicyCheckResult>;
   validateRule(rule: PolicyRule): Promise<boolean>;
   getDefaultRules(): Promise<PolicyRule>;
+}
 }
 export class PolicyCheckersService {
   private checkers: Map<PolicyType, PolicyChecker> = new Map();
@@ -126,6 +140,7 @@ export class PolicyCheckersService {
     this.checkers.set(checker.type, checker);
   // Execute policy checks
   async executeChecks(request: PolicyCheckRequest): Promise<PolicyCheckResult> {
+
     const startTime = Date.now();
     const results: PolicyCheckResult = [];
     const checksToRun = request.checksRequested || Array.from(this.checkers.keys());
@@ -160,10 +175,11 @@ export class PolicyCheckersService {
     await this.logPolicyCheckExecution(request, results, Date.now() - startTime);
     return results;
   // Execute single policy check
-  async executeCheck(()
+  async executeCheck(((
     request: PolicyCheckRequest,
-    policyType: PolicyType,
+    policyType: PolicyType
   ): Promise<PolicyCheckResult> {
+
   const results = await this.executeChecks({)
   ...request,
   checksRequested: [policyType],
@@ -183,6 +199,7 @@ export class PolicyCheckersService {
   criticalViolations: PolicyViolation;
   requiredActions: string;
 }> {
+
     const request: PolicyCheckRequest = {,
   id: `content-validation-${content.id}`}
 },
@@ -232,6 +249,7 @@ export class PolicyCheckersService {
   reasons: string;
   results: PolicyCheckResult;
 }> {
+
     const request: PolicyCheckRequest = {,
   id: `user-action-${action.userId}-${Date.now()}`}
 },
@@ -350,6 +368,7 @@ class ContentQualityPolicyChecker implements PolicyChecker {
   version = '1.0.0';
   constructor(private contentQualityService: ContentQualityMetricsService) {}
   async check(request: PolicyCheckRequest): Promise<PolicyCheckResult> {
+
     const startTime = Date.now();
     const violations: PolicyViolation = [];
     const recommendations: string = [];
@@ -391,6 +410,7 @@ class ContentQualityPolicyChecker implements PolicyChecker {
       executionTimeMs: Date.now() - startTime;
   };
   async validateRule(rule: PolicyRule): Promise<boolean> {
+
   return rule.policyType === this.type;
   async getDefaultRules(): Promise<PolicyRule> {,
   return [{
@@ -422,6 +442,7 @@ class ContentSafetyPolicyChecker implements PolicyChecker {
   type: PolicyType = 'content_safety';
   version = '1.0.0';
   async check(request: PolicyCheckRequest): Promise<PolicyCheckResult> {
+
     const startTime = Date.now();
     const violations: PolicyViolation = [];
     const recommendations: string = [];
@@ -461,6 +482,7 @@ class ContentSafetyPolicyChecker implements PolicyChecker {
       executionTimeMs: Date.now() - startTime;
   };
   async validateRule(rule: PolicyRule): Promise<boolean> {
+
   return rule.policyType === this.type;
   async getDefaultRules(): Promise<PolicyRule> {,
   return [{
@@ -493,6 +515,7 @@ class SecurityCompliancePolicyChecker implements PolicyChecker {
   version = '1.0.0';
   constructor(private complianceMonitor: ComplianceMonitor) {}
   async check(request: PolicyCheckRequest): Promise<PolicyCheckResult> {
+
   const startTime = Date.now();
   // Use existing compliance monitor
   const complianceResult = await this.complianceMonitor.runComplianceCheck();
@@ -524,6 +547,7 @@ class SecurityCompliancePolicyChecker implements PolicyChecker {
       executionTimeMs: Date.now() - startTime;
   };
   async validateRule(rule: PolicyRule): Promise<boolean> {
+
   return rule.policyType === this.type;
   async getDefaultRules(): Promise<PolicyRule> {,
   return [{
@@ -556,6 +580,7 @@ class AccessControlPolicyChecker implements PolicyChecker {
   type: PolicyType = 'access_control';
   version = '1.0.0';
   async check(request: PolicyCheckRequest): Promise<PolicyCheckResult> {
+
     const startTime = Date.now();
     const violations: PolicyViolation = [];
     // Mock access control validation
@@ -588,6 +613,7 @@ class AccessControlPolicyChecker implements PolicyChecker {
       executionTimeMs: Date.now() - startTime;
   };
   async validateRule(rule: PolicyRule): Promise<boolean> {
+
   return rule.policyType === this.type;
   async getDefaultRules(): Promise<PolicyRule> {,
   return [{
@@ -618,6 +644,7 @@ class DataProtectionPolicyChecker implements PolicyChecker {
   type: PolicyType = 'data_protection';
   version = '1.0.0';
   async check(request: PolicyCheckRequest): Promise<PolicyCheckResult> {
+
     const startTime = Date.now();
     const violations: PolicyViolation = [];
     // Mock data protection validation
@@ -652,6 +679,7 @@ class DataProtectionPolicyChecker implements PolicyChecker {
       executionTimeMs: Date.now() - startTime;
   };
   async validateRule(rule: PolicyRule): Promise<boolean> {
+
   return rule.policyType === this.type;
   async getDefaultRules(): Promise<PolicyRule> {,
   return [{
@@ -684,6 +712,7 @@ class RegulatoryCompliancePolicyChecker implements PolicyChecker {
   version = '1.0.0';
   constructor(private complianceMonitor: ComplianceMonitor) {}
   async check(request: PolicyCheckRequest): Promise<PolicyCheckResult> {
+
     const startTime = Date.now();
     // Mock regulatory compliance check
     const score = Math.floor(Math.random() * 10) + 90; // 90-100;
@@ -718,6 +747,7 @@ class RegulatoryCompliancePolicyChecker implements PolicyChecker {
       executionTimeMs: Date.now() - startTime;
   };
   async validateRule(rule: PolicyRule): Promise<boolean> {
+
   return rule.policyType === this.type;
   async getDefaultRules(): Promise<PolicyRule> {,
   return [{

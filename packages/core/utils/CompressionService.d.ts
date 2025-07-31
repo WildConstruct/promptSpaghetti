@@ -30,6 +30,7 @@ export declare enum DataType {
     VIDEO = "video",
     AUDIO = "audio"
 
+}
 export interface CompressionOptions {
     algorithm: CompressionAlgorithm;
     level: CompressionLevel;
@@ -39,6 +40,7 @@ export interface CompressionOptions {
     includeMetadata?: boolean;
 
 
+}
 export interface CompressionResult {
     success: boolean;
     originalSize: number;
@@ -52,6 +54,7 @@ export interface CompressionResult {
     error?: string;
 
 
+}
 export interface CompressionMetadata {
     algorithm: CompressionAlgorithm;
     level: CompressionLevel;
@@ -62,6 +65,7 @@ export interface CompressionMetadata {
     version: string;
 
 
+}
 export interface CompressionStats {
     totalCompressions: number;
     totalDecompressions: number;
@@ -73,6 +77,7 @@ export interface CompressionStats {
     algorithmStats: Map<CompressionAlgorithm, AlgorithmStats>;
 
 
+}
 export interface AlgorithmStats {
     algorithm: CompressionAlgorithm;
     usageCount: number;
@@ -82,6 +87,7 @@ export interface AlgorithmStats {
     averageSpeed: number;
 
 
+}
 export interface StreamCompressionOptions extends CompressionOptions {
     bufferSize?: number;
     onProgress?: (bytesProcessed: number, totalBytes?: number) => void;
@@ -94,6 +100,7 @@ export declare const CompressionOptionsSchema: z.ZodObject<{
     threshold: z.ZodOptional<z.ZodNumber>;
     chunkSize: z.ZodOptional<z.ZodNumber>;
     includeMetadata: z.ZodOptional<z.ZodBoolean>;
+}
 }, "strip", z.ZodTypeAny, {
     level: CompressionLevel;
     dataType: DataType;

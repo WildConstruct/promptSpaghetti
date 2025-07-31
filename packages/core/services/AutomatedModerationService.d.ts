@@ -14,6 +14,7 @@ export type ModerationReason = 'policy_violation' | 'quality_issues' | 'safety_c
 export type ContentType = 'template' | 'prompt' | 'comment' | 'review' | 'user_profile' | 'marketplace_listing' | 'tutorial_content';
 export type ModerationSeverity = 'low' | 'medium' | 'high' | 'critical';
 
+}
 export interface ModerationRequest {
     id: string;
     contentId: string;
@@ -23,6 +24,7 @@ export interface ModerationRequest {
         description?: string;
         body?: string;
         metadata?: Record<string, any>;
+}
     };
     author: {
         userId: string;
@@ -41,6 +43,7 @@ export interface ModerationRequest {
     priority?: 'normal' | 'high' | 'urgent';
     skipCache?: boolean;
 
+}
 export interface ModerationResult {
     id: string;
     requestId: string;
@@ -58,6 +61,7 @@ export interface ModerationResult {
         sentimentScore: number;
         languageQuality: number;
         contentSimilarity?: number;
+}
     };
     trustAnalysis: {
         authorTrustScore: number;
@@ -65,7 +69,7 @@ export interface ModerationResult {
         riskFactors: string[];
         historicalViolations: number;
     };
-    recommendedActions: Array<{,
+    recommendedActions: Array<{
         action: ModerationAction;
         reason: string;
         priority: number;
@@ -79,6 +83,7 @@ export interface ModerationResult {
     timestamp: string;
     version: string;
 
+}
 export interface ModerationRule {
     id: string;
     name: string;
@@ -92,8 +97,9 @@ export interface ModerationRule {
         mlFlagThreshold?: number;
         communityReports?: number;
         keywordMatches?: string[];
+}
     };
-    actions: Array<{,
+    actions: Array<{
         condition: string;
         action: ModerationAction;
         parameters?: Record<string, any>;
@@ -106,6 +112,7 @@ export interface ModerationRule {
     updatedAt: string;
     createdBy: string;
 
+}
 export interface ModerationWorkflow {
     id: string;
     name: string;
@@ -113,6 +120,7 @@ export interface ModerationWorkflow {
     steps: ModerationWorkflowStep[];
     enabled: boolean;
 
+}
 export interface ModerationWorkflowStep {
     id: string;
     name: string;
@@ -122,6 +130,7 @@ export interface ModerationWorkflowStep {
     timeoutMs?: number;
     retryCount?: number;
 
+}
 export interface ModerationQueue {
     id: string;
     name: string;
@@ -130,14 +139,15 @@ export interface ModerationQueue {
         severityLevels?: ModerationSeverity[];
         requiresReview?: boolean;
         assignedTo?: string;
+}
     };
-    priorityRules: Array<{,
+    priorityRules: Array<{
         condition: string;
         priority: number;
     }>;
     autoAssignment: {
         enabled: boolean;
-        rules: Array<{,
+        rules: Array<{
             condition: string;
             assignTo: string;
         }>;
@@ -164,7 +174,7 @@ export declare class AutomatedModerationService {
         actionBreakdown: Record<ModerationAction, number>;
         averageConfidence: number;
         humanReviewRate: number;
-        topViolationReasons: Array<{,
+        topViolationReasons: Array<{
             reason: ModerationReason;
             count: number;
         }>;

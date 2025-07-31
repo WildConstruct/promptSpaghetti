@@ -44,6 +44,7 @@ export declare enum GuidanceCategory {
     PREVENTION = "prevention",
     RECOVERY = "recovery"
 
+}
 export interface CompromiseIndicator {
     type: CompromiseType;
     description: string;
@@ -54,6 +55,7 @@ export interface CompromiseIndicator {
     affectedAccounts: string[];
 
 
+}
 export interface SecurityRecommendation {
     id: string;
     title: string;
@@ -68,6 +70,7 @@ export interface SecurityRecommendation {
     dependencies?: string[];
 
 
+}
 export interface ActionStep {
     stepNumber: number;
     title: string;
@@ -79,6 +82,7 @@ export interface ActionStep {
     required: boolean;
 
 
+}
 export interface GuidanceSession {
     id: string;
     userId: string;
@@ -92,6 +96,7 @@ export interface GuidanceSession {
     status: 'active' | 'completed' | 'expired';
 
 
+}
 export interface PasswordSecurityAssessment {
     strength: 'very_weak' | 'weak' | 'fair' | 'good' | 'strong' | 'very_strong';
     score: number;
@@ -103,6 +108,7 @@ export interface PasswordSecurityAssessment {
     ageInDays: number;
 
 
+}
 export interface UserSecurityProfile {
     userId: string;
     riskScore: number;
@@ -167,6 +173,7 @@ export declare class PasswordGuidanceService extends EventEmitter {
         completed: number;
         percentage: number;
         remainingCritical: number;
+}
     } | null;
     /**
      * Calculate session progress

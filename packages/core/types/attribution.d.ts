@@ -1120,6 +1120,7 @@ export type AttributionStatsResponse = z.infer<typeof AttributionStatsResponseSc
 export type AttributionTimelineResponse = z.infer<typeof AttributionTimelineResponseSchema>;
 export type ContributorStatsResponse = z.infer<typeof ContributorStatsResponseSchema>;
 
+}
 export interface AttributionContext {
     projectId: string;
     userId?: string;
@@ -1130,6 +1131,7 @@ export interface AttributionContext {
     isAnonymous?: boolean;
     trackingConsent?: boolean;
 
+}
 export interface ChangeEvent {
     resourceType: ResourceType;
     resourceId: string;
@@ -1144,6 +1146,7 @@ export interface ChangeEvent {
     collaboratorCount?: number;
     parentChangeId?: string;
 
+}
 export interface AttributionVisualization {
     type: 'timeline' | 'heatmap' | 'contributor_chart' | 'collaboration_graph';
     data: any;
@@ -1152,21 +1155,24 @@ export interface AttributionVisualization {
         dateRange: {
             start: Date;
             end: Date;
+}
         };
         filters: AttributionFilter;
         totalDataPoints: number;
     };
 
+}
 export interface CollaborationMetrics {
     totalSessions: number;
     averageSessionDuration: number;
     averageCollaboratorsPerSession: number;
-    mostActiveCollaborations: Array<{,
+    mostActiveCollaborations: Array<{
         sessionId: string;
         authors: string[];
         changes: number;
         duration: number;
         efficiency: number;
+}
     }>;
     collaborationPatterns: {
         byTimeOfDay: Record<string, number>;
@@ -1212,6 +1218,7 @@ export declare const RESOURCE_TYPE_DESCRIPTIONS: {
     readonly graph: "Graph metadata";
 };
 
+}
 export interface AttributionEvent {
     type: 'attribution_created' | 'attribution_updated' | 'session_started' | 'session_ended';
     data: ChangeAttribution | AttributionSession;
@@ -1219,6 +1226,7 @@ export interface AttributionEvent {
     projectId: string;
     sessionId?: string;
 
+}
 export interface AttributionNotification {
     type: 'contributor_milestone' | 'collaboration_started' | 'significant_change';
     title: string;
@@ -1229,3 +1237,4 @@ export interface AttributionNotification {
     authorId?: string;
 
 //# sourceMappingURL=attribution.d.ts.map
+}

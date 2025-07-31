@@ -18,6 +18,7 @@ import React from 'react';
 import { ConversionFunnelDefinition, FlexibleConversionEvent } from '../../analytics/ConversionDataModel';
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
 
+}
 export interface FunnelComparisonProps {
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
     primaryFunnel: ConversionFunnelDefinition;
@@ -28,6 +29,7 @@ export interface FunnelComparisonProps {
 
 export type ComparisonMode = 'time_period' | 'funnel_variant' | 'segment' | 'cohort' | 'ab_test' | 'geographic' | 'device_type';
 
+}
 export interface ComparisonConfiguration {
     mode: ComparisonMode;
     baseline: ComparisonTarget;
@@ -35,12 +37,14 @@ export interface ComparisonConfiguration {
     timeRange: {
         start: number;
         end: number;
+}
     };
     significanceLevel: number;
     minimumSampleSize: number;
     includeStatisticalTests: boolean;
     autoGenerateInsights: boolean;
 
+}
 export interface ComparisonTarget {
     id: string;
     name: string;
@@ -49,6 +53,7 @@ export interface ComparisonTarget {
     funnelDefinition?: ConversionFunnelDefinition;
     metadata?: Record<string, any>;
 
+}
 export interface ComparisonFilter {
     type: 'segment' | 'cohort' | 'timeRange' | 'geography' | 'device' | 'custom';
     field: string;
@@ -56,6 +61,7 @@ export interface ComparisonFilter {
     value: Error;
     description?: string;
 
+}
 export interface ComparisonResult {
     baseline: FunnelPerformanceData;
     comparison: FunnelPerformanceData;
@@ -64,6 +70,7 @@ export interface ComparisonResult {
     insights: ComparisonInsight[];
     metadata: ComparisonMetadata;
 
+}
 export interface FunnelPerformanceData {
     targetId: string;
     totalEntries: number;
@@ -74,6 +81,7 @@ export interface FunnelPerformanceData {
     stepPerformance: StepPerformanceData[];
     additionalMetrics: Record<string, number>;
 
+}
 export interface StepPerformanceData {
     stepId: string;
     stepName: string;
@@ -86,11 +94,13 @@ export interface StepPerformanceData {
     averageTimeSpent: number;
     value: number;
 
+}
 export interface PerformanceDelta {
     overallConversionRate: {
         absolute: number;
         relative: number;
         direction: 'improvement' | 'decline' | 'no_change'
+}
   };
     totalConversions: {
         absolute: number;
@@ -109,12 +119,14 @@ export interface PerformanceDelta {
   };
     stepDeltas: StepDelta[];
 
+}
 export interface StepDelta {
     stepId: string;
     conversionRate: {
         absolute: number;
         relative: number;
         direction: 'improvement' | 'decline' | 'no_change'
+}
   };
     dropOffRate: {
         absolute: number;
@@ -122,6 +134,7 @@ export interface StepDelta {
         direction: 'improvement' | 'decline' | 'no_change'
   };
 
+}
 export interface StatisticalTestResult {
     testType: 'chi_square' | 'z_test' | 'fishers_exact' | 't_test';
     metric: string;
@@ -133,12 +146,14 @@ export interface StatisticalTestResult {
     effectSize: number;
     powerAnalysis?: PowerAnalysisResult;
 
+}
 export interface PowerAnalysisResult {
     currentPower: number;
     requiredSampleSize: number;
     detectedEffectSize: number;
     recommendations: string[];
 
+}
 export interface ComparisonInsight {
     type: 'significant_improvement' | 'significant_decline' | 'no_significant_difference' | 'sample_size_warning' | 'recommendation';
     severity: 'critical' | 'high' | 'medium' | 'low' | 'info';
@@ -150,16 +165,19 @@ export interface ComparisonInsight {
     recommendations?: string[];
     priority: number;
 
+}
 export interface InsightEvidence {
     statisticalTest?: StatisticalTestResult;
     sampleSizes: {
         baseline: number;
         comparison: number;
+}
     };
     effectSize: number;
     confidenceLevel: number;
     additionalContext?: Record<string, any>;
 
+}
 export interface ComparisonMetadata {
     comparisonId: string;
     generatedAt: number;
@@ -170,25 +188,30 @@ export interface ComparisonMetadata {
         dataCompleteness: number;
         outlierCount: number;
         confidenceLevel: number;
+}
     };
     executionTime: number;
     cacheHit: boolean;
 
+}
 export interface ComparisonExportData {
     comparison: ComparisonResult;
     rawData: {
         baselineEvents: FlexibleConversionEvent[];
         comparisonEvents: FlexibleConversionEvent[];
+}
     };
     visualizations: ComparisonVisualization[];
     reportSummary: string;
 
+}
 export interface ComparisonVisualization {
     type: 'funnel_chart' | 'delta_chart' | 'significance_heatmap' | 'timeline_chart';
     title: string;
     data: Record<string, unknown>;
     configuration: unknown;
 
+}
 export interface ABTestIntegration {
     experimentId: string;
     experimentName: string;
@@ -202,6 +225,7 @@ export interface ABTestIntegration {
     hypothesis: string;
     successCriteria: ABTestSuccessCriteria;
 
+}
 export interface ABTestVariant {
     id: string;
     name: string;
@@ -210,6 +234,7 @@ export interface ABTestVariant {
     trafficPercentage: number;
     isControl: boolean;
 
+}
 export interface ABTestSuccessCriteria {
     minimumDetectableEffect: number;
     significanceLevel: number;
@@ -222,3 +247,4 @@ export interface ABTestSuccessCriteria {
 export declare const FunnelComparison: React.FC<FunnelComparisonProps>;
 export default FunnelComparison;
 //# sourceMappingURL=FunnelComparison.d.ts.map
+}

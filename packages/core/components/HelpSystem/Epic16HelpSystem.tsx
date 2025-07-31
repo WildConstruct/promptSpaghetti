@@ -16,6 +16,7 @@ import { HelpContentManager } from '../ContextualHelp/HelpContentManager';
 import { MarketplaceHelpOverlay } from './MarketplaceHelpOverlay';
 import { MarketplaceContextualHelp } from './MarketplaceContextualHelp';
 
+}
 export interface Epic16HelpSystemProps {
   // Core editor context (Epic 8.4)
   nodes?: unknown;
@@ -32,6 +33,7 @@ export interface Epic16HelpSystemProps {
   category: string;
   type: string;
   isPremium: boolean;
+}
 };
     cartItems?: number;
     purchaseStage?: 'browsing' | 'preview' | 'cart' | 'checkout' | 'download';

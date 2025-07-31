@@ -61,6 +61,7 @@ export type PolicyStatus = 'draft' | 'active' | 'suspended' | 'expired' | 'archi
 // =============================================================================
 
 }
+}
 export interface BackupPolicy {
   policy_id: string;
   name: string;
@@ -80,6 +81,7 @@ export interface BackupPolicy {
     business_units?: string[];
     inclusion_patterns?: string[];
     exclusion_patterns?: string[];
+}
 }
   };
   
@@ -165,6 +167,7 @@ export interface BackupPolicy {
 }
 
 }
+}
 export interface PolicyRule {
   rule_id: string;
   policy_id: string;
@@ -178,6 +181,7 @@ export interface PolicyRule {
     operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'not_in' | 'contains' | 'regex';
     value: Error;
     data_type: 'string' | 'number' | 'boolean' | 'date' | 'array';
+}
 }
   };
   
@@ -195,6 +199,7 @@ export interface PolicyRule {
   created_by: string;
 }
 
+}
 }
 export interface PolicyExecution {
   execution_id: string;
@@ -222,7 +227,9 @@ export interface PolicyExecution {
   executed_by: string;
 }
 }
+}
 
+}
 }
 export interface PolicyExecutionError {
   error_id: string;
@@ -234,7 +241,9 @@ export interface PolicyExecutionError {
   occurred_at: Date;
 }
 }
+}
 
+}
 }
 export interface PolicyExecutionWarning {
   warning_id: string;
@@ -245,10 +254,13 @@ export interface PolicyExecutionWarning {
   occurred_at: Date;
 }
 }
+}
 
+}
 }
 export interface PolicyAnalytics {
   policy_id: string;
+}
 }
   analysis_period: { start: Date; end: Date };
   

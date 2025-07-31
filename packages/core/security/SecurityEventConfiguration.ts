@@ -5,12 +5,15 @@
  */
 import { ComplianceFramework, DataSensitivityLevel } from './DataProtectionEventLogger';
 
+}
 export interface SecurityEventConfig {
   logging: LoggingConfiguration;
   alerting: AlertingConfiguration;
   retention: RetentionConfiguration;
   compliance: ComplianceConfiguration;
   performance: PerformanceConfiguration;
+}
+}
 }
 export interface LoggingConfiguration {
   enabled: boolean;
@@ -23,6 +26,8 @@ export interface LoggingConfiguration {
   enableCircuitBreaker: boolean;
   circuitBreakerConfig: CircuitBreakerConfiguration;
 }
+}
+}
 export interface LogDestination {
   type: 'file' | 'database' | 'siem' | 'webhook' | 'elasticsearch';
   config: Record<string, any>;
@@ -30,17 +35,23 @@ export interface LogDestination {
   filters: LogFilter;
   formatters: LogFormatter;
 }
+}
+}
 export interface LogFilter {
   field: string;
   operator: 'equals' | 'contains' | 'regex' | 'greater_than' | 'less_than';
   value: any;
   invert: boolean;
 }
+}
+}
 export interface LogFormatter {
   type: 'json' | 'structured' | 'syslog' | 'cef' | 'leef';
   template?: string;
   includeFields?: string;
   excludeFields?: string;
+}
+}
 }
 export interface EncryptionConfiguration {
   enabled: boolean;
@@ -49,11 +60,15 @@ export interface EncryptionConfiguration {
   encryptSensitiveFields: boolean;
   sensitiveFields: string;
 }
+}
+}
 export interface CircuitBreakerConfiguration {
   failureThreshold: number;
   resetTimeout: number; // milliseconds,
   monitoringPeriod: number; // milliseconds,
   enabled: boolean;
+}
+}
 }
 export interface AlertingConfiguration {
   enabled: boolean;
@@ -61,6 +76,8 @@ export interface AlertingConfiguration {
   channels: AlertChannel;
   suppressionRules: SuppressionRule;
   escalationPolicies: EscalationPolicy;
+}
+}
 }
 export interface SecurityAlertRule {
   id: string;
@@ -75,6 +92,8 @@ export interface SecurityAlertRule {
   escalationPolicy?: string; // Escalation policy ID,
   metadata: Record<string, any>;
 }
+}
+}
 export interface AlertCondition {
   type: 'threshold' | 'pattern' | 'anomaly' | 'correlation';
   field: string;
@@ -84,6 +103,8 @@ export interface AlertCondition {
   aggregation?: 'count' | 'sum' | 'avg' | 'max' | 'min';
   groupBy?: string;
 }
+}
+}
 export interface AlertChannel {
   id: string;
   type: 'email' | 'webhook' | 'slack' | 'pagerduty' | 'sms';
@@ -91,11 +112,15 @@ export interface AlertChannel {
   enabled: boolean;
   rateLimits: RateLimit;
 }
+}
+}
 export interface RateLimit {
   maxAlerts: number;
   timeWindow: number; // minutes,
   severity?: 'low' | 'medium' | 'high' | 'critical'
+}
   }
+}
 export interface SuppressionRule {
   id: string;
   name: string;
@@ -104,21 +129,29 @@ export interface SuppressionRule {
   duration: number; // minutes,
   reason: string;
 }
+}
+}
 export interface EscalationPolicy {
   id: string;
   name: string;
   enabled: boolean;
   steps: EscalationStep;
 }
+}
+}
 export interface EscalationStep {
   delay: number; // minutes,
   channels: string;
   condition?: 'unacknowledged' | 'unresolved'
+}
   }
+}
 export interface RetentionConfiguration {
   policies: RetentionPolicy;
   archival: ArchivalConfiguration;
   deletion: DeletionConfiguration;
+}
+}
 }
 export interface RetentionPolicy {
   id: string;
@@ -133,11 +166,15 @@ export interface RetentionPolicy {
   purgeAfterRetention: boolean;
   exceptions: RetentionException;
 }
+}
+}
 export interface RetentionException {
   reason: 'legal_hold' | 'investigation' | 'regulatory_request' | 'data_subject_request';
   extendedPeriod: number; // days,
   approvalRequired: boolean;
   notificationRequired: boolean;
+}
+}
 }
 export interface ArchivalConfiguration {
   enabled: boolean;
@@ -145,6 +182,8 @@ export interface ArchivalConfiguration {
   compressionEnabled: boolean;
   encryptionEnabled: boolean;
   verificationEnabled: boolean;
+}
+}
 }
 export interface DeletionConfiguration {
   enabled: boolean;
@@ -154,10 +193,14 @@ export interface DeletionConfiguration {
   backupBeforeDeletion: boolean;
   auditDeletion: boolean;
 }
+}
+}
 export interface ComplianceConfiguration {
   frameworks: ComplianceFrameworkConfig;
   reporting: ReportingConfiguration;
   monitoring: ComplianceMonitoringConfiguration;
+}
+}
 }
 export interface ComplianceFrameworkConfig {
   framework: ComplianceFramework;
@@ -165,6 +208,8 @@ export interface ComplianceFrameworkConfig {
   requirements: ComplianceRequirement;
   reportingFrequency: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'annually';
   alertOnViolations: boolean;
+}
+}
 }
 export interface ComplianceRequirement {
   id: string;
@@ -174,12 +219,16 @@ export interface ComplianceRequirement {
   eventTypes: string;
   validationRules: ValidationRule;
 }
+}
+}
 export interface ValidationRule {
   field: string;
   required: boolean;
   validation: 'regex' | 'range' | 'enum' | 'custom';
   value: any;
   message: string;
+}
+}
 }
 export interface ReportingConfiguration {
   enabled: boolean;
@@ -188,11 +237,15 @@ export interface ReportingConfiguration {
   recipients: ReportRecipient;
   schedules: ReportSchedule;
 }
+}
+}
 export interface ReportRecipient {
   email: string;
   role: string;
   frameworks: ComplianceFramework;
   reportTypes: string;
+}
+}
 }
 export interface ReportSchedule {
   id: string;
@@ -201,6 +254,8 @@ export interface ReportSchedule {
   time: string; // HH:MM format,
   enabled: boolean;
 }
+}
+}
 export interface ComplianceMonitoringConfiguration {
   enabled: boolean;
   continuousMonitoring: boolean;
@@ -208,11 +263,14 @@ export interface ComplianceMonitoringConfiguration {
   dashboardEnabled: boolean;
   metricsCollection: boolean;
 }
+}
+}
 export interface PerformanceConfiguration {
   monitoring: {
   enabled: boolean;
   metricsCollectionInterval: number; // milliseconds,
   alertThresholds: PerformanceThreshold;
+}
 };
   optimization: {
   asyncLogging: boolean;
@@ -227,12 +285,15 @@ export interface PerformanceConfiguration {
   workerPoolSize: number;
 };
 }
+}
 export interface PerformanceThreshold {
   metric: 'latency' | 'throughput' | 'error_rate' | 'queue_depth';
   threshold: number;
   severity: 'low' | 'medium' | 'high' | 'critical';
   action: 'log' | 'alert' | 'throttle' | 'circuit_break'
+}
   }
+}
 export interface CacheConfiguration {
   enabled: boolean;
   type: 'memory' | 'redis' | 'memcached';
@@ -243,6 +304,7 @@ export interface CacheConfiguration {
   * Default Security Event Configuration
   * Production-ready configuration with security best practices
   */
+}
 }
 export const DEFAULT_SECURITY_EVENT_CONFIG: SecurityEventConfig = {,
   logging: {

@@ -7,6 +7,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface LearningPath {
     id: string;
     title: string;
@@ -74,6 +75,7 @@ export declare enum ContentStatus {
     ARCHIVED = "archived",
     DEPRECATED = "deprecated"
 
+}
 export interface LearningModule {
     id: string;
     title: string;
@@ -99,6 +101,7 @@ export declare enum ModuleType {
     DISCUSSION = "discussion",
     REVIEW = "review"
 
+}
 export interface ModuleContent {
     id: string;
     type: ContentType;
@@ -123,6 +126,7 @@ export declare enum ContentType {
     CHECKLIST = "checklist",
     SIMULATION = "simulation"
 
+}
 export interface ContentMetadata {
     transcriptAvailable: boolean;
     captionsAvailable: boolean;
@@ -134,6 +138,7 @@ export interface ContentMetadata {
     alternativeFormats: string[];
 
 
+}
 export interface AccessibilityFeatures {
     screenReaderFriendly: boolean;
     highContrast: boolean;
@@ -142,6 +147,7 @@ export interface AccessibilityFeatures {
     signLanguage: boolean;
 
 
+}
 export interface LearningActivity {
     id: string;
     type: ActivityType;
@@ -170,6 +176,7 @@ export declare enum ActivityType {
     PORTFOLIO_SUBMISSION = "portfolio_submission",
     CASE_STUDY_ANALYSIS = "case_study_analysis"
 
+}
 export interface ActivityConfig {
     parameters: Record<string, any>;
     timeLimit?: number;
@@ -180,6 +187,7 @@ export interface ActivityConfig {
     allowCollaboration: boolean;
 
 
+}
 export interface ActivityResource {
     type: 'template' | 'tool' | 'reference' | 'example';
     name: string;
@@ -188,12 +196,14 @@ export interface ActivityResource {
     downloadable: boolean;
 
 
+}
 export interface ActivityValidation {
     type: 'automatic' | 'manual' | 'peer_review' | 'instructor';
     criteria: ValidationCriteria[];
     rubric?: AssessmentRubric;
 
 
+}
 export interface ValidationCriteria {
     name: string;
     description: string;
@@ -202,6 +212,7 @@ export interface ValidationCriteria {
     measurable: boolean;
 
 
+}
 export interface ActivityFeedback {
     immediate: FeedbackItem[];
     onCompletion: FeedbackItem[];
@@ -210,6 +221,7 @@ export interface ActivityFeedback {
     adaptive: boolean;
 
 
+}
 export interface FeedbackItem {
     type: 'text' | 'video' | 'link' | 'tip' | 'correction';
     content: string;
@@ -217,6 +229,7 @@ export interface FeedbackItem {
     condition?: string;
 
 
+}
 export interface Quiz {
     id: string;
     title: string;
@@ -230,6 +243,7 @@ export interface Quiz {
     certificateEligible: boolean;
 
 
+}
 export interface QuizQuestion {
     id: string;
     type: QuestionType;
@@ -253,6 +267,7 @@ export declare enum QuestionType {
     ORDERING = "ordering",
     HOTSPOT = "hotspot"
 
+}
 export interface QuestionOption {
     id: string;
     text: string;
@@ -260,12 +275,14 @@ export interface QuestionOption {
     explanation?: string;
 
 
+}
 export interface CompletionCriteria {
     type: 'time_based' | 'activity_based' | 'score_based' | 'custom';
     requirements: CompletionRequirement[];
     allRequired: boolean;
 
 
+}
 export interface CompletionRequirement {
     type: string;
     value: any;
@@ -273,6 +290,7 @@ export interface CompletionRequirement {
     weight: number;
 
 
+}
 export interface LearningOutcome {
     id: string;
     description: string;
@@ -289,6 +307,7 @@ export declare enum BloomLevel {
     EVALUATE = "evaluate",
     CREATE = "create"
 
+}
 export interface LearningResource {
     id: string;
     title: string;
@@ -314,6 +333,7 @@ export declare enum ResourceType {
     CHECKLIST = "checklist",
     CASE_STUDY = "case_study"
 
+}
 export interface Assessment {
     id: string;
     title: string;
@@ -342,6 +362,7 @@ export declare enum AssessmentType {
     PROJECT = "project",
     PRESENTATION = "presentation"
 
+}
 export interface AssessmentItem {
     id: string;
     type: string;
@@ -350,6 +371,7 @@ export interface AssessmentItem {
     rubricCriteria?: string[];
 
 
+}
 export interface AssessmentRubric {
     id: string;
     name: string;
@@ -358,6 +380,7 @@ export interface AssessmentRubric {
     levels: RubricLevel[];
 
 
+}
 export interface RubricCriterion {
     id: string;
     name: string;
@@ -365,6 +388,7 @@ export interface RubricCriterion {
     weight: number;
 
 
+}
 export interface RubricLevel {
     id: string;
     name: string;
@@ -372,6 +396,7 @@ export interface RubricLevel {
     points: number;
 
 
+}
 export interface ProctoringSettings {
     recordVideo: boolean;
     recordAudio: boolean;
@@ -383,6 +408,7 @@ export interface ProctoringSettings {
     environmentScan: boolean;
 
 
+}
 export interface Certification {
     id: string;
     name: string;
@@ -401,6 +427,7 @@ export interface Certification {
     accreditation: string[];
 
 
+}
 export interface CertificationRequirement {
     type: 'course_completion' | 'assessment_score' | 'portfolio_submission' | 'experience';
     description: string;
@@ -408,6 +435,7 @@ export interface CertificationRequirement {
     mandatory: boolean;
 
 
+}
 export interface AssessmentRequirement {
     assessmentId: string;
     minimumScore: number;
@@ -415,6 +443,7 @@ export interface AssessmentRequirement {
     timeframe?: number;
 
 
+}
 export interface DigitalBadge {
     id: string;
     imageUrl: string;
@@ -424,6 +453,7 @@ export interface DigitalBadge {
     verificationUrl: string;
 
 
+}
 export interface Skill {
     id: string;
     name: string;
@@ -452,6 +482,7 @@ export declare enum SkillLevel {
     EXPERT = "expert",
     MASTER = "master"
 
+}
 export interface InteractiveElement {
     id: string;
     type: InteractiveType;
@@ -473,6 +504,7 @@ export declare enum InteractiveType {
     AR_EXPERIENCE = "ar_experience",
     VR_EXPERIENCE = "vr_experience"
 
+}
 export interface InteractiveConfig {
     parameters: Record<string, any>;
     responsive: boolean;
@@ -481,6 +513,7 @@ export interface InteractiveConfig {
     mobileOptimized: boolean;
 
 
+}
 export interface InteractiveTrigger {
     event: string;
     condition: string;
@@ -488,6 +521,7 @@ export interface InteractiveTrigger {
     parameters: Record<string, any>;
 
 
+}
 export interface InteractiveAnalytics {
     trackInteractions: boolean;
     trackTime: boolean;
@@ -496,6 +530,7 @@ export interface InteractiveAnalytics {
     customEvents: string[];
 
 
+}
 export interface ProgressTracking {
     enableTracking: boolean;
     trackingGranularity: 'module' | 'activity' | 'detailed';
@@ -510,6 +545,7 @@ export interface ProgressTracking {
     stakeholderReports: string[];
 
 
+}
 export interface GamificationElements {
     enabled: boolean;
     pointsSystem: PointsSystem;
@@ -520,6 +556,7 @@ export interface GamificationElements {
     streaks: StreakTracking;
 
 
+}
 export interface PointsSystem {
     enabled: boolean;
     pointTypes: PointType[];
@@ -527,6 +564,7 @@ export interface PointsSystem {
     redemption: PointRedemption[];
 
 
+}
 export interface PointType {
     id: string;
     name: string;
@@ -536,6 +574,7 @@ export interface PointType {
     value: number;
 
 
+}
 export interface PointConversion {
     fromType: string;
     toType: string;
@@ -543,6 +582,7 @@ export interface PointConversion {
     conditions: string[];
 
 
+}
 export interface PointRedemption {
     item: string;
     cost: number;
@@ -551,6 +591,7 @@ export interface PointRedemption {
     conditions: string[];
 
 
+}
 export interface Badge {
     id: string;
     name: string;
@@ -568,6 +609,7 @@ export declare enum BadgeRarity {
     EPIC = "epic",
     LEGENDARY = "legendary"
 
+}
 export interface BadgeCriteria {
     type: string;
     condition: string;
@@ -575,6 +617,7 @@ export interface BadgeCriteria {
     timeframe?: number;
 
 
+}
 export interface Leaderboard {
     id: string;
     name: string;
@@ -586,6 +629,7 @@ export interface Leaderboard {
     anonymous: boolean;
 
 
+}
 export interface Achievement {
     id: string;
     name: string;
@@ -607,6 +651,7 @@ export declare enum AchievementCategory {
     MILESTONE = "milestone",
     SPECIAL = "special"
 
+}
 export interface AchievementCriteria {
     type: string;
     condition: string;
@@ -614,12 +659,14 @@ export interface AchievementCriteria {
     cumulative: boolean;
 
 
+}
 export interface AchievementReward {
     type: 'points' | 'badge' | 'certificate' | 'unlock' | 'discount' | 'item';
     value: any;
     description: string;
 
 
+}
 export interface Challenge {
     id: string;
     title: string;
@@ -646,6 +693,7 @@ export declare enum ChallengeType {
     COMMUNITY = "community",
     MILESTONE = "milestone"
 
+}
 export interface ChallengeReward {
     rank: number;
     type: string;
@@ -653,6 +701,7 @@ export interface ChallengeReward {
     description: string;
 
 
+}
 export interface StreakTracking {
     enabled: boolean;
     types: StreakType[];
@@ -660,6 +709,7 @@ export interface StreakTracking {
     resetConditions: string[];
 
 
+}
 export interface StreakType {
     id: string;
     name: string;
@@ -669,17 +719,20 @@ export interface StreakType {
     minRequirement: number;
 
 
+}
 export interface StreakReward {
     streakType: string;
     milestones: StreakMilestone[];
 
 
+}
 export interface StreakMilestone {
     days: number;
     reward: AchievementReward;
     special: boolean;
 
 
+}
 export interface PathAnalytics {
     enrollments: number;
     completions: number;
@@ -700,6 +753,7 @@ export interface PathAnalytics {
     contentGaps: ContentGap[];
 
 
+}
 export interface DropoffPoint {
     moduleId: string;
     activityId?: string;
@@ -707,6 +761,7 @@ export interface DropoffPoint {
     commonReasons: string[];
 
 
+}
 export interface ModulePopularity {
     moduleId: string;
     viewCount: number;
@@ -715,12 +770,14 @@ export interface ModulePopularity {
     timeSpent: number;
 
 
+}
 export interface AudienceMetrics {
     byRole: Record<TargetAudience, number>;
     byExperience: Record<DifficultyLevel, number>;
     byGoal: Record<string, number>;
 
 
+}
 export interface DeviceMetrics {
     desktop: number;
     mobile: number;
@@ -728,12 +785,14 @@ export interface DeviceMetrics {
     preferredPlatform: string;
 
 
+}
 export interface GeographicMetrics {
     countries: Record<string, number>;
     timezones: Record<string, number>;
     languages: Record<string, number>;
 
 
+}
 export interface ImprovementSuggestion {
     area: string;
     issue: string;
@@ -742,6 +801,7 @@ export interface ImprovementSuggestion {
     impact: string;
 
 
+}
 export interface ContentGap {
     topic: string;
     requestedBy: number;
@@ -749,6 +809,7 @@ export interface ContentGap {
     urgency: 'high' | 'medium' | 'low';
 
 
+}
 export interface MarketplaceIntegration {
     enabled: boolean;
     linkedTemplates: string[];
@@ -758,6 +819,7 @@ export interface MarketplaceIntegration {
     marketplaceTools: MarketplaceTool[];
 
 
+}
 export interface SellingOpportunity {
     type: 'template' | 'service' | 'consultation' | 'course';
     description: string;
@@ -767,6 +829,7 @@ export interface SellingOpportunity {
     marketDemand: 'high' | 'medium' | 'low';
 
 
+}
 export interface BuyingRecommendation {
     itemType: 'template' | 'tool' | 'service' | 'course';
     itemId: string;
@@ -775,6 +838,7 @@ export interface BuyingRecommendation {
     priceRange: string;
 
 
+}
 export interface EarningPotential {
     skillLevel: SkillLevel;
     averageHourlyRate: number;
@@ -783,6 +847,7 @@ export interface EarningPotential {
     growthProjection: string;
 
 
+}
 export interface MarketplaceTool {
     name: string;
     description: string;
@@ -791,6 +856,7 @@ export interface MarketplaceTool {
     relevantModules: string[];
 
 
+}
 export interface CommunityIntegration {
     enabled: boolean;
     forumLinks: ForumLink[];
@@ -800,6 +866,7 @@ export interface CommunityIntegration {
     communityEvents: CommunityEvent[];
 
 
+}
 export interface ForumLink {
     title: string;
     url: string;
@@ -807,6 +874,7 @@ export interface ForumLink {
     activityLevel: 'high' | 'medium' | 'low';
 
 
+}
 export interface DiscussionTopic {
     id: string;
     title: string;
@@ -817,6 +885,7 @@ export interface DiscussionTopic {
     messageCount: number;
 
 
+}
 export interface MentorshipProgram {
     enabled: boolean;
     availableMentors: Mentor[];
@@ -824,6 +893,7 @@ export interface MentorshipProgram {
     sessionFormats: SessionFormat[];
 
 
+}
 export interface Mentor {
     id: string;
     name: string;
@@ -834,12 +904,14 @@ export interface Mentor {
     price?: number;
 
 
+}
 export interface MatchingCriteria {
     type: 'skill' | 'experience' | 'goal' | 'industry' | 'language';
     weight: number;
     required: boolean;
 
 
+}
 export interface SessionFormat {
     type: '1-on-1' | 'group' | 'workshop' | 'office_hours';
     duration: number;
@@ -847,6 +919,7 @@ export interface SessionFormat {
     price?: number;
 
 
+}
 export interface PeerLearning {
     enabled: boolean;
     studyGroups: StudyGroup[];
@@ -854,6 +927,7 @@ export interface PeerLearning {
     collaborativeProjects: CollaborativeProject[];
 
 
+}
 export interface StudyGroup {
     id: string;
     name: string;
@@ -865,6 +939,7 @@ export interface StudyGroup {
     language: string;
 
 
+}
 export interface PeerReview {
     enabled: boolean;
     reviewCriteria: string[];
@@ -873,6 +948,7 @@ export interface PeerReview {
     qualityControl: boolean;
 
 
+}
 export interface CollaborativeProject {
     id: string;
     title: string;
@@ -883,6 +959,7 @@ export interface CollaborativeProject {
     outcome: string;
 
 
+}
 export interface CommunityEvent {
     id: string;
     title: string;
@@ -895,6 +972,7 @@ export interface CommunityEvent {
     relatedPaths: string[];
 
 
+}
 export interface UserEnrollment {
     userId: string;
     pathId: string;
@@ -912,6 +990,7 @@ export declare enum EnrollmentStatus {
     DROPPED = "dropped",
     CERTIFIED = "certified"
 
+}
 export interface UserProgress {
     overallProgress: number;
     currentModule: string;
@@ -926,6 +1005,7 @@ export interface UserProgress {
     certifications: UserCertification[];
 
 
+}
 export interface ModuleProgress {
     progress: number;
     timeSpent: number;
@@ -935,6 +1015,7 @@ export interface ModuleProgress {
     score?: number;
 
 
+}
 export interface QuizAttempt {
     attemptNumber: number;
     score: number;
@@ -943,6 +1024,7 @@ export interface QuizAttempt {
     answers: Record<string, any>;
 
 
+}
 export interface SkillProgress {
     currentLevel: SkillLevel;
     experience: number;
@@ -951,6 +1033,7 @@ export interface SkillProgress {
     verificationStatus: 'pending' | 'verified' | 'expired';
 
 
+}
 export interface UserCertification {
     certificationId: string;
     issuedAt: Date;
@@ -960,6 +1043,7 @@ export interface UserCertification {
     status: 'active' | 'expired' | 'revoked';
 
 
+}
 export interface UserSettings {
     notifications: NotificationSettings;
     preferences: LearningPreferences;
@@ -967,6 +1051,7 @@ export interface UserSettings {
     privacy: PrivacySettings;
 
 
+}
 export interface NotificationSettings {
     email: boolean;
     push: boolean;
@@ -984,6 +1069,7 @@ export declare enum NotificationType {
     MENTOR_MESSAGES = "mentor_messages",
     DEADLINES = "deadlines"
 
+}
 export interface LearningPreferences {
     learningStyle: LearningStyle[];
     pace: 'self_paced' | 'structured' | 'intensive';
@@ -1000,6 +1086,7 @@ export declare enum LearningStyle {
     SOCIAL = "social",
     SOLITARY = "solitary"
 
+}
 export interface StudyTimePreference {
     day: string;
     startTime: string;
@@ -1007,6 +1094,7 @@ export interface StudyTimePreference {
     timezone: string;
 
 
+}
 export interface AccessibilitySettings {
     screenReader: boolean;
     highContrast: boolean;
@@ -1017,6 +1105,7 @@ export interface AccessibilitySettings {
     keyboardNavigation: boolean;
 
 
+}
 export interface PrivacySettings {
     profileVisibility: 'public' | 'community' | 'private';
     progressSharing: boolean;
@@ -1026,6 +1115,7 @@ export interface PrivacySettings {
     marketingCommunications: boolean;
 
 
+}
 export interface UserAnalytics {
     totalTimeSpent: number;
     averageSessionTime: number;
@@ -1042,6 +1132,7 @@ export interface UserAnalytics {
     improvementAreas: string[];
 
 
+}
 export interface UserStreak {
     type: string;
     current: number;
@@ -1050,6 +1141,7 @@ export interface UserStreak {
     lastActivity: Date;
 
 
+}
 export interface UserAchievement {
     achievementId: string;
     unlockedAt: Date;
@@ -1057,6 +1149,7 @@ export interface UserAchievement {
     tier?: number;
 
 
+}
 export interface UserBadge {
     badgeId: string;
     earnedAt: Date;
@@ -1064,6 +1157,7 @@ export interface UserBadge {
     shareCount: number;
 
 
+}
 export interface TimePattern {
     hour: number;
     dayOfWeek: number;
@@ -1113,6 +1207,7 @@ export declare class Epic16LearningPathService extends EventEmitter {
         duration?: {
             min?: number;
             max?: number;
+}
         };
         certification?: boolean;
     }): Promise<LearningPath[]>;

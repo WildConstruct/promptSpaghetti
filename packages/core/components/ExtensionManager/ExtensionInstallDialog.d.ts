@@ -5,6 +5,7 @@
 import React from 'react';
 import { ExtensionManifest } from '../../extensions/ExtensionManifest-simple';
 
+}
 export interface ExtensionInstallDialogProps {
     onInstall: (extension: ExtensionManifest) => Promise<void>;
     onCancel: () => void;
@@ -12,3 +13,4 @@ export interface ExtensionInstallDialogProps {
 export declare const ExtensionInstallDialog: React.FC<ExtensionInstallDialogProps>;
 export default ExtensionInstallDialog;
 //# sourceMappingURL=ExtensionInstallDialog.d.ts.map
+}

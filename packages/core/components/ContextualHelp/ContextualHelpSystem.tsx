@@ -25,6 +25,7 @@ export type HelpContentType =
   | 'troubleshooting'
   | 'advanced-features';
 
+}
 export interface HelpContent {
   id: string;
   type: HelpContentType;
@@ -39,7 +40,9 @@ export interface HelpContent {
   nodeTypes?: string;
   actions?: string;
   conditions?: Record<string, any>;
+}
 };
+}
 }
 export interface ContextualHelpProps {
   // Graph state for context awareness
@@ -56,6 +59,7 @@ export interface ContextualHelpProps {
   // Callbacks
   onHelpContentViewed?: (contentId: string) => void;
   onUserLevelChange?: (level: string) => void;
+}
 }
 export const ContextualHelpSystem: React.FC<ContextualHelpProps> = ({)
   nodes,

@@ -7,6 +7,7 @@ import { NodeType } from '../types/NodeTypes';
 /**
  * Compressed storage format for large graphs
  */
+}
 interface CompressedGraphData {
     format_version: '2.0.0';
     compressed: true;
@@ -17,6 +18,7 @@ interface CompressedGraphData {
         edge_count: number;
         compression_ratio: number;
         original_size: number;
+}
     };
 /**
  * Optimized graph storage with hybrid Map/Array architecture

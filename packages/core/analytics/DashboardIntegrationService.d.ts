@@ -10,6 +10,7 @@ import { AnalyticsAuthorizationService, AuthContext } from './AnalyticsAuthoriza
 import { WebSocketStreamingServer } from './WebSocketStreaming';
 import { AnalyticsAdapterManager } from './AnalyticsEventAdapters';
 
+}
 interface DashboardIntegrationConfig {
     enableLegacySupport: boolean;
     migrationMode: 'gradual' | 'immediate' | 'parallel';
@@ -19,6 +20,7 @@ interface DashboardIntegrationConfig {
     alertingEnabled: boolean;
 
 
+}
 interface LegacyAnalyticsSystem {
     name: string;
     routePath: string;
@@ -29,6 +31,7 @@ interface LegacyAnalyticsSystem {
     healthStatus: 'healthy' | 'degraded' | 'failing';
 
 
+}
 interface WidgetPerformanceMetrics {
     widgetId: string;
     widgetType: string;
@@ -39,6 +42,7 @@ interface WidgetPerformanceMetrics {
     lastUpdate: number;
 
 
+}
 interface IntegrationStatus {
     totalSystems: number;
     integratedSystems: number;
@@ -88,6 +92,7 @@ export declare class DashboardIntegrationService {
         events: UnifiedAnalyticsEvent[];
         timeSeriesData: unknown[];
         integrationStatus: IntegrationStatus;
+}
     }>;
     /**
      * Calculate consolidated metrics from all systems

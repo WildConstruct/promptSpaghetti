@@ -8,6 +8,7 @@ import { RedisService } from '../database/RedisService';
 import { SessionActivityTrackingService } from './SessionActivityTrackingService';
 
 }
+}
 export interface IdleTimeoutPolicy {
   id: string;
   name: string;
@@ -21,6 +22,7 @@ export interface IdleTimeoutPolicy {
     deviceTypes?: string[];
     trustLevels?: string[];
     timeConditions?: {
+}
 }
       businessHours?: { start: string; end: string };
       weekends?: boolean;
@@ -78,6 +80,7 @@ export interface IdleTimeoutPolicy {
 }
 
 }
+}
 export interface IdleSession {
   sessionId: string;
   userId: string;
@@ -89,6 +92,7 @@ export interface IdleSession {
     warningIssuedAt?: Date;
     timeoutScheduledAt?: Date;
     gracePeriodEnds?: Date;
+}
 }
   };
   
@@ -127,6 +131,7 @@ export interface IdleSession {
 }
 
 }
+}
 export interface TimeoutEvent {
   id: string;
   sessionId: string;
@@ -138,6 +143,7 @@ export interface TimeoutEvent {
           'extension_granted' | 'activity_resumed' | 'force_logout';
     severity: 'info' | 'warning' | 'error';
     details: Record<string, any>;
+}
 }
   };
   
@@ -156,6 +162,7 @@ export interface TimeoutEvent {
   };
 }
 
+}
 }
 export interface IdleStatistics {
   timeRange: { start: Date; end: Date };

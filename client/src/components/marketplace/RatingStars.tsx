@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { StarIcon } from '@heroicons/react/24/solid';
 import { StarIcon as StarOutlineIcon } from '@heroicons/react/24/outline';
 import './RatingStars.css';
+}
 interface RatingStarsProps {
   rating: number;
   maxRating?: number;
@@ -31,6 +32,7 @@ interface RatingStarsProps {
   className = '',
   disabled = false,
   showTooltip = false
+}
 }) => {
   const [hoverRating, setHoverRating] = useState<number | null>(null);
   const [tooltipVisible, setTooltipVisible] = useState(false);
@@ -146,13 +148,15 @@ interface RatingStarsProps {
 };
 
 // Rating Distribution Component
+}
 interface RatingDistributionProps {
-  distribution: {,
+  distribution: {
   five_star: number;,
   four_star: number;
   three_star: number;,
   two_star: number;
   one_star: number;
+}
 };
   totalReviews: number;
   onFilterByRating?: (rating: number) => void;
@@ -202,15 +206,17 @@ export const RatingDistribution: React.FC<RatingDistributionProps> = ({)
 };
 
 // Rating Summary Component
+}
 interface RatingSummaryProps {
   averageRating: number;,
   totalReviews: number;
-  distribution: {,
+  distribution: {
   five_star: number;,
   four_star: number;
   three_star: number;,
   two_star: number;
   one_star: number;
+}
 };
   verifiedPercentage?: number;
   onFilterByRating?: (rating: number) => void;

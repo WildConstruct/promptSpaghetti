@@ -15,6 +15,7 @@ import {
 } from '../../../packages/core/utils/CompressionService';
 
 }
+}
 export interface CompressionMiddlewareOptions {
   threshold?: number; // Minimum response size to compress (bytes)
   level?: CompressionLevel;
@@ -28,7 +29,9 @@ export interface CompressionMiddlewareOptions {
   maxCacheSize?: number; // MB
 }
 }
+}
 
+}
 }
 export interface CompressionStats {
   totalRequests: number;
@@ -40,6 +43,7 @@ export interface CompressionStats {
     requests: number;
     bytesSaved: number;
     averageCompressionRatio: number;
+}
 }
   }>;
 }

@@ -21,6 +21,7 @@ import { DiagnosticService } from '../admin/DiagnosticService';
 let securityAnalyticsService: SecurityAnalyticsIntegrationService | null = null;
 
 }
+}
 interface SecurityAnalyticsQuery {
   timeRange?: 'last_hour' | 'last_day' | 'last_week' | 'last_month';
   includeAlerts?: boolean;
@@ -28,13 +29,16 @@ interface SecurityAnalyticsQuery {
   includeDiagnostics?: boolean;
 }
 }
+}
 
+}
 }
 interface SecurityAnalyticsResponse {
   success: boolean;
   data?: any;
   error?: string;
   timestamp: number;
+}
 }
 }
 

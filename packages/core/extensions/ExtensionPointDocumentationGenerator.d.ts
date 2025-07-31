@@ -3,6 +3,7 @@
  * Generates documentation for extension points in the system
  */
 
+}
 export interface ExtensionPointDocumentation {
     name: string;
     description: string;
@@ -27,3 +28,4 @@ export declare class ExtensionPointDocumentationGenerator {
 
 export default ExtensionPointDocumentationGenerator;
 //# sourceMappingURL=ExtensionPointDocumentationGenerator.d.ts.map
+}

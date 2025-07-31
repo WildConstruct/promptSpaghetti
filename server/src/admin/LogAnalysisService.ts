@@ -64,6 +64,7 @@ export type AlertSeverity =
 // ==========================================
 
 }
+}
 export interface LogEntry {
   log_id: string;
   timestamp: Date;
@@ -83,7 +84,9 @@ export interface LogEntry {
   created_at: Date;
 }
 }
+}
 
+}
 }
 export interface LogAnalysisRule {
   rule_id: string;
@@ -99,6 +102,7 @@ export interface LogAnalysisRule {
     statistical_window_minutes?: number;
     ml_model?: string;
     custom_function?: string;
+}
 }
   };
   anomaly_type: AnomalyType;
@@ -124,6 +128,7 @@ export interface LogAnalysisRule {
 }
 
 }
+}
 export interface LogAnalysisSession {
   session_id: string;
   name: string;
@@ -134,6 +139,7 @@ export interface LogAnalysisSession {
   time_range: {
     start_time: Date;
     end_time?: Date; // null for real-time
+}
 }
   };
   filters: {
@@ -165,6 +171,7 @@ export interface LogAnalysisSession {
 }
 
 }
+}
 export interface LogPattern {
   pattern_id: string;
   pattern_type: string;
@@ -179,7 +186,9 @@ export interface LogPattern {
   suggested_actions: string[];
 }
 }
+}
 
+}
 }
 export interface ErrorSummary {
   error_type: string;
@@ -193,7 +202,9 @@ export interface ErrorSummary {
   resolution_suggestions: string[];
 }
 }
+}
 
+}
 }
 export interface PerformanceMetrics {
   avg_response_time_ms: number;
@@ -209,9 +220,11 @@ export interface PerformanceMetrics {
     memory_avg: number;
     disk_io_avg: number;
 }
+}
   };
 }
 
+}
 }
 export interface LogAlert {
   alert_id: string;
@@ -234,7 +247,9 @@ export interface LogAlert {
   updated_at: Date;
 }
 }
+}
 
+}
 }
 export interface LogAnalysisConfig {
   enabled: boolean;
@@ -249,6 +264,7 @@ export interface LogAnalysisConfig {
     enable_performance_analysis: boolean;
     ml_confidence_threshold: number;
     pattern_detection_threshold: number;
+}
 }
   };
   alert_settings: {

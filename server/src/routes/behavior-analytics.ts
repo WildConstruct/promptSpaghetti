@@ -8,26 +8,32 @@ import { BehaviorAnalyticsService, SessionBehaviorData } from '../auth/services/
 import { requireAuth } from '../middleware/auth';
 
 }
+}
 interface AnalyzeBehaviorRequest {
   Body: {
     sessionData: SessionBehaviorData;
     userId?: string; // Optional, defaults to authenticated user
 }
+}
   };
 }
 
+}
 }
 interface GetProfileRequest {
   Params: {
     userId: string;
 }
+}
   };
 }
 
 }
+}
 interface UpdateProfileRequest {
   Params: {
     userId: string;
+}
 }
   };
   Body: {
@@ -36,6 +42,7 @@ interface UpdateProfileRequest {
   };
 }
 
+}
 }
 interface GetAnomaliesRequest {
   Querystring: {
@@ -48,13 +55,16 @@ interface GetAnomaliesRequest {
     limit?: number;
     offset?: number;
 }
+}
   };
 }
 
 }
+}
 interface ResolveAnomalyRequest {
   Params: {
     anomalyId: string;
+}
 }
   };
   Body: {
@@ -64,17 +74,21 @@ interface ResolveAnomalyRequest {
 }
 
 }
+}
 interface GetRiskScoreRequest {
   Params: {
     userId: string;
+}
 }
   };
 }
 
 }
+}
 interface GetPatternsRequest {
   Params: {
     userId: string;
+}
 }
   };
   Querystring: {

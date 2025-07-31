@@ -24,6 +24,7 @@ import {
 } from '../../../packages/core/types/DisputeTypes';
 
 }
+}
 export interface CreateDisputeRequest {
   transactionId: string;
   type: DisputeType;
@@ -43,9 +44,11 @@ export interface CreateDisputeRequest {
     content: string;
     category?: string;
 }
+}
   }>;
 }
 
+}
 }
 export interface UpdateDisputeRequest {
   status?: DisputeStatus;
@@ -59,9 +62,11 @@ export interface UpdateDisputeRequest {
     content: string;
     category?: string;
 }
+}
   }>;
 }
 
+}
 }
 export interface ResolveDisputeRequest {
   outcome: DisputeOutcome;
@@ -70,7 +75,9 @@ export interface ResolveDisputeRequest {
   notes?: string;
 }
 }
+}
 
+}
 }
 export interface AddEvidenceRequest {
   evidence: Array<{
@@ -81,9 +88,11 @@ export interface AddEvidenceRequest {
     attachments?: string[];
     category?: string;
 }
+}
   }>;
 }
 
+}
 }
 export interface CreateResponseRequest {
   responseType: 'accept' | 'contest' | 'partial_accept';
@@ -94,6 +103,7 @@ export interface CreateResponseRequest {
     description: string;
     content: string;
     category?: string;
+}
 }
   }>;
 }

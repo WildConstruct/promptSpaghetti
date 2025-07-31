@@ -33,6 +33,7 @@ import {
   RefreshCw,
   Plus
 } from 'lucide-react';
+}
 interface DeletionWorkflow {
   id: string;,
   name: string;
@@ -81,6 +82,7 @@ interface DeletionWorkflow {
   createdBy: string;,
   lastModifiedBy: string;
   tags: string;
+}
 interface WorkflowError {
   id: string;,
   timestamp: string;
@@ -90,6 +92,7 @@ interface WorkflowError {
   stackTrace?: string;
   resolution?: string;
   resolved: boolean;
+}
 interface WorkflowTemplate {
   id: string;,
   name: string;
@@ -97,6 +100,7 @@ interface WorkflowTemplate {
   category: 'user_data' | 'system_cleanup' | 'log_rotation' | 'compliance' | 'backup_cleanup';
   recommended: boolean;,
   config: Partial<DeletionWorkflow>;
+}
 interface WorkflowMetrics {
   totalWorkflows: number;,
   activeWorkflows: number;
@@ -132,6 +136,7 @@ const DeletionWorkflowManager: React.FC = () => {
       setError(null);
       const [workflowsRes, templatesRes, metricsRes] = await Promise.all([)
         fetch('/api/data-protection/workflows', {)
+}
   headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
         fetch('/api/data-protection/workflow-templates', {)

@@ -15,6 +15,7 @@ import { TimeRange } from './analytics.types';
 
 // Core Content Quality Interfaces
 }
+}
 export interface ContentQualityMetrics {
   templateId: string;
   assessmentDate: Date;
@@ -41,7 +42,9 @@ export interface ContentQualityMetrics {
   confidenceLevel: number; // 0-100
 }
 }
+}
 
+}
 }
 export interface EffectivenessMetrics {
   score: number; // 0-100
@@ -52,6 +55,7 @@ export interface EffectivenessMetrics {
     ratingDistribution: RatingDistribution;
     satisfactionScore: number;
     qualityConsistency: number; // variance in output quality
+}
 }
   };
   problemSolving: {
@@ -67,6 +71,7 @@ export interface EffectivenessMetrics {
 }
 
 }
+}
 export interface UsabilityMetrics {
   score: number; // 0-100
   easeOfUse: {
@@ -74,6 +79,7 @@ export interface UsabilityMetrics {
     userFriendliness: number; // subjective ease score
     errorRate: number; // user error frequency
     recoverability: number; // ease of error recovery
+}
 }
   };
   clarity: {
@@ -95,6 +101,7 @@ export interface UsabilityMetrics {
 }
 
 }
+}
 export interface EngagementMetrics {
   score: number; // 0-100
   usage: {
@@ -102,6 +109,7 @@ export interface EngagementMetrics {
     retentionRate: number; // % of users who return
     frequencyOfUse: number; // average uses per user
     sessionDuration: number; // average session length
+}
 }
   };
   interaction: {
@@ -123,6 +131,7 @@ export interface EngagementMetrics {
 }
 
 }
+}
 export interface ReliabilityMetrics {
   score: number; // 0-100
   stability: {
@@ -130,6 +139,7 @@ export interface ReliabilityMetrics {
     crashRate: number; // frequency of crashes/failures
     uptime: number; // availability percentage
     consistencyScore: number; // consistent behavior across uses
+}
 }
   };
   performance: {
@@ -153,6 +163,7 @@ export interface ReliabilityMetrics {
 }
 
 }
+}
 export interface MaintainabilityMetrics {
   score: number; // 0-100
   updateFrequency: {
@@ -160,6 +171,7 @@ export interface MaintainabilityMetrics {
     bugFixFrequency: number; // frequency of bug fixes
     featureUpdateRate: number; // rate of feature additions
     maintenanceQuality: number; // quality of maintenance
+}
 }
   };
   codeQuality: {
@@ -183,6 +195,7 @@ export interface MaintainabilityMetrics {
 }
 
 }
+}
 export interface MarketFitMetrics {
   score: number; // 0-100
   demand: {
@@ -190,6 +203,7 @@ export interface MarketFitMetrics {
     searchVolume: number; // search volume for related terms
     competitorComparison: number; // vs competitor solutions
     marketPenetration: number; // market share/penetration
+}
 }
   };
   satisfaction: {
@@ -213,6 +227,7 @@ export interface MarketFitMetrics {
 }
 
 }
+}
 export interface QualityBenchmarks {
   industryAverage: number;
   categoryAverage: number;
@@ -222,7 +237,9 @@ export interface QualityBenchmarks {
   competitorComparison: CompetitorBenchmark[];
 }
 }
+}
 
+}
 }
 export interface CompetitorBenchmark {
   competitorId: string;
@@ -233,7 +250,9 @@ export interface CompetitorBenchmark {
   marketPosition: number;
 }
 }
+}
 
+}
 }
 export interface QualityTrends {
   timeframe: string;
@@ -244,7 +263,9 @@ export interface QualityTrends {
   seasonality: SeasonalityPattern[];
 }
 }
+}
 
+}
 }
 export interface HistoricalQualityData {
   date: Date;
@@ -257,10 +278,12 @@ export interface HistoricalQualityData {
     maintainability: number;
     marketFit: number;
 }
+}
   };
   events: QualityEvent[];
 }
 
+}
 }
 export interface QualityProjection {
   date: Date;
@@ -269,7 +292,9 @@ export interface QualityProjection {
   factors: string[];
 }
 }
+}
 
+}
 }
 export interface SeasonalityPattern {
   period: 'weekly' | 'monthly' | 'quarterly' | 'yearly';
@@ -277,7 +302,9 @@ export interface SeasonalityPattern {
   impact: number; // strength of seasonal effect
 }
 }
+}
 
+}
 }
 export interface QualityEvent {
   date: Date;
@@ -286,7 +313,9 @@ export interface QualityEvent {
   impact: number; // -100 to 100
 }
 }
+}
 
+}
 }
 export interface QualityRecommendation {
   id: string;
@@ -300,6 +329,7 @@ export interface QualityRecommendation {
     projectedImprovement: number;
     confidenceLevel: number;
     timeToImpact: string;
+}
 }
   };
   
@@ -327,6 +357,7 @@ export interface QualityRecommendation {
 }
 
 }
+}
 export interface RatingDistribution {
   oneStar: number;
   twoStar: number;
@@ -335,7 +366,9 @@ export interface RatingDistribution {
   fiveStar: number;
 }
 }
+}
 
+}
 }
 export interface ContentQualityConfig {
   weightings: {
@@ -345,6 +378,7 @@ export interface ContentQualityConfig {
     reliability: number;
     maintainability: number;
     marketFit: number;
+}
 }
   };
   thresholds: {
@@ -944,6 +978,7 @@ export class ContentQualityMetricsService {
 
 // Supporting interfaces for dashboard and insights
 }
+}
 export interface CreatorQualityDashboard {
   creatorId: string;
   assessmentDate: Date;
@@ -958,7 +993,9 @@ export interface CreatorQualityDashboard {
   improvementOpportunities: ImprovementOpportunity[];
 }
 }
+}
 
+}
 }
 export interface CreatorQualityOverview {
   averageQualityScore: number;
@@ -969,7 +1006,9 @@ export interface CreatorQualityOverview {
   qualityTrend: 'improving' | 'stable' | 'declining';
 }
 }
+}
 
+}
 }
 export interface CategoryPerformance {
   category: string;
@@ -980,16 +1019,20 @@ export interface CategoryPerformance {
   categoryRanking: number;
 }
 }
+}
 
+}
 }
 export interface CreatorQualityTrends {
   monthlyScores: number[];
+}
 }
   dimensionTrends: { [key: string]: number[] };
   milestones: QualityEvent[];
   projectedScore: number;
 }
 
+}
 }
 export interface CreatorQualityBenchmarks {
   vsMarketplace: number;
@@ -998,7 +1041,9 @@ export interface CreatorQualityBenchmarks {
   percentileRank: number;
 }
 }
+}
 
+}
 }
 export interface TopPerformingTemplate {
   templateId: string;
@@ -1007,7 +1052,9 @@ export interface TopPerformingTemplate {
   standoutDimensions: string[];
 }
 }
+}
 
+}
 }
 export interface ImprovementOpportunity {
   area: string;
@@ -1017,7 +1064,9 @@ export interface ImprovementOpportunity {
   impactLevel: string;
 }
 }
+}
 
+}
 }
 export interface MarketplaceQualityInsights {
   assessmentDate: Date;
@@ -1032,7 +1081,9 @@ export interface MarketplaceQualityInsights {
   recommendations: MarketplaceRecommendation[];
 }
 }
+}
 
+}
 }
 export interface MarketplaceOverallMetrics {
   averageQualityScore: number;
@@ -1042,7 +1093,9 @@ export interface MarketplaceOverallMetrics {
   qualityVariance: number;
 }
 }
+}
 
+}
 }
 export interface CategoryQualityBreakdown {
   category: string;
@@ -1052,7 +1105,9 @@ export interface CategoryQualityBreakdown {
   improvement: number;
 }
 }
+}
 
+}
 }
 export interface QualityDistribution {
   excellent: number;
@@ -1062,16 +1117,20 @@ export interface QualityDistribution {
   critical: number;
 }
 }
+}
 
+}
 }
 export interface MarketplaceQualityTrends {
   overallTrend: 'improving' | 'stable' | 'declining';
   monthlyAverages: number[];
 }
+}
   categoryTrends: { [key: string]: number[] };
   qualityFactorTrends: { [key: string]: number[] };
 }
 
+}
 }
 export interface TopPerformer {
   templateId: string;
@@ -1081,7 +1140,9 @@ export interface TopPerformer {
   standoutFeatures: string[];
 }
 }
+}
 
+}
 }
 export interface QualityFactor {
   factor: string;
@@ -1091,7 +1152,9 @@ export interface QualityFactor {
   recommendations: string[];
 }
 }
+}
 
+}
 }
 export interface MarketplaceInsight {
   type: string;
@@ -1102,7 +1165,9 @@ export interface MarketplaceInsight {
   actionable: boolean;
 }
 }
+}
 
+}
 }
 export interface MarketplaceRecommendation {
   category: string;
@@ -1112,5 +1177,6 @@ export interface MarketplaceRecommendation {
   effort: string;
   expectedImpact: string;
   timeframe: string;
+}
 }
 }

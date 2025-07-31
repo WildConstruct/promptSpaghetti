@@ -8,6 +8,7 @@ import React, { useState, useMemo } from 'react';
 import { ChevronUp, ChevronDown, Search, Filter, Download, Eye, MoreHorizontal } from 'lucide-react';
 import './DataTable.css';
 
+}
 export interface TableColumn<T = any> {
   key: string;
   title: string;
@@ -19,6 +20,7 @@ export interface TableColumn<T = any> {
   align?: 'left' | 'center' | 'right';
   className?: string;
 
+}
 export interface TableAction<T = any> {
   key: string;
   label: string;
@@ -27,6 +29,7 @@ export interface TableAction<T = any> {
   disabled?: (record: T) => boolean;
   variant?: 'default' | 'primary' | 'danger';
 
+}
 export interface DataTableProps<T = any> {
   // Core data
   data: T;
@@ -68,6 +71,7 @@ export interface DataTableProps<T = any> {
   emptyText?: string;
   className?: string;
 type SortDirection = 'asc' | 'desc' | null;
+}
 interface SortConfig {
   key: string;
   direction: SortDirection;
@@ -75,6 +79,7 @@ interface SortConfig {
 export const DataTable = <T extends Record<string, any>>({)
   data,
   columns,
+}
   pagination = { pageSize: 10 },
   rowSelection,
   actions,

@@ -17,11 +17,13 @@ export type ContentVersionControlMode = 'author' | 'editor' | 'reviewer' | 'admi
 export type QualityAssessmentType = 'automated' | 'editorial' | 'community' | 'comprehensive';
 export type WorkflowStage = 'automated_analysis' | 'editorial_review' | 'specialist_review' | 'final_approval' | 'published';
 
+}
 export interface CommunityComponentEvents {
     'version:created': {
         version: ContentVersion;
         contentId: string;
 
+}
     };
     'version:published': {
         version: ContentVersion;

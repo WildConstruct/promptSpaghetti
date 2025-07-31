@@ -187,6 +187,7 @@ export type EvidenceRecord = z.infer<typeof EvidenceRecordSchema>;
 // =============================================================================
 
 }
+}
 export interface EvidenceCollectionConfig {
   enableRealtimeCollection: boolean;
   batchSize: number;
@@ -220,11 +221,13 @@ export interface EvidenceCollectionConfig {
   failureRateThreshold: number;
 }
 }
+}
 
 // =============================================================================
 // Evidence Collection Rules Engine
 // =============================================================================
 
+}
 }
 export interface CollectionRule {
   id: string;
@@ -238,7 +241,9 @@ export interface CollectionRule {
   complianceFrameworks: ComplianceFramework[];
 }
 }
+}
 
+}
 }
 export interface CollectionTrigger {
   event: string;
@@ -246,7 +251,9 @@ export interface CollectionTrigger {
   filters: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface CollectionCondition {
   field: string;
@@ -255,13 +262,16 @@ export interface CollectionCondition {
   required: boolean;
 }
 }
+}
 
+}
 }
 export interface CollectionAction {
   type: 'collect' | 'verify' | 'alert' | 'archive' | 'purge';
   parameters: Record<string, any>;
   retryAttempts: number;
   timeoutMs: number;
+}
 }
 }
 

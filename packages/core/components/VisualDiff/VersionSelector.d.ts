@@ -1,5 +1,6 @@
 import React from 'react';
 
+}
 export interface Version {
     id: string;
     version_number: number;
@@ -9,6 +10,7 @@ export interface Version {
     is_current?: boolean;
 
 
+}
 export interface VersionSelectorProps {
     graphId: string;
     versions: Version[];
@@ -19,3 +21,4 @@ export interface VersionSelectorProps {
 
 export declare const VersionSelector: React.FC<VersionSelectorProps>;
 //# sourceMappingURL=VersionSelector.d.ts.map
+}

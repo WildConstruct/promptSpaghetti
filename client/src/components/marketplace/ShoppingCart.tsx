@@ -12,6 +12,7 @@ import { useMarketplace } from '../../hooks/useMarketplace';
 import { PriceDisplay } from './PriceDisplay';
 import { Badge } from './Badge';
 import './ShoppingCart.css';
+}
 interface ShoppingCartProps {
   isOpen: boolean;,
   onClose: () => void;
@@ -20,6 +21,7 @@ interface ShoppingCartProps {
   isOpen,
   onClose,
   onCheckout
+}
 }) => {
   const { cart, updateCartItem, removeFromCart, clearCart, loading } = useMarketplace();
   const [isClearing, setIsClearing] = useState(false);
@@ -136,6 +138,7 @@ interface ShoppingCartProps {
     </div>
   );
 };
+}
 interface CartItemComponentProps {
   item: CartItem;,
   onQuantityChange: (itemId: string, quantity: number) => void;,
@@ -148,6 +151,7 @@ interface CartItemComponentProps {
   onLicenseChange,
   onRemove,
   disabled
+}
 }) => {
   const [template, setTemplate] = useState<unknown>(null);
   useEffect(() => {

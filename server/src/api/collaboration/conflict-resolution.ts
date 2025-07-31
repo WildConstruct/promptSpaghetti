@@ -18,17 +18,21 @@ import { COLLABORATIVE_PERMISSIONS } from '../../database/epic23-workspace-model
 // =============================================================================
 
 }
+}
 interface GetConflictsRequest {
   Params: {
     resourceId: string;
+}
 }
   };
 }
 
 }
+}
 interface ResolveConflictRequest {
   Params: {
     resourceId: string;
+}
 }
   };
   Body: {
@@ -38,9 +42,11 @@ interface ResolveConflictRequest {
 }
 
 }
+}
 interface RollbackRequest {
   Params: {
     resourceId: string;
+}
 }
   };
   Body: {
@@ -49,9 +55,11 @@ interface RollbackRequest {
 }
 
 }
+}
 interface CreateRollbackPointRequest {
   Params: {
     resourceId: string;
+}
 }
   };
   Body: {
@@ -60,37 +68,46 @@ interface CreateRollbackPointRequest {
 }
 
 }
+}
 interface ConflictAnalysisRequest {
   Params: {
     resourceId: string;
 }
+}
   };
 }
 
+}
 }
 interface StartMonitoringRequest {
   Params: {
     resourceId: string;
 }
+}
   };
 }
 
+}
 }
 interface StopMonitoringRequest {
   Params: {
     resourceId: string;
 }
+}
   };
 }
 
+}
 }
 interface GetStatisticsRequest {
   Params: {
     resourceId?: string;
 }
+}
   };
 }
 
+}
 }
 interface UpdateConfigRequest {
   Body: {
@@ -101,6 +118,7 @@ interface UpdateConfigRequest {
     max_rollback_points?: number;
     notification_enabled?: boolean;
     conflict_threshold_seconds?: number;
+}
 }
   };
 }

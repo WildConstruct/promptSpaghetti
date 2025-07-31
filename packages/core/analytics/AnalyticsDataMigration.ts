@@ -52,11 +52,13 @@ export enum MigrationStatus {
   averageBatchTime: number;
   peakMemoryUsage: number;
   totalDataSize: number;
+}
 };
   backupLocation?: string;
   rollbackAvailable: boolean;
 
 // Validation Error
+}
 }
 export interface ValidationError {
   recordId?: string;
@@ -68,6 +70,8 @@ export interface ValidationError {
   severity: 'warning' | 'error' | 'critical';
   // Data Transformation Schema
 }
+}
+}
 export interface DataTransformationRule {
   id: string;
   sourceSystem: string;
@@ -76,6 +80,7 @@ export interface DataTransformationRule {
   transformationType: 'direct' | 'computed' | 'lookup' | 'conditional';
   transformation: {
     expression?: string;
+}
     lookupTable?: { [key: string]: any };
     conditions?: Array<{ condition: string; value: any; fallback?: any }>;
     defaultValue?: any;
@@ -91,6 +96,7 @@ export interface DataTransformationRule {
 
 // Migration Progress
 }
+}
 export interface MigrationProgress {
   migrationId: string;
   systemName: string;
@@ -102,6 +108,7 @@ export interface MigrationProgress {
   currentBatch: number;
   totalBatches: number;
   eta: number;
+}
 };
   currentOperation: string;
   lastError?: string;
@@ -307,10 +314,11 @@ export class AnalyticsDataMigrationService {
   /**
    * Start migration for a specific analytics system
    */
-  async startMigration(systemName: string)
+  async startMigration(systemName: string(
     sourceData: any,
     config: Partial<MigrationConfig> = {}
   ): Promise<string> {
+
     const migrationConfig = MigrationConfigSchema.parse(config);
     const migrationId = `migration_${systemName}_${Date.now()}`;}
     // Initialize migration progress
@@ -489,6 +497,7 @@ export class AnalyticsDataMigrationService {
   skipped: number;
   validationErrors: ValidationError;
 }> {
+
   const results = {
   processed: 0,
   migrated: 0,
@@ -546,6 +555,7 @@ export class AnalyticsDataMigrationService {
   skipped: boolean;
   validationErrors?: ValidationError;
 }> {
+
   try {
   // Transform record using transformation rules
   const transformedEvent = await this.transformRecord(record, transformationRules);
@@ -602,9 +612,9 @@ export class AnalyticsDataMigrationService {
   /**
    * Transform record using transformation rules
    */
-  private async transformRecord(()
+  private async transformRecord(((
     record: any,
-    transformationRules: DataTransformationRule,
+    transformationRules: DataTransformationRule
   ): Promise<Partial<any>> {
     const transformed: any = {,
   data: {},
@@ -625,10 +635,11 @@ export class AnalyticsDataMigrationService {
   /**
    * Apply individual transformation rule
    */
-  private async applyTransformationRule(()
+  private async applyTransformationRule(((
     record: any,
-    rule: DataTransformationRule,
+    rule: DataTransformationRule
   ): Promise<any> {
+
     const sourceValue = rule.sourceField ? this.getNestedProperty(record, rule.sourceField) : record;
     switch (rule.transformationType) {
       case 'direct':
@@ -677,10 +688,11 @@ export class AnalyticsDataMigrationService {
   /**
    * Validate transformed event
    */
-  private async validateTransformedEvent(()
+  private async validateTransformedEvent(((
     transformedEvent: any,
-    originalRecord: any,
+    originalRecord: any
   ): Promise<{ valid: boolean; errors: ValidationError }> {
+
   const errors: ValidationError = [];
   // Basic validation
   if (!transformedEvent.type) {
@@ -709,10 +721,11 @@ export class AnalyticsDataMigrationService {
   /**
    * Perform final validation
    */
-  private async performFinalValidation(()
+  private async performFinalValidation(((
     systemName: string,
-    expectedCount: number,
+    expectedCount: number
   ): Promise<ValidationError> {
+
   const errors: ValidationError = [];
   try {
   // Count migrated records
@@ -745,6 +758,7 @@ export class AnalyticsDataMigrationService {
    * Create backup of source data
    */
   private async createBackup(systemName: string, data: any): Promise<string> {
+
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const backupLocation = `/tmp/analytics_backup_${systemName}_${timestamp}.json`;}
     // In production, this would write to a proper backup location
@@ -799,6 +813,7 @@ export class AnalyticsDataMigrationService {
    * Sleep utility
    */
   private sleep(ms: number): Promise<void> {
+
     return new Promise(resolve => setTimeout(resolve, ms));
   /**
    * Public API Methods
@@ -852,6 +867,7 @@ export class AnalyticsDataMigrationService {
    * Rollback migration
    */
   async rollbackMigration(migrationId: string): Promise<boolean> {
+
     const result = this.migrationResults.get(migrationId);
     if (!result || !result.rollbackAvailable) {
       return false;
@@ -886,10 +902,11 @@ export class AnalyticsDataMigrationService {
   /**
    * Migrate all systems
    */
-  async migrateAllSystems(()
+  async migrateAllSystems(((
     systemsData: { [systemName: string]: any },
     config: Partial<MigrationConfig> = {}
   ): Promise<{ [systemName: string]: string }> {
+
     const migrationIds: { [systemName: string]: string } = {};
     for (const [systemName, data] of Object.entries(systemsData)) {
       try {

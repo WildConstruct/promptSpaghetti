@@ -13,6 +13,7 @@ import React, { useCallback, useState } from 'react';
 import { useReactFlow, useViewport } from 'reactflow';
 import { useGraphStore } from '../../graphStore';
 import { RegionGroupsLayer } from '../Annotations/RegionGroupsLayer';
+}
 interface RegionGroupsManagerProps {
   disabled?: boolean;
   readonly?: boolean;
@@ -27,6 +28,7 @@ interface RegionGroupsManagerProps {
   selectedGroupId = null,
   onGroupHover,
   onGroupSelect
+}
 }) => {
   const { 
     nodes,

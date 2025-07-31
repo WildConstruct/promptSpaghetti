@@ -3,6 +3,7 @@
  * Defines measurable performance metrics and targets for the prompt graph system
  */
 
+}
 export interface KPIDefinition {
     id: string;
     name: string;
@@ -16,10 +17,12 @@ export interface KPIDefinition {
         method: string;
         frequency: 'realtime' | 'interval' | 'on-demand';
         source: string;
+}
     };
     businessImpact: string;
     priority: 'critical' | 'high' | 'medium' | 'low';
 
+}
 export interface KPISnapshot {
     kpiId: string;
     value: number;
@@ -28,10 +31,12 @@ export interface KPISnapshot {
     trend: 'improving' | 'stable' | 'degrading';
     metadata?: Record<string, any>;
 
+}
 export interface KPIThresholds {
     excellent: {
         min: number;
         max?: number;
+}
     };
     good: {
         min: number;

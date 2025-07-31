@@ -3,6 +3,7 @@
  * Form for creating and editing comments
  */
 import React, { useState, useRef, useEffect } from 'react';
+}
 interface CommentFormProps {
   onSubmit: (content: string) => Promise<void>;
   onCancel: () => void;
@@ -21,6 +22,7 @@ interface CommentFormProps {
   userId,
   compact = false,
   autoFocus = true
+}
 }) => {
   const [content, setContent] = useState(initialValue);
   const [submitting, setSubmitting] = useState(false);

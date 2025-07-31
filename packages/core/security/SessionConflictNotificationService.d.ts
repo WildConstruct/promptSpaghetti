@@ -55,6 +55,7 @@ export declare enum DeliveryStatus {
     CLICKED = "clicked",
     EXPIRED = "expired"
 
+}
 export interface NotificationConfig {
     channels: NotificationChannel[];
     priority: NotificationPriority;
@@ -68,6 +69,7 @@ export interface NotificationConfig {
     rateLimitCount: number;
     templateCustomization: boolean;
 
+}
 export interface UserNotificationPreferences {
     userId: string;
     channels: {
@@ -78,6 +80,7 @@ export interface UserNotificationPreferences {
                 start: string;
                 end: string;
                 timezone: string;
+}
             };
         };
     };
@@ -92,6 +95,7 @@ export interface UserNotificationPreferences {
         minimumPriority: NotificationPriority;
     };
 
+}
 export interface NotificationMessage {
     id: string;
     type: NotificationType;
@@ -113,6 +117,7 @@ export interface NotificationMessage {
             lastAttempt?: Date;
             deliveredAt?: Date;
             error?: string;
+}
         };
     };
     metadata: {
@@ -122,6 +127,7 @@ export interface NotificationMessage {
         locationInfo?: any;
     };
 
+}
 export interface NotificationAction {
     id: string;
     label: string;
@@ -131,6 +137,7 @@ export interface NotificationAction {
     requiresConfirmation?: boolean;
     timeout?: number;
 
+}
 export interface NotificationTemplate {
     type: NotificationType;
     channel: NotificationChannel;
@@ -141,9 +148,11 @@ export interface NotificationTemplate {
         [actionId: string]: {
             label: string;
             type: NotificationAction['type'];
+}
         };
     };
 
+}
 export interface ConflictResolutionResponse {
     conflictId: string;
     userId: string;
@@ -152,6 +161,7 @@ export interface ConflictResolutionResponse {
     confirmed: boolean;
     timestamp: Date;
 
+}
 export interface NotificationStats {
     totalSent: number;
     deliveryRate: number;
@@ -163,6 +173,7 @@ export interface NotificationStats {
             delivered: number;
             failed: number;
             avgDeliveryTime: number;
+}
         };
     };
     typeStats: {

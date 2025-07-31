@@ -42,6 +42,7 @@ export declare class ExtensionDevelopmentKit {
     private testPhase;
     private toPascalCase;
 
+}
 interface ExtensionSkeletonConfig {
     id: string;
     name: string;
@@ -50,6 +51,7 @@ interface ExtensionSkeletonConfig {
     description: string;
 
 
+}
 interface TestExtensionConfig {
     id?: string;
     name?: string;
@@ -60,6 +62,7 @@ interface TestExtensionConfig {
     permissions?: string[];
 
 
+}
 interface LifecycleTestResult {
     success: boolean;
     phases: LifecyclePhaseResult[];
@@ -67,6 +70,7 @@ interface LifecycleTestResult {
     duration: number;
 
 
+}
 interface LifecyclePhaseResult {
     phase: string;
     success: boolean;
@@ -74,5 +78,6 @@ interface LifecyclePhaseResult {
     error?: Error;
 
 export declare const extensionDevelopmentKit: ExtensionDevelopmentKit;
+}
 export {};
 //# sourceMappingURL=ExtensionDevelopmentTools.d.ts.map

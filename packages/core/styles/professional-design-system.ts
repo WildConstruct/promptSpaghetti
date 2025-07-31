@@ -6,6 +6,7 @@
  * shadows, and layout tokens for VFX industry standards.
  */
 
+}
 export interface ProfessionalColorPalette {
   // Primary Dark Theme (inspired by Cinema 4D R25 + Substance Designer)
   background: {
@@ -14,6 +15,7 @@ export interface ProfessionalColorPalette {
   tertiary: string;     // Elevated surfaces,
   elevated: string;     // Modal/dialog backgrounds,
   inverse: string;      // Light surfaces for contrast,
+}
 };
   // Professional Text Colors
   text: {
@@ -52,11 +54,13 @@ export interface ProfessionalColorPalette {
   hover: string;        // Hover states,
 };
 }
+}
 export interface ProfessionalTypography {
   fontFamilies: {
   primary: string;      // Main UI font (technical-friendly),
   mono: string;         // Code/technical text,
   heading: string;      // Headers and titles,
+}
 };
   fontSizes: {
   xs: string;          // 11px - Small labels,
@@ -84,6 +88,7 @@ export interface ProfessionalTypography {
   wide: string;        // 0.025em,
 };
 }
+}
 export interface ProfessionalShadows {
   // Elevation System (inspired by Material Design + VFX tools)
   elevation: {
@@ -93,6 +98,7 @@ export interface ProfessionalShadows {
   lg: string;          // Prominent elevation,
   xl: string;          // High elevation (modals),
   '2xl': string;       // Maximum elevation,
+}
 };
   // Specialized Shadows
   node: {
@@ -108,6 +114,7 @@ export interface ProfessionalShadows {
   strong: string;      // Strong glow effect,
   accent: string;      // Accent-colored glow,
 };
+}
 }
 export interface ProfessionalSpacing {
   // Spacing Scale (8px base grid)
@@ -127,6 +134,8 @@ export interface ProfessionalSpacing {
   24: string;           // 96px,
   32: string;           // 128px,
 }
+}
+}
 export interface ProfessionalBorderRadius {
   none: string;         // 0px,
   sm: string;           // 3px,
@@ -136,6 +145,7 @@ export interface ProfessionalBorderRadius {
   '2xl': string;        // 16px,
   full: string;         // 50%,
   // Professional Color Palette Implementation
+}
 }
 export const professionalColors: ProfessionalColorPalette = {
   background: {
@@ -270,12 +280,14 @@ export const professionalBorderRadius: ProfessionalBorderRadius = {
 
 // Complete Professional Design System
 
+}
 export interface ProfessionalDesignSystem {
   colors: ProfessionalColorPalette;
   typography: ProfessionalTypography;
   shadows: ProfessionalShadows;
   spacing: ProfessionalSpacing;
   borderRadius: ProfessionalBorderRadius;
+}
 }
 export const professionalDesignSystem: ProfessionalDesignSystem = {
   colors: professionalColors,

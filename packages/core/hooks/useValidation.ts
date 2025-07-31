@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Edge, Node } from 'reactflow';
 import { ValidationError, validateConnection } from '../validation';
+}
 interface UseValidationReturn {
   errors: ValidationError;
   styledEdges: Edge;
@@ -18,6 +19,7 @@ interface UseValidationReturn {
   highlightNodeIds = new Set(),
   highlightEdgeIds = new Set(),
   validateConnection: customValidateConnection = validateConnection,
+}
 }: UseValidationProps): UseValidationReturn => {
   const [errors, setErrors] = useState<ValidationError>([]);
   const runValidation = useCallback(;);

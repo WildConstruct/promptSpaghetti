@@ -13,6 +13,7 @@
  * - Alert filtering and prioritization
  */
 
+}
 export interface AlertRule {
     id: string;
     name: string;
@@ -32,6 +33,7 @@ export interface AlertRule {
     createdBy: string;
 
 
+}
 export interface AlertCondition {
     id: string;
     field: string;
@@ -41,6 +43,7 @@ export interface AlertCondition {
     timeWindow?: number;
 
 
+}
 export interface AlertAction {
     id: string;
     type: 'notification' | 'email' | 'webhook' | 'script' | 'create_task';
@@ -51,8 +54,10 @@ export interface AlertAction {
         retryDelay: number;
         backoffMultiplier?: number;
 
+}
     };
 
+}
 export interface AlertThreshold {
     id: string;
     name: string;
@@ -61,11 +66,13 @@ export interface AlertThreshold {
     severity: AlertSeverity;
 
 
+}
 export interface AlertEscalation {
     enabled: boolean;
     stages: AlertEscalationStage[];
 
 
+}
 export interface AlertEscalationStage {
     id: string;
     delayMinutes: number;
@@ -74,6 +81,7 @@ export interface AlertEscalationStage {
     condition?: 'unacknowledged' | 'unresolved' | 'recurring';
 
 
+}
 export interface Alert {
     id: string;
     ruleId: string;
@@ -114,6 +122,7 @@ export type AlertSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
 export type AlertStatus = 'active' | 'acknowledged' | 'resolved' | 'suppressed' | 'expired';
 export type AlertPriority = 'urgent' | 'high' | 'normal' | 'low';
 
+}
 export interface AlertFilter {
     types?: AlertType[];
     categories?: AlertCategory[];
@@ -125,9 +134,11 @@ export interface AlertFilter {
         start: Date;
         end: Date;
 
+}
     };
     searchQuery?: string;
 
+}
 export interface AlertStats {
     total: number;
     active: number;
@@ -234,3 +245,4 @@ export declare const getAlerts: (filter?: AlertFilter) => Alert[];
 export declare const getAlertStats: () => AlertStats;
 export declare const subscribeToAlerts: (listenerId: string, callback: (alert: Alert) => void) => void;
 //# sourceMappingURL=AlertSystem.d.ts.map
+}

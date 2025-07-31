@@ -16,12 +16,14 @@ jest.mock('../ExtensionPointRegistry');
 jest.mock('../../hooks/useWebSocket');
 
 // Import types and interfaces (these would be defined in the actual implementation)
+}
 interface ExtensionContext {
   storage: unknown;
   logging: unknown;
   runtime: unknown;
   ui: unknown;
   api: unknown;
+}
 interface Extension {
   id: string;
   name: string;
@@ -41,6 +43,7 @@ enum ExtensionState {
   DEACTIVATED = 'deactivated',
   DISPOSED = 'disposed',
   ERROR = 'error'
+}
 interface ExtensionLifecycleManager {
   initialize(): Promise<void>;
   registerExtension(extension: Extension): void;
@@ -60,6 +63,7 @@ interface ExtensionLifecycleManager {
 // Mock extension implementations for testing
 const createMockExtension = (id: string, dependencies: string = []): Extension => ({)
   id,
+}
   name: `Extension ${id}`}
 },
   version: '1.0.0',

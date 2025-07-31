@@ -125,6 +125,7 @@ type DatasetVersion = z.infer<typeof DatasetVersionSchema>;
 type ExportJob = z.infer<typeof ExportJobSchema>;
 
 }
+}
 interface DatasetCreateRequest {
   name: string;
   description?: string;
@@ -135,7 +136,9 @@ interface DatasetCreateRequest {
   source?: 'upload' | 'api' | 'synthetic' | 'augmented';
 }
 }
+}
 
+}
 }
 interface DatasetImportRequest {
   name: string;
@@ -147,10 +150,12 @@ interface DatasetImportRequest {
     rule_type: 'required' | 'type' | 'range' | 'regex' | 'custom';
     parameters?: Record<string, unknown>;
 }
+}
   }>;
   auto_labeling?: boolean;
 }
 
+}
 }
 interface LabelingTaskRequest {
   dataset_id: string;
@@ -164,9 +169,11 @@ interface LabelingTaskRequest {
     minimum_annotators?: number;
     expert_review_percentage?: number;
 }
+}
   };
 }
 
+}
 }
 interface DataAugmentationRequest {
   dataset_id: string;
@@ -176,7 +183,9 @@ interface DataAugmentationRequest {
   quality_threshold: number;
 }
 }
+}
 
+}
 }
 interface QualityAssessmentRequest {
   dataset_id: string;
@@ -185,7 +194,9 @@ interface QualityAssessmentRequest {
   generate_report: boolean;
 }
 }
+}
 
+}
 }
 interface DatasetVersionRequest {
   dataset_id: string;
@@ -196,10 +207,12 @@ interface DatasetVersionRequest {
     count: number;
     description?: string;
 }
+}
   }>;
   parent_version_id?: string;
 }
 
+}
 }
 interface ExportRequest {
   format: string;
@@ -208,7 +221,9 @@ interface ExportRequest {
   filter?: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 interface DatasetListOptions {
   page: number;
@@ -218,9 +233,11 @@ interface DatasetListOptions {
     status?: string;
     search?: string;
 }
+}
   };
 }
 
+}
 }
 interface DatasetStatistics {
   totalSamples: number;
@@ -230,6 +247,7 @@ interface DatasetStatistics {
     consistency: number;
     bias: number;
     duplication: number;
+}
 }
   };
   sizeMetrics: {

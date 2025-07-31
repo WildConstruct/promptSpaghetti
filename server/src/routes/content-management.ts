@@ -17,6 +17,7 @@ import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 interface AuthenticatedRequest extends FastifyRequest {
   user?: {
     id: string;
@@ -26,6 +27,7 @@ interface AuthenticatedRequest extends FastifyRequest {
   };
 }
 
+}
 }
 interface ContentQueryParams {
   type?: string;
@@ -43,17 +45,22 @@ interface ContentQueryParams {
   offset?: string;
 }
 }
+}
 
+}
 }
 interface ContentIdParams {
   contentId: string;
 }
 }
+}
 
+}
 }
 interface BulkUpdateBody {
   contentIds: string[];
   status: string;
+}
 }
 }
 

@@ -17,6 +17,7 @@ import { ConversionEvent } from '../../packages/core/analytics/ConversionTracker
 import { EnhancedConversionEvent } from '../../packages/core/analytics/ConversionFunnelArchitecture';
 
 }
+}
 export interface ConversionEventBatch {
   events: EnhancedConversionEvent[];
   metadata: {
@@ -26,9 +27,11 @@ export interface ConversionEventBatch {
     version?: string;
     clientId?: string;
 }
+}
   };
 }
 
+}
 }
 export interface ConversionEventQuery {
   startTime?: number;
@@ -41,7 +44,9 @@ export interface ConversionEventQuery {
   offset?: number;
 }
 }
+}
 
+}
 }
 export interface ConversionEventValidationResult {
   isValid: boolean;
@@ -50,7 +55,9 @@ export interface ConversionEventValidationResult {
   processedEvent?: EnhancedConversionEvent;
 }
 }
+}
 
+}
 }
 export interface ConversionEventResponse {
   success: boolean;
@@ -62,6 +69,7 @@ export interface ConversionEventResponse {
     duplicates: number;
     invalid: number;
     batchId: string;
+}
 }
   };
 }

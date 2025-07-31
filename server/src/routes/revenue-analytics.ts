@@ -21,6 +21,7 @@ import { Database } from '../database';
 
 // Request type definitions
 }
+}
 interface GenerateAnalyticsRequest {
   Querystring: {
     timeRange?: TimeRange;
@@ -30,13 +31,16 @@ interface GenerateAnalyticsRequest {
     includeOptimization?: boolean;
     granularity?: 'daily' | 'weekly' | 'monthly';
 }
+}
   };
 }
 
 }
+}
 interface CreatorRevenueRequest {
   Params: {
     creatorId: string;
+}
 }
   };
   Querystring: {
@@ -47,9 +51,11 @@ interface CreatorRevenueRequest {
 }
 
 }
+}
 interface TemplateRevenueRequest {
   Params: {
     templateId: string;
+}
 }
   };
   Querystring: {
@@ -60,6 +66,7 @@ interface TemplateRevenueRequest {
 }
 
 }
+}
 interface RevenueComparisonRequest {
   Body: {
     templateIds: string[];
@@ -68,9 +75,11 @@ interface RevenueComparisonRequest {
     comparisonType: 'templates' | 'creators' | 'categories';
     metrics?: string[]; // specific metrics to compare
 }
+}
   };
 }
 
+}
 }
 interface RevenueForecastRequest {
   Querystring: {
@@ -79,14 +88,17 @@ interface RevenueForecastRequest {
     includeSeasonality?: boolean;
     includeEvents?: boolean;
 }
+}
   };
 }
 
+}
 }
 interface RevenueOptimizationRequest {
   Params: {
     templateId?: string;
     creatorId?: string;
+}
 }
   };
   Querystring: {

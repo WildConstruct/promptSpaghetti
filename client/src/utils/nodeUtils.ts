@@ -17,9 +17,9 @@ export const calculateNodePosition = (index: number, )
 };
 };
 
-export const snapToGrid = (()
+export const snapToGrid = (((
     position: { x: number; y: number },
-    gridSize: number = 20,
+    gridSize: number = 20
   ): { x: number; y: number } => {
   return {
   x: Math.round(position.x / gridSize) * gridSize,
@@ -38,9 +38,9 @@ export const getRandomOption = (options: OptionConfig): OptionConfig => {
   return options[0]; // Fallback
 };
 
-export const getWeightedRandomOptions = (()
+export const getWeightedRandomOptions = (((
     options: OptionConfig,
-    count: number = 1,
+    count: number = 1
   ): OptionConfig => {
   const selected: OptionConfig = [];
   const remaining = [...options];
@@ -91,11 +91,11 @@ export const duplicateNode = (node: NodeTemplate, offset: { x: number; y: number
     ...node,
     id: `${node.id}-copy-${Date.now()}`}
 },
-  position: {,
+  position: {
   x: node.position.x + offset.x,
   y: node.position.y + offset.y,
 },
-  data: {,
+  data: {
   ...node.data,
   options: [...node.data.options] // Deep copy options array,
 };
@@ -111,7 +111,7 @@ export const moveNode = (node: NodeTemplate, newPosition: { x: number; y: number
 export const updateNodeOptions = (node: NodeTemplate, newOptions: OptionConfig): NodeTemplate => {
   return {
   ...node,
-  data: {,
+  data: {
   ...node.data,
   options: [...newOptions],
 };

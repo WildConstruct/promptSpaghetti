@@ -32,6 +32,7 @@ import {
   Target,
   Plus
 } from 'lucide-react';
+}
 interface ComplianceFramework {
   id: string;,
   name: string;
@@ -46,6 +47,7 @@ interface ComplianceFramework {
   requirements: ComplianceRequirement;,
   nextAuditDate: string;
   certificationStatus: 'certified' | 'pending' | 'expired' | 'not_applicable';
+}
 interface ComplianceRequirement {
   id: string;,
   frameworkId: string;
@@ -59,6 +61,7 @@ interface ComplianceRequirement {
   remediationActions: RemediationAction;
   automatedCheck: boolean;,
   checkFrequency: 'daily' | 'weekly' | 'monthly' | 'quarterly';
+}
 interface ComplianceViolation {
   id: string;,
   frameworkId: string;
@@ -79,6 +82,7 @@ interface ComplianceViolation {
   remediationPlan?: string;
   evidence: string;,
   notifications: string;
+}
 interface RemediationAction {
   id: string;,
   violationId: string;
@@ -93,8 +97,10 @@ interface RemediationAction {
   completedDate?: string;
   dependencies: string;,
   tasks: string;
+}
 interface ComplianceMetrics {
   overallScore: number;,
+}
   frameworkScores: { [key: string]: number };
   totalViolations: number;,
   activeViolations: number;
@@ -105,6 +111,7 @@ interface ComplianceMetrics {
   upcomingAudits: number;,
   certificationStatus: string;
   lastReportGenerated: string;
+}
 interface AuditLog {
   id: string;,
   timestamp: string;
@@ -135,6 +142,7 @@ const ComplianceReportingDashboard: React.FC = () => {
   const [severityFilter, setSeverityFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+}
   const [_dateRange, _setDateRange] = useState<{ start: string; end: string }>({)
   start: '',
   end: '',
@@ -254,7 +262,7 @@ const ComplianceReportingDashboard: React.FC = () => {
   notifications: ['data-protection@company.com']];
   const mockMetrics: ComplianceMetrics = {,
   overallScore: 89,
-  frameworkScores: {,
+  frameworkScores: {
   gdpr: 87,
   hipaa: 94,
   sox: 91,
@@ -265,7 +273,7 @@ const ComplianceReportingDashboard: React.FC = () => {
         resolvedViolations: 39,
         averageResolutionTime: 4.2, // days
         violationTrend: 'improving',
-        riskDistribution: {,
+        riskDistribution: {
   low: 2,
   medium: 2,
   high: 1,

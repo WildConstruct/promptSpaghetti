@@ -27,6 +27,7 @@ import {
 // Component Types
 // =============================================================================
 
+}
 export interface MarketplaceLeaderboardsProps {
   defaultTab?: 'templates' | 'creators' | 'categories' | 'engagement';
   onTemplateClick?: (templateId: string) => void;
@@ -52,7 +53,9 @@ export interface MarketplaceLeaderboardsProps {
   topScore: number;
   totalParticipants: number;
   updateFrequency: string;
+}
 };
+}
 interface LeaderboardFilter {
   timeframe: '24h' | '7d' | '30d' | '90d' | 'all';
   category?: string;
@@ -60,6 +63,7 @@ interface LeaderboardFilter {
   // =============================================================================
   // Marketplace Leaderboards Component
   // =============================================================================
+}
 }
 export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = ({)
   defaultTab = 'templates',

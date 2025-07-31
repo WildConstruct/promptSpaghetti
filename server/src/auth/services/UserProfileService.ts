@@ -19,6 +19,7 @@ import { AuditService } from './AuditService';
 import { ActivityHistoryService, ActivityType } from './ActivityHistoryService';
 
 }
+}
 export interface UserProfile {
   id: string;
   userId: string;
@@ -71,7 +72,9 @@ export interface UserProfile {
   mutualConnectionsCount?: number;
 }
 }
+}
 
+}
 }
 export interface PrivacySettings {
   profileVisibility: 'public' | 'connections' | 'private';
@@ -92,7 +95,9 @@ export interface PrivacySettings {
   marketingEmails: boolean;
 }
 }
+}
 
+}
 }
 export interface UserPreferences {
   id: string;
@@ -103,7 +108,9 @@ export interface UserPreferences {
   updatedAt: Date;
 }
 }
+}
 
+}
 }
 export interface ProfileCompletionStatus {
   overall: number;
@@ -113,6 +120,7 @@ export interface ProfileCompletionStatus {
     contact: number;
     social: number;
     preferences: number;
+}
 }
   };
   nextSteps: string[];
@@ -143,6 +151,7 @@ export enum PreferenceCategory {
 }
 
 }
+}
 export interface UserConnection {
   id: string;
   followerId: string;
@@ -153,7 +162,9 @@ export interface UserConnection {
   acceptedAt?: Date;
 }
 }
+}
 
+}
 }
 export interface ProfileSearchQuery {
   query?: string;
@@ -172,12 +183,15 @@ export interface ProfileSearchQuery {
   sortOrder?: 'asc' | 'desc';
 }
 }
+}
 
+}
 }
 export interface ProfileSearchResult {
   profiles: UserProfile[];
   totalCount: number;
   facets: {
+}
 }
     skills: Array<{ skill: string; count: number }>;
     locations: Array<{ location: string; count: number }>;
@@ -188,6 +202,7 @@ export interface ProfileSearchResult {
 }
 
 }
+}
 export interface ProfileAnalytics {
   userId: string;
   profileViews: {
@@ -196,6 +211,7 @@ export interface ProfileAnalytics {
     today: number;
     thisWeek: number;
     thisMonth: number;
+}
 }
   };
   viewerDemographics: {
@@ -222,6 +238,7 @@ export interface ProfileAnalytics {
 }
 
 }
+}
 export interface ProfileUpdate {
   displayName?: string;
   firstName?: string;
@@ -246,6 +263,7 @@ export interface ProfileUpdate {
   experience?: ExperienceLevel;
   industry?: string;
   privacySettings?: Partial<PrivacySettings>;
+}
 }
 }
 

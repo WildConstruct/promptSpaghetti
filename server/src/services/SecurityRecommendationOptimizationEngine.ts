@@ -11,6 +11,7 @@ import { SecurityMLToolsEngine, SecurityMLModel } from './SecurityMLToolsEngine'
 import { SecurityStatisticalAnalysisEngine, SecurityStatistics } from './SecurityStatisticalAnalysisEngine';
 
 }
+}
 export interface SecurityRecommendation {
   recommendation_id: string;
   timestamp: number;
@@ -23,6 +24,7 @@ export interface SecurityRecommendation {
     rationale: string;
     expected_outcome: string;
     success_metrics: string[];
+}
 }
   };
   
@@ -77,6 +79,7 @@ export interface SecurityRecommendation {
 }
 
 }
+}
 export interface RecommendationOptimization {
   optimization_id: string;
   timestamp: number;
@@ -91,6 +94,7 @@ export interface RecommendationOptimization {
     business_priorities: Array<{
       priority: string;
       weight: number;
+}
 }
     }>;
   };
@@ -139,6 +143,7 @@ export interface RecommendationOptimization {
 }
 
 }
+}
 export interface RecommendationOutcome {
   outcome_id: string;
   recommendation_id: string;
@@ -151,6 +156,7 @@ export interface RecommendationOutcome {
     risk_reduction_achieved: number;
     implementation_success: boolean;
     success_metrics_achieved: Record<string, boolean>;
+}
 }
   };
   
@@ -182,6 +188,7 @@ export interface RecommendationOutcome {
 }
 
 }
+}
 export interface MLRecommendationModel {
   model_id: string;
   model_name: string;
@@ -192,6 +199,7 @@ export interface MLRecommendationModel {
     outcome_data_points: number;
     contextual_features: number;
     feedback_samples: number;
+}
 }
   };
   

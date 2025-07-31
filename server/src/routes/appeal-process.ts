@@ -25,12 +25,14 @@ import { AuditService } from '../auth/services/AuditService';
 import { requireAuth, requireAdmin, requireRole } from '../middleware/auth';
 
 }
+}
 interface AppealRoutes {
   '/appeals': {
     GET: {
       Querystring: AppealFilters & {
         include_timeline?: boolean;
         include_evidence?: boolean;
+}
 }
       };
     };

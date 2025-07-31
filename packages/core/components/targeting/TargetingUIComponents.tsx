@@ -48,6 +48,7 @@ import {
 
 // Core Types
 
+}
 export interface TargetingCondition {
   id: string;
   type: 'attribute' | 'behavior' | 'segment' | 'geography' | 'device' | 'time';
@@ -57,6 +58,8 @@ export interface TargetingCondition {
   logicalOperator?: 'AND' | 'OR' | 'NOT';
   weight?: number;
   isEnabled: boolean;
+}
+}
 }
 export interface UserSegment {
   id: string;
@@ -70,6 +73,8 @@ export interface UserSegment {
   tags: string;
   color: string;
 }
+}
+}
 export interface TargetingAudience {
   id: string;
   name: string;
@@ -80,15 +85,18 @@ export interface TargetingAudience {
   isActive: boolean;
   rolloutPercentage: number;
 }
+}
+}
 export interface TargetingPreview {
   totalUsers: number;
   matchedUsers: number;
   matchPercentage: number;
-  sampleUsers: Array<{,
+  sampleUsers: Array<{
   id: string;
   email: string;
   attributes: Record<string, any>;
   matchReasons: string;
+}
 }>;
   demographics: {
   age: Record<string, number>;
@@ -97,6 +105,7 @@ export interface TargetingPreview {
 };
 
 // Audience Selector Component
+}
 interface AudienceSelectorProps {
   audiences: TargetingAudience;
   selectedAudience?: TargetingAudience;
@@ -106,6 +115,7 @@ interface AudienceSelectorProps {
   onDelete?: (audienceId: string) => void;
   showAnalytics?: boolean;
   compact?: boolean;
+}
 }
 export const [sortBy, setSortBy] = useState<'name' | 'reach' | 'updated'>('name');
   const filteredAudiences = useMemo(() => {
@@ -254,15 +264,17 @@ export const [sortBy, setSortBy] = useState<'name' | 'reach' | 'updated'>('name'
 };
 
 // Advanced Condition Builder Component
+}
 interface AdvancedConditionBuilderProps {
   conditions: TargetingCondition;
   onChange: (conditions: TargetingCondition) => void;
-  availableFields: Array<{,
+  availableFields: Array<{
   key: string;
   label: string;
   type: string;
   category: string;
   options?: unknown;
+}
 }>;
   onPreview?: (conditions: TargetingCondition) => Promise<TargetingPreview>;
   showVisualBuilder?: boolean;
@@ -585,6 +597,7 @@ export const [previewLoading, setPreviewLoading] = useState(false);
 };
 
 // Geographic Targeting Component
+}
 interface GeographicTargetingProps {
   selectedCountries: string;
   selectedRegions: string;
@@ -596,6 +609,7 @@ interface GeographicTargetingProps {
   onExcludeModeChange?: (exclude: boolean) => void;
   // Mock data - in real implementation, this would come from props or API
   const countries = [;
+}
     { code: 'US', name: 'United States', userCount: 125000 },
     { code: 'GB', name: 'United Kingdom', userCount: 89000 },
     { code: 'CA', name: 'Canada', userCount: 67000 },
@@ -694,6 +708,7 @@ interface GeographicTargetingProps {
 };
 
 // Segment Management Component
+}
 interface SegmentManagementProps {
   segments: UserSegment;
   onCreateSegment: (segment: Omit<UserSegment, 'id' | 'createdAt' | 'lastUpdated'>) => void;
@@ -704,6 +719,7 @@ interface SegmentManagementProps {
     <div className="segment-management">
       <div className="segments-header">
         <div className="header-title">
+}
           <Layers size={20} />
           <h3>User Segments</h3>
           <div className="segment-count">{segments.length} segments</div>
@@ -865,6 +881,7 @@ interface SegmentManagementProps {
 };
 
 // Targeting Performance Analytics
+}
 interface TargetingAnalyticsProps {
   analytics: {
   totalUsers: number;
@@ -872,14 +889,15 @@ interface TargetingAnalyticsProps {
   conversionRate: number;
   impressions: number;
   clicks: number;
-  topSegments: Array<{,
+  topSegments: Array<{
   id: string;
   name: string;
   performance: number;
   users: number;
+}
 }>;
     geographicBreakdown: Record<string, number>;
-    timeSeriesData: Array<{,
+    timeSeriesData: Array<{
   date: string;
   impressions: number;
   conversions: number;

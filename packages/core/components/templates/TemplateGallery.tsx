@@ -4,6 +4,7 @@
  */
 import React, { useState, useEffect, useMemo } from 'react';
 import { ProjectTemplate, TemplateCategory, ProjectTemplateManager } from '../../templates/ProjectTemplateManager';
+}
 interface TemplateGalleryProps {
   templateManager: ProjectTemplateManager;
   onTemplateSelect: (template: ProjectTemplate, customizations: Record<string, any>) => void;
@@ -14,6 +15,7 @@ interface TemplateGalleryProps {
   onTemplateSelect,
   onTemplatePreview,
   className = ''
+}
 }) => {
   const [templates, setTemplates] = useState<ProjectTemplate>([]);
   const [categories, setCategories] = useState<TemplateCategory>([]);
@@ -181,11 +183,13 @@ interface TemplateGalleryProps {
     </div>
   );
 };
+}
 interface TemplateCardProps {
   template: ProjectTemplate;
   onUse: () => void;
   onPreview: () => void;
   featured?: boolean;
+}
 const TemplateCard: React.FC<TemplateCardProps> = ({ template, onUse, onPreview, featured = false }) => {
   const complexityColors = {
   beginner: 'bg-green-100 text-green-800',

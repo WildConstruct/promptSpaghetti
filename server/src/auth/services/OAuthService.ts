@@ -9,6 +9,7 @@ import { DatabaseService } from '../database/DatabaseService';
 import { CertificatePinningManager, loadPinConfigFromEnv } from '../../security/tls-config';
 
 }
+}
 export interface OAuthProviderConfig {
   clientId: string;
   clientSecret: string;
@@ -24,9 +25,11 @@ export interface OAuthProviderConfig {
     picture?: string;
     verified?: string;
 }
+}
   };
 }
 
+}
 }
 export interface OAuthStateData {
   provider: OAuthProvider;
@@ -35,6 +38,7 @@ export interface OAuthStateData {
   createdAt: Date;
   ipAddress?: string;
   userAgent?: string;
+}
 }
 }
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { ConnectionState } from '../websocket/WebSocketClient';
+}
 interface WebSocketStatusProps {
   connectionState: ConnectionState;
   queuedMessages?: number;
@@ -10,6 +11,7 @@ interface WebSocketStatusProps {
   queuedMessages = 0,
   className = '',
   showDetails = false
+}
 }) => {
   const getStatusColor = (status: ConnectionState['status']): string => {,
   switch (status) {

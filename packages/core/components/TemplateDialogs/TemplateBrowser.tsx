@@ -9,11 +9,13 @@ import {
   TemplateBrowserState
 } from '../../types/TemplateTypes';
 import { templateService } from '../../services/TemplateService';
+}
 interface TemplateBrowserProps {
   isOpen: boolean;
   onClose: () => void;
   onApplyTemplate: (templateId: string, options: TemplateInstantiationOptions) => Promise<void>;
   currentAuthor?: string; // For filtering "my templates"
+}
 const TEMPLATE_CATEGORIES: Array<{ value: TemplateCategory | 'all'; label: string }> = [
   { value: 'all', label: 'All Categories' },
   { value: 'character', label: 'Character' },

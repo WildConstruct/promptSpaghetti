@@ -40,10 +40,12 @@ const AUTH_ROUTE_CONFIG = {
 /**
  * Authentication breadcrumb component
  */
+}
 interface AuthBreadcrumbProps {
   currentPath: string;
 
 // eslint-disable-next-line react/prop-types
+}
 const AuthBreadcrumb: React.FC<AuthBreadcrumbProps> = React.memo(({ currentPath }) => {
   const route = useMemo(() => ;
   AUTH_ROUTE_CONFIG.public.find(r => r.path === currentPath) ||
@@ -104,10 +106,12 @@ AuthProgressIndicator.displayName = 'AuthProgressIndicator';
 /**
  * Authentication error boundary
  */
+}
 interface AuthErrorBoundaryState {
   hasError: boolean;
   error?: Error;
 class AuthErrorBoundary extends React.Component<
+}
   { children: React.ReactNode },
   AuthErrorBoundaryState
 > {

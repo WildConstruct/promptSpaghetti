@@ -3,6 +3,7 @@
  * Epic 28.3 - Legal document processing and compliance components
  */
 
+}
 export interface LegalDocument {
     id: string;
     title: string;
@@ -14,6 +15,7 @@ export interface LegalDocument {
     updatedAt: Date;
     version: string;
 
+}
 export interface LegalDocumentMetadata {
     jurisdiction: string;
     practiceArea: string[];
@@ -24,6 +26,7 @@ export interface LegalDocumentMetadata {
     tags: string[];
     confidentialityLevel: 'public' | 'confidential' | 'attorney_client' | 'work_product';
 
+}
 export interface LegalReference {
     id: string;
     type: 'statute' | 'regulation' | 'case' | 'treaty' | 'article';
@@ -33,6 +36,7 @@ export interface LegalReference {
     jurisdiction: string;
     year?: number;
 
+}
 export interface ContractClause {
     id: string;
     type: string;
@@ -45,8 +49,10 @@ export interface ContractClause {
     position: {
         start: number;
         end: number;
+}
     };
 
+}
 export interface ComplianceCheck {
     id: string;
     regulation: string;
@@ -57,6 +63,7 @@ export interface ComplianceCheck {
     remediation?: string[];
     affectedSections: number[];
 
+}
 export interface LegalTerminology {
     term: string;
     definition: string;
@@ -65,6 +72,7 @@ export interface LegalTerminology {
     source: string;
     alternatives?: string[];
 
+}
 export interface Citation {
     id: string;
     type: 'bluebook' | 'alwd' | 'chicago' | 'mla' | 'apa';
@@ -78,12 +86,14 @@ export interface Citation {
     date?: string;
     url?: string;
 
+}
 export interface LegalDocumentParserProps {
     onDocumentParsed: (document: LegalDocument) => void;
     supportedTypes: LegalDocument['type'][];
     maxFileSize?: number;
     className?: string;
 
+}
 export interface ContractAnalyzerProps {
     document: LegalDocument;
     onClauseIdentified: (clauses: ContractClause[]) => void;
@@ -91,6 +101,7 @@ export interface ContractAnalyzerProps {
     analysisType?: 'basic' | 'detailed' | 'comprehensive';
     className?: string;
 
+}
 export interface ContractAnalysis {
     documentId: string;
     clauses: ContractClause[];
@@ -100,12 +111,14 @@ export interface ContractAnalysis {
     confidence: number;
     processingTime: number;
 
+}
 export interface RiskAssessment {
     overallRisk: 'low' | 'medium' | 'high' | 'critical';
     riskFactors: RiskFactor[];
     mitigation: string[];
     score: number;
 
+}
 export interface RiskFactor {
     type: string;
     description: string;
@@ -113,6 +126,7 @@ export interface RiskFactor {
     likelihood: 'low' | 'medium' | 'high';
     mitigation: string[];
 
+}
 export interface ComplianceCheckerProps {
     document: LegalDocument;
     regulations: string[];
@@ -120,6 +134,7 @@ export interface ComplianceCheckerProps {
     autoCheck?: boolean;
     className?: string;
 
+}
 export interface CitationManagerProps {
     citations: Citation[];
     onCitationAdd: (citation: Citation) => void;
@@ -128,6 +143,7 @@ export interface CitationManagerProps {
     citationStyle: Citation['type'];
     className?: string;
 
+}
 export interface TerminologyValidatorProps {
     text: string;
     onValidationResults: (results: TermValidationResult[]) => void;
@@ -136,17 +152,20 @@ export interface TerminologyValidatorProps {
     autoValidate?: boolean;
     className?: string;
 
+}
 export interface TermValidationResult {
     term: string;
     position: {
         start: number;
         end: number;
+}
     };
     isValid: boolean;
     suggestions: LegalTerminology[];
     confidence: number;
     context: string;
 
+}
 export interface WorkflowTemplate {
     id: string;
     name: string;
@@ -157,6 +176,7 @@ export interface WorkflowTemplate {
     difficulty: 'beginner' | 'intermediate' | 'advanced';
     tags: string[];
 
+}
 export interface WorkflowStep {
     id: string;
     name: string;
@@ -167,6 +187,7 @@ export interface WorkflowStep {
     outputs: WorkflowOutput[];
     automationLevel: 'manual' | 'assisted' | 'automated';
 
+}
 export interface WorkflowInput {
     name: string;
     type: 'document' | 'text' | 'selection' | 'boolean' | 'date';
@@ -174,6 +195,7 @@ export interface WorkflowInput {
     validation?: string;
     options?: string[];
 
+}
 export interface WorkflowOutput {
     name: string;
     type: 'document' | 'report' | 'checklist' | 'recommendation';
@@ -181,3 +203,4 @@ export interface WorkflowOutput {
     description: string;
 
 //# sourceMappingURL=types.d.ts.map
+}

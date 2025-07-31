@@ -8,6 +8,7 @@ export type WorkflowAction =
   | 'archive'
   | 'return_to_draft';
 
+}
 export interface WorkflowConfig {
   id: string;
   name: string;
@@ -19,6 +20,8 @@ export interface WorkflowConfig {
   is_active: boolean;
   created_at: string;
   updated_at: string;
+}
+}
 }
 export interface WorkflowStateConfig {
   id: WorkflowState;
@@ -32,6 +35,8 @@ export interface WorkflowStateConfig {
   auto_actions?: WorkflowAutoAction;
   metadata?: Record<string, any>;
 }
+}
+}
 export interface WorkflowTransition {
   id: string;
   from_state: WorkflowState;
@@ -44,20 +49,28 @@ export interface WorkflowTransition {
   auto_conditions?: WorkflowAutoCondition;
   metadata?: Record<string, any>;
 }
+}
+}
 export interface WorkflowCondition {
   type: 'permission' | 'approval_count' | 'custom';
   config: Record<string, any>;
   error_message?: string;
+}
+}
 }
 export interface WorkflowAutoCondition {
   type: 'time_based' | 'field_based' | 'external';
   config: Record<string, any>;
   delay?: number; // seconds,
 }
+}
+}
 export interface WorkflowAutoAction {
   type: 'notification' | 'assignment' | 'field_update' | 'webhook';
   config: Record<string, any>;
   delay?: number; // seconds,
+}
+}
 }
 export interface WorkflowInstance {
   id: string;
@@ -72,6 +85,8 @@ export interface WorkflowInstance {
   created_at: string;
   updated_at: string;
 }
+}
+}
 export interface WorkflowHistoryEntry {
   id: string;
   from_state?: WorkflowState;
@@ -83,10 +98,14 @@ export interface WorkflowHistoryEntry {
   metadata?: Record<string, any>;
   created_at: string;
 }
+}
+}
 export interface WorkflowTransitionRequest {
   action: WorkflowAction;
   comment?: string;
   metadata?: Record<string, any>;
+}
+}
 }
 export interface WorkflowStats {
   total_instances: number;
@@ -98,9 +117,11 @@ export interface WorkflowStats {
   today: number;
   this_week: number;
   this_month: number;
+}
 };
 
 // Approval Process Types
+}
 }
 export interface ApprovalRequest {
   id: string;
@@ -118,6 +139,8 @@ export interface ApprovalRequest {
   created_at: string;
   updated_at: string;
 }
+}
+}
 export interface ApprovalReviewer {
   user_id: string;
   user_name?: string;
@@ -126,11 +149,15 @@ export interface ApprovalReviewer {
   comment?: string;
   responded_at?: string;
 }
+}
+}
 export interface ApprovalResponse {
   decision: 'approve' | 'reject';
   comment?: string;
   metadata?: Record<string, any>;
   // Locking Types
+}
+}
 }
 export interface ResourceLock {
   id: string;
@@ -145,6 +172,8 @@ export interface ResourceLock {
   metadata?: Record<string, any>;
   created_at: string;
 }
+}
+}
 export interface LockRequest {
   resource_id: string;
   resource_type: 'project' | 'resource' | 'node' | 'region';
@@ -154,6 +183,8 @@ export interface LockRequest {
   auto_release?: boolean;
   metadata?: Record<string, any>;
   // Audit Trail Types
+}
+}
 }
 export interface AuditLogEntry {
   id: string;
@@ -171,6 +202,8 @@ export interface AuditLogEntry {
   categories: string;
   created_at: string;
 }
+}
+}
 export interface AuditFilter {
   resource_id?: string;
   resource_type?: string;
@@ -182,6 +215,8 @@ export interface AuditFilter {
   date_to?: string;
   search?: string;
   // API Integration Types
+}
+}
 }
 export interface WorkflowWebhook {
   id: string;
@@ -196,13 +231,17 @@ export interface WorkflowWebhook {
   max_retries: number;
   backoff_factor: number;
   max_delay: number;
+}
 };
   created_at: string;
   updated_at: string;
 }
+}
 export interface WorkflowWebhookEvent {
   event_type: 'state_changed' | 'approval_requested' | 'approved' | 'rejected';
   conditions?: Record<string, any>;
+}
+}
 }
 export interface WebhookDeliveryLog {
   id: string;
@@ -217,6 +256,8 @@ export interface WebhookDeliveryLog {
   created_at: string;
   // Scheduled Execution Types
 }
+}
+}
 export interface ScheduledExecution {
   id: string;
   name: string;
@@ -228,6 +269,7 @@ export interface ScheduledExecution {
   cron_expression?: string;
   interval_seconds?: number;
   execute_at?: string;
+}
 };
   action_type: 'workflow_transition' | 'approval_request' | 'custom';
   action_config: Record<string, any>;
@@ -239,6 +281,7 @@ export interface ScheduledExecution {
   created_at: string;
   updated_at: string;
 }
+}
 export interface ExecutionResult {
   id: string;
   scheduled_execution_id: string;
@@ -248,6 +291,8 @@ export interface ExecutionResult {
   execution_time_ms: number;
   executed_at: string;
   // Hook return types
+}
+}
 }
 export interface UseWorkflowReturn {
   instance: WorkflowInstance | null;
@@ -262,9 +307,12 @@ export interface UseWorkflowReturn {
   canTransition: (action: WorkflowAction) => boolean;
   currentStateConfig: WorkflowStateConfig | null;
 }
+}
+}
 export interface UseWorkflowStatsReturn {
   stats: WorkflowStats | null;
   loading: boolean;
   error: Error | null;
   refreshStats: () => Promise<void>;
+}
 }

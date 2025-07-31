@@ -13,10 +13,12 @@ import { Epic16TicketIntegrationService } from '../../../packages/core/services/
 import { Database } from '../database/connection';
 
 }
+}
 interface HelpIntegrationRouteOptions {
   database: Database;
   supportService: Epic16SupportEscalationService;
   ticketService: Epic16TicketIntegrationService;
+}
 }
 }
 

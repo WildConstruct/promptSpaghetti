@@ -22,6 +22,7 @@ import {
 // CORE PROMOTION ENTITIES
 // ==========================================
 
+}
 export interface PromotionCampaign {
   campaignId: string;
   name: string;
@@ -66,6 +67,7 @@ export interface PromotionCampaign {
   analyticsTracking: AnalyticsTrackingConfig;
   externalPlatforms?: ExternalPlatformConfig;
   customEventTracking?: CustomEventConfig;
+}
 };
 }
 export enum PromotionType {
@@ -141,6 +143,7 @@ export enum PromotionType {
   tags: string;
   thumbnailUrl?: string;
   previewUrl?: string;
+}
 };
   // Promotion Configuration
   promotionConfig: {
@@ -169,6 +172,7 @@ export enum PromotionType {
   experimentVariant?: string;
   controlGroup?: boolean;
 }
+}
 export interface PromotionalBadge {
   badgeId: string;
   type: BadgeType;
@@ -177,6 +181,7 @@ export interface PromotionalBadge {
   position: BadgePosition;
   visibility: BadgeVisibility;
   conditions?: BadgeConditions;
+}
 }
 export enum BadgeType {
   NEW = 'new',
@@ -197,6 +202,7 @@ export enum BadgeType {
   fontWeight?: string;
   borderRadius?: number;
   animation?: 'pulse' | 'glow' | 'bounce' | 'none'
+}
   }
 export enum BadgePosition {
   TOP_LEFT = 'top_left',
@@ -211,10 +217,13 @@ export enum BadgePosition {
   showOnMobile?: boolean;
   minScreenWidth?: number;
 }
+}
+}
 export interface BadgeConditions {
   timeframe?: {
   start: Date;
   end: Date;
+}
 };
   performanceThreshold?: {
   metric: string;
@@ -250,6 +259,7 @@ export enum ContentPromotionStatus {
   priceRange?: {
   min: number;
   max: number;
+}
 };
   };
   // Performance Requirements
@@ -303,6 +313,7 @@ export enum ContentPromotionStatus {
 // SCHEDULING AND ROTATION
 // ==========================================
 }
+}
 export interface PromotionSchedule {
   scheduleId: string;
   // Basic Timing
@@ -323,6 +334,7 @@ export interface PromotionSchedule {
   lastExecution?: Date;
   executionHistory: ScheduleExecution;
 }
+}
 export enum ScheduleType {
   FIXED_DURATION = 'fixed_duration',
   PERFORMANCE_BASED = 'performance_based',
@@ -341,6 +353,7 @@ export enum ScheduleType {
   start: string; // "09:00",
   end: string; // "17:00",
   multiplier: number;
+}
 };
   // Geographic Time Zones
   primaryTimezones?: string;
@@ -348,11 +361,14 @@ export enum ScheduleType {
   // Seasonal Adjustments
   seasonalPatterns?: SeasonalPattern;
 }
+}
 export interface SeasonalPattern {
   season: 'spring' | 'summer' | 'fall' | 'winter' | 'holiday' | 'back_to_school';
   adjustmentFactor: number;
   specificDates?: Date;
   geographicRegions?: string;
+}
+}
 }
 export interface RecurrenceConfig {
   frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly';
@@ -360,6 +376,8 @@ export interface RecurrenceConfig {
   endCondition: 'date' | 'count' | 'performance';
   endValue: Date | number;
   exceptions?: Date;
+}
+}
 }
 export interface DynamicSchedulingRule {
   ruleId: string;
@@ -369,6 +387,7 @@ export interface DynamicSchedulingRule {
   threshold: number;
   operator: 'gt' | 'lt' | 'eq' | 'gte' | 'lte';
   timeWindow: number; // minutes,
+}
 };
   action: {
   type: 'extend' | 'pause' | 'rotate' | 'boost' | 'end';
@@ -376,6 +395,7 @@ export interface DynamicSchedulingRule {
 };
   priority: number;
   isActive: boolean;
+}
 }
 export interface ScheduleExecution {
   executionId: string;
@@ -388,6 +408,8 @@ export interface ScheduleExecution {
   // ==========================================
   // ROTATION AND OPTIMIZATION
   // ==========================================
+}
+}
 }
 export interface RotationConfiguration {
   rotationId: string;
@@ -411,6 +433,7 @@ export interface RotationConfiguration {
   preRotationChecks: QualityCheck;
   postRotationValidation: QualityCheck;
 }
+}
 export enum RotationStrategy {
   ROUND_ROBIN = 'round_robin',
   WEIGHTED_RANDOM = 'weighted_random',
@@ -425,6 +448,8 @@ export enum RotationStrategy {
   maxInterval?: number;
   conditions?: RotationCondition;
 }
+}
+}
 export interface RotationTrigger {
   triggerId: string;
   type: 'time' | 'performance' | 'user_activity' | 'external_event' | 'manual';
@@ -433,10 +458,12 @@ export interface RotationTrigger {
   threshold?: number;
   operator?: 'gt' | 'lt' | 'eq';
   timeWindow?: number;
+}
 };
   priority: number;
   isActive: boolean;
   lastTriggered?: Date;
+}
 }
 export interface PerformanceThreshold {
   metric: string;
@@ -445,11 +472,15 @@ export interface PerformanceThreshold {
   timeWindow: number; // minutes,
   sampleSize?: number;
 }
+}
+}
 export interface WeightingFactor {
   factor: string;
   weight: number;
   source: 'historical_performance' | 'real_time_metrics' | 'user_preference' | 'content_attributes' | 'external_signals';
   decayRate?: number; // how quickly influence diminishes,
+}
+}
 }
 export interface RotationCondition {
   conditionId: string;
@@ -457,6 +488,8 @@ export interface RotationCondition {
   operator: 'gt' | 'lt' | 'eq' | 'gte' | 'lte';
   value: number;
   timeWindow: number;
+}
+}
 }
 export interface QualityCheck {
   checkId: string;
@@ -468,6 +501,8 @@ export interface QualityCheck {
   // ==========================================
   // TARGETING AND PERSONALIZATION
   // ==========================================
+}
+}
 }
 export interface PromotionTargeting extends PlacementTargetingRules {
   // Advanced User Targeting
@@ -534,6 +569,7 @@ export enum UserLifeCycleStage {
   totalPurchases?: {
   min: number;
   max?: number;
+}
 };
   recentPurchases?: {
   days: number;
@@ -568,7 +604,9 @@ export enum UserIntent {
   touchSupport: boolean;
   connectionSpeed: 'slow' | 'medium' | 'fast';
   processingPower: 'low' | 'medium' | 'high'
+}
   }
+}
 export interface BrowsingPattern {
   patternType: 'sequential' | 'comparative' | 'exploratory' | 'focused';
   categoryDepth: number;
@@ -576,11 +614,15 @@ export interface BrowsingPattern {
   pageViews: number;
   bounceRate: number;
 }
+}
+}
 export interface InteractionPattern {
   interactionType: 'click' | 'scroll' | 'hover' | 'search' | 'filter' | 'share';
   frequency: number;
   intensity: 'low' | 'medium' | 'high';
   recency: number; // hours ago,
+}
+}
 }
 export interface PurchasePattern {
   frequency: 'impulse' | 'regular' | 'seasonal' | 'occasional';
@@ -589,7 +631,9 @@ export interface PurchasePattern {
   priceRange: {
   min: number;
   max: number;
+}
 };
+}
 }
 export interface ContentPreference {
   categories: string;
@@ -599,6 +643,8 @@ export interface ContentPreference {
   topics: string;
   formats: string;
 }
+}
+}
 export interface TemporalPattern {
   timeOfDay: number;
   dayOfWeek: number;
@@ -607,6 +653,8 @@ export interface TemporalPattern {
   // ==========================================
   // PERSONALIZATION SYSTEM
   // ==========================================
+}
+}
 }
 export interface PersonalizationRule {
   ruleId: string;
@@ -629,6 +677,7 @@ export interface PersonalizationRule {
   createdBy: string;
   version: string;
 }
+}
 export enum PersonalizationRuleType {
   CONTENT_BOOST = 'content_boost',
   CONTENT_SUPPRESS = 'content_suppress',
@@ -644,6 +693,8 @@ export enum PersonalizationRuleType {
   value: any;
   weight: number;
 }
+}
+}
 export interface PersonalizationAction {
   actionId: string;
   type: 'boost_content' | 'change_position' | 'modify_message' | 'adjust_timing' | 'add_badge' | 'change_style';
@@ -652,6 +703,8 @@ export interface PersonalizationAction {
   // ==========================================
   // PERFORMANCE AND OPTIMIZATION
   // ==========================================
+}
+}
 }
 export interface PromotionGoal {
   goalId: string;
@@ -674,6 +727,7 @@ export interface PromotionGoal {
   achievedAt?: Date;
   lastUpdated: Date;
 }
+}
 export enum GoalType {
   VISIBILITY = 'visibility',
   ENGAGEMENT = 'engagement',
@@ -686,6 +740,7 @@ export enum GoalType {
   duration?: number;
   endDate?: Date;
   milestone?: boolean;
+}
 }
 export enum GoalPriority {
   LOW = 'low',
@@ -714,6 +769,7 @@ export enum GoalPriority {
   // Fallback Rules
   fallbackRules: FallbackRule;
 }
+}
 export enum OptimizationStrategy {
   MANUAL_CONTROL = 'manual_control',
   RULE_BASED = 'rule_based',
@@ -728,11 +784,15 @@ export enum OptimizationStrategy {
   modelUpdate: MLModelUpdateConfig;
   explainability: boolean;
 }
+}
+}
 export interface MLFeature {
   name: string;
   type: 'categorical' | 'numerical' | 'text' | 'boolean';
   importance: number;
   preprocessing: string;
+}
+}
 }
 export interface MLTrainingConfig {
   dataWindow: number; // days,
@@ -741,11 +801,15 @@ export interface MLTrainingConfig {
   crossValidation: boolean;
   hyperparameterTuning: boolean;
 }
+}
+}
 export interface MLModelUpdateConfig {
   updateFrequency: 'hourly' | 'daily' | 'weekly';
   performanceDrift: number;
   retrainingTrigger: number;
   modelVersion: boolean;
+}
+}
 }
 export interface OptimizationConstraint {
   constraintId: string;
@@ -753,6 +817,8 @@ export interface OptimizationConstraint {
   parameter: string;
   value: number;
   priority: number;
+}
+}
 }
 export interface FallbackRule {
   ruleId: string;
@@ -762,6 +828,8 @@ export interface FallbackRule {
   // ==========================================
   // A/B TESTING FRAMEWORK
   // ==========================================
+}
+}
 }
 export interface ABTestConfiguration {
   testId: string;
@@ -790,6 +858,7 @@ export interface ABTestConfiguration {
   biasDetection: boolean;
   multipleComparisonCorrection: boolean;
 }
+}
 export enum ABTestType {
   SIMPLE_AB = 'simple_ab',
   MULTIVARIATE = 'multivariate',
@@ -803,11 +872,14 @@ export enum ABTestType {
   trafficPercentage: number;
   isControl: boolean;
 }
+}
+}
 export interface TrafficAllocation {
   strategy: 'random' | 'deterministic' | 'weighted';
   totalTrafficPercentage: number;
   segments?: string;
   exclusionRules?: string;
+}
 }
 export enum ABTestStatus {
   DRAFT = 'draft',
@@ -824,10 +896,12 @@ export enum ABTestStatus {
   confidenceInterval: {
   lower: number;
   upper: number;
+}
 };
   pValue: number;
   effect: number;
   significance: boolean;
+}
 }
 export interface ABTestQualityCheck {
   checkType: 'sample_ratio' | 'novelty_effect' | 'external_validity' | 'implementation';
@@ -836,6 +910,8 @@ export interface ABTestQualityCheck {
   // ==========================================
   // BUDGET AND RESOURCE MANAGEMENT
   // ==========================================
+}
+}
 }
 export interface PromotionBudget {
   budgetId: string;
@@ -864,6 +940,7 @@ export interface PromotionBudget {
   allocationBySlot: Record<string, number>;
   allocationByTime: Record<string, number>;
 }
+}
 export enum BudgetType {
   LIFETIME = 'lifetime',
   DAILY = 'daily',
@@ -880,20 +957,28 @@ export enum BudgetType {
   baseRate: number;
   multipliers?: CostMultiplier;
 }
+}
+}
 export interface CostMultiplier {
   factor: string;
   multiplier: number;
   conditions?: Record<string, any>;
+}
+}
 }
 export interface BidStrategy {
   strategy: 'manual' | 'target_cpa' | 'target_roas' | 'maximize_clicks' | 'maximize_conversions';
   targetValue?: number;
   constraints?: BidConstraint;
 }
+}
+}
 export interface BidConstraint {
   type: 'min_bid' | 'max_bid' | 'bid_adjustment';
   value: number;
   conditions?: Record<string, any>;
+}
+}
 }
 export interface BudgetAlert {
   alertId: string;
@@ -904,6 +989,8 @@ export interface BudgetAlert {
   isActive: boolean;
   triggered?: boolean;
   lastTriggered?: Date;
+}
+}
 }
 export interface ResourceAllocation {
   // Slot Allocation
@@ -921,6 +1008,8 @@ export interface ResourceAllocation {
   reallocationThreshold: number;
   reallocationFrequency: number; // hours,
 }
+}
+}
 export interface TimeDistribution {
   timeSlot: string;
   percentage: number;
@@ -928,6 +1017,8 @@ export interface TimeDistribution {
   // ==========================================
   // ANALYTICS AND INSIGHTS
   // ==========================================
+}
+}
 }
 export interface PromotionMetrics {
   campaignId: string;
@@ -969,6 +1060,8 @@ export interface PromotionMetrics {
   performanceBySlot: SlotPerformance;
   performanceByTime: TimePerformance;
 }
+}
+}
 export interface ContentPromotionMetrics {
   contentId: string;
   period: MetricsPeriod;
@@ -995,6 +1088,8 @@ export interface ContentPromotionMetrics {
   averagePromotionDuration: number;
   lastPromotionDate: Date;
 }
+}
+}
 export interface PerformanceComparison {
   metric: string;
   current: number;
@@ -1003,7 +1098,9 @@ export interface PerformanceComparison {
   changePercent: number;
   significance: number;
   trend: 'improving' | 'declining' | 'stable'
+}
   }
+}
 export interface GoalComparison {
   goalId: string;
   goalName: string;
@@ -1011,13 +1108,17 @@ export interface GoalComparison {
   actual: number;
   achievement: number; // percentage,
   status: 'ahead' | 'on_track' | 'behind' | 'achieved'
+}
   }
+}
 export interface CompetitiveBenchmark {
   metric: string;
   ourValue: number;
   industryAverage: number;
   topPerformer: number;
   percentile: number;
+}
+}
 }
 export interface SegmentPerformance {
   segmentId: string;
@@ -1026,12 +1127,16 @@ export interface SegmentPerformance {
   sampleSize: number;
   significance: boolean;
 }
+}
+}
 export interface SlotPerformance {
   slotId: string;
   slotName: string;
   metrics: Record<string, number>;
   performance: 'high' | 'medium' | 'low';
   ranking: number;
+}
+}
 }
 export interface TimePerformance {
   timeSlot: string;
@@ -1041,6 +1146,8 @@ export interface TimePerformance {
   // ==========================================
   // INSIGHTS AND RECOMMENDATIONS
   // ==========================================
+}
+}
 }
 export interface PromotionInsight {
   insightId: string;
@@ -1068,6 +1175,7 @@ export interface PromotionInsight {
   actionTaken?: boolean;
   actionDate?: Date;
   actionResult?: ActionResult;
+}
 }
 export enum InsightCategory {
   PERFORMANCE = 'performance',
@@ -1098,10 +1206,13 @@ export enum InsightCategory {
   context: string;
   timeframe: string;
 }
+}
+}
 export interface InsightEvidence {
   type: 'chart' | 'table' | 'comparison' | 'statistical_test';
   data: any;
   description: string;
+}
 }
 export enum ImpactLevel {
   LOW = 'low',
@@ -1117,6 +1228,8 @@ export enum ImpactLevel {
   timeframe: string;
   priority: number;
 }
+}
+}
 export interface ActionResult {
   implemented: boolean;
   implementationDate: Date;
@@ -1126,6 +1239,7 @@ export interface ActionResult {
   // ==========================================
   // STATUS AND LIFECYCLE MANAGEMENT
   // ==========================================
+}
 }
 export enum PromotionStatus {
   DRAFT = 'draft',
@@ -1142,6 +1256,7 @@ export enum PromotionStatus {
   stages: LifecycleStageHistory;
   nextStage?: LifecycleStage;
   stageTransitionRules: StageTransitionRule;
+}
 }
 export enum LifecycleStage {
   PLANNING = 'planning',
@@ -1162,6 +1277,8 @@ export enum LifecycleStage {
   notes?: string;
   performedBy: string;
 }
+}
+}
 export interface StageTransitionRule {
   fromStage: LifecycleStage;
   toStage: LifecycleStage;
@@ -1169,11 +1286,15 @@ export interface StageTransitionRule {
   isAutomatic: boolean;
   requiredRole?: string;
 }
+}
+}
 export interface TransitionCondition {
   type: 'approval' | 'performance' | 'time' | 'budget' | 'manual';
   condition: string;
   value?: any;
   isMet: boolean;
+}
+}
 }
 export interface ApprovalRecord {
   recordId: string;
@@ -1188,6 +1309,8 @@ export interface ApprovalRecord {
   // INTEGRATION AND EXTERNAL PLATFORMS
   // ==========================================
 }
+}
+}
 export interface AnalyticsTrackingConfig {
   enabled: boolean;
   trackingId: string;
@@ -1196,17 +1319,23 @@ export interface AnalyticsTrackingConfig {
   crossDomainTracking?: boolean;
   privacyCompliant: boolean;
 }
+}
+}
 export interface CustomEventDefinition {
   eventName: string;
   eventCategory: string;
   parameters: Record<string, any>;
   trackingCode: string;
 }
+}
+}
 export interface ConversionTrackingConfig {
   conversionEvents: string;
   conversionValue: boolean;
   attributionModel: 'first_click' | 'last_click' | 'linear' | 'time_decay' | 'position_based';
   lookbackWindow: number; // days,
+}
+}
 }
 export interface ExternalPlatformConfig {
   platform: 'google_ads' | 'facebook_ads' | 'microsoft_ads' | 'twitter_ads' | 'linkedin_ads' | 'custom';
@@ -1216,6 +1345,8 @@ export interface ExternalPlatformConfig {
   audienceSync: boolean;
   conversionSync: boolean;
   apiCredentials: Record<string, string>;
+}
+}
 }
 export interface CustomEventConfig {
   eventId: string;
@@ -1228,6 +1359,8 @@ export interface CustomEventConfig {
   // UTILITY TYPES AND HELPERS
   // ==========================================
 }
+}
+}
 export interface PromotionFilterCriteria {
   campaignIds?: string;
   status?: PromotionStatus;
@@ -1235,6 +1368,7 @@ export interface PromotionFilterCriteria {
   dateRange?: {
   start: Date;
   end: Date;
+}
 };
   performance?: {
   metric: string;
@@ -1245,10 +1379,13 @@ export interface PromotionFilterCriteria {
   createdBy?: string;
   approvalStatus?: string;
 }
+}
 export interface PromotionSortOptions {
   field: 'createdAt' | 'performance' | 'budget' | 'status' | 'name';
   direction: 'asc' | 'desc';
   secondarySort?: PromotionSortOptions;
+}
+}
 }
 export interface PromotionBulkOperation {
   operationType: 'activate' | 'pause' | 'cancel' | 'duplicate' | 'update' | 'delete';
@@ -1256,12 +1393,16 @@ export interface PromotionBulkOperation {
   parameters?: Record<string, any>;
   dryRun?: boolean;
 }
+}
+}
 export interface PromotionValidationError {
   errorCode: string;
   field: string;
   message: string;
   severity: 'error' | 'warning' | 'info'
+}
   }
+}
 export interface PromotionTemplate {
   templateId: string;
   name: string;
@@ -1276,6 +1417,7 @@ export interface PromotionTemplate {
   // ==========================================
   // DATA MODEL EXPORTS
   // ==========================================
+}
 }
 export type {
   // Core Entities

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './ModerationAnalytics.css';
+}
 interface ModeratorStats {
   id: string;,
   name: string;
@@ -43,6 +44,7 @@ interface ModeratorStats {
   escalationRate: 0,
   automationRate: 0,
   userSatisfactionScore: 0,
+}
 });
   const [moderatorStats, setModeratorStats] = useState<ModeratorStats>([]);
   const [contentTrends, setContentTrends] = useState<ContentTrends>([]);

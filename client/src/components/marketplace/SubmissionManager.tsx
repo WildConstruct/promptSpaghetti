@@ -2,15 +2,17 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './SubmissionManager.css';
+}
 interface Submission {
   id: string;,
   template_id: string;
   status: 'draft' | 'submitted' | 'under_review' | 'changes_requested' | 'approved' | 'rejected';,
   version_number: number;
-  submission_data: {,
+  submission_data: {
   title: string;,
   description: string;
   price_cents: number;
+}
 };
   validation_results: ValidationResult;
   review_comments?: string;
@@ -19,6 +21,7 @@ interface Submission {
   reviewed_at?: string;
   created_at: string;,
   updated_at: string;
+}
 interface ValidationResult {
   severity: 'error' | 'warning' | 'info';,
   message: string;
@@ -36,6 +39,7 @@ interface ValidationResult {
   changes_requested: '#ef4444',
   approved: '#10b981',
   rejected: '#ef4444',
+}
 };
 const STATUS_LABELS = {
   draft: 'Draft',
@@ -59,7 +63,7 @@ export const SubmissionManager: React.FC = () => {
   const fetchSubmissions = async () => {
     try {
       const response = await fetch('/api/marketplace/submissions', {)
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
       });
       if (!response.ok) {
@@ -74,7 +78,7 @@ export const SubmissionManager: React.FC = () => {
   const fetchStats = async () => {
     try {
       const response = await fetch('/api/marketplace/submissions/stats', {)
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
       });
       if (response.ok) {
@@ -90,7 +94,7 @@ export const SubmissionManager: React.FC = () => {
       const response = await fetch(`/api/marketplace/submissions/${id}`, {)}
   },
   method: 'DELETE',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
       });
       if (response.ok) {
@@ -103,7 +107,7 @@ export const SubmissionManager: React.FC = () => {
       const response = await fetch(`/api/marketplace/submissions/${id}/submit`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
       });
       if (response.ok) {

@@ -6,10 +6,12 @@
 import React, { useState, useEffect } from 'react';
 import { StateDevTools, StateValidationResult } from '../StateDevTools';
 
+}
 export interface StateInspectorPanelProps {
   devTools: StateDevTools;
   selectedDomain: string;
   onDomainChange: (domain: string) => void;
+}
 }
 export const StateInspectorPanel: React.FC<StateInspectorPanelProps> = ({)
   devTools,

@@ -25,12 +25,14 @@ import { WSServerConfig, WSMessage } from './types';
 
 // Enhanced server configuration
 }
+}
 export interface SecureWSServerConfig extends WSServerConfig {
   security: WebSocketSecurityConfig;
   keyManagement: KeyManagementConfig;
 }
 
 // Enhanced connection info with security context
+}
 }
 export interface SecureConnectionInfo {
   id: string;
@@ -48,6 +50,7 @@ export interface SecureConnectionInfo {
   isSecure: boolean;
   threatLevel: 'low' | 'medium' | 'high' | 'critical';
   trustLevel: 'none' | 'basic' | 'verified' | 'full';
+}
 }
 }
 

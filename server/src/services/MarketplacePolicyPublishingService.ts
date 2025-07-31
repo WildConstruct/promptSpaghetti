@@ -43,6 +43,7 @@ export enum NotificationChannel {
 
 // Core interfaces
 }
+}
 export interface MarketplacePolicy {
   id: string;
   policy_type: MarketplacePolicyType;
@@ -61,7 +62,9 @@ export interface MarketplacePolicy {
   updated_by: string;
 }
 }
+}
 
+}
 }
 export interface PolicyContent {
   sections: PolicySection[];
@@ -71,7 +74,9 @@ export interface PolicyContent {
   localization: LocalizationConfig[];
 }
 }
+}
 
+}
 }
 export interface PolicySection {
   id: string;
@@ -84,7 +89,9 @@ export interface PolicySection {
   subsections: PolicySection[];
 }
 }
+}
 
+}
 }
 export interface PolicyVariable {
   name: string;
@@ -96,7 +103,9 @@ export interface PolicyVariable {
   validation_rules: ValidationRule[];
 }
 }
+}
 
+}
 }
 export interface ValidationRule {
   type: 'required' | 'min_length' | 'max_length' | 'pattern' | 'range';
@@ -104,7 +113,9 @@ export interface ValidationRule {
   error_message: string;
 }
 }
+}
 
+}
 }
 export interface TemplateReference {
   template_id: string;
@@ -113,7 +124,9 @@ export interface TemplateReference {
   variables: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface PolicyAttachment {
   id: string;
@@ -125,7 +138,9 @@ export interface PolicyAttachment {
   description?: string;
 }
 }
+}
 
+}
 }
 export interface LocalizationConfig {
   locale: string;
@@ -135,7 +150,9 @@ export interface LocalizationConfig {
   reviewed_by?: string;
 }
 }
+}
 
+}
 }
 export interface DisplayCondition {
   field: string;
@@ -144,7 +161,9 @@ export interface DisplayCondition {
   logical_operator?: 'and' | 'or';
 }
 }
+}
 
+}
 }
 export interface PolicyMetadata {
   target_audience: UserRole[];
@@ -160,7 +179,9 @@ export interface PolicyMetadata {
   risk_level: 'low' | 'medium' | 'high' | 'critical';
 }
 }
+}
 
+}
 }
 export interface PublicationInfo {
   publishing_status: PublishingStatus;
@@ -172,7 +193,9 @@ export interface PublicationInfo {
   announcement?: PolicyAnnouncement;
 }
 }
+}
 
+}
 }
 export interface PublicationChannel {
   channel: string;
@@ -182,7 +205,9 @@ export interface PublicationChannel {
   audience_filter?: AudienceFilter;
 }
 }
+}
 
+}
 }
 export interface RolloutStrategy {
   type: 'immediate' | 'phased' | 'scheduled' | 'canary';
@@ -192,7 +217,9 @@ export interface RolloutStrategy {
   rollback_triggers: RollbackTrigger[];
 }
 }
+}
 
+}
 }
 export interface RolloutPhase {
   phase_id: string;
@@ -204,7 +231,9 @@ export interface RolloutPhase {
   success_criteria: SuccessCriteria[];
 }
 }
+}
 
+}
 }
 export interface RollbackTrigger {
   metric: string;
@@ -213,7 +242,9 @@ export interface RollbackTrigger {
   action: 'pause' | 'rollback' | 'alert';
 }
 }
+}
 
+}
 }
 export interface SuccessCriteria {
   metric: string;
@@ -221,7 +252,9 @@ export interface SuccessCriteria {
   required: boolean;
 }
 }
+}
 
+}
 }
 export interface NotificationSettings {
   enabled: boolean;
@@ -233,7 +266,9 @@ export interface NotificationSettings {
   reminder_schedule?: ReminderSchedule[];
 }
 }
+}
 
+}
 }
 export interface ReminderSchedule {
   days_before: number;
@@ -241,7 +276,9 @@ export interface ReminderSchedule {
   template_id: string;
 }
 }
+}
 
+}
 }
 export interface PolicyAnnouncement {
   title: string;
@@ -251,7 +288,9 @@ export interface PolicyAnnouncement {
   banner_config?: BannerConfig;
 }
 }
+}
 
+}
 }
 export interface BannerConfig {
   enabled: boolean;
@@ -261,7 +300,9 @@ export interface BannerConfig {
   expiry_date?: Date;
 }
 }
+}
 
+}
 }
 export interface AudienceFilter {
   user_roles: UserRole[];
@@ -271,7 +312,9 @@ export interface AudienceFilter {
   exclude_users?: string[];
 }
 }
+}
 
+}
 }
 export interface EnforcementConfig {
   enabled: boolean;
@@ -282,7 +325,9 @@ export interface EnforcementConfig {
   escalation_rules: EscalationRule[];
 }
 }
+}
 
+}
 }
 export interface ViolationDetectionConfig {
   enabled: boolean;
@@ -292,7 +337,9 @@ export interface ViolationDetectionConfig {
   review_required: boolean;
 }
 }
+}
 
+}
 }
 export interface DetectionRule {
   rule_id: string;
@@ -303,7 +350,9 @@ export interface DetectionRule {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface RuleCondition {
   field: string;
@@ -312,7 +361,9 @@ export interface RuleCondition {
   logical_operator?: 'and' | 'or';
 }
 }
+}
 
+}
 }
 export interface EnforcementAction {
   action_id: string;
@@ -324,7 +375,9 @@ export interface EnforcementAction {
   parameters: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ActionCondition {
   violation_count: number;
@@ -332,7 +385,9 @@ export interface ActionCondition {
   time_window_hours: number;
 }
 }
+}
 
+}
 }
 export interface EscalationRule {
   trigger: EscalationTrigger;
@@ -341,14 +396,18 @@ export interface EscalationRule {
   delay_hours: number;
 }
 }
+}
 
+}
 }
 export interface EscalationTrigger {
   type: 'violation_count' | 'severity' | 'time_elapsed' | 'appeal_filed';
   threshold: number;
 }
 }
+}
 
+}
 }
 export interface PolicyAnalytics {
   views: number;
@@ -360,7 +419,9 @@ export interface PolicyAnalytics {
   last_updated: Date;
 }
 }
+}
 
+}
 }
 export interface UserFeedback {
   user_id: string;
@@ -368,6 +429,7 @@ export interface UserFeedback {
   comment?: string;
   category: string;
   timestamp: Date;
+}
 }
 }
 
@@ -382,6 +444,7 @@ export enum UserRole {
 }
 
 }
+}
 export interface PolicyPublishingRequest {
   policy_id: string;
   publication_channels: string[];
@@ -391,7 +454,9 @@ export interface PolicyPublishingRequest {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface PolicyVersionRequest {
   policy_id: string;
@@ -402,7 +467,9 @@ export interface PolicyVersionRequest {
   requires_acknowledgment: boolean;
 }
 }
+}
 
+}
 }
 export interface PolicyChange {
   section: string;
@@ -411,6 +478,7 @@ export interface PolicyChange {
   old_content?: string;
   new_content?: string;
   impact_level: 'low' | 'medium' | 'high' | 'critical';
+}
 }
 }
 

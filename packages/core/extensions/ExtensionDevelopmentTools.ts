@@ -91,6 +91,7 @@ ${exports}
    * Test extension lifecycle
    */
   public async testExtensionLifecycle(extension: BaseExtension): Promise<LifecycleTestResult> {
+
   const result: LifecycleTestResult = {,
   success: true,
   phases: [],
@@ -253,6 +254,7 @@ abstract class BaseExtensionImpl implements BaseExtension {
     this.dependencies = dependencies;
     this.permissions = permissions;
   public async initialize(): Promise<void> {
+
   // Override in subclass
   public async activate(): Promise<void> {,
   // Override in subclass
@@ -298,15 +300,19 @@ export class ${this.toPascalCase(id)}Extension extends BaseExtensionImpl impleme
       []  // permissions
     );
   public async initialize(): Promise<void> {
+
     // Initialize your extension here
     console.log('Initializing ${name} extension');}
   public async activate(): Promise<void> {
+
     // Activate your extension here
     console.log('Activating ${name} extension');}
   public async deactivate(): Promise<void> {
+
     // Deactivate your extension here
     console.log('Deactivating ${name} extension');}
   public async dispose(): Promise<void> {
+
     // Dispose of your extension here
     console.log('Disposing ${name} extension');}
   ${typeSpecificMethods}
@@ -464,6 +470,7 @@ const Component = extension.createComponentInstance('my-component', {});`;
     default:
       return '// Use extension-specific methods here';
   private async testPhase(result: LifecycleTestResult, phase: string, testFn: () => Promise<void>): Promise<void> {
+
   const phaseResult: LifecyclePhaseResult = {,
   phase,
   success: true,
@@ -525,12 +532,14 @@ class TestExtension implements BaseExtension {
     this.healthy = healthy;
 
 // Type definitions
+}
 interface ExtensionSkeletonConfig {
   id: string;
   name: string;
   type: 'node' | 'ui' | 'transform' | 'storage';
   author: string;
   description: string;
+}
 interface TestExtensionConfig {
   id?: string;
   name?: string;
@@ -539,11 +548,13 @@ interface TestExtensionConfig {
   author?: string;
   dependencies?: string;
   permissions?: string;
+}
 interface LifecycleTestResult {
   success: boolean;
   phases: LifecyclePhaseResult;
   errors: Error;
   duration: number;
+}
 interface LifecyclePhaseResult {
   phase: string;
   success: boolean;
@@ -552,3 +563,4 @@ interface LifecyclePhaseResult {
 
 // Export singleton
 export const extensionDevelopmentKit = ExtensionDevelopmentKit.getInstance();
+}

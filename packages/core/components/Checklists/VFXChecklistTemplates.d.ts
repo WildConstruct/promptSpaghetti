@@ -9,6 +9,7 @@ import { CheckSquare } from 'lucide-react';
 import React from 'react';
 import type { VFXChecklistTemplate, VFXTeamMember } from './VFXChecklistSystem';
 
+}
 export interface VFXChecklistTemplatesProps {
     templates?: VFXChecklistTemplate[];
     currentUser: VFXTeamMember;
@@ -23,3 +24,4 @@ export interface VFXChecklistTemplatesProps {
 export declare const VFXChecklistTemplates: React.FC<VFXChecklistTemplatesProps>;
 export default VFXChecklistTemplates;
 //# sourceMappingURL=VFXChecklistTemplates.d.ts.map
+}

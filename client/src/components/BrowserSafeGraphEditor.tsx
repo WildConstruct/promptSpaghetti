@@ -11,16 +11,23 @@ import ReactFlow, {
   Background,
   BackgroundVariant
 } from 'reactflow';
+}
 interface BrowserSafeGraphEditorProps {
   initialNodes?: unknown;
   initialEdges?: unknown;
+}
+}
+
+}
 interface NodeData {
   label?: string;
   description?: string;
+}
+}
 
 // Sample node types for the basic editor
 const nodeTypes = {
-  default: ({ data }: { data: NodeData }) => ()
+  default: ({ data }: { data: NodeData }) => (
     <div style={{
   padding: '10px',
   border: '1px solid #ddd',
@@ -122,7 +129,7 @@ export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({)
   );
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
   const onNodeClick = useCallback(;);
-  (_event: React.MouseEvent, node: Node) => {,
+  (_event: React.MouseEvent, node: Node) => {
   setSelectedNode(node);
 }
     []
@@ -132,11 +139,11 @@ export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({)
   id: `node_${Date.now()}`}
 }
       type,
-      position: {,
+      position: {
   x: Math.random() * 400 + 100,
   y: Math.random() * 300 + 100,
 },
-  data: {,
+  data: {
   label: `New ${type}`}
 },
   description: `${type} node created ${new Date().toLocaleTimeString()}` }

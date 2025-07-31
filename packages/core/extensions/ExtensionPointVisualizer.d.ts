@@ -4,6 +4,7 @@
  */
 import { ExtensionPointCategory } from './ExtensionPointRegistry';
 
+}
 export interface VisualizationOptions {
     format?: 'mermaid' | 'graphviz' | 'json';
     includeInternal?: boolean;
@@ -13,6 +14,7 @@ export interface VisualizationOptions {
     theme?: 'light' | 'dark';
 
 
+}
 export interface ExtensionPointNode {
     id: string;
     name: string;
@@ -24,6 +26,7 @@ export interface ExtensionPointNode {
     location: string;
 
 
+}
 export interface ExtensionPointEdge {
     source: string;
     target: string;
@@ -31,6 +34,7 @@ export interface ExtensionPointEdge {
     label?: string;
 
 
+}
 export interface ExtensionPointGraph {
     nodes: ExtensionPointNode[];
     edges: ExtensionPointEdge[];
@@ -83,3 +87,4 @@ export declare class ExtensionPointVisualizer {
 
 export declare const extensionPointVisualizer: ExtensionPointVisualizer;
 //# sourceMappingURL=ExtensionPointVisualizer.d.ts.map
+}

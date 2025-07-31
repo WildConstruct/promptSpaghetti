@@ -9,6 +9,7 @@
  */
 import React from 'react';
 
+}
 interface DateTimeSelection {
     date: Date;
     time: string;
@@ -18,6 +19,7 @@ interface DateTimeSelection {
     smartSuggestion?: boolean;
 
 
+}
 interface BusinessHours {
     enabled: boolean;
     workdays: number[];
@@ -26,6 +28,7 @@ interface BusinessHours {
     timezone: string;
 
 
+}
 interface AdvancedDateTimeControlsProps {
     value?: DateTimeSelection;
     onChange: (selection: DateTimeSelection) => void;
@@ -39,3 +42,4 @@ interface AdvancedDateTimeControlsProps {
 export declare const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps>;
 export default AdvancedDateTimeControls;
 //# sourceMappingURL=AdvancedDateTimeControls.d.ts.map
+}

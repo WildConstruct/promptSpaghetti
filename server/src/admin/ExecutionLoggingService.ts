@@ -22,6 +22,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 export interface ExecutionLog {
   id: string;
   executionId: string;
@@ -82,7 +83,9 @@ export interface ExecutionLog {
   archivedAt?: Date;
 }
 }
+}
 
+}
 }
 export interface ExecutionContext {
   // System context
@@ -117,7 +120,9 @@ export interface ExecutionContext {
   customFields: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ExecutionError {
   id: string;
@@ -135,7 +140,9 @@ export interface ExecutionError {
   resolvedBy?: string;
 }
 }
+}
 
+}
 }
 export interface ExecutionWarning {
   id: string;
@@ -151,7 +158,9 @@ export interface ExecutionWarning {
   acknowledgedAt?: Date;
 }
 }
+}
 
+}
 }
 export interface PerformanceMetrics {
   // Timing metrics
@@ -188,7 +197,9 @@ export interface PerformanceMetrics {
   customMetrics: Record<string, number>;
 }
 }
+}
 
+}
 }
 export interface ResourceUsage {
   // CPU metrics
@@ -229,7 +240,9 @@ export interface ResourceUsage {
   computeUnits?: number;
 }
 }
+}
 
+}
 }
 export interface SecurityContext {
   // Authentication
@@ -261,7 +274,9 @@ export interface SecurityContext {
   riskFactors: string[];
 }
 }
+}
 
+}
 }
 export interface PermissionCheck {
   resource: string;
@@ -269,6 +284,7 @@ export interface PermissionCheck {
   granted: boolean;
   checkedAt: Date;
   reason?: string;
+}
 }
 }
 
@@ -404,6 +420,7 @@ export enum SecurityLevel {
 }
 
 }
+}
 export interface ExecutionQuery {
   // Basic filters
   executionIds?: string[];
@@ -427,6 +444,7 @@ export interface ExecutionQuery {
   durationRange?: {
     min?: number;
     max?: number;
+}
 }
   };
   
@@ -480,6 +498,7 @@ export enum ExecutionSortField {
 }
 
 }
+}
 export interface ExecutionStatistics {
   // General statistics
   totalExecutions: number;
@@ -516,6 +535,7 @@ export interface ExecutionStatistics {
   warningsByType: Record<WarningType, number>;
   
   // Time-based trends
+}
 }
   executionsPerHour: Array<{ hour: number; count: number }>;
   executionsPerDay: Array<{ date: string; count: number }>;
@@ -1031,6 +1051,7 @@ export class ExecutionLoggingService extends EventEmitter {
 }
 
 }
+}
 export interface ExecutionLoggingConfig {
   applicationVersion: string;
   enablePerformanceTracking: boolean;
@@ -1046,6 +1067,7 @@ export interface ExecutionLoggingConfig {
     averageDuration: number;
     memoryUsage: number;
     cpuUsage: number;
+}
 }
   };
   enableRealTimeAlerts: boolean;

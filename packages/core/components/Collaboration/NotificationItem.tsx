@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { Notification, NotificationType } from '../../types/NotificationTypes';
 
+}
 interface NotificationItemProps {
   notification: Notification;
   onMarkAsRead: (id: string) => void;
@@ -33,6 +34,7 @@ interface NotificationItemProps {
   return AlertCircle;
   default:,
   return AlertCircle;
+}
 };
 const getNotificationColor = (type: NotificationType) => {
   switch (type) {

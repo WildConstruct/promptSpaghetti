@@ -10,17 +10,22 @@ import './Chart.css';
 
 export type ChartType = 'line' | 'bar' | 'pie' | 'area' | 'donut';
 
+}
 export interface ChartDataPoint {
   label: string;
   value: number;
   color?: string;
   metadata?: Record<string, any>;
 }
+}
+}
 export interface ChartSeries {
   name: string;
   data: ChartDataPoint;
   color?: string;
   type?: ChartType; // Override for mixed charts,
+}
+}
 }
 export interface ChartProps {
   // Core data
@@ -56,6 +61,7 @@ export interface ChartProps {
   error: ['#dc2626', '#ef4444', '#f87171', '#fca5a5'],
   info: ['#2563eb', '#3b82f6', '#60a5fa', '#93c5fd'],
   custom: [],
+}
 };
 const formatDefaultValue = (value: number): string => {
   if (value >= 1000000) {

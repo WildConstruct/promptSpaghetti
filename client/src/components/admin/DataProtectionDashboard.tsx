@@ -29,27 +29,29 @@ import {
   Activity,
   TrendingUp
 } from 'lucide-react';
+}
 interface DataProtectionMetrics {
-  retentionPolicies: {,
+  retentionPolicies: {
   total: number;,
   active: number;
   expired: number;,
   violations: number;
+}
 };
-  deletionWorkflows: {,
+  deletionWorkflows: {
   total: number;
   running: number;,
   completed: number;
   failed: number;,
   scheduled: number;
 };
-  dataVolume: {,
+  dataVolume: {
   totalSize: number;
   archivedSize: number;,
   pendingDeletion: number;
   recentlyDeleted: number;
 };
-  compliance: {,
+  compliance: {
   gdprScore: number;
   hipaaScore: number;,
   soxScore: number;
@@ -57,6 +59,7 @@ interface DataProtectionMetrics {
   violations: number;
   lastAudit: string;
 };
+}
 interface RetentionPolicy {
   id: string;,
   name: string;
@@ -71,6 +74,7 @@ interface RetentionPolicy {
   updatedAt: string;,
   nextExecution: string;
   affectedRecords: number;
+}
 interface DeletionWorkflow {
   id: string;,
   name: string;
@@ -84,6 +88,7 @@ interface DeletionWorkflow {
   estimatedCompletion?: string;
   policyId: string;,
   errors: string;
+}
 interface ComplianceViolation {
   id: string;,
   type: 'retention_exceeded' | 'deletion_failed' | 'access_violation' | 'audit_failed';
@@ -112,6 +117,7 @@ const DataProtectionDashboard: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_frameworkFilter, _setFrameworkFilter] = useState<string>('all');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+}
   const [_dateRange, _setDateRange] = useState<{ start: string; end: string }>({)
   start: '',
   end: '',

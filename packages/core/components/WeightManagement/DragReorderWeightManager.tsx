@@ -30,6 +30,7 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 
+}
 export interface WeightedOption {
   id: string;
   text: string;
@@ -37,6 +38,8 @@ export interface WeightedOption {
   locked?: boolean;
   color?: string;
   category?: string;
+}
+}
 }
 export interface DragReorderProps {
   options: WeightedOption;
@@ -62,6 +65,8 @@ export interface DragReorderProps {
   enableBulkOperations?: boolean;
   enablePresets?: boolean;
   showStatistics?: boolean;
+}
+}
 }
 export interface WeightStatistics {
   totalWeight: number;
@@ -91,6 +96,7 @@ export interface WeightStatistics {
   onItemSelect,
   isSelected,
   draggedItemId
+}
 }: {
   option: WeightedOption;
   index: number;

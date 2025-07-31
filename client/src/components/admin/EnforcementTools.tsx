@@ -38,6 +38,7 @@ import {
   Zap,
   Download
 } from 'lucide-react';
+}
 interface EnforcementAction {
   actionId: string;,
   entityType: 'user' | 'template' | 'transaction';
@@ -53,21 +54,24 @@ interface EnforcementAction {
   expiresAt?: Date;
   reviewRequired: boolean;
   adminNotes?: string;
-  reversal?: {,
+  reversal?: {
   reversedAt: Date;,
   reversedBy: string;
   reason: string;
+}
 };
+}
 interface EnforcementPolicy {
   policyId: string;,
   name: string;
   description: string;,
   enabled: boolean;
-  triggers: {,
-  trustScoreThresholds?: {,
+  triggers: {
+  trustScoreThresholds?: {
   suspend: number;,
   restrict: number;
   flag: number;
+}
 };
     riskFactorRules?: {
   criticalRiskCount: number;,
@@ -79,7 +83,7 @@ interface EnforcementPolicy {
   suspiciousIndicatorThreshold: number;
 };
   };
-  actions: {,
+  actions: {
   autoSuspension: boolean;
   autoRestriction: boolean;,
   autoFlagging: boolean;
@@ -91,6 +95,7 @@ interface EnforcementPolicy {
   verifiedUsers: boolean;
   whitelistedEntities: string;
 };
+}
 interface ViolationReport {
   reportId: string;,
   type: 'fraud' | 'abuse' | 'violation' | 'security' | 'quality';
@@ -105,12 +110,14 @@ interface ViolationReport {
   description: string;
   createdAt: Date;
   assignedTo?: string;
-  resolution?: {,
+  resolution?: {
   action: string;,
   reason: string;
   resolvedBy: string;,
   resolvedAt: Date;
+}
 };
+}
 interface EnforcementStats {
   totalActions: number;,
   pendingReviews: number;
@@ -118,28 +125,31 @@ interface EnforcementStats {
   appeals: number;
   automatedActions: number;,
   manualActions: number;
-  actionBreakdown: {,
+  actionBreakdown: {
   suspensions: number;,
   restrictions: number;
   flags: number;,
   blocks: number;
   quarantines: number;
+}
 };
-  severityBreakdown: {,
+  severityBreakdown: {
   low: number;
   medium: number;,
   high: number;
   critical: number;
 };
-  effectivenessMetrics: {,
+  effectivenessMetrics: {
   successRate: number;
   appealRate: number;,
   reversalRate: number;
   avgResolutionTime: number;
 };
 
+}
 export interface EnforcementToolsProps {
   className?: string;
+}
 }
 export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className }) => {
   const [error, setError] = useState<string | null>(null);

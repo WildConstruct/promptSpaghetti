@@ -17,12 +17,15 @@ import {
   ModelUnavailableError
 } from '../BaseAIModel';
 
+}
 export interface OpenAIConfig {
   apiKey: string;
   baseURL?: string;
   organization?: string;
   timeout?: number;
   maxRetries?: number;
+}
+}
 }
 export interface OpenAIRequestOptions {
   model?: string;
@@ -34,9 +37,11 @@ export interface OpenAIRequestOptions {
   stop?: string | string;
   stream?: boolean;
   seed?: number;
+}
   response_format?: { type: 'text' | 'json_object' };
   tools?: unknown;
   tool_choice?: string | object;
+}
 }
 export interface ChatMessage {
   role: 'system' | 'user' | 'assistant' | 'tool';
@@ -45,16 +50,19 @@ export interface ChatMessage {
   tool_calls?: unknown;
   tool_call_id?: string;
 }
+}
+}
 export interface OpenAIResponse {
   id: string;
   object: string;
   created: number;
   model: string;
-  choices: Array<{,
+  choices: Array<{
   index: number;
   message?: ChatMessage;
   text?: string;
   finish_reason: string;
+}
 }>;
   usage: {
   prompt_tokens: number;
@@ -102,6 +110,7 @@ export class OpenAIAdapter extends BaseAIModel {
     this.config = config;
     this.apiEndpoint = config.baseURL || 'https://api.openai.com/v1';
   async initialize(): Promise<void> {
+
     try {
       this._status = AIModelStatus.INITIALIZING;
       // Validate API key
@@ -115,6 +124,7 @@ export class OpenAIAdapter extends BaseAIModel {
       this._status = AIModelStatus.ERROR;
       throw new ModelInitializationError(this._id, error instanceof Error ? error.message : 'Unknown error');
   async process(input: unknown, options?: OpenAIRequestOptions): Promise<unknown> {
+
     try {
       if (this._status !== AIModelStatus.READY) {
         throw new ModelUnavailableError(this._id);
@@ -196,6 +206,7 @@ export class OpenAIAdapter extends BaseAIModel {
     return latencies[modelName] || 1500;
   // Private helper methods
   private async _testConnection(): Promise<void> {
+
     try {
       const response = await fetch(`${this.apiEndpoint}/models`, {)}
   },
@@ -210,6 +221,7 @@ export class OpenAIAdapter extends BaseAIModel {
     } catch (error) {
       throw new Error(`Failed to connect to OpenAI API: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   private async _makeRequest(endpoint: string, payload: any): Promise<OpenAIResponse> {
+
     const url = `${this.apiEndpoint}${endpoint}`;}
     const response = await fetch(url, {)
   method: 'POST',
@@ -266,6 +278,7 @@ export class OpenAIAdapter extends BaseAIModel {
     ).join(' ');
     return Math.ceil(totalText.length / 4);
   protected async _performHealthCheck(): Promise<void> {
+
     await this._testConnection();
 
 export default OpenAIAdapter;

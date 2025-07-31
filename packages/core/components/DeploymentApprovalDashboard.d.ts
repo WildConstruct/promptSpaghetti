@@ -4,6 +4,7 @@
  */
 import React from 'react';
 
+}
 interface DeploymentApprovalDashboardProps {
     workspaceId: string;
     currentUserId: string;
@@ -13,3 +14,4 @@ interface DeploymentApprovalDashboardProps {
 export declare const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardProps>;
 export default DeploymentApprovalDashboard;
 //# sourceMappingURL=DeploymentApprovalDashboard.d.ts.map
+}

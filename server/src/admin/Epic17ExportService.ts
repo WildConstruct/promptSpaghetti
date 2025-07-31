@@ -51,6 +51,7 @@ const CACHE_TTL_SECONDS = 3600; // 1 hour
 // =============================================================================
 
 }
+}
 export interface ExportServiceConfig {
   // General settings
   enabled: boolean;
@@ -66,6 +67,7 @@ export interface ExportServiceConfig {
     compressionEnabled: boolean;
     encryptionEnabled: boolean;
     retentionDays: number;
+}
 }
   };
   
@@ -152,6 +154,7 @@ export enum ExportStatus {
 }
 
 }
+}
 export interface ExportRequest {
   exportId: string;
   exportType: ExportType;
@@ -205,7 +208,9 @@ export interface ExportRequest {
   expiresAt?: Date;
 }
 }
+}
 
+}
 }
 export interface ExportDataFilters {
   // Date range filters
@@ -213,6 +218,7 @@ export interface ExportDataFilters {
     field: string;
     startDate?: Date;
     endDate?: Date;
+}
 }
   };
   
@@ -246,6 +252,7 @@ export interface ExportDataFilters {
 }
 
 }
+}
 export interface OutputOptions {
   fileName?: string;
   fileNameTemplate?: string; // Template with placeholders
@@ -259,6 +266,7 @@ export interface OutputOptions {
     escapeChar: string;
     includeHeaders: boolean;
     nullValue: string;
+}
 }
   };
   
@@ -294,6 +302,7 @@ export interface OutputOptions {
 }
 
 }
+}
 export interface CompressionOptions {
   enabled: boolean;
   algorithm: 'gzip' | 'zip' | '7z' | 'brotli';
@@ -301,7 +310,9 @@ export interface CompressionOptions {
   password?: string;
 }
 }
+}
 
+}
 }
 export interface EncryptionOptions {
   enabled: boolean;
@@ -311,7 +322,9 @@ export interface EncryptionOptions {
   encryptMetadata: boolean;
 }
 }
+}
 
+}
 }
 export interface ProcessingOptions {
   enableStreaming: boolean;
@@ -331,7 +344,9 @@ export interface ProcessingOptions {
   optimizeForSpeed: boolean;
 }
 }
+}
 
+}
 }
 export interface SchedulingOptions {
   isScheduled: boolean;
@@ -349,7 +364,9 @@ export interface SchedulingOptions {
   maxConcurrentRuns: number;
 }
 }
+}
 
+}
 }
 export interface OutputFile {
   fileId: string;
@@ -375,7 +392,9 @@ export interface OutputFile {
   schema?: any;
 }
 }
+}
 
+}
 }
 export interface ExportError {
   errorId: string;
@@ -388,7 +407,9 @@ export interface ExportError {
   stackTrace?: string;
 }
 }
+}
 
+}
 }
 export interface ExportWarning {
   warningId: string;
@@ -398,7 +419,9 @@ export interface ExportWarning {
   context?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ExportAuditEntry {
   auditId: string;
@@ -410,7 +433,9 @@ export interface ExportAuditEntry {
   userAgent?: string;
 }
 }
+}
 
+}
 }
 export interface ComplianceInfo {
   complianceLevel: 'none' | 'basic' | 'standard' | 'strict';
@@ -421,7 +446,9 @@ export interface ComplianceInfo {
   auditTrailIncluded: boolean;
 }
 }
+}
 
+}
 }
 export interface DataTransformation {
   transformId: string;
@@ -431,7 +458,9 @@ export interface DataTransformation {
   condition?: string;
 }
 }
+}
 
+}
 }
 export interface DataRedactionRule {
   ruleId: string;
@@ -442,10 +471,13 @@ export interface DataRedactionRule {
   condition?: string;
 }
 }
+}
 
+}
 }
 export interface ExcelStyles {
   headerStyle: {
+}
 }
     font: { bold: boolean; color: string; size: number; };
     fill: { type: string; fgColor: string; };

@@ -49,10 +49,12 @@ import { CodeQualityMetrics } from '../../hooks/useQualityMetrics';
 // Code Quality Metrics Component
 // =============================================================================
 
+}
 export interface CodeQualityMetricsProps {
   metrics: CodeQualityMetrics;
   compact?: boolean;
   className?: string;
+}
 }
 export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({)
   metrics,

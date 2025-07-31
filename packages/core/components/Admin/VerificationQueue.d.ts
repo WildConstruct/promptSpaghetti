@@ -7,6 +7,7 @@
 import React from 'react';
 import type { IdentityValidationRequest, ValidationStatus } from '../../auth/IdentityValidation';
 
+}
 export interface VerificationQueueProps {
     request: IdentityValidationRequest;
     onBack: () => void;
@@ -15,6 +16,7 @@ export interface VerificationQueueProps {
     className?: string;
 
 
+}
 export interface ReviewDecision {
     status: ValidationStatus;
     reviewNotes: string;
@@ -26,3 +28,4 @@ export interface ReviewDecision {
 export declare const VerificationQueue: React.FC<VerificationQueueProps>;
 export default VerificationQueue;
 //# sourceMappingURL=VerificationQueue.d.ts.map
+}

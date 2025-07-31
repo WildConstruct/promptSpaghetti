@@ -94,10 +94,12 @@ async function basicAuditLogging() {
 class DatabaseStorageBackend implements AuditStorageBackend {
   private db: Map<string, AuditLogEntry> = new Map();
   async write(entry: AuditLogEntry): Promise<void> {
+
     // In production, this would write to a real database
     this.db.set(entry.id, entry);
     console.log(`  [DB] Written audit log ${entry.id}`);}
   async query(criteria: any): Promise<AuditLogEntry> {
+
     // In production, this would query a real database
     const results = Array.from(this.db.values()).filter(entry => {)
   if (criteria.userId && entry.userId !== criteria.userId) return false;
@@ -107,6 +109,7 @@ class DatabaseStorageBackend implements AuditStorageBackend {
     });
     return results.slice(0, criteria.limit || 100);
   async delete(id: string): Promise<void> {
+
   this.db.delete(id);
   async rotate(): Promise<void> {,
   // Archive old logs

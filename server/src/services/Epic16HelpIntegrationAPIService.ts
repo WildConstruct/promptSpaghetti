@@ -17,6 +17,7 @@ import { EventEmitter } from 'events';
 // =============================================================================
 
 }
+}
 export interface HelpSessionAPIRequest {
   userId: string;
   sessionType: 'onboarding' | 'feature-discovery' | 'troubleshooting' | 'purchase-assistance' | 'template-creation' | 'marketplace-navigation';
@@ -28,9 +29,11 @@ export interface HelpSessionAPIRequest {
     graphContext?: unknown;
     marketplaceContext?: unknown;
 }
+}
   };
 }
 
+}
 }
 export interface HelpContentAPIResponse {
   success: boolean;
@@ -42,9 +45,11 @@ export interface HelpContentAPIResponse {
     contextualRelevance: number;
     estimatedReadTime: number;
 }
+}
   };
 }
 
+}
 }
 export interface HelpContentItem {
   id: string;
@@ -61,9 +66,11 @@ export interface HelpContentItem {
     completionTracking: boolean;
     feedbackEnabled: boolean;
 }
+}
   };
 }
 
+}
 }
 export interface TransitionAPIRequest {
   userId: string;
@@ -74,7 +81,9 @@ export interface TransitionAPIRequest {
   transitionData?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface EscalationAPIRequest {
   sessionId: string;
@@ -87,6 +96,7 @@ export interface EscalationAPIRequest {
     userActions?: string[];
     systemState?: Record<string, any>;
     attachments?: string[];
+}
 }
   };
 }

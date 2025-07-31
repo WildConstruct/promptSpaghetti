@@ -9,6 +9,7 @@ import { z } from 'zod';
 // Types and Interfaces
 // ========================================
 
+}
 export interface PasswordComplexityRule {
   id: string;
   name: string;
@@ -19,6 +20,8 @@ export interface PasswordComplexityRule {
   category: 'length' | 'character' | 'pattern' | 'dictionary' | 'entropy' | 'history';
   severity: 'error' | 'warning' | 'info';
   validate: (password: string, context?: PasswordValidationContext) => PasswordRuleResult;
+}
+}
 }
 export interface PasswordValidationContext {
   username?: string;
@@ -32,6 +35,8 @@ export interface PasswordValidationContext {
   userRole?: string;
   locale?: string;
 }
+}
+}
 export interface PasswordRuleResult {
   passed: boolean;
   score: number; // 0-10 scale,
@@ -41,7 +46,9 @@ export interface PasswordRuleResult {
   expected?: unknown;
   actual?: unknown;
   examples?: string;
+}
 };
+}
 }
 export interface PasswordComplexityConfig {
   enabled: boolean;
@@ -52,6 +59,7 @@ export interface PasswordComplexityConfig {
   enabled: boolean;
   roles: string;
   requireJustification: boolean;
+}
 };
   breachChecking?: {
   enabled: boolean;
@@ -65,6 +73,7 @@ export interface PasswordComplexityConfig {
   categories: string;
 };
 }
+}
 export interface PasswordValidationResult {
   valid: boolean;
   score: number; // 0-100 overall score,
@@ -77,6 +86,7 @@ export interface PasswordValidationResult {
   offline: string;
   online: string;
   unit: string;
+}
 };
   entropy?: number;
   passedRules: number;

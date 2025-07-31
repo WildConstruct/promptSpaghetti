@@ -27,6 +27,7 @@ import { HealthCheckFramework } from '../admin/HealthCheckFramework';
 let securityAnalyticsOptimizer: SecurityAnalyticsOptimizer | null = null;
 
 }
+}
 interface OptimizationQuery {
   includeRecommendations?: boolean;
   includeHistory?: boolean;
@@ -34,7 +35,9 @@ interface OptimizationQuery {
   includeStatus?: boolean;
 }
 }
+}
 
+}
 }
 interface OptimizationRequest {
   recommendationId?: string;
@@ -42,13 +45,16 @@ interface OptimizationRequest {
   optimizationType?: 'performance' | 'memory' | 'cpu' | 'cache' | 'resource_allocation';
 }
 }
+}
 
+}
 }
 interface OptimizationResponse {
   success: boolean;
   data?: any;
   error?: string;
   timestamp: number;
+}
 }
 }
 

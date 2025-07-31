@@ -19,6 +19,7 @@ import { Pool } from 'pg';
 import { Redis } from 'ioredis';
 
 }
+}
 export interface CurationCriteria {
   originality: number;      // 0-1 - How original/unique is the content
   quality: number;          // 0-1 - Overall technical quality
@@ -28,7 +29,9 @@ export interface CurationCriteria {
   safety: number;           // 0-1 - Content safety and appropriateness
 }
 }
+}
 
+}
 }
 export interface CurationItem {
   id: string;
@@ -44,6 +47,7 @@ export interface CurationItem {
     category: string;
     complexity: 'beginner' | 'intermediate' | 'advanced';
     estimatedUseTime: number; // minutes
+}
 }
   };
   
@@ -84,6 +88,7 @@ export interface CurationItem {
 }
 
 }
+}
 export interface CuratorProfile {
   id: string;
   userId: string;
@@ -104,6 +109,7 @@ export interface CuratorProfile {
     qualityScore: number;      // Quality of feedback provided
     overallRating: number;     // Combined performance score
 }
+}
   };
   
   // Workload
@@ -121,6 +127,7 @@ export interface CuratorProfile {
 }
 
 }
+}
 export interface CurationQueue {
   highPriority: CurationItem[];
   standard: CurationItem[];
@@ -134,9 +141,11 @@ export interface CurationQueue {
     completionRate: number;
     curatorUtilization: number;
 }
+}
   };
 }
 
+}
 }
 export interface QualityTrend {
   period: 'day' | 'week' | 'month';
@@ -146,6 +155,7 @@ export interface QualityTrend {
     submissionCount: number;
     approvalRate: number;
     revisionRate: number;
+}
 }
     topCategories: Array<{ category: string; count: number; quality: number }>;
     curatorEfficiency: number;

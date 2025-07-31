@@ -103,6 +103,7 @@ export type EventFilter = z.infer<typeof EventFilterSchema>;
 
 // Subscriber Interface
 
+}
 export interface EventSubscriber {
   id: string;
   name: string;
@@ -113,9 +114,11 @@ export interface EventSubscriber {
   retryConfig?: {
   maxRetries: number;
   backoffMs: number;
+}
 };
 
 // Event Bus Configuration
+}
 }
 export interface EventBusConfig {
   maxEventHistory: number;
@@ -125,6 +128,8 @@ export interface EventBusConfig {
   deadLetterQueue: boolean;
   metricsEnabled: boolean;
   // Event Bus Metrics
+}
+}
 }
 export interface EventBusMetrics {
   eventsPublished: number;
@@ -140,6 +145,7 @@ export interface EventBusMetrics {
   * Consolidates analytics from 12+ systems into a single event-driven architecture
   * with pub/sub patterns, filtering, routing, and persistence capabilities.
   */
+}
 }
 export class UnifiedEventBus extends EventEmitter {
   private subscribers: Map<string, EventSubscriber> = new Map();
@@ -175,6 +181,7 @@ export class UnifiedEventBus extends EventEmitter {
    * Publish an analytics event to the unified bus
    */
   async publishEvent(eventData: Omit<UnifiedAnalyticsEvent, 'id' | 'timestamp'>): Promise<string> {
+
   try {
   // Create unified event with ID and timestamp
   const event: UnifiedAnalyticsEvent = {,
@@ -287,6 +294,7 @@ export class UnifiedEventBus extends EventEmitter {
     systemName: string, 
     events: unknown, 
     transformer: (legacyEvent: unknown) => Partial<UnifiedAnalyticsEvent>): Promise<{ migrated: number; failed: number; errors: string }> {
+
     const results = { migrated: 0, failed: 0, errors: [] as string };
     for (const legacyEvent of events) {
       try {
@@ -319,6 +327,7 @@ export class UnifiedEventBus extends EventEmitter {
    * Process event queue in batches
    */
   private async processEventQueue(): Promise<void> {
+
     if (this.processingQueue || this.eventQueue.length === 0) {
       return;
     this.processingQueue = true;
@@ -384,6 +393,7 @@ export class UnifiedEventBus extends EventEmitter {
    * Process event through individual subscriber
    */
   private async processSubscriber(event: UnifiedAnalyticsEvent, subscriber: EventSubscriber): Promise<void> {
+
   const result = subscriber.handler(event);
   if (result instanceof Promise) {
   await result;
@@ -446,6 +456,7 @@ export class UnifiedEventBus extends EventEmitter {
    * Cleanup and shutdown
    */
   async shutdown(): Promise<void> {
+
     if (this.flushTimer) {
       clearInterval(this.flushTimer);
     // Process remaining events
@@ -466,6 +477,7 @@ export class EventBusFactory {
   static createInstance(config?: Partial<EventBusConfig>): UnifiedEventBus {
     return new UnifiedEventBus(config);
   static async shutdown(): Promise<void> {
+
     if (this.instance) {
       await this.instance.shutdown();
       this.instance = null;

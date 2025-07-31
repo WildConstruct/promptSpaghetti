@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import './DataAccessDashboard.css';
 
 // Types
+}
 interface DataAccessGrant {
   id: string;,
   resourceId: string;
@@ -15,10 +16,12 @@ interface DataAccessGrant {
   expiresAt: Date;
   reason: string;,
   restrictions: AccessRestriction;
+}
 interface AccessRestriction {
   type: string;,
   value: string;
   description: string;
+}
 interface AccessHistoryEvent {
   id: string;,
   userId: string;
@@ -30,6 +33,7 @@ interface AccessHistoryEvent {
   accessLevel: string;
   timestamp: Date;,
   riskScore: number;
+}
 interface AccessRequest {
   resourceId: string;,
   resourceType: string;
@@ -47,13 +51,16 @@ interface AccessRequest {
 //   restrictions: AccessRestriction;
 //   auditId: string;
 
+}
 // }
+}
 interface DataAccessDashboardProps {
   userId: string;
   apiBaseUrl?: string;
   const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({,)
   userId,
   apiBaseUrl = '/api'
+}
 }) => {
   // State
   const [activeTab, setActiveTab] = useState<'permissions' | 'requests' | 'history'>('permissions');
@@ -82,7 +89,7 @@ interface DataAccessDashboardProps {
     const response = await fetch(`${apiBaseUrl}${endpoint}`, {)}
   }
       ...options,
-      headers: {,
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`}
 }

@@ -17,6 +17,7 @@ import {
   ModelUnavailableError
 } from '../BaseAIModel';
 
+}
 export interface MidjourneyConfig {
   apiKey?: string;
   serverUrl: string; // Midjourney API proxy server,
@@ -24,6 +25,8 @@ export interface MidjourneyConfig {
   maxRetries?: number;
   pollInterval?: number;
   maxPollAttempts?: number;
+}
+}
 }
 export interface MidjourneyRequestOptions {
   version?: 'v5' | 'v5.1' | 'v5.2' | 'v6';
@@ -38,6 +41,8 @@ export interface MidjourneyRequestOptions {
   tile?: boolean;
   weird?: number; // 0-3000,
   stop?: number; // 10-100,
+}
+}
 }
 export interface MidjourneyJobStatus {
   id: string;
@@ -58,7 +63,9 @@ export interface MidjourneyJobStatus {
   chaos: number;
   quality: number;
   seed?: number;
+}
 };
+}
 }
 export interface MidjourneyResponse {
   success: boolean;
@@ -72,17 +79,20 @@ export interface MidjourneyResponse {
   variations?: string;
   prompt: string;
   seed?: number;
+}
 };
   error?: string;
+}
 }
 export interface MidjourneyGenerationResult {
   jobId: string;
   status: 'completed' | 'failed';
-  images: Array<{,
+  images: Array<{
   url: string;
   thumbnailUrl?: string;
   type: 'main' | 'upscaled' | 'variation';
   index?: number;
+}
 }>;
   originalPrompt: string;
   processedPrompt: string;
@@ -165,6 +175,7 @@ export class MidjourneyAdapter extends BaseAIModel {
 };
     this.promptTemplater = new MidjourneyPromptTemplater();
   async initialize(): Promise<void> {
+
     try {
       this._status = AIModelStatus.INITIALIZING;
       if (!this.config.serverUrl) {
@@ -177,6 +188,7 @@ export class MidjourneyAdapter extends BaseAIModel {
       this._status = AIModelStatus.ERROR;
       throw new ModelInitializationError(this._id, error instanceof Error ? error.message : 'Unknown error');
   async process(input: unknown, options?: MidjourneyRequestOptions): Promise<MidjourneyGenerationResult> {
+
     try {
       if (this._status !== AIModelStatus.READY) {
         throw new ModelUnavailableError(this._id);
@@ -219,6 +231,7 @@ export class MidjourneyAdapter extends BaseAIModel {
 };
   // Midjourney-specific methods
   async getJobStatus(jobId: string): Promise<MidjourneyJobStatus | null> {
+
     try {
       const response = await this._makeRequest(`/job/${jobId}/status`, 'GET');}
       return this._parseJobStatus(response);
@@ -226,6 +239,7 @@ export class MidjourneyAdapter extends BaseAIModel {
       console.warn(`Failed to get job status for ${jobId}:`, error);}
       return null;
   async cancelJob(jobId: string): Promise<boolean> {
+
     try {
       const response = await this._makeRequest(`/job/${jobId}/cancel`, 'POST');}
       this.activeJobs.delete(jobId);
@@ -234,6 +248,7 @@ export class MidjourneyAdapter extends BaseAIModel {
       console.warn(`Failed to cancel job ${jobId}:`, error);}
       return false;
   async upscaleImage(jobId: string, imageIndex: number): Promise<MidjourneyGenerationResult> {
+
   try {
   const payload = {
   jobId,
@@ -265,6 +280,7 @@ export class MidjourneyAdapter extends BaseAIModel {
     return Array.from(this.activeJobs.values());
   // Private helper methods
   private async _testConnection(): Promise<void> {
+
     try {
       const response = await fetch(`${this.config.serverUrl}/health`, {)}
   },
@@ -283,6 +299,7 @@ export class MidjourneyAdapter extends BaseAIModel {
       headers['Authorization'] = `Bearer ${this.config.apiKey}`;}
     return headers;
   private async _makeRequest(endpoint: string, method: 'GET' | 'POST' = 'POST', payload?: unknown): Promise<unknown> {
+
     const url = `${this.config.serverUrl}${endpoint}`;}
     const options: RequestInit = {
   method,
@@ -306,6 +323,7 @@ export class MidjourneyAdapter extends BaseAIModel {
           await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
     throw lastError || new Error('All retry attempts failed');
   private async _submitJob(prompt: string, options?: MidjourneyRequestOptions): Promise<MidjourneyResponse> {
+
     const payload = {
       prompt,
       version: options?.version || 'v6',
@@ -323,6 +341,7 @@ export class MidjourneyAdapter extends BaseAIModel {
     };
     return this._makeRequest('/generate', 'POST', payload);
   private async _pollJobCompletion(jobId: string): Promise<MidjourneyJobStatus> {
+
     const pollInterval = this.config.pollInterval || 5000;
     const maxAttempts = this.config.maxPollAttempts || 120;
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
@@ -395,6 +414,7 @@ export class MidjourneyAdapter extends BaseAIModel {
       if (input.text) return input.text;
     return JSON.stringify(input);
   protected async _performHealthCheck(): Promise<void> {
+
     await this._testConnection();
 
 // Midjourney prompt templating helper

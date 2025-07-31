@@ -16,6 +16,7 @@ import { SecurityIntelligence } from './MLSecurityAnalyticsFramework';
 // TYPES AND INTERFACES
 // ==========================================
 
+}
 export interface DataPipelineConfig {
   enableRealTimeProcessing: boolean;
   batchProcessingInterval: number; // minutes,
@@ -29,12 +30,15 @@ export interface DataPipelineConfig {
   dataQualityThresholds: DataQualityThresholds;
   outputFormats: OutputFormat;
 }
+}
+}
 export interface DataQualityThresholds {
   completeness: number; // 0-100%,
   accuracy: number; // 0-100%,
   consistency: number; // 0-100%,
   timeliness: number; // max age in minutes,
   validity: number; // 0-100%,
+}
 }
 export enum OutputFormat {
   JSON = 'json',
@@ -58,6 +62,7 @@ export enum OutputFormat {
   errorHandling: ErrorHandlingStrategy;
   performanceMetrics: StageMetrics;
 }
+}
 export enum StageType {
   INGESTION = 'ingestion',
   VALIDATION = 'validation',
@@ -73,6 +78,8 @@ export enum StageType {
   fields: SchemaField;
   constraints: SchemaConstraint;
 }
+}
+}
 export interface SchemaField {
   name: string;
   type: FieldType;
@@ -81,6 +88,7 @@ export interface SchemaField {
   defaultValue?: unknown;
   description?: string;
   validationRules?: string;
+}
 }
 export enum FieldType {
   STRING = 'string',
@@ -99,6 +107,7 @@ export enum FieldType {
   value: unknown;
   errorMessage: string;
 }
+}
 export enum ConstraintType {
   MIN_LENGTH = 'min_length',
   MAX_LENGTH = 'max_length',
@@ -116,6 +125,7 @@ export enum ConstraintType {
   parameters: Record<string, unknown>;
   condition?: string; // JavaScript expression,
   enabled: boolean;
+}
 }
 export enum TransformationType {
   MAP = 'map',
@@ -140,6 +150,7 @@ export enum TransformationType {
   severity: ValidationSeverity;
   enabled: boolean;
 }
+}
 export enum ValidationRuleType {
   REQUIRED_FIELD = 'required_field',
   DATA_TYPE = 'data_type',
@@ -163,6 +174,7 @@ export enum ValidationRuleType {
   deadLetterQueue: boolean;
   alertOnError: boolean;
 }
+}
 export enum ErrorAction {
   SKIP = 'skip',
   RETRY = 'retry',
@@ -180,12 +192,16 @@ export enum ErrorAction {
   lastProcessedAt?: Date;
   performanceTrends: PerformanceTrend;
 }
+}
+}
 export interface PerformanceTrend {
   timestamp: Date;
   metric: string;
   value: number;
   trend: 'increasing' | 'decreasing' | 'stable'
+}
   }
+}
 export interface PipelineExecution {
   executionId: string;
   pipelineId: string;
@@ -197,6 +213,7 @@ export interface PipelineExecution {
   stageExecutions: StageExecution;
   errors: ExecutionError;
   metrics: ExecutionMetrics;
+}
 }
 export enum ExecutionStatus {
   PENDING = 'pending',
@@ -218,6 +235,8 @@ export enum ExecutionStatus {
   cpuUsage: number;
   errors: string;
 }
+}
+}
 export interface ExecutionError {
   errorId: string;
   timestamp: Date;
@@ -228,6 +247,7 @@ export interface ExecutionError {
   stackTrace?: string;
   retryCount: number;
   resolved: boolean;
+}
 }
 export enum ErrorType {
   VALIDATION_ERROR = 'validation_error',
@@ -247,6 +267,8 @@ export enum ErrorType {
   networkBytesTransferred: number;
   diskBytesWritten: number;
 }
+}
+}
 export interface DataSource {
   sourceId: string;
   sourceName: string;
@@ -257,6 +279,7 @@ export interface DataSource {
   schedule?: ProcessingSchedule;
   lastProcessed?: Date;
   metrics: SourceMetrics;
+}
 }
 export enum SourceType {
   FILE_SYSTEM = 'file_system',
@@ -276,6 +299,7 @@ export enum SourceType {
   password?: string;
   apiKey?: string;
   certificate?: string;
+}
 };
   timeout?: number;
   maxConnections?: number;
@@ -289,6 +313,7 @@ export enum SourceType {
   certificatePath?: string;
 };
 }
+}
 export interface ProcessingSchedule {
   scheduleType: ScheduleType;
   cronExpression?: string;
@@ -296,6 +321,7 @@ export interface ProcessingSchedule {
   startTime?: Date;
   endTime?: Date;
   enabled: boolean;
+}
 }
 export enum ScheduleType {
   REALTIME = 'realtime',
@@ -311,6 +337,8 @@ export enum ScheduleType {
   errorCount: number;
   averageLatency: number;
 }
+}
+}
 export interface DataDestination {
   destinationId: string;
   destinationName: string;
@@ -320,6 +348,7 @@ export interface DataDestination {
   schema: DataSchema;
   enabled: boolean;
   metrics: DestinationMetrics;
+}
 }
 export enum DestinationType {
   FILE_SYSTEM = 'file_system',
@@ -339,6 +368,8 @@ export enum DestinationType {
   errorCount: number;
   averageLatency: number;
 }
+}
+}
 export interface PipelineAlert {
   alertId: string;
   timestamp: Date;
@@ -351,6 +382,7 @@ export interface PipelineAlert {
   acknowledged: boolean;
   acknowledgedBy?: string;
   acknowledgedAt?: Date;
+}
 }
 export enum PipelineAlertType {
   PERFORMANCE_DEGRADATION = 'performance_degradation',
@@ -694,6 +726,7 @@ export enum PipelineAlertType {
         await this.processQueueBatch();
     }, this.config.batchProcessingInterval * 60 * 1000);
   private async processQueueBatch(): Promise<void> {
+
     if (this.isProcessing) return;
     this.isProcessing = true;
     try {
@@ -741,6 +774,7 @@ export enum PipelineAlertType {
   errors: [],
 };
   private async processStage(stage: PipelineStage, data: any, stageExecution: StageExecution): Promise<any> {
+
   const startTime = Date.now();
   try {
   let processedData = data;
@@ -809,6 +843,7 @@ export enum PipelineAlertType {
         // Continue with other transformations based on error handling strategy
     return transformedData;
   private async applyTransformation(data: any, transformation: DataTransformation): Promise<any> {
+
     switch (transformation.transformationType) {
       case TransformationType.MAP:
         return data.map(record => this.mapRecord(record, transformation));
@@ -866,6 +901,7 @@ export enum PipelineAlertType {
   enrichment_source: transformation.parameters.service || 'default',
 }));
   private async classifyRecords(data: any, transformation: DataTransformation): Promise<any> {
+
   // Placeholder for classification logic
   // In a real implementation, this would use ML models for classification
   return data.map(record => ({)
@@ -876,6 +912,7 @@ export enum PipelineAlertType {
   model: transformation.parameters.model || 'default',
 }));
   private async enrichData(data: any, configuration: Record<string, unknown>): Promise<any> {
+
   // Implement data enrichment logic
   return data.map(record => ({)
   ...record,
@@ -883,6 +920,7 @@ export enum PipelineAlertType {
   enrichment_timestamp: new Date(),
 }));
   private async analyzeData(data: any, configuration: Record<string, unknown>): Promise<any> {
+
   // Implement security analysis logic
   return data.map(record => ({)
   ...record,
@@ -891,6 +929,7 @@ export enum PipelineAlertType {
   threat_indicators: [],
 }));
   private async outputData(data: any, configuration: Record<string, unknown>): Promise<void> {
+
   // Implement output logic based on configured destinations
   for (const destination of this.dataDestinations.values()) {
   if (destination.enabled) {
@@ -1013,6 +1052,7 @@ export enum PipelineAlertType {
 // INTERFACES FOR PIPELINE METRICS
 // ==========================================
 
+}
 export interface PipelineMetrics {
   totalExecutions: number;
   successfulExecutions: number;
@@ -1026,6 +1066,7 @@ export interface PipelineMetrics {
   // ==========================================
   // FACTORY CLASS
   // ==========================================
+}
 }
 export class SecurityIntelligenceDataPipelineFactory {
   public static createDefaultConfig(): DataPipelineConfig {,

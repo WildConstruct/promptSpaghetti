@@ -6,6 +6,7 @@
  */
 import React from 'react';
 
+}
 export interface PolicyData {
     id: string;
     name: string;
@@ -23,6 +24,7 @@ export interface PolicyData {
     updatedAt: Date;
 
 
+}
 export interface PolicyViolationData {
     violationId: string;
     policyId: string;
@@ -37,9 +39,11 @@ export interface PolicyViolationData {
     description: string;
 
 
+}
 export interface PolicyManagementDashboardProps {
     className?: string;
 
 export declare const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>;
 export default PolicyManagementDashboard;
 //# sourceMappingURL=PolicyManagementDashboard.d.ts.map
+}

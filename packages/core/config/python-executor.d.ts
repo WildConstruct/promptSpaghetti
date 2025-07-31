@@ -3,6 +3,7 @@
  * Epic 8 Story 8.1.4: Configuration management for Python executor
  */
 
+}
 export interface PythonExecutorConfig {
     serviceUrl: string;
     apiKey?: string;
@@ -110,3 +111,4 @@ export declare function isPythonExecutorConfigured(): boolean;
  */
 export declare function getClientSafeConfig(): Omit<PythonExecutorConfig, 'apiKey'>;
 //# sourceMappingURL=python-executor.d.ts.map
+}

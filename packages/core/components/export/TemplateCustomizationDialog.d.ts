@@ -8,6 +8,7 @@
 import React from 'react';
 import { ExportTemplate } from '../../types/export';
 
+}
 interface TemplateCustomizationDialogProps {
     template: ExportTemplate;
     visible?: boolean;
@@ -20,3 +21,4 @@ interface TemplateCustomizationDialogProps {
 export declare const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogProps>;
 export default TemplateCustomizationDialog;
 //# sourceMappingURL=TemplateCustomizationDialog.d.ts.map
+}

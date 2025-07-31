@@ -9,6 +9,7 @@ import {
   toggleEdgeLabel,
   optimizeLabelPositions 
 } from '../components/Annotations/ConnectionAnnotations';
+}
 interface ConnectionAnnotationsState {
   selectedEdgeId: string | null;
   showAllLabels: boolean;
@@ -47,6 +48,7 @@ interface ConnectionAnnotationsState {
   edges,
   onEdgesChange,
   autoOptimizePositions = true
+}
 }: UseConnectionAnnotationsProps): UseConnectionAnnotationsReturn => {
   const [state, setState] = useState<ConnectionAnnotationsState>({)
   selectedEdgeId: null,

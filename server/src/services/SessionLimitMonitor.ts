@@ -18,6 +18,7 @@ import { SessionLimitManager, SessionLimitMetrics } from './SessionLimitManager'
 import { ConnectionManager } from '../websocket/ConnectionManager';
 
 }
+}
 export interface AlertRule {
   id: string;
   name: string;
@@ -32,7 +33,9 @@ export interface AlertRule {
   updatedAt: Date;
 }
 }
+}
 
+}
 }
 export interface AlertCondition {
   metric: string;
@@ -42,7 +45,9 @@ export interface AlertCondition {
   aggregation: 'sum' | 'avg' | 'max' | 'min' | 'count';
 }
 }
+}
 
+}
 }
 export interface AlertAction {
   type: 'email' | 'webhook' | 'slack' | 'pagerduty' | 'websocket' | 'log';
@@ -51,7 +56,9 @@ export interface AlertAction {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface Alert {
   id: string;
@@ -70,7 +77,9 @@ export interface Alert {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface MonitoringDashboard {
   overview: {
@@ -78,6 +87,7 @@ export interface MonitoringDashboard {
     violationsLast24h: number;
     averageResponseTime: number;
     systemHealth: 'healthy' | 'warning' | 'critical';
+}
 }
   };
   realTimeMetrics: {

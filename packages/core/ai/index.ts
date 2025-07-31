@@ -110,6 +110,7 @@ export type {
 export * from './performance';
 
 // Utility functions and helpers
+}
 interface HTTPRequestMapping {
   inputPath: string;
   outputPath: string;
@@ -123,5 +124,6 @@ interface HTTPRequestMapping {
   provider: 'custom' as any,
   endpoint,
   apiKey
+}
 });
 };

@@ -4,11 +4,13 @@ import { TextFieldEditor } from '../TextFieldEditor';
 import { TextAreaEditor } from '../TextAreaEditor';
 import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
 import { WeightSlider } from '../WeightSlider';
+}
 interface MarkovTransition {
   from: string;
   to: string;
   probability: number;
 
+}
 export interface MarkovEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   // Markov chain editor with three-tier progressive disclosure
 /**
@@ -20,6 +22,7 @@ export interface MarkovEditorProps extends Omit<BaseNodeEditorProps, 'children'>
  * - Debug: Technical settings, loop detection, termination states
  */
 
+}
 export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }) => {
   // Markov specific fields
   const states = (nodeData.states as string) || [];

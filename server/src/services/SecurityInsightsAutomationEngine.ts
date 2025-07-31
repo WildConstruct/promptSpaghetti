@@ -14,6 +14,7 @@ import { SecurityPatternRecognitionEngine } from './SecurityPatternRecognitionEn
 import { SecurityTimeSeriesAnalysisEngine } from './SecurityTimeSeriesAnalysisEngine';
 
 }
+}
 export interface SecurityInsightsConfig {
   generation_settings: {
     enabled: boolean;
@@ -24,6 +25,7 @@ export interface SecurityInsightsConfig {
     automated_distribution: boolean;
     multi_language_support: boolean;
     personalization_enabled: boolean;
+}
 }
   };
   
@@ -93,6 +95,7 @@ export interface SecurityInsightsConfig {
 }
 
 }
+}
 export interface SecurityInsight {
   insight_id: string;
   insight_title: string;
@@ -107,6 +110,7 @@ export interface SecurityInsight {
     data_points: InsightDataPoint[];
     visualizations: InsightVisualization[];
     supporting_evidence: SupportingEvidence[];
+}
 }
   };
   
@@ -154,6 +158,7 @@ export interface SecurityInsight {
 }
 
 }
+}
 export interface KeyFinding {
   finding_id: string;
   finding_type: string;
@@ -161,9 +166,11 @@ export interface KeyFinding {
   significance_level: 'low' | 'medium' | 'high' | 'critical';
   supporting_data: Record<string, unknown>;
 }
+}
   confidence_interval: { lower: number; upper: number };
 }
 
+}
 }
 export interface InsightDataPoint {
   data_point_id: string;
@@ -175,7 +182,9 @@ export interface InsightDataPoint {
   statistical_significance: number;
 }
 }
+}
 
+}
 }
 export interface InsightVisualization {
   visualization_id: string;
@@ -185,7 +194,9 @@ export interface InsightVisualization {
   interactive_elements: string[];
 }
 }
+}
 
+}
 }
 export interface SupportingEvidence {
   evidence_id: string;
@@ -195,7 +206,9 @@ export interface SupportingEvidence {
   source_reliability: number;
 }
 }
+}
 
+}
 }
 export interface ActionRecommendation {
   recommendation_id: string;
@@ -210,7 +223,9 @@ export interface ActionRecommendation {
   risk_mitigation: string[];
 }
 }
+}
 
+}
 }
 export interface StrategyRecommendation {
   strategy_id: string;
@@ -223,7 +238,9 @@ export interface StrategyRecommendation {
   risk_considerations: RiskConsideration[];
 }
 }
+}
 
+}
 }
 export interface InitiativeRecommendation {
   initiative_id: string;
@@ -236,7 +253,9 @@ export interface InitiativeRecommendation {
   stakeholder_alignment: StakeholderAlignment[];
 }
 }
+}
 
+}
 }
 export interface PreventiveMeasure {
   measure_id: string;
@@ -248,7 +267,9 @@ export interface PreventiveMeasure {
   cost_benefit_analysis: CostBenefitAnalysis;
 }
 }
+}
 
+}
 }
 export interface OptimizationOpportunity {
   opportunity_id: string;
@@ -260,7 +281,9 @@ export interface OptimizationOpportunity {
   implementation_challenges: string[];
 }
 }
+}
 
+}
 }
 export interface FinancialImpact {
   direct_costs: number;
@@ -271,7 +294,9 @@ export interface FinancialImpact {
   confidence_level: number;
 }
 }
+}
 
+}
 }
 export interface OperationalImpact {
   efficiency_impact: string;
@@ -281,7 +306,9 @@ export interface OperationalImpact {
   process_optimization_impact: string;
 }
 }
+}
 
+}
 }
 export interface StrategyImplication {
   implication_type: string;
@@ -291,7 +318,9 @@ export interface StrategyImplication {
   adjustment_recommendations: string[];
 }
 }
+}
 
+}
 }
 export interface ComplianceImplication {
   regulation_name: string;
@@ -301,7 +330,9 @@ export interface ComplianceImplication {
   remediation_actions: string[];
 }
 }
+}
 
+}
 }
 export interface TargetAudience {
   audience_id: string;
@@ -312,7 +343,9 @@ export interface TargetAudience {
   delivery_preferences: DeliveryPreference[];
 }
 }
+}
 
+}
 }
 export interface PersonalizationProfile {
   profile_id: string;
@@ -325,7 +358,9 @@ export interface PersonalizationProfile {
   language_preference: string;
 }
 }
+}
 
+}
 }
 export interface DeliveryStatus {
   channel: string;
@@ -335,7 +370,9 @@ export interface DeliveryStatus {
   engagement_metrics: unknown;
 }
 }
+}
 
+}
 }
 export interface InsightFeedback {
   feedback_id: string;
@@ -347,8 +384,10 @@ export interface InsightFeedback {
   timestamp: number;
 }
 }
+}
 
 // Supporting interface definitions
+}
 }
 interface ImplementationPhase {
   phase_name: string;
@@ -358,7 +397,9 @@ interface ImplementationPhase {
   dependencies: string[];
 }
 }
+}
 
+}
 }
 interface ResourceRequirement {
   resource_type: string;
@@ -368,7 +409,9 @@ interface ResourceRequirement {
   cost_estimate: number;
 }
 }
+}
 
+}
 }
 interface SuccessCriteria {
   criteria_name: string;
@@ -378,7 +421,9 @@ interface SuccessCriteria {
   measurement_frequency: string;
 }
 }
+}
 
+}
 }
 interface RiskConsideration {
   risk_type: string;
@@ -388,7 +433,9 @@ interface RiskConsideration {
   mitigation_strategies: string[];
 }
 }
+}
 
+}
 }
 interface InvestmentRequirement {
   investment_type: string;
@@ -398,7 +445,9 @@ interface InvestmentRequirement {
   funding_source: string;
 }
 }
+}
 
+}
 }
 interface ExpectedROI {
   roi_percentage: number;
@@ -408,7 +457,9 @@ interface ExpectedROI {
   risk_adjusted_return: number;
 }
 }
+}
 
+}
 }
 interface ImplementationRoadmap {
   milestone_name: string;
@@ -418,7 +469,9 @@ interface ImplementationRoadmap {
   dependencies: string[];
 }
 }
+}
 
+}
 }
 interface StakeholderAlignment {
   stakeholder_group: string;
@@ -427,7 +480,9 @@ interface StakeholderAlignment {
   engagement_strategy: string;
 }
 }
+}
 
+}
 }
 interface CostBenefitAnalysis {
   implementation_cost: number;
@@ -437,7 +492,9 @@ interface CostBenefitAnalysis {
   break_even_period: string;
 }
 }
+}
 
+}
 }
 interface ExpectedBenefit {
   benefit_type: string;
@@ -447,7 +504,9 @@ interface ExpectedBenefit {
   realization_timeline: string;
 }
 }
+}
 
+}
 }
 interface DeliveryPreference {
   channel: string;
@@ -456,7 +515,9 @@ interface DeliveryPreference {
   timing: string;
 }
 }
+}
 
+}
 }
 export interface InsightDistributionResult {
   distribution_id: string;
@@ -469,6 +530,7 @@ export interface InsightDistributionResult {
     personalization_applied: boolean;
     distribution_success_rate: number;
     average_delivery_time: number;
+}
 }
   };
   
@@ -505,6 +567,7 @@ export interface InsightDistributionResult {
 }
 
 }
+}
 export interface InsightGenerationResult {
   generation_id: string;
   generation_timestamp: number;
@@ -519,6 +582,7 @@ export interface InsightGenerationResult {
     average_confidence_score: number;
     average_quality_score: number;
     generation_time_ms: number;
+}
 }
   };
   
@@ -547,6 +611,7 @@ export interface InsightGenerationResult {
 }
 
 }
+}
 export interface InsightsAnalytics {
   summary: {
     total_insights_generated: number;
@@ -556,6 +621,7 @@ export interface InsightsAnalytics {
     average_feedback_score: number;
     insights_acted_upon: number;
     automation_efficiency: number;
+}
 }
   };
   

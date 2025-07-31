@@ -7,6 +7,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface MarketplaceTicket {
     id: string;
     type: MarketplaceTicketType;
@@ -80,6 +81,7 @@ export declare enum TicketCategory {
     POLICY = "policy",
     PARTNERSHIP = "partnership"
 
+}
 export interface TicketMetadata {
     source: 'web' | 'api' | 'email' | 'chat' | 'phone' | 'community';
     userAgent?: string;
@@ -94,6 +96,7 @@ export interface TicketMetadata {
     userId?: string;
     customFields: Record<string, any>;
 
+}
 export interface DeviceInfo {
     type: 'desktop' | 'mobile' | 'tablet';
     os: string;
@@ -101,6 +104,7 @@ export interface DeviceInfo {
     version: string;
     screenResolution?: string;
 
+}
 export interface TicketAttachment {
     id: string;
     filename: string;
@@ -112,6 +116,7 @@ export interface TicketAttachment {
     uploadedAt: Date;
     scanResults?: SecurityScanResult[];
 
+}
 export interface SecurityScanResult {
     scanner: string;
     result: 'clean' | 'suspicious' | 'malicious';
@@ -119,6 +124,7 @@ export interface SecurityScanResult {
     details: string[];
     scannedAt: Date;
 
+}
 export interface TicketComment {
     id: string;
     content: string;
@@ -131,11 +137,13 @@ export interface TicketComment {
     mentions: string[];
     reactions: CommentReaction[];
 
+}
 export interface CommentReaction {
     emoji: string;
     userId: string;
     timestamp: Date;
 
+}
 export interface SLATracking {
     responseTime: SLAMetric;
     resolutionTime: SLAMetric;
@@ -143,6 +151,7 @@ export interface SLATracking {
     breached: boolean;
     breachReason?: string;
 
+}
 export interface SLAMetric {
     target: number;
     actual?: number;
@@ -150,6 +159,7 @@ export interface SLAMetric {
     breached: boolean;
     warningThreshold: number;
 
+}
 export interface ExternalIntegration {
     system: string;
     externalId: string;
@@ -158,6 +168,7 @@ export interface ExternalIntegration {
     lastSync: Date;
     syncData: Record<string, any>;
 
+}
 export interface TicketWorkflow {
     id: string;
     name: string;
@@ -169,6 +180,7 @@ export interface TicketWorkflow {
     active: boolean;
     version: string;
 
+}
 export interface WorkflowStep {
     id: string;
     name: string;
@@ -180,22 +192,26 @@ export interface WorkflowStep {
     slaRules: SLARule[];
     nextSteps: string[];
 
+}
 export interface WorkflowTrigger {
     type: 'status_change' | 'time_based' | 'field_change' | 'comment_added' | 'escalation';
     condition: string;
     parameters: Record<string, any>;
 
+}
 export interface WorkflowCondition {
     field: string;
     operator: 'equals' | 'not_equals' | 'contains' | 'greater_than' | 'less_than';
     value: any;
     logic: 'AND' | 'OR';
 
+}
 export interface AssignmentRule {
     type: 'round_robin' | 'skill_based' | 'workload_based' | 'availability_based';
     criteria: AssignmentCriteria;
     fallbackAssignee?: string;
 
+}
 export interface AssignmentCriteria {
     skills?: string[];
     teams?: string[];
@@ -203,11 +219,13 @@ export interface AssignmentCriteria {
     availabilityHours?: string[];
     language?: string[];
 
+}
 export interface WorkflowAction {
     type: 'set_field' | 'send_email' | 'create_task' | 'call_webhook' | 'update_status';
     parameters: Record<string, any>;
     condition?: string;
 
+}
 export interface NotificationRule {
     type: 'email' | 'sms' | 'push' | 'slack' | 'webhook';
     recipients: NotificationRecipient[];
@@ -215,23 +233,27 @@ export interface NotificationRule {
     trigger: string;
     delay?: number;
 
+}
 export interface NotificationRecipient {
     type: 'user' | 'role' | 'team' | 'custom';
     identifier: string;
     fallbacks?: string[];
 
+}
 export interface SLARule {
     metric: 'response_time' | 'resolution_time' | 'escalation_time';
     target: number;
     businessHoursOnly: boolean;
     escalationActions: EscalationAction[];
 
+}
 export interface EscalationAction {
     trigger: 'warning' | 'breach' | 'severe_breach';
     delay: number;
     actions: WorkflowAction[];
     notifications: NotificationRule[];
 
+}
 export interface IntegrationConfig {
     github: GitHubIntegration;
     jira: JiraIntegration;
@@ -241,6 +263,7 @@ export interface IntegrationConfig {
     email: EmailIntegration;
     webhook: WebhookIntegration;
 
+}
 export interface GitHubIntegration {
     enabled: boolean;
     repository: string;
@@ -249,6 +272,7 @@ export interface GitHubIntegration {
     autoCreateIssues: boolean;
     syncComments: boolean;
 
+}
 export interface JiraIntegration {
     enabled: boolean;
     url: string;
@@ -258,6 +282,7 @@ export interface JiraIntegration {
     issueTypeMapping: Record<MarketplaceTicketType, string>;
     fieldMapping: Record<string, string>;
 
+}
 export interface ZendeskIntegration {
     enabled: boolean;
     domain: string;
@@ -266,6 +291,7 @@ export interface ZendeskIntegration {
     ticketFormId?: string;
     customFields: Record<string, number>;
 
+}
 export interface SlackIntegration {
     enabled: boolean;
     webhookUrl: string;
@@ -273,6 +299,7 @@ export interface SlackIntegration {
     botToken?: string;
     mentionRoles: string[];
 
+}
 export interface DiscordIntegration {
     enabled: boolean;
     webhookUrl: string;
@@ -280,6 +307,7 @@ export interface DiscordIntegration {
     channelId: string;
     roleMapping: Record<TicketPriority, string>;
 
+}
 export interface EmailIntegration {
     enabled: boolean;
     smtpHost: string;
@@ -289,33 +317,39 @@ export interface EmailIntegration {
     fromAddress: string;
     templates: Record<string, EmailTemplate>;
 
+}
 export interface EmailTemplate {
     subject: string;
     htmlBody: string;
     textBody: string;
     attachments?: string[];
 
+}
 export interface WebhookIntegration {
     enabled: boolean;
     endpoints: WebhookEndpoint[];
     retryPolicy: RetryPolicy;
 
+}
 export interface WebhookEndpoint {
     url: string;
     events: string[];
     headers: Record<string, string>;
     authentication?: WebhookAuth;
 
+}
 export interface WebhookAuth {
     type: 'none' | 'basic' | 'bearer' | 'api_key';
     credentials: Record<string, string>;
 
+}
 export interface RetryPolicy {
     maxRetries: number;
     backoffStrategy: 'linear' | 'exponential';
     baseDelay: number;
     maxDelay: number;
 
+}
 export interface TicketIntegrationConfig {
     defaultWorkflow: string;
     autoAssignment: boolean;
@@ -325,6 +359,7 @@ export interface TicketIntegrationConfig {
         enabled: boolean;
         channels: string[];
         templates: Record<string, string>;
+}
     };
     security: {
         encryptAttachments: boolean;

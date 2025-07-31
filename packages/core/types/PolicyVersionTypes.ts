@@ -5,6 +5,7 @@
  * Part of Epic 17 - Backstage Admin Controls
  */
 
+}
 export interface Policy {
   id: string;
   policyKey: string;
@@ -14,6 +15,7 @@ export interface Policy {
   createdBy: string;
   createdAt: Date;
   updatedAt: Date;
+}
 }
 export type PolicyCategory = 
   | 'general'
@@ -26,6 +28,7 @@ export type PolicyCategory =
   | 'user_safety'
   | 'intellectual_property';
 
+}
 export interface PolicyVersion {
   id: string;
   policyId: string;
@@ -59,6 +62,7 @@ export interface PolicyVersion {
   // Timestamps
   createdAt: Date;
   updatedAt: Date;
+}
 }
 export type PolicyStatus = 
   | 'draft'
@@ -100,12 +104,15 @@ export type ComplianceFramework =
   | 'quality_assurance'
   | 'data_protection';
 
+}
 export interface PolicyContent {
   sections: PolicySection;
   summary?: string;
   lastModified?: Date;
   wordCount?: number;
   [key: string]: any; // Allow additional content properties,
+}
+}
 }
 export interface PolicySection {
   id?: string;
@@ -114,6 +121,8 @@ export interface PolicySection {
   order?: number;
   subsections?: PolicySection;
   metadata?: Record<string, any>;
+}
+}
 }
 export interface PolicyVersionChange {
   id: string;
@@ -126,6 +135,8 @@ export interface PolicyVersionChange {
   createdBy: string;
   createdAt: Date;
 }
+}
+}
 export interface PolicyApproval {
   id: string;
   versionId: string;
@@ -136,12 +147,14 @@ export interface PolicyApproval {
   approvedAt?: Date;
   createdAt: Date;
 }
+}
 export type ApprovalStatus = 
   | 'pending'
   | 'approved'
   | 'rejected'
   | 'withdrawn';
 
+}
 export interface PolicyComplianceMapping {
   id: string;
   versionId: string;
@@ -152,6 +165,7 @@ export interface PolicyComplianceMapping {
   notes?: string;
   createdAt: Date;
 }
+}
 export type ComplianceLevel = 
   | 'full'
   | 'partial'
@@ -159,11 +173,14 @@ export type ComplianceLevel =
 
 // Request and Response Types
 
+}
 export interface CreatePolicyRequest {
   policyKey: string;
   name: string;
   description?: string;
   category: PolicyCategory;
+}
+}
 }
 export interface CreatePolicyVersionRequest {
   title: string;
@@ -178,6 +195,8 @@ export interface CreatePolicyVersionRequest {
   expirationDate?: Date;
   metadata?: Record<string, any>;
 }
+}
+}
 export interface UpdatePolicyVersionRequest {
   title?: string;
   content?: PolicyContent;
@@ -190,9 +209,13 @@ export interface UpdatePolicyVersionRequest {
   expirationDate?: Date;
   metadata?: Record<string, any>;
 }
+}
+}
 export interface PublishPolicyVersionRequest {
   effectiveDate?: Date;
   publishingNotes?: string;
+}
+}
 }
 export interface PolicyVersionComparison {
   fromVersion: PolicyVersion;
@@ -203,7 +226,9 @@ export interface PolicyVersionComparison {
   removedSections: number;
   modifiedSections: number;
   totalChanges: number;
+}
 };
+}
 }
 export interface PolicyVersionDiff {
   type: DiffType;
@@ -212,6 +237,7 @@ export interface PolicyVersionDiff {
   oldValue?: any;
   newValue?: any;
   impact: DiffImpact;
+}
 }
 export type DiffType = 
   | 'added'
@@ -225,6 +251,7 @@ export type DiffImpact =
   | 'high'
   | 'breaking';
 
+}
 export interface PolicyVersionListResponse {
   versions: PolicyVersion;
   pagination: {
@@ -232,8 +259,10 @@ export interface PolicyVersionListResponse {
   pageSize: number;
   total: number;
   totalPages: number;
+}
 };
   policy: Policy;
+}
 }
 export interface PolicyVersionSearchQuery {
   policyId?: string;
@@ -250,6 +279,7 @@ export interface PolicyVersionSearchQuery {
   pageSize?: number;
   sortBy?: PolicyVersionSortField;
   sortOrder?: 'asc' | 'desc'
+}
   }
 export type PolicyVersionSortField = 
   | 'version'
@@ -262,6 +292,7 @@ export type PolicyVersionSortField =
   | 'minorVersion'
   | 'patchVersion';
 
+}
 export interface PolicyVersionAnalytics {
   policyId: string;
   totalVersions: number;
@@ -270,13 +301,15 @@ export interface PolicyVersionAnalytics {
   averageTimeToPublish: number; // in hours,
   mostActiveContributor: string;
   complianceFrameworkUsage: Record<ComplianceFramework, number>;
-  versionsByMonth: Array<{,
+  versionsByMonth: Array<{
   month: string;
   count: number;
+}
 }>;
   changeTypeDistribution: Record<ChangeType, number>;
 
 // Workflow Types
+}
 }
 export interface PolicyWorkflowState {
   currentStatus: PolicyStatus;
@@ -286,11 +319,14 @@ export interface PolicyWorkflowState {
   pendingReviewers: string;
   blockers: WorkflowBlocker;
 }
+}
+}
 export interface WorkflowBlocker {
   type: BlockerType;
   description: string;
   resolvable: boolean;
   resolveAction?: string;
+}
 }
 export type BlockerType = 
   | 'missing_approval'
@@ -301,6 +337,7 @@ export type BlockerType =
 
 // Event Types
 
+}
 export interface PolicyVersionEvent {
   id: string;
   type: PolicyEventType;
@@ -309,6 +346,7 @@ export interface PolicyVersionEvent {
   userId: string;
   data: Record<string, any>;
   timestamp: Date;
+}
 }
 export type PolicyEventType = 
   | 'version_created'
@@ -324,23 +362,30 @@ export type PolicyEventType =
 
 // Validation Types
 
+}
 export interface PolicyVersionValidation {
   isValid: boolean;
   errors: ValidationError;
   warnings: ValidationWarning;
   complianceStatus: ComplianceValidation;
 }
+}
+}
 export interface ValidationError {
   field: string;
   message: string;
   code: string;
   severity: 'error' | 'warning'
+}
   }
+}
 export interface ValidationWarning {
   field: string;
   message: string;
   code: string;
   suggestion?: string;
+}
+}
 }
 export interface ComplianceValidation {
   framework: ComplianceFramework;
@@ -350,6 +395,8 @@ export interface ComplianceValidation {
   notes?: string;
   // Export Configuration
 }
+}
+}
 export interface PolicyVersionConfig {
   maxVersionsPerPolicy: number;
   defaultComplianceFrameworks: ComplianceFramework;
@@ -357,4 +404,5 @@ export interface PolicyVersionConfig {
   autoArchiveAfterDays: number;
   enableAutomaticVersioning: boolean;
   versionNumberingStrategy: 'semantic' | 'sequential' | 'timestamp'
+}
   }

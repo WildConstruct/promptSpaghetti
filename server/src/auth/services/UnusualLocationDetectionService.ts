@@ -9,6 +9,7 @@ import { AuditService } from './AuditService';
 import { GeolocationService, GeolocationData, LocationHistory } from './GeolocationService';
 
 }
+}
 export interface UnusualLocationConfig {
   // Detection thresholds
   newLocationSuspicionThreshold: number; // km distance to be considered unusual
@@ -38,7 +39,9 @@ export interface UnusualLocationConfig {
   blockedASNs: string[]; // Blocked ASNs
 }
 }
+}
 
+}
 }
 export interface LocationRiskAssessment {
   riskScore: number; // 0-100
@@ -49,7 +52,9 @@ export interface LocationRiskAssessment {
   reasoning: string[];
 }
 }
+}
 
+}
 }
 export interface LocationRiskFactor {
   factor: string;
@@ -59,7 +64,9 @@ export interface LocationRiskFactor {
   severity: 'low' | 'medium' | 'high' | 'critical';
 }
 }
+}
 
+}
 }
 export interface UnusualLocationEvent {
   id: string;
@@ -81,7 +88,9 @@ export interface UnusualLocationEvent {
   notes?: string;
 }
 }
+}
 
+}
 }
 export interface UserLocationProfile {
   userId: string;
@@ -98,6 +107,7 @@ export interface UserLocationProfile {
     uniqueRegionsCount: number;
     typicalLoginHours: number[];
     weekendTravelFrequency: number;
+}
 }
   };
   riskProfile: {

@@ -9,6 +9,7 @@
  */
 import React from 'react';
 
+}
 interface AuditLogDashboardProps {
     className?: string;
     userId?: string;
@@ -17,3 +18,4 @@ interface AuditLogDashboardProps {
 export declare const AuditLogDashboard: React.FC<AuditLogDashboardProps>;
 export default AuditLogDashboard;
 //# sourceMappingURL=AuditLogDashboard.d.ts.map
+}

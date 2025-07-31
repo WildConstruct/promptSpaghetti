@@ -4,12 +4,14 @@
  */
 import React, { useState, useEffect } from 'react';
 import { NotificationManager, NotificationPreferences as PrefsType } from './NotificationManager';
+}
 interface NotificationPreferencesProps {
   notificationManager: NotificationManager;
   className?: string;
   export const NotificationPreferences: React.FC<NotificationPreferencesProps> = ({,)
   notificationManager,
   className = ''
+}
 }) => {
   const [preferences, setPreferences] = useState<PrefsType | null>(null);
   const [loading, setLoading] = useState(true);
@@ -373,6 +375,7 @@ interface NotificationPreferencesProps {
     </div>
   );
 };
+}
 interface NotificationTypeSectionProps {
   title: string;
   description: string;
@@ -380,6 +383,7 @@ interface NotificationTypeSectionProps {
   preferences: {
   enabled: boolean;
   channels: ('in_app' | 'email' | 'push')[];
+}
 };
   onChange: (updates: unknown) => void;
   extraOptions?: React.ReactNode;

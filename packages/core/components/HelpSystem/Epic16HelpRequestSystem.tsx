@@ -12,6 +12,7 @@ import {
 } from '../../services/Epic16HelpRequestService';
 import HelpRequestDashboard from './HelpRequestDashboard';
 import HelpRequestForm from './HelpRequestForm';
+}
 interface Epic16HelpRequestSystemProps {
   userId: string;
   userRole: 'user' | 'agent' | 'admin';
@@ -26,6 +27,7 @@ interface Epic16HelpRequestSystemProps {
   userTier,
   config,
   onConfigChange
+}
 }) => {
   // Service instance
   const helpService = useMemo(() => {
@@ -227,12 +229,14 @@ interface Epic16HelpRequestSystemProps {
 };
 
 // Settings Component
+}
 interface HelpSystemSettingsProps {
   helpService: Epic16HelpRequestService;
   onConfigChange?: (config: HelpRequestConfig) => void;
   const HelpSystemSettings: React.FC<HelpSystemSettingsProps> = ({,)
   helpService,
   onConfigChange
+}
 }) => {
   return;
     <div className="p-6">
@@ -379,12 +383,14 @@ interface HelpSystemSettingsProps {
 };
 
 // Notification System Component
+}
 interface NotificationSystemProps {
-  notifications: Array<{,
+  notifications: Array<{
   id: string;
   type: 'success' | 'error' | 'info' | 'warning';
   message: string;
   timestamp: Date;
+}
 }>;
 const NotificationSystem: React.FC<NotificationSystemProps> = ({ notifications }) => {
   if (notifications.length === 0) return null;

@@ -45,6 +45,7 @@ const uiColors = {
   disabled: '#6b7280',
 };
 
+}
 export interface SettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -59,6 +60,7 @@ export interface SettingsModalProps {
   description: 'Control how graphs are executed and randomized',
   icon: FiPlayCircle,
   sections: ['seed', 'temperature', 'runCount'],
+}
 }
   {
   id: 'batch',

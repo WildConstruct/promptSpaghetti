@@ -11,19 +11,24 @@ import { operationalMetricsService } from '../services/OperationalMetricsService
 import { ErrorFactory } from '../types/errors';
 
 }
+}
 interface SystemStatusQuery {
   detailed?: boolean;
   include?: string; // comma-separated: 'metrics,health,circuits,retries,alerts'
 }
 }
+}
 
+}
 }
 interface MetricsQuery {
   minutes?: number;
   limit?: number;
 }
 }
+}
 
+}
 }
 interface AlertRuleBody {
   name: string;
@@ -32,6 +37,7 @@ interface AlertRuleBody {
   description: string;
   enabled?: boolean;
   cooldownMs?: number;
+}
 }
 }
 

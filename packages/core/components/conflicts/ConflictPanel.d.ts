@@ -1,16 +1,18 @@
 import React from 'react';
 
+}
 export interface ConflictData {
     id: string;
     type: string;
     description: string;
-    operations: Array<{,
+    operations: Array<{
         id: string;
         userId: string;
         userName?: string;
         timestamp: number;
         oldValue: Error;
         newValue: Error;
+}
     }>;
     nodeId?: string;
     edgeId?: string;
@@ -18,6 +20,7 @@ export interface ConflictData {
     detectedAt: number;
     autoResolved: boolean;
 
+}
 export interface ConflictPanelProps {
     conflicts: ConflictData[];
     onResolveConflict: (conflictId: string, strategy: string, userSelection?: Record<string, unknown>) => void;
@@ -27,6 +30,7 @@ export interface ConflictPanelProps {
 
 export declare const ConflictPanel: React.FC<ConflictPanelProps>;
 export default ConflictPanel;
+}
 interface ConflictNotificationProps {
     conflict: ConflictData;
     onResolve: (conflict: ConflictData) => void;
@@ -34,3 +38,4 @@ interface ConflictNotificationProps {
 
 export declare const ConflictNotification: React.FC<ConflictNotificationProps>;
 //# sourceMappingURL=ConflictPanel.d.ts.map
+}

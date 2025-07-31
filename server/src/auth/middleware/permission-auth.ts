@@ -6,6 +6,7 @@ import { RBACService } from '../services/RBACService';
 import { PermissionCheck, PermissionContext } from '../types';
 
 }
+}
 export interface PermissionAuthOptions {
   resource: string;
   action: string;
@@ -13,6 +14,7 @@ export interface PermissionAuthOptions {
   requireAll?: boolean; // If multiple permissions, require all or any
   allowSuperAdmin?: boolean; // Allow super_admin to bypass checks
   extractContext?: (request: FastifyRequest) => PermissionContext | Promise<PermissionContext>;
+}
 }
 }
 
@@ -314,6 +316,7 @@ declare module 'fastify' {
     hasPermission: (userId: string, resource: string, action: string, context?: PermissionContext) => Promise<boolean>;
     getUserPermissions: (userId: string) => Promise<any[]>;
     getUserRoles: (userId: string) => Promise<any[]>;
+}
 }
   }
 }

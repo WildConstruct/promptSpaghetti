@@ -18,6 +18,7 @@ type PolicyStatus =
   'DRAFT' | 'UNDER_REVIEW' | 'APPROVED' | 'PUBLISHED' | 
   'ACTIVE' | 'DEPRECATED' | 'ARCHIVED' | 'SUSPENDED';
 type ChangeImpact = 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+}
 interface PolicyConfigurationInterfaceProps {
   onPolicyCreate?: (policy: unknown) => void;
   onPolicyUpdate?: (policy: unknown) => void;
@@ -95,6 +96,7 @@ interface PolicyConfigurationInterfaceProps {
   jurisdiction: z.array(z.string()).min(1, 'At least one jurisdiction is required'),
   complianceFrameworks: z.array(z.string()),
   audience: z.array(z.string()).min(1, 'At least one audience is required'),
+}
 });
 
 export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterfaceProps> = ({)

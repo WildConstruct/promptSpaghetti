@@ -7,6 +7,7 @@ import { AuditService } from './AuditService';
 import { RBACService } from './RBACService';
 
 }
+}
 export interface CreateOrganizationData {
   name: string;
   slug?: string;
@@ -18,7 +19,9 @@ export interface CreateOrganizationData {
   branding?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface UpdateOrganizationData {
   name?: string;
@@ -30,7 +33,9 @@ export interface UpdateOrganizationData {
   branding?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface CreateTeamData {
   organizationId: string;
@@ -40,7 +45,9 @@ export interface CreateTeamData {
   settings?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface UpdateTeamData {
   name?: string;
@@ -49,7 +56,9 @@ export interface UpdateTeamData {
   settings?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface TeamMemberData {
   teamId: string;
@@ -58,7 +67,9 @@ export interface TeamMemberData {
   invitedBy?: string;
 }
 }
+}
 
+}
 }
 export interface OrganizationStats {
   totalMembers: number;
@@ -69,6 +80,7 @@ export interface OrganizationStats {
     maxUsers: number;
     maxTeams: number;
     maxStorage: number;
+}
 }
   };
   usage: {

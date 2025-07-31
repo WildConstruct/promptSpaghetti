@@ -5,6 +5,7 @@
  * Intelligent caching system with multiple eviction policies and performance optimization
  */
 
+}
 export interface CacheConfig {
     maxSize: number;
     maxMemoryMB: number;
@@ -16,8 +17,10 @@ export interface CacheConfig {
     metrics: {
         enabled: boolean;
         reportingInterval: number;
+}
     };
 
+}
 export interface CacheItem<T = any> {
     key: string;
     value: T;
@@ -35,6 +38,7 @@ export interface CacheItem<T = any> {
         cost: number;
     };
 
+}
 export interface CacheMetrics {
     hitRate: number;
     missRate: number;
@@ -47,6 +51,7 @@ export interface CacheMetrics {
     compressionRatio: number;
     costSavings: number;
 
+}
 export interface EvictionStrategy {
     name: string;
     shouldEvict(item: CacheItem, config: CacheConfig): boolean;
@@ -89,6 +94,7 @@ export declare class AdvancedCacheManager {
         ttl?: number;
         priority?: number;
         metadata?: Partial<CacheItem['metadata']>;
+}
     }): Promise<void>;
     delete(key: string): Promise<boolean>;
     clear(): Promise<void>;
@@ -101,12 +107,12 @@ export declare class AdvancedCacheManager {
         optimizationTime: number;
     }>;
     analyzeHitPatterns(): {
-        topKeys: Array<{,
+        topKeys: Array<{
             key: string;
             hitRate: number;
             accessCount: number;
         }>;
-        lowPerformanceKeys: Array<{,
+        lowPerformanceKeys: Array<{
             key: string;
             performance: number;
         }>;

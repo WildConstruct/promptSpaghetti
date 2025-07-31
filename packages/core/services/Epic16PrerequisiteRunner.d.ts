@@ -6,6 +6,7 @@
  */
 import { PrerequisiteReport } from './Epic16PrerequisiteSystem';
 
+}
 export interface PrerequisiteRunnerOptions {
     categories?: string[];
     skipChecks?: string[];
@@ -21,6 +22,7 @@ export interface PrerequisiteRunnerOptions {
     environment?: 'development' | 'staging' | 'production';
 
 
+}
 export interface PrerequisiteRunnerResult {
     success: boolean;
     report: PrerequisiteReport;
@@ -43,6 +45,7 @@ export declare class Epic16PrerequisiteRunner {
         status: 'healthy' | 'degraded' | 'critical';
         message: string;
         details: any;
+}
     }>;
     private buildSystemConfig;
     private setupEventListeners;

@@ -47,6 +47,7 @@ export enum ResolutionStrategy {
 }
 
 }
+}
 export interface ConflictContext {
   resource_id: string;
   workspace_id: string;
@@ -60,11 +61,13 @@ export interface ConflictContext {
     column?: number;
     offset?: number;
 }
+}
   };
   timestamp: Date;
   priority_levels: Map<string, number>; // User ID -> priority level
 }
 
+}
 }
 export interface ResolutionResult {
   success: boolean;
@@ -79,11 +82,13 @@ export interface ResolutionResult {
     confidence_score: number;     // 0-1 confidence in resolution
     affected_users: string[];
 }
+}
   };
   warnings?: string[];
   errors?: string[];
 }
 
+}
 }
 export interface Operation {
   id: string;
@@ -96,7 +101,9 @@ export interface Operation {
   session_id: string;
 }
 }
+}
 
+}
 }
 export interface OperationalTransform {
   operations: Operation[];
@@ -107,6 +114,7 @@ export interface OperationalTransform {
     transform_time_ms: number;
     operations_processed: number;
     conflicts_resolved: number;
+}
 }
   };
 }

@@ -6,6 +6,7 @@
  */
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
 
+}
 export interface OpenAITTSConfig {
     apiKey: string;
     baseURL?: string;
@@ -13,6 +14,7 @@ export interface OpenAITTSConfig {
     maxRetries?: number;
     organization?: string;
 
+}
 export interface TTSRequestOptions {
     text: string;
     voice?: 'alloy' | 'echo' | 'fable' | 'onyx' | 'nova' | 'shimmer';
@@ -24,12 +26,14 @@ export interface TTSRequestOptions {
         similarity_boost?: number;
         style?: number;
         use_speaker_boost?: boolean;
+}
     };
     use_ssml?: boolean;
     pronunciation_dictionary?: Record<string, string>;
     chunk_length_s?: number;
     normalize_audio?: boolean;
 
+}
 export interface TTSGenerationResult {
     audio: {
         data: ArrayBuffer | string;
@@ -38,6 +42,7 @@ export interface TTSGenerationResult {
         sample_rate: number;
         channels: number;
         bitrate?: number;
+}
     };
     metadata: {
         voice: string;
@@ -53,6 +58,7 @@ export interface TTSGenerationResult {
         cost: number;
     };
 
+}
 export interface VoiceInfo {
     id: string;
     name: string;
@@ -91,3 +97,4 @@ export declare class OpenAITTSAdapter extends BaseAIModel {
 
 export default OpenAITTSAdapter;
 //# sourceMappingURL=OpenAITTSAdapter.d.ts.map
+}

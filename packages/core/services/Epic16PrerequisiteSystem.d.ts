@@ -7,6 +7,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface PrerequisiteCheck {
     id: string;
     name: string;
@@ -19,6 +20,7 @@ export interface PrerequisiteCheck {
     manualFixInstructions?: string;
     estimatedFixTime?: number;
 
+}
 export interface PrerequisiteResult {
     passed: boolean;
     message: string;
@@ -29,6 +31,7 @@ export interface PrerequisiteResult {
     recommendation?: string;
     checkDuration?: number;
 
+}
 export interface PrerequisiteReport {
     overall: {
         passed: boolean;
@@ -37,6 +40,7 @@ export interface PrerequisiteReport {
         failedChecks: number;
         criticalFailures: number;
         estimatedFixTime: number;
+}
     };
     categories: Record<string, {
         passed: boolean;
@@ -50,13 +54,16 @@ export interface PrerequisiteReport {
     generatedAt: Date;
     version: string;
 
+}
 export interface PrerequisiteDependencyMap {
     [checkId: string]: {
         dependsOn: string[];
         requiredBy: string[];
         status: 'pending' | 'checking' | 'passed' | 'failed' | 'skipped'
+}
   };
 
+}
 export interface Epic16PrerequisiteConfig {
     enabledCategories: string[];
     skipChecks: string[];
@@ -75,6 +82,7 @@ export interface Epic16PrerequisiteConfig {
         postgres?: string;
         stripe?: string;
         claude?: string;
+}
     };
     environment: 'development' | 'staging' | 'production';
     region?: string;

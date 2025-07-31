@@ -8,6 +8,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 
 }
+}
 export interface ReferrerPolicyConfig {
   id: string;
   name: string;
@@ -23,6 +24,7 @@ export interface ReferrerPolicyConfig {
       method?: string | string[];
       policy: ReferrerPolicyValue;
       exactMatch: boolean;
+}
 }
     }>;
     domainSpecific?: Array<{
@@ -79,6 +81,7 @@ export type ReferrerPolicyValue =
   | 'unsafe-url';
 
 }
+}
 export interface ReferrerViolation {
   id: string;
   timestamp: Date;
@@ -89,6 +92,7 @@ export interface ReferrerViolation {
     userAgent: string;
     ip: string;
     userId?: string;
+}
 }
   };
   
@@ -123,6 +127,7 @@ export interface ReferrerViolation {
   };
 }
 
+}
 }
 export interface ReferrerPolicyStatistics {
   timeRange: { start: Date; end: Date };

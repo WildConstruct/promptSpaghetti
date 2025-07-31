@@ -265,6 +265,7 @@ export const OPERATION_MODIFIERS: Record<DataOperation, OperationModifier> = {
   riskMultiplier: 1.1,
 };
 
+}
 export interface OperationModifier {
   requestMultiplier: number;
   volumeMultiplier: number;
@@ -273,6 +274,7 @@ export interface OperationModifier {
   /**
   * Environment-Specific Configurations
   */
+}
 }
 export const ENVIRONMENT_CONFIGURATIONS = {
   DEVELOPMENT: {
@@ -417,9 +419,9 @@ export class DataRetrievalConfigurationFactory {
   /**
    * Create operation-specific limits based on base limits and operation
    */
-  public static createOperationLimits(()
+  public static createOperationLimits(((
     baseLimits: DataRetrievalLimits,
-    operation: DataOperation,
+    operation: DataOperation
   ): DataRetrievalLimits {
   const modifier = OPERATION_MODIFIERS[operation];
   if (!modifier) {
@@ -516,5 +518,6 @@ export class DataRetrievalConfigurationFactory {
   isValid: boolean;
   errors: string;
   warnings: string;
+}
 }
 export default DataRetrievalConfigurationFactory;

@@ -6,12 +6,14 @@
  */
 import React from 'react';
 
+}
 export interface DirectorAnalyticsViewProps {
     conversionData: unknown;
     performanceData: unknown;
     timeRange: {
         startTime: number;
         endTime: number;
+}
     };
     userId?: number;
     loading: boolean;

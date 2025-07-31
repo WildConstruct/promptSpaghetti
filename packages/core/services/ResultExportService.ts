@@ -8,6 +8,7 @@
 import { PreviewResultWithPath, ExecutionPath } from '../types/ExecutionPath';
 import { exportResults, ExportRequest, ExportResult } from '../../../server/src/exporter';
 
+}
 export interface ResultExportOptions {
   format: ExportFormat;
   includeMetadata: boolean;
@@ -20,6 +21,7 @@ export interface ResultExportOptions {
   sceneNumbering?: boolean;
   shotBreakdown?: boolean;
   timingNotes?: boolean;
+}
 };
   // VFX options
   vfxOptions?: {
@@ -54,12 +56,15 @@ export type ExportFormat =
   | 'variance-report'
   | 'batch-summary';
 
+}
 export interface IndividualExportData {
   result: PreviewResultWithPath;
   index: number;
   totalResults: number;
   exportedAt: string;
   sourceGraph?: any;
+}
+}
 }
 export interface BatchExportData {
   results: PreviewResultWithPath;
@@ -70,6 +75,7 @@ export interface BatchExportData {
   uniqueSeeds: number;
   varianceScore: number;
   commonElements: string;
+}
 };
   exportedAt: string;
   sourceGraph?: any;
@@ -83,6 +89,7 @@ export class ResultExportService {
     totalResults: number,
     options: ResultExportOptions,
     sourceGraph?: any): Promise<ExportResult> {
+
     const exportData: IndividualExportData = {
       result,
       index: resultIndex,
@@ -101,6 +108,7 @@ export class ResultExportService {
     options: ResultExportOptions,
     sourceGraph?: any
   ): Promise<ExportResult> {
+
   const selectedResults = selectedIndices.map(index => results[index]).filter(Boolean);
   const aggregateStats = this.calculateAggregateStats(selectedResults);
     const exportData: BatchExportData = {
@@ -123,6 +131,7 @@ export class ResultExportService {
     options: ResultExportOptions,
     sourceGraph?: any
   ): Promise<ExportResult> {
+
   const comparisonData = {
   results,
   comparison: this.generateComparisonAnalysis(results),
@@ -320,6 +329,7 @@ export class ResultExportService {
     options: ResultExportOptions,
     filename: string,
     exportType: 'individual' | 'batch' | 'comparison'): Promise<ExportResult> {
+
   // Transform data to match existing export system format
   const exportRequest: ExportRequest = {
   format: this.mapToExistingFormat(options.format),
@@ -387,6 +397,7 @@ export class ResultExportService {
     options: ResultExportOptions,
     filename: string,
     exportType: string): Promise<ExportResult> {
+
   switch (options.format) {
   case 'plain-text':,
   return this.exportPlainText(data, options);

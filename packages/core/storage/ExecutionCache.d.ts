@@ -8,6 +8,7 @@ import { OptimizedGraphStorage } from './OptimizedGraphStorage';
  * Cache performance metrics
  */
 
+}
 interface CacheMetrics {
     totalExecutions: number;
     cacheHits: number;
@@ -38,6 +39,7 @@ export declare class ExecutionCache {
         storage: OptimizedGraphStorage;
         isFromCache: boolean;
         nodeMap: Map<string, Node>;
+}
     }>;
     /**
      * Cache execution result with dependency tracking

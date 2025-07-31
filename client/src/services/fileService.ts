@@ -7,20 +7,29 @@ import { useAuthStore } from '../stores/authStore';
 
 // Dependency Injection Interfaces
 
+}
 export interface HttpClient {
   request<T>(url: string, options?: RequestInit): Promise<T>;
 }
+}
+}
 export interface AuthProvider {
   getToken(): string | null;
+}
+}
 }
 export interface Logger {
   error(message: string, context?: Record<string, unknown>): void;
   info(message: string, context?: Record<string, unknown>): void;
   warn(message: string, context?: Record<string, unknown>): void;
 }
+}
+}
 export interface FileServiceConfig {
   baseUrl: string;,
   enableMockFallback: boolean;
+}
+}
 }
 export interface FileServiceDependencies {
   httpClient: HttpClient;,
@@ -28,11 +37,15 @@ export interface FileServiceDependencies {
   logger: Logger;,
   config: FileServiceConfig;
 }
+}
+}
 export interface FileOperationResponse {
   success: boolean;
   message?: string;
   data?: unknown;
   error?: string;
+}
+}
 }
 export interface TreeNode {
   id: string;,
@@ -45,13 +58,14 @@ export interface TreeNode {
   tags: string;
   children?: TreeNode;
   isExpanded?: boolean;
-  metadata?: {,
+  metadata?: {
   nodeCount?: number;
   edgeCount?: number;
   description?: string;
   author?: string;
   version?: string;
   thumbnail?: string;
+}
 };
   permissions?: {
   read: boolean;,
@@ -60,12 +74,14 @@ export interface TreeNode {
   share: boolean;
 };
 }
+}
 export interface FileStats {
   totalFiles: number;,
   totalFolders: number;
   totalSize: number;,
   recentFiles: TreeNode;
 class FileService {
+}
   constructor(private deps: FileServiceDependencies) {}
   // Factory method for creating with default dependencies
   static createDefault(): FileService {
@@ -73,7 +89,7 @@ class FileService {
   httpClient: new DefaultHttpClient(),
   authProvider: new AuthStoreProvider(),
   logger: new ConsoleLogger(),
-  config: {,
+  config: {
   baseUrl: import.meta.env.VITE_API_URL || '',
   enableMockFallback: true,
 });
@@ -90,10 +106,11 @@ class FileService {
    * Make authenticated API request using injected HTTP client
    */
   private async makeRequest<T>(url: string, options: RequestInit = {}): Promise<T> {
+
     return this.deps.httpClient.request<T>(`${this.deps.config.baseUrl}${url}`, {)}
   }
       ...options,
-      headers: {,
+      headers: {
         ...this.getHeaders(),
         ...options.headers
     });
@@ -101,6 +118,7 @@ class FileService {
    * List directory contents
    */
   async listDirectory(path: string = '/'): Promise<TreeNode> {
+
     try {
       return await this.makeRequest<TreeNode>(`/api/files/list?path=${encodeURIComponent(path)}`);}
     } catch (error) {
@@ -118,6 +136,7 @@ class FileService {
    * Move file or folder from source to target path
    */
   async moveFile(sourcePath: string, targetPath: string): Promise<FileOperationResponse> {
+
     try {
       return await this.makeRequest<FileOperationResponse>('/api/files/move', {)
   method: 'POST',
@@ -144,6 +163,7 @@ class FileService {
    * Copy file or folder from source to target path
    */
   async copyFile(sourcePath: string, targetPath: string): Promise<FileOperationResponse> {
+
     try {
       return await this.makeRequest<FileOperationResponse>('/api/files/copy', {)
   method: 'POST',
@@ -170,6 +190,7 @@ class FileService {
    * Rename file or folder
    */
   async renameFile(path: string, newName: string): Promise<FileOperationResponse> {
+
     try {
       return await this.makeRequest<FileOperationResponse>('/api/files/rename', {)
   method: 'POST',
@@ -196,6 +217,7 @@ class FileService {
    * Delete file or folder
    */
   async deleteFile(path: string): Promise<FileOperationResponse> {
+
     try {
       return await this.makeRequest<FileOperationResponse>('/api/files/delete', {)
   method: 'DELETE',
@@ -221,6 +243,7 @@ class FileService {
    * Create new folder
    */
   async createFolder(parentPath: string, folderName: string): Promise<FileOperationResponse> {
+
     try {
       return await this.makeRequest<FileOperationResponse>('/api/files/create-folder', {)
   method: 'POST',
@@ -247,6 +270,7 @@ class FileService {
    * Upload file to specified directory
    */
   async uploadFile(parentPath: string, file: File): Promise<FileOperationResponse> {
+
     try {
       const formData = new FormData();
       formData.append('file', file);
@@ -255,7 +279,7 @@ class FileService {
       const response = await fetch(`${this.deps.config.baseUrl}/api/files/upload`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Authorization': token ? `Bearer ${token}` : ''}
           // Don't set Content-Type for FormData, let browser set it with boundary
   },
@@ -286,6 +310,7 @@ class FileService {
    * Get file/folder properties and metadata
    */
   async getProperties(path: string): Promise<TreeNode | null> {
+
     try {
       return await this.makeRequest<TreeNode>(`/api/files/properties?path=${encodeURIComponent(path)}`);}
     } catch (error) {
@@ -300,6 +325,7 @@ class FileService {
    * Search files and folders
    */
   async searchFiles(query: string, searchIn: 'name' | 'content' | 'tags' | 'all' = 'name'): Promise<TreeNode> {
+
     try {
       return await this.makeRequest<TreeNode>(`/api/files/search?q=${encodeURIComponent(query)}&searchIn=${searchIn}`);}
     } catch (error) {
@@ -315,6 +341,7 @@ class FileService {
    * Get file statistics for dashboard
    */
   async getFileStats(path: string = '/'): Promise<FileStats> {
+
     try {
       return await this.makeRequest<FileStats>(`/api/files/stats?path=${encodeURIComponent(path)}`);}
     } catch (error) {
@@ -334,6 +361,7 @@ class FileService {
    * Check if file/folder exists
    */
   async exists(path: string): Promise<boolean> {
+
     try {
       const response = await this.makeRequest<{ exists: boolean }>(`/api/files/exists?path=${encodeURIComponent(path)}`);}
       return response.exists;
@@ -352,6 +380,7 @@ class FileService {
     paths: string,
     targetPath?: string
   ): Promise<FileOperationResponse> {
+
     try {
       return await this.makeRequest<FileOperationResponse>('/api/files/batch', {)
   method: 'POST',
@@ -410,7 +439,7 @@ class FileService {
                 createdAt: new Date('2024-01-08'),
                 tags: ['character', 'rpg'],
                 permissions: { read: true, write: true, delete: true, share: true },
-                metadata: {,
+                metadata: {
   nodeCount: 12,
   edgeCount: 15,
   description: 'RPG character generator with stats and background',
@@ -427,7 +456,7 @@ class FileService {
                 createdAt: new Date('2024-01-06'),
                 tags: ['story', 'creative'],
                 permissions: { read: true, write: true, delete: true, share: true },
-                metadata: {,
+                metadata: {
   nodeCount: 8,
   edgeCount: 10,
   description: 'Creative story prompt generator',
@@ -454,7 +483,7 @@ class FileService {
                 createdAt: new Date('2024-01-12'),
                 tags: ['basic', 'template'],
                 permissions: { read: true, write: true, delete: true, share: true },
-                metadata: {,
+                metadata: {
   nodeCount: 3,
   edgeCount: 2,
   description: 'Simple prompt template',
@@ -480,6 +509,7 @@ class FileService {
 // Concrete Implementation Classes
 class DefaultHttpClient implements HttpClient {
   async request<T>(url: string, options: RequestInit = {}): Promise<T> {
+
     const response = await fetch(url, options);
     if (!response.ok) {
       let errorData = { message: `Request failed with status ${response.status}` };}

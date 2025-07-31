@@ -1,5 +1,6 @@
 import React from 'react';
 
+}
 interface ValidationMessageProps {
   message: string;
   type?: 'error' | 'warning' | 'success' | 'info';
@@ -8,6 +9,7 @@ interface ValidationMessageProps {
   message,
   type = 'error',
   className = ''
+}
 }) => {
   const typeClasses = {
   error: 'text-red-600 bg-red-50 border-red-200',

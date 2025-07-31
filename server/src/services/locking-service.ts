@@ -6,6 +6,7 @@ import { Database } from '../database/connection';
 import { WorkflowLock } from '../database/workflow-models';
 
 }
+}
 export interface LockRequest {
   resource_id: string;
   user_id: string;
@@ -17,7 +18,9 @@ export interface LockRequest {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface LockPolicy {
   id: string;
@@ -49,7 +52,9 @@ export interface LockPolicy {
   updated_at: Date;
 }
 }
+}
 
+}
 }
 export interface LockConflict {
   id: string;
@@ -64,7 +69,9 @@ export interface LockConflict {
   resolution_action?: string;
 }
 }
+}
 
+}
 }
 export interface LockQueue {
   id: string;
@@ -77,7 +84,9 @@ export interface LockQueue {
   notification_sent: boolean;
 }
 }
+}
 
+}
 }
 export interface LockNotification {
   id: string;
@@ -93,7 +102,9 @@ export interface LockNotification {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface LockingStatistics {
   total_locks: number;
@@ -108,6 +119,7 @@ export interface LockingStatistics {
     resource_id: string;
     conflict_count: number;
     avg_wait_time: number;
+}
 }
   }>;
 }

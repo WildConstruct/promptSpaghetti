@@ -17,6 +17,7 @@ import {
   Settings,
   RefreshCw
 } from 'lucide-react';
+}
 interface ThreatData {
   id: string;,
   type: 'malware' | 'phishing' | 'brute_force' | 'ddos' | 'injection' | 'data_breach';
@@ -27,13 +28,16 @@ interface ThreatData {
   detected_at: Date;,
   status: 'active' | 'blocked' | 'investigating';
   description: string;
+}
 interface ThreatStats {
   total_threats: number;,
   active_threats: number;
   blocked_threats: number;,
   threat_types: Record<string, number>;
   severity_distribution: Record<string, number>;
+}
   hourly_detection_rate: Array<{ hour: number; count: number }>;
+}
 interface ThreatDetectionVisualizerProps {
   onThreatClick?: (threat: ThreatData) => void;
   refreshInterval?: number;
@@ -46,6 +50,7 @@ interface ThreatDetectionVisualizerProps {
   if (autoRefresh) {
   const interval = setInterval(loadThreatData, refreshInterval);
   return () => clearInterval(interval);
+}
 }, [autoRefresh, refreshInterval]);
   const loadThreatData = async () => {
   setIsLoading(true);
@@ -99,7 +104,7 @@ interface ThreatDetectionVisualizerProps {
   total_threats: 47,
   active_threats: 3,
   blocked_threats: 41,
-  threat_types: {,
+  threat_types: {
   brute_force: 15,
   injection: 12,
   phishing: 8,
@@ -107,7 +112,7 @@ interface ThreatDetectionVisualizerProps {
   malware: 3,
   data_breach: 2,
 },
-  severity_distribution: {,
+  severity_distribution: {
   critical: 5,
   high: 18,
   medium: 19,

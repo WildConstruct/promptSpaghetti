@@ -28,6 +28,7 @@ import { DiagnosticService } from '../admin/DiagnosticService';
 import { HealthCheckFramework } from '../admin/HealthCheckFramework';
 
 }
+}
 export interface AdvancedSecurityMLToolsConfig {
   threat_detection: {
     enabled: boolean;
@@ -38,6 +39,7 @@ export interface AdvancedSecurityMLToolsConfig {
     campaign_correlation: boolean;
     threat_hunting_automation: boolean;
     ioc_extraction: boolean;
+}
 }
   };
   behavioral_analysis: {
@@ -100,6 +102,7 @@ export interface AdvancedSecurityMLToolsConfig {
 }
 
 }
+}
 export interface ThreatDetectionModel {
   id: string;
   name: string;
@@ -112,6 +115,7 @@ export interface ThreatDetectionModel {
   deployment_status: ModelDeploymentStatus;
   created_at: number;
   updated_at: number;
+}
 }
 }
 
@@ -140,6 +144,7 @@ export enum DetectionTechnique {
 }
 
 }
+}
 export interface AccuracyMetrics {
   overall_accuracy: number;
   precision_by_threat: Record<ThreatType, number>;
@@ -151,7 +156,9 @@ export interface AccuracyMetrics {
   confidence_distribution: ConfidenceDistribution;
 }
 }
+}
 
+}
 }
 export interface ConfidenceDistribution {
   high_confidence: number; // >90%
@@ -160,7 +167,9 @@ export interface ConfidenceDistribution {
   uncertain: number; // <50%
 }
 }
+}
 
+}
 }
 export interface ThreatModelConfig {
   algorithm_type: MLAlgorithm;
@@ -171,7 +180,9 @@ export interface ThreatModelConfig {
   explainability_config: ExplainabilityConfig;
 }
 }
+}
 
+}
 }
 export interface FeatureSet {
   category: FeatureCategory;
@@ -179,6 +190,7 @@ export interface FeatureSet {
   weight: number;
   extraction_method: string;
   quality_metrics: FeatureQualityMetrics;
+}
 }
 }
 
@@ -194,6 +206,7 @@ export enum FeatureCategory {
 }
 
 }
+}
 export interface FeatureQualityMetrics {
   information_gain: number;
   correlation_with_target: number;
@@ -202,7 +215,9 @@ export interface FeatureQualityMetrics {
   computational_cost: number;
 }
 }
+}
 
+}
 }
 export interface EnsembleConfig {
   models: EnsembleModel[];
@@ -212,7 +227,9 @@ export interface EnsembleConfig {
   consensus_requirement: number;
 }
 }
+}
 
+}
 }
 export interface EnsembleModel {
   model_id: string;
@@ -220,6 +237,7 @@ export interface EnsembleModel {
   specialization: ThreatType[];
   weight: number;
   confidence_calibration: ConfidenceCalibration;
+}
 }
 }
 
@@ -232,10 +250,12 @@ export enum VotingMethod {
 }
 
 }
+}
 export interface ConfidenceCalibration {
   method: CalibrationMethod;
   parameters: Record<string, number>;
   validation_score: number;
+}
 }
 }
 
@@ -247,6 +267,7 @@ export enum CalibrationMethod {
 }
 
 }
+}
 export interface PreprocessingStep {
   step_name: string;
   step_type: PreprocessingType;
@@ -254,6 +275,7 @@ export interface PreprocessingStep {
   order: number;
   conditional: boolean;
   conditions?: PreprocessingCondition[];
+}
 }
 }
 
@@ -268,6 +290,7 @@ export enum PreprocessingType {
 }
 
 }
+}
 export interface PreprocessingCondition {
   field: string;
   operator: string;
@@ -275,7 +298,9 @@ export interface PreprocessingCondition {
   action: string;
 }
 }
+}
 
+}
 }
 export interface PostprocessingRule {
   rule_id: string;
@@ -286,7 +311,9 @@ export interface PostprocessingRule {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface RuleCondition {
   field: string;
@@ -295,13 +322,16 @@ export interface RuleCondition {
   logical_operator?: 'AND' | 'OR' | 'NOT';
 }
 }
+}
 
+}
 }
 export interface RuleAction {
   action_type: PostprocessingActionType;
   parameters: Record<string, unknown>;
   confidence_adjustment?: number;
   label_override?: string;
+}
 }
 }
 
@@ -315,12 +345,14 @@ export enum PostprocessingActionType {
 }
 
 }
+}
 export interface ExplainabilityConfig {
   method: ExplainabilityMethod;
   feature_importance_threshold: number;
   explanation_depth: ExplanationDepth;
   visualization_enabled: boolean;
   report_generation: boolean;
+}
 }
 }
 
@@ -340,6 +372,7 @@ export enum ExplanationDepth {
 }
 
 }
+}
 export interface TrainingDataInfo {
   dataset_id: string;
   dataset_name: string;
@@ -353,7 +386,9 @@ export interface TrainingDataInfo {
   threat_distribution: Record<ThreatType, number>;
 }
 }
+}
 
+}
 }
 export interface TemporalCoverage {
   start_date: number;
@@ -363,13 +398,16 @@ export interface TemporalCoverage {
   seasonal_representation: SeasonalRepresentation;
 }
 }
+}
 
+}
 }
 export interface SeasonalRepresentation {
   quarters: Record<string, number>;
   months: Record<string, number>;
   days_of_week: Record<string, number>;
   hours_of_day: Record<string, number>;
+}
 }
 }
 
@@ -382,6 +420,7 @@ export enum ModelDeploymentStatus {
   MAINTENANCE = 'maintenance'
 }
 
+}
 }
 export interface BehavioralAnalysisProfile {
   id: string;
@@ -396,6 +435,7 @@ export interface BehavioralAnalysisProfile {
   temporal_analysis: TemporalAnalysis;
   created_at: number;
   updated_at: number;
+}
 }
 }
 
@@ -417,6 +457,7 @@ export enum ProfileType {
 }
 
 }
+}
 export interface BaselinePeriod {
   start_date: number;
   end_date: number;
@@ -426,7 +467,9 @@ export interface BaselinePeriod {
   stability_score: number;
 }
 }
+}
 
+}
 }
 export interface BehavioralPattern {
   pattern_id: string;
@@ -437,6 +480,7 @@ export interface BehavioralPattern {
   confidence: number;
   attributes: PatternAttribute[];
   correlations: PatternCorrelation[];
+}
 }
 }
 
@@ -450,11 +494,13 @@ export enum PatternType {
 }
 
 }
+}
 export interface PatternFrequency {
   occurrence_rate: number;
   regularity_score: number;
   seasonal_variation: number;
   trend_direction: TrendDirection;
+}
 }
 }
 
@@ -467,12 +513,14 @@ export enum TrendDirection {
 }
 
 }
+}
 export interface PatternAttribute {
   attribute_name: string;
   attribute_value: unknown;
   attribute_type: AttributeType;
   importance: number;
   variability: number;
+}
 }
 }
 
@@ -485,11 +533,13 @@ export enum AttributeType {
 }
 
 }
+}
 export interface PatternCorrelation {
   correlated_pattern_id: string;
   correlation_strength: number;
   correlation_type: CorrelationType;
   lag_time_minutes?: number;
+}
 }
 }
 
@@ -501,6 +551,7 @@ export enum CorrelationType {
 }
 
 }
+}
 export interface RiskFactor {
   factor_id: string;
   factor_name: string;
@@ -510,6 +561,7 @@ export interface RiskFactor {
   probability_score: number;
   mitigation_recommendations: string[];
   evidence: RiskEvidence[];
+}
 }
 }
 
@@ -530,12 +582,14 @@ export enum RiskLevel {
 }
 
 }
+}
 export interface RiskEvidence {
   evidence_type: EvidenceType;
   evidence_data: Record<string, unknown>;
   confidence: number;
   timestamp: number;
   source: string;
+}
 }
 }
 
@@ -549,6 +603,7 @@ export enum EvidenceType {
 }
 
 }
+}
 export interface AnomalyScore {
   score_type: AnomalyScoreType;
   score_value: number;
@@ -556,6 +611,7 @@ export interface AnomalyScore {
   severity: AnomālySeverity;
   contributing_factors: ContributingFactor[];
   timestamp: number;
+}
 }
 }
 
@@ -574,6 +630,7 @@ export enum AnomālySeverity {
 }
 
 }
+}
 export interface ContributingFactor {
   factor_name: string;
   contribution_weight: number;
@@ -581,7 +638,9 @@ export interface ContributingFactor {
   remediation_suggestion?: string;
 }
 }
+}
 
+}
 }
 export interface PeerComparison {
   peer_group_id: string;
@@ -592,7 +651,9 @@ export interface PeerComparison {
   group_statistics: GroupStatistics;
 }
 }
+}
 
+}
 }
 export interface DeviationMetric {
   metric_name: string;
@@ -603,7 +664,9 @@ export interface DeviationMetric {
   percentile: number;
 }
 }
+}
 
+}
 }
 export interface GroupStatistics {
   total_members: number;
@@ -613,7 +676,9 @@ export interface GroupStatistics {
   last_updated: number;
 }
 }
+}
 
+}
 }
 export interface TemporalAnalysis {
   trends: TrendAnalysis[];
@@ -622,7 +687,9 @@ export interface TemporalAnalysis {
   forecasts: BehaviorForecast[];
 }
 }
+}
 
+}
 }
 export interface TrendAnalysis {
   metric_name: string;
@@ -632,7 +699,9 @@ export interface TrendAnalysis {
   statistical_significance: number;
 }
 }
+}
 
+}
 }
 export interface SeasonalityAnalysis {
   seasonal_patterns: SeasonalPattern[];
@@ -641,7 +710,9 @@ export interface SeasonalityAnalysis {
   predictability_score: number;
 }
 }
+}
 
+}
 }
 export interface SeasonalPattern {
   pattern_type: 'daily' | 'weekly' | 'monthly' | 'quarterly';
@@ -650,7 +721,9 @@ export interface SeasonalPattern {
   pattern_amplitude: number;
 }
 }
+}
 
+}
 }
 export interface ChangePoint {
   timestamp: number;
@@ -659,6 +732,7 @@ export interface ChangePoint {
   confidence: number;
   affected_metrics: string[];
   potential_causes: string[];
+}
 }
 }
 
@@ -670,6 +744,7 @@ export enum ChangeType {
 }
 
 }
+}
 export interface BehaviorForecast {
   metric_name: string;
   forecast_horizon_hours: number;
@@ -678,7 +753,9 @@ export interface BehaviorForecast {
   forecast_accuracy: ForecastAccuracy;
 }
 }
+}
 
+}
 }
 export interface ForecastPoint {
   timestamp: number;
@@ -686,7 +763,9 @@ export interface ForecastPoint {
   confidence: number;
 }
 }
+}
 
+}
 }
 export interface ConfidenceInterval {
   timestamp: number;
@@ -695,7 +774,9 @@ export interface ConfidenceInterval {
   confidence_level: number;
 }
 }
+}
 
+}
 }
 export interface ForecastAccuracy {
   mape: number; // Mean Absolute Percentage Error
@@ -704,7 +785,9 @@ export interface ForecastAccuracy {
   forecast_skill: number;
 }
 }
+}
 
+}
 }
 export interface RiskAssessment {
   assessment_id: string;
@@ -720,7 +803,9 @@ export interface RiskAssessment {
   next_assessment_due: number;
 }
 }
+}
 
+}
 }
 export interface RiskComponent {
   component_id: string;
@@ -733,6 +818,7 @@ export interface RiskComponent {
   trend: ComponentTrend;
 }
 }
+}
 
 export enum RiskComponentType {
   BEHAVIORAL_RISK = 'behavioral_risk',
@@ -743,6 +829,7 @@ export enum RiskComponentType {
 }
 
 }
+}
 export interface ComponentTrend {
   direction: TrendDirection;
   velocity: number;
@@ -750,7 +837,9 @@ export interface ComponentTrend {
   duration_days: number;
 }
 }
+}
 
+}
 }
 export interface MitigationStrategy {
   strategy_id: string;
@@ -762,6 +851,7 @@ export interface MitigationStrategy {
   time_to_implement_hours: number;
   prerequisites: string[];
   success_metrics: SuccessMetric[];
+}
 }
 }
 
@@ -780,6 +870,7 @@ export enum ComplexityLevel {
 }
 
 }
+}
 export interface SuccessMetric {
   metric_name: string;
   target_value: number;
@@ -787,7 +878,9 @@ export interface SuccessMetric {
   evaluation_period_days: number;
 }
 }
+}
 
+}
 }
 export interface BusinessImpact {
   financial_impact: FinancialImpact;
@@ -797,7 +890,9 @@ export interface BusinessImpact {
   overall_impact_score: number;
 }
 }
+}
 
+}
 }
 export interface FinancialImpact {
   potential_loss_min: number;
@@ -807,7 +902,9 @@ export interface FinancialImpact {
   impact_categories: string[];
 }
 }
+}
 
+}
 }
 export interface OperationalImpact {
   service_disruption_hours: number;
@@ -816,7 +913,9 @@ export interface OperationalImpact {
   recovery_time_hours: number;
 }
 }
+}
 
+}
 }
 export interface ReputationalImpact {
   customer_impact_score: number;
@@ -825,7 +924,9 @@ export interface ReputationalImpact {
   brand_damage_potential: number;
 }
 }
+}
 
+}
 }
 export interface RegulatoryImpact {
   compliance_violations: ComplianceViolation[];
@@ -834,7 +935,9 @@ export interface RegulatoryImpact {
   reporting_requirements: ReportingRequirement[];
 }
 }
+}
 
+}
 }
 export interface ComplianceViolation {
   regulation: string;
@@ -843,7 +946,9 @@ export interface ComplianceViolation {
   potential_penalty: number;
 }
 }
+}
 
+}
 }
 export interface ReportingRequirement {
   regulation: string;
@@ -852,7 +957,9 @@ export interface ReportingRequirement {
   responsible_parties: string[];
 }
 }
+}
 
+}
 }
 export interface Recommendation {
   recommendation_id: string;
@@ -864,6 +971,7 @@ export interface Recommendation {
   expected_outcomes: ExpectedOutcome[];
   dependencies: string[];
   estimated_effort_hours: number;
+}
 }
 }
 
@@ -883,6 +991,7 @@ export enum RecommendationPriority {
 }
 
 }
+}
 export interface ImplementationStep {
   step_number: number;
   step_description: string;
@@ -892,7 +1001,9 @@ export interface ImplementationStep {
   success_criteria: string[];
 }
 }
+}
 
+}
 }
 export interface ExpectedOutcome {
   outcome_description: string;
@@ -901,7 +1012,9 @@ export interface ExpectedOutcome {
   timeline_days: number;
 }
 }
+}
 
+}
 }
 export interface AdvancedSecurityMLMetrics {
   threat_detection_metrics: ThreatDetectionMetrics;
@@ -913,7 +1026,9 @@ export interface AdvancedSecurityMLMetrics {
   business_impact_metrics: BusinessImpactMetrics;
 }
 }
+}
 
+}
 }
 export interface ThreatDetectionMetrics {
   total_threats_detected: number;
@@ -926,7 +1041,9 @@ export interface ThreatDetectionMetrics {
   model_confidence_distribution: ConfidenceDistribution;
 }
 }
+}
 
+}
 }
 export interface BehavioralAnalysisMetrics {
   profiles_analyzed: number;
@@ -938,7 +1055,9 @@ export interface BehavioralAnalysisMetrics {
   prediction_accuracy: number;
 }
 }
+}
 
+}
 }
 export interface AnomalyDetectionMetrics {
   anomalies_detected: number;
@@ -950,7 +1069,9 @@ export interface AnomalyDetectionMetrics {
   multi_dimensional_accuracy: number;
 }
 }
+}
 
+}
 }
 export interface RiskScoringMetrics {
   risk_assessments_completed: number;
@@ -962,7 +1083,9 @@ export interface RiskScoringMetrics {
   risk_trend_analysis_accuracy: number;
 }
 }
+}
 
+}
 }
 export interface PatternRecognitionMetrics {
   patterns_discovered: number;
@@ -974,7 +1097,9 @@ export interface PatternRecognitionMetrics {
   attack_sequence_detection_rate: number;
 }
 }
+}
 
+}
 }
 export interface SystemPerformanceMetrics {
   processing_latency_ms: ProcessingLatency;
@@ -985,7 +1110,9 @@ export interface SystemPerformanceMetrics {
   error_rates: ErrorRates;
 }
 }
+}
 
+}
 }
 export interface ProcessingLatency {
   threat_detection_avg_ms: number;
@@ -995,7 +1122,9 @@ export interface ProcessingLatency {
   pattern_recognition_avg_ms: number;
 }
 }
+}
 
+}
 }
 export interface ThroughputMetrics {
   events_processed_per_second: number;
@@ -1004,7 +1133,9 @@ export interface ThroughputMetrics {
   anomalies_analyzed_per_minute: number;
 }
 }
+}
 
+}
 }
 export interface ResourceUtilization {
   cpu_utilization_percent: number;
@@ -1014,7 +1145,9 @@ export interface ResourceUtilization {
   storage_iops: number;
 }
 }
+}
 
+}
 }
 export interface AccuracyTrends {
   threat_detection_trend: TrendData[];
@@ -1023,7 +1156,9 @@ export interface AccuracyTrends {
   risk_scoring_trend: TrendData[];
 }
 }
+}
 
+}
 }
 export interface TrendData {
   timestamp: number;
@@ -1031,7 +1166,9 @@ export interface TrendData {
   sample_size: number;
 }
 }
+}
 
+}
 }
 export interface ErrorRates {
   model_execution_errors: number;
@@ -1040,7 +1177,9 @@ export interface ErrorRates {
   timeout_errors: number;
 }
 }
+}
 
+}
 }
 export interface BusinessImpactMetrics {
   threats_prevented: number;
@@ -1050,6 +1189,7 @@ export interface BusinessImpactMetrics {
   analyst_productivity_improvement: number;
   security_posture_improvement: number;
   compliance_score_improvement: number;
+}
 }
 }
 

@@ -7,6 +7,7 @@
  */
 import React from 'react';
 
+}
 interface BusinessValueDemoProps {
     className?: string;
     templateExample?: {
@@ -15,6 +16,7 @@ interface BusinessValueDemoProps {
         description: string;
         category: string;
 
+}
     };
 
 export declare const BusinessValueDemo: React.FC<BusinessValueDemoProps>;

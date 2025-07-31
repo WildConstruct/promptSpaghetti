@@ -30,11 +30,13 @@ import {
 
 // Template performance indicator interfaces
 
+}
 export interface TemplatePerformanceIndicatorsProps {
   templateId: string;
   templateMetadata: TemplateMetadata;
   funnelDefinition: ConversionFunnelDefinition;
   analyticsInfrastructure: ConversionAnalyticsInfrastructure;
+}
   timeRange?: { start: number; end: number };
   displayMode?: IndicatorDisplayMode;
   comparisonEnabled?: boolean;
@@ -42,6 +44,7 @@ export interface TemplatePerformanceIndicatorsProps {
   onIndicatorClick?: (indicator: PerformanceIndicator) => void;
   onOptimizationAction?: (action: OptimizationAction) => void;
   onExport?: (data: TemplatePerformanceExportData) => void;
+}
 }
 export interface TemplateMetadata {
   templateId: string;
@@ -60,6 +63,8 @@ export interface TemplateMetadata {
   status: TemplateStatus;
   visibility: TemplateVisibility;
 }
+}
+}
 export interface TemplatePricing {
   type: 'free' | 'premium' | 'subscription';
   price?: number;
@@ -67,6 +72,7 @@ export interface TemplatePricing {
   discountPercentage?: number;
   subscriptionTier?: string;
   paymentModel: 'one_time' | 'recurring' | 'usage_based'
+}
   }
 export type TemplateStatus = 'draft' | 'review' | 'published' | 'archived' | 'suspended';
 export type TemplateVisibility = 'public' | 'unlisted' | 'private' | 'premium_only';
@@ -79,6 +85,7 @@ export type IndicatorDisplayMode =
   | 'overlay'
   | 'mobile';
 
+}
 export interface TemplatePerformanceData {
   templateMetrics: TemplateMetrics;
   funnelPerformance: TemplateFunnelPerformance;
@@ -89,6 +96,8 @@ export interface TemplatePerformanceData {
   historicalTrends: PerformanceTrend;
   benchmarkComparison: BenchmarkComparison;
 }
+}
+}
 export interface TemplateMetrics {
   views: TemplateViewMetrics;
   engagement: TemplateEngagementMetrics;
@@ -97,6 +106,8 @@ export interface TemplateMetrics {
   quality: TemplateQualityMetrics;
   performance: TemplatePerformanceMetrics;
   lastUpdated: number;
+}
+}
 }
 export interface TemplateViewMetrics {
   totalViews: number;
@@ -109,11 +120,15 @@ export interface TemplateViewMetrics {
   bounceRate: number;
   viewSources: ViewSource;
 }
+}
+}
 export interface ViewSource {
   source: string;
   views: number;
   percentage: number;
   conversionRate: number;
+}
+}
 }
 export interface TemplateEngagementMetrics {
   engagementScore: number;
@@ -126,6 +141,8 @@ export interface TemplateEngagementMetrics {
   previewRate: number;
   downloadAttempts: number;
 }
+}
+}
 export interface TemplateConversionMetrics {
   overallConversionRate: number;
   conversionTrend: number;
@@ -134,6 +151,8 @@ export interface TemplateConversionMetrics {
   conversionsByDevice: DeviceConversionData;
   conversionsByTime: TimeConversionData;
   dropoffPoints: DropoffPoint;
+}
+}
 }
 export interface StepConversionData {
   stepId: string;
@@ -146,12 +165,16 @@ export interface StepConversionData {
   averageTime: number;
   optimizationScore: number;
 }
+}
+}
 export interface SourceConversionData {
   source: string;
   visits: number;
   conversions: number;
   conversionRate: number;
   quality: number;
+}
+}
 }
 export interface DeviceConversionData {
   deviceType: 'desktop' | 'mobile' | 'tablet';
@@ -160,11 +183,15 @@ export interface DeviceConversionData {
   conversionRate: number;
   averageTime: number;
 }
+}
+}
 export interface TimeConversionData {
   timeSlot: string;
   conversions: number;
   conversionRate: number;
   volume: number;
+}
+}
 }
 export interface DropoffPoint {
   stepId: string;
@@ -173,12 +200,16 @@ export interface DropoffPoint {
   dropoffCount: number;
   reasons: DropoffReason;
   severity: 'low' | 'medium' | 'high' | 'critical'
+}
   }
+}
 export interface DropoffReason {
   reason: string;
   frequency: number;
   impact: number;
   actionable: boolean;
+}
+}
 }
 export interface TemplateRevenueMetrics {
   totalRevenue: number;
@@ -191,17 +222,23 @@ export interface TemplateRevenueMetrics {
   revenueBySource: RevenueBySource;
   revenueTrend: RevenueTrendData;
 }
+}
+}
 export interface RevenueBySource {
   source: string;
   revenue: number;
   percentage: number;
   growth: number;
 }
+}
+}
 export interface RevenueTrendData {
   date: number;
   revenue: number;
   conversions: number;
   averageValue: number;
+}
+}
 }
 export interface TemplateQualityMetrics {
   qualityScore: number;
@@ -212,12 +249,16 @@ export interface TemplateQualityMetrics {
   reviewSentiment: ReviewSentiment;
   qualityFactors: QualityFactor;
 }
+}
+}
 export interface RatingDistribution {
   fiveStars: number;
   fourStars: number;
   threeStars: number;
   twoStars: number;
   oneStar: number;
+}
+}
 }
 export interface ReviewSentiment {
   positive: number;
@@ -226,18 +267,24 @@ export interface ReviewSentiment {
   sentimentScore: number;
   keyThemes: SentimentTheme;
 }
+}
+}
 export interface SentimentTheme {
   theme: string;
   sentiment: 'positive' | 'negative' | 'neutral';
   frequency: number;
   impact: number;
 }
+}
+}
 export interface QualityFactor {
   factor: string;
   score: number;
   weight: number;
   trend: 'improving' | 'declining' | 'stable'
+}
   }
+}
 export interface TemplatePerformanceMetrics {
   performanceScore: number;
   performanceTrend: number;
@@ -248,6 +295,8 @@ export interface TemplatePerformanceMetrics {
   seoScore: number;
   mobileScore: number;
 }
+}
+}
 export interface TemplateFunnelPerformance {
   funnelId: string;
   overallPerformance: FunnelOverallPerformance;
@@ -255,6 +304,8 @@ export interface TemplateFunnelPerformance {
   conversionPaths: ConversionPath;
   optimizationInsights: FunnelOptimizationInsight;
   performanceComparison: FunnelPerformanceComparison;
+}
+}
 }
 export interface FunnelOverallPerformance {
   conversionRate: number;
@@ -265,6 +316,8 @@ export interface FunnelOverallPerformance {
   efficiencyScore: number;
   bottleneckStep: string;
   topPerformingStep: string;
+}
+}
 }
 export interface FunnelStepPerformance {
   stepId: string;
@@ -281,7 +334,9 @@ export interface FunnelStepPerformance {
   satisfactionScore: number;
   optimizationPotential: number;
   performanceGrade: 'A' | 'B' | 'C' | 'D' | 'F'
+}
   }
+}
 export interface ConversionPath {
   pathId: string;
   steps: string;
@@ -290,6 +345,8 @@ export interface ConversionPath {
   averageValue: number;
   averageTime: number;
   efficiency: number;
+}
+}
 }
 export interface FunnelOptimizationInsight {
   type: OptimizationInsightType;
@@ -302,6 +359,7 @@ export interface FunnelOptimizationInsight {
   affectedSteps: string;
   actionItems: string;
 }
+}
 export type OptimizationInsightType = 
   | 'bottleneck_removal'
   | 'step_optimization'
@@ -310,6 +368,7 @@ export type OptimizationInsightType =
   | 'technical_fix'
   | 'user_experience';
 
+}
 export interface FunnelPerformanceComparison {
   categoryAverage: number;
   creatorAverage: number;
@@ -317,7 +376,9 @@ export interface FunnelPerformanceComparison {
   industryBenchmark: number;
   percentileRank: number;
   competitivePosition: 'leading' | 'above_average' | 'average' | 'below_average' | 'lagging'
+}
   }
+}
 export interface PerformanceIndicator {
   indicatorId: string;
   type: IndicatorType;
@@ -335,6 +396,7 @@ export interface PerformanceIndicator {
   thresholds: IndicatorThreshold;
   lastUpdated: number;
 }
+}
 export type IndicatorType = 
   | 'conversion_rate'
   | 'revenue_performance'
@@ -345,15 +407,18 @@ export type IndicatorType =
   | 'competitive_position'
   | 'optimization_opportunity';
 
+}
 export interface IndicatorTrend {
   direction: 'up' | 'down' | 'stable' | 'volatile';
   percentage: number;
   timeframe: string;
   confidence: number;
 }
+}
 export type IndicatorSeverity = 'critical' | 'warning' | 'info' | 'success';
 export type IndicatorStatus = 'healthy' | 'attention_needed' | 'critical' | 'improving' | 'declining';
 
+}
 export interface IndicatorAction {
   actionId: string;
   title: string;
@@ -362,11 +427,15 @@ export interface IndicatorAction {
   effort: 'low' | 'medium' | 'high';
   expectedImpact: number;
   actionType: 'optimization' | 'fix' | 'enhancement' | 'investigation'
+}
   }
+}
 export interface IndicatorVisualization {
   type: 'gauge' | 'progress' | 'trend' | 'comparison' | 'heatmap';
   config: VisualizationConfig;
   colorScheme: ColorScheme;
+}
+}
 }
 export interface VisualizationConfig {
   showTrend: boolean;
@@ -374,7 +443,9 @@ export interface VisualizationConfig {
   timeframe: string;
   granularity: string;
   format: 'percentage' | 'currency' | 'number' | 'time' | 'score'
+}
   }
+}
 export interface ColorScheme {
   primary: string;
   secondary: string;
@@ -383,12 +454,16 @@ export interface ColorScheme {
   error: string;
   neutral: string;
 }
+}
+}
 export interface IndicatorThreshold {
   level: 'excellent' | 'good' | 'fair' | 'poor' | 'critical';
   minValue: number;
   maxValue: number;
   color: string;
   description: string;
+}
+}
 }
 export interface TemplateCompetitivePosition {
   categoryRank: number;
@@ -401,11 +476,15 @@ export interface TemplateCompetitivePosition {
   opportunities: CompetitiveOpportunity;
   threats: CompetitiveThreat;
 }
+}
+}
 export interface CompetitiveStrength {
   area: string;
   score: number;
   description: string;
   advantage: string;
+}
+}
 }
 export interface CompetitiveWeakness {
   area: string;
@@ -414,6 +493,8 @@ export interface CompetitiveWeakness {
   impact: string;
   improvement: string;
 }
+}
+}
 export interface CompetitiveOpportunity {
   opportunity: string;
   description: string;
@@ -421,12 +502,16 @@ export interface CompetitiveOpportunity {
   effort: 'low' | 'medium' | 'high';
   timeframe: number;
 }
+}
+}
 export interface CompetitiveThreat {
   threat: string;
   description: string;
   severity: 'low' | 'medium' | 'high';
   probability: number;
   mitigation: string;
+}
+}
 }
 export interface TemplateOptimizationOpportunity {
   opportunityId: string;
@@ -441,6 +526,7 @@ export interface TemplateOptimizationOpportunity {
   successMetrics: OpportunityMetric;
   relatedIndicators: string;
 }
+}
 export type OpportunityCategory = 
   | 'conversion_optimization'
   | 'content_improvement'
@@ -449,6 +535,7 @@ export type OpportunityCategory =
   | 'user_experience'
   | 'pricing_strategy';
 
+}
 export interface OpportunityImpact {
   revenueIncrease: number;
   conversionImprovement: number;
@@ -456,19 +543,25 @@ export interface OpportunityImpact {
   ratingImprovement: number;
   confidenceLevel: number;
 }
+}
+}
 export interface OpportunityEffort {
   estimatedHours: number;
   skillsRequired: string;
   resourcesNeeded: string;
   complexity: 'simple' | 'moderate' | 'complex' | 'expert'
+}
   }
 export type OpportunityPriority = 'critical' | 'high' | 'medium' | 'low';
 
+}
 export interface OpportunityTimeline {
   estimatedDuration: number;
   milestones: OpportunityMilestone;
   dependencies: string;
   risks: OpportunityRisk;
+}
+}
 }
 export interface OpportunityMilestone {
   name: string;
@@ -476,11 +569,15 @@ export interface OpportunityMilestone {
   targetDate: number;
   deliverables: string;
 }
+}
+}
 export interface OpportunityRisk {
   risk: string;
   probability: number;
   impact: number;
   mitigation: string;
+}
+}
 }
 export interface OpportunityRequirement {
   requirement: string;
@@ -488,11 +585,15 @@ export interface OpportunityRequirement {
   description: string;
   critical: boolean;
 }
+}
+}
 export interface OpportunityMetric {
   metric: string;
   currentValue: number;
   targetValue: number;
   measurementMethod: string;
+}
+}
 }
 export interface PerformanceAlert {
   alertId: string;
@@ -507,6 +608,7 @@ export interface PerformanceAlert {
   actions: AlertAction;
   escalation: AlertEscalation;
 }
+}
 export type AlertType = 
   | 'performance_drop'
   | 'conversion_decline'
@@ -518,11 +620,14 @@ export type AlertType =
 export type AlertSeverity = 'info' | 'warning' | 'critical' | 'emergency';
 export type AlertStatus = 'active' | 'acknowledged' | 'resolved' | 'suppressed';
 
+}
 export interface AlertThreshold {
   metric: string;
   condition: 'above' | 'below' | 'equals' | 'change';
   value: number;
   timeframe: number;
+}
+}
 }
 export interface AlertAction {
   actionId: string;
@@ -531,11 +636,15 @@ export interface AlertAction {
   actionType: 'investigate' | 'fix' | 'optimize' | 'escalate';
   automated: boolean;
 }
+}
+}
 export interface AlertEscalation {
   escalationLevel: number;
   escalationTime: number;
   escalationTarget: string;
   maxEscalations: number;
+}
+}
 }
 export interface PerformanceTrend {
   metric: string;
@@ -545,11 +654,15 @@ export interface PerformanceTrend {
   forecast: TrendForecast;
   seasonality: SeasonalityData;
 }
+}
+}
 export interface TrendDataPoint {
   timestamp: number;
   value: number;
   volume: number;
   context: Record<string, any>;
+}
+}
 }
 export interface TrendAnalysis {
   direction: 'increasing' | 'decreasing' | 'stable' | 'volatile';
@@ -558,11 +671,15 @@ export interface TrendAnalysis {
   acceleration: number;
   inflectionPoints: InflectionPoint;
 }
+}
+}
 export interface InflectionPoint {
   timestamp: number;
   type: 'peak' | 'trough' | 'change';
   significance: number;
   context: string;
+}
+}
 }
 export interface TrendForecast {
   nextPeriod: ForecastPeriod;
@@ -570,10 +687,14 @@ export interface TrendForecast {
   assumptions: string;
   risks: string;
 }
+}
+}
 export interface ForecastPeriod {
   timestamp: number;
   predictedValue: number;
+}
   confidenceInterval: { min: number; max: number };
+}
 }
 export interface SeasonalityData {
   detected: boolean;
@@ -581,11 +702,15 @@ export interface SeasonalityData {
   strength: number;
   reliability: number;
 }
+}
+}
 export interface SeasonalPattern {
   type: 'daily' | 'weekly' | 'monthly' | 'yearly';
   amplitude: number;
   phase: number;
   confidence: number;
+}
+}
 }
 export interface BenchmarkComparison {
   benchmarks: BenchmarkData;
@@ -593,24 +718,32 @@ export interface BenchmarkComparison {
   gaps: PerformanceGap;
   opportunities: BenchmarkOpportunity;
 }
+}
+}
 export interface BenchmarkData {
   benchmarkType: 'category' | 'creator' | 'industry' | 'top_performer';
   name: string;
   metrics: BenchmarkMetric;
   lastUpdated: number;
 }
+}
+}
 export interface BenchmarkMetric {
   metric: string;
   value: number;
   percentile: number;
   trend: 'improving' | 'declining' | 'stable'
+}
   }
+}
 export interface BenchmarkPosition {
   overallRank: number;
   categoryRank: number;
   percentile: number;
   competitiveAdvantage: string;
   improvementAreas: string;
+}
+}
 }
 export interface PerformanceGap {
   metric: string;
@@ -619,6 +752,8 @@ export interface PerformanceGap {
   priority: 'high' | 'medium' | 'low';
   actionItems: string;
 }
+}
+}
 export interface BenchmarkOpportunity {
   opportunity: string;
   description: string;
@@ -626,17 +761,23 @@ export interface BenchmarkOpportunity {
   effort: 'low' | 'medium' | 'high';
   examples: BenchmarkExample;
 }
+}
+}
 export interface BenchmarkExample {
   templateName: string;
   creatorName: string;
   achievement: string;
   strategy: string;
 }
+}
+}
 export interface OptimizationAction {
   actionType: 'view_details' | 'start_optimization' | 'fix_issue' | 'ignore_alert';
   targetId: string;
   details: Record<string, any>;
   timestamp: number;
+}
+}
 }
 export interface TemplatePerformanceExportData {
   templateMetadata: TemplateMetadata;
@@ -646,9 +787,12 @@ export interface TemplatePerformanceExportData {
   exportTimestamp: number;
   exportConfig: ExportConfig;
 }
+}
+}
 export interface ExportConfig {
   format: 'json' | 'csv' | 'excel' | 'pdf';
   includeCharts: boolean;
+}
   timeRange: { start: number; end: number };
   metrics: string;
 }

@@ -13,21 +13,26 @@ import { DatabaseService } from '../database/DatabaseService';
 
 // Request/Response Types
 }
+}
 interface ConsentConfigRequest {
   Params: {
     version?: string;
 }
+}
   };
 }
 
+}
 }
 interface UserPreferencesRequest {
   Params: {
     userId: string;
 }
+}
   };
 }
 
+}
 }
 interface SavePreferencesRequest {
   Body: {
@@ -37,9 +42,11 @@ interface SavePreferencesRequest {
     userPreferences: Record<string, unknown>;
     lastUpdated: string;
 }
+}
   };
 }
 
+}
 }
 interface ConsentEventRequest {
   Body: {
@@ -52,13 +59,16 @@ interface ConsentEventRequest {
     source: string;
     metadata: Record<string, unknown>;
 }
+}
   };
 }
 
 }
+}
 interface ExportDataRequest {
   Params: {
     userId: string;
+}
 }
   };
   Querystring: {
@@ -67,9 +77,11 @@ interface ExportDataRequest {
 }
 
 }
+}
 interface ResetConsentsRequest {
   Params: {
     userId: string;
+}
 }
   };
 }

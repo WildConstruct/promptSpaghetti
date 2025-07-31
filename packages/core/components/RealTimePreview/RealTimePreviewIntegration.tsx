@@ -16,6 +16,7 @@ import { Node, Edge } from 'reactflow';
 import { EnhancedPreviewModal, EnhancedPreviewResult } from '../PreviewModal/EnhancedPreviewModal';
 import { useEnhancedPreview } from '../../hooks/useEnhancedPreview';
 import { useRealTimePreview, PreviewVariant, RealTimePreviewConfig } from '../../hooks/useRealTimePreview';
+}
 interface RealTimePreviewIntegrationProps {
   nodes: Node;
   edges: Edge;
@@ -38,6 +39,7 @@ interface RealTimePreviewIntegrationProps {
   onPreviewUpdate,
   onHighlightPath,
   onError
+}
 }) => {
   // State for preview integration
   const [showEnhancedModal, setShowEnhancedModal] = useState(false);

@@ -5,6 +5,7 @@
  */
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { PSGFile, projectManager } from '../../projectManager';
+}
 interface FilePreviewProps {
   /** File data for preview */
   file: PSGFile;
@@ -28,6 +29,7 @@ interface FilePreviewProps {
   onToggleFavorite,
   style,
   className
+}
 }) => {
   const [thumbnail, setThumbnail] = useState<string | null>(file.metadata.thumbnail || null);
   const [isLoadingThumbnail, setIsLoadingThumbnail] = useState(false);

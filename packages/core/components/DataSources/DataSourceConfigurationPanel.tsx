@@ -3,6 +3,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { DataSource, DataTransform } from '../../external-data/DataSourceManager';
 
+}
 export interface DataSourceConfigurationPanelProps {
   visible: boolean;
   onClose: () => void;
@@ -18,6 +19,7 @@ export interface DataSourceConfigurationPanelProps {
   type: 'none' | 'api_key' | 'oauth' | 'basic' | 'bearer';
   credentials: Record<string, string>;
   headers: Record<string, string>;
+}
 };
   caching: {
   enabled: boolean;

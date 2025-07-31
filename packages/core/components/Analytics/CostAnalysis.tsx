@@ -24,6 +24,7 @@ import {
 /**
  * Budget card props
  */
+}
 interface BudgetCardProps {
   budget: unknown;
   usage: Error;
@@ -31,6 +32,7 @@ interface BudgetCardProps {
 /**
  * Budget card component
  */
+}
 const BudgetCard: React.FC<BudgetCardProps> = ({ budget, usage, onUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({)
@@ -150,12 +152,14 @@ const BudgetCard: React.FC<BudgetCardProps> = ({ budget, usage, onUpdate }) => {
 /**
  * Cost forecast chart props
  */
+}
 interface CostForecastChartProps {
   forecastData: unknown;
   loading: boolean;
 /**
  * Cost forecast chart component
  */
+}
 const CostForecastChart: React.FC<CostForecastChartProps> = ({ forecastData, loading }) => {
   if (loading) {
     return;
@@ -261,14 +265,17 @@ const CostForecastChart: React.FC<CostForecastChartProps> = ({ forecastData, loa
  * Cost analysis props
  */
 
+}
 export interface CostAnalysisProps {
   analyticsClient: AnalyticsClient;
+}
   timeRange: { startTime: number; endTime: number };
   userId?: number;
   organizationId?: number;
 /**
  * Cost analysis state
  */
+}
 interface CostAnalysisState {
   loading: boolean;
   costSummary: unknown;
@@ -280,6 +287,7 @@ interface CostAnalysisState {
   /**
   * Cost analysis component
   */
+}
 }
 export const CostAnalysis: React.FC<CostAnalysisProps> = ({)
   analyticsClient,

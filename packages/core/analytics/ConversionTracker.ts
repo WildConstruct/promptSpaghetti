@@ -12,6 +12,7 @@
  * - User journey analytics
  */
 
+}
 export interface ConversionEvent {
   id: string;
   userId: string;
@@ -26,6 +27,7 @@ export interface ConversionEvent {
   referrer: string;
   campaignSource?: string;
   experimentGroup?: string;
+}
 };
 }
 export type ConversionEventType =
@@ -74,6 +76,7 @@ export type ConversionCategory =
   | 'revenue'
   | 'referral';
 
+}
 export interface ConversionFunnel {
   id: string;
   name: string;
@@ -81,6 +84,8 @@ export interface ConversionFunnel {
   steps: ConversionStep;
   timeWindow: number; // milliseconds,
   category: ConversionCategory;
+}
+}
 }
 export interface ConversionStep {
   id: string;
@@ -90,11 +95,14 @@ export interface ConversionStep {
   conditions?: Record<string, any>;
   timeout?: number;
 }
+}
+}
 export interface ConversionMetrics {
   funnel: string;
   period: {
   start: number;
   end: number;
+}
 };
   metrics: {
   totalUsers: number;
@@ -592,6 +600,7 @@ export class ConversionTracker {
       return sorted[sorted.length - 1].timestamp - sorted[0].timestamp;
     });
   private async flushEvents(): Promise<void> {
+
   if (this.pendingEvents.length === 0) return;
   const eventsToFlush = [...this.pendingEvents];
   this.pendingEvents = [];

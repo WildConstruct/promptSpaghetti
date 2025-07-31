@@ -27,6 +27,7 @@ import { AuditService } from '../auth/services/AuditService';
 // ==========================================
 
 }
+}
 export interface RotationResponse<T = any> {
   success: boolean;
   data?: T;
@@ -39,6 +40,7 @@ export interface RotationResponse<T = any> {
   };
 }
 
+}
 }
 export interface CreateRotationPolicyRequest {
   name: string;
@@ -57,6 +59,7 @@ export interface CreateRotationPolicyRequest {
     mustInclude?: string[];
     expirationDays?: number;
 }
+}
   };
   notifications?: {
     enabled: boolean;
@@ -74,6 +77,7 @@ export interface CreateRotationPolicyRequest {
 }
 
 }
+}
 export interface RegisterCredentialRequest {
   name: string;
   description: string;
@@ -85,6 +89,7 @@ export interface RegisterCredentialRequest {
     services: string[];
     accessLevel: 'read' | 'write' | 'admin' | 'service';
 }
+}
   };
   dependencies?: Array<{
     type: 'service' | 'database' | 'api';
@@ -95,6 +100,7 @@ export interface RegisterCredentialRequest {
 }
 
 }
+}
 export interface RotationRequest {
   credentialId: string;
   reason?: string;
@@ -102,7 +108,9 @@ export interface RotationRequest {
   executeImmediately?: boolean;
 }
 }
+}
 
+}
 }
 export interface BulkRotationRequest {
   credentialIds: string[];
@@ -113,14 +121,17 @@ export interface BulkRotationRequest {
     staggered?: boolean;
     staggerDelay?: number; // milliseconds between rotations
 }
+}
   };
 }
 
+}
 }
 export interface RotationAnalyticsRequest {
   timeRange: {
     start: string;
     end: string;
+}
 }
   };
   filters?: {
@@ -133,12 +144,14 @@ export interface RotationAnalyticsRequest {
 }
 
 }
+}
 export interface EmergencyRotationRequest {
   credentialId: string;
   reason: string;
   compromisedAt?: string; // ISO date
   affectedServices?: string[];
   mitigationActions?: string[];
+}
 }
 }
 

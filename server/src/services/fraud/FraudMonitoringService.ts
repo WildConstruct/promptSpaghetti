@@ -33,6 +33,7 @@ import {
 } from '../../../../packages/core/types/FraudMonitoring';
 
 }
+}
 export interface FraudReviewCase {
   caseId: string;
   type: 'payment' | 'account' | 'network' | 'manual';
@@ -65,7 +66,9 @@ export interface FraudReviewCase {
   tags: string[];
 }
 }
+}
 
+}
 }
 export interface FraudReviewNote {
   noteId: string;
@@ -76,7 +79,9 @@ export interface FraudReviewNote {
   attachments?: string[];
 }
 }
+}
 
+}
 }
 export interface FraudReviewDecision {
   decision: 'approve' | 'reject' | 'escalate' | 'modify';
@@ -89,7 +94,9 @@ export interface FraudReviewDecision {
   decidedAt: Date;
 }
 }
+}
 
+}
 }
 export interface FraudEvidence {
   evidenceId: string;
@@ -102,7 +109,9 @@ export interface FraudEvidence {
   verifiedAt?: Date;
 }
 }
+}
 
+}
 }
 export interface FraudAlert {
   alertId: string;
@@ -129,6 +138,7 @@ export interface FraudAlert {
   expiresAt?: Date;
   tags: string[];
   relatedAlerts: string[];
+}
 }
 }
 
@@ -1057,12 +1067,14 @@ export class FraudMonitoringService {
 
 // Supporting interfaces
 }
+}
 interface FraudDashboardSummary {
   todayStats: {
     totalDetections: number;
     blockedTransactions: number;
     reviewQueue: number;
     avgFraudScore: number;
+}
 }
   };
   weeklyTrend: {
@@ -1079,6 +1091,7 @@ interface FraudDashboardSummary {
 }
 
 }
+}
 interface RiskEntity {
   entityType: 'user' | 'transaction' | 'account';
   entityId: string;
@@ -1088,12 +1101,15 @@ interface RiskEntity {
   actions: string[];
 }
 }
+}
 
+}
 }
 interface PerformanceMetrics {
   avgProcessingTime: number;
   throughput: number;
   errorRate: number;
   cacheHitRate: number;
+}
 }
 }

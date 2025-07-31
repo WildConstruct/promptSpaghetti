@@ -24,6 +24,7 @@ import { SecurityTimeSeriesAnalysisEngine } from './SecurityTimeSeriesAnalysisEn
 import { SecurityInsightsAutomationEngine } from './SecurityInsightsAutomationEngine';
 
 }
+}
 export interface DataRefreshConfig {
   refresh_automation: {
     enabled: boolean;
@@ -34,6 +35,7 @@ export interface DataRefreshConfig {
     quality_gated_refresh: boolean;
     error_recovery: boolean;
     performance_optimization: boolean;
+}
 }
   };
   
@@ -92,6 +94,7 @@ export interface DataRefreshConfig {
 }
 
 }
+}
 export interface RefreshJob {
   job_id: string;
   job_name: string;
@@ -106,6 +109,7 @@ export interface RefreshJob {
       minimum_confidence: number;
       freshness_threshold: number;
       completeness_check: boolean;
+}
 }
     };
     processing_options: {
@@ -148,6 +152,7 @@ export interface RefreshJob {
 }
 
 }
+}
 export interface RefreshAnalytics {
   summary: {
     total_refresh_jobs: number;
@@ -157,6 +162,7 @@ export interface RefreshAnalytics {
     total_data_points_collected: number;
     average_quality_score: number;
     refresh_efficiency_score: number;
+}
 }
   };
   

@@ -21,6 +21,7 @@ import { DataClassificationLevel, type OperationContext } from '../types/DataCla
  * Audit log entry structure
  */
 
+}
 export interface AuditLogEntry {
     id: string;
     timestamp: Date;
@@ -83,6 +84,7 @@ export declare enum AuditOperation {
  * Audit logger configuration
  */
 
+}
 export interface AuditLoggerConfig {
     storageBackend?: AuditStorageBackend;
     bufferSize?: number;
@@ -105,6 +107,7 @@ export interface AuditLoggerConfig {
  * Storage backend interface
  */
 
+}
 export interface AuditStorageBackend {
     write(entry: AuditLogEntry): Promise<void>;
     query(criteria: AuditQueryCriteria): Promise<AuditLogEntry[]>;
@@ -116,6 +119,7 @@ export interface AuditStorageBackend {
  * Query criteria for retrieving audit logs
  */
 
+}
 export interface AuditQueryCriteria {
     startDate?: Date;
     endDate?: Date;
@@ -133,6 +137,7 @@ export interface AuditQueryCriteria {
  * Alert threshold configuration
  */
 
+}
 export interface AlertThresholds {
     failedAccessAttempts?: number;
     sensitiveDataAccess?: number;
@@ -236,6 +241,7 @@ export declare class AuditLogger extends BrowserEventEmitter {
  * Audit statistics structure
  */
 
+}
 export interface AuditStatistics {
     totalOperations: number;
     operationCounts: Record<string, number>;
@@ -258,5 +264,6 @@ export declare class InMemoryStorageBackend implements AuditStorageBackend {
  * Factory function to create audit logger
  */
 export declare function createAuditLogger(config?: AuditLoggerConfig): AuditLogger;
+}
 export type { AuditLogEntry, AuditLoggerConfig, AuditStorageBackend, AuditQueryCriteria, AlertThresholds, AuditStatistics };
 //# sourceMappingURL=AuditLogger.d.ts.map

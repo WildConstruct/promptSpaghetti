@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useRef } from 'react';
+}
 interface WeightSliderProps {
   value: number;
   onChange: (value: number) => void;
@@ -24,6 +25,7 @@ interface WeightSliderProps {
   showNumeric = false,
   label,
   className = ''
+}
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);

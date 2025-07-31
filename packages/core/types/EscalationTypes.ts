@@ -135,6 +135,7 @@ export const EscalationRuleSchema = z.object({
 // Core Interfaces
 // =============================================================================
 
+}
 export interface EscalationCondition {
   conditionId: string;
   type: 'value' | 'time' | 'count' | 'percentage' | 'custom';
@@ -142,7 +143,9 @@ export interface EscalationCondition {
   operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'contains' | 'regex';
   value: string | number | boolean;
   logicalOperator?: 'AND' | 'OR'
+}
   }
+}
 export interface NotificationMethod {
   type: NotificationType;
   address: string;
@@ -151,12 +154,16 @@ export interface NotificationMethod {
   retryCount?: number;
   retryInterval?: number; // minutes,
 }
+}
+}
 export interface EscalationAction {
   actionId: string;
   type: EscalationActionType;
   configuration: Record<string, any>;
   executeImmediately: boolean;
   rollbackable: boolean;
+}
+}
 }
 export interface EscalationLevel {
   levelId: string;
@@ -172,6 +179,8 @@ export interface EscalationLevel {
   automaticActions?: EscalationAction;
   requiredActions?: string;
   escalationCriteria?: EscalationCondition;
+}
+}
 }
 export interface EscalationRule {
   ruleId: string;
@@ -196,6 +205,8 @@ export interface EscalationRule {
   // Case and Workflow Interfaces
   // =============================================================================
 }
+}
+}
 export interface EscalationPathStep {
   stepId: string;
   level: number;
@@ -210,6 +221,8 @@ export interface EscalationPathStep {
   notes?: string;
   timeSpent?: number; // minutes,
 }
+}
+}
 export interface EscalationNotification {
   notificationId: string;
   method: string;
@@ -220,6 +233,8 @@ export interface EscalationNotification {
   failureReason?: string;
   retryCount: number;
   priority: EscalationPriority;
+}
+}
 }
 export interface EscalationActionLog {
   actionId: string;
@@ -232,6 +247,8 @@ export interface EscalationActionLog {
   rollbackable: boolean;
   rolledBackAt?: Date;
 }
+}
+}
 export interface EscalationResolution {
   resolutionType: 'resolved' | 'cancelled' | 'transferred' | 'merged' | 'expired';
   resolutionLevel: number;
@@ -240,6 +257,8 @@ export interface EscalationResolution {
   satisfactionRating?: number; // 1-5,
   lessonsLearned?: string;
   improvementSuggestions?: string;
+}
+}
 }
 export interface EscalationCase {
   caseId: string;
@@ -277,6 +296,8 @@ export interface EscalationCase {
   // Metrics and Analytics Interfaces
   // =============================================================================
 }
+}
+}
 export interface EscalationCategoryMetrics {
   category: EscalationCategory;
   totalCases: number;
@@ -284,6 +305,8 @@ export interface EscalationCategoryMetrics {
   escalationRate: number;
   satisfactionScore: number;
   topIssues: string;
+}
+}
 }
 export interface EscalationLevelMetrics {
   level: number;
@@ -294,6 +317,8 @@ export interface EscalationLevelMetrics {
   escalationRate: number; // percentage escalated to next level,
   workloadDistribution: Map<string, number>; // assignee -> case count,
 }
+}
+}
 export interface EscalationTrend {
   period: string; // 'hourly', 'daily', 'weekly', 'monthly',
   timestamp: Date;
@@ -301,6 +326,8 @@ export interface EscalationTrend {
   escalationRate: number;
   resolutionTime: number;
   satisfactionScore: number;
+}
+}
 }
 export interface EscalationMetrics {
   totalCases: number;
@@ -321,6 +348,8 @@ export interface EscalationMetrics {
   // Dashboard Interfaces
   // =============================================================================
 }
+}
+}
 export interface EscalationAlert {
   alertId: string;
   type: 'sla_breach' | 'high_volume' | 'system_issue' | 'quality_concern' | 'capacity_limit';
@@ -330,6 +359,8 @@ export interface EscalationAlert {
   affectedCases: string;
   recommendedActions: string;
   createdAt: Date;
+}
+}
 }
 export interface EscalationRecommendation {
   recommendationId: string;
@@ -341,18 +372,24 @@ export interface EscalationRecommendation {
   priority: EscalationPriority;
   category?: EscalationCategory;
 }
+}
+}
 export interface WorkloadAssignment {
   assignee: string;
   activeCases: number;
   overdueItems: number;
   utilizationRate: number;
 }
+}
+}
 export interface CategoryBreakdown {
   category: EscalationCategory;
   count: number;
   percentage: number;
   trend: 'up' | 'down' | 'stable'
+}
   }
+}
 export interface EscalationDashboard {
   overview: {
   activeCases: number;
@@ -360,6 +397,7 @@ export interface EscalationDashboard {
   overdueResponses: number;
   overdueResolutions: number;
   averageWaitTime: number;
+}
 };
   recentEscalations: EscalationCase;
   urgentCases: EscalationCase;
@@ -378,6 +416,7 @@ export interface EscalationDashboard {
 // API Request/Response Types
 // =============================================================================
 }
+}
 export interface CreateEscalationRuleRequest {
   name: string;
   description?: string;
@@ -393,6 +432,8 @@ export interface CreateEscalationRuleRequest {
   allowWeekends?: boolean;
   timeZone?: string;
 }
+}
+}
 export interface UpdateEscalationRuleRequest {
   name?: string;
   description?: string;
@@ -407,6 +448,8 @@ export interface UpdateEscalationRuleRequest {
   allowWeekends?: boolean;
   timeZone?: string;
 }
+}
+}
 export interface CreateEscalationCaseRequest {
   sourceType: string;
   sourceId: string;
@@ -414,8 +457,12 @@ export interface CreateEscalationCaseRequest {
   ruleId?: string;
   priority?: EscalationPriority;
 }
+}
+}
 export interface EscalateCaseRequest {
   reason?: string;
+}
+}
 }
 export interface ResolveCaseRequest {
   resolutionType: 'resolved' | 'cancelled' | 'transferred' | 'merged';
@@ -423,6 +470,8 @@ export interface ResolveCaseRequest {
   satisfactionRating?: number;
   lessonsLearned?: string;
   improvementSuggestions?: string;
+}
+}
 }
 export interface GetEscalationCasesQuery {
   status?: EscalationStatus;
@@ -436,7 +485,9 @@ export interface GetEscalationCasesQuery {
   limit?: number;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc'
+}
   }
+}
 export interface GetEscalationRulesQuery {
   category?: EscalationCategory;
   enabled?: boolean;
@@ -444,11 +495,15 @@ export interface GetEscalationRulesQuery {
   page?: number;
   limit?: number;
 }
+}
+}
 export interface GetEscalationMetricsQuery {
   period?: 'hourly' | 'daily' | 'weekly' | 'monthly';
   startDate?: Date;
   endDate?: Date;
   category?: EscalationCategory;
+}
+}
 }
 export interface GetEscalationAnalyticsQuery {
   period?: 'week' | 'month' | 'quarter' | 'year';
@@ -456,6 +511,8 @@ export interface GetEscalationAnalyticsQuery {
   // =============================================================================
   // Response Types
   // =============================================================================
+}
+}
 }
 export interface EscalationAPIResponse<T = any> {
   success: boolean;
@@ -471,6 +528,7 @@ export interface EscalationAPIResponse<T = any> {
   pages: number;
 };
 
+}
 export interface EscalationRuleTestResult {
   ruleId: string;
   testData: Record<string, any>;
@@ -481,14 +539,17 @@ export interface EscalationRuleTestResult {
   level: number;
   assignee: string;
   estimatedTime: number;
+}
 }[];
   warnings: string;
+}
 }
 export interface AssigneePerformance {
   assignee: string;
   period: {
   startDate: Date;
   endDate: Date;
+}
 };
   casesHandled: number;
   averageResolutionTime: number;
@@ -502,6 +563,7 @@ export interface AssigneePerformance {
 // Integration Types
 // =============================================================================
 }
+}
 export interface EscalationIntegration {
   integrationId: string;
   name: string;
@@ -514,6 +576,7 @@ export interface EscalationIntegration {
   requestsPerMinute: number;
   requestsPerHour: number;
   requestsPerDay: number;
+}
 };
 }
 export enum EscalationEventType {
@@ -537,12 +600,15 @@ export enum EscalationEventType {
   // Configuration Types
   // =============================================================================
 }
+}
+}
 export interface EscalationServiceConfig {
   defaultTimezone: string;
   businessHours: {
   startTime: string; // HH:MM format,
   endTime: string;   // HH:MM format,
   daysOfWeek: number; // 0-6, Sunday = 0,
+}
 };
   notifications: {
   retryAttempts: number;

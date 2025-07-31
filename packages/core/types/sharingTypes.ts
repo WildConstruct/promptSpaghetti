@@ -306,6 +306,7 @@ const SocialPlatformSchema = z.enum(['twitter', 'linkedin', 'discord', 'slack', 
 
 // Helper types for convenience
 
+}
 export interface ShareSystemConfig {
   enabledPlatforms: SocialPlatform;
   defaultPermissions: SharePermission;
@@ -314,6 +315,7 @@ export interface ShareSystemConfig {
   rateLimiting: {
   sharesPerHour: number;
   embedsPerHour: number;
+}
 };
   customization: {
   allowCustomBranding: boolean;

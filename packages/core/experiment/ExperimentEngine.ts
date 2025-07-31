@@ -17,6 +17,7 @@ import {
   AllocationServiceConfig
 } from '../types/experiment';
 
+}
 export interface ExperimentStorage {
   getExperiment(id: string): Promise<Experiment | null>;
   saveExperiment(experiment: Experiment): Promise<void>;
@@ -24,9 +25,12 @@ export interface ExperimentStorage {
   saveUserAssignment(assignment: UserAssignment): Promise<void>;
   getActiveExperiments(organizationId?: string): Promise<Experiment>;
 }
+}
+}
 export interface ExperimentMetrics {
   recordAssignment(assignment: UserAssignment): Promise<void>;
   recordEvent(experimentId: string, variantId: string, eventType: string, data: Record<string, unknown>): Promise<void>;
+}
 }
 export class ExperimentEngine {
   private config: ABTestingConfig;
@@ -60,6 +64,7 @@ export class ExperimentEngine {
    * Update an existing experiment
    */
   async updateExperiment(id: string, updates: Partial<Experiment>): Promise<Experiment> {
+
   const experiment = await this.storage.getExperiment(id);
   if (!experiment) {
   throw new ExperimentError('Experiment not found', 'NOT_FOUND', id);
@@ -82,6 +87,7 @@ export class ExperimentEngine {
    * Start an experiment
    */
   async startExperiment(id: string): Promise<Experiment> {
+
     const experiment = await this.storage.getExperiment(id);
     if (!experiment) {
       throw new ExperimentError('Experiment not found', 'NOT_FOUND', id);
@@ -105,6 +111,7 @@ export class ExperimentEngine {
    * Stop an experiment
    */
   async stopExperiment(id: string, reason?: string): Promise<Experiment> {
+
     const experiment = await this.storage.getExperiment(id);
     if (!experiment) {
       throw new ExperimentError('Experiment not found', 'NOT_FOUND', id);
@@ -126,6 +133,7 @@ export class ExperimentEngine {
    * Assign a user to an experiment variant
    */
   async assignUser(request: AssignmentRequest): Promise<AssignmentResponse> {
+
   try {
   // Check for existing assignment first
   const existingAssignment = await this.storage.getUserAssignment(;);
@@ -188,6 +196,7 @@ export class ExperimentEngine {
    * Get all active experiments for an organization
    */
   async getActiveExperiments(organizationId?: string): Promise<Experiment> {
+
     return await this.storage.getActiveExperiments(organizationId);
   /**
    * Validate experiment configuration

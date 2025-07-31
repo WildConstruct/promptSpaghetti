@@ -8,6 +8,7 @@ import { FrameworkNode, NodeDefinition, NodeFramework } from './NodeFramework';
 import { AdvancedNodeConfig } from '../runtime/advanced';
 import { NodeValidationService } from '../validation';
 
+}
 export interface NodeCreationOptions {
   /** Validate node before creation */
   validate?: boolean;
@@ -20,6 +21,8 @@ export interface NodeCreationOptions {
   /** Template to base node on */
   template?: string;
 }
+}
+}
 export interface NodeTemplate {
   id: string;
   name: string;
@@ -29,6 +32,8 @@ export interface NodeTemplate {
   defaultData: any;
   category: string;
   tags: string;
+}
+}
 }
 export interface NodeFactoryConfig {
   /** Enable automatic node optimization */
@@ -45,13 +50,14 @@ export interface NodeFactoryConfig {
   * Node Factory for creating and managing framework nodes
   */
 }
+}
 export class NodeFactory {
   private framework: NodeFramework;
   private validationService: NodeValidationService;
   private config: NodeFactoryConfig;
   private templates = new Map<string, NodeTemplate>();
   private nodeCache = new Map<string, FrameworkNode>();
-  private creationHistory: Array<{,
+  private creationHistory: Array<{
   timestamp: number;
   nodeType: string;
   nodeId: string;
@@ -81,6 +87,7 @@ export class NodeFactory {
     data: any,
     options: NodeCreationOptions = {}
   ): Promise<FrameworkNode> {
+
     try {
       // Apply template if specified
       let finalConfig = config;
@@ -122,6 +129,7 @@ export class NodeFactory {
   data?: any;
 } = {}
   ): Promise<FrameworkNode> {
+
     const template = this.templates.get(templateId);
     if (!template) {
       throw new Error(`Template '${templateId}' not found`);}
@@ -142,6 +150,7 @@ export class NodeFactory {
   data: any;
   options?: NodeCreationOptions;
 }>): Promise<FrameworkNode> {
+
     const results: FrameworkNode = [];
     const errors: Array<{ spec: any; error: Error }> = [];
     // Process in parallel with controlled concurrency
@@ -179,6 +188,7 @@ export class NodeFactory {
   config?: Partial<AdvancedNodeConfig>;
   data?: any;
 }): Promise<FrameworkNode> {
+
     const sourceNode = this.framework.getNode(sourceId);
     if (!sourceNode) {
       throw new Error(`Source node '${sourceId}' not found`);}

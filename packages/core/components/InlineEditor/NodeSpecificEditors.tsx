@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { NodeData } from '../../types/NodeTypes';
 import { NodeSpecificRichEditor } from './RichTextEditor';
+}
 interface NodeEditorProps {
   data: NodeData;
   onChange: (field: string, value: any) => void;
@@ -12,6 +13,7 @@ interface NodeEditorProps {
   onChange,
   errors,
   theme = 'cinema'
+}
 }) => {
   const choices = data.choices || [];
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);

@@ -1,6 +1,7 @@
 // Common Badge Component
 import React from 'react';
 import './Badge.css';
+}
 interface BadgeProps {
   children: React.ReactNode;
   variant?: 'default' | 'featured' | 'free' | 'premium' | 'ai' | 'verified' | 'new' | 'popular' | 'success' | 'warning' | 'error';
@@ -13,6 +14,7 @@ interface BadgeProps {
   size = 'medium',
   icon,
   className = ''
+}
 }) => {
   return;
     <span className={`badge ${variant} ${size} ${className}`}>}

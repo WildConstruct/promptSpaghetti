@@ -66,7 +66,7 @@ describe('RoleProtectedRoute', () => {
   mockUseAuthStore.mockReturnValue({)
   isAuthenticated: true,
   isLoading: false,
-  user: {,
+  user: {
   id: '1',
   email: 'admin@example.com',
   firstName: 'Admin',
@@ -100,7 +100,7 @@ describe('RoleProtectedRoute', () => {
   mockUseAuthStore.mockReturnValue({)
   isAuthenticated: true,
   isLoading: false,
-  user: {,
+  user: {
   id: '1',
   email: 'user@example.com',
   firstName: 'Regular',
@@ -136,7 +136,7 @@ describe('RoleProtectedRoute', () => {
   mockUseAuthStore.mockReturnValue({)
   isAuthenticated: true,
   isLoading: false,
-  user: {,
+  user: {
   id: '1',
   email: 'user@example.com',
   firstName: 'Regular',
@@ -170,7 +170,7 @@ describe('RoleProtectedRoute', () => {
   mockUseAuthStore.mockReturnValue({)
   isAuthenticated: true,
   isLoading: false,
-  user: {,
+  user: {
   id: '1',
   email: 'user@example.com',
   firstName: 'User',
@@ -205,7 +205,7 @@ describe('RoleProtectedRoute', () => {
   mockUseAuthStore.mockReturnValue({)
   isAuthenticated: true,
   isLoading: false,
-  user: {,
+  user: {
   id: '1',
   email: 'user@example.com',
   firstName: 'User',
@@ -239,7 +239,7 @@ describe('RoleProtectedRoute', () => {
   mockUseAuthStore.mockReturnValue({)
   isAuthenticated: true,
   isLoading: false,
-  user: {,
+  user: {
   id: '1',
   email: 'user@example.com',
   firstName: 'User',

@@ -19,6 +19,7 @@ import * as crypto from 'crypto';
 // =============================================================================
 
 }
+}
 export interface AssignmentToolsConfig {
   // Assignment limits
   maxAssignmentsPerUser: number;
@@ -30,6 +31,7 @@ export interface AssignmentToolsConfig {
     enabled: boolean;
     rules: AutoAssignmentRule[];
     evaluationInterval: number; // minutes
+}
 }
   };
   
@@ -96,6 +98,7 @@ export enum AssignmentStatus {
 }
 
 }
+}
 export interface Assignment {
   assignmentId: string;
   assignmentType: AssignmentType;
@@ -151,7 +154,9 @@ export interface Assignment {
   auditTrail: AssignmentAuditEntry[];
 }
 }
+}
 
+}
 }
 export interface AssignmentScope {
   organizationId?: string;
@@ -170,12 +175,14 @@ export interface AssignmentScope {
     end: string;   // HH:MM
     days: number[]; // 0-6, Sunday = 0
 }
+}
   };
   
   // Custom scope attributes
   customScope: Record<string, any>;
 }
 
+}
 }
 export interface AssignmentContext {
   purpose: string;
@@ -199,7 +206,9 @@ export interface AssignmentContext {
   downstreamImpact: string[];
 }
 }
+}
 
+}
 }
 export interface AssignmentPermission {
   permissionId: string;
@@ -209,7 +218,9 @@ export interface AssignmentPermission {
   conditions?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface AssignmentCondition {
   conditionId: string;
@@ -220,7 +231,9 @@ export interface AssignmentCondition {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface AssignmentRestriction {
   restrictionId: string;
@@ -230,7 +243,9 @@ export interface AssignmentRestriction {
   enforced: boolean;
 }
 }
+}
 
+}
 }
 export interface AssignmentApprovalRequest {
   requestId: string;
@@ -260,7 +275,9 @@ export interface AssignmentApprovalRequest {
   conditions?: string[];
 }
 }
+}
 
+}
 }
 export interface AssignmentApproval {
   approvalId: string;
@@ -271,7 +288,9 @@ export interface AssignmentApproval {
   conditions?: string[];
 }
 }
+}
 
+}
 }
 export interface AssignmentUsageTracking {
   totalAccesses: number;
@@ -285,6 +304,7 @@ export interface AssignmentUsageTracking {
     action: string;
     count: number;
     lastUsed: Date;
+}
 }
   }>;
   
@@ -300,6 +320,7 @@ export interface AssignmentUsageTracking {
 }
 
 }
+}
 export interface AssignmentAccessInfo {
   accessId: string;
   accessedAt: Date;
@@ -313,7 +334,9 @@ export interface AssignmentAccessInfo {
   details: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface AssignmentAuditEntry {
   entryId: string;
@@ -326,7 +349,9 @@ export interface AssignmentAuditEntry {
   details: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface AutoAssignmentRule {
   ruleId: string;
@@ -354,9 +379,11 @@ export interface AutoAssignmentRule {
     lastTriggered?: Date;
     successRate: number;
 }
+}
   };
 }
 
+}
 }
 export interface AutoAssignmentTrigger {
   type: 'user_created' | 'team_joined' | 'role_granted' | 'key_created' | 'project_assigned' | 'custom';
@@ -364,7 +391,9 @@ export interface AutoAssignmentTrigger {
   conditions: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface AutoAssignmentCondition {
   field: string;
@@ -373,7 +402,9 @@ export interface AutoAssignmentCondition {
   logicalOperator?: 'AND' | 'OR';
 }
 }
+}
 
+}
 }
 export interface AutoAssignmentAction {
   type: 'assign_key' | 'assign_permission' | 'assign_role' | 'create_team' | 'send_notification' | 'custom';
@@ -381,7 +412,9 @@ export interface AutoAssignmentAction {
   conditions?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface AssignmentTemplate {
   templateId: string;
@@ -406,6 +439,7 @@ export interface AssignmentTemplate {
     lastUsed?: Date;
     averageRating: number;
 }
+}
   };
   
   // Template settings
@@ -415,6 +449,7 @@ export interface AssignmentTemplate {
   requiredApproval: boolean;
 }
 
+}
 }
 export interface BulkAssignmentOperation {
   operationId: string;
@@ -449,7 +484,9 @@ export interface BulkAssignmentOperation {
   reason: string;
 }
 }
+}
 
+}
 }
 export interface BulkAssignmentResult {
   assignmentId: string;
@@ -459,7 +496,9 @@ export interface BulkAssignmentResult {
   processedAt: Date;
 }
 }
+}
 
+}
 }
 export interface BulkAssignmentError {
   assignmentId: string;
@@ -467,6 +506,7 @@ export interface BulkAssignmentError {
   errorMessage: string;
   errorDetails: Record<string, any>;
   retryable: boolean;
+}
 }
 }
 

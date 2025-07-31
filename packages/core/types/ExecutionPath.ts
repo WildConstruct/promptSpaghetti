@@ -3,6 +3,7 @@
  * Epic 8.5: Real-Time Multi-Seed Preview - Task 2: Execution Path Visualization
  */
 
+}
 export interface NodeExecutionStep {
   nodeId: string;
   nodeType: string;
@@ -14,10 +15,14 @@ export interface NodeExecutionStep {
   randomChoice?: RandomChoiceInfo;
   error?: string;
 }
+}
+}
 export interface ExecutionInput {
   sourceNodeId?: string;
   value: unknown;
   inputIndex: number;
+}
+}
 }
 export interface RandomChoiceInfo {
   choiceType: 'weighted' | 'uniform' | 'conditional' | 'sequential' | 'markov';
@@ -27,6 +32,8 @@ export interface RandomChoiceInfo {
   probability?: number;
   weight?: number;
   conditionMet?: boolean;
+}
+}
 }
 export interface ExecutionPath {
   id: string;
@@ -40,6 +47,8 @@ export interface ExecutionPath {
   randomizationPoints: RandomChoiceInfo;
   error?: string;
 }
+}
+}
 export interface PathVisualizationData {
   executionPath: ExecutionPath;
   pathColor: string;
@@ -48,6 +57,8 @@ export interface PathVisualizationData {
   variance: number;
   creativityScore: number;
 }
+}
+}
 export interface ExecutionFlowEdge {
   from: string;
   to: string;
@@ -55,6 +66,8 @@ export interface ExecutionFlowEdge {
   dataFlow: unknown;
   executionTimeMs: number;
   isRandomChoice: boolean;
+}
+}
 }
 export interface PreviewResultWithPath {
   seed: number;
@@ -72,7 +85,9 @@ export interface PreviewResultWithPath {
   randomChoices: RandomChoiceInfo;
   performanceBreakdown: Record<string, number>;
   memoryUsage?: number;
+}
 };
+}
 }
 export interface MultiSeedPreviewResult {
   results: PreviewResultWithPath;
@@ -83,8 +98,10 @@ export interface MultiSeedPreviewResult {
   uniquePaths: number;
   commonNodes: string;
   divergencePoints: string;
+}
 };
   pathComparison: PathComparisonData;
+}
 }
 export interface PathComparisonData {
   sharedSteps: NodeExecutionStep;
@@ -92,12 +109,14 @@ export interface PathComparisonData {
   resultId: string;
   divergencePoint: string;
   uniqueSteps: NodeExecutionStep;
+}
 }[];
   varianceAnalysis: {
   highVarianceNodes: string;
   consistentNodes: string;
   randomizationImpact: number;
 };
+}
 }
 export interface ExecutionTracker {
   startTracking(seed: number): string; // Returns execution ID,
@@ -107,6 +126,7 @@ export interface ExecutionTracker {
   getExecutionPath(executionId: string): ExecutionPath | null;
   clearTracker(executionId: string): void;
   // Color scheme for path visualization
+}
 }
 export const EXECUTION_PATH_COLORS = [
   '#3B82F6', // Blue
@@ -125,6 +145,7 @@ export type ExecutionPathColor = typeof EXECUTION_PATH_COLORS[number];
 
 // Node highlighting styles
 
+}
 export interface NodeHighlightStyle {
   color: ExecutionPathColor;
   opacity: number;
@@ -132,6 +153,8 @@ export interface NodeHighlightStyle {
   animation?: 'pulse' | 'glow' | 'none';
   order: number;
   // Execution visualization configuration
+}
+}
 }
 export interface ExecutionVisualizationConfig {
   showExecutionOrder: boolean;
@@ -142,5 +165,6 @@ export interface ExecutionVisualizationConfig {
   colorByVariance: boolean;
   showDebugInfo: boolean;
   // Default visualization configuration
+}
 }
 export };

@@ -20,6 +20,7 @@ import { Redis } from 'ioredis';
 import { MarketplaceDAO } from './dao';
 
 }
+}
 interface IndexOperation {
   id: string;
   operation: 'rebuild' | 'optimize' | 'update' | 'delete' | 'warm';
@@ -32,7 +33,9 @@ interface IndexOperation {
   metadata: any;
 }
 }
+}
 
+}
 }
 interface IndexHealth {
   indexName: string;
@@ -45,6 +48,7 @@ interface IndexHealth {
     relocatingShards: number;
     initializingShards: number;
     unassignedShards: number;
+}
 }
   };
   settings: any;
@@ -64,6 +68,7 @@ interface IndexHealth {
 }
 
 }
+}
 interface IndexOptimizationRecommendation {
   category: 'mappings' | 'settings' | 'queries' | 'shards' | 'replicas';
   priority: 'low' | 'medium' | 'high' | 'critical';
@@ -76,7 +81,9 @@ interface IndexOptimizationRecommendation {
   estimatedImprovement: string;
 }
 }
+}
 
+}
 }
 interface BulkIndexResult {
   operationId: string;
@@ -87,6 +94,7 @@ interface BulkIndexResult {
   errors: Array<{
     documentId: string;
     error: string;
+}
 }
   }>;
 }

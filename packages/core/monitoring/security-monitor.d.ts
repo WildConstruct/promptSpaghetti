@@ -21,6 +21,7 @@ export declare enum SecurityEventSeverity {
     HIGH = "high",
     CRITICAL = "critical"
 
+}
 export interface SecurityEvent {
     id: string;
     timestamp: Date;
@@ -34,6 +35,7 @@ export interface SecurityEvent {
         sanitized?: string;
         size: number;
         type: string;
+}
     };
     analysis: {
         riskScore: number;
@@ -49,28 +51,33 @@ export interface SecurityEvent {
     };
     metadata: Record<string, any>;
 
+}
 export interface AlertConfig {
     enabled: boolean;
     severityThreshold: SecurityEventSeverity;
     rateThreshold: {
         events: number;
         timeWindowMs: number;
+}
     };
     channels: AlertChannel[];
 
+}
 export interface AlertChannel {
     type: 'webhook' | 'email' | 'slack' | 'console';
     config: Record<string, any>;
     enabled: boolean;
 
+}
 export interface SecurityMonitoringStats {
     totalEvents: number;
     eventsByType: Record<SecurityEventType, number>;
     eventsBySeverity: Record<SecurityEventSeverity, number>;
     averageRiskScore: number;
-    topThreats: Array<{,
+    topThreats: Array<{
         threat: string;
         count: number;
+}
     }>;
     timeRange: {
         start: Date;

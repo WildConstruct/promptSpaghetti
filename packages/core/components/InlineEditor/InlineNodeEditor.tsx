@@ -8,12 +8,14 @@ import {
   ConditionalEditor,
   OutputEditor
 } from './NodeSpecificEditors';
+}
 interface InlineNodeEditorProps {
   node: Node<NodeData>;
   isActive: boolean;
   onUpdate: (nodeId: string, updates: Partial<NodeData>) => void;
   onClose: () => void;
   onSubmit: () => void;
+}
   position: { x: number; y: number };
   maxWidth?: number;
   maxHeight?: number;
@@ -296,12 +298,14 @@ export const InlineNodeEditor: React.FC<InlineNodeEditorProps> = ({
 };
 
 // Node-specific editor components
+}
 interface NodeSpecificEditorProps {
   nodeType: string;
   data: NodeData;
   onChange: (field: string, value: any) => void;
   errors: Record<string, string>;
   theme?: 'light' | 'dark' | 'cinema';
+}
 }
 
 const NodeSpecificEditor: React.FC<NodeSpecificEditorProps> = ({

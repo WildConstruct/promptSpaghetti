@@ -2,6 +2,7 @@
 // Interface for assigning and managing user roles with organization and team context
 import React, { useState, useEffect, useCallback } from 'react';
 import { Search, Plus, X, Calendar, Users, Shield, AlertCircle } from 'lucide-react';
+}
 interface User {
   id: string;,
   email: string;
@@ -43,6 +44,7 @@ interface User {
   const [assignmentForm, setAssignmentForm] = useState<AssignRoleData>({)
   userId: '',
   roleId: '',
+}
 });
   const [assignmentExpiry, setAssignmentExpiry] = useState('');
   const [assignmentContext, setAssignmentContext] = useState('');
@@ -127,7 +129,7 @@ interface User {
   return;
   const response = await fetch('/api/auth/rbac/assign-role', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   credentials: 'include',
@@ -155,7 +157,7 @@ interface User {
   try {
   const response = await fetch('/api/auth/rbac/remove-role', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   credentials: 'include',

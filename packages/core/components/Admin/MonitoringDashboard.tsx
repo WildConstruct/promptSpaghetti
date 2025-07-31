@@ -11,6 +11,7 @@ import { MonitoringWidget, WidgetConfig } from './MonitoringWidgets';
 
 // Dashboard Configuration Types
 
+}
 export interface DashboardLayout {
   id: string;
   name: string;
@@ -18,6 +19,8 @@ export interface DashboardLayout {
   widgets: WidgetConfig;
   roles: string;
   refreshInterval: number;
+}
+}
 }
 export interface MonitoringDashboardProps {
   userRole: string;
@@ -43,6 +46,7 @@ export interface MonitoringDashboardProps {
   size: 'medium',
   requiredPermissions: ['admin', 'executive', 'manager'],
   dataSource: '/api/monitoring/health/overview',
+}
 }
       {
   id: 'key-metrics',

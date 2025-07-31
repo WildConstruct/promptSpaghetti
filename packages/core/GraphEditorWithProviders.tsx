@@ -56,6 +56,7 @@ import {
   GetVariableIcon
 } from './icons';
 
+}
 export interface GraphEditorWithProvidersProps {
   initialNodes: Node;
   initialEdges: Edge;
@@ -63,6 +64,7 @@ export interface GraphEditorWithProvidersProps {
   // Provider configuration
   enableBuiltInProviders?: {
     consoleLogger?: boolean;
+}
     autoSave?: boolean | { interval?: number };
     validation?: boolean;
   };
@@ -220,6 +222,7 @@ const NODE_TYPES: NodeMeta = [
 };
 
 // Core GraphEditor component with provider integration
+}
 interface GraphEditorCoreProps {
   initialNodes: Node;
   initialEdges: Edge;
@@ -235,6 +238,7 @@ interface GraphEditorCoreProps {
   registry,
   editorActions,
   isProviderLoading
+}
 }) => {
   // Local state management (similar to original GraphEditor)
   const [nodes, setNodes] = useState<Node>(initialNodes);

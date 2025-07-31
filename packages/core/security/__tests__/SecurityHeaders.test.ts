@@ -416,6 +416,7 @@ function analyzeSecurityHeaders(headers: Record<string, string>): string {
     };
     return mockResponse;
   static async generateSecurityReport(scanResults: any): Promise<string> {
+
   const report = {
   timestamp: new Date().toISOString(),
   summary: {

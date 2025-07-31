@@ -3,10 +3,13 @@
 // Validation system for LLM-generated graph format
 import { NodeTypeEnum } from '../../graphSchema';
 
+}
 export interface ValidationResult {
   isValid: boolean;
   errors: ValidationError;
   warnings: ValidationWarning;
+}
+}
 }
 export interface ValidationError {
   type: 'syntax' | 'semantic' | 'schema';
@@ -15,12 +18,16 @@ export interface ValidationError {
   column?: number;
   nodeId?: string;
   severity: 'error' | 'warning'
+}
   }
+}
 export interface ValidationWarning {
   type: 'optimization' | 'compatibility' | 'best-practice';
   message: string;
   suggestion?: string;
   nodeId?: string;
+}
+}
 }
 export interface ParsedGraph {
   version: string;
@@ -29,15 +36,20 @@ export interface ParsedGraph {
   nodes: ParsedNode;
   edges: ParsedEdge;
 }
+}
+}
 export interface ParsedNode {
   id: string;
   type: string;
   props?: Record<string, any>;
   inputs?: string;
 }
+}
+}
 export interface ParsedEdge {
   source: string;
   target: string;
+}
 }
 export class FormatValidator {
   private static readonly SUPPORTED_VERSIONS = ['1.0.0'];

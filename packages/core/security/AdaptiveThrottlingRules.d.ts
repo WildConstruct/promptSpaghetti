@@ -15,6 +15,7 @@ import { RateLimitingService, ThreatLevel } from './RateLimitingService';
 import { ApiUsagePatternQuotaRecommendations } from './ApiUsagePatternQuotaRecommendations';
 import { ApiScalingAnalyticsIntegration } from './ApiScalingAnalyticsIntegration';
 
+}
 export interface ThrottlingAnalyticsConfig {
     enableAnalyticsIntegration: boolean;
     analyticsUpdateInterval: number;
@@ -24,6 +25,7 @@ export interface ThrottlingAnalyticsConfig {
     enableAnomalyDetection: boolean;
     confidenceThreshold: number;
 
+}
 export interface ThrottlingAnalyticsInsight {
     insightId: string;
     timestamp: Date;
@@ -36,6 +38,7 @@ export interface ThrottlingAnalyticsInsight {
         reason: string;
         expectedImpact: string;
         validityPeriod: number;
+}
     };
     metadata: {
         patternType?: string;
@@ -45,6 +48,7 @@ export interface ThrottlingAnalyticsInsight {
         supportingData?: Record<string, unknown>;
     };
 
+}
 export interface ThrottlingDecisionContext extends ThrottlingContext {
     analyticsInsights: ThrottlingAnalyticsInsight[];
     historicalPerformance: {
@@ -83,6 +87,7 @@ export declare const SystemCondition: {
     readonly UNDER_ATTACK: "under_attack"
   };
 
+}
 export interface ThrottlingRule {
     id: string;
     name: string;
@@ -113,8 +118,10 @@ export interface ThrottlingRule {
         falsePositiveRate: number;
         adaptationSuccessRate: number;
         lastOptimizationDate: Date;
+}
     };
 
+}
 export interface ThrottlingCondition {
     type: 'endpoint' | 'method' | 'user_pattern' | 'system_load' | 'threat_level' | 'time_based' | 'custom';
     operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'in_range' | 'pattern_match';
@@ -122,6 +129,7 @@ export interface ThrottlingCondition {
     value?: unknown;
     threshold?: number;
 
+}
 export interface ThrottlingStep {
     level: number;
     delay: number;
@@ -129,6 +137,7 @@ export interface ThrottlingStep {
     duration: number;
     condition: ThrottlingCondition;
 
+}
 export interface ThrottlingContext {
     requestId: string;
     endpoint: string;
@@ -142,6 +151,7 @@ export interface ThrottlingContext {
     recentFailures: number;
     consecutiveFailures: number;
 
+}
 export interface ThrottlingResult {
     action: 'allow' | 'throttle' | 'block' | 'shed';
     delay: number;
@@ -153,8 +163,10 @@ export interface ThrottlingResult {
         systemCondition: SystemCondition;
         escalationLevel?: number;
         tokensRemaining?: number;
+}
     };
 
+}
 export interface CircuitBreakerState {
     state: 'closed' | 'open' | 'half_open';
     failureCount: number;
@@ -162,12 +174,14 @@ export interface CircuitBreakerState {
     nextAttemptTime: Date;
     successCount: number;
 
+}
 export interface TokenBucketState {
     tokens: number;
     lastRefill: Date;
     capacity: number;
     refillRate: number;
 
+}
 export interface SystemMetrics {
     cpuUsage: number;
     memoryUsage: number;
@@ -193,6 +207,7 @@ export declare class AdaptiveThrottlingRulesEngine extends EventEmitter {
         usagePatternAnalytics?: ApiUsagePatternQuotaRecommendations;
         scalingAnalytics?: ApiScalingAnalyticsIntegration;
         enableAnalytics?: boolean;
+}
     });
     /**
      * Add a new throttling rule

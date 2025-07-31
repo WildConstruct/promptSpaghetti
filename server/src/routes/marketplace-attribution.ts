@@ -17,8 +17,10 @@ import {
 } from '../../../packages/core/types/marketplaceAttribution';
 
 }
+}
 interface AttributionRouteOptions {
   database: Database;
+}
 }
 }
 

@@ -7,6 +7,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface InteractiveElement {
     id: string;
     type: InteractiveElementType;
@@ -72,6 +73,7 @@ export declare enum ElementStatus {
     ARCHIVED = "archived",
     ERROR = "error"
 
+}
 export interface ElementConfiguration {
     theme: ElementTheme;
     layout: ElementLayout;
@@ -89,6 +91,7 @@ export interface ElementConfiguration {
     custom_js: string;
     template_overrides: Record<string, string>;
 
+}
 export interface ElementTheme {
     primary_color: string;
     secondary_color: string;
@@ -101,6 +104,7 @@ export interface ElementTheme {
     font_family: string;
     font_size: number;
 
+}
 export interface ElementLayout {
     position: 'fixed' | 'absolute' | 'relative' | 'static';
     placement: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center' | 'inline';
@@ -110,11 +114,13 @@ export interface ElementLayout {
     responsive: boolean;
     breakpoints: ResponsiveBreakpoint[];
 
+}
 export interface ResponsiveBreakpoint {
     screen_size: 'mobile' | 'tablet' | 'desktop' | 'large';
     min_width: number;
     overrides: Partial<ElementLayout>;
 
+}
 export interface AnimationConfig {
     entrance: AnimationType;
     exit: AnimationType;
@@ -135,6 +141,7 @@ export declare enum AnimationType {
     BOUNCE = "bounce",
     ELASTIC = "elastic"
 
+}
 export interface BehaviorConfig {
     auto_trigger: boolean;
     trigger_delay: number;
@@ -146,6 +153,7 @@ export interface BehaviorConfig {
     cooldown_period: number;
     frequency_cap: FrequencyCap;
 
+}
 export interface FrequencyCap {
     enabled: boolean;
     max_per_session: number;
@@ -153,6 +161,7 @@ export interface FrequencyCap {
     max_per_week: number;
     reset_on_engagement: boolean;
 
+}
 export interface InteractionConfig {
     click_tracking: boolean;
     hover_tracking: boolean;
@@ -161,12 +170,14 @@ export interface InteractionConfig {
     conversion_tracking: boolean;
     custom_events: CustomEventConfig[];
 
+}
 export interface CustomEventConfig {
     name: string;
     trigger: string;
     data: Record<string, any>;
     callback?: string;
 
+}
 export interface PersistenceConfig {
     state_persistence: boolean;
     user_preferences: boolean;
@@ -175,12 +186,14 @@ export interface PersistenceConfig {
     session_storage: boolean;
     database_sync: boolean;
 
+}
 export interface CachingConfig {
     enabled: boolean;
     ttl: number;
     strategy: 'memory' | 'localStorage' | 'sessionStorage' | 'redis';
     invalidation_keys: string[];
 
+}
 export interface AccessibilityConfig {
     aria_labels: Record<string, string>;
     keyboard_navigation: boolean;
@@ -190,6 +203,7 @@ export interface AccessibilityConfig {
     focus_management: boolean;
     semantic_markup: boolean;
 
+}
 export interface ApiEndpointConfig {
     name: string;
     url: string;
@@ -200,12 +214,14 @@ export interface ApiEndpointConfig {
     timeout: number;
     retry_config: RetryConfig;
 
+}
 export interface RetryConfig {
     max_attempts: number;
     backoff_strategy: 'linear' | 'exponential' | 'fixed';
     base_delay: number;
     max_delay: number;
 
+}
 export interface WebhookConfig {
     name: string;
     url: string;
@@ -214,6 +230,7 @@ export interface WebhookConfig {
     secret: string;
     retry_config: RetryConfig;
 
+}
 export interface ElementState {
     current_state: string;
     properties: Record<string, any>;
@@ -227,6 +244,7 @@ export interface ElementState {
     interaction_count: number;
     last_interaction: Date | null;
 
+}
 export interface ElementError {
     code: string;
     message: string;
@@ -235,6 +253,7 @@ export interface ElementError {
     user_id?: string;
     context: Record<string, any>;
 
+}
 export interface Interaction {
     id: string;
     type: InteractionType;
@@ -256,6 +275,7 @@ export declare enum InteractionType {
     API_CALL = "api_call",
     CUSTOM = "custom"
 
+}
 export interface InteractionContext {
     page_url: string;
     referrer: string;
@@ -266,6 +286,7 @@ export interface InteractionContext {
     session_id: string;
     ab_test_variant: string | null;
 
+}
 export interface InteractionResult {
     success: boolean;
     error?: string;
@@ -273,6 +294,7 @@ export interface InteractionResult {
     data: Record<string, any>;
     next_action?: string;
 
+}
 export interface ElementAnalytics {
     total_impressions: number;
     unique_users: number;
@@ -296,6 +318,7 @@ export interface ElementAnalytics {
     geographical_distribution: Record<string, number>;
     device_distribution: Record<string, number>;
 
+}
 export interface DailyStats {
     date: string;
     impressions: number;
@@ -304,6 +327,7 @@ export interface DailyStats {
     unique_users: number;
     error_count: number;
 
+}
 export interface TargetContext {
     type: TargetType;
     rules: TargetRule[];
@@ -319,6 +343,7 @@ export declare enum TargetType {
     CONTENT = "content",
     CUSTOM = "custom"
 
+}
 export interface TargetRule {
     field: string;
     operator: ComparisonOperator;
@@ -342,6 +367,7 @@ export declare enum ComparisonOperator {
     EXISTS = "exists",
     NOT_EXISTS = "not_exists"
 
+}
 export interface ElementTrigger {
     id: string;
     type: TriggerType;
@@ -361,11 +387,13 @@ export declare enum TriggerType {
     IDLE_TIME = "idle_time",
     ELEMENT_VISIBLE = "element_visible"
 
+}
 export interface TriggerCondition {
     field: string;
     operator: ComparisonOperator;
     value: any;
 
+}
 export interface ElementCondition {
     id: string;
     name: string;
@@ -373,6 +401,7 @@ export interface ElementCondition {
     variables: Record<string, any>;
     active: boolean;
 
+}
 export interface ElementIntegration {
     type: IntegrationType;
     config: Record<string, any>;
@@ -392,6 +421,7 @@ export declare enum IntegrationType {
     SEARCH = "search",
     AI_ML = "ai_ml"
 
+}
 export interface LiveChatElement extends InteractiveElement {
     type: InteractiveElementType.LIVE_CHAT;
     config: ElementConfiguration & {,
@@ -406,10 +436,12 @@ export interface LiveChatElement extends InteractiveElement {
             rate_limiting: {
                 messages_per_minute: number;
                 chars_per_message: number;
+}
             };
         };
     };
 
+}
 export interface ProgressBarElement extends InteractiveElement {
     type: InteractiveElementType.PROGRESS_BAR;
     config: ElementConfiguration & {,
@@ -425,17 +457,20 @@ export interface ProgressBarElement extends InteractiveElement {
         };
     };
 
+}
 export interface ColorThreshold {
     threshold: number;
     color: string;
     label?: string;
 
+}
 export interface Milestone {
     value: number;
     label: string;
     icon?: string;
     reward?: string;
 
+}
 export interface QuickPreviewElement extends InteractiveElement {
     type: InteractiveElementType.QUICK_PREVIEW;
     config: ElementConfiguration & {,
@@ -448,9 +483,11 @@ export interface QuickPreviewElement extends InteractiveElement {
             zoom_enabled: boolean;
             download_enabled: boolean;
             sharing_enabled: boolean;
+}
         };
     };
 
+}
 export interface InteractiveDemo extends InteractiveElement {
     type: InteractiveElementType.INTERACTIVE_DEMO;
     config: ElementConfiguration & {,
@@ -467,6 +504,7 @@ export interface InteractiveDemo extends InteractiveElement {
         };
     };
 
+}
 export interface DemoStep {
     id: string;
     title: string;
@@ -506,6 +544,7 @@ export declare class Epic16InteractiveElementsService extends EventEmitter {
     private compareValues;
     private evaluateExpression;
 
+}
 export interface ActivationContext {
     userId: string;
     sessionId: string;
@@ -515,6 +554,7 @@ export interface ActivationContext {
     userAttributes: Record<string, any>;
     requestContext: Record<string, any>;
 
+}
 export interface UserSession {
     userId: string;
     sessionId: string;
@@ -525,3 +565,4 @@ export interface UserSession {
 
 export default Epic16InteractiveElementsService;
 //# sourceMappingURL=Epic16InteractiveElementsService.d.ts.map
+}

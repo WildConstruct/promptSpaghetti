@@ -12,6 +12,7 @@
 import { ComplianceRuleEngine, ComplianceRule, ComplianceFramework } from './ComplianceRuleEngine';
 
 }
+}
 export interface ISO27001Control {
   controlId: string;
   controlNumber: string;
@@ -30,7 +31,9 @@ export interface ISO27001Control {
   metadata: ControlMetadata;
 }
 }
+}
 
+}
 }
 export interface ISO27001Implementation {
   requirements: string[];
@@ -43,7 +46,9 @@ export interface ISO27001Implementation {
   metrics: ControlMetric[];
 }
 }
+}
 
+}
 }
 export interface ISO27001Evidence {
   evidenceId: string;
@@ -57,7 +62,9 @@ export interface ISO27001Evidence {
   automated: boolean;
 }
 }
+}
 
+}
 }
 export interface ISO27001ComplianceMapping {
   soc2Mapping: string[];
@@ -68,7 +75,9 @@ export interface ISO27001ComplianceMapping {
   customMappings: CustomMapping[];
 }
 }
+}
 
+}
 }
 export interface ImplementationProcedure {
   procedureId: string;
@@ -80,7 +89,9 @@ export interface ImplementationProcedure {
   documentation: string[];
 }
 }
+}
 
+}
 }
 export interface ProcedureStep {
   stepId: string;
@@ -92,7 +103,9 @@ export interface ProcedureStep {
   outputs: string[];
 }
 }
+}
 
+}
 }
 export interface ResponsibleRole {
   role: string;
@@ -102,7 +115,9 @@ export interface ResponsibleRole {
   training: string[];
 }
 }
+}
 
+}
 }
 export interface ValidationRequirement {
   validationId: string;
@@ -113,7 +128,9 @@ export interface ValidationRequirement {
   responsible: string;
 }
 }
+}
 
+}
 }
 export interface ValidationCriteria {
   passCriteria: string[];
@@ -122,7 +139,9 @@ export interface ValidationCriteria {
   thresholds: ValidationThreshold[];
 }
 }
+}
 
+}
 }
 export interface ValidationThreshold {
   metric: string;
@@ -132,7 +151,9 @@ export interface ValidationThreshold {
   unit: string;
 }
 }
+}
 
+}
 }
 export interface ControlMetric {
   metricId: string;
@@ -146,7 +167,9 @@ export interface ControlMetric {
   automated: boolean;
 }
 }
+}
 
+}
 }
 export interface EvidenceRetention {
   period: number;
@@ -155,7 +178,9 @@ export interface EvidenceRetention {
   archival: ArchivalRequirement;
 }
 }
+}
 
+}
 }
 export interface CustomMapping {
   framework: string;
@@ -164,7 +189,9 @@ export interface CustomMapping {
   verified: boolean;
 }
 }
+}
 
+}
 }
 export interface ControlMetadata {
   version: string;
@@ -177,7 +204,9 @@ export interface ControlMetadata {
   changeHistory: ControlChange[];
 }
 }
+}
 
+}
 }
 export interface ControlReference {
   type: ReferenceType;
@@ -187,7 +216,9 @@ export interface ControlReference {
   version?: string;
 }
 }
+}
 
+}
 }
 export interface ControlChange {
   changeId: string;
@@ -198,13 +229,16 @@ export interface ControlChange {
   approvedBy: string;
 }
 }
+}
 
+}
 }
 export interface ArchivalRequirement {
   required: boolean;
   method: ArchivalMethod;
   location: string;
   access: ArchivalAccess;
+}
 }
 }
 
@@ -1054,6 +1088,7 @@ export class ISO27001ControlsService {
 }
 
 }
+}
 export interface ISO27001ComplianceReport {
   reportId: string;
   generatedAt: Date;
@@ -1064,6 +1099,7 @@ export interface ISO27001ComplianceReport {
   themeSummary: Record<ISO27001Theme, number>;
   gapAnalysis: ISO27001Control[];
   recommendations: string[];
+}
 }
 }
 

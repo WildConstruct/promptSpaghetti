@@ -43,14 +43,17 @@ const { Title, Text, _____Paragraph } = Typography;
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
 const { _____Option } = Select;
+}
 interface ContributorVisualizationProps {
   projectId: string;
   visible?: boolean;
   onClose?: () => void;
+}
 interface ContributorCardProps {
   contributor: ContributorStatsResponse['contributors'][0];
   projectId: string;
   onViewDetails: (contributorId: string) => void;
+}
 const ContributorCard: React.FC<ContributorCardProps> = ({ contributor, _____projectId, onViewDetails }) => {
   const getContributorInitials = (name?: string) => {,
   if (!name) return '?';

@@ -3,6 +3,7 @@
  */
 import React from 'react';
 
+}
 export interface OptimizationSettings {
     deadCodeElimination: boolean;
     constantPropagation: boolean;
@@ -14,6 +15,7 @@ export interface OptimizationSettings {
     debugMode: boolean;
 
 
+}
 interface OptimizationControlsProps {
     settings: OptimizationSettings;
     onSettingsChange: (settings: OptimizationSettings) => void;
@@ -23,3 +25,4 @@ interface OptimizationControlsProps {
 export declare const OptimizationControls: React.FC<OptimizationControlsProps>;
 export default OptimizationControls;
 //# sourceMappingURL=OptimizationControls.d.ts.map
+}

@@ -21,23 +21,29 @@ import {
 } from '../../../packages/core/types/feedback';
 
 }
+}
 interface FeedbackRouteParams {
   feedbackId: string;
   targetId?: string;
 }
 }
+}
 
+}
 }
 interface FeedbackVoteParams {
   feedbackId: string;
   voteType: 'helpful' | 'not_helpful';
 }
 }
+}
 
+}
 }
 interface FeedbackReplyBody {
   content: string;
   parentReplyId?: string;
+}
 }
 }
 

@@ -18,9 +18,11 @@ declare module 'fastify' {
   interface FastifyInstance {
     placementAdmin?: PlacementAdminController;
 }
+}
   }
 }
 
+}
 }
 interface PlacementAdminOptions {
   prefix?: string;
@@ -32,6 +34,7 @@ interface PlacementAdminOptions {
     previewCacheTTL?: number;
     bulkOperationLimit?: number;
     analyticsRetentionDays?: number;
+}
 }
   };
 }

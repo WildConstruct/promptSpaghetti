@@ -5,6 +5,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NotificationManager } from './NotificationManager';
 
+}
 export interface Notification {
   id: string;
   user_id: string;
@@ -27,6 +28,7 @@ export interface Notification {
   isOpen: boolean;
   onClose: () => void;
   className?: string;
+}
 }
 export const NotificationCenter: React.FC<NotificationCenterProps> = ({)
   notificationManager,
@@ -264,6 +266,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({)
     </div>
   );
 };
+}
 interface NotificationItemProps {
   notification: Notification;
   onClick: () => void;
@@ -280,6 +283,7 @@ interface NotificationItemProps {
   getIcon,
   getPriorityColor,
   formatTimeAgo
+}
 }) => {
   const [showActions, setShowActions] = useState(false);
   return;

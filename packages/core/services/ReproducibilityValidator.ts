@@ -5,12 +5,15 @@ import { Node, Edge } from 'reactflow';
 import seedrandom from 'seedrandom';
 import crypto from 'crypto';
 
+}
 export interface ReproducibilityValidationOptions {
   strictMode?: boolean;           // Require exact reproducibility,
   allowApproximate?: boolean;     // Accept approximate reproducibility,
   validateChecksums?: boolean;    // Verify data integrity hashes,
   checkVersionCompatibility?: boolean; // Validate version compatibility,
   requirePerformanceData?: boolean;    // Require performance metrics,
+}
+}
 }
 export interface ReproducibilityValidationReport {
   isValid: boolean;
@@ -24,12 +27,14 @@ export interface ReproducibilityValidationReport {
   seedsValid: boolean;
   versionCompatible: boolean;
   checksumValid: boolean;
+}
 };
   performance: {
   estimatedReproductionTime: number;
   complexityScore: number;
   memoryRequirement: number;
 };
+}
 }
 export interface ValidationError {
   code: string;
@@ -38,17 +43,22 @@ export interface ValidationError {
   field?: string;
   suggestion?: string;
 }
+}
+}
 export interface ValidationWarning {
   code: string;
   message: string;
   impact: 'reproducibility' | 'performance' | 'compatibility' | 'quality';
   suggestion?: string;
 }
+}
+}
 export interface ValidationSuggestion {
   code: string;
   message: string;
   category: 'optimization' | 'enhancement' | 'compatibility' | 'debugging';
   priority: 'high' | 'medium' | 'low'
+}
   }
 export class ReproducibilityValidator {
   private static instance: ReproducibilityValidator;
@@ -245,9 +255,9 @@ export class ReproducibilityValidator {
   });
     });
     report.integrity.configurationValid = configurationsValid;
-  private validateNodeReproducibilityData(()
+  private validateNodeReproducibilityData(((
     node: any,
-    report: ReproducibilityValidationReport,
+    report: ReproducibilityValidationReport
   ): void {
     const reprData = node.reproducibilityData;
     if (!reprData.originalPosition || !reprData.originalSize) {
@@ -350,9 +360,9 @@ export class ReproducibilityValidator {
         report.integrity.checksumValid = true;
     // Validate graph structure integrity
     this.validateGraphIntegrity(exportData, report);
-  private validateGraphIntegrity(()
+  private validateGraphIntegrity(((
     exportData: VFXExportFormat,
-    report: ReproducibilityValidationReport,
+    report: ReproducibilityValidationReport
   ): void {
     const nodes = exportData.graph.nodes;
     const connections = exportData.graph.connections;
@@ -386,9 +396,9 @@ export class ReproducibilityValidator {
   impact: 'reproducibility'
   });
       });
-  private calculatePerformanceEstimates(()
+  private calculatePerformanceEstimates(((
     exportData: VFXExportFormat,
-    report: ReproducibilityValidationReport,
+    report: ReproducibilityValidationReport
   ): void {
     const performance = exportData.execution.performance;
     const nodeCount = exportData.graph.nodes.length;
@@ -458,9 +468,9 @@ export class ReproducibilityValidator {
   category: 'debugging',
   priority: 'high',
 });
-  private assessOverallValidity(()
+  private assessOverallValidity(((
     report: ReproducibilityValidationReport,
-    options: ReproducibilityValidationOptions,
+    options: ReproducibilityValidationOptions
   ): void {
     const criticalErrors = report.errors.filter(e => e.severity === 'critical').length;
     const highErrors = report.errors.filter(e => e.severity === 'high').length;
@@ -482,7 +492,7 @@ export class ReproducibilityValidator {
   /**
    * Test actual reproduction by re-executing with exported data
    */
-  async testReproduction(()
+  async testReproduction(((
     exportData: VFXExportFormat,
     originalGraph: { nodes: Node; edges: Edge }
   ): Promise<{
@@ -491,6 +501,7 @@ export class ReproducibilityValidator {
   differences: string;
   reproductionTime: number;
 }> {
+
   const startTime = Date.now();
   try {
   // Reconstruct RNG state

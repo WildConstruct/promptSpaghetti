@@ -12,6 +12,7 @@ export interface WorkflowState {
     created_at: Date;
     updated_at: Date;
 
+}
 export interface WorkflowTransition {
     id: string;
     workspace_id: string;
@@ -24,6 +25,7 @@ export interface WorkflowTransition {
     conditions: Record<string, unknown>;
     created_at: Date;
 
+}
 export interface WorkflowApproval {
     id: string;
     workspace_id: string;
@@ -41,6 +43,7 @@ export interface WorkflowApproval {
     created_at: Date;
     updated_at: Date;
 
+}
 export interface WorkflowLock {
     id: string;
     workspace_id: string;
@@ -53,6 +56,7 @@ export interface WorkflowLock {
     auto_release: boolean;
     metadata: Record<string, unknown>;
 
+}
 export interface WorkflowHistoryEntry {
     id: string;
     workspace_id: string;
@@ -67,6 +71,7 @@ export interface WorkflowHistoryEntry {
     comment?: string;
     metadata: Record<string, unknown>;
 
+}
 export interface WorkflowStatistics {
     total_states: number;
     total_transitions: number;
@@ -80,6 +85,7 @@ export interface WorkflowStatistics {
         rejected: number;
         cancelled: number;
         avg_approval_time_hours: number;
+}
     };
     lock_stats: {
         total_active: number;
@@ -93,6 +99,7 @@ export interface WorkflowStatistics {
         failed_executions: number;
     };
 
+}
 export interface StateTransitionResult {
     success: boolean;
     new_state_id?: string;
@@ -100,6 +107,7 @@ export interface StateTransitionResult {
     approval_id?: string;
     error?: string;
     workflow_history_id?: string;
+}
 interface WorkflowStore {
     states: WorkflowState[];
     transitions: WorkflowTransition[];
@@ -121,6 +129,7 @@ interface WorkflowStore {
         metadata?: Record<string, unknown>;
         force?: boolean;
         lockDuration?: number;
+}
     }) => Promise<StateTransitionResult>;
     fetchApprovals: (workspaceId: string, filters?: Record<string, string>) => Promise<void>;
     createApproval: (data: Partial<WorkflowApproval>) => Promise<WorkflowApproval>;

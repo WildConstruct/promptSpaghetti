@@ -5,6 +5,7 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { KeyRotationPolicyService } from '../services/KeyRotationPolicyService';
 
 }
+}
 interface CreatePolicyRequest {
   policyName: string;
   description?: string;
@@ -39,7 +40,9 @@ interface CreatePolicyRequest {
   priority?: number;
 }
 }
+}
 
+}
 }
 interface ScheduleRotationRequest {
   keyId: string;
@@ -49,18 +52,23 @@ interface ScheduleRotationRequest {
   reason?: string;
 }
 }
+}
 
+}
 }
 interface ApproveRotationRequest {
   scheduleId: string;
   notes?: string;
 }
 }
+}
 
+}
 }
 interface ExecuteRotationRequest {
   scheduleId: string;
   force?: boolean;
+}
 }
 }
 

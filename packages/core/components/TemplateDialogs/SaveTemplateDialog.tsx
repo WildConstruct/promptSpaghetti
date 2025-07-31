@@ -5,9 +5,11 @@ import {
   TemplateCategory, 
   TemplateSaveData 
 } from '../../types/TemplateTypes';
+}
 interface SaveTemplateDialogProps {
   isOpen: boolean;
   onClose: () => void;
+}
   onSave: (templateData: TemplateSaveData) => Promise<{ success: boolean; error?: string }>;
   initialData?: Partial<TemplateSaveData>;
 const TEMPLATE_CATEGORIES: Array<{ value: TemplateCategory; label: string }> = [

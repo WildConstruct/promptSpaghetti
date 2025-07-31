@@ -382,6 +382,7 @@ export type BranchComparisonResponse = z.infer<typeof BranchComparisonResponseSc
 
 // Utility types
 
+}
 export interface BranchContext {
   projectId: string;
   branchId: string;
@@ -392,7 +393,9 @@ export interface BranchContext {
   canMerge: boolean;
   canDelete: boolean;
   canAdmin: boolean;
+}
 };
+}
 }
 export interface MergeContext {
   mergeRequestId: string;
@@ -402,11 +405,15 @@ export interface MergeContext {
   strategy: 'merge' | 'squash' | 'rebase';
   conflictResolution?: Record<string, any>;
 }
+}
+}
 export interface BranchHierarchy {
   branch: ProjectBranch;
   children: BranchHierarchy;
   depth: number;
   path: string;
+}
+}
 }
 export interface BranchMetrics {
   commitsPerDay: Record<string, number>;
@@ -419,6 +426,7 @@ export interface BranchMetrics {
   userId: string;
   userName: string;
   commits: number;
+}
 };
 
 // Validation helpers
@@ -491,6 +499,7 @@ export const MERGE_STRATEGY_DESCRIPTIONS = {
 
 // Event types for real-time updates
 
+}
 export interface BranchEvent {
   type: 'branch_created' | 'branch_updated' | 'branch_deleted' | 'branch_merged';
   branchId: string;
@@ -499,6 +508,8 @@ export interface BranchEvent {
   data: any;
   timestamp: Date;
 }
+}
+}
 export interface MergeRequestEvent {
   type: 'merge_request_created' | 'merge_request_updated' | 'merge_request_merged' | 'merge_request_closed';
   mergeRequestId: string;
@@ -506,6 +517,8 @@ export interface MergeRequestEvent {
   userId: string;
   data: any;
   timestamp: Date;
+}
+}
 }
 export interface BranchNotification {
   type: 'branch_conflict' | 'merge_request_review' | 'branch_merged' | 'branch_updated';
@@ -516,4 +529,5 @@ export interface BranchNotification {
   userId: string;
   data: any;
   timestamp: Date;
+}
 }

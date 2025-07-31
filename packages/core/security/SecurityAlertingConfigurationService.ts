@@ -40,6 +40,7 @@ import {
 import { SecurityLogger, SecurityEventType, LogLevel } from './SecurityLogger';
 import { DataClassificationLevel } from './DataClassificationAccessControl';
 
+}
 export interface SecurityAlertingConfigurationServiceOptions {
   storageBackend: 'filesystem' | 'database' | 'redis' | 'memory';
   enableCaching: boolean;
@@ -51,6 +52,8 @@ export interface SecurityAlertingConfigurationServiceOptions {
   maxBackups: number;
   encryptStorage: boolean;
   requireApproval: boolean;
+}
+}
 }
 export interface ConfigurationMetadata {
   id: string;
@@ -66,6 +69,8 @@ export interface ConfigurationMetadata {
   tags: string;
   classification: DataClassificationLevel;
 }
+}
+}
 export interface ConfigurationChangeRequest {
   configId: string;
   changes: Partial<SecurityAlertingConfig>;
@@ -75,6 +80,8 @@ export interface ConfigurationChangeRequest {
   scheduledAt?: Date;
   approvers?: string;
 }
+}
+}
 export interface ConfigurationValidationResult {
   isValid: boolean;
   errors: ValidationError;
@@ -83,12 +90,16 @@ export interface ConfigurationValidationResult {
   complianceIssues: ComplianceIssue;
   performanceImpact: PerformanceImpact;
 }
+}
+}
 export interface ValidationError {
   field: string;
   message: string;
   severity: 'error' | 'critical';
   code: string;
   suggestion?: string;
+}
+}
 }
 export interface ValidationWarning {
   field: string;
@@ -97,11 +108,15 @@ export interface ValidationWarning {
   code: string;
   suggestion?: string;
 }
+}
+}
 export interface ComplianceIssue {
   framework: string; // 'SOC2', 'GDPR', 'HIPAA', etc.,
   requirement: string;
   impact: 'minor' | 'major' | 'critical';
   description: string;
+}
+}
 }
 export interface PerformanceImpact {
   cpuImpact: 'low' | 'medium' | 'high';
@@ -112,6 +127,7 @@ export interface PerformanceImpact {
   /**
   * Service for managing security alerting configurations
   */
+}
 }
 export class SecurityAlertingConfigurationService extends EventEmitter {
   private configs: Map<string, SecurityAlertingConfig> = new Map();
@@ -145,6 +161,7 @@ export class SecurityAlertingConfigurationService extends EventEmitter {
    * Initialize the configuration service
    */
   private async initializeService(): Promise<void> {
+
   try {
   // Load existing configurations
   await this.loadConfigurations();
@@ -174,6 +191,7 @@ export class SecurityAlertingConfigurationService extends EventEmitter {
    * Get configuration by ID
    */
   async getConfiguration(configId: string): Promise<SecurityAlertingConfig | null> {
+
   try {
   // Check cache first
   if (this.options.enableCaching) {
@@ -201,10 +219,11 @@ export class SecurityAlertingConfigurationService extends EventEmitter {
   /**
    * Save configuration
    */
-  async saveConfiguration(configId: string, )
-    config: SecurityAlertingConfig, 
+  async saveConfiguration(configId: string, (
+    config: SecurityAlertingConfig,
     metadata: Partial<ConfigurationMetadata> = {}
   ): Promise<boolean> {
+
     try {
       // Validate configuration if enabled
       if (this.options.enableValidation) {
@@ -268,6 +287,7 @@ export class SecurityAlertingConfigurationService extends EventEmitter {
    * Validate configuration
    */
   async validateConfiguration(config: SecurityAlertingConfig): Promise<ConfigurationValidationResult> {
+
   const errors: ValidationError = [];
   const warnings: ValidationWarning = [];
   const complianceIssues: ComplianceIssue = [];
@@ -367,6 +387,7 @@ export class SecurityAlertingConfigurationService extends EventEmitter {
    * List all configurations
    */
   async listConfigurations(): Promise<ConfigurationMetadata> {
+
     try {
       return Array.from(this.metadata.values()).sort((a, b) => 
         b.updatedAt.getTime() - a.updatedAt.getTime()
@@ -383,6 +404,7 @@ export class SecurityAlertingConfigurationService extends EventEmitter {
    * Delete configuration
    */
   async deleteConfiguration(configId: string, deletedBy: string): Promise<boolean> {
+
   try {
   const config = await this.getConfiguration(configId);
   const metadata = this.metadata.get(configId);
@@ -420,6 +442,7 @@ export class SecurityAlertingConfigurationService extends EventEmitter {
    * Create backup of all configurations
    */
   async createBackup(): Promise<string> {
+
   try {
   const backup = {
   timestamp: new Date().toISOString(),
@@ -456,6 +479,7 @@ export class SecurityAlertingConfigurationService extends EventEmitter {
    * Private helper methods
    */
   private async loadConfigurations(): Promise<void> {
+
   // In a real implementation, this would load from the configured storage backend
   // For now, we'll initialize with empty collections
   private async loadConfiguration(configId: string): Promise<SecurityAlertingConfig | null> {,

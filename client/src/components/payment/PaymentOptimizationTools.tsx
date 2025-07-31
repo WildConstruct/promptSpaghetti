@@ -9,6 +9,7 @@ import { PaymentProvider, PaymentMethodType } from '../../../../server/src/marke
 import { PaymentProviderMetrics, PaymentMethodMetrics, PaymentFailureAnalysis } from './PaymentAnalyticsDashboard';
 import './PaymentOptimizationTools.css';
 
+}
 export interface PaymentOptimizationRecommendation {
   id: string;,
   type: 'routing' | 'retry' | 'method' | 'provider' | 'performance';
@@ -17,28 +18,31 @@ export interface PaymentOptimizationRecommendation {
   impact: 'high' | 'medium' | 'low';,
   effort: 'high' | 'medium' | 'low';
   priority: number;,
-  estimatedImprovement: {,
+  estimatedImprovement: {
   successRate?: number;
   processingTime?: number;
   cost?: number;
+}
 };
-  actionItems: Array<{,
+  actionItems: Array<{
   task: string;
   owner: string;,
   timeline: string;
 }>;
   status: 'pending' | 'in_progress' | 'completed' | 'dismissed';
 }
+}
 export interface PaymentRoutingRule {
   id: string;,
   name: string;
   description: string;,
-  conditions: Array<{,
+  conditions: Array<{
   field: string;,
   operator: 'equals' | 'greater_than' | 'less_than' | 'contains';
   value: string | number;
+}
 }>;
-  actions: Array<{,
+  actions: Array<{
   type: 'route_to_provider' | 'use_method' | 'apply_retry_logic';
   provider?: PaymentProvider;
   method?: PaymentMethodType;
@@ -50,11 +54,13 @@ export interface PaymentRoutingRule {
   createdAt: Date;,
   lastModified: Date;
 }
+}
 export interface PaymentOptimizationToolsProps {
   providerMetrics: PaymentProviderMetrics;,
   methodMetrics: PaymentMethodMetrics;
   failureAnalysis: PaymentFailureAnalysis;
   className?: string;
+}
 }
 export const PaymentOptimizationTools: React.FC<PaymentOptimizationToolsProps> = ({)
   providerMetrics,
@@ -583,7 +589,7 @@ function generateRecommendations(providerMetrics: PaymentProviderMetrics,)
         impact: provider.successRate < 90 ? 'high' : 'medium',
         effort: 'medium',
         priority: 10 - index,
-        estimatedImprovement: {,
+        estimatedImprovement: {
   successRate: 95 - provider.successRate,
 },
   actionItems: [,
@@ -605,7 +611,7 @@ function generateRecommendations(providerMetrics: PaymentProviderMetrics,)
   impact: 'medium',
         effort: 'high',
         priority: 7 - index,
-        estimatedImprovement: {,
+        estimatedImprovement: {
   processingTime: Math.max(200, provider.averageProcessingTime - 500),
 },
   actionItems: [,
@@ -630,7 +636,7 @@ function generateRecommendations(providerMetrics: PaymentProviderMetrics,)
   impact: 'high',
         effort: 'low',
         priority: 15 - index,
-        estimatedImprovement: {,
+        estimatedImprovement: {
   successRate: failure.percentage * 0.3, // Assume 30% improvement,
 },
   actionItems: [,
@@ -655,7 +661,7 @@ function generateRecommendations(providerMetrics: PaymentProviderMetrics,)
   impact: 'high',
       effort: 'medium',
       priority: 20,
-      estimatedImprovement: {,
+      estimatedImprovement: {
   successRate: 2.5,
   cost: 0.5,
 },

@@ -16,6 +16,7 @@ import { AnalyticsClient, AnalyticsClientConfig } from './AnalyticsClient';
 import { ConversionArchitectureManager, EnhancedConversionEvent, TouchPoint } from './ConversionFunnelArchitecture';
 import { SessionTrackingManager } from './SessionTrackingIntegration';
 
+}
 export interface ConversionTrackingConfig extends AnalyticsClientConfig {
     enableRealTimeStreaming: boolean;
     streamingEndpoint: string;
@@ -31,6 +32,7 @@ export interface ConversionTrackingConfig extends AnalyticsClientConfig {
     enableDebugLogging: boolean;
     errorReportingEndpoint?: string;
 
+}
 export interface EventValidationRule {
     field: string;
     type: 'required' | 'pattern' | 'range' | 'custom';
@@ -38,12 +40,14 @@ export interface EventValidationRule {
     validator?: (value: unknown) => boolean;
     errorMessage: string;
 
+}
 export interface QueuedEvent {
     event: EnhancedConversionEvent;
     timestamp: number;
     retryCount: number;
     queuedOffline: boolean;
 
+}
 export interface TrackingMetrics {
     eventsTracked: number;
     eventsQueued: number;
@@ -54,6 +58,7 @@ export interface TrackingMetrics {
     offlineEvents: number;
     privacyBlockedEvents: number;
 
+}
 export interface ConversionContext {
     sessionId: string;
     userId: string;
@@ -65,6 +70,7 @@ export interface ConversionContext {
         analytics: boolean;
         personalization: boolean;
         crossDevice: boolean;
+}
     };
     attribution: {
         source: string;

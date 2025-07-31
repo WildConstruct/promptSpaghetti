@@ -5,6 +5,7 @@
  */
 import React, { useMemo, useState } from 'react';
 import { VarianceAnalysis, EnhancedPreviewResult } from '../../hooks/useEnhancedPreview';
+}
 interface VarianceVisualizationProps {
   results: EnhancedPreviewResult;
   varianceAnalysis: VarianceAnalysis | null;
@@ -17,6 +18,7 @@ interface VarianceVisualizationProps {
   results,
   varianceAnalysis,
   className = ''
+}
 }) => {
   const [activeChart, setActiveChart] = useState<'length' | 'similarity' | 'content' | 'creativity'>('length');
   // Prepare chart data

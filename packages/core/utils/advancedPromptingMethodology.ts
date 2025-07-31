@@ -6,6 +6,7 @@ import { VariableSuggestion, templateParser } from './templateParser';
 // ZADA-STYLE SCREENPLAY TEMPLATE SYSTEM
 // Based on screenplay structure: time/setting → actions → locations → characters → cinematography
 
+}
 export interface ZadaTemplateComponent {
   category: 'time_setting' | 'actions' | 'locations' | 'characters' | 'cinematography';
   name: string;
@@ -15,6 +16,7 @@ export interface ZadaTemplateComponent {
   examples: string;
   priority: number;
   dependencies?: string; // Other components this depends on,
+}
 }
 export const ZADA_SCREENPLAY_TEMPLATES: ZadaTemplateComponent = [
   // Time/Setting Foundation
@@ -153,6 +155,7 @@ export const ZADA_SCREENPLAY_TEMPLATES: ZadaTemplateComponent = [
 // MARS FRAMEWORK SUPPORT
 // Modular tagging system: [CAM] for camera, [SUBJ] for subject, [FX] for effects, !FOCAL for priorities
 
+}
 export interface MarsTag {
   tag: string;
   category: 'camera' | 'subject' | 'effects' | 'focal' | 'setting' | 'mood' | 'technical';
@@ -162,6 +165,7 @@ export interface MarsTag {
   priority?: number;
   conflicts?: string; // Tags that conflict with this one,
   requires?: string; // Tags that must be present when this is used,
+}
 }
 export const MARS_FRAMEWORK_TAGS: MarsTag = [
   // Camera Tags [CAM]

@@ -48,9 +48,12 @@ export enum RiskLevel {
   relatedEvents: string;
   mitigationStrategies: string;
 }
+}
+}
 export interface BehavioralBaseline {
   userId: string;
   normalPatterns: {;
+}
   loginTimes: { hour: number; frequency: number }[];
     ipAddresses: { ip: string; frequency: number }[];
     devices: { deviceId: string; frequency: number }[];
@@ -63,6 +66,7 @@ export interface BehavioralBaseline {
 };
   lastUpdated: Date;
 }
+}
 export interface SecurityInsight {
   id: string;
   type: 'trend' | 'anomaly' | 'prediction' | 'recommendation';
@@ -72,6 +76,7 @@ export interface SecurityInsight {
   severity: RiskLevel;
   confidence: number;
   impact: 'low' | 'medium' | 'high' | 'critical';
+}
   timeframe: { start: Date; end: Date };
   evidence: {
   eventIds: string;
@@ -84,6 +89,7 @@ export interface SecurityInsight {
   longTerm: string;
 };
   generatedAt: Date;
+}
 }
 export interface SecurityMetricsSummary {
   period: { start: Date; end: Date };
@@ -121,6 +127,7 @@ export interface SecurityMetricsSummary {
   incidentResponseTime: number;
 };
 }
+}
 export interface AlertConfiguration {
   id: string;
   name: string;
@@ -131,6 +138,7 @@ export interface AlertConfiguration {
   timeWindow?: number; // minutes,
   userScope?: string;
   riskLevel?: RiskLevel;
+}
 };
   actions: {
   notify: string; // email addresses,
@@ -158,9 +166,10 @@ export class SecurityEventAnalytics extends EventEmitter {
   /**
    * Analyze security events and generate insights
    */
-  public async analyzeSecurityEvents()
+  public async analyzeSecurityEvents(
     timeframe?: { start: Date; end: Date }
   ): Promise<SecurityMetricsSummary> {
+
     this.isAnalyzing = true;
     try {
       const now = new Date();
@@ -286,6 +295,7 @@ export class SecurityEventAnalytics extends EventEmitter {
     this.emit('alertConfigured', config);
   // Private analysis methods
   private async calculateOverallRisk(logs: SecurityLogEntry): Promise<SecurityMetricsSummary['overallRisk']> {
+
     const baseRisk = 30; // Baseline risk score;
     let riskScore = baseRisk;
     const contributors: Array<{ factor: string; impact: number }> = [];
@@ -345,6 +355,7 @@ export class SecurityEventAnalytics extends EventEmitter {
   monthOverMonth: this.calculateMonthOverMonthTrend(),
 };
   private async analyzeThreatLandscape(logs: SecurityLogEntry): Promise<SecurityMetricsSummary['threatLandscape']> {
+
     const activeThreats = this.patterns.size;
     const newPatterns = Array.from(this.patterns.values()).filter(;);
       pattern => pattern.firstSeen.getTime() > Date.now() - 24 * 60 * 60 * 1000
@@ -379,6 +390,7 @@ export class SecurityEventAnalytics extends EventEmitter {
       geographicHotspots
     };
   private async analyzeUserBehavior(logs: SecurityLogEntry): Promise<SecurityMetricsSummary['userBehavior']> {
+
     const userActivity: Record<string, SecurityLogEntry> = {};
     // Group logs by user
     logs.forEach(log => {)
@@ -404,6 +416,7 @@ export class SecurityEventAnalytics extends EventEmitter {
   behavioralDeviations
 };
   private async assessSystemHealth(logs: SecurityLogEntry): Promise<SecurityMetricsSummary['systemHealth']> {
+
   // Security posture score (0-100)
   const failureRate = logs.filter(log => log.outcome === 'failure').length / Math.max(1, logs.length);
   const criticalEventRate = logs.filter(log => log.severity === 'critical').length / Math.max(1, logs.length);
@@ -424,12 +437,14 @@ export class SecurityEventAnalytics extends EventEmitter {
   incidentResponseTime
 };
   private async detectSecurityPatterns(logs: SecurityLogEntry): Promise<void> {
+
     // Pattern detection algorithms
     await this.detectBruteForcePatterns(logs);
     await this.detectPrivilegeEscalationPatterns(logs);
     await this.detectDataExfiltrationPatterns(logs);
     await this.detectInsiderThreatPatterns(logs);
   private async detectBruteForcePatterns(logs: SecurityLogEntry): Promise<void> {
+
     const failedLogins = logs.filter(log => ;);
       log.eventType === SecurityEventType.ACCOUNT_LOCKED &&
       log.details.reason === 'EXCESSIVE_FAILED_ATTEMPTS'
@@ -461,6 +476,7 @@ export class SecurityEventAnalytics extends EventEmitter {
       };
       this.patterns.set(pattern.id, pattern);
   private async detectPrivilegeEscalationPatterns(logs: SecurityLogEntry): Promise<void> {
+
     // Look for admin actions by non-admin users or unusual admin activity
     const adminActions = logs.filter(log => log.actor.type === 'admin');
     const suspiciousActions = adminActions.filter(log => ;);
@@ -494,6 +510,7 @@ export class SecurityEventAnalytics extends EventEmitter {
       };
       this.patterns.set(pattern.id, pattern);
   private async detectDataExfiltrationPatterns(logs: SecurityLogEntry): Promise<void> {
+
     // Look for patterns indicating potential data exfiltration
     const dataAccessEvents = logs.filter(log => ;);
       log.eventType === SecurityEventType.AUDIT_LOG_ACCESS ||
@@ -537,6 +554,7 @@ export class SecurityEventAnalytics extends EventEmitter {
           };
           this.patterns.set(pattern.id, pattern);
   private async detectInsiderThreatPatterns(logs: SecurityLogEntry): Promise<void> {
+
     // Analyze user behavior for insider threat indicators
     const userActivities: Record<string, SecurityLogEntry> = {};
     logs.forEach(log => {)
@@ -576,12 +594,14 @@ export class SecurityEventAnalytics extends EventEmitter {
         };
         this.patterns.set(pattern.id, pattern);
   private async generateSecurityInsights(logs: SecurityLogEntry): Promise<void> {
+
     // Generate various types of insights
     await this.generateTrendInsights(logs);
     await this.generateAnomalyInsights(logs);
     await this.generatePredictiveInsights(logs);
     await this.generateRecommendationInsights(logs);
   private async generateTrendInsights(logs: SecurityLogEntry): Promise<void> {
+
     // Analyze trends in security events
     const recentLogs = logs.filter(log => ;);
       log.timestamp.getTime() > Date.now() - 7 * 24 * 60 * 60 * 1000
@@ -629,6 +649,7 @@ export class SecurityEventAnalytics extends EventEmitter {
   };
       this.insights.push(insight);
   private async generateAnomalyInsights(logs: SecurityLogEntry): Promise<void> {
+
     // Detect anomalies in security events
     const hourlyActivity = new Array(24).fill(0);
     logs.forEach(log => {)
@@ -675,6 +696,7 @@ export class SecurityEventAnalytics extends EventEmitter {
         this.insights.push(insight);
     });
   private async generatePredictiveInsights(logs: SecurityLogEntry): Promise<void> {
+
     // Generate predictive insights based on patterns
     const patterns = Array.from(this.patterns.values());
     const growingPatterns = patterns.filter(pattern => ;);
@@ -715,6 +737,7 @@ export class SecurityEventAnalytics extends EventEmitter {
       this.insights.push(insight);
     });
   private async generateRecommendationInsights(logs: SecurityLogEntry): Promise<void> {
+
     // Generate recommendations based on overall security posture
     const criticalEvents = logs.filter(log => log.severity === 'critical').length;
     const failedEvents = logs.filter(log => log.outcome === 'failure').length;
@@ -778,6 +801,7 @@ export class SecurityEventAnalytics extends EventEmitter {
     // Simplified geographic risk calculation
     return count * 2;
   private async calculateUserRisk(userId: string, logs: SecurityLogEntry): Promise<number> {
+
     const baseline = this.baselines.get(userId);
     let riskScore = 20; // Base risk;
     // Factor in failed events
@@ -820,9 +844,9 @@ export class SecurityEventAnalytics extends EventEmitter {
     if (score >= 60) return 'High';
     if (score >= 40) return 'Medium';
     return 'Low';
-  private generateExecutiveRecommendations(()
+  private generateExecutiveRecommendations(((
     summary: SecurityMetricsSummary | null,
-    insights: SecurityInsight,
+    insights: SecurityInsight
   ): Array<{ priority: string; action: string; timeline: string }> {
   const recommendations = [];
   if (insights.some(insight => insight.severity === RiskLevel.CRITICAL)) {
@@ -866,6 +890,7 @@ export class SecurityEventAnalytics extends EventEmitter {
     // Simplified calculation
     return 300; // 5 minutes average
   private async updateBehavioralBaselines(logs: SecurityLogEntry): Promise<void> {
+
     // Update user behavioral baselines based on new activity
     const userActivity: Record<string, SecurityLogEntry> = {};
     logs.forEach(log => {)
@@ -921,9 +946,9 @@ export class SecurityEventAnalytics extends EventEmitter {
     });
     // Calculate deviations
     baseline.riskProfile.recentDeviations = this.calculateBehavioralDeviations(baseline, activities);
-  private calculateBehavioralDeviations(()
+  private calculateBehavioralDeviations(((
     baseline: BehavioralBaseline,
-    activities: SecurityLogEntry,
+    activities: SecurityLogEntry
   ): number {
     let deviations = 0;
     activities.forEach(activity => {)

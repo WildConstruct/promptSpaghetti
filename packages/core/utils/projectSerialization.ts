@@ -20,16 +20,19 @@ import {
 
 // Graph state interface matching the Zustand store
 
+}
 export interface GraphState {
   nodes: Node[];
   edges: Edge[];
   annotations?: {
+}
     stickyNotes?: Array<{ id: string; text: string; position: { x: number; y: number } }>;
     nodeLabels?: Record<string, string>;
     regionGroups?: Array<{ id: string; name: string; nodeIds: string[] }>;
     connectionLabels?: Record<string, string>;
     [key: string]: unknown;
   };
+}
 }
 export interface SerializationOptions {
   includeMetadata?: boolean;
@@ -38,16 +41,22 @@ export interface SerializationOptions {
   compress?: boolean;
   validateOutput?: boolean;
 }
+}
+}
 export interface DeserializationOptions {
   skipValidation?: boolean;
   autoMigrate?: boolean;
   preserveIds?: boolean;
+}
+}
 }
 export interface SerializationResult {
   success: boolean;
   data?: string; // JSON string,
   error?: string;
   warnings?: string;
+}
+}
 }
 export interface DeserializationResult {
   success: boolean;
@@ -56,6 +65,7 @@ export interface DeserializationResult {
   metadata: ProjectMetadata;
   settings: ProjectSettings;
   collaboration?: CollaborationData;
+}
 };
   error?: string;
   warnings?: string;

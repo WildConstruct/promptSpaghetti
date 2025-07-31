@@ -46,14 +46,17 @@ const { TabPane } = Tabs;
 const { _Option } = Select;
 
 // Types for promotion preview
+}
 interface PromotionSlot {
   id: string;
   name: string;
   type: string;
   location: string;
+}
   dimensions: { width: number; height: number };
   traffic_allocation: number;
   priority: number;
+}
 interface PromotionPreviewData {
   schedule: {
   id: string;
@@ -63,8 +66,9 @@ interface PromotionPreviewData {
   start_date: Date;
   end_date: Date;
   status: string;
+}
 };
-  content: Array<{,
+  content: Array<{
   id: string;
   title: string;
   category: string;
@@ -88,23 +92,26 @@ interface PromotionPreviewData {
 };
   ab_test_config?: {
   test_name: string;
-  variants: Array<{,
+  variants: Array<{
   id: string;
   name: string;
   traffic_split: number;
   content_ids: string;
 }>;
   };
+}
 interface PerformancePrediction {
   metric: string;
   predicted_value: number;
   confidence_range: [number, number];
-  factors: Array<{,
+  factors: Array<{
   name: string;
   impact: number;
   description: string;
+}
 }>;
 
+}
 export interface PromotionPreviewProps {
   promotionData?: PromotionPreviewData;
   onUpdateRotation?: (config: unknown) => void;
@@ -112,6 +119,7 @@ export interface PromotionPreviewProps {
   onStopPreview?: () => void;
   isLive?: boolean;
   className?: string;
+}
 }
 export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
   promotionData,

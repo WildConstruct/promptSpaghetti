@@ -2,6 +2,7 @@
 // Dialog for requesting locks on resources
 import React, { useState, useEffect } from 'react';
 import { X, Lock, Clock, AlertTriangle, Info } from 'lucide-react';
+}
 interface LockRequestDialogProps {
   isOpen: boolean;
   onClose: () => void;
@@ -14,6 +15,7 @@ interface LockRequestDialogProps {
   onRequest,
   resourceId,
   userId
+}
 }) => {
   const [selectedResource, setSelectedResource] = useState(resourceId || '');
   const [lockType, setLockType] = useState<string>('edit');

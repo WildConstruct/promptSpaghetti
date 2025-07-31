@@ -8,12 +8,15 @@ import { AdvancedRuntimeNode, AdvancedExecutionContext, NodeExecutionResult } fr
 import { IOSpecBuilder, TypedInputs } from '../io-system';
 import { AIModelFactory, DALLEAdapter, MidjourneyAdapter, StableDiffusionAdapter } from '../../ai';
 
+}
 export interface ImageGenerationConfig {
   provider: 'dalle' | 'midjourney' | 'stable-diffusion';
   model?: string;
   apiKey?: string;
   endpoint?: string;
   defaultParameters?: Record<string, any>;
+}
+}
 }
 export interface ImageMetadata {
   width: number;
@@ -27,10 +30,13 @@ export interface ImageMetadata {
   prompt: string;
   negativePrompt?: string;
 }
+}
+}
 export interface GeneratedImage {
   url?: string;
   base64?: string;
   metadata: ImageMetadata;
+}
 }
 export class ImageGenerationNode extends AdvancedRuntimeNode {
   private modelFactory: AIModelFactory;
@@ -52,6 +58,7 @@ export class ImageGenerationNode extends AdvancedRuntimeNode {
     this.modelFactory = new AIModelFactory();
     this._initializeAdapter(config);
   async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> {
+
     try {
       const prompt = inputs.getString('prompt');
       const negativePrompt = inputs.getString('negative_prompt', '');
@@ -119,6 +126,7 @@ export class ImageGenerationNode extends AdvancedRuntimeNode {
     } catch (error) {
       throw new Error(`Image generation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   async validateInputs(inputs: Record<string, any>): Promise<string> {
+
     const errors: string = [];
     if (!inputs.prompt || typeof inputs.prompt !== 'string') {
       errors.push('Prompt must be a non-empty string');
@@ -130,6 +138,7 @@ export class ImageGenerationNode extends AdvancedRuntimeNode {
       errors.push('Seed must be a positive number');
     return errors;
   private async _initializeAdapter(config: ImageGenerationConfig): Promise<void> {
+
     try {
       let adapter: unknown;
       switch (config.provider) {
@@ -235,6 +244,7 @@ export class ImageVariationNode extends AdvancedRuntimeNode {
     super(nodeId, 'image_variation', ioSpec);
     this.modelFactory = new AIModelFactory();
   async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> {
+
   try {
   const sourceImage = inputs.getString('source_image');
   const variationPrompt = inputs.getString('variation_prompt', '');
@@ -271,6 +281,7 @@ export class ImageVariationNode extends AdvancedRuntimeNode {
     } catch (error) {
       throw new Error(`Image variation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   async validateInputs(inputs: Record<string, any>): Promise<string> {
+
     const errors: string = [];
     if (!inputs.source_image || typeof inputs.source_image !== 'string') {
       errors.push('Source image must be provided as URL or base64 string');
@@ -291,6 +302,7 @@ export class ImageUpscaleNode extends AdvancedRuntimeNode {
       .build();
     super(nodeId, 'image_upscale', ioSpec);
   async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> {
+
   try {
   const image = inputs.getString('image');
   const scaleFactor = inputs.getNumber('scale_factor', 2);
@@ -317,6 +329,7 @@ export class ImageUpscaleNode extends AdvancedRuntimeNode {
     } catch (error) {
       throw new Error(`Image upscaling failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   async validateInputs(inputs: Record<string, any>): Promise<string> {
+
     const errors: string = [];
     if (!inputs.image || typeof inputs.image !== 'string') {
       errors.push('Image must be provided as URL or base64 string');
@@ -336,6 +349,7 @@ export class ImageEditNode extends AdvancedRuntimeNode {
       .build();
     super(nodeId, 'image_edit', ioSpec);
   async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> {
+
   try {
   const image = inputs.getString('image');
   const mask = inputs.getString('mask', '');
@@ -364,6 +378,7 @@ export class ImageEditNode extends AdvancedRuntimeNode {
     } catch (error) {
       throw new Error(`Image editing failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   async validateInputs(inputs: Record<string, any>): Promise<string> {
+
     const errors: string = [];
     if (!inputs.image || typeof inputs.image !== 'string') {
       errors.push('Source image must be provided as URL or base64 string');

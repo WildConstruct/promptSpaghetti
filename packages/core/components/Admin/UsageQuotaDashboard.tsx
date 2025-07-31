@@ -49,6 +49,7 @@ import {
   QuotaAdminOperation
 } from '../../types/UsageQuotaTypes';
 import { ActionSeverity } from '../../types/EnforcementTypes';
+}
 interface UsageQuotaDashboardProps {
   onQuotaCreate?: (quota: Omit<UsageQuota, 'quotaId' | 'createdAt' | 'updatedAt'>) => Promise<void>;
   onQuotaUpdate?: (quotaId: string, updates: Partial<UsageQuota>) => Promise<void>;
@@ -91,6 +92,7 @@ interface UsageQuotaDashboardProps {
   onViolationResolve,
   onQuotaOverride,
   className = ''
+}
 }) => {
   // State management
   const [dashboardState, setDashboardState] = useState<DashboardState | null>(null);

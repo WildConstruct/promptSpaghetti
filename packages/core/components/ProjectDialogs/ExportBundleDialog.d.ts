@@ -4,6 +4,7 @@
 import React from 'react';
 import { Node, Edge } from 'reactflow';
 
+}
 interface ExportBundleDialogProps {
     isOpen: boolean;
     onClose: () => void;
@@ -13,6 +14,7 @@ interface ExportBundleDialogProps {
         success: boolean;
         error?: string;
 
+}
     }) => void;
 
 export declare const ExportBundleDialog: React.FC<ExportBundleDialogProps>;

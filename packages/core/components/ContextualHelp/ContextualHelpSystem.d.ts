@@ -15,6 +15,7 @@ import React from 'react';
 import { Node, Edge } from 'reactflow';
 export type HelpContentType = 'getting-started' | 'node-creation' | 'connection-flow' | 'weight-adjustment' | 'preview-generation' | 'professional-workflow' | 'troubleshooting' | 'advanced-features';
 
+}
 export interface HelpContent {
     id: string;
     type: HelpContentType;
@@ -29,8 +30,10 @@ export interface HelpContent {
         nodeTypes?: string[];
         actions?: string[];
         conditions?: Record<string, any>;
+}
     };
 
+}
 export interface ContextualHelpProps {
     nodes: Node[];
     edges: Edge[];
@@ -46,3 +49,4 @@ export interface ContextualHelpProps {
 export declare const ContextualHelpSystem: React.FC<ContextualHelpProps>;
 export default ContextualHelpSystem;
 //# sourceMappingURL=ContextualHelpSystem.d.ts.map
+}

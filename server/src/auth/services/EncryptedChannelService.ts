@@ -7,6 +7,7 @@ import crypto from 'crypto';
 import { EventEmitter } from 'events';
 
 }
+}
 export interface EncryptedChannel {
   id: string;
   name: string;
@@ -23,9 +24,11 @@ export interface EncryptedChannel {
     ttl?: number; // Time to live in seconds
     requireMFA?: boolean;
 }
+}
   };
 }
 
+}
 }
 export interface EncryptedMessage {
   id: string;
@@ -42,9 +45,11 @@ export interface EncryptedMessage {
     checksum: string;
     priority: 'low' | 'normal' | 'high' | 'urgent';
 }
+}
   };
 }
 
+}
 }
 export interface ChannelKey {
   version: number;
@@ -55,7 +60,9 @@ export interface ChannelKey {
   algorithm: string;
 }
 }
+}
 
+}
 }
 export interface MessageTransmissionResult {
   success: boolean;
@@ -63,6 +70,7 @@ export interface MessageTransmissionResult {
   error?: string;
   deliveredTo: string[];
   failedDeliveries: string[];
+}
 }
 }
 

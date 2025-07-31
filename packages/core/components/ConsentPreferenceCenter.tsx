@@ -12,6 +12,7 @@ import {
   Trash2, Edit, History, AlertCircle, CheckCircle, Clock, 
   FileText, ExternalLink, RefreshCw, User, Globe, Calendar 
 } from 'lucide-react';
+}
 interface ConsentPreferenceCenterProps {
   userId?: string;
   onConsentUpdate?: (consents: ConsentSettings) => void;
@@ -47,7 +48,9 @@ interface ConsentPreferenceCenterProps {
   start: string;
   end: string;
   timezone: string;
+}
 };
+}
 interface DataProcessingPreferences {
   analytics: ProcessingConsent;
   personalization: ProcessingConsent;
@@ -103,6 +106,7 @@ interface DataProcessingPreferences {
   showDataRights = true,
   showHistory = true,
   jurisdiction = 'US'
+}
 }) => {
   const [activeSection, setActiveSection] = useState('overview');
   const [settings, setSettings] = useState<ConsentSettings>({)

@@ -27,6 +27,7 @@ import { Textarea } from '../ui/Textarea';
 import { Progress } from '../ui/Progress';
 import { AlertRuleBuilder } from './AlertRuleBuilder';
 import './SecurityEventLoggingConfigPanel.css';
+}
 interface SecurityLoggingConfig {
   enabled: boolean;
   destinations: LoggingDestination;
@@ -106,6 +107,7 @@ interface SecurityLoggingConfig {
   circuit_breaker_enabled: true,
   circuit_breaker_threshold: 100,
   rate_limit_per_minute: 1000,
+}
 },
   compliance_settings: {
   frameworks: [],
@@ -1057,6 +1059,7 @@ function getFrameworkDescription(framework: ComplianceFramework): string {
 
 // Utility functions (would be replaced with actual API calls)
 async function fetchSecurityLoggingConfig(): Promise<SecurityLoggingConfig> {
+
   // Simulate API call
   return {
   enabled: true,
@@ -1103,10 +1106,12 @@ async function fetchSecurityLoggingConfig(): Promise<SecurityLoggingConfig> {
   validation_rules: [],
 };
 async function saveSecurityLoggingConfig(config: SecurityLoggingConfig): Promise<void> {
+
   // Simulate API call
   await new Promise(resolve => setTimeout(resolve, 1000));
   console.log('Saved configuration:', config);
 async function testSecurityLoggingConfig(_config: SecurityLoggingConfig): Promise<unknown> {
+
   // Simulate configuration test
   await new Promise(resolve => setTimeout(resolve, 2000));
   return {

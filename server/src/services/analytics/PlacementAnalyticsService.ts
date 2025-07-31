@@ -23,6 +23,7 @@ import {
 } from '../../../../packages/core/types/PlacementTypes';
 
 }
+}
 export interface AnalyticsConfig {
   metricsCalculationInterval: number; // minutes
   insightGenerationInterval: number; // hours
@@ -31,7 +32,9 @@ export interface AnalyticsConfig {
   retentionPeriod: number; // days
 }
 }
+}
 
+}
 }
 export interface PerformanceBaselineData {
   slotId: string;
@@ -41,11 +44,13 @@ export interface PerformanceBaselineData {
     averageConversions: number;
     averageRevenue: number;
 }
+}
   };
   calculatedAt: Date;
   sampleSize: number;
 }
 
+}
 }
 export interface AnomalyDetectionResult {
   type: 'performance_drop' | 'unusual_spike' | 'trend_change';
@@ -55,6 +60,7 @@ export interface AnomalyDetectionResult {
   detectedAt: Date;
   confidence: number;
   suggestions: string[];
+}
 }
 }
 

@@ -15,6 +15,7 @@ import {
 } from '../../models/CaseStudyDataModel';
 import { CaseStudyCard } from './CaseStudyCard';
 
+}
 export interface CaseStudyGalleryProps {
   initialFilter?: CaseStudyFilter;
   initialSort?: CaseStudySort;
@@ -27,6 +28,7 @@ export interface CaseStudyGalleryProps {
   onTemplateClick?: (templateId: string) => void;
   onAuthorClick?: (authorId: string) => void;
   className?: string;
+}
 }
 export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({)
   initialFilter = {},

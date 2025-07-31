@@ -8,12 +8,14 @@
  */
 import React from 'react';
 
+}
 interface ShareAnalyticsDashboardProps {
     shareLinkId: string;
     timeRange?: {
         start: Date;
         end: Date;
 
+}
     };
 
 export declare const ShareAnalyticsDashboard: React.FC<ShareAnalyticsDashboardProps>;

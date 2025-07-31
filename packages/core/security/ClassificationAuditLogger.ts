@@ -49,6 +49,7 @@ export enum AuditEventType {
   ipAddress: string;
   userAgent?: string;
   sessionId?: string;
+}
 };
   target: {
   dataId?: string;
@@ -84,6 +85,7 @@ export enum AuditEventType {
 
 // Query Filters
 }
+}
 export interface AuditQueryFilter {
   startDate?: Date;
   endDate?: Date;
@@ -98,11 +100,14 @@ export interface AuditQueryFilter {
   offset?: number;
   // Compliance Report
 }
+}
+}
 export interface ComplianceReport {
   framework: ComplianceFramework;
   reportPeriod: {
   start: Date;
   end: Date;
+}
 };
   summary: {
   totalEvents: number;
@@ -116,7 +121,7 @@ export interface ComplianceReport {
   exported: number;
   deleted: number;
 };
-  violationDetails: Array<{,
+  violationDetails: Array<{
   timestamp: Date;
   eventId: string;
   description: string;
@@ -129,6 +134,7 @@ export interface ComplianceReport {
 
 // Retention Policy
 }
+}
 export interface RetentionPolicy {
   framework: ComplianceFramework;
   eventType: AuditEventType;
@@ -137,6 +143,7 @@ export interface RetentionPolicy {
   deleteAfterDays: number;
   requiresApproval: boolean;
   // Export Format
+}
 }
 export enum ExportFormat {
   JSON = 'json',
@@ -155,10 +162,11 @@ export enum ExportFormat {
   logRotationSizeMB: number;
   logRotationIntervalHours: number;
   archiveLocation: string;
-  streamEndpoints?: Array<{,
+  streamEndpoints?: Array<{
   url: string;
   format: ExportFormat;
   headers?: Record<string, string>;
+}
 }>;
   performanceMode: 'balanced' | 'high_performance' | 'high_security';
 /**
@@ -185,7 +193,7 @@ export class ClassificationAuditLogger extends EventEmitter {
   /**
   * Log a classification event
   */
-  public async logClassification()
+  public async logClassification(
   dataElement: DataElement,
   result: ClassificationResult,
   actor: AuditLogEntry['actor'],
@@ -224,7 +232,7 @@ export class ClassificationAuditLogger extends EventEmitter {
   /**
    * Log a classification update
    */
-  public async logClassificationUpdate()
+  public async logClassificationUpdate(
     dataId: string,
     oldLevel: ClassificationLevel,
     newLevel: ClassificationLevel,
@@ -260,7 +268,7 @@ export class ClassificationAuditLogger extends EventEmitter {
   /**
    * Log a policy violation
    */
-  public async logPolicyViolation()
+  public async logPolicyViolation(
     violation: {
   dataId: string;
   policyId: string;
@@ -305,13 +313,14 @@ export class ClassificationAuditLogger extends EventEmitter {
   /**
    * Log data access event
    */
-  public async logDataAccess()
+  public async logDataAccess(
     dataId: string,
     accessGranted: boolean,
     reason: string,
     actor: AuditLogEntry['actor'],
     classification?: ClassificationResult
   ): Promise<string> {
+
   const entry = await this.createAuditEntry({)
   eventType: accessGranted ? AuditEventType.ACCESS_GRANTED : AuditEventType.ACCESS_DENIED,
   actor,
@@ -344,6 +353,7 @@ export class ClassificationAuditLogger extends EventEmitter {
    * Query audit logs
    */
   public async queryLogs(filter: AuditQueryFilter): Promise<AuditLogEntry> {
+
   let results = [...this.logs];
   // Apply filters
   if (filter.startDate) {
@@ -383,7 +393,7 @@ export class ClassificationAuditLogger extends EventEmitter {
   /**
   * Generate compliance report
   */
-  public async generateComplianceReport()
+  public async generateComplianceReport(
   framework: ComplianceFramework,
   startDate: Date,
   endDate: Date): Promise<ComplianceReport> {,
@@ -472,10 +482,11 @@ export class ClassificationAuditLogger extends EventEmitter {
   /**
    * Export logs in specified format
    */
-  public async exportLogs(()
+  public async exportLogs(((
     filter: AuditQueryFilter,
-    format: ExportFormat,
+    format: ExportFormat
   ): Promise<string> {
+
     const logs = await this.queryLogs(filter);
     switch (format) {
     case ExportFormat.JSON:
@@ -492,7 +503,7 @@ export class ClassificationAuditLogger extends EventEmitter {
   /**
    * Verify log integrity
    */
-  public async verifyIntegrity()
+  public async verifyIntegrity(
     startId?: string,
     endId?: string
   ): Promise<{
@@ -533,6 +544,7 @@ export class ClassificationAuditLogger extends EventEmitter {
   // Private helper methods
   private async createAuditEntry(data: Omit<AuditLogEntry, 'id' | 'timestamp' | 'integrity'>)
   ): Promise<AuditLogEntry> {
+
   const entry: AuditLogEntry = {,
   id: this.generateLogId(),
   timestamp: new Date(),
@@ -559,6 +571,7 @@ export class ClassificationAuditLogger extends EventEmitter {
       await this.storeLog(entry);
     return entry;
   private async storeLog(entry: AuditLogEntry): Promise<void> {
+
     this.logs.push(entry);
     this.logIndex.set(entry.id, this.logs.length - 1);
     this.currentLogSize += JSON.stringify(entry).length;
@@ -608,6 +621,7 @@ export class ClassificationAuditLogger extends EventEmitter {
   await this.storeLog(entry);
 }, 1000); // Flush every second
   private async streamLog(entry: AuditLogEntry): Promise<void> {
+
   if (!this.config.streamEndpoints) return;
   for (const endpoint of this.config.streamEndpoints) {
   try {
@@ -623,6 +637,7 @@ export class ClassificationAuditLogger extends EventEmitter {
   error: error instanceof Error ? error.message : 'Unknown error',
 });
   private async rotateLogs(): Promise<void> {
+
     const rotatedLogs = [...this.logs];
     const rotationId = `rotation_${Date.now()}`;}
     // Archive current logs
@@ -753,9 +768,9 @@ export class ClassificationAuditLogger extends EventEmitter {
     case AlertSeverity.ERROR: return 'high';
     case AlertSeverity.CRITICAL: return 'critical';
   default: return 'medium';
-  private generateRecommendations(()
+  private generateRecommendations(((
     framework: ComplianceFramework,
-    violations: AuditLogEntry,
+    violations: AuditLogEntry
   ): string {
     const recommendations: string = [];
     if (violations.length > 10) {

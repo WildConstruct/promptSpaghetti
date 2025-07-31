@@ -3,6 +3,7 @@
 // Google Gemini agent script with structured output and safety considerations
 import { validateFormat } from '../../serialization/validator';
 
+}
 export interface GeminiAgentConfig {
   apiKey: string;
   model: string;
@@ -11,11 +12,13 @@ export interface GeminiAgentConfig {
   maxRetries: number;
   retryTemperatureReduction: number;
   useStructuredOutput: boolean;
-  safetySettings?: Array<{,
+  safetySettings?: Array<{
   category: string;
   threshold: string;
+}
 }>;
   stopSequences?: string;
+}
 }
 export interface GeminiGenerationRequest {
   purpose: string;
@@ -29,15 +32,18 @@ export interface GeminiGenerationRequest {
   constraints?: string;
   examples?: string;
 }
+}
+}
 export interface GeminiGenerationResult {
   success: boolean;
   graph?: string;
   errors?: string;
   warnings?: string;
   attempts: number;
-  safetyRatings?: Array<{,
+  safetyRatings?: Array<{
   category: string;
   probability: string;
+}
 }>;
   metadata: {
   model: string;
@@ -432,9 +438,10 @@ export const defaultGeminiConfig: GeminiAgentConfig = {,
 /**
  * Utility function to create and use Gemini agent
  */
-export async function generateGraphWithGemini(()
+export async function generateGraphWithGemini(((
     request: GeminiGenerationRequest,
     config: Partial<GeminiAgentConfig> = {}
   ): Promise<GeminiGenerationResult> {
+
   const agent = new GeminiGraphAgent({ ...defaultGeminiConfig, ...config });
   return agent.generateGraph(request);

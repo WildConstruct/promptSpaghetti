@@ -4,6 +4,7 @@
 import { Pool, PoolClient } from 'pg';
 
 }
+}
 export interface KnowledgeArticle {
   id: string;
   title: string;
@@ -19,6 +20,7 @@ export interface KnowledgeArticle {
     avatar_url?: string;
     creator_tier: string;
     verification_status: string;
+}
 }
   };
   difficulty_level: 'beginner' | 'intermediate' | 'advanced' | 'expert';
@@ -40,6 +42,7 @@ export interface KnowledgeArticle {
 }
 
 }
+}
 export interface Tutorial {
   id: string;
   title: string;
@@ -52,6 +55,7 @@ export interface Tutorial {
     id: string;
     display_name: string;
     avatar_url?: string;
+}
 }
   };
   difficulty_level: 'beginner' | 'intermediate' | 'advanced' | 'expert';
@@ -68,6 +72,7 @@ export interface Tutorial {
 }
 
 }
+}
 export interface TutorialStep {
   id: string;
   order: number;
@@ -79,6 +84,7 @@ export interface TutorialStep {
     url: string;
     caption?: string;
 }
+}
   }>;
   interactive_elements?: Array<{
     type: 'quiz' | 'code_editor' | 'template_builder';
@@ -87,6 +93,7 @@ export interface TutorialStep {
   estimated_duration: number;
 }
 
+}
 }
 export interface CaseStudy {
   id: string;
@@ -102,6 +109,7 @@ export interface CaseStudy {
     avatar_url?: string;
     company?: string;
     role?: string;
+}
 }
   };
   industry: string;
@@ -128,6 +136,7 @@ export interface CaseStudy {
 }
 
 }
+}
 export interface LearningPath {
   id: string;
   title: string;
@@ -143,6 +152,7 @@ export interface LearningPath {
     order: number;
     is_required: boolean;
 }
+}
   }>;
   prerequisites?: string[];
   learning_objectives: string[];
@@ -152,6 +162,7 @@ export interface LearningPath {
   updated_at: string;
 }
 
+}
 }
 export interface CreateArticleRequest {
   title: string;
@@ -168,9 +179,11 @@ export interface CreateArticleRequest {
     title: string;
     description?: string;
 }
+}
   }>;
 }
 
+}
 }
 export interface CreateTutorialRequest {
   title: string;
@@ -185,7 +198,9 @@ export interface CreateTutorialRequest {
   is_interactive?: boolean;
 }
 }
+}
 
+}
 }
 export interface CreateCaseStudyRequest {
   title: string;
@@ -202,6 +217,7 @@ export interface CreateCaseStudyRequest {
     value: string;
     description?: string;
 }
+}
   }>;
   templates_used?: Array<{
     id: string;
@@ -212,6 +228,7 @@ export interface CreateCaseStudyRequest {
 }
 
 }
+}
 export interface SearchFilters {
   category?: string;
   difficulty_level?: string;
@@ -220,6 +237,7 @@ export interface SearchFilters {
   author_id?: string;
   is_featured?: boolean;
   is_community_contributed?: boolean;
+}
 }
 }
 

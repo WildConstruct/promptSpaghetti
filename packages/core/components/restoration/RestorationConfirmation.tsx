@@ -28,6 +28,7 @@ import {
   CONFLICT_DESCRIPTIONS
 } from '../../types/restoration';
 const { Title, Text } = Typography;
+}
 interface RestorationConfirmationProps {
   preview: RestorationPreviewResponse;
   config: RestorationConfig;
@@ -38,6 +39,7 @@ interface RestorationConfirmationProps {
   config,
   onConfirm,
   onCancel
+}
 }) => {
   const hasConflicts = preview.summary.totalConflicts > 0;
   const isHighRisk = preview.summary.riskLevel === 'high';

@@ -20,6 +20,7 @@ import { Pool } from 'pg';
 import { Redis } from 'ioredis';
 
 }
+}
 export interface Category {
   id: string;
   name: string;
@@ -42,6 +43,7 @@ export interface Category {
     totalDownloads: number;
     averageRating: number;
     trendingScore: number;
+}
 }
   };
   
@@ -66,6 +68,7 @@ export interface Category {
 }
 
 }
+}
 export interface Tag {
   id: string;
   name: string;
@@ -88,7 +91,9 @@ export interface Tag {
   suggestedBy?: 'ai' | 'user' | 'admin';
 }
 }
+}
 
+}
 }
 export interface ClassificationResult {
   primaryCategory: {
@@ -96,6 +101,7 @@ export interface ClassificationResult {
     name: string;
     confidence: number;
     reasoning: string;
+}
 }
   };
   
@@ -123,6 +129,7 @@ export interface ClassificationResult {
 }
 
 }
+}
 export interface CategoryTree {
   categories: Category[];
   totalCount: number;
@@ -130,12 +137,15 @@ export interface CategoryTree {
   lastUpdated: Date;
 }
 }
+}
 
+}
 }
 export interface CategoryAnalytics {
   category: Category;
   performance: {
     growth: {
+}
 }
       templates: { current: number; previous: number; change: number };
       downloads: { current: number; previous: number; change: number };

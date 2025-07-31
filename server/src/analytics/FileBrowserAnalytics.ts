@@ -59,6 +59,7 @@ export enum FileBrowserEventType {
  * File operation event data
  */
 }
+}
 export interface FileOperationEvent extends AnalyticsEvent {
   type: FileBrowserEventType;
   metadata: {
@@ -80,6 +81,7 @@ export interface FileOperationEvent extends AnalyticsEvent {
  * Download statistics aggregation
  */
 }
+}
 export interface DownloadStats {
   fileId: string;
   fileName: string;
@@ -95,6 +97,7 @@ export interface DownloadStats {
     weekly: Map<string, number>;
     monthly: Map<string, number>;
 }
+}
   };
   downloadsByUserAgent: Map<string, number>;
   downloadsByLocation: Map<string, number>;
@@ -106,10 +109,12 @@ export interface DownloadStats {
  * Usage analytics aggregation
  */
 }
+}
 export interface UsageAnalytics {
   timeframe: {
     startDate: Date;
     endDate: Date;
+}
 }
   };
   overview: {
@@ -146,12 +151,14 @@ export interface UsageAnalytics {
  * Developer insights for file browser optimization
  */
 }
+}
 export interface DeveloperInsights {
   systemHealth: {
     overallScore: number; // 0-100
     reliability: number;
     performance: number;
     usability: number;
+}
 }
   };
   recommendations: Array<{
@@ -183,6 +190,7 @@ export interface DeveloperInsights {
  * Configuration for file browser analytics
  */
 }
+}
 export interface FileBrowserAnalyticsConfig {
   enabled: boolean;
   trackDownloads: boolean;
@@ -193,6 +201,7 @@ export interface FileBrowserAnalyticsConfig {
   anonymizeUserData: boolean;
   generateInsights: boolean;
   insightGenerationInterval: number; // milliseconds
+}
 }
 }
 

@@ -16,6 +16,7 @@ import {
   validateExportOptions
 } from '../../types/export';
 import { useExport } from '../../hooks/useExport';
+}
 interface AdvancedExportTemplateManagerProps {
   visible?: boolean;
   onClose?: () => void;
@@ -51,6 +52,7 @@ interface AdvancedExportTemplateManagerProps {
   enableSharing = true,
   enableCollaboration = true,
   className = ''
+}
 }) => {
   // State management
   const [templates, setTemplates] = useState<ExportTemplate>([]);

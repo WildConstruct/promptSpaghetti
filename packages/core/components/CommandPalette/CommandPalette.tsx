@@ -7,6 +7,7 @@
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { Node, Edge, useReactFlow } from 'reactflow';
 
+}
 export interface CommandPaletteAction {
   id: string;
   title: string;
@@ -21,7 +22,9 @@ export interface CommandPaletteAction {
   disabled?: boolean;
   premium?: boolean;
 }
+}
 
+}
 export interface GenerationFlow {
   id: string;
   name: string;
@@ -32,8 +35,10 @@ export interface GenerationFlow {
   estimatedTime: string;
   complexity: 'simple' | 'moderate' | 'advanced';
   outputType: 'single_node' | 'node_chain' | 'complete_graph'
+}
   }
 
+}
 export interface GenerationStep {
   id: string;
   title: string;
@@ -42,12 +47,15 @@ export interface GenerationStep {
   required: boolean;
   fields?: GenerationField[];
 }
+}
 
+}
 export interface GenerationField {
   id: string;
   label: string;
   type: 'text' | 'textarea' | 'select' | 'multiselect' | 'number' | 'boolean';
   placeholder?: string;
+}
   options?: Array<{ value: string; label: string }>;
   validation?: {
     required?: boolean;
@@ -58,6 +66,7 @@ export interface GenerationField {
   defaultValue?: unknown;
 }
 
+}
 export interface CommandPaletteProps {
   isOpen: boolean;
   onClose: () => void;
@@ -65,6 +74,7 @@ export interface CommandPaletteProps {
   edges: Edge[];
   selectedNodes: Node[];
   onGenerationStart: (flow: GenerationFlow, params: Record<string, any>) => Promise<void>;
+}
   onNodeCreate: (nodeType: string, position: { x: number; y: number }, data?: any) => void;
   onNodeDelete: (nodeIds: string[]) => void;
   onExport: (format: 'json' | 'png' | 'svg' | 'pdf') => void;
@@ -75,6 +85,7 @@ export interface CommandPaletteProps {
 }
 
 // Generation Wizard Component
+}
 interface GenerationWizardProps {
   flow: GenerationFlow;
   currentStep: number;
@@ -84,6 +95,7 @@ interface GenerationWizardProps {
   onExecute: () => void;
   onCancel: () => void;
   theme: 'light' | 'dark' | 'cinema'
+}
   }
 
 const GenerationWizard: React.FC<GenerationWizardProps> = ({

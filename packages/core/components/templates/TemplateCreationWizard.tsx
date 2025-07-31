@@ -4,6 +4,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { ProjectTemplate, TemplateVariable, CustomizationPoint, TemplateCategory, ProjectTemplateManager } from '../../templates/ProjectTemplateManager';
+}
 interface TemplateCreationWizardProps {
   graphData: unknown; // The current graph to turn into a template,
   isOpen: boolean;
@@ -17,6 +18,7 @@ interface TemplateCreationWizardProps {
   onClose,
   onComplete,
   templateManager
+}
 }) => {
   const [currentStep, setCurrentStep] = useState<WizardStep>('basic');
   const [templateData, setTemplateData] = useState<Partial<ProjectTemplate>>({)
@@ -287,11 +289,13 @@ interface TemplateCreationWizardProps {
 };
 
 // Step Components
+}
 interface BasicInfoStepProps {
   data: Partial<ProjectTemplate>;
   categories: TemplateCategory;
   errors: Record<string, string>;
   onChange: (updates: Partial<ProjectTemplate>) => void;
+}
 const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ data, categories, errors, onChange }) => {
   const [newTag, setNewTag] = useState('');
   const addTag = () => {
@@ -428,11 +432,13 @@ const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ data, categories, errors,
     </div>
   );
 };
+}
 interface VariablesStepProps {
   variables: TemplateVariable;
   onAdd: () => void;
   onUpdate: (index: number, updates: Partial<TemplateVariable>) => void;
   onRemove: (index: number) => void;
+}
 const VariablesStep: React.FC<VariablesStepProps> = ({ variables, onAdd, onUpdate, onRemove }) => {
   return;
     <div className="space-y-6">
@@ -551,12 +557,14 @@ const VariablesStep: React.FC<VariablesStepProps> = ({ variables, onAdd, onUpdat
     </div>
   );
 };
+}
 interface CustomizationStepProps {
   points: CustomizationPoint;
   graphData: unknown;
   onAdd: () => void;
   onUpdate: (index: number, updates: Partial<CustomizationPoint>) => void;
   onRemove: (index: number) => void;
+}
 const CustomizationStep: React.FC<CustomizationStepProps> = ({ points, graphData, onAdd, onUpdate, onRemove }) => {
   const _____availableNodes = graphData?.nodes?.map((node: Error) => node.id) || [];
   return;
@@ -656,8 +664,10 @@ const CustomizationStep: React.FC<CustomizationStepProps> = ({ points, graphData
     </div>
   );
 };
+}
 interface PreviewStepProps {
   template: ProjectTemplate;
+}
 const PreviewStep: React.FC<PreviewStepProps> = ({ template }) => {
   return;
     <div className="space-y-6">
@@ -713,10 +723,12 @@ const PreviewStep: React.FC<PreviewStepProps> = ({ template }) => {
     </div>
   );
 };
+}
 interface PublishStepProps {
   data: Partial<ProjectTemplate>;
   errors: Record<string, string>;
   onChange: (updates: Partial<ProjectTemplate>) => void;
+}
 const PublishStep: React.FC<PublishStepProps> = ({ data, errors, onChange }) => {
   return;
     <div className="space-y-6">

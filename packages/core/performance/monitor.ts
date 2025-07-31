@@ -3,6 +3,7 @@
  * Real-time performance tracking and metrics collection
  */
 
+}
 export interface PerformanceMetric {
   name: string;
   values: number;
@@ -14,6 +15,8 @@ export interface PerformanceMetric {
   count: number;
   lastUpdated: number;
 }
+}
+}
 export interface PerformanceAlert {
   metric: string;
   threshold: number;
@@ -21,11 +24,14 @@ export interface PerformanceAlert {
   severity: 'low' | 'medium' | 'high' | 'critical';
   timestamp: number;
 }
+}
+}
 export interface PerformanceConfig {
   maxSamples: number;
   alertThresholds: Record<string, number>;
   enableLogging: boolean;
   enableAlerts: boolean;
+}
 }
 export class PerformanceMonitor {
   private metrics: Map<string, PerformanceMetric> = new Map();

@@ -8,6 +8,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface DataPipeline {
     id: string;
     name: string;
@@ -21,6 +22,7 @@ export interface DataPipeline {
         processing_interval_ms: number;
         retry_policy: RetryPolicy;
         error_handling: ErrorHandlingStrategy;
+}
     };
     performance: {
         target_throughput_records_per_second: number;
@@ -59,6 +61,7 @@ export interface DataPipeline {
     last_updated: number;
     enabled: boolean;
 
+}
 export interface DataSource {
     id: string;
     name: string;
@@ -69,6 +72,7 @@ export interface DataSource {
         connection_pool_size: number;
         timeout_ms: number;
         retry_attempts: number;
+}
     };
     data_format: 'json' | 'csv' | 'xml' | 'parquet' | 'avro' | 'binary' | 'log_format';
     schema_definition?: string;
@@ -82,6 +86,7 @@ export interface DataSource {
         };
     };
 
+}
 export interface DataDestination {
     id: string;
     name: string;
@@ -92,6 +97,7 @@ export interface DataDestination {
         batch_size: number;
         flush_interval_ms: number;
         compression_enabled: boolean;
+}
     };
     data_format: 'json' | 'csv' | 'xml' | 'parquet' | 'avro' | 'binary';
     partitioning_strategy?: PartitioningStrategy;
@@ -101,6 +107,7 @@ export interface DataDestination {
         availability_monitoring: boolean;
     };
 
+}
 export interface ProcessingStage {
     id: string;
     name: string;
@@ -112,6 +119,7 @@ export interface ProcessingStage {
         output_schema?: string;
         transformation_rules: TransformationRule[];
         validation_rules: ValidationRule[];
+}
     };
     performance: {
         max_processing_time_ms: number;
@@ -132,6 +140,7 @@ export interface ProcessingStage {
         output_validation: boolean;
     };
 
+}
 export interface TransformationRule {
     id: string;
     name: string;
@@ -142,6 +151,7 @@ export interface TransformationRule {
     validation_criteria?: string;
     error_action: 'skip_record' | 'default_value' | 'fail_pipeline' | 'log_and_continue';
 
+}
 export interface ValidationRule {
     id: string;
     name: string;
@@ -151,6 +161,7 @@ export interface ValidationRule {
     severity: 'warning' | 'error' | 'critical';
     action_on_failure: 'skip_record' | 'fail_pipeline' | 'quarantine' | 'log_and_continue';
 
+}
 export interface QualityThresholds {
     completeness_percent_min: number;
     accuracy_percent_min: number;
@@ -159,6 +170,7 @@ export interface QualityThresholds {
     duplicate_percent_max: number;
     error_rate_percent_max: number;
 
+}
 export interface RetryPolicy {
     max_attempts: number;
     initial_delay_ms: number;
@@ -167,6 +179,7 @@ export interface RetryPolicy {
     retry_on_errors: string[];
     dead_letter_queue_enabled: boolean;
 
+}
 export interface ErrorHandlingStrategy {
     strategy: 'fail_fast' | 'continue_on_error' | 'circuit_breaker' | 'dead_letter_queue';
     error_threshold_percent: number;
@@ -175,8 +188,10 @@ export interface ErrorHandlingStrategy {
         immediate_alerts: boolean;
         escalation_enabled: boolean;
         escalation_delay_minutes: number;
+}
     };
 
+}
 export interface PartitioningStrategy {
     strategy: 'time_based' | 'hash_based' | 'range_based' | 'custom';
     partition_field: string;
@@ -184,6 +199,7 @@ export interface PartitioningStrategy {
     time_interval?: 'hourly' | 'daily' | 'weekly' | 'monthly';
     custom_logic?: string;
 
+}
 export interface PipelineExecution {
     id: string;
     pipeline_id: string;
@@ -212,12 +228,14 @@ export interface PipelineExecution {
         network_io_mb: number;
         storage_io_mb: number;
         cost_estimate: number;
+}
     };
     status: 'running' | 'completed' | 'failed' | 'cancelled' | 'partially_completed';
     error_summary?: ExecutionError[];
     warnings: string[];
     executed_by: string;
 
+}
 export interface StageExecution {
     stage_id: string;
     stage_name: string;
@@ -232,6 +250,7 @@ export interface StageExecution {
         processing_rate: number;
         memory_usage_mb: number;
         cpu_usage_percent: number;
+}
     };
     quality_metrics: {
         validation_pass_rate: number;
@@ -242,6 +261,7 @@ export interface StageExecution {
     errors: string[];
     warnings: string[];
 
+}
 export interface ExecutionError {
     error_type: string;
     error_message: string;
@@ -251,6 +271,7 @@ export interface ExecutionError {
     severity: 'warning' | 'error' | 'critical';
     recovery_action?: string;
 
+}
 export interface PipelineAlert {
     id: string;
     pipeline_id: string;
@@ -267,6 +288,7 @@ export interface PipelineAlert {
         threshold_value?: number;
         measurement_unit?: string;
         impact_assessment: 'none' | 'low' | 'medium' | 'high' | 'critical'
+}
   };
     resolution: {
         acknowledged: boolean;
@@ -281,6 +303,7 @@ export interface PipelineAlert {
     automated_actions: string[];
     recommended_actions: string[];
 
+}
 export interface PipelineOptimizationRecommendation {
     id: string;
     pipeline_id: string;
@@ -296,6 +319,7 @@ export interface PipelineOptimizationRecommendation {
         reliability_improvement_percent?: number;
         implementation_effort: 'low' | 'medium' | 'high';
         risk_level: 'low' | 'medium' | 'high'
+}
   };
     implementation: {
         configuration_changes: Record<string, any>;
@@ -316,6 +340,7 @@ export interface PipelineOptimizationRecommendation {
     reviewed_at?: number;
     review_notes?: string;
 
+}
 export interface DataLineageRecord {
     id: string;
     pipeline_id: string;
@@ -324,12 +349,13 @@ export interface DataLineageRecord {
     source_system: string;
     source_record_id: string;
     source_timestamp: number;
-    processing_history: Array<{,
+    processing_history: Array<{
         stage_id: string;
         stage_name: string;
         processed_at: number;
         transformations_applied: string[];
         validation_results: Record<string, boolean>;
+}
     }>;
     current_location: string;
     current_format: string;

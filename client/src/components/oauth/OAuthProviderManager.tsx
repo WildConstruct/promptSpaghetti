@@ -11,6 +11,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 
 // Types and interfaces
+}
 interface OAuthProvider {
   id: string;,
   name: string;
@@ -27,27 +28,29 @@ interface OAuthProvider {
   clientId: string;,
   clientSecret: string;
   scopes: string;,
-  endpoints: {,
+  endpoints: {
   authorization: string;,
   token: string;
   userInfo: string;
   revocation?: string;
+}
 };
   redirectUri: string;,
   additionalParams: Record<string, string>;
-  securitySettings: {,
+  securitySettings: {
   enablePKCE: boolean;
   enableCertificatePinning: boolean;,
   enableMTLS: boolean;
   stateParameterLength: number;,
   tokenBindingRequired: boolean;
 };
-  complianceSettings: {,
+  complianceSettings: {
   gdprCompliant: boolean;
   ccpaCompliant: boolean;,
   dataRetentionDays: number;
   auditLevel: 'basic' | 'standard' | 'enhanced';
 };
+}
 interface ProviderStatistics {
   totalLogins: number;,
   successfulLogins: number;
@@ -61,12 +64,13 @@ interface ProviderStatistics {
   responseTime: number;
   errors: string;,
   warnings: string;
-  endpoints: {,
+  endpoints: {
   authorization: boolean;,
   token: boolean;
   userInfo: boolean;
+}
 };
-  securityChecks: {,
+  securityChecks: {
   tlsVersion: string;
   certificateValid: boolean;,
   pkceSupported: boolean;

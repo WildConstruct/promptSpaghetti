@@ -7,6 +7,7 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Node, Edge } from 'reactflow';
 
+}
 export interface AutosaveState {
   nodes: Node[];
   edges: Edge[];
@@ -18,7 +19,9 @@ export interface AutosaveState {
     edgeCount: number;
     lastModified: string;
     sessionId: string;
+}
 };
+}
 }
 export interface AutosaveManagerProps {
   nodes: Node[];
@@ -29,6 +32,7 @@ export interface AutosaveManagerProps {
   onConflict?: (current: AutosaveState, saved: AutosaveState) => void;
   theme?: 'light' | 'dark' | 'cinema';
   disabled?: boolean;
+}
 }
 export class AutosaveSystem {
   private sessionId: string;
@@ -165,6 +169,7 @@ export class AutosaveSystem {
   timestamp?: number;
   version?: number;
   error?: string;
+}
 }
 
 export const AutosaveManager: React.FC<AutosaveManagerProps> = ({

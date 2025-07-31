@@ -47,6 +47,7 @@ import { Template } from './TemplatePreviewModal';
 
 // Share Tracking Interfaces
 
+}
 export interface ShareTrackingManagerProps {
   templateId: string;
   template?: Template;
@@ -56,6 +57,8 @@ export interface ShareTrackingManagerProps {
   className?: string;
   realTimeUpdates?: boolean;
   showAdvancedMetrics?: boolean;
+}
+}
 }
 export interface ShareTrackingData {
   totalShares: number;
@@ -67,6 +70,8 @@ export interface ShareTrackingData {
   alerts: ShareAlert;
   recommendations: ShareRecommendation;
 }
+}
+}
 export interface PlatformShareData {
   platform: string;
   totalShares: number;
@@ -75,6 +80,8 @@ export interface PlatformShareData {
   revenueGenerated: number;
   topPerformingContent: string;
   trends: TrendData;
+}
+}
 }
 export interface TimeSeriesPoint {
   timestamp: Date;
@@ -85,12 +92,16 @@ export interface TimeSeriesPoint {
   revenue: number;
   platform?: string;
 }
+}
+}
 export interface ConversionFunnelData {
   awareness: FunnelStage;
   interest: FunnelStage;
   consideration: FunnelStage;
   purchase: FunnelStage;
   advocacy: FunnelStage;
+}
+}
 }
 export interface FunnelStage {
   stage: string;
@@ -99,11 +110,14 @@ export interface FunnelStage {
   dropOffRate: number;
   averageTime: number;
 }
+}
+}
 export interface DemographicAnalysis {
   topAgeGroups: { group: string; percentage: number; engagement: number }[];
   topLocations: { location: string; shares: number; revenue: number }[];
   topInterests: { interest: string; affinity: number; conversion: number }[];
   devicePreferences: { device: string; usage: number; performance: number }[];
+}
 }
 export interface AggregatedMetrics {
   totalReach: number;
@@ -115,11 +129,15 @@ export interface AggregatedMetrics {
   lifetimeValue: number;
   returnOnInvestment: number;
 }
+}
+}
 export interface TrendData {
   direction: 'up' | 'down' | 'stable';
   percentage: number;
   significance: 'high' | 'medium' | 'low';
   period: string;
+}
+}
 }
 export interface ShareAlert {
   id: string;
@@ -131,6 +149,8 @@ export interface ShareAlert {
   actionRequired: boolean;
   dismissed: boolean;
 }
+}
+}
 export interface ShareRecommendation {
   id: string;
   type: 'content' | 'timing' | 'platform' | 'targeting';
@@ -140,6 +160,8 @@ export interface ShareRecommendation {
   impact: string;
   effort: 'low' | 'medium' | 'high';
   confidence: number;
+}
+}
 }
 export interface ShareTrackingFilters {
   dateRange: { start: Date; end: Date };

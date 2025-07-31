@@ -4,6 +4,7 @@
  */
 import React from 'react';
 
+}
 interface CommentSystemProps {
     workspaceId: string;
     targetType: string;
@@ -17,3 +18,4 @@ interface CommentSystemProps {
 export declare const CommentSystem: React.FC<CommentSystemProps>;
 export default CommentSystem;
 //# sourceMappingURL=CommentSystem.d.ts.map
+}

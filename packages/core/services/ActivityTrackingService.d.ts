@@ -8,6 +8,7 @@
  */
 import { Activity, ActivityQuery, ActivityQueryResult, ActivityMetrics, ActivityStream, ActivityStreamEvent, ActivityRetentionPolicy, ActivitySeverity, BaseActivity } from '../types/ActivityDataModel';
 
+}
 export interface ActivityStorage {
     create(activity: Activity): Promise<Activity>;
     findById(id: string): Promise<Activity | null>;
@@ -18,6 +19,7 @@ export interface ActivityStorage {
     getMetrics(query: ActivityQuery): Promise<ActivityMetrics>;
 
 
+}
 export interface ActivityStreaming {
     createStream(filters: ActivityQuery): Promise<ActivityStream>;
     destroyStream(subscriptionId: string): Promise<boolean>;
@@ -26,6 +28,7 @@ export interface ActivityStreaming {
     unsubscribe(subscriptionId: string): Promise<void>;
 
 
+}
 export interface ActivityServiceConfig {
     storage: ActivityStorage;
     streaming?: ActivityStreaming;
@@ -55,6 +58,7 @@ export declare class ActivityTrackingService {
         component?: string;
         metadata?: Record<string, any>;
         severity?: ActivitySeverity;
+}
     }): Promise<Activity>;
     trackSystemEvent(params: {)
         source: string;

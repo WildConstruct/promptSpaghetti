@@ -7,11 +7,13 @@
 import React from 'react';
 import type { IdentityValidationRequest } from '../../auth/IdentityValidation';
 
+}
 export interface VerificationDashboardProps {
     className?: string;
     onRequestSelect?: (request: IdentityValidationRequest) => void;
 
 
+}
 export interface AdminVerificationMetrics {
     totalRequests: number;
     pendingRequests: number;
@@ -22,6 +24,7 @@ export interface AdminVerificationMetrics {
     priorityRequests: number;
 
 
+}
 export interface VerificationQueueItem extends IdentityValidationRequest {
     priority: 'low' | 'medium' | 'high' | 'urgent';
     timeInQueue: number;
@@ -32,3 +35,4 @@ export interface VerificationQueueItem extends IdentityValidationRequest {
 declare const VerificationDashboard: React.FC<VerificationDashboardProps>;
 export default VerificationDashboard;
 //# sourceMappingURL=VerificationDashboard.d.ts.map
+}

@@ -43,6 +43,7 @@ import {
 import { useAttribution } from '../../hooks/useAttribution';
 import { ContributorVisualization } from './ContributorVisualization';
 const { Text, _____Title } = Typography;
+}
 interface AttributionPanelProps {
   projectId: string;
   selectedResourceType?: ResourceType;
@@ -50,10 +51,12 @@ interface AttributionPanelProps {
   visible: boolean;
   onClose: () => void;
   onAttributionRecord?: (attribution: ChangeAttribution) => void;
+}
 interface AuthorIndicatorProps {
   attribution: ChangeAttribution;
   showDetails?: boolean;
   onClick?: () => void;
+}
 const AuthorIndicator: React.FC<AuthorIndicatorProps> = ({ attribution, showDetails = true, onClick }) => {
   const getAuthorInitials = (name?: string) => {,
   if (!name) return '?';

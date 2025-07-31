@@ -28,6 +28,7 @@ import {
 } from '../../../packages/core/security/DataClassificationAccessControl';
 
 }
+}
 interface DataRetrievalRateLimitOptions {
   environment: 'DEVELOPMENT' | 'STAGING' | 'PRODUCTION';
   enableLogging?: boolean;
@@ -35,7 +36,9 @@ interface DataRetrievalRateLimitOptions {
   customConfig?: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 interface AuthenticatedRequest extends FastifyRequest {
   user?: {
@@ -51,6 +54,7 @@ interface AuthenticatedRequest extends FastifyRequest {
 declare module 'fastify' {
   interface FastifyInstance {
     dataRetrievalRateLimit: DataRetrievalRateLimit;
+}
 }
   }
 }

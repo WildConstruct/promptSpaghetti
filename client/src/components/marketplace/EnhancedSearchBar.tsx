@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useMarketplace } from '../../hooks/useMarketplace';
 import './SearchBar.css';
 
+}
 interface EnhancedSearchBarProps {
   value: string;,
   onChange: (value: string) => void;
@@ -14,6 +15,7 @@ export const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
+}
   const { getSearchSuggestions } = useMarketplace();
   // Suggestion fetching function
   const getSuggestions = useCallback(async (query: string) => {

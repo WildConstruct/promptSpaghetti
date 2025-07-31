@@ -12,8 +12,10 @@ import { Database } from '../database/connection';
 import { ToggleType } from '../database/feature-toggle-models';
 
 }
+}
 interface ToggleParametersRouteOptions {
   db: Database;
+}
 }
 }
 

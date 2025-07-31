@@ -49,6 +49,7 @@ import { AuditService } from '../../auth/services/AuditService';
 
 // Request/Response DTOs
 }
+}
 export interface CreateReviewerRequest {
   user_id: string;
   role: ReviewerRole;
@@ -57,7 +58,9 @@ export interface CreateReviewerRequest {
   skill_ratings: Record<string, number>;
 }
 }
+}
 
+}
 }
 export interface AssignReviewRequest {
   review_item_id: string;
@@ -72,7 +75,9 @@ export interface AssignReviewRequest {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ManualAssignRequest {
   reviewer_id: string;
@@ -81,21 +86,27 @@ export interface ManualAssignRequest {
   priority?: 'low' | 'medium' | 'high' | 'urgent';
 }
 }
+}
 
+}
 }
 export interface ReassignRequest {
   new_reviewer_id: string;
   reason: string;
 }
 }
+}
 
+}
 }
 export interface UpdateAvailabilityRequest {
   availability_status: 'available' | 'busy' | 'away' | 'unavailable';
   capacity_limit?: number;
 }
 }
+}
 
+}
 }
 export interface ReviewerDashboard {
   total_reviewers: number;
@@ -107,6 +118,7 @@ export interface ReviewerDashboard {
   average_review_time: number;
   workload_distribution: WorkloadDistribution[];
   recent_assignments: ReviewAssignment[];
+}
 }
 }
 

@@ -21,6 +21,7 @@ import { MetricsCollector } from '../performance/MetricsCollector';
 // ============================================================================
 
 }
+}
 export interface APILifecycleManagementConfig {
   // Lifecycle tracking configuration
   lifecycle_tracking: {
@@ -30,6 +31,7 @@ export interface APILifecycleManagementConfig {
     stage_transition_monitoring: boolean;
     automated_stage_detection: boolean;
     governance_enforcement: boolean;
+}
 }
   };
   
@@ -160,6 +162,7 @@ export interface APILifecycleManagementConfig {
 }
 
 }
+}
 export interface APILifecycleData {
   api_metadata: {
     api_id: string;
@@ -169,6 +172,7 @@ export interface APILifecycleData {
     stage_entry_date: number;
     stage_duration_days: number;
     next_milestone_date?: number;
+}
 }
   };
   
@@ -273,6 +277,7 @@ export interface APILifecycleData {
 }
 
 }
+}
 export interface LifecycleGuidanceRecommendation {
   recommendation_id: string;
   recommendation_type: 'stage_transition' | 'performance_optimization' | 'security_enhancement' | 'deprecation_planning' | 'resource_allocation';
@@ -285,6 +290,7 @@ export interface LifecycleGuidanceRecommendation {
     key_metrics: Record<string, number>;
     identified_issues: string[];
     risk_factors: string[];
+}
 }
   };
   
@@ -341,6 +347,7 @@ export interface LifecycleGuidanceRecommendation {
 }
 
 }
+}
 export interface APILifecycleAnalysisResult {
   analysis_metadata: {
     analysis_id: string;
@@ -348,6 +355,7 @@ export interface APILifecycleAnalysisResult {
     analysis_scope: 'single_api' | 'api_portfolio' | 'service_ecosystem';
     data_completeness: number;
     analysis_confidence: number;
+}
 }
   };
   
@@ -433,6 +441,7 @@ export interface APILifecycleAnalysisResult {
 // ============================================================================
 
 }
+}
 interface LifecyclePredictionEngine {
   stage_transition_models: Array<{
     model_name: string;
@@ -441,6 +450,7 @@ interface LifecyclePredictionEngine {
     model_accuracy: number;
     prediction_features: string[];
     last_trained: number;
+}
 }
   }>;
   

@@ -25,6 +25,7 @@ import { MetricsCollector } from '../performance/MetricsCollector';
 // ============================================================================
 
 }
+}
 interface APIResponse {
   success: boolean;
   data?: unknown;
@@ -33,7 +34,9 @@ interface APIResponse {
   request_id: string;
 }
 }
+}
 
+}
 }
 interface InitializeEffectivenessTrackingRequest {
   config: APIRateLimitingEffectivenessConfig;
@@ -41,7 +44,9 @@ interface InitializeEffectivenessTrackingRequest {
   enable_automated_optimization: boolean;
 }
 }
+}
 
+}
 }
 interface RunEffectivenessAnalysisRequest {
   analysis_scope: 'comprehensive' | 'performance_only' | 'business_only' | 'technical_only';
@@ -51,7 +56,9 @@ interface RunEffectivenessAnalysisRequest {
   include_comparative_analysis: boolean;
 }
 }
+}
 
+}
 }
 interface ApplyOptimizationRecommendationsRequest {
   recommendation_ids: string[];
@@ -61,7 +68,9 @@ interface ApplyOptimizationRecommendationsRequest {
   rollback_conditions: Record<string, number>;
 }
 }
+}
 
+}
 }
 interface GetEffectivenessMetricsRequest {
   metric_types: ('performance' | 'business' | 'technical' | 'comparative')[];
@@ -70,7 +79,9 @@ interface GetEffectivenessMetricsRequest {
   include_trend_analysis: boolean;
 }
 }
+}
 
+}
 }
 interface ConfigureOptimizationStrategyRequest {
   strategy_updates: {
@@ -78,6 +89,7 @@ interface ConfigureOptimizationStrategyRequest {
       enabled: boolean;
       improvement_cycle_hours: number;
       automated_optimization: boolean;
+}
 }
     };
     machine_learning_optimization?: {
@@ -94,11 +106,13 @@ interface ConfigureOptimizationStrategyRequest {
 }
 
 }
+}
 interface GenerateExecutiveReportRequest {
   report_type: 'executive_summary' | 'detailed_analysis' | 'trend_report' | 'roi_analysis';
   time_period: 'daily' | 'weekly' | 'monthly' | 'quarterly';
   include_benchmarks: boolean;
   include_recommendations: boolean;
+}
 }
 }
 

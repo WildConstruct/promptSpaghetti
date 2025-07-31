@@ -7,6 +7,7 @@ import {
   FiAlertCircle,
   FiInfo
 } from 'react-icons/fi';
+}
 interface ImportDialogProps {
   onClose: () => void;
   onImportComplete: (result: Record<string, unknown>) => void;
@@ -32,6 +33,7 @@ interface ImportDialogProps {
   onClose,
   onImportComplete,
   className = ''
+}
 }) => {
   const [dragOver, setDragOver] = useState(false);
   const [uploading, setUploading] = useState(false);

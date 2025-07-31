@@ -1,12 +1,14 @@
 // Epic 16 Marketplace - Advanced Filters Component
 import React, { useState } from 'react';
 import './SearchBar.css';
+}
 interface FilterOptions {
   categories: string;,
   tags: string;
-  priceRange: {,
+  priceRange: {
   min?: number;
   max?: number;
+}
 };
   rating: number;,
   complexity: 'beginner' | 'intermediate' | 'advanced' | 'all';
@@ -14,9 +16,11 @@ interface FilterOptions {
   isFree: boolean | null;
   isAiGenerated: boolean | null;,
   sortBy: 'relevance' | 'price_asc' | 'price_desc' | 'rating' | 'popularity' | 'newest' | 'oldest';
+}
 interface AdvancedFiltersProps {
   filters: FilterOptions;,
   onFiltersChange: (filters: FilterOptions) => void;,
+}
   availableCategories: Array<{ id: string; name: string }>;
   availableTags: string;
   className?: string;

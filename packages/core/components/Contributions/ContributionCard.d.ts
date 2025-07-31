@@ -8,6 +8,7 @@
 import React from 'react';
 import { Contribution } from '../../types/contributions';
 
+}
 export interface ContributionCardProps {
     contribution: Contribution;
     variant?: 'compact' | 'standard' | 'detailed';
@@ -21,3 +22,4 @@ export interface ContributionCardProps {
 export declare const ContributionCard: React.FC<ContributionCardProps>;
 export default ContributionCard;
 //# sourceMappingURL=ContributionCard.d.ts.map
+}

@@ -6,6 +6,7 @@
  * Adapts the proven TemplateVersionManager pattern for content versioning.
  */
 
+}
 export interface CommunityContent {
   id: string;
   type: 'article' | 'tutorial' | 'case-study' | 'guide' | 'documentation';
@@ -19,6 +20,7 @@ export interface CommunityContent {
   summary: string;
   tableOfContents?: ContentSection;
   metadata: ContentMetadata;
+}
 };
   // Rich media attachments
   media: ContentMediaAttachment;
@@ -42,12 +44,15 @@ export interface CommunityContent {
   lastReview?: string;
 };
 }
+}
 export interface ContentSection {
   id: string;
   title: string;
   level: number; // 1-6 for h1-h6,
   anchor: string;
   children?: ContentSection;
+}
+}
 }
 export interface ContentMetadata {
   readingTime: number; // estimated minutes,
@@ -57,6 +62,8 @@ export interface ContentMetadata {
   prerequisites: string;
   learningObjectives: string;
   relatedContent: string;
+}
+}
 }
 export interface ContentMediaAttachment {
   id: string;
@@ -69,9 +76,11 @@ export interface ContentMediaAttachment {
   caption?: string;
   fileSize?: number;
   mimeType?: string;
+}
   dimensions?: { width: number; height: number };
   duration?: number; // for video/audio
   position: number; // order in content
+}
 }
 export interface ContentVersion {
   id: string;
@@ -114,6 +123,8 @@ export interface ContentVersion {
   plagiarism_check?: PlagiarismResult;
   fact_check?: FactCheckResult;
 }
+}
+}
 export interface ReviewFeedback {
   id: string;
   reviewer_id: string;
@@ -126,6 +137,8 @@ export interface ReviewFeedback {
   status: 'open' | 'addressed' | 'dismissed';
   resolution?: string;
 }
+}
+}
 export interface ContentContributor {
   user_id: string;
   name: string;
@@ -133,6 +146,8 @@ export interface ContentContributor {
   contribution: string;
   contribution_date: string;
   attribution_visible: boolean;
+}
+}
 }
 export interface ContentQualityScore {
   overall_score: number; // 0-100,
@@ -143,6 +158,7 @@ export interface ContentQualityScore {
   usefulness: number;
   originality: number;
   engagement: number;
+}
 };
   automated_checks: {
   grammar_score: number;
@@ -157,29 +173,34 @@ export interface ContentQualityScore {
   target_audience_fit: number;
 };
 }
+}
 export interface PlagiarismResult {
   overall_similarity: number; // 0-100%,
-  sources_found: Array<{,
+  sources_found: Array<{
   url: string;
   similarity: number;
   matched_text: string;
   context: string;
+}
 }>;
   confidence_level: number;
   check_date: string;
+}
 }
 export interface FactCheckResult {
   overall_accuracy: number; // 0-100%,
   claims_checked: number;
   claims_verified: number;
-  disputed_claims: Array<{,
+  disputed_claims: Array<{
   claim: string;
   status: 'verified' | 'disputed' | 'false' | 'unverifiable';
   sources: string;
   explanation: string;
+}
 }>;
   check_date: string;
   checker_id?: string;
+}
 }
 export interface ContentImportOptions {
   format: 'markdown' | 'html' | 'docx' | 'pdf' | 'notion' | 'confluence';
@@ -203,6 +224,8 @@ export interface ContentImportOptions {
   target_status?: 'draft' | 'review';
   import_notes?: string;
 }
+}
+}
 export interface ContentExportOptions {
   format: 'markdown' | 'html' | 'pdf' | 'docx' | 'epub' | 'content_bundle';
   // Export scope
@@ -225,23 +248,26 @@ export interface ContentExportOptions {
   theme?: string;
   custom_css?: string;
   include_toc?: boolean;
+}
 };
 }
+}
 export interface ContentVersionDiff {
-  content_changes: Array<{,
+  content_changes: Array<{
   section: string;
   change_type: 'added' | 'removed' | 'modified';
   old_content?: string;
   new_content?: string;
   line_number?: number;
+}
 }>;
-  metadata_changes: Array<{,
+  metadata_changes: Array<{
   field: string;
   old_value: unknown;
   new_value: unknown;
   change_type: 'added' | 'removed' | 'modified'
   }>;
-  media_changes: Array<{,
+  media_changes: Array<{
   media_id: string;
   change_type: 'added' | 'removed' | 'modified';
   old_media?: ContentMediaAttachment;
@@ -288,6 +314,7 @@ export class ContentVersionManager {
   target_status?: 'draft' | 'review'
   } = {}
   ): Promise<ContentVersion> {
+
   try {
   // Calculate content metrics
   const quality_metrics = await this.calculateQualityMetrics(content);
@@ -327,6 +354,7 @@ export class ContentVersionManager {
   review_notes?: string;
   priority?: 'low' | 'normal' | 'high' | 'urgent'
   } = {}): Promise<ContentVersion> {
+
     try {
       const response = await this.apiClient.put(`/api/content-versions/${versionId}/submit-review`, {)}
   },
@@ -346,6 +374,7 @@ export class ContentVersionManager {
   publish_date?: string;
   notify_subscribers?: boolean;
 } = {}): Promise<ContentVersion> {
+
     try {
       const response = await this.apiClient.put(`/api/content-versions/${versionId}/publish`, {)}
   },
@@ -365,6 +394,7 @@ export class ContentVersionManager {
     feedback: Omit<ReviewFeedback,
     'id' | 'reviewer_id' | 'reviewer_name' | 'review_date'>
   ): Promise<ReviewFeedback> {
+
     try {
       const response = await this.apiClient.post(`/api/content-versions/${versionId}/feedback`, feedback);}
       // Update local version data
@@ -377,6 +407,7 @@ export class ContentVersionManager {
       console.error('Failed to add review feedback:', error);
       throw error;
   async resolveFeedback(versionId: string, feedbackId: string, resolution: string): Promise<void> {
+
     try {
       await this.apiClient.put(`/api/content-versions/${versionId}/feedback/${feedbackId}/resolve`, {)}
   }
@@ -393,6 +424,7 @@ export class ContentVersionManager {
       console.error('Failed to resolve feedback:', error);
       throw error;
   async getReviewHistory(versionId: string): Promise<ReviewFeedback> {
+
     try {
       const response = await this.apiClient.get(`/api/content-versions/${versionId}/reviews`);}
       return response.data;
@@ -401,6 +433,7 @@ export class ContentVersionManager {
       throw error;
   // Collaboration Features
   async addContributor(versionId: string, contributor: Omit<ContentContributor, 'contribution_date'>): Promise<void> {
+
     try {
       await this.apiClient.post(`/api/content-versions/${versionId}/contributors`, {)}
   }
@@ -417,7 +450,7 @@ export class ContentVersionManager {
     } catch (error) {
   console.error('Failed to add contributor:', error);
   throw error;
-  async getCollaborationHistory(contentId?: string): Promise<Array<{,
+  async getCollaborationHistory(contentId?: string): Promise<Array<{
   version_id: string;
   version_number: string;
   contributors: ContentContributor;
@@ -439,6 +472,7 @@ export class ContentVersionManager {
   errors: string;
   quality_score?: ContentQualityScore;
 }> {
+
     try {
       const formData = new FormData();
       // Handle different source types
@@ -471,6 +505,7 @@ export class ContentVersionManager {
   size: number;
   format: string;
 }> {
+
   try {
   const exportData = {
   version_id: versionId,
@@ -501,6 +536,7 @@ export class ContentVersionManager {
   similarity_score: number;
   change_magnitude: 'trivial' | 'minor' | 'moderate' | 'major' | 'complete_rewrite'
   }> {
+
     try {
       const response = await this.apiClient.get(;);
         `/api/content-versions/${fromVersionId}/compare/${toVersionId}`}
@@ -516,6 +552,7 @@ export class ContentVersionManager {
   offset?: number;
   contributor_id?: string;
 } = {}): Promise<{ versions: ContentVersion; total: number }> {
+
     try {
       const params = new URLSearchParams();
       params.append('content_id', this.contentId);
@@ -539,6 +576,7 @@ export class ContentVersionManager {
   include_grammar_check?: boolean;
   include_seo_analysis?: boolean;
 } = {}): Promise<ContentQualityScore> {
+
     try {
       const response = await this.apiClient.post(`/api/content-versions/${versionId}/quality-assessment`, options);}
       // Update local version data
@@ -551,6 +589,7 @@ export class ContentVersionManager {
       throw error;
   // Utility Methods
   private async generateNextVersion(): Promise<string> {
+
     try {
       const { versions } = await this.getVersionHistory({ limit: 1 });
       if (versions.length === 0) {
@@ -585,6 +624,7 @@ export class ContentVersionManager {
 
 // Content Bundle Format (for export/import)
 
+}
 export interface ContentBundle {
   format_version: string;
   created_at: string;
@@ -599,10 +639,11 @@ export interface ContentBundle {
   readme: string;
   changelog: string;
   usage_guide?: string;
-  examples?: Array<{,
+  examples?: Array<{
   name: string;
   description: string;
   preview: string;
+}
 }>;
   };
   // Verification and integrity

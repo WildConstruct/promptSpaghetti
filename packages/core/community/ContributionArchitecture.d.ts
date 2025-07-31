@@ -12,6 +12,7 @@ export type ContributionStatus = 'draft' | 'submitted' | 'under_review' | 'revis
 export type ContributorRole = 'author' | 'co-author' | 'editor' | 'reviewer' | 'translator' | 'maintainer' | 'subject_expert';
 export type ContributionCategory = 'getting-started' | 'tutorials' | 'best-practices' | 'case-studies' | 'troubleshooting' | 'advanced' | 'tools-resources' | 'community' | 'official' | 'experimental';
 
+}
 export interface ContributionSubmission {
     id: string;
     title: string;
@@ -27,6 +28,7 @@ export interface ContributionSubmission {
         learning_objectives?: string[];
         prerequisites?: string[];
         estimated_completion_time?: number;
+}
     };
     status: ContributionStatus;
     workflow: ContributionWorkflow;
@@ -44,6 +46,7 @@ export interface ContributionSubmission {
     published_at?: string;
     featured_at?: string;
 
+}
 export interface ContributionWorkflow {
     current_stage: WorkflowStage;
     assigned_reviewers: string[];
@@ -58,6 +61,7 @@ export interface ContributionWorkflow {
 
 export type WorkflowStage = 'submission' | 'intake_review' | 'quality_check' | 'editorial_review' | 'technical_review' | 'community_review' | 'final_approval' | 'publication' | 'post_publication';
 
+}
 export interface WorkflowStageEntry {
     stage: WorkflowStage;
     entered_at: string;
@@ -67,6 +71,7 @@ export interface WorkflowStageEntry {
     notes?: string;
     outcome: 'completed' | 'skipped' | 'failed' | 'escalated';
 
+}
 export interface ReviewerAssignment {
     reviewer_id: string;
     reviewer_name: string;
@@ -78,6 +83,7 @@ export interface ReviewerAssignment {
     expertise_areas: string[];
     workload_capacity: number;
 
+}
 export interface QualityGate {
     name: string;
     type: 'automated' | 'manual' | 'hybrid';
@@ -86,6 +92,7 @@ export interface QualityGate {
     stage: WorkflowStage;
     timeout_hours?: number;
 
+}
 export interface QualityGateCriteria {
     minimum_score?: number;
     required_checks: string[];
@@ -93,6 +100,7 @@ export interface QualityGateCriteria {
     reviewer_consensus?: number;
     automated_thresholds: Record<string, number>;
 
+}
 export interface QualityGateResult {
     gate_name: string;
     passed: boolean;
@@ -103,6 +111,7 @@ export interface QualityGateResult {
     checked_by?: string;
     retry_count: number;
 
+}
 export interface ApprovalEntry {
     approver_id: string;
     approver_name: string;
@@ -112,6 +121,7 @@ export interface ApprovalEntry {
     conditions?: string[];
     notes?: string;
 
+}
 export interface PublicationSchedule {
     scheduled_date?: string;
     publication_priority: 'low' | 'medium' | 'high' | 'urgent';
@@ -122,6 +132,7 @@ export interface PublicationSchedule {
 
 export type PublicationChannel = 'knowledge_base' | 'community_forum' | 'newsletter' | 'social_media' | 'rss_feed' | 'api_endpoints' | 'mobile_app';
 
+}
 export interface ContributionContributor {
     user_id: string;
     name: string;
@@ -137,11 +148,13 @@ export interface ContributionContributor {
         website?: string;
         social_links: Record<string, string>;
         preferred_attribution: string;
+}
     };
     contribution_date: string;
     previous_contributions: number;
     reputation_score: number;
 
+}
 export interface ContributionAttribution {
     attribution_model: 'individual' | 'collaborative' | 'organizational' | 'anonymous';
     primary_author: string;
@@ -152,11 +165,13 @@ export interface ContributionAttribution {
         contributor_order: 'contribution' | 'alphabetical' | 'chronological';
         show_roles: boolean;
         show_percentages: boolean;
+}
     };
     copyright_holder: string;
     license_type: string;
     attribution_requirements: string[];
 
+}
 export interface ContributionEngagement {
     total_views: number;
     unique_views: number;
@@ -173,6 +188,7 @@ export interface ContributionEngagement {
         upvotes: number;
         downvotes: number;
         expert_endorsements: number;
+}
     };
     completion_rate: number;
     success_rate: number;
@@ -184,6 +200,7 @@ export interface ContributionEngagement {
         update_requests: string[];
     };
 
+}
 export interface PublishingConfiguration {
     visibility: 'public' | 'community' | 'restricted' | 'private';
     access_level: 'free' | 'premium' | 'subscriber_only' | 'invitation_only';
@@ -198,6 +215,7 @@ export interface PublishingConfiguration {
             description: string;
             image?: string;
             type: string;
+}
         };
     };
     categories: string[];
@@ -218,6 +236,7 @@ export interface PublishingConfiguration {
         notify_collaborators: boolean;
     };
 
+}
 export interface MonetizationConfiguration {
     monetization_enabled: boolean;
     pricing_model: 'free' | 'one_time' | 'subscription' | 'donation' | 'sponsored';
@@ -227,6 +246,7 @@ export interface MonetizationConfiguration {
         discount_percentage?: number;
         promotional_price?: number;
         promotion_end_date?: string;
+}
     };
     revenue_sharing: {
         contributor_percentage: number;
@@ -242,6 +262,7 @@ export interface MonetizationConfiguration {
         disclosure_required: boolean;
     };
 
+}
 export interface ReviewFeedbackEntry {
     id: string;
     reviewer_id: string;
@@ -258,6 +279,7 @@ export interface ReviewFeedbackEntry {
     public_feedback?: string;
     private_notes?: string;
 
+}
 export interface DetailedFeedback {
     content_quality: {
         accuracy: number;
@@ -265,6 +287,7 @@ export interface DetailedFeedback {
         completeness: number;
         usefulness: number;
         originality: number;
+}
     };
     technical_quality: {
         formatting: number;
@@ -287,6 +310,7 @@ export interface DetailedFeedback {
         accessibility_issues: string[];
     };
 
+}
 export interface FeedbackArea {
     section: string;
     line_number?: number;
@@ -296,6 +320,7 @@ export interface FeedbackArea {
     suggested_change?: string;
     explanation?: string;
 
+}
 export interface NotificationConfiguration {
     notify_contributors: boolean;
     notify_reviewers: boolean;
@@ -307,6 +332,7 @@ export interface NotificationConfiguration {
         push_notification: boolean;
         slack?: boolean;
         discord?: boolean;
+}
     };
     timing: {
         immediate: boolean;
@@ -322,6 +348,7 @@ export interface NotificationConfiguration {
         quality_improvements: boolean;
     };
 
+}
 export interface ContributionRepository {
     submitContribution(submission: Omit<ContributionSubmission, 'id' | 'created_at' | 'updated_at'>): Promise<ContributionSubmission>;
     updateContribution(id: string, updates: Partial<ContributionSubmission>): Promise<ContributionSubmission>;
@@ -340,6 +367,7 @@ export interface ContributionRepository {
     getContributorStatistics(userId: string): Promise<ContributorStatistics>;
     getSystemMetrics(timeRange?: string): Promise<ContributionSystemMetrics>;
 
+}
 export interface ContributorStatistics {
     user_id: string;
     total_contributions: number;
@@ -362,6 +390,7 @@ export interface ContributorStatistics {
     revision_rate: number;
     acceptance_rate: number;
 
+}
 export interface ContributorBadge {
     id: string;
     name: string;
@@ -371,20 +400,22 @@ export interface ContributorBadge {
     earned_at: string;
     criteria_met: string[];
 
+}
 export interface ContributionSystemMetrics {
     time_period: string;
     total_submissions: number;
     submissions_by_type: Record<ContributionType, number>;
     submissions_by_category: Record<ContributionCategory, number>;
     average_review_time: number;
-    workflow_bottlenecks: Array<{,
+    workflow_bottlenecks: Array<{
         stage: WorkflowStage;
         average_duration: number;
         backlog_count: number;
+}
     }>;
     average_quality_score: number;
     quality_distribution: Record<string, number>;
-    common_quality_issues: Array<{,
+    common_quality_issues: Array<{
         issue_type: string;
         frequency: number;
         impact: string;

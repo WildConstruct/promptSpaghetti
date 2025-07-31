@@ -8,6 +8,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface DisasterRecoveryPlan {
     id: string;
     name: string;
@@ -18,6 +19,7 @@ export interface DisasterRecoveryPlan {
         severity_level: 'minor' | 'major' | 'critical' | 'catastrophic';
         scope: 'single_system' | 'datacenter' | 'region' | 'global';
         impact_category: 'availability' | 'integrity' | 'confidentiality' | 'all'
+}
   };
     objectives: {
         recovery_time_objective: number;
@@ -75,6 +77,7 @@ export interface DisasterRecoveryPlan {
     next_review_date: number;
     status: 'draft' | 'approved' | 'active' | 'archived';
 
+}
 export interface RecoveryStrategy {
     id: string;
     name: string;
@@ -88,6 +91,7 @@ export interface RecoveryStrategy {
         region: string;
         availability_zone?: string;
         capacity_percentage: number;
+}
     };
     procedures: RecoveryProcedure[];
     resources: {
@@ -119,6 +123,7 @@ export interface RecoveryStrategy {
     last_tested: number;
     test_success_rate: number;
 
+}
 export interface RecoveryProcedure {
     id: string;
     name: string;
@@ -131,6 +136,7 @@ export interface RecoveryProcedure {
         manual_steps?: string[];
         approval_required: boolean;
         timeout: number;
+}
     };
     dependencies: string[];
     parallel_execution: boolean;
@@ -144,6 +150,7 @@ export interface RecoveryProcedure {
     last_execution_duration?: number;
     success_rate: number;
 
+}
 export interface BackupJob {
     id: string;
     name: string;
@@ -154,6 +161,7 @@ export interface BackupJob {
         data_types: ('security_events' | 'audit_logs' | 'configurations' | 'user_data' | 'analytics_data' | 'system_state')[];
         include_patterns: string[];
         exclude_patterns: string[];
+}
     };
     destination: {
         primary_location: string;
@@ -212,6 +220,7 @@ export interface BackupJob {
     next_run: number;
     enabled: boolean;
 
+}
 export interface BackupExecution {
     id: string;
     job_id: string;
@@ -226,6 +235,7 @@ export interface BackupExecution {
         current_item?: string;
         percentage_complete: number;
         estimated_time_remaining?: number;
+}
     };
     metrics: {
         data_size_bytes: number;
@@ -255,6 +265,7 @@ export interface BackupExecution {
     triggered_by: 'schedule' | 'manual' | 'event' | 'disaster_recovery';
     execution_log: string[];
 
+}
 export interface DisasterRecoveryEvent {
     id: string;
     plan_id: string;
@@ -274,6 +285,7 @@ export interface DisasterRecoveryEvent {
         revenue_impact: number;
         compliance_impact: string[];
         reputation_impact: 'minimal' | 'moderate' | 'significant' | 'severe'
+}
   };
     execution: {
         strategy_used: string;
@@ -312,6 +324,7 @@ export interface DisasterRecoveryEvent {
     incident_commander: string;
     created_by: string;
 
+}
 export interface RecoveryTimelineEntry {
     id: string;
     timestamp: number;
@@ -323,6 +336,7 @@ export interface RecoveryTimelineEntry {
     details: Record<string, any>;
     notes?: string;
 
+}
 export interface TestResult {
     id: string;
     plan_id: string;
@@ -333,6 +347,7 @@ export interface TestResult {
         procedures_tested: string[];
         systems_involved: string[];
         scenarios_tested: string[];
+}
     };
     execution: {
         duration: number;
@@ -365,6 +380,7 @@ export interface TestResult {
     test_report: string;
     conducted_by: string;
 
+}
 export interface NotificationTreeNode {
     id: string;
     name: string;
@@ -373,6 +389,7 @@ export interface NotificationTreeNode {
         primary: {
             type: 'email' | 'sms' | 'phone';
             value: string;
+}
         };
         secondary?: {
             type: 'email' | 'sms' | 'phone';
@@ -396,6 +413,7 @@ export interface NotificationTreeNode {
         on_call_schedule?: string;
     };
 
+}
 export interface EscalationProcedure {
     id: string;
     name: string;
@@ -406,9 +424,11 @@ export interface EscalationProcedure {
         recipients: string[];
         communication_method: 'email' | 'sms' | 'phone' | 'all';
         authorization_required: boolean;
+}
     }[];
     max_escalation_level: number;
 
+}
 export interface StakeholderGroup {
     id: string;
     name: string;
@@ -418,9 +438,11 @@ export interface StakeholderGroup {
         frequency: 'immediate' | 'hourly' | 'daily' | 'milestone';
         methods: ('email' | 'sms' | 'phone' | 'portal' | 'public_announcement')[];
         information_level: 'summary' | 'detailed' | 'technical'
+}
   };
     notification_triggers: string[];
 
+}
 export interface ExternalDependency {
     id: string;
     name: string;
@@ -430,6 +452,7 @@ export interface ExternalDependency {
         support_phone: string;
         emergency_contact: string;
         account_manager?: string;
+}
     };
     dependency_level: 'critical' | 'important' | 'optional';
     sla_commitments: {
@@ -438,6 +461,7 @@ export interface ExternalDependency {
         recovery_time: number;
     };
 
+}
 export interface ActionItem {
     id: string;
     title: string;
@@ -452,6 +476,7 @@ export interface ActionItem {
     created_at: number;
     completed_at?: number;
 
+}
 export interface Issue {
     id: string;
     title: string;
@@ -462,6 +487,7 @@ export interface Issue {
     root_cause?: string;
     recommendations: string[];
 
+}
 export interface DisasterRecoveryMetrics {
     availability: {
         system_uptime: number;
@@ -469,6 +495,7 @@ export interface DisasterRecoveryMetrics {
         unplanned_downtime: number;
         mtbf: number;
         mttr: number;
+}
     };
     backup_performance: {
         backup_success_rate: number;
@@ -513,6 +540,7 @@ export interface DisasterRecoveryMetrics {
         end: number;
     };
 
+}
 export interface DisasterRecoveryConfig {
     enabled: boolean;
     default_rto: number;
@@ -525,6 +553,7 @@ export interface DisasterRecoveryConfig {
         offsite_replication: boolean;
         cloud_backup_enabled: boolean;
         backup_verification_enabled: boolean;
+}
     };
     testing: {
         mandatory_testing: boolean;

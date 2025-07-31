@@ -34,14 +34,17 @@ import type { Article, ArticleCategory, ArticleAuthor } from './ArticleManagemen
 
 // Additional types for knowledge base layouts
 
+}
 export interface KnowledgeBaseSection {
   id: string;
   title: string;
   description: string;
+}
   icon: React.ComponentType<{ className?: string }>;
   articles: Article;
   color: string;
   featured: boolean;
+}
 }
 export interface LearningPath {
   id: string;
@@ -59,6 +62,8 @@ export interface LearningPath {
   createdAt: Date;
   updatedAt: Date;
 }
+}
+}
 export interface LearningPathStep {
   id: string;
   title: string;
@@ -68,6 +73,8 @@ export interface LearningPathStep {
   required: boolean;
   completed?: boolean;
   order: number;
+}
+}
 }
 export interface SearchResult {
   id: string;
@@ -80,6 +87,8 @@ export interface SearchResult {
   tags: string;
   matchedTerms: string;
 }
+}
+}
 export interface KnowledgeBaseStats {
   totalArticles: number;
   totalViews: number;
@@ -90,11 +99,15 @@ export interface KnowledgeBaseStats {
   featuredContent: Article;
   // Props for different layout components
 }
+}
+}
 export interface KnowledgeBaseHeroProps {
   stats: KnowledgeBaseStats;
   onSearch: (query: string) => void;
   onBrowseCategory: (categoryId: string) => void;
   featuredSections: KnowledgeBaseSection;
+}
+}
 }
 export interface ArticleCardProps {
   article: Article;
@@ -109,11 +122,15 @@ export interface ArticleCardProps {
   onShare?: (article: Article) => void;
   className?: string;
 }
+}
+}
 export interface CategoryBrowserProps {
   categories: ArticleCategory;
   onSelectCategory: (category: ArticleCategory) => void;
   layout?: 'grid' | 'list' | 'tree';
   showArticleCount?: boolean;
+}
+}
 }
 export interface LearningPathCardProps {
   learningPath: LearningPath;
@@ -123,6 +140,7 @@ export interface LearningPathCardProps {
   onClick?: (path: LearningPath) => void;
   onEnroll?: (path: LearningPath) => void;
   // Hero Section Component
+}
 }
 export const KnowledgeBaseHero: React.FC<KnowledgeBaseHeroProps> = ({)
   stats,
@@ -698,6 +716,7 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({)
 
 // Main Knowledge Base Layout Component
 
+}
 export interface KnowledgeBaseLayoutProps {
   articles: Article;
   categories: ArticleCategory;
@@ -709,6 +728,7 @@ export interface KnowledgeBaseLayoutProps {
   onSelectArticle: (article: Article) => void;
   onSelectLearningPath?: (path: LearningPath) => void;
   className?: string;
+}
 }
 export const KnowledgeBaseLayout: React.FC<KnowledgeBaseLayoutProps> = ({)
   articles,

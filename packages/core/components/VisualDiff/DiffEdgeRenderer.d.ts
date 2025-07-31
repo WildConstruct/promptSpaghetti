@@ -1,6 +1,7 @@
 import React from 'react';
 import { EdgeProps } from 'reactflow';
 
+}
 interface DiffEdgeData {
     originalEdge: Error;
     diffState: 'added' | 'removed' | 'modified' | 'unchanged';
@@ -9,5 +10,6 @@ interface DiffEdgeData {
     [key: string]: unknown;
 
 export declare const DiffEdgeRenderer: React.NamedExoticComponent<EdgeProps<DiffEdgeData>>;
+}
 export {};
 //# sourceMappingURL=DiffEdgeRenderer.d.ts.map

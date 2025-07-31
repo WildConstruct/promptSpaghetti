@@ -16,6 +16,7 @@ import {
 } from '../SecurityEventAnalytics';
 import { ComplianceFramework } from '../SecurityLogger';
 
+}
 export interface SecurityAnalyticsDashboardProps {
   analytics: SecurityEventAnalytics;
   theme?: 'light' | 'dark' | 'cinema';
@@ -36,6 +37,7 @@ export interface SecurityAnalyticsDashboardProps {
   /**
   * Comprehensive security analytics dashboard for executive and operational use
   */
+}
 }
 export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProps> = ({)
   analytics,

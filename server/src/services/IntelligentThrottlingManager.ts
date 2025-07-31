@@ -18,6 +18,7 @@ import { MetricsCollector } from '../performance/MetricsCollector';
 // ============================================================================
 
 }
+}
 export interface IntelligentThrottlingConfig {
   // Analytics-based throttling configuration
   analytics_integration: {
@@ -26,6 +27,7 @@ export interface IntelligentThrottlingConfig {
     pattern_detection_sensitivity: number;
     adaptive_learning_rate: number;
     real_time_adjustment_enabled: boolean;
+}
 }
   };
   
@@ -110,12 +112,14 @@ export interface IntelligentThrottlingConfig {
 }
 
 }
+}
 export interface UsageAnalytics {
   user_id: string;
   analysis_period: {
     start_time: number;
     end_time: number;
     duration_minutes: number;
+}
 }
   };
   usage_patterns: {
@@ -159,6 +163,7 @@ export interface UsageAnalytics {
 }
 
 }
+}
 export interface ThrottlingDecision {
   decision_id: string;
   timestamp: number;
@@ -170,6 +175,7 @@ export interface ThrottlingDecision {
     requests_per_minute: number;
     burst_capacity: number;
     current_usage: number;
+}
 }
   };
   decision_rationale: {
@@ -194,11 +200,13 @@ export interface ThrottlingDecision {
 }
 
 }
+}
 export interface ThrottlingEffectivenessMetrics {
   measurement_period: {
     start_time: number;
     end_time: number;
     duration_hours: number;
+}
 }
   };
   throttling_statistics: {

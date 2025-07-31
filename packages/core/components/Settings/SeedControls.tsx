@@ -23,6 +23,7 @@ const uiColors = {
   disabled: '#6b7280',
 };
 
+}
 export interface SeedControlsProps {
   settings: SeedSettings;
   onChange: (settings: SeedSettings) => void;
@@ -30,6 +31,7 @@ export interface SeedControlsProps {
   * Seed Settings Controls Component
   * Manages seed configuration for deterministic execution
   */
+}
 }
 export const SeedControls: React.FC<SeedControlsProps> = ({)
   settings,

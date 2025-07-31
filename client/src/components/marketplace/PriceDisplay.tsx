@@ -1,6 +1,7 @@
 // Epic 16 Marketplace - Price Display Component
 import React from 'react';
 import './PriceDisplay.css';
+}
 interface PriceDisplayProps {
   priceCents: number;
   originalPriceCents?: number; // For showing discounts,
@@ -15,6 +16,7 @@ interface PriceDisplayProps {
   showCurrency = true,
   currency = 'USD',
   className = ''
+}
 }) => {
   const formatPrice = (cents: number): string => {,
   if (cents === 0) return 'Free';

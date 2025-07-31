@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { X, Play, Pause, Archive, AlertTriangle, CheckCircle } from 'lucide-react';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import { ValidationMessage } from '../common/ValidationMessage';
+}
 interface BulkOperationsModalProps {
   isOpen: boolean;,
   onClose: () => void;
@@ -14,6 +15,7 @@ interface BulkOperationsModalProps {
   onClose,
   selectedToggleIds,
   onComplete
+}
 }) => {
   const [operation, setOperation] = useState<BulkOperation>('enable');
   const [reason, setReason] = useState('');
@@ -26,7 +28,7 @@ interface BulkOperationsModalProps {
   const [errors, setErrors] = useState<Record<string, string>>({});
   if (!isOpen) return null;
   const operationConfig = {
-    enable: {,
+    enable: {
   title: 'Enable Toggles',
       description: 'Enable the selected feature toggles',
       icon: <Play size={16} />,
@@ -34,7 +36,7 @@ interface BulkOperationsModalProps {
       confirmPhrase: 'ENABLE TOGGLES',
       warning: 'This will immediately activate these toggles for users.';
   },
-  disable: {,
+  disable: {
   title: 'Disable Toggles',
       description: 'Disable the selected feature toggles',
       icon: <Pause size={16} />,
@@ -42,7 +44,7 @@ interface BulkOperationsModalProps {
       confirmPhrase: 'DISABLE TOGGLES',
       warning: 'This will immediately deactivate these toggles for users.';
   },
-  archive: {,
+  archive: {
   title: 'Archive Toggles',
       description: 'Archive the selected feature toggles (cannot be undone)',
       icon: <Archive size={16} />,
@@ -81,7 +83,7 @@ interface BulkOperationsModalProps {
             : undefined;
         const response = await fetch(endpoint, {)
   method,
-          headers: {,
+          headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`}
 }
             'Content-Type': 'application/json'

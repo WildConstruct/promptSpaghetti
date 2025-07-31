@@ -8,6 +8,7 @@
 import { SearchQuery, SearchResult, FilterCondition, SortCondition } from '../components/search/SearchContext';
 
 // Backend API types
+}
 interface TemplateSearchQuery {
   q?: string;
   categories?: string;
@@ -24,12 +25,14 @@ interface TemplateSearchQuery {
   sortBy?: 'relevance' | 'newest' | 'oldest' | 'rating' | 'popular' | 'trending';
   page?: number;
   limit?: number;
+}
 interface TemplateSearchResponse {
   success: boolean;,
   data: {;
   templates: Template;,
   total: number;
     aggregations?: {
+}
       categories: Array<{ name: string; count: number }>;
       price_ranges: Array<{ min: number; max: number; count: number }>;
       avg_ratings: Array<{ rating: number; count: number }>;
@@ -37,6 +40,7 @@ interface TemplateSearchResponse {
     };
     executionTime?: number;
   };
+}
 interface Template {
   id: string;,
   title: string;
@@ -56,19 +60,22 @@ interface Template {
   updated_at: string;
   interface AutocompleteResponse {
   success: boolean;,
-  data: {,
+  data: {
   query: string;,
   suggestions: string;
+}
 };
+}
 interface TrendingResponse {
   success: boolean;,
-  data: {,
+  data: {
   timeframe: string;,
   category: string | null;
-  trending: Array<{,
+  trending: Array<{
   query: string;,
   count: number;
   growth?: number;
+}
 }>;
   };
 class SearchApiService {
@@ -259,11 +266,12 @@ class SearchApiService {
    * Track search result click for analytics
    */
   async trackClick(templateId: string, query: string, position: number, searchId?: string): Promise<void> {
+
     try {
       const response = await fetch(`${this.baseUrl}/click`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),
@@ -282,11 +290,12 @@ class SearchApiService {
    * Save a search query
    */
   async saveSearch(name: string, searchQuery: SearchQuery): Promise<{ id: string; name: string }> {
+
     try {
       const response = await fetch(`${this.baseUrl}/save`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),
@@ -306,7 +315,7 @@ class SearchApiService {
   /**
   * Get user's saved searches
   */
-  async getSavedSearches(): Promise<Array<{,
+  async getSavedSearches(): Promise<Array<{
   id: string;,
   name: string;
   searchQuery: SearchQuery;,
@@ -329,6 +338,7 @@ class SearchApiService {
    * Delete a saved search
    */
   async deleteSavedSearch(searchId: string): Promise<void> {
+
     try {
       const response = await fetch(`${this.baseUrl}/saved/${searchId}`, {)}
   },

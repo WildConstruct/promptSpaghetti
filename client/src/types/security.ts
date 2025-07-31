@@ -1,6 +1,7 @@
 // Epic 19.4 - Security Types Definition
 // Task: T-1752989145014 - Create frontend components for Security Monitoring & Incident Response
 
+}
 export interface SecurityMetric {
   id: string;,
   name: string;
@@ -9,6 +10,8 @@ export interface SecurityMetric {
   trend?: 'up' | 'down' | 'stable';
   change?: number;
   timestamp: Date;
+}
+}
 }
 export interface SecurityEvent {
   id: string;,
@@ -25,6 +28,8 @@ export interface SecurityEvent {
   outcome: 'success' | 'failure' | 'blocked';
   metadata?: Record<string, unknown>;
 }
+}
+}
 export interface SecurityAlert {
   id: string;,
   type: 'critical' | 'high' | 'medium' | 'low' | 'info';
@@ -38,11 +43,15 @@ export interface SecurityAlert {
   metadata?: Record<string, unknown>;
   escalation_level: number;
 }
+}
+}
 export interface AlertAction {
   id: string;,
   label: string;
   type: 'primary' | 'secondary' | 'danger';,
   action: 'block_ip' | 'quarantine_user' | 'escalate' | 'investigate' | 'dismiss';
+}
+}
 }
 export interface ThreatData {
   id: string;,
@@ -54,6 +63,8 @@ export interface ThreatData {
   detected_at: Date;,
   status: 'active' | 'blocked' | 'investigating';
   description: string;
+}
+}
 }
 export interface SecurityIncident {
   id: string;,
@@ -71,6 +82,8 @@ export interface SecurityIncident {
   timeline: TimelineEntry;,
   response_actions: ResponseAction;
 }
+}
+}
 export interface Evidence {
   id: string;,
   type: 'log' | 'screenshot' | 'file' | 'url' | 'note';
@@ -79,6 +92,8 @@ export interface Evidence {
   collected_at: Date;,
   collected_by: string;
 }
+}
+}
 export interface TimelineEntry {
   id: string;,
   timestamp: Date;
@@ -86,6 +101,8 @@ export interface TimelineEntry {
   description: string;
   author: string;,
   type: 'status_change' | 'assignment' | 'action' | 'note' | 'evidence';
+}
+}
 }
 export interface ResponseAction {
   id: string;,
@@ -96,6 +113,8 @@ export interface ResponseAction {
   due_date?: Date;
   completed_at?: Date;
 }
+}
+}
 export interface ThreatStats {
   total_threats: number;,
   active_threats: number;
@@ -103,31 +122,42 @@ export interface ThreatStats {
   threat_types: Record<string, number>;
   severity_distribution: Record<string, number>;
 
+}
   hourly_detection_rate: Array<{ hour: number; count: number }>;
+}
 }
 export interface SecurityDashboardProps {
   onIncidentClick?: (incidentId: string) => void;
   onThreatClick?: (threatId: string) => void;
 }
+}
+}
 export interface SecurityEventLogProps {
   onEventClick?: (event: SecurityEvent) => void;
-  initialFilters?: {,
+  initialFilters?: {
   severity?: string;
   category?: string;
   dateRange?: [Date, Date];
+}
 };
+}
 }
 export interface IncidentResponsePanelProps {
   incidentId: string;
   onIncidentUpdate?: (incident: SecurityIncident) => void;
   onClose?: () => void;
 }
+}
+}
 export interface ThreatDetectionVisualizerProps {
   onThreatClick?: (threat: ThreatData) => void;
   refreshInterval?: number;
+}
+}
 }
 export interface SecurityAlertsProps {
   onAlertAction?: (alertId: string, action: string) => void;
   maxVisible?: number;
   showDismissed?: boolean;
+}
 }

@@ -39,12 +39,15 @@ import type {
   IdentityValidationData 
 } from '../../auth/IdentityValidation';
 
+}
 export interface VerificationQueueProps {
   request: IdentityValidationRequest;
   onBack: () => void;
   onStatusUpdate: (requestId: string, status: ValidationStatus, notes?: string) => void;
   onRequestUpdate?: (requestId: string, updates: Partial<IdentityValidationRequest>) => void;
   className?: string;
+}
+}
 }
 export interface ReviewDecision {
   status: ValidationStatus;
@@ -53,6 +56,7 @@ export interface ReviewDecision {
   flagged: boolean;
   requiresSeniorReview: boolean;
   confidenceLevel: number;
+}
 }
 export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
   request,

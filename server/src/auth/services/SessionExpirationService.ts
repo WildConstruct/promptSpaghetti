@@ -7,6 +7,7 @@ import { EventEmitter } from 'events';
 import crypto from 'crypto';
 
 }
+}
 export interface ExpirationPolicy {
   id: string;
   name: string;
@@ -20,6 +21,7 @@ export interface ExpirationPolicy {
     warningPeriod: number; // seconds - warning before expiration
     gracePeriod: number; // seconds - grace period after expiration
     slidingWindow: boolean; // extend on activity
+}
 }
   };
   
@@ -58,6 +60,7 @@ export interface ExpirationPolicy {
 }
 
 }
+}
 export interface SessionExpiration {
   sessionId: string;
   userId: string;
@@ -70,6 +73,7 @@ export interface SessionExpiration {
     warningAt?: Date;
     expiredAt?: Date;
     cleanupAt?: Date;
+}
 }
   };
   
@@ -108,6 +112,7 @@ export interface SessionExpiration {
 }
 
 }
+}
 export interface ExpirationEvent {
   id: string;
   sessionId: string;
@@ -116,6 +121,7 @@ export interface ExpirationEvent {
   timestamp: Date;
   details: Record<string, any>;
   triggeredBy: string;
+}
 }
 }
 

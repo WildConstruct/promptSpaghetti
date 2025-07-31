@@ -18,6 +18,7 @@ import { TrustScoreService } from '../services/trust/TrustScoreService';
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 export interface PolicyTemplate {
   templateId: string;
   name: string;
@@ -30,7 +31,9 @@ export interface PolicyTemplate {
   updatedAt: Date;
 }
 }
+}
 
+}
 }
 export interface PolicyViolation {
   violationId: string;
@@ -48,7 +51,9 @@ export interface PolicyViolation {
   enforcementActions?: string[];
 }
 }
+}
 
+}
 }
 export interface AdminEnforcementRequest {
   requestId: string;
@@ -67,7 +72,9 @@ export interface AdminEnforcementRequest {
   rejectionReason?: string;
 }
 }
+}
 
+}
 }
 export interface PolicyEnforcementStats {
   totalPolicies: number;
@@ -81,6 +88,7 @@ export interface PolicyEnforcementStats {
     policyId: string;
     policyName: string;
     violationCount: number;
+}
 }
   }>;
 }

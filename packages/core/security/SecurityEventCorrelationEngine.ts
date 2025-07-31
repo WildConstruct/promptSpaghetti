@@ -16,6 +16,7 @@ import { SecurityIntelligence } from './MLSecurityAnalyticsFramework';
 // TYPES AND INTERFACES
 // ==========================================
 
+}
 export interface CorrelationConfig {
   enableRealTimeCorrelation: boolean;
   correlationTimeWindow: number; // minutes,
@@ -26,6 +27,8 @@ export interface CorrelationConfig {
   retentionPeriodDays: number;
   enableMachineLearning: boolean;
   correlationRules: CorrelationRule;
+}
+}
 }
 export interface CorrelationRule {
   id: string;
@@ -40,6 +43,7 @@ export interface CorrelationRule {
   threshold: number;
   lastUpdated: Date;
   triggeredCount: number;
+}
 }
 export enum CorrelationRuleType {
   TEMPORAL_SEQUENCE = 'temporal_sequence',
@@ -57,6 +61,7 @@ export enum CorrelationRuleType {
   weight: number;
   required: boolean;
 }
+}
 export enum CorrelationOperator {
   EQUALS = 'equals',
   CONTAINS = 'contains',
@@ -73,6 +78,7 @@ export enum CorrelationOperator {
   parameters: Record<string, unknown>;
   priority: number;
   enabled: boolean;
+}
 }
 export enum CorrelationActionType {
   CREATE_INCIDENT = 'create_incident',
@@ -100,6 +106,7 @@ export enum CorrelationActionType {
   recommendations: GroupRecommendation;
   status: GroupStatus;
 }
+}
 export enum EventGroupType {
   ATTACK_CAMPAIGN = 'attack_campaign',
   SECURITY_INCIDENT = 'security_incident',
@@ -116,6 +123,7 @@ export enum EventGroupType {
   sources: string;
   confidence: number;
   supportingData: Record<string, unknown>;
+}
 }
 export enum EvidenceType {
   TEMPORAL_PROXIMITY = 'temporal_proximity',
@@ -134,6 +142,8 @@ export enum EvidenceType {
   impact: number;
   source: string;
 }
+}
+}
 export interface ThreatIndicator {
   indicator: string;
   indicatorType: IndicatorType;
@@ -143,6 +153,7 @@ export interface ThreatIndicator {
   lastSeen: Date;
   frequency: number;
   associatedThreats: ThreatType;
+}
 }
 export enum IndicatorType {
   IP_ADDRESS = 'ip_address',
@@ -160,6 +171,7 @@ export enum IndicatorType {
   actionItems: string;
   estimatedEffort: number; // hours,
   riskReduction: number; // 0-100,
+}
 }
 export enum RecommendationType {
   IMMEDIATE_ACTION = 'immediate_action',
@@ -187,6 +199,8 @@ export enum RecommendationType {
   ruleEffectiveness: Map<string, RuleEffectiveness>;
   threatPatternStats: Map<ThreatType, PatternStats>;
 }
+}
+}
 export interface RuleEffectiveness {
   ruleId: string;
   triggeredCount: number;
@@ -194,6 +208,8 @@ export interface RuleEffectiveness {
   falsePositiveRate: number;
   averageConfidence: number;
   lastTriggered: Date;
+}
+}
 }
 export interface PatternStats {
   threatType: ThreatType;
@@ -204,18 +220,22 @@ export interface PatternStats {
   firstDetected: Date;
   lastDetected: Date;
 }
+}
+}
 export interface CorrelationReport {
   reportId: string;
   generatedAt: Date;
   timeRange: {
   start: Date;
   end: Date;
+}
 };
   summary: CorrelationSummary;
   topThreats: ThreatSummary;
   correlationTrends: CorrelationTrend;
   rulePerformance: RulePerformanceMetrics;
   recommendations: SystemRecommendation;
+}
 }
 export interface CorrelationSummary {
   totalEvents: number;
@@ -226,6 +246,8 @@ export interface CorrelationSummary {
   averageCorrelationTime: number;
   correlationEfficiency: number;
 }
+}
+}
 export interface ThreatSummary {
   threatType: ThreatType;
   eventCount: number;
@@ -234,13 +256,17 @@ export interface ThreatSummary {
   trendDirection: 'increasing' | 'decreasing' | 'stable';
   keyIndicators: string;
 }
+}
+}
 export interface CorrelationTrend {
   timeframe: string;
   metric: string;
   value: number;
   changePercent: number;
   significance: 'high' | 'medium' | 'low'
+}
   }
+}
 export interface RulePerformanceMetrics {
   ruleId: string;
   ruleName: string;
@@ -248,6 +274,8 @@ export interface RulePerformanceMetrics {
   successRate: number;
   averageExecutionTime: number;
   impactScore: number;
+}
+}
 }
 export interface SystemRecommendation {
   category: 'rules' | 'performance' | 'coverage' | 'accuracy';
@@ -259,6 +287,7 @@ export interface SystemRecommendation {
   // ==========================================
   // MAIN CORRELATION ENGINE CLASS
   // ==========================================
+}
 }
 export class SecurityEventCorrelationEngine extends EventEmitter {
   private config: CorrelationConfig;
@@ -290,17 +319,20 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
   // PUBLIC METHODS
   // ==========================================
   public async processEvent(event: SecurityEvent): Promise<void> {
+
     this.processingQueue.push(event);
     this.analytics.totalEventsProcessed++;
     if (this.config.enableRealTimeCorrelation && !this.isProcessing) {
       await this.processEventQueue();
     this.emit('eventProcessed', { event, queueSize: this.processingQueue.length });
   public async processEvents(events: SecurityEvent): Promise<void> {
+
     this.processingQueue.push(...events);
     this.analytics.totalEventsProcessed += events.length;
     await this.processEventQueue();
     this.emit('batchProcessed', { count: events.length, totalProcessed: this.analytics.totalEventsProcessed });
   public async correlateEvents(timeWindow?: number): Promise<CorrelatedEventGroup> {
+
     const windowMs = (timeWindow || this.config.correlationTimeWindow) * 60 * 1000;
     const now = Date.now();
     const recentEvents = this.eventBuffer.filter(event => ;);
@@ -325,6 +357,7 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
       group.status === GroupStatus.ACTIVE || group.status === GroupStatus.INVESTIGATING
     );
   public async updateGroupStatus(groupId: string, status: GroupStatus, notes?: string): Promise<void> {
+
     const group = this.correlatedGroups.get(groupId);
     if (!group) {
       throw new Error(`Correlation group ${groupId} not found`);}
@@ -356,6 +389,7 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
   public getAnalytics(): CorrelationAnalytics {
     return { ...this.analytics };
   public async generateReport(timeRange: { start: Date; end: Date }): Promise<CorrelationReport> {
+
     const groups = Array.from(this.correlatedGroups.values()).filter(group =>;);
       group.createdAt >= timeRange.start && group.createdAt <= timeRange.end
     );
@@ -442,6 +476,7 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
         await this.processEventQueue();
     }, 5000); // Process queue every 5 seconds
   private async processEventQueue(): Promise<void> {
+
     if (this.isProcessing || this.processingQueue.length === 0) {
       return;
     this.isProcessing = true;
@@ -813,7 +848,7 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
   [AnomalySeverity.CRITICAL]: 5,
 };
     return scores[severity] || 1;
-  private analyzeCorrelationTrends(()
+  private analyzeCorrelationTrends(((
     groups: CorrelatedEventGroup,
     timeRange: { start: Date; end: Date }
   ): CorrelationTrend {

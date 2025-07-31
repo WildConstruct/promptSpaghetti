@@ -6,6 +6,7 @@
  */
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
 
+}
 export interface WhisperConfig {
     apiKey: string;
     baseURL?: string;
@@ -13,6 +14,7 @@ export interface WhisperConfig {
     maxRetries?: number;
     organization?: string;
 
+}
 export interface WhisperRequestOptions {
     file: File | Blob | ArrayBuffer;
     model?: 'whisper-1';
@@ -23,6 +25,7 @@ export interface WhisperRequestOptions {
     timestamp_granularities?: ('word' | 'segment')[];
     task?: 'transcribe' | 'translate';
 
+}
 export interface WhisperTranscriptionResult {
     text: string;
     language?: string;
@@ -42,6 +45,7 @@ export interface WhisperTranscriptionResult {
             word: string;
             start: number;
             end: number;
+}
         }>;
     }>;
     words?: Array<{
@@ -62,6 +66,7 @@ export interface WhisperTranscriptionResult {
         cost: number;
     };
 
+}
 export interface AudioFileInfo {
     name: string;
     size: number;
@@ -80,6 +85,7 @@ export declare class WhisperAdapter extends BaseAIModel {
         file?: File | Blob | ArrayBuffer;
         audio?: File | Blob | ArrayBuffer;
         data?: File | Blob | ArrayBuffer;
+}
     }, options?: WhisperRequestOptions): Promise<WhisperTranscriptionResult>;
     cleanup(): Promise<void>;
     estimate(input: File | Blob | ArrayBuffer | {)

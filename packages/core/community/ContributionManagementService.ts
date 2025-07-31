@@ -70,8 +70,7 @@ export class ContributionManagementService implements ContributionRepository {
     } catch (error) {
   console.error('Failed to submit contribution:', error);
   throw error;
-  async updateContribution(()
-  id: string,
+  async updateContribution((id: string,
   updates: Partial<ContributionSubmission>): Promise<ContributionSubmission> {,
   try {
   const updateData = {
@@ -84,6 +83,7 @@ export class ContributionManagementService implements ContributionRepository {
       console.error('Failed to update contribution:', error);
       throw error;
   async getContribution(id: string): Promise<ContributionSubmission> {
+
     try {
       const response = await this.apiClient.get(`/api/contributions/${id}`);}
       return response.data;
@@ -93,6 +93,7 @@ export class ContributionManagementService implements ContributionRepository {
   async getContributionsByUser(userId: string)
     status?: ContributionStatus
   ): Promise<ContributionSubmission> {
+
     try {
       const params = new URLSearchParams();
       params.append('user_id', userId);
@@ -110,6 +111,7 @@ export class ContributionManagementService implements ContributionRepository {
     newStage: WorkflowStage,
     notes?: string
   ): Promise<ContributionWorkflow> {
+
     try {
       const contribution = await this.getContribution(contributionId);
       const currentWorkflow = contribution.workflow;
@@ -139,8 +141,7 @@ export class ContributionManagementService implements ContributionRepository {
     } catch (error) {
   console.error('Failed to advance workflow stage:', error);
   throw error;
-  async assignReviewer(()
-  contributionId: string,
+  async assignReviewer((contributionId: string,
   assignment: ReviewerAssignment): Promise<void> {,
   try {
   const contribution = await this.getContribution(contributionId);
@@ -159,10 +160,11 @@ export class ContributionManagementService implements ContributionRepository {
     } catch (error) {
       console.error('Failed to assign reviewer:', error);
       throw error;
-  async submitReviewFeedback(()
+  async submitReviewFeedback(((
     contributionId: string,
-    feedback: ReviewFeedbackEntry,
+    feedback: ReviewFeedbackEntry
   ): Promise<void> {
+
     try {
       const contribution = await this.getContribution(contributionId);
       const updatedFeedback = [;
@@ -188,8 +190,7 @@ export class ContributionManagementService implements ContributionRepository {
     } catch (error) {
   console.error('Failed to submit review feedback:', error);
   throw error;
-  async approveContribution(()
-  contributionId: string,
+  async approveContribution((contributionId: string,
   approval: ApprovalEntry): Promise<void> {,
   try {
   const contribution = await this.getContribution(contributionId);
@@ -256,8 +257,7 @@ export class ContributionManagementService implements ContributionRepository {
   // ====================================
   // Publication Management
   // ====================================
-  async schedulePublication(()
-  contributionId: string,
+  async schedulePublication((contributionId: string,
   schedule: PublicationSchedule): Promise<void> {,
   try {
   const contribution = await this.getContribution(contributionId);
@@ -319,6 +319,7 @@ export class ContributionManagementService implements ContributionRepository {
   // Analytics and Reporting
   // ====================================
   async getContributionAnalytics(contributionId: string): Promise<ContributionEngagement> {
+
     try {
       const response = await this.apiClient.get(`/api/contributions/${contributionId}/analytics`);}
       return response.data;
@@ -326,6 +327,7 @@ export class ContributionManagementService implements ContributionRepository {
       console.error('Failed to get contribution analytics:', error);
       throw error;
   async getContributorStatistics(userId: string): Promise<ContributorStatistics> {
+
     try {
       const response = await this.apiClient.get(`/api/contributors/${userId}/statistics`);}
       return response.data;
@@ -333,6 +335,7 @@ export class ContributionManagementService implements ContributionRepository {
       console.error('Failed to get contributor statistics:', error);
       throw error;
   async getSystemMetrics(timeRange?: string): Promise<ContributionSystemMetrics> {
+
     try {
       const params = timeRange ? `?time_range=${timeRange}` : '';}
       const response = await this.apiClient.get(`/api/contributions/system-metrics${params}`);}
@@ -483,23 +486,33 @@ export class ContributionManagementService implements ContributionRepository {
   retry_count: 0,
 };
   private async autoAssignReviewers(contributionId: string, reviewType: string): Promise<void> {
+
     // Auto-assignment logic would be implemented here
     // This would find available reviewers based on expertise, workload, etc.
   private async openCommunityReview(contributionId: string): Promise<void> {
+
     // Community review opening logic
   private async notifyReviewer(reviewerId: string, contributionId: string, assignment: ReviewerAssignment): Promise<void> {
+
     // Notification logic
   private async notifyContributor(contributionId: string, eventType: string, data: any): Promise<void> {
+
     // Contributor notification logic
   private async updateReviewerAssignmentStatus(contributionId: string, reviewerId: string, status: string): Promise<void> {
+
     // Update reviewer assignment status
   private async checkReviewCompletion(contributionId: string): Promise<void> {
+
     // Check if all required reviews are complete and advance workflow if needed
   private async scheduleAutomaticPublication(contributionId: string, scheduledDate: string): Promise<void> {
+
     // Schedule automatic publication
   private async sendPublicationNotifications(contributionId: string): Promise<void> {
+
     // Send publication notifications
   private async initializePostPublicationTracking(contributionId: string): Promise<void> {
+
     // Initialize analytics and engagement tracking
   private async awardContributorBadge(contributionId: string, badgeType: string): Promise<void> {
+
     // Award badge to contributor

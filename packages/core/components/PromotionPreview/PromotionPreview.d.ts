@@ -7,6 +7,7 @@
  * Part of Epic 17 - Backstage Admin Controls
  */
 import React from 'react';
+}
 interface PromotionSlot {
     id: string;
     name: string;
@@ -15,9 +16,11 @@ interface PromotionSlot {
     dimensions: {
         width: number;
         height: number;
+}
     };
     traffic_allocation: number;
     priority: number;
+}
 interface PromotionPreviewData {
     schedule: {
         id: string;
@@ -27,8 +30,9 @@ interface PromotionPreviewData {
         start_date: Date;
         end_date: Date;
         status: string;
+}
     };
-    content: Array<{,
+    content: Array<{
         id: string;
         title: string;
         category: string;
@@ -52,7 +56,7 @@ interface PromotionPreviewData {
     };
     ab_test_config?: {
         test_name: string;
-        variants: Array<{,
+        variants: Array<{
             id: string;
             name: string;
             traffic_split: number;
@@ -60,6 +64,7 @@ interface PromotionPreviewData {
         }>;
     };
 
+}
 export interface PromotionPreviewProps {
     promotionData?: PromotionPreviewData;
     onUpdateRotation?: (config: unknown) => void;
@@ -71,3 +76,4 @@ export interface PromotionPreviewProps {
 export declare const PromotionPreview: React.FC<PromotionPreviewProps>;
 export default PromotionPreview;
 //# sourceMappingURL=PromotionPreview.d.ts.map
+}

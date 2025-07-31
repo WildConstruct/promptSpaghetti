@@ -11,11 +11,14 @@ import { globalEventBus, BaseEvent, EventFactory, EventCategory, EventPriority }
  * Zustand middleware that publishes state changes as events
  */
 
+}
 export interface EventableStore {
   _eventAdapter?: ZustandEventAdapter;
   /**
   * Event metadata for state changes
   */
+}
+}
 }
 export interface StateChangeEvent extends BaseEvent {
   type: 'state_changed' | 'store_initialized' | 'store_reset';
@@ -31,6 +34,7 @@ export interface StateChangeEvent extends BaseEvent {
  * Configuration for Zustand event integration
  */
 
+}
 export interface ZustandEventConfig {
   storeName: string;
   enabledPaths?: string; // Only monitor specific paths,
@@ -41,6 +45,7 @@ export interface ZustandEventConfig {
   /**
   * Zustand Event Adapter Class
   */
+}
 }
 export class ZustandEventAdapter {
   private config: ZustandEventConfig;
@@ -204,9 +209,9 @@ export class ZustandEventAdapter {
   /**
    * Subscribe to state changes from the event bus
    */
-  public subscribeToStateEvents(()
+  public subscribeToStateEvents(((
     storeName: string,
-    handler: (event: StateChangeEvent) => void,
+    handler: (event: StateChangeEvent) => void
   ): string {
   return globalEventBus.subscribe()
   {

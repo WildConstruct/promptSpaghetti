@@ -7,16 +7,19 @@ import { subscribeWithSelector } from 'zustand/middleware';
 import { Graph, Node, Edge } from '../graphSchema';
 import { GraphCRDTAdapter, CollaborativeGraphOptions } from './GraphCRDTAdapter';
 
+}
 export interface UserPresence {
   userId: string;
   name: string;
   color: string;
   cursor?: {
     nodeId?: string;
+}
     position?: { x: number; y: number };
   };
   selection?: string;
   lastSeen: number;
+}
 }
 export interface CollaborativeGraphState {
   // Core graph state
@@ -40,6 +43,7 @@ export interface CollaborativeGraphState {
   disableCollaboration: () => void;
   // Graph operations (collaborative when enabled)
   setGraph: (graph: Graph) => void;
+}
   addNode: (node: Node, position?: { x: number; y: number }) => void;
   updateNode: (nodeId: string, updates: Partial<Node>) => void;
   deleteNode: (nodeId: string) => void;

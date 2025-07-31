@@ -15,6 +15,7 @@ import {
   NodeLabelPreferences,
   DEFAULT_NODE_LABEL_PREFERENCES
 } from '../../types/CollaborationTypes';
+}
 interface NodeLabelsLayerProps {
   nodes: Node;
   labelConfigs: Record<string, NodeLabelConfig>;
@@ -25,6 +26,7 @@ interface NodeLabelsLayerProps {
   focusedNodeId?: string | null;
   author?: string;
   readOnly?: boolean;
+}
   canvasOffset?: { x: number; y: number };
   zoom?: number;
 

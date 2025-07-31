@@ -21,6 +21,7 @@ import { Database } from '../database/connection';
 
 // Request type definitions
 }
+}
 interface IngestLogRequest {
   Body: {
     level: LogLevel;
@@ -30,9 +31,11 @@ interface IngestLogRequest {
     context?: Record<string, any>;
     metadata?: Record<string, any>;
 }
+}
   };
 }
 
+}
 }
 interface BatchIngestLogsRequest {
   Body: {
@@ -51,10 +54,12 @@ interface BatchIngestLogsRequest {
       stack_trace?: string;
       metadata?: Record<string, any>;
 }
+}
     }>;
   };
 }
 
+}
 }
 interface CreateAnalysisRuleRequest {
   Body: {
@@ -70,6 +75,7 @@ interface CreateAnalysisRuleRequest {
       statistical_window_minutes?: number;
       ml_model?: string;
       custom_function?: string;
+}
 }
     };
     anomaly_type: AnomalyType;
@@ -91,6 +97,7 @@ interface CreateAnalysisRuleRequest {
 }
 
 }
+}
 interface CreateAnalysisSessionRequest {
   Body: {
     name: string;
@@ -101,6 +108,7 @@ interface CreateAnalysisSessionRequest {
     time_range: {
       start_time: string;
       end_time?: string;
+}
 }
     };
     filters?: {
@@ -115,6 +123,7 @@ interface CreateAnalysisSessionRequest {
 }
 
 }
+}
 interface ListLogEntriesRequest {
   Querystring: {
     source?: LogSource;
@@ -127,9 +136,11 @@ interface ListLogEntriesRequest {
     page?: number;
     pageSize?: number;
 }
+}
   };
 }
 
+}
 }
 interface ListAnalysisRulesRequest {
   Querystring: {
@@ -139,9 +150,11 @@ interface ListAnalysisRulesRequest {
     page?: number;
     pageSize?: number;
 }
+}
   };
 }
 
+}
 }
 interface ListAlertsRequest {
   Querystring: {
@@ -154,9 +167,11 @@ interface ListAlertsRequest {
     page?: number;
     pageSize?: number;
 }
+}
   };
 }
 
+}
 }
 interface GetAnalyticsRequest {
   Querystring: {
@@ -164,6 +179,7 @@ interface GetAnalyticsRequest {
     end_date: string;
     source?: LogSource;
     include_patterns?: boolean;
+}
 }
   };
 }

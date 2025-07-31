@@ -6,6 +6,7 @@ import { MetricsCollector, PerformanceAlert } from './MetricsCollector';
  * Optimization strategy configuration
  */
 }
+}
 export interface OptimizationStrategy {
   name: string;
   description: string;
@@ -18,6 +19,7 @@ export interface OptimizationStrategy {
     errorRateThreshold?: number;
     connectionCountThreshold?: number;
 }
+}
   };
   actions: OptimizationAction[];
 }
@@ -26,6 +28,7 @@ export interface OptimizationStrategy {
  * Optimization action types
  */
 }
+}
 export interface OptimizationAction {
   type: 'throttle' | 'batch' | 'cache' | 'compress' | 'prioritize' | 'scale' | 'cleanup';
   target: string;
@@ -33,10 +36,12 @@ export interface OptimizationAction {
   description: string;
 }
 }
+}
 
 /**
  * Optimization result
  */
+}
 }
 export interface OptimizationResult {
   strategyName: string;
@@ -49,6 +54,7 @@ export interface OptimizationResult {
     memoryReduction?: number;
     latencyReduction?: number;
     errorRateReduction?: number;
+}
 }
   };
   errors: string[];

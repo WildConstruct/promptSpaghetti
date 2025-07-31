@@ -54,20 +54,22 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 // Types
+}
 interface ComplianceReport {
   id: string;,
   reportType: 'access_report' | 'change_report' | 'security_report' | 'retention_report';
   standard: 'soc2' | 'iso27001' | 'gdpr' | 'hipaa' | 'pci_dss' | 'ccpa' | 'sox';,
   startDate: Date;
   endDate: Date;,
-  summary: {,
+  summary: {
   totalEvents: number;,
   uniqueUsers: number;
   criticalEvents: number;,
   securityIncidents: number;
   complianceViolations: number;
+}
 };
-  violations: Array<{,
+  violations: Array<{
   eventId: string;
   violationType: string;,
   description: string;
@@ -78,6 +80,7 @@ interface ComplianceReport {
   generatedAt: Date;
   format: 'json' | 'pdf' | 'csv' | 'xml';,
   status: 'pending' | 'generating' | 'completed' | 'failed';
+}
 interface ReportTemplate {
   id: string;,
   name: string;
@@ -85,10 +88,12 @@ interface ReportTemplate {
   standard: string;
   reportType: string;,
   defaultScope: Record<string, unknown>;
-  schedule?: {,
+  schedule?: {
   frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly';,
   enabled: boolean;
+}
 };
+}
 interface ComplianceMetrics {
   complianceScore: number;,
   totalReports: number;
@@ -98,6 +103,7 @@ interface ComplianceMetrics {
   score: number;,
   violations: number;
   lastReport: Date;
+}
 }>;
 const COMPLIANCE_STANDARDS = [;
   { value: 'soc2', label: 'SOC 2', description: 'Service Organization Control 2' },
@@ -152,7 +158,7 @@ export const ComplianceReportDashboard: React.FC = () => {
   standard: 'soc2',
   startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
   endDate: new Date(),
-  summary: {,
+  summary: {
   totalEvents: 1543,
   uniqueUsers: 45,
   criticalEvents: 12,
@@ -184,7 +190,7 @@ export const ComplianceReportDashboard: React.FC = () => {
   standard: 'gdpr',
   startDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
   endDate: new Date(),
-  summary: {,
+  summary: {
   totalEvents: 234,
   uniqueUsers: 18,
   criticalEvents: 2,
@@ -218,10 +224,10 @@ export const ComplianceReportDashboard: React.FC = () => {
   description: 'Comprehensive security assessment for SOC 2 compliance',
   standard: 'soc2',
   reportType: 'security_report',
-  defaultScope: {,
+  defaultScope: {
   eventTypes: ['login_failed', 'unauthorized_access', 'security_breach_detected'],
 },
-  schedule: {,
+  schedule: {
   frequency: 'monthly',
   enabled: true,
 }
@@ -231,10 +237,10 @@ export const ComplianceReportDashboard: React.FC = () => {
   description: 'Data modification tracking for GDPR compliance',
   standard: 'gdpr',
   reportType: 'change_report',
-  defaultScope: {,
+  defaultScope: {
   eventTypes: ['data_exported', 'data_purged', 'user_created', 'user_deleted'],
 },
-  schedule: {,
+  schedule: {
   frequency: 'weekly',
   enabled: true];
   setTemplates(mockTemplates);
@@ -249,7 +255,7 @@ export const ComplianceReportDashboard: React.FC = () => {
         totalReports: 42,
         violationsThisMonth: 8,
         averageResolutionTime: 2.5, // days
-        byStandard: {,
+        byStandard: {
   soc2: { score: 92, violations: 3, lastReport: new Date(Date.now() - 24 * 60 * 60 * 1000) },
           gdpr: { score: 89, violations: 2, lastReport: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) },
           iso27001: { score: 85, violations: 3, lastReport: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000) }

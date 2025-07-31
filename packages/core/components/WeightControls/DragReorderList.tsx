@@ -5,6 +5,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import { WeightControlOption } from '../Inspector/WeightControlSlider';
 import { getOptionColor } from './WeightVisualization';
 
+}
 export interface DragReorderListProps {
   options: WeightControlOption;
   onReorder: (fromIndex: number, toIndex: number) => void;
@@ -13,10 +14,12 @@ export interface DragReorderListProps {
   className?: string;
   disabled?: boolean;
   showWeights?: boolean;
+}
 interface DragState {
   isDragging: boolean;
   draggedIndex: number | null;
   dragOverIndex: number | null;
+}
   dragOffset: { x: number; y: number };
   ghostPosition: { x: number; y: number };
 const DRAG_THRESHOLD = 5; // Minimum pixels to start drag;

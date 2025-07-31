@@ -5,6 +5,7 @@
  */
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { PSGFile, projectManager } from '../../projectManager';
+}
 interface RecentFilesProps {
   /** Maximum number of recent files to display */
   limit?: number;
@@ -19,6 +20,7 @@ interface RecentFilesProps {
   onClick,
   style,
   className
+}
 }) => {
   const [currentView, setCurrentView] = useState<'recent' | 'favorites'>('recent');
   const [recentFiles, setRecentFiles] = useState<PSGFile>([]);

@@ -4,6 +4,7 @@
  */
 import { Comment, CreateComment, UpdateComment } from '../types/workspace';
 
+}
 interface UseCommentsOptions {
     workspaceId: string;
     targetType: string;
@@ -27,6 +28,7 @@ export declare function useComments(options: UseCommentsOptions): {
     loadMore: () => void;
     refresh: () => void;
     getComment: (commentId: string) => Promise<Comment | null>;
+}
 };
 export {};
 //# sourceMappingURL=useComments.d.ts.map

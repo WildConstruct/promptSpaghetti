@@ -17,6 +17,7 @@ import { type EnhancedDataElement, type SecurityPolicyEnforcementResult } from '
  * Extended request interface with sensitivity information
  */
 
+}
 export interface SensitivityAwareRequest extends Request {
     dataSensitivity?: {
         level: DataSensitivityLevel;
@@ -29,6 +30,7 @@ export interface SensitivityAwareRequest extends Request {
  * Data sensitivity middleware configuration
  */
 
+}
 export interface DataSensitivityMiddlewareConfig {
     /** Enable automatic data sensitivity detection */
     autoDetection: boolean;
@@ -49,6 +51,7 @@ export interface DataSensitivityMiddlewareConfig {
         allowed: boolean;
         reasons: string[];
 
+}
     }>;
     /** Compliance frameworks to validate against */
     complianceFrameworks: string[];

@@ -11,6 +11,7 @@
 import { VFXExportFormat, VFXPromptVariant } from '../types/VFXExport.js';
 import { Node, Edge } from 'reactflow';
 
+}
 export interface HybridExportFormat extends VFXExportFormat {
     hybridPrompting: {
         mars: {
@@ -30,6 +31,7 @@ export interface HybridExportFormat extends VFXExportFormat {
         };
     };
 
+}
 export interface MARSFrameworkTags {
     CAM: {
         shot_type: 'ECU' | 'CU' | 'MS' | 'WS' | 'EWS' | 'OTS' | 'POV';
@@ -37,6 +39,7 @@ export interface MARSFrameworkTags {
         movement: 'static' | 'pan' | 'tilt' | 'dolly' | 'zoom' | 'handheld';
         lens: string;
         depth_of_field: 'shallow' | 'deep' | 'rack-focus';
+}
     };
     SUBJ: {
         primary: string;
@@ -59,6 +62,7 @@ export interface MARSFrameworkTags {
         visual_hierarchy: 'foreground' | 'midground' | 'background'
   };
 
+}
 export interface MARSStructuredPrompt {
     raw_mars: string;
     parsed_structure: {
@@ -66,6 +70,7 @@ export interface MARSStructuredPrompt {
         subject_section: string;
         effects_section: string;
         focal_section: string;
+}
     };
     controlnet_mapping: {
         pose_guidance: string;
@@ -74,6 +79,7 @@ export interface MARSStructuredPrompt {
         composition_rules: string;
     };
 
+}
 export interface ZadaNaturalLanguageVariant {
     variant_id: string;
     style: 'screenplay' | 'storyboard' | 'shot_list' | 'director_note';
@@ -81,6 +87,7 @@ export interface ZadaNaturalLanguageVariant {
     accessibility_level: 'director' | 'cinematographer' | 'general_crew';
     human_readable_score: number;
 
+}
 export interface DirectorAccessiblePrompt {
     screenplay_style: string;
     shot_description: string;
@@ -90,8 +97,10 @@ export interface DirectorAccessiblePrompt {
         cinematographer: string;
         lighting_director: string;
         vfx_supervisor: string;
+}
     };
 
+}
 export interface HollywoodSeedProtocol {
     master_seed: number;
     component_seeds: Record<string, number>;
@@ -101,8 +110,10 @@ export interface HollywoodSeedProtocol {
         generator_version: string;
         node_version_map: Record<string, string>;
         schema_version: string;
+}
     };
 
+}
 export interface IterationHistory {
     iteration_id: string;
     timestamp: string;
@@ -123,6 +134,7 @@ export declare class HybridPromptExportService {
     exportHybridPrompt(graph: {)
         nodes: Node[];
         edges: Edge[];
+}
     }, executionResults: {
         finalPrompt: string;
         variables: Record<string, string>;

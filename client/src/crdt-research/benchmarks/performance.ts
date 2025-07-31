@@ -4,6 +4,7 @@
  */
 import { GraphSyncHandler } from '../src/graph-sync';
 import { CRDTNode, CRDTEdge } from '../src/types';
+}
 interface BenchmarkResult {
   name: string;,
   operations: number;
@@ -34,6 +35,7 @@ interface BenchmarkResult {
   duration,
   opsPerSecond: (operations / duration) * 1000,
   memoryUsed: memAfter - memBefore,
+}
 };
     this.results.push(result);
     return result;
@@ -41,6 +43,7 @@ interface BenchmarkResult {
    * Benchmark single-user node creation
    */
   async benchmarkNodeCreation(nodeCount: number): Promise<BenchmarkResult> {
+
     return this.runBenchmark()
       `Create ${nodeCount} nodes (single user)`}
 }
@@ -54,11 +57,11 @@ interface BenchmarkResult {
 },
   type: 'WeightedChoice',
             position: { x: i * 100, y: i * 100 },
-            data: {,
+            data: {
   choices: ['Option A', 'Option B', 'Option C'],
   weights: [0.33, 0.33, 0.34],
 },
-  metadata: {,
+  metadata: {
   label: `Node ${i}`}
 },
   description: `This is test node number ${i}`}
@@ -71,10 +74,11 @@ interface BenchmarkResult {
   /**
    * Benchmark concurrent node creation
    */
-  async benchmarkConcurrentNodeCreation(()
+  async benchmarkConcurrentNodeCreation(((
     nodeCount: number,
-    userCount: number,
+    userCount: number
   ): Promise<BenchmarkResult> {
+
     const nodesPerUser = Math.floor(nodeCount / userCount);
     return this.runBenchmark()
       `Create ${nodeCount} nodes (${userCount} concurrent users)`}
@@ -113,6 +117,7 @@ interface BenchmarkResult {
    * Benchmark edge creation in a large graph
    */
   async benchmarkEdgeCreation(nodeCount: number, edgeCount: number): Promise<BenchmarkResult> {
+
     return this.runBenchmark()
       `Create ${edgeCount} edges in ${nodeCount} node graph`}
 }
@@ -154,6 +159,7 @@ interface BenchmarkResult {
    * Benchmark update operations
    */
   async benchmarkUpdates(nodeCount: number, updateCount: number): Promise<BenchmarkResult> {
+
     return this.runBenchmark()
       `Perform ${updateCount} updates on ${nodeCount} nodes`}
 }
@@ -177,7 +183,7 @@ interface BenchmarkResult {
           const nodeIdx = Math.floor(Math.random() * nodeCount);
           const nodeId = `node${nodeIdx}`;}
           graph.updateNode(nodeId, {)
-  position: {,
+  position: {
   x: Math.random() * 1000,
   y: Math.random() * 1000,
 },
@@ -188,10 +194,11 @@ interface BenchmarkResult {
   /**
    * Benchmark document synchronization
    */
-  async benchmarkSynchronization(()
+  async benchmarkSynchronization(((
     nodeCount: number,
-    syncCount: number,
+    syncCount: number
   ): Promise<BenchmarkResult> {
+
     return this.runBenchmark()
       `Sync ${nodeCount} nodes between ${syncCount} users`}
 }
@@ -230,6 +237,7 @@ interface BenchmarkResult {
    * Benchmark snapshot creation and restoration
    */
   async benchmarkSnapshots(nodeCount: number): Promise<BenchmarkResult> {
+
     let snapshotSize = 0;
     return this.runBenchmark()
       `Create and restore snapshot of ${nodeCount} nodes`}
@@ -245,12 +253,12 @@ interface BenchmarkResult {
 },
   type: 'WeightedChoice',
             position: { x: i * 100, y: i * 100 },
-            data: {,
+            data: {
   choices: Array.from({ length: 10 }, (_, j) => `Option ${j}`)}
 },
   weights: Array.from({ length: 10 }, () => Math.random())
   },
-  metadata: {,
+  metadata: {
   label: `Node ${i}`}
 },
   description: `This is a detailed description for node ${i}`}
@@ -301,6 +309,7 @@ interface BenchmarkResult {
    * Run all benchmarks
    */
   async runAll(): Promise<void> {
+
     console.log('Starting CRDT performance benchmarks...\n');
     // Node creation benchmarks
     await this.benchmarkNodeCreation(1000);

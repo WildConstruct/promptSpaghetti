@@ -21,6 +21,7 @@ import {
   Pause as PauseIcon,
   Stop as StopIcon
 } from '@mui/icons-material';
+}
 interface Schedule {
   id: string;,
   toggleId: string;
@@ -53,6 +54,7 @@ interface Schedule {
   cancelled: '#9e9e9e',
   failed: '#f44336',
   paused: '#ff5722',
+}
 };
 const TIME_RANGES = [;
   { value: '24h', label: '24 Hours', hours: 24 },
@@ -146,7 +148,7 @@ export const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({ schedules, o
         startTime.getTime() + (i / markerCount) * (endTime.getTime() - startTime.getTime())
       );
       const position = (i / markerCount) * 100;
-      markers.push()
+      markers.push(
         <Box
           key={i}
           sx={{
@@ -365,7 +367,7 @@ export const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({ schedules, o
   width: 2,
   bgcolor: 'error.main',
   zIndex: 3,
-  '&::before': {,
+  '&::before': {
   content: '"Now"',
   position: 'absolute',
   top: -25,

@@ -8,6 +8,7 @@
  */
 import { useCallback, useRef, useEffect } from 'react';
 import { useAuthStore } from '../stores/authStore';
+}
 interface AnalyticsMetadata {
   sessionId?: string;
   userId?: string;
@@ -17,6 +18,7 @@ interface AnalyticsMetadata {
   duration?: number;
   errorMessage?: string;
   [key: string]: unknown;
+}
 interface UseFileBrowserAnalyticsReturn {
   trackFileOperation: (),
     operationType: string,
@@ -42,6 +44,7 @@ interface UseFileBrowserAnalyticsReturn {
 const ANALYTICS_ENABLED = process.env.NODE_ENV === 'production' || process.env.REACT_APP_ANALYTICS_ENABLED === 'true';
 const BATCH_SIZE = 10;
 const BATCH_TIMEOUT = 5000; // 5 seconds;
+}
 interface QueuedEvent {
   endpoint: string;,
   data: Record<string, unknown>;
@@ -50,6 +53,7 @@ interface QueuedEvent {
  * Hook for tracking file browser analytics
  */
 export const useFileBrowserAnalytics = (): UseFileBrowserAnalyticsReturn => {
+}
   const { user, isAuthenticated } = useAuthStore();
   const eventQueue = useRef<QueuedEvent>([]);
   const batchTimer = useRef<NodeJS.Timeout | null>(null);
@@ -75,7 +79,7 @@ export const useFileBrowserAnalytics = (): UseFileBrowserAnalyticsReturn => {
       const response = await fetch(`/api/file-browser/analytics/${endpoint}`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           ...(user?.token && { 'Authorization': `Bearer ${user.token}` })}
   },
@@ -134,7 +138,7 @@ export const useFileBrowserAnalytics = (): UseFileBrowserAnalyticsReturn => {
   fileName,
   filePath,
   success,
-  metadata: {,
+  metadata: {
   ...getCommonMetadata(),
   ...metadata
 };
@@ -151,7 +155,7 @@ export const useFileBrowserAnalytics = (): UseFileBrowserAnalyticsReturn => {
   searchTerm,
   resultsCount,
   clickedResults,
-  metadata: {,
+  metadata: {
   ...getCommonMetadata(),
   ...metadata
 };
@@ -168,7 +172,7 @@ export const useFileBrowserAnalytics = (): UseFileBrowserAnalyticsReturn => {
   operationType,
   duration,
   success,
-  metadata: {,
+  metadata: {
   ...getCommonMetadata(),
   ...metadata
 };
@@ -222,11 +226,13 @@ export const useFileBrowserAnalytics = (): UseFileBrowserAnalyticsReturn => {
  * Enhanced hook that provides common file operation tracking patterns
  */
 
+}
 export interface EnhancedAnalyticsAPI {
   trackUpload: (fileName: string, filePath: string, fileSize: number) => Promise<void>;,
   trackDirectoryLoad: (path: string, fileCount: number) => Promise<void>;,
   trackSearchWithResults: (),
     searchTerm: string,
+}
     results: Array<{ id: string; name: string; type: string }>,
     clickedResultIndex?: number
   ) => Promise<void>;

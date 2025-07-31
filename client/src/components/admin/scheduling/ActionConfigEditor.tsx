@@ -26,25 +26,29 @@ import {
   TrendingUp as TrendingUpIcon
 } from '@mui/icons-material';
 
+}
 export interface ActionConfig {
   targetValue?: unknown;
   rolloutPercentage?: number;
-  conditions?: Array<{,
+  conditions?: Array<{
   attribute: string;,
   operator: string;
   value: Error;
+}
 }>;
   gradualRollout?: {
   startPercentage: number;,
   endPercentage: number;
   incrementMinutes: number;
 };
+}
 interface ActionConfigEditorProps {
   action: string;,
   value: ActionConfig;
   onChange: (config: ActionConfig) => void;
   error?: string;
 const CONDITION_OPERATORS = [;
+}
   { value: 'equals', label: 'Equals', symbol: '=' },
   { value: 'not_equals', label: 'Not Equals', symbol: '≠' },
   { value: 'greater_than', label: 'Greater Than', symbol: '>' },

@@ -55,6 +55,7 @@ export declare enum VerificationOutcome {
     EXPIRED = "expired",
     ABANDONED = "abandoned"
 
+}
 export interface VerificationSession {
     id: string;
     userId: string;
@@ -87,8 +88,10 @@ export interface VerificationSession {
         deviceSpoofing: boolean;
         locationInconsistent: boolean;
         timeZoneManipulation: boolean;
+}
     };
 
+}
 export interface DeviceChallenge {
     id: string;
     type: ChallengeType;
@@ -103,6 +106,7 @@ export interface DeviceChallenge {
         deliveryAddress?: string;
         attempts: number;
         maxAttempts: number;
+}
     };
     responseData?: {
         userResponse: string;
@@ -111,6 +115,7 @@ export interface DeviceChallenge {
     };
     metadata: Record<string, any>;
 
+}
 export interface VerificationAttempt {
     id: string;
     timestamp: Date;
@@ -121,6 +126,7 @@ export interface VerificationAttempt {
     duration: number;
     metadata: Record<string, any>;
 
+}
 export interface VerificationConfig {
     sessionTimeoutMinutes: number;
     maxAttemptsPerChallenge: number;
@@ -130,6 +136,7 @@ export interface VerificationConfig {
         mediumRisk: number;
         highRisk: number;
         requireManualReview: number;
+}
     };
     challengeRequirements: {
         [key in RiskLevel]: ChallengeType[];
@@ -140,6 +147,7 @@ export interface VerificationConfig {
     enableAutomaticApproval: boolean;
     requireDoubleVerification: boolean;
 
+}
 export interface DeviceVerificationRequestData {
     userId: string;
     fingerprintContext: FingerprintContext;
@@ -183,6 +191,7 @@ export declare class DeviceVerificationService extends EventEmitter {
         success: boolean;
         session: VerificationSession;
         nextStep?: VerificationStep;
+}
     }>;
     /**
      * Get verification session

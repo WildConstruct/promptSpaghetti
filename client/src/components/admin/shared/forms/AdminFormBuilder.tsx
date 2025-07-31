@@ -9,6 +9,7 @@ import { X, AlertCircle, Check, Eye, EyeOff } from 'lucide-react';
 import { FormField } from './FormField';
 import './AdminFormBuilder.css';
 
+}
 export interface FormFieldSchema {
   name: string;,
   label: string;
@@ -16,6 +17,7 @@ export interface FormFieldSchema {
   placeholder?: string;
   required?: boolean;
   disabled?: boolean;
+}
   options?: Array<{ value: string; label: string; disabled?: boolean }>;
   validation?: {
   minLength?: number;
@@ -36,6 +38,7 @@ export interface FormFieldSchema {
   accept?: string; // for file inputs
   rows?: number; // for textarea
 }
+}
 export interface FormSchema {
   title?: string;
   description?: string;
@@ -50,6 +53,7 @@ export interface FormSchema {
   onCancel?: () => void;
   loading?: boolean;
   className?: string;
+}
 }
 export const AdminFormBuilder: React.FC<AdminFormBuilderProps> = ({)
   schema,

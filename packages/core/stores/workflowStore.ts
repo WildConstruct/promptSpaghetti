@@ -5,6 +5,7 @@ import { devtools } from 'zustand/middleware';
 
 // Type definitions for workflow entities
 
+}
 export interface WorkflowState {
   id: string;
   workspace_id: string;
@@ -19,6 +20,8 @@ export interface WorkflowState {
   created_at: Date;
   updated_at: Date;
 }
+}
+}
 export interface WorkflowTransition {
   id: string;
   workspace_id: string;
@@ -30,6 +33,8 @@ export interface WorkflowTransition {
   required_permissions: bigint;
   conditions: Record<string, unknown>;
   created_at: Date;
+}
+}
 }
 export interface WorkflowApproval {
   id: string;
@@ -48,6 +53,8 @@ export interface WorkflowApproval {
   created_at: Date;
   updated_at: Date;
 }
+}
+}
 export interface WorkflowLock {
   id: string;
   workspace_id: string;
@@ -59,6 +66,8 @@ export interface WorkflowLock {
   expires_at?: Date;
   auto_release: boolean;
   metadata: Record<string, unknown>;
+}
+}
 }
 export interface WorkflowHistoryEntry {
   id: string;
@@ -74,6 +83,8 @@ export interface WorkflowHistoryEntry {
   comment?: string;
   metadata: Record<string, unknown>;
 }
+}
+}
 export interface WorkflowStatistics {
   total_states: number;
   total_transitions: number;
@@ -87,6 +98,7 @@ export interface WorkflowStatistics {
   rejected: number;
   cancelled: number;
   avg_approval_time_hours: number;
+}
 };
   lock_stats: {
   total_active: number;
@@ -99,6 +111,7 @@ export interface WorkflowStatistics {
   successful_executions: number;
   failed_executions: number;
 };
+}
 }
 export interface StateTransitionResult {
   success: boolean;
@@ -164,6 +177,7 @@ export interface StateTransitionResult {
   valid: boolean;
   transition?: WorkflowTransition;
   error?: string;
+}
 }>;
   canUserTransitionState: (userId: string, resourceId: string, toStateId: string) => Promise<boolean>;
   isResourceLocked: (resourceId: string, lockType?: string) => Promise<boolean>;

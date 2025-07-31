@@ -13,6 +13,7 @@ import {
   ValidationResult
 } from '../../types/DataClassification';
 
+}
 interface DataElement {
     id: string;
     name: string;
@@ -22,6 +23,7 @@ interface DataElement {
     existingClassification?: DataClassification;
 
 
+}
 interface BulkClassificationToolsProps {
     dataElements: DataElement[];
     classificationRules?: ClassificationRule[];
@@ -32,3 +34,4 @@ interface BulkClassificationToolsProps {
 export declare const BulkClassificationTools: React.FC<BulkClassificationToolsProps>;
 export default BulkClassificationTools;
 //# sourceMappingURL=BulkClassificationTools.d.ts.map
+}

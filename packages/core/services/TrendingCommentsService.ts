@@ -57,6 +57,7 @@ export class TrendingCommentsService {
    * Get trending comments for a resource
    */
   async getTrendingComments(request: GetTrendingCommentsRequest): Promise<TrendingCommentsResponse> {
+
   const validatedRequest = validateGetTrendingCommentsRequest(request);
   const startTime = Date.now();
   const requestId = uuidv4();
@@ -114,6 +115,7 @@ export class TrendingCommentsService {
     engagements: CommentEngagement,
     algorithmId?: string
   ): Promise<CommentScore> {
+
     const algorithm = this.algorithms.get(algorithmId || this.defaultAlgorithm);
     if (!algorithm) {
       throw new Error(`Algorithm not found: ${algorithmId}`);}
@@ -159,6 +161,7 @@ export class TrendingCommentsService {
     engagementType: CommentEngagementType,
     contextData?: Record<string, unknown>
   ): Promise<CommentEngagement> {
+
     const engagement: CommentEngagement = {,
   engagementId: uuidv4(),
       commentId,
@@ -176,10 +179,11 @@ export class TrendingCommentsService {
   /**
    * Get comment analytics for a resource
    */
-  async getCommentAnalytics(()
+  async getCommentAnalytics(((
     resourceId: string,
     timeRange: { start: Date; end: Date }
   ): Promise<CommentAnalytics> {
+
   const analyticsService = new CommentAnalyticsService(this.baseUrl);
   // Map timeRange to CommentableResourceType for analytics service
   const resourceType = this.inferResourceType(resourceId);
@@ -257,6 +261,7 @@ export class TrendingCommentsService {
     return Array.from(this.algorithms.values());
   // Private helper methods
   private async calculateTrendingResults(request: GetTrendingCommentsRequest): Promise<TrendingResults> {
+
     // TODO: Fetch actual comments from database
     const mockComments = this.generateMockComments(request.resourceId, request.resourceType);
     // Calculate scores for all comments

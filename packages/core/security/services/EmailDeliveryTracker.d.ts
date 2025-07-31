@@ -60,6 +60,7 @@ export declare enum BounceSubType {
     CONTENT_REJECTED = "content_rejected",
     ATTACHMENT_REJECTED = "attachment_rejected"
 
+}
 export interface EmailMetadata {
     userId: string;
     sessionId?: string;
@@ -77,8 +78,10 @@ export interface EmailMetadata {
         openTracking?: boolean;
         subscriptionTracking?: boolean;
         ganalytics?: boolean;
+}
     };
 
+}
 export interface EmailDeliveryRecord {
     id: string;
     messageId: string;
@@ -103,6 +106,7 @@ export interface EmailDeliveryRecord {
         reason: string;
         diagnosticCode?: string;
         remoteMta?: string;
+}
     };
     tracking: {
         opens: EmailOpenEvent[];
@@ -111,6 +115,7 @@ export interface EmailDeliveryRecord {
     };
     providerData: Record<string, any>;
 
+}
 export interface EmailDeliveryAttempt {
     attemptNumber: number;
     timestamp: Date;
@@ -119,6 +124,7 @@ export interface EmailDeliveryAttempt {
     error?: string;
     retryAfter?: Date;
 
+}
 export interface EmailOpenEvent {
     timestamp: Date;
     ipAddress: string;
@@ -126,6 +132,7 @@ export interface EmailOpenEvent {
     location?: string;
     deviceType?: string;
 
+}
 export interface EmailClickEvent {
     timestamp: Date;
     ipAddress: string;
@@ -135,12 +142,14 @@ export interface EmailClickEvent {
     location?: string;
     deviceType?: string;
 
+}
 export interface EmailUnsubscribeEvent {
     timestamp: Date;
     ipAddress: string;
     userAgent: string;
     reason?: string;
 
+}
 export interface DeliveryStatistics {
     totalEmails: number;
     sentEmails: number;
@@ -162,6 +171,7 @@ export interface DeliveryStatistics {
             deliveryRate: number;
             openRate: number;
             bounceRate: number;
+}
         };
     };
     statisticsByProvider: {
@@ -173,12 +183,13 @@ export interface DeliveryStatistics {
     };
     averageDeliveryTime: number;
     averageOpenTime: number;
-    peakSendTimes: Array<{,
+    peakSendTimes: Array<{
         hour: number;
         count: number;
         deliveryRate: number;
     }>;
 
+}
 export interface EmailDeliveryConfig {
     defaultProvider: EmailProvider;
     retryAttempts: number;
@@ -193,9 +204,11 @@ export interface EmailDeliveryConfig {
             apiKey?: string;
             endpoint?: string;
             customSettings?: Record<string, any>;
+}
         };
     };
 
+}
 export interface EmailSendRequest {
     type: EmailType;
     recipient: string;
@@ -205,6 +218,7 @@ export interface EmailSendRequest {
         html?: string;
         templateId?: string;
         templateData?: Record<string, any>;
+}
     };
     metadata: EmailMetadata;
     provider?: EmailProvider;

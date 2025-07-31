@@ -14,6 +14,7 @@ import { RestoreFunctionalityService } from '../../services/data-retention/Resto
 
 // Admin backup configuration types
 }
+}
 export interface AdminBackupConfiguration {
   config_id: string;
   name: string;
@@ -27,6 +28,7 @@ export interface AdminBackupConfiguration {
     days_of_week?: number[];
     day_of_month?: number;
     timezone: string;
+}
 }
   };
   
@@ -74,6 +76,7 @@ export interface AdminBackupConfiguration {
 }
 
 }
+}
 export interface BackupExecution {
   execution_id: string;
   config_id: string;
@@ -94,6 +97,7 @@ export interface BackupExecution {
     total_steps: number;
     percentage: number;
     estimated_remaining_seconds?: number;
+}
 }
   };
   

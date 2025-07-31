@@ -5,6 +5,7 @@
  * and retry logic for improved system resilience.
  */
 
+}
 export interface RetryOptions {
     maxAttempts: number;
     baseDelay: number;
@@ -12,11 +13,13 @@ export interface RetryOptions {
     backoffMultiplier: number;
     retryCondition?: (error: Error) => boolean;
 
+}
 export interface FallbackOptions<T> {
     fallbackValue?: T;
     fallbackFunction?: () => T | Promise<T>;
     logError?: boolean;
 
+}
 export interface CircuitBreakerOptions {
     threshold: number;
     resetTimeout: number;
@@ -45,8 +48,9 @@ export declare class ErrorRecovery {
         operation: () => Promise<T>;
         name: string;
         priority: 'critical' | 'important' | 'optional'
+}
   }>, context: string): Promise<{
-        results: Array<{,
+        results: Array<{
             name: string;
             result?: T;
             error?: Error;
@@ -76,6 +80,7 @@ export declare class ErrorRecovery {
      * Reset circuit breaker manually
      */
     static resetCircuitBreaker(name: string): void;
+}
 interface CircuitBreakerState extends CircuitBreakerOptions {
     state: 'closed' | 'open' | 'half-open';
     failures: number;

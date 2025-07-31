@@ -7,6 +7,7 @@
 import React from 'react';
 import { Node, Edge } from 'reactflow';
 
+}
 export interface PerformanceTestResult {
     nodeCount: number;
     edgeCount: number;
@@ -18,6 +19,7 @@ export interface PerformanceTestResult {
     recommendations: string[];
 
 
+}
 export interface DemoPerformanceTesterProps {
     onTestComplete?: (result: PerformanceTestResult) => void;
     onGraphGenerated?: (nodes: Node[], edges: Edge[]) => void;
@@ -27,3 +29,4 @@ export interface DemoPerformanceTesterProps {
 export declare const DemoPerformanceTester: React.FC<DemoPerformanceTesterProps>;
 export default DemoPerformanceTester;
 //# sourceMappingURL=DemoPerformanceTester.d.ts.map
+}

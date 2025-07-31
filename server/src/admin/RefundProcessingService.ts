@@ -14,6 +14,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { FinancialDataLifecycleService } from '../financial/FinancialDataLifecycleService';
 
 }
+}
 export interface RefundRequest {
   refundId: string;
   purchaseId: string;
@@ -40,6 +41,7 @@ export interface RefundRequest {
     originalAmount: number;
     purchaseDate: Date;
     stripePaymentIntentId?: string;
+}
 }
   };
   
@@ -93,6 +95,7 @@ export enum RefundStatus {
 }
 
 }
+}
 export interface RefundWorkflowStep {
   stepId: string;
   action: 'created' | 'assigned' | 'reviewed' | 'approved' | 'rejected' | 'processed' | 'completed';
@@ -103,7 +106,9 @@ export interface RefundWorkflowStep {
   newStatus: RefundStatus;
 }
 }
+}
 
+}
 }
 export interface RefundNote {
   noteId: string;
@@ -113,7 +118,9 @@ export interface RefundNote {
   createdAt: Date;
 }
 }
+}
 
+}
 }
 export interface RefundPolicy {
   policyId: string;
@@ -139,7 +146,9 @@ export interface RefundPolicy {
   escrowHoldPeriod: number; // Hours
 }
 }
+}
 
+}
 }
 export interface RefundStats {
   totalRequests: number;
@@ -155,6 +164,7 @@ export interface RefundStats {
     creatorsAffected: number;
     totalCreatorDeductions: number;
     avgDeductionAmount: number;
+}
 }
   };
   

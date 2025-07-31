@@ -74,6 +74,8 @@ export enum SecuritySeverity {
   * Security audit event
   */
 }
+}
+}
 export interface SecurityAuditEvent {
   id: string;
   timestamp: number;
@@ -86,17 +88,21 @@ export interface SecurityAuditEvent {
   * Event aggregation statistics
   */
 }
+}
+}
 export interface SecurityEventStats {
   totalEvents: number;
   eventsByCategory: Record<SecurityEventCategory, number>;
   eventsBySeverity: Record<SecuritySeverity, number>;
   blockedOperations: number;
   uniqueExpressions: number;
+}
   topBlockedPatterns: Array<{ pattern: string; count: number }>;
   recentCriticalEvents: SecurityAuditEvent;
 /**
  * Security audit logger configuration
  */
+}
 }
 export interface SecurityAuditConfig {
   maxEvents: number;
@@ -107,6 +113,7 @@ export interface SecurityAuditConfig {
   /**
   * Main security audit logger class
   */
+}
 }
 export class SecurityAuditLogger {
   private static instance: SecurityAuditLogger;
@@ -385,9 +392,9 @@ export const securityAudit = SecurityAuditLogger.getInstance();
 /**
  * Decorator for automatic security logging
  */
-export function auditSecurityEvent(()
+export function auditSecurityEvent(((
     severity: SecuritySeverity = SecuritySeverity.INFO,
-    category: SecurityEventCategory = SecurityEventCategory.EXPRESSION_VALIDATION,
+    category: SecurityEventCategory = SecurityEventCategory.EXPRESSION_VALIDATION
   ): MethodDecorator {
   return function (target: unknown)
     propertyName: string | symbol,

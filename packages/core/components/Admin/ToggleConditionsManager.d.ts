@@ -10,6 +10,7 @@
 import React from 'react';
 import { ToggleCondition, ToggleConditionsService } from '../../services/ToggleConditionsService';
 
+}
 interface ToggleConditionsManagerProps {
     conditionsService: ToggleConditionsService;
     toggleId: string;
@@ -19,3 +20,4 @@ interface ToggleConditionsManagerProps {
 export declare const ToggleConditionsManager: React.FC<ToggleConditionsManagerProps>;
 export default ToggleConditionsManager;
 //# sourceMappingURL=ToggleConditionsManager.d.ts.map
+}

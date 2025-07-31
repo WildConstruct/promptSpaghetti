@@ -11,12 +11,14 @@ import { UnifiedAnalyticsEvent, AnalyticsEventType, EventCategory, EventSeverity
 
 // System Metrics Interface (from target architecture)
 }
+}
 export interface SystemMetrics {
   performance: {
     nodeExecutionTime: HistogramMetric;
     memoryUsage: GaugeMetric;
     cacheHitRate: CounterMetric;
     errorRate: CounterMetric;
+}
 }
   };
   
@@ -37,6 +39,7 @@ export interface SystemMetrics {
 
 // Metric Types
 }
+}
 export interface BaseMetric {
   name: string;
   value: number;
@@ -45,18 +48,22 @@ export interface BaseMetric {
   tags: string[];
 }
 }
+}
 
+}
 }
 export interface GaugeMetric extends BaseMetric {
   type: 'gauge';
 }
 
 }
+}
 export interface CounterMetric extends BaseMetric {
   type: 'counter';
   delta?: number;
 }
 
+}
 }
 export interface HistogramMetric extends BaseMetric {
   type: 'histogram';
@@ -86,6 +93,7 @@ export const AlertConfigSchema = z.object({
 export type AlertConfig = z.infer<typeof AlertConfigSchema>;
 
 }
+}
 export interface Alert {
   id: string;
   configId: string;
@@ -100,8 +108,10 @@ export interface Alert {
   tags: string[];
 }
 }
+}
 
 // Trace Configuration
+}
 }
 export interface TraceContext {
   traceId: string;
@@ -111,7 +121,9 @@ export interface TraceContext {
   flags: number;
 }
 }
+}
 
+}
 }
 export interface Span {
   traceId: string;
@@ -123,12 +135,14 @@ export interface Span {
   duration?: number;
   tags: Record<string, string>;
 }
+}
   logs: Array<{ timestamp: number; fields: Record<string, unknown> }>;
   status: 'ok' | 'error' | 'timeout';
   error?: string;
 }
 
 // Performance Analytics
+}
 }
 export interface PerformanceReport {
   timeRange: { start: number; end: number };

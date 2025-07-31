@@ -14,6 +14,7 @@ import {
 } from '../types/DataRetentionPeriods';
 
 }
+}
 export interface RetentionRecord {
   recordId: string;
   dataId: string;
@@ -31,6 +32,7 @@ export interface RetentionRecord {
   reviewedBy?: string;
 }
 }
+}
 
 export enum RetentionStatus {
   ACTIVE = 'ACTIVE',
@@ -41,6 +43,7 @@ export enum RetentionStatus {
   UNDER_REVIEW = 'UNDER_REVIEW'
 }
 
+}
 }
 export interface RetentionPolicy {
   policyId: string;
@@ -54,13 +57,16 @@ export interface RetentionPolicy {
   rules: RetentionRule[];
 }
 }
+}
 
+}
 }
 export interface RetentionRule {
   ruleId: string;
   condition: string;
   action: RetentionAction;
   priority: number;
+}
 }
 }
 
@@ -73,6 +79,7 @@ export enum RetentionAction {
 }
 
 }
+}
 export interface RetentionJob {
   jobId: string;
   jobType: RetentionJobType;
@@ -84,6 +91,7 @@ export interface RetentionJob {
   recordsDeleted: number;
   recordsArchived: number;
   errors: string[];
+}
 }
 }
 

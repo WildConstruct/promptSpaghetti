@@ -5,6 +5,7 @@ import { Edge, getBezierPath, EdgeProps } from 'reactflow';
 
 // Enhanced Edge interface with label support
 
+}
 export interface AnnotatedEdge extends Edge {
   label?: string;
   labelStyle?: {
@@ -19,6 +20,7 @@ export interface AnnotatedEdge extends Edge {
   labelOffset?: { x: number; y: number };
   showLabel?: boolean;
   interactive?: boolean; // Whether label can be edited by clicking
+}
 interface ConnectionLabelProps {
   edge: AnnotatedEdge;
   x: number;
@@ -32,6 +34,7 @@ interface ConnectionLabelProps {
   y,
   onLabelChange,
   onLabelStyleChange
+}
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(edge.label || '');
@@ -110,6 +113,7 @@ interface ConnectionLabelProps {
 };
 
 // Enhanced edge component with label support
+}
 interface AnnotatedEdgeComponentProps extends EdgeProps {
   data?: AnnotatedEdge;
   onLabelChange?: (edgeId: string, newLabel: string) => void;
@@ -179,6 +183,7 @@ export const AnnotatedEdgeComponent: React.FC<AnnotatedEdgeComponentProps> = ({)
 };
 
 // Connection label editing interface
+}
 interface ConnectionLabelEditorProps {
   edge: AnnotatedEdge | null;
   onUpdateEdge: (edgeId: string, updates: Partial<AnnotatedEdge>) => void;
@@ -187,6 +192,7 @@ interface ConnectionLabelEditorProps {
   edge,
   onUpdateEdge,
   onClose
+}
 }) => {
   const [label, setLabel] = useState(edge?.label || '');
   const [fontSize, setFontSize] = useState(edge?.labelStyle?.fontSize || 12);
@@ -421,9 +427,9 @@ export const updateEdgeLabel = (edges: AnnotatedEdge)
   );
 };
 
-export const toggleEdgeLabel = (()
+export const toggleEdgeLabel = (((
     edges: AnnotatedEdge,
-    edgeId: string,
+    edgeId: string
   ): AnnotatedEdge => {
   return edges.map(edge =>)
     edge.id === edgeId 

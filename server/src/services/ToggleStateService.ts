@@ -19,6 +19,7 @@ import {
 
 // State query interface
 }
+}
 export interface ToggleStateQuery {
   keys?: string[];
   types?: ToggleType[];
@@ -29,6 +30,7 @@ export interface ToggleStateQuery {
   lastModified?: {
     since?: string;
     until?: string;
+}
 }
   };
   includeMetadata?: boolean;
@@ -41,12 +43,14 @@ export interface ToggleStateQuery {
 
 // Bulk operation interface
 }
+}
 export interface BulkStateOperation {
   operation: 'enable' | 'disable' | 'toggle' | 'update_values';
   toggles: Array<string | {
     key: string;
     value?: unknown;
     reason?: string;
+}
 }
   }>;
   reason?: string;
@@ -58,11 +62,13 @@ export interface BulkStateOperation {
 
 // State comparison interface
 }
+}
 export interface StateComparisonRequest {
   left: {
     orgId?: string;
     timestamp?: string;
     filters?: ToggleStateQuery;
+}
 }
   };
   right: {
@@ -79,6 +85,7 @@ export interface StateComparisonRequest {
 
 // State watch interface
 }
+}
 export interface StateWatchRequest {
   keys?: string[];
   events?: string[];
@@ -86,8 +93,10 @@ export interface StateWatchRequest {
   callback: (event: unknown) => void;
 }
 }
+}
 
 // Response interfaces
+}
 }
 export interface ToggleStateQueryResult {
   states: unknown[];
@@ -95,13 +104,16 @@ export interface ToggleStateQueryResult {
   cacheHit?: boolean;
 }
 }
+}
 
+}
 }
 export interface BulkOperationResult {
   results: {
     successful: unknown[];
     failed: unknown[];
     rollbacks: unknown[];
+}
 }
   };
   summary: {
@@ -113,11 +125,13 @@ export interface BulkOperationResult {
 }
 
 }
+}
 export interface StateCloneRequest {
   source: {
     orgId?: string;
     keys?: string[];
     filters?: ToggleStateQuery;
+}
 }
   };
   target: {

@@ -5,6 +5,7 @@
  * Unified alerting system for security events across all analytics and monitoring systems
  */
 
+}
 export interface SecurityEvent {
     id: string;
     type: 'security_breach' | 'anomaly_detected' | 'policy_violation' | 'system_failure' | 'suspicious_activity' | 'data_leak' | 'unauthorized_access';
@@ -27,6 +28,7 @@ export interface SecurityEvent {
             coordinates?: {
                 lat: number;
                 lng: number;
+}
             };
         };
     };
@@ -47,6 +49,7 @@ export interface SecurityEvent {
         notes: string;
     };
 
+}
 export interface AlertRule {
     id: string;
     name: string;
@@ -59,6 +62,7 @@ export interface AlertRule {
         frequency_threshold?: {
             count: number;
             time_window: number;
+}
         };
         custom_conditions?: Array<{
             field: string;
@@ -79,6 +83,7 @@ export interface AlertRule {
     created_at: number;
     last_modified: number;
 
+}
 export interface NotificationAction {
     type: 'email' | 'sms' | 'slack' | 'webhook' | 'pagerduty' | 'teams' | 'discord';
     target: string;
@@ -87,20 +92,24 @@ export interface NotificationAction {
     rate_limit?: {
         max_per_hour: number;
         max_per_day: number;
+}
     };
 
+}
 export interface EscalationAction {
     trigger_after: number;
     escalate_to: string[];
     escalation_message?: string;
     auto_assign?: boolean;
 
+}
 export interface AutomationAction {
     type: 'block_ip' | 'disable_user' | 'quarantine_system' | 'trigger_backup' | 'rotate_keys' | 'scale_resources';
     parameters: Record<string, any>;
     confirmation_required: boolean;
     timeout?: number;
 
+}
 export interface AlertingConfig {
     enabled: boolean;
     default_severity_threshold: SecurityEvent['severity'];
@@ -111,6 +120,7 @@ export interface AlertingConfig {
             start: string;
             end: string;
             timezone: string;
+}
         };
     };
     escalation_settings: {
@@ -137,6 +147,7 @@ export interface AlertingConfig {
         };
     };
 
+}
 export interface AlertMetrics {
     total_alerts: number;
     alerts_by_severity: Record<SecurityEvent['severity'], number>;
@@ -146,6 +157,7 @@ export interface AlertMetrics {
         mean_acknowledgment_time: number;
         mean_resolution_time: number;
         p95_response_time: number;
+}
     };
     escalation_stats: {
         total_escalations: number;
@@ -199,15 +211,15 @@ export declare class CrossSystemAlertingSystem {
             false_positive_rate: number;
         };
         trends: {
-            daily_alert_counts: Array<{,
+            daily_alert_counts: Array<{
                 date: string;
                 count: number;
             }>;
-            top_alert_sources: Array<{,
+            top_alert_sources: Array<{
                 source: string;
                 count: number;
             }>;
-            response_time_trend: Array<{,
+            response_time_trend: Array<{
                 date: string;
                 avg_response_time: number;
             }>;

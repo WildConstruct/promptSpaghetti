@@ -28,6 +28,7 @@ import {
 
 // Domain service interfaces
 
+}
 export interface IAuthenticationService {
   authenticate(credentials: any): Promise<{ user: User; session: UserSession; token: string }>;
   logout(sessionId: string): Promise<void>;
@@ -37,6 +38,7 @@ export interface IAuthenticationService {
   verifyMFA(userId: string, code: string): Promise<boolean>;
   resetPassword(userId: string, newPassword: string): Promise<void>;
   forgotPassword(email: string): Promise<void>;
+}
 }
 export interface IAuthorizationService {
   checkPermission(userId: string, resource: string, action: PermissionAction): Promise<boolean>;
@@ -49,6 +51,8 @@ export interface IAuthorizationService {
   assignRole(userId: string, roleId: string): Promise<void>;
   removeRole(userId: string, roleId: string): Promise<void>;
 }
+}
+}
 export interface IAuditService {
   logEvent(event: Omit<AuditLog, 'id' | 'timestamp'>): Promise<AuditLog>;
   getAuditLogs(filters?: AuditLogFilters): Promise<AuditLog>;
@@ -57,7 +61,9 @@ export interface IAuditService {
   searchAuditLogs(query: string, filters?: AuditLogFilters): Promise<AuditLog>;
   exportAuditLogs(filters?: AuditLogFilters, format?: 'csv' | 'json' | 'pdf'): Promise<string>;
 
+}
   retentionCleanup(): Promise<{ deleted: number; retained: number }>;
+}
 }
 export interface ISecurityMonitoringService {
   getSecurityAlerts(filters?: SecurityAlertFilters): Promise<SecurityAlert>;
@@ -69,6 +75,8 @@ export interface ISecurityMonitoringService {
   analyzeRisk(userId: string, context: AccessContext): Promise<RiskAssessment>;
   detectAnomalies(userId: string, activities: any): Promise<AnomalyDetection>;
 }
+}
+}
 export interface IPolicyManagementService {
   getPolicies(type?: string): Promise<SecurityPolicy>;
   getPolicy(id: string): Promise<SecurityPolicy>;
@@ -79,6 +87,8 @@ export interface IPolicyManagementService {
   enforcePolicy(policyId: string, violation: PolicyViolation): Promise<EnforcementAction>;
   validatePolicyRules(rules: PolicyRule): Promise<ValidationResult>;
 }
+}
+}
 export interface IDataClassificationService {
   classifyData(data: any, context?: any): Promise<DataClassification>;
   getClassifications(): Promise<DataClassification>;
@@ -87,6 +97,8 @@ export interface IDataClassificationService {
   deleteClassification(id: string): Promise<void>;
   applyClassification(resourceId: string, classificationId: string): Promise<void>;
   validateDataHandling(data: any, operation: string): Promise<ValidationResult>;
+}
+}
 }
 export interface IEncryptionService {
   encrypt(data: string, context?: EncryptionContext): Promise<EncryptedData>;
@@ -98,15 +110,19 @@ export interface IEncryptionService {
   generateSecureToken(length?: number): Promise<string>;
   // Support types
 }
+}
+}
 export interface AuditLogFilters {
   userId?: string;
   resource?: string;
   action?: string;
 
+}
   dateRange?: { start: Date; end: Date };
   outcome?: string;
   limit?: number;
   offset?: number;
+}
 }
 export interface AuditReportCriteria {
   period: { start: Date; end: Date };
@@ -114,6 +130,7 @@ export interface AuditReportCriteria {
   includeDetails: boolean;
   format: 'summary' | 'detailed' | 'compliance'
   }
+}
 export interface AuditReport {
   id: string;
   criteria: AuditReportCriteria;
@@ -123,13 +140,17 @@ export interface AuditReport {
   generatedAt: Date;
   generatedBy: string;
 }
+}
+}
 export interface SecurityAlertFilters {
   type?: string;
   severity?: string;
   status?: string;
   userId?: string;
 
+}
   dateRange?: { start: Date; end: Date };
+}
 }
 export interface SecurityScanResult {
   scanId: string;
@@ -139,12 +160,16 @@ export interface SecurityScanResult {
   findings: SecurityFinding;
   summary: ScanSummary;
 }
+}
+}
 export interface RiskAssessment {
   userId: string;
   riskScore: number;
   factors: RiskFactor;
   recommendations: string;
   validUntil: Date;
+}
+}
 }
 export interface AnomalyDetection {
   type: string;
@@ -154,6 +179,8 @@ export interface AnomalyDetection {
   evidence: any;
   timestamp: Date;
 }
+}
+}
 export interface PolicyEvaluationResult {
   policyId: string;
   allowed: boolean;
@@ -161,11 +188,15 @@ export interface PolicyEvaluationResult {
   violations: PolicyViolation;
   recommendations: string;
 }
+}
+}
 export interface PolicyViolation {
   ruleId: string;
   description: string;
   severity: string;
   evidence: any;
+}
+}
 }
 export interface EnforcementAction {
   action: string;
@@ -173,16 +204,22 @@ export interface EnforcementAction {
   executedAt: Date;
   result: string;
 }
+}
+}
 export interface ValidationResult {
   valid: boolean;
   errors: string;
   warnings: string;
   suggestions: string;
 }
+}
+}
 export interface EncryptionContext {
   purpose: string;
   retention: number;
   classification: string;
+}
+}
 }
 export interface EncryptedData {
   data: string;
@@ -191,10 +228,14 @@ export interface EncryptedData {
   iv: string;
   timestamp: Date;
 }
+}
+}
 export interface KeyRotationResult {
   rotatedKeys: number;
   failedRotations: string;
   completedAt: Date;
+}
+}
 }
 export interface ReportSummary {
   totalEvents: number;
@@ -202,7 +243,9 @@ export interface ReportSummary {
   criticalEvents: number;
   policyViolations: number;
 
+}
   timeRange: { start: Date; end: Date };
+}
 }
 export interface ReportFinding {
   type: string;
@@ -211,6 +254,8 @@ export interface ReportFinding {
   count: number;
   examples: AuditLog;
 }
+}
+}
 export interface SecurityFinding {
   type: string;
   severity: string;
@@ -218,6 +263,8 @@ export interface SecurityFinding {
   description: string;
   remediation: string;
   evidence: any;
+}
+}
 }
 export interface ScanSummary {
   totalChecks: number;
@@ -228,12 +275,16 @@ export interface ScanSummary {
   mediumFindings: number;
   lowFindings: number;
 }
+}
+}
 export interface RiskFactor {
   type: string;
   description: string;
   weight: number;
   value: any;
   // Main domain interface
+}
+}
 }
 export interface ISecurityDomain {
   // React Components
@@ -247,6 +298,7 @@ export interface ISecurityDomain {
   SecurityAlerts: React.ComponentType<any>;
   RoleManager: React.ComponentType<any>;
   PolicyEditor: React.ComponentType<any>;
+}
 };
   // React Hooks
   hooks: {
@@ -314,14 +366,18 @@ export interface ISecurityDomain {
 
 // Domain factory function
 }
+}
 export interface SecurityDomainFactory {
   create(config?: SecurityDomainConfig): ISecurityDomain;
+}
+}
 }
 export interface SecurityDomainConfig {
   encryption: {
   algorithm: string;
   keySize: number;
   keyRotationInterval: number;
+}
 };
   authentication: {
   sessionTimeout: number;
@@ -339,6 +395,7 @@ export interface SecurityDomainConfig {
   riskScoringEnabled: boolean;
 };
 }
+}
 export interface PasswordPolicy {
   minLength: number;
   requireUppercase: boolean;
@@ -348,6 +405,7 @@ export interface PasswordPolicy {
   prohibitCommonPasswords: boolean;
   historyCount: number;
   // Event constants for cross-domain communication
+}
 }
 export const SECURITY_DOMAIN_EVENTS = {
   USER_AUTHENTICATED: 'security:user:authenticated',

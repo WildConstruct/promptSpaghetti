@@ -11,11 +11,13 @@ import {
   MFAEnrollmentRequest,
   MFAEnrollmentResponse
 } from '../types/MFATypes';
+}
 interface EmailMFAConfig {
     encryption: {
         algorithm: 'aes-256-gcm';
         keyDerivation: 'pbkdf2';
         iterations: number;
+}
     };
     templates: {
         verificationCode: string;
@@ -25,29 +27,35 @@ interface EmailMFAConfig {
         maxDailyEmails: number;
         cooldownMinutes: number;
     };
+}
 interface EmailTemplate {
     subject: string;
     htmlTemplate: string;
     textTemplate: string;
     variables: string[];
+}
 interface EmailSendResult {
     messageId: string;
     status: 'sent' | 'failed';
     error?: string;
     timestamp: Date;
+}
 interface RiskAssessmentContext {
     ipAddress: string;
     userAgent: string;
     location?: string;
     deviceFingerprint?: string;
     previousAttempts: number;
+}
 interface EmailService {
     sendEmail(to: string, template: EmailTemplate, variables: Record<string, string>): Promise<EmailSendResult>;
     validateEmailAddress(email: string): Promise<boolean>;
     checkEmailReputation(email: string): Promise<{
         valid: boolean;
         risk: number;
+}
     }>;
+}
 interface EmailMFAStorage {
     saveConfiguration(config: EmailConfiguration): Promise<void>;
     getConfiguration(userId: string): Promise<EmailConfiguration | null>;
@@ -61,6 +69,7 @@ interface EmailMFAStorage {
     getRateLimitState(userId: string, action: string): Promise<{
         count: number;
         windowStart: Date;
+}
     } | null>;
     updateRateLimitState(userId: string, action: string, count: number): Promise<void>;
     logVerificationAttempt(attempt: unknown): Promise<void>;

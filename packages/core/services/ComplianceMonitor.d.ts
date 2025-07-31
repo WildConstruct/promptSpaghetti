@@ -3,6 +3,7 @@
  * Provides real-time compliance checking for security, privacy, and regulatory requirements
  */
 
+}
 export interface ComplianceCheck {
     id: string;
     name: string;
@@ -14,6 +15,7 @@ export interface ComplianceCheck {
     frequency: 'realtime' | 'hourly' | 'daily' | 'weekly' | 'monthly';
     check: (context: ComplianceContext) => Promise<ComplianceResult>;
 
+}
 export interface ComplianceContext {
     timestamp: Date;
     userId?: string;
@@ -21,6 +23,7 @@ export interface ComplianceContext {
     environment: 'development' | 'staging' | 'production';
     data?: Record<string, unknown>;
 
+}
 export interface ComplianceResult {
     checkId: string;
     status: 'compliant' | 'non_compliant' | 'warning' | 'error';
@@ -31,12 +34,14 @@ export interface ComplianceResult {
     remediation?: RemediationAction[];
     timestamp: Date;
 
+}
 export interface ComplianceEvidence {
     type: 'log' | 'configuration' | 'data' | 'certificate' | 'audit_trail';
     source: string;
     content: string;
     timestamp: Date;
 
+}
 export interface RemediationAction {
     id: string;
     description: string;
@@ -45,6 +50,7 @@ export interface RemediationAction {
     estimatedTime: string;
     execute?: () => Promise<void>;
 
+}
 export interface ComplianceDashboard {
     overallScore: number;
     frameworkScores: Record<string, number>;
@@ -52,6 +58,7 @@ export interface ComplianceDashboard {
     trendData: ComplianceTrend[];
     upcomingAudits: UpcomingAudit[];
 
+}
 export interface ComplianceViolation {
     id: string;
     checkId: string;
@@ -62,6 +69,7 @@ export interface ComplianceViolation {
     assignedTo?: string;
     dueDate?: Date;
 
+}
 export interface ComplianceTrend {
     framework: string;
     period: string;
@@ -69,6 +77,7 @@ export interface ComplianceTrend {
     previousScore: number;
     trend: 'improving' | 'stable' | 'declining';
 
+}
 export interface UpcomingAudit {
     framework: string;
     type: 'internal' | 'external';
@@ -180,6 +189,7 @@ export declare class ComplianceMonitor {
      */
     private checkRateLimiting;
 
+}
 export interface EnhancedComplianceDashboard extends ComplianceDashboard {
     baselineTracking: {
         overallBaselineHealth: number;
@@ -191,6 +201,7 @@ export interface EnhancedComplianceDashboard extends ComplianceDashboard {
             totalBaselines: number;
             averagePerformance: number;
             status: 'healthy' | 'warning' | 'critical'
+}
   }>;
     };
     historicalTrends: {

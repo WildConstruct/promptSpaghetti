@@ -9,6 +9,7 @@ import { AttributionService } from './attribution-service';
 import { AnalyticsDAO } from '../database/analytics-dao';
 
 }
+}
 export interface AlertThresholds {
   // Stalled project detection
   stalledProject: {
@@ -16,6 +17,7 @@ export interface AlertThresholds {
     noExecutionDays: number;          // Days without graph execution
     noCollaborationDays: number;      // Days without multi-user activity
     minActivityThreshold: number;     // Minimum activities per week
+}
 }
   };
   
@@ -35,6 +37,7 @@ export interface AlertThresholds {
   };
 }
 
+}
 }
 export interface ProjectHealthAlert {
   id: string;
@@ -60,7 +63,9 @@ export interface ProjectHealthAlert {
   dismissedReason?: string;
 }
 }
+}
 
+}
 }
 export interface ContributionAnalysis {
   totalContributions: number;
@@ -70,6 +75,7 @@ export interface ContributionAnalysis {
     contributions: number;
     percentage: number;
     lastActivity: Date;
+}
 }
   }>;
   giniCoefficient: number;            // Measure of contribution inequality (0 = equal, 1 = maximum inequality)

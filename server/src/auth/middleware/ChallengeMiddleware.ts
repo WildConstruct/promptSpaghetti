@@ -21,6 +21,7 @@ import { RateLimiter } from '../../../../packages/core/security/RateLimiter';
 // ========================================
 
 }
+}
 export interface ChallengeMiddlewareConfig {
   challengeService: ChallengeService;
   rateLimiter?: RateLimiter;
@@ -28,6 +29,7 @@ export interface ChallengeMiddlewareConfig {
   defaultChallenge?: {
     type: ChallengeType;
     difficulty: ChallengeDifficulty;
+}
 }
   };
   bypassTokens?: string[]; // For testing/admin bypass
@@ -40,6 +42,7 @@ export interface ChallengeMiddlewareConfig {
 }
 
 }
+}
 export interface ChallengeRule {
   path: string | RegExp;
   method?: string | string[];
@@ -50,12 +53,15 @@ export interface ChallengeRule {
   riskThreshold?: number;
 }
 }
+}
 
+}
 }
 export interface ChallengeCondition {
   type: 'failedAttempts' | 'riskScore' | 'ipReputation' | 'timeWindow' | 'custom';
   threshold?: number;
   evaluate?: (request: FastifyRequest) => boolean;
+}
 }
 }
 
@@ -71,6 +77,7 @@ declare module 'fastify' {
       challengeId?: string;
       type?: ChallengeType;
       riskScore?: number;
+}
 }
     };
   }

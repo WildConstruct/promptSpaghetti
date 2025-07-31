@@ -9,6 +9,7 @@
  */
 import React from 'react';
 
+}
 interface DemoReadyModeProps {
     children: React.ReactNode;
     enabled?: boolean;
@@ -20,6 +21,7 @@ export declare const useDemoMode: () => {
     toggle: () => void;
     enable: () => void;
     disable: () => void;
+}
 };
 export default DemoReadyMode;
 //# sourceMappingURL=DemoReadyMode.d.ts.map

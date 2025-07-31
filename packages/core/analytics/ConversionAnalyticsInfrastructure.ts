@@ -25,6 +25,7 @@ import {
 import { EnhancedConversionEvent } from './ConversionFunnelArchitecture';
 
 // Import Epic 1 Analytics Infrastructure
+}
 interface AnalyticsEvent {
   id: string;
   timestamp: number;
@@ -32,11 +33,14 @@ interface AnalyticsEvent {
   userId: string;
   sessionId: string;
   properties: Record<string, any>;
+}
 interface MetricQuery {
   metric: string;
   filters?: Record<string, any>;
+}
   timeRange?: { start: number; end: number };
   groupBy?: string;
+}
 interface MetricResult {
   metric: string;
   value: number;
@@ -61,6 +65,7 @@ interface MetricResult {
   interval: 'hour' | 'day' | 'week' | 'month';
   timeZone?: string;
   fillGaps?: boolean;
+}
 };
   // Performance settings
   useCache?: boolean;
@@ -95,11 +100,14 @@ export type ConversionGroupBy =
   | 'time_period'
   | 'attribution_model';
 
+}
 export interface ConversionFilter {
   field: string;
   operator: 'equals' | 'in' | 'between' | 'greater_than' | 'less_than' | 'contains';
   value: any;
   negate?: boolean;
+}
+}
 }
 export interface ConversionMetricResult {
   metricType: ConversionMetricType;
@@ -111,15 +119,18 @@ export interface ConversionMetricResult {
   variability: number;
   trend: 'up' | 'down' | 'stable';
   comparison?: ComparisonData;
+}
 };
   dimensions: Record<string, any>;
   breakdowns?: MetricBreakdown;
+}
 }
 export interface ComparisonData {
   previousPeriod: {
   value: number;
   changePercent: number;
   significance: number;
+}
 };
   benchmark?: {
   value: number;
@@ -127,11 +138,14 @@ export interface ComparisonData {
   lastUpdated: number;
 };
 }
+}
 export interface MetricBreakdown {
   dimension: string;
   value: any;
   metricValue: number;
   percentage: number;
+}
+}
 }
 export interface ProcessingStageResult {
   stage: string;
@@ -141,12 +155,16 @@ export interface ProcessingStageResult {
   duration: number;
   errors?: ProcessingError;
 }
+}
+}
 export interface ProcessingError {
   eventId: string;
   stage: string;
   error: string;
   severity: 'warning' | 'error' | 'critical';
   context?: Record<string, any>;
+}
+}
 }
 export interface DataWarehouseConfig {
   connectionString: string;
@@ -156,6 +174,7 @@ export interface DataWarehouseConfig {
   strategy: 'time' | 'hash' | 'range';
   field: string;
   interval?: string;
+}
 };
   retention: {
   rawEvents: number; // days,
@@ -169,12 +188,14 @@ export interface DataWarehouseConfig {
   customIndices: string;
 };
 }
+}
 export interface AnalyticsAPIConfig {
   caching: {
   enabled: boolean;
   ttl: number; // seconds,
   maxSize: number; // entries,
   strategy: 'lru' | 'lfu' | 'ttl'
+}
   };
   rateLimiting: {
   enabled: boolean;
@@ -221,34 +242,34 @@ export class ConversionAnalyticsInfrastructure {
   /**
    * Process conversion event through complete pipeline
    */
-  public async processConversionEvent()
+  public async processConversionEvent(
     event: FlexibleConversionEvent): Promise<ProcessingStageResult> {,
     return await this.processingPipeline.processEvent(event);
   /**
    * Process batch of conversion events
    */
-  public async processBatch(()
+  public async processBatch(((
     events: FlexibleConversionEvent,
     options: BatchProcessingOptions = {}
   ): Promise<BatchProcessingResult> {
+
   return await this.processingPipeline.processBatch(events, options);
   /**
   * Query conversion metrics with advanced filtering and aggregation
   */
-  public async queryMetrics()
+  public async queryMetrics(
   query: ConversionMetricQuery): Promise<ConversionMetricResult> {,
   return await this.analyticsAPI.queryMetrics(query);
   /**
   * Get real-time conversion metrics
   */
-  public async getRealTimeMetrics(()
-  funnelId: string,
+  public async getRealTimeMetrics((funnelId: string,
   timeWindow: number = 3600000 // 1 hour default): Promise<RealTimeMetrics> {,
   return await this.analyticsAPI.getRealTimeMetrics(funnelId, timeWindow);
   /**
   * Export analytics data for external systems
   */
-  public async exportData()
+  public async exportData(
   request: DataExportRequest): Promise<DataExportResult> {,
   return await this.analyticsAPI.exportData(request);
   /**
@@ -278,7 +299,7 @@ export class ConversionProcessingPipeline {
       new AggregationStage(this.config.aggregation),
       new StorageStage(this.config.storage)
     ];
-  public async processEvent()
+  public async processEvent(
     event: FlexibleConversionEvent): Promise<ProcessingStageResult> {,
     const results: ProcessingStageResult = [];
     let currentEvent = { ...event };
@@ -334,8 +355,7 @@ export class ConversionProcessingPipeline {
   // Log Epic 1 forwarding error but don't fail the pipeline
   console.warn('Failed to forward event to Epic 1:', error);
   return results;
-  public async processBatch(()
-  events: FlexibleConversionEvent,
+  public async processBatch((events: FlexibleConversionEvent,
   options: BatchProcessingOptions): Promise<BatchProcessingResult> {,
   const batchSize = options.batchSize || this.config.batchSize || 100;
   const batches = this.chunkArray(events, batchSize);
@@ -401,10 +421,11 @@ export class ConversionProcessingPipeline {
 export class ConversionMetricsCalculator {
   private metricCache: Map<string, CachedMetric> = new Map();
   constructor(private config: MetricCalculationConfig) {}
-  public async calculateMetrics(()
+  public async calculateMetrics(((
     query: ConversionMetricQuery,
-    events: FlexibleConversionEvent,
+    events: FlexibleConversionEvent
   ): Promise<ConversionMetricResult> {
+
   const results: ConversionMetricResult = [];
   for (const metricType of query.metrics) {
   try {
@@ -543,9 +564,9 @@ export class ConversionMetricsCalculator {
   percentage: (groupEvents.length / events.length) * 100,
 });
     return breakdowns;
-  private groupEventsByDimension(()
+  private groupEventsByDimension(((
     events: FlexibleConversionEvent,
-    dimension: ConversionGroupBy,
+    dimension: ConversionGroupBy
   ): Map<any, FlexibleConversionEvent> {
     const groups = new Map<any, FlexibleConversionEvent>();
     events.forEach(event => {)
@@ -581,6 +602,7 @@ export class ConversionMetricsCalculator {
   end: query.endDate,
 };
   public async getHealthStatus(): Promise<ComponentHealthStatus> {
+
   return {
   healthy: true,
   uptime: Date.now(),
@@ -592,6 +614,7 @@ export class ConversionMetricsCalculator {
 
 // Supporting interfaces and types
 
+}
 export interface ProcessingConfig {
   validation: ValidationConfig;
   enrichment: EnrichmentConfig;
@@ -603,30 +626,42 @@ export interface ProcessingConfig {
   continueOnError: boolean;
   forwardToEpic1: boolean;
 }
+}
+}
 export interface ValidationConfig {
   strict: boolean;
   requiredFields: string;
   customRules: string;
+}
+}
 }
 export interface EnrichmentConfig {
   enableUserEnrichment: boolean;
   enableTemplateEnrichment: boolean;
   enableLocationEnrichment: boolean;
 }
+}
+}
 export interface TransformationConfig {
   normalizeTimestamps: boolean;
   calculateDerivedFields: boolean;
   applyPrivacyFilters: boolean;
+}
+}
 }
 export interface AggregationConfig {
   enableRealTimeAggregation: boolean;
   aggregationWindows: string;
   customAggregations: string;
 }
+}
+}
 export interface StorageConfig {
   primaryStorage: string;
   archiveStorage: string;
   retentionPeriod: number;
+}
+}
 }
 export interface MetricCalculationConfig {
   enableCaching: boolean;
@@ -634,10 +669,14 @@ export interface MetricCalculationConfig {
   parallelCalculations: boolean;
   customMetrics: Record<string, string>;
 }
+}
+}
 export interface BatchProcessingOptions {
   batchSize?: number;
   parallel?: boolean;
   continueOnError?: boolean;
+}
+}
 }
 export interface BatchProcessingResult {
   totalEvents: number;
@@ -645,6 +684,8 @@ export interface BatchProcessingResult {
   errorCount: number;
   duration: number;
   stageResults: ProcessingStageResult;
+}
+}
 }
 export interface RealTimeMetrics {
   funnelId: string;
@@ -655,14 +696,18 @@ export interface RealTimeMetrics {
   conversionRate: number;
   averageTimeToConvert: number;
   topDropOffStep: string;
+}
 };
+}
 }
 export interface DataExportRequest {
   format: 'csv' | 'json' | 'parquet';
   query: ConversionMetricQuery;
   compression?: 'gzip' | 'zip';
   destination?: 'download' | 's3' | 'api'
+}
   }
+}
 export interface DataExportResult {
   exportId: string;
   status: 'pending' | 'completed' | 'failed';
@@ -670,11 +715,15 @@ export interface DataExportResult {
   fileSize?: number;
   recordCount?: number;
 }
+}
+}
 export interface InfrastructureHealthStatus {
   processing: ComponentHealthStatus;
   metrics: ComponentHealthStatus;
   dataWarehouse: ComponentHealthStatus;
   api: ComponentHealthStatus;
+}
+}
 }
 export interface ComponentHealthStatus {
   healthy: boolean;
@@ -684,8 +733,10 @@ export interface ComponentHealthStatus {
   totalCalculations?: number;
   errorRate: number;
   averageLatency: number;
+}
 };
   details?: any;
+}
 }
 export interface CachedMetric {
   value: ConversionMetricResult;
@@ -693,10 +744,14 @@ export interface CachedMetric {
   ttl: number;
   // Processing stage interfaces
 }
+}
+}
 export interface ProcessingStage {
   getName(): string;
   process(event: FlexibleConversionEvent): Promise<StageProcessingResult>;
   getHealthStatus(): Promise<ComponentHealthStatus>;
+}
+}
 }
 export interface StageProcessingResult {
   success: boolean;
@@ -704,41 +759,51 @@ export interface StageProcessingResult {
   errors?: ProcessingError;
   // Metric calculator interfaces
 }
+}
+}
 export interface MetricCalculator {
   calculate(events: FlexibleConversionEvent, query: ConversionMetricQuery): Promise<number>;
 
 // Concrete metric calculators (simplified implementations)
 class ConversionRateCalculator implements MetricCalculator {
   async calculate(events: FlexibleConversionEvent): Promise<number> {
+
     const conversions = events.filter(e => e.type.includes('conversion') || (e.value || 0) > 0);
     return events.length > 0 ? (conversions.length / events.length) * 100 : 0;
 class DropOffRateCalculator implements MetricCalculator {
   async calculate(events: FlexibleConversionEvent): Promise<number> {
+
     const conversions = events.filter(e => e.type.includes('conversion') || (e.value || 0) > 0);
     return events.length > 0 ? ((events.length - conversions.length) / events.length) * 100 : 0;
 class AverageTimeCalculator implements MetricCalculator {
   async calculate(events: FlexibleConversionEvent): Promise<number> {
+
     const times = events.map(e => e.funnelContext.timeInFunnel).filter(t => t > 0);
     return times.length > 0 ? times.reduce((a, b) => a + b, 0) / times.length : 0;
 class UserCountCalculator implements MetricCalculator {
   async calculate(events: FlexibleConversionEvent): Promise<number> {
+
     const uniqueUsers = new Set(events.map(e => e.userId));
     return uniqueUsers.size;
 class SessionCountCalculator implements MetricCalculator {
   async calculate(events: FlexibleConversionEvent): Promise<number> {
+
     const uniqueSessions = new Set(events.map(e => e.sessionId));
     return uniqueSessions.size;
 class RevenueCalculator implements MetricCalculator {
   async calculate(events: FlexibleConversionEvent): Promise<number> {
+
     return events.reduce((total, event) => total + (event.value || 0), 0);
 class AOVCalculator implements MetricCalculator {
   async calculate(events: FlexibleConversionEvent): Promise<number> {
+
     const revenueEvents = events.filter(e => e.value && e.value > 0);
     const totalRevenue = revenueEvents.reduce((total, event) => total + event.value!, 0);
     return revenueEvents.length > 0 ? totalRevenue / revenueEvents.length : 0;
 
 // Placeholder implementations for remaining calculators
 class RetentionRateCalculator implements MetricCalculator {
+}
   async calculate(): Promise<number> { return 0; }
 class ChurnRateCalculator implements MetricCalculator {
   async calculate(): Promise<number> { return 0; }
@@ -761,6 +826,7 @@ class ValidationStage implements ProcessingStage {
   getName(): string { return 'validation'
   }
   async process(event: FlexibleConversionEvent): Promise<StageProcessingResult> {
+
   // Simplified validation
   const hasRequiredFields = this.config.requiredFields.every(field => ;);
   this.getFieldValue(event, field) !== undefined
@@ -783,6 +849,7 @@ class ValidationStage implements ProcessingStage {
       if (value === undefined) break;
     return value;
   async getHealthStatus(): Promise<ComponentHealthStatus> {
+
     return {
       healthy: true,
       uptime: Date.now(),
@@ -793,9 +860,11 @@ class EnrichmentStage implements ProcessingStage {
   getName(): string { return 'enrichment'
   }
   async process(event: FlexibleConversionEvent): Promise<StageProcessingResult> {
+
     // Event is already enriched in ConversionDataRelationshipManager
     return { success: true, transformedEvent: event };
   async getHealthStatus(): Promise<ComponentHealthStatus> {
+
     return {
       healthy: true,
       uptime: Date.now(),
@@ -806,11 +875,13 @@ class TransformationStage implements ProcessingStage {
   getName(): string { return 'transformation'
   }
   async process(event: FlexibleConversionEvent): Promise<StageProcessingResult> {
+
     const transformedEvent = { ...event };
     if (this.config.normalizeTimestamps) {
       transformedEvent.timestamp = Math.floor(transformedEvent.timestamp / 1000) * 1000;
     return { success: true, transformedEvent };
   async getHealthStatus(): Promise<ComponentHealthStatus> {
+
     return {
       healthy: true,
       uptime: Date.now(),
@@ -821,9 +892,11 @@ class AggregationStage implements ProcessingStage {
   getName(): string { return 'aggregation'
   }
   async process(event: FlexibleConversionEvent): Promise<StageProcessingResult> {
+
     // Real-time aggregation would happen here
     return { success: true, transformedEvent: event };
   async getHealthStatus(): Promise<ComponentHealthStatus> {
+
     return {
       healthy: true,
       uptime: Date.now(),
@@ -834,9 +907,11 @@ class StorageStage implements ProcessingStage {
   getName(): string { return 'storage'
   }
   async process(event: FlexibleConversionEvent): Promise<StageProcessingResult> {
+
     // Storage logic would happen here
     return { success: true, transformedEvent: event };
   async getHealthStatus(): Promise<ComponentHealthStatus> {
+
     return {
       healthy: true,
       uptime: Date.now(),
@@ -847,6 +922,7 @@ class StorageStage implements ProcessingStage {
 class ConversionDataWarehouse {
   constructor(private config: DataWarehouseConfig) {}
   async getHealthStatus(): Promise<ComponentHealthStatus> {
+
     return {
       healthy: true,
       uptime: Date.now(),
@@ -859,6 +935,7 @@ class ConversionAnalyticsAPI {
     private config: AnalyticsAPIConfig
   ) {}
   async queryMetrics(query: ConversionMetricQuery): Promise<ConversionMetricResult> {
+
   // Implementation would fetch events and calculate metrics
   return [];
   async getRealTimeMetrics(funnelId: string, timeWindow: number): Promise<RealTimeMetrics> {,
@@ -873,12 +950,14 @@ class ConversionAnalyticsAPI {
   topDropOffStep: 'unknown',
 };
   async exportData(request: DataExportRequest): Promise<DataExportResult> {
+
     return {
       exportId: `export-${Date.now()}`}
 },
   status: 'pending'
   };
   async getHealthStatus(): Promise<ComponentHealthStatus> {
+
     return {
       healthy: true,
       uptime: Date.now(),
@@ -887,10 +966,10 @@ class ConversionAnalyticsAPI {
 
 // Factory function
 }
-export function createConversionAnalyticsInfrastructure(epic1Analytics: any)
-  config: {
-  processing: ProcessingConfig;
-): ConversionAnalyticsInfrastructure {
+export function createConversionAnalyticsInfrastructure(epic1Analytics: any(
+    config: {
+    processing: ProcessingConfig;
+  ): ConversionAnalyticsInfrastructure {
   return new ConversionAnalyticsInfrastructure(epic1Analytics, config);
 
 export default ConversionAnalyticsInfrastructure;

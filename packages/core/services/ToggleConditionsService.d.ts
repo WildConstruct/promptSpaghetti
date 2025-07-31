@@ -9,6 +9,7 @@
  * - Security-hardened expression evaluation
  */
 
+}
 export interface ToggleCondition {
     id: string;
     toggleId: string;
@@ -37,6 +38,7 @@ export declare enum ConditionType {
     TRAFFIC_SPLIT = "traffic_split",// Traffic splitting conditions
     FEATURE_FLAG = "feature_flag"
 
+}
 export interface ConditionParameters {
     userAttributes?: UserAttributeParams;
     userSegments?: string[];
@@ -58,11 +60,13 @@ export interface ConditionParameters {
     customVariables?: Record<string, any>;
     functions?: Record<string, Function>;
 
+}
 export interface UserAttributeParams {
-    attributes: Array<{,
+    attributes: Array<{
         key: string;
         operator: ComparisonOperator;
         value: any;
+}
     }>;
     logic: 'AND' | 'OR';
 
@@ -81,18 +85,21 @@ export declare enum ComparisonOperator {
     IN_LIST = "in_list",
     NOT_IN_LIST = "not_in_list"
 
+}
 export interface ScheduleParams {
     daysOfWeek?: number[];
     hoursOfDay?: number[];
     recurring?: boolean;
     recurrencePattern?: 'daily' | 'weekly' | 'monthly';
 
+}
 export interface ExperimentParams {
     experimentId: string;
     variant: string;
     trafficAllocation: number;
     stickiness?: 'user' | 'session' | 'device';
 
+}
 export interface ConditionMetadata {
     category: string;
     tags: string[];
@@ -105,6 +112,7 @@ export interface ConditionMetadata {
     reviewedBy?: string;
     reviewedAt?: Date;
 
+}
 export interface EvaluationContext {
     user?: UserContext;
     request?: RequestContext;
@@ -114,6 +122,7 @@ export interface EvaluationContext {
     timestamp?: Date;
     customData?: Record<string, any>;
 
+}
 export interface UserContext {
     id: string;
     email?: string;
@@ -123,6 +132,7 @@ export interface UserContext {
     groups?: string[];
     permissions?: string[];
 
+}
 export interface RequestContext {
     ip?: string;
     userAgent?: string;
@@ -132,24 +142,28 @@ export interface RequestContext {
     device?: DeviceInfo;
     session?: SessionInfo;
 
+}
 export interface DeviceInfo {
     type: 'mobile' | 'tablet' | 'desktop' | 'unknown';
     platform: string;
     browser?: string;
     version?: string;
 
+}
 export interface SessionInfo {
     id: string;
     startTime: Date;
     duration: number;
     pageViews: number;
 
+}
 export interface EnvironmentContext {
     environment: 'development' | 'staging' | 'production';
     region: string;
     timezone: string;
     version: string;
 
+}
 export interface ConditionEvaluationResult {
     conditionId: string;
     result: boolean;
@@ -160,8 +174,10 @@ export interface ConditionEvaluationResult {
         evaluatedAt: Date;
         contextHash: string;
         intermediateValues?: Record<string, any>;
+}
     };
 
+}
 export interface ToggleEvaluationResult {
     toggleId: string;
     enabled: boolean;
@@ -173,8 +189,10 @@ export interface ToggleEvaluationResult {
         evaluatedAt: Date;
         totalExecutionTime: number;
         cacheHit: boolean;
+}
     };
 
+}
 export interface ToggleConditionsConfig {
     evaluation: {
         enableCaching: boolean;
@@ -182,6 +200,7 @@ export interface ToggleConditionsConfig {
         maxConditionsPerToggle: number;
         evaluationTimeout: number;
         strictMode: boolean;
+}
     };
     security: {
         allowCustomExpressions: boolean;

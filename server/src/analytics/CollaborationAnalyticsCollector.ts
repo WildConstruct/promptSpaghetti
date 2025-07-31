@@ -23,12 +23,14 @@ import { v4 as uuidv4 } from 'uuid';
 
 // Collaboration-specific metrics tracking
 }
+}
 interface CollaborationMetrics {
   realTimeLatency: {
     samples: number[];
     p50: number;
     p95: number;
     p99: number;
+}
 }
   };
   
@@ -63,6 +65,7 @@ interface CollaborationMetrics {
 
 // Real-time collaboration session tracking
 }
+}
 interface ActiveCollaborationSession {
   sessionId: string;
   workspaceId: string;
@@ -77,6 +80,7 @@ interface ActiveCollaborationSession {
     userAgent?: string;
     version?: string;
     device?: string;
+}
 }
   };
 }
@@ -343,8 +347,7 @@ export class CollaborationAnalyticsCollector {
         unique_collaborators: new Set(activeSessions.map(s => s.userId)).size,
         active_workspaces: new Set(activeSessions.map(s => s.workspaceId)).size,
         average_session_duration: this.calculateAverageSessionDuration(),
-        concurrent_peak: this.getCurrentConcurrentPeak()
-  }
+        concurrent_peak: this.getCurrentConcurrentPeak(}
       performance_metrics: {
         ...this.metrics.performance,
         recent_latency: this.metrics.realTimeLatency,

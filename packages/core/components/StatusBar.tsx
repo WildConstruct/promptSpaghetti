@@ -7,6 +7,7 @@ import { ConnectionState } from '../websocket/WebSocketClient';
 import { RecentProjectsMenu } from './RecentProjects/RecentProjectsMenu';
 import { RecentProjectEntry } from '../managers/RecentProjectsManager';
 
+}
 interface StatusBarProps {
   statusMessage: string;
   errors: ValidationError;
@@ -54,6 +55,7 @@ interface StatusBarProps {
   setShowWebSocketDetails(false);
   if (encryptionDetailsRef.current && !encryptionDetailsRef.current.contains(event.target as Node)) {
   setShowEncryptionDetails(false);
+}
 };
     if (showWebSocketDetails || showEncryptionDetails) {
       document.addEventListener('mousedown', handleClickOutside);

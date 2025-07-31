@@ -4,6 +4,7 @@ import { EventEmitter } from 'events';
 
 // Core interfaces for external data integration
 
+}
 export interface DataSource {
   id: string;
   name: string;
@@ -15,6 +16,7 @@ export interface DataSource {
   type: 'none' | 'api_key' | 'oauth' | 'basic' | 'bearer';
   credentials: Record<string, string>;
   headers?: Record<string, string>;
+}
 };
   // Caching strategy
   caching: {
@@ -47,12 +49,15 @@ export interface DataSource {
   version?: string;
 };
 }
+}
 export interface DataTransform {
   id: string;
   name: string;
   type: 'map' | 'filter' | 'aggregate' | 'validate' | 'normalize';
   config: Record<string, any>;
   enabled: boolean;
+}
+}
 }
 export interface HistoricalQuery {
   era: string | string; // e.g., 'medieval', 'renaissance',
@@ -67,7 +72,9 @@ export interface HistoricalQuery {
   offset?: number;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc'
+}
   }
+}
 export interface QueryResult<T = any> {
   success: boolean;
   data: T;
@@ -84,6 +91,7 @@ export interface QueryResult<T = any> {
   warnings?: string;
 
 // Cache interface
+}
 interface CacheEntry<T = any> {
   data: T;
   timestamp: number;
@@ -292,6 +300,7 @@ export class DataSourceManager extends EventEmitter {
    * Execute query against a specific data source
    */
   private async executeQuery(source: DataSource, query: HistoricalQuery): Promise<QueryResult> {
+
   const cacheKey = this.generateCacheKey(source.id, query);
   const startTime = Date.now();
   // Check cache first
@@ -350,6 +359,7 @@ export class DataSourceManager extends EventEmitter {
    * Query API data source
    */
   private async queryAPI(source: DataSource, query: HistoricalQuery): Promise<any> {
+
     if (!source.endpoint) {
       throw new Error(`API endpoint not configured for source: ${source.id}`);}
     // Build query parameters based on source
@@ -390,6 +400,7 @@ export class DataSourceManager extends EventEmitter {
    * Query static/demo data
    */
   private async queryStaticData(source: DataSource, query: HistoricalQuery): Promise<any> {
+
     // Demo medieval clothing data
     if (source.id === 'medieval-clothing') {
       return this.getMedievalClothingData(query);
@@ -470,6 +481,7 @@ export class DataSourceManager extends EventEmitter {
       return response.objects || [];
     return response.data || response.results || [response];
   private async applyTransforms(data: any, transforms: DataTransform): Promise<any> {
+
     let result = data;
     for (const transform of transforms.filter(t => t.enabled)) {
       switch (transform.type) {
@@ -535,6 +547,7 @@ export class DataSourceManager extends EventEmitter {
       this.cleanupCache();
     }, 300000); // Every 5 minutes
   private async performHealthChecks(): Promise<void> {
+
     // Perform health checks on all sources
   private cleanupCache(): void {
     const now = Date.now();
@@ -543,6 +556,7 @@ export class DataSourceManager extends EventEmitter {
         this.cache.delete(key);
   // Database and file query methods
   private async queryDatabase(source: DataSource, query: HistoricalQuery): Promise<any> {
+
     // Database implementation would depend on the specific database type
     // For demo purposes, we'll simulate a database query
     if (!source.endpoint) {
@@ -553,6 +567,7 @@ export class DataSourceManager extends EventEmitter {
     const mockDatabaseResults = this.generateMockDatabaseResults(query, source);
     return mockDatabaseResults;
   private async queryFile(source: DataSource, query: HistoricalQuery): Promise<any> {
+
     // File-based data sources (JSON, CSV, XML, etc.)
     if (!source.endpoint) {
       throw new Error(`File path not configured for source: ${source.id}`);}
@@ -601,6 +616,7 @@ export class DataSourceManager extends EventEmitter {
    * Query JSON file data source
    */
   private async queryJSONFile(source: DataSource, query: HistoricalQuery): Promise<any> {
+
     // Simulate file reading delay
     await new Promise(resolve => setTimeout(resolve, 200 + Math.random() * 300));
     // Mock JSON file data
@@ -644,6 +660,7 @@ export class DataSourceManager extends EventEmitter {
    * Query CSV file data source
    */
   private async queryCSVFile(source: DataSource, query: HistoricalQuery): Promise<any> {
+
   // Simulate file reading delay
   await new Promise(resolve => setTimeout(resolve, 300 + Math.random() * 400));
   // Mock CSV data converted to objects
@@ -690,6 +707,7 @@ export class DataSourceManager extends EventEmitter {
    * Query XML file data source
    */
   private async queryXMLFile(source: DataSource, query: HistoricalQuery): Promise<any> {
+
     // Simulate file reading and XML parsing delay
     await new Promise(resolve => setTimeout(resolve, 400 + Math.random() * 500));
     // Mock XML data converted to objects

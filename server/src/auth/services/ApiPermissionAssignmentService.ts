@@ -47,6 +47,7 @@ export enum ApiPermissionScope {
 }
 
 }
+}
 export interface ApiPermission {
   permissionId: string;
   name: string;
@@ -63,9 +64,11 @@ export interface ApiPermission {
     version: number;
     tags: string[];
 }
+}
   };
 }
 
+}
 }
 export interface ApiPermissionCondition {
   field: string;
@@ -74,7 +77,9 @@ export interface ApiPermissionCondition {
   logicalOperator?: 'AND' | 'OR';
 }
 }
+}
 
+}
 }
 export interface ApiPermissionAssignment {
   assignmentId: string;
@@ -91,6 +96,7 @@ export interface ApiPermissionAssignment {
     apiKeyId?: string;
     resourceId?: string;
 }
+}
   };
   conditions?: ApiPermissionCondition[];
   metadata: {
@@ -101,6 +107,7 @@ export interface ApiPermissionAssignment {
   };
 }
 
+}
 }
 export interface ApiRole {
   roleId: string;
@@ -117,9 +124,11 @@ export interface ApiRole {
     assignmentCount: number;
     tags: string[];
 }
+}
   };
 }
 
+}
 }
 export interface PermissionTemplate {
   templateId: string;
@@ -131,7 +140,9 @@ export interface PermissionTemplate {
   isBuiltIn: boolean;
 }
 }
+}
 
+}
 }
 export interface PermissionCheck {
   userId: string;
@@ -146,9 +157,11 @@ export interface PermissionCheck {
     resourceId?: string;
     metadata?: Record<string, any>;
 }
+}
   };
 }
 
+}
 }
 export interface PermissionCheckResult {
   allowed: boolean;
@@ -159,13 +172,16 @@ export interface PermissionCheckResult {
   suggestions: string[];
 }
 }
+}
 
+}
 }
 export interface PermissionAnalytics {
   summary: {
     totalPermissions: number;
     activeAssignments: number;
     uniqueUsers: number;
+}
 }
     mostUsedPermissions: { permissionId: string; usage: number }[];
     recentActivity: PermissionActivity[];
@@ -185,6 +201,7 @@ export interface PermissionAnalytics {
 }
 
 }
+}
 export interface PermissionActivity {
   activityId: string;
   userId: string;
@@ -196,7 +213,9 @@ export interface PermissionActivity {
   details: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface PermissionRecommendation {
   type: 'cleanup' | 'security' | 'optimization' | 'compliance';
@@ -205,6 +224,7 @@ export interface PermissionRecommendation {
   description: string;
   affectedUsers: string[];
   suggestedActions: string[];
+}
 }
 }
 

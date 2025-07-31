@@ -7,11 +7,13 @@
 import React from 'react';
 import type { TabConfig } from './DashboardShell';
 
+}
 export interface DashboardTabsProps {
   tabs: TabConfig;
   activeTab: string;
   onTabChange: (tabId: string) => void;
   className?: string;
+}
 }
 export const DashboardTabs: React.FC<DashboardTabsProps> = ({)
   tabs,

@@ -6,6 +6,7 @@
  */
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 
+}
 export interface SearchFilters {
   priceRange: [number, number]; // in cents
   tags: string;
@@ -14,15 +15,18 @@ export interface SearchFilters {
   isAiGenerated?: boolean;
   sortBy: 'relevance' | 'price_low' | 'price_high' | 'rating' | 'downloads' | 'newest' | 'oldest';
   creatorId?: string;
+}
 interface SearchSuggestion {
   text: string;
   type: 'query' | 'tag' | 'creator' | 'template';
   count?: number;
   icon?: string;
+}
 interface MarketplaceSearchProps {
   onSearch: (query: string, filters: SearchFilters) => void;
   onFiltersChange?: (filters: SearchFilters) => void;
   availableTags?: string;
+}
   availableCreators?: Array<{ id: string; name: string; templateCount: number }>;
   availableModels?: string;
   searchSuggestions?: SearchSuggestion;

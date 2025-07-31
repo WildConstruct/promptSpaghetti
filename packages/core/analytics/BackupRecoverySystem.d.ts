@@ -59,6 +59,7 @@ export declare enum RecoveryStatus {
     VALIDATING = "validating",
     VALIDATED = "validated"
 
+}
 export interface BackupMetadata {
     backupId: string;
     backupName: string;
@@ -72,6 +73,7 @@ export interface BackupMetadata {
     timeRange: {
         start: number;
         end: number;
+}
     };
     config: BackupConfig;
     filePath: string;
@@ -81,6 +83,7 @@ export interface BackupMetadata {
     compressed: boolean;
     encrypted: boolean;
 
+}
 export interface RecoveryMetadata {
     recoveryId: string;
     backupId: string;
@@ -93,8 +96,10 @@ export interface RecoveryMetadata {
     validationResults?: {
         passed: boolean;
         issues: string[];
+}
     };
 
+}
 export interface BackupProgress {
     backupId: string;
     status: BackupStatus;
@@ -106,6 +111,7 @@ export interface BackupProgress {
         totalBatches: number;
         bytesWritten: number;
         estimatedTimeRemaining: number;
+}
     };
     currentOperation: string;
     throughput: {

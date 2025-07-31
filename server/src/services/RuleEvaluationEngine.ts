@@ -23,6 +23,7 @@ import {
 } from './ComplianceRuleEngine';
 
 }
+}
 export interface RuleEvaluationEngineConfig {
   engineId: string;
   version: string;
@@ -34,7 +35,9 @@ export interface RuleEvaluationEngineConfig {
   monitoring: EvaluationMonitoringConfig;
 }
 }
+}
 
+}
 }
 export interface EvaluationPerformanceConfig {
   maxConcurrentEvaluations: number;
@@ -46,7 +49,9 @@ export interface EvaluationPerformanceConfig {
   performanceMetrics: boolean;
 }
 }
+}
 
+}
 }
 export interface EvaluationCachingConfig {
   enabled: boolean;
@@ -58,7 +63,9 @@ export interface EvaluationCachingConfig {
   cacheKeyPrefix: string;
 }
 }
+}
 
+}
 }
 export interface EvaluationOptimizationConfig {
   enableParallelExecution: boolean;
@@ -70,7 +77,9 @@ export interface EvaluationOptimizationConfig {
   enableVectorization: boolean;
 }
 }
+}
 
+}
 }
 export interface EvaluationSecurityConfig {
   sandboxMode: boolean;
@@ -81,7 +90,9 @@ export interface EvaluationSecurityConfig {
   auditAllEvaluations: boolean;
 }
 }
+}
 
+}
 }
 export interface EvaluationMonitoringConfig {
   enableRealTimeMetrics: boolean;
@@ -91,7 +102,9 @@ export interface EvaluationMonitoringConfig {
   metricRetentionDays: number;
 }
 }
+}
 
+}
 }
 export interface PerformanceThreshold {
   metric: string;
@@ -100,7 +113,9 @@ export interface PerformanceThreshold {
   unit: string;
 }
 }
+}
 
+}
 }
 export interface EvaluationRequest {
   requestId: string;
@@ -110,7 +125,9 @@ export interface EvaluationRequest {
   metadata: EvaluationRequestMetadata;
 }
 }
+}
 
+}
 }
 export interface EvaluationOptions {
   frameworks?: ComplianceFramework[];
@@ -123,7 +140,9 @@ export interface EvaluationOptions {
   cacheResults?: boolean;
 }
 }
+}
 
+}
 }
 export interface EvaluationRequestMetadata {
   requestedBy: string;
@@ -133,7 +152,9 @@ export interface EvaluationRequestMetadata {
   correlationId?: string;
 }
 }
+}
 
+}
 }
 export interface EvaluationBatch {
   batchId: string;
@@ -143,7 +164,9 @@ export interface EvaluationBatch {
   results: BatchEvaluationResult;
 }
 }
+}
 
+}
 }
 export interface BatchEvaluationOptions {
   parallelism: number;
@@ -152,7 +175,9 @@ export interface BatchEvaluationOptions {
   partialResults: boolean;
 }
 }
+}
 
+}
 }
 export interface BatchRetryPolicy {
   maxRetries: number;
@@ -161,7 +186,9 @@ export interface BatchRetryPolicy {
   maxDelay: number;
 }
 }
+}
 
+}
 }
 export interface BatchEvaluationResult {
   batchId: string;
@@ -175,7 +202,9 @@ export interface BatchEvaluationResult {
   completedAt?: Date;
 }
 }
+}
 
+}
 }
 export interface BatchPerformanceMetrics {
   totalDuration: number;
@@ -186,7 +215,9 @@ export interface BatchPerformanceMetrics {
   cacheHitRate: number;
 }
 }
+}
 
+}
 }
 export interface MemoryUsageMetrics {
   peak: number;
@@ -195,7 +226,9 @@ export interface MemoryUsageMetrics {
   unit: 'bytes' | 'kb' | 'mb' | 'gb';
 }
 }
+}
 
+}
 }
 export interface CPUUsageMetrics {
   peak: number;
@@ -204,7 +237,9 @@ export interface CPUUsageMetrics {
   unit: 'percentage';
 }
 }
+}
 
+}
 }
 export interface EvaluationError {
   errorId: string;
@@ -217,7 +252,9 @@ export interface EvaluationError {
   timestamp: Date;
 }
 }
+}
 
+}
 }
 export interface ErrorContext {
   ruleId?: string;
@@ -227,7 +264,9 @@ export interface ErrorContext {
   additionalInfo?: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 export interface ConditionEvaluator {
   evaluatorId: string;
@@ -237,7 +276,9 @@ export interface ConditionEvaluator {
   optimize(condition: RuleCondition): OptimizedCondition;
 }
 }
+}
 
+}
 }
 export interface ConditionEvaluationResult {
   conditionId: string;
@@ -248,7 +289,9 @@ export interface ConditionEvaluationResult {
   evidence?: ConditionEvidence[];
 }
 }
+}
 
+}
 }
 export interface ConditionResultMetadata {
   evaluatedAt: Date;
@@ -258,7 +301,9 @@ export interface ConditionResultMetadata {
   operandResults: OperandResult[];
 }
 }
+}
 
+}
 }
 export interface OperandResult {
   operandId: string;
@@ -268,7 +313,9 @@ export interface OperandResult {
   transformations: string[];
 }
 }
+}
 
+}
 }
 export interface ConditionPerformanceMetrics {
   evaluationTime: number;
@@ -277,7 +324,9 @@ export interface ConditionPerformanceMetrics {
   transformationTime: number;
 }
 }
+}
 
+}
 }
 export interface ConditionEvidence {
   evidenceId: string;
@@ -288,7 +337,9 @@ export interface ConditionEvidence {
   relevance: number;
 }
 }
+}
 
+}
 }
 export interface ValidationResult {
   valid: boolean;
@@ -297,13 +348,16 @@ export interface ValidationResult {
   suggestions: string[];
 }
 }
+}
 
+}
 }
 export interface OptimizedCondition extends RuleCondition {
   optimizations: ConditionOptimization[];
   estimatedImprovement: number;
 }
 
+}
 }
 export interface ConditionOptimization {
   type: OptimizationType;
@@ -312,12 +366,15 @@ export interface ConditionOptimization {
   applied: boolean;
 }
 }
+}
 
+}
 }
 export interface OptimizationImpact {
   performance: number; // percentage improvement
   accuracy: number; // accuracy retention percentage
   complexity: ComplexityChange;
+}
 }
 }
 
@@ -1148,6 +1205,7 @@ export class RuleEvaluationEngine extends EventEmitter {
 
 // Supporting interfaces
 }
+}
 interface CacheEntry {
   result: RuleEvaluationResult;
   createdAt: number;
@@ -1156,7 +1214,9 @@ interface CacheEntry {
   lastAccessed: number;
 }
 }
+}
 
+}
 }
 interface PerformanceMetrics {
   totalEvaluations: number;
@@ -1168,7 +1228,9 @@ interface PerformanceMetrics {
   currentCPUUsage?: number;
 }
 }
+}
 
+}
 }
 interface CacheStats {
   enabled: boolean;
@@ -1181,7 +1243,9 @@ interface CacheStats {
   evictionCount: number;
 }
 }
+}
 
+}
 }
 interface HealthStatus {
   status: 'HEALTHY' | 'DEGRADED' | 'UNHEALTHY';
@@ -1191,10 +1255,12 @@ interface HealthStatus {
     evaluators: string;
     performance: string;
 }
+}
   };
   metrics: PerformanceMetrics;
 }
 
+}
 }
 interface EngineStatus {
   engineId: string;
@@ -1206,6 +1272,7 @@ interface EngineStatus {
   cacheSize: number;
   performanceMetrics: PerformanceMetrics;
   config: RuleEvaluationEngineConfig;
+}
 }
 }
 

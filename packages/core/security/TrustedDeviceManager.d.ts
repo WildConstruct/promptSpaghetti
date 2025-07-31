@@ -42,6 +42,7 @@ export declare enum TrustLevel {
     LIMITED = "limited",// Only remember device, still require MFA
     NONE = "none"
 
+}
 export interface TrustedDevice {
     id: string;
     userId: string;
@@ -77,9 +78,11 @@ export interface TrustedDevice {
         autoRenew: boolean;
         requirePeriodicVerification: boolean;
         verificationIntervalDays: number;
+}
     };
     metadata: Record<string, any>;
 
+}
 export interface DeviceVerificationRequest {
     userId: string;
     deviceFingerprint: DeviceFingerprint;
@@ -88,6 +91,7 @@ export interface DeviceVerificationRequest {
     challenge?: string;
     metadata?: Record<string, any>;
 
+}
 export interface TrustDecision {
     trusted: boolean;
     device?: TrustedDevice;
@@ -102,8 +106,10 @@ export interface TrustDecision {
         notExpired: boolean;
         notRevoked: boolean;
         recentlyVerified: boolean;
+}
     };
 
+}
 export interface TrustedDeviceConfig {
     maxDevicesPerUser: number;
     defaultTrustDurationDays: number;
@@ -116,6 +122,7 @@ export interface TrustedDeviceConfig {
         full: number;
         partial: number;
         deny: number;
+}
     };
     verificationMethods: VerificationMethod[];
     enableAnomalyDetection: boolean;

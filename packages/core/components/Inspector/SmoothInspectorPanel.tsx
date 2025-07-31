@@ -41,6 +41,7 @@ const getFilmmakerFriendlyName = (nodeType: string): string => {
   return friendlyNames[nodeType] || nodeType;
 };
 
+}
 export interface SmoothInspectorPanelProps {
   node: Error | null;
   schema: ZodSchema<unknown> | null;
@@ -50,6 +51,7 @@ export interface SmoothInspectorPanelProps {
   initialWidth?: number;
   minWidth?: number;
   maxWidth?: number;
+}
 }
 export const SmoothInspectorPanel = ({ )
   node, 

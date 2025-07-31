@@ -1,6 +1,7 @@
 import React from 'react';
 import { WeightPreset } from '../WeightControls/WeightPresets';
 
+}
 export interface WeightControlOption {
     id: string;
     text: string;
@@ -8,6 +9,7 @@ export interface WeightControlOption {
     locked?: boolean;
 
 
+}
 interface WeightControlSliderProps {
     options: WeightControlOption[];
     onOptionsChange: (options: WeightControlOption[]) => void;
@@ -25,6 +27,7 @@ export declare const WeightControlSlider: React.FC<WeightControlSliderProps>;
 export declare const useWeightControlIntegration: (onPreviewRequest: (options: WeightControlOption[]) => void) => {
     handleOptionsChange: (newOptions: WeightControlOption[]) => void;
     lastUpdateTime: number;
+}
 };
 export default WeightControlSlider;
 //# sourceMappingURL=WeightControlSlider.d.ts.map

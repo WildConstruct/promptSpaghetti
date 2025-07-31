@@ -6,6 +6,7 @@
  */
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
 
+}
 export interface StableVideoConfig {
     endpoint: string;
     apiType: 'stability-ai' | 'automatic1111' | 'comfyui' | 'custom';
@@ -14,6 +15,7 @@ export interface StableVideoConfig {
     maxRetries?: number;
     defaultModel?: string;
 
+}
 export interface StableVideoRequestOptions {
     image: string;
     model?: 'svd' | 'svd-xt' | 'svd-img2vid' | 'svd-xt-1-1';
@@ -36,6 +38,7 @@ export interface StableVideoRequestOptions {
     remove_watermark?: boolean;
     loop_video?: boolean;
 
+}
 export interface StableVideoGenerationResult {
     video: {
         frames: string[];
@@ -46,6 +49,7 @@ export interface StableVideoGenerationResult {
         resolution: {
             width: number;
             height: number;
+}
         };
         fps: number;
         frame_count: number;
@@ -68,6 +72,7 @@ export interface StableVideoGenerationResult {
         processing_time: number;
     };
 
+}
 export interface SVDModelInfo {
     name: string;
     type: 'svd' | 'svd-xt';
@@ -115,3 +120,4 @@ export declare class StableVideoAdapter extends BaseAIModel {
 
 export default StableVideoAdapter;
 //# sourceMappingURL=StableVideoAdapter.d.ts.map
+}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Edge, EdgeProps } from 'reactflow';
 
+}
 export interface AnnotatedEdge extends Edge {
     label?: string;
     labelStyle?: {
@@ -19,6 +20,7 @@ export interface AnnotatedEdge extends Edge {
     showLabel?: boolean;
     interactive?: boolean;
 
+}
 interface ConnectionLabelProps {
     edge: AnnotatedEdge;
     x: number;
@@ -28,6 +30,7 @@ interface ConnectionLabelProps {
 
 export declare const ConnectionLabel: React.FC<ConnectionLabelProps>;
 
+}
 interface AnnotatedEdgeComponentProps extends EdgeProps {
     data?: AnnotatedEdge;
     onLabelChange?: (edgeId: string, newLabel: string) => void;
@@ -35,6 +38,7 @@ interface AnnotatedEdgeComponentProps extends EdgeProps {
 
 export declare const AnnotatedEdgeComponent: React.FC<AnnotatedEdgeComponentProps>;
 
+}
 interface ConnectionLabelEditorProps {
     edge: AnnotatedEdge | null;
     onUpdateEdge: (edgeId: string, updates: Partial<AnnotatedEdge>) => void;
@@ -47,6 +51,7 @@ export declare const toggleEdgeLabel: (edges: AnnotatedEdge[], edgeId: string) =
 export declare const getEdgeCenter: (_____edge: Edge) => {
     x: number;
     y: number;
+}
 };
 export declare const optimizeLabelPositions: (edges: AnnotatedEdge[]) => AnnotatedEdge[];
 export {};

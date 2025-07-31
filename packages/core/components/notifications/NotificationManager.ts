@@ -4,6 +4,7 @@
  */
 import { Notification } from './NotificationCenter';
 
+}
 export interface NotificationPreferences {
   in_app_enabled: boolean;
   email_enabled: boolean;
@@ -13,6 +14,7 @@ export interface NotificationPreferences {
   enabled: boolean;
   channels: ('in_app' | 'email' | 'push')[];
   mentions_only: boolean;
+}
 };
   collaboration: {
   enabled: boolean;
@@ -46,6 +48,7 @@ export interface NotificationPreferences {
   time: string; // HH:MM format,
 };
 }
+}
 export interface NotificationFilter {
   filter: 'all' | 'unread' | 'mentions' | 'workspace';
   sort_by: 'newest' | 'priority' | 'type';
@@ -54,11 +57,14 @@ export interface NotificationFilter {
   start_date?: string;
   end_date?: string;
 }
+}
+}
 export interface NotificationStats {
   total: number;
   unread: number;
   by_type: Record<string, number>;
   by_priority: Record<string, number>;
+}
   by_day: { date: string; count: number }[];
 }
 export class NotificationManager {
@@ -175,6 +181,7 @@ export class NotificationManager {
       setTimeout(() => browserNotification.close(), 5000);
   // Public API methods
   async getNotifications(filter: NotificationFilter): Promise<{ notifications: Notification; total: number; unread_count: number }> {
+
     try {
       const params = new URLSearchParams();
       Object.entries(filter).forEach(([key, value]) => {
@@ -192,6 +199,7 @@ export class NotificationManager {
       console.error('Failed to get notifications:', error);
       throw error;
   async markAsRead(notificationId: string): Promise<void> {
+
     try {
       await this.apiClient.put(`/api/notifications/${notificationId}/read`);}
       // Update local cache
@@ -219,6 +227,7 @@ export class NotificationManager {
       console.error('Failed to mark all notifications as read:', error);
       throw error;
   async deleteNotification(notificationId: string): Promise<void> {
+
     try {
       await this.apiClient.delete(`/api/notifications/${notificationId}`);}
       this.notifications.delete(notificationId);
@@ -226,6 +235,7 @@ export class NotificationManager {
       console.error('Failed to delete notification:', error);
       throw error;
   async getStats(days: number = 30): Promise<NotificationStats> {
+
     try {
       const response = await this.apiClient.get(`/api/notifications/stats?days=${days}`);}
       return response.data;

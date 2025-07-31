@@ -6,11 +6,13 @@ import { corePerformanceKPIs, KPIDefinition, KPISnapshot, calculateKPIStatus, ca
 import { measureExecution, ExecutionMetrics, PerformanceTracker } from '../utils/performance';
 import { EventEmitter } from 'events';
 
+}
 export interface BaselineSnapshot {
   id: string;
   timestamp: number;
   environment: {
     userAgent?: string;
+}
     viewport?: { width: number; height: number };
     connection?: string;
     deviceMemory?: number;
@@ -28,6 +30,7 @@ export interface BaselineSnapshot {
   concurrentUsers: number;
 };
 }
+}
 export interface BaselineSummary {
   capturedAt: number;
   totalKPIs: number;
@@ -37,6 +40,7 @@ export interface BaselineSummary {
   good: number;
   warning: number;
   critical: number;
+}
 };
   averageScores: {
   runtime: number;
@@ -64,6 +68,7 @@ export class PerformanceBaseline extends EventEmitter {
    * Capture a comprehensive performance baseline
    */
   async captureBaseline(testConditions?: Partial<BaselineSnapshot['testConditions']>): Promise<BaselineSnapshot> {
+
     const baselineId = `baseline-${Date.now()}`;}
     const timestamp = Date.now();
     console.log(`📊 Capturing performance baseline: ${baselineId}`);}
@@ -133,6 +138,7 @@ export class PerformanceBaseline extends EventEmitter {
    * Measure a specific KPI based on its definition
    */
   private async measureKPI(kpi: KPIDefinition, testConditions: BaselineSnapshot['testConditions']): Promise<number> {
+
     switch (kpi.id) {
     // Runtime KPIs - would typically integrate with Web Vitals API
     case 'runtime_fcp':
@@ -183,19 +189,25 @@ export class PerformanceBaseline extends EventEmitter {
       throw new Error(`Unknown KPI: ${kpi.id}`);}
   // === Runtime Performance Measurements ===
   private async measureFCP(): Promise<number> {
+
     // In a real implementation, this would use the Web Vitals API
     // For now, return a simulated measurement based on current system performance
     return this.simulateWebVital(1000, 200); // ~1000ms ± 200ms
   private async measureLCP(): Promise<number> {
+
     return this.simulateWebVital(1800, 300); // ~1800ms ± 300ms
   private async measureFID(): Promise<number> {
+
     return this.simulateWebVital(80, 20); // ~80ms ± 20ms
   private async measureCLS(): Promise<number> {
+
     return this.simulateWebVital(0.08, 0.02); // ~0.08 ± 0.02
   private async measureTTI(): Promise<number> {
+
     return this.simulateWebVital(2200, 400); // ~2200ms ± 400ms
   // === API Performance Measurements ===
   private async measureGraphExecution(complexity: string): Promise<number> {
+
     const { metrics } = await measureExecution(async () => {
   // Simulate graph execution based on complexity
   const delay = complexity === 'simple' ? 300 : complexity === 'medium' ? 600 : 1200;
@@ -203,6 +215,7 @@ export class PerformanceBaseline extends EventEmitter {
 });
     return metrics.duration;
   private async measurePreviewGeneration(dataSize: string): Promise<number> {
+
     const { metrics } = await measureExecution(async () => {
   // Simulate preview generation based on data size
   const delay = dataSize === 'small' ? 150 : dataSize === 'medium' ? 300 : 600;
@@ -210,27 +223,33 @@ export class PerformanceBaseline extends EventEmitter {
 });
     return metrics.duration;
   private async measureValidation(): Promise<number> {
+
     const { metrics } = await measureExecution(async () => {
       // Simulate graph validation
       await this.simulateAsyncWork(50);
     });
     return metrics.duration;
   private async measureThroughput(): Promise<number> {
+
     // Simulate API throughput measurement
     const requestsPerSecond = 80 + Math.random() * 40; // 80-120 RPS;
     return Math.round(requestsPerSecond);
   // === Bundle Size Measurements ===
   private async measureMainBundleSize(): Promise<number> {
+
     // In a real implementation, this would read from webpack stats or build artifacts
     return 220 + Math.random() * 60; // 220-280 KB
   private async measureTotalBundleSize(): Promise<number> {
+
     // In a real implementation, this would sum all bundle sizes
     return 950 + Math.random() * 200; // 950-1150 KB
   // === Memory Measurements ===
   private async measurePeakMemoryUsage(): Promise<number> {
+
     const usage = process.memoryUsage();
     return Math.round(usage.heapUsed / 1024 / 1024); // Convert to MB
   private async measureMemoryLeakRate(): Promise<number> {
+
     // Calculate from historical memory usage
     const recentBaselines = this.snapshots.slice(-5);
     if (recentBaselines.length < 2) return 0;
@@ -245,24 +264,30 @@ export class PerformanceBaseline extends EventEmitter {
     return Math.max(0, memoryDiff / timeDiff); // MB per hour
   // === Network Measurements ===
   private async measureTransferSize(): Promise<number> {
+
     // Simulate network transfer measurement
     return 1200 + Math.random() * 400; // 1200-1600 KB
   private async measureRequestCount(): Promise<number> {
+
     // Simulate request count
     return Math.round(18 + Math.random() * 10); // 18-28 requests
   // === Build Performance Measurements ===
   private async measureBuildTime(): Promise<number> {
+
     // Simulate build time measurement
     return 45 + Math.random() * 20; // 45-65 seconds
   private async measureTestTime(): Promise<number> {
+
     // Simulate test execution time
     return 25 + Math.random() * 10; // 25-35 seconds
   // === User Experience Measurements ===
   private async measureGraphCreationTime(complexity: string): Promise<number> {
+
     // Simulate end-to-end graph creation workflow
     const baseTime = complexity === 'simple' ? 20 : complexity === 'medium' ? 35 : 50;
     return baseTime + Math.random() * 10;
   private async measureErrorRate(): Promise<number> {
+
     // Simulate error rate measurement (percentage)
     return Math.random() * 3; // 0-3% error rate
   // === Utility Methods ===
@@ -271,6 +296,7 @@ export class PerformanceBaseline extends EventEmitter {
     const factor = 0.8 + Math.random() * 0.4; // 0.8 to 1.2 multiplier;
     return Math.round((mean + (Math.random() - 0.5) * variance * 2) * factor);
   private async simulateAsyncWork(duration: number): Promise<void> {
+
     // Add some CPU work to simulate realistic execution
     const start = Date.now();
     while (Date.now() - start < duration * 0.1) {

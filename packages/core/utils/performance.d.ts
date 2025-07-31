@@ -2,6 +2,7 @@
  * Performance measurement utilities for tracking execution metrics
  */
 
+}
 export interface ExecutionMetrics {
     duration: number;
     startTime: number;
@@ -16,6 +17,7 @@ export interface ExecutionMetrics {
 export declare function measureExecution<T>(fn: () => T | Promise<T>, metadata?: Record<string, any>): Promise<{
     result: T;
     metrics: ExecutionMetrics;
+}
 }>;
 /**
  * Simple performance timer

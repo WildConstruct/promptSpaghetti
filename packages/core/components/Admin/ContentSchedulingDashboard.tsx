@@ -54,11 +54,13 @@ import {
   SchedulingStats,
   ScheduleBatch
 } from '../../services/ContentSchedulingService';
+}
 interface ContentSchedulingDashboardProps {
   className?: string;
   userId?: string;
   userRole?: string;
 const CONTENT_TYPE_CONFIG = {
+}
   article: { color: 'text-blue-600 bg-blue-100', icon: FileText },
   blog_post: { color: 'text-green-600 bg-green-100', icon: Edit },
   page: { color: 'text-purple-600 bg-purple-100', icon: Globe },
@@ -772,6 +774,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
 };
 
 // Content Card Component
+}
 interface ContentCardProps {
   content: ContentItem;
   onSelect: (content: ContentItem) => void;
@@ -786,6 +789,7 @@ interface ContentCardProps {
   onUnpublish,
   onSchedule,
   userRole
+}
 }) => {
   const typeConfig = CONTENT_TYPE_CONFIG[content.type];
   const statusConfig = STATUS_CONFIG[content.status];
@@ -935,10 +939,12 @@ interface ContentCardProps {
 };
 
 // Batch Card Component
+}
 interface BatchCardProps {
   batch: ScheduleBatch;
   onExecute: (batchId: string) => void;
   onCancel: (batchId: string) => void;
+}
 const BatchCard: React.FC<BatchCardProps> = ({ batch, onExecute, onCancel }) => {
   const getStatusColor = (status: string) => {,
   switch (status) {
@@ -1033,6 +1039,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch, onExecute, onCancel }) => 
 };
 
 // Content Detail Modal Component (simplified)
+}
 interface ContentDetailModalProps {
   content: ContentItem;
   onClose: () => void;
@@ -1043,6 +1050,7 @@ interface ContentDetailModalProps {
   onClose,
   onUpdate,
   userRole
+}
 }) => {
   return;
     <div className="modal-overlay">

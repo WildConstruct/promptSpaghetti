@@ -13,6 +13,7 @@ import { ScheduleConfig } from './ScheduleConfig';
 import { ReportPreview } from './ReportPreview';
 import { analyticsService } from '../../../services/analyticsService';
 import './ReportBuilder.css';
+}
 interface ReportBuilderProps {
   creatorId: string;
   existingReport?: CustomReport;
@@ -25,6 +26,7 @@ interface ReportBuilderProps {
   onSave,
   onCancel,
   className = ''
+}
 }) => {
   const [step, setStep] = useState<'query' | 'visualization' | 'schedule' | 'preview'>('query');
   const [reportName, setReportName] = useState(existingReport?.name || '');
@@ -130,8 +132,8 @@ interface ReportBuilderProps {
   const reportData: Partial<CustomReport> = {,
   name: reportName,
   description: reportDescription || undefined,
-  configuration: {,
-  query: {,
+  configuration: {
+  query: {
   ...query,
   creator_id: creatorId,
 }

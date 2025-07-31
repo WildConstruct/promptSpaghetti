@@ -8,6 +8,7 @@ import React from 'react';
 import { Loader2, AlertCircle, Search, Database, Users } from 'lucide-react';
 
 // ===== LOADING SPINNER =====
+}
 interface LoadingSpinnerProps {
   size?: 'small' | 'medium' | 'large';
   message?: string;
@@ -16,6 +17,7 @@ interface LoadingSpinnerProps {
   size = 'medium',
   message = 'Loading...',
   className = ''
+}
 }) => {
   const sizeConfig = {
     small: { spinner: 16, fontSize: '12px', gap: '8px' },
@@ -46,6 +48,7 @@ interface LoadingSpinnerProps {
 };
 
 // ===== ERROR STATE =====
+}
 interface ErrorStateProps {
   error?: string | Error;
   title?: string;
@@ -58,6 +61,7 @@ interface ErrorStateProps {
   onRetry,
   retryText = 'Try Again',
   className = ''
+}
 }) => {
   const errorMessage = error instanceof Error ? error.message : error || 'An unexpected error occurred.';
   return;
@@ -131,6 +135,7 @@ interface ErrorStateProps {
 };
 
 // ===== EMPTY STATE =====
+}
 interface EmptyStateProps {
   icon?: React.ComponentType<{ size?: number; style?: React.CSSProperties }>;
   title?: string;
@@ -219,6 +224,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({,)
 };
 
 // ===== EMPTY SEARCH STATE =====
+}
 interface EmptySearchStateProps {
   query?: string;
   onClearSearch?: () => void;
@@ -227,6 +233,7 @@ interface EmptySearchStateProps {
   query,
   onClearSearch,
   className = ''
+}
 }) => {
   return;
     <EmptyState
@@ -265,6 +272,7 @@ export const EmptyUsersState: React.FC<{ onAddUser?: () => void; className?: str
 };
 
 // ===== LOADING OVERLAY =====
+}
 interface LoadingOverlayProps {
   message?: string;
   transparent?: boolean;
@@ -273,6 +281,7 @@ interface LoadingOverlayProps {
   message = 'Loading...',
   transparent = false,
   className = ''
+}
 }) => {
   return;
     <div

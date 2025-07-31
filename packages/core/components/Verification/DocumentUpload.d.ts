@@ -6,6 +6,7 @@
  */
 import React from 'react';
 
+}
 interface DocumentUploadProps {
     acceptedTypes?: string[];
     maxFileSize?: number;
@@ -16,6 +17,7 @@ interface DocumentUploadProps {
     placeholder?: string;
 
 
+}
 interface UploadedFile {
     id: string;
     name: string;
@@ -27,3 +29,4 @@ interface UploadedFile {
 export declare const DocumentUpload: React.FC<DocumentUploadProps>;
 export default DocumentUpload;
 //# sourceMappingURL=DocumentUpload.d.ts.map
+}

@@ -8,6 +8,7 @@
  */
 import React, { useState, useEffect, useCallback } from 'react';
 import { X, Settings, Shield, Eye, Target, MessageSquare, Cookie } from 'lucide-react';
+}
 interface ConsentBannerProps {
   onConsentUpdate?: (consents: ConsentPreferences) => void;
   onClose?: () => void;
@@ -45,6 +46,7 @@ interface ConsentBannerProps {
   advertising: false,
   socialMedia: false,
   personalization: false,
+}
 };
 const consentPurposes: ConsentPurpose = [
   {

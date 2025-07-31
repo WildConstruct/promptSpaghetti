@@ -13,6 +13,7 @@
  */
 import { EnhancedConversionEvent } from './ConversionFunnelArchitecture';
 
+}
 export interface ValidationRule {
     id: string;
     name: string;
@@ -24,6 +25,7 @@ export interface ValidationRule {
     weight: number;
 
 
+}
 export interface ValidationResult {
     isValid: boolean;
     score: number;
@@ -32,6 +34,7 @@ export interface ValidationResult {
     metadata: Record<string, any>;
 
 
+}
 export interface ValidationError {
     rule: string;
     field?: string;
@@ -41,6 +44,7 @@ export interface ValidationError {
     suggestion?: string;
 
 
+}
 export interface ValidationWarning {
     rule: string;
     field?: string;
@@ -49,6 +53,7 @@ export interface ValidationWarning {
     impact: string;
 
 
+}
 export interface ValidationContext {
     userId: string;
     sessionId: string;
@@ -58,6 +63,7 @@ export interface ValidationContext {
     behaviorProfile?: BehaviorProfile;
 
 
+}
 export interface UserProfile {
     id: string;
     registrationDate: number;
@@ -69,6 +75,7 @@ export interface UserProfile {
     deviceHistory: string[];
 
 
+}
 export interface DeviceProfile {
     fingerprint: string;
     firstSeen: number;
@@ -79,6 +86,7 @@ export interface DeviceProfile {
     characteristics: Record<string, any>;
 
 
+}
 export interface BehaviorProfile {
     sessionCount: number;
     averageSessionDuration: number;
@@ -87,6 +95,7 @@ export interface BehaviorProfile {
     patterns: BehaviorPattern[];
 
 
+}
 export interface BehaviorPattern {
     type: 'temporal' | 'sequential' | 'volumetric' | 'value-based';
     description: string;
@@ -96,6 +105,7 @@ export interface BehaviorPattern {
     deviation: number;
 
 
+}
 export interface DeduplicationConfig {
     enabled: boolean;
     timeWindow: number;
@@ -106,6 +116,7 @@ export interface DeduplicationConfig {
     fuzzyMatchFields: string[];
 
 
+}
 export interface DeduplicationField {
     name: string;
     weight: number;
@@ -113,6 +124,7 @@ export interface DeduplicationField {
     matcher?: (val1: unknown, val2: unknown) => number;
 
 
+}
 export interface DeduplicationResult {
     isDuplicate: boolean;
     confidence: number;
@@ -122,6 +134,7 @@ export interface DeduplicationResult {
     matchedFields: string[];
 
 
+}
 export interface ValidationMetrics {
     totalValidated: number;
     passRate: number;
@@ -208,3 +221,4 @@ export declare class ConversionEventValidator {
  */
 export declare export default ConversionEventValidator;
 //# sourceMappingURL=ConversionEventValidator.d.ts.map
+}

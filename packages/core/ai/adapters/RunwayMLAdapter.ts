@@ -17,11 +17,14 @@ import {
   ModelUnavailableError
 } from '../BaseAIModel';
 
+}
 export interface RunwayMLConfig {
   apiKey: string;
   baseURL?: string;
   timeout?: number;
   maxRetries?: number;
+}
+}
 }
 export interface RunwayMLRequestOptions {
   // Core parameters
@@ -49,6 +52,8 @@ export interface RunwayMLRequestOptions {
   enhance_prompt?: boolean;
   negative_prompt?: string;
 }
+}
+}
 export interface RunwayMLGenerationResult {
   video: {
   url?: string;
@@ -58,6 +63,7 @@ export interface RunwayMLGenerationResult {
   resolution: {
   width: number;
   height: number;
+}
 };
     fps: number;
   size: number;
@@ -80,6 +86,7 @@ export interface RunwayMLGenerationResult {
   processing_time: number;
 };
 }
+}
 export interface RunwayMLTask {
   id: string;
   status: 'PENDING' | 'RUNNING' | 'SUCCEEDED' | 'FAILED';
@@ -90,6 +97,7 @@ export interface RunwayMLTask {
   started_at?: string;
   completed_at?: string;
   output?: string;
+}
 }
 export class RunwayMLAdapter extends BaseAIModel {
   private config: RunwayMLConfig;
@@ -140,6 +148,7 @@ export class RunwayMLAdapter extends BaseAIModel {
     super(id, metadata, capabilities);
     this.config = config;
   async initialize(): Promise<void> {
+
     try {
       this._status = AIModelStatus.INITIALIZING;
       if (!this.config.apiKey) {
@@ -197,6 +206,7 @@ export class RunwayMLAdapter extends BaseAIModel {
     duration: number = 4,
     options?: Partial<RunwayMLRequestOptions>
   ): Promise<RunwayMLGenerationResult> {
+
   const runwayOptions: RunwayMLRequestOptions = {,
   text_prompt: prompt,
   duration,
@@ -209,6 +219,7 @@ export class RunwayMLAdapter extends BaseAIModel {
     duration: number = 4,
     options?: Partial<RunwayMLRequestOptions>
   ): Promise<RunwayMLGenerationResult> {
+
   const runwayOptions: RunwayMLRequestOptions = {,
   text_prompt: prompt,
   image_prompt: imageData,
@@ -221,6 +232,7 @@ export class RunwayMLAdapter extends BaseAIModel {
     videoData: string,
     options?: Partial<RunwayMLRequestOptions>
   ): Promise<RunwayMLGenerationResult> {
+
   const runwayOptions: RunwayMLRequestOptions = {,
   text_prompt: prompt,
   init_video: videoData,
@@ -229,15 +241,18 @@ export class RunwayMLAdapter extends BaseAIModel {
 };
     return this.process(prompt, runwayOptions);
   async getTaskStatus(taskId: string): Promise<RunwayMLTask> {
+
     const response = await this._makeRequest(`/v1/tasks/${taskId}`, 'GET');}
     if (!response.ok) {
       throw new Error(`Failed to get task status: ${response.status} ${response.statusText}`);}
     return response.json();
   async cancelTask(taskId: string): Promise<void> {
+
     const response = await this._makeRequest(`/v1/tasks/${taskId}/cancel`, 'POST');}
     if (!response.ok) {
       throw new Error(`Failed to cancel task: ${response.status} ${response.statusText}`);}
   async getAvailableModels(): Promise<string> {
+
     return [...this.availableModels];
   // Static helper methods
   static getModelCredits(model: string, duration: number): number {
@@ -253,6 +268,7 @@ export class RunwayMLAdapter extends BaseAIModel {
     return [4, 10, 16];
   // Private helper methods
   private async _testConnection(): Promise<void> {
+
     try {
       const response = await this._makeRequest('/v1/account', 'GET');
       if (!response.ok) {
@@ -301,6 +317,7 @@ export class RunwayMLAdapter extends BaseAIModel {
       processed.resolution = '1280x768';
     return processed as Required<Pick<RunwayMLRequestOptions, 'model' | 'duration' | 'resolution' | 'motion' | 'mode' | 'text_prompt'>> & Omit<RunwayMLRequestOptions, 'text_prompt'> & { text_prompt: string };
   private async _createGenerationTask(prompt: string, options: RunwayMLRequestOptions): Promise<RunwayMLTask> {
+
     const payload = {
       taskType: 'gen2' === options.model ? 'gen2' : 'gen3',
       internal: false,
@@ -325,6 +342,7 @@ export class RunwayMLAdapter extends BaseAIModel {
       throw new Error(`Failed to create generation task: ${response.status} ${response.statusText} - ${errorData?.error || 'Unknown error'}`);}
     return response.json();
   private async _pollTaskCompletion(taskId: string): Promise<RunwayMLTask> {
+
     const maxPollTime = this.config.timeout || 600000; // 10 minutes default;
     const pollInterval = 5000; // 5 seconds;
     const startTime = Date.now();
@@ -385,6 +403,7 @@ export class RunwayMLAdapter extends BaseAIModel {
     method: 'GET' | 'POST' = 'GET', 
     payload?: any
   ): Promise<Response> {
+
     const url = `${this.config.baseURL || 'https://api.runwayml.com'}${endpoint}`;}
     const headers: Record<string, string> = {
       'Authorization': `Bearer ${this.config.apiKey}`}
@@ -411,6 +430,7 @@ export class RunwayMLAdapter extends BaseAIModel {
   private _calculateCredits(model: string, duration: number): number {
     return RunwayMLAdapter.getModelCredits(model, duration);
   protected async _performHealthCheck(): Promise<void> {
+
     await this._testConnection();
 
 export default RunwayMLAdapter;

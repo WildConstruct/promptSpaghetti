@@ -16,6 +16,7 @@ import {
   FunnelIcon
 } from '@heroicons/react/24/outline';
 import { useWorkflowStore } from '../stores/workflowStore';
+}
 interface WorkflowHistoryEntry {
   id: string;
   workspace_id: string;
@@ -41,6 +42,7 @@ interface WorkflowHistoryEntry {
   maxEntries = 20,
   showFilters = true,
   compact = false
+}
 }) => {
   const {
     states,

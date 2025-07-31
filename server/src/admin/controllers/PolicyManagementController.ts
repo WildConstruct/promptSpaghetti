@@ -37,6 +37,7 @@ import { AuditService } from '../../auth/services/AuditService';
 
 // Request/Response DTOs
 }
+}
 export interface CreatePolicyRequest {
   policy_type: string;
   title: string;
@@ -48,7 +49,9 @@ export interface CreatePolicyRequest {
   notification_channels?: string[];
 }
 }
+}
 
+}
 }
 export interface UpdatePolicyRequest {
   title?: string;
@@ -59,13 +62,16 @@ export interface UpdatePolicyRequest {
   effective_date?: Date;
 }
 }
+}
 
+}
 }
 export interface PublishPolicyRequest {
   publication_channels: string[];
   rollout_strategy: {
     type: 'immediate' | 'phased' | 'canary' | 'scheduled';
     parameters?: any;
+}
 }
   };
   notification_settings: {
@@ -75,6 +81,7 @@ export interface PublishPolicyRequest {
   };
 }
 
+}
 }
 export interface CreateEnforcementRuleRequest {
   policy_id: string;
@@ -87,7 +94,9 @@ export interface CreateEnforcementRuleRequest {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface ViolationReviewRequest {
   action: 'uphold' | 'dismiss' | 'escalate';
@@ -96,7 +105,9 @@ export interface ViolationReviewRequest {
   follow_up_required?: boolean;
 }
 }
+}
 
+}
 }
 export interface PolicyManagementDashboard {
   statistics: {
@@ -106,6 +117,7 @@ export interface PolicyManagementDashboard {
     total_violations: number;
     open_violations: number;
     appeal_rate: number;
+}
 }
   };
   recent_activities: any[];

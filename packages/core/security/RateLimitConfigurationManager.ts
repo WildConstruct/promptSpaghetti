@@ -10,6 +10,7 @@ import { RateLimitConfig, RateLimitKeyGenerator, RateLimitScope } from './RateLi
 // Configuration Types
 // ========================================
 
+}
 export interface DynamicRateLimitRule {
   id: string;
   name: string;
@@ -38,6 +39,8 @@ export interface DynamicRateLimitRule {
   alertThreshold?: number;    // Alert when this percentage of limit is reached,
   logViolations?: boolean;
 }
+}
+}
 export interface RateLimitCondition {
   type: 'ip' | 'user' | 'endpoint' | 'method' | 'header' | 'query' | 'body' | 'time' | 'geo' | 'custom';
   operator: 'equals' | 'contains' | 'startsWith' | 'endsWith' | 'regex' | 'in' | 'range' | 'exists';
@@ -47,6 +50,8 @@ export interface RateLimitCondition {
   caseSensitive?: boolean;    // For string comparisons,
   negate?: boolean;           // Invert the condition,
 }
+}
+}
 export interface RateLimitAction {
   type: 'block' | 'delay' | 'throttle' | 'captcha' | 'redirect' | 'custom';
   statusCode?: number;        // HTTP status code for block action,
@@ -55,9 +60,13 @@ export interface RateLimitAction {
   customHandler?: string;     // For custom action,
   parameters?: Record<string, any>;
 }
+}
+}
 export interface RateLimitSchedule {
   timezone: string;
   rules: ScheduleRule;
+}
+}
 }
 export interface ScheduleRule {
   days: number;             // 0-6 (Sunday-Saturday),
@@ -65,6 +74,8 @@ export interface ScheduleRule {
   endTime: string;            // HH:MM format,
   windowMs?: number;          // Override window for this schedule,
   maxRequests?: number;       // Override max requests for this schedule,
+}
+}
 }
 export interface RateLimitProfile {
   id: string;
@@ -78,7 +89,9 @@ export interface RateLimitProfile {
   updatedAt: Date;
   author: string;
   tags: string;
+}
 };
+}
 }
 export interface ConfigurationContext {
   environment: 'development' | 'staging' | 'production';
@@ -96,6 +109,7 @@ export interface ConfigurationContext {
   values: z.array(z.any()).optional(),
   caseSensitive: z.boolean().optional(),
   negate: z.boolean().optional(),
+}
 });
 const RateLimitActionSchema = z.object({)
   type: z.enum(['block', 'delay', 'throttle', 'captcha', 'redirect', 'custom']),

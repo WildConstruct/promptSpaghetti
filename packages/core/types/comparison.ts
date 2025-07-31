@@ -9,17 +9,19 @@ export type HighlightMode = 'changes' | 'additions' | 'deletions' | 'all';
 
 // Graph data structure for comparison
 
+}
 export interface GraphData {
   id: string;
   nodes: Array<{;
   id: string;
   type: string;
 
+}
     position: { x: number; y: number };
     data: Record<string, unknown>;
     [key: string]: unknown;
   }>;
-  edges: Array<{,
+  edges: Array<{
   id: string;
   source: string;
   target: string;
@@ -29,6 +31,7 @@ export interface GraphData {
   metadata?: Record<string, unknown>;
 
 // Change summary
+}
 }
 export interface ChangeSummary {
   total_changes: number;
@@ -41,20 +44,24 @@ export interface ChangeSummary {
   properties_changed: number;
   // Node and edge changes
 }
+}
+}
 export interface NodeChange {
   id: string;
   type: string;
   change_type: MatchType;
   old_properties?: Record<string, unknown>;
   new_properties?: Record<string, unknown>;
-  property_changes: Array<{,
+  property_changes: Array<{
   field: string;
   old_value: unknown;
   new_value: unknown;
   change_type: 'added' | 'removed' | 'modified'
+}
   }>;
   position_changed: boolean;
   visual_changes: Record<string, unknown>;
+}
 }
 export interface EdgeChange {
   id: string;
@@ -63,15 +70,17 @@ export interface EdgeChange {
   change_type: MatchType;
   old_properties?: Record<string, unknown>;
   new_properties?: Record<string, unknown>;
-  property_changes: Array<{,
+  property_changes: Array<{
   field: string;
   old_value: unknown;
   new_value: unknown;
   change_type: 'added' | 'removed' | 'modified'
+}
   }>;
   connection_changed: boolean;
 
 // Match results
+}
 }
 export interface NodeMatchResult {
   id: string;
@@ -85,6 +94,8 @@ export interface NodeMatchResult {
   position_changed: boolean;
   visual_changes: Record<string, unknown>;
   created_at: Date;
+}
+}
 }
 export interface EdgeMatchResult {
   id: string;
@@ -100,6 +111,8 @@ export interface EdgeMatchResult {
   property_changes: Record<string, unknown>;
   created_at: Date;
   // Main comparison result
+}
+}
 }
 export interface GraphComparison {
   id: string;
@@ -122,6 +135,8 @@ export interface GraphComparison {
   created_at: Date;
   // Detailed comparison with additional data
 }
+}
+}
 export interface DetailedComparison extends GraphComparison {
   source_data: GraphData;
   target_data: GraphData;
@@ -135,6 +150,7 @@ export interface DetailedComparison extends GraphComparison {
 
 // Visual diff session
 
+}
 export interface VisualDiffSession {
   id: string;
   user_id: string;
@@ -152,11 +168,15 @@ export interface VisualDiffSession {
   created_at: Date;
   // Request/response types
 }
+}
+}
 export interface CompareVersionsRequest {
   source_version_id: string;
   target_version_id: string;
   comparison_type?: ComparisonType;
   include_details?: boolean;
+}
+}
 }
 export interface CreateDiffSessionRequest {
   graph_id: string;
@@ -164,6 +184,8 @@ export interface CreateDiffSessionRequest {
   target_version_id: string;
   view_mode?: ViewMode;
   highlight_mode?: HighlightMode;
+}
+}
 }
 export interface UpdateDiffSessionRequest {
   view_mode?: ViewMode;
@@ -174,6 +196,8 @@ export interface UpdateDiffSessionRequest {
   show_metadata?: boolean;
   filter_options?: Record<string, unknown>;
   // Configuration
+}
+}
 }
 export interface ComparisonConfig {
   node_similarity_threshold: number;
@@ -186,6 +210,8 @@ export interface ComparisonConfig {
   cache_ttl_hours: number;
   // Statistics
 }
+}
+}
 export interface ComparisonStatistics {
   total_comparisons: number;
   avg_similarity: number;
@@ -195,13 +221,17 @@ export interface ComparisonStatistics {
   high: number; // > 0.8,
   medium: number; // 0.5 - 0.8,
   low: number; // < 0.5,
+}
 };
 
 // Pagination
 }
+}
 export interface PaginationOptions {
   page?: number;
   limit?: number;
+}
+}
 }
 export interface PaginatedResult<T> {
   data: T;
@@ -222,6 +252,8 @@ export interface PaginatedResult<T> {
   created_by?: string;
   // API response wrapper
 }
+}
+}
 export interface ApiResponse<T> {
   success: boolean;
   data?: T;
@@ -230,21 +262,24 @@ export interface ApiResponse<T> {
   metadata?: Record<string, unknown>;
   // Batch comparison
   export interface BatchComparisonRequest {
-  comparisons: Array<{,
+  comparisons: Array<{
   source_version_id: string;
   target_version_id: string;
   comparison_type?: ComparisonType;
+}
 }>;
 }
+}
 export interface BatchComparisonResult {
-  successful: Array<{,
+  successful: Array<{
   similarity_score: number;
   changes_summary: ChangeSummary;
   comparison_id: string;
   source_version_id: string;
   target_version_id: string;
+}
 }>;
-  failed: Array<{,
+  failed: Array<{
   error: string;
 }>;
   total_requested: number;
@@ -275,10 +310,13 @@ export class ComparisonError extends Error {
   timestamp: Date;
   data?: Record<string, unknown>;
 }
+}
+}
 export interface DiffSessionEvent {
   type: 'session_created' | 'session_updated' | 'session_expired';
   session_id: string;
   user_id: string;
   timestamp: Date;
   data?: Record<string, unknown>;
+}
 }

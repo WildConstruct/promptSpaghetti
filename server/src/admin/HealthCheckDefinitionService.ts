@@ -38,6 +38,7 @@ import {
 // ==========================================
 
 }
+}
 export interface HealthCheckExecutionContext {
   executionId: string;
   checkDefinition: HealthCheckDefinition;
@@ -47,7 +48,9 @@ export interface HealthCheckExecutionContext {
   timeout: number;
 }
 }
+}
 
+}
 }
 export interface HealthCheckRegistry {
   definitions: Map<string, HealthCheckDefinition>;
@@ -56,7 +59,9 @@ export interface HealthCheckRegistry {
   schedules: Map<string, NodeJS.Timeout>;
 }
 }
+}
 
+}
 }
 export interface BulkExecutionResult {
   executionId: string;
@@ -68,7 +73,9 @@ export interface BulkExecutionResult {
   overallStatus: HealthStatus;
 }
 }
+}
 
+}
 }
 export interface HealthCheckFilter {
   category?: HealthCheckCategory;
@@ -78,6 +85,7 @@ export interface HealthCheckFilter {
   isActive?: boolean;
   createdAfter?: Date;
   createdBefore?: Date;
+}
 }
 }
 

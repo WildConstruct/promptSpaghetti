@@ -44,6 +44,7 @@ import { useBranching } from '../../hooks/useBranching';
 const { Title, Text } = Typography;
 const { Option } = Select;
 const { TextArea } = Input;
+}
 interface MergeRequestPanelProps {
   projectId: string;
   visible: boolean;
@@ -58,6 +59,7 @@ interface MergeRequestPanelProps {
   onView,
   onMerge,
   onClose
+}
 }) => {
   const getStatusColor = (status: MergeRequestStatus) => {,
   switch (status) {

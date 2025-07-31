@@ -10,6 +10,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { TrendingComment } from '../../types/TrendingCommentsTypes';
 import { TrendingCommentCard } from '../TrendingComments/TrendingCommentCard';
 
+}
 export interface CommentModerationConfig {
   enableBulkActions: boolean;
   enableAutoModeration: boolean;
@@ -21,6 +22,8 @@ export interface CommentModerationConfig {
   moderatorId: string;
   permissions: string;
 }
+}
+}
 export interface CommentModerationFilters {
   status?: 'pending' | 'approved' | 'rejected' | 'flagged' | 'auto_hidden';
   sentiment?: 'positive' | 'neutral' | 'negative' | 'very_negative';
@@ -30,11 +33,13 @@ export interface CommentModerationFilters {
   dateRange?: {
   start: Date;
   end: Date;
+}
 };
   resourceId?: string;
   resourceType?: string;
   sortBy?: 'newest' | 'oldest' | 'most_reported' | 'lowest_quality' | 'highest_toxicity';
   keywords?: string;
+}
 }
 export interface CommentModerationAction {
   type: 'approve' | 'reject' | 'flag' | 'hide' | 'delete' | 'ban_author' | 'require_edit' | 'escalate';
@@ -44,6 +49,8 @@ export interface CommentModerationAction {
   notifyAuthor?: boolean;
   escalateTo?: string;
   metadata?: Record<string, unknown>;
+}
+}
 }
 export interface CommentModerationStats {
   total: number;
@@ -62,6 +69,7 @@ export interface CommentModerationStats {
   onFiltersChange?: (filters: CommentModerationFilters) => void;
   onStatsUpdate?: (stats: CommentModerationStats) => void;
   className?: string;
+}
 }
 export const CommentModerationPanel: React.FC<CommentModerationPanelProps> = ({)
   config,
@@ -537,6 +545,7 @@ export const CommentModerationPanel: React.FC<CommentModerationPanelProps> = ({)
 };
 
 // Individual Comment Moderation Item Component
+}
 interface CommentModerationItemProps {
   comment: TrendingComment;
   selected: boolean;
@@ -557,6 +566,7 @@ interface CommentModerationItemProps {
   showCheckbox,
   moderatorPermissions,
   style
+}
 }) => {
   const hasPermission = (permission: string) => {,
   return moderatorPermissions.includes(permission) || moderatorPermissions.includes('moderation:admin');
@@ -569,7 +579,7 @@ interface CommentModerationItemProps {
   reports: Math.floor(Math.random() * 3),
   autoFlag: Math.random() > 0.8,
 };
-  const toxicityColor = moderationData.toxicity > 0.2 ? '#dc2626' :;
+  const toxicityColor = moderationData.toxicity > 0.2 ? '#dc2626' :
     moderationData.toxicity > 0.1 ? '#d97706' : '#059669';
   return;
     <div
@@ -717,6 +727,7 @@ interface CommentModerationItemProps {
 
 // Helper functions for mock data
 async function generateMockComments(_____filters: CommentModerationFilters): Promise<TrendingComment> {
+
   // Generate mock comments based on filters
   const count = Math.floor(Math.random() * 20) + 5;
   const comments: TrendingComment = [];

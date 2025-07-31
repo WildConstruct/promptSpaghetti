@@ -2,6 +2,7 @@
 // Story 9.3.2 - Visual Diff Tool
 import React, { memo } from 'react';
 import { EdgeProps, getSmoothStepPath } from 'reactflow';
+}
 interface DiffEdgeData {
   originalEdge: Error;
   diffState: 'added' | 'removed' | 'modified' | 'unchanged';
@@ -18,6 +19,7 @@ interface DiffEdgeData {
   targetPosition,
   data,
   selected
+}
 }) => {
   const { diffState, changeDetails } = data || {};
   // Calculate path

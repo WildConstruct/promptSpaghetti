@@ -13,6 +13,7 @@ import {
   Settings, Zap, TrendingUp, Activity,
   RefreshCw, Pause, Play, CheckCircle
 } from 'lucide-react';
+}
 interface FeatureToggle {
   id: string;,
   key: string;
@@ -41,6 +42,7 @@ interface FeatureToggle {
   onOverrideClick,
   onEmergencyDisable,
   compact = false
+}
 }) => {
   const [showPercentageSlider, setShowPercentageSlider] = useState(false);
   const [showEmergencyConfirm, setShowEmergencyConfirm] = useState(false);

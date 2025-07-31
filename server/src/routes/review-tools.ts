@@ -19,6 +19,7 @@ import { Database } from '../database';
 
 // Request/Response type definitions
 }
+}
 interface CreateReviewRequest {
   Body: {
     reviewType: string;
@@ -32,18 +33,22 @@ interface CreateReviewRequest {
     assignToReviewer?: string;
     metadata?: any;
 }
+}
   };
 }
 
+}
 }
 interface AssignReviewRequest {
   Body: {
     reviewerId: string;
     assignmentType?: 'manual' | 'automatic';
 }
+}
   };
 }
 
+}
 }
 interface SubmitDecisionRequest {
   Body: {
@@ -56,11 +61,13 @@ interface SubmitDecisionRequest {
       passed: boolean;
       notes?: string;
 }
+}
     }>;
     recommendedActions?: string[];
   };
 }
 
+}
 }
 interface AddNoteRequest {
   Body: {
@@ -69,17 +76,21 @@ interface AddNoteRequest {
     visibility: 'reviewers_only' | 'internal' | 'public' | 'submitter_visible';
     replyTo?: string;
 }
+}
   };
 }
 
+}
 }
 interface EscalateReviewRequest {
   Body: {
     reason: string;
 }
+}
   };
 }
 
+}
 }
 interface GetReviewsRequest {
   Querystring: {
@@ -93,9 +104,11 @@ interface GetReviewsRequest {
     limit?: number;
     search?: string;
 }
+}
   };
 }
 
+}
 }
 interface GetAnalyticsRequest {
   Querystring: {
@@ -104,23 +117,28 @@ interface GetAnalyticsRequest {
     reviewType?: string;
     granularity?: 'day' | 'week' | 'month';
 }
+}
   };
 }
 
+}
 }
 interface ReassignReviewRequest {
   Body: {
     newReviewerId: string;
     reason: string;
 }
+}
   };
 }
 
+}
 }
 interface RebalanceWorkloadRequest {
   Body: {
     reviewType?: string;
     targetUtilization?: number;
+}
 }
   };
 }

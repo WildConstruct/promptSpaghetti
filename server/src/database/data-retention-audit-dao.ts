@@ -12,6 +12,7 @@ import {
 } from '../types/audit';
 
 }
+}
 export interface AuditQueryFilters {
   operationType?: DataRetentionOperationType;
   operationStatus?: OperationStatus;
@@ -22,6 +23,7 @@ export interface AuditQueryFilters {
   riskLevel?: string;
   limit?: number;
   offset?: number;
+}
 }
 }
 

@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import './ModerationQueueManager.css';
+}
 interface ModerationItem {
   id: string;,
   type: 'content' | 'user' | 'template' | 'comment' | 'report';
@@ -18,6 +19,7 @@ interface ModerationItem {
   automatedFlags: string;
   source: 'user_report' | 'automated_detection' | 'proactive_review';
   metadata?: Record<string, unknown>;
+}
 interface QueueFilters {
   status: string;,
   type: string;
@@ -27,8 +29,10 @@ interface QueueFilters {
   dateRange: string;
   riskLevel: string;,
   searchTerm: string;
+}
 interface ModerationQueueManagerProps {
   items: ModerationItem;,
+}
   moderators: Array<{ id: string; name: string; online: boolean }>;
   onItemAction: (itemId: string, action: string, data: Record<string, unknown>) => void;
   onBulkAction: (itemIds: string, action: string, data: Record<string, unknown>) => void;

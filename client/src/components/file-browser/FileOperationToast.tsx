@@ -10,12 +10,14 @@
 import React, { useEffect, useState } from 'react';
 import { FileOperation, FileUploadProgress } from './types';
 
+}
 export interface FileOperationToastProps {
   operations: FileOperation;
   uploads?: FileUploadProgress;
   onClose: (operationId: string) => void;
   position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
   className?: string;
+}
 }
 export const FileOperationToast: React.FC<FileOperationToastProps> = ({)
   operations,

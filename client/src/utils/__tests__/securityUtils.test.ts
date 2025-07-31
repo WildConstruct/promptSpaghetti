@@ -40,7 +40,7 @@ describe('Security Utilities', () => {
   mockElement.innerHTML = '';
   // Mock window.location for URL validation tests
   Object.defineProperty(window, 'location', {)
-  value: {,
+  value: {
   origin: 'https://example.com',
   href: 'https://example.com',
 },

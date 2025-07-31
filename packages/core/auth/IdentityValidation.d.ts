@@ -12,6 +12,7 @@
  * - Real-time verification status tracking
  */
 
+}
 export interface IdentityValidationRequest {
     userId: string;
     requestId: string;
@@ -24,11 +25,13 @@ export interface IdentityValidationRequest {
         userAgent: string;
         sessionId: string;
         requestSource: 'profile_setup' | 'manual_request' | 'system_triggered'
+}
   };
 
 export type IdentityValidationType = 'basic_profile' | 'email_verification' | 'phone_verification' | 'government_id' | 'professional_credentials' | 'industry_affiliation' | 'portfolio_verification' | 'social_media_verification' | 'address_verification' | 'payment_method_verification';
 export type ValidationStatus = 'pending' | 'in_review' | 'approved' | 'rejected' | 'expired' | 'requires_update';
 
+}
 export interface IdentityValidationData {
     fullName?: string;
     dateOfBirth?: string;
@@ -41,6 +44,7 @@ export interface IdentityValidationData {
         state: string;
         postalCode: string;
         country: string;
+}
     };
     governmentId?: {
         type: 'passport' | 'drivers_license' | 'national_id';
@@ -74,6 +78,7 @@ export interface IdentityValidationData {
         country: string;
     };
 
+}
 export interface ProfessionalCredential {
     type: 'degree' | 'certificate' | 'award' | 'credit';
     title: string;
@@ -82,6 +87,7 @@ export interface ProfessionalCredential {
     verificationStatus: ValidationStatus;
     documentUrl?: string;
 
+}
 export interface PortfolioItem {
     type: 'film' | 'video' | 'demo_reel' | 'template' | 'project';
     title: string;
@@ -93,6 +99,7 @@ export interface PortfolioItem {
     verificationStatus: ValidationStatus;
     imdbUrl?: string;
 
+}
 export interface Certification {
     name: string;
     issuingBody: string;
@@ -101,6 +108,7 @@ export interface Certification {
     expirationDate?: number;
     verificationStatus: ValidationStatus;
 
+}
 export interface ValidationResult {
     requestId: string;
     userId: string;
@@ -115,6 +123,7 @@ export interface ValidationResult {
     reviewNotes?: string;
     nextSteps?: string[];
 
+}
 export interface ValidationEvidence {
     type: 'document_scan' | 'api_verification' | 'manual_review' | 'third_party_check';
     source: string;
@@ -122,6 +131,7 @@ export interface ValidationEvidence {
     timestamp: number;
     data: Record<string, unknown>;
 
+}
 export interface ValidationFlag {
     type: 'warning' | 'error' | 'info';
     code: string;
@@ -129,6 +139,7 @@ export interface ValidationFlag {
     severity: 'low' | 'medium' | 'high' | 'critical';
     requiresAction: boolean;
 
+}
 export interface TrustScore {
     overall: number;
     components: {
@@ -136,6 +147,7 @@ export interface TrustScore {
         professional: number;
         community: number;
         activity: number;
+}
     };
     tier: 'unverified' | 'basic' | 'verified' | 'professional' | 'expert';
     badges: string[];

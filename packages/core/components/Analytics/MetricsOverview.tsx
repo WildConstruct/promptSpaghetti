@@ -6,6 +6,7 @@ import { TrendingUp, TrendingDown, Activity, Users, DollarSign, Clock, CheckCirc
 /**
  * Metric card props
  */
+}
 interface MetricCardProps {
   title: string;
   value: string | number;
@@ -14,6 +15,7 @@ interface MetricCardProps {
   direction: 'up' | 'down' | 'stable';
   value: number;
   label: string;
+}
 };
   progress?: {
   value: number;
@@ -128,6 +130,7 @@ const MetricCard: React.FC<MetricCardProps> = ({)
  * Metrics overview props
  */
 
+}
 export interface MetricsOverviewProps {
   summary: unknown;
   dashboardData: unknown;
@@ -137,6 +140,7 @@ export interface MetricsOverviewProps {
   /**
   * Metrics overview component
   */
+}
 }
 export const MetricsOverview: React.FC<MetricsOverviewProps> = ({)
   summary,

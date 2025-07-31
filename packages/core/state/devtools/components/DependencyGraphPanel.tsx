@@ -6,11 +6,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { DependencyGraph } from '../StateDevTools';
 
+}
 export interface DependencyGraphPanelProps {
   dependencyGraph: DependencyGraph | null;
   onGenerateGraph: () => void;
   selectedDomain: string;
   onDomainChange: (domain: string) => void;
+}
 }
 export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
   dependencyGraph,

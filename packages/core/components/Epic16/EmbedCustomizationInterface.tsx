@@ -53,6 +53,7 @@ import { EmbedCustomization, EmbedBranding, PREVIEW_SIZES, PreviewSize } from '.
 
 // Advanced customization types
 
+}
 export interface EmbedCustomizationInterfaceProps {
   template: Template;
   initialCustomization?: EmbedCustomization;
@@ -64,6 +65,8 @@ export interface EmbedCustomizationInterfaceProps {
   className?: string;
   presets?: EmbedPreset;
 }
+}
+}
 export interface EmbedPreset {
   id: string;
   name: string;
@@ -73,6 +76,8 @@ export interface EmbedPreset {
   customization: EmbedCustomization;
   popular: boolean;
 }
+}
+}
 export interface EmbedWidget {
   id: string;
   type: 'header' | 'preview' | 'metadata' | 'actions' | 'stats' | 'comments' | 'author' | 'footer';
@@ -81,10 +86,12 @@ export interface EmbedWidget {
   icon: React.ComponentType<unknown>;
   configurable: boolean;
   required: boolean;
+}
   position: { x: number; y: number };
   size: { width: number; height: number };
   visible: boolean;
   config: Record<string, any>;
+}
 }
 export interface CustomFont {
   family: string;
@@ -92,7 +99,9 @@ export interface CustomFont {
   weights: number;
   url?: string;
   provider: 'google' | 'adobe' | 'custom'
+}
   }
+}
 export interface CustomTheme {
   id: string;
   name: string;
@@ -109,6 +118,7 @@ export interface CustomTheme {
   warning: string;
   error: string;
   info: string;
+}
 };
   fonts: {
   heading: CustomFont;

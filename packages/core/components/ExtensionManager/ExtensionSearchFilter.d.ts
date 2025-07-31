@@ -4,12 +4,14 @@
  */
 import React from 'react';
 
+}
 export interface FilterOptions {
     status: 'all' | 'enabled' | 'disabled';
     type: 'all' | 'node' | 'ui' | 'transform' | 'storage';
     sortBy: 'name' | 'version' | 'lastUpdated' | 'size';
 
 
+}
 export interface ExtensionSearchFilterProps {
     searchQuery: string;
     onSearchChange: (query: string) => void;
@@ -20,3 +22,4 @@ export interface ExtensionSearchFilterProps {
 export declare const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps>;
 export default ExtensionSearchFilter;
 //# sourceMappingURL=ExtensionSearchFilter.d.ts.map
+}

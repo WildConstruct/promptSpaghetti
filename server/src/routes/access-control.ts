@@ -8,6 +8,7 @@ import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 interface RouteContext {
   db: DatabaseService;
   redis: RedisService;
@@ -15,8 +16,10 @@ interface RouteContext {
   accessControlManager: AccessControlManager;
 }
 }
+}
 
 // Request type definitions
+}
 }
 interface CreateRoleRequest {
   Body: {
@@ -28,11 +31,13 @@ interface CreateRoleRequest {
       scope: string;
       constraints?: any[];
 }
+}
     }>;
     parentRoles?: string[];
   };
 }
 
+}
 }
 interface AssignRoleRequest {
   Body: {
@@ -41,12 +46,14 @@ interface AssignRoleRequest {
     expiresAt?: string;
     conditions?: any[];
 }
+}
   };
   Params: {
     userId: string;
   };
 }
 
+}
 }
 interface CreatePolicyRequest {
   Body: {
@@ -56,11 +63,13 @@ interface CreatePolicyRequest {
       condition: any;
       action: string;
 }
+}
     }>;
     priority: number;
   };
 }
 
+}
 }
 interface AccessRequestSubmission {
   Body: {
@@ -70,15 +79,18 @@ interface AccessRequestSubmission {
     requestedDuration?: number;
     urgency: 'low' | 'medium' | 'high' | 'critical';
 }
+}
   };
 }
 
+}
 }
 interface ApproveAccessRequest {
   Body: {
     approved: boolean;
     comments?: string;
     conditions?: any[];
+}
 }
   };
   Params: {

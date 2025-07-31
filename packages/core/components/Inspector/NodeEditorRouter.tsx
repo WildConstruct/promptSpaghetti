@@ -13,6 +13,7 @@ import { SequentialEditor } from './editors/SequentialEditor';
 import { MarkovEditor } from './editors/MarkovEditor';
 import { WeightedAdvancedEditor } from './editors/WeightedAdvancedEditor';
 import { BaseNodeEditor } from './BaseNodeEditor';
+}
 interface NodeEditorRouterProps {
   node: Record<string, unknown>;
   schema: ZodSchema<Record<string, unknown>>;
@@ -23,6 +24,7 @@ interface NodeEditorRouterProps {
   schema,
   onChange,
   onGlobalPreviewRequest
+}
 }) => {
   if (!node || !schema) {
     return null;

@@ -1,5 +1,6 @@
 // Theme configuration for corrections UI components
 
+}
 export interface CorrectionsTheme {
   colors: {
   primary: string;
@@ -14,6 +15,7 @@ export interface CorrectionsTheme {
   tertiary: string;
   elevated: string;
   overlay: string;
+}
 };
     text: {
   primary: string;
@@ -201,6 +203,7 @@ export const lightTheme: CorrectionsTheme = {
 
 // Theme context and provider
 import React, { createContext, useContext, ReactNode } from 'react';
+}
 interface CorrectionsThemeContextType {
   theme: CorrectionsTheme;
   isDark: boolean;
@@ -212,6 +215,7 @@ interface CorrectionsThemeContextType {
   export const CorrectionsThemeProvider: React.FC<CorrectionsThemeProviderProps> = ({ ),
   children,
   initialTheme = 'dark'
+}
 }) => {
   const [isDark, setIsDark] = React.useState(initialTheme === 'dark');
   const theme = isDark ? darkTheme : lightTheme;

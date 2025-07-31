@@ -9,6 +9,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { professionalColors } from '../styles/professional-design-system';
+}
 interface DemoReadyModeProps {
   children: React.ReactNode;
   enabled?: boolean;
@@ -17,6 +18,7 @@ interface DemoReadyModeProps {
   children,
   enabled = false,
   onToggle
+}
 }) => {
   const [screenSize, setScreenSize] = useState({)
   width: window.innerWidth,

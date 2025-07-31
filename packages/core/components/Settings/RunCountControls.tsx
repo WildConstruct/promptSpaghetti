@@ -23,6 +23,7 @@ const uiColors = {
   disabled: '#6b7280',
 };
 
+}
 export interface RunCountControlsProps {
   settings: RunCountSettings;
   onChange: (settings: RunCountSettings) => void;
@@ -30,6 +31,7 @@ export interface RunCountControlsProps {
   * Run Count Settings Controls Component
   * Manages number of preview variants to generate
   */
+}
 }
 export const RunCountControls: React.FC<RunCountControlsProps> = ({)
   settings,

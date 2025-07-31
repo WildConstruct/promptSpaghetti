@@ -96,10 +96,11 @@ export class SentimentAnalysisService {
   /**
    * Get sentiment analytics for a resource
    */
-  async getSentimentAnalytics(resourceId: string)
+  async getSentimentAnalytics(resourceId: string(
     resourceType: string,
     timeRange: { start: Date; end: Date }
   ): Promise<SentimentAnalytics> {
+
     // Check cache first
     const cacheKey = `analytics:${resourceId}:${timeRange.start.getTime()}:${timeRange.end.getTime()}`;}
     const cachedAnalytics = this.getCachedAnalytics(cacheKey);
@@ -124,6 +125,7 @@ export class SentimentAnalysisService {
       includeTopics?: boolean;
       language?: string;
   ): Promise<SentimentAnalysis> {
+
     const textData = {
       textId,
       content,
@@ -152,10 +154,11 @@ export class SentimentAnalysisService {
   getConfig(): SentimentAnalysisConfig {
     return { ...this.config };
   // Private methods
-  private async performSentimentAnalysis(()
+  private async performSentimentAnalysis(((
     textData: any,
-    options: any,
+    options: any
   ): Promise<SentimentAnalysis> {
+
     const startTime = Date.now();
     // Preprocess text
     const processedText = this.preprocessText(textData.content);

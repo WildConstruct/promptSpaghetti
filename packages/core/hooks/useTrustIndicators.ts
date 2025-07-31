@@ -8,10 +8,13 @@ import { useEffect, useState, useCallback, useMemo } from 'react';
 import { identityValidationService, TrustScore } from '../auth/IdentityValidation';
 import { marketplaceMetrics } from '../analytics/MarketplaceMetrics';
 
+}
 export interface TrustIndicatorConfig {
   userId?: string;
   showRealTimeUpdates?: boolean;
   cacheTimeout?: number; // milliseconds,
+}
+}
 }
 export interface EnhancedTrustData {
   trustScore: TrustScore | null;
@@ -27,11 +30,13 @@ export interface EnhancedTrustData {
   professional: boolean;
   portfolio: boolean;
   social: boolean;
+}
 };
   badges: string;
   communityStanding: 'excellent' | 'good' | 'fair' | 'poor' | 'unrated';
   trustTrend: 'improving' | 'stable' | 'declining'
   }
+}
 export interface TrustDisplayOptions {
   showScore?: boolean;
   showBadges?: boolean;
@@ -40,6 +45,7 @@ export interface TrustDisplayOptions {
   theme?: 'light' | 'dark' | 'auto';
   const TRUST_CACHE_KEY = 'wildConstruct_trustCache';
   const DEFAULT_CACHE_TIMEOUT = 5 * 60 * 1000; // 5 minutes;
+}
 }
 export const useTrustIndicators = (config: TrustIndicatorConfig = {}) => {
   const { userId, showRealTimeUpdates = false, cacheTimeout = DEFAULT_CACHE_TIMEOUT } = config;
@@ -288,9 +294,9 @@ function calculateReputationScore(trustScore: TrustScore | null, creatorAnalytic
     const downloadBonus = Math.min((creatorAnalytics.metrics.totalDownloads || 0) / 100, 10);
     score += ratingBonus + downloadBonus;
   return Math.min(Math.round(score), 100);
-function calculateCommunityStanding(()
+function calculateCommunityStanding(((
     trustScore: TrustScore | null,
-    creatorAnalytics: any,
+    creatorAnalytics: any
   ): EnhancedTrustData['communityStanding'] {
   if (!trustScore) return 'unrated';
   const score = trustScore.components.community;

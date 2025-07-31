@@ -79,9 +79,11 @@ export enum DeliveryStatus {
   openTracking?: boolean;
   subscriptionTracking?: boolean;
   ganalytics?: boolean;
+}
 };
 
 // Email delivery record
+}
 }
 export interface EmailDeliveryRecord {
   id: string;
@@ -109,6 +111,7 @@ export interface EmailDeliveryRecord {
   reason: string;
   diagnosticCode?: string;
   remoteMta?: string;
+}
 };
   // Tracking data
   tracking: {
@@ -121,6 +124,7 @@ export interface EmailDeliveryRecord {
 
 // Delivery attempt information
 }
+}
 export interface EmailDeliveryAttempt {
   attemptNumber: number;
   timestamp: Date;
@@ -130,12 +134,16 @@ export interface EmailDeliveryAttempt {
   retryAfter?: Date;
   // Email tracking events
 }
+}
+}
 export interface EmailOpenEvent {
   timestamp: Date;
   ipAddress: string;
   userAgent: string;
   location?: string;
   deviceType?: string;
+}
+}
 }
 export interface EmailClickEvent {
   timestamp: Date;
@@ -146,12 +154,16 @@ export interface EmailClickEvent {
   location?: string;
   deviceType?: string;
 }
+}
+}
 export interface EmailUnsubscribeEvent {
   timestamp: Date;
   ipAddress: string;
   userAgent: string;
   reason?: string;
   // Delivery statistics
+}
+}
 }
 export interface DeliveryStatistics {
   totalEmails: number;
@@ -176,6 +188,7 @@ export interface DeliveryStatistics {
   deliveryRate: number;
   openRate: number;
   bounceRate: number;
+}
 };
   };
   // By provider
@@ -189,13 +202,14 @@ export interface DeliveryStatistics {
   // Time-based metrics
   averageDeliveryTime: number;
   averageOpenTime: number;
-  peakSendTimes: Array<{,
+  peakSendTimes: Array<{
   hour: number;
   count: number;
   deliveryRate: number;
 }>;
 
 // Configuration
+}
 }
 export interface EmailDeliveryConfig {
   defaultProvider: EmailProvider;
@@ -211,10 +225,12 @@ export interface EmailDeliveryConfig {
   apiKey?: string;
   endpoint?: string;
   customSettings?: Record<string, any>;
+}
 };
   };
 
 // Email sending request
+}
 }
 export interface EmailSendRequest {
   type: EmailType;
@@ -225,6 +241,7 @@ export interface EmailSendRequest {
   html?: string;
   templateId?: string;
   templateData?: Record<string, any>;
+}
 };
   metadata: EmailMetadata;
   provider?: EmailProvider;
@@ -361,6 +378,7 @@ export class EmailDeliveryTracker extends EventEmitter {
    * Handle webhook notifications from email providers
    */
   public async handleWebhook(provider: EmailProvider, payload: any): Promise<void> {
+
     try {
       const events = this.parseWebhookPayload(provider, payload);
       for (const event of events) {
@@ -434,10 +452,11 @@ export class EmailDeliveryTracker extends EventEmitter {
     this.config = this.mergeConfig(newConfig);
     this.emit('configUpdated', { config: this.config });
   // Private methods
-  private async sendEmailViaProvider(()
+  private async sendEmailViaProvider(((
     record: EmailDeliveryRecord,
-    request: EmailSendRequest,
+    request: EmailSendRequest
   ): Promise<void> {
+
   // Simulate email sending based on provider
   await this.delay(100); // Simulate API call delay
   this.addDeliveryAttempt(record.id, {)
@@ -562,6 +581,7 @@ export class EmailDeliveryTracker extends EventEmitter {
   private generateEmailId(): string {
     return `email_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;}
   private async generateMessageId(provider: EmailProvider): Promise<string> {
+
     return `${provider}_msg_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;}
   private getSenderAddress(emailType: EmailType): string {
     // Return appropriate sender address based on email type
@@ -576,6 +596,7 @@ export class EmailDeliveryTracker extends EventEmitter {
   default:
       return 'noreply@example.com';
   private delay(ms: number): Promise<void> {
+
     return new Promise(resolve => setTimeout(resolve, ms));
   private mergeConfig(config: Partial<EmailDeliveryConfig>): EmailDeliveryConfig {
     return {

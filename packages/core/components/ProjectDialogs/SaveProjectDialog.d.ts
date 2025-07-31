@@ -3,6 +3,7 @@
  */
 import React from 'react';
 
+}
 interface SaveProjectDialogProps {
     isOpen: boolean;
     onClose: () => void;
@@ -10,6 +11,7 @@ interface SaveProjectDialogProps {
         success: boolean;
         error?: string;
 
+}
     }) => void;
 
 export declare const SaveProjectDialog: React.FC<SaveProjectDialogProps>;

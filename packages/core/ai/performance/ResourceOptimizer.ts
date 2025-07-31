@@ -5,12 +5,14 @@
  * Intelligent resource management and optimization for AI model operations
  */
 
+}
 export interface ResourceUsage {
   memory: {
   used: number;
   available: number;
   percentage: number;
   peak: number;
+}
 };
   cpu: {
   usage: number;
@@ -35,6 +37,7 @@ export interface ResourceUsage {
   temperature: number;
 };
 }
+}
 export interface OptimizationStrategy {
   name: string;
   description: string;
@@ -45,9 +48,11 @@ export interface OptimizationStrategy {
   cpu?: number;
   cost?: number;
   responseTime?: number;
+}
 };
   implementation: () => Promise<void>;
   rollback: () => Promise<void>;
+}
 }
 export interface ResourceOptimizationConfig {
   enabled: boolean;
@@ -57,6 +62,7 @@ export interface ResourceOptimizationConfig {
   cpuUsage: number;
   diskUsage: number;
   responseTime: number; // milliseconds,
+}
 };
   strategies: {
   memoryOptimization: boolean;
@@ -73,6 +79,7 @@ export interface ResourceOptimizationConfig {
   maxCacheSize: number;
 };
 }
+}
 export interface ModelResourceProfile {
   modelId: string;
   resourceRequirements: {
@@ -80,8 +87,9 @@ export interface ModelResourceProfile {
   cpu: number;
   gpu?: number;
   disk: number;
+}
 };
-  utilizationHistory: Array<{,
+  utilizationHistory: Array<{
   timestamp: number;
   usage: ResourceUsage;
 }>;
@@ -142,6 +150,7 @@ export class ResourceOptimizer {
   memoryFreed: number;
   optimizationsApplied: string;
 }> {
+
   const initialMemory = this.currentUsage.memory.used;
   const optimizationsApplied: string = [];
   // 1. Garbage collection
@@ -167,6 +176,7 @@ export class ResourceOptimizer {
   cpuSavings: number;
   optimizationsApplied: string;
 }> {
+
   const initialCPU = this.currentUsage.cpu.usage;
   const optimizationsApplied: string = [];
   // 1. Implement request batching
@@ -191,6 +201,7 @@ export class ResourceOptimizer {
   latencyImprovement: number;
   optimizationsApplied: string;
 }> {
+
   const initialBandwidth = this.currentUsage.network.bytesIn + this.currentUsage.network.bytesOut;
   const initialLatency = this.currentUsage.network.latency;
   const optimizationsApplied: string = [];
@@ -250,6 +261,7 @@ export class ResourceOptimizer {
 };
     implementationOrder: string;
   }> {
+
     const recommendations = await this.analyzeOptimizationOpportunities();
     const estimatedImpact = this.calculateEstimatedImpact(recommendations);
     const implementationOrder = this.determineImplementationOrder(recommendations);
@@ -306,6 +318,7 @@ export class ResourceOptimizer {
   getActiveOptimizations(): OptimizationStrategy {
     return Array.from(this.activeOptimizations.values());
   async rollbackOptimization(optimizationName: string): Promise<void> {
+
     const optimization = this.activeOptimizations.get(optimizationName);
     if (!optimization) {
       throw new Error(`Optimization ${optimizationName} not found or not active`);}
@@ -338,6 +351,7 @@ export class ResourceOptimizer {
   throughput: 0,
 };
   private async monitorResources(): Promise<void> {
+
     // In a real implementation, this would collect actual system metrics
     this.currentUsage.memory.used = this.getCurrentMemoryUsage();
     this.currentUsage.cpu.usage = this.getCurrentCPUUsage();
@@ -353,6 +367,7 @@ export class ResourceOptimizer {
       if (profile.utilizationHistory.length > 100) {
         profile.utilizationHistory.shift();
   private async evaluateOptimizations(): Promise<void> {
+
     const { optimizationThresholds } = this.config;
     // Check if we need to trigger optimizations
     if (this.currentUsage.memory.percentage > optimizationThresholds.memoryUsage) {
@@ -394,9 +409,11 @@ export class ResourceOptimizer {
       if (activeInstances.length < instances.length) {
         this.modelPool.set(modelId, activeInstances);
   private async optimizeCacheSizes(): Promise<void> {
+
     // This would integrate with the AdvancedCacheManager
     // to optimize cache sizes based on hit rates and memory pressure
   private async optimizeModelPooling(): Promise<void> {
+
     if (!this.config.strategies.modelPooling) return;
     // Implement intelligent model pooling based on usage patterns
     for (const [modelId, profile] of this.modelProfiles.entries()) {
@@ -420,19 +437,26 @@ export class ResourceOptimizer {
     // Simple heuristic: 1 instance per 10 requests per monitoring interval
     return Math.min(Math.max(Math.ceil(averageRequests / 10), 1), this.config.limits.maxModelInstances);
   private async enableRequestBatching(): Promise<void> {
+
     // Implement request batching logic
     // This would collect similar requests and batch them for efficiency
   private async optimizeModelLoading(): Promise<void> {
+
     // Implement lazy loading and preloading strategies
   private async implementDynamicScaling(): Promise<void> {
+
     // Implement dynamic scaling based on load
   private async enableResponseCompression(): Promise<void> {
+
     // Enable response compression to reduce network usage
   private async enableRequestDeduplication(): Promise<void> {
+
     // Implement request deduplication to avoid redundant calls
   private async optimizeDataFormats(): Promise<void> {
+
     // Optimize data serialization formats for network efficiency
   private async getModelMetrics(modelId: string): Promise<{ responseTime: number; resourceUsage: ResourceUsage }> {
+
     const profile = this.modelProfiles.get(modelId);
     if (!profile) {
       throw new Error(`Model ${modelId} not found`);}
@@ -442,6 +466,7 @@ export class ResourceOptimizer {
   resourceUsage: recentUsage ? recentUsage.usage : this.currentUsage,
 };
   private async isModelCold(modelId: string): Promise<boolean> {
+
   const profile = this.modelProfiles.get(modelId);
   if (!profile) return true;
   const lastUsage = profile.utilizationHistory.slice(-1)[0];
@@ -465,6 +490,7 @@ export class ResourceOptimizer {
   peak: 0,
 };
   private async analyzeOptimizationOpportunities(): Promise<OptimizationStrategy> {
+
     const strategies: OptimizationStrategy = [];
     // Memory optimization
     if (this.currentUsage.memory.percentage > 0.7) {
@@ -511,6 +537,7 @@ export class ResourceOptimizer {
       .sort((a, b) => priorityOrder[b.priority] - priorityOrder[a.priority])
       .map(s => s.name);
   private async measureCurrentState(): Promise<ResourceUsage> {
+
     await this.monitorResources();
     return { ...this.currentUsage };
   private calculateImpact(before: ResourceUsage, after: ResourceUsage, strategy: OptimizationStrategy): {

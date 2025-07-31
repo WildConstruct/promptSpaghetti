@@ -7,6 +7,7 @@ import { BaseExtension, ExtensionContext, ExtensionValidationResult } from './Ex
 
 // UI Extension Interface
 
+}
 export interface UIExtension extends BaseExtension {
   readonly extensionType: 'ui';
   // Component registration
@@ -27,6 +28,7 @@ export interface UIExtension extends BaseExtension {
 }
 
 // UI Component Definition
+}
 export interface UIComponentDefinition {
   // Basic metadata
   id: string;
@@ -46,6 +48,7 @@ export interface UIComponentDefinition {
   metadata: UIComponentMetadata;
   // UI Component Categories
 }
+}
 export enum UIComponentCategory {
   EDITOR = 'editor',
   PANEL = 'panel',
@@ -58,6 +61,7 @@ export enum UIComponentCategory {
 }
 
 // UI Component UI Configuration
+}
 export interface UIComponentUIConfiguration {
   // Layout
   layout?: UIComponentLayout;
@@ -68,6 +72,8 @@ export interface UIComponentUIConfiguration {
   // Accessibility
   accessibility?: UIComponentAccessibility;
   // UI Component Layout
+}
+}
 }
 export interface UIComponentLayout {
   position?: 'fixed' | 'absolute' | 'relative' | 'sticky';
@@ -82,6 +88,8 @@ export interface UIComponentLayout {
   draggable?: boolean;
   // UI Component Styling
 }
+}
+}
 export interface UIComponentStyling {
   className?: string;
   style?: React.CSSProperties;
@@ -90,17 +98,21 @@ export interface UIComponentStyling {
   customCSS?: string;
   // UI Component Responsive
 }
+}
+}
 export interface UIComponentResponsive {
   breakpoints?: {
   mobile?: UIComponentLayout;
   tablet?: UIComponentLayout;
   desktop?: UIComponentLayout;
+}
 };
   hideOnMobile?: boolean;
   hideOnTablet?: boolean;
   hideOnDesktop?: boolean;
 
 // UI Component Accessibility
+}
 }
 export interface UIComponentAccessibility {
   role?: string;
@@ -111,6 +123,8 @@ export interface UIComponentAccessibility {
   keyboardNavigation?: boolean;
   screenReaderSupport?: boolean;
   // UI Component Runtime Configuration
+}
+}
 }
 export interface UIComponentRuntimeConfiguration {
   // Rendering
@@ -125,6 +139,8 @@ export interface UIComponentRuntimeConfiguration {
   events?: UIComponentEventConfiguration;
   // UI Component Performance
 }
+}
+}
 export interface UIComponentPerformance {
   memo?: boolean;
   virtualizeList?: boolean;
@@ -133,6 +149,8 @@ export interface UIComponentPerformance {
   measurePerformance?: boolean;
   // UI Component State Configuration
 }
+}
+}
 export interface UIComponentStateConfiguration {
   persist?: boolean;
   scope?: 'global' | 'session' | 'local';
@@ -140,12 +158,16 @@ export interface UIComponentStateConfiguration {
   reducer?: (state: any, action: any) => any;
   // UI Component Event Configuration
 }
+}
+}
 export interface UIComponentEventConfiguration {
   preventDefault?: string;
   stopPropagation?: string;
   capture?: string;
   passive?: string;
   // UI Component Metadata
+}
+}
 }
 export interface UIComponentMetadata {
   author: string;
@@ -160,12 +182,14 @@ export interface UIComponentMetadata {
   maxVersion?: string;
   browsers?: string;
   devices?: string;
+}
 };
   // Tags
   tags?: string;
   keywords?: string;
 
 // UI Component Example
+}
 }
 export interface UIComponentExample {
   name: string;
@@ -174,6 +198,8 @@ export interface UIComponentExample {
   code?: string;
   preview?: string;
   // Theme Contribution
+}
+}
 }
 export interface ThemeContribution {
   id: string;
@@ -196,6 +222,8 @@ export interface ThemeContribution {
   custom?: Record<string, any>;
   // Theme Colors
 }
+}
+}
 export interface ThemeColors {
   primary: string;
   secondary: string;
@@ -213,6 +241,8 @@ export interface ThemeColors {
   extended?: Record<string, string>;
   // Theme Typography
 }
+}
+}
 export interface ThemeTypography {
   fontFamily: string;
   fontSize: {
@@ -223,6 +253,7 @@ export interface ThemeTypography {
   xl: string;
   '2xl': string;
   '3xl': string;
+}
 };
   fontWeight: {
   light: number;
@@ -244,6 +275,7 @@ export interface ThemeTypography {
 
 // Theme Spacing
 }
+}
 export interface ThemeSpacing {
   xs: string;
   sm: string;
@@ -256,6 +288,8 @@ export interface ThemeSpacing {
   custom?: Record<string, string>;
   // Theme Shadows
 }
+}
+}
 export interface ThemeShadows {
   sm: string;
   md: string;
@@ -266,11 +300,14 @@ export interface ThemeShadows {
   custom?: Record<string, string>;
   // Theme Borders
 }
+}
+}
 export interface ThemeBorders {
   width: {
   thin: string;
   normal: string;
   thick: string;
+}
 };
   radius: {
   none: string;
@@ -287,11 +324,13 @@ export interface ThemeBorders {
 
 // Theme Transitions
 }
+}
 export interface ThemeTransitions {
   duration: {
   fast: string;
   normal: string;
   slow: string;
+}
 };
   easing: {
   linear: string;
@@ -302,6 +341,7 @@ export interface ThemeTransitions {
 };
 
 // Command Contribution
+}
 }
 export interface CommandContribution {
   id: string;
@@ -319,15 +359,21 @@ export interface CommandContribution {
   context?: string;
   // Command Handler
 }
+}
+}
 export interface CommandHandler {
   (context: ExtensionContext, ...args: any): Promise<any> | any;
   // Command Enablement
+}
+}
 }
 export interface CommandEnablement {
   when?: string; // Boolean expression,
   contexts?: string;
   permissions?: string;
   // Menu Contribution
+}
+}
 }
 export interface MenuContribution {
   id: string;
@@ -346,6 +392,7 @@ export interface MenuContribution {
   menu: MenuTarget;
   // Menu Target
 }
+}
 export enum MenuTarget {
   MAIN_MENU = 'main',
   CONTEXT_MENU = 'context',
@@ -357,6 +404,7 @@ export enum MenuTarget {
 }
 
 // Keybinding Contribution
+}
 export interface KeybindingContribution {
   id: string;
   key: string;
@@ -368,6 +416,8 @@ export interface KeybindingContribution {
   win?: string;
   linux?: string;
   // Theme Interface
+}
+}
 }
 export interface Theme {
   id: string;
@@ -381,6 +431,8 @@ export interface Theme {
   transitions: ThemeTransitions;
   custom?: Record<string, any>;
   // UI Context Manager
+}
+}
 }
 export interface UIContextManager {
   // Component registration
@@ -417,12 +469,15 @@ export interface UIContextManager {
   emit(event: string, ...args: any): void;
   // UI Component Factory
 }
+}
+}
 export interface UIComponentFactory {
   create(componentId: string, props: any): React.ComponentType<any>;
   canCreate(componentId: string): boolean;
   getPropsSchema(componentId: string): any;
   validateProps(componentId: string, props: any): ExtensionValidationResult;
   // UI Extension Helper Functions
+}
 }
 export namespace UIExtensionHelpers {
   export function createTheme(partial: Partial<ThemeContribution>): ThemeContribution {

@@ -8,6 +8,7 @@
  */
 import { CommentableResourceType } from '../types/TrendingCommentsTypes';
 
+}
 export interface CommentModerationRequest {
     commentId: string;
     action: CommentModerationAction;
@@ -17,6 +18,7 @@ export interface CommentModerationRequest {
     notifyAuthor?: boolean;
     scheduledFor?: Date;
 
+}
 export interface CommentModerationAction {
     type: 'approve' | 'reject' | 'flag' | 'hide' | 'delete' | 'ban_author' | 'require_edit' | 'escalate';
     severity?: 'low' | 'medium' | 'high' | 'critical';
@@ -24,6 +26,7 @@ export interface CommentModerationAction {
     appealable?: boolean;
     escalateTo?: string;
 
+}
 export interface CommentModerationResult {
     commentId: string;
     action: CommentModerationAction;
@@ -37,6 +40,7 @@ export interface CommentModerationResult {
     workflowId?: string;
     error?: string;
 
+}
 export interface CommentModerationFilters {
     resourceId?: string;
     resourceType?: CommentableResourceType;
@@ -46,6 +50,7 @@ export interface CommentModerationFilters {
     dateRange?: {
         start: Date;
         end: Date;
+}
     };
     toxicityRange?: {
         min: number;
@@ -68,6 +73,7 @@ export interface CommentModerationFilters {
     limit?: number;
     offset?: number;
 
+}
 export interface CommentModerationQueue {
     queueId: string;
     name: string;
@@ -80,6 +86,7 @@ export interface CommentModerationQueue {
     enableAutoModeration: boolean;
     escalationRules: EscalationRule[];
 
+}
 export interface EscalationRule {
     condition: 'timeout' | 'toxicity_threshold' | 'report_count' | 'quality_threshold' | 'custom';
     threshold: number;
@@ -87,6 +94,7 @@ export interface EscalationRule {
     escalateTo?: string;
     notifyStakeholders: string[];
 
+}
 export interface CommentModerationStats {
     totalComments: number;
     pendingReview: number;
@@ -95,12 +103,13 @@ export interface CommentModerationStats {
     flaggedComments: number;
     escalatedComments: number;
     avgProcessingTimeMinutes: number;
-    moderatorWorkload: Array<{,
+    moderatorWorkload: Array<{
         moderatorId: string;
         assignedComments: number;
         completedToday: number;
         avgTimeMinutes: number;
         accuracy: number;
+}
     }>;
     toxicityDistribution: {
         low: number;
@@ -120,6 +129,7 @@ export interface CommentModerationStats {
         qualityChange24h: number;
     };
 
+}
 export interface BulkModerationRequest {
     commentIds: string[];
     action: CommentModerationAction;
@@ -129,15 +139,17 @@ export interface BulkModerationRequest {
     parallel?: boolean;
     validateBeforeAction?: boolean;
 
+}
 export interface BulkModerationResult {
     batchId: string;
     totalItems: number;
     successful: number;
     failed: number;
     results: CommentModerationResult[];
-    errors: Array<{,
+    errors: Array<{
         commentId: string;
         error: string;
+}
     }>;
     processingTimeMs: number;
     summary: Record<string, number>;

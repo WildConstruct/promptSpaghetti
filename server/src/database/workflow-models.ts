@@ -8,6 +8,7 @@ import { z } from 'zod';
 // =============================================================================
 
 }
+}
 export interface WorkflowState {
   id: string;
   workspace_id: string;
@@ -23,7 +24,9 @@ export interface WorkflowState {
   updated_at: Date;
 }
 }
+}
 
+}
 }
 export interface WorkflowTransition {
   id: string;
@@ -38,7 +41,9 @@ export interface WorkflowTransition {
   created_at: Date;
 }
 }
+}
 
+}
 }
 export interface WorkflowApproval {
   id: string;
@@ -65,7 +70,9 @@ export interface WorkflowApproval {
   updated_at: Date;
 }
 }
+}
 
+}
 }
 export interface WorkflowApprovalReviewer {
   id: string;
@@ -77,7 +84,9 @@ export interface WorkflowApprovalReviewer {
   created_at: Date;
 }
 }
+}
 
+}
 }
 export interface WorkflowLock {
   id: string;
@@ -92,7 +101,9 @@ export interface WorkflowLock {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface WorkflowHistoryEntry {
   id: string;
@@ -116,7 +127,9 @@ export interface WorkflowHistoryEntry {
   session_id?: string;
 }
 }
+}
 
+}
 }
 export interface WorkflowSchedule {
   id: string;
@@ -147,7 +160,9 @@ export interface WorkflowSchedule {
   updated_at: Date;
 }
 }
+}
 
+}
 }
 export interface WorkflowExecutionLog {
   id: string;
@@ -165,6 +180,7 @@ export interface WorkflowExecutionLog {
   // Retry information
   retry_attempt: number;
   next_retry_at?: Date;
+}
 }
 }
 
@@ -189,6 +205,7 @@ export interface WorkflowExecutionLog {
 // =============================================================================
 
 }
+}
 export interface StateTransitionRequest {
   resource_id: string;
   to_state_id: string;
@@ -197,7 +214,9 @@ export interface StateTransitionRequest {
   force?: boolean; // Bypass approval if user has permission
 }
 }
+}
 
+}
 }
 export interface StateTransitionResult {
   success: boolean;
@@ -208,7 +227,9 @@ export interface StateTransitionResult {
   workflow_history_id?: string;
 }
 }
+}
 
+}
 }
 export interface WorkflowStateFilter {
   workspace_id?: string;
@@ -218,7 +239,9 @@ export interface WorkflowStateFilter {
   name_contains?: string;
 }
 }
+}
 
+}
 }
 export interface WorkflowApprovalFilter {
   workspace_id?: string;
@@ -229,7 +252,9 @@ export interface WorkflowApprovalFilter {
   overdue?: boolean;
 }
 }
+}
 
+}
 }
 export interface WorkflowHistoryFilter {
   workspace_id?: string;
@@ -240,7 +265,9 @@ export interface WorkflowHistoryFilter {
   date_to?: Date;
 }
 }
+}
 
+}
 }
 export interface WorkflowLockFilter {
   workspace_id?: string;
@@ -250,7 +277,9 @@ export interface WorkflowLockFilter {
   expired?: boolean;
 }
 }
+}
 
+}
 }
 export interface WorkflowScheduleFilter {
   workspace_id?: string;
@@ -260,11 +289,13 @@ export interface WorkflowScheduleFilter {
   overdue?: boolean;
 }
 }
+}
 
 // =============================================================================
 // WORKFLOW STATISTICS
 // =============================================================================
 
+}
 }
 export interface WorkflowStatistics {
   total_states: number;
@@ -283,6 +314,7 @@ export interface WorkflowStatistics {
     rejected: number;
     cancelled: number;
     avg_approval_time_hours: number;
+}
 }
   };
   
@@ -307,6 +339,7 @@ export interface WorkflowStatistics {
 // =============================================================================
 
 }
+}
 export interface WorkflowEvent {
   type: 'state_changed' | 'approval_requested' | 'approval_completed' | 'lock_acquired' | 'lock_released' | 'schedule_executed';
   workspace_id: string;
@@ -316,6 +349,7 @@ export interface WorkflowEvent {
   data: Record<string, any>;
 }
 }
+}
 
 export type WorkflowEventHandler = (event: WorkflowEvent) => void | Promise<void>;
 
@@ -323,6 +357,7 @@ export type WorkflowEventHandler = (event: WorkflowEvent) => void | Promise<void
 // WORKFLOW CONFIGURATION
 // =============================================================================
 
+}
 }
 export interface WorkflowConfiguration {
   auto_lock_on_state_change: boolean;
@@ -336,6 +371,7 @@ export interface WorkflowConfiguration {
     approval_completed: boolean;
     lock_acquired: boolean;
     schedule_failed: boolean;
+}
 }
   };
 }

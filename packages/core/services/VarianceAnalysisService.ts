@@ -7,6 +7,7 @@
  */
 import { PreviewResultWithPath } from '../types/ExecutionPath';
 
+}
 export interface VarianceMetrics {
   overallVariance: 'low' | 'medium' | 'high';
   varianceScore: number; // 0-1 scale,
@@ -15,6 +16,7 @@ export interface VarianceMetrics {
   vocabularyDiversity: number;
   structuralDiversity: number;
   executionPathDiversity: number;
+}
 };
   creativeRange: {
   uniqueElements: string;
@@ -24,6 +26,7 @@ export interface VarianceMetrics {
 };
   suggestions: VarianceSuggestion;
 }
+}
 export interface VarianceSuggestion {
   type: 'increase' | 'decrease' | 'optimize';
   category: 'weights' | 'structure' | 'content' | 'execution';
@@ -31,12 +34,15 @@ export interface VarianceSuggestion {
   impact: 'low' | 'medium' | 'high';
   actionable: boolean;
 }
+}
+}
 export interface DiversityIndicator {
   metric: string;
   value: number;
   level: 'low' | 'medium' | 'high';
   description: string;
   color: string;
+}
 }
 export class VarianceAnalysisService {
   /**
@@ -277,8 +283,7 @@ export class VarianceAnalysisService {
   // Weighted combination of factors
   const baseScore = (vocabularyScore * 0.4) + (structuralScore * 0.3) + (pathScore * 0.3);
   return Math.max(0, baseScore * (1 - repetitionPenalty * 0.5));
-  private calculateOverallVarianceScore(()
-  diversityMetrics: VarianceMetrics['diversityMetrics'],
+  private calculateOverallVarianceScore((diversityMetrics: VarianceMetrics['diversityMetrics'],
   creativeRange: VarianceMetrics['creativeRange']): number {,
   const {
   outputLengthVariance,

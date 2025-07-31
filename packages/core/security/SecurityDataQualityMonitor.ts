@@ -15,6 +15,7 @@ import { SecurityAnomaly } from './SecurityAnomalyDetector';
 // TYPES AND INTERFACES
 // ==========================================
 
+}
 export interface DataQualityConfig {
   enableRealTimeValidation: boolean;
   validationInterval: number;
@@ -25,6 +26,8 @@ export interface DataQualityConfig {
   reportingEnabled: boolean;
   validationRules: ValidationRule;
 }
+}
+}
 export interface QualityThresholds {
   completeness: number; // 0-100%,
   accuracy: number; // 0-100%,
@@ -33,6 +36,8 @@ export interface QualityThresholds {
   validity: number; // 0-100%,
   uniqueness: number; // 0-100%,
   overall: number; // 0-100%,
+}
+}
 }
 export interface ValidationRule {
   id: string;
@@ -45,6 +50,7 @@ export interface ValidationRule {
   lastUpdated: Date;
   executionCount: number;
   violationCount: number;
+}
 }
 export enum ValidationRuleType {
   SCHEMA_VALIDATION = 'schema_validation',
@@ -68,6 +74,7 @@ export enum ValidationRuleType {
   period: {
   start: Date;
   end: Date;
+}
 };
   overallScore: number;
   qualityDimensions: QualityDimensionScore;
@@ -76,12 +83,14 @@ export enum ValidationRuleType {
   recommendations: QualityRecommendation;
   dataSourceMetrics: DataSourceQuality;
 }
+}
 export interface QualityDimensionScore {
   dimension: QualityDimension;
   score: number; // 0-100,
   trend: 'improving' | 'declining' | 'stable';
   violationCount: number;
   issuesSummary: string;
+}
 }
 export enum QualityDimension {
   COMPLETENESS = 'completeness',
@@ -108,12 +117,15 @@ export enum QualityDimension {
   resolvedAt?: Date;
   remediation?: RemediationAction;
 }
+}
+}
 export interface RemediationAction {
   actionType: RemediationActionType;
   description: string;
   executedAt: Date;
   result: 'success' | 'failure' | 'partial';
   details: string;
+}
 }
 export enum RemediationActionType {
   DATA_CORRECTION = 'data_correction',
@@ -131,6 +143,8 @@ export enum RemediationActionType {
   significance: 'high' | 'medium' | 'low';
   driverFactors: string;
 }
+}
+}
 export interface QualityRecommendation {
   id: string;
   priority: 'immediate' | 'high' | 'medium' | 'low';
@@ -142,6 +156,8 @@ export interface QualityRecommendation {
   targetDimensions: QualityDimension;
   implementationSteps: string;
 }
+}
+}
 export interface DataSourceQuality {
   sourceName: string;
   sourceType: string;
@@ -152,6 +168,8 @@ export interface DataSourceQuality {
   dimensions: Record<QualityDimension, number>;
   commonIssues: string;
 }
+}
+}
 export interface DataQualityMetrics {
   totalRecordsProcessed: number;
   totalViolations: number;
@@ -161,13 +179,17 @@ export interface DataQualityMetrics {
   automatedRemediations: number;
   manualInterventions: number;
   qualityTrend: 'improving' | 'declining' | 'stable'
+}
   }
+}
 export interface ValidationContext {
   recordId: string;
   dataSource: string;
   timestamp: Date;
   metadata: Record<string, unknown>;
   relatedRecords?: unknown;
+}
+}
 }
 export interface QualityProfile {
   dataSourceName: string;
@@ -176,6 +198,8 @@ export interface QualityProfile {
   businessRules: BusinessRule;
   lastUpdated: Date;
   validationHistory: ValidationHistoryEntry;
+}
+}
 }
 export interface FieldExpectation {
   fieldName: string;
@@ -188,15 +212,19 @@ export interface FieldExpectation {
   nullablePercent: number;
   uniquenessRequired: boolean;
 }
+}
+}
 export interface StatisticalBaseline {
   recordCount: {
   mean: number;
   standardDeviation: number;
   min: number;
   max: number;
+}
 };
   fieldStatistics: Record<string, FieldStatistics>;
   temporalPatterns: TemporalPattern;
+}
 }
 export interface FieldStatistics {
   fieldName: string;
@@ -204,13 +232,17 @@ export interface FieldStatistics {
   nullPercent: number;
   uniquePercent: number;
   averageLength?: number;
+}
   commonValues: Array<{ value: unknown; frequency: number }>;
   outlierThreshold: number;
+}
 }
 export interface TemporalPattern {
   pattern: 'hourly' | 'daily' | 'weekly' | 'monthly';
   expectedVolume: number;
   variationThreshold: number;
+}
+}
 }
 export interface BusinessRule {
   ruleId: string;
@@ -219,6 +251,8 @@ export interface BusinessRule {
   expression: string;
   severity: ValidationSeverity;
   enabled: boolean;
+}
+}
 }
 export interface ValidationHistoryEntry {
   timestamp: Date;
@@ -229,6 +263,7 @@ export interface ValidationHistoryEntry {
   // ==========================================
   // MAIN DATA QUALITY MONITOR CLASS
   // ==========================================
+}
 }
 export class SecurityDataQualityMonitor extends EventEmitter {
   private config: DataQualityConfig;
@@ -357,6 +392,7 @@ export class SecurityDataQualityMonitor extends EventEmitter {
    * Validate security intelligence data
    */
   public async validateSecurityIntelligence(intelligence: SecurityIntelligence): Promise<DataQualityViolation> {
+
     const violations: DataQualityViolation = [];
     for (const intel of intelligence) {
       const context: ValidationContext = {,
@@ -383,6 +419,7 @@ export class SecurityDataQualityMonitor extends EventEmitter {
    * Validate security anomalies data
    */
   public async validateSecurityAnomalies(anomalies: SecurityAnomaly): Promise<DataQualityViolation> {
+
     const violations: DataQualityViolation = [];
     for (const anomaly of anomalies) {
       const context: ValidationContext = {,
@@ -406,6 +443,7 @@ export class SecurityDataQualityMonitor extends EventEmitter {
    * Validate individual record against all applicable rules
    */
   private async validateRecord(record: unknown, context: ValidationContext): Promise<DataQualityViolation> {
+
   const violations: DataQualityViolation = [];
   for (const rule of this.validationRules.values()) {
   if (!rule.enabled) continue;
@@ -625,6 +663,7 @@ export class SecurityDataQualityMonitor extends EventEmitter {
   // VIOLATION PROCESSING
   // ==========================================
   private async processViolations(violations: DataQualityViolation): Promise<void> {
+
   for (const violation of violations) {
   // Store violation
   this.qualityViolations.set(violation.violationId, violation);
@@ -661,6 +700,7 @@ export class SecurityDataQualityMonitor extends EventEmitter {
       console.error('Remediation failed:', error);
       this.emit('remediationError', { violation, error });
   private async remediateCompleteness(violation: DataQualityViolation): Promise<RemediationAction> {
+
     // Attempt to enrich missing data
     return {
       actionType: RemediationActionType.ENRICHMENT,
@@ -671,6 +711,7 @@ export class SecurityDataQualityMonitor extends EventEmitter {
       details: 'Enrichment service contacted';
   };
   private async remediateValidity(violation: DataQualityViolation): Promise<RemediationAction> {
+
     // Attempt to correct invalid data
     return {
       actionType: RemediationActionType.DATA_CORRECTION,
@@ -681,6 +722,7 @@ export class SecurityDataQualityMonitor extends EventEmitter {
       details: 'Value corrected using validation rules';
   };
   private async remediateConsistency(violation: DataQualityViolation): Promise<RemediationAction> {
+
   // Flag inconsistent data for review
   return {
   actionType: RemediationActionType.RECORD_FLAGGING,
@@ -690,6 +732,7 @@ export class SecurityDataQualityMonitor extends EventEmitter {
   details: 'Record flagged in quality review queue',
 };
   private async remediateGeneric(violation: DataQualityViolation): Promise<RemediationAction> {
+
   // Generic remediation - quarantine the record
   return {
   actionType: RemediationActionType.QUARANTINE,
@@ -705,6 +748,7 @@ export class SecurityDataQualityMonitor extends EventEmitter {
    * Generate comprehensive data quality report
    */
   public async generateQualityReport(period: { start: Date; end: Date }): Promise<DataQualityReport> {
+
   const periodViolations = Array.from(this.qualityViolations.values());
   .filter(v => v.timestamp >= period.start && v.timestamp <= period.end);
   const qualityDimensions = await this.calculateQualityDimensions(periodViolations);
@@ -724,6 +768,7 @@ export class SecurityDataQualityMonitor extends EventEmitter {
   dataSourceMetrics
 };
   private async calculateQualityDimensions(violations: DataQualityViolation): Promise<QualityDimensionScore> {
+
   const dimensions = Object.values(QualityDimension);
   const scores: QualityDimensionScore = [];
   for (const dimension of dimensions) {
@@ -767,6 +812,7 @@ export class SecurityDataQualityMonitor extends EventEmitter {
       });
     return scores;
   private async calculateQualityTrends(period: { start: Date; end: Date }): Promise<QualityTrend> {
+
   // Simplified trend calculation
   return Object.values(QualityDimension).map(dimension => ({)
   dimension,
@@ -776,10 +822,11 @@ export class SecurityDataQualityMonitor extends EventEmitter {
   significance: 'low' as const,
   driverFactors: ['System stability', 'Data source reliability'],
 }));
-  private async generateRecommendations(()
+  private async generateRecommendations(((
     dimensions: QualityDimensionScore,
-    violations: DataQualityViolation,
+    violations: DataQualityViolation
   ): Promise<QualityRecommendation> {
+
     const recommendations: QualityRecommendation = [];
     // Find dimensions with low scores
     const problematicDimensions = dimensions.filter(d => d.score < this.config.qualityThresholds.overall);
@@ -825,6 +872,7 @@ export class SecurityDataQualityMonitor extends EventEmitter {
       });
     return recommendations;
   private async calculateDataSourceMetrics(violations: DataQualityViolation): Promise<DataSourceQuality> {
+
     const sourceGroups = violations.reduce((groups, violation) => {
       if (!groups[violation.dataSource]) {
         groups[violation.dataSource] = [];
@@ -882,6 +930,7 @@ export class SecurityDataQualityMonitor extends EventEmitter {
   isResolved: false,
 };
   private async updateQualityMetrics(): Promise<void> {
+
   const totalViolations = this.qualityViolations.size;
   const criticalViolations = Array.from(this.qualityViolations.values());
   .filter(v => v.severity === ValidationSeverity.CRITICAL).length;
@@ -911,6 +960,7 @@ export class SecurityDataQualityMonitor extends EventEmitter {
           this.isValidating = false;
     }, this.config.validationInterval);
   private async performScheduledValidation(): Promise<void> {
+
     // Cleanup old violations
     const cutoff = Date.now() - (this.config.retentionPeriodDays * 24 * 60 * 60 * 1000);
     for (const [id, violation] of this.qualityViolations) {

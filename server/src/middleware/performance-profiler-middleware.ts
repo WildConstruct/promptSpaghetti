@@ -11,6 +11,7 @@ import { FastifyRequest, FastifyReply, FastifyInstance, FastifyPluginOptions } f
 import { PerformanceProfiler } from '../performance/PerformanceProfiler';
 
 }
+}
 interface PerformanceMiddlewareOptions {
   enabled?: boolean;
   autoStartProfiling?: boolean;
@@ -22,6 +23,7 @@ interface PerformanceMiddlewareOptions {
     memoryUsage: number;
     responseTime: number;
     errorRate: number;
+}
 }
   };
 }
@@ -364,6 +366,7 @@ export function withPerformanceTracking(routeHandler: Function) {
 declare module 'fastify' {
   interface FastifyInstance {
     performanceProfiler: PerformanceProfiler;
+}
 }
   }
 }

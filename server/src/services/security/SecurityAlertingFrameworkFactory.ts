@@ -30,6 +30,7 @@ import { AttributionService } from '../attribution-service';
 import { AnalyticsDAO } from '../../database/analytics-dao';
 
 }
+}
 export interface FrameworkInitializationOptions {
   // Database configuration
   database: Database;
@@ -57,7 +58,9 @@ export interface FrameworkInitializationOptions {
   logLevel?: 'error' | 'warn' | 'info' | 'debug';
 }
 }
+}
 
+}
 }
 export interface FrameworkComponents {
   framework: UnifiedSecurityAlertingFramework;
@@ -65,6 +68,7 @@ export interface FrameworkComponents {
   securityAnalytics: SecurityAlertingAnalytics;
   healthMonitoring: HealthMonitoringService;
   projectHealthService: ProjectHealthAlertService;
+}
 }
 }
 

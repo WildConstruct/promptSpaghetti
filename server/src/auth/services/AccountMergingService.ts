@@ -18,6 +18,7 @@ import { AuditService } from './AuditService';
 import { DataRetentionService } from './DataRetentionService';
 
 }
+}
 export interface MergeRequest {
   id: string;
   primaryAccountId: string;
@@ -32,7 +33,9 @@ export interface MergeRequest {
   errorMessage?: string;
 }
 }
+}
 
+}
 }
 export interface MergeStrategy {
   profileMerge: 'keep_primary' | 'keep_secondary' | 'merge_fields' | 'manual';
@@ -43,7 +46,9 @@ export interface MergeStrategy {
   preserveAuditTrail: boolean;
 }
 }
+}
 
+}
 }
 export interface ConflictResolution {
   field: string;
@@ -54,7 +59,9 @@ export interface ConflictResolution {
   reason?: string;
 }
 }
+}
 
+}
 }
 export interface MergeSummary {
   mergeRequestId: string;
@@ -72,12 +79,14 @@ export interface MergeSummary {
     sessions: number;
     uploads: number;
 }
+}
   };
   conflictsResolved: number;
   errors: string[];
   rollbackPlan?: RollbackPlan;
 }
 
+}
 }
 export interface RollbackPlan {
   id: string;
@@ -87,7 +96,9 @@ export interface RollbackPlan {
   expiresAt: Date;
 }
 }
+}
 
+}
 }
 export interface RollbackAction {
   type: 'restore_record' | 'delete_record' | 'update_field' | 'restore_relationship';
@@ -97,7 +108,9 @@ export interface RollbackAction {
   currentData: any;
 }
 }
+}
 
+}
 }
 export interface AccountMergePreview {
   primaryAccount: {
@@ -107,6 +120,7 @@ export interface AccountMergePreview {
     projectCount: number;
     lastLoginAt: Date;
     createdAt: Date;
+}
 }
   };
   secondaryAccount: {
@@ -875,8 +889,7 @@ export class AccountMergingService {
    * Additional helper methods would go here:
    * - getMergeRequest()
    * - updateMergeRequestStatus()
-   * - validateMergeRequest()
-   * - rollbackMerge(* etc.
+   * - validateMergeRequest(* - rollbackMerge(* etc.
    */
 
   private async getMergeRequest(mergeRequestId: string): Promise<MergeRequest | null> {

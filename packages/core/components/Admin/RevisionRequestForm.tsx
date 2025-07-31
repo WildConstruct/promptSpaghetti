@@ -15,6 +15,7 @@ import {
   RevisionEvidenceType,
   DEFAULT_REVISION_REQUEST_CONFIG
 } from '../../types/RevisionRequestTypes';
+}
 interface RevisionRequestFormProps {
   initialData?: Partial<RevisionRequestFormData>;
   contentType?: RevisionContentType;
@@ -24,8 +25,10 @@ interface RevisionRequestFormProps {
   onCancel: () => void;
   isSubmitting?: boolean;
   className?: string;
+}
 interface ValidationErrors {
   [key: string]: string;
+}
 interface EvidenceItem {
   id: string;
   type: RevisionEvidenceType;
@@ -35,6 +38,7 @@ interface EvidenceItem {
   preview?: string;
 
 export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
+}
   initialData = {},
   contentType: initialContentType,
   contentId: initialContentId,

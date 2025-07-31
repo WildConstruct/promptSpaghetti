@@ -1,5 +1,6 @@
 import { PoolClient, QueryResult } from 'pg';
 
+}
 export interface DatabaseConfig {
     host: string;
     port: number;
@@ -26,6 +27,7 @@ export declare class DatabaseConnection {
             total: number;
             idle: number;
             waiting: number;
+}
         };
     }>;
     get isHealthy(): boolean;

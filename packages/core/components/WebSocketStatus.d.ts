@@ -1,6 +1,7 @@
 import React from 'react';
 import { ConnectionState } from '../websocket/WebSocketClient';
 
+}
 interface WebSocketStatusProps {
     connectionState: ConnectionState;
     queuedMessages?: number;
@@ -11,6 +12,7 @@ export declare const WebSocketStatus: React.FC<WebSocketStatusProps>;
 export declare const WebSocketStatusIcon: React.FC<{
     connectionState: ConnectionState;
     onClick?: () => void;
+}
 }>;
 export declare     onReconnect?: () => void;
     onDisconnect?: () => void;

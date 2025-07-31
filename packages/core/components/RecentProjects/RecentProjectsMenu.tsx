@@ -5,6 +5,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { RecentProjectsManager, RecentProjectEntry } from '../../managers/RecentProjectsManager';
 
+}
 interface RecentProjectsMenuProps {
   onLoadRecentProject: (entry: RecentProjectEntry) => void;
   className?: string;
@@ -15,6 +16,7 @@ interface RecentProjectsMenuProps {
   if (isOpen) {
   const projects = RecentProjectsManager.getRecentProjects();
   setRecentProjects(projects);
+}
 }, [isOpen]);
   // Close menu when clicking outside
   useEffect(() => {

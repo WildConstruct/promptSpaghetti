@@ -7,12 +7,15 @@
 import { BaseError, ErrorSeverity, ErrorCode } from './index';
 import { ErrorFactory } from './ErrorFactory';
 
+}
 export interface RetryOptions {
   maxAttempts: number;
   baseDelay: number;
   maxDelay: number;
   backoffMultiplier: number;
   retryCondition?: (error: Error) => boolean;
+}
+}
 }
 export interface FallbackOptions<T> {
   fallbackValue?: T;
@@ -26,6 +29,7 @@ export interface FallbackOptions<T> {
   * Centralized error recovery utilities
   */
 }
+}
 export class ErrorRecovery {
   private static circuitBreakers = new Map<string, CircuitBreakerState>();
   /**
@@ -36,6 +40,7 @@ export class ErrorRecovery {
     context: string,
     options: Partial<RetryOptions> = {}
   ): Promise<T> {
+
     const {
       maxAttempts = 3,
       baseDelay = 1000,
@@ -90,6 +95,7 @@ export class ErrorRecovery {
     context: string,
     options: FallbackOptions<T> = {}
   ): Promise<T> {
+
     const { fallbackValue, fallbackFunction, logError = true } = options;
     try {
       return await operation();
@@ -120,6 +126,7 @@ export class ErrorRecovery {
     context: string,
     options: Partial<CircuitBreakerOptions> = {}
   ): Promise<T> {
+
     const {
       threshold = 5,
       resetTimeout = 60000, // 1 minute
@@ -170,7 +177,7 @@ export class ErrorRecovery {
   * Execute multiple operations with graceful degradation
   */
   static async withGracefulDegradation<T>()
-  operations: Array<{,
+  operations: Array<{
   operation: () => Promise<T>;
   name: string;
   priority: 'critical' | 'important' | 'optional'
@@ -212,6 +219,7 @@ export class ErrorRecovery {
     context: string,
     validationErrorMessage?: string
   ): Promise<T> {
+
     const isValid = await Promise.resolve(validator());
     if (!isValid) {
       throw ErrorFactory.createValidationError()
@@ -230,6 +238,7 @@ export class ErrorRecovery {
     context: string,
     recoveryFn?: () => Promise<T>
   ): Promise<T> {
+
     const timeoutPromise = new Promise<never>((_, reject) => {
       setTimeout(() => {
         reject(ErrorFactory.createAPIError()
@@ -269,9 +278,9 @@ export class ErrorRecovery {
           console.error(`Failed to cleanup resource in '${context}':`, cleanupError);}
   // Private utility methods
   private static delay(ms: number): Promise<void> {
+
   return new Promise(resolve => setTimeout(resolve, ms));
-  private static getOrCreateCircuitBreaker(()
-  name: string,
+  private static getOrCreateCircuitBreaker((name: string,
   options: CircuitBreakerOptions): CircuitBreakerState {,
   if (!this.circuitBreakers.has(name)) {
   this.circuitBreakers.set(name, {)
@@ -299,6 +308,7 @@ export class ErrorRecovery {
       breaker.firstFailureAt = 0;
       breaker.lastFailureAt = 0;
       breaker.openedAt = 0;
+}
 interface CircuitBreakerState extends CircuitBreakerOptions {
   state: 'closed' | 'open' | 'half-open';
   failures: number;
@@ -316,6 +326,7 @@ export function withErrorRecovery<T extends any, R>()
     descriptor: PropertyDescriptor,
     const originalMethod = descriptor.value;
     descriptor.value = async function (...args: T): Promise<R> {
+
       const context = `${target.constructor.name}.${propertyKey}`;}
       const operation = () => originalMethod.apply(this, args);
       // Apply retry logic if specified

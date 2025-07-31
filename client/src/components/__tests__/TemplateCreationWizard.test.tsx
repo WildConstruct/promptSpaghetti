@@ -16,7 +16,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // Mock the API service
 jest.mock('../../services/templateService', () => ({)
-  templateService: {,
+  templateService: {
   createFromGraph: jest.fn<unknown, unknown>(),
   getTemplatesByCategory: jest.fn<unknown, unknown>(),
   validateTemplate: jest.fn<unknown, unknown>(),
@@ -66,7 +66,7 @@ const mockTemplateService = templateService as jest.Mocked<{
 // Test wrapper component
 const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const queryClient = new QueryClient({)
-  defaultOptions: {,
+  defaultOptions: {
   queries: { retry: false },
       mutations: { retry: false }
   });
@@ -95,7 +95,7 @@ describe('TemplateCreationWizard', () => {
         rating: 4.5,
         reviews: [],
         graph: { nodes: [], edges: [], annotations: [] },
-        metadata: {,
+        metadata: {
   created: new Date( as unknown as unknown),
   lastModified: new Date(),
   usageCount: 0,
@@ -118,7 +118,7 @@ describe('TemplateCreationWizard', () => {
         rating: 4.0,
         reviews: [],
         graph: { nodes: [], edges: [], annotations: [] },
-        metadata: {,
+        metadata: {
   created: new Date(),
   lastModified: new Date(),
   usageCount: 0,
@@ -141,7 +141,7 @@ describe('TemplateCreationWizard', () => {
         rating: 4.2,
         reviews: [],
         graph: { nodes: [], edges: [], annotations: [] },
-        metadata: {,
+        metadata: {
   created: new Date(),
           lastModified: new Date(),
           usageCount: 0,

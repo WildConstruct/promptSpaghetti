@@ -113,9 +113,11 @@ export enum VerificationStep {
   deviceSpoofing: boolean;
   locationInconsistent: boolean;
   timeZoneManipulation: boolean;
+}
 };
 
 // Device challenge
+}
 }
 export interface DeviceChallenge {
   id: string;
@@ -132,6 +134,7 @@ export interface DeviceChallenge {
   deliveryAddress?: string; // email or phone,
   attempts: number;
   maxAttempts: number;
+}
 };
   // Response data
   responseData?: {
@@ -142,6 +145,7 @@ export interface DeviceChallenge {
   metadata: Record<string, any>;
 
 // Verification attempt
+}
 }
 export interface VerificationAttempt {
   id: string;
@@ -154,6 +158,8 @@ export interface VerificationAttempt {
   metadata: Record<string, any>;
   // Verification configuration
 }
+}
+}
 export interface VerificationConfig {
   sessionTimeoutMinutes: number;
   maxAttemptsPerChallenge: number;
@@ -164,6 +170,7 @@ export interface VerificationConfig {
   mediumRisk: number;
   highRisk: number;
   requireManualReview: number;
+}
 };
   // Challenge requirements by risk level
   challengeRequirements: {
@@ -178,6 +185,7 @@ export interface VerificationConfig {
 
 // Verification request
 }
+}
 export interface DeviceVerificationRequestData {
   userId: string;
   fingerprintContext: FingerprintContext;
@@ -189,6 +197,7 @@ export interface DeviceVerificationRequestData {
   /**
   * Device Verification Service
   */
+}
 }
 export class DeviceVerificationService extends EventEmitter {
   private sessions: Map<string, VerificationSession> = new Map();
@@ -224,7 +233,7 @@ export class DeviceVerificationService extends EventEmitter {
   /**
    * Start device verification process
    */
-  public async startVerification()
+  public async startVerification(
     request: DeviceVerificationRequestData): Promise<VerificationSession> {,
   try {
   // Generate device fingerprint
@@ -304,12 +313,13 @@ export class DeviceVerificationService extends EventEmitter {
   /**
    * Submit challenge response
    */
-  public async submitChallengeResponse()
+  public async submitChallengeResponse(
     sessionId: string,
     challengeId: string,
     response: string,
     metadata: Record<string, any> = {}
   ): Promise<{ success: boolean; session: VerificationSession; nextStep?: VerificationStep }> {
+
   const session = this.sessions.get(sessionId);
   if (!session) {
   throw new Error('Verification session not found');
@@ -439,6 +449,7 @@ export class DeviceVerificationService extends EventEmitter {
     return true;
   // Private methods
   private async progressSession(session: VerificationSession): Promise<void> {
+
   session.updatedAt = new Date();
   switch (session.currentStep) {
   case VerificationStep.FINGERPRINT_COLLECTION:,
@@ -499,8 +510,7 @@ export class DeviceVerificationService extends EventEmitter {
   const challenge = await this.createChallenge(session, challengeType);
   session.challenges.push(challenge);
   this.challenges.set(challenge.id, challenge);
-  private async createChallenge(()
-  session: VerificationSession,
+  private async createChallenge((session: VerificationSession,
   type: ChallengeType): Promise<DeviceChallenge> {,
   const challengeId = this.generateChallengeId();
   const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes;
@@ -530,10 +540,11 @@ export class DeviceVerificationService extends EventEmitter {
       await this.createManualReviewChallenge(challenge, session);
       break;
     return challenge;
-  private async createEmailChallenge(()
+  private async createEmailChallenge(((
     challenge: DeviceChallenge,
-    session: VerificationSession,
+    session: VerificationSession
   ): Promise<void> {
+
     // Generate verification code
     const codeRequest: CodeGenerationRequest = {,
   userId: session.userId,
@@ -566,10 +577,11 @@ export class DeviceVerificationService extends EventEmitter {
   sessionId: session.id,
 };
     await this.emailTracker.sendEmail(emailRequest);
-  private async createSMSChallenge(()
+  private async createSMSChallenge(((
     challenge: DeviceChallenge,
-    session: VerificationSession,
+    session: VerificationSession
   ): Promise<void> {
+
     // Generate verification code
     const codeRequest: CodeGenerationRequest = {,
   userId: session.userId,
@@ -588,16 +600,14 @@ export class DeviceVerificationService extends EventEmitter {
   challenge.challengeData.deliveryAddress = codeRequest.deliveryAddress;
   // In a real implementation, would send SMS here
   challenge.metadata.smsDelivered = true;
-  private async createCaptchaChallenge(()
-  challenge: DeviceChallenge,
+  private async createCaptchaChallenge((challenge: DeviceChallenge,
   session: VerificationSession): Promise<void> {,
   // Generate captcha challenge
   const captchaData = this.generateCaptcha();
   challenge.challengeData.question = captchaData.question;
   challenge.challengeData.expectedResponse = captchaData.answer;
   challenge.metadata.captchaImage = captchaData.imageData;
-  private async createManualReviewChallenge(()
-  challenge: DeviceChallenge,
+  private async createManualReviewChallenge((challenge: DeviceChallenge,
   session: VerificationSession): Promise<void> {,
   challenge.challengeData.question = 'Manual review required';
   challenge.metadata.reviewReason = 'High risk score requires manual verification';
@@ -608,10 +618,11 @@ export class DeviceVerificationService extends EventEmitter {
   riskScore: session.riskScore,
   timestamp: new Date(),
 });
-  private async validateChallengeResponse(()
+  private async validateChallengeResponse(((
     challenge: DeviceChallenge,
-    response: string,
+    response: string
   ): Promise<boolean> {
+
   switch (challenge.type) {
   case ChallengeType.EMAIL_CODE:,
   case ChallengeType.SMS_CODE:,
@@ -636,6 +647,7 @@ export class DeviceVerificationService extends EventEmitter {
   timestamp: new Date(),
 });
   private async registerTrustedDevice(session: VerificationSession): Promise<void> {
+
   try {
   const deviceRequest: DeviceVerificationRequest = {,
   userId: session.userId,
@@ -660,6 +672,7 @@ export class DeviceVerificationService extends EventEmitter {
   timestamp: new Date(),
 });
   private async requestManualReview(session: VerificationSession): Promise<void> {
+
   session.outcome = VerificationOutcome.REQUIRES_REVIEW;
   this.emit('manualReviewRequired', {)
   sessionId: session.id,
@@ -669,6 +682,7 @@ export class DeviceVerificationService extends EventEmitter {
   timestamp: new Date(),
 });
   private async checkForSuspiciousActivity(session: VerificationSession): Promise<void> {
+
   // Check for repeated verification attempts
   const recentSessions = this.getUserSessions(session.userId);
   .filter(s => s.createdAt.getTime() > Date.now() - 24 * 60 * 60 * 1000); // Last 24 hours
@@ -719,6 +733,7 @@ export class DeviceVerificationService extends EventEmitter {
     };
     session.attempts.push(attempt);
   private async getLocationFromIP(ipAddress: string): Promise<LocationData> {
+
   // Simplified location lookup - would use a real GeoIP service
   return {
   id: 'loc-ip-' + Date.now(),

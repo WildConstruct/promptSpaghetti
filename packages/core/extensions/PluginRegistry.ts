@@ -15,6 +15,7 @@ import { promises as fs } from 'fs';
 import { join } from 'path';
 import * as semver from 'semver';
 
+}
 export interface RemotePlugin {
   id: string;
   name: string;
@@ -32,6 +33,8 @@ export interface RemotePlugin {
   createdAt: Date;
   updatedAt: Date;
 }
+}
+}
 export interface PluginUpdate {
   pluginId: string;
   currentVersion: string;
@@ -39,6 +42,8 @@ export interface PluginUpdate {
   updateType: 'patch' | 'minor' | 'major';
   changelog?: string;
   breaking: boolean;
+}
+}
 }
 export interface PluginRegistryConfig {
   cacheDirectory: string;
@@ -50,12 +55,16 @@ export interface PluginRegistryConfig {
   enableTelemetry: boolean;
   developmentMode: boolean;
 }
+}
+}
 export interface PluginInstallOptions {
   version?: string;
   skipDependencies?: boolean;
   force?: boolean;
   source?: PluginSource;
   activateAfterInstall?: boolean;
+}
+}
 }
 export interface PluginSearchOptions {
   query?: string;
@@ -67,7 +76,9 @@ export interface PluginSearchOptions {
   offset?: number;
   sortBy?: 'name' | 'downloads' | 'rating' | 'updated';
   sortOrder?: 'asc' | 'desc'
+}
   }
+}
 export interface PluginRegistryStats {
   totalPlugins: number;
   activePlugins: number;
@@ -79,6 +90,7 @@ export interface PluginRegistryStats {
   updateCheckLastRun?: Date;
   availableUpdates: number;
   cacheSize: number;
+}
 }
 export class PluginRegistry extends EventEmitter {
   private baseRegistry: ExtensionPointRegistry;
@@ -117,10 +129,11 @@ export class PluginRegistry extends EventEmitter {
   /**
    * Install a plugin from various sources
    */
-  async installPlugin(()
+  async installPlugin(((
     pluginIdentifier: string,
     options: PluginInstallOptions = {}
   ): Promise<LoadedPlugin> {
+
     try {
       this.emit('plugin:install:start', { pluginIdentifier, options });
       // Resolve plugin source
@@ -148,6 +161,7 @@ export class PluginRegistry extends EventEmitter {
    * Uninstall a plugin
    */
   async uninstallPlugin(pluginId: string, removeData: boolean = false): Promise<void> {
+
     try {
       this.emit('plugin:uninstall:start', { pluginId });
       const plugin = this.installedPlugins.get(pluginId);
@@ -176,6 +190,7 @@ export class PluginRegistry extends EventEmitter {
    * Update a plugin to latest version
    */
   async updatePlugin(pluginId: string): Promise<LoadedPlugin> {
+
     try {
       this.emit('plugin:update:start', { pluginId });
       const plugin = this.installedPlugins.get(pluginId);
@@ -206,6 +221,7 @@ export class PluginRegistry extends EventEmitter {
    * Search for plugins in remote registries
    */
   async searchPlugins(options: PluginSearchOptions = {}): Promise<RemotePlugin> {
+
   try {
   const results: RemotePlugin = [];
   // Search in cached remote plugins
@@ -258,6 +274,7 @@ export class PluginRegistry extends EventEmitter {
    * Check for plugin updates
    */
   async checkForUpdates(): Promise<PluginUpdate> {
+
   const updates = await this.pluginLoader.checkForUpdates();
   return updates.map(update => ({)
   ...update,
@@ -313,6 +330,7 @@ export class PluginRegistry extends EventEmitter {
       this.updateCheckTimer = undefined;
   // Private methods
   private async initializeRegistry(): Promise<void> {
+
     try {
       // Ensure cache directory exists
       await fs.mkdir(this.config.cacheDirectory, { recursive: true });
@@ -340,12 +358,14 @@ export class PluginRegistry extends EventEmitter {
     // 4. Default to npm
     return { type: 'npm', location: identifier, version };
   private async checkForConflicts(plugin: LoadedPlugin): Promise<void> {
+
     const existing = this.installedPlugins.get(plugin.manifest.id);
     if (existing && existing !== plugin) {
       throw new Error()
         `Plugin ${plugin.manifest.id} is already installed (version ${existing.manifest.version})`}
       );
   private async installDependencies(manifest: ExtensionManifest): Promise<void> {
+
     if (!manifest.dependencies) return;
     for (const [depId, versionRange] of Object.entries(manifest.dependencies)) {
       if (!this.installedPlugins.has(depId)) {
@@ -360,6 +380,7 @@ export class PluginRegistry extends EventEmitter {
     const diff = semver.diff(currentVersion, availableVersion);
     return (diff as 'patch' | 'minor' | 'major') || 'patch';
   private async saveInstallationRecord(plugin: LoadedPlugin): Promise<void> {
+
     const recordPath = join(this.config.cacheDirectory, 'installed.json');
     try {
       let records: any = {};
@@ -377,6 +398,7 @@ export class PluginRegistry extends EventEmitter {
     } catch (error) {
       console.warn(`Failed to save installation record for ${plugin.manifest.id}:`, error);}
   private async removeInstallationRecord(pluginId: string): Promise<void> {
+
     const recordPath = join(this.config.cacheDirectory, 'installed.json');
     try {
       const content = await fs.readFile(recordPath, 'utf-8');
@@ -386,6 +408,7 @@ export class PluginRegistry extends EventEmitter {
     } catch (error) {
       console.warn(`Failed to remove installation record for ${pluginId}:`, error);}
   private async loadInstalledPlugins(): Promise<void> {
+
     const recordPath = join(this.config.cacheDirectory, 'installed.json');
     try {
       const content = await fs.readFile(recordPath, 'utf-8');
@@ -399,11 +422,14 @@ export class PluginRegistry extends EventEmitter {
     } catch (error) {
       // No installed plugins record exists yet
   private async createPluginBackup(plugin: LoadedPlugin): Promise<void> {
+
     // Simplified backup implementation
     console.log(`Creating backup for plugin ${plugin.manifest.id}`);}
   private async restorePluginBackup(pluginId: string): Promise<void> {
+
     // Simplified restore implementation
     console.log(`Restoring backup for plugin ${pluginId}`);}
   private async removePluginData(pluginId: string): Promise<void> {
+
     // Remove plugin-specific data directories
     console.log(`Removing data for plugin ${pluginId}`);}

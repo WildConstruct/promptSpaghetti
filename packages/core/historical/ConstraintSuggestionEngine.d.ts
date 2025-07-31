@@ -7,6 +7,7 @@
  */
 import { UTDGNode, Era, ConstraintValidationResult, SocialClass } from '../types/UTDG';
 
+}
 export interface ConstraintSuggestion {
     id: string;
     constraint_id: string;
@@ -20,6 +21,7 @@ export interface ConstraintSuggestion {
     example?: string;
 
 
+}
 export interface SpecificAction {
     action_type: 'replace_node' | 'add_node' | 'modify_attribute' | 'remove_node' | 'add_context';
     description: string;
@@ -28,6 +30,7 @@ export interface SpecificAction {
     rationale: string;
 
 
+}
 export interface SuggestionContext {
     era: Era;
     social_class?: SocialClass[];
@@ -86,3 +89,4 @@ export declare class ConstraintSuggestionEngine {
 
 export default ConstraintSuggestionEngine;
 //# sourceMappingURL=ConstraintSuggestionEngine.d.ts.map
+}

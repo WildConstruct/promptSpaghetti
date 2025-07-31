@@ -13,6 +13,7 @@ import { DatabaseConnection } from '../database/connection';
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 export interface MLFlaggingConfig {
   enableContentModeration: boolean;
   enableSecurityThreatDetection: boolean;
@@ -28,10 +29,12 @@ export interface MLFlaggingConfig {
     anomaly?: string;
     promptInjection?: string;
 }
+}
   };
   fallbackToRuleBased: boolean;
 }
 
+}
 }
 export interface FlaggingRequest {
   content: string;
@@ -45,6 +48,7 @@ export interface FlaggingRequest {
     sessionId?: string;
     requestId?: string;
     metadata?: Record<string, unknown>;
+}
 }
   };
   categories: FlaggingCategory[];
@@ -61,6 +65,7 @@ export type FlaggingCategory =
   | 'phishing';
 
 }
+}
 export interface FlaggingResult {
   flagged: boolean;
   confidence: number;
@@ -73,7 +78,9 @@ export interface FlaggingResult {
   fallbackUsed: boolean;
 }
 }
+}
 
+}
 }
 export interface FlaggedCategory {
   category: FlaggingCategory;
@@ -84,7 +91,9 @@ export interface FlaggedCategory {
   subcategories?: string[];
 }
 }
+}
 
+}
 }
 export interface MLModel {
   id: string;
@@ -98,7 +107,9 @@ export interface MLModel {
   configuration?: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 export interface FlaggingEvent {
   id: string;
@@ -116,7 +127,9 @@ export interface FlaggingEvent {
   reviewNotes?: string;
 }
 }
+}
 
+}
 }
 export interface FlaggingStats {
   totalRequests: number;
@@ -128,6 +141,7 @@ export interface FlaggingStats {
   averageConfidence: number;
   averageProcessingTime: number;
   modelAccuracy: Record<string, number>;
+}
 }
 }
 

@@ -10,36 +10,37 @@ import React, { useEffect, useRef, useCallback, useState } from 'react';
 import { clientProfiler, ClientPerformanceProfiler } from '../utils/clientPerformanceProfiler';
 
 // Import PerformanceSnapshot type from the profiler
+}
 type PerformanceSnapshot = {
   timestamp: number;,
-  render: {,
+  render: {
   componentCount: number;,
   renderTime: number;
   reRenderCount: number;,
   mountTime: number;
   updateTime: number;
 };
-  memory: {,
+  memory: {
   usedJSHeapSize: number;
   totalJSHeapSize: number;,
   jsHeapSizeLimit: number;
   heapUtilization: number;
 };
-  network: {,
+  network: {
   requestCount: number;
   totalTransferSize: number;,
   averageResponseTime: number;
   errorCount: number;,
   cacheHitRate: number;
 };
-  interactions: {,
+  interactions: {
   clickCount: number;
   scrollEvents: number;,
   inputEvents: number;
   navigationCount: number;,
   averageInteractionTime: number;
 };
-  vitals: {,
+  vitals: {
   FCP: number;
   LCP: number;,
   FID: number;
@@ -48,6 +49,7 @@ type PerformanceSnapshot = {
 };
   customMetrics: Record<string, any>;
 };
+}
 interface UsePerformanceProfilerOptions {
   autoStart?: boolean;
   trackRenders?: boolean;
@@ -55,12 +57,14 @@ interface UsePerformanceProfilerOptions {
   componentName?: string;
   alertOnSlowRender?: boolean;
   slowRenderThreshold?: number;
+}
 interface PerformanceStats {
   renderTime: number;,
   memoryUsage: number;
   responseTime: number;,
   layoutShift: number;
   interactionCount: number;
+}
 interface UsePerformanceProfilerReturn {
   isRunning: boolean;,
   stats: PerformanceStats | null;
@@ -73,6 +77,7 @@ interface UsePerformanceProfilerReturn {
 /**
  * Performance profiler hook for React components
  */
+}
 export function usePerformanceProfiler(options: UsePerformanceProfilerOptions = {})
 ): UsePerformanceProfilerReturn {
   const {
@@ -319,6 +324,7 @@ export function useMemoryTracking(componentName: string, trackingInterval: numbe
  * Performance context for sharing profiler across components
  */
 import { createContext, useContext } from 'react';
+}
 interface PerformanceContextType {
   profiler: ClientPerformanceProfiler;,
   isGlobalProfilingEnabled: boolean;
@@ -332,6 +338,7 @@ export function usePerformanceContext() {
     throw new Error('usePerformanceContext must be used within a PerformanceProvider');
   return context;
 
+}
 export function PerformanceProvider({ children }: { children: React.ReactNode }) {
   const [isGlobalProfilingEnabled, setIsGlobalProfilingEnabled] = useState(false);
   const startGlobalProfiling = useCallback(() => {

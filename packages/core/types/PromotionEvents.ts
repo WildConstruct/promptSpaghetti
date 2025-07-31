@@ -114,6 +114,8 @@ export enum PromotionEventType {
   metadata: Record<string, any>;
   version: string; // Event schema version,
 }
+}
+}
 export interface EventSource {
   service: string; // promotion-service, campaign-service, etc.,
   component?: string; // specific component within service,
@@ -122,6 +124,8 @@ export interface EventSource {
   api_client_id?: string; // API client that triggered event,
   ip_address?: string;
   user_agent?: string;
+}
+}
 }
 export interface EventContext {
   // Request context
@@ -142,6 +146,7 @@ export interface EventContext {
   content_id?: string;
   // Additional context
   custom_attributes?: Record<string, any>;
+}
 }
 export type PromotionEventData = 
   | PromotionLifecycleEventData
@@ -164,6 +169,7 @@ export type EventCategory =
   | 'alert'
   | 'integration';
 
+}
 export interface RetentionPolicy {
   retention_days: number;
   archive_after_days?: number;
@@ -172,6 +178,8 @@ export interface RetentionPolicy {
   // =============================================================================
   // Specific Event Data Types
   // =============================================================================
+}
+}
 }
 export interface PromotionLifecycleEventData {
   promotion: BasePromotion;
@@ -188,6 +196,8 @@ export interface PromotionLifecycleEventData {
   previous_status?: PromotionStatus;
   auto_generated?: boolean;
 }
+}
+}
 export interface PromotionUsageEventData {
   promotion_id: string;
   promotion_name: string;
@@ -203,10 +213,11 @@ export interface PromotionUsageEventData {
   original_amount_cents: number;
   final_amount_cents: number;
   // Items affected
-  affected_items: Array<{,
+  affected_items: Array<{
   item_id: string;
   discount_applied_cents: number;
   final_price_cents: number;
+}
 }>;
   // Usage tracking
   user_usage_count: number;
@@ -217,6 +228,7 @@ export interface PromotionUsageEventData {
   success: boolean;
   failure_reason?: string;
   validation_errors?: string;
+}
 }
 export interface PromotionPerformanceEventData {
   promotion_id: string;
@@ -238,6 +250,8 @@ export interface PromotionPerformanceEventData {
   // Alert triggers
   alert_triggers?: string;
   recommendation_generated?: boolean;
+}
+}
 }
 export interface ContentPromotionEventData {
   promotion_id: string;
@@ -261,6 +275,8 @@ export interface ContentPromotionEventData {
   variant_id?: string;
   test_group?: string;
 }
+}
+}
 export interface CampaignEventData {
   campaign_id: string;
   campaign_name: string;
@@ -275,16 +291,18 @@ export interface CampaignEventData {
   budget_utilization_percentage?: number;
   // Channel information
   channels_active?: string;
-  channel_performance?: Array<{,
+  channel_performance?: Array<{
   channel: string;
   spend_cents: number;
   impressions: number;
   clicks: number;
   conversions: number;
+}
 }>;
   // Launch/update specific data
   launch_configuration?: Record<string, any>;
   configuration_changes?: Record<string, any>;
+}
 }
 export interface UserInteractionEventData {
   user_id: string;
@@ -310,6 +328,8 @@ export interface UserInteractionEventData {
   previous_interactions?: string;
   conversion_probability?: number;
   personalization_score?: number;
+}
+}
 }
 export interface SystemEventData {
   operation_type: string;
@@ -339,6 +359,8 @@ export interface SystemEventData {
   health_status?: 'healthy' | 'warning' | 'error';
   error_details?: Record<string, any>;
 }
+}
+}
 export interface AlertEventData {
   alert_type: 'fraud' | 'performance' | 'budget' | 'expiration' | 'system';
   alert_severity: 'info' | 'warning' | 'error' | 'critical';
@@ -364,12 +386,16 @@ export interface AlertEventData {
   acknowledged_at?: Date;
   resolution_details?: string;
 }
+}
+}
 export interface AlertAction {
   action_type: string;
   action_description: string;
   action_parameters: Record<string, any>;
   auto_executable: boolean;
   priority: number;
+}
+}
 }
 export interface PerformanceComparison {
   metric_name: string;
@@ -379,6 +405,8 @@ export interface PerformanceComparison {
   is_improvement: boolean;
   statistical_significance?: number;
 }
+}
+}
 export interface ValidationResult {
   field: string;
   is_valid: boolean;
@@ -387,6 +415,8 @@ export interface ValidationResult {
   // =============================================================================
   // Event Handling and Subscription Interfaces
   // =============================================================================
+}
+}
 }
 export interface IPromotionEventHandler {
   /**
@@ -402,6 +432,8 @@ export interface IPromotionEventHandler {
   */
   getHandlerConfig(): EventHandlerConfig;
 }
+}
+}
 export interface EventHandlingResult {
   success: boolean;
   processing_time_ms: number;
@@ -409,6 +441,8 @@ export interface EventHandlingResult {
   errors?: string;
   retry_recommended?: boolean;
   next_retry_delay_ms?: number;
+}
+}
 }
 export interface EventHandlerConfig {
   handler_id: string;
@@ -420,6 +454,8 @@ export interface EventHandlerConfig {
   batch_processing_enabled: boolean;
   max_batch_size?: number;
 }
+}
+}
 export interface EventRetryPolicy {
   max_retries: number;
   base_delay_ms: number;
@@ -429,6 +465,8 @@ export interface EventRetryPolicy {
   // =============================================================================
   // Event Bus and Messaging Interfaces
   // =============================================================================
+}
+}
 }
 export interface IPromotionEventBus {
   /**
@@ -452,6 +490,8 @@ export interface IPromotionEventBus {
   */
   getEventHistory(criteria: EventHistoryCriteria): Promise<EventHistoryResult>;
 }
+}
+}
 export interface PublishResult {
   success: boolean;
   event_id: string;
@@ -459,12 +499,16 @@ export interface PublishResult {
   delivery_promises: DeliveryPromise;
   error?: string;
 }
+}
+}
 export interface BatchPublishResult {
   total_events: number;
   successful_events: number;
   failed_events: number;
   results: PublishResult;
   batch_id: string;
+}
+}
 }
 export interface PromotionEventSubscription {
   subscription_id: string;
@@ -491,11 +535,15 @@ export interface PromotionEventSubscription {
   last_activity_at?: Date;
   expires_at?: Date;
 }
+}
+}
 export interface EventFilter {
   field: string; // JSONPath to field in event,
   operator: 'equals' | 'not_equals' | 'contains' | 'greater_than' | 'less_than' | 'in' | 'exists';
   value: any;
   case_sensitive?: boolean;
+}
+}
 }
 export interface EventDeliveryConfig {
   // Webhook configuration
@@ -521,10 +569,14 @@ export interface EventDeliveryConfig {
   // Database configuration
   table_name?: string;
   storage_format?: 'json' | 'avro' | 'parquet'
+}
   }
+}
 export interface WebhookAuth {
   type: 'none' | 'bearer_token' | 'api_key' | 'basic_auth' | 'oauth2';
   credentials: Record<string, string>;
+}
+}
 }
 export interface SubscriptionResult {
   success: boolean;
@@ -532,10 +584,14 @@ export interface SubscriptionResult {
   active: boolean;
   error?: string;
 }
+}
+}
 export interface DeliveryPromise {
   delivery_method: EventDeliveryMethod;
   estimated_delivery_time: Date;
   tracking_id: string;
+}
+}
 }
 export interface EventHistoryCriteria {
   // Time range
@@ -562,22 +618,28 @@ export interface EventHistoryCriteria {
   include_context?: boolean;
   include_metadata?: boolean;
 }
+}
+}
 export interface EventHistoryResult {
   events: BasePromotionEvent;
   total_count: number;
   has_more: boolean;
   aggregations: EventAggregation;
 }
+}
+}
 export interface EventAggregation {
   field: string;
-  buckets: Array<{,
+  buckets: Array<{
   key: string;
   count: number;
+}
 }>;
 
 // =============================================================================
 // Notification System Interfaces
 // =============================================================================
+}
 }
 export interface IPromotionNotificationService {
   /**
@@ -601,11 +663,15 @@ export interface IPromotionNotificationService {
   */
   getNotificationHistory(criteria: NotificationHistoryCriteria): Promise<NotificationHistoryResult>;
 }
+}
+}
 export interface NotificationRecipient {
   type: 'user' | 'admin' | 'role' | 'team' | 'external';
   identifier: string; // user_id, email, role_name, etc.,
   delivery_preferences: NotificationDeliveryPreference;
   personalization_data?: Record<string, any>;
+}
+}
 }
 export interface NotificationDeliveryPreference {
   method: EventDeliveryMethod;
@@ -614,6 +680,8 @@ export interface NotificationDeliveryPreference {
   quiet_hours?: QuietHours;
   frequency_limit?: FrequencyLimit;
 }
+}
+}
 export interface QuietHours {
   enabled: boolean;
   start_time: string; // HH:MM format,
@@ -621,10 +689,14 @@ export interface QuietHours {
   timezone: string;
   days_of_week?: number; // 0-6, Sunday=0,
 }
+}
+}
 export interface FrequencyLimit {
   max_notifications_per_hour?: number;
   max_notifications_per_day?: number;
   cooldown_minutes?: number;
+}
+}
 }
 export interface NotificationRequest {
   event: BasePromotionEvent;
@@ -633,6 +705,8 @@ export interface NotificationRequest {
   custom_content?: NotificationContent;
   delivery_options?: NotificationDeliveryOptions;
 }
+}
+}
 export interface NotificationContent {
   subject: string;
   body: string;
@@ -640,17 +714,23 @@ export interface NotificationContent {
   action_buttons?: ActionButton;
   attachments?: NotificationAttachment;
 }
+}
+}
 export interface ActionButton {
   text: string;
   url: string;
   style: 'primary' | 'secondary' | 'danger';
   track_clicks: boolean;
 }
+}
+}
 export interface NotificationAttachment {
   filename: string;
   content_type: string;
   content: string; // Base64 encoded,
   size_bytes: number;
+}
+}
 }
 export interface NotificationDeliveryOptions {
   priority: EventPriority;
@@ -660,16 +740,20 @@ export interface NotificationDeliveryOptions {
   track_opens: boolean;
   track_clicks: boolean;
 }
+}
+}
 export interface NotificationResult {
   success: boolean;
   notification_id: string;
-  delivery_results: Array<{,
+  delivery_results: Array<{
   recipient: NotificationRecipient;
   method: EventDeliveryMethod;
   success: boolean;
   error?: string;
   delivered_at?: Date;
+}
 }>;
+}
 }
 export interface BatchNotificationResult {
   total_notifications: number;
@@ -677,6 +761,8 @@ export interface BatchNotificationResult {
   failed_notifications: number;
   results: NotificationResult;
   batch_id: string;
+}
+}
 }
 export interface NotificationTemplate {
   id: string;
@@ -697,6 +783,8 @@ export interface NotificationTemplate {
   version: string;
   usage_count: number;
 }
+}
+}
 export interface CreateNotificationTemplateRequest {
   name: string;
   description: string;
@@ -706,6 +794,8 @@ export interface CreateNotificationTemplateRequest {
   html_template?: string;
   supported_methods: EventDeliveryMethod;
   created_by: string;
+}
+}
 }
 export interface NotificationHistoryCriteria {
   start_date?: Date;
@@ -717,8 +807,10 @@ export interface NotificationHistoryCriteria {
   limit?: number;
   offset?: number;
 }
+}
+}
 export interface NotificationHistoryResult {
-  notifications: Array<{,
+  notifications: Array<{
   notification_id: string;
   event_id: string;
   event_type: PromotionEventType;
@@ -730,6 +822,7 @@ export interface NotificationHistoryResult {
   opened_at?: Date;
   clicked_at?: Date;
   error?: string;
+}
 }>;
   total_count: number;
   has_more: boolean;

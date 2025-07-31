@@ -3,12 +3,14 @@
 import React, { useState } from 'react';
 import { Bell, Clock, Lock, AlertTriangle, Check, Filter } from 'lucide-react';
 import { LockNotification } from '../types/locking';
+}
 interface LockNotificationsProps {
   notifications: LockNotification;
   onMarkAsRead: (notificationId: string) => void;
   export const LockNotifications: React.FC<LockNotificationsProps> = ({,)
   notifications,
   onMarkAsRead
+}
 }) => {
   const [filter, setFilter] = useState<'all' | 'unread' | 'type'>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');

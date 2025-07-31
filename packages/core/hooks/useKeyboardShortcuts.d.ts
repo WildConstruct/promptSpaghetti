@@ -5,6 +5,7 @@
  * Professional keyboard shortcut management for Wild Construct
  */
 
+}
 export interface KeyboardShortcut {
     key: string;
     ctrl?: boolean;
@@ -18,6 +19,7 @@ export interface KeyboardShortcut {
     global?: boolean;
 
 
+}
 export interface UseKeyboardShortcutsOptions {
     shortcuts: KeyboardShortcut[];
     enabled?: boolean;
@@ -27,6 +29,7 @@ export interface UseKeyboardShortcutsOptions {
 /**
  * Hook for managing keyboard shortcuts in the graph editor
  */
+}
 export declare const useKeyboardShortcuts: ({ shortcuts, enabled, preventDefault }: UseKeyboardShortcutsOptions) => {
     shortcuts: KeyboardShortcut[];
 };

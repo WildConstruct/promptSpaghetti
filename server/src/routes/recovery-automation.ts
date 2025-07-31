@@ -22,6 +22,7 @@ import { Database } from '../database/connection';
 
 // Request type definitions
 }
+}
 interface CreateRecoveryRuleRequest {
   Body: {
     name: string;
@@ -39,27 +40,33 @@ interface CreateRecoveryRuleRequest {
       escalation_recipients: string[];
       escalation_actions: string[];
 }
+}
     };
   };
 }
 
 }
+}
 interface UpdateRecoveryRuleRequest {
   Params: {
     ruleId: string;
+}
 }
   };
   Body: Partial<CreateRecoveryRuleRequest['Body']>;
 }
 
 }
+}
 interface GetRecoveryRuleRequest {
   Params: {
     ruleId: string;
 }
+}
   };
 }
 
+}
 }
 interface ListRecoveryRulesRequest {
   Querystring: {
@@ -69,9 +76,11 @@ interface ListRecoveryRulesRequest {
     page?: number;
     pageSize?: number;
 }
+}
   };
 }
 
+}
 }
 interface TriggerRecoveryRequest {
   Body: {
@@ -84,18 +93,22 @@ interface TriggerRecoveryRequest {
       metrics?: Record<string, any>;
       error_details?: string;
 }
+}
     };
   };
 }
 
 }
+}
 interface GetRecoveryExecutionRequest {
   Params: {
     executionId: string;
 }
+}
   };
 }
 
+}
 }
 interface ListRecoveryExecutionsRequest {
   Querystring: {
@@ -108,14 +121,17 @@ interface ListRecoveryExecutionsRequest {
     page?: number;
     pageSize?: number;
 }
+}
   };
 }
 
+}
 }
 interface GetRecoveryAnalyticsRequest {
   Querystring: {
     start_date: string;
     end_date: string;
+}
 }
   };
 }

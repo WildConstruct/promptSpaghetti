@@ -4,6 +4,7 @@
  */
 import React from 'react';
 
+}
 interface InviteUserModalProps {
     workspaceId: string;
     workspaceName: string;
@@ -11,6 +12,7 @@ interface InviteUserModalProps {
         userId: string;
         role: string;
 
+}
     }) => void;
     onCancel: () => void;
 

@@ -7,6 +7,7 @@
  */
 import React, { useState, useEffect, useCallback } from 'react';
 import { ComplianceCheckerProps, ComplianceCheck, LegalDocument } from './types';
+}
 interface ComplianceFramework {
   id: string;
   name: string;
@@ -44,6 +45,7 @@ interface ComplianceFramework {
   severity: 'critical',
   keywords: ['consent', 'contract', 'legal obligation', 'vital interests', 'public task', 'legitimate interests'],
   patterns: [/lawful\s+basis/gi, /consent/gi, /data\s+processing/gi],
+}
 }
           {
   id: 'data_subject_rights',

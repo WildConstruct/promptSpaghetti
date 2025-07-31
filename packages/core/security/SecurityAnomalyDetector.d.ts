@@ -9,6 +9,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface AnomalyDetectionConfig {
     enableRealTimeDetection: boolean;
     detectionSensitivity: number;
@@ -21,6 +22,7 @@ export interface AnomalyDetectionConfig {
     escalationRules: EscalationRule[];
 
 
+}
 export interface SecurityAnomaly {
     id: string;
     timestamp: Date;
@@ -63,6 +65,7 @@ export declare enum AnomalySeverity {
     HIGH = "high",
     CRITICAL = "critical"
 
+}
 export interface AnomalyRiskAssessment {
     businessImpact: number;
     securityImpact: number;
@@ -75,6 +78,7 @@ export interface AnomalyRiskAssessment {
     dataExposureRisk: number;
 
 
+}
 export interface SecurityAlert {
     id: string;
     timestamp: Date;
@@ -106,6 +110,7 @@ export declare enum AlertType {
     AVAILABILITY_ALERT = "availability_alert",
     CORRELATION_ALERT = "correlation_alert"
 
+}
 export interface NotificationChannel {
     channelType: 'email' | 'slack' | 'webhook' | 'sms' | 'pagerduty';
     target: string;
@@ -115,6 +120,7 @@ export interface NotificationChannel {
     template?: string;
 
 
+}
 export interface RateLimitConfig {
     maxAlertsPerHour: number;
     maxAlertsPerDay: number;
@@ -122,6 +128,7 @@ export interface RateLimitConfig {
     cooldownPeriod: number;
 
 
+}
 export interface EscalationRule {
     id: string;
     name: string;
@@ -132,12 +139,14 @@ export interface EscalationRule {
     maxEscalationLevel: number;
 
 
+}
 export interface EscalationCondition {
     field: 'severity' | 'anomalyType' | 'businessImpact' | 'affectedSystems';
     operator: 'equals' | 'greater_than' | 'less_than' | 'contains' | 'in';
     value: unknown;
 
 
+}
 export interface MetricBaseline {
     metricName: string;
     systemName: string;
@@ -154,6 +163,7 @@ export interface MetricBaseline {
     trendCoefficient: number;
 
 
+}
 export interface SeasonalPattern {
     period: 'hourly' | 'daily' | 'weekly' | 'monthly';
     pattern: number[];
@@ -161,6 +171,7 @@ export interface SeasonalPattern {
     phase: number;
 
 
+}
 export interface AnomalyDetectionModel {
     modelId: string;
     modelType: DetectionModelType;
@@ -185,6 +196,7 @@ export declare enum DetectionModelType {
     LSTM_AUTOENCODER = "lstm_autoencoder",
     CHANGEPOINT_DETECTION = "changepoint_detection"
 
+}
 export interface SecurityMetric {
     id: string;
     timestamp: Date;
@@ -271,3 +283,4 @@ export declare class SecurityAnomalyDetector extends EventEmitter {
 
 export default SecurityAnomalyDetector;
 //# sourceMappingURL=SecurityAnomalyDetector.d.ts.map
+}

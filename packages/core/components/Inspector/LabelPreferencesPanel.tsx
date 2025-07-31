@@ -13,10 +13,12 @@ import {
   NodeLabelPosition,
   NodeLabelStyle
 } from '../../types/CollaborationTypes';
+}
 interface LabelPreferencesPanelProps {
   onClose?: () => void;
   export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({,)
   onClose
+}
 }) => {
   const { annotations, setLabelPreferences } = useGraphStore();
   const preferences = annotations.labelPreferences;

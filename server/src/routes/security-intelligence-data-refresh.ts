@@ -25,6 +25,7 @@ import { SecurityInsightsAutomationEngine } from '../services/SecurityInsightsAu
 let refreshEngine: SecurityIntelligenceDataRefreshEngine | null = null;
 
 }
+}
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
@@ -34,6 +35,7 @@ interface APIResponse<T = any> {
 }
 
 }
+}
 interface CreateRefreshJobRequest {
   job_configuration: {
     job_name: string;
@@ -41,6 +43,7 @@ interface CreateRefreshJobRequest {
     target_sources?: string[];
     refresh_mode?: 'incremental' | 'full' | 'selective' | 'smart';
     priority_level?: 'low' | 'medium' | 'high' | 'critical';
+}
 }
   };
   quality_requirements?: {
@@ -63,6 +66,7 @@ interface CreateRefreshJobRequest {
 }
 
 }
+}
 interface SchedulePeriodicRefreshRequest {
   schedule_configuration: {
     schedule_name: string;
@@ -71,6 +75,7 @@ interface SchedulePeriodicRefreshRequest {
     refresh_mode?: 'incremental' | 'full' | 'selective' | 'smart';
     priority_level?: 'low' | 'medium' | 'high' | 'critical';
     enabled?: boolean;
+}
 }
   };
   advanced_scheduling?: {
@@ -89,12 +94,14 @@ interface SchedulePeriodicRefreshRequest {
 }
 
 }
+}
 interface EmergencyRefreshRequest {
   emergency_configuration: {
     trigger_reason: string;
     urgency_level: 'high' | 'critical' | 'immediate';
     urgent_sources?: string[];
     scope?: 'targeted' | 'comprehensive' | 'full_system';
+}
 }
   };
   response_parameters?: {
@@ -112,6 +119,7 @@ interface EmergencyRefreshRequest {
 }
 
 }
+}
 interface UpdateRefreshConfigRequest {
   configuration_updates: {
     refresh_automation?: Partial<DataRefreshConfig['refresh_automation']>;
@@ -120,6 +128,7 @@ interface UpdateRefreshConfigRequest {
     analysis_automation?: Partial<DataRefreshConfig['analysis_automation']>;
     performance_monitoring?: Partial<DataRefreshConfig['performance_monitoring']>;
     integration_settings?: Partial<DataRefreshConfig['integration_settings']>;
+}
 }
   };
   validation_settings?: {
@@ -131,6 +140,7 @@ interface UpdateRefreshConfigRequest {
 }
 
 }
+}
 interface GetRefreshStatusRequest {
   status_filters?: {
     job_types?: ('scheduled' | 'triggered' | 'manual' | 'emergency')[];
@@ -139,6 +149,7 @@ interface GetRefreshStatusRequest {
     time_range?: {
       start: number;
       end: number;
+}
 }
     };
   };
@@ -151,6 +162,7 @@ interface GetRefreshStatusRequest {
 }
 
 }
+}
 interface OptimizeRefreshPerformanceRequest {
   optimization_configuration: {
     optimization_scope: 'source_scheduling' | 'resource_allocation' | 'quality_enhancement' | 'comprehensive';
@@ -162,6 +174,7 @@ interface OptimizeRefreshPerformanceRequest {
       availability_windows?: {
         start_hour: number;
         end_hour: number;
+}
 }
       }[];
     };

@@ -22,19 +22,23 @@ import { HealthCheckFramework } from '../admin/HealthCheckFramework';
 
 // Request/Response Type Definitions
 }
+}
 interface CreateDashboardRequest {
   Body: {
     name: string;
     widgets: DashboardWidget[];
     user_id?: string;
 }
+}
   };
 }
 
 }
+}
 interface UpdateDashboardRequest {
   Params: {
     dashboardId: string;
+}
 }
   };
   Body: {
@@ -43,26 +47,32 @@ interface UpdateDashboardRequest {
 }
 
 }
+}
 interface GetDashboardRequest {
   Params: {
     dashboardId: string;
 }
+}
   };
 }
 
+}
 }
 interface DeleteDashboardRequest {
   Params: {
     dashboardId: string;
 }
+}
   };
 }
 
+}
 }
 interface GetWidgetDataRequest {
   Params: {
     dashboardId: string;
     widgetId: string;
+}
 }
   };
   Querystring: {
@@ -72,19 +82,23 @@ interface GetWidgetDataRequest {
 }
 
 }
+}
 interface GetSecurityAnalyticsRequest {
   Querystring: {
     start_time?: string;
     end_time?: string;
     include_predictions?: boolean;
 }
+}
   };
 }
 
 }
+}
 interface ExportDashboardRequest {
   Params: {
     dashboardId: string;
+}
 }
   };
   Querystring: {

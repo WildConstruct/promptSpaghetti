@@ -14,6 +14,7 @@ import { AnalyticsCollector } from '../analytics/AnalyticsCollector';
 import { MetricsCollector } from '../metrics/MetricsCollector';
 import { EventEmitter } from 'events';
 }
+}
 export interface QualityMetricsConfig {
     enabled: boolean;
     collectRealTime: boolean;
@@ -29,6 +30,7 @@ export interface QualityMetricsConfig {
         documentation: boolean;
         buildHealth: boolean;
 }
+}
     };
     cacheEnabled: boolean;
     cacheTTL: number;
@@ -41,11 +43,13 @@ export interface QualityMetricsConfig {
     };
 }
 }
+}
 export interface QualityThresholds {
     testCoverage: {
         minimum: number;
         target: number;
         critical: number;
+}
 }
     };
     codeQuality: {
@@ -70,6 +74,7 @@ export interface QualityThresholds {
     };
 }
 }
+}
 export interface QualityMetrics {
     timestamp: Date;
     overall: OverallQualityScore;
@@ -88,7 +93,9 @@ export interface QualityMetrics {
         lastUpdated: Date;
         version: string;
 }
+}
     };
+}
 }
 }
 export interface OverallQualityScore {
@@ -104,6 +111,7 @@ export interface OverallQualityScore {
         documentation: number;
         buildHealth: number;
 }
+}
     };
     weights: {
         testCoverage: number;
@@ -115,6 +123,7 @@ export interface OverallQualityScore {
     };
 }
 }
+}
 export interface TestCoverageMetrics {
     overall: {
         percentage: number;
@@ -124,6 +133,7 @@ export interface TestCoverageMetrics {
         branchesCovered: number;
         functionsTotal: number;
         functionsCovered: number;
+}
 }
     };
     byPackage: PackageCoverageMetrics[];
@@ -138,12 +148,14 @@ export interface TestCoverageMetrics {
     coverageHotspots: CoverageHotspot[];
 }
 }
+}
 export interface CodeQualityMetrics {
     complexity: {
         average: number;
         maximum: number;
         distribution: ComplexityDistribution;
         highComplexityFiles: string[];
+}
 }
     };
     duplication: {
@@ -171,6 +183,7 @@ export interface CodeQualityMetrics {
     };
 }
 }
+}
 export interface PerformanceQualityMetrics {
     responseTime: {
         average: number;
@@ -178,6 +191,7 @@ export interface PerformanceQualityMetrics {
         p90: number;
         p95: number;
         p99: number;
+}
 }
     };
     throughput: {
@@ -210,6 +224,7 @@ export interface PerformanceQualityMetrics {
     loadTestResults: LoadTestResult[];
 }
 }
+}
 export interface SecurityQualityMetrics {
     vulnerabilities: {
         total: number;
@@ -218,6 +233,7 @@ export interface SecurityQualityMetrics {
         medium: number;
         low: number;
         trends: number[];
+}
 }
     };
     dependencies: {
@@ -243,12 +259,14 @@ export interface SecurityQualityMetrics {
     };
 }
 }
+}
 export interface DocumentationQualityMetrics {
     coverage: {
         apiDocumentation: number;
         codeDocumentation: number;
         userGuides: number;
         overall: number;
+}
 }
     };
     accuracy: {
@@ -269,12 +287,14 @@ export interface DocumentationQualityMetrics {
     };
 }
 }
+}
 export interface BuildHealthMetrics {
     builds: {
         successRate: number;
         averageDuration: number;
         failureReasons: BuildFailureReason[];
         trends: number[];
+}
 }
     };
     tests: {
@@ -297,6 +317,7 @@ export interface BuildHealthMetrics {
     };
 }
 }
+}
 export interface QualityTrends {
     overall: TrendData;
     testCoverage: TrendData;
@@ -308,6 +329,8 @@ export interface QualityTrends {
 }
 }
 }
+}
+}
 export interface TrendData {
     daily: number[];
     weekly: number[];
@@ -315,6 +338,8 @@ export interface TrendData {
     direction: 'improving' | 'stable' | 'degrading';
     velocity: number;
     projection: number;
+}
+}
 }
 }
 }
@@ -333,12 +358,14 @@ export interface QualityRecommendation {
         projectedValue: number;
         confidence: number;
 }
+}
     };
     relatedFiles: string[];
     relatedComponents: string[];
     status: 'new' | 'acknowledged' | 'in_progress' | 'completed' | 'dismissed';
     createdAt: Date;
     updatedAt: Date;
+}
 }
 }
 export interface QualityAlert {
@@ -360,11 +387,15 @@ export interface QualityAlert {
 }
 }
 }
+}
+}
 interface PackageCoverageMetrics {
     name: string;
     percentage: number;
     linesTotal: number;
     linesCovered: number;
+}
+}
 }
 }
 }
@@ -377,12 +408,16 @@ interface ComponentCoverageMetrics {
 }
 }
 }
+}
+}
 interface CoverageHotspot {
     file: string;
     function: string;
     coverage: number;
     importance: 'low' | 'medium' | 'high' | 'critical';
     reason: string;
+}
+}
 }
 }
 }
@@ -395,10 +430,14 @@ interface ComplexityDistribution {
 }
 }
 }
+}
+}
 interface DuplicationBlock {
     lines: number;
     files: string[];
     similarity: number;
+}
+}
 }
 }
 }
@@ -411,6 +450,8 @@ interface FileMaintainability {
 }
 }
 }
+}
+}
 interface LintRuleBreakdown {
     rule: string;
     count: number;
@@ -419,11 +460,15 @@ interface LintRuleBreakdown {
 }
 }
 }
+}
+}
 interface TechnicalDebtBreakdown {
     category: string;
     minutes: number;
     files: string[];
     priority: 'low' | 'medium' | 'high' | 'critical';
+}
+}
 }
 }
 }
@@ -438,6 +483,8 @@ interface LoadTestResult {
 }
 }
 }
+}
+}
 interface LicenseBreakdown {
     license: string;
     count: number;
@@ -446,10 +493,14 @@ interface LicenseBreakdown {
 }
 }
 }
+}
+}
 interface SecurityCategoryBreakdown {
     category: string;
     count: number;
     severity: 'low' | 'medium' | 'high' | 'critical';
+}
+}
 }
 }
 }
@@ -461,11 +512,15 @@ interface ComplianceFrameworkStatus {
 }
 }
 }
+}
+}
 interface ComplianceGap {
     framework: string;
     requirement: string;
     status: 'missing' | 'partial' | 'outdated';
     priority: 'low' | 'medium' | 'high' | 'critical';
+}
+}
 }
 }
 }
@@ -477,11 +532,15 @@ interface BuildFailureReason {
 }
 }
 }
+}
+}
 interface SlowTest {
     name: string;
     duration: number;
     file: string;
     trend: 'improving' | 'stable' | 'degrading';
+}
+}
 }
 }
 }
@@ -493,11 +552,14 @@ interface PipelineStage {
 }
 }
 }
+}
+}
 interface RecommendationAction {
     description: string;
     type: 'code_change' | 'configuration' | 'process' | 'tooling';
     effort: 'low' | 'medium' | 'high';
     automated: boolean;
+}
 }
 }
 export declare class QualityMetricsService extends EventEmitter {

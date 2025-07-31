@@ -12,6 +12,7 @@ import { randomUUID } from 'crypto';
 import { createHash } from 'crypto';
 
 }
+}
 export interface FinancialDataRecord {
   id: string;
   externalId: string;
@@ -58,6 +59,7 @@ export interface FinancialDataRecord {
   updatedAt: Date;
 }
 }
+}
 
 export enum FinancialDataType {
   TRANSACTION = 'transaction',
@@ -70,6 +72,7 @@ export enum FinancialDataType {
   LOAN = 'loan'
 }
 
+}
 }
 export interface DeletionWorkflow {
   id: string;
@@ -92,6 +95,7 @@ export interface DeletionWorkflow {
   createdBy: string;
 }
 }
+}
 
 export enum DeletionTriggerType {
   SCHEDULE = 'schedule',
@@ -101,6 +105,7 @@ export enum DeletionTriggerType {
 }
 
 }
+}
 export interface VerificationStep {
   stepId: string;
   name: string;
@@ -109,7 +114,9 @@ export interface VerificationStep {
   required: boolean;
 }
 }
+}
 
+}
 }
 export interface SafetyCheck {
   checkId: string;
@@ -119,7 +126,9 @@ export interface SafetyCheck {
   blocking: boolean; // If true, deletion is blocked on failure
 }
 }
+}
 
+}
 }
 export interface DeletionExecution {
   id: string;
@@ -145,6 +154,7 @@ export interface DeletionExecution {
   updatedAt: Date;
 }
 }
+}
 
 export enum DeletionExecutionStatus {
   PENDING = 'pending',
@@ -154,6 +164,7 @@ export enum DeletionExecutionStatus {
   CANCELLED = 'cancelled'
 }
 
+}
 }
 export interface ComplianceReport {
   id: string;
@@ -176,6 +187,7 @@ export interface ComplianceReport {
   createdAt: Date;
   updatedAt: Date;
   createdBy: string;
+}
 }
 }
 

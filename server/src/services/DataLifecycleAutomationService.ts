@@ -9,6 +9,7 @@ import { RetentionEnforcementService } from './RetentionEnforcementService';
 import { DataCategory, Jurisdiction } from '../types/DataRetentionPeriods';
 
 }
+}
 export interface DataLifecycleRecord {
   lifecycleId: string;
   dataId: string;
@@ -21,6 +22,7 @@ export interface DataLifecycleRecord {
   automationRules: AutomationRule[];
   createdAt: Date;
   updatedAt: Date;
+}
 }
 }
 
@@ -37,6 +39,7 @@ export enum LifecycleStage {
 }
 
 }
+}
 export interface LifecycleStageRecord {
   stage: LifecycleStage;
   enteredAt: Date;
@@ -47,7 +50,9 @@ export interface LifecycleStageRecord {
   conditions: StageCondition[];
 }
 }
+}
 
+}
 }
 export interface StageTrigger {
   triggerId: string;
@@ -55,6 +60,7 @@ export interface StageTrigger {
   condition: string;
   parameters: Record<string, any>;
   enabled: boolean;
+}
 }
 }
 
@@ -68,6 +74,7 @@ export enum TriggerType {
 }
 
 }
+}
 export interface StageAction {
   actionId: string;
   type: ActionType;
@@ -75,6 +82,7 @@ export interface StageAction {
   executedAt?: Date;
   status: ActionStatus;
   result?: ActionResult;
+}
 }
 }
 
@@ -100,6 +108,7 @@ export enum ActionStatus {
 }
 
 }
+}
 export interface ActionResult {
   success: boolean;
   message: string;
@@ -107,7 +116,9 @@ export interface ActionResult {
   duration: number;
 }
 }
+}
 
+}
 }
 export interface StageCondition {
   conditionId: string;
@@ -115,6 +126,7 @@ export interface StageCondition {
   expression: string;
   required: boolean;
   met: boolean;
+}
 }
 }
 
@@ -128,6 +140,7 @@ export enum ConditionType {
 }
 
 }
+}
 export interface DataLifecycleMetadata {
   classification: DataClassification;
   sensitivity: DataSensitivity;
@@ -138,7 +151,9 @@ export interface DataLifecycleMetadata {
   complianceRequirements: ComplianceRequirement[];
 }
 }
+}
 
+}
 }
 export interface DataClassification {
   primary: string;
@@ -146,6 +161,7 @@ export interface DataClassification {
   confidentiality: ConfidentialityLevel;
   integrity: IntegrityLevel;
   availability: AvailabilityLevel;
+}
 }
 }
 
@@ -185,12 +201,14 @@ export enum BusinessValue {
 }
 
 }
+}
 export interface AccessPattern {
   period: string;
   frequency: number;
   lastAccess: Date;
   accessType: string;
   trend: AccessTrend;
+}
 }
 }
 
@@ -202,12 +220,14 @@ export enum AccessTrend {
 }
 
 }
+}
 export interface DataDependency {
   dependencyId: string;
   type: DependencyType;
   targetId: string;
   relationship: string;
   criticality: CriticalityLevel;
+}
 }
 }
 
@@ -227,6 +247,7 @@ export enum CriticalityLevel {
 }
 
 }
+}
 export interface ComplianceRequirement {
   regulation: string;
   requirement: string;
@@ -234,7 +255,9 @@ export interface ComplianceRequirement {
   lastAssessed: Date;
 }
 }
+}
 
+}
 }
 export interface AutomationRule {
   ruleId: string;
@@ -248,7 +271,9 @@ export interface AutomationRule {
   createdAt: Date;
 }
 }
+}
 
+}
 }
 export interface LifecycleAutomationJob {
   jobId: string;
@@ -261,6 +286,7 @@ export interface LifecycleAutomationJob {
   actionsExecuted: number;
   errors: JobError[];
   configuration: JobConfiguration;
+}
 }
 }
 
@@ -281,6 +307,7 @@ export enum JobStatus {
 }
 
 }
+}
 export interface JobError {
   recordId: string;
   error: string;
@@ -288,7 +315,9 @@ export interface JobError {
   retryCount: number;
 }
 }
+}
 
+}
 }
 export interface JobConfiguration {
   batchSize: number;
@@ -296,6 +325,7 @@ export interface JobConfiguration {
   retryAttempts: number;
   timeoutMinutes: number;
   dryRun: boolean;
+}
 }
 }
 

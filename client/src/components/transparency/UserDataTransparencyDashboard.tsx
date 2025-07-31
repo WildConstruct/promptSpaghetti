@@ -74,6 +74,7 @@ import {
   BarChart3
 } from 'lucide-react';
 
+}
 interface UserDataInventory {
   userId: string;,
   generatedAt: Date;
@@ -106,12 +107,13 @@ interface UserDataInventory {
   interface UserAccessActivity {
   timestamp: Date;,
   activityType: string;
-  actor: {,
+  actor: {
   type: 'USER' | 'SYSTEM' | 'THIRD_PARTY' | 'ADMIN';,
   name: string;
   role?: string;
+}
 };
-  dataAccessed: {,
+  dataAccessed: {
   dataType: string;
   classification: string;,
   operation: string;
@@ -119,27 +121,29 @@ interface UserDataInventory {
 }[];
   purpose: string;,
   riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-  location: {,
+  location: {
   country: string;
   withinEU: boolean;
 };
 
+}
 interface PrivacyScore {
   overall: number;,
-  categories: {,
+  categories: {
   dataMinimization: number;,
   consentHealth: number;
   securityPosture: number;,
   thirdPartyRisk: number;
   retentionCompliance: number;,
   userControl: number;
+}
 };
-  trends: Array<{,
+  trends: Array<{
   metric: string;
   change: number;,
   direction: 'IMPROVING' | 'DEGRADING' | 'STABLE';
 }>;
-  recommendations: Array<{,
+  recommendations: Array<{
   category: string;
   title: string;,
   description: string;

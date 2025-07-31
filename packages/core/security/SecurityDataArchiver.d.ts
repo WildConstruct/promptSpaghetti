@@ -8,6 +8,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface DataPartitionConfig {
     id: string;
     name: string;
@@ -19,6 +20,7 @@ export interface DataPartitionConfig {
             interval: 'hourly' | 'daily' | 'weekly' | 'monthly';
             retention_policy: RetentionPolicy;
             timezone: string;
+}
         };
         size_based?: {
             max_partition_size_gb: number;
@@ -73,23 +75,25 @@ export interface DataPartitionConfig {
     last_updated: number;
     enabled: boolean;
 
+}
 export interface RetentionPolicy {
     id: string;
     name: string;
     description: string;
-    rules: Array<{,
+    rules: Array<{
         condition: string;
         retention_days: number;
         action: 'archive' | 'delete' | 'move_to_cold' | 'compress';
         priority: number;
+}
     }>;
-    compliance_overrides: Array<{,
+    compliance_overrides: Array<{
         regulation: string;
         min_retention_days: number;
         max_retention_days?: number;
         special_handling: string[];
     }>;
-    exceptions: Array<{,
+    exceptions: Array<{
         condition: string;
         retention_extension_days: number;
         reason: string;
@@ -98,6 +102,7 @@ export interface RetentionPolicy {
     created_at: number;
     enabled: boolean;
 
+}
 export interface StorageTier {
     tier_name: 'hot' | 'warm' | 'cold' | 'archive';
     storage_class: string;
@@ -108,6 +113,7 @@ export interface StorageTier {
     durability: number;
     geographic_regions: string[];
 
+}
 export interface ArchivalJob {
     id: string;
     name: string;
@@ -120,6 +126,7 @@ export interface ArchivalJob {
         max_concurrent_operations: number;
         retry_attempts: number;
         timeout_minutes: number;
+}
     };
     schedule: {
         type: 'manual' | 'scheduled' | 'event_triggered';
@@ -156,6 +163,7 @@ export interface ArchivalJob {
     last_updated: number;
     enabled: boolean;
 
+}
 export interface ArchivalExecution {
     id: string;
     job_id: string;
@@ -171,6 +179,7 @@ export interface ArchivalExecution {
         data_volume_gb: number;
         compression_ratio: number;
         dedupe_savings_percentage: number;
+}
     };
     performance: {
         throughput_records_per_second: number;
@@ -180,7 +189,7 @@ export interface ArchivalExecution {
         network_utilization_mbps: number;
         storage_io_operations: number;
     };
-    errors: Array<{,
+    errors: Array<{
         timestamp: number;
         error_type: string;
         error_message: string;
@@ -188,7 +197,7 @@ export interface ArchivalExecution {
         retry_count: number;
         resolution: string;
     }>;
-    quality_checks: Array<{,
+    quality_checks: Array<{
         check_name: string;
         check_type: 'integrity' | 'completeness' | 'format' | 'compliance';
         result: 'passed' | 'failed' | 'warning';
@@ -205,6 +214,7 @@ export interface ArchivalExecution {
     triggered_by: string;
     created_at: number;
 
+}
 export interface DataRetrievalRequest {
     id: string;
     requester: string;
@@ -214,6 +224,7 @@ export interface DataRetrievalRequest {
         time_range: {
             start: number;
             end: number;
+}
         };
         filters: Record<string, any>;
         search_query?: string;
@@ -268,12 +279,14 @@ export interface DataRetrievalRequest {
     created_at: number;
     last_updated: number;
 
+}
 export interface PartitionMetrics {
     id: string;
     partition_config_id: string;
     collection_period: {
         start: number;
         end: number;
+}
     };
     storage: {
         total_partitions: number;
@@ -315,6 +328,7 @@ export interface PartitionMetrics {
     };
     collected_at: number;
 
+}
 export interface ArchivalEvent {
     id: string;
     type: 'partition_created' | 'archival_completed' | 'retrieval_requested' | 'compliance_audit' | 'error_occurred' | 'maintenance_scheduled';
@@ -331,6 +345,7 @@ export interface ArchivalEvent {
         data_volume_gb: number;
         partitions_affected: string[];
         estimated_recovery_time?: number;
+}
     };
     context: {
         triggered_by: string;

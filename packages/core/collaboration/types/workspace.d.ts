@@ -1,12 +1,15 @@
 export interface WorkspaceId extends String {
     readonly __brand: 'WorkspaceId';
 
+}
 export interface ProjectId extends String {
     readonly __brand: 'ProjectId';
 
+}
 export interface UserId extends String {
     readonly __brand: 'UserId';
 
+}
 export interface ResourceId extends String {
     readonly __brand: 'ResourceId';
 
@@ -42,6 +45,7 @@ export declare enum ActivityType {
     USER_LEAVE = "user.leave",
     USER_ROLE_CHANGE = "user.role_change"
 
+}
 export interface Workspace {
     id: WorkspaceId;
     name: string;
@@ -52,6 +56,7 @@ export interface Workspace {
     created_by: UserId;
     is_active: boolean;
 
+}
 export interface WorkspaceSettings {
     visibility: 'private' | 'internal' | 'public';
     features: {
@@ -60,6 +65,7 @@ export interface WorkspaceSettings {
         comments: boolean;
         notifications: boolean;
         integrations: boolean;
+}
     };
     limits: {
         max_projects: number;
@@ -72,6 +78,7 @@ export interface WorkspaceSettings {
         default_project_visibility: 'private' | 'workspace' | 'public'
   };
 
+}
 export interface Project {
     id: ProjectId;
     workspace_id: WorkspaceId;
@@ -84,6 +91,7 @@ export interface Project {
     is_active: boolean;
     last_activity_at: Date;
 
+}
 export interface ProjectSettings {
     visibility: 'private' | 'workspace' | 'public';
     features: {
@@ -91,6 +99,7 @@ export interface ProjectSettings {
         version_control: boolean;
         real_time_sync: boolean;
         notifications: boolean;
+}
     };
     collaboration: {
         max_concurrent_editors: number;
@@ -98,6 +107,7 @@ export interface ProjectSettings {
         presence_timeout_ms: number;
     };
 
+}
 export interface Resource {
     id: ResourceId;
     project_id: ProjectId;
@@ -111,6 +121,7 @@ export interface Resource {
     is_active: boolean;
     version: number;
 
+}
 export interface ResourceMetadata {
     size_bytes: number;
     mime_type?: string;
@@ -118,6 +129,7 @@ export interface ResourceMetadata {
     tags: string[];
     custom_properties: Record<string, any>;
 
+}
 export interface WorkspaceMember {
     workspace_id: WorkspaceId;
     user_id: UserId;
@@ -127,6 +139,7 @@ export interface WorkspaceMember {
     is_active: boolean;
     last_activity_at: Date;
 
+}
 export interface ProjectMember {
     project_id: ProjectId;
     user_id: UserId;
@@ -136,6 +149,7 @@ export interface ProjectMember {
     is_active: boolean;
     last_activity_at: Date;
 
+}
 export interface ActivityEvent {
     id: string;
     workspace_id: WorkspaceId;
@@ -147,6 +161,7 @@ export interface ActivityEvent {
     metadata: ActivityMetadata;
     created_at: Date;
 
+}
 export interface ActivityDetails {
     action: string;
     target_type: string;
@@ -154,15 +169,18 @@ export interface ActivityDetails {
     changes?: Record<string, {
         from: any;
         to: any;
+}
     }>;
     description?: string;
 
+}
 export interface ActivityMetadata {
     user_agent?: string;
     ip_address?: string;
     session_id?: string;
     request_id?: string;
 
+}
 export interface Comment {
     id: string;
     workspace_id: WorkspaceId;
@@ -176,6 +194,7 @@ export interface Comment {
     updated_at: Date;
     is_active: boolean;
 
+}
 export interface CommentMetadata {
     mentions: UserId[];
     attachments: string[];
@@ -184,6 +203,7 @@ export interface CommentMetadata {
     resolved_by?: UserId;
     resolved_at?: Date;
 
+}
 export interface Notification {
     id: string;
     user_id: UserId;
@@ -206,6 +226,7 @@ export declare enum NotificationType {
     ROLE_CHANGED = "role.changed",
     ACTIVITY_DIGEST = "activity.digest"
 
+}
 export interface NotificationData {
     action_url?: string;
     actor_user_id?: UserId;
@@ -213,6 +234,7 @@ export interface NotificationData {
     target_id?: string;
     metadata?: Record<string, any>;
 
+}
 export interface WorkspaceOperations {
     createWorkspace(data: Omit<Workspace, 'id' | 'created_at' | 'updated_at'>): Promise<Workspace>;
     getWorkspace(id: WorkspaceId): Promise<Workspace | null>;
@@ -253,3 +275,4 @@ export interface WorkspaceOperations {
     markNotificationRead(id: string): Promise<void>;
 
 //# sourceMappingURL=workspace.d.ts.map
+}

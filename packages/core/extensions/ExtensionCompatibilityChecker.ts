@@ -21,8 +21,7 @@ export class ExtensionCompatibilityChecker {
   /**
   * Comprehensive compatibility check
   */
-  public checkExtensionCompatibility(()
-  extension: ExtensionManifest,
+  public checkExtensionCompatibility((extension: ExtensionManifest,
   context: CompatibilityContext): ExtensionCompatibilityResult {,
   const result: ExtensionCompatibilityResult = {,
   compatible: true,
@@ -437,12 +436,15 @@ export class ExtensionCompatibilityChecker {
 
 // Types and Interfaces
 
+}
 export interface CompatibilityContext {
   systemVersion: string;
   platform: string;
   availableExtensions: Map<string, ExtensionManifest>;
   grantedPermissions: string;
   browserInfo?: Record<string, string>;
+}
+}
 }
 export interface ExtensionCompatibilityResult {
   compatible: boolean;
@@ -465,7 +467,9 @@ export interface ExtensionCompatibilityResult {
   check: (extension: ExtensionManifest) => {,
   compatible: boolean;
   issues: CompatibilityIssue;
+}
 };
+}
 interface PlatformFeature {
   id: string;
   name: string;
@@ -477,5 +481,6 @@ interface PlatformFeature {
   version: string;
   platform: string;
   // Export singleton
+}
 }
 export const extensionCompatibilityChecker = ExtensionCompatibilityChecker.getInstance();

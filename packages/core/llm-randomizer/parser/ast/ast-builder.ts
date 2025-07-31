@@ -3,10 +3,13 @@
 // AST construction from lexer tokens
 import { Token, TokenType, LexerPosition } from '../lexer/graph-lexer';
 
+}
 export interface ASTNode {
   type: string;
   position: LexerPosition;
   children?: ASTNode;
+}
+}
 }
 export interface GraphAST extends ASTNode {
   type: 'Graph';
@@ -40,6 +43,7 @@ export interface GraphAST extends ASTNode {
   position: LexerPosition;
   severity: 'error' | 'warning';
   suggestion?: string;
+}
 }
 export class ASTBuilder {
   private tokens: Token;

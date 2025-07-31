@@ -19,6 +19,7 @@ import {
 
 // Request/Response Types
 }
+}
 interface CreatePermissionRequest {
   name: string;
   description?: string;
@@ -29,7 +30,9 @@ interface CreatePermissionRequest {
   conditions?: any[];
 }
 }
+}
 
+}
 }
 interface AssignPermissionRequest {
   userId: string;
@@ -42,6 +45,7 @@ interface AssignPermissionRequest {
     apiKeyId?: string;
     resourceId?: string;
 }
+}
   };
   conditions?: any[];
   reason: string;
@@ -49,11 +53,14 @@ interface AssignPermissionRequest {
 }
 
 }
+}
 interface RevokePermissionRequest {
   reason: string;
 }
 }
+}
 
+}
 }
 interface CreateRoleRequest {
   name: string;
@@ -63,7 +70,9 @@ interface CreateRoleRequest {
   scope: ApiPermissionScope;
 }
 }
+}
 
+}
 }
 interface AssignRoleRequest {
   userId: string;
@@ -74,10 +83,12 @@ interface AssignRoleRequest {
     teamId?: string;
     resourceId?: string;
 }
+}
   };
   reason: string;
 }
 
+}
 }
 interface CheckPermissionRequest {
   userId: string;
@@ -92,9 +103,11 @@ interface CheckPermissionRequest {
     resourceId?: string;
     metadata?: Record<string, any>;
 }
+}
   };
 }
 
+}
 }
 interface GetPermissionsQuery {
   type?: ApiPermissionType;
@@ -105,7 +118,9 @@ interface GetPermissionsQuery {
   limit?: number;
 }
 }
+}
 
+}
 }
 interface GetAssignmentsQuery {
   userId?: string;
@@ -117,7 +132,9 @@ interface GetAssignmentsQuery {
   limit?: number;
 }
 }
+}
 
+}
 }
 interface GetAnalyticsQuery {
   startDate: string;
@@ -125,6 +142,7 @@ interface GetAnalyticsQuery {
   userId?: string;
   type?: ApiPermissionType;
   includeDetails?: boolean;
+}
 }
 }
 

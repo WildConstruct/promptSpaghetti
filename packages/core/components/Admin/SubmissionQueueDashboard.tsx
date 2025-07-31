@@ -40,6 +40,7 @@ import {
 
 // Types extending existing submission system
 
+}
 export interface QueueSubmission {
   id: string;
   template_id: string;
@@ -56,6 +57,7 @@ export interface QueueSubmission {
     price_cents: number;
     is_ai_generated?: boolean;
     intended_use_cases: string[];
+}
   };
   validation_results: ValidationResult[];
   submitted_at: Date;
@@ -66,6 +68,7 @@ export interface QueueSubmission {
   complexity_score?: number; // 1-10
 }
 
+}
 export interface ValidationResult {
   rule_id: string;
   severity: 'error' | 'warning' | 'info';
@@ -74,7 +77,9 @@ export interface ValidationResult {
   field?: string;
   auto_fixable: boolean;
 }
+}
 
+}
 export interface QueueMetrics {
   total_pending: number;
   total_under_review: number;
@@ -89,9 +94,11 @@ export interface QueueMetrics {
     active_reviews: number;
     completed_today: number;
     average_review_time: number;
+}
   }>;
 }
 
+}
 export interface QueueFilters {
   status?: string;
   priority?: string;
@@ -107,6 +114,7 @@ export interface QueueFilters {
   sort_order: 'asc' | 'desc';
   page: number;
   limit: number;
+}
 }
 
 const SubmissionQueueDashboard: React.FC = () => {

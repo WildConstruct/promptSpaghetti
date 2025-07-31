@@ -14,6 +14,7 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { Node, Edge } from 'reactflow';
 import { RealTimePreviewIntegration } from '../RealTimePreview/RealTimePreviewIntegration';
 import { PreviewVariant } from '../../hooks/useRealTimePreview';
+}
 interface DirectorPreviewToolbarProps {
   nodes: Node;
   edges: Edge;
@@ -33,6 +34,7 @@ interface DirectorPreviewToolbarProps {
   onHighlightPath,
   className = '',
   compactMode = false
+}
 }) => {
   // State for director controls
   const [realTimeEnabled, setRealTimeEnabled] = useState(true);

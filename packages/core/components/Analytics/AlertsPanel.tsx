@@ -25,6 +25,7 @@ const ALERT_TYPE_ICONS = {
 /**
  * Alert item props
  */
+}
 interface AlertItemProps {
   alert: unknown;
   onAcknowledge: (alertId: string) => void;
@@ -32,6 +33,7 @@ interface AlertItemProps {
 /**
  * Alert item component
  */
+}
 const AlertItem: React.FC<AlertItemProps> = ({ alert, onAcknowledge, onDismiss }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -140,6 +142,7 @@ const AlertItem: React.FC<AlertItemProps> = ({ alert, onAcknowledge, onDismiss }
 /**
  * Alert summary card props
  */
+}
 interface AlertSummaryProps {
   alerts: unknown;
   title: string;
@@ -148,6 +151,7 @@ interface AlertSummaryProps {
 /**
  * Alert summary card component
  */
+}
 const AlertSummaryCard: React.FC<AlertSummaryProps> = ({ alerts, title, icon, color }) => {
   return;
     <Card>
@@ -177,6 +181,7 @@ const AlertSummaryCard: React.FC<AlertSummaryProps> = ({ alerts, title, icon, co
  * Alerts panel props
  */
 
+}
 export interface AlertsPanelProps {
   alerts: unknown;
   onAcknowledge: (alertId: string) => void;
@@ -186,6 +191,7 @@ export interface AlertsPanelProps {
   /**
   * Alerts panel component
   */
+}
 }
 export const AlertsPanel: React.FC<AlertsPanelProps> = ({)
   alerts,

@@ -21,6 +21,7 @@ export type IODataType =
  * Input/Output port definition for advanced nodes
  */
 
+}
 export interface IOPortDefinition {
   /** Unique identifier for this port */
   id: string;
@@ -42,6 +43,8 @@ export interface IOPortDefinition {
   * Validation constraints for I/O ports
   */
 }
+}
+}
 export interface IOConstraints {
   /** Minimum value (for numbers) */
   min?: number;
@@ -61,6 +64,8 @@ export interface IOConstraints {
   * Input/Output port specification for a node type
   */
 }
+}
+}
 export interface IOSpec {
   /** Input port definitions */
   inputs: IOPortDefinition;
@@ -69,6 +74,8 @@ export interface IOSpec {
   /**
   * Resolved input values for node execution
   */
+}
+}
 }
 export interface ResolvedInputs {
   /** Direct input values by port ID */
@@ -79,6 +86,8 @@ export interface ResolvedInputs {
   * Metadata about how an input was resolved
   */
 }
+}
+}
 export interface IOResolutionMetadata {
   /** Whether the value came from a connection or default */
   source: 'connection' | 'default' | 'computed';
@@ -88,6 +97,7 @@ export interface IOResolutionMetadata {
   typeCoercion?: {
   from: IODataType;
   to: IODataType;
+}
 };
   /** Validation warnings */
   warnings: string;
@@ -192,7 +202,7 @@ export class AdvancedIOHandler {
     const warnings: string = [];
     // Type validation
     if (!this.isValidType(value, portDef.dataType)) {
-      errors.push()
+      errors.push(
         `Invalid type for ${portDef.label}: expected ${portDef.dataType}, got ${typeof value}`}
       );
       return { valid: false, errors, warnings };
@@ -273,9 +283,9 @@ export class AdvancedIOHandler {
   /**
    * Coerce value to target data type with warnings
    */
-  private coerceValue(()
+  private coerceValue(((
     value: unknown,
-    targetType: IODataType,
+    targetType: IODataType
   ): { 
     value: unknown; 
     coercion?: { from: IODataType; to: IODataType }; 
@@ -441,9 +451,9 @@ export class IOSpecBuilder {
   /**
    * Create a basic single-input, single-output spec
    */
-  static createSimple(()
+  static createSimple(((
     inputLabel: string = 'Input',
-    outputLabel: string = 'Output',
+    outputLabel: string = 'Output'
   ): IOSpec {
     return new IOSpecBuilder()
       .addTextInput('input', inputLabel, false, '')
@@ -452,9 +462,9 @@ export class IOSpecBuilder {
   /**
    * Create a multi-input, single-output spec
    */
-  static createMultiInput(()
+  static createMultiInput(((
     inputLabels: string,
-    outputLabel: string = 'Output',
+    outputLabel: string = 'Output'
   ): IOSpec {
     const builder = new IOSpecBuilder();
     inputLabels.forEach((label, index) => {

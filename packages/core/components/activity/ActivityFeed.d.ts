@@ -4,6 +4,7 @@
  */
 import React from 'react';
 
+}
 interface ActivityFeedProps {
     workspaceId: string;
     userId: string;
@@ -16,3 +17,4 @@ interface ActivityFeedProps {
 export declare const ActivityFeed: React.FC<ActivityFeedProps>;
 export default ActivityFeed;
 //# sourceMappingURL=ActivityFeed.d.ts.map
+}

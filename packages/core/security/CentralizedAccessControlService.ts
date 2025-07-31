@@ -42,6 +42,7 @@ import {
 } from './DelegationInheritanceRules';
 import { DataClassifier, ClassificationResult } from './DataClassifier';
 
+}
 export interface AccessControlConfig {
   enableRBAC: boolean;
   enableABAC: boolean;
@@ -54,7 +55,9 @@ export interface AccessControlConfig {
   strictCompliance: boolean;
   emergencyBypass: boolean;
   performanceMode: 'HIGH_SECURITY' | 'BALANCED' | 'HIGH_PERFORMANCE'
+}
   }
+}
 export interface AccessControlMetrics {
   totalRequests: number;
   approvedRequests: number;
@@ -68,11 +71,15 @@ export interface AccessControlMetrics {
   emergencyAccess: number;
   complianceViolations: number;
 }
+}
+}
 export interface CacheEntry {
   decision: AccessDecision;
   timestamp: Date;
   ttl: number;
   requestHash: string;
+}
+}
 }
 export interface AuditLogEntry {
   id: string;
@@ -91,6 +98,8 @@ export interface AuditLogEntry {
   decisionTime: number;
   metadata: Record<string, any>;
 }
+}
+}
 export interface SecurityAlert {
   id: string;
   type: 'UNAUTHORIZED_ACCESS' | 'POLICY_VIOLATION' | 'ANOMALOUS_BEHAVIOR' | 'DELEGATION_ABUSE' | 'EMERGENCY_ACCESS';
@@ -105,6 +114,7 @@ export interface SecurityAlert {
   /**
   * Main Access Control Service Implementation
   */
+}
 }
 export class CentralizedAccessControlService extends EventEmitter {
   private config: AccessControlConfig;
@@ -195,17 +205,20 @@ export class CentralizedAccessControlService extends EventEmitter {
    * Evaluate RBAC decision
    */
   public async evaluateRBAC(request: AccessRequest): Promise<RBACDecision> {
+
     const effectivePermissions = await this.getEffectivePermissions(request.subject);
     return this.rbacEngine.evaluate(request, effectivePermissions);
   /**
    * Evaluate ABAC decision
    */
   public async evaluateABAC(request: AccessRequest): Promise<ABACDecision> {
+
     return this.abacEngine.evaluate(request);
   /**
    * Get effective permissions including delegation and inheritance
    */
   public async getEffectivePermissions(subject: SubjectAttributes): Promise<EffectivePermissions> {
+
     if (!this.config.enableDelegation && !this.config.enableInheritance) {
       // Return basic permissions based on roles
       return this.getBasicPermissions(subject);
@@ -267,6 +280,7 @@ export class CentralizedAccessControlService extends EventEmitter {
    * Validate access request
    */
   private async validateRequest(request: AccessRequest): Promise<{ valid: boolean; reason?: string }> {
+
     // Validate required fields
     if (!request.subject || !request.object || !request.action) {
       return { valid: false, reason: 'Missing required request fields' };
@@ -309,6 +323,7 @@ export class CentralizedAccessControlService extends EventEmitter {
    * Handle emergency access with special procedures
    */
   private async handleEmergencyAccess(request: AccessRequest): Promise<AccessDecision> {
+
     // Emergency access requires additional logging and monitoring
     const decision = this.createDecision('PERMIT', 'Emergency access granted', request);
     // Add emergency obligations
@@ -341,6 +356,7 @@ export class CentralizedAccessControlService extends EventEmitter {
    * Get basic permissions without delegation/inheritance
    */
   private async getBasicPermissions(subject: SubjectAttributes): Promise<EffectivePermissions> {
+
   const permissions: string = [];
   const constraints: RoleConstraint = [];
   // Get permissions from roles
@@ -504,10 +520,11 @@ export class CentralizedAccessControlService extends EventEmitter {
   /**
    * Check compliance requirements
    */
-  private async checkCompliance(()
+  private async checkCompliance(((
     request: AccessRequest,
-    decision: 'PERMIT' | 'DENY' | 'INDETERMINATE',
+    decision: 'PERMIT' | 'DENY' | 'INDETERMINATE'
   ): Promise<{ compliant: boolean; reason?: string }> {
+
     // Check time-based restrictions
     if (request.object.classification === 'RESTRICTED') {
       const currentHour = new Date().getHours();
@@ -528,9 +545,9 @@ export class CentralizedAccessControlService extends EventEmitter {
   /**
    * Calculate risk level for the access request
    */
-  private calculateRiskLevel(()
+  private calculateRiskLevel(((
     request: AccessRequest,
-    effectivePermissions: EffectivePermissions,
+    effectivePermissions: EffectivePermissions
   ): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' {
   let riskScore = 0;
   // Classification-based risk
@@ -588,6 +605,7 @@ export class CentralizedAccessControlService extends EventEmitter {
    * Send notification based on obligation
    */
   private async sendNotification(obligation: PolicyObligation): Promise<void> {
+
   // Implementation would integrate with notification service
   this.emit('notification', {)
   type: obligation.action,
@@ -598,6 +616,7 @@ export class CentralizedAccessControlService extends EventEmitter {
    * Enforce encryption obligation
    */
   private async enforceEncryption(obligation: PolicyObligation): Promise<void> {
+
   // Implementation would integrate with encryption service
   this.emit('encryptionRequired', {)
   action: obligation.action,
@@ -608,6 +627,7 @@ export class CentralizedAccessControlService extends EventEmitter {
    * Setup monitoring based on obligation
    */
   private async setupMonitoring(obligation: PolicyObligation): Promise<void> {
+
   // Implementation would configure monitoring
   this.emit('monitoringSetup', {)
   action: obligation.action,
@@ -849,10 +869,11 @@ export class CentralizedAccessControlService extends EventEmitter {
  * RBAC Engine Implementation
  */
 class RBACEngine {
-  public async evaluate(()
+  public async evaluate(((
     request: AccessRequest,
-    effectivePermissions: EffectivePermissions,
+    effectivePermissions: EffectivePermissions
   ): Promise<RBACDecision> {
+
     const matchedRoles: string = [];
     const matchedPermissions: string = [];
     const denialReasons: string = [];

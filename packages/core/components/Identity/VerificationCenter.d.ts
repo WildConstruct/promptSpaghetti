@@ -5,6 +5,7 @@
  */
 import React from 'react';
 
+}
 export interface VerificationCenterProps {
     userId: string;
     onVerificationComplete?: (type: string) => void;
@@ -13,3 +14,4 @@ export interface VerificationCenterProps {
 export declare const VerificationCenter: React.FC<VerificationCenterProps>;
 export default VerificationCenter;
 //# sourceMappingURL=VerificationCenter.d.ts.map
+}

@@ -33,6 +33,7 @@ export class WildConstructVFXExporter implements VFXExporter {
 },
   options: VFXExportOptions = { quality: 'production' }
   ): Promise<VFXExportFormat> {
+
   const exportId = this.generateExportId();
   const timestamp = new Date().toISOString();
   // Build export data structure
@@ -277,9 +278,9 @@ export class WildConstructVFXExporter implements VFXExporter {
       // Find the dependency with the highest execution time
       currentNode = nodes.find(n => n.id === dependencies[0]) || null;
     return criticalPath;
-  private analyzeComplexity(()
+  private analyzeComplexity(((
     nodes: VFXGraphNode,
-    connections: VFXGraphConnection,
+    connections: VFXGraphConnection
   ): 'simple' | 'moderate' | 'complex' {
     const nodeCount = nodes.length;
     const connectionCount = connections.length;
@@ -670,7 +671,7 @@ This export is ready for integration into VFX pipelines and supports Wild Constr
   platform: process.platform,
 };
     if (reproduction.environment.nodeVersion !== currentEnv.nodeVersion) {
-      issues.push()
+      issues.push(
         `Node.js version mismatch: export ${reproduction.environment.nodeVersion}
 }
         current ${currentEnv.nodeVersion}`}

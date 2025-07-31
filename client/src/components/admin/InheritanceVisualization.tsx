@@ -14,6 +14,7 @@ import {
   AssignmentStatus
 } from '../../types/PolicyAssignmentTypes';
 import './InheritanceVisualization.css';
+}
 interface InheritanceVisualizationProps {
   assignments: PolicyAssignment;
   interface InheritanceNode {
@@ -38,6 +39,7 @@ interface InheritanceVisualizationProps {
   layout: 'tree' | 'radial' | 'force';
   export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> = ({,)
   assignments
+}
 }) => {
   const [inheritanceTree, setInheritanceTree] = useState<InheritanceNode>([]);
   const [selectedNode, setSelectedNode] = useState<InheritanceNode | null>(null);
@@ -255,7 +257,7 @@ interface InheritanceVisualizationProps {
       nodes.forEach(node => {)
   node.children.forEach(child => {)
   const strokeColor = getInheritanceColor(child.inheritanceType);
-          connections.push()
+          connections.push(
             <line
               key={`${node.id}-${child.id}`}
               x1={node.x}
@@ -282,7 +284,7 @@ interface InheritanceVisualizationProps {
   const isSelected = selectedNode === node;
         const isHovered = hoveredNode === node;
         const nodeColor = getTargetTypeColor(node.targetType);
-        nodes.push()
+        nodes.push(
           <g
             key={node.id}
             transform={`translate(${node.x}, ${node.y})`}

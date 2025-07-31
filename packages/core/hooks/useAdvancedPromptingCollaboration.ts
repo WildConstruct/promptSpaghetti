@@ -14,6 +14,7 @@ import {
   FilmIndustryRole
 } from '../services/AdvancedPromptingCollaborationService';
 
+}
 export interface AdvancedCollaborationConfig {
   enableRealTimeSync: boolean;
   enableMARSRegions: boolean;
@@ -21,6 +22,8 @@ export interface AdvancedCollaborationConfig {
   enableVFXExport: boolean;
   autoSaveInterval: number; // seconds,
   maxCollaborators: number;
+}
+}
 }
 export interface AdvancedCollaborationState {
   collaborationService: AdvancedPromptingCollaborationService | null;
@@ -30,6 +33,8 @@ export interface AdvancedCollaborationState {
   connectedUsers: FilmIndustryUser;
   isConnected: boolean;
   lastSync: Date | null;
+}
+}
 }
 export interface AdvancedCollaborationActions {
   initializeCollaboration: (user: FilmIndustryUser, config?: Partial<AdvancedCollaborationConfig>) => Promise<void>;
@@ -50,6 +55,7 @@ export interface AdvancedCollaborationActions {
   enableVFXExport: true,
   autoSaveInterval: 30,
   maxCollaborators: 10,
+}
 };
 /**
  * Advanced Prompting Collaboration Hook

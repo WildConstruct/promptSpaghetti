@@ -17,6 +17,7 @@ import {
 } from 'recharts';
 import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../../config/environment';
+}
 interface CreatorStats {
   total_templates: number;,
   active_templates: number;
@@ -42,14 +43,16 @@ interface CreatorStats {
   payout_threshold_cents: number;,
   payout_schedule: 'weekly' | 'monthly';
   payment_method: 'stripe' | 'paypal' | 'bank_transfer';,
-  tax_settings: {,
+  tax_settings: {
   tax_id?: string;
   business_name?: string;
   address: string;,
   city: string;
   country: string;,
   tax_exempt: boolean;
+}
 };
+}
 interface CreatorProfile {
   id: string;,
   display_name: string;
@@ -69,6 +72,7 @@ interface CreatorProfile {
   const [dateRange, setDateRange] = useState({)
   start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
   end: new Date().toISOString().split('T')[0],
+}
 });
   const navigate = useNavigate();
   const getAuthHeaders = useCallback(() => {

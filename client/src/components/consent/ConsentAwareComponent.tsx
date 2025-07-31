@@ -16,9 +16,11 @@ import { ConsentType } from '../../types/consent';
 
 // Example 1: Analytics Dashboard - requires analytics consent
 
+}
 interface AnalyticsDashboardProps {
   data?: unknown;
 
+}
   const { promptForConsent } = useConsentPrompt();
   const [isLoading, setIsLoading] = useState(false);
   const handleViewAnalytics = async () => {

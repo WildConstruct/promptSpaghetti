@@ -8,6 +8,7 @@
  */
 import React, { useState } from 'react';
 import { ShareConfig, ShareLink, SocialPlatform } from '../../types/sharingTypes';
+}
 interface SharePreviewProps {
   shareConfig: ShareConfig;
   shareLink: ShareLink;
@@ -16,6 +17,7 @@ interface SharePreviewProps {
   shareConfig,
   shareLink,
   selectedPlatform = 'opengraph'
+}
 }) => {
   const [activePreview, setActivePreview] = useState<string>(selectedPlatform);
   const previewOptions = [;

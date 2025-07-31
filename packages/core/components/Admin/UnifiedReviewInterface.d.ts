@@ -6,6 +6,7 @@
  */
 import React from 'react';
 
+}
 export interface ReviewItem {
     id: string;
     type: 'template_submission' | 'verification_request' | 'policy_violation' | 'content_appeal' | 'marketplace_listing';
@@ -20,6 +21,7 @@ export interface ReviewItem {
         avatar_url?: string;
         tier: string;
         reputation_score?: number;
+}
     };
     created_at: Date;
     updated_at: Date;
@@ -58,6 +60,7 @@ export interface ReviewItem {
         appeal_deadline: Date;
     };
 
+}
 export interface ValidationResult {
     rule_id: string;
     severity: 'error' | 'warning' | 'info';
@@ -67,6 +70,7 @@ export interface ValidationResult {
     auto_fixable: boolean;
     suggestions?: string[];
 
+}
 export interface ReviewFeedback {
     category: 'content' | 'quality' | 'compliance' | 'usability' | 'technical';
     rating: number;
@@ -74,6 +78,7 @@ export interface ReviewFeedback {
     suggestions: string[];
     is_blocking: boolean;
 
+}
 export interface DocumentData {
     id: string;
     type: 'image' | 'pdf' | 'document' | 'video' | 'audio';
@@ -85,11 +90,13 @@ export interface DocumentData {
         dimensions?: {
             width: number;
             height: number;
+}
         };
         duration?: number;
         quality?: 'low' | 'medium' | 'high'
   };
 
+}
 export interface VerificationCriterion {
     id: string;
     name: string;
@@ -100,6 +107,7 @@ export interface VerificationCriterion {
     automated_result?: unknown;
     manual_override?: boolean;
 
+}
 export interface Evidence {
     id: string;
     type: 'screenshot' | 'log' | 'report' | 'document';
@@ -108,6 +116,7 @@ export interface Evidence {
     timestamp: Date;
     confidence_score?: number;
 
+}
 export interface ReviewDecision {
     decision: 'approved' | 'rejected' | 'changes_requested';
     overall_score: number;
@@ -119,8 +128,10 @@ export interface ReviewDecision {
     conditional_approval?: {
         conditions: string[];
         deadline: Date;
+}
     };
 
+}
 export interface UnifiedReviewInterfaceProps {
     reviewItem: ReviewItem;
     onDecision: (decision: ReviewDecision) => void;
@@ -131,3 +142,4 @@ export interface UnifiedReviewInterfaceProps {
 declare const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps>;
 export default UnifiedReviewInterface;
 //# sourceMappingURL=UnifiedReviewInterface.d.ts.map
+}

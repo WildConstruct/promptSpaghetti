@@ -13,6 +13,7 @@ import {
   STICKY_NOTE_CONSTRAINTS,
   StickyNoteAction
 } from '../../types/CollaborationTypes';
+}
 interface StickyNoteProps {
   note: StickyNoteType;
   onAction: (action: StickyNoteAction) => void;
@@ -31,6 +32,7 @@ interface StickyNoteProps {
   canDelete = true,
   canMove = true,
   canResize = true
+}
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);

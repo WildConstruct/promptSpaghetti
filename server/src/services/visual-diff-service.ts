@@ -16,10 +16,12 @@ import {
 } from '../database/comparison-models.js';
 
 }
+}
 export interface VisualDiffServiceOptions {
   comparisonConfig?: Partial<ComparisonConfig>;
   enableCaching?: boolean;
   maxCacheSize?: number;
+}
 }
 }
 

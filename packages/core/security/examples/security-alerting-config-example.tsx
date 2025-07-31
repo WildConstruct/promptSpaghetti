@@ -65,6 +65,7 @@ const DEFAULT_SECURITY_CONFIG: SecurityAlertingConfig = {,
   cooldownPeriod: 900000, // 15 minutes,
   emergencyOverride: false,
 };
+}
 interface SecurityConfigurationPageProps {
   userRole: 'admin' | 'security_admin' | 'security_analyst';
   userId: string;
@@ -78,6 +79,7 @@ interface SecurityConfigurationPageProps {
   userId,
   organizationId,
   theme = 'cinema'
+}
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

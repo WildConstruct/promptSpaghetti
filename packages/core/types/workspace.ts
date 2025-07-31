@@ -5,6 +5,7 @@
 
 // Core workspace types
 
+}
 export interface Workspace {
   id: string;
   owner_id: string;
@@ -15,16 +16,22 @@ export interface Workspace {
   updated_at: Date;
   archived_at?: Date | null;
 }
+}
+}
 export interface CreateWorkspace {
   name: string;
   description?: string;
   settings?: Record<string, any>;
+}
+}
 }
 export interface UpdateWorkspace {
   name?: string;
   description?: string;
   settings?: Record<string, any>;
   // Project types
+}
+}
 }
 export interface Project {
   id: string;
@@ -37,11 +44,15 @@ export interface Project {
   created_at: Date;
   updated_at: Date;
 }
+}
+}
 export interface CreateProject {
   workspace_id: string;
   name: string;
   description?: string;
   metadata?: Record<string, any>;
+}
+}
 }
 export interface UpdateProject {
   name?: string;
@@ -49,6 +60,8 @@ export interface UpdateProject {
   status?: Project['status'];
   metadata?: Record<string, any>;
   // Resource types
+}
+}
 }
 export interface Resource {
   id: string;
@@ -66,6 +79,8 @@ export interface Resource {
   created_at: Date;
   updated_at: Date;
 }
+}
+}
 export interface CreateResource {
   project_id: string;
   name: string;
@@ -78,6 +93,8 @@ export interface CreateResource {
   checksum?: string;
   // Permission and role types
 }
+}
+}
 export interface ACLRole {
   id: string;
   workspace_id: string;
@@ -87,6 +104,8 @@ export interface ACLRole {
   is_system_role: boolean;
   created_at: Date;
   updated_at: Date;
+}
+}
 }
 export interface UserMembership {
   id: string;
@@ -98,6 +117,8 @@ export interface UserMembership {
   last_active_at: Date;
   // Activity and notifications
 }
+}
+}
 export interface ActivityEvent {
   id: string;
   workspace_id: string;
@@ -108,6 +129,8 @@ export interface ActivityEvent {
   event_data: Record<string, any>;
   aggregation_key?: string;
   created_at: Date;
+}
+}
 }
 export interface Comment {
   id: string;
@@ -125,6 +148,8 @@ export interface Comment {
   created_at: Date;
   updated_at: Date;
 }
+}
+}
 export interface CreateComment {
   resource_id: string;
   parent_id?: string;
@@ -133,9 +158,13 @@ export interface CreateComment {
   target_type?: Comment['target_type'];
   target_data?: Record<string, any>;
 }
+}
+}
 export interface UpdateComment {
   content_markdown?: string;
   status?: Comment['status'];
+}
+}
 }
 export interface Notification {
   id: string;
@@ -151,6 +180,8 @@ export interface Notification {
   read_at?: Date;
   delivered_at: Date;
   // Extended types with additional data
+}
+}
 }
 export interface WorkspaceWithMembership extends Workspace {
   membership?: UserMembership;
@@ -175,6 +206,8 @@ export interface WorkspaceWithMembership extends Workspace {
   has_next: boolean;
   has_prev: boolean;
 }
+}
+}
 export interface PaginatedResponse<T> {
   data: T;
   pagination: PaginationMeta;
@@ -183,10 +216,14 @@ export interface PaginatedResponse<T> {
   search?: string;
   archived?: boolean;
 }
+}
+}
 export interface ProjectFilter {
   search?: string;
   status?: Project['status'][];
   created_by?: string;
+}
+}
 }
 export interface ActivityEventFilter {
   project_id?: string;
@@ -195,12 +232,15 @@ export interface ActivityEventFilter {
   from_date?: Date;
   to_date?: Date;
 }
+}
+}
 export interface CommentFilter {
   resource_id?: string;
   author_id?: string;
   status?: Comment['status'][];
   target_type?: Comment['target_type'];
   // Permission constants
+}
 }
 export const PERMISSIONS = {
   // Workspace permissions

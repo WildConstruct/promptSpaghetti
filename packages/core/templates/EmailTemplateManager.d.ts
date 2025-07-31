@@ -4,6 +4,7 @@
  * Epic 19: Authentication Enhancement & Security Hardening
  */
 
+}
 export interface EmailTemplate {
     subject: string;
     htmlTemplate: string;
@@ -13,6 +14,7 @@ export interface EmailTemplate {
     category: 'verification' | 'enrollment' | 'security' | 'notification';
 
 
+}
 export interface TemplateVariables {
     displayName: string;
     emailAddress: string;
@@ -27,6 +29,7 @@ export interface TemplateVariables {
     timezone?: string;
 
 
+}
 export interface TemplateRenderOptions {
     minify?: boolean;
     stripComments?: boolean;
@@ -76,6 +79,7 @@ export declare class EmailTemplateManager {
     ): {
         subject: string;
         content: string;
+}
     } | null;
     /**
      * Validate a template

@@ -11,6 +11,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 
 // TypeScript interfaces for API management data structures
+}
 interface GlobalApiKeyStats {
   totalKeys: number;,
   activeKeys: number;
@@ -20,10 +21,11 @@ interface GlobalApiKeyStats {
   keysUsedLast24Hours: number;
   keysUsedLast7Days: number;,
   keysUsedLast30Days: number;
-  topScopes: Array<{,
+  topScopes: Array<{
   scope: string;,
   count: number;
   percentage: number;
+}
 }>;
   averageKeyAge: number;,
   keysByEnvironment: Record<string, number>;
@@ -33,6 +35,7 @@ interface GlobalApiKeyStats {
   averageCallsPerKey: number;
   errorRate: number;,
   rateLimitViolations: number;
+}
 interface ApiKeyDetail {
   keyId: string;,
   userId: string;
@@ -46,13 +49,14 @@ interface ApiKeyDetail {
   createdAt: Date;
   expiresAt?: Date;
   lastUsedAt?: Date;
-  rateLimits: {,
+  rateLimits: {
   requestsPerMinute: number;,
   requestsPerHour: number;
   requestsPerDay: number;
+}
 };
   ipWhitelist?: string;
-  metadata: {,
+  metadata: {
   createdBy: string;
   environment: string;,
   rotationCount: number;
@@ -63,13 +67,14 @@ interface ApiKeyDetail {
   revokedAt?: Date;
   revocationReason?: string;
 };
-  recentActivity: Array<{,
+  recentActivity: Array<{
   timestamp: Date;
   action: 'call' | 'error' | 'rate_limit' | 'creation' | 'rotation' | 'revocation';,
   details: string;
   ipAddress?: string;
   endpoint?: string;
 }>;
+}
 interface UsageMetrics {
   keyId: string;,
   callsLast1Hour: number;
@@ -79,11 +84,13 @@ interface UsageMetrics {
   errorRate: number;
   averageResponseTime: number;,
   rateLimitHits: number;
-  topEndpoints: Array<{,
+  topEndpoints: Array<{
   endpoint: string;,
   calls: number;
   errorRate: number;
+}
 }>;
+}
 interface RateLimitConfiguration {
   keyId: string;,
   requestsPerMinute: number;
@@ -93,6 +100,7 @@ interface RateLimitConfiguration {
   windowSize: number;
 
 export const ApiManagementDashboard: React.FC = () => {
+}
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -132,7 +140,7 @@ export const ApiManagementDashboard: React.FC = () => {
   const fetchGlobalStats = useCallback(async () => {
     try {
       const response = await fetch('/api/auth/api-keys/admin/statistics', {)
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
       });
       if (!response.ok) {
@@ -146,7 +154,7 @@ export const ApiManagementDashboard: React.FC = () => {
   const fetchApiKeys = useCallback(async () => {
     try {
       const response = await fetch('/api/auth/api-keys/admin/all', {)
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
       });
       if (!response.ok) {
@@ -163,7 +171,7 @@ export const ApiManagementDashboard: React.FC = () => {
     try {
       const response = await fetch(`/api/auth/api-keys/admin/metrics?timeRange=${timeRange}`, {)}
   },
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
       });
       if (response.ok) {
@@ -175,7 +183,7 @@ export const ApiManagementDashboard: React.FC = () => {
   const fetchRealTimeAlerts = useCallback(async () => {
     try {
       const response = await fetch('/api/auth/api-keys/admin/alerts', {)
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
       });
       if (response.ok) {
@@ -190,7 +198,7 @@ export const ApiManagementDashboard: React.FC = () => {
     try {
       const response = await fetch(`/admin/api-optimization/insights?timeWindow=${optimizationTimeRange}&focusAreas=performance,security,cost,reliability&includeBenchmarks=true`, {)}
   },
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
       });
       if (response.ok) {
@@ -224,7 +232,7 @@ export const ApiManagementDashboard: React.FC = () => {
     try {
       const response = await fetch('/api/auth/api-keys/admin/revoke', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
   },
@@ -244,7 +252,7 @@ export const ApiManagementDashboard: React.FC = () => {
     try {
       const response = await fetch('/api/auth/api-keys/admin/suspend', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
   },

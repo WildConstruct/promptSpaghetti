@@ -24,6 +24,7 @@ import { SecurityIntelligenceDataModelEngine } from './SecurityIntelligenceDataM
 // ============================================================================
 
 }
+}
 export interface SecurityDataCorrelationArchitecture {
   // Multi-dimensional correlation engine
   correlation_engine: {
@@ -33,6 +34,7 @@ export interface SecurityDataCorrelationArchitecture {
     behavioral_correlation_engine: BehavioralCorrelationEngine;
     geospatial_correlation_analyzer: GeospatialCorrelationAnalyzer;
     network_topology_correlator: NetworkTopologyCorrelator;
+}
 }
   };
   
@@ -90,6 +92,7 @@ export interface SecurityDataCorrelationArchitecture {
 // ============================================================================
 
 }
+}
 export interface MultiDimensionalCorrelator {
   // Correlation dimensions
   dimensions: {
@@ -101,6 +104,7 @@ export interface MultiDimensionalCorrelator {
     asset: AssetDimension;
     threat: ThreatDimension;
     contextual: ContextualDimension;
+}
 }
   };
   
@@ -123,11 +127,13 @@ export interface MultiDimensionalCorrelator {
 }
 
 }
+}
 export interface TemporalDimension {
   time_window_analysis: {
     sliding_windows: SlidingWindowConfig[];
     fixed_windows: FixedWindowConfig[];
     adaptive_windows: AdaptiveWindowConfig[];
+}
 }
   };
   temporal_patterns: {
@@ -144,11 +150,13 @@ export interface TemporalDimension {
 }
 
 }
+}
 export interface SpatialDimension {
   geographic_correlation: {
     proximity_analysis: ProximityAnalysisConfig;
     geofencing_triggers: GeofencingTriggerConfig[];
     location_clustering: LocationClusteringConfig;
+}
 }
   };
   network_topology: {
@@ -164,11 +172,13 @@ export interface SpatialDimension {
 }
 
 }
+}
 export interface BehavioralDimension {
   user_behavior_analysis: {
     normal_behavior_profiling: BehaviorProfilingConfig;
     deviation_detection: DeviationDetectionConfig;
     behavioral_clustering: BehavioralClusteringConfig;
+}
 }
   };
   entity_behavior_analysis: {
@@ -188,6 +198,7 @@ export interface BehavioralDimension {
 // ============================================================================
 
 }
+}
 export interface PatternRecognitionEngine {
   // Pattern types
   pattern_categories: {
@@ -197,6 +208,7 @@ export interface PatternRecognitionEngine {
     data_exfiltration_patterns: DataExfiltrationPatternRecognition;
     lateral_movement_patterns: LateralMovementPatternRecognition;
     privilege_escalation_patterns: PrivilegeEscalationPatternRecognition;
+}
 }
   };
   
@@ -227,11 +239,13 @@ export interface PatternRecognitionEngine {
 }
 
 }
+}
 export interface AttackPatternRecognition {
   reconnaissance_patterns: {
     network_scanning_detection: NetworkScanningDetectionConfig;
     information_gathering_detection: InformationGatheringDetectionConfig;
     vulnerability_assessment_detection: VulnerabilityAssessmentDetectionConfig;
+}
 }
   };
   initial_access_patterns: {
@@ -256,6 +270,7 @@ export interface AttackPatternRecognition {
 // ============================================================================
 
 }
+}
 export interface AnalysisPipelineArchitecture {
   // Pipeline stages
   pipeline_stages: {
@@ -265,6 +280,7 @@ export interface AnalysisPipelineArchitecture {
     threat_analysis_stage: ThreatAnalysisStage;
     risk_assessment_stage: RiskAssessmentStage;
     reporting_stage: ReportingStage;
+}
 }
   };
   
@@ -286,6 +302,7 @@ export interface AnalysisPipelineArchitecture {
 }
 
 }
+}
 export interface ThreatIntelligenceAnalyzer {
   // Intelligence sources
   intelligence_sources: {
@@ -294,6 +311,7 @@ export interface ThreatIntelligenceAnalyzer {
     government_feeds: GovernmentFeedConfig[];
     industry_sharing_platforms: IndustrySharingPlatformConfig[];
     internal_threat_intelligence: InternalThreatIntelligenceConfig;
+}
 }
   };
   
@@ -320,6 +338,7 @@ export interface ThreatIntelligenceAnalyzer {
 // ============================================================================
 
 }
+}
 export interface MachineLearningIntegration {
   // Feature engineering
   feature_engineering: {
@@ -328,6 +347,7 @@ export interface MachineLearningIntegration {
     network_features: NetworkFeatureExtraction;
     content_features: ContentFeatureExtraction;
     contextual_features: ContextualFeatureExtraction;
+}
 }
   };
   
@@ -351,12 +371,14 @@ export interface MachineLearningIntegration {
 }
 
 }
+}
 export interface SupervisedLearningModels {
   classification_models: {
     threat_classification: ThreatClassificationModel;
     anomaly_classification: AnomalyClassificationModel;
     attack_stage_classification: AttackStageClassificationModel;
     severity_classification: SeverityClassificationModel;
+}
 }
   };
   regression_models: {
@@ -376,6 +398,7 @@ export interface SupervisedLearningModels {
 // ============================================================================
 
 }
+}
 export interface RealTimeProcessingInfrastructure {
   // Stream processing
   stream_processing: {
@@ -383,6 +406,7 @@ export interface RealTimeProcessingInfrastructure {
     stream_correlation_engine: StreamCorrelationEngineConfig;
     real_time_enrichment: RealTimeEnrichmentConfig;
     stream_analytics: StreamAnalyticsConfig;
+}
 }
   };
   
@@ -976,6 +1000,7 @@ export class SecurityDataCorrelationAnalysisEngine extends EventEmitter {
 // ============================================================================
 
 }
+}
 export interface CorrelationAnalysisRequest {
   analysis_id?: string;
   data_sources: DataSource[];
@@ -989,9 +1014,11 @@ export interface CorrelationAnalysisRequest {
     timeout_minutes: number;
     quality_requirements: QualityRequirement[];
 }
+}
   };
 }
 
+}
 }
 export interface CorrelationAnalysisResult {
   analysis_id: string;
@@ -1006,7 +1033,9 @@ export interface CorrelationAnalysisResult {
   quality_metrics: unknown;
 }
 }
+}
 
+}
 }
 export interface DataSource {
   source_id: string;
@@ -1017,7 +1046,9 @@ export interface DataSource {
   filters?: unknown[];
 }
 }
+}
 
+}
 }
 export interface MultiDimensionalCorrelationConfig {
   temporal: unknown;
@@ -1028,7 +1059,9 @@ export interface MultiDimensionalCorrelationConfig {
   dimension_weights: Record<string, number>;
 }
 }
+}
 
+}
 }
 export interface PatternRecognitionConfig {
   attack_patterns: unknown;
@@ -1038,7 +1071,9 @@ export interface PatternRecognitionConfig {
   confidence_threshold: number;
 }
 }
+}
 
+}
 }
 export interface ThreatIntelligenceAnalysisConfig {
   attribution: unknown;
@@ -1048,7 +1083,9 @@ export interface ThreatIntelligenceAnalysisConfig {
   enrichment_enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface MachineLearningAnalysisConfig {
   anomaly_detection: unknown;
@@ -1058,7 +1095,9 @@ export interface MachineLearningAnalysisConfig {
   confidence_threshold: number;
 }
 }
+}
 
+}
 }
 export interface RiskAssessmentConfig {
   risk_factors: unknown;
@@ -1068,7 +1107,9 @@ export interface RiskAssessmentConfig {
   scoring_method: string;
 }
 }
+}
 
+}
 }
 export interface QualityRequirement {
   dimension: string;
@@ -1076,7 +1117,9 @@ export interface QualityRequirement {
   required: boolean;
 }
 }
+}
 
+}
 }
 export interface SecurityCorrelation {
   correlation_id: string;
@@ -1087,7 +1130,9 @@ export interface SecurityCorrelation {
   timestamp: number;
 }
 }
+}
 
+}
 }
 export interface SecurityPattern {
   pattern_id: string;
@@ -1097,7 +1142,9 @@ export interface SecurityPattern {
   mitre_mapping?: string[];
 }
 }
+}
 
+}
 }
 export interface MultiDimensionalCorrelationResult {
   correlations: SecurityCorrelation[];
@@ -1107,7 +1154,9 @@ export interface MultiDimensionalCorrelationResult {
   processing_metrics: unknown;
 }
 }
+}
 
+}
 }
 export interface PatternRecognitionResult {
   patterns: SecurityPattern[];
@@ -1117,7 +1166,9 @@ export interface PatternRecognitionResult {
   pattern_statistics: unknown;
 }
 }
+}
 
+}
 }
 export interface ThreatIntelligenceAnalysisResult {
   indicators: unknown[];
@@ -1127,7 +1178,9 @@ export interface ThreatIntelligenceAnalysisResult {
   intelligence_summary: unknown;
 }
 }
+}
 
+}
 }
 export interface MachineLearningAnalysisResult {
   anomalies: unknown[];
@@ -1137,7 +1190,9 @@ export interface MachineLearningAnalysisResult {
   ml_metrics: unknown;
 }
 }
+}
 
+}
 }
 export interface RiskAssessmentResult {
   overall_score: number;
@@ -1146,6 +1201,7 @@ export interface RiskAssessmentResult {
   likelihood: unknown;
   mitigations: unknown[];
   risk_metadata: Record<string, unknown>;
+}
 }
 }
 

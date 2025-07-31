@@ -5,6 +5,7 @@
  * Utilities for image format conversion, compression, metadata extraction, and optimization
  */
 
+}
 export interface ImageMetadata {
     width: number;
     height: number;
@@ -20,8 +21,10 @@ export interface ImageMetadata {
         prompt?: string;
         seed?: number;
         parameters?: Record<string, any>;
+}
     };
 
+}
 export interface ImageProcessingOptions {
     format?: 'jpeg' | 'png' | 'webp' | 'avif';
     quality?: number;
@@ -33,12 +36,14 @@ export interface ImageProcessingOptions {
     progressive?: boolean;
     removeMetadata?: boolean;
 
+}
 export interface ImageVariationOptions {
     count: number;
     strength: number;
     seed?: number;
     preserveStyle?: boolean;
 
+}
 export interface ImageBatchProcessingOptions {
     concurrency?: number;
     outputFormat?: 'jpeg' | 'png' | 'webp';
@@ -46,6 +51,7 @@ export interface ImageBatchProcessingOptions {
     resize?: {
         width: number;
         height: number;
+}
     };
     watermark?: {
         text?: string;

@@ -18,6 +18,7 @@ import { useComments } from '../../hooks/useComments';
 import { CommentEditor } from './CommentEditor';
 import { CommentMentions } from './CommentMentions';
 import { Comment, CommentStatus } from '../../types/CommentTypes';
+}
 interface CommentThreadProps {
   resourceId: string;
   resourceType: 'project' | 'resource' | 'node' | 'region';
@@ -42,6 +43,7 @@ interface CommentThreadProps {
   allowEditing = true,
   allowModeration = false,
   realTime = true
+}
 }) => {
   const [expandedReplies, setExpandedReplies] = useState<Set<string>>(new Set());
   const [editingComment, setEditingComment] = useState<string | null>(null);

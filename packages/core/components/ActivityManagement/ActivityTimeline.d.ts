@@ -6,6 +6,7 @@
  */
 import React from 'react';
 
+}
 interface ActivityTimelineProps {
     userId?: string;
     workspaceId?: string;
@@ -19,3 +20,4 @@ interface ActivityTimelineProps {
 export declare const ActivityTimeline: React.FC<ActivityTimelineProps>;
 export default ActivityTimeline;
 //# sourceMappingURL=ActivityTimeline.d.ts.map
+}

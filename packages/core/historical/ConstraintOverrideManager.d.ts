@@ -7,6 +7,7 @@
  */
 import { HistoricalConstraint, Era } from '../types/UTDG';
 
+}
 export interface ConstraintOverride {
     id: string;
     constraint_id: string;
@@ -18,6 +19,7 @@ export interface ConstraintOverride {
     conditions?: OverrideConditions;
 
 
+}
 export interface OverrideConditions {
     era?: Era[];
     node_types?: string[];
@@ -25,6 +27,7 @@ export interface OverrideConditions {
     max_authenticity_impact?: number;
 
 
+}
 export interface OverrideReason {
     category: 'creative' | 'narrative' | 'technical' | 'artistic' | 'educational';
     description: string;
@@ -42,6 +45,7 @@ export declare class ConstraintOverrideManager {
         duration?: number;
         scope?: 'global' | 'era' | 'project' | 'session';
         conditions?: OverrideConditions;
+}
     }): ConstraintOverride;
     /**
      * Check if a constraint is currently overridden

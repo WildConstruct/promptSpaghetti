@@ -32,6 +32,7 @@ import {
 } from '../../types/restoration';
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
+}
 interface RestoreProgressPanelProps {
   progress: RestorationProgressResponse;
   onCancel: () => void;
@@ -40,6 +41,7 @@ interface RestoreProgressPanelProps {
   progress,
   onCancel,
   showDetails = false
+}
 }) => {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [detailsVisible, setDetailsVisible] = useState(showDetails);

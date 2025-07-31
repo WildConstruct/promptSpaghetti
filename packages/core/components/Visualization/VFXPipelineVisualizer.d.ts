@@ -7,6 +7,7 @@
  */
 import React from 'react';
 
+}
 export interface VFXScene {
     id: string;
     name: string;
@@ -19,6 +20,7 @@ export interface VFXScene {
     composition: SceneComposition;
     accuracy: HistoricalAccuracyMetrics;
 
+}
 export interface VFXCharacter {
     id: string;
     name: string;
@@ -31,8 +33,10 @@ export interface VFXCharacter {
         x: number;
         y: number;
         z: number;
+}
     };
 
+}
 export interface VFXAsset {
     id: string;
     name: string;
@@ -43,22 +47,26 @@ export interface VFXAsset {
     materials: MaterialProperty[];
     lod: number;
 
+}
 export interface MaterialProperty {
     name: string;
     type: 'diffuse' | 'roughness' | 'metallic' | 'normal' | 'displacement';
     value: number;
     historicallyAccurate: boolean;
 
+}
 export interface SceneComposition {
     cameraPosition: {
         x: number;
         y: number;
         z: number;
+}
     };
     focalLength: number;
     depth: number;
     layers: SceneLayer[];
 
+}
 export interface SceneLayer {
     id: string;
     name: string;
@@ -66,6 +74,7 @@ export interface SceneLayer {
     opacity: number;
     elements: string[];
 
+}
 export interface HistoricalAccuracyMetrics {
     overall: number;
     architecture: number;
@@ -76,6 +85,7 @@ export interface HistoricalAccuracyMetrics {
     expertValidated: boolean;
     violations: AccuracyViolation[];
 
+}
 export interface AccuracyViolation {
     type: 'anachronism' | 'cultural' | 'architectural' | 'technological';
     severity: 'low' | 'medium' | 'high' | 'critical';
@@ -83,6 +93,7 @@ export interface AccuracyViolation {
     element: string;
     suggestion: string;
 
+}
 export interface VFXPipelineVisualizerProps {
     scene?: VFXScene;
     scenes?: VFXScene[];
@@ -94,3 +105,4 @@ export interface VFXPipelineVisualizerProps {
 export declare const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps>;
 export default VFXPipelineVisualizer;
 //# sourceMappingURL=VFXPipelineVisualizer.d.ts.map
+}

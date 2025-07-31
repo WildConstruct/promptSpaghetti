@@ -1,8 +1,10 @@
 // packages/core/utils/templateParser.ts
 // Director-friendly template parsing system for {variable} syntax
 
+}
 export interface ExtractedVariable {
   name: string;          // Variable name (without braces),
+}
   placeholder: string;   // Full placeholder text {name},
   startIndex: number;    // Start position in template,
   endIndex: number;      // End position in template
@@ -10,25 +12,32 @@ export interface ExtractedVariable {
   inferredType?: VariableType; // Auto-inferred type from context
   defaultValue?: string; // Default value based on type inference
 }
+}
 export interface TemplateParseResult {
   variables: ExtractedVariable;
   errors: TemplateError;
   isValid: boolean;
   processedTemplate: string;  // Template with highlighted variables,
 }
+}
+}
 export interface TemplateError {
   type: 'unclosed_brace' | 'empty_variable' | 'invalid_name' | 'nested_braces';
   message: string;
   position: number;
   severity: 'error' | 'warning'
+}
   }
 export type VariableType = 'string' | 'number' | 'boolean' | 'array' | 'object' | 'auto';
 
+}
 export interface VariableTypeInference {
   type: VariableType;
   confidence: number; // 0-1, how confident we are about this inference,
   reason: string; // Human-readable explanation,
   defaultValue: string; // Suggested default value,
+}
+}
 }
 export interface VariableSuggestion {
   name: string;
@@ -49,6 +58,7 @@ export interface VariableSuggestion {
   priority: 10,
   nodeTypes: ['subject', 'output'],
   relatedVariables: ['action', 'location', 'mood'],
+}
 }
   {
   name: 'creature',

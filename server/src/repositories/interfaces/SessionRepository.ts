@@ -4,6 +4,7 @@ import { UserId } from '../../types';
  * Repository interface for user session handling with Redis integration
  */
 }
+}
 export interface SessionRepository {
   /**
    * Create a new session
@@ -51,10 +52,12 @@ export interface SessionRepository {
   cleanupExpired(): Promise<number>;
 }
 }
+}
 
 /**
  * Session data structure
  */
+}
 }
 export interface Session {
   id: string;
@@ -68,10 +71,12 @@ export interface Session {
   metadata?: Record<string, any>;
 }
 }
+}
 
 /**
  * Request for creating a new session
  */
+}
 }
 export interface CreateSessionRequest {
   userId: UserId;
@@ -79,5 +84,6 @@ export interface CreateSessionRequest {
   ipAddress?: string;
   ttlSeconds?: number;
   metadata?: Record<string, any>;
+}
 }
 }

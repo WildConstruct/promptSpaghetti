@@ -20,6 +20,7 @@ import {
   ExperimentParams,
   ToggleConditionsService
 } from '../../services/ToggleConditionsService';
+}
 interface ToggleConditionsManagerProps {
   conditionsService: ToggleConditionsService;
   toggleId: string;
@@ -38,6 +39,7 @@ interface ToggleConditionsManagerProps {
   tags: string;
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
   businessImpact: string;
+}
 };
 
 export const ToggleConditionsManager: React.FC<ToggleConditionsManagerProps> = ({)
@@ -501,8 +503,10 @@ export const ToggleConditionsManager: React.FC<ToggleConditionsManagerProps> = (
 };
 
 // Sub-components
+}
 interface ConditionDetailsProps {
   condition: ToggleCondition;
+}
 const ConditionDetails: React.FC<ConditionDetailsProps> = ({ condition }) => {
   const renderParameters = () => {
     const params = condition.parameters;
@@ -562,6 +566,7 @@ const ConditionDetails: React.FC<ConditionDetailsProps> = ({ condition }) => {
 };
 
 // Condition Form Modal (simplified implementation)
+}
 interface ConditionFormModalProps {
   formData: ConditionFormData;
   setFormData: (data: ConditionFormData) => void;
@@ -574,6 +579,7 @@ interface ConditionFormModalProps {
   onSubmit,
   onCancel,
   isEditing
+}
 }) => {
   return;
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

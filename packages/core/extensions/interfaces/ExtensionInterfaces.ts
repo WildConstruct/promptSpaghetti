@@ -6,6 +6,7 @@ import { z } from 'zod';
 
 // Base Extension Interface
 
+}
 export interface BaseExtension {
   readonly id: string;
   readonly name: string;
@@ -28,12 +29,16 @@ export interface BaseExtension {
   getHealthStatus(): ExtensionHealthStatus;
   // Extension Health Status
 }
+}
+}
 export interface ExtensionHealthStatus {
   status: 'healthy' | 'warning' | 'error';
   message?: string;
   lastChecked: Date;
   details?: Record<string, any>;
   // Extension Context - provides access to system resources
+}
+}
 }
 export interface ExtensionContext {
   readonly extensionId: string;
@@ -46,6 +51,8 @@ export interface ExtensionContext {
   readonly api: ExtensionAPIContext;
   // Extension Logger
 }
+}
+}
 export interface ExtensionLogger {
   debug(message: string, ...args: any): void;
   info(message: string, ...args: any): void;
@@ -53,6 +60,8 @@ export interface ExtensionLogger {
   error(message: string, ...args: any): void;
   trace(message: string, ...args: any): void;
   // Extension Storage
+}
+}
 }
 export interface ExtensionStorage {
   get<T>(key: string): Promise<T | undefined>;
@@ -64,6 +73,8 @@ export interface ExtensionStorage {
   getScoped(scope: string): ExtensionStorage;
   // Extension Event Emitter
 }
+}
+}
 export interface ExtensionEventEmitter {
   on(event: string, listener: (...args: any) => void): void;
   off(event: string, listener: (...args: any) => void): void;
@@ -71,6 +82,8 @@ export interface ExtensionEventEmitter {
   once(event: string, listener: (...args: any) => void): void;
   removeAllListeners(event?: string): void;
   // Extension Runtime Context
+}
+}
 }
 export interface ExtensionRuntime {
   readonly version: string;
@@ -83,6 +96,8 @@ export interface ExtensionRuntime {
   unregisterNode(nodeId: string): void;
   getRegisteredNodes(): NodeDefinition;
   // Extension UI Context
+}
+}
 }
 export interface ExtensionUIContext {
   // Component registration
@@ -99,6 +114,8 @@ export interface ExtensionUIContext {
   showModal(modal: ModalDefinition): void;
   // Extension API Context
 }
+}
+}
 export interface ExtensionAPIContext {
   // HTTP client
   createHttpClient(): HttpClient;
@@ -110,6 +127,8 @@ export interface ExtensionAPIContext {
   unregisterMiddleware(middlewareId: string): void;
   // System Information
 }
+}
+}
 export interface SystemInfo {
   version: string;
   platform: string;
@@ -119,6 +138,8 @@ export interface SystemInfo {
   uptime: number;
   // Performance Metrics
 }
+}
+}
 export interface PerformanceMetrics {
   executionTime: number;
   memoryUsage: number;
@@ -126,6 +147,8 @@ export interface PerformanceMetrics {
   activeNodes: number;
   totalExecutions: number;
   // Node Definition Interface
+}
+}
 }
 export interface NodeDefinition {
   id: string;
@@ -147,9 +170,11 @@ export interface NodeDefinition {
   license: string;
   repository?: string;
   documentation?: string;
+}
 };
 
 // Menu Item Interface
+}
 }
 export interface MenuItem {
   id: string;
@@ -161,6 +186,8 @@ export interface MenuItem {
   submenu?: MenuItem;
   // Notification Interface
 }
+}
+}
 export interface Notification {
   id?: string;
   type: 'info' | 'success' | 'warning' | 'error';
@@ -170,11 +197,15 @@ export interface Notification {
   actions?: NotificationAction;
   // Notification Action
 }
+}
+}
 export interface NotificationAction {
   label: string;
   action: () => void;
   primary?: boolean;
   // Modal Definition
+}
+}
 }
 export interface ModalDefinition {
   id: string;
@@ -185,6 +216,8 @@ export interface ModalDefinition {
   onClose?: () => void;
   // HTTP Client Interface
 }
+}
+}
 export interface HttpClient {
   get<T>(url: string, options?: RequestOptions): Promise<T>;
   post<T>(url: string, data?: any, options?: RequestOptions): Promise<T>;
@@ -193,6 +226,8 @@ export interface HttpClient {
   delete<T>(url: string, options?: RequestOptions): Promise<T>;
   // Request Options
 }
+}
+}
 export interface RequestOptions {
   headers?: Record<string, string>;
   timeout?: number;
@@ -200,9 +235,13 @@ export interface RequestOptions {
   validateStatus?: (status: number) => boolean;
   // API Handler
 }
+}
+}
 export interface APIHandler {
   (request: APIRequest, response: APIResponse): Promise<void> | void;
   // API Request
+}
+}
 }
 export interface APIRequest {
   method: string;
@@ -215,6 +254,8 @@ export interface APIRequest {
   user?: any;
   // API Response
 }
+}
+}
 export interface APIResponse {
   status(code: number): APIResponse;
   json(data: any): APIResponse;
@@ -223,11 +264,14 @@ export interface APIResponse {
   redirect(url: string): APIResponse;
   // API Middleware
 }
+}
+}
 export interface APIMiddleware {
   id: string;
   priority: number;
   handler: (request: APIRequest, response: APIResponse, next: () => void) => Promise<void> | void;
   // Extension Lifecycle States
+}
 }
 export enum ExtensionLifecycleState {
   UNINITIALIZED = 'uninitialized',
@@ -271,6 +315,7 @@ export class ExtensionError extends Error {
   errors: string;
   warnings: string;
   // Extension Manifest Schema (will be used in Story 8.4.3)
+}
 }
 export const ExtensionManifestSchema = z.object({
   id: z.string().regex(/^[a-zA-Z0-9-_.]+$/),

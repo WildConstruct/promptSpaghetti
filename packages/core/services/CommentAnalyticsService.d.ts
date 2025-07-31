@@ -7,6 +7,7 @@
  */
 import { CommentAnalytics, CommentEngagementType, CommentableResourceType } from '../types/TrendingCommentsTypes';
 
+}
 export interface CommentAnalyticsConfig {
     databaseUrl?: string;
     cacheTTLSeconds?: number;
@@ -14,15 +15,18 @@ export interface CommentAnalyticsConfig {
     maxAnalyticsPeriodDays?: number;
 
 
+}
 export interface EngagementBreakdown {
     [key: string]: number;
 
 
+}
 export interface TimeSeriesData {
     timestamp: string;
     value: number;
 
 
+}
 export interface CommentMetrics {
     totalComments: number;
     totalReplies: number;
@@ -32,6 +36,7 @@ export interface CommentMetrics {
     engagementRate: number;
 
 
+}
 export interface SentimentAnalysis {
     positive: number;
     neutral: number;
@@ -40,6 +45,7 @@ export interface SentimentAnalysis {
     confidence: number;
 
 
+}
 export interface TopicTrend {
     topic: string;
     mentionCount: number;
@@ -48,6 +54,7 @@ export interface TopicTrend {
     peakHour?: number;
 
 
+}
 export interface UserEngagementData {
     userId: string;
     commentsPosted: number;
@@ -69,6 +76,7 @@ export declare class CommentAnalyticsService {
         includeRealTime?: boolean;
         includeSentiment?: boolean;
         includeTopics?: boolean;
+}
     }): Promise<CommentAnalytics>;
     /**
      * Record a comment engagement event

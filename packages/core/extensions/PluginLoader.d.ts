@@ -10,6 +10,7 @@ import { ExtensionManifest } from './ExtensionLifecycleManager';
 import { DependencyGraph, LoadOrder } from './DependencyResolver';
 import { PluginSandbox } from './PluginSandbox';
 
+}
 export interface PluginSource {
     type: 'filesystem' | 'npm' | 'git' | 'url' | 'registry';
     location: string;
@@ -19,6 +20,7 @@ export interface PluginSource {
         username?: string;
         password?: string;
 
+}
     };
     options?: {
         cache?: boolean;
@@ -26,6 +28,7 @@ export interface PluginSource {
         allowPrerelease?: boolean;
     };
 
+}
 export interface LoadedPlugin {
     manifest: ExtensionManifest;
     source: PluginSource;
@@ -37,6 +40,7 @@ export interface LoadedPlugin {
     error?: Error;
 
 
+}
 export interface PluginLoadOptions {
     enableSandbox: boolean;
     allowRemoteSources: boolean;
@@ -47,6 +51,7 @@ export interface PluginLoadOptions {
     permissionsCheck?: boolean;
 
 
+}
 export interface PluginRegistry {
     plugins: Map<string, LoadedPlugin>;
     manifests: Map<string, ExtensionManifest>;
@@ -94,6 +99,7 @@ export declare class PluginLoader {
         pluginId: string;
         currentVersion: string;
         availableVersion: string;
+}
     }>>;
     /**
      * Update a plugin to latest version

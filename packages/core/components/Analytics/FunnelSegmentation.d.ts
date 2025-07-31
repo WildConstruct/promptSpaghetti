@@ -19,12 +19,14 @@ import React from 'react';
 import { UserSegment, ConversionCohort } from '../../analytics/ConversionDataModel';
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
 
+}
 export interface FunnelSegmentationProps {
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
     funnelId: string;
     timeRange: {
         start: number;
         end: number;
+}
     };
     availableSegments?: UserSegment[];
     availableCohorts?: ConversionCohort[];
@@ -32,6 +34,7 @@ export interface FunnelSegmentationProps {
     onFilterChange?: (filters: SegmentFilter[]) => void;
     onSegmentAnalysis?: (analysis: SegmentAnalysisResult) => void;
 
+}
 export interface SegmentFilter {
     id: string;
     name: string;
@@ -44,6 +47,7 @@ export interface SegmentFilter {
 
 export type SegmentFilterType = 'demographic' | 'behavioral' | 'geographic' | 'device' | 'acquisition' | 'engagement' | 'value' | 'custom';
 
+}
 export interface SegmentCondition {
     id: string;
     field: string;
@@ -54,6 +58,7 @@ export interface SegmentCondition {
 
 export type SegmentOperator = 'equals' | 'not_equals' | 'contains' | 'not_contains' | 'starts_with' | 'ends_with' | 'greater_than' | 'less_than' | 'between' | 'in' | 'not_in' | 'exists' | 'not_exists' | 'regex_match';
 
+}
 export interface SegmentAnalysisResult {
     segmentId: string;
     segmentName: string;
@@ -65,6 +70,7 @@ export interface SegmentAnalysisResult {
     comparisons: SegmentComparison[];
     insights: SegmentInsight[];
 
+}
 export interface SegmentFunnelPerformance {
     conversionRate: number;
     averageTimeToConvert: number;
@@ -72,6 +78,7 @@ export interface SegmentFunnelPerformance {
     pathAnalysis: PathAnalysis[];
     stepPerformance: StepSegmentPerformance[];
 
+}
 export interface StepSegmentPerformance {
     stepId: string;
     stepName: string;
@@ -81,6 +88,7 @@ export interface StepSegmentPerformance {
     averageTimeSpent: number;
     exitReasons: ExitReason[];
 
+}
 export interface DropOffAnalysis {
     stepId: string;
     stepName: string;
@@ -89,6 +97,7 @@ export interface DropOffAnalysis {
     primaryReasons: DropOffReason[];
     recoveryOpportunities: string[];
 
+}
 export interface DropOffReason {
     reason: string;
     percentage: number;
@@ -96,6 +105,7 @@ export interface DropOffReason {
     category: 'technical' | 'user_experience' | 'content' | 'external';
     severity: 'high' | 'medium' | 'low';
 
+}
 export interface PathAnalysis {
     pathId: string;
     pathName: string;
@@ -105,6 +115,7 @@ export interface PathAnalysis {
     averageTimeToComplete: number;
     isOptimal: boolean;
 
+}
 export interface BehavioralPattern {
     id: string;
     name: string;
@@ -115,6 +126,7 @@ export interface BehavioralPattern {
     timePattern: TimePattern;
     strength: 'strong' | 'moderate' | 'weak';
 
+}
 export interface TimePattern {
     preferredDays: number[];
     preferredHours: number[];
@@ -122,90 +134,102 @@ export interface TimePattern {
     visitFrequency: number;
     seasonality?: SeasonalityData;
 
+}
 export interface SeasonalityData {
     pattern: 'weekly' | 'monthly' | 'quarterly';
-    peaks: Array<{,
+    peaks: Array<{
         period: string;
         multiplier: number;
+}
     }>;
     confidence: number;
 
+}
 export interface DemographicBreakdown {
     geography: GeographicDistribution;
     devices: DeviceDistribution;
     acquisition: AcquisitionChannelDistribution;
     userLifecycle: UserLifecycleDistribution;
 
+}
 export interface GeographicDistribution {
-    countries: Array<{,
+    countries: Array<{
         country: string;
         percentage: number;
         conversionRate: number;
+}
     }>;
-    regions: Array<{,
+    regions: Array<{
         region: string;
         percentage: number;
         conversionRate: number;
     }>;
-    cities: Array<{,
+    cities: Array<{
         city: string;
         percentage: number;
         conversionRate: number;
     }>;
 
+}
 export interface DeviceDistribution {
-    types: Array<{,
+    types: Array<{
         type: string;
         percentage: number;
         conversionRate: number;
+}
     }>;
-    browsers: Array<{,
+    browsers: Array<{
         browser: string;
         percentage: number;
         conversionRate: number;
     }>;
-    operatingSystems: Array<{,
+    operatingSystems: Array<{
         os: string;
         percentage: number;
         conversionRate: number;
     }>;
 
+}
 export interface AcquisitionChannelDistribution {
-    channels: Array<{,
+    channels: Array<{
         channel: string;
         percentage: number;
         conversionRate: number;
         cost: number;
+}
     }>;
-    sources: Array<{,
+    sources: Array<{
         source: string;
         percentage: number;
         conversionRate: number;
     }>;
-    campaigns: Array<{,
+    campaigns: Array<{
         campaign: string;
         percentage: number;
         conversionRate: number;
         roi: number;
     }>;
 
+}
 export interface UserLifecycleDistribution {
-    stages: Array<{,
+    stages: Array<{
         stage: string;
         percentage: number;
         conversionRate: number;
+}
     }>;
-    tenure: Array<{,
+    tenure: Array<{
         range: string;
         percentage: number;
         conversionRate: number;
     }>;
-    engagementLevel: Array<{,
+    engagementLevel: Array<{
         level: string;
         percentage: number;
         conversionRate: number;
     }>;
 
+}
 export interface SegmentValueMetrics {
     averageLifetimeValue: number;
     averageOrderValue: number;
@@ -214,6 +238,7 @@ export interface SegmentValueMetrics {
     returnOnInvestment: number;
     churnRate: number;
 
+}
 export interface SegmentComparison {
     comparedToSegment: string;
     conversionRateDelta: number;
@@ -221,6 +246,7 @@ export interface SegmentComparison {
     engagementDelta: number;
     significance: number;
 
+}
 export interface SegmentInsight {
     type: 'opportunity' | 'risk' | 'trend' | 'anomaly';
     severity: 'high' | 'medium' | 'low';
@@ -231,11 +257,13 @@ export interface SegmentInsight {
     recommendations: string[];
     evidence: Record<string, any>;
 
+}
 export interface SegmentRuleBuilder {
     fieldDefinitions: FieldDefinition[];
     operators: OperatorDefinition[];
     templates: SegmentTemplate[];
 
+}
 export interface FieldDefinition {
     path: string;
     displayName: string;
@@ -245,6 +273,7 @@ export interface FieldDefinition {
     possibleValues?: unknown[];
     validation?: FieldValidation;
 
+}
 export interface OperatorDefinition {
     operator: SegmentOperator;
     displayName: string;
@@ -253,6 +282,7 @@ export interface OperatorDefinition {
     requiresValue: boolean;
     multiValue: boolean;
 
+}
 export interface SegmentTemplate {
     id: string;
     name: string;
@@ -262,6 +292,7 @@ export interface SegmentTemplate {
     operator: 'AND' | 'OR';
     tags: string[];
 
+}
 export interface FieldValidation {
     required?: boolean;
     min?: number;
@@ -274,3 +305,4 @@ export interface FieldValidation {
 export declare const FunnelSegmentation: React.FC<FunnelSegmentationProps>;
 export default FunnelSegmentation;
 //# sourceMappingURL=FunnelSegmentation.d.ts.map
+}

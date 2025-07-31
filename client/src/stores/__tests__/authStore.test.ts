@@ -363,7 +363,7 @@ describe('Authentication Store', () => {
 };
       const mockCallbackResponse = {
   user: mockUser,
-  tokens: {,
+  tokens: {
   accessToken: 'oauth-access-token',
   refreshToken: 'oauth-refresh-token',
   expiresAt: new Date(Date.now() + 900000).toISOString(),

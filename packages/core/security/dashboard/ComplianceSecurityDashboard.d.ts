@@ -54,6 +54,7 @@ export declare enum ComplianceStatus {
     NOT_ASSESSED = "not_assessed",
     IN_REMEDIATION = "in_remediation"
 
+}
 export interface ComplianceRequirement {
     id: string;
     framework: ComplianceFramework;
@@ -69,6 +70,7 @@ export interface ComplianceRequirement {
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
     businessImpact: string;
 
+}
 export interface Evidence {
     id: string;
     type: 'document' | 'screenshot' | 'log' | 'certificate' | 'policy';
@@ -80,6 +82,7 @@ export interface Evidence {
     owner: string;
     status: 'current' | 'outdated' | 'missing';
 
+}
 export interface Finding {
     id: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
@@ -93,6 +96,7 @@ export interface Finding {
     owner: string;
     estimatedEffort: string;
 
+}
 export interface AuditCycle {
     id: string;
     framework: ComplianceFramework;
@@ -107,6 +111,7 @@ export interface AuditCycle {
     findings: Finding[];
     reportUrl?: string;
 
+}
 export interface ComplianceMetrics {
     overallScore: number;
     byFramework: Record<ComplianceFramework, {
@@ -116,6 +121,7 @@ export interface ComplianceMetrics {
         criticalGaps: number;
         lastAudit: Date;
         nextAudit?: Date;
+}
     }>;
     riskProfile: {
         high: number;
@@ -135,6 +141,7 @@ export interface ComplianceMetrics {
         expiringWithin30Days: number;
     };
 
+}
 export interface ComplianceSecurityDashboardProps {
     metrics: ComplianceMetrics;
     requirements: ComplianceRequirement[];
@@ -152,3 +159,4 @@ export interface ComplianceSecurityDashboardProps {
 export declare const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardProps>;
 export default ComplianceSecurityDashboard;
 //# sourceMappingURL=ComplianceSecurityDashboard.d.ts.map
+}

@@ -20,6 +20,7 @@ import {
 } from '../database/audit-models';
 
 }
+}
 export interface ChangeRecord {
   id: string;
   resourceType: string;
@@ -64,7 +65,9 @@ export interface ChangeRecord {
   updatedAt: Date;
 }
 }
+}
 
+}
 }
 export interface FieldChange {
   fieldPath: string; // Dot notation path (e.g., 'user.profile.email')
@@ -87,7 +90,9 @@ export interface FieldChange {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ChangeContext {
   actorId?: string;
@@ -113,7 +118,9 @@ export interface ChangeContext {
   approvedBy?: string[];
 }
 }
+}
 
+}
 }
 export interface ChangeMetadata {
   // Change classification
@@ -141,7 +148,9 @@ export interface ChangeMetadata {
   customAttributes: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ChangeAnalysis {
   // Change complexity
@@ -167,7 +176,9 @@ export interface ChangeAnalysis {
   mitigationActions: string[];
 }
 }
+}
 
+}
 }
 export interface ImpactAssessment {
   // Impact scope
@@ -189,7 +200,9 @@ export interface ImpactAssessment {
   rollbackComplexity: 'simple' | 'moderate' | 'complex' | 'impossible';
 }
 }
+}
 
+}
 }
 export interface ComplianceRelevance {
   isComplianceRelevant: boolean;
@@ -215,7 +228,9 @@ export interface ComplianceRelevance {
   exportClassification?: string;
 }
 }
+}
 
+}
 }
 export interface ValidationResult {
   validator: string;
@@ -225,7 +240,9 @@ export interface ValidationResult {
   remediation?: string;
 }
 }
+}
 
+}
 }
 export interface ChangePattern {
   patternType: 'bulk_change' | 'cascading_change' | 'rollback' | 'configuration_drift' | 'data_migration';
@@ -234,7 +251,9 @@ export interface ChangePattern {
   relatedChanges: string[];
 }
 }
+}
 
+}
 }
 export interface ChangeAnomaly {
   anomalyType: 'unusual_timing' | 'unexpected_actor' | 'suspicious_pattern' | 'high_volume' | 'privilege_escalation';
@@ -244,7 +263,9 @@ export interface ChangeAnomaly {
   recommendedAction: string;
 }
 }
+}
 
+}
 }
 export interface RiskFactor {
   factor: string;
@@ -255,7 +276,9 @@ export interface RiskFactor {
   mitigations: string[];
 }
 }
+}
 
+}
 }
 export interface AffectedEntity {
   entityType: string;
@@ -265,7 +288,9 @@ export interface AffectedEntity {
   impactDescription: string;
 }
 }
+}
 
+}
 }
 export interface BusinessImpact {
   severity: ImpactSeverity;
@@ -276,7 +301,9 @@ export interface BusinessImpact {
   customerImpact: CustomerImpact;
 }
 }
+}
 
+}
 }
 export interface TechnicalImpact {
   severity: ImpactSeverity;
@@ -287,7 +314,9 @@ export interface TechnicalImpact {
   dataIntegrityImpact?: DataIntegrityImpact;
 }
 }
+}
 
+}
 }
 export interface SecurityImpact {
   severity: ImpactSeverity;
@@ -297,7 +326,9 @@ export interface SecurityImpact {
   accessChanges: AccessChange[];
 }
 }
+}
 
+}
 }
 export interface ComplianceImpact {
   severity: ImpactSeverity;
@@ -307,7 +338,9 @@ export interface ComplianceImpact {
   requiredActions: string[];
 }
 }
+}
 
+}
 }
 export interface ChangeHistory {
   resourceType: string;
@@ -331,7 +364,9 @@ export interface ChangeHistory {
   updatedAt: Date;
 }
 }
+}
 
+}
 }
 export interface ChangeStatistics {
   totalChanges: number;
@@ -351,9 +386,11 @@ export interface ChangeStatistics {
     approvedChanges: number;
     auditedChanges: number;
 }
+}
   };
 }
 
+}
 }
 export interface ChangeTrend {
   period: 'daily' | 'weekly' | 'monthly';
@@ -361,6 +398,7 @@ export interface ChangeTrend {
   values: Array<{
     timestamp: Date;
     value: number;
+}
 }
   }>;
   trend: 'increasing' | 'decreasing' | 'stable' | 'volatile';
@@ -473,6 +511,7 @@ export type ValidationSeverity =
   | 'critical';
 
 }
+}
 export interface CustomerImpact {
   affectedCustomers: number;
   severity: ImpactSeverity;
@@ -480,7 +519,9 @@ export interface CustomerImpact {
   compensationRequired: boolean;
 }
 }
+}
 
+}
 }
 export interface PerformanceImpact {
   responseTimeChange: number; // percentage
@@ -489,7 +530,9 @@ export interface PerformanceImpact {
   description: string;
 }
 }
+}
 
+}
 }
 export interface AvailabilityImpact {
   downtime: number; // minutes
@@ -498,7 +541,9 @@ export interface AvailabilityImpact {
   description: string;
 }
 }
+}
 
+}
 }
 export interface DataIntegrityImpact {
   dataConsistencyRisk: RiskLevel;
@@ -507,7 +552,9 @@ export interface DataIntegrityImpact {
   description: string;
 }
 }
+}
 
+}
 }
 export interface SecurityRisk {
   riskType: string;
@@ -516,7 +563,9 @@ export interface SecurityRisk {
   mitigations: string[];
 }
 }
+}
 
+}
 }
 export interface PrivilegeChange {
   type: 'grant' | 'revoke' | 'modify';
@@ -525,7 +574,9 @@ export interface PrivilegeChange {
   justification: string;
 }
 }
+}
 
+}
 }
 export interface AccessChange {
   type: 'grant' | 'revoke' | 'modify';
@@ -534,7 +585,9 @@ export interface AccessChange {
   target: string;
 }
 }
+}
 
+}
 }
 export interface ComplianceViolation {
   standard: string;
@@ -542,6 +595,7 @@ export interface ComplianceViolation {
   severity: ImpactSeverity;
   description: string;
   remediation: string[];
+}
 }
 }
 
@@ -1798,6 +1852,7 @@ export class ChangeRecordingService extends EventEmitter {
 
 // Supporting interfaces
 }
+}
 export interface ChangeRecordingOptions {
   parentChangeId?: string;
   deduplicationWindow?: number; // milliseconds
@@ -1806,7 +1861,9 @@ export interface ChangeRecordingOptions {
   customMetadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface BulkChangeRecordingOptions extends ChangeRecordingOptions {
   auditEachChange?: boolean;
@@ -1814,6 +1871,7 @@ export interface BulkChangeRecordingOptions extends ChangeRecordingOptions {
   batchSize?: number;
 }
 
+}
 }
 export interface ChangeHistoryOptions {
   startDate?: Date;
@@ -1824,7 +1882,9 @@ export interface ChangeHistoryOptions {
   includeTrends?: boolean;
 }
 }
+}
 
+}
 }
 export interface ChangeRecordFilter {
   resourceTypes?: string[];
@@ -1842,7 +1902,9 @@ export interface ChangeRecordFilter {
   sortOrder?: 'asc' | 'desc';
 }
 }
+}
 
+}
 }
 export interface ChangeRecordResponse {
   records: ChangeRecord[];
@@ -1851,6 +1913,7 @@ export interface ChangeRecordResponse {
     limit: number;
     total: number;
     totalPages: number;
+}
 }
   };
   summary: {

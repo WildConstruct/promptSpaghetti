@@ -58,6 +58,7 @@ export class OperationHistory {
    * Undo the last operation
    */
   async undo(engine: any): Promise<UndoResult> {
+
     if (!this.canUndo()) {
       return { success: false, error: 'Nothing to undo' };
     const entry = this.undoStack[this.historyPointer];
@@ -95,6 +96,7 @@ export class OperationHistory {
    * Redo the last undone operation
    */
   async redo(engine: any): Promise<RedoResult> {
+
     if (!this.canRedo()) {
       return { success: false, error: 'Nothing to redo' };
     const entry = this.redoStack.pop()!;
@@ -226,10 +228,11 @@ export class OperationHistory {
       return true; // We have previous state,
   default:
       return true; // Most operations can be reversed
-  private async createInverseOperation(()
+  private async createInverseOperation(((
     operation: GraphOperation,
-    snapshot: GraphSnapshot,
+    snapshot: GraphSnapshot
   ): Promise<GraphOperation> {
+
     const inverseId = `inverse-${operation.id}-${Date.now()}`;}
     const inverseTimestamp = new Date();
     switch (operation.type) {

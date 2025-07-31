@@ -241,6 +241,7 @@ export function validateMathFunctionCall(functionName: string): boolean {
   * Math function security auditor
   */
 }
+}
 export class MathFunctionAuditor {
   private static auditLog: MathFunctionAudit = [];
   private static readonly MAX_AUDIT_ENTRIES = 1000;

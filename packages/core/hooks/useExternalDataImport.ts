@@ -8,6 +8,7 @@ import {
   HistoricalQuery, 
   QueryResult 
 } from '../external-data/DataSourceManager';
+}
 interface UseExternalDataImportProps {
   autoRefresh?: boolean;
   refreshInterval?: number; // milliseconds
@@ -15,6 +16,7 @@ interface UseExternalDataImportProps {
   cacheStrategy?: 'aggressive' | 'conservative' | 'disabled';
   onError?: (error: Error) => void;
   onSuccess?: (results: QueryResult) => void;
+}
 interface ExternalDataImportState {
   isLoading: boolean;
   hasError: boolean;
@@ -25,6 +27,7 @@ interface ExternalDataImportState {
   enabledSourcesCount: number;
   cacheHitRate: number;
   lastUpdateTime: string | null;
+}
 interface UseExternalDataImportReturn {
   // State
   state: ExternalDataImportState;
@@ -42,6 +45,7 @@ interface UseExternalDataImportReturn {
   startRealTimeUpdates: () => void;
   stopRealTimeUpdates: () => void;
   // Utility functions
+}
   validateQuery: (query: HistoricalQuery) => { valid: boolean; errors: string };
   getQuerySuggestions: (partial: Partial<HistoricalQuery>) => string;
   exportResults: (format: 'json' | 'csv') => string;
@@ -246,18 +250,18 @@ export const useExternalDataImport = ({)
   const suggestions: string = [];
   // Era suggestions
   if (!partial.era) {
-  suggestions.push()
+  suggestions.push(
   'Try "medieval", "renaissance", "ancient", "modern"',
   'Use specific periods like "early-medieval" or "high-renaissance"'
   );
   // Category suggestions
   if (!partial.category) {
-  suggestions.push()
+  suggestions.push(
   'Popular categories: "clothing", "architecture", "art", "literature"',
   'Historical categories: "warfare", "trade", "religion", "daily-life"');
   // Region suggestions
   if (!partial.region) {
-  suggestions.push()
+  suggestions.push(
   'Add regions like "europe", "asia", "middle-east" for more specific results'
   );
   return suggestions;

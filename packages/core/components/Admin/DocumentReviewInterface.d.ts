@@ -6,6 +6,7 @@
  */
 import React from 'react';
 
+}
 export interface DocumentData {
     id: string;
     type: 'image' | 'pdf' | 'document';
@@ -20,12 +21,14 @@ export interface DocumentData {
             width: number;
             height: number;
 
+}
         };
         pages?: number;
         quality?: 'low' | 'medium' | 'high';
         extractedText?: string;
     };
 
+}
 export interface DocumentReviewProps {
     documents: DocumentData[];
     requestId: string;
@@ -36,6 +39,7 @@ export interface DocumentReviewProps {
     className?: string;
 
 
+}
 export interface ReviewAnnotation {
     id: string;
     x: number;
@@ -50,3 +54,4 @@ export interface ReviewAnnotation {
 export declare const DocumentReviewInterface: React.FC<DocumentReviewProps>;
 export default DocumentReviewInterface;
 //# sourceMappingURL=DocumentReviewInterface.d.ts.map
+}

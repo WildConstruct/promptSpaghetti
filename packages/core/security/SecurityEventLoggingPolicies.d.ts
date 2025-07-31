@@ -229,6 +229,7 @@ export declare const SecurityEventSchema: z.ZodObject<{
 }>;
 export type SecurityEvent = z.infer<typeof SecurityEventSchema>;
 
+}
 export interface SecurityEventPolicy {
     policy_id: string;
     policy_name: string;
@@ -236,11 +237,12 @@ export interface SecurityEventPolicy {
     severity_threshold: SecurityEventSeverity;
     enabled: boolean;
     detection_rules: {
-        conditions: Array<{,
+        conditions: Array<{
             field: string;
             operator: 'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte' | 'contains' | 'regex';
             value: any;
             logic?: 'and' | 'or'
+}
   }>;
         time_window?: number;
         frequency_threshold?: number;

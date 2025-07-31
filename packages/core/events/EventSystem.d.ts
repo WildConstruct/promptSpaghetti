@@ -12,6 +12,7 @@
 import { EventEmitter } from 'events';
 import { z } from 'zod';
 
+}
 export interface BaseEvent {
     type: string;
     timestamp: Date;
@@ -52,6 +53,7 @@ export declare class EventBus extends EventEmitter {
     constructor(options?: {)
         maxHistorySize?: number;
         enableHistory?: boolean;
+}
     });
     /**
      * Subscribe to events with filtering

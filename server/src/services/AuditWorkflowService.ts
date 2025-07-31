@@ -6,6 +6,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { DataAccessControlService } from './DataAccessControlService';
 
 }
+}
 export interface AuditWorkflow {
   id: string;
   name: string;
@@ -24,7 +25,9 @@ export interface AuditWorkflow {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface WorkflowStep {
   stepId: string;
@@ -44,7 +47,9 @@ export interface WorkflowStep {
   reviewRequirements: ReviewRequirement[];
 }
 }
+}
 
+}
 }
 export interface TriggerCondition {
   conditionType: TriggerType;
@@ -54,7 +59,9 @@ export interface TriggerCondition {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface EvidenceItem {
   id: string;
@@ -67,7 +74,9 @@ export interface EvidenceItem {
   verificationStatus: VerificationStatus;
 }
 }
+}
 
+}
 }
 export interface ReviewRequirement {
   reviewType: ReviewType;
@@ -76,7 +85,9 @@ export interface ReviewRequirement {
   signOffRequired: boolean;
 }
 }
+}
 
+}
 }
 export interface WorkflowExecution {
   executionId: string;
@@ -92,7 +103,9 @@ export interface WorkflowExecution {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface WorkflowFinding {
   id: string;
@@ -109,7 +122,9 @@ export interface WorkflowFinding {
   identifiedAt: Date;
 }
 }
+}
 
+}
 }
 export interface RemediationAction {
   actionId: string;
@@ -121,7 +136,9 @@ export interface RemediationAction {
   completedAt?: Date;
 }
 }
+}
 
+}
 }
 export interface AuditReport {
   reportId: string;
@@ -137,6 +154,7 @@ export interface AuditReport {
   approvedBy?: string;
   approvedAt?: Date;
   distribution: string[];
+}
 }
 }
 

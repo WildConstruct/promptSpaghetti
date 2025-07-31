@@ -2,6 +2,7 @@ export type CommentStatus = 'active' | 'deleted' | 'resolved';
 
 export type CommentTargetType = 'project' | 'resource' | 'node' | 'region';
 
+}
 export interface Comment {
   id: string;
   resource_id: string;
@@ -21,6 +22,8 @@ export interface Comment {
   created_at: string;
   updated_at: string;
 }
+}
+}
 export interface CommentThread {
   id: string;
   resource_id: string;
@@ -30,11 +33,13 @@ export interface CommentThread {
   reply_count: number;
   unread_count: number;
   last_activity: string;
-  participants: Array<{,
+  participants: Array<{
   user_id: string;
   user_name: string;
   user_avatar?: string;
+}
 }>;
+}
 }
 export interface CommentStats {
   total: number;
@@ -45,7 +50,9 @@ export interface CommentStats {
   today: number;
   this_week: number;
   this_month: number;
+}
 };
+}
 }
 export interface CommentCreateRequest {
   content: string;
@@ -53,10 +60,14 @@ export interface CommentCreateRequest {
   parent_id?: string;
   target_data?: Record<string, any>;
 }
+}
+}
 export interface CommentUpdateRequest {
   content?: string;
   mentions?: string;
   status?: CommentStatus;
+}
+}
 }
 export interface CommentFilter {
   status?: CommentStatus;
@@ -66,6 +77,8 @@ export interface CommentFilter {
   created_from?: string;
   created_to?: string;
 }
+}
+}
 export interface CommentListResponse {
   comments: Comment;
   total: number;
@@ -74,17 +87,23 @@ export interface CommentListResponse {
   stats?: CommentStats;
   // Real-time comment events
 }
+}
+}
 export interface CommentRealTimeConnection {
   status: 'connected' | 'connecting' | 'disconnected' | 'error';
   lastConnected?: Date;
   reconnectAttempts: number;
   error?: string;
 }
+}
+}
 export interface CommentRealTimeEvent {
   type: 'comment_created' | 'comment_updated' | 'comment_deleted' | 'comment_resolved' | 'comment_unresolved';
   comment: Comment;
   timestamp: string;
   // Hook return types
+}
+}
 }
 export interface UseCommentsOptions {
   resourceId: string;
@@ -93,6 +112,8 @@ export interface UseCommentsOptions {
   userId: string;
   realTime?: boolean;
   autoLoad?: boolean;
+}
+}
 }
 export interface UseCommentsReturn {
   comments: Comment;
@@ -112,6 +133,8 @@ export interface UseCommentsReturn {
   clearFilter: () => void;
   // Mention types
 }
+}
+}
 export interface MentionUser {
   id: string;
   name: string;
@@ -120,10 +143,14 @@ export interface MentionUser {
   role?: 'owner' | 'admin' | 'editor' | 'viewer';
   online?: boolean;
 }
+}
+}
 export interface MentionSearchResponse {
   users: MentionUser;
   total: number;
   // Comment notification types
+}
+}
 }
 export interface CommentNotification {
   id: string;
@@ -132,4 +159,5 @@ export interface CommentNotification {
   type: 'mention' | 'reply' | 'thread_update';
   read: boolean;
   created_at: string;
+}
 }

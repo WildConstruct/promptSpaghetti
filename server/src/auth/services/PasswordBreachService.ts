@@ -18,6 +18,7 @@ import { RateLimitService } from './RateLimitService';
 import { logger } from '../../utils/logger';
 
 }
+}
 export interface BreachCheckResult {
   isBreached: boolean;
   occurrenceCount: number;
@@ -28,7 +29,9 @@ export interface BreachCheckResult {
   responseTime: number;
 }
 }
+}
 
+}
 }
 export interface BreachCheckOptions {
   skipCache?: boolean;
@@ -37,7 +40,9 @@ export interface BreachCheckOptions {
   retryAttempts?: number;
 }
 }
+}
 
+}
 }
 export interface BreachMetadata {
   apiVersion: string;
@@ -45,6 +50,7 @@ export interface BreachMetadata {
   requestId: string;
   paddingEnabled: boolean;
   anonymityLevel: number;
+}
 }
 }
 

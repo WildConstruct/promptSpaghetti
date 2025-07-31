@@ -12,10 +12,12 @@ import { useNavigate } from 'react-router-dom';
 import { ChevronRight, Home } from 'lucide-react';
 import { useNavigation } from '../../hooks/useNavigation';
 
+}
 interface BreadcrumbsProps {
   className?: string;
   showHome?: boolean;
 
+}
   customBreadcrumbs?: Array<{ label: string; path?: string }>;
 
 export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ )

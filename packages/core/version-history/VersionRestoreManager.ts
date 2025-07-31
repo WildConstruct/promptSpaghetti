@@ -3,6 +3,7 @@
  * Handles version restoration with conflict detection, preview, and selective restore capabilities
  */
 
+}
 export interface RestoreOptions {
   create_backup?: boolean;
   backup_title?: string;
@@ -12,6 +13,8 @@ export interface RestoreOptions {
   restore_metadata?: boolean;
   restore_workflow_state?: boolean;
   notify_collaborators?: boolean;
+}
+}
 }
 export interface RestoreConflict {
   id: string;
@@ -25,6 +28,8 @@ export interface RestoreConflict {
   severity: 'low' | 'medium' | 'high' | 'critical';
   auto_resolvable: boolean;
 }
+}
+}
 export interface RestorePreview {
   restore_id: string;
   snapshot_id: string;
@@ -37,6 +42,7 @@ export interface RestorePreview {
   edges_to_remove: number;
   edges_to_modify: number;
   properties_to_change: number;
+}
 };
   estimated_duration: number; // seconds,
   risk_level: 'low' | 'medium' | 'high' | 'critical';
@@ -46,6 +52,7 @@ export interface RestorePreview {
   potential_conflicts: string;
   recommended_actions: string;
 };
+}
 }
 export interface RestoreResult {
   success: boolean;
@@ -61,10 +68,12 @@ export interface RestoreResult {
   edges_removed: number;
   edges_modified: number;
   properties_changed: number;
+}
 };
   duration_ms: number;
   warnings: string;
   errors: string;
+}
 }
 export interface RestoreState {
   id: string;
@@ -77,6 +86,7 @@ export interface RestoreState {
   completed_at?: string;
   error_message?: string;
 }
+}
 export class VersionRestoreManager {
   private activeRestores = new Map<string, RestoreState>();
   private restoreHistory: RestoreResult[] = [];
@@ -87,10 +97,11 @@ export class VersionRestoreManager {
     private versionHistoryManager: any
   ) {}
   // Create restore preview
-  async createRestorePreview(snapshotId: string)
+  async createRestorePreview(snapshotId: string(
     currentGraphData: any,
     options: RestoreOptions = {}
   ): Promise<RestorePreview> {
+
   try {
   const response = await this.apiClient.post('/api/version-restore/preview', {)
   project_id: this.projectId,
@@ -247,6 +258,7 @@ export class VersionRestoreManager {
       this.restoreHistory.push(result);
       throw error;
   private async createBackupSnapshot(title?: string): Promise<string> {
+
     try {
       const currentGraphData = await this.getCurrentGraphData();
       const snapshot = await this.versionHistoryManager.createSnapshot(currentGraphData, {)
@@ -261,6 +273,7 @@ export class VersionRestoreManager {
       console.error('Failed to create backup snapshot:', error);
       throw new Error('Failed to create backup snapshot');
   private async getCurrentGraphData(): Promise<unknown> {
+
     try {
       const response = await this.apiClient.get(`/api/projects/${this.projectId}/current-graph`);}
       return response.data;
@@ -268,6 +281,7 @@ export class VersionRestoreManager {
       console.error('Failed to get current graph data:', error);
       throw error;
   private async detectConflicts(snapshotData: any, currentData: any): Promise<RestoreConflict> {
+
     const conflicts: RestoreConflict[] = [];
     // Detect data conflicts
     conflicts.push(...this.detectDataConflicts(snapshotData, currentData));
@@ -372,6 +386,7 @@ export class VersionRestoreManager {
   private async resolveConflicts(conflicts: RestoreConflict)
     conflictResolutions: Record<string, string>
   ): Promise<{ resolved: RestoreConflict; unresolved: RestoreConflict; warnings: string }> {
+
   const resolved: RestoreConflict[] = [];
   const unresolved: RestoreConflict[] = [];
   const warnings: string[] = [];
@@ -388,6 +403,7 @@ export class VersionRestoreManager {
           unresolved.push(conflict);
     return { resolved, unresolved, warnings };
   private async applyConflictResolution(conflict: RestoreConflict, resolution: string): Promise<void> {
+
     // Implementation would depend on the specific conflict type and resolution strategy
     switch (resolution) {
     case 'keep_current':
@@ -403,6 +419,7 @@ export class VersionRestoreManager {
     default:
       throw new Error(`Unknown resolution strategy: ${resolution}`);}
   private async mergeConflictValues(conflict: RestoreConflict): Promise<void> {
+
     // Implement intelligent merging based on conflict type
     switch (conflict.element_type) {
     case 'node':
@@ -417,6 +434,7 @@ export class VersionRestoreManager {
     default:
       throw new Error(`Cannot merge conflict type: ${conflict.element_type}`);}
   private async mergeNodeValues(conflict: RestoreConflict): Promise<void> {
+
     // Implement node-specific merging logic
     const current = conflict.current_value;
     const restore = conflict.restore_value;
@@ -430,6 +448,7 @@ export class VersionRestoreManager {
     // Apply the merged value
     await this.updateElement(conflict.element_id, 'node', merged);
   private async mergeEdgeValues(conflict: RestoreConflict): Promise<void> {
+
     // Implement edge-specific merging logic
     const current = conflict.current_value;
     const restore = conflict.restore_value;
@@ -439,6 +458,7 @@ export class VersionRestoreManager {
     };
     await this.updateElement(conflict.element_id, 'edge', merged);
   private async mergePropertyValues(conflict: RestoreConflict): Promise<void> {
+
   // Implement property-specific merging logic
   // This would depend on the specific property type
   private async validateRestorePermissions(snapshotData: any, options: RestoreOptions): Promise<void> {,
@@ -495,6 +515,7 @@ export class VersionRestoreManager {
   merge_changes: [],
 };
   private async applyChanges(changesToApply: unknown, options: RestoreOptions): Promise<unknown> {
+
     // Apply the calculated changes to the graph
     const response = await this.apiClient.post(`/api/projects/${this.projectId}/apply-changes`, {)}
   },
@@ -503,6 +524,7 @@ export class VersionRestoreManager {
     });
     return response.data.changes_applied;
   private async restoreMetadata(snapshotData: any, options: RestoreOptions): Promise<void> {
+
   if (options.restore_workflow_state) {
   await this.updateWorkflowState(snapshotData.workflow_state, snapshotData.approval_status);
   // Restore other metadata as needed

@@ -12,6 +12,7 @@ import { SecurityPolicyAnalysisEngine } from './SecurityPolicyAnalysisEngine';
 import { SecurityIntelligenceAutomationEngine } from './SecurityIntelligenceAutomationEngine';
 
 }
+}
 export interface SIEMIntegrationConfig {
   integration_settings: {
     enabled: boolean;
@@ -22,6 +23,7 @@ export interface SIEMIntegrationConfig {
     incident_synchronization: boolean;
     threat_feed_integration: boolean;
     alert_forwarding: boolean;
+}
 }
   };
   
@@ -87,6 +89,7 @@ export interface SIEMIntegrationConfig {
 }
 
 }
+}
 export interface SIEMConnection {
   connection_id: string;
   connection_name: string;
@@ -100,6 +103,7 @@ export interface SIEMConnection {
     protocol: 'https' | 'tcp' | 'udp' | 'kafka' | 'amqp';
     port?: number;
     ssl_enabled: boolean;
+}
 }
   };
   
@@ -131,6 +135,7 @@ export interface SIEMConnection {
 }
 
 }
+}
 export interface FieldMapping {
   source_field: string;
   target_field: string;
@@ -140,7 +145,9 @@ export interface FieldMapping {
   default_value?: unknown;
 }
 }
+}
 
+}
 }
 export interface EnrichmentRule {
   rule_id: string;
@@ -152,7 +159,9 @@ export interface EnrichmentRule {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface FilterCriteria {
   include_filters: FilterRule[];
@@ -162,7 +171,9 @@ export interface FilterCriteria {
   time_window_hours?: number;
 }
 }
+}
 
+}
 }
 export interface FilterRule {
   field: string;
@@ -171,7 +182,9 @@ export interface FilterRule {
   case_sensitive?: boolean;
 }
 }
+}
 
+}
 }
 export interface SIEMExportJob {
   job_id: string;
@@ -183,6 +196,7 @@ export interface SIEMExportJob {
     connection_id: string;
     data_types: string[];
     export_format: string;
+}
 }
     time_range?: { start: number; end: number };
     filter_criteria?: FilterCriteria;
@@ -208,6 +222,7 @@ export interface SIEMExportJob {
 }
 
 }
+}
 export interface ThreatIntelligenceExport {
   export_id: string;
   export_timestamp: number;
@@ -218,6 +233,7 @@ export interface ThreatIntelligenceExport {
     threat_actors: ThreatActorExport[];
     campaigns: CampaignExport[];
     vulnerabilities: VulnerabilityExport[];
+}
 }
   };
   
@@ -239,6 +255,7 @@ export interface ThreatIntelligenceExport {
 }
 
 }
+}
 export interface IOCExport {
   indicator_id: string;
   indicator_type: 'ip' | 'domain' | 'url' | 'hash' | 'email' | 'file' | 'registry' | 'mutex';
@@ -252,7 +269,9 @@ export interface IOCExport {
   tlp: 'white' | 'green' | 'amber' | 'red';
 }
 }
+}
 
+}
 }
 export interface TTPExport {
   ttp_id: string;
@@ -265,7 +284,9 @@ export interface TTPExport {
   mitigation_strategies: string[];
 }
 }
+}
 
+}
 }
 export interface ThreatActorExport {
   actor_id: string;
@@ -278,7 +299,9 @@ export interface ThreatActorExport {
   attribution_confidence: number;
 }
 }
+}
 
+}
 }
 export interface CampaignExport {
   campaign_id: string;
@@ -292,7 +315,9 @@ export interface CampaignExport {
   status: string;
 }
 }
+}
 
+}
 }
 export interface VulnerabilityExport {
   vulnerability_id: string;
@@ -305,7 +330,9 @@ export interface VulnerabilityExport {
   patch_available: boolean;
 }
 }
+}
 
+}
 }
 export interface SIEMIntegrationResult {
   integration_id: string;
@@ -318,6 +345,7 @@ export interface SIEMIntegrationResult {
     real_time_streams_active: number;
     data_volume_exported: number;
     integration_health_score: number;
+}
 }
   };
   

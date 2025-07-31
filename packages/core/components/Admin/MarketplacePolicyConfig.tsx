@@ -27,6 +27,7 @@ import {
   Target
 } from 'lucide-react';
 
+}
 export interface PolicyRule {
   id: string;
   name: string;
@@ -35,6 +36,8 @@ export interface PolicyRule {
   action: string;
   enabled: boolean;
   priority: number;
+}
+}
 }
 export interface MarketplacePolicyTemplate {
   templateId: string;
@@ -48,10 +51,13 @@ export interface MarketplacePolicyTemplate {
   thresholds: Record<string, number>;
   timeframes: Record<string, number>;
   actions: string;
+}
 };
+}
 }
 export interface MarketplacePolicyConfigProps {
   className?: string;
+}
 }
 export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = ({)
   className = ''

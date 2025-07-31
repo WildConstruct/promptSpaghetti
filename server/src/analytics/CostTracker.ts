@@ -6,13 +6,16 @@ import { AnalyticsDAO, TokenUsage } from '../database/analytics-dao';
  * Provider pricing configuration
  */
 }
+}
 export interface ProviderPricing {
   provider: string;
   models: Map<string, ModelPricing>;
   lastUpdated: number;
 }
 }
+}
 
+}
 }
 export interface ModelPricing {
   inputTokenPrice: number;    // Price per 1000 input tokens
@@ -21,10 +24,12 @@ export interface ModelPricing {
   lastUpdated: number;
 }
 }
+}
 
 /**
  * Cost calculation result
  */
+}
 }
 export interface CostCalculation {
   provider: string;
@@ -39,10 +44,12 @@ export interface CostCalculation {
   timestamp: number;
 }
 }
+}
 
 /**
  * Budget configuration
  */
+}
 }
 export interface BudgetConfig {
   id: string;
@@ -61,10 +68,12 @@ export interface BudgetConfig {
   updatedAt: number;
 }
 }
+}
 
 /**
  * Budget usage tracking
  */
+}
 }
 export interface BudgetUsage {
   budgetId: string;
@@ -76,10 +85,12 @@ export interface BudgetUsage {
   lastUpdated: number;
 }
 }
+}
 
 /**
  * Cost alert
  */
+}
 }
 export interface CostAlert {
   id: string;
@@ -92,6 +103,7 @@ export interface CostAlert {
   severity: 'info' | 'warning' | 'critical';
   timestamp: number;
   acknowledged: boolean;
+}
 }
 }
 

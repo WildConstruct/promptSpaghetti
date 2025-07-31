@@ -21,6 +21,7 @@ import validator from 'validator';
 // =============================================================================
 
 }
+}
 export interface SecurityValidationContext {
   userId: string;
   sessionId: string;
@@ -34,7 +35,9 @@ export interface SecurityValidationContext {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface AdminOperation {
   type: AdminOperationType;
@@ -44,6 +47,7 @@ export interface AdminOperation {
   requiresMFA?: boolean;
   privilegeLevel: PrivilegeLevel;
   auditLevel: AuditLevel;
+}
 }
 }
 
@@ -73,6 +77,7 @@ export type PrivilegeLevel = 'standard' | 'elevated' | 'admin' | 'super_admin' |
 export type AuditLevel = 'basic' | 'detailed' | 'comprehensive' | 'forensic';
 
 }
+}
 export interface SecurityValidationResult {
   isValid: boolean;
   securityLevel: SecuritySeverity;
@@ -86,7 +91,9 @@ export interface SecurityValidationResult {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface SecurityViolation {
   violationType: ViolationType;
@@ -97,6 +104,7 @@ export interface SecurityViolation {
   detectionTime: Date;
   remediation: RemediationAction[];
   evidence: Record<string, any>;
+}
 }
 }
 
@@ -113,6 +121,7 @@ export type ViolationType =
   | 'audit_tampering';
 
 }
+}
 export interface SecurityWarning {
   warningType: string;
   message: string;
@@ -120,13 +129,16 @@ export interface SecurityWarning {
   recommendations: string[];
 }
 }
+}
 
+}
 }
 export interface RemediationAction {
   action: string;
   priority: number;
   automated: boolean;
   description: string;
+}
 }
 }
 
@@ -136,6 +148,7 @@ export type AuthMethod = 'mfa_totp' | 'mfa_sms' | 'hardware_key' | 'biometric' |
 // Security Policy Configurations
 // =============================================================================
 
+}
 }
 export interface AdminSecurityPolicy {
   id: string;
@@ -153,7 +166,9 @@ export interface AdminSecurityPolicy {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface TimeRestriction {
   startTime: string; // HH:mm
@@ -162,7 +177,9 @@ export interface TimeRestriction {
   timezone: string;
 }
 }
+}
 
+}
 }
 export interface ValidationRule {
   field: string;
@@ -176,9 +193,11 @@ export interface ValidationRule {
   customValidator?: string;
 }
 }
+}
 
 export type SanitizationType = 'html_escape' | 'sql_escape' | 'json_escape' | 'trim' | 'lowercase' | 'uppercase';
 
+}
 }
 export interface RateLimit {
   operation: string;
@@ -188,7 +207,9 @@ export interface RateLimit {
   penaltyDuration: number; // minutes
 }
 }
+}
 
+}
 }
 export interface AuditRequirement {
   level: AuditLevel;
@@ -196,6 +217,7 @@ export interface AuditRequirement {
   fields: string[];
   realTimeAlerts: boolean;
   complianceFlags: string[];
+}
 }
 }
 
@@ -1149,13 +1171,16 @@ export class AdminSecurityValidationService {
 // =============================================================================
 
 }
+}
 interface RateLimitState {
   requests: number[];
   blocked: boolean;
   blockedUntil: number;
 }
 }
+}
 
+}
 }
 interface SuspiciousActivity {
   userId: string;
@@ -1163,5 +1188,6 @@ interface SuspiciousActivity {
   severity: SecuritySeverity;
   detectedAt: Date;
   count: number;
+}
 }
 }

@@ -5,6 +5,7 @@
  * Supports multiple file types with preview and validation.
  */
 import React, { useState, useCallback, useRef } from 'react';
+}
 interface DocumentUploadProps {
   acceptedTypes?: string;
   maxFileSize?: number; // in MB,
@@ -36,6 +37,7 @@ interface DocumentUploadProps {
   existingFiles = [],
   disabled = false,
   placeholder = 'Upload your documents here'
+}
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<File>([]);
   const [dragActive, setDragActive] = useState(false);

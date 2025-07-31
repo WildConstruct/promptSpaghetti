@@ -1174,6 +1174,7 @@ function ensureOutputNode(graph: Graph, entryPointId: string): void {
  * Professional export system with VFX-ready formats
  */
 }
+}
 export interface ExportRequest {
   format: string;
   data: Record<string, unknown>;
@@ -1181,13 +1182,16 @@ export interface ExportRequest {
   filename: string;
 }
 }
+}
 
+}
 }
 export interface ExportResult {
   type: 'text' | 'binary';
   data: Record<string, unknown>;
   mimeType: string;
   shouldDownload?: boolean;
+}
 }
 }
 

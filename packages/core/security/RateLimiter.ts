@@ -9,6 +9,7 @@ import { z } from 'zod';
 // Types and Interfaces
 // ========================================
 
+}
 export interface RateLimitConfig {
   windowMs: number;           // Time window in milliseconds,
   maxRequests: number;        // Maximum requests per window,
@@ -23,6 +24,8 @@ export interface RateLimitConfig {
   message?: string | ((info: RateLimitInfo) => string);
   statusCode?: number;
 }
+}
+}
 export interface RateLimitContext {
   ip?: string;
   userId?: string;
@@ -36,6 +39,8 @@ export interface RateLimitContext {
   sessionId?: string;
   organizationId?: string;
 }
+}
+}
 export interface RateLimitInfo {
   totalHits: number;
   totalHitsInWindow: number;
@@ -46,23 +51,30 @@ export interface RateLimitInfo {
   exceeded: boolean;
   retryAfter?: number;
 }
+}
+}
 export interface RateLimitResult {
   allowed: boolean;
   info: RateLimitInfo;
   headers: Record<string, string>;
   error?: string;
 }
+}
+}
 export interface RateLimitStore {
   get(key: string): Promise<RateLimitData | null>;
   set(key: string, data: RateLimitData, ttlMs: number): Promise<void>;
+}
   increment(key: string, windowMs: number): Promise<{ hits: number; resetTime: Date }>;
   reset(key: string): Promise<void>;
   cleanup(): Promise<void>;
+}
 }
 export interface RateLimitData {
   hits: number;
   resetTime: number;
   windowStart: number;
+}
 }
 export enum RateLimitStrategyType {
   FIXED_WINDOW = 'fixed_window',
@@ -103,6 +115,7 @@ export class MemoryRateLimitStore implements RateLimitStore {
   this.cleanup();
 }, cleanupIntervalMs);
   async get(key: string): Promise<RateLimitData | null> {
+
   const data = this.store.get(key);
   if (!data) return null;
   // Check if expired
@@ -116,6 +129,7 @@ export class MemoryRateLimitStore implements RateLimitStore {
   resetTime: Date.now() + ttlMs,
 });
   async increment(key: string, windowMs: number): Promise<{ hits: number; resetTime: Date }> {
+
   const now = Date.now();
   const existing = await this.get(key);
   if (!existing || now > existing.resetTime) {
@@ -140,8 +154,10 @@ export class MemoryRateLimitStore implements RateLimitStore {
   resetTime: new Date(existing.resetTime),
 };
   async reset(key: string): Promise<void> {
+
     this.store.delete(key);
   async cleanup(): Promise<void> {
+
     const now = Date.now();
     for (const [key, data] of this.store.entries()) {
       if (now > data.resetTime) {
@@ -250,6 +266,7 @@ export abstract class RateLimitStrategy {
 
 export class FixedWindowStrategy extends RateLimitStrategy {
   async checkLimit(key: string): Promise<RateLimitResult> {
+
     try {
       const { hits, resetTime } = await this.store.increment(key, this.config.windowMs);
       const now = new Date();
@@ -293,6 +310,7 @@ export class FixedWindowStrategy extends RateLimitStrategy {
   error: 'Rate limit store unavailable',
 };
   async reset(key: string): Promise<void> {
+
     await this.store.reset(key);
   private generateHeaders(info: RateLimitInfo): Record<string, string> {
     const headers: Record<string, string> = {};
@@ -354,6 +372,7 @@ export class RateLimiter {
    * Check if request should be rate limited
    */
   async checkLimit(context: RateLimitContext): Promise<RateLimitResult> {
+
   const key = this.keyGenerator(context);
   return await this.strategy.checkLimit(key, context);
   /**
@@ -397,6 +416,7 @@ export class RateLimiter {
    * Cleanup resources
    */
   async cleanup(): Promise<void> {
+
   if (this.config.store) {
   await this.config.store.cleanup();
   // Cleanup memory store if it's the default one

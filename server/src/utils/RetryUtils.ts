@@ -7,6 +7,7 @@
  */
 
 }
+}
 export interface RetryOptions {
   maxAttempts?: number;
   baseDelay?: number;
@@ -19,7 +20,9 @@ export interface RetryOptions {
   onFailure?: (attempts: number, finalError: Error) => void;
 }
 }
+}
 
+}
 }
 export interface RetryResult<T> {
   success: boolean;
@@ -31,6 +34,7 @@ export interface RetryResult<T> {
 }
 
 }
+}
 export interface RetryAttempt {
   attempt: number;
   startTime: number;
@@ -38,6 +42,7 @@ export interface RetryAttempt {
   success: boolean;
   error?: Error;
   delay?: number;
+}
 }
 }
 

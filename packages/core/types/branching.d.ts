@@ -1339,6 +1339,7 @@ export type BranchStatsResponse = z.infer<typeof BranchStatsResponseSchema>;
 export type BranchTimelineResponse = z.infer<typeof BranchTimelineResponseSchema>;
 export type BranchComparisonResponse = z.infer<typeof BranchComparisonResponseSchema>;
 
+}
 export interface BranchContext {
     projectId: string;
     branchId: string;
@@ -1349,8 +1350,10 @@ export interface BranchContext {
         canMerge: boolean;
         canDelete: boolean;
         canAdmin: boolean;
+}
     };
 
+}
 export interface MergeContext {
     mergeRequestId: string;
     sourceBranchId: string;
@@ -1359,12 +1362,14 @@ export interface MergeContext {
     strategy: 'merge' | 'squash' | 'rebase';
     conflictResolution?: Record<string, any>;
 
+}
 export interface BranchHierarchy {
     branch: ProjectBranch;
     children: BranchHierarchy[];
     depth: number;
     path: string[];
 
+}
 export interface BranchMetrics {
     commitsPerDay: Record<string, number>;
     contributorsPerDay: Record<string, number>;
@@ -1376,6 +1381,7 @@ export interface BranchMetrics {
         userId: string;
         userName: string;
         commits: number;
+}
     };
 
 export declare export declare export declare export declare export declare export declare export declare const BRANCHING_DEFAULTS: {
@@ -1415,6 +1421,7 @@ export declare const MERGE_STRATEGY_DESCRIPTIONS: {
     readonly rebase: "Rebase and merge";
 };
 
+}
 export interface BranchEvent {
     type: 'branch_created' | 'branch_updated' | 'branch_deleted' | 'branch_merged';
     branchId: string;
@@ -1423,6 +1430,7 @@ export interface BranchEvent {
     data: any;
     timestamp: Date;
 
+}
 export interface MergeRequestEvent {
     type: 'merge_request_created' | 'merge_request_updated' | 'merge_request_merged' | 'merge_request_closed';
     mergeRequestId: string;
@@ -1431,6 +1439,7 @@ export interface MergeRequestEvent {
     data: any;
     timestamp: Date;
 
+}
 export interface BranchNotification {
     type: 'branch_conflict' | 'merge_request_review' | 'branch_merged' | 'branch_updated';
     title: string;
@@ -1442,3 +1451,4 @@ export interface BranchNotification {
     timestamp: Date;
 
 //# sourceMappingURL=branching.d.ts.map
+}

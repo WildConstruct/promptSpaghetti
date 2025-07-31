@@ -446,6 +446,7 @@ export type SettingItem = z.infer<typeof SettingItemSchema>;
  * Settings change event
  */
 
+}
 export interface SettingsChangeEvent {
     key: string;
     value: any;
@@ -456,6 +457,7 @@ export interface SettingsChangeEvent {
  * Settings validation result
  */
 
+}
 export interface SettingsValidationResult {
     valid: boolean;
     errors: string[];
@@ -464,12 +466,14 @@ export interface SettingsValidationResult {
  * Settings export/import format
  */
 
+}
 export interface SettingsExport {
     settings: AdvancedSettings;
     metadata: {
         exportedAt: string;
         version: string;
         appVersion: string;
+}
     };
 
 //# sourceMappingURL=types.d.ts.map

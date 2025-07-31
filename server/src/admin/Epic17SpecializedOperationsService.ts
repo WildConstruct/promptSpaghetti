@@ -21,6 +21,7 @@ import * as fs from 'fs/promises';
 // =============================================================================
 
 }
+}
 export interface SpecializedOperationsConfig {
   // Key rotation settings
   keyRotation: {
@@ -29,6 +30,7 @@ export interface SpecializedOperationsConfig {
     gracePeriodHours: number;
     maxConcurrentRotations: number;
     notifyBeforeDays: number[];
+}
 }
   };
   
@@ -88,6 +90,7 @@ export enum SpecializedOperationType {
 }
 
 }
+}
 export interface SpecializedOperation {
   operationId: string;
   operationType: SpecializedOperationType;
@@ -139,6 +142,7 @@ export interface SpecializedOperation {
   notifications: NotificationConfig;
 }
 }
+}
 
 export enum OperationStatus {
   DRAFT = 'draft',
@@ -163,6 +167,7 @@ export enum OperationPriority {
 }
 
 }
+}
 export interface OperationConfiguration {
   executionMode: 'manual' | 'automatic' | 'scheduled';
   parallelExecution: boolean;
@@ -186,7 +191,9 @@ export interface OperationConfiguration {
   notifyOnError: boolean;
 }
 }
+}
 
+}
 }
 export interface OperationPhase {
   phaseId: string;
@@ -215,6 +222,7 @@ export interface OperationPhase {
   outputs: Record<string, any>;
 }
 }
+}
 
 export enum PhaseStatus {
   PENDING = 'pending',
@@ -225,6 +233,7 @@ export enum PhaseStatus {
   CANCELLED = 'cancelled'
 }
 
+}
 }
 export interface PhaseTask {
   taskId: string;
@@ -237,7 +246,9 @@ export interface PhaseTask {
   duration?: number; // milliseconds
 }
 }
+}
 
+}
 }
 export interface OperationProgress {
   overallPercentage: number;
@@ -261,7 +272,9 @@ export interface OperationProgress {
   errors: string[];
 }
 }
+}
 
+}
 }
 export interface OperationResult {
   resultId: string;
@@ -281,7 +294,9 @@ export interface OperationResult {
   recommendations?: string[];
 }
 }
+}
 
+}
 }
 export interface OperationArtifact {
   artifactId: string;
@@ -305,7 +320,9 @@ export interface OperationArtifact {
   allowedRoles: string[];
 }
 }
+}
 
+}
 }
 export interface OperationLog {
   logId: string;
@@ -324,7 +341,9 @@ export interface OperationLog {
   traceId?: string;
 }
 }
+}
 
+}
 }
 export interface RiskAssessment {
   overallRisk: 'low' | 'medium' | 'high' | 'critical';
@@ -342,7 +361,9 @@ export interface RiskAssessment {
   recoveryTimeEstimate: number; // minutes
 }
 }
+}
 
+}
 }
 export interface RiskFactor {
   factor: string;
@@ -352,7 +373,9 @@ export interface RiskFactor {
   mitigation?: string;
 }
 }
+}
 
+}
 }
 export interface ComplianceCheck {
   checkId: string;
@@ -372,7 +395,9 @@ export interface ComplianceCheck {
   remediationDeadline?: Date;
 }
 }
+}
 
+}
 }
 export interface OperationApproval {
   approvalId: string;
@@ -391,7 +416,9 @@ export interface OperationApproval {
   validUntil?: Date;
 }
 }
+}
 
+}
 }
 export interface RollbackPlan {
   planId: string;
@@ -412,7 +439,9 @@ export interface RollbackPlan {
   estimatedRollbackTime: number; // minutes
 }
 }
+}
 
+}
 }
 export interface RollbackStep {
   stepId: string;
@@ -431,7 +460,9 @@ export interface RollbackStep {
   dependsOn: string[]; // Other step IDs
 }
 }
+}
 
+}
 }
 export interface NotificationConfig {
   enabled: boolean;
@@ -440,7 +471,9 @@ export interface NotificationConfig {
   escalation: EscalationConfig;
 }
 }
+}
 
+}
 }
 export interface NotificationChannel {
   type: 'email' | 'slack' | 'webhook' | 'sms' | 'push';
@@ -449,7 +482,9 @@ export interface NotificationChannel {
   events: string[]; // Which events to notify about
 }
 }
+}
 
+}
 }
 export interface EscalationConfig {
   enabled: boolean;
@@ -457,13 +492,16 @@ export interface EscalationConfig {
   timeoutMinutes: number;
 }
 }
+}
 
+}
 }
 export interface EscalationLevel {
   level: number;
   recipients: string[];
   channels: string[];
   delayMinutes: number;
+}
 }
 }
 

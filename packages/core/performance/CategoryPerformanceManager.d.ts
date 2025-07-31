@@ -7,6 +7,7 @@
 import { EventEmitter } from 'events';
 import { PerformanceMonitor } from '../monitoring';
 
+}
 export interface CategoryPerformanceConfig {
     enableCategoryOptimization: boolean;
     enableDynamicThresholds: boolean;
@@ -17,8 +18,10 @@ export interface CategoryPerformanceConfig {
         memoryThreshold: number;
         cpuThreshold: number;
         responseTimeTarget: number;
+}
     };
 
+}
 export interface CategoryConfig {
     name: string;
     priority: 'low' | 'medium' | 'high' | 'critical';
@@ -28,6 +31,7 @@ export interface CategoryConfig {
         maxExecutionTimeMs: number;
         maxConcurrentNodes: number;
         queueLimit: number;
+}
     };
     cacheStrategy: {
         enabled: boolean;
@@ -42,6 +46,7 @@ export interface CategoryConfig {
         maxInstances: number;
     };
 
+}
 export interface CategoryMetrics {
     categoryName: string;
     totalNodes: number;
@@ -59,6 +64,7 @@ export interface CategoryMetrics {
     recommendations: string[];
     lastUpdated: number;
 
+}
 export interface OptimizationAction {
     id: string;
     category: string;
@@ -69,6 +75,7 @@ export interface OptimizationAction {
         performanceGain: number;
         resourceCost: number;
         confidence: number;
+}
     };
     timestamp: number;
     applied: boolean;

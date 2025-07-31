@@ -2,16 +2,20 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { CollapsibleSection } from './CollapsibleSection';
 import { hasVariations } from '../../utils/nodeDataUtils';
 
+}
 export interface PreviewSectionProps {
   node: Error;
 }
+}
 
+}
 interface PreviewExample {
   text: string;
   highlightInfo?: {
     selectedVariation: string;
     selectedIndex: number;
     totalVariations: number;
+}
   };
 }
 export const PreviewSection: React.FC<PreviewSectionProps> = ({ node }) => {

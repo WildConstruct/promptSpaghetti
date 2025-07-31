@@ -9,6 +9,7 @@ export type FilmIndustryRole = 'director' | 'vfx_supervisor' | 'pipeline_td' | '
 export type PromptingMethodology = 'zada' | 'mars' | 'hybrid' | 'custom';
 export type MARSZoneType = 'camera' | 'subject' | 'effects' | 'focal' | 'lighting' | 'composition' | 'post_processing';
 
+}
 export interface FilmIndustryUser {
     id: string;
     name: string;
@@ -18,6 +19,7 @@ export interface FilmIndustryUser {
     isOnline: boolean;
     currentSession?: string;
 
+}
 export interface MARSRegionTemplate {
     id: string;
     zoneType: MARSZoneType;
@@ -31,8 +33,10 @@ export interface MARSRegionTemplate {
         category: string;
         subcategory: string;
         controlNetMapping?: string;
+}
     };
 
+}
 export interface ZadaPromptPattern {
     id: string;
     name: string;
@@ -47,6 +51,7 @@ export interface ZadaPromptPattern {
         locations: string;
         characters: string;
         cinematography: string;
+}
     };
     accessibility: {
         directorFriendly: boolean;
@@ -54,6 +59,7 @@ export interface ZadaPromptPattern {
         humanReadableScore: number;
     };
 
+}
 export interface PromptingMethodologySession {
     sessionId: string;
     title: string;
@@ -66,6 +72,7 @@ export interface PromptingMethodologySession {
     createdAt: Date;
     lastModified: Date;
 
+}
 export interface MethodologyEdit {
     id: string;
     sessionId: string;
@@ -75,6 +82,7 @@ export interface MethodologyEdit {
     data: any;
     conflictResolution?: string;
 
+}
 export interface VFXPipelineConfig {
     includeAnnotations: boolean;
     includeMarsStructure: boolean;
@@ -86,8 +94,10 @@ export interface VFXPipelineConfig {
         sequence: string;
         shot: string;
         version: string;
+}
     };
 
+}
 export interface FilmIndustryWorkflowTemplate {
     id: string;
     name: string;
@@ -100,6 +110,7 @@ export interface FilmIndustryWorkflowTemplate {
     estimatedDuration: number;
     complexity: 'simple' | 'intermediate' | 'advanced';
 
+}
 export interface WorkflowPhase {
     id: string;
     name: string;
@@ -111,6 +122,7 @@ export interface WorkflowPhase {
     marsConfiguration?: MARSRegionTemplate[];
     zadaPattern?: ZadaPromptPattern;
 
+}
 export interface CollaborationComment {
     id: string;
     userId: string;
@@ -168,3 +180,4 @@ export declare class AdvancedPromptingCollaborationService extends EventEmitter 
     getUserSessions(userId: string): PromptingMethodologySession[];
 
 //# sourceMappingURL=AdvancedPromptingCollaborationService.d.ts.map
+}

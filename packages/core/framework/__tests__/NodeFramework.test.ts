@@ -23,10 +23,13 @@ class TestFrameworkNode extends FrameworkNode {
   version: '1.0.0',
 };
   protected async onInitialize(): Promise<void> {
+
     // Test initialization
   protected async executeNode(context: AdvancedExecutionContext): Promise<any> {
+
     return { result: 'test_result', data: this.testData };
   protected async onDestroy(): Promise<void> {
+
   // Test cleanup
   protected getData(): any {,
   return this.testData;

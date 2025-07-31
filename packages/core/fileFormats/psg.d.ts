@@ -373,6 +373,7 @@ export declare enum PSGErrorType {
     INVALID_EDGE_DATA = "INVALID_EDGE_DATA",
     SECURITY_VIOLATION = "SECURITY_VIOLATION"
 
+}
 export interface PSGError {
     type: PSGErrorType;
     message: string;
@@ -385,6 +386,7 @@ export declare function parsePSGFile(jsonString: string, options?: {)
     maxFileSize?: number;
     strictValidation?: boolean;
     allowLegacyFormat?: boolean;
+}
 }): {
     success: true;
     data: PSGFile;

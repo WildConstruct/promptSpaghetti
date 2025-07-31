@@ -6,21 +6,26 @@
 import { Graph } from './graphSchema';
 import { ProjectMetadata, PSGFile, SaveProjectOptions, LoadProjectResult, SaveProjectResult } from './projectManager';
 
+}
 export interface ServerProjectMetadata extends ProjectMetadata {
   id: string;
   userId?: number;
 }
 
+}
 export interface ServerProject extends PSGFile {
   id: string;
   userId?: number;
 }
 
+}
 export interface ProjectListResponse {
   projects: ServerProject[];
   total: number;
   limit: number;
   offset: number;
+}
+}
 }
 export interface ProjectQuery {
   userId?: number;
@@ -34,6 +39,7 @@ export interface ProjectQuery {
   * Server-based Project Manager for API operations
   */
 }
+}
 export class ServerProjectManager {
   private static readonly API_BASE = '/api';
   /**
@@ -45,6 +51,7 @@ export class ServerProjectManager {
     settings?: any,
     userId?: number
   ): Promise<SaveProjectResult & { projectId?: string }> {
+
     try {
       const now = new Date().toISOString();
       const project: PSGFile = {
@@ -110,6 +117,7 @@ export class ServerProjectManager {
     settings?: any,
     userId?: number
   ): Promise<SaveProjectResult> {
+
   try {
   const now = new Date().toISOString();
   const project: PSGFile = {
@@ -162,6 +170,7 @@ export class ServerProjectManager {
   static async loadProjectFromServer(projectId: string,
     userId?: number
   ): Promise<LoadProjectResult & { project?: ServerProject }> {
+
     try {
       const url = new URL(`${this.API_BASE}/projects/${projectId}`, window.location.origin);
       if (userId) {
@@ -199,6 +208,7 @@ export class ServerProjectManager {
    * Get list of user's projects with filtering and pagination
    */
   static async getUserProjects(query: ProjectQuery = {}): Promise<ProjectListResponse | { error: string }> {
+
     try {
       const url = new URL(`${this.API_BASE}/projects`, window.location.origin);
       // Add query parameters
@@ -231,6 +241,7 @@ export class ServerProjectManager {
    */
   static async getRecentProjects(userId?: number,
     limit: number = 10): Promise<{ projects: ServerProject } | { error: string }> {
+
     try {
       const url = new URL(`${this.API_BASE}/projects/recent`, window.location.origin);
       if (userId) {
@@ -258,6 +269,7 @@ export class ServerProjectManager {
   static async deleteProjectFromServer(projectId: string,
     userId?: number
   ): Promise<{ success: boolean; error?: string; message?: string }> {
+
     try {
       const url = new URL(`${this.API_BASE}/projects/${projectId}`, window.location.origin);
       if (userId) {
@@ -296,6 +308,7 @@ export class ServerProjectManager {
     userId?: number,
     limit: number = 20,
     offset: number = 0): Promise<ProjectListResponse | { error: string }> {
+
     return this.getUserProjects({
       userId,
       search: searchQuery,
@@ -313,6 +326,7 @@ export class ServerProjectManager {
     userId?: number,
     limit: number = 20,
     offset: number = 0): Promise<ProjectListResponse | { error: string }> {
+
     return this.getUserProjects({
       userId,
       tags,

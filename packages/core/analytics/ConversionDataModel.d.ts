@@ -13,6 +13,7 @@
  */
 import { EnhancedConversionEvent } from './ConversionFunnelArchitecture';
 
+}
 export interface ConversionFunnelDefinition {
     id: string;
     name: string;
@@ -25,6 +26,7 @@ export interface ConversionFunnelDefinition {
         requireSequentialSteps: boolean;
         enableParallelPaths: boolean;
         dropOffGracePeriod: number;
+}
     };
     steps: ConversionStep[];
     conditionalPaths: ConditionalPath[];
@@ -45,6 +47,7 @@ export interface ConversionFunnelDefinition {
         benchmarkData?: BenchmarkData;
     };
 
+}
 export interface ConversionStep {
     id: string;
     name: string;
@@ -60,6 +63,7 @@ export interface ConversionStep {
         maxTimeFromPrevious?: number;
         maxTimeFromStart?: number;
         allowedTimeWindows?: TimeWindow[];
+}
     };
     successMetrics: {
         expectedCompletionRate: number;
@@ -77,6 +81,7 @@ export interface ConversionStep {
 export type StepType = 'entry_point' | 'engagement' | 'decision_point' | 'action' | 'validation' | 'conversion' | 'exit_point';
 export type FunnelCategory = 'acquisition' | 'activation' | 'engagement' | 'monetization' | 'retention' | 'referral';
 
+}
 export interface EventCriteria {
     eventType: string;
     eventPattern?: string;
@@ -84,6 +89,7 @@ export interface EventCriteria {
     valueConstraints?: ValueConstraint[];
     contextRequirements?: ContextRequirement[];
 
+}
 export interface PropertyMatcher {
     propertyPath: string;
     operator: 'equals' | 'contains' | 'startsWith' | 'endsWith' | 'matches' | 'exists' | 'in' | 'between';
@@ -91,6 +97,7 @@ export interface PropertyMatcher {
     caseSensitive?: boolean;
     required?: boolean;
 
+}
 export interface ValueConstraint {
     field: 'value' | 'timestamp' | 'duration';
     min?: number;
@@ -98,11 +105,13 @@ export interface ValueConstraint {
     exactValues?: number[];
     excludeValues?: number[];
 
+}
 export interface ContextRequirement {
     type: 'device' | 'location' | 'session' | 'user_attribute' | 'time_of_day' | 'referrer';
     condition: string;
     value: any;
 
+}
 export interface StepCondition {
     id: string;
     type: 'property' | 'time' | 'sequence' | 'count' | 'custom';
@@ -110,23 +119,27 @@ export interface StepCondition {
     logic: ConditionLogic;
     weight: number;
 
+}
 export interface ConditionLogic {
     operator: 'AND' | 'OR' | 'NOT';
     conditions: SimpleCondition[];
     customValidator?: string;
 
+}
 export interface SimpleCondition {
     field: string;
     operator: string;
     value: any;
     metadata?: Record<string, any>;
 
+}
 export interface TimeWindow {
     start: string;
     end: string;
     daysOfWeek: number[];
     timezone?: string;
 
+}
 export interface StepBranch {
     id: string;
     name: string;
@@ -136,8 +149,10 @@ export interface StepBranch {
     metadata: {
         description: string;
         expectedFlow: number;
+}
     };
 
+}
 export interface ConditionalPath {
     id: string;
     name: string;
@@ -147,13 +162,15 @@ export interface ConditionalPath {
     priority: number;
     isDefault: boolean;
 
+}
 export interface SuccessCriteria {
     primary: {
         stepId: string;
         requirements: ConditionLogic;
         weight: number;
+}
     };
-    secondary: Array<{,
+    secondary: Array<{
         stepId: string;
         requirements: ConditionLogic;
         weight: number;
@@ -164,6 +181,7 @@ export interface SuccessCriteria {
         customFormula?: string;
     };
 
+}
 export interface SegmentationRule {
     id: string;
     name: string;
@@ -175,8 +193,10 @@ export interface SegmentationRule {
         expectedSize: number;
         businessValue: string;
         trackingPeriod: number;
+}
     };
 
+}
 export interface BenchmarkData {
     industryAverageConversionRate: number;
     competitorData?: CompetitorBenchmark[];
@@ -184,6 +204,7 @@ export interface BenchmarkData {
     goalConversionRate: number;
     lastUpdated: number;
 
+}
 export interface CompetitorBenchmark {
     name: string;
     conversionRate: number;
@@ -191,6 +212,7 @@ export interface CompetitorBenchmark {
     dropOffPoints: string[];
     strengths: string[];
 
+}
 export interface HistoricalBenchmark {
     period: string;
     conversionRate: number;
@@ -202,9 +224,11 @@ export interface HistoricalBenchmark {
  * Extends the base conversion event with flexible property validation
  */
 
+}
 export interface FlexibleConversionEvent extends EnhancedConversionEvent {
     flexibleProperties: {
         [key: string]: FlexibleProperty;
+}
     };
     schemaVersion: string;
     validation: {
@@ -252,6 +276,7 @@ export interface FlexibleConversionEvent extends EnhancedConversionEvent {
         locationData?: LocationData;
     };
 
+}
 export interface FlexibleProperty {
     value: any;
     type: PropertyType;
@@ -261,10 +286,12 @@ export interface FlexibleProperty {
         confidence: number;
         lastUpdated: number;
         validationStatus: 'valid' | 'invalid' | 'pending'
+}
   };
 
 export type PropertyType = 'string' | 'number' | 'boolean' | 'date' | 'array' | 'object' | 'enum' | 'json' | 'custom';
 
+}
 export interface PropertySchema {
     type: PropertyType;
     required: boolean;
@@ -273,22 +300,26 @@ export interface PropertySchema {
     transformations?: PropertyTransformation[];
     relationships?: PropertyRelationship[];
 
+}
 export interface PropertyConstraint {
     type: 'format' | 'range' | 'length' | 'pattern' | 'custom';
     value: any;
     errorMessage: string;
     severity: 'error' | 'warning' | 'info';
 
+}
 export interface PropertyTransformation {
     type: 'normalize' | 'encode' | 'hash' | 'encrypt' | 'custom';
     config: Record<string, any>;
     conditions?: ConditionLogic;
 
+}
 export interface PropertyRelationship {
     type: 'depends_on' | 'conflicts_with' | 'derives_from' | 'validates_against';
     targetProperty: string;
     relationship: string;
 
+}
 export interface ValidationError {
     propertyPath: string;
     constraint: string;
@@ -296,6 +327,7 @@ export interface ValidationError {
     severity: 'critical' | 'major' | 'minor';
     suggestedFix?: string;
 
+}
 export interface ValidationWarning {
     propertyPath: string;
     issue: string;
@@ -303,6 +335,7 @@ export interface ValidationWarning {
     impact: string;
     recommendation?: string;
 
+}
 export interface LocationData {
     country: string;
     region?: string;
@@ -312,12 +345,14 @@ export interface LocationData {
         latitude: number;
         longitude: number;
         accuracy: number;
+}
     };
     ipHash: string;
 /**
  * Cohort Tracking Structures
  */
 
+}
 export interface ConversionCohort {
     id: string;
     name: string;
@@ -328,6 +363,7 @@ export interface ConversionCohort {
         timeWindow: number;
         maxSize?: number;
         minSize?: number;
+}
     };
     analysis: {
         retentionPeriods: number[];
@@ -357,6 +393,7 @@ export interface ConversionCohort {
         owner: string;
     };
 
+}
 export interface UserSegment {
     id: string;
     name: string;
@@ -366,6 +403,7 @@ export interface UserSegment {
         operator: 'AND' | 'OR';
         updateFrequency: 'real_time' | 'hourly' | 'daily' | 'weekly';
         isStatic: boolean;
+}
     };
     state: {
         currentSize: number;
@@ -390,6 +428,7 @@ export interface UserSegment {
         customAttributes: Record<string, any>;
     };
 
+}
 export interface MetricCalculation {
     id: string;
     name: string;
@@ -398,11 +437,13 @@ export interface MetricCalculation {
     aggregationPeriod: 'hour' | 'day' | 'week' | 'month';
     customFormula?: string;
 
+}
 export interface TimeSeriesData {
     timestamp: number;
     value: number;
     metadata?: Record<string, any>;
 
+}
 export interface DropOffPoint {
     stepId: string;
     stepName: string;
@@ -412,6 +453,7 @@ export interface DropOffPoint {
     commonExitActions: string[];
     recoveryOpportunities: string[];
 
+}
 export interface ValueMetrics {
     totalRevenue: number;
     averageOrderValue: number;
@@ -420,6 +462,7 @@ export interface ValueMetrics {
     costPerAcquisition: number;
     returnOnInvestment: number;
 
+}
 export interface BehaviorPattern {
     id: string;
     name: string;
@@ -430,8 +473,10 @@ export interface BehaviorPattern {
         preferredDays: number[];
         preferredHours: number[];
         seasonality?: string;
+}
     };
 
+}
 export interface FunnelSegmentMetrics {
     funnelId: string;
     conversionRate: number;
@@ -441,6 +486,7 @@ export interface FunnelSegmentMetrics {
     backtrackingRate: number;
     pathPreferences: PathPreference[];
 
+}
 export interface PathPreference {
     pathId: string;
     pathName: string;
@@ -451,6 +497,7 @@ export interface PathPreference {
  * Entity Relationship Structures
  */
 
+}
 export interface UserEntity {
     id: string;
     profile: {
@@ -459,6 +506,7 @@ export interface UserEntity {
         registrationDate: number;
         verificationStatus: 'verified' | 'pending' | 'suspended';
         accountType: 'free' | 'premium' | 'enterprise'
+}
   };
     conversionHistory: {
         totalConversions: number;
@@ -496,6 +544,7 @@ export interface UserEntity {
         notificationSettings: NotificationSettings;
     };
 
+}
 export interface TemplateEntity {
     id: string;
     metadata: {
@@ -507,6 +556,7 @@ export interface TemplateEntity {
         tags: string[];
         createdDate: number;
         lastUpdated: number;
+}
     };
     conversionMetrics: {
         totalViews: number;
@@ -548,6 +598,7 @@ export interface TemplateEntity {
         qualityScore: number;
     };
 
+}
 export interface ConversionSummary {
     funnelId: string;
     totalConversions: number;
@@ -556,12 +607,14 @@ export interface ConversionSummary {
     lastConversionDate: number;
     preferredPath?: string;
 
+}
 export interface DevicePreference {
     deviceType: string;
     usagePercentage: number;
     conversionRate: number;
     lastUsed: number;
 
+}
 export interface ActivityPattern {
     type: 'temporal' | 'behavioral' | 'contextual';
     pattern: string;
@@ -569,6 +622,7 @@ export interface ActivityPattern {
     strength: number;
     impact: 'positive' | 'negative' | 'neutral';
 
+}
 export interface SegmentChange {
     date: number;
     fromSegment: string;
@@ -576,6 +630,7 @@ export interface SegmentChange {
     reason: string;
     triggerEvent?: string;
 
+}
 export interface CohortMembership {
     cohortId: string;
     joinDate: number;
@@ -583,6 +638,7 @@ export interface CohortMembership {
     daysActive: number;
     conversionAchieved: boolean;
 
+}
 export interface PrivacySettings {
     trackingConsent: boolean;
     analyticsConsent: boolean;
@@ -591,17 +647,20 @@ export interface PrivacySettings {
     dataRetentionPeriod: number;
     rightToErasure: boolean;
 
+}
 export interface CommunicationPreference {
     channel: 'email' | 'sms' | 'push' | 'in_app';
     frequency: 'immediate' | 'daily' | 'weekly' | 'monthly' | 'never';
     topics: string[];
 
+}
 export interface ContentPreference {
     category: string;
     interest: number;
     lastInteraction: number;
     conversionHistory: number;
 
+}
 export interface NotificationSettings {
     marketing: boolean;
     product: boolean;
@@ -611,8 +670,10 @@ export interface NotificationSettings {
         start: string;
         end: string;
         timezone: string;
+}
     };
 
+}
 export interface TemplateFunnelMetrics {
     funnelId: string;
     views: number;
@@ -622,6 +683,7 @@ export interface TemplateFunnelMetrics {
     dropOffPoints: DropOffPoint[];
     topSegments: string[];
 
+}
 export interface PriceChange {
     date: number;
     oldPrice: number;
@@ -629,6 +691,7 @@ export interface PriceChange {
     reason: string;
     impactOnConversions: number;
 
+}
 export interface TrendData {
     direction: 'up' | 'down' | 'stable';
     magnitude: number;
@@ -636,11 +699,13 @@ export interface TrendData {
     timeframe: string;
     dataPoints: TimeSeriesData[];
 
+}
 export interface SeasonalityData {
     pattern: 'weekly' | 'monthly' | 'quarterly' | 'yearly';
-    peaks: Array<{,
+    peaks: Array<{
         period: string;
         multiplier: number;
+}
     }>;
     confidence: number;
 /**

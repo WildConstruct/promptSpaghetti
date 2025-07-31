@@ -19,6 +19,7 @@ import { z } from 'zod';
 
 // Base User Attributes
 
+}
 export interface UserAttributes {
   // Identity attributes
   userId: string;
@@ -60,6 +61,7 @@ export interface UserAttributes {
   count: number;
   lastUsed: Date;
   frequency: 'never' | 'rare' | 'occasional' | 'frequent' | 'daily'
+}
   }>;
   // Behavioral attributes
   clickThroughRates: Record<string, number>;
@@ -86,6 +88,7 @@ export interface UserAttributes {
 
 // Behavioral Events for Segment Triggers
 }
+}
 export interface BehaviorEvent {
   eventType: string;
   eventData: Record<string, any>;
@@ -99,9 +102,11 @@ export interface BehaviorEvent {
   source?: string;
   campaign?: string;
   referrer?: string;
+}
 };
 
 // Segment Condition Types
+}
 }
 export interface SegmentCondition {
   id: string;
@@ -120,6 +125,7 @@ export interface SegmentCondition {
   timeWindow?: {
   value: number;
   unit: 'minutes' | 'hours' | 'days' | 'weeks' | 'months'
+}
   };
   aggregation?: 'sum' | 'avg' | 'count' | 'min' | 'max' | 'distinct' | 'percentile';
   threshold?: number;
@@ -131,6 +137,7 @@ export interface SegmentCondition {
   matchRate: number; // percentage of users matching this condition
 
 // User Segment Definition
+}
 }
 export interface UserSegment {
   id: string;
@@ -153,9 +160,10 @@ export interface UserSegment {
   // Segment metrics
   userCount: number;
   estimatedUserCount?: number; // for complex segments where real count is expensive,
-  userCountHistory: Array<{,
+  userCountHistory: Array<{
   date: Date;
   count: number;
+}
 }>;
   // Performance metrics
   conversionRate?: number;
@@ -183,7 +191,7 @@ export interface UserSegment {
   syncStatus: 'pending' | 'syncing' | 'synced' | 'failed'
   }>;
   // Validation and quality
-  validationRules: Array<{,
+  validationRules: Array<{
   rule: string;
   description: string;
   isRequired: boolean;
@@ -211,7 +219,7 @@ export interface UserSegment {
 };
   };
   // Analytics and insights
-  insights: Array<{,
+  insights: Array<{
   type: 'trend' | 'anomaly' | 'opportunity' | 'risk';
   title: string;
   description: string;
@@ -221,6 +229,7 @@ export interface UserSegment {
 }>;
 
 // Cohort Analysis Model
+}
 }
 export interface UserCohort {
   id: string;
@@ -234,6 +243,7 @@ export interface UserCohort {
   definitionTimeframe: {
   start: Date;
   end: Date;
+}
 };
   // Analysis settings
   analysisMetric: 'retention' | 'revenue' | 'engagement' | 'conversion' | 'churn';
@@ -242,10 +252,10 @@ export interface UserCohort {
   unit: 'days' | 'weeks' | 'months'
   };
   // Cohort data
-  cohortData: Array<{,
+  cohortData: Array<{
   cohortPeriod: string; // "2024-01", "Week 1", etc.,
   userCount: number;
-  periodData: Array<{,
+  periodData: Array<{
   period: number; // 0, 1, 2, ... representing time periods,
   value: number; // metric value for this period,
   userCount: number; // users still active in this period,
@@ -259,11 +269,13 @@ export interface UserCohort {
 
 // Segment Performance Analytics
 }
+}
 export interface SegmentAnalytics {
   segmentId: string;
   timeRange: {
   start: Date;
   end: Date;
+}
 };
   // User metrics
   totalUsers: number;
@@ -310,6 +322,7 @@ export interface SegmentAnalytics {
 
 // Segment Rules Engine
 }
+}
 export interface SegmentRule {
   id: string;
   name: string;
@@ -329,6 +342,7 @@ export interface SegmentRule {
   maxRetries: number;
   backoffStrategy: 'linear' | 'exponential';
   baseDelayMs: number;
+}
 };
   // Metadata
   isActive: boolean;
@@ -338,6 +352,7 @@ export interface SegmentRule {
   executionCount: number;
   successRate: number;
   averageExecutionTime: number;
+}
 }
 export interface SegmentAction {
   id: string;
@@ -353,6 +368,8 @@ export interface SegmentAction {
   successCount: number;
   lastExecuted?: Date;
   // Segment Export/Import Models
+}
+}
 }
 export interface SegmentExport {
   id: string;
@@ -376,6 +393,7 @@ export interface SegmentExport {
   completedAt?: Date;
   errorMessage?: string;
   // Zod Schemas for Validation
+}
 }
 export const UserAttributesSchema = z.object({)
   userId: z.string().min(1),
@@ -661,9 +679,9 @@ export class SegmentUtils {
   /**
    * Generate segment insights
    */
-  static generateSegmentInsights(()
+  static generateSegmentInsights(((
     segment: UserSegment,
-    analytics: SegmentAnalytics,
+    analytics: SegmentAnalytics
   ): UserSegment['insights'] {
     const insights: UserSegment['insights'] = [];
     // Growth trend analysis

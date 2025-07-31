@@ -8,6 +8,7 @@
  */
 import React, { useState } from 'react';
 import { TrendingComment } from '../../types/TrendingCommentsTypes';
+}
 interface TrendingCommentCardProps {
   comment: TrendingComment;
   rank: number;
@@ -20,6 +21,7 @@ interface TrendingCommentCardProps {
   onEngagement,
   showReplies = true,
   isReply = false
+}
 }) => {
   const [showAllReplies, setShowAllReplies] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);

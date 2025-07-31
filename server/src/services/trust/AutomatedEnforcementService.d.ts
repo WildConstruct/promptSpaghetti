@@ -13,6 +13,7 @@ import { TrustScoreService } from './TrustScoreService';
 import { AuditService } from '../auth/services/AuditService';
 import { UserTrustScore, TemplateTrustScore, TransactionTrustScore } from '../../../../packages/core/types/TrustTypes';
 }
+}
 export interface EnforcementAction {
     actionId: string;
     entityType: 'user' | 'template' | 'transaction';
@@ -33,7 +34,9 @@ export interface EnforcementAction {
         reversedBy: string;
         reason: string;
 }
+}
     };
+}
 }
 }
 export interface EnforcementPolicy {
@@ -46,6 +49,7 @@ export interface EnforcementPolicy {
             suspend: number;
             restrict: number;
             flag: number;
+}
 }
         };
         riskFactorRules?: {
@@ -72,6 +76,7 @@ export interface EnforcementPolicy {
     };
 }
 }
+}
 export interface EnforcementConfig {
     enabled: boolean;
     policies: EnforcementPolicy[];
@@ -79,6 +84,7 @@ export interface EnforcementConfig {
         adminAlerts: boolean;
         userNotifications: boolean;
         webhookUrl?: string;
+}
 }
     };
     reviewSettings: {

@@ -4,6 +4,7 @@ import { X, Save, AlertCircle, Info } from 'lucide-react';
 import { Badge } from '../common/Badge';
 import { ValidationMessage } from '../common/ValidationMessage';
 import { LoadingSpinner } from '../common/LoadingSpinner';
+}
 interface EditToggleModalProps {
   isOpen: boolean;,
   onClose: () => void;
@@ -24,6 +25,7 @@ interface EditToggleModalProps {
   onClose,
   toggleId,
   onSave
+}
 }) => {
   const [toggle, setToggle] = useState<ToggleData | null>(null);
   const [formData, setFormData] = useState<Partial<ToggleData>>({});
@@ -40,7 +42,7 @@ interface EditToggleModalProps {
     try {
       const response = await fetch(`/api/feature-toggles/toggles/${toggleId}`, {)}
   },
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
       });
       if (!response.ok) {
@@ -82,7 +84,7 @@ interface EditToggleModalProps {
       const response = await fetch(`/api/feature-toggles/toggles/${toggleId}`, {)}
   },
   method: 'PUT',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
 }
           'Content-Type': 'application/json'

@@ -21,6 +21,7 @@ const mockFs = fs as jest.Mocked<typeof fs>;
 
 // Import the PluginLoader (assuming it exists based on the architecture)
 // Note: This test file will guide the implementation if the class doesn't exist yet
+}
 interface PluginLoader {
   loadPlugin(source: string): Promise<any>;
   activatePlugin(pluginId: string): Promise<boolean>;
@@ -39,6 +40,7 @@ const mockPluginManifest = {
   version: '1.0.0',
   description: 'Test plugin for unit testing',
   main: 'index',
+}
   dependencies: {},
   engines: {
   node: '>=14.0.0',

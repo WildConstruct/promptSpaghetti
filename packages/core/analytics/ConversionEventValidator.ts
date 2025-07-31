@@ -13,6 +13,7 @@
  */
 import { EnhancedConversionEvent, TouchPoint, AttributionModel } from './ConversionFunnelArchitecture';
 
+}
 export interface ValidationRule {
   id: string;
   name: string;
@@ -23,12 +24,16 @@ export interface ValidationRule {
   enabled: boolean;
   weight: number; // For scoring,
 }
+}
+}
 export interface ValidationResult {
   isValid: boolean;
   score: number; // 0-100,
   errors: ValidationError;
   warnings: ValidationWarning;
   metadata: Record<string, any>;
+}
+}
 }
 export interface ValidationError {
   rule: string;
@@ -38,12 +43,16 @@ export interface ValidationError {
   code: string;
   suggestion?: string;
 }
+}
+}
 export interface ValidationWarning {
   rule: string;
   field?: string;
   message: string;
   code: string;
   impact: string;
+}
+}
 }
 export interface ValidationContext {
   userId: string;
@@ -52,6 +61,8 @@ export interface ValidationContext {
   userProfile?: UserProfile;
   deviceProfile?: DeviceProfile;
   behaviorProfile?: BehaviorProfile;
+}
+}
 }
 export interface UserProfile {
   id: string;
@@ -63,6 +74,8 @@ export interface UserProfile {
   locationHistory: string;
   deviceHistory: string;
 }
+}
+}
 export interface DeviceProfile {
   fingerprint: string;
   firstSeen: number;
@@ -72,12 +85,16 @@ export interface DeviceProfile {
   riskIndicators: string;
   characteristics: Record<string, any>;
 }
+}
+}
 export interface BehaviorProfile {
   sessionCount: number;
   averageSessionDuration: number;
   typicalEventSequence: string;
   anomalyScore: number;
   patterns: BehaviorPattern;
+}
+}
 }
 export interface BehaviorPattern {
   type: 'temporal' | 'sequential' | 'volumetric' | 'value-based';
@@ -86,6 +103,8 @@ export interface BehaviorPattern {
   baseline: number;
   current: number;
   deviation: number;
+}
+}
 }
 export interface DeduplicationConfig {
   enabled: boolean;
@@ -96,11 +115,15 @@ export interface DeduplicationConfig {
   exactMatchFields: string;
   fuzzyMatchFields: string;
 }
+}
+}
 export interface DeduplicationField {
   name: string;
   weight: number;
   transform?: (value: unknown) => string;
   matcher?: (val1: unknown, val2: unknown) => number; // Returns similarity 0-1,
+}
+}
 }
 export interface DeduplicationResult {
   isDuplicate: boolean;
@@ -109,6 +132,8 @@ export interface DeduplicationResult {
   matchType: 'exact' | 'fuzzy' | 'none';
   matchScore: number;
   matchedFields: string;
+}
+}
 }
 export interface ValidationMetrics {
   totalValidated: number;
@@ -124,6 +149,7 @@ export interface ValidationMetrics {
   * Comprehensive Conversion Event Validator
   * Handles all aspects of event validation and deduplication
   */
+}
 }
 export class ConversionEventValidator {
   private static readonly MAX_EVENT_AGE = 30 * 24 * 60 * 60 * 1000; // 30 days
@@ -160,10 +186,11 @@ export class ConversionEventValidator {
   /**
    * Validate conversion event
    */
-  public async validateEvent()
+  public async validateEvent(
     event: EnhancedConversionEvent,
     context?: Partial<ValidationContext>
   ): Promise<ValidationResult> {
+
     const startTime = Date.now();
     try {
       // Build full context
@@ -191,6 +218,7 @@ export class ConversionEventValidator {
    * Check for duplicate events
    */
   public async checkDuplication(event: EnhancedConversionEvent): Promise<DeduplicationResult> {
+
   if (!this.deduplicationConfig.enabled) {
   return {
   isDuplicate: false,
@@ -247,6 +275,7 @@ export class ConversionEventValidator {
   private async buildValidationContext(event: EnhancedConversionEvent)
     context?: Partial<ValidationContext>
   ): Promise<ValidationContext> {
+
   const recentEvents = this.getRecentEvents(event.userId, 3600000); // Last hour;
   const userProfile = this.userProfiles.get(event.userId);
   const deviceProfile = this.deviceProfiles.get(event.deviceFingerprint || '');
@@ -260,10 +289,11 @@ export class ConversionEventValidator {
   behaviorProfile,
   ...context
 };
-  private async runValidationRules(()
+  private async runValidationRules(((
     event: EnhancedConversionEvent,
-    context: ValidationContext,
+    context: ValidationContext
   ): Promise<ValidationResult> {
+
   const results: ValidationResult = [];
   for (const rule of this.rules.values()) {
   if (!rule.enabled) continue;
@@ -310,14 +340,15 @@ export class ConversionEventValidator {
   ruleCount: results.length,
   scoreDistribution: scores,
 };
-  private async compareEvents(()
+  private async compareEvents(((
     event1: EnhancedConversionEvent,
-    event2: EnhancedConversionEvent,
+    event2: EnhancedConversionEvent
   ): Promise<{
   matchScore: number;
   matchType: 'exact' | 'fuzzy';
   matchedFields: string;
 }> {
+
     const matchedFields: string = [];
     let totalScore = 0;
     let totalWeight = 0;

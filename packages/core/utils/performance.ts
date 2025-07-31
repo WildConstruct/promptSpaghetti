@@ -2,6 +2,7 @@
  * Performance measurement utilities for tracking execution metrics
  */
 
+}
 export interface ExecutionMetrics {
   duration: number;
   startTime: number;
@@ -12,10 +13,12 @@ export interface ExecutionMetrics {
   * Measures execution time of a function
   */
 }
+}
 export async function measureExecution<T>()
   fn: () => T | Promise<T>,
   metadata?: Record<string, any>
 ): Promise<{ result: T; metrics: ExecutionMetrics }> {
+
   const startTime = Date.now();
   const startMemory = process.memoryUsage?.()?.heapUsed || 0;
   try {

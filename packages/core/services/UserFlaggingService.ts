@@ -8,6 +8,7 @@
  */
 import { FlagSubmission, FlaggingStatus, FlaggingReason } from '../components/Flagging/FlaggingButton';
 
+}
 export interface UserFlagReport {
   id: string;
   contentId: string;
@@ -26,6 +27,8 @@ export interface UserFlagReport {
   resolution?: FlagResolution;
   metadata: Record<string, unknown>;
 }
+}
+}
 export interface FlagResolution {
   action: 'approved' | 'removed' | 'edited' | 'warning_issued' | 'user_suspended' | 'no_action';
   reason: string;
@@ -33,6 +36,8 @@ export interface FlagResolution {
   appealDeadline?: Date;
   notificationSent: boolean;
   precedentCase?: string;
+}
+}
 }
 export interface ContentFlagSummary {
   contentId: string;
@@ -47,7 +52,9 @@ export interface ContentFlagSummary {
   autoFlagged: boolean;
   mlConfidence?: number;
   moderationPriority: 'low' | 'medium' | 'high' | 'urgent'
+}
   }
+}
 export interface FlaggingAnalytics {
   timeRange: { start: Date; end: Date };
   totalReports: number;
@@ -61,7 +68,7 @@ export interface FlaggingAnalytics {
   pending: number;
   avgResolutionTimeHours: number;
 };
-  topReporters: Array<{,
+  topReporters: Array<{
   userId: string;
   reportCount: number;
   accuracy: number;
@@ -77,6 +84,7 @@ export interface FlaggingAnalytics {
   escalationRate: number;
 };
 }
+}
 export interface FlaggingConfig {
   enableUserFlagging: boolean;
   maxFlagsPerUser24h: number;
@@ -91,6 +99,7 @@ export interface FlaggingConfig {
   userFlaggingWeight: number;
   combineScores: boolean;
   autoModerationThreshold: number;
+}
 };
 /**
  * User Flagging Service
@@ -132,6 +141,7 @@ export class UserFlaggingService {
   message: string;
   estimatedResolutionHours?: number;
 }> {
+
   try {
   // Validate submission
   this.validateFlagSubmission(submission);
@@ -176,6 +186,7 @@ export class UserFlaggingService {
   async getFlaggingStatus(contentId: string)
     userId?: string
   ): Promise<FlaggingStatus> {
+
   try {
   const contentSummary = await this.getContentSummary(contentId);
   const userHasFlagged = userId ? await this.hasUserFlagged(contentId, userId) : false;
@@ -220,6 +231,7 @@ export class UserFlaggingService {
   accuracyRate: number;
 };
   }> {
+
   try {
   // Fetch user's reports from storage/database
   const allReports = Array.from(this.flagReports.values());
@@ -257,6 +269,7 @@ export class UserFlaggingService {
    */
   async getFlaggingAnalytics(timeRange?: { start: Date; end: Date })
   ): Promise<FlaggingAnalytics> {
+
   const range = timeRange || {
   start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago,
   end: new Date(),
@@ -292,6 +305,7 @@ export class UserFlaggingService {
       moderatorNote?: string;
       resolution?: FlagResolution;
   ): Promise<void> {
+
     try {
       const report = this.flagReports.get(reportId);
       if (!report) {
@@ -329,6 +343,7 @@ export class UserFlaggingService {
     if (this.config.requireJustification.includes(submission.reasonId) && !submission.details) {
       throw new Error('Additional details are required for this type of report');
   private async checkRateLimits(userId: string): Promise<void> {
+
     const last24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
     const recentReports = Array.from(this.flagReports.values());
       .filter(report => )
@@ -338,6 +353,7 @@ export class UserFlaggingService {
     if (recentReports.length >= this.config.maxFlagsPerUser24h) {
       throw new Error(`Rate limit exceeded: maximum ${this.config.maxFlagsPerUser24h} reports per 24 hours`);}
   private async checkForDuplicates(submission: FlagSubmission): Promise<{ isDuplicate: boolean; existingReportId?: string }> {
+
     if (!this.config.enableDuplicateDetection) {
       return { isDuplicate: false };
     const existing = Array.from(this.flagReports.values());
@@ -352,6 +368,7 @@ export class UserFlaggingService {
   existingReportId: existing?.id,
 };
   private async createFlagReport(submission: FlagSubmission): Promise<UserFlagReport> {
+
     const reportId = `flag_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
     const report: UserFlagReport = {,
   id: reportId,
@@ -373,6 +390,7 @@ export class UserFlaggingService {
     this.flagReports.set(reportId, report);
     return report;
   private async integrateMlFlagging(report: UserFlagReport): Promise<void> {
+
     try {
       // In real implementation, this would call the ML flagging service
       // to combine user reports with automated analysis
@@ -388,6 +406,7 @@ export class UserFlaggingService {
       console.error('ML flagging integration failed:', error);
       // Continue without ML integration
   private async updateContentSummary(report: UserFlagReport): Promise<void> {
+
     let summary = this.contentSummaries.get(report.contentId);
     if (!summary) {
       summary = {
@@ -416,6 +435,7 @@ export class UserFlaggingService {
     summary.moderationPriority = this.calculateModerationPriority(summary);
     this.contentSummaries.set(report.contentId, summary);
   private async checkAutoEscalation(report: UserFlagReport): Promise<void> {
+
     const summary = this.contentSummaries.get(report.contentId);
     if (!summary) return;
     if (summary.totalFlags >= this.config.autoEscalationThreshold) {
@@ -425,6 +445,7 @@ export class UserFlaggingService {
       summary.moderationPriority = 'urgent';
       this.contentSummaries.set(report.contentId, summary);
   private async getContentSummary(contentId: string): Promise<ContentFlagSummary> {
+
     let summary = this.contentSummaries.get(contentId);
     if (!summary) {
       // Create empty summary for unflagged content
@@ -443,6 +464,7 @@ export class UserFlaggingService {
   };
     return summary;
   private async hasUserFlagged(contentId: string, userId: string): Promise<boolean> {
+
   return Array.from(this.flagReports.values())
   .some(report => )
   report.contentId === contentId &&
@@ -531,8 +553,7 @@ export class UserFlaggingService {
   r.resolution?.action !== 'no_action'
   );
   return (accurateReports.length / resolvedReports.length) * 100;
-  private aggregateByField<T extends Record<string, any>>(()
-  items: T,
+  private aggregateByField<T extends Record<string, any>>((items: T,
   field: keyof T): Record<string, number> {,
   return items.reduce((acc, item) => {
   const key = String(item[field]);
@@ -578,9 +599,11 @@ export class UserFlaggingService {
   escalationRate: 8.5,
 };
   private async notifyContentOwner(report: UserFlagReport): Promise<void> {
+
     // Send notification to content owner about the flag
     console.log(`📧 Content owner notified about flag: ${report.contentId}`);}
   private async notifyReporter(report: UserFlagReport): Promise<void> {
+
     // Send notification to reporter about resolution
     console.log(`📧 Reporter notified about resolution: ${report.id}`);}
 

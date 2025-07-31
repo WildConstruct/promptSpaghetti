@@ -60,15 +60,20 @@ export enum RetryStrategy {
   retryableErrors: FailureType;
   customDelayFunction?: (attempt: number, baseDelay: number) => number;
 }
+}
+}
 export interface CircuitBreakerConfig {
   failureThreshold: number;
   resetTimeoutMs: number;
   monitoringWindowMs: number;
   halfOpenMaxAttempts: number;
 }
+}
+}
 export interface MFARetryConfig {
   operationConfigs: {
   [key in MFAOperation]: RetryConfig;
+}
 };
   circuitBreaker: CircuitBreakerConfig;
   globalTimeoutMs: number;
@@ -76,6 +81,7 @@ export interface MFARetryConfig {
   enableLogging: boolean;
 
 // Operation context
+}
 }
 export interface OperationContext {
   operationId: string;
@@ -87,6 +93,8 @@ export interface OperationContext {
   metadata: Record<string, any>;
   // Retry attempt data
 }
+}
+}
 export interface RetryAttempt {
   attempt: number;
   startTime: Date;
@@ -96,6 +104,8 @@ export interface RetryAttempt {
   success: boolean;
   timeoutReached: boolean;
   // Operation result
+}
+}
 }
 export interface OperationResult<T = any> {
   success: boolean;
@@ -127,6 +137,7 @@ export interface OperationResult<T = any> {
   successRate: number;
   averageAttempts: number;
   averageDuration: number;
+}
 };
   };
   errorMetrics: {
@@ -310,10 +321,11 @@ export class MFARetryHandler extends EventEmitter {
   circuitBreakerTriggered: false,
   rateLimited: false,
 };
-  private async executeWithTimeout<T>(()
+  private async executeWithTimeout<T>(((
     operationFn: () => Promise<T>,
-    timeoutMs: number,
+    timeoutMs: number
   ): Promise<T> {
+
     return new Promise((resolve, reject) => {
       const timeoutId = setTimeout(() => {
         reject(new Error(`Operation timeout after ${timeoutMs}ms`));}
@@ -448,6 +460,7 @@ export class MFARetryHandler extends EventEmitter {
     opMetrics.averageDuration = 
       ((opMetrics.averageDuration * (opMetrics.count - 1)) + durationMs) / opMetrics.count;
   private sleep(ms: number): Promise<void> {
+
     return new Promise(resolve => setTimeout(resolve, ms));
   private generateOperationId(): string {
     return `mfa_op_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;}

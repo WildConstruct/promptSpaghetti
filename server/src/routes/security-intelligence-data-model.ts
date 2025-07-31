@@ -17,6 +17,7 @@ import {
 let dataModelEngine: SecurityIntelligenceDataModelEngine | null = null;
 
 }
+}
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
@@ -25,6 +26,7 @@ interface APIResponse<T = any> {
   timestamp: number;
 }
 
+}
 }
 interface InitializeDataModelRequest {
   pipeline_configuration: {
@@ -37,6 +39,7 @@ interface InitializeDataModelRequest {
           consumer_groups: string[];
           batch_size?: number;
           max_poll_interval?: number;
+}
 }
         };
         processing_parallelism?: number;
@@ -92,6 +95,7 @@ interface InitializeDataModelRequest {
 }
 
 }
+}
 interface IngestSecurityDataRequest {
   data_ingestion: {
     data_source: string;
@@ -99,6 +103,7 @@ interface IngestSecurityDataRequest {
     raw_data: any;
     batch_size?: number;
     processing_priority?: 'low' | 'medium' | 'high' | 'critical';
+}
 }
   };
   processing_options?: {
@@ -119,6 +124,7 @@ interface IngestSecurityDataRequest {
 }
 
 }
+}
 interface ProcessStreamingDataRequest {
   stream_configuration: {
     stream_name: string;
@@ -126,6 +132,7 @@ interface ProcessStreamingDataRequest {
     processing_mode: 'real_time' | 'micro_batch' | 'batch';
     buffer_size?: number;
     flush_interval_seconds?: number;
+}
 }
   };
   processing_options?: {
@@ -144,6 +151,7 @@ interface ProcessStreamingDataRequest {
 }
 
 }
+}
 interface ExecuteBatchProcessingRequest {
   batch_configuration: {
     job_type: 'etl' | 'ml_training' | 'analytics_aggregation';
@@ -153,6 +161,7 @@ interface ExecuteBatchProcessingRequest {
     processing_window?: {
       start_date: string;
       end_date: string;
+}
 }
     };
   };
@@ -180,6 +189,7 @@ interface ExecuteBatchProcessingRequest {
 }
 
 }
+}
 interface OptimizeDataModelRequest {
   optimization_scope: {
     target_areas: ('storage' | 'queries' | 'indexes' | 'caching' | 'partitioning')[];
@@ -190,6 +200,7 @@ interface OptimizeDataModelRequest {
       maintenance_window?: {
         start_hour: number;
         end_hour: number;
+}
 }
       };
     };

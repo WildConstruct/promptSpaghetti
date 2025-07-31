@@ -2,6 +2,7 @@
 // Interface for linking and unlinking OAuth provider accounts
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
+}
 interface LinkedAccount {
   provider: string;,
   email: string;
@@ -21,6 +22,7 @@ interface LinkedAccount {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onAccountLinked,
   onAccountUnlinked
+}
 }) => {
   const { user } = useAuth();
   const [linkedAccounts, setLinkedAccounts] = useState<LinkedAccount>([]);
@@ -37,7 +39,7 @@ interface LinkedAccount {
   const fetchLinkedAccounts = async () => {
     try {
       const response = await fetch('/api/auth/oauth/accounts', {)
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
       });
       if (!response.ok) {
@@ -67,7 +69,7 @@ interface LinkedAccount {
       // Generate OAuth authorization URL
       const authResponse = await fetch(`/api/auth/oauth/authorize?provider=${provider}`, {)}
   },
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
       });
       if (!authResponse.ok) {
@@ -86,7 +88,7 @@ interface LinkedAccount {
       setError(null);
       const response = await fetch('/api/auth/oauth/unlink', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
   },

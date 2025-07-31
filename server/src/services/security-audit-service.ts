@@ -5,6 +5,7 @@ import { FastifyInstance } from 'fastify';
 import { auditSecurityHeaders, SecurityAuditResult } from '../middleware/security-headers';
 
 }
+}
 export interface SecurityAuditConfig {
   enabled: boolean;
   intervalMinutes: number;
@@ -13,6 +14,7 @@ export interface SecurityAuditConfig {
     scoreThreshold: number;
     criticalIssues: number;
     highIssues: number;
+}
 }
   };
   notifications: {
@@ -23,12 +25,14 @@ export interface SecurityAuditConfig {
 }
 
 }
+}
 export interface AuditRecord {
   id: string;
   timestamp: Date;
   endpoint: string;
   result: SecurityAuditResult;
   alerts: string[];
+}
 }
 }
 

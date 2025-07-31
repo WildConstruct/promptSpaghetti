@@ -1,6 +1,7 @@
 import React from 'react';
 import { HelpContent } from './ContextualHelpSystem';
 
+}
 export interface HelpContextState {
     helpContent: HelpContent[];
     onboardingEnabled: boolean;
@@ -37,6 +38,7 @@ export declare export declare     currentStep: number;
     completeOnboarding: any;
     startOnboarding: any;
     isComplete: any;
+}
 };
 export declare const HelpSystemSettings: React.FC<{
     className?: string;

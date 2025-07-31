@@ -7,6 +7,7 @@
 import React from 'react';
 import { LiveChatElement, Epic16InteractiveElementsService } from '../../services/Epic16InteractiveElementsService';
 
+}
 interface LiveChatWidgetProps {
     element: LiveChatElement;
     interactiveService: Epic16InteractiveElementsService;
@@ -20,3 +21,4 @@ interface LiveChatWidgetProps {
 export declare const LiveChatWidget: React.FC<LiveChatWidgetProps>;
 export default LiveChatWidget;
 //# sourceMappingURL=LiveChatWidget.d.ts.map
+}

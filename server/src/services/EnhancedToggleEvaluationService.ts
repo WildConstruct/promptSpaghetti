@@ -24,6 +24,7 @@ import {
 
 // Enhanced evaluation interfaces
 }
+}
 export interface EnhancedEvaluationContext extends ToggleEvaluationContext {
   // Claude-specific context
   claudeContext?: ClaudeEvaluationContext;
@@ -41,6 +42,7 @@ export interface EnhancedEvaluationContext extends ToggleEvaluationContext {
 }
 
 }
+}
 export interface ClaudeEvaluationContext {
   modelVersion?: string;
   promptType?: 'creative' | 'analytical' | 'conversational' | 'code';
@@ -52,7 +54,9 @@ export interface ClaudeEvaluationContext {
   qualityImpact?: 'none' | 'positive' | 'neutral' | 'negative';
 }
 }
+}
 
+}
 }
 export interface PerformanceHints {
   cacheTTL?: number;
@@ -62,7 +66,9 @@ export interface PerformanceHints {
   priority?: 'low' | 'normal' | 'high' | 'critical';
 }
 }
+}
 
+}
 }
 export interface DependencyEvaluationContext {
   enforceDependencies?: boolean;
@@ -70,6 +76,7 @@ export interface DependencyEvaluationContext {
   maxDepth?: number;
   impactAnalysis?: boolean;
   rollbackOnFailure?: boolean;
+}
 }
 }
 
@@ -81,6 +88,7 @@ export enum CacheStrategy {
 }
 
 // Enhanced evaluation result
+}
 }
 export interface EnhancedEvaluationResult extends ToggleEvaluationResult {
   // Performance metrics
@@ -110,6 +118,7 @@ export interface EnhancedEvaluationResult extends ToggleEvaluationResult {
 }
 
 }
+}
 export interface DependencyStatus {
   checked: boolean;
   violations: DependencyViolation[];
@@ -119,7 +128,9 @@ export interface DependencyStatus {
   canActivate: boolean;
 }
 }
+}
 
+}
 }
 export interface DependencyViolation {
   type: DependencyType;
@@ -129,7 +140,9 @@ export interface DependencyViolation {
   canOverride: boolean;
 }
 }
+}
 
+}
 }
 export interface DependencyWarning {
   message: string;
@@ -137,7 +150,9 @@ export interface DependencyWarning {
   recommendation: string;
 }
 }
+}
 
+}
 }
 export interface CascadeEffect {
   targetToggle: string;
@@ -146,7 +161,9 @@ export interface CascadeEffect {
   confidence: number; // 0.0-1.0
 }
 }
+}
 
+}
 }
 export interface RiskAssessment {
   riskScore: number; // 0.0-1.0
@@ -155,7 +172,9 @@ export interface RiskAssessment {
   recommendation: 'proceed' | 'caution' | 'review' | 'block';
 }
 }
+}
 
+}
 }
 export interface RiskFactor {
   category: 'technical' | 'business' | 'user_experience' | 'performance' | 'cost';
@@ -164,7 +183,9 @@ export interface RiskFactor {
   weight: number; // importance multiplier
 }
 }
+}
 
+}
 }
 export interface EvaluationTrace {
   steps: TraceStep[];
@@ -174,7 +195,9 @@ export interface EvaluationTrace {
   dependencyChecks: number;
 }
 }
+}
 
+}
 }
 export interface TraceStep {
   step: string;
@@ -183,7 +206,9 @@ export interface TraceStep {
   details: unknown;
 }
 }
+}
 
+}
 }
 export interface RuleEvaluationResult {
   ruleName: string;
@@ -193,8 +218,10 @@ export interface RuleEvaluationResult {
   metadata: Record<string, unknown>;
 }
 }
+}
 
 // Advanced rule evaluation engine
+}
 }
 export interface AdvancedRule {
   id: string;
@@ -213,9 +240,11 @@ export interface AdvancedRule {
     description?: string;
     tags: string[];
 }
+}
   };
 }
 
+}
 }
 export interface RuleCondition {
   type: ConditionType;
@@ -224,6 +253,7 @@ export interface RuleCondition {
   value: Error;
   weight?: number; // for weighted evaluation
   nested?: RuleCondition[]; // for complex nested conditions
+}
 }
 }
 
@@ -257,11 +287,13 @@ export enum ConditionOperator {
 }
 
 }
+}
 export interface RuleAction {
   type: ActionType;
   target?: string;
   value?: unknown;
   metadata?: unknown;
+}
 }
 }
 
@@ -276,6 +308,7 @@ export enum ActionType {
 
 // Configuration
 }
+}
 export interface EnhancedEvaluationConfig {
   performance: {
     maxEvaluationTime: number;
@@ -284,6 +317,7 @@ export interface EnhancedEvaluationConfig {
     enableBulkOptimization: boolean;
     enableParallelEvaluation: boolean;
     maxConcurrentEvaluations: number;
+}
 }
   };
   
@@ -1012,13 +1046,16 @@ export class EnhancedToggleEvaluationService extends EventEmitter {
 
 // Supporting interfaces for internal use
 }
+}
 interface CompiledRule {
   id: string;
   compiledCondition: Function;
   metadata: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 interface CachedEvaluation {
   result: EnhancedEvaluationResult;
@@ -1026,7 +1063,9 @@ interface CachedEvaluation {
   ttl: number;
 }
 }
+}
 
+}
 }
 interface PerformanceMetric {
   timestamp: number;
@@ -1036,7 +1075,9 @@ interface PerformanceMetric {
   dependencyChecks: number;
 }
 }
+}
 
+}
 }
 interface EvaluationContext {
   id: string;
@@ -1045,13 +1086,16 @@ interface EvaluationContext {
   startTime: number;
 }
 }
+}
 
+}
 }
 interface EvaluationHistoryEntry {
   key: string;
   result: EnhancedEvaluationResult;
   timestamp: number;
   context: unknown;
+}
 }
 }
 

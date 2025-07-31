@@ -6,6 +6,7 @@ import { TopPerformingTemplate } from './TopPerformingTemplate';
 import { TrendChart } from './TrendChart';
 import { formatNumber, formatCurrency, formatPercentage } from '../../../utils/formatters';
 import './DashboardOverview.css';
+}
 interface DashboardOverviewProps {
   dashboard: CreatorDashboard;,
   insights: AnalyticsInsight;
@@ -15,6 +16,7 @@ interface DashboardOverviewProps {
   insights,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onRefresh
+}
 }) => {
   const { overview, performance_summary } = dashboard;
   // Calculate trend indicators

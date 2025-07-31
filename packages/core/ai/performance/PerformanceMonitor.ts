@@ -5,6 +5,7 @@
  * Comprehensive performance monitoring with real-time metrics, alerts, and analytics
  */
 
+}
 export interface PerformanceMetrics {
   // Request metrics
   totalRequests: number;
@@ -33,6 +34,8 @@ export interface PerformanceMetrics {
   windowStart: number;
   windowEnd: number;
 }
+}
+}
 export interface PerformanceAlert {
   id: string;
   type: 'warning' | 'error' | 'critical';
@@ -44,13 +47,17 @@ export interface PerformanceAlert {
   resolved: boolean;
   resolvedAt?: number;
 }
+}
+}
 export interface PerformanceThreshold {
   metric: keyof PerformanceMetrics;
   warningThreshold: number;
   errorThreshold: number;
   criticalThreshold: number;
   operator: 'greater_than' | 'less_than' | 'equals'
+}
   }
+}
 export interface MonitoringConfig {
   enabled: boolean;
   collectionInterval: number; // milliseconds,
@@ -60,6 +67,7 @@ export interface MonitoringConfig {
   email?: string;
   webhook?: string;
   slackChannel?: string;
+}
 };
   thresholds: PerformanceThreshold;
   sampling: {;
@@ -72,6 +80,7 @@ export interface MonitoringConfig {
   maxSize?: number;
 };
 }
+}
 export interface ModelPerformanceData {
   modelId: string;
   modelType: string;
@@ -80,7 +89,9 @@ export interface ModelPerformanceData {
   alerts: PerformanceAlert;
   lastUpdated: number;
   healthStatus: 'healthy' | 'degraded' | 'unhealthy' | 'offline'
+}
   }
+}
 export interface PerformanceReport {
   summary: {
   totalModels: number;
@@ -89,6 +100,7 @@ export interface PerformanceReport {
   averageResponseTime: number;
   totalCost: number;
   successRate: number;
+}
 };
   trends: {
   responseTimeTrend: Array<{ timestamp: number; value: number }>;
@@ -457,7 +469,7 @@ export class PerformanceMonitor {
   private getTopPerformers(): Array<{ modelId: string; metric: string; value: number }> {
     const performers: Array<{ modelId: string; metric: string; value: number }> = [];
     for (const [modelId, modelData] of this.models.entries()) {
-      performers.push()
+      performers.push(
         { modelId, metric: 'successRate', value: modelData.metrics.successRate },
         { modelId, metric: 'tokensPerSecond', value: modelData.metrics.tokensPerSecond }
       );
@@ -465,7 +477,7 @@ export class PerformanceMonitor {
   private getBottomPerformers(): Array<{ modelId: string; metric: string; value: number }> {
     const performers: Array<{ modelId: string; metric: string; value: number }> = [];
     for (const [modelId, modelData] of this.models.entries()) {
-      performers.push()
+      performers.push(
         { modelId, metric: 'averageResponseTime', value: modelData.metrics.averageResponseTime },
         { modelId, metric: 'errorRate', value: modelData.metrics.errorRate }
       );

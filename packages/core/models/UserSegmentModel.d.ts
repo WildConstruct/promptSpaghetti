@@ -17,6 +17,7 @@
  */
 import { z } from 'zod';
 
+}
 export interface UserAttributes {
     userId: string;
     email?: string;
@@ -51,6 +52,7 @@ export interface UserAttributes {
         count: number;
         lastUsed: Date;
         frequency: 'never' | 'rare' | 'occasional' | 'frequent' | 'daily'
+}
   }>;
     clickThroughRates: Record<string, number>;
     conversionRates: Record<string, number>;
@@ -71,6 +73,7 @@ export interface UserAttributes {
     npsScore?: number;
     healthScore: number;
 
+}
 export interface BehaviorEvent {
     eventType: string;
     eventData: Record<string, any>;
@@ -84,8 +87,10 @@ export interface BehaviorEvent {
         source?: string;
         campaign?: string;
         referrer?: string;
+}
     };
 
+}
 export interface SegmentCondition {
     id: string;
     type: 'attribute' | 'behavior' | 'demographic' | 'geographic' | 'temporal' | 'cohort' | 'custom';
@@ -98,6 +103,7 @@ export interface SegmentCondition {
     timeWindow?: {
         value: number;
         unit: 'minutes' | 'hours' | 'days' | 'weeks' | 'months'
+}
   };
     aggregation?: 'sum' | 'avg' | 'count' | 'min' | 'max' | 'distinct' | 'percentile';
     threshold?: number;
@@ -107,6 +113,7 @@ export interface SegmentCondition {
     evaluationCount: number;
     matchRate: number;
 
+}
 export interface UserSegment {
     id: string;
     name: string;
@@ -123,9 +130,10 @@ export interface UserSegment {
     category: 'behavioral' | 'demographic' | 'geographic' | 'engagement' | 'revenue' | 'lifecycle' | 'experimental' | 'custom';
     userCount: number;
     estimatedUserCount?: number;
-    userCountHistory: Array<{,
+    userCountHistory: Array<{
         date: Date;
         count: number;
+}
     }>;
     conversionRate?: number;
     averageLifetimeValue?: number;
@@ -148,7 +156,7 @@ export interface UserSegment {
         lastSync?: Date;
         syncStatus: 'pending' | 'syncing' | 'synced' | 'failed'
   }>;
-    validationRules: Array<{,
+    validationRules: Array<{
         rule: string;
         description: string;
         isRequired: boolean;
@@ -172,7 +180,7 @@ export interface UserSegment {
             timezone: string;
         };
     };
-    insights: Array<{,
+    insights: Array<{
         type: 'trend' | 'anomaly' | 'opportunity' | 'risk';
         title: string;
         description: string;
@@ -181,6 +189,7 @@ export interface UserSegment {
         generatedAt: Date;
     }>;
 
+}
 export interface UserCohort {
     id: string;
     name: string;
@@ -191,16 +200,17 @@ export interface UserCohort {
     definitionTimeframe: {
         start: Date;
         end: Date;
+}
     };
     analysisMetric: 'retention' | 'revenue' | 'engagement' | 'conversion' | 'churn';
     analysisWindow: {
         value: number;
         unit: 'days' | 'weeks' | 'months'
   };
-    cohortData: Array<{,
+    cohortData: Array<{
         cohortPeriod: string;
         userCount: number;
-        periodData: Array<{,
+        periodData: Array<{
             period: number;
             value: number;
             userCount: number;
@@ -211,11 +221,13 @@ export interface UserCohort {
     calculationStatus: 'pending' | 'calculating' | 'completed' | 'failed';
     isActive: boolean;
 
+}
 export interface SegmentAnalytics {
     segmentId: string;
     timeRange: {
         start: Date;
         end: Date;
+}
     };
     totalUsers: number;
     newUsers: number;
@@ -252,6 +264,7 @@ export interface SegmentAnalytics {
         significance: 'higher' | 'lower' | 'similar'
   }[];
 
+}
 export interface SegmentRule {
     id: string;
     name: string;
@@ -268,6 +281,7 @@ export interface SegmentRule {
         maxRetries: number;
         backoffStrategy: 'linear' | 'exponential';
         baseDelayMs: number;
+}
     };
     isActive: boolean;
     priority: number;
@@ -277,6 +291,7 @@ export interface SegmentRule {
     successRate: number;
     averageExecutionTime: number;
 
+}
 export interface SegmentAction {
     id: string;
     type: 'add_to_segment' | 'remove_from_segment' | 'send_notification' | 'trigger_webhook' | 'update_attribute' | 'log_event' | 'custom';
@@ -287,6 +302,7 @@ export interface SegmentAction {
     successCount: number;
     lastExecuted?: Date;
 
+}
 export interface SegmentExport {
     id: string;
     segmentId: string;
@@ -339,6 +355,7 @@ export declare const UserAttributesSchema: z.ZodObject<{
         count: z.ZodNumber;
         lastUsed: z.ZodDate;
         frequency: z.ZodEnum<["never", "rare", "occasional", "frequent", "daily"]>;
+}
     }, "strip", z.ZodTypeAny, {
         count: number;
         frequency: "never" | "rare" | "daily" | "occasional" | "frequent";

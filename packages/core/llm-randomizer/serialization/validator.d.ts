@@ -4,6 +4,7 @@ export interface ValidationResult {
     warnings: ValidationWarning[];
 
 
+}
 export interface ValidationError {
     type: 'syntax' | 'semantic' | 'schema';
     message: string;
@@ -13,6 +14,7 @@ export interface ValidationError {
     severity: 'error' | 'warning';
 
 
+}
 export interface ValidationWarning {
     type: 'optimization' | 'compatibility' | 'best-practice';
     message: string;
@@ -20,6 +22,7 @@ export interface ValidationWarning {
     nodeId?: string;
 
 
+}
 export interface ParsedGraph {
     version: string;
     checksum?: string;
@@ -28,6 +31,7 @@ export interface ParsedGraph {
     edges: ParsedEdge[];
 
 
+}
 export interface ParsedNode {
     id: string;
     type: string;
@@ -35,6 +39,7 @@ export interface ParsedNode {
     inputs?: string[];
 
 
+}
 export interface ParsedEdge {
     source: string;
     target: string;
@@ -93,3 +98,4 @@ export declare function validateFormat(content: string): ValidationResult;
  */
 export declare function isValidFormat(content: string): boolean;
 //# sourceMappingURL=validator.d.ts.map
+}

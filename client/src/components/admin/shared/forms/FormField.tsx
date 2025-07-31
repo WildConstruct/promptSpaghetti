@@ -7,6 +7,7 @@
 import React from 'react';
 import { Eye, EyeOff, AlertCircle, HelpCircle } from 'lucide-react';
 import { FormFieldSchema } from './AdminFormBuilder';
+}
 interface FormFieldProps {
   field: FormFieldSchema;,
   value: any;
@@ -25,6 +26,7 @@ interface FormFieldProps {
   showPassword = false,
   onTogglePassword,
   disabled = false
+}
 }) => {
   const fieldId = `field-${field.name}`;}
   const hasError = Boolean(error);

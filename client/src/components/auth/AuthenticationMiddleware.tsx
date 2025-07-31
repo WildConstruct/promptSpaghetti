@@ -14,6 +14,7 @@ import { useAuthStore } from '../../stores/authStore';
 /**
  * Authentication middleware configuration
  */
+}
 interface AuthMiddlewareConfig {
   /** Enable automatic token refresh */
   autoRefresh?: boolean;
@@ -40,6 +41,7 @@ interface AuthMiddlewareConfig {
   sessionTimeout: 1800000, // 30 minutes,
   publicRoutes: ['/login', '/register', '/reset-password', '/verify-email', '/unauthorized', '/auth/callback'],
   debug: process.env.NODE_ENV === 'development',
+}
 };
 
 // =============================================================================
@@ -107,6 +109,7 @@ class SessionActivityTracker {
 /**
  * Authentication middleware props
  */
+}
 interface AuthenticationMiddlewareProps {
   children: React.ReactNode;
   config?: AuthMiddlewareConfig;
@@ -115,6 +118,7 @@ interface AuthenticationMiddlewareProps {
  */
 export const AuthenticationMiddleware: React.FC<AuthenticationMiddlewareProps> = ({)
   children,
+}
   config = {}
 }) => {
   const fullConfig = useMemo(() => ({ ...DEFAULT_CONFIG, ...config }), [config]);

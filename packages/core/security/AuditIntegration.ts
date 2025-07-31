@@ -18,6 +18,7 @@ import {
  * Configuration for audit integration
  */
 
+}
 export interface AuditIntegrationConfig {
   auditLogger: AuditLogger;
   classificationEnforcer?: ClassificationEnforcer;
@@ -30,6 +31,7 @@ export interface AuditIntegrationConfig {
   /**
   * Audit integration service
   */
+}
 }
 export class AuditIntegration {
   private logger: AuditLogger;
@@ -61,6 +63,7 @@ export class AuditIntegration {
     data?: any,
     metadata?: Record<string, any>
   ): Promise<void> {
+
     let classification = DataClassificationLevel.PUBLIC;
     let classificationMetadata: Record<string, any> = {};
     // Classify the data if classifier is available
@@ -130,6 +133,7 @@ export class AuditIntegration {
     },
     metadata?: Record<string, any>
   ): Promise<void> {
+
     await this.logger.log({
       userId: context.userId,
       userRole: context.userRole,
@@ -157,6 +161,7 @@ export class AuditIntegration {
     context: OperationContext,
     details: Record<string, any>
   ): Promise<void> {
+
     await this.logger.log({
       userId: context.userId,
       userRole: context.userRole,
@@ -189,6 +194,7 @@ export class AuditIntegration {
     success: boolean,
     metadata?: Record<string, any>
   ): Promise<void> {
+
     const highestClassification = resources.reduce((highest, resource) => {
       const level = resource.classification || DataClassificationLevel.PUBLIC;
       return this.getClassificationPriority(level) > this.getClassificationPriority(highest)
@@ -223,6 +229,7 @@ export class AuditIntegration {
     context: OperationContext,
     metadata?: Record<string, any>
   ): Promise<string> {
+
     const correlationId = `workflow_${workflowId}_${Date.now()}`;
     await this.logger.log({
       userId: context.userId,
@@ -339,6 +346,7 @@ export class AuditIntegration {
       includeDetails?: boolean;
     }
   ): Promise<ComplianceReport> {
+
     const logs = await this.logger.query({
       startDate,
       endDate
@@ -396,10 +404,12 @@ export class AuditIntegration {
 /**
  * Compliance report structure
  */
+}
 export interface ComplianceReport {
   period: {
     start: Date;
     end: Date;
+}
   };
   totalAccess: number;
   sensitiveAccess: number;

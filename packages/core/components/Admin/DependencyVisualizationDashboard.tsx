@@ -16,6 +16,7 @@ import {
   DependencyType,
   FeatureToggleDependencyService
 } from '../../services/FeatureToggleDependencyService';
+}
 interface DashboardProps {
   dependencyService: FeatureToggleDependencyService;
   selectedToggles?: string;
@@ -42,6 +43,7 @@ interface DashboardProps {
   onToggleSelect,
   onDependencyCreate,
   onConflictResolve
+}
 }) => {
   // State management
   const [graph, setGraph] = useState<DependencyGraph | null>(null);
@@ -381,6 +383,7 @@ interface DashboardProps {
 };
 
 // Sub-components (simplified implementations)
+}
 interface GraphVisualizationProps {
   graph: DependencyGraph | null;
   viewMode: ViewMode;
@@ -394,6 +397,7 @@ interface GraphVisualizationProps {
   viewMode,
   selectedNode,
   onNodeClick
+}
 }) => {
   if (!graph) {
     return;
@@ -425,9 +429,11 @@ interface GraphVisualizationProps {
     </div>
   );
 };
+}
 interface AnalysisViewProps {
   analysis: DependencyAnalysis;
   onConflictResolve?: (conflictId: string, resolution: string) => void;
+}
 const AnalysisView: React.FC<AnalysisViewProps> = ({ analysis }) => {
   return;
     <div className="flex-1 p-6 bg-gray-50 overflow-y-auto">

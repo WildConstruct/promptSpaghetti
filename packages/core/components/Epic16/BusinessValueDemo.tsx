@@ -9,6 +9,7 @@ import React, { useState } from 'react';
 import { Calculator, PiggyBank, TrendingUp, BarChart3, Download } from 'lucide-react';
 import { ROICalculator } from './ROICalculator';
 import { SavingsEstimation } from './SavingsEstimation';
+}
 interface BusinessValueDemoProps {
   className?: string;
   templateExample?: {
@@ -16,6 +17,7 @@ interface BusinessValueDemoProps {
   price: number;
   description: string;
   category: string;
+}
 };
 
 export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({)

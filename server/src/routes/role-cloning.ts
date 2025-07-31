@@ -15,6 +15,7 @@ import { AuditService } from '../auth/AuditService';
 import { requirePermission } from '../middleware/auth';
 
 }
+}
 interface CloneRoleBody {
   sourceRoleId: string;
   targetName: string;
@@ -27,22 +28,28 @@ interface CloneRoleBody {
     templateVersion?: string;
     customProperties?: Record<string, unknown>;
 }
+}
   };
 }
 
+}
 }
 interface RoleCloneHistoryParams {
   roleId: string;
 }
 }
+}
 
+}
 }
 interface RoleTemplatesQuery {
   organizationId?: string;
   limit?: string;
 }
 }
+}
 
+}
 }
 interface ValidateCloneBody {
   sourceRoleId: string;
@@ -50,6 +57,7 @@ interface ValidateCloneBody {
   targetScope: string;
   organizationId?: string;
   includePermissions: string[];
+}
 }
 }
 

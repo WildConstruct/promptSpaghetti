@@ -37,6 +37,7 @@ export enum DocumentType {
 
 // Interfaces
 }
+}
 export interface VerificationRequest {
   id?: string;
   user_id: string;
@@ -52,6 +53,7 @@ export interface VerificationRequest {
     documents?: VerificationDocument[];
     notes?: string;
 }
+}
   };
   admin_notes?: string;
   rejection_reason?: string;
@@ -59,6 +61,7 @@ export interface VerificationRequest {
   updated_at?: Date;
 }
 
+}
 }
 export interface VerificationDocument {
   id?: string;
@@ -74,7 +77,9 @@ export interface VerificationDocument {
   verification_notes?: string;
 }
 }
+}
 
+}
 }
 export interface VerificationQueueItem {
   id: string;
@@ -88,7 +93,9 @@ export interface VerificationQueueItem {
   days_pending: number;
 }
 }
+}
 
+}
 }
 export interface VerificationDecision {
   request_id: string;
@@ -98,7 +105,9 @@ export interface VerificationDecision {
   follow_up_required?: boolean;
 }
 }
+}
 
+}
 }
 export interface VerificationStats {
   total_pending: number;
@@ -109,6 +118,7 @@ export interface VerificationStats {
     pending: number;
     approved: number;
     rejected: number;
+}
 }
   }>;
 }

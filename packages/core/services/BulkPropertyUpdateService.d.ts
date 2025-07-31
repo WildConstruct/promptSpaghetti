@@ -8,12 +8,14 @@
  * Epic: 17 - Backstage Admin Controls
  */
 
+}
 export interface BulkUpdateTarget {
     type: TargetType;
     id: string;
     displayName?: string;
     currentValues?: Record<string, any>;
 
+}
 export interface BulkUpdateOperation {
     id: string;
     name: string;
@@ -32,6 +34,7 @@ export interface BulkUpdateOperation {
     completedAt?: Date;
     rolledBackAt?: Date;
 
+}
 export interface PropertyUpdate {
     property: string;
     operation: UpdateOperationType;
@@ -39,35 +42,41 @@ export interface PropertyUpdate {
     conditions?: UpdateCondition[];
     transformation?: PropertyTransformation;
 
+}
 export interface UpdateCondition {
     type: 'equals' | 'not_equals' | 'contains' | 'not_contains' | 'greater_than' | 'less_than' | 'exists' | 'not_exists' | 'matches_regex';
     field: string;
     value: any;
     description: string;
 
+}
 export interface PropertyTransformation {
     type: 'case_convert' | 'trim' | 'replace' | 'append' | 'prepend' | 'calculate' | 'format' | 'extract' | 'custom';
     parameters: Record<string, any>;
     description: string;
 
+}
 export interface ValidationRules {
     required?: string[];
     constraints?: PropertyConstraint[];
     customValidators?: CustomValidator[];
     skipInvalid?: boolean;
 
+}
 export interface PropertyConstraint {
     property: string;
     type: 'type' | 'length' | 'range' | 'pattern' | 'enum' | 'unique' | 'custom';
     parameters: Record<string, any>;
     message: string;
 
+}
 export interface CustomValidator {
     name: string;
     function: string;
     parameters: Record<string, any>;
     message: string;
 
+}
 export interface ExecutionSettings {
     mode: 'sequential' | 'parallel' | 'batched';
     batchSize?: number;
@@ -78,12 +87,14 @@ export interface ExecutionSettings {
     dryRun?: boolean;
     backupBeforeUpdate?: boolean;
 
+}
 export interface RollbackSettings {
     enabled: boolean;
     autoRollbackOnFailure?: boolean;
     retainBackups?: boolean;
     backupExpiration?: Date;
 
+}
 export interface OperationProgress {
     total: number;
     completed: number;
@@ -93,6 +104,7 @@ export interface OperationProgress {
     startTime?: Date;
     estimatedCompletion?: Date;
 
+}
 export interface OperationResult {
     targetId: string;
     targetType: TargetType;
@@ -103,6 +115,7 @@ export interface OperationResult {
     duration: number;
     backup?: Record<string, any>;
 
+}
 export interface PropertyChange {
     property: string;
     oldValue: any;
@@ -110,6 +123,7 @@ export interface PropertyChange {
     operation: UpdateOperationType;
     applied: boolean;
 
+}
 export interface OperationError {
     type: 'validation' | 'execution' | 'timeout' | 'permission' | 'not_found' | 'conflict';
     message: string;
@@ -120,6 +134,7 @@ export type TargetType = 'user' | 'content' | 'product' | 'category' | 'tag' | '
 export type UpdateOperationType = 'set' | 'unset' | 'append' | 'prepend' | 'increment' | 'decrement' | 'multiply' | 'divide' | 'replace' | 'merge' | 'push' | 'pull' | 'toggle';
 export type OperationStatus = 'draft' | 'validating' | 'validated' | 'executing' | 'completed' | 'failed' | 'cancelled' | 'rolling_back' | 'rolled_back';
 
+}
 export interface BulkUpdateTemplate {
     id: string;
     name: string;
@@ -133,6 +148,7 @@ export interface BulkUpdateTemplate {
     createdBy: string;
     createdAt: Date;
 
+}
 export interface BulkUpdateFilter {
     statuses?: OperationStatus[];
     targetTypes?: TargetType[];
@@ -140,10 +156,12 @@ export interface BulkUpdateFilter {
     dateRange?: {
         start?: Date;
         end?: Date;
+}
     };
     searchQuery?: string;
     hasErrors?: boolean;
 
+}
 export interface BulkUpdateStats {
     totalOperations: number;
     completedOperations: number;
@@ -154,8 +172,9 @@ export interface BulkUpdateStats {
         total: number;
         successful: number;
         rate: number;
+}
     }>;
-    commonErrors: Array<{,
+    commonErrors: Array<{
         type: string;
         message: string;
         count: number;
@@ -224,20 +243,24 @@ export declare class BulkPropertyUpdateService {
     private generateTemplateId;
     private chunkArray;
     private sleep;
+}
 interface ValidationResult {
     valid: boolean;
     errors: OperationError[];
     warnings: OperationError[];
     targetResults: TargetValidationResult[];
+}
 interface TargetValidationResult {
     targetId: string;
     valid: boolean;
     errors: OperationError[];
     warnings: OperationError[];
+}
 interface EntityProvider {
     getEntity: (id: string) => Promise<Record<string, any> | null>;
     updateEntity: (id: string, data: Record<string, any>) => Promise<Record<string, any>>;
 
+}
 export interface BulkUpdateEvent {
     type: string;
     data: any;
@@ -248,5 +271,6 @@ export declare const createBulkOperation: (name: string, targets: BulkUpdateTarg
 export declare const executeBulkOperation: (operationId: string) => Promise<boolean>;
 export declare const getBulkOperations: (filter?: BulkUpdateFilter) => BulkUpdateOperation[];
 export declare const getBulkUpdateStats: () => BulkUpdateStats;
+}
 export {};
 //# sourceMappingURL=BulkPropertyUpdateService.d.ts.map

@@ -12,6 +12,7 @@ import {
 import { DatabaseService } from '../database/database.service.js';
 
 }
+}
 export interface TransactionSearchFilters {
   userId?: string;
   status?: string;
@@ -22,6 +23,7 @@ export interface TransactionSearchFilters {
   startDate?: Date;
   endDate?: Date;
 }
+}
   riskScore?: { min?: number; max?: number };
   hasFlags?: boolean;
   page?: number;
@@ -30,6 +32,7 @@ export interface TransactionSearchFilters {
   sortOrder?: 'asc' | 'desc';
 }
 
+}
 }
 export interface TransactionDetails extends Transaction {
   order?: Order;
@@ -41,6 +44,7 @@ export interface TransactionDetails extends Transaction {
   related_transactions?: Transaction[];
 }
 
+}
 }
 export interface TransactionSummary {
   totalTransactions: number;
@@ -55,6 +59,7 @@ export interface TransactionSummary {
     count: number;
     volume: number;
 }
+}
   }>;
   recentTrends: Array<{
     date: string;
@@ -63,6 +68,7 @@ export interface TransactionSummary {
   }>;
 }
 
+}
 }
 export interface AnomalyDetectionResult {
   transactionId: string;
@@ -74,7 +80,9 @@ export interface AnomalyDetectionResult {
   detectedAt: Date;
 }
 }
+}
 
+}
 }
 export interface TransactionAlert {
   id: string;
@@ -87,6 +95,7 @@ export interface TransactionAlert {
   acknowledgedBy?: string;
   acknowledgedAt?: Date;
   createdAt: Date;
+}
 }
 }
 

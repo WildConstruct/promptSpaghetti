@@ -40,6 +40,7 @@ import {
 import { ComplianceFramework } from '../SecurityLogger';
 import { DataClassificationLevel } from '../DataClassificationAccessControl';
 
+}
 export interface SecurityAlertingConfigurationUIProps {
   currentConfig: SecurityAlertingConfig;
   onConfigChange: (config: SecurityAlertingConfig) => Promise<void>;
@@ -50,17 +51,23 @@ export interface SecurityAlertingConfigurationUIProps {
   readOnly?: boolean;
   allowAdvancedSettings?: boolean;
 }
+}
+}
 export interface ValidationResult {
   isValid: boolean;
   errors: ConfigValidationError;
   warnings: ConfigValidationWarning;
   securityScore: number;
 }
+}
+}
 export interface ConfigValidationError {
   field: string;
   message: string;
   severity: 'error' | 'critical'
+}
   }
+}
 export interface ConfigValidationWarning {
   field: string;
   message: string;
@@ -76,6 +83,7 @@ export interface ConfigValidationWarning {
   /**
   * Advanced security alerting configuration interface
   */
+}
 }
 export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigurationUIProps> = ({)
   currentConfig,

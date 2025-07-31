@@ -51,6 +51,7 @@ export declare function validateMathFunctionCall(functionName: string): boolean;
  * Security audit for Math function usage
  */
 
+}
 export interface MathFunctionAudit {
     functionName: string;
     allowed: boolean;
@@ -85,3 +86,4 @@ export declare function isInSafeRange(value: number): boolean;
 export declare function safeNumberCoercion(value: Error): number;
 export default createSafeMathContext;
 //# sourceMappingURL=safe-math-context.d.ts.map
+}

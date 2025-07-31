@@ -1171,6 +1171,7 @@ export declare export declare export declare export interface TrendingSystemConf
         trendingCacheTTL: number;
         scoreCacheTTL: number;
         analyticsCacheTTL: number;
+}
     };
     moderationSettings: {
         autoModerationEnabled: boolean;

@@ -57,6 +57,7 @@ export enum VerificationCodeType {
   cleanupInterval: number;         // Cleanup interval in milliseconds,
   codeFormats: {
   [key in VerificationCodeType]: CodeFormat;
+}
 };
   expirationTimes: {
   [key in VerificationCodeType]: number;
@@ -69,6 +70,7 @@ export enum VerificationCodeType {
   requireSecureDelivery: boolean;  // Require secure delivery channels
 
 // Verification Code Data
+}
 }
 export interface VerificationCode {
   id: string;
@@ -97,6 +99,7 @@ export interface VerificationCode {
   deliveryStatus?: string;
   revocationReason?: string;
   additionalContext?: Record<string, any>;
+}
 };
   securityFlags: {
   highRisk: boolean;
@@ -106,6 +109,7 @@ export interface VerificationCode {
 };
 
 // Code Generation Request
+}
 }
 export interface CodeGenerationRequest {
   userId: string;
@@ -119,6 +123,8 @@ export interface CodeGenerationRequest {
   metadata?: Record<string, any>;
   // Code Validation Request
 }
+}
+}
 export interface CodeValidationRequest {
   userId: string;
   code: string;
@@ -127,6 +133,8 @@ export interface CodeValidationRequest {
   userAgent: string;
   deviceFingerprint?: string;
   // Validation Result
+}
+}
 }
 export interface ValidationResult {
   valid: boolean;
@@ -137,12 +145,15 @@ export interface ValidationResult {
   riskScore?: number;
   // Rate Limiting Data
 }
+}
+}
 export interface RateLimitData {
   count: number;
   resetTime: number;
   lastRequest: Date;
   violations: number;
   // Security Events
+}
 }
 export enum SecurityEvent {
   CODE_GENERATED = 'code_generated',
@@ -173,6 +184,7 @@ export enum SecurityEvent {
   * Comprehensive verification code management service
   */
 }
+}
 export class VerificationCodeManager extends EventEmitter {
   private codes: Map<string, VerificationCode> = new Map();
   private rateLimits: Map<string, RateLimitData> = new Map();
@@ -186,6 +198,7 @@ export class VerificationCodeManager extends EventEmitter {
    * Generate a new verification code
    */
   public async generateCode(request: CodeGenerationRequest): Promise<{ code: string; codeId: string } | null> {
+
   try {
   // Check rate limiting
   if (this.isRateLimited(request.userId, request.deliveryAddress, request.ipAddress)) {
@@ -272,6 +285,7 @@ export class VerificationCodeManager extends EventEmitter {
    * Validate a verification code
    */
   public async validateCode(request: CodeValidationRequest): Promise<ValidationResult> {
+
     try {
       // Apply anti-enumeration delay
       await this.antiEnumerationDelay();
@@ -322,6 +336,7 @@ export class VerificationCodeManager extends EventEmitter {
    * Use a verification code (marks it as used)
    */
   public async useCode(request: CodeValidationRequest): Promise<{ success: boolean; codeData?: VerificationCode; reason?: string }> {
+
   const validation = await this.validateCode(request);
   if (!validation.valid || !validation.codeData) {
   return {
@@ -353,6 +368,7 @@ export class VerificationCodeManager extends EventEmitter {
    * Revoke a specific verification code
    */
   public async revokeCode(codeId: string, reason: string): Promise<boolean> {
+
   const code = this.codes.get(codeId);
   if (!code || code.status !== CodeStatus.ACTIVE) {
   return false;
@@ -377,7 +393,7 @@ export class VerificationCodeManager extends EventEmitter {
   /**
    * Revoke all codes for a user of a specific type
    */
-  public async revokeUserCodes()
+  public async revokeUserCodes(
     userId: string,
     type?: VerificationCodeType,
     reason: string = 'user_requested'): Promise<number> {,

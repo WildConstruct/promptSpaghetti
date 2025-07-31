@@ -13,6 +13,7 @@ import { DataClassificationService } from './DataClassificationService';
 import { KeyManagementService } from './KeyManagementService';
 
 }
+}
 export interface OAuthConfiguration {
   configId: string;
   clientId: string;
@@ -32,7 +33,9 @@ export interface OAuthConfiguration {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface OAuthScope {
   name: string;
@@ -47,7 +50,9 @@ export interface OAuthScope {
   auditLevel: 'BASIC' | 'ENHANCED' | 'COMPREHENSIVE';
 }
 }
+}
 
+}
 }
 export interface ScopeDataAccess {
   resources: string[];
@@ -59,7 +64,9 @@ export interface ScopeDataAccess {
   crossTenantAccess: boolean;
 }
 }
+}
 
+}
 }
 export interface TokenConfiguration {
   accessTokenTtl: number; // seconds
@@ -73,7 +80,9 @@ export interface TokenConfiguration {
   revocationConfiguration: RevocationConfiguration;
 }
 }
+}
 
+}
 }
 export interface TokenRotationPolicy {
   enabled: boolean;
@@ -84,7 +93,9 @@ export interface TokenRotationPolicy {
   notificationChannels: string[];
 }
 }
+}
 
+}
 }
 export interface TokenBindingConfiguration {
   certificateBinding: boolean;
@@ -95,7 +106,9 @@ export interface TokenBindingConfiguration {
   customBindingFields: string[];
 }
 }
+}
 
+}
 }
 export interface RevocationConfiguration {
   enableRevocation: boolean;
@@ -106,7 +119,9 @@ export interface RevocationConfiguration {
   auditRevocation: boolean;
 }
 }
+}
 
+}
 }
 export interface OAuthSecurityConfiguration {
   pkceRequired: boolean;
@@ -124,7 +139,9 @@ export interface OAuthSecurityConfiguration {
   threatDetection: ThreatDetectionConfiguration;
 }
 }
+}
 
+}
 }
 export interface OAuthRateLimitConfiguration {
   tokenRequestLimit: { requests: number; windowMs: number };
@@ -137,6 +154,7 @@ export interface OAuthRateLimitConfiguration {
 }
 
 }
+}
 export interface SecurityHeaderConfiguration {
   strictTransportSecurity: boolean;
   contentSecurityPolicy: string;
@@ -147,7 +165,9 @@ export interface SecurityHeaderConfiguration {
   customHeaders: Record<string, string>;
 }
 }
+}
 
+}
 }
 export interface ThreatDetectionConfiguration {
   bruteForceProtection: boolean;
@@ -160,7 +180,9 @@ export interface ThreatDetectionConfiguration {
   escalationThresholds: ThreatEscalationThreshold[];
 }
 }
+}
 
+}
 }
 export interface ThreatEscalationThreshold {
   threatLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
@@ -168,6 +190,7 @@ export interface ThreatEscalationThreshold {
   timeWindow: number; // minutes
   actions: ThreatResponseAction[];
   notifications: string[];
+}
 }
 }
 
@@ -182,6 +205,7 @@ export type ThreatResponseAction =
   | 'NOTIFY_USER';
 
 }
+}
 export interface ComplianceSettings {
   gdprCompliance: GDPRComplianceConfiguration;
   ccpaCompliance: CCPAComplianceConfiguration;
@@ -191,7 +215,9 @@ export interface ComplianceSettings {
   customCompliance: CustomComplianceFramework[];
 }
 }
+}
 
+}
 }
 export interface GDPRComplianceConfiguration {
   enabled: boolean;
@@ -205,7 +231,9 @@ export interface GDPRComplianceConfiguration {
   crossBorderTransferSafeguards: string[];
 }
 }
+}
 
+}
 }
 export interface CCPAComplianceConfiguration {
   enabled: boolean;
@@ -216,7 +244,9 @@ export interface CCPAComplianceConfiguration {
   thirdPartyProcessorAgreements: boolean;
 }
 }
+}
 
+}
 }
 export interface SOXComplianceConfiguration {
   enabled: boolean;
@@ -227,7 +257,9 @@ export interface SOXComplianceConfiguration {
   auditTrailRequirements: boolean;
 }
 }
+}
 
+}
 }
 export interface HIPAAComplianceConfiguration {
   enabled: boolean;
@@ -238,7 +270,9 @@ export interface HIPAAComplianceConfiguration {
   businessAssociateAgreements: boolean;
 }
 }
+}
 
+}
 }
 export interface PCIDSSComplianceConfiguration {
   enabled: boolean;
@@ -249,7 +283,9 @@ export interface PCIDSSComplianceConfiguration {
   regularSecurityTesting: boolean;
 }
 }
+}
 
+}
 }
 export interface CustomComplianceFramework {
   frameworkId: string;
@@ -260,7 +296,9 @@ export interface CustomComplianceFramework {
   documentation: string[];
 }
 }
+}
 
+}
 }
 export interface ComplianceRequirement {
   requirementId: string;
@@ -272,7 +310,9 @@ export interface ComplianceRequirement {
   evidence: string[];
 }
 }
+}
 
+}
 }
 export interface DataHandlingConfiguration {
   dataClassificationIntegration: boolean;
@@ -283,7 +323,9 @@ export interface DataHandlingConfiguration {
   thirdPartyDataSharing: ThirdPartyDataSharingConfiguration;
 }
 }
+}
 
+}
 }
 export interface DataRetentionPolicy {
   dataType: string;
@@ -294,7 +336,9 @@ export interface DataRetentionPolicy {
   notificationRequired: boolean;
 }
 }
+}
 
+}
 }
 export interface DataProcessingPurpose {
   purposeId: string;
@@ -308,7 +352,9 @@ export interface DataProcessingPurpose {
   thirdPartySharing: boolean;
 }
 }
+}
 
+}
 }
 export interface CrossBorderTransferConfiguration {
   enabled: boolean;
@@ -320,7 +366,9 @@ export interface CrossBorderTransferConfiguration {
   transferDocumentation: boolean;
 }
 }
+}
 
+}
 }
 export interface DataSubjectRightsConfiguration {
   rightOfAccess: boolean;
@@ -333,7 +381,9 @@ export interface DataSubjectRightsConfiguration {
   responseTimeframes: Record<string, number>; // days
 }
 }
+}
 
+}
 }
 export interface ThirdPartyDataSharingConfiguration {
   enabled: boolean;
@@ -344,6 +394,7 @@ export interface ThirdPartyDataSharingConfiguration {
   auditTrailRequired: boolean;
   consentRequired: boolean;
   shareableDataCategories: string[];
+}
 }
 }
 
@@ -373,6 +424,7 @@ export type ConfigurationStatus =
   | 'SUSPENDED';
 
 }
+}
 export interface OAuthGuidanceDocument {
   documentId: string;
   title: string;
@@ -387,6 +439,7 @@ export interface OAuthGuidanceDocument {
   approvalStatus: 'DRAFT' | 'UNDER_REVIEW' | 'APPROVED' | 'PUBLISHED';
 }
 }
+}
 
 export type GuidanceCategory = 
   | 'IMPLEMENTATION_GUIDE'
@@ -397,6 +450,7 @@ export type GuidanceCategory =
   | 'MIGRATION_GUIDE'
   | 'TESTING_GUIDELINES';
 
+}
 }
 export interface GuidanceContent {
   overview: string;
@@ -409,7 +463,9 @@ export interface GuidanceContent {
   references: Reference[];
 }
 }
+}
 
+}
 }
 export interface GuidanceStep {
   stepNumber: number;
@@ -421,7 +477,9 @@ export interface GuidanceStep {
   verificationSteps: string[];
 }
 }
+}
 
+}
 }
 export interface CodeExample {
   language: string;
@@ -432,7 +490,9 @@ export interface CodeExample {
   securityNotes?: string[];
 }
 }
+}
 
+}
 }
 export interface SecurityConsideration {
   category: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
@@ -442,7 +502,9 @@ export interface SecurityConsideration {
   validation: string[];
 }
 }
+}
 
+}
 }
 export interface ComplianceNote {
   regulation: string;
@@ -451,7 +513,9 @@ export interface ComplianceNote {
   validationCriteria: string[];
 }
 }
+}
 
+}
 }
 export interface TroubleshootingEntry {
   problem: string;
@@ -461,7 +525,9 @@ export interface TroubleshootingEntry {
   prevention: string[];
 }
 }
+}
 
+}
 }
 export interface Reference {
   type: 'RFC' | 'STANDARD' | 'SPECIFICATION' | 'DOCUMENTATION' | 'ARTICLE';
@@ -470,7 +536,9 @@ export interface Reference {
   description: string;
 }
 }
+}
 
+}
 }
 export interface OAuthIntegrationAssessment {
   assessmentId: string;
@@ -487,7 +555,9 @@ export interface OAuthIntegrationAssessment {
   status: 'IN_PROGRESS' | 'COMPLETED' | 'REJECTED' | 'REQUIRES_REMEDIATION';
 }
 }
+}
 
+}
 }
 export interface AssessmentScope {
   configurationReview: boolean;
@@ -498,7 +568,9 @@ export interface AssessmentScope {
   penetrationTesting: boolean;
 }
 }
+}
 
+}
 }
 export interface SecurityFinding {
   findingId: string;
@@ -513,7 +585,9 @@ export interface SecurityFinding {
   status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'ACCEPTED_RISK';
 }
 }
+}
 
+}
 }
 export interface SecurityRecommendation {
   recommendationId: string;
@@ -527,7 +601,9 @@ export interface SecurityRecommendation {
   dependencies: string[];
 }
 }
+}
 
+}
 }
 export interface ComplianceStatus {
   gdprCompliant: boolean;
@@ -539,7 +615,9 @@ export interface ComplianceStatus {
   nonComplianceIssues: ComplianceIssue[];
 }
 }
+}
 
+}
 }
 export interface ComplianceIssue {
   framework: string;
@@ -548,6 +626,7 @@ export interface ComplianceIssue {
   severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
   remediation: string;
   timeline: number; // days
+}
 }
 }
 
@@ -1452,6 +1531,7 @@ window.location.href = authUrl.toString();
 
 // Supporting interfaces
 }
+}
 interface SecurityRequirements {
   securityLevel: 'BASIC' | 'STANDARD' | 'ENHANCED' | 'MAXIMUM';
   requiresMTLS: boolean;
@@ -1459,5 +1539,6 @@ interface SecurityRequirements {
   requiresDPoP: boolean;
   tokenBindingRequired: boolean;
   encryptionRequired: boolean;
+}
 }
 }

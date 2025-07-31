@@ -5,6 +5,7 @@
 import React, { useState, useEffect } from 'react';
 import { enhancedComplianceMonitor, EnhancedComplianceDashboard } from '../services/ComplianceMonitor';
 import { ComplianceTrendReport } from '../services/ComplianceHistoricalAnalyzer';
+}
 interface ComplianceDashboardProps {
   className?: string;
   autoRefresh?: boolean;
@@ -13,6 +14,7 @@ interface ComplianceDashboardProps {
   className = '',
   autoRefresh = true,
   refreshInterval = 300000 // 5 minutes
+}
 }) => {
   const [dashboardData, setDashboardData] = useState<EnhancedComplianceDashboard | null>(null);
   const [selectedFramework, setSelectedFramework] = useState<string>('overview');

@@ -17,6 +17,7 @@ import { WebSocketStreamingServer } from './WebSocketStreaming';
 import { AnalyticsAdapterManager } from './AnalyticsEventAdapters';
 
 // Dashboard Integration Configuration
+}
 interface DashboardIntegrationConfig {
   enableLegacySupport: boolean;
   migrationMode: 'gradual' | 'immediate' | 'parallel';
@@ -26,6 +27,7 @@ interface DashboardIntegrationConfig {
   alertingEnabled: boolean;
 
 // Legacy Analytics System Info
+}
 interface LegacyAnalyticsSystem {
   name: string;
   routePath: string;
@@ -36,6 +38,7 @@ interface LegacyAnalyticsSystem {
   healthStatus: 'healthy' | 'degraded' | 'failing';
 
 // Dashboard Widget Performance Metrics
+}
 interface WidgetPerformanceMetrics {
   widgetId: string;
   widgetType: string;
@@ -46,6 +49,7 @@ interface WidgetPerformanceMetrics {
   lastUpdate: number;
 
 // Integration Status
+}
 interface IntegrationStatus {
   totalSystems: number;
   integratedSystems: number;
@@ -56,6 +60,7 @@ interface IntegrationStatus {
   lastHealthCheck: number;
 
 // Statistics Interface
+}
 interface EventStatistics {
   totalEvents: number;
   eventsBySource?: Record<string, number>;
@@ -75,6 +80,7 @@ export class DashboardIntegrationService {
   private config: DashboardIntegrationConfig;
   private legacySystems: Map<string, LegacyAnalyticsSystem> = new Map();
   private performanceMetrics: Map<string, WidgetPerformanceMetrics> = new Map();
+}
   private integrationCache: Map<string, { data: unknown; timestamp: number }> = new Map();
   constructor();
     eventBus: UnifiedEventBus,
@@ -151,6 +157,7 @@ export class DashboardIntegrationService {
   timeSeriesData: unknown;
   integrationStatus: IntegrationStatus;
 }> {
+
     const startTime = Date.now();
     try {
       // Check cache first
@@ -259,6 +266,7 @@ export class DashboardIntegrationService {
    * Calculate business metrics from consolidated data
    */
   private async calculateBusinessMetrics(events: UnifiedAnalyticsEvent, filter: EventFilter): Promise<any> {
+
   const businessEvents = events.filter(e => e.category === EventCategory.BUSINESS || e.category === EventCategory.USER);
   // Graph creation metrics
   const graphEvents = events.filter(e => e.type === AnalyticsEventType.GRAPH_EXECUTION || e.type === AnalyticsEventType.GRAPH_CREATED);
@@ -292,6 +300,7 @@ export class DashboardIntegrationService {
    * Get integration status for all systems
    */
   async getIntegrationStatus(): Promise<IntegrationStatus> {
+
   const totalSystems = this.legacySystems.size;
   const integratedSystems = Array.from(this.legacySystems.values());
   .filter(system => system.migrationStatus === 'completed').length;
@@ -366,6 +375,7 @@ export class DashboardIntegrationService {
    * Get performance widget data from performance monitoring system
    */
   private async getPerformanceWidgetData(filter: EventFilter, authContext: AuthContext): Promise<any> {
+
     const performanceEvents = await this.eventRepository.findMany({)
   filter: { ...filter, categories: [EventCategory.PERFORMANCE] },
       limit: 1000,
@@ -404,6 +414,7 @@ export class DashboardIntegrationService {
    * Get integration widget data from all integrated systems
    */
   private async getIntegrationWidgetData(filter: EventFilter, authContext: AuthContext): Promise<any> {
+
     const integrationEvents = await this.eventRepository.findMany({)
   filter: { ...filter, categories: [EventCategory.INTEGRATION] },
       limit: 1000;
@@ -430,6 +441,7 @@ export class DashboardIntegrationService {
    * Get business widget data from revenue and user analytics
    */
   private async getBusinessWidgetData(filter: EventFilter, authContext: AuthContext): Promise<any> {
+
     const businessEvents = await this.eventRepository.findMany({)
   filter: { ...filter, categories: [EventCategory.BUSINESS, EventCategory.USER] },
       limit: 1000;
@@ -452,6 +464,7 @@ export class DashboardIntegrationService {
    * Get security widget data from security monitoring systems
    */
   private async getSecurityWidgetData(filter: EventFilter, authContext: AuthContext): Promise<any> {
+
   const securityEvents = await this.eventRepository.findMany({)
   filter: {
   ...filter,
@@ -516,6 +529,7 @@ export class DashboardIntegrationService {
    * Migrate legacy analytics route to unified dashboard
    */
   async migrateLegacyRoute(systemName: string, routePath: string): Promise<boolean> {
+
     try {
       const system = this.legacySystems.get(systemName);
       if (!system) {
@@ -557,6 +571,7 @@ export class DashboardIntegrationService {
    * Simulate migration process (placeholder)
    */
   private async simulateMigration(systemName: string): Promise<void> {
+
     // Simulate async migration work
     await new Promise(resolve => setTimeout(resolve, 1000));
     console.log(`Migration simulation completed for ${systemName}`);}
@@ -564,6 +579,7 @@ export class DashboardIntegrationService {
    * Health check for all integrated systems
    */
   async performHealthCheck(): Promise<void> {
+
   console.log('Performing health check on all integrated systems...');
   for (const [name, system] of this.legacySystems) {
   try {
@@ -581,6 +597,7 @@ export class DashboardIntegrationService {
    * Check individual system health
    */
   private async checkSystemHealth(systemName: string): Promise<boolean> {
+
   // Simulate health check logic
   // In production, this would check actual system endpoints, data freshness, etc.
   return Math.random() > 0.1; // 90% chance of being healthy
@@ -688,6 +705,7 @@ export class DashboardIntegrationService {
    * Force refresh of system health checks
    */
   async refreshSystemHealth(): Promise<void> {
+
   await this.performHealthCheck();
   /**
   * Clear integration cache

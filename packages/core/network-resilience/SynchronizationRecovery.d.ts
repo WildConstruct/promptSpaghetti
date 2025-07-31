@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
 
+}
 export interface DocumentState {
     version: number;
     checksum: string;
@@ -7,6 +8,7 @@ export interface DocumentState {
     operations: DocumentOperation[];
     metadata: Record<string, any>;
 
+}
 export interface DocumentOperation {
     id: string;
     type: 'create' | 'update' | 'delete' | 'move';
@@ -19,6 +21,7 @@ export interface DocumentOperation {
     version: number;
     dependencies?: string[];
 
+}
 export interface SyncDelta {
     operations: DocumentOperation[];
     fromVersion: number;
@@ -28,8 +31,10 @@ export interface SyncDelta {
         operationCount: number;
         estimatedSize: number;
         compression?: string;
+}
     };
 
+}
 export interface ConflictInfo {
     id: string;
     type: 'concurrent_edit' | 'version_mismatch' | 'dependency_missing' | 'data_corruption';
@@ -40,12 +45,14 @@ export interface ConflictInfo {
     autoResolvable: boolean;
     severity: 'low' | 'medium' | 'high' | 'critical';
 
+}
 export interface ConflictResolution {
     strategy: 'mine' | 'theirs' | 'merge' | 'manual';
     description: string;
     result?: any;
     confidence: number;
 
+}
 export interface SyncProgress {
     phase: 'detecting' | 'downloading' | 'applying' | 'validating' | 'completed' | 'failed';
     totalOperations: number;
@@ -56,6 +63,7 @@ export interface SyncProgress {
     bytesTotal?: number;
     errors: Error[];
 
+}
 export interface RecoveryConfig {
     maxDeltaSize: number;
     maxOperationsPerBatch: number;
@@ -69,6 +77,7 @@ export interface RecoveryConfig {
     validateIntegrity: boolean;
     backupBeforeRecovery: boolean;
 
+}
 export interface RecoveryStats {
     totalRecoveries: number;
     successfulRecoveries: number;
@@ -193,3 +202,4 @@ export declare class SynchronizationRecovery extends EventEmitter {
     private chunkArray;
 
 //# sourceMappingURL=SynchronizationRecovery.d.ts.map
+}

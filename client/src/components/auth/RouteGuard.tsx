@@ -33,6 +33,7 @@ export type Permission =
  * Route access requirements
  */
 
+}
 export interface RouteAccessRequirements {
   /** Required authentication status */
   requireAuth?: boolean;
@@ -49,6 +50,7 @@ export interface RouteAccessRequirements {
 /**
  * RouteGuard component props
  */
+}
 interface RouteGuardProps {
   children: React.ReactNode;
   access?: RouteAccessRequirements;
@@ -62,6 +64,7 @@ interface RouteGuardProps {
 // =============================================================================
 const DEFAULT_ROUTE_ACCESS: Record<string, RouteAccessRequirements> = {
   // Public routes - no authentication required
+}
   '/login': { requireAuth: false },
   '/register': { requireAuth: false },
   '/reset-password': { requireAuth: false },

@@ -18,6 +18,7 @@ import { ContributionCard } from './ContributionCard';
 import { ContributionSubmissionForm } from './ContributionSubmissionForm';
 import { ContributorProfileManager } from './ContributorProfileManager';
 
+}
 export interface ContributionDashboardProps {
   userId?: string;
   showCreateForm?: boolean;
@@ -26,6 +27,7 @@ export interface ContributionDashboardProps {
   onContributionEdit?: (contributionId: string) => void;
   onContributionDelete?: (contributionId: string) => void;
   className?: string;
+}
 }
 export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({)
   userId,

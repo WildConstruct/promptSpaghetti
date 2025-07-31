@@ -4,6 +4,7 @@
 import React, { useMemo } from 'react';
 import { WeightControlOption } from '../Inspector/WeightControlSlider';
 
+}
 export interface WeightVisualizationProps {
   options: WeightControlOption;
   type: 'pie' | 'bar';
@@ -13,6 +14,7 @@ export interface WeightVisualizationProps {
   showPercentages?: boolean;
   className?: string;
   // Shared color palette for consistent option visualization across all weight components
+}
 }
 export const WEIGHT_OPTION_COLORS = [
   '#4299e1', // Blue
@@ -247,11 +249,13 @@ export const WeightVisualization: React.FC<WeightVisualizationProps> = (props) =
 
 // Legend Component for both visualizations
 
+}
 export interface WeightLegendProps {
   options: WeightControlOption;
   className?: string;
         return;
           <div
+}
             key={option.id}
             style={{
   display: 'flex',

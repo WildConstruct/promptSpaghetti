@@ -10,6 +10,7 @@ export type ActivityType = 'user_action' | 'system_event' | 'admin_action' | 'se
 export type ActivitySeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
 export type ActivityStatus = 'pending' | 'in_progress' | 'completed' | 'failed' | 'cancelled';
 
+}
 export interface BaseActivity {
     id: string;
     timestamp: string;
@@ -39,6 +40,7 @@ export interface BaseActivity {
         region?: string;
         city?: string;
         coordinates?: [number, number];
+}
     };
     duration?: number;
     startTime?: string;
@@ -56,12 +58,14 @@ export interface BaseActivity {
     updatedAt?: string;
     version: number;
 
+}
 export interface ActivityChange {
     field: string;
     oldValue: any;
     newValue: any;
     changeType: 'create' | 'update' | 'delete' | 'restore';
 
+}
 export interface UserActivity extends BaseActivity {
     type: 'user_action';
     page?: string;
@@ -72,6 +76,7 @@ export interface UserActivity extends BaseActivity {
     renderTime?: number;
     interactionDelay?: number;
 
+}
 export interface SystemActivity extends BaseActivity {
     type: 'system_event';
     systemMetrics?: {
@@ -79,10 +84,12 @@ export interface SystemActivity extends BaseActivity {
         memoryUsage?: number;
         diskUsage?: number;
         networkLatency?: number;
+}
     };
     healthStatus?: 'healthy' | 'warning' | 'critical' | 'unknown';
     componentStatus?: Record<string, string>;
 
+}
 export interface AdminActivity extends BaseActivity {
     type: 'admin_action';
     adminLevel: 'super_admin' | 'admin' | 'moderator' | 'support';
@@ -95,6 +102,7 @@ export interface AdminActivity extends BaseActivity {
     approverId?: string;
     approvalReason?: string;
 
+}
 export interface SecurityActivity extends BaseActivity {
     type: 'security_event';
     threatType?: string;
@@ -113,6 +121,7 @@ export interface SecurityActivity extends BaseActivity {
         fingerprint?: string;
     };
 
+}
 export interface ApiActivity extends BaseActivity {
     type: 'api_call';
     method: string;
@@ -126,6 +135,7 @@ export interface ApiActivity extends BaseActivity {
     databaseTime?: number;
     externalApiTime?: number;
 
+}
 export interface DataActivity extends BaseActivity {
     type: 'data_change';
     database?: string;
@@ -136,6 +146,7 @@ export interface DataActivity extends BaseActivity {
     validationErrors?: string[];
     businessRules?: string[];
 
+}
 export interface PerformanceActivity extends BaseActivity {
     type: 'performance_event';
     metrics: {
@@ -152,6 +163,7 @@ export interface PerformanceActivity extends BaseActivity {
     loadLevel?: 'low' | 'medium' | 'high' | 'peak';
     concurrentUsers?: number;
 
+}
 export interface AuthenticationActivity extends BaseActivity {
     type: 'authentication';
     authMethod: 'password' | 'oauth' | 'saml' | 'mfa' | 'api_key' | 'jwt';
@@ -165,6 +177,7 @@ export interface AuthenticationActivity extends BaseActivity {
     riskScore?: number;
     riskFactors?: string[];
 
+}
 export interface FileActivity extends BaseActivity {
     type: 'file_operation';
     fileName: string;
@@ -178,6 +191,7 @@ export interface FileActivity extends BaseActivity {
     version?: string;
     previousVersion?: string;
 
+}
 export interface WorkflowActivity extends BaseActivity {
     type: 'workflow_event';
     workflowId: string;
@@ -195,6 +209,7 @@ export interface WorkflowActivity extends BaseActivity {
 
 export type Activity = UserActivity | SystemActivity | AdminActivity | SecurityActivity | ApiActivity | DataActivity | PerformanceActivity | AuthenticationActivity | FileActivity | WorkflowActivity;
 
+}
 export interface ActivityQuery {
     startTime?: string;
     endTime?: string;
@@ -218,12 +233,14 @@ export interface ActivityQuery {
     aggregateBy?: string[];
     include?: string[];
 
+}
 export interface ActivityAggregation {
     field: string;
     value: any;
     count: number;
     percentage: number;
 
+}
 export interface ActivityQueryResult {
     activities: Activity[];
     totalCount: number;
@@ -231,9 +248,11 @@ export interface ActivityQueryResult {
     facets?: Record<string, Array<{
         value: string;
         count: number;
+}
     }>>;
     executionTime: number;
 
+}
 export interface ActivityIndex {
     id: string;
     timestamp: string;
@@ -247,6 +266,7 @@ export interface ActivityIndex {
     status: ActivityStatus;
     tags: string[];
 
+}
 export interface ActivityStream {
     subscriptionId: string;
     filters: ActivityQuery;
@@ -254,32 +274,35 @@ export interface ActivityStream {
     createdAt: string;
     lastActivity?: string;
 
+}
 export interface ActivityStreamEvent {
     streamId: string;
     activity: Activity;
     timestamp: string;
 
+}
 export interface ActivityMetrics {
     totalActivities: number;
     activitiesByType: Record<ActivityType, number>;
     activitiesBySeverity: Record<ActivitySeverity, number>;
     activitiesByStatus: Record<ActivityStatus, number>;
-    activitiesOverTime: Array<{,
+    activitiesOverTime: Array<{
         timestamp: string;
         count: number;
         types: Record<ActivityType, number>;
+}
     }>;
-    topSources: Array<{,
+    topSources: Array<{
         source: string;
         count: number;
         percentage: number;
     }>;
-    topActions: Array<{,
+    topActions: Array<{
         action: string;
         count: number;
         percentage: number;
     }>;
-    topUsers: Array<{,
+    topUsers: Array<{
         userId: string;
         userEmail?: string;
         count: number;
@@ -293,6 +316,7 @@ export interface ActivityMetrics {
         p99: number;
     };
 
+}
 export interface ActivityRetentionPolicy {
     id: string;
     name: string;
@@ -311,6 +335,7 @@ export interface ActivityRetentionPolicy {
     updatedAt: string;
     isActive: boolean;
 
+}
 export type { Activity as MonitoringActivity, ActivityQuery as MonitoringActivityQuery, ActivityQueryResult as MonitoringActivityQueryResult, ActivityMetrics as MonitoringActivityMetrics };
 export declare const DEFAULT_ACTIVITY_RETENTION_DAYS = 90;
 export declare const DEFAULT_ACTIVITY_PAGE_SIZE = 50;

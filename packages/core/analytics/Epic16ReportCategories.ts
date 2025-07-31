@@ -25,6 +25,7 @@ export enum Epic16ReportCategory {
   audience: ReportAudience;
   format: ReportFormat;
 }
+}
 export const EPIC16_REPORT_CATEGORIES: Record<Epic16ReportCategory, ReportCategoryDefinition> = {
   [Epic16ReportCategory.CREATOR_PERFORMANCE]: {
   id: Epic16ReportCategory.CREATOR_PERFORMANCE,

@@ -4,11 +4,13 @@
  */
 import React from 'react';
 
+}
 interface CreateWorkspaceModalProps {
     onSubmit: (data: {),
         name: string;
         description?: string;
 
+}
     }) => void;
     onCancel: () => void;
 

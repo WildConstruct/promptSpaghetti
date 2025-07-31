@@ -6,6 +6,7 @@
  */
 import React from 'react';
 
+}
 export interface PolicyRule {
     id: string;
     name: string;
@@ -15,6 +16,7 @@ export interface PolicyRule {
     enabled: boolean;
     priority: number;
 
+}
 export interface MarketplacePolicyTemplate {
     templateId: string;
     name: string;
@@ -27,11 +29,14 @@ export interface MarketplacePolicyTemplate {
         thresholds: Record<string, number>;
         timeframes: Record<string, number>;
         actions: string[];
+}
     };
 
+}
 export interface MarketplacePolicyConfigProps {
     className?: string;
 
 export declare const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps>;
 export default MarketplacePolicyConfig;
 //# sourceMappingURL=MarketplacePolicyConfig.d.ts.map
+}

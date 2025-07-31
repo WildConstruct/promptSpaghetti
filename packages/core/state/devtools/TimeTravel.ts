@@ -10,6 +10,7 @@ import { StateSnapshot, StateChange } from '../containers/BaseStateContainer';
 
 // Time travel types
 
+}
 export interface TimeTravelConfig {
   maxHistorySize: number;
   enableBranching: boolean;
@@ -21,7 +22,9 @@ export interface TimeTravelConfig {
   enabled: boolean;
   interval: number;
   maxSnapshots: number;
+}
 };
+}
 }
 export interface TimelineEntry<T = any> {
   id: string;
@@ -41,6 +44,7 @@ export interface TimelineEntry<T = any> {
   compressed: boolean;
 };
 
+}
 export interface TimeBranch {
   id: string;
   name: string;
@@ -55,7 +59,9 @@ export interface TimeBranch {
   tags: string;
   protected: boolean;
   color: string;
+}
 };
+}
 }
 export interface TimeTravelState {
   currentPosition: number;
@@ -67,6 +73,8 @@ export interface TimeTravelState {
   branches: string;
   markers: TimelineMarker;
 }
+}
+}
 export interface TimelineMarker {
   id: string;
   entryId: string;
@@ -75,13 +83,17 @@ export interface TimelineMarker {
   color: string;
   timestamp: number;
   type: 'bookmark' | 'bug' | 'feature' | 'test' | 'milestone'
+}
   }
+}
 export interface StateDiff {
   path: string;
   type: 'added' | 'removed' | 'modified' | 'unchanged';
   oldValue?: any;
   newValue?: any;
   children?: StateDiff;
+}
+}
 }
 export interface ReplaySession {
   id: string;
@@ -95,6 +107,8 @@ export interface ReplaySession {
   breakpoints: number;
   created: number;
   lastPlayed: number;
+}
+}
 }
 export interface TimelineQuery {
   timeRange?: { start: number; end: number };
@@ -522,6 +536,7 @@ export class TimeTravel extends EventEmitter {
       entries = entries.slice(start, end);
     return entries.sort((a, b) => a.timestamp - b.timestamp);
   private async executeAutoReplay(session: ReplaySession): Promise<void> {
+
     while (this.isReplaying && session.autoPlay && session.currentIndex < session.timeline.length) {
       if (session.breakpoints.includes(session.currentIndex)) {
         session.autoPlay = false;

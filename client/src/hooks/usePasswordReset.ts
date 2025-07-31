@@ -1,6 +1,7 @@
 // Epic 11 usePasswordReset Hook
 // React hook for password reset functionality
 import { useState, useCallback } from 'react';
+}
 interface PasswordResetRequestResponse {
   success: boolean;,
   message: string;
@@ -22,6 +23,7 @@ interface PasswordResetRequestResponse {
   const clearMessages = useCallback(() => {
   setError(null);
   setSuccess(null);
+}
 }, []);
   const requestPasswordReset = useCallback(async (email: string): Promise<void> => {
   setLoading(true);
@@ -30,7 +32,7 @@ interface PasswordResetRequestResponse {
   try {
   const response = await fetch('/api/auth/password-reset/request', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({ email })
@@ -52,7 +54,7 @@ interface PasswordResetRequestResponse {
     try {
       const response = await fetch(`/api/auth/password-reset/validate/${encodeURIComponent(token)}`, {},}
   method: 'GET',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 });
       const data: PasswordResetValidationResponse = await response.json();
@@ -79,7 +81,7 @@ interface PasswordResetRequestResponse {
   try {
   const response = await fetch('/api/auth/password-reset/confirm', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),

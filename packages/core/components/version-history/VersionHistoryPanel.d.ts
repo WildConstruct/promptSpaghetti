@@ -5,6 +5,7 @@
 import React from 'react';
 import { VersionHistoryManager } from '../../version-history/VersionHistoryManager';
 
+}
 interface VersionHistoryPanelProps {
     versionManager: VersionHistoryManager;
     currentGraphData: unknown;
@@ -15,5 +16,6 @@ interface VersionHistoryPanelProps {
     className?: string;
 
 export declare const VersionHistoryPanel: React.FC<VersionHistoryPanelProps>;
+}
 export {};
 //# sourceMappingURL=VersionHistoryPanel.d.ts.map

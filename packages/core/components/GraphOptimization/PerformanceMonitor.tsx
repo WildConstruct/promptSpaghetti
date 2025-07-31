@@ -2,6 +2,7 @@
  * PerformanceMonitor - Real-time graph execution performance monitoring
  */
 import React, { useState, useEffect, useRef } from 'react';
+}
 interface ExecutionMetric {
   timestamp: number;
   duration: number; // milliseconds,
@@ -24,6 +25,7 @@ interface ExecutionMetric {
   isVisible,
   onToggle,
   onMetricsCollected
+}
 }) => {
   const [stats, setStats] = useState<PerformanceStats>({)
   averageExecutionTime: 0,

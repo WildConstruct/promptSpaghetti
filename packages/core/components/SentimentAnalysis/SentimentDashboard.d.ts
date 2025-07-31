@@ -8,6 +8,7 @@
  */
 import React from 'react';
 
+}
 interface SentimentDashboardProps {
     resourceId: string;
     resourceType: string;
@@ -15,6 +16,7 @@ interface SentimentDashboardProps {
         start: Date;
         end: Date;
 
+}
     };
     refreshInterval?: number;
 

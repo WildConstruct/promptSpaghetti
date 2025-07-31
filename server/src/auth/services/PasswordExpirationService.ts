@@ -7,6 +7,7 @@ import crypto from 'crypto';
 import { EventEmitter } from 'events';
 
 }
+}
 export interface ExpirationRule {
   id: string;
   name: string;
@@ -20,6 +21,7 @@ export interface ExpirationRule {
     excludeUsers?: string[];
     departments?: string[];
     accessLevels?: string[];
+}
 }
   };
   expirationPolicy: {
@@ -80,6 +82,7 @@ export interface ExpirationRule {
 }
 
 }
+}
 export interface UserExpirationStatus {
   userId: string;
   currentPasswordSetAt: Date;
@@ -105,10 +108,12 @@ export interface UserExpirationStatus {
       location: string;
       timestamp: Date;
 }
+}
     }>;
   };
 }
 
+}
 }
 export interface ExpirationEvent {
   id: string;
@@ -124,6 +129,7 @@ export interface ExpirationEvent {
     reason?: string;
     automaticAction?: boolean;
 }
+}
   };
   notificationsSent: Array<{
     recipient: string;
@@ -138,6 +144,7 @@ export interface ExpirationEvent {
   };
 }
 
+}
 }
 export interface ExtensionRequest {
   id: string;
@@ -158,6 +165,7 @@ export interface ExtensionRequest {
     businessJustification: string;
     alternativesConsidered: string[];
     riskAssessment: string;
+}
 }
   };
 }

@@ -7,6 +7,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
+}
 export interface User {
   id: string;,
   email: string;
@@ -14,10 +15,12 @@ export interface User {
   lastName: string;
   isEmailVerified: boolean;,
   roles: string;
-  preferences?: {,
+  preferences?: {
   theme?: 'light' | 'dark';
   notifications?: boolean;
+}
 };
+}
 }
 export interface AuthState {
   // User state
@@ -33,11 +36,12 @@ export interface AuthState {
   returnUrl: string | null;
   // Actions
   login: (email: string, password: string, rememberMe?: boolean) => Promise<boolean>;
-  register: (userData: {,)
+  register: (userData: {)
   email: string;,
   password: string;
   firstName: string;,
   lastName: string;
+}
 }) => Promise<boolean>;
   oauthLogin: (provider: string, returnUrl?: string) => Promise<{ url: string; state: string }>;
   processOAuthCallback: (provider: string, code: string, state: string) => Promise<boolean>;,
@@ -70,7 +74,7 @@ export const useAuthStore = create<AuthState>()()
           const response = await fetch(`${API_BASE_URL}/api/auth/login`, {)}
   },
   method: 'POST',
-            headers: {,
+            headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({ ),
@@ -114,7 +118,7 @@ export const useAuthStore = create<AuthState>()()
           const response = await fetch(`${API_BASE_URL}/api/auth/register`, {)}
   },
   method: 'POST',
-            headers: {,
+            headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify(userData);
@@ -147,7 +151,7 @@ export const useAuthStore = create<AuthState>()()
           });
           const response = await fetch(`${API_BASE_URL}/api/auth/oauth/authorize?${queryParams.toString()}`, {},}
   method: 'GET',
-            headers: {,
+            headers: {
   'Content-Type': 'application/json',
 });
           if (!response.ok) {
@@ -173,7 +177,7 @@ export const useAuthStore = create<AuthState>()()
           });
           const response = await fetch(`${API_BASE_URL}/api/auth/oauth/callback/${provider}?${queryParams.toString()}`, {},}
   method: 'GET',
-            headers: {,
+            headers: {
   'Content-Type': 'application/json',
 });
           if (!response.ok) {
@@ -212,7 +216,7 @@ export const useAuthStore = create<AuthState>()()
           fetch(`${API_BASE_URL}/api/auth/logout`, {)}
   },
   method: 'POST',
-            headers: {,
+            headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({ sessionId: undefined })
@@ -236,7 +240,7 @@ export const useAuthStore = create<AuthState>()()
           const response = await fetch(`${API_BASE_URL}/api/auth/refresh`, {)}
   },
   method: 'POST',
-            headers: {,
+            headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({ refreshToken })
@@ -284,7 +288,7 @@ export const useAuthStore = create<AuthState>()()
         try {
           const response = await fetch(`${API_BASE_URL}/api/auth/me`, {)}
   },
-  headers: {,
+  headers: {
               'Authorization': `Bearer ${accessToken}`}
           });
           if (!response.ok) {
@@ -328,14 +332,14 @@ export const getAuthHeaders = (): Record<string, string> => {
 };
 
 // Utility function to make authenticated API calls
-export const authenticatedFetch = async (()
+export const authenticatedFetch = async (((
     url: string,
     options: RequestInit = {}
   ): Promise<Response> => {
   const authHeaders = getAuthHeaders();
   const response = await fetch(url, {)
   ...options,
-  headers: {,
+  headers: {
   ...authHeaders,
   ...options.headers
 });
@@ -348,7 +352,7 @@ export const authenticatedFetch = async (()
   const newAuthHeaders = getAuthHeaders();
   return fetch(url, {)
   ...options,
-  headers: {,
+  headers: {
   ...newAuthHeaders,
   ...options.headers
 });

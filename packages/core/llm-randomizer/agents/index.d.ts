@@ -12,6 +12,7 @@ export type AnyGenerationResult = GenerationResult | ClaudeGenerationResult | Ge
  * Universal agent interface for consistent usage across models
  */
 
+}
 export interface UniversalAgentRequest {
     purpose: string;
     complexity: 'simple' | 'moderate' | 'complex';
@@ -32,3 +33,4 @@ export declare function generateGraph(request: UniversalAgentRequest)
   config?: Partial<AnyAgentConfig>
 ): Promise<AnyGenerationResult>;
 //# sourceMappingURL=index.d.ts.map
+}

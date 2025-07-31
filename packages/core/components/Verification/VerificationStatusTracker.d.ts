@@ -7,6 +7,7 @@
 import React from 'react';
 import { IdentityValidationType } from '../../auth/IdentityValidation';
 
+}
 interface VerificationStatusTrackerProps {
     userId: string;
     onRefresh?: () => void;
@@ -15,3 +16,4 @@ interface VerificationStatusTrackerProps {
 export declare const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>;
 export default VerificationStatusTracker;
 //# sourceMappingURL=VerificationStatusTracker.d.ts.map
+}

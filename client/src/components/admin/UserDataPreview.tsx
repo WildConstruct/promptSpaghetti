@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 
 // Types for user data preview
+}
 interface UserDataCategory {
   category: string;,
   displayName: string;
@@ -48,6 +49,7 @@ interface UserDataCategory {
   userId,
   userName,
   onRetentionAction
+}
 }) => {
   const [dataCategories, setDataCategories] = useState<UserDataCategory>([]);
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());

@@ -156,6 +156,7 @@ export declare class ExtensionManifestBuilder {
     build(): ExtensionManifest;
     buildJSON(): string;
 
+}
 interface ManifestLoadResult {
     success: boolean;
     manifest?: ExtensionManifest;
@@ -166,8 +167,10 @@ interface ManifestLoadResult {
         message: string;
         code: string;
 
+}
     }>;
 
+}
 interface ManifestBatchLoadResult {
     success: boolean;
     results: ManifestLoadResult[];
@@ -176,6 +179,7 @@ interface ManifestBatchLoadResult {
     totalLoaded: number;
 
 
+}
 interface ManifestDependencyInfo {
     manifest?: ExtensionManifest;
     dependencies: ExtensionManifest[];
@@ -184,6 +188,7 @@ interface ManifestDependencyInfo {
     circularDependencies: string[];
 
 
+}
 interface ManifestStatistics {
     total: number;
     byType: Record<string, number>;
@@ -198,5 +203,6 @@ interface ManifestStatistics {
 
 export declare const extensionManifestManager: ExtensionManifestManager;
 export declare const extensionManifestBuilder: ExtensionManifestBuilder;
+}
 export {};
 //# sourceMappingURL=ExtensionManifestManager.d.ts.map

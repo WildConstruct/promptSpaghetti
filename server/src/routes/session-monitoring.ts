@@ -7,15 +7,18 @@ import { requireAuth } from '../auth/middleware/requireAuth';
 import { requirePermission } from '../auth/middleware/requirePermission';
 
 }
+}
 export interface SessionAnalyticsQuery {
   Querystring: {
     startDate?: string;
     endDate?: string;
     userId?: string;
 }
+}
   };
 }
 
+}
 }
 export interface AlertsQuery {
   Querystring: {
@@ -26,17 +29,21 @@ export interface AlertsQuery {
     limit?: string;
     offset?: string;
 }
+}
   };
 }
 
+}
 }
 export interface ResolveAlertBody {
   Body: {
     alertId: string;
 }
+}
   };
 }
 
+}
 }
 export interface UpdateRuleBody {
   Body: {
@@ -47,6 +54,7 @@ export interface UpdateRuleBody {
       threshold?: number;
       parameters?: Record<string, any>;
       action?: 'alert' | 'block' | 'require_2fa' | 'notify_user';
+}
 }
     };
   };

@@ -9,6 +9,7 @@ export interface TemplatePreviewVariant {
     hasErrors: boolean;
     errorMessage?: string;
 
+}
 export interface TemplatePreviewPerformance {
     averageExecutionTime: number;
     totalGenerations: number;
@@ -16,6 +17,7 @@ export interface TemplatePreviewPerformance {
     lastUpdate: number;
     templatesProcessed: number;
 
+}
 export interface TemplatePreviewConfig {
     maxVariants: number;
     debounceMs: number;
@@ -44,6 +46,7 @@ export declare const useTemplatePreview: ()
     getPerformanceInsights: () => {,
         isPerformanceGood: boolean;
         insights: string[];
+}
     };
 };
 //# sourceMappingURL=useTemplatePreview.d.ts.map

@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './VersionEditor.css';
+}
 interface VersionData {
   version_number: string;,
   status: 'draft' | 'published' | 'deprecated' | 'archived';
@@ -33,6 +34,7 @@ const DEFAULT_VERSION_DATA: VersionData = {,
   status: 'draft',
   visibility: 'private',
   claude_model: 'claude-3-sonnet',
+}
   graph_json: {},
   release_notes: '',
   compatibility_level: 'minor',
@@ -66,7 +68,7 @@ export const VersionEditor: React.FC = () => {
     try {
       const response = await fetch(`/api/marketplace/templates/${templateId}/versions`, {)}
   },
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
       });
       if (response.ok) {
@@ -95,7 +97,7 @@ export const VersionEditor: React.FC = () => {
       setIsLoading(true);
       const response = await fetch(`/api/marketplace/versions/${versionId}`, {)}
   },
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
       });
       if (!response.ok) {
@@ -227,7 +229,7 @@ export const VersionEditor: React.FC = () => {
       const method = versionId ? 'PUT' : 'POST';
       const response = await fetch(url, {)
   method,
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
   },

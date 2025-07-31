@@ -26,6 +26,7 @@ const LoginRequestSchema = z.object({)
 });
 type User = z.infer<typeof UserSchema>;
 type LoginRequest = z.infer<typeof LoginRequestSchema>;
+}
 interface AuthContextType {
   user: User | null;,
   isLoading: boolean;
@@ -33,6 +34,7 @@ interface AuthContextType {
   error: string | null;
   login: (),
     credentials: LoginRequest,
+}
     context?: { geoLocation?: { lat: number; lng: number } }
   ) => Promise<{ success: boolean; token?: string; error?: string }>;
   logout: () => Promise<void>;,
@@ -104,7 +106,7 @@ const useStandaloneAuth = () => {
   const response = await fetch('/api/auth/validate', {)
   method: 'GET',
   credentials: 'include',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 });
       return response.ok;
@@ -121,13 +123,13 @@ const useStandaloneAuth = () => {
   try {
   const response = await fetch('/api/auth/login', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   credentials: 'include',
         body: JSON.stringify({),
   ...credentials,
-  deviceInfo: {,
+  deviceInfo: {
   ...credentials.deviceInfo,
   userAgent: navigator.userAgent,
   language: navigator.language,
@@ -164,7 +166,7 @@ const useStandaloneAuth = () => {
   sessionStorage.getItem(STORAGE_KEYS.SESSION);
   await fetch('/api/auth/logout', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   credentials: 'include',
@@ -189,7 +191,7 @@ const useStandaloneAuth = () => {
   const response = await fetch('/api/auth/refresh', {)
   method: 'POST',
   credentials: 'include',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({,)

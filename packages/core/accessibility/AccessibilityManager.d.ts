@@ -67,6 +67,7 @@ export declare enum InterfaceAdaptation {
     FOCUS_INDICATORS = "focus_indicators",
     ERROR_CLARIFICATION = "error_clarification"
 
+}
 export interface UserAccessibilityProfile {
     userId: string;
     needs: AccessibilityNeed[];
@@ -83,13 +84,14 @@ export interface UserAccessibilityProfile {
         hapticEnabled: boolean;
         animationsReduced: boolean;
         colorBlindnessType?: 'protanopia' | 'deuteranopia' | 'tritanopia' | 'monochromacy'
+}
   };
     verificationMethods: {
         primary: string[];
         fallback: string[];
         emergency: string[];
     };
-    emergencyContacts: Array<{,
+    emergencyContacts: Array<{
         name: string;
         relationship: string;
         phone: string;
@@ -104,6 +106,7 @@ export interface UserAccessibilityProfile {
     lastUpdated: Date;
     isActive: boolean;
 
+}
 export interface AccessibilityContext {
     userAgent: string;
     screenReaderDetected: boolean;
@@ -117,6 +120,7 @@ export interface AccessibilityContext {
         screenSize: {
             width: number;
             height: number;
+}
         };
         colorDepth: number;
     };
@@ -133,6 +137,7 @@ export interface AccessibilityContext {
         lastSuccessfulMethod: string;
     };
 
+}
 export interface FallbackConfiguration {
     method: FallbackMethod;
     enabled: boolean;
@@ -143,6 +148,7 @@ export interface FallbackConfiguration {
         needsInteraction: boolean;
         minimumTime: number;
         maximumTime: number;
+}
     };
     accessibility: {
         supportedNeeds: AccessibilityNeed[];
@@ -160,19 +166,22 @@ export interface FallbackConfiguration {
         ada: boolean;
     };
 
+}
 export interface AccessibilityValidationResult {
     isAccessible: boolean;
     fallbacksRequired: FallbackMethod[];
     adaptationsNeeded: InterfaceAdaptation[];
-    issues: Array<{,
+    issues: Array<{
         type: 'critical' | 'major' | 'minor';
         description: string;
         wcagReference: string;
         recommendation: string;
+}
     }>;
     score: number;
     complianceLevel: 'A' | 'AA' | 'AAA' | 'Non-compliant';
 
+}
 export interface EmergencyBypass {
     id: string;
     userId: string;
@@ -187,11 +196,12 @@ export interface EmergencyBypass {
         timeRestriction?: {
             start: string;
             end: string;
+}
         };
         requiresNotification: boolean;
         requiresFollowUp: boolean;
     };
-    auditTrail: Array<{,
+    auditTrail: Array<{
         timestamp: Date;
         action: string;
         details: Record<string, unknown>;
@@ -219,7 +229,7 @@ export declare class AccessibilityManager extends EventEmitter {
         recommendedFallbacks: FallbackMethod[];
         requiredAdaptations: InterfaceAdaptation[];
         estimatedDifficulty: 'low' | 'medium' | 'high' | 'critical';
-        alternatives: Array<{,
+        alternatives: Array<{
             method: string;
             accessibility: number;
             estimated_time: number;
@@ -255,7 +265,7 @@ export declare class AccessibilityManager extends EventEmitter {
      * Get accessibility adaptation recommendations
      */
     getAdaptationRecommendations(userId: string, _currentInterface: unknown): {
-        adaptations: Array<{,
+        adaptations: Array<{
             type: InterfaceAdaptation;
             priority: 'high' | 'medium' | 'low';
             implementation: {
@@ -284,7 +294,7 @@ export declare class AccessibilityManager extends EventEmitter {
             used: number;
             expired: number;
         };
-        topIssues: Array<{,
+        topIssues: Array<{
             issue: string;
             frequency: number;
             severity: 'critical' | 'major' | 'minor'

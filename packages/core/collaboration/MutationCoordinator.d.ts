@@ -17,6 +17,7 @@ import { GraphCRDT } from './GraphCRDT';
  * Result of operational transformation
  */
 
+}
 export interface TransformResult {
     op1: MutationOperation | null;
     op2: MutationOperation | null;
@@ -28,6 +29,7 @@ export interface TransformResult {
  * Batch operation result
  */
 
+}
 export interface BatchResult {
     success: boolean;
     appliedOperations: MutationOperation[];
@@ -40,6 +42,7 @@ export interface BatchResult {
  * Operation queue item
  */
 
+}
 export interface QueuedOperation {
     operation: MutationOperation;
     priority: OperationPriority;
@@ -71,6 +74,7 @@ export declare class MutationCoordinator {
         conflictResolutionStrategy?: ResolutionStrategy;
         maxOperationHistory?: number;
         operationTimeout?: number;
+}
     });
     /**
      * Apply a single mutation operation

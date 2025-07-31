@@ -11,6 +11,7 @@ import {
   ConnectionLabelAction,
   CONNECTION_LABEL_STYLES
 } from '../../types/CollaborationTypes';
+}
 interface ConnectionLabelProps {
   label: ConnectionLabelType;
   onAction: (action: ConnectionLabelAction) => void;
@@ -25,6 +26,7 @@ interface ConnectionLabelProps {
   showTooltip = true,
   isHighlighted = false,
   connectionPath
+}
 }) => {
   const [isEditing, setIsEditing] = useState(label.isEditing || false);
   const [editValue, setEditValue] = useState(label.content);

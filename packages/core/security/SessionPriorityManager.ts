@@ -51,11 +51,13 @@ export enum SessionPriority {
   sessionAge: number;         // Weight for how long session exists,
   activityLevel: number;      // Weight for recent activity,
   securityLevel: number;      // Weight for security requirements,
+}
 };
   emergencyOverride: boolean;
   gracePeriodMinutes: number;
 
 // Priority Factors
+}
 }
 export interface PriorityFactors {
   userRole: 'admin' | 'moderator' | 'user' | 'guest';
@@ -67,6 +69,8 @@ export interface PriorityFactors {
   securityRequirement: number;  // 0-100,
   businessCriticality: number;  // 0-100,
   // Session Metadata for Priority Calculations
+}
+}
 }
 export interface PrioritySessionData {
   sessionId: string;
@@ -84,6 +88,8 @@ export interface PrioritySessionData {
   gracePeriodEnd?: Date;
   // Eviction Decision
 }
+}
+}
 export interface EvictionDecision {
   sessionId: string;
   reason: string;
@@ -94,6 +100,8 @@ export interface EvictionDecision {
   userNotificationRequired: boolean;
   // Session Conflict
 }
+}
+}
 export interface SessionConflict {
   id: string;
   type: 'user_limit' | 'device_limit' | 'total_limit' | 'resource_contention';
@@ -103,6 +111,7 @@ export interface SessionConflict {
   deviceId: string;
   priority: SessionPriority;
   factors: PriorityFactors;
+}
 };
   resolutionOptions: ConflictResolution;
   recommendedResolution: ConflictResolution;
@@ -112,6 +121,7 @@ export interface SessionConflict {
 
 // Priority Metrics
 }
+}
 export interface PriorityMetrics {
   totalSessions: number;
   sessionsByPriority: Record<SessionPriority, number>;
@@ -119,6 +129,7 @@ export interface PriorityMetrics {
   conflictRate: number;
   averageSessionScore: number;
   utilizationPercentage: number;
+}
   topEvictionReasons: Array<{ reason: string; count: number }>;
   emergencyOverrides: number;
   gracePeriodUsage: number;
@@ -436,7 +447,7 @@ export class SessionPriorityManager extends EventEmitter {
     case SessionPriority.LOW: return 40;
     case SessionPriority.MINIMAL: return 20;
   default: return 50;
-  private createConflict(type: SessionConflict['type'])
+  private createConflict(type: SessionConflict['type'](
     affectedSessions: string,
     newRequest: { userId: string; deviceId: string; priority: SessionPriority }
   ): SessionConflict {

@@ -15,6 +15,7 @@ import {
   SearchSuggestion,
   SuggestionType
 } from '../../services/Epic16KnowledgeBaseService';
+}
 interface KnowledgeBaseSearchProps {
   knowledgeService: Epic16KnowledgeBaseService;
   userId: string;
@@ -36,6 +37,7 @@ interface KnowledgeBaseSearchProps {
   onArticleSelect,
   onSearchPerformed,
   className = ''
+}
 }) => {
   // State management
   const [searchState, setSearchState] = useState<SearchState>({)

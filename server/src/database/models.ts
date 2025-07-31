@@ -3,6 +3,7 @@ import { z } from 'zod';
 // Base model interfaces matching the database schema
 
 }
+}
 export interface User {
   id: number;
   username: string;
@@ -12,7 +13,9 @@ export interface User {
   settings: string; // JSON string
 }
 }
+}
 
+}
 }
 export interface Project {
   id: number;
@@ -23,7 +26,9 @@ export interface Project {
   updated_at: string;
 }
 }
+}
 
+}
 }
 export interface CorrectionRule {
   id: number;
@@ -78,7 +83,9 @@ export interface CorrectionRule {
   user_rating?: number;
 }
 }
+}
 
+}
 }
 export interface CorrectionRuleHistory {
   id: number;
@@ -104,7 +111,9 @@ export interface CorrectionRuleHistory {
   performance_impact?: number;
 }
 }
+}
 
+}
 }
 export interface CorrectionStatistics {
   id: number;
@@ -141,7 +150,9 @@ export interface CorrectionStatistics {
   updated_at: string;
 }
 }
+}
 
+}
 }
 export interface CorrectionSet {
   id: number;
@@ -166,7 +177,9 @@ export interface CorrectionSet {
   updated_at: string;
 }
 }
+}
 
+}
 }
 export interface CorrectionSetRule {
   id: number;
@@ -180,7 +193,9 @@ export interface CorrectionSetRule {
   created_at: string;
 }
 }
+}
 
+}
 }
 export interface UserPreferences {
   id: number;
@@ -204,6 +219,7 @@ export interface UserPreferences {
   
   created_at: string;
   updated_at: string;
+}
 }
 }
 
@@ -302,6 +318,7 @@ export type CreateNotificationInput = z.infer<typeof CreateNotificationSchema>;
 
 // Statistics aggregation types
 }
+}
 export interface RuleUsageStats {
   rule_id: number;
   rule_name: string;
@@ -324,7 +341,9 @@ export interface RuleUsageStats {
   performance_trend: 'improving' | 'degrading' | 'stable';
 }
 }
+}
 
+}
 }
 export interface PerformanceMetrics {
   total_rules: number;
@@ -340,6 +359,7 @@ export interface PerformanceMetrics {
     error_count: number;
     quality_score: number;
     impact_rating: number;
+}
 }
   }[];
   
@@ -367,6 +387,7 @@ export interface PerformanceMetrics {
 
 // Workflow state history tracking
 }
+}
 export interface WorkflowStateHistory {
   id: number;
   rule_id: number;
@@ -378,8 +399,10 @@ export interface WorkflowStateHistory {
   metadata?: string; // JSON string
 }
 }
+}
 
 // Workflow notifications
+}
 }
 export interface WorkflowNotification {
   id: number;
@@ -395,8 +418,10 @@ export interface WorkflowNotification {
   read_at?: string;
 }
 }
+}
 
 // Migration tracking
+}
 }
 export interface Migration {
   id: number;
@@ -404,8 +429,10 @@ export interface Migration {
   applied_at: string;
 }
 }
+}
 
 // Database health metrics
+}
 }
 export interface DatabaseHealth {
   is_healthy: boolean;
@@ -414,5 +441,6 @@ export interface DatabaseHealth {
   database_size: number;
   last_backup?: string;
   performance_metrics?: PerformanceMetrics;
+}
 }
 }

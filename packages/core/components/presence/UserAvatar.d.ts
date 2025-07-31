@@ -1,5 +1,6 @@
 import React from 'react';
 
+}
 export interface UserAvatarProps {
     userId: string;
     userName?: string;
@@ -13,12 +14,14 @@ export interface UserAvatarProps {
 
 export declare const UserAvatar: React.FC<UserAvatarProps>;
 
+}
 export interface UserAvatarListProps {
-    users: Array<{,
+    users: Array<{
         userId: string;
         userName?: string;
         userAvatar?: string;
         status: 'active' | 'idle' | 'away' | 'offline'
+}
   }>;
     maxVisible?: number;
     size?: 'small' | 'medium' | 'large';

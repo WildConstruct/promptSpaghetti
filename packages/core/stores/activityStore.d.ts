@@ -7,6 +7,7 @@
  * Provides reactive state management for activity tracking and monitoring.
  */
 import { Activity, ActivityQuery, ActivityQueryResult, ActivityMetrics } from '../types/ActivityDataModel';
+}
 interface ActivityState {
     activities: Activity[];
     currentActivity: Activity | null;
@@ -29,6 +30,7 @@ interface ActivityState {
     pageSize: number;
     hasNextPage: boolean;
     hasPreviousPage: boolean;
+}
 interface ActivityActions {
     setActivities: (activities: Activity[]) => void;
     addActivity: (activity: Activity) => void;
@@ -73,6 +75,7 @@ export declare const useActivityStore: import("zustand").UseBoundStore<Omit<impo
         <U>(selector: (state: ActivityStore) => U, listener: (selectedState: U, previousSelectedState: U) => void, options?: {
             equalityFn?: ((a: U, b: U) => boolean) | undefined;
             fireImmediately?: boolean;
+}
         } | undefined): () => void;
     };
 }>;

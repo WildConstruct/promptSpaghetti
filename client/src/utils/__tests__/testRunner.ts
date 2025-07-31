@@ -6,6 +6,7 @@
 import { performanceMonitor } from '../performanceMonitor';
 import { validateUrl, validateInput, generateCSRFToken, ClientRateLimiter } from '../securityUtils';
 import { memoryUtils, WeakCache } from '../memoryOptimization';
+}
 interface TestResult {
   name: string;,
   category: 'security' | 'performance' | 'memory' | 'integration';
@@ -13,11 +14,13 @@ interface TestResult {
   duration: number;
   error?: string;
   details?: Record<string, unknown>;
+}
 interface TestSuiteResult {
   totalTests: number;,
   passedTests: number;
   failedTests: number;,
   totalDuration: number;
+}
   categories: Record<string, { passed: number; failed: number; duration: number }>;
   results: TestResult;
   coverage?: {
@@ -164,6 +167,7 @@ class QualityTestRunner {
    * Memory optimization tests
    */
   private async runMemoryTests(): Promise<void> {
+
     const tests = [;
       {
         name: 'WeakCache Functionality',
@@ -208,6 +212,7 @@ class QualityTestRunner {
    * Integration tests
    */
   private async runIntegrationTests(): Promise<void> {
+
     const tests = [;
       {
         name: 'Security + Performance Integration',
@@ -375,10 +380,12 @@ export const qualityTestRunner = new QualityTestRunner();
 
 // Export for use in CI/CD
 export async function runQualityTests(): Promise<TestSuiteResult> {
+
   return qualityTestRunner.runAllTests();
 
 // CLI-friendly test runner
 export async function runTestsWithExitCode(): Promise<void> {
+
   const report = await runQualityTests();
   if (report.failedTests > 0) {
     console.error(`\n❌ ${report.failedTests} tests failed`);}

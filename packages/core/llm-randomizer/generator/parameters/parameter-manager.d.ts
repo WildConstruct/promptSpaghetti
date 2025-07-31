@@ -1,5 +1,6 @@
 import { RandomizerParameters, ParameterPreset, ValidationResult } from './parameter-schema';
 
+}
 export interface ParameterHistory {
     id: string;
     parameters: RandomizerParameters;
@@ -8,6 +9,7 @@ export interface ParameterHistory {
     generationTime?: number;
     errorCount?: number;
 
+}
 export interface ParameterManagerOptions {
     enableHistory: boolean;
     maxHistorySize: number;
@@ -45,6 +47,7 @@ export declare class ParameterManager {
         nodeTypes?: string[];
         temperature?: number;
         focusAreas?: string[];
+}
     };
     /**
      * Create complete parameters with defaults
@@ -106,7 +109,7 @@ export declare class ParameterManager {
         averageGenerationTime: number;
         mostUsedComplexity: string;
         mostUsedProvider: string;
-        popularNodeTypes: Array<{,
+        popularNodeTypes: Array<{
             nodeType: string;
             count: number;
         }>;

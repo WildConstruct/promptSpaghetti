@@ -41,6 +41,7 @@ export type StoredEvent = z.infer<typeof StoredEventSchema>;
 
 // Event Query Options
 }
+}
 export interface EventQueryOptions {
   filter?: EventFilter;
   sortBy?: 'timestamp' | 'type' | 'severity' | 'source';
@@ -50,11 +51,14 @@ export interface EventQueryOptions {
   includeMetadata?: boolean;
 }
 }
+}
 
 // Event Statistics
 }
+}
 export interface EventStatistics {
   totalEvents: number;
+}
 }
   eventsByType: { [type: string]: number };
   eventsByCategory: { [category: string]: number };
@@ -65,6 +69,7 @@ export interface EventStatistics {
 }
 
 // Event Aggregation
+}
 }
 export interface EventAggregation {
   groupBy: string;
@@ -77,6 +82,7 @@ export interface EventAggregation {
     uniqueUsers: number;
     uniqueSessions: number;
 }
+}
   };
 }
 
@@ -85,6 +91,7 @@ export interface EventAggregation {
  * 
  * Following repository pattern from Story 1.4 for consistent data access
  */
+}
 }
 export interface EventRepository {
   // Core CRUD operations
@@ -103,6 +110,7 @@ export interface EventRepository {
     metric: string,
     granularity: string,
     filter?: EventFilter
+}
 }
   ): Promise<Array<{ timestamp: number; value: number }>>;
   

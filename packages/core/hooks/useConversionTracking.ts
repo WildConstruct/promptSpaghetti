@@ -8,12 +8,14 @@ import { useEffect, useCallback, useRef } from 'react';
 import { Node, Edge } from 'reactflow';
 import { conversionTracker, ConversionEventType } from '../analytics/ConversionTracker';
 
+}
 export interface ConversionTrackingConfig {
   enableAutoTracking?: boolean;
   trackPageViews?: boolean;
   trackUserInteractions?: boolean;
   experimentId?: string;
   variantId?: string;
+}
 }
 export const useConversionTracking = (config: ConversionTrackingConfig = {}) => {
   const {

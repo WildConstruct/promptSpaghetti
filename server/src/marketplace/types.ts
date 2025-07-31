@@ -48,6 +48,7 @@ export enum SentimentType {
 
 // Base interfaces
 }
+}
 export interface MarketplaceTemplate {
   id: string;
   owner_id: string;
@@ -66,7 +67,9 @@ export interface MarketplaceTemplate {
   search_vector?: string;
 }
 }
+}
 
+}
 }
 export interface TemplateVersion {
   id: string;
@@ -83,7 +86,9 @@ export interface TemplateVersion {
   created_at: Date;
 }
 }
+}
 
+}
 }
 export interface MarketplacePurchase {
   id: string;
@@ -100,7 +105,9 @@ export interface MarketplacePurchase {
   updated_at: Date;
 }
 }
+}
 
+}
 }
 export interface TemplateReview {
   id: string;
@@ -117,7 +124,9 @@ export interface TemplateReview {
   updated_at: Date;
 }
 }
+}
 
+}
 }
 export interface TemplateCategory {
   id: string;
@@ -130,7 +139,9 @@ export interface TemplateCategory {
   created_at: Date;
 }
 }
+}
 
+}
 }
 export interface MarketplaceEvent {
   id: string;
@@ -145,7 +156,9 @@ export interface MarketplaceEvent {
   created_at: Date;
 }
 }
+}
 
+}
 }
 export interface TemplateCollection {
   id: string;
@@ -159,8 +172,10 @@ export interface TemplateCollection {
   updated_at: Date;
 }
 }
+}
 
 // Extended interfaces with relations
+}
 }
 export interface TemplateWithStats extends MarketplaceTemplate {
   total_purchases: number;
@@ -181,6 +196,7 @@ export interface TemplateWithStats extends MarketplaceTemplate {
 }
 
 }
+}
 export interface PurchaseWithDetails extends MarketplacePurchase {
   template?: MarketplaceTemplate;
   version?: TemplateVersion;
@@ -191,6 +207,7 @@ export interface PurchaseWithDetails extends MarketplacePurchase {
   };
 }
 
+}
 }
 export interface ReviewWithDetails extends TemplateReview {
   template?: MarketplaceTemplate;
@@ -203,6 +220,7 @@ export interface ReviewWithDetails extends TemplateReview {
 }
 
 // Search and filter interfaces
+}
 }
 export interface SearchFilters {
   query?: string;
@@ -219,7 +237,9 @@ export interface SearchFilters {
   limit?: number;
 }
 }
+}
 
+}
 }
 export interface SearchResult {
   templates: TemplateWithStats[];
@@ -228,6 +248,7 @@ export interface SearchResult {
   limit: number;
   has_more: boolean;
   aggregations?: {
+}
 }
     categories: Array<{ name: string; count: number }>;
     price_ranges: Array<{ min: number; max: number; count: number }>;
@@ -294,6 +315,7 @@ export const CreatePurchaseSchema = z.object({
 
 // Analytics interfaces
 }
+}
 export interface TemplateAnalytics {
   template_id: string;
   period_start: Date;
@@ -308,6 +330,7 @@ export interface TemplateAnalytics {
     total_reviews: number;
     refund_rate: number;
 }
+}
   };
   demographics?: {
     countries: Array<{ country: string; count: number }>;
@@ -320,6 +343,7 @@ export interface TemplateAnalytics {
 }
 
 }
+}
 export interface CreatorAnalytics {
   creator_id: string;
   period_start: Date;
@@ -331,6 +355,7 @@ export interface CreatorAnalytics {
     total_purchases: number;
     avg_rating: number;
     total_reviews: number;
+}
 }
   };
   top_templates: Array<{
@@ -347,6 +372,7 @@ export interface CreatorAnalytics {
 
 // Preview system interfaces
 }
+}
 export interface PreviewRequest {
   template_id: string;
   version_id?: string;
@@ -354,7 +380,9 @@ export interface PreviewRequest {
   claude_model_override?: string;
 }
 }
+}
 
+}
 }
 export interface PreviewResponse {
   output: string;
@@ -363,6 +391,7 @@ export interface PreviewResponse {
   token_usage: {
     input_tokens: number;
     output_tokens: number;
+}
 }
   };
   cached: boolean;

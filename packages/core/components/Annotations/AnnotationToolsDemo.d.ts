@@ -6,6 +6,7 @@
  */
 import React from 'react';
 
+}
 export interface VFXUser {
     id: string;
     name: string;
@@ -15,6 +16,7 @@ export interface VFXUser {
     color: string;
 
 
+}
 export interface AnnotationToolsDemoProps {
     className?: string;
     title?: string;
@@ -25,3 +27,4 @@ export interface AnnotationToolsDemoProps {
 export declare const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps>;
 export default AnnotationToolsDemo;
 //# sourceMappingURL=AnnotationToolsDemo.d.ts.map
+}

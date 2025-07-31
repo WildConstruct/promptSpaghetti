@@ -18,6 +18,7 @@ import { VarianceVisualization } from '../VarianceAnalysis/VarianceVisualization
 
 // Enhanced result interface for film industry use
 
+}
 export interface EnhancedPreviewResult {
   seed: number;
   output?: string;
@@ -35,12 +36,14 @@ export interface EnhancedPreviewResult {
   tags?: string;
   rating?: 1 | 2 | 3 | 4 | 5; // Professional rating,
   notes?: string;
+}
 };
   // Management state
   id: string;
   selected?: boolean;
   saved?: boolean;
   exported?: boolean;
+}
 interface EnhancedPreviewModalProps {
   open: boolean;
   loading: boolean;
@@ -63,6 +66,7 @@ interface EnhancedPreviewModalProps {
   enableNotes?: boolean;
   enableExport?: boolean;
   maxResults?: number;
+}
 }
 export const [expandedResult, setExpandedResult] = useState<string | null>(null);
   const [ratingInProgress, setRatingInProgress] = useState<string | null>(null);

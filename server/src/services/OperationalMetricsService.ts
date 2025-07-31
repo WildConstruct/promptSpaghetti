@@ -10,6 +10,7 @@ import { circuitBreakerService } from './CircuitBreakerService';
 // import { retryService } from './RetryService'; // Unused import removed
 
 }
+}
 export interface SystemMetrics {
   timestamp: number;
   uptime: number;
@@ -20,6 +21,7 @@ export interface SystemMetrics {
     perMinute: number;
     byCategory: Record<ErrorCategory, number>;
     bySeverity: Record<ErrorSeverity, number>;
+}
 }
   };
   requestMetrics: {
@@ -45,6 +47,7 @@ export interface SystemMetrics {
 }
 
 }
+}
 export interface AlertRule {
   id: string;
   name: string;
@@ -56,7 +59,9 @@ export interface AlertRule {
   lastTriggered?: number;
 }
 }
+}
 
+}
 }
 export interface Alert {
   id: string;
@@ -68,6 +73,7 @@ export interface Alert {
   metrics: SystemMetrics;
   resolved: boolean;
   resolvedAt?: number;
+}
 }
 }
 

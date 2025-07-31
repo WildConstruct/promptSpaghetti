@@ -3,6 +3,7 @@
  * Epic 28.3 - Legal document processing and compliance components
  */
 
+}
 export interface LegalDocument {
   id: string;
   title: string;
@@ -14,6 +15,8 @@ export interface LegalDocument {
   updatedAt: Date;
   version: string;
 }
+}
+}
 export interface LegalDocumentMetadata {
   jurisdiction: string;
   practiceArea: string;
@@ -23,7 +26,9 @@ export interface LegalDocumentMetadata {
   references: LegalReference;
   tags: string;
   confidentialityLevel: 'public' | 'confidential' | 'attorney_client' | 'work_product'
+}
   }
+}
 export interface LegalReference {
   id: string;
   type: 'statute' | 'regulation' | 'case' | 'treaty' | 'article';
@@ -32,6 +37,8 @@ export interface LegalReference {
   url?: string;
   jurisdiction: string;
   year?: number;
+}
+}
 }
 export interface ContractClause {
   id: string;
@@ -45,7 +52,9 @@ export interface ContractClause {
   position: {
   start: number;
   end: number;
+}
 };
+}
 }
 export interface ComplianceCheck {
   id: string;
@@ -57,6 +66,8 @@ export interface ComplianceCheck {
   remediation?: string;
   affectedSections: number;
 }
+}
+}
 export interface LegalTerminology {
   term: string;
   definition: string;
@@ -64,6 +75,8 @@ export interface LegalTerminology {
   jurisdiction: string;
   source: string;
   alternatives?: string;
+}
+}
 }
 export interface Citation {
   id: string;
@@ -79,11 +92,15 @@ export interface Citation {
   url?: string;
   // Component Props Interfaces
 }
+}
+}
 export interface LegalDocumentParserProps {
   onDocumentParsed: (document: LegalDocument) => void;
   supportedTypes: LegalDocument['type'][];
   maxFileSize?: number;
   className?: string;
+}
+}
 }
 export interface ContractAnalyzerProps {
   document: LegalDocument;
@@ -91,6 +108,8 @@ export interface ContractAnalyzerProps {
   onAnalysisComplete: (analysis: ContractAnalysis) => void;
   analysisType?: 'basic' | 'detailed' | 'comprehensive';
   className?: string;
+}
+}
 }
 export interface ContractAnalysis {
   documentId: string;
@@ -101,11 +120,15 @@ export interface ContractAnalysis {
   confidence: number;
   processingTime: number;
 }
+}
+}
 export interface RiskAssessment {
   overallRisk: 'low' | 'medium' | 'high' | 'critical';
   riskFactors: RiskFactor;
   mitigation: string;
   score: number; // 0-100,
+}
+}
 }
 export interface RiskFactor {
   type: string;
@@ -114,12 +137,16 @@ export interface RiskFactor {
   likelihood: 'low' | 'medium' | 'high';
   mitigation: string;
 }
+}
+}
 export interface ComplianceCheckerProps {
   document: LegalDocument;
   regulations: string;
   onComplianceResults: (results: ComplianceCheck) => void;
   autoCheck?: boolean;
   className?: string;
+}
+}
 }
 export interface CitationManagerProps {
   citations: Citation;
@@ -129,6 +156,8 @@ export interface CitationManagerProps {
   citationStyle: Citation['type'];
   className?: string;
 }
+}
+}
 export interface TerminologyValidatorProps {
   text: string;
   onValidationResults: (results: TermValidationResult) => void;
@@ -137,8 +166,11 @@ export interface TerminologyValidatorProps {
   autoValidate?: boolean;
   className?: string;
 }
+}
+}
 export interface TermValidationResult {
   term: string;
+}
   position: { start: number; end: number };
   isValid: boolean;
   suggestions: LegalTerminology;
@@ -146,6 +178,7 @@ export interface TermValidationResult {
   context: string;
 
 // Workflow Templates
+}
 }
 export interface WorkflowTemplate {
   id: string;
@@ -157,6 +190,8 @@ export interface WorkflowTemplate {
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   tags: string;
 }
+}
+}
 export interface WorkflowStep {
   id: string;
   name: string;
@@ -166,7 +201,9 @@ export interface WorkflowStep {
   inputs: WorkflowInput;
   outputs: WorkflowOutput;
   automationLevel: 'manual' | 'assisted' | 'automated'
+}
   }
+}
 export interface WorkflowInput {
   name: string;
   type: 'document' | 'text' | 'selection' | 'boolean' | 'date';
@@ -174,9 +211,12 @@ export interface WorkflowInput {
   validation?: string;
   options?: string;
 }
+}
+}
 export interface WorkflowOutput {
   name: string;
   type: 'document' | 'report' | 'checklist' | 'recommendation';
   format: 'pdf' | 'docx' | 'json' | 'html';
   description: string;
+}
 }

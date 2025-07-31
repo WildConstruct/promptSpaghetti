@@ -16,6 +16,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
   outputs: string[];
   executionPath?: any;
 }> {
+
   console.log(`[STUB] executeGraph called with ${graph.nodes?.length || 0} nodes`);
   
   // Return minimal stub response
@@ -29,6 +30,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
  * Legacy wrapper for backward compatibility
  */
 export async function executeGraphLegacy(graph: Graph, sessionId?: string, userId?: number): Promise<string[]> {
+
   const result = await executeGraph(graph, sessionId, userId);
   return result.outputs;
 }

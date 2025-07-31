@@ -1,6 +1,7 @@
 // Client-side Payload Encryption Utilities
 // Provides easy-to-use encryption/decryption for API payloads
 
+}
 export interface EncryptedPayload {
   data: string; // Base64 encoded encrypted data,
   iv: string; // Base64 encoded initialization vector,
@@ -10,10 +11,13 @@ export interface EncryptedPayload {
   timestamp: number;
   compressed?: boolean;
 }
+}
+}
 export interface EncryptionConfig {
   algorithm: 'aes-256-gcm' | 'aes-256-cbc' | 'chacha20-poly1305';,
   compressionEnabled: boolean;
   maxPayloadSize: number;
+}
 }
 export class PayloadEncryptionClient {
   private config: EncryptionConfig;
@@ -33,11 +37,12 @@ export class PayloadEncryptionClient {
   algorithms: string;,
   compressionSupported: boolean;
 }> {
+
     try {
       const response = await fetch(`${baseUrl}/api/encryption/health`, {)}
   },
   method: 'GET',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 });
       if (response.ok) {
@@ -65,11 +70,12 @@ export class PayloadEncryptionClient {
    * Get encryption key from server
    */
   async getEncryptionKey(baseUrl: string, authToken: string): Promise<string> {
+
     try {
       const response = await fetch(`${baseUrl}/api/encryption/config`, {)}
   },
   method: 'GET',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${authToken}`}
       });
@@ -86,6 +92,7 @@ export class PayloadEncryptionClient {
    * In production, you would use WebCrypto API with proper key exchange
    */
   async encryptPayload(data: unknown, keyId: string = 'client-key'): Promise<EncryptedPayload> {
+
     try {
       // Serialize data
       let serializedData = JSON.stringify(data);
@@ -127,6 +134,7 @@ export class PayloadEncryptionClient {
    * Note: This is a simplified client-side implementation
    */
   async decryptPayload(encryptedPayload: EncryptedPayload): Promise<any> {
+
     try {
       // Validate payload
       if (!encryptedPayload.data || !encryptedPayload.iv || !encryptedPayload.keyId) {
@@ -209,9 +217,10 @@ export class PayloadEncryptionClient {
     authToken?: string,
     options: RequestInit = {}
   ): Promise<Response> {
+
   return this.encryptedFetch(url, {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
   ...options.headers
 },
@@ -227,6 +236,7 @@ export async function encryptedFetch(url: string, )
   options: RequestInit = {}, 
   authToken?: string
 ): Promise<Response> {
+
   return payloadEncryption.encryptedFetch(url, options, authToken, true, true);
   export async function encryptedPost(url: string,)
   data: unknown,

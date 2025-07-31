@@ -324,6 +324,7 @@ export type ContributorStatsResponse = z.infer<typeof ContributorStatsResponseSc
 
 // Utility types
 
+}
 export interface AttributionContext {
   projectId: string;
   userId?: string;
@@ -333,6 +334,8 @@ export interface AttributionContext {
   userAgent?: string;
   isAnonymous?: boolean;
   trackingConsent?: boolean;
+}
+}
 }
 export interface ChangeEvent {
   resourceType: ResourceType;
@@ -348,6 +351,8 @@ export interface ChangeEvent {
   collaboratorCount?: number;
   parentChangeId?: string;
 }
+}
+}
 export interface AttributionVisualization {
   type: 'timeline' | 'heatmap' | 'contributor_chart' | 'collaboration_graph';
   data: any;
@@ -356,21 +361,24 @@ export interface AttributionVisualization {
   dateRange: {
   start: Date;
   end: Date;
+}
 };
     filters: AttributionFilter;
   totalDataPoints: number;
   };
 }
+}
 export interface CollaborationMetrics {
   totalSessions: number;
   averageSessionDuration: number;
   averageCollaboratorsPerSession: number;
-  mostActiveCollaborations: Array<{,
+  mostActiveCollaborations: Array<{
   sessionId: string;
   authors: string;
   changes: number;
   duration: number;
   efficiency: number;
+}
 }>;
   collaborationPatterns: {
   byTimeOfDay: Record<string, number>;
@@ -439,12 +447,15 @@ export const RESOURCE_TYPE_DESCRIPTIONS = {
 
 // Event types for real-time updates
 
+}
 export interface AttributionEvent {
   type: 'attribution_created' | 'attribution_updated' | 'session_started' | 'session_ended';
   data: ChangeAttribution | AttributionSession;
   timestamp: Date;
   projectId: string;
   sessionId?: string;
+}
+}
 }
 export interface AttributionNotification {
   type: 'contributor_milestone' | 'collaboration_started' | 'significant_change';
@@ -454,4 +465,5 @@ export interface AttributionNotification {
   timestamp: Date;
   projectId: string;
   authorId?: string;
+}
 }

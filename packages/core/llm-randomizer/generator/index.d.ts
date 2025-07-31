@@ -49,7 +49,7 @@ export declare class RandomizerSystem {
             averageGenerationTime: number;
             mostUsedComplexity: string;
             mostUsedProvider: string;
-            popularNodeTypes: Array<{,
+            popularNodeTypes: Array<{
                 nodeType: string;
                 count: number;
             }>;

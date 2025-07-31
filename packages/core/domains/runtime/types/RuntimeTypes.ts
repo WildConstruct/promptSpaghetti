@@ -11,6 +11,7 @@ export * from '../../../runtime/advanced';
 
 // Enhanced runtime types for domain architecture
 
+}
 export interface RuntimeDomainState {
   executionQueue: ExecutionTask;
   activeExecutions: Map<string, ExecutionInstance>;
@@ -20,6 +21,8 @@ export interface RuntimeDomainState {
   config: RuntimeConfig;
   error: string | null;
   loading: boolean;
+}
+}
 }
 export interface ExecutionTask {
   id: string;
@@ -36,9 +39,11 @@ export interface ExecutionTask {
   completedAt?: Date;
   userId?: string;
 }
+}
 export type ExecutionPriority = 'low' | 'normal' | 'high' | 'critical';
 export type TaskStatus = 'queued' | 'running' | 'completed' | 'failed' | 'cancelled';
 
+}
 export interface ExecutionInstance {
   taskId: string;
   executionId: string;
@@ -51,6 +56,8 @@ export interface ExecutionInstance {
   metrics: ExecutionMetrics;
   cancellationToken: AbortController;
 }
+}
+}
 export interface ExecutionOptions {
   maxExecutionTime?: number;
   enableProfiling?: boolean;
@@ -61,8 +68,10 @@ export interface ExecutionOptions {
   validateOutputs?: boolean;
   logLevel?: LogLevel;
 }
+}
 export type LogLevel = 'error' | 'warn' | 'info' | 'debug' | 'trace';
 
+}
 export interface ExecutionError {
   nodeId: string;
   type: ErrorType;
@@ -71,12 +80,15 @@ export interface ExecutionError {
   timestamp: Date;
   stackTrace?: string;
 }
+}
+}
 export interface ExecutionWarning {
   nodeId: string;
   type: WarningType;
   message: string;
   details?: any;
   timestamp: Date;
+}
 }
 export type ErrorType = 
   | 'validation_error' | 'runtime_error' | 'timeout_error' 
@@ -86,6 +98,7 @@ export type WarningType =
   | 'performance_warning' | 'deprecation_warning' | 'validation_warning' 
   | 'resource_warning' | 'security_warning';
 
+}
 export interface ExecutionMetrics {
   totalTime: number;
   nodeExecutionTimes: Map<string, number>;
@@ -95,6 +108,8 @@ export interface ExecutionMetrics {
   cacheMisses: number;
   validationTime: number;
   serializationTime: number;
+}
+}
 }
 export interface ExecutionRecord {
   id: string;
@@ -109,6 +124,8 @@ export interface ExecutionRecord {
   duration: number;
   success: boolean;
 }
+}
+}
 export interface RuntimeMetrics {
   totalExecutions: number;
   successfulExecutions: number;
@@ -120,12 +137,16 @@ export interface RuntimeMetrics {
   nodeMetrics: Map<string, NodeMetrics>;
   errorRates: Map<ErrorType, number>;
 }
+}
+}
 export interface MemoryMetrics {
   currentUsage: number;
   peakUsage: number;
   averageUsage: number;
   gcCollections: number;
   gcTime: number;
+}
+}
 }
 export interface PerformanceMetrics {
   executionsPerSecond: number;
@@ -134,6 +155,8 @@ export interface PerformanceMetrics {
   p99Latency: number;
   cpuUsage: number;
   threadPoolUtilization: number;
+}
+}
 }
 export interface NodeMetrics {
   nodeType: string;
@@ -144,6 +167,8 @@ export interface NodeMetrics {
   errorRate: number;
   lastExecuted: Date;
   // Node Definition and Registry types
+}
+}
 }
 export interface NodeDefinition {
   type: string;
@@ -159,8 +184,10 @@ export interface NodeDefinition {
   security: SecuritySpecification;
   metadata: NodeMetadata;
 }
+}
 export type NodeCategory = 'basic' | 'advanced' | 'utility' | 'integration' | 'custom';
 
+}
 export interface IOSpecification {
   name: string;
   type: IOType;
@@ -170,8 +197,10 @@ export interface IOSpecification {
   validation?: ValidationRule;
   metadata?: Record<string, any>;
 }
+}
 export type IOType = 'string' | 'number' | 'boolean' | 'array' | 'object' | 'any';
 
+}
 export interface PropertySpecification {
   name: string;
   type: PropertyType;
@@ -182,13 +211,17 @@ export interface PropertySpecification {
   validation?: ValidationRule;
   ui?: UISpecification;
 }
+}
 export type PropertyType = 'string' | 'number' | 'boolean' | 'select' | 'multiselect' | 'textarea' | 'code';
 
+}
 export interface PropertyOption {
   value: any;
   label: string;
   description?: string;
   disabled?: boolean;
+}
+}
 }
 export interface UISpecification {
   component?: string;
@@ -196,16 +229,22 @@ export interface UISpecification {
   layout?: LayoutSpec;
   conditional?: ConditionalSpec;
 }
+}
+}
 export interface LayoutSpec {
   width?: number | string;
   height?: number | string;
   order?: number;
   group?: string;
 }
+}
+}
 export interface ConditionalSpec {
   property: string;
   operator: 'equals' | 'not_equals' | 'in' | 'not_in';
   value: any;
+}
+}
 }
 export interface NodeImplementation {
   execute: (inputs: any, context: ExecutionContext, node: Node) => Promise<any>;
@@ -214,32 +253,42 @@ export interface NodeImplementation {
   dispose?: () => Promise<void>;
   getOutputSchema?: (inputs: any, properties: any) => IOSpecification;
 }
+}
+}
 export interface ValidationSpecification {
   inputValidation: ValidationRule;
   outputValidation: ValidationRule;
   propertyValidation: ValidationRule;
   crossValidation?: CrossValidationRule;
 }
+}
+}
 export interface ValidationRule {
   type: ValidationType;
   parameters: Record<string, any>;
   message: string;
   severity: 'error' | 'warning' | 'info'
+}
   }
 export type ValidationType = 
   | 'required' | 'type' | 'range' | 'length' | 'pattern' | 'enum' 
   | 'custom' | 'dependency' | 'format' | 'unique';
 
+}
 export interface CrossValidationRule {
   name: string;
   inputs: string;
   validator: (values: any) => ValidationResult;
   message: string;
 }
+}
+}
 export interface ValidationResult {
   valid: boolean;
   errors: ValidationError;
   warnings: ValidationWarning;
+}
+}
 }
 export interface ValidationError {
   field: string;
@@ -247,10 +296,14 @@ export interface ValidationError {
   value?: any;
   constraint?: any;
 }
+}
+}
 export interface ValidationWarning {
   field: string;
   message: string;
   suggestion?: string;
+}
+}
 }
 export interface PerformanceSpecification {
   expectedExecutionTime: number;
@@ -260,6 +313,8 @@ export interface PerformanceSpecification {
   cacheable: boolean;
   parallelizable: boolean;
 }
+}
+}
 export interface SecuritySpecification {
   requiresElevatedPermissions: boolean;
   accessesExternalResources: boolean;
@@ -267,6 +322,8 @@ export interface SecuritySpecification {
   generatesAuditLogs: boolean;
   requiredPermissions: string;
   dataClassification: string;
+}
+}
 }
 export interface NodeMetadata {
   author: string;
@@ -278,6 +335,8 @@ export interface NodeMetadata {
   examples: NodeExample;
   changelog: ChangelogEntry;
 }
+}
+}
 export interface NodeExample {
   name: string;
   description: string;
@@ -285,12 +344,16 @@ export interface NodeExample {
   properties: Record<string, any>;
   expectedOutput: any;
 }
+}
+}
 export interface ChangelogEntry {
   version: string;
   date: Date;
   changes: string;
   breaking: boolean;
   // Runtime Configuration
+}
+}
 }
 export interface RuntimeConfig {
   execution: ExecutionConfig;
@@ -300,6 +363,8 @@ export interface RuntimeConfig {
   caching: CachingConfig;
   monitoring: MonitoringConfig;
 }
+}
+}
 export interface ExecutionConfig {
   maxConcurrentExecutions: number;
   defaultTimeout: number;
@@ -307,6 +372,8 @@ export interface ExecutionConfig {
   enableProfiling: boolean;
   enableValidation: boolean;
   parallelExecution: boolean;
+}
+}
 }
 export interface PerformanceConfig {
   enableCaching: boolean;
@@ -316,6 +383,8 @@ export interface PerformanceConfig {
   memoryLimit: number;
   gcThreshold: number;
 }
+}
+}
 export interface RuntimeSecurityConfig {
   sandboxExecution: boolean;
   allowExternalRequests: boolean;
@@ -323,6 +392,8 @@ export interface RuntimeSecurityConfig {
   allowNetworking: boolean;
   maxMemoryUsage: number;
   maxExecutionTime: number;
+}
+}
 }
 export interface LoggingConfig {
   enabled: boolean;
@@ -332,6 +403,8 @@ export interface LoggingConfig {
   logToConsole: boolean;
   maxLogSize: number;
 }
+}
+}
 export interface CachingConfig {
   enabled: boolean;
   strategy: CacheStrategy;
@@ -340,8 +413,10 @@ export interface CachingConfig {
   persistToDisk: boolean;
   compression: boolean;
 }
+}
 export type CacheStrategy = 'lru' | 'lfu' | 'fifo' | 'random';
 
+}
 export interface MonitoringConfig {
   enabled: boolean;
   metricsRetention: number;
@@ -349,11 +424,15 @@ export interface MonitoringConfig {
   alerting: AlertingConfig;
   reportingInterval: number;
 }
+}
+}
 export interface PerformanceThresholds {
   maxExecutionTime: number;
   maxMemoryUsage: number;
   maxErrorRate: number;
   minSuccessRate: number;
+}
+}
 }
 export interface AlertingConfig {
   enabled: boolean;
@@ -362,12 +441,16 @@ export interface AlertingConfig {
   slackChannel?: string;
   thresholds: AlertThresholds;
 }
+}
+}
 export interface AlertThresholds {
   executionTime: number;
   errorRate: number;
   memoryUsage: number;
   queueSize: number;
   // Runtime Events
+}
+}
 }
 export interface RuntimeDomainEvents {
   onExecutionStarted: (task: ExecutionTask) => void;
@@ -383,12 +466,16 @@ export interface RuntimeDomainEvents {
   onMetricsUpdated: (metrics: RuntimeMetrics) => void;
   // Component Props
 }
+}
+}
 export interface RuntimeDashboardProps {
   showMetrics?: boolean;
   showQueue?: boolean;
   showHistory?: boolean;
   refreshInterval?: number;
   className?: string;
+}
+}
 }
 export interface ExecutionQueueProps {
   maxItems?: number;
@@ -397,12 +484,15 @@ export interface ExecutionQueueProps {
   onTaskCancel?: (taskId: string) => void;
   className?: string;
 }
+}
+}
 export interface NodeRegistryProps {
   categories?: NodeCategory;
   searchable?: boolean;
   onNodeSelect?: (nodeDefinition: NodeDefinition) => void;
   className?: string;
   // Re-export core types from existing runtime
+}
 }
 export type { Graph, Node, Edge } from '../../../graphSchema';
 export type { 

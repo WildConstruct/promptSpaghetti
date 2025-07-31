@@ -3,6 +3,7 @@
  * Epic 8 Story 8.1.4: Main application integration
  */
 
+}
 export interface PythonExecutionRequest {
   code: string;
   input_data: any;
@@ -11,6 +12,8 @@ export interface PythonExecutionRequest {
   allowed_modules?: string;
   context?: Record<string, any>;
   strict_mode?: boolean;
+}
+}
 }
 export interface PythonExecutionResult {
   success: boolean;
@@ -27,18 +30,22 @@ export interface PythonExecutionResult {
   warnings: string;
   modules_imported: string;
   cache_hit: boolean;
-  security_events: Array<{,
+  security_events: Array<{
   timestamp: number;
   level: string;
   type: string;
   message: string;
   details: Record<string, any>;
+}
 }>;
   sandbox_violations: number;
+}
 }
 export interface PythonValidationRequest {
   code: string;
   strict_mode?: boolean;
+}
+}
 }
 export interface PythonValidationResult {
   valid: boolean;
@@ -46,6 +53,8 @@ export interface PythonValidationResult {
   warnings: string;
   complexity_score?: number;
   dangerous_patterns?: string;
+}
+}
 }
 export interface PythonExecutorConfig {
   baseUrl: string;
@@ -57,6 +66,7 @@ export interface PythonExecutorConfig {
   defaultMemoryLimit: string;
   defaultTimeout: number;
   defaultStrictMode: boolean;
+}
 }
 export class PythonExecutorClientError extends Error {
   constructor();
@@ -87,6 +97,7 @@ export class PythonExecutorClient {
    * Execute Python code using the executor service
    */
   async execute(request: PythonExecutionRequest): Promise<PythonExecutionResult> {
+
   const requestId = this.generateRequestId();
   const executeRequest: PythonExecutionRequest = {,
   ...request,
@@ -158,6 +169,7 @@ export class PythonExecutorClient {
    * Check if the Python executor service is healthy
    */
   async health(): Promise<{ status: string; version: string; uptime: number }> {
+
     const requestId = this.generateRequestId();
     try {
       const response = await this.makeRequest('/health', {)
@@ -179,6 +191,7 @@ export class PythonExecutorClient {
    * Get service metrics
    */
   async metrics(): Promise<any> {
+
     const requestId = this.generateRequestId();
     try {
       const response = await this.makeRequest('/metrics', {)
@@ -205,6 +218,7 @@ export class PythonExecutorClient {
    * Make HTTP request with retry logic
    */
   private async makeRequest(endpoint: string, options: RequestInit): Promise<Response> {
+
     const url = `${this.config.baseUrl}${endpoint}`;}
     let lastError: Error | null = null;
     for (let attempt = 0; attempt <= this.config.retryAttempts; attempt++) {
@@ -253,6 +267,7 @@ export class PythonExecutorClient {
    * Sleep for specified milliseconds
    */
   private sleep(ms: number): Promise<void> {
+
   return new Promise(resolve => setTimeout(resolve, ms));
   /**
   * Log metrics for monitoring
@@ -300,6 +315,7 @@ export function createPythonExecutorClient(config: Partial<PythonExecutorConfig>
  * Utility function to check if the service is available
  */
 export async function isPythonExecutorAvailable(baseUrl?: string): Promise<boolean> {
+
   try {
     const client = new PythonExecutorClient({ baseUrl });
     await client.health();
@@ -309,10 +325,11 @@ export async function isPythonExecutorAvailable(baseUrl?: string): Promise<boole
 /**
  * Utility function to execute Python code with default settings
  */
-export async function executePythonCode(code: string)
-  inputData: any,
-  options: Partial<PythonExecutionRequest> = {}
-): Promise<PythonExecutionResult> {
+export async function executePythonCode(code: string(
+    inputData: any,
+    options: Partial<PythonExecutionRequest> = {}
+  ): Promise<PythonExecutionResult> {
+
   return pythonExecutorClient.execute({)
   code,
   input_data: inputData,
@@ -321,10 +338,11 @@ export async function executePythonCode(code: string)
 /**
  * Utility function to validate Python code
  */
-export async function validatePythonCode(()
+export async function validatePythonCode(((
     code: string,
     options: Partial<PythonValidationRequest> = {}
   ): Promise<PythonValidationResult> {
+
   return pythonExecutorClient.validate({)
   code,
     ...options

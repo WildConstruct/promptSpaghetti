@@ -38,12 +38,16 @@ export enum ResetStep {
   lowercase: boolean;
   numbers: boolean;
   symbols: boolean;
+}
 };
+}
 }
 export interface ResetToken {
   token: string;
   tokenId: string;
   expiresAt: Date;
+}
+}
 }
 export interface UsePasswordResetOptions {
   onStepChange?: (step: ResetStep) => void;
@@ -52,6 +56,8 @@ export interface UsePasswordResetOptions {
   customValidation?: (password: string) => PasswordValidation;
   autoAdvance?: boolean;
   resendCooldown?: number; // seconds,
+}
+}
 }
 export interface UsePasswordResetReturn {
   // State
@@ -88,6 +94,7 @@ export interface UsePasswordResetReturn {
   validatePassword: (password: string) => PasswordValidation;
   getPasswordStrengthColor: (strength: PasswordStrength) => string;
   getPasswordStrengthWidth: (score: number) => string;
+}
 }
 export const usePasswordReset = (options: UsePasswordResetOptions = {}): UsePasswordResetReturn => {
   const {

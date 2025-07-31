@@ -21,6 +21,7 @@ import {
   Shield
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+}
 interface SecurityAlert {
   id: string;,
   type: 'critical' | 'high' | 'medium' | 'low' | 'info';
@@ -46,6 +47,7 @@ interface SecurityAlert {
   onAlertAction,
   maxVisible = 50,
   showDismissed = false
+}
 }) => {
   const [alerts, setAlerts] = useState<SecurityAlert>([]);
   const [filteredAlerts, setFilteredAlerts] = useState<SecurityAlert>([]);

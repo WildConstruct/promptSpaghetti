@@ -41,6 +41,7 @@ import { EmbedConfiguration, EmbedTheme, EmbedSize, EmbedFeatures } from '../emb
 
 // Enhanced types for embedded template previews
 
+}
 export interface EmbeddedTemplatePreviewProps {
   template: Template;
   embedConfig: EmbedConfiguration;
@@ -61,10 +62,14 @@ export interface EmbeddedTemplatePreviewProps {
   maxWidth?: number;
   maxHeight?: number;
 }
+}
+}
 export interface ShareMethod {
   type: 'link' | 'embed' | 'social' | 'email' | 'copy';
   platform?: 'twitter' | 'linkedin' | 'facebook' | 'reddit' | 'discord';
   customization?: EmbedCustomization;
+}
+}
 }
 export interface EmbedCustomization {
   size: EmbedSize;
@@ -73,6 +78,8 @@ export interface EmbedCustomization {
   layout: EmbedLayout;
   branding: EmbedBranding;
   social: EmbedSocialConfig;
+}
+}
 }
 export interface EmbedLayout {
   orientation: 'horizontal' | 'vertical' | 'grid';
@@ -83,7 +90,9 @@ export interface EmbedLayout {
   spacing: 'tight' | 'normal' | 'loose';
   borderRadius: number;
   shadow: 'none' | 'sm' | 'md' | 'lg' | 'xl'
+}
   }
+}
 export interface EmbedBranding {
   showLogo: boolean;
   showTitle: boolean;
@@ -95,11 +104,13 @@ export interface EmbedBranding {
   accent: string;
   background: string;
   text: string;
+}
 };
   customFonts?: {
   heading: string;
   body: string;
 };
+}
 }
 export interface EmbedSocialConfig {
   showLikes: boolean;
@@ -111,6 +122,8 @@ export interface EmbedSocialConfig {
   showAuthorInfo: boolean;
   showStats: boolean;
 }
+}
+}
 export interface PreviewSize {
   width: number;
   height: number;
@@ -118,6 +131,7 @@ export interface PreviewSize {
   icon: React.ComponentType<unknown>;
   description: string;
   // Predefined preview sizes
+}
 }
 export const PREVIEW_SIZES: PreviewSize = [
   { width: 320, height: 568, label: 'Mobile', icon: DevicePhoneMobileIcon, description: 'iPhone/Android portrait' },

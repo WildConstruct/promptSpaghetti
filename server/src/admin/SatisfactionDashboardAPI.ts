@@ -15,6 +15,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 export interface SatisfactionDashboardAPI {
   // Dashboard Data
   getDashboard(): Promise<any>;
@@ -38,7 +39,9 @@ export interface SatisfactionDashboardAPI {
   generateReport(reportType: string, params?: any): Promise<any>;
 }
 }
+}
 
+}
 }
 export interface SatisfactionAPIRequest {
   // Survey Creation
@@ -51,6 +54,7 @@ export interface SatisfactionAPIRequest {
     start: string;
     end: string;
 }
+}
   };
   segments?: string[];
   
@@ -59,6 +63,7 @@ export interface SatisfactionAPIRequest {
   includePersonalData?: boolean;
 }
 
+}
 }
 export interface SatisfactionAPIResponse {
   success: boolean;
@@ -69,6 +74,7 @@ export interface SatisfactionAPIResponse {
     filteredCount?: number;
     lastUpdated?: Date;
     processingTime?: number;
+}
 }
   };
 }

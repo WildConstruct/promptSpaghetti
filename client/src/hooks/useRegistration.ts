@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react';
 import { useAuth } from './useAuth';
 
+}
 export interface RegistrationData {
   email: string;,
   password: string;
@@ -11,31 +12,36 @@ export interface RegistrationData {
   displayName?: string;
   invitationToken?: string;
 }
+}
+}
 export interface RegistrationResponse {
-  user: {,
+  user: {
   id: string;,
   email: string;
   emailVerified: boolean;,
   createdAt: string;
   roles: string;,
   permissions: string;
+}
 };
   emailVerificationRequired: boolean;
   nextSteps?: string;
 }
+}
 export interface ValidationResult {
   isValid: boolean;,
-  errors: Array<{,
+  errors: Array<{
   field: string;,
   message: string;
   code: string;
+}
 }>;
-  warnings: Array<{,
+  warnings: Array<{
   field: string;
   message: string;,
   code: string;
 }>;
-  suggestions: Array<{,
+  suggestions: Array<{
   field: string;
   suggestion: string;
 }>;
@@ -51,7 +57,7 @@ export const useRegistration = () => {
   try {
   const response = await fetch('/auth/register', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify(data),
@@ -89,7 +95,7 @@ export const useRegistration = () => {
   try {
   const response = await fetch('/auth/validate-field', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({ field, value })
@@ -107,7 +113,7 @@ export const useRegistration = () => {
   try {
   const response = await fetch('/auth/resend-verification', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({ email }),
@@ -129,7 +135,7 @@ export const useRegistration = () => {
   try {
   const response = await fetch('/auth/verify-email', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({ token }),
@@ -169,7 +175,7 @@ export const useRegistration = () => {
 
 // Helper hook for password strength calculation
 export const usePasswordStrength = (password: string) => {
-  const calculateStrength = useCallback((password: string): {,
+  const calculateStrength = useCallback((password: string): {
   score: number;,
   feedback: string;
   strength: 'weak' | 'fair' | 'good' | 'strong';

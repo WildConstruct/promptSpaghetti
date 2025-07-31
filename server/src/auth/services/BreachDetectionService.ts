@@ -7,6 +7,7 @@ import { EventEmitter } from 'events';
 import crypto from 'crypto';
 
 }
+}
 export interface SecurityEvent {
   id: string;
   userId: string;
@@ -18,6 +19,7 @@ export interface SecurityEvent {
   metadata: Record<string, any>;
   riskScore: number;
   actionTaken?: SecurityAction;
+}
 }
 }
 
@@ -55,6 +57,7 @@ export enum SecurityAction {
 }
 
 }
+}
 interface RiskProfile {
   userId: string;
   baselineScore: number;
@@ -65,7 +68,9 @@ interface RiskProfile {
   lastAssessment: Date;
 }
 }
+}
 
+}
 }
 interface DeviceFingerprint {
   id: string;
@@ -81,13 +86,16 @@ interface DeviceFingerprint {
   lastSeen: Date;
 }
 }
+}
 
+}
 }
 interface GeolocationData {
   ip: string;
   country: string;
   region: string;
   city: string;
+}
 }
   coordinates?: { lat: number; lng: number };
   isp: string;
@@ -97,6 +105,7 @@ interface GeolocationData {
 }
 
 }
+}
 interface RiskFactor {
   type: string;
   value: number;
@@ -104,7 +113,9 @@ interface RiskFactor {
   weight: number;
 }
 }
+}
 
+}
 }
 interface BreachPattern {
   name: string;
@@ -114,6 +125,7 @@ interface BreachPattern {
   threshold: number;
   riskScore: number;
   action: SecurityAction;
+}
 }
 }
 

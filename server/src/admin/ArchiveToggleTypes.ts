@@ -44,6 +44,7 @@ export enum ArchiveToggleScope {
  * Archive toggle configuration for different data types
  */
 }
+}
 export interface ArchiveToggleConfig {
   id: string;
   name: string;
@@ -92,10 +93,12 @@ export interface ArchiveToggleConfig {
   customSettings?: Record<string, unknown>;
 }
 }
+}
 
 /**
  * Archive toggle state for runtime evaluation
  */
+}
 }
 export interface ArchiveToggleState {
   configId: string;
@@ -131,6 +134,7 @@ export interface ArchiveToggleState {
   auditTrail: ArchiveToggleAuditEntry[];
 }
 }
+}
 
 /**
  * Compliance status for archiving operations
@@ -146,6 +150,7 @@ export enum ComplianceStatus {
 /**
  * Audit trail entry for archive toggle operations
  */
+}
 }
 export interface ArchiveToggleAuditEntry {
   id: string;
@@ -174,6 +179,7 @@ export interface ArchiveToggleAuditEntry {
     requirementId: string;
     justification: string;
 }
+}
   };
 }
 
@@ -199,6 +205,7 @@ export enum ArchiveToggleAction {
  * Request interface for creating archive toggles
  */
 }
+}
 export interface CreateArchiveToggleRequest {
   name: string;
   description: string;
@@ -211,10 +218,12 @@ export interface CreateArchiveToggleRequest {
   orgId?: string;
 }
 }
+}
 
 /**
  * Request interface for updating archive toggles
  */
+}
 }
 export interface UpdateArchiveToggleRequest {
   id: string;
@@ -228,10 +237,12 @@ export interface UpdateArchiveToggleRequest {
   customSettings?: Record<string, unknown>;
 }
 }
+}
 
 /**
  * Archive toggle evaluation context for runtime decisions
  */
+}
 }
 export interface ArchiveToggleEvaluationContext {
   userId?: string;
@@ -257,10 +268,12 @@ export interface ArchiveToggleEvaluationContext {
   requestId?: string;
 }
 }
+}
 
 /**
  * Archive toggle evaluation result
  */
+}
 }
 export interface ArchiveToggleEvaluationResult {
   configId: string;
@@ -285,6 +298,7 @@ export interface ArchiveToggleEvaluationResult {
   // Related policies and configurations
   relatedRetentionPolicies: string[];
   appliedComplianceRules: string[];
+}
 }
 }
 

@@ -4,6 +4,7 @@ import React, { memo, useMemo } from 'react';
 import { Node, Handle, Position } from 'reactflow';
 import { NodeMeta } from '../Palette';
 import { parseTemplate } from '../utils/templateParser';
+}
 interface VariablePortNodeRendererProps {
   id: string;
   data: Record<string, unknown>;
@@ -18,6 +19,7 @@ interface VariablePortNodeRendererProps {
   onSelect,
   getNodeMeta,
   getCategoryColor
+}
 }) => {
   // Parse template to extract variables for dynamic ports
   const templateField = data?.template || data?.text || data?.content || '';

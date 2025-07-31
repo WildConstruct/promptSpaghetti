@@ -35,11 +35,13 @@ import { QualityTrends } from '../../hooks/useQualityMetrics';
 // Quality Trends Chart Component
 // =============================================================================
 
+}
 export interface QualityTrendsChartProps {
   trends: QualityTrends | null;
   compact?: boolean;
   className?: string;
   onTimeRangeChange?: (timeRange: string) => void;
+}
 }
 export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({)
   trends,
@@ -161,6 +163,7 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({)
   const CustomTooltip = (;);
     { active,
     payload,
+}
     label }: { active?: boolean; payload?: TooltipEntry; label?: string }
   ) => {
     if (active && payload && payload.length) {

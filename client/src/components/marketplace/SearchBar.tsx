@@ -1,6 +1,7 @@
 // Epic 16 Marketplace - Search Bar Component
 import React, { useState, useRef, useEffect } from 'react';
 import './SearchBar.css';
+}
 interface SearchBarProps {
   value: string;,
   onChange: (value: string) => void;
@@ -17,6 +18,7 @@ interface SearchBarProps {
   suggestions = [],
   loading = false,
   className = ''
+}
 }) => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedSuggestion, setSelectedSuggestion] = useState(-1);

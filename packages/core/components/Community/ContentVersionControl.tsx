@@ -8,6 +8,7 @@
 import React, { useState, useEffect } from 'react';
 import { ContentVersion, ContentVersionDiff, ContentVersionManager } from '../../community/ContentVersionManager';
 
+}
 export interface ContentVersionControlProps {
   contentId: string;
   currentVersionId: string;
@@ -17,6 +18,7 @@ export interface ContentVersionControlProps {
   showEditorialWorkflow?: boolean;
   readOnly?: boolean;
   className?: string;
+}
 }
 export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({)
   contentId,
@@ -866,12 +868,14 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({)
 };
 
 // Create Version Modal Component
+}
 interface CreateVersionModalProps {
   onCreate: (data: {)
   title: string;
   description: string;
   changelog: string;
   revision_type: 'major' | 'minor' | 'patch' | 'editorial'
+}
   }) => void;
   onCancel: () => void;
 const CreateVersionModal: React.FC<CreateVersionModalProps> = ({)

@@ -13,6 +13,7 @@ import { SecurityOptimizationEngine } from './SecurityOptimizationEngine';
 import { SecurityABTestingFramework } from './SecurityABTestingFramework';
 
 }
+}
 export interface SecurityExperimentationConfig {
   platform_settings: {
     enabled: boolean;
@@ -21,6 +22,7 @@ export interface SecurityExperimentationConfig {
     experiment_orchestration_enabled: boolean;
     automated_rollback_enabled: boolean;
     compliance_validation_required: boolean;
+}
 }
   };
   
@@ -70,6 +72,7 @@ export interface SecurityExperimentationConfig {
 }
 
 }
+}
 export interface SecurityExperiment {
   experiment_id: string;
   experiment_name: string;
@@ -83,6 +86,7 @@ export interface SecurityExperiment {
     methodology: ExperimentMethodology;
     expected_outcomes: string[];
     success_criteria: SuccessCriteria;
+}
 }
   };
   
@@ -115,6 +119,7 @@ export interface SecurityExperiment {
 }
 
 }
+}
 export interface ExperimentMethodology {
   methodology_type: 'controlled_experiment' | 'observational_study' | 'simulation' | 'field_study' | 'case_study' | 'longitudinal_study';
   data_collection_methods: string[];
@@ -123,7 +128,9 @@ export interface ExperimentMethodology {
   variables: ExperimentVariable[];
 }
 }
+}
 
+}
 }
 export interface SamplingStrategy {
   sampling_method: 'random' | 'stratified' | 'systematic' | 'cluster' | 'convenience' | 'purposive';
@@ -133,7 +140,9 @@ export interface SamplingStrategy {
   exclusion_criteria: string[];
 }
 }
+}
 
+}
 }
 export interface ControlMechanism {
   control_type: 'randomization' | 'matching' | 'blocking' | 'blind' | 'double_blind';
@@ -141,7 +150,9 @@ export interface ControlMechanism {
   implementation_details: string;
 }
 }
+}
 
+}
 }
 export interface ExperimentVariable {
   variable_name: string;
@@ -151,7 +162,9 @@ export interface ExperimentVariable {
   expected_values: string[];
 }
 }
+}
 
+}
 }
 export interface SuccessCriteria {
   primary_outcomes: OutcomeMeasure[];
@@ -161,7 +174,9 @@ export interface SuccessCriteria {
   minimum_effect_size: number;
 }
 }
+}
 
+}
 }
 export interface OutcomeMeasure {
   measure_name: string;
@@ -169,10 +184,12 @@ export interface OutcomeMeasure {
   measurement_unit: string;
   target_value?: number;
 }
+}
   acceptable_range?: { min: number; max: number };
   measurement_frequency: 'real_time' | 'hourly' | 'daily' | 'weekly' | 'monthly';
 }
 
+}
 }
 export interface TargetSystem {
   system_id: string;
@@ -184,7 +201,9 @@ export interface TargetSystem {
   isolation_level: 'none' | 'network' | 'process' | 'container' | 'vm' | 'physical';
 }
 }
+}
 
+}
 }
 export interface ExperimentEnvironment {
   environment_id: string;
@@ -196,7 +215,9 @@ export interface ExperimentEnvironment {
   rollback_procedures: string[];
 }
 }
+}
 
+}
 }
 export interface ExperimentParticipant {
   participant_type: 'human' | 'system' | 'synthetic';
@@ -207,7 +228,9 @@ export interface ExperimentParticipant {
   anonymization_level: 'none' | 'pseudonymized' | 'anonymized' | 'aggregated';
 }
 }
+}
 
+}
 }
 export interface ExperimentDuration {
   planned_duration_days: number;
@@ -217,7 +240,9 @@ export interface ExperimentDuration {
   review_schedule: ReviewSchedule[];
 }
 }
+}
 
+}
 }
 export interface ExperimentMilestone {
   milestone_name: string;
@@ -227,7 +252,9 @@ export interface ExperimentMilestone {
   review_required: boolean;
 }
 }
+}
 
+}
 }
 export interface ReviewSchedule {
   review_type: 'safety' | 'progress' | 'ethics' | 'compliance' | 'interim_analysis';
@@ -236,7 +263,9 @@ export interface ReviewSchedule {
   review_criteria: string[];
 }
 }
+}
 
+}
 }
 export interface ResourceRequirement {
   resource_type: 'personnel' | 'infrastructure' | 'software' | 'hardware' | 'cloud' | 'budget';
@@ -247,7 +276,9 @@ export interface ResourceRequirement {
   availability_constraints: string[];
 }
 }
+}
 
+}
 }
 export interface RiskAssessment {
   overall_risk_level: 'low' | 'medium' | 'high' | 'critical';
@@ -257,7 +288,9 @@ export interface RiskAssessment {
   impact_assessment: ImpactAssessment;
 }
 }
+}
 
+}
 }
 export interface RiskCategory {
   category_name: string;
@@ -268,7 +301,9 @@ export interface RiskCategory {
   mitigation_required: boolean;
 }
 }
+}
 
+}
 }
 export interface BlastRadiusAssessment {
   affected_systems_count: number;
@@ -279,7 +314,9 @@ export interface BlastRadiusAssessment {
   containment_measures: string[];
 }
 }
+}
 
+}
 }
 export interface LikelihoodAssessment {
   probability_percentage: number;
@@ -289,7 +326,9 @@ export interface LikelihoodAssessment {
   quantitative_analysis: boolean;
 }
 }
+}
 
+}
 }
 export interface ImpactAssessment {
   business_impact: BusinessImpact;
@@ -299,7 +338,9 @@ export interface ImpactAssessment {
   user_impact: UserImpact;
 }
 }
+}
 
+}
 }
 export interface BusinessImpact {
   revenue_impact: number;
@@ -309,7 +350,9 @@ export interface BusinessImpact {
   recovery_time_estimate: number;
 }
 }
+}
 
+}
 }
 export interface TechnicalImpact {
   system_availability_impact: number;
@@ -319,7 +362,9 @@ export interface TechnicalImpact {
   technical_debt_increase: boolean;
 }
 }
+}
 
+}
 }
 export interface SecurityImpact {
   confidentiality_impact: 'none' | 'low' | 'moderate' | 'high' | 'critical';
@@ -329,7 +374,9 @@ export interface SecurityImpact {
   vulnerability_introduction_risk: number;
 }
 }
+}
 
+}
 }
 export interface ComplianceImpact {
   regulatory_compliance_risk: 'none' | 'low' | 'moderate' | 'high' | 'critical';
@@ -338,7 +385,9 @@ export interface ComplianceImpact {
   certification_impact: string[];
 }
 }
+}
 
+}
 }
 export interface UserImpact {
   user_experience_impact: 'positive' | 'neutral' | 'negative';
@@ -347,7 +396,9 @@ export interface UserImpact {
   training_requirements: string[];
 }
 }
+}
 
+}
 }
 export interface MitigationStrategy {
   strategy_id: string;
@@ -360,7 +411,9 @@ export interface MitigationStrategy {
   implementation_timeline: number;
 }
 }
+}
 
+}
 }
 export interface MonitoringPlan {
   monitoring_objectives: string[];
@@ -370,7 +423,9 @@ export interface MonitoringPlan {
   escalation_procedures: EscalationProcedure[];
 }
 }
+}
 
+}
 }
 export interface MonitoringMetric {
   metric_name: string;
@@ -378,10 +433,12 @@ export interface MonitoringMetric {
   measurement_method: string;
   baseline_value?: number;
 }
+}
   threshold_values: { warning: number; critical: number };
   collection_frequency: string;
 }
 
+}
 }
 export interface AlertingRule {
   rule_name: string;
@@ -392,7 +449,9 @@ export interface AlertingRule {
   auto_resolution: boolean;
 }
 }
+}
 
+}
 }
 export interface EscalationProcedure {
   trigger_condition: string;
@@ -402,7 +461,9 @@ export interface EscalationProcedure {
   escalation_actions: string[];
 }
 }
+}
 
+}
 }
 export interface TerminationCriteria {
   automatic_termination_rules: TerminationRule[];
@@ -412,7 +473,9 @@ export interface TerminationCriteria {
   data_preservation_requirements: string[];
 }
 }
+}
 
+}
 }
 export interface TerminationRule {
   rule_name: string;
@@ -422,7 +485,9 @@ export interface TerminationRule {
   automatic_rollback: boolean;
 }
 }
+}
 
+}
 }
 export interface DataProtectionMeasures {
   data_classification: 'public' | 'internal' | 'confidential' | 'restricted';
@@ -433,7 +498,9 @@ export interface DataProtectionMeasures {
   privacy_impact_assessment: PrivacyImpactAssessment;
 }
 }
+}
 
+}
 }
 export interface EncryptionRequirement {
   data_type: string;
@@ -442,7 +509,9 @@ export interface EncryptionRequirement {
   encryption_strength: string;
 }
 }
+}
 
+}
 }
 export interface AccessControl {
   access_type: 'read' | 'write' | 'execute' | 'admin';
@@ -451,7 +520,9 @@ export interface AccessControl {
   audit_requirements: string[];
 }
 }
+}
 
+}
 }
 export interface DataRetentionPolicy {
   retention_period_days: number;
@@ -460,7 +531,9 @@ export interface DataRetentionPolicy {
   legal_hold_procedures: string[];
 }
 }
+}
 
+}
 }
 export interface PrivacyImpactAssessment {
   pia_required: boolean;
@@ -470,7 +543,9 @@ export interface PrivacyImpactAssessment {
   data_subject_rights: string[];
 }
 }
+}
 
+}
 }
 export interface PrivacyRisk {
   risk_description: string;
@@ -479,7 +554,9 @@ export interface PrivacyRisk {
   mitigation_measures: string[];
 }
 }
+}
 
+}
 }
 export interface ConsentRequirement {
   consent_type: 'opt_in' | 'opt_out' | 'explicit' | 'implied';
@@ -488,7 +565,9 @@ export interface ConsentRequirement {
   consent_documentation: string[];
 }
 }
+}
 
+}
 }
 export interface ExperimentResults {
   data_collection: DataCollection;
@@ -499,7 +578,9 @@ export interface ExperimentResults {
   publication_readiness: PublicationReadiness;
 }
 }
+}
 
+}
 }
 export interface DataCollection {
   data_sources: DataSource[];
@@ -509,7 +590,9 @@ export interface DataCollection {
   collection_issues: DataCollectionIssue[];
 }
 }
+}
 
+}
 }
 export interface DataSource {
   source_name: string;
@@ -519,7 +602,9 @@ export interface DataSource {
   reliability_score: number;
 }
 }
+}
 
+}
 }
 export interface DataQualityAssessment {
   overall_quality_score: number;
@@ -531,7 +616,9 @@ export interface DataQualityAssessment {
   quality_issues: DataQualityIssue[];
 }
 }
+}
 
+}
 }
 export interface DataQualityIssue {
   issue_type: string;
@@ -541,7 +628,9 @@ export interface DataQualityIssue {
   resolution_status: 'open' | 'in_progress' | 'resolved';
 }
 }
+}
 
+}
 }
 export interface DataVolumeMetrics {
   total_records_collected: number;
@@ -551,7 +640,9 @@ export interface DataVolumeMetrics {
   storage_utilization: number;
 }
 }
+}
 
+}
 }
 export interface DataCollectionIssue {
   issue_description: string;
@@ -561,7 +652,9 @@ export interface DataCollectionIssue {
   prevention_measures: string[];
 }
 }
+}
 
+}
 }
 export interface StatisticalAnalysis {
   analysis_methods_used: string[];
@@ -572,7 +665,9 @@ export interface StatisticalAnalysis {
   confidence_intervals: ConfidenceInterval[];
 }
 }
+}
 
+}
 }
 export interface HypothesisTestResult {
   hypothesis: string;
@@ -584,7 +679,9 @@ export interface HypothesisTestResult {
   confidence_level: number;
 }
 }
+}
 
+}
 }
 export interface DescriptiveStatistics {
   variables_analyzed: VariableStatistics[];
@@ -593,7 +690,9 @@ export interface DescriptiveStatistics {
   outlier_analysis: OutlierAnalysis;
 }
 }
+}
 
+}
 }
 export interface VariableStatistics {
   variable_name: string;
@@ -604,10 +703,12 @@ export interface VariableStatistics {
   standard_deviation?: number;
   variance?: number;
 }
+}
   range?: { min: number; max: number };
   quartiles?: { q1: number; q2: number; q3: number };
 }
 
+}
 }
 export interface CorrelationMatrix {
   variables: string[];
@@ -615,7 +716,9 @@ export interface CorrelationMatrix {
   significance_levels: number[][];
 }
 }
+}
 
+}
 }
 export interface DistributionAnalysis {
   variable_name: string;
@@ -624,7 +727,9 @@ export interface DistributionAnalysis {
   goodness_of_fit: GoodnessOfFit;
 }
 }
+}
 
+}
 }
 export interface GoodnessOfFit {
   test_method: string;
@@ -633,7 +738,9 @@ export interface GoodnessOfFit {
   fit_quality: 'poor' | 'fair' | 'good' | 'excellent';
 }
 }
+}
 
+}
 }
 export interface OutlierAnalysis {
   outlier_detection_method: string;
@@ -642,7 +749,9 @@ export interface OutlierAnalysis {
   impact_on_analysis: string;
 }
 }
+}
 
+}
 }
 export interface OutlierRecord {
   record_id: string;
@@ -652,7 +761,9 @@ export interface OutlierRecord {
   outlier_severity: 'mild' | 'moderate' | 'extreme';
 }
 }
+}
 
+}
 }
 export interface InferentialStatistics {
   regression_analysis: RegressionAnalysis[];
@@ -661,7 +772,9 @@ export interface InferentialStatistics {
   time_series_analysis: TimeSeriesAnalysis[];
 }
 }
+}
 
+}
 }
 export interface RegressionAnalysis {
   regression_type: 'linear' | 'logistic' | 'multiple' | 'polynomial';
@@ -674,7 +787,9 @@ export interface RegressionAnalysis {
   coefficients: RegressionCoefficient[];
 }
 }
+}
 
+}
 }
 export interface RegressionCoefficient {
   variable_name: string;
@@ -683,9 +798,11 @@ export interface RegressionCoefficient {
   t_statistic: number;
   p_value: number;
 }
+}
   confidence_interval: { lower: number; upper: number };
 }
 
+}
 }
 export interface ANOVAResult {
   test_name: string;
@@ -697,14 +814,18 @@ export interface ANOVAResult {
   post_hoc_tests: PostHocTest[];
 }
 }
+}
 
+}
 }
 export interface PostHocTest {
   test_method: string;
   group_comparisons: GroupComparison[];
 }
 }
+}
 
+}
 }
 export interface GroupComparison {
   group1: string;
@@ -714,7 +835,9 @@ export interface GroupComparison {
   significant: boolean;
 }
 }
+}
 
+}
 }
 export interface ChiSquareTest {
   test_type: 'goodness_of_fit' | 'independence' | 'homogeneity';
@@ -725,7 +848,9 @@ export interface ChiSquareTest {
   contingency_table?: number[][];
 }
 }
+}
 
+}
 }
 export interface TimeSeriesAnalysis {
   time_series_variable: string;
@@ -734,7 +859,9 @@ export interface TimeSeriesAnalysis {
   forecasting_results: ForecastingResults;
 }
 }
+}
 
+}
 }
 export interface TrendAnalysis {
   trend_present: boolean;
@@ -743,7 +870,9 @@ export interface TrendAnalysis {
   trend_significance: number;
 }
 }
+}
 
+}
 }
 export interface SeasonalityAnalysis {
   seasonal_pattern_detected: boolean;
@@ -752,7 +881,9 @@ export interface SeasonalityAnalysis {
   seasonal_significance: number;
 }
 }
+}
 
+}
 }
 export interface ForecastingResults {
   forecasting_method: string;
@@ -761,7 +892,9 @@ export interface ForecastingResults {
   forecast_values: ForecastPoint[];
 }
 }
+}
 
+}
 }
 export interface ForecastAccuracy {
   mae: number; // Mean Absolute Error
@@ -770,15 +903,19 @@ export interface ForecastAccuracy {
   mape: number; // Mean Absolute Percentage Error
 }
 }
+}
 
+}
 }
 export interface ForecastPoint {
   time_point: number;
   forecasted_value: number;
 }
+}
   confidence_interval: { lower: number; upper: number };
 }
 
+}
 }
 export interface EffectSizeAnalysis {
   effect_size_measures: EffectSizeMeasure[];
@@ -786,7 +923,9 @@ export interface EffectSizeAnalysis {
   clinical_significance_assessment: string;
 }
 }
+}
 
+}
 }
 export interface EffectSizeMeasure {
   measure_name: string;
@@ -794,9 +933,11 @@ export interface EffectSizeMeasure {
   effect_size_value: number;
   interpretation: 'negligible' | 'small' | 'medium' | 'large' | 'very_large';
 }
+}
   confidence_interval: { lower: number; upper: number };
 }
 
+}
 }
 export interface ConfidenceInterval {
   parameter_name: string;
@@ -806,7 +947,9 @@ export interface ConfidenceInterval {
   interpretation: string;
 }
 }
+}
 
+}
 }
 export interface Finding {
   finding_id: string;
@@ -819,7 +962,9 @@ export interface Finding {
   limitations: string[];
 }
 }
+}
 
+}
 }
 export interface Evidence {
   evidence_type: 'quantitative' | 'qualitative' | 'observational' | 'anecdotal';
@@ -829,7 +974,9 @@ export interface Evidence {
   corroborating_sources: string[];
 }
 }
+}
 
+}
 }
 export interface StatisticalSupport {
   statistical_test: string;
@@ -840,7 +987,9 @@ export interface StatisticalSupport {
   statistical_power: number;
 }
 }
+}
 
+}
 }
 export interface PracticalImportance {
   importance_level: 'low' | 'medium' | 'high' | 'critical';
@@ -850,7 +999,9 @@ export interface PracticalImportance {
   stakeholder_impact: string;
 }
 }
+}
 
+}
 }
 export interface Insight {
   insight_id: string;
@@ -862,7 +1013,9 @@ export interface Insight {
   generalizability: Generalizability;
 }
 }
+}
 
+}
 }
 export interface Implication {
   implication_type: 'security' | 'operational' | 'strategic' | 'research' | 'policy';
@@ -872,7 +1025,9 @@ export interface Implication {
   timeline_implications: string;
 }
 }
+}
 
+}
 }
 export interface Generalizability {
   generalization_scope: 'limited' | 'moderate' | 'broad' | 'universal';
@@ -881,7 +1036,9 @@ export interface Generalizability {
   external_validity_assessment: string;
 }
 }
+}
 
+}
 }
 export interface Recommendation {
   recommendation_id: string;
@@ -895,7 +1052,9 @@ export interface Recommendation {
   risks_and_challenges: RiskAndChallenge[];
 }
 }
+}
 
+}
 }
 export interface ImplementationPlan {
   phases: ImplementationPhase[];
@@ -906,7 +1065,9 @@ export interface ImplementationPlan {
   review_milestones: string[];
 }
 }
+}
 
+}
 }
 export interface ImplementationPhase {
   phase_name: string;
@@ -917,7 +1078,9 @@ export interface ImplementationPhase {
   success_criteria: string[];
 }
 }
+}
 
+}
 }
 export interface ExpectedBenefit {
   benefit_category: 'security' | 'operational' | 'financial' | 'strategic' | 'compliance';
@@ -927,7 +1090,9 @@ export interface ExpectedBenefit {
   realization_timeline: string;
 }
 }
+}
 
+}
 }
 export interface RiskAndChallenge {
   risk_category: 'technical' | 'operational' | 'financial' | 'regulatory' | 'organizational';
@@ -937,7 +1102,9 @@ export interface RiskAndChallenge {
   mitigation_strategy: string;
 }
 }
+}
 
+}
 }
 export interface PublicationReadiness {
   publication_ready: boolean;
@@ -948,7 +1115,9 @@ export interface PublicationReadiness {
   intellectual_property_considerations: string[];
 }
 }
+}
 
+}
 }
 export interface PublicationVenue {
   venue_name: string;
@@ -958,7 +1127,9 @@ export interface PublicationVenue {
   estimated_review_timeline: number;
 }
 }
+}
 
+}
 }
 export interface ExperimentMetadata {
   created_by: string;
@@ -973,7 +1144,9 @@ export interface ExperimentMetadata {
   related_experiments: string[];
 }
 }
+}
 
+}
 }
 export interface Stakeholder {
   stakeholder_id: string;
@@ -984,7 +1157,9 @@ export interface Stakeholder {
   contact_information: string;
 }
 }
+}
 
+}
 }
 export interface ExperimentTemplate {
   template_id: string;
@@ -997,7 +1172,9 @@ export interface ExperimentTemplate {
   usage_guidelines: string[];
 }
 }
+}
 
+}
 }
 export interface CustomizationPoint {
   field_path: string;
@@ -1008,7 +1185,9 @@ export interface CustomizationPoint {
   help_text: string;
 }
 }
+}
 
+}
 }
 export interface ExperimentPortfolio {
   portfolio_id: string;
@@ -1021,7 +1200,9 @@ export interface ExperimentPortfolio {
   timeline_coordination: TimelineCoordination;
 }
 }
+}
 
+}
 }
 export interface ResearchTheme {
   theme_name: string;
@@ -1031,7 +1212,9 @@ export interface ResearchTheme {
   expected_synergies: string[];
 }
 }
+}
 
+}
 }
 export interface CoordinationRequirement {
   requirement_type: 'data_sharing' | 'resource_sharing' | 'timeline_dependency' | 'methodology_alignment';
@@ -1040,16 +1223,20 @@ export interface CoordinationRequirement {
   coordination_mechanisms: string[];
 }
 }
+}
 
+}
 }
 export interface PortfolioResourceAllocation {
   resource_type: string;
   total_allocation: number;
 }
+}
   experiment_allocations: { experiment_id: string; allocation: number }[];
   allocation_strategy: string;
 }
 
+}
 }
 export interface TimelineCoordination {
   critical_path_experiments: string[];
@@ -1057,7 +1244,9 @@ export interface TimelineCoordination {
   resource_conflict_resolutions: ResourceConflictResolution[];
 }
 }
+}
 
+}
 }
 export interface MilestoneDependency {
   dependent_experiment: string;
@@ -1066,13 +1255,16 @@ export interface MilestoneDependency {
   buffer_time_days: number;
 }
 }
+}
 
+}
 }
 export interface ResourceConflictResolution {
   conflict_description: string;
   affected_experiments: string[];
   resolution_strategy: string;
   alternative_resources: string[];
+}
 }
 }
 

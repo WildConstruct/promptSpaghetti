@@ -1,6 +1,7 @@
 import React from 'react';
 import { professionalColors } from './styles/professional-design-system';
 
+}
 export interface NodeMeta {
   id: string;
   label: string;
@@ -8,12 +9,15 @@ export interface NodeMeta {
   category?: string;
   tooltip: string;
 }
+}
 
+}
 export interface PaletteProps {
   nodes: NodeMeta[];
   collapsed: boolean;
   onToggle: () => void;
   onDragStart?: (nodeId: string) => void;
+}
 }
 export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, onDragStart }) => {
   return (

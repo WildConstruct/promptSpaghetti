@@ -12,6 +12,7 @@ export type PolicyType = 'content_quality' | 'content_safety' | 'marketplace_sta
 export type PolicySeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
 export type PolicyCheckStatus = 'passed' | 'failed' | 'warning' | 'requires_review';
 
+}
 export interface PolicyCheckResult {
     checkId: string;
     policyType: PolicyType;
@@ -26,6 +27,7 @@ export interface PolicyCheckResult {
     timestamp: string;
     executionTimeMs: number;
 
+}
 export interface PolicyViolation {
     id: string;
     ruleId: string;
@@ -38,6 +40,7 @@ export interface PolicyViolation {
     location?: string;
     context?: Record<string, any>;
 
+}
 export interface PolicyCheckRequest {
     id: string;
     resourceType: 'content' | 'user' | 'template' | 'api_request' | 'system_config';
@@ -49,10 +52,12 @@ export interface PolicyCheckRequest {
         source: string;
         timestamp: string;
         metadata?: Record<string, any>;
+}
     };
     checksRequested?: PolicyType[];
     skipCache?: boolean;
 
+}
 export interface PolicyRule {
     id: string;
     name: string;
@@ -72,6 +77,7 @@ export interface PolicyRule {
     updatedAt: string;
     createdBy: string;
 
+}
 export interface RuleCondition {
     id: string;
     field: string;
@@ -79,11 +85,13 @@ export interface RuleCondition {
     value: any;
     caseSensitive?: boolean;
 
+}
 export interface RuleAction {
     id: string;
     type: 'block' | 'warn' | 'flag' | 'require_review' | 'auto_fix' | 'notify';
     parameters?: Record<string, any>;
 
+}
 export interface PolicyChecker {
     name: string;
     type: PolicyType;
@@ -107,6 +115,7 @@ export declare class PolicyCheckersService {
         data: Record<string, any>;
         author?: string;
         metadata?: Record<string, any>;
+}
     }): Promise<{
         isValid: boolean;
         overallScore: number;
@@ -129,7 +138,7 @@ export declare class PolicyCheckersService {
         totalCheckers: number;
         checksExecutedToday: number;
         averageExecutionTime: number;
-        topViolationTypes: Array<{,
+        topViolationTypes: Array<{
             type: string;
             count: number;
         }>;

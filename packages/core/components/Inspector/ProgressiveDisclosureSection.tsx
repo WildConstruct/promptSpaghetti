@@ -10,6 +10,7 @@ import {
   type FieldPriority
 } from '../VisualHierarchy/HierarchyDesignSystem';
 
+}
 export interface ProgressiveDisclosureSectionProps {
   title: string;
   level: 'basic' | 'advanced' | 'debug';
@@ -38,6 +39,7 @@ export interface ProgressiveDisclosureSectionProps {
   className = '',
   priority: explicitPriority,
   fieldName
+}
 }) => {
   const { 
     complexityLevel, 

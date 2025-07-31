@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useCorrectionsStore } from '../../correctionsStore';
 import { EditorFieldProps } from './BaseNodeEditor';
+}
 interface CorrectionSuggestion {
   id: string;
   ruleId: string;
@@ -35,6 +36,7 @@ interface CorrectionSuggestion {
   enableInlineCorrections = true,
   autoApplyCorrections = false,
   showCorrectionHighlights = true
+}
 }) => {
   const [localValue, setLocalValue] = useState(String(value ?? ''));
   const [isFocused, setIsFocused] = useState(false);

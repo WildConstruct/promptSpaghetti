@@ -12,6 +12,7 @@ import { globalConflictResolver } from './ConflictResolver';
 
 // Synchronization types
 
+}
 export interface SyncMessage {
   id: string;
   type: SyncMessageType;
@@ -22,6 +23,7 @@ export interface SyncMessage {
   sessionId: string;
   version: number;
   checksum?: string;
+}
 }
 export type SyncMessageType = 
   | 'STATE_CHANGE'
@@ -34,6 +36,7 @@ export type SyncMessageType =
   | 'CLIENT_LEAVE'
   | 'FORCE_SYNC';
 
+}
 export interface SyncClient {
   id: string;
   userId: string;
@@ -47,7 +50,9 @@ export interface SyncClient {
   userAgent?: string;
   ip?: string;
   location?: string;
+}
 };
+}
 }
 export interface SyncState {
   version: number;
@@ -56,6 +61,8 @@ export interface SyncState {
   conflictQueue: ConflictQueueItem;
   syncHistory: SyncHistoryEntry;
   lastFullSync: number;
+}
+}
 }
 export interface PendingChange {
   id: string;
@@ -68,6 +75,8 @@ export interface PendingChange {
   timeout: number;
   retryCount: number;
 }
+}
+}
 export interface ConflictQueueItem {
   id: string;
   conflictId: string;
@@ -77,6 +86,8 @@ export interface ConflictQueueItem {
   priority: number;
   timestamp: number;
 }
+}
+}
 export interface SyncHistoryEntry {
   timestamp: number;
   type: 'sync' | 'conflict' | 'error' | 'client_event';
@@ -84,6 +95,8 @@ export interface SyncHistoryEntry {
   domain?: string;
   message: string;
   metadata?: Record<string, any>;
+}
+}
 }
 export interface OptimisticUpdate {
   id: string;
@@ -93,6 +106,8 @@ export interface OptimisticUpdate {
   timestamp: number;
   confirmed: boolean;
   clientId: string;
+}
+}
 }
 export interface SyncConfiguration {
   batchInterval: number;
@@ -105,6 +120,7 @@ export interface SyncConfiguration {
   enableConflictResolution: boolean;
   syncQuality: 'fast' | 'reliable' | 'eventual';
   // Main state synchronizer class
+}
 }
 export class StateSynchronizer extends EventEmitter {
   private syncState: SyncState;
@@ -210,6 +226,7 @@ export class StateSynchronizer extends EventEmitter {
       await this.processBatch();
     this.emit('stateChangeBroadcast', { message, excludeClient });
   async handleRemoteStateChange(message: SyncMessage): Promise<void> {
+
     try {
       this.updateClientActivity(message.sessionId);
       const domain = this.domains.get(message.domain);
@@ -243,10 +260,11 @@ export class StateSynchronizer extends EventEmitter {
         error: error.message;
   });
   // Optimistic updates
-  async applyOptimisticUpdate(()
+  async applyOptimisticUpdate(((
     domain: string,
-    change: StateChange<any>,
+    change: StateChange<any>
   ): Promise<string> {
+
     if (!this.config.enableOptimisticUpdates) {
       throw new Error('Optimistic updates are disabled');
     const domainContainer = this.domains.get(domain);
@@ -287,11 +305,13 @@ export class StateSynchronizer extends EventEmitter {
     });
     return updateId;
   async confirmOptimisticUpdate(updateId: string): Promise<void> {
+
     const update = this.optimisticUpdates.get(updateId);
     if (update) {
       update.confirmed = true;
       this.addToHistory('sync', `Optimistic update ${updateId} confirmed`);}
   async rollbackOptimisticUpdate(updateId: string): Promise<void> {
+
     const update = this.optimisticUpdates.get(updateId);
     if (update && !update.confirmed) {
       update.rollbackFn();
@@ -300,6 +320,7 @@ export class StateSynchronizer extends EventEmitter {
       this.emit('optimisticUpdateRolledBack', { updateId, domain: update.domain });
   // Conflict detection and resolution
   private async detectConflict(message: SyncMessage): Promise<ConflictQueueItem | null> {
+
   const domain = message.domain;
   const remoteChange = message.payload.change;
   // Find pending local changes that might conflict
@@ -318,6 +339,7 @@ export class StateSynchronizer extends EventEmitter {
 };
     return null;
   private async handleConflict(conflict: ConflictQueueItem): Promise<void> {
+
     if (!this.config.enableConflictResolution) {
       console.warn('Conflict detected but resolution is disabled:', conflict.id);
       return;
@@ -359,6 +381,7 @@ export class StateSynchronizer extends EventEmitter {
   });
   // Batch processing
   private async processBatch(): Promise<void> {
+
     if (this.batchQueue.length === 0) return;
     const batch = this.batchQueue.splice(0, this.config.maxBatchSize);
     try {
@@ -378,17 +401,20 @@ export class StateSynchronizer extends EventEmitter {
       // Re-queue failed messages
       this.batchQueue.unshift(...batch);
   private async processDomainBatch(domain: string, messages: SyncMessage): Promise<void> {
+
     // Sort messages by timestamp to maintain order
     messages.sort((a, b) => a.timestamp - b.timestamp);
     for (const message of messages) {
       await this.broadcastMessage(message);
   // Message broadcasting (implementation depends on transport layer)
   private async broadcastMessage(message: SyncMessage): Promise<void> {
+
     // This would integrate with WebSocket server/client
     // For now, emit an event that can be handled by transport layer
     this.emit('broadcastMessage', message);
   // Full synchronization
   private async sendFullSyncToClient(clientId: string): Promise<void> {
+
     const client = this.syncState.clients.get(clientId);
     if (!client) return;
     try {
@@ -415,6 +441,7 @@ export class StateSynchronizer extends EventEmitter {
     } catch (error) {
       console.error(`Failed to send full sync to client ${clientId}:`, error);}
   async requestFullSync(): Promise<void> {
+
   const syncRequest: SyncMessage = {,
   id: this.generateMessageId(),
   type: 'SYNC_REQUEST',
@@ -536,6 +563,7 @@ export class StateSynchronizer extends EventEmitter {
 };
     this.syncState.pendingChanges.set(message.id, pending);
   private async sendAcknowledgment(message: SyncMessage): Promise<void> {
+
   const ackMessage: SyncMessage = {,
   id: this.generateMessageId(),
   type: 'SYNC_RESPONSE',
@@ -551,6 +579,7 @@ export class StateSynchronizer extends EventEmitter {
   };
     this.emit('sendAcknowledgment', { targetClient: message.sessionId, message: ackMessage });
   private async applyRemoteChange(domain: DomainStateContainer, message: SyncMessage): Promise<void> {
+
   const change = message.payload.change;
   // Apply the remote change
   await domain.applyExternalChange({)

@@ -9,6 +9,7 @@
 import { DataClassificationLevel, DataOperation } from '../types/DataClassification';
 import { AccessRequirement } from './DataClassificationAccessControl';
 
+}
 export interface PermissionHierarchy {
     levels: PermissionLevel[];
     inheritanceRules: PermissionInheritanceRule[];
@@ -17,6 +18,7 @@ export interface PermissionHierarchy {
     emergencyOverrides: EmergencyOverride[];
 
 
+}
 export interface PermissionLevel {
     id: string;
     name: string;
@@ -33,6 +35,7 @@ export interface PermissionLevel {
     metadata: PermissionLevelMetadata;
 
 
+}
 export interface OperationPermission {
     operation: DataOperation;
     allowed: boolean;
@@ -45,6 +48,7 @@ export interface OperationPermission {
     usageLimit?: number;
 
 
+}
 export interface PermissionCondition {
     type: 'CLASSIFICATION' | 'TIME' | 'LOCATION' | 'PURPOSE' | 'VOLUME' | 'FREQUENCY' | 'CONTEXT';
     operator: 'EQUALS' | 'IN' | 'NOT_IN' | 'GREATER_THAN' | 'LESS_THAN' | 'BETWEEN' | 'CONTAINS' | 'MATCHES';
@@ -53,6 +57,7 @@ export interface PermissionCondition {
     errorMessage?: string;
 
 
+}
 export interface TimeRestriction {
     type: 'BUSINESS_HOURS' | 'SPECIFIC_TIMES' | 'BLACKOUT_PERIODS' | 'MAINTENANCE_WINDOWS';
     configuration: TimeConfiguration;
@@ -60,6 +65,7 @@ export interface TimeRestriction {
     emergencyOverride: boolean;
 
 
+}
 export interface TimeConfiguration {
     startTime?: string;
     endTime?: string;
@@ -69,6 +75,7 @@ export interface TimeConfiguration {
     maintenanceWindows?: MaintenanceWindow[];
 
 
+}
 export interface MaintenanceWindow {
     start: Date;
     end: Date;
@@ -77,6 +84,7 @@ export interface MaintenanceWindow {
     allowedOperations: DataOperation[];
 
 
+}
 export interface TimeException {
     id: string;
     reason: string;
@@ -88,6 +96,7 @@ export interface TimeException {
     approvalRequired: boolean;
 
 
+}
 export interface ContextRequirement {
     type: 'DEVICE' | 'NETWORK' | 'APPLICATION' | 'USER_ATTRIBUTE' | 'ENVIRONMENTAL';
     specification: ContextSpecification;
@@ -95,6 +104,7 @@ export interface ContextRequirement {
     fallbackBehavior: 'DENY' | 'PROMPT' | 'DEGRADE' | 'AUDIT';
 
 
+}
 export interface ContextSpecification {
     attribute: string;
     expectedValue: any;
@@ -102,12 +112,14 @@ export interface ContextSpecification {
     tolerance?: number;
 
 
+}
 export interface ValidationRule {
     type: 'RANGE' | 'PATTERN' | 'ENUM' | 'CUSTOM';
     parameters: Record<string, any>;
     errorMessage: string;
 
 
+}
 export interface PermissionLevelMetadata {
     createdBy: string;
     createdAt: Date;
@@ -118,6 +130,7 @@ export interface PermissionLevelMetadata {
     usageStatistics: UsageStatistics;
 
 
+}
 export interface ComplianceInfo {
     frameworks: string[];
     requirements: string[];
@@ -126,6 +139,7 @@ export interface ComplianceInfo {
     certifications: string[];
 
 
+}
 export interface RiskAssessment {
     overallRisk: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     riskFactors: RiskFactor[];
@@ -134,6 +148,7 @@ export interface RiskAssessment {
     assessedBy: string;
 
 
+}
 export interface RiskFactor {
     type: string;
     description: string;
@@ -142,6 +157,7 @@ export interface RiskFactor {
     mitigation?: string;
 
 
+}
 export interface Mitigation {
     id: string;
     description: string;
@@ -150,6 +166,7 @@ export interface Mitigation {
     verificationRequired: boolean;
 
 
+}
 export interface UsageStatistics {
     totalGrants: number;
     activeUsers: number;
@@ -159,6 +176,7 @@ export interface UsageStatistics {
     peakUsageHours: number[];
 
 
+}
 export interface PermissionInheritanceRule {
     id: string;
     parentLevel: string;
@@ -170,6 +188,7 @@ export interface PermissionInheritanceRule {
     requiresApproval: boolean;
 
 
+}
 export interface InheritanceCondition {
     type: 'USER_ATTRIBUTE' | 'ORGANIZATIONAL' | 'TEMPORAL' | 'CONTEXTUAL';
     attribute: string;
@@ -178,6 +197,7 @@ export interface InheritanceCondition {
     weight: number;
 
 
+}
 export interface InheritanceRestriction {
     type: 'DOWNGRADE' | 'TIME_LIMIT' | 'USAGE_LIMIT' | 'CONTEXT_LIMIT';
     specification: RestrictionSpecification;
@@ -185,12 +205,14 @@ export interface InheritanceRestriction {
     overridable: boolean;
 
 
+}
 export interface RestrictionSpecification {
     parameters: Record<string, any>;
     validation: ValidationRule[];
     monitoring: MonitoringRequirement[];
 
 
+}
 export interface MonitoringRequirement {
     type: 'USAGE' | 'VIOLATIONS' | 'PERFORMANCE' | 'COMPLIANCE';
     frequency: 'REALTIME' | 'HOURLY' | 'DAILY' | 'WEEKLY' | 'MONTHLY';
@@ -198,6 +220,7 @@ export interface MonitoringRequirement {
     alerting: AlertingConfiguration;
 
 
+}
 export interface MonitoringThreshold {
     metric: string;
     warning: number;
@@ -205,6 +228,7 @@ export interface MonitoringThreshold {
     action: 'LOG' | 'ALERT' | 'RESTRICT' | 'REVOKE';
 
 
+}
 export interface AlertingConfiguration {
     enabled: boolean;
     channels: string[];
@@ -212,12 +236,14 @@ export interface AlertingConfiguration {
     suppressionRules: SuppressionRule[];
 
 
+}
 export interface EscalationConfiguration {
     levels: EscalationLevel[];
     timeouts: number[];
     autoEscalate: boolean;
 
 
+}
 export interface EscalationLevel {
     name: string;
     recipients: string[];
@@ -225,12 +251,14 @@ export interface EscalationLevel {
     timeout: number;
 
 
+}
 export interface SuppressionRule {
     condition: string;
     duration: number;
     reason: string;
 
 
+}
 export interface EscalationPath {
     id: string;
     name: string;
@@ -241,6 +269,7 @@ export interface EscalationPath {
     fallbackActions: FallbackAction[];
 
 
+}
 export interface EscalationTrigger {
     type: 'PERMISSION_DENIED' | 'VIOLATION_DETECTED' | 'THRESHOLD_EXCEEDED' | 'MANUAL_REQUEST';
     conditions: TriggerCondition[];
@@ -248,6 +277,7 @@ export interface EscalationTrigger {
     automatic: boolean;
 
 
+}
 export interface TriggerCondition {
     attribute: string;
     operator: string;
@@ -255,6 +285,7 @@ export interface TriggerCondition {
     weight: number;
 
 
+}
 export interface EscalationStep {
     id: string;
     order: number;
@@ -267,6 +298,7 @@ export interface EscalationStep {
     conditions: StepCondition[];
 
 
+}
 export interface ApproverSpecification {
     type: 'USER' | 'ROLE' | 'GROUP' | 'DYNAMIC';
     specification: Record<string, any>;
@@ -274,6 +306,7 @@ export interface ApproverSpecification {
     required: boolean;
 
 
+}
 export interface StepAction {
     type: 'NOTIFICATION' | 'AUDIT' | 'PERMISSION_GRANT' | 'RESTRICTION' | 'MONITORING';
     configuration: ActionConfiguration;
@@ -281,6 +314,7 @@ export interface StepAction {
     rollbackable: boolean;
 
 
+}
 export interface ActionConfiguration {
     parameters: Record<string, any>;
     validation: ValidationRule[];
@@ -288,6 +322,7 @@ export interface ActionConfiguration {
     retries?: number;
 
 
+}
 export interface StepCondition {
     attribute: string;
     operator: string;
@@ -295,6 +330,7 @@ export interface StepCondition {
     required: boolean;
 
 
+}
 export interface EscalationTimeout {
     step: string;
     timeout: number;
@@ -302,6 +338,7 @@ export interface EscalationTimeout {
     notification: boolean;
 
 
+}
 export interface FallbackAction {
     condition: string;
     action: 'DENY' | 'APPROVE' | 'DEFER' | 'EMERGENCY_OVERRIDE';
@@ -309,6 +346,7 @@ export interface FallbackAction {
     auditRequired: boolean;
 
 
+}
 export interface DelegationRule {
     id: string;
     name: string;
@@ -324,6 +362,7 @@ export interface DelegationRule {
     auditRequired: boolean;
 
 
+}
 export interface DelegationCondition {
     type: 'TEMPORAL' | 'CONTEXTUAL' | 'APPROVAL' | 'JUSTIFICATION';
     specification: Record<string, any>;
@@ -331,6 +370,7 @@ export interface DelegationCondition {
     validation: ValidationRule[];
 
 
+}
 export interface DelegationRestriction {
     type: 'SCOPE' | 'TIME' | 'USAGE' | 'CONTEXT' | 'MONITORING';
     specification: Record<string, any>;
@@ -338,6 +378,7 @@ export interface DelegationRestriction {
     overridable: boolean;
 
 
+}
 export interface EmergencyOverride {
     id: string;
     name: string;
@@ -350,6 +391,7 @@ export interface EmergencyOverride {
     postEmergencyActions: PostEmergencyAction[];
 
 
+}
 export interface EmergencyTrigger {
     type: 'SYSTEM_FAILURE' | 'SECURITY_INCIDENT' | 'BUSINESS_CRITICAL' | 'REGULATORY_DEADLINE' | 'MANUAL';
     conditions: TriggerCondition[];
@@ -357,6 +399,7 @@ export interface EmergencyTrigger {
     autoTrigger: boolean;
 
 
+}
 export interface PostEmergencyAction {
     type: 'REVIEW' | 'REVOKE' | 'AUDIT' | 'NOTIFICATION' | 'DOCUMENTATION';
     delay: number;
@@ -373,3 +416,4 @@ export
  */
 default PermissionHierarchy;
 //# sourceMappingURL=DataPermissionHierarchy.d.ts.map
+}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { User, Crown, Shield } from 'lucide-react';
+}
 interface MentionUser {
   id: string;
   name: string;
@@ -19,6 +20,7 @@ interface MentionUser {
   onSelect,
   onClose,
   maxResults = 10
+}
 }) => {
   const [users, setUsers] = useState<MentionUser>([]);
   const [loading, setLoading] = useState(false);

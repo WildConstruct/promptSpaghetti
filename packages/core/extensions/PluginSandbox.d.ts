@@ -8,6 +8,7 @@
  */
 import { ExtensionManifest } from './ExtensionLifecycleManager';
 
+}
 export interface SandboxOptions {
     timeout: number;
     memoryLimit: number;
@@ -19,6 +20,7 @@ export interface SandboxOptions {
     maxCallStack: number;
     contextName: string;
 
+}
 export interface ResourceUsage {
     memoryUsed: number;
     executionTime: number;
@@ -26,10 +28,12 @@ export interface ResourceUsage {
     fileOperations: number;
     networkRequests: number;
 
+}
 export interface SandboxContext {
     require: (id: string) => any;
     module: {
         exports: any;
+}
     };
     exports: any;
     __filename: string;

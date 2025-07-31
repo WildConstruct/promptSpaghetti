@@ -21,6 +21,7 @@ import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 export interface ReputationIntegrationConfig {
   enabled: boolean;
   enableRealtimeCalculation: boolean;
@@ -45,6 +46,7 @@ export interface ReputationIntegrationConfig {
     suddenDropThreshold: number;
     fraudRiskThreshold: number;
     disputeRateThreshold: number;
+}
 }
   };
   

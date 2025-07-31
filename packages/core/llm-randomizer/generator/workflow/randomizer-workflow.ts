@@ -7,11 +7,14 @@ import { parseGraph, ParserResult } from '../../parser';
 import { serializeGraph, validateFormat } from '../../serialization';
 import { Graph } from '../../../graphSchema';
 
+}
 export interface WorkflowOptions {
   onProgress?: (message: string, progress?: number) => void;
   validateIntermediateSteps?: boolean;
   includeDebugInfo?: boolean;
   timeoutMs?: number;
+}
+}
 }
 export interface WorkflowResult {
   success: boolean;
@@ -27,6 +30,7 @@ export interface WorkflowResult {
   parsingTime: number;
   serializationTime: number;
   totalTime: number;
+}
 };
   debugInfo?: {
   originalRequest: RandomizerParameters;
@@ -36,11 +40,14 @@ export interface WorkflowResult {
   validationResult: any;
 };
 }
+}
 export interface WorkflowError {
   stage: 'preparation' | 'llm' | 'parsing' | 'validation' | 'serialization';
   type: string;
   message: string;
   details?: any;
+}
+}
 }
 export interface WorkflowWarning {
   stage: string;
@@ -50,14 +57,16 @@ export interface WorkflowWarning {
   * Complete randomizer workflow that orchestrates all Epic 12 components
   */
 }
+}
 export class RandomizerWorkflow {
   /**
    * Generate a graph using the complete workflow
    */
-  async generateGraph(()
+  async generateGraph(((
     parameters: RandomizerParameters,
     options: WorkflowOptions = {}
   ): Promise<WorkflowResult> {
+
   const startTime = Date.now();
   const result: WorkflowResult = {,
   success: false,
@@ -225,6 +234,7 @@ export class RandomizerWorkflow {
   attempts: number;
   metadata?: any;
 }> {
+
     let attempts = 0;
     const maxAttempts = parameters.maxRetries;
     while (attempts < maxAttempts) {
@@ -276,9 +286,9 @@ export class RandomizerWorkflow {
   /**
    * Validate generated graph against parameters
    */
-  private validateGeneratedGraph(()
+  private validateGeneratedGraph(((
     graph: Graph,
-    parameters: RandomizerParameters,
+    parameters: RandomizerParameters
   ): {
     errors: Array<{ type: string; message: string }>;
     warnings: Array<{ message: string; suggestion?: string }>;
@@ -334,10 +344,11 @@ export class RandomizerWorkflow {
   /**
    * Generate multiple variations with different parameters
    */
-  async generateVariations(baseParameters: RandomizerParameters)
+  async generateVariations(baseParameters: RandomizerParameters(
     variationCount: number = 3,
     options: WorkflowOptions = {}
   ): Promise<WorkflowResult> {
+
     const variations = this.createParameterVariations(baseParameters, variationCount);
     const results = await Promise.all(;);
       variations.map((params, index) =>
@@ -351,9 +362,9 @@ export class RandomizerWorkflow {
   /**
    * Create parameter variations for multiple generations
    */
-  private createParameterVariations(()
+  private createParameterVariations(((
     base: RandomizerParameters,
-    count: number,
+    count: number
   ): RandomizerParameters {
     const variations: RandomizerParameters = [];
     for (let i = 0; i < count; i++) {

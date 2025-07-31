@@ -20,6 +20,7 @@ import {
 
 // Enhanced classification types
 
+}
 export interface MLClassificationModel {
   id: string;
   name: string;
@@ -33,6 +34,8 @@ export interface MLClassificationModel {
   categories: DataCategory;
   features: string;
 }
+}
+}
 export interface ClassificationWorkflow {
   id: string;
   name: string;
@@ -43,38 +46,48 @@ export interface ClassificationWorkflow {
   enabled: boolean;
   priority: number;
 }
+}
+}
 export interface WorkflowTrigger {
   type: 'classification_complete' | 'threshold_exceeded' | 'compliance_violation' | 'manual_review_required';
   conditions: Record<string, any>;
+}
+}
 }
 export interface WorkflowAction {
   type: 'notify' | 'encrypt' | 'quarantine' | 'audit_log' | 'escalate' | 'auto_remediate';
   parameters: Record<string, any>;
   timeout: number;
 }
+}
+}
 export interface WorkflowCondition {
   field: string;
   operator: 'equals' | 'greater_than' | 'less_than' | 'contains' | 'matches';
   value: any;
   logic: 'AND' | 'OR'
+}
   }
+}
 export interface ClassificationAnalytics {
   totalClassifications: number;
   classificationsByLevel: Record<ClassificationLevel, number>;
   classificationsByCategory: Record<DataCategory, number>;
   complianceViolations: number;
   averageConfidence: number;
-  topRiskPatterns: Array<{,
+  topRiskPatterns: Array<{
   pattern: string;
   count: number;
   riskScore: number;
+}
 }>;
-  temporalTrends: Array<{,
+  temporalTrends: Array<{
   timestamp: Date;
   count: number;
   avgConfidence: number;
 }>;
   lastUpdated: Date;
+}
 }
 export interface DataFlow {
   id: string;
@@ -86,7 +99,9 @@ export interface DataFlow {
   lastClassified: Date;
   riskScore: number;
   complianceStatus: 'compliant' | 'violation' | 'unknown'
+}
   }
+}
 export interface ClassificationContext {
   source: string;
   purpose: string;
@@ -95,6 +110,7 @@ export interface ClassificationContext {
   role: string;
   department: string;
   clearanceLevel: string;
+}
 };
   environmentContext: {
   system: string;
@@ -105,14 +121,15 @@ export interface ClassificationContext {
   dataFlow?: DataFlow;
   parentClassification?: string;
 }
+}
 export interface EnhancedClassificationResult extends ClassificationResult {
-  mlPredictions: Array<{,
+  mlPredictions: Array<{
   model: string;
   prediction: ClassificationLevel;
   confidence: number;
   features: Record<string, number>;
 }>;
-  contextualFactors: Array<{,
+  contextualFactors: Array<{
   factor: string;
   impact: number;
   description: string;
@@ -149,8 +166,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
   /**
   * Enhanced classification with ML and context awareness
   */
-  public async classifyWithContext(()
-  data: DataElement,
+  public async classifyWithContext((data: DataElement,
   context: ClassificationContext): Promise<EnhancedClassificationResult> {,
   const startTime = Date.now();
   try {
@@ -205,9 +221,9 @@ export class AdvancedClassificationEngine extends EventEmitter {
   /**
    * Real-time stream classification
    */
-  public async classifyStream(()
+  public async classifyStream(((
     dataStream: AsyncIterable<DataElement>,
-    context: ClassificationContext,
+    context: ClassificationContext
   ): Promise<AsyncGenerator<EnhancedClassificationResult>> {
   const results = this.classifyStreamInternal(dataStream, context);
   this.emit('streamClassificationStarted', {)
@@ -215,9 +231,9 @@ export class AdvancedClassificationEngine extends EventEmitter {
   timestamp: new Date(),
 });
     return results;
-  private async *classifyStreamInternal(()
+  private async *classifyStreamInternal(((
     dataStream: AsyncIterable<DataElement>,
-    context: ClassificationContext,
+    context: ClassificationContext
   ): AsyncGenerator<EnhancedClassificationResult> {
   let processedCount = 0;
   const batchResults: EnhancedClassificationResult = [];
@@ -257,9 +273,9 @@ export class AdvancedClassificationEngine extends EventEmitter {
   /**
    * Train ML model with new data
    */
-  public async trainMLModel()
+  public async trainMLModel(
     modelId: string,
-    trainingData: Array<{,
+    trainingData: Array<{
   data: DataElement;
   expectedClassification: ClassificationLevel;
   context?: ClassificationContext;
@@ -301,7 +317,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
   /**
    * Execute workflow manually
    */
-  public async executeWorkflow()
+  public async executeWorkflow(
     workflowId: string,
     result: EnhancedClassificationResult,
     context: ClassificationContext): Promise<void> {,
@@ -340,7 +356,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
   /**
    * Get compliance report
    */
-  public generateComplianceReport(()
+  public generateComplianceReport(((
     framework: ComplianceFramework,
     dateRange: { start: Date; end: Date }
   ): {
@@ -348,7 +364,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
   period: { start: Date; end: Date };
     totalClassifications: number;
   compliantClassifications: number;
-    violations: Array<{,
+    violations: Array<{
   dataId: string;
   violation: string;
   severity: string;
@@ -370,10 +386,11 @@ export class AdvancedClassificationEngine extends EventEmitter {
   ]
 };
   // Private methods
-  private async applyMLModels(()
+  private async applyMLModels(((
     data: DataElement,
-    context: ClassificationContext,
+    context: ClassificationContext
   ): Promise<EnhancedClassificationResult['mlPredictions']> {
+
   const predictions: EnhancedClassificationResult['mlPredictions'] = [];
   for (const [modelId, model] of this.mlModels) {
   if (!model.enabled) continue;
@@ -516,10 +533,11 @@ export class AdvancedClassificationEngine extends EventEmitter {
   automated: true,
 });
     return actions;
-  private async triggerWorkflows(()
+  private async triggerWorkflows(((
     result: EnhancedClassificationResult,
-    context: ClassificationContext,
+    context: ClassificationContext
   ): Promise<string> {
+
   const triggeredWorkflows: string = [];
   for (const [workflowId, workflow] of this.workflows) {
   if (!workflow.enabled) continue;
@@ -721,6 +739,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
     features: Record<string,
     number>
   ): Promise<{ classification: ClassificationLevel; confidence: number }> {
+
   // Simulate ML prediction
   const randomValue = Math.random();
   // Simple heuristic-based prediction for demo

@@ -3,6 +3,7 @@ import React from 'react';
  * Node category metadata
  */
 
+}
 export interface NodeCategory {
     id: string;
     name: string;
@@ -10,6 +11,7 @@ export interface NodeCategory {
     icon: React.ComponentType<{,
         size?: number;
         color?: string;
+}
     }>;
     color: string;
     order: number;
@@ -64,6 +66,7 @@ export declare function getCategoryColor(categoryId: string, opacity?: number): 
  * Category filter options
  */
 
+}
 export interface CategoryFilterOptions {
     difficulty?: 'beginner' | 'intermediate' | 'advanced';
     usage?: 'common' | 'specialized' | 'experimental';
@@ -73,3 +76,4 @@ export interface CategoryFilterOptions {
  */
 export declare function filterCategories(options: CategoryFilterOptions): NodeCategory[];
 //# sourceMappingURL=NodeCategory.d.ts.map
+}

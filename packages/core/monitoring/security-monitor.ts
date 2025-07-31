@@ -37,6 +37,7 @@ export enum SecurityEventType {
   sanitized?: string;
   size: number;
   type: string;
+}
 };
   analysis: {
   riskScore: number;
@@ -54,14 +55,17 @@ export enum SecurityEventType {
 
 // Alert configuration
 }
+}
 export interface AlertConfig {
   enabled: boolean;
   severityThreshold: SecurityEventSeverity;
   rateThreshold: {
   events: number;
   timeWindowMs: number;
+}
 };
   channels: AlertChannel;
+}
 }
 export interface AlertChannel {
   type: 'webhook' | 'email' | 'slack' | 'console';
@@ -69,11 +73,14 @@ export interface AlertChannel {
   enabled: boolean;
   // Monitoring statistics
 }
+}
+}
 export interface SecurityMonitoringStats {
   totalEvents: number;
   eventsByType: Record<SecurityEventType, number>;
   eventsBySeverity: Record<SecurityEventSeverity, number>;
   averageRiskScore: number;
+}
   topThreats: Array<{ threat: string; count: number }>;
   timeRange: {
   start: Date;
@@ -164,7 +171,7 @@ export class SecurityEventMonitor extends EventEmitter {
     analysis: SecurityAnalysisResult,
     context?: Partial<SecurityEvent['context']>
   ): SecurityEvent {
-    const severity = analysis.riskScore > 0.8 ? SecurityEventSeverity.HIGH :;
+    const severity = analysis.riskScore > 0.8 ? SecurityEventSeverity.HIGH :
                     analysis.riskScore > 0.5 ? SecurityEventSeverity.MEDIUM :
                     SecurityEventSeverity.LOW;
     return this.recordEvent()
@@ -216,7 +223,7 @@ export class SecurityEventMonitor extends EventEmitter {
   threatsDetected: [description],
   confidence: 0.7,
 };
-    const severity = riskScore > 0.8 ? SecurityEventSeverity.HIGH :;
+    const severity = riskScore > 0.8 ? SecurityEventSeverity.HIGH :
                     riskScore > 0.5 ? SecurityEventSeverity.MEDIUM :
                     SecurityEventSeverity.LOW;
     return this.recordEvent()
@@ -362,6 +369,7 @@ export class SecurityEventMonitor extends EventEmitter {
 };
     return severityLevels[event.severity] >= severityLevels[this.alertConfig.severityThreshold];
   private async triggerAlert(event: SecurityEvent): Promise<void> {
+
     const alertPromises = this.alertConfig.channels;
       .filter(channel => channel.enabled)
       .map(channel => this.sendAlert(channel, event));
@@ -371,6 +379,7 @@ export class SecurityEventMonitor extends EventEmitter {
     } catch (error) {
       this.emit('alertError', error, event);
   private async sendAlert(channel: AlertChannel, event: SecurityEvent): Promise<void> {
+
     switch (channel.type) {
       case 'console':
         console.warn(`🚨 Security Alert [${event.severity.toUpperCase()}]:`, {},}

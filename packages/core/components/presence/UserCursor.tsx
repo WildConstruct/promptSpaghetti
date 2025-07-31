@@ -1,5 +1,6 @@
 import React from 'react';
 
+}
 export interface UserCursorProps {
   userId: string;
   userName?: string;
@@ -12,6 +13,7 @@ export interface UserCursorProps {
   isFollowing?: boolean;
   nodeId?: string;
   className?: string;
+}
 }
 export const UserCursor: React.FC<UserCursorProps> = ({)
   userId,
@@ -85,8 +87,9 @@ export const UserCursor: React.FC<UserCursorProps> = ({)
   );
 };
 
+}
 export interface UserCursorOverlayProps {
-  cursors: Array<{,
+  cursors: Array<{
   userId: string;
   userName?: string;
   userAvatar?: string;
@@ -94,6 +97,7 @@ export interface UserCursorOverlayProps {
   y: number;
   nodeId?: string;
   visible?: boolean;
+}
 }>;
   followingUserId?: string;
   showLabels?: boolean;
@@ -128,6 +132,7 @@ export const UserCursorOverlay: React.FC<UserCursorOverlayProps> = ({)
 
 // Selection highlight component
 
+}
 export interface UserSelectionProps {
   userId: string;
   userName?: string;
@@ -135,6 +140,7 @@ export interface UserSelectionProps {
   color?: string;
   opacity?: number;
   showLabel?: boolean;
+}
 }
 export const UserSelection: React.FC<UserSelectionProps> = ({)
   userId,
@@ -183,11 +189,13 @@ export const UserSelection: React.FC<UserSelectionProps> = ({)
 
 // Typing indicator
 
+}
 export interface TypingIndicatorProps {
-  users: Array<{,
+  users: Array<{
   userId: string;
   userName?: string;
   nodeId?: string;
+}
 }>;
   className?: string;
 }

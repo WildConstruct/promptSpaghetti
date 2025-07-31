@@ -5,6 +5,7 @@
 import React from 'react';
 import { Experiment, ExperimentVariant } from '../../types/experiment';
 
+}
 export interface ExperimentBuilderProps {
     experiment?: Experiment;
     onSave: (experiment: Partial<Experiment>) => Promise<void>;
@@ -12,6 +13,7 @@ export interface ExperimentBuilderProps {
         cost: number;
         tokens: number;
         latency: number;
+}
     }>;
     onStart: (experimentId: string) => Promise<void>;
     onPause: (experimentId: string) => Promise<void>;

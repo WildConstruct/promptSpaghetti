@@ -8,6 +8,7 @@
 import React, { useState } from 'react';
 import { CaseStudy, CaseStudyType, IndustryCategory } from '../../models/CaseStudyDataModel';
 
+}
 export interface CaseStudyCardProps {
   caseStudy: CaseStudy;
   variant?: 'compact' | 'standard' | 'featured';
@@ -21,6 +22,7 @@ export interface CaseStudyCardProps {
   onLike?: (caseStudyId: string) => void;
   onShare?: (caseStudy: CaseStudy) => void;
   className?: string;
+}
 }
 export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({)
   caseStudy,

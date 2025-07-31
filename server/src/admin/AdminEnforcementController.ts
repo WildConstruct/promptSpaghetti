@@ -14,6 +14,7 @@ import { AutomatedEnforcementService } from '../services/trust/AutomatedEnforcem
 import { TrustScoreService } from '../services/trust/TrustScoreService';
 
 }
+}
 export interface PolicyTemplateCreateRequest {
   name: string;
   description: string;
@@ -22,7 +23,9 @@ export interface PolicyTemplateCreateRequest {
   defaultConfig: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 export interface ViolationReviewRequest {
   decision: 'dismiss' | 'enforce';
@@ -32,9 +35,11 @@ export interface ViolationReviewRequest {
     severity?: 'low' | 'medium' | 'high' | 'critical';
     expiresAt?: string;
 }
+}
   };
 }
 
+}
 }
 export interface EnforcementRequestCreate {
   entityType: 'user' | 'template' | 'transaction';
@@ -46,11 +51,14 @@ export interface EnforcementRequestCreate {
   expiresAt?: string;
 }
 }
+}
 
+}
 }
 export interface EnforcementRequestProcess {
   decision: 'approve' | 'reject';
   rejectionReason?: string;
+}
 }
 }
 

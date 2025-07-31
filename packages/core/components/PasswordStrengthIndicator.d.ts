@@ -10,6 +10,7 @@ import {
   PasswordValidationContext
 } from '../auth/PasswordComplexityValidator';
 
+}
 export interface PasswordStrengthIndicatorProps {
     password: string;
     context?: PasswordValidationContext;
@@ -25,6 +26,7 @@ export interface PasswordStrengthIndicatorProps {
     debounceMs?: number;
 
 
+}
 export interface PasswordStrengthDisplayProps {
     result: PasswordValidationResult;
     showDetails: boolean;
@@ -47,6 +49,7 @@ export declare const usePasswordStrength: ()
     strength: "strong" | "weak" | "good" | "very-weak" | "fair" | "very-strong";
     suggestions: string[];
     errors: string[];
+}
 };
 export type { PasswordStrengthIndicatorProps, PasswordStrengthDisplayProps };
 export default PasswordStrengthIndicator;

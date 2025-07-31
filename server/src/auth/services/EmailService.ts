@@ -5,13 +5,16 @@ import { AuthConfig } from '../types';
 import { EMAIL_TEMPLATES } from '../config';
 
 }
+}
 export interface EmailTemplate {
   subject: string;
   html: string;
   text?: string;
 }
 }
+}
 
+}
 }
 export interface EmailContext {
   displayName?: string;
@@ -19,6 +22,7 @@ export interface EmailContext {
   userAgent?: string;
   deviceInfo?: string;
   timestamp?: Date;
+}
 }
 }
 

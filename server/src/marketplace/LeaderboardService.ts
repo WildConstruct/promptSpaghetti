@@ -15,6 +15,7 @@ import { BadgeSystem } from '../../../packages/core/gamification/BadgeSystem';
 // =============================================================================
 
 }
+}
 export interface LeaderboardEntry {
   id: string;
   name: string;
@@ -25,7 +26,9 @@ export interface LeaderboardEntry {
   lastUpdated: Date;
 }
 }
+}
 
+}
 }
 export interface TemplateLeaderboardEntry extends LeaderboardEntry {
   templateId: string;
@@ -41,6 +44,7 @@ export interface TemplateLeaderboardEntry extends LeaderboardEntry {
 }
 
 }
+}
 export interface CreatorLeaderboardEntry extends LeaderboardEntry {
   creatorId: string;
   displayName: string;
@@ -53,6 +57,7 @@ export interface CreatorLeaderboardEntry extends LeaderboardEntry {
   joinedAt: Date;
 }
 
+}
 }
 export interface CategoryLeaderboardEntry extends LeaderboardEntry {
   categoryId: string;
@@ -70,6 +75,7 @@ export interface CategoryLeaderboardEntry extends LeaderboardEntry {
 }
 
 }
+}
 export interface UserEngagementEntry extends LeaderboardEntry {
   userId: string;
   userName: string;
@@ -83,6 +89,7 @@ export interface UserEngagementEntry extends LeaderboardEntry {
 }
 
 }
+}
 export interface LeaderboardQuery {
   type: 'templates' | 'creators' | 'categories' | 'engagement';
   metric: string;
@@ -93,7 +100,9 @@ export interface LeaderboardQuery {
   includeHistory?: boolean;
 }
 }
+}
 
+}
 }
 export interface LeaderboardResponse {
   success: boolean;
@@ -106,6 +115,7 @@ export interface LeaderboardResponse {
     topScore: number;
     totalParticipants: number;
     updateFrequency: string;
+}
 }
   };
 }

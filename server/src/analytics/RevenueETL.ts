@@ -41,6 +41,7 @@ export enum ETLJobStatus {
 
 // ETL Job Configuration
 }
+}
 export interface ETLJobConfig {
   id: string;
   type: ETLJobType;
@@ -60,8 +61,10 @@ export interface ETLJobConfig {
   max_retries: number;
 }
 }
+}
 
 // Revenue Fact Table Schema
+}
 }
 export interface RevenueFact {
   id: string;
@@ -116,6 +119,7 @@ export interface RevenueFact {
   
   created_at: Date;
   updated_at: Date;
+}
 }
 }
 

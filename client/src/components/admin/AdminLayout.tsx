@@ -25,6 +25,7 @@ import {
   createEmptyAlertCount,
   AlertCount
 } from './AlertIndicators';
+}
 interface AdminLayoutProps {
   children: React.ReactNode;,
   currentSection: string;
@@ -36,6 +37,7 @@ interface AdminLayoutProps {
   icon: ToggleLeft,
   description: 'Manage feature flags and rollouts',
   requiredRoles: ['admin', 'administrator', 'feature-admin'],
+}
 }
   {
   id: 'users',

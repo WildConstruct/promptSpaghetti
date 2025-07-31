@@ -9,6 +9,7 @@ import { WeightControlOption } from '../Inspector/WeightControlSlider';
 
 export type ChartType = 'pie' | 'bar' | 'donut';
 
+}
 export interface WeightDistributionChartProps {
   options: WeightControlOption;
   type?: ChartType;
@@ -39,6 +40,7 @@ export interface WeightDistributionChartProps {
   '#4169e1', '#00ced1', '#32cd32', '#20b2aa', '#4682b4',
   '#6495ed', '#00bfff', '#1e90ff', '#87ceeb', '#87cefa'
   ]
+}
 } as const;
 }
 export const WeightDistributionChart: React.FC<WeightDistributionChartProps> = ({)

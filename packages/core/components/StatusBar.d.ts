@@ -4,6 +4,7 @@ import { EncryptionState } from './EncryptionStatus';
 import { ConnectionState } from '../websocket/WebSocketClient';
 import { RecentProjectEntry } from '../managers/RecentProjectsManager';
 
+}
 interface StatusBarProps {
     statusMessage: string;
     errors: ValidationError[];
@@ -38,5 +39,6 @@ interface StatusBarProps {
     onBrowseTemplates?: () => void;
 
 export declare const StatusBar: React.FC<StatusBarProps>;
+}
 export {};
 //# sourceMappingURL=StatusBar.d.ts.map

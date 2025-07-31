@@ -10,6 +10,7 @@ import { EnhancedSessionService, Session } from './EnhancedSessionService';
 import { RemoteSessionTerminationService } from './RemoteSessionTerminationService';
 
 }
+}
 export interface ConcurrentSessionPolicy {
   id: string;
   name: string;
@@ -25,6 +26,7 @@ export interface ConcurrentSessionPolicy {
     sessionTypes?: string[];
     deviceTypes?: string[];
     environments?: string[];
+}
 }
   };
   
@@ -84,6 +86,7 @@ export interface ConcurrentSessionPolicy {
 }
 
 }
+}
 export interface SessionConflict {
   id: string;
   userId: string;
@@ -96,6 +99,7 @@ export interface SessionConflict {
     description: string;
     currentSessionCount: number;
     allowedSessionCount: number;
+}
 }
   };
   
@@ -132,6 +136,7 @@ export interface SessionConflict {
 }
 
 }
+}
 export interface SessionPolicyViolation {
   id: string;
   userId: string;
@@ -145,6 +150,7 @@ export interface SessionPolicyViolation {
     policyConstraints: any;
     actionTaken: string;
     success: boolean;
+}
 }
   };
   
@@ -163,8 +169,10 @@ export interface SessionPolicyViolation {
 }
 
 }
+}
 export interface PolicyStatistics {
   policyId: string;
+}
 }
   timeRange: { start: Date; end: Date };
   

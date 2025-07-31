@@ -18,11 +18,13 @@ import {
   FallbackBehavior
 } from './AdaptiveRateLimitingIntegration';
 
+}
 export interface UnifiedSecurityConfig {
     rateLimiting: {
         enabled: boolean;
         strictMode: boolean;
         customEndpoints?: Record<string, any>;
+}
     };
     throttling: {
         enabled: boolean;

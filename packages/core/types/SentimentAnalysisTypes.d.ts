@@ -1793,6 +1793,7 @@ export declare export declare export declare export interface SentimentSystemCon
         maxBatchSize: number;
         processingIntervalMs: number;
         retryAttempts: number;
+}
     };
 
 export { SentimentAnalysisSchema, SentimentAnalyticsSchema, SentimentAnalysisConfigSchema, AnalyzeSentimentRequestSchema, SentimentAnalysisResponseSchema };

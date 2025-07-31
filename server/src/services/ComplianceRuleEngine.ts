@@ -12,6 +12,7 @@
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 export interface ComplianceRule {
   ruleId: string;
   name: string;
@@ -35,7 +36,9 @@ export interface ComplianceRule {
   compliance: RuleCompliance;
 }
 }
+}
 
+}
 }
 export interface RuleScope {
   scopeId: string;
@@ -49,7 +52,9 @@ export interface RuleScope {
   exceptions: ScopeException[];
 }
 }
+}
 
+}
 }
 export interface ScopeApplicability {
   universal: boolean;
@@ -59,7 +64,9 @@ export interface ScopeApplicability {
   exemptions: ScopeExemption[];
 }
 }
+}
 
+}
 }
 export interface ApplicabilityCondition {
   conditionId: string;
@@ -71,7 +78,9 @@ export interface ApplicabilityCondition {
   required: boolean;
 }
 }
+}
 
+}
 }
 export interface ApplicabilityTrigger {
   triggerId: string;
@@ -82,7 +91,9 @@ export interface ApplicabilityTrigger {
   actions: TriggerAction[];
 }
 }
+}
 
+}
 }
 export interface DataTypeScope {
   dataTypeId: string;
@@ -101,7 +112,9 @@ export interface DataTypeScope {
   archivalData: boolean;
 }
 }
+}
 
+}
 }
 export interface ProcessingActivityScope {
   activityId: string;
@@ -119,7 +132,9 @@ export interface ProcessingActivityScope {
   statisticalUse: boolean;
 }
 }
+}
 
+}
 }
 export interface GeographicScope {
   countries: string[];
@@ -130,7 +145,9 @@ export interface GeographicScope {
   localizations: LocalizationRequirement[];
 }
 }
+}
 
+}
 }
 export interface OrganizationalScope {
   departments: string[];
@@ -143,7 +160,9 @@ export interface OrganizationalScope {
   jointControllers: string[];
 }
 }
+}
 
+}
 }
 export interface TemporalScope {
   effectiveDate: Date;
@@ -156,7 +175,9 @@ export interface TemporalScope {
   holidays: Holiday[];
 }
 }
+}
 
+}
 }
 export interface TechnicalScope {
   systems: string[];
@@ -169,7 +190,9 @@ export interface TechnicalScope {
   deploymentTypes: string[];
 }
 }
+}
 
+}
 }
 export interface RuleCondition {
   conditionId: string;
@@ -185,7 +208,9 @@ export interface RuleCondition {
   errorHandling: ErrorHandling;
 }
 }
+}
 
+}
 }
 export interface ConditionOperand {
   operandId: string;
@@ -197,7 +222,9 @@ export interface ConditionOperand {
   caching: OperandCaching;
 }
 }
+}
 
+}
 }
 export interface ConditionContext {
   contextId: string;
@@ -211,7 +238,9 @@ export interface ConditionContext {
   data: ContextData;
 }
 }
+}
 
+}
 }
 export interface ConditionEvaluation {
   method: EvaluationMethod;
@@ -223,7 +252,9 @@ export interface ConditionEvaluation {
   confidence: number;
 }
 }
+}
 
+}
 }
 export interface RuleAction {
   actionId: string;
@@ -240,7 +271,9 @@ export interface RuleAction {
   compliance: ActionCompliance;
 }
 }
+}
 
+}
 }
 export interface ActionOperation {
   operationType: OperationType;
@@ -253,7 +286,9 @@ export interface ActionOperation {
   validation: ActionValidation;
 }
 }
+}
 
+}
 }
 export interface ActionExecution {
   mode: ExecutionMode;
@@ -266,7 +301,9 @@ export interface ActionExecution {
   idempotency: IdempotencyPolicy;
 }
 }
+}
 
+}
 }
 export interface RuleConflict {
   conflictId: string;
@@ -280,7 +317,9 @@ export interface RuleConflict {
   prevention: ConflictPrevention;
 }
 }
+}
 
+}
 }
 export interface ConflictResolution {
   strategy: ResolutionStrategy;
@@ -292,7 +331,9 @@ export interface ConflictResolution {
   approval: ResolutionApproval;
 }
 }
+}
 
+}
 }
 export interface RuleDependency {
   dependencyId: string;
@@ -305,7 +346,9 @@ export interface RuleDependency {
   resolution: DependencyResolution;
 }
 }
+}
 
+}
 }
 export interface RuleMetadata {
   author: string;
@@ -322,7 +365,9 @@ export interface RuleMetadata {
   annotations: Annotation[];
 }
 }
+}
 
+}
 }
 export interface RuleValidation {
   validationId: string;
@@ -335,7 +380,9 @@ export interface RuleValidation {
   compliance: ValidationCompliance;
 }
 }
+}
 
+}
 }
 export interface RuleTesting {
   testingId: string;
@@ -348,7 +395,9 @@ export interface RuleTesting {
   automation: TestAutomation;
 }
 }
+}
 
+}
 }
 export interface TestSuite {
   suiteId: string;
@@ -362,7 +411,9 @@ export interface TestSuite {
   environment: TestEnvironment;
 }
 }
+}
 
+}
 }
 export interface Test {
   testId: string;
@@ -378,7 +429,9 @@ export interface Test {
   mocks: TestMock[];
 }
 }
+}
 
+}
 }
 export interface RuleLifecycle {
   lifecycleId: string;
@@ -391,7 +444,9 @@ export interface RuleLifecycle {
   retirement: LifecycleRetirement;
 }
 }
+}
 
+}
 }
 export interface RuleCompliance {
   complianceId: string;
@@ -404,7 +459,9 @@ export interface RuleCompliance {
   attestations: ComplianceAttestation[];
 }
 }
+}
 
+}
 }
 export interface RuleEvaluationContext {
   contextId: string;
@@ -419,7 +476,9 @@ export interface RuleEvaluationContext {
   security?: SecurityContext;
 }
 }
+}
 
+}
 }
 export interface RuleEvaluationResult {
   resultId: string;
@@ -435,7 +494,9 @@ export interface RuleEvaluationResult {
   audit: EvaluationAudit;
 }
 }
+}
 
+}
 }
 export interface EvaluationOutcome {
   result: EvaluationResult;
@@ -447,7 +508,9 @@ export interface EvaluationOutcome {
   escalation: OutcomeEscalation;
 }
 }
+}
 
+}
 }
 export interface RuleEngineConfiguration {
   engineId: string;
@@ -461,6 +524,7 @@ export interface RuleEngineConfiguration {
   clustering: EngineClusteringConfig;
   scaling: EngineScalingConfig;
   maintenance: EngineMaintenanceConfig;
+}
 }
 }
 
@@ -1123,6 +1187,7 @@ export class ComplianceRuleEngine {
 
 // Additional interfaces for completeness
 }
+}
 interface EngineStatus {
   ruleCount: number;
   status: string;
@@ -1130,6 +1195,7 @@ interface EngineStatus {
   environment: string;
   uptime: number;
   lastUpdate: Date;
+}
 }
 }
 

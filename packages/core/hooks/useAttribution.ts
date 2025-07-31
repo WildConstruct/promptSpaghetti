@@ -12,6 +12,7 @@ import {
   AttributionSession,
   AttributionContext
 } from '../types/attribution';
+}
 interface UseAttributionReturn {
   // State
   loading: boolean;
@@ -20,6 +21,7 @@ interface UseAttributionReturn {
   recordAttribution: (request: CreateAttributionRequest) => Promise<ChangeAttribution>;
   getAttributionStats: (request: AttributionStatsRequest) => Promise<AttributionStatsResponse>;
   getAttributionTimeline: (projectId: string, filter: AttributionFilter) => Promise<AttributionTimelineResponse>;
+}
   getContributorStats: (projectId: string, dateRange?: { start: Date; end: Date }) => Promise<ContributorStatsResponse>;
   listAttributions: (filter: AttributionFilter) => Promise<ChangeAttribution>;
   startSession: (projectId: string, sessionId?: string) => Promise<AttributionSession>;

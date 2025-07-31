@@ -15,6 +15,7 @@
 import { EventEmitter } from 'events';
 import { EnhancedConversionEvent, FunnelStreamConfig } from './ConversionFunnelArchitecture';
 
+}
 export interface StreamEvent {
     id: string;
     type: 'conversion_event' | 'funnel_step' | 'attribution_update' | 'session_event';
@@ -25,6 +26,7 @@ export interface StreamEvent {
     headers: Record<string, string>;
     retryCount: number;
 
+}
 export interface StreamPartition {
     id: number;
     events: StreamEvent[];
@@ -33,6 +35,7 @@ export interface StreamPartition {
     consumerCount: number;
     lag: number;
 
+}
 export interface StreamConsumer {
     id: string;
     groupId: string;
@@ -42,6 +45,7 @@ export interface StreamConsumer {
     isActive: boolean;
     processingRate: number;
 
+}
 export interface StreamMetrics {
     totalEvents: number;
     eventsPerSecond: number;
@@ -50,6 +54,7 @@ export interface StreamMetrics {
         events: number;
         lag: number;
         throughput: number;
+}
     }>;
     consumerMetrics: Map<string, {
         processedEvents: number;
@@ -61,6 +66,7 @@ export interface StreamMetrics {
         oldestEvent: number;
     };
 
+}
 export interface ProcessingResult {
     success: boolean;
     eventId: string;
@@ -173,3 +179,4 @@ export declare class ConversionStreamProcessor extends EventEmitter {
  */
 export declare export default ConversionStreamProcessor;
 //# sourceMappingURL=ConversionStreamProcessor.d.ts.map
+}

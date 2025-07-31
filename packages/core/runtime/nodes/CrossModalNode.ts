@@ -8,12 +8,15 @@ import { AdvancedRuntimeNode, AdvancedExecutionContext, NodeExecutionResult } fr
 import { IOSpecBuilder, TypedInputs } from '../io-system';
 import { AIModelFactory, MultimodalAdapter } from '../../ai';
 
+}
 export interface CrossModalConfig {
   provider: 'openai' | 'anthropic' | 'google' | 'custom';
   apiKey: string;
   baseURL?: string;
   model?: string;
   defaultParameters?: Record<string, any>;
+}
+}
 }
 export interface MultimodalInput {
   type: 'text' | 'image' | 'audio' | 'video';
@@ -22,23 +25,26 @@ export interface MultimodalInput {
     role?: 'user' | 'assistant' | 'system';
     description?: string;
     duration?: number;
+}
     resolution?: { width: number; height: number };
   };
+}
 }
 export interface CrossModalAnalysis {
   content_understanding: {
   overall_summary: string;
     key_themes: string;
+}
   sentiment: { score: number; label: string };
     complexity_score: number;
   };
-  modality_insights: Array<{,
+  modality_insights: Array<{
   modality: string;
   confidence: number;
   key_elements: string;
   dominant_features: string;
 }>;
-  cross_modal_connections: Array<{,
+  cross_modal_connections: Array<{
   connection_type: 'semantic' | 'temporal' | 'causal' | 'contextual';
   modalities: string;
   strength: number;
@@ -72,6 +78,7 @@ export class MultimodalUnderstandingNode extends AdvancedRuntimeNode {
     this.modelFactory = new AIModelFactory();
     this._initializeAdapter(config);
   async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> {
+
   try {
   const multimodalInputs = inputs.get('inputs') as MultimodalInput;
   const task = inputs.getString('task', 'understand');
@@ -117,6 +124,7 @@ export class MultimodalUnderstandingNode extends AdvancedRuntimeNode {
     } catch (error) {
       throw new Error(`Multimodal understanding failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   private async _initializeAdapter(config: CrossModalConfig): Promise<void> {
+
     try {
       this.adapter = new MultimodalAdapter(`multimodal-${this.nodeId}`, {)}
   },
@@ -202,6 +210,7 @@ export class MultimodalUnderstandingNode extends AdvancedRuntimeNode {
     });
     return actions;
   async validateInputs(inputs: Record<string, any>): Promise<string> {
+
     const errors: string = [];
     if (!inputs.inputs || !Array.isArray(inputs.inputs) || inputs.inputs.length === 0) {
       errors.push('At least one multimodal input is required');
@@ -233,6 +242,7 @@ export class ContentComparisonNode extends AdvancedRuntimeNode {
     this.modelFactory = new AIModelFactory();
     this._initializeAdapter(config);
   async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> {
+
     try {
       const contentA = inputs.get('content_a') as MultimodalInput;
       const contentB = inputs.get('content_b') as MultimodalInput;
@@ -271,6 +281,7 @@ export class ContentComparisonNode extends AdvancedRuntimeNode {
     } catch (error) {
       throw new Error(`Content comparison failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   private async _initializeAdapter(config: CrossModalConfig): Promise<void> {
+
     try {
       this.adapter = new MultimodalAdapter(`comparison-${this.nodeId}`, {)}
   },
@@ -363,6 +374,7 @@ export class ContentComparisonNode extends AdvancedRuntimeNode {
     });
     return scores;
   async validateInputs(inputs: Record<string, any>): Promise<string> {
+
     const errors: string = [];
     if (!inputs.content_a || !Array.isArray(inputs.content_a) || inputs.content_a.length === 0) {
       errors.push('Content A is required and must be a non-empty array');
@@ -388,6 +400,7 @@ export class ContentAdaptationNode extends AdvancedRuntimeNode {
     this.modelFactory = new AIModelFactory();
     this._initializeAdapter(config);
   async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> {
+
     try {
       const sourceContent = inputs.get('source_content') as MultimodalInput;
       const targetModality = inputs.getString('target_modality');
@@ -435,6 +448,7 @@ export class ContentAdaptationNode extends AdvancedRuntimeNode {
     } catch (error) {
       throw new Error(`Content adaptation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   private async _initializeAdapter(config: CrossModalConfig): Promise<void> {
+
     try {
       this.adapter = new MultimodalAdapter(`adaptation-${this.nodeId}`, {)}
   },
@@ -699,6 +713,7 @@ export class ContentAdaptationNode extends AdvancedRuntimeNode {
 };
     return metrics[targetModality] || ['General success metrics'];
   async validateInputs(inputs: Record<string, any>): Promise<string> {
+
     const errors: string = [];
     if (!inputs.source_content || !Array.isArray(inputs.source_content) || inputs.source_content.length === 0) {
       errors.push('Source content is required and must be a non-empty array');

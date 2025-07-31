@@ -8,6 +8,7 @@ export interface CrossModelTestResult {
         totalAttempts: number;
         averageGenerationTime: number;
         consistencyScore: number;
+}
     };
 
 export declare class CrossModelTester {

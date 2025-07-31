@@ -10,6 +10,7 @@ import { ConsentType, ConsentBannerState, ConsentConfiguration } from '../../typ
 import { useConsent } from '../../hooks/useConsent';
 import { ConsentPreferencesModal } from './ConsentPreferencesModal';
 import './ConsentBanner.css';
+}
 interface ConsentBannerProps {
   onAcceptAll?: () => void;
   onRejectAll?: () => void;
@@ -20,6 +21,7 @@ interface ConsentBannerProps {
   onRejectAll,
   onCustomize,
   onClose
+}
 }) => {
   const {
   preferences,

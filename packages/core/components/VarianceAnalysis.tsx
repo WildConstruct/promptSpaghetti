@@ -14,10 +14,12 @@ import {
   VarianceSuggestion 
 } from '../services/VarianceAnalysisService';
 import { professionalColors } from '../styles/professional-design-system';
+}
 interface VarianceAnalysisProps {
   results: PreviewResultWithPath;
   onSuggestionClick?: (suggestion: VarianceSuggestion) => void;
   compact?: boolean;
+}
 }
 
 export const VarianceAnalysis: React.FC<VarianceAnalysisProps> = ({ results, onSuggestionClick, compact = false }) => {

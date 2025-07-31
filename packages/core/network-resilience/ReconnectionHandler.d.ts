@@ -6,6 +6,7 @@ export declare enum ReconnectionState {
     FAILED = "failed",
     SUCCEEDED = "succeeded"
 
+}
 export interface ReconnectionAttempt {
     attemptNumber: number;
     startTime: number;
@@ -17,6 +18,7 @@ export interface ReconnectionAttempt {
     connectionType: 'websocket' | 'http' | 'custom';
 
 
+}
 export interface ReconnectionConfig {
     maxAttempts: number;
     initialDelay: number;
@@ -33,6 +35,7 @@ export interface ReconnectionConfig {
     quickReconnectAttempts: number;
 
 
+}
 export interface ReconnectionStats {
     totalAttempts: number;
     successfulAttempts: number;
@@ -162,3 +165,4 @@ export declare class ReconnectionHandler extends EventEmitter {
     private clearAllTimers;
 
 //# sourceMappingURL=ReconnectionHandler.d.ts.map
+}

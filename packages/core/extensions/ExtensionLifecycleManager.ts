@@ -38,6 +38,7 @@ export class ExtensionLifecycleManager {
    * Initialize the lifecycle manager
    */
   public async initialize(): Promise<void> {
+
     if (this.initialized) {
       return;
     }
@@ -49,6 +50,7 @@ export class ExtensionLifecycleManager {
    * Register an extension for lifecycle management
    */
   public async registerExtension(extension: BaseExtension): Promise<void> {
+
     if (this.extensions.has(extension.id)) {
       throw new ExtensionError(
         ExtensionErrorType.INITIALIZATION_ERROR,
@@ -87,6 +89,7 @@ export class ExtensionLifecycleManager {
    * Unregister an extension
    */
   public async unregisterExtension(extensionId: string): Promise<void> {
+
     const entry = this.extensions.get(extensionId);
     if (!entry) {
       throw new ExtensionError(
@@ -111,6 +114,7 @@ export class ExtensionLifecycleManager {
    * Initialize an extension
    */
   public async initializeExtension(extensionId: string): Promise<void> {
+
     const entry = this.getExtensionEntry(extensionId);
     if (entry.state !== ExtensionLifecycleState.UNINITIALIZED) {
       throw new ExtensionError(
@@ -142,6 +146,7 @@ export class ExtensionLifecycleManager {
    * Activate an extension
    */
   public async activateExtension(extensionId: string): Promise<void> {
+
     const entry = this.getExtensionEntry(extensionId);
     if (entry.state !== ExtensionLifecycleState.INITIALIZED) {
       if (entry.state === ExtensionLifecycleState.UNINITIALIZED) {
@@ -178,6 +183,7 @@ export class ExtensionLifecycleManager {
    * Deactivate an extension
    */
   public async deactivateExtension(extensionId: string): Promise<void> {
+
     const entry = this.getExtensionEntry(extensionId);
     if (entry.state !== ExtensionLifecycleState.ACTIVE) {
       throw new ExtensionError(
@@ -208,6 +214,7 @@ export class ExtensionLifecycleManager {
    * Dispose an extension
    */
   public async disposeExtension(extensionId: string): Promise<void> {
+
     const entry = this.getExtensionEntry(extensionId);
     if (entry.state === ExtensionLifecycleState.ACTIVE) {
       await this.deactivateExtension(extensionId);
@@ -288,6 +295,7 @@ export class ExtensionLifecycleManager {
    * Check extension health
    */
   public async checkExtensionHealth(extensionId: string): Promise<ExtensionHealthStatus> {
+
     const entry = this.getExtensionEntry(extensionId);
     try {
       const isHealthy = entry.extension.isHealthy();
@@ -387,6 +395,7 @@ export class ExtensionLifecycleManager {
     });
   }
   private async validateExtension(extension: BaseExtension): Promise<ExtensionValidationResult> {
+
     const errors: string[] = [];
     const warnings: string[] = [];
     // Basic validation
@@ -423,6 +432,7 @@ export class ExtensionLifecycleManager {
     };
   }
   private async validateDependencies(extension: BaseExtension): Promise<void> {
+
     if (!extension.dependencies || extension.dependencies.length === 0) {
       return;
     }
@@ -445,6 +455,7 @@ export class ExtensionLifecycleManager {
     }
   }
   private async validatePermissions(extension: BaseExtension): Promise<void> {
+
     if (!extension.permissions || extension.permissions.length === 0) {
       return;
     }
@@ -598,6 +609,7 @@ export class ExtensionLifecycleManager {
 }
 
 // Extension Lifecycle Entry
+}
 interface ExtensionLifecycleEntry {
   extension: BaseExtension;
   state: ExtensionLifecycleState;
@@ -610,17 +622,20 @@ interface ExtensionLifecycleEntry {
   errors: Array<{
     error: Error;
     timestamp: Date;
+}
   }>;
   healthStatus: ExtensionHealthStatus;
 }
 
 // Extension Statistics
+}
 interface ExtensionStatistics {
   total: number;
   byState: Record<ExtensionLifecycleState, number>;
   byType: Record<string, number>;
   errors: number;
   healthy: number;
+}
 }
 
 // Export singleton instance

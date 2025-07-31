@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../../config/environment';
+}
 interface User {
   id: string;,
   display_name: string;
@@ -18,11 +19,12 @@ interface User {
   content: string;
   images?: string;
   template_id?: string;
-  template_preview?: {,
+  template_preview?: {
   id: string;,
   title: string;
   description: string;,
   price_cents: number;
+}
 };
   type: 'text' | 'template_showcase' | 'tutorial' | 'question' | 'announcement';,
   likes_count: number;
@@ -33,6 +35,7 @@ interface User {
   created_at: string;,
   updated_at: string;
   tags: string;
+}
 interface Discussion {
   id: string;,
   title: string;
@@ -46,6 +49,7 @@ interface Discussion {
   is_pinned: boolean;
   is_solved: boolean;,
   created_at: string;
+}
 interface Event {
   id: string;,
   title: string;
@@ -73,6 +77,7 @@ export const [discussions, setDiscussions] = useState<Discussion>([]);
     const token = localStorage.getItem('auth_token');
     return {
       'Content-Type': 'application/json',
+}
       ...(token && { 'Authorization': `Bearer ${token}` })}
     };
   };

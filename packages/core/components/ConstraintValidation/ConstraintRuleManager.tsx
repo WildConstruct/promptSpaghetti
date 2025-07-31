@@ -26,6 +26,7 @@ import {
 } from '../../types/UTDG';
 import { ConstraintValidator } from '../../historical/ConstraintValidator';
 import './ConstraintRuleManager.css';
+}
 interface ConstraintRuleManagerProps {
   validator: ConstraintValidator;
   onConstraintsChange?: (constraints: HistoricalConstraint) => void;
@@ -34,6 +35,7 @@ interface ConstraintRuleManagerProps {
   validator,
   onConstraintsChange,
   onClose
+}
 }) => {
   const [constraints, setConstraints] = useState<HistoricalConstraint>([]);
   const [editingConstraint, setEditingConstraint] = useState<HistoricalConstraint | null>(null);
@@ -219,6 +221,7 @@ interface ConstraintRuleManagerProps {
     </div>
   );
 };
+}
 interface ConstraintRuleItemProps {
   constraint: HistoricalConstraint;
   onEdit: (constraint: HistoricalConstraint) => void;
@@ -227,6 +230,7 @@ interface ConstraintRuleItemProps {
   constraint,
   onEdit,
   onDelete
+}
 }) => {
   const getEnforcementIcon = (enforcement: string) => {
     switch (enforcement) {
@@ -280,6 +284,7 @@ interface ConstraintRuleItemProps {
     </div>
   );
 };
+}
 interface ConstraintEditorProps {
   constraint: HistoricalConstraint;
   isCreating: boolean;
@@ -292,6 +297,7 @@ interface ConstraintEditorProps {
   onChange,
   onSave,
   onCancel
+}
 }) => {
   const updateConstraint = (updates: Partial<HistoricalConstraint>) => {
     onChange({ ...constraint, ...updates });

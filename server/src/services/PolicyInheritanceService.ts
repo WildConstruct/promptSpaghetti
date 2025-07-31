@@ -11,6 +11,7 @@ import { EventEmitter } from 'events';
 
 // Core interfaces for policy inheritance
 }
+}
 export interface PolicyNode {
   id: string;
   name: string;
@@ -25,7 +26,9 @@ export interface PolicyNode {
   status: PolicyNodeStatus;
 }
 }
+}
 
+}
 }
 export interface PolicyReference {
   policyId: string;
@@ -42,7 +45,9 @@ export interface PolicyReference {
   exceptions: PolicyException[];
 }
 }
+}
 
+}
 }
 export interface InheritanceRule {
   ruleId: string;
@@ -58,7 +63,9 @@ export interface InheritanceRule {
   metadata: InheritanceRuleMetadata;
 }
 }
+}
 
+}
 }
 export interface PolicyOverride {
   overrideId: string;
@@ -75,7 +82,9 @@ export interface PolicyOverride {
   audit: OverrideAudit;
 }
 }
+}
 
+}
 }
 export interface EffectivePolicies {
   nodeId: string;
@@ -88,7 +97,9 @@ export interface EffectivePolicies {
   inheritance: InheritanceTrace[];
 }
 }
+}
 
+}
 }
 export interface ResolvedPolicy {
   policyId: string;
@@ -103,7 +114,9 @@ export interface ResolvedPolicy {
   lastUpdated: Date;
 }
 }
+}
 
+}
 }
 export interface PolicyConflict {
   conflictId: string;
@@ -117,7 +130,9 @@ export interface PolicyConflict {
   resolvedBy?: string;
 }
 }
+}
 
+}
 }
 export interface PolicyGap {
   gapId: string;
@@ -130,7 +145,9 @@ export interface PolicyGap {
   resolvedAt?: Date;
 }
 }
+}
 
+}
 }
 export interface InheritanceTrace {
   nodeId: string;
@@ -140,7 +157,9 @@ export interface InheritanceTrace {
   finalState: PolicyState;
 }
 }
+}
 
+}
 }
 export interface InheritanceStep {
   stepId: string;
@@ -150,6 +169,7 @@ export interface InheritanceStep {
   action: InheritanceActionType;
   transformations: string[];
   timestamp: Date;
+}
 }
 }
 
@@ -247,6 +267,7 @@ export enum InheritanceActionType {
 
 // Additional interfaces
 }
+}
 export interface PolicyScope {
   scopeId: string;
   type: ScopeType;
@@ -255,7 +276,9 @@ export interface PolicyScope {
   exceptions: ScopeException[];
 }
 }
+}
 
+}
 }
 export interface PolicyCondition {
   conditionId: string;
@@ -265,7 +288,9 @@ export interface PolicyCondition {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface PolicyException {
   exceptionId: string;
@@ -276,7 +301,9 @@ export interface PolicyException {
   validUntil?: Date;
 }
 }
+}
 
+}
 }
 export interface PolicySource {
   sourceId: string;
@@ -287,7 +314,9 @@ export interface PolicySource {
   lastModified: Date;
 }
 }
+}
 
+}
 }
 export interface PolicyNodeMetadata {
   createdAt: Date;
@@ -299,7 +328,9 @@ export interface PolicyNodeMetadata {
   attributes: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 export interface PolicyNodeStatus {
   active: boolean;
@@ -309,7 +340,9 @@ export interface PolicyNodeStatus {
   warnings: ValidationWarning[];
 }
 }
+}
 
+}
 }
 export interface InheritanceCondition {
   conditionId: string;
@@ -318,7 +351,9 @@ export interface InheritanceCondition {
   parameters: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 export interface InheritanceAction {
   actionId: string;
@@ -327,7 +362,9 @@ export interface InheritanceAction {
   conditions: InheritanceCondition[];
 }
 }
+}
 
+}
 }
 export interface InheritanceRuleMetadata {
   createdAt: Date;
@@ -337,7 +374,9 @@ export interface InheritanceRuleMetadata {
   tags: string[];
 }
 }
+}
 
+}
 }
 export interface InheritanceScope {
   policyTypes: PolicyType[];
@@ -345,7 +384,9 @@ export interface InheritanceScope {
   conditions: string[];
 }
 }
+}
 
+}
 }
 export interface OverrideCondition {
   conditionId: string;
@@ -354,7 +395,9 @@ export interface OverrideCondition {
   parameters: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 export interface OverrideAudit {
   createdAt: Date;
@@ -363,7 +406,9 @@ export interface OverrideAudit {
   changeLog: OverrideChange[];
 }
 }
+}
 
+}
 }
 export interface OverrideChange {
   timestamp: Date;
@@ -372,7 +417,9 @@ export interface OverrideChange {
   details: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 export interface PolicyCoverage {
   totalPolicies: number;
@@ -384,7 +431,9 @@ export interface PolicyCoverage {
   conflicts: number;
 }
 }
+}
 
+}
 }
 export interface PolicyResolutionSource {
   type: 'direct' | 'inherited' | 'merged' | 'computed';
@@ -393,7 +442,9 @@ export interface PolicyResolutionSource {
   transformations: string[];
 }
 }
+}
 
+}
 }
 export interface ConflictResolution {
   strategy: string;
@@ -403,7 +454,9 @@ export interface ConflictResolution {
   rationale: string;
 }
 }
+}
 
+}
 }
 export interface GapRecommendation {
   type: string;
@@ -413,7 +466,9 @@ export interface GapRecommendation {
   estimatedEffort: string;
 }
 }
+}
 
+}
 }
 export interface PolicyTransformation {
   transformationId: string;
@@ -424,7 +479,9 @@ export interface PolicyTransformation {
   timestamp: Date;
 }
 }
+}
 
+}
 }
 export interface PolicyState {
   policyId: string;
@@ -434,7 +491,9 @@ export interface PolicyState {
   status: string;
 }
 }
+}
 
+}
 }
 export interface ValidationError {
   code: string;
@@ -443,13 +502,16 @@ export interface ValidationError {
   source: string;
 }
 }
+}
 
+}
 }
 export interface ValidationWarning {
   code: string;
   message: string;
   recommendation: string;
   source: string;
+}
 }
 }
 
@@ -1140,6 +1202,7 @@ export class PolicyInheritanceService extends EventEmitter {
 
 // Additional interfaces for helper types
 }
+}
 interface PolicyHierarchy {
   hierarchyId: string;
   name: string;
@@ -1148,14 +1211,18 @@ interface PolicyHierarchy {
   depth: number;
 }
 }
+}
 
+}
 }
 interface ConflictResolutionStrategy {
   name: string;
   resolve: (conflicts: PolicyConflict[]) => Promise<PolicyConflict[]>;
 }
 }
+}
 
+}
 }
 interface RuleConflict {
   description: string;
@@ -1163,7 +1230,9 @@ interface RuleConflict {
   conflictingRules: string[];
 }
 }
+}
 
+}
 }
 interface PolicyChange {
   changeId: string;
@@ -1172,7 +1241,9 @@ interface PolicyChange {
   details: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 interface InheritanceImpactAnalysis {
   analysisId: string;
@@ -1187,10 +1258,12 @@ interface InheritanceImpactAnalysis {
     filledGaps: number;
     performanceImpact: 'low' | 'medium' | 'high';
 }
+}
   };
   recommendations: Recommendation[];
 }
 
+}
 }
 interface SimulationResults {
   newConflicts: number;
@@ -1199,7 +1272,9 @@ interface SimulationResults {
   filledGaps: number;
 }
 }
+}
 
+}
 }
 interface Recommendation {
   type: string;
@@ -1208,7 +1283,9 @@ interface Recommendation {
   actions: string[];
 }
 }
+}
 
+}
 }
 interface PolicyLineage {
   nodeId: string;
@@ -1221,13 +1298,16 @@ interface PolicyLineage {
   conflicts: PolicyConflict[];
 }
 }
+}
 
+}
 }
 interface LineageNode {
   nodeId: string;
   relationship: string;
   distance: number;
   policies: string[];
+}
 }
 }
 

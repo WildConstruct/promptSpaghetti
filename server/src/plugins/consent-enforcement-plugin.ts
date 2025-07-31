@@ -10,6 +10,7 @@ import { ConsentBasedDataFilterService } from '../services/ConsentBasedDataFilte
 import { ConsentCollectionService } from '../services/ConsentCollectionService';
 
 }
+}
 interface ConsentEnforcementPluginOptions extends FastifyPluginOptions {
   enableStrict?: boolean;
   enableCookieEnforcement?: boolean;
@@ -162,6 +163,7 @@ declare module 'fastify' {
       middleware: ConsentEnforcementMiddleware;
       checkConsent: (userId: string, consentType: string) => Promise<boolean>;
       propagateConsentChange: (userId: string, consentType: string, granted: boolean) => Promise<void>;
+}
 }
     };
   }

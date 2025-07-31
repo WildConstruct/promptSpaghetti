@@ -97,6 +97,7 @@ type ModelVersion = z.infer<typeof ModelVersionSchema>;
 type ModelLineage = z.infer<typeof ModelLineageSchema>;
 
 }
+}
 interface ModelRegistrationRequest {
   name: string;
   description?: string;
@@ -111,7 +112,9 @@ interface ModelRegistrationRequest {
   metadata?: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 interface ModelUpdateRequest {
   name?: string;
@@ -122,7 +125,9 @@ interface ModelUpdateRequest {
   metadata?: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 interface ModelSearchOptions {
   query?: string;
@@ -139,7 +144,9 @@ interface ModelSearchOptions {
   limit: number;
 }
 }
+}
 
+}
 }
 interface ModelComparisonRequest {
   modelIds: string[];
@@ -147,7 +154,9 @@ interface ModelComparisonRequest {
   includeLineage?: boolean;
 }
 }
+}
 
+}
 }
 interface ModelComparisonResult {
   models: Array<{
@@ -156,11 +165,13 @@ interface ModelComparisonResult {
     version: string;
     metrics: Record<string, number | undefined>;
 }
+}
   }>;
   bestPerforming: Record<string, string>; // metric -> modelId
   recommendations: string[];
 }
 
+}
 }
 interface ModelStatistics {
   totalModels: number;
@@ -169,6 +180,7 @@ interface ModelStatistics {
   modelsByStatus: Record<string, number>;
   averageAccuracy: number;
   averageInferenceTime: number;
+}
 }
   popularTags: Array<{ tag: string; count: number }>;
   recentActivity: Array<{

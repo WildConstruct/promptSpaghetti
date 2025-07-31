@@ -8,6 +8,7 @@ import { DatabaseService } from '../database/DatabaseService';
 import { RedisService } from '../database/RedisService';
 
 }
+}
 export interface SessionActivity {
   id: string;
   sessionId: string;
@@ -21,6 +22,7 @@ export interface SessionActivity {
     action: string;
     resource?: string;
     method?: string;
+}
 }
   };
   
@@ -73,6 +75,7 @@ export interface SessionActivity {
 }
 
 }
+}
 export interface ActivityPattern {
   id: string;
   name: string;
@@ -87,6 +90,7 @@ export interface ActivityPattern {
       field: string;
       operator: 'equals' | 'contains' | 'gt' | 'lt' | 'in' | 'regex';
       value: any;
+}
 }
     }>;
   };
@@ -111,6 +115,7 @@ export interface ActivityPattern {
 }
 
 }
+}
 export interface ActivitySummary {
   sessionId: string;
   userId: string;
@@ -118,6 +123,7 @@ export interface ActivitySummary {
     start: Date;
     end: Date;
     duration: number; // seconds
+}
 }
   };
   
@@ -169,6 +175,7 @@ export interface ActivitySummary {
 }
 
 }
+}
 export interface RealTimeActivityStream {
   sessionId: string;
   userId: string;
@@ -179,6 +186,7 @@ export interface RealTimeActivityStream {
     subscribers: number;
     bufferSize: number;
     latency: number; // milliseconds
+}
 }
   };
   

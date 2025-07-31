@@ -20,6 +20,7 @@ import { EventEmitter } from 'events';
 
 // Core checkpoint interfaces
 
+}
 export interface CheckpointMetadata {
   id: string;
   name: string;
@@ -37,7 +38,9 @@ export interface CheckpointMetadata {
   stepNumber: number;
   totalSteps: number;
   elapsedTime: number;
+}
 };
+}
 }
 export interface CheckpointData {
   metadata: CheckpointMetadata;
@@ -47,6 +50,7 @@ export interface CheckpointData {
   executionHistory: any;
   nodeStates: Record<string, any>;
   settings: Record<string, any>;
+}
 };
   validation: {
   checksum: string;
@@ -56,12 +60,14 @@ export interface CheckpointData {
   validationErrors: string;
 };
 }
+}
 export interface CheckpointPolicy {
   autoSave: {
   enabled: boolean;
   interval: number; // milliseconds,
   maxAutoSaves: number;
   triggerEvents: ('node_complete' | 'variable_change' | 'error' | 'manual')[];
+}
 };
   retention: {
   maxCheckpoints: number;
@@ -76,6 +82,7 @@ export interface CheckpointPolicy {
   fallbackStrategy: 'latest' | 'stable' | 'manual'
   };
 }
+}
 export interface CheckpointDiff {
   checkpointId: string;
   previousCheckpointId: string | null;
@@ -85,6 +92,7 @@ export interface CheckpointDiff {
   oldValue?: any;
   newValue?: any;
   size: number;
+}
 }[];
   summary: {
   additions: number;
@@ -94,12 +102,15 @@ export interface CheckpointDiff {
   impactScore: number;
 };
 }
+}
 export interface RecoveryOptions {
   checkpointId: string;
   preserveCurrentState: boolean;
   createBackup: boolean;
   validateBeforeRestore: boolean;
   progressCallback?: (progress: number, step: string) => void;
+}
+}
 }
 export interface CheckpointCompressionResult {
   originalSize: number;
@@ -108,6 +119,7 @@ export interface CheckpointCompressionResult {
   algorithm: string;
   processingTime: number;
   // Main Checkpoint System Class
+}
 }
 export class CheckpointSystem extends EventEmitter {
   private checkpoints: Map<string, CheckpointData> = new Map();
@@ -148,10 +160,11 @@ export class CheckpointSystem extends EventEmitter {
     this.initializeAutoSave();
     this.initializeCompressionWorker();
   // Create checkpoint with automatic compression and validation
-  async createCheckpoint(state: any, )
+  async createCheckpoint(state: any, (
     metadata: Partial<CheckpointMetadata> = {},
     options: { compress?: boolean; validate?: boolean } = {}
   ): Promise<string> {
+
     const startTime = performance.now();
     try {
       const checkpointId = `checkpoint_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
@@ -220,10 +233,11 @@ export class CheckpointSystem extends EventEmitter {
 });
       throw error;
   // Restore from checkpoint with validation and progress tracking
-  async restoreCheckpoint(()
+  async restoreCheckpoint(((
     checkpointId: string,
     options: Partial<RecoveryOptions> = {}
   ): Promise<any> {
+
     const startTime = performance.now();
     if (this.isRecovering) {
       throw new Error('Recovery operation already in progress');
@@ -280,6 +294,7 @@ export class CheckpointSystem extends EventEmitter {
       this.isRecovering = false;
   // Generate diff between checkpoints
   async generateDiff(currentCheckpointId: string, previousCheckpointId?: string): Promise<CheckpointDiff> {
+
     const currentCheckpoint = this.checkpoints.get(currentCheckpointId);
     if (!currentCheckpoint) {
       throw new Error(`Checkpoint ${currentCheckpointId} not found`);}
@@ -335,6 +350,7 @@ export class CheckpointSystem extends EventEmitter {
     return checkpoints.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
   // Delete checkpoint with validation
   async deleteCheckpoint(checkpointId: string, force = false): Promise<boolean> {
+
     try {
       const checkpoint = this.checkpoints.get(checkpointId);
       if (!checkpoint) {
@@ -401,6 +417,7 @@ export class CheckpointSystem extends EventEmitter {
       clearInterval(this.autoSaveTimer);
       this.autoSaveTimer = null;
   private async performAutoSave(): Promise<void> {
+
     try {
       const currentState = this.getCurrentState();
       if (this.shouldCreateAutoSave(currentState)) {
@@ -419,6 +436,7 @@ export class CheckpointSystem extends EventEmitter {
     // This could be based on state changes, time elapsed, etc.
     return true;
   private async cleanupAutoSaves(): Promise<void> {
+
     const autoSaves = this.listCheckpoints({ isAutomated: true });
     if (autoSaves.length > this.policy.autoSave.maxAutoSaves) {
   const toDelete = autoSaves;
@@ -456,6 +474,7 @@ export class CheckpointSystem extends EventEmitter {
   processingTime: performance.now() - startTime,
 };
   private async decompressCheckpoint(checkpoint: CheckpointData): Promise<any> {
+
   // Simulate decompression
   return checkpoint.state;
   private async validateCheckpoint(checkpoint: CheckpointData): Promise<CheckpointData['validation']> {,
@@ -588,6 +607,7 @@ export class CheckpointSystem extends EventEmitter {
       settings: {}
     };
   private async applyState(state: any): Promise<void> {
+
     // This method should apply the restored state to your application
     // Implementation depends on your state management system
   private deepClone(obj: any): any {
@@ -616,6 +636,7 @@ export class CheckpointManager {
     this.currentSessionId = `session_${Date.now()}`;}
   // Simplified API for common operations
   async saveProgress(name?: string): Promise<string> {
+
     return await this.checkpointSystem.createCheckpoint()
       this.getCurrentState(),
       {
@@ -624,6 +645,7 @@ export class CheckpointManager {
   tags: ['progress', this.currentSessionId]
     );
   async loadProgress(checkpointId: string): Promise<void> {
+
   await this.checkpointSystem.restoreCheckpoint(checkpointId);
   async undoLastChange(): Promise<void> {,
   const checkpoints = this.checkpointSystem.listCheckpoints({)

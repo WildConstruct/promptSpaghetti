@@ -10,6 +10,7 @@ import path from 'path';
 // Template Types & Interfaces
 // ========================================
 
+}
 export interface EmailTemplate {
   subject: string;
   htmlTemplate: string;
@@ -17,7 +18,9 @@ export interface EmailTemplate {
   variables: string;
   description: string;
   category: 'verification' | 'enrollment' | 'security' | 'notification'
+}
   }
+}
 export interface TemplateVariables {
   // Common variables
   displayName: string;
@@ -36,6 +39,8 @@ export interface TemplateVariables {
   locale?: string;
   timezone?: string;
 }
+}
+}
 export interface TemplateRenderOptions {
   minify?: boolean;
   stripComments?: boolean;
@@ -46,6 +51,7 @@ export interface TemplateRenderOptions {
 // Template Engine
 // ========================================
 class TemplateEngine {
+}
   private static readonly VARIABLE_PATTERN = /\{\{(\w+)\}\}/g;
   private static readonly CONDITIONAL_PATTERN = /\{\{#if\s+(\w+)\}\}([\s\S]*?)\{\{\/if\}\}/g;
   private static readonly HELPER_PATTERN = /\{\{(\w+)\s+([\w\s]+)\}\}/g;

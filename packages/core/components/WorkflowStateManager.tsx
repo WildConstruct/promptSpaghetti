@@ -20,6 +20,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { useWorkflowStore } from '../stores/workflowStore';
 import { WorkflowState, WorkflowTransition, WorkflowApproval, WorkflowLock, WorkflowStatistics } from '../types/workflow';
+}
 interface WorkflowStateManagerProps {
   workspaceId: string;
   resourceId?: string;
@@ -27,6 +28,7 @@ interface WorkflowStateManagerProps {
   onStateChange?: (newStateId: string) => void;
   onLockAcquired?: (lockId: string) => void;
   onLockReleased?: (lockId: string) => void;
+}
 }
 
 export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({

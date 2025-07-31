@@ -4,12 +4,14 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface PerformanceBudgetConfig {
     bundles: {
         main: number;
         vendor: number;
         chunks: number;
         total: number;
+}
     };
     runtime: {
         firstContentfulPaint: number;
@@ -43,6 +45,7 @@ export interface PerformanceBudgetConfig {
         testTime: number;
     };
 
+}
 export interface BudgetViolation {
     category: string;
     metric: string;
@@ -54,6 +57,7 @@ export interface BudgetViolation {
     suggestions: string[];
     timestamp: number;
 
+}
 export interface BudgetCheckResult {
     passed: boolean;
     score: number;
@@ -64,10 +68,12 @@ export interface BudgetCheckResult {
         high: number;
         medium: number;
         low: number;
+}
     };
     recommendations: string[];
     timestamp: number;
 
+}
 export interface PerformanceSnapshot {
     timestamp: number;
     bundles: {
@@ -75,6 +81,7 @@ export interface PerformanceSnapshot {
         vendor: number;
         chunks: number[];
         total: number;
+}
     };
     runtime: {
         fcp?: number;

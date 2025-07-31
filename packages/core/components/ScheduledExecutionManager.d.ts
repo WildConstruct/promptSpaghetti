@@ -1,5 +1,6 @@
 import React from 'react';
 
+}
 interface ScheduledExecutionManagerProps {
     workspaceId: string;
     resourceId?: string;
@@ -8,3 +9,4 @@ interface ScheduledExecutionManagerProps {
 export declare const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>;
 export default ScheduledExecutionManager;
 //# sourceMappingURL=ScheduledExecutionManager.d.ts.map
+}

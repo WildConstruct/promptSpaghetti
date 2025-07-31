@@ -15,6 +15,7 @@ import { UserRole, Permission, usePermissions } from './RouteGuard';
  * Enhanced user interface with role-based access control
  */
 
+}
 export interface AuthUser {
   id: string;,
   email: string;
@@ -24,10 +25,11 @@ export interface AuthUser {
   isEmailVerified: boolean;,
   roles: UserRole;
   permissions: Permission;
-  preferences?: {,
+  preferences?: {
   theme?: 'light' | 'dark';
   notifications?: boolean;
   language?: string;
+}
 };
   metadata?: {
   createdAt: string;
@@ -38,6 +40,7 @@ export interface AuthUser {
 /**
  * Authentication context interface
  */
+}
 }
 export interface AuthContextValue {
   // Authentication state
@@ -50,6 +53,7 @@ export interface AuthContextValue {
   logout: () => void;,
   register: (userData: unknown) => Promise<boolean>;
   // OAuth actions
+}
   oauthLogin: (provider: string, returnUrl?: string) => Promise<{ url: string; state: string }>;
   processOAuthCallback: (provider: string, code: string, state: string) => Promise<boolean>;
   // Session management
@@ -68,7 +72,7 @@ export interface AuthContextValue {
   disableTwoFactor: (code: string) => Promise<boolean>;,
   verifyTwoFactor: (code: string) => Promise<boolean>;
   // Session information
-  sessionInfo: {,
+  sessionInfo: {
   tokenExpiration: number | null;
   lastActivity: number;
   sessionId?: string;
@@ -97,11 +101,13 @@ export function useAuth(): AuthContextValue {
 /**
  * Authentication provider props
  */
+}
 interface AuthProviderProps {
   children: React.ReactNode;
 /**
  * Enhanced authentication provider with comprehensive security features
  */
+}
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const authStore = useAuthStore();
   const permissions = usePermissions();
@@ -120,7 +126,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     roles: (authStore.user.roles as UserRole) || ['user'],
     permissions: permissions.userPermissions,
     preferences: authStore.user.preferences,
-    metadata: {,
+    metadata: {
   createdAt: authStore.user.createdAt || new Date().toISOString(),
   lastLoginAt: authStore.user.lastLoginAt,
   lastActiveAt: new Date().toISOString(),
@@ -218,7 +224,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Update user profile via API
       const response = await fetch('/api/auth/profile', {)
   method: 'PATCH',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${authStore.accessToken}`}
   },
@@ -237,7 +243,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const response = await fetch('/api/auth/change-password', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${authStore.accessToken}`}
   },
@@ -253,7 +259,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const response = await fetch('/api/auth/2fa/enable', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${authStore.accessToken}`}
       });
@@ -266,7 +272,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const response = await fetch('/api/auth/2fa/disable', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${authStore.accessToken}`}
   },
@@ -281,7 +287,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const response = await fetch('/api/auth/2fa/verify', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${authStore.accessToken}`}
   },
@@ -322,7 +328,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   disableTwoFactor,
   verifyTwoFactor,
   // Session information
-  sessionInfo: {,
+  sessionInfo: {
   tokenExpiration: authStore.tokenExpiration,
   lastActivity,
   sessionId
@@ -356,9 +362,9 @@ export function withAuth<P extends object>(Component: React.ComponentType<P>): R
 /**
  * HOC for components that require specific permissions
  */
-export function withPermissions<P extends object>(()
+export function withPermissions<P extends object>(((
     Component: React.ComponentType<P>,
-    requiredPermissions: Permission,
+    requiredPermissions: Permission
   ): React.FC<P> {
   return function PermissionProtectedComponent(props: P) {
     const { hasAllPermissions, isAuthenticated, isLoading } = useAuth();
@@ -371,9 +377,9 @@ export function withPermissions<P extends object>(()
 /**
  * HOC for components that require specific roles
  */
-export function withRoles<P extends object>(()
+export function withRoles<P extends object>(((
     Component: React.ComponentType<P>,
-    requiredRoles: UserRole,
+    requiredRoles: UserRole
   ): React.FC<P> {
   return function RoleProtectedComponent(props: P) {
     const { hasAnyRole, isAuthenticated, isLoading } = useAuth();

@@ -7,6 +7,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
+}
 interface OAuthCallbackState {
   status: 'loading' | 'success' | 'error';,
   message: string;
@@ -15,6 +16,7 @@ interface OAuthCallbackState {
   const [state, setState] = useState<OAuthCallbackState>({)
   status: 'loading',
   message: 'Processing authentication...',
+}
 });
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -47,7 +49,7 @@ interface OAuthCallbackState {
         const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
         const response = await fetch(`${API_BASE_URL}/auth/oauth/callback/${storedProvider}?code=${encodeURIComponent(code)}&state=${encodeURIComponent(state)}`, {},}
   method: 'GET',
-          headers: {,
+          headers: {
   'Content-Type': 'application/json',
 });
         if (!response.ok) {

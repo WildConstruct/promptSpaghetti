@@ -8,6 +8,7 @@
  */
 import React, { useState, useCallback } from 'react';
 
+}
 export interface FlaggingReason {
   id: string;
   label: string;
@@ -16,6 +17,8 @@ export interface FlaggingReason {
   category: 'content' | 'security' | 'legal' | 'spam' | 'harassment' | 'other';
   requiresDetails?: boolean;
 }
+}
+}
 export interface FlagSubmission {
   contentId: string;
   contentType: 'template' | 'comment' | 'review' | 'user' | 'project';
@@ -23,6 +26,8 @@ export interface FlagSubmission {
   details?: string;
   reporterId: string;
   metadata?: Record<string, unknown>;
+}
+}
 }
 export interface FlaggingButtonProps {
   contentId: string;
@@ -35,6 +40,8 @@ export interface FlaggingButtonProps {
   size?: 'small' | 'medium' | 'large';
   variant?: 'button' | 'icon' | 'link';
   className?: string;
+}
+}
 }
 export interface FlaggingStatus {
   contentId: string;
@@ -53,6 +60,7 @@ export interface FlaggingStatus {
   severity: 'high',
   category: 'content',
   requiresDetails: false,
+}
 }
   {
   id: 'spam',

@@ -8,6 +8,7 @@ import React from 'react';
 import { SecurityEventType, SecurityEventSeverity } from '../../security/SecurityEventLoggingPolicies';
 import './AlertRuleBuilder.css';
 
+}
 interface AlertRule {
     id: string;
     name: string;
@@ -23,6 +24,7 @@ interface AlertRule {
     updated_at: Date;
 
 
+}
 interface AlertCondition {
     id: string;
     field: string;
@@ -31,6 +33,7 @@ interface AlertCondition {
     logic_operator?: 'and' | 'or';
 
 
+}
 interface AlertAction {
     id: string;
     type: 'notification' | 'containment' | 'escalation' | 'logging' | 'webhook';
@@ -40,6 +43,7 @@ interface AlertAction {
     delay_seconds?: number;
 
 
+}
 interface NotificationChannel {
     id: string;
     name: string;
@@ -48,6 +52,7 @@ interface NotificationChannel {
     enabled: boolean;
 
 
+}
 interface EscalationConfig {
     enabled: boolean;
     escalation_delay_minutes: number;
@@ -61,6 +66,7 @@ interface EscalationConfig {
 export declare const AlertRuleBuilder: React.FC<{
     alertRules: AlertRule[];
     onRulesChange: (rules: AlertRule[]) => void;
+}
 }>;
 export default AlertRuleBuilder;
 //# sourceMappingURL=AlertRuleBuilder.d.ts.map

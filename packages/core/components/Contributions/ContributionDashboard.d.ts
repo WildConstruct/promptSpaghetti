@@ -8,6 +8,7 @@
 import React from 'react';
 import { Contribution, ContributionFilter } from '../../types/contributions';
 
+}
 export interface ContributionDashboardProps {
     userId?: string;
     showCreateForm?: boolean;
@@ -20,3 +21,4 @@ export interface ContributionDashboardProps {
 export declare const ContributionDashboard: React.FC<ContributionDashboardProps>;
 export default ContributionDashboard;
 //# sourceMappingURL=ContributionDashboard.d.ts.map
+}

@@ -8,6 +8,7 @@ import { EventEmitter } from 'events';
 
 // Navigation state interfaces
 
+}
 export interface NavigationPreferences {
   userId: string;
   expandedSections: string;
@@ -23,6 +24,8 @@ export interface NavigationPreferences {
   lastSection: string;
   customSections: CustomNavigationSection;
 }
+}
+}
 export interface NavigationHistoryItem {
   id: string;
   label: string;
@@ -32,6 +35,8 @@ export interface NavigationHistoryItem {
   category: string;
   accessCount: number;
   lastAccessed: Date;
+}
+}
 }
 export interface CustomNavigationSection {
   id: string;
@@ -46,6 +51,8 @@ export interface CustomNavigationSection {
   createdBy: string;
   created: Date;
 }
+}
+}
 export interface NavigationAnalytics {
   userId: string;
   sessionId: string;
@@ -56,20 +63,26 @@ export interface NavigationAnalytics {
   errorEvents: NavigationErrorEvent;
   performanceMetrics: NavigationPerformanceMetric;
 }
+}
+}
 export interface NavigationPathEvent {
   path: string;
   section: string;
   timestamp: Date;
   duration: number; // milliseconds,
   source: 'click' | 'keyboard' | 'bookmark' | 'direct' | 'search'
+}
   }
+}
 export interface SearchQueryEvent {
   query: string;
   timestamp: Date;
   resultsCount: number;
   selectedResult?: string;
   source: 'header' | 'sidebar' | 'modal'
+}
   }
+}
 export interface NavigationErrorEvent {
   path: string;
   error: string;
@@ -77,11 +90,15 @@ export interface NavigationErrorEvent {
   userAgent: string;
   resolved: boolean;
 }
+}
+}
 export interface NavigationPerformanceMetric {
   action: string;
   duration: number; // milliseconds,
   timestamp: Date;
   metadata: Record<string, any>;
+}
+}
 }
 export interface NavigationSearchOptions {
   query: string;
@@ -92,6 +109,8 @@ export interface NavigationSearchOptions {
   includeDescriptions?: boolean;
   userId?: string;
 }
+}
+}
 export interface NavigationSearchResult {
   item: {
   id: string;
@@ -100,6 +119,7 @@ export interface NavigationSearchResult {
   path: string;
   icon: string;
   category: string;
+}
 };
   score: number;
   matchType: 'exact' | 'partial' | 'fuzzy' | 'description';
@@ -123,6 +143,7 @@ export class NavigationManagerService extends EventEmitter {
    * Get user navigation preferences
    */
   async getUserPreferences(userId: string): Promise<NavigationPreferences> {
+
     let prefs = this.preferences.get(userId);
     if (!prefs) {
       prefs = await this.createDefaultPreferences(userId);
@@ -131,10 +152,11 @@ export class NavigationManagerService extends EventEmitter {
   /**
    * Update user navigation preferences
    */
-  async updateUserPreferences(()
+  async updateUserPreferences(((
     userId: string,
-    updates: Partial<NavigationPreferences>,
+    updates: Partial<NavigationPreferences>
   ): Promise<NavigationPreferences> {
+
     const currentPrefs = await this.getUserPreferences(userId);
     const updatedPrefs = { ...currentPrefs, ...updates };
     this.preferences.set(userId, updatedPrefs);
@@ -146,6 +168,7 @@ export class NavigationManagerService extends EventEmitter {
    * Add item to recent navigation
    */
   async addToRecent(userId: string, item: NavigationHistoryItem): Promise<void> {
+
   const prefs = await this.getUserPreferences(userId);
   // Remove existing entry if present
   const existingIndex = prefs.recentItems.findIndex(r => r.id === item.id);
@@ -169,6 +192,7 @@ export class NavigationManagerService extends EventEmitter {
    * Toggle favorite status of navigation item
    */
   async toggleFavorite(userId: string, itemId: string): Promise<boolean> {
+
     const prefs = await this.getUserPreferences(userId);
     const isFavorite = prefs.favoriteItems.includes(itemId);
     if (isFavorite) {
@@ -182,6 +206,7 @@ export class NavigationManagerService extends EventEmitter {
    * Toggle pinned status of navigation item
    */
   async togglePin(userId: string, itemId: string): Promise<boolean> {
+
     const prefs = await this.getUserPreferences(userId);
     const isPinned = prefs.pinnedItems.includes(itemId);
     if (isPinned) {
@@ -195,6 +220,7 @@ export class NavigationManagerService extends EventEmitter {
    * Toggle section expansion
    */
   async toggleSectionExpansion(userId: string, sectionId: string): Promise<boolean> {
+
     const prefs = await this.getUserPreferences(userId);
     const isExpanded = prefs.expandedSections.includes(sectionId);
     if (isExpanded) {
@@ -208,6 +234,7 @@ export class NavigationManagerService extends EventEmitter {
    * Search navigation items
    */
   async searchNavigation(options: NavigationSearchOptions): Promise<NavigationSearchResult> {
+
     const { query, categories, limit = 10, fuzzyMatch = true } = options;
     if (!query || query.trim().length === 0) {
   return [];
@@ -275,6 +302,7 @@ export class NavigationManagerService extends EventEmitter {
    * Record navigation analytics
    */
   async recordNavigation(userId: string, event: NavigationPathEvent): Promise<void> {
+
   let analytics = this.analytics.get(userId);
   if (!analytics) {
   analytics = {
@@ -304,6 +332,7 @@ export class NavigationManagerService extends EventEmitter {
    * Record search query
    */
   async recordSearch(userId: string, event: SearchQueryEvent): Promise<void> {
+
   let analytics = this.analytics.get(userId);
   if (!analytics) {
   analytics = {
@@ -327,6 +356,7 @@ export class NavigationManagerService extends EventEmitter {
    * Get navigation recommendations for user
    */
   async getRecommendations(userId: string): Promise<NavigationHistoryItem> {
+
   const analytics = this.analytics.get(userId);
   const prefs = await this.getUserPreferences(userId);
   if (!analytics) {
@@ -354,6 +384,7 @@ export class NavigationManagerService extends EventEmitter {
   searchQueriesCount: number;
   lastActivity: Date | null;
 }> {
+
   const analytics = this.analytics.get(userId);
   if (!analytics) {
   return {
@@ -388,6 +419,7 @@ export class NavigationManagerService extends EventEmitter {
   analytics: NavigationAnalytics;
   summary: any;
 }> {
+
   const preferences = await this.getUserPreferences(userId);
   const analytics = this.analytics.get(userId);
   const summary = await this.getAnalyticsSummary(userId);
@@ -398,6 +430,7 @@ export class NavigationManagerService extends EventEmitter {
 };
   // Private helper methods
   private async createDefaultPreferences(userId: string): Promise<NavigationPreferences> {
+
   return {
   userId,
   expandedSections: ['feature-management'],
@@ -425,6 +458,7 @@ export class NavigationManagerService extends EventEmitter {
   performanceMetrics: [],
 };
   private async persistPreferences(userId: string, preferences: NavigationPreferences): Promise<void> {
+
     // In real implementation, this would save to database or local storage
     // For now, just emit event
     this.emit('preferences_persisted', { userId, preferences });

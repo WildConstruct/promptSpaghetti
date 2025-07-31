@@ -67,6 +67,7 @@ export declare class ManifestTemplateGenerator {
     private static generateUITemplate;
     private static generateTransformTemplate;
     private static generateStorageTemplate;
+}
 interface ManifestSizeInfo {
     raw: number;
     compressed: number;
@@ -74,6 +75,7 @@ interface ManifestSizeInfo {
     fieldCount: number;
     dependencyCount: number;
     permissionCount: number;
+}
 interface ManifestMetadata {
     id: string;
     name: string;
@@ -90,18 +92,21 @@ interface ManifestMetadata {
     dependencyCount: number;
     permissionCount: number;
     size: ManifestSizeInfo;
+}
 interface ManifestComparison {
     identical: boolean;
     versionChanged: boolean;
     dependenciesChanged: boolean;
     permissionsChanged: boolean;
     configurationChanged: boolean;
-    changes: Array<{,
+    changes: Array<{
         field: string;
         oldValue: string;
         newValue: string;
         type: 'added' | 'removed' | 'modified'
+}
   }>;
+}
 interface ManifestWizardQuestion {
     key: string;
     prompt: string;
@@ -112,5 +117,6 @@ interface ManifestWizardQuestion {
     validation?: (value: any) => boolean;
     transform?: (value: any) => any;
 
+}
 export { ManifestTemplateGenerator };
 //# sourceMappingURL=ExtensionManifestUtils.d.ts.map

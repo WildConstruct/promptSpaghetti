@@ -59,37 +59,48 @@ const CreateCorrectionSetSchema = z.object({
 
 // Type definitions
 }
+}
 interface GetRulesQuery {
   includeInactive?: boolean;
   search?: string;
 }
 }
+}
 
+}
 }
 interface RuleIdParams {
   id: number;
 }
 }
+}
 
+}
 }
 interface ReorderRulesBody {
   ruleIds: number[];
 }
 }
+}
 
+}
 }
 interface ImportRulesBody {
   rules: any[];
   userId?: number;
 }
 }
+}
 
+}
 }
 interface StatsQuery {
   days?: number;
 }
 }
+}
 
+}
 }
 interface ExportQuery {
   format?: 'json' | 'yaml' | 'csv';
@@ -100,7 +111,9 @@ interface ExportQuery {
   ruleIds?: number[];
 }
 }
+}
 
+}
 }
 interface ImportBody {
   filename: string;
@@ -110,7 +123,9 @@ interface ImportBody {
   skipDuplicates?: boolean;
 }
 }
+}
 
+}
 }
 interface CreateCorrectionSetBody {
   name: string;
@@ -118,6 +133,7 @@ interface CreateCorrectionSetBody {
   version?: string;
   isPublic?: boolean;
   ruleIds: number[];
+}
 }
 }
 

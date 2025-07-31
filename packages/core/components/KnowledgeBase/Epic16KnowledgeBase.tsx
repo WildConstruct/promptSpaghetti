@@ -14,6 +14,7 @@ import {
 } from '../../services/Epic16KnowledgeBaseService';
 import { KnowledgeBaseSearch } from './KnowledgeBaseSearch';
 import { KnowledgeBaseArticleViewer } from './KnowledgeBaseArticleViewer';
+}
 interface Epic16KnowledgeBaseProps {
   userId: string;
   userRole: 'user' | 'creator' | 'admin';
@@ -35,6 +36,7 @@ interface Epic16KnowledgeBaseProps {
   initialView = 'search',
   initialArticleId,
   onAnalytics
+}
 }) => {
   // Service initialization
   const knowledgeService = useMemo(() => new Epic16KnowledgeBaseService(), []);

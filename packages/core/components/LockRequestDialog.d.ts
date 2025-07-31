@@ -1,5 +1,6 @@
 import React from 'react';
 
+}
 interface LockRequestDialogProps {
     isOpen: boolean;
     onClose: () => void;
@@ -8,5 +9,6 @@ interface LockRequestDialogProps {
     userId: string;
 
 export declare const LockRequestDialog: React.FC<LockRequestDialogProps>;
+}
 export {};
 //# sourceMappingURL=LockRequestDialog.d.ts.map

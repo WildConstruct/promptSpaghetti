@@ -73,6 +73,7 @@ type ClinicalWorkflow = z.infer<typeof ClinicalWorkflowSchema>;
 type WorkflowTemplate = z.infer<typeof WorkflowTemplateSchema>;
 
 }
+}
 interface MedicalTextProcessingOptions {
   deidentify?: boolean;
   mapTerminology?: boolean;
@@ -80,7 +81,9 @@ interface MedicalTextProcessingOptions {
   validateCodes?: boolean;
 }
 }
+}
 
+}
 }
 interface ProcessedMedicalText {
   original: string;
@@ -90,14 +93,18 @@ interface ProcessedMedicalText {
   validationResults: ValidationResult[];
 }
 }
+}
 
+}
 }
 interface HealthcareDataValidationOptions {
   version?: string;
   strict?: boolean;
 }
 }
+}
 
+}
 }
 interface HealthcareDataValidationResult {
   isValid: boolean;
@@ -107,11 +114,14 @@ interface HealthcareDataValidationResult {
   detectedVersion?: string;
 }
 }
+}
 
+}
 }
 interface ClinicalWorkflowOptions {
   templateId?: string;
   customizations?: Record<string, unknown>;
+}
 }
 }
 

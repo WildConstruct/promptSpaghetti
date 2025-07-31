@@ -18,6 +18,7 @@ import {
 } from '../../../packages/core/types/DataClassification';
 
 }
+}
 export interface AccessRequest {
   id: string;
   requesterId: string;
@@ -36,6 +37,7 @@ export interface AccessRequest {
     timeWindow?: TimeWindow;
     conditions?: AccessCondition[];
 }
+}
   };
   context: OperationContext;
   attachments?: RequestAttachment[];
@@ -48,6 +50,7 @@ export interface AccessRequest {
 }
 
 }
+}
 export interface AccessScope {
   type: 'RESOURCE_SPECIFIC' | 'CLASSIFICATION_LEVEL' | 'DEPARTMENT' | 'PROJECT' | 'GLOBAL';
   targets: string[];
@@ -56,7 +59,9 @@ export interface AccessScope {
   inheritanceLevel?: 'NONE' | 'CHILD_RESOURCES' | 'ALL_DESCENDANTS';
 }
 }
+}
 
+}
 }
 export interface TimeWindow {
   startTime?: Date;
@@ -68,7 +73,9 @@ export interface TimeWindow {
   sessionDurationLimit?: number; // minutes
 }
 }
+}
 
+}
 }
 export interface RecurrencePattern {
   type: 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'CUSTOM';
@@ -79,7 +86,9 @@ export interface RecurrencePattern {
   occurrences?: number;
 }
 }
+}
 
+}
 }
 export interface AccessCondition {
   type: 'LOCATION' | 'DEVICE' | 'NETWORK' | 'MFA_REQUIRED' | 'SUPERVISION_REQUIRED' | 'AUDIT_ENHANCED' | 'VPN_REQUIRED';
@@ -88,7 +97,9 @@ export interface AccessCondition {
   enforced: boolean;
 }
 }
+}
 
+}
 }
 export interface RequestAttachment {
   id: string;
@@ -101,6 +112,7 @@ export interface RequestAttachment {
   encryptionStatus: 'ENCRYPTED' | 'NOT_ENCRYPTED';
   classification: DataClassificationLevel;
   purpose: 'JUSTIFICATION' | 'APPROVAL_DOCUMENTATION' | 'COMPLIANCE_EVIDENCE' | 'TECHNICAL_SPECIFICATION';
+}
 }
 }
 
@@ -121,6 +133,7 @@ export type RequestStatus =
   | 'REVOKED';
 
 }
+}
 export interface RequestMetadata {
   riskScore: number;
   automaticProcessing: boolean;
@@ -137,7 +150,9 @@ export interface RequestMetadata {
   sensitivityIndicators: string[];
 }
 }
+}
 
+}
 }
 export interface ReviewHistoryEntry {
   timestamp: Date;
@@ -152,7 +167,9 @@ export interface ReviewHistoryEntry {
   metadata: ReviewMetadata;
 }
 }
+}
 
+}
 }
 export interface ReviewMetadata {
   ipAddress?: string;
@@ -163,7 +180,9 @@ export interface ReviewMetadata {
   complianceCheck?: ComplianceCheckResult;
 }
 }
+}
 
+}
 }
 export interface RiskAssessmentDetails {
   overallRisk: number;
@@ -172,7 +191,9 @@ export interface RiskAssessmentDetails {
   recommendedConditions: AccessCondition[];
 }
 }
+}
 
+}
 }
 export interface ComplianceCheckResult {
   compliant: boolean;
@@ -181,7 +202,9 @@ export interface ComplianceCheckResult {
   requiredActions: string[];
 }
 }
+}
 
+}
 }
 export interface ApprovalWorkflow {
   id: string;
@@ -198,7 +221,9 @@ export interface ApprovalWorkflow {
   metadata: WorkflowMetadata;
 }
 }
+}
 
+}
 }
 export interface WorkflowTrigger {
   type: 'DATA_CLASSIFICATION' | 'OPERATION_TYPE' | 'RISK_SCORE' | 'URGENCY' | 'USER_ROLE' | 'RESOURCE_TYPE' | 'REQUEST_VALUE';
@@ -208,7 +233,9 @@ export interface WorkflowTrigger {
   mandatory: boolean;
 }
 }
+}
 
+}
 }
 export interface ApprovalStep {
   id: string;
@@ -229,7 +256,9 @@ export interface ApprovalStep {
   criticalPath: boolean;
 }
 }
+}
 
+}
 }
 export interface ApproverConfig {
   type: 'USER' | 'ROLE' | 'GROUP' | 'DYNAMIC' | 'EXTERNAL' | 'AI_ASSISTANT';
@@ -243,7 +272,9 @@ export interface ApproverConfig {
   specializations?: string[];
 }
 }
+}
 
+}
 }
 export interface NotificationPreference {
   channel: 'EMAIL' | 'SMS' | 'SLACK' | 'TEAMS' | 'WEBHOOK' | 'IN_APP' | 'PUSH';
@@ -253,7 +284,9 @@ export interface NotificationPreference {
   schedule?: NotificationSchedule;
 }
 }
+}
 
+}
 }
 export interface NotificationSchedule {
   immediateDelivery: boolean;
@@ -263,7 +296,9 @@ export interface NotificationSchedule {
   escalationDelay: number; // minutes
 }
 }
+}
 
+}
 }
 export interface TimeRange {
   start: string; // HH:MM format
@@ -271,7 +306,9 @@ export interface TimeRange {
   daysOfWeek: number[];
 }
 }
+}
 
+}
 }
 export interface StepCondition {
   type: 'PREVIOUS_STEP_RESULT' | 'TIME_CONSTRAINT' | 'RESOURCE_AVAILABILITY' | 'COMPLIANCE_CHECK' | 'RISK_THRESHOLD';
@@ -280,7 +317,9 @@ export interface StepCondition {
   operator: 'AND' | 'OR' | 'NOT';
 }
 }
+}
 
+}
 }
 export interface SkipCondition {
   type: 'AUTO_APPROVAL_ELIGIBLE' | 'LOW_RISK' | 'EMERGENCY_OVERRIDE' | 'DELEGATION_ACTIVE';
@@ -288,7 +327,9 @@ export interface SkipCondition {
   requiresJustification: boolean;
 }
 }
+}
 
+}
 }
 export interface NotificationTemplate {
   id: string;
@@ -301,7 +342,9 @@ export interface NotificationTemplate {
   deliveryOptions: DeliveryOptions;
 }
 }
+}
 
+}
 }
 export interface DeliveryOptions {
   immediateDelivery: boolean;
@@ -311,7 +354,9 @@ export interface DeliveryOptions {
   escalateOnFailure: boolean;
 }
 }
+}
 
+}
 }
 export interface WorkflowTimeout {
   stepId: string;
@@ -321,7 +366,9 @@ export interface WorkflowTimeout {
   conditions?: TimeoutCondition[];
 }
 }
+}
 
+}
 }
 export interface TimeoutCondition {
   type: 'BUSINESS_HOURS' | 'HOLIDAY_EXCLUDE' | 'WEEKEND_EXCLUDE' | 'EMERGENCY_OVERRIDE';
@@ -329,7 +376,9 @@ export interface TimeoutCondition {
   description: string;
 }
 }
+}
 
+}
 }
 export interface EscalationRule {
   id: string;
@@ -341,7 +390,9 @@ export interface EscalationRule {
   escalationMatrix: EscalationMatrix[];
 }
 }
+}
 
+}
 }
 export interface EscalationTrigger {
   type: 'TIMEOUT' | 'REJECTION' | 'HIGH_RISK' | 'COMPLIANCE_ISSUE' | 'MANUAL_REQUEST' | 'EMERGENCY' | 'BUSINESS_IMPACT';
@@ -350,7 +401,9 @@ export interface EscalationTrigger {
   severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 }
 }
+}
 
+}
 }
 export interface EscalationMatrix {
   level: number;
@@ -360,7 +413,9 @@ export interface EscalationMatrix {
   autoActions: string[];
 }
 }
+}
 
+}
 }
 export interface AutoApprovalRule {
   id: string;
@@ -376,7 +431,9 @@ export interface AutoApprovalRule {
   cooldownPeriod?: number; // hours
 }
 }
+}
 
+}
 }
 export interface AutoApprovalCriteria {
   type: 'USER_ROLE' | 'DATA_CLASSIFICATION' | 'OPERATION_TYPE' | 'REQUEST_HISTORY' | 'TIME_WINDOW' | 'RESOURCE_VALUE';
@@ -386,7 +443,9 @@ export interface AutoApprovalCriteria {
   mandatory: boolean;
 }
 }
+}
 
+}
 }
 export interface AutoApprovalCondition {
   type: 'TIME_LIMIT' | 'USAGE_LIMIT' | 'SCOPE_RESTRICTION' | 'MONITORING_REQUIRED' | 'PERIODIC_REVIEW';
@@ -395,7 +454,9 @@ export interface AutoApprovalCondition {
   violationAction: 'REVOKE' | 'ALERT' | 'ESCALATE' | 'LOG';
 }
 }
+}
 
+}
 }
 export interface SLATarget {
   metric: 'RESPONSE_TIME' | 'RESOLUTION_TIME' | 'APPROVAL_RATE' | 'ESCALATION_RATE';
@@ -405,7 +466,9 @@ export interface SLATarget {
   consequences: SLAConsequence[];
 }
 }
+}
 
+}
 }
 export interface SLAConsequence {
   action: 'ESCALATE' | 'NOTIFY' | 'AUTO_APPROVE' | 'PRIORITY_BOOST';
@@ -413,7 +476,9 @@ export interface SLAConsequence {
   recipients: string[];
 }
 }
+}
 
+}
 }
 export interface WorkflowMetadata {
   version: string;
@@ -428,7 +493,9 @@ export interface WorkflowMetadata {
   performanceMetrics: WorkflowPerformanceMetrics;
 }
 }
+}
 
+}
 }
 export interface WorkflowUsageStats {
   totalRequests: number;
@@ -441,7 +508,9 @@ export interface WorkflowUsageStats {
   userSatisfactionScore?: number;
 }
 }
+}
 
+}
 }
 export interface WorkflowComplianceInfo {
   frameworks: string[];
@@ -452,7 +521,9 @@ export interface WorkflowComplianceInfo {
   complianceScore: number;
 }
 }
+}
 
+}
 }
 export interface WorkflowPerformanceMetrics {
   averageStepDuration: Record<string, number>;
@@ -462,7 +533,9 @@ export interface WorkflowPerformanceMetrics {
   errorRate: number;
 }
 }
+}
 
+}
 }
 export interface WorkflowExecution {
   id: string;
@@ -479,7 +552,9 @@ export interface WorkflowExecution {
   slaStatus: SLAStatus;
 }
 }
+}
 
+}
 }
 export interface StepExecution {
   stepId: string;
@@ -494,7 +569,9 @@ export interface StepExecution {
   performanceData: StepPerformanceData;
 }
 }
+}
 
+}
 }
 export interface ApprovalDecision {
   approverId: string;
@@ -509,7 +586,9 @@ export interface ApprovalDecision {
   complianceNotes?: string;
 }
 }
+}
 
+}
 }
 export interface DecisionMetadata {
   ipAddress: string;
@@ -522,7 +601,9 @@ export interface DecisionMetadata {
   reviewDepth: 'SURFACE' | 'DETAILED' | 'COMPREHENSIVE';
 }
 }
+}
 
+}
 }
 export interface EscalationRecord {
   id: string;
@@ -537,7 +618,9 @@ export interface EscalationRecord {
   businessImpact: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 }
 }
+}
 
+}
 }
 export interface NotificationRecord {
   id: string;
@@ -552,7 +635,9 @@ export interface NotificationRecord {
   failureReason?: string;
 }
 }
+}
 
+}
 }
 export interface AutomationResult {
   scriptId: string;
@@ -565,7 +650,9 @@ export interface AutomationResult {
   sideEffects: string[];
 }
 }
+}
 
+}
 }
 export interface StepPerformanceData {
   actualDuration: number;
@@ -576,7 +663,9 @@ export interface StepPerformanceData {
   waitTime: number;
 }
 }
+}
 
+}
 }
 export interface WorkflowDecision {
   stepId: string;
@@ -590,7 +679,9 @@ export interface WorkflowDecision {
   businessJustification?: string;
 }
 }
+}
 
+}
 }
 export interface SLAStatus {
   overallSLA: 'ON_TRACK' | 'AT_RISK' | 'VIOLATED' | 'ESCALATED';
@@ -601,7 +692,9 @@ export interface SLAStatus {
   breachNotificationsSent: number;
 }
 }
+}
 
+}
 }
 export interface ExecutionMetadata {
   riskScore: number;
@@ -611,7 +704,9 @@ export interface ExecutionMetadata {
   businessContext: BusinessContext;
 }
 }
+}
 
+}
 }
 export interface ExecutionPerformanceMetrics {
   totalProcessingTime: number;
@@ -623,7 +718,9 @@ export interface ExecutionPerformanceMetrics {
   throughputRate: number;
 }
 }
+}
 
+}
 }
 export interface ExecutionAuditEntry {
   timestamp: Date;
@@ -635,7 +732,9 @@ export interface ExecutionAuditEntry {
   riskImpact?: number;
 }
 }
+}
 
+}
 }
 export interface BusinessContext {
   department: string;
@@ -645,6 +744,7 @@ export interface BusinessContext {
   stakeholders: string[];
   costCenter?: string;
   budgetImpact?: number;
+}
 }
 }
 

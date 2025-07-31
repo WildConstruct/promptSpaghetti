@@ -22,9 +22,11 @@ import { Database } from '../database';
 
 // Request type definitions
 }
+}
 interface AssessQualityRequest {
   Params: {
     templateId: string;
+}
 }
   };
   Querystring: {
@@ -34,9 +36,11 @@ interface AssessQualityRequest {
 }
 
 }
+}
 interface CreatorDashboardRequest {
   Params: {
     creatorId: string;
+}
 }
   };
   Querystring: {
@@ -46,9 +50,11 @@ interface CreatorDashboardRequest {
 }
 
 }
+}
 interface QualityTrendsRequest {
   Params: {
     templateId: string;
+}
 }
   };
   Querystring: {
@@ -58,19 +64,23 @@ interface QualityTrendsRequest {
 }
 
 }
+}
 interface MarketplaceInsightsRequest {
   Querystring: {
     timeRange?: TimeRange;
     category?: string;
     minQualityScore?: number;
 }
+}
   };
 }
 
 }
+}
 interface QualityBenchmarkRequest {
   Params: {
     templateId: string;
+}
 }
   };
   Body: {
@@ -80,9 +90,11 @@ interface QualityBenchmarkRequest {
 }
 
 }
+}
 interface QualityRecommendationsRequest {
   Params: {
     templateId: string;
+}
 }
   };
   Querystring: {

@@ -11,6 +11,7 @@ import { createPortal } from 'react-dom';
 import { JustInTimeConsentPrompt } from './JustInTimeConsentPrompt';
 import { useJustInTimeConsent } from '../../hooks/useJustInTimeConsent';
 import { UseJustInTimeReturn } from '../../types/consent';
+}
 interface JustInTimeConsentContextType extends UseJustInTimeReturn {
   triggerPromptForElement: (feature: string, action: string, element: HTMLElement) => Promise<boolean>;
   const JustInTimeConsentContext = createContext<JustInTimeConsentContextType | null>(null);
@@ -20,12 +21,14 @@ interface JustInTimeConsentContextType extends UseJustInTimeReturn {
   throw new Error('useJustInTimeConsentContext must be used within JustInTimeConsentProvider');
   return context;
 };
+}
 interface JustInTimeConsentProviderProps {
   children: React.ReactNode;
   portalTarget?: HTMLElement;
   export const JustInTimeConsentProvider: React.FC<JustInTimeConsentProviderProps> = ({,)
   children,
   portalTarget
+}
 }) => {
   const justInTimeConsent = useJustInTimeConsent();
   const { activePrompts, showPrompt, dismissPrompt, respondToPrompt } = justInTimeConsent;

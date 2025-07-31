@@ -7,6 +7,7 @@ import { CreateComment, UpdateComment } from '../../types/workspace';
 import { CommentThread } from './CommentThread';
 import { CommentForm } from './CommentForm';
 import { useComments } from '../../hooks/useComments';
+}
 interface CommentSystemProps {
   workspaceId: string;
   targetType: string;
@@ -25,6 +26,7 @@ interface CommentSystemProps {
   projectId,
   className = '',
   compact = false
+}
 }) => {
   const [showCommentForm, setShowCommentForm] = useState(false);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');

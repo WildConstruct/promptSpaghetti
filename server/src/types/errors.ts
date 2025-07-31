@@ -24,6 +24,7 @@ export enum ErrorSeverity {
 }
 
 }
+}
 export interface ErrorContext {
   correlationId: string;
   userId?: string;
@@ -37,13 +38,16 @@ export interface ErrorContext {
   additionalData?: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 export interface ErrorDetail {
   field?: string;
   code: string;
   message: string;
   value?: unknown;
+}
 }
 }
 

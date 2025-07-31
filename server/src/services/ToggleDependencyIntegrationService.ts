@@ -27,6 +27,7 @@ import { AuditService } from '../auth/services/AuditService';
 
 // Real-time dependency enforcement interfaces
 }
+}
 export interface DependencyEnforcement {
   toggleId: string;
   operation: ToggleOperation;
@@ -36,7 +37,9 @@ export interface DependencyEnforcement {
   context: EnforcementContext;
 }
 }
+}
 
+}
 }
 export interface ToggleOperation {
   type: OperationType;
@@ -45,6 +48,7 @@ export interface ToggleOperation {
   newValue?: unknown;
   reason: string;
   metadata?: unknown;
+}
 }
 }
 
@@ -59,6 +63,7 @@ export enum OperationType {
 }
 
 }
+}
 export interface EnforcementResult {
   allowed: boolean;
   blockers: DependencyBlocker[];
@@ -70,7 +75,9 @@ export interface EnforcementResult {
   rollbackPlan?: RollbackPlan;
 }
 }
+}
 
+}
 }
 export interface DependencyBlocker {
   type: DependencyType;
@@ -83,6 +90,7 @@ export interface DependencyBlocker {
   overrideRequiredRoles: string[];
 }
 }
+}
 
 export enum BlockerSeverity {
   INFO = 'info',
@@ -92,6 +100,7 @@ export enum BlockerSeverity {
 }
 
 }
+}
 export interface DependencyWarning {
   type: WarningType;
   toggleId: string;
@@ -99,6 +108,7 @@ export interface DependencyWarning {
   recommendation: string;
   impactLevel: 'minimal' | 'moderate' | 'significant' | 'severe';
   canProceedWithWarning: boolean;
+}
 }
 }
 
@@ -112,6 +122,7 @@ export enum WarningType {
 }
 
 }
+}
 export interface CascadeAction {
   targetToggleId: string;
   requiredAction: OperationType;
@@ -123,7 +134,9 @@ export interface CascadeAction {
   rollbackAction?: OperationType;
 }
 }
+}
 
+}
 }
 export interface OperationImpact {
   directlyAffectedToggles: string[];
@@ -136,7 +149,9 @@ export interface OperationImpact {
   rolloutDuration: number; // estimated minutes for safe rollout
 }
 }
+}
 
+}
 }
 export interface EnforcementRecommendation {
   action: RecommendationAction;
@@ -145,6 +160,7 @@ export interface EnforcementRecommendation {
   prerequisites?: string[];
   timeline?: string;
   riskMitigation?: string[];
+}
 }
 }
 
@@ -158,6 +174,7 @@ export enum RecommendationAction {
 }
 
 }
+}
 export interface RollbackPlan {
   id: string;
   steps: RollbackStep[];
@@ -167,7 +184,9 @@ export interface RollbackPlan {
   validationChecks: string[];
 }
 }
+}
 
+}
 }
 export interface RollbackStep {
   stepNumber: number;
@@ -179,7 +198,9 @@ export interface RollbackStep {
   validationRequired: boolean;
 }
 }
+}
 
+}
 }
 export interface EnforcementContext {
   requestSource: RequestSource;
@@ -189,6 +210,7 @@ export interface EnforcementContext {
   testingPhase?: TestingPhase;
   rolloutStrategy?: RolloutStrategy;
   notifications?: NotificationPreference[];
+}
 }
 }
 
@@ -209,6 +231,7 @@ export enum UrgencyLevel {
 }
 
 }
+}
 export interface Approval {
   id: string;
   approverRole: string;
@@ -218,7 +241,9 @@ export interface Approval {
   conditions?: string[];
 }
 }
+}
 
+}
 }
 export interface DependencyOverride {
   id: string;
@@ -228,6 +253,7 @@ export interface DependencyOverride {
   validUntil?: Date;
   reason: string;
   riskAcceptance: string;
+}
 }
 }
 
@@ -255,11 +281,13 @@ export enum RolloutStrategy {
 }
 
 }
+}
 export interface NotificationPreference {
   channel: NotificationChannel;
   recipients: string[];
   eventTypes: NotificationEvent[];
   urgencyThreshold: UrgencyLevel;
+}
 }
 }
 
@@ -281,6 +309,7 @@ export enum NotificationEvent {
 
 // Configuration and service interfaces
 }
+}
 export interface DependencyIntegrationConfig {
   enforcement: {
     enableRealTimeValidation: boolean;
@@ -289,6 +318,7 @@ export interface DependencyIntegrationConfig {
     maxCascadeDepth: number;
     defaultBlockerSeverity: BlockerSeverity;
     requireApprovalThreshold: number; // risk score threshold
+}
 }
   };
   
@@ -324,11 +354,13 @@ export interface DependencyIntegrationConfig {
 }
 
 }
+}
 export interface EscalationRule {
   condition: string; // JSON logic expression
   escalateTo: string[];
   escalationDelay: number; // minutes
   maxEscalations: number;
+}
 }
 }
 
@@ -1113,6 +1145,7 @@ export class ToggleDependencyIntegrationService extends EventEmitter {
 
 // Supporting interfaces for completeness
 }
+}
 export interface OperationExecutionResult {
   executionId: string;
   success: boolean;
@@ -1123,7 +1156,9 @@ export interface OperationExecutionResult {
   rollbackPlanId?: string;
 }
 }
+}
 
+}
 }
 export interface CascadeExecutionResult {
   cascadeAction: CascadeAction;
@@ -1132,7 +1167,9 @@ export interface CascadeExecutionResult {
   executionTime: number;
 }
 }
+}
 
+}
 }
 export interface ImpactPreview {
   operation: ToggleOperation;
@@ -1145,6 +1182,7 @@ export interface ImpactPreview {
   estimatedExecutionTime: number;
   recommendedApprovals: string[];
   safetyChecks: string[];
+}
 }
 }
 

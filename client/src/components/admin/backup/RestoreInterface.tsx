@@ -31,6 +31,7 @@ import {
 
 // Types extending Epic 19 restore infrastructure for admin use
 
+}
 export interface AdminRestorePoint {
   recovery_point_id: string;,
   name: string;
@@ -44,12 +45,13 @@ export interface AdminRestorePoint {
   record_count: number;,
   status: 'available' | 'restoring' | 'expired' | 'archived' | 'failed';
   validation_status: 'pending' | 'valid' | 'invalid' | 'corrupted';,
-  included_data_types: {,
+  included_data_types: {
   admin_configs: boolean;,
   user_permissions: boolean;
   system_settings: boolean;,
   audit_logs: boolean;
   marketplace_data: boolean;
+}
 };
   storage_location: string;,
   storage_provider: 'local' | 'aws_s3' | 'gcp_storage' | 'azure_blob';
@@ -58,13 +60,14 @@ export interface AdminRestorePoint {
   restore_count: number;
   last_restored_at?: Date;
 }
+}
 export interface RestoreRequest {
   restore_id: string;,
   recovery_point_id: string;
   restore_type: 'full_system' | 'admin_configs' | 'user_data' | 'selective';,
   restore_scope: 'replace_all' | 'merge_data' | 'preview_only' | 'dry_run';
   target_timestamp?: Date;
-  data_selection: {,
+  data_selection: {
   include_admin_configs: boolean;,
   include_user_permissions: boolean;
   include_system_settings: boolean;,
@@ -72,8 +75,9 @@ export interface RestoreRequest {
   include_marketplace_data: boolean;
   specific_tables?: string;
   where_conditions?: Record<string, unknown>;
+}
 };
-  restore_options: {,
+  restore_options: {
   create_backup_first: boolean;
   validate_before_restore: boolean;,
   validation_level: 'basic' | 'full' | 'compliance';
@@ -81,7 +85,7 @@ export interface RestoreRequest {
   notify_admins: boolean;
   maintenance_mode: boolean;
 };
-  conflict_resolution: {,
+  conflict_resolution: {
   duplicate_handling: 'skip' | 'replace' | 'merge';
   permission_conflicts: 'preserve_current' | 'restore_backup' | 'manual_review';,
   config_conflicts: 'preserve_current' | 'restore_backup' | 'merge_smart';
@@ -91,6 +95,7 @@ export interface RestoreRequest {
   approval_required: boolean;
   approved_by?: string;
 }
+}
 export interface RestoreExecution {
   execution_id: string;,
   restore_request: RestoreRequest;
@@ -98,7 +103,7 @@ export interface RestoreExecution {
   started_at?: Date;
   completed_at?: Date;
   estimated_completion?: Date;
-  progress: {,
+  progress: {
   current_phase: string;,
   phases_completed: number;
   total_phases: number;,
@@ -106,6 +111,7 @@ export interface RestoreExecution {
   records_processed: number;,
   total_records: number;
   current_table?: string;
+}
 };
   pre_restore_backup_id?: string;
   validation_results?: {
@@ -120,24 +126,26 @@ export interface RestoreExecution {
   recovery_suggestions: string;,
   rollback_available: boolean;
 };
-  performance_metrics: {,
+  performance_metrics: {
   records_per_second: number;
   data_transfer_rate_mbps: number;,
   cpu_usage_percent: number;
   memory_usage_mb: number;
 };
 }
+}
 export interface RestorePreview {
   recovery_point: AdminRestorePoint;,
-  affected_data: {,
+  affected_data: {
   table_name: string;,
   current_record_count: number;
   restore_record_count: number;,
   estimated_changes: number;
   conflict_count: number;,
   preview_records: unknown;
+}
 }[];
-  impact_analysis: {,
+  impact_analysis: {
   users_affected: number;
   configs_changed: number;,
   permissions_modified: number;
@@ -154,14 +162,14 @@ export const RestoreInterface: React.FC = () => {
   const [restoreRequest, setRestoreRequest] = useState<Partial<RestoreRequest>>({)
   restore_type: 'selective',
   restore_scope: 'preview_only',
-  data_selection: {,
+  data_selection: {
   include_admin_configs: true,
   include_user_permissions: false,
   include_system_settings: false,
   include_audit_logs: false,
   include_marketplace_data: false,
 },
-  restore_options: {,
+  restore_options: {
   create_backup_first: true,
   validate_before_restore: true,
   validation_level: 'full',
@@ -169,7 +177,7 @@ export const RestoreInterface: React.FC = () => {
   notify_admins: true,
   maintenance_mode: false,
 },
-  conflict_resolution: {,
+  conflict_resolution: {
   duplicate_handling: 'skip',
   permission_conflicts: 'manual_review',
   config_conflicts: 'preserve_current',
@@ -220,7 +228,7 @@ export const RestoreInterface: React.FC = () => {
     try {
       const response = await fetch('/api/admin/restore/preview', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('authToken')}`}
   },
@@ -242,7 +250,7 @@ export const RestoreInterface: React.FC = () => {
     try {
       const response = await fetch('/api/admin/restore/execute', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('authToken')}`}
   },
@@ -469,7 +477,7 @@ export const RestoreInterface: React.FC = () => {
                           checked={restoreRequest.data_selection?.[option.key as keyof typeof restoreRequest.data_selection] || false}
                           onChange={(e) => setRestoreRequest(prev => ({)
   ...prev,
-  data_selection: {,
+  data_selection: {
   ...prev.data_selection!,
   [option.key]: e.target.checked,
 }))}
@@ -497,7 +505,7 @@ export const RestoreInterface: React.FC = () => {
                       checked={restoreRequest.restore_options?.create_backup_first || false}
                       onChange={(e) => setRestoreRequest(prev => ({)
   ...prev,
-  restore_options: {,
+  restore_options: {
   ...prev.restore_options!,
   create_backup_first: e.target.checked,
 }))}
@@ -510,7 +518,7 @@ export const RestoreInterface: React.FC = () => {
                       checked={restoreRequest.restore_options?.validate_before_restore || false}
                       onChange={(e) => setRestoreRequest(prev => ({)
   ...prev,
-  restore_options: {,
+  restore_options: {
   ...prev.restore_options!,
   validate_before_restore: e.target.checked,
 }))}
@@ -523,7 +531,7 @@ export const RestoreInterface: React.FC = () => {
                       checked={restoreRequest.restore_options?.rollback_on_failure || false}
                       onChange={(e) => setRestoreRequest(prev => ({)
   ...prev,
-  restore_options: {,
+  restore_options: {
   ...prev.restore_options!,
   rollback_on_failure: e.target.checked,
 }))}
@@ -536,7 +544,7 @@ export const RestoreInterface: React.FC = () => {
                       checked={restoreRequest.restore_options?.maintenance_mode || false}
                       onChange={(e) => setRestoreRequest(prev => ({)
   ...prev,
-  restore_options: {,
+  restore_options: {
   ...prev.restore_options!,
   maintenance_mode: e.target.checked,
 }))}

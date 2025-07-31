@@ -5,12 +5,14 @@
  * Intelligent resource management and optimization for AI model operations
  */
 
+}
 export interface ResourceUsage {
     memory: {
         used: number;
         available: number;
         percentage: number;
         peak: number;
+}
     };
     cpu: {
         usage: number;
@@ -35,6 +37,7 @@ export interface ResourceUsage {
         temperature: number;
     };
 
+}
 export interface OptimizationStrategy {
     name: string;
     description: string;
@@ -45,10 +48,12 @@ export interface OptimizationStrategy {
         cpu?: number;
         cost?: number;
         responseTime?: number;
+}
     };
     implementation: () => Promise<void>;
     rollback: () => Promise<void>;
 
+}
 export interface ResourceOptimizationConfig {
     enabled: boolean;
     monitoringInterval: number;
@@ -57,6 +62,7 @@ export interface ResourceOptimizationConfig {
         cpuUsage: number;
         diskUsage: number;
         responseTime: number;
+}
     };
     strategies: {
         memoryOptimization: boolean;
@@ -73,6 +79,7 @@ export interface ResourceOptimizationConfig {
         maxCacheSize: number;
     };
 
+}
 export interface ModelResourceProfile {
     modelId: string;
     resourceRequirements: {
@@ -80,8 +87,9 @@ export interface ModelResourceProfile {
         cpu: number;
         gpu?: number;
         disk: number;
+}
     };
-    utilizationHistory: Array<{,
+    utilizationHistory: Array<{
         timestamp: number;
         usage: ResourceUsage;
     }>;
@@ -137,7 +145,7 @@ export declare class ResourceOptimizer {
     }>;
     applyOptimizationPlan(plan: OptimizationStrategy[]): Promise<{
         applied: string[];
-        failed: Array<{,
+        failed: Array<{
             strategy: string;
             error: string;
         }>;

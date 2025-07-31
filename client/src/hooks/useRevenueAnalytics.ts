@@ -16,18 +16,21 @@ import {
 } from '../types/revenue';
 import { revenueService } from '../services/revenueService';
 
+}
 export interface UseRevenueAnalyticsParams {
   scope: 'global' | 'creator' | 'template';
   entityId?: string;
   timeRange: RevenueTimeRange;
-  customDateRange?: {,
+  customDateRange?: {
   start: Date | null;,
   end: Date | null;
+}
 };
   filters: RevenueFilters;
   refreshInterval?: number; // milliseconds, 0 to disable
   autoRefresh?: boolean;
   cacheEnabled?: boolean;
+}
 }
 export interface UseRevenueAnalyticsReturn {
   // Data
@@ -48,6 +51,7 @@ export interface UseRevenueAnalyticsReturn {
   lastUpdated: Date | null;,
   cacheHit: boolean;
   executionTime: number | null;
+}
 }
 export const useRevenueAnalytics = (params: UseRevenueAnalyticsParams): UseRevenueAnalyticsReturn => {
   // State
@@ -120,7 +124,7 @@ export const useRevenueAnalytics = (params: UseRevenueAnalyticsParams): UseReven
   userId: 'current-user', // Would come from auth context,
   dashboardScope: params.scope,
   entityId: params.entityId,
-  metadata: {,
+  metadata: {
   timeRange: params.timeRange,
   filtersApplied: Object.keys(params.filters).length > 0,
   cacheHit: response.metadata?.cacheHit,
@@ -192,7 +196,7 @@ export const useRevenueAnalytics = (params: UseRevenueAnalyticsParams): UseReven
   userId: 'current-user',
   dashboardScope: params.scope,
   entityId: params.entityId,
-  metadata: {,
+  metadata: {
   format,
   timeRange: params.timeRange,
   filtersApplied: Object.keys(params.filters).length > 0,

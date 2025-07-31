@@ -8,7 +8,7 @@ export const colorPaletteTemplate: NodeTemplate = {,
   id: "colors-6",
   type: "transform",
   position: { x: 500, y: 350 },
-  data: {,
+  data: {
   label: "Color Palette",
   description: "Dark Grays & Blues, Military Greens, Chrome & Pastels, etc.",
   category: "transform",
@@ -66,7 +66,7 @@ export const colorPaletteOptions = colorPaletteTemplate.data.options;
 
 // Color scheme definitions with hex values
 export const colorSchemes = {
-  "Dark Grays & Blues": {,
+  "Dark Grays & Blues": {
   primary: "#2a2a2a",
   secondary: "#1e3a5f",
   accent: "#4a90e2",

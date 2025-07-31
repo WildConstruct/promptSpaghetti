@@ -6,6 +6,7 @@
  */
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
 
+}
 export interface StableDiffusionConfig {
     endpoint: string;
     apiType: 'automatic1111' | 'comfyui' | 'stability-ai' | 'replicate' | 'custom';
@@ -14,6 +15,7 @@ export interface StableDiffusionConfig {
     maxRetries?: number;
     defaultModel?: string;
 
+}
 export interface StableDiffusionRequestOptions {
     prompt: string;
     negative_prompt?: string;
@@ -35,6 +37,7 @@ export interface StableDiffusionRequestOptions {
     lora_models?: Array<{
         name: string;
         strength: number;
+}
     }>;
     controlnet?: Array<{
         model: string;
@@ -52,13 +55,15 @@ export interface StableDiffusionRequestOptions {
     hr_resize_x?: number;
     hr_resize_y?: number;
 
+}
 export interface StableDiffusionResponse {
     images: string[];
     parameters: Record<string, any>;
     info: string;
 
+}
 export interface StableDiffusionGenerationResult {
-    images: Array<{,
+    images: Array<{
         base64: string;
         url?: string;
         seed: number;
@@ -68,6 +73,7 @@ export interface StableDiffusionGenerationResult {
             steps: number;
             cfg_scale: number;
             size: string;
+}
         };
     }>;
     originalPrompt: string;
@@ -79,6 +85,7 @@ export interface StableDiffusionGenerationResult {
         estimatedCost: number;
     };
 
+}
 export interface ModelInfo {
     name: string;
     filename: string;
@@ -121,3 +128,4 @@ export declare class StableDiffusionAdapter extends BaseAIModel {
 
 export default StableDiffusionAdapter;
 //# sourceMappingURL=StableDiffusionAdapter.d.ts.map
+}

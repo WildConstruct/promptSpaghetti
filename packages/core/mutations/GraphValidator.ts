@@ -104,6 +104,7 @@ export class GraphValidator extends EventEmitter {
    * Validate entire graph state
    */
   async validateState(state: GraphState): Promise<ValidationResult> {
+
   const errors: ValidationError = [];
   try {
   // Use existing validation logic
@@ -136,6 +137,7 @@ export class GraphValidator extends EventEmitter {
   };
   // PRIVATE VALIDATION METHODS
   private async validateBasicOperation(operation: GraphOperation): Promise<ValidationError> {
+
   const errors: ValidationError = [];
   // Check required fields
   if (!operation.id || operation.id.trim() === '') {
@@ -172,10 +174,11 @@ export class GraphValidator extends EventEmitter {
   severity: 'error',
 });
     return errors;
-  private async validateSpecificOperation(()
+  private async validateSpecificOperation(((
     operation: GraphOperation,
-    currentState: GraphState,
+    currentState: GraphState
   ): Promise<ValidationError> {
+
     switch (operation.type) {
     case OperationType.NODE_ADD:
       return this.validateNodeAdd(operation as NodeAddOperation, currentState);
@@ -202,10 +205,11 @@ export class GraphValidator extends EventEmitter {
 },
   severity: 'error'
   }];
-  private async validateNodeAdd(()
+  private async validateNodeAdd(((
     operation: NodeAddOperation,
-    state: GraphState,
+    state: GraphState
   ): Promise<ValidationError> {
+
     const errors: ValidationError = [];
     const { node, position } = operation.payload;
     // Check for duplicate IDs
@@ -240,10 +244,11 @@ export class GraphValidator extends EventEmitter {
   nodeId: node.id,
 });
     return errors;
-  private async validateNodeDelete(()
+  private async validateNodeDelete(((
     operation: NodeDeleteOperation,
-    state: GraphState,
+    state: GraphState
   ): Promise<ValidationError> {
+
     const errors: ValidationError = [];
     const { nodeId } = operation.payload;
     // Check if node exists
@@ -269,10 +274,11 @@ export class GraphValidator extends EventEmitter {
         nodeId
       });
     return errors;
-  private async validateNodeUpdate(()
+  private async validateNodeUpdate(((
     operation: NodeUpdateOperation,
-    state: GraphState,
+    state: GraphState
   ): Promise<ValidationError> {
+
     const errors: ValidationError = [];
     const { nodeId, updates } = operation.payload;
     // Check if node exists
@@ -307,10 +313,11 @@ export class GraphValidator extends EventEmitter {
           field
         });
     return errors;
-  private async validateEdgeAdd(()
+  private async validateEdgeAdd(((
     operation: EdgeAddOperation,
-    state: GraphState,
+    state: GraphState
   ): Promise<ValidationError> {
+
     const errors: ValidationError = [];
     const { edge } = operation.payload;
     // Check for self-loops
@@ -357,10 +364,11 @@ export class GraphValidator extends EventEmitter {
         nodeId: edge.target;
   });
     return errors;
-  private async validateEdgeDelete(()
+  private async validateEdgeDelete(((
     operation: EdgeDeleteOperation,
-    state: GraphState,
+    state: GraphState
   ): Promise<ValidationError> {
+
     const errors: ValidationError = [];
     const { edgeId } = operation.payload;
     // Check if edge exists
@@ -374,10 +382,11 @@ export class GraphValidator extends EventEmitter {
         edgeId
       });
     return errors;
-  private async validateVariationAdd(()
+  private async validateVariationAdd(((
     operation: VariationAddOperation,
-    state: GraphState,
+    state: GraphState
   ): Promise<ValidationError> {
+
     const errors: ValidationError = [];
     const { nodeId, variation } = operation.payload;
     // Check if node exists
@@ -408,10 +417,11 @@ export class GraphValidator extends EventEmitter {
   nodeId
 });
     return errors;
-  private async validateVariationDelete(()
+  private async validateVariationDelete(((
     operation: VariationDeleteOperation,
-    state: GraphState,
+    state: GraphState
   ): Promise<ValidationError> {
+
     const errors: ValidationError = [];
     const { nodeId, index } = operation.payload;
     // Check if node exists
@@ -436,10 +446,11 @@ export class GraphValidator extends EventEmitter {
         nodeId
       });
     return errors;
-  private async validateVariationUpdate(()
+  private async validateVariationUpdate(((
     operation: VariationUpdateOperation,
-    state: GraphState,
+    state: GraphState
   ): Promise<ValidationError> {
+
     const errors: ValidationError = [];
     const { nodeId, index, newValue } = operation.payload;
     // Check if node exists
@@ -472,10 +483,11 @@ export class GraphValidator extends EventEmitter {
   nodeId
 });
     return errors;
-  private async validateVariationReorder(()
+  private async validateVariationReorder(((
     operation: VariationReorderOperation,
-    state: GraphState,
+    state: GraphState
   ): Promise<ValidationError> {
+
     const errors: ValidationError = [];
     const { nodeId, fromIndex, toIndex } = operation.payload;
     // Check if node exists
@@ -508,10 +520,11 @@ export class GraphValidator extends EventEmitter {
         nodeId
       });
     return errors;
-  private async validateOperationSchema(()
+  private async validateOperationSchema(((
     operation: GraphOperation,
-    state: GraphState,
+    state: GraphState
   ): Promise<ValidationError> {
+
   const errors: ValidationError = [];
   // For node operations, validate against node schemas
   if (operation.type === OperationType.NODE_ADD) {
@@ -529,10 +542,11 @@ export class GraphValidator extends EventEmitter {
             nodeId: nodeOp.payload.node.id;
   });
     return errors;
-  private async validateStructuralConstraints(()
+  private async validateStructuralConstraints(((
     operation: GraphOperation,
-    state: GraphState,
+    state: GraphState
   ): Promise<ValidationError> {
+
   const errors: ValidationError = [];
   // Simulate the operation and validate resulting structure
   const simulatedState = this.simulateOperation(operation, state);
@@ -555,6 +569,7 @@ export class GraphValidator extends EventEmitter {
   });
     return errors;
   private async validateGraphState(state: GraphState): Promise<ValidationError> {
+
     const errors: ValidationError = [];
     // Check for duplicate node IDs
     const nodeIds = state.nodes.map(n => n.id);

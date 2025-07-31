@@ -11,6 +11,7 @@ import { EmailService } from './EmailService';
 import { logger } from '../../utils/logger';
 
 }
+}
 export interface BreachNotification {
   id: string;
   userId: string;
@@ -26,7 +27,9 @@ export interface BreachNotification {
   status: 'PENDING' | 'SENT' | 'DELIVERED' | 'FAILED' | 'ACKNOWLEDGED';
 }
 }
+}
 
+}
 }
 export interface BreachNotificationConfig {
   enableEmailNotifications: boolean;
@@ -40,7 +43,9 @@ export interface BreachNotificationConfig {
   includeSecurityTips: boolean;
 }
 }
+}
 
+}
 }
 export interface NotificationTemplate {
   subject: string;
@@ -49,6 +54,7 @@ export interface NotificationTemplate {
   inAppMessage: string;
   smsMessage: string;
   pushMessage: string;
+}
 }
 }
 

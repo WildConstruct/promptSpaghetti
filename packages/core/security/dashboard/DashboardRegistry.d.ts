@@ -27,6 +27,7 @@ import {
   DashboardPermissions
 } from './SecurityDashboardFramework';
 
+}
 export interface DashboardTemplate {
     id: string;
     type: DashboardType;
@@ -43,6 +44,7 @@ export interface DashboardTemplate {
         allowWidgetAdd: boolean;
         allowWidgetRemove: boolean;
         allowThemeChange: boolean;
+}
     };
     metadata: {
         version: string;
@@ -54,6 +56,7 @@ export interface DashboardTemplate {
         complianceFrameworks?: string[];
     };
 
+}
 export interface DashboardPreset {
     id: string;
     name: string;
@@ -67,6 +70,7 @@ export interface DashboardPreset {
         position: {
             x: number;
             y: number;
+}
         };
         size: {
             width: number;
@@ -76,6 +80,7 @@ export interface DashboardPreset {
     }[];
     permissions: DashboardPermissions;
 
+}
 export interface RegistryOptions {
     enableCache: boolean;
     cacheTimeout: number;
@@ -151,6 +156,7 @@ export declare class DashboardRegistry {
         presetCount: number;
         widgetCount: number;
         categoriesByType: Record<DashboardType, number>;
+}
     };
     /**
      * Clear registry (for testing)

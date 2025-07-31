@@ -30,6 +30,7 @@ import {
 
 // Types extending Epic 19 backup infrastructure for admin use
 
+}
 export interface AdminBackupConfiguration {
   config_id: string;,
   name: string;
@@ -37,15 +38,16 @@ export interface AdminBackupConfiguration {
   enabled: boolean;
   backup_type: 'full' | 'incremental' | 'differential';
   // Schedule configuration
-  schedule: {,
+  schedule: {
   frequency: 'hourly' | 'daily' | 'weekly' | 'monthly';,
   time_of_day: string; // HH:MM format,
   days_of_week?: number; // 0-6 for weekly,
   day_of_month?: number; // 1-31 for monthly,
   timezone: string;
+}
 };
   // Data scope
-  data_scope: {,
+  data_scope: {
   include_admin_configs: boolean;
   include_user_permissions: boolean;,
   include_system_settings: boolean;
@@ -55,7 +57,7 @@ export interface AdminBackupConfiguration {
   exclude_tables: string;
 };
   // Retention policy
-  retention_policy: {,
+  retention_policy: {
   keep_hourly: number; // hours,
   keep_daily: number; // days,
   keep_weekly: number; // weeks,
@@ -64,7 +66,7 @@ export interface AdminBackupConfiguration {
   archive_after_days?: number;
 };
   // Storage configuration
-  storage: {,
+  storage: {
   provider: 'local' | 'aws_s3' | 'gcp_storage' | 'azure_blob';
   location: string;,
   encryption_enabled: boolean;
@@ -72,7 +74,7 @@ export interface AdminBackupConfiguration {
   storage_class?: string;
 };
   // Notification settings
-  notifications: {,
+  notifications: {
   on_success: boolean;
   on_failure: boolean;,
   on_completion: boolean;
@@ -86,6 +88,7 @@ export interface AdminBackupConfiguration {
   last_run_at?: Date;
   next_run_at?: Date;
 }
+}
 export interface BackupExecution {
   execution_id: string;,
   config_id: string;
@@ -97,12 +100,13 @@ export interface BackupExecution {
   backup_size_bytes?: number;
   compressed_size_bytes?: number;
   record_count?: number;
-  progress: {,
+  progress: {
   current_step: string;,
   steps_completed: number;
   total_steps: number;,
   percentage: number;
   estimated_remaining_seconds?: number;
+}
 };
   error_details?: {
   error_code: string;,
@@ -117,29 +121,31 @@ export interface BackupExecution {
   integrity_score: number;
 };
 }
+}
 export interface BackupMetrics {
   total_configurations: number;,
   active_configurations: number;
   total_recovery_points: number;,
   total_storage_bytes: number;
-  recent_executions: {,
+  recent_executions: {
   successful: number;,
   failed: number;
   average_duration_minutes: number;,
   last_24h_count: number;
+}
 };
-  storage_breakdown: {,
+  storage_breakdown: {
   provider: string;
   size_bytes: number;
   cost_estimate?: number;
   usage_percentage: number;
 }[];
-  upcoming_backups: {,
+  upcoming_backups: {
   config_name: string;
   next_run: Date;,
   estimated_duration: number;
 }[];
-  health_status: {,
+  health_status: {
   overall_status: 'healthy' | 'warning' | 'critical';
   issues: string;,
   recommendations: string;
@@ -197,7 +203,7 @@ const BackupDashboard: React.FC = () => {
       const response = await fetch(`/api/admin/backup/configurations/${configId}`, {)}
   },
   method: 'PUT',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('authToken')}`}
   },

@@ -1,6 +1,7 @@
 import React from 'react';
 import { ExportJob, ExportShare } from '../../types/export';
 
+}
 interface ShareDialogProps {
     exportJob: ExportJob;
     onClose: () => void;
@@ -10,3 +11,4 @@ interface ShareDialogProps {
 export declare const ShareDialog: React.FC<ShareDialogProps>;
 export default ShareDialog;
 //# sourceMappingURL=ShareDialog.d.ts.map
+}

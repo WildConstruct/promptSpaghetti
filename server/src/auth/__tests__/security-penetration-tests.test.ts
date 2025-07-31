@@ -136,6 +136,7 @@ describe('Epic 19.5 - Security Penetration Testing Suite', () => {
         mfaEnabled: boolean;
         mfaSecret?: string;
 }
+}
       }
 
       const users: User[] = [
@@ -196,17 +197,20 @@ describe('Epic 19.5 - Security Penetration Testing Suite', () => {
       resource: string;
       action: string;
 }
+}
     }
 
     interface Role {
       name: string;
       permissions: Permission[];
 }
+}
     }
 
     interface User {
       id: number;
       roles: string[];
+}
 }
     }
 
@@ -490,6 +494,7 @@ describe('Epic 19.5 - Security Penetration Testing Suite', () => {
       createdAt: Date;
       lastActivity: Date;
       ipAddress: string;
+}
 }
     }
 

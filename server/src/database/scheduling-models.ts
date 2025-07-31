@@ -42,6 +42,7 @@ export enum ExecutionStatus {
 
 // Core schedule model
 }
+}
 export interface FeatureToggleSchedule {
   id: string;
   toggleId: string;
@@ -65,6 +66,7 @@ export interface FeatureToggleSchedule {
     cronExpression?: string; // For custom recurrence
     maxOccurrences?: number;
     endDate?: Date;
+}
 }
   };
   
@@ -105,6 +107,7 @@ export interface FeatureToggleSchedule {
 
 // Schedule execution log
 }
+}
 export interface ScheduleExecution {
   id: string;
   scheduleId: string;
@@ -119,6 +122,7 @@ export interface ScheduleExecution {
     originalTime: Date;
     actualTime: Date;
     delay?: number; // in milliseconds
+}
 }
   };
   
@@ -144,6 +148,7 @@ export interface ScheduleExecution {
 
 // Schedule conflict detection
 }
+}
 export interface ScheduleConflict {
   id: string;
   toggleId: string;
@@ -162,10 +167,12 @@ export interface ScheduleConflict {
     action: 'reschedule' | 'modify_priority' | 'cancel_one' | 'merge';
     details: Record<string, any>;
 }
+}
   };
 }
 
 // Schedule notification configuration
+}
 }
 export interface ScheduleNotification {
   id: string;
@@ -184,6 +191,7 @@ export interface ScheduleNotification {
     afterFailureCount?: number;
     beforeExecution?: number; // minutes before
 }
+}
   };
   
   // Message template
@@ -199,6 +207,7 @@ export interface ScheduleNotification {
 }
 
 // Timezone management
+}
 }
 export interface TimezoneSettings {
   id: string;
@@ -218,8 +227,10 @@ export interface TimezoneSettings {
   updatedAt: Date;
 }
 }
+}
 
 // Schedule template for common patterns
+}
 }
 export interface ScheduleTemplate {
   id: string;
@@ -234,6 +245,7 @@ export interface ScheduleTemplate {
     recurrence?: Partial<FeatureToggleSchedule['recurrence']>;
     actionConfig: Partial<FeatureToggleSchedule['actionConfig']>;
     defaultDuration?: number; // in minutes
+}
 }
   };
   
@@ -251,6 +263,7 @@ export interface ScheduleTemplate {
 }
 
 // Bulk schedule operations
+}
 }
 export interface BulkScheduleOperation {
   id: string;
@@ -273,6 +286,7 @@ export interface BulkScheduleOperation {
     success: boolean;
     error?: string;
 }
+}
   }>;
   
   createdBy: string;
@@ -281,6 +295,7 @@ export interface BulkScheduleOperation {
 }
 
 // Request/response types for API
+}
 }
 export interface CreateScheduleRequest {
   toggleId: string;
@@ -301,15 +316,18 @@ export interface CreateScheduleRequest {
     channels: string[];
     conditions: Record<string, any>;
 }
+}
   }>;
 }
 
+}
 }
 export interface UpdateScheduleRequest extends Partial<CreateScheduleRequest> {
   id: string;
   reason?: string;
 }
 
+}
 }
 export interface ScheduleQuery {
   toggleId?: string;
@@ -325,8 +343,10 @@ export interface ScheduleQuery {
   sortOrder?: 'asc' | 'desc';
 }
 }
+}
 
 // Schedule analytics
+}
 }
 export interface ScheduleAnalytics {
   totalSchedules: number;
@@ -354,6 +374,7 @@ export interface ScheduleAnalytics {
   mostUsedActions: Array<{
     action: ScheduleAction;
     count: number;
+}
 }
   }>;
   

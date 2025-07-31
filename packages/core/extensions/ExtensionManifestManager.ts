@@ -66,6 +66,7 @@ export class ExtensionManifestManager {
    * Load multiple manifests from directory
    */
   public async loadManifestsFromDirectory(directoryPath: string): Promise<ManifestBatchLoadResult> {
+
     const results: ManifestLoadResult = [];
     const errors: string = [];
     try {
@@ -208,6 +209,7 @@ export class ExtensionManifestManager {
    * Refresh manifest from file
    */
   public async refreshManifest(extensionId: string): Promise<boolean> {
+
     // Find cached manifest
     let filePath: string | undefined;
     for (const [path, cached] of this.manifestCache.entries()) {
@@ -286,6 +288,7 @@ export class ExtensionManifestManager {
     const cacheTimeout = 5 * 60 * 1000; // 5 minutes;
     return Date.now() - cached.loadedAt.getTime() > cacheTimeout;
   private async findManifestFiles(directoryPath: string): Promise<string> {
+
     // In a real implementation, this would scan the directory for manifest files
     // For now, we'll return a mock list
     return [
@@ -456,23 +459,27 @@ export class ExtensionManifestBuilder {
   manifest?: ExtensionManifest;
   source?: 'cache' | 'file';
   error?: string;
-  details?: Array<{,
+  details?: Array<{
   path: string;
   message: string;
   code: string;
+}
 }>;
+}
 interface ManifestBatchLoadResult {
   success: boolean;
   results: ManifestLoadResult;
   errors: string;
   totalFound: number;
   totalLoaded: number;
+}
 interface ManifestDependencyInfo {
   manifest?: ExtensionManifest;
   dependencies: ExtensionManifest;
   dependents: ExtensionManifest;
   missingDependencies: string;
   circularDependencies: string;
+}
 interface ManifestStatistics {
   total: number;
   byType: Record<string, number>;
@@ -488,3 +495,4 @@ interface ManifestStatistics {
 // Export singletons
 export const extensionManifestManager = ExtensionManifestManager.getInstance();
 export const extensionManifestBuilder = new ExtensionManifestBuilder();
+}

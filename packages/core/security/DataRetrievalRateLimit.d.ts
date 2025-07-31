@@ -29,6 +29,7 @@ export declare enum DataEndpointCategory {
     DATA_BACKUP = "data_backup",
     DATA_SYNC = "data_sync"
 
+}
 export interface DataRetrievalLimits {
     classification: DataClassificationLevel;
     operation: DataOperation;
@@ -41,6 +42,7 @@ export interface DataRetrievalLimits {
         recordsPerMinute: number;
         recordsPerHour: number;
         concurrentRequests: number;
+}
     };
     backoff: {
         strategy: BackoffStrategy;
@@ -55,6 +57,7 @@ export interface DataRetrievalLimits {
         deviceTrustMultiplier: number;
     };
 
+}
 export interface DataAccessAttempt {
     userId: string;
     resourceId: string;
@@ -69,6 +72,7 @@ export interface DataAccessAttempt {
     rateLimited: boolean;
     riskScore: number;
 
+}
 export interface RetrievalMetrics {
     totalRequests: number;
     totalBytesTransferred: number;
@@ -81,6 +85,7 @@ export interface RetrievalMetrics {
     peakUsageTimes: TimeUsagePattern[];
     suspiciousActivity: SuspiciousActivity[];
 
+}
 export interface UserDataUsage {
     userId: string;
     requestCount: number;
@@ -91,6 +96,7 @@ export interface UserDataUsage {
     riskScore: number;
     anomalyScore: number;
 
+}
 export interface TimeUsagePattern {
     hour: number;
     dayOfWeek: number;
@@ -98,6 +104,7 @@ export interface TimeUsagePattern {
     averageRiskScore: number;
     topOperations: DataOperation[];
 
+}
 export interface SuspiciousActivity {
     userId: string;
     activityType: 'UNUSUAL_VOLUME' | 'OFF_HOURS_ACCESS' | 'PRIVILEGE_ESCALATION' | 'BULK_DOWNLOAD' | 'RAPID_REQUESTS';
@@ -107,6 +114,7 @@ export interface SuspiciousActivity {
     evidence: Record<string, any>;
     riskScore: number;
 
+}
 export interface DataRetrievalConfig {
     enableVolumeTracking: boolean;
     enableBehaviorAnalysis: boolean;
@@ -118,6 +126,7 @@ export interface DataRetrievalConfig {
     alertThresholds: AlertThresholds;
     exemptions: DataAccessExemption[];
 
+}
 export interface GlobalDataLimits {
     maxConcurrentUsers: number;
     maxDailyBytes: number;
@@ -128,12 +137,15 @@ export interface GlobalDataLimits {
         thresholdCpuPercent: number;
         thresholdMemoryPercent: number;
         throttlePercent: number;
+}
     };
 
+}
 export interface AlertThresholds {
     volumeSpike: {
         percentIncrease: number;
         timeWindow: number;
+}
     };
     userQuotaUsage: {
         warningPercent: number;
@@ -148,6 +160,7 @@ export interface AlertThresholds {
         criticalThreshold: number;
     };
 
+}
 export interface DataAccessExemption {
     id: string;
     userId?: string;
@@ -161,6 +174,7 @@ export interface DataAccessExemption {
     approvedAt: Date;
     auditRequired: boolean;
 
+}
 export interface ExemptionCondition {
     type: 'TIME_RANGE' | 'OPERATION' | 'CLASSIFICATION' | 'EMERGENCY' | 'BUSINESS_CRITICAL';
     specification: Record<string, any>;
@@ -227,6 +241,7 @@ export declare class DataRetrievalRateLimit extends EventEmitter {
     private initializeUserQuota;
     private getSecondsUntilMidnight;
 
+}
 export interface DataRequestDetails {
     operation: DataOperation;
     estimatedBytes: number;
@@ -234,6 +249,7 @@ export interface DataRequestDetails {
     requestType: 'SINGLE' | 'BATCH' | 'STREAM';
     context: Record<string, any>;
 
+}
 export interface DataRetrievalDecision {
     decision: 'ALLOW' | 'DENY';
     reason: string;
@@ -244,6 +260,7 @@ export interface DataRetrievalDecision {
         bytes: number;
         records: number;
         requests: number;
+}
     };
     metadata: {
         timestamp: Date;
@@ -251,6 +268,7 @@ export interface DataRetrievalDecision {
         appliedLimits: string[];
     };
 
+}
 export interface UserQuota {
     userId: string;
     dailyByteLimit: number;
@@ -262,6 +280,7 @@ export interface UserQuota {
     resetAt: Date;
     lastUpdated: Date;
 
+}
 export interface AnomalyCheck {
     isAnomalous: boolean;
     severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
@@ -270,3 +289,4 @@ export interface AnomalyCheck {
 
 export default DataRetrievalRateLimit;
 //# sourceMappingURL=DataRetrievalRateLimit.d.ts.map
+}

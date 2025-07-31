@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { Node } from 'reactflow';
 import { ZodSchema } from 'zod';
+}
 interface InspectorState {
   selectedNode: Node | null;
   selectedSchema: ZodSchema<unknown> | null;
@@ -8,7 +9,9 @@ interface InspectorState {
   panelCollapsed: boolean;
   panelVisible: boolean;
 }
+}
 
+}
 interface InspectorActions {
   setSelectedNode: (node: Node | null) => void;
   setSelectedSchema: (schema: ZodSchema<unknown> | null) => void;
@@ -17,15 +20,18 @@ interface InspectorActions {
   setPanelVisible: (visible: boolean) => void;
   updateNodeData: (nodeId: string, data: Record<string, unknown>) => void;
 }
+}
 
 interface InspectorContextValue extends InspectorState, InspectorActions {}
 const InspectorContext = createContext<InspectorContextValue | null>(null);
+}
 interface InspectorProviderProps {
   children: ReactNode;
   onNodeUpdate?: (nodeId: string, data: Record<string, unknown>) => void;
   initialWidth?: number;
   initialCollapsed?: boolean;
   initialVisible?: boolean;
+}
 }
 
 export const InspectorProvider: React.FC<InspectorProviderProps> = ({

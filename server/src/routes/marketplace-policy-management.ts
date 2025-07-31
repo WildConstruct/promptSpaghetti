@@ -18,6 +18,7 @@ import {
 
 // Request interfaces
 }
+}
 interface CreatePolicyRequest {
   policy_type: MarketplacePolicyType;
   title: string;
@@ -27,22 +28,27 @@ interface CreatePolicyRequest {
   enforcement: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 interface UpdatePolicyRequest extends Partial<CreatePolicyRequest> {
   // Extends create request with optional fields
 }
 
 }
+}
 interface PublishPolicyRequest extends PolicyPublishingRequest {
   // Extends base publishing request
 }
 
 }
+}
 interface CreateVersionRequest extends PolicyVersionRequest {
   // Extends base version request
 }
 
+}
 }
 interface DetectViolationsRequest {
   content_id: string;
@@ -51,12 +57,15 @@ interface DetectViolationsRequest {
   owner_id: string;
 }
 }
+}
 
+}
 }
 interface ReportViolationRequest extends ViolationReport {
   // Extends base violation report
 }
 
+}
 }
 interface ExecuteActionRequest {
   action_id: string;
@@ -64,7 +73,9 @@ interface ExecuteActionRequest {
   notes?: string;
 }
 }
+}
 
+}
 }
 interface CreateDetectionRuleRequest {
   policy_id: string;
@@ -76,8 +87,10 @@ interface CreateDetectionRuleRequest {
   ai_model_config?: Record<string, unknown>;
 }
 }
+}
 
 // Query interfaces
+}
 }
 interface GetPoliciesQuery {
   policy_type?: MarketplacePolicyType;
@@ -87,7 +100,9 @@ interface GetPoliciesQuery {
   offset?: number;
 }
 }
+}
 
+}
 }
 interface GetViolationsQuery {
   violator_id?: string;
@@ -98,6 +113,7 @@ interface GetViolationsQuery {
   offset?: number;
   date_from?: string;
   date_to?: string;
+}
 }
 }
 

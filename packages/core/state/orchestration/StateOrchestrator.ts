@@ -10,6 +10,7 @@ import { globalEventBus } from '../../shared/services/EventBus';
 
 // Domain state coordination types
 
+}
 export interface DomainEvent {
   domain: string;
   type: string;
@@ -19,6 +20,8 @@ export interface DomainEvent {
   source: 'local' | 'remote' | 'system';
   correlationId?: string;
 }
+}
+}
 export interface CrossDomainChange {
   id: string;
   sourceDomain: string;
@@ -27,12 +30,16 @@ export interface CrossDomainChange {
   timestamp: number;
   transactionId?: string;
 }
+}
+}
 export interface DomainStateChange {
   domain: string;
   path: string;
   value: any;
   operation: 'create' | 'update' | 'delete';
   metadata?: Record<string, any>;
+}
+}
 }
 export interface TransactionContext {
   id: string;
@@ -43,6 +50,8 @@ export interface TransactionContext {
   startTime: number;
   timeout: number;
 }
+}
+}
 export interface StateCoordinationRule {
   name: string;
   sourceDomain: string;
@@ -51,6 +60,8 @@ export interface StateCoordinationRule {
   transform?: (event: DomainEvent) => DomainEvent;
   condition?: (event: DomainEvent) => boolean;
   priority: number;
+}
+}
 }
 export interface DomainStateContainer extends BaseStateContainer<any> {
   getDomainName(): string;
@@ -92,6 +103,7 @@ export class StateOrchestrator extends EventEmitter {
       this.emit('domainUnregistered', { domain: domainName });
   // Cross-domain event handling
   async handleCrossDomainEvent(event: DomainEvent): Promise<void> {
+
     try {
       // Add to processing queue
       this.eventQueue.push(event);
@@ -102,6 +114,7 @@ export class StateOrchestrator extends EventEmitter {
       this.emit('coordinationError', { event, error });
       throw error;
   private async processEventQueue(): Promise<void> {
+
     this.isProcessingQueue = true;
     try {
       while (this.eventQueue.length > 0) {
@@ -126,6 +139,7 @@ export class StateOrchestrator extends EventEmitter {
         console.error(`Failed to apply coordination rule ${rule.name}:`, error);}
         this.emit('ruleError', { rule: rule.name, event, error });
   private async applyCoordinationRule(rule: StateCoordinationRule, event: DomainEvent): Promise<void> {
+
   // Transform event if transformer provided
   const eventsToApply = rule.transform ? rule.transform(event) : [event];
   // Create cross-domain changes
@@ -147,6 +161,7 @@ export class StateOrchestrator extends EventEmitter {
     await this.applyCrossDomainChanges(crossDomainChange);
   // Cross-domain transaction management
   async atomicCrossDomainUpdate(changes: CrossDomainChange): Promise<void> {
+
     const transactionId = this.generateTransactionId();
     const allDomains = new Set<string>();
     // Collect all affected domains
@@ -182,6 +197,7 @@ export class StateOrchestrator extends EventEmitter {
     } finally {
       this.activeTransactions.delete(transactionId);
   private async prepareTransaction(transaction: TransactionContext): Promise<void> {
+
     const preparePromises = transaction.participants.map(async domainName => {)
   const domain = this.domains.get(domainName);
       if (!domain) {
@@ -190,6 +206,7 @@ export class StateOrchestrator extends EventEmitter {
     });
     await Promise.all(preparePromises);
   private async applyTransactionChanges(transaction: TransactionContext): Promise<void> {
+
   for (const crossDomainChange of transaction.changes) {
   await this.applyCrossDomainChanges(crossDomainChange);
   private async commitTransaction(transaction: TransactionContext): Promise<void> {,
@@ -200,6 +217,7 @@ export class StateOrchestrator extends EventEmitter {
 });
     await Promise.all(commitPromises);
   private async rollbackTransaction(transaction: TransactionContext): Promise<void> {
+
     const rollbackPromises = transaction.participants.map(async domainName => {)
   const domain = this.domains.get(domainName);
       if (domain) {
@@ -210,6 +228,7 @@ export class StateOrchestrator extends EventEmitter {
     });
     await Promise.all(rollbackPromises);
   private async applyCrossDomainChanges(crossDomainChange: CrossDomainChange): Promise<void> {
+
     const applicationPromises = crossDomainChange.targetDomains.map(async domainName => {)
   const domain = this.domains.get(domainName);
       if (!domain) {
@@ -359,6 +378,7 @@ export class StateOrchestrator extends EventEmitter {
 };
   // Domain dependency resolution
   async resolveDomainDependencies(): Promise<string> {
+
     const loadOrder: string = [];
     const dependencies = new Map<string, string>();
     // Build dependency graph from domain metadata

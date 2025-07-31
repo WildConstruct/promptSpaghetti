@@ -28,6 +28,7 @@ import {
 import { ActionSeverity } from '../../../../packages/core/types/EnforcementTypes';
 
 }
+}
 export interface QuotaIntegrationConfig {
   rateLimitingEnabled: boolean;
   adaptiveThrottlingEnabled: boolean;
@@ -44,6 +45,7 @@ export interface QuotaIntegrationConfig {
   stakeholderNotifications: boolean;
   systemAdminAlerts: boolean;
   userNotifications: boolean;
+}
 }
 }
 

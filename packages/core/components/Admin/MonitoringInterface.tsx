@@ -12,6 +12,7 @@ import { UsageQuotaDashboard } from './UsageQuotaDashboard';
 
 // Monitoring Interface Types
 
+}
 export interface MonitoringMetrics {
   system: {
   cpu: number;
@@ -20,6 +21,7 @@ export interface MonitoringMetrics {
   network: {
   inbound: number;
   outbound: number;
+}
 };
     uptime: number;
   lastUpdated: string;
@@ -47,6 +49,7 @@ export interface MonitoringMetrics {
   operationsPerSecond: number;
 };
 }
+}
 export interface AlertData {
   id: string;
   severity: 'critical' | 'high' | 'medium' | 'low' | 'info';
@@ -57,6 +60,8 @@ export interface AlertData {
   acknowledged: boolean;
   resolved: boolean;
   assignee?: string;
+}
+}
 }
 export interface MonitoringViewConfig {
   layout: 'executive' | 'operational' | 'analytics' | 'compliance';
@@ -69,6 +74,7 @@ export interface MonitoringViewConfig {
   onAlertAction?: (alertId: string, action: string) => void;
   onExport?: (type: string, timeRange: string) => void;
   className?: string;
+}
 }
 export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
   userRole,

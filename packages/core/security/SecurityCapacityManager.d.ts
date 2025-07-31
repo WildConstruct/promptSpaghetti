@@ -8,6 +8,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface CapacityPlan {
     id: string;
     name: string;
@@ -17,6 +18,7 @@ export interface CapacityPlan {
         short_term_days: number;
         medium_term_days: number;
         long_term_days: number;
+}
     };
     requirements: {
         baseline_capacity: ResourceRequirements;
@@ -79,6 +81,7 @@ export interface CapacityPlan {
     next_review_date: number;
     enabled: boolean;
 
+}
 export interface ResourceRequirements {
     cpu_cores: number;
     memory_gb: number;
@@ -88,6 +91,7 @@ export interface ResourceRequirements {
     gpu_units?: number;
     custom_resources?: Record<string, number>;
 
+}
 export interface GrowthProjection {
     period: 'monthly' | 'quarterly' | 'yearly';
     metric: 'transactions' | 'users' | 'data_volume' | 'requests' | 'events';
@@ -97,6 +101,7 @@ export interface GrowthProjection {
     assumptions: string[];
     seasonal_factors?: SeasonalFactor[];
 
+}
 export interface SeasonalFactor {
     period: 'daily' | 'weekly' | 'monthly' | 'yearly';
     pattern: 'cyclical' | 'trending' | 'spike';
@@ -104,6 +109,7 @@ export interface SeasonalFactor {
     duration_hours?: number;
     description: string;
 
+}
 export interface PerformanceTargets {
     response_time_p95_ms: number;
     response_time_p99_ms: number;
@@ -112,6 +118,7 @@ export interface PerformanceTargets {
     availability_percentage: number;
     data_processing_latency_ms: number;
 
+}
 export interface AvailabilityRequirements {
     target_availability: number;
     downtime_budget_minutes_monthly: number;
@@ -120,6 +127,7 @@ export interface AvailabilityRequirements {
         start_time: string;
         duration_hours: number;
         timezone: string;
+}
     };
     disaster_recovery: {
         rto_minutes: number;
@@ -127,6 +135,7 @@ export interface AvailabilityRequirements {
         geographic_redundancy: boolean;
     };
 
+}
 export interface ScalingPolicy {
     id: string;
     name: string;
@@ -137,6 +146,7 @@ export interface ScalingPolicy {
         metric_based: MetricTrigger[];
         time_based: TimeTrigger[];
         event_based: EventTrigger[];
+}
     };
     actions: {
         scale_up: ScalingAction;
@@ -153,6 +163,7 @@ export interface ScalingPolicy {
     last_triggered: number;
     trigger_count: number;
 
+}
 export interface MetricTrigger {
     metric_name: string;
     comparison: 'greater_than' | 'less_than' | 'greater_than_or_equal' | 'less_than_or_equal';
@@ -161,6 +172,7 @@ export interface MetricTrigger {
     datapoints_to_alarm: number;
     evaluation_periods: number;
 
+}
 export interface TimeTrigger {
     schedule_type: 'cron' | 'recurring' | 'one_time';
     cron_expression?: string;
@@ -169,16 +181,19 @@ export interface TimeTrigger {
         times: string[];
         days_of_week?: string[];
         timezone: string;
+}
     };
     one_time_datetime?: number;
     target_capacity: number;
 
+}
 export interface EventTrigger {
     event_type: 'security_incident' | 'high_alert_volume' | 'system_failure' | 'maintenance_mode';
     event_source: string;
     conditions: Record<string, any>;
     scaling_factor: number;
 
+}
 export interface ScalingAction {
     action_type: 'instance_count' | 'resource_adjustment' | 'load_balancer_weight';
     target_value?: number;
@@ -188,18 +203,21 @@ export interface ScalingAction {
     availability_zones?: string[];
     termination_policy?: 'oldest_first' | 'newest_first' | 'least_utilized';
 
+}
 export interface NotificationAction {
     channel: 'email' | 'slack' | 'webhook' | 'sms';
     target: string;
     message_template: string;
     severity: 'info' | 'warning' | 'error';
 
+}
 export interface CustomMetricTarget {
     metric_name: string;
     target_value: number;
     comparison: 'less_than' | 'greater_than';
     weight: number;
 
+}
 export interface InstanceTypeConfig {
     instance_type: string;
     cpu_cores: number;
@@ -211,6 +229,7 @@ export interface InstanceTypeConfig {
     use_cases: string[];
     priority: number;
 
+}
 export interface CapacityMetrics {
     id: string;
     service: string;
@@ -218,6 +237,7 @@ export interface CapacityMetrics {
     collection_period: {
         start: number;
         end: number;
+}
     };
     current_utilization: {
         cpu_percentage: number;
@@ -258,6 +278,7 @@ export interface CapacityMetrics {
         cost_optimization_opportunities: string[];
     };
 
+}
 export interface ScalingEvent {
     id: string;
     timestamp: number;
@@ -273,6 +294,7 @@ export interface ScalingEvent {
         scaling_duration_seconds: number;
         instances_added: number;
         instances_removed: number;
+}
     };
     impact: {
         performance_change: {
@@ -294,6 +316,7 @@ export interface ScalingEvent {
         rollback_required: boolean;
     };
 
+}
 export interface CapacityForecast {
     id: string;
     service: string;
@@ -305,8 +328,9 @@ export interface CapacityForecast {
         historical_data_points: number;
         seasonal_adjustments: boolean;
         trend_adjustments: boolean;
+}
     };
-    forecasts: Array<{,
+    forecasts: Array<{
         date: number;
         predicted_load: number;
         confidence_upper: number;
@@ -327,6 +351,7 @@ export interface CapacityForecast {
         cost_prediction_accuracy: number;
     };
 
+}
 export interface CapacityRecommendation {
     id: string;
     priority: 'low' | 'medium' | 'high' | 'critical';
@@ -341,6 +366,7 @@ export interface CapacityRecommendation {
         prerequisites: string[];
         risks: string[];
         rollback_plan: string;
+}
     };
     timeline: {
         recommended_start: number;
@@ -384,7 +410,7 @@ export declare class SecurityCapacityManager extends EventEmitter {
     private generateCapacityRecommendations;
     manualScale(service: string, targetCapacity: number, reason: string, scaledBy: string): Promise<string>;
     getCapacityStatus(): {
-        services: Array<{,
+        services: Array<{
             service: string;
             current_capacity: number;
             utilization: {

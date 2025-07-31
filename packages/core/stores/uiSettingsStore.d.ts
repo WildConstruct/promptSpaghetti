@@ -3,10 +3,12 @@ export interface NodePreferences {
     useGlobalDefault: boolean;
     lastModified: number;
 
+}
 export interface NodeTypePreferences {
     disclosureLevel: 'basic' | 'advanced' | 'debug';
     collapsedSections: string[];
 
+}
 export interface UISettings {
     debugMode: boolean;
     professionalUI: boolean;
@@ -22,6 +24,7 @@ export interface UISettings {
     showNodeIcons: boolean;
     demoMode: boolean;
     hideAllTechnicalUI: boolean;
+}
 interface UISettingsState extends UISettings {
     setDebugMode: (enabled: boolean) => void;
     setProfessionalUI: (enabled: boolean) => void;
@@ -54,6 +57,7 @@ export declare const useUISettingsStore: import("zustand").UseBoundStore<Omit<im
         onHydrate: (fn: (state: UISettingsState) => void) => () => void;
         onFinishHydration: (fn: (state: UISettingsState) => void) => () => void;
         getOptions: () => Partial<import("zustand/middleware").PersistOptions<UISettingsState, any>>;
+}
     };
 }>;
 export declare const shouldShowField: (fieldName: string, fieldType?: string, store?: ReturnType<typeof useUISettingsStore>) => boolean;

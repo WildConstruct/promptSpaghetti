@@ -19,6 +19,7 @@ import { AuditService } from '../auth/services/AuditService';
 // ==========================================
 
 }
+}
 export interface VerifyBackupRequest {
   backupId: string;
   configuration?: {
@@ -30,9 +31,11 @@ export interface VerifyBackupRequest {
     skipOnWarnings?: boolean;
     abortOnCriticalFailure?: boolean;
 }
+}
   };
 }
 
+}
 }
 export interface BackupVerificationResponse {
   success: boolean;
@@ -43,9 +46,11 @@ export interface BackupVerificationResponse {
     requestId: string;
     processingTime: number;
 }
+}
   };
 }
 
+}
 }
 export interface SessionListQuery {
   status?: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
@@ -56,7 +61,9 @@ export interface SessionListQuery {
   sortOrder?: 'asc' | 'desc';
 }
 }
+}
 
+}
 }
 export interface StepConfigurationRequest {
   stepId: string;
@@ -64,6 +71,7 @@ export interface StepConfigurationRequest {
   timeout?: number;
   retryAttempts?: number;
   parameters?: Record<string, any>;
+}
 }
 }
 

@@ -34,6 +34,7 @@ import {
  * Extended archive options with toggle-aware features
  */
 }
+}
 export interface ToggleAwareArchiveOptions {
   // Standard archive options
   description?: string;
@@ -57,10 +58,12 @@ export interface ToggleAwareArchiveOptions {
   adminOverrideReason?: string;
 }
 }
+}
 
 /**
  * Archive operation result with toggle evaluation details
  */
+}
 }
 export interface ToggleAwareArchiveResult {
   archive?: ArchiveRecord;
@@ -70,6 +73,7 @@ export interface ToggleAwareArchiveResult {
   requiresUserAction: boolean;
   complianceStatus: ComplianceStatus;
   auditTrailId?: string;
+}
 }
 }
 

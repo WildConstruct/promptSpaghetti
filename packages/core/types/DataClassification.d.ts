@@ -11,6 +11,7 @@ export declare enum DataClassificationLevel {
     RESTRICTED = "RESTRICTED",
     TOP_SECRET = "TOP_SECRET"
 
+}
 export interface DataClassification {
     id: string;
     dataElement: string;
@@ -24,6 +25,7 @@ export interface DataClassification {
     metadata: ClassificationMetadata;
 
 
+}
 export interface ClassificationApproval {
     approver: string;
     role: string;
@@ -31,6 +33,7 @@ export interface ClassificationApproval {
     comments?: string;
 
 
+}
 export interface ClassificationMetadata {
     regulatoryRequirements?: string[];
     businessJustification: string;
@@ -39,6 +42,7 @@ export interface ClassificationMetadata {
     relatedClassifications?: string[];
 
 
+}
 export interface ClassificationContext {
     dataType: string;
     businessContext: string;
@@ -47,6 +51,7 @@ export interface ClassificationContext {
     dataOwner: string;
 
 
+}
 export interface ValidationResult {
     valid: boolean;
     errors: string[];
@@ -58,6 +63,7 @@ export interface ValidationResult {
  * Handling Requirements by Classification Level
  */
 
+}
 export interface HandlingRequirements {
     storage: StorageRequirements;
     transmission: TransmissionRequirements;
@@ -66,6 +72,7 @@ export interface HandlingRequirements {
     monitoring: MonitoringRequirements;
 
 
+}
 export interface StorageRequirements {
     encryptionRequired: boolean;
     encryptionAlgorithm: string;
@@ -77,6 +84,7 @@ export interface StorageRequirements {
     redundancyLevel: 'NONE' | 'STANDARD' | 'HIGH' | 'CRITICAL';
 
 
+}
 export interface TransmissionRequirements {
     tlsVersion: string;
     certificatePinning: boolean;
@@ -86,6 +94,7 @@ export interface TransmissionRequirements {
     endToEndEncryption: boolean;
 
 
+}
 export interface ProcessingRequirements {
     approvedEnvironments: string[];
     loggingRequired: boolean;
@@ -95,6 +104,7 @@ export interface ProcessingRequirements {
     auditTrailRequired: boolean;
 
 
+}
 export interface CachingRestrictions {
     allowed: boolean;
     encryptionRequired: boolean;
@@ -103,6 +113,7 @@ export interface CachingRestrictions {
     secureEviction: boolean;
 
 
+}
 export interface AccessRequirements {
     authenticationLevel: 'STANDARD' | 'MFA' | 'STRONG_MFA' | 'BIOMETRIC';
     authorizationRequired: boolean;
@@ -113,6 +124,7 @@ export interface AccessRequirements {
     exportRestrictions: boolean;
 
 
+}
 export interface MonitoringRequirements {
     alertingEnabled: boolean;
     anomalyDetection: boolean;
@@ -126,6 +138,7 @@ export interface MonitoringRequirements {
  * Encryption Requirements by Classification
  */
 
+}
 export interface EncryptionRequirements {
     required: boolean;
     algorithm?: string;
@@ -139,6 +152,7 @@ export interface EncryptionRequirements {
  * Classification Rules Engine
  */
 
+}
 export interface ClassificationRule {
     id: string;
     name: string;
@@ -149,6 +163,7 @@ export interface ClassificationRule {
     priority: number;
 
 
+}
 export interface ClassificationCondition {
     type: 'FIELD_NAME' | 'CONTENT_PATTERN' | 'CONTEXT' | 'REGULATORY' | 'BUSINESS_RULE';
     pattern: string;
@@ -160,6 +175,7 @@ export interface ClassificationCondition {
  * Audit and Compliance Types
  */
 
+}
 export interface ClassificationAuditEvent {
     id: string;
     timestamp: Date;
@@ -174,6 +190,7 @@ export interface ClassificationAuditEvent {
     userAgent?: string;
 
 
+}
 export interface ComplianceReport {
     period: DateRange;
     summary: ComplianceSummary;
@@ -183,11 +200,13 @@ export interface ComplianceReport {
     trends: ComplianceTrend[];
 
 
+}
 export interface DateRange {
     start: Date;
     end: Date;
 
 
+}
 export interface ComplianceSummary {
     totalDataElements: number;
     violationCount: number;
@@ -195,6 +214,7 @@ export interface ComplianceSummary {
     riskScore: number;
 
 
+}
 export interface ClassificationCompliance {
     classification: DataClassificationLevel;
     elementCount: number;
@@ -203,6 +223,7 @@ export interface ClassificationCompliance {
     compliancePercentage: number;
 
 
+}
 export interface ComplianceViolation {
     id: string;
     timestamp: Date;
@@ -215,6 +236,7 @@ export interface ComplianceViolation {
     status: 'OPEN' | 'INVESTIGATING' | 'REMEDIATED' | 'ACCEPTED_RISK';
 
 
+}
 export interface ComplianceTrend {
     metric: string;
     period: string;
@@ -227,6 +249,7 @@ export interface ComplianceTrend {
  * Data Operation Context
  */
 
+}
 export interface OperationContext {
     operation: 'read' | 'write' | 'update' | 'delete' | 'export' | 'share';
     userId: string;
@@ -242,6 +265,7 @@ export interface OperationContext {
  * Classification Service Interface
  */
 
+}
 export interface ClassificationService {
     classifyData(data: any, context: ClassificationContext): Promise<DataClassification>;
     validateClassification(classification: DataClassification): Promise<ValidationResult>;
@@ -255,6 +279,7 @@ export interface ClassificationService {
  * Classification Constants and Decision Matrix
  */
 
+}
 export interface ClassificationCriteria {
     legalRegulatory: 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH';
     businessImpact: 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH';
@@ -271,3 +296,4 @@ export type RiskLevel = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 export type AuthenticationLevel = 'STANDARD' | 'MFA' | 'STRONG_MFA' | 'BIOMETRIC';
 export type LoggingLevel = 'STANDARD' | 'ENHANCED' | 'COMPREHENSIVE' | 'REALTIME';
 //# sourceMappingURL=DataClassification.d.ts.map
+}

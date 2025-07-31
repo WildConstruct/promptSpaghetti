@@ -14,6 +14,7 @@ import {
   ValidationResult
 } from '../types/DataClassification';
 
+}
 export interface AccessControlPolicy {
     id: string;
     name: string;
@@ -25,6 +26,7 @@ export interface AccessControlPolicy {
     version: string;
 
 
+}
 export interface AccessRequest {
     userId: string;
     dataId: string;
@@ -35,6 +37,7 @@ export interface AccessRequest {
     requestedAt: Date;
 
 
+}
 export interface AccessDecision {
     granted: boolean;
     reason: string;
@@ -44,6 +47,7 @@ export interface AccessDecision {
     monitoringLevel: 'STANDARD' | 'ENHANCED' | 'REALTIME';
 
 
+}
 export interface AccessCondition {
     type: 'TIME_RESTRICTION' | 'PURPOSE_LIMITATION' | 'APPROVAL_REQUIRED' | 'AUDIT_LOGGING' | 'EXPORT_RESTRICTED';
     description: string;
@@ -51,6 +55,7 @@ export interface AccessCondition {
     mandatory: boolean;
 
 
+}
 export interface UserAccessProfile {
     userId: string;
     roles: string[];
@@ -62,6 +67,7 @@ export interface UserAccessProfile {
     authenticationLevel: 'STANDARD' | 'MFA' | 'STRONG_MFA' | 'BIOMETRIC';
 
 
+}
 export interface AccessRestriction {
     type: 'TIME_BASED' | 'IP_BASED' | 'DEVICE_BASED' | 'PURPOSE_BASED';
     description: string;
@@ -149,3 +155,4 @@ export declare class ClassificationAccessControlService {
 
 export default ClassificationAccessControlService;
 //# sourceMappingURL=ClassificationAccessControlService.d.ts.map
+}

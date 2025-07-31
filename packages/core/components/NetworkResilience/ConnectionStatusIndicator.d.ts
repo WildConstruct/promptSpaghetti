@@ -1,6 +1,7 @@
 import React from 'react';
 import { NetworkStatus } from '../../network-resilience/NetworkResilienceManager';
 
+}
 interface ConnectionStatusIndicatorProps {
     status: NetworkStatus;
     showDetails?: boolean;
@@ -9,5 +10,6 @@ interface ConnectionStatusIndicatorProps {
     onClick?: () => void;
 
 export declare const ConnectionStatusIndicator: React.FC<ConnectionStatusIndicatorProps>;
+}
 export {};
 //# sourceMappingURL=ConnectionStatusIndicator.d.ts.map

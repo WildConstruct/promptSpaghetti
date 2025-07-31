@@ -44,6 +44,7 @@ export enum RevenueEventType {
 
 // Revenue Attribution Models
 }
+}
 export interface RevenueAttribution {
   id: string;
   transaction_id: string;
@@ -58,8 +59,10 @@ export interface RevenueAttribution {
   created_at: Date;
 }
 }
+}
 
 // Template Revenue Performance
+}
 }
 export interface TemplateRevenueMetrics {
   template_id: string;
@@ -85,6 +88,7 @@ export interface TemplateRevenueMetrics {
     count: number;
     revenue_cents: number;
 }
+}
   }>;
   
   // Time-based Metrics
@@ -97,6 +101,7 @@ export interface TemplateRevenueMetrics {
 }
 
 // Creator Revenue Analytics
+}
 }
 export interface CreatorRevenueMetrics {
   creator_id: string;
@@ -121,6 +126,7 @@ export interface CreatorRevenueMetrics {
     count: number;
     revenue_cents: number;
 }
+}
   }>;
   
   // Payout Information
@@ -134,6 +140,7 @@ export interface CreatorRevenueMetrics {
 }
 
 // Revenue Event extending Epic 1 AnalyticsEvent
+}
 }
 export interface RevenueEvent extends AnalyticsEvent {
   type: RevenueEventType;
@@ -172,6 +179,7 @@ export interface RevenueEvent extends AnalyticsEvent {
 
 // Pricing Tier and Discount Tracking
 }
+}
 export interface PricingTier {
   id: string;
   name: string;
@@ -184,6 +192,7 @@ export interface PricingTier {
   volume_discounts: Array<{
     min_quantity: number;
     discount_percentage: number;
+}
 }
   }>;
   
@@ -204,6 +213,7 @@ export interface PricingTier {
 }
 
 // Discount and Promotion Tracking
+}
 }
 export interface DiscountCode {
   id: string;
@@ -235,8 +245,10 @@ export interface DiscountCode {
   updated_at: Date;
 }
 }
+}
 
 // Revenue Aggregation for Real-time Analytics
+}
 }
 export interface RevenueAggregation {
   id: string;
@@ -257,6 +269,7 @@ export interface RevenueAggregation {
     revenue_cents: number;
     transaction_count: number;
     success_rate: number;
+}
 }
   }>;
   
@@ -287,6 +300,7 @@ export interface RevenueAggregation {
 
 // Revenue Forecast Data
 }
+}
 export interface RevenueForecast {
   id: string;
   forecast_type: 'template' | 'creator' | 'global';
@@ -313,6 +327,7 @@ export interface RevenueForecast {
     predicted_revenue_cents: number;
     confidence_interval_upper: number;
     confidence_interval_lower: number;
+}
 }
   }>;
   

@@ -45,6 +45,7 @@ import {
 
 // Core checklist data structures
 
+}
 export interface VFXChecklistItem {
   id: string;
   title: string;
@@ -71,6 +72,8 @@ export interface VFXChecklistItem {
   comments: VFXChecklistComment;
   history: VFXChecklistHistoryEntry;
 }
+}
+}
 export interface VFXChecklistSubtask {
   id: string;
   title: string;
@@ -79,6 +82,8 @@ export interface VFXChecklistSubtask {
   dueDate?: string;
   description?: string;
   estimatedMinutes?: number;
+}
+}
 }
 export interface VFXChecklistAttachment {
   id: string;
@@ -90,6 +95,8 @@ export interface VFXChecklistAttachment {
   uploadedBy: VFXTeamMember;
   uploadedAt: string;
 }
+}
+}
 export interface VFXAssetReference {
   id: string;
   name: string;
@@ -99,6 +106,8 @@ export interface VFXAssetReference {
   accuracy?: number; // Historical accuracy percentage,
   complexity?: number; // Rendering complexity score,
   dependencies: string;
+}
+}
 }
 export interface VFXQualityGate {
   id: string;
@@ -111,6 +120,8 @@ export interface VFXQualityGate {
   checkedAt?: string;
   required: boolean;
 }
+}
+}
 export interface VFXChecklistComment {
   id: string;
   content: string;
@@ -118,7 +129,9 @@ export interface VFXChecklistComment {
   timestamp: string;
   type: 'comment' | 'review' | 'approval' | 'rejection';
   mentions: string;
+}
   reactions: { [emoji: string]: VFXTeamMember };
+}
 }
 export interface VFXChecklistHistoryEntry {
   id: string;
@@ -130,6 +143,8 @@ export interface VFXChecklistHistoryEntry {
   timestamp: string;
   description: string;
 }
+}
+}
 export interface VFXTeamMember {
   id: string;
   name: string;
@@ -140,6 +155,8 @@ export interface VFXTeamMember {
   isOnline?: boolean;
   permissions: VFXPermissions;
 }
+}
+}
 export interface VFXPermissions {
   canCreate: boolean;
   canEdit: boolean;
@@ -147,6 +164,7 @@ export interface VFXPermissions {
   canApprove: boolean;
   canAssign: boolean;
   canViewReports: boolean;
+}
 }
 export type VFXChecklistCategory = 
   | 'pre_production' | 'asset_creation' | 'animation' | 'fx' | 'lighting' 
@@ -156,6 +174,7 @@ export type VFXProductionPhase =
   | 'concept' | 'previs' | 'asset_build' | 'animation' | 'fx' | 'lighting' 
   | 'comp' | 'render' | 'review' | 'final';
 
+}
 export interface VFXChecklist {
   id: string;
   name: string;
@@ -175,6 +194,8 @@ export interface VFXChecklist {
   tags: string;
   metadata: VFXChecklistMetadata;
 }
+}
+}
 export interface VFXChecklistTemplate {
   id: string;
   name: string;
@@ -185,6 +206,8 @@ export interface VFXChecklistTemplate {
   isPublic: boolean;
   createdBy: VFXTeamMember;
   usageCount: number;
+}
+}
 }
 export interface VFXChecklistMetadata {
   totalItems: number;
@@ -197,6 +220,8 @@ export interface VFXChecklistMetadata {
   averageAccuracy: number;
   lastActivity: string;
   collaborators: number;
+}
+}
 }
 export interface VFXChecklistSystemProps {
   checklist: VFXChecklist;
@@ -213,6 +238,7 @@ export interface VFXChecklistSystemProps {
 
 // Status configurations with VFX-specific colors and labels
 const STATUS_CONFIG = {
+}
   pending: { color: '#6b7280', label: 'Pending', icon: Clock },
   in_progress: { color: '#f59e0b', label: 'In Progress', icon: Timer },
   review: { color: '#3b82f6', label: 'In Review', icon: Eye },
@@ -745,6 +771,7 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({)
 };
 
 // Individual checklist item card component
+}
 interface VFXChecklistItemCardProps {
   item: VFXChecklistItem;
   checklist: VFXChecklist;
@@ -775,6 +802,7 @@ interface VFXChecklistItemCardProps {
   compact = false,
   isSelected = false,
   onSelect
+}
 }) => {
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState('');

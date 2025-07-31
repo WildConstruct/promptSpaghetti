@@ -19,6 +19,7 @@ import { TemplatePreview } from './TemplatePreview';
 import { TemplateCreationDialog } from './TemplateCreationDialog';
 import { useTemplates } from '../../hooks/useTemplates';
 import { ProjectTemplate, TemplateCategory, TemplateDifficulty } from '../../types/TemplateTypes';
+}
 interface TemplateGalleryProps {
   workspaceId?: string;
   onSelectTemplate?: (template: ProjectTemplate) => void;
@@ -35,6 +36,7 @@ interface TemplateGalleryProps {
   showCreateButton = true,
   allowCreation = true,
   viewMode = 'grid'
+}
 }) => {
   const [categoryFilter, setCategoryFilter] = useState<TemplateCategory | 'all'>('all');
   const [difficultyFilter, setDifficultyFilter] = useState<TemplateDifficulty | 'all'>('all');

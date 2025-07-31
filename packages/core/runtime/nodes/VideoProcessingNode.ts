@@ -8,6 +8,7 @@ import { AdvancedRuntimeNode, AdvancedExecutionContext, NodeExecutionResult } fr
 import { IOSpecBuilder, TypedInputs } from '../io-system';
 import { AIModelFactory, RunwayMLAdapter, StableVideoAdapter } from '../../ai';
 
+}
 export interface VideoConfig {
   provider: 'runwayml' | 'stable-video' | 'pika-labs';
   apiKey?: string;
@@ -15,12 +16,15 @@ export interface VideoConfig {
   model?: string;
   defaultParameters?: Record<string, any>;
 }
+}
+}
 export interface VideoMetadata {
   duration: number;
   format: string;
   resolution: {
   width: number;
   height: number;
+}
 };
   fps: number;
   frame_count: number;
@@ -32,12 +36,14 @@ export interface VideoMetadata {
   codec?: string;
   bitrate?: number;
 }
+}
 export interface GeneratedVideo {
   url?: string;
   data?: ArrayBuffer;
   frames?: string;
   format: string;
   metadata: VideoMetadata;
+}
 }
 export class VideoGenerationNode extends AdvancedRuntimeNode {
   private modelFactory: AIModelFactory;
@@ -61,6 +67,7 @@ export class VideoGenerationNode extends AdvancedRuntimeNode {
     this.modelFactory = new AIModelFactory();
     this._initializeAdapter(config);
   async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> {
+
     try {
       const prompt = inputs.getString('prompt');
       const image = inputs.getString('image', '');
@@ -124,6 +131,7 @@ export class VideoGenerationNode extends AdvancedRuntimeNode {
     } catch (error) {
       throw new Error(`Video generation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   async validateInputs(inputs: Record<string, any>): Promise<string> {
+
     const errors: string = [];
     if (!inputs.prompt || typeof inputs.prompt !== 'string') {
       errors.push('Prompt must be a non-empty string');
@@ -135,6 +143,7 @@ export class VideoGenerationNode extends AdvancedRuntimeNode {
       errors.push('Motion must be a number between 1 and 10');
     return errors;
   private async _initializeAdapter(config: VideoConfig): Promise<void> {
+
     try {
       let adapter: unknown;
       switch (config.provider) {
@@ -209,6 +218,7 @@ export class VideoToVideoNode extends AdvancedRuntimeNode {
     this.modelFactory = new AIModelFactory();
     this._initializeAdapter(config);
   async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> {
+
     try {
       const sourceVideo = inputs.get('source_video');
       const prompt = inputs.getString('prompt');
@@ -250,6 +260,7 @@ export class VideoToVideoNode extends AdvancedRuntimeNode {
     } catch (error) {
       throw new Error(`Video transformation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   private async _initializeAdapter(config: VideoConfig): Promise<void> {
+
     // Similar to VideoGenerationNode initialization
     // Only supporting RunwayML for video-to-video currently
     if (config.provider === 'runwayml') {
@@ -264,6 +275,7 @@ export class VideoToVideoNode extends AdvancedRuntimeNode {
   private _getConfiguredProvider(): string {
     return Array.from(this.adapters.keys())[0] || 'runwayml';
   async validateInputs(inputs: Record<string, any>): Promise<string> {
+
     const errors: string = [];
     if (!inputs.source_video) {
       errors.push('Source video is required for transformation');
@@ -290,6 +302,7 @@ export class VideoAnalysisNode extends AdvancedRuntimeNode {
       .build();
     super(nodeId, 'video_analysis', ioSpec);
   async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> {
+
   try {
   const videoFile = inputs.get('video_file');
   const analysisType = inputs.getString('analysis_type', 'basic');
@@ -317,6 +330,7 @@ export class VideoAnalysisNode extends AdvancedRuntimeNode {
     } catch (error) {
       throw new Error(`Video analysis failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   private async _analyzeVideo(videoFile: Error, analysisType: string): Promise<VideoMetadata> {
+
   // Basic video file analysis
   const size = videoFile instanceof ArrayBuffer ? videoFile.byteLength : (videoFile.size || 0);
   // Determine format from file type or extension
@@ -383,6 +397,7 @@ export class VideoAnalysisNode extends AdvancedRuntimeNode {
     if (duration <= 0) return 0;
     return Math.round((size * 8) / (duration * 1000)); // kbps
   async validateInputs(inputs: Record<string, any>): Promise<string> {
+
     const errors: string = [];
     if (!inputs.video_file) {
       errors.push('Video file is required for analysis');
@@ -402,6 +417,7 @@ export class VideoEnhancementNode extends AdvancedRuntimeNode {
       .build();
     super(nodeId, 'video_enhancement', ioSpec);
   async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> {
+
     try {
       const videoFile = inputs.get('video_file');
       const enhancementType = inputs.getString('enhancement_type');
@@ -444,6 +460,7 @@ export class VideoEnhancementNode extends AdvancedRuntimeNode {
     } catch (error) {
       throw new Error(`Video enhancement failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   private async _enhanceVideo(videoFile: Error, options: unknown): Promise<ArrayBuffer> {
+
     // Placeholder implementation - in reality, this would use actual video enhancement
     // Libraries like FFmpeg, OpenCV, or AI upscaling models
     if (videoFile instanceof ArrayBuffer) {
@@ -452,6 +469,7 @@ export class VideoEnhancementNode extends AdvancedRuntimeNode {
       return videoFile.arrayBuffer();
     throw new Error('Unsupported video file format for enhancement');
   async validateInputs(inputs: Record<string, any>): Promise<string> {
+
     const errors: string = [];
     if (!inputs.video_file) {
       errors.push('Video file is required for enhancement');
@@ -477,6 +495,7 @@ export class VideoCompositionNode extends AdvancedRuntimeNode {
       .build();
     super(nodeId, 'video_composition', ioSpec);
   async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> {
+
     try {
       const videoClips = inputs.get('video_clips') as any;
       const compositionType = inputs.getString('composition_type', 'sequence');
@@ -515,6 +534,7 @@ export class VideoCompositionNode extends AdvancedRuntimeNode {
     } catch (error) {
       throw new Error(`Video composition failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   private async _composeVideos(clips: unknown, options: unknown): Promise<ArrayBuffer> {
+
     // Placeholder implementation - in reality, this would use video composition libraries
     // Such as FFmpeg for concatenation, overlays, and transitions
     if (clips.length === 1) {
@@ -532,6 +552,7 @@ export class VideoCompositionNode extends AdvancedRuntimeNode {
       return firstClip.arrayBuffer();
     throw new Error('Unsupported video clip format for composition');
   async validateInputs(inputs: Record<string, any>): Promise<string> {
+
     const errors: string = [];
     if (!inputs.video_clips || !Array.isArray(inputs.video_clips) || inputs.video_clips.length === 0) {
       errors.push('At least one video clip is required for composition');

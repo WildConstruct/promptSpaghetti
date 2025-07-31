@@ -9,6 +9,7 @@ import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { devtools } from 'zustand/middleware';
 
+}
 export interface PreviewResult {
   seed: number;
   output?: string;
@@ -16,6 +17,7 @@ export interface PreviewResult {
   usedNodeIds?: string;
   usedEdgeIds?: string;
   executionTimeMs?: number;
+}
   executionPath?: Array<{ nodeId: string; output: unknown }>;
   weightChoices?: Array<{
   nodeId: string;
@@ -34,6 +36,7 @@ export interface PreviewResult {
     memoryUsage?: { used: number; total: number };
   };
 }
+}
 export interface PreviewCache {
   graphHash: string;
   timestamp: number;
@@ -41,7 +44,9 @@ export interface PreviewCache {
   performanceStats: {
   totalTime: number;
   averageTime: number;
+}
 } | null;
+}
 }
 export interface PreviewPerformanceMetrics {
   totalExecutionTime: number;
@@ -50,6 +55,8 @@ export interface PreviewPerformanceMetrics {
   lastExecutionCount: number;
   peakMemoryUsage?: number;
   networkLatency?: number;
+}
+}
 }
 export interface PreviewStateStore {
   // Current preview state
@@ -60,6 +67,7 @@ export interface PreviewStateStore {
   performanceStats: {
   totalTime: number;
   averageTime: number;
+}
 } | null;
   // Real-time sync state
   lastGraphHash: string | null;
@@ -287,7 +295,7 @@ export // Update last update timestamp
           -10,
           -5
         ).reduce((sum, h) => sum + h.averageExecutionTime, 0) / Math.max(1, history.length - 5);
-        const trend = avgRecent > avgOlder * 1.1 ? 'degrading' :;
+        const trend = avgRecent > avgOlder * 1.1 ? 'degrading' :
                      avgRecent < avgOlder * 0.9 ? 'improving' : 'stable';
         const bottlenecks: string = [];
         const recommendations: string = [];

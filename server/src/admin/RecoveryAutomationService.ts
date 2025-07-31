@@ -59,6 +59,7 @@ export type RecoveryUrgency =
 // ==========================================
 
 }
+}
 export interface RecoveryAutomationRule {
   rule_id: string;
   name: string;
@@ -70,6 +71,7 @@ export interface RecoveryAutomationRule {
     duration?: number; // seconds
     pattern?: string;
     custom_query?: string;
+}
 }
   };
   recovery_strategy: RecoveryStrategy;
@@ -91,6 +93,7 @@ export interface RecoveryAutomationRule {
 }
 
 }
+}
 export interface RecoveryAutomationExecution {
   execution_id: string;
   rule_id: string;
@@ -102,6 +105,7 @@ export interface RecoveryAutomationExecution {
     affected_components: string[];
     metrics?: Record<string, any>;
     error_details?: string;
+}
 }
   };
   recovery_strategy: RecoveryStrategy;
@@ -162,6 +166,7 @@ export interface RecoveryAutomationExecution {
 }
 
 }
+}
 export interface RecoveryStep {
   step_id: string;
   step_name: string;
@@ -178,7 +183,9 @@ export interface RecoveryStep {
   validation_results?: Record<string, boolean>;
 }
 }
+}
 
+}
 }
 export interface RecoveryAutomationConfig {
   enabled: boolean;
@@ -190,6 +197,7 @@ export interface RecoveryAutomationConfig {
     sms_enabled: boolean;
     webhook_enabled: boolean;
     default_recipients: string[];
+}
 }
   };
   escalation_settings: {

@@ -12,6 +12,7 @@ import { DatabaseService } from '../../database/DatabaseService';
 import { AuditService } from '../../auth/services/AuditService';
 
 }
+}
 export interface ApiKeyUsageAnalytics {
   keyId: string;
   name: string;
@@ -25,6 +26,7 @@ export interface ApiKeyUsageAnalytics {
     errorRate: number;
     averageResponseTime: number;
     rateLimitHits: number;
+}
 }
   };
   performance: {
@@ -55,6 +57,7 @@ export interface ApiKeyUsageAnalytics {
 }
 
 }
+}
 export interface SystemHealthMetrics {
   overview: {
     totalKeys: number;
@@ -66,6 +69,7 @@ export interface SystemHealthMetrics {
     callsLast24h: number;
     overallErrorRate: number;
     averageResponseTime: number;
+}
 }
   };
   performance: {
@@ -89,6 +93,7 @@ export interface SystemHealthMetrics {
 }
 
 }
+}
 export interface AlertConfiguration {
   id: string;
   name: string;
@@ -100,6 +105,7 @@ export interface AlertConfiguration {
     usageSpike?: number;
     rateLimitViolations?: number;
     timeWindow: number; // minutes
+}
 }
   };
   actions: {

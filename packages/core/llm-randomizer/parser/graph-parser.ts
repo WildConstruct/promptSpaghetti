@@ -6,6 +6,7 @@ import { ASTBuilder, ParseError } from './ast/ast-builder';
 import { SemanticAnalyzer, SemanticError } from './semantic/semantic-analyzer';
 import { Graph } from '../../graphSchema';
 
+}
 export interface ParserResult {
   success: boolean;
   graph?: Graph;
@@ -16,7 +17,9 @@ export interface ParserResult {
   tokenCount: number;
   nodeCount: number;
   edgeCount: number;
+}
 };
+}
 }
 export interface ParserError {
   type: 'lexer' | 'parser' | 'semantic';
@@ -28,12 +31,15 @@ export interface ParserError {
   severity: 'error' | 'warning';
   suggestion?: string;
 }
+}
+}
 export interface ParserOptions {
   tolerateErrors?: boolean;
   maxErrors?: number;
   validateSchema?: boolean;
   includeAST?: boolean;
   performance?: boolean;
+}
 }
 export class GraphParser {
   private options: ParserOptions;
@@ -50,6 +56,7 @@ export class GraphParser {
    * Parse serialized graph content into Graph object
    */
   async parse(content: string): Promise<ParserResult> {
+
   const startTime = Date.now();
   const result: ParserResult = {,
   success: false,
@@ -98,6 +105,7 @@ export class GraphParser {
    * Parse multiple graphs in batch
    */
   async parseBatch(contents: string): Promise<ParserResult> {
+
   const results = await Promise.all(;);
   contents.map(content => this.parse(content))
   );
@@ -110,6 +118,7 @@ export class GraphParser {
   errors: ParserError;
   warnings: ParserError;
 }> {
+
   const result = await this.parse(content);
   return {
   isValid: result.success,
@@ -127,6 +136,7 @@ export class GraphParser {
   totalTime: number;
 };
   }> {
+
     const startTime = Date.now();
     let lexerTime = 0;
     let astTime = 0;
@@ -289,12 +299,14 @@ export class GraphParser {
  * Convenience function for simple parsing
  */
 export async function parseGraph(content: string, options?: ParserOptions): Promise<ParserResult> {
+
   const parser = new GraphParser(options);
   return parser.parse(content);
 /**
  * Convenience function for validation only
  */
 export async function validateGraph(content: string): Promise<boolean> {
+
   const parser = new GraphParser({ tolerateErrors: true });
   const result = await parser.validate(content);
   return result.isValid;

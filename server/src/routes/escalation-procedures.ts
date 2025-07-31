@@ -11,6 +11,7 @@ import { EscalationProcedureService, EscalationRule, EscalationCase, EscalationP
 
 // Request/Response Types
 }
+}
 interface CreateRuleRequest {
   name: string;
   description?: string;
@@ -27,7 +28,9 @@ interface CreateRuleRequest {
   timeZone?: string;
 }
 }
+}
 
+}
 }
 interface UpdateRuleRequest {
   name?: string;
@@ -44,7 +47,9 @@ interface UpdateRuleRequest {
   timeZone?: string;
 }
 }
+}
 
+}
 }
 interface CreateCaseRequest {
   sourceType: string;
@@ -54,20 +59,26 @@ interface CreateCaseRequest {
   priority?: EscalationPriority;
 }
 }
+}
 
+}
 }
 interface ResolveCaseRequest {
   resolutionType: 'resolved' | 'cancelled' | 'transferred' | 'merged';
   resolutionNotes?: string;
 }
 }
+}
 
+}
 }
 interface EscalateCaseRequest {
   reason?: string;
 }
 }
+}
 
+}
 }
 interface GetCasesQuery {
   status?: EscalationStatus;
@@ -80,13 +91,16 @@ interface GetCasesQuery {
   sortOrder?: 'asc' | 'desc';
 }
 }
+}
 
+}
 }
 interface GetRulesQuery {
   category?: EscalationCategory;
   enabled?: boolean;
   page?: number;
   limit?: number;
+}
 }
 }
 

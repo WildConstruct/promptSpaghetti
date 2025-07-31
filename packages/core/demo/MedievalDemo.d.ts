@@ -4,6 +4,7 @@
  * Connects with external medieval databases and content sources
  */
 
+}
 export interface MedievalClothing {
     id: string;
     name: string;
@@ -15,6 +16,7 @@ export interface MedievalClothing {
     period: {
         start: number;
         end: number;
+}
     };
     regions: string[];
     seasonality: 'all' | 'spring' | 'summer' | 'autumn' | 'winter';
@@ -22,6 +24,7 @@ export interface MedievalClothing {
     historicalAccuracy: 'high' | 'medium' | 'low';
     sources: string[];
 
+}
 export interface MedievalMaterial {
     id: string;
     name: string;
@@ -34,6 +37,7 @@ export interface MedievalMaterial {
     primaryUses: string[];
     historicalNotes: string;
 
+}
 export interface MedievalLocation {
     id: string;
     name: string;
@@ -47,6 +51,7 @@ export interface MedievalLocation {
     geographicalRegion: string;
     politicalContext: string;
 
+}
 export interface MedievalCharacter {
     id: string;
     name: string;
@@ -62,6 +67,7 @@ export interface MedievalCharacter {
     socialConnections: string[];
     historicalContext: string;
 
+}
 export interface MedievalScene {
     id: string;
     title: string;
@@ -71,6 +77,7 @@ export interface MedievalScene {
         season: string;
         timeOfDay: string;
         weather?: string;
+}
     };
     activities: string[];
     socialDynamics: string[];

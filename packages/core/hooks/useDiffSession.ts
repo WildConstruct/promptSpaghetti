@@ -7,6 +7,7 @@ import {
   CreateDiffSessionRequest,
   UpdateDiffSessionRequest
 } from '../types/comparison';
+}
 interface UseDiffSessionResult {
   session: VisualDiffSession | null;
   comparison: DetailedComparison | null;
@@ -22,6 +23,7 @@ export const useDiffSession = (): UseDiffSessionResult => {
   const [comparison, setComparison] = useState<DetailedComparison | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+}
   const apiCall = useCallback(async (url: string, options: RequestInit = {}) => {
     const response = await fetch(`/api/visual-diff${url}`, {)}
   },

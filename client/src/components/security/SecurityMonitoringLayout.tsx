@@ -19,12 +19,14 @@ import { IncidentResponsePanel } from './IncidentResponsePanel';
 import { ThreatDetectionVisualizer } from './ThreatDetectionVisualizer';
 import { SecurityAlerts } from './SecurityAlerts';
 type SecurityView = 'dashboard' | 'events' | 'threats' | 'incidents' | 'alerts';
+}
 interface SecurityMonitoringLayoutProps {
   initialView?: SecurityView;
   compactMode?: boolean;
   export const SecurityMonitoringLayout: React.FC<SecurityMonitoringLayoutProps> = ({,)
   initialView = 'dashboard',
   compactMode = false
+}
 }) => {
   const [currentView, setCurrentView] = useState<SecurityView>(initialView);
   const [selectedIncidentId, setSelectedIncidentId] = useState<string | null>(null);

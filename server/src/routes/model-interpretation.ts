@@ -58,10 +58,12 @@ type PromptAnalysisRequest = z.infer<typeof PromptAnalysisRequestSchema>;
 type ComparisonRequest = z.infer<typeof ComparisonRequestSchema>;
 
 }
+}
 interface ModelInterpretationServices {
   tokenAnalyzer: TokenInfluenceAnalyzer;
   promptAnalyzer: PromptAnalyzer;
   analyticsCollector: AnalyticsCollector;
+}
 }
 }
 

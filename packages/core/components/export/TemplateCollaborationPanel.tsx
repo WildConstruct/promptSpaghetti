@@ -12,12 +12,14 @@ import {
   UpdateExportTemplate
 } from '../../types/export';
 import { useExport } from '../../hooks/useExport';
+}
 interface TemplateCollaborationPanelProps {
   template: ExportTemplate;
   visible?: boolean;
   onClose?: () => void;
   projectId?: string;
   className?: string;
+}
 interface CollaborationUser {
   id: string;
   name: string;
@@ -26,6 +28,7 @@ interface CollaborationUser {
   role: 'owner' | 'editor' | 'viewer';
   joinedAt: string;
   lastActive: string;
+}
 interface CollaborationActivity {
   id: string;
   userId: string;
@@ -34,6 +37,7 @@ interface CollaborationActivity {
   timestamp: string;
   details: string;
   metadata?: Record<string, any>;
+}
 interface TemplateAnalytics {
   totalUses: number;
   uniqueUsers: number;
@@ -41,8 +45,10 @@ interface TemplateAnalytics {
   averageRating: number;
   forkCount: number;
   usageByFormat: Record<string, number>;
+}
   usageOverTime: Array<{ date: string; count: number }>;
   topUsers: Array<{ userId: string; email: string; uses: number }>;
+}
 interface ShareSettings {
   isPublic: boolean;
   allowForks: boolean;
@@ -56,6 +62,7 @@ interface ShareSettings {
   onClose,
   projectId = '',
   className = ''
+}
 }) => {
   // State management
   const [collaborators, setCollaborators] = useState<CollaborationUser>([]);

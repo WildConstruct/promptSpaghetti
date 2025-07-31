@@ -8,12 +8,14 @@ import React from 'react';
 import { Loader2 } from 'lucide-react';
 import './LoadingState.css';
 
+}
 export interface LoadingStateProps {
   message?: string;
   size?: 'small' | 'medium' | 'large';
   overlay?: boolean;
   showSpinner?: boolean;
   className?: string;
+}
 }
 export const LoadingState: React.FC<LoadingStateProps> = ({)
   message = 'Loading...',

@@ -35,6 +35,7 @@ import {
 } from 'lucide-react';
 // Epic 16 theme imports removed
 
+}
 export interface UserProgress {
   userId: string;
   level: number;
@@ -45,6 +46,8 @@ export interface UserProgress {
   lastActivity: Date;
   streakDays: number;
   longestStreak: number;
+}
+}
 }
 export interface EngagementMetrics {
   // Discovery metrics
@@ -73,6 +76,8 @@ export interface EngagementMetrics {
   certificationsEarned: number;
   learningPathsCompleted: number;
 }
+}
+}
 export interface Milestone {
   id: string;
   title: string;
@@ -87,7 +92,9 @@ export interface Milestone {
   icon: string;
   tier: 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond';
   rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary'
+}
   }
+}
 export interface ProgressTrackerProps {
   userId: string;
   variant?: 'full' | 'compact' | 'dashboard';
@@ -96,6 +103,7 @@ export interface ProgressTrackerProps {
   onMilestoneComplete?: (milestone: Milestone) => void;
   onLevelUp?: (newLevel: number, oldLevel: number) => void;
   className?: string;
+}
 }
 export const ProgressTracker: React.FC<ProgressTrackerProps> = ({)
   userId,

@@ -23,6 +23,7 @@ import {
   X
 } from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
+}
 interface UserProfile {
   id: string;,
   userId: string;
@@ -43,30 +44,33 @@ interface UserProfile {
   timezone: string;,
   dateFormat: string;
   timeFormat: '12h' | '24h';,
-  emailNotifications: {,
+  emailNotifications: {
   account: boolean;,
   security: boolean;
   marketing: boolean;,
   product: boolean;
   social: boolean;
+}
 };
-  pushNotifications: {,
+  pushNotifications: {
   account: boolean;
   security: boolean;,
   marketing: boolean;
   product: boolean;,
   social: boolean;
 };
-  privacy: {,
+  privacy: {
   profileVisibility: 'public' | 'private';
   searchEngineIndexing: boolean;,
   activityStatus: boolean;
   readReceipts: boolean;
 };
+}
 interface ProfileSettingsProps {
   className?: string;
   export const ProfileSettings: React.FC<ProfileSettingsProps> = ({,)
   className = ''
+}
 }) => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [preferences, setPreferences] = useState<UserPreferences | null>(null);
@@ -91,14 +95,14 @@ interface ProfileSettingsProps {
       const [profileResponse, preferencesResponse] = await Promise.all([)
         fetch(`${API_BASE_URL}/auth/profile`, {)}
   },
-  headers: {,
+  headers: {
             'Authorization': `Bearer ${token}`}
 }
             'Content-Type': 'application/json'
         }),
         fetch(`${API_BASE_URL}/auth/preferences`, {)}
   },
-  headers: {,
+  headers: {
             'Authorization': `Bearer ${token}`}
 }
             'Content-Type': 'application/json'
@@ -125,7 +129,7 @@ interface ProfileSettingsProps {
       const response = await fetch(`${API_BASE_URL}/auth/profile`, {)}
   },
   method: 'PUT',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${token}`}
 }
           'Content-Type': 'application/json'
@@ -154,7 +158,7 @@ interface ProfileSettingsProps {
       const response = await fetch(`${API_BASE_URL}/auth/preferences`, {)}
   },
   method: 'PUT',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${token}`}
 }
           'Content-Type': 'application/json'
@@ -205,7 +209,7 @@ interface ProfileSettingsProps {
       const response = await fetch(`${API_BASE_URL}/auth/avatar`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${token}`}
   },
   body: formData;
@@ -235,7 +239,7 @@ interface ProfileSettingsProps {
       const response = await fetch(`${API_BASE_URL}/auth/avatar`, {)}
   },
   method: 'DELETE',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${token}`}
       });
       if (!response.ok) {

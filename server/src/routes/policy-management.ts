@@ -22,6 +22,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { requireAuth, requireAdmin } from '../middleware/auth';
 
 }
+}
 interface PolicyRoutes {
   '/policies': {
     GET: {
@@ -32,6 +33,7 @@ interface PolicyRoutes {
         tags?: string;
         limit?: number;
         offset?: number;
+}
 }
       };
     };

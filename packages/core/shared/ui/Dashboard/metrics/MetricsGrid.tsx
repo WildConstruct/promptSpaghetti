@@ -7,12 +7,14 @@
 import React from 'react';
 import './MetricsGrid.css';
 
+}
 export interface MetricsGridProps {
   children: React.ReactNode;
   columns?: 1 | 2 | 3 | 4 | 5 | 6 | 'auto';
   gap?: 'small' | 'medium' | 'large';
   minCardWidth?: string;
   className?: string;
+}
 }
 export const MetricsGrid: React.FC<MetricsGridProps> = ({)
   children,

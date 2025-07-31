@@ -12,6 +12,7 @@ export interface WorkflowState {
     created_at: Date;
     updated_at: Date;
 
+}
 export interface WorkflowTransition {
     id: string;
     workspace_id: string;
@@ -24,6 +25,7 @@ export interface WorkflowTransition {
     conditions: Record<string, any>;
     created_at: Date;
 
+}
 export interface WorkflowApproval {
     id: string;
     workspace_id: string;
@@ -43,6 +45,7 @@ export interface WorkflowApproval {
     created_at: Date;
     updated_at: Date;
 
+}
 export interface WorkflowApprovalReviewer {
     id: string;
     approval_id: string;
@@ -52,6 +55,7 @@ export interface WorkflowApprovalReviewer {
     review_comment?: string;
     created_at: Date;
 
+}
 export interface WorkflowLock {
     id: string;
     workspace_id: string;
@@ -64,6 +68,7 @@ export interface WorkflowLock {
     auto_release: boolean;
     metadata: Record<string, any>;
 
+}
 export interface WorkflowHistoryEntry {
     id: string;
     workspace_id: string;
@@ -81,6 +86,7 @@ export interface WorkflowHistoryEntry {
     user_agent?: string;
     session_id?: string;
 
+}
 export interface WorkflowSchedule {
     id: string;
     workspace_id: string;
@@ -102,6 +108,7 @@ export interface WorkflowSchedule {
     created_at: Date;
     updated_at: Date;
 
+}
 export interface WorkflowExecutionLog {
     id: string;
     schedule_id: string;
@@ -115,6 +122,7 @@ export interface WorkflowExecutionLog {
     retry_attempt: number;
     next_retry_at?: Date;
 
+}
 export interface WorkflowStatistics {
     total_states: number;
     total_transitions: number;
@@ -128,6 +136,7 @@ export interface WorkflowStatistics {
         rejected: number;
         cancelled: number;
         avg_approval_time_hours: number;
+}
     };
     lock_stats: {
         total_active: number;
@@ -141,6 +150,7 @@ export interface WorkflowStatistics {
         failed_executions: number;
     };
 
+}
 export interface StateTransitionRequest {
     resource_id: string;
     to_state_id: string;
@@ -148,6 +158,7 @@ export interface StateTransitionRequest {
     metadata?: Record<string, any>;
     force?: boolean;
 
+}
 export interface StateTransitionResult {
     success: boolean;
     new_state_id?: string;
@@ -156,6 +167,7 @@ export interface StateTransitionResult {
     error?: string;
     workflow_history_id?: string;
 
+}
 export interface WorkflowEvent {
     type: 'state_changed' | 'approval_requested' | 'approval_completed' | 'lock_acquired' | 'lock_released' | 'schedule_executed';
     workspace_id: string;
@@ -164,6 +176,7 @@ export interface WorkflowEvent {
     timestamp: Date;
     data: Record<string, any>;
 
+}
 export interface WorkflowConfiguration {
     auto_lock_on_state_change: boolean;
     auto_release_locks_on_completion: boolean;
@@ -176,8 +189,10 @@ export interface WorkflowConfiguration {
         approval_completed: boolean;
         lock_acquired: boolean;
         schedule_failed: boolean;
+}
     };
 
+}
 export interface WorkflowStateFilter {
     workspace_id?: string;
     is_initial?: boolean;
@@ -185,6 +200,7 @@ export interface WorkflowStateFilter {
     is_locked?: boolean;
     name_contains?: string;
 
+}
 export interface WorkflowApprovalFilter {
     workspace_id?: string;
     resource_id?: string;
@@ -193,6 +209,7 @@ export interface WorkflowApprovalFilter {
     priority?: 'low' | 'medium' | 'high' | 'urgent';
     overdue?: boolean;
 
+}
 export interface WorkflowHistoryFilter {
     workspace_id?: string;
     resource_id?: string;
@@ -203,6 +220,7 @@ export interface WorkflowHistoryFilter {
     limit?: number;
     offset?: number;
 
+}
 export interface WorkflowLockFilter {
     workspace_id?: string;
     resource_id?: string;
@@ -210,6 +228,7 @@ export interface WorkflowLockFilter {
     lock_type?: 'edit' | 'state_change' | 'delete' | 'custom';
     expired?: boolean;
 
+}
 export interface WorkflowScheduleFilter {
     workspace_id?: string;
     resource_id?: string;
@@ -217,6 +236,7 @@ export interface WorkflowScheduleFilter {
     enabled?: boolean;
     overdue?: boolean;
 
+}
 export interface WorkflowComponentProps {
     workspaceId: string;
     currentUserId: string;
@@ -225,6 +245,7 @@ export interface WorkflowComponentProps {
     onLockAcquired?: (lockId: string) => void;
     onLockReleased?: (lockId: string) => void;
 
+}
 export interface UseWorkflowReturn {
     states: WorkflowState[];
     transitions: WorkflowTransition[];
@@ -244,6 +265,7 @@ export interface UseWorkflowReturn {
     getResourceState: (resourceId: string) => WorkflowState | null;
     getAvailableTransitions: (currentStateId: string) => WorkflowTransition[];
 
+}
 export interface WorkflowApiResponse<T> {
     data: T;
     meta?: {
@@ -251,9 +273,11 @@ export interface WorkflowApiResponse<T> {
         page: number;
         limit: number;
         has_more: boolean;
+}
     };
     error?: string;
 
+}
 export interface WorkflowValidationResult {
     valid: boolean;
     transition?: WorkflowTransition;
@@ -273,6 +297,7 @@ export declare const WORKFLOW_ICONS: {
     readonly CheckCircleIcon: "CheckCircleIcon";
     readonly GlobeAltIcon: "GlobeAltIcon";
     readonly ArchiveBoxIcon: "ArchiveBoxIcon"
+}
   };
 export declare const WORKFLOW_COLORS: {
     readonly draft: "#6B7280";

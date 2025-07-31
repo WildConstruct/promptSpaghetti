@@ -28,6 +28,7 @@ export declare enum ComplianceFramework {
     HIPAA = "hipaa",
     PCI_DSS = "pci_dss"
 
+}
 export interface ClassificationRule {
     id: string;
     name: string;
@@ -41,11 +42,13 @@ export interface ClassificationRule {
     priority: number;
     enabled: boolean;
 
+}
 export interface ContextRule {
     field: string;
     condition: 'equals' | 'contains' | 'matches' | 'exists';
     value?: string | RegExp;
 
+}
 export interface ClassificationResult {
     level: ClassificationLevel;
     category: DataCategory;
@@ -57,6 +60,7 @@ export interface ClassificationResult {
     accessControls: string[];
     reasoning: string[];
 
+}
 export interface DataElement {
     id: string;
     fieldName: string;
@@ -66,6 +70,7 @@ export interface DataElement {
     source: string;
     timestamp: Date;
 
+}
 export interface ClassificationMetadata {
     classifiedAt: Date;
     classifiedBy: string;
@@ -113,6 +118,7 @@ export declare class DataClassifier extends BrowserEventEmitter {
         algorithm: string;
         keyRotation: string;
         keyStorage: string;
+}
     };
     /**
      * Get retention requirements for classification level
@@ -137,6 +143,7 @@ export declare class ClassificationPolicyManager {
     getAllPolicies(): ClassificationPolicy[];
     validateCompliance(classification: ClassificationResult, policyId: string): ComplianceValidationResult;
 
+}
 export interface ClassificationPolicy {
     id: string;
     name: string;
@@ -148,12 +155,14 @@ export interface ClassificationPolicy {
         minimumPeriod: string;
         maximumPeriod: string;
         disposalMethod: string;
+}
     };
     auditRequirements: {
         frequency: string;
         scope: string[];
     };
 
+}
 export interface ComplianceValidationResult {
     compliant: boolean;
     violations: string[];
@@ -162,3 +171,4 @@ export interface ComplianceValidationResult {
 
 export default DataClassifier;
 //# sourceMappingURL=DataClassifier.d.ts.map
+}

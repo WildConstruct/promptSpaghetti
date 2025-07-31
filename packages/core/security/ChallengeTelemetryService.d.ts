@@ -49,6 +49,7 @@ export declare enum UserAgentType {
     BOT_CONFIRMED = "bot_confirmed",
     UNKNOWN = "unknown"
 
+}
 export interface ChallengeEvent {
     id: string;
     sessionId: string;
@@ -72,6 +73,7 @@ export interface ChallengeEvent {
             coordinates?: {
                 lat: number;
                 lon: number;
+}
             };
         };
         browserInfo: {
@@ -123,11 +125,13 @@ export interface ChallengeEvent {
         accommodationsApplied: string[];
     };
 
+}
 export interface ChallengeStatistics {
     challengeType: ChallengeType;
     period: {
         start: Date;
         end: Date;
+}
     };
     metrics: {
         totalAttempts: number;
@@ -165,6 +169,7 @@ export interface ChallengeStatistics {
         securityScore: number;
     };
 
+}
 export interface TelemetryQuery {
     startTime: Date;
     endTime: Date;
@@ -183,32 +188,36 @@ export interface TelemetryQuery {
     limit?: number;
     offset?: number;
 
+}
 export interface ABTestConfig {
     id: string;
     name: string;
     challengeType: ChallengeType;
-    variants: Array<{,
+    variants: Array<{
         id: string;
         name: string;
         parameters: Record<string, any>;
         trafficPercentage: number;
+}
     }>;
     startDate: Date;
     endDate: Date;
     targetMetric: 'success_rate' | 'completion_time' | 'user_satisfaction' | 'security_score';
     isActive: boolean;
 
+}
 export interface FraudPattern {
     id: string;
     name: string;
     description: string;
-    conditions: Array<{,
+    conditions: Array<{
         field: string;
         operator: 'equals' | 'greater_than' | 'less_than' | 'contains' | 'in_range';
         value: any;
+}
     }>;
     severity: 'low' | 'medium' | 'high' | 'critical';
-    actions: Array<{,
+    actions: Array<{
         type: 'block' | 'challenge' | 'monitor' | 'flag';
         parameters: Record<string, any>;
     }>;
@@ -282,7 +291,7 @@ export declare class ChallengeTelemetryService extends EventEmitter {
      */
     getABTestResults(testId: string): {
         test: ABTestConfig;
-        results: Array<{,
+        results: Array<{
             variantId: string;
             variantName: string;
             sampleSize: number;
@@ -306,22 +315,22 @@ export declare class ChallengeTelemetryService extends EventEmitter {
             activeABTests: number;
         };
         recentActivity: ChallengeEvent[];
-        topChallengeTypes: Array<{,
+        topChallengeTypes: Array<{
             type: ChallengeType;
             count: number;
             successRate: number;
         }>;
-        fraudAlerts: Array<{,
+        fraudAlerts: Array<{
             level: string;
             description: string;
             timestamp: Date;
         }>;
-        performanceMetrics: Array<{,
+        performanceMetrics: Array<{
             metric: string;
             value: number;
             trend: 'up' | 'down' | 'stable'
   }>;
-        geographicDistribution: Array<{,
+        geographicDistribution: Array<{
             country: string;
             attempts: number;
             successRate: number;

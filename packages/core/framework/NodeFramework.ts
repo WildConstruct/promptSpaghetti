@@ -9,6 +9,7 @@ import { AdvancedRuntimeNode, AdvancedExecutionContext, AdvancedNodeConfig } fro
 import { NodeValidationService, NodeValidationResult } from '../validation';
 import { IOPortDefinition } from '../runtime/io-system';
 
+}
 export interface NodeDefinition {
   /** Unique node type identifier */
   type: string;
@@ -28,6 +29,7 @@ export interface NodeDefinition {
   ports: {
   inputs: IOPortDefinition;
   outputs: IOPortDefinition;
+}
 };
   /** Node-specific metadata */
   metadata: {
@@ -37,6 +39,7 @@ export interface NodeDefinition {
   experimental?: boolean;
   minEngineVersion?: string;
 };
+}
 }
 export interface NodeLifecycleHooks {
   /** Called before node initialization */
@@ -54,6 +57,8 @@ export interface NodeLifecycleHooks {
   /** Called on node errors */
   onError?: (node: FrameworkNode, error: Error) => Promise<void> | void;
 }
+}
+}
 export interface NodeFrameworkConfig {
   /** Enable automatic validation of nodes */
   enableValidation: boolean;
@@ -70,6 +75,8 @@ export interface NodeFrameworkConfig {
   /** Enable hot reloading of node definitions */
   enableHotReload: boolean;
 }
+}
+}
 export interface NodeMetrics {
   nodeId: string;
   nodeType: string;
@@ -83,6 +90,8 @@ export interface NodeMetrics {
   cacheHits: number;
   cacheMisses: number;
 }
+}
+}
 export interface NodeFrameworkMetrics {
   totalNodes: number;
   activeNodes: number;
@@ -95,6 +104,7 @@ export interface NodeFrameworkMetrics {
   /**
   * Enhanced node base class with framework integration
   */
+}
 }
 export abstract class FrameworkNode extends AdvancedRuntimeNode {
   protected framework: NodeFramework | null = null;
@@ -136,6 +146,7 @@ export abstract class FrameworkNode extends AdvancedRuntimeNode {
    * Initialize node with framework integration
    */
   async initialize(): Promise<void> {
+
   try {
   await this.lifecycleHooks.beforeInit?.(this);
   // Perform node-specific initialization
@@ -185,6 +196,7 @@ export abstract class FrameworkNode extends AdvancedRuntimeNode {
    * Destroy node with framework integration
    */
   async destroy(): Promise<void> {
+
   try {
   await this.lifecycleHooks.beforeDestroy?.(this);
   // Perform node-specific cleanup
@@ -205,6 +217,7 @@ export abstract class FrameworkNode extends AdvancedRuntimeNode {
    * Clone node with new ID
    */
   async clone(newId: string): Promise<FrameworkNode> {
+
   const NodeClass = this.constructor as new (id: string, config: AdvancedNodeConfig, data: any) => FrameworkNode;
   const cloned = new NodeClass(newId, this.config, this.getData());
   if (this.framework) {
@@ -237,6 +250,7 @@ export abstract class FrameworkNode extends AdvancedRuntimeNode {
     this.metrics.averageExecutionTime = this.metrics.totalExecutionTime / this.metrics.executionCount;
     this.metrics.lastExecutionTime = executionTime;
   private async handleError(error: Error): Promise<void> {
+
     this.metrics.lastError = error;
     await this.lifecycleHooks.onError?.(this, error);
 /**
@@ -391,6 +405,7 @@ export class NodeFramework extends EventEmitter {
    * Create a node
    */
   async createNode(type: string, id: string, config: AdvancedNodeConfig, data: any): Promise<FrameworkNode> {
+
     // Check memory limits
     if (this.nodes.size >= this.config.maxNodesInMemory) {
       throw new Error('Maximum number of nodes in memory exceeded');
@@ -419,6 +434,7 @@ export class NodeFramework extends EventEmitter {
    * Destroy a node
    */
   async destroyNode(id: string): Promise<void> {
+
     const node = this.nodes.get(id);
     if (!node) {
       throw new Error(`Node with ID '${id}' not found`);}
@@ -466,6 +482,7 @@ export class NodeFramework extends EventEmitter {
    * Execute multiple nodes in batch
    */
   async executeNodeBatch(nodeIds: string, context: AdvancedExecutionContext): Promise<any> {
+
     const results: any = [];
     for (const nodeId of nodeIds) {
       const node = this.nodes.get(nodeId);
@@ -478,6 +495,7 @@ export class NodeFramework extends EventEmitter {
    * Shutdown the framework
    */
   async shutdown(): Promise<void> {
+
   // Clear metrics interval
   if (this.metricsInterval) {
   clearInterval(this.metricsInterval);
@@ -510,11 +528,13 @@ export class NodeFramework extends EventEmitter {
  * Extension interface for framework extensibility
  */
 
+}
 export interface NodeFrameworkExtension {
   name: string;
   version: string;
   description: string;
   initialize(framework: NodeFramework): Promise<void> | void;
   shutdown(): Promise<void> | void;
+}
 }
 export default NodeFramework;

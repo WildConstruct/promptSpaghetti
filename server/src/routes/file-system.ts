@@ -13,6 +13,7 @@ import { pipeline } from 'stream/promises';
 
 // File system types
 }
+}
 export interface TreeNode {
   id: string;
   name: string;
@@ -34,6 +35,7 @@ export interface TreeNode {
     version?: string;
     thumbnail?: string;
 }
+}
   };
   permissions?: {
     read: boolean;
@@ -44,6 +46,7 @@ export interface TreeNode {
 }
 
 }
+}
 export interface FileOperationResponse {
   success: boolean;
   message?: string;
@@ -51,13 +54,16 @@ export interface FileOperationResponse {
   error?: string;
 }
 }
+}
 
+}
 }
 export interface FileStats {
   totalFiles: number;
   totalFolders: number;
   totalSize: number;
   recentFiles: TreeNode[];
+}
 }
 }
 

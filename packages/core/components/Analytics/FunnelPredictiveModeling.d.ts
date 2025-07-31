@@ -18,12 +18,14 @@ import React from 'react';
 import { ConversionFunnelDefinition, UserSegment, ConversionCohort } from '../../analytics/ConversionDataModel';
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
 
+}
 export interface FunnelPredictiveModelingProps {
     funnelDefinition: ConversionFunnelDefinition;
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
     timeRange: {
         start: number;
         end: number;
+}
     };
     modelConfig?: PredictiveModelConfiguration;
     segments?: UserSegment[];
@@ -33,6 +35,7 @@ export interface FunnelPredictiveModelingProps {
     onModelAlert?: (alert: ModelAlert) => void;
     onExport?: (data: PredictiveModelingExportData) => void;
 
+}
 export interface PredictiveModelConfiguration {
     models: PredictiveModelType[];
     updateFrequency: ModelUpdateFrequency;
@@ -47,6 +50,7 @@ export type PredictiveModelType = 'linear_regression' | 'random_forest' | 'gradi
 export type ModelUpdateFrequency = 'real_time' | 'hourly' | 'daily' | 'weekly';
 export type ForecastHorizon = 'short' | 'medium' | 'long' | 'custom';
 
+}
 export interface PredictiveModelingData {
     performanceForecasts: PerformanceForecast[];
     userBehaviorPredictions: UserBehaviorPrediction[];
@@ -59,6 +63,7 @@ export interface PredictiveModelingData {
     uncertaintyAnalysis: UncertaintyAnalysis[];
     featureImportance: FeatureImportanceData[];
 
+}
 export interface PerformanceForecast {
     forecastId: string;
     model: PredictiveModelType;
@@ -71,6 +76,7 @@ export interface PerformanceForecast {
     accuracy: ForecastAccuracy;
     lastUpdated: number;
 
+}
 export interface ForecastTimePoint {
     timestamp: number;
     period: string;
@@ -79,6 +85,7 @@ export interface ForecastTimePoint {
     uncertainty: number;
     contributingFactors: ContributingFactor[];
 
+}
 export interface MetricPrediction {
     metric: string;
     predictedValue: number;
@@ -90,11 +97,13 @@ export interface MetricPrediction {
 
 export type TrendDirection = 'increasing' | 'decreasing' | 'stable' | 'cyclical' | 'volatile';
 
+}
 export interface ConfidenceInterval {
     lower: number;
     upper: number;
     level: number;
 
+}
 export interface ForecastMetrics {
     conversionRate: MetricForecast;
     revenue: MetricForecast;
@@ -103,6 +112,7 @@ export interface ForecastMetrics {
     lifetimeValue: MetricForecast;
     engagementScore: MetricForecast;
 
+}
 export interface MetricForecast {
     metric: string;
     currentValue: number;
@@ -112,6 +122,7 @@ export interface MetricForecast {
     confidence: ConfidenceInterval;
     seasonality: SeasonalityPattern;
 
+}
 export interface SeasonalityPattern {
     detected: boolean;
     period: number;
@@ -119,6 +130,7 @@ export interface SeasonalityPattern {
     phase: number;
     strength: number;
 
+}
 export interface ForecastFactor {
     factor: string;
     impact: number;
@@ -126,6 +138,7 @@ export interface ForecastFactor {
     description: string;
     source: 'historical' | 'external' | 'model_derived';
 
+}
 export interface ForecastScenario {
     scenarioId: string;
     name: string;
@@ -134,17 +147,20 @@ export interface ForecastScenario {
     outcomes: ScenarioOutcome[];
     probability: number;
 
+}
 export interface ScenarioAssumption {
     parameter: string;
     value: number;
     description: string;
 
+}
 export interface ScenarioOutcome {
     metric: string;
     predictedValue: number;
     impact: number;
     confidence: number;
 
+}
 export interface ForecastAccuracy {
     mae: number;
     mape: number;
@@ -153,6 +169,7 @@ export interface ForecastAccuracy {
     accuracy: number;
     lastValidation: number;
 
+}
 export interface UserBehaviorPrediction {
     userId: string;
     segment: string;
@@ -164,6 +181,7 @@ export interface UserBehaviorPrediction {
     churnRisk: ChurnRisk;
     recommendedInterventions: Intervention[];
 
+}
 export interface BehaviorPrediction {
     behavior: string;
     probability: number;
@@ -171,6 +189,7 @@ export interface BehaviorPrediction {
     timeframe: number;
     factors: PredictionFactor[];
 
+}
 export interface PredictedAction {
     action: string;
     probability: number;
@@ -178,6 +197,7 @@ export interface PredictedAction {
     value: number;
     confidence: number;
 
+}
 export interface EngagementPrediction {
     currentScore: number;
     predictedScore: number;
@@ -185,12 +205,14 @@ export interface EngagementPrediction {
     riskLevel: 'low' | 'medium' | 'high';
     drivers: EngagementDriver[];
 
+}
 export interface EngagementDriver {
     factor: string;
     impact: number;
     controllable: boolean;
     recommendation: string;
 
+}
 export interface ConversionProbability {
     probability: number;
     confidence: number;
@@ -199,6 +221,7 @@ export interface ConversionProbability {
     steps: StepConversionProbability[];
     factors: ConversionFactor[];
 
+}
 export interface StepConversionProbability {
     stepId: string;
     stepName: string;
@@ -206,12 +229,14 @@ export interface StepConversionProbability {
     bottleneck: boolean;
     optimizationPotential: number;
 
+}
 export interface ConversionFactor {
     factor: string;
     weight: number;
     direction: 'positive' | 'negative';
     controllable: boolean;
 
+}
 export interface ChurnRisk {
     riskScore: number;
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
@@ -219,6 +244,7 @@ export interface ChurnRisk {
     churnProbability: number;
     preventionRecommendations: ChurnPreventionRecommendation[];
 
+}
 export interface ChurnPreventionRecommendation {
     intervention: string;
     effectiveness: number;
@@ -226,6 +252,7 @@ export interface ChurnPreventionRecommendation {
     urgency: 'immediate' | 'high' | 'medium' | 'low';
     implementation: string;
 
+}
 export interface Intervention {
     type: InterventionType;
     description: string;
@@ -237,6 +264,7 @@ export interface Intervention {
 
 export type InterventionType = 'personalized_offer' | 'content_recommendation' | 'email_campaign' | 'push_notification' | 'chat_support' | 'product_recommendation' | 'pricing_adjustment' | 'feature_highlight';
 
+}
 export interface ChurnPrediction {
     segmentId?: string;
     cohortId?: string;
@@ -246,6 +274,7 @@ export interface ChurnPrediction {
     preventionStrategies: PreventionStrategy[];
     impactAnalysis: ChurnImpactAnalysis;
 
+}
 export interface ChurnRatePrediction {
     currentRate: number;
     predictedRate: number;
@@ -253,6 +282,7 @@ export interface ChurnRatePrediction {
     factors: ChurnFactor[];
     seasonality: SeasonalityPattern;
 
+}
 export interface ChurnFactor {
     factor: string;
     impact: number;
@@ -260,12 +290,14 @@ export interface ChurnFactor {
     controllable: boolean;
     prevention: PreventionAction[];
 
+}
 export interface PreventionAction {
     action: string;
     effectiveness: number;
     cost: number;
     feasibility: 'high' | 'medium' | 'low';
 
+}
 export interface RiskSegment {
     segmentId: string;
     segmentName: string;
@@ -275,11 +307,13 @@ export interface RiskSegment {
     value: number;
     characteristics: SegmentCharacteristic[];
 
+}
 export interface SegmentCharacteristic {
     characteristic: string;
     value: string | number;
     importance: number;
 
+}
 export interface PreventionStrategy {
     strategyId: string;
     name: string;
@@ -290,12 +324,14 @@ export interface PreventionStrategy {
     timeline: number;
     kpis: PreventionKPI[];
 
+}
 export interface PreventionKPI {
     metric: string;
     target: number;
     current: number;
     improvement: number;
 
+}
 export interface ChurnImpactAnalysis {
     revenueImpact: number;
     userImpact: number;
@@ -304,12 +340,14 @@ export interface ChurnImpactAnalysis {
     netImpact: number;
     timeSensitivity: 'critical' | 'high' | 'medium' | 'low';
 
+}
 export interface SeasonalAnalysis {
     pattern: SeasonalPattern;
     forecast: SeasonalForecast[];
     anomalies: SeasonalAnomaly[];
     recommendations: SeasonalRecommendation[];
 
+}
 export interface SeasonalPattern {
     type: 'yearly' | 'monthly' | 'weekly' | 'daily';
     strength: number;
@@ -317,30 +355,35 @@ export interface SeasonalPattern {
     troughs: SeasonalTrough[];
     stability: number;
 
+}
 export interface SeasonalPeak {
     period: string;
     amplitude: number;
     reliability: number;
     duration: number;
 
+}
 export interface SeasonalTrough {
     period: string;
     amplitude: number;
     reliability: number;
     duration: number;
 
+}
 export interface SeasonalForecast {
     period: string;
     expectedValue: number;
     confidence: ConfidenceInterval;
     preparation: SeasonalPrepartion[];
 
+}
 export interface SeasonalPrepartion {
     action: string;
     timing: number;
     impact: number;
     resources: string[];
 
+}
 export interface SeasonalAnomaly {
     period: string;
     expectedValue: number;
@@ -349,6 +392,7 @@ export interface SeasonalAnomaly {
     significance: 'high' | 'medium' | 'low';
     explanation: string;
 
+}
 export interface SeasonalRecommendation {
     recommendation: string;
     seasonality: string;
@@ -356,12 +400,14 @@ export interface SeasonalRecommendation {
     implementation: string;
     timing: SeasonalTiming;
 
+}
 export interface SeasonalTiming {
     startDate: number;
     endDate: number;
     preparation: number;
     duration: number;
 
+}
 export interface ScenarioAnalysis {
     scenarioId: string;
     name: string;
@@ -372,6 +418,7 @@ export interface ScenarioAnalysis {
     impactAnalysis: ScenarioImpactAnalysis;
     recommendations: ScenarioRecommendation[];
 
+}
 export interface ScenarioParameter {
     parameter: string;
     baseValue: number;
@@ -379,6 +426,7 @@ export interface ScenarioParameter {
     impact: number;
     controllable: boolean;
 
+}
 export interface ScenarioImpactAnalysis {
     revenueImpact: number;
     conversionImpact: number;
@@ -387,6 +435,7 @@ export interface ScenarioImpactAnalysis {
     timeframe: number;
     confidence: number;
 
+}
 export interface ScenarioRecommendation {
     action: string;
     preparationTime: number;
@@ -394,6 +443,7 @@ export interface ScenarioRecommendation {
     expectedBenefit: number;
     riskMitigation: string;
 
+}
 export interface CohortPrediction {
     cohortId: string;
     cohortName: string;
@@ -402,6 +452,7 @@ export interface CohortPrediction {
     behaviorEvolution: CohortBehaviorEvolution;
     optimizationOpportunities: CohortOptimizationOpportunity[];
 
+}
 export interface CohortLifecyclePrediction {
     currentStage: LifecycleStage;
     predictedStage: LifecycleStage;
@@ -409,16 +460,19 @@ export interface CohortLifecyclePrediction {
     timeToTransition: number;
     stageMetrics: StageMetrics[];
 
+}
 export interface LifecycleStage {
     stage: 'acquisition' | 'activation' | 'retention' | 'revenue' | 'referral' | 'churn';
     probability: number;
     characteristics: StageCharacteristic[];
 
+}
 export interface StageCharacteristic {
     characteristic: string;
     value: number;
     trend: TrendDirection;
 
+}
 export interface StageMetrics {
     stage: string;
     duration: number;
@@ -426,6 +480,7 @@ export interface StageMetrics {
     dropoffRate: number;
     value: number;
 
+}
 export interface CohortValueProjection {
     currentValue: number;
     projectedValue: number;
@@ -434,44 +489,52 @@ export interface CohortValueProjection {
     peakTime: number;
     factors: ValueFactor[];
 
+}
 export interface ValuePoint {
     timestamp: number;
     value: number;
     confidence: ConfidenceInterval;
 
+}
 export interface ValueFactor {
     factor: string;
     contribution: number;
     trend: TrendDirection;
     controllable: boolean;
 
+}
 export interface CohortBehaviorEvolution {
     currentBehavior: BehaviorProfile;
     predictedBehavior: BehaviorProfile;
     behaviorTrajectory: BehaviorPoint[];
     keyChanges: BehaviorChange[];
 
+}
 export interface BehaviorProfile {
     engagementLevel: number;
     activityFrequency: number;
     preferences: Preference[];
     riskFactors: RiskFactor[];
 
+}
 export interface Preference {
     category: string;
     weight: number;
     stability: number;
 
+}
 export interface RiskFactor {
     factor: string;
     severity: number;
     trend: TrendDirection;
 
+}
 export interface BehaviorPoint {
     timestamp: number;
     profile: BehaviorProfile;
     confidence: number;
 
+}
 export interface BehaviorChange {
     change: string;
     impact: number;
@@ -479,6 +542,7 @@ export interface BehaviorChange {
     timeframe: number;
     intervention: string;
 
+}
 export interface CohortOptimizationOpportunity {
     opportunity: string;
     impact: number;
@@ -487,12 +551,14 @@ export interface CohortOptimizationOpportunity {
     resources: string[];
     kpis: OptimizationKPI[];
 
+}
 export interface OptimizationKPI {
     metric: string;
     current: number;
     target: number;
     improvement: number;
 
+}
 export interface ModelPerformanceMetrics {
     model: PredictiveModelType;
     accuracy: ModelAccuracy;
@@ -501,6 +567,7 @@ export interface ModelPerformanceMetrics {
     drift: ModelDrift;
     lastUpdate: number;
 
+}
 export interface ModelAccuracy {
     overall: number;
     precision: number;
@@ -509,12 +576,14 @@ export interface ModelAccuracy {
     auc: number;
     calibration: number;
 
+}
 export interface PerformanceMetric {
     metric: string;
     value: number;
     benchmark: number;
     percentile: number;
 
+}
 export interface TrainingMetrics {
     trainingSize: number;
     validationSize: number;
@@ -523,6 +592,7 @@ export interface TrainingMetrics {
     trainingTime: number;
     convergence: number;
 
+}
 export interface ModelDrift {
     detected: boolean;
     severity: 'low' | 'medium' | 'high' | 'critical';
@@ -530,12 +600,14 @@ export interface ModelDrift {
     recommendation: string;
     lastCheck: number;
 
+}
 export interface DriftingFeature {
     feature: string;
     driftScore: number;
     impact: number;
     action: 'monitor' | 'retrain' | 'replace';
 
+}
 export interface PredictionHistoryEntry {
     timestamp: number;
     prediction: unknown;
@@ -543,23 +615,27 @@ export interface PredictionHistoryEntry {
     accuracy: number;
     model: PredictiveModelType;
 
+}
 export interface UncertaintyAnalysis {
     source: UncertaintySource;
     impact: number;
     mitigation: UncertaintyMitigation[];
     confidence: number;
 
+}
 export interface UncertaintySource {
     type: 'data_quality' | 'model_limitation' | 'external_factor' | 'measurement_error';
     description: string;
     quantification: number;
 
+}
 export interface UncertaintyMitigation {
     strategy: string;
     effectiveness: number;
     cost: number;
     timeline: number;
 
+}
 export interface FeatureImportanceData {
     feature: string;
     importance: number;
@@ -567,6 +643,7 @@ export interface FeatureImportanceData {
     interpretation: string;
     actionability: 'high' | 'medium' | 'low';
 
+}
 export interface ExternalFactor {
     factor: string;
     impact: number;
@@ -574,18 +651,21 @@ export interface ExternalFactor {
     source: string;
     updateFrequency: string;
 
+}
 export interface ModelValidationConfig {
     crossValidation: boolean;
     holdoutPercentage: number;
     timeBasedSplit: boolean;
     validationMetrics: string[];
 
+}
 export interface EnsembleConfig {
     enabled: boolean;
     models: PredictiveModelType[];
     weightingStrategy: 'equal' | 'performance' | 'dynamic';
     combinationMethod: 'average' | 'weighted' | 'voting' | 'stacking';
 
+}
 export interface PredictionUpdate {
     type: 'forecast' | 'behavior' | 'churn' | 'seasonal';
     update: Error;
@@ -593,6 +673,7 @@ export interface PredictionUpdate {
     impact: 'high' | 'medium' | 'low';
     timestamp: number;
 
+}
 export interface ModelAlert {
     alertType: 'drift' | 'accuracy_drop' | 'data_quality' | 'anomaly';
     severity: 'critical' | 'high' | 'medium' | 'low';
@@ -601,17 +682,20 @@ export interface ModelAlert {
     recommendation: string;
     timestamp: number;
 
+}
 export interface ContributingFactor {
     factor: string;
     contribution: number;
     confidence: number;
 
+}
 export interface PredictionFactor {
     factor: string;
     weight: number;
     direction: 'positive' | 'negative';
     confidence: number;
 
+}
 export interface PredictiveModelingExportData {
     performanceForecasts: PerformanceForecast[];
     userBehaviorPredictions: UserBehaviorPrediction[];
@@ -623,3 +707,4 @@ export interface PredictiveModelingExportData {
 
 export declare const FunnelPredictiveModeling: React.FC<FunnelPredictiveModelingProps>;
 //# sourceMappingURL=FunnelPredictiveModeling.d.ts.map
+}

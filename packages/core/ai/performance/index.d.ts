@@ -13,6 +13,7 @@ export type { PerformanceMetrics, PerformanceAlert, PerformanceThreshold, Monito
 export { default as ResourceOptimizer } from './ResourceOptimizer';
 export type { ResourceUsage, OptimizationStrategy, ResourceOptimizationConfig, ModelResourceProfile } from './ResourceOptimizer';
 export { LRUEvictionStrategy, LFUEvictionStrategy, AdaptiveEvictionStrategy } from './AdvancedCacheManager';
+}
 interface PerformanceMetrics {
     responseTime: number;
     throughput: number;
@@ -20,6 +21,7 @@ interface PerformanceMetrics {
     averageResponseTime?: number;
     successRate?: number;
     totalCost?: number;
+}
 interface ResourceUsage {
     memory: number;
     cpu: number;
@@ -29,12 +31,14 @@ interface ResourceUsage {
 export declare     successRateAverage: number;
     costTrend: "increasing" | "decreasing" | "stable";
     recommendations: string[];
+}
 };
 export declare export interface OptimizationCategories {
     categories: {
         caching: {
             score: number;
             recommendations: string[];
+}
         };
         performance: {
             score: number;

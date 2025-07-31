@@ -185,7 +185,7 @@ export declare class DependencyResolver {
      * Gets learning path suggestions based on user progress
      */
     generateLearningPath(userId: string, targetGoal: string): {
-        path: Array<{,
+        path: Array<{
             prerequisiteId: string;
             name: string;
             estimatedTime: number;

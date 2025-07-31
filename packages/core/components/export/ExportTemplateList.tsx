@@ -1,8 +1,10 @@
 import React from 'react';
 
+}
 export interface ExportTemplateListProps {
   className?: string;
   onSelectTemplate?: (templateId: string) => void;
+}
 }
 export const ExportTemplateList: React.FC<ExportTemplateListProps> = ({ )
   className = '',

@@ -5,6 +5,7 @@ import { DatabaseService } from '../database/DatabaseService';
 import { AuthConfig } from '../types';
 
 }
+}
 export interface RegistrationMetrics {
   dailyRegistrations: number;
   weeklyRegistrations: number;
@@ -16,6 +17,7 @@ export interface RegistrationMetrics {
     count: number;
     percentage: number;
 }
+}
   }>;
   sourceBreakdown: Record<string, {
     visits: number;
@@ -25,6 +27,7 @@ export interface RegistrationMetrics {
 }
 
 }
+}
 export interface FormAnalytics {
   fieldInteractionTime: Record<string, number>;
   fieldErrorRate: Record<string, number>;
@@ -32,6 +35,7 @@ export interface FormAnalytics {
     field: string;
     errorRate: number;
     averageTime: number;
+}
 }
   }>;
   stepCompletionRates: Record<number, number>;

@@ -9,21 +9,25 @@ import { PaymentProvider } from '../../../server/src/marketplace/transaction.typ
 import { RevenueTimeRange } from '../types/revenue';
 import { PaymentAnalyticsData } from '../components/payment/PaymentAnalyticsDashboard';
 
+}
 export interface UsePaymentAnalyticsParams {
   timeRange: RevenueTimeRange;
-  customDateRange?: {,
+  customDateRange?: {
   start: Date | null;,
   end: Date | null;
+}
 };
   providers: PaymentProvider;
   autoRefresh?: boolean;
   refreshInterval?: number;
+}
 }
 export interface UsePaymentAnalyticsReturn {
   data: PaymentAnalyticsData | null;,
   loading: boolean;
   error: string | null;,
   refresh: () => Promise<void>;
+}
 }
 export const usePaymentAnalytics = ({)
   timeRange,
@@ -71,7 +75,7 @@ export const usePaymentAnalytics = ({)
       const [providerMetricsRes, methodMetricsRes, failureAnalysisRes] = await Promise.all([)
         fetch('/api/payment-analytics/provider-metrics', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),
@@ -82,7 +86,7 @@ export const usePaymentAnalytics = ({)
         }),
         fetch('/api/payment-analytics/method-metrics', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),
@@ -93,7 +97,7 @@ export const usePaymentAnalytics = ({)
         }),
         fetch('/api/payment-analytics/failure-analysis', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),
@@ -156,9 +160,9 @@ export const usePaymentAnalytics = ({)
 };
 
 // Mock data generator for development
-function generateMockPaymentAnalytics(()
+function generateMockPaymentAnalytics(((
     dateRange: { start: Date; end: Date },
-    providers: PaymentProvider,
+    providers: PaymentProvider
   ): PaymentAnalyticsData {
   const mockProviderMetrics = providers.map(provider => ({)
   provider,
@@ -171,7 +175,7 @@ function generateMockPaymentAnalytics(()
   totalVolume: Math.floor(Math.random() * 1000000) + 500000,
   totalFees: Math.floor(Math.random() * 30000) + 15000,
   averageFeeRate: 2.9 + Math.random() * 0.5,
-  failuresByReason: {,
+  failuresByReason: {
   'card_declined': Math.floor(Math.random() * 100) + 20,
   'insufficient_funds': Math.floor(Math.random() * 50) + 10,
   'processing_error': Math.floor(Math.random() * 30) + 5,

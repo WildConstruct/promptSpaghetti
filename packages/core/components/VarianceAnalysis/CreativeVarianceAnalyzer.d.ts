@@ -7,6 +7,7 @@
 import React from 'react';
 import { VarianceAnalysis, EnhancedPreviewResult } from '../../hooks/useEnhancedPreview';
 
+}
 interface CreativeVarianceAnalyzerProps {
     results: EnhancedPreviewResult[];
     varianceAnalysis: VarianceAnalysis | null;
@@ -15,3 +16,4 @@ interface CreativeVarianceAnalyzerProps {
 export declare const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps>;
 export default CreativeVarianceAnalyzer;
 //# sourceMappingURL=CreativeVarianceAnalyzer.d.ts.map
+}

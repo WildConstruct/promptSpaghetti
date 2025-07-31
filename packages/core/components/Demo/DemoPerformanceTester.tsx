@@ -8,6 +8,7 @@ import React, { useState, useCallback, useRef } from 'react';
 import { Node, Edge } from 'reactflow';
 import { ProfessionalSpinner } from '../LoadingStates/ProfessionalSpinner';
 
+}
 export interface PerformanceTestResult {
   nodeCount: number;
   edgeCount: number;
@@ -18,11 +19,14 @@ export interface PerformanceTestResult {
   passedThreshold: boolean;
   recommendations: string;
 }
+}
+}
 export interface DemoPerformanceTesterProps {
   onTestComplete?: (result: PerformanceTestResult) => void;
   onGraphGenerated?: (nodes: Node, edges: Edge) => void;
   targetFPS?: number;
   maxRenderTime?: number;
+}
 }
 export const DemoPerformanceTester: React.FC<DemoPerformanceTesterProps> = ({)
   onTestComplete,

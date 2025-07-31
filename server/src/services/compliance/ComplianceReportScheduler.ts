@@ -20,6 +20,7 @@ import cron from 'node-cron';
 import { EventEmitter } from 'events';
 
 }
+}
 export interface ReportSchedule {
   id: string;
   name: string;
@@ -38,7 +39,9 @@ export interface ReportSchedule {
   executionHistory: ScheduleExecution[];
 }
 }
+}
 
+}
 }
 export interface ScheduleConfiguration {
   frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'annually' | 'custom';
@@ -55,7 +58,9 @@ export interface ScheduleConfiguration {
   businessDaysOnly?: boolean;
 }
 }
+}
 
+}
 }
 export interface ReportRecipient {
   id: string;
@@ -68,11 +73,13 @@ export interface ReportRecipient {
     language: string;
     customizations?: RecipientCustomization[];
 }
+}
   };
   approvalRequired?: boolean;
   backupContacts?: BackupContact[];
 }
 
+}
 }
 export interface DeliveryOptions {
   methods: DeliveryMethod[];
@@ -85,7 +92,9 @@ export interface DeliveryOptions {
   retryPolicy: RetryPolicy;
 }
 }
+}
 
+}
 }
 export interface DeliveryMethod {
   type: 'email' | 'secure_portal' | 'sftp' | 'api' | 'webhook';
@@ -94,7 +103,9 @@ export interface DeliveryMethod {
   fallbackMethod?: string;
 }
 }
+}
 
+}
 }
 export interface ScheduleExecution {
   id: string;
@@ -109,7 +120,9 @@ export interface ScheduleExecution {
   metadata: ExecutionMetadata;
 }
 }
+}
 
+}
 }
 export interface GeneratedReport {
   reportId: string;
@@ -121,7 +134,9 @@ export interface GeneratedReport {
   encryptionKey?: string;
 }
 }
+}
 
+}
 }
 export interface DeliveryResult {
   recipientId: string;
@@ -132,6 +147,7 @@ export interface DeliveryResult {
   attempts: number;
   errorMessage?: string;
   trackingId?: string;
+}
 }
 }
 
@@ -825,6 +841,7 @@ export class ComplianceReportScheduler extends EventEmitter {
 
 // Supporting interfaces and types
 }
+}
 interface ScheduleRetentionPolicy {
   keepExecutionHistory: number; // days
   archiveReports: boolean;
@@ -832,7 +849,9 @@ interface ScheduleRetentionPolicy {
   deleteAfterDays: number;
 }
 }
+}
 
+}
 }
 interface HolidayRule {
   name: string;
@@ -841,7 +860,9 @@ interface HolidayRule {
   skipIfWeekend: boolean;
 }
 }
+}
 
+}
 }
 interface RecipientCustomization {
   section: string;
@@ -849,7 +870,9 @@ interface RecipientCustomization {
   format?: string;
 }
 }
+}
 
+}
 }
 interface BackupContact {
   name: string;
@@ -857,7 +880,9 @@ interface BackupContact {
   role: string;
 }
 }
+}
 
+}
 }
 interface EncryptionOptions {
   enabled: boolean;
@@ -866,7 +891,9 @@ interface EncryptionOptions {
   certificatePath?: string;
 }
 }
+}
 
+}
 }
 interface WatermarkOptions {
   text: string;
@@ -874,14 +901,18 @@ interface WatermarkOptions {
   opacity: number;
 }
 }
+}
 
+}
 }
 interface AccessRestriction {
   type: 'ip_whitelist' | 'user_authentication' | 'time_limited' | 'download_limit';
   configuration: unknown;
 }
 }
+}
 
+}
 }
 interface ExpirationPolicy {
   expiresAfterDays: number;
@@ -889,7 +920,9 @@ interface ExpirationPolicy {
   autoDelete: boolean;
 }
 }
+}
 
+}
 }
 interface RetryPolicy {
   maxAttempts: number;
@@ -897,13 +930,17 @@ interface RetryPolicy {
   backoffMultiplier: number;
 }
 }
+}
 
+}
 }
 interface DeliveryConfiguration {
   [key: string]: unknown;
 }
 }
+}
 
+}
 }
 interface ExecutionError {
   type: string;
@@ -912,7 +949,9 @@ interface ExecutionError {
   context: unknown;
 }
 }
+}
 
+}
 }
 interface ExecutionMetadata {
   triggeredBy: 'schedule' | 'manual' | 'api';
@@ -922,7 +961,9 @@ interface ExecutionMetadata {
   cancelledAt?: Date;
 }
 }
+}
 
+}
 }
 interface ScheduleStatus {
   scheduleId: string;
@@ -935,6 +976,7 @@ interface ScheduleStatus {
     reportsGenerated: number;
     deliverySuccessRate: number;
 }
+}
   };
   executionCount: number;
   successRate: number;
@@ -942,10 +984,12 @@ interface ScheduleStatus {
 }
 
 }
+}
 interface ScheduleFilter {
   framework?: ComplianceFramework;
   reportType?: ComplianceReportType;
   isActive?: boolean;
   createdBy?: string;
+}
 }
 }

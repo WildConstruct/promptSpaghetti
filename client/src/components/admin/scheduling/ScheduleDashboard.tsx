@@ -57,6 +57,7 @@ import { ScheduleEditor, ScheduleFormData } from './ScheduleEditor';
 import { ScheduleCalendar } from './ScheduleCalendar';
 import { ScheduleTimeline } from './ScheduleTimeline';
 import { ExecutionHistory } from './ExecutionHistory';
+}
 interface Schedule {
   id: string;,
   toggleId: string;
@@ -78,10 +79,12 @@ interface Schedule {
   createdBy: string;
   createdAt: Date;,
   updatedAt: Date;
+}
 interface ScheduleDashboardProps {
   toggleId?: string;
   onScheduleChange?: () => void;
 const STATUS_CONFIG = {
+}
   pending: { color: 'warning', icon: PendingIcon, label: 'Pending' },
   active: { color: 'success', icon: CheckCircleIcon, label: 'Active' },
   completed: { color: 'info', icon: CheckCircleIcon, label: 'Completed' },

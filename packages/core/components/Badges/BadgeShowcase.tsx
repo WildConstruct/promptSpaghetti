@@ -28,12 +28,14 @@ import {
   SortAsc
 } from 'lucide-react';
 
+}
 export interface BadgeShowcaseProps {
   userId: string;
   variant?: 'full' | 'compact' | 'minimal';
   showProgressBars?: boolean;
   enableNotifications?: boolean;
   className?: string;
+}
 }
 export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
   userId,

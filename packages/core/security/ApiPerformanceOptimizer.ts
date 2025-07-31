@@ -13,6 +13,7 @@ import { EventEmitter } from 'events';
 // TYPES AND INTERFACES
 // ==========================================
 
+}
 export interface ApiPerformanceConfig {
   enableAutomaticOptimization: boolean;
   optimizationInterval: number; // minutes,
@@ -23,6 +24,8 @@ export interface ApiPerformanceConfig {
   monitoringConfig: MonitoringConfig;
   alertingConfig: AlertingConfig;
 }
+}
+}
 export interface PerformanceThresholds {
   responseTimeMs: number;
   throughputRps: number;
@@ -31,6 +34,8 @@ export interface PerformanceThresholds {
   memoryUtilizationPercent: number;
   cacheHitRatePercent: number;
   queueDepth: number;
+}
+}
 }
 export interface CachingStrategy {
   enableQueryCaching: boolean;
@@ -41,6 +46,7 @@ export interface CachingStrategy {
   cacheEvictionPolicy: CacheEvictionPolicy;
   cacheWarmupStrategies: CacheWarmupStrategy;
   distributedCaching: boolean;
+}
 }
 export enum CacheEvictionPolicy {
   LRU = 'lru',
@@ -56,6 +62,7 @@ export enum CacheEvictionPolicy {
   enabled: boolean;
   parameters: Record<string, unknown>;
 }
+}
 export enum WarmupStrategyType {
   POPULAR_QUERIES = 'popular_queries',
   SCHEDULED_PRELOAD = 'scheduled_preload',
@@ -68,6 +75,8 @@ export enum WarmupStrategyType {
   triggerEvents?: string;
   conditions?: string;
 }
+}
+}
 export interface RateLimitingConfig {
   enableRateLimiting: boolean;
   enableAdaptiveRateLimiting: boolean;
@@ -77,6 +86,8 @@ export interface RateLimitingConfig {
   burstAllowance: number;
   rateLimitingAlgorithm: RateLimitingAlgorithm;
 }
+}
+}
 export interface RateLimit {
   requestsPerSecond: number;
   requestsPerMinute: number;
@@ -84,6 +95,7 @@ export interface RateLimit {
   requestsPerDay: number;
   concurrentConnections: number;
   bandwidthLimitMbps?: number;
+}
 }
 export enum RateLimitingAlgorithm {
   TOKEN_BUCKET = 'token_bucket',
@@ -99,6 +111,8 @@ export enum RateLimitingAlgorithm {
   optimizationStrategies: OptimizationStrategy;
   queryAnalysisConfig: QueryAnalysisConfig;
 }
+}
+}
 export interface OptimizationStrategy {
   strategyId: string;
   strategyType: OptimizationStrategyType;
@@ -106,6 +120,7 @@ export interface OptimizationStrategy {
   priority: number;
   conditions: OptimizationCondition;
   actions: OptimizationAction;
+}
 }
 export enum OptimizationStrategyType {
   QUERY_REWRITING = 'query_rewriting',
@@ -122,6 +137,7 @@ export enum OptimizationStrategyType {
   value: unknown;
   weight: number;
 }
+}
 export enum ConditionType {
   RESPONSE_TIME = 'response_time',
   RESULT_SIZE = 'result_size',
@@ -134,6 +150,7 @@ export enum ConditionType {
   parameters: Record<string, unknown>;
   priority: number;
   enabled: boolean;
+}
 }
 export enum OptimizationActionType {
   REWRITE_QUERY = 'rewrite_query',
@@ -151,12 +168,16 @@ export enum OptimizationActionType {
   identifySlowQueries: boolean;
   generateOptimizationSuggestions: boolean;
 }
+}
+}
 export interface MonitoringConfig {
   enableRealTimeMonitoring: boolean;
   metricsCollectionInterval: number;
   performanceHistoryRetention: number;
   alertingThresholds: AlertingThresholds;
   customMetrics: CustomMetric;
+}
+}
 }
 export interface AlertingThresholds {
   responseTimeDegradation: number;
@@ -165,6 +186,8 @@ export interface AlertingThresholds {
   resourceUtilizationHigh: number;
   cacheHitRateDecrease: number;
 }
+}
+}
 export interface CustomMetric {
   metricName: string;
   metricType: MetricType;
@@ -172,6 +195,7 @@ export interface CustomMetric {
   aggregation: AggregationType;
   dimensions: string;
   enabled: boolean;
+}
 }
 export enum MetricType {
   COUNTER = 'counter',
@@ -192,11 +216,14 @@ export enum MetricType {
   escalationRules: EscalationRule;
   suppressionRules: SuppressionRule;
 }
+}
+}
 export interface AlertChannel {
   channelId: string;
   channelType: AlertChannelType;
   configuration: Record<string, unknown>;
   enabled: boolean;
+}
 }
 export enum AlertChannelType {
   EMAIL = 'email',
@@ -213,6 +240,7 @@ export enum AlertChannelType {
   maxEscalations: number;
   enabled: boolean;
 }
+}
 export enum AlertSeverity {
   INFO = 'info',
   WARNING = 'warning',
@@ -224,6 +252,8 @@ export enum AlertSeverity {
   suppressionDuration: number;
   conditions: string;
   enabled: boolean;
+}
+}
 }
 export interface ApiEndpoint {
   endpointId: string;
@@ -237,6 +267,7 @@ export interface ApiEndpoint {
   cachingRules: CachingRule;
   optimizationHints: OptimizationHint;
   metrics: EndpointMetrics;
+}
 }
 export enum EndpointCategory {
   AUTHENTICATION = 'authentication',
@@ -260,11 +291,14 @@ export enum EndpointCategory {
   priority: number;
   enabled: boolean;
 }
+}
+}
 export interface OptimizationHint {
   hintType: OptimizationHintType;
   hintValue: string;
   applicability: string;
   priority: number;
+}
 }
 export enum OptimizationHintType {
   INDEX_HINT = 'index_hint',
@@ -285,12 +319,15 @@ export enum OptimizationHintType {
   lastUpdated: Date;
   trends: MetricTrend;
 }
+}
+}
 export interface MetricTrend {
   metricName: string;
   trend: TrendDirection;
   changePercent: number;
   confidence: number;
   timeframe: string;
+}
 }
 export enum TrendDirection {
   INCREASING = 'increasing',
@@ -309,6 +346,7 @@ export enum TrendDirection {
   status: OptimizationStatus;
   appliedActions: OptimizationAction;
 }
+}
 export enum OptimizationType {
   CACHING_OPTIMIZATION = 'caching_optimization',
   QUERY_OPTIMIZATION = 'query_optimization',
@@ -324,12 +362,16 @@ export enum OptimizationType {
   resourceUtilization: ResourceUtilization;
   cacheMetrics: CacheMetrics;
 }
+}
+}
 export interface ResourceUtilization {
   cpuPercent: number;
   memoryPercent: number;
   networkUtilization: number;
   diskUtilization: number;
   connectionCount: number;
+}
+}
 }
 export interface CacheMetrics {
   hitRate: number;
@@ -338,12 +380,15 @@ export interface CacheMetrics {
   cacheSize: number;
   averageKeySize: number;
 }
+}
+}
 export interface OptimizationImpact {
   expectedResponseTimeImprovement: number;
   expectedThroughputImprovement: number;
   expectedErrorRateReduction: number;
   expectedCostReduction: number;
   confidence: number;
+}
 }
 export enum OptimizationStatus {
   PROPOSED = 'proposed',
@@ -358,12 +403,14 @@ export enum OptimizationStatus {
   reportPeriod: {
   start: Date;
   end: Date;
+}
 };
   summary: PerformanceSummary;
   endpointAnalysis: EndpointAnalysis;
   optimizationRecommendations: OptimizationRecommendation;
   trends: PerformanceTrend;
   incidents: PerformanceIncident;
+}
 }
 export interface PerformanceSummary {
   totalRequests: number;
@@ -376,6 +423,8 @@ export interface PerformanceSummary {
   optimizationsApplied: number;
   performanceImprovement: number;
 }
+}
+}
 export interface EndpointAnalysis {
   endpointId: string;
   requestVolume: number;
@@ -383,6 +432,7 @@ export interface EndpointAnalysis {
   keyIssues: string;
   recommendations: string;
   optimizationPotential: number;
+}
 }
 export enum PerformanceGrade {
   EXCELLENT = 'excellent',
@@ -399,6 +449,7 @@ export enum PerformanceGrade {
   implementationEffort: ImplementationEffort;
   riskLevel: RiskLevel;
   actionItems: string;
+}
 }
 export enum ImplementationEffort {
   LOW = 'low',
@@ -418,6 +469,7 @@ export enum ImplementationEffort {
   forecastedValue: number;
   confidence: number;
 }
+}
 export enum TrendSignificance {
   INSIGNIFICANT = 'insignificant',
   MINOR = 'minor',
@@ -435,6 +487,8 @@ export enum TrendSignificance {
   duration: number;
   impact: IncidentImpact;
 }
+}
+}
 export interface IncidentImpact {
   requestsAffected: number;
   usersAffected: number;
@@ -443,6 +497,7 @@ export interface IncidentImpact {
   // ==========================================
   // MAIN OPTIMIZER CLASS
   // ==========================================
+}
 }
 export class ApiPerformanceOptimizer extends EventEmitter {
   private config: ApiPerformanceConfig;
@@ -468,6 +523,7 @@ export class ApiPerformanceOptimizer extends EventEmitter {
     this.initializeEndpointOptimization(endpoint);
     this.emit('endpointRegistered', { endpointId: endpoint.endpointId });
   public async optimizeEndpoint(endpointId: string): Promise<PerformanceOptimization> {
+
     const endpoint = this.endpoints.get(endpointId);
     if (!endpoint) {
       throw new Error(`Endpoint ${endpointId} not found`);}
@@ -487,6 +543,7 @@ export class ApiPerformanceOptimizer extends EventEmitter {
 });
     return optimizations;
   public async applyOptimization(optimizationId: string): Promise<boolean> {
+
     const optimization = this.optimizations.get(optimizationId);
     if (!optimization) {
       throw new Error(`Optimization ${optimizationId} not found`);}
@@ -510,6 +567,7 @@ export class ApiPerformanceOptimizer extends EventEmitter {
       this.emit('optimizationFailed', { optimizationId, error });
       return false;
   public async analyzeApiPerformance(): Promise<PerformanceReport> {
+
   const reportPeriod = {
   start: new Date(Date.now() - 24 * 60 * 60 * 1000), // Last 24 hours,
   end: new Date(),
@@ -588,6 +646,7 @@ export class ApiPerformanceOptimizer extends EventEmitter {
         await this.runAutomaticOptimization();
     }, this.config.optimizationInterval * 60 * 1000);
   private async runAutomaticOptimization(): Promise<void> {
+
     this.isOptimizing = true;
     try {
       // Analyze all endpoints
@@ -615,6 +674,7 @@ export class ApiPerformanceOptimizer extends EventEmitter {
     for (const hint of endpoint.optimizationHints) {
       this.applyOptimizationHint(endpoint.endpointId, hint);
   private async collectEndpointMetrics(endpointId: string): Promise<PerformanceSnapshot> {
+
     const endpoint = this.endpoints.get(endpointId);
     if (!endpoint) {
       throw new Error(`Endpoint ${endpointId} not found`);}
@@ -803,6 +863,7 @@ export class ApiPerformanceOptimizer extends EventEmitter {
         break;
     return actions;
   private async applyOptimizationAction(endpointId: string, action: OptimizationAction): Promise<void> {
+
     const endpoint = this.endpoints.get(endpointId);
     if (!endpoint) return;
     switch (action.actionType) {
@@ -868,6 +929,7 @@ export class ApiPerformanceOptimizer extends EventEmitter {
     const after = optimization.afterMetrics.responseTime;
     return ((before - after) / before) * 100;
   private async generatePerformanceSummary(period: { start: Date; end: Date }): Promise<PerformanceSummary> {
+
   const endpointMetrics = Array.from(this.endpoints.values()).map(e => e.metrics);
   return {
   totalRequests: endpointMetrics.reduce((sum, m) => sum + m.totalRequests, 0),
@@ -882,6 +944,7 @@ export class ApiPerformanceOptimizer extends EventEmitter {
   performanceImprovement: this.calculateOverallPerformanceImprovement(),
 };
   private async analyzeAllEndpoints(period: { start: Date; end: Date }): Promise<EndpointAnalysis> {
+
   const analyses: EndpointAnalysis = [];
   for (const [endpointId, endpoint] of this.endpoints) {
   const metrics = await this.collectEndpointMetrics(endpointId);
@@ -1171,6 +1234,7 @@ export class ApiPerformanceOptimizer extends EventEmitter {
     }, 0);
     return Math.min(potentialImpact, 100); // Cap at 100%
   private sleep(ms: number): Promise<void> {
+
   return new Promise(resolve => setTimeout(resolve, ms));
   // ==========================================
   // SUPPORTING CLASSES
@@ -1219,6 +1283,7 @@ export class ApiPerformanceOptimizer extends EventEmitter {
   remainingRequests: Math.max(0, this.limits.requestsPerMinute - currentCount - 1),
   resetTime: new Date(this.windowStart + windowDuration),
   retryAfter: allowed ? undefined : Math.ceil((this.windowStart + windowDuration - now) / 1000),
+}
 };
 class QueryOptimizer {
   private config: QueryOptimizationConfig;

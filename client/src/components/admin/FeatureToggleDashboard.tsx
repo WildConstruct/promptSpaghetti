@@ -27,6 +27,7 @@ import { ToggleParametersManager } from './ToggleParametersManager';
 import './FeatureToggleDashboard.css';
 import './CreateToggleModal.css';
 import './ToggleDetailsModal.css';
+}
 interface FeatureToggle {
   id: string;,
   key: string;
@@ -39,11 +40,13 @@ interface FeatureToggle {
   createdAt: string;,
   updatedAt: string;
   version: number;
+}
 interface DashboardFilters {
   search: string;
   enabled?: boolean;
   type?: string;
   claudeImpact?: string;
+}
 interface DashboardState {
   toggles: FeatureToggle;,
   total: number;
@@ -58,6 +61,7 @@ export const FeatureToggleDashboard: React.FC = () => {
   toggles: [],
     total: 0,
     loading: true,
+}
     filters: { search: '' },
     currentPage: 1,
     pageSize: 20;
@@ -87,7 +91,7 @@ export const FeatureToggleDashboard: React.FC = () => {
       params.append('offset', ((state.currentPage - 1) * state.pageSize).toString());
       const response = await fetch(`/api/feature-toggles/toggles?${params}`, {)}
   },
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
 }
           'Content-Type': 'application/json'
@@ -122,7 +126,7 @@ export const FeatureToggleDashboard: React.FC = () => {
         : { reason: 'Manual activation from dashboard' };
       const response = await fetch(endpoint, {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
 }
           'Content-Type': 'application/json'
@@ -142,7 +146,7 @@ export const FeatureToggleDashboard: React.FC = () => {
       const response = await fetch(`/api/feature-toggles/toggles/${toggleId}`, {)}
   },
   method: 'PUT',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
 }
           'Content-Type': 'application/json'
@@ -169,7 +173,7 @@ export const FeatureToggleDashboard: React.FC = () => {
       const response = await fetch(`/api/feature-toggles/toggles/${toggleId}/deactivate`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
 }
           'Content-Type': 'application/json'
@@ -199,7 +203,7 @@ export const FeatureToggleDashboard: React.FC = () => {
       const response = await fetch(`/api/toggle-parameters/toggles/${toggleId}/parameters`, {)}
   },
   method: 'PUT',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
 }
           'Content-Type': 'application/json'
@@ -227,7 +231,7 @@ export const FeatureToggleDashboard: React.FC = () => {
       const response = await fetch(`/api/feature-toggles/toggles/${toggleId}`, {)}
   },
   method: 'DELETE',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
       });
       if (!response.ok) {
@@ -301,7 +305,7 @@ export const FeatureToggleDashboard: React.FC = () => {
       const response = await fetch(`/api/feature-toggles/toggles/${toggleId}/archive`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
 }
           'Content-Type': 'application/json'
@@ -321,7 +325,7 @@ export const FeatureToggleDashboard: React.FC = () => {
     } else {
       setSelectedToggles(new Set(state.toggles.map(t => t.id)));
   };
-  const handleCreateToggle = async (toggleData: {,)
+  const handleCreateToggle = async (toggleData: {)
   key: string;
   name: string;
   description?: string;
@@ -331,7 +335,7 @@ export const FeatureToggleDashboard: React.FC = () => {
 }) => {
     const response = await fetch('/api/feature-toggles/toggles', {)
   method: 'POST',
-      headers: {,
+      headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`}
 }
         'Content-Type': 'application/json'

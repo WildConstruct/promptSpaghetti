@@ -21,6 +21,7 @@
 import React from 'react';
 import { DashboardType, SecurityRole, DashboardTheme } from '../../security/dashboard/SecurityDashboardFramework';
 
+}
 export interface SecurityDashboardMainProps {
     workspaceId: string;
     userId: string;
@@ -31,6 +32,7 @@ export interface SecurityDashboardMainProps {
     refreshInterval?: number;
 
 
+}
 export interface SecurityMetrics {
     securityScore: number;
     activeThreats: number;
@@ -39,6 +41,7 @@ export interface SecurityMetrics {
     lastScanTime: Date;
 
 
+}
 export interface SecurityAlert {
     id: string;
     severity: 'critical' | 'high' | 'medium' | 'low';
@@ -54,6 +57,7 @@ export interface SecurityAlert {
     responseActions: ResponseAction[];
 
 
+}
 export interface ResponseAction {
     id: string;
     type: 'isolate' | 'block' | 'quarantine' | 'investigate' | 'escalate';
@@ -64,6 +68,7 @@ export interface ResponseAction {
     timestamp?: Date;
 
 
+}
 export interface ComplianceStatus {
     framework: string;
     status: 'compliant' | 'non_compliant' | 'partial';
@@ -72,6 +77,7 @@ export interface ComplianceStatus {
     lastAssessment: Date;
 
 
+}
 export interface ComplianceViolation {
     id: string;
     type: string;
@@ -87,3 +93,4 @@ export interface ComplianceViolation {
 export declare const SecurityDashboardMain: React.FC<SecurityDashboardMainProps>;
 export default SecurityDashboardMain;
 //# sourceMappingURL=SecurityDashboardMain.d.ts.map
+}

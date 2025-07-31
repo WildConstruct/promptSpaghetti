@@ -16,9 +16,11 @@ import {
   StickyNoteContextMenuOptions,
   DEFAULT_STICKY_NOTE 
 } from '../../types/CollaborationTypes';
+}
 interface StickyNotesLayerProps {
   notes: StickyNoteType;
   onNotesChange: (notes: StickyNoteType) => void;
+}
   canvasSize: { width: number; height: number };
   canvasOffset: { x: number; y: number };
   zoom: number;

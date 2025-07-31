@@ -62,6 +62,7 @@ export type MediaType =
 // Media and Rich Content
 // ====================================
 
+}
 export interface CaseStudyMedia {
   id: string;
   type: MediaType;
@@ -75,10 +76,12 @@ export interface CaseStudyMedia {
   dimensions?: {
   width: number;
   height: number;
+}
 };
   duration?: number; // For video/audio in seconds
   uploadedAt: string;
   uploadedBy: string;
+}
 }
 export interface MediaGallery {
   featured: CaseStudyMedia;
@@ -90,12 +93,15 @@ export interface MediaGallery {
   // Metrics and ROI Data
   // ====================================
 }
+}
+}
 export interface ROIMetrics {
   // Time savings
   timeSaved: {
   hours: number;
   period: 'day' | 'week' | 'month' | 'project';
   description: string;
+}
 };
   // Cost savings
   costSavings: {
@@ -128,6 +134,7 @@ export interface ROIMetrics {
   consistencyImprovement: number;
 };
 }
+}
 export interface PerformanceMetrics {
   // Usage statistics
   templatesUsed: number;
@@ -145,11 +152,13 @@ export interface PerformanceMetrics {
   before: number | string;
   after: number | string;
   unit?: string;
+}
 }[];
 
 // ====================================
 // Template Integration
 // ====================================
+}
 }
 export interface TemplateReference {
   templateId: string;
@@ -163,12 +172,15 @@ export interface TemplateReference {
   purchaseDate?: string;
   cost?: number;
 }
+}
+}
 export interface TemplateImplementation {
   originalTemplate: TemplateReference;
   customizations: {
   description: string;
   reasonForChange: string;
   impact: string;
+}
 }[];
   results: {
   outputExamples: string;
@@ -181,6 +193,7 @@ export interface TemplateImplementation {
 // ====================================
 // Core Case Study Model
 // ====================================
+}
 }
 export interface CaseStudy {
   // Basic information
@@ -203,6 +216,7 @@ export interface CaseStudy {
   results: string;          // Outcomes achieved,
   learnings: string;        // Key takeaways,
   nextSteps?: string;       // Future plans,
+}
 };
   // Rich media
   media: MediaGallery;
@@ -281,6 +295,7 @@ export interface CaseStudy {
 // Case Study Creation and Updates
 // ====================================
 }
+}
 export interface CreateCaseStudyRequest {
   title: string;
   subtitle?: string;
@@ -296,6 +311,8 @@ export interface CreateCaseStudyRequest {
   performanceMetrics?: Partial<PerformanceMetrics>;
   collaborators?: CaseStudy['collaborators'];
   config?: Partial<CaseStudy['config']>;
+}
+}
 }
 export interface UpdateCaseStudyRequest {
   id: string;
@@ -314,6 +331,8 @@ export interface UpdateCaseStudyRequest {
   // ====================================
   // Case Study Queries and Filters
   // ====================================
+}
+}
 }
 export interface CaseStudyFilter {
   type?: CaseStudyType | CaseStudyType;
@@ -345,19 +364,25 @@ export interface CaseStudyFilter {
   // Featured content
   featuredOnly?: boolean;
 }
+}
+}
 export interface CaseStudySort {
   field: 'createdAt' | 'publishedAt' | 'updatedAt' | 'views' | 'likes' | ,
   'helpfulVotes' | 'roiValue' | 'timeSaved' | 'title' | 'priority';
   direction: 'asc' | 'desc'
+}
   }
+}
 export interface CaseStudyQuery {
   filters?: CaseStudyFilter;
   sort?: CaseStudySort;
   pagination: {
   offset: number;
   limit: number;
+}
 };
   include?: ('media' | 'templates' | 'metrics' | 'author' | 'engagement')[];
+}
 }
 export interface CaseStudyQueryResponse {
   caseStudies: CaseStudy;
@@ -366,6 +391,7 @@ export interface CaseStudyQueryResponse {
   offset: number;
   limit: number;
   hasMore: boolean;
+}
 };
   aggregations: {
   totalCaseStudies: number;
@@ -378,6 +404,7 @@ export interface CaseStudyQueryResponse {
 // ====================================
 // Case Study Analytics
 // ====================================
+}
 }
 export interface CaseStudyAnalytics {
   caseStudyId: string;
@@ -397,6 +424,7 @@ export interface CaseStudyAnalytics {
   templatePurchases: number;
   implementationAttempts: number;
   // Geographic data
+}
   topCountries: Array<{ country: string; views: number }>;
   topCities: Array<{ city: string; views: number }>;
   // Referral data

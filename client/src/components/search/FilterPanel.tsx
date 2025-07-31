@@ -8,9 +8,11 @@
  */
 import React, { useState, useCallback } from 'react';
 import { useSearch, FilterCondition, FilterOperator, SortCondition, SortDirection } from './SearchContext';
+}
 interface FilterPanelProps {
   isOpen: boolean;,
   onToggle: () => void;
+}
   availableFields?: Array<{ key: string; label: string; type: 'text' | 'number' | 'date' | 'boolean' | 'select'; options?: string }>;
   className?: string;
 const DEFAULT_FIELDS = [;

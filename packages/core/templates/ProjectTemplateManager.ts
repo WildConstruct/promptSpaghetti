@@ -3,6 +3,7 @@
  * Manages project templates with versioning, categorization, and sharing capabilities
  */
 
+}
 export interface ProjectTemplate {
   id: string;
   name: string;
@@ -15,6 +16,7 @@ export interface ProjectTemplate {
   id: string;
   name: string;
   avatar?: string;
+}
 };
   created_at: string;
   updated_at: string;
@@ -32,6 +34,7 @@ export interface ProjectTemplate {
   prerequisites: string;
   learning_objectives: string;
 }
+}
 export interface TemplateVariable {
   id: string;
   name: string;
@@ -45,7 +48,9 @@ export interface TemplateVariable {
   max?: number;
   pattern?: string;
   options?: string;
+}
 };
+}
 }
 export interface CustomizationPoint {
   id: string;
@@ -55,7 +60,9 @@ export interface CustomizationPoint {
   properties: string;
   description: string;
   ui_component: 'input' | 'select' | 'color_picker' | 'slider' | 'toggle'
+}
   }
+}
 export interface TemplateCategory {
   id: string;
   name: string;
@@ -63,6 +70,8 @@ export interface TemplateCategory {
   icon: string;
   color: string;
   parent_id?: string;
+}
+}
 }
 export interface TemplateUsageAnalytics {
   template_id: string;
@@ -75,6 +84,7 @@ export interface TemplateUsageAnalytics {
   trend_data: {
   date: string;
   uses: number;
+}
 }[];
 }
 export class ProjectTemplateManager {
@@ -101,6 +111,7 @@ export class ProjectTemplateManager {
     await this.apiClient.post('/api/templates', newTemplate);
     return newTemplate;
   async updateTemplate(id: string, updates: Partial<ProjectTemplate>): Promise<ProjectTemplate> {
+
     const template = this.templates.get(id);
     if (!template) {
       throw new Error(`Template ${id} not found`);}
@@ -114,6 +125,7 @@ export class ProjectTemplateManager {
     await this.apiClient.put(`/api/templates/${id}`, updatedTemplate);}
     return updatedTemplate;
   async deleteTemplate(id: string): Promise<void> {
+
     const template = this.templates.get(id);
     if (!template) {
       throw new Error(`Template ${id} not found`);}
@@ -132,6 +144,7 @@ export class ProjectTemplateManager {
   limit?: number;
   offset?: number;
 }): Promise<{ templates: ProjectTemplate; total: number }> {
+
   let filteredTemplates = Array.from(this.templates.values());
   // Apply filters
   if (criteria.query) {
@@ -164,11 +177,13 @@ export class ProjectTemplateManager {
   total: filteredTemplates.length,
 };
   async getFeaturedTemplates(): Promise<ProjectTemplate> {
+
     return Array.from(this.templates.values())
       .filter(t => t.is_featured && t.is_public)
       .sort((a, b) => b.rating - a.rating)
       .slice(0, 10);
   async getRecommendedTemplates(userId: string): Promise<ProjectTemplate> {
+
     // Simple recommendation based on user's previous template usage
     const userAnalytics = await this.getUserTemplateAnalytics(userId);
     const userCategories = userAnalytics.most_used_categories || [];
@@ -178,6 +193,7 @@ export class ProjectTemplateManager {
       .slice(0, 5);
   // Template Usage
   async instantiateTemplate(templateId: string, customizations: Record<string, any>): Promise<any> {
+
     const template = this.templates.get(templateId);
     if (!template) {
       throw new Error(`Template ${templateId} not found`);}
@@ -189,6 +205,7 @@ export class ProjectTemplateManager {
     await this.recordTemplateUsage(templateId);
     return graphData;
   async previewTemplate(templateId: string, customizations: Record<string, any>): Promise<any> {
+
     const template = this.templates.get(templateId);
     if (!template) {
       throw new Error(`Template ${templateId} not found`);}
@@ -197,6 +214,7 @@ export class ProjectTemplateManager {
     return this.applyCustomizations(graphData, template, customizations);
   // Template Import/Export
   async exportTemplate(templateId: string, format: 'json' | 'yaml' | 'bundle'): Promise<string> {
+
     const template = this.templates.get(templateId);
     if (!template) {
       throw new Error(`Template ${templateId} not found`);}
@@ -212,6 +230,7 @@ export class ProjectTemplateManager {
     default:
       throw new Error(`Unsupported export format: ${format}`);}
   async importTemplate(templateData: string, format: 'json' | 'yaml' | 'bundle'): Promise<ProjectTemplate> {
+
     let template: ProjectTemplate;
     switch (format) {
     case 'json':
@@ -235,6 +254,7 @@ export class ProjectTemplateManager {
     return template;
   // Analytics and Ratings
   async rateTemplate(templateId: string, userId: string, rating: number, review?: string): Promise<void> {
+
     if (rating < 1 || rating > 5) {
       throw new Error('Rating must be between 1 and 5');
     await this.apiClient.post(`/api/templates/${templateId}/ratings`, {)}
@@ -246,6 +266,7 @@ export class ProjectTemplateManager {
     // Update local cache
     await this.refreshTemplateRating(templateId);
   async getTemplateAnalytics(templateId: string): Promise<TemplateUsageAnalytics> {
+
     const analytics = this.analytics.get(templateId);
     if (analytics) {
       return analytics;
@@ -256,6 +277,7 @@ export class ProjectTemplateManager {
     return fetchedAnalytics;
   // Category Management
   async createCategory(category: Omit<TemplateCategory, 'id'>): Promise<TemplateCategory> {
+
   const newCategory: TemplateCategory = {,
   ...category,
   id: crypto.randomUUID(),
@@ -358,17 +380,20 @@ export class ProjectTemplateManager {
   children: children.map(child => this.buildCategoryTree(child, allCategories)),
 };
   private async recordTemplateUsage(templateId: string): Promise<void> {
+
     await this.apiClient.post(`/api/templates/${templateId}/usage`);}
     // Update local cache
     const template = this.templates.get(templateId);
     if (template) {
       template.usage_count++;
   private async refreshTemplateRating(templateId: string): Promise<void> {
+
     const response = await this.apiClient.get(`/api/templates/${templateId}/rating`);}
     const template = this.templates.get(templateId);
     if (template) {
       template.rating = response.data.average_rating;
   private async getUserTemplateAnalytics(userId: string): Promise<any> {
+
     const response = await this.apiClient.get(`/api/users/${userId}/template-analytics`);}
     return response.data;
   private convertToYaml(template: ProjectTemplate): string {

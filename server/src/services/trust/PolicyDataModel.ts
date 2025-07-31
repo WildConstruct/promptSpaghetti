@@ -45,6 +45,7 @@ export type ActionType =
 // =============================================================================
 
 }
+}
 export interface PolicyMetadata {
   id: string;
   name: string;
@@ -63,7 +64,9 @@ export interface PolicyMetadata {
   subcategory?: string;
 }
 }
+}
 
+}
 }
 export interface PolicyScope {
   scope_type: PolicyScope;
@@ -75,6 +78,7 @@ export interface PolicyScope {
     trust_score_ranges?: {
       min?: number;
       max?: number;
+}
 }
     };
     custom_filters?: Array<{
@@ -90,6 +94,7 @@ export interface PolicyScope {
 }
 
 }
+}
 export interface PolicyCondition {
   id: string;
   name: string;
@@ -104,7 +109,9 @@ export interface PolicyCondition {
   weight?: number;
 }
 }
+}
 
+}
 }
 export interface PolicyAction {
   id: string;
@@ -122,6 +129,7 @@ export interface PolicyAction {
     retry_delay: number;
     backoff_factor: number;
 }
+}
   };
   notifications?: {
     admin: boolean;
@@ -131,6 +139,7 @@ export interface PolicyAction {
   };
 }
 
+}
 }
 export interface PolicyRule {
   id: string;
@@ -147,6 +156,7 @@ export interface PolicyRule {
     time_window: number; // seconds
     cooldown_period: number; // seconds
 }
+}
   };
   audit_settings: {
     log_evaluations: boolean;
@@ -156,12 +166,14 @@ export interface PolicyRule {
 }
 
 }
+}
 export interface PolicyConfiguration {
   global_settings: {
     default_severity: PolicySeverity;
     auto_execution_enabled: boolean;
     audit_enabled: boolean;
     notification_enabled: boolean;
+}
 }
   };
   thresholds: Record<string, {
@@ -187,6 +199,7 @@ export interface PolicyConfiguration {
 // =============================================================================
 
 }
+}
 export interface Policy {
   metadata: PolicyMetadata;
   scope: PolicyScope;
@@ -196,6 +209,7 @@ export interface Policy {
     required_policies?: string[];
     conflicting_policies?: string[];
     prerequisite_conditions?: PolicyCondition[];
+}
 }
   };
   compliance?: {
@@ -216,6 +230,7 @@ export interface Policy {
 }
 
 }
+}
 export interface PolicyTestCase {
   id: string;
   name: string;
@@ -224,6 +239,7 @@ export interface PolicyTestCase {
   expected_conditions: Array<{
     condition_id: string;
     expected_result: boolean;
+}
 }
   }>;
   expected_actions: Array<{
@@ -238,6 +254,7 @@ export interface PolicyTestCase {
 // =============================================================================
 
 }
+}
 export interface PolicyEvaluationContext {
   timestamp: Date;
   entity_type: 'user' | 'template' | 'transaction' | 'system';
@@ -250,6 +267,7 @@ export interface PolicyEvaluationContext {
     ip_address?: string;
     user_agent?: string;
 }
+}
   };
   environment: {
     region: string;
@@ -260,6 +278,7 @@ export interface PolicyEvaluationContext {
   parent_evaluation_id?: string;
 }
 
+}
 }
 export interface PolicyEvaluationResult {
   evaluation_id: string;
@@ -272,6 +291,7 @@ export interface PolicyEvaluationResult {
     met: boolean;
     value: Error;
     evaluation_time: number;
+}
 }
   }>;
   actions_triggered: Array<{
@@ -293,6 +313,7 @@ export interface PolicyEvaluationResult {
 // =============================================================================
 
 }
+}
 export interface PolicyTemplate {
   template_id: string;
   name: string;
@@ -312,6 +333,7 @@ export interface PolicyTemplate {
       max?: number;
       pattern?: string;
       options?: unknown[];
+}
 }
     };
   }>;
@@ -333,6 +355,7 @@ export interface PolicyTemplate {
 // =============================================================================
 
 }
+}
 export interface PolicyVersion {
   version_id: string;
   policy_id: string;
@@ -345,12 +368,14 @@ export interface PolicyVersion {
     new_value: Error;
     change_type: 'create' | 'update' | 'delete';
 }
+}
   }>;
   change_summary: string;
   rollback_available: boolean;
   deployment_status: 'draft' | 'staged' | 'deployed' | 'rolled_back';
 }
 
+}
 }
 export interface PolicyDeployment {
   deployment_id: string;
@@ -370,6 +395,7 @@ export interface PolicyDeployment {
       duration: number;
       success_criteria: PolicyCondition[];
 }
+}
     }>;
   };
   health_checks: Array<{
@@ -387,6 +413,7 @@ export interface PolicyDeployment {
 }
 
 }
+}
 export interface PolicyAuditLog {
   audit_id: string;
   policy_id: string;
@@ -396,6 +423,7 @@ export interface PolicyAuditLog {
     type: 'user' | 'system' | 'api';
     id: string;
     name?: string;
+}
 }
   };
   details: {
@@ -421,11 +449,13 @@ export interface PolicyAuditLog {
 // =============================================================================
 
 }
+}
 export interface PolicyMetrics {
   policy_id: string;
   time_period: {
     start_date: Date;
     end_date: Date;
+}
 }
   };
   evaluation_metrics: {
@@ -462,6 +492,7 @@ export interface PolicyMetrics {
 }
 
 }
+}
 export interface PolicyRecommendation {
   recommendation_id: string;
   policy_id: string;
@@ -475,6 +506,7 @@ export interface PolicyRecommendation {
     current_value: Error;
     suggested_value: Error;
     impact: string;
+}
 }
   }>;
   expected_benefits: string[];

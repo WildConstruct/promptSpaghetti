@@ -2,6 +2,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { TemplateCard } from './TemplateCard';
 import './FeaturedTemplates.css';
+}
 interface Template {
   id: string;,
   title: string;
@@ -12,15 +13,17 @@ interface Template {
   total_reviews: number;
   total_purchases: number;
   categories?: string;
-  owner?: {,
+  owner?: {
   id: string;,
   name: string;
   verified: boolean;
+}
 };
   featured_at?: string;
   created_at: string;
   is_ai_generated?: boolean;
   claude_compat: string;
+}
 interface FeaturedTemplatesProps {
   templates: Template;,
   onTemplateClick: (templateId: string) => void;
@@ -33,6 +36,7 @@ interface FeaturedTemplatesProps {
   autoPlay = true,
   autoPlayInterval = 5000,
   className = ''
+}
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(autoPlay);

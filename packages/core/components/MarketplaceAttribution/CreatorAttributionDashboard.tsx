@@ -31,6 +31,7 @@ import {
 // Component Types
 // =============================================================================
 
+}
 export interface CreatorAttributionDashboardProps {
   userId: string;
   onTemplateClick?: (templateId: string) => void;
@@ -55,6 +56,7 @@ export interface CreatorAttributionDashboardProps {
   // =============================================================================
   // Creator Attribution Dashboard Component
   // =============================================================================
+}
 }
 export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardProps> = ({)
   userId,

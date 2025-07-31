@@ -22,6 +22,7 @@ import { SecurityOptimizationEngine } from '../services/SecurityOptimizationEngi
 let abTestingFramework: SecurityABTestingFramework | null = null;
 
 }
+}
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
@@ -30,6 +31,7 @@ interface APIResponse<T = any> {
   timestamp: number;
 }
 
+}
 }
 interface CreateTestRequest {
   test_name: string;
@@ -44,6 +46,7 @@ interface CreateTestRequest {
       statistical_significance_level: number;
       statistical_power: number;
       business_significance_threshold: number;
+}
 }
     };
   };
@@ -70,25 +73,31 @@ interface CreateTestRequest {
 }
 
 }
+}
 interface StartTestRequest {
   pre_flight_checks_override?: boolean;
   notification_recipients?: string[];
 }
 }
+}
 
+}
 }
 interface StopTestRequest {
   reason: string;
   generate_final_report?: boolean;
 }
 }
+}
 
+}
 }
 interface GenerateReportRequest {
   report_type: 'interim' | 'final' | 'post_implementation';
   include_statistical_appendix?: boolean;
   include_stakeholder_sections?: boolean;
   stakeholder_groups?: string[];
+}
 }
 }
 

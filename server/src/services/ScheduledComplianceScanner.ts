@@ -22,6 +22,7 @@ import { PolicyNotificationService } from './PolicyNotificationService';
 import cron from 'node-cron';
 
 }
+}
 export interface ScheduleConfig {
   id: string;
   name: string;
@@ -37,7 +38,9 @@ export interface ScheduleConfig {
   metadata: ScheduleMetadata;
 }
 }
+}
 
+}
 }
 export interface ScanType {
   type: 'full_compliance' | 'framework_specific' | 'security_focused' | 'privacy_focused' | 'operational' | 'audit_preparation';
@@ -48,7 +51,9 @@ export interface ScanType {
   customChecks?: string[]; // Specific check IDs to run
 }
 }
+}
 
+}
 }
 export interface ScanScope {
   systems: string[];
@@ -59,7 +64,9 @@ export interface ScanScope {
   exclusions: ScopeExclusion[];
 }
 }
+}
 
+}
 }
 export interface ScopeExclusion {
   type: 'system' | 'environment' | 'check' | 'timeframe';
@@ -69,7 +76,9 @@ export interface ScopeExclusion {
   validUntil?: Date;
 }
 }
+}
 
+}
 }
 export interface NotificationConfig {
   event: 'scan_started' | 'scan_completed' | 'scan_failed' | 'violations_detected' | 'critical_issues';
@@ -79,7 +88,9 @@ export interface NotificationConfig {
   template: string;
 }
 }
+}
 
+}
 }
 export interface NotificationRecipient {
   id: string;
@@ -90,7 +101,9 @@ export interface NotificationRecipient {
   preferences: NotificationPreferences;
 }
 }
+}
 
+}
 }
 export interface NotificationChannel {
   type: 'email' | 'slack' | 'webhook' | 'sms' | 'dashboard';
@@ -99,7 +112,9 @@ export interface NotificationChannel {
   priority: number;
 }
 }
+}
 
+}
 }
 export interface NotificationThreshold {
   metric: 'compliance_score' | 'critical_violations' | 'high_violations' | 'scan_duration' | 'failure_rate';
@@ -108,7 +123,9 @@ export interface NotificationThreshold {
   timeframe?: number; // minutes
 }
 }
+}
 
+}
 }
 export interface NotificationPreferences {
   immediateAlerts: boolean;
@@ -118,7 +135,9 @@ export interface NotificationPreferences {
   skipWeekends: boolean;
 }
 }
+}
 
+}
 }
 export interface TimeRange {
   start: string; // HH:MM format
@@ -126,7 +145,9 @@ export interface TimeRange {
   timezone: string;
 }
 }
+}
 
+}
 }
 export interface ReportingConfig {
   generateReport: boolean;
@@ -138,7 +159,9 @@ export interface ReportingConfig {
   retention: number; // days
 }
 }
+}
 
+}
 }
 export interface RetentionConfig {
   scanResults: number; // days
@@ -147,7 +170,9 @@ export interface RetentionConfig {
   notifications: number; // days
 }
 }
+}
 
+}
 }
 export interface ScheduleMetadata {
   createdBy: string;
@@ -158,7 +183,9 @@ export interface ScheduleMetadata {
   tags: string[];
 }
 }
+}
 
+}
 }
 export interface ScanExecution {
   id: string;
@@ -172,7 +199,9 @@ export interface ScanExecution {
   errors: ScanError[];
 }
 }
+}
 
+}
 }
 export interface ScanProgress {
   totalChecks: number;
@@ -183,7 +212,9 @@ export interface ScanProgress {
   percentComplete: number;
 }
 }
+}
 
+}
 }
 export interface ScanResults {
   overallScore: number;
@@ -194,7 +225,9 @@ export interface ScanResults {
   trends: ScanTrend[];
 }
 }
+}
 
+}
 }
 export interface ScanViolation {
   id: string;
@@ -209,7 +242,9 @@ export interface ScanViolation {
   timeline: ViolationTimeline;
 }
 }
+}
 
+}
 }
 export interface ViolationImpact {
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
@@ -219,7 +254,9 @@ export interface ViolationImpact {
   complianceImpact: string;
 }
 }
+}
 
+}
 }
 export interface RemediationPlan {
   actions: RemediationAction[];
@@ -230,7 +267,9 @@ export interface RemediationPlan {
   dependencies: string[];
 }
 }
+}
 
+}
 }
 export interface RemediationAction {
   id: string;
@@ -242,7 +281,9 @@ export interface RemediationAction {
   status: 'planned' | 'in_progress' | 'completed' | 'blocked';
 }
 }
+}
 
+}
 }
 export interface ViolationTimeline {
   detected: Date;
@@ -252,7 +293,9 @@ export interface ViolationTimeline {
   verified?: Date;
 }
 }
+}
 
+}
 }
 export interface ScanRecommendation {
   id: string;
@@ -264,7 +307,9 @@ export interface ScanRecommendation {
   priority: 'low' | 'medium' | 'high' | 'critical';
 }
 }
+}
 
+}
 }
 export interface ImplementationGuidance {
   steps: string[];
@@ -275,7 +320,9 @@ export interface ImplementationGuidance {
   risks: string[];
 }
 }
+}
 
+}
 }
 export interface ScanTrend {
   metric: string;
@@ -286,7 +333,9 @@ export interface ScanTrend {
   timeframe: string;
 }
 }
+}
 
+}
 }
 export interface ScanPerformance {
   duration: number; // milliseconds
@@ -296,7 +345,9 @@ export interface ScanPerformance {
   optimization: OptimizationSuggestions;
 }
 }
+}
 
+}
 }
 export interface ResourceUtilization {
   cpu: number; // percentage
@@ -305,7 +356,9 @@ export interface ResourceUtilization {
   database: number; // percentage
 }
 }
+}
 
+}
 }
 export interface OptimizationSuggestions {
   parallelization: string[];
@@ -314,7 +367,9 @@ export interface OptimizationSuggestions {
   scheduling: string[];
 }
 }
+}
 
+}
 }
 export interface ScanError {
   id: string;
@@ -324,6 +379,7 @@ export interface ScanError {
   message: string;
   timestamp: Date;
   context?: Record<string, any>;
+}
 }
 }
 
@@ -1673,12 +1729,14 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
 
 // Supporting interfaces for dashboard
 }
+}
 export interface ScheduledComplianceDashboard {
   overview: {
     totalSchedules: number;
     activeSchedules: number;
     runningScans: number;
     completedScansToday: number;
+}
 }
   };
   recentExecutions: ScanExecution[];
@@ -1696,6 +1754,7 @@ export interface ScheduledComplianceDashboard {
 }
 
 }
+}
 export interface UpcomingScan {
   scheduleId: string;
   scheduleName: string;
@@ -1705,7 +1764,9 @@ export interface UpcomingScan {
   priority: 'low' | 'medium' | 'high' | 'critical';
 }
 }
+}
 
+}
 }
 export interface SchedulingAlert {
   type: 'scan_failures' | 'disabled_schedules' | 'performance_issues' | 'configuration_errors';
@@ -1713,6 +1774,7 @@ export interface SchedulingAlert {
   message: string;
   count: number;
   timestamp: Date;
+}
 }
 }
 

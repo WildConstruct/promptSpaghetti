@@ -40,7 +40,7 @@ export declare class SkillLevelTaggingService implements SkillAssessmentEngine {
         total_content: number;
         classification_accuracy: number;
         community_consensus: number;
-        issues_found: Array<{,
+        issues_found: Array<{
             content_id: string;
             issue_type: string;
             severity: string;

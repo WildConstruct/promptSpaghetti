@@ -18,6 +18,7 @@ import {
   moderationStatesService
 } from './ModerationStatesService';
 
+}
 export interface ModerationWorkflow {
   id: string;
   name: string;
@@ -46,6 +47,8 @@ export interface ModerationWorkflow {
   createdBy: string;
   lastModifiedBy?: string;
 }
+}
+}
 export interface WorkflowExecution {
   id: string;
   workflowId: string;
@@ -70,6 +73,8 @@ export interface WorkflowExecution {
   // Context data
   context: WorkflowContext;
   variables: WorkflowVariables;
+}
+}
 }
 export interface WorkflowStep {
   id: string;
@@ -99,6 +104,8 @@ export interface WorkflowStep {
   // Retry configuration
   retryPolicy: RetryPolicy;
 }
+}
+}
 export interface StepExecution {
   id: string;
   stepId: string;
@@ -118,12 +125,16 @@ export interface StepExecution {
   // Context
   context: Record<string, any>;
 }
+}
+}
 export interface WorkflowTrigger {
   type: 'content_reported' | 'auto_detection' | 'manual_review' | 'scheduled' | 'api_trigger' | 'state_change';
   conditions: TriggerCondition;
   filters: TriggerFilter;
   priority: number;
   enabled: boolean;
+}
+}
 }
 export interface WorkflowCondition {
   type: 'content_type' | 'severity_level' | 'category' | 'user_role' | 'time_based' | 'custom';
@@ -132,17 +143,23 @@ export interface WorkflowCondition {
   value: any;
   description: string;
 }
+}
+}
 export interface WorkflowRouting {
   strategy: 'sequential' | 'parallel' | 'conditional' | 'priority_based' | 'load_balanced';
   rules: RoutingRule;
   loadBalancing?: LoadBalancingConfig;
   failover: FailoverConfig;
 }
+}
+}
 export interface ProcessingConfig {
   maxConcurrentExecutions: number;
   queueStrategy: 'fifo' | 'lifo' | 'priority' | 'fair_share';
   batchProcessing?: BatchProcessingConfig;
   resourceLimits: ResourceLimits;
+}
+}
 }
 export interface EscalationConfig {
   enabled: boolean;
@@ -151,11 +168,15 @@ export interface EscalationConfig {
   timeouts: EscalationTimeout;
   notifications: NotificationConfig;
 }
+}
+}
 export interface AutomationConfig {
   aiAssistance: AIAssistanceConfig;
   autoApproval: AutoApprovalConfig;
   smartRouting: SmartRoutingConfig;
   predictiveAnalytics: PredictiveConfig;
+}
+}
 }
 export interface ValidationConfig {
   inputValidation: ValidationRule;
@@ -163,11 +184,14 @@ export interface ValidationConfig {
   businessRules: BusinessRule;
   complianceChecks: ComplianceRule;
 }
+}
+}
 export interface MonitoringConfig {
   metricsCollection: MetricsConfig;
   alerting: AlertConfig;
   logging: LoggingConfig;
   reporting: ReportingConfig;
+}
 }
 export type ExecutionStatus = 
   | 'pending'      // Waiting to start
@@ -201,21 +225,28 @@ export type StepExecutionStatus =
   | 'timed_out'    // Exceeded timeout
   | 'cancelled';   // Manually cancelled
 
+}
 export interface StepConfig {
   parameters: Record<string, any>;
   templates: Record<string, string>;
   integrations: IntegrationConfig;
   ui: UIConfig;
 }
+}
+}
 export interface StepCondition {
   type: 'data_condition' | 'time_condition' | 'user_condition' | 'system_condition';
   expression: string; // JavaScript expression,
   description: string;
 }
+}
+}
 export interface StepAction {
   type: 'state_change' | 'notification' | 'data_update' | 'integration_call' | 'variable_set';
   parameters: Record<string, any>;
   condition?: string; // Optional condition,
+}
+}
 }
 export interface NextStep {
   stepId: string;
@@ -223,10 +254,14 @@ export interface NextStep {
   probability?: number; // For probabilistic routing,
   weight?: number; // For weighted routing,
 }
+}
+}
 export interface AssignmentRule {
   type: 'round_robin' | 'load_based' | 'skill_based' | 'availability' | 'priority' | 'random';
   criteria: AssignmentCriteria;
   fallback?: AssignmentRule;
+}
+}
 }
 export interface AssignmentCriteria {
   field: string;
@@ -234,10 +269,14 @@ export interface AssignmentCriteria {
   weight: number;
   mandatory: boolean;
 }
+}
+}
 export interface StepValidation {
   required: string;
   rules: ValidationRule;
   customValidators: CustomValidator;
+}
+}
 }
 export interface RetryPolicy {
   enabled: boolean;
@@ -247,6 +286,8 @@ export interface RetryPolicy {
   maxDelay: number; // milliseconds,
   retryableErrors: string;
 }
+}
+}
 export interface StepResult {
   status: 'success' | 'failure' | 'partial';
   data: Record<string, any>;
@@ -254,16 +295,22 @@ export interface StepResult {
   warnings: string;
   metadata: Record<string, any>;
 }
+}
+}
 export interface TriggerCondition {
   type: 'field_match' | 'time_range' | 'user_action' | 'system_event';
   parameters: Record<string, any>;
   description: string;
+}
+}
 }
 export interface TriggerFilter {
   field: string;
   operator: string;
   value: any;
   negate: boolean;
+}
+}
 }
 export interface RoutingRule {
   name: string;
@@ -272,22 +319,30 @@ export interface RoutingRule {
   priority: number;
   weight?: number;
 }
+}
+}
 export interface LoadBalancingConfig {
   algorithm: 'round_robin' | 'least_connections' | 'weighted' | 'resource_based';
   healthCheck: HealthCheckConfig;
   fallbackStrategy: string;
+}
+}
 }
 export interface FailoverConfig {
   enabled: boolean;
   maxFailures: number;
   fallbackWorkflow?: string;
   recoveryStrategy: 'manual' | 'automatic' | 'hybrid'
+}
   }
+}
 export interface BatchProcessingConfig {
   enabled: boolean;
   batchSize: number;
   timeout: number;
   aggregationRules: AggregationRule;
+}
+}
 }
 export interface ResourceLimits {
   maxMemory: number;
@@ -295,10 +350,14 @@ export interface ResourceLimits {
   maxExecutionTime: number;
   maxFileSize: number;
 }
+}
+}
 export interface EscalationTrigger {
   type: 'time_based' | 'failure_count' | 'complexity_score' | 'manual';
   threshold: number;
   condition: string;
+}
+}
 }
 export interface EscalationLevel {
   level: number;
@@ -307,16 +366,22 @@ export interface EscalationLevel {
   timeout: number;
   actions: EscalationAction;
 }
+}
+}
 export interface EscalationTimeout {
   level: number;
   timeout: number; // milliseconds,
   action: 'escalate' | 'auto_resolve' | 'assign_default'
+}
   }
+}
 export interface NotificationConfig {
   type: 'email' | 'sms' | 'push' | 'webhook' | 'internal';
   template: string;
   recipients: string;
   conditions: string;
+}
+}
 }
 export interface AIAssistanceConfig {
   enabled: boolean;
@@ -324,11 +389,15 @@ export interface AIAssistanceConfig {
   confidenceThreshold: number;
   fallbackToHuman: boolean;
 }
+}
+}
 export interface AutoApprovalConfig {
   enabled: boolean;
   rules: AutoApprovalRule;
   safetyLimits: SafetyLimits;
   auditTrail: boolean;
+}
+}
 }
 export interface SmartRoutingConfig {
   enabled: boolean;
@@ -336,11 +405,15 @@ export interface SmartRoutingConfig {
   learningEnabled: boolean;
   feedbackLoop: boolean;
 }
+}
+}
 export interface PredictiveConfig {
   enabled: boolean;
   features: string;
   models: PredictiveModel;
   confidenceThreshold: number;
+}
+}
 }
 export interface ValidationRule {
   field: string;
@@ -348,23 +421,31 @@ export interface ValidationRule {
   parameters: Record<string, any>;
   message: string;
 }
+}
+}
 export interface BusinessRule {
   name: string;
   condition: string;
   action: string;
   priority: number;
 }
+}
+}
 export interface ComplianceRule {
   regulation: string;
   requirement: string;
   validator: string;
   severity: 'low' | 'medium' | 'high' | 'critical'
+}
   }
+}
 export interface MetricsConfig {
   enabled: boolean;
   metrics: string;
   aggregation: AggregationConfig;
   retention: RetentionConfig;
+}
+}
 }
 export interface AlertConfig {
   enabled: boolean;
@@ -372,11 +453,15 @@ export interface AlertConfig {
   channels: AlertChannel;
   escalation: AlertEscalation;
 }
+}
+}
 export interface LoggingConfig {
   level: 'debug' | 'info' | 'warn' | 'error';
   format: 'json' | 'text';
   destinations: LogDestination;
   retention: number; // days,
+}
+}
 }
 export interface ReportingConfig {
   enabled: boolean;
@@ -384,11 +469,15 @@ export interface ReportingConfig {
   templates: ReportTemplate;
   distribution: DistributionConfig;
 }
+}
+}
 export interface ExecutionResult {
   stepId: string;
   status: 'success' | 'failure' | 'warning';
   data: Record<string, any>;
   timestamp: Date;
+}
+}
 }
 export interface ExecutionMetrics {
   totalDuration: number;
@@ -399,12 +488,16 @@ export interface ExecutionMetrics {
   retryCount: number;
   resourceUsage: ResourceUsage;
 }
+}
+}
 export interface ExecutionError {
   stepId: string;
   error: string;
   timestamp: Date;
   context: Record<string, any>;
   retryable: boolean;
+}
+}
 }
 export interface WorkflowContext {
   itemId: string;
@@ -414,8 +507,12 @@ export interface WorkflowContext {
   timestamp: Date;
   metadata: Record<string, any>;
 }
+}
+}
 export interface WorkflowVariables {
   [key: string]: any;
+}
+}
 }
 export interface IntegrationConfig {
   type: string;
@@ -424,17 +521,23 @@ export interface IntegrationConfig {
   timeout: number;
   retryPolicy: RetryPolicy;
 }
+}
+}
 export interface UIConfig {
   layout: string;
   fields: UIField;
   actions: UIAction;
   validation: UIValidation;
 }
+}
+}
 export interface CustomValidator {
   name: string;
   function: string;
   parameters: Record<string, any>;
   message: string;
+}
+}
 }
 export interface HealthCheckConfig {
   enabled: boolean;
@@ -443,14 +546,20 @@ export interface HealthCheckConfig {
   healthyThreshold: number;
   unhealthyThreshold: number;
 }
+}
+}
 export interface AggregationRule {
   field: string;
   operation: 'sum' | 'avg' | 'min' | 'max' | 'count';
   groupBy: string;
 }
+}
+}
 export interface EscalationAction {
   type: 'notify' | 'reassign' | 'escalate' | 'auto_resolve';
   parameters: Record<string, any>;
+}
+}
 }
 export interface AIModelConfig {
   name: string;
@@ -458,15 +567,21 @@ export interface AIModelConfig {
   endpoint: string;
   capabilities: string;
 }
+}
+}
 export interface AutoApprovalRule {
   condition: string;
   confidence: number;
   limitations: string;
 }
+}
+}
 export interface SafetyLimits {
   maxAutoApprovals: number;
   timeWindow: number;
   categories: string;
+}
+}
 }
 export interface PredictiveModel {
   name: string;
@@ -474,14 +589,20 @@ export interface PredictiveModel {
   accuracy: number;
   features: string;
 }
+}
+}
 export interface AggregationConfig {
   intervals: string;
   functions: string;
+}
+}
 }
 export interface RetentionConfig {
   shortTerm: number; // days,
   longTerm: number; // days,
   archival: number; // days,
+}
+}
 }
 export interface AlertRule {
   name: string;
@@ -489,18 +610,26 @@ export interface AlertRule {
   severity: 'low' | 'medium' | 'high' | 'critical';
   cooldown: number;
 }
+}
+}
 export interface AlertChannel {
   type: 'email' | 'slack' | 'webhook' | 'sms';
   config: Record<string, any>;
+}
+}
 }
 export interface AlertEscalation {
   delay: number;
   channels: string;
   recipients: string;
 }
+}
+}
 export interface LogDestination {
   type: 'file' | 'database' | 'external';
   config: Record<string, any>;
+}
+}
 }
 export interface ReportSchedule {
   name: string;
@@ -508,15 +637,21 @@ export interface ReportSchedule {
   time: string;
   enabled: boolean;
 }
+}
+}
 export interface ReportTemplate {
   name: string;
   format: 'pdf' | 'excel' | 'json' | 'csv';
   sections: ReportSection;
 }
+}
+}
 export interface DistributionConfig {
   recipients: string;
   channels: string;
   conditions: string;
+}
+}
 }
 export interface ResourceUsage {
   memory: number;
@@ -524,9 +659,13 @@ export interface ResourceUsage {
   network: number;
   storage: number;
 }
+}
+}
 export interface AuthConfig {
   type: 'bearer' | 'basic' | 'oauth' | 'api_key';
   credentials: Record<string, any>;
+}
+}
 }
 export interface UIField {
   name: string;
@@ -535,22 +674,30 @@ export interface UIField {
   required: boolean;
   validation: string;
 }
+}
+}
 export interface UIAction {
   name: string;
   label: string;
   type: 'button' | 'link' | 'dropdown';
   condition?: string;
 }
+}
+}
 export interface UIValidation {
   field: string;
   rules: string;
   message: string;
+}
+}
 }
 export interface ReportSection {
   name: string;
   type: 'chart' | 'table' | 'text' | 'metric';
   data: string;
   config: Record<string, any>;
+}
+}
 }
 export interface WorkflowStats {
   totalWorkflows: number;
@@ -565,6 +712,7 @@ export interface WorkflowStats {
   automationRate: number;
   successRate: number;
   throughput: number; // executions per hour,
+}
 };
   utilization: {
   processingCapacity: number;
@@ -579,11 +727,13 @@ export interface WorkflowStats {
   retryRate: number;
 };
 }
+}
 export interface WorkflowFilter {
   categories?: ModerationCategory;
   contentTypes?: ContentType;
   status?: ExecutionStatus;
   assignees?: string;
+}
   dateRange?: { start?: Date; end?: Date };
   tags?: string;
   workflowIds?: string;
@@ -640,6 +790,7 @@ export class ModerationWorkflowService {
     this.notifyListeners('workflow_updated', updatedWorkflow);
     return updatedWorkflow;
   async deleteWorkflow(workflowId: string, deletedBy: string): Promise<boolean> {
+
     const workflow = this.workflows.get(workflowId);
     if (!workflow) return false;
     // Check for running executions
@@ -659,6 +810,7 @@ export class ModerationWorkflowService {
     triggeredBy: string,
     context?: Record<string, any>
   ): Promise<WorkflowExecution> {
+
     const workflow = this.workflows.get(workflowId);
     if (!workflow || !workflow.isActive) {
       throw new Error('Workflow not found or inactive');
@@ -705,6 +857,7 @@ export class ModerationWorkflowService {
     this.notifyListeners('execution_started', execution);
     return execution;
   async pauseExecution(executionId: string, pausedBy: string): Promise<boolean> {
+
     const execution = this.executions.get(executionId);
     if (!execution || execution.status !== 'running') return false;
     execution.status = 'paused';
@@ -713,6 +866,7 @@ export class ModerationWorkflowService {
     this.notifyListeners('execution_paused', { execution, pausedBy });
     return true;
   async resumeExecution(executionId: string, resumedBy: string): Promise<boolean> {
+
     const execution = this.executions.get(executionId);
     if (!execution || execution.status !== 'paused') return false;
     execution.status = 'running';
@@ -723,6 +877,7 @@ export class ModerationWorkflowService {
     this.notifyListeners('execution_resumed', { execution, resumedBy });
     return true;
   async cancelExecution(executionId: string, cancelledBy: string): Promise<boolean> {
+
     const execution = this.executions.get(executionId);
     if (!execution || ['completed', 'failed', 'cancelled'].includes(execution.status)) {
       return false;
@@ -737,6 +892,7 @@ export class ModerationWorkflowService {
    * Step Execution
    */
   async executeStep(executionId: string, stepIndex: number): Promise<StepExecution> {
+
     const execution = this.executions.get(executionId);
     if (!execution) throw new Error('Execution not found');
     const workflow = this.workflows.get(execution.workflowId);
@@ -881,6 +1037,7 @@ export class ModerationWorkflowService {
     if (!execution) return;
     this.processExecution(execution);
   private async processExecution(execution: WorkflowExecution): Promise<void> {
+
     execution.status = 'running';
     this.executions.set(execution.id, execution);
     const workflow = this.workflows.get(execution.workflowId);
@@ -1006,12 +1163,14 @@ export class ModerationWorkflowService {
   private generateStepExecutionId(): string {
     return `step_exec_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   private sleep(ms: number): Promise<void> {
+
   return new Promise(resolve => setTimeout(resolve, ms));
   export interface WorkflowEvent {
   type: string;
   data: any;
   timestamp: Date;
   // Export singleton instance
+}
 }
 export const moderationWorkflowService = ModerationWorkflowService.getInstance();
 

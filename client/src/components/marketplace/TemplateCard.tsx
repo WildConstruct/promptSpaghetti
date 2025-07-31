@@ -5,6 +5,7 @@ import { PriceDisplay } from './PriceDisplay';
 import { Badge } from '../common/Badge';
 import { PreviewModal } from './PreviewModal';
 import './TemplateCard.css';
+}
 interface Template {
   id: string;,
   title: string;
@@ -15,15 +16,17 @@ interface Template {
   total_reviews: number;
   total_purchases: number;
   categories?: string;
-  owner?: {,
+  owner?: {
   id: string;,
   name: string;
   verified: boolean;
+}
 };
   featured_at?: string;
   created_at: string;
   is_ai_generated?: boolean;
   claude_compat: string;
+}
 interface TemplateCardProps {
   template: Template;,
   onClick: () => void;
@@ -36,6 +39,7 @@ interface TemplateCardProps {
   variant = 'grid',
   showStats = true,
   className = ''
+}
 }) => {
   const [showPreview, setShowPreview] = useState(false);
   const {

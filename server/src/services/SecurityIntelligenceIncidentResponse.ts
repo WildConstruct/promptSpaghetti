@@ -13,6 +13,7 @@ import { SecurityMLToolsEngine } from './SecurityMLToolsEngine';
 import { SecurityRecommendationOptimizationEngine } from './SecurityRecommendationOptimizationEngine';
 
 }
+}
 export interface SecurityIncident {
   incident_id: string;
   created_at: number;
@@ -27,6 +28,7 @@ export interface SecurityIncident {
     priority: 'p1' | 'p2' | 'p3' | 'p4';
     confidence_score: number; // 0-1
     false_positive_likelihood: number; // 0-1
+}
 }
   };
   
@@ -268,6 +270,7 @@ export interface SecurityIncident {
 }
 
 }
+}
 export interface IntelligenceSource {
   source_id: string;
   source_name: string;
@@ -280,6 +283,7 @@ export interface IntelligenceSource {
     update_frequency: number; // hours
     data_format: 'json' | 'xml' | 'csv' | 'stix' | 'taxii';
     last_updated: number;
+}
 }
   };
   
@@ -301,6 +305,7 @@ export interface IntelligenceSource {
 }
 
 }
+}
 export interface ResponsePlaybook {
   playbook_id: string;
   name: string;
@@ -315,6 +320,7 @@ export interface ResponsePlaybook {
       factor: string;
       operator: 'equals' | 'greater_than' | 'less_than' | 'contains';
       value: Error;
+}
 }
     }>;
   };

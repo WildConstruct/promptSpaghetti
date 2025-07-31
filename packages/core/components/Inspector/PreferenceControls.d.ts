@@ -1,5 +1,6 @@
 import React from 'react';
 
+}
 export interface PreferenceControlsProps {
     nodeId?: string;
     nodeType?: string;
@@ -10,3 +11,4 @@ export interface PreferenceControlsProps {
 declare const PreferenceControls: React.FC<PreferenceControlsProps>;
 export default PreferenceControls;
 //# sourceMappingURL=PreferenceControls.d.ts.map
+}

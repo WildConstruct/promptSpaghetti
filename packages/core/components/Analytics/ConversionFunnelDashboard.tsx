@@ -9,8 +9,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Badge } from '../ui/Badge';
 import { conversionTracker } from '../../analytics/ConversionTracker';
 
+}
 export interface ConversionFunnelDashboardProps {
   conversionData: unknown;
+}
   timeRange: { startTime: number; endTime: number };
   loading: boolean;
 }

@@ -14,6 +14,7 @@ import { MarketplaceTicket } from './Epic16TicketIntegrationService';
 // Integration Architecture Types
 // =============================================================================
 
+}
 export interface MarketplaceHelpContext {
   // Current marketplace context
   currentView: MarketplaceView;
@@ -32,6 +33,7 @@ export interface MarketplaceHelpContext {
   favoriteCategories: string;
   searchHistory: string;
   currentFilters: Record<string, any>;
+}
 };
 }
 export type MarketplaceView = 
@@ -45,6 +47,7 @@ export type MarketplaceView =
   | 'support'
   | 'getting-started';
 
+}
 export interface IntegratedHelpSystem {
   // Combined Epic 8 + Epic 16 help contexts
   graphContext?: {
@@ -53,11 +56,13 @@ export interface IntegratedHelpSystem {
   selectedNodeId?: string;
   isEditing: boolean;
   currentTool?: string;
+}
 };
   marketplaceContext?: MarketplaceHelpContext;
   // Cross-system help coordination
   activeHelpSession?: HelpSession;
   transitionContext?: TransitionContext;
+}
 }
 export interface HelpSession {
   id: string;
@@ -76,6 +81,7 @@ export interface HelpSession {
   escalationLevel: number;
   requiresHumanAssistance: boolean;
 }
+}
 export type HelpSessionType = 
   | 'onboarding'
   | 'feature-discovery'
@@ -84,6 +90,7 @@ export type HelpSessionType =
   | 'template-creation'
   | 'marketplace-navigation';
 
+}
 export interface TransitionContext {
   fromSystem: 'graph-editor' | 'marketplace';
   toSystem: 'graph-editor' | 'marketplace';
@@ -93,6 +100,7 @@ export interface TransitionContext {
   // =============================================================================
   // Integration Architecture Service
   // =============================================================================
+}
 }
 export class Epic16HelpIntegrationArchitecture {
   private graphHelpManager: HelpContentManager;
@@ -109,8 +117,7 @@ export class Epic16HelpIntegrationArchitecture {
   /**
   * Core integration architecture that bridges Epic 8 and Epic 16 help systems
   */
-  async getIntegratedHelpContent(()
-  context: IntegratedHelpSystem,
+  async getIntegratedHelpContent((context: IntegratedHelpSystem,
   userProfile: UserProfile): Promise<HelpContent> {,
   const helpContent: HelpContent = [];
   // 1. Determine primary context
@@ -165,6 +172,7 @@ export class Epic16HelpIntegrationArchitecture {
     escalationReason: string,
     additionalContext?: Record<string, any>
   ): Promise<MarketplaceTicket> {
+
     // Create support ticket with integrated context
     const supportTicket: Partial<MarketplaceTicket> = {,
   type: 'support_request' as any,
@@ -297,8 +305,7 @@ export class Epic16HelpIntegrationArchitecture {
   if (context.marketplaceContext) {
   return 'marketplace';
   return 'marketplace'; // Default to marketplace for Epic 16
-  private async getMarketplaceHelpContent(()
-  context: MarketplaceHelpContext,
+  private async getMarketplaceHelpContent((context: MarketplaceHelpContext,
   userProfile: UserProfile): Promise<HelpContent> {,
   const relevantContent: HelpContent = [];
   // Get content based on current marketplace view
@@ -311,8 +318,7 @@ export class Epic16HelpIntegrationArchitecture {
   if (onboardingContent) {
   relevantContent.unshift(onboardingContent); // Prioritize for beginners
   return relevantContent;
-  private async getTransitionHelpContent(()
-  transitionContext: TransitionContext,
+  private async getTransitionHelpContent((transitionContext: TransitionContext,
   userProfile: UserProfile): Promise<HelpContent> {,
   const transitionContent: HelpContent = [];
   // Find relevant integration points
@@ -360,9 +366,9 @@ export class Epic16HelpIntegrationArchitecture {
 };
     const relevantIds = viewContentMap[view] || [];
     return relevantIds.includes(content.id);
-  private detectTransitionReason(()
+  private detectTransitionReason(((
     from: 'graph-editor' | 'marketplace',
-    to: 'graph-editor' | 'marketplace',
+    to: 'graph-editor' | 'marketplace'
   ): string {
     if (from === 'marketplace' && to === 'graph-editor') {
       return 'template-import-workflow';
@@ -402,6 +408,7 @@ export class Epic16HelpIntegrationArchitecture {
 // Integration Point Interface
 // =============================================================================
 
+}
 export interface IntegrationPoint {
   id: string;
   fromSystem: 'graph-editor' | 'marketplace';
@@ -412,5 +419,6 @@ export interface IntegrationPoint {
   // =============================================================================
   // Export Integration Architecture
   // =============================================================================
+}
 }
 export default Epic16HelpIntegrationArchitecture;

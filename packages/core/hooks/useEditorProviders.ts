@@ -8,6 +8,7 @@ import { useGraphStore } from '../graphStore';
 
 // Provider hook types
 
+}
 export interface EditorStateContext {
   nodes: Node;
   edges: Edge;
@@ -15,6 +16,8 @@ export interface EditorStateContext {
   isLoading: boolean;
   hasUnsavedChanges: boolean;
   validationErrors: any;
+}
+}
 }
 export interface EditorActions {
   addNode: (node: Node) => void;
@@ -25,10 +28,12 @@ export interface EditorActions {
   selectNode: (nodeId: string | null) => void;
   focusNode: (nodeId: string) => void;
   saveGraph: () => Promise<void>;
+}
   loadGraph: (data: { nodes: Node; edges: Edge }) => void;
   exportGraph: (format?: string) => any;
   validateGraph: () => void;
   executeGraph: () => Promise<any>;
+}
 }
 export interface ProviderHook {
   id: string;
@@ -58,6 +63,8 @@ export interface ProviderHook {
   // Custom actions
   customActions?: Record<string, (context: EditorStateContext, ...args: any) => any>;
 }
+}
+}
 export interface ProviderRegistry {
   register: (hook: ProviderHook) => void;
   unregister: (hookId: string) => void;
@@ -69,6 +76,7 @@ export interface ProviderRegistry {
   executeCustomAction: (hookId: string, actionName: string, ...args: any) => any;
   // Global provider registry
   const providerRegistry = new Map<string, ProviderHook>();
+}
 }
 export const useEditorProviders = ()
   initialNodes: Node,

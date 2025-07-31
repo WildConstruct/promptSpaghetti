@@ -27,6 +27,7 @@ import { SecurityInsightsAutomationEngine } from '../services/SecurityInsightsAu
 let intelligenceEngine: SecurityIntelligenceAutomationEngine | null = null;
 
 }
+}
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
@@ -36,6 +37,7 @@ interface APIResponse<T = any> {
 }
 
 }
+}
 interface CollectIntelligenceRequest {
   collection_configuration: {
     sources?: string[];
@@ -44,6 +46,7 @@ interface CollectIntelligenceRequest {
     time_range?: {
       start: number;
       end: number;
+}
 }
     };
     intelligence_types?: ('tactical' | 'operational' | 'strategic' | 'technical')[];
@@ -66,6 +69,7 @@ interface CollectIntelligenceRequest {
 }
 
 }
+}
 interface AnalyzeIntelligenceRequest {
   intelligence_ids?: string[];
   analysis_configuration: {
@@ -78,6 +82,7 @@ interface AnalyzeIntelligenceRequest {
     threat_landscape_assessment?: boolean;
     strategic_implications?: boolean;
 }
+}
   };
   context_parameters?: {
     organizational_priorities?: string[];
@@ -89,6 +94,7 @@ interface AnalyzeIntelligenceRequest {
 }
 
 }
+}
 interface AutomateWorkflowRequest {
   workflow_configuration: {
     workflow_type: 'collection' | 'analysis' | 'enrichment' | 'distribution' | 'response';
@@ -97,6 +103,7 @@ interface AutomateWorkflowRequest {
     trigger_conditions: string[];
     execution_frequency?: string;
     priority_level?: 'low' | 'medium' | 'high' | 'critical';
+}
 }
   };
   workflow_parameters?: {
@@ -116,6 +123,7 @@ interface AutomateWorkflowRequest {
 }
 
 }
+}
 interface GenerateBriefingRequest {
   briefing_configuration: {
     briefing_type: 'tactical' | 'operational' | 'strategic' | 'executive';
@@ -124,6 +132,7 @@ interface GenerateBriefingRequest {
     time_range?: {
       start: number;
       end: number;
+}
 }
     };
     focus_areas?: string[];
@@ -149,6 +158,7 @@ interface GenerateBriefingRequest {
 }
 
 }
+}
 interface CreateIntelligenceSourceRequest {
   source_configuration: {
     source_name: string;
@@ -159,6 +169,7 @@ interface CreateIntelligenceSourceRequest {
     data_types: string[];
     geographic_scope?: string[];
     language?: string;
+}
 }
   };
   collection_settings?: {
@@ -178,6 +189,7 @@ interface CreateIntelligenceSourceRequest {
 }
 
 }
+}
 interface SearchIntelligenceRequest {
   search_parameters: {
     query_text?: string;
@@ -186,6 +198,7 @@ interface SearchIntelligenceRequest {
     date_range?: {
       start: number;
       end: number;
+}
 }
     };
     source_filters?: string[];

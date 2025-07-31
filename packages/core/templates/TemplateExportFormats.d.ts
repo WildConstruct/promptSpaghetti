@@ -5,6 +5,7 @@
 import { ProjectTemplate } from './ProjectTemplateManager';
 import { TemplateVersion } from './TemplateVersionManager';
 
+}
 export interface FormatProcessor {
     export(template: ProjectTemplate, version?: TemplateVersion, options?: any): Promise<string | ArrayBuffer>;
     import(data: string | ArrayBuffer, options?: any): Promise<ProjectTemplate>;
@@ -12,6 +13,7 @@ export interface FormatProcessor {
         valid: boolean;
         errors: string[];
 
+}
     }>;
     getMetadata(data: string | ArrayBuffer): Promise<any>;
 

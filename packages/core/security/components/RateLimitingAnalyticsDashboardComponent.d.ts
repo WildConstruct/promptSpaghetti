@@ -9,6 +9,7 @@
 import React from 'react';
 import { RateLimitingAnalyticsDashboard } from '../RateLimitingAnalyticsDashboard';
 
+}
 interface RateLimitingAnalyticsDashboardProps {
     analyticsDashboard: RateLimitingAnalyticsDashboard;
     className?: string;
@@ -20,3 +21,4 @@ interface RateLimitingAnalyticsDashboardProps {
 export declare const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnalyticsDashboardProps>;
 export default RateLimitingAnalyticsDashboardComponent;
 //# sourceMappingURL=RateLimitingAnalyticsDashboardComponent.d.ts.map
+}

@@ -61,6 +61,7 @@ import { MergeRequestPanel } from './MergeRequestPanel';
 const { Title, Text } = Typography;
 const { Option } = Select;
 const { TextArea } = Input;
+}
 interface BranchManagerProps {
   projectId: string;
   currentBranchId?: string;
@@ -82,6 +83,7 @@ interface BranchManagerProps {
   onCreateChild,
   onSelect,
   isSelected
+}
 }) => {
   const getBranchTypeColor = (type: BranchType) => {,
   switch (type) {

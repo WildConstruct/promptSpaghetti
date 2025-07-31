@@ -9,12 +9,15 @@
  */
 import React, { useState, useEffect, useMemo } from 'react';
 
+}
 export interface FileSearchOptions {
   includeContents: boolean;,
   caseSensitive: boolean;
   useRegex: boolean;,
   includeFolders: boolean;
   fileTypes: string;
+}
+}
 }
 export interface FileSearchBarProps {
   value: string;,
@@ -25,6 +28,7 @@ export interface FileSearchBarProps {
   onAdvancedSearch?: (options: FileSearchOptions) => void;
   onTagFilter?: (tag: string) => void;
   className?: string;
+}
 }
 export const FileSearchBar: React.FC<FileSearchBarProps> = ({)
   value,
@@ -268,9 +272,9 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({)
 };
 
 // Debounce utility function
-function debounce<T extends (...args: unknown) => unknown>((;)
-  func: T,
-    wait: number,
+function debounce<T extends (...args: unknown) => unknown>((;(
+    func: T,
+    wait: number
   ): (...args: Parameters<T>) => void {
   let timeout: NodeJS.Timeout;
   return (...args: Parameters<T>) => {,

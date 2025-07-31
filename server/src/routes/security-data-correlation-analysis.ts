@@ -27,6 +27,7 @@ import { SecurityIntelligenceDataModelEngine } from '../services/SecurityIntelli
 let correlationAnalysisEngine: SecurityDataCorrelationAnalysisEngine | null = null;
 
 }
+}
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
@@ -36,12 +37,14 @@ interface APIResponse<T = any> {
 }
 
 }
+}
 interface ExecuteCorrelationAnalysisRequest {
   analysis_configuration: {
     analysis_name: string;
     analysis_type: 'real_time' | 'batch' | 'hybrid' | 'comprehensive';
     priority: 'low' | 'medium' | 'high' | 'critical';
     timeout_minutes?: number;
+}
 }
   };
   data_sources: {
@@ -126,12 +129,14 @@ interface ExecuteCorrelationAnalysisRequest {
 }
 
 }
+}
 interface GetCorrelationResultsRequest {
   analysis_filters: {
     analysis_ids?: string[];
     time_range?: {
       start_time: string;
       end_time: string;
+}
 }
     };
     risk_score_range?: {
@@ -156,11 +161,13 @@ interface GetCorrelationResultsRequest {
 }
 
 }
+}
 interface GetArchitectureMetricsRequest {
   metrics_scope: {
     time_range: {
       start_time: string;
       end_time: string;
+}
 }
     };
     component_filters?: ('correlation_engine' | 'pattern_recognition' | 'threat_intelligence' | 'machine_learning' | 'risk_assessment')[];
@@ -175,6 +182,7 @@ interface GetArchitectureMetricsRequest {
 }
 
 }
+}
 interface OptimizeArchitectureRequest {
   optimization_scope: {
     target_components: ('correlation_engine' | 'pattern_recognition' | 'threat_intelligence' | 'machine_learning' | 'risk_assessment')[];
@@ -183,6 +191,7 @@ interface OptimizeArchitectureRequest {
       max_performance_impact_percent: number;
       max_resource_increase_percent: number;
       maintain_accuracy_threshold: number;
+}
 }
     };
   };

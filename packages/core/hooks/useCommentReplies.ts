@@ -5,6 +5,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Comment, PaginatedResponse } from '../types/workspace';
 const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:8000/api';
+}
 interface UseCommentRepliesOptions {
   commentId: string;
   userId: string;
@@ -22,6 +23,7 @@ interface UseCommentRepliesOptions {
   enabled = true,
   autoRefresh = false,
   refreshInterval = 30000
+}
 } = options;
   const [replies, setReplies] = useState<Comment>([]);
   const [loading, setLoading] = useState(false);

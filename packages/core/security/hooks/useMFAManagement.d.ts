@@ -13,6 +13,7 @@
  * - Error handling and loading states
  */
 
+}
 export interface MFAMethod {
     id: string;
     type: 'totp' | 'sms' | 'email' | 'backup_codes';
@@ -26,14 +27,17 @@ export interface MFAMethod {
         email?: string;
         appName?: string;
         secretKey?: string;
+}
     };
 
+}
 export interface BackupCode {
     id: string;
     code: string;
     used: boolean;
     usedAt?: Date;
 
+}
 export interface TrustedDevice {
     id: string;
     name: string;
@@ -44,6 +48,7 @@ export interface TrustedDevice {
     lastAccess: Date;
     current: boolean;
 
+}
 export interface SecurityEvent {
     id: string;
     type: 'login' | 'mfa_enabled' | 'mfa_disabled' | 'device_added' | 'device_removed' | 'backup_used';
@@ -53,6 +58,7 @@ export interface SecurityEvent {
     location: string;
     riskLevel: 'low' | 'medium' | 'high';
 
+}
 export interface MFASettings {
     requireMFA: boolean;
     allowBackupCodes: boolean;
@@ -62,6 +68,7 @@ export interface MFASettings {
     emailNotifications: boolean;
     smsNotifications: boolean;
 
+}
 export interface MFAStatus {
     enabled: boolean;
     methodsConfigured: number;
@@ -70,6 +77,7 @@ export interface MFAStatus {
     trustedDevicesCount: number;
     lastSecurityEvent?: SecurityEvent;
 
+}
 export interface UseMFAManagementOptions {
     userId: string;
     autoRefresh?: boolean;
@@ -81,6 +89,7 @@ export interface UseMFAManagementOptions {
     maxRetryAttempts?: number;
     retryTimeoutMs?: number;
 
+}
 export interface UseMFAManagementReturn {
     mfaMethods: MFAMethod[];
     backupCodes: BackupCode[];
@@ -99,6 +108,7 @@ export interface UseMFAManagementReturn {
     setupTOTP: (userId: string) => Promise<{,
         secret: string;
         qrCode: string;
+}
     }>;
     setupSMS: (phoneNumber: string) => Promise<void>;
     setupEmail: (email: string) => Promise<void>;

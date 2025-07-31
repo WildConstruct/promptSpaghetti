@@ -20,6 +20,7 @@
  */
 import { SecurityMetrics, SecurityAlert, ComplianceStatus } from './SecurityDashboardMain';
 
+}
 export interface SecurityAction {
     type: string;
     payload: unknown;
@@ -27,6 +28,7 @@ export interface SecurityAction {
     executedBy: string;
 
 
+}
 export interface DataServiceConfig {
     baseUrl: string;
     wsUrl: string;
@@ -36,6 +38,7 @@ export interface DataServiceConfig {
     cacheTimeout: number;
 
 
+}
 export interface ApiResponse<T> {
     success: boolean;
     data?: T;
@@ -65,6 +68,7 @@ export declare class SecurityDashboardDataService {
         status?: string[];
         limit?: number;
         offset?: number;
+}
     }): Promise<SecurityAlert[]>;
     /**
      * Get compliance status

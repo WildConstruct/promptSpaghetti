@@ -55,6 +55,7 @@ import { Badge } from '../ui/Badge';
 
 // Core help system types
 
+}
 export interface HelpContentItem {
   id: string;
   title: string;
@@ -71,7 +72,9 @@ export interface HelpContentItem {
   helpfulness: {
   helpful: number;
   unhelpful: number;
+}
 };
+}
 }
 export interface TourStep {
   id: string;
@@ -87,6 +90,8 @@ export interface TourStep {
   highlight?: boolean;
   delay?: number;
 }
+}
+}
 export interface HelpTour {
   id: string;
   name: string;
@@ -99,7 +104,9 @@ export interface HelpTour {
   prerequisites?: string;
   estimatedDuration: number;
   difficulty: 'beginner' | 'intermediate' | 'advanced'
+}
   }
+}
 export interface HelpContext {
   currentPage: string;
   userRole?: string;
@@ -111,9 +118,11 @@ export interface HelpContext {
   showTours: boolean;
   preferredHelpType: 'text' | 'video' | 'interactive';
   autoplayVideos: boolean;
+}
 };
 
 // Tooltip Component
+}
 }
 export interface HelpTooltipProps {
   content: string | ReactNode;
@@ -129,6 +138,7 @@ export interface HelpTooltipProps {
   children: ReactNode;
   onShow?: () => void;
   onHide?: () => void;
+}
 }
 export const HelpTooltip: React.FC<HelpTooltipProps> = ({)
   content,
@@ -254,6 +264,7 @@ export const HelpTooltip: React.FC<HelpTooltipProps> = ({)
 
 // Contextual Help Panel
 
+}
 export interface ContextualHelpPanelProps {
   title: string;
   content: HelpContentItem;
@@ -266,6 +277,7 @@ export interface ContextualHelpPanelProps {
   className?: string;
   onContentSelect?: (content: HelpContentItem) => void;
   onFeedback?: (contentId: string, helpful: boolean) => void;
+}
 }
 export const ContextualHelpPanel: React.FC<ContextualHelpPanelProps> = ({)
   title,
@@ -499,6 +511,7 @@ export const ContextualHelpPanel: React.FC<ContextualHelpPanelProps> = ({)
 
 // Guided Tour Component
 
+}
 export interface GuidedTourProps {
   tour: HelpTour;
   isActive: boolean;
@@ -506,6 +519,7 @@ export interface GuidedTourProps {
   onSkip?: () => void;
   onStepChange?: (stepIndex: number) => void;
   className?: string;
+}
 }
 export const GuidedTour: React.FC<GuidedTourProps> = ({)
   tour,
@@ -683,6 +697,7 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({)
 
 // Help Hub Component
 
+}
 export interface HelpHubProps {
   tours: HelpTour;
   content: HelpContentItem;
@@ -690,6 +705,7 @@ export interface HelpHubProps {
   onTourStart?: (tourId: string) => void;
   onContentView?: (contentId: string) => void;
   className?: string;
+}
 }
 export const HelpHub: React.FC<HelpHubProps> = ({)
   tours,
@@ -924,10 +940,12 @@ export const HelpHub: React.FC<HelpHubProps> = ({)
 
 // Quick Help Button
 
+}
 export interface QuickHelpProps {
   helpContent: HelpContentItem;
   onHelpRequest?: () => void;
   className?: string;
+}
 }
 export const QuickHelp: React.FC<QuickHelpProps> = ({)
   helpContent,

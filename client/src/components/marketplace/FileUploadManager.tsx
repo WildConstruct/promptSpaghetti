@@ -2,6 +2,7 @@
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import './FileUploadManager.css';
+}
 interface UploadedFile {
   id: string;,
   file_type: 'graph_json' | 'prompt_yaml' | 'asset_file' | 'documentation';
@@ -21,6 +22,7 @@ interface UploadedFile {
   prompt_yaml: 'Prompt YAML',
   asset_file: 'Asset File',
   documentation: 'Documentation',
+}
 };
 const FILE_TYPE_DESCRIPTIONS = {
   graph_json: 'JSON file containing your template\'s graph structure',
@@ -59,7 +61,7 @@ export const FileUploadManager: React.FC<FileUploadManagerProps> = ({)
       const response = await fetch(`/api/marketplace/submissions/${submissionId}/files`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
   },
@@ -75,7 +77,7 @@ export const FileUploadManager: React.FC<FileUploadManagerProps> = ({)
       const validationResponse = await fetch(`/api/marketplace/submissions/${submissionId}/files/${uploadedFile.id}/validate`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
       });
       let finalFile = uploadedFile;
@@ -105,7 +107,7 @@ export const FileUploadManager: React.FC<FileUploadManagerProps> = ({)
       const response = await fetch(`/api/marketplace/submissions/${submissionId}/files/${fileId}`, {)}
   },
   method: 'DELETE',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
       });
       if (response.ok) {

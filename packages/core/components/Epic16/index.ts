@@ -144,6 +144,7 @@ export type {
 
 // Component types for external usage
 
+}
 export interface Epic16ComponentTheme {
   primary: string;
   secondary: string;
@@ -154,6 +155,7 @@ export interface Epic16ComponentTheme {
   primary: string;
   secondary: string;
   disabled: string;
+}
 };
   border: {
   light: string;

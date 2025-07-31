@@ -9,6 +9,7 @@
  * Epic: 17 - Backstage Admin Controls (Story 17.4.5 - Health Check System)
  */
 
+}
 export interface HealthCheckDefinition {
     id: string;
     name: string;
@@ -49,6 +50,7 @@ export declare enum HealthCheckPriority {
     LOW = "low",
     INFORMATIONAL = "informational"
 
+}
 export interface HealthCheckConfig {
     type: HealthCheckType;
     endpoint?: EndpointConfig;
@@ -71,6 +73,7 @@ export declare enum HealthCheckType {
     NETWORK_CONNECTIVITY = "network_connectivity",
     RESOURCE_AVAILABILITY = "resource_availability"
 
+}
 export interface EndpointConfig {
     url: string;
     method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'HEAD';
@@ -82,6 +85,7 @@ export interface EndpointConfig {
     timeout?: number;
 
 
+}
 export interface QueryConfig {
     connectionString?: string;
     database: string;
@@ -90,6 +94,7 @@ export interface QueryConfig {
     timeout: number;
 
 
+}
 export interface ScriptConfig {
     language: 'javascript' | 'shell' | 'python' | 'powershell';
     script: string;
@@ -98,6 +103,7 @@ export interface ScriptConfig {
     expectedExitCode: number;
 
 
+}
 export interface CompositeConfig {
     checks: string[];
     logic: CompositeLogic;
@@ -116,6 +122,7 @@ export declare enum AggregationStrategy {
     AVERAGE_STATUS = "average_status",
     WEIGHTED_STATUS = "weighted_status"
 
+}
 export interface ParameterDefinition {
     name: string;
     type: 'string' | 'number' | 'boolean' | 'object' | 'array';
@@ -126,6 +133,7 @@ export interface ParameterDefinition {
     sensitive?: boolean;
 
 
+}
 export interface ParameterValidation {
     minLength?: number;
     maxLength?: number;
@@ -136,6 +144,7 @@ export interface ParameterValidation {
     customValidator?: string;
 
 
+}
 export interface ValidationRules {
     input: InputValidation;
     output: OutputValidation;
@@ -143,12 +152,14 @@ export interface ValidationRules {
     security: SecurityValidation;
 
 
+}
 export interface InputValidation {
     required: string[];
     schema?: Record<string, unknown>;
     customValidators: CustomValidator[];
 
 
+}
 export interface OutputValidation {
     expectedFormat: 'json' | 'text' | 'xml' | 'binary';
     schema?: Record<string, unknown>;
@@ -157,6 +168,7 @@ export interface OutputValidation {
     errorConditions: ErrorCondition[];
 
 
+}
 export interface RuntimeValidation {
     maxExecutionTime: number;
     memoryLimit?: number;
@@ -166,6 +178,7 @@ export interface RuntimeValidation {
     privilegedAccessRequired: boolean;
 
 
+}
 export interface SecurityValidation {
     allowedOrigins?: string[];
     requiresAuthentication: boolean;
@@ -185,6 +198,7 @@ export declare enum AuditLevel {
     DETAILED = "detailed",
     FULL = "full"
 
+}
 export interface ExecutionConfig {
     schedule?: ScheduleConfig;
     triggers: TriggerConfig[];
@@ -193,6 +207,7 @@ export interface ExecutionConfig {
     cleanup: CleanupConfig;
 
 
+}
 export interface ScheduleConfig {
     enabled: boolean;
     cronExpression?: string;
@@ -201,6 +216,7 @@ export interface ScheduleConfig {
     maxConcurrentExecutions: number;
 
 
+}
 export interface TriggerConfig {
     type: TriggerType;
     condition: string;
@@ -215,6 +231,7 @@ export declare enum TriggerType {
     SYSTEM_STARTUP = "system_startup",
     API_REQUEST = "api_request"
 
+}
 export interface ExecutionEnvironment {
     runtime: RuntimeEnvironment;
     resources: ResourceLimits;
@@ -228,6 +245,7 @@ export declare enum RuntimeEnvironment {
     SANDBOX = "sandbox",
     REMOTE = "remote"
 
+}
 export interface ResourceLimits {
     maxMemory: number;
     maxCpu: number;
@@ -235,6 +253,7 @@ export interface ResourceLimits {
     maxNetworkBandwidth?: number;
 
 
+}
 export interface AlertingConfig {
     enabled: boolean;
     thresholds: AlertThresholds;
@@ -243,6 +262,7 @@ export interface AlertingConfig {
     suppression: SuppressionConfig;
 
 
+}
 export interface AlertThresholds {
     responseTime: ThresholdConfig;
     errorRate: ThresholdConfig;
@@ -250,6 +270,7 @@ export interface AlertThresholds {
     custom: Record<string, ThresholdConfig>;
 
 
+}
 export interface ThresholdConfig {
     warning: number;
     critical: number;
@@ -258,6 +279,7 @@ export interface ThresholdConfig {
     evaluationMethod: 'average' | 'max' | 'min' | 'percentile';
 
 
+}
 export interface NotificationConfig {
     channel: NotificationChannel;
     recipients: string[];
@@ -274,12 +296,14 @@ export declare enum NotificationChannel {
     DASHBOARD = "dashboard",
     LOG = "log"
 
+}
 export interface NotificationCondition {
     severity: 'info' | 'warning' | 'error' | 'critical';
     repeatInterval?: number;
     maxRepeats?: number;
 
 
+}
 export interface EscalationConfig {
     enabled: boolean;
     levels: EscalationLevel[];
@@ -287,6 +311,7 @@ export interface EscalationConfig {
     maxEscalationLevel: number;
 
 
+}
 export interface EscalationLevel {
     level: number;
     recipients: string[];
@@ -295,18 +320,21 @@ export interface EscalationLevel {
     timeout: number;
 
 
+}
 export interface SuppressionConfig {
     enabled: boolean;
     rules: SuppressionRule[];
     maintenanceWindows: MaintenanceWindow[];
 
 
+}
 export interface SuppressionRule {
     condition: string;
     duration: number;
     reason: string;
 
 
+}
 export interface MaintenanceWindow {
     id: string;
     name: string;
@@ -318,6 +346,7 @@ export interface MaintenanceWindow {
     suppressedChecks?: string[];
 
 
+}
 export interface HealthCheckResult {
     checkId: string;
     executionId: string;
@@ -339,6 +368,7 @@ export declare enum HealthStatus {
     TIMEOUT = "timeout",
     ERROR = "error"
 
+}
 export interface ResultDetails {
     summary: string;
     findings: Finding[];
@@ -347,6 +377,7 @@ export interface ResultDetails {
     relatedChecks: string[];
 
 
+}
 export interface Finding {
     type: 'info' | 'warning' | 'error' | 'critical';
     category: string;
@@ -356,6 +387,7 @@ export interface Finding {
     evidence?: Record<string, unknown>;
 
 
+}
 export interface ResultMetrics {
     responseTime?: number;
     throughput?: number;
@@ -365,6 +397,7 @@ export interface ResultMetrics {
     custom: Record<string, number>;
 
 
+}
 export interface ExecutionMetadata {
     hostname: string;
     environment: string;
@@ -390,6 +423,7 @@ export declare class HealthCheckDefinitionBuilder {
     dependency(...checkIds: string[]): this;
     build(): HealthCheckDefinition;
 
+}
 export interface CustomValidator {
     name: string;
     description: string;
@@ -397,6 +431,7 @@ export interface CustomValidator {
     parameters: string[];
 
 
+}
 export interface SuccessCondition {
     field: string;
     operator: ComparisonOperator;
@@ -404,8 +439,10 @@ export interface SuccessCondition {
     description: string;
 
 
+}
 export interface WarningCondition extends SuccessCondition {
 
+}
 export interface ErrorCondition extends SuccessCondition {
 
 export declare enum ComparisonOperator {
@@ -422,6 +459,7 @@ export declare enum ComparisonOperator {
     IN = "in",
     NOT_IN = "not_in"
 
+}
 export interface ResponseValidation {
     contentType?: string[];
     bodyContains?: string[];
@@ -430,6 +468,7 @@ export interface ResponseValidation {
     jsonPath?: JsonPathValidation[];
 
 
+}
 export interface JsonPathValidation {
     path: string;
     expectedValue?: unknown;
@@ -437,6 +476,7 @@ export interface JsonPathValidation {
     required: boolean;
 
 
+}
 export interface QueryExpectation {
     minRows?: number;
     maxRows?: number;
@@ -445,17 +485,20 @@ export interface QueryExpectation {
     constraints?: QueryConstraint[];
 
 
+}
 export interface QueryConstraint {
     column: string;
     operator: ComparisonOperator;
     value: unknown;
 
 
+}
 export interface AuthenticationConfig {
     type: 'basic' | 'bearer' | 'api_key' | 'oauth2' | 'custom';
     credentials: Record<string, string>;
 
 
+}
 export interface RetryConfig {
     maxAttempts: number;
     backoffStrategy: 'linear' | 'exponential' | 'fixed';
@@ -464,12 +507,14 @@ export interface RetryConfig {
     retryConditions?: RetryCondition[];
 
 
+}
 export interface RetryCondition {
     statusCode?: number;
     errorType?: string;
     condition?: string;
 
 
+}
 export interface NetworkConfig {
     allowedHosts?: string[];
     blockedHosts?: string[];
@@ -477,6 +522,7 @@ export interface NetworkConfig {
     maxConnections?: number;
 
 
+}
 export interface ProxyConfig {
     host: string;
     port: number;
@@ -484,6 +530,7 @@ export interface ProxyConfig {
     password?: string;
 
 
+}
 export interface StorageConfig {
     tempDirectory?: string;
     maxFileSize?: number;
@@ -491,6 +538,7 @@ export interface StorageConfig {
     cleanupAfterExecution: boolean;
 
 
+}
 export interface IsolationConfig {
     sandboxed: boolean;
     allowedSystemCalls?: string[];
@@ -498,6 +546,7 @@ export interface IsolationConfig {
     resourceQuota?: ResourceQuota;
 
 
+}
 export interface ResourceQuota {
     maxFileHandles: number;
     maxProcesses: number;
@@ -505,18 +554,21 @@ export interface ResourceQuota {
     maxSocketConnections: number;
 
 
+}
 export interface CleanupConfig {
     enabled: boolean;
     actions: CleanupAction[];
     timeout: number;
 
 
+}
 export interface CleanupAction {
     type: 'delete_files' | 'close_connections' | 'kill_processes' | 'custom';
     target?: string;
     customScript?: string;
 
 
+}
 export interface RateLimitConfig {
     maxNotifications: number;
     timeWindow: number;
@@ -527,6 +579,7 @@ export declare class HealthCheckDefinitionValidator {
     private static isValidCronExpression;
     private static calculateValidationScore;
 
+}
 export interface ValidationResult {
     isValid: boolean;
     errors: string[];
@@ -534,3 +587,4 @@ export interface ValidationResult {
     score: number;
 
 export declare //# sourceMappingURL=HealthCheckDefinitionModel.d.ts.map
+}

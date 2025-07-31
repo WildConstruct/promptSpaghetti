@@ -33,6 +33,7 @@ import {
 } from '../../../../packages/core/types/EnforcementTypes';
 
 }
+}
 export interface IntegrationConfig {
   enabled: boolean;
   autoCreateReviews: boolean;
@@ -42,7 +43,9 @@ export interface IntegrationConfig {
   integrationMappings: IntegrationMapping[];
 }
 }
+}
 
+}
 }
 export interface IntegrationMapping {
   sourceSystem: SourceSystem;
@@ -51,6 +54,7 @@ export interface IntegrationMapping {
   priorityMapping: Record<string, ReviewPriority>;
   complexityMapping: Record<string, ReviewComplexity>;
   criteriaMapping: Record<string, string[]>;
+}
 }
 }
 
@@ -798,6 +802,7 @@ export class ReviewIntegrationAdapter {
 
 // Supporting interfaces
 }
+}
 interface IntegrationStatus {
   system: SourceSystem;
   status: 'active' | 'inactive' | 'error';
@@ -806,7 +811,9 @@ interface IntegrationStatus {
   totalProcessed: number;
 }
 }
+}
 
+}
 }
 interface IntegrationEvent {
   type: string;
@@ -814,5 +821,6 @@ interface IntegrationEvent {
   data: Record<string, unknown>;
   timestamp: Date;
   processed: boolean;
+}
 }
 }

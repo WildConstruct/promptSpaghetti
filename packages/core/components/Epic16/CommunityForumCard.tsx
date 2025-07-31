@@ -6,6 +6,7 @@
  */
 import React, { useState } from 'react';
 
+}
 export interface ForumUser {
   id: string;
   name: string;
@@ -14,6 +15,8 @@ export interface ForumUser {
   badges: string;
   isVerified: boolean;
   isModerator: boolean;
+}
+}
 }
 export interface ForumPost {
   id: string;
@@ -43,13 +46,15 @@ export interface ForumPost {
   moderationNotes?: string;
   // Related content
   relatedTemplates?: string; // Template IDs,
-  attachments?: Array<{,
+  attachments?: Array<{
   id: string;
   name: string;
   type: string;
   size: number;
   url: string;
+}
 }>;
+}
 interface CommunityForumCardProps {
   post: ForumPost;
   variant?: 'compact' | 'detailed' | 'featured';
@@ -63,6 +68,7 @@ interface CommunityForumCardProps {
   onModerate?: (postId: string, action: string) => void;
   onClick?: (post: ForumPost) => void;
   className?: string;
+}
 }
 export const CommunityForumCard: React.FC<CommunityForumCardProps> = ({)
   post,

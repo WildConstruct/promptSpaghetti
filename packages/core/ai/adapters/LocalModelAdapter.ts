@@ -17,6 +17,7 @@ import {
   ModelUnavailableError
 } from '../BaseAIModel';
 
+}
 export interface LocalModelConfig {
   endpoint: string;
   modelName: string;
@@ -25,6 +26,8 @@ export interface LocalModelConfig {
   warmupOnInit?: boolean;
   modelType?: 'ollama' | 'huggingface' | 'custom';
   authToken?: string;
+}
+}
 }
 export interface LocalRequestOptions {
   temperature?: number;
@@ -38,9 +41,13 @@ export interface LocalRequestOptions {
   context_length?: number;
   system_prompt?: string;
 }
+}
+}
 export interface OllamaMessage {
   role: 'system' | 'user' | 'assistant';
   content: string;
+}
+}
 }
 export interface LocalModelResponse {
   model: string;
@@ -48,6 +55,7 @@ export interface LocalModelResponse {
   message?: {
   role: string;
   content: string;
+}
 };
   response?: string;
   done: boolean;
@@ -99,6 +107,7 @@ export class LocalModelAdapter extends BaseAIModel {
     super(id, metadata, capabilities);
     this.config = config;
   async initialize(): Promise<void> {
+
     try {
       this._status = AIModelStatus.INITIALIZING;
       // Validate configuration
@@ -149,6 +158,7 @@ export class LocalModelAdapter extends BaseAIModel {
 };
   // Model management methods
   async pullModel(): Promise<void> {
+
     if (this.config.modelType !== 'ollama') {
       throw new Error('Model pulling is only supported for Ollama models');
     const response = await fetch(`${this.config.endpoint}/api/pull`, {)}
@@ -160,6 +170,7 @@ export class LocalModelAdapter extends BaseAIModel {
     if (!response.ok) {
       throw new Error(`Failed to pull model: ${response.statusText}`);}
   async listAvailableModels(): Promise<string> {
+
     try {
       const endpoint = this.config.modelType === 'ollama' ? '/api/tags' : '/models';
       const response = await fetch(`${this.config.endpoint}${endpoint}`, {)}
@@ -179,6 +190,7 @@ export class LocalModelAdapter extends BaseAIModel {
     return this.modelInfo;
   // Private helper methods
   private async _testConnection(): Promise<void> {
+
     try {
       const healthEndpoint = this.config.modelType === 'ollama' ? '/api/tags' : '/health';
       const response = await fetch(`${this.config.endpoint}${healthEndpoint}`, {)}
@@ -192,6 +204,7 @@ export class LocalModelAdapter extends BaseAIModel {
     } catch (error) {
       throw new Error(`Failed to connect to local model server: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   private async _loadModelInfo(): Promise<void> {
+
     try {
       if (this.config.modelType === 'ollama') {
         const response = await fetch(`${this.config.endpoint}/api/show`, {)}
@@ -208,6 +221,7 @@ export class LocalModelAdapter extends BaseAIModel {
     } catch (error) {
       console.warn('Failed to load model info:', error);
   private async _warmupModel(): Promise<void> {
+
     try {
       const warmupPayload = this._buildPayload(;);
         [{ role: 'user', content: 'Hello' }],
@@ -262,6 +276,7 @@ export class LocalModelAdapter extends BaseAIModel {
       default:
         return basePayload;
   private async _makeRequest(endpoint: string, payload: any): Promise<LocalModelResponse> {
+
     const url = `${this.config.endpoint}${endpoint}`;}
     let lastError: Error | null = null;
     const maxRetries = this.config.maxRetries ?? 3;
@@ -343,6 +358,7 @@ export class LocalModelAdapter extends BaseAIModel {
   lastUpdated: new Date();
   });
   protected async _performHealthCheck(): Promise<void> {
+
     await this._testConnection();
   private updateMetadata(updates: Partial<ModelMetadata>): void {
     this._metadata = { ...this._metadata, ...updates };

@@ -11,6 +11,7 @@ import { AnalyticsAuthorizationService, AuthContext } from './AnalyticsAuthoriza
 import './RealTimeDashboard.css';
 
 // Dashboard Configuration
+}
 interface DashboardConfig {
   refreshInterval: number; // milliseconds,
   maxEventsDisplay: number;
@@ -36,10 +37,12 @@ export enum WidgetType {
   SECURITY_EVENTS = 'security_events'
 
 // Widget Configuration
+}
 interface WidgetConfig {
   id: string;
   type: WidgetType;
   title: string;
+}
   position: { x: number; y: number; width: number; height: number };
   filter?: EventFilter;
   refreshRate?: number;
@@ -50,6 +53,7 @@ interface WidgetConfig {
   collapsed: boolean;
 
 // Dashboard Data Types
+}
 interface DashboardMetrics {
   totalEvents: number;
   eventsPerSecond: number;
@@ -57,19 +61,23 @@ interface DashboardMetrics {
   activeSessions: number;
   errorRate: number;
   systemHealth: number;
+}
   integrationStatus: { [key: string]: 'healthy' | 'degraded' | 'failing' };
   topSources: Array<{ source: string; count: number; percentage: number }>;
   recentEvents: UnifiedAnalyticsEvent;
+}
 interface TimeSeriesData {
   timestamp: number;
   value: number;
   label?: string;
+}
 interface HeatMapData {
   x: number;
   y: number;
   intensity: number;
 
 // Props
+}
 interface RealTimeDashboardProps {
   eventBus: UnifiedEventBus;
   eventRepository: EventRepository;
@@ -85,6 +93,7 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({)
   eventRepository,
   authService,
   authContext,
+}
   config: configOverride = {},
   onWidgetError
 }) => {

@@ -4,6 +4,7 @@
  */
 import { ExtensionPoint, ExtensionPointCategory, ExtensionPointPriority, ExtensionPointLifecycle, extensionPointRegistry } from './ExtensionPointRegistry';
 
+}
 export interface DocumentationOptions {
   includeExamples?: boolean;
   includeConstraints?: boolean;
@@ -13,6 +14,7 @@ export interface DocumentationOptions {
   category?: ExtensionPointCategory;
   priority?: ExtensionPointPriority;
   lifecycle?: ExtensionPointLifecycle;
+}
 };
 }
 export class ExtensionDocumentationGenerator {

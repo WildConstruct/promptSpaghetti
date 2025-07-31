@@ -12,6 +12,7 @@
  * - Real-time verification status tracking
  */
 
+}
 export interface IdentityValidationRequest {
   userId: string;
   requestId: string;
@@ -24,6 +25,7 @@ export interface IdentityValidationRequest {
   userAgent: string;
   sessionId: string;
   requestSource: 'profile_setup' | 'manual_request' | 'system_triggered'
+}
   };
 }
 export type IdentityValidationType = 
@@ -46,6 +48,7 @@ export type ValidationStatus =
   | 'expired'
   | 'requires_update';
 
+}
 export interface IdentityValidationData {
   // Basic Profile Data
   fullName?: string;
@@ -60,6 +63,7 @@ export interface IdentityValidationData {
   state: string;
   postalCode: string;
   country: string;
+}
 };
   // Government ID
   governmentId?: {
@@ -98,6 +102,7 @@ export interface IdentityValidationData {
   country: string;
 };
 }
+}
 export interface ProfessionalCredential {
   type: 'degree' | 'certificate' | 'award' | 'credit';
   title: string;
@@ -105,6 +110,8 @@ export interface ProfessionalCredential {
   year: number;
   verificationStatus: ValidationStatus;
   documentUrl?: string;
+}
+}
 }
 export interface PortfolioItem {
   type: 'film' | 'video' | 'demo_reel' | 'template' | 'project';
@@ -117,6 +124,8 @@ export interface PortfolioItem {
   verificationStatus: ValidationStatus;
   imdbUrl?: string;
 }
+}
+}
 export interface Certification {
   name: string;
   issuingBody: string;
@@ -124,6 +133,8 @@ export interface Certification {
   issueDate: number;
   expirationDate?: number;
   verificationStatus: ValidationStatus;
+}
+}
 }
 export interface ValidationResult {
   requestId: string;
@@ -139,12 +150,16 @@ export interface ValidationResult {
   reviewNotes?: string;
   nextSteps?: string;
 }
+}
+}
 export interface ValidationEvidence {
   type: 'document_scan' | 'api_verification' | 'manual_review' | 'third_party_check';
   source: string;
   confidence: number;
   timestamp: number;
   data: Record<string, unknown>;
+}
+}
 }
 export interface ValidationFlag {
   type: 'warning' | 'error' | 'info';
@@ -153,6 +168,8 @@ export interface ValidationFlag {
   severity: 'low' | 'medium' | 'high' | 'critical';
   requiresAction: boolean;
 }
+}
+}
 export interface TrustScore {
   overall: number; // 0-100,
   components: {
@@ -160,6 +177,7 @@ export interface TrustScore {
   professional: number;
   community: number;
   activity: number;
+}
 };
   tier: 'unverified' | 'basic' | 'verified' | 'professional' | 'expert';
   badges: string;
@@ -202,12 +220,13 @@ export class IdentityValidationService {
   /**
    * Submit identity validation request
    */
-  public async submitValidationRequest()
+  public async submitValidationRequest(
     userId: string,
     type: IdentityValidationType,
     data: Partial<IdentityValidationData>,
     metadata: Partial<IdentityValidationRequest['metadata']> = {}
   ): Promise<{ requestId: string; status: ValidationStatus }> {
+
   const requestId = this.generateRequestId();
   const request: IdentityValidationRequest = {,
   userId,
@@ -227,6 +246,7 @@ export class IdentityValidationService {
     this.processValidationRequest(requestId);
     return { requestId, status: 'pending' };
   private async processValidationRequest(requestId: string): Promise<void> {
+
     const request = this.validationRequests.get(requestId);
     if (!request) return;
     // Update status to in_review
@@ -346,10 +366,11 @@ export class IdentityValidationService {
   reviewNotes: this.generateReviewNotes(score, flags),
   nextSteps: this.generateNextSteps(status, flags),
 };
-  private async validateProfessionalCredentials(()
+  private async validateProfessionalCredentials(((
     credentials: NonNullable<IdentityValidationData['professionalCredentials']>,
-    evidence: ValidationEvidence,
+    evidence: ValidationEvidence
   ): Promise<number> {
+
     let totalScore = 0;
     let validCredentials = 0;
     // Validate each credential
@@ -472,6 +493,7 @@ export class IdentityValidationService {
    * Update user trust score based on validation results
    */
   private async updateUserTrustScore(userId: string): Promise<void> {
+
   const userValidations = Array.from(this.validationResults.values());
   .filter(result => result.userId === userId && result.status === 'approved');
   if (userValidations.length === 0) return;
@@ -587,6 +609,7 @@ export class IdentityValidationService {
 // Mock external service classes
 class EmailVerificationService {
   async verify(email: string): Promise<{ valid: boolean; confidence: number; deliverable: boolean }> {
+
   // Mock email validation
   const isValidFormat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const confidence = isValidFormat ? 95 : 20;
@@ -597,6 +620,7 @@ class EmailVerificationService {
 };
 class PhoneVerificationService {
   async verify(phone: string): Promise<{ valid: boolean; confidence: number; type: string }> {
+
     // Mock phone validation
     const isValidFormat = /^\+?[\d\s\-\(\)]{10
 }$/.test(phone);
@@ -612,6 +636,7 @@ class DocumentVerificationService {
   expired: boolean;
   documentType: string;
 }> {
+
   // Mock document validation
   const expired = new Date(document.expirationDate) < new Date();
   return {
@@ -626,6 +651,7 @@ class SocialMediaVerificationService {
   confidence: number;
   verifiedProfiles: number;
 }> {
+
     // Mock social media validation
     const scores = profiles.map(profile => {)
   let score = 50;

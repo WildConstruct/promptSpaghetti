@@ -10,6 +10,7 @@ import { logger } from '../utils/logger';
 import { AnalyticsCollector } from './AnalyticsCollector';
 
 }
+}
 export interface TokenInfluenceResult {
   originalPrompt: string;
   tokens: TokenInfluence[];
@@ -24,9 +25,11 @@ export interface TokenInfluenceResult {
     tokenCount: number;
     perturbationCount?: number;
 }
+}
   };
 }
 
+}
 }
 export interface TokenInfluence {
   token: string;
@@ -40,9 +43,11 @@ export interface TokenInfluence {
     before: string[];
     after: string[];
 }
+}
   };
 }
 
+}
 }
 export interface LimeAnalysisOptions {
   numSamples: number;           // Number of perturbations for LIME
@@ -53,7 +58,9 @@ export interface LimeAnalysisOptions {
   regularization: number;       // Ridge regression alpha
 }
 }
+}
 
+}
 }
 export interface SaliencyAnalysisOptions {
   gradientMethod: 'vanilla' | 'integrated' | 'smoothgrad';
@@ -63,13 +70,16 @@ export interface SaliencyAnalysisOptions {
   aggregationMethod: 'mean' | 'max' | 'l2_norm';
 }
 }
+}
 
+}
 }
 export interface PromptPerturbation {
   perturbedPrompt: string;
   changedPositions: number[];
   similarity: number;
   prediction?: any;
+}
 }
 }
 

@@ -31,6 +31,7 @@ export { createDefaultMiddleware, MiddlewareFactory } from './middleware/StateMi
 
 // State management configuration
 
+}
 export interface StateSystemConfig {
   enableValidation: boolean;
   enableHistory: boolean;
@@ -41,6 +42,7 @@ export interface StateSystemConfig {
   conflictResolutionStrategy: 'last_writer_wins' | 'merge' | 'user_intervention';
   performanceMonitoring: boolean;
   securityRules: boolean;
+}
 }
 export const defaultStateConfig: StateSystemConfig = {,
   enableValidation: true,

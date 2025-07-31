@@ -6,6 +6,7 @@
  */
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
 
+}
 export interface DALLEConfig {
     apiKey: string;
     baseURL?: string;
@@ -13,6 +14,7 @@ export interface DALLEConfig {
     timeout?: number;
     maxRetries?: number;
 
+}
 export interface DALLERequestOptions {
     model?: 'dall-e-2' | 'dall-e-3';
     size?: '256x256' | '512x512' | '1024x1024' | '1792x1024' | '1024x1792';
@@ -22,6 +24,7 @@ export interface DALLERequestOptions {
     response_format?: 'url' | 'b64_json';
     user?: string;
 
+}
 export interface ImagePromptOptimization {
     originalPrompt: string;
     optimizedPrompt: string;
@@ -29,16 +32,19 @@ export interface ImagePromptOptimization {
     styleEnhancements: string[];
     qualityImprovements: string[];
 
+}
 export interface DALLEResponse {
     created: number;
-    data: Array<{,
+    data: Array<{
         url?: string;
         b64_json?: string;
         revised_prompt?: string;
+}
     }>;
 
+}
 export interface ImageGenerationResult {
-    images: Array<{,
+    images: Array<{
         url?: string;
         base64?: string;
         revisedPrompt?: string;
@@ -47,6 +53,7 @@ export interface ImageGenerationResult {
             quality: string;
             style?: string;
             model: string;
+}
         };
     }>;
     originalPrompt: string;

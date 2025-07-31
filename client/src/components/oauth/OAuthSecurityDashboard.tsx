@@ -11,6 +11,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 
 // Types and interfaces
+}
 interface SecurityMetrics {
   totalProviders: number;,
   activeProviders: number;
@@ -24,6 +25,7 @@ interface SecurityMetrics {
   securityScore: number;
   complianceScore: number;,
   lastUpdated: Date;
+}
 interface SecurityEvent {
   id: string;,
   timestamp: Date;
@@ -36,12 +38,14 @@ interface SecurityEvent {
   resolved: boolean;
   resolvedAt?: Date;
   resolvedBy?: string;
+}
 interface ComplianceStatus {
   framework: string;,
   status: 'compliant' | 'non_compliant' | 'partial' | 'unknown';
   score: number;,
   issues: ComplianceIssue;
   lastAssessment: Date;
+}
 interface ComplianceIssue {
   id: string;,
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -49,6 +53,7 @@ interface ComplianceIssue {
   description: string;
   recommendation: string;
   providerId?: string;
+}
 interface ThreatDetection {
   threatId: string;,
   timestamp: Date;
@@ -59,10 +64,12 @@ interface ThreatDetection {
   status: 'active' | 'mitigated' | 'false_positive';,
   affectedProviders: string;
   indicators: ThreatIndicator;
+}
 interface ThreatIndicator {
   type: string;,
   value: string;
   confidence: number;
+}
 interface AuditLogEntry {
   id: string;,
   timestamp: Date;
@@ -112,6 +119,7 @@ export const OAuthSecurityDashboard: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [autoRefresh, setAutoRefresh] = useState(true);
   // Auth store for API calls
+}
   const { authenticatedFetch } = useAuthStore();
   // Auto-refresh effect
   useEffect(() => {

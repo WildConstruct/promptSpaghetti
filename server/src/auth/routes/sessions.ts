@@ -19,9 +19,11 @@ const revokeBulkSessionsSchema = z.object({
 });
 
 }
+}
 interface SessionRouteContext {
   authService: AuthenticationService;
   sessionService: SessionService;
+}
 }
 }
 

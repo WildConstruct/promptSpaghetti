@@ -9,6 +9,7 @@
  */
 import React from 'react';
 
+}
 interface ContentSchedulingDashboardProps {
     className?: string;
     userId?: string;
@@ -17,3 +18,4 @@ interface ContentSchedulingDashboardProps {
 export declare const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProps>;
 export default ContentSchedulingDashboard;
 //# sourceMappingURL=ContentSchedulingDashboard.d.ts.map
+}

@@ -3,9 +3,11 @@
 // Core serialization logic for converting graphs to LLM-friendly format
 import { Graph, Node } from '../../graphSchema';
 // Use Node.js crypto in Node environment, or web crypto API in browser
+}
 interface HashFunction {
   update: (data: string) => {,
   digest: (format: string) => string;
+}
 };
 let createHash: (algorithm: string) => HashFunction;
 try {
@@ -26,6 +28,7 @@ try {
 }
   });
 
+}
 export interface SerializationMetadata {
   name?: string;
   description?: string;
@@ -33,11 +36,14 @@ export interface SerializationMetadata {
   created?: string;
   tags?: string;
 }
+}
+}
 export interface SerializationOptions {
   includeChecksum?: boolean;
   includeMetadata?: boolean;
   compactFormat?: boolean;
   validateOnSerialize?: boolean;
+}
 }
 export class GraphSerializer {
   private static readonly FORMAT_VERSION = '1.0.0';

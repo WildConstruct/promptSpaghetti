@@ -6,6 +6,7 @@ import { EventEmitter } from 'events';
 import { KPISnapshot } from './PerformanceKPIs';
 import { BaselineSnapshot } from './PerformanceBaseline';
 
+}
 export interface KPIAlert {
     id: string;
     kpiId: string;
@@ -21,6 +22,7 @@ export interface KPIAlert {
     timestamp: number;
     acknowledged: boolean;
 
+}
 export interface KPIMonitoringConfig {
     monitoringInterval: number;
     alertingEnabled: boolean;
@@ -28,6 +30,7 @@ export interface KPIMonitoringConfig {
         critical: number;
         consecutive: number;
         degradationThreshold: number;
+}
     };
     kpiFilters: {
         categories: string[];
@@ -46,6 +49,7 @@ export interface KPIMonitoringConfig {
         emailRecipients: string[];
     };
 
+}
 export interface KPITrendAnalysis {
     kpiId: string;
     trend: 'improving' | 'stable' | 'degrading';
@@ -56,6 +60,7 @@ export interface KPITrendAnalysis {
         nextWeek: number;
         nextMonth: number;
         confidence: number;
+}
     };
 /**
  * KPI Monitoring Service
@@ -127,7 +132,7 @@ export declare class KPIMonitoringService extends EventEmitter {
             alertsActive: number;
             averageScore: number;
         };
-        kpiStatus: Array<{,
+        kpiStatus: Array<{
             kpiId: string;
             name: string;
             category: string;

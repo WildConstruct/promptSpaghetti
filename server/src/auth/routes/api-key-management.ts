@@ -60,10 +60,12 @@ const AVAILABLE_SCOPES = [
 ];
 
 }
+}
 interface ApiKeyManagementRouteContext {
   databaseService: DatabaseService;
   auditService: AuditService;
   rateLimitService: RateLimitService;
+}
 }
 }
 

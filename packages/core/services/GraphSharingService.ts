@@ -5,6 +5,7 @@ import { AnnotatedEdge } from '../components/Annotations/ConnectionAnnotations';
 
 // Comprehensive shared graph format
 
+}
 export interface SharedGraphFormat {
   // Core metadata
   metadata: {
@@ -18,6 +19,7 @@ export interface SharedGraphFormat {
   id: string;
   name: string;
   email?: string;
+}
 };
     // Version control
     versionControl: {
@@ -30,7 +32,7 @@ export interface SharedGraphFormat {
     // Sharing settings
     sharing: {
   permissions: 'private' | 'read_only' | 'collaborative' | 'public';
-  collaborators: Array<{,
+  collaborators: Array<{
   userId: string;
   name: string;
   role: 'viewer' | 'editor' | 'admin';
@@ -56,7 +58,7 @@ export interface SharedGraphFormat {
   // All annotation types
   annotations: {
   // Connection labels (already handled in AnnotatedEdge)
-  connectionLabels: Array<{,
+  connectionLabels: Array<{
   edgeId: string;
   label: string;
   style?: any;
@@ -64,7 +66,7 @@ export interface SharedGraphFormat {
   visible: boolean;
 }>;
     // Sticky notes
-    stickyNotes: Array<{,
+    stickyNotes: Array<{
   id: string;
       position: { x: number; y: number };
       size: { width: number; height: number };
@@ -77,7 +79,7 @@ export interface SharedGraphFormat {
       visible: boolean;
     }>;
     // Node labels/annotations
-    nodeLabels: Array<{,
+    nodeLabels: Array<{
   nodeId: string;
   label?: string;
   description?: string;
@@ -86,7 +88,7 @@ export interface SharedGraphFormat {
   notes?: string;
 }>;
     // Region grouping/areas
-    regions: Array<{,
+    regions: Array<{
   id: string;
       name: string;
   bounds: { x: number; y: number; width: number; height: number };
@@ -97,7 +99,7 @@ export interface SharedGraphFormat {
       collapsed: boolean;
     }>;
     // Comments and discussions
-    comments: Array<{,
+    comments: Array<{
   id: string;
       content: string;
   author: string;
@@ -116,7 +118,7 @@ export interface SharedGraphFormat {
   };
   // Collaboration metadata
   collaboration: {
-  changeHistory: Array<{,
+  changeHistory: Array<{
   id: string;
   timestamp: string;
   author: string;
@@ -126,7 +128,7 @@ export interface SharedGraphFormat {
   after?: any;
   description: string;
 }>;
-    conflicts: Array<{,
+    conflicts: Array<{
   id: string;
   timestamp: string;
   type: 'merge' | 'edit' | 'delete';
@@ -167,8 +169,8 @@ export class GraphSharingService {
       includeHistory?: boolean;
       includeComments?: boolean;
       permissions?: SharedGraphFormat['metadata']['sharing']['permissions'];
-      author: { id: string; name: string; email?: string };
-  ): Promise<SharedGraphFormat> {
+      author: { id: string; name: string; email?: string }): Promise<SharedGraphFormat> {
+
   const exportId = this.generateExportId();
   const timestamp = new Date().toISOString();
   // Extract connection labels from annotated edges
@@ -257,6 +259,7 @@ export class GraphSharingService {
     errors?: string;
     warnings?: string;
   }> {
+
   const errors: string = [];
   const warnings: string = [];
   try {
@@ -346,8 +349,8 @@ export class GraphSharingService {
       edges?: AnnotatedEdge;
       annotations?: Partial<SharedGraphFormat['annotations']>;
       changeDescription: string;
-  author: { id: string; name: string; };
-  ): Promise<SharedGraphFormat> {
+  author: { id: string; name: string; }): Promise<SharedGraphFormat> {
+
   const newVersion: SharedGraphFormat = {,
   ...baseGraph,
   metadata: {
@@ -438,14 +441,14 @@ export class GraphSharingService {
    * Import nodes with annotation restoration
    */
   private async importNodes(nodes: Node): Promise<Node> {
+
   // In a real implementation, this might involve validation,
   // ID remapping, or other import-specific processing
   return nodes;
   /**
   * Import edges with label restoration
   */
-  private async importEdges(()
-  edges: AnnotatedEdge,
+  private async importEdges((edges: AnnotatedEdge,
   connectionLabels: SharedGraphFormat['annotations']['connectionLabels']): Promise<AnnotatedEdge> {,
   // Create a map for quick label lookup
   const labelMap = new Map(connectionLabels.map(label => [label.edgeId, label]));

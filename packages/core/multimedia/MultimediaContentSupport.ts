@@ -20,6 +20,7 @@ import { EventEmitter } from 'events';
 
 // Core multimedia interfaces
 
+}
 export interface MediaAsset {
   id: string;
   name: string;
@@ -27,6 +28,7 @@ export interface MediaAsset {
   mimeType: string;
   size: number;
   duration?: number; // for video/audio
+}
   dimensions?: { width: number; height: number };
   url: string;
   thumbnailUrl?: string;
@@ -36,6 +38,7 @@ export interface MediaAsset {
   storage: StorageInfo;
   created: Date;
   lastModified: Date;
+}
 }
 export interface MediaMetadata {
   title?: string;
@@ -53,7 +56,9 @@ export interface MediaMetadata {
   bitrate: number;
   framerate?: number;
   sampleRate?: number;
+}
 };
+}
 }
 export interface MediaChapter {
   id: string;
@@ -62,6 +67,8 @@ export interface MediaChapter {
   endTime: number;
   description?: string;
   thumbnailUrl?: string;
+}
+}
 }
 export interface AccessibilityFeatures {
   altText: string;
@@ -72,12 +79,15 @@ export interface AccessibilityFeatures {
   highContrast?: boolean;
   screenReaderOptimized: boolean;
 }
+}
+}
 export interface MediaCaption {
   id: string;
   language: string;
   startTime: number;
   endTime: number;
   text: string;
+}
   position?: { x: number; y: number };
   styling?: {
   fontSize: number;
@@ -85,6 +95,7 @@ export interface MediaCaption {
   backgroundColor: string;
   fontFamily: string;
 };
+}
 }
 export interface ProcessingStatus {
   status: 'pending' | 'processing' | 'completed' | 'failed' | 'optimizing';
@@ -94,6 +105,8 @@ export interface ProcessingStatus {
   estimatedCompletion?: Date;
   processingTime?: number;
 }
+}
+}
 export interface ProcessingStage {
   name: string;
   status: 'pending' | 'processing' | 'completed' | 'failed';
@@ -101,6 +114,8 @@ export interface ProcessingStage {
   startTime?: Date;
   endTime?: Date;
   details?: string;
+}
+}
 }
 export interface StorageInfo {
   provider: 'local' | 'cloud' | 'cdn';
@@ -110,6 +125,7 @@ export interface StorageInfo {
   url: string;
   distribution: string;
   region: string;
+}
 };
   compression: {
   enabled: boolean;
@@ -122,8 +138,10 @@ export interface StorageInfo {
   lastBackup?: Date;
 };
 }
+}
 export interface MediaProcessingOptions {
   image?: {
+}
     resize?: { width?: number; height?: number; maintainAspectRatio?: boolean };
     optimize?: boolean;
     format?: 'jpeg' | 'png' | 'webp' | 'avif';
@@ -169,12 +187,14 @@ export interface MediaProcessingOptions {
   compress?: boolean;
 };
 }
+}
 export interface MultimediaConfig {
   storage: {
   provider: 'local' | 'aws' | 'gcp' | 'azure';
   maxFileSize: number;
   allowedTypes: string;
   compressionEnabled: boolean;
+}
 };
   processing: {
   enableTranscoding: boolean;
@@ -243,10 +263,11 @@ export class MultimediaContentSupport extends EventEmitter {
     };
     this.initializeProcessingWorkers();
   // Upload and process media asset
-  async uploadAsset(file: File | Buffer)
+  async uploadAsset(file: File | Buffer(
     metadata: Partial<MediaMetadata> = {},
     options: MediaProcessingOptions = {}
   ): Promise<string> {
+
     try {
       // Validate file
       await this.validateFile(file);
@@ -325,6 +346,7 @@ export class MultimediaContentSupport extends EventEmitter {
       throw error;
   // Process asset with specific options
   async processAsset(assetId: string, options: MediaProcessingOptions = {}): Promise<void> {
+
     const asset = this.assets.get(assetId);
     if (!asset) {
       throw new Error(`Asset ${assetId} not found`);}
@@ -394,6 +416,7 @@ export class MultimediaContentSupport extends EventEmitter {
     return assets.sort((a, b) => b.created.getTime() - a.created.getTime());
   // Update asset metadata
   async updateAsset(assetId: string, updates: Partial<MediaAsset>): Promise<void> {
+
     const asset = this.assets.get(assetId);
     if (!asset) {
       throw new Error(`Asset ${assetId} not found`);}
@@ -406,6 +429,7 @@ export class MultimediaContentSupport extends EventEmitter {
     this.emit('assetUpdated', { assetId, asset, updates });
   // Delete asset
   async deleteAsset(assetId: string): Promise<boolean> {
+
     const asset = this.assets.get(assetId);
     if (!asset) {
       return false;
@@ -458,6 +482,7 @@ export class MultimediaContentSupport extends EventEmitter {
   size?: { width: number; height: number };
     timestamp?: number; // for video
   }): Promise<string> {
+
     const asset = this.assets.get(assetId);
     if (!asset) {
       throw new Error(`Asset ${assetId} not found`);}
@@ -487,6 +512,7 @@ export class MultimediaContentSupport extends EventEmitter {
       throw error;
   // Batch operations
   async batchProcess(assetIds: string, options: MediaProcessingOptions = {}): Promise<void> {
+
   const promises = assetIds.map(id => this.processAsset(id, options));
   await Promise.allSettled(promises);
   async batchDelete(assetIds: string): Promise<boolean> {,
@@ -545,6 +571,7 @@ export class MultimediaContentSupport extends EventEmitter {
     this.removeAllListeners();
   // Private methods
   private async validateFile(file: File | Buffer): Promise<void> {
+
     const size = file instanceof File ? file.size : file.length;
     const mimeType = file instanceof File ? file.type : 'application/octet-stream';
     if (size > this.config.storage.maxFileSize) {
@@ -596,6 +623,7 @@ export class MultimediaContentSupport extends EventEmitter {
     stages.push({ name: 'Finalization', status: 'pending', progress: 0 });
     return stages;
   private async uploadFile(file: File | Buffer, asset: MediaAsset): Promise<{ url: string; path: string }> {
+
     // Simulate file upload - in practice, this would upload to your storage provider
     const path = `/uploads${asset.storage.path}`;}
     const url = `${this.getBaseUrl()}${path}`;}
@@ -603,6 +631,7 @@ export class MultimediaContentSupport extends EventEmitter {
     await new Promise(resolve => setTimeout(resolve, 100));
     return { url, path };
   private async processImage(asset: MediaAsset, options?: MediaProcessingOptions['image']): Promise<void> {
+
     await this.updateProcessingStage(asset, 'Validation', 'processing');
     // Simulate validation
     await this.delay(100);
@@ -627,6 +656,7 @@ export class MultimediaContentSupport extends EventEmitter {
     await this.delay(100);
     await this.updateProcessingStage(asset, 'Finalization', 'completed');
   private async processVideo(asset: MediaAsset, options?: MediaProcessingOptions['video']): Promise<void> {
+
     await this.updateProcessingStage(asset, 'Validation', 'processing');
     // Extract video metadata
     asset.duration = 120; // Simulated duration
@@ -653,6 +683,7 @@ export class MultimediaContentSupport extends EventEmitter {
     await this.delay(100);
     await this.updateProcessingStage(asset, 'Finalization', 'completed');
   private async processAudio(asset: MediaAsset, options?: MediaProcessingOptions['audio']): Promise<void> {
+
     await this.updateProcessingStage(asset, 'Validation', 'processing');
     // Extract audio metadata
     asset.duration = 180; // Simulated duration
@@ -675,6 +706,7 @@ export class MultimediaContentSupport extends EventEmitter {
     await this.delay(100);
     await this.updateProcessingStage(asset, 'Finalization', 'completed');
   private async processDocument(asset: MediaAsset, options?: MediaProcessingOptions['document']): Promise<void> {
+
     await this.updateProcessingStage(asset, 'Validation', 'processing');
     await this.delay(100);
     await this.updateProcessingStage(asset, 'Validation', 'completed');
@@ -691,6 +723,7 @@ export class MultimediaContentSupport extends EventEmitter {
     await this.delay(100);
     await this.updateProcessingStage(asset, 'Finalization', 'completed');
   private async processInteractive(asset: MediaAsset, options: MediaProcessingOptions): Promise<void> {
+
   await this.updateProcessingStage(asset, 'Validation', 'processing');
   await this.delay(200);
   await this.updateProcessingStage(asset, 'Validation', 'completed');
@@ -728,19 +761,23 @@ export class MultimediaContentSupport extends EventEmitter {
   progress: asset.processing.progress,
 });
   private async generateImageThumbnail(asset: MediaAsset, size?: { width: number; height: number }): Promise<string> {
+
     // Simulate thumbnail generation
     await this.delay(200);
     return `${asset.url}_thumb_${size?.width || 150}x${size?.height || 150}.jpg`;}
   private async generateVideoThumbnail(asset: MediaAsset, timestamp?: number, size?: { width: number; height: number }): Promise<string> {
+
     // Simulate video thumbnail generation
     await this.delay(500);
     const time = timestamp || 0;
     return `${asset.url}_thumb_${time}s_${size?.width || 150}x${size?.height || 150}.jpg`;}
   private async generateDocumentThumbnail(asset: MediaAsset, size?: { width: number; height: number }): Promise<string> {
+
     // Simulate document thumbnail generation
     await this.delay(300);
     return `${asset.url}_preview_${size?.width || 150}x${size?.height || 200}.jpg`;}
   private async deleteFromStorage(asset: MediaAsset): Promise<void> {
+
   // Simulate storage deletion
   await this.delay(100);
   private getQualityValue(quality: 'low' | 'medium' | 'high'): number {,

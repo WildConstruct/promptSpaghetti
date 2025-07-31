@@ -37,6 +37,7 @@ import {
 
 // VFX Pipeline Data Types
 
+}
 export interface VFXScene {
   id: string;
   name: string;
@@ -49,6 +50,8 @@ export interface VFXScene {
   composition: SceneComposition;
   accuracy: HistoricalAccuracyMetrics;
 }
+}
+}
 export interface VFXCharacter {
   id: string;
   name: string;
@@ -57,7 +60,9 @@ export interface VFXCharacter {
   culture: string;
   accuracy: number;
   clothing: string;
+}
   position: { x: number; y: number; z: number };
+}
 }
 export interface VFXAsset {
   id: string;
@@ -69,11 +74,15 @@ export interface VFXAsset {
   materials: MaterialProperty;
   lod: number;
 }
+}
+}
 export interface MaterialProperty {
   name: string;
   type: 'diffuse' | 'roughness' | 'metallic' | 'normal' | 'displacement';
   value: number;
   historicallyAccurate: boolean;
+}
+}
 }
 export interface SceneComposition {
   cameraPosition: { x: number; y: number; z: number };
@@ -81,12 +90,15 @@ export interface SceneComposition {
   depth: number;
   layers: SceneLayer;
 }
+}
 export interface SceneLayer {
   id: string;
   name: string;
   type: 'foreground' | 'midground' | 'background';
   opacity: number;
   elements: string;
+}
+}
 }
 export interface HistoricalAccuracyMetrics {
   overall: number;
@@ -98,12 +110,16 @@ export interface HistoricalAccuracyMetrics {
   expertValidated: boolean;
   violations: AccuracyViolation;
 }
+}
+}
 export interface AccuracyViolation {
   type: 'anachronism' | 'cultural' | 'architectural' | 'technological';
   severity: 'low' | 'medium' | 'high' | 'critical';
   description: string;
   element: string;
   suggestion: string;
+}
+}
 }
 export interface VFXPipelineVisualizerProps {
   scene?: VFXScene;
@@ -112,6 +128,7 @@ export interface VFXPipelineVisualizerProps {
   showControls?: boolean;
   onSceneUpdate?: (scene: VFXScene) => void;
   className?: string;
+}
 }
 export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
   scene,
@@ -191,7 +208,7 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
                     0,
                     Math.floor(index / 5) * 80 - 100
                   );
-                  const color = asset.accuracy > 90 ? '#10b981' :;
+                  const color = asset.accuracy > 90 ? '#10b981' :
                     asset.accuracy > 70 ? '#f59e0b' : '#ef4444';
                   return;
                     <g key={asset.id} transform={`translate(${pos.x}, ${pos.y})`}>}
@@ -241,7 +258,7 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
                     character.position.y || 0,
                     character.position.z || (index * 30 - 60)
                   );
-                  const color = character.type === 'hero' ? '#3b82f6' :;
+                  const color = character.type === 'hero' ? '#3b82f6' :
                     character.type === 'crowd' ? '#8b5cf6' : '#6b7280';
                   return;
                     <g key={character.id} transform={`translate(${pos.x}, ${pos.y})`}>}
@@ -613,7 +630,7 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
               <div className="space-y-2">
                 {Object.entries(crowdStats.types).map(([type, count]) => {
                   const percentage = (count / crowdStats.total) * 100;
-                  const color = type === 'hero' ? 'bg-blue-500' :;
+                  const color = type === 'hero' ? 'bg-blue-500' :
                     type === 'crowd' ? 'bg-purple-500' : 'bg-gray-500';
                   return;
                     <div key={type} className="flex items-center gap-3">

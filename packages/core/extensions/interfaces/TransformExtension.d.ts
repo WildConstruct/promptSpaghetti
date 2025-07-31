@@ -5,6 +5,7 @@
 import { z } from 'zod';
 import { BaseExtension, ExtensionContext, ExtensionValidationResult } from './ExtensionInterfaces';
 
+}
 export interface TransformExtension extends BaseExtension {
     readonly extensionType: 'transform';
     getTransformDefinitions(): TransformDefinition[];
@@ -17,6 +18,7 @@ export interface TransformExtension extends BaseExtension {
     supportsPipeline(): boolean;
     createPipeline?(transforms: DataTransform[]): TransformPipeline;
 
+}
 export interface DataTransform {
     readonly id: string;
     readonly name: string;
@@ -44,6 +46,7 @@ export declare enum TransformType {
     DATE = "date",
     CUSTOM = "custom"
 
+}
 export interface TransformDefinition {
     id: string;
     name: string;
@@ -59,6 +62,7 @@ export interface TransformDefinition {
     pipeline: TransformPipelineConfiguration;
     metadata: TransformMetadata;
 
+}
 export interface TransformUIConfiguration {
     icon?: string;
     color?: string;
@@ -67,6 +71,7 @@ export interface TransformUIConfiguration {
     preview?: TransformPreviewConfiguration;
     help?: TransformHelpConfiguration;
 
+}
 export interface TransformEditorConfiguration {
     component?: React.ComponentType<TransformEditorProps>;
     autoGenerateForm?: boolean;
@@ -74,6 +79,7 @@ export interface TransformEditorConfiguration {
     fields?: Record<string, TransformFieldConfiguration>;
     validation?: TransformEditorValidation;
 
+}
 export interface TransformEditorProps {
     transform: DataTransform;
     config: any;
@@ -81,6 +87,7 @@ export interface TransformEditorProps {
     onTest?: (input: any) => void;
     context: ExtensionContext;
 
+}
 export interface TransformFieldConfiguration {
     type: 'text' | 'textarea' | 'number' | 'boolean' | 'select' | 'json' | 'code' | 'custom';
     label?: string;
@@ -90,6 +97,7 @@ export interface TransformFieldConfiguration {
     options?: Array<{
         value: any;
         label: string;
+}
     }>;
     component?: React.ComponentType<any>;
     multiline?: boolean;
@@ -100,18 +108,21 @@ export interface TransformFieldConfiguration {
     max?: number;
     step?: number;
 
+}
 export interface TransformEditorValidation {
     validateOnChange?: boolean;
     validateOnBlur?: boolean;
     showErrors?: boolean;
     customValidation?: (config: any) => ExtensionValidationResult;
 
+}
 export interface TransformPreviewConfiguration {
     component?: React.ComponentType<TransformPreviewProps>;
     autoPreview?: boolean;
     sampleInput?: any;
     mode?: 'input-output' | 'side-by-side' | 'overlay';
 
+}
 export interface TransformPreviewProps {
     transform: DataTransform;
     input: any;
@@ -119,6 +130,7 @@ export interface TransformPreviewProps {
     error?: Error;
     context: ExtensionContext;
 
+}
 export interface TransformHelpConfiguration {
     documentation?: string;
     examples?: TransformExample[];
@@ -128,8 +140,10 @@ export interface TransformHelpConfiguration {
         title: string;
         url: string;
         type: 'documentation' | 'example' | 'tutorial' | 'reference'
+}
   }>;
 
+}
 export interface TransformRuntimeConfiguration {
     timeout?: number;
     retries?: number;
@@ -138,6 +152,7 @@ export interface TransformRuntimeConfiguration {
     caching?: TransformCachingConfiguration;
     streaming?: TransformStreamingConfiguration;
 
+}
 export interface TransformPerformanceConfiguration {
     maxMemoryUsage?: number;
     maxExecutionTime?: number;
@@ -148,8 +163,10 @@ export interface TransformPerformanceConfiguration {
         cpuIntensive?: boolean;
         ioIntensive?: boolean;
         memoryIntensive?: boolean;
+}
     };
 
+}
 export interface TransformSecurityConfiguration {
     sandboxed?: boolean;
     permissions?: string[];
@@ -157,6 +174,7 @@ export interface TransformSecurityConfiguration {
         sanitize?: boolean;
         allowedTypes?: string[];
         maxSize?: number;
+}
     };
     outputValidation?: {
         sanitize?: boolean;
@@ -164,6 +182,7 @@ export interface TransformSecurityConfiguration {
         maxSize?: number;
     };
 
+}
 export interface TransformCachingConfiguration {
     enabled?: boolean;
     strategy?: 'memory' | 'disk' | 'distributed';
@@ -172,6 +191,7 @@ export interface TransformCachingConfiguration {
     keyGenerator?: (input: any, config: any) => string;
     invalidationRules?: string[];
 
+}
 export interface TransformStreamingConfiguration {
     enabled?: boolean;
     chunkSize?: number;
@@ -180,6 +200,7 @@ export interface TransformStreamingConfiguration {
     streamProcessor?: (chunk: any) => any;
     chunkCombiner?: (chunks: any[]) => any;
 
+}
 export interface TransformPipelineConfiguration {
     supportsComposition?: boolean;
     compositionType?: 'sequential' | 'parallel' | 'conditional';
@@ -189,8 +210,10 @@ export interface TransformPipelineConfiguration {
         fuseable?: boolean;
         parallelizable?: boolean;
         cacheable?: boolean;
+}
     };
 
+}
 export interface TransformMetadata {
     author: string;
     license: string;
@@ -201,6 +224,7 @@ export interface TransformMetadata {
         complexity: 'O(1)' | 'O(n)' | 'O(n^2)' | 'O(log n)' | 'custom';
         memoryUsage: 'constant' | 'linear' | 'quadratic' | 'custom';
         scalability: 'excellent' | 'good' | 'moderate' | 'limited'
+}
   };
     compatibility?: {
         minVersion: string;
@@ -212,6 +236,7 @@ export interface TransformMetadata {
     tags?: string[];
     keywords?: string[];
 
+}
 export interface TransformExample {
     name: string;
     description: string;
@@ -221,6 +246,7 @@ export interface TransformExample {
     explanation?: string;
     difficulty?: 'beginner' | 'intermediate' | 'advanced';
 
+}
 export interface TransformContext {
     transformId: string;
     executionId: string;
@@ -230,6 +256,7 @@ export interface TransformContext {
         startTime: number;
         endTime?: number;
         memoryUsage?: number;
+}
     };
     metadata: {
         inputSize?: number;
@@ -248,6 +275,7 @@ export interface TransformContext {
         hit?: boolean;
     };
 
+}
 export interface TransformPipeline {
     readonly id: string;
     readonly name: string;
@@ -260,6 +288,7 @@ export interface TransformPipeline {
     moveTransform(transformId: string, newPosition: number): void;
     getMetadata(): PipelineMetadata;
 
+}
 export interface PipelineMetadata {
     transformCount: number;
     estimatedExecutionTime: number;
@@ -268,6 +297,7 @@ export interface PipelineMetadata {
     outputType: string;
     compatibility: string[];
 
+}
 export interface TransformRegistry {
     register(definition: TransformDefinition): void;
     unregister(transformId: string): void;
@@ -282,6 +312,7 @@ export interface TransformRegistry {
     on(event: 'registered' | 'unregistered' | 'updated', listener: (definition: TransformDefinition) => void): void;
     off(event: 'registered' | 'unregistered' | 'updated', listener: (definition: TransformDefinition) => void): void;
 
+}
 export interface TransformFactory {
     create(transformId: string, config: any): DataTransform;
     createPipeline(transforms: DataTransform[]): TransformPipeline;
@@ -294,6 +325,7 @@ export interface TransformFactory {
     supportsType(type: TransformType): boolean;
     supportsPipeline(): boolean;
 
+}
 export interface TransformExecutionMonitor {
     onExecutionStart(transform: DataTransform, input: any, context: TransformContext): void;
     onExecutionEnd(transform: DataTransform, output: any, context: TransformContext): void;
@@ -302,6 +334,7 @@ export interface TransformExecutionMonitor {
     getAllMetrics(): Map<string, TransformExecutionMetrics>;
     on(event: 'execution' | 'error' | 'performance', listener: (data: any) => void): void;
 
+}
 export interface TransformExecutionMetrics {
     transformId: string;
     totalExecutions: number;
@@ -322,3 +355,4 @@ export declare namespace TransformExtensionHelpers {
     function createTransformRegistry(): TransformRegistry;
 
 //# sourceMappingURL=TransformExtension.d.ts.map
+}

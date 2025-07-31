@@ -13,23 +13,29 @@ import {
 
 // Request type definitions
 }
+}
 interface CreateScheduleRequestBody {
   Body: CreateScheduleRequest;
 }
 }
+}
 
+}
 }
 interface UpdateScheduleRequestBody {
   Body: UpdateScheduleRequest;
 }
+}
   Params: { id: string };
 }
 
+}
 }
 interface GetScheduleRequest {
   Params: { id: string };
 }
 
+}
 }
 interface QuerySchedulesRequest {
   Querystring: {
@@ -45,14 +51,17 @@ interface QuerySchedulesRequest {
     sortBy?: 'startTime' | 'createdAt' | 'priority' | 'status';
     sortOrder?: 'asc' | 'desc';
 }
+}
   };
 }
 
+}
 }
 interface DeleteScheduleRequest {
   Params: { id: string };
 }
 
+}
 }
 interface GetExecutionsRequest {
   Params: { scheduleId: string };
@@ -60,15 +69,18 @@ interface GetExecutionsRequest {
 }
 
 }
+}
 interface BulkActionRequest {
   Body: {
     scheduleIds: string[];
     action: 'cancel' | 'pause' | 'resume' | 'delete';
     reason?: string;
 }
+}
   };
 }
 
+}
 }
 interface ManualExecuteRequest {
   Params: { id: string };

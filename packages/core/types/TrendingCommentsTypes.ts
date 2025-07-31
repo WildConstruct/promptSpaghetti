@@ -304,6 +304,7 @@ export const validateCommentScore = (data: unknown): CommentScore => {
 
 // Helper types
 
+}
 export interface TrendingSystemConfig {
   enabledAlgorithms: string;
   defaultAlgorithm: string;
@@ -311,6 +312,7 @@ export interface TrendingSystemConfig {
   trendingCacheTTL: number; // minutes,
   scoreCacheTTL: number; // minutes,
   analyticsCacheTTL: number; // minutes,
+}
 };
   moderationSettings: {
   autoModerationEnabled: boolean;

@@ -13,6 +13,7 @@ import {
 } from '../../services/Epic16LearningPathService';
 import { LearningPathDashboard } from './LearningPathDashboard';
 import { LearningPathViewer } from './LearningPathViewer';
+}
 interface Epic16LearningPathsProps {
   userId: string;
   userRole: 'user' | 'creator' | 'admin';
@@ -25,6 +26,7 @@ interface Epic16LearningPathsProps {
   userTier,
   onAnalytics,
   onCertification
+}
 }) => {
   // Service initialization
   const learningService = useMemo(() => new Epic16LearningPathService(), []);

@@ -25,6 +25,7 @@ export enum ReplayEventType {
  * Replay event data structure
  */
 }
+}
 export interface ReplayEvent {
   id: string;
   sessionId: string;
@@ -35,6 +36,7 @@ export interface ReplayEvent {
   viewport: {
     width: number;
     height: number;
+}
 }
   };
 }
@@ -56,6 +58,7 @@ export type ReplayEventData =
   | NavigationData;
 
 }
+}
 export interface MouseMoveData {
   x: number;
   y: number;
@@ -63,7 +66,9 @@ export interface MouseMoveData {
   elementType?: string;
 }
 }
+}
 
+}
 }
 export interface MouseClickData {
   x: number;
@@ -74,7 +79,9 @@ export interface MouseClickData {
   elementText?: string;
 }
 }
+}
 
+}
 }
 export interface KeyPressData {
   key: string;
@@ -84,7 +91,9 @@ export interface KeyPressData {
   isInputField: boolean;
 }
 }
+}
 
+}
 }
 export interface ScrollData {
   scrollX: number;
@@ -92,21 +101,27 @@ export interface ScrollData {
   elementId?: string;
 }
 }
+}
 
+}
 }
 export interface ResizeData {
   width: number;
   height: number;
 }
 }
+}
 
+}
 }
 export interface FocusData {
   elementId?: string;
   elementType?: string;
 }
 }
+}
 
+}
 }
 export interface DOMData {
   mutationType: 'childList' | 'attributes' | 'characterData';
@@ -117,7 +132,9 @@ export interface DOMData {
   attributeValue?: string;
 }
 }
+}
 
+}
 }
 export interface NetworkData {
   url: string;
@@ -128,7 +145,9 @@ export interface NetworkData {
   responseSize?: number;
 }
 }
+}
 
+}
 }
 export interface ConsoleData {
   level: 'log' | 'warn' | 'error' | 'info';
@@ -136,7 +155,9 @@ export interface ConsoleData {
   args?: unknown[];
 }
 }
+}
 
+}
 }
 export interface ErrorData {
   message: string;
@@ -146,7 +167,9 @@ export interface ErrorData {
   colno?: number;
 }
 }
+}
 
+}
 }
 export interface NavigationData {
   from: string;
@@ -154,10 +177,12 @@ export interface NavigationData {
   type: 'navigate' | 'reload' | 'back' | 'forward';
 }
 }
+}
 
 /**
  * Session replay recording
  */
+}
 }
 export interface SessionReplay {
   id: string;
@@ -173,6 +198,7 @@ export interface SessionReplay {
     screenResolution: string;
     timezone: string;
     language: string;
+}
 }
   };
   summary: {
@@ -194,6 +220,7 @@ export interface SessionReplay {
  * Session replay configuration
  */
 }
+}
 export interface ReplayConfig {
   enabled: boolean;
   maxRecordingDuration: number; // milliseconds
@@ -206,6 +233,7 @@ export interface ReplayConfig {
   maskSensitiveData: boolean;
   excludeElements: string[]; // CSS selectors
   minSessionDuration: number; // minimum duration to save
+}
 }
 }
 

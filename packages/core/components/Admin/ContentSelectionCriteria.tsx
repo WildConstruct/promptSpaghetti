@@ -37,6 +37,7 @@ import {
 
 // Types based on existing PromotionSchedulingService
 
+}
 export interface ContentCriteria {
   // Quality filters
   min_rating?: number;
@@ -66,10 +67,14 @@ export interface ContentCriteria {
   max_content_count?: number;
   diversification_rules?: DiversificationRule;
 }
+}
+}
 export interface DiversificationRule {
   attribute: string;
   max_percentage: number;
   enforce_uniqueness: boolean;
+}
+}
 }
 export interface SelectionCriteriaTemplate {
   id: string;
@@ -83,9 +88,11 @@ export interface SelectionCriteriaTemplate {
   created_at: Date;
   last_used?: Date;
 }
+}
+}
 export interface ContentSelectionPreview {
   total_matches: number;
-  sample_content: Array<{,
+  sample_content: Array<{
   id: string;
   title: string;
   creator: string;
@@ -93,6 +100,7 @@ export interface ContentSelectionPreview {
   downloads: number;
   category: string;
   match_reasons: string;
+}
 }>;
   category_distribution: Record<string, number>;
   creator_distribution: Record<string, number>;
@@ -107,8 +115,10 @@ export interface ContentSelectionPreview {
   confidence_level: number;
 };
 }
+}
 export interface ContentSelectionCriteriaProps {
   className?: string;
+}
 }
 export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> = ({)
   className = ''

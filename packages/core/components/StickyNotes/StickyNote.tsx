@@ -11,6 +11,7 @@
  */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { StickyNote as StickyNoteType, StickyNoteColor, StickyNoteCategory } from '../../types/StickyNotes';
+}
 interface StickyNoteProps {
   note: StickyNoteType;
   selected: boolean;
@@ -21,6 +22,7 @@ interface StickyNoteProps {
   onStartEdit: () => void;
   onStopEdit: () => void;
   onDelete: () => void;
+}
   onMove: (position: { x: number; y: number }) => void;
   onResize: (size: { width: number; height: number }) => void;
   onBringToFront: () => void;

@@ -13,6 +13,7 @@ export enum DataClassificationLevel {
   TOP_SECRET = 'TOP_SECRET'
 }
 
+}
 export interface DataClassification {
   id: string;
   dataElement: string;
@@ -25,11 +26,15 @@ export interface DataClassification {
   approvals: ClassificationApproval;
   metadata: ClassificationMetadata;
 }
+}
+}
 export interface ClassificationApproval {
   approver: string;
   role: string;
   approvalDate: Date;
   comments?: string;
+}
+}
 }
 export interface ClassificationMetadata {
   regulatoryRequirements?: string;
@@ -38,12 +43,16 @@ export interface ClassificationMetadata {
   dataLineage?: string;
   relatedClassifications?: string;
 }
+}
+}
 export interface ClassificationContext {
   dataType: string;
   businessContext: string;
   regulatoryScope: string;
   riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   dataOwner: string;
+}
+}
 }
 export interface ValidationResult {
   valid: boolean;
@@ -54,12 +63,16 @@ export interface ValidationResult {
   * Handling Requirements by Classification Level
   */
 }
+}
+}
 export interface HandlingRequirements {
   storage: StorageRequirements;
   transmission: TransmissionRequirements;
   processing: ProcessingRequirements;
   access: AccessRequirements;
   monitoring: MonitoringRequirements;
+}
+}
 }
 export interface StorageRequirements {
   encryptionRequired: boolean;
@@ -70,7 +83,9 @@ export interface StorageRequirements {
   retentionDays: number;
   approvedLocations: string;
   redundancyLevel: 'NONE' | 'STANDARD' | 'HIGH' | 'CRITICAL'
+}
   }
+}
 export interface TransmissionRequirements {
   tlsVersion: string;
   certificatePinning: boolean;
@@ -78,6 +93,8 @@ export interface TransmissionRequirements {
   loggingLevel: 'STANDARD' | 'ENHANCED' | 'COMPREHENSIVE';
   compressionAllowed: boolean;
   endToEndEncryption: boolean;
+}
+}
 }
 export interface ProcessingRequirements {
   approvedEnvironments: string;
@@ -87,12 +104,16 @@ export interface ProcessingRequirements {
   isolationRequired: boolean;
   auditTrailRequired: boolean;
 }
+}
+}
 export interface CachingRestrictions {
   allowed: boolean;
   encryptionRequired: boolean;
   maxTtlSeconds: number;
   purgeOnAccess: boolean;
   secureEviction: boolean;
+}
+}
 }
 export interface AccessRequirements {
   authenticationLevel: 'STANDARD' | 'MFA' | 'STRONG_MFA' | 'BIOMETRIC';
@@ -102,6 +123,8 @@ export interface AccessRequirements {
   purposeLimitation: boolean;
   auditLogging: 'STANDARD' | 'ENHANCED' | 'REALTIME';
   exportRestrictions: boolean;
+}
+}
 }
 export interface MonitoringRequirements {
   alertingEnabled: boolean;
@@ -114,6 +137,8 @@ export interface MonitoringRequirements {
   * Encryption Requirements by Classification
   */
 }
+}
+}
 export interface EncryptionRequirements {
   required: boolean;
   algorithm?: string;
@@ -125,6 +150,8 @@ export interface EncryptionRequirements {
   * Classification Rules Engine
   */
 }
+}
+}
 export interface ClassificationRule {
   id: string;
   name: string;
@@ -134,6 +161,8 @@ export interface ClassificationRule {
   confidence: number;
   priority: number;
 }
+}
+}
 export interface ClassificationCondition {
   type: 'FIELD_NAME' | 'CONTENT_PATTERN' | 'CONTEXT' | 'REGULATORY' | 'BUSINESS_RULE';
   pattern: string;
@@ -142,6 +171,8 @@ export interface ClassificationCondition {
   /**
   * Audit and Compliance Types
   */
+}
+}
 }
 export interface ClassificationAuditEvent {
   id: string;
@@ -156,6 +187,8 @@ export interface ClassificationAuditEvent {
   ipAddress?: string;
   userAgent?: string;
 }
+}
+}
 export interface ComplianceReport {
   period: DateRange;
   summary: ComplianceSummary;
@@ -164,9 +197,13 @@ export interface ComplianceReport {
   recommendations: string;
   trends: ComplianceTrend;
 }
+}
+}
 export interface DateRange {
   start: Date;
   end: Date;
+}
+}
 }
 export interface ComplianceSummary {
   totalDataElements: number;
@@ -174,12 +211,16 @@ export interface ComplianceSummary {
   complianceScore: number;
   riskScore: number;
 }
+}
+}
 export interface ClassificationCompliance {
   classification: DataClassificationLevel;
   elementCount: number;
   compliantCount: number;
   violationCount: number;
   compliancePercentage: number;
+}
+}
 }
 export interface ComplianceViolation {
   id: string;
@@ -191,7 +232,9 @@ export interface ComplianceViolation {
   description: string;
   remediation: string;
   status: 'OPEN' | 'INVESTIGATING' | 'REMEDIATED' | 'ACCEPTED_RISK'
+}
   }
+}
 export interface ComplianceTrend {
   metric: string;
   period: string;
@@ -201,6 +244,8 @@ export interface ComplianceTrend {
   /**
   * Data Operation Context
   */
+}
+}
 }
 export interface OperationContext {
   operation: 'read' | 'write' | 'update' | 'delete' | 'export' | 'share';
@@ -222,6 +267,8 @@ export interface OperationContext {
   * Classification Service Interface
   */
 }
+}
+}
 export interface ClassificationService {
   classifyData(data: unknown, context: ClassificationContext): Promise<DataClassification>;
   validateClassification(classification: DataClassification): Promise<ValidationResult>;
@@ -233,6 +280,8 @@ export interface ClassificationService {
   * Classification Constants and Decision Matrix
   */
 }
+}
+}
 export interface ClassificationCriteria {
   legalRegulatory: 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH';
   businessImpact: 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH';
@@ -241,6 +290,7 @@ export interface ClassificationCriteria {
   /**
   * Utility Types
   */
+}
 }
 export type ClassificationEvent = 'ASSIGNED' | 'CHANGED' | 'REVIEWED' | 'EXPIRED' | 'VIOLATED';
 export type ComplianceStatus = 'COMPLIANT' | 'NON_COMPLIANT' | 'UNDER_REVIEW' | 'EXCEPTION_GRANTED';

@@ -6,6 +6,7 @@
  */
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
 
+}
 export interface OpenAIConfig {
     apiKey: string;
     baseURL?: string;
@@ -13,6 +14,7 @@ export interface OpenAIConfig {
     timeout?: number;
     maxRetries?: number;
 
+}
 export interface OpenAIRequestOptions {
     model?: string;
     temperature?: number;
@@ -25,10 +27,12 @@ export interface OpenAIRequestOptions {
     seed?: number;
     response_format?: {
         type: 'text' | 'json_object'
+}
   };
     tools?: unknown[];
     tool_choice?: string | object;
 
+}
 export interface ChatMessage {
     role: 'system' | 'user' | 'assistant' | 'tool';
     content: string;
@@ -36,16 +40,18 @@ export interface ChatMessage {
     tool_calls?: unknown[];
     tool_call_id?: string;
 
+}
 export interface OpenAIResponse {
     id: string;
     object: string;
     created: number;
     model: string;
-    choices: Array<{,
+    choices: Array<{
         index: number;
         message?: ChatMessage;
         text?: string;
         finish_reason: string;
+}
     }>;
     usage: {
         prompt_tokens: number;

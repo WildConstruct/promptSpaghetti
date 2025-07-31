@@ -22,6 +22,7 @@ import { AnalyticsCollector } from '../analytics/AnalyticsCollector';
 // =============================================================================
 
 }
+}
 export interface SecurityScanConfig {
   enabledScanTypes: {
     dependency: boolean;
@@ -29,6 +30,7 @@ export interface SecurityScanConfig {
     dynamic: boolean;
     infrastructure: boolean;
     compliance: boolean;
+}
 }
   };
   scanSchedule: {
@@ -67,6 +69,7 @@ export interface SecurityScanConfig {
 }
 
 }
+}
 export interface SecurityVulnerability {
   id: string;
   type: 'dependency' | 'code' | 'infrastructure' | 'configuration';
@@ -91,7 +94,9 @@ export interface SecurityVulnerability {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface SecurityScanResult {
   scanId: string;
@@ -110,6 +115,7 @@ export interface SecurityScanResult {
     fixedVulnerabilities: number;
     riskScore: number; // 0-100
 }
+}
   };
   vulnerabilities: SecurityVulnerability[];
   metrics: {
@@ -125,6 +131,7 @@ export interface SecurityScanResult {
 }
 
 }
+}
 export interface SecurityRecommendation {
   id: string;
   category: 'dependency' | 'code' | 'infrastructure' | 'process';
@@ -139,12 +146,14 @@ export interface SecurityRecommendation {
     automated: boolean;
     commands?: string[];
 }
+}
   }>;
   relatedVulnerabilities: string[];
   createdAt: Date;
   status: 'open' | 'in_progress' | 'completed' | 'dismissed';
 }
 
+}
 }
 export interface ComplianceResult {
   framework: 'OWASP' | 'PCI-DSS' | 'SOC2' | 'GDPR' | 'HIPAA' | 'ISO27001';
@@ -158,7 +167,9 @@ export interface ComplianceResult {
   lastAssessed: Date;
 }
 }
+}
 
+}
 }
 export interface SecurityMetrics {
   timestamp: Date;
@@ -171,6 +182,7 @@ export interface SecurityMetrics {
     outdated: number;
     vulnerable: number;
     riskScore: number;
+}
 }
   };
   codeSecurityScore: number;

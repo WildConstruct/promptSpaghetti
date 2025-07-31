@@ -5,6 +5,7 @@
  */
 import { HistoricalEra, Genre, Style } from '../historical/NodeMetadataManager';
 
+}
 export interface UTDGNode {
     id: string;
     type: 'concept' | 'entity' | 'relationship' | 'attribute' | 'constraint';
@@ -19,9 +20,11 @@ export interface UTDGNode {
         confidence: number;
         sources: string[];
         lastUpdated: Date;
+}
     };
     relationships: UTDGRelationship[];
 
+}
 export interface UTDGRelationship {
     id: string;
     sourceNodeId: string;
@@ -34,8 +37,10 @@ export interface UTDGRelationship {
         before?: Date;
         after?: Date;
         duration?: number;
+}
     };
 
+}
 export interface UTDGQuery {
     nodeTypes?: string[];
     relationshipTypes?: string[];
@@ -49,6 +54,7 @@ export interface UTDGQuery {
     spatialConstraints?: {
         regions?: string[];
         excludeRegions?: string[];
+}
     };
     temporalConstraints?: {
         startYear?: number;
@@ -61,12 +67,14 @@ export interface UTDGQuery {
         genders?: string[];
     };
 
+}
 export interface UTDGContext {
     historical: {
         era: HistoricalEra;
         year?: number;
         region?: string;
         culturalContext?: string;
+}
     };
     creative: {
         genre: Genre;
@@ -80,6 +88,7 @@ export interface UTDGContext {
         validation: boolean;
     };
 
+}
 export interface UTDGContentSuggestion {
     type: 'character' | 'setting' | 'object' | 'event' | 'concept';
     content: any;
@@ -90,6 +99,7 @@ export interface UTDGContentSuggestion {
         score: number;
         violations: string[];
         suggestions: string[];
+}
     };
 
 export declare class UTDGFoundation {

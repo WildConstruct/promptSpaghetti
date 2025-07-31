@@ -4,6 +4,7 @@
  */
 import React from 'react';
 
+}
 interface CommentFormProps {
     onSubmit: (content: string) => Promise<void>;
     onCancel: () => void;
@@ -17,3 +18,4 @@ interface CommentFormProps {
 export declare const CommentForm: React.FC<CommentFormProps>;
 export default CommentForm;
 //# sourceMappingURL=CommentForm.d.ts.map
+}

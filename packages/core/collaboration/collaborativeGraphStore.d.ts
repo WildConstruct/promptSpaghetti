@@ -5,6 +5,7 @@
 import { Graph, Node, Edge } from '../graphSchema';
 import { GraphCRDTAdapter, CollaborativeGraphOptions } from './GraphCRDTAdapter';
 
+}
 export interface UserPresence {
     userId: string;
     name: string;
@@ -14,11 +15,13 @@ export interface UserPresence {
         position?: {
             x: number;
             y: number;
+}
         };
     };
     selection?: string[];
     lastSeen: number;
 
+}
 export interface CollaborativeGraphState {
     graph: Graph;
     isCollaborative: boolean;
@@ -37,6 +40,7 @@ export interface CollaborativeGraphState {
     addNode: (node: Node, position?: {)
         x: number;
         y: number;
+}
     }) => void;
     updateNode: (nodeId: string, updates: Partial<Node>) => void;
     deleteNode: (nodeId: string) => void;

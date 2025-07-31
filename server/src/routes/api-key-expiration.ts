@@ -16,6 +16,7 @@ import {
 
 // Request/Response Types
 }
+}
 interface RegisterKeyRequest {
   keyId: string;
   userId: string;
@@ -33,7 +34,9 @@ interface RegisterKeyRequest {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 interface RecordUsageRequest {
   endpoint: string;
@@ -46,7 +49,9 @@ interface RecordUsageRequest {
   userAgent?: string;
 }
 }
+}
 
+}
 }
 interface RenewKeyRequest {
   renewalDuration: number;
@@ -54,13 +59,17 @@ interface RenewKeyRequest {
   autoApprove?: boolean;
 }
 }
+}
 
+}
 }
 interface RevokeKeyRequest {
   reason: string;
 }
 }
+}
 
+}
 }
 interface ExpirationReportQuery {
   startDate: string;
@@ -71,7 +80,9 @@ interface ExpirationReportQuery {
   userIds?: string;
 }
 }
+}
 
+}
 }
 interface GetKeysQuery {
   status?: APIKeyStatus;
@@ -80,6 +91,7 @@ interface GetKeysQuery {
   expiringWithinDays?: number;
   page?: number;
   limit?: number;
+}
 }
 }
 

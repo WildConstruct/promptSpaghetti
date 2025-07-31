@@ -14,6 +14,7 @@ import {
 } from '../../types/consent';
 import { useConsent } from '../../hooks/useConsent';
 import './ConsentPreferencesModal.css';
+}
 interface ConsentPreferencesModalProps {
   isOpen: boolean;,
   onClose: () => void;
@@ -26,6 +27,7 @@ interface ConsentPreferencesModalProps {
   onSave,
   preferences,
   config
+}
 }) => {
   const { hasConsent, grantConsent, withdrawConsent } = useConsent();
   const [localPreferences, setLocalPreferences] = useState<Record<ConsentType, boolean>>()

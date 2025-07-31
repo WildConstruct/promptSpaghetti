@@ -10,6 +10,7 @@ import { Database } from '../database/connection';
 import { RetryUtils, retryableDatabase } from '../utils/RetryUtils';
 
 }
+}
 export interface EmergencyKillSwitchConfig {
   id: string;
   name: string;
@@ -25,7 +26,9 @@ export interface EmergencyKillSwitchConfig {
   activationCount: number;
 }
 }
+}
 
+}
 }
 export interface KillSwitchActivation {
   id: string;
@@ -39,7 +42,9 @@ export interface KillSwitchActivation {
   autoRollbackAt?: Date;
 }
 }
+}
 
+}
 }
 export interface EmergencyKillSwitchMetrics {
   totalKillSwitches: number;
@@ -48,6 +53,7 @@ export interface EmergencyKillSwitchMetrics {
   avgActivationTime: number;
   togglesCurrentlyDisabled: number;
   lastActivation?: Date;
+}
 }
 }
 

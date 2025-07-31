@@ -8,6 +8,7 @@ export interface OpenAIAgentConfig {
     maxRetries: number;
     retryTemperatureReduction: number;
 
+}
 export interface GraphGenerationRequest {
     purpose: string;
     complexity: 'simple' | 'moderate' | 'complex';
@@ -18,6 +19,7 @@ export interface GraphGenerationRequest {
     style?: 'creative' | 'logical' | 'balanced';
     domain?: string;
 
+}
 export interface GenerationResult {
     success: boolean;
     graph?: string;
@@ -29,6 +31,7 @@ export interface GenerationResult {
         temperature: number;
         tokenCount: number;
         generationTime: number;
+}
     };
 
 export declare class OpenAIGraphAgent {

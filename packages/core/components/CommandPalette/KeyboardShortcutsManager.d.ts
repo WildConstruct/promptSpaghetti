@@ -6,6 +6,7 @@
  */
 import React from 'react';
 
+}
 export interface KeyboardShortcut {
     id: string;
     key: string;
@@ -17,6 +18,7 @@ export interface KeyboardShortcut {
     global?: boolean;
 
 
+}
 export interface KeyboardShortcutsManagerProps {
     onCommandPalette: () => void;
     onUndo: () => void;
@@ -39,3 +41,4 @@ export interface KeyboardShortcutsManagerProps {
 export declare const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps>;
 export default KeyboardShortcutsManager;
 //# sourceMappingURL=KeyboardShortcutsManager.d.ts.map
+}

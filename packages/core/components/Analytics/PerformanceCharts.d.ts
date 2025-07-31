@@ -4,11 +4,13 @@ import { AnalyticsClient } from '../../analytics/AnalyticsClient';
  * Performance charts props
  */
 
+}
 export interface PerformanceChartsProps {
     analyticsClient: AnalyticsClient;
     timeRange: {
         startTime: number;
         endTime: number;
+}
     };
     userId?: number;
     organizationId?: number;

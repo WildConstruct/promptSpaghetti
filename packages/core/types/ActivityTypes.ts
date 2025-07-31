@@ -22,6 +22,7 @@ export type ActivityEventType =
   | 'collaboration_started'
   | 'collaboration_ended';
 
+}
 export interface ActivityEvent {
   id: string;
   workspace_id?: string;
@@ -39,15 +40,18 @@ export interface ActivityEvent {
   old_value?: any;
   new_value?: any;
   [key: string]: any;
+}
 };
   resource_url?: string;
   aggregation_key?: string;
   created_at: string;
 }
+}
 export interface ActivityStats {
   total: number;
   by_type: Record<ActivityEventType, number>;
 
+}
   by_actor: Record<string, { name: string; count: number }>;
   recent_activity: {
   today: number;
@@ -59,12 +63,15 @@ export interface ActivityStats {
     hourly: Array<{ hour: number; count: number }>;
   };
 }
+}
 export interface ActivityActor {
   id: string;
   name: string;
   avatar_url?: string;
   activity_count: number;
   last_activity: string;
+}
+}
 }
 export interface ActivityFilter {
   search?: string;
@@ -75,6 +82,8 @@ export interface ActivityFilter {
   project_id?: string;
   resource_id?: string;
 }
+}
+}
 export interface ActivityListResponse {
   activities: ActivityEvent;
   total: number;
@@ -82,6 +91,8 @@ export interface ActivityListResponse {
   next_cursor?: string;
   stats?: ActivityStats;
   actors?: ActivityActor;
+}
+}
 }
 export interface ActivityEventCreateRequest {
   workspace_id?: string;
@@ -96,17 +107,23 @@ export interface ActivityEventCreateRequest {
   aggregation_key?: string;
   // Real-time activity connection types
 }
+}
+}
 export interface ActivityRealTimeConnection {
   status: 'connected' | 'connecting' | 'disconnected' | 'error';
   lastConnected?: Date;
   reconnectAttempts: number;
   error?: string;
 }
+}
+}
 export interface ActivityRealTimeEvent {
   type: 'activity_created' | 'activity_updated' | 'activity_deleted';
   activity: ActivityEvent;
   timestamp: string;
   // Hook return types
+}
+}
 }
 export interface UseActivityFeedOptions {
   workspaceId?: string;
@@ -118,6 +135,8 @@ export interface UseActivityFeedOptions {
   actorFilter?: string;
   realTime?: boolean;
   limit?: number;
+}
+}
 }
 export interface UseActivityFeedReturn {
   activities: ActivityEvent;
@@ -131,4 +150,5 @@ export interface UseActivityFeedReturn {
   refreshActivities: () => Promise<void>;
   loadMore: () => Promise<void>;
   createActivity: (activity: ActivityEventCreateRequest) => Promise<void>;
+}
 }

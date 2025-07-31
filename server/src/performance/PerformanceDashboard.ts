@@ -6,6 +6,7 @@ import { WebSocketServer } from '../websocket/WebSocketServer';
  * Dashboard configuration
  */
 }
+}
 export interface DashboardConfig {
   refreshInterval: number; // milliseconds
   historyWindow: number;   // milliseconds
@@ -13,10 +14,12 @@ export interface DashboardConfig {
   autoRefresh: boolean;
 }
 }
+}
 
 /**
  * Real-time dashboard data
  */
+}
 }
 export interface DashboardData {
   timestamp: number;
@@ -25,6 +28,7 @@ export interface DashboardData {
     system: number;
     webSocket: number;
     collaboration: number;
+}
 }
   };
   metrics: {

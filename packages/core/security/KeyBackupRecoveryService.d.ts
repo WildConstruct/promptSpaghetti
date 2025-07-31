@@ -54,6 +54,7 @@ export declare enum RecoveryStatus {
     PARTIAL = "partial",
     VERIFICATION_FAILED = "verification_failed"
 
+}
 export interface BackupMetadata {
     id: string;
     type: BackupType;
@@ -84,6 +85,7 @@ export interface BackupMetadata {
     accessLog: BackupAccessEvent[];
 
 
+}
 export interface BackupVerificationResult {
     id: string;
     backupId: string;
@@ -102,6 +104,7 @@ export interface BackupVerificationResult {
     issues: BackupIssue[];
 
 
+}
 export interface BackupIssue {
     severity: 'low' | 'medium' | 'high' | 'critical';
     type: 'corruption' | 'missing_data' | 'encryption_error' | 'integrity_failure' | 'metadata_mismatch';
@@ -111,6 +114,7 @@ export interface BackupIssue {
     detectedAt: Date;
 
 
+}
 export interface RecoveryRequest {
     id: string;
     type: RecoveryType;
@@ -129,6 +133,7 @@ export interface RecoveryRequest {
     metadata: Record<string, any>;
 
 
+}
 export interface RecoveryApproval {
     approver: string;
     approvedAt: Date;
@@ -136,6 +141,7 @@ export interface RecoveryApproval {
     conditions?: string[];
 
 
+}
 export interface RecoveryResult {
     id: string;
     requestId: string;
@@ -151,6 +157,7 @@ export interface RecoveryResult {
     warnings: string[];
 
 
+}
 export interface BackupAccessEvent {
     id: string;
     timestamp: Date;
@@ -161,6 +168,7 @@ export interface BackupAccessEvent {
     details: Record<string, any>;
 
 
+}
 export interface BackupConfiguration {
     enableAutomaticBackup: boolean;
     fullBackupIntervalHours: number;
@@ -187,6 +195,7 @@ export interface BackupConfiguration {
     backupTimeoutMinutes: number;
 
 
+}
 export interface BackupStorageLocation {
     id: string;
     tier: BackupStorageTier;
@@ -198,11 +207,13 @@ export interface BackupStorageLocation {
         apiKey?: string;
         certificatePath?: string;
 
+}
     };
     maxSize: number;
     retentionDays: number;
     redundancy: number;
 
+}
 export interface BackupPackage {
     metadata: BackupMetadata;
     encryptedData: Buffer;
@@ -211,6 +222,7 @@ export interface BackupPackage {
     signature: string;
 
 
+}
 export interface KeyManifestEntry {
     keyId: string;
     keyType: KeyType;
@@ -224,6 +236,7 @@ export interface KeyManifestEntry {
     length: number;
 
 
+}
 export interface BackupStatistics {
     totalBackups: number;
     successfulBackups: number;
@@ -261,6 +274,7 @@ export declare class KeyBackupRecoveryService extends EventEmitter {
         specificKeys?: string[];
         tags?: Record<string, string>;
         emergency?: boolean;
+}
     }): Promise<BackupMetadata>;
     /**
      * Verify backup integrity

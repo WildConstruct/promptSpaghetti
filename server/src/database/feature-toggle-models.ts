@@ -28,6 +28,7 @@ export enum ToggleAuditAction {
 }
 
 }
+}
 export interface FeatureToggle {
   id: string;
   key: string;
@@ -47,7 +48,9 @@ export interface FeatureToggle {
   version: number;
 }
 }
+}
 
+}
 }
 export interface ToggleScope {
   id: string;
@@ -58,7 +61,9 @@ export interface ToggleScope {
   updatedAt: Date;
 }
 }
+}
 
+}
 }
 export interface ToggleAudit {
   id: string;
@@ -74,7 +79,9 @@ export interface ToggleAudit {
   createdAt: Date;
 }
 }
+}
 
+}
 }
 export interface ToggleEvaluationCache {
   id: string;
@@ -85,7 +92,9 @@ export interface ToggleEvaluationCache {
   createdAt: Date;
 }
 }
+}
 
+}
 }
 export interface ToggleDependency {
   id: string;
@@ -95,21 +104,27 @@ export interface ToggleDependency {
   createdAt: Date;
 }
 }
+}
 
 // Toggle value type definitions for type safety
+}
 }
 export interface BooleanToggleValue {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface PercentageRolloutValue {
   percentage: number;
   saltKey?: string;
 }
 }
+}
 
+}
 }
 export interface MultivariateValue {
   variants: Array<{
@@ -117,9 +132,11 @@ export interface MultivariateValue {
     value: Error;
     percentage: number;
 }
+}
   }>;
 }
 
+}
 }
 export interface ScheduledValue {
   enabled: boolean;
@@ -130,9 +147,11 @@ export interface ScheduledValue {
     type: 'daily' | 'weekly' | 'monthly';
     interval: number;
 }
+}
   };
 }
 
+}
 }
 export interface SegmentationValue {
   rules: Array<{
@@ -141,11 +160,13 @@ export interface SegmentationValue {
     value: Error;
     logicalOperator?: 'AND' | 'OR';
 }
+}
   }>;
   defaultValue: Error;
 }
 
 // Evaluation context for toggle resolution
+}
 }
 export interface ToggleEvaluationContext {
   userId?: string;
@@ -157,8 +178,10 @@ export interface ToggleEvaluationContext {
   experimentId?: string;
 }
 }
+}
 
 // Toggle evaluation result
+}
 }
 export interface ToggleEvaluationResult {
   enabled: boolean;
@@ -169,8 +192,10 @@ export interface ToggleEvaluationResult {
   metadata?: Record<string, any>;
 }
 }
+}
 
 // Feature toggle creation/update request
+}
 }
 export interface CreateToggleRequest {
   key: string;
@@ -184,7 +209,9 @@ export interface CreateToggleRequest {
   enabled?: boolean;
 }
 }
+}
 
+}
 }
 export interface UpdateToggleRequest extends Partial<CreateToggleRequest> {
   id: string;
@@ -193,14 +220,17 @@ export interface UpdateToggleRequest extends Partial<CreateToggleRequest> {
 
 // Toggle scope management
 }
+}
 export interface CreateToggleScopeRequest {
   toggleId: string;
   rule: Record<string, any>;
   priority?: number;
 }
 }
+}
 
 // Emergency override request
+}
 }
 export interface EmergencyOverrideRequest {
   toggleId: string;
@@ -209,8 +239,10 @@ export interface EmergencyOverrideRequest {
   ttlMinutes?: number;
 }
 }
+}
 
 // Toggle analytics and metrics
+}
 }
 export interface ToggleMetrics {
   toggleId: string;
@@ -223,8 +255,10 @@ export interface ToggleMetrics {
   cacheHitRate: number;
 }
 }
+}
 
 // Toggle health status
+}
 }
 export interface ToggleHealthStatus {
   toggleId: string;
@@ -235,8 +269,10 @@ export interface ToggleHealthStatus {
   errorRate: number;
 }
 }
+}
 
 // Dependency analysis result
+}
 }
 export interface DependencyAnalysis {
   toggleId: string;
@@ -244,6 +280,7 @@ export interface DependencyAnalysis {
     requires: string[];
     conflicts: string[];
     suggests: string[];
+}
 }
   };
   dependents: {
@@ -256,6 +293,7 @@ export interface DependencyAnalysis {
 
 // Feature toggle distribution snapshot
 }
+}
 export interface ToggleSnapshot {
   version: string;
   timestamp: Date;
@@ -266,11 +304,13 @@ export interface ToggleSnapshot {
     enabled: boolean;
     rules: Array<Record<string, any>>;
 }
+}
   }>;
   checksum: string;
 }
 
 // SDK configuration
+}
 }
 export interface ToggleSDKConfig {
   apiUrl: string;
@@ -280,6 +320,7 @@ export interface ToggleSDKConfig {
   fallbackValues: Record<string, any>;
   enableMetrics: boolean;
   enableCache: boolean;
+}
 }
 }
 

@@ -35,6 +35,7 @@ import { createHash } from 'crypto';
 /**
  * Enforcement configuration
  */
+}
 export interface ClassificationEnforcementConfig {
   /** Strict mode - blocks all non-compliant operations */
   strictMode: boolean;
@@ -55,12 +56,14 @@ export interface ClassificationEnforcementConfig {
     users?: string[];
     roles?: string[];
     conditions?: string[];
+}
   };
 }
 
 /**
  * Enforcement result
  */
+}
 export interface EnforcementResult {
   allowed: boolean;
   classification: DataClassificationLevel;
@@ -71,10 +74,12 @@ export interface EnforcementResult {
   auditId: string;
   recommendations?: string[];
 }
+}
 
 /**
  * Access decision
  */
+}
 export interface AccessDecision {
   granted: boolean;
   reason: string;
@@ -82,6 +87,7 @@ export interface AccessDecision {
   requiredAuthorization?: string[];
   conditions?: string[];
   expiresAt?: Date;
+}
 }
 
 /**
@@ -112,6 +118,7 @@ export class ClassificationEnforcer {
     operation: OperationContext,
     currentControls: string[] = []
   ): Promise<EnforcementResult> {
+
     const auditId = this.generateAuditId(operation);
     
     try {
@@ -244,6 +251,7 @@ export class ClassificationEnforcer {
     operation: string,
     context: Partial<OperationContext>
   ): Promise<AccessDecision> {
+
     // Build full operation context
     const fullContext: OperationContext = {
       operation: operation as any,
@@ -330,6 +338,7 @@ export class ClassificationEnforcer {
     classification: DataClassificationLevel,
     dataElement: any
   ): Promise<{ valid: boolean; issues: string[]; controls: string[] }> {
+
     const requirements = this.getEffectiveRequirements(classification);
     const issues: string[] = [];
     const requiredControls: string[] = [];
@@ -427,6 +436,7 @@ export class ClassificationEnforcer {
     operation: OperationContext,
     currentControls: string[]
   ): Promise<string[]> {
+
     const violations: string[] = [];
     
     // Check authentication level
@@ -462,6 +472,7 @@ export class ClassificationEnforcer {
     requirements: HandlingRequirements,
     currentControls: string[]
   ): Promise<string[]> {
+
     const violations: string[] = [];
     
     // Storage requirements for write operations
@@ -774,6 +785,7 @@ export class ClassificationEnforcer {
     violations: string[],
     riskScore: number
   ): Promise<void> {
+
     const event: ClassificationAuditEvent = {
       id: auditId,
       timestamp: new Date(),
@@ -810,6 +822,7 @@ export class ClassificationEnforcer {
     violations: string[],
     riskScore: number
   ): Promise<void> {
+
     if (riskScore > 80 || classification === 'RESTRICTED') {
       // High priority alert
       console.error('SECURITY ALERT: Classification policy violation', {

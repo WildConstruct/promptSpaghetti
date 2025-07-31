@@ -7,12 +7,15 @@
 import { BaseAIModel, AIRequest, AIResponse, AIModelStatus, HealthStatus, CostEstimate } from './BaseAIModel';
 import AIModelFactory, { ModelRegistration, FactoryConfig } from './AIModelFactory';
 
+}
 export interface CacheConfig {
   maxSize: number;
   ttl: number; // Time to live in milliseconds,
   evictionPolicy: 'lru' | 'lfu' | 'ttl' | 'hybrid';
   enablePersistence?: boolean;
   persistencePath?: string;
+}
+}
 }
 export interface LoadBalancingConfig {
   strategy: 'round-robin' | 'least-connections' | 'response-time' | 'cost-aware' | 'capability-based';
@@ -21,6 +24,8 @@ export interface LoadBalancingConfig {
   enableFailover: boolean;
   failoverThreshold: number;
 }
+}
+}
 export interface ModelPool {
   id: string;
   models: BaseAIModel;
@@ -28,6 +33,8 @@ export interface ModelPool {
   healthMonitor: HealthMonitor;
   currentLoad: number;
   lastUsed: Date;
+}
+}
 }
 export interface ModelPerformanceMetrics {
   modelId: string;
@@ -39,11 +46,14 @@ export interface ModelPerformanceMetrics {
   costPerRequest: number;
   lastUpdated: Date;
 }
+}
+}
 export interface WarmupStrategy {
   enabled: boolean;
   concurrency: number;
   sampleRequests: unknown;
   timeout: number;
+}
 }
 export class ModelCache {
   private cache: Map<string, { model: BaseAIModel; lastUsed: Date; accessCount: number }>;
@@ -344,6 +354,7 @@ export class ModelManager {
     this.loadBalancingConfig = loadBalancingConfig;
     this.warmupStrategy = warmupStrategy;
   async createModelPool(poolId: string, registrations: ModelRegistration): Promise<ModelPool> {
+
   const models: BaseAIModel = [];
   const loadBalancer = new LoadBalancer(this.loadBalancingConfig.strategy);
   const healthMonitor = new HealthMonitor(this.loadBalancingConfig.healthCheckInterval);
@@ -375,6 +386,7 @@ export class ModelManager {
     healthMonitor.start();
     return pool;
   async processRequest(poolId: string, request: AIRequest): Promise<AIResponse> {
+
     const pool = this.pools.get(poolId);
     if (!pool) {
       throw new Error(`Model pool not found: ${poolId}`);}
@@ -402,6 +414,7 @@ export class ModelManager {
       pool.loadBalancer.updateMetrics(model.id, latency, cost, true);
       throw err;
   async estimateRequest(poolId: string, request: AIRequest): Promise<CostEstimate> {
+
     const pool = this.pools.get(poolId);
     if (!pool) {
       throw new Error(`Model pool not found: ${poolId}`);}
@@ -429,6 +442,7 @@ export class ModelManager {
   pools: Array.from(this.pools.keys()).map(id => this.getPoolStats(id)),
 };
   async destroyPool(poolId: string): Promise<void> {
+
     const pool = this.pools.get(poolId);
     if (pool) {
       // Stop health monitoring
@@ -439,6 +453,7 @@ export class ModelManager {
         this.cache.delete(model.id);
       this.pools.delete(poolId);
   async destroy(): Promise<void> {
+
     // Destroy all pools
     const destroyPromises = Array.from(this.pools.keys()).map(id => this.destroyPool(id));
     await Promise.all(destroyPromises);
@@ -446,6 +461,7 @@ export class ModelManager {
     this.cache.destroy();
     await this.factory.destroyAllModels();
   private async _warmupModels(models: BaseAIModel): Promise<void> {
+
     if (!this.warmupStrategy.enabled || this.warmupStrategy.sampleRequests.length === 0) {
       return;
     const warmupPromises = models.map(async (model) => {

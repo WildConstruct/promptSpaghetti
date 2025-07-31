@@ -1,5 +1,6 @@
 import React from 'react';
 
+}
 export interface SwitchProps {
   checked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
@@ -7,6 +8,7 @@ export interface SwitchProps {
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
   className?: string;
+}
 }
 export const Switch: React.FC<SwitchProps> = ({)
   checked = false,

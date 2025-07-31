@@ -8,6 +8,7 @@
  * Epic: 17 - Backstage Admin Controls
  */
 
+}
 export interface ContentItem {
     id: string;
     title: string;
@@ -22,6 +23,7 @@ export interface ContentItem {
     createdBy: string;
     lastModifiedBy?: string;
 
+}
 export interface ContentData {
     body?: string;
     description?: string;
@@ -32,6 +34,7 @@ export interface ContentData {
     fields?: Record<string, any>;
     customData?: Record<string, any>;
 
+}
 export interface MediaAsset {
     id: string;
     filename: string;
@@ -41,11 +44,13 @@ export interface MediaAsset {
     dimensions?: {
         width: number;
         height: number;
+}
     };
     duration?: number;
     alt?: string;
     caption?: string;
 
+}
 export interface ContentMetadata {
     seoTitle?: string;
     seoDescription?: string;
@@ -67,8 +72,10 @@ export interface ContentMetadata {
         deadline?: Date;
         priority: 'low' | 'medium' | 'high' | 'urgent';
         notes?: WorkflowNote[];
+}
     };
 
+}
 export interface WorkflowNote {
     id: string;
     author: string;
@@ -76,6 +83,7 @@ export interface WorkflowNote {
     type: 'comment' | 'review' | 'approval' | 'rejection';
     timestamp: Date;
 
+}
 export interface ContentScheduling {
     publishAt?: Date;
     unpublishAt?: Date;
@@ -88,6 +96,7 @@ export interface ContentScheduling {
     prerequisites?: string[];
     blocks?: string[];
 
+}
 export interface RecurrencePattern {
     type: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'custom';
     interval: number;
@@ -98,6 +107,7 @@ export interface RecurrencePattern {
     occurrences?: number;
     customPattern?: string;
 
+}
 export interface PromotionSchedule {
     id: string;
     type: 'homepage' | 'category' | 'search' | 'social' | 'email';
@@ -110,13 +120,16 @@ export interface PromotionSchedule {
         demographics?: Record<string, any>;
         behavioral?: Record<string, any>;
         geographic?: string[];
+}
     };
 
+}
 export interface ScheduleCondition {
     type: 'content_published' | 'date_range' | 'performance_threshold' | 'approval_received' | 'custom';
     parameters: Record<string, any>;
     description: string;
 
+}
 export interface ContentPerformance {
     views: number;
     engagement: number;
@@ -130,6 +143,7 @@ export interface ContentPerformance {
         views: number;
         engagement: number;
         shares: number;
+}
     }>;
     variants?: Array<{
         id: string;
@@ -141,6 +155,7 @@ export interface ContentPerformance {
 export type ContentType = 'article' | 'blog_post' | 'page' | 'product' | 'event' | 'announcement' | 'promotion' | 'newsletter' | 'social_post' | 'video' | 'podcast' | 'gallery' | 'document';
 export type ContentStatus = 'draft' | 'scheduled' | 'published' | 'unpublished' | 'archived' | 'deleted' | 'error';
 
+}
 export interface ContentFilter {
     types?: ContentType[];
     statuses?: ContentStatus[];
@@ -151,6 +166,7 @@ export interface ContentFilter {
     dateRange?: {
         start?: Date;
         end?: Date;
+}
     };
     searchQuery?: string;
     hasSchedule?: boolean;
@@ -161,6 +177,7 @@ export interface ContentFilter {
     language?: string;
     workflowStage?: string[];
 
+}
 export interface ScheduleBatch {
     id: string;
     name: string;
@@ -174,16 +191,19 @@ export interface ScheduleBatch {
         completed: number;
         failed: number;
         errors: BatchError[];
+}
     };
     createdAt: Date;
     createdBy: string;
     executedAt?: Date;
     completedAt?: Date;
 
+}
 export interface BatchOperation {
     type: 'publish' | 'unpublish' | 'schedule' | 'promote' | 'archive' | 'delete' | 'update_metadata';
     parameters?: Record<string, any>;
 
+}
 export interface BatchSchedule {
     executeAt?: Date;
     timezone: string;
@@ -191,31 +211,35 @@ export interface BatchSchedule {
         enabled: boolean;
         interval: number;
         randomization?: boolean;
+}
     };
 
+}
 export interface BatchError {
     contentId: string;
     error: string;
     timestamp: Date;
 
+}
 export interface SchedulingStats {
     totalContent: number;
     scheduledContent: number;
     publishedToday: number;
     unpublishedToday: number;
-    upcomingSchedules: Array<{,
+    upcomingSchedules: Array<{
         date: Date;
         count: number;
-        items: Array<{,
+        items: Array<{
             id: string;
             title: string;
             type: ContentType;
             operation: string;
+}
         }>;
     }>;
     performanceMetrics: {
         averageViewsPerPost: number;
-        topPerformingContent: Array<{,
+        topPerformingContent: Array<{
             id: string;
             title: string;
             views: number;
@@ -276,6 +300,7 @@ export declare class ContentSchedulingService {
     private generateBatchId;
     private sleep;
 
+}
 export interface SchedulingEvent {
     type: string;
     data: any;
@@ -288,3 +313,4 @@ export declare const publishContent: (contentId: string, publishedBy: string) =>
 export declare const getContent: (filter?: ContentFilter) => ContentItem[];
 export declare const getSchedulingStats: () => SchedulingStats;
 //# sourceMappingURL=ContentSchedulingService.d.ts.map
+}

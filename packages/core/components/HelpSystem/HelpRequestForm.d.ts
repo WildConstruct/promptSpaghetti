@@ -7,6 +7,7 @@
 import React from 'react';
 import { HelpRequest, Epic16HelpRequestService, RequestContext } from '../../services/Epic16HelpRequestService';
 
+}
 interface HelpRequestFormProps {
     helpService: Epic16HelpRequestService;
     userId: string;
@@ -19,3 +20,4 @@ interface HelpRequestFormProps {
 export declare const HelpRequestForm: React.FC<HelpRequestFormProps>;
 export default HelpRequestForm;
 //# sourceMappingURL=HelpRequestForm.d.ts.map
+}

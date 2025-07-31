@@ -9,6 +9,7 @@ import QRCode from 'qrcode';
 import base32 from 'base32';
 
 }
+}
 export interface TOTPConfiguration {
   id: string;
   userId: string;
@@ -26,7 +27,9 @@ export interface TOTPConfiguration {
   backupCodes: string[];
 }
 }
+}
 
+}
 }
 export interface TOTPValidationResult {
   valid: boolean;
@@ -36,7 +39,9 @@ export interface TOTPValidationResult {
   message: string;
 }
 }
+}
 
+}
 }
 export interface TOTPEnrollmentData {
   configurationId: string;
@@ -50,7 +55,9 @@ export interface TOTPEnrollmentData {
   expiresAt: Date;
 }
 }
+}
 
+}
 }
 export interface TOTPGenerationOptions {
   algorithm?: 'SHA1' | 'SHA256' | 'SHA512';
@@ -58,6 +65,7 @@ export interface TOTPGenerationOptions {
   period?: number;
   issuer?: string;
   window?: number; // Clock skew tolerance in periods
+}
 }
 }
 

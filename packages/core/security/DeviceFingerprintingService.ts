@@ -51,6 +51,7 @@ export enum FingerprintType {
   doNotTrack: boolean;
   timezone: string;
   timezoneOffset: number;
+}
 };
   // Enhanced fingerprint data
   enhanced: {
@@ -72,7 +73,7 @@ export enum FingerprintType {
   vendor?: string;
   vendorSub?: string;
 };
-    plugins: Array<{,
+    plugins: Array<{
   name: string;
   filename: string;
   description: string;
@@ -149,6 +150,7 @@ export enum FingerprintType {
 
 // Location Data
 }
+}
 export interface LocationData {
   id: string;
   timestamp: Date;
@@ -163,6 +165,7 @@ export interface LocationData {
   altitudeAccuracy?: number;
   heading?: number;
   speed?: number;
+}
 };
   address: {
   country: string;
@@ -197,21 +200,24 @@ export interface LocationData {
 
 // Risk Assessment
 }
+}
 export interface RiskAssessment {
   deviceId: string;
   overallRisk: RiskLevel;
   riskScore: number; // 0-100,
-  factors: Array<{,
+  factors: Array<{
   category: string;
   factor: string;
   impact: number; // -100 to +100,
   confidence: number; // 0-100,
   description: string;
+}
 }>;
   recommendations: string;
   timestamp: Date;
 
 // Fingerprint Collection Context
+}
 }
 export interface FingerprintContext {
   ipAddress: string;
@@ -237,6 +243,7 @@ export interface FingerprintContext {
   storage?: any;
   permissions?: any;
   network?: any;
+}
 };
 /**
  * Comprehensive device fingerprinting and location service
@@ -255,10 +262,11 @@ export class DeviceFingerprintingService extends EventEmitter {
   /**
    * Generate comprehensive device fingerprint
    */
-  public async generateFingerprint(()
+  public async generateFingerprint(((
     context: FingerprintContext,
-    type: FingerprintType = FingerprintType.ENHANCED,
+    type: FingerprintType = FingerprintType.ENHANCED
   ): Promise<DeviceFingerprint> {
+
     const fingerprintId = this.calculateFingerprintId(context);
     const existing = this.fingerprints.get(fingerprintId);
     if (existing) {
@@ -284,10 +292,11 @@ export class DeviceFingerprintingService extends EventEmitter {
   /**
    * Get location data from IP address and other sources
    */
-  public async getLocationData()
+  public async getLocationData(
     ipAddress: string,
     additionalContext?: any
   ): Promise<LocationData> {
+
     // Check cache first
     const cached = this.ipLocationCache.get(ipAddress);
     if (cached && this.isLocationDataFresh(cached)) {
@@ -688,8 +697,7 @@ export class DeviceFingerprintingService extends EventEmitter {
   if (riskScore >= 60) return RiskLevel.HIGH;
   if (riskScore >= 40) return RiskLevel.MEDIUM;
   return RiskLevel.LOW;
-  private generateRecommendations(()
-  factors: RiskAssessment['factors'],
+  private generateRecommendations((factors: RiskAssessment['factors'],
   riskLevel: RiskLevel): string {,
   const recommendations: string = [];
   if (riskLevel === RiskLevel.CRITICAL) {

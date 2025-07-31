@@ -632,6 +632,7 @@ export type Notification = z.infer<typeof NotificationSchema>;
 
 // Main content data model types
 
+}
 export type Epic16ContentModel = {
   UserProfile: UserProfile;
   Template: Template;
@@ -666,13 +667,12 @@ export const Epic16ContentSchemas = {
 };
 
 // Utility functions for validation
-export function validateContentModel<T extends keyof Epic16ContentModel>(()
+export function validateContentModel<T extends keyof Epic16ContentModel>(((
     type: T,
-    data: unknown,
+    data: unknown
   ): Epic16ContentModel[T] {
   return Epic16ContentSchemas[type].parse(data);
-  export function isValidContentModel<T extends keyof Epic16ContentModel>(()
-  type: T,
+  export function isValidContentModel<T extends keyof Epic16ContentModel>((type: T,
   data: unknown): data is Epic16ContentModel[T] {,
   try {
   Epic16ContentSchemas[type].parse(data);

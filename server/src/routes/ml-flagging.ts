@@ -15,6 +15,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { requirePermission } from '../middleware/auth';
 
 }
+}
 interface FlagContentBody {
   content: string;
   contentType: 'text' | 'json' | 'graph' | 'prompt' | 'code';
@@ -26,9 +27,11 @@ interface FlagContentBody {
     requestId?: string;
     metadata?: Record<string, unknown>;
 }
+}
   };
 }
 
+}
 }
 interface FlaggingStatsQuery {
   organizationId?: string;
@@ -36,7 +39,9 @@ interface FlaggingStatsQuery {
   endDate?: string;
 }
 }
+}
 
+}
 }
 interface RecentEventsQuery {
   limit?: string;
@@ -44,17 +49,22 @@ interface RecentEventsQuery {
   flaggedOnly?: string;
 }
 }
+}
 
+}
 }
 interface UpdateReviewBody {
   status: 'approved' | 'rejected' | 'escalated';
   notes?: string;
 }
 }
+}
 
+}
 }
 interface UpdateReviewParams {
   eventId: string;
+}
 }
 }
 

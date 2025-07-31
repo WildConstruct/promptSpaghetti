@@ -9,6 +9,7 @@ import { AdvancedRuntimeNode, AdvancedExecutionContext, AdvancedNodeConfig } fro
 import { NodeValidationService, NodeValidationResult } from '../validation';
 import { IOPortDefinition } from '../runtime/io-system';
 
+}
 export interface NodeDefinition {
     /** Unique node type identifier */
     type: string;
@@ -28,6 +29,7 @@ export interface NodeDefinition {
     ports: {
         inputs: IOPortDefinition[];
         outputs: IOPortDefinition[];
+}
     };
     /** Node-specific metadata */
     metadata: {
@@ -38,6 +40,7 @@ export interface NodeDefinition {
         minEngineVersion?: string;
     };
 
+}
 export interface NodeLifecycleHooks {
     /** Called before node initialization */
     beforeInit?: (node: FrameworkNode) => Promise<void> | void;
@@ -54,6 +57,7 @@ export interface NodeLifecycleHooks {
     /** Called on node errors */
     onError?: (node: FrameworkNode, error: Error) => Promise<void> | void;
 
+}
 export interface NodeFrameworkConfig {
     /** Enable automatic validation of nodes */
     enableValidation: boolean;
@@ -70,6 +74,7 @@ export interface NodeFrameworkConfig {
     /** Enable hot reloading of node definitions */
     enableHotReload: boolean;
 
+}
 export interface NodeMetrics {
     nodeId: string;
     nodeType: string;
@@ -83,6 +88,7 @@ export interface NodeMetrics {
     cacheHits: number;
     cacheMisses: number;
 
+}
 export interface NodeFrameworkMetrics {
     totalNodes: number;
     activeNodes: number;
@@ -195,6 +201,7 @@ export declare class NodeRegistry {
         author?: string;
         deprecated?: boolean;
         experimental?: boolean;
+}
     }): NodeDefinition[];
     private validateDefinition;
 /**
@@ -259,6 +266,7 @@ export declare class NodeFramework extends EventEmitter {
  * Extension interface for framework extensibility
  */
 
+}
 export interface NodeFrameworkExtension {
     name: string;
     version: string;
@@ -268,3 +276,4 @@ export interface NodeFrameworkExtension {
 
 export default NodeFramework;
 //# sourceMappingURL=NodeFramework.d.ts.map
+}

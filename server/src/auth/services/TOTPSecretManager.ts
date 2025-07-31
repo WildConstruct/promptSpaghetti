@@ -8,6 +8,7 @@ import { promisify } from 'util';
 import base32 from 'base32';
 
 }
+}
 export interface EncryptedSecret {
   id: string;
   userId: string;
@@ -24,9 +25,11 @@ export interface EncryptedSecret {
     entropy: number;
     hashFingerprint: string;
 }
+}
   };
 }
 
+}
 }
 export interface SecretGenerationOptions {
   length?: number; // In bytes
@@ -35,7 +38,9 @@ export interface SecretGenerationOptions {
   customEntropy?: Buffer;
 }
 }
+}
 
+}
 }
 export interface KeyRotationResult {
   success: boolean;
@@ -45,7 +50,9 @@ export interface KeyRotationResult {
   message: string;
 }
 }
+}
 
+}
 }
 export interface SecretAuditEntry {
   id: string;
@@ -58,6 +65,7 @@ export interface SecretAuditEntry {
   success: boolean;
   metadata: Record<string, any>;
   riskLevel: 'low' | 'medium' | 'high';
+}
 }
 }
 

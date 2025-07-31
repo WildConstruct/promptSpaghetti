@@ -7,6 +7,7 @@
  */
 import { PreviewResultWithPath } from '../types/ExecutionPath';
 
+}
 export interface VarianceMetrics {
     overallVariance: 'low' | 'medium' | 'high';
     varianceScore: number;
@@ -15,6 +16,7 @@ export interface VarianceMetrics {
         vocabularyDiversity: number;
         structuralDiversity: number;
         executionPathDiversity: number;
+}
     };
     creativeRange: {
         uniqueElements: string[];
@@ -24,6 +26,7 @@ export interface VarianceMetrics {
     };
     suggestions: VarianceSuggestion[];
 
+}
 export interface VarianceSuggestion {
     type: 'increase' | 'decrease' | 'optimize';
     category: 'weights' | 'structure' | 'content' | 'execution';
@@ -31,6 +34,7 @@ export interface VarianceSuggestion {
     impact: 'low' | 'medium' | 'high';
     actionable: boolean;
 
+}
 export interface DiversityIndicator {
     metric: string;
     value: number;
@@ -56,6 +60,7 @@ export declare class VarianceAnalysisService {
         border: string;
         icon: string;
         description: string;
+}
     } | {
         color: string;
         background: string;

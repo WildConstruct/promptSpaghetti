@@ -3,6 +3,7 @@ import { Handle, Position, NodeProps } from 'reactflow';
 import { NodeData } from '../../types/NodeTypes';
 import { useInlineEditorContext } from './InlineEditorManager';
 
+}
 export interface InlineEditableNodeProps extends NodeProps<NodeData> {
   onDoubleClick?: (nodeId: string, event: React.MouseEvent) => void;
   showEditHint?: boolean;
@@ -200,10 +201,12 @@ export interface InlineEditableNodeProps extends NodeProps<NodeData> {
 };
 
 // Node-specific preview components
+}
 interface NodePreviewProps {
   type?: string;
   data: NodeData;
   theme: 'light' | 'dark' | 'cinema';
+}
 const NodePreview: React.FC<NodePreviewProps> = ({ type, data, theme }) => {
   const previewStyle = {
   fontSize: 12,

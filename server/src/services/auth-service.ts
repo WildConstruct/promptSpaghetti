@@ -41,6 +41,7 @@ export type Session = z.infer<typeof SessionSchema>;
 export type MFAConfig = z.infer<typeof MFAConfigSchema>;
 
 }
+}
 interface TokenResponse {
   access_token: string;
   token_type: string;
@@ -49,7 +50,9 @@ interface TokenResponse {
   scope?: string;
 }
 }
+}
 
+}
 }
 interface UserInfo {
   id: string;
@@ -57,6 +60,7 @@ interface UserInfo {
   name: string;
   picture?: string;
   verified_email?: boolean;
+}
 }
 }
 

@@ -6,6 +6,7 @@
  */
 import React from 'react';
 
+}
 export interface DragReorderDemoProps {
     theme?: 'light' | 'dark' | 'cinema';
     showCode?: boolean;
@@ -18,3 +19,4 @@ export interface DragReorderDemoProps {
 export declare const DragReorderDemo: React.FC<DragReorderDemoProps>;
 export default DragReorderDemo;
 //# sourceMappingURL=DragReorderDemo.d.ts.map
+}

@@ -18,6 +18,7 @@ import {
   ChevronRightIcon
 } from '@heroicons/react/24/outline';
 import { useWorkflowStore } from '../stores/workflowStore';
+}
 interface ScheduledExecution {
   id: string;
   workspace_id: string;
@@ -58,6 +59,7 @@ interface ScheduledExecution {
   workspaceId,
   resourceId,
   onClose
+}
 }) => {
   const [activeTab, setActiveTab] = useState<TabType>('schedules');
   const [schedules, setSchedules] = useState<ScheduledExecution>([]);

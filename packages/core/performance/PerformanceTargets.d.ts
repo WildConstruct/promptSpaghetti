@@ -3,12 +3,14 @@
  * Defines performance targets based on user requirements, industry standards, and business objectives
  */
 
+}
 export interface PerformanceTargetConfig {
     environment: 'development' | 'staging' | 'production';
     userSegment: 'power-users' | 'general' | 'enterprise';
     deviceProfile: 'high-end' | 'mid-range' | 'low-end';
     networkProfile: 'fast' | 'average' | 'slow';
 
+}
 export interface PerformanceTarget {
     kpiId: string;
     target: number;
@@ -20,6 +22,7 @@ export interface PerformanceTarget {
         userExperience: 'high' | 'medium' | 'low';
         businessValue: 'high' | 'medium' | 'low';
         technicalRisk: 'high' | 'medium' | 'low'
+}
   };
 /**
  * Performance targets based on Web Vitals and industry standards
@@ -56,7 +59,7 @@ export declare function validatePerformanceTargets(currentMetrics: Record<string
 ): {
     passed: boolean;
     score: number;
-    violations: Array<{,
+    violations: Array<{
         kpiId: string;
         current: number;
         target: number;

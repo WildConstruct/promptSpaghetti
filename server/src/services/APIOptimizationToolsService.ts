@@ -20,6 +20,7 @@ import { MetricsCollector } from '../performance/MetricsCollector';
 // ============================================================================
 
 }
+}
 export interface APIOptimizationToolsConfig {
   // Tool suite configuration
   tools_configuration: {
@@ -28,6 +29,7 @@ export interface APIOptimizationToolsConfig {
     auto_optimization_enabled: boolean;
     optimization_aggressiveness: 'conservative' | 'moderate' | 'aggressive';
     safety_override_enabled: boolean;
+}
 }
   };
   
@@ -174,6 +176,7 @@ export interface APIOptimizationToolsConfig {
 }
 
 }
+}
 export interface OptimizationTool {
   tool_id: string;
   tool_name: string;
@@ -186,6 +189,7 @@ export interface OptimizationTool {
     optimization_capabilities: string[];
     monitoring_capabilities: string[];
     reporting_capabilities: string[];
+}
 }
   };
   
@@ -208,6 +212,7 @@ export interface OptimizationTool {
 }
 
 }
+}
 export interface OptimizationAnalysisResult {
   analysis_id: string;
   analysis_timestamp: Date;
@@ -220,6 +225,7 @@ export interface OptimizationAnalysisResult {
     resource_utilization_analysis: ResourceUtilizationAnalysis;
     cost_analysis: CostAnalysis;
     security_posture_analysis: SecurityPostureAnalysis;
+}
 }
   };
   
@@ -254,6 +260,7 @@ export interface OptimizationAnalysisResult {
 }
 
 }
+}
 export interface BottleneckAnalysis {
   identified_bottlenecks: Bottleneck[];
   bottleneck_severity_distribution: Record<string, number>;
@@ -261,7 +268,9 @@ export interface BottleneckAnalysis {
   estimated_resolution_effort: Record<string, number>;
 }
 }
+}
 
+}
 }
 export interface Bottleneck {
   bottleneck_id: string;
@@ -277,6 +286,7 @@ export interface Bottleneck {
     contributing_factors: string[];
     correlation_analysis: Record<string, number>;
 }
+}
   };
   
   // Resolution recommendations
@@ -289,6 +299,7 @@ export interface Bottleneck {
 }
 
 }
+}
 export interface ResourceUtilizationAnalysis {
   cpu_analysis: {
     current_utilization_percent: number;
@@ -296,6 +307,7 @@ export interface ResourceUtilizationAnalysis {
     average_utilization_percent: number;
     utilization_trend: 'increasing' | 'stable' | 'decreasing';
     optimization_potential: number;
+}
 }
   };
   
@@ -323,12 +335,14 @@ export interface ResourceUtilizationAnalysis {
 }
 
 }
+}
 export interface CostAnalysis {
   current_costs: {
     infrastructure_cost_monthly: number;
     operational_cost_monthly: number;
     third_party_services_cost_monthly: number;
     total_monthly_cost: number;
+}
 }
   };
   
@@ -355,6 +369,7 @@ export interface CostAnalysis {
 }
 
 }
+}
 export interface SecurityPostureAnalysis {
   security_score: number;
   vulnerabilities_identified: SecurityVulnerability[];
@@ -363,7 +378,9 @@ export interface SecurityPostureAnalysis {
   security_optimization_recommendations: SecurityRecommendation[];
 }
 }
+}
 
+}
 }
 export interface OptimizationOpportunity {
   opportunity_id: string;
@@ -377,7 +394,9 @@ export interface OptimizationOpportunity {
   priority_score: number;
 }
 }
+}
 
+}
 }
 export interface RecommendedAction {
   action_id: string;
@@ -391,7 +410,9 @@ export interface RecommendedAction {
   success_metrics: string[];
 }
 }
+}
 
+}
 }
 export interface PredictedImpact {
   improvement_percentage: number;
@@ -400,7 +421,9 @@ export interface PredictedImpact {
   long_term_sustainability_score: number;
 }
 }
+}
 
+}
 }
 export interface RoadmapItem {
   item_id: string;
@@ -412,7 +435,9 @@ export interface RoadmapItem {
   estimated_effort: number;
 }
 }
+}
 
+}
 }
 export interface Risk {
   risk_id: string;
@@ -424,7 +449,9 @@ export interface Risk {
   mitigation_strategies: string[];
 }
 }
+}
 
+}
 }
 export interface CostOptimizationRecommendation {
   recommendation_id: string;
@@ -435,7 +462,9 @@ export interface CostOptimizationRecommendation {
   payback_period_months: number;
 }
 }
+}
 
+}
 }
 export interface SecurityVulnerability {
   vulnerability_id: string;
@@ -446,7 +475,9 @@ export interface SecurityVulnerability {
   estimated_fix_effort: number;
 }
 }
+}
 
+}
 }
 export interface ComplianceStatus {
   framework: string;
@@ -455,7 +486,9 @@ export interface ComplianceStatus {
   remediation_required: boolean;
 }
 }
+}
 
+}
 }
 export interface ThreatAssessment {
   overall_threat_level: 'low' | 'medium' | 'high' | 'critical';
@@ -464,7 +497,9 @@ export interface ThreatAssessment {
   defensive_posture_score: number;
 }
 }
+}
 
+}
 }
 export interface SecurityRecommendation {
   recommendation_id: string;
@@ -474,7 +509,9 @@ export interface SecurityRecommendation {
   implementation_effort: number;
 }
 }
+}
 
+}
 }
 export interface OptimizationToolsAnalytics {
   // Tool usage analytics
@@ -484,6 +521,7 @@ export interface OptimizationToolsAnalytics {
     optimization_success_rate: number;
     average_optimization_impact: number;
     most_effective_tools: string[];
+}
 }
   };
   
@@ -521,6 +559,7 @@ export interface OptimizationToolsAnalytics {
 }
 
 }
+}
 export interface OptimizationImpactMetric {
   metric_name: string;
   before_value: number;
@@ -529,12 +568,15 @@ export interface OptimizationImpactMetric {
   confidence_score: number;
 }
 }
+}
 
+}
 }
 export interface TrendData {
   timestamp: Date;
   value: number;
   trend_direction: 'up' | 'down' | 'stable';
+}
 }
 }
 
@@ -1549,6 +1591,7 @@ export class APIOptimizationToolsService extends EventEmitter {
 
 // Additional interfaces for execution results
 }
+}
 interface OptimizationExecutionResult {
   recommendation_id: string;
   execution_timestamp: Date;
@@ -1561,6 +1604,7 @@ interface OptimizationExecutionResult {
     before_metrics: unknown;
     after_metrics: unknown;
     improvement_verified: boolean;
+}
 }
   };
 }

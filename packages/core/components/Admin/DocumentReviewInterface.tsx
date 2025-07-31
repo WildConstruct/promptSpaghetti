@@ -32,6 +32,7 @@ import {
   Clock
 } from 'lucide-react';
 
+}
 export interface DocumentData {
   id: string;
   type: 'image' | 'pdf' | 'document';
@@ -42,11 +43,13 @@ export interface DocumentData {
   url: string;
   thumbnailUrl?: string;
   metadata?: {
+}
     dimensions?: { width: number; height: number };
     pages?: number;
     quality?: 'low' | 'medium' | 'high';
     extractedText?: string;
   };
+}
 }
 export interface DocumentReviewProps {
   documents: DocumentData;
@@ -56,6 +59,8 @@ export interface DocumentReviewProps {
   onReviewComplete: (documentId: string, approved: boolean, notes: string) => void;
   onBack: () => void;
   className?: string;
+}
+}
 }
 export interface ReviewAnnotation {
   id: string;
@@ -67,6 +72,7 @@ export interface ReviewAnnotation {
   note: string;
   reviewer: string;
   timestamp: Date;
+}
 }
 export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
   documents,

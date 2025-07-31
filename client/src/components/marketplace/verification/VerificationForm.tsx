@@ -1,6 +1,7 @@
 // Epic 17.5.5 - Verification Information Form Component
 import React, { useState, useCallback } from 'react';
 import { VerificationLevel, VerificationInformation } from './types';
+}
 interface VerificationFormProps {
   onSubmit?: (data: { requested_level: VerificationLevel; information: VerificationInformation }) => void;
   onError?: (error: string) => void;
@@ -37,7 +38,7 @@ const COUNTRIES = [;
 ];
 
 export const [formData, setFormData] = useState<VerificationInformation>({)
-  personal_info: {,
+  personal_info: {
   full_name: initialData?.personal_info?.full_name || '',
   email: initialData?.personal_info?.email || '',
   phone: initialData?.personal_info?.phone || '',
@@ -49,7 +50,7 @@ export const [formData, setFormData] = useState<VerificationInformation>({)
   address_line_1: initialData?.personal_info?.address_line_1 || '',
   address_line_2: initialData?.personal_info?.address_line_2 || '',
 },
-  professional_info: {,
+  professional_info: {
   job_title: initialData?.professional_info?.job_title || '',
   company: initialData?.professional_info?.company || '',
   industry: initialData?.professional_info?.industry || '',
@@ -58,12 +59,12 @@ export const [formData, setFormData] = useState<VerificationInformation>({)
   website_url: initialData?.professional_info?.website_url || '',
   portfolio_url: initialData?.professional_info?.portfolio_url || '',
 },
-  business_info: {,
+  business_info: {
   business_name: initialData?.business_info?.business_name || '',
   business_type: initialData?.business_info?.business_type || '',
   registration_number: initialData?.business_info?.registration_number || '',
   tax_id: initialData?.business_info?.tax_id || '',
-  business_address: {,
+  business_address: {
   country: initialData?.business_info?.business_address?.country || 'US',
   state_province: initialData?.business_info?.business_address?.state_province || '',
   city: initialData?.business_info?.business_address?.city || '',
@@ -81,15 +82,15 @@ export const [formData, setFormData] = useState<VerificationInformation>({)
   const addressField = field.replace('business_address.', '');
   return {
   ...prev,
-  business_info: {,
+  business_info: {
   ...prev.business_info!,
-  business_address: {,
+  business_address: {
   ...prev.business_info!.business_address!,
   [addressField]: value,
 };
       return {
   ...prev,
-  [section]: {,
+  [section]: {
   ...prev[section],
   [field]: value,
 };

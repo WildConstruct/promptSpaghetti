@@ -25,6 +25,7 @@ export enum DependencyType {
   CUSTOM = 'custom'
 }
 
+}
 export interface HealthCheckResult {
   status: HealthStatus;
   responseTimeMs: number;
@@ -34,7 +35,9 @@ export interface HealthCheckResult {
   error?: string;
 }
 }
+}
 
+}
 }
 export interface DependencyHealthCheck {
   name: string;
@@ -46,12 +49,15 @@ export interface DependencyHealthCheck {
   degradedThresholdMs?: number; // Response time threshold for degraded status
 }
 }
+}
 
+}
 }
 export interface SystemHealthSummary {
   overall: HealthStatus;
   score: number; // 0-100, weighted health score
   timestamp: number;
+}
 }
   dependencies: Record<string, HealthCheckResult & { weight: number; type: DependencyType }>;
   issues: string[];
@@ -65,6 +71,7 @@ export interface SystemHealthSummary {
 }
 
 }
+}
 export interface HealthMetrics {
   checksPerformed: number;
   averageHealthScore: number;
@@ -73,6 +80,7 @@ export interface HealthMetrics {
     name: string;
     averageResponseTime: number;
     type: DependencyType;
+}
 }
   }>;
   recentDowntime: Array<{

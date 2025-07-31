@@ -36,9 +36,11 @@ const AVAILABLE_SCOPES = [
 ];
 
 }
+}
 interface ApiTokenRouteContext {
   authService: AuthenticationService;
   tokenService: TokenService;
+}
 }
 }
 

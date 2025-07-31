@@ -46,6 +46,7 @@ export declare enum DataSubjectCategory {
     MINORS = "minors",
     VULNERABLE_GROUPS = "vulnerable_groups"
 
+}
 export interface BreachIncident {
     id: string;
     title: string;
@@ -60,6 +61,7 @@ export interface BreachIncident {
         category: DataSubjectCategory;
         count: number;
         countries: string[];
+}
     }[];
     affectedSystems: string[];
     rootCause?: string;
@@ -84,6 +86,7 @@ export declare enum IncidentStatus {
     LESSONS_LEARNED = "lessons_learned",
     CLOSED = "closed"
 
+}
 export interface NotificationRecord {
     id: string;
     type: NotificationType;
@@ -96,6 +99,7 @@ export interface NotificationRecord {
     status: 'pending' | 'sent' | 'delivered' | 'failed' | 'acknowledged';
     metadata: Record<string, any>;
 
+}
 export interface EvidenceRecord {
     id: string;
     type: 'log' | 'screenshot' | 'document' | 'forensic' | 'witness';
@@ -106,6 +110,7 @@ export interface EvidenceRecord {
     description: string;
     chainOfCustody: ChainOfCustodyEntry[];
 
+}
 export interface ChainOfCustodyEntry {
     timestamp: Date;
     action: 'collected' | 'transferred' | 'analyzed' | 'stored';
@@ -113,12 +118,14 @@ export interface ChainOfCustodyEntry {
     location: string;
     notes?: string;
 
+}
 export interface TimelineEvent {
     timestamp: Date;
     event: string;
     actor: string;
     details: Record<string, any>;
 
+}
 export interface RiskAssessment {
     likelihood: 'low' | 'medium' | 'high';
     impact: 'low' | 'medium' | 'high';
@@ -127,6 +134,7 @@ export interface RiskAssessment {
     recommendations: string[];
     residualRisk: string;
 
+}
 export interface ComplianceRequirement {
     framework: 'GDPR' | 'NIST' | 'HIPAA' | 'PCI_DSS' | 'SOX';
     requirement: string;
@@ -134,12 +142,14 @@ export interface ComplianceRequirement {
     status: 'pending' | 'in_progress' | 'completed' | 'overdue';
     evidence?: string[];
 
+}
 export interface BreachNotificationConfig {
     detection: {
         enabled: boolean;
         autoClassification: boolean;
         riskThreshold: BreachSeverity;
         monitoringSources: string[];
+}
     };
     notifications: {
         gdpr: {

@@ -8,6 +8,7 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 
+}
 export interface OAuthProvider {
   id: 'google' | 'github' | 'microsoft';,
   name: string;
@@ -23,6 +24,7 @@ export interface OAuthProvider {
   bgColor: '#fff',
   textColor: '#333',
   hoverBgColor: '#f8f9fa',
+}
 }
   {
   id: 'github',
@@ -45,6 +47,7 @@ export interface OAuthProvider {
   onSuccess?: () => void;
   className?: string;
 }
+}
 export const OAuthProviderButtons: React.FC<OAuthProviderButtonsProps> = ({)
   mode = 'login',
   onError,
@@ -64,7 +67,7 @@ export const OAuthProviderButtons: React.FC<OAuthProviderButtonsProps> = ({)
       const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
       const response = await fetch(`${API_BASE_URL}/auth/oauth/authorize?provider=${provider.id}&returnUrl=${encodeURIComponent(currentReturnUrl)}`, {},}
   method: 'GET',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 });
       if (!response.ok) {

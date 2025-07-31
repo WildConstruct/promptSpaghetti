@@ -7,6 +7,7 @@
 import { Node, Edge } from 'reactflow';
 import { ConversionEventType } from '../analytics/ConversionTracker';
 
+}
 export interface ConversionTrackingConfig {
     enableAutoTracking?: boolean;
     trackPageViews?: boolean;
@@ -23,6 +24,7 @@ export declare const useConversionTracking: (config?: ConversionTrackingConfig) 
         edgeCount: number;
         seedCount: number;
         executionTime?: number;
+}
     }) => void;
     trackAdvancedFeature: (featureName: string, featureContext?: Record<string, any>) => void;
     trackProjectSave: (projectData: {),

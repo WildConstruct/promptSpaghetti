@@ -5,6 +5,7 @@
  * for the Epic 16 Marketplace & Community system.
  */
 import React from 'react';
+}
 interface Epic16InteractiveElementsProps {
     userId: string;
     userName: string;
@@ -16,6 +17,7 @@ interface Epic16InteractiveElementsProps {
         pageType: 'marketplace' | 'community' | 'profile' | 'template' | 'learning';
         templateId?: string;
         categoryId?: string;
+}
     };
     onElementInteraction?: (elementId: string, interaction: unknown) => void;
     onAnalyticsUpdate?: (analytics: unknown) => void;

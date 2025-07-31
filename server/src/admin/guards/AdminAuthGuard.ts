@@ -20,6 +20,7 @@ import { Pool } from 'pg';
 import { AuthService } from '../../auth/services/AuthService';
 
 }
+}
 export interface AdminUser {
   id: string;
   email: string;
@@ -29,7 +30,9 @@ export interface AdminUser {
   isActive: boolean;
 }
 }
+}
 
+}
 }
 export interface AdminPermissionCheck {
   userId: string;
@@ -37,6 +40,7 @@ export interface AdminPermissionCheck {
   userPermissions: string[];
   hasAccess: boolean;
   deniedPermissions: string[];
+}
 }
 }
 

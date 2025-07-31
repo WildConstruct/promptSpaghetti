@@ -19,6 +19,7 @@ import {
   ValidationResult
 } from '../types/DataClassification';
 
+}
 export interface HandlingRule {
   id: string;
   name: string;
@@ -31,6 +32,8 @@ export interface HandlingRule {
   effectiveDate: Date;
   expirationDate?: Date;
   complianceFramework: string;
+}
+}
 }
 export interface HandlingRuleViolation {
   id: string;
@@ -45,7 +48,9 @@ export interface HandlingRuleViolation {
   evidence: Record<string, any>;
   remediation: string;
   status: 'OPEN' | 'INVESTIGATING' | 'REMEDIATED' | 'ACCEPTED_RISK'
+}
   }
+}
 export interface ComplianceCheck {
   ruleId: string;
   dataElement: string;
@@ -54,6 +59,7 @@ export interface ComplianceCheck {
   passed: boolean;
   details: Record<string, any>;
   timestamp: Date;
+}
 }
 export class ClassificationHandlingRulesService {
   private handlingRequirements: Map<DataClassificationLevel, HandlingRequirements> = new Map();
@@ -444,9 +450,9 @@ export class ClassificationHandlingRulesService {
   /**
    * Validate transmission requirements
    */
-  private validateTransmissionRequirements(()
+  private validateTransmissionRequirements(((
     requirements: TransmissionRequirements,
-    context: OperationContext,
+    context: OperationContext
   ): ValidationResult {
     const errors: string = [];
     const warnings: string = [];
@@ -473,9 +479,9 @@ export class ClassificationHandlingRulesService {
   /**
    * Validate processing requirements
    */
-  private validateProcessingRequirements(()
+  private validateProcessingRequirements(((
     requirements: ProcessingRequirements,
-    context: OperationContext,
+    context: OperationContext
   ): ValidationResult {
     const errors: string = [];
     const warnings: string = [];
@@ -501,9 +507,9 @@ export class ClassificationHandlingRulesService {
   /**
    * Validate monitoring requirements
    */
-  private validateMonitoringRequirements(()
+  private validateMonitoringRequirements(((
     requirements: MonitoringRequirements,
-    context: OperationContext,
+    context: OperationContext
   ): ValidationResult {
     const errors: string = [];
     const warnings: string = [];

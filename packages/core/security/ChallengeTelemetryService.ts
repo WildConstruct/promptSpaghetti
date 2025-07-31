@@ -57,6 +57,7 @@ export enum UserAgentType {
 
 // Challenge Event
 
+}
 export interface ChallengeEvent {
   id: string;
   sessionId: string;
@@ -77,6 +78,7 @@ export interface ChallengeEvent {
       country: string;
   region: string;
       city: string;
+}
       coordinates?: { lat: number; lon: number };
     };
     browserInfo: {
@@ -126,11 +128,13 @@ export interface ChallengeEvent {
 
 // Challenge Statistics
 }
+}
 export interface ChallengeStatistics {
   challengeType: ChallengeType;
   period: {
   start: Date;
   end: Date;
+}
 };
   metrics: {
   totalAttempts: number;
@@ -170,6 +174,7 @@ export interface ChallengeStatistics {
 
 // Telemetry Query
 }
+}
 export interface TelemetryQuery {
   startTime: Date;
   endTime: Date;
@@ -189,15 +194,18 @@ export interface TelemetryQuery {
   offset?: number;
   // A/B Test Configuration
 }
+}
+}
 export interface ABTestConfig {
   id: string;
   name: string;
   challengeType: ChallengeType;
-  variants: Array<{,
+  variants: Array<{
   id: string;
   name: string;
   parameters: Record<string, any>;
   trafficPercentage: number;
+}
 }>;
   startDate: Date;
   endDate: Date;
@@ -206,14 +214,16 @@ export interface ABTestConfig {
 
 // Fraud Pattern
 }
+}
 export interface FraudPattern {
   id: string;
   name: string;
   description: string;
-  conditions: Array<{,
+  conditions: Array<{
   field: string;
   operator: 'equals' | 'greater_than' | 'less_than' | 'contains' | 'in_range';
   value: any;
+}
 }>;
   severity: 'low' | 'medium' | 'high' | 'critical';
   actions: Array<{;
@@ -470,9 +480,9 @@ export class ChallengeTelemetryService extends EventEmitter {
   /**
    * Get A/B test variant for a session
    */
-  public getABTestVariant(()
+  public getABTestVariant(((
     challengeType: ChallengeType,
-    sessionId: string,
+    sessionId: string
   ): { testId: string; variantId: string; parameters: Record<string, any> } | null {
   // Find active A/B test for this challenge type
   const activeTest = Array.from(this.abTests.values()).find(test => ;);
@@ -507,7 +517,7 @@ export class ChallengeTelemetryService extends EventEmitter {
    */
   public getABTestResults(testId: string): {
   test: ABTestConfig;
-  results: Array<{,
+  results: Array<{
   variantId: string;
   variantName: string;
   sampleSize: number;

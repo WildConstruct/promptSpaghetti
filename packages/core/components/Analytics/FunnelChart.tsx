@@ -29,9 +29,11 @@ import {
 
 // Chart interfaces
 
+}
 export interface FunnelChartProps {
   funnelDefinition: ConversionFunnelDefinition;
   analyticsInfrastructure: ConversionAnalyticsInfrastructure;
+}
   timeRange: { start: number; end: number };
   segments?: UserSegment;
   cohorts?: ConversionCohort;
@@ -48,6 +50,7 @@ export type FunnelChartMode =
   | 'waterfall'
   | 'heatmap';
 
+}
 export interface StepMetrics {
   stepId: string;
   stepName: string;
@@ -63,23 +66,27 @@ export interface StepMetrics {
   previousStepConversionRate?: number;
   comparisonData?: StepComparisonMetrics;
 }
+}
+}
 export interface StepComparisonMetrics {
   previousPeriod: {
   conversionRate: number;
   change: number;
   direction: 'improvement' | 'decline' | 'no_change'
+}
   };
   benchmark: {
   conversionRate: number;
   percentile: number;
   industry: string;
 };
-  segments: Array<{,
+  segments: Array<{
   segmentId: string;
   segmentName: string;
   conversionRate: number;
   performance: 'above_average' | 'below_average' | 'average'
   }>;
+}
 }
 export interface FunnelChartData {
   steps: StepMetrics;
@@ -87,6 +94,8 @@ export interface FunnelChartData {
   dropoffAnalysis: DropoffAnalysis;
   trends: FunnelTrend;
   segmentComparisons: SegmentFunnelComparison;
+}
+}
 }
 export interface OverallFunnelMetrics {
   totalEntries: number;
@@ -100,6 +109,8 @@ export interface OverallFunnelMetrics {
   biggestDropoffStep: string;
   mostEfficientStep: string;
 }
+}
+}
 export interface DropoffAnalysis {
   stepId: string;
   stepName: string;
@@ -109,13 +120,17 @@ export interface DropoffAnalysis {
   recoveryOpportunity: number;
   recommendedActions: string;
   severity: 'critical' | 'high' | 'medium' | 'low'
+}
   }
+}
 export interface DropoffReason {
   reason: string;
   category: 'technical' | 'user_experience' | 'content' | 'external';
   percentage: number;
   count: number;
   confidence: number;
+}
+}
 }
 export interface FunnelTrend {
   period: string;
@@ -124,16 +139,20 @@ export interface FunnelTrend {
   conversions: number;
   revenue: number;
 }
+}
+}
 export interface SegmentFunnelComparison {
   segmentId: string;
   segmentName: string;
   overallConversionRate: number;
-  stepPerformance: Array<{,
+  stepPerformance: Array<{
   stepId: string;
   conversionRate: number;
   relativePerformance: number;
+}
 }>;
   insights: string;
+}
 }
 export interface ChartExportData {
   chartMode: FunnelChartMode;
@@ -142,6 +161,7 @@ export interface ChartExportData {
   svg: string;
   png?: string;
   pdf?: string;
+}
 };
   metadata: {
   exportedAt: number;
@@ -149,11 +169,14 @@ export interface ChartExportData {
     filters: unknown;
   };
 }
+}
 export interface InteractionState {
   hoveredStep: string | null;
   selectedStep: string | null;
+}
   tooltipPosition: { x: number; y: number } | null;
   tooltipContent: StepTooltipContent | null;
+}
 }
 export interface StepTooltipContent {
   stepName: string;
@@ -163,6 +186,7 @@ export interface StepTooltipContent {
   /**
   * Main Funnel Chart Component
   */
+}
 }
 export const FunnelChart: React.FC<FunnelChartProps> = ({)
   funnelDefinition,
@@ -390,6 +414,7 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({)
 /**
  * Funnel Chart Header Component
  */
+}
 interface FunnelChartHeaderProps {
   funnelDefinition: ConversionFunnelDefinition;
   overallMetrics: OverallFunnelMetrics;
@@ -400,6 +425,7 @@ interface FunnelChartHeaderProps {
   overallMetrics,
   chartMode,
   onExport
+}
 }) => {
   return;
     <div className="funnel-chart-header">
@@ -437,6 +463,7 @@ interface FunnelChartHeaderProps {
 /**
  * Standard Funnel Chart Component
  */
+}
 interface StandardFunnelChartProps {
   data: FunnelChartData;
   dimensions: unknown;
@@ -449,6 +476,7 @@ interface StandardFunnelChartProps {
   interactionState,
   onStepHover,
   onStepClick
+}
 }) => {
   const { steps } = data;
   const { chartWidth, chartHeight, margin } = dimensions;
@@ -621,8 +649,10 @@ const WaterfallFunnelChart: React.FC<StandardFunnelChartProps> = () => ()
 /**
  * Drop-off Analysis Panel Component
  */
+}
 interface DropoffAnalysisPanelProps {
   dropoffAnalysis: DropoffAnalysis;
+}
 const DropoffAnalysisPanel: React.FC<DropoffAnalysisPanelProps> = ({ dropoffAnalysis }) => {
   const criticalDropoffs = dropoffAnalysis;
     .filter(d => d.severity === 'critical' || d.severity === 'high')
@@ -665,8 +695,10 @@ const DropoffAnalysisPanel: React.FC<DropoffAnalysisPanelProps> = ({ dropoffAnal
 /**
  * Segment Comparison Panel Component
  */
+}
 interface SegmentComparisonPanelProps {
   segmentComparisons: SegmentFunnelComparison;
+}
 const SegmentComparisonPanel: React.FC<SegmentComparisonPanelProps> = ({ segmentComparisons }) => {
   return;
     <div className="segment-comparison-panel">
@@ -694,8 +726,10 @@ const SegmentComparisonPanel: React.FC<SegmentComparisonPanelProps> = ({ segment
 /**
  * Step Tooltip Component
  */
+}
 interface StepTooltipProps {
   content: StepTooltipContent;
+}
   position: { x: number; y: number };
   onClose: () => void;
 const StepTooltip: React.FC<StepTooltipProps> = ({ content, position, onClose }) => {
@@ -756,9 +790,11 @@ const FunnelChartLoadingState: React.FC = () => ()
     <p>Loading funnel chart...</p>
   </div>
 );
+}
 interface FunnelChartErrorStateProps {
   error: string;
   onRetry: () => void;
+}
 const FunnelChartErrorState: React.FC<FunnelChartErrorStateProps> = ({ error, onRetry }) => ()
   <div className="funnel-chart-error">
     <div className="error-message">
@@ -804,6 +840,7 @@ async function processFunnelChartData(funnelDefinition: ConversionFunnelDefiniti
   cohorts: ConversionCohort,
   timeRange: { start: number; end: number }
 ): Promise<FunnelChartData> {
+
   // Simplified implementation - in production would process actual metrics
   const steps: StepMetrics = funnelDefinition.steps.map((step, index) => ({,)
   stepId: step.id,

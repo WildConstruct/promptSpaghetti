@@ -9,6 +9,7 @@ import { EventEmitter } from 'events';
 import * as crypto from 'crypto';
 
 }
+}
 export interface Role {
   id: string;
   name: string;
@@ -21,7 +22,9 @@ export interface Role {
   isActive: boolean;
 }
 }
+}
 
+}
 }
 export interface Permission {
   id: string;
@@ -31,16 +34,20 @@ export interface Permission {
   scope: 'global' | 'organizational' | 'project' | 'personal';
 }
 }
+}
 
+}
 }
 export interface PermissionConstraint {
   type: 'time' | 'location' | 'purpose' | 'security_level' | 'data_classification' | 'approval_required';
   operator: 'equals' | 'not_equals' | 'in' | 'not_in' | 'greater_than' | 'less_than' | 'between';
   value: Error;
 }
+}
   metadata?: { [key: string]: unknown };
 }
 
+}
 }
 export interface UserRole {
   userId: string;
@@ -52,7 +59,9 @@ export interface UserRole {
   conditions?: PermissionConstraint[];
 }
 }
+}
 
+}
 }
 export interface AccessRequest {
   id: string;
@@ -71,7 +80,9 @@ export interface AccessRequest {
   expiresAt?: Date;
 }
 }
+}
 
+}
 }
 export interface AccessPolicy {
   id: string;
@@ -85,16 +96,20 @@ export interface AccessPolicy {
   createdBy: string;
 }
 }
+}
 
+}
 }
 export interface PolicyRule {
   id: string;
   condition: PolicyCondition;
   action: 'allow' | 'deny' | 'require_approval' | 'require_mfa' | 'log_warning';
 }
+}
   metadata?: { [key: string]: unknown };
 }
 
+}
 }
 export interface PolicyCondition {
   type: 'user' | 'role' | 'time' | 'location' | 'device' | 'key_properties' | 'operation' | 'data_classification';
@@ -104,7 +119,9 @@ export interface PolicyCondition {
   subConditions?: PolicyCondition[];
 }
 }
+}
 
+}
 }
 export interface AccessContext {
   userId: string;
@@ -117,9 +134,11 @@ export interface AccessContext {
   mfaVerified?: boolean;
   riskScore?: number;
 }
+}
   additionalContext?: { [key: string]: unknown };
 }
 
+}
 }
 export interface GeoLocation {
   country: string;
@@ -128,6 +147,7 @@ export interface GeoLocation {
   latitude?: number;
   longitude?: number;
   timezone?: string;
+}
 }
 }
 
@@ -153,6 +173,7 @@ export type KeyOperation =
 export type ResourceType = 'key' | 'key_group' | 'backup' | 'audit_log' | 'policy' | 'role';
 
 }
+}
 export interface AccessDecision {
   allowed: boolean;
   reason: string;
@@ -164,21 +185,26 @@ export interface AccessDecision {
   additionalFactorsRequired?: string[];
 }
 }
+}
 
+}
 }
 export interface ConditionalAccessRequirement {
   type: 'mfa' | 'device_verification' | 'location_verification' | 'time_restriction' | 'approval';
   description: string;
 }
+}
   parameters?: { [key: string]: unknown };
 }
 
+}
 }
 export interface TimeRestriction {
   startTime: string; // HH:MM format
   endTime: string;
   daysOfWeek: number[]; // 0-6, Sunday = 0
   timezone: string;
+}
 }
 }
 

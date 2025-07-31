@@ -57,6 +57,7 @@ type DeidentificationOptions = z.infer<typeof DeidentificationOptionsSchema>;
 type DeidentificationResult = z.infer<typeof DeidentificationResultSchema>;
 
 }
+}
 interface HIPAARule {
   id: string;
   name: string;
@@ -64,6 +65,7 @@ interface HIPAARule {
   category: 'administrative' | 'physical' | 'technical';
   severity: 'info' | 'warning' | 'error' | 'critical';
   checkFunction: (content: string, context?: Record<string, unknown>) => Promise<boolean>;
+}
 }
 }
 

@@ -8,6 +8,7 @@
  * Epic: 17 - Backstage Admin Controls
  */
 
+}
 export interface ModerationState {
   id: string;
   name: string;
@@ -23,6 +24,8 @@ export interface ModerationState {
   updatedAt: Date;
   createdBy: string;
   isActive: boolean;
+}
+}
 }
 export interface ModerationItem {
   id: string;
@@ -58,6 +61,8 @@ export interface ModerationItem {
   resolvedAt?: Date;
   archivedAt?: Date;
 }
+}
+}
 export interface StateHistoryEntry {
   id: string;
   fromState?: string;
@@ -68,6 +73,8 @@ export interface StateHistoryEntry {
   metadata?: Record<string, any>;
   timestamp: Date;
   duration?: number; // ms spent in previous state,
+}
+}
 }
 export interface StateTransition {
   id: string;
@@ -81,6 +88,8 @@ export interface StateTransition {
   validation: ValidationRules;
   automation: AutomationRules;
 }
+}
+}
 export interface TransitionCondition {
   type: 'user_role' | 'severity_level' | 'escalation_level' | 'time_elapsed' | 'flag_count' | 'ai_confidence' | 'custom';
   field: string;
@@ -88,11 +97,15 @@ export interface TransitionCondition {
   value: any;
   description: string;
 }
+}
+}
 export interface TransitionAction {
   type: 'assign_reviewer' | 'send_notification' | 'escalate' | 'apply_action' | 'update_metadata' | 'trigger_automation' | 'compliance_check';
   parameters: Record<string, any>;
   condition?: string; // JavaScript expression,
   delay?: number; // milliseconds,
+}
+}
 }
 export interface AutoModerationAction {
   id: string;
@@ -101,10 +114,12 @@ export interface AutoModerationAction {
   triggers: AutoActionTrigger;
   conditions: AutoActionCondition;
   actions: ModerationAction;
+}
   confidence: { min: number; max: number };
   enabled: boolean;
   cooldown?: number; // seconds between actions
   limits: ActionLimits;
+}
 }
 export interface ModerationAction {
   type: 'approve' | 'reject' | 'flag' | 'hide' | 'delete' | 'warn_user' | 'suspend_user' | 'ban_user' | 'escalate' | 'request_review';
@@ -114,14 +129,17 @@ export interface ModerationAction {
   parameters: Record<string, any>;
   reversible: boolean;
 }
+}
+}
 export interface AIAnalysisResult {
   confidence: number;
-  categories: Array<{,
+  categories: Array<{
   category: string;
   confidence: number;
   evidence: string;
+}
 }>;
-  recommendations: Array<{,
+  recommendations: Array<{
   action: string;
   confidence: number;
   reasoning: string;
@@ -134,6 +152,7 @@ export interface AIAnalysisResult {
   processedAt: Date;
   modelVersion: string;
 }
+}
 export interface ComplianceCheck {
   id: string;
   type: ComplianceType;
@@ -142,6 +161,8 @@ export interface ComplianceCheck {
   checkedAt?: Date;
   checkedBy?: string;
   validUntil?: Date;
+}
+}
 }
 export interface ProcessingMetrics {
   timeToFirstReview?: number; // milliseconds,
@@ -152,6 +173,7 @@ export interface ProcessingMetrics {
   automationActions: number;
   manualActions: number;
   averageConfidence?: number;
+}
 }
 export type ModerationStateType = 
   | 'initial'        // First state for new items
@@ -226,6 +248,7 @@ export type ComplianceType =
   | 'accessibility'  // Accessibility standards
   | 'industry_specific'; // Sector-specific rules
 
+}
 export interface UserInfo {
   id: string;
   username: string;
@@ -238,17 +261,20 @@ export interface UserInfo {
   confirmedViolations: number;
   falseReports: number;
   lastViolation?: Date;
+}
 };
+}
 }
 export interface ContentSnapshot {
   originalContent: string;
   currentContent: string;
   metadata: Record<string, any>;
-  attachments: Array<{,
+  attachments: Array<{
   type: string;
   url: string;
   size: number;
   checksum: string;
+}
 }>;
   contextData: {
   parentContent?: string;
@@ -256,6 +282,7 @@ export interface ContentSnapshot {
   locationData?: Record<string, any>;
 };
   capturedAt: Date;
+}
 }
 export interface ModerationFlag {
   id: string;
@@ -267,11 +294,15 @@ export interface ModerationFlag {
   reportedBy?: string;
   reportedAt: Date;
 }
+}
+}
 export interface FlagEvidence {
   type: 'text_match' | 'pattern_match' | 'behavior_anomaly' | 'user_report' | 'ai_classification';
   details: Record<string, any>;
   confidence: number;
   source: string;
+}
+}
 }
 export interface ReviewerAssignment {
   reviewerId: string;
@@ -280,6 +311,8 @@ export interface ReviewerAssignment {
   status: 'assigned' | 'in_progress' | 'completed' | 'skipped';
   expertise: string;
   workload: number;
+}
+}
 }
 export interface AutoProcessingStatus {
   enabled: boolean;
@@ -290,12 +323,16 @@ export interface AutoProcessingStatus {
   attempts: number;
   errors: ProcessingError;
 }
+}
+}
 export interface ProcessingError {
   timestamp: Date;
   error: string;
   stage: string;
   retryable: boolean;
   context?: Record<string, any>;
+}
+}
 }
 export interface LegalReviewStatus {
   required: boolean;
@@ -306,6 +343,8 @@ export interface LegalReviewStatus {
   notes?: string;
   completedAt?: Date;
 }
+}
+}
 export interface StatePermissions {
   canView: string;        // Roles that can view items in this state,
   canEdit: string;        // Roles that can edit items in this state,
@@ -314,10 +353,14 @@ export interface StatePermissions {
   canEscalate: string;    // Roles that can escalate,
   restrictions: PermissionRestriction;
 }
+}
+}
 export interface PermissionRestriction {
   type: 'time_based' | 'condition_based' | 'approval_required';
   parameters: Record<string, any>;
   description: string;
+}
+}
 }
 export interface TransitionPermissions {
   requiredRoles: string;
@@ -326,15 +369,21 @@ export interface TransitionPermissions {
   approvers?: string;
   conditions: PermissionCondition;
 }
+}
+}
 export interface PermissionCondition {
   type: 'user_level' | 'content_sensitivity' | 'escalation_level' | 'time_constraint';
   parameters: Record<string, any>;
   description: string;
 }
+}
+}
 export interface ValidationRules {
   required?: string;
   constraints?: ValidationConstraint;
   customValidators?: CustomValidator;
+}
+}
 }
 export interface ValidationConstraint {
   field: string;
@@ -342,11 +391,15 @@ export interface ValidationConstraint {
   parameters: Record<string, any>;
   message: string;
 }
+}
+}
 export interface CustomValidator {
   name: string;
   function: string;
   parameters: Record<string, any>;
   message: string;
+}
+}
 }
 export interface AutomationRules {
   triggers: AutomationTrigger;
@@ -355,25 +408,35 @@ export interface AutomationRules {
   delays?: number;
   retries?: number;
 }
+}
+}
 export interface AutomationTrigger {
   type: 'time_based' | 'event_based' | 'condition_met';
   parameters: Record<string, any>;
   description: string;
+}
+}
 }
 export interface AutomationCondition {
   type: 'field_value' | 'time_elapsed' | 'external_api' | 'user_action';
   parameters: Record<string, any>;
   description: string;
 }
+}
+}
 export interface AutomationAction {
   type: 'state_transition' | 'notification' | 'assignment' | 'escalation' | 'external_api';
   parameters: Record<string, any>;
   description: string;
 }
+}
+}
 export interface AutoActionTrigger {
   type: 'content_created' | 'content_updated' | 'user_reported' | 'threshold_exceeded' | 'pattern_detected';
   parameters: Record<string, any>;
   description: string;
+}
+}
 }
 export interface AutoActionCondition {
   type: 'content_analysis' | 'user_history' | 'volume_check' | 'reputation_score' | 'time_pattern';
@@ -381,12 +444,16 @@ export interface AutoActionCondition {
   threshold: number;
   description: string;
 }
+}
+}
 export interface ActionLimits {
   maxActionsPerHour?: number;
   maxActionsPerDay?: number;
   maxActionsPerUser?: number;
   cooldownPeriod?: number;
   escalationThreshold?: number;
+}
+}
 }
 export interface ModerationStateMetadata {
   description: string;
@@ -400,6 +467,8 @@ export interface ModerationStateMetadata {
   isTemplate: boolean;
   templateParameters?: Record<string, any>;
 }
+}
+}
 export interface ComplianceDetails {
   regulation: string;
   requirements: string;
@@ -408,6 +477,8 @@ export interface ComplianceDetails {
   mitigationActions: string;
   documentation: DocumentationReference;
 }
+}
+}
 export interface ComplianceEvidence {
   type: 'document' | 'log_entry' | 'user_action' | 'system_record';
   reference: string;
@@ -415,12 +486,16 @@ export interface ComplianceEvidence {
   timestamp: Date;
   verifiedBy?: string;
 }
+}
+}
 export interface DocumentationReference {
   type: 'policy' | 'procedure' | 'legal_document' | 'audit_report';
   title: string;
   reference: string;
   version: string;
   url?: string;
+}
+}
 }
 export interface ModerationStats {
   totalItems: number;
@@ -434,6 +509,7 @@ export interface ModerationStats {
   escalationRate: number;
   automationRate: number;
   accuracyRate: number;
+}
 };
   performance: {
   itemsProcessedToday: number;
@@ -456,6 +532,7 @@ export interface ModerationStats {
   confidenceDistribution: Record<string, number>;
 };
 }
+}
 export interface ModerationFilter {
   states?: string;
   categories?: ModerationCategory;
@@ -466,6 +543,7 @@ export interface ModerationFilter {
   authors?: string;
   contentTypes?: ContentType;
   flags?: string;
+}
   dateRange?: { start?: Date; end?: Date };
   searchQuery?: string;
   hasAIAnalysis?: boolean;
@@ -571,6 +649,7 @@ export class ModerationStatesService {
     triggeredBy: string,
     metadata?: Record<string, any>
   ): Promise<boolean> {
+
   const item = this.items.get(itemId);
   if (!item) return false;
   const fromState = this.states.get(item.currentState);
@@ -613,6 +692,7 @@ export class ModerationStatesService {
     assignedBy: string,
     dueDate?: Date
   ): Promise<boolean> {
+
   const item = this.items.get(itemId);
   if (!item) return false;
   const assignment: ReviewerAssignment = {,
@@ -657,6 +737,7 @@ export class ModerationStatesService {
    * Automation Processing
    */
   private async processAutomation(itemId: string): Promise<void> {
+
     const item = this.items.get(itemId);
     if (!item || !item.autoProcessing.enabled) return;
     try {
@@ -908,6 +989,7 @@ export class ModerationStatesService {
     // TODO: Implement transition validation logic
     return true;
   private async executeTransitionActions(item: ModerationItem, transition: StateTransition, userId: string): Promise<void> {
+
     // TODO: Implement transition action execution
   private getApplicableAutoActions(item: ModerationItem): AutoModerationAction {
     return Array.from(this.autoActions.values()).filter(action => )
@@ -920,6 +1002,7 @@ export class ModerationStatesService {
     // TODO: Implement execution conditions check
     return false;
   private async executeAutoAction(item: ModerationItem, action: AutoModerationAction): Promise<void> {
+
     // TODO: Implement auto action execution
   private findEscalatedState(category: ModerationCategory, escalationLevel: number): ModerationState | null {
     const escalatedStates = this.getStates({ type: 'escalated' });
@@ -938,11 +1021,13 @@ export class ModerationStatesService {
   private generateHistoryId(): string {
     return `history_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
 
+}
 export interface ModerationEvent {
   type: string;
   data: any;
   timestamp: Date;
   // Export singleton instance
+}
 }
 export const moderationStatesService = ModerationStatesService.getInstance();
 

@@ -17,6 +17,7 @@ import { Database } from '../database';
 
 // Request/Response type definitions
 }
+}
 interface DetectFraudRequest {
   Body: {
     type: 'payment' | 'account' | 'transaction' | 'login' | 'registration';
@@ -33,10 +34,12 @@ interface DetectFraudRequest {
       source: string;
       environment: 'web' | 'mobile' | 'api';
 }
+}
     };
   };
 }
 
+}
 }
 interface PaymentFraudRequest {
   Body: {
@@ -49,6 +52,7 @@ interface PaymentFraudRequest {
       cardBin?: string;
       billing?: Record<string, unknown>;
 }
+}
     };
     context: {
       ipAddress: string;
@@ -59,6 +63,7 @@ interface PaymentFraudRequest {
   };
 }
 
+}
 }
 interface AccountFraudRequest {
   Body: {
@@ -69,10 +74,12 @@ interface AccountFraudRequest {
       source: string;
       environment: 'web' | 'mobile' | 'api';
 }
+}
     };
   };
 }
 
+}
 }
 interface CreateReviewCaseRequest {
   Body: {
@@ -83,9 +90,11 @@ interface CreateReviewCaseRequest {
     priority?: 'low' | 'medium' | 'high' | 'urgent';
     evidence?: Array<Record<string, unknown>>;
 }
+}
   };
 }
 
+}
 }
 interface ReviewDecisionRequest {
   Body: {
@@ -95,9 +104,11 @@ interface ReviewDecisionRequest {
     actions?: string[];
     modifiedFraudScore?: number;
 }
+}
   };
 }
 
+}
 }
 interface CreateAlertRequest {
   Body: {
@@ -112,9 +123,11 @@ interface CreateAlertRequest {
     expiresAt?: string;
     tags?: string[];
 }
+}
   };
 }
 
+}
 }
 interface FraudRuleRequest {
   Body: {
@@ -128,9 +141,11 @@ interface FraudRuleRequest {
     thresholds: Array<Record<string, unknown>>;
     tags?: string[];
 }
+}
   };
 }
 
+}
 }
 interface AnalyticsRequest {
   Querystring: {
@@ -138,6 +153,7 @@ interface AnalyticsRequest {
     endDate: string;
     format?: 'json' | 'csv';
     includeInsights?: boolean;
+}
 }
   };
 }

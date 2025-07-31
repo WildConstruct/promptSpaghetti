@@ -12,6 +12,7 @@ import {
   REGION_GROUP_COLORS,
   REGION_GROUP_STYLES
 } from '../../types/CollaborationTypes';
+}
 interface RegionGroupProps {
   group: RegionGroupType;
   onAction: (action: RegionGroupAction) => void;
@@ -34,6 +35,7 @@ interface RegionGroupProps {
   showNodeCount = true,
   nodeCount = 0,
   zoom = 1
+}
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);

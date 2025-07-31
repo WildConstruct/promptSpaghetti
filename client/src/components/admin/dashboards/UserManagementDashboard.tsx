@@ -20,6 +20,7 @@ import {
   PERMISSIONS
 } from '../shared';
 import type { TableColumn, TableAction, FormSchema } from '../shared';
+}
 interface User {
   id: string;,
   name: string;
@@ -42,6 +43,7 @@ interface User {
   current: 1,
   pageSize: 10,
   total: 0,
+}
 });
   const { getUsers, updateUserStatus, deleteUser, loading, error } = useAdminUserApi();
   const { hasPermission } = usePermissions();
@@ -95,7 +97,7 @@ interface User {
   value: users.filter(u => u.status === 'active').length,
   label: 'Active Users',
   format: 'number' as const,
-  trend: {,
+  trend: {
   value: 8,
   direction: 'up' as const,
   label: 'vs last month',
@@ -242,7 +244,7 @@ interface User {
   type: 'text',
   required: true,
   placeholder: 'Enter full name',
-  validation: {,
+  validation: {
   minLength: 2,
   maxLength: 100,
 }
@@ -252,7 +254,7 @@ interface User {
   type: 'email',
   required: true,
   placeholder: 'Enter email address',
-  validation: {,
+  validation: {
   pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$',
 }
       {

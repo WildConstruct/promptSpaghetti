@@ -373,11 +373,13 @@ export type OAuthState = z.infer<typeof OAuthStateSchema>;
 
 // Helper types
 }
+}
 export interface WorkspaceWithMembership extends Workspace {
   membership?: UserMembership;
   role_permissions?: number;
 }
 
+}
 }
 export interface ProjectWithStats extends Project {
   resource_count?: number;
@@ -386,19 +388,23 @@ export interface ProjectWithStats extends Project {
 }
 
 }
+}
 export interface UserWithRoles {
   user_id: string;
   membership: UserMembership;
 }
+}
   roles: Array<ACLRole & { scope_type: string; scope_id: string }>;
 }
 
+}
 }
 export interface ActivityEventWithActorInfo extends ActivityEvent {
   actor_name?: string;
   actor_avatar?: string;
 }
 
+}
 }
 export interface CommentWithReplies extends Comment {
   replies?: CommentWithReplies[];
@@ -408,6 +414,7 @@ export interface CommentWithReplies extends Comment {
 
 // Pagination types
 }
+}
 export interface PaginationOptions {
   page?: number;
   limit?: number;
@@ -415,7 +422,9 @@ export interface PaginationOptions {
   sort_order?: 'asc' | 'desc';
 }
 }
+}
 
+}
 }
 export interface PaginatedResult<T> {
   data: T[];
@@ -431,13 +440,16 @@ export interface PaginatedResult<T> {
 
 // Filter types
 }
+}
 export interface WorkspaceFilter {
   owner_id?: string;
   archived?: boolean;
   search?: string;
 }
 }
+}
 
+}
 }
 export interface ProjectFilter {
   workspace_id?: string;
@@ -446,7 +458,9 @@ export interface ProjectFilter {
   search?: string;
 }
 }
+}
 
+}
 }
 export interface ActivityEventFilter {
   workspace_id?: string;
@@ -457,12 +471,15 @@ export interface ActivityEventFilter {
   to_date?: Date;
 }
 }
+}
 
+}
 }
 export interface CommentFilter {
   resource_id?: string;
   author_id?: string;
   status?: Comment['status'][];
   target_type?: Comment['target_type'];
+}
 }
 }

@@ -7,6 +7,7 @@ export type IODataType = 'string' | 'number' | 'boolean' | 'array' | 'object' | 
  * Input/Output port definition for advanced nodes
  */
 
+}
 export interface IOPortDefinition {
     /** Unique identifier for this port */
     id: string;
@@ -30,6 +31,7 @@ export interface IOPortDefinition {
  * Validation constraints for I/O ports
  */
 
+}
 export interface IOConstraints {
     /** Minimum value (for numbers) */
     min?: number;
@@ -51,6 +53,7 @@ export interface IOConstraints {
  * Input/Output port specification for a node type
  */
 
+}
 export interface IOSpec {
     /** Input port definitions */
     inputs: IOPortDefinition[];
@@ -62,6 +65,7 @@ export interface IOSpec {
  * Resolved input values for node execution
  */
 
+}
 export interface ResolvedInputs {
     /** Direct input values by port ID */
     values: Map<string, any>;
@@ -73,6 +77,7 @@ export interface ResolvedInputs {
  * Metadata about how an input was resolved
  */
 
+}
 export interface IOResolutionMetadata {
     /** Whether the value came from a connection or default */
     source: 'connection' | 'default' | 'computed';
@@ -83,6 +88,7 @@ export interface IOResolutionMetadata {
         from: IODataType;
         to: IODataType;
 
+}
     };
     /** Validation warnings */
     warnings: string[];

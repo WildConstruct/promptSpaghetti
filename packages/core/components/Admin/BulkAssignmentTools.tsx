@@ -34,6 +34,8 @@ export enum AssignmentType {
   conflicts?: AssignmentConflict;
   metadata?: Record<string, any>;
 }
+}
+}
 export interface Assignment {
   id: string;
   assignmentType: AssignmentType;
@@ -45,13 +47,17 @@ export interface Assignment {
   assignedBy: string;
   metadata?: Record<string, any>;
 }
+}
+}
 export interface AssignmentConflict {
   type: 'duplicate' | 'incompatible' | 'quota_exceeded' | 'permission_denied';
   description: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
   affectedAssignments: string;
   resolution?: 'skip' | 'override' | 'merge' | 'escalate'
+}
   }
+}
 export interface BulkAssignmentOperation {
   operationId: string;
   operationType: BulkOperationType;
@@ -65,6 +71,8 @@ export interface BulkAssignmentOperation {
   conflicts?: AssignmentConflict;
   results?: BulkAssignmentResult;
 }
+}
+}
 export interface AssignmentResource {
   id: string;
   type: AssignmentType;
@@ -75,6 +83,8 @@ export interface AssignmentResource {
   restrictions?: string;
   quotaLimits?: Record<string, number>;
   metadata?: Record<string, any>;
+}
+}
 }
 export interface BulkAssignmentParameters {
   executionMode: 'immediate' | 'scheduled' | 'staged';
@@ -90,6 +100,8 @@ export interface BulkAssignmentParameters {
   autoResolveConflicts: boolean;
   customProperties: Record<string, any>;
 }
+}
+}
 export interface AssignmentTemplate {
   id: string;
   name: string;
@@ -103,17 +115,21 @@ export interface AssignmentTemplate {
   timesUsed: number;
   lastUsed?: Date;
   successRate: number;
+}
 };
   createdBy: string;
   createdAt: Date;
   isSystemTemplate: boolean;
+}
 }
 export interface TargetFilter {
   field: string;
   operator: 'eq' | 'ne' | 'in' | 'not_in' | 'contains' | 'starts_with';
   value: Error;
   logicalOperator?: 'AND' | 'OR'
+}
   }
+}
 export interface BulkAssignmentProgress {
   totalTargets: number;
   processedTargets: number;
@@ -126,6 +142,8 @@ export interface BulkAssignmentProgress {
   percentComplete: number;
   estimatedTimeRemaining?: number; // minutes,
   currentStep: string;
+}
+}
 }
 export interface BulkAssignmentResult {
   targetId: string;
@@ -141,6 +159,8 @@ export interface BulkAssignmentResult {
   // Main Bulk Assignment Tools Component
   // =============================================================================
 }
+}
+}
 export interface BulkAssignmentToolsProps {
   assignmentType: AssignmentType;
   operationType: BulkOperationType;
@@ -151,6 +171,7 @@ export interface BulkAssignmentToolsProps {
   onCancel?: (operationId: string) => Promise<void>;
   onTemplateCreate?: (template: Omit<AssignmentTemplate, 'id' | 'createdAt' | 'usage'>) => Promise<string>;
   readonly?: boolean;
+}
 }
 export const BulkAssignmentTools: React.FC<BulkAssignmentToolsProps> = ({)
   assignmentType,
@@ -307,6 +328,7 @@ export const BulkAssignmentTools: React.FC<BulkAssignmentToolsProps> = ({)
 // =============================================================================
 // Bulk Assignment Header Component
 // =============================================================================
+}
 interface BulkAssignmentHeaderProps {
   assignmentType: AssignmentType;
   operationType: BulkOperationType;
@@ -319,6 +341,7 @@ interface BulkAssignmentHeaderProps {
   operation,
   availableTemplates,
   onTemplateLoad
+}
 }) => {
   const getOperationTitle = () => {
   const typeNames = {
@@ -388,6 +411,7 @@ interface BulkAssignmentHeaderProps {
 // =============================================================================
 // Wizard Navigation Component
 // =============================================================================
+}
 interface BulkAssignmentWizardProps {
   steps: Array<{ number: number; title: string; description: string }>;
   currentStep: number;
@@ -422,6 +446,7 @@ const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({)
 // =============================================================================
 // Target Selection Step Component
 // =============================================================================
+}
 interface TargetSelectionStepProps {
   targets: BulkAssignmentTarget;
   selectedTargets: BulkAssignmentTarget;
@@ -434,6 +459,7 @@ interface TargetSelectionStepProps {
   onTargetsChange,
   assignmentType,
   operationType
+}
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<'all' | 'user' | 'team' | 'service' | 'role'>('all');
@@ -552,6 +578,7 @@ interface TargetSelectionStepProps {
 // =============================================================================
 // Target Card Component
 // =============================================================================
+}
 interface TargetCardProps {
   target: BulkAssignmentTarget;
   selected: boolean;
@@ -564,6 +591,7 @@ interface TargetCardProps {
   onToggle,
   assignmentType,
   operationType
+}
 }) => {
   const [showDetails, setShowDetails] = useState(false);
   const getTypeIcon = (type: string) => {,
@@ -658,6 +686,7 @@ interface TargetCardProps {
 // =============================================================================
 // Action Buttons Component
 // =============================================================================
+}
 interface BulkAssignmentActionsProps {
   currentStep: number;
   totalSteps: number;
@@ -678,6 +707,7 @@ interface BulkAssignmentActionsProps {
   onReset,
   isExecuting,
   readonly
+}
 }) => {
   return;
     <div className="bulk-assignment-actions">

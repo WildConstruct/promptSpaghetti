@@ -32,6 +32,7 @@ import {
   Eye
 } from 'lucide-react';
 
+}
 export interface PolicyAnalyticsMetrics {
   totalPolicies: number;
   activePolicies: number;
@@ -41,25 +42,28 @@ export interface PolicyAnalyticsMetrics {
   enforcementActions: number;
   actionSuccessRate: number;
   avgResponseTime: number; // hours,
-  topViolatedCategories: Array<{,
+  topViolatedCategories: Array<{
   category: string;
   count: number;
   percentage: number;
+}
 }>;
-  enforcementEffectiveness: Array<{,
+  enforcementEffectiveness: Array<{
   actionType: string;
   successRate: number;
   count: number;
 }>;
-  timeSeriesData: Array<{,
+  timeSeriesData: Array<{
   date: string;
   violations: number;
   enforcements: number;
   preventions: number;
 }>;
 }
+}
 export interface PolicyAnalyticsDashboardProps {
   className?: string;
+}
 }
 export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> = ({)
   className = ''

@@ -4,6 +4,7 @@
  */
 import { ExperimentResults, VariantResults, ExperimentMetric } from '../types/experiment';
 
+}
 export interface StatisticalTestResult {
     pValue: number;
     testStatistic: number;
@@ -14,6 +15,7 @@ export interface StatisticalTestResult {
     practicallySignificant: boolean;
 
 
+}
 export interface BayesianResult {
     posteriorProbability: number;
     credibleInterval: [number, number];
@@ -21,6 +23,7 @@ export interface BayesianResult {
     expectedLoss: number;
 
 
+}
 export interface SampleSizeCalculation {
     requiredSampleSize: number;
     estimatedDuration: number;
@@ -80,6 +83,7 @@ export declare class StatisticalEngine {
         winner?: string;
         confidence: number;
         reason: string;
+}
     };
     private calculatePrimaryMetricResults;
     private calculateGuardrailResults;

@@ -26,6 +26,7 @@ export type MARSZoneType =
   | 'composition'
   | 'post_processing';
 
+}
 export interface FilmIndustryUser {
   id: string;
   name: string;
@@ -34,6 +35,8 @@ export interface FilmIndustryUser {
   permissions: string;
   isOnline: boolean;
   currentSession?: string;
+}
+}
 }
 export interface MARSRegionTemplate {
   id: string;
@@ -48,7 +51,9 @@ export interface MARSRegionTemplate {
   category: string;
   subcategory: string;
   controlNetMapping?: string;
+}
 };
+}
 }
 export interface ZadaPromptPattern {
   id: string;
@@ -64,12 +69,14 @@ export interface ZadaPromptPattern {
   locations: string;
   characters: string;
   cinematography: string;
+}
 };
   accessibility: {
   directorFriendly: boolean;
   technicalLevel: number; // 1-10,
   humanReadableScore: number; // 1-10,
 };
+}
 }
 export interface PromptingMethodologySession {
   sessionId: string;
@@ -83,6 +90,8 @@ export interface PromptingMethodologySession {
   createdAt: Date;
   lastModified: Date;
 }
+}
+}
 export interface MethodologyEdit {
   id: string;
   sessionId: string;
@@ -91,6 +100,8 @@ export interface MethodologyEdit {
   type: 'pattern_edit' | 'mars_region_add' | 'zada_element_edit' | 'vfx_config_update';
   data: any;
   conflictResolution?: string;
+}
+}
 }
 export interface VFXPipelineConfig {
   includeAnnotations: boolean;
@@ -103,7 +114,9 @@ export interface VFXPipelineConfig {
   sequence: string;
   shot: string;
   version: string;
+}
 };
+}
 }
 export interface FilmIndustryWorkflowTemplate {
   id: string;
@@ -116,7 +129,9 @@ export interface FilmIndustryWorkflowTemplate {
   zadaElements: string;
   estimatedDuration: number; // minutes,
   complexity: 'simple' | 'intermediate' | 'advanced'
+}
   }
+}
 export interface WorkflowPhase {
   id: string;
   name: string;
@@ -127,6 +142,8 @@ export interface WorkflowPhase {
   methodology: PromptingMethodology;
   marsConfiguration?: MARSRegionTemplate;
   zadaPattern?: ZadaPromptPattern;
+}
+}
 }
 export interface CollaborationComment {
   id: string;
@@ -147,6 +164,7 @@ export interface CollaborationComment {
   * working with AI prompt generation, combining MARS framework, Zada natural
   * language patterns, and VFX pipeline integration.
   */
+}
 }
 export class AdvancedPromptingCollaborationService extends EventEmitter {
   private sessions: Map<string, PromptingMethodologySession> = new Map();
@@ -363,6 +381,7 @@ export class AdvancedPromptingCollaborationService extends EventEmitter {
     this.emit('session_created', session);
     return session;
   async joinCollaborationSession(sessionId: string, userId: string): Promise<boolean> {
+
     const session = this.sessions.get(sessionId);
     const user = this.users.get(userId);
     if (!session || !user) {
@@ -454,6 +473,7 @@ export class AdvancedPromptingCollaborationService extends EventEmitter {
     return region;
   // VFX Pipeline Integration
   async generateVFXExport(sessionId: string, userId: string): Promise<any> {
+
     const session = this.sessions.get(sessionId);
     if (!session) {
       throw new Error('Session not found');

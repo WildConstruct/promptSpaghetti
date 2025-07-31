@@ -70,6 +70,7 @@ const LEGAL_TERMINOLOGY_DB: LegalTerminology = [
   practiceArea = 'General',
   autoValidate = true,
   className = ''
+}
 }) => {
   const [validationResults, setValidationResults] = useState<TermValidationResult>([]);
   const [isValidating, setIsValidating] = useState(false);

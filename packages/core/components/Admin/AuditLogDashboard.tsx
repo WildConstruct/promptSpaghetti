@@ -68,11 +68,13 @@ import {
   TimePreset,
   SearchAnalytics
 } from '../../services/audit-filtering-service';
+}
 interface AuditLogDashboardProps {
   className?: string;
   userId?: string;
   userRole?: string;
 const SEVERITY_CONFIG = {
+}
   low: { color: 'text-blue-600 bg-blue-100', icon: Minus, label: 'Low' },
   medium: { color: 'text-yellow-600 bg-yellow-100', icon: AlertCircle, label: 'Medium' },
   high: { color: 'text-orange-600 bg-orange-100', icon: AlertTriangle, label: 'High' },

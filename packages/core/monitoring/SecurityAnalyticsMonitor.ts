@@ -8,6 +8,7 @@ import { EventEmitter } from 'events';
 import { PerformanceMonitor, PerformanceMetrics, AggregatedMetrics, PerformanceAlert } from './PerformanceMonitor';
 import { SecurityEvent } from '../security/AlertingSystem';
 
+}
 export interface SecurityAnalyticsMetrics {
   // Security-specific metrics extending performance metrics
   threatDetectionMetrics: {
@@ -17,6 +18,7 @@ export interface SecurityAnalyticsMetrics {
   threatLevel: number;
   detectionAccuracy: number;
   timeToDetection: number;
+}
 };
   complianceMetrics: {
   complianceViolations: number;
@@ -47,6 +49,7 @@ export interface SecurityAnalyticsMetrics {
   escalationRate: number;
 };
 }
+}
 export interface SecuritySystemHealth {
   systemId: string;
   systemType: 'firewall' | 'ids' | 'siem' | 'auth' | 'compliance' | 'backup' | 'encryption';
@@ -71,6 +74,8 @@ export interface SecuritySystemHealth {
   lastConfigUpdate: number;
   pendingUpdates: number;
 }
+}
+}
 export interface SecurityAnalyticsAlert extends PerformanceAlert {
   securityCategory: 'threat_detection' | 'compliance' | 'access_control' | 'data_protection' | 'incident_response';
   affectedSystems: string;
@@ -87,6 +92,7 @@ export interface SecurityAnalyticsAlert extends PerformanceAlert {
   enableAlerting: boolean;
   slowExecutionThreshold: number;
   memoryThreshold: number;
+}
 };
   // Security-specific configuration
   securityConfig: {
@@ -291,7 +297,7 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
   meanResponseTime: number;
 };
     topThreats: Array<{ type: string; count: number }>;
-    systemPerformance: Array<{,
+    systemPerformance: Array<{
   systemId: string;
   healthScore: number;
   responseTime: number;
@@ -633,6 +639,7 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
       this.securityAlerts.set(alert.id, alert);
       this.emit('system_health_alert_created', alert);
   private async performHealthChecks(): Promise<void> {
+
   const healthCheckPromises = Array.from(this.systemHealthMap.keys()).map(async (systemId) => {
   try {
   const health = this.systemHealthMap.get(systemId)!;

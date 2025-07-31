@@ -26,6 +26,7 @@ import {
 import { Badge } from '../common/Badge';
 import './EnhancedToggleFilters.css';
 
+}
 export interface ToggleFilters {
   // Basic filters
   search: string;
@@ -35,10 +36,11 @@ export interface ToggleFilters {
   // Advanced filters
   organizationId?: string;
   createdBy?: string;
-  dateRange?: {,
+  dateRange?: {
   start: string;,
   end: string;
   field: 'created' | 'updated' | 'lastEvaluated';
+}
 };
   // Performance filters
   evaluationCount?: {
@@ -72,12 +74,14 @@ export interface ToggleFilters {
   tags?: string;
   customFields?: Record<string, unknown>;
 }
+}
 export interface SortConfig {
   field: SortField;,
   direction: 'asc' | 'desc';
-  secondary?: {,
+  secondary?: {
   field: SortField;,
   direction: 'asc' | 'desc';
+}
 };
 }
 export type SortField = 
@@ -85,6 +89,7 @@ export type SortField =
   | 'claudeImpact' | 'version' | 'evaluationCount' | 'successRate' 
   | 'responseTime' | 'lastEvaluated' | 'dependencyCount' | 'organizationCount';
 
+}
 export interface SavedFilter {
   id: string;,
   name: string;
@@ -95,6 +100,7 @@ export interface SavedFilter {
   createdBy: string;,
   createdAt: string;
   usageCount: number;
+}
 interface EnhancedToggleFiltersProps {
   filters: ToggleFilters;,
   sort: SortConfig;
@@ -103,6 +109,7 @@ interface EnhancedToggleFiltersProps {
   onReset: () => void;
   // Data for dropdowns
   availableTypes: string;,
+}
   availableOrganizations: Array<{ id: string; name: string }>;
   availableUsers: Array<{ id: string; name: string }>;
   availableToggles: Array<{ id: string; name: string }>;
@@ -147,7 +154,7 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
   id: '1',
   name: 'Active Claude Toggles',
   description: 'Toggles that impact Claude operations',
-  filters: {,
+  filters: {
   search: '',
   enabled: true,
   claudeImpact: 'PROMPT_COST,MODEL_VERSION,OUTPUT_QUALITY,HALLUCINATION_RISK',
@@ -161,7 +168,7 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
           id: '2',
           name: 'High Performance Issues',
           description: 'Toggles with performance problems',
-          filters: {,
+          filters: {
   search: '',
             hasAlerts: true,
             responseTime: { max: 100 },
@@ -176,9 +183,9 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
   id: '3',
   name: 'Recently Created',
   description: 'Toggles created in the last 7 days',
-  filters: {,
+  filters: {
   search: '',
-  dateRange: {,
+  dateRange: {
   start: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
   end: new Date().toISOString().split('T')[0],
   field: 'created',
@@ -434,7 +441,7 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
                       placeholder="Min"
                       value={filters.evaluationCount?.min || ''}
                       onChange={(e) => handleFilterChange({)
-  evaluationCount: {,
+  evaluationCount: {
   ...filters.evaluationCount,
   min: e.target.value ? parseInt(e.target.value) : undefined,
   period: filters.evaluationCount?.period || '24h',
@@ -446,7 +453,7 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
                       placeholder="Max"
                       value={filters.evaluationCount?.max || ''}
                       onChange={(e) => handleFilterChange({)
-  evaluationCount: {,
+  evaluationCount: {
   ...filters.evaluationCount,
   max: e.target.value ? parseInt(e.target.value) : undefined,
   period: filters.evaluationCount?.period || '24h',
@@ -466,7 +473,7 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
                       max="100"
                       value={filters.successRate?.min || ''}
                       onChange={(e) => handleFilterChange({)
-  successRate: {,
+  successRate: {
   min: e.target.value ? parseInt(e.target.value) : 0,
   max: filters.successRate?.max || 100,
 })}
@@ -479,7 +486,7 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
                       max="100"
                       value={filters.successRate?.max || ''}
                       onChange={(e) => handleFilterChange({)
-  successRate: {,
+  successRate: {
   min: filters.successRate?.min || 0,
   max: e.target.value ? parseInt(e.target.value) : 100,
 })}
@@ -567,7 +574,7 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
                   type="date"
                   value={filters.dateRange?.start || ''}
                   onChange={(e) => handleFilterChange({)
-  dateRange: {,
+  dateRange: {
   ...filters.dateRange,
   start: e.target.value,
   end: filters.dateRange?.end || e.target.value,
@@ -581,7 +588,7 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
                   type="date"
                   value={filters.dateRange?.end || ''}
                   onChange={(e) => handleFilterChange({)
-  dateRange: {,
+  dateRange: {
   ...filters.dateRange,
   start: filters.dateRange?.start || e.target.value,
   end: e.target.value,
@@ -594,7 +601,7 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
                 <select
                   value={filters.dateRange?.field || 'created'}
                   onChange={(e) => handleFilterChange({)
-  dateRange: {,
+  dateRange: {
   ...filters.dateRange,
   start: filters.dateRange?.start || '',
   end: filters.dateRange?.end || '',
@@ -625,9 +632,11 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({)
 };
 
 // Save Filter Modal Component
+}
 interface SaveFilterModalProps {
   onSave: (name: string, description?: string) => void;
   onCancel: () => void;
+}
 const SaveFilterModal: React.FC<SaveFilterModalProps> = ({ onSave, onCancel }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');

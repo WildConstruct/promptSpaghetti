@@ -22,6 +22,7 @@ export declare enum MFAVerificationResult {
     METHOD_DISABLED = "method_disabled",
     USER_LOCKED = "user_locked"
 
+}
 export interface BaseMFAConfiguration {
     id: string;
     userId: string;
@@ -35,6 +36,7 @@ export interface BaseMFAConfiguration {
     failedAttempts: number;
     lockedUntil?: Date;
 
+}
 export interface TOTPConfiguration extends BaseMFAConfiguration {
     methodType: MFAMethodType.TOTP;
     encryptedSecret: string;
@@ -45,6 +47,7 @@ export interface TOTPConfiguration extends BaseMFAConfiguration {
     qrCodeExpiresAt?: Date;
     backupCodesGenerated: boolean;
 
+}
 export interface TOTPSecret {
     secret: string;
     qrCodeDataUrl: string;
@@ -52,12 +55,14 @@ export interface TOTPSecret {
     issuer: string;
     accountName: string;
 
+}
 export interface TOTPEnrollmentData {
     configurationId: string;
     secret: TOTPSecret;
     backupCodes: string[];
     expiresAt: Date;
 
+}
 export interface EmailConfiguration extends BaseMFAConfiguration {
     methodType: MFAMethodType.EMAIL;
     emailAddress: string;
@@ -65,6 +70,7 @@ export interface EmailConfiguration extends BaseMFAConfiguration {
     verificationSentAt?: Date;
     verificationExpiresAt?: Date;
 
+}
 export interface EmailVerification {
     id: string;
     userId: string;
@@ -77,8 +83,10 @@ export interface EmailVerification {
         userAgent: string;
         location?: string;
         riskScore: number;
+}
     };
 
+}
 export interface SMSConfiguration extends BaseMFAConfiguration {
     methodType: MFAMethodType.SMS;
     phoneNumber: string;
@@ -90,6 +98,7 @@ export interface SMSConfiguration extends BaseMFAConfiguration {
         riskScore: number;
     };
 
+}
 export interface SMSVerification {
     id: string;
     userId: string;
@@ -103,8 +112,10 @@ export interface SMSVerification {
         userAgent: string;
         carrierResponse?: string;
         deliveryStatus?: 'sent' | 'delivered' | 'failed'
+}
   };
 
+}
 export interface BackupCode {
     id: string;
     userId: string;
@@ -115,15 +126,18 @@ export interface BackupCode {
         ipAddress: string;
         userAgent: string;
         location?: string;
+}
     };
     createdAt: Date;
 
+}
 export interface BackupCodeSet {
     userId: string;
     codes: string[];
     generatedAt: Date;
     expiresAt: Date;
 
+}
 export interface MFAChallenge {
     id: string;
     userId: string;
@@ -134,6 +148,7 @@ export interface MFAChallenge {
     maxAttempts: number;
     createdAt: Date;
 
+}
 export interface MFAVerificationAttempt {
     id: string;
     userId: string;
@@ -148,8 +163,10 @@ export interface MFAVerificationAttempt {
         codeLength?: number;
         timeSkew?: number;
         riskScore?: number;
+}
     };
 
+}
 export interface MFASession {
     id: string;
     userId: string;
@@ -161,6 +178,7 @@ export interface MFASession {
     ipAddress: string;
     userAgent: string;
 
+}
 export interface RateLimitRule {
     action: string;
     userLimit: number;
@@ -170,6 +188,7 @@ export interface RateLimitRule {
     globalLimit: number;
     globalWindow: number;
 
+}
 export interface RateLimitState {
     userId?: string;
     ipAddress?: string;
@@ -178,6 +197,7 @@ export interface RateLimitState {
     windowStart: Date;
     blockedUntil?: Date;
 
+}
 export interface SecurityEvent {
     id: string;
     userId?: string;
@@ -190,11 +210,13 @@ export interface SecurityEvent {
         location?: string;
         methodType?: MFAMethodType;
         attemptCount?: number;
+}
     };
     createdAt: Date;
     resolved: boolean;
     resolvedAt?: Date;
 
+}
 export interface UserMFAProfile {
     userId: string;
     isEnabled: boolean;
@@ -204,6 +226,7 @@ export interface UserMFAProfile {
     lastUsed?: {
         methodType: MFAMethodType;
         timestamp: Date;
+}
     };
     securityMetrics: {
         totalAttempts: number;
@@ -403,12 +426,14 @@ export declare const MFA_DATABASE_TABLES: {
     readonly MFA_SECURITY_EVENTS: "mfa_security_events"
   };
 
+}
 export interface MFAEnrollmentRequest {
     methodType: MFAMethodType;
     displayName: string;
     emailAddress?: string;
     phoneNumber?: string;
 
+}
 export interface MFAEnrollmentResponse {
     configurationId: string;
     methodType: MFAMethodType;
@@ -416,11 +441,13 @@ export interface MFAEnrollmentResponse {
     requiresVerification: boolean;
     expiresAt: Date;
 
+}
 export interface MFAVerificationRequest {
     configurationId: string;
     code: string;
     backupCode?: boolean;
 
+}
 export interface MFAVerificationResponse {
     success: boolean;
     result: MFAVerificationResult;
@@ -428,6 +455,7 @@ export interface MFAVerificationResponse {
     lockoutDuration?: number;
     nextMethodSuggested?: MFAMethodType;
 
+}
 export interface MFAListResponse {
     configurations: BaseMFAConfiguration[];
     profile: UserMFAProfile;
@@ -439,6 +467,7 @@ export declare const MFA_CONSTANTS: {
         readonly QR_CODE_EXPIRY: 300;
         readonly BACKUP_CODE_COUNT: 10;
         readonly MAX_CLOCK_SKEW: 90;
+}
     };
     readonly EMAIL: {
         readonly TOKEN_EXPIRY: 600;

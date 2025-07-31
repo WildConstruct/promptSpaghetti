@@ -51,6 +51,7 @@ type RandomizerGenerateRequest = z.infer<typeof RandomizerGenerateRequestSchema>
 type RandomizerValidateRequest = z.infer<typeof RandomizerValidateRequestSchema>;
 
 }
+}
 interface RandomizerGenerateResponse {
   success: boolean;
   graph?: unknown;
@@ -59,6 +60,7 @@ interface RandomizerGenerateResponse {
     provider: string;
     requestId: string;
     timestamp: string;
+}
 }
   };
   errors?: Array<{
@@ -74,12 +76,14 @@ interface RandomizerGenerateResponse {
 }
 
 }
+}
 interface RandomizerValidateResponse {
   isValid: boolean;
   errors: Array<{
     field: string;
     message: string;
     severity: 'error' | 'warning';
+}
 }
   }>;
   warnings: Array<{

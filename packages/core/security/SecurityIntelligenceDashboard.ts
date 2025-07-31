@@ -16,6 +16,7 @@ import { ThreatForecast } from './SecurityThreatForecasting';
 // TYPES AND INTERFACES
 // ==========================================
 
+}
 export interface SecurityDashboardConfig {
   refreshInterval: number;
   enableRealTimeUpdates: boolean;
@@ -26,6 +27,8 @@ export interface SecurityDashboardConfig {
   alertThresholds: DashboardAlertThresholds;
   reportingSchedules: ReportingSchedule;
 }
+}
+}
 export interface DashboardAlertThresholds {
   criticalThreatCount: number;
   anomalyVolumeThreshold: number;
@@ -33,12 +36,15 @@ export interface DashboardAlertThresholds {
   systemHealthThreshold: number;
   complianceScoreThreshold: number;
 }
+}
+}
 export interface ReportingSchedule {
   reportType: ReportType;
   frequency: ReportFrequency;
   recipients: string;
   nextExecution: Date;
   enabled: boolean;
+}
 }
 export enum ReportType {
   EXECUTIVE_SUMMARY = 'executive_summary',
@@ -65,6 +71,7 @@ export enum ReportType {
   riskFactors: RiskFactor;
   recommendations: SecurityRecommendation;
 }
+}
 export enum ThreatLevel {
   MINIMAL = 'minimal',
   LOW = 'low',
@@ -78,7 +85,9 @@ export enum ThreatLevel {
   changePercent: number;
   timeframe: string;
   significance: 'high' | 'medium' | 'low'
+}
   }
+}
 export interface RiskFactor {
   id: string;
   category: RiskCategory;
@@ -88,6 +97,7 @@ export interface RiskFactor {
   description: string;
   mitigationStatus: 'pending' | 'in_progress' | 'completed';
   estimatedResolutionTime: number; // hours,
+}
 }
 export enum RiskCategory {
   TECHNICAL = 'technical',
@@ -109,6 +119,8 @@ export enum RiskCategory {
   dependencies: string;
   timeline: string;
 }
+}
+}
 export interface ThreatIntelligenceData {
   activeThreatCount: number;
   highSeverityThreats: ThreatSummary;
@@ -117,6 +129,8 @@ export interface ThreatIntelligenceData {
   attackVectors: AttackVector;
   threatTrends: ThreatTrend;
   indicators: ThreatIndicator;
+}
+}
 }
 export interface ThreatSummary {
   id: string;
@@ -128,7 +142,9 @@ export interface ThreatSummary {
   affectedSystems: string;
   description: string;
   status: 'active' | 'mitigated' | 'resolved'
+}
   }
+}
 export interface GeographicalThreat {
   country: string;
   region: string;
@@ -136,19 +152,25 @@ export interface GeographicalThreat {
   severityDistribution: Record<string, number>;
   primaryThreatTypes: string;
 }
+}
+}
 export interface AttackVector {
   vector: string;
   frequency: number;
   successRate: number;
   averageDamage: number;
   trend: 'increasing' | 'decreasing' | 'stable'
+}
   }
+}
 export interface ThreatTrend {
   timeframe: string;
   threatType: string;
   volumeChange: number;
   severityChange: number;
   newVariants: number;
+}
+}
 }
 export interface ThreatIndicator {
   type: 'ip' | 'domain' | 'hash' | 'pattern';
@@ -158,12 +180,15 @@ export interface ThreatIndicator {
   firstSeen: Date;
   associatedThreats: string;
 }
+}
+}
 export interface DashboardMetrics {
   securityEvents: {
   total: number;
   critical: number;
   resolved: number;
   averageResponseTime: number;
+}
 };
   anomalies: {
   detected: number;
@@ -186,6 +211,7 @@ export interface DashboardMetrics {
   severity: Record<string, number>;
 };
 }
+}
 export interface ExecutiveReport {
   id: string;
   reportType: ReportType;
@@ -193,12 +219,14 @@ export interface ExecutiveReport {
   period: {
   start: Date;
   end: Date;
+}
 };
   summary: ExecutiveSummary;
   keyMetrics: KeyMetric;
   findings: Finding;
   recommendations: SecurityRecommendation;
   appendices: ReportAppendix;
+}
 }
 export interface ExecutiveSummary {
   overallStatus: 'excellent' | 'good' | 'fair' | 'poor' | 'critical';
@@ -207,6 +235,8 @@ export interface ExecutiveSummary {
   actionItems: string;
   budgetImpact: string;
 }
+}
+}
 export interface KeyMetric {
   name: string;
   value: number | string;
@@ -214,6 +244,8 @@ export interface KeyMetric {
   trend: 'up' | 'down' | 'stable';
   context: string;
   benchmark: number | string;
+}
+}
 }
 export interface Finding {
   id: string;
@@ -225,11 +257,15 @@ export interface Finding {
   impact: string;
   recommendation: string;
 }
+}
+}
 export interface ReportAppendix {
   title: string;
   type: 'chart' | 'table' | 'text' | 'image';
   content: unknown;
   description: string;
+}
+}
 }
 export interface DashboardWidget {
   id: string;
@@ -241,6 +277,7 @@ export interface DashboardWidget {
   dataSource: string;
   refreshRate: number;
   isVisible: boolean;
+}
 }
 export enum WidgetType {
   METRIC_CARD = 'metric_card',
@@ -257,9 +294,13 @@ export enum WidgetType {
   x: number;
   y: number;
 }
+}
+}
 export interface WidgetSize {
   width: number;
   height: number;
+}
+}
 }
 export interface WidgetConfig {
   theme: 'light' | 'dark';
@@ -271,6 +312,7 @@ export interface WidgetConfig {
   // ==========================================
   // MAIN DASHBOARD CLASS
   // ==========================================
+}
 }
 export class SecurityIntelligenceDashboard extends EventEmitter {
   private config: SecurityDashboardConfig;
@@ -493,6 +535,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
    * Process security intelligence data for dashboard
    */
   public async processSecurityIntelligence(intelligence: SecurityIntelligence): Promise<void> {
+
   try {
   // Update security posture
   await this.updateSecurityPosture(intelligence);
@@ -514,6 +557,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
    * Process security anomalies for dashboard
    */
   public async processSecurityAnomalies(anomalies: SecurityAnomaly): Promise<void> {
+
     try {
       // Update anomaly metrics
       this.dashboardMetrics.anomalies.detected = anomalies.length;
@@ -534,6 +578,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
    * Process threat forecasts for dashboard
    */
   public async processThreatForecasts(forecasts: ThreatForecast): Promise<void> {
+
     try {
       // Update threat trends from forecasts
       const threatTrends: ThreatTrend = forecasts.map(forecast => ({)
@@ -555,6 +600,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
   // SECURITY POSTURE ANALYSIS
   // ==========================================
   private async updateSecurityPosture(intelligence: SecurityIntelligence): Promise<void> {
+
   const activeIntelligence = intelligence.filter(i => !i.autoResolved);
   // Calculate overall security score
   let postureScore = 100;
@@ -593,6 +639,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
   recommendations
 };
   private async updateThreatIntelligence(intelligence: SecurityIntelligence): Promise<void> {
+
     const activeThreats = intelligence.filter(i => !i.autoResolved);
     // High severity threats summary
     const highSeverityThreats: ThreatSummary = activeThreats
@@ -638,6 +685,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
   indicators: [] // Would be populated with IOCs,
 };
   private async updateDashboardMetrics(intelligence: SecurityIntelligence): Promise<void> {
+
     // Update security events metrics
     this.dashboardMetrics.securityEvents.total = intelligence.length;
     this.dashboardMetrics.securityEvents.critical = intelligence.filter(i => i.severity === 'critical').length;
@@ -663,10 +711,11 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
   /**
    * Generate executive report
    */
-  public async generateExecutiveReport(()
+  public async generateExecutiveReport(((
     reportType: ReportType,
     period: { start: Date; end: Date }
   ): Promise<ExecutiveReport> {
+
   const summary = await this.generateExecutiveSummary();
   const keyMetrics = await this.generateKeyMetrics();
   const findings = await this.generateFindings();
@@ -683,6 +732,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
   appendices: [],
 };
   private async generateExecutiveSummary(): Promise<ExecutiveSummary> {
+
     const overallScore = this.securityPosture.overallScore;
     let overallStatus: ExecutiveSummary['overallStatus'];
     if (overallScore >= 90) overallStatus = 'excellent';
@@ -713,6 +763,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
   budgetImpact: 'Moderate investment required for security improvements',
 };
   private async generateKeyMetrics(): Promise<KeyMetric> {
+
   return [
   {
   name: 'Security Posture Score',
@@ -746,6 +797,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         context: 'Regulatory compliance status',
         benchmark: 95];
   private async generateFindings(): Promise<Finding> {
+
     const findings: Finding = [];
     // Generate findings from risk factors
     this.securityPosture.riskFactors.forEach(risk => {)
@@ -768,6 +820,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
   // HELPER METHODS
   // ==========================================
   private async generateRiskFactors(intelligence: SecurityIntelligence): Promise<RiskFactor> {
+
     const riskFactors: RiskFactor = [];
     // Generate risk factors from active intelligence
     const activeThreats = intelligence.filter(i => !i.autoResolved);
@@ -797,10 +850,11 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         estimatedResolutionTime: 4;
   });
     return riskFactors;
-  private async generateRecommendations(()
+  private async generateRecommendations(((
     intelligence: SecurityIntelligence,
-    postureScore: number,
+    postureScore: number
   ): Promise<SecurityRecommendation> {
+
   const recommendations: SecurityRecommendation = [];
   if (postureScore < 70) {
   recommendations.push({)
@@ -833,6 +887,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
 });
     return recommendations;
   private async updateRiskFactorsFromAnomalies(anomalies: SecurityAnomaly): Promise<void> {
+
     const highSeverityAnomalies = anomalies.filter(a => ;);
       a.severity === 'high' || a.severity === 'critical'
     );
@@ -872,6 +927,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
 });
     this.securityPosture.trends = trends;
   private async checkAlertThresholds(): Promise<void> {
+
     const alerts: string = [];
     // Check critical threat count
     if (this.threatIntelligence.activeThreatCount >= this.config.alertThresholds.criticalThreatCount) {
@@ -898,6 +954,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
           this.isUpdating = false;
     }, this.config.refreshInterval);
   private async performScheduledUpdate(): Promise<void> {
+
   // Update system health metrics
   this.dashboardMetrics.systemHealth = {
   availability: 95 + Math.random() * 5, // Simulate availability,
@@ -912,6 +969,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
       await this.checkReportingSchedules();
     }, 60000); // Check every minute
   private async checkReportingSchedules(): Promise<void> {
+
     const now = new Date();
     for (const schedule of this.config.reportingSchedules) {
       if (schedule.enabled && schedule.nextExecution <= now) {
@@ -966,6 +1024,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         break;
     return next;
   private async distributeReport(report: ExecutiveReport, recipients: string): Promise<void> {
+
     // Integration point with Epic 17 notification system
     console.log(`📊 DISTRIBUTING REPORT: ${report.reportType} to ${recipients.join(', ')}`);}
   private generateReportId(): string {
@@ -998,11 +1057,12 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
     this.widgets.set(widgetId, updatedWidget);
     this.emit('widgetUpdated', updatedWidget);
     return true;
-  public async generateAdHocReport()
+  public async generateAdHocReport(
     analysisType: string,
     parameters: Record<string,
     unknown>
   ): Promise<ExecutiveReport> {
+
     // Ad-hoc analysis capability
     console.log(`🔍 GENERATING AD-HOC ANALYSIS: ${analysisType}`);}
     return this.generateExecutiveReport()

@@ -13,6 +13,7 @@ import { EventEmitter } from 'events';
 // TYPES AND INTERFACES
 // ==========================================
 
+}
 export interface SecurityEvent {
   id: string;
   timestamp: Date;
@@ -25,6 +26,7 @@ export interface SecurityEvent {
   metadata: Record<string, unknown>;
   riskScore: number;
   geolocation?: GeolocationData;
+}
 }
 export enum SecurityEventType {
   LOGIN_ATTEMPT = 'login_attempt',
@@ -52,6 +54,8 @@ export enum SecurityEventType {
   longitude: number;
   isKnownLocation: boolean;
 }
+}
+}
 export interface ThreatPrediction {
   predictionId: string;
   timestamp: Date;
@@ -63,6 +67,7 @@ export interface ThreatPrediction {
   recommendedActions: PreventiveAction;
   modelVersion: string;
   features: Record<string, number>;
+}
 }
 export enum ThreatType {
   BRUTE_FORCE_ATTACK = 'brute_force_attack',
@@ -80,6 +85,7 @@ export enum ThreatType {
   urgency: 'low' | 'medium' | 'high' | 'immediate';
   description: string;
   estimatedEffectiveness: number;
+}
 }
 export enum ActionType {
   INCREASE_MONITORING = 'increase_monitoring',
@@ -103,6 +109,8 @@ export enum ActionType {
   threatTypes: ThreatType;
   featureImportance: Record<string, number>;
 }
+}
+}
 export interface AnalyticsConfiguration {
   predictionThreshold: number;
   maxPredictionTimeframe: number;
@@ -114,6 +122,7 @@ export interface AnalyticsConfiguration {
   // ==========================================
   // MAIN SERVICE CLASS
   // ==========================================
+}
 }
 export class PredictiveSecurityAnalytics extends EventEmitter {
   private models: Map<string, PredictionModel> = new Map();
@@ -159,6 +168,7 @@ export class PredictiveSecurityAnalytics extends EventEmitter {
    * Analyze single event for immediate threats
    */
   private async analyzeEvent(event: SecurityEvent): Promise<void> {
+
     const predictions = await this.generatePredictions([event]);
     for (const prediction of predictions) {
       if (prediction.confidence >= this.config.predictionThreshold) {
@@ -167,6 +177,7 @@ export class PredictiveSecurityAnalytics extends EventEmitter {
    * Generate batch predictions from event patterns
    */
   public async generatePredictions(events: SecurityEvent): Promise<ThreatPrediction> {
+
     const predictions: ThreatPrediction = [];
     for (const model of this.models.values()) {
       if (!model.isActive) continue;
@@ -177,6 +188,7 @@ export class PredictiveSecurityAnalytics extends EventEmitter {
    * Run specific prediction model
    */
   private async runModel(model: PredictionModel, events: SecurityEvent): Promise<ThreatPrediction> {
+
     const predictions: ThreatPrediction = [];
     // Extract features from events
     const features = this.extractFeatures(events);
@@ -345,6 +357,7 @@ export class PredictiveSecurityAnalytics extends EventEmitter {
    * Handle high-confidence threat predictions
    */
   private async handleThreatPrediction(prediction: ThreatPrediction): Promise<void> {
+
     // Store active prediction
     this.activePredictions.set(prediction.predictionId, prediction);
     // Emit prediction event
@@ -363,6 +376,7 @@ export class PredictiveSecurityAnalytics extends EventEmitter {
    * Execute preventive actions for threat prediction
    */
   private async executePreventiveActions(prediction: ThreatPrediction): Promise<void> {
+
     for (const action of prediction.recommendedActions) {
       if (action.urgency === 'immediate' || action.urgency === 'high') {
         try {
@@ -518,9 +532,11 @@ export class PredictiveSecurityAnalytics extends EventEmitter {
         description: 'Alert HR and security team of unusual behavior',
         estimatedEffectiveness: 0.7];
   private async sendThreatAlert(prediction: ThreatPrediction): Promise<void> {
+
     // Integration point with Epic 17 alerting system
     console.log(`🚨 THREAT ALERT: ${prediction.threatType} (confidence: ${prediction.confidence})`);}
   private async executeAction(action: PreventiveAction): Promise<void> {
+
     // Integration point with Epic 17 security systems
     console.log(`🛡️ EXECUTING ACTION: ${action.actionType} on ${action.target}`);}
   private cleanupOldEvents(): void {
@@ -561,6 +577,7 @@ export class PredictiveSecurityAnalytics extends EventEmitter {
         clearInterval(this.analysisInterval);
         this.analysisInterval = undefined;
   public async analyzeHistoricalData(timeframeHours = 24): Promise<ThreatPrediction> {
+
     const cutoff = Date.now() - (timeframeHours * 60 * 60 * 1000);
     const relevantEvents = this.eventHistory.filter(event =>;);
       event.timestamp.getTime() > cutoff

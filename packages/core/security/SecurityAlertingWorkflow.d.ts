@@ -31,6 +31,7 @@ export declare enum AlertChannel {
     PAGERDUTY = "pagerduty",
     TEAMS = "teams"
 
+}
 export interface SecurityAlert {
     id: string;
     timestamp: Date;
@@ -45,6 +46,7 @@ export interface SecurityAlert {
         patternIds?: string[];
         insightIds?: string[];
         metrics?: Record<string, number>;
+}
     };
     context: {
         affectedSystems: string[];
@@ -58,7 +60,7 @@ export interface SecurityAlert {
     };
     risk: {
         score: number;
-        factors: Array<{,
+        factors: Array<{
             factor: string;
             impact: number;
         }>;
@@ -90,6 +92,7 @@ export interface SecurityAlert {
         checksum: string;
     };
 
+}
 export interface AlertRule {
     id: string;
     name: string;
@@ -103,6 +106,7 @@ export interface AlertRule {
     automatedActions: AutomatedAction[];
     compliance: ComplianceFramework[];
 
+}
 export interface AlertCondition {
     field: string;
     operator: 'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte' | 'in' | 'nin' | 'contains' | 'matches';
@@ -111,8 +115,10 @@ export interface AlertCondition {
         function: 'count' | 'sum' | 'avg' | 'min' | 'max';
         timeWindow: number;
         groupBy?: string;
+}
     };
 
+}
 export interface SuppressionRule {
     id: string;
     description: string;
@@ -120,6 +126,7 @@ export interface SuppressionRule {
     suppressionWindow: number;
     maxSuppressions?: number;
 
+}
 export interface EscalationPolicy {
     id: string;
     name: string;
@@ -128,6 +135,7 @@ export interface EscalationPolicy {
     autoResolve: boolean;
     escalationTimeout: number;
 
+}
 export interface EscalationStep {
     level: number;
     delay: number;
@@ -136,15 +144,18 @@ export interface EscalationStep {
     actions: string[];
     continueOnFailure: boolean;
 
+}
 export interface NotificationRecipient {
     type: 'user' | 'team' | 'role';
     identifier: string;
-    contactMethods: Array<{,
+    contactMethods: Array<{
         channel: AlertChannel;
         address: string;
         priority: number;
+}
     }>;
 
+}
 export interface AutomatedAction {
     id: string;
     name: string;
@@ -158,6 +169,7 @@ export interface AutomatedAction {
     requiresApproval: boolean;
     approvers?: string[];
 
+}
 export interface WorkflowExecution {
     alertId: string;
     workflowId: string;
@@ -169,8 +181,10 @@ export interface WorkflowExecution {
         message: string;
         stack: string;
         step: string;
+}
     };
 
+}
 export interface WorkflowStep {
     id: string;
     name: string;
@@ -237,6 +251,7 @@ export declare class SecurityAlertingWorkflow extends EventEmitter {
         offset?: number;
         sortBy?: 'timestamp' | 'severity' | 'risk';
         sortOrder?: 'asc' | 'desc'
+}
   }): {
         alerts: SecurityAlert[];
         total: number;
@@ -256,7 +271,7 @@ export declare class SecurityAlertingWorkflow extends EventEmitter {
         averageResponseTime: number;
         averageResolutionTime: number;
         escalationRate: number;
-        topAlertSources: Array<{,
+        topAlertSources: Array<{
             source: string;
             count: number;
         }>;
@@ -320,9 +335,9 @@ export declare class SecurityAlertingWorkflow extends EventEmitter {
     private cleanupOldAlerts;
     private setupAnalyticsIntegration;
 
-export declare function createSecurityAlertingWorkflow(()
+export declare function createSecurityAlertingWorkflow(((
     analytics: SecurityEventAnalytics,
-    securityLogger: SecurityLogger,
+    securityLogger: SecurityLogger
   ): SecurityAlertingWorkflow;
 export default SecurityAlertingWorkflow;
 //# sourceMappingURL=SecurityAlertingWorkflow.d.ts.map

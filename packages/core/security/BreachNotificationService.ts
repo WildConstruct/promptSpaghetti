@@ -60,6 +60,7 @@ export enum BreachSeverity {
   category: DataSubjectCategory;
   count: number;
   countries: string;
+}
 }[];
   affectedSystems: string;
   rootCause?: string;
@@ -95,6 +96,8 @@ export enum IncidentStatus {
   status: 'pending' | 'sent' | 'delivered' | 'failed' | 'acknowledged';
   metadata: Record<string, any>;
 }
+}
+}
 export interface EvidenceRecord {
   id: string;
   type: 'log' | 'screenshot' | 'document' | 'forensic' | 'witness';
@@ -105,6 +108,8 @@ export interface EvidenceRecord {
   description: string;
   chainOfCustody: ChainOfCustodyEntry;
 }
+}
+}
 export interface ChainOfCustodyEntry {
   timestamp: Date;
   action: 'collected' | 'transferred' | 'analyzed' | 'stored';
@@ -112,11 +117,15 @@ export interface ChainOfCustodyEntry {
   location: string;
   notes?: string;
 }
+}
+}
 export interface TimelineEvent {
   timestamp: Date;
   event: string;
   actor: string;
   details: Record<string, any>;
+}
+}
 }
 export interface RiskAssessment {
   likelihood: 'low' | 'medium' | 'high';
@@ -126,6 +135,8 @@ export interface RiskAssessment {
   recommendations: string;
   residualRisk: string;
 }
+}
+}
 export interface ComplianceRequirement {
   framework: 'GDPR' | 'NIST' | 'HIPAA' | 'PCI_DSS' | 'SOX';
   requirement: string;
@@ -134,12 +145,15 @@ export interface ComplianceRequirement {
   evidence?: string;
   // Configuration
 }
+}
+}
 export interface BreachNotificationConfig {
   detection: {
   enabled: boolean;
   autoClassification: boolean;
   riskThreshold: BreachSeverity;
   monitoringSources: string;
+}
 };
   notifications: {
   gdpr: {
@@ -249,6 +263,7 @@ export class BreachNotificationService extends EventEmitter {
   detectedBy?: string;
   metadata?: Record<string, any>;
 }): Promise<string> {
+
     const incident: BreachIncident = {,
   id: this.generateIncidentId(),
       title: incidentData.title,
@@ -285,7 +300,7 @@ export class BreachNotificationService extends EventEmitter {
   /**
    * Update incident status and progress
    */
-  public async updateIncident()
+  public async updateIncident(
     incidentId: string,
     updates: Partial<BreachIncident>,
     actor: string): Promise<void> {,
@@ -313,12 +328,13 @@ export class BreachNotificationService extends EventEmitter {
   /**
    * Send notification to specified recipients
    */
-  public async sendNotification()
+  public async sendNotification(
     incidentId: string,
     type: NotificationType,
     recipients: string,
     template?: string
   ): Promise<NotificationRecord> {
+
     const incident = this.incidents.get(incidentId);
     if (!incident) {
       throw new Error(`Incident not found: ${incidentId}`);}
@@ -355,6 +371,7 @@ export class BreachNotificationService extends EventEmitter {
   deadline: Date;
   recipients: string;
 }> {
+
     const incident = this.incidents.get(incidentId);
     if (!incident) {
       throw new Error(`Incident not found: ${incidentId}`);}
@@ -558,6 +575,7 @@ export class BreachNotificationService extends EventEmitter {
     // Placeholder for breach detection logic
     // In production, this would integrate with SIEM, IDS, etc.
   private async handleStatusChange(incident: BreachIncident, oldStatus: IncidentStatus): Promise<void> {
+
     switch (incident.status) {
     case IncidentStatus.CONTAINED:
       await this.handleContainment(incident);
@@ -566,9 +584,11 @@ export class BreachNotificationService extends EventEmitter {
       await this.handleClosure(incident);
       break;
   private async handleContainment(incident: BreachIncident): Promise<void> {
+
     // Automated containment actions based on incident type
     this.emit('incidentContained', incident);
   private async handleClosure(incident: BreachIncident): Promise<void> {
+
     // Final compliance checks and reporting
     const compliance = this.checkGDPRCompliance(incident.id);
     if (!compliance.compliant) {
@@ -576,9 +596,11 @@ export class BreachNotificationService extends EventEmitter {
     this.emit('incidentClosed', incident);
   // Additional helper methods for notification content generation, delivery, etc.
   private async generateNotificationContent(incident: BreachIncident, type: NotificationType, template?: string): Promise<string> {
+
     // Generate appropriate notification content based on type and template
     return `Incident ${incident.id}: ${incident.title}`;}
   private async deliverNotification(notification: NotificationRecord): Promise<void> {
+
     // Integrate with email, SMS, Slack, etc. delivery systems
     console.log(`Delivering notification ${notification.id} to ${notification.recipient}`);}
   private determineChannel(type: NotificationType, recipient: string): string {
@@ -586,6 +608,7 @@ export class BreachNotificationService extends EventEmitter {
     if (recipient.startsWith('+')) return 'sms';
     return 'system';
   private async generateGDPRContent(incident: BreachIncident): Promise<string> {
+
     return `GDPR Personal Data Breach Notification for incident ${incident.id}`;}
   private generateSummaryReport(incident: BreachIncident): string {
     return JSON.stringify(incident, null, 2);
@@ -594,8 +617,10 @@ export class BreachNotificationService extends EventEmitter {
   private generateRegulatoryReport(incident: BreachIncident): string {
     return JSON.stringify(incident, null, 2);
   private async initiateContainment(incident: BreachIncident): Promise<void> {
+
     // Automated containment logic
   private async startEvidenceCollection(incident: BreachIncident): Promise<void> {
+
     // Automated evidence collection
 
 // Export default instance

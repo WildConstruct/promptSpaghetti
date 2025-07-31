@@ -494,7 +494,7 @@ export declare class PerformanceBaselineManager {
             categories: Record<BaselineCategory, number>;
             alerts: number;
         };
-        baselines: Array<{,
+        baselines: Array<{
             baseline: PerformanceBaseline;
             status: 'ok' | 'warning' | 'critical';
             trend: 'improving' | 'stable' | 'degrading';

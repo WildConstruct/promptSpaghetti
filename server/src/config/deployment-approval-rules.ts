@@ -4,6 +4,7 @@
  */
 
 }
+}
 export interface DeploymentApprovalRule {
   environment: string;
   required: boolean;
@@ -15,7 +16,9 @@ export interface DeploymentApprovalRule {
   timeouts: TimeoutConfiguration;
 }
 }
+}
 
+}
 }
 export interface DeploymentCriterion {
   type: 'security-review' | 'performance-impact' | 'business-approval' | 'technical-review' | 'compliance-check';
@@ -26,12 +29,15 @@ export interface DeploymentCriterion {
   validationSteps?: ValidationStep[];
 }
 }
+}
 
+}
 }
 export interface AutoApprovalConditions {
   testCoverage: {
     minimum: number;
     required: boolean;
+}
 }
   };
   securityScan: {
@@ -60,6 +66,7 @@ export interface AutoApprovalConditions {
 }
 
 }
+}
 export interface EscalationRule {
   triggerAfterHours: number;
   escalateTo: string[];
@@ -67,7 +74,9 @@ export interface EscalationRule {
   urgencyIncrease: 'low' | 'medium' | 'high' | 'critical';
 }
 }
+}
 
+}
 }
 export interface ReviewerAssignmentRule {
   strategy: 'manual' | 'automatic' | 'round-robin' | 'load-balanced';
@@ -76,7 +85,9 @@ export interface ReviewerAssignmentRule {
   excludeRequestor: boolean;
 }
 }
+}
 
+}
 }
 export interface ReviewerPool {
   name: string;
@@ -86,7 +97,9 @@ export interface ReviewerPool {
   expertise: string[];
 }
 }
+}
 
+}
 }
 export interface TimeoutConfiguration {
   initialTimeoutHours: number;
@@ -95,7 +108,9 @@ export interface TimeoutConfiguration {
   businessHoursOnly: boolean;
 }
 }
+}
 
+}
 }
 export interface ValidationStep {
   name: string;
@@ -103,6 +118,7 @@ export interface ValidationStep {
   automatable: boolean;
   command?: string;
   expectedResult?: any;
+}
 }
 }
 

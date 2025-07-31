@@ -12,10 +12,12 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 import { User, ChevronDown, Settings, Shield, Users } from 'lucide-react';
 
+}
 interface UserNavigationProps {
   className?: string;
 
 export const navigate = useNavigate();
+}
   const { isAuthenticated, user } = useAuthStore();
   if (!isAuthenticated || !user) {
     return null;

@@ -59,6 +59,7 @@ import {
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
+}
 interface CalendarState {
   schedules: AuditSchedule;
   currentView: 'month' | 'week' | 'day' | 'agenda';
@@ -93,6 +94,7 @@ interface CalendarState {
   upcomingDeadlines: [],
   overdueSchedules: [],
   calendarEvents: [],
+}
 });
   const [filters, setFilters] = useState<FilterState>({)
   activityTypes: [],

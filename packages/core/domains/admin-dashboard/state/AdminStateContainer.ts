@@ -14,6 +14,7 @@ import { DomainStateContainer, DomainStateChange } from '../../../state/orchestr
 
 // Admin dashboard state interface
 
+}
 export interface AdminDashboardState {
   // Dashboard layout and configuration
   layout: {
@@ -21,6 +22,7 @@ export interface AdminDashboardState {
   gridConfig: GridConfiguration;
   theme: 'light' | 'dark' | 'auto';
   collapsed: boolean;
+}
 };
   // User management state
   users: {
@@ -74,11 +76,13 @@ export interface AdminDashboardState {
 
 // Supporting interfaces
 }
+}
 export interface DashboardWidget {
   id: string;
   type: 'metric' | 'chart' | 'table' | 'alert' | 'custom';
   title: string;
   config: WidgetConfiguration;
+}
   position: { x: number; y: number; w: number; h: number };
   data: any;
   isLoading: boolean;
@@ -87,6 +91,7 @@ export interface DashboardWidget {
   refreshInterval?: number;
   permissions: string;
 }
+}
 export interface GridConfiguration {
   cols: number;
   rowHeight: number;
@@ -94,6 +99,8 @@ export interface GridConfiguration {
   containerPadding: [number, number];
   breakpoints: Record<string, number>;
   layouts: Record<string, any>;
+}
+}
 }
 export interface UserRecord {
   id: string;
@@ -108,6 +115,8 @@ export interface UserRecord {
   lastLogin: number;
   metadata: Record<string, any>;
 }
+}
+}
 export interface UserRole {
   id: string;
   name: string;
@@ -115,12 +124,16 @@ export interface UserRole {
   hierarchy: number;
   isSystem: boolean;
 }
+}
+}
 export interface Permission {
   resource: string;
   actions: string;
   conditions?: Record<string, any>;
   grantedAt: number;
   expiresAt?: number;
+}
+}
 }
 export interface UserProfile {
   firstName: string;
@@ -131,6 +144,8 @@ export interface UserProfile {
   title?: string;
   preferences: UserPreferences;
 }
+}
+}
 export interface UserActivity {
   loginCount: number;
   lastActions: UserAction;
@@ -138,12 +153,16 @@ export interface UserActivity {
   ipAddresses: string;
   devices: DeviceInfo;
 }
+}
+}
 export interface UserFilters {
   role?: string;
   status?: string;
   department?: string;
   searchTerm?: string;
+}
   dateRange?: { start: number; end: number };
+}
 }
 export interface PaginationState {
   page: number;
@@ -151,6 +170,8 @@ export interface PaginationState {
   total: number;
   hasNext: boolean;
   hasPrev: boolean;
+}
+}
 }
 export interface BulkOperation {
   id: string;
@@ -162,6 +183,8 @@ export interface BulkOperation {
   startedAt: number;
   completedAt?: number;
 }
+}
+}
 export interface RealTimeMetrics {
   activeUsers: number;
   systemLoad: number;
@@ -172,15 +195,21 @@ export interface RealTimeMetrics {
   responseTime: number;
   timestamp: number;
 }
+}
+}
 export interface HistoricalMetrics {
   timeRange: '1h' | '24h' | '7d' | '30d' | '90d';
   data: MetricDataPoint;
   aggregation: 'avg' | 'sum' | 'max' | 'min'
+}
   }
+}
 export interface MetricDataPoint {
   timestamp: number;
   value: number;
   metadata?: Record<string, any>;
+}
+}
 }
 export interface AlertRecord {
   id: string;
@@ -198,6 +227,8 @@ export interface AlertRecord {
   actions: AlertAction;
   metadata: Record<string, any>;
 }
+}
+}
 export interface SecurityIncident {
   id: string;
   type: 'breach_attempt' | 'suspicious_activity' | 'policy_violation' | 'system_compromise';
@@ -211,6 +242,8 @@ export interface SecurityIncident {
   createdAt: number;
   updatedAt: number;
 }
+}
+}
 export interface ApiEndpoint {
   id: string;
   path: string;
@@ -223,12 +256,15 @@ export interface ApiEndpoint {
   documentation: string;
   usage: EndpointUsageStats;
   healthStatus: 'healthy' | 'degraded' | 'error'
+}
   }
+}
 export interface SystemSettings {
   maintenance: {
   enabled: boolean;
   scheduledAt?: number;
   message?: string;
+}
 };
   features: Record<string, boolean>;
   limits: {
@@ -694,6 +730,7 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
     return newState;
   // DomainStateContainer interface implementation
   async applyExternalChange(change: DomainStateChange): Promise<void> {
+
     if (change.operation === 'update' && change.path) {
       this.setState(prevState => {)
   const newState = { ...prevState };
@@ -703,10 +740,13 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
   canAcceptChange(change: DomainStateChange): boolean {
     return change.domain === this.getDomainName();
   async prepareForTransaction(transactionId: string): Promise<void> {
+
     this.emit('transactionPrepared', { transactionId, domain: this.getDomainName() });
   async commitTransaction(transactionId: string): Promise<void> {
+
     this.emit('transactionCommitted', { transactionId, domain: this.getDomainName() });
   async rollbackTransaction(transactionId: string): Promise<void> {
+
     this.emit('transactionRolledBack', { transactionId, domain: this.getDomainName() });
   // Query methods
   getActiveAlerts(): AlertRecord {
@@ -736,6 +776,7 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
     return filtered;
   // Widget management
   async updateWidgetData(widgetId: string, data: any): Promise<void> {
+
     await this.applyOperation({)
   type: 'UPDATE_WIDGET',
       widgetId,
@@ -752,6 +793,7 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
       this.pollAlerts();
     }, 10000);
   private async pollMetrics(): Promise<void> {
+
   // In a real implementation, this would fetch from an API
   const mockMetrics: Partial<RealTimeMetrics> = {,
   activeUsers: Math.floor(Math.random() * 1000),
@@ -764,6 +806,7 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
 };
     await this.applyOperation({ type: 'UPDATE_METRICS', metrics: mockMetrics });
   private async pollAlerts(): Promise<void> {
+
   // In a real implementation, this would fetch new alerts from an API
   // This is just a mock implementation
   private setupEventHandlers(): void {,
@@ -828,31 +871,38 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
   email: boolean;
   push: boolean;
   sms: boolean;
+}
 };
+}
 interface UserAction {
   type: string;
   resource: string;
   timestamp: number;
   metadata?: Record<string, any>;
+}
 interface DeviceInfo {
   id: string;
   type: 'desktop' | 'mobile' | 'tablet';
   os: string;
   browser: string;
   lastSeen: number;
+}
 interface BulkOperationResult {
   successful: number;
   failed: number;
   errors: string;
+}
 interface PerformanceMetrics {
   uptime: number;
   throughput: number;
   latency: number;
   errorCount: number;
+}
 interface AccessControlState {
   policies: any;
   roles: any;
   violations: any;
+}
 interface AuditLogEntry {
   id: string;
   userId: string;
@@ -860,35 +910,42 @@ interface AuditLogEntry {
   resource: string;
   timestamp: number;
   details: Record<string, any>;
+}
 interface AlertAction {
   type: string;
   label: string;
   callback: string;
+}
 interface IncidentTimelineEntry {
   timestamp: number;
   event: string;
   details: string;
   userId?: string;
+}
 interface IncidentResponse {
   actions: string;
   assignee?: string;
   status: string;
   notes: string;
+}
 interface EndpointUsageStats {
   requestCount: number;
   errorCount: number;
   avgResponseTime: number;
   lastAccessed: number;
+}
 interface RateLimitConfig {
   endpoint: string;
   limit: number;
   window: number;
   current: number;
+}
 interface ApiUsageMetrics {
   requestsPerMinute: number;
   errorRate: number;
   avgResponseTime: number;
   bandwidthUsage: number;
+}
 interface ApiError {
   id: string;
   endpoint: string;
@@ -897,27 +954,32 @@ interface ApiError {
   message: string;
   timestamp: number;
   userId?: string;
+}
 interface FeatureFlag {
   name: string;
   enabled: boolean;
   description: string;
   rolloutPercentage: number;
+}
 interface MaintenanceState {
   inProgress: boolean;
   scheduled: boolean;
   lastRun: number;
   nextRun: number;
+}
 interface BackupState {
   lastBackup: number;
   nextBackup: number;
   status: 'idle' | 'running' | 'completed' | 'failed';
   size: number;
+}
 interface PasswordPolicy {
   minLength: number;
   requireUppercase: boolean;
   requireLowercase: boolean;
   requireNumbers: boolean;
   requireSymbols: boolean;
+}
 interface ModalState {
   id: string;
   type: string;
@@ -925,6 +987,7 @@ interface ModalState {
   content: any;
   isOpen: boolean;
   onClose?: () => void;
+}
 interface NotificationState {
   id: string;
   type: 'info' | 'success' | 'warning' | 'error';
@@ -932,25 +995,31 @@ interface NotificationState {
   message: string;
   timestamp: number;
   duration?: number;
+}
   actions?: Array<{ label: string; action: () => void }>;
+}
 interface LoadingState {
   global: boolean;
   sections: Record<string, boolean>;
+}
 interface AdminUser {
   id: string;
   name: string;
   avatar?: string;
   isActive: boolean;
   lastSeen: number;
+}
 interface SharedSession {
   id: string;
   adminIds: string;
   resource: string;
   startTime: number;
   activity: any;
+}
 interface StateConflict {
   id: string;
   type: string;
   description: string;
   timestamp: number;
   resolved: boolean;
+}

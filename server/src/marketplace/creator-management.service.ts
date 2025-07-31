@@ -2,6 +2,7 @@
 import { Pool, PoolClient } from 'pg';
 
 }
+}
 interface CreatorStats {
   total_templates: number;
   active_templates: number;
@@ -13,7 +14,9 @@ interface CreatorStats {
   conversion_rate: number;
 }
 }
+}
 
+}
 }
 interface CreatorProfile {
   id: string;
@@ -30,7 +33,9 @@ interface CreatorProfile {
   updated_at: Date;
 }
 }
+}
 
+}
 }
 interface MonetizationSettings {
   creator_id: string;
@@ -50,12 +55,14 @@ interface MonetizationSettings {
     postal_code?: string;
     tax_exempt: boolean;
 }
+}
   };
   auto_payout_enabled: boolean;
   created_at: Date;
   updated_at: Date;
 }
 
+}
 }
 interface CreatorPayoutHistory {
   id: string;
@@ -70,7 +77,9 @@ interface CreatorPayoutHistory {
   created_at: Date;
 }
 }
+}
 
+}
 }
 interface CreatorTemplate {
   id: string;
@@ -87,11 +96,14 @@ interface CreatorTemplate {
   updated_at: Date;
 }
 }
+}
 
+}
 }
 interface PerformanceMetrics {
   period_start: Date;
   period_end: Date;
+}
 }
   revenue_trend: Array<{ date: string; revenue_cents: number; purchases: number }>;
   top_templates: CreatorTemplate[];
@@ -99,6 +111,7 @@ interface PerformanceMetrics {
   geographic_sales: Array<{ country: string; revenue_cents: number; purchases: number }>;  
 }
 
+}
 }
 interface CreatorTierRequirements {
   bronze: { min_revenue: 0; min_rating: 0; min_templates: 0; min_reviews: 0 };

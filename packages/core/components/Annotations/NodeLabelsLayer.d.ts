@@ -10,6 +10,7 @@ import React from 'react';
 import { Node } from 'reactflow';
 import { NodeLabelConfig, NodeLabelPreferences } from '../../types/CollaborationTypes';
 
+}
 interface NodeLabelsLayerProps {
     nodes: Node[];
     labelConfigs: Record<string, NodeLabelConfig>;
@@ -24,6 +25,7 @@ interface NodeLabelsLayerProps {
         x: number;
         y: number;
 
+}
     };
     zoom?: number;
 

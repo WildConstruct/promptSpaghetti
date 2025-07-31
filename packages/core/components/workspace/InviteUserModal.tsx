@@ -3,9 +3,11 @@
  * Modal for inviting users to workspaces
  */
 import React, { useState } from 'react';
+}
 interface InviteUserModalProps {
   workspaceId: string;
   workspaceName: string;
+}
   onSubmit: (data: { userId: string; role: string }) => void;
   onCancel: () => void;
 const ROLES = [;

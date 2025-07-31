@@ -70,6 +70,7 @@ export enum PolicyDomain {
   conditions: PolicyCondition;
   actions: PolicyAction;
   exceptions: PolicyException;
+}
 };
   // Scope and Targets
   scope: {
@@ -119,6 +120,7 @@ export enum PolicyDomain {
   supersededBy?: string;
 };
 }
+}
 export interface PolicyRule {
   id: string;
   name: string;
@@ -131,6 +133,7 @@ export interface PolicyRule {
   'GREATER_THAN' | 'LESS_THAN' | 'BETWEEN' | 'REGEX' | 'CUSTOM';
   value: any;
   customFunction?: string;
+}
 };
   // Context Awareness
   context?: {
@@ -142,6 +145,7 @@ export interface PolicyRule {
   weight: number; // 0-1, importance in policy evaluation
   enabled: boolean;
 }
+}
 export interface PolicyCondition {
   id: string;
   name: string;
@@ -151,6 +155,7 @@ export interface PolicyCondition {
   expression: string;
   parameters: Record<string, any>;
   evaluationMode: 'AND' | 'OR' | 'NOT'
+}
   };
   // Evaluation Context
   evaluationContext: {
@@ -160,6 +165,7 @@ export interface PolicyCondition {
 };
   weight: number;
   critical: boolean; // If true, condition failure blocks entire policy
+}
 }
 export interface PolicyAction {
   id: string;
@@ -171,6 +177,7 @@ export interface PolicyAction {
   targetEntities: string;
   executionMode: 'IMMEDIATE' | 'DEFERRED' | 'SCHEDULED';
   rollbackEnabled: boolean;
+}
 };
   // Integration Points
   integrations?: {
@@ -180,6 +187,7 @@ export interface PolicyAction {
 };
   priority: number;
   enabled: boolean;
+}
 }
 export interface PolicyException {
   id: string;
@@ -191,6 +199,7 @@ export interface PolicyException {
   roleIds?: string;
   entityIds?: string;
   contextConditions?: Record<string, any>;
+}
 };
   // Exception Scope
   scope: {
@@ -210,26 +219,35 @@ export interface PolicyException {
 
 // Context-specific rule types for VFX domain
 }
+}
 export interface TimeBasedRule {
   timePeriods: string;
   seasonality: boolean;
   historicalContext: boolean;
+}
+}
 }
 export interface LocationBasedRule {
   regions: string;
   geopoliticalContext: boolean;
   culturalConsiderations: string;
 }
+}
+}
 export interface RoleBasedRule {
   roles: string;
   permissions: string;
   clearanceLevel: string;
+}
+}
 }
 export interface ContentBasedRule {
   contentTypes: string;
   qualityMetrics: Record<string, number>;
   historicalAccuracy: boolean;
   // Policy evaluation and monitoring
+}
+}
 }
 export interface PolicyEvaluationContext {
   requestId: string;
@@ -244,6 +262,7 @@ export interface PolicyEvaluationContext {
   userAgent: string;
   geolocation?: string;
   authenticationMethod: string;
+}
 };
   // Operation Context
   operation: {
@@ -261,6 +280,7 @@ export interface PolicyEvaluationContext {
   // Additional Context
   additionalContext: Record<string, any>;
 }
+}
 export interface PolicyEvaluationResult {
   requestId: string;
   evaluationId: string;
@@ -272,22 +292,23 @@ export interface PolicyEvaluationResult {
   result: 'ALLOW' | 'DENY' | 'RESTRICT' | 'ESCALATE';
   confidence: number; // 0-1,
   // Rule Results
-  ruleResults: Array<{,
+  ruleResults: Array<{
   ruleId: string;
   ruleName: string;
   result: 'PASS' | 'FAIL' | 'WARN';
   score: number;
   details: any;
+}
 }>;
   // Condition Results
-  conditionResults: Array<{,
+  conditionResults: Array<{
   conditionId: string;
   conditionName: string;
   result: 'MET' | 'NOT_MET' | 'ERROR';
   details: any;
 }>;
   // Actions Triggered
-  triggeredActions: Array<{,
+  triggeredActions: Array<{
   actionId: string;
   actionType: string;
   executed: boolean;
@@ -295,14 +316,14 @@ export interface PolicyEvaluationResult {
   error?: string;
 }>;
   // Exceptions Applied
-  appliedExceptions: Array<{,
+  appliedExceptions: Array<{
   exceptionId: string;
   exceptionName: string;
   scope: string;
 }>;
   // Compliance Information
   complianceStatus: {
-  frameworks: Array<{,
+  frameworks: Array<{
   framework: ComplianceFramework;
   compliant: boolean;
   violations: string;
@@ -322,6 +343,7 @@ export interface PolicyEvaluationResult {
   auditRequired: boolean;
 };
 }
+}
 export interface PolicyViolation {
   id: string;
   policyId: string;
@@ -332,6 +354,7 @@ export interface PolicyViolation {
   severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   description: string;
   details: any;
+}
 };
   // Context
   context: PolicyEvaluationContext;
@@ -451,6 +474,7 @@ export class PolicyManagement extends EventEmitter {
    * Delete a policy
    */
   async deletePolicy(policyId: string, deletedBy: string): Promise<void> {
+
     const policy = this.policies.get(policyId);
     if (!policy) {
       throw new Error(`Policy not found: ${policyId}`);}
@@ -469,6 +493,7 @@ export class PolicyManagement extends EventEmitter {
    * Evaluate policies for a given context
    */
   async evaluatePolicies(context: PolicyEvaluationContext): Promise<PolicyEvaluationResult> {
+
     const startTime = Date.now();
     const results: PolicyEvaluationResult = [];
     // Check cache first
@@ -508,10 +533,11 @@ export class PolicyManagement extends EventEmitter {
   // =============================================================================
   // Policy Evaluation Logic
   // =============================================================================
-  private async evaluatePolicy(()
+  private async evaluatePolicy(((
     policy: UnifiedPolicy,
-    context: PolicyEvaluationContext,
+    context: PolicyEvaluationContext
   ): Promise<PolicyEvaluationResult> {
+
   const evaluationId = this.generateEvaluationId();
   const startTime = Date.now();
   const result: PolicyEvaluationResult = {,
@@ -582,7 +608,7 @@ export class PolicyManagement extends EventEmitter {
       result.result = 'DENY'; // Fail securely
       result.confidence = 0.0;
       return this.finalizeResult(result, startTime);
-  private async evaluateRules(policy: UnifiedPolicy)
+  private async evaluateRules(policy: UnifiedPolicy(
     context: PolicyEvaluationContext,
     exceptions: Array<{ exceptionId: string; exceptionName: string; scope: string }>
   ): Promise<Array<{ ruleId: string; ruleName: string; result: 'PASS' | 'FAIL' | 'WARN'; score: number; details: any }>> {
@@ -622,10 +648,11 @@ export class PolicyManagement extends EventEmitter {
           details: { error: error.message }
         });
     return results;
-  private async evaluateRule(()
+  private async evaluateRule(((
     rule: PolicyRule,
-    context: PolicyEvaluationContext,
+    context: PolicyEvaluationContext
   ): Promise<{ result: 'PASS' | 'FAIL' | 'WARN'; score: number; details: any }> {
+
     const { logic } = rule;
     // Extract field value from context
     const fieldValue = this.extractFieldValue(logic.field, context);
@@ -699,10 +726,11 @@ export class PolicyManagement extends EventEmitter {
   // =============================================================================
   // VFX and Content-Specific Policy Logic
   // =============================================================================
-  private async evaluateRuleContext(()
+  private async evaluateRuleContext(((
     context: NonNullable<PolicyRule['context']>,
-    evaluationContext: PolicyEvaluationContext,
+    evaluationContext: PolicyEvaluationContext
   ): Promise<{ valid: boolean; critical: boolean; score: number; details: any }> {
+
     const results: any = {};
     let overallValid = true;
     let overallScore = 1.0;
@@ -751,10 +779,11 @@ export class PolicyManagement extends EventEmitter {
   score: overallScore,
   details: results,
 };
-  private async evaluateTimeBasedRule(()
+  private async evaluateTimeBasedRule(((
     rule: TimeBasedRule,
-    context: PolicyEvaluationContext,
+    context: PolicyEvaluationContext
   ): Promise<{ valid: boolean; score: number; details: any }> {
+
     const contentContext = context.contentContext;
     if (!contentContext) {
       return { valid: true, score: 1.0, details: { reason: 'no_content_context' } };
@@ -778,10 +807,11 @@ export class PolicyManagement extends EventEmitter {
       // For now, return valid
       return { valid: true, score: 1.0, details };
     return { valid: true, score: 1.0, details: {} };
-  private async evaluateLocationBasedRule(()
+  private async evaluateLocationBasedRule(((
     rule: LocationBasedRule,
-    context: PolicyEvaluationContext,
+    context: PolicyEvaluationContext
   ): Promise<{ valid: boolean; score: number; details: any }> {
+
   const contentContext = context.contentContext;
   // Check geopolitical context for content accuracy
   if (rule.geopoliticalContext && contentContext?.culturalContext) {
@@ -802,16 +832,18 @@ export class PolicyManagement extends EventEmitter {
       // This would integrate with cultural sensitivity analysis
       return { valid: true, score: 1.0, details: { culturalCheck: 'passed' } };
     return { valid: true, score: 1.0, details: {} };
-  private async evaluateRoleBasedRule(()
+  private async evaluateRoleBasedRule(((
     rule: RoleBasedRule,
-    context: PolicyEvaluationContext,
+    context: PolicyEvaluationContext
   ): Promise<{ valid: boolean; score: number; details: any }> {
+
     // This would integrate with role-based access control
     return { valid: true, score: 1.0, details: { roleCheck: 'passed' } };
-  private async evaluateContentBasedRule(()
+  private async evaluateContentBasedRule(((
     rule: ContentBasedRule,
-    context: PolicyEvaluationContext,
+    context: PolicyEvaluationContext
   ): Promise<{ valid: boolean; score: number; details: any }> {
+
   const contentContext = context.contentContext;
   // Check historical accuracy requirements
   if (rule.historicalAccuracy && contentContext) {
@@ -967,6 +999,7 @@ export class PolicyManagement extends EventEmitter {
 });
     console.log(`📋 Initialized ${this.policies.size} default policies`);}
   private async createDefaultPolicy(policyData: Omit<UnifiedPolicy, 'id' | 'metadata'>): Promise<void> {
+
     try {
       await this.createPolicy(policyData, 'system');
     } catch (error) {
@@ -1042,6 +1075,7 @@ export class PolicyManagement extends EventEmitter {
 };
   // Placeholder implementations for missing methods
   private async validatePolicy(policy: UnifiedPolicy): Promise<{ valid: boolean; errors: string }> {
+
   const errors: string = [];
   if (!policy.name || policy.name.trim() === '') {
   errors.push('Policy name is required');
@@ -1065,14 +1099,14 @@ export class PolicyManagement extends EventEmitter {
     if (policy.scope.contentTypes && context.contentContext) {
       // Would check content type applicability
     return true; // Simplified for now
-  private async evaluateExceptions(()
+  private async evaluateExceptions(((
     policy: UnifiedPolicy,
-    context: PolicyEvaluationContext,
+    context: PolicyEvaluationContext
   ): Promise<Array<{ exceptionId: string; exceptionName: string; scope: string }>> {
     return []; // Simplified for now
-  private async evaluateConditions(()
+  private async evaluateConditions(((
     policy: UnifiedPolicy,
-    context: PolicyEvaluationContext,
+    context: PolicyEvaluationContext
   ): Promise<Array<{ conditionId: string; conditionName: string; result: 'MET' | 'NOT_MET' | 'ERROR'; details: any }>> {
     return []; // Simplified for now
   private calculatePolicyResult(policy: UnifiedPolicy)
@@ -1150,6 +1184,7 @@ export class PolicyManagement extends EventEmitter {
   private async evaluateCustomFunction(functionName: string)
     fieldValue: any,
     context: PolicyEvaluationContext): Promise<{ passed: boolean; score: number; details: any }> {
+
     // This would implement custom policy functions
     // For now, return a default result
     return { passed: true, score: 1.0, details: {} };

@@ -56,6 +56,7 @@ export type RestoreStatus =
 // =============================================================================
 
 }
+}
 export interface RestoreRequest {
   restore_id: string;
   recovery_point_id: string;
@@ -75,6 +76,7 @@ export interface RestoreRequest {
     exclude_tables: string[];
     where_conditions: Record<string, any>;
     limit_records?: number;
+}
 }
   };
   
@@ -107,6 +109,7 @@ export interface RestoreRequest {
   scheduled_for?: Date;
 }
 
+}
 }
 export interface RestoreExecution {
   restore_id: string;
@@ -150,7 +153,9 @@ export interface RestoreExecution {
   execution_log: RestoreLogEntry[];
 }
 }
+}
 
+}
 }
 export interface RestoreValidationResult {
   validation_id: string;
@@ -163,6 +168,7 @@ export interface RestoreValidationResult {
     missing_columns: string[];
     type_mismatches: string[];
     constraint_violations: string[];
+}
 }
   };
   
@@ -194,6 +200,7 @@ export interface RestoreValidationResult {
 }
 
 }
+}
 export interface RestoreError {
   error_id: string;
   error_type: 'schema' | 'data' | 'constraint' | 'permission' | 'resource' | 'business_rule';
@@ -207,7 +214,9 @@ export interface RestoreError {
   occurred_at: Date;
 }
 }
+}
 
+}
 }
 export interface RestoreWarning {
   warning_id: string;
@@ -220,7 +229,9 @@ export interface RestoreWarning {
   occurred_at: Date;
 }
 }
+}
 
+}
 }
 export interface RestoreLogEntry {
   entry_id: string;
@@ -232,11 +243,13 @@ export interface RestoreLogEntry {
   duration_ms?: number;
 }
 }
+}
 
 // =============================================================================
 // Restore Analytics and Reporting
 // =============================================================================
 
+}
 }
 export interface RestoreAnalytics {
   restore_id: string;
@@ -253,6 +266,7 @@ export interface RestoreAnalytics {
     affected_transactions: number;
     downtime_minutes: number;
     data_freshness_hours: number;
+}
 }
   };
   

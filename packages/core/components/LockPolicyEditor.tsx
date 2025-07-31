@@ -4,12 +4,14 @@ import React, { useState, useEffect } from 'react';
 import { Save, Settings, AlertTriangle, Info, Clock, Users, Shield } from 'lucide-react';
 import { LockPolicy } from '../types/locking';
 import { useLockingStore } from '../stores/lockingStore';
+}
 interface LockPolicyEditorProps {
   workspaceId: string;
   onPolicyUpdate: () => void;
   export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({,)
   workspaceId,
   onPolicyUpdate
+}
 }) => {
   const { policy, fetchPolicy, updatePolicy, isLoading, error } = useLockingStore();
   const [editingPolicy, setEditingPolicy] = useState<Partial<LockPolicy> | null>(null);

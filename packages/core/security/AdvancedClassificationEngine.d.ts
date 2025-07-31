@@ -14,6 +14,7 @@ import {
   DataElement
 } from './DataClassifier';
 
+}
 export interface MLClassificationModel {
     id: string;
     name: string;
@@ -27,6 +28,7 @@ export interface MLClassificationModel {
     categories: DataCategory[];
     features: string[];
 
+}
 export interface ClassificationWorkflow {
     id: string;
     name: string;
@@ -37,39 +39,45 @@ export interface ClassificationWorkflow {
     enabled: boolean;
     priority: number;
 
+}
 export interface WorkflowTrigger {
     type: 'classification_complete' | 'threshold_exceeded' | 'compliance_violation' | 'manual_review_required';
     conditions: Record<string, any>;
 
+}
 export interface WorkflowAction {
     type: 'notify' | 'encrypt' | 'quarantine' | 'audit_log' | 'escalate' | 'auto_remediate';
     parameters: Record<string, any>;
     timeout: number;
 
+}
 export interface WorkflowCondition {
     field: string;
     operator: 'equals' | 'greater_than' | 'less_than' | 'contains' | 'matches';
     value: any;
     logic: 'AND' | 'OR';
 
+}
 export interface ClassificationAnalytics {
     totalClassifications: number;
     classificationsByLevel: Record<ClassificationLevel, number>;
     classificationsByCategory: Record<DataCategory, number>;
     complianceViolations: number;
     averageConfidence: number;
-    topRiskPatterns: Array<{,
+    topRiskPatterns: Array<{
         pattern: string;
         count: number;
         riskScore: number;
+}
     }>;
-    temporalTrends: Array<{,
+    temporalTrends: Array<{
         timestamp: Date;
         count: number;
         avgConfidence: number;
     }>;
     lastUpdated: Date;
 
+}
 export interface DataFlow {
     id: string;
     source: string;
@@ -81,6 +89,7 @@ export interface DataFlow {
     riskScore: number;
     complianceStatus: 'compliant' | 'violation' | 'unknown';
 
+}
 export interface ClassificationContext {
     source: string;
     purpose: string;
@@ -89,6 +98,7 @@ export interface ClassificationContext {
         role: string;
         department: string;
         clearanceLevel: string;
+}
     };
     environmentContext: {
         system: string;
@@ -99,20 +109,21 @@ export interface ClassificationContext {
     dataFlow?: DataFlow;
     parentClassification?: string;
 
+}
 export interface EnhancedClassificationResult extends ClassificationResult {
-    mlPredictions: Array<{,
+    mlPredictions: Array<{
         model: string;
         prediction: ClassificationLevel;
         confidence: number;
         features: Record<string, number>;
     }>;
-    contextualFactors: Array<{,
+    contextualFactors: Array<{
         factor: string;
         impact: number;
         description: string;
     }>;
     riskScore: number;
-    remediation: Array<{,
+    remediation: Array<{
         action: string;
         priority: 'low' | 'medium' | 'high' | 'critical';
         description: string;
@@ -194,7 +205,7 @@ export declare class AdvancedClassificationEngine extends EventEmitter {
         };
         totalClassifications: number;
         compliantClassifications: number;
-        violations: Array<{,
+        violations: Array<{
             dataId: string;
             violation: string;
             severity: string;

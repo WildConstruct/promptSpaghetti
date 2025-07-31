@@ -8,6 +8,7 @@ import { StateChange } from '../containers/BaseStateContainer';
 
 // Conflict resolution types
 
+}
 export interface StateConflict<T = any> {
   id: string;
   timestamp: number;
@@ -55,6 +56,8 @@ export interface StateConflict<T = any> {
   condition?: (conflict: StateConflict) => boolean;
   customResolver?: (conflict: StateConflict) => ConflictResolution;
 }
+}
+}
 export interface OperationalTransform {
   apply(operation: any, state: any): any;
   transform(op1: any, op2: any): [any, any];
@@ -62,13 +65,17 @@ export interface OperationalTransform {
   inverse(operation: any): any;
   // Graph-specific operational transforms
 }
+}
+}
 export interface GraphMutation {
   type: 'ADD_NODE' | 'REMOVE_NODE' | 'UPDATE_NODE' | 'ADD_EDGE' | 'REMOVE_EDGE' | 'UPDATE_EDGE';
   nodeId?: string;
   edgeId?: string;
   data?: any;
+}
   position?: { x: number; y: number };
   timestamp: number;
+}
 }
 export interface Permission {
   resource: string;
@@ -76,8 +83,10 @@ export interface Permission {
   level: 'none' | 'read' | 'write' | 'admin';
   conditions?: Record<string, any>;
 }
+}
+}
 export interface DashboardLayout {
-  widgets: Array<{,
+  widgets: Array<{
   id: string;
   x: number;
   y: number;
@@ -86,6 +95,7 @@ export interface DashboardLayout {
   minW?: number;
   minH?: number;
   static?: boolean;
+}
 }>;
   breakpoints: Record<string, number>;
   cols: Record<string, number>;
@@ -173,9 +183,9 @@ export class ConflictResolver {
     } else {
       resolution = await this.applyResolutionStrategy(conflict, rule.strategy);
     return resolution;
-  private async applyResolutionStrategy<T>(()
+  private async applyResolutionStrategy<T>(((
     conflict: StateConflict<T>,
-    strategy: ResolutionStrategy,
+    strategy: ResolutionStrategy
   ): Promise<ConflictResolution<T>> {
     switch (strategy) {
       case 'LAST_WRITER_WINS':

@@ -9,6 +9,7 @@ import { persist } from 'zustand/middleware';
 import { EnhancedPreviewResult } from '../components/PreviewModal/EnhancedPreviewModal';
 import { ErrorFactory } from '../errors/ErrorFactory';
 
+}
 export interface SavedResult extends EnhancedPreviewResult {
   // Additional persistence metadata
   savedAt: Date;
@@ -35,6 +36,7 @@ export interface SavedResult extends EnhancedPreviewResult {
   timeOfDay?: 'dawn' | 'morning' | 'afternoon' | 'evening' | 'night'
   };
 
+}
 export interface ResultCollection {
   id: string;
   name: string;
@@ -51,10 +53,13 @@ export interface ResultCollection {
   genre?: string;
   budget?: string;
   targetRating?: string;
+}
 };
+}
 }
 export interface ResultFilter {
   tags?: string;
+}
   rating?: { min?: number; max?: number };
   contentType?: string;
   dateRange?: { start?: Date; end?: Date };
@@ -62,19 +67,22 @@ export interface ResultFilter {
   status?: string;
   searchText?: string;
 }
+}
 export interface ResultStats {
   totalResults: number;
   averageRating: number;
   averageWordCount: number;
   totalExecutionTime: number;
+}
   topTags: Array<{ tag: string; count: number }>;
   contentTypeDistribution: Record<string, number>;
-  recentActivity: Array<{,
+  recentActivity: Array<{
   type: 'save' | 'rate' | 'tag' | 'export' | 'note';
   timestamp: Date;
   resultId: string;
   details?: string;
 }>;
+}
 interface ResultManagementState {
   // Core data
   savedResults: Record<string, SavedResult>;
@@ -124,6 +132,7 @@ interface ResultManagementState {
   getResultsByCollection: (collectionId: string) => SavedResult;
   getRecentResults: (limit?: number) => SavedResult;
   getTopRatedResults: (limit?: number) => SavedResult;
+}
 }
 export const useResultManagementStore = create<ResultManagementState>()()
   persist();
@@ -612,5 +621,4 @@ export const useResultManagementStore = create<ResultManagementState>()()
   ...collection,
   createdAt: new Date(collection.createdAt),
   lastModified: new Date(collection.lastModified)]);
-  };
-);
+  });

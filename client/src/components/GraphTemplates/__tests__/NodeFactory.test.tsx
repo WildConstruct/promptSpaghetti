@@ -25,7 +25,7 @@ describe('NodeFactory', () => {
   id: 'test-template',
         type: 'logic',
         position: { x: 0, y: 0 },
-        data: {,
+        data: {
   label: 'Test Template',
           description: 'Test description',
           category: 'logic',

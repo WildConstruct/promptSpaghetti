@@ -36,6 +36,7 @@ const { TabPane } = Tabs;
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
 const { Option } = Select;
+}
 interface RestorationPreviewProps {
   preview: RestorationPreviewResponse;
   config: RestorationConfig;
@@ -44,6 +45,7 @@ interface RestorationPreviewProps {
   preview,
   config,
   onConflictResolve
+}
 }) => {
   const [activeTab, setActiveTab] = useState('changes');
   const [conflictResolutions, setConflictResolutions] = useState<Record<string, ResolutionStrategy>>({});

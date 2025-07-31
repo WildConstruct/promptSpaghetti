@@ -84,10 +84,11 @@ export class RandomizerSystem {
   /**
    * Generate with preset
    */
-  async generateWithPreset(()
+  async generateWithPreset(((
     presetId: string,
     overrides: Partial<RandomizerParameters> = {}
   ): Promise<WorkflowResult> {
+
     const preset = this.parameterManager.getPreset(presetId);
     if (!preset) {
       throw new Error(`Preset not found: ${presetId}`);}
@@ -99,10 +100,11 @@ export class RandomizerSystem {
   /**
    * Generate multiple variations
    */
-  async generateVariations(()
+  async generateVariations(((
     parameters: RandomizerParameters,
-    count: number = 3,
+    count: number = 3
   ): Promise<WorkflowResult> {
+
   return this.workflow.generateVariations(parameters, count);
   /**
   * Get generation history with statistics

@@ -1,6 +1,7 @@
 // Epic 16 Marketplace - Star Rating Component
 import React from 'react';
 import './StarRating.css';
+}
 interface StarRatingProps {
   rating: number;
   maxRating?: number;
@@ -15,6 +16,7 @@ interface StarRatingProps {
   interactive = false,
   onRatingChange,
   className = ''
+}
 }) => {
   const [hoveredRating, setHoveredRating] = React.useState<number | null>(null);
   const handleStarClick = (starRating: number) => {,

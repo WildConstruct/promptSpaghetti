@@ -18,6 +18,7 @@ import {
   LockOpenIcon
 } from '@heroicons/react/24/outline';
 import { useWorkflowStore } from '../stores/workflowStore';
+}
 interface AuditTrailViewerProps {
   workspaceId: string;
   resourceId?: string;
@@ -33,6 +34,7 @@ interface AuditTrailViewerProps {
   workspaceId,
   resourceId,
   onClose
+}
 }) => {
   const {
     auditHistory,

@@ -12,12 +12,14 @@ import {
   EditorActions
 } from '../hooks/useEditorProviders';
 
+}
 export interface EditorProviderWrapperProps {
   children: (props: {)
   registry: ProviderRegistry;
   editorContext: EditorStateContext;
   editorActions: EditorActions;
   isLoading: boolean;
+}
 }) => React.ReactNode;
   // Initial state
   initialNodes: Node;

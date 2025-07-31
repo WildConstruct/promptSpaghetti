@@ -32,6 +32,7 @@ import {
 
 // Configuration interfaces
 
+}
 export interface FunnelConfigurationProps {
   initialFunnel?: Partial<ConversionFunnelDefinition>;
   templates?: FunnelTemplate;
@@ -40,6 +41,8 @@ export interface FunnelConfigurationProps {
   onSave?: (funnel: ConversionFunnelDefinition) => void;
   onCancel?: () => void;
   onValidation?: (isValid: boolean, errors: ValidationError) => void;
+}
+}
 }
 export interface FunnelTemplate {
   id: string;
@@ -50,6 +53,8 @@ export interface FunnelTemplate {
   defaultConfiguration: Partial<ConversionFunnelDefinition>;
   tags: string;
 }
+}
+}
 export interface EventDefinition {
   type: string;
   name: string;
@@ -58,6 +63,8 @@ export interface EventDefinition {
   properties: PropertyDefinition;
   examples: unknown;
 }
+}
+}
 export interface PropertyDefinition {
   path: string;
   name: string;
@@ -65,6 +72,8 @@ export interface PropertyDefinition {
   description: string;
   possibleValues?: unknown;
   validation?: PropertyValidation;
+}
+}
 }
 export interface PropertyValidation {
   required?: boolean;
@@ -75,11 +84,15 @@ export interface PropertyValidation {
   pattern?: string;
   customValidator?: string;
 }
+}
+}
 export interface ValidationError {
   field: string;
   message: string;
   severity: 'error' | 'warning' | 'info';
   suggestion?: string;
+}
+}
 }
 export interface DragItem {
   type: 'step' | 'condition' | 'path';
@@ -88,6 +101,7 @@ export interface DragItem {
   /**
   * Main Funnel Configuration Component
   */
+}
 }
 export const FunnelConfiguration: React.FC<FunnelConfigurationProps> = ({)
   initialFunnel,
@@ -450,8 +464,10 @@ export const FunnelConfiguration: React.FC<FunnelConfigurationProps> = ({)
 /**
  * Validation Panel Component
  */
+}
 interface ValidationPanelProps {
   errors: ValidationError;
+}
 const ValidationPanel: React.FC<ValidationPanelProps> = ({ errors }) => {
   const errorsByField = useMemo(() => {
     return errors.reduce((acc, error) => {
@@ -482,6 +498,7 @@ const ValidationPanel: React.FC<ValidationPanelProps> = ({ errors }) => {
 /**
  * Basic Configuration Component
  */
+}
 interface BasicConfigurationProps {
   funnel: Partial<ConversionFunnelDefinition>;
   onChange: (field: string, value: Error) => void;
@@ -490,6 +507,7 @@ interface BasicConfigurationProps {
   funnel,
   onChange,
   onConfigChange
+}
 }) => {
   return;
     <div className="basic-configuration">
@@ -639,6 +657,7 @@ interface BasicConfigurationProps {
 /**
  * Steps Configuration Component
  */
+}
 interface StepsConfigurationProps {
   steps: ConversionStep;
   availableEvents: EventDefinition;
@@ -661,6 +680,7 @@ interface StepsConfigurationProps {
   draggedItem,
   onDragStart,
   onDragEnd
+}
 }) => {
   return;
     <div className="steps-configuration">
@@ -701,6 +721,7 @@ interface StepsConfigurationProps {
 /**
  * Step Editor Component
  */
+}
 interface StepEditorProps {
   step: ConversionStep;
   index: number;
@@ -723,6 +744,7 @@ interface StepEditorProps {
   draggedItem,
   onDragStart,
   onDragEnd
+}
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const handleDragStart = (e: React.DragEvent) => {
@@ -845,6 +867,7 @@ interface StepEditorProps {
 /**
  * Event Criteria Editor Component
  */
+}
 interface EventCriteriaEditorProps {
   criteria: EventCriteria;
   availableEvents: EventDefinition;
@@ -855,6 +878,7 @@ interface EventCriteriaEditorProps {
   availableEvents,
   availableProperties,
   onChange
+}
 }) => {
   const selectedEvent = availableEvents.find(e => e.type === criteria.eventType);
   return;
@@ -902,6 +926,7 @@ interface EventCriteriaEditorProps {
 /**
  * Property Matchers Editor Component
  */
+}
 interface PropertyMatchersEditorProps {
   matchers: PropertyMatcher;
   availableProperties: PropertyDefinition;
@@ -910,6 +935,7 @@ interface PropertyMatchersEditorProps {
   matchers,
   availableProperties,
   onChange
+}
 }) => {
   const addMatcher = () => {
   const newMatcher: PropertyMatcher = {,
@@ -1015,12 +1041,14 @@ interface PropertyMatchersEditorProps {
 /**
  * Time Constraints Editor Component
  */
+}
 interface TimeConstraintsEditorProps {
   constraints: ConversionStep['timeConstraints'];
   onChange: (constraints: ConversionStep['timeConstraints']) => void;
   const TimeConstraintsEditor: React.FC<TimeConstraintsEditorProps> = ({,)
   constraints,
   onChange
+}
 }) => {
   return;
     <div className="time-constraints-editor">
@@ -1083,6 +1111,7 @@ const AnalyticsConfiguration: React.FC<unknown> = () => ()
 /**
  * Template Selection Modal
  */
+}
 interface TemplateSelectionModalProps {
   templates: FunnelTemplate;
   onSelect: (template: FunnelTemplate) => void;
@@ -1091,6 +1120,7 @@ interface TemplateSelectionModalProps {
   templates,
   onSelect,
   onClose
+}
 }) => {
   return;
     <div className="modal-overlay">

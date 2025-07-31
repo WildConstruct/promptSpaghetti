@@ -5,6 +5,7 @@
  */
 import React from 'react';
 
+}
 export interface BadgeShowcaseProps {
     userId: string;
     variant?: 'full' | 'compact' | 'minimal';
@@ -15,3 +16,4 @@ export interface BadgeShowcaseProps {
 export declare const BadgeShowcase: React.FC<BadgeShowcaseProps>;
 export default BadgeShowcase;
 //# sourceMappingURL=BadgeShowcase.d.ts.map
+}

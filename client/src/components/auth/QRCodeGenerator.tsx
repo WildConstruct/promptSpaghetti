@@ -23,6 +23,7 @@ import {
   Palette
 } from 'lucide-react';
 
+}
 export interface QRCodeData {
   uri: string;,
   secret: string;
@@ -31,6 +32,8 @@ export interface QRCodeData {
   algorithm: string;,
   digits: number;
   period: number;
+}
+}
 }
 export interface QRCodeStyle {
   size: number;,
@@ -64,6 +67,7 @@ export interface QRCodeStyle {
   includeMargin: true,
   backgroundColor: '#FFFFFF',
   foregroundColor: '#000000',
+}
 };
 const ERROR_CORRECTION_LEVELS = {
   L: { label: 'Low (~7%)', description: 'Basic error recovery' },
@@ -72,23 +76,23 @@ const ERROR_CORRECTION_LEVELS = {
   H: { label: 'High (~30%)', description: 'Best error recovery (recommended)' }
 };
 const PRESET_STYLES = {
-  standard: {,
+  standard: {
   name: 'Standard',
     style: { ...DEFAULT_STYLE }
   },
-  large: {,
+  large: {
   name: 'Large',
     style: { ...DEFAULT_STYLE, size: 384, margin: 6 }
   },
-  minimal: {,
+  minimal: {
   name: 'Minimal',
     style: { ...DEFAULT_STYLE, size: 200, margin: 2 }
   },
-  highContrast: {,
+  highContrast: {
   name: 'High Contrast',
     style: { ...DEFAULT_STYLE, foregroundColor: '#000000', backgroundColor: '#FFFFFF' }
   },
-  darkMode: {,
+  darkMode: {
   name: 'Dark Mode',
     style: { ...DEFAULT_STYLE, foregroundColor: '#FFFFFF', backgroundColor: '#1a1a1a' }
 };

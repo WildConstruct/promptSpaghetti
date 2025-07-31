@@ -2,6 +2,7 @@
 import { Pool, PoolClient } from 'pg';
 
 }
+}
 interface SearchQuery {
   query: string;
   user_id?: string;
@@ -12,13 +13,16 @@ interface SearchQuery {
   user_agent?: string;
 }
 }
+}
 
+}
 }
 interface SearchAnalytics {
   period_start: Date;
   period_end: Date;
   total_searches: number;
   unique_users: number;
+}
 }
   top_queries: Array<{ query: string; count: number; avg_results: number }>;
   popular_filters: Array<{ filter: string; value: string; count: number }>;
@@ -32,11 +36,13 @@ interface SearchAnalytics {
 }
 
 }
+}
 interface SearchSuggestion {
   suggestion: string;
   frequency: number;
   category?: string;
   result_count: number;
+}
 }
 }
 

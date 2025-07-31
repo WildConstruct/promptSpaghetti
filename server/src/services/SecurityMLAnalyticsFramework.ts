@@ -20,6 +20,7 @@ import {
 import { SecurityMLTrainingPipeline, MLTrainingJob, MLTrainingDataset } from './SecurityMLTrainingPipeline';
 
 }
+}
 export interface SecurityAnalyticsConfig {
   framework_settings: {
     enabled: boolean;
@@ -27,6 +28,7 @@ export interface SecurityAnalyticsConfig {
     update_frequency: number; // seconds
     retention_days: number;
     max_concurrent_analyses: number;
+}
 }
   };
   
@@ -82,6 +84,7 @@ export interface SecurityAnalyticsConfig {
 }
 
 }
+}
 export interface SecurityWorkflow {
   workflow_id: string;
   name: string;
@@ -97,6 +100,7 @@ export interface SecurityWorkflow {
       field: string;
       operator: 'equals' | 'contains' | 'greater_than' | 'less_than';
       value: Error;
+}
 }
     }>;
   };
@@ -133,6 +137,7 @@ export interface SecurityWorkflow {
 }
 
 }
+}
 export interface SecurityAnalyticsResult {
   analysis_id: string;
   timestamp: number;
@@ -145,6 +150,7 @@ export interface SecurityAnalyticsResult {
     time_range: {
       start: number;
       end: number;
+}
 }
     };
     filters_applied: Record<string, any>;
@@ -238,6 +244,7 @@ export interface SecurityAnalyticsResult {
 }
 
 }
+}
 export interface SecurityDashboard {
   dashboard_id: string;
   created_at: number;
@@ -250,6 +257,7 @@ export interface SecurityDashboard {
       category: string;
       count: number;
       trend: 'up' | 'down' | 'stable';
+}
 }
     }>;
     geographic_threat_distribution: Record<string, number>;

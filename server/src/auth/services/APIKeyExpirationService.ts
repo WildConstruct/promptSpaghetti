@@ -42,6 +42,7 @@ export enum APIKeyStatus {
 
 // Keep interface for backward compatibility
 }
+}
 export interface ExpirationPolicy {
   warningDays: number; // Days before expiration to send warning
   gracePerioddDays: number; // Days after expiration before cleanup
@@ -49,7 +50,9 @@ export interface ExpirationPolicy {
   notifyUsers: boolean; // Whether to notify users of expiring keys
 }
 }
+}
 
+}
 }
 export interface RotationPolicy {
   maxAgedays: number; // Maximum age before rotation is recommended
@@ -58,7 +61,9 @@ export interface RotationPolicy {
   criticalAgedays: number; // Age at which rotation becomes critical
 }
 }
+}
 
+}
 }
 export interface ExpirationCheck {
   keyId: string;
@@ -70,7 +75,9 @@ export interface ExpirationCheck {
   recommendedAction: 'none' | 'warn_user' | 'rotate' | 'cleanup';
 }
 }
+}
 
+}
 }
 export interface RotationCheck {
   keyId: string;
@@ -80,6 +87,7 @@ export interface RotationCheck {
   status: 'fresh' | 'aging' | 'rotation_recommended' | 'rotation_critical';
   rotationCount: number;
   recommendedAction: 'none' | 'schedule_rotation' | 'force_rotation';
+}
 }
 }
 

@@ -8,6 +8,7 @@
  */
 import { ExtensionManifest, ExtensionVersionManager } from './ExtensionLifecycleManager';
 
+}
 export interface DependencyNode {
     id: string;
     version: string;
@@ -16,28 +17,33 @@ export interface DependencyNode {
     resolved: boolean;
     optional: boolean;
 
+}
 export interface DependencyGraph {
     nodes: Map<string, DependencyNode>;
-    edges: Array<{,
+    edges: Array<{
         from: string;
         to: string;
         optional: boolean;
+}
     }>;
     resolved: boolean;
     conflicts: DependencyConflict[];
     circularDependencies: CircularDependency[];
 
+}
 export interface DependencyConflict {
     packageId: string;
-    requiredVersions: Array<{,
+    requiredVersions: Array<{
         requiredBy: string;
         versionRange: string;
+}
     }>;
     resolution?: {
         selectedVersion: string;
         strategy: 'latest' | 'maxSatisfying' | 'manual'
   };
 
+}
 export interface CircularDependency {
     cycle: string[];
     breakable: boolean;
@@ -45,6 +51,7 @@ export interface CircularDependency {
 
 export type LoadOrder = string[];
 
+}
 export interface DependencyResolutionOptions {
     allowOptionalDependencies: boolean;
     strictVersionMatching: boolean;
@@ -118,3 +125,4 @@ export declare class DependencyResolver {
     private getAvailableVersions;
 
 //# sourceMappingURL=DependencyResolver.d.ts.map
+}

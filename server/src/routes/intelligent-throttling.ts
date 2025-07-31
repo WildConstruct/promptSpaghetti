@@ -22,6 +22,7 @@ import { PredictiveAPILoadManager } from '../services/PredictiveAPILoadManager';
 let intelligentThrottlingManager: IntelligentThrottlingManager | null = null;
 
 }
+}
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
@@ -31,6 +32,7 @@ interface APIResponse<T = any> {
 }
 
 }
+}
 interface InitializeIntelligentThrottlingRequest {
   throttling_configuration: {
     analytics_integration: {
@@ -39,6 +41,7 @@ interface InitializeIntelligentThrottlingRequest {
       pattern_detection_sensitivity?: number;
       adaptive_learning_rate?: number;
       real_time_adjustment_enabled?: boolean;
+}
 }
     };
     throttling_strategies: {
@@ -119,6 +122,7 @@ interface InitializeIntelligentThrottlingRequest {
 }
 
 }
+}
 interface MakeThrottlingDecisionRequest {
   request_context: {
     user_id: string;
@@ -128,6 +132,7 @@ interface MakeThrottlingDecisionRequest {
       ip_address?: string;
       request_size_bytes?: number;
       expected_response_size_bytes?: number;
+}
 }
     };
     resource_requirements?: {
@@ -146,6 +151,7 @@ interface MakeThrottlingDecisionRequest {
 }
 
 }
+}
 interface AnalyzeUserUsageRequest {
   analysis_configuration: {
     user_id: string;
@@ -154,6 +160,7 @@ interface AnalyzeUserUsageRequest {
     include_behavior_analysis?: boolean;
     include_pattern_detection?: boolean;
     include_anomaly_detection?: boolean;
+}
 }
   };
   comparison_settings?: {
@@ -165,6 +172,7 @@ interface AnalyzeUserUsageRequest {
 }
 
 }
+}
 interface GetThrottlingEffectivenessRequest {
   effectiveness_analysis: {
     time_window_hours: number;
@@ -172,6 +180,7 @@ interface GetThrottlingEffectivenessRequest {
     include_user_impact_analysis?: boolean;
     include_business_metrics?: boolean;
     include_performance_impact?: boolean;
+}
 }
   };
   filtering_options?: {

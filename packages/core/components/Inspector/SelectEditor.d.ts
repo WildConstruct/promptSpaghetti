@@ -1,6 +1,7 @@
 import React from 'react';
 import { EditorFieldProps } from './BaseNodeEditor';
 
+}
 export interface SelectOption {
     value: string | number;
     label: string;
@@ -8,6 +9,7 @@ export interface SelectOption {
     group?: string;
 
 
+}
 export interface SelectEditorProps extends EditorFieldProps {
     options: SelectOption[];
     multiple?: boolean;
@@ -17,3 +19,4 @@ export interface SelectEditorProps extends EditorFieldProps {
 
 export declare const SelectEditor: React.FC<SelectEditorProps>;
 //# sourceMappingURL=SelectEditor.d.ts.map
+}

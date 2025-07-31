@@ -36,6 +36,7 @@ export enum DataCategory {
 }
 
 }
+}
 export interface DataRecord {
   id: string;
   entityType: string;
@@ -50,7 +51,9 @@ export interface DataRecord {
   tags: string[];
 }
 }
+}
 
+}
 }
 export interface ComplianceFlag {
   framework: string; // GDPR, CCPA, HIPAA, etc.
@@ -60,7 +63,9 @@ export interface ComplianceFlag {
   details: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface TransitionRule {
   id: string;
@@ -73,7 +78,9 @@ export interface TransitionRule {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface TransitionCondition {
   type: 'TIME_BASED' | 'EVENT_BASED' | 'POLICY_BASED' | 'DEPENDENCY_BASED';
@@ -83,7 +90,9 @@ export interface TransitionCondition {
   evaluator?: (record: DataRecord) => boolean;
 }
 }
+}
 
+}
 }
 export interface TransitionAction {
   type: 'NOTIFY' | 'UPDATE_METADATA' | 'TRIGGER_WORKFLOW' | 'LOG_EVENT';
@@ -91,7 +100,9 @@ export interface TransitionAction {
   async: boolean;
 }
 }
+}
 
+}
 }
 export interface BatchProcessingConfig {
   batchSize: number;
@@ -102,7 +113,9 @@ export interface BatchProcessingConfig {
   memoryLimit: number;
 }
 }
+}
 
+}
 }
 export interface ProcessingResult {
   processedCount: number;
@@ -113,7 +126,9 @@ export interface ProcessingResult {
   throughput: number;
 }
 }
+}
 
+}
 }
 export interface ProcessingError {
   recordId: string;
@@ -121,6 +136,7 @@ export interface ProcessingError {
   stage: string;
   timestamp: Date;
   retryable: boolean;
+}
 }
 }
 

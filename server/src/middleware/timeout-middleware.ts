@@ -9,6 +9,7 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { getTimeoutManager } from '../services/TimeoutManager';
 
 }
+}
 export interface TimeoutMiddlewareConfig {
   // Default timeouts by route pattern
   routeTimeouts: {
@@ -16,6 +17,7 @@ export interface TimeoutMiddlewareConfig {
       operationType: string;
       operationSubtype: string;
       timeout?: number;
+}
 }
     };
   };
@@ -34,6 +36,7 @@ export interface TimeoutMiddlewareConfig {
 }
 
 }
+}
 export interface RequestTimeoutContext {
   operationId: string;
   operationType: string;
@@ -42,10 +45,12 @@ export interface RequestTimeoutContext {
   timeoutManager: ReturnType<typeof getTimeoutManager>;
 }
 }
+}
 
 declare module 'fastify' {
   interface FastifyRequest {
     timeoutContext?: RequestTimeoutContext;
+}
 }
   }
 }
@@ -420,6 +425,7 @@ declare module 'fastify' {
       fallbackOperation: () => Promise<T>
     ): Promise<import('../services/TimeoutManager').OperationResult<T>>;
     cancelOperation(): boolean;
+}
 }
   }
 }

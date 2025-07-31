@@ -465,6 +465,8 @@ export class ExtensionVersionManager {
   systemVersion: string;
   extensionVersion: string;
 }
+}
+}
 export interface CompatibilityIssue {
   type: 'system-version' | 'missing-dependency' | 'version-mismatch' | 'circular-dependency';
   severity: 'error' | 'warning';
@@ -474,12 +476,16 @@ export interface CompatibilityIssue {
   requiredVersion?: string;
   circularPath?: string;
 }
+}
+}
 export interface UpgradePath {
   possible: boolean;
   reason?: string;
   steps: UpgradeStep;
   totalRisk?: RiskLevel;
   estimatedDuration?: string;
+}
+}
 }
 export interface UpgradeStep {
   fromVersion: string;
@@ -489,5 +495,6 @@ export interface UpgradeStep {
   breakingChanges: boolean;
   recommendedActions: string;
   // Export singleton
+}
 }
 export const extensionVersionManager = ExtensionVersionManager.getInstance();

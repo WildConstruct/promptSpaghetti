@@ -19,6 +19,7 @@ import * as crypto from 'crypto';
 // =============================================================================
 
 }
+}
 export interface AccessControlConfig {
   enabled: boolean;
   defaultDenyAll: boolean;
@@ -56,7 +57,9 @@ export interface AccessControlConfig {
   realTimeUpdates: boolean;
 }
 }
+}
 
+}
 }
 export interface AccessControlContext {
   // Subject (who is requesting access)
@@ -89,7 +92,9 @@ export interface AccessControlContext {
   customAttributes: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface AccessSubject {
   id: string;
@@ -126,7 +131,9 @@ export interface AccessSubject {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface AccessResource {
   id: string;
@@ -166,7 +173,9 @@ export interface AccessResource {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface AccessAction {
   id: string;
@@ -191,7 +200,9 @@ export interface AccessAction {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface AccessEnvironment {
   // Time and location
@@ -201,6 +212,7 @@ export interface AccessEnvironment {
     country: string;
     region: string;
     city: string;
+}
 }
     coordinates?: { lat: number; lon: number };
   };
@@ -241,6 +253,7 @@ export interface AccessEnvironment {
 }
 
 }
+}
 export interface AccessDecision {
   decision: AccessDecisionType;
   requestId: string;
@@ -271,11 +284,13 @@ export interface AccessDecision {
   metadata: Record<string, any>;
 }
 }
+}
 
 // =============================================================================
 // Policy System Interfaces
 // =============================================================================
 
+}
 }
 export interface AccessPolicy {
   id: string;
@@ -324,7 +339,9 @@ export interface AccessPolicy {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface PolicyTarget {
   subjects?: SubjectTarget[];
@@ -333,7 +350,9 @@ export interface PolicyTarget {
   environments?: EnvironmentTarget[];
 }
 }
+}
 
+}
 }
 export interface SubjectTarget {
   type: 'IDENTITY' | 'ROLE' | 'GROUP' | 'ATTRIBUTE';
@@ -342,7 +361,9 @@ export interface SubjectTarget {
   negate: boolean;
 }
 }
+}
 
+}
 }
 export interface ResourceTarget {
   type: 'ID' | 'TYPE' | 'PATH' | 'CLASSIFICATION' | 'ATTRIBUTE';
@@ -351,7 +372,9 @@ export interface ResourceTarget {
   negate: boolean;
 }
 }
+}
 
+}
 }
 export interface ActionTarget {
   type: 'ID' | 'TYPE' | 'OPERATION' | 'CATEGORY';
@@ -360,7 +383,9 @@ export interface ActionTarget {
   negate: boolean;
 }
 }
+}
 
+}
 }
 export interface EnvironmentTarget {
   type: 'TIME' | 'LOCATION' | 'DEVICE' | 'NETWORK' | 'ATTRIBUTE';
@@ -369,7 +394,9 @@ export interface EnvironmentTarget {
   negate: boolean;
 }
 }
+}
 
+}
 }
 export interface PolicyRule {
   id: string;
@@ -391,7 +418,9 @@ export interface PolicyRule {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface RuleCondition {
   field: string;
@@ -401,7 +430,9 @@ export interface RuleCondition {
   weight: number; // 0-1
 }
 }
+}
 
+}
 }
 export interface PolicyCondition {
   type: 'TEMPORAL' | 'CONTEXTUAL' | 'RISK' | 'COMPLIANCE';
@@ -410,7 +441,9 @@ export interface PolicyCondition {
   required: boolean;
 }
 }
+}
 
+}
 }
 export interface PolicyEvaluationResult {
   policyId: string;
@@ -431,7 +464,9 @@ export interface PolicyEvaluationResult {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface AccessCondition {
   type: ConditionType;
@@ -448,7 +483,9 @@ export interface AccessCondition {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface AccessObligation {
   type: ObligationType;
@@ -468,11 +505,13 @@ export interface AccessObligation {
   metadata: Record<string, any>;
 }
 }
+}
 
 // =============================================================================
 // RBAC Interfaces
 // =============================================================================
 
+}
 }
 export interface Role {
   id: string;
@@ -506,7 +545,9 @@ export interface Role {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface Permission {
   id: string;
@@ -533,7 +574,9 @@ export interface Permission {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface RoleAssignment {
   id: string;
@@ -563,7 +606,9 @@ export interface RoleAssignment {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface RoleConstraint {
   type: ConstraintType;
@@ -571,7 +616,9 @@ export interface RoleConstraint {
   required: boolean;
 }
 }
+}
 
+}
 }
 export interface PermissionConstraint {
   type: ConstraintType;
@@ -581,7 +628,9 @@ export interface PermissionConstraint {
   required: boolean;
 }
 }
+}
 
+}
 }
 export interface PermissionCondition {
   type: ConditionType;
@@ -589,11 +638,13 @@ export interface PermissionCondition {
   parameters: Record<string, any>;
 }
 }
+}
 
 // =============================================================================
 // ABAC Interfaces
 // =============================================================================
 
+}
 }
 export interface SubjectAttribute {
   name: string;
@@ -623,7 +674,9 @@ export interface SubjectAttribute {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ResourceAttribute {
   name: string;
@@ -647,7 +700,9 @@ export interface ResourceAttribute {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface EnvironmentAttribute {
   name: string;
@@ -669,7 +724,9 @@ export interface EnvironmentAttribute {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface Group {
   id: string;
@@ -701,7 +758,9 @@ export interface Group {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface GroupMember {
   subjectId: string;
@@ -712,7 +771,9 @@ export interface GroupMember {
   addedAt: Date;
 }
 }
+}
 
+}
 }
 export interface GroupAttribute {
   name: string;
@@ -720,6 +781,7 @@ export interface GroupAttribute {
   type: AttributeType;
   inherited: boolean;
   metadata: Record<string, any>;
+}
 }
 }
 

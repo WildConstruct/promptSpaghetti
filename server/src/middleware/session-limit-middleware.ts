@@ -11,6 +11,7 @@ import { SessionService } from '../auth/services/SessionService';
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 export interface SessionLimitMiddlewareOptions {
   enableSessionLimits: boolean;
   skipPaths: string[];
@@ -20,9 +21,11 @@ export interface SessionLimitMiddlewareOptions {
     onViolation?: string;
     onEnforcement?: string;
 }
+}
   };
 }
 
+}
 }
 export interface RequestSessionContext {
   userId?: string;
@@ -34,6 +37,7 @@ export interface RequestSessionContext {
   ipAddress?: string;
   country?: string;
   userAgent?: string;
+}
 }
 }
 

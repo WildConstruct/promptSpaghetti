@@ -55,6 +55,8 @@ export enum RateLimitStrategy {
   adaptiveEnabled: boolean;
   threatDetectionEnabled: boolean;
 }
+}
+}
 export interface EndpointLimits {
   category: EndpointCategory;
   endpoint: string;
@@ -63,6 +65,7 @@ export interface EndpointLimits {
   perMinute: number;
   perHour: number;
   perDay: number;
+}
 };
   backoff: {
   strategy: BackoffStrategy;
@@ -80,6 +83,7 @@ export interface EndpointLimits {
   threatLevelAdjustments: Record<ThreatLevel, number>; // multipliers,
 };
 }
+}
 export interface RateLimitAttempt {
   identifier: string; // IP, user ID, session ID,
   endpoint: string;
@@ -91,7 +95,9 @@ export interface RateLimitAttempt {
   sessionId?: string;
   userId?: string;
   threatLevel: ThreatLevel;
+}
 };
+}
 }
 export interface RateLimitStatus {
   identifier: string;
@@ -104,6 +110,8 @@ export interface RateLimitStatus {
   threatLevel: ThreatLevel;
   adaptiveMultiplier: number;
 }
+}
+}
 export interface BackoffState {
   identifier: string;
   endpoint: string;
@@ -113,6 +121,8 @@ export interface BackoffState {
   totalFailures: number;
   lastFailureTime: Date;
 }
+}
+}
 export interface ThreatContext {
   identifier: string;
   threatLevel: ThreatLevel;
@@ -121,6 +131,7 @@ export interface ThreatContext {
   country: string;
   region: string;
   suspicious: boolean;
+}
 };
   behaviorPattern: {
   rapidRequests: boolean;
@@ -146,11 +157,12 @@ export class RateLimitingService extends EventEmitter {
   /**
    * Check if request should be allowed based on rate limits
    */
-  public async checkRateLimit()
+  public async checkRateLimit(
     identifier: string,
     endpoint: string,
     metadata: Partial<RateLimitAttempt['metadata']> = {}
   ): Promise<RateLimitStatus> {
+
   // Check exemptions first
   if (this.exemptions.has(identifier)) {
   return this.createAllowedStatus(identifier, endpoint, 'exempted');

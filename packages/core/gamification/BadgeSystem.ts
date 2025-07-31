@@ -9,6 +9,7 @@ import { identityValidationService, IdentityValidationType } from '../auth/Ident
 import { marketplaceMetrics } from '../analytics/MarketplaceMetrics';
 import { conversionTracker } from '../analytics/ConversionTracker';
 
+}
 export interface Badge {
   id: string;
   name: string;
@@ -28,6 +29,7 @@ export interface Badge {
   createdAt: number;
   updatedAt: number;
   version: string;
+}
 };
 }
 export type BadgeCategory = 
@@ -55,6 +57,7 @@ export type BadgeRarity =
   | 'epic'
   | 'legendary';
 
+}
 export interface BadgeCriteria {
   type: 'count' | 'threshold' | 'completion' | 'verification' | 'composite';
   metric?: string;
@@ -62,6 +65,8 @@ export interface BadgeCriteria {
   timeframe?: number; // milliseconds,
   conditions?: Record<string, any>;
   customLogic?: (user: UserBadgeProgress) => boolean;
+}
+}
 }
 export interface UserBadge {
   badgeId: string;
@@ -72,6 +77,8 @@ export interface UserBadge {
   metadata?: Record<string, any>;
   isDisplayed: boolean;
   isNotificationSent: boolean;
+}
+}
 }
 export interface UserBadgeProgress {
   userId: string;
@@ -92,6 +99,7 @@ export interface UserBadgeProgress {
   helpfulVotes: number;
   mentoringSessions: number;
   workshopsAttended: number;
+}
 };
   achievements: {
   firstTemplate: boolean;
@@ -101,6 +109,7 @@ export interface UserBadgeProgress {
   communityLeader: boolean;
 };
 }
+}
 export interface BadgeUnlockEvent {
   userId: string;
   badgeId: string;
@@ -109,6 +118,7 @@ export interface BadgeUnlockEvent {
   isLevelUp: boolean;
   newLevel?: number;
   pointsEarned: number;
+}
 }
 export class BadgeSystem {
   private badges: Map<string, Badge> = new Map();
@@ -606,7 +616,7 @@ export class BadgeSystem {
   /**
   * Get leaderboard data
   */
-  public getLeaderboard(limit: number = 10): Array<{,
+  public getLeaderboard(limit: number = 10): Array<{
   userId: string;
   totalPoints: number;
   level: number;

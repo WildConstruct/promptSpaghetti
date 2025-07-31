@@ -5,13 +5,16 @@ import { TemplateWithStats, EventType } from './types';
 import { Pool } from 'pg';
 
 }
+}
 interface RecommendationScore {
   templateId: string;
   score: number;
   reasons: string[];
 }
 }
+}
 
+}
 }
 interface UserBehavior {
   userId: string;
@@ -23,11 +26,14 @@ interface UserBehavior {
   tags: string[];
 }
 }
+}
 
+}
 }
 interface SimilarityMatrix {
   [templateId: string]: {
     [otherTemplateId: string]: number;
+}
 }
   };
 }

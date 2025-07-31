@@ -12,6 +12,7 @@ import {
   ValidationResult
 } from '../types/DataClassification';
 
+}
 export interface AuditLogEntry {
   id: string;
   timestamp: Date;
@@ -29,6 +30,7 @@ export interface AuditLogEntry {
   complianceFlags: ComplianceFlag;
   riskScore: number;
   correlationId?: string;
+}
 }
 export type AuditAction = 
   | 'CLASSIFY_DATA'
@@ -51,6 +53,7 @@ export type AuditAction =
   | 'ALERT_TRIGGERED'
   | 'ALERT_RESOLVED';
 
+}
 export interface AuditDetails {
   previousClassification?: DataClassificationLevel;
   newClassification?: DataClassificationLevel;
@@ -66,6 +69,8 @@ export interface AuditDetails {
   encryptionStatus: 'ENCRYPTED' | 'NOT_ENCRYPTED' | 'PARTIALLY_ENCRYPTED';
   customProperties?: Record<string, any>;
 }
+}
+}
 export interface AuditOutcome {
   success: boolean;
   errorCode?: string;
@@ -77,6 +82,8 @@ export interface AuditOutcome {
   violationsDetected: string;
   remediationRequired: boolean;
 }
+}
+}
 export interface AuditMetadata {
   sourceIP: string;
   userAgent: string;
@@ -85,6 +92,7 @@ export interface AuditMetadata {
   region: string;
   city: string;
   coordinates: [number, number];
+}
 };
   deviceInfo?: {
   deviceId: string;
@@ -104,6 +112,7 @@ export interface AuditMetadata {
   accessLevel: string;
 };
 }
+}
 export interface ComplianceFlag {
   framework: string; // GDPR, HIPAA, SOX, PCI-DSS, etc.,
   requirement: string;
@@ -111,6 +120,8 @@ export interface ComplianceFlag {
   evidence?: string;
   assessmentDate: Date;
   nextReviewDate?: Date;
+}
+}
 }
 export interface AuditQuery {
   startDate?: Date;
@@ -128,7 +139,9 @@ export interface AuditQuery {
   offset?: number;
   sortBy?: 'timestamp' | 'riskScore' | 'classification' | 'userId';
   sortOrder?: 'asc' | 'desc'
+}
   }
+}
 export interface AuditReport {
   id: string;
   name: string;
@@ -142,12 +155,15 @@ export interface AuditReport {
   retentionPeriod: number; // days,
   expiresAt: Date;
 }
+}
+}
 export interface AuditSummary {
   totalEntries: number;
   uniqueUsers: number;
   timeRange: {
   start: Date;
   end: Date;
+}
 };
   actionBreakdown: Record<AuditAction, number>;
   classificationBreakdown: Record<DataClassificationLevel, number>;
@@ -167,6 +183,7 @@ export interface AuditSummary {
   complianceTrend: 'IMPROVING' | 'DEGRADING' | 'STABLE'
   };
 }
+}
 export interface AuditRetentionPolicy {
   classification: DataClassificationLevel;
   retentionDays: number;
@@ -175,6 +192,7 @@ export interface AuditRetentionPolicy {
   complianceRequirements: string;
   encryptionRequired: boolean;
   backupRequired: boolean;
+}
 }
 export class ClassificationAuditLoggingService {
   private auditLogs: Map<string, AuditLogEntry> = new Map();
@@ -240,6 +258,7 @@ export class ClassificationAuditLoggingService {
     outcome: Partial<AuditOutcome>,
     metadata: Partial<AuditMetadata> = {}
   ): Promise<string> {
+
     const entryId = `audit-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;}
     const entry: AuditLogEntry = {,
   id: entryId,
@@ -300,8 +319,7 @@ export class ClassificationAuditLoggingService {
   /**
   * Generate compliance flags for the entry
   */
-  private generateComplianceFlags(()
-  classification: DataClassificationLevel,
+  private generateComplianceFlags((classification: DataClassificationLevel,
   action: AuditAction): ComplianceFlag {,
   const flags: ComplianceFlag = [];
   const policy = this.retentionPolicies.get(classification);
@@ -381,6 +399,7 @@ export class ClassificationAuditLoggingService {
    * Perform compliance checks on the entry
    */
   private async performComplianceChecks(entry: AuditLogEntry): Promise<void> {
+
   // Check for potential violations
   const violations: string = [];
   // Check for high-risk actions on sensitive data

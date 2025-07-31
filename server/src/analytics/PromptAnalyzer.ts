@@ -10,6 +10,7 @@ import { AnalyticsCollector } from './AnalyticsCollector';
 import { logger } from '../utils/logger';
 
 }
+}
 export interface PromptAnalysisResult {
   prompt: string;
   analysis: {
@@ -17,6 +18,7 @@ export interface PromptAnalysisResult {
     structure: StructuralAnalysis;
     quality: QualityMetrics;
     optimization: OptimizationRecommendations;
+}
 }
   };
   summary: {
@@ -33,6 +35,7 @@ export interface PromptAnalysisResult {
 }
 
 }
+}
 export interface StructuralAnalysis {
   tokenCount: number;
   sentenceCount: number;
@@ -43,7 +46,9 @@ export interface StructuralAnalysis {
   semanticClusters: SemanticCluster[];
 }
 }
+}
 
+}
 }
 export interface QualityMetrics {
   clarity: number;          // 0-1, how clear and specific the prompt is
@@ -54,7 +59,9 @@ export interface QualityMetrics {
   overallQuality: number;   // 0-1, weighted combination
 }
 }
+}
 
+}
 }
 export interface OptimizationRecommendations {
   suggestions: Suggestion[];
@@ -63,7 +70,9 @@ export interface OptimizationRecommendations {
   structuralImprovements: StructuralImprovement[];
 }
 }
+}
 
+}
 }
 export interface KeyPhrase {
   phrase: string;
@@ -72,7 +81,9 @@ export interface KeyPhrase {
   positions: number[];
 }
 }
+}
 
+}
 }
 export interface SemanticCluster {
   id: string;
@@ -82,7 +93,9 @@ export interface SemanticCluster {
   importance: number;
 }
 }
+}
 
+}
 }
 export interface Suggestion {
   type: 'add' | 'remove' | 'modify' | 'reorder';
@@ -93,7 +106,9 @@ export interface Suggestion {
   targetTokens?: number[];
 }
 }
+}
 
+}
 }
 export interface AlternativeVersion {
   version: string;
@@ -102,7 +117,9 @@ export interface AlternativeVersion {
   confidenceLevel: number;
 }
 }
+}
 
+}
 }
 export interface TokenOptimization {
   position: number;
@@ -112,13 +129,16 @@ export interface TokenOptimization {
   reasoning: string;
 }
 }
+}
 
+}
 }
 export interface StructuralImprovement {
   issue: string;
   severity: 'critical' | 'major' | 'minor';
   solution: string;
   impact: number;
+}
 }
 }
 

@@ -54,6 +54,8 @@ export enum AnalyticsPermission {
   priority: number;
   enabled: boolean;
 }
+}
+}
 export interface AuthorizationRule {
   id: string;
   condition: {
@@ -65,6 +67,7 @@ export interface AuthorizationRule {
   organizationMatch?: 'self' | 'any';
   requiredPermissions: string;
   requiredRoles?: string;
+}
 };
   action: 'allow' | 'deny';
   fields?: {
@@ -74,6 +77,7 @@ export interface AuthorizationRule {
 };
 
 // Authorization Result
+}
 }
 export interface AuthorizationResult {
   allowed: boolean;
@@ -87,6 +91,7 @@ export interface AuthorizationResult {
   * Provides comprehensive authorization for analytics events and data access
   * integrated with the consolidated authentication system from Story 1.2.
   */
+}
 }
 export class AnalyticsAuthorizationService {
   private policies: Map<string, AuthorizationPolicy> = new Map();
@@ -199,10 +204,11 @@ export class AnalyticsAuthorizationService {
   /**
    * Authorize event publication
    */
-  async authorizeEventPublication(()
+  async authorizeEventPublication(((
     event: Partial<UnifiedAnalyticsEvent>,
-    authContext: AuthContext,
+    authContext: AuthContext
   ): Promise<AuthorizationResult> {
+
   try {
   // Check basic publish permission
   if (!this.hasPermission(authContext, AnalyticsPermission.PUBLISH_EVENTS)) {
@@ -239,10 +245,11 @@ export class AnalyticsAuthorizationService {
   /**
    * Authorize event access/viewing
    */
-  async authorizeEventAccess(()
+  async authorizeEventAccess(((
     event: UnifiedAnalyticsEvent,
-    authContext: AuthContext,
+    authContext: AuthContext
   ): Promise<AuthorizationResult> {
+
   try {
   // Check basic view permission
   if (!this.hasPermission(authContext, AnalyticsPermission.VIEW_EVENTS)) {
@@ -260,10 +267,11 @@ export class AnalyticsAuthorizationService {
   /**
    * Authorize analytics query with filtering
    */
-  async authorizeAnalyticsQuery(()
+  async authorizeAnalyticsQuery(((
     filter: EventFilter,
-    authContext: AuthContext,
+    authContext: AuthContext
   ): Promise<{ allowed: boolean; filteredQuery?: EventFilter; reason?: string }> {
+
   try {
   // Check analytics viewing permission
   if (!this.hasPermission(authContext, AnalyticsPermission.VIEW_ANALYTICS)) {
@@ -295,10 +303,11 @@ export class AnalyticsAuthorizationService {
   /**
    * Authorize dashboard access
    */
-  async authorizeDashboardAccess(()
+  async authorizeDashboardAccess(((
     dashboardType: 'user' | 'organization' | 'admin' | 'system',
-    authContext: AuthContext,
+    authContext: AuthContext
   ): Promise<AuthorizationResult> {
+
   try {
   const requiredPermissions = {
   user: [AnalyticsPermission.VIEW_DASHBOARD],
@@ -326,6 +335,7 @@ export class AnalyticsAuthorizationService {
     authContext: AuthContext,
     // action: 'publish' | 'view'
   ): Promise<AuthorizationResult> {
+
     const appliedRules: string = [];
     let finalResult: AuthorizationResult = { allowed: false };
     let filteredEvent = { ...event };

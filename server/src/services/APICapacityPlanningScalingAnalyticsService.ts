@@ -19,6 +19,7 @@ import { MetricsCollector } from '../performance/MetricsCollector';
 // ============================================================================
 
 }
+}
 export interface CapacityPlanningScalingConfig {
   // Planning configuration
   planning: {
@@ -28,6 +29,7 @@ export interface CapacityPlanningScalingConfig {
     planning_confidence_threshold: number;
     business_alignment_enabled: boolean;
     cost_optimization_priority: number; // 1-10 scale
+}
 }
   };
   
@@ -142,6 +144,7 @@ export interface CapacityPlanningScalingConfig {
 }
 
 }
+}
 export interface CapacityPlanningAnalysisResult {
   analysis_id: string;
   analysis_timestamp: Date;
@@ -155,6 +158,7 @@ export interface CapacityPlanningAnalysisResult {
     capacity_efficiency_score: number;
     utilization_trends: UtilizationTrendAnalysis;
     capacity_gaps_identified: CapacityGap[];
+}
 }
   };
   
@@ -201,6 +205,7 @@ export interface CapacityPlanningAnalysisResult {
 }
 
 }
+}
 export interface ScalingAnalyticsResult {
   analysis_id: string;
   analysis_timestamp: Date;
@@ -213,6 +218,7 @@ export interface ScalingAnalyticsResult {
     average_scaling_time_seconds: number;
     scaling_efficiency_score: number;
     scaling_cost_effectiveness: number;
+}
 }
   };
   
@@ -242,12 +248,14 @@ export interface ScalingAnalyticsResult {
 }
 
 }
+}
 export interface ResourceUtilizationBreakdown {
   compute_resources: {
     cpu_utilization_by_service: Record<string, number>;
     memory_utilization_by_service: Record<string, number>;
     utilization_efficiency_scores: Record<string, number>;
     resource_allocation_optimization: Record<string, number>;
+}
 }
   };
   
@@ -273,6 +281,7 @@ export interface ResourceUtilizationBreakdown {
 }
 
 }
+}
 export interface DemandProjection {
   projection_id: string;
   projection_period: string;
@@ -289,9 +298,11 @@ export interface DemandProjection {
     feature_importance: Record<string, number>;
     model_accuracy: number;
 }
+}
   };
 }
 
+}
 }
 export interface GrowthScenario {
   scenario_id: string;
@@ -304,6 +315,7 @@ export interface GrowthScenario {
     feature_adoption_rate: number;
     market_expansion_factor: number;
     competitive_pressure_factor: number;
+}
 }
   };
   
@@ -323,6 +335,7 @@ export interface GrowthScenario {
 }
 
 }
+}
 export interface ScalingRecommendation {
   recommendation_id: string;
   recommendation_type: 'immediate' | 'short_term' | 'long_term';
@@ -333,6 +346,7 @@ export interface ScalingRecommendation {
     scaling_timeline: string;
     implementation_steps: string[];
     success_criteria: string[];
+}
 }
   };
   
@@ -352,6 +366,7 @@ export interface ScalingRecommendation {
 }
 
 }
+}
 export interface CostProjection {
   projection_id: string;
   projection_period: string;
@@ -362,6 +377,7 @@ export interface CostProjection {
     operational_costs: CostBreakdownItem[];
     licensing_costs: CostBreakdownItem[];
     maintenance_costs: CostBreakdownItem[];
+}
 }
   };
   
@@ -380,6 +396,7 @@ export interface CostProjection {
 }
 
 }
+}
 export interface CapacityPlanningScalingAnalytics {
   // Overall planning analytics
   planning_analytics: {
@@ -388,6 +405,7 @@ export interface CapacityPlanningScalingAnalytics {
     capacity_utilization_optimization: number;
     cost_savings_achieved: number;
     planning_effectiveness_score: number;
+}
 }
   };
   
@@ -427,6 +445,7 @@ export interface CapacityPlanningScalingAnalytics {
 
 // Supporting interfaces
 }
+}
 export interface UtilizationTrendAnalysis {
   overall_trend: 'increasing' | 'stable' | 'decreasing';
   trend_strength: number;
@@ -435,7 +454,9 @@ export interface UtilizationTrendAnalysis {
   trend_change_points: TrendChangePoint[];
 }
 }
+}
 
+}
 }
 export interface CapacityGap {
   gap_id: string;
@@ -447,7 +468,9 @@ export interface CapacityGap {
   business_impact: number;
 }
 }
+}
 
+}
 }
 export interface SeasonalPattern {
   pattern_id: string;
@@ -458,7 +481,9 @@ export interface SeasonalPattern {
   pattern_reliability: number;
 }
 }
+}
 
+}
 }
 export interface DemandDriver {
   driver_id: string;
@@ -469,7 +494,9 @@ export interface DemandDriver {
   predictability_score: number;
 }
 }
+}
 
+}
 }
 export interface ForecastAccuracyMetrics {
   overall_accuracy: number;
@@ -479,7 +506,9 @@ export interface ForecastAccuracyMetrics {
   accuracy_by_horizon: Record<string, number>;
 }
 }
+}
 
+}
 }
 export interface BudgetAnalysis {
   total_budget_allocated: number;
@@ -489,7 +518,9 @@ export interface BudgetAnalysis {
   budget_risk_assessment: BudgetRiskAssessment;
 }
 }
+}
 
+}
 }
 export interface ROIAnalysis {
   overall_roi: number;
@@ -497,6 +528,7 @@ export interface ROIAnalysis {
   payback_period_analysis: PaybackPeriodAnalysis;
   net_present_value: number;
   internal_rate_of_return: number;
+}
 }
 }
 
@@ -1713,13 +1745,16 @@ export class APICapacityPlanningScalingAnalyticsService extends EventEmitter {
 
 // Supporting interfaces for comprehensive type safety
 }
+}
 interface ProjectedDemandValue {
   timestamp: Date;
   value: number;
   confidence: number;
 }
 }
+}
 
+}
 }
 interface ConfidenceInterval {
   timestamp: Date;
@@ -1728,7 +1763,9 @@ interface ConfidenceInterval {
   confidence_level: number;
 }
 }
+}
 
+}
 }
 interface SeasonalAdjustment {
   period: string;
@@ -1736,7 +1773,9 @@ interface SeasonalAdjustment {
   confidence: number;
 }
 }
+}
 
+}
 }
 interface CostImpactAnalysis {
   monthly_cost_increase: number;
@@ -1744,7 +1783,9 @@ interface CostImpactAnalysis {
   roi_timeline_months: number;
 }
 }
+}
 
+}
 }
 interface ScalingRiskAssessment {
   implementation_risks: string[];
@@ -1752,7 +1793,9 @@ interface ScalingRiskAssessment {
   mitigation_strategies: string[];
 }
 }
+}
 
+}
 }
 interface CostBreakdownItem {
   category: string;
@@ -1760,7 +1803,9 @@ interface CostBreakdownItem {
   annual_projection: number;
 }
 }
+}
 
+}
 }
 interface CostDriver {
   driver_name: string;
@@ -1768,7 +1813,9 @@ interface CostDriver {
   cost_sensitivity: string;
 }
 }
+}
 
+}
 }
 interface CostSensitivityAnalysis {
   parameter: string;
@@ -1776,9 +1823,11 @@ interface CostSensitivityAnalysis {
   optimistic_case: number;
   pessimistic_case: number;
 }
+}
   cost_impact_range: { min: number; max: number };
 }
 
+}
 }
 interface BudgetVarianceItem {
   category: string;
@@ -1788,7 +1837,9 @@ interface BudgetVarianceItem {
   variance_reason: string;
 }
 }
+}
 
+}
 }
 interface BudgetOptimizationOpportunity {
   opportunity: string;
@@ -1796,7 +1847,9 @@ interface BudgetOptimizationOpportunity {
   risk_level: string;
 }
 }
+}
 
+}
 }
 interface BudgetRiskAssessment {
   overall_risk_level: string;
@@ -1804,7 +1857,9 @@ interface BudgetRiskAssessment {
   mitigation_strategies: string[];
 }
 }
+}
 
+}
 }
 interface PaybackPeriodAnalysis {
   average_payback_months: number;
@@ -1812,7 +1867,9 @@ interface PaybackPeriodAnalysis {
   worst_case_months: number;
 }
 }
+}
 
+}
 }
 interface TrendAnalysis {
   trend_direction: string;
@@ -1820,7 +1877,9 @@ interface TrendAnalysis {
   confidence_level: number;
 }
 }
+}
 
+}
 }
 interface AnomalyDetection {
   anomaly_id: string;
@@ -1829,7 +1888,9 @@ interface AnomalyDetection {
   description: string;
 }
 }
+}
 
+}
 }
 interface TrendChangePoint {
   timestamp: Date;
@@ -1837,7 +1898,9 @@ interface TrendChangePoint {
   change_direction: string;
 }
 }
+}
 
+}
 }
 interface PeakPeriod {
   start_time: string;
@@ -1845,7 +1908,9 @@ interface PeakPeriod {
   intensity: number;
 }
 }
+}
 
+}
 }
 interface LowPeriod {
   start_time: string;
@@ -1853,7 +1918,9 @@ interface LowPeriod {
   intensity: number;
 }
 }
+}
 
+}
 }
 interface NetworkEfficiencyMetrics {
   overall_network_efficiency: number;
@@ -1862,7 +1929,9 @@ interface NetworkEfficiencyMetrics {
   connection_reuse_efficiency: number;
 }
 }
+}
 
+}
 }
 interface IOPerformanceMetrics {
   average_iops: number;
@@ -1871,7 +1940,9 @@ interface IOPerformanceMetrics {
   io_efficiency_score: number;
 }
 }
+}
 
+}
 }
 interface StorageOptimizationOpportunity {
   opportunity_type: string;
@@ -1879,7 +1950,9 @@ interface StorageOptimizationOpportunity {
   implementation_complexity: string;
 }
 }
+}
 
+}
 }
 interface ResourceAllocationRecommendation {
   recommendation_id: string;
@@ -1891,7 +1964,9 @@ interface ResourceAllocationRecommendation {
   implementation_timeline: string;
 }
 }
+}
 
+}
 }
 interface CapacityOptimizationOpportunity {
   opportunity_id: string;
@@ -1903,7 +1978,9 @@ interface CapacityOptimizationOpportunity {
   business_value: string;
 }
 }
+}
 
+}
 }
 interface TimelineRecommendation {
   timeline_id: string;
@@ -1913,7 +1990,9 @@ interface TimelineRecommendation {
   success_criteria: string[];
 }
 }
+}
 
+}
 }
 interface CapacityPlanningRisk {
   risk_id: string;
@@ -1924,7 +2003,9 @@ interface CapacityPlanningRisk {
   timeline: string;
 }
 }
+}
 
+}
 }
 interface RiskMitigationStrategy {
   strategy_id: string;
@@ -1934,7 +2015,9 @@ interface RiskMitigationStrategy {
   effectiveness_score: number;
 }
 }
+}
 
+}
 }
 interface ContingencyPlan {
   plan_id: string;
@@ -1944,7 +2027,9 @@ interface ContingencyPlan {
   timeline: string;
 }
 }
+}
 
+}
 }
 interface RiskImpactAnalysis {
   overall_risk_score: number;
@@ -1952,7 +2037,9 @@ interface RiskImpactAnalysis {
   mitigation_effectiveness: number;
 }
 }
+}
 
+}
 }
 interface UserExperienceImpactAnalysis {
   response_time_improvement: number;
@@ -1961,7 +2048,9 @@ interface UserExperienceImpactAnalysis {
   user_satisfaction_score_change: number;
 }
 }
+}
 
+}
 }
 interface RevenueImpactAnalysis {
   revenue_protection: number;
@@ -1969,7 +2058,9 @@ interface RevenueImpactAnalysis {
   competitive_advantage_value: number;
 }
 }
+}
 
+}
 }
 interface SLAComplianceAnalysis {
   current_compliance_score: number;
@@ -1977,7 +2068,9 @@ interface SLAComplianceAnalysis {
   compliance_risk_reduction: number;
 }
 }
+}
 
+}
 }
 interface CompetitiveAdvantageAnalysis {
   performance_advantage: string;
@@ -1986,7 +2079,9 @@ interface CompetitiveAdvantageAnalysis {
   overall_competitive_position: string;
 }
 }
+}
 
+}
 }
 interface ExecutiveSummary {
   key_findings: string[];
@@ -1997,6 +2092,7 @@ interface ExecutiveSummary {
     payback_period_months: number;
     annual_savings_potential: number;
 }
+}
   };
   risk_summary: {
     overall_risk_level: string;
@@ -2006,6 +2102,7 @@ interface ExecutiveSummary {
 }
 
 }
+}
 interface ImplementationRoadmap {
   phases: {
     phase_name: string;
@@ -2013,6 +2110,7 @@ interface ImplementationRoadmap {
     activities: string[];
     dependencies: string[];
     success_criteria: string[];
+}
 }
   }[];
   critical_path: string[];
@@ -2024,6 +2122,7 @@ interface ImplementationRoadmap {
 }
 
 }
+}
 interface FinancialProjections {
   total_investment_required: number;
   monthly_cost_projection: number;
@@ -2032,7 +2131,9 @@ interface FinancialProjections {
   cost_benefit_ratio: number;
 }
 }
+}
 
+}
 }
 interface ScalingTrigger {
   trigger_id: string;
@@ -2041,7 +2142,9 @@ interface ScalingTrigger {
   effectiveness: number;
 }
 }
+}
 
+}
 }
 interface ScalingFrequencyAnalysis {
   daily_average: number;
@@ -2049,7 +2152,9 @@ interface ScalingFrequencyAnalysis {
   monthly_trend: string;
 }
 }
+}
 
+}
 }
 interface ScalingEffectivenessAnalysis {
   strategy_type: string;
@@ -2058,7 +2163,9 @@ interface ScalingEffectivenessAnalysis {
   cost_effectiveness: number;
 }
 }
+}
 
+}
 }
 interface OptimalScalingThreshold {
   resource_type: string;
@@ -2067,7 +2174,9 @@ interface OptimalScalingThreshold {
   improvement_potential: number;
 }
 }
+}
 
+}
 }
 interface PredictedScalingEvent {
   event_id: string;
@@ -2077,7 +2186,9 @@ interface PredictedScalingEvent {
   recommended_action: string;
 }
 }
+}
 
+}
 }
 interface ProactiveScalingOpportunity {
   opportunity_id: string;
@@ -2086,7 +2197,9 @@ interface ProactiveScalingOpportunity {
   expected_benefit: number;
 }
 }
+}
 
+}
 }
 interface ScalingAutomationRecommendation {
   recommendation_id: string;
@@ -2095,7 +2208,9 @@ interface ScalingAutomationRecommendation {
   expected_improvement: number;
 }
 }
+}
 
+}
 }
 interface IntelligentScalingStrategy {
   strategy_id: string;
@@ -2104,7 +2219,9 @@ interface IntelligentScalingStrategy {
   applicability_score: number;
 }
 }
+}
 
+}
 }
 interface ScalingCostAnalysis {
   total_scaling_costs: number;
@@ -2112,7 +2229,9 @@ interface ScalingCostAnalysis {
   cost_efficiency_score: number;
 }
 }
+}
 
+}
 }
 interface ResourceWasteAnalysis {
   over_provisioning_waste: number;
@@ -2120,7 +2239,9 @@ interface ResourceWasteAnalysis {
   waste_cost_impact: number;
 }
 }
+}
 
+}
 }
 interface EfficiencyImprovementOpportunity {
   opportunity_id: string;
@@ -2129,7 +2250,9 @@ interface EfficiencyImprovementOpportunity {
   implementation_effort: string;
 }
 }
+}
 
+}
 }
 interface ScalingCostOptimizationRecommendation {
   recommendation_id: string;
@@ -2138,7 +2261,9 @@ interface ScalingCostOptimizationRecommendation {
   implementation_timeline: string;
 }
 }
+}
 
+}
 }
 interface ScalingOptimizationRecommendation {
   recommendation_id: string;
@@ -2150,6 +2275,7 @@ interface ScalingOptimizationRecommendation {
     cost_reduction: number;
     performance_impact: number;
 }
+}
   };
   implementation: {
     effort_level: string;
@@ -2158,6 +2284,7 @@ interface ScalingOptimizationRecommendation {
   };
 }
 
+}
 }
 interface ScalingAutomationOpportunity {
   opportunity_id: string;
@@ -2169,7 +2296,9 @@ interface ScalingAutomationOpportunity {
   expected_benefits: string[];
 }
 }
+}
 
+}
 }
 interface CostEfficiencyAnalysis {
   overall_efficiency_score: number;
@@ -2181,13 +2310,16 @@ interface CostEfficiencyAnalysis {
     relative_performance: string;
     improvement_potential: number;
 }
+}
   };
 }
 
+}
 }
 interface TrendData {
   timestamp: Date;
   value: number;
   trend_direction: 'increasing' | 'stable' | 'decreasing';
+}
 }
 }

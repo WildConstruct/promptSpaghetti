@@ -100,6 +100,7 @@ export declare class ExtensionUpgradeAdvisor {
     private generateTestingPlan;
     private identifyPrerequisites;
 
+}
 export interface UpgradeContext {
     systemVersion: string;
     platform: string;
@@ -110,12 +111,14 @@ export interface UpgradeContext {
     stabilityPriority?: boolean;
     featurePriority?: boolean;
 
+}
 export interface UpgradeRecommendation {
     hasUpdates: boolean;
     currentVersion: string;
     recommendations: VersionRecommendation[];
     strategy: UpgradeStrategyType;
 
+}
 export interface VersionRecommendation {
     version: string;
     priority: 'low' | 'medium' | 'high';
@@ -124,6 +127,7 @@ export interface VersionRecommendation {
     benefits: string[];
     effort: 'minimal' | 'low' | 'medium' | 'high';
 
+}
 export interface UpgradeAnalysis {
     feasible: boolean;
     reason?: string;
@@ -134,6 +138,7 @@ export interface UpgradeAnalysis {
     estimatedEffort?: EffortEstimate;
     timeline?: UpgradeTimeline;
 
+}
 export interface MigrationPlan {
     viable: boolean;
     reason?: string;
@@ -143,6 +148,7 @@ export interface MigrationPlan {
     estimatedDuration?: string;
     riskLevel?: 'low' | 'medium' | 'high';
     prerequisites?: string[];
+}
 interface BreakingChange {
     introducedIn: string;
     type: 'api' | 'config' | 'behavior' | 'dependency';
@@ -151,12 +157,14 @@ interface BreakingChange {
     migrationRequired: boolean;
     automatedMigration: boolean;
     migrationGuide?: string;
+}
 interface BreakingChangeAnalysis {
     hasBreakingChanges: boolean;
     changes: BreakingChange[];
     impactLevel: 'low' | 'medium' | 'high';
     migrationRequired: boolean;
     automatedMigration: boolean;
+}
 interface UpgradeCompatibilityResult {
     compatible: boolean;
     compatibilityResult: ExtensionCompatibilityResult;
@@ -164,16 +172,19 @@ interface UpgradeCompatibilityResult {
     permissionChanges: PermissionChange[];
     requiresRestart: boolean;
     dataBackupRequired: boolean;
+}
 interface DependencyConflict {
     dependencyId: string;
     conflictType: 'version' | 'missing' | 'incompatible';
     description: string;
     resolution: string;
+}
 interface PermissionChange {
     permission: string;
     changeType: 'added' | 'removed' | 'modified';
     description: string;
     impact: 'low' | 'medium' | 'high';
+}
 interface MigrationTask {
     id: string;
     title: string;
@@ -182,41 +193,50 @@ interface MigrationTask {
     required: boolean;
     automated: boolean;
     estimatedDuration: string;
+}
 interface UpgradeRisk {
     type: 'breaking-changes' | 'dependency-conflicts' | 'data-loss' | 'performance' | 'security';
     severity: 'low' | 'medium' | 'high';
     description: string;
     mitigation: string;
     probability: 'low' | 'medium' | 'high';
+}
 interface UpgradeBenefit {
     type: 'features' | 'performance' | 'security' | 'stability' | 'compatibility';
     description: string;
     impact: 'low' | 'medium' | 'high';
+}
 interface EffortEstimate {
     level: 'low' | 'medium' | 'high';
     duration: string;
     complexity: 'simple' | 'moderate' | 'complex';
+}
 interface UpgradeTimeline {
-    phases: Array<{,
+    phases: Array<{
         name: string;
         duration: string;
         tasks: MigrationTask[];
+}
     }>;
     totalDuration: string;
+}
 interface MigrationPhase {
     name: string;
     description: string;
     tasks: MigrationTask[];
     duration: string;
+}
 interface RollbackPlan {
     steps: string[];
     estimatedDuration: string;
     dataLossRisk: 'low' | 'medium' | 'high';
+}
 interface TestingPlan {
     preUpgradeTests: string[];
     postUpgradeTests: string[];
     rollbackTests: string[];
 type UpgradeStrategyType = 'conservative' | 'moderate' | 'aggressive' | 'security' | 'none';
 export declare const extensionUpgradeAdvisor: ExtensionUpgradeAdvisor;
+}
 export {};
 //# sourceMappingURL=ExtensionUpgradeAdvisor.d.ts.map

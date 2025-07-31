@@ -25,6 +25,7 @@ export declare enum TokenType {
     EOF = "EOF",
     ERROR = "ERROR"
 
+}
 export interface Token {
     type: TokenType;
     value: string;
@@ -32,6 +33,7 @@ export interface Token {
     raw?: string;
 
 
+}
 export interface LexerError {
     message: string;
     position: LexerPosition;
@@ -53,6 +55,7 @@ export declare class GraphLexer {
     tokenize(): {
         tokens: Token[];
         errors: LexerError[];
+}
     };
     /**
      * Scan and classify the next token

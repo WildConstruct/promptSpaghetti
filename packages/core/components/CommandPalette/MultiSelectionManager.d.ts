@@ -7,6 +7,7 @@
 import React from 'react';
 import { Node, Edge } from 'reactflow';
 
+}
 export interface SelectionRect {
     startX: number;
     startY: number;
@@ -15,6 +16,7 @@ export interface SelectionRect {
     active: boolean;
 
 
+}
 export interface MultiSelectionManagerProps {
     nodes: Node[];
     edges: Edge[];
@@ -26,6 +28,7 @@ export interface MultiSelectionManagerProps {
         nodes: Node[];
         edges: Edge[];
 
+}
     }) => void;
     theme?: 'light' | 'dark' | 'cinema';
     disabled?: boolean;

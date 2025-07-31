@@ -64,6 +64,7 @@ export enum HttpMethod {
 // =============================================================================
 
 }
+}
 export interface ApiEndpoint {
   // Identification
   endpointId: string;
@@ -126,7 +127,9 @@ export interface ApiEndpoint {
   relatedEndpoints: string[];
 }
 }
+}
 
+}
 }
 export interface ApiService {
   // Identification
@@ -183,7 +186,9 @@ export interface ApiService {
   complianceLabels: string[];
 }
 }
+}
 
+}
 }
 export interface AuthenticationSpec {
   type: ApiSecurityLevel;
@@ -198,7 +203,9 @@ export interface AuthenticationSpec {
   scopes?: Record<string, string>;
 }
 }
+}
 
+}
 }
 export interface OAuthFlow {
   type: 'implicit' | 'authorizationCode' | 'clientCredentials' | 'password';
@@ -208,7 +215,9 @@ export interface OAuthFlow {
   scopes: Record<string, string>;
 }
 }
+}
 
+}
 }
 export interface RateLimitSpec {
   enabled: boolean;
@@ -220,9 +229,11 @@ export interface RateLimitSpec {
     condition: string;
     limit: RateLimit;
 }
+}
   }>;
 }
 
+}
 }
 export interface RateLimit {
   requests: number;
@@ -230,7 +241,9 @@ export interface RateLimit {
   burst?: number;
 }
 }
+}
 
+}
 }
 export interface DocumentationSpec {
   summary: string;
@@ -238,6 +251,7 @@ export interface DocumentationSpec {
   externalDocs?: {
     description: string;
     url: string;
+}
 }
   };
   changelog?: string;
@@ -250,6 +264,7 @@ export interface DocumentationSpec {
 }
 
 }
+}
 export interface ExampleSpec {
   name: string;
   description: string;
@@ -257,6 +272,7 @@ export interface ExampleSpec {
     headers?: Record<string, string>;
     query?: Record<string, unknown>;
     body?: unknown;
+}
 }
   };
   response?: {
@@ -267,6 +283,7 @@ export interface ExampleSpec {
   curl?: string;
 }
 
+}
 }
 export interface JsonSchema {
   type: string;
@@ -280,7 +297,9 @@ export interface JsonSchema {
   example?: unknown;
 }
 }
+}
 
+}
 }
 export interface EndpointMetrics {
   requestCount: number;
@@ -295,7 +314,9 @@ export interface EndpointMetrics {
   uptimePercentage: number;
 }
 }
+}
 
+}
 }
 export interface ServiceMetrics {
   totalEndpoints: number;
@@ -309,7 +330,9 @@ export interface ServiceMetrics {
   networkUsage?: number;
 }
 }
+}
 
+}
 }
 export interface HealthStatus {
   status: 'healthy' | 'degraded' | 'unhealthy' | 'unknown';
@@ -320,7 +343,9 @@ export interface HealthStatus {
   dependencies: DependencyHealth[];
 }
 }
+}
 
+}
 }
 export interface HealthIssue {
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -331,7 +356,9 @@ export interface HealthIssue {
   count: number;
 }
 }
+}
 
+}
 }
 export interface DependencyHealth {
   name: string;
@@ -340,7 +367,9 @@ export interface DependencyHealth {
   lastCheck: Date;
 }
 }
+}
 
+}
 }
 export interface CompatibilityInfo {
   backwardCompatible: boolean;
@@ -350,7 +379,9 @@ export interface CompatibilityInfo {
   migrationRequired: boolean;
 }
 }
+}
 
+}
 }
 export interface DeploymentInfo {
   environment: string;
@@ -361,12 +392,14 @@ export interface DeploymentInfo {
     cpu: string;
     memory: string;
 }
+}
   };
   lastDeployment: Date;
   deploymentStrategy: string;
   rollbackStrategy?: string;
 }
 
+}
 }
 export interface ServiceDependency {
   serviceId: string;
@@ -376,11 +409,13 @@ export interface ServiceDependency {
   healthImpact: boolean;
 }
 }
+}
 
 // =============================================================================
 // Registry Operations
 // =============================================================================
 
+}
 }
 export interface ApiRegistryFilters {
   serviceIds?: string[];
@@ -400,7 +435,9 @@ export interface ApiRegistryFilters {
   sortOrder?: 'asc' | 'desc';
 }
 }
+}
 
+}
 }
 export interface ApiRegistrySearchResult {
   endpoints: ApiEndpoint[];
@@ -410,7 +447,9 @@ export interface ApiRegistrySearchResult {
   filters: ApiRegistryFilters;
 }
 }
+}
 
+}
 }
 export interface ApiDiscoveryResult {
   endpoint: ApiEndpoint;
@@ -421,7 +460,9 @@ export interface ApiDiscoveryResult {
   examples: ExampleSpec[];
 }
 }
+}
 
+}
 }
 export interface ApiRecommendation {
   type: 'alternative' | 'complement' | 'upgrade' | 'migration';
@@ -431,7 +472,9 @@ export interface ApiRecommendation {
   confidence: number;
 }
 }
+}
 
+}
 }
 export interface DocumentationLink {
   title: string;
@@ -439,7 +482,9 @@ export interface DocumentationLink {
   type: 'guide' | 'reference' | 'tutorial' | 'example' | 'changelog';
 }
 }
+}
 
+}
 }
 export interface RegistryEvent {
   eventId: string;
@@ -447,6 +492,7 @@ export interface RegistryEvent {
   timestamp: Date;
   entityType: 'endpoint' | 'service';
   entityId: string;
+}
 }
   changes?: Record<string, { old: unknown; new: unknown }>;
   userId?: string;
@@ -471,10 +517,12 @@ export enum RegistryEventType {
 // =============================================================================
 
 }
+}
 export interface RegistryAnalytics {
   timeRange: {
     start: Date;
     end: Date;
+}
 }
   };
   
@@ -520,6 +568,7 @@ export interface RegistryAnalytics {
 }
 
 }
+}
 export interface ComplianceViolation {
   endpointId: string;
   violationType: string;
@@ -528,11 +577,13 @@ export interface ComplianceViolation {
   remediation: string;
 }
 }
+}
 
 // =============================================================================
 // Registry Configuration
 // =============================================================================
 
+}
 }
 export interface RegistryConfiguration {
   // Discovery Settings
@@ -541,6 +592,7 @@ export interface RegistryConfiguration {
     scanInterval: number;
     scanPaths: string[];
     excludePaths: string[];
+}
 }
   };
   

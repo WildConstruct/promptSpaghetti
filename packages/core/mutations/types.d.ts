@@ -32,6 +32,7 @@ export declare enum OperationType {
  * Base interface for all graph mutation operations
  */
 
+}
 export interface GraphOperation {
     readonly id: string;
     readonly type: OperationType;
@@ -43,6 +44,7 @@ export interface GraphOperation {
  * Node addition operation
  */
 
+}
 export interface NodeAddOperation extends GraphOperation {
     type: OperationType.NODE_ADD;
     payload: {
@@ -50,11 +52,13 @@ export interface NodeAddOperation extends GraphOperation {
         position: XYPosition;
         sourceNodeId?: string;
         skipValidation?: boolean;
+}
     };
 /**
  * Node deletion operation
  */
 
+}
 export interface NodeDeleteOperation extends GraphOperation {
     type: OperationType.NODE_DELETE;
     payload: {
@@ -67,6 +71,7 @@ export interface NodeDeleteOperation extends GraphOperation {
  * Node parameter update operation
  */
 
+}
 export interface NodeUpdateOperation extends GraphOperation {
     type: OperationType.NODE_UPDATE;
     payload: {
@@ -80,6 +85,7 @@ export interface NodeUpdateOperation extends GraphOperation {
  * Node move operation
  */
 
+}
 export interface NodeMoveOperation extends GraphOperation {
     type: OperationType.NODE_MOVE;
     payload: {
@@ -91,6 +97,7 @@ export interface NodeMoveOperation extends GraphOperation {
  * Node duplication operation
  */
 
+}
 export interface NodeDuplicateOperation extends GraphOperation {
     type: OperationType.NODE_DUPLICATE;
     payload: {
@@ -103,6 +110,7 @@ export interface NodeDuplicateOperation extends GraphOperation {
  * Edge addition operation
  */
 
+}
 export interface EdgeAddOperation extends GraphOperation {
     type: OperationType.EDGE_ADD;
     payload: {
@@ -114,6 +122,7 @@ export interface EdgeAddOperation extends GraphOperation {
  * Edge deletion operation
  */
 
+}
 export interface EdgeDeleteOperation extends GraphOperation {
     type: OperationType.EDGE_DELETE;
     payload: {
@@ -124,6 +133,7 @@ export interface EdgeDeleteOperation extends GraphOperation {
  * Edge update operation
  */
 
+}
 export interface EdgeUpdateOperation extends GraphOperation {
     type: OperationType.EDGE_UPDATE;
     payload: {
@@ -135,6 +145,7 @@ export interface EdgeUpdateOperation extends GraphOperation {
  * Add variation to node
  */
 
+}
 export interface VariationAddOperation extends GraphOperation {
     type: OperationType.VARIATION_ADD;
     payload: {
@@ -146,6 +157,7 @@ export interface VariationAddOperation extends GraphOperation {
  * Delete variation from node
  */
 
+}
 export interface VariationDeleteOperation extends GraphOperation {
     type: OperationType.VARIATION_DELETE;
     payload: {
@@ -157,6 +169,7 @@ export interface VariationDeleteOperation extends GraphOperation {
  * Update existing variation
  */
 
+}
 export interface VariationUpdateOperation extends GraphOperation {
     type: OperationType.VARIATION_UPDATE;
     payload: {
@@ -169,6 +182,7 @@ export interface VariationUpdateOperation extends GraphOperation {
  * Reorder variations within node
  */
 
+}
 export interface VariationReorderOperation extends GraphOperation {
     type: OperationType.VARIATION_REORDER;
     payload: {
@@ -181,6 +195,7 @@ export interface VariationReorderOperation extends GraphOperation {
  * Batch operation for atomic multi-step changes
  */
 
+}
 export interface BatchOperation extends GraphOperation {
     type: OperationType.BATCH_OPERATION;
     payload: {
@@ -193,6 +208,7 @@ export interface BatchOperation extends GraphOperation {
  * Clear entire graph
  */
 
+}
 export interface GraphClearOperation extends GraphOperation {
     type: OperationType.GRAPH_CLEAR;
     payload: {
@@ -206,6 +222,7 @@ export interface GraphClearOperation extends GraphOperation {
  * Import graph data
  */
 
+}
 export interface GraphImportOperation extends GraphOperation {
     type: OperationType.GRAPH_IMPORT;
     payload: {
@@ -218,6 +235,7 @@ export interface GraphImportOperation extends GraphOperation {
  * Merge graphs
  */
 
+}
 export interface GraphMergeOperation extends GraphOperation {
     type: OperationType.GRAPH_MERGE;
     payload: {
@@ -230,6 +248,7 @@ export interface GraphMergeOperation extends GraphOperation {
  * Result of executing a single operation
  */
 
+}
 export interface OperationResult {
     success: boolean;
     operation: GraphOperation;
@@ -244,6 +263,7 @@ export interface OperationResult {
  * Result of executing a batch operation
  */
 
+}
 export interface BatchOperationResult {
     success: boolean;
     batchId: string;
@@ -257,6 +277,7 @@ export interface BatchOperationResult {
  * Result of undo operation
  */
 
+}
 export interface UndoResult {
     success: boolean;
     operation?: GraphOperation;
@@ -266,6 +287,7 @@ export interface UndoResult {
  * Result of redo operation
  */
 
+}
 export interface RedoResult {
     success: boolean;
     operation?: GraphOperation;
@@ -279,6 +301,7 @@ export type ValidationSeverity = 'error' | 'warning' | 'info';
  * Individual validation error
  */
 
+}
 export interface ValidationError {
     type: string;
     message: string;
@@ -291,6 +314,7 @@ export interface ValidationError {
  * Complete validation result
  */
 
+}
 export interface ValidationResult {
     valid: boolean;
     errors: ValidationError[];
@@ -300,6 +324,7 @@ export interface ValidationResult {
  * Current state of the graph
  */
 
+}
 export interface GraphState {
     nodes: Node[];
     edges: Edge[];
@@ -310,6 +335,7 @@ export interface GraphState {
  * Snapshot of graph state at specific point in time
  */
 
+}
 export interface GraphSnapshot {
     id: string;
     state: GraphState;
@@ -321,6 +347,7 @@ export interface GraphSnapshot {
  * History entry for undo/redo system
  */
 
+}
 export interface HistoryEntry {
     operation: GraphOperation;
     snapshot: GraphSnapshot;
@@ -332,6 +359,7 @@ export interface HistoryEntry {
  * Conflict detection result
  */
 
+}
 export interface ConflictResult {
     hasConflicts: boolean;
     conflicts: OperationConflict[];
@@ -341,6 +369,7 @@ export interface ConflictResult {
  * Individual operation conflict
  */
 
+}
 export interface OperationConflict {
     localOperation: GraphOperation;
     remoteOperation: GraphOperation;
@@ -370,6 +399,7 @@ export declare enum ConflictResolutionStrategy {
  * Resolution option for conflicts
  */
 
+}
 export interface ConflictResolutionOption {
     strategy: ConflictResolutionStrategy;
     description: string;
@@ -380,6 +410,7 @@ export interface ConflictResolutionOption {
  * Message for collaborative editing synchronization
  */
 
+}
 export interface CollaborativeMessage {
     type: 'GRAPH_MUTATION' | 'CURSOR_UPDATE' | 'SELECTION_CHANGE' | 'PRESENCE_UPDATE';
     operation?: GraphOperation;
@@ -391,6 +422,7 @@ export interface CollaborativeMessage {
  * User presence information
  */
 
+}
 export interface UserPresence {
     userId: string;
     userName: string;
@@ -404,6 +436,7 @@ export interface UserPresence {
  * Validation configuration
  */
 
+}
 export interface ValidationConfig {
     strictMode: boolean;
     allowDangerousOperations: boolean;
@@ -422,6 +455,7 @@ export type ValidationFunction = ()
  * Conflict resolution configuration
  */
 
+}
 export interface ConflictResolutionConfig {
     strategy: ConflictResolutionStrategy;
     autoResolve: boolean;
@@ -432,6 +466,7 @@ export interface ConflictResolutionConfig {
  * Complete mutation engine configuration
  */
 
+}
 export interface MutationEngineConfig {
     historyLimit: number;
     enableUndo: boolean;
@@ -477,18 +512,22 @@ export type OperationPayload<T extends GraphOperation> = T['payload'];
  * Create operation result type
  */
 
+}
 export type CreateOperationResult<T extends GraphOperation> = OperationResult & {
     operation: T;
+}
 };
 /**
  * Events emitted by the mutation engine
  */
 
+}
 export interface MutationEngineEvents {
     'operation_executed': {
         operation: GraphOperation;
         result: OperationResult;
         executionTime: number;
+}
     };
     'operation_failed': {
         operation: GraphOperation;

@@ -50,9 +50,11 @@ const checkPermissionSchema = z.object({
 });
 
 }
+}
 interface RBACRouteContext {
   authService: AuthenticationService;
   rbacService: RBACService;
+}
 }
 }
 

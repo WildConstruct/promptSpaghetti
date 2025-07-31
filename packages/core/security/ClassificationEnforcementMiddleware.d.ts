@@ -21,6 +21,7 @@ import {
  * Extended request with classification information
  */
 
+}
 export interface ClassificationAwareRequest extends Request {
     classification?: {
         level: DataClassificationLevel;
@@ -38,6 +39,7 @@ export interface ClassificationAwareRequest extends Request {
  * Middleware configuration
  */
 
+}
 export interface ClassificationEnforcementMiddlewareConfig {
     /** Environment preset for the enforcer */
     environment: 'development' | 'staging' | 'production';
@@ -74,6 +76,7 @@ export declare function enforceClassification(classification: DataClassification
     allowedOperations?: OperationContext['operation'][];
     requiredControls?: string[];
     customValidation?: (req: Request) => boolean;
+}
 }): (req: ClassificationAwareRequest, res: Response, next: NextFunction) => void;
 /**
  * Export middleware factories

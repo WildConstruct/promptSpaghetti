@@ -8,6 +8,7 @@ import { TrendingUp, TrendingDown, Activity, AlertTriangle } from 'lucide-react'
 /**
  * Time series chart props
  */
+}
 interface TimeSeriesChartProps {
   data: Record<string, unknown>[];
   title: string;
@@ -27,6 +28,7 @@ interface TimeSeriesChartProps {
   color,
   loading,
   error
+}
 }) => {
   const formatValue = (value: number) => {
     if (unit === 'ms') {
@@ -137,14 +139,17 @@ interface TimeSeriesChartProps {
  * Performance charts props
  */
 
+}
 export interface PerformanceChartsProps {
   analyticsClient: AnalyticsClient;
+}
   timeRange: { startTime: number; endTime: number };
   userId?: number;
   organizationId?: number;
 /**
  * Performance charts state
  */
+}
 interface PerformanceChartsState {
   executionsData: unknown;
   tokensData: unknown;
@@ -156,6 +161,7 @@ interface PerformanceChartsState {
   tokens: boolean;
   cost: boolean;
   errors: boolean;
+}
 };
   errors: {
   executions?: string;

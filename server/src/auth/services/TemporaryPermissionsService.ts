@@ -19,6 +19,7 @@ import { AuditService } from './AuditService';
 import { RBACService } from './RBACService';
 
 }
+}
 export interface TemporaryRoleAssignment {
   id: string;
   userId: string;
@@ -36,7 +37,9 @@ export interface TemporaryRoleAssignment {
   notificationSent: boolean;
 }
 }
+}
 
+}
 }
 export interface DirectPermissionGrant {
   id: string;
@@ -58,7 +61,9 @@ export interface DirectPermissionGrant {
   notificationSent: boolean;
 }
 }
+}
 
+}
 }
 export interface TemporaryPermissionRequest {
   userId: string;
@@ -69,6 +74,7 @@ export interface TemporaryPermissionRequest {
     scope: 'global' | 'organization' | 'team' | 'own';
     conditions?: Record<string, any>;
 }
+}
   }[];
   reason: string;
   duration: number; // Duration in hours
@@ -78,6 +84,7 @@ export interface TemporaryPermissionRequest {
   scopeContext?: Record<string, any>;
 }
 
+}
 }
 export interface EmergencyAccessGrant {
   id: string;
@@ -95,7 +102,9 @@ export interface EmergencyAccessGrant {
   reviewedAt?: Date;
 }
 }
+}
 
+}
 }
 export interface PermissionEscalation {
   id: string;
@@ -110,6 +119,7 @@ export interface PermissionEscalation {
   originalExpiresAt?: Date;
   autoDowngrade: boolean;
   notificationsSent: string[];
+}
 }
 }
 

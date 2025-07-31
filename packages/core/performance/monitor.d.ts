@@ -3,6 +3,7 @@
  * Real-time performance tracking and metrics collection
  */
 
+}
 export interface PerformanceMetric {
     name: string;
     values: number[];
@@ -15,6 +16,7 @@ export interface PerformanceMetric {
     lastUpdated: number;
 
 
+}
 export interface PerformanceAlert {
     metric: string;
     threshold: number;
@@ -23,6 +25,7 @@ export interface PerformanceAlert {
     timestamp: number;
 
 
+}
 export interface PerformanceConfig {
     maxSamples: number;
     alertThresholds: Record<string, number>;
@@ -103,5 +106,6 @@ export declare function usePerformanceMonitor(): {
     getMetrics: () => PerformanceMetric[];
     getSummary: () => Record<string, any>;
     measureMemory: (name: string) => void;
+}
 };
 //# sourceMappingURL=monitor.d.ts.map

@@ -9,6 +9,7 @@ import { WeightDistributionChart, ChartType } from './WeightDistributionChart';
 import { WeightControlOption } from '../Inspector/WeightControlSlider';
 import { CollapsibleSection } from '../Inspector/CollapsibleSection';
 
+}
 export interface WeightVisualizationPanelProps {
   options: WeightControlOption;
   title?: string;
@@ -21,6 +22,7 @@ export interface WeightVisualizationPanelProps {
   onOptionClick?: (option: WeightControlOption) => void;
   className?: string;
   style?: React.CSSProperties;
+}
 }
 export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> = ({)
   options,

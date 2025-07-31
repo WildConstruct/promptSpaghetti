@@ -22,6 +22,7 @@ import { PerformanceThreshold, ThresholdValidationResult } from '../types/Perfor
 // ==========================================
 
 }
+}
 export interface DiagnosticResult {
   diagnosticId: string;
   category: DiagnosticCategory;
@@ -34,6 +35,7 @@ export interface DiagnosticResult {
   timestamp: Date;
   duration: number; // milliseconds
   metadata: DiagnosticMetadata;
+}
 }
 }
 
@@ -67,6 +69,7 @@ export enum DiagnosticSeverity {
 }
 
 }
+}
 export interface DiagnosticDetails {
   [key: string]: unknown;
   // Common fields
@@ -83,7 +86,9 @@ export interface DiagnosticDetails {
   stackTrace?: string;
 }
 }
+}
 
+}
 }
 export interface DiagnosticMetadata {
   executionId: string;
@@ -96,7 +101,9 @@ export interface DiagnosticMetadata {
   uptime: number;
 }
 }
+}
 
+}
 }
 export interface DiagnosticSuite {
   suiteId: string;
@@ -109,7 +116,9 @@ export interface DiagnosticSuite {
   timeout: number; // milliseconds
 }
 }
+}
 
+}
 }
 export interface DiagnosticDefinition {
   diagnosticId: string;
@@ -124,7 +133,9 @@ export interface DiagnosticDefinition {
   parameters?: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 export interface DiagnosticExecution {
   executionId: string;
@@ -138,7 +149,9 @@ export interface DiagnosticExecution {
   summary: DiagnosticSummary;
 }
 }
+}
 
+}
 }
 export interface DiagnosticSummary {
   totalDiagnostics: number;
@@ -150,6 +163,7 @@ export interface DiagnosticSummary {
   criticalIssues: string[];
   executionTime: number;
   recommendations: string[];
+}
 }
 }
 

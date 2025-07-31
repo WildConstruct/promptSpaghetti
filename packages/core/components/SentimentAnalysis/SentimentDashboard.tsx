@@ -14,12 +14,14 @@ import {
   ToxicityLevel
 } from '../../types/SentimentAnalysisTypes';
 import { SentimentAnalysisService } from '../../services/SentimentAnalysisService';
+}
 interface SentimentDashboardProps {
   resourceId: string;
   resourceType: string;
   timeRange?: {
   start: Date;
   end: Date;
+}
 };
   refreshInterval?: number; // Auto-refresh interval in milliseconds
 

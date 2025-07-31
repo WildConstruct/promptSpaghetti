@@ -13,6 +13,7 @@ import {
   DocumentTextIcon,
   ArrowPathIcon
 } from '@heroicons/react/24/outline';
+}
 interface ApprovalStatistics {
   total_requests: number;
   pending_requests: number;
@@ -21,7 +22,9 @@ interface ApprovalStatistics {
   approval_rate: number;
   by_urgency: Record<string, number>;
   by_status: Record<string, number>;
+}
   top_reviewers: Array<{ reviewer_id: string; count: number }>;
+}
 interface PerformanceMetrics {
   avg_completion_time: number;
   avg_first_review_time: number;
@@ -39,6 +42,7 @@ interface PerformanceMetrics {
   workspaceId,
   period = '30d',
   refreshInterval = 30000 // 30 seconds
+}
 }) => {
   const [statistics, setStatistics] = useState<ApprovalStatistics | null>(null);
   const [performanceMetrics, setPerformanceMetrics] = useState<PerformanceMetrics | null>(null);

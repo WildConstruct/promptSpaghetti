@@ -12,6 +12,7 @@ import {
   RestorationFilter
 } from '../types/restoration';
 
+}
 interface UseRestorationReturn {
     loading: boolean;
     error: string | null;
@@ -29,5 +30,6 @@ interface UseRestorationReturn {
     clearError: () => void;
 
 export declare const useRestoration: () => UseRestorationReturn;
+}
 export {};
 //# sourceMappingURL=useRestoration.d.ts.map

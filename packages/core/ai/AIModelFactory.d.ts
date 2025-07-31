@@ -15,6 +15,7 @@ import {
 } from './BaseAIModel';
 import { HTTPRequestMapping } from './adapters/GenericHTTPAdapter';
 
+}
 export interface FactoryConfig {
     defaultTimeout?: number;
     defaultRetries?: number;
@@ -22,6 +23,7 @@ export interface FactoryConfig {
     logLevel?: 'debug' | 'info' | 'warn' | 'error';
 
 
+}
 export interface ModelRegistration {
     id: string;
     provider: AIModelProvider;
@@ -61,3 +63,4 @@ export declare class AIModelFactory implements IAIModelFactory {
 
 export default AIModelFactory;
 //# sourceMappingURL=AIModelFactory.d.ts.map
+}

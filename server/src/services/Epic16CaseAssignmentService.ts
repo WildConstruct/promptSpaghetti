@@ -7,6 +7,7 @@
  */
 
 }
+}
 export interface ModerationCase {
   id: string;
   caseNumber: string;
@@ -80,7 +81,9 @@ export interface ModerationCase {
   closedAt?: Date;
 }
 }
+}
 
+}
 }
 export interface ModeratorProfile {
   id: string;
@@ -100,6 +103,7 @@ export interface ModeratorProfile {
   
   // Schedule
   timezone: string;
+}
 }
   workingHours: Record<string, { start: string; end: string }>;
   
@@ -132,6 +136,7 @@ export interface ModeratorProfile {
   updatedAt: Date;
 }
 
+}
 }
 export interface AssignmentRule {
   id: string;
@@ -166,7 +171,9 @@ export interface AssignmentRule {
   lastUsed?: Date;
 }
 }
+}
 
+}
 }
 export interface AssignmentHistory {
   id: string;
@@ -188,7 +195,9 @@ export interface AssignmentHistory {
   createdAt: Date;
 }
 }
+}
 
+}
 }
 export interface AssignmentAnalytics {
   date: string;
@@ -207,7 +216,9 @@ export interface AssignmentAnalytics {
   assignmentMethods: Record<string, number>;
 }
 }
+}
 
+}
 }
 export interface CaseFilter {
   statuses?: string[];
@@ -218,9 +229,11 @@ export interface CaseFilter {
   flags?: string[];
   overdue?: boolean;
 }
+}
   dateRange?: { start?: Date; end?: Date };
 }
 
+}
 }
 export interface AssignmentRequest {
   caseId: string;
@@ -230,7 +243,9 @@ export interface AssignmentRequest {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface AssignmentResult {
   success: boolean;
@@ -242,6 +257,7 @@ export interface AssignmentResult {
   reason?: string;
   alternativeModerators?: string[];
   metadata: Record<string, any>;
+}
 }
 }
 

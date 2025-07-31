@@ -3,6 +3,7 @@ import React from 'react';
  * Metrics overview props
  */
 
+}
 export interface MetricsOverviewProps {
     summary: unknown;
     dashboardData: unknown;
@@ -17,3 +18,4 @@ export interface MetricsOverviewProps {
 export declare const MetricsOverview: React.FC<MetricsOverviewProps>;
 export default MetricsOverview;
 //# sourceMappingURL=MetricsOverview.d.ts.map
+}

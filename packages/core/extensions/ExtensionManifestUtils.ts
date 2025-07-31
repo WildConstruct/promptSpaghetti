@@ -522,6 +522,7 @@ export class ExtensionManifestUtils {
 }, null, 2);
 
 // Types and Interfaces
+}
 interface ManifestSizeInfo {
   raw: number;
   compressed: number;
@@ -551,12 +552,14 @@ interface ManifestSizeInfo {
   dependenciesChanged: boolean;
   permissionsChanged: boolean;
   configurationChanged: boolean;
-  changes: Array<{,
+  changes: Array<{
   field: string;
   oldValue: string;
   newValue: string;
   type: 'added' | 'removed' | 'modified'
+}
   }>;
+}
 interface ManifestWizardQuestion {
   key: string;
   prompt: string;
@@ -568,4 +571,5 @@ interface ManifestWizardQuestion {
   transform?: (value: any) => any;
 
 // Export utilities
+}
 export { ManifestTemplateGenerator };

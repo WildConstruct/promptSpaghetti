@@ -7,6 +7,7 @@
  */
 import React, { useState, useEffect, useMemo } from 'react';
 import { Calculator, DollarSign, Clock, TrendingUp, Target, Zap } from 'lucide-react';
+}
 interface ROIInputs {
   // Template costs
   templatePrice: number; // in cents,
@@ -37,6 +38,7 @@ interface ROIInputs {
   className = '',
   onResultsChange,
   presetScenario
+}
 }) => {
   const [inputs, setInputs] = useState<ROIInputs>({)
   templatePrice: 999, // $9.99 in cents,

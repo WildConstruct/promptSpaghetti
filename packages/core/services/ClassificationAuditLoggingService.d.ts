@@ -8,6 +8,7 @@
  */
 import { DataClassificationLevel, OperationContext } from '../types/DataClassification';
 
+}
 export interface AuditLogEntry {
     id: string;
     timestamp: Date;
@@ -28,6 +29,7 @@ export interface AuditLogEntry {
 
 export type AuditAction = 'CLASSIFY_DATA' | 'DECLASSIFY_DATA' | 'RECLASSIFY_DATA' | 'ACCESS_DATA' | 'EXPORT_DATA' | 'SHARE_DATA' | 'DELETE_DATA' | 'BACKUP_DATA' | 'RESTORE_DATA' | 'POLICY_CHANGE' | 'PERMISSION_GRANT' | 'PERMISSION_REVOKE' | 'ENCRYPTION_APPLIED' | 'ENCRYPTION_REMOVED' | 'COMPLIANCE_CHECK' | 'VIOLATION_DETECTED' | 'REMEDIATION_APPLIED' | 'ALERT_TRIGGERED' | 'ALERT_RESOLVED';
 
+}
 export interface AuditDetails {
     previousClassification?: DataClassificationLevel;
     newClassification?: DataClassificationLevel;
@@ -43,6 +45,7 @@ export interface AuditDetails {
     encryptionStatus: 'ENCRYPTED' | 'NOT_ENCRYPTED' | 'PARTIALLY_ENCRYPTED';
     customProperties?: Record<string, any>;
 
+}
 export interface AuditOutcome {
     success: boolean;
     errorCode?: string;
@@ -54,6 +57,7 @@ export interface AuditOutcome {
     violationsDetected: string[];
     remediationRequired: boolean;
 
+}
 export interface AuditMetadata {
     sourceIP: string;
     userAgent: string;
@@ -62,6 +66,7 @@ export interface AuditMetadata {
         region: string;
         city: string;
         coordinates: [number, number];
+}
     };
     deviceInfo?: {
         deviceId: string;
@@ -81,6 +86,7 @@ export interface AuditMetadata {
         accessLevel: string;
     };
 
+}
 export interface ComplianceFlag {
     framework: string;
     requirement: string;
@@ -89,6 +95,7 @@ export interface ComplianceFlag {
     assessmentDate: Date;
     nextReviewDate?: Date;
 
+}
 export interface AuditQuery {
     startDate?: Date;
     endDate?: Date;
@@ -106,6 +113,7 @@ export interface AuditQuery {
     sortBy?: 'timestamp' | 'riskScore' | 'classification' | 'userId';
     sortOrder?: 'asc' | 'desc';
 
+}
 export interface AuditReport {
     id: string;
     name: string;
@@ -119,12 +127,14 @@ export interface AuditReport {
     retentionPeriod: number;
     expiresAt: Date;
 
+}
 export interface AuditSummary {
     totalEntries: number;
     uniqueUsers: number;
     timeRange: {
         start: Date;
         end: Date;
+}
     };
     actionBreakdown: Record<AuditAction, number>;
     classificationBreakdown: Record<DataClassificationLevel, number>;
@@ -144,6 +154,7 @@ export interface AuditSummary {
         complianceTrend: 'IMPROVING' | 'DEGRADING' | 'STABLE'
   };
 
+}
 export interface AuditRetentionPolicy {
     classification: DataClassificationLevel;
     retentionDays: number;
@@ -267,6 +278,7 @@ export declare class ClassificationAuditLoggingService {
         entriesByAction: Record<string, number>;
         averageRiskScore: number;
         recentViolations: number;
+}
     };
     /**
      * Clear audit logs (for testing purposes)

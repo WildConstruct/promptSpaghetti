@@ -15,6 +15,7 @@ import { KPIMonitoringService, KPIAlert, KPITrendAnalysis } from './KPIMonitorin
 import { PerformanceBaseline, BaselineSnapshot, BaselineSummary } from './PerformanceBaseline';
 import { performanceTargets, getAdjustedTargets, PerformanceTargetConfig } from './PerformanceTargets';
 
+}
 export interface DashboardWidget {
   id: string;
   type: 'chart' | 'metric' | 'alert' | 'trend' | 'gauge' | 'table';
@@ -26,6 +27,8 @@ export interface DashboardWidget {
   refreshRate: number; // in milliseconds,
   lastUpdated: number;
 }
+}
+}
 export interface DashboardLayout {
   id: string;
   name: string;
@@ -34,6 +37,8 @@ export interface DashboardLayout {
   columns: number;
   autoRefresh: boolean;
   refreshInterval: number;
+}
+}
 }
 export interface DashboardMetrics {
   overview: {
@@ -46,6 +51,7 @@ export interface DashboardMetrics {
   trendsImproving: number;
   trendsStable: number;
   trendsDegrading: number;
+}
 };
   categories: Record<string, {
   total: number;
@@ -68,6 +74,7 @@ export interface DashboardMetrics {
   stable: KPITrendAnalysis;
 };
 }
+}
 export interface DashboardReport {
   id: string;
   timestamp: number;
@@ -76,6 +83,7 @@ export interface DashboardReport {
   start: number;
   end: number;
   duration: string;
+}
 };
   metrics: DashboardMetrics;
   insights: {;

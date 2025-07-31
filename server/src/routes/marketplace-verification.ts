@@ -12,6 +12,7 @@ import { DocumentVerificationService } from '../services/DocumentVerificationSer
 
 // Request interfaces
 }
+}
 interface SubmitVerificationRequest {
   verification_type: VerificationType;
   user_info?: any;
@@ -19,13 +20,17 @@ interface SubmitVerificationRequest {
   notes?: string;
 }
 }
+}
 
+}
 }
 interface UploadDocumentRequest {
   document_type: DocumentType;
 }
 }
+}
 
+}
 }
 interface VerificationQueueQuery {
   status?: VerificationStatus;
@@ -36,7 +41,9 @@ interface VerificationQueueQuery {
   sort_order?: 'asc' | 'desc';
 }
 }
+}
 
+}
 }
 interface ProcessDecisionRequest extends VerificationDecision {
   // Extends the base decision interface

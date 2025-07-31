@@ -11,6 +11,7 @@ import { DashboardProvider } from './DashboardProvider';
 import { LoadingState, ErrorState } from '../states';
 import './DashboardShell.css';
 
+}
 export interface TabConfig {
   id: string;
   label: string;
@@ -18,15 +19,20 @@ export interface TabConfig {
   badge?: string | number;
   disabled?: boolean;
 }
+}
+}
 export interface TimeRangeOption {
   label: string;
   value: string;
   days?: number;
 }
+}
+}
 export interface DashboardShellProps {
   // Header configuration
   title: string;
   description?: string;
+}
   icon?: React.ComponentType<{ size?: number }>;
   // Actions and controls
   actions?: React.ReactNode;

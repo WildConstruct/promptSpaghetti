@@ -13,6 +13,7 @@ import { EventEmitter } from 'events';
 // TYPES AND INTERFACES
 // ==========================================
 
+}
 export interface UserBehaviorEvent {
   id: string;
   userId: string;
@@ -27,6 +28,7 @@ export interface UserBehaviorEvent {
   success: boolean;
   duration?: number;
   dataVolumeBytes?: number;
+}
 }
 export enum UserActionType {
   LOGIN = 'login',
@@ -48,6 +50,8 @@ export enum UserActionType {
   latitude: number;
   longitude: number;
   timezone: string;
+}
+}
 }
 export interface UserBehaviorProfile {
   userId: string;
@@ -80,12 +84,16 @@ export interface UserBehaviorProfile {
   anomalyThreshold: number;
   adaptationRate: number;
 }
+}
+}
 export interface TravelPattern {
   fromLocation: GeolocationData;
   toLocation: GeolocationData;
   frequency: number;
   typicalDuration: number;
   lastOccurrence: Date;
+}
+}
 }
 export interface ResourceAccess {
   resource: string;
@@ -94,6 +102,8 @@ export interface ResourceAccess {
   typicalAccessPattern: number; // Hours when typically accessed,
   lastAccessed: Date;
   riskScore: number;
+}
+}
 }
 export interface BehaviorAnomaly {
   id: string;
@@ -112,6 +122,7 @@ export interface BehaviorAnomaly {
   isResolved: boolean;
   resolvedAt?: Date;
   falsePositive?: boolean;
+}
 }
 export enum AnomalyType {
   UNUSUAL_LOGIN_TIME = 'unusual_login_time',
@@ -137,7 +148,9 @@ export enum AnomalyType {
   probabilityOfThreat: number; // 0-100,
   potentialDamage: string;
   mitigationUrgency: 'low' | 'medium' | 'high' | 'immediate'
+}
   }
+}
 export interface BehaviorAnalyticsConfig {
   profileUpdateInterval: number;
   anomalyDetectionSensitivity: number;
@@ -150,6 +163,7 @@ export interface BehaviorAnalyticsConfig {
   // ==========================================
   // MAIN SERVICE CLASS
   // ==========================================
+}
 }
 export class UserBehaviorAnalytics extends EventEmitter {
   private userProfiles: Map<string, UserBehaviorProfile> = new Map();
@@ -199,6 +213,7 @@ export class UserBehaviorAnalytics extends EventEmitter {
    * Update user behavioral profile based on new event
    */
   private async updateUserProfile(event: UserBehaviorEvent): Promise<void> {
+
     let profile = this.userProfiles.get(event.userId);
     if (!profile) {
       profile = this.createNewProfile(event.userId);
@@ -319,6 +334,7 @@ export class UserBehaviorAnalytics extends EventEmitter {
    * Detect behavioral anomalies in user event
    */
   private async detectAnomalies(event: UserBehaviorEvent): Promise<void> {
+
     const profile = this.userProfiles.get(event.userId);
     if (!profile || profile.totalEvents < this.config.minEventsForProfile) {
       return; // Need baseline before detecting anomalies
@@ -478,6 +494,7 @@ export class UserBehaviorAnalytics extends EventEmitter {
   // ANOMALY HANDLING
   // ==========================================
   private async handleAnomaly(anomaly: BehaviorAnomaly): Promise<void> {
+
     // Store anomaly
     this.detectedAnomalies.set(anomaly.id, anomaly);
     // Emit anomaly event
@@ -636,6 +653,7 @@ export class UserBehaviorAnalytics extends EventEmitter {
           this.isAnalyzing = false;
     }, this.config.profileUpdateInterval);
   private async performBatchAnalysis(): Promise<void> {
+
   // Update all user profiles periodically
   for (const [userId, profile] of this.userProfiles) {
   const userEvents = this.recentEvents.get(userId) || [];

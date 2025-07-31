@@ -78,6 +78,7 @@ import {
 
 // Enhanced comparison interfaces
 
+}
 export interface ComparisonItem {
   id: string;
   name: string;
@@ -88,6 +89,8 @@ export interface ComparisonItem {
   size: number;
   checksum: string;
   metadata: Record<string, any>;
+}
+}
 }
 export interface ComparisonSession {
   id: string;
@@ -103,6 +106,8 @@ export interface ComparisonSession {
   lastAccessed: Date;
   isBookmarked: boolean;
 }
+}
+}
 export interface ComparisonFilters {
   showUnchanged: boolean;
   showMetadata: boolean;
@@ -113,9 +118,11 @@ export interface ComparisonFilters {
   dateRange?: {
   start: Date;
   end: Date;
+}
 };
   author?: string;
   searchQuery?: string;
+}
 }
 export interface ComparisonAnnotation {
   id: string;
@@ -127,7 +134,9 @@ export interface ComparisonAnnotation {
   author: string;
   createdAt: Date;
   resolved: boolean;
+}
   position?: { x: number; y: number };
+}
 }
 export interface ComparisonMetrics {
   structuralSimilarity: number;
@@ -142,10 +151,12 @@ export interface ComparisonMetrics {
   cpuDelta: number;
   memoryDelta: number;
   networkDelta: number;
+}
 };
   breakingChanges: number;
   deprecations: number;
   newFeatures: number;
+}
 }
 export interface ComparisonReport {
   session: ComparisonSession;
@@ -157,8 +168,9 @@ export interface ComparisonReport {
   recommendations: string;
   warnings: string;
   errors: string;
+}
 };
-  timeline: Array<{,
+  timeline: Array<{
   timestamp: Date;
   event: string;
   impact: 'low' | 'medium' | 'high';
@@ -167,6 +179,7 @@ export interface ComparisonReport {
   exportFormats: ('pdf' | 'html' | 'json' | 'csv')[];
 
 // Main Comparison Tools Component
+}
 }
 export interface ComparisonToolsProps {
   sessions: ComparisonSession;
@@ -177,6 +190,7 @@ export interface ComparisonToolsProps {
   onSessionDelete: (sessionId: string) => void;
   onExportReport: (sessionId: string, format: string) => void;
   className?: string;
+}
 }
 export const ComparisonTools: React.FC<ComparisonToolsProps> = ({)
   sessions,
@@ -380,6 +394,7 @@ export const ComparisonTools: React.FC<ComparisonToolsProps> = ({)
 };
 
 // Comparison Session Card Component
+}
 interface ComparisonSessionCardProps {
   session: ComparisonSession;
   isActive: boolean;
@@ -398,6 +413,7 @@ interface ComparisonSessionCardProps {
   onUpdate,
   onDelete,
   onExport
+}
 }) => {
   const [showActions, setShowActions] = useState(false);
   return;
@@ -511,6 +527,7 @@ interface ComparisonSessionCardProps {
 };
 
 // Comparison Session Row Component
+}
 interface ComparisonSessionRowProps {
   session: ComparisonSession;
   isActive: boolean;
@@ -527,6 +544,7 @@ interface ComparisonSessionRowProps {
   onToggleSelection,
   onUpdate,
   onDelete
+}
 }) => {
   return;
     <div 
@@ -601,6 +619,7 @@ interface ComparisonSessionRowProps {
 };
 
 // Comparison Timeline Component
+}
 interface ComparisonTimelineProps {
   sessions: ComparisonSession;
   activeSessionId?: string;
@@ -609,6 +628,7 @@ interface ComparisonTimelineProps {
   sessions,
   activeSessionId,
   onSessionSelect
+}
 }) => {
   const groupedSessions = useMemo(() => {
     const groups: Record<string, ComparisonSession> = {};
@@ -679,6 +699,7 @@ interface ComparisonTimelineProps {
 
 // Advanced Diff Viewer Component
 
+}
 export interface AdvancedDiffViewerProps {
   comparison: GraphComparison;
   session: ComparisonSession;
@@ -687,6 +708,7 @@ export interface AdvancedDiffViewerProps {
   onAnnotationUpdate: (id: string, updates: Partial<ComparisonAnnotation>) => void;
   onAnnotationDelete: (id: string) => void;
   className?: string;
+}
 }
 export const AdvancedDiffViewer: React.FC<AdvancedDiffViewerProps> = ({)
   comparison,
@@ -773,6 +795,7 @@ export const AdvancedDiffViewer: React.FC<AdvancedDiffViewerProps> = ({)
 };
 
 // Diff Viewer Toolbar
+}
 interface DiffViewerToolbarProps {
   session: ComparisonSession;
   comparison: GraphComparison;
@@ -793,6 +816,7 @@ interface DiffViewerToolbarProps {
   onZoomChange,
   showAnnotations,
   onToggleAnnotations
+}
 }) => {
   return;
     <div className="diff-viewer-toolbar">

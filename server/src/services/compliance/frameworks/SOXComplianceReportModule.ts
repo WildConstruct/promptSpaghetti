@@ -16,6 +16,7 @@ import {
 } from '../StandardComplianceReportingService';
 
 }
+}
 export interface SOXComplianceReport extends StandardComplianceReport {
   soxSpecific: {
     managementAssertion: ManagementAssertionReport;
@@ -34,6 +35,7 @@ export interface SOXComplianceReport extends StandardComplianceReport {
 }
 
 }
+}
 export interface ManagementAssertionReport {
   assertionDate: Date;
   reportingPeriod: ReportingPeriod;
@@ -42,6 +44,7 @@ export interface ManagementAssertionReport {
     signedDate: Date;
     assertionStatement: string;
     qualifications: string[];
+}
 }
   };
   cfoAssertion: {
@@ -69,6 +72,7 @@ export interface ManagementAssertionReport {
 }
 
 }
+}
 export interface InternalControlsReport {
   frameworkUsed: 'COSO_2013' | 'COSO_1992' | 'OTHER';
   controlEnvironment: {
@@ -78,6 +82,7 @@ export interface InternalControlsReport {
     organizationalStructure: ControlAssessment;
     competenceCommitment: ControlAssessment;
     humanResourcePolicies: ControlAssessment;
+}
 }
   };
   riskAssessment: {
@@ -105,6 +110,7 @@ export interface InternalControlsReport {
 }
 
 }
+}
 export interface FinancialReportingControlsReport {
   revenueControls: ProcessControlReport;
   procurementControls: ProcessControlReport;
@@ -118,7 +124,9 @@ export interface FinancialReportingControlsReport {
   disclosureControls: ProcessControlReport;
 }
 }
+}
 
+}
 }
 export interface ProcessControlReport {
   processName: string;
@@ -131,7 +139,9 @@ export interface ProcessControlReport {
   nextTestingDue: Date;
 }
 }
+}
 
+}
 }
 export interface ITGeneralControlsReport {
   accessControls: {
@@ -139,6 +149,7 @@ export interface ITGeneralControlsReport {
     privilegedAccessManagement: ITControlAssessment;
     passwordManagement: ITControlAssessment;
     networkSecurity: ITControlAssessment;
+}
 }
   };
   changeManagement: {
@@ -162,6 +173,7 @@ export interface ITGeneralControlsReport {
 }
 
 }
+}
 export interface ApplicationControlsReport {
   systemName: string;
   systemDescription: string;
@@ -171,6 +183,7 @@ export interface ApplicationControlsReport {
     processingControls: ApplicationControl[];
     outputControls: ApplicationControl[];
     interfaceControls: ApplicationControl[];
+}
 }
   };
   dataIntegrity: {
@@ -189,11 +202,13 @@ export interface ApplicationControlsReport {
 }
 
 }
+}
 export interface EntityLevelControlsReport {
   corporateGovernance: {
     boardComposition: EntityControlAssessment;
     committeesEffectiveness: EntityControlAssessment;
     managementOversight: EntityControlAssessment;
+}
 }
   };
   codeOfConduct: {
@@ -215,12 +230,14 @@ export interface EntityLevelControlsReport {
 }
 
 }
+}
 export interface DisclosureControlsReport {
   disclosureCommittee: {
     committeeMembership: string[];
     meetingFrequency: string;
     responsibilites: string[];
     effectiveness: 'effective' | 'ineffective';
+}
 }
   };
   disclosureProcess: {
@@ -244,12 +261,14 @@ export interface DisclosureControlsReport {
 }
 
 }
+}
 export interface ChangeManagementReport {
   changeApprovalProcess: {
     changeRequestProcess: ControlAssessment;
     approvalAuthority: ControlAssessment;
     riskAssessment: ControlAssessment;
     businessJustification: ControlAssessment;
+}
 }
   };
   testingRequirements: {
@@ -273,12 +292,14 @@ export interface ChangeManagementReport {
 }
 
 }
+}
 export interface AccessControlsReport {
   userAccountManagement: {
     accountProvisioning: ControlAssessment;
     accountModification: ControlAssessment;
     accountDeprovisioning: ControlAssessment;
     periodicReview: ControlAssessment;
+}
 }
   };
   privilegedAccessManagement: {
@@ -302,12 +323,14 @@ export interface AccessControlsReport {
 }
 
 }
+}
 export interface AuditEvidenceReport {
   documentationStandards: {
     controlDocumentation: DocumentationAssessment;
     testingDocumentation: DocumentationAssessment;
     evidenceRetention: DocumentationAssessment;
     accessibilityRequirements: DocumentationAssessment;
+}
 }
   };
   testingEvidence: {
@@ -330,6 +353,7 @@ export interface AuditEvidenceReport {
 }
 
 }
+}
 export interface DeficiencyReport {
   materialWeaknesses: MaterialWeaknessDetail[];
   significantDeficiencies: SignificantDeficiencyDetail[];
@@ -339,6 +363,7 @@ export interface DeficiencyReport {
     remedatedDeficiencies: number;
     outstandingDeficiencies: number;
     averageRemediationTime: number;
+}
 }
   };
   rootCauseAnalysis: {
@@ -350,6 +375,7 @@ export interface DeficiencyReport {
 }
 
 }
+}
 export interface RemediationReport {
   remediationPlans: RemediationPlan[];
   remediationProgress: {
@@ -357,6 +383,7 @@ export interface RemediationReport {
     planDelayed: number;
     planCompleted: number;
     overallProgressPercentage: number;
+}
 }
   };
   resourceAllocation: {
@@ -697,6 +724,7 @@ export class SOXComplianceReportModule {
 
 // Supporting interfaces for SOX-specific reporting
 }
+}
 interface ControlAssessment {
   componentName: string;
   designEffectiveness: 'effective' | 'ineffective' | 'needs_improvement';
@@ -707,7 +735,9 @@ interface ControlAssessment {
   testedBy: string;
 }
 }
+}
 
+}
 }
 interface ITControlAssessment {
   controlType: string;
@@ -719,7 +749,9 @@ interface ITControlAssessment {
   compensatingControls: string[];
 }
 }
+}
 
+}
 }
 interface ControlObjective {
   objective: string;
@@ -727,7 +759,9 @@ interface ControlObjective {
   financialStatementAssertion: string;
 }
 }
+}
 
+}
 }
 interface KeyControl {
   controlId: string;
@@ -737,7 +771,9 @@ interface KeyControl {
   reviewer: string;
 }
 }
+}
 
+}
 }
 interface TestingResult {
   testDate: Date;
@@ -747,7 +783,9 @@ interface TestingResult {
   conclusion: 'effective' | 'ineffective' | 'needs_improvement';
 }
 }
+}
 
+}
 }
 interface Deficiency {
   deficiencyType: 'control_deficiency' | 'significant_deficiency' | 'material_weakness';
@@ -757,7 +795,9 @@ interface Deficiency {
   remediationPlan: string;
 }
 }
+}
 
+}
 }
 interface ApplicationControl {
   controlType: string;
@@ -767,7 +807,9 @@ interface ApplicationControl {
   effectiveness: 'effective' | 'ineffective';
 }
 }
+}
 
+}
 }
 interface ApplicationTestingResult {
   testDate: Date;
@@ -776,7 +818,9 @@ interface ApplicationTestingResult {
   deficienciesNoted: string[];
 }
 }
+}
 
+}
 }
 interface EntityControlAssessment {
   controlArea: string;
@@ -785,7 +829,9 @@ interface EntityControlAssessment {
   deficiencies: string[];
 }
 }
+}
 
+}
 }
 interface QuarterlyDisclosureAssessment {
   quarter: 'Q1' | 'Q2' | 'Q3' | 'Q4';
@@ -795,7 +841,9 @@ interface QuarterlyDisclosureAssessment {
   deficienciesIdentified: string[];
 }
 }
+}
 
+}
 }
 interface AccessReviewResult {
   reviewType: string;
@@ -806,7 +854,9 @@ interface AccessReviewResult {
   effectivenessRating: 'effective' | 'ineffective';
 }
 }
+}
 
+}
 }
 interface DocumentationAssessment {
   documentationType: string;
@@ -815,7 +865,9 @@ interface DocumentationAssessment {
   accessibility: 'good' | 'fair' | 'poor';
 }
 }
+}
 
+}
 }
 interface EvidenceAssessment {
   evidenceType: string;
@@ -824,7 +876,9 @@ interface EvidenceAssessment {
   retention: 'compliant' | 'non_compliant';
 }
 }
+}
 
+}
 }
 interface MaterialWeaknessDetail {
   weaknessId: string;
@@ -834,7 +888,9 @@ interface MaterialWeaknessDetail {
   targetRemediationDate: Date;
 }
 }
+}
 
+}
 }
 interface SignificantDeficiencyDetail {
   deficiencyId: string;
@@ -844,7 +900,9 @@ interface SignificantDeficiencyDetail {
   targetRemediationDate: Date;
 }
 }
+}
 
+}
 }
 interface ControlDeficiencyDetail {
   deficiencyId: string;
@@ -853,7 +911,9 @@ interface ControlDeficiencyDetail {
   remediationStatus: 'open' | 'in_progress' | 'closed';
 }
 }
+}
 
+}
 }
 interface RemediationPlan {
   planId: string;
@@ -863,6 +923,7 @@ interface RemediationPlan {
   targetCompletionDate: Date;
   status: 'not_started' | 'in_progress' | 'completed' | 'delayed';
   progressPercentage: number;
+}
 }
 }
 

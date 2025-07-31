@@ -6,6 +6,7 @@
  */
 import { useEffect, useCallback, useRef } from 'react';
 
+}
 export interface KeyboardShortcut {
   key: string;
   ctrl?: boolean;
@@ -18,6 +19,8 @@ export interface KeyboardShortcut {
   enabled?: boolean;
   global?: boolean; // Works even when inputs are focused,
 }
+}
+}
 export interface UseKeyboardShortcutsOptions {
   shortcuts: KeyboardShortcut;
   enabled?: boolean;
@@ -25,6 +28,7 @@ export interface UseKeyboardShortcutsOptions {
   /**
   * Hook for managing keyboard shortcuts in the graph editor
   */
+}
 }
 export const useKeyboardShortcuts = ({)
   shortcuts,

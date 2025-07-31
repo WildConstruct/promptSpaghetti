@@ -1,4 +1,5 @@
 // Enhanced data model reflecting actual editor usage patterns
+}
 export interface BaseNodeData {
   // Core identification
   id: string;
@@ -15,8 +16,10 @@ export interface BaseNodeData {
   transformations?: string[];
   contextHints?: string[];
 }
+}
 
 // Extended UI-only node types (rich text generation)
+}
 export interface SubjectNodeData extends BaseNodeData {
   type: 'Subject';
   grammaticalNumber?: 'singular' | 'plural' | 'both';
@@ -26,6 +29,7 @@ export interface SubjectNodeData extends BaseNodeData {
   baseForm?: string;
 }
 
+}
 export interface ConnectorNodeData extends BaseNodeData {
   type: 'Connector';
   connectors: string[];
@@ -33,6 +37,7 @@ export interface ConnectorNodeData extends BaseNodeData {
   position?: 'before' | 'after' | 'between'
   }
 
+}
 export interface AttributeNodeData extends BaseNodeData {
   type: 'Attribute';
   attributes: string[];
@@ -41,6 +46,7 @@ export interface AttributeNodeData extends BaseNodeData {
   position?: 'before' | 'after'
   }
 
+}
 export interface ActionNodeData extends BaseNodeData {
   type: 'Action';
   actionType?: 'verb' | 'verb_phrase' | 'gerund';
@@ -52,12 +58,14 @@ export interface ActionNodeData extends BaseNodeData {
 }
 
 // Core runtime-compatible node types (match graphSchema.ts)
+}
 export interface WeightedChoiceNodeData extends BaseNodeData {
   type: 'WeightedChoice';
   choices: string[];
   weights: number[];
 }
 
+}
 export interface ConcatNodeData extends BaseNodeData {
   type: 'Concat';
   separator?: string;
@@ -70,6 +78,7 @@ export interface ConcatNodeData extends BaseNodeData {
   limitCount?: number;
 }
 
+}
 export interface OutputNodeData extends BaseNodeData {
   type: 'Output';
   template?: string;
@@ -77,12 +86,14 @@ export interface OutputNodeData extends BaseNodeData {
   destination?: 'stdout' | 'file' | 'variable'
   }
 
+}
 export interface IncludeNodeData extends BaseNodeData {
   type: 'Include';
   name: string; // matches graphSchema
   includeType?: 'bundle' | 'template' | 'component'
   }
 
+}
 export interface SetVariableNodeData extends BaseNodeData {
   type: 'SetVariable';
   variableName: string;
@@ -93,6 +104,7 @@ export interface SetVariableNodeData extends BaseNodeData {
   allowOverwrite?: boolean;
 }
 
+}
 export interface GetVariableNodeData extends BaseNodeData {
   type: 'GetVariable';
   variableName: string;
@@ -267,11 +279,13 @@ export function createNodeData(type: NodeType, id: string, label?: string): Node
 }
 
 // Serialization utilities for runtime compatibility
+}
 export interface RuntimeNodeData {
   id: string;
   type: RuntimeNodeType;
   inputs?: string[];
   [key: string]: any;
+}
 }
 
 // Convert UI node data to runtime-compatible format
@@ -419,6 +433,7 @@ export function validateNodeData(nodeData: Partial<NodeData>): string[] {
   return errors;
 }
 
+}
 export interface NodeOperations {
   addVariation: (nodeId: string, variation: string) => void;
   removeVariation: (nodeId: string, variationIndex: number) => void;
@@ -428,7 +443,9 @@ export interface NodeOperations {
   duplicateNode: (nodeId: string) => void;
   deleteNode: (nodeId: string) => void;
 }
+}
 
+}
 export interface VariationConfig {
   id: string;
   text: string;
@@ -437,7 +454,9 @@ export interface VariationConfig {
   tags?: string[];
   metadata?: Record<string, any>;
 }
+}
 
+}
 export interface NodeTemplate {
   id: string;
   name: string;
@@ -446,4 +465,5 @@ export interface NodeTemplate {
   defaultData: Partial<NodeData>;
   category: string;
   tags: string[];
+}
 }

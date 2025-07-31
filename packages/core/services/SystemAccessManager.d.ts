@@ -15,6 +15,7 @@
  * - Resource-based permissions
  */
 
+}
 export interface SystemUser {
     id: string;
     username: string;
@@ -41,6 +42,7 @@ export interface SystemUser {
     privacyPolicyAccepted?: Date;
     dataRetentionConsent?: boolean;
 
+}
 export interface UserProfile {
     firstName?: string;
     lastName?: string;
@@ -53,6 +55,7 @@ export interface UserProfile {
     organization?: string;
     manager?: string;
 
+}
 export interface UserRole {
     id: string;
     roleId: string;
@@ -64,6 +67,7 @@ export interface UserRole {
     scope: RoleScope;
     context?: Record<string, any>;
 
+}
 export interface DirectPermission {
     id: string;
     permission: string;
@@ -76,11 +80,13 @@ export interface DirectPermission {
     expiresAt?: Date;
     conditions?: PermissionCondition[];
 
+}
 export interface PermissionCondition {
     type: 'time' | 'location' | 'device' | 'mfa' | 'approval';
     constraint: Record<string, any>;
     description: string;
 
+}
 export interface SystemRole {
     id: string;
     name: string;
@@ -99,6 +105,7 @@ export interface SystemRole {
     updatedAt: Date;
     createdBy: string;
 
+}
 export interface RolePermission {
     permission: string;
     resource: string;
@@ -106,6 +113,7 @@ export interface RolePermission {
     scope: PermissionScope;
     conditions?: PermissionCondition[];
 
+}
 export interface AccessRequest {
     id: string;
     requesterId: string;
@@ -129,6 +137,7 @@ export interface AccessRequest {
     expiresAt?: Date;
     auditTrail: AccessAuditEntry[];
 
+}
 export interface AccessApprover {
     userId: string;
     displayName: string;
@@ -138,6 +147,7 @@ export interface AccessApprover {
     respondedAt?: Date;
     comments?: string;
 
+}
 export interface AccessAuditEntry {
     id: string;
     timestamp: Date;
@@ -147,6 +157,7 @@ export interface AccessAuditEntry {
     ipAddress?: string;
     userAgent?: string;
 
+}
 export interface AccessRestriction {
     type: RestrictionType;
     description: string;
@@ -156,6 +167,7 @@ export interface AccessRestriction {
     appliedBy: string;
     appliedAt: Date;
 
+}
 export interface SystemAccess {
     id: string;
     userId: string;
@@ -165,6 +177,7 @@ export interface SystemAccess {
     lastUsed?: Date;
     restrictions: SystemRestriction[];
 
+}
 export interface SystemRestriction {
     type: 'ip_whitelist' | 'time_window' | 'mfa_required' | 'approval_required' | 'read_only';
     configuration: Record<string, any>;
@@ -182,6 +195,7 @@ export type AccessRequestStatus = 'pending' | 'approved' | 'rejected' | 'expired
 export type ApprovalStatus = 'pending' | 'approved' | 'rejected' | 'delegated';
 export type RestrictionType = 'time' | 'location' | 'device' | 'resource' | 'action' | 'network';
 
+}
 export interface AccessFilter {
     userIds?: string[];
     roles?: string[];
@@ -195,6 +209,7 @@ export interface AccessFilter {
     includeInactive?: boolean;
     securityClearance?: SecurityClearance[];
 
+}
 export interface AccessStats {
     totalUsers: number;
     activeUsers: number;
@@ -209,6 +224,7 @@ export interface AccessStats {
         accessRevoked: number;
         loginAttempts: number;
         failedLogins: number;
+}
     };
     compliance: {
         mfaEnabled: number;

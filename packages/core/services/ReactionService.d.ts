@@ -7,11 +7,13 @@
  */
 import { ReactionData, ReactionSummary } from '../components/Reactions/ReactionButton';
 
+}
 export interface ReactionAnalytics {
     contentId: string;
     timeRange: {
         start: Date;
         end: Date;
+}
     };
     totalReactions: number;
     uniqueReactors: number;
@@ -46,23 +48,25 @@ export interface ReactionAnalytics {
     comparativeMetrics: {
         vsAverageContent: number;
         categoryRanking: number;
-        similarContentComparison: Array<{,
+        similarContentComparison: Array<{
             contentId: string;
             similarity: number;
             reactionPattern: string[];
         }>;
     };
 
+}
 export interface ReactionBehaviorInsights {
     userId: string;
     timeRange: {
         start: Date;
         end: Date;
+}
     };
     totalReactions: number;
     favoriteReactions: string[];
     reactionFrequency: Record<string, number>;
-    contentAffinity: Array<{,
+    contentAffinity: Array<{
         contentType: string;
         reactionCount: number;
         preferredReactions: string[];
@@ -79,20 +83,22 @@ export interface ReactionBehaviorInsights {
         burstyBehavior: boolean;
     };
 
+}
 export interface ReactionTrend {
     reactionType: string;
     timeRange: {
         start: Date;
         end: Date;
+}
     };
-    trendData: Array<{,
+    trendData: Array<{
         timestamp: Date;
         count: number;
         cumulativeCount: number;
     }>;
     growthRate: number;
     momentum: 'accelerating' | 'steady' | 'declining' | 'stagnant';
-    peakPeriods: Array<{,
+    peakPeriods: Array<{
         start: Date;
         end: Date;
         intensity: number;
@@ -103,18 +109,21 @@ export interface ReactionTrend {
         amplitude?: number;
     };
 
+}
 export interface BulkReactionOperation {
-    operations: Array<{,
+    operations: Array<{
         contentId: string;
         userId: string;
         action: 'add' | 'remove' | 'change';
         reactionType: string;
         previousReaction?: string;
+}
     }>;
     batchId: string;
     timestamp: Date;
     metadata?: Record<string, unknown>;
 
+}
 export interface ReactionModerationAction {
     actionType: 'hide' | 'remove' | 'flag' | 'approve' | 'escalate';
     reactionIds: string[];
@@ -122,6 +131,7 @@ export interface ReactionModerationAction {
     reason: string;
     metadata?: Record<string, unknown>;
 
+}
 export interface ReactionConfig {
     enabledReactions: string[];
     maxReactionsPerUser: number;
@@ -135,6 +145,7 @@ export interface ReactionConfig {
         enabled: boolean;
         maxReactionsPerMinute: number;
         suspiciousPatternThreshold: number;
+}
     };
     contentTypeSettings: Record<string, {
         enabledReactions: string[];
@@ -196,7 +207,7 @@ export declare class ReactionService {
     executeBulkOperations(operations: BulkReactionOperation): Promise<{
         successful: number;
         failed: number;
-        results: Array<{,
+        results: Array<{
             contentId: string;
             success: boolean;
             error?: string;

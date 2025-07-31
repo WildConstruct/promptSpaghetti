@@ -7,6 +7,7 @@ import { Comment } from '../../types/workspace';
 import { CommentItem } from './CommentItem';
 import { CommentForm } from './CommentForm';
 import { useCommentReplies } from '../../hooks/useCommentReplies';
+}
 interface CommentThreadProps {
   comment: Comment;
   workspaceId: string;
@@ -27,6 +28,7 @@ interface CommentThreadProps {
   onResolve,
   compact = false,
   isLast = false
+}
 }) => {
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [showReplies, setShowReplies] = useState(false);

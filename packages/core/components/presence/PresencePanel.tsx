@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { UserAvatar, UserAvatarList } from './UserAvatar';
 
+}
 export interface PresenceUser {
   userId: string;
   userName?: string;
@@ -11,11 +12,13 @@ export interface PresenceUser {
   x: number;
   y: number;
   nodeId?: string;
+}
 };
   selection?: string;
   currentTool?: string;
   isTyping?: boolean;
   focusedNodeId?: string;
+}
 }
 export interface PresencePanelProps {
   users: PresenceUser;
@@ -27,6 +30,7 @@ export interface PresencePanelProps {
   showDetailedView?: boolean;
   maxAvatars?: number;
   className?: string;
+}
 }
 export const PresencePanel: React.FC<PresencePanelProps> = ({)
   users,
@@ -201,6 +205,7 @@ export const PresencePanel: React.FC<PresencePanelProps> = ({)
     </div>
   );
 };
+}
 interface UserPresenceItemProps {
   user: PresenceUser;
   isCurrentUser: boolean;
@@ -219,6 +224,7 @@ interface UserPresenceItemProps {
   onUnfollowUser,
   formatLastSeen,
   getActivityText
+}
 }) => {
   const handleClick = () => {
     if (!isCurrentUser && onUserClick) {

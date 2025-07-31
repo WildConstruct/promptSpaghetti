@@ -8,12 +8,15 @@ import { AdvancedRuntimeNode, AdvancedExecutionContext, NodeExecutionResult } fr
 import { IOSpecBuilder, TypedInputs } from '../io-system';
 import { AIModelFactory, OpenAITTSAdapter, ElevenLabsAdapter, WhisperAdapter } from '../../ai';
 
+}
 export interface AudioConfig {
   provider: 'openai-tts' | 'elevenlabs' | 'whisper';
   apiKey?: string;
   endpoint?: string;
   model?: string;
   defaultParameters?: Record<string, any>;
+}
+}
 }
 export interface AudioMetadata {
   duration: number;
@@ -27,19 +30,24 @@ export interface AudioMetadata {
   generation_time: number;
   cost: number;
 }
+}
+}
 export interface GeneratedAudio {
   data: ArrayBuffer | string;
   format: string;
   metadata: AudioMetadata;
 }
+}
+}
 export interface TranscriptionResult {
   text: string;
   language?: string;
   confidence?: number;
-  segments?: Array<{,
+  segments?: Array<{
   start: number;
   end: number;
   text: string;
+}
 }>;
   words?: Array<{
   word: string;
@@ -68,6 +76,7 @@ export class TextToSpeechNode extends AdvancedRuntimeNode {
     this.modelFactory = new AIModelFactory();
     this._initializeAdapter(config);
   async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> {
+
     try {
       const text = inputs.getString('text');
       const voice = inputs.getString('voice', '');
@@ -125,6 +134,7 @@ export class TextToSpeechNode extends AdvancedRuntimeNode {
     } catch (error) {
       throw new Error(`Text-to-speech generation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   async validateInputs(inputs: Record<string, any>): Promise<string> {
+
     const errors: string = [];
     if (!inputs.text || typeof inputs.text !== 'string') {
       errors.push('Text must be a non-empty string');
@@ -134,6 +144,7 @@ export class TextToSpeechNode extends AdvancedRuntimeNode {
       errors.push('Volume must be a number between 0 and 1');
     return errors;
   private async _initializeAdapter(config: AudioConfig): Promise<void> {
+
     try {
       let adapter: unknown;
       switch (config.provider) {
@@ -216,6 +227,7 @@ export class AudioTranscriptionNode extends AdvancedRuntimeNode {
     this.modelFactory = new AIModelFactory();
     this._initializeAdapter(config);
   async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> {
+
     try {
       const audioFile = inputs.get('audio_file');
       const language = inputs.getString('language', '');
@@ -273,6 +285,7 @@ export class AudioTranscriptionNode extends AdvancedRuntimeNode {
     } catch (error) {
       throw new Error(`Audio transcription failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   async validateInputs(inputs: Record<string, any>): Promise<string> {
+
     const errors: string = [];
     if (!inputs.audio_file) {
       errors.push('Audio file is required for transcription');
@@ -282,6 +295,7 @@ export class AudioTranscriptionNode extends AdvancedRuntimeNode {
       errors.push('Task must be either "transcribe" or "translate"');
     return errors;
   private async _initializeAdapter(config: AudioConfig): Promise<void> {
+
     try {
       let adapter: unknown;
       switch (config.provider) {
@@ -333,6 +347,7 @@ export class AudioAnalysisNode extends AdvancedRuntimeNode {
       .build();
     super(nodeId, 'audio_analysis', ioSpec);
   async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> {
+
   try {
   const audioFile = inputs.get('audio_file');
   const analysisType = inputs.getString('analysis_type', 'basic');
@@ -358,6 +373,7 @@ export class AudioAnalysisNode extends AdvancedRuntimeNode {
     } catch (error) {
       throw new Error(`Audio analysis failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   private async _analyzeAudio(audioFile: Error, analysisType: string): Promise<AudioMetadata> {
+
   // Basic audio file analysis
   const size = audioFile instanceof ArrayBuffer ? audioFile.byteLength : (audioFile.size || 0);
   // Determine format from file type or extension
@@ -407,6 +423,7 @@ export class AudioAnalysisNode extends AdvancedRuntimeNode {
     if (duration <= 0) return 0;
     return Math.round((size * 8) / (duration * 1000)); // kbps
   async validateInputs(inputs: Record<string, any>): Promise<string> {
+
     const errors: string = [];
     if (!inputs.audio_file) {
       errors.push('Audio file is required for analysis');
@@ -425,6 +442,7 @@ export class AudioConversionNode extends AdvancedRuntimeNode {
       .build();
     super(nodeId, 'audio_conversion', ioSpec);
   async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> {
+
     try {
       const audioFile = inputs.get('audio_file');
       const targetFormat = inputs.getString('target_format');
@@ -465,6 +483,7 @@ export class AudioConversionNode extends AdvancedRuntimeNode {
     } catch (error) {
       throw new Error(`Audio conversion failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   private async _convertAudio(audioFile: Error, options: unknown): Promise<ArrayBuffer> {
+
     // Placeholder implementation - in reality, this would use actual audio conversion
     // Libraries like FFmpeg, Web Audio API, or similar
     if (audioFile instanceof ArrayBuffer) {
@@ -479,6 +498,7 @@ export class AudioConversionNode extends AdvancedRuntimeNode {
       return audioFile.name.split('.').pop()?.toLowerCase() || 'unknown';
     return 'unknown';
   async validateInputs(inputs: Record<string, any>): Promise<string> {
+
     const errors: string = [];
     if (!inputs.audio_file) {
       errors.push('Audio file is required for conversion');

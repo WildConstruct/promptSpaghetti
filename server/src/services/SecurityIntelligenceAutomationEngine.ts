@@ -15,6 +15,7 @@ import { SecurityTimeSeriesAnalysisEngine } from './SecurityTimeSeriesAnalysisEn
 import { SecurityInsightsAutomationEngine } from './SecurityInsightsAutomationEngine';
 
 }
+}
 export interface SecurityIntelligenceConfig {
   intelligence_collection: {
     enabled: boolean;
@@ -25,6 +26,7 @@ export interface SecurityIntelligenceConfig {
     dark_web_monitoring: boolean;
     social_media_intelligence: boolean;
     vulnerability_intelligence: boolean;
+}
 }
   };
   
@@ -84,6 +86,7 @@ export interface SecurityIntelligenceConfig {
 }
 
 }
+}
 export interface SecurityIntelligenceSource {
   source_id: string;
   source_name: string;
@@ -97,6 +100,7 @@ export interface SecurityIntelligenceSource {
     data_types: string[];
     filters: unknown;
     preprocessing: string[];
+}
 }
   };
   
@@ -112,6 +116,7 @@ export interface SecurityIntelligenceSource {
 }
 
 }
+}
 export interface ThreatIntelligenceData {
   intelligence_id: string;
   intelligence_type: 'tactical' | 'operational' | 'strategic' | 'technical';
@@ -126,6 +131,7 @@ export interface ThreatIntelligenceData {
       first_seen: number;
       last_seen: number;
       tlp: 'white' | 'green' | 'amber' | 'red';
+}
 }
     }[];
     ttps: {
@@ -199,6 +205,7 @@ export interface ThreatIntelligenceData {
 }
 
 }
+}
 export interface IntelligenceAnalysisResult {
   analysis_id: string;
   analysis_type: string;
@@ -210,6 +217,7 @@ export interface IntelligenceAnalysisResult {
     threat_campaigns_tracked: number;
     high_priority_indicators: number;
     actionable_intelligence_count: number;
+}
 }
   };
   
@@ -305,6 +313,7 @@ export interface IntelligenceAnalysisResult {
 }
 
 }
+}
 export interface IntelligenceWorkflow {
   workflow_id: string;
   workflow_name: string;
@@ -319,6 +328,7 @@ export interface IntelligenceWorkflow {
     automation_level: 'manual' | 'semi_automated' | 'fully_automated';
     dependencies: string[];
     execution_order: number;
+}
 }
   }[];
   
@@ -340,6 +350,7 @@ export interface IntelligenceWorkflow {
 }
 
 }
+}
 export interface IntelligenceBriefing {
   briefing_id: string;
   briefing_title: string;
@@ -352,6 +363,7 @@ export interface IntelligenceBriefing {
     technical_level: string;
     decision_authority: string;
     interest_areas: string[];
+}
 }
   };
   

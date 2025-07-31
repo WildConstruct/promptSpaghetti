@@ -8,6 +8,7 @@ import React from 'react';
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import './TrendIndicator.css';
 
+}
 export interface TrendIndicatorProps {
   value: number;
   direction: 'up' | 'down' | 'neutral';
@@ -19,6 +20,7 @@ export interface TrendIndicatorProps {
   showPeriod?: boolean;
   format?: 'percentage' | 'number' | 'points';
   className?: string;
+}
 }
 export const TrendIndicator: React.FC<TrendIndicatorProps> = ({)
   value,

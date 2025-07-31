@@ -19,6 +19,7 @@ import { Pool } from 'pg';
 import { Redis } from 'ioredis';
 
 }
+}
 export interface ReviewCriteria {
   quality: number;        // 1-5 stars - Code/template quality
   usability: number;      // 1-5 stars - Ease of use
@@ -26,7 +27,9 @@ export interface ReviewCriteria {
   support: number;        // 1-5 stars - Creator responsiveness
 }
 }
+}
 
+}
 }
 export interface TemplateReview {
   id: string;
@@ -58,6 +61,7 @@ export interface TemplateReview {
       usability: number;
       support: number;
 }
+}
     };
   };
   
@@ -66,6 +70,7 @@ export interface TemplateReview {
   fraudFlags: string[];
 }
 
+}
 }
 export interface ReviewSubmission {
   templateId: string;
@@ -79,9 +84,11 @@ export interface ReviewSubmission {
     purchaseVerified?: boolean;
     usageDuration?: number; // days since purchase
 }
+}
   };
 }
 
+}
 }
 export interface AggregatedRating {
   templateId: string;
@@ -90,6 +97,7 @@ export interface AggregatedRating {
     count: number;
     distribution: Record<1 | 2 | 3 | 4 | 5, number>;
     confidence: number;
+}
 }
   };
   criteria: {
@@ -108,6 +116,7 @@ export interface AggregatedRating {
 }
 
 }
+}
 export interface ModerationQueue {
   pending: TemplateReview[];
   flagged: TemplateReview[];
@@ -117,6 +126,7 @@ export interface ModerationQueue {
     moderatorId: string;
     timestamp: Date;
     reason?: string;
+}
 }
   }>;
 }

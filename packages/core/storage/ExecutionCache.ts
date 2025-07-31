@@ -8,6 +8,7 @@ import { OptimizedGraphStorage } from './OptimizedGraphStorage';
 /**
  * Cached execution result with metadata
  */
+}
 interface CachedExecutionResult {
   result: any;
   timestamp: number;
@@ -53,6 +54,7 @@ interface CachedExecutionResult {
   averageExecutionTime: 0,
   cacheSize: 0,
   memoryUsage: 0,
+}
 };
   // Configuration
   private readonly MAX_RESULT_CACHE_SIZE = 1000;
@@ -116,6 +118,7 @@ interface CachedExecutionResult {
     inputs?: any,
     seed?: string | number
   ): Promise<void> {
+
   const cacheEntry: CachedExecutionResult = {,
   result,
   timestamp: Date.now(),
@@ -139,6 +142,7 @@ interface CachedExecutionResult {
   fromCache: boolean;
   executionTime: number;
 } | null> {
+
   const cached = this.resultCache.get(key);
   if (!cached) {
   return null;

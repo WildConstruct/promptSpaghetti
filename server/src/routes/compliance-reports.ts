@@ -28,6 +28,7 @@ import {
 
 // Request/Response type definitions
 }
+}
 interface GenerateReportRequest {
   Body: {
     framework: ComplianceFramework;
@@ -41,10 +42,12 @@ interface GenerateReportRequest {
       includeFinancialImpact?: boolean;
       customSections?: string[];
 }
+}
     };
   };
 }
 
+}
 }
 interface ValidateReportRequest {
   Body: {
@@ -52,9 +55,11 @@ interface ValidateReportRequest {
     report?: any;
     validationLevel?: 'basic' | 'standard' | 'comprehensive';
 }
+}
   };
 }
 
+}
 }
 interface QualityAssessmentRequest {
   Body: {
@@ -62,9 +67,11 @@ interface QualityAssessmentRequest {
     assessorId: string;
     assessmentLevel?: 'basic' | 'standard' | 'comprehensive';
 }
+}
   };
 }
 
+}
 }
 interface ScheduleReportRequest {
   Body: {
@@ -79,6 +86,7 @@ interface ScheduleReportRequest {
       startDate: string;
       endDate?: string;
       executionTime: string;
+}
 }
     };
     recipients: Array<{

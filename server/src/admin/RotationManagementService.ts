@@ -51,6 +51,7 @@ export enum RotationPriority {
 }
 
 }
+}
 export interface RotationPolicy {
   policyId: string;
   name: string;
@@ -68,7 +69,9 @@ export interface RotationPolicy {
   metadata: RotationPolicyMetadata;
 }
 }
+}
 
+}
 }
 export interface RotationRequirements {
   keyLength: number;
@@ -81,7 +84,9 @@ export interface RotationRequirements {
   renewalThresholdDays?: number;
 }
 }
+}
 
+}
 }
 export interface NotificationSettings {
   enabled: boolean;
@@ -90,7 +95,9 @@ export interface NotificationSettings {
   escalationRules: EscalationRule[];
 }
 }
+}
 
+}
 }
 export interface NotificationChannel {
   type: 'email' | 'slack' | 'webhook' | 'sms' | 'teams';
@@ -100,7 +107,9 @@ export interface NotificationChannel {
   template?: string;
 }
 }
+}
 
+}
 }
 export interface NotificationEvent {
   event: 'rotation_due' | 'rotation_started' | 'rotation_completed' | 'rotation_failed' | 'credential_expired';
@@ -108,7 +117,9 @@ export interface NotificationEvent {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface EscalationRule {
   condition: 'failed_rotation' | 'overdue_rotation' | 'expired_credential';
@@ -117,7 +128,9 @@ export interface EscalationRule {
   parameters: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface RollbackPolicy {
   enabled: boolean;
@@ -128,7 +141,9 @@ export interface RollbackPolicy {
   preserveHistory: number; // number of previous versions to keep
 }
 }
+}
 
+}
 }
 export interface RotationPolicyMetadata {
   createdBy: string;
@@ -140,7 +155,9 @@ export interface RotationPolicyMetadata {
   auditTrail: string[];
 }
 }
+}
 
+}
 }
 export interface ComplianceRequirement {
   standard: string; // e.g., 'SOC2', 'PCI-DSS', 'HIPAA', 'GDPR'
@@ -149,7 +166,9 @@ export interface ComplianceRequirement {
   auditFrequency: number; // milliseconds
 }
 }
+}
 
+}
 }
 export interface ManagedCredential {
   credentialId: string;
@@ -168,7 +187,9 @@ export interface ManagedCredential {
   metadata: CredentialMetadata;
 }
 }
+}
 
+}
 }
 export interface CredentialVersion {
   versionId: string;
@@ -183,7 +204,9 @@ export interface CredentialVersion {
   rollbackCapable: boolean;
 }
 }
+}
 
+}
 }
 export interface CredentialConfiguration {
   scope: 'global' | 'service' | 'user' | 'environment';
@@ -194,7 +217,9 @@ export interface CredentialConfiguration {
   customSettings: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface AccessRestriction {
   type: 'ip_range' | 'time_window' | 'usage_count' | 'geo_location' | 'custom';
@@ -203,7 +228,9 @@ export interface AccessRestriction {
   description: string;
 }
 }
+}
 
+}
 }
 export interface CredentialDependency {
   dependencyId: string;
@@ -215,7 +242,9 @@ export interface CredentialDependency {
   rollbackSupport: boolean;
 }
 }
+}
 
+}
 }
 export interface CredentialMetadata {
   owner: string;
@@ -228,7 +257,9 @@ export interface CredentialMetadata {
   customAttributes: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface RotationJob {
   jobId: string;
@@ -248,7 +279,9 @@ export interface RotationJob {
   metadata: JobMetadata;
 }
 }
+}
 
+}
 }
 export interface RotationAttempt {
   attemptId: string;
@@ -262,7 +295,9 @@ export interface RotationAttempt {
   validationResults: ValidationResult[];
 }
 }
+}
 
+}
 }
 export interface RotationStep {
   stepId: string;
@@ -277,7 +312,9 @@ export interface RotationStep {
   rollbackData?: any;
 }
 }
+}
 
+}
 }
 export interface RotationError {
   errorId: string;
@@ -291,7 +328,9 @@ export interface RotationError {
   retryable: boolean;
 }
 }
+}
 
+}
 }
 export interface RollbackJob {
   rollbackJobId: string;
@@ -304,7 +343,9 @@ export interface RollbackJob {
   steps: RollbackStep[];
 }
 }
+}
 
+}
 }
 export interface RollbackStep {
   stepId: string;
@@ -315,7 +356,9 @@ export interface RollbackStep {
   completedAt?: Date;
 }
 }
+}
 
+}
 }
 export interface ValidationResult {
   validationId: string;
@@ -327,7 +370,9 @@ export interface ValidationResult {
   recommendations: string[];
 }
 }
+}
 
+}
 }
 export interface ValidationDetails {
   checks: ValidationCheck[];
@@ -336,7 +381,9 @@ export interface ValidationDetails {
   warnings: string[];
 }
 }
+}
 
+}
 }
 export interface ValidationCheck {
   name: string;
@@ -346,7 +393,9 @@ export interface ValidationCheck {
   severity: 'info' | 'warning' | 'error' | 'critical';
 }
 }
+}
 
+}
 }
 export interface ComplianceCheck {
   standard: string;
@@ -355,7 +404,9 @@ export interface ComplianceCheck {
   details: string;
 }
 }
+}
 
+}
 }
 export interface JobMetadata {
   initiatedBy: string;
@@ -367,12 +418,15 @@ export interface JobMetadata {
   actualDuration?: number;
 }
 }
+}
 
+}
 }
 export interface RotationAnalytics {
   timeRange: {
     start: Date;
     end: Date;
+}
 }
   };
   totalRotations: number;
@@ -388,6 +442,7 @@ export interface RotationAnalytics {
 }
 
 }
+}
 export interface ComplianceMetrics {
   overallCompliance: number; // percentage
   standardCompliance: Record<string, number>;
@@ -396,7 +451,9 @@ export interface ComplianceMetrics {
   complianceViolations: ComplianceViolation[];
 }
 }
+}
 
+}
 }
 export interface ComplianceViolation {
   violationId: string;
@@ -409,7 +466,9 @@ export interface ComplianceViolation {
   resolution?: string;
 }
 }
+}
 
+}
 }
 export interface RotationTrends {
   rotationFrequency: TrendData;
@@ -418,7 +477,9 @@ export interface RotationTrends {
   errorRate: TrendData;
 }
 }
+}
 
+}
 }
 export interface TrendData {
   current: number;
@@ -429,14 +490,18 @@ export interface TrendData {
   dataPoints: DataPoint[];
 }
 }
+}
 
+}
 }
 export interface DataPoint {
   timestamp: Date;
   value: number;
 }
 }
+}
 
+}
 }
 export interface RotationErrorAnalysis {
   errorType: string;
@@ -445,6 +510,7 @@ export interface RotationErrorAnalysis {
   averageResolutionTime: number;
   topAffectedCredentials: string[];
   recommendedActions: string[];
+}
 }
 }
 
@@ -1505,10 +1571,12 @@ export class RotationManagementService {
 // ==========================================
 
 }
+}
 interface RotationStepConfig {
   name: string;
   description: string;
   execute: (input?: any) => Promise<any>;
   rollbackData?: () => Promise<any>;
+}
 }
 }

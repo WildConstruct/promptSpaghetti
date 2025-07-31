@@ -9,6 +9,7 @@
  */
 import React from 'react';
 
+}
 interface RecurringScheduleManagerProps {
     className?: string;
     userId?: string;
@@ -17,3 +18,4 @@ interface RecurringScheduleManagerProps {
 export declare const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps>;
 export default RecurringScheduleManager;
 //# sourceMappingURL=RecurringScheduleManager.d.ts.map
+}

@@ -14,17 +14,20 @@ import {
   Epic16HelpRequestService,
   KnowledgeBaseArticle
 } from '../../services/Epic16HelpRequestService';
+}
 interface HelpRequestDashboardProps {
   helpService: Epic16HelpRequestService;
   userId: string;
   userRole: 'user' | 'agent' | 'admin';
   onRequestSelect?: (request: HelpRequest) => void;
+}
 interface HelpRequestFilters {
   status: HelpRequestStatus;
   category: HelpCategory;
   priority: HelpPriority;
   type: HelpRequestType;
   assignedTo?: string;
+}
   dateRange?: { start: Date; end: Date };
   searchQuery: string;
 
@@ -501,6 +504,7 @@ export const HelpRequestDashboard: React.FC<HelpRequestDashboardProps> = ({)
 };
 
 // Help Request List Item Component
+}
 interface HelpRequestListItemProps {
   request: HelpRequest;
   onSelect: () => void;
@@ -521,6 +525,7 @@ interface HelpRequestListItemProps {
   selected,
   renderStatusBadge,
   renderPriorityBadge
+}
 }) => {
   const [showActions, setShowActions] = useState(false);
   const canModify = userRole === 'admin' || userRole === 'agent';

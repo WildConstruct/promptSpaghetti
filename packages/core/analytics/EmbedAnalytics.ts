@@ -20,6 +20,7 @@ import { EventEmitter } from 'events';
 
 // Core Analytics Interfaces
 
+}
 export interface EmbedConfig {
   embedId: string;
   trackingEnabled: boolean;
@@ -33,6 +34,8 @@ export interface EmbedConfig {
   samplingRate: number; // 0-1,
   batchSize: number;
   flushInterval: number; // milliseconds,
+}
+}
 }
 export interface AnalyticsEvent {
   id: string;
@@ -49,6 +52,7 @@ export interface AnalyticsEvent {
   userId?: string;
   anonymousId: string;
 }
+}
 export type EventType = 
   | 'page_view'
   | 'interaction'
@@ -60,11 +64,14 @@ export type EventType =
   | 'privacy'
   | 'custom';
 
+}
 export interface EventData {
   properties: Record<string, any>;
   metrics: Record<string, number>;
   dimensions: Record<string, string>;
   custom: Record<string, any>;
+}
+}
 }
 export interface EventContext {
   page: PageContext;
@@ -75,15 +82,19 @@ export interface EventContext {
   referrer: ReferrerContext;
   experiment: ExperimentContext;
 }
+}
+}
 export interface PageContext {
   url: string;
   title: string;
   path: string;
   domain: string;
   language: string;
+}
   viewport: { width: number; height: number };
   scrollDepth: number;
   timeOnPage: number;
+}
 }
 export interface UserContext {
   id?: string;
@@ -94,12 +105,16 @@ export interface UserContext {
   preferences: UserPreferences;
   consent: ConsentData;
 }
+}
+}
 export interface UserPreferences {
   language: string;
   timezone: string;
   theme: 'light' | 'dark' | 'auto';
   accessibility: AccessibilityPreferences;
   notifications: NotificationPreferences;
+}
+}
 }
 export interface AccessibilityPreferences {
   screenReader: boolean;
@@ -108,11 +123,15 @@ export interface AccessibilityPreferences {
   largeText: boolean;
   keyboardNavigation: boolean;
 }
+}
+}
 export interface NotificationPreferences {
   email: boolean;
   push: boolean;
   inApp: boolean;
   sms: boolean;
+}
+}
 }
 export interface ConsentData {
   analytics: boolean;
@@ -122,17 +141,21 @@ export interface ConsentData {
   timestamp: Date;
   version: string;
 }
+}
+}
 export interface DeviceContext {
   type: 'desktop' | 'tablet' | 'mobile' | 'tv' | 'bot';
   os: string;
   osVersion: string;
   browser: string;
   browserVersion: string;
+}
   resolution: { width: number; height: number };
   pixelDensity: number;
   touchSupport: boolean;
   connectionType?: 'slow-2g' | '2g' | '3g' | '4g' | '5g' | 'wifi' | 'ethernet';
   darkMode: boolean;
+}
 }
 export interface SessionContext {
   id: string;
@@ -145,16 +168,20 @@ export interface SessionContext {
   medium: string;
   campaign?: string;
 }
+}
+}
 export interface EmbedContext {
   id: string;
   version: string;
   type: string;
+}
   size: { width: number; height: number };
   position: { x: number; y: number };
   visible: boolean;
   loadTime: number;
   renderTime: number;
   interactionCount: number;
+}
 }
 export interface ReferrerContext {
   url?: string;
@@ -165,10 +192,14 @@ export interface ReferrerContext {
   term?: string;
   content?: string;
 }
+}
+}
 export interface ExperimentContext {
   activeExperiments: ActiveExperiment;
   cohort?: string;
   segment?: string;
+}
+}
 }
 export interface ActiveExperiment {
   id: string;
@@ -177,6 +208,8 @@ export interface ActiveExperiment {
   startDate: Date;
   allocation: number;
   // Performance Metrics
+}
+}
 }
 export interface PerformanceMetrics {
   embedId: string;
@@ -192,6 +225,8 @@ export interface PerformanceMetrics {
   cacheHitRate: number;
   apiResponseTimes: Record<string, number>;
 }
+}
+}
 export interface EngagementMetrics {
   embedId: string;
   timestamp: Date;
@@ -206,6 +241,8 @@ export interface EngagementMetrics {
   shareCount: number;
   favoriteCount: number;
 }
+}
+}
 export interface ConversionMetrics {
   embedId: string;
   timestamp: Date;
@@ -216,6 +253,8 @@ export interface ConversionMetrics {
   signupRate: number;
   purchaseRate: number;
 }
+}
+}
 export interface GoalCompletion {
   goalId: string;
   goalName: string;
@@ -223,6 +262,8 @@ export interface GoalCompletion {
   completedAt: Date;
   funnelPosition: number;
   attribution: AttributionData;
+}
+}
 }
 export interface FunnelStep {
   stepId: string;
@@ -232,11 +273,15 @@ export interface FunnelStep {
   averageTime: number;
   userCount: number;
 }
+}
+}
 export interface AttributionData {
   firstTouch: TouchPoint;
   lastTouch: TouchPoint;
   touchPoints: TouchPoint;
   modelType: 'first-touch' | 'last-touch' | 'linear' | 'time-decay' | 'position-based';
+}
+}
 }
 export interface TouchPoint {
   source: string;
@@ -245,6 +290,8 @@ export interface TouchPoint {
   timestamp: Date;
   value: number;
   // Reporting and Analytics
+}
+}
 }
 export interface AnalyticsReport {
   id: string;
@@ -258,6 +305,7 @@ export interface AnalyticsReport {
   generatedAt: Date;
   generatedBy: string;
 }
+}
 export type ReportType = 
   | 'overview'
   | 'performance'
@@ -269,22 +317,29 @@ export type ReportType =
   | 'experiment'
   | 'custom';
 
+}
 export interface TimeRange {
   start: Date;
   end: Date;
   granularity: 'hour' | 'day' | 'week' | 'month' | 'quarter' | 'year'
+}
   }
+}
 export interface ReportFilter {
   field: string;
   operator: 'equals' | 'not_equals' | 'contains' | 'greater' | 'less' | 'between' | 'in';
   value: any;
   logicalOperator?: 'AND' | 'OR'
+}
   }
+}
 export interface ReportMetric {
   name: string;
   aggregation: 'sum' | 'count' | 'average' | 'median' | 'min' | 'max' | 'unique';
   format: 'number' | 'percentage' | 'currency' | 'duration' | 'bytes';
   precision?: number;
+}
+}
 }
 export interface ReportData {
   summary: SummaryData;
@@ -292,6 +347,8 @@ export interface ReportData {
   breakdown: BreakdownData;
   comparisons: ComparisonData;
   insights: InsightData;
+}
+}
 }
 export interface SummaryData {
   totalEvents: number;
@@ -302,23 +359,31 @@ export interface SummaryData {
   conversionRate: number;
   topMetrics: TopMetric;
 }
+}
+}
 export interface TopMetric {
   name: string;
   value: number;
   change: number;
   trend: 'up' | 'down' | 'stable'
+}
   }
+}
 export interface TimeSeriesData {
   timestamp: Date;
   values: Record<string, number>;
 }
+}
+}
 export interface BreakdownData {
   dimension: string;
-  values: Array<{,
+  values: Array<{
   name: string;
   value: number;
   percentage: number;
+}
 }>;
+}
 }
 export interface ComparisonData {
   metric: string;
@@ -326,7 +391,9 @@ export interface ComparisonData {
   previous: number;
   change: number;
   significance: 'significant' | 'not_significant'
+}
   }
+}
 export interface InsightData {
   type: 'anomaly' | 'trend' | 'opportunity' | 'warning';
   title: string;
@@ -335,6 +402,8 @@ export interface InsightData {
   actionable: boolean;
   recommendation?: string;
   // A/B Testing
+}
+}
 }
 export interface ExperimentConfig {
   id: string;
@@ -349,6 +418,8 @@ export interface ExperimentConfig {
   duration: ExperimentDuration;
   significance: SignificanceConfig;
 }
+}
+}
 export interface ExperimentVariant {
   id: string;
   name: string;
@@ -357,23 +428,31 @@ export interface ExperimentVariant {
   configuration: Record<string, any>;
   isControl: boolean;
 }
+}
+}
 export interface AllocationStrategy {
   type: 'random' | 'sticky' | 'targeted';
   seed?: string;
   method: 'hash' | 'random' | 'deterministic'
+}
   }
+}
 export interface TargetingCriteria {
   includeCriteria: TargetingRule;
   excludeCriteria: TargetingRule;
   sampleSize?: number;
   samplePercentage?: number;
 }
+}
+}
 export interface TargetingRule {
   field: string;
   operator: string;
   value: any;
   logicalOperator?: 'AND' | 'OR'
+}
   }
+}
 export interface ExperimentGoal {
   id: string;
   name: string;
@@ -382,7 +461,9 @@ export interface ExperimentGoal {
   aggregation: string;
   target?: number;
   direction: 'increase' | 'decrease'
+}
   }
+}
 export interface ExperimentDuration {
   startDate: Date;
   endDate?: Date;
@@ -390,11 +471,15 @@ export interface ExperimentDuration {
   maxDuration: number; // days,
   earlyStoppingEnabled: boolean;
 }
+}
+}
 export interface SignificanceConfig {
   confidenceLevel: number; // 0.90, 0.95, 0.99,
   minimumSampleSize: number;
   minimumDetectableEffect: number; // percentage,
   statisticalPower: number; // typically 0.8,
+}
+}
 }
 export interface ExperimentResult {
   experimentId: string;
@@ -407,6 +492,8 @@ export interface ExperimentResult {
   pValue: number;
   effect: EffectSize;
 }
+}
+}
 export interface ExperimentMetric {
   goalId: string;
   value: number;
@@ -415,6 +502,8 @@ export interface ExperimentMetric {
   improvement: number; // percentage vs control,
   significant: boolean;
 }
+}
+}
 export interface StatisticalSignificance {
   isSignificant: boolean;
   pValue: number;
@@ -422,16 +511,21 @@ export interface StatisticalSignificance {
   testStatistic: number;
   degreesOfFreedom: number;
 }
+}
+}
 export interface ConfidenceInterval {
   lower: number;
   upper: number;
   level: number;
+}
+}
 }
 export interface EffectSize {
   absolute: number;
   relative: number; // percentage,
   practical: 'small' | 'medium' | 'large';
   // Main Analytics System
+}
 }
 export class EmbedAnalytics extends EventEmitter {
   private config: EmbedConfig;
@@ -460,6 +554,7 @@ export class EmbedAnalytics extends EventEmitter {
     this.initializeTracking();
   // Core Tracking Methods
   async initialize(): Promise<void> {
+
     if (!this.config.trackingEnabled) {
       return;
     try {
@@ -620,6 +715,7 @@ export class EmbedAnalytics extends EventEmitter {
       this.emit('reportError', { reportId, error: error instanceof Error ? error.message : String(error) });
       throw error;
   async getPerformanceMetrics(timeRange: TimeRange): Promise<PerformanceMetrics> {
+
   // Query performance metrics from storage
   return this.queryPerformanceData(timeRange);
   async getEngagementMetrics(timeRange: TimeRange): Promise<EngagementMetrics> {,
@@ -644,6 +740,7 @@ export class EmbedAnalytics extends EventEmitter {
     this.config.anonymizeData = true;
     this.track('privacy', 'user_anonymized', {});
   purgeUserData(userId: string): Promise<void> {
+
     // Implementation for GDPR compliance
     return this.deleteUserData(userId);
   // Configuration
@@ -654,6 +751,7 @@ export class EmbedAnalytics extends EventEmitter {
     return { ...this.config };
   // System Management
   flush(): Promise<void> {
+
   return this.processEventQueue();
   stop(): void {,
   this.stopTracking();
@@ -861,6 +959,7 @@ export class EmbedAnalytics extends EventEmitter {
     if (this.eventQueue.length >= this.config.batchSize) {
       this.processEventQueue();
   private async processEventQueue(): Promise<void> {
+
     if (this.eventQueue.length === 0) {
       return;
     const events = this.eventQueue.splice(0, this.config.batchSize);
@@ -875,6 +974,7 @@ export class EmbedAnalytics extends EventEmitter {
         { error: error instanceof Error ? error.message : String(error)
       ), eventCount: events.length });
   private async sendEvents(events: AnalyticsEvent): Promise<void> {
+
     // Implementation would send events to analytics backend
     // For now, just emit the events
     events.forEach(event => {)
@@ -1074,6 +1174,7 @@ export class EmbedAnalytics extends EventEmitter {
       comparisons: [];
   };
   private async generateInsights(data: any): Promise<InsightData> {
+
     return [
       {
         type: 'trend',
@@ -1087,6 +1188,7 @@ export class EmbedAnalytics extends EventEmitter {
   private async queryConversionData(timeRange: TimeRange): Promise<ConversionMetrics> { return []; }
 
 // Session Data Interface
+}
 interface SessionData {
   id: string;
   startTime: Date;
@@ -1100,4 +1202,5 @@ interface SessionData {
   campaign?: string;
   export default {
   EmbedAnalytics
+}
 };

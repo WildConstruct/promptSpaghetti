@@ -20,6 +20,7 @@ import { RateLimitingService, ThreatLevel } from '../../../../packages/core/secu
 // ========================================
 
 }
+}
 export interface AdaptiveThrottlingConfig {
   enabled: boolean;
   skipHealthChecks: boolean;
@@ -34,7 +35,9 @@ export interface AdaptiveThrottlingConfig {
   onError?: (error: Error, request: FastifyRequest) => void;
 }
 }
+}
 
+}
 }
 export interface SystemMonitor {
   getCPUUsage(): Promise<number>;
@@ -44,6 +47,7 @@ export interface SystemMonitor {
   getAverageResponseTime(): number;
   getErrorRate(): number;
   getQueueDepth(): number;
+}
 }
 }
 
@@ -555,6 +559,7 @@ export function createAdaptiveThrottlingPlugin(
 declare module 'fastify' {
   interface FastifyInstance {
     adaptiveThrottling: AdaptiveThrottlingMiddleware;
+}
 }
   }
 }

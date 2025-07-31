@@ -23,6 +23,7 @@ import { LoadingSpinner } from '../common/LoadingSpinner';
 import { UserPreviewTool } from './targeting/UserPreviewTool';
 import './targeting/UserPreviewTool.css';
 import './targeting/TargetingModalExtensions.css';
+}
 interface ToggleDetailsModalProps {
   isOpen: boolean;,
   onClose: () => void;
@@ -42,13 +43,14 @@ interface ToggleDetailsModalProps {
   version: number;
   createdBy?: string;
   updatedBy?: string;
-  scopes: Array<{,
+  scopes: Array<{
   id: string;,
   rule: unknown;
   priority: number;,
   createdAt: string;
+}
 }>;
-  recentAudit: Array<{,
+  recentAudit: Array<{
   id: string;
   action: string;
   actorId?: string;
@@ -56,13 +58,13 @@ interface ToggleDetailsModalProps {
   createdAt: string;,
   isEmergency: boolean;
 }>;
-  dependencies: {,
-  dependencies: {,
+  dependencies: {
+  dependencies: {
   requires: string;,
   conflicts: string;
   suggests: string;
 };
-    dependents: {,
+    dependents: {
   requiredBy: string;
   conflictsWith: string;,
   suggestedBy: string;
@@ -89,7 +91,7 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({)
     try {
       const response = await fetch(`/api/feature-toggles/toggles/${toggleId}`, {)}
   },
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
       });
       if (!response.ok) {

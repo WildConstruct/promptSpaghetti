@@ -8,6 +8,7 @@
 export type SkillLevel = 'beginner' | 'intermediate' | 'advanced' | 'expert';
 export type SkillDomain = 'programming' | 'web-development' | 'mobile-development' | 'data-science' | 'devops' | 'design' | 'business' | 'marketing' | 'writing' | 'tools' | 'soft-skills' | 'project-management' | 'security' | 'database' | 'ai-ml' | 'cloud' | 'general';
 
+}
 export type SkillSubcategory = {
     programming: 'algorithms' | 'data-structures' | 'oop' | 'functional' | 'debugging' | 'testing' | 'architecture';
     'web-development': 'frontend' | 'backend' | 'fullstack' | 'frameworks' | 'apis' | 'databases' | 'deployment';
@@ -28,6 +29,7 @@ export type SkillSubcategory = {
     'general': 'fundamentals' | 'concepts' | 'trends' | 'career' | 'industry' | 'best-practices';
 };
 
+}
 export interface SkillLevelClassification {
     level: SkillLevel;
     confidence: number;
@@ -39,6 +41,7 @@ export interface SkillLevelClassification {
     assessed_at: string;
     assessment_method: string;
 
+}
 export interface SkillLevelDimensions {
     technical_complexity: number;
     concept_difficulty: number;
@@ -53,12 +56,14 @@ export interface SkillLevelDimensions {
     hands_on_component: number;
     problem_solving_complexity: number;
 
+}
 export interface SkillLevelContext {
     target_audience: {
         experience_level: SkillLevel;
         role: string[];
         industry: string[];
         learning_style: 'visual' | 'auditory' | 'kinesthetic' | 'reading' | 'mixed'
+}
   };
     content_type: 'tutorial' | 'guide' | 'reference' | 'workshop' | 'course' | 'example';
     delivery_format: 'text' | 'video' | 'interactive' | 'hands-on' | 'mixed';
@@ -75,6 +80,7 @@ export interface SkillLevelContext {
         learning_outcome_confidence: number;
     };
 
+}
 export interface SkillPrerequisite {
     skill_domain: SkillDomain;
     subcategory?: string;
@@ -84,6 +90,7 @@ export interface SkillPrerequisite {
     alternative_paths: string[];
     assessment_method?: string;
 
+}
 export interface SkillProgression {
     skill_domain: SkillDomain;
     subcategory?: string;
@@ -93,6 +100,7 @@ export interface SkillProgression {
     estimated_time: number;
     milestones: ProgressionMilestone[];
 
+}
 export interface ProgressionMilestone {
     name: string;
     description: string;
@@ -100,6 +108,7 @@ export interface ProgressionMilestone {
     assessment_criteria: string[];
     estimated_effort: number;
 
+}
 export interface ContentSkillTag {
     id: string;
     content_id: string;
@@ -109,8 +118,9 @@ export interface ContentSkillTag {
         subcategory?: string;
         level: SkillLevel;
         classification: SkillLevelClassification;
+}
     };
-    secondary_skills: Array<{,
+    secondary_skills: Array<{
         domain: SkillDomain;
         subcategory?: string;
         level: SkillLevel;
@@ -130,6 +140,7 @@ export interface ContentSkillTag {
     review_status: 'pending' | 'approved' | 'needs_review';
     confidence_score: number;
 
+}
 export interface DifficultyIndicators {
     reading_level: number;
     concept_density: number;
@@ -147,11 +158,13 @@ export interface DifficultyIndicators {
     success_barriers: string[];
     support_needs: string[];
 
+}
 export interface CommunitySkillFeedback {
     perceived_difficulty: {
         average_rating: number;
         rating_distribution: Record<string, number>;
         total_ratings: number;
+}
     };
     level_appropriateness: {
         too_easy_votes: number;
@@ -165,13 +178,14 @@ export interface CommunitySkillFeedback {
         good_examples: number;
         would_recommend: number;
     };
-    improvement_areas: Array<{,
+    improvement_areas: Array<{
         area: string;
         suggestion_count: number;
         examples: string[];
     }>;
     level_suggestions: Record<SkillLevel, number>;
 
+}
 export interface AdaptiveElements {
     has_difficulty_options: boolean;
     can_skip_basics: boolean;
@@ -188,6 +202,7 @@ export interface AdaptiveElements {
     industry_specific_examples: string[];
     tool_alternatives: string[];
 
+}
 export interface SkillBasedLearningPath {
     id: string;
     name: string;
@@ -198,6 +213,7 @@ export interface SkillBasedLearningPath {
         start_level: SkillLevel;
         target_level: SkillLevel;
         estimated_duration: number;
+}
     };
     learning_modules: LearningModule[];
     skill_checkpoints: SkillCheckpoint[];
@@ -206,19 +222,21 @@ export interface SkillBasedLearningPath {
     adaptive_features: PathAdaptiveFeatures;
     success_metrics: PathSuccessMetrics;
 
+}
 export interface LearningModule {
     id: string;
     name: string;
     description: string;
     position: number;
-    skills_developed: Array<{,
+    skills_developed: Array<{
         domain: SkillDomain;
         subcategory?: string;
         from_level: SkillLevel;
         to_level: SkillLevel;
         confidence: number;
+}
     }>;
-    content_items: Array<{,
+    content_items: Array<{
         content_id: string;
         content_type: string;
         required: boolean;
@@ -228,16 +246,18 @@ export interface LearningModule {
     assessments: ModuleAssessment[];
     completion_criteria: CompletionCriteria;
 
+}
 export interface SkillCheckpoint {
     id: string;
     position: number;
     name: string;
     description: string;
-    skills_assessed: Array<{,
+    skills_assessed: Array<{
         domain: SkillDomain;
         subcategory?: string;
         required_level: SkillLevel;
         assessment_method: 'quiz' | 'project' | 'peer-review' | 'self-assessment' | 'portfolio'
+}
   }>;
     checkpoint_type: 'milestone' | 'gate' | 'reflection' | 'feedback';
     blocking: boolean;
@@ -246,6 +266,7 @@ export interface SkillCheckpoint {
     struggle_actions: string[];
     failure_actions: string[];
 
+}
 export interface LearningOutcome {
     skill_domain: SkillDomain;
     subcategory?: string;
@@ -258,6 +279,7 @@ export interface LearningOutcome {
     portfolio_examples: string[];
     career_relevance: string;
 
+}
 export interface PathAdaptiveFeatures {
     skill_gap_detection: boolean;
     prerequisite_enforcement: boolean;
@@ -269,6 +291,7 @@ export interface PathAdaptiveFeatures {
     industry_customization: boolean;
     tool_preference_adaptation: boolean;
 
+}
 export interface PathSuccessMetrics {
     target_completion_rate: number;
     target_time_to_complete: number;
@@ -279,6 +302,7 @@ export interface PathSuccessMetrics {
     skill_retention_assessment: boolean;
     continued_learning_engagement: boolean;
 
+}
 export interface ModuleAssessment {
     type: 'knowledge_check' | 'skill_demonstration' | 'project' | 'peer_review' | 'reflection';
     required: boolean;
@@ -286,33 +310,39 @@ export interface ModuleAssessment {
     feedback_type: 'immediate' | 'delayed' | 'peer' | 'instructor';
     retry_policy: RetryPolicy;
 
+}
 export interface CompletionCriteria {
     content_completion_required: number;
     assessment_passing_required: boolean;
     time_investment_minimum: number;
     skill_demonstration_required: boolean;
 
+}
 export interface AssessmentCriteria {
     minimum_score: number;
     rubric_criteria: RubricCriterion[];
     peer_consensus_required?: number;
     instructor_approval_required?: boolean;
 
+}
 export interface RubricCriterion {
     dimension: string;
     weight: number;
-    levels: Array<{,
+    levels: Array<{
         level: number;
         description: string;
         points: number;
+}
     }>;
 
+}
 export interface RetryPolicy {
     max_attempts: number;
     cooldown_period: number;
     progressive_hints: boolean;
     alternative_assessments: boolean;
 
+}
 export interface SkillAssessmentEngine {
     analyzeContent(content: any): Promise<SkillLevelClassification>;
     classifyDifficulty(content: any, domain: SkillDomain): Promise<SkillLevel>;
@@ -323,6 +353,7 @@ export interface SkillAssessmentEngine {
     incorporateCommunityFeedback(contentId: string, feedback: CommunitySkillFeedback): Promise<void>;
     validateSkillTagging(contentId: string): Promise<ValidationResult>;
 
+}
 export interface UserSkillProfile {
     user_id: string;
     skill_levels: Record<SkillDomain, {
@@ -331,6 +362,7 @@ export interface UserSkillProfile {
         last_assessed: string;
         assessment_method: string;
         subcategory_levels: Record<string, SkillLevel>;
+}
     }>;
     learning_preferences: {
         preferred_difficulty_progression: 'gradual' | 'moderate' | 'steep';
@@ -348,6 +380,7 @@ export interface UserSkillProfile {
     motivation_factors: string[];
     career_context: string;
 
+}
 export interface ContentCompletionRecord {
     content_id: string;
     completed_at: string;
@@ -357,6 +390,7 @@ export interface ContentCompletionRecord {
     user_rating: number;
     struggled_areas: string[];
 
+}
 export interface SkillProgressionRecord {
     skill_domain: SkillDomain;
     subcategory?: string;
@@ -366,6 +400,7 @@ export interface SkillProgressionRecord {
     evidence: string[];
     confidence: number;
 
+}
 export interface AssessmentResult {
     assessment_id: string;
     content_id: string;
@@ -376,6 +411,7 @@ export interface AssessmentResult {
     completed_at: string;
     feedback_received: string;
 
+}
 export interface StrugglePattern {
     skill_domain: SkillDomain;
     difficulty_type: string;
@@ -383,6 +419,7 @@ export interface StrugglePattern {
     context: string;
     resolution_strategies: string[];
 
+}
 export interface LearningGoal {
     id: string;
     skill_domain: SkillDomain;
@@ -393,18 +430,21 @@ export interface LearningGoal {
     priority: 'low' | 'medium' | 'high';
     progress: number;
 
+}
 export interface ContentRecommendation {
     content_id: string;
     relevance_score: number;
-    skill_alignment: Array<{,
+    skill_alignment: Array<{
         domain: SkillDomain;
         level: SkillLevel;
         contribution: number;
+}
     }>;
     estimated_value: number;
     confidence: number;
     reasoning: string[];
 
+}
 export interface OptimizedLearningPath {
     original_path_id: string;
     optimized_sequence: string[];
@@ -413,6 +453,7 @@ export interface OptimizedLearningPath {
     personalization_factors: string[];
     confidence: number;
 
+}
 export interface SkillGap {
     skill_domain: SkillDomain;
     subcategory?: string;
@@ -421,25 +462,29 @@ export interface SkillGap {
     gap_size: number;
     recommended_content: string[];
 
+}
 export interface ContentSuggestion {
     content_id: string;
     suggestion_type: 'next_step' | 'reinforcement' | 'remediation' | 'enrichment';
-    skill_focus: Array<{,
+    skill_focus: Array<{
         domain: SkillDomain;
         level: SkillLevel;
+}
     }>;
     estimated_benefit: number;
     urgency: 'low' | 'medium' | 'high';
     reasoning: string;
 
+}
 export interface ValidationResult {
     is_valid: boolean;
     confidence: number;
-    discrepancies: Array<{,
+    discrepancies: Array<{
         aspect: string;
         expected: any;
         actual: any;
         severity: 'low' | 'medium' | 'high'
+}
   }>;
     recommendations: string[];
     community_consensus: number;

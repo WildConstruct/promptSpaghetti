@@ -9,6 +9,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface SecurityEvent {
     id: string;
     timestamp: Date;
@@ -42,6 +43,7 @@ export declare enum SecuritySeverity {
     HIGH = "high",
     CRITICAL = "critical"
 
+}
 export interface GeolocationData {
     country: string;
     region: string;
@@ -51,6 +53,7 @@ export interface GeolocationData {
     isKnownLocation: boolean;
 
 
+}
 export interface ThreatPrediction {
     predictionId: string;
     timestamp: Date;
@@ -73,6 +76,7 @@ export declare enum ThreatType {
     DATA_EXFILTRATION = "data_exfiltration",
     PRIVILEGE_ESCALATION_ATTEMPT = "privilege_escalation_attempt"
 
+}
 export interface PreventiveAction {
     actionType: ActionType;
     target: string;
@@ -91,6 +95,7 @@ export declare enum ActionType {
     REVOKE_PERMISSIONS = "revoke_permissions",
     FORCE_PASSWORD_RESET = "force_password_reset"
 
+}
 export interface PredictionModel {
     modelId: string;
     name: string;
@@ -105,6 +110,7 @@ export interface PredictionModel {
     featureImportance: Record<string, number>;
 
 
+}
 export interface AnalyticsConfiguration {
     predictionThreshold: number;
     maxPredictionTimeframe: number;
@@ -196,3 +202,4 @@ export declare class PredictiveAnalyticsFactory {
 
 export default PredictiveSecurityAnalytics;
 //# sourceMappingURL=PredictiveSecurityAnalytics.d.ts.map
+}

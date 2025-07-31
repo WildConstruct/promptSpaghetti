@@ -6,6 +6,7 @@
  */
 import React from 'react';
 
+}
 export interface UserProgress {
     userId: string;
     level: number;
@@ -18,6 +19,7 @@ export interface UserProgress {
     longestStreak: number;
 
 
+}
 export interface EngagementMetrics {
     templatesViewed: number;
     searchesPerformed: number;
@@ -41,6 +43,7 @@ export interface EngagementMetrics {
     learningPathsCompleted: number;
 
 
+}
 export interface Milestone {
     id: string;
     title: string;
@@ -57,6 +60,7 @@ export interface Milestone {
     rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
 
 
+}
 export interface ProgressTrackerProps {
     userId: string;
     variant?: 'full' | 'compact' | 'dashboard';
@@ -69,3 +73,4 @@ export interface ProgressTrackerProps {
 export declare const ProgressTracker: React.FC<ProgressTrackerProps>;
 export default ProgressTracker;
 //# sourceMappingURL=ProgressTracker.d.ts.map
+}

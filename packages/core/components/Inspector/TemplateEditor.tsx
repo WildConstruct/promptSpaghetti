@@ -13,6 +13,7 @@ import {
 } from '../../utils/templateParser';
 import { useTemplatePreview } from '../../hooks/useTemplatePreview';
 
+}
 export interface TemplateEditorProps {
   value: string;
   onChange: (value: string) => void;
@@ -28,6 +29,7 @@ export interface TemplateEditorProps {
   showCategoryFilters?: boolean; // Show category filters in suggestions,
   maxSuggestions?: number; // Limit number of suggestions shown,
   className?: string;
+}
 }
 export const [suggestionIndex, setSuggestionIndex] = useState(-1);
   const [cursorPosition, setCursorPosition] = useState(0);

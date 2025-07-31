@@ -10,6 +10,7 @@ import { NodeTypeEnum, Node } from '../graphSchema';
  * Base interface for all graph mutation operations
  */
 
+}
 export interface BaseMutationOperation {
     operationId: string;
     documentId: string;
@@ -22,6 +23,7 @@ export interface BaseMutationOperation {
  * Version vector for operation ordering and conflict resolution
  */
 
+}
 export interface VersionVector {
     [clientId: string]: number;
 /**
@@ -36,6 +38,7 @@ export declare enum OperationPriority {
  * Node Addition Operation
  */
 
+}
 export interface NodeAddOperation extends BaseMutationOperation {
     type: 'NODE_ADD';
     nodeId: string;
@@ -43,6 +46,7 @@ export interface NodeAddOperation extends BaseMutationOperation {
     position: {
         x: number;
         y: number;
+}
     };
     initialData?: Record<string, any>;
     parentId?: string;
@@ -51,6 +55,7 @@ export interface NodeAddOperation extends BaseMutationOperation {
  * Node Update Operation
  */
 
+}
 export interface NodeUpdateOperation extends BaseMutationOperation {
     type: 'NODE_UPDATE';
     nodeId: string;
@@ -64,6 +69,7 @@ export interface NodeUpdateOperation extends BaseMutationOperation {
  * Node Removal Operation
  */
 
+}
 export interface NodeRemoveOperation extends BaseMutationOperation {
     type: 'NODE_REMOVE';
     nodeId: string;
@@ -75,6 +81,7 @@ export interface NodeRemoveOperation extends BaseMutationOperation {
  * Edge data structure
  */
 
+}
 export interface GraphEdge {
     id: string;
     sourceNodeId: string;
@@ -87,6 +94,7 @@ export interface GraphEdge {
  * Edge Addition Operation
  */
 
+}
 export interface EdgeAddOperation extends BaseMutationOperation {
     type: 'EDGE_ADD';
     edgeId: string;
@@ -101,6 +109,7 @@ export interface EdgeAddOperation extends BaseMutationOperation {
  * Edge Update Operation
  */
 
+}
 export interface EdgeUpdateOperation extends BaseMutationOperation {
     type: 'EDGE_UPDATE';
     edgeId: string;
@@ -112,6 +121,7 @@ export interface EdgeUpdateOperation extends BaseMutationOperation {
  * Edge Removal Operation
  */
 
+}
 export interface EdgeRemoveOperation extends BaseMutationOperation {
     type: 'EDGE_REMOVE';
     edgeId: string;
@@ -123,6 +133,7 @@ export interface EdgeRemoveOperation extends BaseMutationOperation {
  * Parameter Update Operation
  */
 
+}
 export interface ParameterUpdateOperation extends BaseMutationOperation {
     type: 'PARAMETER_UPDATE';
     nodeId: string;
@@ -137,6 +148,7 @@ export interface ParameterUpdateOperation extends BaseMutationOperation {
  * Batch Operation for atomic multi-operation execution
  */
 
+}
 export interface BatchMutationOperation extends BaseMutationOperation {
     type: 'BATCH_MUTATION';
     batchId: string;
@@ -186,6 +198,7 @@ export declare enum ResolutionStrategy {
  * Conflict resolution data
  */
 
+}
 export interface ConflictResolution {
     conflictId: string;
     conflictType: ConflictType;
@@ -200,6 +213,7 @@ export interface ConflictResolution {
  * Conflict operation for manual resolution UI
  */
 
+}
 export interface ConflictOperation {
     id: string;
     type: ConflictType;
@@ -219,6 +233,7 @@ export interface ConflictOperation {
  * Resolution option for conflict UI
  */
 
+}
 export interface ResolutionOption {
     strategy: ResolutionStrategy;
     label: string;
@@ -229,6 +244,7 @@ export interface ResolutionOption {
  * Graph mutation message for WebSocket transport
  */
 
+}
 export interface GraphMutationMessage {
     type: 'GRAPH_MUTATION';
     operationId: string;
@@ -243,6 +259,7 @@ export interface GraphMutationMessage {
  * Batch mutation message
  */
 
+}
 export interface BatchMutationMessage {
     type: 'BATCH_MUTATION';
     batchId: string;
@@ -255,6 +272,7 @@ export interface BatchMutationMessage {
  * Conflict detected message
  */
 
+}
 export interface ConflictDetectedMessage {
     type: 'CONFLICT_DETECTED';
     conflictId: string;
@@ -270,6 +288,7 @@ export interface ConflictDetectedMessage {
  * Conflict resolved message
  */
 
+}
 export interface ConflictResolvedMessage {
     type: 'CONFLICT_RESOLVED';
     conflictId: string;
@@ -281,6 +300,7 @@ export interface ConflictResolvedMessage {
  * Delta synchronization message
  */
 
+}
 export interface DeltaSyncMessage {
     type: 'DELTA_SYNC';
     documentId: string;
@@ -293,6 +313,7 @@ export interface DeltaSyncMessage {
  * State verification message
  */
 
+}
 export interface StateVerificationMessage {
     type: 'STATE_VERIFICATION';
     documentId: string;
@@ -307,6 +328,7 @@ export interface StateVerificationMessage {
  * Operation acknowledgment message
  */
 
+}
 export interface OperationAckMessage {
     type: 'OPERATION_ACK';
     operationId: string;
@@ -325,6 +347,7 @@ export declare const VersionVectorSchema: z.ZodRecord<z.ZodString, z.ZodNumber>;
 export declare const PositionSchema: z.ZodObject<{
     x: z.ZodNumber;
     y: z.ZodNumber;
+}
 }, "strip", z.ZodTypeAny, {
     x: number;
     y: number;

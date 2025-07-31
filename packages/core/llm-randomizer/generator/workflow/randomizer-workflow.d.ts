@@ -3,12 +3,14 @@ import { UniversalAgentRequest } from '../../agents';
 import { ParserResult } from '../../parser';
 import { Graph } from '../../../graphSchema';
 
+}
 export interface WorkflowOptions {
     onProgress?: (message: string, progress?: number) => void;
     validateIntermediateSteps?: boolean;
     includeDebugInfo?: boolean;
     timeoutMs?: number;
 
+}
 export interface WorkflowResult {
     success: boolean;
     graph?: Graph;
@@ -23,6 +25,7 @@ export interface WorkflowResult {
         parsingTime: number;
         serializationTime: number;
         totalTime: number;
+}
     };
     debugInfo?: {
         originalRequest: RandomizerParameters;
@@ -32,12 +35,14 @@ export interface WorkflowResult {
         validationResult: any;
     };
 
+}
 export interface WorkflowError {
     stage: 'preparation' | 'llm' | 'parsing' | 'validation' | 'serialization';
     type: string;
     message: string;
     details?: any;
 
+}
 export interface WorkflowWarning {
     stage: string;
     message: string;
@@ -85,6 +90,7 @@ export declare class RandomizerWorkflow {
         isValid: boolean;
         errors: string[];
         warnings: string[];
+}
     };
 
 //# sourceMappingURL=randomizer-workflow.d.ts.map

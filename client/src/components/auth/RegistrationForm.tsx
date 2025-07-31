@@ -12,6 +12,7 @@ import { OAuthProviderButtons } from './OAuthProviderButtons';
 
 // Registration form schema - commented out as only used for type inference
 // 
+}
 type RegistrationFormData = {
   email: string;,
   password: string;
@@ -22,12 +23,14 @@ type RegistrationFormData = {
   acceptTerms: boolean;
   marketingConsent?: boolean;
 };
+}
 interface RegistrationFormProps {
   invitationToken?: string;
   onSuccess?: (user: unknown) => void;
   onCancel?: () => void;
   className?: string;
 
+}
 export const [errors, setErrors] = useState<Record<string, string>>({});
   const [showPassword, setShowPassword] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);

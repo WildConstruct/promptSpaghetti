@@ -9,6 +9,7 @@ import { EnhancedPreviewResult } from '../components/PreviewModal/EnhancedPrevie
 import { useResultManagementStore } from '../stores/resultManagementStore';
 import { ErrorFactory } from '../errors/ErrorFactory';
 
+}
 export interface EnhancedPreviewConfig {
   maxResults?: number;
   enableProfessionalMetadata?: boolean;
@@ -17,9 +18,12 @@ export interface EnhancedPreviewConfig {
   seedStrategy?: 'random' | 'sequential' | 'custom';
   customSeeds?: number;
 }
+}
+}
 export interface VarianceAnalysis {
   // Content analysis
   wordCountVariance: number;
+}
   lengthDistribution: { min: number; max: number; avg: number; std: number };
   // Similarity metrics
   averageSimilarity: number;
@@ -33,6 +37,7 @@ export interface VarianceAnalysis {
   creativityScore: number; // 0-100 scale,
   professionalSuitability: number; // 0-100 scale
   genreConsistency: number; // 0-100 scale
+}
 }
 export interface PreviewPerformanceStats {
   totalExecutionTime: number;
@@ -49,6 +54,7 @@ export interface PreviewPerformanceStats {
   selectedResultIds: Set<string>;
   performanceStats: PreviewPerformanceStats | null;
   varianceAnalysis: VarianceAnalysis | null;
+}
 }
 export const useEnhancedPreviewResultManagement = () => {
   const abortRef = useRef<AbortController | null>(null);

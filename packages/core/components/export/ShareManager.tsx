@@ -18,6 +18,7 @@ import {
   FiAlertCircle,
   FiCheck
 } from 'react-icons/fi';
+}
 interface ShareManagerProps {
   projectId: string;
   className?: string;
@@ -29,6 +30,7 @@ interface ShareManagerProps {
   export const ShareManager: React.FC<ShareManagerProps> = ({,)
   projectId,
   className = ''
+}
 }) => {
   const [shares, setShares] = useState<ExportShare>([]);
   const [stats, setStats] = useState<ShareStats | null>(null);

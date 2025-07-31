@@ -18,6 +18,7 @@ import {
 } from '../../types/UTDG';
 import { Node } from '../../graphSchema';
 import './ConstraintValidationPanel.css';
+}
 interface ConstraintValidationPanelProps {
   nodes: Node;
   utdgNodes?: UTDGNode;
@@ -34,6 +35,7 @@ interface ConstraintValidationPanelProps {
   onToggleVisibility,
   onNodeHighlight,
   onConstraintOverride
+}
 }) => {
   const [validator] = useState(() => new ConstraintValidator());
   const [validationResult, setValidationResult] = useState<ConstraintValidationResult | null>(null);
@@ -245,6 +247,7 @@ interface ConstraintValidationPanelProps {
     </div>
   );
 };
+}
 interface ConstraintItemProps {
   type: 'violation' | 'warning' | 'suggestion';
   constraint: ConstraintViolation | ConstraintWarning | ConstraintSuggestion;
@@ -255,6 +258,7 @@ interface ConstraintItemProps {
   constraint,
   onNodeClick,
   onOverride
+}
 }) => {
   const getIcon = () => {
     switch (type) {

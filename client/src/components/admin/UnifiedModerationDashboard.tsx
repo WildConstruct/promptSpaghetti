@@ -16,6 +16,7 @@ import {
   BulkModerationAction,
   DashboardMetrics
 } from '../../../../packages/core/services/UnifiedModerationDashboard';
+}
 interface UnifiedModerationDashboardProps {
   moderatorId: string;,
   permissions: string;
@@ -25,6 +26,7 @@ interface UnifiedModerationDashboardProps {
   permissions,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigate
+}
 }) => {
   // State management
   const [dashboard, setDashboard] = useState<UnifiedModerationDashboard | null>(null);

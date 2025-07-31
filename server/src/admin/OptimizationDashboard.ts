@@ -16,6 +16,7 @@ import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 export interface OptimizationDashboardAPI {
   // Dashboard Data
   getDashboard(): Promise<any>;
@@ -38,12 +39,15 @@ export interface OptimizationDashboardAPI {
   cancelOptimization(executionId: string, userId: string): Promise<any>;
 }
 }
+}
 
+}
 }
 export interface RecommendationFilters {
   category?: string[];
   priority?: string[];
   status?: string[];
+}
 }
   dateRange?: { start: Date; end: Date };
   search?: string;
@@ -51,6 +55,7 @@ export interface RecommendationFilters {
   offset?: number;
 }
 
+}
 }
 export interface PolicyFilters {
   category?: string[];
@@ -61,7 +66,9 @@ export interface PolicyFilters {
   offset?: number;
 }
 }
+}
 
+}
 }
 export interface OptimizationRequest {
   type: 'recommendation' | 'policy' | 'manual';
@@ -75,10 +82,12 @@ export interface OptimizationRequest {
       slack?: boolean;
       webhook?: string;
 }
+}
     };
   };
 }
 
+}
 }
 export interface OptimizationResponse {
   success: boolean;
@@ -88,6 +97,7 @@ export interface OptimizationResponse {
   risksIdentified?: string[];
   approvalRequired?: boolean;
   nextSteps?: string[];
+}
 }
 }
 

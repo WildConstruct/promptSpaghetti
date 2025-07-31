@@ -37,6 +37,7 @@ import { AuditService } from '../../auth/services/AuditService';
 
 // Request/Response DTOs
 }
+}
 export interface CreatePromotionRequest {
   title: string;
   description?: string;
@@ -54,7 +55,9 @@ export interface CreatePromotionRequest {
   ab_test_config?: any;
 }
 }
+}
 
+}
 }
 export interface UpdatePromotionRequest {
   title?: string;
@@ -65,7 +68,9 @@ export interface UpdatePromotionRequest {
   end_date?: string;
 }
 }
+}
 
+}
 }
 export interface PromotionPreviewRequest {
   content_ids: string[];
@@ -74,7 +79,9 @@ export interface PromotionPreviewRequest {
   ab_test_config?: any;
 }
 }
+}
 
+}
 }
 export interface PromotionPreviewResponse {
   schedule: {
@@ -85,6 +92,7 @@ export interface PromotionPreviewResponse {
     start_date: Date;
     end_date: Date;
     status: string;
+}
 }
   };
   content: Array<{
@@ -108,6 +116,7 @@ export interface PromotionPreviewResponse {
 }
 
 }
+}
 export interface PromotionDashboard {
   active_promotions: number;
   total_impressions: number;
@@ -117,6 +126,7 @@ export interface PromotionDashboard {
   top_performing_slots: any[];
   recent_promotions: any[];
   performance_trends: any[];
+}
 }
 }
 

@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 
 // Types
+}
 interface UserProfile {
   id: string;,
   name: string;
@@ -44,6 +45,7 @@ interface UserProfile {
   mfaEnabled: boolean;,
   sessionCount: number;
   passwordLastChanged?: string;
+}
 interface ActivityLog {
   id: string;,
   type: 'login' | 'logout' | 'permission_change' | 'profile_update' | 'password_reset';
@@ -52,6 +54,7 @@ interface ActivityLog {
   ipAddress?: string;
   userAgent?: string;
   location?: string;
+}
 interface TeamMembership {
   id: string;,
   name: string;
@@ -60,6 +63,7 @@ interface TeamMembership {
   memberCount: number;,
   department: string;
 const UserProfileDetail: React.FC = () => {
+}
   const { userId } = useParams<{ userId: string }>();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'profile' | 'permissions' | 'activity' | 'team' | 'settings' | 'security'>('profile');

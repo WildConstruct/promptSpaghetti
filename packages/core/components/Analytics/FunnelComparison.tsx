@@ -29,6 +29,7 @@ import {
 
 // Comparison interfaces
 
+}
 export interface FunnelComparisonProps {
   analyticsInfrastructure: ConversionAnalyticsInfrastructure;
   primaryFunnel: ConversionFunnelDefinition;
@@ -36,6 +37,7 @@ export interface FunnelComparisonProps {
   comparisonConfig: ComparisonConfiguration;
   onInsightGenerated?: (insights: ComparisonInsight) => void;
   onExportRequest?: (data: ComparisonExportData) => void;
+}
 }
 export type ComparisonMode = 
   | 'time_period'
@@ -46,15 +48,18 @@ export type ComparisonMode =
   | 'geographic'
   | 'device_type';
 
+}
 export interface ComparisonConfiguration {
   mode: ComparisonMode;
   baseline: ComparisonTarget;
   comparison: ComparisonTarget;
+}
   timeRange: { start: number; end: number };
   significanceLevel: number; // 0.05 for 95% confidence,
   minimumSampleSize: number;
   includeStatisticalTests: boolean;
   autoGenerateInsights: boolean;
+}
 }
 export interface ComparisonTarget {
   id: string;
@@ -64,12 +69,16 @@ export interface ComparisonTarget {
   funnelDefinition?: ConversionFunnelDefinition;
   metadata?: Record<string, any>;
 }
+}
+}
 export interface ComparisonFilter {
   type: 'segment' | 'cohort' | 'timeRange' | 'geography' | 'device' | 'custom';
   field: string;
   operator: string;
   value: Error;
   description?: string;
+}
+}
 }
 export interface ComparisonResult {
   baseline: FunnelPerformanceData;
@@ -78,6 +87,8 @@ export interface ComparisonResult {
   statisticalTests: StatisticalTestResult;
   insights: ComparisonInsight;
   metadata: ComparisonMetadata;
+}
+}
 }
 export interface FunnelPerformanceData {
   targetId: string;
@@ -88,6 +99,8 @@ export interface FunnelPerformanceData {
   totalValue: number;
   stepPerformance: StepPerformanceData;
   additionalMetrics: Record<string, number>;
+}
+}
 }
 export interface StepPerformanceData {
   stepId: string;
@@ -101,11 +114,14 @@ export interface StepPerformanceData {
   averageTimeSpent: number;
   value: number;
 }
+}
+}
 export interface PerformanceDelta {
   overallConversionRate: {
   absolute: number;
   relative: number;
   direction: 'improvement' | 'decline' | 'no_change'
+}
   };
   totalConversions: {
   absolute: number;
@@ -124,18 +140,21 @@ export interface PerformanceDelta {
   };
   stepDeltas: StepDelta;
 }
+}
 export interface StepDelta {
   stepId: string;
   conversionRate: {
   absolute: number;
   relative: number;
   direction: 'improvement' | 'decline' | 'no_change'
+}
   };
   dropOffRate: {
   absolute: number;
   relative: number;
   direction: 'improvement' | 'decline' | 'no_change'
   };
+}
 }
 export interface StatisticalTestResult {
   testType: 'chi_square' | 'z_test' | 'fishers_exact' | 't_test';
@@ -148,11 +167,15 @@ export interface StatisticalTestResult {
   effectSize: number;
   powerAnalysis?: PowerAnalysisResult;
 }
+}
+}
 export interface PowerAnalysisResult {
   currentPower: number;
   requiredSampleSize: number;
   detectedEffectSize: number;
   recommendations: string;
+}
+}
 }
 export interface ComparisonInsight {
   type: 'significant_improvement' | 'significant_decline' | 'no_significant_difference' | 'sample_size_warning' | 'recommendation';
@@ -165,12 +188,16 @@ export interface ComparisonInsight {
   recommendations?: string;
   priority: number;
 }
+}
+}
 export interface InsightEvidence {
   statisticalTest?: StatisticalTestResult;
+}
   sampleSizes: { baseline: number; comparison: number };
   effectSize: number;
   confidenceLevel: number;
   additionalContext?: Record<string, any>;
+}
 }
 export interface ComparisonMetadata {
   comparisonId: string;
@@ -182,24 +209,30 @@ export interface ComparisonMetadata {
   dataCompleteness: number;
   outlierCount: number;
   confidenceLevel: number;
+}
 };
   executionTime: number;
   cacheHit: boolean;
+}
 }
 export interface ComparisonExportData {
   comparison: ComparisonResult;
   rawData: {
   baselineEvents: FlexibleConversionEvent;
   comparisonEvents: FlexibleConversionEvent;
+}
 };
   visualizations: ComparisonVisualization;
   reportSummary: string;
+}
 }
 export interface ComparisonVisualization {
   type: 'funnel_chart' | 'delta_chart' | 'significance_heatmap' | 'timeline_chart';
   title: string;
   data: Record<string, unknown>;
   configuration: unknown;
+}
+}
 }
 export interface ABTestIntegration {
   experimentId: string;
@@ -214,6 +247,8 @@ export interface ABTestIntegration {
   hypothesis: string;
   successCriteria: ABTestSuccessCriteria;
 }
+}
+}
 export interface ABTestVariant {
   id: string;
   name: string;
@@ -221,6 +256,8 @@ export interface ABTestVariant {
   funnelDefinition: ConversionFunnelDefinition;
   trafficPercentage: number;
   isControl: boolean;
+}
+}
 }
 export interface ABTestSuccessCriteria {
   minimumDetectableEffect: number;
@@ -231,6 +268,7 @@ export interface ABTestSuccessCriteria {
   /**
   * Main Funnel Comparison Component
   */
+}
 }
 export const FunnelComparison: React.FC<FunnelComparisonProps> = ({)
   analyticsInfrastructure,
@@ -340,6 +378,7 @@ export const FunnelComparison: React.FC<FunnelComparisonProps> = ({)
 /**
  * Comparison Header Component
  */
+}
 interface ComparisonHeaderProps {
   configuration: ComparisonConfiguration;
   result: ComparisonResult;
@@ -352,6 +391,7 @@ interface ComparisonHeaderProps {
   viewMode,
   onViewModeChange,
   onExport
+}
 }) => {
   return;
     <div className="comparison-header">
@@ -389,6 +429,7 @@ interface ComparisonHeaderProps {
 /**
  * Comparison Summary Component
  */
+}
 interface ComparisonSummaryProps {
   baseline: FunnelPerformanceData;
   comparison: FunnelPerformanceData;
@@ -399,6 +440,7 @@ interface ComparisonSummaryProps {
   comparison,
   delta,
   mode
+}
 }) => {
   return;
     <div className="comparison-summary">
@@ -438,6 +480,7 @@ interface ComparisonSummaryProps {
 /**
  * Metric Comparison Card Component
  */
+}
 interface MetricComparisonCardProps {
   title: string;
   baseline: number;
@@ -446,6 +489,7 @@ interface MetricComparisonCardProps {
   absolute: number;
   relative: number;
   direction: 'improvement' | 'decline' | 'no_change'
+}
   };
   format: 'number' | 'percentage' | 'duration' | 'currency';
 const MetricComparisonCard: React.FC<MetricComparisonCardProps> = ({)
@@ -497,6 +541,7 @@ const MetricComparisonCard: React.FC<MetricComparisonCardProps> = ({)
 /**
  * Insights Panel Component
  */
+}
 interface InsightsPanelProps {
   insights: ComparisonInsight;
   selectedInsight: ComparisonInsight | null;
@@ -505,6 +550,7 @@ interface InsightsPanelProps {
   insights,
   selectedInsight,
   onInsightSelect
+}
 }) => {
   const sortedInsights = useMemo(() => {
     return [...insights].sort((a, b) => {
@@ -534,10 +580,12 @@ interface InsightsPanelProps {
 /**
  * Insight Card Component
  */
+}
 interface InsightCardProps {
   insight: ComparisonInsight;
   isSelected: boolean;
   onClick: () => void;
+}
 const InsightCard: React.FC<InsightCardProps> = ({ insight, isSelected, onClick }) => {
   return;
     <div 
@@ -574,6 +622,7 @@ const InsightCard: React.FC<InsightCardProps> = ({ insight, isSelected, onClick 
 /**
  * Overview Comparison Component
  */
+}
 interface OverviewComparisonProps {
   baseline: FunnelPerformanceData;
   comparison: FunnelPerformanceData;
@@ -582,6 +631,7 @@ interface OverviewComparisonProps {
   baseline,
   comparison,
   delta
+}
 }) => {
   return;
     <div className="overview-comparison">
@@ -606,8 +656,10 @@ interface OverviewComparisonProps {
 /**
  * Simple Funnel Chart Component
  */
+}
 interface SimpleFunnelChartProps {
   steps: StepPerformanceData;
+}
 const SimpleFunnelChart: React.FC<SimpleFunnelChartProps> = ({ steps }) => {
   const maxEntries = Math.max(...steps.map(s => s.entries));
   return;
@@ -637,6 +689,7 @@ const SimpleFunnelChart: React.FC<SimpleFunnelChartProps> = ({ steps }) => {
 /**
  * Step-by-Step Comparison Component
  */
+}
 interface StepByStepComparisonProps {
   baselineSteps: StepPerformanceData;
   comparisonSteps: StepPerformanceData;
@@ -645,6 +698,7 @@ interface StepByStepComparisonProps {
   baselineSteps,
   comparisonSteps,
   stepDeltas
+}
 }) => {
   return;
     <div className="step-by-step-comparison">
@@ -711,9 +765,11 @@ const ComparisonLoadingState: React.FC = () => ()
     <p>Analyzing funnel performance...</p>
   </div>
 );
+}
 interface ComparisonErrorStateProps {
   error: string;
   onRetry: () => void;
+}
 const ComparisonErrorState: React.FC<ComparisonErrorStateProps> = ({ error, onRetry }) => ()
   <div className="comparison-error">
     <div className="error-message">
@@ -806,9 +862,9 @@ async function performFunnelComparison(analyticsInfrastructure: ConversionAnalyt
   executionTime: 1500,
       cacheHit: false;
   };
-function calculatePerformanceDelta(()
+function calculatePerformanceDelta(((
     baseline: FunnelPerformanceData,
-    comparison: FunnelPerformanceData,
+    comparison: FunnelPerformanceData
   ): PerformanceDelta {
   const calculateDelta = (baseValue: number, compValue: number) => {
     const absolute = compValue - baseValue;

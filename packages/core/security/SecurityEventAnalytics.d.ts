@@ -33,6 +33,7 @@ export declare enum ThreatCategory {
     SYSTEM_COMPROMISE = "system_compromise",
     COMPLIANCE_VIOLATION = "compliance_violation"
 
+}
 export interface SecurityPattern {
     id: string;
     name: string;
@@ -47,12 +48,14 @@ export interface SecurityPattern {
     relatedEvents: string[];
     mitigationStrategies: string[];
 
+}
 export interface BehavioralBaseline {
     userId: string;
     normalPatterns: {
         loginTimes: {
             hour: number;
             frequency: number;
+}
         }[];
         ipAddresses: {
             ip: string;
@@ -74,6 +77,7 @@ export interface BehavioralBaseline {
     };
     lastUpdated: Date;
 
+}
 export interface SecurityInsight {
     id: string;
     type: 'trend' | 'anomaly' | 'prediction' | 'recommendation';
@@ -86,6 +90,7 @@ export interface SecurityInsight {
     timeframe: {
         start: Date;
         end: Date;
+}
     };
     evidence: {
         eventIds: string[];
@@ -99,16 +104,18 @@ export interface SecurityInsight {
     };
     generatedAt: Date;
 
+}
 export interface SecurityMetricsSummary {
     period: {
         start: Date;
         end: Date;
+}
     };
     overallRisk: {
         level: RiskLevel;
         score: number;
         trend: 'increasing' | 'decreasing' | 'stable';
-        contributors: Array<{,
+        contributors: Array<{
             factor: string;
             impact: number;
         }>;
@@ -126,18 +133,18 @@ export interface SecurityMetricsSummary {
     threatLandscape: {
         activeThreats: number;
         newPatterns: number;
-        topCategories: Array<{,
+        topCategories: Array<{
             category: ThreatCategory;
             count: number;
         }>;
-        geographicHotspots: Array<{,
+        geographicHotspots: Array<{
             location: string;
             riskScore: number;
         }>;
     };
     userBehavior: {
         anomalousUsers: number;
-        highRiskUsers: Array<{,
+        highRiskUsers: Array<{
             userId: string;
             riskScore: number;
         }>;
@@ -150,6 +157,7 @@ export interface SecurityMetricsSummary {
         incidentResponseTime: number;
     };
 
+}
 export interface AlertConfiguration {
     id: string;
     name: string;
@@ -160,6 +168,7 @@ export interface AlertConfiguration {
         timeWindow?: number;
         userScope?: string[];
         riskLevel?: RiskLevel;
+}
     };
     actions: {
         notify: string[];
@@ -199,7 +208,7 @@ export declare class SecurityEventAnalytics extends EventEmitter {
     getUserBehaviorAnalysis(userId: string): {
         baseline: BehavioralBaseline | null;
         currentRisk: number;
-        recentAnomalies: Array<{,
+        recentAnomalies: Array<{
             type: string;
             severity: RiskLevel;
             timestamp: Date;
@@ -215,18 +224,18 @@ export declare class SecurityEventAnalytics extends EventEmitter {
     }): {
         executiveSummary: string;
         keyMetrics: Record<string, string | number>;
-        topThreats: Array<{,
+        topThreats: Array<{
             threat: string;
             impact: string;
             status: string;
         }>;
-        recommendations: Array<{,
+        recommendations: Array<{
             priority: string;
             action: string;
             timeline: string;
         }>;
         complianceStatus: Record<ComplianceFramework, string>;
-        riskTrend: Array<{,
+        riskTrend: Array<{
             date: Date;
             riskScore: number;
         }>;

@@ -1,5 +1,6 @@
 import React from 'react';
 
+}
 interface WorkflowTransitionControlsProps {
     resourceId: string;
     currentStateId: string;
@@ -10,5 +11,6 @@ interface WorkflowTransitionControlsProps {
     disabled?: boolean;
 
 export declare const WorkflowTransitionControls: React.FC<WorkflowTransitionControlsProps>;
+}
 export {};
 //# sourceMappingURL=WorkflowTransitionControls.d.ts.map

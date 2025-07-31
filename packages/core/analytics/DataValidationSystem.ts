@@ -55,6 +55,7 @@ export type ValidationRule = z.infer<typeof ValidationRuleSchema>;
 
 // Validation Result
 
+}
 export interface ValidationResult {
   ruleId: string;
   ruleName: string;
@@ -73,10 +74,12 @@ export interface ValidationResult {
   inconsistentEventCount?: number;
   orphanedEventCount?: number;
   [key: string]: unknown;
+}
 };
   timestamp: number;
 
 // Consistency Check Result
+}
 }
 export interface ConsistencyCheckResult {
   checkId: string;
@@ -90,6 +93,7 @@ export interface ConsistencyCheckResult {
   invalidRecords: number;
   warningRecords: number;
   errorRate: number;
+}
 };
   violations: ValidationResult;
   recommendations: string;
@@ -97,9 +101,11 @@ export interface ConsistencyCheckResult {
 
 // Data Quality Metrics
 }
+}
 export interface DataQualityMetrics {
   completeness: {
   score: number;
+}
     missingFields: { [field: string]: number };
     requiredFieldsCoverage: number;
   };
@@ -306,6 +312,7 @@ export class DataValidationSystem {
    * Validate single event
    */
   async validateEvent(event: UnifiedAnalyticsEvent): Promise<ValidationResult> {
+
     const results: ValidationResult = [];
     // Get applicable validation rules
     const applicableRules = this.getApplicableRules(event);
@@ -319,6 +326,7 @@ export class DataValidationSystem {
    * Validate batch of events
    */
   async validateEventBatch(events: UnifiedAnalyticsEvent): Promise<ValidationResult> {
+
     const allResults: ValidationResult = [];
     // Validate individual events
     for (const event of events) {
@@ -334,6 +342,7 @@ export class DataValidationSystem {
   async performConsistencyCheck(filter?: EventFilter)
     timeRange?: { start: number; end: number }
   ): Promise<ConsistencyCheckResult> {
+
     const checkId = `consistency_check_${Date.now()}`;}
     const startTime = Date.now();
     try {
@@ -393,6 +402,7 @@ export class DataValidationSystem {
   async calculateDataQualityMetrics(filter?: EventFilter)
     timeRange?: { start: number; end: number }
   ): Promise<DataQualityMetrics> {
+
   const events = await this.eventRepository.findMany({)
   filter: {
   ...filter,
@@ -461,10 +471,11 @@ export class DataValidationSystem {
   /**
    * Execute validation rule on event
    */
-  private async executeValidationRule(()
+  private async executeValidationRule(((
     event: UnifiedAnalyticsEvent,
-    rule: ValidationRule,
+    rule: ValidationRule
   ): Promise<ValidationResult> {
+
   const results: ValidationResult = [];
   // Validate individual field rules
   for (const fieldRule of rule.validation.rules) {
@@ -611,6 +622,7 @@ export class DataValidationSystem {
    * Perform cross-event validation
    */
   private async performCrossEventValidation(events: UnifiedAnalyticsEvent): Promise<ValidationResult> {
+
     const results: ValidationResult = [];
     // Check for duplicate events
     const duplicateCheck = this.checkForDuplicates(events);
@@ -683,6 +695,7 @@ export class DataValidationSystem {
    * Check referential integrity
    */
   private async checkReferentialIntegrity(events: UnifiedAnalyticsEvent): Promise<ValidationResult> {
+
     const results: ValidationResult = [];
     const userIds = new Set<string>();
     const sessionIds = new Set<string>();
@@ -966,9 +979,9 @@ export class DataValidationSystem {
   /**
    * Generate recommendations based on violations
    */
-  private generateRecommendations(()
+  private generateRecommendations(((
     violations: ValidationResult,
-    events: UnifiedAnalyticsEvent,
+    events: UnifiedAnalyticsEvent
   ): string {
     const recommendations: string = [];
     const violationsByRule = new Map<string, ValidationResult>();

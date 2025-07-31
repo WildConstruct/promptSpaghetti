@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
 
+}
 export interface DataSource {
     id: string;
     name: string;
@@ -10,6 +11,7 @@ export interface DataSource {
         type: 'none' | 'api_key' | 'oauth' | 'basic' | 'bearer';
         credentials: Record<string, string>;
         headers?: Record<string, string>;
+}
     };
     caching: {
         enabled: boolean;
@@ -37,6 +39,7 @@ export interface DataSource {
         version?: string;
     };
 
+}
 export interface DataTransform {
     id: string;
     name: string;
@@ -44,6 +47,7 @@ export interface DataTransform {
     config: Record<string, any>;
     enabled: boolean;
 
+}
 export interface HistoricalQuery {
     era: string | string[];
     region?: string | string[];
@@ -56,6 +60,7 @@ export interface HistoricalQuery {
     sortBy?: string;
     sortOrder?: 'asc' | 'desc';
 
+}
 export interface QueryResult<T = any> {
     success: boolean;
     data: T[];
@@ -67,6 +72,7 @@ export interface QueryResult<T = any> {
         source: string;
         cached: boolean;
         executionTime: number;
+}
     };
     error?: string;
     warnings?: string[];

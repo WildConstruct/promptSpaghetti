@@ -1,5 +1,6 @@
 import React from 'react';
 
+}
 interface Organization {
     id: string;
     name: string;
@@ -15,6 +16,7 @@ interface Organization {
     updatedAt: Date;
 
 
+}
 interface OrganizationManagerProps {
     currentUser?: {
         id: string;
@@ -22,6 +24,7 @@ interface OrganizationManagerProps {
         email: string;
         role: string;
 
+}
     };
     onOrganizationChange?: (org: Organization) => void;
     onInvitationSent?: (invitation: {)

@@ -6,6 +6,7 @@
  */
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
 
+}
 export interface LocalModelConfig {
     endpoint: string;
     modelName: string;
@@ -16,6 +17,7 @@ export interface LocalModelConfig {
     authToken?: string;
 
 
+}
 export interface LocalRequestOptions {
     temperature?: number;
     max_tokens?: number;
@@ -29,11 +31,13 @@ export interface LocalRequestOptions {
     system_prompt?: string;
 
 
+}
 export interface OllamaMessage {
     role: 'system' | 'user' | 'assistant';
     content: string;
 
 
+}
 export interface LocalModelResponse {
     model: string;
     created_at: string;
@@ -41,6 +45,7 @@ export interface LocalModelResponse {
         role: string;
         content: string;
 
+}
     };
     response?: string;
     done: boolean;

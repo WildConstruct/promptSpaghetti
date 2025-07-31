@@ -17,6 +17,7 @@ import {
   ModelUnavailableError
 } from '../BaseAIModel';
 
+}
 export interface HTTPConfig {
   baseURL: string;
   apiKey?: string;
@@ -26,6 +27,8 @@ export interface HTTPConfig {
   authType?: 'bearer' | 'api-key' | 'custom';
   healthEndpoint?: string;
 }
+}
+}
 export interface HTTPRequestOptions {
   endpoint?: string;
   method?: 'POST' | 'GET' | 'PUT' | 'PATCH';
@@ -33,6 +36,8 @@ export interface HTTPRequestOptions {
   timeout?: number;
   retries?: number;
   parameters?: Record<string, unknown>;
+}
+}
 }
 export interface HTTPRequestMapping {
   inputPath: string; // JSONPath for where to place input in request,
@@ -42,6 +47,8 @@ export interface HTTPRequestMapping {
   errorPath?: string; // JSONPath for error information,
   statusPath?: string; // JSONPath for status information,
 }
+}
+}
 export interface GenericHTTPResponse {
   status: number;
   data: unknown;
@@ -50,6 +57,7 @@ export interface GenericHTTPResponse {
   input_tokens?: number;
   output_tokens?: number;
   total_tokens?: number;
+}
 };
 }
 export class GenericHTTPAdapter extends BaseAIModel {
@@ -94,6 +102,7 @@ export class GenericHTTPAdapter extends BaseAIModel {
     this.requestMapping = requestMapping;
     this.defaultEndpoint = defaultEndpoint;
   async initialize(): Promise<void> {
+
     try {
       this._status = AIModelStatus.INITIALIZING;
       // Validate configuration
@@ -146,6 +155,7 @@ export class GenericHTTPAdapter extends BaseAIModel {
     this.config = { ...this.config, ...config };
   // Private helper methods
   private async _testConnection(): Promise<void> {
+
     try {
       const url = `${this.config.baseURL}${this.config.healthEndpoint}`;}
       const response = await fetch(url, {)
@@ -161,6 +171,7 @@ export class GenericHTTPAdapter extends BaseAIModel {
     payload: any,
     options?: HTTPRequestOptions
   ): Promise<GenericHTTPResponse> {
+
     const url = `${this.config.baseURL}${endpoint}`;}
     const method = options?.method || 'POST';
     const fetchOptions: RequestInit = {
@@ -254,6 +265,7 @@ export class GenericHTTPAdapter extends BaseAIModel {
       current = current[key];
     return current;
   protected async _performHealthCheck(): Promise<void> {
+
     if (this.config.healthEndpoint) {
       await this._testConnection();
 

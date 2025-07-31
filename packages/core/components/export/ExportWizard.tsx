@@ -30,17 +30,19 @@ import {
   FiDownload,
   FiInfo
 } from 'react-icons/fi';
+}
 interface ExportWizardProps {
   projectId: string;
   template?: ExportTemplate | null;
   onComplete: (exportData: CreateExportJob) => void;
   onCancel: () => void;
   type WizardStep = 'format' | 'options' | 'filters' | 'review';
-  const EXPORT_FORMATS: Array<{,
+  const EXPORT_FORMATS: Array<{
   value: ExportFormat;
   label: string;
   description: string;
   icon: string;
+}
 }> = [
   { value: 'vfx', label: 'VFX Pipeline', description: 'Wild Construct VFX export for film production', icon: '🎬' },
   { value: 'json', label: 'JSON', description: 'JavaScript Object Notation - structured data', icon: '{}' },
@@ -52,7 +54,7 @@ interface ExportWizardProps {
   { value: 'html', label: 'HTML', description: 'Web page format', icon: '🌐' },
   { value: 'zip', label: 'ZIP', description: 'Compressed archive', icon: '📦' }
 ];
-const EXPORT_TYPES: Array<{,
+const EXPORT_TYPES: Array<{
   value: ExportType;
   label: string;
   description: string;

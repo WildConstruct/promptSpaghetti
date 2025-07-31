@@ -5,6 +5,7 @@
 import React from 'react';
 import { ProjectTemplate, ProjectTemplateManager } from '../../templates/ProjectTemplateManager';
 
+}
 interface TemplateGalleryProps {
     templateManager: ProjectTemplateManager;
     onTemplateSelect: (template: ProjectTemplate, customizations: Record<string, any>) => void;
@@ -12,5 +13,6 @@ interface TemplateGalleryProps {
     className?: string;
 
 export declare const TemplateGallery: React.FC<TemplateGalleryProps>;
+}
 export {};
 //# sourceMappingURL=TemplateGallery.d.ts.map

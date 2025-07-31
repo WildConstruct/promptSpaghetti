@@ -3,8 +3,10 @@ import * as Y from 'yjs';
 import { WorkspaceId, ProjectId, UserId, ResourceId } from '../types/workspace';
 import { WorkspaceDAO } from '../dao/workspace-dao';
 
+}
 export interface YGraph extends Y.Map<unknown> {
 
+}
 export interface WorkspaceSyncState {
     workspaceId: WorkspaceId;
     projectId?: ProjectId;
@@ -15,6 +17,7 @@ export interface WorkspaceSyncState {
     isConnected: boolean;
 
 
+}
 export interface SyncEvent {
     type: 'state_change' | 'participant_join' | 'participant_leave' | 'conflict_detected' | 'sync_complete';
     workspaceId: WorkspaceId;
@@ -23,11 +26,13 @@ export interface SyncEvent {
     timestamp: number;
 
 
+}
 export interface ConflictResolution {
     strategy: 'manual' | 'automatic' | 'last_writer_wins';
     resolver?: (conflicts: Conflict[]) => Resolution[];
 
 
+}
 export interface Conflict {
     id: string;
     type: 'content' | 'metadata' | 'structure';
@@ -36,6 +41,7 @@ export interface Conflict {
     timestamp: number;
 
 
+}
 export interface Change {
     userId: UserId;
     operation: Y.YEvent;
@@ -43,6 +49,7 @@ export interface Change {
     clientId: number;
 
 
+}
 export interface Resolution {
     conflictId: string;
     selectedChange: Change;
@@ -92,3 +99,4 @@ export declare class WorkspaceStateSync extends EventEmitter {
     shutdown(): Promise<void>;
 
 //# sourceMappingURL=workspace-sync.d.ts.map
+}

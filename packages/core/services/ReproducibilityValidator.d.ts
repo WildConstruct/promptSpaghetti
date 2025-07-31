@@ -1,6 +1,7 @@
 import { VFXExportFormat } from '../types/VFXExport';
 import { Node, Edge } from 'reactflow';
 
+}
 export interface ReproducibilityValidationOptions {
     strictMode?: boolean;
     allowApproximate?: boolean;
@@ -8,6 +9,7 @@ export interface ReproducibilityValidationOptions {
     checkVersionCompatibility?: boolean;
     requirePerformanceData?: boolean;
 
+}
 export interface ReproducibilityValidationReport {
     isValid: boolean;
     exactReproducible: boolean;
@@ -20,6 +22,7 @@ export interface ReproducibilityValidationReport {
         seedsValid: boolean;
         versionCompatible: boolean;
         checksumValid: boolean;
+}
     };
     performance: {
         estimatedReproductionTime: number;
@@ -27,6 +30,7 @@ export interface ReproducibilityValidationReport {
         memoryRequirement: number;
     };
 
+}
 export interface ValidationError {
     code: string;
     message: string;
@@ -34,12 +38,14 @@ export interface ValidationError {
     field?: string;
     suggestion?: string;
 
+}
 export interface ValidationWarning {
     code: string;
     message: string;
     impact: 'reproducibility' | 'performance' | 'compatibility' | 'quality';
     suggestion?: string;
 
+}
 export interface ValidationSuggestion {
     code: string;
     message: string;
@@ -74,6 +80,7 @@ export declare class ReproducibilityValidator {
     testReproduction(exportData: VFXExportFormat, originalGraph: {)
         nodes: Node[];
         edges: Edge[];
+}
     }): Promise<{
         success: boolean;
         identicalResults: boolean;

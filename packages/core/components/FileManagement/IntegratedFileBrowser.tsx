@@ -3,6 +3,7 @@
  */
 import React, { useState } from 'react';
 
+}
 interface FileItem {
   id: string;
   name: string;
@@ -10,11 +11,14 @@ interface FileItem {
   lastModified: Date;
   type: 'file' | 'folder';
 }
+}
 
+}
 interface IntegratedFileBrowserProps {
   isOpen: boolean;
   onClose: () => void;
   onFileSelect?: (file: FileItem) => void;
+}
 }
 
 const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({

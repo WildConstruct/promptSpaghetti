@@ -105,11 +105,13 @@ export enum SOC2EvidenceType {
  * SOC2 Compliance Assessment Interface
  */
 }
+}
 export interface SOC2ComplianceAssessment {
   assessmentId: string;
   reportingPeriod: {
     startDate: Date;
     endDate: Date;
+}
 }
   };
   trustServiceCategory: SOC2TrustServiceCategory;
@@ -124,6 +126,7 @@ export interface SOC2ComplianceAssessment {
   assessmentDate: Date;
 }
 
+}
 }
 export interface SOC2Evidence {
   evidenceId: string;
@@ -140,7 +143,9 @@ export interface SOC2Evidence {
   testingResults?: string;
 }
 }
+}
 
+}
 }
 export interface SOC2Finding {
   findingId: string;
@@ -155,7 +160,9 @@ export interface SOC2Finding {
   status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'ACCEPTED_RISK';
 }
 }
+}
 
+}
 }
 export interface SOC2RemediationPlan {
   planId: string;
@@ -167,7 +174,9 @@ export interface SOC2RemediationPlan {
   approver: string;
 }
 }
+}
 
+}
 }
 export interface SOC2RemediationAction {
   actionId: string;
@@ -176,6 +185,7 @@ export interface SOC2RemediationAction {
   targetDate: Date;
   status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED';
   evidenceOfCompletion?: string;
+}
 }
 }
 

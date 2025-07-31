@@ -17,12 +17,15 @@ import {
   ModelUnavailableError
 } from '../BaseAIModel';
 
+}
 export interface DALLEConfig {
   apiKey: string;
   baseURL?: string;
   organization?: string;
   timeout?: number;
   maxRetries?: number;
+}
+}
 }
 export interface DALLERequestOptions {
   model?: 'dall-e-2' | 'dall-e-3';
@@ -33,6 +36,8 @@ export interface DALLERequestOptions {
   response_format?: 'url' | 'b64_json';
   user?: string;
 }
+}
+}
 export interface ImagePromptOptimization {
   originalPrompt: string;
   optimizedPrompt: string;
@@ -40,16 +45,20 @@ export interface ImagePromptOptimization {
   styleEnhancements: string;
   qualityImprovements: string;
 }
+}
+}
 export interface DALLEResponse {
   created: number;
-  data: Array<{,
+  data: Array<{
   url?: string;
   b64_json?: string;
   revised_prompt?: string;
+}
 }>;
 }
+}
 export interface ImageGenerationResult {
-  images: Array<{,
+  images: Array<{
   url?: string;
   base64?: string;
   revisedPrompt?: string;
@@ -58,6 +67,7 @@ export interface ImageGenerationResult {
   quality: string;
   style?: string;
   model: string;
+}
 };
   }>;
   originalPrompt: string;
@@ -129,6 +139,7 @@ export class DALLEAdapter extends BaseAIModel {
     this.apiEndpoint = config.baseURL || 'https://api.openai.com/v1';
     this.promptOptimizer = new PromptOptimizer(modelName);
   async initialize(): Promise<void> {
+
     try {
       this._status = AIModelStatus.INITIALIZING;
       if (!this.config.apiKey) {
@@ -141,6 +152,7 @@ export class DALLEAdapter extends BaseAIModel {
       this._status = AIModelStatus.ERROR;
       throw new ModelInitializationError(this._id, error instanceof Error ? error.message : 'Unknown error');
   async process(input: unknown, options?: DALLERequestOptions): Promise<ImageGenerationResult> {
+
     try {
       if (this._status !== AIModelStatus.READY) {
         throw new ModelUnavailableError(this._id);
@@ -195,6 +207,7 @@ export class DALLEAdapter extends BaseAIModel {
 };
   // Image-specific methods
   async generateVariations(imageUrl: string, options?: Partial<DALLERequestOptions>): Promise<ImageGenerationResult> {
+
     // Note: Variations are only available for DALL-E 2
     if (this._metadata.name === 'dall-e-3') {
       throw new Error('Image variations are not available for DALL-E 3');
@@ -219,6 +232,7 @@ export class DALLEAdapter extends BaseAIModel {
     prompt: string, 
     options?: Partial<DALLERequestOptions>
   ): Promise<ImageGenerationResult> {
+
     // Note: Image editing is only available for DALL-E 2
     if (this._metadata.name === 'dall-e-3') {
       throw new Error('Image editing is not available for DALL-E 3');
@@ -250,6 +264,7 @@ export class DALLEAdapter extends BaseAIModel {
     return latencies[modelName] || 20000;
   // Private helper methods
   private async _testConnection(): Promise<void> {
+
     try {
       const response = await fetch(`${this.apiEndpoint}/models`, {)}
   },
@@ -264,6 +279,7 @@ export class DALLEAdapter extends BaseAIModel {
     } catch (error) {
       throw new Error(`Failed to connect to OpenAI API: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   private async _makeRequest(endpoint: string, payload: unknown): Promise<DALLEResponse> {
+
     const url = `${this.apiEndpoint}${endpoint}`;}
     let lastError: Error | null = null;
     const maxRetries = this.config.maxRetries ?? 3;
@@ -347,6 +363,7 @@ export class DALLEAdapter extends BaseAIModel {
       generationTime
     };
   protected async _performHealthCheck(): Promise<void> {
+
   await this._testConnection();
   // Prompt optimization helper class
   class PromptOptimizer {

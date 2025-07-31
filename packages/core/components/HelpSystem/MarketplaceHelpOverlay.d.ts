@@ -17,6 +17,7 @@ import { HelpContent, HelpContentType } from '../ContextualHelp/ContextualHelpSy
 import { HelpContentManager } from '../ContextualHelp/HelpContentManager';
 export type MarketplaceHelpContentType = 'marketplace-discovery' | 'template-browsing' | 'purchase-flow' | 'template-preview' | 'rating-system' | 'creator-onboarding' | 'community-features' | 'profile-management' | 'monetization' | 'marketplace-navigation';
 
+}
 export interface MarketplaceHelpContent extends Omit<HelpContent, 'type'> {
     type: HelpContentType | MarketplaceHelpContentType;
     marketplaceContext: {
@@ -27,6 +28,7 @@ export interface MarketplaceHelpContent extends Omit<HelpContent, 'type'> {
         features?: string[];
     };
 
+}
 export interface MarketplaceHelpOverlayProps {
     currentPage?: 'marketplace' | 'template-details' | 'creator-dashboard' | 'community' | 'profile';
     userRole?: 'buyer' | 'creator' | 'community-member' | 'new-user';
@@ -35,6 +37,7 @@ export interface MarketplaceHelpOverlayProps {
         category: string;
         type: string;
         isPremium: boolean;
+}
     };
     cartItems?: number;
     purchaseStage?: 'browsing' | 'preview' | 'cart' | 'checkout' | 'download';

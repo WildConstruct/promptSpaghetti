@@ -7,6 +7,7 @@
 import React from 'react';
 import { TicketIntegrationConfig } from '../../services/Epic16TicketIntegrationService';
 
+}
 interface Epic16TicketIntegrationProps {
     userId: string;
     userRole: 'user' | 'agent' | 'admin';
@@ -16,3 +17,4 @@ interface Epic16TicketIntegrationProps {
 export declare const Epic16TicketIntegration: React.FC<Epic16TicketIntegrationProps>;
 export default Epic16TicketIntegration;
 //# sourceMappingURL=Epic16TicketIntegration.d.ts.map
+}

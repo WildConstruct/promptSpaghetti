@@ -13,17 +13,20 @@ import {
   TicketCategory,
   Epic16TicketIntegrationService
 } from '../../services/Epic16TicketIntegrationService';
+}
 interface TicketManagementDashboardProps {
   ticketService: Epic16TicketIntegrationService;
   userId: string;
   userRole: 'user' | 'agent' | 'admin';
   onTicketSelect?: (ticket: MarketplaceTicket) => void;
+}
 interface TicketFilters {
   status: TicketStatus;
   type: MarketplaceTicketType;
   priority: TicketPriority;
   category: TicketCategory;
   assignedTo?: string;
+}
   dateRange?: { start: Date; end: Date };
   searchQuery: string;
 
@@ -440,6 +443,7 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
 };
 
 // Ticket List Item Component
+}
 interface TicketListItemProps {
   ticket: MarketplaceTicket;
   onSelect: () => void;
@@ -462,6 +466,7 @@ interface TicketListItemProps {
   selected,
   renderStatusBadge,
   renderPriorityBadge
+}
 }) => {
   const [showActions, setShowActions] = useState(false);
   const canModify = userRole === 'admin' || (userRole === 'agent' && ticket.assignedTo === currentUserId);

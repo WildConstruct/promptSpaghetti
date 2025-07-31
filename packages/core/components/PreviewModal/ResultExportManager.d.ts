@@ -7,6 +7,7 @@
 import React from 'react';
 import { EnhancedPreviewResult } from './EnhancedPreviewModal';
 
+}
 export interface ExportFormat {
     id: string;
     name: string;
@@ -18,6 +19,7 @@ export interface ExportFormat {
     icon: string;
 
 
+}
 export interface ExportOptions {
     format: ExportFormat;
     includeMetadata?: boolean;
@@ -31,6 +33,7 @@ export interface ExportOptions {
         frameRate?: number;
         resolution?: [number, number];
 
+}
     };
     filmOptions?: {
         scriptFormat?: 'fountain' | 'final-draft' | 'writerpro';
@@ -40,6 +43,7 @@ export interface ExportOptions {
         watermark?: string;
     };
 
+}
 export interface ResultExportManagerProps {
     results: EnhancedPreviewResult[];
     selectedResultIds: string[];
@@ -49,3 +53,4 @@ export interface ResultExportManagerProps {
 
 export declare const ResultExportManager: React.FC<ResultExportManagerProps>;
 //# sourceMappingURL=ResultExportManager.d.ts.map
+}

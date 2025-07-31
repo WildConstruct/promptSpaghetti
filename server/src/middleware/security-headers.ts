@@ -4,12 +4,14 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 
 }
+}
 export interface SecurityHeadersConfig {
   contentSecurityPolicy?: {
     enabled: boolean;
     directives: Record<string, string[]>;
     reportOnly?: boolean;
     reportUri?: string;
+}
 }
   };
   frameOptions?: {
@@ -256,6 +258,7 @@ export function securityHeadersMiddleware(config?: SecurityHeadersConfig) {
 
 // Security headers audit function
 }
+}
 export interface SecurityAuditResult {
   passed: boolean;
   score: number;
@@ -266,6 +269,7 @@ export interface SecurityAuditResult {
     value?: string;
     recommendation?: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
+}
 }
   }[];
   summary: {

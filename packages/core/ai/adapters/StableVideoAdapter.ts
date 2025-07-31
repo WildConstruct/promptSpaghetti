@@ -17,6 +17,7 @@ import {
   ModelUnavailableError
 } from '../BaseAIModel';
 
+}
 export interface StableVideoConfig {
   endpoint: string; // API endpoint (local, Stability AI, or custom),
   apiType: 'stability-ai' | 'automatic1111' | 'comfyui' | 'custom';
@@ -24,6 +25,8 @@ export interface StableVideoConfig {
   timeout?: number;
   maxRetries?: number;
   defaultModel?: string;
+}
+}
 }
 export interface StableVideoRequestOptions {
   // Core parameters
@@ -54,6 +57,8 @@ export interface StableVideoRequestOptions {
   remove_watermark?: boolean;
   loop_video?: boolean;
 }
+}
+}
 export interface StableVideoGenerationResult {
   video: {
   frames: string; // Base64 encoded frames,
@@ -64,6 +69,7 @@ export interface StableVideoGenerationResult {
   resolution: {
   width: number;
   height: number;
+}
 };
     fps: number;
   frame_count: number;
@@ -86,6 +92,7 @@ export interface StableVideoGenerationResult {
   processing_time: number;
 };
 }
+}
 export interface SVDModelInfo {
   name: string;
   type: 'svd' | 'svd-xt';
@@ -93,6 +100,7 @@ export interface SVDModelInfo {
   resolution: string;
   description: string;
   memory_requirements: string;
+}
 }
 export class StableVideoAdapter extends BaseAIModel {
   private config: StableVideoConfig;
@@ -134,6 +142,7 @@ export class StableVideoAdapter extends BaseAIModel {
     this.config = config;
     this._initializeModels();
   async initialize(): Promise<void> {
+
     try {
       this._status = AIModelStatus.INITIALIZING;
       if (!this.config.endpoint) {
@@ -193,6 +202,7 @@ export class StableVideoAdapter extends BaseAIModel {
     numFrames: number = 14,
     options?: Partial<StableVideoRequestOptions>
   ): Promise<StableVideoGenerationResult> {
+
   const svdOptions: StableVideoRequestOptions = {,
   image: imageData,
   motion_bucket_id: motionIntensity,
@@ -203,6 +213,7 @@ export class StableVideoAdapter extends BaseAIModel {
   async generateVideoLoop(imageData: string)
     options?: Partial<StableVideoRequestOptions>
   ): Promise<StableVideoGenerationResult> {
+
   const loopOptions: StableVideoRequestOptions = {,
   image: imageData,
   loop_video: true,
@@ -214,6 +225,7 @@ export class StableVideoAdapter extends BaseAIModel {
   async generateHighQualityVideo(imageData: string)
     options?: Partial<StableVideoRequestOptions>
   ): Promise<StableVideoGenerationResult> {
+
   const hqOptions: StableVideoRequestOptions = {,
   image: imageData,
   model: 'svd-xt-1-1',
@@ -227,6 +239,7 @@ export class StableVideoAdapter extends BaseAIModel {
 };
     return this.process(imageData, hqOptions);
   async getAvailableModels(): Promise<SVDModelInfo> {
+
   return [...this.availableModels];
   async switchModel(modelName: string): Promise<void> {,
   if (this.config.apiType === 'automatic1111') {
@@ -237,6 +250,7 @@ export class StableVideoAdapter extends BaseAIModel {
     } else {
       throw new Error(`Model switching not supported for ${this.config.apiType}`);}
   async interpolateFrames(frames: string): Promise<string> {
+
   // Frame interpolation to increase smoothness
   const interpolatedFrames: string = [];
   for (let i = 0; i < frames.length - 1; i++) {
@@ -246,8 +260,7 @@ export class StableVideoAdapter extends BaseAIModel {
   interpolatedFrames.push(interpolatedFrame);
   interpolatedFrames.push(frames[frames.length - 1]);
   return interpolatedFrames;
-  async enhanceVideoQuality(()
-  frames: string,
+  async enhanceVideoQuality((frames: string,
   upscaleFactor: number = 2): Promise<string> {,
   const enhancedFrames: string = [];
   for (const frame of frames) {
@@ -312,6 +325,7 @@ export class StableVideoAdapter extends BaseAIModel {
   private _initializeModels(): void {
     this.availableModels = StableVideoAdapter.getSupportedModels();
   private async _testConnection(): Promise<void> {
+
     try {
       let testEndpoint = '/';
       switch (this.config.apiType) {
@@ -346,6 +360,7 @@ export class StableVideoAdapter extends BaseAIModel {
         headers['Authorization'] = `Bearer ${this.config.apiKey}`;}
     return headers;
   private async _loadAvailableModels(): Promise<void> {
+
   try {
   if (this.config.apiType === 'automatic1111') {
   const response = await this._makeRequest('/sdapi/v1/sd-models', 'GET');
@@ -415,6 +430,7 @@ export class StableVideoAdapter extends BaseAIModel {
     processed.cfg_scale = Math.max(1, Math.min(20, processed.cfg_scale));
     return processed;
   private async _generateVideo(imageData: string, options: Omit<StableVideoRequestOptions, 'image'>): Promise<any> {
+
   let endpoint: string;
   let payload: any;
   switch (this.config.apiType) {
@@ -514,6 +530,7 @@ export class StableVideoAdapter extends BaseAIModel {
   processing_time: generationTime,
 };
   private async _makeRequest(endpoint: string, method: 'GET' | 'POST' = 'POST', payload?: any): Promise<any> {
+
     const url = `${this.config.endpoint}${endpoint}`;}
     const options: RequestInit = {
   method,
@@ -548,14 +565,17 @@ export class StableVideoAdapter extends BaseAIModel {
 }, 0) / frames.length;
     return avgFrameSize * frames.length;
   private async _interpolateFrame(frame1: string, frame2: string): Promise<string> {
+
     // Placeholder for frame interpolation
     // In a real implementation, this would use interpolation algorithms
     return frame1; // Return first frame for now
   private async _upscaleFrame(frame: string, upscaleFactor: number): Promise<string> {
+
     // Placeholder for frame upscaling
     // In a real implementation, this would use upscaling models
     return frame; // Return original frame for now
   protected async _performHealthCheck(): Promise<void> {
+
     await this._testConnection();
 
 export default StableVideoAdapter;

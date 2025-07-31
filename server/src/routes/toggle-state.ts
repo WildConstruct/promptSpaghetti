@@ -12,8 +12,10 @@ import { FeatureToggleDAO } from '../database/feature-toggle-dao';
 import { ToggleEvaluationContext, ToggleType, ClaudeImpact } from '../database/feature-toggle-models';
 
 }
+}
 interface ToggleStateRouteOptions {
   dao: FeatureToggleDAO;
+}
 }
 }
 

@@ -34,6 +34,7 @@ import { FunnelPredictiveModeling } from './FunnelPredictiveModeling';
 
 // Marketplace integration interfaces
 
+}
 export interface MarketplaceFunnelIntegrationProps {
   funnelDefinition: ConversionFunnelDefinition;
   analyticsInfrastructure: ConversionAnalyticsInfrastructure;
@@ -45,6 +46,8 @@ export interface MarketplaceFunnelIntegrationProps {
   onInsightInteraction?: (insight: InsightInteraction) => void;
   onExport?: (data: MarketplaceIntegrationExportData) => void;
 }
+}
+}
 export interface MarketplaceContext {
   marketplaceId: string;
   marketplaceName: string;
@@ -53,6 +56,8 @@ export interface MarketplaceContext {
   adminContext?: AdminContext;
   environment: 'production' | 'staging' | 'development';
   permissions: MarketplacePermission;
+}
+}
 }
 export interface TemplateContext {
   templateId: string;
@@ -66,17 +71,23 @@ export interface TemplateContext {
   pricing: TemplatePricing;
   performance: TemplatePerformance;
 }
+}
+}
 export interface TemplatePricing {
   priceType: 'free' | 'premium' | 'subscription';
   price?: number;
   subscriptionTier?: string;
   discounts: TemplateDiscount;
 }
+}
+}
 export interface TemplateDiscount {
   type: 'percentage' | 'fixed';
   value: number;
   validUntil: number;
   conditions: string;
+}
+}
 }
 export interface TemplatePerformance {
   downloads: number;
@@ -86,6 +97,8 @@ export interface TemplatePerformance {
   rating: number;
   reviews: number;
   lastUpdated: number;
+}
+}
 }
 export interface CreatorContext {
   creatorId: string;
@@ -98,6 +111,8 @@ export interface CreatorContext {
   specializations: string;
   achievements: CreatorAchievement;
 }
+}
+}
 export interface CreatorAchievement {
   achievementId: string;
   name: string;
@@ -105,11 +120,14 @@ export interface CreatorAchievement {
   earnedDate: number;
   badge: string;
 }
+}
+}
 export interface AdminContext {
   adminId: string;
   adminRole: 'super_admin' | 'marketplace_admin' | 'analytics_admin';
   permissions: AdminPermission;
   managedCategories: string;
+}
 }
 export type AdminPermission = 
   | 'view_all_analytics'
@@ -134,6 +152,7 @@ export type IntegrationMode =
 
 export type UserRole = 'creator' | 'admin' | 'viewer' | 'manager';
 
+}
 export interface WidgetConfiguration {
   widgets: WidgetType;
   layout: WidgetLayout;
@@ -141,6 +160,7 @@ export interface WidgetConfiguration {
   compactMode: boolean;
   theme: 'light' | 'dark' | 'auto';
   customizations: WidgetCustomization;
+}
 }
 export type WidgetType = 
   | 'conversion_summary'
@@ -152,6 +172,7 @@ export type WidgetType =
   | 'template_performance'
   | 'creator_dashboard';
 
+}
 export interface WidgetLayout {
   columns: number;
   rows: number;
@@ -159,12 +180,16 @@ export interface WidgetLayout {
   spacing: number;
   widgetSizes: Record<WidgetType, WidgetSize>;
 }
+}
+}
 export interface WidgetSize {
   width: number;
   height: number;
   minWidth?: number;
   minHeight?: number;
   resizable: boolean;
+}
+}
 }
 export interface WidgetCustomization {
   widgetType: WidgetType;
@@ -174,7 +199,9 @@ export interface WidgetCustomization {
   defaultFilters: Record<string, any>;
   colorScheme?: string;
   displayMode: 'compact' | 'standard' | 'detailed'
+}
   }
+}
 export interface MarketplaceIntegrationData {
   funnelSummary: FunnelSummaryData;
   templateInsights: TemplateInsightData;
@@ -183,6 +210,8 @@ export interface MarketplaceIntegrationData {
   recommendedActions: RecommendedAction;
   performanceAlerts: PerformanceAlert;
   integrationHealth: IntegrationHealthData;
+}
+}
 }
 export interface FunnelSummaryData {
   overallConversionRate: number;
@@ -194,6 +223,8 @@ export interface FunnelSummaryData {
   trendDirection: 'improving' | 'declining' | 'stable';
   lastUpdated: number;
 }
+}
+}
 export interface StepPerformanceData {
   stepId: string;
   stepName: string;
@@ -202,6 +233,8 @@ export interface StepPerformanceData {
   averageTimeSpent: number;
   performanceRank: number;
   optimizationPotential: number;
+}
+}
 }
 export interface TemplateInsightData {
   templateId: string;
@@ -212,6 +245,8 @@ export interface TemplateInsightData {
   optimizationOpportunities: TemplateOptimizationOpportunity;
   competitivePosition: TemplateCompetitivePosition;
 }
+}
+}
 export interface TemplateConversionMetrics {
   viewToDownloadRate: number;
   downloadToUseRate: number;
@@ -219,6 +254,8 @@ export interface TemplateConversionMetrics {
   overallConversionRate: number;
   revenuePerView: number;
   userRetentionRate: number;
+}
+}
 }
 export interface TemplatePerformanceInsight {
   insightType: TemplateInsightType;
@@ -229,6 +266,7 @@ export interface TemplatePerformanceInsight {
   actionable: boolean;
   recommendations: TemplateRecommendation;
 }
+}
 export type TemplateInsightType = 
   | 'conversion_opportunity'
   | 'pricing_optimization'
@@ -237,6 +275,7 @@ export type TemplateInsightType =
   | 'user_experience'
   | 'competitive_advantage';
 
+}
 export interface TemplateRecommendation {
   action: string;
   expectedImpact: number;
@@ -244,6 +283,8 @@ export interface TemplateRecommendation {
   priority: 'critical' | 'high' | 'medium' | 'low';
   timeline: string;
   resources: string;
+}
+}
 }
 export interface TemplateOptimizationOpportunity {
   opportunity: string;
@@ -253,12 +294,16 @@ export interface TemplateOptimizationOpportunity {
   implementationSteps: OptimizationStep;
   successProbability: number;
 }
+}
+}
 export interface OptimizationStep {
   step: string;
   description: string;
   effort: 'low' | 'medium' | 'high';
   timeline: number; // Days,
   dependencies: string;
+}
+}
 }
 export interface TemplateCompetitivePosition {
   categoryRank: number;
@@ -267,7 +312,9 @@ export interface TemplateCompetitivePosition {
   competitiveWeaknesses: string;
   marketShare: number;
   trendDirection: 'gaining' | 'losing' | 'stable'
+}
   }
+}
 export interface CreatorOptimizationData {
   creatorId: string;
   creatorName: string;
@@ -275,6 +322,8 @@ export interface CreatorOptimizationData {
   optimizationRecommendations: CreatorOptimizationRecommendation;
   performanceTrends: CreatorPerformanceTrend;
   growthOpportunities: CreatorGrowthOpportunity;
+}
+}
 }
 export interface CreatorPortfolioMetrics {
   totalTemplates: number;
@@ -285,6 +334,8 @@ export interface CreatorPortfolioMetrics {
   portfolioDiversification: number;
   marketPenetration: number;
 }
+}
+}
 export interface CreatorOptimizationRecommendation {
   recommendationType: CreatorRecommendationType;
   title: string;
@@ -292,6 +343,7 @@ export interface CreatorOptimizationRecommendation {
   expectedImpact: CreatorImpactProjection;
   actionItems: CreatorActionItem;
   priority: 'critical' | 'high' | 'medium' | 'low'
+}
   }
 export type CreatorRecommendationType = 
   | 'template_optimization'
@@ -301,12 +353,15 @@ export type CreatorRecommendationType =
   | 'user_engagement'
   | 'quality_enhancement';
 
+}
 export interface CreatorImpactProjection {
   revenueIncrease: number;
   conversionImprovement: number;
   userEngagementBoost: number;
   timeToImpact: number;
   confidenceLevel: number;
+}
+}
 }
 export interface CreatorActionItem {
   action: string;
@@ -316,6 +371,8 @@ export interface CreatorActionItem {
   tools: string;
   success_criteria: string;
 }
+}
+}
 export interface CreatorPerformanceTrend {
   metric: string;
   currentValue: number;
@@ -324,11 +381,15 @@ export interface CreatorPerformanceTrend {
   projectedValue: number;
   factors: TrendFactor;
 }
+}
+}
 export interface TrendFactor {
   factor: string;
   impact: number;
   controllable: boolean;
   recommendation: string;
+}
+}
 }
 export interface CreatorGrowthOpportunity {
   opportunity: string;
@@ -339,6 +400,8 @@ export interface CreatorGrowthOpportunity {
   investmentRequired: number;
   expectedROI: number;
 }
+}
+}
 export interface MarketplaceMetricData {
   totalConversions: number;
   totalRevenue: number;
@@ -348,6 +411,8 @@ export interface MarketplaceMetricData {
   retentionMetrics: RetentionMetrics;
   healthScore: MarketplaceHealthScore;
 }
+}
+}
 export interface CategoryPerformance {
   category: string;
   conversionRate: number;
@@ -356,11 +421,15 @@ export interface CategoryPerformance {
   averageRating: number;
   growthRate: number;
 }
+}
+}
 export interface UserAcquisitionMetrics {
   newUsersLastPeriod: number;
   acquisitionCost: number;
   acquisitionChannels: AcquisitionChannel;
   conversionByChannel: ChannelConversion;
+}
+}
 }
 export interface AcquisitionChannel {
   channel: string;
@@ -369,11 +438,15 @@ export interface AcquisitionChannel {
   conversionRate: number;
   quality: number;
 }
+}
+}
 export interface ChannelConversion {
   channel: string;
   conversionRate: number;
   averageValue: number;
   retentionRate: number;
+}
+}
 }
 export interface RetentionMetrics {
   overallRetentionRate: number;
@@ -381,11 +454,15 @@ export interface RetentionMetrics {
   churnRate: number;
   reactivationRate: number;
 }
+}
+}
 export interface CohortRetentionData {
   cohort: string;
   retentionRate: number;
   averageLifetime: number;
   totalValue: number;
+}
+}
 }
 export interface MarketplaceHealthScore {
   overallScore: number;
@@ -393,12 +470,16 @@ export interface MarketplaceHealthScore {
   trend: 'improving' | 'declining' | 'stable';
   criticalIssues: string;
 }
+}
+}
 export interface HealthScoreComponent {
   component: string;
   score: number;
   weight: number;
   status: 'excellent' | 'good' | 'fair' | 'poor'
+}
   }
+}
 export interface RecommendedAction {
   actionId: string;
   type: ActionType;
@@ -410,6 +491,7 @@ export interface RecommendedAction {
   implementation: ActionImplementation;
   progress: ActionProgress;
 }
+}
 export type ActionType = 
   | 'optimization'
   | 'alert_response'
@@ -417,6 +499,7 @@ export type ActionType =
   | 'operational_fix'
   | 'growth_initiative';
 
+}
 export interface ActionImpact {
   revenueImpact: number;
   conversionImpact: number;
@@ -424,13 +507,17 @@ export interface ActionImpact {
   timeToImpact: number;
   confidenceLevel: number;
 }
+}
+}
 export interface ActionImplementation {
   steps: ImplementationStep;
   resources: string;
   timeline: number;
   cost: number;
   riskLevel: 'low' | 'medium' | 'high'
+}
   }
+}
 export interface ImplementationStep {
   step: string;
   description: string;
@@ -438,12 +525,16 @@ export interface ImplementationStep {
   duration: number;
   dependencies: string;
 }
+}
+}
 export interface ActionProgress {
   status: 'pending' | 'in_progress' | 'completed' | 'paused' | 'cancelled';
   completionPercentage: number;
   startDate?: number;
   completedSteps: string;
   blockers: string;
+}
+}
 }
 export interface PerformanceAlert {
   alertId: string;
@@ -456,6 +547,7 @@ export interface PerformanceAlert {
   resolvedAt?: number;
   resolution: AlertResolution;
 }
+}
 export type AlertType = 
   | 'conversion_drop'
   | 'revenue_anomaly'
@@ -464,11 +556,14 @@ export type AlertType =
   | 'system_issue'
   | 'market_opportunity';
 
+}
 export interface AffectedEntity {
   entityType: 'template' | 'creator' | 'category' | 'marketplace';
   entityId: string;
   entityName: string;
   impactLevel: number;
+}
+}
 }
 export interface AlertResolution {
   status: 'open' | 'investigating' | 'resolved' | 'false_positive';
@@ -476,11 +571,15 @@ export interface AlertResolution {
   resolutionSteps: ResolutionStep;
   resolutionTime?: number;
 }
+}
+}
 export interface ResolutionStep {
   step: string;
   completedAt?: number;
   completedBy?: string;
   notes?: string;
+}
+}
 }
 export interface IntegrationHealthData {
   connectionStatus: 'connected' | 'degraded' | 'disconnected';
@@ -490,6 +589,8 @@ export interface IntegrationHealthData {
   errors: IntegrationError;
   performance: IntegrationPerformance;
 }
+}
+}
 export interface IntegrationError {
   errorId: string;
   errorType: string;
@@ -497,12 +598,16 @@ export interface IntegrationError {
   timestamp: number;
   resolved: boolean;
   impact: 'low' | 'medium' | 'high'
+}
   }
+}
 export interface IntegrationPerformance {
   averageResponseTime: number;
   throughput: number;
   errorRate: number;
   availability: number;
+}
+}
 }
 export interface OptimizationAction {
   actionType: 'implement_recommendation' | 'dismiss_alert' | 'export_data' | 'configure_widget';
@@ -510,12 +615,16 @@ export interface OptimizationAction {
   userId: string;
   timestamp: number;
 }
+}
+}
 export interface InsightInteraction {
   interactionType: 'view' | 'click' | 'share' | 'bookmark';
   insightId: string;
   userId: string;
   timestamp: number;
   context: Record<string, any>;
+}
+}
 }
 export interface MarketplaceIntegrationExportData {
   funnelSummary: FunnelSummaryData;
@@ -526,6 +635,7 @@ export interface MarketplaceIntegrationExportData {
   exportTimestamp: number;
   userContext: MarketplaceContext;
   // Default widget configuration
+}
 }
 export const [error, setError] = useState<string | null>(null);
   const [activeWidget, setActiveWidget] = useState<WidgetType>(widgetConfig.widgets[0]);
@@ -549,13 +659,13 @@ export const [error, setError] = useState<string | null>(null);
         ]
       };
       if (marketplaceContext.templateContext) {
-        query.filters?.push()
+        query.filters?.push(
           { field: 'template_id',
           operator: 'eq',
           value: marketplaceContext.templateContext.templateId }
         );
       if (marketplaceContext.creatorContext) {
-        query.filters?.push()
+        query.filters?.push(
           { field: 'creator_id',
           operator: 'eq',
           value: marketplaceContext.creatorContext.creatorId }

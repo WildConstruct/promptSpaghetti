@@ -15,6 +15,7 @@ const nodeTypes = {
   include: InlineEditableNode,
 };
 
+}
 export interface GraphEditorWithInlineEditingProps {
   nodes: Node<NodeData>[];
   edges: Edge;
@@ -27,6 +28,7 @@ export interface GraphEditorWithInlineEditingProps {
   showMinimap?: boolean;
   showControls?: boolean;
   showBackground?: boolean;
+}
 }
 export const GraphEditorWithInlineEditing: React.FC<GraphEditorWithInlineEditingProps> = ({
   nodes,

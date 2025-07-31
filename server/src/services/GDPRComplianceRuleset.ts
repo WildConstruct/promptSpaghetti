@@ -28,6 +28,7 @@ import {
 } from './ComplianceRuleEngine';
 
 }
+}
 export interface GDPRRulesetConfig {
   jurisdiction: 'EU' | 'EEA' | 'UK' | 'GLOBAL';
   dataSubjectRights: boolean;
@@ -40,6 +41,7 @@ export interface GDPRRulesetConfig {
   dpoRequirements: boolean;
   recordKeeping: boolean;
   impactAssessments: boolean;
+}
 }
 }
 

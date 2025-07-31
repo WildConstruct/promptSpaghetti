@@ -7,6 +7,7 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Node, Edge } from 'reactflow';
 
+}
 export interface GraphState {
   nodes: Node[];
   edges: Edge[];
@@ -14,10 +15,13 @@ export interface GraphState {
   description: string;
   id: string;
 }
+}
+}
 export interface UndoRedoManagerProps {
   onStateChange: (state: GraphState) => void;
   maxHistorySize?: number;
   theme?: 'light' | 'dark' | 'cinema'
+}
   }
 export class UndoRedoSystem {
   private history: GraphState[] = [];

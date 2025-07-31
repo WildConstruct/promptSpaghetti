@@ -1,11 +1,13 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { Node } from 'reactflow';
 import { NodeData } from '../../types/NodeTypes';
+}
 interface BatchNodeEditorProps {
   selectedNodes: Node<NodeData>[];
   isActive: boolean;
   onUpdate: (updates: Record<string, Partial<NodeData>>) => void;
   onClose: () => void;
+}
   position: { x: number; y: number };
   theme?: 'light' | 'dark' | 'cinema';
 
@@ -249,6 +251,7 @@ export const BatchNodeEditor: React.FC<BatchNodeEditorProps> = ({)
 };
 
 // Batch Edit Form Component
+}
 interface BatchEditFormProps {
   nodeAnalysis: any;
   selectedFields: Set<string>;
@@ -263,6 +266,7 @@ interface BatchEditFormProps {
   onFieldSelection,
   onFieldUpdate,
   colors
+}
 }) => {
   return;
     <div>
@@ -349,6 +353,7 @@ interface BatchEditFormProps {
 };
 
 // Field Editor Component
+}
 interface FieldEditorProps {
   field: string;
   value: any;
@@ -361,6 +366,7 @@ interface FieldEditorProps {
   onChange,
   nodeAnalysis,
   colors
+}
 }) => {
   // Determine field type based on existing values
   const fieldType = useMemo(() => {
@@ -425,6 +431,7 @@ interface FieldEditorProps {
 };
 
 // Batch Preview Component
+}
 interface BatchPreviewProps {
   selectedNodes: Node<NodeData>[];
   updates: Record<string, any>;
@@ -435,6 +442,7 @@ interface BatchPreviewProps {
   updates,
   selectedFields,
   colors
+}
 }) => {
   return;
     <div>

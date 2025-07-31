@@ -16,6 +16,7 @@ import { RedisService } from '../auth/database/RedisService';
 import { requirePermission } from '../middleware/auth';
 
 }
+}
 interface CreatePolicyBody {
   name: string;
   resourceType: 'jwt_token' | 'api_key' | 'session' | 'reset_token' | 'verification_code' | 'backup_code' | 'refresh_token';
@@ -29,7 +30,9 @@ interface CreatePolicyBody {
   organizationId?: string;
 }
 }
+}
 
+}
 }
 interface CreateExpirationRuleBody {
   resourceId: string;
@@ -39,44 +42,57 @@ interface CreateExpirationRuleBody {
   metadata?: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 interface ExpirationStatusParams {
   resourceType: string;
   resourceId: string;
 }
 }
+}
 
+}
 }
 interface RenewResourceBody {
   requestedTtl?: number;
   reason?: string;
 }
 }
+}
 
+}
 }
 interface RenewResourceParams {
   resourceType: string;
   resourceId: string;
 }
 }
+}
 
+}
 }
 interface RevokeResourceBody {
   reason?: string;
 }
 }
+}
 
+}
 }
 interface ExpirationStatsQuery {
   organizationId?: string;
 }
 }
+}
 
+}
 }
 interface UpcomingWarningsQuery {
   organizationId?: string;
   limit?: string;
+}
 }
 }
 

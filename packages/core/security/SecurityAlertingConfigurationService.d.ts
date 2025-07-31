@@ -32,6 +32,7 @@ import { EventEmitter } from 'events';
 import { SecurityAlertingConfig } from './SecurityAlertingAnalytics';
 import { DataClassificationLevel } from './DataClassificationAccessControl';
 
+}
 export interface SecurityAlertingConfigurationServiceOptions {
     storageBackend: 'filesystem' | 'database' | 'redis' | 'memory';
     enableCaching: boolean;
@@ -45,6 +46,7 @@ export interface SecurityAlertingConfigurationServiceOptions {
     requireApproval: boolean;
 
 
+}
 export interface ConfigurationMetadata {
     id: string;
     version: number;
@@ -60,6 +62,7 @@ export interface ConfigurationMetadata {
     classification: DataClassificationLevel;
 
 
+}
 export interface ConfigurationChangeRequest {
     configId: string;
     changes: Partial<SecurityAlertingConfig>;
@@ -70,6 +73,7 @@ export interface ConfigurationChangeRequest {
     approvers?: string[];
 
 
+}
 export interface ConfigurationValidationResult {
     isValid: boolean;
     errors: ValidationError[];
@@ -79,6 +83,7 @@ export interface ConfigurationValidationResult {
     performanceImpact: PerformanceImpact;
 
 
+}
 export interface ValidationError {
     field: string;
     message: string;
@@ -87,6 +92,7 @@ export interface ValidationError {
     suggestion?: string;
 
 
+}
 export interface ValidationWarning {
     field: string;
     message: string;
@@ -95,6 +101,7 @@ export interface ValidationWarning {
     suggestion?: string;
 
 
+}
 export interface ComplianceIssue {
     framework: string;
     requirement: string;
@@ -102,6 +109,7 @@ export interface ComplianceIssue {
     description: string;
 
 
+}
 export interface PerformanceImpact {
     cpuImpact: 'low' | 'medium' | 'high';
     memoryImpact: 'low' | 'medium' | 'high';
@@ -170,3 +178,4 @@ export declare class SecurityAlertingConfigurationService extends EventEmitter {
 
 export default SecurityAlertingConfigurationService;
 //# sourceMappingURL=SecurityAlertingConfigurationService.d.ts.map
+}

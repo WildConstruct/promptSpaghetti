@@ -8,12 +8,14 @@ import {
 } from '../../hooks/useExternalDataImport';
 import { QueryResult } from '../../external-data/DataSourceManager';
 
+}
 export interface HistoricalDataImportPanelProps {
   visible: boolean;
   onClose: () => void;
   onDataImported?: (results: QueryResult) => void;
   onError?: (error: Error) => void;
 const ERA_OPTIONS = [;
+}
   { value: 'ancient', label: 'Ancient (3000 BC - 500 AD)' },
   { value: 'early-medieval', label: 'Early Medieval (500-1000)' },
   { value: 'high-medieval', label: 'High Medieval (1000-1300)' },

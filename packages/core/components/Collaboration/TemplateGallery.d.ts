@@ -1,6 +1,7 @@
 import React from 'react';
 import { ProjectTemplate } from '../../types/TemplateTypes';
 
+}
 interface TemplateGalleryProps {
     workspaceId?: string;
     onSelectTemplate?: (template: ProjectTemplate) => void;
@@ -14,3 +15,4 @@ interface TemplateGalleryProps {
 declare const TemplateGallery: React.FC<TemplateGalleryProps>;
 export default TemplateGallery;
 //# sourceMappingURL=TemplateGallery.d.ts.map
+}

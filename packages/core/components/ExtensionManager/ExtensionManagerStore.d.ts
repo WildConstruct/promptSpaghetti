@@ -4,6 +4,7 @@
  */
 import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 
+}
 export interface ExtensionStatus {
     enabled: boolean;
     loaded: boolean;
@@ -14,6 +15,7 @@ export interface ExtensionStatus {
     availableVersion?: string;
 
 
+}
 export interface ExtensionInstallation {
     extension: ExtensionManifest;
     installedAt: Date;
@@ -22,6 +24,7 @@ export interface ExtensionInstallation {
     configuration?: Record<string, any>;
 
 
+}
 export interface ExtensionManagerState {
     installedExtensions: ExtensionManifest[];
     availableExtensions: ExtensionManifest[];
@@ -46,3 +49,4 @@ export interface ExtensionManagerState {
 export declare const useExtensionManagerStore: import("zustand").UseBoundStore<import("zustand").StoreApi<ExtensionManagerState>>;
 export type ExtensionManagerStore = ReturnType<typeof useExtensionManagerStore>;
 //# sourceMappingURL=ExtensionManagerStore.d.ts.map
+}

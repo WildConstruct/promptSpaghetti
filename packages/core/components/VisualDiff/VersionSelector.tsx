@@ -2,6 +2,7 @@
 // Story 9.3.2 - Visual Diff Tool
 import React, { useMemo } from 'react';
 
+}
 export interface Version {
   id: string;
   version_number: number;
@@ -10,6 +11,8 @@ export interface Version {
   created_by?: string;
   is_current?: boolean;
 }
+}
+}
 export interface VersionSelectorProps {
   graphId: string;
   versions: Version;
@@ -17,6 +20,7 @@ export interface VersionSelectorProps {
   targetVersionId: string;
   onVersionChange: (sourceId: string, targetId: string) => void;
   className?: string;
+}
 }
 export const VersionSelector: React.FC<VersionSelectorProps> = ({)
   graphId,

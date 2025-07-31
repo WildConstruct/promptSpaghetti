@@ -25,6 +25,7 @@ import {
 
 // Main Operation UI Component
 
+}
 export interface OperationUIProps {
   operationType: OperationType;
   initialParameters?: Record<string, any>;
@@ -33,6 +34,7 @@ export interface OperationUIProps {
   onParametersChange?: (parameters: Record<string, any>) => void;
   readonly?: boolean;
   showAdvanced?: boolean;
+}
 }
 export const OperationUI: React.FC<OperationUIProps> = ({)
   operationType,
@@ -150,6 +152,7 @@ export const OperationUI: React.FC<OperationUIProps> = ({)
 };
 
 // Operation Header Component
+}
 interface OperationHeaderProps {
   operationType: OperationType;
   execution: OperationExecution | null;
@@ -160,6 +163,7 @@ interface OperationHeaderProps {
   execution,
   onToggleParameters,
   showParameters
+}
 }) => {
   const _____getRiskLevelColor = (risk: RiskLevel) => {,
   switch (risk) {
@@ -204,6 +208,7 @@ interface OperationHeaderProps {
 };
 
 // Dynamic Parameters Form Component
+}
 interface OperationParametersFormProps {
   parameters: OperationParameter;
   values: Record<string, any>;
@@ -218,6 +223,7 @@ interface OperationParametersFormProps {
   onChange,
   readonly,
   showAdvanced
+}
 }) => {
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set());
   const parametersByGroup = useMemo(() => {
@@ -273,6 +279,7 @@ interface OperationParametersFormProps {
 };
 
 // Individual Parameter Input Component
+}
 interface ParameterInputProps {
   parameter: OperationParameter;
   value: Error;
@@ -285,6 +292,7 @@ interface ParameterInputProps {
   error,
   onChange,
   readonly
+}
 }) => {
   const renderInput = () => {
   const commonProps = {
@@ -411,6 +419,7 @@ interface ParameterInputProps {
 };
 
 // Operation Actions Component
+}
 interface OperationActionsProps {
   operationType: OperationType;
   canExecute: boolean;
@@ -425,6 +434,7 @@ interface OperationActionsProps {
   execution,
   onExecute,
   onCancel
+}
 }) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const handleExecute = () => {
@@ -488,6 +498,7 @@ interface OperationActionsProps {
 };
 
 // Operation Progress Component
+}
 interface OperationProgressProps {
   execution: OperationExecution;
   operationType: OperationType;
@@ -496,6 +507,7 @@ interface OperationProgressProps {
   execution,
   operationType,
   onCancel
+}
 }) => {
   const formatDuration = (ms: number) => {
     const seconds = Math.floor(ms / 1000);

@@ -6,12 +6,14 @@
  */
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
 
+}
 export interface AnthropicConfig {
     apiKey: string;
     baseURL?: string;
     timeout?: number;
     maxRetries?: number;
 
+}
 export interface AnthropicRequestOptions {
     model?: string;
     temperature?: number;
@@ -25,27 +27,32 @@ export interface AnthropicRequestOptions {
     tool_choice?: {
         type: 'auto' | 'any' | 'tool';
         name?: string;
+}
     };
 
+}
 export interface ClaudeMessage {
     role: 'user' | 'assistant';
-    content: string | Array<{,
+    content: string | Array<{
         type: 'text' | 'image';
         text?: string;
         source?: {
             type: 'base64';
             media_type: string;
             data: string;
+}
         };
     }>;
 
+}
 export interface AnthropicResponse {
     id: string;
     type: 'message';
     role: 'assistant';
-    content: Array<{,
+    content: Array<{
         type: 'text';
         text: string;
+}
     }>;
     model: string;
     stop_reason: 'end_turn' | 'max_tokens' | 'stop_sequence' | 'tool_use';

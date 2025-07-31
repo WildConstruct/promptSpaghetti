@@ -27,6 +27,7 @@ export enum WebSocketMessageType {
  * WebSocket message structure
  */
 }
+}
 export interface WebSocketMessage {
   type: WebSocketMessageType;
   data: any;
@@ -34,10 +35,12 @@ export interface WebSocketMessage {
   id?: string;
 }
 }
+}
 
 /**
  * Client connection info
  */
+}
 }
 export interface ClientConnection {
   id: string;
@@ -49,10 +52,12 @@ export interface ClientConnection {
   isAuthenticated: boolean;
 }
 }
+}
 
 /**
  * Subscription configuration
  */
+}
 }
 export interface SubscriptionConfig {
   topic: string;
@@ -61,6 +66,7 @@ export interface SubscriptionConfig {
     organizationId?: number;
     eventTypes?: string[];
     minSeverity?: 'info' | 'warning' | 'critical';
+}
 }
   };
   throttle?: number;

@@ -259,6 +259,7 @@ function measureTime(fn: () => any): number {
   fn();
   return Math.round(performance.now() - start);
 async function measureTimeAsync(fn: () => Promise<any>): Promise<number> {
+
   const start = performance.now();
   await fn();
   return Math.round(performance.now() - start);

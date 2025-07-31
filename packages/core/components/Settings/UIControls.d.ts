@@ -1,6 +1,7 @@
 import React from 'react';
 import { UISettings } from '../../settings/types';
 
+}
 export interface UIControlsProps {
     settings: UISettings;
     onChange: (settings: UISettings) => void;
@@ -12,3 +13,4 @@ export interface UIControlsProps {
  */
 export declare const UIControls: React.FC<UIControlsProps>;
 //# sourceMappingURL=UIControls.d.ts.map
+}

@@ -4,8 +4,11 @@
 
 // Define types locally to avoid cross-package dependencies
 
+}
 export interface NodeData {
   [key: string]: any;
+}
+}
 }
 export interface Edge {
   id: string;,
@@ -17,18 +20,22 @@ export interface Edge {
   * Unique identifier for a peer in the collaborative session
   */
 }
+}
 export type PeerId = string;
 
 /**
  * Logical timestamp for operation ordering
  */
 
+}
 export interface LogicalTimestamp {
   counter: number;,
   peerId: PeerId;
   /**
   * Base interface for all CRDT operations
   */
+}
+}
 }
 export interface CRDTOperation {
   id: string;,
@@ -38,6 +45,8 @@ export interface CRDTOperation {
   /**
   * Graph-specific CRDT operations
   */
+}
+}
 }
 export interface GraphOperation extends CRDTOperation {
   type: 'node' | 'edge' | 'addNode' | 'removeNode' | 'updateNode' | 'addEdge' | 'removeEdge';,
@@ -58,10 +67,13 @@ export interface GraphOperation extends CRDTOperation {
   * CRDT-enhanced node with metadata
   */
 }
+}
+}
 export interface CRDTNode {
   id: string;,
   type: 'WeightedChoice' | 'Concat' | 'Output' | 'SetVariable' | 'GetVariable' | 'Include' | string;
 
+}
   position: { x: number; y: number };
   data: any;,
   metadata: Record<string, any>;
@@ -73,6 +85,7 @@ export interface CRDTNode {
 /**
  * CRDT-enhanced edge with metadata
  */
+}
 }
 export interface CRDTEdge {
   id: string;,
@@ -88,6 +101,7 @@ export interface CRDTEdge {
   * Conflict resolution strategy
   */
 }
+}
 export type ConflictResolutionStrategy = 
   | 'lastWriteWins'
   | 'multiValue'
@@ -97,6 +111,7 @@ export type ConflictResolutionStrategy =
  * CRDT implementation configuration
  */
 
+}
 export interface CRDTConfig {
   peerId: PeerId;,
   conflictResolution: ConflictResolutionStrategy;
@@ -106,11 +121,14 @@ export interface CRDTConfig {
   * User presence information for awareness
   */
 }
+}
+}
 export interface UserPresence {
   userId: string;
   cursor?: {
     nodeId?: string;
 
+}
     position?: { x: number; y: number };
   };
   selection?: string;
@@ -122,6 +140,7 @@ export interface UserPresence {
  * Sync state tracking
  */
 }
+}
 export interface SyncState {
   documentId: string;,
   userId: string;
@@ -130,6 +149,8 @@ export interface SyncState {
   /**
   * Synchronization message between peers
   */
+}
+}
 }
 export interface SyncMessage {
   type: 'sync' | 'update' | 'awareness' | 'operation' | 'state' | 'request';,
@@ -145,6 +166,8 @@ export interface SyncMessage {
   * Node operation types
   */
 }
+}
+}
 export interface NodeOperation extends GraphOperation {
   type: 'node';,
   action: 'create' | 'update' | 'delete';
@@ -155,6 +178,7 @@ export interface NodeOperation extends GraphOperation {
  * Edge operation types
  */
 
+}
 export interface EdgeOperation extends GraphOperation {
   type: 'edge';,
   action: 'create' | 'update' | 'delete';

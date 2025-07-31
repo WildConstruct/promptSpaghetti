@@ -14,17 +14,20 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface CodeGenerationOptions {
     length: number;
     format: 'numeric' | 'alphanumeric' | 'alphabetic';
     excludeAmbiguous: boolean;
     customAlphabet?: string;
 
+}
 export interface CodeValidationOptions {
     allowedAttempts: number;
     timeWindowMinutes: number;
     constantTimeValidation: boolean;
 
+}
 export interface VerificationCodeData {
     id: string;
     codeHash: string;
@@ -39,6 +42,7 @@ export interface VerificationCodeData {
     used: boolean;
     metadata?: Record<string, any>;
 
+}
 export interface ValidationResult {
     valid: boolean;
     code?: VerificationCodeData;
@@ -56,6 +60,7 @@ declare const SECURITY_CONFIG: {
         readonly numeric: "0123456789";
         readonly alphanumeric: "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
         readonly alphabetic: "ABCDEFGHJKMNPQRSTUVWXYZ"
+}
   };
 };
 /**

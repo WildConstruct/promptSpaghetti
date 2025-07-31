@@ -3,6 +3,7 @@ import { EventEmitter } from 'events';
  * Analytics API response wrapper
  */
 
+}
 export interface AnalyticsResponse<T = unknown> {
     success: boolean;
     data?: T;
@@ -22,6 +23,7 @@ export interface AnalyticsResponse<T = unknown> {
  * Analytics query parameters
  */
 
+}
 export interface AnalyticsQuery {
     startTime?: number;
     endTime?: number;
@@ -35,6 +37,7 @@ export interface AnalyticsQuery {
  * Time range parameters
  */
 
+}
 export interface TimeRange {
     startTime: number;
     endTime: number;
@@ -45,6 +48,7 @@ export interface TimeRange {
  * Budget configuration
  */
 
+}
 export interface BudgetConfig {
     name: string;
     description?: string;
@@ -60,6 +64,7 @@ export interface BudgetConfig {
  * Report configuration
  */
 
+}
 export interface ReportConfig {
     startTime: number;
     endTime: number;
@@ -73,6 +78,7 @@ export interface ReportConfig {
  * Analytics client configuration
  */
 
+}
 export interface AnalyticsClientConfig {
     baseUrl: string;
     apiKey?: string;
@@ -188,3 +194,4 @@ export declare class AnalyticsClient extends EventEmitter {
  */
 export declare const defaultAnalyticsClient: AnalyticsClient;
 //# sourceMappingURL=AnalyticsClient.d.ts.map
+}

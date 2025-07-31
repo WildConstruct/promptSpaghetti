@@ -5,16 +5,19 @@
 import React, { useState, useEffect } from 'react';
 import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 
+}
 export interface ExtensionConfigurationPanelProps {
   extension: ExtensionManifest;
   onSave: (config: Record<string, any>) => void;
   onCancel: () => void;
+}
 interface ConfigField {
   key: string;
   label: string;
   type: 'string' | 'number' | 'boolean' | 'select' | 'json' | 'array';
   description?: string;
   defaultValue?: unknown;
+}
   options?: { label: string; value: Error }[];
   required?: boolean;
   validation?: (value: Error) => string | null;
@@ -354,10 +357,12 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
 };
 
 // Array input component for handling array values
+}
 interface ArrayInputProps {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
+}
 const ArrayInput: React.FC<ArrayInputProps> = ({ value, onChange, placeholder }) => {
   const [newItem, setNewItem] = useState('');
   const addItem = () => {

@@ -8,6 +8,7 @@ import { FrameworkNode, NodeFramework } from './NodeFramework';
 import { AdvancedNodeConfig } from '../runtime/advanced';
 import { NodeValidationService } from '../validation';
 
+}
 export interface NodeCreationOptions {
     /** Validate node before creation */
     validate?: boolean;
@@ -20,6 +21,7 @@ export interface NodeCreationOptions {
     /** Template to base node on */
     template?: string;
 
+}
 export interface NodeTemplate {
     id: string;
     name: string;
@@ -30,6 +32,7 @@ export interface NodeTemplate {
     category: string;
     tags: string[];
 
+}
 export interface NodeFactoryConfig {
     /** Enable automatic node optimization */
     enableOptimization: boolean;
@@ -72,6 +75,7 @@ export declare class NodeFactory {
     createFromTemplate(templateId: string, nodeId: string, overrides?: {)
         config?: Partial<AdvancedNodeConfig>;
         data?: any;
+}
     }): Promise<FrameworkNode>;
     /**
      * Bulk create multiple nodes
@@ -116,7 +120,7 @@ export declare class NodeFactory {
         successRate: number;
         averageCreationTime: number;
         typeDistribution: Record<string, number>;
-        recentFailures: Array<{,
+        recentFailures: Array<{
             nodeType: string;
             nodeId: string;
             error: string;

@@ -7,6 +7,7 @@
 
 // Authentication and Authorization types
 
+}
 export interface User {
   id: string;
   email: string;
@@ -18,6 +19,8 @@ export interface User {
   security: UserSecurityInfo;
   metadata: UserMetadata;
 }
+}
+}
 export interface UserRole {
   id: string;
   name: string;
@@ -26,6 +29,8 @@ export interface UserRole {
   isSystemRole: boolean;
   hierarchy: number;
   inheritsFrom?: string;
+}
+}
 }
 export interface Permission {
   id: string;
@@ -36,10 +41,12 @@ export interface Permission {
   scope: PermissionScope;
   conditions?: PermissionCondition;
 }
+}
 export type PermissionAction = 'read' | 'write' | 'delete' | 'admin' | 'execute' | 'manage';
 export type PermissionScope = 'global' | 'organization' | 'team' | 'project' | 'self';
 export type UserStatus = 'active' | 'inactive' | 'suspended' | 'pending' | 'locked';
 
+}
 export interface UserProfile {
   firstName: string;
   lastName: string;
@@ -47,6 +54,8 @@ export interface UserProfile {
   timezone: string;
   locale: string;
   preferences: Record<string, any>;
+}
+}
 }
 export interface UserSecurityInfo {
   lastLogin?: Date;
@@ -57,6 +66,8 @@ export interface UserSecurityInfo {
   securityQuestions: SecurityQuestion;
   trustedDevices: TrustedDevice;
 }
+}
+}
 export interface UserMetadata {
   createdAt: Date;
   updatedAt: Date;
@@ -64,11 +75,15 @@ export interface UserMetadata {
   lastModifiedBy: string;
   version: number;
 }
+}
+}
 export interface SecurityQuestion {
   id: string;
   question: string;
   answerHash: string;
   createdAt: Date;
+}
+}
 }
 export interface TrustedDevice {
   id: string;
@@ -81,12 +96,16 @@ export interface TrustedDevice {
   lastUsed: Date;
   // Access Control types
 }
+}
+}
 export interface AccessRequest {
   userId: string;
   resource: string;
   action: PermissionAction;
   context?: AccessContext;
   timestamp: Date;
+}
+}
 }
 export interface AccessContext {
   ipAddress: string;
@@ -96,6 +115,8 @@ export interface AccessContext {
   sessionId: string;
   requestId: string;
 }
+}
+}
 export interface AccessResponse {
   granted: boolean;
   reason?: string;
@@ -103,12 +124,16 @@ export interface AccessResponse {
   expiresAt?: Date;
   auditId: string;
 }
+}
+}
 export interface PermissionCondition {
   type: 'time' | 'location' | 'device' | 'custom';
   operator: 'equals' | 'contains' | 'in' | 'not_in' | 'greater_than' | 'less_than';
   value: any;
   description: string;
   // Audit and Monitoring types
+}
+}
 }
 export interface AuditLog {
   id: string;
@@ -121,6 +146,7 @@ export interface AuditLog {
   timestamp: Date;
   metadata: AuditMetadata;
 }
+}
 export type AuditAction = 
   | 'login' | 'logout' | 'password_change' | 'permission_grant' | 'permission_revoke'
   | 'resource_access' | 'resource_create' | 'resource_update' | 'resource_delete'
@@ -128,12 +154,15 @@ export type AuditAction =
 
 export type AuditOutcome = 'success' | 'failure' | 'blocked' | 'warning';
 
+}
 export interface AuditDetails {
   description: string;
   oldValue?: any;
   newValue?: any;
   reason?: string;
   additionalData?: Record<string, any>;
+}
+}
 }
 export interface AuditMetadata {
   ipAddress: string;
@@ -144,6 +173,8 @@ export interface AuditMetadata {
   location?: string;
   riskScore?: number;
   // Security Monitoring types
+}
+}
 }
 export interface SecurityAlert {
   id: string;
@@ -160,6 +191,7 @@ export interface SecurityAlert {
   resolvedBy?: string;
   resolution?: string;
 }
+}
 export type SecurityAlertType = 
   | 'authentication_failure' | 'privilege_escalation' | 'data_breach'
   | 'suspicious_activity' | 'policy_violation' | 'malware_detected'
@@ -168,6 +200,7 @@ export type SecurityAlertType =
 export type SecuritySeverity = 'low' | 'medium' | 'high' | 'critical';
 export type AlertStatus = 'open' | 'investigating' | 'resolved' | 'false_positive';
 
+}
 export interface SecurityAlertDetails {
   affectedResources: string;
   riskScore: number;
@@ -176,17 +209,23 @@ export interface SecurityAlertDetails {
   recommendations: string;
   relatedAlerts: string;
 }
+}
+}
 export interface SecurityIndicator {
   type: string;
   value: string;
   confidence: number;
   source: string;
 }
+}
+}
 export interface SecurityEvent {
   timestamp: Date;
   event: string;
   details: string;
   // Compliance and Policy types
+}
+}
 }
 export interface SecurityPolicy {
   id: string;
@@ -199,11 +238,13 @@ export interface SecurityPolicy {
   status: PolicyStatus;
   metadata: PolicyMetadata;
 }
+}
 export type PolicyType = 'password' | 'access' | 'data' | 'network' | 'compliance' | 'custom';
 export type PolicyEnforcement = 'strict' | 'warn' | 'log' | 'disabled';
 export type PolicyScope = 'global' | 'organization' | 'team' | 'project';
 export type PolicyStatus = 'active' | 'draft' | 'deprecated' | 'disabled';
 
+}
 export interface PolicyRule {
   id: string;
   name: string;
@@ -212,9 +253,13 @@ export interface PolicyRule {
   parameters: Record<string, any>;
   enabled: boolean;
 }
+}
+}
 export interface PolicyAction {
   type: 'allow' | 'deny' | 'require_approval' | 'log' | 'notify';
   parameters: Record<string, any>;
+}
+}
 }
 export interface PolicyMetadata {
   createdAt: Date;
@@ -225,6 +270,8 @@ export interface PolicyMetadata {
   complianceFrameworks: string;
   // Data Classification types
 }
+}
+}
 export interface DataClassification {
   id: string;
   name: string;
@@ -234,13 +281,17 @@ export interface DataClassification {
   retentionPolicy: RetentionPolicy;
   accessControls: ClassificationAccessControl;
 }
+}
 export type ClassificationLevel = 'public' | 'internal' | 'confidential' | 'restricted' | 'top_secret';
 
+}
 export interface DataHandlingRule {
   type: 'storage' | 'transmission' | 'processing' | 'disposal';
   requirements: string;
   restrictions: string;
   approvals: string;
+}
+}
 }
 export interface RetentionPolicy {
   retentionPeriod: number;
@@ -248,11 +299,15 @@ export interface RetentionPolicy {
   disposalMethod: 'secure_delete' | 'archive' | 'anonymize';
   legalHoldExempt: boolean;
 }
+}
+}
 export interface ClassificationAccessControl {
   role: string;
   permissions: PermissionAction;
   conditions: PermissionCondition;
   // Encryption and Security Measures
+}
+}
 }
 export interface EncryptionConfig {
   algorithm: string;
@@ -261,12 +316,15 @@ export interface EncryptionConfig {
   keyRotationInterval: number;
   keyEscrow: boolean;
 }
+}
+}
 export interface SecurityMetrics {
   authentication: {
   successfulLogins: number;
   failedLogins: number;
   mfaAdoption: number;
   passwordCompliance: number;
+}
 };
   authorization: {
   accessViolations: number;
@@ -288,6 +346,7 @@ export interface SecurityMetrics {
 
 // Domain Events
 }
+}
 export interface SecurityDomainEvents {
   onUserAuthenticated: (user: User, context: AccessContext) => void;
   onAuthenticationFailed: (attempt: AccessRequest, reason: string) => void;
@@ -300,6 +359,8 @@ export interface SecurityDomainEvents {
   onSecurityMetricsUpdated: (metrics: SecurityMetrics) => void;
   // Security State
 }
+}
+}
 export interface SecurityDomainState {
   currentUser: User | null;
   userPermissions: Permission;
@@ -310,6 +371,8 @@ export interface SecurityDomainState {
   metrics: SecurityMetrics;
   loading: boolean;
   error: string | null;
+}
+}
 }
 export interface UserSession {
   id: string;
@@ -323,17 +386,23 @@ export interface UserSession {
   riskScore: number;
   flags: SessionFlag;
 }
+}
+}
 export interface SessionFlag {
   type: 'suspicious' | 'elevated_risk' | 'new_device' | 'unusual_location';
   reason: string;
   timestamp: Date;
   // Component Props
 }
+}
+}
 export interface SecurityDashboardProps {
   userId: string;
   permissions: Permission;
   onSecurityEvent?: (event: SecurityAlert) => void;
   className?: string;
+}
+}
 }
 export interface AccessControlProps {
   resource: string;
@@ -342,11 +411,14 @@ export interface AccessControlProps {
   fallback?: React.ReactNode;
   className?: string;
 }
+}
+}
 export interface AuditLogViewerProps {
   userId?: string;
   resource?: string;
   actions?: AuditAction;
 
+}
   dateRange?: { start: Date; end: Date };
   onLogSelect?: (log: AuditLog) => void;
   className?: string;

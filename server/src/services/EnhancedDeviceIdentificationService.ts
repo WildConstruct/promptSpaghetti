@@ -9,6 +9,7 @@ import { AuditService } from '../auth/services/AuditService';
 import crypto from 'crypto';
 
 }
+}
 export interface EnhancedDeviceProfile {
   deviceId: string;
   fingerprint: string;
@@ -24,6 +25,7 @@ export interface EnhancedDeviceProfile {
     behavior: BehaviorProfile;
     network: NetworkProfile;
     security: SecurityProfile;
+}
 }
   };
   
@@ -58,6 +60,7 @@ export interface EnhancedDeviceProfile {
 }
 
 }
+}
 export interface BrowserProfile {
   userAgent: string;
   userAgentParsed: {
@@ -66,6 +69,7 @@ export interface BrowserProfile {
     os: string;
     osVersion: string;
     device: string;
+}
 }
   };
   language: string;
@@ -78,6 +82,7 @@ export interface BrowserProfile {
 }
 
 }
+}
 export interface HardwareProfile {
   screenResolution: string;
   screenColorDepth: number;
@@ -89,6 +94,7 @@ export interface HardwareProfile {
     vendor: string;
     renderer: string;
 }
+}
   };
   battery: {
     level: number | null;
@@ -96,6 +102,7 @@ export interface HardwareProfile {
   };
 }
 
+}
 }
 export interface BehaviorProfile {
   mouseMovement: MouseBehavior;
@@ -105,7 +112,9 @@ export interface BehaviorProfile {
   interactionPatterns: InteractionPattern[];
 }
 }
+}
 
+}
 }
 export interface NetworkProfile {
   ipAddress: string;
@@ -119,7 +128,9 @@ export interface NetworkProfile {
   torDetected: boolean;
 }
 }
+}
 
+}
 }
 export interface SecurityProfile {
   canvasFingerprint: string;
@@ -133,7 +144,9 @@ export interface SecurityProfile {
   spoofingDetected: boolean;
 }
 }
+}
 
+}
 }
 export interface UserAssociation {
   userId: string;
@@ -144,7 +157,9 @@ export interface UserAssociation {
   trustLevel: number;
 }
 }
+}
 
+}
 }
 export interface LocationHistory {
   geolocation: GeolocationData;
@@ -153,7 +168,9 @@ export interface LocationHistory {
   frequency: number;
 }
 }
+}
 
+}
 }
 export interface FingerprintHistory {
   fingerprint: string;
@@ -163,7 +180,9 @@ export interface FingerprintHistory {
   transitionReason?: string;
 }
 }
+}
 
+}
 }
 export interface SecurityEvent {
   eventId: string;
@@ -173,7 +192,9 @@ export interface SecurityEvent {
   details: unknown;
 }
 }
+}
 
+}
 }
 export interface AnomalyReport {
   anomalyId: string;
@@ -187,10 +208,12 @@ export interface AnomalyReport {
     deviation?: number;
     recommendation?: string;
 }
+}
   };
 }
 
 // Behavioral biometrics interfaces
+}
 }
 export interface MouseBehavior {
   averageSpeed: number;
@@ -199,7 +222,9 @@ export interface MouseBehavior {
   movementPatterns: MovementPattern[];
 }
 }
+}
 
+}
 }
 export interface KeyboardBehavior {
   typingSpeed: number;
@@ -208,7 +233,9 @@ export interface KeyboardBehavior {
   patterns: KeystrokePattern[];
 }
 }
+}
 
+}
 }
 export interface TouchBehavior {
   touchPressure: number[];
@@ -217,7 +244,9 @@ export interface TouchBehavior {
   multiTouchPatterns: unknown[];
 }
 }
+}
 
+}
 }
 export interface ScrollBehavior {
   scrollSpeed: number;
@@ -225,7 +254,9 @@ export interface ScrollBehavior {
   scrollPatterns: unknown[];
 }
 }
+}
 
+}
 }
 export interface ClickPattern {
   averageInterval: number;
@@ -233,7 +264,9 @@ export interface ClickPattern {
   rightClickRatio: number;
 }
 }
+}
 
+}
 }
 export interface MovementPattern {
   curvature: number;
@@ -241,7 +274,9 @@ export interface MovementPattern {
   straightness: number;
 }
 }
+}
 
+}
 }
 export interface KeystrokePattern {
   digraph: string;  // Two-key combination
@@ -249,7 +284,9 @@ export interface KeystrokePattern {
   standardDeviation: number;
 }
 }
+}
 
+}
 }
 export interface InteractionPattern {
   action: string;
@@ -257,7 +294,9 @@ export interface InteractionPattern {
   timing: number[];
 }
 }
+}
 
+}
 }
 export interface DeviceIdentificationConfig {
   // Trust scoring weights
@@ -268,6 +307,7 @@ export interface DeviceIdentificationConfig {
     locationStability: number;
     securityEvents: number;
     verificationLevel: number;
+}
 }
   };
   
@@ -1331,9 +1371,11 @@ export class EnhancedDeviceIdentificationService {
 }
 
 }
+}
 export interface TrustDecision {
   decision: 'allow' | 'monitor' | 'challenge' | 'block';
   reason: string;
   requiresAction: string[];
+}
 }
 }

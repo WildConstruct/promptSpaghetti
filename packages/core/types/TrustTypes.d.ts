@@ -9,6 +9,7 @@
  */
 import { TimeRange } from '../marketplace/analytics.types';
 
+}
 export interface TrustScore {
     score: number;
     grade: TrustGrade;
@@ -20,6 +21,7 @@ export interface TrustScore {
 export type TrustGrade = 'A+' | 'A' | 'B+' | 'B' | 'C+' | 'C' | 'D' | 'F';
 export type TrustStatus = 'excellent' | 'good' | 'fair' | 'warning' | 'critical' | 'suspended';
 
+}
 export interface TrustFactor {
     factor: string;
     weight: number;
@@ -31,6 +33,7 @@ export interface TrustFactor {
 
 export type TrustFactorCategory = 'behavior' | 'quality' | 'security' | 'community' | 'performance' | 'compliance';
 
+}
 export interface UserTrustScore extends TrustScore {
     userId: string;
     userType: 'creator' | 'buyer' | 'both';
@@ -44,6 +47,7 @@ export interface UserTrustScore extends TrustScore {
     dataQuality: DataQualityScore;
     calculationMethod: string;
 
+}
 export interface UserTrustDimensions {
     reliability: DimensionScore;
     quality: DimensionScore;
@@ -51,6 +55,7 @@ export interface UserTrustDimensions {
     security: DimensionScore;
     expertise: DimensionScore;
 
+}
 export interface DimensionScore {
     score: number;
     weight: number;
@@ -58,6 +63,7 @@ export interface DimensionScore {
     trend: 'improving' | 'stable' | 'declining';
     lastUpdated: Date;
 
+}
 export interface CreatorTrustScore {
     score: number;
     contentQuality: ContentQualityTrustMetrics;
@@ -71,6 +77,7 @@ export interface CreatorTrustScore {
     badges: TrustBadge[];
     certifications: Certification[];
 
+}
 export interface BuyerTrustScore {
     score: number;
     purchaseHistory: PurchaseHistoryMetrics;
@@ -82,6 +89,7 @@ export interface BuyerTrustScore {
     disputeRate: number;
     refundRate: number;
 
+}
 export interface TemplateTrustScore extends TrustScore {
     templateId: string;
     creatorId: string;
@@ -93,6 +101,7 @@ export interface TemplateTrustScore extends TrustScore {
     trustIndicators: TemplateTrustIndicator[];
     warnings: TrustWarning[];
 
+}
 export interface TemplateTrustDimensions {
     contentQuality: DimensionScore;
     safety: DimensionScore;
@@ -100,6 +109,7 @@ export interface TemplateTrustDimensions {
     community: DimensionScore;
     transparency: DimensionScore;
 
+}
 export interface TemplateQualityAssessment {
     overallQuality: number;
     codeQuality: number;
@@ -109,6 +119,7 @@ export interface TemplateQualityAssessment {
     maintenabilityScore: number;
     qualityTrend: 'improving' | 'stable' | 'declining';
 
+}
 export interface TemplateSafetyAssessment {
     overallSafety: number;
     securityScore: number;
@@ -118,6 +129,7 @@ export interface TemplateSafetyAssessment {
     safetyWarnings: SafetyWarning[];
     lastSecurityScan: Date;
 
+}
 export interface CommunityValidationMetrics {
     reviewCount: number;
     averageRating: number;
@@ -126,6 +138,7 @@ export interface CommunityValidationMetrics {
     reportedIssues: number;
     communityFlags: CommunityFlag[];
 
+}
 export interface TemplatePerformanceMetrics {
     executionSuccessRate: number;
     averageExecutionTime: number;
@@ -134,6 +147,7 @@ export interface TemplatePerformanceMetrics {
     scalabilityScore: number;
     uptimePercentage: number;
 
+}
 export interface TransactionTrustScore extends TrustScore {
     transactionId: string;
     buyerId: string;
@@ -145,6 +159,7 @@ export interface TransactionTrustScore extends TrustScore {
     fraudIndicators: FraudIndicator[];
     transactionContext: TransactionContext;
 
+}
 export interface TransactionTrustFactors {
     buyerTrustScore: number;
     sellerTrustScore: number;
@@ -153,6 +168,7 @@ export interface TransactionTrustFactors {
     paymentMethod: string;
     transactionHistory: number;
 
+}
 export interface TransactionRiskAssessment {
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
     riskScore: number;
@@ -160,6 +176,7 @@ export interface TransactionRiskAssessment {
     mitigationStrategies: string[];
     recommendedActions: string[];
 
+}
 export interface TrustScoreHistory {
     date: Date;
     score: number;
@@ -167,12 +184,14 @@ export interface TrustScoreHistory {
     reason: string;
     impact: number;
 
+}
 export interface TrustTrends {
     direction: 'improving' | 'stable' | 'declining';
     velocity: number;
     prediction: number;
     confidence: number;
 
+}
 export interface RiskFactor {
     factor: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
@@ -181,6 +200,7 @@ export interface RiskFactor {
     description: string;
     mitigation: string[];
 
+}
 export interface VerificationStatus {
     isVerified: boolean;
     verificationType: VerificationType[];
@@ -190,6 +210,7 @@ export interface VerificationStatus {
 
 export type VerificationType = 'email' | 'phone' | 'identity' | 'business' | 'expertise' | 'background_check';
 
+}
 export interface DataQualityScore {
     completeness: number;
     accuracy: number;
@@ -197,6 +218,7 @@ export interface DataQualityScore {
     consistency: number;
     overallQuality: number;
 
+}
 export interface ContentQualityTrustMetrics {
     averageQualityScore: number;
     qualityConsistency: number;
@@ -204,6 +226,7 @@ export interface ContentQualityTrustMetrics {
     topPerformingTemplates: number;
     qualityBadges: string[];
 
+}
 export interface ReputationMetrics {
     overallReputation: number;
     peerRecognition: number;
@@ -211,12 +234,14 @@ export interface ReputationMetrics {
     expertiseRecognition: number;
     contributionScore: number;
 
+}
 export interface SatisfactionMetrics {
     customerSatisfactionScore: number;
     netPromoterScore: number;
     customerRetentionRate: number;
     supportSatisfaction: number;
 
+}
 export interface ComplianceMetrics {
     complianceScore: number;
     violationCount: number;
@@ -224,6 +249,7 @@ export interface ComplianceMetrics {
     complianceHistory: ComplianceEvent[];
     certificationStatus: CertificationStatus[];
 
+}
 export interface PurchaseHistoryMetrics {
     totalPurchases: number;
     purchaseValue: number;
@@ -232,6 +258,7 @@ export interface PurchaseHistoryMetrics {
     disputeRate: number;
     refundRate: number;
 
+}
 export interface ReviewQualityMetrics {
     reviewCount: number;
     averageReviewLength: number;
@@ -239,6 +266,7 @@ export interface ReviewQualityMetrics {
     reviewAccuracy: number;
     constructiveFeedbackScore: number;
 
+}
 export interface CommunityContributionMetrics {
     helpfulnessScore: number;
     mentorshipScore: number;
@@ -246,6 +274,7 @@ export interface CommunityContributionMetrics {
     communityEngagement: number;
     forumContributions: number;
 
+}
 export interface PaymentReliabilityMetrics {
     paymentSuccessRate: number;
     averagePaymentTime: number;
@@ -253,6 +282,7 @@ export interface PaymentReliabilityMetrics {
     paymentMethodsUsed: number;
     paymentHistory: PaymentEvent[];
 
+}
 export interface TrustBadge {
     badgeId: string;
     name: string;
@@ -262,6 +292,7 @@ export interface TrustBadge {
     expiryDate?: Date;
     criteria: string[];
 
+}
 export interface Certification {
     certificationId: string;
     name: string;
@@ -271,6 +302,7 @@ export interface Certification {
     status: 'active' | 'expired' | 'revoked';
     verificationUrl?: string;
 
+}
 export interface TemplateTrustIndicator {
     indicator: string;
     type: 'positive' | 'neutral' | 'negative';
@@ -278,6 +310,7 @@ export interface TemplateTrustIndicator {
     description: string;
     evidenceCount: number;
 
+}
 export interface TrustWarning {
     warningId: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
@@ -288,6 +321,7 @@ export interface TrustWarning {
     reportedDate: Date;
     status: 'active' | 'resolved' | 'dismissed';
 
+}
 export interface SafetyWarning {
     warningId: string;
     type: 'security' | 'privacy' | 'content' | 'performance';
@@ -297,6 +331,7 @@ export interface SafetyWarning {
     recommendation: string;
     detectedDate: Date;
 
+}
 export interface RatingDistribution {
     oneStar: number;
     twoStar: number;
@@ -304,6 +339,7 @@ export interface RatingDistribution {
     fourStar: number;
     fiveStar: number;
 
+}
 export interface CommunityFlag {
     flagId: string;
     type: 'inappropriate' | 'spam' | 'quality' | 'safety' | 'other';
@@ -312,6 +348,7 @@ export interface CommunityFlag {
     status: 'pending' | 'reviewed' | 'resolved' | 'dismissed';
     reportedDate: Date;
 
+}
 export interface FraudIndicator {
     indicator: string;
     type: 'behavioral' | 'transactional' | 'identity' | 'technical';
@@ -320,12 +357,14 @@ export interface FraudIndicator {
     description: string;
     detectedDate: Date;
 
+}
 export interface TransactionContext {
     deviceInfo: DeviceInfo;
     locationInfo: LocationInfo;
     timingInfo: TimingInfo;
     behaviorInfo: BehaviorInfo;
 
+}
 export interface DeviceInfo {
     deviceType: string;
     browser: string;
@@ -333,6 +372,7 @@ export interface DeviceInfo {
     ipAddress: string;
     userAgent: string;
 
+}
 export interface LocationInfo {
     country: string;
     region: string;
@@ -340,18 +380,21 @@ export interface LocationInfo {
     timezone: string;
     isVPN: boolean;
 
+}
 export interface TimingInfo {
     transactionTime: Date;
     sessionDuration: number;
     timeOnPage: number;
     timeSinceLastTransaction: number;
 
+}
 export interface BehaviorInfo {
     clickPattern: string;
     typingPattern: string;
     navigationPattern: string;
     suspiciousActivity: boolean;
 
+}
 export interface ComplianceEvent {
     eventId: string;
     type: 'violation' | 'warning' | 'certification' | 'audit';
@@ -361,6 +404,7 @@ export interface ComplianceEvent {
     resolved: boolean;
     resolutionDate?: Date;
 
+}
 export interface CertificationStatus {
     certification: string;
     status: 'active' | 'expired' | 'pending' | 'revoked';
@@ -368,6 +412,7 @@ export interface CertificationStatus {
     expiryDate?: Date;
     issuer: string;
 
+}
 export interface PaymentEvent {
     eventId: string;
     type: 'payment' | 'refund' | 'chargeback' | 'dispute';
@@ -377,6 +422,7 @@ export interface PaymentEvent {
     date: Date;
     paymentMethod: string;
 
+}
 export interface TrustScoreConfig {
     version: string;
     weights: {
@@ -384,12 +430,14 @@ export interface TrustScoreConfig {
         buyer: BuyerTrustWeights;
         template: TemplateTrustWeights;
         transaction: TransactionTrustWeights;
+}
     };
     thresholds: TrustThresholds;
     calculation: CalculationConfig;
     fraudDetection: FraudDetectionConfig;
     updateFrequencies: UpdateFrequencyConfig;
 
+}
 export interface CreatorTrustWeights {
     reliability: number;
     quality: number;
@@ -397,6 +445,7 @@ export interface CreatorTrustWeights {
     security: number;
     expertise: number;
 
+}
 export interface BuyerTrustWeights {
     reliability: number;
     quality: number;
@@ -404,6 +453,7 @@ export interface BuyerTrustWeights {
     security: number;
     expertise: number;
 
+}
 export interface TemplateTrustWeights {
     contentQuality: number;
     safety: number;
@@ -411,6 +461,7 @@ export interface TemplateTrustWeights {
     community: number;
     transparency: number;
 
+}
 export interface TransactionTrustWeights {
     buyerScore: number;
     sellerScore: number;
@@ -418,6 +469,7 @@ export interface TransactionTrustWeights {
     transactionContext: number;
     historicalData: number;
 
+}
 export interface TrustThresholds {
     excellent: number;
     good: number;
@@ -426,6 +478,7 @@ export interface TrustThresholds {
     critical: number;
     suspension: number;
 
+}
 export interface CalculationConfig {
     minimumDataPoints: number;
     historicalWindow: number;
@@ -433,6 +486,7 @@ export interface CalculationConfig {
     confidenceThreshold: number;
     recalculationTriggers: string[];
 
+}
 export interface FraudDetectionConfig {
     enabled: boolean;
     sensitivityLevel: 'low' | 'medium' | 'high';
@@ -440,12 +494,14 @@ export interface FraudDetectionConfig {
     autoSuspendThreshold: number;
     alertThreshold: number;
 
+}
 export interface UpdateFrequencyConfig {
     realTime: string[];
     hourly: string[];
     daily: string[];
     weekly: string[];
 
+}
 export interface TrustScoreAnalytics {
     period: AnalyticsPeriod;
     generatedAt: Date;
@@ -457,11 +513,13 @@ export interface TrustScoreAnalytics {
     insights: TrustInsight[];
     recommendations: TrustRecommendation[];
 
+}
 export interface AnalyticsPeriod {
     startDate: Date;
     endDate: Date;
     timeRange: TimeRange;
 
+}
 export interface MarketplaceTrustMetrics {
     averageTrustScore: number;
     trustScoreDistribution: TrustDistribution;
@@ -470,6 +528,7 @@ export interface MarketplaceTrustMetrics {
     trustScoreImprovement: number;
     communityTrustHealth: number;
 
+}
 export interface TrustDistribution {
     excellent: number;
     good: number;
@@ -478,6 +537,7 @@ export interface TrustDistribution {
     critical: number;
     suspended: number;
 
+}
 export interface TrustTrendAnalysis {
     overallTrend: 'improving' | 'stable' | 'declining';
     trendVelocity: number;
@@ -485,18 +545,21 @@ export interface TrustTrendAnalysis {
     seasonalPatterns: SeasonalPattern[];
     trustMilestones: TrustMilestone[];
 
+}
 export interface SeasonalPattern {
     period: string;
     impact: number;
     confidence: number;
     description: string;
 
+}
 export interface TrustMilestone {
     date: Date;
     milestone: string;
     impact: number;
     description: string;
 
+}
 export interface RiskAnalysis {
     overallRiskLevel: 'low' | 'medium' | 'high' | 'critical';
     riskFactors: RiskFactor[];
@@ -504,6 +567,7 @@ export interface RiskAnalysis {
     suspiciousActivityCount: number;
     riskTrends: RiskTrend[];
 
+}
 export interface RiskTrend {
     riskType: string;
     trend: 'increasing' | 'stable' | 'decreasing';
@@ -511,6 +575,7 @@ export interface RiskTrend {
     affectedUsers: number;
     impact: string;
 
+}
 export interface TrustInsight {
     insightId: string;
     type: 'opportunity' | 'risk' | 'trend' | 'anomaly';
@@ -522,6 +587,7 @@ export interface TrustInsight {
     relatedMetrics: string[];
     generatedAt: Date;
 
+}
 export interface TrustRecommendation {
     recommendationId: string;
     category: 'user_engagement' | 'fraud_prevention' | 'quality_improvement' | 'community_building';
@@ -533,6 +599,7 @@ export interface TrustRecommendation {
         effort: 'low' | 'medium' | 'high';
         timeline: string;
         resources: string[];
+}
     };
     success_metrics: string[];
     generatedAt: Date;

@@ -25,6 +25,7 @@ import { AccessRequestWorkflowService } from '../services/AccessRequestWorkflowS
 
 // Request/Response Type Definitions
 }
+}
 interface CreateGrantRequest {
   Body: {
     granteeId: string;
@@ -41,6 +42,7 @@ interface CreateGrantRequest {
         window: number;
         burstAllowed?: boolean;
         burstLimit?: number;
+}
 }
       }>;
     }>;
@@ -117,9 +119,11 @@ interface CreateGrantRequest {
 }
 
 }
+}
 interface ActivateGrantRequest {
   Params: {
     grantId: string;
+}
 }
   };
   Headers: {
@@ -130,9 +134,11 @@ interface ActivateGrantRequest {
 }
 
 }
+}
 interface ValidateAccessRequest {
   Params: {
     grantId: string;
+}
 }
   };
   Body: {
@@ -147,9 +153,11 @@ interface ValidateAccessRequest {
 }
 
 }
+}
 interface RevokeGrantRequest {
   Params: {
     grantId: string;
+}
 }
   };
   Body: {
@@ -166,9 +174,11 @@ interface RevokeGrantRequest {
 }
 
 }
+}
 interface ExtendGrantRequest {
   Params: {
     grantId: string;
+}
 }
   };
   Body: {
@@ -184,6 +194,7 @@ interface ExtendGrantRequest {
   };
 }
 
+}
 }
 interface SearchGrantsRequest {
   Querystring: {
@@ -203,6 +214,7 @@ interface SearchGrantsRequest {
     limit?: string;
     offset?: string;
 }
+}
   };
   Headers: {
     'x-user-id': string;
@@ -212,11 +224,13 @@ interface SearchGrantsRequest {
 }
 
 }
+}
 interface GetAnalyticsRequest {
   Querystring: {
     startDate?: string;
     endDate?: string;
     timeframe?: 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'QUARTERLY' | 'YEARLY';
+}
 }
   };
   Headers: {

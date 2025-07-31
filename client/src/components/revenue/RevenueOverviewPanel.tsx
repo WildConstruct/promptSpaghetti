@@ -7,6 +7,7 @@
 import React from 'react';
 import { RevenueMetrics, RevenueDashboardData } from '../../types/revenue';
 import './RevenueOverviewPanel.css';
+}
 interface RevenueOverviewPanelProps {
   metrics: RevenueMetrics | null;,
   dashboardData: RevenueDashboardData | null;
@@ -17,6 +18,7 @@ interface RevenueOverviewPanelProps {
   dashboardData,
   layout = 'detailed',
   className = ''
+}
 }) => {
   if (!metrics) {
     return;

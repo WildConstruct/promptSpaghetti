@@ -5,6 +5,7 @@
 import React from 'react';
 import { BaseExtension, ExtensionContext, ExtensionValidationResult } from './ExtensionInterfaces';
 
+}
 export interface UIExtension extends BaseExtension {
     readonly extensionType: 'ui';
     getComponentDefinitions(): UIComponentDefinition[];
@@ -17,6 +18,7 @@ export interface UIExtension extends BaseExtension {
     onUIDestroyed?(context: ExtensionContext): void;
     onThemeChanged?(theme: Theme): void;
 
+}
 export interface UIComponentDefinition {
     id: string;
     name: string;
@@ -39,12 +41,14 @@ export declare enum UIComponentCategory {
     OVERLAY = "overlay",
     CUSTOM = "custom"
 
+}
 export interface UIComponentUIConfiguration {
     layout?: UIComponentLayout;
     styling?: UIComponentStyling;
     responsive?: UIComponentResponsive;
     accessibility?: UIComponentAccessibility;
 
+}
 export interface UIComponentLayout {
     position?: 'fixed' | 'absolute' | 'relative' | 'sticky';
     zIndex?: number;
@@ -57,6 +61,7 @@ export interface UIComponentLayout {
     resizable?: boolean;
     draggable?: boolean;
 
+}
 export interface UIComponentStyling {
     className?: string;
     style?: React.CSSProperties;
@@ -64,16 +69,19 @@ export interface UIComponentStyling {
     variant?: string;
     customCSS?: string;
 
+}
 export interface UIComponentResponsive {
     breakpoints?: {
         mobile?: UIComponentLayout;
         tablet?: UIComponentLayout;
         desktop?: UIComponentLayout;
+}
     };
     hideOnMobile?: boolean;
     hideOnTablet?: boolean;
     hideOnDesktop?: boolean;
 
+}
 export interface UIComponentAccessibility {
     role?: string;
     ariaLabel?: string;
@@ -83,6 +91,7 @@ export interface UIComponentAccessibility {
     keyboardNavigation?: boolean;
     screenReaderSupport?: boolean;
 
+}
 export interface UIComponentRuntimeConfiguration {
     lazy?: boolean;
     suspense?: boolean;
@@ -91,6 +100,7 @@ export interface UIComponentRuntimeConfiguration {
     state?: UIComponentStateConfiguration;
     events?: UIComponentEventConfiguration;
 
+}
 export interface UIComponentPerformance {
     memo?: boolean;
     virtualizeList?: boolean;
@@ -98,18 +108,21 @@ export interface UIComponentPerformance {
     throttleUpdates?: number;
     measurePerformance?: boolean;
 
+}
 export interface UIComponentStateConfiguration {
     persist?: boolean;
     scope?: 'global' | 'session' | 'local';
     initialState?: any;
     reducer?: (state: any, action: any) => any;
 
+}
 export interface UIComponentEventConfiguration {
     preventDefault?: string[];
     stopPropagation?: string[];
     capture?: string[];
     passive?: string[];
 
+}
 export interface UIComponentMetadata {
     author: string;
     license: string;
@@ -122,10 +135,12 @@ export interface UIComponentMetadata {
         maxVersion?: string;
         browsers?: string[];
         devices?: string[];
+}
     };
     tags?: string[];
     keywords?: string[];
 
+}
 export interface UIComponentExample {
     name: string;
     description: string;
@@ -133,6 +148,7 @@ export interface UIComponentExample {
     code?: string;
     preview?: string;
 
+}
 export interface ThemeContribution {
     id: string;
     name: string;
@@ -146,6 +162,7 @@ export interface ThemeContribution {
     transitions: ThemeTransitions;
     custom?: Record<string, any>;
 
+}
 export interface ThemeColors {
     primary: string;
     secondary: string;
@@ -161,6 +178,7 @@ export interface ThemeColors {
     info: string;
     extended?: Record<string, string>;
 
+}
 export interface ThemeTypography {
     fontFamily: string;
     fontSize: {
@@ -171,6 +189,7 @@ export interface ThemeTypography {
         xl: string;
         '2xl': string;
         '3xl': string;
+}
     };
     fontWeight: {
         light: number;
@@ -190,6 +209,7 @@ export interface ThemeTypography {
         wide: string;
     };
 
+}
 export interface ThemeSpacing {
     xs: string;
     sm: string;
@@ -200,6 +220,7 @@ export interface ThemeSpacing {
     '3xl': string;
     custom?: Record<string, string>;
 
+}
 export interface ThemeShadows {
     sm: string;
     md: string;
@@ -208,11 +229,13 @@ export interface ThemeShadows {
     none: string;
     custom?: Record<string, string>;
 
+}
 export interface ThemeBorders {
     width: {
         thin: string;
         normal: string;
         thick: string;
+}
     };
     radius: {
         none: string;
@@ -227,11 +250,13 @@ export interface ThemeBorders {
         dotted: string;
     };
 
+}
 export interface ThemeTransitions {
     duration: {
         fast: string;
         normal: string;
         slow: string;
+}
     };
     easing: {
         linear: string;
@@ -241,6 +266,7 @@ export interface ThemeTransitions {
         easeInOut: string;
     };
 
+}
 export interface CommandContribution {
     id: string;
     title: string;
@@ -252,14 +278,17 @@ export interface CommandContribution {
     keybinding?: string;
     context?: string[];
 
+}
 export interface CommandHandler {
     (context: ExtensionContext, ...args: any[]): Promise<any> | any;
 
+}
 export interface CommandEnablement {
     when?: string;
     contexts?: string[];
     permissions?: string[];
 
+}
 export interface MenuContribution {
     id: string;
     label: string;
@@ -280,6 +309,7 @@ export declare enum MenuTarget {
     GRAPH = "graph",
     CUSTOM = "custom"
 
+}
 export interface KeybindingContribution {
     id: string;
     key: string;
@@ -290,6 +320,7 @@ export interface KeybindingContribution {
     win?: string;
     linux?: string;
 
+}
 export interface Theme {
     id: string;
     name: string;
@@ -302,6 +333,7 @@ export interface Theme {
     transitions: ThemeTransitions;
     custom?: Record<string, any>;
 
+}
 export interface UIContextManager {
     registerComponent(definition: UIComponentDefinition): void;
     unregisterComponent(componentId: string): void;
@@ -330,6 +362,7 @@ export interface UIContextManager {
     off(event: string, listener: (...args: any[]) => void): void;
     emit(event: string, ...args: any[]): void;
 
+}
 export interface UIComponentFactory {
     create(componentId: string, props: any): React.ComponentType<any>;
     canCreate(componentId: string): boolean;
@@ -343,3 +376,4 @@ export declare namespace UIExtensionHelpers {
     function validateUIComponent(definition: UIComponentDefinition): ExtensionValidationResult;
 
 //# sourceMappingURL=UIExtension.d.ts.map
+}

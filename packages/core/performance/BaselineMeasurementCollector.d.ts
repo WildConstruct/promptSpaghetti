@@ -5,6 +5,7 @@
  */
 import { TestEnvironment } from './PerformanceBaselines';
 
+}
 interface SystemInfo {
     nodeVersion: string;
     platform: string;
@@ -82,6 +83,7 @@ export declare function collectSystemBaselines(environment?: TestEnvironment, it
     report: any;
     collection: any;
     systemInfo: SystemInfo;
+}
 }>;
 export default BaselineMeasurementCollector;
 //# sourceMappingURL=BaselineMeasurementCollector.d.ts.map

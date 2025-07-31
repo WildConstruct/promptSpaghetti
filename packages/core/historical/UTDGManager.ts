@@ -46,6 +46,7 @@ export class UTDGManager {
   * Query historical content from all available sources
   */
   async queryHistoricalContent(query: HistoricalQuery): Promise<HistoricalQueryResult> {
+
   // Try external sources first
   try {
   const externalResults = await this.externalDataService.queryHistoricalData(query);
@@ -64,6 +65,7 @@ export class UTDGManager {
   * Generate historically accurate content for a specific scenario
   */
   async generateHistoricalContent(config: ContentGenerationConfig): Promise<GeneratedContent> {
+
   const startTime = performance.now();
   // Build query from configuration
   const query: HistoricalQuery = {
@@ -285,8 +287,7 @@ export class UTDGManager {
         source_reliability: reliabilityScore,
         freshness: freshnessScore,
       }),
-      last_validated: new Date().toISOString()
-    };
+      last_validated: new Date().toISOString(};
   }
   /**
    * Register external data sources

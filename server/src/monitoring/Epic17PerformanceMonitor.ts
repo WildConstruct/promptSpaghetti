@@ -22,6 +22,7 @@ import { AuditService } from '../auth/services/AuditService';
 
 // Epic 17 Admin-specific interfaces
 }
+}
 export interface AdminPerformanceMetric extends PerformanceMetric {
   // Admin-specific context
   adminContext: {
@@ -43,6 +44,7 @@ export interface AdminPerformanceMetric extends PerformanceMetric {
 }
 
 }
+}
 export interface AdminPerformanceDashboard {
   // Admin System Overview
   adminSystemOverview: {
@@ -51,6 +53,7 @@ export interface AdminPerformanceDashboard {
     systemConfigurationChanges: number;
     integrationHealthScore: number;
     complianceViolations: number;
+}
 }
   };
   
@@ -97,6 +100,7 @@ export interface AdminPerformanceDashboard {
 }
 
 }
+}
 export interface AdminPerformanceAlert {
   alertId: string;
   adminOperation: AdminOperation;
@@ -108,6 +112,7 @@ export interface AdminPerformanceAlert {
   affectedUsers: number;
   triggeredAt: Date;
   status: 'active' | 'acknowledged' | 'resolved';
+}
 }
 }
 
@@ -734,6 +739,7 @@ export class Epic17PerformanceMonitor extends EventEmitter {
 
 // Supporting interfaces
 }
+}
 interface IntegrationHealthData {
   integration: SystemIntegration;
   status: 'healthy' | 'degraded' | 'unhealthy';
@@ -744,12 +750,15 @@ interface IntegrationHealthData {
   totalChecks: number;
 }
 }
+}
 
+}
 }
 export interface Epic17MonitorConfig {
   adminMonitoring: {
     enabled: boolean;
     interval: number; // milliseconds
+}
 }
   };
   integrationMonitoring: {
@@ -770,12 +779,14 @@ export interface Epic17MonitorConfig {
 }
 
 }
+}
 export interface Epic17PerformanceReport {
   reportId: string;
   generatedAt: Date;
   period: {
     startDate: Date;
     endDate: Date;
+}
 }
   };
   categories: AdminCategory[];

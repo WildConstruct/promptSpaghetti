@@ -14,6 +14,7 @@ import {
   KnowledgeBaseArticle,
   RequestContext
 } from '../../services/Epic16HelpRequestService';
+}
 interface HelpRequestFormProps {
   helpService: Epic16HelpRequestService;
   userId: string;
@@ -42,6 +43,7 @@ interface HelpRequestFormProps {
   [HelpCategory.PARTNERSHIPS]: ['affiliate', 'integration', 'business_development'],
   [HelpCategory.COMPLIANCE]: ['dmca', 'privacy', 'terms_of_service', 'licensing'],
   [HelpCategory.GENERAL]: ['feedback', 'feature_request', 'other'],
+}
 };
 
 export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({)

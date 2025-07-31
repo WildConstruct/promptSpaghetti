@@ -6,6 +6,7 @@
  */
 import React, { useState } from 'react';
 
+}
 export interface MarketplaceTemplate {
   id: string;
   title: string;
@@ -25,9 +26,11 @@ export interface MarketplaceTemplate {
   downloads: number;
   views: number;
   likes: number;
+}
 };
   createdAt: Date;
   updatedAt: Date;
+}
 interface MarketplaceCardProps {
   template: MarketplaceTemplate;
   variant?: 'grid' | 'list' | 'featured';
@@ -37,6 +40,7 @@ interface MarketplaceCardProps {
   onLike?: (template: MarketplaceTemplate) => void;
   onShare?: (template: MarketplaceTemplate) => void;
   className?: string;
+}
 }
 export const MarketplaceCard: React.FC<MarketplaceCardProps> = ({)
   template,
@@ -71,13 +75,13 @@ export const MarketplaceCard: React.FC<MarketplaceCardProps> = ({)
     const hasHalfStar = rating % 1 !== 0;
     for (let i = 0; i < 5; i++) {
       if (i < fullStars) {
-        stars.push()
+        stars.push(
           <svg key={i} className="h-4 w-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
             <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
           </svg>
         );
       } else if (i === fullStars && hasHalfStar) {
-        stars.push()
+        stars.push(
           <svg key={i} className="h-4 w-4 text-yellow-400" viewBox="0 0 20 20">
             <defs>
               <linearGradient id={`half-${template.id}`}>}
@@ -89,7 +93,7 @@ export const MarketplaceCard: React.FC<MarketplaceCardProps> = ({)
           </svg>
         );
       } else {
-        stars.push()
+        stars.push(
           <svg key={i} className="h-4 w-4 text-gray-300" viewBox="0 0 20 20">
             <path fill="currentColor" d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
           </svg>

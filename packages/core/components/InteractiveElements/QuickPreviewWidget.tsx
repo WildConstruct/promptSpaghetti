@@ -10,6 +10,7 @@ import {
   Epic16InteractiveElementsService,
   InteractionType
 } from '../../services/Epic16InteractiveElementsService';
+}
 interface QuickPreviewWidgetProps {
   element: QuickPreviewElement;
   interactiveService: Epic16InteractiveElementsService;
@@ -62,6 +63,7 @@ interface QuickPreviewWidgetProps {
   onDownload,
   onShare,
   onPurchase
+}
 }) => {
   // Configuration
   const previewConfig = element.config.preview_config;
@@ -291,7 +293,7 @@ interface QuickPreviewWidgetProps {
     const stars = [];
     const sizeClass = size === 'sm' ? 'w-4 h-4' : 'w-5 h-5';
     for (let i = 1; i <= 5; i++) {
-      stars.push()
+      stars.push(
         <svg
           key={i}
           className={`${sizeClass} ${i <= rating ? 'text-yellow-400' : 'text-gray-300'}`}

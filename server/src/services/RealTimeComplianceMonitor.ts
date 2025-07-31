@@ -24,6 +24,7 @@ import { RedisService } from '../auth/database/RedisService';
 import { AnalyticsCollector } from '../analytics/AnalyticsCollector';
 
 }
+}
 export interface RealTimeMonitoringConfig {
   monitorId: string;
   enabled: boolean;
@@ -57,7 +58,9 @@ export interface RealTimeMonitoringConfig {
   enableAutoRemediation: boolean;
 }
 }
+}
 
+}
 }
 export interface RealTimeEvent {
   eventId: string;
@@ -71,7 +74,9 @@ export interface RealTimeEvent {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface EventPayload {
   userId?: string;
@@ -85,7 +90,9 @@ export interface EventPayload {
   error?: ErrorInfo;
 }
 }
+}
 
+}
 }
 export interface DataAccessInfo {
   dataType: string;
@@ -97,7 +104,9 @@ export interface DataAccessInfo {
   consentId?: string;
 }
 }
+}
 
+}
 }
 export interface ComplianceViolationEvent {
   violationId: string;
@@ -113,7 +122,9 @@ export interface ComplianceViolationEvent {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ViolationEvidence {
   type: 'log' | 'metric' | 'configuration' | 'data_sample' | 'user_action';
@@ -124,7 +135,9 @@ export interface ViolationEvidence {
   signature?: string;
 }
 }
+}
 
+}
 }
 export interface AlertThreshold {
   metric: string;
@@ -134,7 +147,9 @@ export interface AlertThreshold {
   consecutiveCount?: number;
 }
 }
+}
 
+}
 }
 export interface EscalationRule {
   ruleId: string;
@@ -145,7 +160,9 @@ export interface EscalationRule {
   actions: string[];
 }
 }
+}
 
+}
 }
 export interface SuppressionRule {
   ruleId: string;
@@ -155,7 +172,9 @@ export interface SuppressionRule {
   approvedBy: string;
 }
 }
+}
 
+}
 }
 export interface MonitoringMetrics {
   eventsProcessed: number;
@@ -166,6 +185,7 @@ export interface MonitoringMetrics {
   alertsGenerated: number;
   remediationsTriggered: number;
   timestamp: Date;
+}
 }
 }
 

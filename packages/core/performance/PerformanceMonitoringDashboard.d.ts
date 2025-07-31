@@ -5,12 +5,14 @@
 import { EventEmitter } from 'events';
 import { PerformanceSnapshot, BudgetCheckResult } from './PerformanceBudget';
 
+}
 export interface DashboardConfig {
     updateInterval: number;
     historyLimit: number;
     alertThresholds: {
         violations: number;
         score: number;
+}
     };
     autoOptimize: boolean;
     reporting: {
@@ -19,6 +21,7 @@ export interface DashboardConfig {
         recipients: string[];
     };
 
+}
 export interface DashboardData {
     timestamp: number;
     status: 'healthy' | 'warning' | 'critical';
@@ -31,9 +34,11 @@ export interface DashboardData {
         bundleSize: number[];
         memoryUsage: number[];
         apiLatency: number[];
+}
     };
     alerts: DashboardAlert[];
 
+}
 export interface DashboardAlert {
     id: string;
     type: 'budget-violation' | 'performance-degradation' | 'system-health' | 'optimization-suggestion';
@@ -45,6 +50,7 @@ export interface DashboardAlert {
     autoResolvable: boolean;
     actions: AlertAction[];
 
+}
 export interface AlertAction {
     id: string;
     label: string;
@@ -52,6 +58,7 @@ export interface AlertAction {
     description: string;
     automated: boolean;
 
+}
 export interface OptimizationSuggestion {
     id: string;
     category: 'bundle' | 'runtime' | 'api' | 'memory' | 'network' | 'build';
@@ -62,6 +69,7 @@ export interface OptimizationSuggestion {
         scoreImprovement: number;
         sizeReduction?: number;
         timeReduction?: number;
+}
     };
     implementation: {
         effort: 'low' | 'medium' | 'high';

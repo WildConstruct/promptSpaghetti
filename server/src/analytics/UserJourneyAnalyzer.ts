@@ -6,6 +6,7 @@ import { AnalyticsEventType } from './AnalyticsCollector';
  * User journey path segment
  */
 }
+}
 export interface JourneySegment {
   step: number;
   eventType: AnalyticsEventType;
@@ -16,10 +17,12 @@ export interface JourneySegment {
   metadata?: Record<string, any>;
 }
 }
+}
 
 /**
  * Complete user journey
  */
+}
 }
 export interface UserJourney {
   journeyId: string;
@@ -34,10 +37,12 @@ export interface UserJourney {
   dropoffPoint?: number;
 }
 }
+}
 
 /**
  * User journey pattern
  */
+}
 }
 export interface JourneyPattern {
   patternId: string;
@@ -48,6 +53,7 @@ export interface JourneyPattern {
   successRate: number;
   averageDuration: number;
   conversionRate: number;
+}
 }
   dropoffPoints: Array<{ step: number; rate: number }>;
   variants: Array<{
@@ -61,6 +67,7 @@ export interface JourneyPattern {
  * Funnel analysis result
  */
 }
+}
 export interface FunnelAnalysis {
   funnelId: string;
   name: string;
@@ -71,6 +78,7 @@ export interface FunnelAnalysis {
     conversionRate: number;
     dropoffRate: number;
     averageTimeToNext?: number;
+}
 }
   }>;
   overallConversionRate: number;
@@ -87,6 +95,7 @@ export interface FunnelAnalysis {
  * User flow analysis
  */
 }
+}
 export interface UserFlow {
   flowId: string;
   sourceStep: string;
@@ -95,6 +104,7 @@ export interface UserFlow {
   percentage: number;
   averageTime: number;
   successRate: number;
+}
 }
 }
 

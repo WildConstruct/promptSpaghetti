@@ -10,6 +10,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface ToggleDependency {
     id: string;
     sourceToggleId: string;
@@ -37,6 +38,7 @@ export declare enum DependencyRelationship {
     CONDITIONAL = "conditional",// Depends on conditions
     CONTEXTUAL = "contextual"
 
+}
 export interface DependencyMetadata {
     category: string;
     epic?: string;
@@ -47,6 +49,7 @@ export interface DependencyMetadata {
     technicalNotes: string[];
     overrideHistory: DependencyOverride[];
 
+}
 export interface DependencyOverride {
     id: string;
     actor: string;
@@ -56,6 +59,7 @@ export interface DependencyOverride {
     approved: boolean;
     approver?: string;
 
+}
 export interface DependencyGraph {
     nodes: ToggleNode[];
     edges: DependencyEdge[];
@@ -64,6 +68,7 @@ export interface DependencyGraph {
     conflicts: DependencyConflict[];
     metrics: GraphMetrics;
 
+}
 export interface ToggleNode {
     id: string;
     toggleId: string;
@@ -80,8 +85,10 @@ export interface ToggleNode {
         riskScore: number;
         activationCount: number;
         lastActivated?: Date;
+}
     };
 
+}
 export interface DependencyEdge {
     id: string;
     source: string;
@@ -94,8 +101,10 @@ export interface DependencyEdge {
         reason: string;
         validated: Date;
         violations: number;
+}
     };
 
+}
 export interface DependencyCluster {
     id: string;
     name: string;
@@ -104,6 +113,7 @@ export interface DependencyCluster {
     strength: number;
     external: string[];
 
+}
 export interface CriticalPath {
     id: string;
     toggles: string[];
@@ -113,6 +123,7 @@ export interface CriticalPath {
     bottlenecks: string[];
     alternatives: string[][];
 
+}
 export interface DependencyConflict {
     id: string;
     type: ConflictType;
@@ -129,6 +140,7 @@ export declare enum ConflictType {
     RESOURCE_CONFLICT = "resource_conflict",
     BUSINESS_LOGIC = "business_logic"
 
+}
 export interface ConflictResolution {
     id: string;
     type: 'remove_dependency' | 'change_type' | 'add_condition' | 'manual_override';
@@ -137,12 +149,14 @@ export interface ConflictResolution {
     confidence: number;
     impact: string;
 
+}
 export interface ConflictImpact {
     affectedToggles: number;
     userImpact: 'none' | 'minimal' | 'moderate' | 'significant';
     businessRisk: 'low' | 'medium' | 'high' | 'critical';
     estimatedDowntime?: number;
 
+}
 export interface GraphMetrics {
     totalToggles: number;
     totalDependencies: number;
@@ -153,6 +167,7 @@ export interface GraphMetrics {
     healthScore: number;
     lastAnalyzed: Date;
 
+}
 export interface DependencyAnalysis {
     graph: DependencyGraph;
     violations: DependencyViolation[];
@@ -160,6 +175,7 @@ export interface DependencyAnalysis {
     impactAssessment: ImpactAssessment;
     riskFactors: RiskFactor[];
 
+}
 export interface DependencyViolation {
     id: string;
     type: ViolationType;
@@ -178,6 +194,7 @@ export declare enum ViolationType {
     ORPHANED_TOGGLE = "orphaned_toggle",
     INCONSISTENT_RELATIONSHIP = "inconsistent_relationship"
 
+}
 export interface DependencyRecommendation {
     id: string;
     type: RecommendationType;
@@ -197,6 +214,7 @@ export declare enum RecommendationType {
     OPTIMIZE_PATH = "optimize_path",
     RESOLVE_CONFLICT = "resolve_conflict"
 
+}
 export interface ImpactAssessment {
     directImpact: ToggleImpact[];
     indirectImpact: ToggleImpact[];
@@ -206,6 +224,7 @@ export interface ImpactAssessment {
     riskScore: number;
     mitigation: string[];
 
+}
 export interface ToggleImpact {
     toggleId: string;
     impactType: 'activation' | 'deactivation' | 'modification' | 'dependency_change';
@@ -214,6 +233,7 @@ export interface ToggleImpact {
     affectedFeatures: string[];
     userExperienceChange: string;
 
+}
 export interface RiskFactor {
     category: 'technical' | 'business' | 'user_experience' | 'compliance';
     risk: string;
@@ -222,12 +242,14 @@ export interface RiskFactor {
     score: number;
     mitigation: string[];
 
+}
 export interface DependencyServiceConfig {
     detection: {
         autoDetectDependencies: boolean;
         detectionPatterns: string[];
         confidenceThreshold: number;
         maxDependencyDepth: number;
+}
     };
     validation: {
         validateOnActivation: boolean;

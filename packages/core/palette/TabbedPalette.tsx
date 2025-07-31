@@ -41,6 +41,7 @@ const uiColors = {
   disabled: '#6b7280',
 };
 
+}
 export interface TabbedPaletteProps {
   nodes: NodeMeta;
   collapsed: boolean;
@@ -53,6 +54,7 @@ export interface TabbedPaletteProps {
   /**
   * Enhanced tabbed palette with search and favorites
   */
+}
 }
 export const TabbedPalette: React.FC<TabbedPaletteProps> = ({)
   nodes,

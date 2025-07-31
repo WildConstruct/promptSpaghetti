@@ -20,6 +20,7 @@ import { DatabaseService } from '../database/DatabaseService';
 import { RedisService } from '../database/RedisService';
 
 }
+}
 export interface LocationContext {
   userId: string;
   ipAddress: string;
@@ -31,9 +32,11 @@ export interface LocationContext {
     city?: string;
     timezone?: string;
 }
+}
   };
 }
 
+}
 }
 export interface LocationChallengeRequirement {
   required: boolean;
@@ -49,6 +52,7 @@ export interface LocationChallengeRequirement {
   message?: string;
 }
 }
+}
 
 export enum LocationChallengeType {
   EMAIL_VERIFICATION = 'email_verification',
@@ -59,6 +63,7 @@ export enum LocationChallengeType {
   ADMIN_APPROVAL = 'admin_approval'
 }
 
+}
 }
 export interface LocationVerificationAttempt {
   id: string;
@@ -83,9 +88,11 @@ export interface LocationVerificationAttempt {
     deliveryMethod?: string;
     gracePeriodApplied?: boolean;
 }
+}
   };
 }
 
+}
 }
 export interface LocationVerificationConfig {
   // Risk thresholds for different challenge types
@@ -113,6 +120,7 @@ export interface LocationVerificationConfig {
   enableTOTPVerification: boolean;
   enableManualReview: boolean;
   enableGracePeriods: boolean;
+}
 }
 }
 

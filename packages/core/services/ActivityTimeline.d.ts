@@ -15,6 +15,7 @@
  * - Export and reporting capabilities
  */
 
+}
 export interface ActivityEvent {
     id: string;
     timestamp: Date;
@@ -53,6 +54,7 @@ export interface ActivityEvent {
     bookmarked?: boolean;
     archived?: boolean;
 
+}
 export interface ActivityDetails {
     nodeChanges?: NodeChange[];
     connectionChanges?: ConnectionChange[];
@@ -74,6 +76,7 @@ export interface ActivityDetails {
     externalUrl?: string;
     customData?: Record<string, unknown>;
 
+}
 export interface NodeChange {
     nodeId: string;
     nodeType: string;
@@ -83,6 +86,7 @@ export interface NodeChange {
     newValue?: unknown;
     position?: [number, number];
 
+}
 export interface ConnectionChange {
     connectionId: string;
     changeType: 'created' | 'deleted';
@@ -91,12 +95,14 @@ export interface ConnectionChange {
     sourceHandle?: string;
     targetHandle?: string;
 
+}
 export interface VariableChange {
     variableName: string;
     oldValue?: string;
     newValue?: string;
     scope: 'global' | 'local' | 'session';
 
+}
 export interface ClientInfo {
     userAgent: string;
     platform: string;
@@ -107,6 +113,7 @@ export interface ClientInfo {
     timezone: string;
     language: string;
 
+}
 export interface GeolocationInfo {
     country?: string;
     region?: string;
@@ -120,6 +127,7 @@ export type ActivitySource = 'web_ui' | 'mobile_app' | 'api' | 'cli' | 'webhook'
 export type ActivityImpact = 'none' | 'low' | 'medium' | 'high' | 'critical';
 export type ActivityVisibility = 'private' | 'team' | 'workspace' | 'public';
 
+}
 export interface ActivityFilter {
     userIds?: string[];
     types?: ActivityType[];
@@ -131,6 +139,7 @@ export interface ActivityFilter {
     dateRange?: {
         start: Date;
         end: Date;
+}
     };
     impactLevels?: ActivityImpact[];
     successOnly?: boolean;
@@ -145,6 +154,7 @@ export interface ActivityFilter {
     sortBy?: 'timestamp' | 'impact' | 'duration';
     sortDirection?: 'asc' | 'desc';
 
+}
 export interface ActivityStats {
     totalEvents: number;
     uniqueUsers: number;
@@ -158,8 +168,9 @@ export interface ActivityStats {
     peakActivity: {
         hour: number;
         count: number;
+}
     };
-    mostActiveUsers: Array<{,
+    mostActiveUsers: Array<{
         userId: string;
         displayName: string;
         eventCount: number;
@@ -172,6 +183,7 @@ export interface ActivityStats {
     teamsActive: number;
     sharingEvents: number;
 
+}
 export interface ActivitySession {
     id: string;
     userId: string;
@@ -213,6 +225,7 @@ export declare class ActivityTimelineService {
         nodeChanges?: NodeChange[];
         connectionChanges?: ConnectionChange[];
         variableChanges?: VariableChange[];
+}
     }, userId: string, context?: {
         workspaceId?: string;
         projectId?: string;

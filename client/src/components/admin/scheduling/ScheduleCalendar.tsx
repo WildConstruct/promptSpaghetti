@@ -23,6 +23,7 @@ import {
   Schedule as ScheduleIcon,
   Add as AddIcon
 } from '@mui/icons-material';
+}
 interface Schedule {
   id: string;,
   toggleId: string;
@@ -55,6 +56,7 @@ interface Schedule {
   cancelled: '#9e9e9e',
   failed: '#f44336',
   paused: '#ff5722',
+}
 };
 const DAYS_OF_WEEK = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const MONTHS = [;
@@ -147,7 +149,7 @@ export const [popoverSchedules, setPopoverSchedules] = useState<Schedule>([]);
   cursor: 'pointer',
   bgcolor: isTodayDate ? 'primary.50' : 'background.paper',
   opacity: isCurrentMonthDay ? 1 : 0.5,
-  '&:hover': {,
+  '&:hover': {
   bgcolor: isTodayDate ? 'primary.100' : 'action.hover',
 }}
         onClick={() => handleDayClick(date, daySchedules)}
@@ -181,7 +183,7 @@ export const [popoverSchedules, setPopoverSchedules] = useState<Schedule>([]);
   height: 18,
   bgcolor: STATUS_COLORS[schedule.status],
   color: 'white',
-  '& .MuiChip-label': {,
+  '& .MuiChip-label': {
   px: 1,
 }}
               />

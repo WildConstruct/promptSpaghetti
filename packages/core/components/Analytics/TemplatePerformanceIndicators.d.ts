@@ -19,6 +19,7 @@ import React from 'react';
 import { ConversionFunnelDefinition } from '../../analytics/ConversionDataModel';
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
 
+}
 export interface TemplatePerformanceIndicatorsProps {
     templateId: string;
     templateMetadata: TemplateMetadata;
@@ -27,6 +28,7 @@ export interface TemplatePerformanceIndicatorsProps {
     timeRange?: {
         start: number;
         end: number;
+}
     };
     displayMode?: IndicatorDisplayMode;
     comparisonEnabled?: boolean;
@@ -35,6 +37,7 @@ export interface TemplatePerformanceIndicatorsProps {
     onOptimizationAction?: (action: OptimizationAction) => void;
     onExport?: (data: TemplatePerformanceExportData) => void;
 
+}
 export interface TemplateMetadata {
     templateId: string;
     templateName: string;
@@ -52,6 +55,7 @@ export interface TemplateMetadata {
     status: TemplateStatus;
     visibility: TemplateVisibility;
 
+}
 export interface TemplatePricing {
     type: 'free' | 'premium' | 'subscription';
     price?: number;
@@ -64,6 +68,7 @@ export type TemplateStatus = 'draft' | 'review' | 'published' | 'archived' | 'su
 export type TemplateVisibility = 'public' | 'unlisted' | 'private' | 'premium_only';
 export type IndicatorDisplayMode = 'compact' | 'standard' | 'detailed' | 'dashboard' | 'overlay' | 'mobile';
 
+}
 export interface TemplatePerformanceData {
     templateMetrics: TemplateMetrics;
     funnelPerformance: TemplateFunnelPerformance;
@@ -74,6 +79,7 @@ export interface TemplatePerformanceData {
     historicalTrends: PerformanceTrend[];
     benchmarkComparison: BenchmarkComparison;
 
+}
 export interface TemplateMetrics {
     views: TemplateViewMetrics;
     engagement: TemplateEngagementMetrics;
@@ -83,6 +89,7 @@ export interface TemplateMetrics {
     performance: TemplatePerformanceMetrics;
     lastUpdated: number;
 
+}
 export interface TemplateViewMetrics {
     totalViews: number;
     uniqueViews: number;
@@ -94,12 +101,14 @@ export interface TemplateViewMetrics {
     bounceRate: number;
     viewSources: ViewSource[];
 
+}
 export interface ViewSource {
     source: string;
     views: number;
     percentage: number;
     conversionRate: number;
 
+}
 export interface TemplateEngagementMetrics {
     engagementScore: number;
     engagementTrend: number;
@@ -111,6 +120,7 @@ export interface TemplateEngagementMetrics {
     previewRate: number;
     downloadAttempts: number;
 
+}
 export interface TemplateConversionMetrics {
     overallConversionRate: number;
     conversionTrend: number;
@@ -120,6 +130,7 @@ export interface TemplateConversionMetrics {
     conversionsByTime: TimeConversionData[];
     dropoffPoints: DropoffPoint[];
 
+}
 export interface StepConversionData {
     stepId: string;
     stepName: string;
@@ -131,6 +142,7 @@ export interface StepConversionData {
     averageTime: number;
     optimizationScore: number;
 
+}
 export interface SourceConversionData {
     source: string;
     visits: number;
@@ -138,6 +150,7 @@ export interface SourceConversionData {
     conversionRate: number;
     quality: number;
 
+}
 export interface DeviceConversionData {
     deviceType: 'desktop' | 'mobile' | 'tablet';
     visits: number;
@@ -145,12 +158,14 @@ export interface DeviceConversionData {
     conversionRate: number;
     averageTime: number;
 
+}
 export interface TimeConversionData {
     timeSlot: string;
     conversions: number;
     conversionRate: number;
     volume: number;
 
+}
 export interface DropoffPoint {
     stepId: string;
     stepName: string;
@@ -159,12 +174,14 @@ export interface DropoffPoint {
     reasons: DropoffReason[];
     severity: 'low' | 'medium' | 'high' | 'critical';
 
+}
 export interface DropoffReason {
     reason: string;
     frequency: number;
     impact: number;
     actionable: boolean;
 
+}
 export interface TemplateRevenueMetrics {
     totalRevenue: number;
     revenueGrowth: number;
@@ -176,18 +193,21 @@ export interface TemplateRevenueMetrics {
     revenueBySource: RevenueBySource[];
     revenueTrend: RevenueTrendData[];
 
+}
 export interface RevenueBySource {
     source: string;
     revenue: number;
     percentage: number;
     growth: number;
 
+}
 export interface RevenueTrendData {
     date: number;
     revenue: number;
     conversions: number;
     averageValue: number;
 
+}
 export interface TemplateQualityMetrics {
     qualityScore: number;
     qualityTrend: number;
@@ -197,6 +217,7 @@ export interface TemplateQualityMetrics {
     reviewSentiment: ReviewSentiment;
     qualityFactors: QualityFactor[];
 
+}
 export interface RatingDistribution {
     fiveStars: number;
     fourStars: number;
@@ -204,6 +225,7 @@ export interface RatingDistribution {
     twoStars: number;
     oneStar: number;
 
+}
 export interface ReviewSentiment {
     positive: number;
     neutral: number;
@@ -211,18 +233,21 @@ export interface ReviewSentiment {
     sentimentScore: number;
     keyThemes: SentimentTheme[];
 
+}
 export interface SentimentTheme {
     theme: string;
     sentiment: 'positive' | 'negative' | 'neutral';
     frequency: number;
     impact: number;
 
+}
 export interface QualityFactor {
     factor: string;
     score: number;
     weight: number;
     trend: 'improving' | 'declining' | 'stable';
 
+}
 export interface TemplatePerformanceMetrics {
     performanceScore: number;
     performanceTrend: number;
@@ -233,6 +258,7 @@ export interface TemplatePerformanceMetrics {
     seoScore: number;
     mobileScore: number;
 
+}
 export interface TemplateFunnelPerformance {
     funnelId: string;
     overallPerformance: FunnelOverallPerformance;
@@ -241,6 +267,7 @@ export interface TemplateFunnelPerformance {
     optimizationInsights: FunnelOptimizationInsight[];
     performanceComparison: FunnelPerformanceComparison;
 
+}
 export interface FunnelOverallPerformance {
     conversionRate: number;
     conversionRateTrend: number;
@@ -251,6 +278,7 @@ export interface FunnelOverallPerformance {
     bottleneckStep: string;
     topPerformingStep: string;
 
+}
 export interface FunnelStepPerformance {
     stepId: string;
     stepName: string;
@@ -267,6 +295,7 @@ export interface FunnelStepPerformance {
     optimizationPotential: number;
     performanceGrade: 'A' | 'B' | 'C' | 'D' | 'F';
 
+}
 export interface ConversionPath {
     pathId: string;
     steps: string[];
@@ -276,6 +305,7 @@ export interface ConversionPath {
     averageTime: number;
     efficiency: number;
 
+}
 export interface FunnelOptimizationInsight {
     type: OptimizationInsightType;
     title: string;
@@ -289,6 +319,7 @@ export interface FunnelOptimizationInsight {
 
 export type OptimizationInsightType = 'bottleneck_removal' | 'step_optimization' | 'path_simplification' | 'content_improvement' | 'technical_fix' | 'user_experience';
 
+}
 export interface FunnelPerformanceComparison {
     categoryAverage: number;
     creatorAverage: number;
@@ -297,6 +328,7 @@ export interface FunnelPerformanceComparison {
     percentileRank: number;
     competitivePosition: 'leading' | 'above_average' | 'average' | 'below_average' | 'lagging';
 
+}
 export interface PerformanceIndicator {
     indicatorId: string;
     type: IndicatorType;
@@ -316,6 +348,7 @@ export interface PerformanceIndicator {
 
 export type IndicatorType = 'conversion_rate' | 'revenue_performance' | 'engagement_score' | 'quality_rating' | 'traffic_volume' | 'technical_performance' | 'competitive_position' | 'optimization_opportunity';
 
+}
 export interface IndicatorTrend {
     direction: 'up' | 'down' | 'stable' | 'volatile';
     percentage: number;
@@ -325,6 +358,7 @@ export interface IndicatorTrend {
 export type IndicatorSeverity = 'critical' | 'warning' | 'info' | 'success';
 export type IndicatorStatus = 'healthy' | 'attention_needed' | 'critical' | 'improving' | 'declining';
 
+}
 export interface IndicatorAction {
     actionId: string;
     title: string;
@@ -334,11 +368,13 @@ export interface IndicatorAction {
     expectedImpact: number;
     actionType: 'optimization' | 'fix' | 'enhancement' | 'investigation';
 
+}
 export interface IndicatorVisualization {
     type: 'gauge' | 'progress' | 'trend' | 'comparison' | 'heatmap';
     config: VisualizationConfig;
     colorScheme: ColorScheme;
 
+}
 export interface VisualizationConfig {
     showTrend: boolean;
     showComparison: boolean;
@@ -346,6 +382,7 @@ export interface VisualizationConfig {
     granularity: string;
     format: 'percentage' | 'currency' | 'number' | 'time' | 'score';
 
+}
 export interface ColorScheme {
     primary: string;
     secondary: string;
@@ -354,6 +391,7 @@ export interface ColorScheme {
     error: string;
     neutral: string;
 
+}
 export interface IndicatorThreshold {
     level: 'excellent' | 'good' | 'fair' | 'poor' | 'critical';
     minValue: number;
@@ -361,6 +399,7 @@ export interface IndicatorThreshold {
     color: string;
     description: string;
 
+}
 export interface TemplateCompetitivePosition {
     categoryRank: number;
     totalInCategory: number;
@@ -372,12 +411,14 @@ export interface TemplateCompetitivePosition {
     opportunities: CompetitiveOpportunity[];
     threats: CompetitiveThreat[];
 
+}
 export interface CompetitiveStrength {
     area: string;
     score: number;
     description: string;
     advantage: string;
 
+}
 export interface CompetitiveWeakness {
     area: string;
     score: number;
@@ -385,6 +426,7 @@ export interface CompetitiveWeakness {
     impact: string;
     improvement: string;
 
+}
 export interface CompetitiveOpportunity {
     opportunity: string;
     description: string;
@@ -392,6 +434,7 @@ export interface CompetitiveOpportunity {
     effort: 'low' | 'medium' | 'high';
     timeframe: number;
 
+}
 export interface CompetitiveThreat {
     threat: string;
     description: string;
@@ -399,6 +442,7 @@ export interface CompetitiveThreat {
     probability: number;
     mitigation: string;
 
+}
 export interface TemplateOptimizationOpportunity {
     opportunityId: string;
     title: string;
@@ -414,6 +458,7 @@ export interface TemplateOptimizationOpportunity {
 
 export type OpportunityCategory = 'conversion_optimization' | 'content_improvement' | 'technical_enhancement' | 'marketing_boost' | 'user_experience' | 'pricing_strategy';
 
+}
 export interface OpportunityImpact {
     revenueIncrease: number;
     conversionImprovement: number;
@@ -421,6 +466,7 @@ export interface OpportunityImpact {
     ratingImprovement: number;
     confidenceLevel: number;
 
+}
 export interface OpportunityEffort {
     estimatedHours: number;
     skillsRequired: string[];
@@ -429,36 +475,42 @@ export interface OpportunityEffort {
 
 export type OpportunityPriority = 'critical' | 'high' | 'medium' | 'low';
 
+}
 export interface OpportunityTimeline {
     estimatedDuration: number;
     milestones: OpportunityMilestone[];
     dependencies: string[];
     risks: OpportunityRisk[];
 
+}
 export interface OpportunityMilestone {
     name: string;
     description: string;
     targetDate: number;
     deliverables: string[];
 
+}
 export interface OpportunityRisk {
     risk: string;
     probability: number;
     impact: number;
     mitigation: string;
 
+}
 export interface OpportunityRequirement {
     requirement: string;
     type: 'skill' | 'tool' | 'resource' | 'approval';
     description: string;
     critical: boolean;
 
+}
 export interface OpportunityMetric {
     metric: string;
     currentValue: number;
     targetValue: number;
     measurementMethod: string;
 
+}
 export interface PerformanceAlert {
     alertId: string;
     type: AlertType;
@@ -476,12 +528,14 @@ export type AlertType = 'performance_drop' | 'conversion_decline' | 'revenue_los
 export type AlertSeverity = 'info' | 'warning' | 'critical' | 'emergency';
 export type AlertStatus = 'active' | 'acknowledged' | 'resolved' | 'suppressed';
 
+}
 export interface AlertThreshold {
     metric: string;
     condition: 'above' | 'below' | 'equals' | 'change';
     value: number;
     timeframe: number;
 
+}
 export interface AlertAction {
     actionId: string;
     title: string;
@@ -489,12 +543,14 @@ export interface AlertAction {
     actionType: 'investigate' | 'fix' | 'optimize' | 'escalate';
     automated: boolean;
 
+}
 export interface AlertEscalation {
     escalationLevel: number;
     escalationTime: number;
     escalationTarget: string;
     maxEscalations: number;
 
+}
 export interface PerformanceTrend {
     metric: string;
     timeframe: string;
@@ -503,12 +559,14 @@ export interface PerformanceTrend {
     forecast: TrendForecast;
     seasonality: SeasonalityData;
 
+}
 export interface TrendDataPoint {
     timestamp: number;
     value: number;
     volume: number;
     context: Record<string, any>;
 
+}
 export interface TrendAnalysis {
     direction: 'increasing' | 'decreasing' | 'stable' | 'volatile';
     strength: number;
@@ -516,56 +574,66 @@ export interface TrendAnalysis {
     acceleration: number;
     inflectionPoints: InflectionPoint[];
 
+}
 export interface InflectionPoint {
     timestamp: number;
     type: 'peak' | 'trough' | 'change';
     significance: number;
     context: string;
 
+}
 export interface TrendForecast {
     nextPeriod: ForecastPeriod[];
     confidence: number;
     assumptions: string[];
     risks: string[];
 
+}
 export interface ForecastPeriod {
     timestamp: number;
     predictedValue: number;
     confidenceInterval: {
         min: number;
         max: number;
+}
     };
 
+}
 export interface SeasonalityData {
     detected: boolean;
     patterns: SeasonalPattern[];
     strength: number;
     reliability: number;
 
+}
 export interface SeasonalPattern {
     type: 'daily' | 'weekly' | 'monthly' | 'yearly';
     amplitude: number;
     phase: number;
     confidence: number;
 
+}
 export interface BenchmarkComparison {
     benchmarks: BenchmarkData[];
     position: BenchmarkPosition;
     gaps: PerformanceGap[];
     opportunities: BenchmarkOpportunity[];
 
+}
 export interface BenchmarkData {
     benchmarkType: 'category' | 'creator' | 'industry' | 'top_performer';
     name: string;
     metrics: BenchmarkMetric[];
     lastUpdated: number;
 
+}
 export interface BenchmarkMetric {
     metric: string;
     value: number;
     percentile: number;
     trend: 'improving' | 'declining' | 'stable';
 
+}
 export interface BenchmarkPosition {
     overallRank: number;
     categoryRank: number;
@@ -573,6 +641,7 @@ export interface BenchmarkPosition {
     competitiveAdvantage: string[];
     improvementAreas: string[];
 
+}
 export interface PerformanceGap {
     metric: string;
     gap: number;
@@ -580,6 +649,7 @@ export interface PerformanceGap {
     priority: 'high' | 'medium' | 'low';
     actionItems: string[];
 
+}
 export interface BenchmarkOpportunity {
     opportunity: string;
     description: string;
@@ -587,18 +657,21 @@ export interface BenchmarkOpportunity {
     effort: 'low' | 'medium' | 'high';
     examples: BenchmarkExample[];
 
+}
 export interface BenchmarkExample {
     templateName: string;
     creatorName: string;
     achievement: string;
     strategy: string;
 
+}
 export interface OptimizationAction {
     actionType: 'view_details' | 'start_optimization' | 'fix_issue' | 'ignore_alert';
     targetId: string;
     details: Record<string, any>;
     timestamp: number;
 
+}
 export interface TemplatePerformanceExportData {
     templateMetadata: TemplateMetadata;
     performanceData: TemplatePerformanceData;
@@ -607,12 +680,14 @@ export interface TemplatePerformanceExportData {
     exportTimestamp: number;
     exportConfig: ExportConfig;
 
+}
 export interface ExportConfig {
     format: 'json' | 'csv' | 'excel' | 'pdf';
     includeCharts: boolean;
     timeRange: {
         start: number;
         end: number;
+}
     };
     metrics: string[];
 

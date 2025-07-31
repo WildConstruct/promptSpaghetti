@@ -9,6 +9,7 @@ import { EventEmitter } from 'events';
 
 // Core interactive element interfaces
 
+}
 export interface InteractiveElement {
   id: string;
   type: InteractiveElementType;
@@ -32,6 +33,7 @@ export interface InteractiveElement {
   // Integration
   integrations: ElementIntegration;
   dependencies: string;
+}
 }
 export enum InteractiveElementType {
   // Real-time elements
@@ -107,6 +109,8 @@ export enum InteractiveElementType {
   custom_js: string;
   template_overrides: Record<string, string>;
 }
+}
+}
 export interface ElementTheme {
   primary_color: string;
   secondary_color: string;
@@ -119,6 +123,8 @@ export interface ElementTheme {
   font_family: string;
   font_size: number;
 }
+}
+}
 export interface ElementLayout {
   position: 'fixed' | 'absolute' | 'relative' | 'static';
   placement: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center' | 'inline';
@@ -128,10 +134,14 @@ export interface ElementLayout {
   responsive: boolean;
   breakpoints: ResponsiveBreakpoint;
 }
+}
+}
 export interface ResponsiveBreakpoint {
   screen_size: 'mobile' | 'tablet' | 'desktop' | 'large';
   min_width: number;
   overrides: Partial<ElementLayout>;
+}
+}
 }
 export interface AnimationConfig {
   entrance: AnimationType;
@@ -140,6 +150,7 @@ export interface AnimationConfig {
   transition_duration: number;
   easing: string;
   stagger_delay: number;
+}
 }
 export enum AnimationType {
   NONE = 'none',
@@ -163,12 +174,16 @@ export enum AnimationType {
   cooldown_period: number;
   frequency_cap: FrequencyCap;
 }
+}
+}
 export interface FrequencyCap {
   enabled: boolean;
   max_per_session: number;
   max_per_day: number;
   max_per_week: number;
   reset_on_engagement: boolean;
+}
+}
 }
 export interface InteractionConfig {
   click_tracking: boolean;
@@ -178,11 +193,15 @@ export interface InteractionConfig {
   conversion_tracking: boolean;
   custom_events: CustomEventConfig;
 }
+}
+}
 export interface CustomEventConfig {
   name: string;
   trigger: string;
   data: Record<string, any>;
   callback?: string;
+}
+}
 }
 export interface PersistenceConfig {
   state_persistence: boolean;
@@ -192,11 +211,15 @@ export interface PersistenceConfig {
   session_storage: boolean;
   database_sync: boolean;
 }
+}
+}
 export interface CachingConfig {
   enabled: boolean;
   ttl: number;
   strategy: 'memory' | 'localStorage' | 'sessionStorage' | 'redis';
   invalidation_keys: string;
+}
+}
 }
 export interface AccessibilityConfig {
   aria_labels: Record<string, string>;
@@ -206,6 +229,8 @@ export interface AccessibilityConfig {
   reduced_motion: boolean;
   focus_management: boolean;
   semantic_markup: boolean;
+}
+}
 }
 export interface ApiEndpointConfig {
   name: string;
@@ -217,11 +242,15 @@ export interface ApiEndpointConfig {
   timeout: number;
   retry_config: RetryConfig;
 }
+}
+}
 export interface RetryConfig {
   max_attempts: number;
   backoff_strategy: 'linear' | 'exponential' | 'fixed';
   base_delay: number;
   max_delay: number;
+}
+}
 }
 export interface WebhookConfig {
   name: string;
@@ -230,6 +259,8 @@ export interface WebhookConfig {
   headers: Record<string, string>;
   secret: string;
   retry_config: RetryConfig;
+}
+}
 }
 export interface ElementState {
   current_state: string;
@@ -246,6 +277,8 @@ export interface ElementState {
   interaction_count: number;
   last_interaction: Date | null;
 }
+}
+}
 export interface ElementError {
   code: string;
   message: string;
@@ -253,6 +286,8 @@ export interface ElementError {
   timestamp: Date;
   user_id?: string;
   context: Record<string, any>;
+}
+}
 }
 export interface Interaction {
   id: string;
@@ -263,6 +298,7 @@ export interface Interaction {
   data: Record<string, any>;
   result: InteractionResult;
   duration: number;
+}
 }
 export enum InteractionType {
   CLICK = 'click',
@@ -284,12 +320,16 @@ export enum InteractionType {
   session_id: string;
   ab_test_variant: string | null;
 }
+}
+}
 export interface InteractionResult {
   success: boolean;
   error?: string;
   conversion: boolean;
   data: Record<string, any>;
   next_action?: string;
+}
+}
 }
 export interface ElementAnalytics {
   // Performance metrics
@@ -319,6 +359,8 @@ export interface ElementAnalytics {
   geographical_distribution: Record<string, number>;
   device_distribution: Record<string, number>;
 }
+}
+}
 export interface DailyStats {
   date: string;
   impressions: number;
@@ -327,11 +369,14 @@ export interface DailyStats {
   unique_users: number;
   error_count: number;
 }
+}
+}
 export interface TargetContext {
   type: TargetType;
   rules: TargetRule;
   operator: 'AND' | 'OR';
   weight: number;
+}
 }
 export enum TargetType {
   USER_ATTRIBUTE = 'user_attribute',
@@ -346,6 +391,7 @@ export enum TargetType {
   operator: ComparisonOperator;
   value: any;
   case_sensitive: boolean;
+}
 }
 export enum ComparisonOperator {
   EQUALS = 'equals',
@@ -371,6 +417,7 @@ export enum ComparisonOperator {
   max_triggers: number;
   cooldown: number;
 }
+}
 export enum TriggerType {
   PAGE_LOAD = 'page_load',
   TIME_DELAY = 'time_delay',
@@ -386,6 +433,8 @@ export enum TriggerType {
   operator: ComparisonOperator;
   value: any;
 }
+}
+}
 export interface ElementCondition {
   id: string;
   name: string;
@@ -393,12 +442,15 @@ export interface ElementCondition {
   variables: Record<string, any>;
   active: boolean;
 }
+}
+}
 export interface ElementIntegration {
   type: IntegrationType;
   config: Record<string, any>;
   enabled: boolean;
   last_sync: Date | null;
   sync_status: 'success' | 'error' | 'pending'
+}
   }
 export enum IntegrationType {
   ANALYTICS = 'analytics',
@@ -430,6 +482,7 @@ export enum IntegrationType {
     };
   };
 
+}
 export interface ProgressBarElement extends InteractiveElement {
   type: InteractiveElementType.PROGRESS_BAR;
   config: ElementConfiguration & {,
@@ -445,16 +498,21 @@ export interface ProgressBarElement extends InteractiveElement {
 };
   };
 
+}
 export interface ColorThreshold {
   threshold: number;
   color: string;
   label?: string;
+}
+}
 }
 export interface Milestone {
   value: number;
   label: string;
   icon?: string;
   reward?: string;
+}
+}
 }
 export interface QuickPreviewElement extends InteractiveElement {
   type: InteractiveElementType.QUICK_PREVIEW;
@@ -471,6 +529,7 @@ export interface QuickPreviewElement extends InteractiveElement {
 };
   };
 
+}
 export interface InteractiveDemo extends InteractiveElement {
   type: InteractiveElementType.INTERACTIVE_DEMO;
   config: ElementConfiguration & {,
@@ -487,6 +546,7 @@ export interface InteractiveDemo extends InteractiveElement {
 };
   };
 
+}
 export interface DemoStep {
   id: string;
   title: string;
@@ -498,6 +558,7 @@ export interface DemoStep {
   optional: boolean;
   // Service class
 }
+}
 export class Epic16InteractiveElementsService extends EventEmitter {
   private elements: Map<string, InteractiveElement> = new Map();
   private activeElements: Set<string> = new Set();
@@ -507,6 +568,7 @@ export class Epic16InteractiveElementsService extends EventEmitter {
     super();
   // Element lifecycle management
   async createElement(elementData: Omit<InteractiveElement, 'id' | 'created' | 'lastUpdated' | 'version'>): Promise<InteractiveElement> {
+
     const element: InteractiveElement = {,
   id: `element-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
 },
@@ -543,6 +605,7 @@ export class Epic16InteractiveElementsService extends EventEmitter {
     this.emit('elementCreated', element);
     return element;
   async updateElement(elementId: string, updates: Partial<InteractiveElement>): Promise<InteractiveElement | null> {
+
   const element = this.elements.get(elementId);
   if (!element) return null;
   const updatedElement = {
@@ -554,6 +617,7 @@ export class Epic16InteractiveElementsService extends EventEmitter {
     this.emit('elementUpdated', updatedElement);
     return updatedElement;
   async deleteElement(elementId: string): Promise<boolean> {
+
     const element = this.elements.get(elementId);
     if (!element) return false;
     this.elements.delete(elementId);
@@ -563,6 +627,7 @@ export class Epic16InteractiveElementsService extends EventEmitter {
     return true;
   // Element activation and control
   async activateElement(elementId: string, context: ActivationContext): Promise<boolean> {
+
     const element = this.elements.get(elementId);
     if (!element || element.status !== ElementStatus.ACTIVE) return false;
     // Check targeting conditions
@@ -576,10 +641,12 @@ export class Epic16InteractiveElementsService extends EventEmitter {
     this.emit('elementActivated', { elementId, context });
     return true;
   async deactivateElement(elementId: string): Promise<void> {
+
     this.activeElements.delete(elementId);
     this.emit('elementDeactivated', { elementId });
   // Interaction tracking
   async trackInteraction(elementId: string, interaction: Omit<Interaction, 'id'>): Promise<void> {
+
     const element = this.elements.get(elementId);
     if (!element) return;
     const fullInteraction: Interaction = {,
@@ -748,6 +815,8 @@ export class Epic16InteractiveElementsService extends EventEmitter {
   userAttributes: Record<string, any>;
   requestContext: Record<string, any>;
 }
+}
+}
 export interface UserSession {
   userId: string;
   sessionId: string;
@@ -755,5 +824,6 @@ export interface UserSession {
   elementInteractions: Map<string, number>;
   uniqueElements: Set<string>;
   totalInteractions: number;
+}
 }
 export default Epic16InteractiveElementsService;

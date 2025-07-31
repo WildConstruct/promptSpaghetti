@@ -52,6 +52,8 @@ export enum ErrorCode {
   originalError?: any;
   metadata?: Record<string, any>;
 }
+}
+}
 export interface RecoveryAction {
   type: 'retry' | 'fallback' | 'redirect' | 'reset' | 'manual';
   description: string;
@@ -61,6 +63,7 @@ export interface RecoveryAction {
   /**
   * Base class for all structured errors in the system
   */
+}
 }
 export abstract class BaseError extends Error {
   public readonly code: ErrorCode;

@@ -15,6 +15,7 @@ import crypto from 'crypto';
 // ========================================
 
 }
+}
 export interface TLSConfig {
   enabled: boolean;
   port: number;
@@ -23,6 +24,7 @@ export interface TLSConfig {
     key: string;
     ca?: string;
     passphrase?: string;
+}
 }
   };
   options: {
@@ -51,6 +53,7 @@ export interface TLSConfig {
 }
 
 }
+}
 export interface CertificateInfo {
   subject: any;
   issuer: any;
@@ -64,7 +67,9 @@ export interface CertificateInfo {
   warnings: string[];
 }
 }
+}
 
+}
 }
 export interface TLSValidationResult {
   valid: boolean;
@@ -72,6 +77,7 @@ export interface TLSValidationResult {
   warnings: string[];
   certificateInfo?: CertificateInfo;
   recommendations: string[];
+}
 }
 }
 
@@ -586,6 +592,7 @@ export function loadTLSConfigFromEnv(): TLSConfig {
 // ========================================
 
 }
+}
 export interface CertificatePinConfig {
   enabled: boolean;
   pins: Record<string, CertificatePin[]>;
@@ -595,11 +602,13 @@ export interface CertificatePinConfig {
     pinFailureAction: 'block' | 'warn' | 'log';
     pinUpdateCheckInterval: number; // hours
 }
+}
   };
   allowedDomains: string[];
   pinnedDomains: string[];
 }
 
+}
 }
 export interface CertificatePin {
   type: 'sha256' | 'sha1' | 'subject' | 'spki';
@@ -609,7 +618,9 @@ export interface CertificatePin {
   expiresAt?: Date;
 }
 }
+}
 
+}
 }
 export interface PinValidationResult {
   valid: boolean;
@@ -618,6 +629,7 @@ export interface PinValidationResult {
   certificate: any;
   errors: string[];
   warnings: string[];
+}
 }
 }
 

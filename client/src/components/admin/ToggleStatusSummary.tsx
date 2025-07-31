@@ -26,6 +26,7 @@ import {
 import { Badge } from '../common/Badge';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import './ToggleStatusSummary.css';
+}
 interface ToggleSummaryMetrics {
   // System Overview
   totalToggles: number;,
@@ -33,15 +34,16 @@ interface ToggleSummaryMetrics {
   inactiveToggles: number;,
   archivedToggles: number;
   // Toggle Types Distribution
-  typeBreakdown: {,
+  typeBreakdown: {
   boolean: number;,
   percentage_rollout: number;
   multivariate: number;,
   scheduled: number;
   segmentation: number;
+}
 };
   // Claude Impact Analysis
-  claudeImpact: {,
+  claudeImpact: {
   NONE: number;
   PROMPT_COST: number;,
   MODEL_VERSION: number;
@@ -71,6 +73,7 @@ interface ToggleSummaryMetrics {
   // Trends
   growthRate: number; // Percentage change from last period,
   lastUpdated: string;
+}
 interface StatusCard {
   title: string;,
   value: string | number;
@@ -79,6 +82,7 @@ interface StatusCard {
   icon: React.ReactNode;,
   variant: 'success' | 'warning' | 'danger' | 'info';
   description?: string;
+}
   details?: Array<{ label: string; value: string | number }>;
 
 export const ToggleStatusSummary: React.FC = () => {
@@ -356,6 +360,7 @@ const StatusCard: React.FC<StatusCard> = ({ )
 );
 
 // Distribution Card Component
+}
 interface DistributionCardProps {
   title: string;,
   value: number;
@@ -368,6 +373,7 @@ interface DistributionCardProps {
   total,
   color,
   icon
+}
 }) => {
   const percentage = total > 0 ? (value / total) * 100 : 0;
   return;
@@ -412,14 +418,14 @@ const simulateMetricsAPI = async (): Promise<ToggleSummaryMetrics> => {
   activeToggles: 184,
   inactiveToggles: 51,
   archivedToggles: 12,
-  typeBreakdown: {,
+  typeBreakdown: {
   boolean: 145,
   percentage_rollout: 67,
   multivariate: 23,
   scheduled: 8,
   segmentation: 4,
 },
-  claudeImpact: {,
+  claudeImpact: {
   NONE: 156,
   PROMPT_COST: 34,
   MODEL_VERSION: 28,

@@ -69,6 +69,7 @@ export declare enum KeyAlgorithm {
     SCRYPT = "scrypt",
     ARGON2ID = "argon2id"
 
+}
 export interface KeyMetadata {
     id: string;
     name: string;
@@ -102,6 +103,7 @@ export interface KeyMetadata {
     tags: Record<string, string>;
     metadata: Record<string, any>;
 
+}
 export interface CryptographicKey {
     metadata: KeyMetadata;
     keyData?: Buffer;
@@ -110,6 +112,7 @@ export interface CryptographicKey {
     wrappedKeyData?: Buffer;
     derivationParameters?: KeyDerivationParameters;
 
+}
 export interface KeyDerivationParameters {
     algorithm: KeyAlgorithm;
     salt: Buffer;
@@ -119,6 +122,7 @@ export interface KeyDerivationParameters {
     keyLength: number;
     additionalData?: Buffer;
 
+}
 export interface KeyAccessPolicy {
     requireMultiAuth: boolean;
     minApprovals: number;
@@ -126,6 +130,7 @@ export interface KeyAccessPolicy {
         allowedHours: number[];
         allowedDays: number[];
         timezone: string;
+}
     };
     locationRestrictions?: {
         allowedCountries: string[];
@@ -135,6 +140,7 @@ export interface KeyAccessPolicy {
     maxConcurrentAccess: number;
     sessionTimeout: number;
 
+}
 export interface KeyAuditEvent {
     id: string;
     timestamp: Date;
@@ -146,6 +152,7 @@ export interface KeyAuditEvent {
     details: Record<string, any>;
     riskScore: number;
 
+}
 export interface KeyGenerationOptions {
     type: KeyType;
     purpose: KeyPurpose;
@@ -161,6 +168,7 @@ export interface KeyGenerationOptions {
     metadata?: Record<string, any>;
     tags?: Record<string, string>;
 
+}
 export interface KeyRotationOptions {
     forceRotation?: boolean;
     gracePeriodDays?: number;
@@ -168,6 +176,7 @@ export interface KeyRotationOptions {
     automatedRotation?: boolean;
     rotationReason?: string;
 
+}
 export interface KeySearchCriteria {
     type?: KeyType;
     purpose?: KeyPurpose;
@@ -180,6 +189,7 @@ export interface KeySearchCriteria {
     authorizedUser?: string;
     complianceLevel?: string;
 
+}
 export interface KeyManagementConfig {
     defaultTier: StorageTier;
     hotCacheSize: number;
@@ -202,8 +212,10 @@ export interface KeyManagementConfig {
         keyUsageRate: number;
         failureRate: number;
         responseTime: number;
+}
     };
 
+}
 export interface HSMConfiguration {
     provider: 'aws-cloudhsm' | 'azure-keyvault' | 'gcp-hsm' | 'pkcs11';
     endpoint: string;
@@ -212,10 +224,12 @@ export interface HSMConfiguration {
         password?: string;
         certificatePath?: string;
         tokenPath?: string;
+}
     };
     keySlots: number[];
     partitionLabel?: string;
 
+}
 export interface KeyPerformanceMetrics {
     operationsPerSecond: number;
     averageResponseTime: number;
@@ -319,3 +333,4 @@ export declare class KeyManagementService extends EventEmitter {
 
 export default KeyManagementService;
 //# sourceMappingURL=KeyManagementService.d.ts.map
+}

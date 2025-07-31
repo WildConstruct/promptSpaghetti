@@ -9,13 +9,15 @@
 import { useState, useCallback } from 'react';
 
 // Types
+}
 interface ReportData {
-  metadata: {,
+  metadata: {
   title: string;,
   description: string;
   generatedAt: Date;,
   generatedBy: string;
   version: string;
+}
 };
   summary: Record<string, any>;
   data: Array<Record<string, any>>;
@@ -30,20 +32,22 @@ interface ReportData {
   content: string | Record<string, any>;
   type: 'text' | 'table' | 'chart' | 'html';
 }>;
+}
 interface ExportConfig {
   format: 'pdf' | 'excel' | 'csv' | 'json' | 'xml' | 'html';,
   delivery: 'file' | 'email' | 'webhook' | 'api';
   filename?: string;
-  options?: {,
+  options?: {
   includeCharts?: boolean;
   includeRawData?: boolean;
   compression?: boolean;
   encryption?: boolean;
   password?: string;
   customStyling?: Record<string, any>;
+}
 };
   delivery_config?: {
-  email?: {,
+  email?: {
   to: string;
   cc?: string;
   subject: string;
@@ -60,6 +64,7 @@ interface ExportConfig {
   headers?: Record<string, string>;
 };
   };
+}
 interface ExportResult {
   id: string;,
   success: boolean;
@@ -71,32 +76,36 @@ interface ExportResult {
   deliveredAt?: Date;
   error?: string;
   downloadUrl?: string;
-  metadata: {,
+  metadata: {
   recordCount: number;,
   processingTime: number;
   compressionRatio?: number;
+}
 };
+}
 interface ScheduledExport {
   id: string;,
   name: string;
   description: string;,
   reportQuery: string;
   exportConfig: ExportConfig;,
-  schedule: {,
+  schedule: {
   frequency: 'daily' | 'weekly' | 'monthly' | 'custom';,
   time: string;
   dayOfWeek?: number;
   dayOfMonth?: number;
   cron?: string;
+}
 };
   enabled: boolean;
   lastRun?: Date;
   nextRun?: Date;
   createdBy: string;
+}
 interface ExportFormats {
   formats: string;,
   deliveryMethods: string;
-  supportedFeatures: {,
+  supportedFeatures: {
   compression: boolean;,
   encryption: boolean;
   scheduling: boolean;,
@@ -105,7 +114,9 @@ interface ExportFormats {
   charts: boolean;
   email: boolean;,
   webhooks: boolean;
+}
 };
+}
 interface UseReportExportReturn {
   // State
   isExporting: boolean;,
@@ -116,10 +127,11 @@ interface UseReportExportReturn {
   exportFormats: ExportFormats | null;
   // Actions
   exportReport: (reportData: ReportData, config: ExportConfig) => Promise<ExportResult>;,
-  bulkExportReports: (reports: Array<{,)
+  bulkExportReports: (reports: Array<{)
   name: string;,
   reportData: ReportData;
   config: ExportConfig;
+}
 }>, options?: {
   parallel?: boolean;
   maxConcurrency?: number;
@@ -130,7 +142,7 @@ interface UseReportExportReturn {
   previewReport: (reportData: ReportData, format: string) => Promise<{,
   format: string;
   preview: string;,
-  metadata: {,
+  metadata: {
   recordCount: number;,
   estimatedSize: number;
   previewTruncated: boolean;
@@ -159,7 +171,7 @@ export const useReportExport = (): UseReportExportReturn => {
   try {
   const response = await fetch('/api/reports/export', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),
@@ -180,7 +192,7 @@ export const useReportExport = (): UseReportExportReturn => {
   }, []);
   // Bulk export multiple reports
   const bulkExportReports = useCallback(async (;);
-    reports: Array<{,
+    reports: Array<{
   name: string;
   reportData: ReportData;,
   config: ExportConfig;
@@ -194,7 +206,7 @@ export const useReportExport = (): UseReportExportReturn => {
   try {
   const response = await fetch('/api/reports/bulk-export', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),
@@ -215,7 +227,7 @@ export const useReportExport = (): UseReportExportReturn => {
   const scheduleExport = useCallback(async (schedule: Omit<ScheduledExport, 'id'>): Promise<ScheduledExport> => {
   const response = await fetch('/api/reports/schedule', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify(schedule);
@@ -235,7 +247,7 @@ export const useReportExport = (): UseReportExportReturn => {
   try {
   const response = await fetch('/api/reports/test-export', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),
@@ -256,7 +268,7 @@ export const useReportExport = (): UseReportExportReturn => {
   const previewReport = useCallback(async (reportData: ReportData, format: string) => {
   const response = await fetch('/api/reports/preview', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),

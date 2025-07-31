@@ -5,6 +5,7 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { AnomalyDetectionService } from '../services/AnomalyDetectionService';
 
 }
+}
 interface AnomalyFilters {
   severity?: 'low' | 'medium' | 'high' | 'critical';
   resolved?: boolean;
@@ -13,7 +14,9 @@ interface AnomalyFilters {
   offset?: number;
 }
 }
+}
 
+}
 }
 interface ResolveAnomalyRequest {
   resolvedBy: string;
@@ -21,12 +24,15 @@ interface ResolveAnomalyRequest {
   notes?: string;
 }
 }
+}
 
+}
 }
 interface UpdatePatternRequest {
   enabled?: boolean;
   threshold?: number;
   severity?: 'low' | 'medium' | 'high' | 'critical';
+}
 }
 }
 

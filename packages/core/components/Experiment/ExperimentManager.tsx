@@ -49,6 +49,7 @@ import {
   KnowledgeBaseEntry
 } from '../../types/experiment';
 
+}
 export interface ExperimentManagerProps {
   experiments: Experiment;
   templates: ExperimentTemplate;
@@ -75,6 +76,7 @@ export interface ExperimentManagerProps {
   sortOrder: 'asc' | 'desc';
   selectedExperiments: string;
   showArchived: boolean;
+}
 }
 export const ExperimentManager: React.FC<ExperimentManagerProps> = ({)
   experiments,

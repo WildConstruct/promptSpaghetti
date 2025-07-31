@@ -26,13 +26,16 @@ import {
 } from './UnifiedSecurityAlertingFramework';
 
 }
+}
 export interface ConfigurationValidationResult {
   valid: boolean;
   errors: string[];
   warnings: string[];
 }
 }
+}
 
+}
 }
 export interface ConfigurationTemplate {
   id: string;
@@ -50,9 +53,11 @@ export interface ConfigurationTemplate {
     updatedAt: Date;
     tags: string[];
 }
+}
   };
 }
 
+}
 }
 export interface ConfigurationChange {
   id: string;
@@ -66,7 +71,9 @@ export interface ConfigurationChange {
   description: string;
 }
 }
+}
 
+}
 }
 export interface RuleTestResult {
   ruleId: string;
@@ -77,10 +84,12 @@ export interface RuleTestResult {
     matched: boolean;
     value: Error;
 }
+}
   }[];
   executionTime: number;
 }
 
+}
 }
 export interface ConfigurationAudit {
   timestamp: Date;
@@ -90,6 +99,7 @@ export interface ConfigurationAudit {
   changes: string[];
   ipAddress?: string;
   userAgent?: string;
+}
 }
 }
 

@@ -9,6 +9,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useGraphStore } from '../../graphStore';
 import { usePreviewStateStore } from '../../stores/previewStateStore';
 import { usePreviewSync } from '../../hooks/usePreviewSync';
+}
 interface RealTimePreviewPanelProps {
   visible?: boolean;
   onClose?: () => void;
@@ -28,6 +29,7 @@ interface RealTimePreviewPanelProps {
   className = '',
   enablePerformanceMonitoring = true,
   maxResults = 5
+}
 }) => {
   // Store hooks
   const { getGraphData } = useGraphStore();

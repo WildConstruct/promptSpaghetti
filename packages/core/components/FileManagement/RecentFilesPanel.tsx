@@ -7,6 +7,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { ProjectManager, PSGFile } from '../../projectManager';
 
+}
 export interface RecentFilesPanelProps {
   onFileSelected?: (file: PSGFile) => void;
   onFileLoad?: (file: PSGFile) => void;
@@ -15,6 +16,7 @@ export interface RecentFilesPanelProps {
   maxRecentFiles?: number;
   showFavorites?: boolean;
   showClearButton?: boolean;
+}
 }
 export const RecentFilesPanel: React.FC<RecentFilesPanelProps> = ({
   onFileSelected,

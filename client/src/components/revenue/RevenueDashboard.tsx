@@ -20,6 +20,7 @@ import { useRevenueAnalytics } from '../../hooks/useRevenueAnalytics';
 import { useRealtimeRevenue } from '../../hooks/useRealtimeRevenue';
 import { useRevenueForecast } from '../../hooks/useRevenueForecast';
 import './RevenueDashboard.css';
+}
 interface RevenueDashboardProps {
   /** Dashboard scope - global, creator-specific, or template-specific */
   scope: 'global' | 'creator' | 'template';
@@ -43,6 +44,7 @@ interface RevenueDashboardProps {
   realtimeEnabled = true,
   exportEnabled = true,
   className = ''
+}
 }) => {
   // State management
   const [timeRange, setTimeRange] = useState<RevenueTimeRange>(initialTimeRange);

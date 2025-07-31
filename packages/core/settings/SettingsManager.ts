@@ -100,9 +100,9 @@ export class SettingsManager {
   /**
    * Update settings with validation
    */
-  public updateSettings(()
+  public updateSettings(((
     newSettings: Partial<AdvancedSettings>,
-    source: 'user' | 'system' | 'import' = 'user',
+    source: 'user' | 'system' | 'import' = 'user'
   ): SettingsValidationResult {
     const previousSettings = { ...this.settings };
     const mergedSettings = { ...this.settings, ...newSettings };

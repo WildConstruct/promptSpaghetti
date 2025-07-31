@@ -49,12 +49,14 @@ export declare enum DataSensitivityLevel {
  * Data handling requirements for each sensitivity level
  */
 
+}
 export interface DataHandlingRequirements {
     /** Minimum access control requirements */
     accessControl: {
         authentication: 'none' | 'basic' | 'strong' | 'mfa';
         authorization: 'none' | 'role-based' | 'attribute-based' | 'need-to-know';
         monitoring: 'none' | 'basic' | 'enhanced' | 'continuous'
+}
   };
     /** Encryption requirements */
     encryption: {
@@ -117,6 +119,7 @@ declare const DATA_SENSITIVITY_DEFINITIONS: Record<DataSensitivityLevel, {
  * Data element sensitivity classification
  */
 
+}
 export interface DataElementClassification {
     /** Unique identifier for the data element */
     elementId: string;
@@ -141,6 +144,7 @@ export interface DataElementClassification {
         businessOwner: string;
         technicalOwner: string;
         complianceRequirements: string[];
+}
     };
 /**
  * Data Sensitivity Level Utilities

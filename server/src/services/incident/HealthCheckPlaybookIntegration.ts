@@ -25,6 +25,7 @@ import {
 import { ActionSeverity } from '../../../../packages/core/types/EnforcementTypes';
 
 }
+}
 export interface HealthCheckFailureEvent {
   healthCheckId: string;
   healthCheckName: string;
@@ -36,7 +37,9 @@ export interface HealthCheckFailureEvent {
   metadata: HealthCheckMetadata;
 }
 }
+}
 
+}
 }
 export interface HealthCheckMetadata {
   responseTime?: number;
@@ -47,7 +50,9 @@ export interface HealthCheckMetadata {
   diagnosticData?: unknown;
 }
 }
+}
 
+}
 }
 export interface SystemAlert {
   alertId: string;
@@ -60,7 +65,9 @@ export interface SystemAlert {
   metadata: AlertMetadata;
 }
 }
+}
 
+}
 }
 export interface AlertMetadata {
   affectedServices?: string[];
@@ -72,7 +79,9 @@ export interface AlertMetadata {
   correlationId?: string;
 }
 }
+}
 
+}
 }
 export interface MetricAlert {
   metricName: string;
@@ -86,7 +95,9 @@ export interface MetricAlert {
   metadata: MetricMetadata;
 }
 }
+}
 
+}
 }
 export interface MetricMetadata {
   aggregationType: 'average' | 'sum' | 'max' | 'min' | 'count';
@@ -96,7 +107,9 @@ export interface MetricMetadata {
   previousValue?: number;
 }
 }
+}
 
+}
 }
 export interface IntegrationConfig {
   enabled: boolean;
@@ -109,7 +122,9 @@ export interface IntegrationConfig {
   metricMapping: MetricMapping[];
 }
 }
+}
 
+}
 }
 export interface HealthCheckMapping {
   healthCheckId: string;
@@ -120,7 +135,9 @@ export interface HealthCheckMapping {
   autoExecute: boolean;
 }
 }
+}
 
+}
 }
 export interface AlertMapping {
   alertPattern: string;
@@ -130,7 +147,9 @@ export interface AlertMapping {
   autoExecute: boolean;
 }
 }
+}
 
+}
 }
 export interface MetricMapping {
   metricName: string;
@@ -138,6 +157,7 @@ export interface MetricMapping {
   thresholds: {
     warning: number;
     critical: number;
+}
 }
   };
   operator: 'above' | 'below';
@@ -662,6 +682,7 @@ export class HealthCheckPlaybookIntegration {
 
 // Supporting interfaces
 }
+}
 interface HealthCheckEventListener {
   id: string;
   healthCheckId: string;
@@ -670,7 +691,9 @@ interface HealthCheckEventListener {
   lastTriggered: Date | null;
 }
 }
+}
 
+}
 }
 interface AlertEventListener {
   id: string;
@@ -680,7 +703,9 @@ interface AlertEventListener {
   lastTriggered: Date | null;
 }
 }
+}
 
+}
 }
 interface MetricEventListener {
   id: string;
@@ -688,5 +713,6 @@ interface MetricEventListener {
   callback: (alert: MetricAlert) => Promise<void>;
   enabled: boolean;
   lastTriggered: Date | null;
+}
 }
 }

@@ -30,6 +30,7 @@ import {
 // =============================================================================
 
 }
+}
 export interface AttributionServiceConfig {
   database: Database;
   enableRealTimeUpdates?: boolean;
@@ -38,7 +39,9 @@ export interface AttributionServiceConfig {
   revenueHoldDays?: number;
 }
 }
+}
 
+}
 }
 export interface TemplateAttributionCreateResult {
   success: boolean;
@@ -48,7 +51,9 @@ export interface TemplateAttributionCreateResult {
   errors?: string[];
 }
 }
+}
 
+}
 }
 export interface AttributionClaimResult {
   success: boolean;
@@ -58,7 +63,9 @@ export interface AttributionClaimResult {
   errors?: string[];
 }
 }
+}
 
+}
 }
 export interface RevenueDistributionResult {
   success: boolean;
@@ -68,6 +75,7 @@ export interface RevenueDistributionResult {
   holdAmount: number;
   immediateRelease: number;
   errors?: string[];
+}
 }
 }
 

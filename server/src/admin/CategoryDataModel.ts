@@ -16,6 +16,7 @@
  */
 
 }
+}
 export interface Category {
   id: string;
   domain: CategoryDomain;
@@ -68,6 +69,7 @@ export interface Category {
   // Localization
   localizedNames?: Record<string, string>;
   localizedDescriptions?: Record<string, string>;
+}
 }
 }
 
@@ -145,6 +147,7 @@ export enum CategoryAccessLevel {
 }
 
 }
+}
 export interface CategoryMetadata {
   // Core metadata
   tags: string[];
@@ -176,7 +179,9 @@ export interface CategoryMetadata {
   customFields: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 export interface CategoryConfiguration {
   // Behavior settings
@@ -200,7 +205,9 @@ export interface CategoryConfiguration {
   integrationConfig: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 export interface CategoryValidationRule {
   field: string;
@@ -210,7 +217,9 @@ export interface CategoryValidationRule {
   severity: 'error' | 'warning' | 'info';
 }
 }
+}
 
+}
 }
 export interface CategoryAutoAssignmentRule {
   condition: string; // JSON logic expression
@@ -220,7 +229,9 @@ export interface CategoryAutoAssignmentRule {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface CategoryNotificationSettings {
   notifyOnAssignment: boolean;
@@ -230,7 +241,9 @@ export interface CategoryNotificationSettings {
   recipientRoles: string[];
 }
 }
+}
 
+}
 }
 export interface CategoryDisplaySettings {
   showInNavigation: boolean;
@@ -242,7 +255,9 @@ export interface CategoryDisplaySettings {
   detailViewTemplate?: string;
 }
 }
+}
 
+}
 }
 export interface CategoryVersion {
   version: number;
@@ -253,7 +268,9 @@ export interface CategoryVersion {
   previousData: Partial<Category>;
 }
 }
+}
 
+}
 }
 export interface CategoryChange {
   field: string;
@@ -262,13 +279,16 @@ export interface CategoryChange {
   changeType: 'created' | 'updated' | 'deleted' | 'moved' | 'renamed';
 }
 }
+}
 
+}
 }
 export interface CategoryUsageStatistics {
   categoryId: string;
   period: {
     start: Date;
     end: Date;
+}
 }
   };
   
@@ -299,6 +319,7 @@ export interface CategoryUsageStatistics {
 }
 
 }
+}
 export interface CategoryTree {
   category: Category;
   children: CategoryTree[];
@@ -309,7 +330,9 @@ export interface CategoryTree {
   isLoading?: boolean;
 }
 }
+}
 
+}
 }
 export interface CategoryFilter {
   domains?: CategoryDomain[];
@@ -335,13 +358,16 @@ export interface CategoryFilter {
   businessCriticality?: string[];
 }
 }
+}
 
+}
 }
 export interface CategoryQuery {
   filter?: CategoryFilter;
   sort?: {
     field: keyof Category;
     direction: 'asc' | 'desc';
+}
 }
   }[];
   pagination?: {
@@ -358,6 +384,7 @@ export interface CategoryQuery {
 }
 
 }
+}
 export interface CategoryOperation {
   operation: CategoryOperationType;
   categoryId: string;
@@ -367,6 +394,7 @@ export interface CategoryOperation {
     notifyUsers?: boolean;
     createAuditLog?: boolean;
     cascadeToChildren?: boolean;
+}
 }
   };
 }
@@ -389,6 +417,7 @@ export enum CategoryOperationType {
 }
 
 }
+}
 export interface CategoryBulkOperation {
   operations: CategoryOperation[];
   executionMode: 'sequential' | 'parallel';
@@ -398,7 +427,9 @@ export interface CategoryBulkOperation {
   reason: string;
 }
 }
+}
 
+}
 }
 export interface CategoryImportExport {
   format: 'json' | 'csv' | 'xml' | 'yaml';
@@ -409,7 +440,9 @@ export interface CategoryImportExport {
   transformRules?: CategoryTransformRule[];
 }
 }
+}
 
+}
 }
 export interface CategoryTransformRule {
   sourceField: string;
@@ -418,7 +451,9 @@ export interface CategoryTransformRule {
   options?: unknown;
 }
 }
+}
 
+}
 }
 export interface CategoryPermission {
   categoryId: string;
@@ -432,7 +467,9 @@ export interface CategoryPermission {
   conditions?: string; // JSON logic expression
 }
 }
+}
 
+}
 }
 export interface CategoryAuditEntry {
   id: string;
@@ -462,10 +499,12 @@ export interface CategoryAuditEntry {
   systemGenerated: boolean;
 }
 }
+}
 
 /**
  * Category validation result
  */
+}
 }
 export interface CategoryValidationResult {
   valid: boolean;
@@ -473,7 +512,9 @@ export interface CategoryValidationResult {
   warnings: CategoryValidationWarning[];
 }
 }
+}
 
+}
 }
 export interface CategoryValidationError {
   field: string;
@@ -483,7 +524,9 @@ export interface CategoryValidationError {
   suggestedFix?: string;
 }
 }
+}
 
+}
 }
 export interface CategoryValidationWarning {
   field: string;
@@ -493,10 +536,12 @@ export interface CategoryValidationWarning {
   canIgnore: boolean;
 }
 }
+}
 
 /**
  * Category relationship types for linking related categories
  */
+}
 }
 export interface CategoryRelationship {
   id: string;
@@ -508,6 +553,7 @@ export interface CategoryRelationship {
   metadata?: Record<string, unknown>;
   createdBy: string;
   createdAt: Date;
+}
 }
 }
 
@@ -527,6 +573,7 @@ export enum CategoryRelationshipType {
  * Category mapping for external systems
  */
 }
+}
 export interface CategoryMapping {
   id: string;
   internalCategoryId: string;
@@ -545,10 +592,12 @@ export interface CategoryMapping {
   updatedAt: Date;
 }
 }
+}
 
 /**
  * Category template for rapid creation of standard category structures
  */
+}
 }
 export interface CategoryTemplate {
   id: string;
@@ -572,7 +621,9 @@ export interface CategoryTemplate {
   updatedAt: Date;
 }
 }
+}
 
+}
 }
 export interface CategoryTemplateNode {
   code: string;
@@ -586,16 +637,19 @@ export interface CategoryTemplateNode {
   required: boolean;
 }
 }
+}
 
 /**
  * Category analytics and insights
  */
+}
 }
 export interface CategoryAnalytics {
   categoryId: string;
   period: {
     start: Date;
     end: Date;
+}
 }
   };
   
@@ -634,6 +688,7 @@ export interface CategoryAnalytics {
 }
 
 }
+}
 export interface CategoryRecommendation {
   type: 'optimization' | 'maintenance' | 'structure' | 'content';
   priority: 'low' | 'medium' | 'high' | 'critical';
@@ -643,6 +698,7 @@ export interface CategoryRecommendation {
   estimatedImpact: string;
   estimatedEffort: string;
   implementationSteps: string[];
+}
 }
 }
 

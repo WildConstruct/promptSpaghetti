@@ -2,16 +2,18 @@
 // React component for managing user sessions with multi-device support
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
+}
 interface SessionInfo {
   id: string;,
-  deviceInfo: {,
+  deviceInfo: {
   platform?: string;
   browser?: string;
   version?: string;
   userAgent?: string;
   fingerprint?: string;
+}
 };
-  location: {,
+  location: {
   ipAddress?: string;
   country?: string;
   city?: string;
@@ -19,19 +21,22 @@ interface SessionInfo {
   lastAccessedAt: string;,
   createdAt: string;
   current: boolean;
+}
 interface SessionStats {
   totalSessions: number;,
   activeSessions: number;
   expiredSessions: number;,
   revokedSessions: number;
   interface SecurityInsights {
-  suspiciousActivity: {,
+  suspiciousActivity: {
   multipleLocations: boolean;,
   unusualDevices: boolean;
   suspiciousLocations: string;,
   newDevices: unknown;
+}
 };
   recommendations: string;
+}
 interface SessionManagerProps {
   onSessionRevoked?: (sessionId: string) => void;
   onAllSessionsRevoked?: () => void;
@@ -40,6 +45,7 @@ interface SessionManagerProps {
   onSessionRevoked,
   onAllSessionsRevoked,
   showSecurityInsights = true
+}
 }) => {
   const { user } = useAuth();
   const [sessions, setSessions] = useState<SessionInfo>([]);
@@ -59,7 +65,7 @@ interface SessionManagerProps {
     try {
       setLoading(true);
       const response = await fetch('/api/auth/sessions', {)
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
       });
       if (!response.ok) {
@@ -76,7 +82,7 @@ interface SessionManagerProps {
   const fetchSecurityInsights = async () => {
     try {
       const response = await fetch('/api/auth/sessions/security', {)
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
       });
       if (!response.ok) {
@@ -91,7 +97,7 @@ interface SessionManagerProps {
       setRevoking(sessionId);
       const response = await fetch('/api/auth/sessions/revoke', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
   },
@@ -120,7 +126,7 @@ interface SessionManagerProps {
       setBulkRevoking(true);
       const response = await fetch('/api/auth/sessions/revoke-all', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
   },

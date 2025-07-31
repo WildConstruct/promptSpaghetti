@@ -7,6 +7,7 @@ import crypto from 'crypto';
 import { EventEmitter } from 'events';
 
 }
+}
 export interface IPLimitingRule {
   id: string;
   name: string;
@@ -16,6 +17,7 @@ export interface IPLimitingRule {
   
   ipTargets: {
     specificIPs?: string[];
+}
 }
     ipRanges?: Array<{ start: string; end: string; cidr?: string }>;
     countries?: string[];
@@ -88,6 +90,7 @@ export interface IPLimitingRule {
 }
 
 }
+}
 export interface GeolocationData {
   ip: string;
   country: string;
@@ -108,7 +111,9 @@ export interface GeolocationData {
   lastUpdated: Date;
 }
 }
+}
 
+}
 }
 export interface DeviceFingerprint {
   id: string;
@@ -129,7 +134,9 @@ export interface DeviceFingerprint {
   violationCount: number;
 }
 }
+}
 
+}
 }
 export interface UserBehaviorProfile {
   userId: string;
@@ -140,6 +147,7 @@ export interface UserBehaviorProfile {
   loginPatterns: {
     commonHours: number[]; // 0-23
     commonDays: number[]; // 0-6
+}
 }
     commonLocations: Array<{ country: string; region: string; frequency: number }>;
     averageSessionDuration: number; // minutes
@@ -167,6 +175,7 @@ export interface UserBehaviorProfile {
 }
 
 }
+}
 export interface LimitingViolation {
   id: string;
   userId?: string;
@@ -183,6 +192,7 @@ export interface LimitingViolation {
     geolocation?: GeolocationData;
     deviceFingerprint?: string;
     sessionId?: string;
+}
 }
   };
   actionTaken: string[];

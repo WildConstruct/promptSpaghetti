@@ -7,6 +7,7 @@
 import React from 'react';
 import { Node, Edge } from 'reactflow';
 
+}
 export interface AutosaveState {
     nodes: Node[];
     edges: Edge[];
@@ -18,8 +19,10 @@ export interface AutosaveState {
         edgeCount: number;
         lastModified: string;
         sessionId: string;
+}
     };
 
+}
 export interface AutosaveManagerProps {
     nodes: Node[];
     edges: Edge[];
@@ -48,6 +51,7 @@ export declare class AutosaveSystem {
     private notifyListeners;
     validateChecksum(state: AutosaveState): boolean;
 
+}
 export interface AutosaveStatus {
     type: 'saved' | 'restored' | 'cleared' | 'error';
     timestamp?: number;
@@ -57,3 +61,4 @@ export interface AutosaveStatus {
 export declare const AutosaveManager: React.FC<AutosaveManagerProps>;
 export default AutosaveManager;
 //# sourceMappingURL=AutosaveManager.d.ts.map
+}

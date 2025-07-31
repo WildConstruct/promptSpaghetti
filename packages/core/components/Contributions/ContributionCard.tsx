@@ -8,6 +8,7 @@
 import React from 'react';
 import { Contribution, ContributionType, ContributionStatus } from '../../types/contributions';
 
+}
 export interface ContributionCardProps {
   contribution: Contribution;
   variant?: 'compact' | 'standard' | 'detailed';
@@ -17,6 +18,7 @@ export interface ContributionCardProps {
   onDelete?: (contributionId: string) => void;
   onView?: (contributionId: string) => void;
   className?: string;
+}
 }
 export const ContributionCard: React.FC<ContributionCardProps> = ({)
   contribution,

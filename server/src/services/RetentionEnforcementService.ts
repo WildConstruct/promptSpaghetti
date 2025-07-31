@@ -8,6 +8,7 @@ import { DataRetentionFrameworkService, RetentionRecord, RetentionStatus } from 
 import { DataCategory, Jurisdiction } from '../types/DataRetentionPeriods';
 
 }
+}
 export interface EnforcementPolicy {
   policyId: string;
   name: string;
@@ -23,7 +24,9 @@ export interface EnforcementPolicy {
   updatedAt: Date;
 }
 }
+}
 
+}
 }
 export interface EnforcementRule {
   ruleId: string;
@@ -32,6 +35,7 @@ export interface EnforcementRule {
   action: EnforcementAction;
   parameters: Record<string, any>;
   priority: number;
+}
 }
 }
 
@@ -55,6 +59,7 @@ export enum EnforcementAction {
 }
 
 }
+}
 export interface NotificationRule {
   ruleId: string;
   trigger: EnforcementTrigger;
@@ -64,11 +69,14 @@ export interface NotificationRule {
   channels: NotificationChannel[];
 }
 }
+}
 
+}
 }
 export interface NotificationRecipient {
   type: RecipientType;
   identifier: string;
+}
 }
 }
 
@@ -96,6 +104,7 @@ export enum NotificationChannel {
 }
 
 }
+}
 export interface EscalationRule {
   ruleId: string;
   trigger: string;
@@ -105,7 +114,9 @@ export interface EscalationRule {
   autoApprove: boolean;
 }
 }
+}
 
+}
 }
 export interface EnforcementEvent {
   eventId: string;
@@ -120,6 +131,7 @@ export interface EnforcementEvent {
   notifications: EnforcementNotification[];
 }
 }
+}
 
 export enum EnforcementStatus {
   PENDING = 'PENDING',
@@ -131,6 +143,7 @@ export enum EnforcementStatus {
 }
 
 }
+}
 export interface EnforcementDetails {
   dataId: string;
   category: DataCategory;
@@ -139,6 +152,7 @@ export interface EnforcementDetails {
   riskLevel: RiskLevel;
   complianceFrameworks: string[];
   metadata: Record<string, any>;
+}
 }
 }
 
@@ -150,6 +164,7 @@ export enum RiskLevel {
 }
 
 }
+}
 export interface EnforcementApproval {
   approvalId: string;
   approverRole: RecipientType;
@@ -159,7 +174,9 @@ export interface EnforcementApproval {
   timestamp: Date;
 }
 }
+}
 
+}
 }
 export interface EnforcementNotification {
   notificationId: string;
@@ -168,6 +185,7 @@ export interface EnforcementNotification {
   sent: boolean;
   sentAt?: Date;
   error?: string;
+}
 }
 }
 

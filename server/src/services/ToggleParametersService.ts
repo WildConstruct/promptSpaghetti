@@ -17,13 +17,16 @@ import {
 } from '../database/feature-toggle-models';
 
 }
+}
 export interface ToggleParameterValidation {
   isValid: boolean;
   errors: string[];
   warnings?: string[];
 }
 }
+}
 
+}
 }
 export interface ParameterPreset {
   id: string;
@@ -37,7 +40,9 @@ export interface ParameterPreset {
   createdAt: Date;
 }
 }
+}
 
+}
 }
 export interface ParameterTemplate {
   type: ToggleType;
@@ -49,9 +54,11 @@ export interface ParameterTemplate {
     rule: string;
     message: string;
 }
+}
   }>;
 }
 
+}
 }
 export interface ParameterChangeLog {
   id: string;
@@ -63,6 +70,7 @@ export interface ParameterChangeLog {
   changedBy: string;
   changedAt: Date;
   metadata?: Record<string, any>;
+}
 }
 }
 

@@ -9,13 +9,16 @@ import {
   PaginatedResponse 
 } from '../types/workspace';
 const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:8000/api';
+}
 interface UseActivityFeedOptions {
   limit?: number;
   autoRefresh?: boolean;
   refreshInterval?: number;
+}
 interface ActivityStatsData {
   total_events: number;
   events_by_type: Record<string, number>;
+}
   events_by_day: Array<{ date: string; count: number }>;
   most_active_users: Array<{ user_id: string; count: number }>;
 

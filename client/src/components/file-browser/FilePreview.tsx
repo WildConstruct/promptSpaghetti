@@ -10,6 +10,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { FileItem, FileMetadata } from './types';
 import { useAuthStore } from '../../stores/authStore';
+}
 interface FilePreviewProps {
   file: FileItem | null;
   onOpen?: (file: FileItem) => void;
@@ -19,11 +20,12 @@ interface FilePreviewProps {
   interface PreviewData {
   thumbnail?: string;
   metadata?: FileMetadata;
-  content?: {,
+  content?: {
   nodeCount: number;,
   edgeCount: number;
   lastModified: Date;,
   size: number;
+}
 };
 const formatFileSize = (bytes: number): string => {
   if (bytes === 0) return '0 B';
@@ -71,7 +73,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
       const mockData: PreviewData = {,
   thumbnail: generateMockThumbnail(fileItem),
   metadata: fileItem.metadata,
-  content: {,
+  content: {
   nodeCount: fileItem.metadata?.nodeCount || 0,
   edgeCount: fileItem.metadata?.edgeCount || 0,
   lastModified: fileItem.lastModified,

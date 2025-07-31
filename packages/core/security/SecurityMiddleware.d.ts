@@ -6,12 +6,14 @@
  */
 import { Request, Response, NextFunction } from 'express';
 
+}
 export interface SecurityConfig {
     hsts: {
         enabled: boolean;
         maxAge: number;
         includeSubDomains: boolean;
         preload: boolean;
+}
     };
     csp: {
         enabled: boolean;

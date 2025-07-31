@@ -79,6 +79,7 @@ export enum EvidenceType {
  * Investigation record
  */
 }
+}
 export interface Investigation {
   id: string;
   title: string;
@@ -119,10 +120,12 @@ export interface Investigation {
   metadata: Record<string, any>;
 }
 }
+}
 
 /**
  * Investigation task
  */
+}
 }
 export interface InvestigationTask {
   id: string;
@@ -145,10 +148,12 @@ export interface InvestigationTask {
   metadata: Record<string, any>;
 }
 }
+}
 
 /**
  * Evidence record
  */
+}
 }
 export interface Evidence {
   id: string;
@@ -188,10 +193,12 @@ export interface Evidence {
   metadata: Record<string, any>;
 }
 }
+}
 
 /**
  * Custody chain record
  */
+}
 }
 export interface CustodyRecord {
   id: string;
@@ -203,10 +210,12 @@ export interface CustodyRecord {
   signature: string; // Digital signature/hash
 }
 }
+}
 
 /**
  * Investigation comment/update
  */
+}
 }
 export interface InvestigationComment {
   id: string;
@@ -230,10 +239,12 @@ export interface InvestigationComment {
   metadata: Record<string, any>;
 }
 }
+}
 
 /**
  * Team notification
  */
+}
 }
 export interface TeamNotification {
   id: string;
@@ -254,10 +265,12 @@ export interface TeamNotification {
   metadata: Record<string, any>;
 }
 }
+}
 
 /**
  * Collaboration metrics
  */
+}
 }
 export interface CollaborationMetrics {
   investigationCount: number;
@@ -267,6 +280,7 @@ export interface CollaborationMetrics {
   teamWorkload: Record<string, number>;
   evidenceCollected: number;
   complianceIssues: number;
+}
 }
 }
 

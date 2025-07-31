@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import AlertIndicatorBadge, { AlertCount, AlertSeverity } from './AlertIndicatorBadge';
 import AlertStatusIndicator from './AlertStatusIndicator';
+}
 interface AlertItem {
   id: string;,
   type: string;
@@ -51,6 +52,7 @@ interface AlertItem {
   onAcknowledgeAll,
   className = '',
   maxRecentAlerts = 5
+}
 }) => {
   const [localExpanded, setLocalExpanded] = useState(isExpanded);
   useEffect(() => {

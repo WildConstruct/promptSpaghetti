@@ -8,6 +8,7 @@ import { StateChange, StateMiddleware, ValidationResult, ValidationError } from 
 
 // Enhanced middleware types
 
+}
 export interface MiddlewareContext<T> {
   state: T;
   prevState: T;
@@ -39,6 +40,7 @@ export interface MiddlewareContext<T> {
 } = {}
   ) {}
   async beforeUpdate(state: T, change: StateChange<T>): Promise<T> {
+
   const validationResults = this.validators.map(validator => validator(state));
   const allErrors: ValidationError = [];
   const allWarnings: any = [];
@@ -70,6 +72,7 @@ export interface MiddlewareContext<T> {
 } = {}
   ) {}
   async afterUpdate(state: T, prevState: T, change: StateChange<T>): Promise<void> {
+
   const auditEntry: AuditEntry = {,
   id: this.generateAuditId(),
   timestamp: Date.now(),
@@ -123,6 +126,7 @@ export class PerformanceMiddleware<T> implements StateMiddleware<T> {
     this.performanceMetrics.set(change.id, metric);
     return state;
   async afterUpdate(state: T, prevState: T, change: StateChange<T>): Promise<void> {
+
   const metric = this.performanceMetrics.get(change.id);
   if (!metric) return;
   // Complete performance measurement
@@ -182,6 +186,7 @@ export class PerformanceMiddleware<T> implements StateMiddleware<T> {
 } = {}
   ) {}
   async beforeUpdate(state: T, change: StateChange<T>): Promise<T> {
+
   // Check security rules
   const violations = this.checkSecurityRules(state, change);
   if (violations.length > 0) {
@@ -221,6 +226,7 @@ export class PerformanceMiddleware<T> implements StateMiddleware<T> {
 } = {}
   ) {}
   async beforeUpdate(state: T, change: StateChange<T>): Promise<T> {
+
   let transformedState = state;
   for (const transformer of this.transformers) {
   try {
@@ -314,6 +320,8 @@ export class PerformanceMiddleware<T> implements StateMiddleware<T> {
   prevStateSnapshot?: any;
   metadata: Record<string, any>;
 }
+}
+}
 export interface PerformanceMetric {
   changeId: string;
   changeType: string;
@@ -324,6 +332,8 @@ export interface PerformanceMetric {
   memoryAfter: number;
   metadata: Record<string, any>;
 }
+}
+}
 export interface PerformanceStats {
   averageDuration: number;
   maxDuration: number;
@@ -331,11 +341,15 @@ export interface PerformanceStats {
   totalOperations: number;
   operationsPerSecond: number;
 }
+}
+}
 export interface SecurityRule {
   name: string;
   severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   message: string;
   condition: (state: any, change: StateChange<any>) => boolean;
+}
+}
 }
 export interface SecurityViolation {
   rule: string;
@@ -343,6 +357,8 @@ export interface SecurityViolation {
   message: string;
   change: string;
   timestamp: number;
+}
+}
 }
 export interface CacheEntry<T> {
   state: T;

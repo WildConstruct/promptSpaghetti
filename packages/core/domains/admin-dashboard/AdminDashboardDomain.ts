@@ -23,6 +23,7 @@ import {
 
 // Domain service interfaces
 
+}
 export interface IAdminUserService {
   getUsers(): Promise<AdminUser>;
   getUser(userId: string): Promise<AdminUser>;
@@ -33,6 +34,8 @@ export interface IAdminUserService {
   suspendUser(userId: string, reason: string): Promise<void>;
   activateUser(userId: string): Promise<void>;
 }
+}
+}
 export interface ISecurityService {
   getSecurityAlerts(): Promise<SecurityAlert>;
   acknowledgeAlert(alertId: string): Promise<void>;
@@ -40,6 +43,8 @@ export interface ISecurityService {
   performSecurityScan(): Promise<any>;
   updateSecurityPolicy(policy: any): Promise<void>;
   generateSecurityReport(): Promise<any>;
+}
+}
 }
 export interface IApiManagementService {
   getApiKeys(): Promise<ApiKey>;
@@ -49,12 +54,16 @@ export interface IApiManagementService {
   getApiUsage(keyId: string, period: string): Promise<any>;
   updateRateLimit(keyId: string, rateLimit: any): Promise<void>;
 }
+}
+}
 export interface ISystemMonitoringService {
   getSystemMetrics(): Promise<SystemMetrics>;
   getSystemHealth(): Promise<any>;
   getPerformanceMetrics(period: string): Promise<any>;
   restartService(serviceName: string): Promise<void>;
   updateSystemConfig(config: any): Promise<void>;
+}
+}
 }
 export interface IDashboardConfigService {
   getLayouts(): Promise<DashboardLayout>;
@@ -65,6 +74,8 @@ export interface IDashboardConfigService {
   getDefaultLayout(): Promise<DashboardLayout>;
   setDefaultLayout(layoutId: string): Promise<void>;
 }
+}
+}
 export interface IWidgetRegistry {
   getWidgets(): WidgetDefinition;
   getWidget(widgetType: string): WidgetDefinition | undefined;
@@ -73,6 +84,8 @@ export interface IWidgetRegistry {
   getWidgetsByCategory(category: string): WidgetDefinition;
   getAvailableWidgets(permissions: string): WidgetDefinition;
   // Main domain interface
+}
+}
 }
 export interface IAdminDashboardDomain {
   // React Components
@@ -86,6 +99,7 @@ export interface IAdminDashboardDomain {
   ApiManagementWidget: React.ComponentType<any>;
   SystemMetricsWidget: React.ComponentType<any>;
   AlertIndicatorsWidget: React.ComponentType<any>;
+}
 };
   // React Hooks
   hooks: {
@@ -164,9 +178,11 @@ export interface IAdminDashboardDomain {
 
 // Domain factory function
 }
+}
 export interface AdminDashboardDomainFactory {
   create(config?: Partial<AdminDashboardConfig>): IAdminDashboardDomain;
   // Event constants for cross-domain communication
+}
 }
 export const ADMIN_DOMAIN_EVENTS = {
   DASHBOARD_LOADED: 'admin:dashboard:loaded',

@@ -11,6 +11,7 @@ export declare enum NodeSafetyLevel {
  * Interface for blocked node information
  */
 
+}
 export interface BlockedNodeInfo {
     nodeType: string;
     safetyLevel: NodeSafetyLevel;
@@ -22,6 +23,7 @@ export interface BlockedNodeInfo {
  * Filter result interface
  */
 
+}
 export interface FilterResult {
     allowed: boolean;
     blockedNodes: BlockedNodeInfo[];
@@ -31,6 +33,7 @@ export interface FilterResult {
  * AST node whitelist filter configuration
  */
 
+}
 export interface ASTNodeWhitelistConfig {
     allowedNodeTypes: Set<string>;
     restrictedNodeTypes: Set<string>;
@@ -89,3 +92,4 @@ export declare function createConditionalNodeFilter(): ASTNodeWhitelistFilter;
  */
 export declare function createGeneralExpressionFilter(): ASTNodeWhitelistFilter;
 //# sourceMappingURL=ast-node-whitelist.d.ts.map
+}

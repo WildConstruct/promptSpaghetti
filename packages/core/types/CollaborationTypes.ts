@@ -6,8 +6,10 @@
  * and other collaboration features.
  */
 
+}
 export interface StickyNote {
   id: string;
+}
   position: { x: number; y: number };
   content: string;
   color: StickyNoteColor;
@@ -25,6 +27,7 @@ export type StickyNoteColor =
   | 'purple'     // Creative/brainstorm notes
   | 'orange';    // Review/feedback notes
 
+}
 export interface StickyNoteColorInfo {
   background: string;
   border: string;
@@ -34,15 +37,19 @@ export interface StickyNoteColorInfo {
   description: string;
   // Enhanced Region Grouping System (Epic 8.7 Task 3)
 }
+}
 export type RegionGroupStyle = 'solid' | 'dashed' | 'dotted' | 'rounded' | 'modern';
 export type RegionGroupVisibility = 'always' | 'hover' | 'selected' | 'editing' | 'collapsed';
 
+}
 export interface RegionGroupBounds {
   x: number;
   y: number;
   width: number;
   height: number;
   padding?: number; // Extra padding around contained nodes,
+}
+}
 }
 export interface RegionGroup {
   id: string;
@@ -66,6 +73,8 @@ export interface RegionGroup {
   timestamp: string;
   lastModified: string;
 }
+}
+}
 export interface RegionGroupAction {
   type: 'create' | 'update' | 'delete' | 'addNodes' | 'removeNodes' | 'move' | 'resize' | 'collapse' | 'expand';
   groupId?: string;
@@ -73,8 +82,10 @@ export interface RegionGroupAction {
   nodeIds?: string;
   bounds?: RegionGroupBounds;
 
+}
   position?: { x: number; y: number };
   size?: { width: number; height: number };
+}
 }
 export interface RegionGroupPreferences {
   defaultColor: string;
@@ -91,16 +102,19 @@ export interface RegionGroupPreferences {
   gridSize: number;
   // Enhanced Connection Annotation System (Epic 8.7 Task 4)
 }
+}
 export type ConnectionLabelPosition = 'start' | 'middle' | 'end' | 'custom';
 export type ConnectionLabelStyle = 'default' | 'badge' | 'arrow' | 'highlight' | 'minimal';
 export type ConnectionVisualStyle = 'solid' | 'dashed' | 'dotted' | 'animated' | 'gradient';
 
+}
 export interface ConnectionLabel {
   id: string;
   connectionId: string;
   content: string;
   description?: string;
 
+}
   position: { x: number; y: number };
   positionType: ConnectionLabelPosition;
   positionOffset: number; // 0-1 along the path for non-custom positions
@@ -116,6 +130,7 @@ export interface ConnectionLabel {
   author: string;
   timestamp: string;
   lastModified: string;
+}
 }
 export interface ConnectionAnnotation {
   id: string;
@@ -135,6 +150,8 @@ export interface ConnectionAnnotation {
   timestamp: string;
   lastModified: string;
 }
+}
+}
 export interface ConnectionLabelAction {
   type: 'create' | 'update' | 'delete' | 'startEdit' | 'stopEdit' | 'move';
   labelId?: string;
@@ -142,14 +159,18 @@ export interface ConnectionLabelAction {
   label?: Partial<ConnectionLabel>;
   content?: string;
 
+}
   position?: { x: number; y: number };
   positionOffset?: number;
+}
 }
 export interface ConnectionAnnotationAction {
   type: 'create' | 'update' | 'delete' | 'highlight' | 'unhighlight';
   annotationId?: string;
   connectionId: string;
   annotation?: Partial<ConnectionAnnotation>;
+}
+}
 }
 export interface ConnectionAnnotationPreferences {
   defaultLabelStyle: ConnectionLabelStyle;
@@ -165,10 +186,12 @@ export interface ConnectionAnnotationPreferences {
   highlightOnHover: boolean;
   // Enhanced Node Label System (Epic 8.7 Task 2)
 }
+}
 export type NodeLabelDisplayMode = 'always' | 'hover' | 'focus' | 'selected' | 'never';
 export type NodeLabelPosition = 'top' | 'bottom' | 'left' | 'right' | 'center';
 export type NodeLabelStyle = 'default' | 'minimal' | 'professional' | 'colorful' | 'outline';
 
+}
 export interface NodeLabelConfig {
   id: string;
   nodeId: string;
@@ -186,12 +209,16 @@ export interface NodeLabelConfig {
   author: string;
   timestamp: string;
 }
+}
+}
 export interface NodeLabelAction {
   type: 'create' | 'update' | 'delete' | 'startEdit' | 'stopEdit';
   nodeId: string;
   labelId?: string;
   config?: Partial<NodeLabelConfig>;
   customLabel?: string;
+}
+}
 }
 export interface NodeLabelPreferences {
   defaultDisplayMode: NodeLabelDisplayMode;
@@ -202,6 +229,8 @@ export interface NodeLabelPreferences {
   enableLabelHistory: boolean;
   maxLabelLength: number;
   showLabelTooltips: boolean;
+}
+}
 }
 export interface GraphAnnotations {
   stickyNotes: StickyNote;
@@ -218,17 +247,21 @@ export interface GraphAnnotations {
   created: string;
   modified: string;
   version: string;
+}
 };
+}
 }
 export interface StickyNoteAction {
   type: 'create' | 'update' | 'delete' | 'move' | 'resize' | 'startEdit' | 'stopEdit';
   noteId?: string;
   note?: Partial<StickyNote>;
 
+}
   position?: { x: number; y: number };
   size?: { width: number; height: number };
   content?: string;
   color?: StickyNoteColor;
+}
 }
 export interface StickyNoteContextMenuOptions {
   x: number;
@@ -242,4 +275,5 @@ export interface StickyNoteContextMenuOptions {
   onDuplicate?: () => void;
   // Predefined color schemes for sticky notes
   // Default sticky note configuration
+}
 }

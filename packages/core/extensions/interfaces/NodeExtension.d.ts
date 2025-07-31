@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { BaseExtension, ExtensionContext, ExtensionValidationResult } from './ExtensionInterfaces';
 import { RuntimeNode, AdvancedRuntimeNode, ExecutionContext, AdvancedExecutionContext } from '../../runtime';
 
+}
 export interface NodeExtension extends BaseExtension {
     readonly extensionType: 'node';
     getNodeDefinitions(): NodeDefinition[];
@@ -20,6 +21,7 @@ export interface NodeExtension extends BaseExtension {
     supportsAdvancedNodes(): boolean;
     createAdvancedNodeInstance?(nodeType: string, nodeId: string, config: any): AdvancedRuntimeNode<any>;
 
+}
 export interface NodeDefinition {
     id: string;
     name: string;
@@ -46,6 +48,7 @@ export type NodeClass = ()
   config: any,
 ) => RuntimeNode<any>) | (new (id: string, config: any) => AdvancedRuntimeNode<any>);
 
+}
 export interface NodeUIConfiguration {
     icon?: string;
     color?: string;
@@ -54,6 +57,7 @@ export interface NodeUIConfiguration {
     palette?: NodePaletteConfiguration;
     preview?: NodePreviewConfiguration;
 
+}
 export interface NodeEditorConfiguration {
     component?: React.ComponentType<NodeEditorProps>;
     autoGenerateForm?: boolean;
@@ -61,6 +65,7 @@ export interface NodeEditorConfiguration {
     fields?: Record<string, NodeFieldConfiguration>;
     validation?: NodeEditorValidation;
 
+}
 export interface NodeEditorProps {
     node: any;
     config: any;
@@ -68,6 +73,7 @@ export interface NodeEditorProps {
     onValidate?: (result: ExtensionValidationResult) => void;
     context: ExtensionContext;
 
+}
 export interface NodeFieldConfiguration {
     type: 'text' | 'textarea' | 'number' | 'boolean' | 'select' | 'multiselect' | 'custom';
     label?: string;
@@ -77,15 +83,18 @@ export interface NodeFieldConfiguration {
     options?: Array<{
         value: any;
         label: string;
+}
     }>;
     component?: React.ComponentType<any>;
 
+}
 export interface NodeEditorValidation {
     validateOnChange?: boolean;
     validateOnBlur?: boolean;
     showErrors?: boolean;
     customValidation?: (config: any) => ExtensionValidationResult;
 
+}
 export interface NodePaletteConfiguration {
     group?: string;
     order?: number;
@@ -94,18 +103,21 @@ export interface NodePaletteConfiguration {
     dragData?: any;
     tooltip?: string;
 
+}
 export interface NodePreviewConfiguration {
     component?: React.ComponentType<NodePreviewProps>;
     autoGenerate?: boolean;
     mode?: 'static' | 'dynamic' | 'interactive';
     updateFrequency?: 'onChange' | 'onFocus' | 'manual';
 
+}
 export interface NodePreviewProps {
     node: any;
     config: any;
     context: ExtensionContext;
     executionResult?: any;
 
+}
 export interface NodeRuntimeConfiguration {
     timeout?: number;
     retries?: number;
@@ -113,12 +125,14 @@ export interface NodeRuntimeConfiguration {
     security?: NodeSecuritySettings;
     caching?: NodeCachingConfiguration;
 
+}
 export interface NodePerformanceHints {
     expectedExecutionTime?: 'fast' | 'medium' | 'slow';
     memoryUsage?: 'low' | 'medium' | 'high';
     cpuIntensive?: boolean;
     ioIntensive?: boolean;
 
+}
 export interface NodeSecuritySettings {
     sandboxed?: boolean;
     permissions?: string[];
@@ -127,6 +141,7 @@ export interface NodeSecuritySettings {
     maxMemoryUsage?: number;
     maxExecutionTime?: number;
 
+}
 export interface NodeCachingConfiguration {
     enabled?: boolean;
     strategy?: 'lru' | 'ttl' | 'custom';
@@ -134,6 +149,7 @@ export interface NodeCachingConfiguration {
     ttl?: number;
     keyGenerator?: (node: any, context: ExecutionContext) => string;
 
+}
 export interface NodeMetadata {
     author: string;
     license: string;
@@ -146,10 +162,12 @@ export interface NodeMetadata {
         maxVersion?: string;
         deprecatedIn?: string;
         removedIn?: string;
+}
     };
     tags?: string[];
     keywords?: string[];
 
+}
 export interface NodeExample {
     name: string;
     description: string;
@@ -157,18 +175,21 @@ export interface NodeExample {
     expectedOutput?: any;
     code?: string;
 
+}
 export interface NodeValidation {
     configValidation?: (config: any) => ExtensionValidationResult;
     runtimeValidation?: (node: RuntimeNode<any>, context: ExecutionContext) => ExtensionValidationResult;
     contextValidation?: (context: ExecutionContext) => ExtensionValidationResult;
     customRules?: NodeValidationRule[];
 
+}
 export interface NodeValidationRule {
     name: string;
     description: string;
     validate: (node: any, context: any) => ExtensionValidationResult;
     severity: 'error' | 'warning' | 'info';
 
+}
 export interface NodeRegistry {
     register(definition: NodeDefinition): void;
     unregister(nodeId: string): void;
@@ -181,6 +202,7 @@ export interface NodeRegistry {
     on(event: 'registered' | 'unregistered' | 'updated', listener: (definition: NodeDefinition) => void): void;
     off(event: 'registered' | 'unregistered' | 'updated', listener: (definition: NodeDefinition) => void): void;
 
+}
 export interface NodeFactory {
     create(nodeType: string, nodeId: string, config: any): RuntimeNode<any>;
     createAdvanced(nodeType: string, nodeId: string, config: any): AdvancedRuntimeNode<any>;
@@ -189,6 +211,7 @@ export interface NodeFactory {
     supports(nodeType: string): boolean;
     supportsAdvanced(nodeType: string): boolean;
 
+}
 export interface NodeExecutionContextExtensions {
     nodeExtensions: Map<string, any>;
     performanceTracking: {
@@ -196,6 +219,7 @@ export interface NodeExecutionContextExtensions {
         endTime?: number;
         executionTime?: number;
         memoryUsage?: number;
+}
     };
     securityContext: {
         permissions: string[];
@@ -212,9 +236,11 @@ export interface NodeExecutionContextExtensions {
         cacheSize?: number;
     };
 
+}
 export interface ExtendedExecutionContext extends AdvancedExecutionContext {
     extensions: NodeExecutionContextExtensions;
 
+}
 export interface NodeExecutionMonitor {
     onExecutionStart(node: RuntimeNode<any>, context: ExtendedExecutionContext): void;
     onExecutionEnd(node: RuntimeNode<any>, context: ExtendedExecutionContext, result: any): void;
@@ -223,6 +249,7 @@ export interface NodeExecutionMonitor {
     getAllMetrics(): Map<string, NodeExecutionMetrics>;
     on(event: 'execution' | 'error' | 'performance', listener: (data: any) => void): void;
 
+}
 export interface NodeExecutionMetrics {
     nodeId: string;
     totalExecutions: number;
@@ -241,3 +268,4 @@ export declare namespace NodeExtensionHelpers {
     function createNodeRegistry(): NodeRegistry;
 
 //# sourceMappingURL=NodeExtension.d.ts.map
+}

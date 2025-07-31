@@ -25,6 +25,7 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 
 }
+}
 export interface CollaborationTelemetryServiceConfig {
   enabled: boolean;
   enableLatencyMeasurement: boolean;
@@ -32,6 +33,7 @@ export interface CollaborationTelemetryServiceConfig {
   sessionHeartbeatInterval: number; // ms
   enablePerformanceTracking: boolean;
   enableConflictTracking: boolean;
+}
 }
 }
 

@@ -12,6 +12,7 @@ import {
 } from './knowledge-base.service';
 
 }
+}
 interface AuthenticatedRequest extends FastifyRequest {
   user: {
     id: string;
@@ -20,6 +21,7 @@ interface AuthenticatedRequest extends FastifyRequest {
   };
 }
 
+}
 }
 interface ContentQuerystring {
   category?: string;
@@ -33,7 +35,9 @@ interface ContentQuerystring {
   offset?: number;
 }
 }
+}
 
+}
 }
 interface SearchQuerystring {
   q: string;
@@ -41,6 +45,7 @@ interface SearchQuerystring {
   difficulty_level?: string;
   content_type?: string;
   limit?: number;
+}
 }
 }
 

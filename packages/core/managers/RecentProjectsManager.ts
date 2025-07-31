@@ -4,6 +4,7 @@
  */
 import type { ProjectMetadata } from '../schemas/psgSchema';
 
+}
 export interface RecentProjectEntry {
   id: string;
   name: string;
@@ -13,9 +14,12 @@ export interface RecentProjectEntry {
   metadata: ProjectMetadata;
   fileSize?: number;
 }
+}
+}
 export interface RecentProjectsData {
   projects: RecentProjectEntry;
   version: string;
+}
 }
 export class RecentProjectsManager {
   private static readonly STORAGE_KEY = 'promptspaghetti_recent_projects';

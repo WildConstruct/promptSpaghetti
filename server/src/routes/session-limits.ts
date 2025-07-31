@@ -13,19 +13,23 @@ import { AuditService } from '../auth/services/AuditService';
 
 // Request/Response schemas
 }
+}
 interface GetConfigRequest {
   Params: {
     scope: 'global' | 'organization' | 'user';
     targetId?: string;
 }
+}
   };
 }
 
+}
 }
 interface UpdateConfigRequest {
   Params: {
     scope: 'global' | 'organization' | 'user';
     targetId?: string;
+}
 }
   };
   Body: {
@@ -35,6 +39,7 @@ interface UpdateConfigRequest {
 }
 
 }
+}
 interface GetMetricsRequest {
   Querystring: {
     timeRange?: string;
@@ -43,9 +48,11 @@ interface GetMetricsRequest {
     userId?: string;
     organizationId?: string;
 }
+}
   };
 }
 
+}
 }
 interface GetViolationsRequest {
   Querystring: {
@@ -55,13 +62,16 @@ interface GetViolationsRequest {
     limit?: number;
     resolved?: boolean;
 }
+}
   };
 }
 
 }
+}
 interface ResolveViolationRequest {
   Params: {
     violationId: string;
+}
 }
   };
   Body: {
@@ -70,9 +80,11 @@ interface ResolveViolationRequest {
 }
 
 }
+}
 interface TerminateSessionRequest {
   Params: {
     sessionId: string;
+}
 }
   };
   Body: {
@@ -83,9 +95,11 @@ interface TerminateSessionRequest {
 }
 
 }
+}
 interface OverrideUserLimitsRequest {
   Params: {
     userId: string;
+}
 }
   };
   Body: {

@@ -11,11 +11,13 @@ import { getMergedConfig } from '../config/evidence-mapping-config.js';
 
 // Request/Response schemas
 }
+}
 interface EvidenceMappingRequest {
   Params: {
     frameworkId?: string;
     requirementId?: string;
     evidenceTypeId?: string;
+}
 }
   };
   Querystring: {
@@ -35,6 +37,7 @@ interface EvidenceMappingRequest {
 }
 
 }
+}
 interface EvidenceCollectionRequest {
   Body: {
     evidence_type_id: string;
@@ -42,6 +45,7 @@ interface EvidenceCollectionRequest {
     evidence_location: string;
     integrity_hash: string;
     signature: string;
+}
 }
   };
 }

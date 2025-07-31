@@ -13,6 +13,7 @@
 // CORE HEALTH CHECK INTERFACES
 // ==========================================
 
+}
 export interface HealthCheckDefinition {
   id: string;
   name: string;
@@ -33,6 +34,7 @@ export interface HealthCheckDefinition {
   isActive: boolean;
   deprecated?: boolean;
   replacedBy?: string;
+}
 }
 export enum HealthCheckCategory {
   SYSTEM = 'system',
@@ -64,6 +66,7 @@ export enum HealthCheckCategory {
   timeout: number;
   retries: RetryConfig;
 }
+}
 export enum HealthCheckType {
   HTTP_ENDPOINT = 'http_endpoint',
   DATABASE_QUERY = 'database_query',
@@ -87,12 +90,16 @@ export enum HealthCheckType {
   authentication?: AuthenticationConfig;
   timeout?: number;
 }
+}
+}
 export interface QueryConfig {
   connectionString?: string;
   database: string;
   query: string;
   expectedResults?: QueryExpectation;
   timeout: number;
+}
+}
 }
 export interface ScriptConfig {
   language: 'javascript' | 'shell' | 'python' | 'powershell';
@@ -101,10 +108,13 @@ export interface ScriptConfig {
   workingDirectory?: string;
   expectedExitCode: number;
 }
+}
+}
 export interface CompositeConfig {
   checks: string; // IDs of child checks,
   logic: CompositeLogic;
   aggregation: AggregationStrategy;
+}
 }
 export enum CompositeLogic {
   ALL_PASS = 'all_pass',
@@ -126,6 +136,8 @@ export enum CompositeLogic {
   validation?: ParameterValidation;
   sensitive?: boolean; // For passwords, tokens, etc.,
 }
+}
+}
 export interface ParameterValidation {
   minLength?: number;
   maxLength?: number;
@@ -138,16 +150,22 @@ export interface ParameterValidation {
   // VALIDATION AND EXECUTION
   // ==========================================
 }
+}
+}
 export interface ValidationRules {
   input: InputValidation;
   output: OutputValidation;
   runtime: RuntimeValidation;
   security: SecurityValidation;
 }
+}
+}
 export interface InputValidation {
   required: string;
   schema?: Record<string, unknown>; // JSON Schema,
   customValidators: CustomValidator;
+}
+}
 }
 export interface OutputValidation {
   expectedFormat: 'json' | 'text' | 'xml' | 'binary';
@@ -155,6 +173,8 @@ export interface OutputValidation {
   successConditions: SuccessCondition;
   warningConditions: WarningCondition;
   errorConditions: ErrorCondition;
+}
+}
 }
 export interface RuntimeValidation {
   maxExecutionTime: number;
@@ -164,12 +184,15 @@ export interface RuntimeValidation {
   fileSystemAccessRequired: boolean;
   privilegedAccessRequired: boolean;
 }
+}
+}
 export interface SecurityValidation {
   allowedOrigins?: string;
   requiresAuthentication: boolean;
   requiredPermissions: string;
   sensitiveDataHandling: SensitiveDataPolicy;
   auditLevel: AuditLevel;
+}
 }
 export enum SensitiveDataPolicy {
   NONE = 'none',
@@ -188,6 +211,8 @@ export enum SensitiveDataPolicy {
   isolation: IsolationConfig;
   cleanup: CleanupConfig;
 }
+}
+}
 export interface ScheduleConfig {
   enabled: boolean;
   cronExpression?: string;
@@ -195,10 +220,13 @@ export interface ScheduleConfig {
   timezone: string;
   maxConcurrentExecutions: number;
 }
+}
+}
 export interface TriggerConfig {
   type: TriggerType;
   condition: string; // Expression or condition,
   parameters?: Record<string, unknown>;
+}
 }
 export enum TriggerType {
   ON_DEMAND = 'on_demand',
@@ -213,6 +241,7 @@ export enum TriggerType {
   resources: ResourceLimits;
   network: NetworkConfig;
   storage: StorageConfig;
+}
 }
 export enum RuntimeEnvironment {
   LOCAL = 'local',
@@ -229,6 +258,8 @@ export enum RuntimeEnvironment {
   // ALERTING AND NOTIFICATIONS
   // ==========================================
 }
+}
+}
 export interface AlertingConfig {
   enabled: boolean;
   thresholds: AlertThresholds;
@@ -236,11 +267,15 @@ export interface AlertingConfig {
   escalation: EscalationConfig;
   suppression: SuppressionConfig;
 }
+}
+}
 export interface AlertThresholds {
   responseTime: ThresholdConfig;
   errorRate: ThresholdConfig;
   availability: ThresholdConfig;
   custom: Record<string, ThresholdConfig>;
+}
+}
 }
 export interface ThresholdConfig {
   warning: number;
@@ -248,13 +283,16 @@ export interface ThresholdConfig {
   unit: string;
   evaluationWindow: number; // seconds,
   evaluationMethod: 'average' | 'max' | 'min' | 'percentile'
+}
   }
+}
 export interface NotificationConfig {
   channel: NotificationChannel;
   recipients: string;
   template: string;
   conditions: NotificationCondition;
   rateLimit?: RateLimitConfig;
+}
 }
 export enum NotificationChannel {
   EMAIL = 'email',
@@ -269,11 +307,15 @@ export enum NotificationChannel {
   repeatInterval?: number; // minutes,
   maxRepeats?: number;
 }
+}
+}
 export interface EscalationConfig {
   enabled: boolean;
   levels: EscalationLevel;
   autoEscalationDelay: number; // minutes,
   maxEscalationLevel: number;
+}
+}
 }
 export interface EscalationLevel {
   level: number;
@@ -282,15 +324,21 @@ export interface EscalationLevel {
   requiresAcknowledgment: boolean;
   timeout: number; // minutes,
 }
+}
+}
 export interface SuppressionConfig {
   enabled: boolean;
   rules: SuppressionRule;
   maintenanceWindows: MaintenanceWindow;
 }
+}
+}
 export interface SuppressionRule {
   condition: string; // Expression,
   duration: number; // minutes,
   reason: string;
+}
+}
 }
 export interface MaintenanceWindow {
   id: string;
@@ -305,6 +353,8 @@ export interface MaintenanceWindow {
   // RESULT AND STATUS INTERFACES
   // ==========================================
 }
+}
+}
 export interface HealthCheckResult {
   checkId: string;
   executionId: string;
@@ -316,6 +366,7 @@ export interface HealthCheckResult {
   details: ResultDetails;
   metrics: ResultMetrics;
   metadata: ExecutionMetadata;
+}
 }
 export enum HealthStatus {
   HEALTHY = 'healthy',
@@ -332,6 +383,8 @@ export enum HealthStatus {
   affectedComponents: string;
   relatedChecks: string;
 }
+}
+}
 export interface Finding {
   type: 'info' | 'warning' | 'error' | 'critical';
   category: string;
@@ -340,6 +393,8 @@ export interface Finding {
   remediation?: string;
   evidence?: Record<string, unknown>;
 }
+}
+}
 export interface ResultMetrics {
   responseTime?: number;
   throughput?: number;
@@ -347,6 +402,8 @@ export interface ResultMetrics {
   successRate?: number;
   availability?: number;
   custom: Record<string, number>;
+}
+}
 }
 export interface ExecutionMetadata {
   hostname: string;
@@ -359,6 +416,7 @@ export interface ExecutionMetadata {
   // ==========================================
   // HEALTH CHECK DEFINITION BUILDER
   // ==========================================
+}
 }
 export class HealthCheckDefinitionBuilder {
   private definition: Partial<HealthCheckDefinition> = {};
@@ -481,17 +539,21 @@ export class HealthCheckDefinitionBuilder {
 // VALIDATION HELPER TYPES
 // ==========================================
 
+}
 export interface CustomValidator {
   name: string;
   description: string;
   function: string; // JavaScript function as string,
   parameters: string;
 }
+}
+}
 export interface SuccessCondition {
   field: string;
   operator: ComparisonOperator;
   value: unknown;
   description: string;
+}
 }
 export interface WarningCondition extends SuccessCondition {}
 export interface ErrorCondition extends SuccessCondition {}
@@ -516,11 +578,15 @@ export enum ComparisonOperator {
   headers?: Record<string, string>;
   jsonPath?: JsonPathValidation;
 }
+}
+}
 export interface JsonPathValidation {
   path: string;
   expectedValue?: unknown;
   expectedType?: string;
   required: boolean;
+}
+}
 }
 export interface QueryExpectation {
   minRows?: number;
@@ -529,14 +595,20 @@ export interface QueryExpectation {
   columns?: string;
   constraints?: QueryConstraint;
 }
+}
+}
 export interface QueryConstraint {
   column: string;
   operator: ComparisonOperator;
   value: unknown;
 }
+}
+}
 export interface AuthenticationConfig {
   type: 'basic' | 'bearer' | 'api_key' | 'oauth2' | 'custom';
   credentials: Record<string, string>;
+}
+}
 }
 export interface RetryConfig {
   maxAttempts: number;
@@ -545,10 +617,14 @@ export interface RetryConfig {
   maxDelay?: number;
   retryConditions?: RetryCondition;
 }
+}
+}
 export interface RetryCondition {
   statusCode?: number;
   errorType?: string;
   condition?: string; // JavaScript expression,
+}
+}
 }
 export interface NetworkConfig {
   allowedHosts?: string;
@@ -556,11 +632,15 @@ export interface NetworkConfig {
   proxy?: ProxyConfig;
   maxConnections?: number;
 }
+}
+}
 export interface ProxyConfig {
   host: string;
   port: number;
   username?: string;
   password?: string;
+}
+}
 }
 export interface StorageConfig {
   tempDirectory?: string;
@@ -568,11 +648,15 @@ export interface StorageConfig {
   allowedFileTypes?: string;
   cleanupAfterExecution: boolean;
 }
+}
+}
 export interface IsolationConfig {
   sandboxed: boolean;
   allowedSystemCalls?: string;
   restrictedDirectories?: string;
   resourceQuota?: ResourceQuota;
+}
+}
 }
 export interface ResourceQuota {
   maxFileHandles: number;
@@ -580,15 +664,21 @@ export interface ResourceQuota {
   maxThreads: number;
   maxSocketConnections: number;
 }
+}
+}
 export interface CleanupConfig {
   enabled: boolean;
   actions: CleanupAction;
   timeout: number; // milliseconds,
 }
+}
+}
 export interface CleanupAction {
   type: 'delete_files' | 'close_connections' | 'kill_processes' | 'custom';
   target?: string;
   customScript?: string;
+}
+}
 }
 export interface RateLimitConfig {
   maxNotifications: number;
@@ -597,6 +687,7 @@ export interface RateLimitConfig {
   // ==========================================
   // UTILITY FUNCTIONS
   // ==========================================
+}
 }
 export class HealthCheckDefinitionValidator {
   static validate(definition: HealthCheckDefinition): ValidationResult {,
@@ -639,6 +730,7 @@ export class HealthCheckDefinitionValidator {
     const warningDeduction = warnings.length * 5;
     return Math.max(0, baseScore - errorDeduction - warningDeduction);
 
+}
 export interface ValidationResult {
   isValid: boolean;
   errors: string;
@@ -662,6 +754,7 @@ export interface ValidationResult {
       responseValidation: {
   contentType: ['application/json'],
         jsonPath: [,
+}
           { path: '$.status', expectedValue: 'healthy', required: true },
           { path: '$.timestamp', expectedType: 'string', required: true }
         ]

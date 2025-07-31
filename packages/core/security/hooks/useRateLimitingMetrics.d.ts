@@ -15,6 +15,7 @@ import {
 import { RateLimitingService } from '../RateLimitingService';
 import { AdaptiveThrottlingRulesEngine } from '../AdaptiveThrottlingRules';
 
+}
 export interface UseRateLimitingMetricsOptions {
     autoRefresh?: boolean;
     refreshInterval?: number;
@@ -23,6 +24,7 @@ export interface UseRateLimitingMetricsOptions {
     retainHistoryHours?: number;
 
 
+}
 export interface MetricsHookReturn {
     currentMetrics: PerformanceMetrics | null;
     visualizationData: MetricsVisualizationData | null;
@@ -44,6 +46,7 @@ export interface MetricsHookReturn {
     clearError: () => void;
 
 
+}
 export interface MetricsServiceConfig {
     rateLimitingService: RateLimitingService;
     throttlingEngine?: AdaptiveThrottlingRulesEngine;
@@ -52,6 +55,7 @@ export interface MetricsServiceConfig {
 export declare const useRateLimitingMetrics: ()
   { rateLimitingService,
   throttlingEngine,
+}
   options }: MetricsServiceConfig
 ) => MetricsHookReturn;
 export declare const isLoading: boolean, setIsLoading: import("react").Dispatch<import("react").SetStateAction<boolean>>;

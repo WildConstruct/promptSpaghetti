@@ -22,6 +22,7 @@ import { Modal } from './Modal';
 import './ReviewSystem.css';
 
 // Types
+}
 interface Review {
   id: string;,
   template_id: string;
@@ -37,14 +38,15 @@ interface Review {
   verified_purchase: boolean;
   created_at: Date;,
   updated_at: Date;
-  buyer?: {,
+  buyer?: {
   id: string;,
   name: string;
   avatar_url?: string;
   verified: boolean;,
   total_reviews: number;
+}
 };
-  helpfulness_votes: {,
+  helpfulness_votes: {
   helpful: number;
   not_helpful: number;
   user_vote?: 'helpful' | 'not_helpful';
@@ -62,6 +64,7 @@ interface Review {
   thumbnail_url?: string;
   filename: string;
 }>;
+}
 interface ReviewSystemProps {
   templateId: string;,
   templateTitle: string;
@@ -76,6 +79,7 @@ interface ReviewSystemProps {
   currentUserId,
   isOwner = false,
   userHasPurchased = false
+}
 }) => {
   const [reviews, setReviews] = useState<Review>([]);
   const [metrics, setMetrics] = useState<unknown>(null);
@@ -111,7 +115,7 @@ interface ReviewSystemProps {
   try {
   const response = await fetch('/api/marketplace/reviews', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),
@@ -129,7 +133,7 @@ interface ReviewSystemProps {
   try {
   const response = await fetch('/api/marketplace/reviews/helpfulness', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({,)
@@ -146,7 +150,7 @@ interface ReviewSystemProps {
   try {
   const response = await fetch('/api/marketplace/reviews/flag', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({,)
@@ -164,7 +168,7 @@ interface ReviewSystemProps {
   try {
   const responseData = await fetch('/api/marketplace/reviews/response', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({,)
@@ -295,6 +299,7 @@ interface ReviewSystemProps {
 };
 
 // Review Card Component
+}
 interface ReviewCardProps {
   review: Review;
   currentUserId?: string;
@@ -311,6 +316,7 @@ interface ReviewCardProps {
   onFlag,
   onCreatorResponse,
   onEdit
+}
 }) => {
   const [showResponseForm, setShowResponseForm] = useState(false);
   const [responseText, setResponseText] = useState('');
@@ -499,6 +505,7 @@ interface ReviewCardProps {
 };
 
 // Review Modal Component
+}
 interface ReviewModalProps {
   templateId: string;,
   templateTitle: string;
@@ -511,6 +518,7 @@ interface ReviewModalProps {
   editingReview,
   onSubmit,
   onClose
+}
 }) => {
   const [formData, setFormData] = useState({)
   stars: editingReview?.stars || 5,
@@ -694,10 +702,12 @@ interface ReviewModalProps {
 };
 
 // Flag Modal Component
+}
 interface FlagModalProps {
   reviewId: string;,
   onFlag: (reviewId: string, flagType: string, reason?: string) => void;
   onClose: () => void;
+}
 const FlagModal: React.FC<FlagModalProps> = ({ reviewId, onFlag, onClose }) => {
   const [flagType, setFlagType] = useState('inappropriate');
   const [reason, setReason] = useState('');

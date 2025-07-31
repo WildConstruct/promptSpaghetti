@@ -48,7 +48,7 @@ export function sanitizeText(input: string): string {
   /**
   * Validate input against common injection patterns
   */
-  export function validateInput(input: string, options: {,)
+  export function validateInput(input: string, options: {)
   maxLength?: number;
   allowedPattern?: RegExp;
   blockedPatterns?: RegExp;

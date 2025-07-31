@@ -35,6 +35,7 @@ export declare enum ActivityLevel {
     HIGH = "high",
     CRITICAL = "critical"
 
+}
 export interface TimeoutConfiguration {
     sessionId: string;
     policy: TimeoutPolicy;
@@ -54,6 +55,7 @@ export interface TimeoutConfiguration {
     deviceTrustFactor: number;
     locationTrustFactor: number;
 
+}
 export interface ActivityData {
     timestamp: Date;
     type: 'mouse' | 'keyboard' | 'touch' | 'api' | 'navigation' | 'interaction';
@@ -62,6 +64,7 @@ export interface ActivityData {
     duration?: number;
     metadata?: Record<string, any>;
 
+}
 export interface SessionTimeoutState {
     sessionId: string;
     configuration: TimeoutConfiguration;
@@ -82,10 +85,12 @@ export interface SessionTimeoutState {
         peakHours: number[];
         averageSessionLength: number;
         typicalActivityLevel: ActivityLevel;
+}
     };
     status: 'active' | 'warning' | 'grace' | 'expired' | 'extended';
     timeoutReason?: TimeoutReason;
 
+}
 export interface TimeoutEvent {
     sessionId: string;
     eventType: 'warning' | 'timeout' | 'extension' | 'renewal';
@@ -152,6 +157,7 @@ export declare class SessionTimeoutController extends EventEmitter {
         extensionUsage: number;
         timeoutReasons: Record<TimeoutReason, number>;
         policyDistribution: Record<TimeoutPolicy, number>;
+}
     };
     private shouldExtendSession;
     private calculateActivityScore;

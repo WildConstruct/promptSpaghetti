@@ -394,7 +394,7 @@ describe('DataRetrievalRateLimit', () => {
       // Make many rapid requests
       const promises = [];
       for (let i = 0; i < 60; i++) {
-        promises.push()
+        promises.push(
           dataRetrievalRateLimit.checkDataRetrievalLimit()
             subject,
             object,
@@ -636,7 +636,7 @@ describe('DataRetrievalRateLimit', () => {
       for (let i = 0; i < 100; i++) {
         const subject = createTestSubject({ userId: `user-${i}` });}
         const object = createTestObject({ dataId: `data-${i}` });}
-        promises.push()
+        promises.push(
           dataRetrievalRateLimit.checkDataRetrievalLimit()
             subject,
             object,

@@ -7,6 +7,7 @@ import { NodeData, NodeType } from '../types/NodeTypes';
 /**
  * Compressed storage format for large graphs
  */
+}
 interface CompressedGraphData {
   format_version: '2.0.0';
   compressed: true;
@@ -17,10 +18,12 @@ interface CompressedGraphData {
   edge_count: number;
   compression_ratio: number;
   original_size: number;
+}
 };
 /**
  * Index structures for fast graph queries
  */
+}
 interface GraphIndexes {
   // Type-based indexes
   nodesByType: Map<NodeType, Set<string>>;
@@ -96,6 +99,7 @@ export class OptimizedGraphStorage {
   updateNode(nodeId: string, updates: Partial<Node>): boolean {
     const existing = this.nodeMap.get(nodeId);
     if (!existing) return false;
+}
     const updated = { ...existing, ...updates };
     // Update indexes if type changed
     if (updates.type && updates.type !== existing.type) {

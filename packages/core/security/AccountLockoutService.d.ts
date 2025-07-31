@@ -49,6 +49,7 @@ export declare enum NotificationType {
     ADMIN_ACTION_REQUIRED = "admin_action_required",
     COMPLIANCE_REPORT = "compliance_report"
 
+}
 export interface AccountLockout {
     id: string;
     userId: string;
@@ -66,11 +67,13 @@ export interface AccountLockout {
         geolocation?: string;
         riskScore: number;
         threatLevel: string;
+}
     };
     adminActions: AdminAction[];
     notifications: LockoutNotification[];
     auditTrail: AuditEntry[];
 
+}
 export interface AdminAction {
     id: string;
     adminId: string;
@@ -86,6 +89,7 @@ export interface AdminAction {
     approvalTime?: Date;
     metadata: Record<string, any>;
 
+}
 export interface LockoutNotification {
     id: string;
     type: NotificationType;
@@ -97,6 +101,7 @@ export interface LockoutNotification {
     content: string;
     status: 'pending' | 'sent' | 'delivered' | 'failed' | 'read';
 
+}
 export interface AuditEntry {
     id: string;
     timestamp: Date;
@@ -107,6 +112,7 @@ export interface AuditEntry {
     ipAddress?: string;
     sessionId?: string;
 
+}
 export interface UnlockRequest {
     lockoutId: string;
     adminId: string;
@@ -117,6 +123,7 @@ export interface UnlockRequest {
     approvalRequired: boolean;
     metadata?: Record<string, any>;
 
+}
 export interface UnlockPolicy {
     adminRole: AdminRole;
     canUnlock: boolean;
@@ -150,6 +157,7 @@ export declare class AccountLockoutService extends EventEmitter {
         success: boolean;
         message: string;
         requiresApproval?: boolean;
+}
     }>;
     /**
      * Emergency unlock capability for critical situations
@@ -204,7 +212,7 @@ export declare class AccountLockoutService extends EventEmitter {
         averageLockoutDuration: number;
         adminUnlocks: number;
         emergencyUnlocks: number;
-        topAffectedUsers: Array<{,
+        topAffectedUsers: Array<{
             userId: string;
             count: number;
         }>;

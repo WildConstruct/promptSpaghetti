@@ -54,6 +54,7 @@ export declare enum ComplianceFramework {
     PCI_DSS = "PCI_DSS",
     ENTERTAINMENT_INDUSTRY = "ENTERTAINMENT_INDUSTRY"
 
+}
 export interface UnifiedPolicy {
     id: string;
     name: string;
@@ -66,6 +67,7 @@ export interface UnifiedPolicy {
         conditions: PolicyCondition[];
         actions: PolicyAction[];
         exceptions: PolicyException[];
+}
     };
     scope: {
         workspaceIds?: string[];
@@ -109,6 +111,7 @@ export interface UnifiedPolicy {
         supersededBy?: string;
     };
 
+}
 export interface PolicyRule {
     id: string;
     name: string;
@@ -119,6 +122,7 @@ export interface PolicyRule {
         operator: 'EQUALS' | 'NOT_EQUALS' | 'CONTAINS' | 'NOT_CONTAINS' | 'GREATER_THAN' | 'LESS_THAN' | 'BETWEEN' | 'REGEX' | 'CUSTOM';
         value: any;
         customFunction?: string;
+}
     };
     context?: {
         timeBasedRules?: TimeBasedRule[];
@@ -129,6 +133,7 @@ export interface PolicyRule {
     weight: number;
     enabled: boolean;
 
+}
 export interface PolicyCondition {
     id: string;
     name: string;
@@ -137,6 +142,7 @@ export interface PolicyCondition {
         expression: string;
         parameters: Record<string, any>;
         evaluationMode: 'AND' | 'OR' | 'NOT'
+}
   };
     evaluationContext: {
         requiredData: string[];
@@ -146,6 +152,7 @@ export interface PolicyCondition {
     weight: number;
     critical: boolean;
 
+}
 export interface PolicyAction {
     id: string;
     name: string;
@@ -155,6 +162,7 @@ export interface PolicyAction {
         targetEntities: string[];
         executionMode: 'IMMEDIATE' | 'DEFERRED' | 'SCHEDULED';
         rollbackEnabled: boolean;
+}
     };
     integrations?: {
         services: string[];
@@ -164,6 +172,7 @@ export interface PolicyAction {
     priority: number;
     enabled: boolean;
 
+}
 export interface PolicyException {
     id: string;
     name: string;
@@ -173,6 +182,7 @@ export interface PolicyException {
         roleIds?: string[];
         entityIds?: string[];
         contextConditions?: Record<string, any>;
+}
     };
     scope: {
         rules?: string[];
@@ -188,26 +198,31 @@ export interface PolicyException {
     };
     active: boolean;
 
+}
 export interface TimeBasedRule {
     timePeriods: string[];
     seasonality: boolean;
     historicalContext: boolean;
 
+}
 export interface LocationBasedRule {
     regions: string[];
     geopoliticalContext: boolean;
     culturalConsiderations: string[];
 
+}
 export interface RoleBasedRule {
     roles: string[];
     permissions: string[];
     clearanceLevel: string;
 
+}
 export interface ContentBasedRule {
     contentTypes: string[];
     qualityMetrics: Record<string, number>;
     historicalAccuracy: boolean;
 
+}
 export interface PolicyEvaluationContext {
     requestId: string;
     timestamp: Date;
@@ -219,6 +234,7 @@ export interface PolicyEvaluationContext {
         userAgent: string;
         geolocation?: string;
         authenticationMethod: string;
+}
     };
     operation: {
         type: string;
@@ -233,6 +249,7 @@ export interface PolicyEvaluationContext {
     };
     additionalContext: Record<string, any>;
 
+}
 export interface PolicyEvaluationResult {
     requestId: string;
     evaluationId: string;
@@ -241,33 +258,34 @@ export interface PolicyEvaluationResult {
     policyName: string;
     result: 'ALLOW' | 'DENY' | 'RESTRICT' | 'ESCALATE';
     confidence: number;
-    ruleResults: Array<{,
+    ruleResults: Array<{
         ruleId: string;
         ruleName: string;
         result: 'PASS' | 'FAIL' | 'WARN';
         score: number;
         details: any;
+}
     }>;
-    conditionResults: Array<{,
+    conditionResults: Array<{
         conditionId: string;
         conditionName: string;
         result: 'MET' | 'NOT_MET' | 'ERROR';
         details: any;
     }>;
-    triggeredActions: Array<{,
+    triggeredActions: Array<{
         actionId: string;
         actionType: string;
         executed: boolean;
         result?: any;
         error?: string;
     }>;
-    appliedExceptions: Array<{,
+    appliedExceptions: Array<{
         exceptionId: string;
         exceptionName: string;
         scope: string[];
     }>;
     complianceStatus: {
-        frameworks: Array<{,
+        frameworks: Array<{
             framework: ComplianceFramework;
             compliant: boolean;
             violations: string[];
@@ -285,6 +303,7 @@ export interface PolicyEvaluationResult {
         auditRequired: boolean;
     };
 
+}
 export interface PolicyViolation {
     id: string;
     policyId: string;
@@ -294,6 +313,7 @@ export interface PolicyViolation {
         severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
         description: string;
         details: any;
+}
     };
     context: PolicyEvaluationContext;
     impact: {

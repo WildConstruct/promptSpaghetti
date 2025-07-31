@@ -43,6 +43,7 @@ export enum SMSMessageType {
 
 // Rate limit configuration
 }
+}
 export interface RateLimitConfig {
   algorithm: RateLimitAlgorithm;
   scope: RateLimitScope;
@@ -54,8 +55,10 @@ export interface RateLimitConfig {
   enabled: boolean;
 }
 }
+}
 
 // SMS message data
+}
 }
 export interface SMSMessage {
   id: string;
@@ -74,8 +77,10 @@ export interface SMSMessage {
   createdAt: Date;
 }
 }
+}
 
 // Rate limit result
+}
 }
 export interface RateLimitResult {
   allowed: boolean;
@@ -89,8 +94,10 @@ export interface RateLimitResult {
   metadata?: Record<string, any>;
 }
 }
+}
 
 // Queue status
+}
 }
 export interface QueueStatus {
   pending: number;
@@ -102,8 +109,10 @@ export interface QueueStatus {
   queueHealthScore: number; // 0-100
 }
 }
+}
 
 // Rate limiting storage interface
+}
 }
 interface RateLimitStorage {
   get(key: string): Promise<unknown>;
@@ -112,6 +121,7 @@ interface RateLimitStorage {
   expire(key: string, ttlMs: number): Promise<void>;
   delete(key: string): Promise<boolean>;
   cleanup(): Promise<void>;
+}
 }
 }
 
@@ -913,10 +923,12 @@ export class SMSRateLimitingService extends EventEmitter {
 
 // SMS Provider interface
 }
+}
 export interface SMSProvider {
   name: string;
   sendSMS(message: SMSMessage): Promise<boolean>;
   isAvailable(): boolean;
+}
 }
   getStatus(): { healthy: boolean; lastError?: string; };
 }

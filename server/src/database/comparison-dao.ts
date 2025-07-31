@@ -15,12 +15,15 @@ import {
 } from './comparison-models.js';
 
 }
+}
 export interface PaginationOptions {
   page?: number;
   limit?: number;
 }
 }
+}
 
+}
 }
 export interface ComparisonFilter {
   graph_id?: string;
@@ -34,7 +37,9 @@ export interface ComparisonFilter {
   created_by?: string;
 }
 }
+}
 
+}
 }
 export interface PaginatedResult<T> {
   data: T[];

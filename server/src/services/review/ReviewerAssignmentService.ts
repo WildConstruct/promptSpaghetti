@@ -30,6 +30,7 @@ import {
 } from '../../../../packages/core/types/ReviewTools';
 
 }
+}
 export interface AssignmentRecommendation {
   reviewerId: string;
   score: number;
@@ -40,7 +41,9 @@ export interface AssignmentRecommendation {
   alternativeReviewers: string[];
 }
 }
+}
 
+}
 }
 export interface AssignmentReason {
   factor: WeightingFactor;
@@ -49,7 +52,9 @@ export interface AssignmentReason {
   description: string;
 }
 }
+}
 
+}
 }
 export interface AssignmentStrategy {
   name: AssignmentType;
@@ -57,6 +62,7 @@ export interface AssignmentStrategy {
   weights: Record<WeightingFactor, number>;
   fallback: FallbackStrategy;
   enabled: boolean;
+}
 }
 }
 
@@ -771,6 +777,7 @@ export class ReviewerAssignmentService {
 type ReassignmentReason = 'performance_issue' | 'workload_overload' | 'expertise_mismatch' | 'unavailable' | 'escalated';
 
 }
+}
 interface WorkloadRebalanceResult {
   totalReviewers: number;
   overloadedCount: number;
@@ -779,7 +786,9 @@ interface WorkloadRebalanceResult {
   projectedImprovement: number;
 }
 }
+}
 
+}
 }
 interface WorkloadRebalanceAction {
   reviewId: string;
@@ -787,5 +796,6 @@ interface WorkloadRebalanceAction {
   toReviewerId: string;
   reason: string;
   expectedBenefit: number;
+}
 }
 }

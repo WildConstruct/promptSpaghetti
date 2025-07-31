@@ -16,10 +16,12 @@ import './CheckoutFlow.css';
 
 // Initialize Stripe
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '');
+}
 interface CheckoutFlowProps {
   onBack: () => void;,
   onSuccess: (orderId: string) => void;
 
+}
 export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ onBack, onSuccess }) => {
   const [currentStep, setCurrentStep] = useState<'billing' | 'payment' | 'confirmation'>('billing');
   const [billingAddress, setBillingAddress] = useState<BillingAddress>({)
@@ -38,9 +40,9 @@ export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ onBack, onSuccess })
   const [processing, setProcessing] = useState(false);
   const { cart } = useMarketplace();
   const elementsOptions: StripeElementsOptions = {,
-  appearance: {,
+  appearance: {
   theme: 'stripe',
-  variables: {,
+  variables: {
   colorPrimary: '#3b82f6',
 };
   const steps = [;
@@ -118,6 +120,7 @@ export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ onBack, onSuccess })
 };
 
 // Billing Address Form Component
+}
 interface BillingAddressFormProps {
   address: BillingAddress;,
   onChange: (address: BillingAddress) => void;,
@@ -129,6 +132,7 @@ interface BillingAddressFormProps {
   onChange,
   errors: _, // eslint-disable-line @typescript-eslint/no-unused-vars,
   onNext
+}
 }) => {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const handleChange = (field: keyof BillingAddress, value: string) => {
@@ -283,6 +287,7 @@ interface BillingAddressFormProps {
 };
 
 // Payment Form Component
+}
 interface PaymentFormProps {
   billingAddress: BillingAddress;,
   paymentIntent: PaymentIntent | null;
@@ -300,6 +305,7 @@ interface PaymentFormProps {
   onSuccess,
   processing,
   setProcessing
+}
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -341,12 +347,12 @@ interface PaymentFormProps {
       const { error: stripeError } = await stripe.confirmCardPayment()
         paymentIntent.client_secret!,
         {
-  payment_method: {,
+  payment_method: {
   card: cardElement,
-  billing_details: {,
+  billing_details: {
   name: billingAddress.name,
   email: billingAddress.email,
-  address: {,
+  address: {
   line1: billingAddress.line1,
   line2: billingAddress.line2 || undefined,
   city: billingAddress.city,
@@ -384,11 +390,11 @@ interface PaymentFormProps {
           <div className="card-element">
             <CardElement
               options={{
-  style: {,
-  base: {,
+  style: {
+  base: {
   fontSize: '16px',
   color: '#424770',
-  '::placeholder': {,
+  '::placeholder': {
   color: '#aab7c4',
 },
   hidePostalCode: true // We collect this separately;
@@ -425,6 +431,7 @@ interface PaymentFormProps {
 };
 
 // Confirmation Step Component
+}
 interface ConfirmationStepProps {
   paymentIntent: PaymentIntent | null;,
   onBack: () => void;
@@ -434,6 +441,7 @@ interface ConfirmationStepProps {
   paymentIntent: _paymentIntent, // eslint-disable-line @typescript-eslint/no-unused-vars,
   onBack: _onBack, // eslint-disable-line @typescript-eslint/no-unused-vars,
   onSuccess
+}
 }) => {
   return;
     <div className="confirmation-step">
@@ -460,8 +468,10 @@ interface ConfirmationStepProps {
 };
 
 // Order Summary Component
+}
 interface OrderSummaryProps {
   cart: unknown; // ShoppingCart type
+}
 const OrderSummary: React.FC<OrderSummaryProps> = ({ cart }) => {
   if (!cart || !cart.items || cart.items.length === 0) {
     return null;

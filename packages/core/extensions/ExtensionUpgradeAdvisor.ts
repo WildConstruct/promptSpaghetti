@@ -442,9 +442,9 @@ export class ExtensionUpgradeAdvisor {
     const conflicts: DependencyConflict = [];
     // Implementation would check for actual conflicts
     return conflicts;
-  private analyzePermissionChanges(()
+  private analyzePermissionChanges(((
     currentExtension: ExtensionManifest,
-    targetExtension: ExtensionManifest,
+    targetExtension: ExtensionManifest
   ): PermissionChange {
     const changes: PermissionChange = [];
     // Implementation would analyze permission differences
@@ -543,11 +543,15 @@ export class ExtensionUpgradeAdvisor {
   stabilityPriority?: boolean;
   featurePriority?: boolean;
 }
+}
+}
 export interface UpgradeRecommendation {
   hasUpdates: boolean;
   currentVersion: string;
   recommendations: VersionRecommendation;
   strategy: UpgradeStrategyType;
+}
+}
 }
 export interface VersionRecommendation {
   version: string;
@@ -556,7 +560,9 @@ export interface VersionRecommendation {
   risk: 'low' | 'medium' | 'high';
   benefits: string;
   effort: 'minimal' | 'low' | 'medium' | 'high'
+}
   }
+}
 export interface UpgradeAnalysis {
   feasible: boolean;
   reason?: string;
@@ -566,6 +572,8 @@ export interface UpgradeAnalysis {
   benefits: UpgradeBenefit;
   estimatedEffort?: EffortEstimate;
   timeline?: UpgradeTimeline;
+}
+}
 }
 export interface MigrationPlan {
   viable: boolean;
@@ -640,12 +648,14 @@ export interface MigrationPlan {
   duration: string;
   complexity: 'simple' | 'moderate' | 'complex';
   interface UpgradeTimeline {
-  phases: Array<{,
+  phases: Array<{
   name: string;
   duration: string;
   tasks: MigrationTask;
+}
 }>;
   totalDuration: string;
+}
 interface MigrationPhase {
   name: string;
   description: string;
@@ -661,5 +671,6 @@ interface MigrationPhase {
   rollbackTests: string;
   type UpgradeStrategyType = 'conservative' | 'moderate' | 'aggressive' | 'security' | 'none';
   // Export singleton
+}
 }
 export const extensionUpgradeAdvisor = ExtensionUpgradeAdvisor.getInstance();

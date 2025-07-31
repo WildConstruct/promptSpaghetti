@@ -6,6 +6,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FilePreview } from './FilePreview';
 import { PSGFile } from '../../projectManager';
+}
 interface HoverPreviewProps {
   /** File data to preview */
   file: PSGFile;
@@ -23,6 +24,7 @@ interface HoverPreviewProps {
   delay = 300,
   onClick,
   children
+}
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });

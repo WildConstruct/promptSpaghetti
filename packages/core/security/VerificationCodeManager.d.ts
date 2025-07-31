@@ -48,6 +48,7 @@ export declare enum DeliveryChannel {
     PUSH = "push",
     IN_APP = "in_app"
 
+}
 export interface VerificationCodeConfig {
     defaultExpiration: number;
     maxExpiration: number;
@@ -57,6 +58,7 @@ export interface VerificationCodeConfig {
     cleanupInterval: number;
     codeFormats: {
         [key in VerificationCodeType]: CodeFormat;
+}
     };
     expirationTimes: {
         [key in VerificationCodeType]: number;
@@ -68,6 +70,7 @@ export interface VerificationCodeConfig {
     antiEnumerationDelay: number;
     requireSecureDelivery: boolean;
 
+}
 export interface VerificationCode {
     id: string;
     userId: string;
@@ -95,6 +98,7 @@ export interface VerificationCode {
         deliveryStatus?: string;
         revocationReason?: string;
         additionalContext?: Record<string, any>;
+}
     };
     securityFlags: {
         highRisk: boolean;
@@ -103,6 +107,7 @@ export interface VerificationCode {
         deviceMismatch: boolean;
     };
 
+}
 export interface CodeGenerationRequest {
     userId: string;
     type: VerificationCodeType;
@@ -114,6 +119,7 @@ export interface CodeGenerationRequest {
     maxAttempts?: number;
     metadata?: Record<string, any>;
 
+}
 export interface CodeValidationRequest {
     userId: string;
     code: string;
@@ -122,6 +128,7 @@ export interface CodeValidationRequest {
     userAgent: string;
     deviceFingerprint?: string;
 
+}
 export interface ValidationResult {
     valid: boolean;
     codeData?: VerificationCode;
@@ -130,6 +137,7 @@ export interface ValidationResult {
     securityWarnings?: string[];
     riskScore?: number;
 
+}
 export interface RateLimitData {
     count: number;
     resetTime: number;
@@ -148,6 +156,7 @@ export declare enum SecurityEvent {
     BRUTE_FORCE_DETECTED = "brute_force_detected",
     CODE_CLEANUP = "code_cleanup"
 
+}
 export interface CodeStatistics {
     totalCodes: number;
     activeCodes: number;
@@ -176,6 +185,7 @@ export declare class VerificationCodeManager extends EventEmitter {
     generateCode(request: CodeGenerationRequest): Promise<{
         code: string;
         codeId: string;
+}
     } | null>;
     /**
      * Validate a verification code

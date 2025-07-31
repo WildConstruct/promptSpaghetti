@@ -7,6 +7,7 @@ import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 
 }
+}
 export interface PasswordHistoryEntry {
   id: string;
   userId: string;
@@ -24,11 +25,13 @@ export interface PasswordHistoryEntry {
     rotationPolicy?: string;
     breachDetected?: boolean;
 }
+}
   };
   archivedAt?: Date;
   isActive: boolean;
 }
 
+}
 }
 export interface PasswordSecurityAnalysis {
   userId: string;
@@ -46,9 +49,11 @@ export interface PasswordSecurityAnalysis {
     severity: 'low' | 'medium' | 'high';
     description: string;
 }
+}
   }>;
 }
 
+}
 }
 export interface PasswordPattern {
   id: string;
@@ -60,7 +65,9 @@ export interface PasswordPattern {
   affectedUsers: number;
 }
 }
+}
 
+}
 }
 export interface HistoryPolicy {
   preventReuse: number; // Number of previous passwords to remember
@@ -70,6 +77,7 @@ export interface HistoryPolicy {
   patternAnalysis: boolean; // Enable pattern detection
   complianceTracking: boolean; // Track compliance metrics
   retentionPeriod: number; // Days to keep password history
+}
 }
 }
 

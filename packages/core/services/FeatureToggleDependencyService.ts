@@ -12,6 +12,7 @@ import { EventEmitter } from 'events';
 
 // Core dependency interfaces
 
+}
 export interface ToggleDependency {
   id: string;
   sourceToggleId: string;
@@ -24,6 +25,7 @@ export interface ToggleDependency {
   metadata: DependencyMetadata;
   created: Date;
   lastValidated: Date;
+}
 }
 export enum DependencyType {
   REQUIRES = 'requires',           // Source requires target to be active
@@ -47,6 +49,8 @@ export enum DependencyType {
   technicalNotes: string;
   overrideHistory: DependencyOverride;
 }
+}
+}
 export interface DependencyOverride {
   id: string;
   actor: string;
@@ -57,6 +61,8 @@ export interface DependencyOverride {
   approver?: string;
   // Dependency analysis and visualization
 }
+}
+}
 export interface DependencyGraph {
   nodes: ToggleNode;
   edges: DependencyEdge;
@@ -64,6 +70,8 @@ export interface DependencyGraph {
   criticalPaths: CriticalPath;
   conflicts: DependencyConflict;
   metrics: GraphMetrics;
+}
+}
 }
 export interface ToggleNode {
   id: string;
@@ -81,7 +89,9 @@ export interface ToggleNode {
   riskScore: number;
   activationCount: number;
   lastActivated?: Date;
+}
 };
+}
 }
 export interface DependencyEdge {
   id: string;
@@ -95,7 +105,9 @@ export interface DependencyEdge {
   reason: string;
   validated: Date;
   violations: number;
+}
 };
+}
 }
 export interface DependencyCluster {
   id: string;
@@ -104,6 +116,8 @@ export interface DependencyCluster {
   type: 'feature' | 'epic' | 'story' | 'system';
   strength: number; // Average internal dependency strength,
   external: string; // Dependencies outside this cluster,
+}
+}
 }
 export interface CriticalPath {
   id: string;
@@ -114,6 +128,8 @@ export interface CriticalPath {
   bottlenecks: string;
   alternatives: string[];
 }
+}
+}
 export interface DependencyConflict {
   id: string;
   type: ConflictType;
@@ -122,6 +138,7 @@ export interface DependencyConflict {
   description: string;
   resolution: ConflictResolution;
   impact: ConflictImpact;
+}
 }
 export enum ConflictType {
   CIRCULAR_DEPENDENCY = 'circular_dependency',
@@ -137,11 +154,15 @@ export enum ConflictType {
   confidence: number; // 0.0-1.0,
   impact: string;
 }
+}
+}
 export interface ConflictImpact {
   affectedToggles: number;
   userImpact: 'none' | 'minimal' | 'moderate' | 'significant';
   businessRisk: 'low' | 'medium' | 'high' | 'critical';
   estimatedDowntime?: number; // minutes,
+}
+}
 }
 export interface GraphMetrics {
   totalToggles: number;
@@ -154,12 +175,16 @@ export interface GraphMetrics {
   lastAnalyzed: Date;
   // Analysis and validation interfaces
 }
+}
+}
 export interface DependencyAnalysis {
   graph: DependencyGraph;
   violations: DependencyViolation;
   recommendations: DependencyRecommendation;
   impactAssessment: ImpactAssessment;
   riskFactors: RiskFactor;
+}
+}
 }
 export interface DependencyViolation {
   id: string;
@@ -171,6 +196,7 @@ export interface DependencyViolation {
   detected: Date;
   resolved?: Date;
   resolution?: string;
+}
 }
 export enum ViolationType {
   MISSING_DEPENDENCY = 'missing_dependency',
@@ -189,6 +215,7 @@ export enum ViolationType {
   estimatedEffort: number; // hours,
   automated: boolean;
 }
+}
 export enum RecommendationType {
   ADD_DEPENDENCY = 'add_dependency',
   REMOVE_DEPENDENCY = 'remove_dependency',
@@ -205,6 +232,8 @@ export enum RecommendationType {
   riskScore: number;
   mitigation: string;
 }
+}
+}
 export interface ToggleImpact {
   toggleId: string;
   impactType: 'activation' | 'deactivation' | 'modification' | 'dependency_change';
@@ -212,6 +241,8 @@ export interface ToggleImpact {
   description: string;
   affectedFeatures: string;
   userExperienceChange: string;
+}
+}
 }
 export interface RiskFactor {
   category: 'technical' | 'business' | 'user_experience' | 'compliance';
@@ -222,12 +253,15 @@ export interface RiskFactor {
   mitigation: string;
   // Service configuration
 }
+}
+}
 export interface DependencyServiceConfig {
   detection: {
   autoDetectDependencies: boolean;
   detectionPatterns: string;
   confidenceThreshold: number;
   maxDependencyDepth: number;
+}
 };
   validation: {
   validateOnActivation: boolean;
@@ -323,6 +357,7 @@ export class FeatureToggleDependencyService extends EventEmitter {
    * Remove a dependency
    */
   async removeDependency(dependencyId: string): Promise<boolean> {
+
     const dependency = this.dependencies.get(dependencyId);
     if (!dependency) {
       return false;
@@ -339,6 +374,7 @@ export class FeatureToggleDependencyService extends EventEmitter {
   warnings: string;
   requirements: string;
 }> {
+
     const blockers: string = [];
     const warnings: string = [];
     const requirements: string = [];
@@ -376,6 +412,7 @@ export class FeatureToggleDependencyService extends EventEmitter {
    * Generate dependency graph for visualization
    */
   async generateDependencyGraph(toggleIds?: string): Promise<DependencyGraph> {
+
   const nodes: ToggleNode = [];
   const edges: DependencyEdge = [];
   const nodeMap = new Map<string, ToggleNode>();
@@ -456,6 +493,7 @@ export class FeatureToggleDependencyService extends EventEmitter {
    * Analyze dependencies and provide recommendations
    */
   async analyzeDependencies(toggleIds?: string): Promise<DependencyAnalysis> {
+
   const cacheKey = (toggleIds || []).sort().join(',') || 'all';
   // Check cache first
   const cached = this.analysisCache.get(cacheKey);
@@ -480,6 +518,7 @@ export class FeatureToggleDependencyService extends EventEmitter {
    * Get impact analysis for toggle changes
    */
   async getImpactAnalysis(toggleId: string, action: 'activate' | 'deactivate'): Promise<ImpactAssessment> {
+
     const directImpact: ToggleImpact = [];
     const indirectImpact: ToggleImpact = [];
     const affectedToggles = new Set<string>();
@@ -542,6 +581,7 @@ export class FeatureToggleDependencyService extends EventEmitter {
   errors: string;
   warnings: string;
 }> {
+
   const errors: string = [];
   const warnings: string = [];
   // Check for circular dependencies
@@ -561,6 +601,7 @@ export class FeatureToggleDependencyService extends EventEmitter {
   warnings
 };
   private async updateDependencyGraph(): Promise<void> {
+
   this.dependencyGraph = await this.generateDependencyGraph();
   private calculateNodeLevels(nodes: ToggleNode, edges: DependencyEdge): void {,
   const visited = new Set<string>();
@@ -632,6 +673,7 @@ export class FeatureToggleDependencyService extends EventEmitter {
         });
     return paths.sort((a, b) => b.length - a.length).slice(0, 10); // Top 10 critical paths
   private async detectConflicts(nodes: ToggleNode, edges: DependencyEdge): Promise<DependencyConflict> {
+
     const conflicts: DependencyConflict = [];
     // Detect circular dependencies
     const cycles = this.findCircularDependencies(edges);
@@ -689,24 +731,29 @@ export class FeatureToggleDependencyService extends EventEmitter {
   // Additional helper methods would continue here...
   // (Implementation of remaining private methods for completeness)
   private async performPeriodicAnalysis(): Promise<void> {
+
     try {
       const analysis = await this.analyzeDependencies();
       this.emit('periodic_analysis', { analysis });
     } catch (error) {
       this.emit('analysis_error', { error });
   private async isToggleActive(toggleId: string): Promise<boolean> {
+
     // Implementation would check actual toggle status
     return false; // Placeholder
   private async getToggleInfo(toggleId: string): Promise<any> {
+
     // Implementation would fetch toggle information
     return null; // Placeholder
   private calculateToggleRisk(toggleId: string): number {
     // Implementation would calculate risk score
     return 0.5; // Placeholder
   private async validateDependencyStatus(dependency: ToggleDependency): Promise<'valid' | 'invalid' | 'warning' | 'conflict'> {
+
     // Implementation would validate dependency status
     return 'valid'; // Placeholder
   private async countDependencyViolations(dependencyId: string): Promise<number> {
+
     // Implementation would count violations
     return 0; // Placeholder
   // Additional placeholder methods for completeness

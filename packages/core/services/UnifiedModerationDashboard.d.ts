@@ -7,6 +7,7 @@
  * workflow management, queue processing, and analytics.
  */
 
+}
 export interface UnifiedDashboardConfig {
     enableRealTimeUpdates: boolean;
     autoRefreshInterval: number;
@@ -18,6 +19,7 @@ export interface UnifiedDashboardConfig {
     escalationThreshold: number;
     workloadDistributionMode: 'round_robin' | 'expertise_based' | 'workload_balanced';
 
+}
 export interface DashboardOverview {
     timestamp: Date;
     summary: {
@@ -27,6 +29,7 @@ export interface DashboardOverview {
         autoRejected: number;
         escalated: number;
         appealed: number;
+}
     };
     queues: {
         highPriority: number;
@@ -47,6 +50,7 @@ export interface DashboardOverview {
         performanceTrend: 'improving' | 'declining' | 'stable'
   };
 
+}
 export interface ModerationAlert {
     id: string;
     type: 'queue_backlog' | 'sla_breach' | 'policy_violation' | 'system_error' | 'performance_issue';
@@ -57,6 +61,7 @@ export interface ModerationAlert {
     acknowledged: boolean;
     assignedTo?: string;
 
+}
 export interface ModerationWorkload {
     moderatorId: string;
     currentLoad: number;
@@ -70,8 +75,10 @@ export interface ModerationWorkload {
         start: string;
         end: string;
         timezone: string;
+}
     };
 
+}
 export interface AdvancedSearchQuery {
     contentTypes?: string[];
     statuses?: string[];
@@ -79,6 +86,7 @@ export interface AdvancedSearchQuery {
     dateRange?: {
         start: Date;
         end: Date;
+}
     };
     moderators?: string[];
     policies?: string[];
@@ -93,6 +101,7 @@ export interface AdvancedSearchQuery {
     limit?: number;
     offset?: number;
 
+}
 export interface BulkModerationAction {
     actionType: 'approve' | 'reject' | 'flag' | 'escalate' | 'assign' | 'prioritize';
     itemIds: string[];
@@ -101,23 +110,25 @@ export interface BulkModerationAction {
     metadata?: Record<string, unknown>;
     scheduledFor?: Date;
 
+}
 export interface DashboardMetrics {
     realTime: {
         activeModerators: number;
         itemsBeingReviewed: number;
         averageWaitTime: number;
         systemLoad: number;
+}
     };
     historical: {
-        dailyVolume: Array<{,
+        dailyVolume: Array<{
             date: string;
             volume: number;
         }>;
-        resolutionTimes: Array<{,
+        resolutionTimes: Array<{
             date: string;
             avgTime: number;
         }>;
-        accuracyTrends: Array<{,
+        accuracyTrends: Array<{
             date: string;
             accuracy: number;
         }>;
@@ -171,7 +182,7 @@ export declare class UnifiedModerationDashboard {
     executeBulkActions(actions: BulkModerationAction[], moderatorId: string): Promise<{
         successful: number;
         failed: number;
-        errors: Array<{,
+        errors: Array<{
             itemId: string;
             error: string;
         }>;
@@ -185,7 +196,7 @@ export declare class UnifiedModerationDashboard {
      * Intelligent workload distribution
      */
     distributeWorkload(items: string[], distribution: 'urgent' | 'balanced' | 'expertise'): Promise<{
-        assignments: Array<{,
+        assignments: Array<{
             moderatorId: string;
             itemIds: string[];
         }>;

@@ -8,6 +8,7 @@ import { DataLifecycleAutomationService, LifecycleStage } from './DataLifecycleA
 import { DataCategory, Jurisdiction } from '../types/DataRetentionPeriods';
 
 }
+}
 export interface DataAgingRecord {
   agingId: string;
   dataId: string;
@@ -25,7 +26,9 @@ export interface DataAgingRecord {
   updatedAt: Date;
 }
 }
+}
 
+}
 }
 export interface AgingMetrics {
   chronologicalAge: AgingPeriod;
@@ -36,7 +39,9 @@ export interface AgingMetrics {
   overallAgingScore: number;
 }
 }
+}
 
+}
 }
 export interface AgingPeriod {
   days: number;
@@ -44,6 +49,7 @@ export interface AgingPeriod {
   years: number;
   category: AgeCategory;
   trend: AgingTrend;
+}
 }
 }
 
@@ -65,6 +71,7 @@ export enum AgingTrend {
 }
 
 }
+}
 export interface AccessAnalytics {
   totalAccesses: number;
   uniqueUsers: number;
@@ -75,7 +82,9 @@ export interface AccessAnalytics {
   userBehavior: UserBehaviorAnalysis;
 }
 }
+}
 
+}
 }
 export interface AccessFrequency {
   daily: number;
@@ -83,6 +92,7 @@ export interface AccessFrequency {
   monthly: number;
   quarterly: number;
   trend: FrequencyTrend;
+}
 }
 }
 
@@ -95,6 +105,7 @@ export enum FrequencyTrend {
 }
 
 }
+}
 export interface AccessPattern {
   patternId: string;
   type: PatternType;
@@ -102,6 +113,7 @@ export interface AccessPattern {
   frequency: number;
   lastOccurrence: Date;
   confidence: number;
+}
 }
 }
 
@@ -115,12 +127,14 @@ export enum PatternType {
 }
 
 }
+}
 export interface HotspotPeriod {
   periodStart: Date;
   periodEnd: Date;
   accessCount: number;
   reason: string;
   intensity: HotspotIntensity;
+}
 }
 }
 
@@ -132,12 +146,14 @@ export enum HotspotIntensity {
 }
 
 }
+}
 export interface AccessDecayAnalysis {
   decayRate: number;
   halfLife: number; // days until access frequency halves
   projectedInactiveDate: Date;
   decayModel: DecayModel;
   confidence: number;
+}
 }
 }
 
@@ -149,6 +165,7 @@ export enum DecayModel {
 }
 
 }
+}
 export interface UserBehaviorAnalysis {
   primaryUsers: UserAccessProfile[];
   accessDiversity: number;
@@ -156,7 +173,9 @@ export interface UserBehaviorAnalysis {
   behaviorChanges: BehaviorChange[];
 }
 }
+}
 
+}
 }
 export interface UserAccessProfile {
   userId: string;
@@ -164,6 +183,7 @@ export interface UserAccessProfile {
   lastAccess: Date;
   accessPattern: string;
   importance: UserImportance;
+}
 }
 }
 
@@ -175,6 +195,7 @@ export enum UserImportance {
 }
 
 }
+}
 export interface UserRetentionAnalysis {
   activeUsers30d: number;
   activeUsers90d: number;
@@ -183,7 +204,9 @@ export interface UserRetentionAnalysis {
   churnRate: number;
 }
 }
+}
 
+}
 }
 export interface BehaviorChange {
   changeId: string;
@@ -192,6 +215,7 @@ export interface BehaviorChange {
   description: string;
   impact: ChangeImpact;
   confidence: number;
+}
 }
 }
 
@@ -211,6 +235,7 @@ export enum ChangeImpact {
 }
 
 }
+}
 export interface DataValueAssessment {
   businessValue: BusinessValueMetrics;
   technicalValue: TechnicalValueMetrics;
@@ -219,7 +244,9 @@ export interface DataValueAssessment {
   valueDecay: ValueDecayAnalysis;
 }
 }
+}
 
+}
 }
 export interface BusinessValueMetrics {
   revenue: RevenueImpact;
@@ -229,13 +256,16 @@ export interface BusinessValueMetrics {
   score: number;
 }
 }
+}
 
+}
 }
 export interface RevenueImpact {
   directRevenue: number;
   indirectRevenue: number;
   potentialLoss: number;
   impactLevel: ImpactLevel;
+}
 }
 }
 
@@ -248,6 +278,7 @@ export enum ImpactLevel {
 }
 
 }
+}
 export interface OperationalImpact {
   processEfficiency: number;
   decisionSupport: number;
@@ -255,7 +286,9 @@ export interface OperationalImpact {
   costSavings: number;
 }
 }
+}
 
+}
 }
 export interface StrategicImpact {
   competitiveAdvantage: number;
@@ -264,7 +297,9 @@ export interface StrategicImpact {
   futureOpportunity: number;
 }
 }
+}
 
+}
 }
 export interface RiskMitigationValue {
   complianceRisk: number;
@@ -273,7 +308,9 @@ export interface RiskMitigationValue {
   reputationalRisk: number;
 }
 }
+}
 
+}
 }
 export interface TechnicalValueMetrics {
   dataQuality: DataQualityScore;
@@ -283,7 +320,9 @@ export interface TechnicalValueMetrics {
   score: number;
 }
 }
+}
 
+}
 }
 export interface DataQualityScore {
   completeness: number;
@@ -294,7 +333,9 @@ export interface DataQualityScore {
   overall: number;
 }
 }
+}
 
+}
 }
 export interface UniquenessScore {
   duplicateLevel: number;
@@ -303,7 +344,9 @@ export interface UniquenessScore {
   overall: number;
 }
 }
+}
 
+}
 }
 export interface RelationshipValue {
   dependencies: number;
@@ -312,7 +355,9 @@ export interface RelationshipValue {
   networkEffect: number;
 }
 }
+}
 
+}
 }
 export interface TechnicalScore {
   storage: StorageMetrics;
@@ -321,7 +366,9 @@ export interface TechnicalScore {
   overall: number;
 }
 }
+}
 
+}
 }
 export interface StorageMetrics {
   size: number;
@@ -330,7 +377,9 @@ export interface StorageMetrics {
   accessSpeed: number;
 }
 }
+}
 
+}
 }
 export interface ProcessingMetrics {
   computeIntensity: number;
@@ -339,7 +388,9 @@ export interface ProcessingMetrics {
   efficiency: number;
 }
 }
+}
 
+}
 }
 export interface MaintenanceMetrics {
   updateFrequency: number;
@@ -348,7 +399,9 @@ export interface MaintenanceMetrics {
   stability: number;
 }
 }
+}
 
+}
 }
 export interface ComplianceValueMetrics {
   legalRequirement: number;
@@ -358,13 +411,16 @@ export interface ComplianceValueMetrics {
   score: number;
 }
 }
+}
 
+}
 }
 export interface ValueScore {
   overall: number;
   category: ValueCategory;
   trend: ValueTrend;
   projectedValue: number;
+}
 }
 }
 
@@ -384,6 +440,7 @@ export enum ValueTrend {
 }
 
 }
+}
 export interface ValueDecayAnalysis {
   decayRate: number;
   valueHalfLife: number;
@@ -391,12 +448,15 @@ export interface ValueDecayAnalysis {
   decayFactors: DecayFactor[];
 }
 }
+}
 
+}
 }
 export interface DecayFactor {
   factor: string;
   impact: number;
   trend: string;
+}
 }
 }
 
@@ -411,6 +471,7 @@ export enum AgingStatus {
 }
 
 }
+}
 export interface PredictiveAnalytics {
   predictions: AgingPrediction[];
   riskAssessment: AgingRiskAssessment;
@@ -418,7 +479,9 @@ export interface PredictiveAnalytics {
   models: PredictiveModel[];
 }
 }
+}
 
+}
 }
 export interface AgingPrediction {
   predictionId: string;
@@ -427,6 +490,7 @@ export interface AgingPrediction {
   prediction: Record<string, number | string | boolean>;
   confidence: number;
   factors: string[];
+}
 }
 }
 
@@ -439,11 +503,13 @@ export enum PredictionType {
 }
 
 }
+}
 export interface AgingRiskAssessment {
   overallRisk: RiskLevel;
   riskFactors: RiskFactor[];
   mitigationStrategies: MitigationStrategy[];
   costOfInaction: number;
+}
 }
 }
 
@@ -455,12 +521,14 @@ export enum RiskLevel {
 }
 
 }
+}
 export interface RiskFactor {
   factor: string;
   impact: number;
   probability: number;
   riskScore: number;
   category: RiskCategory;
+}
 }
 }
 
@@ -473,12 +541,14 @@ export enum RiskCategory {
 }
 
 }
+}
 export interface MitigationStrategy {
   strategy: string;
   effectiveness: number;
   cost: number;
   timeline: number;
   priority: Priority;
+}
 }
 }
 
@@ -490,6 +560,7 @@ export enum Priority {
 }
 
 }
+}
 export interface AgingRecommendation {
   recommendationId: string;
   type: RecommendationType;
@@ -499,6 +570,7 @@ export interface AgingRecommendation {
   effort: EffortLevel;
   urgency: Priority;
   expectedBenefit: number;
+}
 }
 }
 
@@ -521,6 +593,7 @@ export enum EffortLevel {
 }
 
 }
+}
 export interface PredictiveModel {
   modelId: string;
   name: string;
@@ -529,6 +602,7 @@ export interface PredictiveModel {
   lastTrained: Date;
   features: string[];
   parameters: Record<string, unknown>;
+}
 }
 }
 
@@ -541,6 +615,7 @@ export enum ModelType {
 }
 
 }
+}
 export interface AgingAlert {
   alertId: string;
   type: AlertType;
@@ -551,6 +626,7 @@ export interface AgingAlert {
   acknowledgedAt?: Date;
   resolvedAt?: Date;
   conditions: AlertCondition[];
+}
 }
 }
 
@@ -571,11 +647,13 @@ export enum AlertSeverity {
 }
 
 }
+}
 export interface AlertCondition {
   condition: string;
   threshold: number;
   currentValue: number;
   met: boolean;
+}
 }
 }
 
@@ -1177,6 +1255,7 @@ export class DataAgingTrackingService {
 
 // Supporting interfaces
 }
+}
 interface AgingReport {
   reportId: string;
   generatedAt: Date;
@@ -1187,5 +1266,6 @@ interface AgingReport {
   trends: unknown[];
   costs: unknown;
   records: DataAgingRecord[];
+}
 }
 }

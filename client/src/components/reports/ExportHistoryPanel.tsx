@@ -48,6 +48,7 @@ import {
 } from 'lucide-react';
 
 // Types
+}
 interface ExportHistoryItem {
   id: string;,
   success: boolean;
@@ -59,20 +60,23 @@ interface ExportHistoryItem {
   deliveredAt?: string;
   error?: string;
   downloadUrl?: string;
-  metadata: {,
+  metadata: {
   recordCount: number;,
   processingTime: number;
   compressionRatio?: number;
+}
 };
+}
 interface ScheduledExport {
   id: string;,
   name: string;
   description: string;,
-  exportConfig: {,
+  exportConfig: {
   format: string;,
   delivery: string;
+}
 };
-  schedule: {,
+  schedule: {
   frequency: string;
   time: string;
   dayOfWeek?: number;
@@ -82,6 +86,7 @@ interface ScheduledExport {
   lastRun?: string;
   nextRun?: string;
   createdBy: string;
+}
 interface ExportStatistics {
   totalExports: number;,
   successfulExports: number;
@@ -101,6 +106,7 @@ interface ExportStatistics {
   // Load data on component mount
   useEffect(() => {
   loadExportData();
+}
 }, [loadExportData]);
   const loadExportData = useCallback(async (): Promise<void> => {
     setIsLoading(true);

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './SubmissionReview.css';
+}
 interface SubmissionData {
   title: string;,
   description: string;
@@ -30,9 +31,11 @@ interface SubmissionData {
   details?: Record<string, unknown>;
   suggested_fix?: string;
   auto_fixable: boolean;
-  location?: {,
+  location?: {
   field?: string;
+}
 };
+}
 interface SubmissionDetails {
   id: string;,
   template_id: string;
@@ -48,12 +51,14 @@ interface SubmissionDetails {
   reviewed_at?: string;
   created_at: string;,
   updated_at: string;
+}
 interface ReviewFeedback {
   category: 'content' | 'quality' | 'compliance' | 'usability' | 'technical';,
   rating: number;
   comments: string;,
   suggestions: string;
 const FEEDBACK_CATEGORIES = [;
+}
   { id: 'content', label: 'Content Quality', description: 'Originality, usefulness, and relevance' },
   { id: 'quality', label: 'Technical Quality', description: 'Code structure, performance, and reliability' },
   { id: 'compliance', label: 'Policy Compliance', description: 'Adherence to platform guidelines and policies' },
@@ -88,7 +93,7 @@ export const SubmissionReview: React.FC = () => {
       setIsLoading(true);
       const response = await fetch(`/api/marketplace/submissions/${submissionId}`, {)}
   },
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
       });
       if (!response.ok) {
@@ -130,7 +135,7 @@ export const SubmissionReview: React.FC = () => {
       const response = await fetch(`/api/marketplace/submissions/${submission.id}/review`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
   },

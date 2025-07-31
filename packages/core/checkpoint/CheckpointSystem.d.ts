@@ -18,6 +18,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface CheckpointMetadata {
     id: string;
     name: string;
@@ -35,8 +36,10 @@ export interface CheckpointMetadata {
         stepNumber: number;
         totalSteps: number;
         elapsedTime: number;
+}
     };
 
+}
 export interface CheckpointData {
     metadata: CheckpointMetadata;
     state: {
@@ -45,6 +48,7 @@ export interface CheckpointData {
         executionHistory: any[];
         nodeStates: Record<string, any>;
         settings: Record<string, any>;
+}
     };
     validation: {
         checksum: string;
@@ -54,12 +58,14 @@ export interface CheckpointData {
         validationErrors: string[];
     };
 
+}
 export interface CheckpointPolicy {
     autoSave: {
         enabled: boolean;
         interval: number;
         maxAutoSaves: number;
         triggerEvents: ('node_complete' | 'variable_change' | 'error' | 'manual')[];
+}
     };
     retention: {
         maxCheckpoints: number;
@@ -74,6 +80,7 @@ export interface CheckpointPolicy {
         fallbackStrategy: 'latest' | 'stable' | 'manual'
   };
 
+}
 export interface CheckpointDiff {
     checkpointId: string;
     previousCheckpointId: string | null;
@@ -83,6 +90,7 @@ export interface CheckpointDiff {
         oldValue?: any;
         newValue?: any;
         size: number;
+}
     }[];
     summary: {
         additions: number;
@@ -92,6 +100,7 @@ export interface CheckpointDiff {
         impactScore: number;
     };
 
+}
 export interface RecoveryOptions {
     checkpointId: string;
     preserveCurrentState: boolean;
@@ -99,6 +108,7 @@ export interface RecoveryOptions {
     validateBeforeRestore: boolean;
     progressCallback?: (progress: number, step: string) => void;
 
+}
 export interface CheckpointCompressionResult {
     originalSize: number;
     compressedSize: number;
@@ -117,6 +127,7 @@ export declare class CheckpointSystem extends EventEmitter {
     createCheckpoint(state: any, metadata?: Partial<CheckpointMetadata>, options?: {)
         compress?: boolean;
         validate?: boolean;
+}
     }): Promise<string>;
     restoreCheckpoint(checkpointId: string, options?: Partial<RecoveryOptions>): Promise<any>;
     generateDiff(currentCheckpointId: string, previousCheckpointId?: string): Promise<CheckpointDiff>;

@@ -22,12 +22,14 @@ import { Graph } from '../graphSchema';
  * CRDT representation of a graph node
  */
 
+}
 export interface GraphNodeCRDT {
     id: string;
     type: string;
     position: {
         x: number;
         y: number;
+}
     };
     data: Record<string, any>;
     inputs: string[];
@@ -42,6 +44,7 @@ export interface GraphNodeCRDT {
  * CRDT representation of a graph edge
  */
 
+}
 export interface GraphEdgeCRDT {
     id: string;
     sourceNodeId: string;
@@ -56,11 +59,13 @@ export interface GraphEdgeCRDT {
         created: string;
         createdBy: string;
         [key: string]: any;
+}
     };
 /**
  * Operation record for history tracking
  */
 
+}
 export interface OperationRecord {
     operationId: string;
     type: string;
@@ -191,6 +196,7 @@ export declare class GraphCRDT {
         onOperationApplied?: (operation: MutationOperation) => void;
         onConflictDetected?: (conflictType: ConflictType, operations: MutationOperation[]) => void;
         onStateChanged?: (documentId: string) => void;
+}
     }): void;
     /**
      * Get Yjs document for synchronization

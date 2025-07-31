@@ -8,9 +8,11 @@ import React, { useState } from 'react';
 import { RefreshCw, Download, ChevronDown, Calendar } from 'lucide-react';
 import type { TimeRangeOption } from './DashboardShell';
 
+}
 export interface DashboardHeaderProps {
   title: string;
   description?: string;
+}
   icon?: React.ComponentType<{ size?: number }>;
   // Actions
   actions?: React.ReactNode;

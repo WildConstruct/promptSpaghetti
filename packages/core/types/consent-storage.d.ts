@@ -11,6 +11,7 @@ export type LegalBasis = 'CONSENT' | 'CONTRACT' | 'LEGAL_OBLIGATION' | 'VITAL_IN
 export type CollectionMethod = 'WEB_FORM' | 'MOBILE_APP' | 'EMAIL' | 'PHONE' | 'IN_PERSON' | 'API' | 'BANNER' | 'POPUP';
 export type ConsentSource = 'banner' | 'preferences' | 'just_in_time' | 'api' | 'migration' | 'admin';
 
+}
 export interface ConsentRecord {
     consent_id: string;
     user_id?: string;
@@ -39,6 +40,7 @@ export interface ConsentRecord {
     updated_at: Date;
 
 
+}
 export interface ConsentCollectionContext {
     ip_address?: string;
     user_agent?: string;
@@ -50,6 +52,7 @@ export interface ConsentCollectionContext {
             latitude: number;
             longitude: number;
 
+}
         };
     };
     referrer?: string;
@@ -73,6 +76,7 @@ export interface ConsentCollectionContext {
 
 export type ConsentPurposeCategory = 'ESSENTIAL' | 'FUNCTIONAL' | 'ANALYTICS' | 'MARKETING' | 'ADVERTISING' | 'SOCIAL_MEDIA' | 'PERSONALIZATION' | 'RESEARCH';
 
+}
 export interface ConsentPurpose {
     purpose_id: string;
     category: ConsentPurposeCategory;
@@ -97,6 +101,7 @@ export interface ConsentPurpose {
     updated_at: Date;
 
 
+}
 export interface DataProcessingDetails {
     collectsPersonalData: boolean;
     storesData: boolean;
@@ -111,6 +116,7 @@ export interface DataProcessingDetails {
     dataRecipients?: string[];
 
 
+}
 export interface ConsentPurposeMapping {
     mapping_id: string;
     consent_id: string;
@@ -123,6 +129,7 @@ export interface ConsentPurposeMapping {
 export type DataSensitivityLevel = 'PUBLIC' | 'INTERNAL' | 'CONFIDENTIAL' | 'RESTRICTED' | 'PII' | 'SPECIAL_CATEGORY';
 export type DataClassification = 'PERSONAL_IDENTIFIABLE' | 'FINANCIAL' | 'HEALTH' | 'BEHAVIORAL' | 'TECHNICAL' | 'COMMUNICATION' | 'PREFERENCE';
 
+}
 export interface DataCategory {
     category_id: string;
     name: string;
@@ -139,6 +146,7 @@ export interface DataCategory {
     updated_at: Date;
 
 
+}
 export interface RetentionRequirement {
     framework: string;
     period: number;
@@ -146,6 +154,7 @@ export interface RetentionRequirement {
     mandatory: boolean;
 
 
+}
 export interface ConsentDataCategoryMapping {
     mapping_id: string;
     consent_id: string;
@@ -157,6 +166,7 @@ export interface ConsentDataCategoryMapping {
 
 export type ThirdPartyRelationshipType = 'PROCESSOR' | 'JOINT_CONTROLLER' | 'VENDOR' | 'PARTNER' | 'SERVICE_PROVIDER';
 
+}
 export interface ThirdPartyEntity {
     entity_id: string;
     entity_name: string;
@@ -177,6 +187,7 @@ export interface ThirdPartyEntity {
     updated_at: Date;
 
 
+}
 export interface ContactInfo {
     address?: {
         street?: string;
@@ -185,6 +196,7 @@ export interface ContactInfo {
         postal_code?: string;
         country?: string;
 
+}
     };
     phone?: string;
     website?: string;
@@ -194,6 +206,7 @@ export interface ContactInfo {
         phone?: string;
     };
 
+}
 export interface ConsentThirdPartySharing {
     mapping_id: string;
     consent_id: string;
@@ -214,6 +227,7 @@ export interface ConsentThirdPartySharing {
     updated_at: Date;
 
 
+}
 export interface UserConsentPreferences {
     preference_id: string;
     user_id?: string;
@@ -235,6 +249,7 @@ export interface UserConsentPreferences {
     updated_at: Date;
 
 
+}
 export interface CommunicationPreference {
     type: string;
     enabled: boolean;
@@ -243,6 +258,7 @@ export interface CommunicationPreference {
     topics?: string[];
 
 
+}
 export interface PrivacySetting {
     setting: string;
     value: any;
@@ -250,6 +266,7 @@ export interface PrivacySetting {
     customizable: boolean;
 
 
+}
 export interface CookiePreference {
     category: string;
     enabled: boolean;
@@ -257,6 +274,7 @@ export interface CookiePreference {
     cookies?: string[];
 
 
+}
 export interface MarketingPreference {
     type: string;
     consent: boolean;
@@ -265,6 +283,7 @@ export interface MarketingPreference {
     interests?: string[];
 
 
+}
 export interface DataProcessingPreference {
     purpose: string;
     consent: boolean;
@@ -272,6 +291,7 @@ export interface DataProcessingPreference {
     conditions?: Record<string, any>;
 
 
+}
 export interface NotificationPreference {
     type: string;
     enabled: boolean;
@@ -281,8 +301,10 @@ export interface NotificationPreference {
         end: string;
         timezone: string;
 
+}
     };
 
+}
 export interface AccessibilityPreference {
     high_contrast?: boolean;
     large_text?: boolean;
@@ -296,6 +318,7 @@ export type CookieCategory = 'ESSENTIAL' | 'FUNCTIONAL' | 'ANALYTICS' | 'MARKETI
 export type CookieType = 'session' | 'persistent' | 'secure' | 'httpOnly';
 export type SameSitePolicy = 'Strict' | 'Lax' | 'None';
 
+}
 export interface CookieDefinition {
     cookie_id: string;
     cookie_name: string;
@@ -319,6 +342,7 @@ export interface CookieDefinition {
     updated_at: Date;
 
 
+}
 export interface UserCookieConsent {
     consent_id: string;
     user_id?: string;
@@ -337,6 +361,7 @@ export interface UserCookieConsent {
 export type ConsentChangeType = 'initial_grant' | 'preference_update' | 'withdrawal' | 'renewal' | 'expiration' | 'reauthorization' | 'migration' | 'correction' | 'system_update' | 'compliance_adjustment';
 export type ConsentChangeMethod = 'user_action' | 'system_automated' | 'admin_override' | 'api_call' | 'batch_process' | 'compliance_requirement' | 'legal_requirement' | 'data_migration';
 
+}
 export interface ConsentChangeHistory {
     change_id: string;
     consent_id: string;
@@ -360,6 +385,7 @@ export interface ConsentChangeHistory {
     timestamp: Date;
 
 
+}
 export interface ConsentChangeSummary {
     fields_changed: string[];
     impact_level: 'low' | 'medium' | 'high' | 'critical';
@@ -368,6 +394,7 @@ export interface ConsentChangeSummary {
     compliance_implications?: string[];
 
 
+}
 export interface ConsentChangeContext {
     user_agent?: string;
     ip_address?: string;
@@ -382,6 +409,7 @@ export interface ConsentChangeContext {
 export type ConsentInteractionType = 'VIEW' | 'CLICK' | 'SCROLL' | 'HOVER' | 'FOCUS' | 'INPUT' | 'SUBMIT' | 'CANCEL';
 export type ConsentInteractionResult = 'ACCEPT' | 'REJECT' | 'CUSTOMIZE' | 'DEFER' | 'IGNORE' | 'TIMEOUT';
 
+}
 export interface ConsentInteraction {
     interaction_id: string;
     consent_id?: string;
@@ -401,6 +429,7 @@ export interface ConsentInteraction {
     timestamp: Date;
 
 
+}
 export interface ConsentConfiguration {
     config_id: string;
     version: string;
@@ -420,6 +449,7 @@ export interface ConsentConfiguration {
     updated_at: Date;
 
 
+}
 export interface ConsentTypeConfig {
     type: string;
     name: string;
@@ -433,6 +463,7 @@ export interface ConsentTypeConfig {
     conflicts?: string[];
 
 
+}
 export interface BannerConfiguration {
     position: 'top' | 'bottom' | 'center' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
     theme: 'light' | 'dark' | 'auto';
@@ -461,6 +492,7 @@ export interface BannerConfiguration {
     languages?: Record<string, BannerLanguage>;
 
 
+}
 export interface BannerLanguage {
     title: string;
     message: string;
@@ -471,6 +503,7 @@ export interface BannerLanguage {
     close: string;
 
 
+}
 export interface ComplianceSettings {
     gdprEnabled: boolean;
     ccpaEnabled: boolean;
@@ -493,6 +526,7 @@ export interface ComplianceSettings {
     complianceMonitoring: boolean;
 
 
+}
 export interface RetentionSettings {
     consentRecordRetention: number;
     auditLogRetention: number;
@@ -508,6 +542,7 @@ export interface RetentionSettings {
     retentionExceptions?: RetentionException[];
 
 
+}
 export interface RetentionException {
     reason: 'legal_hold' | 'investigation' | 'regulatory_request' | 'data_subject_request';
     extendedPeriod: number;
@@ -515,6 +550,7 @@ export interface RetentionException {
     notificationRequired?: boolean;
 
 
+}
 export interface JustInTimePromptConfig {
     prompt_id: string;
     trigger_id: string;
@@ -530,6 +566,7 @@ export interface JustInTimePromptConfig {
     updated_at: Date;
 
 
+}
 export interface JustInTimeAppearance {
     style: 'modal' | 'toast' | 'banner' | 'slide-in' | 'popup';
     theme: 'light' | 'dark' | 'auto';
@@ -540,6 +577,7 @@ export interface JustInTimeAppearance {
     animation?: 'none' | 'fade-in' | 'slide-in' | 'bounce' | 'zoom';
 
 
+}
 export interface JustInTimeBehavior {
     blocking: boolean;
     dismissible: boolean;
@@ -551,6 +589,7 @@ export interface JustInTimeBehavior {
     persistentDenial?: boolean;
 
 
+}
 export interface JustInTimeContext {
     trigger: string;
     page: string;
@@ -564,6 +603,7 @@ export interface JustInTimeContext {
 export type ConsentReportType = 'user_history' | 'compliance_summary' | 'deletion_report' | 'privacy_requests' | 'violation_summary';
 export type ReportStatus = 'generating' | 'generated' | 'expired' | 'error';
 
+}
 export interface ConsentReport {
     report_id: string;
     report_type: ConsentReportType;
@@ -583,6 +623,7 @@ export interface ConsentReport {
     generated_by?: string;
 
 
+}
 export interface ConsentReportSummary {
     total_consents: number;
     active_consents: number;
@@ -599,8 +640,10 @@ export interface ConsentReportSummary {
         changes_count: number;
         interactions_count: number;
 
+}
     };
 
+}
 export interface ConsentTimelineEntry {
     timestamp: Date;
     event_type: string;
@@ -609,6 +652,7 @@ export interface ConsentTimelineEntry {
     details?: Record<string, any>;
 
 
+}
 export interface ComplianceAnalysis {
     gdpr_compliance?: ComplianceFrameworkAnalysis;
     ccpa_compliance?: ComplianceFrameworkAnalysis;
@@ -618,6 +662,7 @@ export interface ComplianceAnalysis {
     recommendations: ComplianceRecommendation[];
 
 
+}
 export interface ComplianceFrameworkAnalysis {
     framework: string;
     compliance_score: number;
@@ -626,6 +671,7 @@ export interface ComplianceFrameworkAnalysis {
     issues: ComplianceIssue[];
 
 
+}
 export interface ComplianceIssue {
     issue_type: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
@@ -634,6 +680,7 @@ export interface ComplianceIssue {
     affected_records?: number;
 
 
+}
 export interface ComplianceRecommendation {
     priority: 'low' | 'medium' | 'high' | 'critical';
     category: string;
@@ -645,6 +692,7 @@ export interface ComplianceRecommendation {
 export type ViolationSeverity = 'low' | 'medium' | 'high' | 'critical';
 export type ViolationStatus = 'detected' | 'investigating' | 'resolved' | 'dismissed';
 
+}
 export interface ComplianceViolation {
     violation_id: string;
     user_id?: string;
@@ -666,6 +714,7 @@ export interface ComplianceViolation {
     detected_at: Date;
 
 
+}
 export interface NotificationRecord {
     recipient: string;
     channel: 'email' | 'sms' | 'webhook' | 'dashboard';
@@ -674,6 +723,7 @@ export interface NotificationRecord {
     message_id?: string;
 
 
+}
 export interface ConsentMetrics {
     metric_id: string;
     metric_date: Date;
@@ -696,12 +746,14 @@ export interface ConsentMetrics {
     created_at: Date;
 
 
+}
 export interface ConsentValidationResult {
     isValid: boolean;
     errors: ConsentValidationError[];
     warnings: ConsentValidationWarning[];
 
 
+}
 export interface ConsentValidationError {
     field: string;
     code: string;
@@ -709,6 +761,7 @@ export interface ConsentValidationError {
     severity: 'error' | 'warning' | 'info';
 
 
+}
 export interface ConsentValidationWarning {
     field: string;
     code: string;
@@ -716,10 +769,12 @@ export interface ConsentValidationWarning {
     recommendation?: string;
 
 
+}
 export interface ActiveConsentView extends ConsentRecord {
     language?: string;
     timezone?: string;
 
+}
 export interface ConsentSummaryView {
     user_id: string;
     total_consents: number;
@@ -730,9 +785,11 @@ export interface ConsentSummaryView {
     last_modified_date: Date;
 
 
+}
 export interface ExpiringConsentView extends ConsentRecord {
     days_until_expiry: number;
 
+}
 export interface CreateConsentRequest {
     user_id?: string;
     session_id: string;
@@ -745,6 +802,7 @@ export interface CreateConsentRequest {
     metadata?: Record<string, any>;
 
 
+}
 export interface UpdateConsentRequest {
     consent_id: string;
     status?: ConsentStatus;
@@ -754,6 +812,7 @@ export interface UpdateConsentRequest {
     change_reason: string;
 
 
+}
 export interface ConsentResponse {
     consent: ConsentRecord;
     purposes: ConsentPurpose[];
@@ -761,6 +820,7 @@ export interface ConsentResponse {
     validation?: ConsentValidationResult;
 
 
+}
 export interface ConsentQueryOptions {
     user_id?: string;
     session_id?: string;
@@ -776,6 +836,7 @@ export interface ConsentQueryOptions {
     include_withdrawn?: boolean;
 
 
+}
 export interface ConsentEventData {
     consent_id: string;
     user_id?: string;
@@ -787,6 +848,7 @@ export interface ConsentEventData {
     metadata?: Record<string, any>;
 
 
+}
 export interface ConsentAuditEvent {
     audit_id: string;
     consent_id: string;
@@ -800,6 +862,7 @@ export interface ConsentAuditEvent {
     timestamp: Date;
 
 
+}
 export interface ConsentMigrationData {
     source_system: string;
     migration_batch: string;
@@ -810,6 +873,7 @@ export interface ConsentMigrationData {
     migration_log: MigrationLogEntry[];
 
 
+}
 export interface MigrationLogEntry {
     timestamp: Date;
     level: 'info' | 'warning' | 'error';
@@ -819,3 +883,4 @@ export interface MigrationLogEntry {
 
 export * from './consent';
 //# sourceMappingURL=consent-storage.d.ts.map
+}

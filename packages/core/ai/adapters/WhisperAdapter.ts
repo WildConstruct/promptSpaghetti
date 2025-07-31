@@ -17,12 +17,15 @@ import {
   ModelUnavailableError
 } from '../BaseAIModel';
 
+}
 export interface WhisperConfig {
   apiKey: string;
   baseURL?: string;
   timeout?: number;
   maxRetries?: number;
   organization?: string;
+}
+}
 }
 export interface WhisperRequestOptions {
   // Core parameters
@@ -38,11 +41,13 @@ export interface WhisperRequestOptions {
   // Processing options
   task?: 'transcribe' | 'translate'; // translate converts to English,
 }
+}
+}
 export interface WhisperTranscriptionResult {
   text: string;
   language?: string;
   duration?: number;
-  segments?: Array<{,
+  segments?: Array<{
   id: number;
   seek: number;
   start: number;
@@ -53,10 +58,11 @@ export interface WhisperTranscriptionResult {
   avg_logprob: number;
   compression_ratio: number;
   no_speech_prob: number;
-  words?: Array<{,
+  words?: Array<{
   word: string;
   start: number;
   end: number;
+}
 }>;
   }>;
   words?: Array<{
@@ -77,6 +83,7 @@ export interface WhisperTranscriptionResult {
   cost: number;
 };
 }
+}
 export interface AudioFileInfo {
   name: string;
   size: number;
@@ -85,6 +92,7 @@ export interface AudioFileInfo {
   sample_rate?: number;
   channels?: number;
   format: string;
+}
 }
 export class WhisperAdapter extends BaseAIModel {
   private config: WhisperConfig;
@@ -137,6 +145,7 @@ export class WhisperAdapter extends BaseAIModel {
     super(id, metadata, capabilities);
     this.config = config;
   async initialize(): Promise<void> {
+
     try {
       this._status = AIModelStatus.INITIALIZING;
       if (!this.config.apiKey) {
@@ -151,6 +160,7 @@ export class WhisperAdapter extends BaseAIModel {
   async process(input: File | Blob | ArrayBuffer | { file?: File | Blob | ArrayBuffer; audio?: File | Blob | ArrayBuffer; data?: File | Blob | ArrayBuffer })
     options?: WhisperRequestOptions
   ): Promise<WhisperTranscriptionResult> {
+
   try {
   if (this._status !== AIModelStatus.READY) {
   throw new ModelUnavailableError(this._id);
@@ -191,12 +201,14 @@ export class WhisperAdapter extends BaseAIModel {
     } catch (error) {
       throw new ModelProcessingError(this._id, error instanceof Error ? error.message : 'Unknown error');
   async cleanup(): Promise<void> {
+
     this._status = AIModelStatus.OFFLINE;
     this._activeRequests.clear();
     this._requestQueue = [];
   async estimate(input: File | Blob | ArrayBuffer | { file?: File | Blob | ArrayBuffer; audio?: File | Blob | ArrayBuffer; data?: File | Blob | ArrayBuffer })
     options?: WhisperRequestOptions
   ): Promise<CostEstimate> {
+
     const audioFile = this._extractAudioFile(input);
     let audioDuration = 0;
     if (audioFile) {
@@ -220,6 +232,7 @@ export class WhisperAdapter extends BaseAIModel {
     language?: string,
     options?: Partial<WhisperRequestOptions>
   ): Promise<WhisperTranscriptionResult> {
+
   const whisperOptions: WhisperRequestOptions = {,
   file,
   language,
@@ -230,6 +243,7 @@ export class WhisperAdapter extends BaseAIModel {
   async translateToEnglish(file: File)
     options?: Partial<WhisperRequestOptions>
   ): Promise<WhisperTranscriptionResult> {
+
   const whisperOptions: WhisperRequestOptions = {,
   file,
   task: 'translate',
@@ -240,6 +254,7 @@ export class WhisperAdapter extends BaseAIModel {
     granularity: 'word' | 'segment' | 'both' = 'segment',
     options?: Partial<WhisperRequestOptions>
   ): Promise<WhisperTranscriptionResult> {
+
   const timestamp_granularities: ('word' | 'segment')[] =,
   granularity === 'both' ? ['word', 'segment'] : [granularity];
   const whisperOptions: WhisperRequestOptions = {,
@@ -252,6 +267,7 @@ export class WhisperAdapter extends BaseAIModel {
   async batchTranscribe(files: File)
     options?: WhisperRequestOptions
   ): Promise<WhisperTranscriptionResult> {
+
   const results: WhisperTranscriptionResult = [];
   for (const file of files) {
   try {
@@ -264,6 +280,7 @@ export class WhisperAdapter extends BaseAIModel {
         throw error;
     return results;
   async getSupportedLanguages(): Promise<string> {
+
   // Whisper supports 99 languages - this is a subset of the most common ones
   return [
   'af', 'ar', 'hy', 'az', 'be', 'bs', 'bg', 'ca', 'zh', 'hr', 'cs', 'da',
@@ -302,6 +319,7 @@ export class WhisperAdapter extends BaseAIModel {
     return languages[code] || code.toUpperCase();
   // Private helper methods
   private async _testConnection(): Promise<void> {
+
     try {
       // Create a minimal test audio file (1 second of silence)
       const testAudioBlob = this._createTestAudioBlob();
@@ -364,6 +382,7 @@ export class WhisperAdapter extends BaseAIModel {
       if (input.data) return input.data;
     return null;
   private async _validateAudioFile(file: File | Blob | ArrayBuffer): Promise<void> {
+
     // Check file size
     const size = file instanceof ArrayBuffer ? file.byteLength : file.size;
     if (size > WhisperAdapter.getMaxFileSize()) {
@@ -391,6 +410,7 @@ export class WhisperAdapter extends BaseAIModel {
     options: Omit<WhisperRequestOptions,
     'file'>
   ): Promise<any> {
+
     const formData = new FormData();
     // Convert ArrayBuffer to Blob if necessary
     let fileToUpload: File | Blob;
@@ -488,6 +508,7 @@ export class WhisperAdapter extends BaseAIModel {
     const durationInMinutes = durationInSeconds / 60;
     return Math.max(0.006, durationInMinutes * 60 * costPerMinute); // Minimum charge is for 1 minute
   protected async _performHealthCheck(): Promise<void> {
+
     await this._testConnection();
 
 export default WhisperAdapter;

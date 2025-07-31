@@ -4,6 +4,7 @@ import { QueuedOperation } from '../../network-resilience/OfflineOperationQueue'
 import { ConnectionStatusIndicator } from './ConnectionStatusIndicator';
 import { ReconnectionState } from '../../network-resilience/ReconnectionHandler';
 import { ConnectionState, ConnectionQuality } from '../../network-resilience/ConnectionStateManager';
+}
 interface NetworkResiliencePanelProps {
   status: NetworkStatus;
   queuedOperations: QueuedOperation;
@@ -22,6 +23,7 @@ interface NetworkResiliencePanelProps {
   onRetryOperation,
   isOpen,
   onClose
+}
 }) => {
   const [activeTab, setActiveTab] = useState<'status' | 'queue' | 'metrics'>('status');
   const formatDuration = (ms: number) => {

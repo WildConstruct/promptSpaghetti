@@ -18,6 +18,7 @@ import * as crypto from 'crypto';
 // =============================================================================
 
 }
+}
 export interface ToggleStatusControlsConfig {
   // General settings
   enabled: boolean;
@@ -33,6 +34,7 @@ export interface ToggleStatusControlsConfig {
     maintenanceToggles: boolean;
     securityToggles: boolean;
     complianceToggles: boolean;
+}
 }
   };
   
@@ -128,6 +130,7 @@ export enum TogglePriority {
 }
 
 }
+}
 export interface SafetyCheck {
   checkId: string;
   checkName: string;
@@ -141,7 +144,9 @@ export interface SafetyCheck {
   parameters: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ToggleDefinition {
   toggleId: string;
@@ -184,7 +189,9 @@ export interface ToggleDefinition {
   accessCount: number;
 }
 }
+}
 
+}
 }
 export interface ValidationRule {
   ruleId: string;
@@ -197,7 +204,9 @@ export interface ValidationRule {
   parameters: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ToggleDependency {
   dependencyId: string;
@@ -208,7 +217,9 @@ export interface ToggleDependency {
   enforced: boolean;
 }
 }
+}
 
+}
 }
 export interface ScheduledToggleChange {
   changeId: string;
@@ -221,7 +232,9 @@ export interface ScheduledToggleChange {
   rollbackAfter?: Date;
 }
 }
+}
 
+}
 }
 export interface ToggleCondition {
   conditionId: string;
@@ -232,7 +245,9 @@ export interface ToggleCondition {
   priority: number;
 }
 }
+}
 
+}
 }
 export interface ToggleUsageMetrics {
   totalAccesses: number;
@@ -244,7 +259,9 @@ export interface ToggleUsageMetrics {
   geographicDistribution: Record<string, number>;
 }
 }
+}
 
+}
 }
 export interface ToggleChangeRequest {
   changeId: string;
@@ -287,7 +304,9 @@ export interface ToggleChangeRequest {
   rollbackData?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ToggleBulkOperation {
   operationId: string;
@@ -317,7 +336,9 @@ export interface ToggleBulkOperation {
   rollbackAvailable: boolean;
 }
 }
+}
 
+}
 }
 export interface ToggleBulkOperationResult {
   toggleId: string;
@@ -328,7 +349,9 @@ export interface ToggleBulkOperationResult {
   executionTime: number;
 }
 }
+}
 
+}
 }
 export interface ToggleStatusOverview {
   totalToggles: number;
@@ -356,6 +379,7 @@ export interface ToggleStatusOverview {
   averageResponseTime: number;
   totalRequests: number;
   errorRate: number;
+}
 }
 }
 

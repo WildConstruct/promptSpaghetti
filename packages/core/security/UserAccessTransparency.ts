@@ -19,6 +19,7 @@ import {
 } from './DataClassificationAccessControl';
 import { AuditLogEntry } from './CentralizedAccessControlService';
 
+}
 export interface TransparencyConfig {
   enableRealTimeNotifications: boolean;
   enableDataUsageTracking: boolean;
@@ -31,12 +32,15 @@ export interface TransparencyConfig {
   dataPortabilityEnabled: boolean;
   notificationChannels: NotificationChannel;
 }
+}
+}
 export interface NotificationChannel {
   type: 'EMAIL' | 'SMS' | 'PUSH' | 'WEBHOOK' | 'IN_APP';
   endpoint: string;
   enabled: boolean;
   events: TransparencyEventType;
   frequency: 'IMMEDIATE' | 'HOURLY' | 'DAILY' | 'WEEKLY'
+}
   }
 export enum TransparencyEventType {
   DATA_ACCESSED = 'data_accessed',
@@ -61,6 +65,8 @@ export enum TransparencyEventType {
   complianceStatus: ComplianceStatus;
   privacyScore: PrivacyScore;
 }
+}
+}
 export interface DataCategory {
   category: string;
   description: string;
@@ -71,6 +77,8 @@ export interface DataCategory {
   processingPurposes: ProcessingPurpose;
   thirdPartyAccess: boolean;
   userControl: UserControlLevel;
+}
+}
 }
 export interface DataPoint {
   id: string;
@@ -84,6 +92,8 @@ export interface DataPoint {
   modificationHistory: DataModification;
   consentStatus: ConsentStatus;
 }
+}
+}
 export interface DataModification {
   modifiedAt: Date;
   modifiedBy: string;
@@ -93,6 +103,8 @@ export interface DataModification {
   approved: boolean;
   approvedBy?: string;
 }
+}
+}
 export interface LawfulBasis {
   basis: 'CONSENT' | 'CONTRACT' | 'LEGAL_OBLIGATION' | 'VITAL_INTERESTS' | 'PUBLIC_TASK' | 'LEGITIMATE_INTERESTS';
   description: string;
@@ -101,6 +113,8 @@ export interface LawfulBasis {
   evidence: string;
   userNotified: boolean;
 }
+}
+}
 export interface RetentionPeriod {
   duration: number; // days,
   reason: string;
@@ -108,6 +122,8 @@ export interface RetentionPeriod {
   deletionDate?: Date;
   extensionReason?: string;
   userRequested: boolean;
+}
+}
 }
 export interface ProcessingPurpose {
   purpose: string;
@@ -118,6 +134,8 @@ export interface ProcessingPurpose {
   canOptOut: boolean;
   necessaryForService: boolean;
 }
+}
+}
 export interface ConsentStatus {
   granted: boolean;
   grantedAt?: Date;
@@ -127,6 +145,8 @@ export interface ConsentStatus {
   version: string;
   evidence: ConsentEvidence;
 }
+}
+}
 export interface ConsentEvidence {
   type: 'EXPLICIT' | 'IMPLIED' | 'PRECHECK' | 'COOKIE' | 'API';
   timestamp: Date;
@@ -134,6 +154,8 @@ export interface ConsentEvidence {
   ipAddress: string;
   userAgent: string;
   context: Record<string, any>;
+}
+}
 }
 export interface RetentionSummary {
   totalDataPoints: number;
@@ -144,6 +166,8 @@ export interface RetentionSummary {
   automaticDeletions: number;
   upcomingDeletions: UpcomingDeletion;
 }
+}
+}
 export interface UpcomingDeletion {
   dataId: string;
   dataType: string;
@@ -151,6 +175,8 @@ export interface UpcomingDeletion {
   reason: string;
   preventable: boolean;
   notificationSent: boolean;
+}
+}
 }
 export interface ThirdPartySharing {
   thirdPartyId: string;
@@ -165,6 +191,8 @@ export interface ThirdPartySharing {
   userRights: ThirdPartyUserRights;
   contactInfo: ContactInfo;
 }
+}
+}
 export interface ThirdPartyUserRights {
   canAccess: boolean;
   canRectify: boolean;
@@ -174,12 +202,16 @@ export interface ThirdPartyUserRights {
   canRestrictProcessing: boolean;
   contactMethod: string;
 }
+}
+}
 export interface ContactInfo {
   dpoEmail?: string;
   privacyEmail?: string;
   phone?: string;
   address?: string;
   website?: string;
+}
+}
 }
 export interface ComplianceStatus {
   overall: 'COMPLIANT' | 'PARTIAL' | 'NON_COMPLIANT' | 'UNKNOWN';
@@ -189,6 +221,8 @@ export interface ComplianceStatus {
   lastAssessment: Date;
   nextAssessment: Date;
 }
+}
+}
 export interface FrameworkCompliance {
   framework: 'GDPR' | 'CCPA' | 'HIPAA' | 'PCI_DSS' | 'SOX' | 'ISO27001';
   status: 'COMPLIANT' | 'PARTIAL' | 'NON_COMPLIANT';
@@ -197,12 +231,16 @@ export interface FrameworkCompliance {
   lastAudit: Date;
   nextAudit: Date;
 }
+}
+}
 export interface RequirementStatus {
   requirement: string;
   status: 'MET' | 'PARTIAL' | 'NOT_MET' | 'NOT_APPLICABLE';
   evidence: string;
   gap?: string;
   remediation?: string;
+}
+}
 }
 export interface ComplianceViolation {
   id: string;
@@ -216,6 +254,8 @@ export interface ComplianceViolation {
   userImpact: string;
   notificationRequired: boolean;
 }
+}
+}
 export interface ComplianceAction {
   id: string;
   type: 'DATA_DELETION' | 'CONSENT_UPDATE' | 'POLICY_UPDATE' | 'NOTIFICATION' | 'AUDIT';
@@ -224,7 +264,9 @@ export interface ComplianceAction {
   assignedTo: string;
   userActionRequired: boolean;
   priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT'
+}
   }
+}
 export interface PrivacyScore {
   overall: number; // 0-100,
   categories: {
@@ -234,17 +276,21 @@ export interface PrivacyScore {
   thirdPartyRisk: number;
   retentionCompliance: number;
   userControl: number;
+}
 };
   trends: PrivacyTrend;
   recommendations: PrivacyRecommendation;
   lastCalculated: Date;
+}
 }
 export interface PrivacyTrend {
   metric: string;
   change: number; // percentage change,
   period: 'WEEK' | 'MONTH' | 'QUARTER';
   direction: 'IMPROVING' | 'DEGRADING' | 'STABLE'
+}
   }
+}
 export interface PrivacyRecommendation {
   id: string;
   category: 'DATA_MINIMIZATION' | 'CONSENT' | 'SECURITY' | 'RETENTION' | 'THIRD_PARTY';
@@ -254,6 +300,8 @@ export interface PrivacyRecommendation {
   effort: 'LOW' | 'MEDIUM' | 'HIGH';
   userAction: boolean;
   actionUrl?: string;
+}
+}
 }
 export interface UserAccessActivity {
   timestamp: Date;
@@ -266,7 +314,9 @@ export interface UserAccessActivity {
   location: AccessLocation;
   userNotified: boolean;
   riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'
+}
   }
+}
 export interface ActivityActor {
   type: 'USER' | 'SYSTEM' | 'THIRD_PARTY' | 'ADMIN';
   id: string;
@@ -274,6 +324,8 @@ export interface ActivityActor {
   role?: string;
   department?: string;
   justification?: string;
+}
+}
 }
 export interface AccessedData {
   dataId: string;
@@ -284,6 +336,8 @@ export interface AccessedData {
   recordCount: number;
   byteSize: number;
 }
+}
+}
 export interface AccessLocation {
   country: string;
   region: string;
@@ -291,6 +345,8 @@ export interface AccessLocation {
   withinEU: boolean;
   withinApprovedRegions: boolean;
   requiresDataTransferSafeguards: boolean;
+}
+}
 }
 export interface DataSubjectAccessRequest {
   requestId: string;
@@ -304,11 +360,14 @@ export interface DataSubjectAccessRequest {
   assignedTo?: string;
   processingHistory: DSARProcessingStep;
 }
+}
+}
 export interface DSARRequestDetails {
   dataCategories?: string;
   timeRange?: {
   start: Date;
   end: Date;
+}
 };
   specificData?: string;
   reason?: string;
@@ -316,6 +375,7 @@ export interface DSARRequestDetails {
   urgency: 'STANDARD' | 'URGENT' | 'EMERGENCY';
   preferredFormat?: 'JSON' | 'XML' | 'CSV' | 'PDF' | 'HUMAN_READABLE'
   }
+}
 export interface DSARResponse {
   responseId: string;
   generatedAt: Date;
@@ -328,6 +388,8 @@ export interface DSARResponse {
   exclusionReasons: string;
   additionalInfo?: string;
 }
+}
+}
 export interface DSARProcessingStep {
   step: string;
   status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'FAILED';
@@ -335,6 +397,8 @@ export interface DSARProcessingStep {
   completedAt?: Date;
   notes?: string;
   automatedProcessing: boolean;
+}
+}
 }
 export interface TransparencySettings {
   userId: string;
@@ -344,6 +408,8 @@ export interface TransparencySettings {
   dataRetentionPreferences: DataRetentionPreferences;
   accessControlPreferences: AccessControlPreferences;
   lastUpdated: Date;
+}
+}
 }
 export interface NotificationPreferences {
   realTimeNotifications: boolean;
@@ -357,7 +423,9 @@ export interface NotificationPreferences {
   start: string; // HH:MM,
   end: string; // HH:MM,
   timezone: string;
+}
 };
+}
 }
 export interface PrivacySettings {
   dataMinimizationEnabled: boolean;
@@ -369,6 +437,8 @@ export interface PrivacySettings {
   dataPortabilityEnabled: boolean;
   privacyScoreVisible: boolean;
 }
+}
+}
 export interface ConsentPreferences {
   granularConsent: boolean;
   automaticConsentRenewal: boolean;
@@ -377,6 +447,8 @@ export interface ConsentPreferences {
   purposeLimitationStrict: boolean;
   consentWithdrawalEasy: boolean;
 }
+}
+}
 export interface DataRetentionPreferences {
   minimumRetention: boolean;
   customRetentionPeriods: CustomRetentionPeriod;
@@ -384,11 +456,15 @@ export interface DataRetentionPreferences {
   dataArchivingPreference: 'DELETE' | 'ARCHIVE' | 'USER_CHOICE';
   retentionExtensionNotifications: boolean;
 }
+}
+}
 export interface CustomRetentionPeriod {
   dataCategory: string;
   retentionDays: number;
   reason: string;
   userRequested: boolean;
+}
+}
 }
 export interface AccessControlPreferences {
   requireExplicitApproval: boolean;
@@ -397,6 +473,7 @@ export interface AccessControlPreferences {
   accessTimeRestrictions: boolean;
   locationRestrictions: boolean;
   deviceRestrictions: boolean;
+}
 }
 export enum UserControlLevel {
   NONE = 'none',
@@ -440,11 +517,12 @@ export enum UserControlLevel {
   /**
    * Get real-time user access activity
    */
-  public async getUserAccessActivity()
+  public async getUserAccessActivity(
     userId: string,
     timeRange?: { start: Date; end: Date },
     limit?: number
   ): Promise<UserAccessActivity> {
+
   // This would integrate with the existing audit system
   const activities = await this.fetchUserAccessActivities(userId, timeRange, limit);
   // Enrich with transparency-specific information
@@ -452,7 +530,7 @@ export enum UserControlLevel {
   /**
   * Submit Data Subject Access Request
   */
-  public async submitDSAR()
+  public async submitDSAR(
   userId: string,
   requestType: DataSubjectAccessRequest['requestType'],
   details: DSARRequestDetails): Promise<DataSubjectAccessRequest> {,
@@ -485,16 +563,18 @@ export enum UserControlLevel {
    * Get user's privacy score and recommendations
    */
   public async getPrivacyScore(userId: string): Promise<PrivacyScore> {
+
     if (!this.config.enablePrivacyScoring) {
       throw new Error('Privacy scoring is disabled');
     return this.calculatePrivacyScore(userId);
   /**
    * Update user transparency settings
    */
-  public async updateTransparencySettings(()
+  public async updateTransparencySettings(((
     userId: string,
-    settings: Partial<TransparencySettings>,
+    settings: Partial<TransparencySettings>
   ): Promise<TransparencySettings> {
+
     const existingSettings = this.userSettings.get(userId) || this.getDefaultSettings(userId);
     const updatedSettings = { ...existingSettings, ...settings, lastUpdated: new Date() };
     this.userSettings.set(userId, updatedSettings);
@@ -508,6 +588,7 @@ export enum UserControlLevel {
    * Send real-time transparency notification
    */
   public async sendTransparencyNotification(notification: TransparencyNotification): Promise<void> {
+
   if (!this.config.enableRealTimeNotifications) {
   return;
   const userSettings = this.userSettings.get(notification.userId);
@@ -529,7 +610,7 @@ export enum UserControlLevel {
   /**
   * Export user data for portability
   */
-  public async exportUserData()
+  public async exportUserData(
   userId: string,
   format: 'JSON' | 'XML' | 'CSV' | 'PDF' = 'JSON',
   categories?: string): Promise<DSARResponse> {,
@@ -545,6 +626,7 @@ export enum UserControlLevel {
     return response;
   // Private implementation methods...
   private async buildDataInventory(userId: string): Promise<UserDataInventory> {
+
   // Implementation would gather data from various sources
   // This is a simplified structure
   return {
@@ -559,6 +641,7 @@ export enum UserControlLevel {
   privacyScore: await this.calculatePrivacyScore(userId),
 };
   private async gatherDataCategories(userId: string): Promise<DataCategory> {
+
   // Implementation would query data stores and classify data
   return [];
   private async calculateRetentionSummary(userId: string): Promise<RetentionSummary> {,
@@ -573,6 +656,7 @@ export enum UserControlLevel {
   upcomingDeletions: [],
 };
   private async getThirdPartySharing(userId: string): Promise<ThirdPartySharing> {
+
   // Implementation would check data sharing agreements and logs
   return [];
   private async assessUserCompliance(userId: string): Promise<ComplianceStatus> {,
@@ -586,6 +670,7 @@ export enum UserControlLevel {
   nextAssessment: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000) // 90 days,
 };
   private async calculatePrivacyScore(userId: string): Promise<PrivacyScore> {
+
   // Implementation would calculate privacy score based on various factors
   return {
   overall: 85,
@@ -608,9 +693,9 @@ export enum UserControlLevel {
   ): Promise<UserAccessActivity> { return Promise.resolve([]); }
   private enrichActivityWithTransparencyData(activity: UserAccessActivity): UserAccessActivity { return activity; }
   private generateRequestId(): string { return `dsar_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`; }
-  private calculateCompletionDeadline(()
+  private calculateCompletionDeadline(((
     requestType: string,
-    urgency: string,
+    urgency: string
   ): Date { return new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); }
   private processDBARAutomatically(request: DataSubjectAccessRequest): Promise<void> { return Promise.resolve(); }
   private getDefaultSettings(userId: string): TransparencySettings { return {} as TransparencySettings; }
@@ -626,6 +711,7 @@ export enum UserControlLevel {
   private startPeriodicTasks(): void { /* Implementation */ }
   private processNotificationQueue(): void { /* Implementation */ }
 
+}
 export interface TransparencyNotification {
   id: string;
   userId: string;
@@ -638,5 +724,6 @@ export interface TransparencyNotification {
   delivered: boolean;
   deliveredAt?: Date;
   channels: NotificationChannel;
+}
 }
 export default UserAccessTransparencyService;

@@ -27,6 +27,7 @@ import { createSecurityMiddleware, SecurityConfig, SecurityPresets } from './Sec
  * Extended request interface with sensitivity information
  */
 
+}
 export interface SensitivityAwareRequest extends Request {
   dataSensitivity?: {
   level: DataSensitivityLevel;
@@ -38,6 +39,7 @@ export interface SensitivityAwareRequest extends Request {
  * Data sensitivity middleware configuration
  */
 
+}
 export interface DataSensitivityMiddlewareConfig {
   /** Enable automatic data sensitivity detection */
   autoDetection: boolean;
@@ -57,6 +59,7 @@ export interface DataSensitivityMiddlewareConfig {
   customValidation?: (req: SensitivityAwareRequest) => Promise<{,
   allowed: boolean;
   reasons: string;
+}
 }>;
   /** Compliance frameworks to validate against */
   complianceFrameworks: string;
@@ -119,15 +122,16 @@ export function createDataSensitivityMiddleware()
 /**
  * Analyze request for data sensitivity
  */
-async function analyzeSensitivity(()
+async function analyzeSensitivity(((
     req: SensitivityAwareRequest,
-    config: DataSensitivityMiddlewareConfig,
+    config: DataSensitivityMiddlewareConfig
   ): Promise<{
   level: DataSensitivityLevel;
   detectedElements: EnhancedDataElement;
   policyEnforcement: SecurityPolicyEnforcementResult;
   complianceRequirements: string;
 }> {
+
   const detectedElements: EnhancedDataElement = [];
   let highestLevel = DataSensitivityLevel.PUBLIC;
   const complianceRequirements = new Set<string>();
@@ -288,12 +292,12 @@ function extractAccessControlFromRequest(req: Request): string {
   /**
   * Enforce sensitivity policies
   */
-  async function enforceSensitivityPolicies(()
-  req: SensitivityAwareRequest,
+  async function enforceSensitivityPolicies((req: SensitivityAwareRequest,
   config: DataSensitivityMiddlewareConfig): Promise<{,
   allowed: boolean;
   violations: string;
 }> {
+
   const violations: string = [];
   if (!req.dataSensitivity) {
     return { allowed: true, violations: [] };

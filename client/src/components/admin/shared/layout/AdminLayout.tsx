@@ -8,10 +8,12 @@ import React from 'react';
 import { SidebarNavigation } from './SidebarNavigation';
 import { AdminHeader } from './AdminHeader';
 import './AdminLayout.css';
+}
 interface AdminLayoutProps {
   children: React.ReactNode;
   title?: string;
   subtitle?: string;
+}
   breadcrumbs?: Array<{ label: string; href?: string }>;
   actions?: React.ReactNode;
   showSidebar?: boolean;

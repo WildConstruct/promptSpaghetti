@@ -51,6 +51,8 @@ export enum TokenType {
   allowMultipleTokens: boolean;       // Allow multiple active tokens per user,
   // Token Data
 }
+}
+}
 export interface ResetToken {
   id: string;
   userId: string;
@@ -71,12 +73,14 @@ export interface ResetToken {
   deviceFingerprint?: string;
   locationData?: any;
   additionalContext?: Record<string, any>;
+}
 };
   usageCount: number;
   maxUsageCount: number;
   revocationReason?: string;
 
 // Token Request Data
+}
 }
 export interface TokenRequest {
   userId: string;
@@ -89,6 +93,8 @@ export interface TokenRequest {
   metadata?: Record<string, any>;
   // Token Validation Result
 }
+}
+}
 export interface TokenValidation {
   valid: boolean;
   token?: ResetToken;
@@ -97,12 +103,15 @@ export interface TokenValidation {
   riskScore?: number;
   // Rate Limiting Data
 }
+}
+}
 export interface RateLimitData {
   count: number;
   resetTime: number;
   lastRequest: Date;
   violationCount: number;
   // Security Events
+}
 }
 export enum SecurityEvent {
   TOKEN_CREATED = 'token_created',
@@ -128,6 +137,8 @@ export enum SecurityEvent {
   sessionId?: string;
   // Statistics and Metrics
 }
+}
+}
 export interface TokenStatistics {
   totalTokens: number;
   activeTokens: number;
@@ -144,6 +155,7 @@ export interface TokenStatistics {
   lastCleanup: Date;
   tokensRemoved: number;
   auditLogsRemoved: number;
+}
 };
 /**
  * Comprehensive password reset token management service
@@ -163,6 +175,7 @@ export class PasswordResetTokenManager extends EventEmitter {
    * Generate a new password reset token
    */
   public async generateToken(request: TokenRequest): Promise<{ token: string; tokenId: string } | null> {
+
   try {
   // Check rate limiting
   if (this.isRateLimited(request.email, request.ipAddress)) {
@@ -239,7 +252,7 @@ export class PasswordResetTokenManager extends EventEmitter {
   /**
    * Validate a password reset token
    */
-  public async validateToken()
+  public async validateToken(
     tokenValue: string,
     ipAddress: string,
     userAgent: string): Promise<TokenValidation> {,
@@ -276,10 +289,11 @@ export class PasswordResetTokenManager extends EventEmitter {
   /**
    * Use a password reset token (marks it as used)
    */
-  public async useToken()
+  public async useToken(
     tokenValue: string,
     ipAddress: string,
     userAgent: string): Promise<{ success: boolean; token?: ResetToken; reason?: string }> {
+
   try {
   const validation = await this.validateToken(tokenValue, ipAddress, userAgent);
   if (!validation.valid || !validation.token) {
@@ -321,7 +335,7 @@ export class PasswordResetTokenManager extends EventEmitter {
   /**
    * Revoke a specific token
    */
-  public async revokeToken()
+  public async revokeToken(
     tokenId: string,
     reason: string,
     ipAddress: string = 'system',
@@ -349,7 +363,7 @@ export class PasswordResetTokenManager extends EventEmitter {
   /**
    * Revoke all tokens for a user
    */
-  public async revokeUserTokens()
+  public async revokeUserTokens(
     userId: string,
     type?: TokenType,
     reason: string = 'user_requested'): Promise<number> {,

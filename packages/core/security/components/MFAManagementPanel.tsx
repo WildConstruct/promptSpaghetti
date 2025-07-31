@@ -37,6 +37,7 @@ import {
 } from 'lucide-react';
 
 // Types for MFA management
+}
 interface MFAMethod {
   id: string;
   type: 'totp' | 'sms' | 'email' | 'backup_codes';
@@ -50,7 +51,9 @@ interface MFAMethod {
   email?: string;
   appName?: string;
   secretKey?: string;
+}
 };
+}
 interface BackupCode {
   id: string;
   code: string;
@@ -91,6 +94,7 @@ interface BackupCode {
   onMFAStatusChange,
   onSecurityEvent,
   className = ''
+}
 }) => {
   // State management
   const [mfaMethods, setMFAMethods] = useState<MFAMethod>([]);

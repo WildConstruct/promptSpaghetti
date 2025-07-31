@@ -23,6 +23,7 @@ const uiColors = {
   disabled: '#6b7280',
 };
 
+}
 export interface UIControlsProps {
   settings: UISettings;
   onChange: (settings: UISettings) => void;
@@ -30,6 +31,7 @@ export interface UIControlsProps {
   * UI Settings Controls Component
   * Manages user interface and accessibility preferences
   */
+}
 }
 export const UIControls: React.FC<UIControlsProps> = ({)
   settings,

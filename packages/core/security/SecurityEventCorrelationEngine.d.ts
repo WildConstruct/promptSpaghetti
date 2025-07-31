@@ -11,6 +11,7 @@ import { EventEmitter } from 'events';
 import { SecurityEvent, ThreatType } from './PredictiveSecurityAnalytics';
 import { AnomalySeverity } from './SecurityAnomalyDetector';
 
+}
 export interface CorrelationConfig {
     enableRealTimeCorrelation: boolean;
     correlationTimeWindow: number;
@@ -22,6 +23,7 @@ export interface CorrelationConfig {
     enableMachineLearning: boolean;
     correlationRules: CorrelationRule[];
 
+}
 export interface CorrelationRule {
     id: string;
     name: string;
@@ -46,6 +48,7 @@ export declare enum CorrelationRuleType {
     ANOMALY_CLUSTERING = "anomaly_clustering",
     THREAT_CHAIN = "threat_chain"
 
+}
 export interface CorrelationCondition {
     field: string;
     operator: CorrelationOperator;
@@ -65,6 +68,7 @@ export declare enum CorrelationOperator {
     SIMILAR_TO = "similar_to",
     PATTERN_MATCH = "pattern_match"
 
+}
 export interface CorrelationAction {
     actionType: CorrelationActionType;
     parameters: Record<string, unknown>;
@@ -81,6 +85,7 @@ export declare enum CorrelationActionType {
     TRIGGER_AUTOMATION = "trigger_automation",
     NOTIFY_STAKEHOLDERS = "notify_stakeholders"
 
+}
 export interface CorrelatedEventGroup {
     groupId: string;
     createdAt: Date;
@@ -108,6 +113,7 @@ export declare enum EventGroupType {
     SUSPICIOUS_ACTIVITY = "suspicious_activity",
     COORDINATED_ATTACK = "coordinated_attack"
 
+}
 export interface CorrelationEvidence {
     evidenceType: EvidenceType;
     strength: number;
@@ -126,6 +132,7 @@ export declare enum EvidenceType {
     BEHAVIORAL_CORRELATION = "behavioral_correlation",
     STATISTICAL_CORRELATION = "statistical_correlation"
 
+}
 export interface EventTimeline {
     timestamp: Date;
     eventId: string;
@@ -134,6 +141,7 @@ export interface EventTimeline {
     impact: number;
     source: string;
 
+}
 export interface ThreatIndicator {
     indicator: string;
     indicatorType: IndicatorType;
@@ -154,6 +162,7 @@ export declare enum IndicatorType {
     ATTACK_SIGNATURE = "attack_signature",
     GEOLOCATION = "geolocation"
 
+}
 export interface GroupRecommendation {
     recommendationType: RecommendationType;
     priority: number;
@@ -179,6 +188,7 @@ export declare enum GroupStatus {
     FALSE_POSITIVE = "false_positive",
     ARCHIVED = "archived"
 
+}
 export interface CorrelationAnalytics {
     totalEventsProcessed: number;
     correlatedEventsCount: number;
@@ -190,6 +200,7 @@ export interface CorrelationAnalytics {
     ruleEffectiveness: Map<string, RuleEffectiveness>;
     threatPatternStats: Map<ThreatType, PatternStats>;
 
+}
 export interface RuleEffectiveness {
     ruleId: string;
     triggeredCount: number;
@@ -198,6 +209,7 @@ export interface RuleEffectiveness {
     averageConfidence: number;
     lastTriggered: Date;
 
+}
 export interface PatternStats {
     threatType: ThreatType;
     detectionCount: number;
@@ -207,12 +219,14 @@ export interface PatternStats {
     firstDetected: Date;
     lastDetected: Date;
 
+}
 export interface CorrelationReport {
     reportId: string;
     generatedAt: Date;
     timeRange: {
         start: Date;
         end: Date;
+}
     };
     summary: CorrelationSummary;
     topThreats: ThreatSummary[];
@@ -220,6 +234,7 @@ export interface CorrelationReport {
     rulePerformance: RulePerformanceMetrics[];
     recommendations: SystemRecommendation[];
 
+}
 export interface CorrelationSummary {
     totalEvents: number;
     correlatedEvents: number;
@@ -229,6 +244,7 @@ export interface CorrelationSummary {
     averageCorrelationTime: number;
     correlationEfficiency: number;
 
+}
 export interface ThreatSummary {
     threatType: ThreatType;
     eventCount: number;
@@ -237,6 +253,7 @@ export interface ThreatSummary {
     trendDirection: 'increasing' | 'decreasing' | 'stable';
     keyIndicators: string[];
 
+}
 export interface CorrelationTrend {
     timeframe: string;
     metric: string;
@@ -244,6 +261,7 @@ export interface CorrelationTrend {
     changePercent: number;
     significance: 'high' | 'medium' | 'low';
 
+}
 export interface RulePerformanceMetrics {
     ruleId: string;
     ruleName: string;
@@ -252,6 +270,7 @@ export interface RulePerformanceMetrics {
     averageExecutionTime: number;
     impactScore: number;
 
+}
 export interface SystemRecommendation {
     category: 'rules' | 'performance' | 'coverage' | 'accuracy';
     priority: number;
@@ -283,6 +302,7 @@ export declare class SecurityEventCorrelationEngine extends EventEmitter {
     generateReport(timeRange: {)
         start: Date;
         end: Date;
+}
     }): Promise<CorrelationReport>;
     private initializeCorrelationRules;
     private startRealTimeProcessing;

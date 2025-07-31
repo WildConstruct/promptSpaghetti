@@ -7,6 +7,7 @@ import * as fs from 'fs';
 
 // Document validation results
 }
+}
 export interface DocumentValidation {
   document_id: string;
   is_valid: boolean;
@@ -18,6 +19,7 @@ export interface DocumentValidation {
     text_readable: boolean;
     tampering_detected: boolean;
     metadata_consistent: boolean;
+}
 }
   };
   extracted_data?: {
@@ -36,6 +38,7 @@ export interface DocumentValidation {
 }
 
 }
+}
 export interface DocumentAnalysis {
   document_id: string;
   file_type: string;
@@ -47,12 +50,15 @@ export interface DocumentAnalysis {
   processing_time_ms: number;
 }
 }
+}
 
+}
 }
 export interface OCRResult {
   text: string;
   confidence: number;
   regions: Array<{
+}
 }
     bbox: { x: number; y: number; width: number; height: number };
     text: string;

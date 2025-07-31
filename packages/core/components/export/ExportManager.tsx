@@ -28,6 +28,7 @@ import {
   FiShare2,
   FiUpload
 } from 'react-icons/fi';
+}
 interface ExportManagerProps {
   projectId: string;
   className?: string;
@@ -35,6 +36,7 @@ interface ExportManagerProps {
   export const ExportManager: React.FC<ExportManagerProps> = ({,)
   projectId,
   className = ''
+}
 }) => {
   const [activeTab, setActiveTab] = useState<ActiveTab>('templates');
   const [showWizard, setShowWizard] = useState(false);

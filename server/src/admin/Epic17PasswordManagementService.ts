@@ -19,6 +19,7 @@ import * as bcrypt from 'bcrypt';
 // =============================================================================
 
 }
+}
 export interface Epic17PasswordConfig {
   // API Key Secret Management
   apiKeySecretLength: number;
@@ -33,6 +34,7 @@ export interface Epic17PasswordConfig {
     requireNumbers: boolean;
     requireSymbols: boolean;
     minUniqueChars: number;
+}
 }
   };
   adminPasswordMaxAge: number; // days
@@ -61,6 +63,7 @@ export interface Epic17PasswordConfig {
 }
 
 }
+}
 export interface ApiKeySecret {
   keyId: string;
   secretId: string;
@@ -78,9 +81,11 @@ export interface ApiKeySecret {
     strength: number;
     entropy: number;
 }
+}
   };
 }
 
+}
 }
 export interface AdminCredential {
   credentialId: string;
@@ -112,9 +117,11 @@ export interface AdminCredential {
     reasonForChange?: string;
     approvedBy?: string;
 }
+}
   };
 }
 
+}
 }
 export interface ServiceAuthentication {
   serviceId: string;
@@ -125,6 +132,7 @@ export interface ServiceAuthentication {
     backup?: string;
     certificate?: string;
     privateKey?: string;
+}
 }
   };
   encryptionMethod: string;
@@ -144,6 +152,7 @@ export interface ServiceAuthentication {
 }
 
 }
+}
 export interface PasswordSecurityEvent {
   eventId: string;
   eventType: 'creation' | 'rotation' | 'access' | 'failure' | 'breach' | 'compromise';
@@ -158,12 +167,14 @@ export interface PasswordSecurityEvent {
     location?: string;
     riskScore?: number;
 }
+}
   };
   timestamp: Date;
   resolved: boolean;
   resolutionNotes?: string;
 }
 
+}
 }
 export interface VaultEntry {
   vaultId: string;
@@ -176,6 +187,7 @@ export interface VaultEntry {
     algorithm: string;
     iterations: number;
     salt: string;
+}
 }
   };
   accessLog: Array<{

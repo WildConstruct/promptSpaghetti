@@ -12,6 +12,7 @@
  */
 import React from 'react';
 
+}
 export interface Epic16HelpSystemProps {
     nodes?: unknown[];
     edges?: unknown[];
@@ -26,6 +27,7 @@ export interface Epic16HelpSystemProps {
             type: string;
             isPremium: boolean;
 
+}
         };
         cartItems?: number;
         purchaseStage?: 'browsing' | 'preview' | 'cart' | 'checkout' | 'download';

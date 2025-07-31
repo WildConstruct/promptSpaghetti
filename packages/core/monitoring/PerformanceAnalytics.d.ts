@@ -7,11 +7,13 @@
 import { PerformanceMonitor } from './PerformanceMonitor';
 import { EventEmitter } from 'events';
 
+}
 export interface PerformanceReport {
     generatedAt: number;
     timeRange: {
         start: number;
         end: number;
+}
     };
     summary: {
         totalExecutions: number;
@@ -25,7 +27,7 @@ export interface PerformanceReport {
         p50ExecutionTime: number;
         p95ExecutionTime: number;
         p99ExecutionTime: number;
-        slowestNodes: Array<{,
+        slowestNodes: Array<{
             nodeId: string;
             nodeType: string;
             averageDuration: number;
@@ -37,7 +39,7 @@ export interface PerformanceReport {
         errorRate: number;
         mostReliableTypes: string[];
         leastReliableTypes: string[];
-        errorPatterns: Array<{,
+        errorPatterns: Array<{
             pattern: string;
             frequency: number;
             affectedNodes: string[];
@@ -54,7 +56,7 @@ export interface PerformanceReport {
         performanceTrend: 'improving' | 'stable' | 'degrading';
         trendConfidence: number;
         projectedImprovement: number;
-        seasonalPatterns: Array<{,
+        seasonalPatterns: Array<{
             period: string;
             impact: number;
             description: string;
@@ -65,13 +67,14 @@ export interface PerformanceReport {
         high: number;
         medium: number;
         low: number;
-        topAlertTypes: Array<{,
+        topAlertTypes: Array<{
             type: string;
             frequency: number;
             severity: string;
         }>;
     };
 
+}
 export interface PerformanceBenchmark {
     nodeType: string;
     target: {
@@ -79,6 +82,7 @@ export interface PerformanceBenchmark {
         maxExecutionTime: number;
         successRate: number;
         memoryUsage: number;
+}
     };
     current: {
         averageExecutionTime: number;
@@ -89,6 +93,7 @@ export interface PerformanceBenchmark {
     status: 'exceeds' | 'meets' | 'below' | 'critical';
     improvement: number;
 
+}
 export interface PerformanceInsight {
     id: string;
     timestamp: number;
@@ -116,6 +121,7 @@ export declare class PerformanceAnalytics extends EventEmitter {
     generateReport(timeRange?: {)
         start: number;
         end: number;
+}
     }): PerformanceReport;
     /**
      * Set benchmarks for node types
@@ -146,7 +152,7 @@ export declare class PerformanceAnalytics extends EventEmitter {
     exportData(): {
         insights: PerformanceInsight[];
         benchmarks: PerformanceBenchmark[];
-        reports: Array<{,
+        reports: Array<{
             timestamp: number;
             report: PerformanceReport;
         }>;

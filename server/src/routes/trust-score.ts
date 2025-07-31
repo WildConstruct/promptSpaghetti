@@ -29,9 +29,11 @@ import { Database } from '../database';
 
 // Request type definitions
 }
+}
 interface UserTrustScoreRequest {
   Params: {
     userId: string;
+}
 }
   };
   Querystring: {
@@ -42,9 +44,11 @@ interface UserTrustScoreRequest {
 }
 
 }
+}
 interface TemplateTrustScoreRequest {
   Params: {
     templateId: string;
+}
 }
   };
   Querystring: {
@@ -54,9 +58,11 @@ interface TemplateTrustScoreRequest {
 }
 
 }
+}
 interface TransactionTrustScoreRequest {
   Params: {
     transactionId: string;
+}
 }
   };
   Querystring: {
@@ -66,19 +72,23 @@ interface TransactionTrustScoreRequest {
 }
 
 }
+}
 interface BulkUserTrustRequest {
   Body: {
     userIds: string[];
     includeDetails?: boolean;
     prioritizeRecent?: boolean;
 }
+}
   };
 }
 
 }
+}
 interface TrustEventRequest {
   Params: {
     userId: string;
+}
 }
   };
   Body: {
@@ -86,6 +96,7 @@ interface TrustEventRequest {
   };
 }
 
+}
 }
 interface TrustAnalyticsRequest {
   Querystring: {
@@ -95,19 +106,24 @@ interface TrustAnalyticsRequest {
     includeInsights?: boolean;
     includeRecommendations?: boolean;
 }
+}
   };
 }
 
+}
 }
 interface SuspiciousActivityRequest {
   Body: SuspiciousActivityReport;
 }
 }
+}
 
+}
 }
 interface TrustFactorsRequest {
   Params: {
     templateId: string;
+}
 }
   };
   Querystring: {
@@ -117,12 +133,14 @@ interface TrustFactorsRequest {
 }
 
 }
+}
 interface CreateTransactionTrustRequest {
   Body: {
     transactionId: string;
     buyerId: string;
     sellerId: string;
     templateId: string;
+}
 }
   };
 }

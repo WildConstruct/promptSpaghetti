@@ -39,12 +39,14 @@ export type ReviewerExpertise =
 // =============================================================================
 
 }
+}
 export interface ReviewCriteria {
   factual_accuracy: {
     score: number; // 1-10
     notes: string;
     evidence_verification: boolean;
     fact_checking_complete: boolean;
+}
 }
   };
   policy_compliance: {
@@ -81,6 +83,7 @@ export interface ReviewCriteria {
 }
 
 }
+}
 export interface ReviewRecommendation {
   primary_decision: ReviewDecision;
   confidence_level: number; // 1-100
@@ -89,6 +92,7 @@ export interface ReviewRecommendation {
     supporting_evidence: string[];
     mitigating_circumstances: string[];
     aggravating_factors: string[];
+}
 }
   };
   implementation: {
@@ -104,6 +108,7 @@ export interface ReviewRecommendation {
   };
 }
 
+}
 }
 export interface ReviewWorkflow {
   review_id: string;
@@ -155,7 +160,9 @@ export interface ReviewWorkflow {
   public_summary: string;
 }
 }
+}
 
+}
 }
 export interface ReviewTemplate {
   template_id: string;
@@ -183,10 +190,13 @@ export interface ReviewTemplate {
   last_updated: Date;
 }
 }
+}
 
+}
 }
 export interface ReviewQualityMetrics {
   reviewer_id: string;
+}
 }
   time_period: { start: Date; end: Date };
   
@@ -222,6 +232,7 @@ export interface ReviewQualityMetrics {
 }
 
 }
+}
 export interface PrecedentMatch {
   precedent_id: string;
   appeal_id: string;
@@ -241,6 +252,7 @@ export interface PrecedentMatch {
   policy_version_match: boolean;
   
   relevance_notes: string;
+}
 }
 }
 

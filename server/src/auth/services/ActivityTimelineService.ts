@@ -18,6 +18,7 @@ import { AuditService } from './AuditService';
 import { ActivityHistoryService, ActivityRecord, ActivityType, ActivityCategory, ActivityQuery } from './ActivityHistoryService';
 
 }
+}
 export interface TimelineEvent {
   id: string;
   userId: string;
@@ -37,7 +38,9 @@ export interface TimelineEvent {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface TimelineFilter {
   userId: string;
@@ -53,7 +56,9 @@ export interface TimelineFilter {
   offset?: number;
 }
 }
+}
 
+}
 }
 export interface UserActivityInsights {
   userId: string;
@@ -61,6 +66,7 @@ export interface UserActivityInsights {
   timeRange: {
     start: Date;
     end: Date;
+}
 }
   };
   
@@ -117,6 +123,7 @@ export interface UserActivityInsights {
 }
 
 }
+}
 export interface ActivityCorrelation {
   primaryActivity: ActivityRecord;
   relatedActivities: ActivityRecord[];
@@ -125,6 +132,7 @@ export interface ActivityCorrelation {
     strength: number; // 0-1
     confidence: number; // 0-1
     description: string;
+}
 }
   };
   timeline: Array<{
@@ -135,6 +143,7 @@ export interface ActivityCorrelation {
 }
 
 }
+}
 export interface ActivityStream {
   userId: string;
   streamId: string;
@@ -143,6 +152,7 @@ export interface ActivityStream {
   lastUpdated: Date;
   updateFrequency: number; // seconds
   activeConnections: number;
+}
 }
 }
 

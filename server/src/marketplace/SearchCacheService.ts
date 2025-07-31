@@ -25,6 +25,7 @@ const gzip = promisify(zlib.gzip);
 const gunzip = promisify(zlib.gunzip);
 
 }
+}
 interface CacheConfig {
   defaultTTL: number;
   maxMemoryItems: number;
@@ -33,7 +34,9 @@ interface CacheConfig {
   prefetchThreshold: number;
 }
 }
+}
 
+}
 }
 interface CacheEntry {
   data: any;
@@ -44,7 +47,9 @@ interface CacheEntry {
   size: number;
 }
 }
+}
 
+}
 }
 interface CacheMetrics {
   hits: number;
@@ -59,9 +64,11 @@ interface CacheMetrics {
     hits: number;
     lastAccessed: Date;
 }
+}
   }>;
 }
 
+}
 }
 interface SearchCacheOptions {
   ttl?: number;
@@ -69,6 +76,7 @@ interface SearchCacheOptions {
   compress?: boolean;
   priority?: 'low' | 'normal' | 'high';
   refreshAhead?: boolean;
+}
 }
 }
 

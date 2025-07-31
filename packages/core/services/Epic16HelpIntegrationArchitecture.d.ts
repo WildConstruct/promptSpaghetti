@@ -10,6 +10,7 @@ import { HelpContent } from '../components/ContextualHelp/ContextualHelpSystem';
 import { HelpContentManager, UserProfile } from '../components/ContextualHelp/HelpContentManager';
 import { MarketplaceTicket } from './Epic16TicketIntegrationService';
 
+}
 export interface MarketplaceHelpContext {
     currentView: MarketplaceView;
     templateId?: string;
@@ -25,10 +26,12 @@ export interface MarketplaceHelpContext {
         favoriteCategories: string[];
         searchHistory: string[];
         currentFilters: Record<string, any>;
+}
     };
 
 export type MarketplaceView = 'home' | 'search' | 'template-detail' | 'purchase-flow' | 'user-profile' | 'seller-dashboard' | 'transaction-history' | 'support' | 'getting-started';
 
+}
 export interface IntegratedHelpSystem {
     graphContext?: {
         nodes: any[];
@@ -36,11 +39,13 @@ export interface IntegratedHelpSystem {
         selectedNodeId?: string;
         isEditing: boolean;
         currentTool?: string;
+}
     };
     marketplaceContext?: MarketplaceHelpContext;
     activeHelpSession?: HelpSession;
     transitionContext?: TransitionContext;
 
+}
 export interface HelpSession {
     id: string;
     userId: string;
@@ -58,6 +63,7 @@ export interface HelpSession {
 
 export type HelpSessionType = 'onboarding' | 'feature-discovery' | 'troubleshooting' | 'purchase-assistance' | 'template-creation' | 'marketplace-navigation';
 
+}
 export interface TransitionContext {
     fromSystem: 'graph-editor' | 'marketplace';
     toSystem: 'graph-editor' | 'marketplace';
@@ -98,6 +104,7 @@ export declare class Epic16HelpIntegrationArchitecture {
     private determineSupportPriority;
     private mapHelpCategoryToTicketCategory;
 
+}
 export interface IntegrationPoint {
     id: string;
     fromSystem: 'graph-editor' | 'marketplace';
@@ -108,3 +115,4 @@ export interface IntegrationPoint {
 
 export default Epic16HelpIntegrationArchitecture;
 //# sourceMappingURL=Epic16HelpIntegrationArchitecture.d.ts.map
+}

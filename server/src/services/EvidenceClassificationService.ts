@@ -18,6 +18,7 @@ import * as crypto from 'crypto';
 // =============================================================================
 
 }
+}
 export interface EvidenceClassificationConfig {
   enabled: boolean;
   autoClassificationEnabled: boolean;
@@ -27,6 +28,7 @@ export interface EvidenceClassificationConfig {
     enabled: boolean;
     patterns: SensitivityPattern[];
     scoring: SensitivityScoring;
+}
 }
   };
   contentAnalysis: {
@@ -49,6 +51,7 @@ export interface EvidenceClassificationConfig {
 }
 
 }
+}
 export interface EvidenceClassificationRule {
   id: string;
   name: string;
@@ -65,7 +68,9 @@ export interface EvidenceClassificationRule {
   updatedAt: Date;
 }
 }
+}
 
+}
 }
 export interface EvidenceClassificationCondition {
   field: 'content' | 'metadata' | 'filename' | 'size' | 'source' | 'evidence_type' | 'compliance_framework';
@@ -75,7 +80,9 @@ export interface EvidenceClassificationCondition {
   weight?: number; // Weight for confidence calculation
 }
 }
+}
 
+}
 }
 export interface SensitivityPattern {
   id: string;
@@ -87,7 +94,9 @@ export interface SensitivityPattern {
   description: string;
 }
 }
+}
 
+}
 }
 export interface SensitivityScoring {
   thresholds: {
@@ -95,6 +104,7 @@ export interface SensitivityScoring {
     internal: number;
     confidential: number;
     restricted: number;
+}
 }
   };
   weightingFactors: {
@@ -106,12 +116,15 @@ export interface SensitivityScoring {
 }
 
 }
+}
 export interface ClassificationAction {
   type: 'notify' | 'encrypt' | 'restrict_access' | 'require_approval' | 'audit_log';
   parameters: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface EvidenceClassificationResult {
   evidenceId: string;
@@ -125,7 +138,9 @@ export interface EvidenceClassificationResult {
   timestamp: Date;
 }
 }
+}
 
+}
 }
 export interface SensitivityAnalysisResult {
   overallScore: number;
@@ -135,6 +150,7 @@ export interface SensitivityAnalysisResult {
     score: number;
     locations: string[];
 }
+}
   }[];
   contentAnalysis: {
     textScore: number;
@@ -143,6 +159,7 @@ export interface SensitivityAnalysisResult {
   };
 }
 
+}
 }
 export interface EvidenceItem {
   id: string;
@@ -160,6 +177,7 @@ export interface EvidenceItem {
     classifiedBy: string;
     method: string;
     confidence: number;
+}
 }
   };
 }

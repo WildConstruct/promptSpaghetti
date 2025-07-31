@@ -11,6 +11,7 @@ import {
   AttributionSession
 } from '../types/attribution';
 
+}
 interface UseAttributionReturn {
     loading: boolean;
     error: string | null;
@@ -21,6 +22,7 @@ interface UseAttributionReturn {
         start: Date;
         end: Date;
 
+}
     }) => Promise<ContributorStatsResponse>;
     listAttributions: (filter: AttributionFilter) => Promise<ChangeAttribution[]>;
     startSession: (projectId: string, sessionId?: string) => Promise<AttributionSession>;

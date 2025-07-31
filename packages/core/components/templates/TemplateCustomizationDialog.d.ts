@@ -5,6 +5,7 @@
 import React from 'react';
 import { ProjectTemplate } from '../../templates/ProjectTemplateManager';
 
+}
 interface TemplateCustomizationDialogProps {
     template: ProjectTemplate;
     isOpen: boolean;
@@ -13,5 +14,6 @@ interface TemplateCustomizationDialogProps {
     onPreview: (customizations: Record<string, any>) => void;
 
 export declare const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogProps>;
+}
 export {};
 //# sourceMappingURL=TemplateCustomizationDialog.d.ts.map

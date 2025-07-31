@@ -3,6 +3,7 @@
  * Epic 8 Story 8.1.4: Configuration management for Python executor
  */
 
+}
 export interface PythonExecutorConfig {
   // Service connection
   serviceUrl: string;
@@ -61,6 +62,7 @@ export interface PythonExecutorConfig {
   // Development
   enableDebugLogs: process.env.NODE_ENV === 'development',
   enableValidation: true,
+}
 };
 /**
  * Configuration manager for Python executor

@@ -7,6 +7,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { LocationData } from './LocationDetectionService';
 
 }
+}
 export interface LocationCluster {
   id: string;
   label: 'home' | 'work' | 'frequent' | 'occasional';
@@ -15,6 +16,7 @@ export interface LocationCluster {
     longitude: number;
     country: string;
     city: string;
+}
 }
   };
   radius: number; // in kilometers
@@ -27,6 +29,7 @@ export interface LocationCluster {
   verificationMethod?: 'user_confirmed' | 'pattern_analysis' | 'device_correlation';
 }
 
+}
 }
 export interface TravelPattern {
   routeId: string;
@@ -41,9 +44,11 @@ export interface TravelPattern {
     impossibleTiming: boolean;
     frequencyAnomaly: boolean;
 }
+}
   };
 }
 
+}
 }
 export interface UserLocationProfile {
   userId: string;
@@ -54,6 +59,7 @@ export interface UserLocationProfile {
     predictabilityScore: number; // 0-100, higher = more predictable
     riskScore: number; // 0-100, overall location-based risk
     anomalyCount: number;
+}
 }
   };
   insights: {
@@ -67,6 +73,7 @@ export interface UserLocationProfile {
   profileVersion: string;
 }
 
+}
 }
 export interface LocationAnomaly {
   id: string;
@@ -82,6 +89,7 @@ export interface LocationAnomaly {
     distanceFromExpected?: number;
     riskFactors: string[];
 }
+}
   };
   resolved: boolean;
   falsePositive: boolean;
@@ -94,6 +102,7 @@ export interface LocationAnomaly {
 }
 
 }
+}
 export interface LocationRiskAssessment {
   overall: number;
   factors: {
@@ -104,12 +113,14 @@ export interface LocationRiskAssessment {
     geopoliticalRisk: number;
     networkRisk: number;
 }
+}
   };
   recommendations: string[];
   actionRequired: boolean;
   suggestedActions: string[];
 }
 
+}
 }
 export interface LocationHistoryAnalysisConfig {
   enabled: boolean;
@@ -120,6 +131,7 @@ export interface LocationHistoryAnalysisConfig {
     maxDistanceKm: number;
     minTimeForHomeDetection: number; // days
     confidenceThreshold: number;
+}
 }
   };
   

@@ -11,12 +11,14 @@ import {
   Check
 } from 'lucide-react';
 import { Badge } from '../../common/Badge';
+}
 interface TargetingRule {
   id: string;,
   attribute: string;
   operator: 'equals' | 'not_equals' | 'in' | 'not_in' | 'greater_than' | 'less_than' | 'contains' | 'regex' | 'exists' | 'not_exists';,
   value: Error;
   logicalOperator?: 'AND' | 'OR';
+}
 interface UserSegment {
   id: string;,
   name: string;
@@ -24,10 +26,12 @@ interface UserSegment {
   rules: TargetingRule;
   estimatedUsers?: number;
   isActive: boolean;
+}
 interface TargetingRuleBuilderProps {
   initialRules?: TargetingRule;
   onRulesChange: (rules: TargetingRule) => void;
   segments?: UserSegment;
+}
   onTestRule?: (rules: TargetingRule) => Promise<{ matches: boolean; userCount: number }>;
 const AVAILABLE_ATTRIBUTES = [;
   { key: 'user_id', label: 'User ID', type: 'string', description: 'Unique user identifier' },

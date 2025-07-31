@@ -8,6 +8,7 @@
  */
 import { DataClassificationLevel, OperationContext } from '../types/DataClassification';
 
+}
 export interface MonitoringEvent {
     id: string;
     timestamp: Date;
@@ -21,6 +22,7 @@ export interface MonitoringEvent {
     context: OperationContext;
     metrics?: MonitoringMetrics;
 
+}
 export interface MonitoringMetrics {
     processingTimeMs: number;
     dataSize?: number;
@@ -28,6 +30,7 @@ export interface MonitoringMetrics {
     complianceScore?: number;
     riskScore?: number;
 
+}
 export interface ClassificationStats {
     classification: DataClassificationLevel;
     totalEvents: number;
@@ -39,6 +42,7 @@ export interface ClassificationStats {
     complianceRate: number;
     lastUpdated: Date;
 
+}
 export interface UserActivity {
     userId: string;
     totalEvents: number;
@@ -48,6 +52,7 @@ export interface UserActivity {
     riskScore: number;
     suspiciousActivities: string[];
 
+}
 export interface MonitoringAlert {
     id: string;
     timestamp: Date;
@@ -59,6 +64,7 @@ export interface MonitoringAlert {
     resolvedAt?: Date;
     resolvedBy?: string;
 
+}
 export interface MonitoringThreshold {
     name: string;
     description: string;
@@ -70,6 +76,7 @@ export interface MonitoringThreshold {
     cooldownMinutes: number;
     lastTriggered?: Date;
 
+}
 export interface MonitoringDashboard {
     overallStats: {
         totalEvents: number;
@@ -78,6 +85,7 @@ export interface MonitoringDashboard {
         activeUsers: number;
         violationCount: number;
         complianceScore: number;
+}
     };
     classificationBreakdown: ClassificationStats[];
     topUsers: UserActivity[];

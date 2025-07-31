@@ -20,6 +20,7 @@ import { RedisService } from '../auth/database/RedisService';
 import { AnalyticsCollector } from '../analytics/AnalyticsCollector';
 
 }
+}
 export interface ComplianceScannerIntegrationConfig {
   enabledEnvironments: ('development' | 'staging' | 'production')[];
   autoStart: boolean;
@@ -27,6 +28,7 @@ export interface ComplianceScannerIntegrationConfig {
   gracefulShutdownTimeout: number; // milliseconds
   enableMetrics: boolean;
   enableDashboard: boolean;
+}
 }
 }
 

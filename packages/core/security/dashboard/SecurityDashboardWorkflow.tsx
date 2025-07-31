@@ -54,6 +54,7 @@ import './SecurityDashboardWorkflow.css';
 
 // Security Dashboard Workflow Types
 
+}
 export interface SecurityWorkflowEvent {
   id: string;
   type: SecurityEventType;
@@ -67,6 +68,7 @@ export interface SecurityWorkflowEvent {
   escalationLevel: number;
   complianceFrameworks: string;
   automatedActions: SecurityAction;
+}
 }
 export enum SecurityEventType {
   THREAT_DETECTION = 'threat_detection',
@@ -94,6 +96,7 @@ export enum SecurityEventType {
   status: 'pending' | 'executing' | 'completed' | 'failed';
   result?: string;
 }
+}
 export enum SecurityActionType {
   BLOCK_IP = 'block_ip',
   ISOLATE_HOST = 'isolate_host',
@@ -111,6 +114,8 @@ export enum SecurityActionType {
   autoApprovalRules: AutoApprovalRule;
   complianceRequirements: ComplianceRequirement;
 }
+}
+}
 export interface AutoApprovalRule {
   id: string;
   name: string;
@@ -119,12 +124,16 @@ export interface AutoApprovalRule {
   approvedActions: SecurityActionType;
   requiredRole?: SecurityRole;
 }
+}
+}
 export interface ComplianceRequirement {
   framework: string;
   alertTypes: SecurityEventType;
   responseTimeMinutes: number;
   requiredDocumentation: string;
   notificationRequired: boolean;
+}
+}
 }
 export interface SecurityDashboardWorkflowProps {
   workspaceId: string;
@@ -138,6 +147,7 @@ export interface SecurityDashboardWorkflowProps {
   * Main Security Dashboard Workflow Component
   */
   // Safe reload function that can be mocked in tests
+}
 }
 export const safeReload = (): void => {
   if (typeof window !== 'undefined' && window.location) {

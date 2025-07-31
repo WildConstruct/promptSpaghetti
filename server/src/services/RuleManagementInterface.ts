@@ -24,6 +24,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { DatabaseService } from '../database/DatabaseService';
 
 }
+}
 export interface RuleManagementConfiguration {
   environment: string;
   enableVersioning: boolean;
@@ -39,7 +40,9 @@ export interface RuleManagementConfiguration {
   governance: GovernanceConfig;
 }
 }
+}
 
+}
 }
 export interface ApprovalWorkflowConfig {
   enabled: boolean;
@@ -50,7 +53,9 @@ export interface ApprovalWorkflowConfig {
   timeouts: TimeoutConfig;
 }
 }
+}
 
+}
 }
 export interface ApprovalStage {
   stageId: string;
@@ -67,7 +72,9 @@ export interface ApprovalStage {
   vetoPower: boolean;
 }
 }
+}
 
+}
 }
 export interface ApproverConfig {
   approverId: string;
@@ -77,6 +84,7 @@ export interface ApproverConfig {
   expertise: string[];
   delegationAllowed: boolean;
   autoApprovalRules: AutoApprovalRule[];
+}
 }
 }
 
@@ -89,12 +97,14 @@ export enum ApproverType {
 }
 
 }
+}
 export interface AutoApprovalRule {
   ruleId: string;
   conditions: AutoApprovalCondition[];
   riskThreshold: RiskLevel;
   requireManualReview: boolean;
   notifications: boolean;
+}
 }
 }
 
@@ -108,6 +118,7 @@ export enum RiskLevel {
 }
 
 }
+}
 export interface DeploymentStrategy {
   strategy: DeploymentType;
   environments: string[];
@@ -116,6 +127,7 @@ export interface DeploymentStrategy {
   blueGreenDeployment: BlueGreenConfig;
   validation: DeploymentValidation;
   rollback: AutoRollbackConfig;
+}
 }
 }
 
@@ -128,6 +140,7 @@ export enum DeploymentType {
 }
 
 }
+}
 export interface CanaryConfig {
   enabled: boolean;
   initialPercentage: number;
@@ -138,7 +151,9 @@ export interface CanaryConfig {
   monitoring: CanaryMonitoring;
 }
 }
+}
 
+}
 }
 export interface RuleVersion {
   versionId: string;
@@ -161,6 +176,7 @@ export interface RuleVersion {
   deactivatedAt?: Date;
 }
 }
+}
 
 export enum VersionStatus {
   DRAFT = 'DRAFT',
@@ -177,6 +193,7 @@ export enum VersionStatus {
 }
 
 }
+}
 export interface VersionChange {
   changeId: string;
   type: ChangeType;
@@ -190,6 +207,7 @@ export interface VersionChange {
   evidence: ChangeEvidence[];
   riskAssessment: ChangeRiskAssessment;
   timestamp: Date;
+}
 }
 }
 
@@ -216,6 +234,7 @@ export enum ChangeCategory {
 }
 
 }
+}
 export interface RuleApproval {
   approvalId: string;
   ruleVersionId: string;
@@ -233,6 +252,7 @@ export interface RuleApproval {
   expiresAt?: Date;
   delegatedBy?: string;
   overridden?: boolean;
+}
 }
 }
 
@@ -259,6 +279,7 @@ export enum ApprovalDecision {
 }
 
 }
+}
 export interface RuleDeployment {
   deploymentId: string;
   ruleVersionId: string;
@@ -280,6 +301,7 @@ export interface RuleDeployment {
   artifacts: DeploymentArtifact[];
 }
 }
+}
 
 export enum DeploymentStatus {
   PENDING = 'PENDING',
@@ -293,6 +315,7 @@ export enum DeploymentStatus {
 }
 
 }
+}
 export interface RuleConflictDetection {
   conflictId: string;
   type: ConflictType;
@@ -305,6 +328,7 @@ export interface RuleConflictDetection {
   recommendations: ConflictRecommendation[];
   history: ConflictHistory[];
   metadata: ConflictMetadata;
+}
 }
 }
 
@@ -340,6 +364,7 @@ export enum ConflictStatus {
 }
 
 }
+}
 export interface RulePerformanceMetrics {
   ruleId: string;
   version: string;
@@ -355,7 +380,9 @@ export interface RulePerformanceMetrics {
   optimizations: PerformanceOptimization[];
 }
 }
+}
 
+}
 }
 export interface ExecutionMetrics {
   totalExecutions: number;
@@ -370,7 +397,9 @@ export interface ExecutionMetrics {
   timeoutRate: number; // percentage
 }
 }
+}
 
+}
 }
 export interface ResourceMetrics {
   averageMemoryUsage: number;
@@ -383,7 +412,9 @@ export interface ResourceMetrics {
   databaseConnections: number;
 }
 }
+}
 
+}
 }
 export interface RuleGovernance {
   governanceId: string;
@@ -400,7 +431,9 @@ export interface RuleGovernance {
   reporting: ReportingGovernance;
 }
 }
+}
 
+}
 }
 export interface RuleOwner {
   ownerId: string;
@@ -414,6 +447,7 @@ export interface RuleOwner {
   delegation: DelegationSettings;
 }
 }
+}
 
 export enum AuthorityLevel {
   READ_ONLY = 'READ_ONLY',
@@ -424,6 +458,7 @@ export enum AuthorityLevel {
 }
 
 }
+}
 export interface RuleStakeholder {
   stakeholderId: string;
   name: string;
@@ -433,6 +468,7 @@ export interface RuleStakeholder {
   influence: InfluenceLevel;
   notifications: NotificationPreferences;
   involvement: InvolvementLevel;
+}
 }
 }
 
@@ -1319,6 +1355,7 @@ export class RuleManagementInterface {
 
 // Interface definitions for the management system
 }
+}
 export interface RuleCreationResult {
   success: boolean;
   ruleId: string;
@@ -1331,7 +1368,9 @@ export interface RuleCreationResult {
   nextSteps: string[];
 }
 }
+}
 
+}
 }
 export interface RuleUpdateResult {
   success: boolean;
@@ -1346,7 +1385,9 @@ export interface RuleUpdateResult {
   nextSteps: string[];
 }
 }
+}
 
+}
 }
 export interface RuleDeploymentResult {
   success: boolean;
@@ -1361,6 +1402,7 @@ export interface RuleDeploymentResult {
     preDeployment: ValidationResult;
     postDeployment: ValidationResult;
 }
+}
   };
   monitoring: DeploymentMonitoring;
   rollback?: DeploymentRollback;
@@ -1368,6 +1410,7 @@ export interface RuleDeploymentResult {
   warnings: DeploymentWarning[];
 }
 
+}
 }
 export interface ApprovalProcessResult {
   success: boolean;
@@ -1381,7 +1424,9 @@ export interface ApprovalProcessResult {
   notifications: NotificationTarget[];
 }
 }
+}
 
+}
 }
 export interface RulePerformanceReport {
   ruleId: string;
@@ -1397,7 +1442,9 @@ export interface RulePerformanceReport {
   generatedAt: Date;
 }
 }
+}
 
+}
 }
 export interface RuleGovernanceReport {
   reportId: string;
@@ -1411,6 +1458,7 @@ export interface RuleGovernanceReport {
   summary: unknown;
   generatedAt: Date;
   generatedBy: string;
+}
 }
 }
 

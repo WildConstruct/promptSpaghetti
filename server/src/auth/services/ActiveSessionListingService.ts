@@ -9,6 +9,7 @@ import { RedisService } from '../database/RedisService';
 import { EnhancedSessionService, Session } from './EnhancedSessionService';
 
 }
+}
 export interface SessionListingOptions {
   includeExpired?: boolean;
   includeInactive?: boolean;
@@ -25,6 +26,7 @@ export interface SessionListingOptions {
       from?: Date;
       to?: Date;
 }
+}
     };
   };
   pagination?: {
@@ -37,6 +39,7 @@ export interface SessionListingOptions {
 }
 
 }
+}
 export interface SessionSummary {
   sessionId: string;
   userId: string;
@@ -46,6 +49,7 @@ export interface SessionSummary {
     type: string;
     fingerprint?: string;
     trusted: boolean;
+}
 }
   };
   location: {
@@ -82,6 +86,7 @@ export interface SessionSummary {
 }
 
 }
+}
 export interface SessionListingResult {
   sessions: SessionSummary[];
   pagination: {
@@ -91,6 +96,7 @@ export interface SessionListingResult {
     totalPages: number;
     hasNext: boolean;
     hasPrev: boolean;
+}
 }
   };
   summary: {
@@ -107,6 +113,7 @@ export interface SessionListingResult {
 }
 
 }
+}
 export interface UserSessionOverview {
   userId: string;
   totalSessions: number;
@@ -117,6 +124,7 @@ export interface UserSessionOverview {
     sessionCount: number;
     lastSeen: Date;
     trusted: boolean;
+}
 }
   }>;
   locations: Array<{

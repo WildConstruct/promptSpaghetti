@@ -18,6 +18,7 @@ import { promisify } from 'util';
 // =============================================================================
 
 }
+}
 export interface EvidenceVersionConfig {
   enabled: boolean;
   immutableHistory: boolean;
@@ -27,6 +28,7 @@ export interface EvidenceVersionConfig {
     enabled: boolean;
     algorithm: 'sha256' | 'sha512' | 'blake2b';
     chainValidation: boolean;
+}
 }
   };
   retention: {
@@ -42,6 +44,7 @@ export interface EvidenceVersionConfig {
   };
 }
 
+}
 }
 export interface EvidenceVersion {
   id: string;
@@ -89,7 +92,9 @@ export interface EvidenceVersion {
   archivalStatus: 'active' | 'compressed' | 'archived' | 'deleted';
 }
 }
+}
 
+}
 }
 export interface EvidenceVersionDiff {
   fromVersion: number;
@@ -100,6 +105,7 @@ export interface EvidenceVersionDiff {
       added: string[];
       removed: string[];
       modified: string[];
+}
 }
     };
     metadata?: {
@@ -121,6 +127,7 @@ export interface EvidenceVersionDiff {
 }
 
 }
+}
 export interface EvidenceVersionChain {
   evidenceId: string;
   versions: EvidenceVersion[];
@@ -130,6 +137,7 @@ export interface EvidenceVersionChain {
     brokenLinks: number[];
     hashMismatches: number[];
     lastVerified: Date;
+}
 }
   };
   statistics: {
@@ -142,6 +150,7 @@ export interface EvidenceVersionChain {
 }
 
 }
+}
 export interface EvidenceVersionBranch {
   name: string;
   baseVersion: number;
@@ -152,7 +161,9 @@ export interface EvidenceVersionBranch {
   status: 'active' | 'merged' | 'abandoned';
 }
 }
+}
 
+}
 }
 export interface VersionConflict {
   evidenceId: string;
@@ -164,7 +175,9 @@ export interface VersionConflict {
   timestamp: Date;
 }
 }
+}
 
+}
 }
 export interface VersionMergeResult {
   success: boolean;
@@ -172,6 +185,7 @@ export interface VersionMergeResult {
   conflicts: VersionConflict[];
   warnings: string[];
   changes: EvidenceVersionDiff;
+}
 }
 }
 

@@ -6,6 +6,7 @@
  */
 import { EnhancedPreviewResult } from '../components/PreviewModal/EnhancedPreviewModal';
 
+}
 export interface SavedResult extends EnhancedPreviewResult {
     savedAt: Date;
     lastModified: Date;
@@ -29,6 +30,7 @@ export interface SavedResult extends EnhancedPreviewResult {
         timeOfDay?: 'dawn' | 'morning' | 'afternoon' | 'evening' | 'night'
   };
 
+}
 export interface ResultCollection {
     id: string;
     name: string;
@@ -44,13 +46,16 @@ export interface ResultCollection {
         genre?: string;
         budget?: string;
         targetRating?: string;
+}
     };
 
+}
 export interface ResultFilter {
     tags?: string[];
     rating?: {
         min?: number;
         max?: number;
+}
     };
     contentType?: string[];
     dateRange?: {
@@ -61,22 +66,25 @@ export interface ResultFilter {
     status?: string[];
     searchText?: string;
 
+}
 export interface ResultStats {
     totalResults: number;
     averageRating: number;
     averageWordCount: number;
     totalExecutionTime: number;
-    topTags: Array<{,
+    topTags: Array<{
         tag: string;
         count: number;
+}
     }>;
     contentTypeDistribution: Record<string, number>;
-    recentActivity: Array<{,
+    recentActivity: Array<{
         type: 'save' | 'rate' | 'tag' | 'export' | 'note';
         timestamp: Date;
         resultId: string;
         details?: string;
     }>;
+}
 interface ResultManagementState {
     savedResults: Record<string, SavedResult>;
     collections: Record<string, ResultCollection>;
@@ -126,6 +134,7 @@ export declare const useResultManagementStore: import("zustand").UseBoundStore<O
         onHydrate: (fn: (state: ResultManagementState) => void) => () => void;
         onFinishHydration: (fn: (state: ResultManagementState) => void) => () => void;
         getOptions: () => Partial<import("zustand/middleware").PersistOptions<ResultManagementState, ResultManagementState>>;
+}
     };
 }>;
 export {};

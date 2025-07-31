@@ -7,6 +7,7 @@
  */
 import { HistoricalConstraint, Era } from '../types/UTDG';
 
+}
 export interface ConstraintOverride {
   id: string;
   constraint_id: string;
@@ -17,17 +18,22 @@ export interface ConstraintOverride {
   scope: 'global' | 'era' | 'project' | 'session';
   conditions?: OverrideConditions;
 }
+}
+}
 export interface OverrideConditions {
   era?: Era;
   node_types?: string;
   social_classes?: string;
   max_authenticity_impact?: number; // Maximum reduction in authenticity score,
 }
+}
+}
 export interface OverrideReason {
   category: 'creative' | 'narrative' | 'technical' | 'artistic' | 'educational';
   description: string;
   justification: string;
   alternative_considered?: string;
+}
 }
 export class ConstraintOverrideManager {
   private overrides: Map<string, ConstraintOverride> = new Map();

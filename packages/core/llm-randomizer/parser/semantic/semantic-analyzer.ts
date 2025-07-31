@@ -4,6 +4,7 @@
 import { GraphAST, NodeDefinitionAST, EdgeDefinitionAST, ParseError } from '../ast/ast-builder';
 import { Graph, Node, NodeTypeEnum } from '../../../graphSchema';
 
+}
 export interface SemanticError extends ParseError {
   nodeId?: string;
   errorCode: string;
@@ -15,10 +16,13 @@ export interface SemanticError extends ParseError {
   visitedNodes: Set<string>;
   currentPath: string;
 }
+}
+}
 export interface SemanticAnalysisResult {
   graph: Graph | null;
   errors: SemanticError;
   warnings: SemanticError;
+}
 }
 export class SemanticAnalyzer {
   private context: ValidationContext;

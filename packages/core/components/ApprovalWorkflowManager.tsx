@@ -16,6 +16,7 @@ import {
 import { ApprovalDashboard } from './ApprovalDashboard';
 import { ApprovalReviewInterface } from './ApprovalReviewInterface';
 import { ApprovalStatistics } from './ApprovalStatistics';
+}
 interface ApprovalCriteria {
   id: string;
   workspace_id: string;
@@ -54,6 +55,7 @@ interface ApprovalCriteria {
   workspaceId,
   currentUserId,
   userRole
+}
 }) => {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'rules' | 'criteria' | 'statistics'>('dashboard');
   const [approvalCriteria, setApprovalCriteria] = useState<ApprovalCriteria>([]);

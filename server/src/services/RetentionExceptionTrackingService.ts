@@ -8,6 +8,7 @@ import { DataRetentionFrameworkService } from './DataRetentionFrameworkService';
 import { DataCategory, Jurisdiction } from '../types/DataRetentionPeriods';
 
 }
+}
 export interface RetentionException {
   exceptionId: string;
   dataId: string;
@@ -30,6 +31,7 @@ export interface RetentionException {
   expiresAt: Date;
 }
 }
+}
 
 export enum ExceptionType {
   BUSINESS_REQUIREMENT = 'BUSINESS_REQUIREMENT',
@@ -45,6 +47,7 @@ export enum ExceptionType {
 }
 
 }
+}
 export interface ExceptionJustification {
   primaryReason: string;
   detailedJustification: string;
@@ -55,7 +58,9 @@ export interface ExceptionJustification {
   stakeholders: Stakeholder[];
 }
 }
+}
 
+}
 }
 export interface BusinessImpact {
   description: string;
@@ -64,6 +69,7 @@ export interface BusinessImpact {
   estimatedCost: number;
   currency: string;
   timeline: BusinessTimeline;
+}
 }
 }
 
@@ -75,10 +81,12 @@ export enum ImpactSeverity {
 }
 
 }
+}
 export interface BusinessTimeline {
   urgency: UrgencyLevel;
   deadline: Date;
   milestones: BusinessMilestone[];
+}
 }
 }
 
@@ -90,10 +98,12 @@ export enum UrgencyLevel {
 }
 
 }
+}
 export interface BusinessMilestone {
   description: string;
   targetDate: Date;
   importance: MilestoneImportance;
+}
 }
 }
 
@@ -104,6 +114,7 @@ export enum MilestoneImportance {
 }
 
 }
+}
 export interface LegalBasis {
   applicable: boolean;
   jurisdiction: Jurisdiction[];
@@ -112,7 +123,9 @@ export interface LegalBasis {
   precedents: LegalPrecedent[];
 }
 }
+}
 
+}
 }
 export interface LegalRequirement {
   regulation: string;
@@ -121,13 +134,16 @@ export interface LegalRequirement {
   mandatory: boolean;
 }
 }
+}
 
+}
 }
 export interface LegalPrecedent {
   caseReference: string;
   description: string;
   relevance: PrecedenceRelevance;
   jurisdiction: Jurisdiction;
+}
 }
 }
 
@@ -139,6 +155,7 @@ export enum PrecedenceRelevance {
 }
 
 }
+}
 export interface Alternative {
   alternativeId: string;
   description: string;
@@ -147,6 +164,7 @@ export interface Alternative {
   timeline: number; // days
   riskLevel: RiskLevel;
   rejectionReason: string;
+}
 }
 }
 
@@ -165,6 +183,7 @@ export enum RiskLevel {
 }
 
 }
+}
 export interface SupportingDocument {
   documentId: string;
   title: string;
@@ -173,6 +192,7 @@ export interface SupportingDocument {
   uploadedAt: Date;
   uploadedBy: string;
   confidentiality: ConfidentialityLevel;
+}
 }
 }
 
@@ -195,6 +215,7 @@ export enum ConfidentialityLevel {
 }
 
 }
+}
 export interface Stakeholder {
   stakeholderId: string;
   name: string;
@@ -202,6 +223,7 @@ export interface Stakeholder {
   department: string;
   involvement: StakeholderInvolvement;
   contactInfo: ContactInfo;
+}
 }
 }
 
@@ -225,6 +247,7 @@ export enum StakeholderInvolvement {
 }
 
 }
+}
 export interface ContactInfo {
   email: string;
   phone?: string;
@@ -232,7 +255,9 @@ export interface ContactInfo {
   location: string;
 }
 }
+}
 
+}
 }
 export interface ExceptionApproval {
   approvalWorkflow: ApprovalWorkflow;
@@ -243,7 +268,9 @@ export interface ExceptionApproval {
   delegations: ApprovalDelegation[];
 }
 }
+}
 
+}
 }
 export interface ApprovalWorkflow {
   workflowId: string;
@@ -252,7 +279,9 @@ export interface ApprovalWorkflow {
   escalationRules: EscalationRule[];
 }
 }
+}
 
+}
 }
 export interface WorkflowStage {
   stageId: string;
@@ -264,7 +293,9 @@ export interface WorkflowStage {
   autoEscalate: boolean;
 }
 }
+}
 
+}
 }
 export interface EscalationRule {
   ruleId: string;
@@ -272,6 +303,7 @@ export interface EscalationRule {
   action: EscalationAction;
   escalateTo: string[];
   timeoutDays: number;
+}
 }
 }
 
@@ -290,6 +322,7 @@ export enum EscalationAction {
 }
 
 }
+}
 export interface ExceptionApprover {
   approverId: string;
   userId: string;
@@ -302,6 +335,7 @@ export interface ExceptionApprover {
   conditions: string[];
   approvedAt?: Date;
   delegatedTo?: string;
+}
 }
 }
 
@@ -351,6 +385,7 @@ export enum ApprovalStatus {
 }
 
 }
+}
 export interface ApprovalCondition {
   conditionId: string;
   description: string;
@@ -361,6 +396,7 @@ export interface ApprovalCondition {
   verifiedAt?: Date;
   verifiedBy?: string;
   evidence: string[];
+}
 }
 }
 
@@ -382,6 +418,7 @@ export enum ConditionStatus {
 }
 
 }
+}
 export interface ApprovalDelegation {
   delegationId: string;
   fromUserId: string;
@@ -392,6 +429,7 @@ export interface ApprovalDelegation {
   scope: DelegationScope;
 }
 }
+}
 
 export enum DelegationScope {
   FULL_AUTHORITY = 'FULL_AUTHORITY',
@@ -399,6 +437,7 @@ export enum DelegationScope {
   ADVISORY_ONLY = 'ADVISORY_ONLY'
 }
 
+}
 }
 export interface ExceptionCondition {
   conditionId: string;
@@ -408,6 +447,7 @@ export interface ExceptionCondition {
   monitoring: ConditionMonitoring;
   compliance: ConditionCompliance;
   violations: ConditionViolation[];
+}
 }
 }
 
@@ -430,6 +470,7 @@ export enum EnforcementLevel {
 }
 
 }
+}
 export interface ConditionMonitoring {
   automated: boolean;
   frequency: MonitoringFrequency;
@@ -437,6 +478,7 @@ export interface ConditionMonitoring {
   lastChecked: Date;
   nextCheck: Date;
   responsible: string;
+}
 }
 }
 
@@ -450,6 +492,7 @@ export enum MonitoringFrequency {
 }
 
 }
+}
 export interface MonitoringAlert {
   alertId: string;
   type: AlertType;
@@ -458,6 +501,7 @@ export interface MonitoringAlert {
   triggeredAt: Date;
   acknowledgedAt?: Date;
   resolvedAt?: Date;
+}
 }
 }
 
@@ -476,6 +520,7 @@ export enum AlertSeverity {
 }
 
 }
+}
 export interface ConditionCompliance {
   compliant: boolean;
   complianceScore: number;
@@ -484,7 +529,9 @@ export interface ConditionCompliance {
   findings: ComplianceFinding[];
 }
 }
+}
 
+}
 }
 export interface ComplianceFinding {
   findingId: string;
@@ -493,6 +540,7 @@ export interface ComplianceFinding {
   severity: FindingSeverity;
   recommendation: string;
   status: FindingStatus;
+}
 }
 }
 
@@ -518,6 +566,7 @@ export enum FindingStatus {
 }
 
 }
+}
 export interface ConditionViolation {
   violationId: string;
   detectedAt: Date;
@@ -526,6 +575,7 @@ export interface ConditionViolation {
   impact: string;
   resolution: ViolationResolution;
   responsible: string;
+}
 }
 }
 
@@ -537,12 +587,14 @@ export enum ViolationSeverity {
 }
 
 }
+}
 export interface ViolationResolution {
   status: ResolutionStatus;
   description: string;
   resolvedAt?: Date;
   resolvedBy?: string;
   preventiveMeasures: string[];
+}
 }
 }
 
@@ -554,6 +606,7 @@ export enum ResolutionStatus {
 }
 
 }
+}
 export interface ExceptionMonitoring {
   monitoringPlan: MonitoringPlan;
   metrics: MonitoringMetric[];
@@ -562,7 +615,9 @@ export interface ExceptionMonitoring {
   dashboards: MonitoringDashboard[];
 }
 }
+}
 
+}
 }
 export interface MonitoringPlan {
   planId: string;
@@ -573,7 +628,9 @@ export interface MonitoringPlan {
   escalationProcedures: MonitoringEscalation[];
 }
 }
+}
 
+}
 }
 export interface MonitoringObjective {
   objectiveId: string;
@@ -583,7 +640,9 @@ export interface MonitoringObjective {
   targets: PerformanceTarget[];
 }
 }
+}
 
+}
 }
 export interface KeyPerformanceIndicator {
   kpiId: string;
@@ -595,7 +654,9 @@ export interface KeyPerformanceIndicator {
   threshold: KPIThreshold;
 }
 }
+}
 
+}
 }
 export interface KPIThreshold {
   green: number;
@@ -603,7 +664,9 @@ export interface KPIThreshold {
   red: number;
 }
 }
+}
 
+}
 }
 export interface PerformanceTarget {
   targetId: string;
@@ -613,7 +676,9 @@ export interface PerformanceTarget {
   deadline: Date;
 }
 }
+}
 
+}
 }
 export interface MonitoringMethod {
   methodId: string;
@@ -622,6 +687,7 @@ export interface MonitoringMethod {
   automated: boolean;
   frequency: MonitoringFrequency;
   tools: string[];
+}
 }
 }
 
@@ -635,6 +701,7 @@ export enum MonitoringMethodType {
 }
 
 }
+}
 export interface MonitoringResponsibility {
   responsibilityId: string;
   userId: string;
@@ -642,6 +709,7 @@ export interface MonitoringResponsibility {
   role: ResponsibilityRole;
   activities: string[];
   backup: string;
+}
 }
 }
 
@@ -653,6 +721,7 @@ export enum ResponsibilityRole {
 }
 
 }
+}
 export interface MonitoringEscalation {
   escalationId: string;
   trigger: EscalationTrigger;
@@ -660,6 +729,7 @@ export interface MonitoringEscalation {
   escalateTo: string[];
   timeframe: number; // hours
   actions: EscalationAction[];
+}
 }
 }
 
@@ -671,6 +741,7 @@ export enum EscalationLevel {
 }
 
 }
+}
 export interface MonitoringMetric {
   metricId: string;
   name: string;
@@ -679,6 +750,7 @@ export interface MonitoringMetric {
   timestamp: Date;
   source: string;
   status: MetricStatus;
+}
 }
 }
 
@@ -690,6 +762,7 @@ export enum MetricStatus {
 }
 
 }
+}
 export interface MonitoringReport {
   reportId: string;
   type: ReportType;
@@ -698,6 +771,7 @@ export interface MonitoringReport {
   summary: ReportSummary;
   findings: ReportFinding[];
   recommendations: ReportRecommendation[];
+}
 }
 }
 
@@ -711,19 +785,23 @@ export enum ReportType {
 }
 
 }
+}
 export interface ReportPeriod {
   startDate: Date;
   endDate: Date;
   description: string;
 }
 }
+}
 
+}
 }
 export interface ReportSummary {
   overallStatus: OverallStatus;
   keyMetrics: KeyMetricSummary[];
   trendAnalysis: TrendAnalysis;
   complianceStatus: ComplianceStatus;
+}
 }
 }
 
@@ -736,12 +814,14 @@ export enum OverallStatus {
 }
 
 }
+}
 export interface KeyMetricSummary {
   metric: string;
   current: number;
   previous: number;
   change: number;
   trend: TrendDirection;
+}
 }
 }
 
@@ -752,6 +832,7 @@ export enum TrendDirection {
 }
 
 }
+}
 export interface TrendAnalysis {
   direction: TrendDirection;
   confidence: number;
@@ -759,7 +840,9 @@ export interface TrendAnalysis {
   factors: TrendFactor[];
 }
 }
+}
 
+}
 }
 export interface ForecastData {
   period: string;
@@ -767,12 +850,15 @@ export interface ForecastData {
   confidence: number;
 }
 }
+}
 
+}
 }
 export interface TrendFactor {
   factor: string;
   impact: FactorImpact;
   description: string;
+}
 }
 }
 
@@ -790,6 +876,7 @@ export enum ComplianceStatus {
 }
 
 }
+}
 export interface ReportFinding {
   findingId: string;
   type: FindingType;
@@ -798,13 +885,16 @@ export interface ReportFinding {
   evidence: FindingEvidence[];
 }
 }
+}
 
+}
 }
 export interface ImpactAssessment {
   severity: ImpactSeverity;
   scope: string[];
   likelihood: Likelihood;
   consequences: string[];
+}
 }
 }
 
@@ -817,12 +907,14 @@ export enum Likelihood {
 }
 
 }
+}
 export interface FindingEvidence {
   evidenceId: string;
   type: EvidenceType;
   description: string;
   location: string;
   timestamp: Date;
+}
 }
 }
 
@@ -835,6 +927,7 @@ export enum EvidenceType {
 }
 
 }
+}
 export interface ReportRecommendation {
   recommendationId: string;
   priority: RecommendationPriority;
@@ -843,6 +936,7 @@ export interface ReportRecommendation {
   implementation: ImplementationPlan;
   benefits: string[];
   risks: string[];
+}
 }
 }
 
@@ -854,6 +948,7 @@ export enum RecommendationPriority {
 }
 
 }
+}
 export interface ImplementationPlan {
   steps: ImplementationStep[];
   timeline: number; // days
@@ -861,7 +956,9 @@ export interface ImplementationPlan {
   dependencies: string[];
 }
 }
+}
 
+}
 }
 export interface ImplementationStep {
   stepId: string;
@@ -871,13 +968,16 @@ export interface ImplementationStep {
   dependencies: string[];
 }
 }
+}
 
+}
 }
 export interface ResourceRequirement {
   type: ResourceType;
   quantity: number;
   description: string;
   cost: number;
+}
 }
 }
 
@@ -888,6 +988,7 @@ export enum ResourceType {
   TIME = 'TIME'
 }
 
+}
 }
 export interface ExceptionAlert {
   alertId: string;
@@ -904,6 +1005,7 @@ export interface ExceptionAlert {
   actions: AlertAction[];
 }
 }
+}
 
 export enum ExceptionAlertType {
   CONDITION_VIOLATION = 'CONDITION_VIOLATION',
@@ -914,6 +1016,7 @@ export enum ExceptionAlertType {
 }
 
 }
+}
 export interface AlertAction {
   actionId: string;
   description: string;
@@ -923,7 +1026,9 @@ export interface AlertAction {
   result: ActionResult;
 }
 }
+}
 
+}
 }
 export interface ActionResult {
   success: boolean;
@@ -931,7 +1036,9 @@ export interface ActionResult {
   details: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface MonitoringDashboard {
   dashboardId: string;
@@ -942,7 +1049,9 @@ export interface MonitoringDashboard {
   accessRoles: string[];
 }
 }
+}
 
+}
 }
 export interface DashboardWidget {
   widgetId: string;
@@ -950,6 +1059,7 @@ export interface DashboardWidget {
   title: string;
   configuration: WidgetConfiguration;
   position: WidgetPosition;
+}
 }
 }
 
@@ -962,13 +1072,16 @@ export enum WidgetType {
 }
 
 }
+}
 export interface WidgetConfiguration {
   dataSource: string;
   refreshInterval: number;
   parameters: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface WidgetPosition {
   row: number;
@@ -977,7 +1090,9 @@ export interface WidgetPosition {
   height: number;
 }
 }
+}
 
+}
 }
 export interface ExceptionCompliance {
   overallCompliance: ComplianceStatus;
@@ -989,7 +1104,9 @@ export interface ExceptionCompliance {
   remediations: ComplianceRemediation[];
 }
 }
+}
 
+}
 }
 export interface RegulationCompliance {
   regulation: string;
@@ -999,7 +1116,9 @@ export interface RegulationCompliance {
   lastChecked: Date;
 }
 }
+}
 
+}
 }
 export interface RegulationRequirement {
   requirementId: string;
@@ -1009,7 +1128,9 @@ export interface RegulationRequirement {
   gaps: string[];
 }
 }
+}
 
+}
 }
 export interface ComplianceViolation {
   violationId: string;
@@ -1022,6 +1143,7 @@ export interface ComplianceViolation {
   remediation: string;
 }
 }
+}
 
 export enum ViolationStatus {
   OPEN = 'OPEN',
@@ -1030,6 +1152,7 @@ export enum ViolationStatus {
   ACCEPTED = 'ACCEPTED'
 }
 
+}
 }
 export interface ComplianceRemediation {
   remediationId: string;
@@ -1040,7 +1163,9 @@ export interface ComplianceRemediation {
   progress: number; // percentage
 }
 }
+}
 
+}
 }
 export interface RemediationPlan {
   steps: RemediationStep[];
@@ -1050,7 +1175,9 @@ export interface RemediationPlan {
   successCriteria: string[];
 }
 }
+}
 
+}
 }
 export interface RemediationStep {
   stepId: string;
@@ -1058,6 +1185,7 @@ export interface RemediationStep {
   dueDate: Date;
   status: StepStatus;
   assignee: string;
+}
 }
 }
 
@@ -1076,6 +1204,7 @@ export enum RemediationStatus {
 }
 
 }
+}
 export interface ExceptionRisk {
   riskId: string;
   category: RiskCategory;
@@ -1086,6 +1215,7 @@ export interface ExceptionRisk {
   mitigation: RiskMitigation;
   owner: string;
   status: RiskStatus;
+}
 }
 }
 
@@ -1099,6 +1229,7 @@ export enum RiskCategory {
 }
 
 }
+}
 export interface RiskImpact {
   severity: ImpactSeverity;
   description: string;
@@ -1107,7 +1238,9 @@ export interface RiskImpact {
   timeline: RiskTimeline;
 }
 }
+}
 
+}
 }
 export interface RiskTimeline {
   immediateImpact: boolean;
@@ -1115,7 +1248,9 @@ export interface RiskTimeline {
   longTermImpact: string;
 }
 }
+}
 
+}
 }
 export interface RiskMitigation {
   strategies: MitigationStrategy[];
@@ -1124,7 +1259,9 @@ export interface RiskMitigation {
   residualRisk: number;
 }
 }
+}
 
+}
 }
 export interface MitigationStrategy {
   strategyId: string;
@@ -1133,6 +1270,7 @@ export interface MitigationStrategy {
   cost: number;
   timeline: number; // days
   effectiveness: number; // percentage
+}
 }
 }
 
@@ -1159,6 +1297,7 @@ export enum RiskStatus {
 }
 
 }
+}
 export interface ExceptionReview {
   reviewId: string;
   type: ReviewType;
@@ -1173,6 +1312,7 @@ export interface ExceptionReview {
   followUp: ReviewFollowUp;
 }
 }
+}
 
 export enum ReviewType {
   SCHEDULED = 'SCHEDULED',
@@ -1183,6 +1323,7 @@ export enum ReviewType {
 }
 
 }
+}
 export interface ReviewerInfo {
   reviewerId: string;
   name: string;
@@ -1190,6 +1331,7 @@ export interface ReviewerInfo {
   department: string;
   qualifications: string[];
   independence: IndependenceLevel;
+}
 }
 }
 
@@ -1200,11 +1342,13 @@ export enum IndependenceLevel {
 }
 
 }
+}
 export interface ReviewScope {
   areas: ReviewArea[];
   period: ReviewPeriod;
   criteria: ReviewCriteria[];
   limitations: string[];
+}
 }
 }
 
@@ -1218,6 +1362,7 @@ export enum ReviewArea {
 }
 
 }
+}
 export interface ReviewCriteria {
   criteriaId: string;
   description: string;
@@ -1225,13 +1370,16 @@ export interface ReviewCriteria {
   benchmark: string;
 }
 }
+}
 
+}
 }
 export interface ReviewMethodology {
   approach: ReviewApproach;
   techniques: ReviewTechnique[];
   sampling: SamplingMethod;
   evidence: EvidenceCollection;
+}
 }
 }
 
@@ -1251,11 +1399,13 @@ export enum ReviewTechnique {
 }
 
 }
+}
 export interface SamplingMethod {
   type: SamplingType;
   size: number;
   criteria: string[];
   rationale: string;
+}
 }
 }
 
@@ -1267,19 +1417,23 @@ export enum SamplingType {
 }
 
 }
+}
 export interface EvidenceCollection {
   types: EvidenceType[];
   sources: EvidenceSource[];
   preservation: EvidencePreservation;
 }
 }
+}
 
+}
 }
 export interface EvidenceSource {
   sourceId: string;
   type: SourceType;
   description: string;
   reliability: ReliabilityLevel;
+}
 }
 }
 
@@ -1299,11 +1453,13 @@ export enum ReliabilityLevel {
 }
 
 }
+}
 export interface EvidencePreservation {
   method: PreservationMethod;
   location: string;
   retention: number; // days
   access: AccessControl;
+}
 }
 }
 
@@ -1315,18 +1471,22 @@ export enum PreservationMethod {
 }
 
 }
+}
 export interface AccessControl {
   authorizedRoles: string[];
   restrictions: AccessRestriction[];
   logging: boolean;
 }
 }
+}
 
+}
 }
 export interface AccessRestriction {
   type: RestrictionType;
   description: string;
   enforced: boolean;
+}
 }
 }
 
@@ -1338,6 +1498,7 @@ export enum RestrictionType {
 }
 
 }
+}
 export interface ReviewFinding {
   findingId: string;
   area: ReviewArea;
@@ -1348,7 +1509,9 @@ export interface ReviewFinding {
   recommendation: string;
 }
 }
+}
 
+}
 }
 export interface ReviewEvidence {
   evidenceId: string;
@@ -1359,7 +1522,9 @@ export interface ReviewEvidence {
   hash: string;
 }
 }
+}
 
+}
 }
 export interface FindingImpact {
   severity: FindingSeverity;
@@ -1368,7 +1533,9 @@ export interface FindingImpact {
   likelihood: Likelihood;
 }
 }
+}
 
+}
 }
 export interface ReviewRecommendation {
   recommendationId: string;
@@ -1380,7 +1547,9 @@ export interface ReviewRecommendation {
   implementation: RecommendationImplementation;
 }
 }
+}
 
+}
 }
 export interface RecommendationImplementation {
   timeline: number; // days
@@ -1389,7 +1558,9 @@ export interface RecommendationImplementation {
   successMetrics: string[];
 }
 }
+}
 
+}
 }
 export interface ReviewOutcome {
   overall: ReviewDecision;
@@ -1397,6 +1568,7 @@ export interface ReviewOutcome {
   conditions: OutcomeCondition[];
   nextReview: Date;
   escalation: boolean;
+}
 }
 }
 
@@ -1408,6 +1580,7 @@ export enum ReviewDecision {
 }
 
 }
+}
 export interface OutcomeCondition {
   conditionId: string;
   description: string;
@@ -1415,7 +1588,9 @@ export interface OutcomeCondition {
   responsible: string;
 }
 }
+}
 
+}
 }
 export interface ReviewFollowUp {
   required: boolean;
@@ -1424,13 +1599,16 @@ export interface ReviewFollowUp {
   activities: FollowUpActivity[];
 }
 }
+}
 
+}
 }
 export interface FollowUpActivity {
   activityId: string;
   description: string;
   dueDate: Date;
   status: ActivityStatus;
+}
 }
 }
 
@@ -1454,6 +1632,7 @@ export enum ExceptionStatus {
 }
 
 }
+}
 export interface ExceptionMetadata {
   version: string;
   classification: ConfidentialityLevel;
@@ -1464,7 +1643,9 @@ export interface ExceptionMetadata {
   costs: ExceptionCost;
 }
 }
+}
 
+}
 }
 export interface ExceptionPrecedent {
   precedentId: string;
@@ -1474,7 +1655,9 @@ export interface ExceptionPrecedent {
   lessons: string[];
 }
 }
+}
 
+}
 }
 export interface ExceptionImpact {
   business: BusinessImpactSummary;
@@ -1483,7 +1666,9 @@ export interface ExceptionImpact {
   operational: OperationalImpact;
 }
 }
+}
 
+}
 }
 export interface BusinessImpactSummary {
   revenue: number;
@@ -1492,7 +1677,9 @@ export interface BusinessImpactSummary {
   reputation: ReputationImpact;
 }
 }
+}
 
+}
 }
 export interface ProductivityImpact {
   description: string;
@@ -1500,7 +1687,9 @@ export interface ProductivityImpact {
   metrics: ProductivityMetric[];
 }
 }
+}
 
+}
 }
 export interface ProductivityMetric {
   metric: string;
@@ -1510,7 +1699,9 @@ export interface ProductivityMetric {
   unit: string;
 }
 }
+}
 
+}
 }
 export interface ReputationImpact {
   risk: RiskLevel;
@@ -1518,13 +1709,16 @@ export interface ReputationImpact {
   mitigationMeasures: string[];
 }
 }
+}
 
+}
 }
 export interface TechnicalImpact {
   systems: string[];
   complexity: ComplexityLevel;
   maintenance: MaintenanceImpact;
   performance: PerformanceImpact;
+}
 }
 }
 
@@ -1536,6 +1730,7 @@ export enum ComplexityLevel {
 }
 
 }
+}
 export interface MaintenanceImpact {
   increased: boolean;
   effort: number; // hours per month
@@ -1543,7 +1738,9 @@ export interface MaintenanceImpact {
   tools: string[];
 }
 }
+}
 
+}
 }
 export interface PerformanceImpact {
   degradation: boolean;
@@ -1551,7 +1748,9 @@ export interface PerformanceImpact {
   thresholds: PerformanceThreshold[];
 }
 }
+}
 
+}
 }
 export interface PerformanceMetric {
   metric: string;
@@ -1561,7 +1760,9 @@ export interface PerformanceMetric {
   acceptableRange: AcceptableRange;
 }
 }
+}
 
+}
 }
 export interface AcceptableRange {
   min: number;
@@ -1569,7 +1770,9 @@ export interface AcceptableRange {
   target: number;
 }
 }
+}
 
+}
 }
 export interface PerformanceThreshold {
   metric: string;
@@ -1578,7 +1781,9 @@ export interface PerformanceThreshold {
   action: string;
 }
 }
+}
 
+}
 }
 export interface LegalImpact {
   regulations: string[];
@@ -1587,13 +1792,16 @@ export interface LegalImpact {
   mitigations: LegalMitigation[];
 }
 }
+}
 
+}
 }
 export interface LegalLiability {
   type: LiabilityType;
   description: string;
   likelihood: Likelihood;
   potential: PotentialLiability;
+}
 }
 }
 
@@ -1605,13 +1813,16 @@ export enum LiabilityType {
 }
 
 }
+}
 export interface PotentialLiability {
   financial: number;
   operational: string[];
   reputational: string[];
 }
 }
+}
 
+}
 }
 export interface LegalMitigation {
   strategy: string;
@@ -1620,7 +1831,9 @@ export interface LegalMitigation {
   timeline: number; // days
 }
 }
+}
 
+}
 }
 export interface OperationalImpact {
   processes: ProcessImpact[];
@@ -1628,7 +1841,9 @@ export interface OperationalImpact {
   efficiency: EfficiencyImpact;
 }
 }
+}
 
+}
 }
 export interface ProcessImpact {
   processId: string;
@@ -1638,13 +1853,16 @@ export interface ProcessImpact {
   risk: RiskLevel;
 }
 }
+}
 
+}
 }
 export interface ProcessChange {
   type: ChangeType;
   description: string;
   complexity: ComplexityLevel;
   training: TrainingRequirement;
+}
 }
 }
 
@@ -1656,6 +1874,7 @@ export enum ChangeType {
 }
 
 }
+}
 export interface TrainingRequirement {
   required: boolean;
   duration: number; // hours
@@ -1663,7 +1882,9 @@ export interface TrainingRequirement {
   cost: number;
 }
 }
+}
 
+}
 }
 export interface ResourceImpact {
   resourceType: ResourceType;
@@ -1672,7 +1893,9 @@ export interface ResourceImpact {
   timeline: number; // days
 }
 }
+}
 
+}
 }
 export interface ResourceChange {
   type: ChangeType;
@@ -1681,7 +1904,9 @@ export interface ResourceChange {
   justification: string;
 }
 }
+}
 
+}
 }
 export interface EfficiencyImpact {
   overall: EfficiencyChange;
@@ -1689,7 +1914,9 @@ export interface EfficiencyImpact {
   metrics: EfficiencyMetric[];
 }
 }
+}
 
+}
 }
 export interface EfficiencyChange {
   improvement: boolean;
@@ -1698,13 +1925,16 @@ export interface EfficiencyChange {
   measurable: boolean;
 }
 }
+}
 
+}
 }
 export interface EfficiencyArea {
   area: string;
   impact: ImpactLevel;
   description: string;
   metrics: string[];
+}
 }
 }
 
@@ -1717,6 +1947,7 @@ export enum ImpactLevel {
 }
 
 }
+}
 export interface EfficiencyMetric {
   metric: string;
   baseline: number;
@@ -1725,7 +1956,9 @@ export interface EfficiencyMetric {
   confidence: number; // percentage
 }
 }
+}
 
+}
 }
 export interface ExceptionCost {
   implementation: ImplementationCost;
@@ -1734,7 +1967,9 @@ export interface ExceptionCost {
   total: TotalCost;
 }
 }
+}
 
+}
 }
 export interface ImplementationCost {
   personnel: number;
@@ -1746,7 +1981,9 @@ export interface ImplementationCost {
   currency: string;
 }
 }
+}
 
+}
 }
 export interface OngoingCost {
   monthly: MonthlyCost;
@@ -1754,7 +1991,9 @@ export interface OngoingCost {
   variableCosts: VariableCost[];
 }
 }
+}
 
+}
 }
 export interface MonthlyCost {
   personnel: number;
@@ -1765,7 +2004,9 @@ export interface MonthlyCost {
   total: number;
 }
 }
+}
 
+}
 }
 export interface AnnualCost {
   personnel: number;
@@ -1776,7 +2017,9 @@ export interface AnnualCost {
   total: number;
 }
 }
+}
 
+}
 }
 export interface VariableCost {
   description: string;
@@ -1786,7 +2029,9 @@ export interface VariableCost {
   totalCost: number;
 }
 }
+}
 
+}
 }
 export interface OpportunityCost {
   description: string;
@@ -1795,7 +2040,9 @@ export interface OpportunityCost {
   alternatives: OpportunityAlternative[];
 }
 }
+}
 
+}
 }
 export interface OpportunityAlternative {
   description: string;
@@ -1804,7 +2051,9 @@ export interface OpportunityAlternative {
   timeline: number; // days
 }
 }
+}
 
+}
 }
 export interface TotalCost {
   implementation: number;
@@ -1815,12 +2064,15 @@ export interface TotalCost {
   confidence: CostConfidence;
 }
 }
+}
 
+}
 }
 export interface CostConfidence {
   level: ConfidenceLevel;
   range: CostRange;
   assumptions: string[];
+}
 }
 }
 
@@ -1832,10 +2084,12 @@ export enum ConfidenceLevel {
 }
 
 }
+}
 export interface CostRange {
   low: number;
   high: number;
   mostLikely: number;
+}
 }
 }
 

@@ -24,6 +24,7 @@ import { API_URL } from '../../config/environment';
 //   total_searches: number;
 //   unique_users: number;
 
+}
 //   top_queries: Array<{ query: string; count: number; avg_results: number }>;
 //   popular_filters: Array<{ filter: string; value: string; count: number }>;
 //   zero_result_queries: Array<{ query: string; count: number }>;
@@ -34,12 +35,15 @@ import { API_URL } from '../../config/environment';
 //     avg_time_to_action: number;
 //   };
 // }
+}
 interface SearchInsights {
   trending_topics: string;,
   emerging_queries: string;
   declining_queries: string;,
   zero_result_opportunities: string;
+}
   popular_categories: Array<{ category: string; searches: number }>;
+}
 interface PopularTerm {
   query: string;,
   count: number;
@@ -53,6 +57,7 @@ interface PopularTerm {
   const [dateRange, setDateRange] = useState({)
   start: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
   end: new Date().toISOString().split('T')[0],
+}
 });
   const getAuthHeaders = () => {
     const token = localStorage.getItem('auth_token');

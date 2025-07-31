@@ -16,12 +16,14 @@ import { useAuthStore } from '../../stores/authStore';
 const isFileEntry = (entry: RecentFileEntry): entry is FileNode => {
   return entry.type === 'file';
 };
+}
 interface RecentFilesProps {
   maxItems?: number;
   onFileSelect?: (file: FileNode) => void;
   onFileDoubleClick?: (file: FileNode) => void;
   showFavorites?: boolean;
   className?: string;
+}
 interface RecentFileEntry extends FileItem {
   lastAccessed: Date;,
   accessCount: number;
@@ -32,6 +34,7 @@ const formatTimeAgo = (date: Date): string => {
   const diffHours = Math.floor(diffMinutes / 60);
   const diffDays = Math.floor(diffHours / 24);
   if (diffMinutes < 1) return 'Just now';
+}
   if (diffMinutes < 60) return `${diffMinutes}m ago`;}
   if (diffHours < 24) return `${diffHours}h ago`;}
   if (diffDays < 7) return `${diffDays}d ago`;}
@@ -92,7 +95,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({)
   tags: ['customer-service', 'workflow'],
   extension: 'psg',
   mimeType: 'application/psg',
-  metadata: {,
+  metadata: {
   nodeCount: 18,
   edgeCount: 22,
   description: 'Automated customer support workflow with escalation paths',
@@ -111,7 +114,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({)
   tags: ['content', 'generation', 'template'],
   extension: 'psg',
   mimeType: 'application/psg',
-  metadata: {,
+  metadata: {
   nodeCount: 14,
   edgeCount: 16,
   description: 'Multi-stage content generation with quality checks',
@@ -130,7 +133,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({)
   tags: ['analytics', 'data', 'reporting'],
   extension: 'psg',
   mimeType: 'application/psg',
-  metadata: {,
+  metadata: {
   nodeCount: 10,
   edgeCount: 12,
   description: 'Automated data analysis and reporting pipeline',

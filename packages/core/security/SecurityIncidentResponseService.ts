@@ -10,6 +10,7 @@ import { EventEmitter } from 'events';
 import { SecurityEvent, CrossSystemAlertingSystem } from './AlertingSystem';
 import { SecurityAnalyticsMonitor } from '../monitoring/SecurityAnalyticsMonitor';
 
+}
 export interface SecurityIncident {
   id: string;
   title: string;
@@ -35,6 +36,7 @@ export interface SecurityIncident {
   estimatedCost: number;
   businessImpact: string;
   dataClassification: 'public' | 'internal' | 'confidential' | 'restricted'
+}
   };
   // Response tracking
   timeline: IncidentTimelineEntry;
@@ -47,6 +49,7 @@ export interface SecurityIncident {
   improvementActions?: string;
   postIncidentReviewCompleted: boolean;
 }
+}
 export interface IncidentTimelineEntry {
   id: string;
   timestamp: number;
@@ -55,6 +58,8 @@ export interface IncidentTimelineEntry {
   description: string;
   details?: any;
   automated: boolean;
+}
+}
 }
 export interface IncidentAction {
   id: string;
@@ -70,6 +75,8 @@ export interface IncidentAction {
   result?: string;
   dependencies?: string; // IDs of actions that must complete first,
 }
+}
+}
 export interface Evidence {
   id: string;
   type: 'log_file' | 'screenshot' | 'network_capture' | 'system_state' | 'forensic_image' | 'document' | 'artifact';
@@ -79,12 +86,14 @@ export interface Evidence {
   collectedAt: number;
   location: string; // File path, URL, or location description,
   hash?: string; // For integrity verification,
-  chainOfCustody: Array<{,
+  chainOfCustody: Array<{
   handler: string;
   timestamp: number;
   action: 'collected' | 'analyzed' | 'transferred' | 'archived';
   notes?: string;
+}
 }>;
+}
 }
 export interface Communication {
   id: string;
@@ -95,10 +104,12 @@ export interface Communication {
   sentBy: string;
   sentAt: number;
   channel: 'email' | 'phone' | 'meeting' | 'document' | 'portal' | 'other';
-  acknowledged?: Array<{,
+  acknowledged?: Array<{
   recipient: string;
   acknowledgedAt: number;
+}
 }>;
+}
 }
 export interface IncidentResponseProcedure {
   id: string;
@@ -110,6 +121,7 @@ export interface IncidentResponseProcedure {
   eventTypes: SecurityEvent['type'][];
   severityThreshold: SecurityEvent['severity'];
   customRules: string; // Rule IDs,
+}
 };
   // Standardized response steps
   phases: IncidentResponsePhase;
@@ -129,6 +141,7 @@ export interface IncidentResponseProcedure {
   approved: boolean;
   approvedBy?: string;
 }
+}
 export interface IncidentResponsePhase {
   id: string;
   name: string;
@@ -141,10 +154,12 @@ export interface IncidentResponsePhase {
   minimum?: number; // milliseconds,
   maximum?: number;
   typical?: number;
+}
 };
   // Phase dependencies
   dependencies?: string; // Phase IDs that must complete first
   triggers?: string; // Conditions that must be met to start this phase
+}
 }
 export interface ResponseStep {
   id: string;
@@ -166,6 +181,8 @@ export interface ResponseStep {
   estimatedDuration: number; // milliseconds,
   dependencies?: string; // Step IDs that must complete first,
 }
+}
+}
 export interface AutomatedResponseAction {
   id: string;
   name: string;
@@ -175,6 +192,7 @@ export interface AutomatedResponseAction {
   automatic: boolean;
   requiresApproval: boolean;
   conditions: string;
+}
 };
   script: string; // Automation script or command,
   parameters: Record<string, any>;
@@ -185,6 +203,7 @@ export interface AutomatedResponseAction {
   approvalRequired: boolean;
   testMode: boolean; // Run in test mode first
 }
+}
 export interface CommunicationTemplate {
   id: string;
   name: string;
@@ -194,16 +213,18 @@ export interface CommunicationTemplate {
   content: string;
   channel: Communication['channel'];
   // Template variables
-  variables: Array<{,
+  variables: Array<{
   name: string;
   description: string;
   required: boolean;
   defaultValue?: string;
+}
 }>;
   // Timing and frequency
   timing: 'immediate' | 'hourly' | 'daily' | 'milestone' | 'resolution';
   frequency?: 'once' | 'repeating';
   conditions?: string;
+}
 }
 export interface TroubleshootingWorkflow {
   id: string;
@@ -224,6 +245,8 @@ export interface TroubleshootingWorkflow {
   successRate: number; // Tracked automatically,
   averageResolutionTime: number; // Tracked automatically,
 }
+}
+}
 export interface DiagnosticStep {
   id: string;
   title: string;
@@ -236,15 +259,17 @@ export interface DiagnosticStep {
   tools: string;
   automationScript?: string;
   // Decision logic
-  nextSteps: Array<{,
+  nextSteps: Array<{
   condition: string;
   nextStepId: string;
   confidence: number; // 0-1,
+}
 }>;
   // Success criteria
   successIndicators: string;
   failureIndicators: string;
   timeoutSeconds: number;
+}
 }
 export interface DecisionNode {
   id: string;
@@ -252,16 +277,18 @@ export interface DecisionNode {
   type: 'boolean' | 'multiple_choice' | 'numeric' | 'text';
   options?: string; // For multiple choice,
   // Decision routing
-  routes: Array<{,
+  routes: Array<{
   condition: string;
   nextNodeId?: string;
   solutionId?: string;
   escalate?: boolean;
+}
 }>;
   // Context and help
   helpText?: string;
   examples?: string;
   automationSupport?: boolean;
+}
 }
 export interface Solution {
   id: string;
@@ -270,12 +297,13 @@ export interface Solution {
   category: string;
   severity: SecurityIncident['severity'];
   // Solution steps
-  steps: Array<{,
+  steps: Array<{
   order: number;
   description: string;
   type: 'action' | 'verification' | 'rollback';
   script?: string;
   manual?: boolean;
+}
 }>;
   // Solution metadata
   effectiveness: number; // 0-1 based on historical success,
@@ -289,6 +317,7 @@ export interface Solution {
   averageTimeToResolve: number;
   lastUsed?: number;
 }
+}
 export interface IncidentResponseConfig {
   // Response team configuration
   responseTeams: {
@@ -296,6 +325,7 @@ export interface IncidentResponseConfig {
   secondary: string;
   escalation: string;
   external: string;
+}
 };
   // SLA and timing requirements
   slaTargets: {
@@ -352,7 +382,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
   private workflows: Map<string, TroubleshootingWorkflow> = new Map();
   private solutions: Map<string, Solution> = new Map();
   // Automation and orchestration
-  private automationQueue: Array<{,
+  private automationQueue: Array<{
   incidentId: string;
   actionId: string;
   timestamp: number;
@@ -389,6 +419,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
     category: SecurityIncident['category'],
     assignedTo?: string
   ): Promise<string> {
+
     const incidentId = this.generateIncidentId();
     const now = Date.now();
     // Determine impact assessment
@@ -446,6 +477,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
     updatedBy: string,
     notes?: string
   ): Promise<boolean> {
+
     const incident = this.activeIncidents.get(incidentId);
     if (!incident) return false;
     const previousStatus = incident.status;
@@ -586,6 +618,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
   nextSteps: string;
   recommendations: string;
 }> {
+
     const incident = this.activeIncidents.get(incidentId);
     const workflow = this.workflows.get(workflowId);
     if (!incident || !workflow) {
@@ -787,6 +820,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
       await this.handleSecurityAlert(alert);
     });
   private async handleSecurityAlert(alert: any): Promise<void> {
+
   // Check if alert should trigger incident creation
   const shouldCreateIncident = this.shouldCreateIncidentFromAlert(alert);
   if (shouldCreateIncident) {
@@ -934,9 +968,9 @@ export class SecurityIncidentResponseService extends EventEmitter {
   operational: 1,
 };
     return baseCosts[severity] * categoryMultipliers[category] * Math.min(eventCount, 5);
-  private assessBusinessImpact(()
+  private assessBusinessImpact(((
     category: SecurityIncident['category'],
-    severity: SecurityIncident['severity'],
+    severity: SecurityIncident['severity']
   ): string {
   const impacts = {
   data_breach: {
@@ -971,8 +1005,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
   );
   if (hasConfidentialData) return 'confidential';
   return 'internal';
-  private assignResponderTeam(()
-  severity: SecurityIncident['severity'],
+  private assignResponderTeam((severity: SecurityIncident['severity'],
   category: SecurityIncident['category']): string {,
   let team = [...this.config.responseTeams.primary];
   if (severity === 'critical' || severity === 'high') {
@@ -989,6 +1022,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
 });
     incident.updatedAt = Date.now();
   private async applyIncidentProcedures(incident: SecurityIncident): Promise<void> {
+
     // Find applicable procedures
     const applicableProcedures = Array.from(this.procedures.values()).filter(procedure => ;);
       procedure.category === incident.category &&
@@ -997,10 +1031,11 @@ export class SecurityIncidentResponseService extends EventEmitter {
     for (const procedure of applicableProcedures) {
       if (procedure.approved) {
         await this.executeProcedure(incident, procedure);
-  private async executeProcedure(()
+  private async executeProcedure(((
     incident: SecurityIncident,
-    procedure: IncidentResponseProcedure,
+    procedure: IncidentResponseProcedure
   ): Promise<void> {
+
     this.addTimelineEntry(incident, {)
   type: 'action',
       actor: 'automated_system',
@@ -1086,10 +1121,11 @@ export class SecurityIncidentResponseService extends EventEmitter {
           } else {
             // Execute immediately
             await this.executeAutomatedAction(incident, automatedAction);
-  private async executeAutomatedAction(()
+  private async executeAutomatedAction(((
     incident: SecurityIncident,
-    action: AutomatedResponseAction,
+    action: AutomatedResponseAction
   ): Promise<void> {
+
     try {
       console.log(`Executing automated response action: ${action.name}`);}
       console.log(`Script: ${action.script}`);}
@@ -1113,10 +1149,11 @@ export class SecurityIncidentResponseService extends EventEmitter {
   details: { actionId: action.id, error: error.message },
         automated: true;
   });
-  private async sendIncidentNotifications(()
+  private async sendIncidentNotifications(((
     incident: SecurityIncident,
-    eventType: 'created' | 'status_updated' | 'escalated' | 'resolved',
+    eventType: 'created' | 'status_updated' | 'escalated' | 'resolved'
   ): Promise<void> {
+
     // Determine notification recipients based on event type and incident severity
     const recipients = this.determineNotificationRecipients(incident, eventType);
     // Create notification message
@@ -1136,9 +1173,9 @@ export class SecurityIncidentResponseService extends EventEmitter {
       sentAt: Date.now(),
       channel: 'email'
   });
-  private determineNotificationRecipients(()
+  private determineNotificationRecipients(((
     incident: SecurityIncident,
-    eventType: string,
+    eventType: string
   ): string {
     let recipients = [...incident.responderTeam];
     if (eventType === 'created' || incident.severity === 'critical') {
@@ -1148,9 +1185,9 @@ export class SecurityIncidentResponseService extends EventEmitter {
     if (eventType === 'resolved') {
       recipients = [...recipients, ...this.config.notifications.resolution];
     return [...new Set(recipients)];
-  private createNotificationMessage(()
+  private createNotificationMessage(((
     incident: SecurityIncident,
-    eventType: string,
+    eventType: string
   ): string {
     return `
 Security Incident ${eventType.toUpperCase()}: ${incident.id},}
@@ -1172,6 +1209,7 @@ Incident Dashboard: /incidents/${incident.id}
   private generateCommunicationId(): string {
     return `COMM-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`;}
   private async performTriage(incident: SecurityIncident): Promise<void> {
+
     // Implement triage logic - validate categorization, assign resources, etc.
     this.addTimelineEntry(incident, {)
   type: 'action',
@@ -1181,6 +1219,7 @@ Incident Dashboard: /incidents/${incident.id}
       automated: true;
   });
   private async startInvestigation(incident: SecurityIncident): Promise<void> {
+
     // Start investigation procedures
     this.addTimelineEntry(incident, {)
   type: 'investigation',
@@ -1190,6 +1229,7 @@ Incident Dashboard: /incidents/${incident.id}
       automated: false;
   });
   private async startContainment(incident: SecurityIncident): Promise<void> {
+
     // Start containment procedures
     this.addTimelineEntry(incident, {)
   type: 'containment',
@@ -1199,6 +1239,7 @@ Incident Dashboard: /incidents/${incident.id}
       automated: false;
   });
   private async startEradication(incident: SecurityIncident): Promise<void> {
+
     // Start eradication procedures
     this.addTimelineEntry(incident, {)
   type: 'action',
@@ -1208,6 +1249,7 @@ Incident Dashboard: /incidents/${incident.id}
       automated: false;
   });
   private async startRecovery(incident: SecurityIncident): Promise<void> {
+
     // Start recovery procedures
     this.addTimelineEntry(incident, {)
   type: 'action',
@@ -1217,6 +1259,7 @@ Incident Dashboard: /incidents/${incident.id}
       automated: false;
   });
   private async resolveIncident(incident: SecurityIncident, resolvedBy: string): Promise<void> {
+
     this.addTimelineEntry(incident, {)
   type: 'resolution',
       actor: resolvedBy,
@@ -1227,6 +1270,7 @@ Incident Dashboard: /incidents/${incident.id}
     // Update metrics
     this.updateResponseMetrics(incident);
   private async closeIncident(incident: SecurityIncident, closedBy: string): Promise<void> {
+
     this.addTimelineEntry(incident, {)
   type: 'action',
       actor: closedBy,
@@ -1239,15 +1283,16 @@ Incident Dashboard: /incidents/${incident.id}
       this.activeIncidents.delete(incident.id);
     }, 24 * 60 * 60 * 1000); // 24 hours
   private async checkPhaseTransitions(incident: SecurityIncident): Promise<void> {
+
     // Check if completed actions trigger phase transitions
     const completedActions = incident.actions.filter(a => a.status === 'completed');
     const totalActions = incident.actions.length;
     // Simple logic - could be more sophisticated
     if (completedActions.length === totalActions && incident.status === 'investigating') {
       await this.updateIncidentStatus(incident.id, 'containing', 'automated_system');
-  private async executeDiagnosticSteps(()
+  private async executeDiagnosticSteps(((
     incident: SecurityIncident,
-    workflow: TroubleshootingWorkflow,
+    workflow: TroubleshootingWorkflow
   ): Promise<Map<string, any>> {
     const results = new Map();
     for (const step of workflow.diagnosticSteps.sort((a, b) => a.order - b.order)) {
@@ -1265,10 +1310,11 @@ Incident Dashboard: /incidents/${incident.id}
         console.error(`Diagnostic step failed: ${step.title}`, error);}
         results.set(step.id, { error: error.message });
     return results;
-  private async executeDiagnosticStep(()
+  private async executeDiagnosticStep(((
     incident: SecurityIncident,
-    step: DiagnosticStep,
+    step: DiagnosticStep
   ): Promise<any> {
+
     // Simulate diagnostic step execution
     await new Promise(resolve => setTimeout(resolve, 1000));
     // Return simulated result based on step type
@@ -1289,6 +1335,7 @@ Incident Dashboard: /incidents/${incident.id}
     workflow: TroubleshootingWorkflow,
     diagnosticResults: Map<string, any>
   ): Promise<{ solutionId?: string; nextSteps: string; escalate: boolean }> {
+
   let currentNode = workflow.decisionTree[0];
   const nextSteps: string = [];
   while (currentNode) {
@@ -1401,8 +1448,7 @@ Incident Dashboard: /incidents/${incident.id}
   const totalUses = workflow.timesUsed || 0;
   const currentSuccessRate = workflow.successRate || 0;
   workflow.successRate = (currentSuccessRate * totalUses + (successful ? 1 : 0)) / (totalUses + 1);
-  private generateIncidentRecommendations(()
-  incident: SecurityIncident,
+  private generateIncidentRecommendations((incident: SecurityIncident,
   summary: any): string {,
   const recommendations = [];
   // Time-based recommendations
@@ -1430,7 +1476,7 @@ Incident Dashboard: /incidents/${incident.id}
   recommendations.push('Consider additional user behavior analytics');
   break;
   return recommendations;
-  private assessComplianceStatus(incident: SecurityIncident): Array<{,
+  private assessComplianceStatus(incident: SecurityIncident): Array<{
   framework: string;
   compliant: boolean;
   gaps: string;
@@ -1603,6 +1649,7 @@ Incident Dashboard: /incidents/${incident.id}
       this.processAutomationQueue();
     }, 30000);
   private async processAutomationQueue(): Promise<void> {
+
     const pendingActions = this.automationQueue.filter(item => !item.approved);
     for (const item of pendingActions) {
       // Check if action should be auto-approved (based on time, severity, etc.)

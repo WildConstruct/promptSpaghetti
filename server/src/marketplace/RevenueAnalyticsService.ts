@@ -14,6 +14,7 @@ import { TimeRange } from './analytics.types';
 
 // Core Revenue Analytics Interfaces
 }
+}
 export interface RevenueAnalytics {
   period: RevenueAnalyticsPeriod;
   generatedAt: Date;
@@ -37,7 +38,9 @@ export interface RevenueAnalytics {
   recommendations: RevenueRecommendation[];
 }
 }
+}
 
+}
 }
 export interface RevenueAnalyticsPeriod {
   startDate: Date;
@@ -46,7 +49,9 @@ export interface RevenueAnalyticsPeriod {
   comparisonPeriod?: RevenueAnalyticsPeriod;
 }
 }
+}
 
+}
 }
 export interface RevenueOverview {
   totalRevenue: number;
@@ -64,7 +69,9 @@ export interface RevenueOverview {
   alerts: RevenueAlert[];
 }
 }
+}
 
+}
 }
 export interface GrowthMetrics {
   periodOverPeriod: number; // % change from previous period
@@ -74,7 +81,9 @@ export interface GrowthMetrics {
   growthTrend: 'accelerating' | 'decelerating' | 'stable';
 }
 }
+}
 
+}
 }
 export interface TransactionMetrics {
   totalTransactions: number;
@@ -85,7 +94,9 @@ export interface TransactionMetrics {
   refundRate: number; // % of transactions refunded
 }
 }
+}
 
+}
 }
 export interface AverageMetrics {
   revenuePerTransaction: number;
@@ -96,7 +107,9 @@ export interface AverageMetrics {
   timeToRepeatPurchase: number; // days
 }
 }
+}
 
+}
 }
 export interface RevenueKPI {
   name: string;
@@ -107,7 +120,9 @@ export interface RevenueKPI {
   trend: 'improving' | 'stable' | 'declining';
 }
 }
+}
 
+}
 }
 export interface RevenueAlert {
   id: string;
@@ -121,7 +136,9 @@ export interface RevenueAlert {
   timestamp: Date;
 }
 }
+}
 
+}
 }
 export interface RevenuePerformance {
   topPerformers: TopPerformingContent[];
@@ -132,7 +149,9 @@ export interface RevenuePerformance {
   devicePerformance: DeviceRevenue[];
 }
 }
+}
 
+}
 }
 export interface TopPerformingContent {
   templateId: string;
@@ -145,7 +164,9 @@ export interface TopPerformingContent {
   rankChange: number;
 }
 }
+}
 
+}
 }
 export interface UnderperformingContent {
   templateId: string;
@@ -157,7 +178,9 @@ export interface UnderperformingContent {
   recommendations: string[];
 }
 }
+}
 
+}
 }
 export interface CategoryRevenue {
   category: string;
@@ -169,7 +192,9 @@ export interface CategoryRevenue {
   seasonalityFactor: number;
 }
 }
+}
 
+}
 }
 export interface CreatorRevenue {
   creatorId: string;
@@ -183,7 +208,9 @@ export interface CreatorRevenue {
   payoutStatus: 'pending' | 'processed' | 'held';
 }
 }
+}
 
+}
 }
 export interface GeographicRevenue {
   country: string;
@@ -196,7 +223,9 @@ export interface GeographicRevenue {
   marketPenetration: number;
 }
 }
+}
 
+}
 }
 export interface DeviceRevenue {
   deviceType: 'desktop' | 'mobile' | 'tablet';
@@ -207,7 +236,9 @@ export interface DeviceRevenue {
   userCount: number;
 }
 }
+}
 
+}
 }
 export interface RevenueAttribution {
   channels: ChannelAttribution[];
@@ -217,7 +248,9 @@ export interface RevenueAttribution {
   crossSellUpsell: CrossSellUpsellAttribution;
 }
 }
+}
 
+}
 }
 export interface ChannelAttribution {
   channel: string;
@@ -229,7 +262,9 @@ export interface ChannelAttribution {
   conversionPathLength: number; // avg touches to conversion
 }
 }
+}
 
+}
 }
 export interface TouchpointAttribution {
   touchpoint: string;
@@ -240,7 +275,9 @@ export interface TouchpointAttribution {
   optimizationOpportunity: number; // potential improvement score
 }
 }
+}
 
+}
 }
 export interface CustomerJourneyAttribution {
   averageJourneyLength: number; // days from first touch to purchase
@@ -250,7 +287,9 @@ export interface CustomerJourneyAttribution {
   accelerationFactors: AccelerationFactor[];
 }
 }
+}
 
+}
 }
 export interface JourneyPathway {
   pathway: string[];
@@ -260,7 +299,9 @@ export interface JourneyPathway {
   journeyDuration: number; // days
 }
 }
+}
 
+}
 }
 export interface ConversionFunnel {
   stage: string;
@@ -271,7 +312,9 @@ export interface ConversionFunnel {
   avgTimeInStage: number; // hours
 }
 }
+}
 
+}
 }
 export interface DropoffPoint {
   stage: string;
@@ -281,7 +324,9 @@ export interface DropoffPoint {
   impactOnRevenue: number;
 }
 }
+}
 
+}
 }
 export interface AccelerationFactor {
   factor: string;
@@ -290,7 +335,9 @@ export interface AccelerationFactor {
   implementationDifficulty: 'low' | 'medium' | 'high';
 }
 }
+}
 
+}
 }
 export interface ContentAttribution {
   templateId: string;
@@ -301,7 +348,9 @@ export interface ContentAttribution {
   totalAttributedValue: number;
 }
 }
+}
 
+}
 }
 export interface CrossSellUpsellAttribution {
   crossSellRevenue: number;
@@ -314,7 +363,9 @@ export interface CrossSellUpsellAttribution {
   topCrossSellPairs: CrossSellPair[];
 }
 }
+}
 
+}
 }
 export interface CrossSellPair {
   primaryTemplate: string;
@@ -324,7 +375,9 @@ export interface CrossSellPair {
   conversionRate: number;
 }
 }
+}
 
+}
 }
 export interface RevenueForecast {
   methodology: 'linear' | 'exponential' | 'seasonal' | 'machine_learning' | 'hybrid';
@@ -340,7 +393,9 @@ export interface RevenueForecast {
   lastUpdated: Date;
 }
 }
+}
 
+}
 }
 export interface ForecastPrediction {
   date: Date;
@@ -348,6 +403,7 @@ export interface ForecastPrediction {
   confidenceInterval: {
     lower: number;
     upper: number;
+}
 }
   };
   components: {
@@ -359,6 +415,7 @@ export interface ForecastPrediction {
 }
 
 }
+}
 export interface ForecastScenario {
   name: string;
   description: string;
@@ -369,7 +426,9 @@ export interface ForecastScenario {
   mitigationStrategies: string[];
 }
 }
+}
 
+}
 }
 export interface ForecastFactor {
   factor: string;
@@ -379,7 +438,9 @@ export interface ForecastFactor {
   dataSource: string;
 }
 }
+}
 
+}
 }
 export interface ForecastRisk {
   risk: string;
@@ -390,7 +451,9 @@ export interface ForecastRisk {
   contingencyPlan: string;
 }
 }
+}
 
+}
 }
 export interface ModelPerformance {
   accuracy: number; // % accurate predictions
@@ -401,7 +464,9 @@ export interface ModelPerformance {
   featureImportance: FeatureImportance[];
 }
 }
+}
 
+}
 }
 export interface FeatureImportance {
   feature: string;
@@ -410,7 +475,9 @@ export interface FeatureImportance {
   trend: 'stable' | 'increasing' | 'decreasing';
 }
 }
+}
 
+}
 }
 export interface RevenueOptimization {
   opportunities: OptimizationOpportunity[];
@@ -423,7 +490,9 @@ export interface RevenueOptimization {
   roi: OptimizationROI;
 }
 }
+}
 
+}
 }
 export interface OptimizationOpportunity {
   id: string;
@@ -439,7 +508,9 @@ export interface OptimizationOpportunity {
   confidence: number; // 0-100
 }
 }
+}
 
+}
 }
 export interface PricingOptimization {
   currentPricingStrategy: string;
@@ -449,7 +520,9 @@ export interface PricingOptimization {
   dynamicPricingOpportunities: DynamicPricingOpportunity[];
 }
 }
+}
 
+}
 }
 export interface PriceElasticity {
   templateId: string;
@@ -460,7 +533,9 @@ export interface PriceElasticity {
   demandForecast: number;
 }
 }
+}
 
+}
 }
 export interface OptimalPricing {
   templateId: string;
@@ -471,7 +546,9 @@ export interface OptimalPricing {
   testDuration: string;
 }
 }
+}
 
+}
 }
 export interface CompetitivePricing {
   templateId: string;
@@ -483,7 +560,9 @@ export interface CompetitivePricing {
   recommendedAction: string;
 }
 }
+}
 
+}
 }
 export interface DynamicPricingOpportunity {
   templateId: string;
@@ -493,7 +572,9 @@ export interface DynamicPricingOpportunity {
   implementation: string;
 }
 }
+}
 
+}
 }
 export interface ConversionOptimization {
   funnelAnalysis: FunnelStage[];
@@ -502,7 +583,9 @@ export interface ConversionOptimization {
   personalizationOpportunities: PersonalizationOpportunity[];
 }
 }
+}
 
+}
 }
 export interface FunnelStage {
   stage: string;
@@ -513,7 +596,9 @@ export interface FunnelStage {
   optimizationOpportunities: string[];
 }
 }
+}
 
+}
 }
 export interface ConversionBarrier {
   barrier: string;
@@ -523,7 +608,9 @@ export interface ConversionBarrier {
   recommendedSolution: string;
 }
 }
+}
 
+}
 }
 export interface ConversionTest {
   testId: string;
@@ -536,7 +623,9 @@ export interface ConversionTest {
   confidence?: number;
 }
 }
+}
 
+}
 }
 export interface TestVariant {
   variantName: string;
@@ -546,7 +635,9 @@ export interface TestVariant {
   revenue: number;
 }
 }
+}
 
+}
 }
 export interface PersonalizationOpportunity {
   segment: string;
@@ -556,7 +647,9 @@ export interface PersonalizationOpportunity {
   implementationEffort: 'low' | 'medium' | 'high';
 }
 }
+}
 
+}
 }
 export interface RetentionOptimization {
   churnAnalysis: ChurnAnalysis;
@@ -565,7 +658,9 @@ export interface RetentionOptimization {
   winbackCampaigns: WinbackCampaign[];
 }
 }
+}
 
+}
 }
 export interface ChurnAnalysis {
   churnRate: number;
@@ -574,7 +669,9 @@ export interface ChurnAnalysis {
   churnPrediction: ChurnPrediction[];
 }
 }
+}
 
+}
 }
 export interface ChurnReason {
   reason: string;
@@ -584,7 +681,9 @@ export interface ChurnReason {
   recommendedAction: string;
 }
 }
+}
 
+}
 }
 export interface RetentionCohort {
   cohortName: string;
@@ -594,7 +693,9 @@ export interface RetentionCohort {
   characteristics: string[];
 }
 }
+}
 
+}
 }
 export interface ChurnPrediction {
   customerId: string;
@@ -604,7 +705,9 @@ export interface ChurnPrediction {
   interventionRecommendation: string;
 }
 }
+}
 
+}
 }
 export interface LoyaltyProgram {
   programName: string;
@@ -615,7 +718,9 @@ export interface LoyaltyProgram {
   effectiveness: 'high' | 'medium' | 'low';
 }
 }
+}
 
+}
 }
 export interface EngagementStrategy {
   strategy: string;
@@ -626,7 +731,9 @@ export interface EngagementStrategy {
   roi: number;
 }
 }
+}
 
+}
 }
 export interface WinbackCampaign {
   campaignName: string;
@@ -637,7 +744,9 @@ export interface WinbackCampaign {
   roi: number;
 }
 }
+}
 
+}
 }
 export interface OptimizationRecommendation {
   id: string;
@@ -654,7 +763,9 @@ export interface OptimizationRecommendation {
   successMetrics: string[];
 }
 }
+}
 
+}
 }
 export interface RevenueExperiment {
   id: string;
@@ -672,7 +783,9 @@ export interface RevenueExperiment {
   variants: ExperimentVariant[];
 }
 }
+}
 
+}
 }
 export interface ExperimentVariant {
   name: string;
@@ -681,7 +794,9 @@ export interface ExperimentVariant {
   metrics: ExperimentMetrics;
 }
 }
+}
 
+}
 }
 export interface ExperimentMetrics {
   visitors: number;
@@ -691,7 +806,9 @@ export interface ExperimentMetrics {
   revenuePerVisitor: number;
 }
 }
+}
 
+}
 }
 export interface OptimizationROI {
   totalInvestment: number;
@@ -702,7 +819,9 @@ export interface OptimizationROI {
   breakdownByCategory: ROIBreakdown[];
 }
 }
+}
 
+}
 }
 export interface ROIBreakdown {
   category: string;
@@ -712,7 +831,9 @@ export interface ROIBreakdown {
   timeframe: string;
 }
 }
+}
 
+}
 }
 export interface RevenueBreakdown {
   byTime: TimeBreakdown[];
@@ -722,7 +843,9 @@ export interface RevenueBreakdown {
   byGeography: GeographyBreakdown[];
 }
 }
+}
 
+}
 }
 export interface TimeBreakdown {
   period: string;
@@ -733,7 +856,9 @@ export interface TimeBreakdown {
   growth: number;
 }
 }
+}
 
+}
 }
 export interface ProductBreakdown {
   templateId: string;
@@ -746,7 +871,9 @@ export interface ProductBreakdown {
   growth: number;
 }
 }
+}
 
+}
 }
 export interface CustomerSegmentBreakdown {
   segment: string;
@@ -758,7 +885,9 @@ export interface CustomerSegmentBreakdown {
   profitability: number;
 }
 }
+}
 
+}
 }
 export interface ChannelBreakdown {
   channel: string;
@@ -770,7 +899,9 @@ export interface ChannelBreakdown {
   roi: number;
 }
 }
+}
 
+}
 }
 export interface GeographyBreakdown {
   region: string;
@@ -781,7 +912,9 @@ export interface GeographyBreakdown {
   competitiveLandscape: string;
 }
 }
+}
 
+}
 }
 export interface CohortRevenueAnalysis {
   cohortDefinition: string; // e.g., "Monthly signup cohorts"
@@ -790,7 +923,9 @@ export interface CohortRevenueAnalysis {
   trends: CohortTrend[];
 }
 }
+}
 
+}
 }
 export interface RevenueCohort {
   cohortId: string;
@@ -803,7 +938,9 @@ export interface RevenueCohort {
   avgRevenuePerUser: number[];
 }
 }
+}
 
+}
 }
 export interface CohortInsight {
   insight: string;
@@ -814,7 +951,9 @@ export interface CohortInsight {
   recommendation: string;
 }
 }
+}
 
+}
 }
 export interface CohortTrend {
   metric: string;
@@ -824,7 +963,9 @@ export interface CohortTrend {
   projection: number[];
 }
 }
+}
 
+}
 }
 export interface CLVAnalysis {
   overallCLV: number;
@@ -834,7 +975,9 @@ export interface CLVAnalysis {
   clvOptimization: CLVOptimization[];
 }
 }
+}
 
+}
 }
 export interface SegmentCLV {
   segment: string;
@@ -845,7 +988,9 @@ export interface SegmentCLV {
   paybackPeriod: number; // months
 }
 }
+}
 
+}
 }
 export interface CLVDistribution {
   percentiles: {
@@ -857,10 +1002,12 @@ export interface CLVDistribution {
     p95: number;
     p99: number;
 }
+}
   };
   segments: CLVSegment[];
 }
 
+}
 }
 export interface CLVSegment {
   name: string;
@@ -870,7 +1017,9 @@ export interface CLVSegment {
   characteristics: string[];
 }
 }
+}
 
+}
 }
 export interface CLVPrediction {
   customerId: string;
@@ -881,7 +1030,9 @@ export interface CLVPrediction {
   factors: string[];
 }
 }
+}
 
+}
 }
 export interface CLVOptimization {
   strategy: string;
@@ -893,7 +1044,9 @@ export interface CLVOptimization {
   roi: number;
 }
 }
+}
 
+}
 }
 export interface RevenueTrends {
   overallTrend: TrendAnalysis;
@@ -902,7 +1055,9 @@ export interface RevenueTrends {
   cyclicalPatterns: CyclicalPattern[];
 }
 }
+}
 
+}
 }
 export interface TrendAnalysis {
   direction: 'upward' | 'downward' | 'stable' | 'volatile';
@@ -913,7 +1068,9 @@ export interface TrendAnalysis {
   inflectionPoints: InflectionPoint[];
 }
 }
+}
 
+}
 }
 export interface CategoryTrend {
   category: string;
@@ -923,7 +1080,9 @@ export interface CategoryTrend {
   competitiveFactors: string[];
 }
 }
+}
 
+}
 }
 export interface SeasonalTrend {
   pattern: 'weekly' | 'monthly' | 'quarterly' | 'annual';
@@ -933,7 +1092,9 @@ export interface SeasonalTrend {
   variance: number;
 }
 }
+}
 
+}
 }
 export interface CyclicalPattern {
   name: string;
@@ -943,7 +1104,9 @@ export interface CyclicalPattern {
   confidence: number; // 0-100
 }
 }
+}
 
+}
 }
 export interface InflectionPoint {
   date: Date;
@@ -953,7 +1116,9 @@ export interface InflectionPoint {
   impact: number;
 }
 }
+}
 
+}
 }
 export interface SeasonalityAnalysis {
   seasonalFactors: SeasonalFactor[];
@@ -962,7 +1127,9 @@ export interface SeasonalityAnalysis {
   recommendations: SeasonalityRecommendation[];
 }
 }
+}
 
+}
 }
 export interface SeasonalFactor {
   period: string;
@@ -972,7 +1139,9 @@ export interface SeasonalFactor {
   volatility: number;
 }
 }
+}
 
+}
 }
 export interface EventImpact {
   event: string;
@@ -983,7 +1152,9 @@ export interface EventImpact {
   predictability: number; // 0-100
 }
 }
+}
 
+}
 }
 export interface MarketingEvent {
   event: string;
@@ -994,7 +1165,9 @@ export interface MarketingEvent {
   roi?: number;
 }
 }
+}
 
+}
 }
 export interface SeasonalityRecommendation {
   period: string;
@@ -1004,7 +1177,9 @@ export interface SeasonalityRecommendation {
   priority: 'high' | 'medium' | 'low';
 }
 }
+}
 
+}
 }
 export interface RevenueInsight {
   id: string;
@@ -1021,7 +1196,9 @@ export interface RevenueInsight {
   generatedAt: Date;
 }
 }
+}
 
+}
 }
 export interface RevenueRecommendation {
   id: string;
@@ -1034,6 +1211,7 @@ export interface RevenueRecommendation {
     revenueIncrease: number;
     timeToImpact: string;
     confidence: number;
+}
 }
   };
   implementation: {

@@ -17,6 +17,7 @@ import {
   SharePermission
 } from '../../types/sharingTypes';
 import { SharingService } from '../../services/SharingService';
+}
 interface ShareModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -33,6 +34,7 @@ interface ShareModalProps {
   resourceTitle,
   resourceDescription,
   onShareCreated
+}
 }) => {
   const [shareTarget, setShareTarget] = useState<ShareTarget>('public');
   const [shareFormat, setShareFormat] = useState<ShareFormat>('link');

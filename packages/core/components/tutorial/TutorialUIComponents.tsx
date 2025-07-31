@@ -77,6 +77,7 @@ import { Badge } from '../ui/Badge';
 
 // Core tutorial interfaces
 
+}
 export interface TutorialStep {
   id: string;
   title: string;
@@ -93,6 +94,8 @@ export interface TutorialStep {
   resources: TutorialResource;
   metadata: StepMetadata;
 }
+}
+}
 export interface TutorialContent {
   format: 'text' | 'html' | 'markdown' | 'video' | 'interactive' | 'mixed';
   primary: string; // Main content,
@@ -100,6 +103,8 @@ export interface TutorialContent {
   media?: MediaContent;
   interactive?: InteractiveElement;
   code?: CodeExample;
+}
+}
 }
 export interface MediaContent {
   id: string;
@@ -112,14 +117,18 @@ export interface MediaContent {
   autoplay?: boolean;
   controls?: boolean;
 }
+}
+}
 export interface InteractiveElement {
   id: string;
   type: 'hotspot' | 'overlay' | 'tooltip' | 'modal' | 'form' | 'simulation';
+}
   position?: { x: number; y: number };
   size?: { width: number; height: number };
   trigger: 'click' | 'hover' | 'auto' | 'manual';
   content: string;
   action?: string;
+}
 }
 export interface CodeExample {
   id: string;
@@ -129,6 +138,8 @@ export interface CodeExample {
   executable?: boolean;
   expectedOutput?: string;
 }
+}
+}
 export interface StepValidation {
   type: 'automatic' | 'manual' | 'quiz' | 'checklist';
   criteria: ValidationCriteria;
@@ -136,11 +147,13 @@ export interface StepValidation {
   success: string;
   failure: string;
   partial: string;
+}
 };
   retries: {
   allowed: number;
   unlimited: boolean;
 };
+}
 }
 export interface ValidationCriteria {
   id: string;
@@ -150,6 +163,8 @@ export interface ValidationCriteria {
   function?: string;
   weight: number;
 }
+}
+}
 export interface TutorialHint {
   id: string;
   content: string;
@@ -157,6 +172,8 @@ export interface TutorialHint {
   trigger: 'manual' | 'timer' | 'struggle' | 'request';
   delay?: number;
   priority: number;
+}
+}
 }
 export interface TutorialResource {
   id: string;
@@ -167,6 +184,8 @@ export interface TutorialResource {
   description: string;
   tags: string;
 }
+}
+}
 export interface StepMetadata {
   difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
   category: string;
@@ -176,6 +195,8 @@ export interface StepMetadata {
   averageScore: number;
   commonMistakes: string;
   tips: string;
+}
+}
 }
 export interface Tutorial {
   id: string;
@@ -191,11 +212,15 @@ export interface Tutorial {
   analytics: AnalyticsConfig;
   metadata: TutorialMetadata;
 }
+}
+}
 export interface LearningObjectives {
   primary: string;
   secondary: string;
   outcomes: string;
   assessments: Assessment;
+}
+}
 }
 export interface Assessment {
   id: string;
@@ -204,6 +229,8 @@ export interface Assessment {
   description: string;
   passingScore: number;
   questions?: QuizQuestion;
+}
+}
 }
 export interface QuizQuestion {
   id: string;
@@ -214,6 +241,8 @@ export interface QuizQuestion {
   explanation: string;
   points: number;
 }
+}
+}
 export interface NavigationConfig {
   allowBackward: boolean;
   allowForward: boolean;
@@ -222,6 +251,8 @@ export interface NavigationConfig {
   showStepList: boolean;
   autoAdvance: boolean;
   autoAdvanceDelay?: number;
+}
+}
 }
 export interface AccessibilityConfig {
   screenReaderSupport: boolean;
@@ -232,12 +263,16 @@ export interface AccessibilityConfig {
   closedCaptions: boolean;
   fontSize: 'small' | 'medium' | 'large' | 'extra-large';
 }
+}
+}
 export interface AnalyticsConfig {
   trackProgress: boolean;
   trackEngagement: boolean;
   trackPerformance: boolean;
   trackDropoff: boolean;
   anonymize: boolean;
+}
+}
 }
 export interface TutorialMetadata {
   author: string;
@@ -251,6 +286,8 @@ export interface TutorialMetadata {
   isPublished: boolean;
   rating: number;
   reviewCount: number;
+}
+}
 }
 export interface TutorialProgress {
   tutorialId: string;
@@ -268,6 +305,8 @@ export interface TutorialProgress {
   bookmarks: string;
   notes: TutorialNote;
 }
+}
+}
 export interface TutorialNote {
   id: string;
   stepId: string;
@@ -275,6 +314,8 @@ export interface TutorialNote {
   timestamp: Date;
   isPrivate: boolean;
   // Main Tutorial Component
+}
+}
 }
 export interface TutorialPlayerProps {
   tutorial: Tutorial;
@@ -284,6 +325,7 @@ export interface TutorialPlayerProps {
   onProgressSave: (progress: Partial<TutorialProgress>) => void;
   onExit: () => void;
   className?: string;
+}
 }
 export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
   tutorial,
@@ -461,6 +503,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
 };
 
 // Tutorial Progress Bar Component
+}
 interface TutorialProgressBarProps {
   current: number;
   total: number;
@@ -473,6 +516,7 @@ interface TutorialProgressBarProps {
   completedSteps,
   steps,
   onStepClick
+}
 }) => {
   const progressPercentage = (current / total) * 100;
   return;
@@ -509,6 +553,7 @@ interface TutorialProgressBarProps {
 };
 
 // Tutorial Step Content Component
+}
 interface TutorialStepContentProps {
   step: TutorialStep;
   isPlaying: boolean;
@@ -521,6 +566,7 @@ interface TutorialStepContentProps {
   settings,
   onComplete,
   onPlayPause
+}
 }) => {
   const [showHints, setShowHints] = useState(false);
   const [currentHintIndex, setCurrentHintIndex] = useState(0);
@@ -735,6 +781,7 @@ interface TutorialStepContentProps {
 };
 
 // Tutorial Step List Component
+}
 interface TutorialStepListProps {
   steps: TutorialStep;
   currentStepIndex: number;
@@ -745,6 +792,7 @@ interface TutorialStepListProps {
   currentStepIndex,
   completedSteps,
   onStepSelect
+}
 }) => {
   return;
     <div className="tutorial-step-list">
@@ -787,12 +835,14 @@ interface TutorialStepListProps {
 };
 
 // Tutorial Resources Component
+}
 interface TutorialResourcesProps {
   resources: TutorialResource;
   onResourceClick: (resource: TutorialResource) => void;
   const TutorialResources: React.FC<TutorialResourcesProps> = ({,)
   resources,
   onResourceClick
+}
 }) => {
   return;
     <div className="tutorial-resources">
@@ -828,6 +878,7 @@ interface TutorialResourcesProps {
 };
 
 // Tutorial Settings Component
+}
 interface TutorialSettingsProps {
   settings: unknown;
   onSettingsChange: (settings: unknown) => void;
@@ -836,6 +887,7 @@ interface TutorialSettingsProps {
   settings,
   onSettingsChange,
   onClose
+}
 }) => {
   return;
     <div className="tutorial-settings-overlay">
@@ -916,12 +968,14 @@ interface TutorialSettingsProps {
 };
 
 // Interactive Element Renderer
+}
 interface InteractiveElementProps {
   element: InteractiveElement;
   onInteraction: () => void;
   const InteractiveElement: React.FC<InteractiveElementProps> = ({,)
   element,
   onInteraction
+}
 }) => {
   const [isActive, setIsActive] = useState(false);
   const handleTrigger = () => {
@@ -974,12 +1028,14 @@ interface InteractiveElementProps {
 };
 
 // Media Content Renderer
+}
 interface MediaContentRendererProps {
   media: MediaContent;
   settings: unknown;
   const MediaContentRenderer: React.FC<MediaContentRendererProps> = ({,)
   media,
   settings
+}
 }) => {
   return;
     <div className="media-content">
@@ -1015,12 +1071,14 @@ interface MediaContentRendererProps {
 };
 
 // Code Example Renderer
+}
 interface CodeExampleRendererProps {
   example: CodeExample;
   onExecute: () => void;
   const CodeExampleRenderer: React.FC<CodeExampleRendererProps> = ({,)
   example,
   onExecute
+}
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   return;
@@ -1073,11 +1131,13 @@ interface CodeExampleRendererProps {
 
 // Tutorial Browser Component
 
+}
 export interface TutorialBrowserProps {
   tutorials: Tutorial;
   onTutorialSelect: (tutorial: Tutorial) => void;
   onTutorialCreate: () => void;
   className?: string;
+}
 }
 export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({)
   tutorials,
@@ -1194,12 +1254,14 @@ export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({)
 };
 
 // Tutorial Card Component
+}
 interface TutorialCardProps {
   tutorial: Tutorial;
   onClick: () => void;
   const TutorialCard: React.FC<TutorialCardProps> = ({,)
   tutorial,
   onClick
+}
 }) => {
   return;
     <Card className="tutorial-card" onClick={onClick}>

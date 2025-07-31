@@ -26,6 +26,8 @@ export enum WebSocketMessageType {
   * Subscription configuration
   */
 }
+}
+}
 export interface SubscriptionConfig {
   topic: string;
   filters?: {
@@ -33,11 +35,13 @@ export interface SubscriptionConfig {
   organizationId?: number;
   eventTypes?: string;
   minSeverity?: 'info' | 'warning' | 'critical'
+}
   };
   throttle?: number; // Minimum time between updates in ms
 /**
  * WebSocket client configuration
  */
+}
 }
 export interface WebSocketClientConfig {
   url: string;
@@ -52,6 +56,7 @@ export interface WebSocketClientConfig {
   /**
   * WebSocket connection state
   */
+}
 }
 export enum ConnectionState {
   DISCONNECTED = 'disconnected',
@@ -88,6 +93,7 @@ export class WebSocketClient extends EventEmitter {
    * Connect to WebSocket server
    */
   connect(): Promise<void> {
+
     return new Promise((resolve, reject) => {
       if (this.connectionState === ConnectionState.CONNECTED) {
         resolve();
@@ -379,6 +385,7 @@ export class AnalyticsWebSocketClient extends WebSocketClient {
    * Subscribe to cost alerts
    */
   async subscribeToCostAlerts(): Promise<void> {
+
   await this.subscribe('cost_alerts', {)
   filters: {
   eventTypes: ['cost_alert', 'budget_alert'],
@@ -390,6 +397,7 @@ export class AnalyticsWebSocketClient extends WebSocketClient {
    * Subscribe to recommendations
    */
   async subscribeToRecommendations(): Promise<void> {
+
   await this.subscribe('recommendations', {)
   filters: {
   eventTypes: ['recommendation'],
@@ -400,6 +408,7 @@ export class AnalyticsWebSocketClient extends WebSocketClient {
    * Subscribe to user activity
    */
   async subscribeToUserActivity(): Promise<void> {
+
   await this.subscribe('user_activity', {)
   filters: {
   eventTypes: ['user_activity'],

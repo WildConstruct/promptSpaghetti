@@ -17,6 +17,7 @@ import { EvidenceAccessAuditService } from '../security/EvidenceAccessAuditServi
 
 // Core data structures for standard compliance reporting
 }
+}
 export interface StandardComplianceReport {
   id: string;
   reportType: ComplianceReportType;
@@ -30,6 +31,7 @@ export interface StandardComplianceReport {
   attachments: ReportAttachment[];
   certification: ComplianceCertification;
   metadata: ReportMetadata;
+}
 }
 }
 
@@ -58,6 +60,7 @@ export enum ComplianceFramework {
 }
 
 }
+}
 export interface ReportingPeriod {
   startDate: Date;
   endDate: Date;
@@ -66,7 +69,9 @@ export interface ReportingPeriod {
   reportingCycle?: string;
 }
 }
+}
 
+}
 }
 export interface ExecutiveSummary {
   overallComplianceScore: number;
@@ -79,7 +84,9 @@ export interface ExecutiveSummary {
   executiveRecommendations: string[];
 }
 }
+}
 
+}
 }
 export interface DetailedFindings {
   frameworkAssessments: FrameworkAssessment[];
@@ -91,7 +98,9 @@ export interface DetailedFindings {
   thirdPartyAssessments: ThirdPartyAssessment[];
 }
 }
+}
 
+}
 }
 export interface RiskAssessment {
   overallRiskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
@@ -103,7 +112,9 @@ export interface RiskAssessment {
   contingencyPlans: ContingencyPlan[];
 }
 }
+}
 
+}
 }
 export interface Recommendation {
   id: string;
@@ -119,7 +130,9 @@ export interface Recommendation {
   success_metrics: SuccessMetric[];
 }
 }
+}
 
+}
 }
 export interface ComplianceCertification {
   certifiedBy: string;
@@ -131,7 +144,9 @@ export interface ComplianceCertification {
   attestation: string;
 }
 }
+}
 
+}
 }
 export interface ReportMetadata {
   version: string;
@@ -140,6 +155,7 @@ export interface ReportMetadata {
     system: string;
     user: string;
     role: string;
+}
 }
   };
   approvals: ReportApproval[];
@@ -150,6 +166,7 @@ export interface ReportMetadata {
 }
 
 // Framework-specific report templates
+}
 }
 export interface GDPRComplianceReport extends StandardComplianceReport {
   dataSubjectRights: {
@@ -165,6 +182,7 @@ export interface GDPRComplianceReport extends StandardComplianceReport {
 }
 
 }
+}
 export interface SOXComplianceReport extends StandardComplianceReport {
   financialControls: FinancialControlAssessment[];
   managementAssertion: ManagementAssertion;
@@ -174,6 +192,7 @@ export interface SOXComplianceReport extends StandardComplianceReport {
 }
 
 }
+}
 export interface SOC2ComplianceReport extends StandardComplianceReport {
   securityCriteria: SOC2Criteria[];
   availabilityMetrics: AvailabilityMetrics;
@@ -182,6 +201,7 @@ export interface SOC2ComplianceReport extends StandardComplianceReport {
   privacyNotices: PrivacyNoticeAssessment[];
 }
 
+}
 }
 export interface ISO27001ComplianceReport extends StandardComplianceReport {
   controlObjectives: ISO27001Control[];
@@ -727,6 +747,7 @@ export class StandardComplianceReportingService {
 
 // Supporting interfaces and types
 }
+}
 interface ReportGenerationOptions {
   requestedBy?: string;
   requestedByRole?: string;
@@ -737,7 +758,9 @@ interface ReportGenerationOptions {
   customSections?: string[];
 }
 }
+}
 
+}
 }
 interface ExportOptions {
   template?: string;
@@ -747,7 +770,9 @@ interface ExportOptions {
   digitallySign?: boolean;
 }
 }
+}
 
+}
 }
 interface ValidationResult {
   isValid: boolean;
@@ -757,7 +782,9 @@ interface ValidationResult {
   validatedAt: Date;
 }
 }
+}
 
+}
 }
 interface ValidationIssue {
   type: 'missing_data' | 'calculation_error' | 'compliance_gap' | 'evidence_missing';
@@ -767,7 +794,9 @@ interface ValidationIssue {
   suggestion: string;
 }
 }
+}
 
+}
 }
 interface ReportSchedule {
   frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'annually';
@@ -779,7 +808,9 @@ interface ReportSchedule {
   format?: string[];
 }
 }
+}
 
+}
 }
 interface ComplianceData {
   monitoring: unknown;
@@ -787,6 +818,7 @@ interface ComplianceData {
   audits: unknown[];
   lifecycle: Error;
   period: ReportingPeriod;
+}
 }
 }
 

@@ -25,6 +25,7 @@ import { RateLimiter, RateLimitStrategy } from '../../packages/core/security/Rat
 // ============================================================================
 
 }
+}
 export interface PredictiveLoadManagementConfig {
   // Prediction engine configuration
   prediction_engine: {
@@ -38,6 +39,7 @@ export interface PredictiveLoadManagementConfig {
       seasonal_features: boolean;
       trend_features: boolean;
       external_factors: boolean;
+}
 }
     };
   };
@@ -125,6 +127,7 @@ export interface PredictiveLoadManagementConfig {
 }
 
 }
+}
 export interface LoadPrediction {
   prediction_id: string;
   timestamp: number;
@@ -132,6 +135,7 @@ export interface LoadPrediction {
     start_time: number;
     end_time: number;
     duration_minutes: number;
+}
 }
   };
   predicted_metrics: {
@@ -173,6 +177,7 @@ export interface LoadPrediction {
 }
 
 }
+}
 export interface PredictiveAction {
   action_id: string;
   action_type: 'scale_up' | 'scale_down' | 'adjust_rate_limits' | 'warm_cache' | 'reroute_traffic' | 'alert_operators';
@@ -182,6 +187,7 @@ export interface PredictiveAction {
     resource_cost_change: number;
     risk_reduction_percent: number;
 }
+}
   };
   execution_time: number;
   confidence: number;
@@ -190,6 +196,7 @@ export interface PredictiveAction {
   automated_execution: boolean;
 }
 
+}
 }
 export interface LoadPattern {
   pattern_id: string;
@@ -201,6 +208,7 @@ export interface LoadPattern {
     amplitude: number;
     phase_shift: number;
     duration_minutes: number;
+}
 }
   };
   historical_occurrences: number;

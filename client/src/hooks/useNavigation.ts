@@ -10,6 +10,7 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../stores/authStore';
 import { useCallback, useMemo } from 'react';
+}
 interface NavigationOptions {
   requireAuth?: boolean;
   requiredRoles?: string;
@@ -18,6 +19,7 @@ interface NavigationOptions {
 export const useNavigation = () => {
   const navigate = useNavigate();
   const location = useLocation();
+}
   const { user, isAuthenticated } = useAuthStore();
   // Check if user has required role
   const hasRole = useCallback((roles: string | string): boolean => {

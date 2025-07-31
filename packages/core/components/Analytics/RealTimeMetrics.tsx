@@ -9,9 +9,11 @@ import { Badge } from '../ui/Badge';
 import { conversionTracker } from '../../analytics/ConversionTracker';
 import { performanceMonitor } from '../../utils/PerformanceMonitor';
 
+}
 export interface RealTimeMetricsProps {
   metrics: unknown;
   loading: boolean;
+}
 }
 export const RealTimeMetrics: React.FC<RealTimeMetricsProps> = ({ metrics, loading }) => {
   const [liveData, setLiveData] = useState({)

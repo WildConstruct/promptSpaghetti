@@ -9,18 +9,21 @@ import { ChallengeType } from '../../../../server/src/auth/types';
 // ========================================
 // Types
 // ========================================
+}
 interface ChallengeData {
   id: string;,
   type: ChallengeType;
-  data: {,
+  data: {
   text?: string;
   imageUrl?: string;
   audioUrl?: string;
   options?: string;
   metadata?: Record<string, unknown>;
+}
 };
   expiresAt: string;,
   maxAttempts: number;
+}
 interface ChallengeComponentProps {
   onSuccess: (token: string) => void;,
   onError: (error: string) => void;
@@ -42,6 +45,7 @@ interface ChallengeComponentProps {
   script.onload = () => resolve();
   script.onerror = () => reject(new Error('Failed to load reCAPTCHA'));
   document.head.appendChild(script);
+}
 });
 };
 const loadHCaptchaScript = (): Promise<void> => {
@@ -111,7 +115,7 @@ export const ChallengeComponent: React.FC<ChallengeComponentProps> = ({)
       const response = await fetch(`${challengeEndpoint}/generate`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({})
@@ -144,7 +148,7 @@ export const ChallengeComponent: React.FC<ChallengeComponentProps> = ({)
       const response = await fetch(`${challengeEndpoint}/validate`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({,)
@@ -178,7 +182,7 @@ export const ChallengeComponent: React.FC<ChallengeComponentProps> = ({)
       const response = await fetch(`${challengeEndpoint}/refresh`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({,)
@@ -440,3 +444,4 @@ declare global {
   hcaptcha: unknown;
 
 export default ChallengeComponent;
+}

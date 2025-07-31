@@ -22,6 +22,7 @@ export enum ResolutionStrategy {
 }
 
 }
+}
 export interface ConflictOperation {
   id: string;
   type: ConflictType;
@@ -35,7 +36,9 @@ export interface ConflictOperation {
   documentId: string;
 }
 }
+}
 
+}
 }
 export interface Conflict {
   id: string;
@@ -54,7 +57,9 @@ export interface Conflict {
   description: string;
 }
 }
+}
 
+}
 }
 export interface ResolutionResult {
   conflict: Conflict;
@@ -65,10 +70,12 @@ export interface ResolutionResult {
     mergedFields?: string[];
     discardedOperations?: string[];
 }
+}
     offsetApplied?: { x: number; y: number };
   };
 }
 
+}
 }
 export interface ConflictResolverConfig {
   defaultStrategy: ResolutionStrategy;
@@ -78,6 +85,7 @@ export interface ConflictResolverConfig {
   enableSemanticMerge: boolean;
   preserveConflictHistory: boolean;
   conflictHistoryRetention: number; // ms
+}
 }
 }
 

@@ -14,9 +14,11 @@ import {
   FiTarget,
 } from 'react-icons/fi';
 
+}
 interface VFXExportPreviewProps {
   exportData: CreateExportJob;
   onValidationComplete?: (isValid: boolean, results: VFXValidationResult | null) => void;
+}
 }
 
 export const VFXExportPreview: React.FC<VFXExportPreviewProps> = ({ exportData, onValidationComplete }) => {

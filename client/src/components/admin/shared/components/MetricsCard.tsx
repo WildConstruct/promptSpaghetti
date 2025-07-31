@@ -7,19 +7,22 @@
 import React from 'react';
 import { TrendingUp, TrendingDown, Minus, LucideIcon } from 'lucide-react';
 
+}
 export interface MetricData {
   value: string | number;,
   label: string;
-  trend?: {,
+  trend?: {
   value: number;
   label?: string;
   direction: 'up' | 'down' | 'neutral';
+}
 };
   target?: {
   value: number;
   label?: string;
 };
   format?: 'number' | 'percentage' | 'currency' | 'duration';
+}
 interface MetricsCardProps {
   title: string;,
   metrics: MetricData;
@@ -30,40 +33,41 @@ interface MetricsCardProps {
   className?: string;
   onClick?: () => void;
   const variantConfigs = {
-  default: {,
+  default: {
   background: '#ffffff',
   border: '#e5e7eb',
   iconColor: '#6b7280',
+}
 },
-  success: {,
+  success: {
   background: '#f0fdf4',
   border: '#bbf7d0',
   iconColor: '#16a34a',
 },
-  warning: {,
+  warning: {
   background: '#fffbeb',
   border: '#fed7aa',
   iconColor: '#d97706',
 },
-  error: {,
+  error: {
   background: '#fef2f2',
   border: '#fecaca',
   iconColor: '#dc2626',
 };
 const sizeConfigs = {
-  small: {,
+  small: {
   padding: '16px',
   titleSize: '14px',
   valueSize: '20px',
   labelSize: '12px',
 },
-  medium: {,
+  medium: {
   padding: '20px',
   titleSize: '16px',
   valueSize: '28px',
   labelSize: '14px',
 },
-  large: {,
+  large: {
   padding: '24px',
   titleSize: '18px',
   valueSize: '36px',

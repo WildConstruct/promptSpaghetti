@@ -42,6 +42,7 @@ import {
 } from 'lucide-react';
 // Epic 16 theme imports removed
 
+}
 export interface TutorialStep {
   id: string;
   title: string;
@@ -56,6 +57,8 @@ export interface TutorialStep {
   tips?: string;
   actions?: TutorialAction;
 }
+}
+}
 export interface TutorialAction {
   id: string;
   type: 'click' | 'hover' | 'input' | 'scroll' | 'wait';
@@ -63,6 +66,8 @@ export interface TutorialAction {
   value?: string;
   message?: string;
   completed: boolean;
+}
+}
 }
 export interface Tutorial {
   id: string;
@@ -77,12 +82,14 @@ export interface Tutorial {
   xp: number;
   badge?: string;
   certificate?: string;
+}
 };
   tags: string;
   rating: number;
   completionCount: number;
   createdAt: Date;
   updatedAt: Date;
+}
 }
 export interface TutorialProgress {
   tutorialId: string;
@@ -94,6 +101,8 @@ export interface TutorialProgress {
   stepsCompleted: string;
   score?: number;
 }
+}
+}
 export interface TutorialPlayerProps {
   tutorial?: Tutorial;
   isOpen: boolean;
@@ -104,6 +113,7 @@ export interface TutorialPlayerProps {
   showTranscript?: boolean;
   enableInteractions?: boolean;
   className?: string;
+}
 }
 export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
   tutorial,
@@ -604,10 +614,12 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
 
 // Tutorial Browser Component
 
+}
 export interface TutorialBrowserProps {
   tutorials: Tutorial;
   onSelectTutorial: (tutorial: Tutorial) => void;
   onStartTutorial?: (tutorial: Tutorial) => void;
+}
   userProgress?: { [tutorialId: string]: TutorialProgress };
   className?: string;
 }

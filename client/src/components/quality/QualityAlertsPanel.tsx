@@ -32,11 +32,13 @@ import { QualityAlert } from '../../hooks/useQualityMetrics';
 // Quality Alerts Panel Component
 // =============================================================================
 
+}
 export interface QualityAlertsPanelProps {
   alerts: QualityAlert;
   onAlertAction?: (alertId: string, action: 'acknowledge' | 'resolve' | 'dismiss') => void;
   compact?: boolean;
   className?: string;
+}
 }
 export const QualityAlertsPanel: React.FC<QualityAlertsPanelProps> = ({)
   alerts,

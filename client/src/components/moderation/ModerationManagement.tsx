@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+}
 interface ModerationItem {
   id: string;,
   type: 'content' | 'user' | 'template' | 'comment';
@@ -20,7 +21,9 @@ interface ModerationItem {
 //   moderatorId: string;
 //   timestamp: Date;
 
+}
 // }
+}
 interface ModerationManagementProps {
   items: ModerationItem;
   onApprove?: (itemId: string, reason: string) => void;
@@ -35,6 +38,7 @@ interface ModerationManagementProps {
   onFlag,
   onDelete,
   currentModerator
+}
 }) => {
   const [selectedItems, setSelectedItems] = useState<string>([]);
   const [filterStatus, setFilterStatus] = useState<string>('all');

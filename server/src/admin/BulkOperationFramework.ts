@@ -22,6 +22,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { RBACService } from '../auth/services/RBACService';
 
 }
+}
 export interface BulkOperationRequest<T = unknown> {
   id: string;
   resourceType: string;
@@ -39,6 +40,7 @@ export interface BulkOperationRequest<T = unknown> {
 }
 
 }
+}
 export interface BulkOperationOptions {
   batchSize?: number;
   maxConcurrency?: number;
@@ -54,7 +56,9 @@ export interface BulkOperationOptions {
   exportResults?: boolean;
 }
 }
+}
 
+}
 }
 export interface BulkOperationResult {
   operationId: string;
@@ -66,6 +70,7 @@ export interface BulkOperationResult {
     failedItems: number;
     skippedItems: number;
     percentComplete: number;
+}
 }
   };
   results: Array<{
@@ -97,6 +102,7 @@ export interface BulkOperationResult {
 }
 
 }
+}
 export interface BulkOperationHandler<T = any, R = any> {
   resourceType: string;
   supportedOperations: string[];
@@ -106,6 +112,7 @@ export interface BulkOperationHandler<T = any, R = any> {
   rollback?(targetId: string, operation: string, parameters: T, result: R): Promise<void>;
 }
 
+}
 }
 export interface BulkOperationContext {
   operationId: string;
@@ -118,7 +125,9 @@ export interface BulkOperationContext {
   timestamp: Date;
 }
 }
+}
 
+}
 }
 export interface BulkOperationConfig {
   maxConcurrentOperations: number;
@@ -130,6 +139,7 @@ export interface BulkOperationConfig {
   retryDelayMs: number;
   cleanupIntervalMs: number;
   resultRetentionDays: number;
+}
 }
 }
 

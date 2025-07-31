@@ -13,6 +13,7 @@ import {
 } from '../../../packages/core/auth/IdentityValidation';
 
 }
+}
 interface SubmitVerificationRequestBody {
   userId: string;
   verificationType: IdentityValidationType;
@@ -23,13 +24,16 @@ interface SubmitVerificationRequestBody {
     sessionId?: string;
     requestSource?: 'profile_setup' | 'manual_request' | 'system_triggered';
 }
+}
   };
 }
 
 }
+}
 interface GetVerificationStatusParams {
   userId: string;
   requestId?: string;
+}
 }
 }
 

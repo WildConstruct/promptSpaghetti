@@ -7,6 +7,7 @@ import { FeatureToggleService } from '../services/feature-toggle-service';
 import { EnhancedToggleEvaluationService } from '../services/EnhancedToggleEvaluationService';
 
 }
+}
 export interface FeatureToggleAdmin {
   id: string;
   key: string;
@@ -26,6 +27,7 @@ export interface FeatureToggleAdmin {
     user_ids: string[];
     percentage: number;
     rules: TargetingRule[];
+}
 }
   };
   
@@ -56,6 +58,7 @@ export interface FeatureToggleAdmin {
 }
 
 }
+}
 export interface TargetingRule {
   field: string;
   operator: 'equals' | 'not_equals' | 'in' | 'not_in' | 'contains' | 'regex' | 'greater_than' | 'less_than';
@@ -63,7 +66,9 @@ export interface TargetingRule {
   condition?: 'and' | 'or';
 }
 }
+}
 
+}
 }
 export interface RollbackCondition {
   metric: string;
@@ -73,13 +78,16 @@ export interface RollbackCondition {
   action: 'disable' | 'rollback' | 'alert';
 }
 }
+}
 
+}
 }
 export interface AuditLogEntry {
   id: string;
   user_id: string;
   user_name: string;
   action: 'created' | 'updated' | 'enabled' | 'disabled' | 'deleted' | 'emergency_override';
+}
 }
   changes: Record<string, { old: any; new: any }>;
   reason?: string;
@@ -88,6 +96,7 @@ export interface AuditLogEntry {
   user_agent?: string;
 }
 
+}
 }
 export interface FeatureUsageStats {
   total_evaluations: number;
@@ -98,7 +107,9 @@ export interface FeatureUsageStats {
   last_evaluation: string;
 }
 }
+}
 
+}
 }
 export interface FeatureHealthStatus {
   status: 'healthy' | 'warning' | 'critical' | 'disabled';
@@ -108,7 +119,9 @@ export interface FeatureHealthStatus {
   availability_percentage: number;
 }
 }
+}
 
+}
 }
 export interface FeatureDashboardStats {
   total_features: number;
@@ -123,7 +136,9 @@ export interface FeatureDashboardStats {
   recent_changes: AuditLogEntry[];
 }
 }
+}
 
+}
 }
 export interface CreateFeatureRequest {
   key: string;
@@ -137,6 +152,7 @@ export interface CreateFeatureRequest {
     user_ids?: string[];
     percentage?: number;
     rules?: TargetingRule[];
+}
 }
   };
   scheduling?: {
@@ -159,6 +175,7 @@ export interface CreateFeatureRequest {
 }
 
 }
+}
 export interface UpdateFeatureRequest {
   name?: string;
   description?: string;
@@ -169,6 +186,7 @@ export interface UpdateFeatureRequest {
     user_ids?: string[];
     percentage?: number;
     rules?: TargetingRule[];
+}
 }
   };
   scheduling?: {

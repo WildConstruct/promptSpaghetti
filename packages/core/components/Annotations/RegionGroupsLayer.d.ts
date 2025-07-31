@@ -10,6 +10,7 @@ import React from 'react';
 import { Node } from 'reactflow';
 import { RegionGroup as RegionGroupType, RegionGroupPreferences } from '../../types/CollaborationTypes';
 
+}
 interface RegionGroupsLayerProps {
     nodes: Node[];
     regionGroups: RegionGroupType[];
@@ -23,6 +24,7 @@ interface RegionGroupsLayerProps {
         x: number;
         y: number;
 
+}
     };
     zoom?: number;
 

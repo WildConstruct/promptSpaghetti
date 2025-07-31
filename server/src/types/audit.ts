@@ -3,6 +3,7 @@
 // Epic: 19 - Security & Compliance Framework
 
 }
+}
 export interface DataRetentionAuditRecord {
   id: string;
   timestamp: Date;
@@ -93,7 +94,9 @@ export interface DataRetentionAuditRecord {
   updatedAt: Date;
 }
 }
+}
 
+}
 }
 export interface DataSubjectRightsAuditRecord {
   id: string;
@@ -154,7 +157,9 @@ export interface DataSubjectRightsAuditRecord {
   updatedAt: Date;
 }
 }
+}
 
+}
 }
 export interface ComplianceMonitoringAuditRecord {
   id: string;
@@ -216,6 +221,7 @@ export interface ComplianceMonitoringAuditRecord {
   metadata: Record<string, any>;
   createdAt: Date;
   updatedAt: Date;
+}
 }
 }
 
@@ -320,6 +326,7 @@ export type RemediationStatus =
 // Supporting Interfaces
 
 }
+}
 export interface CommunicationLogEntry {
   timestamp: Date;
   method: string;
@@ -329,7 +336,9 @@ export interface CommunicationLogEntry {
   attachments?: string[];
 }
 }
+}
 
+}
 }
 export interface ComplianceViolation {
   id: string;
@@ -342,7 +351,9 @@ export interface ComplianceViolation {
   potentialFines?: number;
 }
 }
+}
 
+}
 }
 export interface RemediationAction {
   id: string;
@@ -356,9 +367,11 @@ export interface RemediationAction {
   priority: number;
 }
 }
+}
 
 // Audit Summary Types
 
+}
 }
 export interface DataRetentionAuditSummary {
   auditDate: Date;
@@ -376,7 +389,9 @@ export interface DataRetentionAuditSummary {
   uniqueAffectedUsers: number;
 }
 }
+}
 
+}
 }
 export interface DataSubjectRightsSummary {
   requestMonth: Date;
@@ -389,7 +404,9 @@ export interface DataSubjectRightsSummary {
   escalatedRequests: number;
 }
 }
+}
 
+}
 }
 export interface ComplianceViolationsSummary {
   complianceFramework: string;
@@ -401,9 +418,11 @@ export interface ComplianceViolationsSummary {
   latestViolation: Date;
 }
 }
+}
 
 // Audit Service Configuration
 
+}
 }
 export interface AuditConfiguration {
   enabledFrameworks: string[];
@@ -411,6 +430,7 @@ export interface AuditConfiguration {
     dataRetentionAudit: number;
     subjectRightsAudit: number;
     complianceMonitoringAudit: number;
+}
 }
   };
   integrityHashingEnabled: boolean;
@@ -426,6 +446,7 @@ export interface AuditConfiguration {
 // Export Functions Interface
 
 }
+}
 export interface AuditExportOptions {
   startDate?: Date;
   endDate?: Date;
@@ -435,10 +456,13 @@ export interface AuditExportOptions {
   format?: 'JSON' | 'CSV' | 'XML';
 }
 }
+}
 
+}
 }
 export interface AuditExportResult {
   auditType: 'data_retention' | 'subject_rights' | 'compliance_monitoring';
   auditData: Record<string, any>;
+}
 }
 }

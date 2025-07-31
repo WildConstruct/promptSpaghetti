@@ -20,6 +20,7 @@ import { ErrorFactory } from '../../errors/ErrorFactory';
  * A conditional branch with condition expression and output value
  */
 
+}
 export interface ConditionalBranch {
   /** JavaScript-like expression to evaluate (e.g., "variable > 5", "hasFlag('debug')") */
   condition: string;
@@ -30,6 +31,8 @@ export interface ConditionalBranch {
   /**
   * Configuration for conditional evaluation
   */
+}
+}
 }
 export interface ConditionalConfig {
   /** Whether to allow access to execution context variables */
@@ -42,6 +45,7 @@ export interface ConditionalConfig {
   * Advanced conditional node with expression-based branching logic
   * Supports multiple conditions, variable access, and custom functions
   */
+}
 }
 export class ConditionalNode extends AdvancedRuntimeNode<string> {
   private ioHandler: AdvancedIOHandler;

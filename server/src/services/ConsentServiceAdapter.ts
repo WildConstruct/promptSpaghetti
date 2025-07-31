@@ -10,6 +10,7 @@
 import { ConsentType, ConsentStatus } from './ConsentFeatureToggleService';
 
 }
+}
 interface ConsentRecord {
   consentId: string;
   userId?: string;
@@ -26,13 +27,16 @@ interface ConsentRecord {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 interface ConsentServiceConfig {
   cacheTimeout: number; // minutes
   strictMode: boolean;
   auditEnabled: boolean;
   defaultStatus: ConsentStatus;
+}
 }
 }
 
@@ -300,12 +304,14 @@ export class ConsentServiceAdapter {
  * Data access interface for consent records
  */
 }
+}
 interface ConsentDAO {
   getConsentsByUserOrSession(userId?: string, sessionId?: string): Promise<ConsentRecord[]>;
   getConsentByType(consentType: ConsentType, userId?: string, sessionId?: string): Promise<ConsentRecord | null>;
   createConsent(record: Omit<ConsentRecord, 'consentId'>): Promise<ConsentRecord>;
   updateConsent(consentId: string, updates: Partial<ConsentRecord>): Promise<ConsentRecord>;
   deleteConsent(consentId: string): Promise<void>;
+}
 }
 }
 

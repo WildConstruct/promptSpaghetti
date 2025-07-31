@@ -5,8 +5,10 @@
 import React from 'react';
 import { useReactFlow } from 'reactflow';
 import { UserPresence } from './collaborativeGraphStore';
+}
 interface UserCursorProps {
   user: UserPresence;
+}
   position: { x: number; y: number };
   nodeId?: string;
 }
@@ -54,9 +56,11 @@ const UserCursor: React.FC<UserCursorProps> = ({ user, position, nodeId }) => {
     </div>
   );
 };
+}
 interface NodeSelectionOverlayProps {
   nodeId: string;
   users: UserPresence[];
+}
   nodePosition: { x: number; y: number };
   nodeWidth: number;
   nodeHeight: number;
@@ -109,10 +113,12 @@ const NodeSelectionOverlay: React.FC<NodeSelectionOverlayProps> = ({
     </div>
   );
 };
+}
 interface CollaborativePresenceProps {
   userCursors: Array<{
     userId: string;
     user: UserPresence;
+}
     position: { x: number; y: number };
     nodeId?: string;
   }>;
@@ -179,11 +185,13 @@ export const CollaborativePresence: React.FC<CollaborativePresenceProps> = ({
     </div>
   );
 };
+}
 interface CollaborationStatusProps {
   isCollaborative: boolean;
   connectionStatus: 'connecting' | 'connected' | 'disconnected' | 'error';
   connectedUserCount: number;
   className?: string;
+}
 }
 
 /**
@@ -242,11 +250,13 @@ export const CollaborationStatus: React.FC<CollaborationStatusProps> = ({
     </div>
   );
 };
+}
 interface UserAvatarsProps {
   connectedUsers: Map<string, UserPresence>;
   localUserId?: string;
   maxVisible?: number;
   className?: string;
+}
 }
 
 /**

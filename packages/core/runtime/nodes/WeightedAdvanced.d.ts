@@ -7,6 +7,7 @@ export type WeightDistributionType = 'linear' | 'exponential' | 'gaussian' | 'cu
  * A weighted choice with value and weight
  */
 
+}
 export interface WeightedChoice {
     value: string;
     weight: number;
@@ -14,6 +15,7 @@ export interface WeightedChoice {
  * Configuration for weight distribution algorithms
  */
 
+}
 export interface WeightDistributionConfig {
     type: WeightDistributionType;
     /** Parameters for distribution (e.g., exponential factor, gaussian mean/std) */
@@ -89,6 +91,7 @@ export declare const DistributionPresets: {
     linear: {
         type: "linear";
         normalize: true;
+}
     };
     exponential: {
         type: "exponential";

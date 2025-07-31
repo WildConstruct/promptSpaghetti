@@ -6,6 +6,7 @@
  */
 import { BaseAIModel } from '../BaseAIModel';
 
+}
 export interface LoadBalancerConfig {
   strategy: 'round_robin' | 'least_connections' | 'response_time' | 'cost_aware' | 'adaptive';
   healthCheckInterval: number; // milliseconds,
@@ -14,6 +15,8 @@ export interface LoadBalancerConfig {
   timeoutMs: number;
   circuitBreakerEnabled: boolean;
   metricsCollection: boolean;
+}
+}
 }
 export interface ModelInstance {
   id: string;
@@ -31,12 +34,14 @@ export interface ModelInstance {
   costPerRequest: number;
   lastHealthCheck: number;
   consecutiveFailures: number;
+}
 };
   circuitBreaker: {
   state: 'closed' | 'open' | 'half_open';
   openedAt: number;
   nextRetryAt: number;
 };
+}
 }
 export interface LoadBalancingRequest {
   id: string;
@@ -47,6 +52,8 @@ export interface LoadBalancingRequest {
   retryCount?: number;
   startTime: number;
   metadata?: Record<string, any>;
+}
+}
 }
 export interface LoadBalancingResult<T = any> {
   result: T;
@@ -236,6 +243,7 @@ export interface LoadBalancingResult<T = any> {
     input: any,
     options: any,
     timeoutMs: number): Promise<{ result: any; cost?: number; cached?: boolean }> {
+
     return new Promise(async (resolve, reject) => {
       const timeoutId = setTimeout(() => {
         reject(new Error(`Request timeout after ${timeoutMs}ms`));}
@@ -325,6 +333,7 @@ export interface LoadBalancingResult<T = any> {
   this.performHealthChecks();
 }, this.config.healthCheckInterval);
   private async performHealthChecks(): Promise<void> {
+
     const healthCheckPromises = Array.from(this.instances.values()).map(async (instance) => {
       try {
         // Perform a lightweight health check
@@ -371,6 +380,7 @@ export interface LoadBalancingResult<T = any> {
   private generateRequestId(): string {
     return `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   private sleep(ms: number): Promise<void> {
+
     return new Promise(resolve => setTimeout(resolve, ms));
   destroy(): void {
     if (this.healthCheckTimer) {

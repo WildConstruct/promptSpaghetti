@@ -33,6 +33,7 @@ import { SecurityDashboardDataService } from './SecurityDashboardDataService';
 
 // Main Dashboard Types
 
+}
 export interface SecurityDashboardMainProps {
   workspaceId: string;
   userId: string;
@@ -42,12 +43,16 @@ export interface SecurityDashboardMainProps {
   enableRealTimeUpdates?: boolean;
   refreshInterval?: number; // seconds,
 }
+}
+}
 export interface SecurityMetrics {
   securityScore: number;
   activeThreats: number;
   blockedThreats: number;
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
   lastScanTime: Date;
+}
+}
 }
 export interface SecurityAlert {
   id: string;
@@ -63,6 +68,8 @@ export interface SecurityAlert {
   indicators: string;
   responseActions: ResponseAction;
 }
+}
+}
 export interface ResponseAction {
   id: string;
   type: 'isolate' | 'block' | 'quarantine' | 'investigate' | 'escalate';
@@ -72,12 +79,16 @@ export interface ResponseAction {
   performer?: string;
   timestamp?: Date;
 }
+}
+}
 export interface ComplianceStatus {
   framework: string;
   status: 'compliant' | 'non_compliant' | 'partial';
   score: number;
   violations: ComplianceViolation;
   lastAssessment: Date;
+}
+}
 }
 export interface ComplianceViolation {
   id: string;
@@ -89,6 +100,7 @@ export interface ComplianceViolation {
   /**
   * Main Security Dashboard Component
   */
+}
 }
 export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({)
   workspaceId,

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 
+}
 export interface SimpleVariationListProps {
   variations: string;
   onChange: (variations: string) => void;
   placeholder?: string;
   addButtonText?: string;
   emptyMessage?: string;
+}
 }
 export const SimpleVariationList: React.FC<SimpleVariationListProps> = ({)
   variations,

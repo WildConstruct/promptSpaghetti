@@ -9,12 +9,15 @@ import {
   getTemplateById, 
   validateTemplate 
 } from '../../data/nodeTemplates';
+}
 interface NodeFactoryProps {
   onNodeCreate?: (node: NodeTemplate) => void;
   onTemplateSelect?: (template: NodeTemplate) => void;
   availableTemplates?: NodeTemplate;
+}
 interface NodeCreationOptions {
-  position?: { x: number; y: number };
+}
+  position?: { x: number, y: number };
   customId?: string;
   overrides?: Partial<NodeTemplate['data']>;
 
@@ -40,7 +43,7 @@ export class NodeFactory {
       return false;
     this.templates.set(template.id, template);
     return true;
-  public createNode(()
+  public createNode(((
     templateId: string,
     options: NodeCreationOptions = {}
   ): NodeTemplate | null {
@@ -53,7 +56,7 @@ export class NodeFactory {
       id: options.customId || `${template.id}-${Date.now()}`}
 },
   position: options.position || template.position,
-      data: {,
+      data: {
         ...template.data,
         ...options.overrides
     };
@@ -71,7 +74,7 @@ export class NodeFactory {
   const cloned: NodeTemplate = {,
   ...template,
   id: newId,
-  data: {,
+  data: {
   ...template.data,
   options: [...template.data.options],
 };

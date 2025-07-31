@@ -35,11 +35,13 @@ import {
   Camera
 } from 'lucide-react';
 
+}
 export interface VFXVisualizationDemoProps {
   className?: string;
   title?: string;
   showControlPanel?: boolean;
   autoRotateScenes?: boolean;
+}
 }
 export const VFXVisualizationDemo: React.FC<VFXVisualizationDemoProps> = ({)
   className = '',

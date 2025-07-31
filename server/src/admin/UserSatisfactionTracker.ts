@@ -16,6 +16,7 @@ import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 export interface SatisfactionSurvey {
   surveyId: string;
   userId: string;
@@ -34,6 +35,7 @@ export interface SatisfactionSurvey {
     negativeAspects: string[];
     suggestions: string[];
     openFeedback?: string;
+}
 }
   };
   
@@ -56,6 +58,7 @@ export interface SatisfactionSurvey {
 }
 
 }
+}
 export interface SatisfactionMetrics {
   // Aggregate Scores
   overallSatisfaction: {
@@ -63,6 +66,7 @@ export interface SatisfactionMetrics {
     trend: 'improving' | 'stable' | 'declining';
     changeFromPrevious: number;
     sampleSize: number;
+}
 }
   };
   
@@ -119,6 +123,7 @@ export interface SatisfactionMetrics {
 }
 
 }
+}
 export interface SatisfactionContext {
   // Product Context
   templateId?: string;
@@ -137,7 +142,9 @@ export interface SatisfactionContext {
   userRole: 'buyer' | 'seller' | 'admin' | 'moderator';
 }
 }
+}
 
+}
 }
 export interface SatisfactionAlert {
   alertId: string;
@@ -166,7 +173,9 @@ export interface SatisfactionAlert {
   resolvedAt?: Date;
 }
 }
+}
 
+}
 }
 export interface SatisfactionDashboard {
   // Summary Metrics
@@ -176,6 +185,7 @@ export interface SatisfactionDashboard {
     responseRate: number;
     totalResponses: number;
     trendDirection: 'up' | 'down' | 'stable';
+}
 }
   };
   
@@ -233,6 +243,7 @@ export type SatisfactionSource =
   | 'manual_entry';
 
 }
+}
 export interface SatisfactionTrendPoint {
   date: Date;
   score: number;
@@ -240,7 +251,9 @@ export interface SatisfactionTrendPoint {
   segments: Record<string, number>;
 }
 }
+}
 
+}
 }
 export interface SatisfactionDriver {
   factor: string;
@@ -248,6 +261,7 @@ export interface SatisfactionDriver {
   frequency: number; // how often mentioned
   sentiment: 'positive' | 'negative' | 'neutral';
   examples: string[];
+}
 }
 }
 

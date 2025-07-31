@@ -55,6 +55,7 @@ export enum EscalationCategory {
 }
 
 }
+}
 export interface EscalationRule {
   ruleId: string;
   name: string;
@@ -86,7 +87,9 @@ export interface EscalationRule {
   version: number;
 }
 }
+}
 
+}
 }
 export interface EscalationCondition {
   conditionId: string;
@@ -97,7 +100,9 @@ export interface EscalationCondition {
   logicalOperator?: 'AND' | 'OR';
 }
 }
+}
 
+}
 }
 export interface EscalationLevel {
   levelId: string;
@@ -125,7 +130,9 @@ export interface EscalationLevel {
   escalationCriteria?: EscalationCondition[];
 }
 }
+}
 
+}
 }
 export interface NotificationMethod {
   type: 'email' | 'sms' | 'push' | 'slack' | 'teams' | 'webhook' | 'dashboard';
@@ -136,7 +143,9 @@ export interface NotificationMethod {
   retryInterval?: number; // minutes
 }
 }
+}
 
+}
 }
 export interface EscalationAction {
   actionId: string;
@@ -146,7 +155,9 @@ export interface EscalationAction {
   rollbackable: boolean;
 }
 }
+}
 
+}
 }
 export interface EscalationCase {
   caseId: string;
@@ -188,7 +199,9 @@ export interface EscalationCase {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface EscalationPathStep {
   stepId: string;
@@ -205,7 +218,9 @@ export interface EscalationPathStep {
   timeSpent?: number; // minutes
 }
 }
+}
 
+}
 }
 export interface EscalationNotification {
   notificationId: string;
@@ -219,7 +234,9 @@ export interface EscalationNotification {
   priority: EscalationPriority;
 }
 }
+}
 
+}
 }
 export interface EscalationActionLog {
   actionId: string;
@@ -233,7 +250,9 @@ export interface EscalationActionLog {
   rolledBackAt?: Date;
 }
 }
+}
 
+}
 }
 export interface EscalationResolution {
   resolutionType: 'resolved' | 'cancelled' | 'transferred' | 'merged' | 'expired';
@@ -245,7 +264,9 @@ export interface EscalationResolution {
   improvementSuggestions?: string[];
 }
 }
+}
 
+}
 }
 export interface EscalationMetrics {
   totalCases: number;
@@ -274,7 +295,9 @@ export interface EscalationMetrics {
   ruleEffectivenessScore: number; // 0-100
 }
 }
+}
 
+}
 }
 export interface EscalationCategoryMetrics {
   category: EscalationCategory;
@@ -285,7 +308,9 @@ export interface EscalationCategoryMetrics {
   topIssues: string[];
 }
 }
+}
 
+}
 }
 export interface EscalationLevelMetrics {
   level: number;
@@ -297,7 +322,9 @@ export interface EscalationLevelMetrics {
   workloadDistribution: Map<string, number>; // assignee -> case count
 }
 }
+}
 
+}
 }
 export interface EscalationTrend {
   period: string; // 'hourly', 'daily', 'weekly', 'monthly'
@@ -308,7 +335,9 @@ export interface EscalationTrend {
   satisfactionScore: number;
 }
 }
+}
 
+}
 }
 export interface EscalationDashboard {
   overview: {
@@ -317,6 +346,7 @@ export interface EscalationDashboard {
     overdueResponses: number;
     overdueResolutions: number;
     averageWaitTime: number;
+}
 }
   };
   
@@ -349,6 +379,7 @@ export interface EscalationDashboard {
 }
 
 }
+}
 export interface EscalationAlert {
   alertId: string;
   type: 'sla_breach' | 'high_volume' | 'system_issue' | 'quality_concern' | 'capacity_limit';
@@ -360,7 +391,9 @@ export interface EscalationAlert {
   createdAt: Date;
 }
 }
+}
 
+}
 }
 export interface EscalationRecommendation {
   recommendationId: string;
@@ -371,6 +404,7 @@ export interface EscalationRecommendation {
   implementationEffort: 'low' | 'medium' | 'high';
   priority: EscalationPriority;
   category?: EscalationCategory;
+}
 }
 }
 

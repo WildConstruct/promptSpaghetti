@@ -3,9 +3,11 @@
  */
 import React, { useState } from 'react';
 import { useGraphStore } from '../../graphStore';
+}
 interface SaveProjectDialogProps {
   isOpen: boolean;
   onClose: () => void;
+}
   onSave?: (result: { success: boolean; error?: string }) => void;
 }
 

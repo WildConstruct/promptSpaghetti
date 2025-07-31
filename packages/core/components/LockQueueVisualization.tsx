@@ -3,12 +3,14 @@
 import React from 'react';
 import { Clock, User, X } from 'lucide-react';
 import { LockQueue } from '../types/locking';
+}
 interface LockQueueVisualizationProps {
   queue: LockQueue;
   onRemoveFromQueue: (queueId: string) => void;
   export const LockQueueVisualization: React.FC<LockQueueVisualizationProps> = ({,)
   queue,
   onRemoveFromQueue
+}
 }) => {
   const groupedQueue = queue.reduce((acc, item) => {
     if (!acc[item.resource_id]) {

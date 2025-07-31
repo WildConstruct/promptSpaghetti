@@ -7,6 +7,7 @@ import { AnalyticsEventType } from './AnalyticsCollector';
  * Cohort definition
  */
 }
+}
 export interface CohortDefinition {
   id: string;
   name: string;
@@ -15,6 +16,7 @@ export interface CohortDefinition {
   timeframe: {
     startDate: number;
     endDate?: number;
+}
 }
   };
   type: 'acquisition' | 'behavior' | 'retention' | 'custom';
@@ -28,6 +30,7 @@ export interface CohortDefinition {
  * Cohort criteria for user segmentation
  */
 }
+}
 export interface CohortCriteria {
   // User demographics
   userAttributes?: {
@@ -36,6 +39,7 @@ export interface CohortCriteria {
     registrationPeriod?: {
       startDate: number;
       endDate: number;
+}
 }
     };
   };
@@ -78,6 +82,7 @@ export interface CohortCriteria {
  * Cohort analysis result
  */
 }
+}
 export interface CohortAnalysis {
   cohortId: string;
   analysisId: string;
@@ -91,10 +96,12 @@ export interface CohortAnalysis {
   comparisonData?: CohortComparison;
 }
 }
+}
 
 /**
  * Cohort member
  */
+}
 }
 export interface CohortMember {
   userId: number;
@@ -110,6 +117,7 @@ export interface CohortMember {
     tokenUsage: number;
     totalCost: number;
 }
+}
   };
   segments: string[];
   status: 'active' | 'inactive' | 'churned';
@@ -118,6 +126,7 @@ export interface CohortMember {
 /**
  * Cohort metrics
  */
+}
 }
 export interface CohortMetrics {
   totalUsers: number;
@@ -132,10 +141,12 @@ export interface CohortMetrics {
   engagementScore: number;
 }
 }
+}
 
 /**
  * Cohort segment
  */
+}
 }
 export interface CohortSegment {
   segmentId: string;
@@ -150,6 +161,7 @@ export interface CohortSegment {
     successRate: number;
     tokenUsage: number;
 }
+}
   };
   characteristics: string[];
 }
@@ -157,6 +169,7 @@ export interface CohortSegment {
 /**
  * Cohort trend data
  */
+}
 }
 export interface CohortTrend {
   period: string;
@@ -170,10 +183,12 @@ export interface CohortTrend {
   retentionRate: number;
 }
 }
+}
 
 /**
  * Retention analysis data
  */
+}
 }
 export interface RetentionData {
   cohortPeriod: string;
@@ -186,12 +201,14 @@ export interface RetentionData {
     rate: number;
     users: number;
 }
+}
   }>;
 }
 
 /**
  * Cohort comparison data
  */
+}
 }
 export interface CohortComparison {
   comparisonId: string;
@@ -200,6 +217,7 @@ export interface CohortComparison {
     name: string;
     size: number;
     metrics: CohortMetrics;
+}
 }
   }>;
   differences: Array<{

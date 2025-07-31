@@ -2,6 +2,7 @@
 // React component for managing API tokens with scope-based authorization
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
+}
 interface ApiToken {
   id: string;,
   name: string;
@@ -26,6 +27,7 @@ interface ApiToken {
   export const ApiTokenManager: React.FC<ApiTokenManagerProps> = ({,)
   onTokenCreated,
   onTokenRevoked
+}
 }) => {
   const { user } = useAuth();
   const [tokens, setTokens] = useState<ApiToken>([]);
@@ -50,7 +52,7 @@ interface ApiToken {
   const fetchTokens = async () => {
     try {
       const response = await fetch('/api/auth/api-tokens', {)
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
       });
       if (!response.ok) {
@@ -66,7 +68,7 @@ interface ApiToken {
   const fetchStats = async () => {
     try {
       const response = await fetch('/api/auth/api-tokens/stats', {)
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
       });
       if (response.ok) {
@@ -93,7 +95,7 @@ interface ApiToken {
       setError(null);
       const response = await fetch('/api/auth/api-tokens', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
   },
@@ -127,7 +129,7 @@ interface ApiToken {
       setRevoking(tokenId);
       const response = await fetch('/api/auth/api-tokens/revoke', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
   },

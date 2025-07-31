@@ -20,6 +20,7 @@ import { SecurityPolicyAnalysisEngine } from '../services/SecurityPolicyAnalysis
 let riskScoringEngine: SecurityRiskScoringEngine | null = null;
 
 }
+}
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
@@ -28,6 +29,7 @@ interface APIResponse<T = any> {
   timestamp: number;
 }
 
+}
 }
 interface CreateRiskRequest {
   risk_name: string;
@@ -39,6 +41,7 @@ interface CreateRiskRequest {
     severity_level: 'low' | 'medium' | 'high' | 'critical';
     affected_systems: string[];
     exploit_available: boolean;
+}
 }
   };
   threat_details?: {
@@ -80,6 +83,7 @@ interface CreateRiskRequest {
 }
 
 }
+}
 interface UpdateRiskScoreRequest {
   update_reason: string;
   score_adjustments?: {
@@ -87,6 +91,7 @@ interface UpdateRiskScoreRequest {
     threat_score_adjustment?: number;
     asset_score_adjustment?: number;
     business_impact_adjustment?: number;
+}
 }
   };
   new_intelligence?: {
@@ -97,6 +102,7 @@ interface UpdateRiskScoreRequest {
 }
 
 }
+}
 interface PrioritizeRisksRequest {
   risk_ids: string[];
   prioritization_criteria?: string[];
@@ -105,6 +111,7 @@ interface PrioritizeRisksRequest {
     business_priorities: string[];
     resource_constraints: string[];
     timeline_requirements: string;
+}
 }
   };
   filter_criteria?: {
@@ -117,11 +124,13 @@ interface PrioritizeRisksRequest {
 }
 
 }
+}
 interface GenerateReportRequest {
   report_scope: 'all_risks' | 'high_priority' | 'recent_risks' | 'custom';
   time_period?: {
     start_date: number;
     end_date: number;
+}
 }
   };
   risk_filters?: {

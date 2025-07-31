@@ -9,6 +9,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface UserBehaviorEvent {
     id: string;
     userId: string;
@@ -38,6 +39,7 @@ export declare enum UserActionType {
     SEARCH_QUERY = "search_query",
     NAVIGATION = "navigation"
 
+}
 export interface GeolocationData {
     country: string;
     region: string;
@@ -47,6 +49,7 @@ export interface GeolocationData {
     timezone: string;
 
 
+}
 export interface UserBehaviorProfile {
     userId: string;
     createdAt: Date;
@@ -73,6 +76,7 @@ export interface UserBehaviorProfile {
     adaptationRate: number;
 
 
+}
 export interface TravelPattern {
     fromLocation: GeolocationData;
     toLocation: GeolocationData;
@@ -81,6 +85,7 @@ export interface TravelPattern {
     lastOccurrence: Date;
 
 
+}
 export interface ResourceAccess {
     resource: string;
     accessCount: number;
@@ -90,6 +95,7 @@ export interface ResourceAccess {
     riskScore: number;
 
 
+}
 export interface BehaviorAnomaly {
     id: string;
     userId: string;
@@ -128,6 +134,7 @@ export declare enum AnomalySeverity {
     HIGH = "high",
     CRITICAL = "critical"
 
+}
 export interface RiskAssessment {
     overallRisk: number;
     businessImpact: number;
@@ -136,6 +143,7 @@ export interface RiskAssessment {
     mitigationUrgency: 'low' | 'medium' | 'high' | 'immediate';
 
 
+}
 export interface BehaviorAnalyticsConfig {
     profileUpdateInterval: number;
     anomalyDetectionSensitivity: number;
@@ -211,3 +219,4 @@ export declare class UserBehaviorAnalyticsFactory {
 
 export default UserBehaviorAnalytics;
 //# sourceMappingURL=UserBehaviorAnalytics.d.ts.map
+}

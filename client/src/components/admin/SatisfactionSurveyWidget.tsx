@@ -15,12 +15,14 @@ import { Badge } from '../ui/badge';
 import { Progress } from '../ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { AlertTriangle, TrendingUp, TrendingDown, Users, MessageSquare, Star } from 'lucide-react';
+}
 interface SatisfactionMetrics {
   overallScore: number;,
   npsScore: number;
   responseRate: number;,
   totalResponses: number;
   trendDirection: 'up' | 'down' | 'stable';
+}
 interface SatisfactionAlert {
   alertId: string;,
   alertType: string;
@@ -30,7 +32,9 @@ interface SatisfactionAlert {
   affectedUsers: number;
   triggeredAt: Date;,
   acknowledged: boolean;
+}
 interface RecentFeedback {
+}
   positive: { text: string; user: string; timestamp: Date }[];
   negative: { text: string; user: string; timestamp: Date }[];
   suggestions: { text: string; user: string; timestamp: Date }[];
@@ -42,6 +46,7 @@ interface RecentFeedback {
 //     todayResponses: number;
 //     averageToday: number;
 
+}
 //     hourlyTrend: { hour: number; score: number; responses: number }[];
 //   };
 //   segments: {
@@ -59,12 +64,14 @@ interface RecentFeedback {
 //   timestamp: Date;
 //   dataFreshness: number;
 // }
+}
 interface SatisfactionSurveyWidgetProps {
   className?: string;
   refreshInterval?: number;
   export const SatisfactionSurveyWidget: React.FC<SatisfactionSurveyWidgetProps> = ({ ),
   className,
   refreshInterval = 30000
+}
 }) => {
   const [dashboardData, setDashboardData] = useState<{
   summary: SatisfactionMetrics;,

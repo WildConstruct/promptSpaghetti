@@ -12,6 +12,7 @@ import { ModerationStatesService } from './ModerationStatesService';
 import { RBACService } from './RBACService';
 import { CommentAnalyticsService } from './CommentAnalyticsService';
 
+}
 export interface UnifiedDashboardConfig {
   enableRealTimeUpdates: boolean;
   autoRefreshInterval: number; // milliseconds,
@@ -22,7 +23,9 @@ export interface UnifiedDashboardConfig {
   defaultModerationMode: 'manual' | 'assisted' | 'automated';
   escalationThreshold: number;
   workloadDistributionMode: 'round_robin' | 'expertise_based' | 'workload_balanced'
+}
   }
+}
 export interface DashboardOverview {
   timestamp: Date;
   summary: {
@@ -32,6 +35,7 @@ export interface DashboardOverview {
   autoRejected: number;
   escalated: number;
   appealed: number;
+}
 };
   queues: {
   highPriority: number;
@@ -52,6 +56,7 @@ export interface DashboardOverview {
   performanceTrend: 'improving' | 'declining' | 'stable'
   };
 }
+}
 export interface ModerationAlert {
   id: string;
   type: 'queue_backlog' | 'sla_breach' | 'policy_violation' | 'system_error' | 'performance_issue';
@@ -61,6 +66,8 @@ export interface ModerationAlert {
   data?: Record<string, unknown>;
   acknowledged: boolean;
   assignedTo?: string;
+}
+}
 }
 export interface ModerationWorkload {
   moderatorId: string;
@@ -75,7 +82,9 @@ export interface ModerationWorkload {
   start: string; // HH:MM,
   end: string; // HH:MM,
   timezone: string;
+}
 };
+}
 }
 export interface AdvancedSearchQuery {
   contentTypes?: string;
@@ -84,6 +93,7 @@ export interface AdvancedSearchQuery {
   dateRange?: {
   start: Date;
   end: Date;
+}
 };
   moderators?: string;
   policies?: string;
@@ -98,6 +108,7 @@ export interface AdvancedSearchQuery {
   limit?: number;
   offset?: number;
 }
+}
 export interface BulkModerationAction {
   actionType: 'approve' | 'reject' | 'flag' | 'escalate' | 'assign' | 'prioritize';
   itemIds: string;
@@ -106,12 +117,15 @@ export interface BulkModerationAction {
   metadata?: Record<string, unknown>;
   scheduledFor?: Date;
 }
+}
+}
 export interface DashboardMetrics {
   realTime: {
   activeModerators: number;
   itemsBeingReviewed: number;
   averageWaitTime: number;
   systemLoad: number;
+}
 };
   historical: {
   dailyVolume: Array<{ date: string; volume: number }>;
@@ -175,6 +189,7 @@ export class UnifiedModerationDashboard {
    * Get comprehensive dashboard overview
    */
   async getDashboardOverview(moderatorId?: string): Promise<DashboardOverview> {
+
   const startTime = Date.now();
   try {
   // Fetch data from all integrated services
@@ -259,9 +274,9 @@ export class UnifiedModerationDashboard {
   /**
    * Execute bulk moderation actions
    */
-  async executeBulkActions(()
+  async executeBulkActions(((
     actions: BulkModerationAction,
-    moderatorId: string,
+    moderatorId: string
   ): Promise<{
     successful: number;
   failed: number;
@@ -298,6 +313,7 @@ export class UnifiedModerationDashboard {
    * Get moderator workload and performance analytics
    */
   async getModeratorWorkloads(): Promise<ModerationWorkload> {
+
     try {
       // Get active moderators from RBAC
       const moderators = await this.rbacService.getUsersByRole('moderator');
@@ -315,9 +331,9 @@ export class UnifiedModerationDashboard {
   /**
    * Intelligent workload distribution
    */
-  async distributeWorkload(()
+  async distributeWorkload(((
     items: string,
-    distribution: 'urgent' | 'balanced' | 'expertise',
+    distribution: 'urgent' | 'balanced' | 'expertise'
   ): Promise<{
     assignments: Array<{ moderatorId: string; itemIds: string }>;
     unassigned: string;
@@ -348,6 +364,7 @@ export class UnifiedModerationDashboard {
    * Get comprehensive dashboard metrics
    */
   async getDashboardMetrics(timeRange?: { start: Date; end: Date }): Promise<DashboardMetrics> {
+
   const range = timeRange || {
   start: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7 days ago,
   end: new Date(),
@@ -381,6 +398,7 @@ export class UnifiedModerationDashboard {
     console.log(`🔄 Real-time updates enabled (${this.config.autoRefreshInterval}ms interval)`);}
   // Private helper methods
   private async getPerformanceMetrics(): Promise<any> {
+
   // Aggregate performance data from all services
   return {
   avgProcessingTime: 15.5, // minutes,
@@ -398,6 +416,7 @@ export class UnifiedModerationDashboard {
   performanceTrend: 'improving' as const,
 };
   private async checkAndGenerateAlerts(overview: DashboardOverview): Promise<void> {
+
     // Check for queue backlog
     if (overview.queues.highPriority > 100) {
       this.addAlert({)
@@ -430,6 +449,7 @@ export class UnifiedModerationDashboard {
     if (!this.config.enablePerformanceTracking) return;
     this.performanceMetrics.set(`${name}_${Date.now()}`, value);}
   private async searchAnalyticsData(query: AdvancedSearchQuery): Promise<any> {
+
   // Search analytics data based on query
   return [];
   private mergeSearchResults(resultSets: any[]): any {,
@@ -462,6 +482,7 @@ export class UnifiedModerationDashboard {
     // Generate search suggestions based on query and results
     return [];
   private async executeSingleBulkAction(action: BulkModerationAction, moderatorId: string): Promise<void> {
+
     switch (action.actionType) {
     case 'approve':
       await this.automatedService.batchApprove(action.itemIds, moderatorId, action.reason);
@@ -475,6 +496,7 @@ export class UnifiedModerationDashboard {
     default:
       throw new Error(`Unknown bulk action type: ${action.actionType}`);}
   private async calculateModeratorWorkload(moderatorId: string): Promise<ModerationWorkload> {
+
   // Calculate individual moderator workload metrics
   return {
   moderatorId,
@@ -550,6 +572,7 @@ export class UnifiedModerationDashboard {
         unassigned.push(item);
     reasoning.push(`Expertise-based distribution: matched ${items.length - unassigned.length} items to specialized moderators`);}
   private async getItemType(itemId: string): Promise<string> {
+
   // Determine item type for expertise matching
   return 'content_moderation'; // Default type
   private async refreshRealTimeData(): Promise<void> {,
@@ -560,6 +583,7 @@ export class UnifiedModerationDashboard {
   subscription.emit('dashboard_update', overview);
 });
   private async getRealTimeMetrics(): Promise<any> {
+
   return {
   activeModerators: 12,
   itemsBeingReviewed: 45,
@@ -567,6 +591,7 @@ export class UnifiedModerationDashboard {
   systemLoad: 67 // percentage,
 };
   private async getHistoricalMetrics(range: { start: Date; end: Date }): Promise<any> {
+
     return {
       dailyVolume: [],
       resolutionTimes: [],
@@ -574,6 +599,7 @@ export class UnifiedModerationDashboard {
       violationTypes: {}
     };
   private async generatePredictions(): Promise<any> {
+
   return {
   expectedVolume24h: 1400,
   estimatedBacklog: 45,

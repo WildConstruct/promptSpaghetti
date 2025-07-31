@@ -23,6 +23,7 @@ const uiColors = {
   disabled: '#6b7280',
 };
 
+}
 export interface PerformanceControlsProps {
   settings: PerformanceSettings;
   onChange: (settings: PerformanceSettings) => void;
@@ -30,6 +31,7 @@ export interface PerformanceControlsProps {
   * Performance Settings Controls Component
   * Manages performance monitoring and debugging options
   */
+}
 }
 export const PerformanceControls: React.FC<PerformanceControlsProps> = ({)
   settings,

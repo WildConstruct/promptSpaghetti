@@ -8,6 +8,7 @@ import { NodeValidationFramework, NodeValidationResult, NodeValidationConfig } f
 import { AdvancedNodeData, ValidationResult } from '../runtime/advanced';
 import { EventEmitter } from 'events';
 
+}
 export interface ValidationServiceConfig extends NodeValidationConfig {
   /** Enable validation result caching */
   enableCaching: boolean;
@@ -26,6 +27,8 @@ export interface ValidationServiceConfig extends NodeValidationConfig {
   performanceIssuesDetected: number;
   cacheHitRate: number;
 }
+}
+}
 export interface ValidationCacheEntry {
   result: NodeValidationResult;
   timestamp: number;
@@ -33,6 +36,7 @@ export interface ValidationCacheEntry {
   /**
   * Node Validation Service with caching, monitoring, and batch operations
   */
+}
 }
 export class NodeValidationService extends EventEmitter {
   private framework: NodeValidationFramework;
@@ -118,6 +122,7 @@ export class NodeValidationService extends EventEmitter {
    * Validate multiple nodes in batch with parallel processing
    */
   async validateNodeBatch(nodes: AdvancedNodeData): Promise<NodeValidationResult> {
+
   if (nodes.length === 0) return [];
   const batches = this.chunkArray(nodes, this.config.batchSize);
   const results: NodeValidationResult = [];

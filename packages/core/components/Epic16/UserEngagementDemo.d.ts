@@ -6,6 +6,7 @@
  */
 import React from 'react';
 
+}
 export interface UserEngagementDemoProps {
     userId?: string;
     showFullFeatures?: boolean;
@@ -15,3 +16,4 @@ export interface UserEngagementDemoProps {
 export declare const UserEngagementDemo: React.FC<UserEngagementDemoProps>;
 export default UserEngagementDemo;
 //# sourceMappingURL=UserEngagementDemo.d.ts.map
+}

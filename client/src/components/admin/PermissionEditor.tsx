@@ -12,6 +12,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 
 // Types for permission management
+}
 interface Permission {
   id: string;,
   name: string;
@@ -67,6 +68,7 @@ interface Permission {
   scope: 'own',
   description: 'View project details and contents',
   category: 'Projects',
+}
 }
   {
   id: 'perm_edit_projects',

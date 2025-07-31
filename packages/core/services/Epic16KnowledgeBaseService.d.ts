@@ -7,6 +7,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface KnowledgeBaseArticle {
     id: string;
     title: string;
@@ -94,6 +95,7 @@ export declare enum ReadingLevel {
     ADVANCED = "advanced",
     EXPERT = "expert"
 
+}
 export interface ArticleSection {
     id: string;
     title: string;
@@ -117,6 +119,7 @@ export declare enum SectionType {
     TABLE = "table",
     INTERACTIVE = "interactive"
 
+}
 export interface ArticleAttachment {
     id: string;
     name: string;
@@ -128,6 +131,7 @@ export interface ArticleAttachment {
     isPublic: boolean;
 
 
+}
 export interface ArticleRating {
     userId: string;
     rating: number;
@@ -136,6 +140,7 @@ export interface ArticleRating {
     helpful: boolean;
 
 
+}
 export interface ArticleFeedback {
     id: string;
     userId: string;
@@ -161,6 +166,7 @@ export declare enum FeedbackStatus {
     RESOLVED = "resolved",
     REJECTED = "rejected"
 
+}
 export interface AccessibilityFeature {
     type: AccessibilityType;
     description: string;
@@ -175,6 +181,7 @@ export declare enum AccessibilityType {
     CAPTIONS = "captions",
     TRANSCRIPT = "transcript"
 
+}
 export interface InteractiveKBElement {
     id: string;
     type: InteractiveElementType;
@@ -193,12 +200,14 @@ export declare enum InteractiveElementType {
     QUIZ = "quiz",
     CHECKLIST = "checklist"
 
+}
 export interface ElementPosition {
     sectionId: string;
     order: number;
     placement: 'before' | 'after' | 'replace' | 'inline';
 
 
+}
 export interface CodeExample {
     id: string;
     language: string;
@@ -210,6 +219,7 @@ export interface CodeExample {
     githubLink?: string;
 
 
+}
 export interface VideoContent {
     id: string;
     title: string;
@@ -222,6 +232,7 @@ export interface VideoContent {
     chapters: VideoChapter[];
 
 
+}
 export interface VideoChapter {
     title: string;
     startTime: number;
@@ -229,6 +240,7 @@ export interface VideoChapter {
     description?: string;
 
 
+}
 export interface ImageContent {
     id: string;
     url: string;
@@ -240,6 +252,7 @@ export interface ImageContent {
     zoomable: boolean;
 
 
+}
 export interface ArticleAnalytics {
     totalViews: number;
     uniqueViews: number;
@@ -260,6 +273,7 @@ export interface ArticleAnalytics {
     seoScore: number;
 
 
+}
 export interface SectionAnalytics {
     sectionId: string;
     views: number;
@@ -267,6 +281,7 @@ export interface SectionAnalytics {
     exitRate: number;
 
 
+}
 export interface UserJourneyStep {
     fromArticle?: string;
     toArticle?: string;
@@ -274,6 +289,7 @@ export interface UserJourneyStep {
     sessionId: string;
 
 
+}
 export interface KnowledgeBaseSearch {
     query: string;
     filters: SearchFilters;
@@ -284,6 +300,7 @@ export interface KnowledgeBaseSearch {
     didYouMean?: string;
 
 
+}
 export interface SearchFilters {
     categories: KnowledgeCategory[];
     types: ArticleType[];
@@ -296,11 +313,13 @@ export interface SearchFilters {
     hasCode: boolean;
 
 
+}
 export interface DateRange {
     start?: Date;
     end?: Date;
 
 
+}
 export interface SearchResult {
     article: KnowledgeBaseArticle;
     score: number;
@@ -309,6 +328,7 @@ export interface SearchResult {
     relevanceReason: string[];
 
 
+}
 export interface MatchedSection {
     sectionId: string;
     title: string;
@@ -316,6 +336,7 @@ export interface MatchedSection {
     highlightedText: string;
 
 
+}
 export interface SearchSuggestion {
     text: string;
     type: SuggestionType;
@@ -328,6 +349,7 @@ export declare enum SuggestionType {
     RELATED_TOPIC = "related_topic",
     POPULAR_SEARCH = "popular_search"
 
+}
 export interface AIRecommendation {
     articleId: string;
     score: number;
@@ -344,6 +366,7 @@ export declare enum RecommendationReason {
     TRENDING = "trending",
     PERSONALIZED = "personalized"
 
+}
 export interface RecommendationContext {
     currentArticleId?: string;
     userSearchHistory: string[];
@@ -353,6 +376,7 @@ export interface RecommendationContext {
     timestamp: Date;
 
 
+}
 export interface PersonalizationFactor {
     type: PersonalizationType;
     weight: number;
@@ -367,6 +391,7 @@ export declare enum PersonalizationType {
     DEVICE_TYPE = "device_type",
     TIME_OF_DAY = "time_of_day"
 
+}
 export interface KnowledgeBaseConfig {
     searchConfig: SearchConfig;
     aiConfig: AIConfig;
@@ -376,6 +401,7 @@ export interface KnowledgeBaseConfig {
     integrationConfig: IntegrationConfig;
 
 
+}
 export interface SearchConfig {
     enableAISearch: boolean;
     enableAutoComplete: boolean;
@@ -388,6 +414,7 @@ export interface SearchConfig {
     synonyms: Record<string, string[]>;
 
 
+}
 export interface AIConfig {
     enableRecommendations: boolean;
     enableContentGeneration: boolean;
@@ -398,6 +425,7 @@ export interface AIConfig {
     personalizedWeight: number;
 
 
+}
 export interface ContentConfig {
     autoPublish: boolean;
     requireReview: boolean;
@@ -408,6 +436,7 @@ export interface ContentConfig {
     duplicateDetection: boolean;
 
 
+}
 export interface AnalyticsConfig {
     trackingEnabled: boolean;
     retentionPeriod: number;
@@ -417,6 +446,7 @@ export interface AnalyticsConfig {
     performanceTracking: boolean;
 
 
+}
 export interface LocalizationConfig {
     defaultLanguage: string;
     supportedLanguages: string[];
@@ -425,6 +455,7 @@ export interface LocalizationConfig {
     fallbackLanguage: string;
 
 
+}
 export interface IntegrationConfig {
     crmIntegration: boolean;
     helpDeskIntegration: boolean;
@@ -475,6 +506,7 @@ export declare class Epic16KnowledgeBaseService extends EventEmitter {
     private updateHelpfulnessScore;
     private incrementVersion;
 
+}
 export interface UserKBSession {
     userId: string;
     sessionStart: Date;
@@ -483,12 +515,14 @@ export interface UserKBSession {
     preferences: UserKBPreferences;
 
 
+}
 export interface SearchHistoryItem {
     query: string;
     timestamp: Date;
     results: number;
 
 
+}
 export interface UserKBPreferences {
     favoriteCategories?: KnowledgeCategory[];
     preferredReadingLevel?: ReadingLevel;
@@ -498,3 +532,4 @@ export interface UserKBPreferences {
 
 export default Epic16KnowledgeBaseService;
 //# sourceMappingURL=Epic16KnowledgeBaseService.d.ts.map
+}

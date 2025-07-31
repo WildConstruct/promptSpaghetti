@@ -6,6 +6,7 @@
  */
 import React, { useState, useEffect, useRef } from 'react';
 import { MarketplaceTemplate } from './MarketplaceCard';
+}
 interface PreviewResult {
   output: string;
   cost: number;
@@ -24,6 +25,7 @@ interface PreviewResult {
   id: string;
   name: string;
   tier: 'free' | 'pro' | 'enterprise'
+}
   };
 
 export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({)

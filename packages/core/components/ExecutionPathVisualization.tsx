@@ -12,11 +12,13 @@ import {
   ExecutionVisualizationConfig,
   DEFAULT_VISUALIZATION_CONFIG 
 } from '../types/ExecutionPath';
+}
 interface ExecutionPathVisualizationProps {
   results: PreviewResultWithPath;
   onNodeHighlight?: (nodeIds: string) => void;
   config?: Partial<ExecutionVisualizationConfig>;
   className?: string;
+}
 }
 
 export const ExecutionPathVisualization: React.FC<ExecutionPathVisualizationProps> = ({

@@ -20,11 +20,14 @@ import {
 
 // Domain service interfaces
 
+}
 export interface IGraphValidationService {
   validateGraph(graph: Graph): Promise<ValidationError>;
   validateNode(node: Node): ValidationError;
   validateConnection(sourceId: string, targetId: string, graph: Graph): ValidationError;
   isValidGraph(graph: Graph): boolean;
+}
+}
 }
 export interface IGraphOperationsService {
   addNode(graph: Graph, nodeType: string, position: { x: number; y: number }): Graph;
@@ -37,13 +40,16 @@ export interface IGraphOperationsService {
   importGraph(graphData: any): Graph;
   exportGraph(graph: Graph): any;
 }
+}
 export interface IGraphExecutionService {
   executeGraph(graph: Graph, seeds: number): Promise<Record<string, any>>;
   executeNode(node: Node, context: any): Promise<any>;
   previewGraph(graph: Graph, seeds: number): Promise<Record<string, any>>;
   cancelExecution(): void;
   getExecutionStatus(): 'idle' | 'running' | 'completed' | 'error'
+}
   }
+}
 export interface IGraphStateService {
   getState(): GraphEditorState;
   setState(state: Partial<GraphEditorState>): void;
@@ -56,6 +62,8 @@ export interface IGraphStateService {
   loadState(): void;
   // Main domain interface
 }
+}
+}
 export interface IGraphEditorDomain {
   // React Components
   components: {
@@ -63,6 +71,7 @@ export interface IGraphEditorDomain {
   NodePalette: React.ComponentType<NodePaletteProps>;
   Inspector: React.ComponentType<InspectorProps>;
   Canvas: React.ComponentType<CanvasProps>;
+}
 };
   // React Hooks
   hooks: {
@@ -132,9 +141,11 @@ export interface IGraphEditorDomain {
 
 // Domain factory function
 }
+}
 export interface GraphEditorDomainFactory {
   create(config?: Partial<GraphEditorConfig>): IGraphEditorDomain;
   // Event constants for cross-domain communication
+}
 }
 export const GRAPH_DOMAIN_EVENTS = {
   GRAPH_MODIFIED: 'graph:modified',

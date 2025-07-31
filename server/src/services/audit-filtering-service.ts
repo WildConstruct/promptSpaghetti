@@ -35,6 +35,7 @@ const CIRCUIT_BREAKER_THRESHOLD = 5;
 const CIRCUIT_BREAKER_TIMEOUT = 60000; // 1 minute
 
 }
+}
 export interface AdvancedSearchFilter {
   // Basic filters
   timeRange?: TimeRangeFilter;
@@ -53,7 +54,9 @@ export interface AdvancedSearchFilter {
   output?: OutputOptions;
 }
 }
+}
 
+}
 }
 export interface TimeRangeFilter {
   startDate?: Date;
@@ -64,10 +67,12 @@ export interface TimeRangeFilter {
     value: number;
     unit: 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'years';
 }
+}
   };
   timePattern?: TimePatternFilter;
 }
 
+}
 }
 export interface ActorFilter {
   userIds?: string[];
@@ -80,7 +85,9 @@ export interface ActorFilter {
   searchTerm?: string;
 }
 }
+}
 
+}
 }
 export interface ResourceFilter {
   resourceTypes?: string[];
@@ -91,7 +98,9 @@ export interface ResourceFilter {
   searchTerm?: string;
 }
 }
+}
 
+}
 }
 export interface ContextFilter {
   sessionIds?: string[];
@@ -101,7 +110,9 @@ export interface ContextFilter {
   deviceTypes?: ('desktop' | 'mobile' | 'tablet' | 'api' | 'system')[];
 }
 }
+}
 
+}
 }
 export interface SearchFilter {
   query: string;
@@ -112,7 +123,9 @@ export interface SearchFilter {
   highlight?: boolean;
 }
 }
+}
 
+}
 }
 export interface ComplianceFilter {
   standards?: ComplianceStandard[];
@@ -123,9 +136,11 @@ export interface ComplianceFilter {
     min?: number;
     max?: number;
 }
+}
   };
 }
 
+}
 }
 export interface AdvancedFilter {
   customSql?: string;
@@ -133,7 +148,9 @@ export interface AdvancedFilter {
   correlations?: CorrelationConfig[];
 }
 }
+}
 
+}
 }
 export interface OutputOptions {
   fields?: string[];
@@ -146,7 +163,9 @@ export interface OutputOptions {
   sortOrder?: 'asc' | 'desc';
 }
 }
+}
 
+}
 }
 export interface CachedResult {
   result: AuditEventResponse;
@@ -154,12 +173,15 @@ export interface CachedResult {
   expiresAt: Date;
 }
 }
+}
 
+}
 }
 export interface CircuitBreakerState {
   failures: number;
   lastFailure?: Date;
   state: 'closed' | 'open' | 'half-open';
+}
 }
 }
 
@@ -702,6 +724,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
 
 // Supporting interfaces
 }
+}
 export interface SavedFilter {
   id: string;
   name: string;
@@ -715,7 +738,9 @@ export interface SavedFilter {
   usageCount: number;
 }
 }
+}
 
+}
 }
 export interface SuggestedFilter {
   field: string;
@@ -724,28 +749,37 @@ export interface SuggestedFilter {
   description: string;
 }
 }
+}
 
+}
 }
 export interface TimePreset {
   // Define time preset interface
 }
 }
+}
 
+}
 }
 export interface TimePatternFilter {
   // Define time pattern interface
 }
 }
+}
 
+}
 }
 export interface AggregationConfig {
   // Define aggregation interface
 }
 }
+}
 
+}
 }
 export interface CorrelationConfig {
   // Define correlation interface
+}
 }
 }
 

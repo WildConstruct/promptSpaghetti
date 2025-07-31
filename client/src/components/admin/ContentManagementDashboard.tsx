@@ -19,6 +19,7 @@ import {
 import { useAuthStore } from '../../stores/authStore';
 
 // Types
+}
 interface ContentItem {
   id: string;,
   title: string;
@@ -27,7 +28,7 @@ interface ContentItem {
   status: 'draft' | 'published' | 'archived' | 'under_review' | 'rejected' | 'featured';
   visibility: 'public' | 'private' | 'organization' | 'admin_only';,
   content: unknown;
-  metadata: {,
+  metadata: {
   tags: string;,
   category: string;
   version: number;,
@@ -40,11 +41,13 @@ interface ContentItem {
   expiresAt?: string;
   publishedAt?: string;
   customFields: Record<string, unknown>;
+}
 };
   organizationId?: string;
   parentId?: string;
   createdAt: string;,
   updatedAt: string;
+}
 interface ContentFilter {
   searchTerm: string;,
   typeFilter: string;
@@ -53,30 +56,34 @@ interface ContentFilter {
   authorFilter: string;,
   categoryFilter: string;
   featuredFilter?: boolean;
-  dateRange?: {,
+  dateRange?: {
   start: string;,
   end: string;
+}
 };
+}
 interface ContentStatistics {
   totalItems: number;,
   byType: Record<string, number>;
   byStatus: Record<string, number>;
   byVisibility: Record<string, number>;
   featuredCount: number;,
-  recentActivity: {,
+  recentActivity: {
   created24h: number;,
   updated24h: number;
   published24h: number;
+}
 };
-  topCategories: Array<{,
+  topCategories: Array<{
   category: string;
   count: number;
 }>;
-  topAuthors: Array<{,
+  topAuthors: Array<{
   authorId: string;
   authorName: string;,
   count: number;
 }>;
+}
 interface DashboardState {
   items: ContentItem;,
   loading: boolean;
@@ -92,13 +99,14 @@ interface DashboardState {
   showBulkActions: boolean;
 const ContentManagementDashboard: React.FC = () => {
   const navigate = useNavigate();
+}
   const { user } = useAuthStore();
   // State management
   const [state, setState] = useState<DashboardState>({)
   items: [],
   loading: true,
   error: null,
-  filters: {,
+  filters: {
   searchTerm: '',
   typeFilter: '',
   statusFilter: '',
@@ -131,7 +139,7 @@ const ContentManagementDashboard: React.FC = () => {
       params.append('offset', ((state.currentPage - 1) * state.pageSize).toString());
       const response = await fetch(`/api/content-management/content?${params}`, {)}
   },
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
 }
           'Content-Type': 'application/json'
@@ -158,7 +166,7 @@ const ContentManagementDashboard: React.FC = () => {
       return;
     try {
       const response = await fetch('/api/content-management/content/statistics', {)
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
 }
           'Content-Type': 'application/json'
@@ -202,7 +210,7 @@ const ContentManagementDashboard: React.FC = () => {
       const response = await fetch(`/api/content-management/content/${contentId}/publish`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
 }
           'Content-Type': 'application/json'
@@ -218,7 +226,7 @@ const ContentManagementDashboard: React.FC = () => {
       const response = await fetch(`/api/content-management/content/${contentId}/archive`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
 }
           'Content-Type': 'application/json'
@@ -234,7 +242,7 @@ const ContentManagementDashboard: React.FC = () => {
       const response = await fetch(`/api/content-management/content/${contentId}/feature`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
 }
           'Content-Type': 'application/json'
@@ -252,7 +260,7 @@ const ContentManagementDashboard: React.FC = () => {
     try {
       const response = await fetch('/api/content-management/content/bulk/status', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
 }
           'Content-Type': 'application/json'

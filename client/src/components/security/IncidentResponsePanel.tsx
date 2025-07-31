@@ -22,6 +22,7 @@ import {
   Activity
 } from 'lucide-react';
 import { format, formatDistanceToNow } from 'date-fns';
+}
 interface SecurityIncident {
   id: string;,
   title: string;
@@ -67,6 +68,7 @@ interface SecurityIncident {
   incidentId,
   onIncidentUpdate,
   // onClose // Commented out unused prop
+}
 }) => {
   const [incident, setIncident] = useState<SecurityIncident | null>(null);
   const [isLoading, setIsLoading] = useState(true);

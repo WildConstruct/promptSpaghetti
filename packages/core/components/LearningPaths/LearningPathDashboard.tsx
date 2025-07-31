@@ -14,15 +14,18 @@ import {
   EnrollmentStatus,
   Epic16LearningPathService
 } from '../../services/Epic16LearningPathService';
+}
 interface LearningPathDashboardProps {
   learningService: Epic16LearningPathService;
   userId: string;
   userRole: 'user' | 'creator' | 'admin';
   onPathSelect?: (path: LearningPath) => void;
+}
 interface PathFilters {
   category: LearningCategory;
   difficulty: DifficultyLevel;
   audience: TargetAudience;
+}
   duration: { min?: number; max?: number };
   certification: boolean | null;
   searchQuery: string;

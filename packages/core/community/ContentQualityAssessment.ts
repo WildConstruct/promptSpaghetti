@@ -9,6 +9,7 @@ import { CommunityContent, ContentVersion, ContentQualityScore } from './Content
 
 // Core Quality Assessment Interfaces
 
+}
 export interface CommunityContentQualityMetrics {
   contentId: string;
   versionId: string;
@@ -36,6 +37,8 @@ export interface CommunityContentQualityMetrics {
   confidence_level: number; // 0-100,
   flags: QualityFlag;
 }
+}
+}
 export interface EditorialQualityMetrics {
   score: number; // 0-100,
   // Content accuracy and factual correctness
@@ -44,6 +47,7 @@ export interface EditorialQualityMetrics {
   source_reliability: number;
   claim_verification: number;
   up_to_date: number;
+}
 };
   // Writing quality and clarity
   clarity: {
@@ -74,6 +78,7 @@ export interface EditorialQualityMetrics {
   plagiarism_risk: number; // 0 = no risk, 100 = high risk,
 };
 }
+}
 export interface TechnicalQualityMetrics {
   score: number; // 0-100,
   // Content formatting and presentation
@@ -82,6 +87,7 @@ export interface TechnicalQualityMetrics {
   structure_consistency: number;
   visual_hierarchy: number;
   code_formatting: number; // for technical content,
+}
 };
   // Media and multimedia quality
   media_quality: {
@@ -112,6 +118,7 @@ export interface TechnicalQualityMetrics {
   performance_implications: number;
 };
 }
+}
 export interface ContentEngagementMetrics {
   score: number; // 0-100,
   // Reader engagement potential
@@ -120,6 +127,7 @@ export interface ContentEngagementMetrics {
   reader_retention_likelihood: number;
   interactive_elements: number;
   call_to_action_clarity: number;
+}
 };
   // Content shareability
   shareability: {
@@ -143,6 +151,7 @@ export interface ContentEngagementMetrics {
   cultural_sensitivity: number;
 };
 }
+}
 export interface CommunityValueMetrics {
   score: number; // 0-100,
   // Community contribution value
@@ -151,6 +160,7 @@ export interface CommunityValueMetrics {
   community_need_alignment: number;
   expertise_sharing_quality: number;
   collaborative_potential: number;
+}
 };
   // Long-term value and sustainability
   sustainability: {
@@ -174,6 +184,7 @@ export interface CommunityValueMetrics {
   learning_path_contribution: number;
 };
 }
+}
 export interface AutomatedContentAnalysis {
   // Language and grammar analysis
   language_analysis: {
@@ -184,6 +195,7 @@ export interface AutomatedContentAnalysis {
   detected_tone: string;
   tone_consistency: number;
   appropriateness: number;
+}
 };
   };
   // Readability analysis
@@ -218,6 +230,7 @@ export interface AutomatedContentAnalysis {
   // Potential issues detection
   issues: AutomatedIssue;
 }
+}
 export interface AutomatedIssue {
   type: 'grammar' | 'spelling' | 'formatting' | 'accessibility' | 'seo' | 'structure' | 'plagiarism' | 'factual';
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -225,10 +238,12 @@ export interface AutomatedIssue {
   section?: string;
   line?: number;
   character_range?: [number, number];
+}
 };
   description: string;
   suggestion?: string;
   auto_fixable: boolean;
+}
 }
 export interface EditorialReview {
   reviewer_id: string;
@@ -258,6 +273,8 @@ export interface EditorialReview {
   public_feedback: string; // Visible to author,
   internal_notes: string; // Internal editorial notes,
 }
+}
+}
 export interface QualityRecommendation {
   id: string;
   type: 'critical' | 'improvement' | 'enhancement' | 'optimization';
@@ -269,14 +286,16 @@ export interface QualityRecommendation {
   estimated_effort: 'low' | 'medium' | 'high';
   // Implementation guidance
   implementation_steps?: string;
-  resources?: Array<{,
+  resources?: Array<{
   title: string;
   url: string;
   type: 'guide' | 'tool' | 'example' | 'reference'
+}
   }>;
   // Automated fix availability
   auto_fix_available: boolean;
   auto_fix_confidence?: number; // 0-100
+}
 }
 export interface QualityFlag {
   type: 'plagiarism' | 'factual_error' | 'policy_violation' | 'accessibility_issue' | 'quality_concern';
@@ -285,6 +304,8 @@ export interface QualityFlag {
   evidence?: string;
   requires_human_review: boolean;
   auto_detected: boolean;
+}
+}
 }
 export interface QualityAssessmentWorkflow {
   content_id: string;
@@ -309,7 +330,9 @@ export interface QualityAssessmentWorkflow {
   notify_author: boolean;
   notify_reviewers: boolean;
   notify_community: boolean;
+}
 };
+}
 }
 export interface WorkflowStep {
   step_type: 'automated_check' | 'editorial_review' | 'author_revision' | 'approval' | 'rejection';
@@ -318,6 +341,7 @@ export interface WorkflowStep {
   duration_hours: number;
   notes?: string;
   attachments?: string;
+}
 }
 export class ContentQualityAssessmentService {
   private apiClient: any;
@@ -334,6 +358,7 @@ export class ContentQualityAssessmentService {
   priority?: 'normal' | 'high' | 'urgent'
   } = {}
   ): Promise<CommunityContentQualityMetrics> {
+
     try {
       const response = await this.apiClient.post(`/api/content/${contentId}/versions/${versionId}/quality-assessment`, {)}
   },
@@ -354,6 +379,7 @@ export class ContentQualityAssessmentService {
   language?: string;
 } = {}
   ): Promise<AutomatedContentAnalysis> {
+
     try {
       const response = await this.apiClient.post(`/api/content/${contentId}/versions/${versionId}/automated-analysis`, options);}
       return response.data;
@@ -370,6 +396,7 @@ export class ContentQualityAssessmentService {
   special_instructions?: string;
 } = {}
   ): Promise<QualityAssessmentWorkflow> {
+
     try {
       const response = await this.apiClient.post(`/api/content/${contentId}/versions/${versionId}/assign-review`, {)}
   },
@@ -384,6 +411,7 @@ export class ContentQualityAssessmentService {
     versionId: string,
     review: Omit<EditorialReview, 'reviewer_id' | 'reviewer_name' | 'review_date'>
   ): Promise<EditorialReview> {
+
     try {
       const response = await this.apiClient.post(`/api/content/${contentId}/versions/${versionId}/editorial-review`, review);}
       return response.data;
@@ -391,6 +419,7 @@ export class ContentQualityAssessmentService {
       console.error('Failed to submit editorial review:', error);
       throw error;
   async getReviewWorkflow(contentId: string, versionId: string): Promise<QualityAssessmentWorkflow> {
+
     try {
       const response = await this.apiClient.get(`/api/content/${contentId}/versions/${versionId}/workflow`);}
       return response.data;
@@ -402,6 +431,7 @@ export class ContentQualityAssessmentService {
     versionId: string,
     flag: Omit<QualityFlag, 'auto_detected'>
   ): Promise<QualityFlag> {
+
     try {
       const response = await this.apiClient.post(`/api/content/${contentId}/versions/${versionId}/flag-issue`, {)}
   }
@@ -420,6 +450,7 @@ export class ContentQualityAssessmentService {
       resolution_notes: string;
   resolved_by: string;
   ): Promise<void> {
+
     try {
       await this.apiClient.put(`/api/content/${contentId}/versions/${versionId}/flags/${flagId}/resolve`, resolution);}
     } catch (error) {
@@ -431,12 +462,12 @@ export class ContentQualityAssessmentService {
   timeRange?: 'week' | 'month' | 'quarter' | 'year'): Promise<{,
   overall_average: number;
   grade_distribution: Record<string, number>;
-  common_issues: Array<{,
+  common_issues: Array<{
   issue_type: string;
   frequency: number;
   avg_severity: number;
 }>;
-    improvement_trends: Array<{,
+    improvement_trends: Array<{
   metric: string;
   trend: 'improving' | 'stable' | 'declining';
   change_percentage: number;
@@ -463,7 +494,7 @@ export class ContentQualityAssessmentService {
   total_content_assessed: number;
   avg_community_quality: number;
   quality_distribution: Record<string, number>;
-  top_contributors: Array<{,
+  top_contributors: Array<{
   user_id: string;
   username: string;
   avg_quality: number;
@@ -474,7 +505,7 @@ export class ContentQualityAssessmentService {
   pending_reviews: number;
   avg_review_time: number;
   urgent_items: number;
-  reviewer_workload: Array<{,
+  reviewer_workload: Array<{
   reviewer_id: string;
   pending_count: number;
   avg_turnaround: number;
@@ -500,6 +531,7 @@ export class ContentQualityAssessmentService {
   prioritized_recommendations: QualityRecommendation;
   success_probability: number;
 }> {
+
     try {
       const response = await this.apiClient.post(`/api/content/${contentId}/versions/${versionId}/improvement-plan`, {)}
   },
@@ -517,7 +549,7 @@ export class ContentQualityAssessmentService {
   fixes_available: number;
   new_version_id?: string;
   quality_improvement: number;
-  applied_fixes: Array<{,
+  applied_fixes: Array<{
   type: string;
   description: string;
   confidence: number;
@@ -538,13 +570,13 @@ export class ContentQualityAssessmentService {
   difficultyLevel?: string): Promise<{,
   general_guidelines: string;
   specific_criteria: Record<string, string>;
-  examples: Array<{,
+  examples: Array<{
   title: string;
   description: string;
   quality_score: number;
   exemplary_aspects: string;
 }>;
-    common_mistakes: Array<{,
+    common_mistakes: Array<{
   mistake: string;
   impact: string;
   how_to_avoid: string;

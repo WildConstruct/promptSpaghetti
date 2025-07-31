@@ -12,6 +12,7 @@ import { SecurityIntelligence } from './MLSecurityAnalyticsFramework';
 import { SecurityAnomaly } from './SecurityAnomalyDetector';
 import { ThreatForecast } from './SecurityThreatForecasting';
 
+}
 export interface SecurityDashboardConfig {
     refreshInterval: number;
     enableRealTimeUpdates: boolean;
@@ -22,6 +23,7 @@ export interface SecurityDashboardConfig {
     alertThresholds: DashboardAlertThresholds;
     reportingSchedules: ReportingSchedule[];
 
+}
 export interface DashboardAlertThresholds {
     criticalThreatCount: number;
     anomalyVolumeThreshold: number;
@@ -29,6 +31,7 @@ export interface DashboardAlertThresholds {
     systemHealthThreshold: number;
     complianceScoreThreshold: number;
 
+}
 export interface ReportingSchedule {
     reportType: ReportType;
     frequency: ReportFrequency;
@@ -53,6 +56,7 @@ export declare enum ReportFrequency {
     MONTHLY = "monthly",
     QUARTERLY = "quarterly"
 
+}
 export interface SecurityPosture {
     overallScore: number;
     threatLevel: ThreatLevel;
@@ -71,6 +75,7 @@ export declare enum ThreatLevel {
     HIGH = "high",
     SEVERE = "severe"
 
+}
 export interface PostureTrend {
     metric: string;
     direction: 'improving' | 'declining' | 'stable';
@@ -78,6 +83,7 @@ export interface PostureTrend {
     timeframe: string;
     significance: 'high' | 'medium' | 'low';
 
+}
 export interface RiskFactor {
     id: string;
     category: RiskCategory;
@@ -96,6 +102,7 @@ export declare enum RiskCategory {
     HUMAN_FACTOR = "human_factor",
     INFRASTRUCTURE = "infrastructure"
 
+}
 export interface SecurityRecommendation {
     id: string;
     priority: 'immediate' | 'high' | 'medium' | 'low';
@@ -109,6 +116,7 @@ export interface SecurityRecommendation {
     dependencies: string[];
     timeline: string;
 
+}
 export interface ThreatIntelligenceData {
     activeThreatCount: number;
     highSeverityThreats: ThreatSummary[];
@@ -118,6 +126,7 @@ export interface ThreatIntelligenceData {
     threatTrends: ThreatTrend[];
     indicators: ThreatIndicator[];
 
+}
 export interface ThreatSummary {
     id: string;
     type: string;
@@ -129,6 +138,7 @@ export interface ThreatSummary {
     description: string;
     status: 'active' | 'mitigated' | 'resolved';
 
+}
 export interface GeographicalThreat {
     country: string;
     region: string;
@@ -136,6 +146,7 @@ export interface GeographicalThreat {
     severityDistribution: Record<string, number>;
     primaryThreatTypes: string[];
 
+}
 export interface AttackVector {
     vector: string;
     frequency: number;
@@ -143,6 +154,7 @@ export interface AttackVector {
     averageDamage: number;
     trend: 'increasing' | 'decreasing' | 'stable';
 
+}
 export interface ThreatTrend {
     timeframe: string;
     threatType: string;
@@ -150,6 +162,7 @@ export interface ThreatTrend {
     severityChange: number;
     newVariants: number;
 
+}
 export interface ThreatIndicator {
     type: 'ip' | 'domain' | 'hash' | 'pattern';
     value: string;
@@ -158,12 +171,14 @@ export interface ThreatIndicator {
     firstSeen: Date;
     associatedThreats: string[];
 
+}
 export interface DashboardMetrics {
     securityEvents: {
         total: number;
         critical: number;
         resolved: number;
         averageResponseTime: number;
+}
     };
     anomalies: {
         detected: number;
@@ -186,6 +201,7 @@ export interface DashboardMetrics {
         severity: Record<string, number>;
     };
 
+}
 export interface ExecutiveReport {
     id: string;
     reportType: ReportType;
@@ -193,6 +209,7 @@ export interface ExecutiveReport {
     period: {
         start: Date;
         end: Date;
+}
     };
     summary: ExecutiveSummary;
     keyMetrics: KeyMetric[];
@@ -200,6 +217,7 @@ export interface ExecutiveReport {
     recommendations: SecurityRecommendation[];
     appendices: ReportAppendix[];
 
+}
 export interface ExecutiveSummary {
     overallStatus: 'excellent' | 'good' | 'fair' | 'poor' | 'critical';
     keyHighlights: string[];
@@ -207,6 +225,7 @@ export interface ExecutiveSummary {
     actionItems: string[];
     budgetImpact: string;
 
+}
 export interface KeyMetric {
     name: string;
     value: number | string;
@@ -215,6 +234,7 @@ export interface KeyMetric {
     context: string;
     benchmark: number | string;
 
+}
 export interface Finding {
     id: string;
     category: string;
@@ -225,12 +245,14 @@ export interface Finding {
     impact: string;
     recommendation: string;
 
+}
 export interface ReportAppendix {
     title: string;
     type: 'chart' | 'table' | 'text' | 'image';
     content: unknown;
     description: string;
 
+}
 export interface DashboardWidget {
     id: string;
     type: WidgetType;
@@ -254,14 +276,17 @@ export declare enum WidgetType {
     ALERT_LIST = "alert_list",
     THREAT_MAP = "threat_map"
 
+}
 export interface WidgetPosition {
     x: number;
     y: number;
 
+}
 export interface WidgetSize {
     width: number;
     height: number;
 
+}
 export interface WidgetConfig {
     theme: 'light' | 'dark';
     colors: string[];
@@ -303,6 +328,7 @@ export declare class SecurityIntelligenceDashboard extends EventEmitter {
     generateExecutiveReport(reportType: ReportType, period: {)
         start: Date;
         end: Date;
+}
     }): Promise<ExecutiveReport>;
     private generateExecutiveSummary;
     private generateKeyMetrics;

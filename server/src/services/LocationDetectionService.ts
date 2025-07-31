@@ -6,6 +6,7 @@ import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 export interface LocationData {
   ipAddress: string;
   country?: string;
@@ -27,7 +28,9 @@ export interface LocationData {
   lastUpdated?: Date;
 }
 }
+}
 
+}
 }
 export interface LocationHistory {
   userId: string;
@@ -41,7 +44,9 @@ export interface LocationHistory {
   flagReason?: string;
 }
 }
+}
 
+}
 }
 export interface LocationAlert {
   id: string;
@@ -56,6 +61,7 @@ export interface LocationAlert {
     travelTime?: number;
     riskFactors: string[];
 }
+}
   };
   timestamp: Date;
   acknowledged: boolean;
@@ -63,6 +69,7 @@ export interface LocationAlert {
   acknowledgedAt?: Date;
 }
 
+}
 }
 export interface LocationRisk {
   overall: number;
@@ -74,10 +81,12 @@ export interface LocationRisk {
     highRiskRegion: number;
     frequencyAnomalies: number;
 }
+}
   };
   recommendations: string[];
 }
 
+}
 }
 export interface LocationDetectionConfig {
   enabled: boolean;
@@ -87,6 +96,7 @@ export interface LocationDetectionConfig {
     primary: 'ipapi' | 'maxmind' | 'ipgeolocation' | 'ipstack';
     fallback?: string[];
     apiKeys: Record<string, string>;
+}
 }
   };
 

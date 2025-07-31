@@ -19,6 +19,7 @@ import {
 
 // Core interfaces
 
+}
 export interface UserBehaviorFlowVisualizationProps {
   analyticsInfrastructure: ConversionAnalyticsInfrastructure;
   flowConfig: FlowVisualizationConfig;
@@ -27,8 +28,11 @@ export interface UserBehaviorFlowVisualizationProps {
   onPathwayOptimization?: (optimization: PathwayOptimization) => void;
   onExport?: (data: FlowVisualizationExportData) => void;
 }
+}
+}
 export interface FlowVisualizationConfig {
   visualizationType: VisualizationType;
+}
   timeRange: { start: number; end: number };
   segmentFilters: SegmentFilter;
   pathwayAnalysis: PathwayAnalysisSettings;
@@ -37,12 +41,15 @@ export interface FlowVisualizationConfig {
 }
 export type VisualizationType = 'sankey' | 'node_link' | 'flow_map' | 'journey_map' | 'heatmap';
 
+}
 export interface BehaviorFlowData {
   userId: string;
   sessionId: string;
   flowPath: FlowStep;
   metadata: FlowMetadata;
   outcomes: FlowOutcome;
+}
+}
 }
 export interface FlowStep {
   stepId: string;
@@ -52,6 +59,8 @@ export interface FlowStep {
   duration: number;
   context: StepContext;
 }
+}
+}
 export interface FlowAnalysis {
   popularPaths: PopularPath;
   dropoffPoints: DropoffPoint;
@@ -60,6 +69,7 @@ export interface FlowAnalysis {
 
 // Mock data generator
 const generateMockBehaviorFlowData = (): BehaviorFlowData => ({)
+}
   userId: `user_${Math.random().toString(36).substr(2, 8)}`}
 },
   sessionId: `session_${Math.random().toString(36).substr(2, 9)}`}
@@ -315,38 +325,53 @@ export const UserBehaviorFlowVisualization: React.FC<UserBehaviorFlowVisualizati
 
 // Supporting interfaces (condensed)
 
+}
 export interface SegmentFilter {
   segment: string;
   enabled: boolean;
+}
+}
 }
 export interface PathwayAnalysisSettings {
   minPathLength: number;
   maxPathLength: number;
   includeLoops: boolean;
 }
+}
+}
 export interface InteractionFilter {
   actionType: string;
   enabled: boolean;
+}
+}
 }
 export interface VisualizationPerformanceSettings {
   maxNodes: number;
   aggregationLevel: 'high' | 'medium' | 'low';
   renderingMode: 'fast' | 'detailed'
+}
   }
+}
 export interface FlowMetadata {
   totalDuration: number;
   deviceType: string;
   userType: string;
+}
+}
 }
 export interface FlowOutcome {
   type: string;
   value: number;
   timestamp: number;
 }
+}
+}
 export interface StepContext {
   device: string;
   referrer?: string;
   exitType: string;
+}
+}
 }
 export interface PopularPath {
   path: string;
@@ -355,6 +380,8 @@ export interface PopularPath {
   avgDuration: number;
   conversionRate: number;
 }
+}
+}
 export interface DropoffPoint {
   page: string;
   entries: number;
@@ -362,10 +389,14 @@ export interface DropoffPoint {
   dropoffRate: number;
   impactScore: number;
 }
+}
+}
 export interface ConversionPath {
   path: string;
   conversionRate: number;
   value: number;
+}
+}
 }
 export interface OptimizationOpportunity {
   type: string;
@@ -373,19 +404,27 @@ export interface OptimizationOpportunity {
   impact: number;
   effort: string;
 }
+}
+}
 export interface PathwayOptimization {
   recommendations: OptimizationRecommendation;
   projectedImpact: ProjectedImpact;
+}
+}
 }
 export interface OptimizationRecommendation {
   action: string;
   rationale: string;
   priority: string;
 }
+}
+}
 export interface ProjectedImpact {
   conversionIncrease: number;
   engagementIncrease: number;
   dropoffReduction: number;
+}
+}
 }
 export interface FlowVisualizationExportData {
   flowData: BehaviorFlowData;
@@ -394,6 +433,7 @@ export interface FlowVisualizationExportData {
   metadata: {;
   exportTimestamp: number;
   totalFlows: number;
+}
     timeRange: { start: number; end: number };
     version: string;
   };

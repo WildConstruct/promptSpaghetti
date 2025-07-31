@@ -19,6 +19,7 @@ import { ThreatLevel } from '../RateLimitingService';
 // ========================================
 // Component Props and Types
 // ========================================
+}
 interface RateLimitingMetricsDashboardProps {
   metricsService: RateLimitingPerformanceMetrics;
   className?: string;
@@ -27,13 +28,15 @@ interface RateLimitingMetricsDashboardProps {
   refreshInterval?: number; // seconds,
   interface ChartData {
   labels: string;
-  datasets: Array<{,
+  datasets: Array<{
   label: string;
   data: number;
   borderColor: string;
   backgroundColor: string;
   fill?: boolean;
+}
 }>;
+}
 interface MetricStat {
   label: string;
   value: number | string;
@@ -49,6 +52,7 @@ interface MetricStat {
   theme = 'light',
   autoRefresh = true,
   refreshInterval = 5
+}
 }) => {
   // State management
   const [currentMetrics, setCurrentMetrics] = useState<PerformanceMetrics | null>(null);

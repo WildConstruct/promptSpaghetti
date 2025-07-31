@@ -18,6 +18,7 @@ import {
   SystemCondition
 } from './AdaptiveThrottlingRules';
 
+}
 export interface IntegrationConfig {
     enableUnifiedProtection: boolean;
     rateLimitingPriority: number;
@@ -48,12 +49,14 @@ export declare enum FallbackBehavior {
     USE_THROTTLING = "use_throttling",// Fall back to throttling
     ESCALATE = "escalate"
 
+}
 export interface UnifiedProtectionContext extends ThrottlingContext {
     rateLimitingHistory: {
         recentAttempts: number;
         backoffLevel: number;
         threatAssessment: ThreatLevel;
         adaptiveMultiplier: number;
+}
     };
     throttlingHistory: {
         recentThrottling: number;
@@ -68,6 +71,7 @@ export interface UnifiedProtectionContext extends ThrottlingContext {
         decisionTrail: ProtectionDecision[];
     };
 
+}
 export interface ProtectionDecision {
     system: 'rate_limiting' | 'throttling' | 'integration';
     timestamp: Date;
@@ -76,6 +80,7 @@ export interface ProtectionDecision {
     reasoning: string;
     parameters: Record<string, unknown>;
 
+}
 export interface UnifiedProtectionResult {
     action: 'allow' | 'block' | 'throttle' | 'delay';
     delay: number;
@@ -86,6 +91,7 @@ export interface UnifiedProtectionResult {
         strategy: CoordinationStrategy;
         confidence: number;
         reasoning: string;
+}
     };
     recommendations: {
         adjustRateLimits: boolean;
@@ -103,12 +109,14 @@ export interface UnifiedProtectionResult {
         };
     };
 
+}
 export interface CrossSystemLearning {
     rateLimitingInsights: {
         effectiveBackoffStrategies: BackoffStrategy[];
         optimalThreatThresholds: Record<ThreatLevel, number>;
         endpointVulnerabilities: Record<string, number>;
         patternRecognition: string[];
+}
     };
     throttlingInsights: {
         effectiveRuleCombinations: string[];
@@ -117,12 +125,12 @@ export interface CrossSystemLearning {
         falsePositivePatterns: string[];
     };
     integratedInsights: {
-        complementaryProtections: Array<{,
+        complementaryProtections: Array<{
             rateLimiting: string;
             throttling: string;
             effectiveness: number;
         }>;
-        conflictResolution: Array<{,
+        conflictResolution: Array<{
             scenario: string;
             resolution: CoordinationStrategy;
             success: boolean;

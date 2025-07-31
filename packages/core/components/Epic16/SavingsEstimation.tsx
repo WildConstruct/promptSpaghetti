@@ -7,6 +7,7 @@
  */
 import React, { useState, useEffect, useMemo } from 'react';
 import { PiggyBank, Clock, Zap, Target, ArrowRight } from 'lucide-react';
+}
 interface SavingsInputs {
   // Usage patterns
   monthlyUsage: number; // number of times template/manual prompts used per month,
@@ -33,6 +34,7 @@ interface SavingsInputs {
   manualTokenCost: number;
   netTokenSavings: number;
   tokenEfficiency: number;
+}
 };
   timeSavings: {
   templateTimeSpent: number;
@@ -56,6 +58,7 @@ interface SavingsInputs {
   capacityIncrease: number;
   errorReduction: number;
 };
+}
 interface SavingsEstimationProps {
   className?: string;
   onSavingsChange?: (savings: SavingsBreakdown) => void;
@@ -66,6 +69,7 @@ interface SavingsEstimationProps {
   onSavingsChange,
   comparisonMode = 'detailed',
   industryPreset
+}
 }) => {
   const [inputs, setInputs] = useState<SavingsInputs>({)
   monthlyUsage: 25,

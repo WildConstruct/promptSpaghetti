@@ -10,12 +10,15 @@ export type ShareStatus = 'active' | 'expired' | 'revoked' | 'pending';
 
 // User information for sharing
 
+}
 export interface UserInfo {
   id: string;
   email: string;
   name: string;
   avatar?: string;
   // Collaborator with permissions
+}
+}
 }
 export interface Collaborator extends UserInfo {
   role: SharePermission;
@@ -38,6 +41,8 @@ export interface Collaborator extends UserInfo {
   notifyOnAccess: boolean;
   // Share security settings
 }
+}
+}
 export interface ShareSecurityConfig {
   dataClassification: 'public' | 'internal' | 'confidential' | 'restricted';
   encryptionRequired: boolean;
@@ -46,6 +51,7 @@ export interface ShareSecurityConfig {
   maxShareDuration: number; // days,
   autoExpire: boolean;
   dataRetentionDays: number;
+}
 };
   accessControls: {
   ipWhitelist: string;
@@ -56,6 +62,7 @@ export interface ShareSecurityConfig {
 };
 
 // Core shared content interface
+}
 }
 export interface SharedContent {
   id: string;
@@ -72,6 +79,8 @@ export interface SharedContent {
   status: ShareStatus;
   // Metadata for shared content
 }
+}
+}
 export interface SharedContentMetadata {
   exportId: string;
   version: string;
@@ -85,12 +94,16 @@ export interface SharedContentMetadata {
   annotations: ContentAnnotations;
   // Version control for shared content
 }
+}
+}
 export interface VersionControl {
   currentVersion: string;
   versions: ContentVersion;
   isLatest: boolean;
   changesFromPrevious?: string;
   mergeConflicts?: MergeConflict;
+}
+}
 }
 export interface ContentVersion {
   version: string;
@@ -100,6 +113,8 @@ export interface ContentVersion {
   size: number;
   checksum: string;
 }
+}
+}
 export interface MergeConflict {
   path: string;
   type: 'content' | 'metadata' | 'permissions';
@@ -107,11 +122,15 @@ export interface MergeConflict {
   resolution?: 'auto' | 'manual';
   // Content annotations
 }
+}
+}
 export interface ContentAnnotations {
   connectionLabels: ConnectionLabel;
   stickyNotes: StickyNote;
   regions: AnnotationRegion;
   comments: ShareComment;
+}
+}
 }
 export interface ConnectionLabel {
   id: string;
@@ -121,6 +140,8 @@ export interface ConnectionLabel {
   color?: string;
   author: UserInfo;
   createdAt: Date;
+}
+}
 }
 export interface StickyNote {
   id: string;
@@ -134,6 +155,8 @@ export interface StickyNote {
   createdAt: Date;
   updatedAt: Date;
 }
+}
+}
 export interface AnnotationRegion {
   id: string;
   x: number;
@@ -146,6 +169,8 @@ export interface AnnotationRegion {
   author: UserInfo;
   createdAt: Date;
 }
+}
+}
 export interface ShareComment {
   id: string;
   content: string;
@@ -154,12 +179,14 @@ export interface ShareComment {
   updatedAt?: Date;
   parentId?: string; // For threaded comments
 
+}
   position?: { x: number; y: number }; // For positioned comments
   resolved: boolean;
   resolvedBy?: UserInfo;
   resolvedAt?: Date;
 
 // Analytics and tracking
+}
 }
 export interface ShareAnalytics {
   views: ShareView;
@@ -173,6 +200,8 @@ export interface ShareAnalytics {
   deviceStats: DeviceStats;
   conversionMetrics: ConversionMetrics;
 }
+}
+}
 export interface ShareView {
   id: string;
   viewerInfo: ViewerInfo;
@@ -182,6 +211,8 @@ export interface ShareView {
   userAgent: string;
   referrer?: string;
   geolocation?: GeoLocation;
+}
+}
 }
 export interface ShareDownload {
   id: string;
@@ -193,6 +224,8 @@ export interface ShareDownload {
   success: boolean;
   errorReason?: string;
 }
+}
+}
 export interface CollaborationEvent {
   id: string;
   type: 'comment' | 'edit' | 'annotation' | 'permission_change';
@@ -200,7 +233,9 @@ export interface CollaborationEvent {
   timestamp: Date;
   details: any;
   impact: 'minor' | 'major' | 'breaking'
+}
   }
+}
 export interface ViewerInfo {
   id?: string; // null for anonymous viewers,
   email?: string;
@@ -208,16 +243,22 @@ export interface ViewerInfo {
   isAuthenticated: boolean;
   sessionId: string;
 }
+}
+}
 export interface GeoLocation {
   country: string;
   region: string;
   city: string;
+}
   coordinates: { lat: number; lng: number };
+}
 }
 export interface GeographicStats {
   country: string;
   views: number;
   uniqueViewers: number;
+}
+}
 }
 export interface DeviceStats {
   deviceType: 'desktop' | 'tablet' | 'mobile';
@@ -225,12 +266,16 @@ export interface DeviceStats {
   browser: string;
   views: number;
 }
+}
+}
 export interface ConversionMetrics {
   viewToDownload: number; // percentage,
   viewToCollaboration: number; // percentage,
   viewToSignup: number; // percentage (for anonymous viewers),
   averageTimeToAction: number; // seconds,
   // API request/response types
+}
+}
 }
 export interface CreateShareRequest {
   contentId: string;
@@ -241,6 +286,8 @@ export interface CreateShareRequest {
   security?: Partial<ShareSecurityConfig>;
   collaborators?: string; // user IDs to invite,
 }
+}
+}
 export interface CreateShareResponse {
   success: boolean;
   shareId: string;
@@ -249,17 +296,23 @@ export interface CreateShareResponse {
   expiresAt?: Date;
   error?: string;
 }
+}
+}
 export interface UpdateShareRequest {
   title?: string;
   description?: string;
   sharing?: Partial<SharingConfig>;
   security?: Partial<ShareSecurityConfig>;
 }
+}
+}
 export interface ShareAccessRequest {
   shareToken: string;
   password?: string;
   userAgent: string;
   ipAddress: string;
+}
+}
 }
 export interface ShareAccessResponse {
   success: boolean;
@@ -270,7 +323,9 @@ export interface ShareAccessResponse {
   analytics?: {
   viewCount: number;
   lastAccessed: Date;
+}
 };
+}
 }
 export interface SharePermissionRequest {
   shareId: string;
@@ -278,19 +333,24 @@ export interface SharePermissionRequest {
   permission: SharePermission;
   message?: string;
 }
+}
+}
 export interface ShareAnalyticsRequest {
   shareId: string;
   timeRange?: {
   start: Date;
   end: Date;
+}
 };
   metrics?: ('views' | 'downloads' | 'collaborations')[];
+}
 }
 export interface ShareAnalyticsResponse {
   success: boolean;
   analytics: ShareAnalytics;
   error?: string;
   // Error types
+}
 }
 export class ShareError extends Error {
   constructor();
@@ -324,12 +384,15 @@ export class ShareError extends Error {
   encryptionRequired: boolean;
   // Event types for real-time updates
 }
+}
+}
 export interface ShareEvent {
   type: ShareEventType;
   shareId: string;
   timestamp: Date;
   user?: UserInfo;
   data: any;
+}
 }
 export enum ShareEventType {
   SHARE_CREATED = 'share_created',

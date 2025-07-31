@@ -9,6 +9,7 @@ import {
   ArchiveBoxIcon,
   ChevronDownIcon
 } from '@heroicons/react/24/outline';
+}
 interface WorkflowState {
   id: string;
   name: string;
@@ -29,6 +30,7 @@ interface WorkflowState {
   canEdit = false,
   onStateChange,
   compact = false
+}
 }) => {
   const getStateIcon = (iconName?: string) => {,
   switch (iconName) {

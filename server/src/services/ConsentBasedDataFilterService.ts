@@ -8,6 +8,7 @@ import { ConsentData, GranularConsent } from './PolicyAcceptanceTrackingService'
 import { DataProtectionRule, RuleEvaluationContext } from '../types/DataProtectionRuleSchema';
 
 }
+}
 export interface FilterRequest {
   userId: string;
   dataType: string;
@@ -16,7 +17,9 @@ export interface FilterRequest {
   context: FilterContext;
 }
 }
+}
 
+}
 }
 export interface FilterContext {
   requestId: string;
@@ -25,6 +28,7 @@ export interface FilterContext {
   userAgent: string;
   timestamp: Date;
   metadata?: Record<string, any>;
+}
 }
 }
 
@@ -39,6 +43,7 @@ export enum DataOperation {
 }
 
 }
+}
 export interface FilterResult {
   allowed: boolean;
   filteredFields?: string[];
@@ -48,7 +53,9 @@ export interface FilterResult {
   auditEventId: string;
 }
 }
+}
 
+}
 }
 export interface ConsentFilter {
   purpose: string;
@@ -58,6 +65,7 @@ export interface ConsentFilter {
   granted: boolean;
   grantedAt?: Date;
   expiresAt?: Date;
+}
 }
 }
 

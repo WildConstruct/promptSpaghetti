@@ -540,7 +540,7 @@ describe('AuditLogger', () => {
     it('should handle concurrent logging', async () => {
       const promises = [];
       for (let i = 0; i < 10; i++) {
-        promises.push()
+        promises.push(
           logger.log({)
   userId: `user${i}`}
 },

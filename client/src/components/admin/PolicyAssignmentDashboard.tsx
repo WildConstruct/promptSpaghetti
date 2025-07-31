@@ -20,6 +20,7 @@ import { AssignmentConflictResolver } from './AssignmentConflictResolver';
 import { AssignmentAnalytics } from './AssignmentAnalytics';
 import { InheritanceVisualization } from './InheritanceVisualization';
 import './PolicyAssignmentDashboard.css';
+}
 interface DashboardFilters {
   targetType?: AssignmentTargetType;
   targetId?: string;
@@ -42,6 +43,7 @@ interface DashboardFilters {
   pendingApprovals: 0,
   conflicts: 0,
   inheritanceChains: 0,
+}
 });
   const [filters, setFilters] = useState<DashboardFilters>({});
   const [selectedAssignments, setSelectedAssignments] = useState<string>([]);

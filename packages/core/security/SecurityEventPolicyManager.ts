@@ -23,6 +23,7 @@ import {
 
 // Policy Management Configuration
 
+}
 export interface PolicyManagerConfig {
   enabled: boolean;
   real_time_processing: boolean;
@@ -31,6 +32,7 @@ export interface PolicyManagerConfig {
   retention_policy: {
   default_retention_days: number;
   compliance_retention_overrides: Record<ComplianceFramework, number>;
+}
 };
   notification_config: {
   channels: NotificationChannel;
@@ -43,6 +45,7 @@ export interface PolicyManagerConfig {
   compliance_reporting_enabled: boolean;
 };
 }
+}
 export interface NotificationChannel {
   channel_id: string;
   channel_type: 'email' | 'sms' | 'slack' | 'webhook' | 'dashboard' | 'siem';
@@ -53,9 +56,11 @@ export interface NotificationChannel {
   rate_limit?: {
   max_per_minute: number;
   burst_limit: number;
+}
 };
 
 // Policy Enforcement Result
+}
 }
 export interface PolicyEnforcementResult {
   event_id: string;
@@ -68,6 +73,8 @@ export interface PolicyEnforcementResult {
   processing_time_ms: number;
   errors: string;
 }
+}
+}
 export interface PolicyAction {
   action_id: string;
   action_type: 'containment' | 'notification' | 'escalation' | 'documentation' | 'analysis';
@@ -76,6 +83,8 @@ export interface PolicyAction {
   success: boolean;
   details: Record<string, any>;
   error_message?: string;
+}
+}
 }
 export interface NotificationResult {
   notification_id: string;
@@ -87,6 +96,8 @@ export interface NotificationResult {
   delivery_status?: 'pending' | 'delivered' | 'failed' | 'bounced';
   error_message?: string;
 }
+}
+}
 export interface ComplianceImpact {
   framework: ComplianceFramework;
   requirement_ids: string;
@@ -94,6 +105,8 @@ export interface ComplianceImpact {
   notification_required: boolean;
   reporting_deadline?: Date;
   external_notification_required: boolean;
+}
+}
 }
 export interface AutomatedResponse {
   response_id: string;
@@ -104,6 +117,8 @@ export interface AutomatedResponse {
   rollback_available: boolean;
   rollback_deadline?: Date;
   // Policy Performance Metrics
+}
+}
 }
 export interface PolicyMetrics {
   policy_id: string;
@@ -122,6 +137,7 @@ export interface PolicyMetrics {
   * Provides centralized management of security event policies, enforcement,
   * monitoring, and integration with existing PromptScape infrastructure.
   */
+}
 }
 export class SecurityEventPolicyManager {
   private config: PolicyManagerConfig;
@@ -204,6 +220,7 @@ export class SecurityEventPolicyManager {
    * Process security event through policy engine
    */
   async processSecurityEvent(event: SecurityEvent): Promise<PolicyEnforcementResult> {
+
   const startTime = Date.now();
   const result: PolicyEnforcementResult = {,
   event_id: event.event_id,
@@ -246,10 +263,11 @@ export class SecurityEventPolicyManager {
   /**
    * Execute policy-defined actions
    */
-  private async executePolicyActions(()
+  private async executePolicyActions(((
     event: SecurityEvent,
-    policyResult: any,
+    policyResult: any
   ): Promise<{ actions: PolicyAction; automated_responses: AutomatedResponse }> {
+
     const actions: PolicyAction = [];
     const automatedResponses: AutomatedResponse = [];
     for (const actionType of policyResult.actions_triggered) {
@@ -304,10 +322,11 @@ export class SecurityEventPolicyManager {
   /**
    * Send notifications through configured channels
    */
-  private async sendNotifications(()
+  private async sendNotifications(((
     event: SecurityEvent,
-    policyResult: any,
+    policyResult: any
   ): Promise<NotificationResult> {
+
   const results: NotificationResult = [];
   for (const channelType of policyResult.notifications_sent) {
   const channels = Array.from(this.notificationChannels.values());
@@ -336,8 +355,7 @@ export class SecurityEventPolicyManager {
   /**
   * Assess compliance impact of security event
   */
-  private async assessComplianceImpact(()
-  event: SecurityEvent,
+  private async assessComplianceImpact((event: SecurityEvent,
   policyResult: any): Promise<ComplianceImpact> {,
   const complianceImpacts: ComplianceImpact = [];
   for (const framework of policyResult.compliance_requirements) {
@@ -358,8 +376,7 @@ export class SecurityEventPolicyManager {
   /**
   * Handle event escalations
   */
-  private async handleEscalations(()
-  event: SecurityEvent,
+  private async handleEscalations((event: SecurityEvent,
   policyResult: any): Promise<string> {,
   const escalations: string = [];
   // Escalate based on severity
@@ -381,10 +398,11 @@ export class SecurityEventPolicyManager {
   /**
    * Create corresponding audit event in existing audit system
    */
-  private async createAuditEvent(()
+  private async createAuditEvent(((
     securityEvent: SecurityEvent,
-    enforcementResult: PolicyEnforcementResult,
+    enforcementResult: PolicyEnforcementResult
   ): Promise<void> {
+
     try {
       // Map security event to audit event
       const auditEvent = auditManagementSystem.createAuditEvent({)
@@ -460,6 +478,7 @@ export class SecurityEventPolicyManager {
    * Process queued events in batch
    */
   private async processBatchEvents(): Promise<void> {
+
     if (this.processingInProgress || this.eventProcessingQueue.length === 0) {
       return;
     this.processingInProgress = true;
@@ -492,13 +511,15 @@ export class SecurityEventPolicyManager {
   private async isolateNetworkSegment(ip: string): Promise<{ success: boolean; details: Record<string, any> }> {
     // Implementation would integrate with network infrastructure
     return { success: true, details: { isolated_segment: ip, isolation_time: new Date().toISOString() } };
-  private async sendNotification(()
+  private async sendNotification(((
     channel: NotificationChannel,
-    event: SecurityEvent,
+    event: SecurityEvent
   ): Promise<{ success: boolean; status: string }> {
+
     // Implementation would integrate with various notification services
     return { success: true, status: 'delivered' };
   private async executeEscalation(escalationType: string, event: SecurityEvent): Promise<void> {
+
     // Implementation would trigger escalation procedures
     console.log(`Executing escalation: ${escalationType} for event ${event.event_id}`);}
   // Utility mapping methods
@@ -557,9 +578,9 @@ export class SecurityEventPolicyManager {
   private getFrameworkRequirements(framework: ComplianceFramework, event: SecurityEvent): string {
     // Return relevant requirement IDs for the framework
     return [`${framework}_req_001`, `${framework}_req_002`];}
-  private calculateImpactLevel(()
+  private calculateImpactLevel(((
     event: SecurityEvent,
-    framework: ComplianceFramework,
+    framework: ComplianceFramework
   ): 'low' | 'medium' | 'high' | 'critical' {
   if (event.severity === SecurityEventSeverity.CRITICAL) return 'critical';
   if (event.severity === SecurityEventSeverity.HIGH) return 'high';

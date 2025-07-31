@@ -38,6 +38,7 @@ import {
 
 // Types for Node Annotations
 
+}
 export interface NodeAnnotation {
   id: string;
   nodeId: string;
@@ -57,6 +58,8 @@ export interface NodeAnnotation {
   deadline?: string;
   assignee?: VFXUser;
 }
+}
+}
 export interface NodeAnnotationAttachment {
   id: string;
   type: 'image' | 'video' | 'audio' | 'link' | 'file';
@@ -66,12 +69,16 @@ export interface NodeAnnotationAttachment {
   size?: number;
   duration?: number; // For audio/video,
 }
+}
+}
 export interface NodeAnnotationReply {
   id: string;
   content: string;
   author: VFXUser;
   timestamp: string;
+}
   reactions: { [emoji: string]: VFXUser };
+}
 }
 export interface VFXUser {
   id: string;
@@ -79,6 +86,8 @@ export interface VFXUser {
   role: 'director' | 'vfx_supervisor' | 'artist' | 'producer' | 'pipeline_td' | 'coordinator';
   avatar?: string;
   email: string;
+}
+}
 }
 export interface NodeAnnotationSystemProps {
   nodeId: string;
@@ -100,6 +109,7 @@ export interface NodeAnnotationSystemProps {
   bgColor: 'bg-amber-50',
   borderColor: 'border-amber-200',
   label: 'Performance',
+}
 },
   creative: {
   icon: <Camera className="w-4 h-4" />,

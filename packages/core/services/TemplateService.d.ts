@@ -13,6 +13,7 @@ import {
  * Template storage interface - can be implemented for local/server storage
  */
 
+}
 export interface TemplateStorage {
     save(template: Template): Promise<Template>;
     load(id: string): Promise<Template | null>;
@@ -89,3 +90,4 @@ export declare class TemplateService {
 
 export declare const templateService: TemplateService;
 //# sourceMappingURL=TemplateService.d.ts.map
+}

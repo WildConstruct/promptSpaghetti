@@ -11,6 +11,7 @@ import {
 import { IOSpecBuilder, AdvancedIOHandler } from '../io-system';
 import { PythonExecutorClient, PythonExecutionResult, pythonExecutorClient } from '../../python-executor-client';
 
+}
 export interface PythonTransformConfig {
   code: string;
   timeout?: number;
@@ -23,6 +24,7 @@ export interface PythonTransformConfig {
   retryAttempts?: number;
   fallbackBehavior?: 'error' | 'skip' | 'default';
   defaultOutput?: string;
+}
 };
 }
 export class PythonTransformNode extends AdvancedRuntimeNode<string> {
@@ -93,6 +95,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
    * Main execution method required by AdvancedRuntimeNode
    */
   async run(context: AdvancedExecutionContext): Promise<string> {
+
     // Record this node's execution
     context.executionMeta.nodeExecutionOrder.push(this.id);
     // Execute with performance tracking
@@ -156,6 +159,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
       context.outputs = {};
     context.outputs[outputId] = value;
   protected async executeCore(context: AdvancedExecutionContext): Promise<string> {
+
   const inputData = this.getTypedInput('input', context);
   // Validate that we have code to execute
   if (!this.pythonConfig.code || this.pythonConfig.code.trim() === '') {
@@ -309,6 +313,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
    * Validate Python code before execution
    */
   async validateCode(): Promise<{valid: boolean; errors: string; warnings: string}> {
+
   if (!this.pythonConfig.code || this.pythonConfig.code.trim() === '') {
   return {
   valid: false,
@@ -336,6 +341,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
    * Check if Python executor service is available
    */
   async isServiceAvailable(): Promise<boolean> {
+
     try {
       await this.pythonClient.health();
       return true;
@@ -345,6 +351,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
    * Get service health information
    */
   async getServiceHealth(): Promise<{status: string; version: string; uptime: number} | null> {
+
     try {
       return await this.pythonClient.health();
     } catch {

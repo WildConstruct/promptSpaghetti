@@ -1,11 +1,13 @@
 import { Token, LexerPosition } from '../lexer/graph-lexer';
 
+}
 export interface ASTNode {
     type: string;
     position: LexerPosition;
     children?: ASTNode[];
 
 
+}
 export interface GraphAST extends ASTNode {
     type: 'Graph';
     version?: string;
@@ -14,10 +16,12 @@ export interface GraphAST extends ASTNode {
     nodes: NodeDefinitionAST[];
     edges: EdgeDefinitionAST[];
 
+}
 export interface MetadataNode extends ASTNode {
     type: 'Metadata';
     properties: Record<string, any>;
 
+}
 export interface NodeDefinitionAST extends ASTNode {
     type: 'NodeDefinition';
     id: string;
@@ -25,20 +29,24 @@ export interface NodeDefinitionAST extends ASTNode {
     properties?: Record<string, any>;
     inputs?: string[];
 
+}
 export interface EdgeDefinitionAST extends ASTNode {
     type: 'EdgeDefinition';
     source: string;
     target: string;
 
+}
 export interface PropertyNode extends ASTNode {
     type: 'Property';
     key: string;
     value: any;
 
+}
 export interface ArrayNode extends ASTNode {
     type: 'Array';
     elements: any[];
 
+}
 export interface ParseError {
     message: string;
     position: LexerPosition;
@@ -56,6 +64,7 @@ export declare class ASTBuilder {
     build(): {
         ast: GraphAST | null;
         errors: ParseError[];
+}
     };
     /**
      * Parse complete graph structure

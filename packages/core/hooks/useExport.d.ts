@@ -23,6 +23,7 @@ import {
   ExportScheduleWithStats
 } from '../types/export';
 
+}
 interface UseExportState {
     templates: ExportTemplate[];
     jobs: ExportJob[];
@@ -35,6 +36,7 @@ interface UseExportState {
     error: string | null;
 
 
+}
 interface UseExportActions {
     fetchTemplates: (options?: {),
         format?: ExportFormat;
@@ -42,6 +44,7 @@ interface UseExportActions {
         limit?: number;
         offset?: number;
 
+}
     }) => Promise<void>;
     createTemplate: (template: CreateExportTemplate) => Promise<ExportTemplate>;
     updateTemplate: (id: string, updates: UpdateExportTemplate) => Promise<ExportTemplate>;

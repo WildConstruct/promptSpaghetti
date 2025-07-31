@@ -12,6 +12,7 @@ import { SecurityPolicyAnalysisEngine, SecurityPolicy } from './SecurityPolicyAn
 import { SecurityOptimizationEngine } from './SecurityOptimizationEngine';
 
 }
+}
 export interface SecurityControlTestingConfig {
   testing_framework: {
     enabled: boolean;
@@ -20,6 +21,7 @@ export interface SecurityControlTestingConfig {
     regression_testing_enabled: boolean;
     performance_testing_enabled: boolean;
     security_testing_enabled: boolean;
+}
 }
   };
   
@@ -61,6 +63,7 @@ export interface SecurityControlTestingConfig {
 }
 
 }
+}
 export interface SecurityControl {
   id: string;
   name: string;
@@ -73,6 +76,7 @@ export interface SecurityControl {
     configuration: Record<string, any>;
     dependencies: string[];
     deployment_scope: string[];
+}
 }
   };
   
@@ -104,6 +108,7 @@ export interface SecurityControl {
 }
 
 }
+}
 export interface SecurityControlTest {
   test_id: string;
   control_id: string;
@@ -116,6 +121,7 @@ export interface SecurityControlTest {
     concurrent_tests: number;
     data_volume: number;
     attack_vectors?: string[];
+}
 }
   };
   
@@ -145,6 +151,7 @@ export interface SecurityControlTest {
 }
 
 }
+}
 export interface SecurityControlIssue {
   issue_id: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -157,6 +164,7 @@ export interface SecurityControlIssue {
     business_impact: 'low' | 'medium' | 'high' | 'critical';
     security_impact: 'low' | 'medium' | 'high' | 'critical';
     performance_impact_percent: number;
+}
 }
   };
   
@@ -177,6 +185,7 @@ export interface SecurityControlIssue {
 }
 
 }
+}
 export interface EffectivenessReport {
   report_id: string;
   report_type: 'individual_control' | 'category_summary' | 'comprehensive' | 'trend_analysis';
@@ -185,6 +194,7 @@ export interface EffectivenessReport {
     start_date: number;
     end_date: number;
     duration_days: number;
+}
 }
   };
   
@@ -219,6 +229,7 @@ export interface EffectivenessReport {
 }
 
 }
+}
 export interface SecurityControlPerformance {
   control_id: string;
   control_name: string;
@@ -230,6 +241,7 @@ export interface SecurityControlPerformance {
     response_effectiveness: number;
     prevention_effectiveness: number;
     recovery_effectiveness: number;
+}
 }
   };
   
@@ -257,6 +269,7 @@ export interface SecurityControlPerformance {
 }
 
 }
+}
 export interface CategoryAnalysis {
   category_name: string;
   total_controls: number;
@@ -266,6 +279,7 @@ export interface CategoryAnalysis {
     best_performing_control: string;
     worst_performing_control: string;
     category_trend: 'improving' | 'stable' | 'declining';
+}
 }
   };
   
@@ -283,6 +297,7 @@ export interface CategoryAnalysis {
 }
 
 }
+}
 export interface TrendAnalysis {
   analysis_period_days: number;
   data_points: number;
@@ -292,6 +307,7 @@ export interface TrendAnalysis {
     trend_strength: number;
     seasonal_patterns: boolean;
     anomalies_detected: number;
+}
 }
   };
   
@@ -311,6 +327,7 @@ export interface TrendAnalysis {
 }
 
 }
+}
 export interface RecommendationItem {
   recommendation_id: string;
   priority: 'low' | 'medium' | 'high' | 'critical';
@@ -322,6 +339,7 @@ export interface RecommendationItem {
     rationale: string;
     expected_benefits: string[];
     implementation_steps: string[];
+}
 }
   };
   
@@ -342,6 +360,7 @@ export interface RecommendationItem {
 }
 
 }
+}
 export interface ResourceRequirement {
   resource_type: 'personnel' | 'technology' | 'budget' | 'time';
   description: string;
@@ -351,7 +370,9 @@ export interface ResourceRequirement {
   criticality: 'optional' | 'recommended' | 'required' | 'critical';
 }
 }
+}
 
+}
 }
 export interface ComplianceGap {
   framework: string;
@@ -360,6 +381,7 @@ export interface ComplianceGap {
   severity: 'low' | 'medium' | 'high' | 'critical';
   remediation_actions: string[];
   estimated_effort: number;
+}
 }
 }
 

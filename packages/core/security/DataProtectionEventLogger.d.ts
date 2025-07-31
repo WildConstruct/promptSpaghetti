@@ -40,6 +40,7 @@ export declare enum ComplianceFramework {
     HIPAA = "hipaa",
     CUSTOM = "custom"
 
+}
 export interface DataProtectionEvent {
     eventType: DataProtectionEventType;
     timestamp: Date;
@@ -57,6 +58,7 @@ export interface DataProtectionEvent {
     complianceFrameworks: ComplianceFramework[];
     metadata?: Record<string, any>;
 
+}
 export interface DataDeletionEvent extends DataProtectionEvent {
     deletionJobId: string;
     scheduledTime: Date;
@@ -67,10 +69,12 @@ export interface DataDeletionEvent extends DataProtectionEvent {
         processed: number;
         successful: number;
         failed: number;
+}
     };
     failureReasons?: string[];
     exemptionReasons?: string[];
 
+}
 export interface PrivacyRequestEvent extends DataProtectionEvent {
     requestType: 'access' | 'rectification' | 'erasure' | 'portability' | 'restriction' | 'objection';
     requestId: string;
@@ -80,6 +84,7 @@ export interface PrivacyRequestEvent extends DataProtectionEvent {
     dataCategories: string[];
     processingPurposes: string[];
 
+}
 export interface PolicyViolationEvent extends DataProtectionEvent {
     violationType: string;
     policyId: string;
@@ -136,11 +141,13 @@ export declare class DataProtectionEventLogger {
     private aggregatePrivacyRequests;
     private calculateRetentionCompliance;
 
+}
 export interface ComplianceReport {
     framework: ComplianceFramework;
     reportPeriod: {
         start: Date;
         end: Date;
+}
     };
     eventCount: number;
     eventTypes: Record<string, number>;
@@ -150,6 +157,7 @@ export interface ComplianceReport {
     retentionCompliance: ComplianceMetrics;
     generatedAt: Date;
 
+}
 export interface ComplianceMetrics {
     totalEvents: number;
     pastRetentionEvents: number;
@@ -157,3 +165,4 @@ export interface ComplianceMetrics {
     compliancePercentage: number;
 
 //# sourceMappingURL=DataProtectionEventLogger.d.ts.map
+}

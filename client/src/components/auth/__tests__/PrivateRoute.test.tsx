@@ -123,7 +123,7 @@ describe('PrivateRoute', () => {
   isLoading: false,
   checkAuthStatus: mockCheckAuthStatus,
   setReturnUrl: mockSetReturnUrl,
-  user: {,
+  user: {
   id: '1',
   email: 'test@example.com',
   firstName: 'Test',
@@ -183,7 +183,7 @@ describe('PrivateRoute', () => {
   isLoading: false,
   checkAuthStatus: mockCheckAuthStatus,
   setReturnUrl: mockSetReturnUrl,
-  user: {,
+  user: {
   id: '1',
   email: 'test@example.com',
   firstName: 'Test',

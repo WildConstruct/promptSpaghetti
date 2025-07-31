@@ -9,6 +9,7 @@ import {
   retroGamingDemoTemplate,
   templateCategories 
 } from '../../data/nodeTemplates';
+}
 interface TemplateSelectorProps {
   onTemplateSelect?: (template: GraphTemplate) => void;
   onNodeTemplateSelect?: (nodeTemplate: NodeTemplate) => void;
@@ -17,6 +18,7 @@ interface TemplateSelectorProps {
   onTemplateSelect,
   onNodeTemplateSelect,
   className = ""
+}
 }) => {
   const [activeTab, setActiveTab] = useState<'graphs' | 'nodes'>('graphs');
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'logic' | 'transform'>('all');
@@ -28,7 +30,8 @@ interface TemplateSelectorProps {
   const getNodeTemplatesByCategory = () => {
   if (selectedCategory === 'all') {
   return Object.values(templateCategories).flat();
-  return templateCategories[selectedCategory] || [];
+}
+return templateCategories[selectedCategory] || [];
 };
   const handleGraphTemplateSelect = (template: GraphTemplate) => {
     onTemplateSelect?.(template);

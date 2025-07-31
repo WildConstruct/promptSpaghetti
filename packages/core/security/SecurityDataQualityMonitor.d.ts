@@ -11,6 +11,7 @@ import { EventEmitter } from 'events';
 import { SecurityIntelligence } from './MLSecurityAnalyticsFramework';
 import { SecurityAnomaly } from './SecurityAnomalyDetector';
 
+}
 export interface DataQualityConfig {
     enableRealTimeValidation: boolean;
     validationInterval: number;
@@ -21,6 +22,7 @@ export interface DataQualityConfig {
     reportingEnabled: boolean;
     validationRules: ValidationRule[];
 
+}
 export interface QualityThresholds {
     completeness: number;
     accuracy: number;
@@ -30,6 +32,7 @@ export interface QualityThresholds {
     uniqueness: number;
     overall: number;
 
+}
 export interface ValidationRule {
     id: string;
     name: string;
@@ -60,12 +63,14 @@ export declare enum ValidationSeverity {
     ERROR = "error",
     CRITICAL = "critical"
 
+}
 export interface DataQualityReport {
     reportId: string;
     generatedAt: Date;
     period: {
         start: Date;
         end: Date;
+}
     };
     overallScore: number;
     qualityDimensions: QualityDimensionScore[];
@@ -74,6 +79,7 @@ export interface DataQualityReport {
     recommendations: QualityRecommendation[];
     dataSourceMetrics: DataSourceQuality[];
 
+}
 export interface QualityDimensionScore {
     dimension: QualityDimension;
     score: number;
@@ -89,6 +95,7 @@ export declare enum QualityDimension {
     VALIDITY = "validity",
     UNIQUENESS = "uniqueness"
 
+}
 export interface DataQualityViolation {
     violationId: string;
     timestamp: Date;
@@ -107,6 +114,7 @@ export interface DataQualityViolation {
     resolvedAt?: Date;
     remediation?: RemediationAction;
 
+}
 export interface RemediationAction {
     actionType: RemediationActionType;
     description: string;
@@ -123,6 +131,7 @@ export declare enum RemediationActionType {
     ENRICHMENT = "enrichment",
     TRANSFORMATION = "transformation"
 
+}
 export interface QualityTrend {
     dimension: QualityDimension;
     timeframe: string;
@@ -131,6 +140,7 @@ export interface QualityTrend {
     significance: 'high' | 'medium' | 'low';
     driverFactors: string[];
 
+}
 export interface QualityRecommendation {
     id: string;
     priority: 'immediate' | 'high' | 'medium' | 'low';
@@ -142,6 +152,7 @@ export interface QualityRecommendation {
     targetDimensions: QualityDimension[];
     implementationSteps: string[];
 
+}
 export interface DataSourceQuality {
     sourceName: string;
     sourceType: string;
@@ -152,6 +163,7 @@ export interface DataSourceQuality {
     dimensions: Record<QualityDimension, number>;
     commonIssues: string[];
 
+}
 export interface DataQualityMetrics {
     totalRecordsProcessed: number;
     totalViolations: number;
@@ -162,6 +174,7 @@ export interface DataQualityMetrics {
     manualInterventions: number;
     qualityTrend: 'improving' | 'declining' | 'stable';
 
+}
 export interface ValidationContext {
     recordId: string;
     dataSource: string;
@@ -169,6 +182,7 @@ export interface ValidationContext {
     metadata: Record<string, unknown>;
     relatedRecords?: unknown[];
 
+}
 export interface QualityProfile {
     dataSourceName: string;
     expectedSchema: Record<string, FieldExpectation>;
@@ -177,6 +191,7 @@ export interface QualityProfile {
     lastUpdated: Date;
     validationHistory: ValidationHistoryEntry[];
 
+}
 export interface FieldExpectation {
     fieldName: string;
     dataType: string;
@@ -188,33 +203,39 @@ export interface FieldExpectation {
     nullablePercent: number;
     uniquenessRequired: boolean;
 
+}
 export interface StatisticalBaseline {
     recordCount: {
         mean: number;
         standardDeviation: number;
         min: number;
         max: number;
+}
     };
     fieldStatistics: Record<string, FieldStatistics>;
     temporalPatterns: TemporalPattern[];
 
+}
 export interface FieldStatistics {
     fieldName: string;
     dataType: string;
     nullPercent: number;
     uniquePercent: number;
     averageLength?: number;
-    commonValues: Array<{,
+    commonValues: Array<{
         value: unknown;
         frequency: number;
+}
     }>;
     outlierThreshold: number;
 
+}
 export interface TemporalPattern {
     pattern: 'hourly' | 'daily' | 'weekly' | 'monthly';
     expectedVolume: number[];
     variationThreshold: number;
 
+}
 export interface BusinessRule {
     ruleId: string;
     name: string;
@@ -223,6 +244,7 @@ export interface BusinessRule {
     severity: ValidationSeverity;
     enabled: boolean;
 
+}
 export interface ValidationHistoryEntry {
     timestamp: Date;
     overallScore: number;
@@ -275,6 +297,7 @@ export declare class SecurityDataQualityMonitor extends EventEmitter {
     generateQualityReport(period: {)
         start: Date;
         end: Date;
+}
     }): Promise<DataQualityReport>;
     private calculateQualityDimensions;
     private calculateQualityTrends;

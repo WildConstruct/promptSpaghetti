@@ -8,6 +8,7 @@ import React from 'react';
 import { WeightControlOption } from '../Inspector/WeightControlSlider';
 export type ChartType = 'pie' | 'bar' | 'donut';
 
+}
 export interface WeightDistributionChartProps {
     options: WeightControlOption[];
     type?: ChartType;
@@ -24,3 +25,4 @@ export interface WeightDistributionChartProps {
 export declare const WeightDistributionChart: React.FC<WeightDistributionChartProps>;
 export default WeightDistributionChart;
 //# sourceMappingURL=WeightDistributionChart.d.ts.map
+}

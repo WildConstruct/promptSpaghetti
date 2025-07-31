@@ -14,6 +14,7 @@ import { DataClassificationLevel, type OperationContext } from '../types/DataCla
  * Configuration for audit integration
  */
 
+}
 export interface AuditIntegrationConfig {
     auditLogger: AuditLogger;
     classificationEnforcer?: ClassificationEnforcer;
@@ -50,6 +51,7 @@ export declare class AuditIntegration {
         resourceType: string;
         resourceId: string;
         classification?: DataClassificationLevel;
+}
     }, metadata?: Record<string, any>): Promise<void>;
     /**
      * Log a security event
@@ -90,10 +92,12 @@ export declare class AuditIntegration {
  * Compliance report structure
  */
 
+}
 export interface ComplianceReport {
     period: {
         start: Date;
         end: Date;
+}
     };
     totalAccess: number;
     sensitiveAccess: number;

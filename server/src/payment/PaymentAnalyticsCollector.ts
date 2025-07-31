@@ -45,6 +45,7 @@ export enum PaymentAnalyticsEventType {
 
 // Payment Performance Metrics
 }
+}
 export interface PaymentProviderMetrics {
   provider: PaymentProvider;
   
@@ -74,6 +75,7 @@ export interface PaymentProviderMetrics {
     successRate: number;
     averageProcessingTime: number;
 }
+}
   }>;
   
   // Temporal Performance
@@ -85,6 +87,7 @@ export interface PaymentProviderMetrics {
 }
 
 // Payment Method Performance
+}
 }
 export interface PaymentMethodMetrics {
   methodType: PaymentMethodType;
@@ -102,6 +105,7 @@ export interface PaymentMethodMetrics {
     successRate: number;
     usage: number;
 }
+}
   }>;
   
   // Device performance
@@ -113,6 +117,7 @@ export interface PaymentMethodMetrics {
 }
 
 // Payment Failure Analysis
+}
 }
 export interface PaymentFailureAnalysis {
   failureCode: string;
@@ -129,6 +134,7 @@ export interface PaymentFailureAnalysis {
     hour: number;
     frequency: number;
 }
+}
   }>;
   
   geographicPattern: Array<{
@@ -144,6 +150,7 @@ export interface PaymentFailureAnalysis {
 
 // Payment Webhook Event
 }
+}
 export interface PaymentWebhookEvent {
   id: string;
   provider: PaymentProvider;
@@ -153,6 +160,7 @@ export interface PaymentWebhookEvent {
   processedAt?: Date;
   processingStatus: 'pending' | 'processed' | 'failed' | 'ignored';
   errorMessage?: string;
+}
 }
 }
 

@@ -7,6 +7,7 @@
  */
 
 }
+}
 export interface EvidenceType {
   id: string;
   name: string;
@@ -22,9 +23,11 @@ export interface EvidenceType {
     chain_of_custody: boolean;
     version_control: boolean;
 }
+}
   };
 }
 
+}
 }
 export interface ComplianceFramework {
   id: string;
@@ -42,9 +45,11 @@ export interface ComplianceFramework {
     recipients: string[];
     retention_period: string;
 }
+}
   };
 }
 
+}
 }
 export interface AuditRequirement {
   id: string;
@@ -60,7 +65,9 @@ export interface AuditRequirement {
   manual_verification_required: boolean;
 }
 }
+}
 
+}
 }
 export interface EvidenceMapping {
   evidence_type_id: string;
@@ -73,7 +80,9 @@ export interface EvidenceMapping {
   alternatives: string[];
 }
 }
+}
 
+}
 }
 export interface EvidenceGap {
   audit_requirement_id: string;
@@ -84,7 +93,9 @@ export interface EvidenceGap {
   responsible_party: string;
 }
 }
+}
 
+}
 }
 export interface AuditTrail {
   id: string;
@@ -100,6 +111,7 @@ export interface AuditTrail {
     actor: string;
     action: string;
     reason: string;
+}
 }
   }[];
   validation_status: 'pending' | 'validated' | 'invalid' | 'expired';

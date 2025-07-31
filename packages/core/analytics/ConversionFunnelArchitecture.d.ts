@@ -12,6 +12,7 @@
  */
 import { ConversionEvent, ConversionFunnel } from './ConversionTracker';
 
+}
 export interface EnhancedConversionEvent extends ConversionEvent {
     deviceFingerprint?: string;
     crossDeviceUserId?: string;
@@ -33,6 +34,7 @@ export interface EnhancedConversionEvent extends ConversionEvent {
         latency: number;
     };
 
+}
 export interface TouchPoint {
     id: string;
     timestamp: number;
@@ -48,12 +50,14 @@ export interface TouchPoint {
 
 export type MarketingChannel = 'organic_search' | 'paid_search' | 'social_organic' | 'social_paid' | 'email' | 'direct' | 'referral' | 'display' | 'affiliate' | 'video' | 'content_marketing' | 'marketplace_internal';
 
+}
 export interface AttributionModel {
     name: 'first_touch' | 'last_touch' | 'linear' | 'time_decay' | 'position_based' | 'data_driven';
     weight: number;
     touchpoint: TouchPoint;
     attribution_value: number;
 
+}
 export interface EnhancedConversionFunnel extends ConversionFunnel {
     crossDeviceTracking: boolean;
     attributionWindow: number;
@@ -61,6 +65,7 @@ export interface EnhancedConversionFunnel extends ConversionFunnel {
         primaryGoal: ConversionGoal;
         microConversions: ConversionGoal[];
         macroConversions: ConversionGoal[];
+}
     };
     segmentation: {
         userSegments: UserSegment[];
@@ -72,6 +77,7 @@ export interface EnhancedConversionFunnel extends ConversionFunnel {
         alerting: AlertingConfig;
     };
 
+}
 export interface ConversionGoal {
     id: string;
     name: string;
@@ -81,21 +87,25 @@ export interface ConversionGoal {
     conditions: Record<string, any>;
     weight: number;
 
+}
 export interface UserSegment {
     id: string;
     name: string;
     definition: {
         rules: SegmentRule[];
         operator: 'AND' | 'OR'
+}
   };
     size: number;
     conversionRate: number;
 
+}
 export interface SegmentRule {
     field: string;
     operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'in' | 'not_in';
     value: any;
 
+}
 export interface CohortDefinition {
     id: string;
     name: string;
@@ -104,18 +114,21 @@ export interface CohortDefinition {
     analysisWindow: number;
     retentionPeriods: number[];
 
+}
 export interface AnomalyThreshold {
     metric: 'conversion_rate' | 'drop_off_rate' | 'time_to_convert' | 'volume';
     threshold: number;
     direction: 'above' | 'below' | 'change';
     sensitivity: 'low' | 'medium' | 'high';
 
+}
 export interface AlertingConfig {
     channels: ('email' | 'slack' | 'webhook' | 'dashboard')[];
     recipients: string[];
     frequency: 'immediate' | 'hourly' | 'daily';
     cooldown: number;
 
+}
 export interface CrossDeviceIdentity {
     primaryUserId: string;
     linkedDevices: DeviceIdentity[];
@@ -126,8 +139,10 @@ export interface CrossDeviceIdentity {
         createdAt: number;
         expiresAt: number;
         purpose: string;
+}
     };
 
+}
 export interface DeviceIdentity {
     deviceId: string;
     deviceType: 'desktop' | 'mobile' | 'tablet';
@@ -139,12 +154,14 @@ export interface DeviceIdentity {
     linkedAt: number;
     linkingSignals: LinkingSignal[];
 
+}
 export interface LinkingSignal {
     type: 'login' | 'email' | 'phone' | 'behavioral' | 'temporal';
     strength: number;
     timestamp: number;
     metadata: Record<string, any>;
 
+}
 export interface FunnelStreamConfig {
     streamName: string;
     batchSize: number;
@@ -153,6 +170,7 @@ export interface FunnelStreamConfig {
         maxRetries: number;
         backoffMultiplier: number;
         maxBackoffTime: number;
+}
     };
     deadLetterQueue: {
         enabled: boolean;
@@ -163,6 +181,7 @@ export interface FunnelStreamConfig {
         partitionCount: number;
     };
 
+}
 export interface ConversionPatternInsight {
     pattern: {
         id: string;
@@ -170,6 +189,7 @@ export interface ConversionPatternInsight {
         description: string;
         frequency: number;
         averageValue: number;
+}
     };
     segments: {
         high_value: UserJourneyPattern;
@@ -182,6 +202,7 @@ export interface ConversionPatternInsight {
         personalization: string[];
     };
 
+}
 export interface UserJourneyPattern {
     pattern: string[];
     frequency: number;
@@ -242,3 +263,4 @@ export declare class ConversionArchitectureManager {
 export declare const conversionArchitecture: ConversionArchitectureManager;
 export default conversionArchitecture;
 //# sourceMappingURL=ConversionFunnelArchitecture.d.ts.map
+}

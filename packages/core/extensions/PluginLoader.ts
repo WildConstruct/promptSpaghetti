@@ -15,6 +15,7 @@ import { join, resolve, dirname } from 'path';
 import { createRequire } from 'module';
 import * as semver from 'semver';
 
+}
 export interface PluginSource {
   type: 'filesystem' | 'npm' | 'git' | 'url' | 'registry';
   location: string;
@@ -23,12 +24,14 @@ export interface PluginSource {
   token?: string;
   username?: string;
   password?: string;
+}
 };
   options?: {
   cache?: boolean;
   timeout?: number;
   allowPrerelease?: boolean;
 };
+}
 }
 export interface LoadedPlugin {
   manifest: ExtensionManifest;
@@ -40,6 +43,8 @@ export interface LoadedPlugin {
   status: 'loaded' | 'active' | 'inactive' | 'error';
   error?: Error;
 }
+}
+}
 export interface PluginLoadOptions {
   enableSandbox: boolean;
   allowRemoteSources: boolean;
@@ -49,11 +54,14 @@ export interface PluginLoadOptions {
   developmentMode?: boolean;
   permissionsCheck?: boolean;
 }
+}
+}
 export interface PluginRegistry {
   plugins: Map<string, LoadedPlugin>;
   manifests: Map<string, ExtensionManifest>;
   dependencyGraph: DependencyGraph;
   loadOrder: LoadOrder;
+}
 }
 export class PluginLoader {
   private registry: ExtensionPointRegistry;
@@ -86,6 +94,7 @@ export class PluginLoader {
    * Load a plugin from a source
    */
   async loadPlugin(source: PluginSource): Promise<LoadedPlugin> {
+
     const pluginKey = this.getPluginKey(source);
     // Check if already loaded
     const existing = this.loadedPlugins.get(pluginKey);
@@ -154,6 +163,7 @@ export class PluginLoader {
    * Resolve and install plugin dependencies
    */
   async resolvePluginDependencies(manifest: ExtensionManifest): Promise<string> {
+
     const dependencies: string = [];
     if (manifest.dependencies) {
       for (const [depName, versionRange] of Object.entries(manifest.dependencies)) {
@@ -182,6 +192,7 @@ export class PluginLoader {
    * Unload a plugin and its dependents
    */
   async unloadPlugin(pluginId: string): Promise<void> {
+
     const plugin = this.loadedPlugins.get(pluginId);
     if (!plugin) {
       return;
@@ -206,6 +217,7 @@ export class PluginLoader {
    * Reload a plugin (unload and load again)
    */
   async reloadPlugin(pluginId: string): Promise<LoadedPlugin> {
+
     const plugin = this.loadedPlugins.get(pluginId);
     if (!plugin) {
       throw new Error(`Plugin ${pluginId} not found`);}
@@ -247,6 +259,7 @@ export class PluginLoader {
    * Update a plugin to latest version
    */
   async updatePlugin(pluginId: string): Promise<LoadedPlugin> {
+
     const plugin = this.loadedPlugins.get(pluginId);
     if (!plugin) {
       throw new Error(`Plugin ${pluginId} not found`);}
@@ -263,6 +276,7 @@ export class PluginLoader {
     return this.loadPlugin(updatedSource);
   // Private methods
   private async loadPluginInternal(source: PluginSource): Promise<LoadedPlugin> {
+
   try {
   // 1. Resolve and download plugin source
   const pluginPath = await this.resolvePluginSource(source);
@@ -294,6 +308,7 @@ export class PluginLoader {
     } catch (error) {
       throw new Error(`Failed to load plugin from ${source.location}: ${error.message}`);}
   private async resolvePluginSource(source: PluginSource): Promise<string> {
+
     switch (source.type) {
     case 'filesystem':
       return resolve(source.location);
@@ -308,6 +323,7 @@ export class PluginLoader {
     default:
       throw new Error(`Unsupported plugin source type: ${(source as any).type}`);}
   private async loadPluginManifest(pluginPath: string): Promise<ExtensionManifest> {
+
   const manifestPath = join(pluginPath, 'plugin.json') || join(pluginPath, 'package.json');
   try {
   const content = await fs.readFile(manifestPath, 'utf-8');
@@ -319,6 +335,7 @@ export class PluginLoader {
 } catch (error) {
       throw new Error(`Failed to load manifest from ${manifestPath}: ${error.message}`);}
   private async loadPluginExports(pluginPath: string, sandbox: PluginSandbox | null): Promise<any> {
+
     const entryPoint = join(pluginPath, 'index.js') || join(pluginPath, 'main.js');
     if (sandbox) {
       return sandbox.loadModule(entryPoint);
@@ -350,6 +367,7 @@ export class PluginLoader {
     }));
     return manifests;
   private async resolveDependency(depName: string, versionRange: string): Promise<LoadedPlugin | null> {
+
   // Try to find dependency in available sources or registries
   // This is a simplified implementation - in production you'd want
   // integration with npm, plugin registries, etc.
@@ -372,17 +390,22 @@ export class PluginLoader {
   private getPluginKey(source: PluginSource): string {
     return `${source.type}:${source.location}${source.version ? `@${source.version}` : ''}`;}
   private async downloadFromNpm(source: PluginSource): Promise<string> {
+
     // Implementation would use npm/yarn to download and cache packages
     throw new Error('NPM plugin sources not implemented yet');
   private async downloadFromGit(source: PluginSource): Promise<string> {
+
     // Implementation would clone git repositories
     throw new Error('Git plugin sources not implemented yet');
   private async downloadFromUrl(source: PluginSource): Promise<string> {
+
     // Implementation would download and extract from URLs
     throw new Error('URL plugin sources not implemented yet');
   private async downloadFromRegistry(source: PluginSource): Promise<string> {
+
     // Implementation would download from custom plugin registries
     throw new Error('Registry plugin sources not implemented yet');
   private async getLatestVersion(source: PluginSource): Promise<string | null> {
+
     // Implementation would query registries for latest versions
     return null;

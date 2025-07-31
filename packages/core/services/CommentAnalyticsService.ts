@@ -12,18 +12,25 @@ import {
   CommentableResourceType 
 } from '../types/TrendingCommentsTypes';
 
+}
 export interface CommentAnalyticsConfig {
   databaseUrl?: string;
   cacheTTLSeconds?: number;
   enableRealTimeUpdates?: boolean;
   maxAnalyticsPeriodDays?: number;
 }
+}
+}
 export interface EngagementBreakdown {
   [key: string]: number;
+}
+}
 }
 export interface TimeSeriesData {
   timestamp: string;
   value: number;
+}
+}
 }
 export interface CommentMetrics {
   totalComments: number;
@@ -33,12 +40,16 @@ export interface CommentMetrics {
   averageRating: number;
   engagementRate: number;
 }
+}
+}
 export interface SentimentAnalysis {
   positive: number;
   neutral: number;
   negative: number;
   averageScore: number;
   confidence: number;
+}
+}
 }
 export interface TopicTrend {
   topic: string;
@@ -47,12 +58,15 @@ export interface TopicTrend {
   growthRate: number;
   peakHour?: number;
 }
+}
+}
 export interface UserEngagementData {
   userId: string;
   commentsPosted: number;
   likesReceived: number;
   influenceScore: number;
   reputationScore: number;
+}
 }
 export class CommentAnalyticsService {
   private db: Pool;
@@ -82,6 +96,7 @@ export class CommentAnalyticsService {
   includeTopics?: boolean;
 } = {}
   ): Promise<CommentAnalytics> {
+
     const cacheKey = `analytics:${resourceId}:${resourceType}:${JSON.stringify(options)}`;}
     // Check cache first
     const cached = this.getCachedData(cacheKey);
@@ -196,6 +211,7 @@ export class CommentAnalyticsService {
     engagementType: CommentEngagementType,
     metadata: Record<string, any> = {}
   ): Promise<void> {
+
     try {
       await this.db.query()
         `INSERT INTO comment_engagement_events 
@@ -413,6 +429,7 @@ export class CommentAnalyticsService {
     if (previousPeriod.totalComments === 0) return 100;
     return ((currentPeriod.totalComments - previousPeriod.totalComments) / previousPeriod.totalComments) * 100;
   private async calculateTrendingScore(resourceId: string, resourceType: string): Promise<number> {
+
     // Use the database function to calculate trending score
     const result = await this.db.query(;);
       `SELECT AVG(calculate_comment_trending_score(f.id)) as avg_score
@@ -423,6 +440,7 @@ export class CommentAnalyticsService {
     );
     return parseFloat(result.rows[0].avg_score) || 0;
   private async calculateEngagementVelocity(resourceId: string, resourceType: string): Promise<number> {
+
     const result = await this.db.query(;);
       `SELECT COUNT(*)::DECIMAL / 24 as velocity
        FROM comment_engagement_events cee
@@ -567,6 +585,7 @@ export class CommentAnalyticsService {
   qualityChange: 0 // Placeholder,
 };
   private async getBenchmarkComparison(resourceType: string): Promise<any> {
+
   // This would compare against industry/platform benchmarks
   return {
   commentsPercentile: 75,
@@ -574,6 +593,7 @@ export class CommentAnalyticsService {
   qualityPercentile: 82,
 };
   private async getSimilarResourcesComparison(resourceId: string, resourceType: string): Promise<any> {
+
   // This would find and compare similar resources
   return {
   averageComments: 156,
@@ -606,6 +626,7 @@ export class CommentAnalyticsService {
    * Clean up resources
    */
   async close(): Promise<void> {
+
     await this.db.end();
     this.cache.clear();
 

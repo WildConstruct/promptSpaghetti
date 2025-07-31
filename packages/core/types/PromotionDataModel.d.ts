@@ -10,6 +10,7 @@
  */
 import { PlacementTargetingRules, PlacementStyling, MetricsPeriod } from './PlacementTypes';
 
+}
 export interface PromotionCampaign {
     campaignId: string;
     name: string;
@@ -44,6 +45,7 @@ export interface PromotionCampaign {
         analyticsTracking: AnalyticsTrackingConfig;
         externalPlatforms?: ExternalPlatformConfig[];
         customEventTracking?: CustomEventConfig[];
+}
     };
 
 export declare enum PromotionType {
@@ -97,6 +99,7 @@ export declare enum ContentSelectionMethod {
     HYBRID_SCORING = "hybrid_scoring",
     REAL_TIME_OPTIMIZATION = "real_time_optimization"
 
+}
 export interface PromotionContent {
     contentId: string;
     templateId: string;
@@ -108,6 +111,7 @@ export interface PromotionContent {
         tags: string[];
         thumbnailUrl?: string;
         previewUrl?: string;
+}
     };
     promotionConfig: {
         priority: number;
@@ -130,6 +134,7 @@ export interface PromotionContent {
     experimentVariant?: string;
     controlGroup?: boolean;
 
+}
 export interface PromotionalBadge {
     badgeId: string;
     type: BadgeType;
@@ -151,6 +156,7 @@ export declare enum BadgeType {
     DISCOUNT = "discount",
     CUSTOM = "custom"
 
+}
 export interface BadgeStyle {
     backgroundColor: string;
     textColor: string;
@@ -168,16 +174,19 @@ export declare enum BadgePosition {
     CENTER = "center",
     OVERLAY = "overlay"
 
+}
 export interface BadgeVisibility {
     showOnHover?: boolean;
     showAlways?: boolean;
     showOnMobile?: boolean;
     minScreenWidth?: number;
 
+}
 export interface BadgeConditions {
     timeframe?: {
         start: Date;
         end: Date;
+}
     };
     performanceThreshold?: {
         metric: string;
@@ -197,6 +206,7 @@ export declare enum ContentPromotionStatus {
     UNDERPERFORMING = "underperforming",
     EXCLUDED = "excluded"
 
+}
 export interface ContentSelectionCriteria {
     templateCriteria: {
         categories?: string[];
@@ -210,6 +220,7 @@ export interface ContentSelectionCriteria {
         priceRange?: {
             min: number;
             max: number;
+}
         };
     };
     performanceCriteria: {
@@ -254,6 +265,7 @@ export interface ContentSelectionCriteria {
         lowPerformers?: boolean;
     };
 
+}
 export interface PromotionSchedule {
     scheduleId: string;
     startDate: Date;
@@ -275,6 +287,7 @@ export declare enum ScheduleType {
     EVENT_TRIGGERED = "event_triggered",
     CONTINUOUS = "continuous"
 
+}
 export interface TimeBasedRules {
     hoursOfDay?: number[];
     excludeHours?: number[];
@@ -284,17 +297,20 @@ export interface TimeBasedRules {
         start: string;
         end: string;
         multiplier: number;
+}
     };
     primaryTimezones?: string[];
     followUserTimezone?: boolean;
     seasonalPatterns?: SeasonalPattern[];
 
+}
 export interface SeasonalPattern {
     season: 'spring' | 'summer' | 'fall' | 'winter' | 'holiday' | 'back_to_school';
     adjustmentFactor: number;
     specificDates?: Date[];
     geographicRegions?: string[];
 
+}
 export interface RecurrenceConfig {
     frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly';
     interval: number;
@@ -302,6 +318,7 @@ export interface RecurrenceConfig {
     endValue: Date | number;
     exceptions?: Date[];
 
+}
 export interface DynamicSchedulingRule {
     ruleId: string;
     name: string;
@@ -310,6 +327,7 @@ export interface DynamicSchedulingRule {
         threshold: number;
         operator: 'gt' | 'lt' | 'eq' | 'gte' | 'lte';
         timeWindow: number;
+}
     };
     action: {
         type: 'extend' | 'pause' | 'rotate' | 'boost' | 'end';
@@ -318,6 +336,7 @@ export interface DynamicSchedulingRule {
     priority: number;
     isActive: boolean;
 
+}
 export interface ScheduleExecution {
     executionId: string;
     executedAt: Date;
@@ -327,6 +346,7 @@ export interface ScheduleExecution {
     issues?: string[];
     success: boolean;
 
+}
 export interface RotationConfiguration {
     rotationId: string;
     strategy: RotationStrategy;
@@ -350,6 +370,7 @@ export declare enum RotationStrategy {
     USER_BEHAVIOR_DRIVEN = "user_behavior_driven",
     MACHINE_LEARNING = "machine_learning"
 
+}
 export interface RotationFrequency {
     type: 'fixed_interval' | 'performance_based' | 'traffic_based' | 'hybrid';
     interval?: number;
@@ -357,6 +378,7 @@ export interface RotationFrequency {
     maxInterval?: number;
     conditions?: RotationCondition[];
 
+}
 export interface RotationTrigger {
     triggerId: string;
     type: 'time' | 'performance' | 'user_activity' | 'external_event' | 'manual';
@@ -365,11 +387,13 @@ export interface RotationTrigger {
         threshold?: number;
         operator?: 'gt' | 'lt' | 'eq';
         timeWindow?: number;
+}
     };
     priority: number;
     isActive: boolean;
     lastTriggered?: Date;
 
+}
 export interface PerformanceThreshold {
     metric: string;
     threshold: number;
@@ -377,12 +401,14 @@ export interface PerformanceThreshold {
     timeWindow: number;
     sampleSize?: number;
 
+}
 export interface WeightingFactor {
     factor: string;
     weight: number;
     source: 'historical_performance' | 'real_time_metrics' | 'user_preference' | 'content_attributes' | 'external_signals';
     decayRate?: number;
 
+}
 export interface RotationCondition {
     conditionId: string;
     metric: string;
@@ -390,6 +416,7 @@ export interface RotationCondition {
     value: number;
     timeWindow: number;
 
+}
 export interface QualityCheck {
     checkId: string;
     name: string;
@@ -398,6 +425,7 @@ export interface QualityCheck {
     timeout: number;
     retryCount: number;
 
+}
 export interface PromotionTargeting extends PlacementTargetingRules {
     userTargeting: {
         segments: string[];
@@ -406,6 +434,7 @@ export interface PromotionTargeting extends PlacementTargetingRules {
         valueTiers?: UserValueTier[];
         engagementLevels?: UserEngagementLevel[];
         purchaseHistory?: PurchaseHistoryTargeting;
+}
     };
     contextualTargeting: {
         currentPage?: string[];
@@ -457,10 +486,12 @@ export declare enum UserEngagementLevel {
     HIGHLY_ENGAGED = "highly_engaged",
     POWER_USER = "power_user"
 
+}
 export interface PurchaseHistoryTargeting {
     totalPurchases?: {
         min: number;
         max?: number;
+}
     };
     recentPurchases?: {
         days: number;
@@ -492,12 +523,14 @@ export declare enum SessionStage {
     CHECKOUT = "checkout",
     POST_PURCHASE = "post_purchase"
 
+}
 export interface DeviceCapability {
     screenSize: 'small' | 'medium' | 'large' | 'xlarge';
     touchSupport: boolean;
     connectionSpeed: 'slow' | 'medium' | 'fast';
     processingPower: 'low' | 'medium' | 'high';
 
+}
 export interface BrowsingPattern {
     patternType: 'sequential' | 'comparative' | 'exploratory' | 'focused';
     categoryDepth: number;
@@ -505,12 +538,14 @@ export interface BrowsingPattern {
     pageViews: number;
     bounceRate: number;
 
+}
 export interface InteractionPattern {
     interactionType: 'click' | 'scroll' | 'hover' | 'search' | 'filter' | 'share';
     frequency: number;
     intensity: 'low' | 'medium' | 'high';
     recency: number;
 
+}
 export interface PurchasePattern {
     frequency: 'impulse' | 'regular' | 'seasonal' | 'occasional';
     timing: 'morning' | 'afternoon' | 'evening' | 'weekend' | 'weekday';
@@ -518,8 +553,10 @@ export interface PurchasePattern {
     priceRange: {
         min: number;
         max: number;
+}
     };
 
+}
 export interface ContentPreference {
     categories: string[];
     creators: string[];
@@ -528,12 +565,14 @@ export interface ContentPreference {
     topics: string[];
     formats: string[];
 
+}
 export interface TemporalPattern {
     timeOfDay: number[];
     dayOfWeek: number[];
     seasonality: string[];
     eventTiming: string[];
 
+}
 export interface PersonalizationRule {
     ruleId: string;
     name: string;
@@ -558,6 +597,7 @@ export declare enum PersonalizationRuleType {
     MESSAGING_CUSTOMIZATION = "messaging_customization",
     TARGETING_REFINEMENT = "targeting_refinement"
 
+}
 export interface PersonalizationCondition {
     conditionId: string;
     type: 'user_attribute' | 'behavior' | 'context' | 'performance' | 'time';
@@ -566,12 +606,14 @@ export interface PersonalizationCondition {
     value: any;
     weight: number;
 
+}
 export interface PersonalizationAction {
     actionId: string;
     type: 'boost_content' | 'change_position' | 'modify_message' | 'adjust_timing' | 'add_badge' | 'change_style';
     parameters: Record<string, any>;
     impact: number;
 
+}
 export interface PromotionGoal {
     goalId: string;
     name: string;
@@ -597,6 +639,7 @@ export declare enum GoalType {
     RETENTION = "retention",
     BRAND_AWARENESS = "brand_awareness"
 
+}
 export interface GoalTimeframe {
     type: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'campaign_duration';
     duration?: number;
@@ -616,6 +659,7 @@ export declare enum GoalStatus {
     FAILED = "failed",
     ARCHIVED = "archived"
 
+}
 export interface OptimizationSettings {
     optimizationStrategy: OptimizationStrategy;
     optimizationGoals: string[];
@@ -635,6 +679,7 @@ export declare enum OptimizationStrategy {
     MULTI_ARMED_BANDIT = "multi_armed_bandit",
     BAYESIAN_OPTIMIZATION = "bayesian_optimization"
 
+}
 export interface MachineLearningConfig {
     algorithm: 'collaborative_filtering' | 'content_based' | 'deep_learning' | 'ensemble';
     features: MLFeature[];
@@ -642,12 +687,14 @@ export interface MachineLearningConfig {
     modelUpdate: MLModelUpdateConfig;
     explainability: boolean;
 
+}
 export interface MLFeature {
     name: string;
     type: 'categorical' | 'numerical' | 'text' | 'boolean';
     importance: number;
     preprocessing: string[];
 
+}
 export interface MLTrainingConfig {
     dataWindow: number;
     minSamples: number;
@@ -655,12 +702,14 @@ export interface MLTrainingConfig {
     crossValidation: boolean;
     hyperparameterTuning: boolean;
 
+}
 export interface MLModelUpdateConfig {
     updateFrequency: 'hourly' | 'daily' | 'weekly';
     performanceDrift: number;
     retrainingTrigger: number;
     modelVersion: boolean;
 
+}
 export interface OptimizationConstraint {
     constraintId: string;
     type: 'min_value' | 'max_value' | 'equality' | 'ratio' | 'budget';
@@ -668,12 +717,14 @@ export interface OptimizationConstraint {
     value: number;
     priority: number;
 
+}
 export interface FallbackRule {
     ruleId: string;
     trigger: string;
     action: string;
     priority: number;
 
+}
 export interface ABTestConfiguration {
     testId: string;
     name: string;
@@ -702,6 +753,7 @@ export declare enum ABTestType {
     MULTI_ARMED_BANDIT = "multi_armed_bandit",
     SEQUENTIAL = "sequential"
 
+}
 export interface ABTestVariant {
     variantId: string;
     name: string;
@@ -710,6 +762,7 @@ export interface ABTestVariant {
     trafficPercentage: number;
     isControl: boolean;
 
+}
 export interface TrafficAllocation {
     strategy: 'random' | 'deterministic' | 'weighted';
     totalTrafficPercentage: number;
@@ -724,6 +777,7 @@ export declare enum ABTestStatus {
     COMPLETED = "completed",
     FAILED = "failed"
 
+}
 export interface ABTestResult {
     variantId: string;
     metric: string;
@@ -732,16 +786,19 @@ export interface ABTestResult {
     confidenceInterval: {
         lower: number;
         upper: number;
+}
     };
     pValue: number;
     effect: number;
     significance: boolean;
 
+}
 export interface ABTestQualityCheck {
     checkType: 'sample_ratio' | 'novelty_effect' | 'external_validity' | 'implementation';
     status: 'pass' | 'fail' | 'warning';
     details: string;
 
+}
 export interface PromotionBudget {
     budgetId: string;
     totalBudget: number;
@@ -776,26 +833,31 @@ export declare enum SpendingPace {
     FRONT_LOADED = "front_loaded",
     BACK_LOADED = "back_loaded"
 
+}
 export interface CostModel {
     model: 'cpm' | 'cpc' | 'cpa' | 'cpcv' | 'fixed';
     baseRate: number;
     multipliers?: CostMultiplier[];
 
+}
 export interface CostMultiplier {
     factor: string;
     multiplier: number;
     conditions?: Record<string, any>;
 
+}
 export interface BidStrategy {
     strategy: 'manual' | 'target_cpa' | 'target_roas' | 'maximize_clicks' | 'maximize_conversions';
     targetValue?: number;
     constraints?: BidConstraint[];
 
+}
 export interface BidConstraint {
     type: 'min_bid' | 'max_bid' | 'bid_adjustment';
     value: number;
     conditions?: Record<string, any>;
 
+}
 export interface BudgetAlert {
     alertId: string;
     threshold: number;
@@ -806,6 +868,7 @@ export interface BudgetAlert {
     triggered?: boolean;
     lastTriggered?: Date;
 
+}
 export interface ResourceAllocation {
     slotPriority: Record<string, number>;
     slotBudgetShare: Record<string, number>;
@@ -818,11 +881,13 @@ export interface ResourceAllocation {
     reallocationThreshold: number;
     reallocationFrequency: number;
 
+}
 export interface TimeDistribution {
     timeSlot: string;
     percentage: number;
     priority: number;
 
+}
 export interface PromotionMetrics {
     campaignId: string;
     period: MetricsPeriod;
@@ -856,6 +921,7 @@ export interface PromotionMetrics {
     performanceBySlot: SlotPerformance[];
     performanceByTime: TimePerformance[];
 
+}
 export interface ContentPromotionMetrics {
     contentId: string;
     period: MetricsPeriod;
@@ -878,6 +944,7 @@ export interface ContentPromotionMetrics {
     averagePromotionDuration: number;
     lastPromotionDate: Date;
 
+}
 export interface PerformanceComparison {
     metric: string;
     current: number;
@@ -887,6 +954,7 @@ export interface PerformanceComparison {
     significance: number;
     trend: 'improving' | 'declining' | 'stable';
 
+}
 export interface GoalComparison {
     goalId: string;
     goalName: string;
@@ -895,6 +963,7 @@ export interface GoalComparison {
     achievement: number;
     status: 'ahead' | 'on_track' | 'behind' | 'achieved';
 
+}
 export interface CompetitiveBenchmark {
     metric: string;
     ourValue: number;
@@ -902,6 +971,7 @@ export interface CompetitiveBenchmark {
     topPerformer: number;
     percentile: number;
 
+}
 export interface SegmentPerformance {
     segmentId: string;
     segmentName: string;
@@ -909,6 +979,7 @@ export interface SegmentPerformance {
     sampleSize: number;
     significance: boolean;
 
+}
 export interface SlotPerformance {
     slotId: string;
     slotName: string;
@@ -916,12 +987,14 @@ export interface SlotPerformance {
     performance: 'high' | 'medium' | 'low';
     ranking: number;
 
+}
 export interface TimePerformance {
     timeSlot: string;
     metrics: Record<string, number>;
     trend: 'increasing' | 'decreasing' | 'stable';
     seasonality: number;
 
+}
 export interface PromotionInsight {
     insightId: string;
     campaignId: string;
@@ -968,6 +1041,7 @@ export declare enum InsightPriority {
     HIGH = "high",
     CRITICAL = "critical"
 
+}
 export interface InsightFinding {
     metric: string;
     observation: string;
@@ -975,6 +1049,7 @@ export interface InsightFinding {
     context: string;
     timeframe: string;
 
+}
 export interface InsightEvidence {
     type: 'chart' | 'table' | 'comparison' | 'statistical_test';
     data: any;
@@ -986,6 +1061,7 @@ export declare enum ImpactLevel {
     HIGH = "high",
     CRITICAL = "critical"
 
+}
 export interface InsightRecommendation {
     recommendationId: string;
     action: string;
@@ -995,6 +1071,7 @@ export interface InsightRecommendation {
     timeframe: string;
     priority: number;
 
+}
 export interface ActionResult {
     implemented: boolean;
     implementationDate: Date;
@@ -1013,6 +1090,7 @@ export declare enum PromotionStatus {
     CANCELLED = "cancelled",
     ARCHIVED = "archived"
 
+}
 export interface PromotionLifecycle {
     currentStage: LifecycleStage;
     stages: LifecycleStageHistory[];
@@ -1030,6 +1108,7 @@ export declare enum LifecycleStage {
     ANALYSIS = "analysis",
     ARCHIVAL = "archival"
 
+}
 export interface LifecycleStageHistory {
     stage: LifecycleStage;
     enteredAt: Date;
@@ -1039,6 +1118,7 @@ export interface LifecycleStageHistory {
     notes?: string;
     performedBy: string;
 
+}
 export interface StageTransitionRule {
     fromStage: LifecycleStage;
     toStage: LifecycleStage;
@@ -1046,12 +1126,14 @@ export interface StageTransitionRule {
     isAutomatic: boolean;
     requiredRole?: string;
 
+}
 export interface TransitionCondition {
     type: 'approval' | 'performance' | 'time' | 'budget' | 'manual';
     condition: string;
     value?: any;
     isMet: boolean;
 
+}
 export interface ApprovalRecord {
     recordId: string;
     stage: LifecycleStage;
@@ -1062,6 +1144,7 @@ export interface ApprovalRecord {
     comments?: string;
     conditions?: string[];
 
+}
 export interface AnalyticsTrackingConfig {
     enabled: boolean;
     trackingId: string;
@@ -1070,18 +1153,21 @@ export interface AnalyticsTrackingConfig {
     crossDomainTracking?: boolean;
     privacyCompliant: boolean;
 
+}
 export interface CustomEventDefinition {
     eventName: string;
     eventCategory: string;
     parameters: Record<string, any>;
     trackingCode: string;
 
+}
 export interface ConversionTrackingConfig {
     conversionEvents: string[];
     conversionValue: boolean;
     attributionModel: 'first_click' | 'last_click' | 'linear' | 'time_decay' | 'position_based';
     lookbackWindow: number;
 
+}
 export interface ExternalPlatformConfig {
     platform: 'google_ads' | 'facebook_ads' | 'microsoft_ads' | 'twitter_ads' | 'linkedin_ads' | 'custom';
     accountId: string;
@@ -1091,6 +1177,7 @@ export interface ExternalPlatformConfig {
     conversionSync: boolean;
     apiCredentials: Record<string, string>;
 
+}
 export interface CustomEventConfig {
     eventId: string;
     eventName: string;
@@ -1099,6 +1186,7 @@ export interface CustomEventConfig {
     frequency: 'once' | 'session' | 'always';
     conditions?: Record<string, any>;
 
+}
 export interface PromotionFilterCriteria {
     campaignIds?: string[];
     status?: PromotionStatus[];
@@ -1106,6 +1194,7 @@ export interface PromotionFilterCriteria {
     dateRange?: {
         start: Date;
         end: Date;
+}
     };
     performance?: {
         metric: string;
@@ -1116,23 +1205,27 @@ export interface PromotionFilterCriteria {
     createdBy?: string[];
     approvalStatus?: string[];
 
+}
 export interface PromotionSortOptions {
     field: 'createdAt' | 'performance' | 'budget' | 'status' | 'name';
     direction: 'asc' | 'desc';
     secondarySort?: PromotionSortOptions;
 
+}
 export interface PromotionBulkOperation {
     operationType: 'activate' | 'pause' | 'cancel' | 'duplicate' | 'update' | 'delete';
     campaignIds: string[];
     parameters?: Record<string, any>;
     dryRun?: boolean;
 
+}
 export interface PromotionValidationError {
     errorCode: string;
     field: string;
     message: string;
     severity: 'error' | 'warning' | 'info';
 
+}
 export interface PromotionTemplate {
     templateId: string;
     name: string;
@@ -1145,5 +1238,6 @@ export interface PromotionTemplate {
     createdBy: string;
     createdAt: Date;
 
+}
 export type { PromotionCampaign, PromotionContent, PromotionSchedule, RotationConfiguration, PromotionTargeting, PersonalizationRule, PromotionGoal, OptimizationSettings, ABTestConfiguration, PromotionBudget, ResourceAllocation, PromotionMetrics, ContentPromotionMetrics, PromotionInsight, PromotionLifecycle, ContentSelectionCriteria, PromotionalBadge, TimeBasedRules, RecurrenceConfig, DynamicSchedulingRule, RotationTrigger, PerformanceThreshold, WeightingFactor, MachineLearningConfig, ABTestVariant, TrafficAllocation, CostModel, BidStrategy, PerformanceComparison, GoalComparison, CompetitiveBenchmark, SegmentPerformance, SlotPerformance, TimePerformance, InsightFinding, InsightEvidence, InsightRecommendation, PromotionFilterCriteria, PromotionSortOptions, PromotionBulkOperation, PromotionValidationError, PromotionTemplate };
 //# sourceMappingURL=PromotionDataModel.d.ts.map

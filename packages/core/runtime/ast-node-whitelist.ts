@@ -21,12 +21,16 @@ export enum NodeSafetyLevel {
   * Filter result interface
   */
 }
+}
+}
 export interface FilterResult {
   allowed: boolean;
   blockedNodes: BlockedNodeInfo;
   /**
   * AST node whitelist filter configuration
   */
+}
+}
 }
 export interface ASTNodeWhitelistConfig {
   allowedNodeTypes: Set<string>;
@@ -37,6 +41,7 @@ export interface ASTNodeWhitelistConfig {
   /**
   * AST node whitelist filter for security validation
   */
+}
 }
 export class ASTNodeWhitelistFilter {
   private config: ASTNodeWhitelistConfig;

@@ -8,6 +8,7 @@
 import React from 'react';
 import { SecurityEventAnalytics, SecurityInsight, SecurityPattern, ThreatCategory } from '../SecurityEventAnalytics';
 
+}
 export interface SecurityAnalyticsDashboardProps {
     analytics: SecurityEventAnalytics;
     theme?: 'light' | 'dark' | 'cinema';
@@ -24,3 +25,4 @@ export interface SecurityAnalyticsDashboardProps {
 export declare const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProps>;
 export default SecurityAnalyticsDashboard;
 //# sourceMappingURL=SecurityAnalyticsDashboard.d.ts.map
+}

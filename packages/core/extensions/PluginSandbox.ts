@@ -12,6 +12,7 @@ import { resolve, dirname, join } from 'path';
 import { ExtensionManifest } from './ExtensionLifecycleManager';
 import * as crypto from 'crypto';
 
+}
 export interface SandboxOptions {
   timeout: number;
   memoryLimit: number;
@@ -23,6 +24,8 @@ export interface SandboxOptions {
   maxCallStack: number;
   contextName: string;
 }
+}
+}
 export interface ResourceUsage {
   memoryUsed: number;
   executionTime: number;
@@ -30,8 +33,11 @@ export interface ResourceUsage {
   fileOperations: number;
   networkRequests: number;
 }
+}
+}
 export interface SandboxContext {
   require: (id: string) => any;
+}
   module: { exports: any };
   exports: any;
   __filename: string;
@@ -85,6 +91,7 @@ export class PluginSandbox {
    * Load and execute a module in the sandbox
    */
   async loadModule(modulePath: string): Promise<any> {
+
   if (this.disposed) {
   throw new Error('Sandbox has been disposed');
   const absolutePath = resolve(this.pluginPath, modulePath);
@@ -280,6 +287,7 @@ export class PluginSandbox {
       })(require, module, exports, "${filename}", "${dirname(filename)}");}
     `;
   private async executeWithTimeout(code: string, filename: string): Promise<any> {
+
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
         reject(new Error('Script execution timed out'));

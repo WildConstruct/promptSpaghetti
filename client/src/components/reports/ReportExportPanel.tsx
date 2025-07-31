@@ -31,14 +31,14 @@ import {
 
 // Sample report data generator
 const generateSampleReportData = () => ({)
-  metadata: {,
+  metadata: {
   title: 'Performance Analysis Report',
   description: 'Comprehensive analysis of system performance metrics',
   generatedAt: new Date(),
   generatedBy: 'System Administrator',
   version: '1.0.0',
 },
-  summary: {,
+  summary: {
   totalRequests: 156789,
   averageResponseTime: 245.7,
   successRate: 98.3,
@@ -86,6 +86,7 @@ const generateSampleReportData = () => ({)
   content: '<ul><li>Scale up server resources during 2-4 PM peak hours</li><li>Optimize database queries showing slow performance</li><li>Implement caching for frequently accessed endpoints</li></ul>',
   type: 'html' as const];
   });
+}
 interface ReportExportPanelProps {
   // Optional props for customization
   title?: string;
@@ -99,6 +100,7 @@ interface ReportExportPanelProps {
   showSampleData = true,
   allowScheduling = true,
   customReportData
+}
 }) => {
   const [activeTab, setActiveTab] = useState('overview');
   const [exportModalOpen, setExportModalOpen] = useState(false);

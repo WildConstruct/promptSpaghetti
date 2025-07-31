@@ -51,11 +51,13 @@ import {
   SecurityClearance,
   AccessRequestStatus
 } from '../../services/SystemAccessManager';
+}
 interface SystemAccessDashboardProps {
   className?: string;
   userId?: string;
   userRole?: string;
 const ACCESS_LEVEL_CONFIG = {
+}
   none: { color: 'text-gray-600 bg-gray-100', icon: Lock, priority: 0 },
   basic: { color: 'text-blue-600 bg-blue-100', icon: Users, priority: 1 },
   advanced: { color: 'text-green-600 bg-green-100', icon: Key, priority: 2 },
@@ -640,6 +642,7 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
 };
 
 // User Card Component
+}
 interface UserCardProps {
   user: SystemUser;
   onSelect: (user: SystemUser) => void;
@@ -652,6 +655,7 @@ interface UserCardProps {
   onAssignRole,
   onRevokeRole,
   currentUserId
+}
 }) => {
   const statusConfig = STATUS_CONFIG[user.status];
   const accessConfig = ACCESS_LEVEL_CONFIG[user.systemAccess];
@@ -775,6 +779,7 @@ interface UserCardProps {
 };
 
 // Access Request Card Component
+}
 interface AccessRequestCardProps {
   request: AccessRequest;
   onApprove: (requestId: string) => void;
@@ -783,6 +788,7 @@ interface AccessRequestCardProps {
   request,
   onApprove,
   onReject
+}
 }) => {
   const getUrgencyColor = (urgency: string) => {,
   switch (urgency) {
@@ -901,6 +907,7 @@ interface AccessRequestCardProps {
 };
 
 // User Detail Modal Component
+}
 interface UserDetailModalProps {
   user: SystemUser;
   onClose: () => void;
@@ -911,6 +918,7 @@ interface UserDetailModalProps {
   onClose,
   onUpdate,
   currentUserId
+}
 }) => {
   return;
     <div className="modal-overlay">

@@ -16,6 +16,7 @@ import {
   Permission,
   Role
 } from '../../packages/core/services/Epic17AuthorizationService';
+}
 interface UseEpic17AuthorizationOptions {
   enableCaching?: boolean;
   strictMode?: boolean;
@@ -49,9 +50,10 @@ interface UseEpic17AuthorizationOptions {
   label: string;
   description: string;,
   icon: string;
-  requiredPermissions: {,
+  requiredPermissions: {
   resource: ResourceType;,
   actions: string;
+}
 }[];
   riskLevel: 'low' | 'medium' | 'high' | 'critical';,
   category: string;
@@ -153,22 +155,22 @@ let authorizationServiceInstance: Epic17AuthorizationService | null = null;
 function getAuthorizationService(): Epic17AuthorizationService {
   if (!authorizationServiceInstance) {
   authorizationServiceInstance = new Epic17AuthorizationService({)
-  evaluation: {,
+  evaluation: {
   enableCaching: true,
   cacheTimeToLive: 300, // 5 minutes,
   evaluationTimeout: 1000,
   strictMode: true,
 },
-  audit: {,
+  audit: {
   enableAuditLogging: true,
   logLevel: 'detailed',
   auditAllDecisions: true,
 },
-  permissions: {,
+  permissions: {
   defaultDenyMode: true,
   inheritanceEnabled: true,
 },
-  security: {,
+  security: {
   requireMfaForHighRisk: true,
   sessionValidation: true,
 });
@@ -194,7 +196,7 @@ export const useEpic17Authorization = (options: UseEpic17AuthorizationOptions = 
   roles: user.roles || [],
   groups: user.groups || [],
   permissions: userPermissions,
-  attributes: {,
+  attributes: {
   firstName: user.firstName,
   lastName: user.lastName,
   department: user.department,
@@ -267,7 +269,7 @@ export const useEpic17Authorization = (options: UseEpic17AuthorizationOptions = 
       const authContext: AuthorizationContext = {,
   user: userContext,
         action,
-        environment: {,
+        environment: {
   environment: 'production', // Default
           region: process.env.REACT_APP_REGION || 'us-west-2',
           version: process.env.REACT_APP_VERSION || '1.0.0',
@@ -301,7 +303,7 @@ export const useEpic17Authorization = (options: UseEpic17AuthorizationOptions = 
             tags: [];
   } : undefined,
           action: check.action,
-          environment: {,
+          environment: {
   environment: 'production',
             region: 'us-west-2',
             version: '1.0.0',
@@ -363,6 +365,7 @@ export const useEpic17Authorization = (options: UseEpic17AuthorizationOptions = 
 /**
  * Higher-order component for protecting routes with Epic 17 authorization
  */
+}
 interface ProtectedRouteProps {
   children: React.ReactNode;,
   requiredResource: ResourceType;
@@ -375,6 +378,7 @@ interface ProtectedRouteProps {
   requiredAction,
   resourceId,
   fallback = React.createElement('div', null, 'Access Denied')
+}
 }) => {
   const { hasPermission, isAuthorizing } = useEpic17Authorization();
   const [hasAccess, setHasAccess] = useState<boolean | null>(null);

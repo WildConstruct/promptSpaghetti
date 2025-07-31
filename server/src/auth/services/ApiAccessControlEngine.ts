@@ -17,6 +17,7 @@ import { EventEmitter } from 'events';
 // =============================================================================
 
 }
+}
 export interface ApiAccessRequest {
   requestId: string;
   userId: string;
@@ -37,6 +38,7 @@ export interface ApiAccessRequest {
     current: number;
     limit: number;
     period: string;
+}
 }
   };
   
@@ -59,6 +61,7 @@ export interface ApiAccessRequest {
 }
 
 }
+}
 export interface ApiAccessDecision {
   requestId: string;
   allowed: boolean;
@@ -76,6 +79,7 @@ export interface ApiAccessDecision {
     remainingRequests: number;
     resetTime: Date;
     bucketName: string;
+}
 }
   };
   
@@ -108,6 +112,7 @@ export interface ApiAccessDecision {
 }
 
 }
+}
 export interface ApiAccessPolicy {
   policyId: string;
   name: string;
@@ -123,6 +128,7 @@ export interface ApiAccessPolicy {
     resources?: string[];
     userGroups?: string[];
     organizations?: string[];
+}
 }
   };
   
@@ -143,6 +149,7 @@ export interface ApiAccessPolicy {
 }
 
 }
+}
 export interface ApiPolicyCondition {
   type: 'user' | 'role' | 'permission' | 'time' | 'location' | 'rate_limit' | 'usage_quota' | 'risk_score' | 'device' | 'custom';
   field: string;
@@ -151,14 +158,18 @@ export interface ApiPolicyCondition {
   logicalOperator?: 'AND' | 'OR' | 'NOT';
 }
 }
+}
 
+}
 }
 export interface ApiPolicyAction {
   type: 'allow' | 'deny' | 'rate_limit' | 'usage_control' | 'require_mfa' | 'require_approval' | 'log' | 'alert' | 'transform' | 'redirect';
   parameters: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ApiAccessEngineConfig {
   // Core settings
@@ -195,6 +206,7 @@ export interface ApiAccessEngineConfig {
   permissionServiceEnabled: boolean;
   rbacIntegrationEnabled: boolean;
   externalPolicyProvidersEnabled: boolean;
+}
 }
 }
 
@@ -900,6 +912,7 @@ class AccessDecisionBuilder {
 }
 
 }
+}
 interface PolicyEvaluationResult {
   policyId: string;
   policyName: string;
@@ -908,7 +921,9 @@ interface PolicyEvaluationResult {
   reason: string;
 }
 }
+}
 
+}
 }
 interface RateLimitResult {
   allowed: boolean;
@@ -917,7 +932,9 @@ interface RateLimitResult {
   bucketName: string;
 }
 }
+}
 
+}
 }
 interface UsageControlResult {
   allowed: boolean;
@@ -926,12 +943,15 @@ interface UsageControlResult {
   quotaResetTime: Date;
 }
 }
+}
 
+}
 }
 interface RiskAssessmentResult {
   score: number;
   factors: string[];
   recommendations: string[];
+}
 }
 }
 

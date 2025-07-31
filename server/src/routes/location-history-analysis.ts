@@ -5,11 +5,14 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { LocationHistoryAnalysisService } from '../services/LocationHistoryAnalysisService';
 
 }
+}
 interface AnalyzeLocationHistoryRequest {
   forceRefresh?: boolean;
 }
 }
+}
 
+}
 }
 interface LocationRiskAssessmentRequest {
   ipAddress: string;
@@ -17,7 +20,9 @@ interface LocationRiskAssessmentRequest {
   deviceFingerprint?: string;
 }
 }
+}
 
+}
 }
 interface DetectAnomaliesFilters {
   severity?: 'low' | 'medium' | 'high' | 'critical';
@@ -26,12 +31,15 @@ interface DetectAnomaliesFilters {
   limit?: number;
 }
 }
+}
 
+}
 }
 interface ResolveAnomalyRequest {
   resolution: string;
   falsePositive?: boolean;
   preventFutureAlerts?: boolean;
+}
 }
 }
 

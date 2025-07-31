@@ -1,5 +1,6 @@
 import React from 'react';
 
+}
 interface WeightSliderProps {
     value: number;
     onChange: (value: number) => void;
@@ -20,3 +21,4 @@ interface WeightSliderProps {
 export declare const WeightSlider: React.FC<WeightSliderProps>;
 export default WeightSlider;
 //# sourceMappingURL=WeightSlider.d.ts.map
+}

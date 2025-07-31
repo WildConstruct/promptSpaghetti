@@ -13,6 +13,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 
 // Types for role cloning operations
+}
 interface Role {
   id: string;,
   name: string;
@@ -22,11 +23,13 @@ interface Role {
   organizationId?: string;
   createdAt: Date;,
   updatedAt: Date;
-  metadata?: {,
+  metadata?: {
   clonedFrom?: string;
   cloneCount: number;
   templateVersion?: string;
+}
 };
+}
 interface Permission {
   id: string;,
   name: string;
@@ -35,6 +38,7 @@ interface Permission {
   scope: 'global' | 'organization' | 'team' | 'own';,
   description: string;
   category: string;
+}
 interface CloneOperation {
   id: string;,
   sourceRoleId: string;
@@ -46,10 +50,12 @@ interface CloneOperation {
   timestamp: Date;
   status: 'pending' | 'success' | 'failed';
   error?: string;
+}
 interface RoleCloneManagerProps {
   onRoleCloned?: (clonedRole: Role) => void;
   onClose?: () => void;
   className?: string;
+}
 interface RoleCloneState {
   availableRoles: Role;,
   availablePermissions: Permission;
@@ -85,6 +91,7 @@ const mockRoles: Role = [
     scope: 'organization',
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-15'),
+}
     metadata: { cloneCount: 3 }
   }
   {
@@ -305,7 +312,7 @@ const mockPermissions: Permission = [
         scope: state.targetScope,
         createdAt: new Date(),
         updatedAt: new Date(),
-        metadata: {,
+        metadata: {
   clonedFrom: state.selectedSourceRole.id,
   cloneCount: 0,
 };
@@ -314,7 +321,7 @@ const mockPermissions: Permission = [
         role.id === state.selectedSourceRole?.id
           ? {
             ...role,
-            metadata: {,
+            metadata: {
               ...role.metadata,
               cloneCount: (role.metadata?.cloneCount || 0) + 1,
           : role

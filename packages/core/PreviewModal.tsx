@@ -9,26 +9,33 @@ import { VarianceSuggestion } from './services/VarianceAnalysisService';
 import { professionalColors } from './styles/professional-design-system';
 
 // Individual result management for Epic 8.5 Task 3
+}
 interface ResultAction {
   type: 'regenerate' | 'lock' | 'unlock' | 'compare' | 'export';
   resultIndex: number;
   data?: Record<string, unknown>;
 }
+}
 
+}
 interface LockedResult {
   index: number;
   seed: number;
   lockedAt: number;
   note?: string;
 }
+}
 
 // Legacy interface for backward compatibility
+}
 interface PreviewResult {
   seed: number;
   output?: string;
   error?: string;
 }
+}
 
+}
 export interface PreviewModalProps {
   open: boolean;
   loading: boolean;
@@ -44,6 +51,7 @@ export interface PreviewModalProps {
   regeneratingResults?: number[];
   // Epic 8.5 Task 5: Creative variance analysis
   onVarianceSuggestion?: (suggestion: VarianceSuggestion) => void;
+}
 }
 
 export const PreviewModal: React.FC<PreviewModalProps> = ({

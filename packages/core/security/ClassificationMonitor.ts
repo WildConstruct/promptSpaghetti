@@ -52,6 +52,8 @@ export enum MonitoringEventType {
   userId?: string;
   // Performance Metrics
 }
+}
+}
 export interface ClassificationPerformanceMetrics {
   totalClassifications: number;
   averageResponseTime: number;
@@ -64,6 +66,8 @@ export interface ClassificationPerformanceMetrics {
   lastUpdated: Date;
   // Classification Statistics
 }
+}
+}
 export interface ClassificationStatistics {
   byLevel: Record<ClassificationLevel, number>;
   byCategory: Record<DataCategory, number>;
@@ -74,9 +78,11 @@ export interface ClassificationStatistics {
   timeRange: {
   start: Date;
   end: Date;
+}
 };
 
 // Compliance Metrics
+}
 }
 export interface ComplianceMetrics {
   totalViolations: number;
@@ -87,6 +93,8 @@ export interface ComplianceMetrics {
   resolvedViolations: number;
   pendingRemediation: number;
   // Anomaly Detection
+}
+}
 }
 export interface ClassificationAnomaly {
   id: string;
@@ -100,6 +108,8 @@ export interface ClassificationAnomaly {
   recommendation: string;
   // Alert Configuration
 }
+}
+}
 export interface AlertConfig {
   enabled: boolean;
   thresholds: {
@@ -107,6 +117,7 @@ export interface AlertConfig {
   responseTime: number;
   violationCount: number;
   anomalyConfidence: number;
+}
 };
   channels: {
   email: boolean;
@@ -117,6 +128,7 @@ export interface AlertConfig {
   webhookUrl?: string;
 
 // Monitor Configuration
+}
 }
 export interface MonitorConfig {
   enableRealTimeMonitoring: boolean;
@@ -130,6 +142,7 @@ export interface MonitorConfig {
   /**
   * Classification Monitoring Service
   */
+}
 }
 export class ClassificationMonitor extends EventEmitter {
   private events: MonitoringEvent = [];
@@ -442,9 +455,9 @@ export class ClassificationMonitor extends EventEmitter {
       result.level + ':' + result.category,
       (this.classificationCounts.get(result.level + ':' + result.category) || 0) + 1
     );
-  private updateComplianceMetrics(()
+  private updateComplianceMetrics(((
     framework: ComplianceFramework,
-    violation: string,
+    violation: string
   ): void {
     this.complianceMetrics.totalViolations++;
     this.complianceMetrics.violationsByFramework[framework]++;
@@ -493,9 +506,9 @@ export class ClassificationMonitor extends EventEmitter {
           actualPattern: { count: expectedCount },
           recommendation: 'Review classification rules and data sources';
   });
-  private checkComplianceViolations(()
+  private checkComplianceViolations(((
     result: ClassificationResult,
-    dataElement: DataElement,
+    dataElement: DataElement
   ): void {
   // Check for missing encryption on sensitive data
   if (result.level === ClassificationLevel.RESTRICTED && !result.encryptionRequired) {

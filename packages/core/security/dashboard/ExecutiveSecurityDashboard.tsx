@@ -35,6 +35,7 @@ import {
   DashboardType 
 } from './SecurityDashboardFramework';
 
+}
 export interface ExecutiveMetrics {
   securityScore: number; // 0-100,
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
@@ -43,6 +44,7 @@ export interface ExecutiveMetrics {
   resolved: number;
   open: number;
   critical: number;
+}
 };
   complianceScore: number; // 0-100,
   financialImpact: {;
@@ -62,6 +64,7 @@ export interface ExecutiveMetrics {
   maturityLevel: 'initial' | 'managed' | 'defined' | 'quantitative' | 'optimizing'
   };
 }
+}
 export interface ExecutiveInsight {
   id: string;
   type: 'risk' | 'opportunity' | 'compliance' | 'investment';
@@ -75,7 +78,9 @@ export interface ExecutiveInsight {
   timeline: string;
   owner: string;
   status: 'new' | 'in_progress' | 'completed' | 'deferred'
+}
   }
+}
 export interface ExecutiveSecurityDashboardProps {
   metrics: ExecutiveMetrics;
   insights: ExecutiveInsight;
@@ -88,6 +93,7 @@ export interface ExecutiveSecurityDashboardProps {
   /**
   * Executive Security Dashboard Component
   */
+}
 }
 export const ExecutiveSecurityDashboard: React.FC<ExecutiveSecurityDashboardProps> = ({)
   metrics,

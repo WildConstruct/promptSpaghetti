@@ -2,6 +2,7 @@ import React from 'react';
 import { useUISettingsStore } from '../../stores/uiSettingsStore';
 import { SelectOption } from './SelectEditor';
 
+}
 export interface PreferenceControlsProps {
   nodeId?: string;
   nodeType?: string;
@@ -9,6 +10,7 @@ export interface PreferenceControlsProps {
   compact?: boolean;
 
 const DISCLOSURE_LEVELS: SelectOption = [
+}
   { value: 'basic', label: 'Basic - Essential fields only' },
   { value: 'advanced', label: 'Advanced - Power user options' },
   { value: 'debug', label: 'Expert - Technical details' }

@@ -3,11 +3,14 @@
  * Statistics dashboard for workspace activity
  */
 import React, { useState } from 'react';
+}
 interface ActivityStatsData {
   total_events: number;
   events_by_type: Record<string, number>;
+}
   events_by_day: Array<{ date: string; count: number }>;
   most_active_users: Array<{ user_id: string; count: number }>;
+}
 interface ActivityStatsProps {
   stats: ActivityStatsData;
   workspaceId: string;
@@ -16,6 +19,7 @@ interface ActivityStatsProps {
   stats,
   workspaceId,
   className = ''
+}
 }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'types' | 'timeline' | 'users'>('overview');
   const topEventTypes = Object.entries(stats.events_by_type);

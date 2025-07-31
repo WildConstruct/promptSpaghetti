@@ -10,6 +10,7 @@ import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 export interface PayloadEncryptionConfig {
   enabled: boolean;
   algorithm: 'aes-256-gcm' | 'aes-256-cbc' | 'chacha20-poly1305';
@@ -23,7 +24,9 @@ export interface PayloadEncryptionConfig {
   auditAllOperations: boolean;
 }
 }
+}
 
+}
 }
 export interface EncryptedPayload {
   data: string; // Base64 encoded encrypted data
@@ -35,7 +38,9 @@ export interface EncryptedPayload {
   compressed?: boolean;
 }
 }
+}
 
+}
 }
 export interface PayloadEncryptionMetrics {
   totalEncryptions: number;
@@ -46,6 +51,7 @@ export interface PayloadEncryptionMetrics {
   averageDecryptionTime: number;
   keyRotations: number;
   compressionRatio: number;
+}
 }
 }
 

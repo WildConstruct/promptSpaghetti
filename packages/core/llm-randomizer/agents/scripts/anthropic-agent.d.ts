@@ -8,6 +8,7 @@ export interface AnthropicAgentConfig {
     useXmlFormatting: boolean;
     stopSequences?: string[];
 
+}
 export interface ClaudeGenerationRequest {
     purpose: string;
     complexity: 'simple' | 'moderate' | 'complex';
@@ -19,6 +20,7 @@ export interface ClaudeGenerationRequest {
     domain?: string;
     userContext?: string;
 
+}
 export interface ClaudeGenerationResult {
     success: boolean;
     graph?: string;
@@ -31,6 +33,7 @@ export interface ClaudeGenerationResult {
         temperature: number;
         tokenCount: number;
         generationTime: number;
+}
     };
 
 export declare class AnthropicGraphAgent {

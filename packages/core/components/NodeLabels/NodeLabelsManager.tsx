@@ -13,6 +13,7 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { useReactFlow, useViewport } from 'reactflow';
 import { useGraphStore } from '../../graphStore';
 import { NodeLabelsLayer } from '../Annotations/NodeLabelsLayer';
+}
 interface NodeLabelsManagerProps {
   disabled?: boolean;
   readonly?: boolean;
@@ -27,6 +28,7 @@ interface NodeLabelsManagerProps {
   selectedNodeId = null,
   onNodeHover,
   onNodeFocus
+}
 }) => {
   const { 
     nodes,

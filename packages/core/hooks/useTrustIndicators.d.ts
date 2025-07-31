@@ -6,11 +6,13 @@
  */
 import { TrustScore } from '../auth/IdentityValidation';
 
+}
 export interface TrustIndicatorConfig {
     userId?: string;
     showRealTimeUpdates?: boolean;
     cacheTimeout?: number;
 
+}
 export interface EnhancedTrustData {
     trustScore: TrustScore | null;
     reputationScore: number;
@@ -25,11 +27,13 @@ export interface EnhancedTrustData {
         professional: boolean;
         portfolio: boolean;
         social: boolean;
+}
     };
     badges: string[];
     communityStanding: 'excellent' | 'good' | 'fair' | 'poor' | 'unrated';
     trustTrend: 'improving' | 'stable' | 'declining';
 
+}
 export interface TrustDisplayOptions {
     showScore?: boolean;
     showBadges?: boolean;
@@ -58,6 +62,7 @@ export declare const useTrustIndicators: (config?: TrustIndicatorConfig) => {
         professional: boolean;
         portfolio: boolean;
         social: boolean;
+}
     };
     verificationCount: number;
     shouldShowVerificationPrompt: boolean;

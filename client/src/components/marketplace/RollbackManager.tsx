@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './RollbackManager.css';
+}
 interface TemplateVersion {
   id: string;,
   version_number: string;
@@ -43,6 +44,7 @@ interface TemplateVersion {
   icon: '🚨',
   color: '#ef4444',
 }
+}
   {
   value: 'planned',
   label: 'Planned Rollback',
@@ -83,7 +85,7 @@ export const RollbackManager: React.FC = () => {
       setIsLoading(true);
       const response = await fetch(`/api/marketplace/templates/${templateId}/versions?include_private=true`, {)}
   },
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
       });
       if (!response.ok) {
@@ -170,7 +172,7 @@ export const RollbackManager: React.FC = () => {
       const response = await fetch(`/api/marketplace/templates/${templateId}/rollback`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
   },

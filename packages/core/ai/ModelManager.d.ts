@@ -7,6 +7,7 @@
 import { BaseAIModel, AIRequest, AIResponse, HealthStatus, CostEstimate } from './BaseAIModel';
 import { ModelRegistration, FactoryConfig } from './AIModelFactory';
 
+}
 export interface CacheConfig {
     maxSize: number;
     ttl: number;
@@ -15,6 +16,7 @@ export interface CacheConfig {
     persistencePath?: string;
 
 
+}
 export interface LoadBalancingConfig {
     strategy: 'round-robin' | 'least-connections' | 'response-time' | 'cost-aware' | 'capability-based';
     healthCheckInterval: number;
@@ -23,6 +25,7 @@ export interface LoadBalancingConfig {
     failoverThreshold: number;
 
 
+}
 export interface ModelPool {
     id: string;
     models: BaseAIModel[];
@@ -32,6 +35,7 @@ export interface ModelPool {
     lastUsed: Date;
 
 
+}
 export interface ModelPerformanceMetrics {
     modelId: string;
     averageLatency: number;
@@ -43,6 +47,7 @@ export interface ModelPerformanceMetrics {
     lastUpdated: Date;
 
 
+}
 export interface WarmupStrategy {
     enabled: boolean;
     concurrency: number;
@@ -122,3 +127,4 @@ export declare class ModelManager {
 
 export default ModelManager;
 //# sourceMappingURL=ModelManager.d.ts.map
+}

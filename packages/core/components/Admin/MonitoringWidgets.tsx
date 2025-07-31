@@ -10,6 +10,7 @@ import React, { useState, useEffect } from 'react';
 
 // Widget Configuration Types
 
+}
 export interface WidgetConfig {
   id: string;
   title: string;
@@ -25,6 +26,7 @@ export interface WidgetConfig {
   onAction?: (widgetId: string, action: string, params?: Record<string, unknown>) => void;
   className?: string;
   // System Health Score Widget
+}
 }
 export const SystemHealthWidget: React.FC<MonitoringWidgetProps> = ({ data, className }) => {
   const healthScore = data?.healthScore || 0;

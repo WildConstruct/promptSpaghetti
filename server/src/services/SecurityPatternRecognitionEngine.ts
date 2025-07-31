@@ -12,6 +12,7 @@ import { SecurityPolicyAnalysisEngine } from './SecurityPolicyAnalysisEngine';
 import { SecurityRiskScoringEngine } from './SecurityRiskScoringEngine';
 
 }
+}
 export interface SecurityPatternRecognitionConfig {
   pattern_recognition: {
     enabled: boolean;
@@ -22,6 +23,7 @@ export interface SecurityPatternRecognitionConfig {
     behavioral_analysis_enabled: boolean;
     temporal_pattern_analysis: boolean;
     spatial_pattern_analysis: boolean;
+}
 }
   };
   
@@ -85,6 +87,7 @@ export interface SecurityPatternRecognitionConfig {
 }
 
 }
+}
 export interface SecurityPattern {
   pattern_id: string;
   pattern_name: string;
@@ -97,6 +100,7 @@ export interface SecurityPattern {
     temporal_characteristics: TemporalCharacteristic[];
     statistical_properties: StatisticalProperty[];
     contextual_factors: ContextualFactor[];
+}
 }
   };
   
@@ -136,6 +140,7 @@ export interface SecurityPattern {
 }
 
 }
+}
 export interface ThreatCluster {
   cluster_id: string;
   cluster_name: string;
@@ -148,6 +153,7 @@ export interface ThreatCluster {
     shared_characteristics: SharedCharacteristic[];
     similarity_metrics: SimilarityMetric[];
     cluster_cohesion_score: number;
+}
 }
   };
   
@@ -186,6 +192,7 @@ export interface ThreatCluster {
 }
 
 }
+}
 export interface PatternRecognitionResult {
   analysis_id: string;
   analysis_type: 'real_time' | 'batch' | 'historical' | 'targeted';
@@ -197,6 +204,7 @@ export interface PatternRecognitionResult {
     confirmed_patterns: SecurityPattern[];
     deprecated_patterns: SecurityPattern[];
     pattern_relationships: PatternRelationship[];
+}
 }
   };
   
@@ -235,6 +243,7 @@ export interface PatternRecognitionResult {
 
 // Supporting interfaces
 }
+}
 interface PatternElement {
   element_type: string;
   element_value: string;
@@ -242,7 +251,9 @@ interface PatternElement {
   element_context: string;
 }
 }
+}
 
+}
 }
 interface BehavioralIndicator {
   behavior_type: string;
@@ -251,7 +262,9 @@ interface BehavioralIndicator {
   behavior_context: string;
 }
 }
+}
 
+}
 }
 interface TemporalCharacteristic {
   time_pattern_type: string;
@@ -260,7 +273,9 @@ interface TemporalCharacteristic {
   frequency_analysis: object;
 }
 }
+}
 
+}
 }
 interface StatisticalProperty {
   property_name: string;
@@ -269,7 +284,9 @@ interface StatisticalProperty {
   statistical_test: string;
 }
 }
+}
 
+}
 }
 interface ContextualFactor {
   factor_type: string;
@@ -278,7 +295,9 @@ interface ContextualFactor {
   factor_context: string;
 }
 }
+}
 
+}
 }
 interface DetectionCriteria {
   primary_criteria: string[];
@@ -287,7 +306,9 @@ interface DetectionCriteria {
   confidence_threshold: number;
 }
 }
+}
 
+}
 }
 interface ValidationMethod {
   method_name: string;
@@ -296,7 +317,9 @@ interface ValidationMethod {
   validation_details: object;
 }
 }
+}
 
+}
 }
 interface AccuracyMetrics {
   precision: number;
@@ -305,7 +328,9 @@ interface AccuracyMetrics {
   specificity: number;
 }
 }
+}
 
+}
 }
 interface GeographicDistribution {
   primary_regions: string[];
@@ -314,7 +339,9 @@ interface GeographicDistribution {
   concentration_metrics: object;
 }
 }
+}
 
+}
 }
 interface IndustryPrevalence {
   targeted_industries: string[];
@@ -322,7 +349,9 @@ interface IndustryPrevalence {
   industry_specific_variants: object;
 }
 }
+}
 
+}
 }
 interface SeverityAssessment {
   base_severity: number;
@@ -331,7 +360,9 @@ interface SeverityAssessment {
   urgency_factor: number;
 }
 }
+}
 
+}
 }
 interface ThreatAssociation {
   threat_id: string;
@@ -340,7 +371,9 @@ interface ThreatAssociation {
   association_evidence: string[];
 }
 }
+}
 
+}
 }
 interface AttackChain {
   chain_id: string;
@@ -349,7 +382,9 @@ interface AttackChain {
   pattern_role: string;
 }
 }
+}
 
+}
 }
 interface CampaignLink {
   campaign_id: string;
@@ -358,7 +393,9 @@ interface CampaignLink {
   evidence_quality: number;
 }
 }
+}
 
+}
 }
 interface ActorAttribution {
   actor_id: string;
@@ -367,7 +404,9 @@ interface ActorAttribution {
   attribution_evidence: string[];
 }
 }
+}
 
+}
 }
 interface InfrastructureConnection {
   infrastructure_type: string;
@@ -376,7 +415,9 @@ interface InfrastructureConnection {
   temporal_overlap: object;
 }
 }
+}
 
+}
 }
 interface PotentialDamage {
   damage_categories: string[];
@@ -385,7 +426,9 @@ interface PotentialDamage {
   mitigation_effectiveness: object;
 }
 }
+}
 
+}
 }
 interface AffectedAsset {
   asset_type: string;
@@ -394,7 +437,9 @@ interface AffectedAsset {
   exposure_assessment: object;
 }
 }
+}
 
+}
 }
 interface BusinessImpact {
   revenue_impact: number;
@@ -403,7 +448,9 @@ interface BusinessImpact {
   compliance_impact: string;
 }
 }
+}
 
+}
 }
 interface ComplianceImplication {
   regulation_name: string;
@@ -412,7 +459,9 @@ interface ComplianceImplication {
   remediation_requirements: string[];
 }
 }
+}
 
+}
 }
 interface RemediationStrategy {
   strategy_name: string;
@@ -421,7 +470,9 @@ interface RemediationStrategy {
   effectiveness_rating: number;
 }
 }
+}
 
+}
 }
 interface ClusterMember {
   member_id: string;
@@ -430,7 +481,9 @@ interface ClusterMember {
   contribution_score: number;
 }
 }
+}
 
+}
 }
 interface SharedCharacteristic {
   characteristic_type: string;
@@ -439,7 +492,9 @@ interface SharedCharacteristic {
   uniqueness_score: number;
 }
 }
+}
 
+}
 }
 interface SimilarityMetric {
   metric_name: string;
@@ -448,7 +503,9 @@ interface SimilarityMetric {
   comparison_basis: string;
 }
 }
+}
 
+}
 }
 interface ClusterQualityMetric {
   metric_name: string;
@@ -457,7 +514,9 @@ interface ClusterQualityMetric {
   assessment_method: string;
 }
 }
+}
 
+}
 }
 interface StabilityAssessment {
   stability_score: number;
@@ -466,7 +525,9 @@ interface StabilityAssessment {
   membership_stability: number;
 }
 }
+}
 
+}
 }
 interface EvolutionTracking {
   evolution_timestamp: number;
@@ -475,7 +536,9 @@ interface EvolutionTracking {
   impact_assessment: object;
 }
 }
+}
 
+}
 }
 interface OutlierDetection {
   outlier_id: string;
@@ -484,7 +547,9 @@ interface OutlierDetection {
   removal_recommendation: boolean;
 }
 }
+}
 
+}
 }
 interface CollectiveIndicator {
   indicator_type: string;
@@ -493,7 +558,9 @@ interface CollectiveIndicator {
   indicator_reliability: number;
 }
 }
+}
 
+}
 }
 interface SharedInfrastructure {
   infrastructure_type: string;
@@ -502,7 +569,9 @@ interface SharedInfrastructure {
   temporal_overlap: object;
 }
 }
+}
 
+}
 }
 interface CommonTTP {
   ttp_id: string;
@@ -511,7 +580,9 @@ interface CommonTTP {
   variation_analysis: object;
 }
 }
+}
 
+}
 }
 interface AttributionAnalysis {
   attribution_confidence: number;
@@ -520,7 +591,9 @@ interface AttributionAnalysis {
   confidence_intervals: object;
 }
 }
+}
 
+}
 }
 interface CampaignCoordination {
   coordination_evidence: string[];
@@ -529,7 +602,9 @@ interface CampaignCoordination {
   resource_sharing: object;
 }
 }
+}
 
+}
 }
 interface GeographicScope {
   primary_regions: string[];
@@ -538,7 +613,9 @@ interface GeographicScope {
   regional_variations: object;
 }
 }
+}
 
+}
 }
 interface TemporalSpan {
   start_date: number;
@@ -547,7 +624,9 @@ interface TemporalSpan {
   activity_patterns: object;
 }
 }
+}
 
+}
 }
 interface IndustryTarget {
   industry_name: string;
@@ -556,7 +635,9 @@ interface IndustryTarget {
   success_rates: object;
 }
 }
+}
 
+}
 }
 interface CombinedImpactPotential {
   aggregate_damage: number;
@@ -565,7 +646,9 @@ interface CombinedImpactPotential {
   recovery_complexity: string;
 }
 }
+}
 
+}
 }
 interface CoordinatedResponseRequirement {
   response_type: string;
@@ -574,7 +657,9 @@ interface CoordinatedResponseRequirement {
   resource_requirements: object;
 }
 }
+}
 
+}
 }
 interface StrategyImplication {
   implication_type: string;
@@ -583,7 +668,9 @@ interface StrategyImplication {
   implementation_timeline: object;
 }
 }
+}
 
+}
 }
 interface PatternRelationship {
   relationship_type: string;
@@ -592,7 +679,9 @@ interface PatternRelationship {
   relationship_strength: number;
 }
 }
+}
 
+}
 }
 interface ClusterMerge {
   merge_id: string;
@@ -601,7 +690,9 @@ interface ClusterMerge {
   merge_rationale: string;
 }
 }
+}
 
+}
 }
 interface ClusterSplit {
   split_id: string;
@@ -610,7 +701,9 @@ interface ClusterSplit {
   split_rationale: string;
 }
 }
+}
 
+}
 }
 interface ClusterMigration {
   migration_id: string;
@@ -619,7 +712,9 @@ interface ClusterMigration {
   target_cluster: string;
 }
 }
+}
 
+}
 }
 interface DataVolumeMetric {
   total_records_processed: number;
@@ -628,7 +723,9 @@ interface DataVolumeMetric {
   data_quality_score: number;
 }
 }
+}
 
+}
 }
 interface ProcessingPerformance {
   throughput_records_per_second: number;
@@ -637,7 +734,9 @@ interface ProcessingPerformance {
   processing_efficiency: number;
 }
 }
+}
 
+}
 }
 interface AlgorithmEffectiveness {
   algorithm_name: string;
@@ -646,7 +745,9 @@ interface AlgorithmEffectiveness {
   false_negative_rate: number;
 }
 }
+}
 
+}
 }
 interface QualityAssessment {
   overall_quality_score: number;
@@ -655,7 +756,9 @@ interface QualityAssessment {
   validation_success_rate: number;
 }
 }
+}
 
+}
 }
 interface ConfidenceDistribution {
   high_confidence_percentage: number;
@@ -664,7 +767,9 @@ interface ConfidenceDistribution {
   confidence_trend_analysis: object;
 }
 }
+}
 
+}
 }
 interface SecurityInsight {
   insight_type: string;
@@ -673,7 +778,9 @@ interface SecurityInsight {
   actionable_recommendations: string[];
 }
 }
+}
 
+}
 }
 interface ThreatTrend {
   trend_type: string;
@@ -682,7 +789,9 @@ interface ThreatTrend {
   trend_significance: number;
 }
 }
+}
 
+}
 }
 interface AnomalyDetection {
   anomaly_type: string;
@@ -691,7 +800,9 @@ interface AnomalyDetection {
   investigation_priority: string;
 }
 }
+}
 
+}
 }
 interface PredictiveIndicator {
   indicator_type: string;
@@ -700,7 +811,9 @@ interface PredictiveIndicator {
   prediction_timeframe: object;
 }
 }
+}
 
+}
 }
 interface PatternRecommendation {
   recommendation_type: string;
@@ -709,7 +822,9 @@ interface PatternRecommendation {
   expected_impact: object;
 }
 }
+}
 
+}
 }
 interface SIEMAlert {
   alert_type: string;
@@ -718,7 +833,9 @@ interface SIEMAlert {
   recommended_actions: string[];
 }
 }
+}
 
+}
 }
 interface IncidentTrigger {
   trigger_type: string;
@@ -727,7 +844,9 @@ interface IncidentTrigger {
   escalation_criteria: string[];
 }
 }
+}
 
+}
 }
 interface ThreatHuntingLead {
   lead_type: string;
@@ -736,7 +855,9 @@ interface ThreatHuntingLead {
   expected_indicators: string[];
 }
 }
+}
 
+}
 }
 interface PolicyRecommendation {
   policy_area: string;
@@ -745,7 +866,9 @@ interface PolicyRecommendation {
   compliance_benefits: string[];
 }
 }
+}
 
+}
 }
 interface DashboardUpdate {
   widget_type: string;
@@ -754,7 +877,9 @@ interface DashboardUpdate {
   refresh_frequency: string;
 }
 }
+}
 
+}
 }
 export interface PatternRecognitionAnalytics {
   summary: {
@@ -765,6 +890,7 @@ export interface PatternRecognitionAnalytics {
     active_clusters: number;
     pattern_recognition_accuracy: number;
     clustering_effectiveness: number;
+}
 }
   };
   

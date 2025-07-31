@@ -16,6 +16,7 @@ import { ActionSeverity } from './EnforcementTypes';
 // Core Epic 17 Playbook Types
 // =============================================================================
 
+}
 export interface Epic17IncidentPlaybook {
   id: string;
   name: string;
@@ -42,6 +43,7 @@ export interface Epic17IncidentPlaybook {
   // Metadata
   metadata: PlaybookMetadata;
 }
+}
 export type PlaybookCategory = 
   | 'feature_toggle_emergency'
   | 'admin_system_outage'
@@ -54,6 +56,7 @@ export type PlaybookCategory =
   | 'configuration_error'
   | 'permission_escalation';
 
+}
 export interface Epic17Context {
   affectedSystems: Epic17System;
   businessImpact: BusinessImpact;
@@ -61,6 +64,7 @@ export interface Epic17Context {
   dataImpact: DataImpact;
   complianceImplications: ComplianceImplication;
   dependencies: SystemDependency;
+}
 }
 export type Epic17System = 
   | 'feature_management'
@@ -74,6 +78,7 @@ export type Epic17System =
   | 'fraud_monitoring'
   | 'enforcement_actions';
 
+}
 export interface BusinessImpact {
   severity: ActionSeverity;
   affectedUsers: number;
@@ -82,11 +87,15 @@ export interface BusinessImpact {
   complianceRisk: 'low' | 'medium' | 'high' | 'critical';
   description: string;
 }
+}
+}
 export interface UserImpact {
   adminUsers: UserImpactDetail;
   regularUsers: UserImpactDetail;
   externalUsers: UserImpactDetail;
   systemUsers: UserImpactDetail;
+}
+}
 }
 export interface UserImpactDetail {
   affected: boolean;
@@ -95,12 +104,15 @@ export interface UserImpactDetail {
   severity: ActionSeverity;
   estimatedDuration: number; // minutes,
 }
+}
+}
 export interface DataImpact {
   dataAtRisk: boolean;
   dataTypes: DataType;
   severity: ActionSeverity;
   backupStatus: 'available' | 'partial' | 'unavailable' | 'unknown';
   recoveryComplexity: 'simple' | 'moderate' | 'complex' | 'critical'
+}
   }
 export type DataType = 
   | 'user_profiles'
@@ -112,6 +124,7 @@ export type DataType =
   | 'security_credentials'
   | 'system_state';
 
+}
 export interface ComplianceImplication {
   regulation: string;
   requirement: string;
@@ -119,6 +132,8 @@ export interface ComplianceImplication {
   reportingRequired: boolean;
   timelineRequirement: number; // hours,
   stakeholders: string;
+}
+}
 }
 export interface SystemDependency {
   system: Epic17System;
@@ -130,6 +145,8 @@ export interface SystemDependency {
   // Playbook Trigger Conditions
   // =============================================================================
 }
+}
+}
 export interface PlaybookTriggerConditions {
   healthCheckFailures: HealthCheckTrigger;
   alertTriggers: AlertTrigger;
@@ -137,6 +154,8 @@ export interface PlaybookTriggerConditions {
   manualTriggers: ManualTrigger;
   cascadingFailures: CascadingFailureTrigger;
   timeBasedTriggers: TimeBasedTrigger;
+}
+}
 }
 export interface HealthCheckTrigger {
   healthCheckId: string;
@@ -147,6 +166,8 @@ export interface HealthCheckTrigger {
   timeWindow: number; // minutes,
   severity: ActionSeverity;
 }
+}
+}
 export interface AlertTrigger {
   alertType: AlertType;
   source: Epic17System;
@@ -154,6 +175,7 @@ export interface AlertTrigger {
   frequency: 'single' | 'burst' | 'sustained';
   pattern: string; // regex pattern for alert matching,
   conditions: AlertCondition;
+}
 }
 export type AlertType = 
   | 'system_error'
@@ -165,11 +187,14 @@ export type AlertType =
   | 'capacity_exceeded'
   | 'audit_failure';
 
+}
 export interface AlertCondition {
   field: string;
   operator: 'equals' | 'greater_than' | 'less_than' | 'contains' | 'regex_match';
   value: any;
   required: boolean;
+}
+}
 }
 export interface MetricThreshold {
   metricName: string;
@@ -178,7 +203,9 @@ export interface MetricThreshold {
   threshold: number;
   duration: number; // minutes,
   aggregation: 'average' | 'sum' | 'max' | 'min' | 'count'
+}
   }
+}
 export interface ManualTrigger {
   triggerName: string;
   description: string;
@@ -187,11 +214,15 @@ export interface ManualTrigger {
   confirmationRequired: boolean;
   reasonRequired: boolean;
 }
+}
+}
 export interface CascadingFailureTrigger {
   primarySystem: Epic17System;
   cascadePattern: CascadePattern;
   timeWindow: number; // minutes,
   minAffectedSystems: number;
+}
+}
 }
 export interface CascadePattern {
   system: Epic17System;
@@ -199,16 +230,22 @@ export interface CascadePattern {
   probability: number; // 0-1,
   impact: ActionSeverity;
 }
+}
+}
 export interface TimeBasedTrigger {
   schedule: CronSchedule;
   timezone: string;
   conditions: TimeCondition;
   skipIfHealthy: boolean;
 }
+}
+}
 export interface CronSchedule {
   expression: string;
   description: string;
   enabled: boolean;
+}
+}
 }
 export interface TimeCondition {
   type: 'maintenance_window' | 'business_hours' | 'high_traffic_period' | 'backup_schedule';
@@ -217,6 +254,8 @@ export interface TimeCondition {
   // =============================================================================
   // Playbook Execution Steps
   // =============================================================================
+}
+}
 }
 export interface PlaybookStep {
   stepId: string;
@@ -242,6 +281,7 @@ export interface PlaybookStep {
   expectedOutcome: string;
   troubleshooting: TroubleshootingGuide;
 }
+}
 export type StepType = 
   | 'automated_action'
   | 'manual_action'
@@ -254,12 +294,14 @@ export type StepType =
   | 'rollback'
   | 'recovery';
 
+}
 export interface PlaybookAction {
   actionType: ActionType;
   targetSystem: Epic17System;
   parameters: ActionParameters;
   credentials: CredentialRequirement;
   permissions: PermissionRequirement;
+}
 }
 export type ActionType = 
   // Feature Toggle Actions
@@ -302,6 +344,7 @@ export type ActionType =
   | 'collect_diagnostics'
   | 'generate_report';
 
+}
 export interface ActionParameters {
   [key: string]: any;
   // Common parameters
@@ -311,11 +354,15 @@ export interface ActionParameters {
   notificationTargets?: string;
   rollbackConfig?: any;
 }
+}
+}
 export interface CredentialRequirement {
   type: 'api_key' | 'oauth_token' | 'service_account' | 'admin_password' | 'certificate';
   scope: string;
   required: boolean;
   fallbackOptions: string;
+}
+}
 }
 export interface PermissionRequirement {
   permission: string;
@@ -323,11 +370,15 @@ export interface PermissionRequirement {
   required: boolean;
   justification: string;
 }
+}
+}
 export interface StepCondition {
   type: 'prerequisite' | 'guard' | 'success_criteria' | 'failure_criteria';
   expression: string;
   description: string;
   required: boolean;
+}
+}
 }
 export interface RetryPolicy {
   maxRetries: number;
@@ -335,10 +386,14 @@ export interface RetryPolicy {
   backoffStrategy: 'linear' | 'exponential' | 'fixed';
   retryConditions: RetryCondition;
 }
+}
+}
 export interface RetryCondition {
   errorType: string;
   shouldRetry: boolean;
   maxRetriesOverride?: number;
+}
+}
 }
 export interface Prerequisite {
   type: 'system_healthy' | 'service_available' | 'data_consistent' | 'permissions_valid' | 'resources_available';
@@ -346,12 +401,16 @@ export interface Prerequisite {
   validationMethod: string;
   required: boolean;
 }
+}
+}
 export interface StepValidation {
   validationType: 'automated' | 'manual' | 'hybrid';
   successCriteria: SuccessCriteria;
   failureCriteria: FailureCriteria;
   timeoutBehavior: 'fail' | 'continue' | 'escalate'
+}
   }
+}
 export interface SuccessCriteria {
   metric: string;
   operator: 'equals' | 'greater_than' | 'less_than' | 'contains';
@@ -359,11 +418,15 @@ export interface SuccessCriteria {
   tolerance?: number;
   description: string;
 }
+}
+}
 export interface FailureCriteria {
   condition: string;
   severity: ActionSeverity;
   action: 'stop' | 'continue' | 'escalate' | 'rollback';
   description: string;
+}
+}
 }
 export interface TroubleshootingGuide {
   issue: string;
@@ -371,6 +434,8 @@ export interface TroubleshootingGuide {
   possibleCauses: string;
   solutions: TroubleshootingSolution;
   escalationPath: string;
+}
+}
 }
 export interface TroubleshootingSolution {
   solution: string;
@@ -381,6 +446,8 @@ export interface TroubleshootingSolution {
   // =============================================================================
   // Recovery and Rollback Procedures
   // =============================================================================
+}
+}
 }
 export interface RecoveryProcedure {
   procedureId: string;
@@ -393,6 +460,7 @@ export interface RecoveryProcedure {
   dependencies: string;
   fallbackProcedures: string;
 }
+}
 export type RecoveryScenario = 
   | 'complete_system_failure'
   | 'partial_degradation'
@@ -402,6 +470,7 @@ export type RecoveryScenario =
   | 'performance_crisis'
   | 'integration_failure';
 
+}
 export interface RecoveryStep {
   stepId: string;
   name: string;
@@ -415,6 +484,7 @@ export interface RecoveryStep {
   rollbackAction?: PlaybookAction;
   estimatedTime: number; // minutes,
 }
+}
 export type RecoveryStepType = 
   | 'system_restart'
   | 'data_restore'
@@ -425,6 +495,7 @@ export type RecoveryStepType =
   | 'manual_intervention'
   | 'validation_check';
 
+}
 export interface RollbackProcedure {
   procedureId: string;
   name: string;
@@ -436,12 +507,16 @@ export interface RollbackProcedure {
   dataLossRisk: 'none' | 'minimal' | 'moderate' | 'significant';
   automaticExecution: boolean;
 }
+}
+}
 export interface RollbackTrigger {
   condition: string;
   severity: ActionSeverity;
   timeThreshold?: number; // minutes,
   automatic: boolean;
   confirmationRequired: boolean;
+}
+}
 }
 export interface RollbackStep {
   stepId: string;
@@ -452,6 +527,8 @@ export interface RollbackStep {
   safetyCheck?: SafetyCheck;
   pointOfNoReturn: boolean;
   estimatedTime: number; // minutes,
+}
+}
 }
 export interface SafetyCheck {
   checkId: string;
@@ -465,6 +542,8 @@ export interface SafetyCheck {
   // Epic 17 Integration and Configuration
   // =============================================================================
 }
+}
+}
 export interface Epic17Integration {
   integrationId: string;
   system: Epic17System;
@@ -475,6 +554,7 @@ export interface Epic17Integration {
   healthCheck: IntegrationHealthCheck;
   fallbackOptions: FallbackOption;
 }
+}
 export type IntegrationType = 
   | 'rest_api'
   | 'message_queue'
@@ -484,15 +564,20 @@ export type IntegrationType =
   | 'monitoring_system'
   | 'notification_service';
 
+}
 export interface AuthenticationConfig {
   type: 'api_key' | 'oauth2' | 'basic_auth' | 'certificate' | 'service_account';
   credentials: CredentialReference;
   refreshPolicy: RefreshPolicy;
 }
+}
+}
 export interface CredentialReference {
   source: 'environment' | 'secret_manager' | 'config_file' | 'vault';
   key: string;
   fallbackKeys: string;
+}
+}
 }
 export interface RefreshPolicy {
   enabled: boolean;
@@ -500,23 +585,31 @@ export interface RefreshPolicy {
   expiryBuffer: number; // minutes,
   retryAttempts: number;
 }
+}
+}
 export interface IntegrationConfig {
   timeout: number; // seconds,
   retryPolicy: RetryPolicy;
   rateLimiting: RateLimitConfig;
   circuitBreaker: CircuitBreakerConfig;
 }
+}
+}
 export interface RateLimitConfig {
   enabled: boolean;
   requestsPerSecond: number;
   burstSize: number;
   backoffStrategy: 'linear' | 'exponential'
+}
   }
+}
 export interface CircuitBreakerConfig {
   enabled: boolean;
   failureThreshold: number;
   timeoutThreshold: number; // seconds,
   recoveryTime: number; // seconds,
+}
+}
 }
 export interface IntegrationHealthCheck {
   enabled: boolean;
@@ -525,11 +618,15 @@ export interface IntegrationHealthCheck {
   expectedResponse: any;
   timeout: number; // seconds,
 }
+}
+}
 export interface FallbackOption {
   type: 'secondary_endpoint' | 'cached_data' | 'manual_process' | 'degraded_mode';
   description: string;
   configuration: any;
   automaticActivation: boolean;
+}
+}
 }
 export interface PlaybookConfiguration {
   execution: ExecutionConfig;
@@ -537,6 +634,8 @@ export interface PlaybookConfiguration {
   logging: LoggingConfig;
   security: SecurityConfig;
   performance: PerformanceConfig;
+}
+}
 }
 export interface ExecutionConfig {
   maxConcurrentPlaybooks: number;
@@ -546,17 +645,23 @@ export interface ExecutionConfig {
   automaticRetry: boolean;
   rollbackOnFailure: boolean;
 }
+}
+}
 export interface NotificationConfig {
   enabled: boolean;
   channels: NotificationChannel;
   escalationSchedule: EscalationSchedule;
   templates: NotificationTemplate;
 }
+}
+}
 export interface NotificationChannel {
   type: 'email' | 'slack' | 'sms' | 'webhook' | 'dashboard';
   configuration: any;
   enabled: boolean;
   priority: number;
+}
+}
 }
 export interface EscalationSchedule {
   level: number;
@@ -565,6 +670,8 @@ export interface EscalationSchedule {
   channels: string;
   requiredAcknowledgment: boolean;
 }
+}
+}
 export interface NotificationTemplate {
   templateId: string;
   name: string;
@@ -572,11 +679,15 @@ export interface NotificationTemplate {
   template: string;
   variables: TemplateVariable;
 }
+}
+}
 export interface TemplateVariable {
   name: string;
   type: 'string' | 'number' | 'date' | 'object';
   required: boolean;
   defaultValue?: any;
+}
+}
 }
 export interface LoggingConfig {
   enabled: boolean;
@@ -585,10 +696,14 @@ export interface LoggingConfig {
   retention: RetentionPolicy;
   sensitiveDataHandling: SensitiveDataPolicy;
 }
+}
+}
 export interface LogDestination {
   type: 'file' | 'database' | 'elasticsearch' | 'cloudwatch' | 'syslog';
   configuration: any;
   enabled: boolean;
+}
+}
 }
 export interface RetentionPolicy {
   defaultRetention: number; // days,
@@ -596,21 +711,29 @@ export interface RetentionPolicy {
   auditRetention: number; // days,
   compressionEnabled: boolean;
 }
+}
+}
 export interface SensitiveDataPolicy {
   maskingEnabled: boolean;
   fieldMasks: FieldMask;
   encryptionRequired: boolean;
   accessRestrictions: AccessRestriction;
 }
+}
+}
 export interface FieldMask {
   fieldName: string;
   maskingType: 'full' | 'partial' | 'hash' | 'encrypt';
   preserveLength: boolean;
 }
+}
+}
 export interface AccessRestriction {
   role: string;
   permissions: string;
   approvalRequired: boolean;
+}
+}
 }
 export interface SecurityConfig {
   authenticationRequired: boolean;
@@ -619,20 +742,28 @@ export interface SecurityConfig {
   encryptionRequired: boolean;
   accessControls: AccessControl;
 }
+}
+}
 export interface AccessControl {
   resource: string;
   permissions: Permission;
   conditions: AccessCondition;
+}
+}
 }
 export interface Permission {
   action: string;
   granted: boolean;
   restrictions: string;
 }
+}
+}
 export interface AccessCondition {
   type: 'time_based' | 'location_based' | 'role_based' | 'approval_based';
   condition: string;
   required: boolean;
+}
+}
 }
 export interface PerformanceConfig {
   enableMetrics: boolean;
@@ -640,39 +771,53 @@ export interface PerformanceConfig {
   optimizations: OptimizationConfig;
   resourceLimits: ResourceLimitConfig;
 }
+}
+}
 export interface MetricCollectionConfig {
   enabled: boolean;
   interval: number; // seconds,
   metrics: string;
   aggregation: AggregationConfig;
 }
+}
+}
 export interface AggregationConfig {
   windowSize: number; // seconds,
   functions: string;
   retentionPeriod: number; // hours,
+}
+}
 }
 export interface OptimizationConfig {
   caching: CachingConfig;
   parallelization: ParallelizationConfig;
   resourcePooling: ResourcePoolingConfig;
 }
+}
+}
 export interface CachingConfig {
   enabled: boolean;
   ttl: number; // seconds,
   maxSize: number; // MB,
   strategy: 'lru' | 'lfu' | 'ttl'
+}
   }
+}
 export interface ParallelizationConfig {
   enabled: boolean;
   maxWorkers: number;
   queueSize: number;
   loadBalancing: 'round_robin' | 'least_loaded' | 'weighted'
+}
   }
+}
 export interface ResourcePoolingConfig {
   enabled: boolean;
   poolSize: number;
   connectionTimeout: number; // seconds,
   idleTimeout: number; // seconds,
+}
+}
 }
 export interface ResourceLimitConfig {
   maxMemoryUsage: number; // MB,
@@ -682,6 +827,8 @@ export interface ResourceLimitConfig {
   // =============================================================================
   // Playbook Metadata and Analytics
   // =============================================================================
+}
+}
 }
 export interface PlaybookMetadata {
   createdBy: string;
@@ -694,6 +841,7 @@ export interface PlaybookMetadata {
   usage: UsageMetadata;
   performance: PerformanceMetadata;
 }
+}
 export type PlaybookStatus = 
   | 'draft'
   | 'testing'
@@ -702,11 +850,14 @@ export type PlaybookStatus =
   | 'deprecated'
   | 'archived';
 
+}
 export interface TestingMetadata {
   lastTested: Date;
   testResults: TestResult;
   testCoverage: number; // percentage,
   simulationResults: SimulationResult;
+}
+}
 }
 export interface TestResult {
   testId: string;
@@ -717,11 +868,15 @@ export interface TestResult {
   issues: TestIssue;
   timestamp: Date;
 }
+}
+}
 export interface TestIssue {
   severity: ActionSeverity;
   description: string;
   step: string;
   recommendation: string;
+}
+}
 }
 export interface SimulationResult {
   simulationId: string;
@@ -731,17 +886,23 @@ export interface SimulationResult {
   resourcesUsed: ResourceUsage;
   feedback: SimulationFeedback;
 }
+}
+}
 export interface ResourceUsage {
   cpuUsage: number; // percentage,
   memoryUsage: number; // MB,
   networkUsage: number; // Mbps,
   storageUsage: number; // MB,
 }
+}
+}
 export interface SimulationFeedback {
   category: 'performance' | 'accuracy' | 'user_experience' | 'resource_efficiency';
   rating: number; // 1-5,
   comments: string;
   improvements: string;
+}
+}
 }
 export interface UsageMetadata {
   totalExecutions: number;
@@ -751,17 +912,23 @@ export interface UsageMetadata {
   lastExecution: Date;
   frequencyPattern: FrequencyPattern;
 }
+}
+}
 export interface FrequencyPattern {
   hourlyDistribution: number;
   dailyDistribution: number;
   monthlyDistribution: number;
   seasonalTrends: SeasonalTrend;
 }
+}
+}
 export interface SeasonalTrend {
   season: 'spring' | 'summer' | 'fall' | 'winter';
   frequency: number;
   averageSeverity: ActionSeverity;
   commonTriggers: string;
+}
+}
 }
 export interface PerformanceMetadata {
   averageResolutionTime: number; // minutes,
@@ -771,11 +938,15 @@ export interface PerformanceMetadata {
   costEffectiveness: CostEffectiveness;
   trends: PerformanceTrend;
 }
+}
+}
 export interface CostEffectiveness {
   automationSavings: number; // dollars per incident,
   manualEffortReduction: number; // hours per incident,
   mttrImprovement: number; // percentage improvement,
   businessImpactReduction: number; // percentage,
+}
+}
 }
 export interface PerformanceTrend {
   metric: string;
@@ -787,6 +958,8 @@ export interface PerformanceTrend {
   // Escalation and Communication
   // =============================================================================
 }
+}
+}
 export interface EscalationRule {
   ruleId: string;
   name: string;
@@ -797,12 +970,15 @@ export interface EscalationRule {
   approvals: ApprovalRequirement;
   notifications: EscalationNotification;
 }
+}
+}
 export interface EscalationTrigger {
   type: TriggerType;
   condition: string;
   threshold?: number;
   timeWindow?: number; // minutes,
   priority: number;
+}
 }
 export type TriggerType = 
   | 'time_exceeded'
@@ -813,12 +989,14 @@ export type TriggerType =
   | 'cascading_failures'
   | 'business_impact_exceeded';
 
+}
 export interface EscalationAction {
   actionType: EscalationActionType;
   parameters: ActionParameters;
   delay: number; // minutes,
   condition?: string;
   reversible: boolean;
+}
 }
 export type EscalationActionType = 
   | 'notify_manager'
@@ -830,6 +1008,7 @@ export type EscalationActionType =
   | 'notify_executives'
   | 'engage_external_support';
 
+}
 export interface ApprovalRequirement {
   level: number;
   approverRole: string;
@@ -838,6 +1017,8 @@ export interface ApprovalRequirement {
   escalateIfNoResponse: boolean;
   delegationAllowed: boolean;
 }
+}
+}
 export interface EscalationNotification {
   recipient: NotificationRecipient;
   channel: NotificationChannel;
@@ -845,11 +1026,15 @@ export interface EscalationNotification {
   urgency: 'low' | 'medium' | 'high' | 'critical';
   acknowledgmentRequired: boolean;
 }
+}
+}
 export interface NotificationRecipient {
   type: 'individual' | 'role' | 'team' | 'external';
   identifier: string;
   contactMethods: ContactMethod;
   availability: AvailabilitySchedule;
+}
+}
 }
 export interface ContactMethod {
   type: 'email' | 'phone' | 'sms' | 'slack' | 'teams' | 'pager';
@@ -857,16 +1042,22 @@ export interface ContactMethod {
   priority: number;
   availability: AvailabilityWindow;
 }
+}
+}
 export interface AvailabilityWindow {
   start: string; // HH:mm format,
   end: string; // HH:mm format,
   daysOfWeek: number; // 0-6 (Sunday-Saturday),
   timezone: string;
 }
+}
+}
 export interface AvailabilitySchedule {
   businessHours: AvailabilityWindow;
   onCallSchedule: OnCallSchedule;
   vacationSchedule: VacationPeriod;
+}
+}
 }
 export interface OnCallSchedule {
   start: Date;
@@ -874,8 +1065,11 @@ export interface OnCallSchedule {
   primary: boolean;
   escalationDelay: number; // minutes,
 }
+}
+}
 export interface VacationPeriod {
   start: Date;
   end: Date;
   backup: string; // identifier of backup person,
+}
 }

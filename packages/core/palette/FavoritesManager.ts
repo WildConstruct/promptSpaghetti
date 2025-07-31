@@ -12,6 +12,7 @@ const FAVORITES_STORAGE_KEY = 'prompt-spaghetti-node-favorites';
  * Favorites data structure
  */
 
+}
 export interface FavoritesData {
   nodeIds: string;
   lastModified: string;
@@ -19,6 +20,7 @@ export interface FavoritesData {
   /**
   * Singleton favorites manager class
   */
+}
 }
 export class FavoritesManager {
   private static instance: FavoritesManager;

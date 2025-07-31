@@ -8,6 +8,7 @@
  */
 import React from 'react';
 
+}
 export interface FlaggingReason {
     id: string;
     label: string;
@@ -17,6 +18,7 @@ export interface FlaggingReason {
     requiresDetails?: boolean;
 
 
+}
 export interface FlagSubmission {
     contentId: string;
     contentType: 'template' | 'comment' | 'review' | 'user' | 'project';
@@ -26,6 +28,7 @@ export interface FlagSubmission {
     metadata?: Record<string, unknown>;
 
 
+}
 export interface FlaggingButtonProps {
     contentId: string;
     contentType: 'template' | 'comment' | 'review' | 'user' | 'project';
@@ -39,6 +42,7 @@ export interface FlaggingButtonProps {
     className?: string;
 
 
+}
 export interface FlaggingStatus {
     contentId: string;
     canFlag: boolean;
@@ -52,3 +56,4 @@ export interface FlaggingStatus {
 export declare const FlaggingButton: React.FC<FlaggingButtonProps>;
 export default FlaggingButton;
 //# sourceMappingURL=FlaggingButton.d.ts.map
+}

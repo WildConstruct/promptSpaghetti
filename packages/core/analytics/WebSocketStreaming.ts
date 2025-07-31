@@ -50,6 +50,7 @@ export const SubscriptionConfigSchema = z.object({)
 export type SubscriptionConfig = z.infer<typeof SubscriptionConfigSchema>;
 
 // Client Connection
+}
 interface ClientConnection {
   id: string;
   ws: WebSocket | any; // WebSocket interface
@@ -63,6 +64,7 @@ interface ClientConnection {
   userAgent?: string;
 
 // Connection Statistics
+}
 interface ConnectionStats {
   totalConnections: number;
   activeConnections: number;
@@ -73,6 +75,7 @@ interface ConnectionStats {
   errorRate: number;
 
 // WebSocket Server Configuration
+}
 interface WSServerConfig {
   port: number;
   heartbeatInterval: number;
@@ -100,6 +103,7 @@ export class WebSocketStreamingServer extends EventEmitter {
   constructor();
     eventBus: UnifiedEventBus,
     authService: AnalyticsAuthorizationService,
+}
     config: Partial<WSServerConfig> = {}
     super();
     this.eventBus = eventBus;
@@ -130,6 +134,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Start WebSocket server
    */
   async start(): Promise<void> {
+
     try {
       // In production, this would use an actual WebSocket library like 'ws'
       console.log(`Starting WebSocket server on port ${this.config.port}`);}
@@ -223,6 +228,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Handle client message
    */
   private async handleMessage(clientId: string, data: any): Promise<void> {
+
   const client = this.clients.get(clientId);
   if (!client) return;
   try {
@@ -255,6 +261,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Handle client authentication
    */
   private async handleAuthentication(client: ClientConnection, payload: any): Promise<void> {
+
     try {
       const { token } = payload;
       if (!token) {
@@ -291,6 +298,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Handle subscription request
    */
   private async handleSubscription(client: ClientConnection, payload: any): Promise<void> {
+
   try {
   // Check authentication if required
   if (this.config.requireAuthentication && !client.isAuthenticated) {
@@ -348,6 +356,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Handle unsubscription request
    */
   private async handleUnsubscription(client: ClientConnection, payload: any): Promise<void> {
+
     try {
       const { subscriptionId } = payload;
       if (client.subscriptions.has(subscriptionId)) {
@@ -370,6 +379,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Handle heartbeat
    */
   private async handleHeartbeat(client: ClientConnection): Promise<void> {
+
     client.lastHeartbeat = Date.now();
     await this.sendMessage(client, {)
   type: WSMessageType.HEARTBEAT,
@@ -380,6 +390,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Handle configuration request
    */
   private async handleConfigRequest(client: ClientConnection): Promise<void> {
+
   await this.sendMessage(client, {)
   type: WSMessageType.CONFIG,
   payload: {
@@ -430,6 +441,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Broadcast event to matching subscribers
    */
   private async broadcastEvent(event: UnifiedAnalyticsEvent): Promise<void> {
+
   const broadcastPromises: Promise<void>[] = [];
   for (const client of this.clients.values()) {
   if (!client.connected) continue;
@@ -443,7 +455,7 @@ export class WebSocketStreamingServer extends EventEmitter {
   severities: config.filter.severities as EventSeverity | undefined,
 } : undefined;
         if (this.eventMatchesFilter(event, eventFilter)) {
-  broadcastPromises.push()
+  broadcastPromises.push(
   this.sendEventToClient(client, event, subscriptionId, config)
   );
   await Promise.allSettled(broadcastPromises);
@@ -545,6 +557,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Send error message to client
    */
   private async sendError(client: ClientConnection, message: string, details?: any): Promise<void> {
+
     await this.sendMessage(client, {)
   type: WSMessageType.ERROR,
       payload: { message, details },
@@ -554,6 +567,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Disconnect client
    */
   private async disconnectClient(clientId: string, reason: string): Promise<void> {
+
     const client = this.clients.get(clientId);
     if (client) {
       try {
@@ -603,6 +617,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Broadcast custom message to all clients
    */
   async broadcastMessage(message: WSMessage, filter?: (client: ClientConnection) => boolean): Promise<void> {
+
   const clients = filter ;
   ? Array.from(this.clients.values()).filter(filter)
   : Array.from(this.clients.values());

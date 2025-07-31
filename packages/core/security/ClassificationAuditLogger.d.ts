@@ -36,6 +36,7 @@ export declare enum AuditEventType {
     CONFIGURATION_CHANGED = "configuration_changed",
     SYSTEM_EVENT = "system_event"
 
+}
 export interface AuditLogEntry {
     id: string;
     timestamp: Date;
@@ -46,6 +47,7 @@ export interface AuditLogEntry {
         ipAddress: string;
         userAgent?: string;
         sessionId?: string;
+}
     };
     target: {
         dataId?: string;
@@ -79,6 +81,7 @@ export interface AuditLogEntry {
         sequenceNumber: number;
     };
 
+}
 export interface AuditQueryFilter {
     startDate?: Date;
     endDate?: Date;
@@ -92,11 +95,13 @@ export interface AuditQueryFilter {
     limit?: number;
     offset?: number;
 
+}
 export interface ComplianceReport {
     framework: ComplianceFramework;
     reportPeriod: {
         start: Date;
         end: Date;
+}
     };
     summary: {
         totalEvents: number;
@@ -110,7 +115,7 @@ export interface ComplianceReport {
         exported: number;
         deleted: number;
     };
-    violationDetails: Array<{,
+    violationDetails: Array<{
         timestamp: Date;
         eventId: string;
         description: string;
@@ -121,6 +126,7 @@ export interface ComplianceReport {
     generatedAt: Date;
     generatedBy: string;
 
+}
 export interface RetentionPolicy {
     framework: ComplianceFramework;
     eventType: AuditEventType;
@@ -136,6 +142,7 @@ export declare enum ExportFormat {
     CEF = "cef",// Common Event Format
     LEEF = "leef"
 
+}
 export interface AuditLoggerConfig {
     enableRealTimeLogging: boolean;
     enableCompression: boolean;
@@ -150,6 +157,7 @@ export interface AuditLoggerConfig {
         url: string;
         format: ExportFormat;
         headers?: Record<string, string>;
+}
     }>;
     performanceMode: 'balanced' | 'high_performance' | 'high_security';
 /**
@@ -225,7 +233,7 @@ export declare class ClassificationAuditLogger extends EventEmitter {
      */
     verifyIntegrity(startId?: string, endId?: string): Promise<{
         valid: boolean;
-        errors: Array<{,
+        errors: Array<{
             logId: string;
             error: string;
         }>;

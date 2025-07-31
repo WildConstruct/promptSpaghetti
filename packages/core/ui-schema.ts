@@ -89,18 +89,22 @@ export type UIGraph = z.infer<typeof UIGraph>;
 
 // Utility type for extracting variables from templates
 
+}
 export interface ExtractedVariable {
   name: string;                          // Variable name (without braces),
+}
   placeholder: string;                   // Full placeholder text {name},
   position: number;                      // Position in template
 
 // UI State management for progressive disclosure
+}
 }
 export interface NodeUIState {
   basic: UINode;                         // Always visible fields,
   advanced?: {                           // Advanced options (collapsed by default),
   performance?: boolean;               // Show performance settings,
   debugging?: boolean;                 // Show debug information,
+}
 };
   connections?: {                        // Visual connection state
     inputs: string;                    // Connected input node IDs,
@@ -109,8 +113,10 @@ export interface NodeUIState {
 
 // Template parsing utilities interface
 }
+}
 export interface TemplateParser {
   extractVariables(template: string): ExtractedVariable;
+}
   validateTemplate(template: string): { valid: boolean; errors: string };
   previewTemplate(template: string, variables: Record<string, string>): string;
 }

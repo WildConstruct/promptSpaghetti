@@ -55,6 +55,8 @@ export enum RiskLevel {
   evidence: string;
   affectedAccounts: string;
 }
+}
+}
 export interface SecurityRecommendation {
   id: string;
   title: string;
@@ -68,6 +70,8 @@ export interface SecurityRecommendation {
   risks: string;
   dependencies?: string; // IDs of other recommendations,
 }
+}
+}
 export interface ActionStep {
   stepNumber: number;
   title: string;
@@ -77,6 +81,8 @@ export interface ActionStep {
   helpResources: string;
   timeEstimate: string;
   required: boolean;
+}
+}
 }
 export interface GuidanceSession {
   id: string;
@@ -89,7 +95,9 @@ export interface GuidanceSession {
   lastUpdated: Date;
   expiresAt: Date;
   status: 'active' | 'completed' | 'expired'
+}
   }
+}
 export interface PasswordSecurityAssessment {
   strength: 'very_weak' | 'weak' | 'fair' | 'good' | 'strong' | 'very_strong';
   score: number; // 0-100,
@@ -99,6 +107,8 @@ export interface PasswordSecurityAssessment {
   breachDatabases: string;
   reuseDetected: boolean;
   ageInDays: number;
+}
+}
 }
 export interface UserSecurityProfile {
   userId: string;
@@ -112,14 +122,14 @@ export interface UserSecurityProfile {
   * Comprehensive password guidance and security recommendation service
   */
 }
+}
 export class PasswordGuidanceService extends EventEmitter {
   private sessions: Map<string, GuidanceSession> = new Map();
   private userProfiles: Map<string, UserSecurityProfile> = new Map();
   /**
   * Assess password compromise risk and generate guidance
   */
-  public async assessPasswordCompromise(()
-  userId: string,
+  public async assessPasswordCompromise((userId: string,
   indicators: CompromiseIndicator): Promise<GuidanceSession> {,
   const riskLevel = this.calculateRiskLevel(indicators);
   const recommendations = await this.generateRecommendations(indicators, riskLevel);
@@ -299,10 +309,11 @@ export class PasswordGuidanceService extends EventEmitter {
   /**
    * Generate comprehensive security recommendations
    */
-  private async generateRecommendations(()
+  private async generateRecommendations(((
     indicators: CompromiseIndicator,
-    riskLevel: RiskLevel,
+    riskLevel: RiskLevel
   ): Promise<SecurityRecommendation> {
+
   const recommendations: SecurityRecommendation = [];
   // Get immediate actions
   const compromiseTypes = [...new Set(indicators.map(i => i.type))];
@@ -676,9 +687,9 @@ export class PasswordGuidanceService extends EventEmitter {
   /**
    * Prioritize recommendations based on risk level and dependencies
    */
-  private prioritizeRecommendations(()
+  private prioritizeRecommendations(((
     recommendations: SecurityRecommendation,
-    riskLevel: RiskLevel,
+    riskLevel: RiskLevel
   ): SecurityRecommendation {
   // Sort by priority, then by category importance
   const priorityOrder = {
@@ -756,10 +767,11 @@ export class PasswordGuidanceService extends EventEmitter {
   /**
    * Update user security profile
    */
-  private async updateUserSecurityProfile(()
+  private async updateUserSecurityProfile(((
     userId: string,
-    indicators: CompromiseIndicator,
+    indicators: CompromiseIndicator
   ): Promise<void> {
+
   let profile = this.userProfiles.get(userId);
   if (!profile) {
   profile = {

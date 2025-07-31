@@ -14,6 +14,7 @@ export declare enum ConnectionQuality {
     POOR = "poor",
     UNKNOWN = "unknown"
 
+}
 export interface ConnectionMetrics {
     latency: number;
     packetLoss: number;
@@ -22,6 +23,7 @@ export interface ConnectionMetrics {
     lastMeasurement: number;
     measurementCount: number;
 
+}
 export interface NetworkInfo {
     type: 'wifi' | 'cellular' | 'ethernet' | 'unknown';
     effectiveType: '2g' | '3g' | '4g' | 'slow-2g' | 'unknown';
@@ -29,6 +31,7 @@ export interface NetworkInfo {
     rtt: number;
     saveData: boolean;
 
+}
 export interface ConnectionStateData {
     state: ConnectionState;
     quality: ConnectionQuality;
@@ -39,12 +42,14 @@ export interface ConnectionStateData {
     totalDowntime: number;
     metrics: ConnectionMetrics;
     networkInfo: NetworkInfo | null;
-    stateHistory: Array<{,
+    stateHistory: Array<{
         state: ConnectionState;
         timestamp: number;
         reason?: string;
+}
     }>;
 
+}
 export interface ConnectionStateConfig {
     pingInterval: number;
     qualityCheckInterval: number;
@@ -52,6 +57,7 @@ export interface ConnectionStateConfig {
         excellent: number;
         good: number;
         fair: number;
+}
     };
     packetLossThreshold: {
         excellent: number;

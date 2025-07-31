@@ -14,6 +14,7 @@ import { AuditService } from '../auth/services/AuditService';
 
 const exec = promisify(execCallback);
 
+}
 export interface ModelEvaluationTriggerRequest {
   modelId: string;
   modelName: string;
@@ -27,7 +28,9 @@ export interface ModelEvaluationTriggerRequest {
   evaluationSuite?: 'standard' | 'comprehensive' | 'security' | 'performance';
   priority?: 'low' | 'medium' | 'high' | 'critical';
 }
+}
 
+}
 export interface ModelEvaluationJob {
   id: string;
   modelId: string;
@@ -43,12 +46,15 @@ export interface ModelEvaluationJob {
   githubRunUrl?: string;
   priority: string;
 }
+}
 
+}
 export interface ModelEvaluationResults {
   overall: {
     score: number;
     status: 'passed' | 'failed' | 'warning';
     summary: string;
+}
   };
   performance: {
     accuracy?: number;
@@ -86,6 +92,7 @@ export interface ModelEvaluationResults {
   };
 }
 
+}
 export interface ModelEvaluationConfig {
   enabled: boolean;
   defaultEvaluationSuite: 'standard' | 'comprehensive' | 'security' | 'performance';
@@ -104,6 +111,7 @@ export interface ModelEvaluationConfig {
     development: boolean;
     staging: boolean;
     production: boolean;
+}
   };
   qualityGates: {
     minAccuracy: number;

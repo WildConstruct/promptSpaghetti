@@ -32,6 +32,7 @@ import {
 
 // Types with comprehensive validation
 
+}
 export interface ContributionFormData {
   title: string;
   description: string;
@@ -41,13 +42,15 @@ export interface ContributionFormData {
   difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
   estimatedTime: number; // minutes,
   prerequisites: string;
-  resources: Array<{,
+  resources: Array<{
   type: 'link' | 'file' | 'image' | 'video';
   url: string;
   title: string;
+}
 }>;
   license: 'cc0' | 'cc-by' | 'cc-by-sa' | 'proprietary'
   }
+}
 export interface ContributionItem {
   id: string;
   title: string;
@@ -57,6 +60,7 @@ export interface ContributionItem {
   name: string;
   avatar?: string;
   reputation: number;
+}
 };
   category: string;
   tags: string;
@@ -71,10 +75,13 @@ export interface ContributionItem {
 
 // Error types for comprehensive error handling
 }
+}
 export interface ValidationError {
   field: string;
   message: string;
   code: string;
+}
+}
 }
 export interface ContributionError {
   type: 'validation' | 'network' | 'permission' | 'server' | 'unknown';
@@ -83,6 +90,7 @@ export interface ContributionError {
   field?: string;
   code?: string;
   // Security and validation utilities
+}
 }
 export class ContributionValidator {
   static validateTitle(title: string): ValidationError {,
@@ -211,12 +219,14 @@ export class ContributionValidator {
     return errors;
 
 // Error boundary component for robust error handling
+}
 interface ErrorBoundaryState {
   hasError: boolean;
   error?: Error;
   errorInfo?: unknown;
 
 export class ContributionErrorBoundary extends React.Component<
+}
   { children: React.ReactNode; onError?: (error: Error) => void },
   ErrorBoundaryState
 > {
@@ -257,8 +267,10 @@ export class ContributionErrorBoundary extends React.Component<
 
 // Main contribution form component
 
+}
 export interface ContributionFormProps {
   initialData?: Partial<ContributionFormData>;
+}
   onSubmit: (data: ContributionFormData) => Promise<{ success: boolean; error?: ContributionError }>;
   onSaveDraft?: (data: ContributionFormData) => Promise<{ success: boolean; error?: ContributionError }>;
   isLoading?: boolean;
@@ -715,6 +727,7 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({)
 
 // Contribution listing component
 
+}
 export interface ContributionListProps {
   contributions: ContributionItem;
   onView?: (contribution: ContributionItem) => void;
@@ -725,6 +738,7 @@ export interface ContributionListProps {
   isLoading?: boolean;
   error?: ContributionError;
   className?: string;
+}
 }
 export const ContributionList: React.FC<ContributionListProps> = ({)
   contributions,

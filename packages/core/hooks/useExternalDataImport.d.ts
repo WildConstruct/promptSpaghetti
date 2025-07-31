@@ -1,4 +1,5 @@
 import { DataSource, HistoricalQuery, QueryResult } from '../external-data/DataSourceManager';
+}
 interface UseExternalDataImportProps {
     autoRefresh?: boolean;
     refreshInterval?: number;
@@ -6,6 +7,7 @@ interface UseExternalDataImportProps {
     cacheStrategy?: 'aggressive' | 'conservative' | 'disabled';
     onError?: (error: Error) => void;
     onSuccess?: (results: QueryResult[]) => void;
+}
 interface ExternalDataImportState {
     isLoading: boolean;
     hasError: boolean;
@@ -16,6 +18,7 @@ interface ExternalDataImportState {
     enabledSourcesCount: number;
     cacheHitRate: number;
     lastUpdateTime: string | null;
+}
 interface UseExternalDataImportReturn {
     state: ExternalDataImportState;
     queryData: (query: HistoricalQuery, sourceIds?: string[]) => Promise<QueryResult[]>;
@@ -31,6 +34,7 @@ interface UseExternalDataImportReturn {
     validateQuery: (query: HistoricalQuery) => {,
         valid: boolean;
         errors: string[];
+}
     };
     getQuerySuggestions: (partial: Partial<HistoricalQuery>) => string[];
     exportResults: (format: 'json' | 'csv') => string;

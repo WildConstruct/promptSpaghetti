@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 // Enhanced presence data models
 }
+}
 export interface UserPresenceData {
   userId: string;
   userName?: string;
@@ -20,6 +21,7 @@ export interface UserPresenceData {
       width: number;
       height: number;
       zoom: number;
+}
 }
     };
   };
@@ -53,6 +55,7 @@ export interface UserPresenceData {
 }
 
 }
+}
 export interface DocumentPresence {
   documentId: string;
   users: Map<string, UserPresenceData>;
@@ -62,7 +65,9 @@ export interface DocumentPresence {
   createdAt: number;
 }
 }
+}
 
+}
 }
 export interface PresenceStats {
   totalUsers: number;
@@ -75,7 +80,9 @@ export interface PresenceStats {
   lastUpdated: number;
 }
 }
+}
 
+}
 }
 export interface PresenceConfig {
   idleTimeout: number; // Time before marking user as idle (ms)
@@ -87,6 +94,7 @@ export interface PresenceConfig {
   enableActivityTracking: boolean;
   retainPresenceHistory: boolean;
   historyRetentionPeriod: number; // How long to keep presence history (ms)
+}
 }
 }
 

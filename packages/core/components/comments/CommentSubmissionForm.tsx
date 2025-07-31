@@ -8,6 +8,7 @@
  */
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 
+}
 export interface CommentSubmissionData {
   content: string;
   contentType: 'text' | 'markdown' | 'rich';
@@ -20,6 +21,8 @@ export interface CommentSubmissionData {
   attachments: CommentAttachment;
   metadata?: Record<string, unknown>;
 }
+}
+}
 export interface CommentAttachment {
   id: string;
   name: string;
@@ -28,6 +31,8 @@ export interface CommentAttachment {
   size?: number;
   preview?: string;
   metadata?: Record<string, unknown>;
+}
+}
 }
 export interface CommentSubmissionConfig {
   enableRichText: boolean;
@@ -49,7 +54,9 @@ export interface CommentSubmissionConfig {
   requireApproval: boolean;
   enableAutoModeration: boolean;
   flagSuspiciousContent: boolean;
+}
 };
+}
 }
 export interface CommentSubmissionFormProps {
   resourceId: string;
@@ -94,6 +101,7 @@ export interface CommentSubmissionFormProps {
   requireApproval: false,
   enableAutoModeration: true,
   flagSuspiciousContent: true,
+}
 };
 }
 export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({)
@@ -695,9 +703,11 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({)
 };
 
 // Attachment Preview Component
+}
 interface AttachmentPreviewProps {
   attachment: CommentAttachment;
   onRemove: () => void;
+}
 const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment, onRemove }) => {
   return;
   <div style={{

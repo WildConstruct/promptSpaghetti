@@ -7,6 +7,7 @@
 import { AdvancedRuntimeNode, AdvancedExecutionContext, NodeExecutionResult } from '../advanced';
 import { TypedInputs } from '../io-system';
 
+}
 export interface AudioConfig {
     provider: 'openai-tts' | 'elevenlabs' | 'whisper';
     apiKey?: string;
@@ -15,6 +16,7 @@ export interface AudioConfig {
     defaultParameters?: Record<string, any>;
 
 
+}
 export interface AudioMetadata {
     duration: number;
     format: string;
@@ -28,12 +30,14 @@ export interface AudioMetadata {
     cost: number;
 
 
+}
 export interface GeneratedAudio {
     data: ArrayBuffer | string;
     format: string;
     metadata: AudioMetadata;
 
 
+}
 export interface TranscriptionResult {
     text: string;
     language?: string;
@@ -43,6 +47,7 @@ export interface TranscriptionResult {
         end: number;
         text: string;
 
+}
     }>;
     words?: Array<{
         word: string;

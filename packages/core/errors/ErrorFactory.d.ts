@@ -21,6 +21,7 @@ import {
   ConfigurationError
 } from './index';
 
+}
 export interface ErrorFactoryOptions {
     userId?: string;
     sessionId?: string;
@@ -47,6 +48,7 @@ export declare class ErrorFactory {
         field: string;
         value: any;
         expected: string;
+}
     }>, options?: ErrorFactoryOptions): GraphValidationError;
     /**
      * Create a graph execution error with node context

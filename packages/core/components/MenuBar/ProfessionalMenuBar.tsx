@@ -8,6 +8,7 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Node, Edge } from 'reactflow';
 import { PSGFile } from '../../projectManager';
 
+}
 export interface MenuBarProps {
   // File operations
   onNew?: () => void;
@@ -60,7 +61,9 @@ export interface MenuBarProps {
   inspectorVisible?: boolean;
   recentFiles?: PSGFile[];
 }
+}
 
+}
 interface MenuItemProps {
   label: string;
   shortcut?: string;
@@ -69,13 +72,16 @@ interface MenuItemProps {
   divider?: boolean;
   submenu?: MenuItemProps[];
 }
+}
 
+}
 interface MenuProps {
   label: string;
   items: MenuItemProps[];
   isOpen: boolean;
   onToggle: () => void;
   onClose: () => void;
+}
 }
 const professionalColors = {
   background: {

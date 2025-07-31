@@ -7,6 +7,7 @@ import { ExecutionMetrics } from '../utils/performance';
 
 // Performance Budget Configuration Types
 
+}
 export interface PerformanceBudgetConfig {
   // Bundle Size Budgets
   bundles: {
@@ -14,6 +15,7 @@ export interface PerformanceBudgetConfig {
   vendor: number;      // Vendor bundle size in KB,
   chunks: number;      // Individual chunk size in KB,
   total: number;       // Total bundle size in KB,
+}
 };
   // Runtime Performance Budgets
   runtime: {
@@ -54,6 +56,7 @@ export interface PerformanceBudgetConfig {
 
 // Performance Budget Violation Types
 }
+}
 export interface BudgetViolation {
   category: string;
   metric: string;
@@ -66,6 +69,8 @@ export interface BudgetViolation {
   timestamp: number;
   // Performance Budget Results
 }
+}
+}
 export interface BudgetCheckResult {
   passed: boolean;
   score: number;          // 0-100 performance score,
@@ -76,11 +81,13 @@ export interface BudgetCheckResult {
   high: number;
   medium: number;
   low: number;
+}
 };
   recommendations: string;
   timestamp: number;
 
 // Real-time Performance Metrics
+}
 }
 export interface PerformanceSnapshot {
   timestamp: number;
@@ -89,6 +96,7 @@ export interface PerformanceSnapshot {
   vendor: number;
   chunks: number;
   total: number;
+}
 };
   runtime: {
   fcp?: number;

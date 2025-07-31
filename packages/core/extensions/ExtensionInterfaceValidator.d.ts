@@ -92,6 +92,7 @@ export declare class ExtensionRuntimeTypeChecker {
     private isExtension;
     private isAsyncFunction;
 
+}
 interface MethodSignature {
     parameterCount?: number;
     parameterTypes?: string[];
@@ -99,6 +100,7 @@ interface MethodSignature {
     async?: boolean;
 
 
+}
 interface ExtensionValidationReport {
     extensionId: string;
     extensionName: string;
@@ -108,6 +110,7 @@ interface ExtensionValidationReport {
     validations: ValidationResult[];
 
 
+}
 interface ValidationResult {
     name: string;
     valid: boolean;
@@ -115,6 +118,7 @@ interface ValidationResult {
     warnings: string[];
 
 
+}
 interface RuntimeTypeInfo {
     type: string;
     constructor: string;
@@ -125,5 +129,6 @@ interface RuntimeTypeInfo {
 
 export declare const extensionValidator: ExtensionInterfaceValidator;
 export declare const runtimeTypeChecker: ExtensionRuntimeTypeChecker;
+}
 export {};
 //# sourceMappingURL=ExtensionInterfaceValidator.d.ts.map

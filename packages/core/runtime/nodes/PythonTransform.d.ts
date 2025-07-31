@@ -5,6 +5,7 @@
 import { AdvancedRuntimeNode, AdvancedExecutionContext, AdvancedNodeData, ValidationResult } from '../advanced';
 import { IOSpecBuilder } from '../io-system';
 
+}
 export interface PythonTransformConfig {
     code: string;
     timeout?: number;
@@ -17,6 +18,7 @@ export interface PythonTransformConfig {
         retryAttempts?: number;
         fallbackBehavior?: 'error' | 'skip' | 'default';
         defaultOutput?: string;
+}
     };
 
 export declare class PythonTransformNode extends AdvancedRuntimeNode<string> {

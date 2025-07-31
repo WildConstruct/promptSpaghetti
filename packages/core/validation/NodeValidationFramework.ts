@@ -8,6 +8,7 @@ import { z } from 'zod';
 import { ValidationResult, ValidationHelpers, AdvancedNodeData, AdvancedNodeConfig } from '../runtime/advanced';
 import { IOPortDefinition, IOConstraints } from '../runtime/io-system';
 
+}
 export interface NodeValidationConfig {
   /** Enable strict type checking */
   strictTypeValidation: boolean;
@@ -23,6 +24,8 @@ export interface NodeValidationConfig {
   maxMemoryUsage: number;
   /** Maximum execution time per node (milliseconds) */
   maxExecutionTime: number;
+}
+}
 }
 export interface NodeValidationResult extends ValidationResult {
   /** Security-specific validation results */
@@ -50,6 +53,7 @@ export interface NodeValidationResult extends ValidationResult {
   schemaErrors: string;
 };
 
+}
 export interface SecurityThreat {
   type: 'injection' | 'eval' | 'prototype_pollution' | 'xss' | 'unsafe_function' | 'dangerous_import';
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -57,12 +61,16 @@ export interface SecurityThreat {
   location: string;
   recommendation: string;
 }
+}
+}
 export interface PerformanceIssue {
   type: 'memory' | 'execution_time' | 'infinite_loop' | 'inefficient_algorithm';
   severity: 'low' | 'medium' | 'high';
   description: string;
   impact: string;
   suggestion: string;
+}
+}
 }
 export interface TypeError {
   expected: string;
@@ -73,6 +81,7 @@ export interface TypeError {
   * Core Node Validation Framework
   * Provides comprehensive validation for runtime nodes
   */
+}
 }
 export class NodeValidationFramework {
   private config: NodeValidationConfig;

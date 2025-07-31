@@ -9,6 +9,7 @@ import { EventEmitter } from 'events';
 import * as crypto from 'crypto';
 
 }
+}
 export interface KeyExchangeConfig {
   // Algorithm configuration
   algorithm: 'secp256r1' | 'secp384r1' | 'secp521r1';
@@ -31,7 +32,9 @@ export interface KeyExchangeConfig {
   riskThreshold: number; // 0-100
 }
 }
+}
 
+}
 }
 export interface KeyExchangeSession {
   id: string;
@@ -53,7 +56,9 @@ export interface KeyExchangeSession {
   userAgent?: string;
 }
 }
+}
 
+}
 }
 export interface DerivedKey {
   keyId: string;
@@ -65,7 +70,9 @@ export interface DerivedKey {
   maxUsageCount?: number;
 }
 }
+}
 
+}
 }
 export interface KeyExchangeResult {
   sessionId: string;
@@ -78,9 +85,11 @@ export interface KeyExchangeResult {
     iterations: number;
     saltLength: number;
 }
+}
   };
 }
 
+}
 }
 export interface SharedSecretResult {
   sessionId: string;
@@ -89,6 +98,7 @@ export interface SharedSecretResult {
     [purpose: string]: {
       keyId: string;
       expiresAt?: Date;
+}
 }
     };
   };

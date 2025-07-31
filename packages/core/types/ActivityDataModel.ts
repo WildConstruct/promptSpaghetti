@@ -28,6 +28,7 @@ export type ActivityStatus = 'pending' | 'in_progress' | 'completed' | 'failed' 
 
 // Core Activity Interface
 
+}
 export interface BaseActivity {
   id: string;
   timestamp: string;
@@ -63,6 +64,7 @@ export interface BaseActivity {
   region?: string;
   city?: string;
   coordinates?: [number, number]; // [lat, lon],
+}
 };
   // Timing Information
   duration?: number; // milliseconds
@@ -87,12 +89,15 @@ export interface BaseActivity {
 
 // Change Tracking for Data Modifications
 }
+}
 export interface ActivityChange {
   field: string;
   oldValue: any;
   newValue: any;
   changeType: 'create' | 'update' | 'delete' | 'restore';
   // User Action Activities
+}
+}
 }
 export interface UserActivity extends BaseActivity {
   type: 'user_action';
@@ -122,6 +127,7 @@ export interface UserActivity extends BaseActivity {
 
 // Admin Action Activities
 
+}
 export interface AdminActivity extends BaseActivity {
   type: 'admin_action';
   // Administrative Context
@@ -161,6 +167,7 @@ export interface AdminActivity extends BaseActivity {
 
 // API Call Activities
 
+}
 export interface ApiActivity extends BaseActivity {
   type: 'api_call';
   // HTTP Context
@@ -212,6 +219,7 @@ export interface ApiActivity extends BaseActivity {
 
 // Authentication Activities
 
+}
 export interface AuthenticationActivity extends BaseActivity {
   type: 'authentication';
   // Authentication Method
@@ -313,21 +321,27 @@ export interface AuthenticationActivity extends BaseActivity {
   include?: string;
   // Activity Aggregation Results
 }
+}
+}
 export interface ActivityAggregation {
   field: string;
   value: any;
   count: number;
   percentage: number;
 }
+}
+}
 export interface ActivityQueryResult {
   activities: Activity;
   totalCount: number;
   aggregations?: Record<string, ActivityAggregation>;
 
+}
   facets?: Record<string, Array<{ value: string; count: number }>>;
   executionTime: number;
 
 // Activity Storage and Indexing
+}
 }
 export interface ActivityIndex {
   id: string;
@@ -343,6 +357,8 @@ export interface ActivityIndex {
   tags: string;
   // Activity Streaming and Real-time
 }
+}
+}
 export interface ActivityStream {
   subscriptionId: string;
   filters: ActivityQuery;
@@ -350,33 +366,38 @@ export interface ActivityStream {
   createdAt: string;
   lastActivity?: string;
 }
+}
+}
 export interface ActivityStreamEvent {
   streamId: string;
   activity: Activity;
   timestamp: string;
   // Activity Analytics
 }
+}
+}
 export interface ActivityMetrics {
   totalActivities: number;
   activitiesByType: Record<ActivityType, number>;
   activitiesBySeverity: Record<ActivitySeverity, number>;
   activitiesByStatus: Record<ActivityStatus, number>;
-  activitiesOverTime: Array<{,
+  activitiesOverTime: Array<{
   timestamp: string;
   count: number;
   types: Record<ActivityType, number>;
+}
 }>;
-  topSources: Array<{,
+  topSources: Array<{
   source: string;
   count: number;
   percentage: number;
 }>;
-  topActions: Array<{,
+  topActions: Array<{
   action: string;
   count: number;
   percentage: number;
 }>;
-  topUsers: Array<{,
+  topUsers: Array<{
   userId: string;
   userEmail?: string;
   count: number;
@@ -391,6 +412,7 @@ export interface ActivityMetrics {
 };
 
 // Activity Retention and Archiving
+}
 }
 export interface ActivityRetentionPolicy {
   id: string;
@@ -414,6 +436,7 @@ export interface ActivityRetentionPolicy {
   updatedAt: string;
   isActive: boolean;
   // Export types for external use
+}
 }
 export type {
   Activity as MonitoringActivity,

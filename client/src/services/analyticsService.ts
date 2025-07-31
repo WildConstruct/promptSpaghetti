@@ -14,11 +14,12 @@ class AnalyticsService implements IAnalyticsService {
     this.baseUrl = import.meta.env.VITE_API_URL || '';
   // Track analytics event
   async trackEvent(event: Partial<AnalyticsEvent>): Promise<void> {
+
     try {
       const response = await fetch(`${this.baseUrl}/api/analytics/events`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${this.getAuthToken()}`}
   },
@@ -31,11 +32,12 @@ class AnalyticsService implements IAnalyticsService {
       // Don't throw error to avoid disrupting user experience
   // Batch track multiple events
   async batchTrackEvents(events: Partial<AnalyticsEvent>[]): Promise<void> {
+
     try {
       const response = await fetch(`${this.baseUrl}/api/analytics/events/batch`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${this.getAuthToken()}`}
   },
@@ -51,6 +53,7 @@ class AnalyticsService implements IAnalyticsService {
     startDate?: Date,
     endDate?: Date
   ): Promise<CreatorDashboard> {
+
     try {
       const params = new URLSearchParams({)
   time_range: timeRange,
@@ -61,7 +64,7 @@ class AnalyticsService implements IAnalyticsService {
         `${this.baseUrl}/api/analytics/creators/${creatorId}/dashboard?${params}`}
 }
         {
-          headers: {,
+          headers: {
             'Authorization': `Bearer ${this.getAuthToken()}`}
       );
       if (!response.ok) {
@@ -77,6 +80,7 @@ class AnalyticsService implements IAnalyticsService {
     startDate?: Date,
     endDate?: Date
   ): Promise<TemplateMetrics> {
+
     try {
       const params = new URLSearchParams({)
   time_range: timeRange,
@@ -87,7 +91,7 @@ class AnalyticsService implements IAnalyticsService {
         `${this.baseUrl}/api/analytics/templates/${templateId}/metrics?${params}`}
 }
         {
-          headers: {,
+          headers: {
             'Authorization': `Bearer ${this.getAuthToken()}`}
       );
       if (!response.ok) {
@@ -99,11 +103,12 @@ class AnalyticsService implements IAnalyticsService {
       throw error;
   // Query analytics data
   async queryAnalytics(query: AnalyticsQuery): Promise<any> {
+
     try {
       const response = await fetch(`${this.baseUrl}/api/analytics/query`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${this.getAuthToken()}`}
   },
@@ -117,11 +122,12 @@ class AnalyticsService implements IAnalyticsService {
       throw error;
   // Create custom report
   async createCustomReport(report: Partial<CustomReport>): Promise<CustomReport> {
+
     try {
       const response = await fetch(`${this.baseUrl}/api/analytics/reports`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${this.getAuthToken()}`}
   },
@@ -136,12 +142,13 @@ class AnalyticsService implements IAnalyticsService {
       throw error;
   // Get custom reports
   async getCustomReports(creatorId: string): Promise<CustomReport> {
+
     try {
       const response = await fetch(;);
         `${this.baseUrl}/api/analytics/creators/${creatorId}/reports`}
 }
         {
-          headers: {,
+          headers: {
             'Authorization': `Bearer ${this.getAuthToken()}`}
       );
       if (!response.ok) {
@@ -153,13 +160,14 @@ class AnalyticsService implements IAnalyticsService {
       throw error;
   // Generate report
   async generateReport(reportId: string): Promise<any> {
+
     try {
       const response = await fetch(;);
         `${this.baseUrl}/api/analytics/reports/${reportId}/generate`}
 }
         {
           method: 'POST',
-          headers: {,
+          headers: {
             'Authorization': `Bearer ${this.getAuthToken()}`}
       );
       if (!response.ok) {
@@ -172,6 +180,7 @@ class AnalyticsService implements IAnalyticsService {
   async generateInsights(creatorId: string,)
     templateIds?: string
   ): Promise<AnalyticsInsight> {
+
     try {
       const params = new URLSearchParams();
       if (templateIds && templateIds.length > 0) {
@@ -180,7 +189,7 @@ class AnalyticsService implements IAnalyticsService {
         `${this.baseUrl}/api/analytics/creators/${creatorId}/insights?${params}`}
 }
         {
-          headers: {,
+          headers: {
             'Authorization': `Bearer ${this.getAuthToken()}`}
       );
       if (!response.ok) {
@@ -191,15 +200,16 @@ class AnalyticsService implements IAnalyticsService {
       console.error('Error fetching insights:', error);
       throw error;
   // Update custom report
-  async updateCustomReport(()
+  async updateCustomReport(((
     reportId: string,
-    updates: Partial<CustomReport>,
+    updates: Partial<CustomReport>
   ): Promise<CustomReport> {
+
     try {
       const response = await fetch(`${this.baseUrl}/api/analytics/reports/${reportId}`, {)}
   },
   method: 'PATCH',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${this.getAuthToken()}`}
   },
@@ -214,11 +224,12 @@ class AnalyticsService implements IAnalyticsService {
       throw error;
   // Delete custom report
   async deleteCustomReport(reportId: string): Promise<void> {
+
     try {
       const response = await fetch(`${this.baseUrl}/api/analytics/reports/${reportId}`, {)}
   },
   method: 'DELETE',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${this.getAuthToken()}`}
       });
       if (!response.ok) {
@@ -228,13 +239,14 @@ class AnalyticsService implements IAnalyticsService {
       throw error;
   // Dismiss insight
   async dismissInsight(insightId: string): Promise<void> {
+
     try {
       const response = await fetch(;);
         `${this.baseUrl}/api/analytics/insights/${insightId}/dismiss`}
 }
         {
           method: 'POST',
-          headers: {,
+          headers: {
             'Authorization': `Bearer ${this.getAuthToken()}`}
       );
       if (!response.ok) {
@@ -243,15 +255,16 @@ class AnalyticsService implements IAnalyticsService {
       console.error('Error dismissing insight:', error);
       throw error;
   // Export analytics data
-  async exportAnalyticsData(()
+  async exportAnalyticsData(((
     query: AnalyticsQuery,
-    format: 'csv' | 'xlsx' | 'json' = 'csv',
+    format: 'csv' | 'xlsx' | 'json' = 'csv'
   ): Promise<Blob> {
+
     try {
       const response = await fetch(`${this.baseUrl}/api/analytics/export`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${this.getAuthToken()}`}
   },
@@ -278,7 +291,7 @@ class AnalyticsService implements IAnalyticsService {
   ...data,
   period_start: new Date(data.period_start),
   period_end: new Date(data.period_end),
-  trends: {,
+  trends: {
   ...data.trends,
   daily_metrics: data.trends.daily_metrics.map((metric: any) => ({,)
   ...metric,

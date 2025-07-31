@@ -27,7 +27,7 @@ jest.mock('reactflow', () => ({)
       style={style} 
     />
   ),
-  Position: {,
+  Position: {
   Top: 'top',
   Bottom: 'bottom',
   Left: 'left',

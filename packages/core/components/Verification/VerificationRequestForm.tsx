@@ -6,12 +6,15 @@
  */
 import React, { useState, useCallback } from 'react';
 import { IdentityValidationType, IdentityValidationData } from '../../auth/IdentityValidation';
+}
 interface VerificationRequestFormProps {
   userId: string;
   onSubmit: (),
     type: IdentityValidationType,
+}
     data: Partial<IdentityValidationData>) => Promise<{ requestId: string; status: string }>;
   onCancel?: () => void;
+}
 interface FormStep {
   id: string;
   title: string;
@@ -25,6 +28,7 @@ interface FormStep {
   description: 'Verify your email address to establish basic identity',
   verificationType: 'email_verification',
   required: true,
+}
 }
   {
   id: 'phone',
@@ -280,6 +284,7 @@ interface FormStep {
 };
 
 // Step Content Component
+}
 interface VerificationStepContentProps {
   step: FormStep;
   data: Partial<IdentityValidationData>;
@@ -290,6 +295,7 @@ interface VerificationStepContentProps {
   data,
   onSubmit,
   isSubmitting
+}
 }) => {
   const [stepData, setStepData] = useState<Partial<IdentityValidationData>>(data);
   const handleSubmit = useCallback(async (e: React.FormEvent) => {,

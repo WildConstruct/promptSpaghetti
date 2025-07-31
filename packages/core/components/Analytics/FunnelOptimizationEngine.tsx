@@ -29,15 +29,18 @@ import {
 
 // Optimization engine interfaces
 
+}
 export interface FunnelOptimizationEngineProps {
   funnelDefinition: ConversionFunnelDefinition;
   analyticsInfrastructure: ConversionAnalyticsInfrastructure;
+}
   timeRange: { start: number; end: number };
   currentPerformance: FunnelPerformanceSnapshot;
   optimizationGoals?: OptimizationGoal;
   constraints?: OptimizationConstraint;
   onRecommendationGenerated?: (recommendations: OptimizationRecommendation) => void;
   onExperimentPlan?: (experiments: ExperimentPlan) => void;
+}
 }
 export interface FunnelPerformanceSnapshot {
   overallConversionRate: number;
@@ -46,6 +49,8 @@ export interface FunnelPerformanceSnapshot {
   userExperienceMetrics: UXMetricsSnapshot;
   technicalMetrics: TechnicalMetricsSnapshot;
   timestamp: number;
+}
+}
 }
 export interface StepPerformanceSnapshot {
   stepId: string;
@@ -57,12 +62,16 @@ export interface StepPerformanceSnapshot {
   userSatisfactionScore: number;
   completionQuality: number;
 }
+}
+}
 export interface RevenueMetricsSnapshot {
   revenuePerVisitor: number;
   revenuePerConversion: number;
   lifetimeValue: number;
   paybackPeriod: number;
   marginPerConversion: number;
+}
+}
 }
 export interface UXMetricsSnapshot {
   overallSatisfactionScore: number;
@@ -72,6 +81,8 @@ export interface UXMetricsSnapshot {
   mobileExperienceScore: number;
   accessibilityScore: number;
 }
+}
+}
 export interface TechnicalMetricsSnapshot {
   averageLoadTime: number;
   errorRate: number;
@@ -79,6 +90,8 @@ export interface TechnicalMetricsSnapshot {
   performanceScore: number;
   securityScore: number;
   compatibilityScore: number;
+}
+}
 }
 export interface OptimizationGoal {
   id: string;
@@ -88,6 +101,7 @@ export interface OptimizationGoal {
   timeframe: number; // Days to achieve,
   constraints: string;
   successMetrics: string;
+}
 }
 export type OptimizationGoalType = 
   | 'increase_conversion_rate'
@@ -99,12 +113,14 @@ export type OptimizationGoalType =
   | 'reduce_technical_issues'
   | 'improve_accessibility';
 
+}
 export interface OptimizationConstraint {
   id: string;
   type: ConstraintType;
   value: number | string;
   description: string;
   flexibility: 'strict' | 'moderate' | 'flexible'
+}
   }
 export type ConstraintType = 
   | 'budget_limit'
@@ -114,6 +130,7 @@ export type ConstraintType =
   | 'business_rule'
   | 'compliance_requirement';
 
+}
 export interface OptimizationAnalysisData {
   recommendations: OptimizationRecommendation;
   experimentPlans: ExperimentPlan;
@@ -123,6 +140,8 @@ export interface OptimizationAnalysisData {
   riskAssessment: RiskAssessment;
   competitiveAnalysis: CompetitiveAnalysis;
   trends: OptimizationTrend;
+}
+}
 }
 export interface OptimizationRecommendation {
   id: string;
@@ -144,6 +163,7 @@ export interface OptimizationRecommendation {
   dependencies: string;
   alternatives: AlternativeRecommendation;
 }
+}
 export type RecommendationCategory = 
   | 'user_experience'
   | 'technical_performance'
@@ -161,12 +181,15 @@ export type RecommendationPriority =
   | 'low'
   | 'nice_to_have';
 
+}
 export interface ImplementationPlan {
   phases: ImplementationPhase;
   resources: ResourceRequirement;
   timeline: TimelineItem;
   risksAndMitigations: RiskMitigation;
   successCriteria: SuccessCriterion;
+}
+}
 }
 export interface ImplementationPhase {
   phase: string;
@@ -177,18 +200,24 @@ export interface ImplementationPhase {
   resources: string;
   milestones: Milestone;
 }
+}
+}
 export interface ResourceRequirement {
   type: 'development' | 'design' | 'content' | 'qa' | 'marketing' | 'analytics';
   hours: number;
   skills: string;
   urgency: 'immediate' | 'soon' | 'later'
+}
   }
+}
 export interface TimelineItem {
   date: number;
   activity: string;
   responsible: string;
   dependencies: string;
   deliverable?: string;
+}
+}
 }
 export interface RiskMitigation {
   risk: string;
@@ -197,17 +226,23 @@ export interface RiskMitigation {
   mitigation: string;
   contingency: string;
 }
+}
+}
 export interface SuccessCriterion {
   metric: string;
   target: number;
   measurement: string;
   timeframe: number; // Days,
 }
+}
+}
 export interface Milestone {
   name: string;
   date: number;
   criteria: string;
   dependencies: string;
+}
+}
 }
 export interface ValidationPlan {
   hypothesis: string;
@@ -217,17 +252,23 @@ export interface ValidationPlan {
   successMetrics: ValidationMetric;
   stopConditions: StopCondition;
 }
+}
+}
 export interface ValidationMetric {
   metric: string;
   target: number;
   tolerance: number;
   significance: number;
 }
+}
+}
 export interface StopCondition {
   condition: string;
   threshold: number;
   action: 'stop' | 'modify' | 'continue'
+}
   }
+}
 export interface AlternativeRecommendation {
   title: string;
   description: string;
@@ -235,6 +276,8 @@ export interface AlternativeRecommendation {
   effortScore: number;
   riskScore: number;
   tradeoffs: string;
+}
+}
 }
 export interface ExperimentPlan {
   id: string;
@@ -252,6 +295,7 @@ export interface ExperimentPlan {
   analysisFramework: AnalysisFramework;
   riskAssessment: ExperimentRiskAssessment;
 }
+}
 export type ExperimentType = 
   | 'ab_test'
   | 'multivariate'
@@ -260,6 +304,7 @@ export type ExperimentType =
   | 'personalization'
   | 'sequential';
 
+}
 export interface ExperimentVariant {
   id: string;
   name: string;
@@ -268,12 +313,16 @@ export interface ExperimentVariant {
   trafficPercentage: number;
   expectedImpact: number;
   riskLevel: 'low' | 'medium' | 'high'
+}
   }
+}
 export interface VariantChange {
   type: 'ui' | 'content' | 'flow' | 'logic' | 'design';
   element: string;
   change: string;
   rationale: string;
+}
+}
 }
 export interface TrafficAllocation {
   strategy: 'equal' | 'weighted' | 'adaptive' | 'sequential';
@@ -281,16 +330,22 @@ export interface TrafficAllocation {
   exclusionCriteria: string;
   inclusionCriteria: string;
 }
+}
+}
 export interface RampUpPlan {
   initialPercentage: number;
   finalPercentage: number;
   rampUpDuration: number; // Days,
   milestones: RampUpMilestone;
 }
+}
+}
 export interface RampUpMilestone {
   percentage: number;
   date: number;
   criteria: string;
+}
+}
 }
 export interface SampleSizeCalculation {
   minimumDetectableEffect: number;
@@ -301,6 +356,8 @@ export interface SampleSizeCalculation {
   recommendedDuration: number; // Days,
   confidenceInterval: [number, number];
 }
+}
+}
 export interface ExperimentMetric {
   name: string;
   type: 'primary' | 'secondary';
@@ -308,17 +365,23 @@ export interface ExperimentMetric {
   target: number;
   minimumDetectableEffect: number;
 }
+}
+}
 export interface GuardrailMetric {
   name: string;
   threshold: number;
   direction: 'increase' | 'decrease';
   action: 'stop' | 'alert' | 'adjust'
+}
   }
+}
 export interface AnalysisFramework {
   method: 'frequentist' | 'bayesian' | 'sequential';
   interimAnalyses: InterimAnalysis;
   finalAnalysis: FinalAnalysis;
   reportingSchedule: ReportingSchedule;
+}
+}
 }
 export interface InterimAnalysis {
   day: number;
@@ -326,16 +389,22 @@ export interface InterimAnalysis {
   metrics: string;
   decisionCriteria: string;
 }
+}
+}
 export interface FinalAnalysis {
   methods: string;
   visualizations: string;
   segmentAnalysis: string;
   statisticalTests: string;
 }
+}
+}
 export interface ReportingSchedule {
   frequency: 'daily' | 'weekly' | 'milestone';
   audience: string;
   content: string;
+}
+}
 }
 export interface ExperimentRiskAssessment {
   businessRisks: BusinessRisk;
@@ -343,11 +412,15 @@ export interface ExperimentRiskAssessment {
   userExperienceRisks: UXRisk;
   mitigationPlans: RiskMitigationPlan;
 }
+}
+}
 export interface BusinessRisk {
   risk: string;
   probability: number;
   impact: number;
   mitigation: string;
+}
+}
 }
 export interface TechnicalRisk {
   risk: string;
@@ -355,17 +428,23 @@ export interface TechnicalRisk {
   impact: number;
   mitigation: string;
 }
+}
+}
 export interface UXRisk {
   risk: string;
   probability: number;
   impact: number;
   mitigation: string;
 }
+}
+}
 export interface RiskMitigationPlan {
   risk: string;
   plan: string;
   responsible: string;
   timeline: number;
+}
+}
 }
 export interface ImpactPrediction {
   recommendationId: string;
@@ -376,6 +455,8 @@ export interface ImpactPrediction {
   assumptions: string;
   sensitivityAnalysis: SensitivityAnalysis;
 }
+}
+}
 export interface PredictedMetricImpact {
   metric: string;
   currentValue: number;
@@ -384,19 +465,27 @@ export interface PredictedMetricImpact {
   changeRelative: number;
   confidence: number;
 }
+}
+}
 export interface SensitivityAnalysis {
   factors: SensitivityFactor;
   scenarios: ImpactScenario;
+}
+}
 }
 export interface SensitivityFactor {
   factor: string;
   impact: number;
   uncertainty: number;
 }
+}
+}
 export interface ImpactScenario {
   scenario: string;
   probability: number;
   impact: PredictedMetricImpact;
+}
+}
 }
 export interface ResourceAllocation {
   totalBudget: number;
@@ -404,6 +493,8 @@ export interface ResourceAllocation {
   priorities: PriorityMatrix;
   timeline: AllocationTimeline;
   optimization: AllocationOptimization;
+}
+}
 }
 export interface AllocationItem {
   recommendationId: string;
@@ -413,11 +504,15 @@ export interface AllocationItem {
   expectedROI: number;
   priority: number;
 }
+}
+}
 export interface AllocatedResource {
   type: string;
   amount: number;
   duration: number;
   utilization: number;
+}
+}
 }
 export interface PriorityMatrix {
   highImpactLowEffort: string;
@@ -425,10 +520,14 @@ export interface PriorityMatrix {
   lowImpactLowEffort: string;
   lowImpactHighEffort: string;
 }
+}
+}
 export interface AllocationTimeline {
   period: string;
   allocations: AllocationItem;
   capacity: CapacityInfo;
+}
+}
 }
 export interface CapacityInfo {
   available: number;
@@ -436,11 +535,15 @@ export interface CapacityInfo {
   utilization: number;
   bottlenecks: string;
 }
+}
+}
 export interface AllocationOptimization {
   method: 'linear_programming' | 'genetic_algorithm' | 'monte_carlo';
   objective: 'maximize_roi' | 'minimize_risk' | 'balanced';
   constraints: OptimizationConstraint;
   solution: OptimizationSolution;
+}
+}
 }
 export interface OptimizationSolution {
   optimalAllocations: AllocationItem;
@@ -448,11 +551,15 @@ export interface OptimizationSolution {
   confidence: number;
   alternatives: AlternativeSolution;
 }
+}
+}
 export interface AlternativeSolution {
   description: string;
   allocations: AllocationItem;
   expectedOutcome: number;
   tradeoffs: string;
+}
+}
 }
 export interface OptimizationRoadmap {
   phases: RoadmapPhase;
@@ -460,6 +567,8 @@ export interface OptimizationRoadmap {
   dependencies: RoadmapDependency;
   riskMitigations: RoadmapRiskMitigation;
   success: RoadmapSuccess;
+}
+}
 }
 export interface RoadmapPhase {
   phase: string;
@@ -470,6 +579,8 @@ export interface RoadmapPhase {
   risks: string;
   successCriteria: string;
 }
+}
+}
 export interface RoadmapMilestone {
   name: string;
   date: number;
@@ -478,13 +589,17 @@ export interface RoadmapMilestone {
   successCriteria: string;
   impact: number;
 }
+}
+}
 export interface RoadmapDependency {
   from: string;
   to: string;
   type: 'blocking' | 'enabling' | 'informing';
   description: string;
   criticality: 'critical' | 'important' | 'nice_to_have'
+}
   }
+}
 export interface RoadmapRiskMitigation {
   risk: string;
   phase: string;
@@ -492,17 +607,23 @@ export interface RoadmapRiskMitigation {
   contingency: string;
   monitoring: string;
 }
+}
+}
 export interface RoadmapSuccess {
   definition: string;
   metrics: SuccessMetric;
   timeline: number;
   dependencies: string;
 }
+}
+}
 export interface SuccessMetric {
   metric: string;
   target: number;
   measurement: string;
   frequency: string;
+}
+}
 }
 export interface RiskAssessment {
   overallRiskScore: number;
@@ -511,12 +632,16 @@ export interface RiskAssessment {
   contingencyPlans: ContingencyPlan;
   monitoring: RiskMonitoring;
 }
+}
+}
 export interface RiskCategory {
   category: string;
   risks: Risk;
   overallScore: number;
   trend: 'increasing' | 'stable' | 'decreasing'
+}
   }
+}
 export interface Risk {
   id: string;
   description: string;
@@ -527,6 +652,8 @@ export interface Risk {
   triggers: string;
   indicators: string;
 }
+}
+}
 export interface MitigationStrategy {
   riskId: string;
   strategy: string;
@@ -534,6 +661,8 @@ export interface MitigationStrategy {
   cost: number;
   timeframe: number;
   responsible: string;
+}
+}
 }
 export interface ContingencyPlan {
   scenario: string;
@@ -543,11 +672,15 @@ export interface ContingencyPlan {
   resources: string;
   timeline: number;
 }
+}
+}
 export interface RiskMonitoring {
   indicators: RiskIndicator;
   alertThresholds: AlertThreshold;
   reportingFrequency: string;
   responsible: string;
+}
+}
 }
 export interface RiskIndicator {
   indicator: string;
@@ -555,11 +688,15 @@ export interface RiskIndicator {
   threshold: number;
   frequency: string;
 }
+}
+}
 export interface AlertThreshold {
   metric: string;
   threshold: number;
   severity: 'low' | 'medium' | 'high' | 'critical';
   action: string;
+}
+}
 }
 export interface CompetitiveAnalysis {
   competitors: Competitor;
@@ -567,6 +704,8 @@ export interface CompetitiveAnalysis {
   opportunities: CompetitiveOpportunity;
   threats: CompetitiveThreat;
   positioning: PositioningAnalysis;
+}
+}
 }
 export interface Competitor {
   name: string;
@@ -576,6 +715,8 @@ export interface Competitor {
   conversionStrategies: string;
   differentiators: string;
 }
+}
+}
 export interface CompetitiveBenchmark {
   metric: string;
   ourValue: number;
@@ -584,10 +725,14 @@ export interface CompetitiveBenchmark {
   marketAverage: number;
   ourRanking: number;
 }
+}
+}
 export interface CompetitorValue {
   competitor: string;
   value: number;
   confidence: number;
+}
+}
 }
 export interface CompetitiveOpportunity {
   opportunity: string;
@@ -597,6 +742,8 @@ export interface CompetitiveOpportunity {
   timeframe: number;
   requirements: string;
 }
+}
+}
 export interface CompetitiveThreat {
   threat: string;
   description: string;
@@ -605,6 +752,8 @@ export interface CompetitiveThreat {
   timeframe: number;
   mitigations: string;
 }
+}
+}
 export interface PositioningAnalysis {
   currentPosition: string;
   targetPosition: string;
@@ -612,6 +761,8 @@ export interface PositioningAnalysis {
   weaknesses: string;
   opportunities: string;
   strategies: string;
+}
+}
 }
 export interface OptimizationTrend {
   trend: string;
@@ -625,6 +776,7 @@ export interface OptimizationTrend {
   /**
   * Main Funnel Optimization Engine Component
   */
+}
 }
 export const FunnelOptimizationEngine: React.FC<FunnelOptimizationEngineProps> = ({)
   funnelDefinition,
@@ -758,6 +910,7 @@ export const FunnelOptimizationEngine: React.FC<FunnelOptimizationEngineProps> =
 /**
  * Optimization Engine Header Component
  */
+}
 interface OptimizationEngineHeaderProps {
   funnelDefinition: ConversionFunnelDefinition;
   currentPerformance: FunnelPerformanceSnapshot;
@@ -770,6 +923,7 @@ interface OptimizationEngineHeaderProps {
   analysisData,
   activeView,
   onViewChange
+}
 }) => {
   const views = [;
     { key: 'recommendations', label: 'Recommendations' },
@@ -821,6 +975,7 @@ interface OptimizationEngineHeaderProps {
 /**
  * Recommendations View Component
  */
+}
 interface RecommendationsViewProps {
   recommendations: OptimizationRecommendation;
   impactPredictions: ImpactPrediction;
@@ -831,6 +986,7 @@ interface RecommendationsViewProps {
   impactPredictions,
   selectedRecommendation,
   onRecommendationSelect
+}
 }) => {
   const prioritizedRecommendations = useMemo(() => {
     return [...recommendations].sort((a, b) => {
@@ -880,6 +1036,7 @@ interface RecommendationsViewProps {
 /**
  * Recommendation Card Component
  */
+}
 interface RecommendationCardProps {
   recommendation: OptimizationRecommendation;
   impactPrediction?: ImpactPrediction;
@@ -890,6 +1047,7 @@ interface RecommendationCardProps {
   impactPrediction,
   isSelected,
   onSelect
+}
 }) => {
   return;
     <div 
@@ -990,9 +1148,11 @@ interface RecommendationCardProps {
 /**
  * Experiments View Component
  */
+}
 interface ExperimentsViewProps {
   experimentPlans: ExperimentPlan;
   recommendations: OptimizationRecommendation;
+}
 const ExperimentsView: React.FC<ExperimentsViewProps> = ({ experimentPlans, recommendations }) => {
   return;
     <div className="experiments-view">
@@ -1008,8 +1168,10 @@ const ExperimentsView: React.FC<ExperimentsViewProps> = ({ experimentPlans, reco
 /**
  * Experiment Card Component
  */
+}
 interface ExperimentCardProps {
   experiment: ExperimentPlan;
+}
 const ExperimentCard: React.FC<ExperimentCardProps> = ({ experiment }) => {
   return;
     <div className="experiment-card">
@@ -1060,10 +1222,12 @@ const ExperimentCard: React.FC<ExperimentCardProps> = ({ experiment }) => {
 /**
  * Roadmap View Component
  */
+}
 interface RoadmapViewProps {
   roadmap: OptimizationRoadmap;
   recommendations: OptimizationRecommendation;
   riskAssessment: RiskAssessment;
+}
 const RoadmapView: React.FC<RoadmapViewProps> = ({ roadmap, recommendations, riskAssessment }) => {
   return;
     <div className="roadmap-view">
@@ -1089,8 +1253,10 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({ roadmap, recommendations, ris
 /**
  * Roadmap Phase Card Component
  */
+}
 interface RoadmapPhaseCardProps {
   phase: RoadmapPhase;
+}
 const RoadmapPhaseCard: React.FC<RoadmapPhaseCardProps> = ({ phase }) => {
   return;
     <div className="roadmap-phase-card">
@@ -1128,9 +1294,11 @@ const RoadmapPhaseCard: React.FC<RoadmapPhaseCardProps> = ({ phase }) => {
 /**
  * Resource Allocation View Component
  */
+}
 interface ResourceAllocationViewProps {
   allocation: ResourceAllocation;
   recommendations: OptimizationRecommendation;
+}
 const ResourceAllocationView: React.FC<ResourceAllocationViewProps> = ({ allocation, recommendations }) => {
   return;
     <div className="resource-allocation-view">
@@ -1202,9 +1370,11 @@ const ResourceAllocationView: React.FC<ResourceAllocationViewProps> = ({ allocat
 /**
  * Competitive Insights Panel Component
  */
+}
 interface CompetitiveInsightsPanelProps {
   analysis: CompetitiveAnalysis;
   trends: OptimizationTrend;
+}
 const CompetitiveInsightsPanel: React.FC<CompetitiveInsightsPanelProps> = ({ analysis, trends }) => {
   return;
     <div className="competitive-insights-panel">
@@ -1257,9 +1427,11 @@ const OptimizationEngineLoadingState: React.FC = () => ()
     <p>Analyzing optimization opportunities...</p>
   </div>
 );
+}
 interface OptimizationEngineErrorStateProps {
   error: string;
   onRetry: () => void;
+}
 const OptimizationEngineErrorState: React.FC<OptimizationEngineErrorStateProps> = ({ error, onRetry }) => ()
   <div className="optimization-engine-error">
     <div className="error-message">

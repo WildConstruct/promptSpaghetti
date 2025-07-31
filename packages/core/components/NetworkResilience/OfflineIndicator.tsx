@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NetworkStatus } from '../../network-resilience/NetworkResilienceManager';
 import { ConnectionState } from '../../network-resilience/ConnectionStateManager';
+}
 interface OfflineIndicatorProps {
   status: NetworkStatus;
   position?: 'top' | 'bottom';
@@ -17,6 +18,7 @@ interface OfflineIndicatorProps {
   onRetryConnection,
   onViewQueue,
   className = ''
+}
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [canDismiss, setCanDismiss] = useState(false);

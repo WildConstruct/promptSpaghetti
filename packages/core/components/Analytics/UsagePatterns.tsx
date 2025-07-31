@@ -11,6 +11,7 @@ import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Ba
 /**
  * Heat map component props
  */
+}
 interface HeatMapProps {
   data: Array<{ x: number; y: number; intensity: number }>;
   width?: number;
@@ -108,14 +109,17 @@ const UserJourneyFlow: React.FC<{ journeyData: unknown }> = ({ journeyData }) =>
  * Usage patterns props
  */
 
+}
 export interface UsagePatternsProps {
   analyticsClient: AnalyticsClient;
+}
   timeRange: { startTime: number; endTime: number };
   userId?: number;
   organizationId?: number;
 /**
  * Usage patterns state
  */
+}
 interface UsagePatternsState {
   loading: boolean;
   error: string | null;
@@ -128,6 +132,7 @@ interface UsagePatternsState {
   /**
   * Usage patterns component
   */
+}
 }
 export const UsagePatterns: React.FC<UsagePatternsProps> = ({)
   analyticsClient,

@@ -3,6 +3,7 @@
  * Defines measurable performance metrics and targets for the prompt graph system
  */
 
+}
 export interface KPIDefinition {
   id: string;
   name: string;
@@ -16,10 +17,12 @@ export interface KPIDefinition {
   method: string;
   frequency: 'realtime' | 'interval' | 'on-demand';
   source: string;
+}
 };
   businessImpact: string;
   priority: 'critical' | 'high' | 'medium' | 'low'
   }
+}
 export interface KPISnapshot {
   kpiId: string;
   value: number;
@@ -27,6 +30,8 @@ export interface KPISnapshot {
   status: 'excellent' | 'good' | 'warning' | 'critical';
   trend: 'improving' | 'stable' | 'degrading';
   metadata?: Record<string, any>;
+}
+}
 }
 export interface KPIThresholds {
   excellent: { min: number; max?: number };
@@ -470,7 +475,7 @@ export function calculateKPIStatus(kpiId: string, value: number): 'excellent' | 
   switch (kpiId) {
   case 'runtime_fcp':,
   case 'runtime_lcp':,
-  recommendations.push()
+  recommendations.push(
   'Optimize critical rendering path',
   'Minimize render-blocking resources',
   'Enable resource preloading for critical assets',
@@ -478,7 +483,7 @@ export function calculateKPIStatus(kpiId: string, value: number): 'excellent' | 
   );
   break;
   case 'runtime_fid':,
-  recommendations.push()
+  recommendations.push(
   'Reduce JavaScript execution time during initial load',
   'Break up long-running tasks with setTimeout or scheduler',
   'Use web workers for heavy computations',
@@ -486,7 +491,7 @@ export function calculateKPIStatus(kpiId: string, value: number): 'excellent' | 
   );
   break;
   case 'api_graph_execution':,
-  recommendations.push()
+  recommendations.push(
   'Implement caching for repeated graph operations',
   'Optimize graph traversal algorithms',
   'Consider parallel processing for independent nodes',
@@ -494,7 +499,7 @@ export function calculateKPIStatus(kpiId: string, value: number): 'excellent' | 
   );
   break;
   case 'memory_peak_usage':,
-  recommendations.push()
+  recommendations.push(
   'Implement object pooling for frequently created objects',
   'Add proper cleanup in component unmounting',
   'Use virtualization for large lists',
@@ -503,7 +508,7 @@ export function calculateKPIStatus(kpiId: string, value: number): 'excellent' | 
   break;
   case 'bundle_main_size':,
   case 'bundle_total_size':,
-  recommendations.push()
+  recommendations.push(
   'Enable code splitting for route-based loading',
   'Remove unused dependencies and dead code',
   'Use dynamic imports for non-critical features',
@@ -511,7 +516,7 @@ export function calculateKPIStatus(kpiId: string, value: number): 'excellent' | 
   );
   break;
   default:,
-  recommendations.push()
+  recommendations.push(
   'Monitor this metric closely for trends',
   'Consider performance optimization strategies',
   'Review related system components'

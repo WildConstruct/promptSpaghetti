@@ -8,6 +8,7 @@
 import React from 'react';
 import { CreateContributionRequest } from '../../types/contributions';
 
+}
 export interface ContributionSubmissionFormProps {
     onSubmit: (data: CreateContributionRequest) => void;
     onCancel: () => void;
@@ -17,3 +18,4 @@ export interface ContributionSubmissionFormProps {
 export declare const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProps>;
 export default ContributionSubmissionForm;
 //# sourceMappingURL=ContributionSubmissionForm.d.ts.map
+}

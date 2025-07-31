@@ -216,6 +216,7 @@ export const loadingAnimations = {
 /**
  * React component wrapper for smooth animations
  */
+}
 interface AnimatedProps {
   children: React.ReactNode;
   className?: string;
@@ -232,6 +233,7 @@ interface AnimatedProps {
   duration = animationDurations.normal,
   delay = 0,
   isVisible = true
+}
 }) => {
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => {

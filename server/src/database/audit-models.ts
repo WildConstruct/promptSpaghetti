@@ -99,6 +99,7 @@ export enum ComplianceStandard {
 
 // Core audit event model
 }
+}
 export interface AuditEvent {
   id: string;
   eventType: AuditEventType;
@@ -143,6 +144,7 @@ export interface AuditEvent {
       latitude: number;
       longitude: number;
 }
+}
     };
   };
   
@@ -172,6 +174,7 @@ export interface AuditEvent {
 
 // Audit trail for tracking changes over time
 }
+}
 export interface AuditTrail {
   id: string;
   resourceType: string;
@@ -184,8 +187,10 @@ export interface AuditTrail {
   updatedAt: Date;
 }
 }
+}
 
 // Audit session for tracking user sessions
+}
 }
 export interface AuditSession {
   id: string;
@@ -215,8 +220,10 @@ export interface AuditSession {
   updatedAt: Date;
 }
 }
+}
 
 // Compliance report model
+}
 }
 export interface ComplianceReport {
   id: string;
@@ -230,6 +237,7 @@ export interface ComplianceReport {
     userIds?: string[];
     resourceTypes?: string[];
     eventTypes?: AuditEventType[];
+}
 }
   };
   
@@ -265,6 +273,7 @@ export interface ComplianceReport {
 
 // Audit configuration
 }
+}
 export interface AuditConfiguration {
   id: string;
   
@@ -299,6 +308,7 @@ export interface AuditConfiguration {
     dayOfMonth?: number;
     time: string; // HH:mm format
 }
+}
   };
   
   // Notification settings
@@ -311,6 +321,7 @@ export interface AuditConfiguration {
 }
 
 // Audit statistics
+}
 }
 export interface AuditStatistics {
   totalEvents: number;
@@ -329,6 +340,7 @@ export interface AuditStatistics {
     userId: string;
     userEmail: string;
     eventCount: number;
+}
 }
   }>;
   
@@ -360,6 +372,7 @@ export interface AuditStatistics {
 
 // Request/Response types for API
 }
+}
 export interface CreateAuditEventRequest {
   eventType: AuditEventType;
   category: AuditCategory;
@@ -377,7 +390,9 @@ export interface CreateAuditEventRequest {
   complianceStandards?: ComplianceStandard[];
 }
 }
+}
 
+}
 }
 export interface AuditEventQuery {
   // Time filters
@@ -418,7 +433,9 @@ export interface AuditEventQuery {
   sortOrder?: 'asc' | 'desc';
 }
 }
+}
 
+}
 }
 export interface AuditEventResponse {
   events: AuditEvent[];
@@ -427,6 +444,7 @@ export interface AuditEventResponse {
     limit: number;
     total: number;
     totalPages: number;
+}
 }
   };
   summary: {
@@ -442,6 +460,7 @@ export interface AuditEventResponse {
 }
 
 }
+}
 export interface CreateComplianceReportRequest {
   reportType: ComplianceReport['reportType'];
   standard: ComplianceStandard;
@@ -451,8 +470,10 @@ export interface CreateComplianceReportRequest {
   format?: ComplianceReport['format'];
 }
 }
+}
 
 // Audit middleware context
+}
 }
 export interface AuditContext {
   actorId?: string;
@@ -468,8 +489,10 @@ export interface AuditContext {
   metadata?: Record<string, any>;
 }
 }
+}
 
 // Export configuration for different formats
+}
 }
 export interface ExportConfiguration {
   format: 'json' | 'csv' | 'xml' | 'pdf';
@@ -479,6 +502,7 @@ export interface ExportConfiguration {
   encryption?: {
     algorithm: string;
     keyId: string;
+}
 }
   };
   digitalSignature?: boolean;

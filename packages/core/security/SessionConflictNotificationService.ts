@@ -68,6 +68,8 @@ export enum NotificationType {
   templateCustomization: boolean;
   // User Notification Preferences
 }
+}
+}
 export interface UserNotificationPreferences {
   userId: string;
   channels: {
@@ -78,6 +80,7 @@ export interface UserNotificationPreferences {
   start: string; // HH:MM format,
   end: string;
   timezone: string;
+}
 };
     };
   };
@@ -93,6 +96,7 @@ export interface UserNotificationPreferences {
 };
 
 // Notification Message
+}
 }
 export interface NotificationMessage {
   id: string;
@@ -115,6 +119,7 @@ export interface NotificationMessage {
   lastAttempt?: Date;
   deliveredAt?: Date;
   error?: string;
+}
 };
   };
   metadata: {
@@ -126,6 +131,7 @@ export interface NotificationMessage {
 
 // Notification Action
 }
+}
 export interface NotificationAction {
   id: string;
   label: string;
@@ -135,6 +141,8 @@ export interface NotificationAction {
   requiresConfirmation?: boolean;
   timeout?: number; // seconds,
   // Notification Template
+}
+}
 }
 export interface NotificationTemplate {
   type: NotificationType;
@@ -146,10 +154,12 @@ export interface NotificationTemplate {
   [actionId: string]: {
   label: string;
   type: NotificationAction['type'];
+}
 };
   };
 
 // Conflict Resolution Response
+}
 }
 export interface ConflictResolutionResponse {
   conflictId: string;
@@ -159,6 +169,8 @@ export interface ConflictResolutionResponse {
   confirmed: boolean;
   timestamp: Date;
   // Notification Statistics
+}
+}
 }
 export interface NotificationStats {
   totalSent: number;
@@ -171,6 +183,7 @@ export interface NotificationStats {
   delivered: number;
   failed: number;
   avgDeliveryTime: number;
+}
 };
   };
   typeStats: {
@@ -204,10 +217,11 @@ export class SessionConflictNotificationService extends EventEmitter {
   /**
    * Send session conflict notification
    */
-  public async sendConflictNotification(()
+  public async sendConflictNotification(((
     conflict: SessionConflict,
-    affectedUserIds: string,
+    affectedUserIds: string
   ): Promise<{ sent: string; failed: string }> {
+
   const sent: string = [];
   const failed: string = [];
   for (const userId of affectedUserIds) {
@@ -233,12 +247,13 @@ export class SessionConflictNotificationService extends EventEmitter {
   /**
    * Send session eviction notification
    */
-  public async sendEvictionNotification()
+  public async sendEvictionNotification(
     sessionId: string,
     userId: string,
     reason: string,
     gracePeriodMinutes?: number
   ): Promise<boolean> {
+
     try {
       const preferences = this.getUserPreferences(userId);
       const notification = this.createEvictionNotification(;);
@@ -259,7 +274,7 @@ export class SessionConflictNotificationService extends EventEmitter {
   /**
    * Send emergency override notification
    */
-  public async sendEmergencyOverrideNotification()
+  public async sendEmergencyOverrideNotification(
     adminUserId: string,
     targetUserId: string,
     evictedSessions: string): Promise<boolean> {,
@@ -282,7 +297,7 @@ export class SessionConflictNotificationService extends EventEmitter {
   /**
    * Prompt user for conflict resolution choice
    */
-  public async promptUserChoice()
+  public async promptUserChoice(
     conflict: SessionConflict,
     userId: string,
     timeoutMinutes: number = 5): Promise<ConflictResolutionResponse | null> {,
@@ -343,7 +358,7 @@ export class SessionConflictNotificationService extends EventEmitter {
   /**
   * Send grace period expiration warning
   */
-  public async sendGracePeriodWarning()
+  public async sendGracePeriodWarning(
   sessionId: string,
   userId: string,
   minutesRemaining: number): Promise<boolean> {,
@@ -516,6 +531,7 @@ export class SessionConflictNotificationService extends EventEmitter {
     });
     // Add more templates...
   private async sendNotification(notification: NotificationMessage): Promise<boolean> {
+
     this.notifications.set(notification.id, notification);
     if (this.config.batchingEnabled) {
       return this.addToBatch(notification);
@@ -557,6 +573,7 @@ export class SessionConflictNotificationService extends EventEmitter {
 });
     return allSuccessful;
   private async deliverToChannel(notification: NotificationMessage, channel: NotificationChannel): Promise<boolean> {
+
   // In a real implementation, this would integrate with actual delivery services
   switch (channel) {
   case NotificationChannel.EMAIL:,
@@ -584,6 +601,7 @@ export class SessionConflictNotificationService extends EventEmitter {
 });
     return true;
   private async sendSMS(notification: NotificationMessage): Promise<boolean> {
+
     // Mock SMS delivery
     this.emit('smsSent', { )
       to: '+1234567890', 
@@ -591,6 +609,7 @@ export class SessionConflictNotificationService extends EventEmitter {
     });
     return true;
   private async sendPush(notification: NotificationMessage): Promise<boolean> {
+
   // Mock push notification delivery
   this.emit('pushSent', { )
   deviceToken: 'device_token',
@@ -599,6 +618,7 @@ export class SessionConflictNotificationService extends EventEmitter {
 });
     return true;
   private async sendInApp(notification: NotificationMessage): Promise<boolean> {
+
   // In-app notifications are handled by the UI
   this.emit('inAppNotification', notification);
   return true;
@@ -610,6 +630,7 @@ export class SessionConflictNotificationService extends EventEmitter {
 });
     return true;
   private async sendSlack(notification: NotificationMessage): Promise<boolean> {
+
     // Mock Slack delivery
     this.emit('slackSent', { )
       channel: '#alerts', 
@@ -617,6 +638,7 @@ export class SessionConflictNotificationService extends EventEmitter {
     });
     return true;
   private async sendTeams(notification: NotificationMessage): Promise<boolean> {
+
     // Mock Teams delivery
     this.emit('teamsSent', { )
       channel: 'Security Alerts', 

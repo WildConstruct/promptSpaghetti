@@ -3,6 +3,7 @@
 import React from 'react';
 import { Lock, Clock, AlertTriangle, Users, Activity, TrendingUp } from 'lucide-react';
 import { LockingStatistics, LockConflict } from '../types/locking';
+}
 interface LockStatusOverviewProps {
   statistics: LockingStatistics;
   conflicts: LockConflict;
@@ -11,6 +12,7 @@ interface LockStatusOverviewProps {
   statistics,
   conflicts,
   onConflictClick
+}
 }) => {
   const pendingConflicts = conflicts.filter(c => c.status === 'pending');
   const resolvedConflicts = conflicts.filter(c => c.status === 'resolved');

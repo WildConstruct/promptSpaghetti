@@ -14,6 +14,7 @@ import { AuditService } from './AuditService';
 import { RateLimitService } from './RateLimitService';
 
 }
+}
 export interface ApiKeyConfig {
   keyLength: number;
   defaultExpirationDays: number;
@@ -26,9 +27,11 @@ export interface ApiKeyConfig {
     requestsPerHour: number;
     requestsPerDay: number;
 }
+}
   };
 }
 
+}
 }
 export interface ApiKey {
   keyId: string;
@@ -47,6 +50,7 @@ export interface ApiKey {
     requestsPerHour: number;
     requestsPerDay: number;
 }
+}
   };
   ipWhitelist?: string[];
   metadata: {
@@ -58,6 +62,7 @@ export interface ApiKey {
 }
 
 }
+}
 export interface CreateApiKeyRequest {
   name: string;
   description?: string;
@@ -68,11 +73,13 @@ export interface CreateApiKeyRequest {
     requestsPerHour?: number;
     requestsPerDay?: number;
 }
+}
   };
   ipWhitelist?: string[];
   purpose: string;
 }
 
+}
 }
 export interface ApiKeyValidationResult {
   valid: boolean;
@@ -85,6 +92,7 @@ export interface ApiKeyValidationResult {
       minute: number;
       hour: number;
       day: number;
+}
 }
     };
     resetTimes: {

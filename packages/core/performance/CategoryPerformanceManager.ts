@@ -7,6 +7,7 @@
 import { EventEmitter } from 'events';
 import { PerformanceMonitor, PerformanceMetrics } from '../monitoring';
 
+}
 export interface CategoryPerformanceConfig {
   enableCategoryOptimization: boolean;
   enableDynamicThresholds: boolean;
@@ -17,7 +18,9 @@ export interface CategoryPerformanceConfig {
   memoryThreshold: number;
   cpuThreshold: number;
   responseTimeTarget: number;
+}
 };
+}
 }
 export interface CategoryConfig {
   name: string;
@@ -28,6 +31,7 @@ export interface CategoryConfig {
   maxExecutionTimeMs: number;
   maxConcurrentNodes: number;
   queueLimit: number;
+}
 };
   cacheStrategy: {
   enabled: boolean;
@@ -41,6 +45,7 @@ export interface CategoryConfig {
   cooldownMs: number;
   maxInstances: number;
 };
+}
 }
 export interface CategoryMetrics {
   categoryName: string;
@@ -62,6 +67,8 @@ export interface CategoryMetrics {
   recommendations: string;
   lastUpdated: number;
 }
+}
+}
 export interface OptimizationAction {
   id: string;
   category: string;
@@ -72,6 +79,7 @@ export interface OptimizationAction {
   performanceGain: number; // percentage,
   resourceCost: number; // percentage,
   confidence: number; // 0-1,
+}
 };
   timestamp: number;
   applied: boolean;
@@ -137,6 +145,7 @@ export class CategoryPerformanceManager extends EventEmitter {
    * Register a node execution request with category-aware queuing
    */
   async registerExecution(nodeId: string, nodeType: string, priority: number = 0): Promise<string> {
+
     const category = this.getCategoryForNodeType(nodeType);
     const categoryConfig = this.config.categories[category];
     if (!categoryConfig) {
@@ -169,7 +178,7 @@ export class CategoryPerformanceManager extends EventEmitter {
   priority: 'low' | 'medium' | 'high' | 'critical';
   estimatedImpact: number;
 }> {
-  const recommendations: Array<{,
+  const recommendations: Array<{
   category: string;
   recommendations: string;
   priority: 'low' | 'medium' | 'high' | 'critical';
@@ -193,6 +202,7 @@ export class CategoryPerformanceManager extends EventEmitter {
    * Apply optimization action to a category
    */
   async applyOptimization(actionId: string): Promise<boolean> {
+
     const action = this.optimizationActions.get(actionId);
     if (!action) {
       throw new Error(`Optimization action not found: ${actionId}`);}
@@ -242,6 +252,7 @@ export class CategoryPerformanceManager extends EventEmitter {
    * Force optimization for a specific category
    */
   async forceOptimization(category: string): Promise<OptimizationAction> {
+
     const metrics = this.categoryMetrics.get(category);
     if (!metrics) {
       throw new Error(`Category not found: ${category}`);}
@@ -390,6 +401,7 @@ export class CategoryPerformanceManager extends EventEmitter {
   lastUpdated: Date.now(),
 };
   private async canExecuteInCategory(category: string): Promise<boolean> {
+
     const categoryConfig = this.config.categories[category];
     const executionPool = this.executionPools.get(category);
     if (!categoryConfig || !executionPool) {
@@ -404,6 +416,7 @@ export class CategoryPerformanceManager extends EventEmitter {
       return false;
     return true;
   private async executeImmediate(nodeId: string, nodeType: string, category: string): Promise<string> {
+
     const executionPool = this.executionPools.get(category);
     if (!executionPool) {
       throw new Error(`Category not found: ${category}`);}

@@ -12,6 +12,7 @@ export type CaseStudyStatus = 'draft' | 'submitted' | 'under-review' | 'approved
 export type IndustryCategory = 'film-production' | 'advertising' | 'gaming' | 'publishing' | 'education' | 'healthcare' | 'finance' | 'technology' | 'legal' | 'consulting' | 'e-commerce' | 'non-profit' | 'other';
 export type MediaType = 'image' | 'video' | 'document' | 'screenshot' | 'chart' | 'infographic' | 'audio';
 
+}
 export interface CaseStudyMedia {
     id: string;
     type: MediaType;
@@ -25,11 +26,13 @@ export interface CaseStudyMedia {
     dimensions?: {
         width: number;
         height: number;
+}
     };
     duration?: number;
     uploadedAt: string;
     uploadedBy: string;
 
+}
 export interface MediaGallery {
     featured: CaseStudyMedia[];
     screenshots: CaseStudyMedia[];
@@ -37,11 +40,13 @@ export interface MediaGallery {
     documents: CaseStudyMedia[];
     charts: CaseStudyMedia[];
 
+}
 export interface ROIMetrics {
     timeSaved: {
         hours: number;
         period: 'day' | 'week' | 'month' | 'project';
         description: string;
+}
     };
     costSavings: {
         amount: number;
@@ -70,6 +75,7 @@ export interface ROIMetrics {
         consistencyImprovement: number;
     };
 
+}
 export interface PerformanceMetrics {
     templatesUsed: number;
     implementationTime: number;
@@ -84,8 +90,10 @@ export interface PerformanceMetrics {
         before: number | string;
         after: number | string;
         unit?: string;
+}
     }[];
 
+}
 export interface TemplateReference {
     templateId: string;
     templateName: string;
@@ -98,12 +106,14 @@ export interface TemplateReference {
     purchaseDate?: string;
     cost?: number;
 
+}
 export interface TemplateImplementation {
     originalTemplate: TemplateReference;
     customizations: {
         description: string;
         reasonForChange: string;
         impact: string;
+}
     }[];
     results: {
         outputExamples: string[];
@@ -113,6 +123,7 @@ export interface TemplateImplementation {
     lessonsLearned: string[];
     recommendations: string[];
 
+}
 export interface CaseStudy {
     id: string;
     title: string;
@@ -131,6 +142,7 @@ export interface CaseStudy {
         results: string;
         learnings: string;
         nextSteps?: string;
+}
     };
     media: MediaGallery;
     featuredImage?: CaseStudyMedia;
@@ -195,6 +207,7 @@ export interface CaseStudy {
         priority: number;
     };
 
+}
 export interface CreateCaseStudyRequest {
     title: string;
     subtitle?: string;
@@ -210,6 +223,7 @@ export interface CreateCaseStudyRequest {
     collaborators?: CaseStudy['collaborators'];
     config?: Partial<CaseStudy['config']>;
 
+}
 export interface UpdateCaseStudyRequest {
     id: string;
     title?: string;
@@ -225,6 +239,7 @@ export interface UpdateCaseStudyRequest {
     config?: Partial<CaseStudy['config']>;
     updateReason: string;
 
+}
 export interface CaseStudyFilter {
     type?: CaseStudyType | CaseStudyType[];
     industry?: IndustryCategory | IndustryCategory[];
@@ -248,19 +263,23 @@ export interface CaseStudyFilter {
     search?: string;
     featuredOnly?: boolean;
 
+}
 export interface CaseStudySort {
     field: 'createdAt' | 'publishedAt' | 'updatedAt' | 'views' | 'likes' | 'helpfulVotes' | 'roiValue' | 'timeSaved' | 'title' | 'priority';
     direction: 'asc' | 'desc';
 
+}
 export interface CaseStudyQuery {
     filters?: CaseStudyFilter;
     sort?: CaseStudySort;
     pagination: {
         offset: number;
         limit: number;
+}
     };
     include?: ('media' | 'templates' | 'metrics' | 'author' | 'engagement')[];
 
+}
 export interface CaseStudyQueryResponse {
     caseStudies: CaseStudy[];
     pagination: {
@@ -268,24 +287,26 @@ export interface CaseStudyQueryResponse {
         offset: number;
         limit: number;
         hasMore: boolean;
+}
     };
     aggregations: {
         totalCaseStudies: number;
-        byType: Array<{,
+        byType: Array<{
             type: CaseStudyType;
             count: number;
         }>;
-        byIndustry: Array<{,
+        byIndustry: Array<{
             industry: IndustryCategory;
             count: number;
         }>;
-        byDifficulty: Array<{,
+        byDifficulty: Array<{
             difficulty: string;
             count: number;
         }>;
         featuredCount: number;
     };
 
+}
 export interface CaseStudyAnalytics {
     caseStudyId: string;
     totalViews: number;
@@ -300,35 +321,36 @@ export interface CaseStudyAnalytics {
     templatesDiscovered: number;
     templatePurchases: number;
     implementationAttempts: number;
-    topCountries: Array<{,
+    topCountries: Array<{
         country: string;
         views: number;
+}
     }>;
-    topCities: Array<{,
+    topCities: Array<{
         city: string;
         views: number;
     }>;
-    topReferrers: Array<{,
+    topReferrers: Array<{
         source: string;
         visits: number;
     }>;
-    searchKeywords: Array<{,
+    searchKeywords: Array<{
         keyword: string;
         frequency: number;
     }>;
-    viewsByDay: Array<{,
+    viewsByDay: Array<{
         date: string;
         views: number;
     }>;
-    engagementByWeek: Array<{,
+    engagementByWeek: Array<{
         week: string;
         engagement: number;
     }>;
-    viewsByUserType: Array<{,
+    viewsByUserType: Array<{
         userType: string;
         count: number;
     }>;
-    viewsByIndustry: Array<{,
+    viewsByIndustry: Array<{
         industry: string;
         count: number;
     }>;

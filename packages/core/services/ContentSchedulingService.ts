@@ -8,6 +8,7 @@
  * Epic: 17 - Backstage Admin Controls
  */
 
+}
 export interface ContentItem {
   id: string;
   title: string;
@@ -23,6 +24,8 @@ export interface ContentItem {
   createdBy: string;
   lastModifiedBy?: string;
 }
+}
+}
 export interface ContentData {
   // Core content
   body?: string;
@@ -36,16 +39,20 @@ export interface ContentData {
   fields?: Record<string, any>;
   customData?: Record<string, any>;
 }
+}
+}
 export interface MediaAsset {
   id: string;
   filename: string;
   url: string;
   type: 'image' | 'video' | 'document' | 'audio';
   size: number;
+}
   dimensions?: { width: number; height: number };
   duration?: number; // for video/audio
   alt?: string;
   caption?: string;
+}
 }
 export interface ContentMetadata {
   // SEO
@@ -73,7 +80,9 @@ export interface ContentMetadata {
   deadline?: Date;
   priority: 'low' | 'medium' | 'high' | 'urgent';
   notes?: WorkflowNote;
+}
 };
+}
 }
 export interface WorkflowNote {
   id: string;
@@ -81,6 +90,8 @@ export interface WorkflowNote {
   message: string;
   type: 'comment' | 'review' | 'approval' | 'rejection';
   timestamp: Date;
+}
+}
 }
 export interface ContentScheduling {
   // Publication scheduling
@@ -100,6 +111,8 @@ export interface ContentScheduling {
   prerequisites?: string; // content IDs that must be published first,
   blocks?: string; // content IDs that this blocks from publishing,
 }
+}
+}
 export interface RecurrencePattern {
   type: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'custom';
   interval: number; // Every N days/weeks/months,
@@ -109,6 +122,8 @@ export interface RecurrencePattern {
   endDate?: Date;
   occurrences?: number; // Max number of occurrences,
   customPattern?: string; // Cron-like expression,
+}
+}
 }
 export interface PromotionSchedule {
   id: string;
@@ -122,12 +137,16 @@ export interface PromotionSchedule {
   demographics?: Record<string, any>;
   behavioral?: Record<string, any>;
   geographic?: string;
+}
 };
+}
 }
 export interface ScheduleCondition {
   type: 'content_published' | 'date_range' | 'performance_threshold' | 'approval_received' | 'custom';
   parameters: Record<string, any>;
   description: string;
+}
+}
 }
 export interface ContentPerformance {
   views: number;
@@ -138,11 +157,12 @@ export interface ContentPerformance {
   conversionRate?: number;
   revenue?: number;
   // Time-based metrics
-  metrics?: Array<{,
+  metrics?: Array<{
   timestamp: Date;
   views: number;
   engagement: number;
   shares: number;
+}
 }>;
   // A/B testing results
   variants?: Array<{
@@ -176,6 +196,7 @@ export type ContentStatus =
   | 'deleted'
   | 'error';
 
+}
 export interface ContentFilter {
   types?: ContentType;
   statuses?: ContentStatus;
@@ -183,12 +204,14 @@ export interface ContentFilter {
   tags?: string;
   collections?: string;
   authors?: string;
+}
   dateRange?: { start?: Date; end?: Date };
   searchQuery?: string;
   hasSchedule?: boolean;
   scheduledBetween?: { start: Date; end: Date };
   language?: string;
   workflowStage?: string;
+}
 }
 export interface ScheduleBatch {
   id: string;
@@ -203,15 +226,19 @@ export interface ScheduleBatch {
   completed: number;
   failed: number;
   errors: BatchError;
+}
 };
   createdAt: Date;
   createdBy: string;
   executedAt?: Date;
   completedAt?: Date;
 }
+}
 export interface BatchOperation {
   type: 'publish' | 'unpublish' | 'schedule' | 'promote' | 'archive' | 'delete' | 'update_metadata';
   parameters?: Record<string, any>;
+}
+}
 }
 export interface BatchSchedule {
   executeAt?: Date;
@@ -220,31 +247,36 @@ export interface BatchSchedule {
   enabled: boolean;
   interval: number; // minutes between each item,
   randomization?: boolean; // add random delay,
+}
 };
+}
 }
 export interface BatchError {
   contentId: string;
   error: string;
   timestamp: Date;
 }
+}
+}
 export interface SchedulingStats {
   totalContent: number;
   scheduledContent: number;
   publishedToday: number;
   unpublishedToday: number;
-  upcomingSchedules: Array<{,
+  upcomingSchedules: Array<{
   date: Date;
   count: number;
-  items: Array<{,
+  items: Array<{
   id: string;
   title: string;
   type: ContentType;
   operation: string;
+}
 }>;
   }>;
   performanceMetrics: {
   averageViewsPerPost: number;
-  topPerformingContent: Array<{,
+  topPerformingContent: Array<{
   id: string;
   title: string;
   views: number;
@@ -309,6 +341,7 @@ export class ContentSchedulingService {
     this.notifyListeners('content_updated', updatedContent);
     return updatedContent;
   async deleteContent(contentId: string, deletedBy: string): Promise<boolean> {
+
   const content = this.content.get(contentId);
   if (!content) return false;
   // Mark as deleted instead of hard delete
@@ -670,12 +703,14 @@ export class ContentSchedulingService {
   private generateBatchId(): string {
     return `batch_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   private sleep(ms: number): Promise<void> {
+
   return new Promise(resolve => setTimeout(resolve, ms));
   export interface SchedulingEvent {
   type: string;
   data: any;
   timestamp: Date;
   // Export singleton instance
+}
 }
 export const contentSchedulingService = ContentSchedulingService.getInstance();
 

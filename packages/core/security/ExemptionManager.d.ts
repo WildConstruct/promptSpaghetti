@@ -64,6 +64,7 @@ export declare enum ExemptionReason {
     PERFORMANCE = "performance",
     USER_EXPERIENCE = "user_experience"
 
+}
 export interface SecurityExemption {
     id: string;
     type: ExemptionType;
@@ -78,6 +79,7 @@ export interface SecurityExemption {
         userEmail: string;
         role: AdminRole;
         timestamp: Date;
+}
     };
     approvedBy?: {
         userId: string;
@@ -139,13 +141,14 @@ export interface SecurityExemption {
     usage: {
         timesUsed: number;
         lastUsed?: Date;
-        usageHistory: Array<{,
+        usageHistory: Array<{
             timestamp: Date;
             context: Record<string, any>;
             source: string;
         }>;
     };
 
+}
 export interface ExemptionAuditEntry {
     id: string;
     timestamp: Date;
@@ -155,11 +158,13 @@ export interface ExemptionAuditEntry {
         userEmail: string;
         role?: AdminRole;
         type: 'user' | 'admin' | 'system'
+}
   };
     details: Record<string, any>;
     ipAddress?: string;
     userAgent?: string;
 
+}
 export interface ExemptionRequest {
     type: ExemptionType;
     scope: ExemptionScope;
@@ -175,6 +180,7 @@ export interface ExemptionRequest {
     autoRenew?: boolean;
     emergencyOverride?: boolean;
 
+}
 export interface ExemptionUsageContext {
     endpoint?: string;
     ipAddress?: string;
@@ -184,6 +190,7 @@ export interface ExemptionUsageContext {
     sessionId?: string;
     metadata?: Record<string, any>;
 
+}
 export interface ExemptionQuery {
     types?: ExemptionType[];
     scopes?: ExemptionScope[];
@@ -200,6 +207,7 @@ export interface ExemptionQuery {
     limit?: number;
     offset?: number;
 
+}
 export interface ExemptionPolicy {
     type: ExemptionType;
     scope: ExemptionScope;
@@ -255,6 +263,7 @@ export declare class ExemptionManager extends EventEmitter {
         granted: boolean;
         exemption?: SecurityExemption;
         reason?: string;
+}
     };
     /**
      * Revoke an active exemption
@@ -302,7 +311,7 @@ export declare class ExemptionManager extends EventEmitter {
         usageStats: {
             totalUsage: number;
             averageUsagePerExemption: number;
-            mostUsedExemptions: Array<{,
+            mostUsedExemptions: Array<{
                 id: string;
                 usage: number;
             }>;

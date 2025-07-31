@@ -13,6 +13,7 @@
 import { ConversionEvent, ConversionFunnel, ConversionStep } from './ConversionTracker';
 import { MarketplaceEvent } from './MarketplaceMetrics';
 
+}
 export interface EnhancedConversionEvent extends ConversionEvent {
   // Enhanced properties for Story 30.2
   deviceFingerprint?: string;
@@ -35,6 +36,7 @@ export interface EnhancedConversionEvent extends ConversionEvent {
   latency: number;
 };
 
+}
 export interface TouchPoint {
   id: string;
   timestamp: number;
@@ -47,6 +49,7 @@ export interface TouchPoint {
   value?: number;
   position: number; // Position in customer journey,
   influence: number; // Influence score 0-1,
+}
 }
 export type MarketingChannel = 
   | 'organic_search'
@@ -62,11 +65,14 @@ export type MarketingChannel =
   | 'content_marketing'
   | 'marketplace_internal';
 
+}
 export interface AttributionModel {
   name: 'first_touch' | 'last_touch' | 'linear' | 'time_decay' | 'position_based' | 'data_driven';
   weight: number;
   touchpoint: TouchPoint;
   attribution_value: number;
+}
+}
 }
 export interface EnhancedConversionFunnel extends ConversionFunnel {
   // Enhanced funnel properties for Story 30.2
@@ -87,6 +93,7 @@ export interface EnhancedConversionFunnel extends ConversionFunnel {
   alerting: AlertingConfig;
 };
 
+}
 export interface ConversionGoal {
   id: string;
   name: string;
@@ -96,20 +103,26 @@ export interface ConversionGoal {
   conditions: Record<string, any>;
   weight: number; // For attribution calculation,
 }
+}
+}
 export interface UserSegment {
   id: string;
   name: string;
   definition: {
   rules: SegmentRule;
   operator: 'AND' | 'OR'
+}
   };
   size: number;
   conversionRate: number;
+}
 }
 export interface SegmentRule {
   field: string;
   operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'in' | 'not_in';
   value: any;
+}
+}
 }
 export interface CohortDefinition {
   id: string;
@@ -119,17 +132,23 @@ export interface CohortDefinition {
   analysisWindow: number; // Days to track cohort,
   retentionPeriods: number; // Days to measure retention,
 }
+}
+}
 export interface AnomalyThreshold {
   metric: 'conversion_rate' | 'drop_off_rate' | 'time_to_convert' | 'volume';
   threshold: number;
   direction: 'above' | 'below' | 'change';
   sensitivity: 'low' | 'medium' | 'high'
+}
   }
+}
 export interface AlertingConfig {
   channels: ('email' | 'slack' | 'webhook' | 'dashboard')[];
   recipients: string;
   frequency: 'immediate' | 'hourly' | 'daily';
   cooldown: number; // Minutes between similar alerts,
+}
+}
 }
 export interface CrossDeviceIdentity {
   primaryUserId: string;
@@ -141,7 +160,9 @@ export interface CrossDeviceIdentity {
   createdAt: number;
   expiresAt: number;
   purpose: string;
+}
 };
+}
 }
 export interface DeviceIdentity {
   deviceId: string;
@@ -154,11 +175,15 @@ export interface DeviceIdentity {
   linkedAt: number;
   linkingSignals: LinkingSignal;
 }
+}
+}
 export interface LinkingSignal {
   type: 'login' | 'email' | 'phone' | 'behavioral' | 'temporal';
   strength: number; // 0-1,
   timestamp: number;
   metadata: Record<string, any>;
+}
+}
 }
 export interface FunnelStreamConfig {
   streamName: string;
@@ -168,6 +193,7 @@ export interface FunnelStreamConfig {
   maxRetries: number;
   backoffMultiplier: number;
   maxBackoffTime: number;
+}
 };
   deadLetterQueue: {
   enabled: boolean;
@@ -178,6 +204,7 @@ export interface FunnelStreamConfig {
   partitionCount: number;
 };
 }
+}
 export interface ConversionPatternInsight {
   pattern: {
   id: string;
@@ -185,6 +212,7 @@ export interface ConversionPatternInsight {
   description: string;
   frequency: number;
   averageValue: number;
+}
 };
   segments: {
   high_value: UserJourneyPattern;
@@ -196,6 +224,7 @@ export interface ConversionPatternInsight {
   targeting: string;
   personalization: string;
 };
+}
 }
 export interface UserJourneyPattern {
   pattern: string;
@@ -209,6 +238,7 @@ export interface UserJourneyPattern {
   * Enhanced Conversion Architecture Manager
   * Orchestrates all conversion tracking components with privacy compliance
   */
+}
 }
 export class ConversionArchitectureManager {
   private funnels: Map<string, EnhancedConversionFunnel> = new Map();

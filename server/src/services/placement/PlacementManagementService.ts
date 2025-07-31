@@ -29,6 +29,7 @@ import {
 } from '../../../../packages/core/types/PlacementTypes';
 
 }
+}
 export interface CreateSlotRequest {
   name: string;
   displayName: string;
@@ -45,7 +46,9 @@ export interface CreateSlotRequest {
   tags?: string[];
 }
 }
+}
 
+}
 }
 export interface UpdateSlotRequest {
   displayName?: string;
@@ -61,7 +64,9 @@ export interface UpdateSlotRequest {
   tags?: string[];
 }
 }
+}
 
+}
 }
 export interface CreatePlacementRequest {
   slotId: string;
@@ -80,7 +85,9 @@ export interface CreatePlacementRequest {
   tags?: string[];
 }
 }
+}
 
+}
 }
 export interface UpdatePlacementRequest {
   priority?: number;
@@ -93,6 +100,7 @@ export interface UpdatePlacementRequest {
   customData?: unknown;
   notes?: string;
   tags?: string[];
+}
 }
 }
 

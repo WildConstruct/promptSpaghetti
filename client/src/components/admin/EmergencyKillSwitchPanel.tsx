@@ -22,6 +22,7 @@ import {
 import { Badge } from '../common/Badge';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import './EmergencyKillSwitchPanel.css';
+}
 interface EmergencyKillSwitch {
   id: string;,
   name: string;
@@ -35,6 +36,7 @@ interface EmergencyKillSwitch {
   lastActivated?: string;
   lastActivatedBy?: string;
   activationCount: number;
+}
 interface KillSwitchActivation {
   id: string;,
   killSwitchId: string;
@@ -44,6 +46,7 @@ interface KillSwitchActivation {
   affectedToggles: string;
   status: 'ACTIVE' | 'ROLLED_BACK' | 'EXPIRED';
   autoRollbackAt?: string;
+}
 interface EmergencyMetrics {
   totalKillSwitches: number;,
   activeKillSwitches: number;
@@ -72,6 +75,7 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
       // Load kill switches, activations, and metrics in parallel
       const [killSwitchesRes, activationsRes, metricsRes] = await Promise.all([)
         fetch('/api/emergency/kill-switches', {)
+}
   headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
         fetch('/api/emergency/activations/active', {)
@@ -111,7 +115,7 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
     try {
       const response = await fetch('/api/emergency/disable-all', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
 }
           'Content-Type': 'application/json'
@@ -132,7 +136,7 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
     try {
       const response = await fetch('/api/emergency/disable-claude-impact', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
 }
           'Content-Type': 'application/json'
@@ -153,7 +157,7 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
       const response = await fetch(`/api/emergency/kill-switches/${killSwitchId}/activate`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
 }
           'Content-Type': 'application/json'
@@ -179,7 +183,7 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
       const response = await fetch(`/api/emergency/activations/${activationId}/rollback`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
 }
           'Content-Type': 'application/json'

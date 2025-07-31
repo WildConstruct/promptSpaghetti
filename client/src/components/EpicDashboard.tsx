@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
+}
 interface EpicComponent {
   name: string;,
-  status: 'complete' | 'in_progress' | 'partial' | 'missing' | 'exists' | 'backend_ready' | 'unknown';
+  status: 'complete' | 'in_progress' | 'partial' | 'missing' | 'exists' | 'backend_ready' | 'unknown',
   progress: number;
   location?: string;
   task?: string;
   assignee?: string;
+}
 interface EpicData {
   name: string;,
-  icon: string;
+  icon: string,
   description: string;,
-  businessValue: string;
+  businessValue: string,
   overallProgress: number;,
-  impact: string;
+  impact: string,
   components: EpicComponent;
 
 // Epic completion data (from show-epic-completion.js analysis)
@@ -25,6 +27,7 @@ const EPIC_ANALYSIS: Record<string, EpicData> = {
     overallProgress: 85,
     impact: 'HIGH',
     components: [,
+}
       { name: 'Runtime Implementation', status: 'complete', progress: 100, location: 'packages/core/runtime/nodes/' },
       {
   name: 'GraphEditor Integration',
@@ -103,7 +106,7 @@ const EPIC_ANALYSIS: Record<string, EpicData> = {
 };
 const EpicDashboard: React.FC = () => {
   const [showDetails, setShowDetails] = useState(false);
-  const getStatusIcon = (status: string): string => {,
+  const getStatusIcon = (status: string): string => {
   switch (status) {
   case 'complete': return '✅';
   case 'in_progress': return '🔄';

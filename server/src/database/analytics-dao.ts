@@ -15,6 +15,7 @@ import {
  * Database models for analytics data
  */
 }
+}
 export interface AnalyticsSession {
   id: number;
   sessionId: string;
@@ -33,10 +34,12 @@ export interface AnalyticsSession {
   updatedAt: number;
 }
 }
+}
 
 /**
  * Project execution statistics for health monitoring
  */
+}
 }
 export interface ProjectExecutionStats {
   projectId: string;
@@ -47,7 +50,9 @@ export interface ProjectExecutionStats {
   lastExecution?: number;
 }
 }
+}
 
+}
 }
 export interface GraphExecution {
   id: number;
@@ -70,7 +75,9 @@ export interface GraphExecution {
   createdAt: number;
 }
 }
+}
 
+}
 }
 export interface NodeExecution {
   id: number;
@@ -89,7 +96,9 @@ export interface NodeExecution {
   createdAt: number;
 }
 }
+}
 
+}
 }
 export interface TokenUsage {
   id: number;
@@ -114,7 +123,9 @@ export interface TokenUsage {
   createdAt: number;
 }
 }
+}
 
+}
 }
 export interface UserInteraction {
   id: number;
@@ -135,7 +146,9 @@ export interface UserInteraction {
   createdAt: number;
 }
 }
+}
 
+}
 }
 export interface AnalyticsAggregation {
   id: number;
@@ -155,10 +168,12 @@ export interface AnalyticsAggregation {
   createdAt: number;
 }
 }
+}
 
 /**
  * Analytics query filters
  */
+}
 }
 export interface AnalyticsFilters {
   startTime?: number;
@@ -175,10 +190,12 @@ export interface AnalyticsFilters {
   offset?: number;
 }
 }
+}
 
 /**
  * Analytics summary data
  */
+}
 }
 export interface AnalyticsSummary {
   totalEvents: number;
@@ -190,6 +207,7 @@ export interface AnalyticsSummary {
   totalCost: number;
   averageExecutionTime: number;
   successRate: number;
+}
 }
   topGraphTypes: Array<{ type: string; count: number }>;
   topNodeTypes: Array<{ type: string; count: number; avgTime: number }>;

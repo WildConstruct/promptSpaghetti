@@ -118,6 +118,8 @@ export enum KeyType {
   metadata: Record<string, any>;
   // Key data structure
 }
+}
+}
 export interface CryptographicKey {
   metadata: KeyMetadata;
   keyData?: Buffer; // Actual key material (may be null for HSM keys),
@@ -126,6 +128,8 @@ export interface CryptographicKey {
   wrappedKeyData?: Buffer; // Encrypted key data,
   derivationParameters?: KeyDerivationParameters;
   // Key derivation parameters
+}
+}
 }
 export interface KeyDerivationParameters {
   algorithm: KeyAlgorithm;
@@ -137,6 +141,8 @@ export interface KeyDerivationParameters {
   additionalData?: Buffer;
   // Key access policy
 }
+}
+}
 export interface KeyAccessPolicy {
   requireMultiAuth: boolean;
   minApprovals: number;
@@ -144,6 +150,7 @@ export interface KeyAccessPolicy {
   allowedHours: number;
   allowedDays: number;
   timezone: string;
+}
 };
   locationRestrictions?: {
   allowedCountries: string;
@@ -154,6 +161,7 @@ export interface KeyAccessPolicy {
   sessionTimeout: number;
 
 // Key audit events
+}
 }
 export interface KeyAuditEvent {
   id: string;
@@ -166,6 +174,8 @@ export interface KeyAuditEvent {
   details: Record<string, any>;
   riskScore: number;
   // Key generation options
+}
+}
 }
 export interface KeyGenerationOptions {
   type: KeyType;
@@ -183,6 +193,8 @@ export interface KeyGenerationOptions {
   tags?: Record<string, string>;
   // Key rotation options
 }
+}
+}
 export interface KeyRotationOptions {
   forceRotation?: boolean;
   gracePeriodDays?: number;
@@ -190,6 +202,8 @@ export interface KeyRotationOptions {
   automatedRotation?: boolean;
   rotationReason?: string;
   // Key search criteria
+}
+}
 }
 export interface KeySearchCriteria {
   type?: KeyType;
@@ -203,6 +217,8 @@ export interface KeySearchCriteria {
   authorizedUser?: string;
   complianceLevel?: string;
   // Service configuration
+}
+}
 }
 export interface KeyManagementConfig {
   // Storage configuration
@@ -231,9 +247,11 @@ export interface KeyManagementConfig {
   keyUsageRate: number;
   failureRate: number;
   responseTime: number;
+}
 };
 
 // HSM configuration
+}
 }
 export interface HSMConfiguration {
   provider: 'aws-cloudhsm' | 'azure-keyvault' | 'gcp-hsm' | 'pkcs11';
@@ -243,11 +261,13 @@ export interface HSMConfiguration {
   password?: string;
   certificatePath?: string;
   tokenPath?: string;
+}
 };
   keySlots: number;
   partitionLabel?: string;
 
 // Performance metrics
+}
 }
 export interface KeyPerformanceMetrics {
   operationsPerSecond: number;
@@ -262,6 +282,7 @@ export interface KeyPerformanceMetrics {
   /**
   * Key Management Service
   */
+}
 }
 export class KeyManagementService extends EventEmitter {
   private keys: Map<string, CryptographicKey> = new Map();
@@ -331,11 +352,13 @@ export class KeyManagementService extends EventEmitter {
    * Get key metadata without access validation (for administrative/testing purposes)
    */
   public async getKeyMetadata(keyId: string): Promise<CryptographicKey | null> {
+
     return await this.loadKey(keyId);
   /**
    * Retrieve a key by ID
    */
   public async getKey(keyId: string, requesterId: string): Promise<CryptographicKey | null> {
+
     const startTime = Date.now();
     try {
       // Check cache first
@@ -369,11 +392,12 @@ export class KeyManagementService extends EventEmitter {
   /**
    * Rotate a key
    */
-  public async rotateKey()
+  public async rotateKey(
     keyId: string, 
     requesterId: string, 
     options: KeyRotationOptions = {}
   ): Promise<CryptographicKey> {
+
     const startTime = Date.now();
     try {
       const existingKey = await this.getKey(keyId, requesterId);
@@ -423,6 +447,7 @@ export class KeyManagementService extends EventEmitter {
    * Revoke a key
    */
   public async revokeKey(keyId: string, requesterId: string, reason: string): Promise<void> {
+
     const startTime = Date.now();
     try {
       const key = await this.loadKey(keyId);
@@ -450,7 +475,7 @@ export class KeyManagementService extends EventEmitter {
   /**
    * Derive a key from a parent key
    */
-  public async deriveKey()
+  public async deriveKey(
     parentKeyId: string,
     derivationParams: KeyDerivationParameters,
     requesterId: string): Promise<CryptographicKey> {,
@@ -521,6 +546,7 @@ export class KeyManagementService extends EventEmitter {
    * Export key for backup (encrypted)
    */
   public async exportKey(keyId: string, requesterId: string): Promise<Buffer> {
+
   const key = await this.getKey(keyId, requesterId);
   if (!key) {
   throw new Error('Key not found');
@@ -581,6 +607,7 @@ export class KeyManagementService extends EventEmitter {
     if (options.expirationDays && options.expirationDays < 1) {
       throw new Error('Expiration must be at least 1 day');
   private async createKeyMetadata(keyId: string, options: KeyGenerationOptions): Promise<KeyMetadata> {
+
     const now = new Date();
     const expiration = options.expirationDays ;
       ? new Date(now.getTime() + options.expirationDays * 24 * 60 * 60 * 1000)
@@ -685,6 +712,7 @@ export class KeyManagementService extends EventEmitter {
   derivationParameters: derivationParams,
 };
   private async performKeyDerivation(parentKey: Buffer, params: KeyDerivationParameters): Promise<Buffer> {
+
     switch (params.algorithm) {
     case KeyAlgorithm.PBKDF2_SHA256:
       return await pbkdf2Async(parentKey, params.salt, params.iterations || 100000, params.keyLength, 'sha256');
@@ -693,6 +721,7 @@ export class KeyManagementService extends EventEmitter {
     default:
       throw new Error(`Unsupported derivation algorithm: ${params.algorithm}`);}
   private async wrapKey(key: CryptographicKey): Promise<void> {
+
     if (!key.keyData) return;
     const masterKey = this.masterKeys.get(key.metadata.tier);
     if (!masterKey) {
@@ -707,6 +736,7 @@ export class KeyManagementService extends EventEmitter {
     if (key.metadata.tier !== StorageTier.HOT) {
       key.keyData = undefined;
   private async unwrapKey(key: CryptographicKey): Promise<void> {
+
     if (!key.wrappedKeyData) return;
     const masterKey = this.masterKeys.get(key.metadata.tier);
     if (!masterKey) {
@@ -717,6 +747,7 @@ export class KeyManagementService extends EventEmitter {
       unwrapped[i] = key.wrappedKeyData[i] ^ masterKey[i % masterKey.length];
     key.keyData = unwrapped;
   private async wrapKeyForExport(key: CryptographicKey): Promise<Buffer> {
+
     if (!key.keyData) {
       throw new Error('Key data not available for export');
     // Use a different wrapping key for exports
@@ -726,6 +757,7 @@ export class KeyManagementService extends EventEmitter {
       wrapped[i] = key.keyData[i] ^ exportKey[i % exportKey.length];
     return wrapped;
   private async storeKey(key: CryptographicKey): Promise<void> {
+
     const existingKey = this.keys.get(key.metadata.id);
     this.keys.set(key.metadata.id, key);
     // Only set to ACTIVE if this is a new key (not an update)
@@ -733,6 +765,7 @@ export class KeyManagementService extends EventEmitter {
       key.metadata.status = KeyStatus.ACTIVE;
       key.metadata.activatedAt = new Date();
   private async loadKey(keyId: string): Promise<CryptographicKey | null> {
+
     return this.keys.get(keyId) || null;
   private shouldCacheKey(key: CryptographicKey): boolean {
     return this.config.cacheEnabled && 
@@ -752,6 +785,7 @@ export class KeyManagementService extends EventEmitter {
       return null;
     return cached.key;
   private async validateKeyAccess(key: CryptographicKey, requesterId: string): Promise<void> {
+
     // Basic access validation
     if (key.metadata.status !== KeyStatus.ACTIVE) {
       throw new Error(`Key is ${key.metadata.status}`);}
@@ -763,6 +797,7 @@ export class KeyManagementService extends EventEmitter {
     return key.metadata.status === KeyStatus.ACTIVE &&
            (!key.metadata.expiresAt || new Date() < key.metadata.expiresAt);
   private async updateKeyUsage(key: CryptographicKey): Promise<void> {
+
     key.metadata.usageCount++;
     key.metadata.lastUsed = new Date();
     if (key.metadata.maxUsages && key.metadata.usageCount >= key.metadata.maxUsages) {
@@ -810,6 +845,7 @@ export class KeyManagementService extends EventEmitter {
     details: Record<string,
     any>
   ): Promise<void> {
+
     const auditEvent: KeyAuditEvent = {,
   id: `audit_${Date.now()}_${randomBytes(8).toString('hex')}`}
 },

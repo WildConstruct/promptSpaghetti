@@ -7,6 +7,7 @@ import { KPIMonitoringService, KPITrendAnalysis } from './KPIMonitoringService';
 import { PerformanceBaseline } from './PerformanceBaseline';
 import { PerformanceTargetConfig } from './PerformanceTargets';
 
+}
 export interface DashboardWidget {
     id: string;
     type: 'chart' | 'metric' | 'alert' | 'trend' | 'gauge' | 'table';
@@ -18,6 +19,7 @@ export interface DashboardWidget {
     refreshRate: number;
     lastUpdated: number;
 
+}
 export interface DashboardLayout {
     id: string;
     name: string;
@@ -27,6 +29,7 @@ export interface DashboardLayout {
     autoRefresh: boolean;
     refreshInterval: number;
 
+}
 export interface DashboardMetrics {
     overview: {
         totalKPIs: number;
@@ -38,6 +41,7 @@ export interface DashboardMetrics {
         trendsImproving: number;
         trendsStable: number;
         trendsDegrading: number;
+}
     };
     categories: Record<string, {
         total: number;
@@ -60,6 +64,7 @@ export interface DashboardMetrics {
         stable: KPITrendAnalysis[];
     };
 
+}
 export interface DashboardReport {
     id: string;
     timestamp: number;
@@ -68,6 +73,7 @@ export interface DashboardReport {
         start: number;
         end: number;
         duration: string;
+}
     };
     metrics: DashboardMetrics;
     insights: {
@@ -77,17 +83,17 @@ export interface DashboardReport {
         improvements: string[];
     };
     charts: {
-        performanceScore: Array<{,
+        performanceScore: Array<{
             timestamp: number;
             score: number;
         }>;
         categoryBreakdown: Record<string, number>;
-        alertsOverTime: Array<{,
+        alertsOverTime: Array<{
             timestamp: number;
             count: number;
             severity: string;
         }>;
-        topKPIs: Array<{,
+        topKPIs: Array<{
             kpiId: string;
             name: string;
             score: number;

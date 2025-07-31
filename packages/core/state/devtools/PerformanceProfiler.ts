@@ -9,6 +9,7 @@ import { EventEmitter } from 'events';
 
 // Performance profiling types
 
+}
 export interface PerformanceProfilerConfig {
   sampleRate: number;
   maxSamples: number;
@@ -22,7 +23,9 @@ export interface PerformanceProfilerConfig {
   memoryUsage: number;
   renderTime: number;
   cacheHitRate: number;
+}
 };
+}
 }
 export interface PerformanceProfile {
   id: string;
@@ -34,6 +37,8 @@ export interface PerformanceProfile {
   summary: PerformanceSummary;
   analysis: PerformanceAnalysis;
   recommendations: PerformanceRecommendation;
+}
+}
 }
 export interface PerformanceSample {
   timestamp: number;
@@ -50,9 +55,11 @@ export interface PerformanceSample {
   cacheMisses?: number;
   networkRequests?: number;
   errorCount: number;
+}
 };
   stackTrace?: string;
   metadata?: Record<string, any>;
+}
 }
 export interface PerformanceSummary {
   totalSamples: number;
@@ -68,6 +75,8 @@ export interface PerformanceSummary {
   throughput: number;
   domainBreakdown: Map<string, DomainPerformanceStats>;
 }
+}
+}
 export interface DomainPerformanceStats {
   domain: string;
   sampleCount: number;
@@ -78,6 +87,8 @@ export interface DomainPerformanceStats {
   cacheHitRate: number;
   bottlenecks: string;
 }
+}
+}
 export interface PerformanceAnalysis {
   bottlenecks: PerformanceBottleneck;
   patterns: PerformancePattern;
@@ -85,6 +96,8 @@ export interface PerformanceAnalysis {
   anomalies: PerformanceAnomaly;
   correlations: PerformanceCorrelation;
   insights: PerformanceInsight;
+}
+}
 }
 export interface PerformanceBottleneck {
   id: string;
@@ -95,6 +108,7 @@ export interface PerformanceBottleneck {
   domain: string;
   operation: string;
   stackTrace?: string;
+}
 };
   impact: {
   frequency: number;
@@ -113,6 +127,7 @@ export interface PerformanceBottleneck {
   occurrences: number;
 };
 }
+}
 export interface PerformancePattern {
   id: string;
   name: string;
@@ -125,7 +140,9 @@ export interface PerformancePattern {
   amplitude: number;
   period?: number;
   trend?: 'increasing' | 'decreasing' | 'stable'
+}
   };
+}
 }
 export interface PerformanceTrend {
   metric: string;
@@ -137,8 +154,10 @@ export interface PerformanceTrend {
   nextHour: number;
   nextDay: number;
   nextWeek: number;
+}
 };
   inflectionPoints: number;
+}
 }
 export interface PerformanceAnomaly {
   id: string;
@@ -150,6 +169,8 @@ export interface PerformanceAnomaly {
   possibleCauses: string;
   sample: PerformanceSample;
 }
+}
+}
 export interface PerformanceCorrelation {
   metrics: [string, string];
   coefficient: number;
@@ -157,6 +178,8 @@ export interface PerformanceCorrelation {
   significance: number;
   description: string;
   implications: string;
+}
+}
 }
 export interface PerformanceInsight {
   id: string;
@@ -167,6 +190,8 @@ export interface PerformanceInsight {
   effort: 'low' | 'medium' | 'high';
   evidence: PerformanceSample;
   recommendations: string;
+}
+}
 }
 export interface PerformanceRecommendation {
   id: string;
@@ -181,12 +206,14 @@ export interface PerformanceRecommendation {
   prerequisites: string;
   steps: string;
   codeExample?: string;
+}
 };
   metrics: {
   expectedSpeedup: number;
   expectedMemoryReduction: number;
   expectedCacheImprovement: number;
 };
+}
 }
 export interface PerformanceAlert {
   id: string;
@@ -201,6 +228,8 @@ export interface PerformanceAlert {
   suggestions: string;
   // Memory profiling types
 }
+}
+}
 export interface MemorySnapshot {
   timestamp: number;
   totalHeapSize: number;
@@ -208,6 +237,8 @@ export interface MemorySnapshot {
   heapSizeLimit: number;
   objects: Map<string, number>;
   leaks: MemoryLeak;
+}
+}
 }
 export interface MemoryLeak {
   object: string;
@@ -217,6 +248,8 @@ export interface MemoryLeak {
   firstDetected: number;
   locations: string;
   // Render profiling types
+}
+}
 }
 export interface RenderProfile {
   componentName: string;
@@ -230,6 +263,7 @@ export interface RenderProfile {
   stateChanged: boolean;
   contextChanged: boolean;
   parentRerender: boolean;
+}
 };
 
 // Main PerformanceProfiler class

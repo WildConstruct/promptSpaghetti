@@ -6,12 +6,14 @@
  */
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
 
+}
 export interface RunwayMLConfig {
     apiKey: string;
     baseURL?: string;
     timeout?: number;
     maxRetries?: number;
 
+}
 export interface RunwayMLRequestOptions {
     text_prompt: string;
     image_prompt?: string;
@@ -31,6 +33,7 @@ export interface RunwayMLRequestOptions {
     enhance_prompt?: boolean;
     negative_prompt?: string;
 
+}
 export interface RunwayMLGenerationResult {
     video: {
         url?: string;
@@ -40,6 +43,7 @@ export interface RunwayMLGenerationResult {
         resolution: {
             width: number;
             height: number;
+}
         };
         fps: number;
         size: number;
@@ -62,6 +66,7 @@ export interface RunwayMLGenerationResult {
         processing_time: number;
     };
 
+}
 export interface RunwayMLTask {
     id: string;
     status: 'PENDING' | 'RUNNING' | 'SUCCEEDED' | 'FAILED';
@@ -102,3 +107,4 @@ export declare class RunwayMLAdapter extends BaseAIModel {
 
 export default RunwayMLAdapter;
 //# sourceMappingURL=RunwayMLAdapter.d.ts.map
+}

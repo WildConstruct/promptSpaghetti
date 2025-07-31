@@ -6,12 +6,14 @@
  * by selecting multiple nodes through mouse drag operation.
  */
 import React from 'react';
+}
 interface DragSelectBoxProps {
     onSelectionComplete: (bounds: {),
         x: number;
         y: number;
         width: number;
         height: number;
+}
     }) => void;
     onSelectionCancel: () => void;
     canvasOffset: {

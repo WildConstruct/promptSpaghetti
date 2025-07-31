@@ -17,6 +17,7 @@ import { EventEmitter } from 'events';
 // ============================================================================
 
 }
+}
 export interface SecurityIntelligenceDataModel {
   // Core entity models
   entities: {
@@ -28,6 +29,7 @@ export interface SecurityIntelligenceDataModel {
     campaigns: CampaignEntity[];
     indicators: IndicatorEntity[];
     techniques: TechniqueEntity[];
+}
 }
   };
   
@@ -70,6 +72,7 @@ export interface SecurityIntelligenceDataModel {
 }
 
 }
+}
 export interface ThreatEntity {
   threat_id: string;
   threat_name: string;
@@ -86,6 +89,7 @@ export interface ThreatEntity {
     sophistication_level: 'basic' | 'intermediate' | 'advanced' | 'expert';
     persistence_mechanisms: string[];
     evasion_techniques: string[];
+}
 }
   };
   
@@ -137,6 +141,7 @@ export interface ThreatEntity {
 }
 
 }
+}
 export interface AssetEntity {
   asset_id: string;
   asset_name: string;
@@ -150,6 +155,7 @@ export interface AssetEntity {
     data_classification: 'public' | 'internal' | 'confidential' | 'restricted';
     compliance_scope: string[];
     regulatory_requirements: string[];
+}
 }
   };
   
@@ -214,6 +220,7 @@ export interface AssetEntity {
 }
 
 }
+}
 export interface IncidentEntity {
   incident_id: string;
   incident_title: string;
@@ -227,6 +234,7 @@ export interface IncidentEntity {
     impact_level: 'organization_wide' | 'business_unit' | 'department' | 'individual';
     urgency_level: 'immediate' | 'same_day' | 'next_business_day' | 'planned';
     risk_rating: number; // 1-100
+}
 }
   };
   
@@ -324,6 +332,7 @@ export interface IncidentEntity {
 }
 
 }
+}
 export interface VulnerabilityEntity {
   vulnerability_id: string;
   cve_id?: string;
@@ -339,6 +348,7 @@ export interface VulnerabilityEntity {
     custom_risk_score: number;
     exploitability_score: number;
     impact_score: number;
+}
 }
   };
   
@@ -412,6 +422,7 @@ export interface VulnerabilityEntity {
 // ============================================================================
 
 }
+}
 export interface ThreatAssetMapping {
   mapping_id: string;
   threat_id: string;
@@ -428,9 +439,11 @@ export interface ThreatAssetMapping {
     updated_at: Date;
     data_sources: string[];
 }
+}
   };
 }
 
+}
 }
 export interface UserIncidentMapping {
   mapping_id: string;
@@ -445,6 +458,7 @@ export interface UserIncidentMapping {
     updated_at: Date;
     privacy_level: string;
 }
+}
   };
 }
 
@@ -452,6 +466,7 @@ export interface UserIncidentMapping {
 // PROCESSING PIPELINE CONFIGURATION
 // ============================================================================
 
+}
 }
 export interface ProcessingPipelineConfig {
   // Stream processing configuration
@@ -464,6 +479,7 @@ export interface ProcessingPipelineConfig {
         consumer_groups: string[];
         batch_size: number;
         max_poll_interval: number;
+}
 }
       };
       processing_parallelism: number;

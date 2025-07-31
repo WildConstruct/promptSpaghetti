@@ -1,11 +1,13 @@
 import React from 'react';
 
+}
 interface SelectProps {
   children?: React.ReactNode;
   onValueChange?: (value: string) => void;
   value?: string;
   defaultValue?: string;
 
+}
 export const Select: React.FC<SelectProps> = ({ children, ...props }) => ()
   <div className="select" {...props}>{children}</div>
 );

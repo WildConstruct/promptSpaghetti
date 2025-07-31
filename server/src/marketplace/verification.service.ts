@@ -18,12 +18,14 @@ import {
 } from './verification.types';
 
 }
+}
 export interface VerificationServiceConfig {
   s3: {
     bucket: string;
     region: string;
     accessKeyId?: string;
     secretAccessKey?: string;
+}
 }
   };
   documentUpload: {

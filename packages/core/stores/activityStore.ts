@@ -19,6 +19,7 @@ import {
 } from '../types/ActivityDataModel';
 
 // Store State Interface
+}
 interface ActivityState {
   // Data State
   activities: Activity;
@@ -112,6 +113,7 @@ interface ActivityState {
   offset: 0,
   sortBy: 'timestamp',
   sortOrder: 'desc',
+}
 },
   queryResult: null,
   lastQueryTime: null,
@@ -135,6 +137,7 @@ interface ActivityState {
 // API Service Mock (replace with actual API integration)
 const activityApi = {
   async queryActivities(query: ActivityQuery): Promise<ActivityQueryResult> {
+
     // Mock implementation - replace with actual API call
     await new Promise(resolve => setTimeout(resolve, 500));
     const mockActivities: Activity = [];
@@ -166,6 +169,7 @@ const activityApi = {
 };
   }
   async getMetrics(query: ActivityQuery): Promise<ActivityMetrics> {
+
   // Mock implementation
   await new Promise(resolve => setTimeout(resolve, 300));
   return {

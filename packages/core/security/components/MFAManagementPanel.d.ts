@@ -17,6 +17,7 @@
  */
 import React from 'react';
 
+}
 interface SecurityEvent {
     id: string;
     type: 'login' | 'mfa_enabled' | 'mfa_disabled' | 'device_added' | 'device_removed' | 'backup_used';
@@ -27,6 +28,7 @@ interface SecurityEvent {
     riskLevel: 'low' | 'medium' | 'high';
 
 
+}
 interface MFAManagementProps {
     userId: string;
     onMFAStatusChange?: (enabled: boolean) => void;
@@ -36,3 +38,4 @@ interface MFAManagementProps {
 export declare const MFAManagementPanel: React.FC<MFAManagementProps>;
 export default MFAManagementPanel;
 //# sourceMappingURL=MFAManagementPanel.d.ts.map
+}

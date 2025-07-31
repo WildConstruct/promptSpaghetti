@@ -12,6 +12,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 
 // Types for expiration management
+}
 interface ExpirationStats {
   total: number;,
   active: number;
@@ -21,11 +22,13 @@ interface ExpirationStats {
   renewed: number;
   revoked: number;,
   byResourceType: Record<string, number>;
-  upcomingExpirations: {,
+  upcomingExpirations: {
   next24Hours: number;,
   next7Days: number;
   next30Days: number;
+}
 };
+}
 interface ExpirationWarning {
   resourceId: string;,
   resourceType: string;
@@ -71,6 +74,7 @@ interface ExpirationWarning {
   verification_code: 'Verification Codes',
   backup_code: 'Backup Codes',
   refresh_token: 'Refresh Tokens',
+}
 };
 const warningLevelColors = {
   info: '#17a2b8',
@@ -145,7 +149,7 @@ export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({)
       const response = await fetch(`/api/expiration/renew/${resourceType}/${resourceId}`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
   },
@@ -172,7 +176,7 @@ export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({)
       const response = await fetch(`/api/expiration/revoke/${resourceType}/${resourceId}`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
   },
@@ -197,7 +201,7 @@ export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({)
     try {
       const response = await fetch('/api/expiration/cleanup', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
       });
       const result = await response.json();

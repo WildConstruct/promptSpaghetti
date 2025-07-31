@@ -13,6 +13,7 @@ import { DatabaseService } from '../../database/DatabaseService';
 import { AuditService } from './AuditService';
 
 }
+}
 export interface WebAuthnConfig {
   rpId: string; // Relying Party ID (domain)
   rpName: string; // Relying Party Name
@@ -23,7 +24,9 @@ export interface WebAuthnConfig {
   attestation: 'none' | 'indirect' | 'direct' | 'enterprise';
 }
 }
+}
 
+}
 }
 export interface WebAuthnCredential {
   credentialId: string;
@@ -39,7 +42,9 @@ export interface WebAuthnCredential {
   backupState?: boolean;
 }
 }
+}
 
+}
 }
 export interface AuthenticatorSelection {
   authenticatorAttachment?: 'platform' | 'cross-platform';
@@ -48,7 +53,9 @@ export interface AuthenticatorSelection {
   userVerification: 'required' | 'preferred' | 'discouraged';
 }
 }
+}
 
+}
 }
 export interface CredentialCreationOptions {
   challenge: string;
@@ -56,6 +63,7 @@ export interface CredentialCreationOptions {
     id: string;
     name: string;
     displayName: string;
+}
 }
   };
   pubKeyCredParams: Array<{
@@ -73,6 +81,7 @@ export interface CredentialCreationOptions {
 }
 
 }
+}
 export interface CredentialRequestOptions {
   challenge: string;
   timeout: number;
@@ -82,10 +91,12 @@ export interface CredentialRequestOptions {
     type: 'public-key';
     transports?: AuthenticatorTransport[];
 }
+}
   }>;
   userVerification: 'required' | 'preferred' | 'discouraged';
 }
 
+}
 }
 export interface AttestationResult {
   verified: boolean;
@@ -97,13 +108,16 @@ export interface AttestationResult {
   credentialBackedUp?: boolean;
 }
 }
+}
 
+}
 }
 export interface AssertionResult {
   verified: boolean;
   credentialId: string;
   counter: number;
   userHandle?: string;
+}
 }
 }
 

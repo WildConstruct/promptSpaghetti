@@ -4,6 +4,7 @@ import { ConnectionStateManager, ConnectionState, ConnectionQuality, ConnectionS
 import { ReconnectionHandler, ReconnectionState, ReconnectionConfig } from './ReconnectionHandler';
 import { SynchronizationRecovery, DocumentState, SyncDelta, RecoveryConfig } from './SynchronizationRecovery';
 
+}
 export interface NetworkResilienceConfig {
   enabled: boolean;
   offlineQueue: Partial<OfflineQueueConfig>;
@@ -16,6 +17,7 @@ export interface NetworkResilienceConfig {
   showConnectionQuality: boolean;
   notifyOnReconnect: boolean;
   notifyOnSyncComplete: boolean;
+}
 };
   persistence: {
   enabled: boolean;
@@ -27,6 +29,7 @@ export interface NetworkResilienceConfig {
   metricsInterval: number;
   enableProfiling: boolean;
 };
+}
 }
 export interface ResilienceMetrics {
   uptime: number;
@@ -40,6 +43,8 @@ export interface ResilienceMetrics {
   dataLoss: number;
   conflicts: number;
 }
+}
+}
 export interface NetworkStatus {
   isOnline: boolean;
   connectionState: ConnectionState;
@@ -49,6 +54,7 @@ export interface NetworkStatus {
   pendingSync: boolean;
   lastSync: number | null;
   metrics: ResilienceMetrics;
+}
 }
 export class NetworkResilienceManager extends EventEmitter {
   private config: NetworkResilienceConfig;
@@ -111,6 +117,7 @@ export class NetworkResilienceManager extends EventEmitter {
    * Initialize the network resilience system
    */
   async initialize(documentId: string, userId: string): Promise<void> {
+
     if (this.isInitialized) {
       console.warn('NetworkResilienceManager already initialized');
       return;
@@ -129,6 +136,7 @@ export class NetworkResilienceManager extends EventEmitter {
    * Connect to WebSocket server
    */
   async connect(websocketUrl: string, authToken?: string): Promise<void> {
+
     if (!this.isInitialized) {
       throw new Error('Manager not initialized. Call initialize() first.');
     console.log(`Connecting to ${websocketUrl}`);}
@@ -192,6 +200,7 @@ export class NetworkResilienceManager extends EventEmitter {
    * Force synchronization
    */
   async forceSync(): Promise<SyncDelta | null> {
+
   if (!this.isInitialized || !this.documentId) {
   throw new Error('Manager not properly initialized');
   if (this.syncInProgress) {
@@ -228,7 +237,7 @@ export class NetworkResilienceManager extends EventEmitter {
       pendingOperations: this.offlineQueue.size(),
       ...this.connectionState.getStatistics(),
       ...this.reconnectionHandler.getStats(),
-      ...this.syncRecovery.getStats(};)
+      ...this.syncRecovery.getStats(})
   /**
    * Enable or disable network resilience
    */
@@ -349,6 +358,7 @@ export class NetworkResilienceManager extends EventEmitter {
    * Establish WebSocket connection
    */
   private async establishWebSocketConnection(url: string, authToken?: string): Promise<void> {
+
   return new Promise((resolve, reject) => {
   try {
   this.websocket = new WebSocket(url);
@@ -419,6 +429,7 @@ export class NetworkResilienceManager extends EventEmitter {
    * Start reconnection process
    */
   private async startReconnection(): Promise<void> {
+
     if (!this.isEnabled || this.reconnectionHandler.isReconnecting()) {
       return;
     this.metrics.connectionAttempts++;
@@ -427,6 +438,7 @@ export class NetworkResilienceManager extends EventEmitter {
    * Process queued operations
    */
   private async processQueuedOperations(): Promise<void> {
+
     if (!this.connectionState.isOnline() || this.syncInProgress) {
       return;
     const batch = this.offlineQueue.dequeue(10); // Process in small batches;
@@ -444,6 +456,7 @@ export class NetworkResilienceManager extends EventEmitter {
    * Send operation to server
    */
   private async sendOperationToServer(operation: QueuedOperation): Promise<void> {
+
   if (!this.websocket || this.websocket.readyState !== WebSocket.OPEN) {
   throw new Error('WebSocket not connected');
   return new Promise((resolve, reject) => {
@@ -489,6 +502,7 @@ export class NetworkResilienceManager extends EventEmitter {
    * Get current document state (stub)
    */
   private async getCurrentDocumentState(): Promise<DocumentState> {
+
     // This would integrate with the actual document/graph system
     return {
       version: 1,
@@ -501,6 +515,7 @@ export class NetworkResilienceManager extends EventEmitter {
    * Get server document state (stub)
    */
   private async getServerDocumentState(): Promise<DocumentState> {
+
     // This would make an HTTP request to get server state
     return {
       version: 2,
@@ -567,6 +582,7 @@ export class NetworkResilienceManager extends EventEmitter {
    * Load persisted state
    */
   private async loadPersistedState(): Promise<void> {
+
     if (typeof localStorage === 'undefined') return;
     try {
       const stored = localStorage.getItem(this.config.persistence.storageKey);

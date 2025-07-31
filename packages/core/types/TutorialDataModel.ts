@@ -184,6 +184,7 @@ export class TutorialDataAccess {
    * Creates a new tutorial with security validation
    */
   static async createTutorial(tutorialData: Tutorial, userId: string): Promise<{ success: boolean; tutorialId?: string; errors?: string }> {
+
     try {
       // Validate input schema
       const validation = tutorialSchema.safeParse(tutorialData);
@@ -229,6 +230,7 @@ export class TutorialDataAccess {
    * Gets user tutorial count for rate limiting
    */
   private static async getUserTutorialCount(userId: string): Promise<number> {
+
   // TODO: Implement actual database query,
   return 0;
   /**

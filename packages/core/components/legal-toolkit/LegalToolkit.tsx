@@ -19,6 +19,7 @@ import {
   Citation,
   TermValidationResult 
 } from './types';
+}
 interface LegalToolkitProps {
   className?: string;
   initialDocument?: LegalDocument;
@@ -34,6 +35,7 @@ interface LegalToolkitProps {
   className = '',
   initialDocument,
   onWorkflowComplete
+}
 }) => {
   const [currentView, setCurrentView] = useState<ToolkitView>(initialDocument ? 'analyze' : 'upload');
   const [document, setDocument] = useState<LegalDocument | null>(initialDocument || null);

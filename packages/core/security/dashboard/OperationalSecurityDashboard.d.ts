@@ -27,6 +27,7 @@
 import React from 'react';
 import { DashboardTheme } from './SecurityDashboardFramework';
 
+}
 export interface SecurityAlert {
     id: string;
     severity: 'critical' | 'high' | 'medium' | 'low';
@@ -41,6 +42,7 @@ export interface SecurityAlert {
     indicators: string[];
     responseActions: ResponseAction[];
 
+}
 export interface ResponseAction {
     id: string;
     type: 'isolate' | 'block' | 'quarantine' | 'investigate' | 'escalate';
@@ -50,6 +52,7 @@ export interface ResponseAction {
     performer?: string;
     timestamp?: Date;
 
+}
 export interface SystemStatus {
     component: string;
     status: 'operational' | 'degraded' | 'outage' | 'maintenance';
@@ -58,6 +61,7 @@ export interface SystemStatus {
     uptime: number;
     criticalIssues: number;
 
+}
 export interface ThreatIntelligence {
     feed: string;
     lastUpdate: Date;
@@ -66,6 +70,7 @@ export interface ThreatIntelligence {
     confidence: 'high' | 'medium' | 'low';
     categories: string[];
 
+}
 export interface OperationalMetrics {
     alerts: {
         total: number;
@@ -74,6 +79,7 @@ export interface OperationalMetrics {
         bySeverity: Record<string, number>;
         avgResponseTime: number;
         slaCompliance: number;
+}
     };
     incidents: {
         active: number;
@@ -94,6 +100,7 @@ export interface OperationalMetrics {
         avgCaseload: number;
     };
 
+}
 export interface OperationalSecurityDashboardProps {
     alerts: SecurityAlert[];
     metrics: OperationalMetrics;
@@ -111,3 +118,4 @@ export interface OperationalSecurityDashboardProps {
 export declare const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboardProps>;
 export default OperationalSecurityDashboard;
 //# sourceMappingURL=OperationalSecurityDashboard.d.ts.map
+}

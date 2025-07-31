@@ -3,6 +3,7 @@
  * Manages project templates with versioning, categorization, and sharing capabilities
  */
 
+}
 export interface ProjectTemplate {
     id: string;
     name: string;
@@ -15,6 +16,7 @@ export interface ProjectTemplate {
         id: string;
         name: string;
         avatar?: string;
+}
     };
     created_at: string;
     updated_at: string;
@@ -30,6 +32,7 @@ export interface ProjectTemplate {
     prerequisites: string[];
     learning_objectives: string[];
 
+}
 export interface TemplateVariable {
     id: string;
     name: string;
@@ -43,8 +46,10 @@ export interface TemplateVariable {
         max?: number;
         pattern?: string;
         options?: string[];
+}
     };
 
+}
 export interface CustomizationPoint {
     id: string;
     name: string;
@@ -54,6 +59,7 @@ export interface CustomizationPoint {
     description: string;
     ui_component: 'input' | 'select' | 'color_picker' | 'slider' | 'toggle';
 
+}
 export interface TemplateCategory {
     id: string;
     name: string;
@@ -62,6 +68,7 @@ export interface TemplateCategory {
     color: string;
     parent_id?: string;
 
+}
 export interface TemplateUsageAnalytics {
     template_id: string;
     total_uses: number;
@@ -73,6 +80,7 @@ export interface TemplateUsageAnalytics {
     trend_data: {
         date: string;
         uses: number;
+}
     }[];
 
 export declare class ProjectTemplateManager {

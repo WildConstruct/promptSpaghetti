@@ -24,6 +24,7 @@ import {
 
 // Request/Response type definitions
 }
+}
 interface CreateEnforcementActionRequest {
   Body: {
     targetType: TargetType;
@@ -38,6 +39,7 @@ interface CreateEnforcementActionRequest {
       duration?: number;
       condition?: string;
 }
+}
     };
     effectiveFrom?: Date;
     effectiveUntil?: Date;
@@ -45,6 +47,7 @@ interface CreateEnforcementActionRequest {
   };
 }
 
+}
 }
 interface ListEnforcementActionsRequest {
   Querystring: {
@@ -59,9 +62,11 @@ interface ListEnforcementActionsRequest {
     limit?: number;
     offset?: number;
 }
+}
   };
 }
 
+}
 }
 interface CreateViolationReportRequest {
   Body: {
@@ -75,10 +80,12 @@ interface CreateViolationReportRequest {
       method: string;
       confidence: number;
 }
+}
     };
   };
 }
 
+}
 }
 interface SubmitAppealRequest {
   Body: {
@@ -89,6 +96,7 @@ interface SubmitAppealRequest {
       claimsInnocence?: boolean;
       claimsError?: boolean;
       newEvidence?: boolean;
+}
 }
     };
     description: string;
@@ -102,21 +110,25 @@ interface SubmitAppealRequest {
 }
 
 }
+}
 interface ProcessAppealDecisionRequest {
   Body: {
     outcome: 'approved' | 'denied' | 'partially_approved';
     reasoning: string;
     modifiedActions?: any[];
 }
+}
   };
 }
 
+}
 }
 interface AnalyticsRequest {
   Querystring: {
     startDate: string;
     endDate: string;
     format?: 'json' | 'csv';
+}
 }
   };
 }

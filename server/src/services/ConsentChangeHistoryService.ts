@@ -28,6 +28,7 @@ import * as crypto from 'crypto';
 // =============================================================================
 
 }
+}
 export interface ConsentChangeHistoryConfig {
   enabled: boolean;
   immutableHistory: boolean;
@@ -40,6 +41,7 @@ export interface ConsentChangeHistoryConfig {
     alertOnModification: boolean;
     alertOnExpiry: boolean;
     alertOnCompliance: boolean;
+}
 }
   };
   integrityChecking: {
@@ -56,6 +58,7 @@ export interface ConsentChangeHistoryConfig {
   };
 }
 
+}
 }
 export interface ConsentChangeEvent {
   changeId: string;
@@ -90,7 +93,9 @@ export interface ConsentChangeEvent {
   flags: string[];
 }
 }
+}
 
+}
 }
 export interface ConsentChangeState {
   status: ConsentStatus;
@@ -104,7 +109,9 @@ export interface ConsentChangeState {
   customAttributes: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ConsentChangeSummary {
   totalChanges: number;
@@ -116,7 +123,9 @@ export interface ConsentChangeSummary {
   requiresReauthorization: boolean;
 }
 }
+}
 
+}
 }
 export interface ConsentFieldChange {
   fieldPath: string;
@@ -128,7 +137,9 @@ export interface ConsentFieldChange {
   reason?: string;
 }
 }
+}
 
+}
 }
 export interface ConsentChangeContext {
   sessionId: string;
@@ -138,6 +149,7 @@ export interface ConsentChangeContext {
     country: string;
     region: string;
     city: string;
+}
 }
   };
   deviceInfo?: {
@@ -159,6 +171,7 @@ export interface ConsentChangeContext {
 }
 
 }
+}
 export interface ConsentLegalBasisChange {
   previousBasis: string;
   newBasis: string;
@@ -168,7 +181,9 @@ export interface ConsentLegalBasisChange {
   jurisdictionImpact: JurisdictionImpact[];
 }
 }
+}
 
+}
 }
 export interface JurisdictionImpact {
   jurisdiction: string;
@@ -178,7 +193,9 @@ export interface JurisdictionImpact {
   deadline?: Date;
 }
 }
+}
 
+}
 }
 export interface ConsentComplianceImpact {
   gdprImpact: GDPRComplianceImpact;
@@ -189,7 +206,9 @@ export interface ConsentComplianceImpact {
   deadlines: ComplianceDeadline[];
 }
 }
+}
 
+}
 }
 export interface GDPRComplianceDetails {
   article7Compliance: {
@@ -198,6 +217,7 @@ export interface GDPRComplianceDetails {
     consentInformed: boolean;
     consentUnambiguous: boolean;
     withdrawalEasyAsGiving: boolean;
+}
 }
   };
   article13_14Compliance: {
@@ -221,6 +241,7 @@ export interface GDPRComplianceDetails {
 }
 
 }
+}
 export interface GDPRComplianceImpact {
   articlesAffected: string[];
   rightsImpacted: string[];
@@ -230,7 +251,9 @@ export interface GDPRComplianceImpact {
   dataSubjectNotificationRequired: boolean;
 }
 }
+}
 
+}
 }
 export interface CCPAComplianceImpact {
   categoriesAffected: string[];
@@ -240,7 +263,9 @@ export interface CCPAComplianceImpact {
   disclosureRequired: boolean;
 }
 }
+}
 
+}
 }
 export interface ComplianceFrameworkImpact {
   framework: string;
@@ -250,7 +275,9 @@ export interface ComplianceFrameworkImpact {
   timeline: string;
 }
 }
+}
 
+}
 }
 export interface ComplianceAction {
   actionType: string;
@@ -261,7 +288,9 @@ export interface ComplianceAction {
   status: 'pending' | 'in_progress' | 'completed' | 'overdue';
 }
 }
+}
 
+}
 }
 export interface ComplianceDeadline {
   requirement: string;
@@ -270,7 +299,9 @@ export interface ComplianceDeadline {
   consequence: string;
 }
 }
+}
 
+}
 }
 export interface ConsentChangeMetadata {
   version: string;
@@ -283,11 +314,13 @@ export interface ConsentChangeMetadata {
     migrationRules: string[];
     migrationDate: Date;
 }
+}
   };
   customFields: Record<string, any>;
   systemGeneratedFields: Record<string, any>;
 }
 
+}
 }
 export interface ConsentHistoryReport {
   reportId: string;
@@ -297,6 +330,7 @@ export interface ConsentHistoryReport {
     startDate: Date;
     endDate: Date;
 }
+}
   };
   summary: ConsentHistorySummary;
   timeline: ConsentTimelineEvent[];
@@ -305,6 +339,7 @@ export interface ConsentHistoryReport {
   exportFormats: string[];
 }
 
+}
 }
 export interface ConsentHistorySummary {
   totalConsents: number;
@@ -317,7 +352,9 @@ export interface ConsentHistorySummary {
   riskLevel: ConsentRiskLevel;
 }
 }
+}
 
+}
 }
 export interface ConsentTimelineEvent {
   timestamp: Date;
@@ -328,7 +365,9 @@ export interface ConsentTimelineEvent {
   userNotified: boolean;
 }
 }
+}
 
+}
 }
 export interface ConsentComplianceReport {
   overallStatus: 'compliant' | 'non_compliant' | 'under_review';
@@ -338,7 +377,9 @@ export interface ConsentComplianceReport {
   auditTrailIntegrity: AuditIntegrityReport;
 }
 }
+}
 
+}
 }
 export interface FrameworkComplianceStatus {
   framework: string;
@@ -348,7 +389,9 @@ export interface FrameworkComplianceStatus {
   actions: string[];
 }
 }
+}
 
+}
 }
 export interface ComplianceIssue {
   issueId: string;
@@ -360,7 +403,9 @@ export interface ComplianceIssue {
   deadline?: Date;
 }
 }
+}
 
+}
 }
 export interface ConsentRiskAssessment {
   overallRisk: ConsentRiskLevel;
@@ -369,7 +414,9 @@ export interface ConsentRiskAssessment {
   riskTrend: 'improving' | 'stable' | 'deteriorating';
 }
 }
+}
 
+}
 }
 export interface ConsentRiskFactor {
   factor: string;
@@ -379,7 +426,9 @@ export interface ConsentRiskFactor {
   mitigation: string;
 }
 }
+}
 
+}
 }
 export interface AuditIntegrityReport {
   overallIntegrity: 'intact' | 'compromised' | 'unknown';
@@ -389,7 +438,9 @@ export interface AuditIntegrityReport {
   lastVerification: Date;
 }
 }
+}
 
+}
 }
 export interface ConsentRecommendation {
   recommendationId: string;
@@ -399,6 +450,7 @@ export interface ConsentRecommendation {
   benefits: string[];
   implementation: string;
   timeline: string;
+}
 }
 }
 

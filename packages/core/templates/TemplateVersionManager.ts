@@ -5,6 +5,7 @@
 import { ProjectTemplate, TemplateVariable, CustomizationPoint } from './ProjectTemplateManager';
 import { VersionSnapshot, Branch, VersionDiff } from '../version-history/VersionHistoryManager';
 
+}
 export interface TemplateVersion {
   id: string;
   template_id: string;
@@ -42,18 +43,24 @@ export interface TemplateVersion {
   dependencies: TemplateDependency;
   conflicts: TemplateConflict;
 }
+}
+}
 export interface TemplateDependency {
   template_id: string;
   version_constraint: string; // e.g., ">=1.0.0, <2.0.0",
   dependency_type: 'required' | 'optional' | 'peer';
   description?: string;
 }
+}
+}
 export interface TemplateConflict {
   template_id: string;
   conflict_type: 'api_version' | 'node_type' | 'variable_name' | 'resource';
   description: string;
   severity: 'warning' | 'error'
+}
   }
+}
 export interface TemplateImportOptions {
   format: 'json' | 'yaml' | 'zip' | 'git' | 'template_bundle';
   source: string | File | ArrayBuffer;
@@ -73,6 +80,8 @@ export interface TemplateImportOptions {
   // Metadata
   import_notes?: string;
   tags?: string;
+}
+}
 }
 export interface TemplateExportOptions {
   format: 'json' | 'yaml' | 'zip' | 'template_bundle';
@@ -96,7 +105,9 @@ export interface TemplateExportOptions {
   enabled: boolean;
   password?: string;
   algorithm?: string;
+}
 };
+}
 }
 export interface TemplateImportResult {
   success: boolean;
@@ -116,6 +127,8 @@ export interface TemplateImportResult {
   backup_version_id?: string;
   can_rollback: boolean;
 }
+}
+}
 export interface VersionComparisonResult {
   from_version: TemplateVersion;
   to_version: TemplateVersion;
@@ -125,25 +138,28 @@ export interface VersionComparisonResult {
   api_changes: boolean;
   schema_changes: boolean;
   dependency_changes: boolean;
+}
 };
   migration_required: boolean;
   migration_complexity: 'simple' | 'moderate' | 'complex';
   estimated_migration_time: number; // minutes
 }
+}
 export interface TemplateDiff {
-  metadata_changes: Array<{,
+  metadata_changes: Array<{
   field: string;
   old_value: any;
   new_value: any;
   change_type: 'added' | 'removed' | 'modified'
+}
   }>;
-  variable_changes: Array<{,
+  variable_changes: Array<{
   variable_id: string;
   change_type: 'added' | 'removed' | 'modified';
   old_variable?: TemplateVariable;
   new_variable?: TemplateVariable;
 }>;
-  customization_changes: Array<{,
+  customization_changes: Array<{
   point_id: string;
   change_type: 'added' | 'removed' | 'modified';
   old_point?: CustomizationPoint;
@@ -178,6 +194,7 @@ export class TemplateVersionManager {
   compatibility_level?: 'patch' | 'minor' | 'major'
   } = {}
   ): Promise<TemplateVersion> {
+
   try {
   const versionData = {
   template_id: this.templateId,
@@ -205,6 +222,7 @@ export class TemplateVersionManager {
   release_notes?: string;
   visibility?: 'private' | 'workspace' | 'public'
   } = {}): Promise<TemplateVersion> {
+
     try {
       const response = await this.apiClient.put(`/api/template-versions/${versionId}/publish`, {)}
   },
@@ -223,6 +241,7 @@ export class TemplateVersionManager {
   limit?: number;
   offset?: number;
 } = {}): Promise<{ versions: TemplateVersion; total: number }> {
+
     try {
       const params = new URLSearchParams();
       params.append('template_id', this.templateId);
@@ -240,6 +259,7 @@ export class TemplateVersionManager {
       console.error('Failed to get template versions:', error);
       throw error;
   async getVersion(versionId: string): Promise<TemplateVersion> {
+
     try {
       if (this.versions.has(versionId)) {
         return this.versions.get(versionId)!;
@@ -251,6 +271,7 @@ export class TemplateVersionManager {
       console.error('Failed to get template version:', error);
       throw error;
   async compareVersions(fromVersionId: string, toVersionId: string): Promise<VersionComparisonResult> {
+
     try {
       const response = await this.apiClient.get(;);
         `/api/template-versions/${fromVersionId}/compare/${toVersionId}`}
@@ -295,6 +316,7 @@ export class TemplateVersionManager {
 };
     import_options?: Partial<TemplateImportOptions>;
   }): Promise<TemplateImportResult> {
+
   try {
   const importData = {
   git_url: gitUrl,
@@ -317,6 +339,7 @@ export class TemplateVersionManager {
   auto_update?: boolean;
   include_dependencies?: boolean;
 }): Promise<TemplateImportResult> {
+
   try {
   const importData = {
   marketplace_id: marketplaceId,
@@ -341,6 +364,7 @@ export class TemplateVersionManager {
   size: number;
   checksum: string;
 }> {
+
   try {
   const exportData = {
   version_id: versionId,
@@ -375,6 +399,7 @@ export class TemplateVersionManager {
   download_url: string;
   filename: string;
 }> {
+
   try {
   const exportData = {
   template_id: this.templateId,
@@ -390,7 +415,7 @@ export class TemplateVersionManager {
   satisfied: boolean;
   missing: TemplateDependency;
   conflicts: TemplateConflict;
-  recommendations: Array<{,
+  recommendations: Array<{
   template_id: string;
   recommended_version: string;
   reason: string;
@@ -411,6 +436,7 @@ export class TemplateVersionManager {
   updated: string;
   conflicts: TemplateConflict;
 }> {
+
     try {
       const response = await this.apiClient.post(`/api/template-versions/${versionId}/resolve-dependencies`, options);}
       return response.data;
@@ -423,7 +449,7 @@ export class TemplateVersionManager {
   instructions: string;
   complexity: 'simple' | 'moderate' | 'complex';
   estimated_time: number;
-  breaking_changes: Array<{,
+  breaking_changes: Array<{
   type: string;
   description: string;
   action_required: string;
@@ -443,6 +469,7 @@ export class TemplateVersionManager {
   migration_log: string;
   rollback_script?: string;
 }> {
+
     try {
       const response = await this.apiClient.post(`/api/template-versions/${versionId}/migrate`, {)}
   },
@@ -494,18 +521,19 @@ export class TemplateVersionManager {
   dependencies: TemplateVersion;
   related_templates: TemplateVersion;
   // Assets and resources
-  assets: Array<{,
+  assets: Array<{
   type: 'image' | 'document' | 'config' | 'script';
   filename: string;
   data: ArrayBuffer | string;
   mime_type: string;
+}
 }>;
   // Metadata and documentation
   documentation: {
   readme: string;
   changelog: string;
   api_docs?: string;
-  examples?: Array<{,
+  examples?: Array<{
   name: string;
   description: string;
   graph_data: any;

@@ -13,6 +13,7 @@ import { WildConstructVFXExporter } from './VFXExporter.js';
 import { Node, Edge } from 'reactflow';
 import { substituteVariables } from '../utils/templateParser.js';
 
+}
 export interface HybridExportFormat extends VFXExportFormat {
   // Hybrid prompting extensions
   hybridPrompting: {
@@ -35,6 +36,7 @@ export interface HybridExportFormat extends VFXExportFormat {
 
 // === MARS FRAMEWORK INTEGRATION ===
 
+}
 export interface MARSFrameworkTags {
   // Camera and composition tags
   CAM: {
@@ -43,6 +45,7 @@ export interface MARSFrameworkTags {
   movement: 'static' | 'pan' | 'tilt' | 'dolly' | 'zoom' | 'handheld';
   lens: string; // e.g., "35mm", "85mm", "wide-angle",
   depth_of_field: 'shallow' | 'deep' | 'rack-focus';
+}
 };
   // Subject and character tags
   SUBJ: {
@@ -68,6 +71,7 @@ export interface MARSFrameworkTags {
   visual_hierarchy: 'foreground' | 'midground' | 'background'
   };
 }
+}
 export interface MARSStructuredPrompt {
   raw_mars: string; // Original MARS-tagged prompt,
   parsed_structure: {
@@ -75,6 +79,7 @@ export interface MARSStructuredPrompt {
   subject_section: string;
   effects_section: string;
   focal_section: string;
+}
 };
   controlnet_mapping: {
   pose_guidance: string; // SUBJ → pose parameters,
@@ -85,12 +90,15 @@ export interface MARSStructuredPrompt {
 
 // === ZADA NATURAL LANGUAGE APPROACH ===
 }
+}
 export interface ZadaNaturalLanguageVariant {
   variant_id: string;
   style: 'screenplay' | 'storyboard' | 'shot_list' | 'director_note';
   content: string;
   accessibility_level: 'director' | 'cinematographer' | 'general_crew';
   human_readable_score: number; // 1-10, how accessible to non-technical users,
+}
+}
 }
 export interface DirectorAccessiblePrompt {
   screenplay_style: string; // "FADE IN: CLOSE-UP on character's face...",
@@ -101,9 +109,11 @@ export interface DirectorAccessiblePrompt {
   cinematographer: string;
   lighting_director: string;
   vfx_supervisor: string;
+}
 };
 
 // === HOLLYWOOD REPRODUCIBILITY PROTOCOL ===
+}
 }
 export interface HollywoodSeedProtocol {
   master_seed: number; // Primary reproducibility seed,
@@ -114,7 +124,9 @@ export interface HollywoodSeedProtocol {
   generator_version: string;
   node_version_map: Record<string, string>;
   schema_version: string;
+}
 };
+}
 }
 export interface IterationHistory {
   iteration_id: string;
@@ -124,6 +136,7 @@ export interface IterationHistory {
   director_notes?: string;
   approval_status: 'draft' | 'review' | 'approved' | 'final';
   // === HYBRID EXPORT SERVICE ===
+}
 }
 export class HybridPromptExportService {
   private vfxExporter: WildConstructVFXExporter;
@@ -221,6 +234,7 @@ class MARSFrameworkExtractor {
 };
     return tags;
   async createStructuredPrompt(prompt: string): Promise<MARSStructuredPrompt> {
+
   // Parse prompt into MARS structured format
   const structured: MARSStructuredPrompt = {,
   raw_mars: this.convertToMARSFormat(prompt),
@@ -546,6 +560,7 @@ class ZadaNaturalLanguageGenerator {
   async createDirectorAccessiblePrompt(prompt: string)
     variables: Record<string, string>
   ): Promise<DirectorAccessiblePrompt> {
+
   return {
   screenplay_style: this.convertToScreenplayStyle(prompt, variables),
   shot_description: this.createNaturalShotDescription(prompt, variables),

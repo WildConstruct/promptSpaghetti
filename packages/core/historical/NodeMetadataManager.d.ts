@@ -6,6 +6,7 @@
  * genre/style classification, and tag management.
  */
 
+}
 export interface NodeMetadata {
     id: string;
     nodeId: string;
@@ -19,6 +20,7 @@ export interface NodeMetadata {
     updated: string;
     author: string;
 
+}
 export interface NodeTag {
     id: string;
     type: 'era' | 'genre' | 'style' | 'material' | 'social_class' | 'region' | 'custom';
@@ -27,12 +29,14 @@ export interface NodeTag {
     confidence: number;
     metadata?: Record<string, any>;
 
+}
 export interface EraTag {
     id: string;
     name: string;
     period: {
         start: number;
         end: number;
+}
     };
     region: string[];
     accuracy: 'high' | 'medium' | 'low';
@@ -40,6 +44,7 @@ export interface EraTag {
     parent?: string;
     children?: string[];
 
+}
 export interface GenreTag {
     id: string;
     name: string;
@@ -48,6 +53,7 @@ export interface GenreTag {
     characteristics: string[];
     relatedGenres: string[];
 
+}
 export interface StyleTag {
     id: string;
     name: string;
@@ -57,6 +63,7 @@ export interface StyleTag {
     description: string;
     keyFeatures: string[];
 
+}
 export interface QualityMetadata {
     authenticity: number;
     completeness: number;
@@ -64,6 +71,7 @@ export interface QualityMetadata {
     verification: 'verified' | 'unverified' | 'disputed' | 'fictional';
     lastVerified?: string;
 
+}
 export interface HistoricalContext {
     socialClass: 'peasant' | 'artisan' | 'merchant' | 'noble' | 'clergy' | 'royal' | 'unknown';
     usage: 'daily' | 'ceremonial' | 'religious' | 'military' | 'trade' | 'artistic';
@@ -72,6 +80,7 @@ export interface HistoricalContext {
     productionMethod: string[];
     culturalSignificance: string;
 
+}
 export interface TagInheritanceRule {
     id: string;
     name: string;
@@ -81,11 +90,13 @@ export interface TagInheritanceRule {
     transformations: TagTransformation[];
     enabled: boolean;
 
+}
 export interface TagCondition {
     field: string;
     operator: 'equals' | 'contains' | 'matches' | 'in' | 'not_in';
     value: any;
 
+}
 export interface TagTransformation {
     type: 'copy' | 'modify' | 'merge' | 'filter';
     config: Record<string, any>;
@@ -180,6 +191,7 @@ export declare class NodeMetadataManager {
         valid: boolean;
         conflicts: string[];
         warnings: string[];
+}
     };
     /**
      * Check material-era compatibility

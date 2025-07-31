@@ -20,6 +20,7 @@ import { SecurityOptimizationEngine } from '../services/SecurityOptimizationEngi
 let policyAnalysisEngine: SecurityPolicyAnalysisEngine | null = null;
 
 }
+}
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
@@ -29,13 +30,16 @@ interface APIResponse<T = any> {
 }
 
 }
+}
 interface PolicyAnalysisRequest {
   policy: SecurityPolicy;
   analysis_type?: 'pre_deployment' | 'post_deployment' | 'periodic_review';
   include_simulation?: boolean;
 }
 }
+}
 
+}
 }
 interface PolicyValidationRequest {
   policy: SecurityPolicy;
@@ -43,12 +47,15 @@ interface PolicyValidationRequest {
   compliance_standards?: string[];
 }
 }
+}
 
+}
 }
 interface PolicyComparisonRequest {
   current_policy: SecurityPolicy;
   new_policy: SecurityPolicy;
   include_detailed_analysis?: boolean;
+}
 }
 }
 

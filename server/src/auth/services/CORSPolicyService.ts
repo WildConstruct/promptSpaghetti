@@ -6,6 +6,7 @@
 import { Request } from 'express';
 
 }
+}
 export interface CORSPolicy {
   id: string;
   name: string;
@@ -21,6 +22,7 @@ export interface CORSPolicy {
     inheritFromReferrer?: boolean;
     localhostAllowed?: boolean;
     subdomainWildcard?: boolean;
+}
 }
   };
   
@@ -81,6 +83,7 @@ export interface CORSPolicy {
 }
 
 }
+}
 export interface CORSAssessment {
   policyId: string;
   timestamp: Date;
@@ -90,6 +93,7 @@ export interface CORSAssessment {
     severity: 'low' | 'medium' | 'high' | 'critical';
     description: string;
     recommendation: string;
+}
 }
   }>;
   complianceScore: number; // 0-100
@@ -103,6 +107,7 @@ export interface CORSAssessment {
 }
 
 }
+}
 export interface CORSRequest {
   origin?: string;
   method: string;
@@ -115,7 +120,9 @@ export interface CORSRequest {
   requestedMethod?: string;
 }
 }
+}
 
+}
 }
 export interface CORSResponse {
   allowed: boolean;
@@ -124,6 +131,7 @@ export interface CORSResponse {
   reason?: string;
   policyApplied?: string;
   securityWarnings?: string[];
+}
 }
 }
 

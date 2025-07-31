@@ -9,6 +9,7 @@ import { EventEmitter } from 'events';
 
 // Core ticket interfaces for Epic 16
 
+}
 export interface MarketplaceTicket {
   id: string;
   type: MarketplaceTicketType;
@@ -44,6 +45,7 @@ export interface MarketplaceTicket {
   sla: SLATracking;
   // Integration data
   externalIntegrations: ExternalIntegration;
+}
 }
 export enum MarketplaceTicketType {
   TEMPLATE_SUBMISSION = 'template_submission',
@@ -99,12 +101,16 @@ export enum MarketplaceTicketType {
   userId?: string;
   customFields: Record<string, any>;
 }
+}
+}
 export interface DeviceInfo {
   type: 'desktop' | 'mobile' | 'tablet';
   os: string;
   browser: string;
   version: string;
   screenResolution?: string;
+}
+}
 }
 export interface TicketAttachment {
   id: string;
@@ -117,12 +123,16 @@ export interface TicketAttachment {
   uploadedAt: Date;
   scanResults?: SecurityScanResult;
 }
+}
+}
 export interface SecurityScanResult {
   scanner: string;
   result: 'clean' | 'suspicious' | 'malicious';
   confidence: number;
   details: string;
   scannedAt: Date;
+}
+}
 }
 export interface TicketComment {
   id: string;
@@ -136,10 +146,14 @@ export interface TicketComment {
   mentions: string;
   reactions: CommentReaction;
 }
+}
+}
 export interface CommentReaction {
   emoji: string;
   userId: string;
   timestamp: Date;
+}
+}
 }
 export interface SLATracking {
   responseTime: SLAMetric;
@@ -148,12 +162,16 @@ export interface SLATracking {
   breached: boolean;
   breachReason?: string;
 }
+}
+}
 export interface SLAMetric {
   target: number; // minutes,
   actual?: number; // minutes,
   deadline: Date;
   breached: boolean;
   warningThreshold: number; // minutes before deadline,
+}
+}
 }
 export interface ExternalIntegration {
   system: string;
@@ -163,6 +181,8 @@ export interface ExternalIntegration {
   lastSync: Date;
   syncData: Record<string, any>;
   // Ticket workflow interfaces
+}
+}
 }
 export interface TicketWorkflow {
   id: string;
@@ -175,6 +195,8 @@ export interface TicketWorkflow {
   active: boolean;
   version: string;
 }
+}
+}
 export interface WorkflowStep {
   id: string;
   name: string;
@@ -186,21 +208,29 @@ export interface WorkflowStep {
   slaRules: SLARule;
   nextSteps: string;
 }
+}
+}
 export interface WorkflowTrigger {
   type: 'status_change' | 'time_based' | 'field_change' | 'comment_added' | 'escalation';
   condition: string;
   parameters: Record<string, any>;
+}
+}
 }
 export interface WorkflowCondition {
   field: string;
   operator: 'equals' | 'not_equals' | 'contains' | 'greater_than' | 'less_than';
   value: any;
   logic: 'AND' | 'OR'
+}
   }
+}
 export interface AssignmentRule {
   type: 'round_robin' | 'skill_based' | 'workload_based' | 'availability_based';
   criteria: AssignmentCriteria;
   fallbackAssignee?: string;
+}
+}
 }
 export interface AssignmentCriteria {
   skills?: string;
@@ -209,10 +239,14 @@ export interface AssignmentCriteria {
   availabilityHours?: string;
   language?: string;
 }
+}
+}
 export interface WorkflowAction {
   type: 'set_field' | 'send_email' | 'create_task' | 'call_webhook' | 'update_status';
   parameters: Record<string, any>;
   condition?: string;
+}
+}
 }
 export interface NotificationRule {
   type: 'email' | 'sms' | 'push' | 'slack' | 'webhook';
@@ -221,10 +255,14 @@ export interface NotificationRule {
   trigger: string;
   delay?: number; // minutes,
 }
+}
+}
 export interface NotificationRecipient {
   type: 'user' | 'role' | 'team' | 'custom';
   identifier: string;
   fallbacks?: string;
+}
+}
 }
 export interface SLARule {
   metric: 'response_time' | 'resolution_time' | 'escalation_time';
@@ -232,12 +270,16 @@ export interface SLARule {
   businessHoursOnly: boolean;
   escalationActions: EscalationAction;
 }
+}
+}
 export interface EscalationAction {
   trigger: 'warning' | 'breach' | 'severe_breach';
   delay: number; // minutes,
   actions: WorkflowAction;
   notifications: NotificationRule;
   // Integration configuration
+}
+}
 }
 export interface IntegrationConfig {
   github: GitHubIntegration;
@@ -248,6 +290,8 @@ export interface IntegrationConfig {
   email: EmailIntegration;
   webhook: WebhookIntegration;
 }
+}
+}
 export interface GitHubIntegration {
   enabled: boolean;
   repository: string;
@@ -255,6 +299,8 @@ export interface GitHubIntegration {
   labelMapping: Record<string, string>;
   autoCreateIssues: boolean;
   syncComments: boolean;
+}
+}
 }
 export interface JiraIntegration {
   enabled: boolean;
@@ -265,6 +311,8 @@ export interface JiraIntegration {
   issueTypeMapping: Record<MarketplaceTicketType, string>;
   fieldMapping: Record<string, string>;
 }
+}
+}
 export interface ZendeskIntegration {
   enabled: boolean;
   domain: string;
@@ -273,6 +321,8 @@ export interface ZendeskIntegration {
   ticketFormId?: string;
   customFields: Record<string, number>;
 }
+}
+}
 export interface SlackIntegration {
   enabled: boolean;
   webhookUrl: string;
@@ -280,12 +330,16 @@ export interface SlackIntegration {
   botToken?: string;
   mentionRoles: string;
 }
+}
+}
 export interface DiscordIntegration {
   enabled: boolean;
   webhookUrl: string;
   serverId: string;
   channelId: string;
   roleMapping: Record<TicketPriority, string>;
+}
+}
 }
 export interface EmailIntegration {
   enabled: boolean;
@@ -296,16 +350,22 @@ export interface EmailIntegration {
   fromAddress: string;
   templates: Record<string, EmailTemplate>;
 }
+}
+}
 export interface EmailTemplate {
   subject: string;
   htmlBody: string;
   textBody: string;
   attachments?: string;
 }
+}
+}
 export interface WebhookIntegration {
   enabled: boolean;
   endpoints: WebhookEndpoint;
   retryPolicy: RetryPolicy;
+}
+}
 }
 export interface WebhookEndpoint {
   url: string;
@@ -313,9 +373,13 @@ export interface WebhookEndpoint {
   headers: Record<string, string>;
   authentication?: WebhookAuth;
 }
+}
+}
 export interface WebhookAuth {
   type: 'none' | 'basic' | 'bearer' | 'api_key';
   credentials: Record<string, string>;
+}
+}
 }
 export interface RetryPolicy {
   maxRetries: number;
@@ -323,6 +387,8 @@ export interface RetryPolicy {
   baseDelay: number; // milliseconds,
   maxDelay: number; // milliseconds,
   // Service configuration
+}
+}
 }
 export interface TicketIntegrationConfig {
   defaultWorkflow: string;
@@ -333,6 +399,7 @@ export interface TicketIntegrationConfig {
   enabled: boolean;
   channels: string;
   templates: Record<string, string>;
+}
 };
   security: {
   encryptAttachments: boolean;
@@ -395,6 +462,7 @@ export class Epic16TicketIntegrationService extends EventEmitter {
    * Create a new marketplace/community ticket
    */
   async createTicket(ticketData: Omit<MarketplaceTicket, 'id' | 'createdAt' | 'updatedAt' | 'sla'>): Promise<MarketplaceTicket> {
+
   const ticketId = this.generateTicketId();
   const now = new Date();
   const ticket: MarketplaceTicket = {,
@@ -421,6 +489,7 @@ export class Epic16TicketIntegrationService extends EventEmitter {
    * Update ticket status
    */
   async updateTicketStatus(ticketId: string, newStatus: TicketStatus, userId: string, comment?: string): Promise<MarketplaceTicket | null> {
+
   const ticket = this.tickets.get(ticketId);
   if (!ticket) return null;
   const oldStatus = ticket.status;
@@ -448,6 +517,7 @@ export class Epic16TicketIntegrationService extends EventEmitter {
    * Add comment to ticket
    */
   async addComment(ticketId: string, commentData: Omit<TicketComment, 'id' | 'createdAt' | 'reactions'>): Promise<TicketComment | null> {
+
   const ticket = this.tickets.get(ticketId);
   if (!ticket) return null;
   const comment: TicketComment = {,
@@ -471,6 +541,7 @@ export class Epic16TicketIntegrationService extends EventEmitter {
    * Assign ticket to user or team
    */
   async assignTicket(ticketId: string, assigneeId: string, assignerId: string): Promise<MarketplaceTicket | null> {
+
     const ticket = this.tickets.get(ticketId);
     if (!ticket) return null;
     const oldAssignee = ticket.assignedTo;
@@ -494,6 +565,7 @@ export class Epic16TicketIntegrationService extends EventEmitter {
    * Escalate ticket
    */
   async escalateTicket(ticketId: string, reason: string, escalatedBy: string): Promise<MarketplaceTicket | null> {
+
     const ticket = this.tickets.get(ticketId);
     if (!ticket) return null;
     const oldStatus = ticket.status;
@@ -533,6 +605,7 @@ export class Epic16TicketIntegrationService extends EventEmitter {
   total: number;
   hasMore: boolean;
 }> {
+
   let filtered = Array.from(this.tickets.values());
   // Apply filters
   if (filters.status) {
@@ -760,20 +833,28 @@ export class Epic16TicketIntegrationService extends EventEmitter {
     this.workflows.set('standard_support', standardWorkflow);
   // Placeholder integration methods - would implement actual API calls
   private async sendEmailNotification(ticket: MarketplaceTicket, event: string, context?: any): Promise<void> {
+
     // Email notification implementation
   private async sendSlackNotification(ticket: MarketplaceTicket, event: string, context?: any): Promise<void> {
+
     // Slack notification implementation
   private async sendDiscordNotification(ticket: MarketplaceTicket, event: string, context?: any): Promise<void> {
+
     // Discord notification implementation
   private async sendWorkflowNotification(notification: NotificationRule, ticket: MarketplaceTicket, context?: any): Promise<void> {
+
     // Workflow notification implementation
   private async callWebhook(url: string, ticket: MarketplaceTicket, method: string): Promise<void> {
+
     // Webhook call implementation
   private async syncWithGitHub(ticket: MarketplaceTicket, event: string, context?: any): Promise<void> {
+
     // GitHub sync implementation
   private async syncWithJira(ticket: MarketplaceTicket, event: string, context?: any): Promise<void> {
+
     // Jira sync implementation
   private async syncWithZendesk(ticket: MarketplaceTicket, event: string, context?: any): Promise<void> {
+
     // Zendesk sync implementation
 
 export default Epic16TicketIntegrationService;

@@ -3,6 +3,7 @@ import { useState, useCallback, useRef } from 'react';
 import { API_URL } from '../config/environment';
 
 // Types
+}
 interface SearchFilters {
   query?: string;
   categories?: string;
@@ -25,21 +26,24 @@ interface SearchFilters {
   total_reviews: number;
   total_purchases: number;
   categories?: string;
-  owner?: {,
+  owner?: {
   id: string;,
   name: string;
   verified: boolean;
+}
 };
   featured_at?: string;
   created_at: string;
   is_ai_generated?: boolean;
   claude_compat: string;
+}
 interface SearchResult {
   templates: Template;,
   total: number;
   page: number;,
   limit: number;
   has_more: boolean;
+}
 interface Category {
   id: string;,
   name: string;
@@ -47,12 +51,14 @@ interface Category {
   icon?: string;
   sort_order: number;
   parent_id?: string;
+}
 interface MarketplaceState {
   templates: SearchResult;,
   categories: Category;
   featuredTemplates: Template;,
   loading: boolean;
   error: string | null;
+}
 interface MarketplaceActions {
   searchTemplates: (filters: SearchFilters, append?: boolean) => Promise<void>;
   loadCategories: () => Promise<void>;,
@@ -60,6 +66,7 @@ interface MarketplaceActions {
   getTemplate: (id: string) => Promise<Template | null>;,
   previewTemplate: (),
     id: string,
+}
     options?: { format?: string; version?: string }
   ) => Promise<{ success: boolean; preview?: string; error?: string }>;
   purchaseTemplate: (),
@@ -115,7 +122,7 @@ export const useMarketplace = () => {
   }, [setError]);
   const reset = useCallback(() => {
   setState({)
-  templates: {,
+  templates: {
   templates: [],
   total: 0,
   page: 1,

@@ -7,6 +7,7 @@
 import { EventEmitter } from 'events';
 import { AdvancedExecutionContext } from '../runtime/advanced';
 
+}
 export interface PerformanceMetrics {
   nodeId: string;
   nodeType: string;
@@ -21,6 +22,7 @@ export interface PerformanceMetrics {
   after: number;
   peak: number;
   delta: number;
+}
 };
   // Context metrics
   contextSize: {
@@ -35,6 +37,7 @@ export interface PerformanceMetrics {
   warnings: string;
   // Custom metrics
   customMetrics: Map<string, number | string | boolean>;
+}
 }
 export interface AggregatedMetrics {
   nodeType: string;
@@ -60,6 +63,8 @@ export interface AggregatedMetrics {
   // Recommendations
   optimizationRecommendations: string;
 }
+}
+}
 export interface PerformanceAlert {
   id: string;
   timestamp: number;
@@ -70,6 +75,8 @@ export interface PerformanceAlert {
   message: string;
   details: Record<string, any>;
   resolved: boolean;
+}
+}
 }
 export interface PerformanceMonitorConfig {
   enableMemoryTracking: boolean;
@@ -91,6 +98,7 @@ export interface PerformanceMonitorConfig {
   /**
   * Comprehensive performance monitoring system
   */
+}
 }
 export class PerformanceMonitor extends EventEmitter {
   private config: PerformanceMonitorConfig;
@@ -345,12 +353,12 @@ export class PerformanceMonitor extends EventEmitter {
   private analyzePerformance(metrics: PerformanceMetrics): void {
     // Check for slow execution
     if (metrics.duration > this.config.slowExecutionThreshold) {
-      metrics.warnings.push()
+      metrics.warnings.push(
         `Slow execution: ${metrics.duration.toFixed(2)}ms (threshold: ${this.config.slowExecutionThreshold}ms)`}
       );
     // Check for high memory usage
     if (Math.abs(metrics.memoryUsage.delta) > this.config.memoryThreshold) {
-      metrics.warnings.push()
+      metrics.warnings.push(
         `High memory usage: ${(metrics.memoryUsage.delta / (1024 * 1024)).toFixed(2)}MB delta`}
       );
     // Check for large context
@@ -359,12 +367,12 @@ export class PerformanceMonitor extends EventEmitter {
       metrics.contextSize.stateCount + 
       metrics.contextSize.cacheSize;
     if (totalContextSize > this.config.contextSizeThreshold) {
-      metrics.warnings.push()
+      metrics.warnings.push(
         `Large context size: ${totalContextSize} items (threshold: ${this.config.contextSizeThreshold})`}
       );
     // Check for deep evaluation
     if (metrics.contextSize.evaluationDepth > 10) { // Arbitrary threshold
-      metrics.warnings.push()
+      metrics.warnings.push(
         `Deep evaluation depth: ${metrics.contextSize.evaluationDepth} levels`}
       );
   private storeMetrics(metrics: PerformanceMetrics): void {

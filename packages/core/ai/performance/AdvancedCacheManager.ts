@@ -5,6 +5,7 @@
  * Intelligent caching system with multiple eviction policies and performance optimization
  */
 
+}
 export interface CacheConfig {
   maxSize: number;
   maxMemoryMB: number;
@@ -16,7 +17,9 @@ export interface CacheConfig {
   metrics: {
   enabled: boolean;
   reportingInterval: number;
+}
 };
+}
 }
 export interface CacheItem<T = any> {
   key: string;
@@ -35,6 +38,7 @@ export interface CacheItem<T = any> {
   cost: number;
 };
 
+}
 export interface CacheMetrics {
   hitRate: number;
   missRate: number;
@@ -47,11 +51,14 @@ export interface CacheMetrics {
   compressionRatio: number;
   costSavings: number;
 }
+}
+}
 export interface EvictionStrategy {
   name: string;
   shouldEvict(item: CacheItem, config: CacheConfig): boolean;
   selectItemsForEviction(items: CacheItem, count: number): CacheItem;
   calculatePriority(item: CacheItem): number;
+}
 }
 export class LRUEvictionStrategy implements EvictionStrategy {
   name = 'LRU';
@@ -166,6 +173,7 @@ export class LRUEvictionStrategy implements EvictionStrategy {
   metadata?: Partial<CacheItem['metadata']>;
 } = {}
   ): Promise<void> {
+
   const size = this.calculateSize(value);
   // Check if we need to make space
   await this.ensureCapacity(size);
@@ -195,11 +203,13 @@ export class LRUEvictionStrategy implements EvictionStrategy {
     this.cache.set(key, item);
     this.updateMetrics();
   async delete(key: string): Promise<boolean> {
+
     const deleted = this.cache.delete(key);
     if (deleted) {
       this.updateMetrics();
     return deleted;
   async clear(): Promise<void> {
+
     this.cache.clear();
     this.metrics = this.initializeMetrics();
   getMetrics(): CacheMetrics {
@@ -216,6 +226,7 @@ export class LRUEvictionStrategy implements EvictionStrategy {
   memoryFreed: number;
   optimizationTime: number;
 }> {
+
   const startTime = Date.now();
   const initialMemory = this.getMemoryUsage();
   const initialCount = this.cache.size;
@@ -323,11 +334,13 @@ export class LRUEvictionStrategy implements EvictionStrategy {
       hash = hash & hash; // Convert to 32-bit integer
     return hash.toString(36);
   private async compress(value: any): Promise<any> {
+
     // Simplified compression - in production would use proper compression library
     if (typeof value === 'string') {
       return { __compressed: true, data: value }; // Placeholder
     return value;
   private async decompress(value: any): Promise<any> {
+
   if (value && value.__compressed) {
   return value.data;
   return value;

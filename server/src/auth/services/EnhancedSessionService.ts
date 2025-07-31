@@ -8,6 +8,7 @@ import { EventEmitter } from 'events';
 import jwt from 'jsonwebtoken';
 
 }
+}
 export interface SessionConfig {
   sessionDuration: number; // seconds
   refreshTokenDuration: number; // seconds
@@ -25,6 +26,7 @@ export interface SessionConfig {
     domain?: string;
     path: string;
 }
+}
   };
   sessionRotation: {
     enabled: boolean;
@@ -41,6 +43,7 @@ export interface SessionConfig {
 }
 
 }
+}
 export interface Session {
   id: string;
   userId: string;
@@ -53,6 +56,7 @@ export interface Session {
     previousTokens?: Array<{
       token: string;
       validUntil: Date;
+}
 }
     }>;
   };
@@ -102,6 +106,7 @@ export interface Session {
 }
 
 }
+}
 export interface DeviceProfile {
   id: string;
   userId: string;
@@ -114,6 +119,7 @@ export interface DeviceProfile {
     registeredFrom: string;
     verificationMethod: 'email' | 'sms' | 'push' | 'manual';
     verifiedAt?: Date;
+}
 }
   };
   
@@ -145,6 +151,7 @@ export interface DeviceProfile {
 }
 
 }
+}
 export interface SessionActivity {
   sessionId: string;
   timestamp: Date;
@@ -154,6 +161,7 @@ export interface SessionActivity {
   statusCode?: number;
   responseTime?: number;
   metadata: Record<string, any>;
+}
 }
 }
 

@@ -22,6 +22,7 @@ import { SecurityOptimizationEngine } from '../services/SecurityOptimizationEngi
 let controlTestingEngine: SecurityControlTestingEngine | null = null;
 
 }
+}
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
@@ -31,12 +32,15 @@ interface APIResponse<T = any> {
 }
 
 }
+}
 interface ControlRegistrationRequest {
   control: SecurityControl;
   schedule_immediate_test?: boolean;
 }
 }
+}
 
+}
 }
 interface ControlTestRequest {
   control_id: string;
@@ -45,7 +49,9 @@ interface ControlTestRequest {
   notify_on_completion?: boolean;
 }
 }
+}
 
+}
 }
 interface OptimizationRequest {
   control_id: string;
@@ -53,7 +59,9 @@ interface OptimizationRequest {
   apply_automatically?: boolean;
 }
 }
+}
 
+}
 }
 interface ReportRequest {
   report_type?: EffectivenessReport['report_type'];
@@ -62,6 +70,7 @@ interface ReportRequest {
   control_ids?: string[];
   include_detailed_findings?: boolean;
   include_compliance_assessment?: boolean;
+}
 }
 }
 

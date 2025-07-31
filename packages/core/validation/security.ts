@@ -364,9 +364,9 @@ export class SecurityTesting {
   /**
    * Test if validation properly blocks injection attempts
    */
-  static testInjectionProtection(()
+  static testInjectionProtection(((
     validator: (input: string) => boolean,
-    testName: string = 'Unknown',
+    testName: string = 'Unknown'
   ): { passed: number; failed: number; failedPatterns: string } {
   let passed = 0;
   let failed = 0;

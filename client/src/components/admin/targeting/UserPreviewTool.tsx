@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { Badge } from '../../common/Badge';
 import { LoadingSpinner } from '../../common/LoadingSpinner';
+}
 interface UserPreview {
   id: string;,
   email: string;
@@ -41,11 +42,12 @@ interface UserPreview {
   isOpen: boolean;,
   onClose: () => void;
   toggleId?: string;
-  rules?: Array<{,
+  rules?: Array<{
   attribute: string;,
   operator: string;
   value: Error;
   logicalOperator?: 'AND' | 'OR';
+}
 }>;
 
 export const [userToggles, setUserToggles] = useState<TogglePreview>([]);
@@ -73,7 +75,7 @@ export const [userToggles, setUserToggles] = useState<TogglePreview>([]);
         loginCount: 142,
         featureUsage: 89,
         experimentGroup: 'variant_a',
-        customAttributes: {,
+        customAttributes: {
   department: 'engineering',
   seniority: 'senior',
   team_size: 8,

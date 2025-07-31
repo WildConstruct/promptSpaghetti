@@ -18,6 +18,7 @@ import {
 let dataMart: SecurityIntelligenceDataMart | null = null;
 
 }
+}
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
@@ -27,6 +28,7 @@ interface APIResponse<T = any> {
 }
 
 }
+}
 interface InitializeDataMartRequest {
   configuration: {
     architecture: Partial<SecurityDataMartConfig['architecture']>;
@@ -35,6 +37,7 @@ interface InitializeDataMartRequest {
     data_quality: Partial<SecurityDataMartConfig['data_quality']>;
     access_control: Partial<SecurityDataMartConfig['access_control']>;
     analytics_capabilities: Partial<SecurityDataMartConfig['analytics_capabilities']>;
+}
 }
   };
   deployment_options?: {
@@ -47,6 +50,7 @@ interface InitializeDataMartRequest {
 }
 
 }
+}
 interface CreateSchemaRequest {
   schema_options: {
     create_dimensions: boolean;
@@ -54,6 +58,7 @@ interface CreateSchemaRequest {
     create_views: boolean;
     apply_partitioning: boolean;
     create_indexes: boolean;
+}
 }
   };
   performance_settings?: {
@@ -71,6 +76,7 @@ interface CreateSchemaRequest {
 }
 
 }
+}
 interface SetupPipelinesRequest {
   pipeline_configuration: {
     real_time_pipelines: {
@@ -78,6 +84,7 @@ interface SetupPipelinesRequest {
       source_types: ('security_events' | 'threat_intelligence' | 'vulnerability_data')[];
       processing_mode: 'streaming' | 'micro_batch';
       quality_checks: boolean;
+}
 }
     };
     batch_pipelines: {
@@ -105,12 +112,14 @@ interface SetupPipelinesRequest {
 }
 
 }
+}
 interface GenerateAnalyticsRequest {
   analytics_scope: {
     analysis_types: ('threat_landscape' | 'risk_trending' | 'incident_patterns' | 'asset_criticality' | 'compliance_status')[];
     time_range?: {
       start_date: string;
       end_date: string;
+}
 }
     };
     organizational_scope?: string[];
@@ -132,6 +141,7 @@ interface GenerateAnalyticsRequest {
 }
 
 }
+}
 interface OptimizePerformanceRequest {
   optimization_scope: {
     target_areas: ('indexes' | 'queries' | 'storage' | 'processing' | 'comprehensive')[];
@@ -140,6 +150,7 @@ interface OptimizePerformanceRequest {
       maintenance_window_hours?: number[];
       resource_usage_limit?: number;
       availability_requirement?: number;
+}
 }
     };
   };
@@ -158,6 +169,7 @@ interface OptimizePerformanceRequest {
 }
 
 }
+}
 interface GetDataQualityRequest {
   quality_scope: {
     data_sources?: string[];
@@ -165,6 +177,7 @@ interface GetDataQualityRequest {
     time_range?: {
       start_date: string;
       end_date: string;
+}
 }
     };
   };
@@ -182,6 +195,7 @@ interface GetDataQualityRequest {
 }
 
 }
+}
 interface ManageRetentionRequest {
   retention_configuration: {
     data_types: ('raw_events' | 'aggregated_metrics' | 'audit_logs' | 'compliance_data')[];
@@ -190,6 +204,7 @@ interface ManageRetentionRequest {
       retention_period_days: number;
       archive_before_delete: boolean;
       compliance_requirements?: string[];
+}
 }
     }[];
   };

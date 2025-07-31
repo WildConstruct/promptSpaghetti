@@ -58,6 +58,8 @@ export enum DataProtectionEventType {
   complianceFrameworks: ComplianceFramework;
   metadata?: Record<string, any>;
 }
+}
+}
 export interface DataDeletionEvent extends DataProtectionEvent {
   deletionJobId: string;
   scheduledTime: Date;
@@ -72,6 +74,7 @@ export interface DataDeletionEvent extends DataProtectionEvent {
   failureReasons?: string;
   exemptionReasons?: string;
 
+}
 export interface PrivacyRequestEvent extends DataProtectionEvent {
   requestType: 'access' | 'rectification' | 'erasure' | 'portability' | 'restriction' | 'objection';
   requestId: string;
@@ -113,6 +116,7 @@ export interface PrivacyRequestEvent extends DataProtectionEvent {
    * Log a data protection event
    */
   async logDataProtectionEvent(event: DataProtectionEvent): Promise<void> {
+
   try {
   // Validate event data
   this.validateEvent(event);
@@ -167,6 +171,7 @@ export interface PrivacyRequestEvent extends DataProtectionEvent {
    * Log a data deletion event with detailed tracking
    */
   async logDataDeletionEvent(event: DataDeletionEvent): Promise<void> {
+
   const extendedEvent: DataProtectionEvent = {,
   ...event,
   metadata: {
@@ -294,6 +299,7 @@ export interface PrivacyRequestEvent extends DataProtectionEvent {
       correlationId: event.correlationId;
   });
   private async logOverduePrivacyRequestAlert(event: PrivacyRequestEvent): Promise<void> {
+
   console.log('Security alert:', {,)
   eventId: this.generateEventId(),
   timestamp: new Date(),
@@ -312,6 +318,7 @@ export interface PrivacyRequestEvent extends DataProtectionEvent {
       correlationId: event.correlationId;
   });
   private async logCriticalViolationAlert(event: PolicyViolationEvent): Promise<void> {
+
   console.log('Security alert:', {,)
   eventId: this.generateEventId(),
   timestamp: new Date(),
@@ -382,8 +389,10 @@ export interface PrivacyRequestEvent extends DataProtectionEvent {
   : 100,
 };
 
+}
 export interface ComplianceReport {
   framework: ComplianceFramework;
+}
   reportPeriod: { start: Date; end: Date };
   eventCount: number;
   eventTypes: Record<string, number>;
@@ -393,9 +402,11 @@ export interface ComplianceReport {
   retentionCompliance: ComplianceMetrics;
   generatedAt: Date;
 }
+}
 export interface ComplianceMetrics {
   totalEvents: number;
   pastRetentionEvents: number;
   improperllyRetainedEvents: number;
   compliancePercentage: number;
+}
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 
+}
 interface ApprovalRequest {
     id: string;
     workspace_id: string;
@@ -18,6 +19,7 @@ interface ApprovalRequest {
     approval_percentage: number;
 
 
+}
 interface ApprovalReviewInterfaceProps {
     request: ApprovalRequest;
     workspaceId: string;
@@ -32,5 +34,6 @@ interface ApprovalReviewInterfaceProps {
     readOnly?: boolean;
 
 export declare const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps>;
+}
 export {};
 //# sourceMappingURL=ApprovalReviewInterface.d.ts.map

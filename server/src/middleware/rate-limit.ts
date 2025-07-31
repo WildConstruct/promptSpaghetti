@@ -31,6 +31,7 @@ import { RedisService } from '../auth/database/RedisService';
 // ========================================
 
 }
+}
 export interface RateLimitMiddlewareConfig {
   redis?: RedisService;
   configManager?: RateLimitConfigurationManager;
@@ -44,12 +45,15 @@ export interface RateLimitMiddlewareConfig {
   errorHandler?: (error: Error, request: FastifyRequest, reply: FastifyReply) => void;
 }
 }
+}
 
+}
 }
 export interface EndpointRateLimitConfig {
   path: string;
   method?: string | string[];
   config: Partial<RateLimitConfig>;
+}
 }
 }
 
@@ -61,6 +65,7 @@ declare module 'fastify' {
       remaining: number;
       resetTime: Date;
       exceeded: boolean;
+}
 }
     };
     userId?: string | number;
@@ -467,6 +472,7 @@ declare module 'fastify' {
   interface FastifyInstance {
     rateLimit: RateLimitMiddleware;
     rateLimitEndpoint: (config: Partial<RateLimitConfig>) => ReturnType<RateLimitMiddleware['createEndpointMiddleware']>;
+}
 }
   }
 }

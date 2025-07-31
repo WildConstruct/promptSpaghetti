@@ -168,6 +168,7 @@ export type RestoreSnapshotPayload = z.infer<typeof RestoreSnapshotPayloadSchema
 
 // Connection metadata
 }
+}
 export interface ConnectionInfo {
   id: string;
   userId: string;
@@ -184,8 +185,10 @@ export interface ConnectionInfo {
   role?: 'owner' | 'editor' | 'viewer' | 'reviewer';
 }
 }
+}
 
 // Document session info
+}
 }
 export interface DocumentSession {
   documentId: string;
@@ -194,8 +197,10 @@ export interface DocumentSession {
   version: number;
 }
 }
+}
 
 // WebSocket server configuration
+}
 }
 export interface WSServerConfig {
   port: number;
@@ -207,8 +212,10 @@ export interface WSServerConfig {
   corsOrigins: string[];
 }
 }
+}
 
 // Health check data
+}
 }
 export interface HealthMetrics {
   totalConnections: number;
@@ -217,5 +224,6 @@ export interface HealthMetrics {
   uptime: number;
   memoryUsage: number;
   lastUpdated: number;
+}
 }
 }

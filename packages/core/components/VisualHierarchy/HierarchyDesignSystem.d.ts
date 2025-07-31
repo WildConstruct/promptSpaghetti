@@ -140,6 +140,7 @@ export declare const FieldImportanceStyles: {
 export type FieldPriority = 'critical' | 'important' | 'standard' | 'supplementary';
 export declare const classifyFieldPriority: (fieldName: string, nodeType?: string) => FieldPriority;
 
+}
 export interface HierarchyHeaderProps {
     title: string;
     level: 'basic' | 'advanced' | 'debug';
@@ -153,6 +154,7 @@ export interface HierarchyHeaderProps {
 
 export declare const HierarchyHeader: React.FC<HierarchyHeaderProps>;
 
+}
 export interface HierarchyFieldProps {
     priority: FieldPriority;
     level: 'basic' | 'advanced' | 'debug';
@@ -165,6 +167,7 @@ export interface HierarchyFieldProps {
 
 export declare const HierarchyField: React.FC<HierarchyFieldProps>;
 
+}
 export interface ComplexityIndicatorProps {
     level: 'basic' | 'advanced' | 'debug';
     showLabel?: boolean;
@@ -175,6 +178,7 @@ export declare const AccessibilityUtils: {
     getAriaLabel: (level: "basic" | "advanced" | "debug", title: string) => string;
     getAriaDescription: (priority: FieldPriority) => string;
     getFocusableElements: (container: HTMLElement) => HTMLElement[];
+}
 };
 declare const _default: {
     TypographyScale: {

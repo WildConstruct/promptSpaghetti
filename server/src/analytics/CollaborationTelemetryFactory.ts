@@ -13,10 +13,12 @@ import { getDatabase } from '../database/connection';
 import { AnalyticsDAO } from '../database/analytics-dao';
 
 }
+}
 export interface CollaborationTelemetrySetup {
   telemetryService: CollaborationTelemetryService;
   analyticsCollector: AnalyticsCollector;
   analyticsWebSocketServer: AnalyticsWebSocketServer;
+}
 }
 }
 

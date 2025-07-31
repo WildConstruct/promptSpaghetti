@@ -17,6 +17,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 
 }
+}
 export interface EventStreamConfig {
   streamId: string;
   port?: number;
@@ -49,7 +50,9 @@ export interface EventStreamConfig {
   bufferRetention: number; // hours
 }
 }
+}
 
+}
 }
 export interface EventSubscription {
   subscriptionId: string;
@@ -79,7 +82,9 @@ export interface EventSubscription {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface SubscriptionChannel {
   type: 'websocket' | 'sse' | 'webhook' | 'redis';
@@ -95,7 +100,9 @@ export interface SubscriptionChannel {
   lastError?: string;
 }
 }
+}
 
+}
 }
 export interface EventFilter {
   field: string;
@@ -104,7 +111,9 @@ export interface EventFilter {
   caseSensitive?: boolean;
 }
 }
+}
 
+}
 }
 export interface StreamMetrics {
   activeSubscriptions: number;
@@ -118,7 +127,9 @@ export interface StreamMetrics {
   timestamp: Date;
 }
 }
+}
 
+}
 }
 export interface DeliveryReceipt {
   subscriptionId: string;
@@ -128,6 +139,7 @@ export interface DeliveryReceipt {
   deliveryLatency: number;
   success: boolean;
   error?: string;
+}
 }
 }
 

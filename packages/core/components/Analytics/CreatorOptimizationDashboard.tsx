@@ -29,16 +29,19 @@ import {
 
 // Creator optimization interfaces
 
+}
 export interface CreatorOptimizationDashboardProps {
   creatorId: string;
   creatorProfile: CreatorProfile;
   funnelDefinition: ConversionFunnelDefinition;
   analyticsInfrastructure: ConversionAnalyticsInfrastructure;
+}
   timeRange?: { start: number; end: number };
   dashboardMode?: CreatorDashboardMode;
   onActionTaken?: (action: CreatorAction) => void;
   onGoalSet?: (goal: CreatorGoal) => void;
   onExport?: (data: CreatorOptimizationExportData) => void;
+}
 }
 export interface CreatorProfile {
   creatorId: string;
@@ -55,8 +58,10 @@ export interface CreatorProfile {
   preferences: CreatorPreferences;
   goals: CreatorGoal;
 }
+}
 export type CreatorTier = 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond';
 
+}
 export interface CreatorBadge {
   badgeId: string;
   name: string;
@@ -64,12 +69,16 @@ export interface CreatorBadge {
   earnedDate: number;
   category: 'quality' | 'popularity' | 'innovation' | 'community' | 'milestone';
   rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary'
+}
   }
+}
 export interface CreatorPreferences {
   notificationSettings: NotificationSettings;
   displaySettings: DisplaySettings;
   privacySettings: PrivacySettings;
   optimizationFocus: OptimizationFocus;
+}
+}
 }
 export interface NotificationSettings {
   emailNotifications: boolean;
@@ -78,18 +87,23 @@ export interface NotificationSettings {
   marketingUpdates: boolean;
   communityUpdates: boolean;
   frequency: 'real_time' | 'daily' | 'weekly' | 'monthly'
+}
   }
+}
 export interface DisplaySettings {
   theme: 'light' | 'dark' | 'auto';
   dashboardLayout: 'compact' | 'standard' | 'detailed';
   defaultTimeRange: 'week' | 'month' | 'quarter' | 'year';
   chartType: 'line' | 'bar' | 'area' | 'mixed'
+}
   }
+}
 export interface PrivacySettings {
   profileVisibility: 'public' | 'limited' | 'private';
   revenueDataSharing: boolean;
   performanceDataSharing: boolean;
   allowBenchmarking: boolean;
+}
 }
 export type OptimizationFocus = 
   | 'revenue_growth'
@@ -101,6 +115,7 @@ export type OptimizationFocus =
 
 export type CreatorDashboardMode = 'overview' | 'performance' | 'optimization' | 'growth' | 'learning';
 
+}
 export interface CreatorOptimizationData {
   overviewMetrics: CreatorOverviewMetrics;
   templatePerformance: CreatorTemplatePerformance;
@@ -111,6 +126,8 @@ export interface CreatorOptimizationData {
   successStories: CreatorSuccessStory;
   automatedSuggestions: AutomatedSuggestion;
   goalProgress: CreatorGoalProgress;
+}
+}
 }
 export interface CreatorOverviewMetrics {
   totalRevenue: number;
@@ -130,6 +147,8 @@ export interface CreatorOverviewMetrics {
   followerGrowth: number;
   lastUpdated: number;
 }
+}
+}
 export interface CreatorTemplatePerformance {
   templateId: string;
   templateName: string;
@@ -141,6 +160,8 @@ export interface CreatorTemplatePerformance {
   optimization: TemplateOptimizationData;
   competitivePosition: TemplateCompetitivePosition;
   recommendations: TemplateRecommendation;
+}
+}
 }
 export interface TemplateMetrics {
   views: number;
@@ -155,12 +176,16 @@ export interface TemplateMetrics {
   bounceRate: number;
   timeOnPage: number;
 }
+}
+}
 export interface TemplateConversionFunnel {
   steps: TemplateConversionStep;
   overallConversionRate: number;
   biggestDropoff: string;
   biggestOpportunity: string;
   optimizationPotential: number;
+}
+}
 }
 export interface TemplateConversionStep {
   stepName: string;
@@ -171,6 +196,8 @@ export interface TemplateConversionStep {
   averageTimeSpent: number;
   optimizationScore: number;
 }
+}
+}
 export interface TemplateOptimizationData {
   optimizationScore: number;
   optimizationPotential: number;
@@ -179,6 +206,8 @@ export interface TemplateOptimizationData {
   quickWins: OptimizationQuickWin;
   longTermOpportunities: OptimizationOpportunity;
 }
+}
+}
 export interface OptimizationQuickWin {
   action: string;
   description: string;
@@ -186,6 +215,8 @@ export interface OptimizationQuickWin {
   effort: 'minimal' | 'low' | 'medium';
   timeToImplement: number; // hours,
   successProbability: number;
+}
+}
 }
 export interface OptimizationOpportunity {
   opportunity: string;
@@ -196,6 +227,8 @@ export interface OptimizationOpportunity {
   investmentRequired: number;
   expectedROI: number;
 }
+}
+}
 export interface TemplateCompetitivePosition {
   categoryRank: number;
   totalInCategory: number;
@@ -205,6 +238,8 @@ export interface TemplateCompetitivePosition {
   vulnerabilities: string;
   marketTrends: MarketTrend;
 }
+}
+}
 export interface CompetitorTemplate {
   templateId: string;
   templateName: string;
@@ -213,6 +248,8 @@ export interface CompetitorTemplate {
   strengthsVsYours: string;
   weaknessesVsYours: string;
 }
+}
+}
 export interface CompetitorMetrics {
   estimatedRevenue: number;
   estimatedDownloads: number;
@@ -220,12 +257,16 @@ export interface CompetitorMetrics {
   reviewCount: number;
   pricePoint: number;
 }
+}
+}
 export interface MarketTrend {
   trend: string;
   direction: 'growing' | 'declining' | 'stable';
   impact: 'high' | 'medium' | 'low';
   opportunity: string;
   threat: string;
+}
+}
 }
 export interface TemplateRecommendation {
   type: TemplateRecommendationType;
@@ -236,6 +277,7 @@ export interface TemplateRecommendation {
   expectedImpact: RecommendationImpact;
   implementation: RecommendationImplementation;
   successMetrics: string;
+}
 }
 export type TemplateRecommendationType = 
   | 'pricing_optimization'
@@ -251,6 +293,7 @@ export type RecommendationCategory =
   | 'competitive_advantage'
   | 'long_term_growth';
 
+}
 export interface RecommendationImpact {
   revenueIncrease: number;
   conversionImprovement: number;
@@ -259,6 +302,8 @@ export interface RecommendationImpact {
   timeToImpact: number;
   confidence: number;
 }
+}
+}
 export interface RecommendationImplementation {
   steps: string;
   estimatedTime: number;
@@ -266,7 +311,9 @@ export interface RecommendationImplementation {
   tools: string;
   cost: number;
   difficulty: 'easy' | 'moderate' | 'challenging' | 'expert'
+}
   }
+}
 export interface CreatorOptimizationRecommendation {
   recommendationId: string;
   type: CreatorRecommendationType;
@@ -278,6 +325,7 @@ export interface CreatorOptimizationRecommendation {
   actionPlan: CreatorActionPlan;
   relatedGoals: string;
 }
+}
 export type CreatorRecommendationType = 
   | 'portfolio_optimization'
   | 'pricing_strategy'
@@ -287,6 +335,7 @@ export type CreatorRecommendationType =
   | 'brand_building'
   | 'community_engagement';
 
+}
 export interface CreatorRecommendationImpact {
   portfolioImpact: number;
   revenueImpact: number;
@@ -295,12 +344,16 @@ export interface CreatorRecommendationImpact {
   timeframe: number;
   successProbability: number;
 }
+}
+}
 export interface CreatorActionPlan {
   phases: ActionPhase;
   totalTimeline: number;
   milestones: ActionMilestone;
   resources: ActionResource;
   riskMitigation: RiskMitigation;
+}
+}
 }
 export interface ActionPhase {
   phaseName: string;
@@ -310,6 +363,8 @@ export interface ActionPhase {
   dependencies: string;
   successCriteria: string;
 }
+}
+}
 export interface ActionTask {
   taskName: string;
   description: string;
@@ -317,17 +372,23 @@ export interface ActionTask {
   skills: string;
   deliverables: string;
 }
+}
+}
 export interface ActionMilestone {
   milestoneName: string;
   targetDate: number;
   metrics: MilestoneMetric;
   reward: string;
 }
+}
+}
 export interface MilestoneMetric {
   metric: string;
   target: number;
   current: number;
   progress: number;
+}
+}
 }
 export interface ActionResource {
   resourceType: 'tool' | 'service' | 'education' | 'template' | 'community';
@@ -336,6 +397,8 @@ export interface ActionResource {
   cost: number;
   link?: string;
 }
+}
+}
 export interface RiskMitigation {
   risk: string;
   probability: number;
@@ -343,12 +406,16 @@ export interface RiskMitigation {
   mitigation: string;
   contingency: string;
 }
+}
+}
 export interface CreatorCompetitiveInsights {
   marketPosition: MarketPosition;
   competitorAnalysis: CompetitorAnalysis;
   marketOpportunities: MarketOpportunity;
   threatAnalysis: ThreatAnalysis;
   benchmarkData: BenchmarkData;
+}
+}
 }
 export interface MarketPosition {
   overallRank: number;
@@ -358,12 +425,16 @@ export interface MarketPosition {
   competitiveAdvantages: string;
   uniqueValueProposition: string;
 }
+}
+}
 export interface CategoryRank {
   category: string;
   rank: number;
   totalCreators: number;
   marketShare: number;
   growth: number;
+}
+}
 }
 export interface CompetitorAnalysis {
   competitorId: string;
@@ -374,7 +445,9 @@ export interface CompetitorAnalysis {
   strategy: string;
   recentMoves: string;
   threat_level: 'low' | 'medium' | 'high'
+}
   }
+}
 export interface MarketOpportunity {
   opportunity: string;
   description: string;
@@ -385,6 +458,8 @@ export interface MarketOpportunity {
   investmentRequired: number;
   expectedROI: number;
 }
+}
+}
 export interface ThreatAnalysis {
   threat: string;
   description: string;
@@ -394,11 +469,15 @@ export interface ThreatAnalysis {
   mitigation: string;
   monitoring: string;
 }
+}
+}
 export interface BenchmarkData {
   industryAverages: IndustryAverage;
   peerComparisons: PeerComparison;
   bestPractices: BestPractice;
   performance_gaps: PerformanceGap;
+}
+}
 }
 export interface IndustryAverage {
   metric: string;
@@ -406,7 +485,9 @@ export interface IndustryAverage {
   yourValue: number;
   percentile: number;
   trend: 'above' | 'below' | 'at_average'
+}
   }
+}
 export interface PeerComparison {
   metric: string;
   yourValue: number;
@@ -414,6 +495,8 @@ export interface PeerComparison {
   topPerformer: number;
   bottomPerformer: number;
   ranking: number;
+}
+}
 }
 export interface BestPractice {
   practice: string;
@@ -423,11 +506,15 @@ export interface BestPractice {
   impact: 'high' | 'medium' | 'low';
   examples: BestPracticeExample;
 }
+}
+}
 export interface BestPracticeExample {
   creatorName: string;
   implementation: string;
   results: string;
   keyTakeaways: string;
+}
+}
 }
 export interface PerformanceGap {
   area: string;
@@ -435,6 +522,8 @@ export interface PerformanceGap {
   priority: 'high' | 'medium' | 'low';
   actionItems: string;
   timeToClose: number;
+}
+}
 }
 export interface CreatorGrowthOpportunity {
   opportunityId: string;
@@ -446,6 +535,7 @@ export interface CreatorGrowthOpportunity {
   roadmap: GrowthRoadmap;
   risks: GrowthRisk;
 }
+}
 export type GrowthOpportunityCategory = 
   | 'new_market'
   | 'new_product'
@@ -454,6 +544,7 @@ export type GrowthOpportunityCategory =
   | 'automation'
   | 'brand_building';
 
+}
 export interface GrowthPotential {
   revenueUpside: number;
   marketSize: number;
@@ -461,6 +552,8 @@ export interface GrowthPotential {
   scalability: 'low' | 'medium' | 'high';
   sustainability: 'low' | 'medium' | 'high';
   confidenceLevel: number;
+}
+}
 }
 export interface GrowthRequirement {
   requirement: string;
@@ -470,11 +563,15 @@ export interface GrowthRequirement {
   timeToAcquire: number;
   alternatives: string;
 }
+}
+}
 export interface GrowthRoadmap {
   phases: GrowthPhase;
   totalTimeline: number;
   keyMilestones: GrowthMilestone;
   dependencies: GrowthDependency;
+}
+}
 }
 export interface GrowthPhase {
   phaseName: string;
@@ -484,6 +581,8 @@ export interface GrowthPhase {
   deliverables: string;
   success_criteria: string;
 }
+}
+}
 export interface GrowthMilestone {
   milestoneName: string;
   description: string;
@@ -491,11 +590,15 @@ export interface GrowthMilestone {
   metrics: MilestoneMetric;
   dependencies: string;
 }
+}
+}
 export interface GrowthDependency {
   dependency: string;
   type: 'internal' | 'external' | 'market' | 'technology';
   criticality: 'high' | 'medium' | 'low';
   mitigation: string;
+}
+}
 }
 export interface GrowthRisk {
   risk: string;
@@ -503,6 +606,8 @@ export interface GrowthRisk {
   impact: number;
   mitigation: string;
   monitoring: string;
+}
+}
 }
 export interface CreatorLearningResource {
   resourceId: string;
@@ -520,6 +625,7 @@ export interface CreatorLearningResource {
   relatedSkills: string;
   prerequisites: string;
 }
+}
 export type LearningResourceType = 
   | 'course'
   | 'tutorial'
@@ -532,6 +638,7 @@ export type LearningResourceType =
 
 export type ResourceFormat = 'online' | 'offline' | 'interactive' | 'self_paced' | 'instructor_led';
 
+}
 export interface CreatorSuccessStory {
   storyId: string;
   title: string;
@@ -545,6 +652,8 @@ export interface CreatorSuccessStory {
   applicableStrategies: string;
   relevanceScore: number;
 }
+}
+}
 export interface SuccessResults {
   revenueIncrease: number;
   conversionImprovement: number;
@@ -552,6 +661,8 @@ export interface SuccessResults {
   ratingImprovement: number;
   marketShareGain: number;
   timeToResults: number;
+}
+}
 }
 export interface AutomatedSuggestion {
   suggestionId: string;
@@ -564,6 +675,7 @@ export interface AutomatedSuggestion {
   triggerConditions: TriggerCondition;
   implementation: SuggestionImplementation;
 }
+}
 export type SuggestionType = 
   | 'pricing_adjustment'
   | 'content_update'
@@ -572,6 +684,7 @@ export type SuggestionType =
   | 'opportunity_alert'
   | 'competitive_response';
 
+}
 export interface SuggestionImpact {
   primary: string;
   secondary: string;
@@ -579,20 +692,26 @@ export interface SuggestionImpact {
   timeframe: number;
   certainty: number;
 }
+}
 export type AutomationLevel = 'manual' | 'semi_automated' | 'fully_automated';
 
+}
 export interface TriggerCondition {
   condition: string;
   threshold: number;
   timeframe: number;
   frequency: 'once' | 'daily' | 'weekly' | 'monthly'
+}
   }
+}
 export interface SuggestionImplementation {
   automatable: boolean;
   manualSteps: string;
   toolsRequired: string;
   skillsRequired: string;
   estimatedTime: number;
+}
+}
 }
 export interface CreatorGoal {
   goalId: string;
@@ -606,6 +725,7 @@ export interface CreatorGoal {
   progress: GoalProgress;
   relatedRecommendations: string;
 }
+}
 export type GoalCategory = 
   | 'revenue'
   | 'growth'
@@ -614,19 +734,24 @@ export type GoalCategory =
   | 'market_position'
   | 'skill_development';
 
+}
 export interface GoalTarget {
   metric: string;
   currentValue: number;
   targetValue: number;
   improvementPercentage: number;
   measurementFrequency: 'daily' | 'weekly' | 'monthly'
+}
   }
+}
 export interface GoalTimeline {
   startDate: number;
   targetDate: number;
   duration: number;
   milestones: GoalMilestone;
   checkpoints: GoalCheckpoint;
+}
+}
 }
 export interface GoalMilestone {
   name: string;
@@ -635,14 +760,18 @@ export interface GoalMilestone {
   metrics: MilestoneMetric;
   rewards: string;
 }
+}
+}
 export interface GoalCheckpoint {
   date: number;
   expectedProgress: number;
   reviewCriteria: string;
   adjustmentOptions: string;
 }
+}
 export type GoalStatus = 'draft' | 'active' | 'on_track' | 'at_risk' | 'delayed' | 'completed' | 'cancelled';
 
+}
 export interface GoalProgress {
   currentProgress: number;
   progressTrend: 'accelerating' | 'on_track' | 'slowing' | 'stalled';
@@ -651,11 +780,15 @@ export interface GoalProgress {
   daysToGoal: number;
   likelihoodOfSuccess: number;
 }
+}
+}
 export interface CreatorGoalProgress {
   goal: CreatorGoal;
   progressData: ProgressDataPoint;
   insights: ProgressInsight;
   adjustmentRecommendations: AdjustmentRecommendation;
+}
+}
 }
 export interface ProgressDataPoint {
   date: number;
@@ -663,11 +796,15 @@ export interface ProgressDataPoint {
   target: number;
   progress: number;
 }
+}
+}
 export interface ProgressInsight {
   insight: string;
   type: 'positive' | 'concern' | 'opportunity' | 'risk';
   impact: 'high' | 'medium' | 'low';
   actionable: boolean;
+}
+}
 }
 export interface AdjustmentRecommendation {
   recommendation: string;
@@ -675,11 +812,15 @@ export interface AdjustmentRecommendation {
   impact: string;
   effort: 'low' | 'medium' | 'high';
   urgency: 'immediate' | 'soon' | 'planned'
+}
   }
+}
 export interface CreatorAction {
   actionType: 'goal_set' | 'recommendation_accepted' | 'template_updated' | 'learning_started';
   details: Record<string, any>;
   timestamp: number;
+}
+}
 }
 export interface CreatorOptimizationExportData {
   creatorProfile: CreatorProfile;
@@ -688,6 +829,7 @@ export interface CreatorOptimizationExportData {
   optimizationRecommendations: CreatorOptimizationRecommendation;
   goalProgress: CreatorGoalProgress;
   exportTimestamp: number;
+}
 }
 export const [error, setError] = useState<string | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);

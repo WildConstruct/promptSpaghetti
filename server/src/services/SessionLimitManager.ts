@@ -19,6 +19,7 @@ import { ConnectionManager } from '../websocket/ConnectionManager';
 
 // Configuration Interfaces
 }
+}
 export interface SessionLimitConfig {
   // Concurrent session limits
   maxConcurrentSessionsPerUser: number;
@@ -72,9 +73,11 @@ export interface SessionLimitConfig {
     suspiciousActivity: number;
     geographicAnomalies: number;
 }
+}
   };
 }
 
+}
 }
 export interface UserLimitOverride {
   userId: string;
@@ -85,7 +88,9 @@ export interface UserLimitOverride {
   createdAt: Date;
 }
 }
+}
 
+}
 }
 export interface OrganizationLimitConfig extends Partial<SessionLimitConfig> {
   organizationId: string;
@@ -93,6 +98,7 @@ export interface OrganizationLimitConfig extends Partial<SessionLimitConfig> {
   customLimits?: Partial<SessionLimitConfig>;
 }
 
+}
 }
 export interface SessionLimitViolation {
   id: string;
@@ -108,7 +114,9 @@ export interface SessionLimitViolation {
   createdAt: Date;
 }
 }
+}
 
+}
 }
 export interface SessionLimitMetrics {
   timestamp: Date;
@@ -119,6 +127,7 @@ export interface SessionLimitMetrics {
     organization: Record<string, number>;
     device: Record<string, number>;
     country: Record<string, number>;
+}
 }
   };
   violations: {
@@ -135,6 +144,7 @@ export interface SessionLimitMetrics {
 }
 
 }
+}
 export interface SessionEnforcementAction {
   action: 'terminate' | 'warn' | 'extend_grace' | 'upgrade_required';
   sessionId: string;
@@ -142,6 +152,7 @@ export interface SessionEnforcementAction {
   gracePeriodMinutes?: number;
   notifyUser: boolean;
   details: Record<string, any>;
+}
 }
 }
 

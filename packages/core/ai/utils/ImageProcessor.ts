@@ -5,6 +5,7 @@
  * Utilities for image format conversion, compression, metadata extraction, and optimization
  */
 
+}
 export interface ImageMetadata {
   width: number;
   height: number;
@@ -20,7 +21,9 @@ export interface ImageMetadata {
   prompt?: string;
   seed?: number;
   parameters?: Record<string, any>;
+}
 };
+}
 }
 export interface ImageProcessingOptions {
   format?: 'jpeg' | 'png' | 'webp' | 'avif';
@@ -33,11 +36,15 @@ export interface ImageProcessingOptions {
   progressive?: boolean;
   removeMetadata?: boolean;
 }
+}
+}
 export interface ImageVariationOptions {
   count: number;
   strength: number; // 0-1,
   seed?: number;
   preserveStyle?: boolean;
+}
+}
 }
 export interface ImageBatchProcessingOptions {
   concurrency?: number;
@@ -46,6 +53,7 @@ export interface ImageBatchProcessingOptions {
   resize?: {
   width: number;
   height: number;
+}
 };
   watermark?: {
   text?: string;
@@ -62,10 +70,11 @@ export class ImageProcessor {
       this.canvas = document.createElement('canvas');
       this.ctx = this.canvas.getContext('2d');
   // Format conversion and optimization
-  async convertFormat(()
+  async convertFormat(((
     imageData: string | ArrayBuffer,
-    options: ImageProcessingOptions,
+    options: ImageProcessingOptions
   ): Promise<{ data: string; metadata: ImageMetadata }> {
+
     try {
       const image = await this._loadImage(imageData);
       const originalMetadata = await this.extractMetadata(imageData);
@@ -104,6 +113,7 @@ export class ImageProcessor {
       throw new Error(`Image conversion failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   // Metadata extraction
   async extractMetadata(imageData: string | ArrayBuffer): Promise<ImageMetadata> {
+
   try {
   if (typeof imageData === 'string') {
   // Handle data URL
@@ -128,6 +138,7 @@ export class ImageProcessor {
   async compress(imageData: string)
     quality: number = 80,
     format: 'jpeg' | 'webp' = 'jpeg'): Promise<{ data: string; compressionRatio: number; originalSize: number; compressedSize: number }> {
+
   const originalSize = this._estimateDataURLSize(imageData);
   const compressed = await this.convertFormat(imageData, {)
   format,
@@ -155,9 +166,9 @@ export class ImageProcessor {
 });
     return result.data;
   // Batch processing
-  async processBatch(()
+  async processBatch(((
     images: string,
-    options: ImageBatchProcessingOptions,
+    options: ImageBatchProcessingOptions
   ): Promise<Array<{ original: string; processed: string; metadata: ImageMetadata }>> {
     const concurrency = options.concurrency || 3;
     const results: Array<{ original: string; processed: string; metadata: ImageMetadata }> = [];
@@ -195,10 +206,11 @@ export class ImageProcessor {
       results.push(...batchResults);
     return results;
   // Image variation generation (placeholder for future ML integration)
-  async generateVariations(()
+  async generateVariations(((
     imageData: string,
-    options: ImageVariationOptions,
+    options: ImageVariationOptions
   ): Promise<string> {
+
   // This would integrate with image-to-image models
   // For now, return simulated variations
   const variations: string = [];
@@ -216,6 +228,7 @@ export class ImageProcessor {
   pixelDifference: number;
 };
   }> {
+
   const img1 = await this._loadImage(image1);
   const img2 = await this._loadImage(image2);
   // Resize both images to same size for comparison
@@ -250,6 +263,7 @@ export class ImageProcessor {
 };
   // Private helper methods
   private async _loadImage(imageData: string | ArrayBuffer): Promise<HTMLImageElement> {
+
     return new Promise((resolve, reject) => {
       const img = new Image();
       img.onload = () => resolve(img);
@@ -363,10 +377,11 @@ export class ImageProcessor {
   size: dataView.byteLength,
   hasAlpha
 };
-  private async _applyWatermark(()
+  private async _applyWatermark(((
     imageData: string,
-    watermark: NonNullable<ImageBatchProcessingOptions['watermark']>,
+    watermark: NonNullable<ImageBatchProcessingOptions['watermark']>
   ): Promise<string> {
+
     const image = await this._loadImage(imageData);
     this._setupCanvas(image.width, image.height);
     // Draw original image
@@ -427,6 +442,7 @@ export class ImageProcessor {
       default:
         return { x: padding, y: itemHeight + padding };
   private async _createVariation(imageData: string, index: number, options: ImageVariationOptions): Promise<string> {
+
   const image = await this._loadImage(imageData);
   this._setupCanvas(image.width, image.height);
   // Draw original image

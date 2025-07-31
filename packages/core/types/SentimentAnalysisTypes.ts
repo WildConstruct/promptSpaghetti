@@ -315,6 +315,7 @@ export const validateSentimentAnalytics = (data: unknown): SentimentAnalytics =>
 
 // Helper types
 
+}
 export interface SentimentSystemConfig {
   enabledModels: AnalysisModelType;
   defaultModel: AnalysisModelType;
@@ -326,6 +327,7 @@ export interface SentimentSystemConfig {
   maxBatchSize: number;
   processingIntervalMs: number;
   retryAttempts: number;
+}
 };
 
 // Export all schemas for external use

@@ -31,6 +31,7 @@ export type MarketplaceHelpContentType =
 
 // Extended help content interface for marketplace features
 
+}
 export interface MarketplaceHelpContent extends Omit<HelpContent, 'type'> {
   type: HelpContentType | MarketplaceHelpContentType;
   marketplaceContext: {
@@ -41,6 +42,7 @@ export interface MarketplaceHelpContent extends Omit<HelpContent, 'type'> {
   features?: string;
 };
 
+}
 export interface MarketplaceHelpOverlayProps {
   // Current marketplace context
   currentPage?: 'marketplace' | 'template-details' | 'creator-dashboard' | 'community' | 'profile';
@@ -51,6 +53,7 @@ export interface MarketplaceHelpOverlayProps {
   category: string;
   type: string;
   isPremium: boolean;
+}
 };
   // Purchase context
   cartItems?: number;

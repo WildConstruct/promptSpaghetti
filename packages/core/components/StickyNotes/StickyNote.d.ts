@@ -12,6 +12,7 @@
 import React from 'react';
 import { StickyNote as StickyNoteType } from '../../types/StickyNotes';
 
+}
 interface StickyNoteProps {
     note: StickyNoteType;
     selected: boolean;
@@ -26,6 +27,7 @@ interface StickyNoteProps {
         x: number;
         y: number;
 
+}
     }) => void;
     onResize: (size: {),
         width: number;

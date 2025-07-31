@@ -18,7 +18,7 @@ import { useConsent } from './useConsent';
 
 // Mock configuration - in real app this would come from API/config
 const DEFAULT_PROMPT_CONFIGS: Record<string, JustInTimePromptConfig> = {
-  analytics_view: {,
+  analytics_view: {
   triggerId: 'analytics_view',
   title: 'Analytics Consent',
   message: 'Allow analytics tracking to help us improve your experience?',
@@ -26,14 +26,14 @@ const DEFAULT_PROMPT_CONFIGS: Record<string, JustInTimePromptConfig> = {
   feature: 'analytics_dashboard',
   action: 'view',
 }],
-    appearance: {,
+    appearance: {
   style: 'modal',
   theme: 'light',
   size: 'medium',
   showIcon: true,
   iconType: 'info',
 },
-  behavior: {,
+  behavior: {
   showOnce: false,
   cooldownPeriod: 60,
   maxShowsPerSession: 3,
@@ -41,7 +41,7 @@ const DEFAULT_PROMPT_CONFIGS: Record<string, JustInTimePromptConfig> = {
   allowDismiss: true,
   blockInteraction: true,
 },
-  marketing_newsletter: {,
+  marketing_newsletter: {
   triggerId: 'marketing_newsletter',
   title: 'Marketing Communications',
   message: 'Subscribe to our newsletter for updates and promotions?',
@@ -49,7 +49,7 @@ const DEFAULT_PROMPT_CONFIGS: Record<string, JustInTimePromptConfig> = {
   feature: 'newsletter_signup',
   action: 'click',
 }],
-    appearance: {,
+    appearance: {
   style: 'banner',
   position: 'bottom',
   theme: 'light',
@@ -57,13 +57,13 @@ const DEFAULT_PROMPT_CONFIGS: Record<string, JustInTimePromptConfig> = {
   showIcon: true,
   iconType: 'info',
 },
-  behavior: {,
+  behavior: {
   showOnce: true,
   requireResponse: false,
   allowDismiss: true,
   blockInteraction: false,
 },
-  social_sharing: {,
+  social_sharing: {
   triggerId: 'social_sharing',
   title: 'Social Media Integration',
   message: 'Enable social media features for sharing content?',
@@ -71,14 +71,14 @@ const DEFAULT_PROMPT_CONFIGS: Record<string, JustInTimePromptConfig> = {
   feature: 'social_share',
   action: 'click',
 }],
-    appearance: {,
+    appearance: {
   style: 'tooltip',
   theme: 'light',
   size: 'small',
   showIcon: true,
   iconType: 'question',
 },
-  behavior: {,
+  behavior: {
   showOnce: false,
   cooldownPeriod: 30,
   requireResponse: false,
@@ -86,7 +86,7 @@ const DEFAULT_PROMPT_CONFIGS: Record<string, JustInTimePromptConfig> = {
   autoHideAfter: 10,
   blockInteraction: false,
 },
-  personalization_features: {,
+  personalization_features: {
   triggerId: 'personalization_features',
   title: 'Personalization',
   message: 'Allow personalization to customize your experience?',
@@ -94,7 +94,7 @@ const DEFAULT_PROMPT_CONFIGS: Record<string, JustInTimePromptConfig> = {
   feature: 'recommendations',
   action: 'view',
 }],
-    appearance: {,
+    appearance: {
   style: 'sidebar',
   position: 'right',
   theme: 'light',
@@ -102,7 +102,7 @@ const DEFAULT_PROMPT_CONFIGS: Record<string, JustInTimePromptConfig> = {
   showIcon: true,
   iconType: 'shield',
 },
-  behavior: {,
+  behavior: {
   showOnce: false,
   cooldownPeriod: 120,
   maxShowsPerSession: 2,
@@ -211,7 +211,7 @@ export const useJustInTimeConsent = (): UseJustInTimeReturn => {
     setPromptState(prev => ({)
   ...prev,
   activePrompts: [...prev.activePrompts, activePrompt],
-  sessionCounts: {,
+  sessionCounts: {
   ...prev.sessionCounts,
   [triggerId]: (prev.sessionCounts[triggerId] || 0) + 1,
 }));

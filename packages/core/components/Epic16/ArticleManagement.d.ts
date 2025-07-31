@@ -6,6 +6,7 @@
  */
 import React from 'react';
 
+}
 export interface Article {
     id: string;
     title: string;
@@ -33,6 +34,7 @@ export interface Article {
         metaTitle?: string;
         metaDescription?: string;
         keywords?: string[];
+}
     };
     analytics: {
         averageRating: number;
@@ -41,6 +43,7 @@ export interface Article {
         bounceRate: number;
     };
 
+}
 export interface ArticleCategory {
     id: string;
     name: string;
@@ -51,6 +54,7 @@ export interface ArticleCategory {
     parentId?: string;
     articleCount: number;
 
+}
 export interface ArticleAuthor {
     id: string;
     name: string;
@@ -62,8 +66,10 @@ export interface ArticleAuthor {
         twitter?: string;
         github?: string;
         linkedin?: string;
+}
     };
 
+}
 export interface ArticleAttachment {
     id: string;
     name: string;
@@ -72,6 +78,7 @@ export interface ArticleAttachment {
     size: number;
     mimeType: string;
 
+}
 export interface ArticleFilter {
     status?: Article['status'][];
     category?: string[];
@@ -81,14 +88,17 @@ export interface ArticleFilter {
     dateRange?: {
         start: Date;
         end: Date;
+}
     };
     featured?: boolean;
     searchQuery?: string;
 
+}
 export interface ArticleSort {
     field: 'title' | 'createdAt' | 'updatedAt' | 'publishedAt' | 'viewCount' | 'likeCount' | 'rating';
     direction: 'asc' | 'desc';
 
+}
 export interface ArticleManagementProps {
     articles: Article[];
     categories: ArticleCategory[];
@@ -113,6 +123,7 @@ export declare const ArticleList: React.FC<{
     onDuplicate: (article: Article) => void;
     onView: (article: Article) => void;
     currentUser: ArticleAuthor;
+}
 }>;
 export declare const ArticleEditor: React.FC<{
     article?: Article;

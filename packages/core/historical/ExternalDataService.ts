@@ -15,15 +15,19 @@ import {
   UTDGNodeType
 } from '../types/UTDG';
 
+}
 export interface CacheEntry {
   data: any;
   timestamp: number;
   ttl: number;
   source_id: string;
 }
+}
 
+}
 export interface DataSourceRegistry {
   [sourceId: string]: DataSource;
+}
 }
 
 export class ExternalDataService {
@@ -72,6 +76,7 @@ export class ExternalDataService {
    * Query historical data from external sources
    */
   async queryHistoricalData(query: HistoricalQuery, sourceIds?: string[]): Promise<HistoricalQueryResult> {
+
     const startTime = performance.now();
     const sourcesUsed: string[] = [];
 
@@ -151,6 +156,7 @@ export class ExternalDataService {
    * Import data from a specific source with transformation
    */
   async importFromSource(sourceId: string, query: HistoricalQuery): Promise<UTDGNode[]> {
+
     const source = this.dataSources[sourceId];
     if (!source) {
       throw new Error(`Data source ${sourceId} not found`);
@@ -164,6 +170,7 @@ export class ExternalDataService {
    * Validate and test a data source connection
    */
   async validateDataSource(sourceId: string): Promise<{valid: boolean, error?: string, sample_data?: any}> {
+
     const source = this.dataSources[sourceId];
     if (!source) {
       return {valid: false, error: 'Data source not found'};
@@ -222,6 +229,7 @@ export class ExternalDataService {
    * Query a specific data source
    */
   private async queryDataSource(source: DataSource, query: HistoricalQuery): Promise<UTDGNode[]> {
+
     switch (source.type) {
       case 'api':
         return this.queryApiSource(source, query);
@@ -238,6 +246,7 @@ export class ExternalDataService {
    * Query an API-based data source
    */
   private async queryApiSource(source: DataSource, query: HistoricalQuery): Promise<UTDGNode[]> {
+
     if (!source.endpoint) {
       throw new Error('API source requires endpoint');
     }
@@ -267,6 +276,7 @@ export class ExternalDataService {
    * Query a database-based data source (placeholder)
    */
   private async queryDatabaseSource(source: DataSource, query: HistoricalQuery): Promise<UTDGNode[]> {
+
     // This would integrate with actual database connectors
     throw new Error('Database sources not implemented yet');
   }
@@ -275,6 +285,7 @@ export class ExternalDataService {
    * Query a file-based data source (JSON/CSV files)
    */
   private async queryFileSource(source: DataSource, query: HistoricalQuery): Promise<UTDGNode[]> {
+
     if (!source.endpoint) {
       throw new Error('File source requires file path');
     }

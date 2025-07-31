@@ -54,6 +54,7 @@ import {
   ExperimentMetric
 } from '../../types/experiment';
 
+}
 export interface ExperimentResultsProps {
   experiment: Experiment;
   results: ExperimentResultsType;
@@ -69,6 +70,7 @@ export interface ExperimentResultsProps {
   refreshing: boolean;
   showDetails: boolean;
   const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7c7c', '#8dd1e1'];
+}
 }
 export const ExperimentResults: React.FC<ExperimentResultsProps> = ({)
   experiment,

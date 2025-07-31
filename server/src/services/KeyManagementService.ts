@@ -10,6 +10,7 @@ import { EventEmitter } from 'events';
 import * as crypto from 'crypto';
 
 }
+}
 export interface KeyManagementConfig {
   // Key encryption
   keyEncryptionAlgorithm: 'aes-256-gcm' | 'chacha20-poly1305';
@@ -41,7 +42,9 @@ export interface KeyManagementConfig {
   dataClassificationRequired: boolean;
 }
 }
+}
 
+}
 }
 export interface MasterKey {
   keyId: string;
@@ -67,9 +70,11 @@ export interface MasterKey {
   securityLevel: string;
   accessControlList?: AccessControlEntry[];
 }
+}
   complianceTags?: { [key: string]: unknown };
 }
 
+}
 }
 export interface AccessControlEntry {
   userId?: string;
@@ -77,10 +82,12 @@ export interface AccessControlEntry {
   role?: string;
   operations: string[];
 }
+}
   conditions?: { [key: string]: unknown };
   expiresAt?: Date;
 }
 
+}
 }
 export interface KeyRotationPolicy {
   policyName: string;
@@ -102,6 +109,7 @@ export interface KeyRotationPolicy {
   approvalRoles?: string[];
 }
 }
+}
 
 export type KeyPurpose = 
   | 'data_encryption'
@@ -113,6 +121,7 @@ export type KeyPurpose =
   | 'audit_signing';
 
 }
+}
 export interface KeyGenerationRequest {
   purpose: KeyPurpose;
   algorithm?: string;
@@ -122,10 +131,12 @@ export interface KeyGenerationRequest {
   maxUsageCount?: number;
   accessControlList?: AccessControlEntry[];
 }
+}
   complianceTags?: { [key: string]: unknown };
   makePrimary?: boolean;
 }
 
+}
 }
 export interface KeyOperationContext {
   userId?: string;
@@ -136,9 +147,11 @@ export interface KeyOperationContext {
   operationType: 'encrypt' | 'decrypt' | 'sign' | 'verify' | 'derive' | 'export' | 'import' | 'rotate' | 'destroy';
   dataClassification?: string;
 }
+}
   additionalContext?: { [key: string]: unknown };
 }
 
+}
 }
 export interface KeyBackup {
   backupId: string;
@@ -148,6 +161,7 @@ export interface KeyBackup {
   expiresAt?: Date;
   storageLocation?: string;
   verified: boolean;
+}
 }
 }
 

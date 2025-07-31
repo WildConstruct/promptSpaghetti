@@ -22,6 +22,7 @@ import {
   ConditionLogic
 } from './ConversionDataModel';
 
+}
 export interface EventSchemaDefinition {
   id: string;
   name: string;
@@ -35,6 +36,7 @@ export interface EventSchemaDefinition {
   tags: string;
   isActive: boolean;
   deprecated?: boolean;
+}
 };
   // Base event requirements
   baseRequirements: {
@@ -69,6 +71,7 @@ export interface EventSchemaDefinition {
   batchValidation: boolean;
   maxValidationTime: number; // milliseconds,
 };
+}
 }
 export interface PropertySchemaDefinition extends Omit<PropertySchema, 'relationships'> {
   id: string;
@@ -105,6 +108,7 @@ export interface PropertySchemaDefinition extends Omit<PropertySchema, 'relation
   examples: PropertyExample;
 };
 
+}
 export interface PropertyTransformationStep {
   id: string;
   name: string;
@@ -117,6 +121,7 @@ export interface PropertyTransformationStep {
   parameters: Record<string, unknown>;
   conditions?: ConditionLogic;
   errorHandling: 'skip' | 'warn' | 'fail' | 'default'
+}
   };
   // Performance settings
   performance: {
@@ -124,6 +129,7 @@ export interface PropertyTransformationStep {
   retries: number;
   cacheable: boolean;
 };
+}
 }
 export interface ValidationRule {
   id: string;
@@ -135,6 +141,7 @@ export interface ValidationRule {
   condition: ConditionLogic;
   errorMessage: string;
   warningMessage?: string;
+}
 };
   // Execution context
   execution: {
@@ -150,6 +157,7 @@ export interface ValidationRule {
   suggestedFix?: string;
 };
 }
+}
 export interface PropertyRelationshipDefinition {
   id: string;
   type: 'depends_on' | 'conflicts_with' | 'derives_from' | 'validates_against';
@@ -157,6 +165,8 @@ export interface PropertyRelationshipDefinition {
   relationship: RelationshipSpec;
   strength: number; // 0-1,
   bidirectional: boolean;
+}
+}
 }
 export interface RelationshipSpec {
   condition: ConditionLogic;
@@ -166,7 +176,9 @@ export interface RelationshipSpec {
   description: string;
   businessReason: string;
   examples: string;
+}
 };
+}
 }
 export interface GlobalConstraint {
   id: string;
@@ -176,6 +188,8 @@ export interface GlobalConstraint {
   severity: 'error' | 'warning';
   applicableEvents: string; // Event types this applies to,
 }
+}
+}
 export interface SchemaTransformation {
   id: string;
   name: string;
@@ -184,12 +198,16 @@ export interface SchemaTransformation {
   transformation: TransformationDefinition;
   conditions?: ConditionLogic;
 }
+}
+}
 export interface TransformationDefinition {
   type: 'property_mapping' | 'data_enrichment' | 'format_conversion' | 'aggregation' | 'custom';
   config: Record<string, unknown>;
   inputFields: string;
   outputFields: string;
   preserveOriginal: boolean;
+}
+}
 }
 export interface CustomValidator {
   id: string;
@@ -200,6 +218,7 @@ export interface CustomValidator {
   functionBody: string; // JavaScript function body,
   parameters: ValidatorParameter;
   returnType: 'boolean' | 'ValidationResult' | 'Promise<ValidationResult>';
+}
 };
   // Execution context
   execution: {
@@ -211,6 +230,7 @@ export interface CustomValidator {
   // Testing
   tests: ValidatorTest;
 }
+}
 export interface ValidatorParameter {
   name: string;
   type: string;
@@ -218,21 +238,29 @@ export interface ValidatorParameter {
   required: boolean;
   defaultValue?: unknown;
 }
+}
+}
 export interface ValidatorTest {
   name: string;
   input: unknown;
   expectedOutput: unknown;
   description: string;
 }
+}
+}
 export interface PropertyOverride {
   propertyId: string;
   changes: Partial<PropertySchemaDefinition>;
   reason: string;
 }
+}
+}
 export interface PropertyExtension {
   propertyId: string;
   newProperty: PropertySchemaDefinition;
   reason: string;
+}
+}
 }
 export interface PropertyQualityMetrics {
   completeness: number; // 0-1,
@@ -242,11 +270,15 @@ export interface PropertyQualityMetrics {
   validity: number; // 0-1,
   lastAssessed: number;
 }
+}
+}
 export interface PropertyExample {
   description: string;
   validExample: unknown;
   invalidExample?: unknown;
   explanation: string;
+}
+}
 }
 export interface SchemaValidationResult {
   isValid: boolean;
@@ -261,6 +293,7 @@ export interface SchemaValidationResult {
   validationTime: number;
   transformationTime: number;
   cacheHitRate: number;
+}
 };
   // Aggregated errors and warnings
   errors: ValidationError;
@@ -272,6 +305,7 @@ export interface SchemaValidationResult {
   validatorVersion: string;
   processingPipeline: string;
 };
+}
 }
 export interface FieldValidationResult {
   fieldName: string;
@@ -292,6 +326,8 @@ export interface FieldValidationResult {
   errors: ValidationError;
   warnings: ValidationWarning;
 }
+}
+}
 export interface RuleValidationResult {
   ruleId: string;
   ruleName: string;
@@ -301,6 +337,8 @@ export interface RuleValidationResult {
   message?: string;
   details?: Record<string, unknown>;
 }
+}
+}
 export interface RelationshipValidationResult {
   relationshipId: string;
   relatedField: string;
@@ -309,6 +347,8 @@ export interface RelationshipValidationResult {
   confidence: number;
   message?: string;
 }
+}
+}
 export interface GlobalConstraintResult {
   constraintId: string;
   constraintName: string;
@@ -316,6 +356,8 @@ export interface GlobalConstraintResult {
   score: number;
   affectedFields: string;
   message?: string;
+}
+}
 }
 export interface TransformationResult {
   transformationId: string;
@@ -327,6 +369,7 @@ export interface TransformationResult {
   performance: {
   executionTime: number;
   memoryUsed: number;
+}
 };
   error?: string;
 /**
@@ -354,11 +397,12 @@ export class FlexibleEventSchemaManager {
   /**
    * Validate event against schema
    */
-  public async validateEvent()
+  public async validateEvent(
     event: FlexibleConversionEvent,
     schemaId: string,
     options: ValidationOptions = {}
   ): Promise<SchemaValidationResult> {
+
     const schema = this.getSchema(schemaId);
     if (!schema) {
       throw new Error(`Schema not found: ${schemaId}`);}
@@ -380,7 +424,7 @@ export class FlexibleEventSchemaManager {
   /**
    * Transform event according to schema
    */
-  public async transformEvent()
+  public async transformEvent(
     event: FlexibleConversionEvent,
     schemaId: string,
     stage: 'pre_validation' | 'post_validation' | 'pre_storage' | 'post_retrieval' = 'pre_validation'): Promise<FlexibleConversionEvent> {,
@@ -432,7 +476,7 @@ export class FlexibleEventSchemaManager {
   /**
    * Create schema from template
    */
-  public createSchemaFromTemplate(templateName: string)
+  public createSchemaFromTemplate(templateName: string(
     schemaId: string,
     customizations: Partial<EventSchemaDefinition> = {}
   ): EventSchemaDefinition {
@@ -717,10 +761,11 @@ export class FlexibleEventSchemaManager {
   'custom': ['custom'],
 };
     return compatibilityMap[expected]?.includes(actual) || false;
-  private async validateConstraint(()
+  private async validateConstraint(((
     value: unknown,
-    constraint: PropertyConstraint,
+    constraint: PropertyConstraint
   ): Promise<{ isValid: boolean; message?: string }> {
+
     switch (constraint.type) {
       case 'range':
         if (typeof value === 'number') {
@@ -753,6 +798,7 @@ export class FlexibleEventSchemaManager {
         return this.executeCustomConstraint(value, constraint.value);
     return { isValid: true };
   private async validateFormat(value: unknown, format: string): Promise<{ isValid: boolean; message?: string }> {
+
     const formatValidators: Record<string, (val: unknown) => boolean> = {
       'email': (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val),
       'url': (val) => {
@@ -769,10 +815,11 @@ export class FlexibleEventSchemaManager {
         message: `Value must be a valid ${format}`}
       };
     return { isValid: true };
-  private async executeCustomConstraint(()
+  private async executeCustomConstraint(((
     value: unknown,
-    constraintConfig: unknown,
+    constraintConfig: unknown
   ): Promise<{ isValid: boolean; message?: string }> {
+
     // Simplified custom constraint execution
     // In production, this would use a secure sandbox
     try {
@@ -811,13 +858,15 @@ export class FlexibleEventSchemaManager {
         message: `Rule execution failed: ${error}`}
       };
   private async evaluateCondition(condition: ConditionLogic, context: Record<string, unknown>): Promise<boolean> {
+
     // Simplified condition evaluation
     // In production, this would be more sophisticated
     return true;
-  private async evaluateGlobalConstraint(()
+  private async evaluateGlobalConstraint(((
     event: FlexibleConversionEvent,
-    constraint: GlobalConstraint,
+    constraint: GlobalConstraint
   ): Promise<GlobalConstraintResult> {
+
     const satisfied = await this.evaluateCondition(constraint.constraint, { event });
     return {
       constraintId: constraint.id,
@@ -916,28 +965,25 @@ export class FlexibleEventSchemaManager {
     if (!template) {
       throw new Error(`Schema template not found: ${templateName}`);}
     return template;
-  private shouldApplyTransformation(()
+  private shouldApplyTransformation(((
     transformation: SchemaTransformation,
-    event: FlexibleConversionEvent,
+    event: FlexibleConversionEvent
   ): boolean {
   if (!transformation.conditions) return true;
   // Simplified condition evaluation
   return true;
-  private async applyTransformation(()
-  event: FlexibleConversionEvent,
+  private async applyTransformation((event: FlexibleConversionEvent,
   transformation: SchemaTransformation): Promise<FlexibleConversionEvent> {,
   // Simplified transformation application
   return event;
-  private async transformProperty(()
-  property: unknown,
+  private async transformProperty((property: unknown,
   propertyDef: PropertySchemaDefinition): Promise<unknown> {,
   let transformed = property;
   for (const step of propertyDef.transformationPipeline) {
   if (step.enabled) {
   transformed = await this.applyTransformationStep(transformed, step);
   return transformed;
-  private async applyTransformationStep(()
-  property: unknown,
+  private async applyTransformationStep((property: unknown,
   step: PropertyTransformationStep): Promise<unknown> {,
   // Simplified transformation step application
   return property;
@@ -1062,6 +1108,7 @@ export class FlexibleEventSchemaManager {
   /**
   * Factory function to create FlexibleEventSchemaManager
   */
+}
 }
 export };
 

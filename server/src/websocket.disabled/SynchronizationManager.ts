@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 // Document state and synchronization types
 }
+}
 export interface DocumentState {
   documentId: string;
   version: number;
@@ -13,7 +14,9 @@ export interface DocumentState {
   metadata: any;
 }
 }
+}
 
+}
 }
 export interface StateUpdate {
   id: string;
@@ -25,7 +28,9 @@ export interface StateUpdate {
   checksum: string;
 }
 }
+}
 
+}
 }
 export interface StateOperation {
   id: string;
@@ -37,7 +42,9 @@ export interface StateOperation {
   timestamp: number;
 }
 }
+}
 
+}
 }
 export interface StateDelta {
   fromVersion: number;
@@ -47,7 +54,9 @@ export interface StateDelta {
   checksum: string;
 }
 }
+}
 
+}
 }
 export interface SyncRequest {
   documentId: string;
@@ -57,7 +66,9 @@ export interface SyncRequest {
   checksum?: string;
 }
 }
+}
 
+}
 }
 export interface SyncResponse {
   documentId: string;
@@ -71,7 +82,9 @@ export interface SyncResponse {
   checksum: string;
 }
 }
+}
 
+}
 }
 export interface SyncManagerConfig {
   maxVersionHistory: number;
@@ -81,6 +94,7 @@ export interface SyncManagerConfig {
   autoMerge: boolean;
   syncInterval: number; // ms
   maxSyncBatchSize: number;
+}
 }
 }
 

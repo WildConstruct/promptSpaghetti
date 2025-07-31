@@ -10,6 +10,7 @@ import { EmailService } from '../auth/services/EmailService';
 import { EventEmitter } from 'events';
 
 }
+}
 export interface NewDeviceContext {
   userId: string;
   deviceFingerprint: string;
@@ -21,6 +22,7 @@ export interface NewDeviceContext {
     latitude?: number;
     longitude?: number;
 }
+}
   };
   metadata?: {
     loginTime: Date;
@@ -29,6 +31,7 @@ export interface NewDeviceContext {
   };
 }
 
+}
 }
 export interface NewDeviceDetectionResult {
   isNewDevice: boolean;
@@ -42,10 +45,12 @@ export interface NewDeviceDetectionResult {
     similarity: number;
     lastSeen: Date;
 }
+}
   }>;
   recommendations: string[];
 }
 
+}
 }
 export interface NewDevicePolicy {
   enabled: boolean;
@@ -56,6 +61,7 @@ export interface NewDevicePolicy {
     considerLocationChange: boolean;
     considerUserAgentChange: boolean;
     maxSimilarDevices: number;
+}
 }
   };
   

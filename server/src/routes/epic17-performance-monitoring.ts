@@ -21,6 +21,7 @@ import {
 
 // Request/Response Types
 }
+}
 interface RecordAdminMetricRequest {
   operation: AdminOperation;
   category: AdminCategory;
@@ -35,9 +36,11 @@ interface RecordAdminMetricRequest {
     complianceLevel: ComplianceLevel;
     performanceImpact: PerformanceImpact;
 }
+}
   };
 }
 
+}
 }
 interface AdminPerformanceReportRequest {
   startDate: string;
@@ -48,7 +51,9 @@ interface AdminPerformanceReportRequest {
   format?: 'json' | 'pdf' | 'csv';
 }
 }
+}
 
+}
 }
 interface AdminPerformanceQuery {
   operation?: string;
@@ -60,13 +65,16 @@ interface AdminPerformanceQuery {
   sortOrder?: 'asc' | 'desc';
 }
 }
+}
 
+}
 }
 interface IntegrationHealthQuery {
   integration?: string;
   status?: string;
   includeHistory?: boolean;
   timeRange?: string;
+}
 }
 }
 

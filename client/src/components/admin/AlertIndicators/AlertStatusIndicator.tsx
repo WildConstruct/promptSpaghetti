@@ -14,6 +14,7 @@ import {
 import { AlertCount } from './AlertIndicatorBadge';
 
 export type AlertSystemStatus = 'healthy' | 'warning' | 'critical' | 'maintenance' | 'unknown';
+}
 interface AlertStatusIndicatorProps {
   alertCounts: AlertCount;
   systemStatus?: AlertSystemStatus;
@@ -32,6 +33,7 @@ interface AlertStatusIndicatorProps {
   showPulse = true,
   onClick,
   className = ''
+}
 }) => {
   const [showTooltipState, setShowTooltipState] = useState(false);
   // Calculate system status based on alert counts if not provided
@@ -45,7 +47,7 @@ interface AlertStatusIndicatorProps {
   // Get status configuration
   const getStatusConfig = (status: AlertSystemStatus) => {
   const configs = {
-  healthy: {,
+  healthy: {
   icon: CheckCircle,
   color: 'text-green-500',
   bgColor: 'bg-green-50',
@@ -53,7 +55,7 @@ interface AlertStatusIndicatorProps {
   label: 'System Healthy',
   description: 'All systems operating normally',
 },
-  warning: {,
+  warning: {
   icon: AlertTriangle,
   color: 'text-yellow-500',
   bgColor: 'bg-yellow-50',
@@ -61,7 +63,7 @@ interface AlertStatusIndicatorProps {
   label: 'System Warning',
   description: 'Some alerts require attention',
 },
-  critical: {,
+  critical: {
   icon: AlertOctagon,
   color: 'text-red-500',
   bgColor: 'bg-red-50',
@@ -69,7 +71,7 @@ interface AlertStatusIndicatorProps {
   label: 'Critical Alerts',
   description: 'Immediate attention required',
 },
-  maintenance: {,
+  maintenance: {
   icon: Settings,
   color: 'text-blue-500',
   bgColor: 'bg-blue-50',
@@ -77,7 +79,7 @@ interface AlertStatusIndicatorProps {
   label: 'Maintenance Mode',
   description: 'System maintenance in progress',
 },
-  unknown: {,
+  unknown: {
   icon: AlertCircle,
   color: 'text-gray-500',
   bgColor: 'bg-gray-50',
@@ -90,17 +92,17 @@ interface AlertStatusIndicatorProps {
   // Get size configuration
   const getSizeConfig = (sz: string) => {
     const configs: Record<string, { icon: string; container: string; tooltip: string }> = {
-  sm: {,
+  sm: {
   icon: 'w-4 h-4',
   container: 'p-1.5',
   tooltip: 'text-xs',
 },
-  md: {,
+  md: {
   icon: 'w-5 h-5',
   container: 'p-2',
   tooltip: 'text-sm',
 },
-  lg: {,
+  lg: {
   icon: 'w-6 h-6',
   container: 'p-2.5',
   tooltip: 'text-base',

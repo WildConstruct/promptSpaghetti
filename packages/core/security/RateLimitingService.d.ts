@@ -43,6 +43,7 @@ export declare enum RateLimitResult {
     BLOCKED = "blocked",
     WARNING = "warning"
 
+}
 export interface RateLimitConfig {
     strategy: RateLimitStrategy;
     windowSize: number;
@@ -53,6 +54,7 @@ export interface RateLimitConfig {
     adaptiveEnabled: boolean;
     threatDetectionEnabled: boolean;
 
+}
 export interface EndpointLimits {
     category: EndpointCategory;
     endpoint: string;
@@ -61,6 +63,7 @@ export interface EndpointLimits {
         perMinute: number;
         perHour: number;
         perDay: number;
+}
     };
     backoff: {
         strategy: BackoffStrategy;
@@ -78,6 +81,7 @@ export interface EndpointLimits {
         threatLevelAdjustments: Record<ThreatLevel, number>;
     };
 
+}
 export interface RateLimitAttempt {
     identifier: string;
     endpoint: string;
@@ -89,8 +93,10 @@ export interface RateLimitAttempt {
         sessionId?: string;
         userId?: string;
         threatLevel: ThreatLevel;
+}
     };
 
+}
 export interface RateLimitStatus {
     identifier: string;
     endpoint: string;
@@ -102,6 +108,7 @@ export interface RateLimitStatus {
     threatLevel: ThreatLevel;
     adaptiveMultiplier: number;
 
+}
 export interface BackoffState {
     identifier: string;
     endpoint: string;
@@ -111,6 +118,7 @@ export interface BackoffState {
     totalFailures: number;
     lastFailureTime: Date;
 
+}
 export interface ThreatContext {
     identifier: string;
     threatLevel: ThreatLevel;
@@ -119,6 +127,7 @@ export interface ThreatContext {
         country: string;
         region: string;
         suspicious: boolean;
+}
     };
     behaviorPattern: {
         rapidRequests: boolean;
@@ -186,7 +195,7 @@ export declare class RateLimitingService extends EventEmitter {
         blockedAttempts: number;
         activeBackoffs: number;
         threatLevels: Record<ThreatLevel, number>;
-        topEndpoints: Array<{,
+        topEndpoints: Array<{
             endpoint: string;
             attempts: number;
         }>;

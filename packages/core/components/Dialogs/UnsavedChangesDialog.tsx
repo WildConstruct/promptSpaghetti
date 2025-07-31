@@ -4,6 +4,7 @@
  */
 import React from 'react';
 
+}
 interface UnsavedChangesDialogProps {
   isOpen: boolean;
   projectName?: string;
@@ -18,6 +19,7 @@ interface UnsavedChangesDialogProps {
   onDontSave,
   onCancel,
   actionDescription = 'continue'
+}
 }) => {
   if (!isOpen) return null;
   const overlayStyle: React.CSSProperties = {,

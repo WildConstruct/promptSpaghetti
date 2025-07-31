@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef } from 'react';
 
 // Analytics event types
+}
 interface LoginAttemptEvent {
   email: string;,
   success: boolean;
@@ -20,18 +21,19 @@ interface LoginAttemptEvent {
   successfulLogins: number;
   failedAttempts: number;,
   successRate: number;
-  topFailureReasons: Array<{,
+  topFailureReasons: Array<{
   reason: string;,
   count: number;
   percentage: number;
+}
 }>;
-  suspiciousActivity: Array<{,
+  suspiciousActivity: Array<{
   type: string;
   description: string;,
   count: number;
   severity: 'low' | 'medium' | 'high';
 }>;
-  deviceAnalysis: {,
+  deviceAnalysis: {
   newDevices: number;
   returningDevices: number;,
   suspiciousDevices: number;
@@ -82,7 +84,7 @@ export const useLoginAnalytics = () => {
       // Send to analytics endpoint
       await fetch('/api/auth/analytics/login-attempt', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   credentials: 'include',
@@ -105,7 +107,7 @@ export const useLoginAnalytics = () => {
 };
       await fetch('/api/auth/analytics/form-interactions', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   credentials: 'include',
@@ -129,7 +131,7 @@ export const useLoginAnalytics = () => {
 };
       await fetch('/api/auth/analytics/security-event', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   credentials: 'include',
@@ -146,7 +148,7 @@ export const useLoginAnalytics = () => {
   },
   method: 'GET',
         credentials: 'include',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 });
       if (!response.ok) {
@@ -179,7 +181,7 @@ export const useLoginAnalytics = () => {
 };
         await fetch('/api/auth/analytics/page-metrics', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   credentials: 'include',
@@ -201,7 +203,7 @@ export const useLoginAnalytics = () => {
 };
       await fetch('/api/auth/analytics/engagement', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   credentials: 'include',

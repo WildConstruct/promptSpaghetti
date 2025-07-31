@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../../config/environment';
+}
 interface Author {
   id: string;,
   display_name: string;
@@ -66,6 +67,7 @@ interface Author {
   intermediate: 'bg-yellow-100 text-yellow-800',
   advanced: 'bg-orange-100 text-orange-800',
   expert: 'bg-red-100 text-red-800',
+}
 };
 const DIFFICULTY_LABELS = {
   beginner: 'Beginner',

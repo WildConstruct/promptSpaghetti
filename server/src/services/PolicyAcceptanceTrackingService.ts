@@ -5,6 +5,7 @@ import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 export interface PolicyAcceptance {
   acceptanceId: string;
   userId: string;
@@ -24,7 +25,9 @@ export interface PolicyAcceptance {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface AcceptanceContext {
   ipAddress: string;
@@ -38,7 +41,9 @@ export interface AcceptanceContext {
   interactionMetrics: InteractionMetrics;
 }
 }
+}
 
+}
 }
 export interface ConsentData {
   consentId: string;
@@ -54,7 +59,9 @@ export interface ConsentData {
   dataTransfers: DataTransferConsent[];
 }
 }
+}
 
+}
 }
 export interface GranularConsent {
   consentId: string;
@@ -67,7 +74,9 @@ export interface GranularConsent {
   lastUpdated: Date;
 }
 }
+}
 
+}
 }
 export interface LegalBasis {
   basisType: LegalBasisType;
@@ -77,7 +86,9 @@ export interface LegalBasis {
   justification: string;
 }
 }
+}
 
+}
 }
 export interface ProcessingPurpose {
   purposeId: string;
@@ -89,7 +100,9 @@ export interface ProcessingPurpose {
   automated: boolean;
 }
 }
+}
 
+}
 }
 export interface ThirdPartyConsent {
   thirdPartyId: string;
@@ -102,7 +115,9 @@ export interface ThirdPartyConsent {
   consentedAt?: Date;
 }
 }
+}
 
+}
 }
 export interface MarketingConsent {
   emailMarketing: boolean;
@@ -114,7 +129,9 @@ export interface MarketingConsent {
   lastUpdated: Date;
 }
 }
+}
 
+}
 }
 export interface CookieConsent {
   essential: boolean; // always true, non-optional
@@ -126,7 +143,9 @@ export interface CookieConsent {
   lastUpdated: Date;
 }
 }
+}
 
+}
 }
 export interface CookieCategory {
   categoryId: string;
@@ -137,7 +156,9 @@ export interface CookieCategory {
   required: boolean;
 }
 }
+}
 
+}
 }
 export interface CookieDetails {
   name: string;
@@ -147,7 +168,9 @@ export interface CookieDetails {
   thirdParty: boolean;
 }
 }
+}
 
+}
 }
 export interface DataTransferConsent {
   transferId: string;
@@ -159,7 +182,9 @@ export interface DataTransferConsent {
   consentedAt?: Date;
 }
 }
+}
 
+}
 }
 export interface GeolocationData {
   country: string;
@@ -169,11 +194,13 @@ export interface GeolocationData {
     latitude: number;
     longitude: number;
 }
+}
   };
   timezone: string;
   accuracy?: number;
 }
 
+}
 }
 export interface InteractionMetrics {
   timeOnPage: number; // seconds
@@ -184,7 +211,9 @@ export interface InteractionMetrics {
   hesitationTime: number; // seconds between page load and acceptance
 }
 }
+}
 
+}
 }
 export interface DigitalSignature {
   signatureId: string;
@@ -196,7 +225,9 @@ export interface DigitalSignature {
   verificationStatus: VerificationStatus;
 }
 }
+}
 
+}
 }
 export interface PolicyAcceptanceRecord {
   recordId: string;
@@ -209,7 +240,9 @@ export interface PolicyAcceptanceRecord {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ConsentWithdrawal {
   withdrawalId: string;
@@ -226,7 +259,9 @@ export interface ConsentWithdrawal {
   dataActions: DataAction[];
 }
 }
+}
 
+}
 }
 export interface WithdrawalImpact {
   affectedServices: string[];
@@ -237,7 +272,9 @@ export interface WithdrawalImpact {
   businessImpact: string;
 }
 }
+}
 
+}
 }
 export interface DataAction {
   actionId: string;
@@ -249,7 +286,9 @@ export interface DataAction {
   evidence: string[];
 }
 }
+}
 
+}
 }
 export interface ComplianceFlag {
   flagId: string;
@@ -262,7 +301,9 @@ export interface ComplianceFlag {
   resolution?: string;
 }
 }
+}
 
+}
 }
 export interface ConsentRenewal {
   renewalId: string;
@@ -276,7 +317,9 @@ export interface ConsentRenewal {
   renewalStrategy: RenewalStrategy;
 }
 }
+}
 
+}
 }
 export interface NotificationRecord {
   notificationId: string;
@@ -288,7 +331,9 @@ export interface NotificationRecord {
   responseAt?: Date;
 }
 }
+}
 
+}
 }
 export interface RenewalStrategy {
   strategyType: RenewalStrategyType;
@@ -298,7 +343,9 @@ export interface RenewalStrategy {
   escalationSteps: EscalationStep[];
 }
 }
+}
 
+}
 }
 export interface ReminderSchedule {
   daysBefore: number;
@@ -307,7 +354,9 @@ export interface ReminderSchedule {
   urgency: ReminderUrgency;
 }
 }
+}
 
+}
 }
 export interface EscalationStep {
   stepNumber: number;
@@ -315,6 +364,7 @@ export interface EscalationStep {
   action: EscalationAction;
   delayDays: number;
   responsible: string[];
+}
 }
 }
 
@@ -1131,6 +1181,7 @@ export class PolicyAcceptanceTrackingService {
 
 // Supporting interfaces for dashboard metrics
 }
+}
 interface AcceptanceStats {
   totalAcceptances: number;
   acceptancesByType: Record<PolicyType, number>;
@@ -1138,7 +1189,9 @@ interface AcceptanceStats {
   recentAcceptances: number;
 }
 }
+}
 
+}
 }
 interface ComplianceMetrics {
   complianceRate: number;
@@ -1147,21 +1200,26 @@ interface ComplianceMetrics {
   resolvedFlags: number;
 }
 }
+}
 
+}
 }
 interface RiskAnalysis {
   averageRiskScore: number;
   highRiskUsers: number;
   riskDistribution: Record<string, number>;
 }
+}
   riskTrends: Array<{ date: Date; score: number }>;
 }
 
+}
 }
 interface RenewalMetrics {
   dueRenewals: number;
   renewalRate: number;
   overduRenewals: number;
   renewalsByStrategy: Record<RenewalStrategyType, number>;
+}
 }
 }

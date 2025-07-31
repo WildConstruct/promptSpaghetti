@@ -86,10 +86,12 @@ export enum TrustStatus {
   autoRenew: boolean;
   requirePeriodicVerification: boolean;
   verificationIntervalDays: number;
+}
 };
   metadata: Record<string, any>;
 
 // Device verification request
+}
 }
 export interface DeviceVerificationRequest {
   userId: string;
@@ -99,6 +101,8 @@ export interface DeviceVerificationRequest {
   challenge?: string;
   metadata?: Record<string, any>;
   // Trust decision
+}
+}
 }
 export interface TrustDecision {
   trusted: boolean;
@@ -114,9 +118,11 @@ export interface TrustDecision {
   notExpired: boolean;
   notRevoked: boolean;
   recentlyVerified: boolean;
+}
 };
 
 // Configuration
+}
 }
 export interface TrustedDeviceConfig {
   maxDevicesPerUser: number;
@@ -130,6 +136,7 @@ export interface TrustedDeviceConfig {
   full: number;    // Risk score threshold for full trust,
   partial: number; // Risk score threshold for partial trust,
   deny: number;    // Risk score above which to deny trust,
+}
 };
   verificationMethods: VerificationMethod;
   enableAnomalyDetection: boolean;
@@ -165,11 +172,12 @@ export class TrustedDeviceManager extends EventEmitter {
   /**
    * Check if a device is trusted for a user
    */
-  public async checkDeviceTrust()
+  public async checkDeviceTrust(
     userId: string,
     context: FingerprintContext,
     location?: LocationData
   ): Promise<TrustDecision> {
+
   try {
   // Generate fingerprint for the current device
   const fingerprint = await this.fingerprintService.generateFingerprint(;);
@@ -242,7 +250,7 @@ export class TrustedDeviceManager extends EventEmitter {
   /**
    * Register a new trusted device
    */
-  public async registerTrustedDevice()
+  public async registerTrustedDevice(
     request: DeviceVerificationRequest): Promise<TrustedDevice> {,
     const { userId, deviceFingerprint, location, verificationMethod } = request;
     // Check device limit
@@ -321,6 +329,7 @@ export class TrustedDeviceManager extends EventEmitter {
    * Verify a pending device
    */
   public async verifyDevice(verificationToken: string): Promise<TrustedDevice> {
+
   const tokenData = this.verificationTokens.get(verificationToken);
   if (!tokenData) {
   throw new Error('Invalid verification token');
@@ -349,6 +358,7 @@ export class TrustedDeviceManager extends EventEmitter {
    * Revoke device trust
    */
   public async revokeDevice(deviceId: string, reason: string): Promise<void> {
+
   const device = this.deviceLookup.get(deviceId);
   if (!device) {
   throw new Error('Device not found');
@@ -370,9 +380,9 @@ export class TrustedDeviceManager extends EventEmitter {
   /**
    * Update device settings
    */
-  public updateDeviceSettings(()
+  public updateDeviceSettings(((
     deviceId: string,
-    settings: Partial<TrustedDevice['settings']>,
+    settings: Partial<TrustedDevice['settings']>
   ): TrustedDevice {
     const device = this.deviceLookup.get(deviceId);
     if (!device) {
@@ -451,8 +461,7 @@ export class TrustedDeviceManager extends EventEmitter {
   const riskAssessment = this.fingerprintService.assessRisk(fingerprint, location);
   factors.riskAcceptable = riskAssessment.riskScore <= this.config.riskThreshold.partial;
   return factors;
-  private makeTrustDecision(()
-  device: TrustedDevice,
+  private makeTrustDecision((device: TrustedDevice,
   factors: TrustDecision['factors']): TrustDecision {,
   // Calculate overall trust score starting from 100
   let trustScore = 100;
@@ -493,9 +502,9 @@ export class TrustedDeviceManager extends EventEmitter {
   verificationMethods: requiresVerification ? this.config.verificationMethods : undefined,
   factors
 };
-  private calculateFingerprintSimilarity(()
+  private calculateFingerprintSimilarity(((
     device: TrustedDevice,
-    fingerprint: DeviceFingerprint,
+    fingerprint: DeviceFingerprint
   ): number {
     // Simple similarity calculation based on key attributes
     let matchCount = 0;
@@ -522,9 +531,9 @@ export class TrustedDeviceManager extends EventEmitter {
               Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
-  private isLocationTrusted(()
+  private isLocationTrusted(((
     device: TrustedDevice,
-    location: LocationData,
+    location: LocationData
   ): boolean {
     if (!device.primaryLocation) {
       return true; // No location restriction

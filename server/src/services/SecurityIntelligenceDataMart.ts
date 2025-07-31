@@ -13,6 +13,7 @@
 import { EventEmitter } from 'events';
 
 }
+}
 export interface SecurityDataMartConfig {
   architecture: {
     deployment_mode: 'standalone' | 'integrated' | 'distributed';
@@ -22,6 +23,7 @@ export interface SecurityDataMartConfig {
       threat_intelligence_days: number;
       incident_data_years: number;
       audit_logs_years: number;
+}
 }
     };
     performance_optimization: {
@@ -142,6 +144,7 @@ export interface SecurityDataMartConfig {
 }
 
 }
+}
 export interface DataMartSchema {
   // Core dimension tables
   dim_time: {
@@ -159,6 +162,7 @@ export interface DataMartSchema {
     is_holiday: boolean;
     business_day: boolean;
     fiscal_period: string;
+}
 }
   };
   
@@ -399,6 +403,7 @@ export interface DataMartSchema {
 }
 
 }
+}
 export interface DataMartAnalytics {
   // Threat landscape analytics
   threat_landscape_summary: {
@@ -406,6 +411,7 @@ export interface DataMartAnalytics {
     active_campaigns: number;
     threat_actors: number;
     techniques_observed: number;
+}
 }
     geographic_distribution: { country: string; threat_count: number }[];
     threat_type_distribution: { type: string; percentage: number }[];

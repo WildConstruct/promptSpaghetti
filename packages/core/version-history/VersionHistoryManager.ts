@@ -3,6 +3,7 @@
  * Manages version snapshots, branching, and change tracking for projects
  */
 
+}
 export interface VersionSnapshot {
   id: string;
   project_id: string;
@@ -33,6 +34,8 @@ export interface VersionSnapshot {
   workflow_state: string;
   approval_status?: string;
 }
+}
+}
 export interface VersionDiff {
   id: string;
   from_snapshot_id: string;
@@ -46,9 +49,11 @@ export interface VersionDiff {
   removed: number;
   modified: number;
   complexity: number;
+}
 };
   similarity_score: number;
   created_at: string;
+}
 }
 export interface Branch {
   id: string;
@@ -66,6 +71,8 @@ export interface Branch {
   updated_at: string;
   visibility: 'private' | 'workspace' | 'public';
   total_commits: number;
+}
+}
 }
 export interface ChangeEvent {
   id: string;
@@ -87,6 +94,8 @@ export interface ChangeEvent {
   workflow_state?: string;
   approval_required: boolean;
 }
+}
+}
 export interface VersionAnnotation {
   id: string;
   snapshot_id: string;
@@ -100,10 +109,12 @@ export interface VersionAnnotation {
   status: 'active' | 'resolved' | 'archived';
   priority: 'low' | 'normal' | 'high' | 'critical';
   target_element_id?: string;
+}
   target_coordinates?: { x: number; y: number };
   resolved_by?: string;
   resolved_at?: string;
   resolution_note?: string;
+}
 }
 export interface VersionHistoryFilter {
   branch_name?: string;
@@ -115,6 +126,8 @@ export interface VersionHistoryFilter {
   offset?: number;
   include_annotations?: boolean;
 }
+}
+}
 export interface SnapshotCreationOptions {
   title?: string;
   description?: string;
@@ -124,6 +137,7 @@ export interface SnapshotCreationOptions {
   version_tag?: string;
   workflow_state?: string;
   approval_status?: string;
+}
 }
 export class VersionHistoryManager {
   private snapshots = new Map<string, VersionSnapshot>();
@@ -137,6 +151,7 @@ export class VersionHistoryManager {
     this.currentSessionId = crypto.randomUUID();
   // Snapshot Management
   async createSnapshot(graphData: any, options: SnapshotCreationOptions = {}): Promise<VersionSnapshot> {
+
   try {
   // Prepare snapshot data
   const snapshotData = {
@@ -172,6 +187,7 @@ export class VersionHistoryManager {
       console.error('Failed to create snapshot:', error);
       throw error;
   async getSnapshots(filter: VersionHistoryFilter = {}): Promise<{ snapshots: VersionSnapshot; total: number }> {
+
     try {
       const params = new URLSearchParams();
       params.append('project_id', this.projectId);
@@ -190,6 +206,7 @@ export class VersionHistoryManager {
       console.error('Failed to get snapshots:', error);
       throw error;
   async getSnapshot(snapshotId: string): Promise<VersionSnapshot> {
+
     try {
       // Check cache first
       if (this.snapshots.has(snapshotId)) {
@@ -202,6 +219,7 @@ export class VersionHistoryManager {
       console.error('Failed to get snapshot:', error);
       throw error;
   async getSnapshotData(snapshotId: string): Promise<any> {
+
     try {
       const response = await this.apiClient.get(`/api/version-snapshots/${snapshotId}/data`);}
       return response.data;
@@ -209,6 +227,7 @@ export class VersionHistoryManager {
       console.error('Failed to get snapshot data:', error);
       throw error;
   async deleteSnapshot(snapshotId: string): Promise<void> {
+
     try {
       await this.apiClient.delete(`/api/version-snapshots/${snapshotId}`);}
       this.snapshots.delete(snapshotId);
@@ -224,6 +243,7 @@ export class VersionHistoryManager {
       throw error;
   // Diff Management
   async compareFreshSnapshots(fromSnapshotId: string, toSnapshotId: string): Promise<VersionDiff> {
+
     try {
       const response = await this.apiClient.get(`/api/version-diffs/${fromSnapshotId}/${toSnapshotId}`);}
       return response.data;
@@ -231,6 +251,7 @@ export class VersionHistoryManager {
       console.error('Failed to compare snapshots:', error);
       throw error;
   async getSnapshotDiff(fromSnapshotId: string, toSnapshotId: string): Promise<VersionDiff> {
+
     try {
       // Try to get cached diff first
       const response = await this.apiClient.get(`/api/version-diffs/${fromSnapshotId}/${toSnapshotId}`);}
@@ -258,6 +279,7 @@ export class VersionHistoryManager {
   visibility?: 'private' | 'workspace' | 'public'
   } = {}
   ): Promise<Branch> {
+
   try {
   const branchData = {
   project_id: this.projectId,
@@ -288,6 +310,7 @@ export class VersionHistoryManager {
       console.error('Failed to create branch:', error);
       throw error;
   async getBranches(): Promise<Branch> {
+
     try {
       const response = await this.apiClient.get(`/api/branches?project_id=${this.projectId}`);}
       const branches = response.data;
@@ -328,6 +351,7 @@ export class VersionHistoryManager {
   delete_source?: boolean;
 } = {}
   ): Promise<VersionSnapshot> {
+
   try {
   const response = await this.apiClient.post('/api/branches/merge', {)
   source_branch_id: sourceBranchId,
@@ -363,6 +387,7 @@ export class VersionHistoryManager {
   workflow_state?: string;
   approval_required?: boolean;
 }): Promise<ChangeEvent> {
+
   try {
   const eventData: Partial<ChangeEvent> = {,
   project_id: this.projectId,
@@ -392,6 +417,7 @@ export class VersionHistoryManager {
   limit?: number;
   offset?: number;
 } = {}): Promise<{ events: ChangeEvent; total: number }> {
+
     try {
       const params = new URLSearchParams();
       params.append('project_id', this.projectId);
@@ -415,8 +441,8 @@ export class VersionHistoryManager {
       content_markdown: string;
       priority?: 'low' | 'normal' | 'high' | 'critical';
       target_element_id?: string;
-      target_coordinates?: { x: number; y: number };
-  ): Promise<VersionAnnotation> {
+      target_coordinates?: { x: number; y: number }): Promise<VersionAnnotation> {
+
   try {
   const annotationData = {
   snapshot_id: snapshotId,
@@ -434,6 +460,7 @@ export class VersionHistoryManager {
       console.error('Failed to add annotation:', error);
       throw error;
   async getAnnotations(snapshotId: string): Promise<VersionAnnotation> {
+
     try {
       const response = await this.apiClient.get(`/api/version-annotations?snapshot_id=${snapshotId}`);}
       return response.data;
@@ -441,6 +468,7 @@ export class VersionHistoryManager {
       console.error('Failed to get annotations:', error);
       throw error;
   async resolveAnnotation(annotationId: string, resolutionNote?: string): Promise<VersionAnnotation> {
+
     try {
       const response = await this.apiClient.put(`/api/version-annotations/${annotationId}/resolve`, {)}
   },
@@ -491,6 +519,7 @@ export class VersionHistoryManager {
   keep_milestones?: boolean;
   keep_tagged_versions?: boolean;
 } = {}): Promise<{ deleted_snapshots: number; deleted_diffs: number }> {
+
   try {
   const response = await this.apiClient.post('/api/version-cleanup', {)
   project_id: this.projectId,

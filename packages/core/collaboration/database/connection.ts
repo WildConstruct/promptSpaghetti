@@ -3,6 +3,7 @@ import { WorkspaceId, ProjectId, UserId, ResourceId } from '../types/workspace';
 import { ErrorFactory } from '../../errors/ErrorFactory';
 import { DatabaseConnectionError } from '../../errors/index';
 
+}
 export interface DatabaseConfig {
   host: string;
   port: number;
@@ -13,6 +14,7 @@ export interface DatabaseConfig {
   connectionTimeoutMillis?: number;
   idleTimeoutMillis?: number;
   max?: number;
+}
 }
 export class DatabaseConnection {
   private pool: Pool;
@@ -28,6 +30,7 @@ export class DatabaseConnection {
       console.error('Unexpected error on idle client', err);
     });
   async connect(): Promise<void> {
+
     try {
       const client = await this.pool.connect();
       await client.query('SELECT NOW()');
@@ -68,6 +71,7 @@ export class DatabaseConnection {
 });
       throw error;
   async transaction<T>(callback: (client: PoolClient) => Promise<T>): Promise<T> {
+
     if (!this.isConnected) {
       throw ErrorFactory.createDatabaseConnectionError()
         'Cannot start transaction: Database not connected',
@@ -94,6 +98,7 @@ export class DatabaseConnection {
   waiting: number;
 };
   }> {
+
   const start = Date.now();
   try {
   await this.pool.query('SELECT 1');
@@ -215,6 +220,7 @@ export class QueryBuilder {
 export class MigrationRunner {
   constructor(private db: DatabaseConnection) {}
   async ensureMigrationsTable(): Promise<void> {
+
     await this.db.query(`)
       CREATE TABLE IF NOT EXISTS schema_migrations ()
         version VARCHAR(20) PRIMARY KEY,
@@ -223,11 +229,13 @@ export class MigrationRunner {
         rollback_sql TEXT
     `);
   async getAppliedMigrations(): Promise<string> {
+
     const result = await this.db.query<{ version: string }>()
       'SELECT version FROM schema_migrations ORDER BY version'
     );
     return result.rows.map(row => row.version);
   async applyMigration(version: string, sql: string): Promise<void> {
+
     await this.db.transaction(async (client) => {
       await client.query(sql);
       await client.query()
@@ -236,6 +244,7 @@ export class MigrationRunner {
       );
     });
   async rollbackMigration(version: string): Promise<void> {
+
     const result = await this.db.query<{ rollback_sql: string }>()
       'SELECT rollback_sql FROM schema_migrations WHERE version = $1',
       [version]

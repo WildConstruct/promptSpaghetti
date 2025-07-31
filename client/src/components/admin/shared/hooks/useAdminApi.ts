@@ -5,6 +5,7 @@
  * Provides authenticated API calls, error handling, and loading states
  */
 import { useState, useCallback, useRef } from 'react';
+}
 interface ApiOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   headers?: Record<string, string>;
@@ -23,6 +24,7 @@ interface ApiOptions {
   // Mock auth token getter - replace with actual auth implementation
   const getAuthToken = (): string | null => {,
   return localStorage.getItem('admin_token') || localStorage.getItem('token');
+}
 };
 
 export const useAdminApi = (): UseAdminApiReturn => {
@@ -46,7 +48,7 @@ export const useAdminApi = (): UseAdminApiReturn => {
       };
       const requestOptions: RequestInit = {,
   method: options.method || 'GET',
-  headers: {,
+  headers: {
   ...defaultHeaders,
   ...options.headers
 }
@@ -56,7 +58,7 @@ export const useAdminApi = (): UseAdminApiReturn => {
 }
       };
       // Ensure endpoint starts with / or is a full URL
-      const url = endpoint.startsWith('http') ? endpoint :;
+      const url = endpoint.startsWith('http') ? endpoint :
                   endpoint.startsWith('/') ? endpoint : `/${endpoint}`;}
       const response = await fetch(url, requestOptions);
       // Handle different response types

@@ -1,5 +1,6 @@
 import React from 'react';
 
+}
 export interface SliderProps {
   value?: number;
   onValueChange?: (value: number) => void;
@@ -8,6 +9,7 @@ export interface SliderProps {
   step?: number;
   className?: string;
   disabled?: boolean;
+}
 }
 export const Slider: React.FC<SliderProps> = ({)
   value = [0],

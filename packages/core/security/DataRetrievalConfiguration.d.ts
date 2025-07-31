@@ -24,6 +24,7 @@ export declare const STANDARD_DATA_RETRIEVAL_LIMITS: Record<DataClassificationLe
  */
 export declare const OPERATION_MODIFIERS: Record<DataOperation, OperationModifier>;
 
+}
 export interface OperationModifier {
     requestMultiplier: number;
     volumeMultiplier: number;
@@ -37,6 +38,7 @@ export declare const ENVIRONMENT_CONFIGURATIONS: {
         globalLimits: GlobalDataLimits;
         relaxedMode: boolean;
         debugLogging: boolean;
+}
     };
     STAGING: {
         globalLimits: GlobalDataLimits;
@@ -140,6 +142,7 @@ export declare class DataRetrievalConfigurationFactory {
      */
     static optimizeForPerformance(config: DataRetrievalConfig): DataRetrievalConfig;
 
+}
 export interface ValidationResult {
     isValid: boolean;
     errors: string[];
@@ -147,3 +150,4 @@ export interface ValidationResult {
 
 export default DataRetrievalConfigurationFactory;
 //# sourceMappingURL=DataRetrievalConfiguration.d.ts.map
+}

@@ -5,6 +5,7 @@
  * Comprehensive performance monitoring with real-time metrics, alerts, and analytics
  */
 
+}
 export interface PerformanceMetrics {
     totalRequests: number;
     successfulRequests: number;
@@ -28,6 +29,7 @@ export interface PerformanceMetrics {
     windowStart: number;
     windowEnd: number;
 
+}
 export interface PerformanceAlert {
     id: string;
     type: 'warning' | 'error' | 'critical';
@@ -39,6 +41,7 @@ export interface PerformanceAlert {
     resolved: boolean;
     resolvedAt?: number;
 
+}
 export interface PerformanceThreshold {
     metric: keyof PerformanceMetrics;
     warningThreshold: number;
@@ -46,6 +49,7 @@ export interface PerformanceThreshold {
     criticalThreshold: number;
     operator: 'greater_than' | 'less_than' | 'equals';
 
+}
 export interface MonitoringConfig {
     enabled: boolean;
     collectionInterval: number;
@@ -55,6 +59,7 @@ export interface MonitoringConfig {
         email?: string[];
         webhook?: string;
         slackChannel?: string;
+}
     };
     thresholds: PerformanceThreshold[];
     sampling: {
@@ -67,6 +72,7 @@ export interface MonitoringConfig {
         maxSize?: number;
     };
 
+}
 export interface ModelPerformanceData {
     modelId: string;
     modelType: string;
@@ -76,6 +82,7 @@ export interface ModelPerformanceData {
     lastUpdated: number;
     healthStatus: 'healthy' | 'degraded' | 'unhealthy' | 'offline';
 
+}
 export interface PerformanceReport {
     summary: {
         totalModels: number;
@@ -84,27 +91,28 @@ export interface PerformanceReport {
         averageResponseTime: number;
         totalCost: number;
         successRate: number;
+}
     };
     trends: {
-        responseTimeTrend: Array<{,
+        responseTimeTrend: Array<{
             timestamp: number;
             value: number;
         }>;
-        successRateTrend: Array<{,
+        successRateTrend: Array<{
             timestamp: number;
             value: number;
         }>;
-        costTrend: Array<{,
+        costTrend: Array<{
             timestamp: number;
             value: number;
         }>;
     };
-    topPerformers: Array<{,
+    topPerformers: Array<{
         modelId: string;
         metric: string;
         value: number;
     }>;
-    bottomPerformers: Array<{,
+    bottomPerformers: Array<{
         modelId: string;
         metric: string;
         value: number;

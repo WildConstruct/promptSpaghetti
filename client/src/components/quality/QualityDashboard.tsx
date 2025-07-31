@@ -35,10 +35,12 @@ import { useQualityMetrics } from '../../hooks/useQualityMetrics';
 // Quality Dashboard Component
 // =============================================================================
 
+}
 export interface QualityDashboardProps {
   refreshInterval?: number; // milliseconds,
   compact?: boolean;
   className?: string;
+}
 }
 export const QualityDashboard: React.FC<QualityDashboardProps> = ({)
   refreshInterval = 60000, // 1 minute default

@@ -18,6 +18,7 @@ import { HealthCheckFramework } from '../admin/HealthCheckFramework';
 import { DiagnosticService } from '../admin/DiagnosticService';
 
 }
+}
 export interface SecurityAnalyticsIntegrationConfig {
   epic1_analytics_integration: {
     enabled: boolean;
@@ -26,6 +27,7 @@ export interface SecurityAnalyticsIntegrationConfig {
     performance_event_forwarding: boolean;
     batch_size: number;
     flush_interval_ms: number;
+}
 }
   };
   
@@ -57,6 +59,7 @@ export interface SecurityAnalyticsIntegrationConfig {
 }
 
 }
+}
 export interface SecurityPerformanceMetrics {
   timestamp: number;
   performance_score: number;
@@ -70,7 +73,9 @@ export interface SecurityPerformanceMetrics {
   system_availability_percent: number;
 }
 }
+}
 
+}
 }
 export interface SecurityAnalyticsAlert {
   id: string;
@@ -84,6 +89,7 @@ export interface SecurityAnalyticsAlert {
   created_at: number;
   resolved_at?: number;
   resolved_by?: string;
+}
 }
 }
 

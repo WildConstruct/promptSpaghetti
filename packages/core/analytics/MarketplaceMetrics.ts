@@ -14,6 +14,7 @@
  */
 import { conversionTracker } from './ConversionTracker';
 
+}
 export interface MarketplaceEvent {
   id: string;
   userId: string;
@@ -30,6 +31,7 @@ export interface MarketplaceEvent {
   referrer: string;
   location?: string;
   deviceType: 'desktop' | 'mobile' | 'tablet'
+}
   };
 }
 export type MarketplaceEventType =
@@ -69,6 +71,7 @@ export type MarketplaceCategory =
   | 'creator_economy'
   | 'recommendation';
 
+}
 export interface TemplateMetrics {
   templateId: string;
   name: string;
@@ -84,6 +87,7 @@ export interface TemplateMetrics {
   ratings: {;
   average: number;
   count: number;
+}
       distribution: { [stars: number]: number };
     };
     revenue: {
@@ -103,6 +107,7 @@ export interface TemplateMetrics {
   ratingTrend: 'improving' | 'stable' | 'declining'
   };
 }
+}
 export interface CreatorMetrics {
   creatorId: string;
   name: string;
@@ -116,6 +121,7 @@ export interface CreatorMetrics {
   id: string;
   name: string;
   revenue: number;
+}
 };
     recentPerformance: {
   period: string;
@@ -130,6 +136,7 @@ export interface CreatorMetrics {
   templatePerformance: 'improving' | 'stable' | 'declining'
   };
 }
+}
 export interface MarketplaceDashboardData {
   overview: {
   totalRevenue: number;
@@ -138,12 +145,13 @@ export interface MarketplaceDashboardData {
   activeCreators: number;
   averageRating: number;
   conversionRate: number;
+}
 };
   trends: {
   revenueGrowth: number;
   transactionGrowth: number;
   userGrowth: number;
-  topCategories: Array<{,
+  topCategories: Array<{
   category: string;
   revenue: number;
   growth: number;
@@ -158,13 +166,13 @@ export interface MarketplaceDashboardData {
 };
   searchAnalytics: {
   totalSearches: number;
-  topQueries: Array<{,
+  topQueries: Array<{
   query: string;
   count: number;
   resultsFound: number;
   ctr: number;
 }>;
-    zeroResultQueries: Array<{,
+    zeroResultQueries: Array<{
   query: string;
   count: number;
 }>;
@@ -481,8 +489,7 @@ export class MarketplaceMetrics {
   /**
   * Get top performing templates
   */
-  public getTopPerformingTemplates(()
-  metric: 'revenue' | 'downloads' | 'rating' = 'revenue',
+  public getTopPerformingTemplates((metric: 'revenue' | 'downloads' | 'rating' = 'revenue',
   limit: number = 10): TemplateMetrics {,
   const templates = Array.from(this.templateMetrics.values());
   return templates

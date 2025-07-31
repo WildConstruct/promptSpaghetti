@@ -13,6 +13,7 @@ import { SecurityMLToolsEngine } from './SecurityMLToolsEngine';
 import { SecurityIntelligenceIncidentResponse, SecurityIncident } from './SecurityIntelligenceIncidentResponse';
 
 }
+}
 export interface InvestigationQuery {
   query_id: string;
   name: string;
@@ -31,6 +32,7 @@ export interface InvestigationQuery {
         operator: 'equals' | 'not_equals' | 'contains' | 'not_contains' | 'greater_than' | 'less_than' | 'between' | 'in' | 'not_in' | 'regex';
         value: Error;
         logical_operator?: 'and' | 'or';
+}
 }
       }>;
     }>;
@@ -94,6 +96,7 @@ export interface InvestigationQuery {
 }
 
 }
+}
 export interface InvestigationResult {
   result_id: string;
   query_id: string;
@@ -110,6 +113,7 @@ export interface InvestigationResult {
     query_optimization_applied: boolean;
     warnings: string[];
     errors: string[];
+}
 }
   };
   
@@ -264,6 +268,7 @@ export interface InvestigationResult {
 }
 
 }
+}
 export interface Investigation {
   investigation_id: string;
   title: string;
@@ -280,6 +285,7 @@ export interface Investigation {
     category: 'incident_response' | 'threat_hunting' | 'compliance_audit' | 'forensic_analysis' | 'vulnerability_assessment';
     related_incidents: string[];
     related_tickets: string[];
+}
 }
   };
   
@@ -354,6 +360,7 @@ export interface Investigation {
 }
 
 }
+}
 export interface QueryTemplate {
   template_id: string;
   name: string;
@@ -370,6 +377,7 @@ export interface QueryTemplate {
       required: boolean;
       default_value?: unknown;
       validation_rules?: Record<string, any>;
+}
 }
     }>;
     

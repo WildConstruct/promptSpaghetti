@@ -11,6 +11,7 @@ import { EventEmitter } from 'events';
 import { RateLimitingService, ThreatLevel } from './RateLimitingService';
 import { AdaptiveThrottlingRulesEngine } from './AdaptiveThrottlingRules';
 
+}
 export interface RateLimitingMetricsConfig {
     enableRealTimeMetrics: boolean;
     metricsRetentionPeriod: number;
@@ -19,6 +20,7 @@ export interface RateLimitingMetricsConfig {
         throughput: number;
         errorRate: number;
         blockRate: number;
+}
     };
     visualizationOptions: {
         enableCharts: boolean;
@@ -37,6 +39,7 @@ export interface RateLimitingMetricsConfig {
         };
     };
 
+}
 export interface PerformanceMetrics {
     timestamp: Date;
     responseTime: {
@@ -45,6 +48,7 @@ export interface PerformanceMetrics {
         p95: number;
         p99: number;
         max: number;
+}
     };
     throughput: {
         requestsPerSecond: number;
@@ -72,6 +76,7 @@ export interface PerformanceMetrics {
         adaptiveAdjustments: number;
     };
 
+}
 export interface MetricsVisualizationData {
     timeSeriesData: {
         timestamps: Date[];
@@ -79,6 +84,7 @@ export interface MetricsVisualizationData {
         throughput: number[];
         blockRate: number[];
         errorRate: number[];
+}
     };
     heatmapData: {
         endpoints: string[];
@@ -87,7 +93,7 @@ export interface MetricsVisualizationData {
         blockMatrix: number[][];
     };
     geospatialData: {
-        locations: Array<{,
+        locations: Array<{
             latitude: number;
             longitude: number;
             requestCount: number;
@@ -98,13 +104,14 @@ export interface MetricsVisualizationData {
     distributionData: {
         endpointDistribution: Record<string, number>;
         threatLevelDistribution: Record<ThreatLevel, number>;
-        responseTimeDistribution: Array<{,
+        responseTimeDistribution: Array<{
             range: string;
             count: number;
         }>;
         userAgentDistribution: Record<string, number>;
     };
 
+}
 export interface AlertCondition {
     alertId: string;
     timestamp: Date;
@@ -117,6 +124,7 @@ export interface AlertCondition {
     recommendedActions: string[];
     metadata: Record<string, unknown>;
 
+}
 export interface DashboardWidget {
     widgetId: string;
     widgetType: 'chart' | 'gauge' | 'table' | 'heatmap' | 'map' | 'counter';
@@ -131,6 +139,7 @@ export interface DashboardWidget {
         filters?: Record<string, unknown>;
         dimensions?: string[];
         metrics?: string[];
+}
     };
     position: {
         x: number;

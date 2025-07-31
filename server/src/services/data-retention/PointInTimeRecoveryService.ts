@@ -43,6 +43,7 @@ export type RestoreScope =
 // =============================================================================
 
 }
+}
 export interface RecoveryPoint {
   recovery_point_id: string;
   name: string;
@@ -92,7 +93,9 @@ export interface RecoveryPoint {
   access_log: RecoveryPointAccess[];
 }
 }
+}
 
+}
 }
 export interface RecoveryPointAccess {
   access_id: string;
@@ -105,7 +108,9 @@ export interface RecoveryPointAccess {
   details?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface RecoveryConfiguration {
   config_id: string;
@@ -131,6 +136,7 @@ export interface RecoveryConfiguration {
     exclude_schemas: string[];
     include_system_data: boolean;
     include_audit_logs: boolean;
+}
 }
   };
   
@@ -178,8 +184,10 @@ export interface RecoveryConfiguration {
 }
 
 }
+}
 export interface RecoveryMetrics {
   config_id: string;
+}
 }
   time_period: { start: Date; end: Date };
   

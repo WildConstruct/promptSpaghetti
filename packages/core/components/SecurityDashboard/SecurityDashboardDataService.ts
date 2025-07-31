@@ -20,11 +20,14 @@
  */
 import { SecurityMetrics, SecurityAlert, ComplianceStatus, ResponseAction } from './SecurityDashboardMain';
 
+}
 export interface SecurityAction {
   type: string;
   payload: unknown;
   timestamp: Date;
   executedBy: string;
+}
+}
 }
 export interface DataServiceConfig {
   baseUrl: string;
@@ -33,6 +36,8 @@ export interface DataServiceConfig {
   timeout: number;
   retryAttempts: number;
   cacheTimeout: number; // seconds,
+}
+}
 }
 export interface ApiResponse<T> {
   success: boolean;
@@ -65,6 +70,7 @@ export class SecurityDashboardDataService {
    * Get current security metrics
    */
   async getSecurityMetrics(): Promise<SecurityMetrics> {
+
     const cacheKey = `security-metrics-${this.workspaceId}`;}
     const cached = this.getFromCache(cacheKey);
     if (cached) {
@@ -92,6 +98,7 @@ export class SecurityDashboardDataService {
   limit?: number;
   offset?: number;
 }): Promise<SecurityAlert> {
+
     const cacheKey = `security-alerts-${this.workspaceId}-${JSON.stringify(filters)}`;}
     const cached = this.getFromCache(cacheKey);
     if (cached) {
@@ -130,6 +137,7 @@ export class SecurityDashboardDataService {
    * Get compliance status
    */
   async getComplianceStatus(): Promise<ComplianceStatus> {
+
     const cacheKey = `compliance-status-${this.workspaceId}`;}
     const cached = this.getFromCache(cacheKey);
     if (cached) {
@@ -184,6 +192,7 @@ export class SecurityDashboardDataService {
    * Update an alert
    */
   async updateAlert(alertId: string, updates: Partial<SecurityAlert>): Promise<SecurityAlert> {
+
     try {
       const response = await this.apiRequest<SecurityAlert>(;);
         `/security/alerts/${this.workspaceId}/${alertId}`}
@@ -237,6 +246,7 @@ export class SecurityDashboardDataService {
    * Initialize WebSocket connection for real-time updates
    */
   initializeWebSocket(): Promise<void> {
+
     return new Promise((resolve, reject) => {
       try {
         this.ws = new WebSocket(`${this.config.wsUrl}/security-dashboard/${this.workspaceId}`);}

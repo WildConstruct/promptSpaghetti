@@ -6,6 +6,7 @@ import { create } from 'zustand';
 import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 import { extensionCompatibilityChecker } from '../../extensions/ExtensionCompatibilityChecker';
 
+}
 export interface ExtensionStatus {
   enabled: boolean;
   loaded: boolean;
@@ -15,12 +16,16 @@ export interface ExtensionStatus {
   updateAvailable: boolean;
   availableVersion?: string;
 }
+}
+}
 export interface ExtensionInstallation {
   extension: ExtensionManifest;
   installedAt: Date;
   enabledAt?: Date;
   disabledAt?: Date;
   configuration?: Record<string, any>;
+}
+}
 }
 export interface ExtensionManagerState {
   // Extension data
@@ -52,6 +57,7 @@ export interface ExtensionManagerState {
   hasErrors: false,
   version: extension.version,
   updateAvailable: false,
+}
 });
 
 // Mock data for development

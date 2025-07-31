@@ -9,11 +9,13 @@
 import React, { useState, useEffect } from 'react';
 import { ShareMetrics } from '../../types/sharingTypes';
 import { SharingService } from '../../services/SharingService';
+}
 interface ShareAnalyticsDashboardProps {
   shareLinkId: string;
   timeRange?: {
   start: Date;
   end: Date;
+}
 };
 
 export const ShareAnalyticsDashboard: React.FC<ShareAnalyticsDashboardProps> = ({)

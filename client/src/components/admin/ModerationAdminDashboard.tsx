@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ModerationManagement } from '../moderation/ModerationManagement';
 import { ApprovalWorkflow } from '../approval/ApprovalWorkflow';
 import './ModerationAdminDashboard.css';
+}
 interface ModerationStats {
   pending: number;,
   approved: number;
@@ -52,6 +53,7 @@ interface ModerationStats {
   averageProcessingTime: 0,
   moderatorCount: 0,
   queueBacklog: 0,
+}
 });
   const [moderationItems, setModerationItems] = useState<ModerationItem>([]);
   const [approvalRequests, setApprovalRequests] = useState<ApprovalRequest>([]);

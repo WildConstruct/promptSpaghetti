@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { User } from '../../types/auth';
+}
 interface UserProfileProps {
   user: User;
   onUpdateProfile?: (updates: Partial<User>) => void;
@@ -10,6 +11,7 @@ interface UserProfileProps {
   onUpdateProfile,
   onDeleteAccount,
   readOnly = false
+}
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({)

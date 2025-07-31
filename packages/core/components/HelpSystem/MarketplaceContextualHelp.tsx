@@ -32,6 +32,7 @@ export type ContextualTriggerType =
 
 // User behavior tracking
 
+}
 export interface UserBehaviorContext {
   // Navigation patterns
   currentPage: string;
@@ -60,6 +61,8 @@ export interface UserBehaviorContext {
   returnUserBehavior: boolean;
   // Contextual help rule
 }
+}
+}
 export interface ContextualHelpRule {
   id: string;
   name: string;
@@ -70,11 +73,13 @@ export interface ContextualHelpRule {
   userBehavior?: Partial<UserBehaviorContext>;
   timeThreshold?: number;
   eventCount?: number;
+}
 };
   helpContent: MarketplaceHelpContent;
   priority: number;
   cooldownMinutes?: number;
   maxTriggers?: number;
+}
 }
 export interface MarketplaceContextualHelpProps {
   // User context
@@ -96,6 +101,7 @@ export interface MarketplaceContextualHelpProps {
   onContextualHelpTriggered?: (rule: ContextualHelpRule, context: unknown) => void;
   onUserStruggleDetected?: (struggleType: string, severity: number) => void;
   onHelpEffectiveness?: (helpId: string, wasEffective: boolean) => void;
+}
 }
 export const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps> = ({)
   userId = 'anonymous',

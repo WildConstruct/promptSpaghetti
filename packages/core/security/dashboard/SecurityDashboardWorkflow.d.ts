@@ -40,6 +40,7 @@ import { DashboardType, SecurityRole } from './SecurityDashboardFramework';
 import { StateTransitionResult } from '../stores/workflowStore';
 import './SecurityDashboardWorkflow.css';
 
+}
 export interface SecurityWorkflowEvent {
     id: string;
     type: SecurityEventType;
@@ -73,6 +74,7 @@ export declare enum SecuritySeverity {
     LOW = "low",
     INFO = "info"
 
+}
 export interface SecurityAction {
     type: SecurityActionType;
     target: string;
@@ -92,6 +94,7 @@ export declare enum SecurityActionType {
     ESCALATE_ALERT = "escalate_alert",
     COLLECT_EVIDENCE = "collect_evidence"
 
+}
 export interface SecurityWorkflowConfig {
     enableAutoTransitions: boolean;
     enableAutomatedActions: boolean;
@@ -101,6 +104,7 @@ export interface SecurityWorkflowConfig {
     complianceRequirements: ComplianceRequirement[];
 
 
+}
 export interface AutoApprovalRule {
     id: string;
     name: string;
@@ -110,6 +114,7 @@ export interface AutoApprovalRule {
     requiredRole?: SecurityRole;
 
 
+}
 export interface ComplianceRequirement {
     framework: string;
     alertTypes: SecurityEventType[];
@@ -118,6 +123,7 @@ export interface ComplianceRequirement {
     notificationRequired: boolean;
 
 
+}
 export interface SecurityDashboardWorkflowProps {
     workspaceId: string;
     userId: string;
@@ -134,3 +140,4 @@ export interface SecurityDashboardWorkflowProps {
 export declare export declare const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>;
 export default SecurityDashboardWorkflow;
 //# sourceMappingURL=SecurityDashboardWorkflow.d.ts.map
+}

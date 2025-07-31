@@ -8,6 +8,7 @@
  */
 import React from 'react';
 
+}
 interface ConsentBannerProps {
     onConsentUpdate?: (consents: ConsentPreferences) => void;
     onClose?: () => void;
@@ -21,6 +22,7 @@ interface ConsentBannerProps {
     respectDoNotTrack?: boolean;
 
 
+}
 interface ConsentPreferences {
     essential: boolean;
     functional: boolean;
@@ -34,3 +36,4 @@ interface ConsentPreferences {
 declare const ConsentBanner: React.FC<ConsentBannerProps>;
 export default ConsentBanner;
 //# sourceMappingURL=ConsentBanner.d.ts.map
+}

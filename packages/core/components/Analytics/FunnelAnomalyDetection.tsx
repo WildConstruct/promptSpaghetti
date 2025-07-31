@@ -29,9 +29,11 @@ import {
 
 // Anomaly detection interfaces
 
+}
 export interface FunnelAnomalyDetectionProps {
   funnelDefinition: ConversionFunnelDefinition;
   analyticsInfrastructure: ConversionAnalyticsInfrastructure;
+}
   timeRange: { start: number; end: number };
   detectionConfig?: AnomalyDetectionConfig;
   alertConfig?: AlertConfiguration;
@@ -41,6 +43,7 @@ export interface FunnelAnomalyDetectionProps {
   onAnomalyDetected?: (anomaly: DetectedAnomaly) => void;
   onAlertTriggered?: (alert: AnomalyAlert) => void;
   onExport?: (data: AnomalyDetectionExportData) => void;
+}
 }
 export interface AnomalyDetectionConfig {
   algorithms: AnomalyAlgorithm;
@@ -53,6 +56,8 @@ export interface AnomalyDetectionConfig {
   cohortAnalysis: boolean;
   customRules: CustomAnomalyRule;
 }
+}
+}
 export interface AlertConfiguration {
   channels: AlertChannel;
   escalationRules: EscalationRule;
@@ -60,6 +65,7 @@ export interface AlertConfiguration {
   throttling: AlertThrottling;
   severity: AlertSeverityConfig;
   recipients: AlertRecipient;
+}
 }
 export type AnomalyAlgorithm = 
   | 'statistical_zscore'
@@ -71,6 +77,7 @@ export type AnomalyAlgorithm =
   | 'seasonal_hybrid_esd'
   | 'changepoint_detection';
 
+}
 export interface AnomalyDetectionData {
   currentAnomalies: DetectedAnomaly;
   historicalAnomalies: DetectedAnomaly;
@@ -81,6 +88,8 @@ export interface AnomalyDetectionData {
   alertHistory: AnomalyAlert;
   systemHealth: SystemHealthMetrics;
   detectionPerformance: DetectionPerformanceMetrics;
+}
+}
 }
 export interface DetectedAnomaly {
   id: string;
@@ -108,6 +117,7 @@ export interface DetectedAnomaly {
   resolvedAt?: number;
   falsePositive?: boolean;
 }
+}
 export type AnomalyType = 
   | 'performance_drop'
   | 'performance_spike'
@@ -122,6 +132,7 @@ export type AnomalyType =
 export type AnomalySeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
 export type AnomalyStatus = 'new' | 'acknowledged' | 'investigating' | 'resolved' | 'false_positive';
 
+}
 export interface AnomalyContext {
   timeOfDay: number;
   dayOfWeek: number;
@@ -131,11 +142,15 @@ export interface AnomalyContext {
   marketConditions: MarketCondition;
   systemMetrics: SystemMetric;
 }
+}
+}
 export interface EnvironmentalFactor {
   factor: string;
   value: string | number;
   impact: 'positive' | 'negative' | 'neutral';
   confidence: number;
+}
+}
 }
 export interface ConcurrentEvent {
   eventType: string;
@@ -144,24 +159,31 @@ export interface ConcurrentEvent {
   impact: string;
   correlation: number;
 }
+}
+}
 export interface MarketCondition {
   indicator: string;
   value: number;
   trend: 'increasing' | 'decreasing' | 'stable';
   volatility: number;
 }
+}
+}
 export interface SystemMetric {
   metric: string;
   value: number;
   threshold: number;
   status: 'normal' | 'warning' | 'critical'
+}
   }
+}
 export interface PotentialRootCause {
   category: RootCauseCategory;
   description: string;
   probability: number;
   evidence: Evidence;
   investigationSteps: string;
+}
 }
 export type RootCauseCategory = 
   | 'technical'
@@ -172,12 +194,15 @@ export type RootCauseCategory =
   | 'competitive'
   | 'system_performance';
 
+}
 export interface Evidence {
   type: string;
   description: string;
   strength: 'weak' | 'moderate' | 'strong';
   timestamp: number;
   source: string;
+}
+}
 }
 export interface AnomalyImpact {
   revenueImpact: number;
@@ -188,6 +213,8 @@ export interface AnomalyImpact {
   recoveryEstimate: number;
   businessCritical: boolean;
 }
+}
+}
 export interface AnomalyRecommendation {
   action: string;
   priority: 'immediate' | 'high' | 'medium' | 'low';
@@ -196,6 +223,8 @@ export interface AnomalyRecommendation {
   timeline: string;
   owner: string;
   dependencies: string;
+}
+}
 }
 export interface AnomalyTrend {
   period: string;
@@ -206,6 +235,8 @@ export interface AnomalyTrend {
   averageDetectionTime: number;
   averageResolutionTime: number;
 }
+}
+}
 export interface PredictedAnomaly {
   predictedTimestamp: number;
   type: AnomalyType;
@@ -215,6 +246,8 @@ export interface PredictedAnomaly {
   preventiveActions: PreventiveAction;
   monitoringPlan: MonitoringPlan;
 }
+}
+}
 export interface PreventiveAction {
   action: string;
   effectiveness: number;
@@ -222,11 +255,15 @@ export interface PreventiveAction {
   timeline: string;
   dependencies: string;
 }
+}
+}
 export interface MonitoringPlan {
   metrics: string;
   frequency: number;
   alertThresholds: Record<string, number>;
   escalationPlan: string;
+}
+}
 }
 export interface RootCauseAnalysis {
   anomalyId: string;
@@ -237,12 +274,16 @@ export interface RootCauseAnalysis {
   timeline: CausalTimeline;
   confidence: number;
   validationStatus: 'pending' | 'confirmed' | 'rejected'
+}
   }
+}
 export interface CausalTimeline {
   timestamp: number;
   event: string;
   impact: string;
   correlation: number;
+}
+}
 }
 export interface AnomalyImpactAssessment {
   anomalyId: string;
@@ -254,11 +295,15 @@ export interface AnomalyImpactAssessment {
   businessImplications: BusinessImplication;
   recoveryProjection: RecoveryProjection;
 }
+}
+}
 export interface DirectImpact {
   revenueloss: number;
   userLoss: number;
   conversionLoss: number;
   engagementLoss: number;
+}
+}
 }
 export interface IndirectImpact {
   brandReputation: number;
@@ -266,11 +311,15 @@ export interface IndirectImpact {
   futureImpact: number;
   competitiveDisadvantage: number;
 }
+}
+}
 export interface TotalImpact {
   monetaryValue: number;
   userValue: number;
   strategicValue: number;
   severity: AnomalySeverity;
+}
+}
 }
 export interface AffectedSegment {
   segmentId: string;
@@ -278,11 +327,15 @@ export interface AffectedSegment {
   impactPercentage: number;
   recoveryTime: number;
 }
+}
+}
 export interface BusinessImplication {
   area: string;
   impact: string;
   severity: 'low' | 'medium' | 'high';
   mitigation: string;
+}
+}
 }
 export interface RecoveryProjection {
   estimatedRecoveryTime: number;
@@ -290,18 +343,24 @@ export interface RecoveryProjection {
   successProbability: number;
   resourceRequirements: ResourceRequirement;
 }
+}
+}
 export interface RecoveryStage {
   stage: string;
   duration: number;
   expectedImprovement: number;
   dependencies: string;
 }
+}
+}
 export interface ResourceRequirement {
   resource: string;
   amount: number;
   duration: number;
   criticality: 'essential' | 'important' | 'nice_to_have'
+}
   }
+}
 export interface AnomalyAlert {
   id: string;
   anomalyId: string;
@@ -316,30 +375,40 @@ export interface AnomalyAlert {
   acknowledgedAt?: number;
   resolvedAt?: number;
 }
+}
 export type AlertChannel = 'email' | 'sms' | 'slack' | 'webhook' | 'pagerduty' | 'dashboard';
 export type AlertStatus = 'sent' | 'delivered' | 'acknowledged' | 'escalated' | 'resolved';
 
+}
 export interface EscalationRule {
   severity: AnomalySeverity;
   escalationDelay: number;
   escalationChain: string;
   maxEscalations: number;
 }
+}
+}
 export interface SuppressionRule {
   anomalyType: AnomalyType;
   suppressionDuration: number;
   conditions: SuppressionCondition;
+}
+}
 }
 export interface SuppressionCondition {
   metric: string;
   operator: 'gt' | 'lt' | 'eq' | 'between';
   value: number | [number, number];
 }
+}
+}
 export interface AlertThrottling {
   enabled: boolean;
   maxAlertsPerHour: number;
   maxAlertsPerDay: number;
   cooldownPeriod: number;
+}
+}
 }
 export interface AlertSeverityConfig {
   critical: AlertSeveritySettings;
@@ -348,11 +417,15 @@ export interface AlertSeverityConfig {
   low: AlertSeveritySettings;
   info: AlertSeveritySettings;
 }
+}
+}
 export interface AlertSeveritySettings {
   enabled: boolean;
   channels: AlertChannel;
   immediateAlert: boolean;
   escalationEnabled: boolean;
+}
+}
 }
 export interface AlertRecipient {
   id: string;
@@ -364,17 +437,23 @@ export interface AlertRecipient {
   severity: AnomalySeverity;
   availability: AvailabilitySchedule;
 }
+}
+}
 export interface AvailabilitySchedule {
   timezone: string;
   schedule: DaySchedule;
   holidays: string;
   onCall: boolean;
 }
+}
+}
 export interface DaySchedule {
   day: number; // 0-6, Sunday-Saturday,
   startTime: string; // HH:MM,
   endTime: string; // HH:MM,
   available: boolean;
+}
+}
 }
 export interface CustomAnomalyRule {
   id: string;
@@ -386,6 +465,8 @@ export interface CustomAnomalyRule {
   metrics: string;
   thresholds: Record<string, number>;
 }
+}
+}
 export interface SystemHealthMetrics {
   detectionLatency: number;
   alertLatency: number;
@@ -394,6 +475,8 @@ export interface SystemHealthMetrics {
   falseNegativeRate: number;
   systemAvailability: number;
   dataQuality: number;
+}
+}
 }
 export interface DetectionPerformanceMetrics {
   algorithm: AnomalyAlgorithm;
@@ -405,6 +488,8 @@ export interface DetectionPerformanceMetrics {
   resourceUsage: number;
   confidence: number;
 }
+}
+}
 export interface AnomalyDetectionExportData {
   anomalies: DetectedAnomaly;
   alerts: AnomalyAlert;
@@ -414,6 +499,7 @@ export interface AnomalyDetectionExportData {
   exportTimestamp: number;
   configuration: AnomalyDetectionConfig;
   // Default configuration
+}
 }
 export const [error, setError] = useState<string | null>(null);
   const [selectedAnomaly, setSelectedAnomaly] = useState<DetectedAnomaly | null>(null);

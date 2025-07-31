@@ -56,6 +56,7 @@ export enum SentimentScore {
 
 // Enhanced review interfaces
 }
+}
 export interface ReviewMetrics {
   total_reviews: number;
   average_rating: number;
@@ -66,12 +67,14 @@ export interface ReviewMetrics {
     two_star: number;
     one_star: number;
 }
+}
   };
   verified_percentage: number;
   response_rate: number; // Creator response rate
   helpfulness_score: number;
 }
 
+}
 }
 export interface ReviewWithDetails {
   id: string;
@@ -101,6 +104,7 @@ export interface ReviewWithDetails {
     verified: boolean;
     total_reviews: number;
     average_rating_given: number;
+}
 }
   };
   
@@ -136,6 +140,7 @@ export interface ReviewWithDetails {
 }
 
 }
+}
 export interface ReviewSubmission {
   template_id: string;
   stars: number;
@@ -149,7 +154,9 @@ export interface ReviewSubmission {
   attachments?: File[];
 }
 }
+}
 
+}
 }
 export interface ReviewFilters {
   rating?: number;
@@ -164,7 +171,9 @@ export interface ReviewFilters {
   filter_by?: ReviewFilterBy;
 }
 }
+}
 
+}
 }
 export interface ReviewHelpfulnessVote {
   id: string;
@@ -174,7 +183,9 @@ export interface ReviewHelpfulnessVote {
   created_at: Date;
 }
 }
+}
 
+}
 }
 export interface ReviewFlag {
   id: string;
@@ -188,7 +199,9 @@ export interface ReviewFlag {
   created_at: Date;
 }
 }
+}
 
+}
 }
 export interface CreatorResponse {
   id: string;
@@ -199,7 +212,9 @@ export interface CreatorResponse {
   updated_at: Date;
 }
 }
+}
 
+}
 }
 export interface ReviewAnalytics {
   template_id: string;
@@ -207,6 +222,7 @@ export interface ReviewAnalytics {
   period_end: Date;
   metrics: ReviewMetrics;
   trends: {
+}
 }
     daily_reviews: Array<{ date: string; count: number; avg_rating: number }>;
     rating_trends: Array<{ date: string; rating: number }>;
@@ -218,6 +234,7 @@ export interface ReviewAnalytics {
 }
 
 }
+}
 export interface ReviewModerationQueue {
   pending_reviews: ReviewWithDetails[];
   flagged_reviews: ReviewWithDetails[];
@@ -228,6 +245,7 @@ export interface ReviewModerationQueue {
     approved_today: number;
     rejected_today: number;
     flagged_today: number;
+}
 }
   };
 }

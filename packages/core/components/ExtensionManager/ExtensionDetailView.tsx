@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 import { ExtensionStatus } from './ExtensionManagerStore';
 
+}
 export interface ExtensionDetailViewProps {
   extension: ExtensionManifest;
   status: ExtensionStatus;
@@ -16,6 +17,7 @@ export interface ExtensionDetailViewProps {
   onConfigure?: () => void;
   onInstall?: () => void;
   onClose: () => void;
+}
 }
 
 export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({

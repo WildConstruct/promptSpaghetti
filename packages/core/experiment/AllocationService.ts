@@ -14,20 +14,26 @@ import {
   AllocationServiceConfig
 } from '../types/experiment';
 
+}
 export interface AllocationCache {
   get(key: string): Promise<string | null>;
   set(key: string, value: string, ttlSeconds: number): Promise<void>;
   del(key: string): Promise<void>;
+}
+}
 }
 export interface AssignmentStorage {
   getAssignment(userId: string, experimentId: string): Promise<UserAssignment | null>;
   saveAssignment(assignment: UserAssignment): Promise<void>;
   getExperiment(experimentId: string): Promise<Experiment | null>;
 }
+}
+}
 export interface AssignmentMetrics {
   recordAssignment(assignment: UserAssignment): Promise<void>;
   recordOverride(userId: string, experimentId: string, variantId: string, reason: string): Promise<void>;
   recordExclusion(userId: string, experimentId: string, reason: string): Promise<void>;
+}
 }
 export class AllocationService {
   private config: AllocationServiceConfig;
@@ -150,6 +156,7 @@ export class AllocationService {
     reason: string,
     sessionId?: string
   ): Promise<AssignmentResponse> {
+
   const experiment = await this.storage.getExperiment(experimentId);
   if (!experiment) {
   throw new AllocationError('Experiment not found', 'EXPERIMENT_NOT_FOUND', userId, experimentId);
@@ -172,6 +179,7 @@ export class AllocationService {
    * Remove user assignment (for opt-out scenarios)
    */
   async removeUserAssignment(userId: string, experimentId: string): Promise<void> {
+
   const cacheKey = this.getCacheKey(userId, experimentId);
   await this.cache.del(cacheKey);
   // Note: We don't delete from persistent storage to maintain audit trail,
@@ -200,10 +208,11 @@ export class AllocationService {
     this.config.saltStorage.currentSalt = newSalt;
     return newSalt;
   // Private methods
-  private async performAssignment(()
+  private async performAssignment(((
     request: AssignmentRequest,
-    experiment: Experiment,
+    experiment: Experiment
   ): Promise<UserAssignment> {
+
   // Handle gradual rollout
   if (experiment.rolloutStrategy?.type === 'gradual') {
   const currentStage = this.getCurrentRolloutStage(experiment);
@@ -291,8 +300,7 @@ export class AllocationService {
   private getControlVariant(experiment: Experiment): ExperimentVariant {
   // Return first variant as control
   return experiment.variants[0];
-  private async handleOverride(()
-  request: AssignmentRequest,
+  private async handleOverride((request: AssignmentRequest,
   experiment: Experiment): Promise<AssignmentResponse> {,
   const variant = experiment.variants.find(v => v.id === request.overrideVariant);
   if (!variant) {
@@ -341,6 +349,7 @@ export class AllocationService {
   private getCacheKey(userId: string, experimentId: string): string {
     return `ab:assignment:${userId}:${experimentId}`;}
   private async updateCache(cacheKey: string, assignment: UserAssignment): Promise<void> {
+
     try {
       await this.cache.set()
         cacheKey,

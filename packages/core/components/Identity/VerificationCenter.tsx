@@ -27,10 +27,12 @@ import {
   TrendingUp
 } from 'lucide-react';
 
+}
 export interface VerificationCenterProps {
   userId: string;
   onVerificationComplete?: (type: string) => void;
   className?: string;
+}
 }
 export const VerificationCenter: React.FC<VerificationCenterProps> = ({)
   userId,

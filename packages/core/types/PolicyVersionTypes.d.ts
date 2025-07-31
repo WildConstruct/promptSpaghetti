@@ -5,6 +5,7 @@
  * Part of Epic 17 - Backstage Admin Controls
  */
 
+}
 export interface Policy {
     id: string;
     policyKey: string;
@@ -17,6 +18,7 @@ export interface Policy {
 
 export type PolicyCategory = 'general' | 'content' | 'conduct' | 'privacy' | 'security' | 'compliance' | 'marketplace' | 'user_safety' | 'intellectual_property';
 
+}
 export interface PolicyVersion {
     id: string;
     policyId: string;
@@ -50,6 +52,7 @@ export type ContentType = 'markdown' | 'html' | 'json' | 'plain_text';
 export type SeverityLevel = 'low' | 'medium' | 'high' | 'critical';
 export type ComplianceFramework = 'GDPR' | 'CCPA' | 'SOX' | 'HIPAA' | 'PCI_DSS' | 'ISO_27001' | 'content_moderation' | 'intellectual_property' | 'community_standards' | 'user_safety' | 'quality_assurance' | 'data_protection';
 
+}
 export interface PolicyContent {
     sections: PolicySection[];
     summary?: string;
@@ -57,6 +60,7 @@ export interface PolicyContent {
     wordCount?: number;
     [key: string]: any;
 
+}
 export interface PolicySection {
     id?: string;
     title: string;
@@ -65,6 +69,7 @@ export interface PolicySection {
     subsections?: PolicySection[];
     metadata?: Record<string, any>;
 
+}
 export interface PolicyVersionChange {
     id: string;
     versionId: string;
@@ -76,6 +81,7 @@ export interface PolicyVersionChange {
     createdBy: string;
     createdAt: Date;
 
+}
 export interface PolicyApproval {
     id: string;
     versionId: string;
@@ -88,6 +94,7 @@ export interface PolicyApproval {
 
 export type ApprovalStatus = 'pending' | 'approved' | 'rejected' | 'withdrawn';
 
+}
 export interface PolicyComplianceMapping {
     id: string;
     versionId: string;
@@ -100,12 +107,14 @@ export interface PolicyComplianceMapping {
 
 export type ComplianceLevel = 'full' | 'partial' | 'not_applicable';
 
+}
 export interface CreatePolicyRequest {
     policyKey: string;
     name: string;
     description?: string;
     category: PolicyCategory;
 
+}
 export interface CreatePolicyVersionRequest {
     title: string;
     content: PolicyContent;
@@ -119,6 +128,7 @@ export interface CreatePolicyVersionRequest {
     expirationDate?: Date;
     metadata?: Record<string, any>;
 
+}
 export interface UpdatePolicyVersionRequest {
     title?: string;
     content?: PolicyContent;
@@ -131,10 +141,12 @@ export interface UpdatePolicyVersionRequest {
     expirationDate?: Date;
     metadata?: Record<string, any>;
 
+}
 export interface PublishPolicyVersionRequest {
     effectiveDate?: Date;
     publishingNotes?: string;
 
+}
 export interface PolicyVersionComparison {
     fromVersion: PolicyVersion;
     toVersion: PolicyVersion;
@@ -144,8 +156,10 @@ export interface PolicyVersionComparison {
         removedSections: number;
         modifiedSections: number;
         totalChanges: number;
+}
     };
 
+}
 export interface PolicyVersionDiff {
     type: DiffType;
     path: string;
@@ -157,6 +171,7 @@ export interface PolicyVersionDiff {
 export type DiffType = 'added' | 'removed' | 'modified' | 'moved';
 export type DiffImpact = 'low' | 'medium' | 'high' | 'breaking';
 
+}
 export interface PolicyVersionListResponse {
     versions: PolicyVersion[];
     pagination: {
@@ -164,9 +179,11 @@ export interface PolicyVersionListResponse {
         pageSize: number;
         total: number;
         totalPages: number;
+}
     };
     policy: Policy;
 
+}
 export interface PolicyVersionSearchQuery {
     policyId?: string;
     status?: PolicyStatus[];
@@ -185,6 +202,7 @@ export interface PolicyVersionSearchQuery {
 
 export type PolicyVersionSortField = 'version' | 'title' | 'status' | 'createdAt' | 'publishedAt' | 'effectiveDate' | 'majorVersion' | 'minorVersion' | 'patchVersion';
 
+}
 export interface PolicyVersionAnalytics {
     policyId: string;
     totalVersions: number;
@@ -193,12 +211,14 @@ export interface PolicyVersionAnalytics {
     averageTimeToPublish: number;
     mostActiveContributor: string;
     complianceFrameworkUsage: Record<ComplianceFramework, number>;
-    versionsByMonth: Array<{,
+    versionsByMonth: Array<{
         month: string;
         count: number;
+}
     }>;
     changeTypeDistribution: Record<ChangeType, number>;
 
+}
 export interface PolicyWorkflowState {
     currentStatus: PolicyStatus;
     allowedTransitions: PolicyStatus[];
@@ -207,6 +227,7 @@ export interface PolicyWorkflowState {
     pendingReviewers: string[];
     blockers: WorkflowBlocker[];
 
+}
 export interface WorkflowBlocker {
     type: BlockerType;
     description: string;
@@ -215,6 +236,7 @@ export interface WorkflowBlocker {
 
 export type BlockerType = 'missing_approval' | 'compliance_check_failed' | 'content_validation_error' | 'schedule_conflict' | 'dependency_not_met';
 
+}
 export interface PolicyVersionEvent {
     id: string;
     type: PolicyEventType;
@@ -226,24 +248,28 @@ export interface PolicyVersionEvent {
 
 export type PolicyEventType = 'version_created' | 'version_updated' | 'version_published' | 'version_deprecated' | 'version_archived' | 'approval_requested' | 'approval_granted' | 'approval_rejected' | 'compliance_check_completed' | 'rollback_performed';
 
+}
 export interface PolicyVersionValidation {
     isValid: boolean;
     errors: ValidationError[];
     warnings: ValidationWarning[];
     complianceStatus: ComplianceValidation[];
 
+}
 export interface ValidationError {
     field: string;
     message: string;
     code: string;
     severity: 'error' | 'warning';
 
+}
 export interface ValidationWarning {
     field: string;
     message: string;
     code: string;
     suggestion?: string;
 
+}
 export interface ComplianceValidation {
     framework: ComplianceFramework;
     status: 'compliant' | 'non_compliant' | 'unknown';
@@ -251,6 +277,7 @@ export interface ComplianceValidation {
     missingRequirements: string[];
     notes?: string;
 
+}
 export interface PolicyVersionConfig {
     maxVersionsPerPolicy: number;
     defaultComplianceFrameworks: ComplianceFramework[];
@@ -260,3 +287,4 @@ export interface PolicyVersionConfig {
     versionNumberingStrategy: 'semantic' | 'sequential' | 'timestamp';
 
 //# sourceMappingURL=PolicyVersionTypes.d.ts.map
+}

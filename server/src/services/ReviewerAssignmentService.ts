@@ -48,6 +48,7 @@ export enum AssignmentStatus {
 
 // Core interfaces
 }
+}
 export interface ReviewerProfile {
   id: string;
   user_id: string;
@@ -62,7 +63,9 @@ export interface ReviewerProfile {
   updated_at: Date;
 }
 }
+}
 
+}
 }
 export interface ReviewerMetrics {
   total_reviews: number;
@@ -75,7 +78,9 @@ export interface ReviewerMetrics {
   last_review_date: Date;
 }
 }
+}
 
+}
 }
 export interface ReviewAssignment {
   id: string;
@@ -105,7 +110,9 @@ export interface ReviewAssignment {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface AssignmentRule {
   id: string;
@@ -119,7 +126,9 @@ export interface AssignmentRule {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface AssignmentCondition {
   field: string;
@@ -128,7 +137,9 @@ export interface AssignmentCondition {
   weight: number;
 }
 }
+}
 
+}
 }
 export interface WorkloadDistribution {
   reviewer_id: string;
@@ -139,7 +150,9 @@ export interface WorkloadDistribution {
   priority_score: number;
 }
 }
+}
 
+}
 }
 export interface AssignmentRequest {
   review_item_id: string;
@@ -152,6 +165,7 @@ export interface AssignmentRequest {
   estimated_duration_hours?: number;
   assignment_strategy?: AssignmentStrategy;
   metadata?: Record<string, any>;
+}
 }
 }
 

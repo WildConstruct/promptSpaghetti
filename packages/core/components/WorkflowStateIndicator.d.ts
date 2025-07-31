@@ -1,5 +1,6 @@
 import React from 'react';
 
+}
 interface WorkflowState {
     id: string;
     name: string;
@@ -10,6 +11,7 @@ interface WorkflowState {
     is_locked: boolean;
 
 
+}
 interface WorkflowStateIndicatorProps {
     state: WorkflowState;
     isLocked?: boolean;
@@ -21,6 +23,7 @@ export declare const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProp
 export declare const WorkflowStateBadge: React.FC<{
     state: WorkflowState;
     size?: 'sm' | 'md' | 'lg'
+}
   }>;
 export {};
 //# sourceMappingURL=WorkflowStateIndicator.d.ts.map

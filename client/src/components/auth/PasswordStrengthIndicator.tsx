@@ -2,12 +2,14 @@
 // Visual password strength indicator with real-time feedback
 import React from 'react';
 import { usePasswordStrength } from '../../hooks/useRegistration';
+}
 interface PasswordStrengthIndicatorProps {
   password: string;
   className?: string;
   export const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps> = ({,)
   password,
   className = ''
+}
 }) => {
   const { score, feedback, strength } = usePasswordStrength(password);
   const getStrengthColor = (strength: string) => {

@@ -28,6 +28,7 @@ import {
   FiArrowRight,
   FiRefreshCw
 } from 'react-icons/fi';
+}
 interface TemplateImportExportDialogProps {
   isOpen: boolean;
   onClose: () => void;
@@ -48,6 +49,7 @@ interface TemplateImportExportDialogProps {
   version: string;
   author: string;
   dependencies: number;
+}
 };
 
 export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProps> = ({)

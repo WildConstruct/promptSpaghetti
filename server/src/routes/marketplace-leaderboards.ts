@@ -12,9 +12,11 @@ import { BadgeSystem } from '../../../packages/core/gamification/BadgeSystem';
 import { Database } from '../database/connection';
 
 }
+}
 interface LeaderboardRouteOptions {
   database: Database;
   badgeSystem: BadgeSystem;
+}
 }
 }
 

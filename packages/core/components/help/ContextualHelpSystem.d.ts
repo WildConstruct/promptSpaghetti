@@ -1,5 +1,6 @@
 import React from 'react';
 
+}
 export interface HelpContent {
     id: string;
     title: string;
@@ -15,6 +16,7 @@ export interface HelpContent {
     priority?: 'high' | 'medium' | 'low';
 
 
+}
 export interface ContextualTooltipProps {
     content: HelpContent;
     children: React.ReactNode;
@@ -23,6 +25,7 @@ export interface ContextualTooltipProps {
     className?: string;
 
 
+}
 export interface HelpSystemProps {
     helpContent: HelpContent[];
     showOnboarding?: boolean;
@@ -32,6 +35,7 @@ export interface HelpSystemProps {
 
 export declare const ContextualTooltip: React.FC<ContextualTooltipProps>;
 
+}
 interface ProgressiveOnboardingProps {
     steps: any[];
     currentStep: number;
@@ -43,3 +47,4 @@ interface ProgressiveOnboardingProps {
 export declare const ProgressiveOnboarding: React.FC<ProgressiveOnboardingProps>;
 export default ContextualTooltip;
 //# sourceMappingURL=ContextualHelpSystem.d.ts.map
+}

@@ -5,6 +5,7 @@
 import React, { useState } from 'react';
 import { Comment } from '../../types/workspace';
 import { CommentForm } from './CommentForm';
+}
 interface CommentItemProps {
   comment: Comment;
   userId: string;
@@ -27,6 +28,7 @@ interface CommentItemProps {
   isReply = false,
   isThreadRoot = false,
   isLast = false
+}
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [showActions, setShowActions] = useState(false);

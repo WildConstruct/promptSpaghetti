@@ -10,12 +10,14 @@ import { BaseEvent, EventCategory, EventPriority } from '../EventSystem';
  * Zustand middleware that publishes state changes as events
  */
 
+}
 export interface EventableStore {
     _eventAdapter?: ZustandEventAdapter;
 /**
  * Event metadata for state changes
  */
 
+}
 export interface StateChangeEvent extends BaseEvent {
     type: 'state_changed' | 'store_initialized' | 'store_reset';
     metadata: {
@@ -25,11 +27,13 @@ export interface StateChangeEvent extends BaseEvent {
         currentValue: unknown;
         category: EventCategory;
         priority: EventPriority;
+}
     };
 /**
  * Configuration for Zustand event integration
  */
 
+}
 export interface ZustandEventConfig {
     storeName: string;
     enabledPaths?: string[];
@@ -97,6 +101,7 @@ export declare class ZustandEventAdapter {
         subscriptions: number;
         activeDebounces: number;
         config: ZustandEventConfig;
+}
     };
 /**
  * Factory function to create Zustand event middleware

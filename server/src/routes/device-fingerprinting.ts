@@ -5,6 +5,7 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { DeviceFingerprintingService } from '../services/DeviceFingerprintingService';
 
 }
+}
 interface FingerprintRequest {
   components: {
     userAgent: string;
@@ -27,6 +28,7 @@ interface FingerprintRequest {
       localIP?: string;
       publicIP?: string;
 }
+}
     };
   };
   metadata?: {
@@ -39,21 +41,27 @@ interface FingerprintRequest {
 }
 
 }
+}
 interface VerifyDeviceRequest {
   fingerprint: string;
   expectedFingerprint?: string;
 }
 }
+}
 
+}
 }
 interface TrustDeviceRequest {
   reason?: string;
 }
 }
+}
 
+}
 }
 interface BlockDeviceRequest {
   reason: string;
+}
 }
 }
 

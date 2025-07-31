@@ -11,19 +11,23 @@
 import React, { useState, useEffect, useCallback } from 'react';
 // FileItem type removed - not needed for this component
 import { useAuthStore } from '../../stores/authStore';
+}
 interface QuickNavigationProps {
   onNavigate?: (path: string, filter?: NavigationFilter) => void;
   currentPath?: string;
   className?: string;
+}
 interface NavigationFilter {
   type: 'all' | 'recent' | 'favorites' | 'fileType' | 'folder';
   value?: string;
+}
 interface NavigationSection {
   id: string;,
   title: string;
   icon: string;,
   isCollapsed: boolean;
   items: NavigationItem;
+}
 interface NavigationItem {
   id: string;,
   label: string;
@@ -32,6 +36,7 @@ interface NavigationItem {
   filter?: NavigationFilter;
   count?: number;
   isActive?: boolean;
+}
 interface BookmarkItem extends NavigationItem {
   createdAt: Date;,
   isCustom: boolean;
@@ -46,6 +51,7 @@ const defaultSections: NavigationSection = [
         id: 'recent',
         label: 'Recent Files',
         icon: '🕒',
+}
         filter: { type: 'recent' }
   }
       {

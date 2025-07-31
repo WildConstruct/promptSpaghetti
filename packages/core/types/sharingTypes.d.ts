@@ -2523,6 +2523,7 @@ declare const ShareTargetSchema: z.ZodEnum<["public", "workspace", "organization
 declare const ShareFormatSchema: z.ZodEnum<["link", "embed", "export", "clone"]>;
 declare const SocialPlatformSchema: z.ZodEnum<["twitter", "linkedin", "discord", "slack", "teams", "email", "github"]>;
 
+}
 export interface ShareSystemConfig {
     enabledPlatforms: SocialPlatform[];
     defaultPermissions: SharePermission;
@@ -2531,6 +2532,7 @@ export interface ShareSystemConfig {
     rateLimiting: {
         sharesPerHour: number;
         embedsPerHour: number;
+}
     };
     customization: {
         allowCustomBranding: boolean;

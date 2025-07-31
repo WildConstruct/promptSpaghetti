@@ -14,6 +14,7 @@ import {
   HISTORICAL_ERAS 
 } from '../types/UTDG';
 
+}
 export interface ConstraintSuggestion {
   id: string;
   constraint_id: string;
@@ -26,6 +27,8 @@ export interface ConstraintSuggestion {
   trade_offs?: string;
   example?: string;
 }
+}
+}
 export interface SpecificAction {
   action_type: 'replace_node' | 'add_node' | 'modify_attribute' | 'remove_node' | 'add_context';
   description: string;
@@ -33,12 +36,15 @@ export interface SpecificAction {
   suggested_values?: any;
   rationale: string;
 }
+}
+}
 export interface SuggestionContext {
   era: Era;
   social_class?: SocialClass;
   scenario: 'daily_life' | 'ceremonial' | 'military' | 'religious' | 'artistic';
   region?: string;
   creative_flexibility: 'strict' | 'moderate' | 'flexible'
+}
   }
 export class ConstraintSuggestionEngine {
   private historicalDatabase: HistoricalKnowledge;
@@ -323,9 +329,9 @@ export class ConstraintSuggestionEngine {
   /**
    * Generate proactive improvement suggestions
    */
-  private generateImprovementSuggestions(()
+  private generateImprovementSuggestions(((
     nodes: UTDGNode,
-    context: SuggestionContext,
+    context: SuggestionContext
   ): ConstraintSuggestion {
     const suggestions: ConstraintSuggestion = [];
     // Calculate average authenticity

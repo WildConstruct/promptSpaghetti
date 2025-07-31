@@ -9,6 +9,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface ScalingAnalyticsConfig {
     enableRealTimeAnalytics: boolean;
     analysisInterval: number;
@@ -19,10 +20,12 @@ export interface ScalingAnalyticsConfig {
     costOptimizationConfig: CostOptimizationConfig;
     alertingConfig: ScalingAlertingConfig;
 
+}
 export interface ScalingThresholds {
     cpuUtilizationPercent: {
         scaleUp: number;
         scaleDown: number;
+}
     };
     memoryUtilizationPercent: {
         scaleUp: number;
@@ -49,6 +52,7 @@ export interface ScalingThresholds {
         scaleDown: number;
     };
 
+}
 export interface LoadBalancingConfig {
     enableIntelligentRouting: boolean;
     routingAlgorithm: LoadBalancingAlgorithm;
@@ -68,6 +72,7 @@ export declare enum LoadBalancingAlgorithm {
     ADAPTIVE = "adaptive",
     ML_OPTIMIZED = "ml_optimized"
 
+}
 export interface HealthCheckConfig {
     enableHealthChecks: boolean;
     healthCheckInterval: number;
@@ -77,6 +82,7 @@ export interface HealthCheckConfig {
     healthyThreshold: number;
     customHealthChecks: CustomHealthCheck[];
 
+}
 export interface CustomHealthCheck {
     checkId: string;
     checkName: string;
@@ -94,6 +100,7 @@ export declare enum HealthCheckType {
     CUSTOM_SCRIPT = "custom_script",
     DEPENDENCY_CHECK = "dependency_check"
 
+}
 export interface StickySessionConfig {
     enableStickySession: boolean;
     sessionAffinityType: SessionAffinityType;
@@ -112,6 +119,7 @@ export declare enum FallbackBehavior {
     FAIL_REQUEST = "fail_request",
     REMOVE_AFFINITY = "remove_affinity"
 
+}
 export interface CircuitBreakerConfig {
     enableCircuitBreaker: boolean;
     failureThreshold: number;
@@ -120,12 +128,14 @@ export interface CircuitBreakerConfig {
     slowCallThreshold: number;
     slowCallDurationThreshold: number;
 
+}
 export interface TrafficShapingConfig {
     enableTrafficShaping: boolean;
     rateLimitingRules: TrafficRule[];
     priorityRouting: PriorityRoutingRule[];
     trafficMirroring: TrafficMirroringConfig[];
 
+}
 export interface TrafficRule {
     ruleId: string;
     ruleName: string;
@@ -134,6 +144,7 @@ export interface TrafficRule {
     priority: number;
     enabled: boolean;
 
+}
 export interface TrafficCondition {
     conditionType: TrafficConditionType;
     field: string;
@@ -151,6 +162,7 @@ export declare enum TrafficConditionType {
     REQUEST_SIZE = "request_size",
     USER_TIER = "user_tier"
 
+}
 export interface TrafficAction {
     actionType: TrafficActionType;
     parameters: Record<string, any>;
@@ -164,6 +176,7 @@ export declare enum TrafficActionType {
     CACHE_RESPONSE = "cache_response",
     MIRROR_TRAFFIC = "mirror_traffic"
 
+}
 export interface PriorityRoutingRule {
     ruleId: string;
     priority: number;
@@ -172,6 +185,7 @@ export interface PriorityRoutingRule {
     routingWeight: number;
     enabled: boolean;
 
+}
 export interface TrafficMirroringConfig {
     mirrorId: string;
     sourcePool: string;
@@ -180,6 +194,7 @@ export interface TrafficMirroringConfig {
     conditions: TrafficCondition[];
     enabled: boolean;
 
+}
 export interface PredictiveScalingConfig {
     enablePredictiveScaling: boolean;
     forecastingHorizon: number;
@@ -188,6 +203,7 @@ export interface PredictiveScalingConfig {
     models: PredictiveScalingModel[];
     seasonalityConfig: SeasonalityConfig;
 
+}
 export interface PredictiveScalingModel {
     modelId: string;
     modelType: PredictiveModelType;
@@ -205,6 +221,7 @@ export declare enum PredictiveModelType {
     ENSEMBLE = "ensemble",
     CUSTOM = "custom"
 
+}
 export interface SeasonalityConfig {
     enableSeasonalityDetection: boolean;
     seasonalPatterns: SeasonalPattern[];
@@ -212,6 +229,7 @@ export interface SeasonalityConfig {
     businessHours: BusinessHours;
     holidays: Holiday[];
 
+}
 export interface SeasonalPattern {
     patternId: string;
     patternType: SeasonalPatternType;
@@ -229,18 +247,21 @@ export declare enum SeasonalPatternType {
     YEARLY = "yearly",
     CUSTOM = "custom"
 
+}
 export interface BusinessHours {
     startHour: number;
     endHour: number;
     timeZone: string;
     weekdays: number[];
 
+}
 export interface Holiday {
     name: string;
     date: Date;
     impactMultiplier: number;
     region: string;
 
+}
 export interface PerformanceTargets {
     responseTimeP95Ms: number;
     responseTimeP99Ms: number;
@@ -250,6 +271,7 @@ export interface PerformanceTargets {
     resourceUtilizationPercent: number;
     costPerRequest: number;
 
+}
 export interface CostOptimizationConfig {
     enableCostOptimization: boolean;
     costTargets: CostTargets;
@@ -258,12 +280,14 @@ export interface CostOptimizationConfig {
     reservedInstanceConfig: ReservedInstanceConfig;
     autoShutdownConfig: AutoShutdownConfig;
 
+}
 export interface CostTargets {
     maxMonthlyCost: number;
     costPerRequestTarget: number;
     utilizationTarget: number;
     costEfficiencyScore: number;
 
+}
 export interface InstanceTypeConfig {
     instanceType: string;
     costPerHour: number;
@@ -273,6 +297,7 @@ export interface InstanceTypeConfig {
     suitableWorkloads: string[];
     enabled: boolean;
 
+}
 export interface SpotInstanceConfig {
     enableSpotInstances: boolean;
     maxSpotPrice: number;
@@ -286,6 +311,7 @@ export declare enum SpotDiversificationStrategy {
     ACROSS_INSTANCE_TYPES = "across_instance_types",
     PRICE_CAPACITY_OPTIMIZED = "price_capacity_optimized"
 
+}
 export interface SpotInterruptionHandling {
     drainTimeout: number;
     replacementStrategy: ReplacementStrategy;
@@ -296,6 +322,7 @@ export declare enum ReplacementStrategy {
     GRADUAL = "gradual",
     QUEUE_BASED = "queue_based"
 
+}
 export interface ReservedInstanceConfig {
     enableReservedInstances: boolean;
     reservationStrategy: ReservationStrategy;
@@ -317,12 +344,14 @@ export declare enum PaymentOption {
     PARTIAL_UPFRONT = "partial_upfront",
     ALL_UPFRONT = "all_upfront"
 
+}
 export interface AutoShutdownConfig {
     enableAutoShutdown: boolean;
     idleThreshold: number;
     scheduleBasedShutdown: ScheduleBasedShutdown[];
     excludeFromShutdown: string[];
 
+}
 export interface ScheduleBasedShutdown {
     scheduleId: string;
     name: string;
@@ -331,6 +360,7 @@ export interface ScheduleBasedShutdown {
     daysOfWeek: number[];
     enabled: boolean;
 
+}
 export interface ScalingAlertingConfig {
     enableAlerting: boolean;
     alertChannels: AlertChannel[];
@@ -338,6 +368,7 @@ export interface ScalingAlertingConfig {
     performanceAlerts: PerformanceAlert[];
     costAlerts: CostAlert[];
 
+}
 export interface AlertChannel {
     channelId: string;
     channelType: AlertChannelType;
@@ -351,6 +382,7 @@ export declare enum AlertChannelType {
     SMS = "sms",
     PAGER_DUTY = "pager_duty"
 
+}
 export interface ScalingEventAlert {
     alertId: string;
     eventType: ScalingEventType;
@@ -372,6 +404,7 @@ export declare enum AlertSeverity {
     ERROR = "error",
     CRITICAL = "critical"
 
+}
 export interface PerformanceAlert {
     alertId: string;
     metricName: string;
@@ -387,6 +420,7 @@ export declare enum ComparisonOperator {
     EQUALS = "equals",
     NOT_EQUALS = "not_equals"
 
+}
 export interface CostAlert {
     alertId: string;
     costType: CostType;
@@ -407,6 +441,7 @@ export declare enum CostPeriod {
     WEEKLY = "weekly",
     MONTHLY = "monthly"
 
+}
 export interface ScalingDecision {
     decisionId: string;
     timestamp: Date;
@@ -426,6 +461,7 @@ export declare enum ScalingDecisionType {
     COST_OPTIMIZATION = "cost_optimization",
     MANUAL_OVERRIDE = "manual_override"
 
+}
 export interface ScalingMetrics {
     timestamp: Date;
     instanceCount: number;
@@ -438,6 +474,7 @@ export interface ScalingMetrics {
     connectionCount: number;
     cost: number;
 
+}
 export interface ScalingAction {
     actionType: ScalingActionType;
     instanceChanges: InstanceChange[];
@@ -453,6 +490,7 @@ export declare enum ScalingActionType {
     REBALANCE = "rebalance",
     MIGRATE = "migrate"
 
+}
 export interface InstanceChange {
     instanceId?: string;
     instanceType: string;
@@ -467,6 +505,7 @@ export declare enum InstanceAction {
     START = "start",
     RESIZE = "resize"
 
+}
 export interface LoadBalancerChange {
     targetGroupId: string;
     action: LoadBalancerAction;
@@ -479,6 +518,7 @@ export declare enum LoadBalancerAction {
     UPDATE_WEIGHT = "update_weight",
     UPDATE_HEALTH_CHECK = "update_health_check"
 
+}
 export interface ConfigurationChange {
     configType: ConfigurationType;
     parameter: string;
@@ -492,24 +532,28 @@ export declare enum ConfigurationType {
     INSTANCE = "instance",
     APPLICATION = "application"
 
+}
 export interface ScalingImpact {
     expectedPerformanceChange: PerformanceChange;
     expectedCostChange: CostChange;
     riskAssessment: RiskAssessment;
     rollbackPlan: RollbackPlan;
 
+}
 export interface PerformanceChange {
     responseTimeChange: number;
     throughputChange: number;
     availabilityChange: number;
     resourceUtilizationChange: number;
 
+}
 export interface CostChange {
     hourlyCostChange: number;
     dailyCostChange: number;
     monthlyCostChange: number;
     costPerRequestChange: number;
 
+}
 export interface RiskAssessment {
     overallRisk: RiskLevel;
     risks: Risk[];
@@ -521,6 +565,7 @@ export declare enum RiskLevel {
     HIGH = "high",
     CRITICAL = "critical"
 
+}
 export interface Risk {
     riskId: string;
     description: string;
@@ -528,24 +573,28 @@ export interface Risk {
     impact: number;
     riskLevel: RiskLevel;
 
+}
 export interface Mitigation {
     mitigationId: string;
     description: string;
     effectiveness: number;
     implementationCost: number;
 
+}
 export interface RollbackPlan {
     rollbackActions: ScalingAction[];
     rollbackTriggers: RollbackTrigger[];
     maxRollbackTime: number;
     successCriteria: SuccessCriteria[];
 
+}
 export interface RollbackTrigger {
     triggerId: string;
     condition: string;
     threshold: number;
     evaluationPeriod: number;
 
+}
 export interface SuccessCriteria {
     criteriaId: string;
     metric: string;
@@ -560,6 +609,7 @@ export declare enum ExecutionStatus {
     ROLLED_BACK = "rolled_back",
     CANCELLED = "cancelled"
 
+}
 export interface LoadBalancingAnalytics {
     analyticsId: string;
     timestamp: Date;
@@ -568,6 +618,7 @@ export interface LoadBalancingAnalytics {
     performanceAnalytics: LoadBalancerPerformanceAnalytics;
     recommendations: LoadBalancingRecommendation[];
 
+}
 export interface ServerPoolAnalytics {
     poolId: string;
     poolName: string;
@@ -580,18 +631,21 @@ export interface ServerPoolAnalytics {
     utilization: ResourceUtilization;
     capacity: PoolCapacity;
 
+}
 export interface ResourceUtilization {
     cpu: number;
     memory: number;
     network: number;
     disk: number;
 
+}
 export interface PoolCapacity {
     maxConnections: number;
     maxRequestsPerSecond: number;
     currentLoad: number;
     availableCapacity: number;
 
+}
 export interface RoutingAnalytics {
     totalRequests: number;
     routingDistribution: RoutingDistribution[];
@@ -599,6 +653,7 @@ export interface RoutingAnalytics {
     failoverEvents: FailoverEvent[];
     circuitBreakerEvents: CircuitBreakerEvent[];
 
+}
 export interface RoutingDistribution {
     serverId: string;
     requestCount: number;
@@ -606,12 +661,14 @@ export interface RoutingDistribution {
     responseTime: number;
     errorCount: number;
 
+}
 export interface StickySessionAnalytics {
     totalSessions: number;
     activeSessionsByServer: Map<string, number>;
     sessionDuration: number;
     sessionDistribution: number[];
 
+}
 export interface FailoverEvent {
     eventId: string;
     timestamp: Date;
@@ -621,6 +678,7 @@ export interface FailoverEvent {
     duration: number;
     requestsAffected: number;
 
+}
 export interface CircuitBreakerEvent {
     eventId: string;
     timestamp: Date;
@@ -634,6 +692,7 @@ export declare enum CircuitBreakerState {
     OPEN = "open",
     HALF_OPEN = "half_open"
 
+}
 export interface LoadBalancerPerformanceAnalytics {
     overallResponseTime: number;
     overallThroughput: number;
@@ -642,6 +701,7 @@ export interface LoadBalancerPerformanceAnalytics {
     performanceTrends: PerformanceTrend[];
     bottlenecks: Bottleneck[];
 
+}
 export interface PerformanceTrend {
     metric: string;
     trend: TrendDirection;
@@ -660,6 +720,7 @@ export declare enum TrendSignificance {
     HIGH = "high",
     CRITICAL = "critical"
 
+}
 export interface Bottleneck {
     bottleneckId: string;
     location: BottleneckLocation;
@@ -681,6 +742,7 @@ export declare enum BottleneckSeverity {
     HIGH = "high",
     CRITICAL = "critical"
 
+}
 export interface LoadBalancingRecommendation {
     recommendationId: string;
     priority: number;
@@ -762,6 +824,7 @@ export declare class ApiScalingAnalyticsIntegration extends EventEmitter {
     private collectAndStoreMetrics;
     private cleanupOldData;
     private sleep;
+}
 interface ScalingForecast {
     timestamp: Date;
     expectedLoad: number;
@@ -770,7 +833,9 @@ interface ScalingForecast {
         seasonal: number;
         trend: number;
         events: string[];
+}
     };
+}
 interface CostOptimizationReport {
     reportId: string;
     generatedAt: Date;
@@ -779,6 +844,7 @@ interface CostOptimizationReport {
     potentialSavings: number;
     optimizationOpportunities: CostOptimizationOpportunity[];
     recommendations: string[];
+}
 interface CostOptimizationOpportunity {
     opportunityId: string;
     description: string;
@@ -794,3 +860,4 @@ export declare class ApiScalingAnalyticsFactory {
 
 export default ApiScalingAnalyticsIntegration;
 //# sourceMappingURL=ApiScalingAnalyticsIntegration.d.ts.map
+}

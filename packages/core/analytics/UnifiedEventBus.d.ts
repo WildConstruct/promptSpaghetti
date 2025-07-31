@@ -142,6 +142,7 @@ export declare const EventFilterSchema: z.ZodObject<{
 }>;
 export type EventFilter = z.infer<typeof EventFilterSchema>;
 
+}
 export interface EventSubscriber {
     id: string;
     name: string;
@@ -153,8 +154,10 @@ export interface EventSubscriber {
         maxRetries: number;
         backoffMs: number;
 
+}
     };
 
+}
 export interface EventBusConfig {
     maxEventHistory: number;
     enablePersistence: boolean;
@@ -164,6 +167,7 @@ export interface EventBusConfig {
     metricsEnabled: boolean;
 
 
+}
 export interface EventBusMetrics {
     eventsPublished: number;
     eventsProcessed: number;
@@ -220,6 +224,7 @@ export declare class UnifiedEventBus extends EventEmitter {
         status: 'healthy' | 'degraded' | 'unhealthy';
         metrics: EventBusMetrics;
         issues: string[];
+}
     };
     /**
      * Migrate analytics data from existing systems

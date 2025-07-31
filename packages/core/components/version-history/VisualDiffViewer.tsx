@@ -4,6 +4,7 @@
  */
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { GraphDiffEngine, GraphDiff, DiffChange, GraphData } from './GraphDiffEngine';
+}
 interface VisualDiffViewerProps {
   fromGraphData: GraphData;
   toGraphData: GraphData;
@@ -24,6 +25,7 @@ interface VisualDiffViewerProps {
   onApplyChange,
   onRejectChange,
   className = ''
+}
 }) => {
   const [diff, setDiff] = useState<GraphDiff | null>(externalDiff || null);
   const [viewMode, setViewMode] = useState<ViewMode>('side-by-side');
@@ -356,6 +358,7 @@ interface VisualDiffViewerProps {
 };
 
 // Sub-components (simplified versions - would need full implementations)
+}
 interface ChangeItemProps {
   change: DiffChange;
   isSelected: boolean;
@@ -376,6 +379,7 @@ interface ChangeItemProps {
   getChangeIcon,
   getSignificanceLevel,
   getSignificanceColor
+}
 }) => {
   const renderChangeDescription = () => {
     const baseDesc = `${change.type} ${change.element_type}`;}

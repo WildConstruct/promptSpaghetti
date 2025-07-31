@@ -8,6 +8,7 @@ import { EventEmitter } from 'events';
 
 // Core state management types
 
+}
 export interface StateSubscriber<T> {
   (state: T, prevState: T): void;
   export interface StateUpdater<T> {
@@ -24,16 +25,22 @@ export interface StateSubscriber<T> {
   errors: ValidationError;
   warnings: ValidationWarning;
 }
+}
+}
 export interface ValidationError {
   field: string;
   message: string;
   value?: any;
   code: string;
 }
+}
+}
 export interface ValidationWarning {
   field: string;
   message: string;
   suggestion?: string;
+}
+}
 }
 export interface StateMiddleware<T> {
   name: string;
@@ -51,6 +58,8 @@ export interface StateMiddleware<T> {
   enableDevTools: boolean;
   enableTimeTravel: boolean;
   enablePerformanceProfiling: boolean;
+}
+}
 }
 export interface StateSnapshot<T> {
   id: string;
@@ -209,6 +218,7 @@ export abstract class BaseStateContainer<T> extends EventEmitter {
     if (this.history.length > this.config.maxHistorySize) {
       this.history = this.history.slice(-this.config.maxHistorySize);
   protected async persistState(): Promise<void> {
+
     try {
       // Import and use the global persistence manager
       const { globalPersistenceManager } = await import('../performance/StatePersistenceManager');
@@ -229,6 +239,7 @@ export abstract class BaseStateContainer<T> extends EventEmitter {
 } catch (error) {
       console.error('Failed to persist state:', error);
   protected async loadPersistedState(): Promise<void> {
+
     try {
       // Import and use the global persistence manager
       const { globalPersistenceManager } = await import('../performance/StatePersistenceManager');
@@ -290,6 +301,7 @@ export abstract class BaseStateContainer<T> extends EventEmitter {
       console.warn('Performance profiling failed, falling back to normal update:', error);
       await this.applyStateUpdate(newState, prevState, change);
   protected async recordInDevTools(state: T, change: StateChange<T>): Promise<void> {
+
     try {
       // Record in StateDevTools
       if (this.config.enableDevTools) {
@@ -330,6 +342,7 @@ export abstract class BaseStateContainer<T> extends EventEmitter {
     this.config.enableTimeTravel = false;
     this.config.enablePerformanceProfiling = false;
   private async initializeDevTools(): Promise<void> {
+
     try {
       if (this.config.enableDevTools) {
         const { globalStateDevTools } = await import('../devtools/StateDevTools');
@@ -359,6 +372,7 @@ export abstract class BaseStateContainer<T> extends EventEmitter {
     console.log('Performance Profiling Enabled:', this.config.enablePerformanceProfiling);
     console.groupEnd();
   public async getDevToolsInfo(): Promise<any> {
+
     if (!this.config.enableDevTools) {
       return { devToolsEnabled: false };
     try {

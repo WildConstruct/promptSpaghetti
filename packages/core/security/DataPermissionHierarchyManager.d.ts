@@ -15,6 +15,7 @@ import {
 } from './DataPermissionHierarchy';
 import { DataClassificationLevel, OperationContext, DataOperation } from '../types/DataClassification';
 
+}
 export interface PermissionRequest {
     id: string;
     requesterId: string;
@@ -28,6 +29,7 @@ export interface PermissionRequest {
     expiresAt?: Date;
 
 
+}
 export interface PermissionGrant {
     id: string;
     requestId: string;
@@ -44,6 +46,7 @@ export interface PermissionGrant {
     auditTrail: PermissionAuditEntry[];
 
 
+}
 export interface PermissionAuditEntry {
     timestamp: Date;
     userId: string;
@@ -52,6 +55,7 @@ export interface PermissionAuditEntry {
     riskScore: number;
 
 
+}
 export interface EscalationRequest {
     id: string;
     originalRequestId: string;
@@ -67,8 +71,10 @@ export interface EscalationRequest {
         decisionAt: Date;
         reason: string;
 
+}
     };
 
+}
 export interface EscalationStepStatus {
     stepId: string;
     status: 'PENDING' | 'APPROVED' | 'DENIED' | 'TIMEOUT' | 'SKIPPED';
@@ -79,6 +85,7 @@ export interface EscalationStepStatus {
     timeoutAt: Date;
 
 
+}
 export interface StepApproval {
     approver: string;
     decision: 'APPROVED' | 'DENIED';
@@ -87,6 +94,7 @@ export interface StepApproval {
     conditions?: PermissionCondition[];
 
 
+}
 export interface DelegationRequest {
     id: string;
     delegatorId: string;
@@ -102,6 +110,7 @@ export interface DelegationRequest {
     approvedBy?: string;
 
 
+}
 export interface HierarchyAnalysis {
     userLevel: number;
     effectivePermissions: OperationPermission[];
@@ -112,6 +121,7 @@ export interface HierarchyAnalysis {
     riskProfile: HierarchyRiskProfile;
 
 
+}
 export interface DelegationGrant {
     id: string;
     delegatorId: string;
@@ -122,6 +132,7 @@ export interface DelegationGrant {
     source: 'DIRECT' | 'INHERITED' | 'EMERGENCY';
 
 
+}
 export interface PermissionRestriction {
     type: 'TIME' | 'CONTEXT' | 'VOLUME' | 'FREQUENCY' | 'APPROVAL';
     description: string;
@@ -130,6 +141,7 @@ export interface PermissionRestriction {
     bypassable: boolean;
 
 
+}
 export interface HierarchyRiskProfile {
     overallRisk: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     riskFactors: string[];
@@ -157,6 +169,7 @@ export declare class DataPermissionHierarchyManager extends EventEmitter {
         escalationPath?: string;
         timeLimit?: Date;
         usageLimit?: number;
+}
     }>;
     /**
      * Grant permission based on evaluation

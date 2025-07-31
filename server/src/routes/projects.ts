@@ -61,6 +61,7 @@ const ProjectQuerySchema = z.object({
 });
 
 }
+}
 interface DatabaseProject {
   id: string;
   user_id?: number;
@@ -74,6 +75,7 @@ interface DatabaseProject {
   file_format_version: string;
   graph_data: any;
   settings: any;
+}
 }
 }
 

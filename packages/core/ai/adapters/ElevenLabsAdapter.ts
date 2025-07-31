@@ -17,11 +17,14 @@ import {
   ModelUnavailableError
 } from '../BaseAIModel';
 
+}
 export interface ElevenLabsConfig {
   apiKey: string;
   baseURL?: string;
   timeout?: number;
   maxRetries?: number;
+}
+}
 }
 export interface ElevenLabsRequestOptions {
   // Core parameters
@@ -34,6 +37,7 @@ export interface ElevenLabsRequestOptions {
   similarity_boost: number; // 0-1,
   style?: number; // 0-1 (for v2 models),
   use_speaker_boost?: boolean;
+}
 };
   // Audio parameters
   output_format?: 'mp3_22050_32' | 'mp3_44100_32' | 'mp3_44100_64' | 'mp3_44100_96' | 'mp3_44100_128' | 'mp3_44100_192' | 'pcm_16000' | 'pcm_22050' | 'pcm_24000' | 'pcm_44100' | 'ulaw_8000';
@@ -50,6 +54,7 @@ export interface ElevenLabsRequestOptions {
   labels?: Record<string, string>;
 };
 }
+}
 export interface ElevenLabsGenerationResult {
   audio: {
   data: ArrayBuffer;
@@ -58,6 +63,7 @@ export interface ElevenLabsGenerationResult {
   sample_rate: number;
   channels: number;
   bit_depth: number;
+}
 };
   metadata: {
   voice_id: string;
@@ -75,22 +81,24 @@ export interface ElevenLabsGenerationResult {
   quota_remaining?: number;
 };
 }
+}
 export interface ElevenLabsVoice {
   voice_id: string;
   name: string;
-  samples?: Array<{,
+  samples?: Array<{
   sample_id: string;
   file_name: string;
   mime_type: string;
   size_bytes: number;
   hash: string;
+}
 }>;
   category: 'premade' | 'cloned' | 'generated' | 'professional';
   fine_tuning: {;
   is_allowed_to_fine_tune: boolean;
   finetuning_requested: boolean;
   finetuning_state: string;
-  verification_attempts: Array<{,
+  verification_attempts: Array<{
   text: string;
   date_unix: number;
   accepted: boolean;
@@ -109,7 +117,7 @@ export interface ElevenLabsVoice {
   manual_verification: {;
   extra_text: string;
   request_time_unix: number;
-  files: Array<{,
+  files: Array<{
   file_id: string;
   file_name: string;
   mime_type: string;
@@ -144,6 +152,7 @@ export interface ElevenLabsVoice {
 };
   high_quality_base_model_ids: string;
 }
+}
 export interface ElevenLabsModel {
   model_id: string;
   name: string;
@@ -158,9 +167,10 @@ export interface ElevenLabsModel {
   requires_alpha_access: boolean;
   max_characters_request_free_user: number;
   max_characters_request_subscribed_user: number;
-  languages: Array<{,
+  languages: Array<{
   language_id: string;
   name: string;
+}
 }>;
 }
 export class ElevenLabsAdapter extends BaseAIModel {
@@ -207,6 +217,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
     super(id, metadata, capabilities);
     this.config = config;
   async initialize(): Promise<void> {
+
     try {
       this._status = AIModelStatus.INITIALIZING;
       if (!this.config.apiKey) {
@@ -287,6 +298,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
 };
   // ElevenLabs-specific methods
   async getAvailableVoices(): Promise<ElevenLabsVoice> {
+
   return [...this.availableVoices];
   async getAvailableModels(): Promise<ElevenLabsModel> {,
   return [...this.availableModels];
@@ -321,8 +333,10 @@ export class ElevenLabsAdapter extends BaseAIModel {
     audioSample: File,
     description?: string
   ): Promise<ElevenLabsVoice> {
+
     return this.createCustomVoice(name, [audioSample], description);
   async deleteVoice(voiceId: string): Promise<void> {
+
     const response = await this._makeRequest(`/v1/voices/${voiceId}`, 'DELETE');}
     if (!response.ok) {
       const errorData = await response.json().catch(() => null);
@@ -330,11 +344,13 @@ export class ElevenLabsAdapter extends BaseAIModel {
     // Refresh voice list
     await this._loadAvailableVoices();
   async getVoiceSettings(voiceId: string): Promise<any> {
+
     const response = await this._makeRequest(`/v1/voices/${voiceId}/settings`, 'GET');}
     if (!response.ok) {
       throw new Error(`Failed to get voice settings: ${response.status} ${response.statusText}`);}
     return response.json();
   async updateVoiceSettings(voiceId: string, settings: any): Promise<void> {
+
     const response = await this._makeRequest(`/v1/voices/${voiceId}/settings/edit`, 'POST', settings);}
     if (!response.ok) {
       const errorData = await response.json().catch(() => null);
@@ -343,6 +359,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
     voiceId: string,
     options?: Partial<ElevenLabsRequestOptions>
   ): Promise<ReadableStream> {
+
     const processedOptions = this._processOptions({ text, voice_id: voiceId, ...options }, text);
     const payload = {
   text,
@@ -382,6 +399,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
     return optimizations[voiceCategory] || ElevenLabsAdapter.getDefaultVoiceSettings();
   // Private helper methods
   private async _testConnection(): Promise<void> {
+
     try {
       const response = await this._makeRequest('/v1/user', 'GET');
       if (!response.ok) {
@@ -392,6 +410,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
     } catch (error) {
       throw new Error(`Failed to connect to ElevenLabs API: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   private async _loadAvailableVoices(): Promise<void> {
+
     try {
       const response = await this._makeRequest('/v1/voices', 'GET');
       if (response.ok) {
@@ -417,6 +436,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
 } catch (error) {
       console.warn('Failed to load quota information:', error);
   private async _checkQuota(characterCount: number): Promise<void> {
+
     if (this.quotaInfo) {
       const remaining = this.quotaInfo.character_limit - this.quotaInfo.character_count;
       if (remaining < characterCount) {
@@ -473,6 +493,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
         processed.voice_settings.style = Math.max(0, Math.min(1, processed.voice_settings.style));
     return processed as Required<Pick<ElevenLabsRequestOptions, 'voice_id' | 'model_id' | 'output_format' | 'text'>> & Omit<ElevenLabsRequestOptions, 'text'> & { text: string };
   private async _generateSpeech(text: string, options: ElevenLabsRequestOptions): Promise<ArrayBuffer> {
+
   const payload = {
   text,
   model_id: options.model_id,
@@ -491,12 +512,14 @@ export class ElevenLabsAdapter extends BaseAIModel {
       throw new Error(`ElevenLabs TTS generation failed: ${response.status} ${response.statusText} - ${errorData?.detail?.message || 'Unknown error'}`);}
     return response.arrayBuffer();
   private async _getVoiceInfo(voiceId: string): Promise<ElevenLabsVoice | undefined> {
+
     return this.availableVoices.find(v => v.voice_id === voiceId);
   private async _makeRequest(endpoint: string, )
     method: 'GET' | 'POST' | 'DELETE' = 'GET', 
     payload?: any,
     additionalHeaders?: Record<string, string>
   ): Promise<Response> {
+
     const url = `${this.config.baseURL || 'https://api.elevenlabs.io'}${endpoint}`;}
     const headers: Record<string, string> = {
   'xi-api-key': this.config.apiKey,
@@ -539,6 +562,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
     const costPerCharacter = this._metadata.costPerRequest || (0.18 / 1000);
     return characterCount * costPerCharacter;
   protected async _performHealthCheck(): Promise<void> {
+
     await this._testConnection();
 
 export default ElevenLabsAdapter;

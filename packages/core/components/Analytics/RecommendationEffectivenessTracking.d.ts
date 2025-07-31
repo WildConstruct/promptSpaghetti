@@ -7,6 +7,7 @@
 import React from 'react';
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
 
+}
 export interface RecommendationEffectivenessTrackingProps {
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
     trackingConfig: EffectivenessTrackingConfig;
@@ -14,6 +15,7 @@ export interface RecommendationEffectivenessTrackingProps {
     onPerformanceInsight?: (insight: PerformanceInsight) => void;
     onExport?: (data: EffectivenessTrackingExportData) => void;
 
+}
 export interface EffectivenessTrackingConfig {
     algorithms: TrackedAlgorithm[];
     metrics: EffectivenessMetric[];
@@ -21,6 +23,7 @@ export interface EffectivenessTrackingConfig {
     reporting: ReportingConfig;
     alerting: AlertingConfig;
 
+}
 export interface RecommendationSystemMetrics {
     algorithmId: string;
     algorithmName: string;
@@ -31,6 +34,7 @@ export interface RecommendationSystemMetrics {
     businessImpact: BusinessImpactMetrics;
     userSegmentPerformance: SegmentPerformance[];
 
+}
 export interface MetricValue {
     metricId: string;
     name: string;
@@ -40,12 +44,14 @@ export interface MetricValue {
     trend: TrendData;
     confidence: number;
 
+}
 export interface ContextualMetric {
     context: RecommendationContext;
     metrics: MetricValue[];
     sampleSize: number;
     significance: number;
 
+}
 export interface RecommendationContext {
     deviceType: 'desktop' | 'mobile' | 'tablet';
     timeOfDay: 'morning' | 'afternoon' | 'evening' | 'night';
@@ -53,6 +59,7 @@ export interface RecommendationContext {
     contentCategory: string;
     sessionType: 'browsing' | 'searching' | 'purchasing';
 
+}
 export interface BusinessImpactMetrics {
     revenueImpact: number;
     conversionLift: number;
@@ -63,12 +70,14 @@ export interface BusinessImpactMetrics {
 
 export declare const RecommendationEffectivenessTracking: React.FC<RecommendationEffectivenessTrackingProps>;
 
+}
 export interface TrackedAlgorithm {
     algorithmId: string;
     name: string;
     version: string;
     enabled: boolean;
 
+}
 export interface EffectivenessMetric {
     metricId: string;
     name: string;
@@ -76,37 +85,44 @@ export interface EffectivenessMetric {
     weight: number;
     target: number;
 
+}
 export interface PerformanceBenchmark {
     metricId: string;
     benchmark: number;
     source: 'internal' | 'industry' | 'target';
 
+}
 export interface ReportingConfig {
     frequency: 'hourly' | 'daily' | 'weekly';
     recipients: string[];
     includeInsights: boolean;
 
+}
 export interface AlertingConfig {
     enabled: boolean;
     thresholds: AlertThreshold[];
     channels: string[];
 
+}
 export interface AlertThreshold {
     metricId: string;
     condition: 'above' | 'below' | 'change';
     value: number;
     severity: 'low' | 'medium' | 'high';
 
+}
 export interface TrendData {
     direction: 'increasing' | 'decreasing' | 'stable';
     strength: number;
     duration: number;
 
+}
 export interface SegmentPerformance {
     segment: string;
     metrics: MetricValue[];
     sampleSize: number;
 
+}
 export interface EffectivenessAlert {
     alertId: string;
     algorithmId: string;
@@ -119,6 +135,7 @@ export interface EffectivenessAlert {
     timestamp: number;
     actionRequired: boolean;
 
+}
 export interface PerformanceInsight {
     insightId: string;
     type: string;
@@ -128,11 +145,13 @@ export interface PerformanceInsight {
     confidence: number;
     recommendations: string[];
 
+}
 export interface EffectivenessTrackingExportData {
     algorithmMetrics: RecommendationSystemMetrics[];
     timeRange: {
         start: number;
         end: number;
+}
     };
     summary: {
         totalAlgorithms: number;

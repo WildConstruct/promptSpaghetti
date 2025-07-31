@@ -10,6 +10,7 @@ import { TimeoutManager, TimeoutMetrics } from './TimeoutManager';
 import { AnalyticsCollector } from '../analytics/AnalyticsCollector';
 
 }
+}
 export interface AlertConfig {
   timeoutThreshold: number;
   circuitBreakerThreshold: number;
@@ -20,16 +21,20 @@ export interface AlertConfig {
   enableWebhookAlerts: boolean;
 }
 }
+}
 
+}
 }
 export interface AlertChannel {
   type: 'email' | 'slack' | 'webhook';
   config: {
     [key: string]: unknown;
 }
+}
   };
 }
 
+}
 }
 export interface TimeoutAlert {
   id: string;
@@ -43,7 +48,9 @@ export interface TimeoutAlert {
   resolvedAt?: Date;
 }
 }
+}
 
+}
 }
 export interface PerformanceMetrics {
   operation: string;
@@ -55,6 +62,7 @@ export interface PerformanceMetrics {
   timeoutRate: number;
   circuitBreakerTrips: number;
   lastUpdated: Date;
+}
 }
 }
 

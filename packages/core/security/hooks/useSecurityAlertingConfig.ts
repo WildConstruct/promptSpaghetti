@@ -29,6 +29,7 @@ import {
 } from '../SecurityAlertingAnalytics';
 import { SecurityLogger, SecurityEventType, LogLevel } from '../SecurityLogger';
 
+}
 export interface UseSecurityAlertingConfigOptions {
   configId?: string;
   autoSave?: boolean;
@@ -40,11 +41,15 @@ export interface UseSecurityAlertingConfigOptions {
   onSaveSuccess?: () => void;
   onSaveError?: (error: Error) => void;
 }
+}
+}
 export interface ValidationError {
   field: string;
   message: string;
   severity: 'error' | 'warning' | 'info';
   code: string;
+}
+}
 }
 export interface ConfigurationState {
   config: SecurityAlertingConfig;
@@ -58,6 +63,8 @@ export interface ConfigurationState {
   validationWarnings: ValidationError;
   securityScore: number;
   configVersion: number;
+}
+}
 }
 export interface UseSecurityAlertingConfigReturn {
   state: ConfigurationState;
@@ -73,6 +80,7 @@ export interface UseSecurityAlertingConfigReturn {
   revertChanges: () => void;
   exportConfig: () => string;
   importConfig: (configJson: string) => boolean;
+}
 };
   utils: {
   getConfigDiff: () => Partial<SecurityAlertingConfig>;
@@ -85,6 +93,7 @@ export interface UseSecurityAlertingConfigReturn {
 };
     getRecommendations: () => ConfigRecommendation;
   };
+}
 }
 export interface ConfigRecommendation {
   field: string;
@@ -112,6 +121,7 @@ export interface ConfigRecommendation {
   dataExfiltrationThreshold: 100, // MB,
   suspiciousPatternCount: 3,
   riskScoreThreshold: 75,
+}
 },
   correlationRules: [],
   responseAutomation: {

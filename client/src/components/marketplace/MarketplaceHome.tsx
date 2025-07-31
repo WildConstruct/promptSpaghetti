@@ -8,9 +8,11 @@ import { AdvancedFilters } from './AdvancedFilters';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import { useMarketplace } from '../../hooks/useMarketplace';
 import './MarketplaceHome.css';
+}
 interface MarketplaceHomeProps {
   className?: string;
 
+}
 export const MarketplaceHome: React.FC<MarketplaceHomeProps> = ({ className = '' }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);

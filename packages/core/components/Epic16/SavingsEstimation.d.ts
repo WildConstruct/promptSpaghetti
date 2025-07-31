@@ -6,12 +6,14 @@
  * Part of Epic 16 Case Study Showcase (Story 16.4.4).
  */
 import React from 'react';
+}
 interface SavingsBreakdown {
     tokenSavings: {
         templateTokenCost: number;
         manualTokenCost: number;
         netTokenSavings: number;
         tokenEfficiency: number;
+}
     };
     timeSavings: {
         templateTimeSpent: number;
@@ -35,6 +37,7 @@ interface SavingsBreakdown {
         capacityIncrease: number;
         errorReduction: number;
     };
+}
 interface SavingsEstimationProps {
     className?: string;
     onSavingsChange?: (savings: SavingsBreakdown) => void;
@@ -44,3 +47,4 @@ interface SavingsEstimationProps {
 export declare const SavingsEstimation: React.FC<SavingsEstimationProps>;
 export default SavingsEstimation;
 //# sourceMappingURL=SavingsEstimation.d.ts.map
+}

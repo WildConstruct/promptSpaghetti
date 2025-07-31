@@ -13,6 +13,7 @@ import {
   validateExportOptions
 } from '../../types/export';
 import { useExport } from '../../hooks/useExport';
+}
 interface TemplateCustomizationDialogProps {
   template: ExportTemplate;
   visible?: boolean;
@@ -21,6 +22,7 @@ interface TemplateCustomizationDialogProps {
   onPreview?: (previewData: unknown) => void;
   projectId?: string;
   className?: string;
+}
 interface ParameterDefinition {
   key: string;
   label: string;
@@ -32,10 +34,12 @@ interface ParameterDefinition {
     min?: number;
     max?: number;
     pattern?: string;
+}
     options?: Array<{ value: Error; label: string }>;
   };
   category?: string;
   dependencies?: string;
+}
 interface CustomizationState {
   parameters: Record<string, any>;
   customFields: Record<string, any>;
@@ -50,6 +54,7 @@ const DEFAULT_PARAMETERS: Record<ExportFormat, ParameterDefinition> = {
       type: 'number',
       defaultValue: 2,
       description: 'Number of spaces for JSON indentation',
+}
       validation: { min: 0, max: 8 },
       category: 'Formatting'
   }

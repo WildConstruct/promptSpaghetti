@@ -13,12 +13,14 @@ import { AnalyticsEventType } from '../analytics/AnalyticsCollector';
 
 // User Segmentation Types
 }
+}
 export interface TargetingRule {
   id: string;
   attribute: string;
   operator: RuleOperator;
   value: Error;
   logicalOperator?: 'AND' | 'OR';
+}
 }
 }
 
@@ -29,6 +31,7 @@ export type RuleOperator =
   | 'in' | 'not_in' | 'exists' | 'not_exists'
   | 'between' | 'within_days' | 'older_than_days';
 
+}
 }
 export interface UserSegment {
   id: string;
@@ -57,7 +60,9 @@ export interface UserSegment {
   version: string;
 }
 }
+}
 
+}
 }
 export interface CreateSegmentRequest {
   name: string;
@@ -69,7 +74,9 @@ export interface CreateSegmentRequest {
   createdBy: string;
 }
 }
+}
 
+}
 }
 export interface UpdateSegmentRequest {
   id: string;
@@ -82,7 +89,9 @@ export interface UpdateSegmentRequest {
   updatedBy: string;
 }
 }
+}
 
+}
 }
 export interface SegmentQuery {
   search?: string;
@@ -97,7 +106,9 @@ export interface SegmentQuery {
   offset?: number;
 }
 }
+}
 
+}
 }
 export interface SegmentEvaluationResult {
   segmentId: string;
@@ -110,7 +121,9 @@ export interface SegmentEvaluationResult {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface BatchEvaluationRequest {
   segmentIds: string[];
@@ -119,7 +132,9 @@ export interface BatchEvaluationRequest {
   includeDetails?: boolean;
 }
 }
+}
 
+}
 }
 export interface UserQuery {
   attributes?: Record<string, any>;
@@ -127,6 +142,7 @@ export interface UserQuery {
     types: AnalyticsEventType[];
     timeWindow?: number;
     minOccurrences?: number;
+}
 }
   };
   registrationPeriod?: {
@@ -136,6 +152,7 @@ export interface UserQuery {
 }
 
 }
+}
 export interface BatchEvaluationResult {
   requestId: string;
   segmentResults: SegmentUserMatch[];
@@ -144,7 +161,9 @@ export interface BatchEvaluationResult {
   timestamp: string;
 }
 }
+}
 
+}
 }
 export interface SegmentUserMatch {
   segmentId: string;
@@ -155,7 +174,9 @@ export interface SegmentUserMatch {
   sampleResults?: SegmentEvaluationResult[];
 }
 }
+}
 
+}
 }
 export interface SegmentMetrics {
   segmentId: string;
@@ -168,6 +189,7 @@ export interface SegmentMetrics {
   engagementScore?: number;
   demographics: {
     averageAge?: number;
+}
 }
     topLocations: Array<{ location: string; count: number }>;
     deviceTypes: Array<{ device: string; count: number }>;

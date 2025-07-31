@@ -14,6 +14,7 @@ import {
 } from '../database/workflow-models';
 
 }
+}
 export interface ApprovalCriteria {
   id: string;
   workspace_id: string;
@@ -26,7 +27,9 @@ export interface ApprovalCriteria {
   updated_at: Date;
 }
 }
+}
 
+}
 }
 export interface ApprovalRule {
   id: string;
@@ -59,7 +62,9 @@ export interface ApprovalRule {
   updated_at: Date;
 }
 }
+}
 
+}
 }
 export interface ApprovalRequest {
   id: string;
@@ -94,7 +99,9 @@ export interface ApprovalRequest {
   updated_at: Date;
 }
 }
+}
 
+}
 }
 export interface ReviewerAssignment {
   id: string;
@@ -118,12 +125,14 @@ export interface ReviewerAssignment {
     score: number;
     comment?: string;
 }
+}
   }>;
   
   created_at: Date;
   updated_at: Date;
 }
 
+}
 }
 export interface ApprovalNotification {
   id: string;
@@ -136,6 +145,7 @@ export interface ApprovalNotification {
   read_at?: Date;
   action_taken?: string;
   created_at: Date;
+}
 }
 }
 

@@ -1,10 +1,12 @@
 import React from 'react';
 
+}
 interface DialogProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   children?: React.ReactNode;
 
+}
 export const Dialog: React.FC<DialogProps> = ({ children, ...props }) => ()
   <div className="dialog" {...props}>{children}</div>
 );

@@ -54,9 +54,11 @@ export enum SessionSecurityLevel {
   keyDerivation: 'pbkdf2' | 'scrypt' | 'argon2';
   iterations: number;
   saltLength: number;
+}
 };
 
 // Session Data
+}
 }
 export interface SecureSession {
   id: string;
@@ -82,6 +84,7 @@ export interface SecureSession {
   os: string;
   browser: string;
   version: string;
+}
 };
     location: {
       country?: string;
@@ -96,14 +99,14 @@ export interface SecureSession {
   trustLevel: 'low' | 'medium' | 'high'
   };
   };
-  activities: Array<{,
+  activities: Array<{
   timestamp: Date;
   action: string;
   endpoint: string;
   riskScore: number;
   anomalyDetected: boolean;
 }>;
-  rotationHistory: Array<{,
+  rotationHistory: Array<{
   timestamp: Date;
   oldTokenHash: string;
   newTokenHash: string;
@@ -111,6 +114,7 @@ export interface SecureSession {
 }>;
 
 // Session Context
+}
 }
 export interface SessionContext {
   ipAddress: string;
@@ -121,6 +125,7 @@ export interface SessionContext {
   country: string;
   region: string;
   city: string;
+}
 };
   securityFlags: {
   isSuspiciousLocation: boolean;
@@ -131,17 +136,19 @@ export interface SessionContext {
 
 // Session Validation Result
 }
+}
 export interface SessionValidationResult {
   isValid: boolean;
   session?: SecureSession;
   requiresRotation: boolean;
   requiresReauthentication: boolean;
-  securityIssues: Array<{,
+  securityIssues: Array<{
   type: 'warning' | 'critical';
   description: string;
   recommendation: string;
+}
 }>;
-  anomalies: Array<{,
+  anomalies: Array<{
   type: string;
   severity: 'low' | 'medium' | 'high';
   description: string;
@@ -149,6 +156,7 @@ export interface SessionValidationResult {
 }>;
 
 // Activity Pattern
+}
 }
 export interface ActivityPattern {
   userId: string;
@@ -159,6 +167,7 @@ export interface ActivityPattern {
   commonLocations: string;
   usualEndpoints: string;
   averageSessionDuration: number;
+}
 };
   lastUpdated: Date;
   confidence: number;
@@ -183,11 +192,12 @@ export class SecureSessionManager extends EventEmitter {
   /**
    * Create a new secure session
    */
-  public async createSession()
+  public async createSession(
     userId: string,
     context: SessionContext,
     securityLevel: SessionSecurityLevel = SessionSecurityLevel.MEDIUM,
     mfaVerified: boolean = false): Promise<{ session: SecureSession; token: string }> {
+
     const config = this.sessionConfigs.get(securityLevel)!;
     const deviceId = this.generateDeviceId(context);
     // Check concurrent session limits
@@ -248,7 +258,7 @@ export class SecureSessionManager extends EventEmitter {
   /**
    * Validate and refresh session
    */
-  public async validateSession()
+  public async validateSession(
     sessionId: string,
     token: string,
     context: SessionContext): Promise<SessionValidationResult> {,
@@ -349,11 +359,12 @@ export class SecureSessionManager extends EventEmitter {
   /**
    * Terminate session
    */
-  public async terminateSession()
+  public async terminateSession(
     sessionId: string,
     reason: SessionTerminationReason,
     terminatedBy?: string
   ): Promise<boolean> {
+
     const session = this.sessions.get(sessionId);
     if (!session) {
       return false;
@@ -371,11 +382,12 @@ export class SecureSessionManager extends EventEmitter {
   /**
    * Terminate all sessions for a user
    */
-  public async terminateAllUserSessions()
+  public async terminateAllUserSessions(
     userId: string,
     reason: SessionTerminationReason,
     excludeSessionId?: string
   ): Promise<number> {
+
     const userSessionIds = this.userSessions.get(userId);
     if (!userSessionIds) {
       return 0;
@@ -503,9 +515,9 @@ export class SecureSessionManager extends EventEmitter {
     if (riskScore > 50) return 'low';
     if (riskScore > 20 || !isKnownDevice) return 'medium';
     return 'high';
-  private validateSessionContext(()
+  private validateSessionContext(((
     session: SecureSession,
-    context: SessionContext,
+    context: SessionContext
   ): { issues: SessionValidationResult['securityIssues']; anomalies: SessionValidationResult['anomalies'] } {
   const issues: SessionValidationResult['securityIssues'] = [];
   const anomalies: SessionValidationResult['anomalies'] = [];
@@ -587,8 +599,7 @@ export class SecureSessionManager extends EventEmitter {
   pattern.lastUpdated = now;
   pattern.confidence = Math.min(1.0, pattern.confidence + 0.1);
   this.activityPatterns.set(key, pattern);
-  private async enforceConcurrentSessionLimits(()
-  userId: string,
+  private async enforceConcurrentSessionLimits((userId: string,
   config: SessionConfiguration): Promise<void> {,
   if (!config.allowMultipleDevices || config.maxConcurrentSessions <= 0) {
   return;
@@ -676,6 +687,7 @@ export class SecureSessionManager extends EventEmitter {
       this.performAutomaticRotation();
     }, 5 * 60 * 1000);
   private async performAutomaticRotation(): Promise<void> {
+
   const now = new Date();
   for (const [sessionId, session] of this.sessions) {
   if (session.state !== SessionState.ACTIVE) continue;

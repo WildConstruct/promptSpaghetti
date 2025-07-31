@@ -39,6 +39,7 @@ import {
 } from '../../../../packages/core/types/EnforcementTypes';
 
 }
+}
 export interface EnforcementServiceConfig {
   enabled: boolean;
   autoExecutionEnabled: boolean;
@@ -50,6 +51,7 @@ export interface EnforcementServiceConfig {
     userNotifications: boolean;
     webhookUrl?: string;
     emailEnabled: boolean;
+}
 }
   };
   thresholds: {

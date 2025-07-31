@@ -20,6 +20,7 @@ export declare enum ReportFormat {
     PDF = "pdf",
     CSV = "csv"
 
+}
 export interface ReportCategoryDefinition {
     id: Epic16ReportCategory;
     name: string;
@@ -34,3 +35,4 @@ export declare class Epic16ReportCategoryService {
 
 export declare const epic16ReportCategoryService: Epic16ReportCategoryService;
 //# sourceMappingURL=Epic16ReportCategories.d.ts.map
+}

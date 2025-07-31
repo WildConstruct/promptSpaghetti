@@ -9,6 +9,7 @@
 import React from 'react';
 import { ShareableResourceType, ShareResponse } from '../../types/sharingTypes';
 
+}
 interface ShareModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -21,3 +22,4 @@ interface ShareModalProps {
 export declare const ShareModal: React.FC<ShareModalProps>;
 export default ShareModal;
 //# sourceMappingURL=ShareModal.d.ts.map
+}

@@ -9,6 +9,7 @@ import React, { useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 
+}
 interface PrivateRouteProps {
   children: React.ReactNode;
   redirectTo?: string;
@@ -19,6 +20,7 @@ interface PrivateRouteProps {
   redirectTo = '/login',
   requiredRoles = [],
   unauthorizedRedirect = '/unauthorized'
+}
 }) => {
   const { isAuthenticated, isLoading, checkAuthStatus, setReturnUrl, user } = useAuthStore();
   const location = useLocation();

@@ -19,6 +19,7 @@ import {
   EyeIcon,
   PencilIcon
 } from '@heroicons/react/24/outline';
+}
 interface ApprovalRequest {
   id: string;
   workspace_id: string;
@@ -58,6 +59,7 @@ interface ApprovalRequest {
   workspaceId,
   currentUserId,
   mode = 'reviewer'
+}
 }) => {
   const [approvalRequests, setApprovalRequests] = useState<ApprovalRequest>([]);
   const [reviewerAssignments, setReviewerAssignments] = useState<Record<string, ReviewerAssignment>>({});

@@ -111,6 +111,7 @@ export declare const loadingAnimations: {
 /**
  * React component wrapper for smooth animations
  */
+}
 interface AnimatedProps {
     children: React.ReactNode;
     className?: string;
@@ -121,5 +122,6 @@ interface AnimatedProps {
     isVisible?: boolean;
 
 export declare const AnimatedContainer: React.FC<AnimatedProps>;
+}
 export {};
 //# sourceMappingURL=smoothAnimations.d.ts.map

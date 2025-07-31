@@ -15,6 +15,7 @@ import { DiagnosticService } from '../admin/DiagnosticService';
 import { HealthCheckFramework } from '../admin/HealthCheckFramework';
 
 }
+}
 export interface SecurityIntelligenceDataPipelineConfig {
   ingestion: {
     enabled: boolean;
@@ -25,6 +26,7 @@ export interface SecurityIntelligenceDataPipelineConfig {
     deduplication_enabled: boolean;
     rate_limit_per_second: number;
     backpressure_threshold: number;
+}
 }
   };
   processing: {
@@ -76,6 +78,7 @@ export interface SecurityIntelligenceDataPipelineConfig {
 }
 
 }
+}
 export interface SecurityEvent {
   id: string;
   timestamp: number;
@@ -94,6 +97,7 @@ export interface SecurityEvent {
   incident_id?: string;
   response_actions: ResponseAction[];
   metadata: SecurityEventMetadata;
+}
 }
 }
 
@@ -120,6 +124,7 @@ export enum SecurityEventSeverity {
 }
 
 }
+}
 export interface SecurityEventSource {
   system_name: string;
   ip_address: string;
@@ -131,7 +136,9 @@ export interface SecurityEventSource {
   criticality: string;
 }
 }
+}
 
+}
 }
 export interface SecurityEventDestination {
   system_name: string;
@@ -142,7 +149,9 @@ export interface SecurityEventDestination {
   service: string;
 }
 }
+}
 
+}
 }
 export interface UserContext {
   user_id: string;
@@ -156,7 +165,9 @@ export interface UserContext {
   risk_score: number;
 }
 }
+}
 
+}
 }
 export interface DeviceContext {
   device_id: string;
@@ -172,7 +183,9 @@ export interface DeviceContext {
   last_seen: number;
 }
 }
+}
 
+}
 }
 export interface NetworkContext {
   source_ip: string;
@@ -188,7 +201,9 @@ export interface NetworkContext {
   network_segment: string;
 }
 }
+}
 
+}
 }
 export interface ApplicationContext {
   application_name: string;
@@ -202,7 +217,9 @@ export interface ApplicationContext {
   digital_signature: string;
 }
 }
+}
 
+}
 }
 export interface ThreatIndicator {
   type: IOCType;
@@ -214,6 +231,7 @@ export interface ThreatIndicator {
   last_seen: number;
   context: string;
   tags: string[];
+}
 }
 }
 
@@ -231,6 +249,7 @@ export enum IOCType {
 }
 
 }
+}
 export interface ResponseAction {
   action_type: ResponseActionType;
   action_status: ResponseActionStatus;
@@ -239,6 +258,7 @@ export interface ResponseAction {
   description: string;
   parameters: Record<string, unknown>;
   result: Record<string, unknown>;
+}
 }
 }
 
@@ -262,6 +282,7 @@ export enum ResponseActionStatus {
 }
 
 }
+}
 export interface SecurityEventMetadata {
   collector_version: string;
   ingestion_timestamp: number;
@@ -277,7 +298,9 @@ export interface SecurityEventMetadata {
   tags: string[];
 }
 }
+}
 
+}
 }
 export interface ThreatIntelligence {
   id: string;
@@ -297,7 +320,9 @@ export interface ThreatIntelligence {
   metadata: ThreatIntelligenceMetadata;
 }
 }
+}
 
+}
 }
 export interface ThreatType {
   category: string;
@@ -307,7 +332,9 @@ export interface ThreatType {
   mitre_attack_id: string;
 }
 }
+}
 
+}
 }
 export interface ThreatActor {
   name: string;
@@ -319,7 +346,9 @@ export interface ThreatActor {
   attribution_confidence: number;
 }
 }
+}
 
+}
 }
 export interface IOC {
   type: IOCType;
@@ -331,7 +360,9 @@ export interface IOC {
   tags: string[];
 }
 }
+}
 
+}
 }
 export interface TTP {
   tactic: string;
@@ -343,7 +374,9 @@ export interface TTP {
   mitigation_methods: string[];
 }
 }
+}
 
+}
 }
 export interface ThreatIntelligenceSource {
   name: string;
@@ -355,7 +388,9 @@ export interface ThreatIntelligenceSource {
   credentials?: Record<string, string>;
 }
 }
+}
 
+}
 }
 export interface MitigationStrategy {
   strategy_type: string;
@@ -366,7 +401,9 @@ export interface MitigationStrategy {
   timeline_estimate: string;
 }
 }
+}
 
+}
 }
 export interface ThreatIntelligenceMetadata {
   source_reliability: string;
@@ -377,7 +414,9 @@ export interface ThreatIntelligenceMetadata {
   handling_requirements: string[];
 }
 }
+}
 
+}
 }
 export interface DataPipelineMetrics {
   ingestion_metrics: {
@@ -387,6 +426,7 @@ export interface DataPipelineMetrics {
     average_ingestion_latency_ms: number;
     queue_depth: number;
     throughput_mbps: number;
+}
 }
   };
   processing_metrics: {

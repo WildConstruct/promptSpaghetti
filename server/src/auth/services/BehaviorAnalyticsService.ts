@@ -8,6 +8,7 @@ import { RedisService } from '../database/RedisService';
 import { AuditService } from './AuditService';
 
 }
+}
 export interface BehaviorAnalyticsConfig {
   // Analysis parameters
   baselineWindowDays: number; // Days to establish baseline behavior
@@ -31,6 +32,7 @@ export interface BehaviorAnalyticsConfig {
     velocityAnomaly: number;
     patternDeviation: number;
 }
+}
   };
   
   // Response configuration
@@ -49,6 +51,7 @@ export type BehaviorPatternType =
   | 'navigation_flow';
 
 }
+}
 export interface UserBehaviorProfile {
   userId: string;
   baseline: BehaviorBaseline;
@@ -61,11 +64,14 @@ export interface UserBehaviorProfile {
   status: 'learning' | 'established' | 'suspicious' | 'blocked';
 }
 }
+}
 
+}
 }
 export interface BehaviorBaseline {
   // Temporal patterns
   typicalLoginTimes: TimeWindow[];
+}
 }
   typicalSessionDuration: { mean: number; stdDev: number };
   typicalActivityHours: number[]; // 0-23 hours
@@ -90,6 +96,7 @@ export interface BehaviorBaseline {
 }
 
 }
+}
 export interface BehaviorPattern {
   id: string;
   type: BehaviorPatternType;
@@ -100,7 +107,9 @@ export interface BehaviorPattern {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface BehaviorAnomaly {
   id: string;
@@ -115,6 +124,7 @@ export interface BehaviorAnomaly {
   resolvedAt?: Date;
 }
 }
+}
 
 export type AnomalyType = 
   | 'unusual_login_time'
@@ -127,6 +137,7 @@ export type AnomalyType =
   | 'bot_like_behavior';
 
 }
+}
 export interface TimeWindow {
   startHour: number;
   endHour: number;
@@ -134,7 +145,9 @@ export interface TimeWindow {
   probability: number;
 }
 }
+}
 
+}
 }
 export interface ActionSequence {
   actions: string[];
@@ -142,7 +155,9 @@ export interface ActionSequence {
   averageTimeBetween: number[]; // ms between each action
 }
 }
+}
 
+}
 }
 export interface ResourceAccess {
   resourceType: string;
@@ -151,7 +166,9 @@ export interface ResourceAccess {
   averageAccessDuration: number;
 }
 }
+}
 
+}
 }
 export interface NavigationPath {
   path: string[];
@@ -159,7 +176,9 @@ export interface NavigationPath {
   averageDuration: number;
 }
 }
+}
 
+}
 }
 export interface RetryPattern {
   action: string;
@@ -167,7 +186,9 @@ export interface RetryPattern {
   successRate: number;
 }
 }
+}
 
+}
 }
 export interface BehaviorAnalysisResult {
   userId: string;
@@ -180,7 +201,9 @@ export interface BehaviorAnalysisResult {
   reasoning: string[];
 }
 }
+}
 
+}
 }
 export interface SessionBehaviorData {
   sessionId: string;
@@ -193,7 +216,9 @@ export interface SessionBehaviorData {
   errors: ErrorEvent[];
 }
 }
+}
 
+}
 }
 export interface UserAction {
   timestamp: Date;
@@ -204,7 +229,9 @@ export interface UserAction {
   success: boolean;
 }
 }
+}
 
+}
 }
 export interface ResourceAccessLog {
   timestamp: Date;
@@ -214,7 +241,9 @@ export interface ResourceAccessLog {
   duration: number;
 }
 }
+}
 
+}
 }
 export interface InteractionEvent {
   timestamp: Date;
@@ -223,7 +252,9 @@ export interface InteractionEvent {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ErrorEvent {
   timestamp: Date;
@@ -231,6 +262,7 @@ export interface ErrorEvent {
   errorMessage: string;
   context: string;
   resolved: boolean;
+}
 }
 }
 

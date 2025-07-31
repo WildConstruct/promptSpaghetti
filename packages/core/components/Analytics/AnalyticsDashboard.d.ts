@@ -4,6 +4,7 @@ import { AnalyticsClient } from '../../analytics/AnalyticsClient';
  * Analytics dashboard props
  */
 
+}
 export interface AnalyticsDashboardProps {
     analyticsClient: AnalyticsClient;
     userId?: number;
@@ -19,3 +20,4 @@ export interface AnalyticsDashboardProps {
 export declare const AnalyticsDashboard: React.FC<AnalyticsDashboardProps>;
 export default AnalyticsDashboard;
 //# sourceMappingURL=AnalyticsDashboard.d.ts.map
+}

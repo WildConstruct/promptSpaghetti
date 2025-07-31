@@ -3,6 +3,7 @@
  */
 import React from 'react';
 
+}
 interface LoadProjectDialogProps {
     isOpen: boolean;
     onClose: () => void;
@@ -11,6 +12,7 @@ interface LoadProjectDialogProps {
         error?: string;
         warnings?: string[];
 
+}
     }) => void;
 
 export declare const LoadProjectDialog: React.FC<LoadProjectDialogProps>;

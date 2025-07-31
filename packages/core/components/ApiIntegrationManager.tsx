@@ -18,6 +18,7 @@ import {
   ExclamationTriangleIcon
 } from '@heroicons/react/24/outline';
 // import { useWorkflowStore } from '../stores/workflowStore';
+}
 interface ApiKey {
   id: string;
   name: string;
@@ -47,6 +48,7 @@ interface ApiKey {
   export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({,)
   workspaceId,
   onClose
+}
 }) => {
   const [activeTab, setActiveTab] = useState<TabType>('api_keys');
   const [apiKeys, setApiKeys] = useState<ApiKey>([]);

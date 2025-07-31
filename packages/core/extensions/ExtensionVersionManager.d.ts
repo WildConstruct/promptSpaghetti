@@ -124,6 +124,7 @@ type ReleaseType = 'major' | 'minor' | 'patch' | 'prerelease';
 type RiskLevel = 'low' | 'medium' | 'high';
 type UpgradeStepType = 'major' | 'minor' | 'patch' | 'prerelease';
 
+}
 interface Comparator {
     operator: string;
     version: SemanticVersion;
@@ -131,6 +132,7 @@ interface Comparator {
 
 type RangeSet = Comparator[];
 
+}
 export interface CompatibilityResult {
     compatible: boolean;
     issues: CompatibilityIssue[];
@@ -139,6 +141,7 @@ export interface CompatibilityResult {
     extensionVersion: string;
 
 
+}
 export interface CompatibilityIssue {
     type: 'system-version' | 'missing-dependency' | 'version-mismatch' | 'circular-dependency';
     severity: 'error' | 'warning';
@@ -149,6 +152,7 @@ export interface CompatibilityIssue {
     circularPath?: string[];
 
 
+}
 export interface UpgradePath {
     possible: boolean;
     reason?: string;
@@ -157,6 +161,7 @@ export interface UpgradePath {
     estimatedDuration?: string;
 
 
+}
 export interface UpgradeStep {
     fromVersion: string;
     toVersion: string;
@@ -166,5 +171,6 @@ export interface UpgradeStep {
     recommendedActions: string[];
 
 export declare const extensionVersionManager: ExtensionVersionManager;
+}
 export {};
 //# sourceMappingURL=ExtensionVersionManager.d.ts.map

@@ -11,6 +11,7 @@
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 export interface ConsentRecord {
   consentId: string;
   userId: string;
@@ -35,7 +36,9 @@ export interface ConsentRecord {
   metadata: ConsentMetadata;
 }
 }
+}
 
+}
 }
 export interface ConsentPurpose {
   purposeId: string;
@@ -53,7 +56,9 @@ export interface ConsentPurpose {
   specialCategoryData: boolean;
 }
 }
+}
 
+}
 }
 export interface DataProcessingDetails {
   collectsPersonalData: boolean;
@@ -67,7 +72,9 @@ export interface DataProcessingDetails {
   securityMeasures: string[];
 }
 }
+}
 
+}
 }
 export interface RetentionPolicy {
   retentionPeriod: number; // days
@@ -77,7 +84,9 @@ export interface RetentionPolicy {
   exceptionCriteria: string[];
 }
 }
+}
 
+}
 }
 export interface ConsentContext {
   contextId: string;
@@ -93,7 +102,9 @@ export interface ConsentContext {
   interactionHistory: ConsentInteraction[];
 }
 }
+}
 
+}
 }
 export interface GeolocationData {
   country: string;
@@ -105,7 +116,9 @@ export interface GeolocationData {
   source: 'IP' | 'GPS' | 'USER_PROVIDED';
 }
 }
+}
 
+}
 }
 export interface ConsentFlow {
   flowId: string;
@@ -117,7 +130,9 @@ export interface ConsentFlow {
   totalTimeSpent: number; // milliseconds
 }
 }
+}
 
+}
 }
 export interface ConsentFlowStep {
   stepId: string;
@@ -128,7 +143,9 @@ export interface ConsentFlowStep {
   stepData: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ConsentInteraction {
   interactionId: string;
@@ -140,7 +157,9 @@ export interface ConsentInteraction {
   result: InteractionResult;
 }
 }
+}
 
+}
 }
 export interface DataCategory {
   categoryId: string;
@@ -154,7 +173,9 @@ export interface DataCategory {
   encryptionRequired: boolean;
 }
 }
+}
 
+}
 }
 export interface ProcessingActivity {
   activityId: string;
@@ -170,7 +191,9 @@ export interface ProcessingActivity {
   profilingInvolved: boolean;
 }
 }
+}
 
+}
 }
 export interface ProcessingRecipient {
   recipientId: string;
@@ -182,7 +205,9 @@ export interface ProcessingRecipient {
   adequacyDecision: boolean;
 }
 }
+}
 
+}
 }
 export interface InternationalTransfer {
   transferId: string;
@@ -194,7 +219,9 @@ export interface InternationalTransfer {
   dataCategories: string[];
 }
 }
+}
 
+}
 }
 export interface TransferSafeguard {
   safeguardType: string;
@@ -204,7 +231,9 @@ export interface TransferSafeguard {
   expiryDate?: Date;
 }
 }
+}
 
+}
 }
 export interface ThirdPartyConsent {
   thirdPartyId: string;
@@ -220,7 +249,9 @@ export interface ThirdPartyConsent {
   contactInfo: ThirdPartyContact;
 }
 }
+}
 
+}
 }
 export interface ThirdPartyContact {
   dpoEmail?: string;
@@ -230,7 +261,9 @@ export interface ThirdPartyContact {
   phone?: string;
 }
 }
+}
 
+}
 }
 export interface UserConsentPreferences {
   preferenceId: string;
@@ -243,7 +276,9 @@ export interface UserConsentPreferences {
   accessibilityPreferences: AccessibilityPreference[];
 }
 }
+}
 
+}
 }
 export interface CommunicationPreference {
   channel: CommunicationChannel;
@@ -254,7 +289,9 @@ export interface CommunicationPreference {
   languagePreference: string;
 }
 }
+}
 
+}
 }
 export interface PrivacySetting {
   settingType: PrivacySettingType;
@@ -264,7 +301,9 @@ export interface PrivacySetting {
   userModifiable: boolean;
 }
 }
+}
 
+}
 }
 export interface CookiePreference {
   category: CookieCategory;
@@ -274,7 +313,9 @@ export interface CookiePreference {
   sameSitePreference: 'Strict' | 'Lax' | 'None';
 }
 }
+}
 
+}
 }
 export interface SpecificCookieConsent {
   cookieName: string;
@@ -285,7 +326,9 @@ export interface SpecificCookieConsent {
   duration: number;
 }
 }
+}
 
+}
 }
 export interface MarketingPreference {
   channel: MarketingChannel;
@@ -296,7 +339,9 @@ export interface MarketingPreference {
   thirdPartySharing: boolean;
 }
 }
+}
 
+}
 }
 export interface DataProcessingPreference {
   processingType: DataProcessingType;
@@ -307,7 +352,9 @@ export interface DataProcessingPreference {
   retention: RetentionPreference;
 }
 }
+}
 
+}
 }
 export interface AutomationPreference {
   automatedDecisions: boolean;
@@ -316,7 +363,9 @@ export interface AutomationPreference {
   humanReview: boolean;
 }
 }
+}
 
+}
 }
 export interface SharingPreference {
   internalSharing: boolean;
@@ -326,7 +375,9 @@ export interface SharingPreference {
   researchSharing: boolean;
 }
 }
+}
 
+}
 }
 export interface RetentionPreference {
   minimumRetention: boolean;
@@ -336,7 +387,9 @@ export interface RetentionPreference {
   automaticDeletion: boolean;
 }
 }
+}
 
+}
 }
 export interface NotificationPreference {
   notificationType: NotificationType;
@@ -346,7 +399,9 @@ export interface NotificationPreference {
   quietHours: QuietHours;
 }
 }
+}
 
+}
 }
 export interface QuietHours {
   enabled: boolean;
@@ -356,7 +411,9 @@ export interface QuietHours {
   exceptions: string[];
 }
 }
+}
 
+}
 }
 export interface AccessibilityPreference {
   highContrast: boolean;
@@ -368,7 +425,9 @@ export interface AccessibilityPreference {
   simplifiedInterface: boolean;
 }
 }
+}
 
+}
 }
 export interface TimePreference {
   timezone: string;
@@ -377,7 +436,9 @@ export interface TimePreference {
   frequency: 'IMMEDIATE' | 'DAILY' | 'WEEKLY' | 'MONTHLY';
 }
 }
+}
 
+}
 }
 export interface ComplianceFlag {
   flagId: string;
@@ -390,7 +451,9 @@ export interface ComplianceFlag {
   riskLevel: RiskLevel;
 }
 }
+}
 
+}
 }
 export interface ConsentAuditEntry {
   entryId: string;
@@ -404,7 +467,9 @@ export interface ConsentAuditEntry {
   compliance: AuditCompliance;
 }
 }
+}
 
+}
 }
 export interface ConsentActor {
   actorId: string;
@@ -414,7 +479,9 @@ export interface ConsentActor {
   sessionInfo: SessionInfo;
 }
 }
+}
 
+}
 }
 export interface SessionInfo {
   sessionId: string;
@@ -424,7 +491,9 @@ export interface SessionInfo {
   securityLevel: string;
 }
 }
+}
 
+}
 }
 export interface AuditEvidence {
   evidenceType: EvidenceType;
@@ -434,7 +503,9 @@ export interface AuditEvidence {
   timestamp: Date;
 }
 }
+}
 
+}
 }
 export interface AuditCompliance {
   frameworks: string[];
@@ -444,7 +515,9 @@ export interface AuditCompliance {
   integrity: IntegrityCheck;
 }
 }
+}
 
+}
 }
 export interface IntegrityCheck {
   checksum: string;
@@ -453,7 +526,9 @@ export interface IntegrityCheck {
   verifiedAt: Date;
 }
 }
+}
 
+}
 }
 export interface ConsentMetadata {
   version: string;
@@ -465,7 +540,9 @@ export interface ConsentMetadata {
   experiments: ExperimentInfo[];
 }
 }
+}
 
+}
 }
 export interface MigrationInfo {
   migrationId: string;
@@ -475,7 +552,9 @@ export interface MigrationInfo {
   migrationRules: string[];
 }
 }
+}
 
+}
 }
 export interface ExperimentInfo {
   experimentId: string;
@@ -485,7 +564,9 @@ export interface ExperimentInfo {
   endDate?: Date;
 }
 }
+}
 
+}
 }
 export interface RetentionRequirement {
   requirementId: string;
@@ -494,6 +575,7 @@ export interface RetentionRequirement {
   maximumPeriod?: number;
   triggers: string[];
   exceptions: string[];
+}
 }
 }
 
@@ -1070,6 +1152,7 @@ export class ConsentCollectionService {
 
 // Additional interfaces for service functionality
 }
+}
 export interface ConsentCollectionRequest {
   consentType: ConsentType;
   purpose: ConsentPurpose;
@@ -1087,7 +1170,9 @@ export interface ConsentCollectionRequest {
   experiments?: ExperimentInfo[];
 }
 }
+}
 
+}
 }
 export interface BannerConfiguration {
   type: 'GDPR_COMPLIANT' | 'CCPA_COMPLIANT' | 'SIMPLE' | 'ADVANCED';
@@ -1103,7 +1188,9 @@ export interface BannerConfiguration {
   respectDoNotTrack: boolean;
 }
 }
+}
 
+}
 }
 export interface JustInTimePromptConfig {
   promptId: string;
@@ -1120,9 +1207,11 @@ export interface JustInTimePromptConfig {
     rememberChoice: boolean;
     explainConsequences: boolean;
 }
+}
   };
 }
 
+}
 }
 export interface ComplianceIssue {
   issueId: string;
@@ -1133,5 +1222,6 @@ export interface ComplianceIssue {
   requirement: string;
   remediation: string;
   deadline?: Date;
+}
 }
 }

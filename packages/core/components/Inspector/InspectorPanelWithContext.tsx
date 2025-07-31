@@ -2,10 +2,12 @@ import React, { useCallback, useRef, useEffect } from 'react';
 import { PropertiesSection } from './PropertiesSection';
 import { PreviewSection } from './PreviewSection';
 import { useInspectorContext } from './InspectorContext';
+}
 interface InspectorPanelWithContextProps {
   onClose?: () => void;
   minWidth?: number;
   maxWidth?: number;
+}
 }
 
 export const InspectorPanelWithContext: React.FC<InspectorPanelWithContextProps> = ({

@@ -6,11 +6,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { TimeTravel, TimeTravelState, TimelineEntry, TimeBranch, TimelineMarker } from '../TimeTravel';
 
+}
 export interface TimeTravelPanelProps {
   timeTravel: TimeTravel;
   timeTravelState: TimeTravelState | null;
   selectedDomain: string;
   onDomainChange: (domain: string) => void;
+}
 }
 export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
   timeTravel,

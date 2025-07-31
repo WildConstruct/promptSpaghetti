@@ -9,6 +9,7 @@ import { EnhancedPreviewResult } from './EnhancedPreviewModal';
 import { useResultManagementStore } from '../../stores/resultManagementStore';
 import { ErrorFactory } from '../../errors/ErrorFactory';
 
+}
 export interface ExportFormat {
   id: string;
   name: string;
@@ -18,6 +19,8 @@ export interface ExportFormat {
   vfxCompatible?: boolean;
   controlNetReady?: boolean;
   icon: string;
+}
+}
 }
 export interface ExportOptions {
   format: ExportFormat;
@@ -32,6 +35,7 @@ export interface ExportOptions {
   includeSceneData?: boolean;
   frameRate?: number;
   resolution?: [number, number];
+}
 };
   // Film industry options
   filmOptions?: {
@@ -41,6 +45,7 @@ export interface ExportOptions {
   includeSceneBreakdowns?: boolean;
   watermark?: string;
 };
+}
 }
 export interface ResultExportManagerProps {
   results: EnhancedPreviewResult;
@@ -58,6 +63,7 @@ export interface ResultExportManagerProps {
   extension: 'fountain',
   category: 'script',
   icon: '📄',
+}
 }
   {
   id: 'final-draft',
@@ -749,10 +755,11 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
 };
 
 // Helper function to prepare export payload
-async function prepareExportPayload(()
+async function prepareExportPayload(((
     results: EnhancedPreviewResult,
-    options: ExportOptions,
+    options: ExportOptions
   ): Promise<unknown> {
+
   const { format, includeMetadata, includeExecutionPath, includeVarianceAnalysis } = options;
   const basePayload = {
     results: results.map(result => ({)

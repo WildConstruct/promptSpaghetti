@@ -12,12 +12,14 @@ import {
   CreatorMetrics
 } from '../analytics/MarketplaceMetrics';
 
+}
 export interface MarketplaceMetricsConfig {
   enableAutoTracking?: boolean;
   trackPageViews?: boolean;
   trackUserInteractions?: boolean;
   userId?: string;
   userRole?: 'director' | 'producer' | 'creator' | 'admin'
+}
   }
 export const useMarketplaceMetrics = (config: MarketplaceMetricsConfig = {}) => {
   const {

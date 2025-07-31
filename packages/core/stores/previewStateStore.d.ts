@@ -6,6 +6,7 @@
  * synchronization, caching, and performance optimizations.
  */
 
+}
 export interface PreviewResult {
     seed: number;
     output?: string;
@@ -16,6 +17,7 @@ export interface PreviewResult {
     executionPath?: Array<{
         nodeId: string;
         output: unknown;
+}
     }>;
     weightChoices?: Array<{
         nodeId: string;
@@ -29,7 +31,7 @@ export interface PreviewResult {
     lockedNote?: string;
     debugInfo?: {
         nodeExecutionOrder: string[];
-        randomChoices: Array<{,
+        randomChoices: Array<{
             nodeId: string;
             choice: unknown;
         }>;
@@ -40,6 +42,7 @@ export interface PreviewResult {
         };
     };
 
+}
 export interface PreviewCache {
     graphHash: string;
     timestamp: number;
@@ -47,8 +50,10 @@ export interface PreviewCache {
     performanceStats: {
         totalTime: number;
         averageTime: number;
+}
     } | null;
 
+}
 export interface PreviewPerformanceMetrics {
     totalExecutionTime: number;
     averageExecutionTime: number;
@@ -57,6 +62,7 @@ export interface PreviewPerformanceMetrics {
     peakMemoryUsage?: number;
     networkLatency?: number;
 
+}
 export interface PreviewStateStore {
     isLoading: boolean;
     error: string | null;
@@ -65,6 +71,7 @@ export interface PreviewStateStore {
     performanceStats: {
         totalTime: number;
         averageTime: number;
+}
     } | null;
     lastGraphHash: string | null;
     lastUpdateTimestamp: number;

@@ -17,6 +17,7 @@ import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 export interface SatisfactionIntegrationConfig {
   enabled: boolean;
   enableSurveyCollection: boolean;
@@ -35,6 +36,7 @@ export interface SatisfactionIntegrationConfig {
     good: number;
     fair: number;
     poor: number;
+}
 }
   };
   

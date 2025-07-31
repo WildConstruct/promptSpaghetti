@@ -2,12 +2,15 @@
 // Comprehensive client-side device identification with multiple techniques
 import * as crypto from 'crypto-js';
 
+}
 export interface DeviceFingerprintData {
   fingerprint: string;,
   components: FingerprintComponents;
   metadata: FingerprintMetadata;,
   timestamp: Date;
   confidence: number;
+}
+}
 }
 export interface FingerprintComponents {
   // Basic browser info
@@ -53,6 +56,8 @@ export interface FingerprintComponents {
   // Permissions
   permissions: PermissionStatus;
 }
+}
+}
 export interface FingerprintMetadata {
   collectionTime: number; // milliseconds,
   errors: string;,
@@ -60,17 +65,23 @@ export interface FingerprintMetadata {
   device: DeviceInfo;,
   riskFactors: RiskFactors;
 }
+}
+}
 export interface BrowserInfo {
   name: string;,
   version: string;
   majorVersion: number;,
   engine: string;
 }
+}
+}
 export interface DeviceInfo {
   type: 'desktop' | 'mobile' | 'tablet' | 'unknown';,
   os: string;
   osVersion: string;,
   vendor: string;
+}
+}
 }
 export interface RiskFactors {
   isIncognito: boolean;,
@@ -80,11 +91,14 @@ export interface RiskFactors {
   isVirtualMachine: boolean;,
   spoofingDetected: boolean;
 }
+}
+}
 export interface PermissionStatus {
   camera: PermissionState | null;,
   microphone: PermissionState | null;
   geolocation: PermissionState | null;,
   notifications: PermissionState | null;
+}
 }
 export class DeviceFingerprintService {
   private static instance: DeviceFingerprintService;
@@ -98,10 +112,11 @@ export class DeviceFingerprintService {
   /**
   * Collect comprehensive device fingerprint
   */
-  async collectFingerprint(options: {,)
+  async collectFingerprint(options: {)
   useCache?: boolean;
   components?: string;
 } = {}): Promise<DeviceFingerprintData> {
+
   const startTime = Date.now();
   // Check cache if enabled
   if (options.useCache && this.cachedFingerprint) {
@@ -129,6 +144,7 @@ export class DeviceFingerprintService {
    * Collect all fingerprint components
    */
   private async collectAllComponents(errors: string): Promise<FingerprintComponents> {
+
   const [
   basicInfo,
   screenInfo,
@@ -385,6 +401,7 @@ export class DeviceFingerprintService {
    * Detect available fonts
    */
   private async collectFonts(errors: string): Promise<string> {
+
     try {
       const baseFonts = ['monospace', 'sans-serif', 'serif'];
       const testString = 'mmmmmmmmmmlli';
@@ -437,6 +454,7 @@ export class DeviceFingerprintService {
    * Collect browser plugins
    */
   private async collectPlugins(): Promise<string> {
+
     const plugins: string = [];
     if (navigator.plugins) {
       for (let i = 0; i < navigator.plugins.length; i++) {
@@ -447,6 +465,7 @@ export class DeviceFingerprintService {
    * Collect media devices
    */
   private async collectMediaDevices(errors: string): Promise<MediaDeviceInfo> {
+
     try {
       if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
         return [];
@@ -498,6 +517,7 @@ export class DeviceFingerprintService {
    * Collect permission status
    */
   private async collectPermissions(errors: string): Promise<PermissionStatus> {
+
   const permissions: PermissionStatus = {,
   camera: null,
   microphone: null,
@@ -630,6 +650,7 @@ export class DeviceFingerprintService {
    * Detect risk factors and potential spoofing
    */
   private async detectRiskFactors(components: FingerprintComponents): Promise<RiskFactors> {
+
   return {
   isIncognito: await this.detectIncognito(),
   isBot: this.detectBot(components),
@@ -642,6 +663,7 @@ export class DeviceFingerprintService {
    * Detect incognito/private mode
    */
   private async detectIncognito(): Promise<boolean> {
+
     return new Promise((resolve) => {
       if ('storage' in navigator && 'estimate' in navigator.storage) {
         navigator.storage.estimate().then(estimate => {)
@@ -753,7 +775,7 @@ export class DeviceFingerprintService {
   /**
    * Compare two fingerprints
    */
-  compareFingerprints(fp1: DeviceFingerprintData, fp2: DeviceFingerprintData): {,
+  compareFingerprints(fp1: DeviceFingerprintData, fp2: DeviceFingerprintData): {
   match: boolean;
     similarity: number;,
   changedComponents: string;

@@ -4,6 +4,7 @@
  */
 import React, { useState, useEffect, useMemo } from 'react';
 import { VersionHistoryManager, VersionSnapshot, Branch, ChangeEvent, VersionAnnotation } from '../../version-history/VersionHistoryManager';
+}
 interface VersionHistoryPanelProps {
   versionManager: VersionHistoryManager;
   currentGraphData: unknown;
@@ -21,6 +22,7 @@ interface VersionHistoryPanelProps {
   isOpen,
   onClose,
   className = ''
+}
 }) => {
   const [viewMode, setViewMode] = useState<ViewMode>('timeline');
   const [snapshots, setSnapshots] = useState<VersionSnapshot>([]);
@@ -315,6 +317,7 @@ interface VersionHistoryPanelProps {
 };
 
 // Sub-components
+}
 interface SnapshotTimelineProps {
   snapshots: VersionSnapshot;
   selectedSnapshots: Set<string>;
@@ -331,6 +334,7 @@ interface SnapshotTimelineProps {
   formatTimeAgo,
   getSnapshotTypeIcon,
   getSnapshotTypeColor
+}
 }) => {
   return;
     <div className="p-4">
@@ -399,6 +403,7 @@ interface SnapshotTimelineProps {
     </div>
   );
 };
+}
 interface BranchViewProps {
   branches: Branch;
   snapshots: VersionSnapshot;
@@ -411,6 +416,7 @@ interface BranchViewProps {
   selectedBranch,
   onBranchSelect,
   formatTimeAgo
+}
 }) => {
   const getBranchIcon = (type: string): string => {,
   switch (type) {
@@ -468,9 +474,11 @@ interface BranchViewProps {
     </div>
   );
 };
+}
 interface ChangeEventsListProps {
   events: ChangeEvent;
   formatTimeAgo: (date: string) => string;
+}
 const ChangeEventsList: React.FC<ChangeEventsListProps> = ({ events, formatTimeAgo }) => {
   const getEventIcon = (eventType: string): string => {,
   if (eventType.includes('node')) return '🔵';
@@ -541,9 +549,11 @@ const ChangeEventsList: React.FC<ChangeEventsListProps> = ({ events, formatTimeA
     </div>
   );
 };
+}
 interface AnnotationsListProps {
   annotations: VersionAnnotation;
   formatTimeAgo: (date: string) => string;
+}
 const AnnotationsList: React.FC<AnnotationsListProps> = ({ annotations, formatTimeAgo }) => {
   const getAnnotationIcon = (type: string): string => {,
   switch (type) {

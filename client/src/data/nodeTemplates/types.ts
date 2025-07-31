@@ -3,11 +3,14 @@
  * REFACTOR-001: EnhancedGraphEditor Data Extraction
  */
 
+}
 export interface OptionConfig {
   label: string;,
   value: string;
   weight: number;
   description?: string;
+}
+}
 }
 export interface NodeData {
   label: string;,
@@ -15,18 +18,24 @@ export interface NodeData {
   category: 'logic' | 'transform' | 'output';,
   options: OptionConfig;
 }
+}
+}
 export interface NodeTemplate {
   id: string;,
   type: 'logic' | 'transform' | 'output';
 
+}
   position: { x: number; y: number };
   data: NodeData;
+}
 }
 export interface GraphTemplate {
   name: string;,
   description: string;
   nodes: NodeTemplate;,
   edges: EdgeTemplate;
+}
+}
 }
 export interface EdgeTemplate {
   id: string;,
@@ -35,6 +44,8 @@ export interface EdgeTemplate {
   sourceHandle?: string;
   targetHandle?: string;
 }
+}
+}
 export interface TemplateCategory {
   id: string;,
   name: string;
@@ -42,8 +53,11 @@ export interface TemplateCategory {
   templates: NodeTemplate;
   // Template configuration for different domains
 }
+}
+}
 export interface DomainTemplate {
   domain: string;,
   categories: TemplateCategory;
   presets: GraphTemplate;
+}
 }

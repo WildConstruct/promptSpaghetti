@@ -66,6 +66,7 @@ export declare enum RevisionTimelineEventType {
     IMPLEMENTATION_COMPLETED = "implementation_completed",
     REQUEST_CANCELLED = "request_cancelled"
 
+}
 export interface RevisionRequest {
     id: string;
     requesterId: string;
@@ -103,6 +104,7 @@ export interface RevisionRequest {
     complexityScore?: number;
     impactScore?: number;
 
+}
 export interface RevisionEvidence {
     id: string;
     revisionRequestId: string;
@@ -118,6 +120,7 @@ export interface RevisionEvidence {
     annotations?: EvidenceAnnotation[];
     metadata: Record<string, any>;
 
+}
 export interface EvidenceAnnotation {
     id: string;
     evidenceId: string;
@@ -127,6 +130,7 @@ export interface EvidenceAnnotation {
         y: number;
         width?: number;
         height?: number;
+}
     };
     content: string;
     createdBy: string;
@@ -135,6 +139,7 @@ export interface EvidenceAnnotation {
     resolvedBy?: string;
     resolvedAt?: Date;
 
+}
 export interface RevisionTimelineEvent {
     id: string;
     revisionRequestId: string;
@@ -147,6 +152,7 @@ export interface RevisionTimelineEvent {
     timestamp: Date;
     metadata: Record<string, any>;
 
+}
 export interface RevisionComment {
     id: string;
     revisionRequestId: string;
@@ -161,6 +167,7 @@ export interface RevisionComment {
     mentions: string[];
     attachments: string[];
 
+}
 export interface RevisionRequestSearchQuery {
     status?: RevisionRequestStatus[];
     priority?: RevisionRequestPriority[];
@@ -172,6 +179,7 @@ export interface RevisionRequestSearchQuery {
     dateRange?: {
         start: Date;
         end: Date;
+}
     };
     dueDateRange?: {
         start: Date;
@@ -191,6 +199,7 @@ export interface RevisionRequestSearchQuery {
 
 export type RevisionRequestSortField = 'created_at' | 'updated_at' | 'due_date' | 'priority' | 'urgency_score' | 'complexity_score' | 'title' | 'requester_name' | 'status';
 
+}
 export interface RevisionRequestSearchResults {
     requests: RevisionRequest[];
     pagination: {
@@ -198,10 +207,12 @@ export interface RevisionRequestSearchResults {
         pageSize: number;
         total: number;
         totalPages: number;
+}
     };
     aggregations: RevisionRequestAggregations;
     filters: AppliedFilters;
 
+}
 export interface RevisionRequestAggregations {
     statusBreakdown: Record<RevisionRequestStatus, number>;
     priorityBreakdown: Record<RevisionRequestPriority, number>;
@@ -213,29 +224,33 @@ export interface RevisionRequestAggregations {
         overdue: number;
         dueToday: number;
         dueThisWeek: number;
+}
     };
     averageCompletionTime: number;
-    topRequesters: Array<{,
+    topRequesters: Array<{
         requesterId: string;
         requesterName: string;
         count: number;
     }>;
-    topReviewers: Array<{,
+    topReviewers: Array<{
         reviewerId: string;
         reviewerName: string;
         count: number;
         averageResponseTime: number;
     }>;
 
+}
 export interface AppliedFilters {
     count: number;
-    filters: Array<{,
+    filters: Array<{
         field: string;
         operator: string;
         value: any;
         displayName: string;
+}
     }>;
 
+}
 export interface RevisionRequestAnalytics {
     period: AnalyticsPeriod;
     overview: RevisionRequestOverview;
@@ -244,12 +259,14 @@ export interface RevisionRequestAnalytics {
     insights: RevisionRequestInsight[];
     recommendations: RevisionRequestRecommendation[];
 
+}
 export interface AnalyticsPeriod {
     startDate: Date;
     endDate: Date;
     timeRange: TimeRange;
     comparisonPeriod?: AnalyticsPeriod;
 
+}
 export interface RevisionRequestOverview {
     totalRequests: number;
     completedRequests: number;
@@ -262,8 +279,10 @@ export interface RevisionRequestOverview {
         requestGrowth: number;
         completionGrowth: number;
         averageTimeImprovement: number;
+}
     };
 
+}
 export interface RevisionRequestPerformance {
     reviewerPerformance: Record<string, ReviewerPerformance>;
     contentTypePerformance: Record<RevisionContentType, ContentTypePerformance>;
@@ -272,8 +291,10 @@ export interface RevisionRequestPerformance {
         onTimeCompletionRate: number;
         averageResponseTime: number;
         escalationRate: number;
+}
     };
 
+}
 export interface ReviewerPerformance {
     reviewerId: string;
     reviewerName: string;
@@ -284,35 +305,40 @@ export interface ReviewerPerformance {
     satisfactionRating: number;
     workloadBalance: number;
 
+}
 export interface ContentTypePerformance {
     totalRequests: number;
     averageCompletionTime: number;
     complexityScore: number;
     successRate: number;
 
+}
 export interface PriorityPerformance {
     totalRequests: number;
     averageResponseTime: number;
     slaCompliance: number;
     escalationRate: number;
 
+}
 export interface RevisionRequestTrends {
-    requestVolume: Array<{,
+    requestVolume: Array<{
         date: string;
         count: number;
         priority: Record<RevisionRequestPriority, number>;
+}
     }>;
-    completionTrends: Array<{,
+    completionTrends: Array<{
         date: string;
         completed: number;
         averageTime: number;
     }>;
-    contentTypeTrends: Array<{,
+    contentTypeTrends: Array<{
         contentType: RevisionContentType;
         trend: 'increasing' | 'decreasing' | 'stable';
         changePercent: number;
     }>;
 
+}
 export interface RevisionRequestInsight {
     type: 'bottleneck' | 'opportunity' | 'risk' | 'trend';
     title: string;
@@ -323,6 +349,7 @@ export interface RevisionRequestInsight {
     recommendedActions: string[];
     relatedRequests?: string[];
 
+}
 export interface RevisionRequestRecommendation {
     category: 'process_improvement' | 'resource_allocation' | 'automation' | 'training';
     priority: 'low' | 'medium' | 'high' | 'critical';
@@ -333,9 +360,11 @@ export interface RevisionRequestRecommendation {
         complexity: 'low' | 'medium' | 'high';
         timeframe: string;
         requirements: string[];
+}
     };
     metrics: string[];
 
+}
 export interface RevisionRequestExportRequest {
     format: 'csv' | 'json' | 'excel';
     query: RevisionRequestSearchQuery;
@@ -344,6 +373,7 @@ export interface RevisionRequestExportRequest {
     includeTimeline?: boolean;
     includeComments?: boolean;
 
+}
 export interface RevisionRequestConfig {
     enableAutoAssignment: boolean;
     defaultReviewerAssignment: 'round_robin' | 'workload_based' | 'skill_based';
@@ -360,6 +390,7 @@ export interface RevisionRequestConfig {
         onComment: boolean;
         onDueDate: boolean;
         onOverdue: boolean;
+}
     };
     maxEvidenceFiles: number;
     maxFileSizeMB: number;
@@ -382,6 +413,7 @@ export declare     description: string;
     tags?: string[];
 };
 
+}
 export type RevisionRequestUpdateSchema = Partial<RevisionRequestCreateSchema> & {
     status?: RevisionRequestStatus;
     reviewerId?: string;
@@ -391,6 +423,7 @@ export type RevisionRequestUpdateSchema = Partial<RevisionRequestCreateSchema> &
     implementationNotes?: string;
 };
 
+}
 export type RevisionEvidenceCreateSchema = {
     evidenceType: RevisionEvidenceType;
     title: string;
@@ -398,6 +431,7 @@ export type RevisionEvidenceCreateSchema = {
     file?: File;
 };
 
+}
 export type RevisionCommentCreateSchema = {
     content: string;
     parentCommentId?: string;

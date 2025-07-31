@@ -29,6 +29,7 @@ import {
 
 // User session recording interfaces
 
+}
 export interface UserSessionRecordingProps {
   sessionConfig: SessionRecordingConfig;
   analyticsInfrastructure: ConversionAnalyticsInfrastructure;
@@ -39,6 +40,8 @@ export interface UserSessionRecordingProps {
   onPatternDetected?: (pattern: BehaviorPattern) => void;
   onExport?: (data: SessionRecordingExportData) => void;
 }
+}
+}
 export interface SessionRecordingConfig {
   enabledFeatures: SessionFeature;
   recordingSettings: RecordingSettings;
@@ -47,6 +50,7 @@ export interface SessionRecordingConfig {
   replaySettings: ReplaySettings;
   privacySettings: SessionPrivacySettings;
   performanceSettings: PerformanceSettings;
+}
 }
 export type SessionFeature = 
   | 'mouse_tracking'
@@ -60,6 +64,7 @@ export type SessionFeature =
   | 'console_logs'
   | 'error_tracking';
 
+}
 export interface RecordingSettings {
   maxSessionDuration: number; // milliseconds,
   samplingRate: number; // 0-1,
@@ -69,11 +74,15 @@ export interface RecordingSettings {
   maskSensitiveData: boolean;
   captureThreshold: CaptureThreshold;
 }
+}
+}
 export interface CaptureThreshold {
   minInteractionGap: number; // milliseconds,
   maxIdleTime: number; // milliseconds,
   minSessionLength: number; // milliseconds,
   qualityThreshold: number; // 0-1,
+}
+}
 }
 export interface AnalysisSettings {
   enableRealTimeAnalysis: boolean;
@@ -82,6 +91,8 @@ export interface AnalysisSettings {
   anomalyDetection: AnomalyDetectionSettings;
   performanceAnalysis: PerformanceAnalysisSettings;
 }
+}
+}
 export interface PatternRecognitionSettings {
   enableMousePatterns: boolean;
   enableNavigationPatterns: boolean;
@@ -89,6 +100,7 @@ export interface PatternRecognitionSettings {
   enableTemporalPatterns: boolean;
   confidenceThreshold: number;
   patternCategories: PatternCategory;
+}
 }
 export type PatternCategory = 
   | 'navigation'
@@ -100,6 +112,7 @@ export type PatternCategory =
   | 'exploration'
   | 'decision_making';
 
+}
 export interface HeatmapSettings {
   enableClickHeatmaps: boolean;
   enableScrollHeatmaps: boolean;
@@ -108,8 +121,10 @@ export interface HeatmapSettings {
   resolution: HeatmapResolution;
   aggregationPeriod: number; // hours,
 }
+}
 export type HeatmapResolution = 'low' | 'medium' | 'high' | 'ultra';
 
+}
 export interface AnomalyDetectionSettings {
   enableBehaviorAnomalies: boolean;
   enablePerformanceAnomalies: boolean;
@@ -117,12 +132,16 @@ export interface AnomalyDetectionSettings {
   sensitivityLevel: 'low' | 'medium' | 'high';
   alertThresholds: AnomalyThreshold;
 }
+}
+}
 export interface AnomalyThreshold {
   metric: string;
   threshold: number;
   timeWindow: number; // minutes,
   severity: 'low' | 'medium' | 'high' | 'critical'
+}
   }
+}
 export interface PerformanceAnalysisSettings {
   trackPageLoadTimes: boolean;
   trackInteractionLatency: boolean;
@@ -130,10 +149,14 @@ export interface PerformanceAnalysisSettings {
   trackMemoryUsage: boolean;
   performanceThresholds: PerformanceThreshold;
 }
+}
+}
 export interface PerformanceThreshold {
   metric: 'load_time' | 'interaction_delay' | 'render_time' | 'memory_usage';
   warningThreshold: number;
   criticalThreshold: number;
+}
+}
 }
 export interface StorageSettings {
   retentionPeriod: number; // days,
@@ -143,11 +166,15 @@ export interface StorageSettings {
   cloudStorageEnabled: boolean;
   storageQuota: StorageQuota;
 }
+}
+}
 export interface StorageQuota {
   maxSessionSize: number; // MB,
   maxTotalSize: number; // MB,
   cleanupPolicy: 'oldest_first' | 'largest_first' | 'least_accessed'
+}
   }
+}
 export interface ReplaySettings {
   enableSessionReplay: boolean;
   replaySpeed: number; // 0.5x to 4x,
@@ -155,6 +182,8 @@ export interface ReplaySettings {
   maxInactivitySkip: number; // seconds,
   replayQuality: 'low' | 'medium' | 'high';
   enableControls: boolean;
+}
+}
 }
 export interface SessionPrivacySettings {
   consentRequired: boolean;
@@ -167,6 +196,8 @@ export interface SessionPrivacySettings {
   anonymizeUserData: boolean;
   gdprCompliant: boolean;
 }
+}
+}
 export interface PerformanceSettings {
   maxCpuUsage: number; // percentage,
   maxMemoryUsage: number; // MB,
@@ -174,6 +205,8 @@ export interface PerformanceSettings {
   batchProcessing: boolean;
   workerThreads: boolean;
   // Session data structures
+}
+}
 }
 export interface UserSession {
   sessionId: string;
@@ -189,6 +222,8 @@ export interface UserSession {
   metadata: SessionMetadata;
   analysis?: SessionAnalysis;
 }
+}
+}
 export interface SessionPageView {
   pageId: string;
   url: string;
@@ -199,12 +234,15 @@ export interface SessionPageView {
   scrollDepth: number;
   interactions: number;
   exitType: 'navigation' | 'close' | 'refresh' | 'timeout'
+}
   }
+}
 export interface SessionInteraction {
   interactionId: string;
   type: InteractionType;
   element: InteractionElement;
   timestamp: number;
+}
   coordinates?: { x: number; y: number };
   value?: string;
   context: InteractionContext;
@@ -223,6 +261,7 @@ export type InteractionType =
   | 'focus'
   | 'blur';
 
+}
 export interface InteractionElement {
   tagName: string;
   id?: string;
@@ -232,12 +271,16 @@ export interface InteractionElement {
   selector: string;
   attributes: Record<string, string>;
 }
+}
+}
 export interface InteractionContext {
   pageUrl: string;
+}
   viewportSize: { width: number; height: number };
   scrollPosition: { x: number; y: number };
   timestamp: number;
   userAgent: string;
+}
 }
 export interface NavigationEvent {
   eventId: string;
@@ -247,9 +290,11 @@ export interface NavigationEvent {
   timestamp: number;
   loadTime: number;
   method: 'link' | 'button' | 'form' | 'direct' | 'back' | 'forward'
+}
   }
 export type NavigationType = 'page_load' | 'navigation' | 'redirect' | 'back' | 'forward' | 'refresh';
 
+}
 export interface SessionPerformance {
   totalLoadTime: number;
   averageResponseTime: number;
@@ -259,11 +304,15 @@ export interface SessionPerformance {
   networkRequests: NetworkRequest;
   errors: SessionError;
 }
+}
+}
 export interface MemoryUsage {
   peak: number;
   average: number;
   finalUsage: number;
   gcEvents: number;
+}
+}
 }
 export interface NetworkRequest {
   url: string;
@@ -272,6 +321,8 @@ export interface NetworkRequest {
   duration: number;
   size: number;
   timestamp: number;
+}
+}
 }
 export interface SessionError {
   type: 'javascript' | 'network' | 'console' | 'crash';
@@ -282,9 +333,12 @@ export interface SessionError {
   line?: number;
   column?: number;
 }
+}
+}
 export interface SessionMetadata {
   userAgent: string;
   platform: string;
+}
   screenResolution: { width: number; height: number };
   viewportSize: { width: number; height: number };
   timezone: string;
@@ -295,6 +349,7 @@ export interface SessionMetadata {
   browserVersion: string;
 
 // Session analysis structures
+}
 }
 export interface SessionAnalysis {
   sessionId: string;
@@ -308,6 +363,8 @@ export interface SessionAnalysis {
   recommendations: SessionRecommendation;
   heatmapData: HeatmapData;
 }
+}
+}
 export interface SessionScore {
   overall: number; // 0-100,
   engagement: number;
@@ -315,6 +372,8 @@ export interface SessionScore {
   conversion: number;
   performance: number;
   quality: number;
+}
+}
 }
 export interface BehaviorPattern {
   patternId: string;
@@ -327,11 +386,15 @@ export interface BehaviorPattern {
   examples: PatternExample;
   insights: string;
 }
+}
+}
 export interface PatternExample {
   sessionId: string;
   timestamp: number;
   description: string;
   context: string;
+}
+}
 }
 export interface NavigationAnalysis {
   totalPages: number;
@@ -343,18 +406,24 @@ export interface NavigationAnalysis {
   backtrackingRate: number;
   directNavigationRate: number;
 }
+}
+}
 export interface PageExit {
   url: string;
   exitRate: number;
   averageTimeOnPage: number;
   exitType: 'navigation' | 'close' | 'timeout'
+}
   }
+}
 export interface FlowPath {
   fromPage: string;
   toPage: string;
   frequency: number;
   averageTime: number;
   conversionRate?: number;
+}
+}
 }
 export interface EngagementMetrics {
   totalInteractions: number;
@@ -366,12 +435,16 @@ export interface EngagementMetrics {
   attentionSpan: number; // seconds,
   focusedTime: number;
 }
+}
+}
 export interface ConversionIndicator {
   indicatorType: 'positive' | 'negative' | 'neutral';
   strength: number; // 0-1,
   description: string;
   relatedActions: string;
   timestamp: number;
+}
+}
 }
 export interface SessionAnomaly {
   anomalyId: string;
@@ -382,11 +455,15 @@ export interface SessionAnomaly {
   context: string;
   impact: AnomalyImpact;
 }
+}
+}
 export interface AnomalyImpact {
   userExperience: 'positive' | 'negative' | 'neutral';
   performance: 'improved' | 'degraded' | 'unchanged';
   conversion: 'helpful' | 'harmful' | 'neutral'
+}
   }
+}
 export interface SessionRecommendation {
   recommendationId: string;
   type: RecommendationType;
@@ -396,6 +473,7 @@ export interface SessionRecommendation {
   implementation: ImplementationGuide;
   expectedImpact: ImpactEstimate;
 }
+}
 export type RecommendationType = 
   | 'ui_improvement'
   | 'performance_optimization'
@@ -404,11 +482,14 @@ export type RecommendationType =
   | 'technical_fix'
   | 'user_experience';
 
+}
 export interface ImplementationGuide {
   steps: string;
   complexity: 'low' | 'medium' | 'high';
   estimatedEffort: string;
   requiredSkills: string;
+}
+}
 }
 export interface ImpactEstimate {
   conversionImprovement: number; // percentage,
@@ -416,11 +497,15 @@ export interface ImpactEstimate {
   performanceImprovement: number; // percentage,
   confidenceLevel: number; // 0-1,
 }
+}
+}
 export interface HeatmapData {
   clickHeatmap: HeatmapPoint;
   scrollHeatmap: ScrollHeatmapData;
   hoverHeatmap: HeatmapPoint;
   attentionHeatmap: AttentionHeatmapData;
+}
+}
 }
 export interface HeatmapPoint {
   x: number;
@@ -428,10 +513,14 @@ export interface HeatmapPoint {
   intensity: number; // 0-1,
   count: number;
 }
+}
+}
 export interface ScrollHeatmapData {
   depth: number; // 0-100 percentage,
   frequency: number;
   averageTime: number;
+}
+}
 }
 export interface AttentionHeatmapData {
   element: string;
@@ -440,6 +529,8 @@ export interface AttentionHeatmapData {
   viewCount: number;
   interactionRate: number;
   // Export data structure
+}
+}
 }
 export interface SessionRecordingExportData {
   sessions: UserSession;
@@ -450,6 +541,7 @@ export interface SessionRecordingExportData {
   metadata: {;
   exportTimestamp: number;
   totalSessions: number;
+}
     dateRange: { start: number; end: number };
     analysisVersion: string;
   };

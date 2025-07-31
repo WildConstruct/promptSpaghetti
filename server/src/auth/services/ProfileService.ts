@@ -6,6 +6,7 @@ import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from './AuditService';
 
 }
+}
 export interface ProfileUpdateData {
   displayName?: string;
   firstName?: string;
@@ -15,7 +16,9 @@ export interface ProfileUpdateData {
   locale?: string;
 }
 }
+}
 
+}
 }
 export interface ProfileImageData {
   originalName: string;
@@ -24,14 +27,18 @@ export interface ProfileImageData {
   buffer: Buffer;
 }
 }
+}
 
+}
 }
 export interface PreferencesData {
   category: string;
   settings: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface NotificationPreferences {
   email: {
@@ -42,6 +49,7 @@ export interface NotificationPreferences {
       system: boolean;
       updates: boolean;
       marketing: boolean;
+}
 }
     };
   };

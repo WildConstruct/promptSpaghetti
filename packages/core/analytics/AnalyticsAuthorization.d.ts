@@ -56,6 +56,7 @@ export declare enum AnalyticsPermission {
     MANAGE_INTEGRATIONS = "analytics:manage_integrations",
     VIEW_INTEGRATION_ANALYTICS = "analytics:view_integration_analytics"
 
+}
 export interface AuthorizationPolicy {
     id: string;
     name: string;
@@ -64,6 +65,7 @@ export interface AuthorizationPolicy {
     priority: number;
     enabled: boolean;
 
+}
 export interface AuthorizationRule {
     id: string;
     condition: {
@@ -75,6 +77,7 @@ export interface AuthorizationRule {
         organizationMatch?: 'self' | 'any';
         requiredPermissions: string[];
         requiredRoles?: string[];
+}
     };
     action: 'allow' | 'deny';
     fields?: {
@@ -83,6 +86,7 @@ export interface AuthorizationRule {
         redacted?: string[];
     };
 
+}
 export interface AuthorizationResult {
     allowed: boolean;
     reason?: string;
@@ -121,6 +125,7 @@ export declare class AnalyticsAuthorizationService {
         allowed: boolean;
         filteredQuery?: EventFilter;
         reason?: string;
+}
     }>;
     /**
      * Authorize dashboard access

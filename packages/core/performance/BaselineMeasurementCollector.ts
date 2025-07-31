@@ -11,6 +11,7 @@ import {
   PerformanceMeasurement 
 } from './PerformanceBaselines';
 import { measureExecution } from '../utils';
+}
 interface SystemInfo {
   nodeVersion: string;
   platform: string;
@@ -45,6 +46,7 @@ interface SystemInfo {
   arch: process.arch,
   memory: process.memoryUsage(),
   cpuUsage: process.cpuUsage(),
+}
 };
   /**
    * Initialize performance benchmarks based on actual system capabilities
@@ -106,6 +108,7 @@ interface SystemInfo {
    * Measure simple graph execution performance
    */
   private async measureSimpleGraphExecution(): Promise<number> {
+
     // Create a simple graph for testing
     const simpleGraph = {
       nodes: [,
@@ -123,6 +126,7 @@ interface SystemInfo {
    * Measure complex graph execution performance
    */
   private async measureComplexGraphExecution(): Promise<number> {
+
     // Create a complex graph for testing
     const complexGraph = {
       nodes: Array.from({ length: 20 }, (_, i) => ({)
@@ -150,6 +154,7 @@ interface SystemInfo {
    * Measure graph execution throughput
    */
   private async measureExecutionThroughput(): Promise<number> {
+
     const startTime = Date.now();
     const testDuration = 5000; // 5 seconds;
     let executions = 0;
@@ -162,6 +167,7 @@ interface SystemInfo {
    * Measure graph memory usage
    */
   private async measureGraphMemoryUsage(): Promise<number> {
+
     const beforeMemory = process.memoryUsage();
     // Create multiple graphs to measure memory impact
     const graphs = Array.from({ length: 100 }, (_, i) => ({)
@@ -185,6 +191,7 @@ interface SystemInfo {
    * Measure peak heap usage during intensive operations
    */
   private async measurePeakHeapUsage(): Promise<number> {
+
     let peakHeap = 0;
     const interval = setInterval(() => {
       const currentHeap = process.memoryUsage().heapUsed;
@@ -199,6 +206,7 @@ interface SystemInfo {
    * Measure TypeScript compilation performance
    */
   private async measureTypeScriptCompilation(): Promise<number> {
+
     const { duration } = await measureExecution('typescript-compilation', async () => {
       // Simulate TypeScript compilation time based on project size
       const projectComplexity = 1000; // Simulate medium project;
@@ -211,6 +219,7 @@ interface SystemInfo {
    * Collect baseline measurements for all benchmarks
    */
   async collectBaselines(iterations: number = 5): Promise<void> {
+
     console.log('🔧 Collecting performance baseline measurements...');
     console.log(`📊 Running ${iterations} iterations per benchmark`);}
     // Create all baseline definitions first
@@ -358,13 +367,13 @@ interface SystemInfo {
   getSystemInfo(): SystemInfo {,
   return this.systemInfo;
   // Export utility function for easy baseline collection
-  export async function collectSystemBaselines(()
-  environment: TestEnvironment = TestEnvironment.DEVELOPMENT,
+  export async function collectSystemBaselines((environment: TestEnvironment = TestEnvironment.DEVELOPMENT,
   iterations: number = 5): Promise<{,
   report: any;
   collection: any;
   systemInfo: SystemInfo;
 }> {
+
   const collector = new BaselineMeasurementCollector(environment);
   await collector.collectBaselines(iterations);
   return {

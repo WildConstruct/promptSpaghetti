@@ -21,11 +21,13 @@ import {
 import { RuleTestingFramework, TestSuite, TestResult, RuleTestType, TestReport } from './RuleTestingFramework';
 // ValidationRulesEngine integration (to be implemented when available)
 }
+}
 interface ValidationRulesEngine {
   validateRules: (rules: unknown[]) => Promise<{ isValid: boolean; errors: string[] }>;
   getValidationReport: () => Promise<{ passed: number; failed: number }>;
 }
 
+}
 }
 export interface TestEnvironmentConfig {
   name: string;
@@ -36,6 +38,7 @@ export interface TestEnvironmentConfig {
     maxExecutionTime: number;
     maxRuleCount: number;
     maxConcurrency: number;
+}
 }
   };
   data: {
@@ -51,6 +54,7 @@ export interface TestEnvironmentConfig {
 }
 
 }
+}
 export interface TestEnvironmentMetrics {
   totalTests: number;
   passedTests: number;
@@ -62,6 +66,7 @@ export interface TestEnvironmentMetrics {
     frameworks: number;
     scenarios: number;
 }
+}
   };
   performance: {
     avgExecutionTime: number;
@@ -70,6 +75,7 @@ export interface TestEnvironmentMetrics {
   };
 }
 
+}
 }
 export interface TestScenario {
   id: string;
@@ -83,15 +89,18 @@ export interface TestScenario {
     maxExecutionTime: number;
     expectedRulesPerSecond: number;
 }
+}
   };
 }
 
+}
 }
 export interface EnvironmentSetup {
   databases: {
     test: boolean;
     staging: boolean;
     production: boolean;
+}
 }
   };
   services: {

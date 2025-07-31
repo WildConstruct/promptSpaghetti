@@ -9,6 +9,7 @@
 import { PluginSource, LoadedPlugin } from './PluginLoader';
 import { EventEmitter } from 'events';
 
+}
 export interface RemotePlugin {
     id: string;
     name: string;
@@ -27,6 +28,7 @@ export interface RemotePlugin {
     updatedAt: Date;
 
 
+}
 export interface PluginUpdate {
     pluginId: string;
     currentVersion: string;
@@ -36,6 +38,7 @@ export interface PluginUpdate {
     breaking: boolean;
 
 
+}
 export interface PluginRegistryConfig {
     cacheDirectory: string;
     autoUpdateCheck: boolean;
@@ -47,6 +50,7 @@ export interface PluginRegistryConfig {
     developmentMode: boolean;
 
 
+}
 export interface PluginInstallOptions {
     version?: string;
     skipDependencies?: boolean;
@@ -55,6 +59,7 @@ export interface PluginInstallOptions {
     activateAfterInstall?: boolean;
 
 
+}
 export interface PluginSearchOptions {
     query?: string;
     category?: string;
@@ -67,6 +72,7 @@ export interface PluginSearchOptions {
     sortOrder?: 'asc' | 'desc';
 
 
+}
 export interface PluginRegistryStats {
     totalPlugins: number;
     activePlugins: number;
@@ -143,3 +149,4 @@ export declare class PluginRegistry extends EventEmitter {
     private removePluginData;
 
 //# sourceMappingURL=PluginRegistry.d.ts.map
+}

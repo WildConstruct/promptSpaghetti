@@ -16,6 +16,7 @@ import {
   Settings,
   Activity
 } from 'lucide-react';
+}
 interface Team {
   id: string;
   organizationId: string;
@@ -40,14 +41,18 @@ interface Team {
   firstName?: string;
   lastName?: string;
   avatarUrl?: string;
+}
 };
+}
 interface CreateTeamData {
   name: string;
   description?: string;
   parentTeamId?: string;
   settings?: Record<string, unknown>;
+}
 interface TeamManagerProps {
   organizationId: string;
+}
   currentUser?: { id: string; name: string; email: string; role: string };
   onTeamChange?: (team: Team) => void;
   onMembershipUpdated?: (membership: { id: string; userId: string; teamId: string; role: string }) => void;

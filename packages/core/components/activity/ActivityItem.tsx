@@ -4,6 +4,7 @@
  */
 import React from 'react';
 import { ActivityEventWithActorInfo } from '../../types/workspace';
+}
 interface ActivityItemProps {
   activity: ActivityEventWithActorInfo;
   onClick?: () => void;
@@ -16,6 +17,7 @@ interface ActivityItemProps {
   compact = false,
   showProject = true,
   isLast = false
+}
 }) => {
   const getActivityIcon = (eventType: string) => {,
   if (eventType.includes('created')) return '✨';

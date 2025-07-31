@@ -12,6 +12,7 @@ import { EventEmitter } from 'events';
 import { PolicyType, PolicyUpdateRequest, PolicyVersion, PolicyDeployment, DeploymentType, DeploymentStatus, ValidationType, ValidationStatus, RiskLevel, UpdatePriority, VersionStatus } from '../../../server/src/services/PolicyUpdateWorkflowService.ts';
 export { PolicyType, PolicyUpdateRequest, PolicyVersion, PolicyDeployment, DeploymentType, DeploymentStatus, ValidationType, ValidationStatus, RiskLevel, UpdatePriority, VersionStatus };
 
+}
 export interface PolicyPreviewConfig {
     enableStagingEnvironments: boolean;
     enableImpactSimulation: boolean;
@@ -22,6 +23,7 @@ export interface PolicyPreviewConfig {
     stagingEnvironments: StagingEnvironment[];
     defaultValidations: ValidationType[];
 
+}
 export interface StagingEnvironment {
     environmentId: string;
     name: string;
@@ -34,6 +36,7 @@ export interface StagingEnvironment {
     monitoringEnabled: boolean;
     features: EnvironmentFeature[];
 
+}
 export interface EnvironmentFeature {
     feature: string;
     enabled: boolean;
@@ -46,6 +49,7 @@ export declare enum EnvironmentType {
     CANARY = "CANARY",
     PREVIEW = "PREVIEW"
 
+}
 export interface PolicyPreview {
     previewId: string;
     policyId: string;
@@ -64,6 +68,7 @@ export interface PolicyPreview {
     userFeedback: UserFeedback[];
     metadata: Record<string, any>;
 
+}
 export interface PreviewChange {
     changeId: string;
     section: string;
@@ -84,6 +89,7 @@ export declare enum PreviewStatus {
     REJECTED = "REJECTED",
     EXPIRED = "EXPIRED"
 
+}
 export interface StagingDeployment {
     deploymentId: string;
     previewId: string;
@@ -106,6 +112,7 @@ export declare enum StagingDeploymentStatus {
     COMPLETED = "COMPLETED",
     FAILED = "FAILED"
 
+}
 export interface StagingMetrics {
     userInteractions: number;
     consentRates: number;
@@ -116,6 +123,7 @@ export interface StagingMetrics {
     accessibilityScore: number;
     securityScore: number;
 
+}
 export interface StagingIssue {
     issueId: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
@@ -142,6 +150,7 @@ export declare enum IssueStatus {
     RESOLVED = "RESOLVED",
     IGNORED = "IGNORED"
 
+}
 export interface IssueResolution {
     resolvedBy: string;
     resolvedAt: Date;
@@ -149,6 +158,7 @@ export interface IssueResolution {
     changeRequired: boolean;
     fixApplied: boolean;
 
+}
 export interface RollbackTrigger {
     triggerType: RollbackTriggerType;
     threshold: number;
@@ -164,6 +174,7 @@ export declare enum RollbackTriggerType {
     SECURITY_INCIDENT = "SECURITY_INCIDENT",
     MANUAL_TRIGGER = "MANUAL_TRIGGER"
 
+}
 export interface PreviewValidationResult {
     validationId: string;
     validationType: ValidationType;
@@ -176,6 +187,7 @@ export interface PreviewValidationResult {
     validatedAt: Date;
     validatorInfo: ValidatorInfo;
 
+}
 export interface ValidationFinding {
     findingId: string;
     severity: 'info' | 'warning' | 'error' | 'critical';
@@ -186,12 +198,14 @@ export interface ValidationFinding {
     suggestion?: string;
     autoFixable: boolean;
 
+}
 export interface ValidatorInfo {
     validatorId: string;
     validatorType: 'automated' | 'human' | 'hybrid';
     version: string;
     credentials?: string[];
 
+}
 export interface ImpactSimulation {
     simulationId: string;
     scenarios: SimulationScenario[];
@@ -201,6 +215,7 @@ export interface ImpactSimulation {
     duration: number;
     methodology: string;
 
+}
 export interface SimulationScenario {
     scenarioId: string;
     name: string;
@@ -210,18 +225,21 @@ export interface SimulationScenario {
     simulatedActions: SimulatedAction[];
     expectedOutcomes: ExpectedOutcome[];
 
+}
 export interface SimulatedAction {
     action: string;
     parameters: Record<string, any>;
     expectedResponse: string;
     timing: number;
 
+}
 export interface ExpectedOutcome {
     metric: string;
     expectedValue: number;
     tolerance: number;
     critical: boolean;
 
+}
 export interface SimulationResult {
     scenarioId: string;
     actualOutcomes: ActualOutcome[];
@@ -231,6 +249,7 @@ export interface SimulationResult {
     failedTests: number;
     recommendations: string[];
 
+}
 export interface ActualOutcome {
     metric: string;
     actualValue: number;
@@ -238,6 +257,7 @@ export interface ActualOutcome {
     variance: number;
     acceptable: boolean;
 
+}
 export interface OutcomeDeviation {
     metric: string;
     deviationType: 'positive' | 'negative' | 'unexpected';
@@ -246,6 +266,7 @@ export interface OutcomeDeviation {
     impact: string;
     recommendedAction: string;
 
+}
 export interface UserFeedback {
     feedbackId: string;
     userId: string;
@@ -274,6 +295,7 @@ export declare enum FeedbackCategory {
     BUG_REPORT = "BUG_REPORT",
     QUESTION = "QUESTION"
 
+}
 export interface PreviewAnalytics {
     previewId: string;
     totalInteractions: number;
@@ -285,12 +307,14 @@ export interface PreviewAnalytics {
     userJourney: UserJourneyStep[];
     conversionFunnel: ConversionStep[];
 
+}
 export interface DropOffPoint {
     section: string;
     dropOffRate: number;
     userCount: number;
     commonReasons: string[];
 
+}
 export interface HeatmapData {
     element: string;
     interactionType: string;
@@ -298,8 +322,10 @@ export interface HeatmapData {
     coordinates: {
         x: number;
         y: number;
+}
     };
 
+}
 export interface UserJourneyStep {
     step: number;
     section: string;
@@ -307,6 +333,7 @@ export interface UserJourneyStep {
     averageTime: number;
     successRate: number;
 
+}
 export interface ConversionStep {
     stepName: string;
     usersEntered: number;
@@ -314,6 +341,7 @@ export interface ConversionStep {
     conversionRate: number;
     averageTime: number;
 
+}
 export interface PolicyComparisonReport {
     comparisonId: string;
     baseVersion: string;
@@ -324,6 +352,7 @@ export interface PolicyComparisonReport {
     complianceComparison: ComplianceComparison;
     generatedAt: Date;
 
+}
 export interface PolicyDifference {
     section: string;
     type: 'added' | 'removed' | 'modified' | 'moved';
@@ -333,6 +362,7 @@ export interface PolicyDifference {
     userVisible: boolean;
     legalImplications: string[];
 
+}
 export interface ComparisonImpactAnalysis {
     overallRisk: RiskLevel;
     affectedUserSegments: string[];
@@ -340,6 +370,7 @@ export interface ComparisonImpactAnalysis {
     timelineRecommendations: TimelineRecommendation[];
     rollbackComplexity: 'simple' | 'moderate' | 'complex' | 'very_complex';
 
+}
 export interface RequiredAction {
     action: string;
     priority: UpdatePriority;
@@ -347,6 +378,7 @@ export interface RequiredAction {
     responsible: string;
     dependencies: string[];
 
+}
 export interface TimelineRecommendation {
     phase: string;
     duration: number;
@@ -354,6 +386,7 @@ export interface TimelineRecommendation {
     dependencies: string[];
     risks: string[];
 
+}
 export interface UserImpactAssessment {
     totalAffectedUsers: number;
     segmentBreakdown: SegmentImpact[];
@@ -361,6 +394,7 @@ export interface UserImpactAssessment {
     trainingRequirements: TrainingRequirement[];
     supportTicketEstimate: number;
 
+}
 export interface SegmentImpact {
     segment: string;
     userCount: number;
@@ -368,6 +402,7 @@ export interface SegmentImpact {
     specificChanges: string[];
     requiredActions: string[];
 
+}
 export interface CommunicationRequirement {
     channel: string;
     audience: string;
@@ -375,6 +410,7 @@ export interface CommunicationRequirement {
     timing: string;
     priority: 'low' | 'medium' | 'high' | 'urgent';
 
+}
 export interface TrainingRequirement {
     audience: string;
     trainingType: string;
@@ -382,6 +418,7 @@ export interface TrainingRequirement {
     materials: string[];
     deadline: Date;
 
+}
 export interface ComplianceComparison {
     frameworks: FrameworkComparison[];
     overallComplianceChange: 'improved' | 'maintained' | 'degraded';
@@ -389,6 +426,7 @@ export interface ComplianceComparison {
     removedRequirements: string[];
     modifiedRequirements: string[];
 
+}
 export interface FrameworkComparison {
     framework: string;
     beforeScore: number;
@@ -415,6 +453,7 @@ export declare class PolicyPreviewStagingService extends EventEmitter {
         expirationDays?: number;
         enableSimulation?: boolean;
         targetEnvironments?: string[];
+}
     }): Promise<PolicyPreview>;
     /**
      * Deploy preview to staging environment

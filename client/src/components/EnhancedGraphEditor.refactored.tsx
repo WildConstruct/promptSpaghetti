@@ -38,52 +38,54 @@ import {
 import { TemplateSelector, useNodeFactory } from './GraphTemplates';
 
 // Professional Design System (kept from original)
+}
 interface ProfessionalColors {
-  background: {,
+  background: {
   primary: string;,
-  secondary: string;
+  secondary: string,
   tertiary: string;
+}
 };
-  text: {,
-  primary: string;
+  text: {
+  primary: string,
   secondary: string;,
   accent: string;
 };
-  accent: {,
-  orange: string;
+  accent: {
+  orange: string,
   blue: string;,
-  cyan: string;
+  cyan: string,
   purple: string;,
-  green: string;
+  green: string,
   red: string;
 };
-  nodes: {,
-  text: string;
+  nodes: {
+  text: string,
   logic: string;,
-  output: string;
+  output: string,
   variable: string;,
-  advanced: string;
+  advanced: string,
   transform: string;
 };
-  ui: {,
-  border: string;
+  ui: {
+  border: string,
   borderHover: string;,
-  borderActive: string;
+  borderActive: string,
   hover: string;,
   selection: string;
 };
 const professionalColors: ProfessionalColors = {,
-  background: {,
+  background: {
   primary: '#1e1e1e',
   secondary: '#2a2a2a',
   tertiary: '#353535',
 },
-  text: {,
+  text: {
   primary: '#e8e8e8',
   secondary: '#b8b8b8',
   accent: '#ff7c00',
 },
-  accent: {,
+  accent: {
   orange: '#ff7c00',
   blue: '#4a9eff',
   cyan: '#00d4ff',
@@ -91,7 +93,7 @@ const professionalColors: ProfessionalColors = {,
   green: '#4ade80',
   red: '#ef4444',
 },
-  nodes: {,
+  nodes: {
   text: '#4f46e5',
   logic: '#059669',
   output: '#dc2626',
@@ -99,7 +101,7 @@ const professionalColors: ProfessionalColors = {,
   advanced: '#6366f1',
   transform: '#f59e0b',
 },
-  ui: {,
+  ui: {
   border: '#404040',
   borderHover: '#5a5a5a',
   borderActive: '#ff7c00',
@@ -107,14 +109,14 @@ const professionalColors: ProfessionalColors = {,
   selection: '#ff7c0040',
 };
 const professionalShadows = {
-  node: {,
+  node: {
   default: '0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.2)',
   hover: '0 8px 25px rgba(0, 0, 0, 0.45), 0 4px 10px rgba(0, 0, 0, 0.25)',
   selected: '0 0 0 2px #ff7c00, 0 8px 25px rgba(255, 124, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.4)',
 };
 
 // Node components
-const TextNode = ({ data, selected }: { data: any; selected: boolean }) => ()
+const TextNode = ({ data, selected }: { data: any, selected: boolean }) => ()
   <div className={`bg-slate-800 border-2 rounded-xl p-4 min-w-[200px] transition-all duration-200 ${
   selected ? 'border-orange-500 shadow-orange-glow' : 'border-slate-600 hover:border-slate-500',
 }`} style={{ boxShadow: selected ? professionalShadows.node.selected : professionalShadows.node.default }}>
@@ -124,7 +126,7 @@ const TextNode = ({ data, selected }: { data: any; selected: boolean }) => ()
     <Handle type="source" position={Position.Bottom} className="w-3 h-3 bg-slate-600" />
   </div>
 );
-const LogicNode = ({ data, selected }: { data: any; selected: boolean }) => ()
+const LogicNode = ({ data, selected }: { data: any, selected: boolean }) => ()
   <div className={`bg-emerald-900 border-2 rounded-xl p-4 min-w-[220px] transition-all duration-200 ${
   selected ? 'border-orange-500 shadow-orange-glow' : 'border-emerald-600 hover:border-emerald-500',
 }`} style={{ boxShadow: selected ? professionalShadows.node.selected : professionalShadows.node.default }}>
@@ -139,7 +141,7 @@ const LogicNode = ({ data, selected }: { data: any; selected: boolean }) => ()
     <Handle type="source" position={Position.Bottom} className="w-3 h-3 bg-emerald-600" />
   </div>
 );
-const TransformNode = ({ data, selected }: { data: any; selected: boolean }) => ()
+const TransformNode = ({ data, selected }: { data: any, selected: boolean }) => ()
   <div className={`bg-amber-900 border-2 rounded-xl p-4 min-w-[220px] transition-all duration-200 ${
   selected ? 'border-orange-500 shadow-orange-glow' : 'border-amber-600 hover:border-amber-500',
 }`} style={{ boxShadow: selected ? professionalShadows.node.selected : professionalShadows.node.default }}>
@@ -154,7 +156,7 @@ const TransformNode = ({ data, selected }: { data: any; selected: boolean }) => 
     <Handle type="source" position={Position.Bottom} className="w-3 h-3 bg-amber-600" />
   </div>
 );
-const OutputNode = ({ data, selected }: { data: any; selected: boolean }) => ()
+const OutputNode = ({ data, selected }: { data: any, selected: boolean }) => ()
   <div className={`bg-red-900 border-2 rounded-xl p-4 min-w-[200px] transition-all duration-200 ${
   selected ? 'border-orange-500 shadow-orange-glow' : 'border-red-600 hover:border-red-500',
 }`} style={{ boxShadow: selected ? professionalShadows.node.selected : professionalShadows.node.default }}>
@@ -176,7 +178,7 @@ const createDefaultNodes = (): Node => [;
     id: "start-1",
     type: "text",
     position: { x: 200, y: 100 },
-    data: {,
+    data: {
   label: "Tech Panel Generator",
   description: "Anachronistic Tech Panel Generator - Creates retro-futuristic interface prompts",
   category: "content",
@@ -188,7 +190,7 @@ const createDefaultNodes = (): Node => [;
     id: "faction-4",
     type: "logic",
     position: { x: 800, y: 50 },
-    data: {,
+    data: {
   label: "Faction Alignment",
   description: "Empire/Corporate, Rebel/Resistance, Civilian/Smuggler, etc.",
   category: "logic",
@@ -200,7 +202,7 @@ const createDefaultNodes = (): Node => [;
     id: "screen-8",
     type: "logic",
     position: { x: 200, y: 250 },
-    data: {,
+    data: {
   label: "Screen Type",
   description: "CRT, LED Matrix, Hologram, etc.",
   category: "logic",
@@ -209,7 +211,7 @@ const createDefaultNodes = (): Node => [;
     id: "final-9",
     type: "output",
     position: { x: 1000, y: 200 },
-    data: {,
+    data: {
   label: "Final Prompt",
       description: "Generated tech panel description",
       category: "output"];
@@ -242,12 +244,14 @@ const ProfessionalControlPanel = ({ onRun }: { onRun: () => void }) => ()
 );
 
 // Main component
+}
 interface EnhancedGraphEditorProps {
   className?: string;
   showTemplateSelector?: boolean;
   const EnhancedGraphEditor: React.FC<EnhancedGraphEditorProps> = ({ ),
   className = "",
   showTemplateSelector = false
+}
 }) => {
   const [nodes, setNodes, onNodesChange] = useNodesState(createDefaultNodes());
   const [edges, setEdges, onEdgesChange] = useEdgesState(defaultEdges);
@@ -274,7 +278,7 @@ interface EnhancedGraphEditorProps {
       setEdges(template.edges);
   }, [setNodes, setEdges]);
   const onAddNode = useCallback((nodeTemplate: any) => {
-    const newNode = createNode(nodeTemplate.id, {)
+    const newNode = createNode(nodeTemplate.id, {
   position: { x: Math.random() * 400 + 100, y: Math.random() * 300 + 100 }
     });
     if (newNode) {

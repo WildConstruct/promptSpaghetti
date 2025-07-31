@@ -38,6 +38,7 @@ export type { KnowledgeBaseSection, LearningPath, LearningPathStep, SearchResult
 export { KnowledgeBaseDemo, default as KnowledgeBaseDemoDefault } from './KnowledgeBaseDemo';
 export type { KnowledgeBaseDemoProps } from './KnowledgeBaseDemo';
 
+}
 export interface Epic16ComponentTheme {
     primary: string;
     secondary: string;
@@ -48,6 +49,7 @@ export interface Epic16ComponentTheme {
         primary: string;
         secondary: string;
         disabled: string;
+}
     };
     border: {
         light: string;

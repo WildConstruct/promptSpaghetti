@@ -6,9 +6,11 @@
  */
 import React from 'react';
 import { Menu, User, Settings, LogOut, ChevronRight } from 'lucide-react';
+}
 interface AdminHeaderProps {
   title?: string;
   subtitle?: string;
+}
   breadcrumbs?: Array<{ label: string; href?: string }>;
   actions?: React.ReactNode;
   showSidebarToggle?: boolean;

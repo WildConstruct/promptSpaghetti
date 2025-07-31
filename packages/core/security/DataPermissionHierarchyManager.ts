@@ -29,6 +29,7 @@ import {
   DataOperation
 } from '../types/DataClassification';
 
+}
 export interface PermissionRequest {
   id: string;
   requesterId: string;
@@ -40,6 +41,8 @@ export interface PermissionRequest {
   context: OperationContext;
   requestedAt: Date;
   expiresAt?: Date;
+}
+}
 }
 export interface PermissionGrant {
   id: string;
@@ -56,12 +59,16 @@ export interface PermissionGrant {
   revokedBy?: string;
   auditTrail: PermissionAuditEntry;
 }
+}
+}
 export interface PermissionAuditEntry {
   timestamp: Date;
   userId: string;
   action: 'GRANTED' | 'USED' | 'DENIED' | 'REVOKED' | 'DELEGATED' | 'ESCALATED' | 'EXPIRED';
   details: Record<string, any>;
   riskScore: number;
+}
+}
 }
 export interface EscalationRequest {
   id: string;
@@ -77,7 +84,9 @@ export interface EscalationRequest {
   decisionBy: string;
   decisionAt: Date;
   reason: string;
+}
 };
+}
 }
 export interface EscalationStepStatus {
   stepId: string;
@@ -88,12 +97,16 @@ export interface EscalationStepStatus {
   completedAt?: Date;
   timeoutAt: Date;
 }
+}
+}
 export interface StepApproval {
   approver: string;
   decision: 'APPROVED' | 'DENIED';
   timestamp: Date;
   comments?: string;
   conditions?: PermissionCondition;
+}
+}
 }
 export interface DelegationRequest {
   id: string;
@@ -109,6 +122,8 @@ export interface DelegationRequest {
   approvedAt?: Date;
   approvedBy?: string;
 }
+}
+}
 export interface HierarchyAnalysis {
   userLevel: number;
   effectivePermissions: OperationPermission;
@@ -118,6 +133,8 @@ export interface HierarchyAnalysis {
   escalationPaths: string;
   riskProfile: HierarchyRiskProfile;
 }
+}
+}
 export interface DelegationGrant {
   id: string;
   delegatorId: string;
@@ -126,7 +143,9 @@ export interface DelegationGrant {
   expiresAt: Date;
   usageRemaining?: number;
   source: 'DIRECT' | 'INHERITED' | 'EMERGENCY'
+}
   }
+}
 export interface PermissionRestriction {
   type: 'TIME' | 'CONTEXT' | 'VOLUME' | 'FREQUENCY' | 'APPROVAL';
   description: string;
@@ -134,12 +153,15 @@ export interface PermissionRestriction {
   active: boolean;
   bypassable: boolean;
 }
+}
+}
 export interface HierarchyRiskProfile {
   overallRisk: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   riskFactors: string;
   mitigationStatus: 'COMPLETE' | 'PARTIAL' | 'NONE';
   lastAssessment: Date;
   recommendedActions: string;
+}
 }
 export class DataPermissionHierarchyManager extends EventEmitter {
   private hierarchy: PermissionHierarchy;
@@ -171,6 +193,7 @@ export class DataPermissionHierarchyManager extends EventEmitter {
   timeLimit?: Date;
   usageLimit?: number;
 }> {
+
   try {
   // Get user's permission level
   const userLevel = await this.getUserPermissionLevel(request.requesterId);
@@ -287,6 +310,7 @@ export class DataPermissionHierarchyManager extends EventEmitter {
     timeLimit?: Date,
     usageLimit?: number
   ): Promise<PermissionGrant> {
+
     const grantId = `grant-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;}
     const grant: PermissionGrant = {,
   id: grantId,
@@ -323,10 +347,11 @@ export class DataPermissionHierarchyManager extends EventEmitter {
   /**
    * Initiate escalation process
    */
-  async initiateEscalation(()
+  async initiateEscalation(((
     request: PermissionRequest,
-    escalationPathId: string,
+    escalationPathId: string
   ): Promise<EscalationRequest> {
+
     const escalationPath = this.hierarchy.escalationPaths.find(;);
       path => path.id === escalationPathId
     );
@@ -611,6 +636,7 @@ export class DataPermissionHierarchyManager extends EventEmitter {
         auditLevel: 'REALTIME',
         postEmergencyActions: []];
   private async getUserPermissionLevel(userId: string): Promise<number> {
+
     // Check cache first
     const cached = this.userLevelCache.get(userId);
     if (cached !== undefined) {
@@ -621,6 +647,7 @@ export class DataPermissionHierarchyManager extends EventEmitter {
     this.userLevelCache.set(userId, defaultLevel);
     return defaultLevel;
   private async findEscalationPath(request: PermissionRequest): Promise<EscalationPath | null> {
+
     // Find appropriate escalation path based on request
     for (const path of this.hierarchy.escalationPaths) {
       const applicable = await this.isEscalationPathApplicable(path, request);
@@ -628,16 +655,18 @@ export class DataPermissionHierarchyManager extends EventEmitter {
         return path;
     return null;
   private async isEscalationPathApplicable(path: EscalationPath, request: PermissionRequest): Promise<boolean> {
+
     // Simplified logic - in real implementation would be more complex
     return path.triggerConditions.length === 0 || 
            path.triggerConditions.some(trigger => trigger.type === 'PERMISSION_DENIED');
   private isEscalationPathAvailable(path: EscalationPath, userLevel: number): boolean {
     // Basic check - more sophisticated logic would go here
     return userLevel >= 5; // Only certain levels can use escalation
-  private async evaluateConditions(()
+  private async evaluateConditions(((
     conditions: PermissionCondition,
-    request: PermissionRequest,
+    request: PermissionRequest
   ): Promise<{ satisfied: boolean; failureReasons: string }> {
+
     const failureReasons: string = [];
     for (const condition of conditions) {
       const satisfied = await this.evaluateCondition(condition, request);
@@ -648,6 +677,7 @@ export class DataPermissionHierarchyManager extends EventEmitter {
   failureReasons
 };
   private async evaluateCondition(condition: PermissionCondition, request: PermissionRequest): Promise<boolean> {
+
     // Simplified condition evaluation
     switch (condition.type) {
     case 'CLASSIFICATION':
@@ -656,19 +686,21 @@ export class DataPermissionHierarchyManager extends EventEmitter {
       return condition.value === request.purpose;
     default:
       return true;
-  private async evaluateTimeRestrictions(()
+  private async evaluateTimeRestrictions(((
     restrictions: TimeRestriction,
-    timestamp: Date,
+    timestamp: Date
   ): Promise<{ allowed: boolean; reason?: string }> {
+
     for (const restriction of restrictions) {
       const result = await this.evaluateTimeRestriction(restriction, timestamp);
       if (!result.allowed) {
         return result;
     return { allowed: true };
-  private async evaluateTimeRestriction(()
+  private async evaluateTimeRestriction(((
     restriction: TimeRestriction,
-    timestamp: Date,
+    timestamp: Date
   ): Promise<{ allowed: boolean; reason?: string }> {
+
     const hour = timestamp.getHours();
     const dayOfWeek = timestamp.getDay();
     if (restriction.type === 'BUSINESS_HOURS') {
@@ -740,8 +772,7 @@ export class DataPermissionHierarchyManager extends EventEmitter {
   private async getActiveRestrictions(userId: string): Promise<PermissionRestriction> {,
   // Get current restrictions for this user
   return [];
-  private async calculateUserRiskProfile(()
-  userId: string,
+  private async calculateUserRiskProfile((userId: string,
   permissions: OperationPermission): Promise<HierarchyRiskProfile> {,
   // Calculate user's risk profile based on permissions
   return {

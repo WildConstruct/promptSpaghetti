@@ -44,6 +44,7 @@ export type CollaborativePermission = keyof typeof COLLABORATIVE_PERMISSIONS;
  * Collaboration settings for workspaces
  */
 }
+}
 export interface CollaborationSettings {
   max_concurrent_editors: number;        // Default: 10
   auto_save_interval: number;            // Milliseconds, default: 5000
@@ -53,10 +54,12 @@ export interface CollaborationSettings {
   session_timeout: number;               // Minutes, default: 30
 }
 }
+}
 
 /**
  * Resource quotas for workspace limits
  */
+}
 }
 export interface ResourceQuotas {
   max_projects: number;                  // Default: 100
@@ -65,10 +68,12 @@ export interface ResourceQuotas {
   max_concurrent_sessions: number;       // Default: 25
 }
 }
+}
 
 /**
  * Current usage statistics
  */
+}
 }
 export interface UsageStats {
   current_projects: number;
@@ -78,10 +83,12 @@ export interface UsageStats {
   last_activity_at: Date;
 }
 }
+}
 
 /**
  * Enhanced workspace interface extending base Workspace
  */
+}
 }
 export interface EnhancedWorkspace extends Workspace {
   // Epic 23 collaborative enhancements
@@ -108,6 +115,7 @@ export enum IsolationLevel {
  * Workspace isolation configuration
  */
 }
+}
 export interface WorkspaceIsolation {
   workspace_id: string;
   isolation_level: IsolationLevel;
@@ -116,6 +124,7 @@ export interface WorkspaceIsolation {
     allow_resource_sharing: boolean;
     allow_user_discovery: boolean;
     allow_project_imports: boolean;
+}
 }
   };
 }
@@ -128,6 +137,7 @@ export interface WorkspaceIsolation {
  * Collaboration-specific settings for roles
  */
 }
+}
 export interface CollaborationRoleSettings {
   max_concurrent_edits: number;         // How many resources can edit simultaneously
   priority_level: 'low' | 'normal' | 'high' | 'critical'; // Conflict resolution priority
@@ -135,10 +145,12 @@ export interface CollaborationRoleSettings {
   session_duration_minutes: number;     // Max session length
 }
 }
+}
 
 /**
  * Enhanced role interface with collaborative features
  */
+}
 }
 export interface CollaborativeRole extends Role {
   collaboration_settings: CollaborationRoleSettings;
@@ -157,6 +169,7 @@ export interface CollaborativeRole extends Role {
  * Edit session information for real-time collaboration
  */
 }
+}
 export interface EditSession {
   id: string;
   resource_id: string;
@@ -170,6 +183,7 @@ export interface EditSession {
     client_id: string;              // Browser/device identifier
     user_agent: string;
     ip_address?: string;
+}
 }
   };
   
@@ -193,6 +207,7 @@ export interface EditSession {
  * Cursor position for real-time cursor tracking
  */
 }
+}
 export interface CursorPosition {
   user_id: string;
   resource_id: string;
@@ -203,6 +218,7 @@ export interface CursorPosition {
     column?: number;
     offset?: number;               // Character offset
 }
+}
   };
   timestamp: Date;
   is_typing: boolean;
@@ -211,6 +227,7 @@ export interface CursorPosition {
 /**
  * Selection range for collaborative editing
  */
+}
 }
 export interface SelectionRange {
   user_id: string;
@@ -221,10 +238,12 @@ export interface SelectionRange {
   timestamp: Date;
 }
 }
+}
 
 /**
  * Conflict marker for version control
  */
+}
 }
 export interface ConflictMarker {
   id: string;
@@ -238,10 +257,12 @@ export interface ConflictMarker {
   resolved_by?: string;
 }
 }
+}
 
 /**
  * Pending merge information
  */
+}
 }
 export interface PendingMerge {
   id: string;
@@ -255,10 +276,12 @@ export interface PendingMerge {
   status: 'pending' | 'approved' | 'rejected' | 'merged';
 }
 }
+}
 
 /**
  * Collaborative state for resources
  */
+}
 }
 export interface CollaborativeState {
   is_collaborative: boolean;        // Can be edited collaboratively
@@ -270,10 +293,12 @@ export interface CollaborativeState {
   lock_expires_at?: Date;
 }
 }
+}
 
 /**
  * Version control information
  */
+}
 }
 export interface VersionControl {
   current_branch: string;           // Default: 'main'
@@ -283,10 +308,12 @@ export interface VersionControl {
   pending_merges: PendingMerge[];
 }
 }
+}
 
 /**
  * User presence data for resources
  */
+}
 }
 export interface PresenceData {
   active_viewers: UserPresence[];   // Users currently viewing
@@ -295,10 +322,12 @@ export interface PresenceData {
   selection_ranges: SelectionRange[];
 }
 }
+}
 
 /**
  * Performance optimization hints
  */
+}
 }
 export interface OptimizationHints {
   is_large_resource: boolean;       // > 1MB or complex structure
@@ -307,10 +336,12 @@ export interface OptimizationHints {
   priority: 'low' | 'normal' | 'high';
 }
 }
+}
 
 /**
  * Enhanced resource interface with collaborative features
  */
+}
 }
 export interface CollaborativeResource extends Resource {
   collaborative_state: CollaborativeState;
@@ -327,6 +358,7 @@ export interface CollaborativeResource extends Resource {
  * User presence status information
  */
 }
+}
 export interface PresenceStatus {
   status: 'online' | 'idle' | 'away' | 'do_not_disturb' | 'offline';
   custom_message?: string;
@@ -334,10 +366,12 @@ export interface PresenceStatus {
   is_mobile: boolean;
 }
 }
+}
 
 /**
  * Current user context within workspace
  */
+}
 }
 export interface UserCurrentContext {
   current_project_id?: string;
@@ -347,10 +381,12 @@ export interface UserCurrentContext {
   selection_range?: SelectionRange;
 }
 }
+}
 
 /**
  * User's collaboration state
  */
+}
 }
 export interface CollaborationState {
   is_editing: boolean;
@@ -359,10 +395,12 @@ export interface CollaborationState {
   collaboration_role: string;       // Current role in this context
 }
 }
+}
 
 /**
  * Session metadata for presence tracking
  */
+}
 }
 export interface SessionMetadata {
   session_id: string;
@@ -372,10 +410,12 @@ export interface SessionMetadata {
   latency_ms?: number;
 }
 }
+}
 
 /**
  * Complete user presence information
  */
+}
 }
 export interface UserPresence {
   user_id: string;
@@ -389,6 +429,7 @@ export interface UserPresence {
   timestamp: Date;
 }
 }
+}
 
 // =============================================================================
 // WORKSPACE CONTEXT MANAGEMENT
@@ -397,6 +438,7 @@ export interface UserPresence {
 /**
  * Navigation state within workspace
  */
+}
 }
 export interface NavigationState {
   current_view: 'dashboard' | 'projects' | 'resources' | 'settings' | 'collaboration';
@@ -407,10 +449,12 @@ export interface NavigationState {
   recent_resources: string[];       // Recently accessed resource IDs
 }
 }
+}
 
 /**
  * Collaboration context for user
  */
+}
 }
 export interface CollaborationContext {
   active_sessions: EditSession[];
@@ -419,10 +463,12 @@ export interface CollaborationContext {
   collaboration_mode: 'individual' | 'paired' | 'team' | 'review';
 }
 }
+}
 
 /**
  * User workspace preferences
  */
+}
 }
 export interface WorkspacePreferences {
   default_project_template?: string;
@@ -433,10 +479,12 @@ export interface WorkspacePreferences {
   conflict_resolution_preference: 'ask' | 'auto_merge' | 'manual';
 }
 }
+}
 
 /**
  * Cache state for performance optimization
  */
+}
 }
 export interface CacheState {
   cached_projects: Map<string, Date>;     // Project ID -> Last cached
@@ -445,10 +493,12 @@ export interface CacheState {
   last_cache_cleanup: Date;
 }
 }
+}
 
 /**
  * Complete workspace context for a user
  */
+}
 }
 export interface WorkspaceContext {
   workspace_id: string;
@@ -463,10 +513,12 @@ export interface WorkspaceContext {
   expires_at: Date;
 }
 }
+}
 
 /**
  * Notification preferences for workspace
  */
+}
 }
 export interface NotificationPreferences {
   workspace_id: string;
@@ -479,6 +531,7 @@ export interface NotificationPreferences {
     mentions: boolean;
     system_announcements: boolean;
     quota_warnings: boolean;
+}
 }
   };
   
@@ -506,6 +559,7 @@ export interface NotificationPreferences {
  * Unsaved changes during workspace switch
  */
 }
+}
 export interface UnsavedChange {
   resource_id: string;
   change_type: 'content' | 'metadata' | 'structure';
@@ -514,10 +568,12 @@ export interface UnsavedChange {
   auto_save_eligible: boolean;
 }
 }
+}
 
 /**
  * Context preservation during workspace switching
  */
+}
 }
 export interface WorkspaceSwitchContext {
   user_id: string;
@@ -530,6 +586,7 @@ export interface WorkspaceSwitchContext {
     open_resources: string[];
     unsaved_changes: UnsavedChange[];
     active_sessions: string[];      // Session IDs to maintain
+}
 }
   };
   
@@ -557,6 +614,7 @@ export interface WorkspaceSwitchContext {
 /**
  * Comprehensive quota tracking
  */
+}
 }
 export interface DetailedResourceQuotas {
   workspace_id: string;
@@ -594,10 +652,12 @@ export interface DetailedResourceQuotas {
   next_reset: Date;
 }
 }
+}
 
 /**
  * Quota usage event for tracking
  */
+}
 }
 export interface QuotaUsageEvent {
   id: string;
@@ -611,6 +671,7 @@ export interface QuotaUsageEvent {
     project_id?: string;
     session_id?: string;
     operation: string;
+}
 }
   };
 }
@@ -694,6 +755,7 @@ export function createEmptyUsageStats(): UsageStats {
  * Interface for creating enhanced workspaces
  */
 }
+}
 export interface CreateEnhancedWorkspace {
   name: string;
   description?: string;
@@ -702,10 +764,12 @@ export interface CreateEnhancedWorkspace {
   settings?: Record<string, any>;
 }
 }
+}
 
 /**
  * Interface for creating collaborative resources
  */
+}
 }
 export interface CreateCollaborativeResource {
   name: string;
@@ -714,6 +778,7 @@ export interface CreateCollaborativeResource {
   content_data?: Record<string, any>;
   is_collaborative?: boolean;
   optimization_hints?: Partial<OptimizationHints>;
+}
 }
 }
 

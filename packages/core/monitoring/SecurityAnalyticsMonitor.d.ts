@@ -8,6 +8,7 @@ import { EventEmitter } from 'events';
 import { PerformanceMonitor, PerformanceAlert } from './PerformanceMonitor';
 import { SecurityEvent } from '../security/AlertingSystem';
 
+}
 export interface SecurityAnalyticsMetrics {
     threatDetectionMetrics: {
         threatsDetected: number;
@@ -16,6 +17,7 @@ export interface SecurityAnalyticsMetrics {
         threatLevel: number;
         detectionAccuracy: number;
         timeToDetection: number;
+}
     };
     complianceMetrics: {
         complianceViolations: number;
@@ -46,6 +48,7 @@ export interface SecurityAnalyticsMetrics {
         escalationRate: number;
     };
 
+}
 export interface SecuritySystemHealth {
     systemId: string;
     systemType: 'firewall' | 'ids' | 'siem' | 'auth' | 'compliance' | 'backup' | 'encryption';
@@ -67,6 +70,7 @@ export interface SecuritySystemHealth {
     lastConfigUpdate: number;
     pendingUpdates: number;
 
+}
 export interface SecurityAnalyticsAlert extends PerformanceAlert {
     securityCategory: 'threat_detection' | 'compliance' | 'access_control' | 'data_protection' | 'incident_response';
     affectedSystems: string[];
@@ -75,6 +79,7 @@ export interface SecurityAnalyticsAlert extends PerformanceAlert {
     recommendedActions: string[];
     relatedEvents: string[];
 
+}
 export interface SecurityAnalyticsConfig {
     performanceConfig: {
         enableMemoryTracking: boolean;
@@ -83,6 +88,7 @@ export interface SecurityAnalyticsConfig {
         enableAlerting: boolean;
         slowExecutionThreshold: number;
         memoryThreshold: number;
+}
     };
     securityConfig: {
         enableThreatDetection: boolean;
@@ -166,11 +172,11 @@ export declare class SecurityAnalyticsMonitor extends EventEmitter {
             meanDetectionTime: number;
             meanResponseTime: number;
         };
-        topThreats: Array<{,
+        topThreats: Array<{
             type: string;
             count: number;
         }>;
-        systemPerformance: Array<{,
+        systemPerformance: Array<{
             systemId: string;
             healthScore: number;
             responseTime: number;

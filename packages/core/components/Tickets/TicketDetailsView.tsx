@@ -13,6 +13,7 @@ import {
   TicketAttachment,
   Epic16TicketIntegrationService
 } from '../../services/Epic16TicketIntegrationService';
+}
 interface TicketDetailsViewProps {
   ticket: MarketplaceTicket;
   ticketService: Epic16TicketIntegrationService;
@@ -31,6 +32,7 @@ interface TicketDetailsViewProps {
   userRole,
   onClose,
   onTicketUpdate
+}
 }) => {
   const [currentTicket, setCurrentTicket] = useState<MarketplaceTicket>(ticket);
   const [loading, setLoading] = useState(false);

@@ -47,10 +47,12 @@ import { TestCoverageMetrics } from '../../hooks/useQualityMetrics';
 // Test Coverage Chart Component
 // =============================================================================
 
+}
 export interface TestCoverageChartProps {
   metrics: TestCoverageMetrics;
   compact?: boolean;
   className?: string;
+}
 }
 export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({)
   metrics,
@@ -122,6 +124,7 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({)
   const CustomTooltip = (;);
     { active,
     payload,
+}
     label }: { active?: boolean; payload?: TooltipEntry; label?: string }
   ) => {
     if (active && payload && payload.length) {

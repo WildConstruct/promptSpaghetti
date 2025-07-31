@@ -386,10 +386,12 @@ const demoAuthors: ArticleAuthor = [
   featuredContent: demoArticles.filter(a => a.featured),
 };
 
+}
 export interface KnowledgeBaseDemoProps {
   initialMode?: 'browse' | 'manage';
   currentUser?: ArticleAuthor;
   className?: string;
+}
 }
 export const KnowledgeBaseDemo: React.FC<KnowledgeBaseDemoProps> = ({)
   initialMode = 'browse',

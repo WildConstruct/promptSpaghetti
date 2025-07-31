@@ -6,12 +6,14 @@
  */
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
 
+}
 export interface ElevenLabsConfig {
     apiKey: string;
     baseURL?: string;
     timeout?: number;
     maxRetries?: number;
 
+}
 export interface ElevenLabsRequestOptions {
     text: string;
     voice_id?: string;
@@ -21,6 +23,7 @@ export interface ElevenLabsRequestOptions {
         similarity_boost: number;
         style?: number;
         use_speaker_boost?: boolean;
+}
     };
     output_format?: 'mp3_22050_32' | 'mp3_44100_32' | 'mp3_44100_64' | 'mp3_44100_96' | 'mp3_44100_128' | 'mp3_44100_192' | 'pcm_16000' | 'pcm_22050' | 'pcm_24000' | 'pcm_44100' | 'ulaw_8000';
     optimize_streaming_latency?: number;
@@ -34,6 +37,7 @@ export interface ElevenLabsRequestOptions {
         labels?: Record<string, string>;
     };
 
+}
 export interface ElevenLabsGenerationResult {
     audio: {
         data: ArrayBuffer;
@@ -42,6 +46,7 @@ export interface ElevenLabsGenerationResult {
         sample_rate: number;
         channels: number;
         bit_depth: number;
+}
     };
     metadata: {
         voice_id: string;
@@ -59,6 +64,7 @@ export interface ElevenLabsGenerationResult {
         quota_remaining?: number;
     };
 
+}
 export interface ElevenLabsVoice {
     voice_id: string;
     name: string;
@@ -68,13 +74,14 @@ export interface ElevenLabsVoice {
         mime_type: string;
         size_bytes: number;
         hash: string;
+}
     }>;
     category: 'premade' | 'cloned' | 'generated' | 'professional';
     fine_tuning: {
         is_allowed_to_fine_tune: boolean;
         finetuning_requested: boolean;
         finetuning_state: string;
-        verification_attempts: Array<{,
+        verification_attempts: Array<{
             text: string;
             date_unix: number;
             accepted: boolean;
@@ -93,7 +100,7 @@ export interface ElevenLabsVoice {
         manual_verification: {
             extra_text: string;
             request_time_unix: number;
-            files: Array<{,
+            files: Array<{
                 file_id: string;
                 file_name: string;
                 mime_type: string;
@@ -128,6 +135,7 @@ export interface ElevenLabsVoice {
     };
     high_quality_base_model_ids: string[];
 
+}
 export interface ElevenLabsModel {
     model_id: string;
     name: string;
@@ -142,9 +150,10 @@ export interface ElevenLabsModel {
     requires_alpha_access: boolean;
     max_characters_request_free_user: number;
     max_characters_request_subscribed_user: number;
-    languages: Array<{,
+    languages: Array<{
         language_id: string;
         name: string;
+}
     }>;
 
 export declare class ElevenLabsAdapter extends BaseAIModel {

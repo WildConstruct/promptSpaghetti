@@ -6,6 +6,7 @@
  */
 import React from 'react';
 
+}
 export interface EnforcementAction {
     id: string;
     type: 'suspend_user' | 'restrict_access' | 'hide_template' | 'block_transaction' | 'send_warning' | 'require_verification';
@@ -16,6 +17,7 @@ export interface EnforcementAction {
     requiresApproval: boolean;
     reversible: boolean;
 
+}
 export interface EnforcementWorkflow {
     workflowId: string;
     name: string;
@@ -25,6 +27,7 @@ export interface EnforcementWorkflow {
     trigger: {
         type: 'violation_detected' | 'manual_trigger' | 'scheduled_check';
         conditions: string[];
+}
     };
     steps: EnforcementStep[];
     status: 'active' | 'paused' | 'disabled';
@@ -32,6 +35,7 @@ export interface EnforcementWorkflow {
     lastExecuted?: Date;
     successRate: number;
 
+}
 export interface EnforcementStep {
     stepId: string;
     name: string;
@@ -42,10 +46,12 @@ export interface EnforcementStep {
         timeout?: number;
         retryPolicy?: 'none' | 'linear' | 'exponential';
         notificationChannels?: ('email' | 'sms' | 'in_app' | 'webhook')[];
+}
     };
     order: number;
     enabled: boolean;
 
+}
 export interface WorkflowExecution {
     executionId: string;
     workflowId: string;
@@ -59,9 +65,11 @@ export interface WorkflowExecution {
     entityId: string;
     context: Record<string, any>;
 
+}
 export interface PolicyEnforcementWorkflowProps {
     className?: string;
 
 export declare const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>;
 export default PolicyEnforcementWorkflow;
 //# sourceMappingURL=PolicyEnforcementWorkflow.d.ts.map
+}

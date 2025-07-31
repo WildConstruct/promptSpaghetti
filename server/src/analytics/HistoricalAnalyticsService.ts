@@ -31,6 +31,7 @@ export type HistoricalQuery = z.infer<typeof HistoricalQuerySchema>;
 
 // Historical Data Point
 }
+}
 export interface HistoricalDataPoint {
   timestamp: number;
   value: number;
@@ -41,16 +42,19 @@ export interface HistoricalDataPoint {
     topSources: string[];
     aggregatedFrom: string; // granularity used
 }
+}
   };
 }
 
 // Time Series Data
+}
 }
 export interface TimeSeriesData {
   query: HistoricalQuery;
   dataPoints: HistoricalDataPoint[];
   statistics: {
     totalPoints: number;
+}
 }
     timeRange: { start: number; end: number };
     aggregatedEvents: number;
@@ -65,6 +69,7 @@ export interface TimeSeriesData {
 
 // Retention Policy Configuration
 }
+}
 export interface RetentionPolicy {
   id: string;
   name: string;
@@ -75,7 +80,9 @@ export interface RetentionPolicy {
   nextExecution?: number;
 }
 }
+}
 
+}
 }
 export interface RetentionRule {
   eventTypes: AnalyticsEventType[];
@@ -88,10 +95,12 @@ export interface RetentionRule {
     excludeSources?: string[];
     preserveUserData?: boolean;
 }
+}
   };
 }
 
 // Archival Configuration
+}
 }
 export interface ArchivalConfig {
   enabled: boolean;
@@ -102,8 +111,10 @@ export interface ArchivalConfig {
   maxConcurrentOperations: number;
 }
 }
+}
 
 // Historical Analytics Performance Metrics
+}
 }
 export interface HistoricalAnalyticsMetrics {
   queryPerformance: {
@@ -111,6 +122,7 @@ export interface HistoricalAnalyticsMetrics {
     slowQueries: number;
     cachedQueries: number;
     totalQueries: number;
+}
 }
   };
   dataVolume: {

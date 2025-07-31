@@ -14,6 +14,7 @@ import { useReactFlow, useViewport } from 'reactflow';
 import { useGraphStore } from '../../graphStore';
 import { StickyNotesLayer } from '../Annotations/StickyNotesLayer';
 import { StickyNote as StickyNoteType } from '../../types/CollaborationTypes';
+}
 interface StickyNotesManagerProps {
   disabled?: boolean;
   readonly?: boolean;
@@ -22,6 +23,7 @@ interface StickyNotesManagerProps {
   disabled = false,
   readonly = false,
   author = 'Anonymous'
+}
 }) => {
   const { 
     stickyNotes, 

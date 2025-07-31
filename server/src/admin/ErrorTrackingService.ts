@@ -60,6 +60,7 @@ export enum ErrorSource {
 }
 
 }
+}
 export interface ErrorEvent {
   errorId: string;
   groupId: string;
@@ -77,7 +78,9 @@ export interface ErrorEvent {
   resolution?: ErrorResolution;
 }
 }
+}
 
+}
 }
 export interface ErrorContext {
   userId?: string;
@@ -94,7 +97,9 @@ export interface ErrorContext {
   additionalData?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ErrorMetadata {
   hostname: string;
@@ -109,7 +114,9 @@ export interface ErrorMetadata {
   customFields: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface UserImpact {
   impactLevel: 'none' | 'low' | 'medium' | 'high' | 'critical';
@@ -120,7 +127,9 @@ export interface UserImpact {
   workaroundAvailable: boolean;
 }
 }
+}
 
+}
 }
 export interface ErrorResolution {
   resolvedBy: string;
@@ -132,7 +141,9 @@ export interface ErrorResolution {
   timeToResolve: number; // milliseconds
 }
 }
+}
 
+}
 }
 export interface ErrorGroup {
   groupId: string;
@@ -154,7 +165,9 @@ export interface ErrorGroup {
   suppressUntil?: Date;
 }
 }
+}
 
+}
 }
 export interface ErrorTrend {
   direction: 'increasing' | 'decreasing' | 'stable';
@@ -165,7 +178,9 @@ export interface ErrorTrend {
   quietPeriods: Date[];
 }
 }
+}
 
+}
 }
 export interface TrendDataPoint {
   timestamp: Date;
@@ -174,7 +189,9 @@ export interface TrendDataPoint {
   severity: ErrorSeverity;
 }
 }
+}
 
+}
 }
 export interface ErrorAlert {
   alertId: string;
@@ -189,7 +206,9 @@ export interface ErrorAlert {
   suppressUntil?: Date;
 }
 }
+}
 
+}
 }
 export interface AlertThreshold {
   type: 'occurrence_count' | 'error_rate' | 'user_impact' | 'severity_level';
@@ -198,7 +217,9 @@ export interface AlertThreshold {
   comparison: 'greater_than' | 'less_than' | 'equals';
 }
 }
+}
 
+}
 }
 export interface AlertChannelConfig {
   type: 'email' | 'slack' | 'webhook' | 'sms' | 'pagerduty';
@@ -208,12 +229,15 @@ export interface AlertChannelConfig {
   cooldownMinutes: number;
 }
 }
+}
 
+}
 }
 export interface ErrorQuery {
   timeRange?: {
     start: Date;
     end: Date;
+}
 }
   };
   severity?: ErrorSeverity[];
@@ -232,6 +256,7 @@ export interface ErrorQuery {
 }
 
 }
+}
 export interface ErrorAnalytics {
   timeRange: string;
   totalErrors: number;
@@ -247,7 +272,9 @@ export interface ErrorAnalytics {
   impactAnalysis: ImpactAnalysis;
 }
 }
+}
 
+}
 }
 export interface ErrorGroupSummary {
   groupId: string;
@@ -259,7 +286,9 @@ export interface ErrorGroupSummary {
   lastSeen: Date;
 }
 }
+}
 
+}
 }
 export interface ErrorTrendAnalysis {
   overallTrend: 'improving' | 'worsening' | 'stable';
@@ -269,7 +298,9 @@ export interface ErrorTrendAnalysis {
   recurringErrorsRate: number; // percentage
 }
 }
+}
 
+}
 }
 export interface ImpactAnalysis {
   highImpactErrors: number;
@@ -277,6 +308,7 @@ export interface ImpactAnalysis {
   userExperienceScore: number; // 0-100
   systemStabilityScore: number; // 0-100
   recommendedActions: string[];
+}
 }
 }
 

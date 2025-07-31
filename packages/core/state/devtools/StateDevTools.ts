@@ -10,6 +10,7 @@ import { StateSnapshot, StateChange } from '../containers/BaseStateContainer';
 
 // Core DevTools types
 
+}
 export interface StateInspectionConfig {
   enableTimeTravel: boolean;
   enablePerformanceTracking: boolean;
@@ -19,6 +20,8 @@ export interface StateInspectionConfig {
   enableStateValidation: boolean;
   enableMemoryTracking: boolean;
   enableNetworkTracking: boolean;
+}
+}
 }
 export interface DependencyGraph {
   nodes: DependencyNode;
@@ -30,13 +33,16 @@ export interface DependencyGraph {
   criticalPaths: string[];
   lastUpdated: number;
   complexity: number;
+}
 };
+}
 }
 export interface DependencyNode {
   id: string;
   type: 'state' | 'component' | 'selector' | 'middleware' | 'domain';
   label: string;
   domain: string;
+}
   position: { x: number; y: number };
   size: number;
   color: string;
@@ -52,6 +58,7 @@ export interface DependencyNode {
 };
   };
 }
+}
 export interface DependencyEdge {
   id: string;
   from: string;
@@ -63,7 +70,9 @@ export interface DependencyEdge {
   frequency: number;
   lastTriggered: number;
   latency: number;
+}
 };
+}
 }
 export interface PerformanceReport {
   summary: {
@@ -73,11 +82,13 @@ export interface PerformanceReport {
   renderSkipRate: number;
   cacheEfficiency: number;
   networkLatency: number;
+}
 };
   bottlenecks: PerformanceBottleneck;
   recommendations: PerformanceRecommendation;
   trends: PerformanceTrend;
   domainAnalysis: Map<string, DomainPerformance>;
+}
 }
 export interface PerformanceBottleneck {
   id: string;
@@ -92,7 +103,9 @@ export interface PerformanceBottleneck {
   start: number;
   end: number;
   duration: number;
+}
 };
+}
 }
 export interface PerformanceRecommendation {
   id: string;
@@ -105,12 +118,16 @@ export interface PerformanceRecommendation {
   difficulty: 'easy' | 'medium' | 'hard';
   codeExample?: string;
 }
+}
+}
 export interface PerformanceTrend {
   metric: string;
+}
   values: { timestamp: number; value: number }[];
   trend: 'improving' | 'degrading' | 'stable';
   changeRate: number;
   prediction: { timestamp: number; value: number }[];
+}
 }
 export interface DomainPerformance {
   domain: string;
@@ -122,6 +139,8 @@ export interface DomainPerformance {
   dependencies: string;
   criticalPath: boolean;
 }
+}
+}
 export interface ReplayEnvironment {
   id: string;
   baseState: any;
@@ -132,7 +151,9 @@ export interface ReplayEnvironment {
   totalChanges: number;
   timespan: number;
   domains: string;
+}
 };
+}
 }
 export interface StateValidationResult {
   valid: boolean;
@@ -141,7 +162,9 @@ export interface StateValidationResult {
   performance: {
   validationTime: number;
   memoryImpact: number;
+}
 };
+}
 }
 export interface StateValidationError {
   path: string;
@@ -151,12 +174,15 @@ export interface StateValidationError {
   severity: 'error' | 'warning';
   code: string;
 }
+}
+}
 export interface StateValidationWarning {
   path: string;
   message: string;
   suggestion: string;
   impact: 'low' | 'medium' | 'high';
   // Main DevTools class
+}
 }
 export class StateDevTools extends EventEmitter {
   private config: StateInspectionConfig;
@@ -240,6 +266,7 @@ export class StateDevTools extends EventEmitter {
   highlightChanges: boolean;
   showDiff: boolean;
 }): Promise<void> {
+
     const { stepDelay, highlightChanges, showDiff } = options;
     for (let i = 0; i < environment.changes.length; i++) {
   if (!this.isReplaying) break;
@@ -458,6 +485,7 @@ export class StateDevTools extends EventEmitter {
   paths: Object.keys(change.payload),
 });
   private delay(ms: number): Promise<void> {
+
   return new Promise(resolve => setTimeout(resolve, ms));
   private buildDependencyGraph(options: {)
   domains?: string;

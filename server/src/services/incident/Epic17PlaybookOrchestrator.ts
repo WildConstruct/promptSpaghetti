@@ -39,6 +39,7 @@ import {
 import { ActionSeverity } from '../../../../packages/core/types/EnforcementTypes';
 
 }
+}
 export interface PlaybookExecutionContext {
   executionId: string;
   playbookId: string;
@@ -49,7 +50,9 @@ export interface PlaybookExecutionContext {
   executionMetadata: ExecutionMetadata;
 }
 }
+}
 
+}
 }
 export interface ExecutionMetadata {
   userId?: string;
@@ -60,7 +63,9 @@ export interface ExecutionMetadata {
   stakeholders: string[];
 }
 }
+}
 
+}
 }
 export interface PlaybookExecutionResult {
   executionId: string;
@@ -81,7 +86,9 @@ export interface PlaybookExecutionResult {
   recommendations: string[];
 }
 }
+}
 
+}
 }
 export interface Epic17PlaybookOrchestratorConfig {
   enabled: boolean;
@@ -93,6 +100,7 @@ export interface Epic17PlaybookOrchestratorConfig {
   dryRunMode: boolean;
   integrationTimeouts: Record<Epic17System, number>;
   healthCheckEnabled: boolean;
+}
 }
 }
 
@@ -1109,6 +1117,7 @@ export class Epic17PlaybookOrchestrator {
 
 // Supporting interfaces
 }
+}
 interface StepExecutionResult {
   success: boolean;
   result?: unknown;
@@ -1117,7 +1126,9 @@ interface StepExecutionResult {
   duration: number;
 }
 }
+}
 
+}
 }
 interface HealthCheckListener {
   id: string;
@@ -1127,7 +1138,9 @@ interface HealthCheckListener {
   lastTriggered: Date | null;
 }
 }
+}
 
+}
 }
 interface AlertListener {
   id: string;
@@ -1137,7 +1150,9 @@ interface AlertListener {
   lastTriggered: Date | null;
 }
 }
+}
 
+}
 }
 interface MetricWatcher {
   id: string;
@@ -1145,5 +1160,6 @@ interface MetricWatcher {
   playbookId: string;
   active: boolean;
   lastTriggered: Date | null;
+}
 }
 }

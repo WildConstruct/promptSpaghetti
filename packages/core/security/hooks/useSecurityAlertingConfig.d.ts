@@ -27,6 +27,7 @@ import {
   ResponseAutomation
 } from '../SecurityAlertingAnalytics';
 
+}
 export interface UseSecurityAlertingConfigOptions {
     configId?: string;
     autoSave?: boolean;
@@ -38,12 +39,14 @@ export interface UseSecurityAlertingConfigOptions {
     onSaveSuccess?: () => void;
     onSaveError?: (error: Error) => void;
 
+}
 export interface ValidationError {
     field: string;
     message: string;
     severity: 'error' | 'warning' | 'info';
     code: string;
 
+}
 export interface ConfigurationState {
     config: SecurityAlertingConfig;
     originalConfig: SecurityAlertingConfig;
@@ -57,6 +60,7 @@ export interface ConfigurationState {
     securityScore: number;
     configVersion: number;
 
+}
 export interface UseSecurityAlertingConfigReturn {
     state: ConfigurationState;
     actions: {
@@ -71,6 +75,7 @@ export interface UseSecurityAlertingConfigReturn {
         revertChanges: () => void;
         exportConfig: () => string;
         importConfig: (configJson: string) => boolean;
+}
     };
     utils: {
         getConfigDiff: () => Partial<SecurityAlertingConfig>;
@@ -84,6 +89,7 @@ export interface UseSecurityAlertingConfigReturn {
         getRecommendations: () => ConfigRecommendation[];
     };
 
+}
 export interface ConfigRecommendation {
     field: string;
     current: any;
@@ -100,3 +106,4 @@ export declare const useSecurityAlertingConfig: ()
 ) => UseSecurityAlertingConfigReturn;
 export default useSecurityAlertingConfig;
 //# sourceMappingURL=useSecurityAlertingConfig.d.ts.map
+}

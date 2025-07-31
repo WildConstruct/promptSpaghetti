@@ -37,6 +37,7 @@ export type ModificationSeverity = 'low' | 'medium' | 'high' | 'critical';
 export type ApprovalStatus = 'pending' | 'approved' | 'rejected' | 'auto_approved';
 
 }
+}
 export interface ModificationRequest {
   scheduleId: string;
   modificationType: ModificationType;
@@ -62,7 +63,9 @@ export interface ModificationRequest {
   notificationChannels?: string[];
 }
 }
+}
 
+}
 }
 export interface ModificationResult {
   id: string;
@@ -102,9 +105,11 @@ export interface ModificationResult {
     message: string;
     recoverable: boolean;
 }
+}
   };
 }
 
+}
 }
 export interface ChangeDetail {
   field: string;
@@ -114,7 +119,9 @@ export interface ChangeDetail {
   description: string;
 }
 }
+}
 
+}
 }
 export interface ImpactAnalysis {
   severity: ModificationSeverity;
@@ -134,7 +141,9 @@ export interface ImpactAnalysis {
   suggestedTestingPlan?: string[];
 }
 }
+}
 
+}
 }
 export interface AffectedComponent {
   type: 'feature_toggle' | 'schedule' | 'execution' | 'user_group' | 'system';
@@ -144,7 +153,9 @@ export interface AffectedComponent {
   description: string;
 }
 }
+}
 
+}
 }
 export interface RiskFactor {
   id: string;
@@ -156,7 +167,9 @@ export interface RiskFactor {
   mitigation?: string;
 }
 }
+}
 
+}
 }
 export interface RollbackPlan {
   id: string;
@@ -167,7 +180,9 @@ export interface RollbackPlan {
   risks: string[];
 }
 }
+}
 
+}
 }
 export interface RollbackStep {
   order: number;
@@ -178,7 +193,9 @@ export interface RollbackStep {
   estimatedTime: number; // seconds
 }
 }
+}
 
+}
 }
 export interface BatchModificationRequest {
   scheduleIds: string[];
@@ -198,7 +215,9 @@ export interface BatchModificationRequest {
   skipImpactAnalysis?: boolean;
 }
 }
+}
 
+}
 }
 export interface BatchModificationResult {
   id: string;
@@ -219,7 +238,9 @@ export interface BatchModificationResult {
   parallelExecution: boolean;
 }
 }
+}
 
+}
 }
 export interface ModificationHistory {
   scheduleId: string;
@@ -229,7 +250,9 @@ export interface ModificationHistory {
   lastModified: string;
 }
 }
+}
 
+}
 }
 export interface HistoryEntry {
   id: string;
@@ -241,6 +264,7 @@ export interface HistoryEntry {
   approvalStatus: ApprovalStatus;
   rollbackId?: string;
   version: string;
+}
 }
 }
 

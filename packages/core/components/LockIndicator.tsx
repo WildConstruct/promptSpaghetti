@@ -3,6 +3,7 @@
 import React from 'react';
 import { Lock, AlertTriangle, Users, Shield } from 'lucide-react';
 import { WorkflowLock } from '../types/locking';
+}
 interface LockIndicatorProps {
   lock: WorkflowLock;
   size?: 'small' | 'medium' | 'large';
@@ -13,6 +14,7 @@ interface LockIndicatorProps {
   size = 'medium',
   showTooltip = true,
   className = ''
+}
 }) => {
   const sizeClasses = {
   small: 'h-4 w-4',
@@ -118,6 +120,7 @@ interface LockIndicatorProps {
 };
 
 // Resource Lock Status Component
+}
 interface ResourceLockStatusProps {
   resourceId: string;
   locks: WorkflowLock;
@@ -126,6 +129,7 @@ interface ResourceLockStatusProps {
   resourceId,
   locks,
   className = ''
+}
 }) => {
   const resourceLocks = locks.filter(lock => lock.resource_id === resourceId);
   if (resourceLocks.length === 0) {
@@ -162,6 +166,7 @@ interface ResourceLockStatusProps {
 };
 
 // Lock Type Badge Component
+}
 interface LockTypeBadgeProps {
   lockType: string;
   size?: 'small' | 'medium';
@@ -170,6 +175,7 @@ interface LockTypeBadgeProps {
   lockType,
   size = 'medium',
   className = ''
+}
 }) => {
   const sizeClasses = {
   small: 'px-2 py-1 text-xs',

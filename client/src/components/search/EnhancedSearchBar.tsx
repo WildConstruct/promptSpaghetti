@@ -7,6 +7,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearch } from './SearchContext';
 import { searchApiService } from '../../services/searchApiService';
+}
 interface EnhancedSearchBarProps {
   placeholder?: string;
   showHistory?: boolean;
@@ -23,6 +24,7 @@ interface EnhancedSearchBarProps {
   showSavedSearches = true,
   onSearch,
   className = ''
+}
 }) => {
   const {
     query,
@@ -165,13 +167,13 @@ interface EnhancedSearchBarProps {
   let itemIndex = 0;
   // Suggestions
   if (showSuggestions && suggestions.length > 0) {
-    dropdownItems.push()
+    dropdownItems.push(
       <div key="suggestions-header" style={{ padding: '8px 12px', fontSize: '12px', fontWeight: '600', color: '#718096', borderBottom: '1px solid #e2e8f0' }}>
         Suggestions
       </div>
     );
     suggestions.forEach((suggestion, index) => {
-      dropdownItems.push()
+      dropdownItems.push(
         <div
           key={`suggestion-${index}`}
           style={{
@@ -196,13 +198,13 @@ interface EnhancedSearchBarProps {
       .filter(t => t && t.toLowerCase().includes(inputValue.toLowerCase()))
       .slice(0, 3);
     if (relevantHistory.length > 0) {
-      dropdownItems.push()
+      dropdownItems.push(
         <div key="history-header" style={{ padding: '8px 12px', fontSize: '12px', fontWeight: '600', color: '#718096', borderBottom: '1px solid #e2e8f0' }}>
           Recent Searches
         </div>
       );
       relevantHistory.forEach((historyItem, index) => {
-        dropdownItems.push()
+        dropdownItems.push(
           <div
             key={`history-${index}`}
             style={{
@@ -222,13 +224,13 @@ interface EnhancedSearchBarProps {
       });
   // Trending (show when input is empty or short)
   if (showTrending && trendingSearches.length > 0 && inputValue.length < 2) {
-    dropdownItems.push()
+    dropdownItems.push(
       <div key="trending-header" style={{ padding: '8px 12px', fontSize: '12px', fontWeight: '600', color: '#718096', borderBottom: '1px solid #e2e8f0' }}>
         Trending Now
       </div>
     );
     trendingSearches.slice(0, 3).forEach((trending, index) => {
-      dropdownItems.push()
+      dropdownItems.push(
         <div
           key={`trending-${index}`}
           style={{
@@ -254,13 +256,13 @@ interface EnhancedSearchBarProps {
     });
   // Saved searches
   if (showSavedSearches && savedSearches.length > 0 && inputValue.length < 2) {
-    dropdownItems.push()
+    dropdownItems.push(
       <div key="saved-header" style={{ padding: '8px 12px', fontSize: '12px', fontWeight: '600', color: '#718096', borderBottom: '1px solid #e2e8f0' }}>
         Saved Searches
       </div>
     );
     savedSearches.slice(0, 3).forEach((saved, index) => {
-      dropdownItems.push()
+      dropdownItems.push(
         <div
           key={`saved-${index}`}
           style={{

@@ -17,16 +17,18 @@ import {
   FiAlertCircle,
   FiGlobe
 } from 'react-icons/fi';
+}
 interface ShareDialogProps {
   exportJob: ExportJob;
   onClose: () => void;
   onShareCreated: (share: ExportShare) => void;
   className?: string;
-  const ACCESS_LEVELS: Array<{,
+  const ACCESS_LEVELS: Array<{
   value: ShareAccessLevel;
   label: string;
   description: string;
   icon: React.ComponentType;
+}
 }> = [
   {
   value: 'public',

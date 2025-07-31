@@ -30,6 +30,7 @@ import {
   Zap,
   BarChart3
 } from 'lucide-react';
+}
 interface RetentionPolicy {
   id: string;,
   name: string;
@@ -121,6 +122,7 @@ interface RetentionPolicy {
   cascadeDelete: false,
   backupBeforeDelete: true,
   tags: [],
+}
 });
   // Load data
   useEffect(() => {
@@ -261,7 +263,7 @@ interface RetentionPolicy {
       const response = await fetch(`/api/data-retention/policies/${policyId}/status`, {)}
   },
   method: 'PATCH',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
 }
           'Content-Type': 'application/json'

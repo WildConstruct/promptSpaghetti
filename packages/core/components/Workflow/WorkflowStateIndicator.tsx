@@ -10,6 +10,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { WorkflowState, WorkflowStateConfig } from '../../types/WorkflowTypes';
+}
 interface WorkflowStateIndicatorProps {
   state: WorkflowState;
   stateConfig?: WorkflowStateConfig;
@@ -26,6 +27,7 @@ interface WorkflowStateIndicatorProps {
   is_initial: true,
   is_final: false,
   required_permissions: [],
+}
 },
   review: {
   id: 'review',
@@ -201,6 +203,7 @@ export const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps> = ({)
 };
 
 // Workflow State Timeline Component
+}
 interface WorkflowStateTimelineProps {
   states: WorkflowStateConfig;
   currentState: WorkflowState;
@@ -209,6 +212,7 @@ interface WorkflowStateTimelineProps {
 
 export const isCurrent = (stateId: WorkflowState) => stateId === currentState;
   return;
+}
     <div className={`flex items-center space-x-2 ${className}`}>}
       {states.map((state, index) => {
         const isLast = index === states.length - 1;
@@ -245,13 +249,15 @@ export const isCurrent = (stateId: WorkflowState) => stateId === currentState;
 };
 
 // Workflow State History Component
+}
 interface WorkflowStateHistoryProps {
-  history: Array<{,
+  history: Array<{
   state: WorkflowState;
   stateConfig?: WorkflowStateConfig;
   timestamp: string;
   actor?: string;
   comment?: string;
+}
 }>;
   className?: string;
 

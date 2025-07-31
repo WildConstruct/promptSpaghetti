@@ -7,6 +7,7 @@ import {
   professionalSpacing,
   professionalBorderRadius
 } from '../styles/professional-design-system';
+}
 interface ProfessionalNodeRendererProps {
   id: string;
   data: Record<string, unknown>;
@@ -31,6 +32,7 @@ interface ProfessionalNodeRendererProps {
   onSelect,
   getNodeMeta,
   getCategoryColor
+}
 }) => {
   try {
     const hasVariations = data?.variations && data.variations.length > 0;

@@ -73,6 +73,7 @@ export enum LogLevel {
   city?: string;
   latitude?: number;
   longitude?: number;
+}
 };
   deviceInfo?: {
   deviceId?: string;
@@ -89,6 +90,7 @@ export enum LogLevel {
 
 // Security Log Entry
 }
+}
 export interface SecurityLogEntry {
   id: string;
   timestamp: Date;
@@ -100,6 +102,7 @@ export interface SecurityLogEntry {
   id: string;
   email?: string;
   role?: AdminRole;
+}
 };
   target?: {
   type: 'user' | 'account' | 'lockout' | 'system';
@@ -127,6 +130,7 @@ export interface SecurityLogEntry {
 
 // Audit Trail Entry
 }
+}
 export interface AuditTrailEntry {
   id: string;
   timestamp: Date;
@@ -137,6 +141,7 @@ export interface AuditTrailEntry {
   type: 'user' | 'admin' | 'system';
   id: string;
   email?: string;
+}
 };
   changes: {
   before?: any;
@@ -150,10 +155,12 @@ export interface AuditTrailEntry {
 
 // Security Metrics
 }
+}
 export interface SecurityMetrics {
   period: {
   start: Date;
   end: Date;
+}
 };
   lockoutEvents: {
   total: number;
@@ -192,6 +199,7 @@ export interface SecurityMetrics {
 
 // Log Query Parameters
 }
+}
 export interface LogQuery {
   startTime?: Date;
   endTime?: Date;
@@ -208,6 +216,8 @@ export interface LogQuery {
   search?: string;
   // Log Retention Policy
 }
+}
+}
 export interface LogRetentionPolicy {
   framework: ComplianceFramework;
   retentionDays: number;
@@ -218,6 +228,7 @@ export interface LogRetentionPolicy {
   /**
   * Comprehensive security logging service
   */
+}
 }
 export class SecurityLogger extends EventEmitter {
   private logs: Map<string, SecurityLogEntry> = new Map();
@@ -233,7 +244,7 @@ export class SecurityLogger extends EventEmitter {
   /**
    * Log account lockout event
    */
-  public logAccountLocked(()
+  public logAccountLocked(((
     lockout: AccountLockout,
     context: LogContext = {}
   ): string {

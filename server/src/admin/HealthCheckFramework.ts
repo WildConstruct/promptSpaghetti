@@ -43,6 +43,7 @@ export enum HealthCheckCategory {
 }
 
 }
+}
 export interface HealthCheck {
   id: string;
   name: string;
@@ -60,7 +61,9 @@ export interface HealthCheck {
   execute: () => Promise<HealthCheckResult>;
 }
 }
+}
 
+}
 }
 export interface HealthCheckMetadata {
   version: string;
@@ -71,7 +74,9 @@ export interface HealthCheckMetadata {
   customData: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface AlertConfiguration {
   enabled: boolean;
@@ -81,7 +86,9 @@ export interface AlertConfiguration {
   suppressDuringMaintenance: boolean;
 }
 }
+}
 
+}
 }
 export interface AlertChannel {
   type: 'email' | 'slack' | 'webhook' | 'sms';
@@ -90,7 +97,9 @@ export interface AlertChannel {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface EscalationRule {
   triggerAfter: number; // minutes
@@ -98,12 +107,15 @@ export interface EscalationRule {
   parameters: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface HealthThresholds {
   responseTime: {
     warning: number;
     critical: number;
+}
 }
   };
   availability: {
@@ -118,6 +130,7 @@ export interface HealthThresholds {
 }
 
 }
+}
 export interface HealthCheckResult {
   checkId: string;
   status: HealthStatus;
@@ -129,7 +142,9 @@ export interface HealthCheckResult {
   metadata: ResultMetadata;
 }
 }
+}
 
+}
 }
 export interface HealthCheckDetails {
   measurements: Record<string, number>;
@@ -140,7 +155,9 @@ export interface HealthCheckDetails {
   relatedIncidents: string[];
 }
 }
+}
 
+}
 }
 export interface DependencyStatus {
   dependencyId: string;
@@ -149,7 +166,9 @@ export interface DependencyStatus {
   impact: 'none' | 'low' | 'medium' | 'high' | 'critical';
 }
 }
+}
 
+}
 }
 export interface ResultMetadata {
   executionEnvironment: string;
@@ -160,7 +179,9 @@ export interface ResultMetadata {
   additionalContext: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface HealthCheckSuite {
   suiteId: string;
@@ -172,7 +193,9 @@ export interface HealthCheckSuite {
   schedule: ScheduleConfiguration;
 }
 }
+}
 
+}
 }
 export interface ExecutionPolicy {
   concurrent: boolean;
@@ -183,7 +206,9 @@ export interface ExecutionPolicy {
   timeoutPolicy: 'individual' | 'suite';
 }
 }
+}
 
+}
 }
 export interface SuiteReportingSettings {
   generateReport: boolean;
@@ -193,7 +218,9 @@ export interface SuiteReportingSettings {
   retentionDays: number;
 }
 }
+}
 
+}
 }
 export interface ScheduleConfiguration {
   enabled: boolean;
@@ -203,7 +230,9 @@ export interface ScheduleConfiguration {
   adaptiveScheduling: AdaptiveSchedulingConfig;
 }
 }
+}
 
+}
 }
 export interface MaintenanceWindow {
   id: string;
@@ -214,7 +243,9 @@ export interface MaintenanceWindow {
   description: string;
 }
 }
+}
 
+}
 }
 export interface AdaptiveSchedulingConfig {
   enabled: boolean;
@@ -224,7 +255,9 @@ export interface AdaptiveSchedulingConfig {
   maxInterval: number; // milliseconds
 }
 }
+}
 
+}
 }
 export interface HealthDashboard {
   dashboardId: string;
@@ -234,7 +267,9 @@ export interface HealthDashboard {
   accessControl: DashboardAccessControl;
 }
 }
+}
 
+}
 }
 export interface DashboardWidget {
   widgetId: string;
@@ -242,10 +277,12 @@ export interface DashboardWidget {
   title: string;
   configuration: WidgetConfiguration;
 }
+}
   size: { width: number; height: number };
   position: { x: number; y: number };
 }
 
+}
 }
 export interface WidgetConfiguration {
   dataSource: string;
@@ -255,7 +292,9 @@ export interface WidgetConfiguration {
   alerting: boolean;
 }
 }
+}
 
+}
 }
 export interface DashboardAccessControl {
   public: boolean;
@@ -264,12 +303,15 @@ export interface DashboardAccessControl {
   permissions: DashboardPermission[];
 }
 }
+}
 
+}
 }
 export interface DashboardPermission {
   principal: string;
   principalType: 'user' | 'role';
   permissions: ('view' | 'edit' | 'admin')[];
+}
 }
 }
 

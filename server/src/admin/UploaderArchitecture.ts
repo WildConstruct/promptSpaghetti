@@ -24,6 +24,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 export interface UploadRequest {
   id: string;
   filename: string;
@@ -43,7 +44,9 @@ export interface UploadRequest {
   expiresAt?: Date;
 }
 }
+}
 
+}
 }
 export interface UploadChunk {
   chunkNumber: number;
@@ -55,7 +58,9 @@ export interface UploadChunk {
   verified: boolean;
 }
 }
+}
 
+}
 }
 export interface UploadMetadata {
   // File metadata
@@ -100,7 +105,9 @@ export interface UploadMetadata {
   tags: string[];
 }
 }
+}
 
+}
 }
 export interface UploadOptions {
   // Upload behavior
@@ -141,6 +148,7 @@ export interface UploadOptions {
   parallelChunks: number;
   bandwidthLimit?: number;
   priorityLevel: 'low' | 'normal' | 'high' | 'urgent';
+}
 }
 }
 
@@ -219,6 +227,7 @@ export enum StorageRedundancy {
 }
 
 }
+}
 export interface UploadProgress {
   uploadId: string;
   bytesUploaded: number;
@@ -233,7 +242,9 @@ export interface UploadProgress {
   lastActivity: Date;
 }
 }
+}
 
+}
 }
 export interface ProcessingJob {
   id: string;
@@ -247,6 +258,7 @@ export interface ProcessingJob {
   progress: number; // 0-100
   result?: any;
   metadata: Record<string, any>;
+}
 }
 }
 
@@ -278,6 +290,7 @@ export enum ProcessingStatus {
 }
 
 }
+}
 export interface UploadValidationResult {
   valid: boolean;
   errors: UploadValidationError[];
@@ -285,7 +298,9 @@ export interface UploadValidationResult {
   recommendations: string[];
 }
 }
+}
 
+}
 }
 export interface UploadValidationError {
   code: string;
@@ -295,7 +310,9 @@ export interface UploadValidationError {
   fixSuggestion?: string;
 }
 }
+}
 
+}
 }
 export interface UploadValidationWarning {
   code: string;
@@ -305,7 +322,9 @@ export interface UploadValidationWarning {
   canIgnore: boolean;
 }
 }
+}
 
+}
 }
 export interface StorageProvider {
   name: string;
@@ -331,7 +350,9 @@ export interface StorageProvider {
   getStorageStats(): Promise<StorageStats>;
 }
 }
+}
 
+}
 }
 export interface StorageConfig {
   endpoint?: string;
@@ -346,7 +367,9 @@ export interface StorageConfig {
   performance?: PerformanceConfig;
 }
 }
+}
 
+}
 }
 export interface EncryptionConfig {
   enabled: boolean;
@@ -355,7 +378,9 @@ export interface EncryptionConfig {
   keyRotationDays: number;
 }
 }
+}
 
+}
 }
 export interface CompressionConfig {
   enabled: boolean;
@@ -364,7 +389,9 @@ export interface CompressionConfig {
   threshold: number; // minimum file size to compress
 }
 }
+}
 
+}
 }
 export interface RedundancyConfig {
   enabled: boolean;
@@ -373,7 +400,9 @@ export interface RedundancyConfig {
   syncMode: 'async' | 'sync';
 }
 }
+}
 
+}
 }
 export interface PerformanceConfig {
   maxConcurrentUploads: number;
@@ -383,7 +412,9 @@ export interface PerformanceConfig {
   timeout: number;
 }
 }
+}
 
+}
 }
 export interface StorageResult {
   success: boolean;
@@ -394,7 +425,9 @@ export interface StorageResult {
   error?: string;
 }
 }
+}
 
+}
 }
 export interface StorageMetadata {
   size: number;
@@ -404,7 +437,9 @@ export interface StorageMetadata {
   customMetadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface StorageFileInfo {
   location: string;
@@ -415,7 +450,9 @@ export interface StorageFileInfo {
   isDirectory: boolean;
 }
 }
+}
 
+}
 }
 export interface StorageStats {
   totalFiles: number;
@@ -426,7 +463,9 @@ export interface StorageStats {
   costEstimate?: number;
 }
 }
+}
 
+}
 }
 export interface FileProcessor {
   type: ProcessorType;
@@ -446,7 +485,9 @@ export interface FileProcessor {
   cleanup?(upload: UploadRequest): Promise<void>;
 }
 }
+}
 
+}
 }
 export interface ProcessingResult {
   success: boolean;
@@ -459,7 +500,9 @@ export interface ProcessingResult {
   warnings?: string[];
 }
 }
+}
 
+}
 }
 export interface ProcessedFile {
   filename: string;
@@ -467,6 +510,7 @@ export interface ProcessedFile {
   size: number;
   contentType: string;
   purpose: string; // thumbnail, preview, converted, etc.
+}
 }
 }
 
@@ -730,8 +774,7 @@ export class UploaderService extends EventEmitter {
   // - queueForProcessing()
   // - processFile()
   // - setupEventHandlers()
-  // - startCleanupScheduler()
-  // - startProcessingWorker(// - etc.
+  // - startCleanupScheduler(// - startProcessingWorker(// - etc.
   
   private generateUploadId(): string {
     return `upload_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -867,6 +910,7 @@ export class UploaderService extends EventEmitter {
 }
 
 }
+}
 export interface UploaderConfig {
   maxFileSize: number;
   maxChunkSize: number;
@@ -884,6 +928,7 @@ export interface UploaderConfig {
   thumbnailGeneration: boolean;
   cleanupIntervalMs: number;
   maxConcurrentProcessing: number;
+}
 }
 }
 

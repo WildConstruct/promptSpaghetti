@@ -15,6 +15,7 @@ import { RedisService } from '../database/RedisService';
 import cron from 'node-cron';
 
 }
+}
 export interface ExpirationPolicy {
   id: string;
   name: string;
@@ -32,7 +33,9 @@ export interface ExpirationPolicy {
   updatedAt: Date;
 }
 }
+}
 
+}
 }
 export interface ExpirationRule {
   id: string;
@@ -51,7 +54,9 @@ export interface ExpirationRule {
   updatedAt: Date;
 }
 }
+}
 
+}
 }
 export interface ExpirationEvent {
   id: string;
@@ -65,7 +70,9 @@ export interface ExpirationEvent {
   notificationSent: boolean;
 }
 }
+}
 
+}
 }
 export interface ExpirationWarning {
   resourceId: string;
@@ -79,7 +86,9 @@ export interface ExpirationWarning {
   organizationId?: string;
 }
 }
+}
 
+}
 }
 export interface ExpirationStats {
   total: number;
@@ -95,9 +104,11 @@ export interface ExpirationStats {
     next7Days: number;
     next30Days: number;
 }
+}
   };
 }
 
+}
 }
 export interface RenewalRequest {
   resourceId: string;
@@ -108,7 +119,9 @@ export interface RenewalRequest {
   organizationId?: string;
 }
 }
+}
 
+}
 }
 export interface RenewalResult {
   success: boolean;
@@ -117,6 +130,7 @@ export interface RenewalResult {
   error?: string;
   warningMessage?: string;
   renewalCount?: number;
+}
 }
 }
 

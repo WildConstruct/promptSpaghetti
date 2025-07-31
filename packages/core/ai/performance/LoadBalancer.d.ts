@@ -6,6 +6,7 @@
  */
 import { BaseAIModel } from '../BaseAIModel';
 
+}
 export interface LoadBalancerConfig {
     strategy: 'round_robin' | 'least_connections' | 'response_time' | 'cost_aware' | 'adaptive';
     healthCheckInterval: number;
@@ -15,6 +16,7 @@ export interface LoadBalancerConfig {
     circuitBreakerEnabled: boolean;
     metricsCollection: boolean;
 
+}
 export interface ModelInstance {
     id: string;
     model: BaseAIModel;
@@ -31,6 +33,7 @@ export interface ModelInstance {
         costPerRequest: number;
         lastHealthCheck: number;
         consecutiveFailures: number;
+}
     };
     circuitBreaker: {
         state: 'closed' | 'open' | 'half_open';
@@ -38,6 +41,7 @@ export interface ModelInstance {
         nextRetryAt: number;
     };
 
+}
 export interface LoadBalancingRequest {
     id: string;
     input: any;
@@ -48,6 +52,7 @@ export interface LoadBalancingRequest {
     startTime: number;
     metadata?: Record<string, any>;
 
+}
 export interface LoadBalancingResult<T = any> {
     result: T;
     modelId: string;
@@ -93,6 +98,7 @@ export declare class LoadBalancer {
         averageResponseTime: number;
         overallErrorRate: number;
         totalCost: number;
+}
     };
     private generateRequestId;
     private sleep;

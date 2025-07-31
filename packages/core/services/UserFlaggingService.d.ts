@@ -8,6 +8,7 @@
  */
 import { FlagSubmission, FlaggingStatus } from '../components/Flagging/FlaggingButton';
 
+}
 export interface UserFlagReport {
     id: string;
     contentId: string;
@@ -26,6 +27,7 @@ export interface UserFlagReport {
     resolution?: FlagResolution;
     metadata: Record<string, unknown>;
 
+}
 export interface FlagResolution {
     action: 'approved' | 'removed' | 'edited' | 'warning_issued' | 'user_suspended' | 'no_action';
     reason: string;
@@ -34,6 +36,7 @@ export interface FlagResolution {
     notificationSent: boolean;
     precedentCase?: string;
 
+}
 export interface ContentFlagSummary {
     contentId: string;
     contentType: string;
@@ -48,10 +51,12 @@ export interface ContentFlagSummary {
     mlConfidence?: number;
     moderationPriority: 'low' | 'medium' | 'high' | 'urgent';
 
+}
 export interface FlaggingAnalytics {
     timeRange: {
         start: Date;
         end: Date;
+}
     };
     totalReports: number;
     uniqueReporters: number;
@@ -64,7 +69,7 @@ export interface FlaggingAnalytics {
         pending: number;
         avgResolutionTimeHours: number;
     };
-    topReporters: Array<{,
+    topReporters: Array<{
         userId: string;
         reportCount: number;
         accuracy: number;
@@ -80,6 +85,7 @@ export interface FlaggingAnalytics {
         escalationRate: number;
     };
 
+}
 export interface FlaggingConfig {
     enableUserFlagging: boolean;
     maxFlagsPerUser24h: number;
@@ -94,6 +100,7 @@ export interface FlaggingConfig {
         userFlaggingWeight: number;
         combineScores: boolean;
         autoModerationThreshold: number;
+}
     };
 /**
  * User Flagging Service

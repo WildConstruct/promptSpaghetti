@@ -8,11 +8,13 @@
 
 // Core Era and Period Definitions
 
+}
 export interface Era {
   name: string;
   period: {
     start: number; // Year
     end: number;   // Year
+}
   };
   region: string;
   accuracy: 'high' | 'medium' | 'low';
@@ -54,6 +56,7 @@ export const HISTORICAL_ERAS = {
 
 // Material and Content Variations
 
+}
 export interface Variation {
   id: string;
   type: 'color' | 'texture' | 'pattern' | 'quality' | 'condition';
@@ -63,10 +66,12 @@ export interface Variation {
   region_specific?: string;
   social_class?: SocialClass;
 }
+}
 export type SocialClass = 'peasant' | 'artisan' | 'merchant' | 'noble' | 'clergy' | 'royal';
 
 // Core UTDG Node Interface
 
+}
 export interface UTDGNode {
   id: string;
   type: 'material' | 'texture' | 'pattern' | 'style' | 'garment' | 'accessory' | 'tool' | 'decoration';
@@ -83,6 +88,7 @@ export interface UTDGNode {
   occupation?: string;
   ceremonial?: boolean;
   daily_use?: boolean;
+}
 };
   relationships: {
   compatible: string;    // Compatible node IDs,
@@ -104,6 +110,7 @@ export interface UTDGNode {
 
 // Historical Constraint System
 }
+}
 export interface HistoricalConstraint {
   id: string;
   rule: string;
@@ -116,23 +123,31 @@ export interface HistoricalConstraint {
   historical_basis?: string;
   // Constraint Validation Result
 }
+}
+}
 export interface ConstraintValidationResult {
   valid: boolean;
   violations: ConstraintViolation;
   warnings: ConstraintWarning;
   suggestions: ConstraintSuggestion;
 }
+}
+}
 export interface ConstraintViolation {
   constraint_id: string;
   node_ids: string;
   message: string;
   severity: 'critical' | 'major' | 'minor'
+}
   }
+}
 export interface ConstraintWarning {
   constraint_id: string;
   node_ids: string;
   message: string;
   historical_context?: string;
+}
+}
 }
 export interface ConstraintSuggestion {
   constraint_id: string;
@@ -140,6 +155,8 @@ export interface ConstraintSuggestion {
   message: string;
   suggested_alternatives?: string;
   // External Data Source Integration
+}
+}
 }
 export interface DataSource {
   id: string;
@@ -152,6 +169,7 @@ export interface DataSource {
   ttl: number; // Time to live in seconds,
   strategy: 'memory' | 'disk' | 'hybrid';
   max_size?: number;
+}
 };
   transforms: DataTransform;
   rate_limiting?: {
@@ -166,19 +184,24 @@ export interface DataSource {
   last_validated: string;
 };
 }
+}
 export interface AuthConfig {
   type: 'api_key' | 'oauth' | 'basic' | 'bearer';
   credentials: Record<string, string>;
+}
+}
 }
 export interface DataTransform {
   type: 'map_fields' | 'filter' | 'validate' | 'enrich';
   config: Record<string, any>;
   description: string;
 }
+}
 export type UTDGNodeType = UTDGNode['type'];
 
 // Historical Query Interface
 
+}
 export interface HistoricalQuery {
   era: string | string;
   region?: string | string;
@@ -192,6 +215,8 @@ export interface HistoricalQuery {
   include_variations?: boolean;
   min_authenticity?: number;
 }
+}
+}
 export interface HistoricalQueryResult {
   nodes: UTDGNode;
   total_count: number;
@@ -199,9 +224,11 @@ export interface HistoricalQueryResult {
   query_time: number;
   cache_hit: boolean;
   sources_used: string;
+}
 };
 
 // Medieval Demo Specific Types
+}
 }
 export interface MedievalClothing extends UTDGNode {
   type: 'garment';
@@ -217,6 +244,7 @@ export interface MedievalClothing extends UTDGNode {
 
 // UTDG Graph Structure
 
+}
 export interface UTDGGraph {
   nodes: UTDGNode;
   constraints: HistoricalConstraint;
@@ -227,9 +255,11 @@ export interface UTDGGraph {
   era_focus: Era;
   accuracy_level: 'high' | 'medium' | 'low';
   source_attribution: string;
+}
 };
 
 // Content Generation Configuration
+}
 }
 export interface ContentGenerationConfig {
   era: Era;
@@ -247,6 +277,8 @@ export interface ContentGenerationConfig {
   forbidden_elements?: string;
   prefer_common_items?: boolean;
 }
+}
+}
 export interface GeneratedContent {
   nodes: UTDGNode;
   constraints_applied: HistoricalConstraint;
@@ -256,9 +288,11 @@ export interface GeneratedContent {
   accuracy_score: number;
   creativity_score: number;
   historical_basis: string;
+}
 };
 
 // Wild Construct Integration Types
+}
 }
 export interface VFXExportData {
   scene_description: string;
@@ -274,11 +308,15 @@ export interface VFXExportData {
   backdrop_data?: BackdropData;
   meteor_data?: MeteorData;
 }
+}
+}
 export interface MaterialDescription {
   name: string;
   properties: Record<string, any>;
   historical_basis: string;
   authenticity_level: number;
+}
+}
 }
 export interface TextureDescription {
   name: string;
@@ -286,21 +324,29 @@ export interface TextureDescription {
   color_palette: string;
   historical_source: string;
 }
+}
+}
 export interface CrowdControlData {
   character_types: string;
   clothing_combinations: string[];
   social_stratification: Record<SocialClass, number>;
+}
+}
 }
 export interface BackdropData {
   architectural_style: string;
   materials: string;
   atmospheric_conditions: string;
 }
+}
+}
 export interface MeteorData {
   weather_patterns: string;
   seasonal_conditions: string;
   time_of_day_preferences: string;
   // Validation and Quality Assurance
+}
+}
 }
 export interface DataQualityMetrics {
   completeness: number;        // Percentage of required fields filled,
@@ -309,12 +355,16 @@ export interface DataQualityMetrics {
   source_reliability: number;  // Data source credibility,
   freshness: number;          // How recently data was updated,
 }
+}
+}
 export interface ValidationReport {
   overall_score: number;
   metrics: DataQualityMetrics;
   issues: ValidationIssue;
   recommendations: string;
   last_validated: string;
+}
+}
 }
 export interface ValidationIssue {
   type: 'missing_data' | 'inconsistency' | 'historical_error' | 'source_issue';
@@ -323,6 +373,7 @@ export interface ValidationIssue {
   affected_nodes: string;
   suggested_fix?: string;
   // Export all types for external use
+}
 }
 export type {
   UTDGNode,

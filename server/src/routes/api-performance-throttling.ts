@@ -25,6 +25,7 @@ import { RateLimiter } from '../../packages/core/security/RateLimiter';
 // ============================================================================
 
 }
+}
 interface InitializePerformanceThrottlingRequest {
   config: APIPerformanceThrottlingConfig;
   integration_settings?: {
@@ -33,9 +34,11 @@ interface InitializePerformanceThrottlingRequest {
     predictive_load_management_enabled: boolean;
     real_time_adjustments_enabled: boolean;
 }
+}
   };
 }
 
+}
 }
 interface PerformThrottlingAdjustmentRequest {
   context?: {
@@ -45,6 +48,7 @@ interface PerformThrottlingAdjustmentRequest {
     geographic_region?: string;
     application_type?: string;
     request_priority?: 'low' | 'medium' | 'high' | 'critical';
+}
 }
   };
   adjustment_preferences?: {
@@ -62,12 +66,14 @@ interface PerformThrottlingAdjustmentRequest {
 }
 
 }
+}
 interface OptimizePerformanceThrottlingRequest {
   optimization_scope: {
     endpoints?: string[];
     user_tiers?: string[];
     time_window_hours?: number;
     optimization_objectives: ('performance' | 'cost' | 'reliability' | 'user_experience')[];
+}
 }
   };
   optimization_constraints?: {
@@ -87,11 +93,13 @@ interface OptimizePerformanceThrottlingRequest {
 }
 
 }
+}
 interface GetPerformanceAnalyticsRequest {
   analytics_scope: {
     time_range: {
       start_timestamp: number;
       end_timestamp: number;
+}
 }
     };
     dimensions?: ('endpoint' | 'user_tier' | 'geographic' | 'temporal' | 'device_type')[];
@@ -106,11 +114,13 @@ interface GetPerformanceAnalyticsRequest {
 }
 
 }
+}
 interface GetPerformanceMetricsRequest {
   metrics_scope: {
     real_time?: boolean;
     historical_window_hours?: number;
     metric_categories?: ('response_time' | 'throughput' | 'error_rates' | 'resource_utilization' | 'quality')[];
+}
 }
   };
   filtering?: {
@@ -120,6 +130,7 @@ interface GetPerformanceMetricsRequest {
   };
 }
 
+}
 }
 interface UpdateThrottlingConfigRequest {
   config_updates: Partial<APIPerformanceThrottlingConfig>;
@@ -131,11 +142,13 @@ interface UpdateThrottlingConfigRequest {
       rollback_delay_minutes: number;
       success_criteria: string[];
 }
+}
     };
   };
 }
 
 // Response interfaces
+}
 }
 interface APIResponse {
   success: boolean;
@@ -146,6 +159,7 @@ interface APIResponse {
     request_id: string;
     processing_time_ms: number;
     api_version: string;
+}
 }
   };
 }

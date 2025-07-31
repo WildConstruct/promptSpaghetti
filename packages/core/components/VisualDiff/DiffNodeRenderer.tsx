@@ -2,6 +2,7 @@
 // Story 9.3.2 - Visual Diff Tool
 import React, { memo } from 'react';
 import { Handle, Position, NodeProps } from 'reactflow';
+}
 interface DiffNodeData {
   originalNode: Error;
   diffState: 'added' | 'removed' | 'modified' | 'unchanged';
@@ -10,6 +11,7 @@ interface DiffNodeData {
   side: 'source' | 'target';
   [key: string]: unknown;
 
+}
 export const DiffNodeRenderer = memo<NodeProps<DiffNodeData>>(({ data, selected }) => {
   const { originalNode, diffState, changeDetails, showMetadata, side } = data;
   // Get styling based on diff state

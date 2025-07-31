@@ -1,5 +1,6 @@
 import React from 'react';
 
+}
 export interface VisualDiffPanelProps {
     graphId: string;
     initialSourceVersionId?: string;
@@ -11,3 +12,4 @@ export interface VisualDiffPanelProps {
 declare const VisualDiffPanel: React.FC<VisualDiffPanelProps>;
 export default VisualDiffPanel;
 //# sourceMappingURL=VisualDiffPanel.d.ts.map
+}

@@ -16,6 +16,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { PerformanceMonitor } from '../monitoring/PerformanceMonitor';
 
 }
+}
 export interface OptimizationRecommendation {
   recommendationId: string;
   category: OptimizationCategory;
@@ -29,6 +30,7 @@ export interface OptimizationRecommendation {
     resourceSaving: number; // percentage
     userExperienceImprovement: number; // 1-10 scale
     implementationEffort: ImplementationEffort;
+}
 }
   };
   
@@ -58,6 +60,7 @@ export interface OptimizationRecommendation {
 }
 
 }
+}
 export interface OptimizationPolicy {
   policyId: string;
   name: string;
@@ -75,6 +78,7 @@ export interface OptimizationPolicy {
     maxDowntime: number; // minutes
     allowedWindows: MaintenanceWindow[];
     excludedSystems: string[];
+}
 }
   };
   
@@ -96,6 +100,7 @@ export interface OptimizationPolicy {
 }
 
 }
+}
 export interface SystemOptimizationProfile {
   profileId: string;
   name: string;
@@ -108,6 +113,7 @@ export interface SystemOptimizationProfile {
     throughput: number; // requests per second
     errorRate: number; // percentage
     resourceUtilization: number; // percentage
+}
 }
   };
   
@@ -135,6 +141,7 @@ export interface SystemOptimizationProfile {
 }
 
 }
+}
 export interface OptimizationDashboard {
   systemHealth: {
     overallScore: number; // 0-100
@@ -143,6 +150,7 @@ export interface OptimizationDashboard {
       resources: number;
       efficiency: number;
       reliability: number;
+}
 }
     };
     alerts: OptimizationAlert[];
@@ -199,6 +207,7 @@ export type ImplementationEffort = 'minimal' | 'low' | 'medium' | 'high' | 'exte
 export type RecommendationStatus = 'pending' | 'approved' | 'implementing' | 'completed' | 'rejected' | 'expired';
 
 }
+}
 export interface OptimizationStep {
   stepId: string;
   order: number;
@@ -210,7 +219,9 @@ export interface OptimizationStep {
   rollbackInstructions?: string;
 }
 }
+}
 
+}
 }
 export interface OptimizationRisk {
   riskId: string;
@@ -221,7 +232,9 @@ export interface OptimizationRisk {
   mitigation: string;
 }
 }
+}
 
+}
 }
 export interface OptimizationResult {
   success: boolean;
@@ -231,7 +244,9 @@ export interface OptimizationResult {
   nextRecommendedAction?: string;
 }
 }
+}
 
+}
 }
 export interface PolicyRule {
   ruleId: string;
@@ -241,7 +256,9 @@ export interface PolicyRule {
   metric: string;
 }
 }
+}
 
+}
 }
 export interface PolicyTrigger {
   triggerId: string;
@@ -249,7 +266,9 @@ export interface PolicyTrigger {
   configuration: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface PolicyAction {
   actionId: string;
@@ -258,7 +277,9 @@ export interface PolicyAction {
   rollbackAction?: string;
 }
 }
+}
 
+}
 }
 export interface MaintenanceWindow {
   windowId: string;
@@ -269,7 +290,9 @@ export interface MaintenanceWindow {
   timezone: string;
 }
 }
+}
 
+}
 }
 export interface CachingConfiguration {
   enabled: boolean;
@@ -279,7 +302,9 @@ export interface CachingConfiguration {
   compressionEnabled: boolean;
 }
 }
+}
 
+}
 }
 export interface ConcurrencyConfiguration {
   maxConcurrentRequests: number;
@@ -288,7 +313,9 @@ export interface ConcurrencyConfiguration {
   priorityLevels: number;
 }
 }
+}
 
+}
 }
 export interface ResourceLimitsConfiguration {
   cpu: { limit: number; warning: number };
@@ -297,6 +324,7 @@ export interface ResourceLimitsConfiguration {
   network: { limit: number; warning: number };
 }
 
+}
 }
 export interface ScalingConfiguration {
   enabled: boolean;
@@ -307,14 +335,18 @@ export interface ScalingConfiguration {
   scaleDownThreshold: number;
 }
 }
+}
 
+}
 }
 export interface TimeRange {
   start: string; // HH:MM
   end: string; // HH:MM
 }
 }
+}
 
+}
 }
 export interface PerformanceBudget {
   budgetId: string;
@@ -324,7 +356,9 @@ export interface PerformanceBudget {
   critical: number;
 }
 }
+}
 
+}
 }
 export interface OptimizationAlert {
   alertId: string;
@@ -337,7 +371,9 @@ export interface OptimizationAlert {
   timestamp: Date;
 }
 }
+}
 
+}
 }
 export interface OptimizationSchedule {
   scheduleId: string;
@@ -349,7 +385,9 @@ export interface OptimizationSchedule {
   status: 'scheduled' | 'running' | 'completed' | 'failed';
 }
 }
+}
 
+}
 }
 export interface PolicyChange {
   changeId: string;
@@ -361,7 +399,9 @@ export interface PolicyChange {
   summary: string;
 }
 }
+}
 
+}
 }
 export interface TrendData {
   timestamp: Date;
@@ -370,7 +410,9 @@ export interface TrendData {
   status: 'good' | 'warning' | 'critical';
 }
 }
+}
 
+}
 }
 export interface QuickAction {
   actionId: string;
@@ -382,13 +424,16 @@ export interface QuickAction {
   requiredPermission: string;
 }
 }
+}
 
+}
 }
 export interface ValidationCriteria {
   metrics: string[];
   thresholds: Record<string, number>;
   timeout: number; // seconds
   rollbackOnFailure: boolean;
+}
 }
 }
 
@@ -972,6 +1017,7 @@ export class OptimizationToolsService extends EventEmitter {
 
 // Supporting interface for optimization execution tracking
 }
+}
 interface OptimizationExecution {
   executionId: string;
   recommendationId: string;
@@ -984,6 +1030,7 @@ interface OptimizationExecution {
     startTime?: Date;
     endTime?: Date;
     error?: string;
+}
 }
   }>;
   dryRun: boolean;

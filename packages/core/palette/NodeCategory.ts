@@ -17,10 +17,12 @@ import {
  * Node category metadata
  */
 
+}
 export interface NodeCategory {
   id: string;
   name: string;
   description: string;
+}
   icon: React.ComponentType<{ size?: number; color?: string }>;
   color: string;
   order: number;
@@ -273,6 +275,7 @@ export function getCategoryColor(categoryId: string, opacity: number = 1): strin
  * Category filter options
  */
 
+}
 export interface CategoryFilterOptions {
   difficulty?: 'beginner' | 'intermediate' | 'advanced';
   usage?: 'common' | 'specialized' | 'experimental';
@@ -280,6 +283,7 @@ export interface CategoryFilterOptions {
   /**
   * Filter categories by options
   */
+}
 }
 export function filterCategories(options: CategoryFilterOptions): NodeCategory {
   let categories = getAllCategories();

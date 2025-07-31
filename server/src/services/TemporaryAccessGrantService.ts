@@ -18,6 +18,7 @@ import {
 } from '../../../packages/core/types/DataClassification';
 
 }
+}
 export interface TemporaryAccessGrant {
   id: string;
   requestId?: string;
@@ -43,7 +44,9 @@ export interface TemporaryAccessGrant {
   lastUsedAt?: Date;
 }
 }
+}
 
+}
 }
 export interface GrantedPermission {
   operation: DataOperation;
@@ -58,7 +61,9 @@ export interface GrantedPermission {
   auditLevel: 'STANDARD' | 'ENHANCED' | 'COMPREHENSIVE' | 'REALTIME';
 }
 }
+}
 
+}
 }
 export interface RateLimit {
   type: 'REQUESTS_PER_MINUTE' | 'REQUESTS_PER_HOUR' | 'DATA_VOLUME_PER_DAY' | 'CONCURRENT_SESSIONS';
@@ -68,7 +73,9 @@ export interface RateLimit {
   burstLimit?: number;
 }
 }
+}
 
+}
 }
 export interface AccessScope {
   type: 'RESOURCE_SPECIFIC' | 'CLASSIFICATION_LEVEL' | 'DEPARTMENT' | 'PROJECT' | 'GLOBAL';
@@ -79,7 +86,9 @@ export interface AccessScope {
   contextualRestrictions: ContextualRestriction[];
 }
 }
+}
 
+}
 }
 export interface ScopeTarget {
   type: 'RESOURCE_ID' | 'RESOURCE_PATTERN' | 'CLASSIFICATION' | 'DEPARTMENT' | 'PROJECT';
@@ -87,7 +96,9 @@ export interface ScopeTarget {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ContextualRestriction {
   type: 'LOCATION' | 'DEVICE' | 'NETWORK' | 'TIME_OF_DAY' | 'USER_ATTRIBUTE';
@@ -96,7 +107,9 @@ export interface ContextualRestriction {
   fallbackBehavior: 'DENY' | 'DEGRADE' | 'WARN' | 'AUDIT';
 }
 }
+}
 
+}
 }
 export interface RestrictionSpecification {
   attribute: string;
@@ -106,7 +119,9 @@ export interface RestrictionSpecification {
   customValidation?: string;
 }
 }
+}
 
+}
 }
 export interface GrantTimeWindow {
   startTime?: Date;
@@ -122,7 +137,9 @@ export interface GrantTimeWindow {
   extensionDuration: number; // hours
 }
 }
+}
 
+}
 }
 export interface TimeRange {
   startHour: number; // 0-23
@@ -131,7 +148,9 @@ export interface TimeRange {
   exceptions: TimeException[];
 }
 }
+}
 
+}
 }
 export interface TimeException {
   date: Date;
@@ -140,7 +159,9 @@ export interface TimeException {
   approvedBy: string;
 }
 }
+}
 
+}
 }
 export interface BlackoutPeriod {
   start: Date;
@@ -151,7 +172,9 @@ export interface BlackoutPeriod {
   overrideRequiresApproval: boolean;
 }
 }
+}
 
+}
 }
 export interface AccessCondition {
   id: string;
@@ -164,7 +187,9 @@ export interface AccessCondition {
   reVerificationInterval?: number; // minutes
 }
 }
+}
 
+}
 }
 export interface ConditionSpecification {
   parameters: Record<string, any>;
@@ -173,13 +198,16 @@ export interface ConditionSpecification {
   conflictsWith: string[]; // IDs of conflicting conditions
 }
 }
+}
 
+}
 }
 export interface ValidationRule {
   type: 'PRESENCE' | 'FORMAT' | 'RANGE' | 'CUSTOM';
   specification: Record<string, any>;
   errorMessage: string;
   severity: 'ERROR' | 'WARNING' | 'INFO';
+}
 }
 }
 
@@ -192,6 +220,7 @@ export type GrantStatus =
   | 'USED_UP'
   | 'FAILED_CONDITIONS';
 
+}
 }
 export interface GrantUsage {
   totalRequests: number;
@@ -207,7 +236,9 @@ export interface GrantUsage {
   lastViolation?: GrantViolation;
 }
 }
+}
 
+}
 }
 export interface GrantViolation {
   id: string;
@@ -220,7 +251,9 @@ export interface GrantViolation {
   impact: ViolationImpact;
 }
 }
+}
 
+}
 }
 export interface ViolationImpact {
   riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
@@ -229,7 +262,9 @@ export interface ViolationImpact {
   escalationRequired: boolean;
 }
 }
+}
 
+}
 }
 export interface GrantMonitoring {
   enabled: boolean;
@@ -241,7 +276,9 @@ export interface GrantMonitoring {
   retentionPeriod: number; // days
 }
 }
+}
 
+}
 }
 export interface AlertThreshold {
   metric: string;
@@ -253,7 +290,9 @@ export interface AlertThreshold {
   recipients: string[];
 }
 }
+}
 
+}
 }
 export interface AnomalyDetectionConfig {
   enabled: boolean;
@@ -263,7 +302,9 @@ export interface AnomalyDetectionConfig {
   responseActions: AnomalyResponseAction[];
 }
 }
+}
 
+}
 }
 export interface AnomalyDetectionMethod {
   type: 'STATISTICAL' | 'MACHINE_LEARNING' | 'RULE_BASED' | 'BEHAVIORAL';
@@ -271,7 +312,9 @@ export interface AnomalyDetectionMethod {
   weight: number;
 }
 }
+}
 
+}
 }
 export interface AnomalyResponseAction {
   trigger: 'ANOMALY_DETECTED' | 'ANOMALY_CONFIRMED' | 'ANOMALY_SEVERE';
@@ -280,7 +323,9 @@ export interface AnomalyResponseAction {
   automatic: boolean;
 }
 }
+}
 
+}
 }
 export interface ComplianceCheck {
   framework: 'GDPR' | 'HIPAA' | 'SOC2' | 'FedRAMP' | 'FISMA' | 'ISO27001' | 'NIST';
@@ -291,7 +336,9 @@ export interface ComplianceCheck {
   remediationActions: string[];
 }
 }
+}
 
+}
 }
 export interface GrantSecurity {
   encryptionRequired: boolean;
@@ -304,7 +351,9 @@ export interface GrantSecurity {
   certificateBasedAuth: boolean;
 }
 }
+}
 
+}
 }
 export interface AccessToken {
   id: string;
@@ -320,7 +369,9 @@ export interface AccessToken {
   usage: TokenUsage;
 }
 }
+}
 
+}
 }
 export interface TokenUsage {
   requestCount: number;
@@ -330,7 +381,9 @@ export interface TokenUsage {
   errors: TokenError[];
 }
 }
+}
 
+}
 }
 export interface TokenError {
   timestamp: Date;
@@ -338,7 +391,9 @@ export interface TokenError {
   context: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface GrantCompliance {
   frameworks: ComplianceFramework[];
@@ -348,7 +403,9 @@ export interface GrantCompliance {
   attestations: ComplianceAttestation[];
 }
 }
+}
 
+}
 }
 export interface ComplianceFramework {
   name: string;
@@ -360,7 +417,9 @@ export interface ComplianceFramework {
   nextReview: Date;
 }
 }
+}
 
+}
 }
 export interface ComplianceRequirement {
   id: string;
@@ -371,7 +430,9 @@ export interface ComplianceRequirement {
   lastVerified: Date;
 }
 }
+}
 
+}
 }
 export interface ComplianceAuditEntry {
   id: string;
@@ -385,7 +446,9 @@ export interface ComplianceAuditEntry {
   evidence: string[];
 }
 }
+}
 
+}
 }
 export interface ComplianceCertification {
   id: string;
@@ -398,7 +461,9 @@ export interface ComplianceCertification {
   status: 'VALID' | 'EXPIRED' | 'REVOKED' | 'SUSPENDED';
 }
 }
+}
 
+}
 }
 export interface ComplianceViolation {
   id: string;
@@ -412,7 +477,9 @@ export interface ComplianceViolation {
   impact: ComplianceImpact;
 }
 }
+}
 
+}
 }
 export interface ComplianceImpact {
   riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
@@ -422,7 +489,9 @@ export interface ComplianceImpact {
   mitigationPlan: string[];
 }
 }
+}
 
+}
 }
 export interface ComplianceAttestation {
   id: string;
@@ -438,7 +507,9 @@ export interface ComplianceAttestation {
   witnessId?: string;
 }
 }
+}
 
+}
 }
 export interface GrantMetadata {
   createdBy: string;
@@ -457,7 +528,9 @@ export interface GrantMetadata {
   lastModifiedBy: string;
 }
 }
+}
 
+}
 }
 export interface GrantRiskAssessment {
   overallRisk: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
@@ -470,7 +543,9 @@ export interface GrantRiskAssessment {
   nextReview: Date;
 }
 }
+}
 
+}
 }
 export interface RiskFactor {
   category: 'DATA_SENSITIVITY' | 'USER_PRIVILEGE' | 'ACCESS_SCOPE' | 'TIME_DURATION' | 'CONTEXT' | 'COMPLIANCE';
@@ -481,7 +556,9 @@ export interface RiskFactor {
   mitigated: boolean;
 }
 }
+}
 
+}
 }
 export interface RiskMitigation {
   riskFactorId: string;
@@ -496,7 +573,9 @@ export interface RiskMitigation {
   verificationDate?: Date;
 }
 }
+}
 
+}
 }
 export interface GrantCreationRequest {
   requestId?: string;
@@ -513,7 +592,9 @@ export interface GrantCreationRequest {
   customAttributes?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface GrantRevocationRequest {
   grantId: string;
@@ -524,7 +605,9 @@ export interface GrantRevocationRequest {
   auditRequired: boolean;
 }
 }
+}
 
+}
 }
 export interface GrantExtensionRequest {
   grantId: string;
@@ -535,7 +618,9 @@ export interface GrantExtensionRequest {
   approverRequired: boolean;
 }
 }
+}
 
+}
 }
 export interface GrantValidationResult {
   valid: boolean;
@@ -545,7 +630,9 @@ export interface GrantValidationResult {
   recommendations: string[];
 }
 }
+}
 
+}
 }
 export interface GrantValidationViolation {
   type: 'SCOPE_VIOLATION' | 'TIME_VIOLATION' | 'CONDITION_VIOLATION' | 'SECURITY_VIOLATION' | 'COMPLIANCE_VIOLATION';
@@ -555,7 +642,9 @@ export interface GrantValidationViolation {
   remediation: string[];
 }
 }
+}
 
+}
 }
 export interface GrantValidationWarning {
   type: 'RISK_WARNING' | 'COMPLIANCE_WARNING' | 'SECURITY_WARNING' | 'PERFORMANCE_WARNING';
@@ -564,7 +653,9 @@ export interface GrantValidationWarning {
   recommendation: string;
 }
 }
+}
 
+}
 }
 export interface GrantSearchFilters {
   granteeId?: string;
@@ -582,7 +673,9 @@ export interface GrantSearchFilters {
   activeOnly?: boolean;
 }
 }
+}
 
+}
 }
 export interface GrantAnalytics {
   totalGrants: number;
@@ -600,7 +693,9 @@ export interface GrantAnalytics {
   recentActivity: GrantActivity[];
 }
 }
+}
 
+}
 }
 export interface GranteeStatistics {
   granteeId: string;
@@ -612,7 +707,9 @@ export interface GranteeStatistics {
   lastActivity: Date;
 }
 }
+}
 
+}
 }
 export interface GranterStatistics {
   granterId: string;
@@ -623,7 +720,9 @@ export interface GranterStatistics {
   riskAssessmentAccuracy: number;
 }
 }
+}
 
+}
 }
 export interface GrantActivity {
   timestamp: Date;
@@ -631,6 +730,7 @@ export interface GrantActivity {
   activity: 'CREATED' | 'ACTIVATED' | 'USED' | 'EXTENDED' | 'SUSPENDED' | 'REVOKED' | 'EXPIRED';
   userId: string;
   details: Record<string, any>;
+}
 }
 }
 

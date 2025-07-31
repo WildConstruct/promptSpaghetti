@@ -10,6 +10,7 @@ import { RiskScoringService } from './RiskScoringService';
 import { logger } from '../utils/logger';
 
 }
+}
 export interface GeolocationData {
   country: string;
   countryCode: string;
@@ -27,7 +28,9 @@ export interface GeolocationData {
   threatLevel: 'low' | 'medium' | 'high' | 'critical';
 }
 }
+}
 
+}
 }
 export interface DeviceFingerprint {
   id: string;
@@ -46,7 +49,9 @@ export interface DeviceFingerprint {
   trustLevel: number; // 0-100
 }
 }
+}
 
+}
 }
 export interface UserBehaviorContext {
   averageSessionDuration: number;
@@ -61,7 +66,9 @@ export interface UserBehaviorContext {
   loginFrequency: number; // logins per day
 }
 }
+}
 
+}
 }
 export interface ThreatIntelligence {
   ipReputation: {
@@ -69,6 +76,7 @@ export interface ThreatIntelligence {
     categories: string[]; // malware, spam, phishing, etc.
     lastSeen: Date;
     sources: string[];
+}
 }
   };
   knownAttackPatterns: {
@@ -84,6 +92,7 @@ export interface ThreatIntelligence {
 }
 
 }
+}
 export interface SessionAnalytics {
   sessionAge: number; // minutes
   activityCount: number;
@@ -93,6 +102,7 @@ export interface SessionAnalytics {
   deviceChanges: number;
   privilegeEscalations: number;
   suspiciousActivities: string[];
+}
 }
 }
 

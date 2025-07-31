@@ -6,7 +6,7 @@ import App from '../../App';
 
 // Helper to create proper drag events with coordinates
 const createDragEvent = (type: string, clientX: number, clientY: number, dataTransferData: string) => {
-  const event = new MouseEvent(type, {)
+  const event = new MouseEvent(type, {
   bubbles: true,
   cancelable: true,
   clientX,
@@ -14,14 +14,15 @@ const createDragEvent = (type: string, clientX: number, clientY: number, dataTra
 }) as MouseEvent & { dataTransfer: DataTransfer };
   // Add dataTransfer for drag events
   event.dataTransfer = {
-  getData: (format: string) => {,
-  if (format === 'application/reactflow' || format === 'application/node-type') {
-  return dataTransferData;
-  return '';
-},
+  getData: (format: string) => {
+    if (format === 'application/reactflow' || format === 'application/node-type') {
+      return dataTransferData;
+    }
+    return '';
+  },
   setData: jest.fn(),
-    dropEffect: 'move',
-    effectAllowed: 'all';
+  dropEffect: 'move',
+  effectAllowed: 'all'
   };
   return event;
 };
@@ -64,7 +65,7 @@ describe('Node Selection Bug Fixes (Real ReactFlow)', () => {
       return p;
     });
     // Simulate drag and drop
-    fireEvent.dragStart(subjectNodeInPalette, {)
+    fireEvent.dragStart(subjectNodeInPalette, {
   dataTransfer: { setData: jest.fn() }
     });
     // Create and dispatch the drop event
@@ -111,7 +112,7 @@ describe('Node Selection Bug Fixes (Real ReactFlow)', () => {
       return p;
     });
     // Simulate drag and drop at specific coordinates
-    fireEvent.dragStart(actionNodeInPalette, {)
+    fireEvent.dragStart(actionNodeInPalette, {
   dataTransfer: { setData: jest.fn() }
     });
     const dropEvent = createDragEvent('drop', 300, 200, 'Action');
@@ -144,7 +145,7 @@ describe('Node Selection Bug Fixes (Real ReactFlow)', () => {
       return p;
     });
     // Create the node
-    fireEvent.dragStart(actionNodeInPalette, {)
+    fireEvent.dragStart(actionNodeInPalette, {
   dataTransfer: { setData: jest.fn() }
     });
     const dropEvent = createDragEvent('drop', 300, 200, 'Action');
@@ -176,7 +177,7 @@ describe('Node Selection Bug Fixes (Real ReactFlow)', () => {
     const subjectNodeInPalette = await waitFor(() => {
       return screen.getByTestId('palette-node-Subject');
     });
-    fireEvent.dragStart(subjectNodeInPalette, {)
+    fireEvent.dragStart(subjectNodeInPalette, {
   dataTransfer: { setData: jest.fn() }
     });
     const firstDropEvent = createDragEvent('drop', 100, 100, 'Subject');
@@ -190,7 +191,7 @@ describe('Node Selection Bug Fixes (Real ReactFlow)', () => {
     const actionNodeInPalette = await waitFor(() => {
       return screen.getByTestId('palette-node-Action');
     });
-    fireEvent.dragStart(actionNodeInPalette, {)
+    fireEvent.dragStart(actionNodeInPalette, {
   dataTransfer: { setData: jest.fn() }
     });
     const secondDropEvent = createDragEvent('drop', 100, 100, 'Action');

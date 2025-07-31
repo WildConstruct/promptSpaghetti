@@ -112,6 +112,7 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
    * Evaluate Role-Based Access Control
    */
   async evaluateRBAC(request: AccessRequest): Promise<RBACDecision> {
+
     const matchedRoles: string = [];
     const matchedPermissions: string = [];
     const denialReasons: string = [];
@@ -170,6 +171,7 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
    * Evaluate Attribute-Based Access Control
    */
   async evaluateABAC(request: AccessRequest): Promise<ABACDecision> {
+
   const matchedPolicies: string = [];
   const obligations: PolicyObligation = [];
   const conditions: AccessCondition = [];
@@ -221,6 +223,7 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
    * Combine RBAC and ABAC decisions
    */
   async combinedDecision(rbac: RBACDecision, abac: ABACDecision): Promise<AccessDecision> {
+
   // Both RBAC and ABAC must permit for final approval
   const permitted = rbac.permitted && abac.permitted;
   let decision: 'PERMIT' | 'DENY' | 'INDETERMINATE';
@@ -289,6 +292,7 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
   this.policyCache.set(policy.id, policy);
     });
   private async getUserRoles(userId: string): Promise<DataClassificationRole> {
+
   const userRoleAssignments = this.rbacModel.userRoleAssignments.filter(;);
   assignment => assignment.userId === userId &&
   assignment.status === 'ACTIVE' &&
@@ -300,15 +304,13 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
   if (role && role.isActive) {
   roles.push(role);
   return roles;
-  private hasClassificationClearance(()
-  role: DataClassificationRole,
+  private hasClassificationClearance((role: DataClassificationRole,
   classification: DataClassificationLevel): boolean {,
   const levels: DataClassificationLevel = ['PUBLIC', 'INTERNAL', 'CONFIDENTIAL', 'RESTRICTED'];
   const roleLevel = levels.indexOf(role.maxClassificationLevel);
   const requiredLevel = levels.indexOf(classification);
   return roleLevel >= requiredLevel;
-  private async evaluateRoleConstraints(()
-  role: DataClassificationRole,
+  private async evaluateRoleConstraints((role: DataClassificationRole,
   request: AccessRequest): Promise<boolean> {,
   for (const constraint of role.constraints) {
   const satisfied = await this.evaluateConstraint(constraint, request);
@@ -346,8 +348,7 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
   if (permission) {
   permissions.push(permission);
   return permissions;
-  private permissionMatches(()
-  permission: DataClassificationPermission,
+  private permissionMatches((permission: DataClassificationPermission,
   request: AccessRequest): boolean {,
   // Check operation match
   if (permission.operation !== '*' && permission.operation !== request.action.operation) {
@@ -424,6 +425,7 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
   confidence: number;
   conditions?: AccessCondition;
 }> {
+
   // Simplified policy evaluation - in real implementation would be more complex
   const applicable = await this.isPolicyApplicable(policy, request);
   return {
@@ -432,13 +434,14 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
   confidence: applicable ? 0.9 : 0,
   conditions: [],
 };
-  private async evaluateClassificationPolicy(()
+  private async evaluateClassificationPolicy(((
     policy: ClassificationAccessPolicy,
-    request: AccessRequest,
+    request: AccessRequest
   ): Promise<{
   permitted: boolean;
   conditions: AccessCondition;
 }> {
+
     // Find applicable access rule
     const applicableRule = policy.accessRules.find(rule => ;);
       rule.operation === request.action.operation || rule.operation === '*'
@@ -462,11 +465,13 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
     const requiredLevel = levels.indexOf(criteria.clearanceLevel);
     return subjectLevel >= requiredLevel;
   private async evaluateAccessConditions(conditions: AccessCondition, request: AccessRequest): Promise<boolean> {
+
     for (const condition of conditions) {
       if (condition.required && !await this.evaluateAccessCondition(condition, request)) {
         return false;
     return true;
   private async evaluateAccessCondition(condition: AccessCondition, request: AccessRequest): Promise<boolean> {
+
     // Simplified condition evaluation
     return true;
   private calculateRiskLevel(rbac: RBACDecision, abac: ABACDecision): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' {

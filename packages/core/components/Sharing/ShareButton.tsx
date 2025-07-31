@@ -9,6 +9,7 @@
 import React, { useState } from 'react';
 import { ShareableResourceType } from '../../types/sharingTypes';
 import { ShareModal } from './ShareModal';
+}
 interface ShareButtonProps {
   resourceId: string;
   resourceType: ShareableResourceType;
@@ -27,6 +28,7 @@ interface ShareButtonProps {
   size = 'medium',
   disabled = false,
   onShareCreated
+}
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleOpenModal = () => {

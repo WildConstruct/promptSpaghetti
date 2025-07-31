@@ -9,8 +9,10 @@ import { RateLimitStore, RateLimitData } from './RateLimiter';
 // Redis Client Interface
 // ========================================
 
+}
 export interface RedisClient {
   get(key: string): Promise<string | null>;
+}
   set(key: string, value: string, options?: { EX?: number; PX?: number }): Promise<string | null>;
   incr(key: string): Promise<number>;
   expire(key: string, seconds: number): Promise<number>;
@@ -25,6 +27,7 @@ export interface RedisClient {
 // ========================================
 // Redis Configuration
 // ========================================
+}
 }
 export interface RedisRateLimitConfig {
   keyPrefix?: string;
@@ -54,6 +57,7 @@ class RedisLuaScripts {
         -- Key doesn't exist, create new window
         redis.call('SET', key, 1)
         redis.call('PEXPIRE', key, window_ms)
+}
         return {1, current_time + window_ms}
     else
         -- Key exists, increment
@@ -202,6 +206,7 @@ export class RedisRateLimitStore implements RateLimitStore {
    * Set rate limit data for a key
    */
   async set(key: string, data: RateLimitData, ttlMs: number): Promise<void> {
+
     const fullKey = this.keyPrefix + key;
     try {
       if (!this.isRedisAvailable && this.fallbackStore) {
@@ -225,6 +230,7 @@ export class RedisRateLimitStore implements RateLimitStore {
    * Atomically increment counter and return current count
    */
   async increment(key: string, windowMs: number): Promise<{ hits: number; resetTime: Date }> {
+
   const fullKey = this.keyPrefix + key;
   const currentTime = Date.now();
   try {
@@ -324,6 +330,7 @@ export class RedisRateLimitStore implements RateLimitStore {
   totalKeys: number;
   fallbackKeys: number;
 }> {
+
     let totalKeys = 0;
     try {
       if (this.isRedisAvailable) {
@@ -343,6 +350,7 @@ export class RedisRateLimitStore implements RateLimitStore {
    * Close connections and cleanup
    */
   async close(): Promise<void> {
+
     if (this.connectionCheckInterval) {
       clearInterval(this.connectionCheckInterval);
     try {
@@ -357,6 +365,7 @@ export class RedisRateLimitStore implements RateLimitStore {
   private async incrementFallback(key: string, )
     windowMs: number, 
     currentTime: number): Promise<{ hits: number; resetTime: Date }> {
+
   const existing = this.fallbackStore!.get(key);
   if (!existing || currentTime > existing.resetTime) {
   // New window
@@ -374,6 +383,7 @@ export class RedisRateLimitStore implements RateLimitStore {
       this.fallbackStore!.set(key, existing, windowMs);
       return { hits: existing.hits, resetTime: new Date(existing.resetTime) };
   private async cleanupManually(): Promise<void> {
+
     const pattern = this.keyPrefix + '*';
     try {
       const scanStream = this.client.scanStream({ match: pattern, count: 100 });
@@ -435,6 +445,7 @@ export class RedisConnectionFactory {
   maxRetriesPerRequest?: number;
   retryDelayOnFailover?: number;
 }): Promise<RedisClient> {
+
     // This is a mock implementation - in real usage, you'd use ioredis or node-redis
     throw new Error('Redis client implementation required. Install and configure ioredis or node-redis.');
   /**
@@ -445,6 +456,7 @@ export class RedisConnectionFactory {
     password?: string;
     maxRetriesPerRequest?: number;
   }): Promise<RedisClient> {
+
     // This is a mock implementation for Redis cluster
     throw new Error('Redis cluster client implementation required. Install and configure ioredis.');
 
@@ -456,9 +468,11 @@ export class MockRedisClient implements RedisClient {
   private data: Map<string, string> = new Map();
   private expiries: Map<string, number> = new Map();
   async get(key: string): Promise<string | null> {
+
     this.checkExpiry(key);
     return this.data.get(key) || null;
   async set(key: string, value: string, options?: { EX?: number; PX?: number }): Promise<string | null> {
+
     this.data.set(key, value);
     if (options?.EX) {
       this.expiries.set(key, Date.now() + options.EX * 1000);
@@ -466,32 +480,38 @@ export class MockRedisClient implements RedisClient {
       this.expiries.set(key, Date.now() + options.PX);
     return 'OK';
   async incr(key: string): Promise<number> {
+
     this.checkExpiry(key);
     const current = parseInt(this.data.get(key) || '0', 10);
     const newValue = current + 1;
     this.data.set(key, newValue.toString());
     return newValue;
   async expire(key: string, seconds: number): Promise<number> {
+
     if (this.data.has(key)) {
       this.expiries.set(key, Date.now() + seconds * 1000);
       return 1;
     return 0;
   async pexpire(key: string, milliseconds: number): Promise<number> {
+
     if (this.data.has(key)) {
       this.expiries.set(key, Date.now() + milliseconds);
       return 1;
     return 0;
   async ttl(key: string): Promise<number> {
+
     const expiry = this.expiries.get(key);
     if (!expiry) return -1;
     const remaining = Math.ceil((expiry - Date.now()) / 1000);
     return Math.max(-2, remaining);
   async del(key: string): Promise<number> {
+
     const existed = this.data.has(key);
     this.data.delete(key);
     this.expiries.delete(key);
     return existed ? 1 : 0;
   async eval(script: string, keys: string, args: string): Promise<unknown> {
+
     // Simple mock for Lua scripts
     if (script.includes('INCREMENT_WITH_EXPIRY')) {
       const key = keys[0];
@@ -505,8 +525,10 @@ export class MockRedisClient implements RedisClient {
       return [newValue, currentTime + windowMs];
     return null;
   async ping(): Promise<string> {
+
     return 'PONG';
   async quit(): Promise<string> {
+
     this.data.clear();
     this.expiries.clear();
     return 'OK';

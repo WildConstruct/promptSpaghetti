@@ -6,6 +6,7 @@
  */
 import React from 'react';
 
+}
 export interface TutorialStep {
     id: string;
     title: string;
@@ -20,6 +21,7 @@ export interface TutorialStep {
     tips?: string[];
     actions?: TutorialAction[];
 
+}
 export interface TutorialAction {
     id: string;
     type: 'click' | 'hover' | 'input' | 'scroll' | 'wait';
@@ -28,6 +30,7 @@ export interface TutorialAction {
     message?: string;
     completed: boolean;
 
+}
 export interface Tutorial {
     id: string;
     title: string;
@@ -41,6 +44,7 @@ export interface Tutorial {
         xp: number;
         badge?: string;
         certificate?: string;
+}
     };
     tags: string[];
     rating: number;
@@ -48,6 +52,7 @@ export interface Tutorial {
     createdAt: Date;
     updatedAt: Date;
 
+}
 export interface TutorialProgress {
     tutorialId: string;
     currentStepIndex: number;
@@ -58,6 +63,7 @@ export interface TutorialProgress {
     stepsCompleted: string[];
     score?: number;
 
+}
 export interface TutorialPlayerProps {
     tutorial?: Tutorial;
     isOpen: boolean;
@@ -71,12 +77,14 @@ export interface TutorialPlayerProps {
 
 export declare const TutorialPlayer: React.FC<TutorialPlayerProps>;
 
+}
 export interface TutorialBrowserProps {
     tutorials: Tutorial[];
     onSelectTutorial: (tutorial: Tutorial) => void;
     onStartTutorial?: (tutorial: Tutorial) => void;
     userProgress?: {
         [tutorialId: string]: TutorialProgress;
+}
     };
     className?: string;
 

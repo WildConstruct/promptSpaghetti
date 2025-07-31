@@ -16,6 +16,7 @@ import { Database } from '../database/DatabaseService';
 import { AuditService } from './AuditService';
 
 }
+}
 export interface ActivityRecord {
   id: string;
   userId: string;
@@ -33,7 +34,9 @@ export interface ActivityRecord {
   location?: GeolocationData;
 }
 }
+}
 
+}
 }
 export interface ActivityDetails {
   // Core activity data
@@ -64,7 +67,9 @@ export interface ActivityDetails {
   internal?: boolean;
 }
 }
+}
 
+}
 }
 export interface ActivityMetadata {
   // System metadata
@@ -92,7 +97,9 @@ export interface ActivityMetadata {
   anonymize?: boolean;
 }
 }
+}
 
+}
 }
 export interface GeolocationData {
   country?: string;
@@ -101,6 +108,7 @@ export interface GeolocationData {
   coordinates?: {
     latitude: number;
     longitude: number;
+}
 }
   };
   timezone?: string;
@@ -175,6 +183,7 @@ export enum ActivityCategory {
 }
 
 }
+}
 export interface ActivityQuery {
   userId?: string;
   sessionId?: string;
@@ -196,13 +205,16 @@ export interface ActivityQuery {
   sortOrder?: 'asc' | 'desc';
 }
 }
+}
 
+}
 }
 export interface ActivitySummary {
   userId: string;
   dateRange: {
     start: Date;
     end: Date;
+}
 }
   };
   totalActivities: number;
@@ -230,6 +242,7 @@ export interface ActivitySummary {
 }
 
 }
+}
 export interface ActivityExport {
   userId: string;
   exportDate: Date;
@@ -237,6 +250,7 @@ export interface ActivityExport {
   dateRange: {
     start: Date;
     end: Date;
+}
 }
   };
   format: 'json' | 'csv' | 'xml';

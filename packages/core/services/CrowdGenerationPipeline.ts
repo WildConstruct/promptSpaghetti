@@ -5,6 +5,7 @@
 import { HistoricalQuery, HistoricalItem, Era, ValidationResult } from '../types/UTDG';
 import { VFXPipelineMetadata } from '../types/VFXExport';
 
+}
 export interface CrowdGenerationRequest {
   scene: {
   era: Era;
@@ -12,6 +13,7 @@ export interface CrowdGenerationRequest {
   location: string; // e.g., "castle courtyard", "marketplace", "cathedral",
   timeOfDay: 'dawn' | 'morning' | 'noon' | 'afternoon' | 'evening' | 'night';
   season: 'spring' | 'summer' | 'autumn' | 'winter'
+}
   };
   crowd: {
   size: number;
@@ -31,6 +33,7 @@ export interface CrowdGenerationRequest {
   vfxPipeline: VFXPipelineMetadata;
 };
 }
+}
 export interface CrowdDemographics {
   socialClasses: {
   peasant: number; // 0-1 percentage,
@@ -39,6 +42,7 @@ export interface CrowdDemographics {
   noble: number;
   clergy: number;
   royal: number;
+}
 };
   ageDistribution: {
   children: number; // 0-12 years,
@@ -52,23 +56,30 @@ export interface CrowdDemographics {
   nonBinary?: number; // For appropriate historical periods,
 };
 }
+}
 export interface CrowdActivity {
   primary: string; // e.g., "market day", "religious ceremony", "royal procession",
   secondary: string; // Background activities,
   mood: 'festive' | 'solemn' | 'busy' | 'tense' | 'peaceful';
   interactions: InteractionType;
 }
+}
+}
 export interface InteractionType {
   type: 'trading' | 'conversation' | 'ceremony' | 'performance' | 'labor';
   participants: string; // Social classes involved,
   frequency: 'rare' | 'occasional' | 'common'
+}
   }
+}
 export interface CrowdGenerationResult {
   individuals: CrowdIndividual;
   groups: CrowdGroup;
   interactions: CrowdInteraction;
   validation: ValidationResult;
   metadata: CrowdMetadata;
+}
+}
 }
 export interface CrowdIndividual {
   id: string;
@@ -77,6 +88,7 @@ export interface CrowdIndividual {
   gender: 'male' | 'female';
   socialClass: string;
   occupation: string;
+}
 };
   appearance: {
   clothing: HistoricalItem;
@@ -97,6 +109,7 @@ export interface CrowdIndividual {
 };
   historicalAccuracy: number; // 0-1 score
 }
+}
 export interface CrowdGroup {
   id: string;
   type: 'family' | 'guild' | 'religious' | 'merchant' | 'nobility';
@@ -104,6 +117,8 @@ export interface CrowdGroup {
   activity: string;
   formation: 'circle' | 'line' | 'cluster' | 'processional';
   relationship: string;
+}
+}
 }
 export interface CrowdInteraction {
   id: string;
@@ -113,12 +128,15 @@ export interface CrowdInteraction {
   intensity: 'subtle' | 'moderate' | 'prominent';
   historicalContext: string;
 }
+}
+}
 export interface CrowdMetadata {
   generation: {
   timestamp: string;
   processingTime: number;
   algorithm: string;
   version: string;
+}
 };
   validation: {
   overallAccuracy: number;
@@ -192,6 +210,7 @@ export class CrowdGenerationPipeline {
    * Stage 1: Prepare historical context for crowd generation
    */
   private async prepareHistoricalContext(request: CrowdGenerationRequest): Promise<HistoricalContext> {
+
   const clothingQuery: HistoricalQuery = {,
   era: request.scene.era,
   region: [request.scene.region],
@@ -222,10 +241,11 @@ export class CrowdGenerationPipeline {
   /**
    * Stage 2: Generate individual crowd members
    */
-  private async generateIndividuals(()
+  private async generateIndividuals(((
     request: CrowdGenerationRequest,
-    context: HistoricalContext,
+    context: HistoricalContext
   ): Promise<CrowdIndividual> {
+
     const individuals: CrowdIndividual = [];
     for (let i = 0; i < request.crowd.size; i++) {
       const demographics = this.generateDemographics(request.crowd.demographics);
@@ -421,6 +441,7 @@ export class CrowdGenerationPipeline {
   private getBehaviorPatterns(request: any): any { return []; }
 
 // Supporting classes and interfaces
+}
 interface HistoricalContext {
   clothing: HistoricalItem;
   socialStructure: any;
@@ -434,6 +455,7 @@ class CrowdGenerationError extends Error {
 
 // Placeholder classes for dependency injection
 class HistoricalDataService {
+}
   async query(query: HistoricalQuery): Promise<any> { return { data: [] }; }
   async getSocialStructure(era: Era, region: string): Promise<any> { return {}; }
   async getCulturalRules(era: Era, region: string): Promise<any> { return {}; }
@@ -449,6 +471,7 @@ class ConstraintValidator {
     constraints: any): Promise<any> { return { violations: [] }; }
 class HistoricalClothingGenerator {
   async generateClothing(demographics: any, occupation: string, scene: any, context: any): Promise<any> {
+
     return { items: [], accessories: [], accuracyScore: 0.9 };
 class CrowdBehaviorEngine {
   generateBehavior(demographics: any, occupation: string, activity: any, context: any): any {,

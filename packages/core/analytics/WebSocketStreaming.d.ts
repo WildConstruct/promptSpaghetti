@@ -96,6 +96,7 @@ export declare const SubscriptionConfigSchema: z.ZodObject<{
     maxQueueSize?: number | undefined;
 }>;
 export type SubscriptionConfig = z.infer<typeof SubscriptionConfigSchema>;
+}
 interface ClientConnection {
     id: string;
     ws: WebSocket | any;
@@ -107,6 +108,7 @@ interface ClientConnection {
     connected: boolean;
     ipAddress?: string;
     userAgent?: string;
+}
 interface ConnectionStats {
     totalConnections: number;
     activeConnections: number;
@@ -115,6 +117,7 @@ interface ConnectionStats {
     messagesPerSecond: number;
     bytesPerSecond: number;
     errorRate: number;
+}
 interface WSServerConfig {
     port: number;
     heartbeatInterval: number;
@@ -248,6 +251,7 @@ export declare class WebSocketStreamingServer extends EventEmitter {
         subscriptions: number;
         lastHeartbeat: number;
         ipAddress?: string;
+}
     }>;
     /**
      * Broadcast custom message to all clients

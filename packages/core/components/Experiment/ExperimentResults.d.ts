@@ -5,6 +5,7 @@
 import React from 'react';
 import { ExperimentResults as ExperimentResultsType, Experiment } from '../../types/experiment';
 
+}
 export interface ExperimentResultsProps {
     experiment: Experiment;
     results: ExperimentResultsType;
@@ -17,3 +18,4 @@ export interface ExperimentResultsProps {
 export declare const ExperimentResults: React.FC<ExperimentResultsProps>;
 export default ExperimentResults;
 //# sourceMappingURL=ExperimentResults.d.ts.map
+}

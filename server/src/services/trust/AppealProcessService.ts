@@ -63,6 +63,7 @@ export type AppealDecision = 'approve' | 'partially_approve' | 'deny' | 'dismiss
 // =============================================================================
 
 }
+}
 export interface AppealEvidence {
   evidence_id: string;
   evidence_type: AppealEvidenceType;
@@ -76,7 +77,9 @@ export interface AppealEvidence {
   verification_status: 'pending' | 'verified' | 'disputed' | 'rejected';
 }
 }
+}
 
+}
 }
 export interface AppealTimeline {
   event_id: string;
@@ -89,7 +92,9 @@ export interface AppealTimeline {
   public_visible: boolean;
 }
 }
+}
 
+}
 }
 export interface AppealReviewCriteria {
   policy_adherence: number;      // 1-10 scale
@@ -100,7 +105,9 @@ export interface AppealReviewCriteria {
   risk_assessment: number;       // 1-10 scale
 }
 }
+}
 
+}
 }
 export interface AppealDecisionRationale {
   primary_reasoning: string;
@@ -112,7 +119,9 @@ export interface AppealDecisionRationale {
   recommended_actions?: string[];
 }
 }
+}
 
+}
 }
 export interface Appeal {
   appeal_id: string;
@@ -172,7 +181,9 @@ export interface Appeal {
   max_resubmissions: number;
 }
 }
+}
 
+}
 }
 export interface AppealFilters {
   status?: AppealStatus;
@@ -183,12 +194,14 @@ export interface AppealFilters {
     start: Date;
     end: Date;
 }
+}
   };
   escalation_level?: number;
   limit?: number;
   offset?: number;
 }
 
+}
 }
 export interface AppealStatistics {
   total_appeals: number;
@@ -201,6 +214,7 @@ export interface AppealStatistics {
     sla_compliance_rate: number;
     approval_rate: number;
     satisfaction_score: number;
+}
 }
   };
   workload_distribution: Record<ReviewerRole, number>;

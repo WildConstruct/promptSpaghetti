@@ -19,6 +19,7 @@ import {
   // Clock // Unused
 } from 'lucide-react';
 
+}
 export interface PasswordPolicy {
   minLength: number;,
   maxLength: number;
@@ -32,12 +33,16 @@ export interface PasswordPolicy {
   minUniqueChars: number;
   forbidRepeatingPatterns: boolean;
 }
+}
+}
 export interface UserContext {
   email?: string;
   firstName?: string;
   lastName?: string;
   username?: string;
   previousPasswords?: string;
+}
+}
 }
 export interface ValidationResult {
   isValid: boolean;,
@@ -47,6 +52,8 @@ export interface ValidationResult {
   suggestions: string;,
   estimatedCrackTime: string;
   entropy: number;
+}
+}
 }
 export interface ValidationCheck {
   id: string;,
@@ -77,6 +84,7 @@ export interface ValidationCheck {
   maxConsecutiveChars: 3,
   minUniqueChars: 8,
   forbidRepeatingPatterns: true,
+}
 };
 const COMMON_PASSWORDS = [;
   'password', 'password123', '123456', '123456789', 'qwerty', 'abc123',

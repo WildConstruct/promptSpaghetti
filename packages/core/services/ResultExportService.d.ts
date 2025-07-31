@@ -8,6 +8,7 @@
 import { PreviewResultWithPath } from '../types/ExecutionPath';
 import { ExportResult } from '../../../server/src/exporter';
 
+}
 export interface ResultExportOptions {
     format: ExportFormat;
     includeMetadata: boolean;
@@ -19,6 +20,7 @@ export interface ResultExportOptions {
         sceneNumbering?: boolean;
         shotBreakdown?: boolean;
         timingNotes?: boolean;
+}
     };
     vfxOptions?: {
         controlNetCompatible?: boolean;
@@ -35,6 +37,7 @@ export interface ResultExportOptions {
 
 export type ExportFormat = 'plain-text' | 'json-simple' | 'json-complete' | 'csv-analysis' | 'fountain-script' | 'final-draft' | 'controlnet-json' | 'stable-diffusion' | 'professional-report' | 'creative-brief' | 'mars-framework' | 'zada-natural' | 'hybrid-prompting' | 'execution-timeline' | 'variance-report' | 'batch-summary';
 
+}
 export interface IndividualExportData {
     result: PreviewResultWithPath;
     index: number;
@@ -42,6 +45,7 @@ export interface IndividualExportData {
     exportedAt: string;
     sourceGraph?: any;
 
+}
 export interface BatchExportData {
     results: PreviewResultWithPath[];
     selectedIndices: number[];
@@ -51,6 +55,7 @@ export interface BatchExportData {
         uniqueSeeds: number[];
         varianceScore: number;
         commonElements: string[];
+}
     };
     exportedAt: string;
     sourceGraph?: any;

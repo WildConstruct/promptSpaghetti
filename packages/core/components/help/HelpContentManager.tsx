@@ -4,6 +4,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { HelpContent, BUILT_IN_HELP_CONTENT } from './ContextualHelpSystem';
 
+}
 export interface HelpContextState {
   helpContent: HelpContent;
   onboardingEnabled: boolean;
@@ -23,6 +24,7 @@ export interface HelpContextState {
   resetHelpSystem: () => void;
   const HelpContext = createContext<HelpContextState | undefined>(undefined);
 }
+}
 export const useHelpSystem = (): HelpContextState => {
   const context = useContext(HelpContext);
   if (!context) {
@@ -30,11 +32,13 @@ export const useHelpSystem = (): HelpContextState => {
   return context;
 };
 
+}
 export interface HelpProviderProps {
   children: React.ReactNode;
   customHelpContent?: HelpContent;
   enableOnboarding?: boolean;
   enableHelpHints?: boolean;
+}
 }
 export const HelpProvider: React.FC<HelpProviderProps> = ({)
   children,

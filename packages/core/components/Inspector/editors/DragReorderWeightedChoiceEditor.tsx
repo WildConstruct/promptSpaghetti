@@ -10,12 +10,15 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { DragReorderWeightManager, WeightedOption } from '../WeightManagement/DragReorderWeightManager';
 import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
 
+}
 export interface WeightedChoiceData {
-  choices?: Array<{,
+  choices?: Array<{
   text: string;
   weight: number;
+}
 }>;
   [key: string]: unknown;
+}
 }
 export interface DragReorderWeightedChoiceEditorProps {
   data: WeightedChoiceData;
@@ -28,6 +31,7 @@ export interface DragReorderWeightedChoiceEditorProps {
   /**
   * Enhanced WeightedChoice editor with professional drag-to-reorder interface
   */
+}
 }
 export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoiceEditorProps> = ({)
   data,

@@ -209,6 +209,7 @@ export type RestorationStatsResponse = z.infer<typeof RestorationStatsResponseSc
 
 // Utility types
 
+}
 export interface RestorationContext {
   projectId: string;
   userId: string;
@@ -217,12 +218,16 @@ export interface RestorationContext {
   currentState: any;
   config: RestorationConfig;
 }
+}
+}
 export interface ConflictResolutionResult {
   conflictId: string;
   resolved: boolean;
   resolvedValue?: any;
   strategy: ResolutionStrategy;
   errorMessage?: string;
+}
+}
 }
 export interface RestorationResult {
   success: boolean;
@@ -234,11 +239,15 @@ export interface RestorationResult {
   backupSnapshotId?: string;
   // Event types for real-time updates
 }
+}
+}
 export interface RestorationEvent {
   type: 'progress' | 'conflict' | 'completed' | 'failed' | 'cancelled';
   restorationAttemptId: string;
   data: any;
   timestamp: Date;
+}
+}
 }
 export interface ConflictEvent {
   type: 'conflict_detected' | 'conflict_resolved';
@@ -247,6 +256,7 @@ export interface ConflictEvent {
   data: any;
   timestamp: Date;
   // Filter and pagination types
+}
 }
 export const RestorationFilterSchema = z.object({
   projectId: z.string().uuid().optional(),

@@ -10,6 +10,7 @@ import { EventEmitter } from 'events';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
+}
 export interface CostCenter {
   id: string;
   name: string;
@@ -27,6 +28,7 @@ export interface CostCenter {
   network: number;
   licensing: number;
   personnel: number;
+}
 };
   };
   // Tracking configuration
@@ -65,6 +67,7 @@ export interface CostCenter {
   last_updated: number;
   active: boolean;
 }
+}
 export interface CostAlert {
   id: string;
   name: string;
@@ -77,6 +80,7 @@ export interface CostAlert {
   percentage?: number;
   period: 'hourly' | 'daily' | 'weekly' | 'monthly';
   comparison: 'greater_than' | 'less_than' | 'percentage_increase'
+}
   };
     anomaly?: {
   sensitivity: 'low' | 'medium' | 'high';
@@ -113,6 +117,7 @@ export interface CostAlert {
   last_triggered?: number;
   trigger_count: number;
 }
+}
 export interface AutoCostAction {
   id: string;
   name: string;
@@ -126,6 +131,7 @@ export interface AutoCostAction {
   confirmation_required?: boolean;
   rollback_conditions?: string;
   max_executions_per_day?: number;
+}
 };
   // Safety controls
   safety: {
@@ -146,6 +152,7 @@ export interface AutoCostAction {
   enabled: boolean;
   created_at: number;
 }
+}
 export interface CostMetrics {
   id: string;
   cost_center_id: string;
@@ -153,6 +160,7 @@ export interface CostMetrics {
   start: number;
   end: number;
   granularity: 'hourly' | 'daily' | 'weekly' | 'monthly'
+}
   };
   // Cost breakdown
   costs: {
@@ -192,7 +200,7 @@ export interface CostMetrics {
   forecasted_yearly_cost: number;
 };
   // Service-level breakdown
-  services: Array<{,
+  services: Array<{
   service_name: string;
   cost: number;
   percentage: number;
@@ -216,6 +224,7 @@ export interface CostMetrics {
   collected_at: number;
   collection_method: 'automated' | 'manual'
   }
+}
 export interface CostOptimizationRecommendation {
   id: string;
   title: string;
@@ -230,6 +239,7 @@ export interface CostOptimizationRecommendation {
   estimated_savings_yearly: number;
   savings_percentage: number;
   payback_period_months: number;
+}
 };
   // Implementation details
   implementation: {
@@ -265,6 +275,7 @@ export interface CostOptimizationRecommendation {
   created_at: number;
   last_updated: number;
 }
+}
 export interface CostBudget {
   id: string;
   name: string;
@@ -278,16 +289,17 @@ export interface CostBudget {
   start_date: number;
   end_date: number;
   rollover_unused: boolean;
+}
 };
   // Budget allocation
   allocation: {
-  services: Array<{,
+  services: Array<{
   service_name: string;
   allocated_amount: number;
   allocated_percentage: number;
   flexible: boolean; // Can be reallocated,
 }>;
-    categories: Array<{,
+    categories: Array<{
   category: 'compute' | 'storage' | 'network' | 'licensing' | 'personnel';
   allocated_amount: number;
   allocated_percentage: number;
@@ -324,6 +336,7 @@ export interface CostBudget {
   last_updated: number;
   active: boolean;
 }
+}
 export interface CostReport {
   id: string;
   title: string;
@@ -335,6 +348,7 @@ export interface CostReport {
   end: number;
   comparison_period_start?: number;
   comparison_period_end?: number;
+}
 };
   // Executive summary
   summary: {
@@ -348,21 +362,21 @@ export interface CostReport {
 };
   // Detailed analysis
   analysis: {
-  cost_breakdown: Array<{,
+  cost_breakdown: Array<{
   category: string;
   current_cost: number;
   previous_cost: number;
   change_amount: number;
   change_percentage: number;
 }>;
-    utilization_analysis: Array<{,
+    utilization_analysis: Array<{
   service: string;
   utilization: number;
   cost: number;
   efficiency_rating: 'excellent' | 'good' | 'fair' | 'poor';
   optimization_potential: number;
 }>;
-    trending_data: Array<{,
+    trending_data: Array<{
   metric: string;
   current_value: number;
   trend_direction: 'up' | 'down' | 'stable';
@@ -390,6 +404,7 @@ export interface CostReport {
   recipients?: string;
   status: 'draft' | 'published' | 'archived'
   }
+}
 export interface CostEvent {
   id: string;
   type: 'threshold_exceeded' | 'anomaly_detected' | 'budget_alert' | 'optimization_applied' | 'cost_spike' | 'efficiency_improvement';
@@ -407,6 +422,7 @@ export interface CostEvent {
   percentage: number;
   currency: string;
   period: string;
+}
 };
   // Event data
   data: {
@@ -443,7 +459,7 @@ export class SecurityCostOptimizer extends EventEmitter {
   private events: CostEvent = [];
   // Optimization tracking
   private optimizationActions: Map<string, AutoCostAction> = new Map();
-  private optimizationHistory: Array<{,
+  private optimizationHistory: Array<{
   action_id: string;
   executed_at: number;
   savings_achieved: number;
@@ -463,6 +479,7 @@ export class SecurityCostOptimizer extends EventEmitter {
     this.startReportGeneration();
   // Cost Center Management
   async createCostCenter(costCenter: Omit<CostCenter, 'id' | 'created_at' | 'last_updated'>): Promise<string> {
+
     const id = `cc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
     const newCostCenter: CostCenter = {
   ...costCenter,
@@ -483,6 +500,7 @@ export class SecurityCostOptimizer extends EventEmitter {
 });
     return id;
   async createCostAlert(alert: Omit<CostAlert, 'id' | 'created_at' | 'trigger_count'>): Promise<string> {
+
     const id = `alert_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
     const newAlert: CostAlert = {
   ...alert,
@@ -500,6 +518,7 @@ export class SecurityCostOptimizer extends EventEmitter {
     return id;
   // Metrics Collection and Analysis
   async collectCostMetrics(costCenterId: string): Promise<string> {
+
     const costCenter = this.costCenters.get(costCenterId);
     if (!costCenter) {
       throw new Error(`Cost center not found: ${costCenterId}`);}
@@ -591,7 +610,7 @@ export class SecurityCostOptimizer extends EventEmitter {
   // Add random operational efficiency factors
   score += (Math.random() - 0.5) * 20;
   return Math.max(0, Math.min(100, score));
-  private generateServiceBreakdown(totalCost: number): Array<{,
+  private generateServiceBreakdown(totalCost: number): Array<{
   service_name: string;
   cost: number;
   percentage: number;
@@ -620,7 +639,7 @@ export class SecurityCostOptimizer extends EventEmitter {
   cost_per_instance: cost / instances,
 };
     });
-  private generateUserCostBreakdown(totalCost: number): Array<{,
+  private generateUserCostBreakdown(totalCost: number): Array<{
   user_id: string;
   cost: number;
   requests: number;
@@ -637,7 +656,7 @@ export class SecurityCostOptimizer extends EventEmitter {
   cost_per_request: cost / requests,
 };
     });
-  private generateProjectCostBreakdown(totalCost: number): Array<{,
+  private generateProjectCostBreakdown(totalCost: number): Array<{
   project_id: string;
   cost: number;
   resources: number;
@@ -656,11 +675,13 @@ export class SecurityCostOptimizer extends EventEmitter {
     });
   // Cost Alert Evaluation
   private async evaluateCostAlerts(costCenterId: string, metrics: CostMetrics): Promise<void> {
+
     const relevantAlerts = Array.from(this.costAlerts.values());
       .filter(alert => alert.enabled);
     for (const alert of relevantAlerts) {
       await this.evaluateAlert(costCenterId, alert, metrics);
   private async evaluateAlert(costCenterId: string, alert: CostAlert, metrics: CostMetrics): Promise<void> {
+
     let shouldTrigger = false;
     let alertData: Record<string, any> = {};
     // Evaluate based on alert type
@@ -721,6 +742,7 @@ export class SecurityCostOptimizer extends EventEmitter {
 } else {
       return trendPercentage < -trend.trend_threshold_percentage;
   private async evaluateBudgetAlert(costCenterId: string, alert: CostAlert, metrics: CostMetrics): Promise<boolean> {
+
     const budget = alert.conditions.budget;
     if (!budget) return false;
     const costCenter = this.costCenters.get(costCenterId);
@@ -731,6 +753,7 @@ export class SecurityCostOptimizer extends EventEmitter {
     const variancePercentage = ((monthlyActual - monthlyBudget) / monthlyBudget) * 100;
     return Math.abs(variancePercentage) > budget.variance_threshold_percentage;
   private async triggerCostAlert(costCenterId: string, alert: CostAlert, metrics: CostMetrics, alertData: Record<string, any>): Promise<void> {
+
     // Check for duplicate suppression
     if (alert.last_triggered && alert.notifications.suppress_duplicates_minutes > 0) {
       const timeSinceLastTrigger = Date.now() - alert.last_triggered;
@@ -811,6 +834,7 @@ export class SecurityCostOptimizer extends EventEmitter {
     recommendations.push(...alert.actions.recommendation_actions);
     return recommendations;
   private async executeAutoAction(action: AutoCostAction, costCenterId: string, event: CostEvent): Promise<void> {
+
     if (!action.enabled || action.safety.dry_run_mode) {
       console.log(`[DRY RUN] Would execute action: ${action.name}`);}
       return;
@@ -882,6 +906,7 @@ export class SecurityCostOptimizer extends EventEmitter {
   success: false,
 });
   private async executeScaleDownAction(action: AutoCostAction, costCenterId: string): Promise<number> {
+
     const scalingFactor = action.parameters.scaling_factor || 0.8;
     const estimatedSavings = 50 * (1 - scalingFactor); // Simplified calculation;
     console.log(`Scaling down resources by ${(1 - scalingFactor) * 100}% for cost center ${costCenterId}`);}
@@ -892,6 +917,7 @@ export class SecurityCostOptimizer extends EventEmitter {
     // - Monitor impact
     return estimatedSavings;
   private async executeShutdownAction(action: AutoCostAction, costCenterId: string): Promise<number> {
+
     const estimatedSavings = 75; // Simplified calculation;
     console.log(`Shutting down non-critical resources for cost center ${costCenterId}`);}
     // In practice, would:
@@ -901,6 +927,7 @@ export class SecurityCostOptimizer extends EventEmitter {
     // - Schedule restart if needed
     return estimatedSavings;
   private async executeOptimizeAction(action: AutoCostAction, costCenterId: string): Promise<number> {
+
     const estimatedSavings = 30; // Simplified calculation;
     console.log(`Optimizing resource allocation for cost center ${costCenterId}`);}
     // In practice, would:
@@ -910,6 +937,7 @@ export class SecurityCostOptimizer extends EventEmitter {
     // - Adjust network configurations
     return estimatedSavings;
   private async executeThrottleAction(action: AutoCostAction, costCenterId: string): Promise<number> {
+
     const estimatedSavings = 20; // Simplified calculation;
     console.log(`Throttling resource usage for cost center ${costCenterId}`);}
     // In practice, would:
@@ -919,6 +947,7 @@ export class SecurityCostOptimizer extends EventEmitter {
     // - Adjust processing limits
     return estimatedSavings;
   private async executeNotifyAction(action: AutoCostAction, costCenterId: string, event: CostEvent): Promise<number> {
+
     console.log(`Sending cost optimization notification for cost center ${costCenterId}`);}
     // Send detailed notification with recommendations
     const recipients = action.parameters.target_resources || ['cost-team@company.com'];
@@ -954,6 +983,7 @@ export class SecurityCostOptimizer extends EventEmitter {
   total_potential_savings: recommendations.reduce((sum, r) => sum + r.cost_impact.estimated_savings_monthly, 0),
 });
   private async createResourceRightsizingRecommendation(costCenterId: string, metrics: CostMetrics): Promise<CostOptimizationRecommendation> {
+
     const currentCost = metrics.costs.compute_cost;
     const utilizationRatio = metrics.utilization.compute_utilization / 100;
     const rightsizedCost = currentCost * utilizationRatio;
@@ -1007,6 +1037,7 @@ export class SecurityCostOptimizer extends EventEmitter {
       last_updated: Date.now();
   };
   private async createStorageOptimizationRecommendation(costCenterId: string, metrics: CostMetrics): Promise<CostOptimizationRecommendation> {
+
     const currentCost = metrics.costs.storage_cost;
     const monthlySavings = currentCost * 0.3 * 24 * 30; // 30% savings from optimization;
     return {
@@ -1056,6 +1087,7 @@ export class SecurityCostOptimizer extends EventEmitter {
       last_updated: Date.now();
   };
   private async createReservedInstanceRecommendation(costCenterId: string, metrics: CostMetrics): Promise<CostOptimizationRecommendation> {
+
     const currentCost = metrics.costs.compute_cost;
     const monthlySavings = currentCost * 0.35 * 24 * 30; // 35% savings from reserved instances;
     return {
@@ -1105,6 +1137,7 @@ export class SecurityCostOptimizer extends EventEmitter {
       last_updated: Date.now();
   };
   private async createLicensingOptimizationRecommendation(costCenterId: string, metrics: CostMetrics): Promise<CostOptimizationRecommendation> {
+
     const currentCost = metrics.costs.licensing_cost;
     const monthlySavings = currentCost * 0.2 * 24 * 30; // 20% savings from license optimization;
     return {
@@ -1156,6 +1189,7 @@ export class SecurityCostOptimizer extends EventEmitter {
   };
   // Report Generation
   async generateCostReport(costCenterId: string, reportType: CostReport['report_type'], period: { start: number; end: number }): Promise<string> {
+
     const costCenter = this.costCenters.get(costCenterId);
     if (!costCenter) {
       throw new Error(`Cost center not found: ${costCenterId}`);}
@@ -1329,6 +1363,7 @@ export class SecurityCostOptimizer extends EventEmitter {
   await this.sendEscalationNotification(recipient, alert, event);
 }, alert.notifications.escalation_delay_minutes * 60 * 1000);
   private async sendNotification(channel: string, recipient: string, alert: CostAlert, event: CostEvent): Promise<void> {
+
     const message = this.createCostNotificationMessage(alert, event);
     switch (channel) {
       case 'email':
@@ -1350,6 +1385,7 @@ export class SecurityCostOptimizer extends EventEmitter {
   event_id: event.id,
 });
   private async sendEscalationNotification(recipient: string, alert: CostAlert, event: CostEvent): Promise<void> {
+
     const message = `🚨 ESCALATED COST ALERT - UNACKNOWLEDGED\n\n${this.createCostNotificationMessage(alert, event)}`;}
     console.log(`🚨 Sending escalated cost alert to ${recipient}: ${message}`);}
     this.emit('cost_escalation_sent', {)
@@ -1374,6 +1410,7 @@ ${event.response.actions_taken.map(a => `• ${a}`).join('\n') || 'No actions ta
 View Details: /cost-optimizer/events/${event.id}
     `.trim();
   private async sendCostReport(report: CostReport, recipients: string): Promise<void> {
+
     const message = this.createReportSummaryMessage(report);
     for (const recipient of recipients) {
       console.log(`📊 Sending cost report to ${recipient}: ${report.title}`);}
@@ -1453,6 +1490,7 @@ View Full Report: /cost-optimizer/reports/${report.id}
 };
   // Utility and Initialization Methods
   private async createDefaultCostAlertsForCenter(costCenterId: string): Promise<void> {
+
     const costCenter = this.costCenters.get(costCenterId);
     if (!costCenter) return;
     // Budget threshold alert
@@ -1623,6 +1661,7 @@ View Full Report: /cost-optimizer/reports/${report.id}
   active_recommendations: Array.from(this.recommendations.values()).filter(r => r.status === 'identified').length,
 });
   private async runOptimizationAnalysis(): Promise<void> {
+
   console.log('🔍 Running cost optimization analysis...');
   // Analyze all cost centers for optimization opportunities
   for (const [costCenterId] of this.costCenters) {
@@ -1636,6 +1675,7 @@ View Full Report: /cost-optimizer/reports/${report.id}
   .reduce((sum, r) => sum + r.cost_impact.estimated_savings_monthly, 0)
 });
   private async generateScheduledReports(): Promise<void> {
+
   console.log('📊 Generating scheduled cost reports...');
   const now = Date.now();
   const weekAgo = now - (7 * 24 * 60 * 60 * 1000);
@@ -1670,6 +1710,7 @@ View Full Report: /cost-optimizer/reports/${report.id}
 };
     return JSON.stringify(config, null, 2);
   async importConfiguration(configJson: string): Promise<void> {
+
   try {
   const config = JSON.parse(configJson);
   // Import cost centers

@@ -38,6 +38,7 @@ export declare enum SessionTerminationReason {
     PASSWORD_CHANGE = "password_change",
     MFA_CHANGE = "mfa_change"
 
+}
 export interface SessionConfiguration {
     maxAge: number;
     rotationInterval: number;
@@ -53,8 +54,10 @@ export interface SessionConfiguration {
         keyDerivation: 'pbkdf2' | 'scrypt' | 'argon2';
         iterations: number;
         saltLength: number;
+}
     };
 
+}
 export interface SecureSession {
     id: string;
     userId: string;
@@ -79,6 +82,7 @@ export interface SecureSession {
             os: string;
             browser: string;
             version: string;
+}
         };
         location: {
             country?: string;
@@ -96,20 +100,21 @@ export interface SecureSession {
             trustLevel: 'low' | 'medium' | 'high'
   };
     };
-    activities: Array<{,
+    activities: Array<{
         timestamp: Date;
         action: string;
         endpoint: string;
         riskScore: number;
         anomalyDetected: boolean;
     }>;
-    rotationHistory: Array<{,
+    rotationHistory: Array<{
         timestamp: Date;
         oldTokenHash: string;
         newTokenHash: string;
         reason: string;
     }>;
 
+}
 export interface SessionContext {
     ipAddress: string;
     userAgent: string;
@@ -119,6 +124,7 @@ export interface SessionContext {
         country: string;
         region: string;
         city: string;
+}
     };
     securityFlags: {
         isSuspiciousLocation: boolean;
@@ -127,23 +133,26 @@ export interface SessionContext {
         hasProxy: boolean;
     };
 
+}
 export interface SessionValidationResult {
     isValid: boolean;
     session?: SecureSession;
     requiresRotation: boolean;
     requiresReauthentication: boolean;
-    securityIssues: Array<{,
+    securityIssues: Array<{
         type: 'warning' | 'critical';
         description: string;
         recommendation: string;
+}
     }>;
-    anomalies: Array<{,
+    anomalies: Array<{
         type: string;
         severity: 'low' | 'medium' | 'high';
         description: string;
         confidence: number;
     }>;
 
+}
 export interface ActivityPattern {
     userId: string;
     deviceId: string;
@@ -153,6 +162,7 @@ export interface ActivityPattern {
         commonLocations: string[];
         usualEndpoints: string[];
         averageSessionDuration: number;
+}
     };
     lastUpdated: Date;
     confidence: number;

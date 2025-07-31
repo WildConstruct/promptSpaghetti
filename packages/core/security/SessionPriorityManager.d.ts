@@ -37,6 +37,7 @@ export declare enum ConflictResolution {
     PROMPT_USER = "prompt_user",// Ask user to choose
     MERGE_SESSIONS = "merge_sessions"
 
+}
 export interface SessionPriorityConfig {
     maxSessionsPerUser: number;
     maxSessionsPerDevice: number;
@@ -51,10 +52,12 @@ export interface SessionPriorityConfig {
         sessionAge: number;
         activityLevel: number;
         securityLevel: number;
+}
     };
     emergencyOverride: boolean;
     gracePeriodMinutes: number;
 
+}
 export interface PriorityFactors {
     userRole: 'admin' | 'moderator' | 'user' | 'guest';
     deviceTrustLevel: number;
@@ -65,6 +68,7 @@ export interface PriorityFactors {
     securityRequirement: number;
     businessCriticality: number;
 
+}
 export interface PrioritySessionData {
     sessionId: string;
     userId: string;
@@ -80,6 +84,7 @@ export interface PrioritySessionData {
     emergencySession: boolean;
     gracePeriodEnd?: Date;
 
+}
 export interface EvictionDecision {
     sessionId: string;
     reason: string;
@@ -89,6 +94,7 @@ export interface EvictionDecision {
     gracePeriodOffered: boolean;
     userNotificationRequired: boolean;
 
+}
 export interface SessionConflict {
     id: string;
     type: 'user_limit' | 'device_limit' | 'total_limit' | 'resource_contention';
@@ -98,6 +104,7 @@ export interface SessionConflict {
         deviceId: string;
         priority: SessionPriority;
         factors: PriorityFactors;
+}
     };
     resolutionOptions: ConflictResolution[];
     recommendedResolution: ConflictResolution;
@@ -105,6 +112,7 @@ export interface SessionConflict {
     autoResolvable: boolean;
     timeoutMinutes: number;
 
+}
 export interface PriorityMetrics {
     totalSessions: number;
     sessionsByPriority: Record<SessionPriority, number>;
@@ -112,9 +120,10 @@ export interface PriorityMetrics {
     conflictRate: number;
     averageSessionScore: number;
     utilizationPercentage: number;
-    topEvictionReasons: Array<{,
+    topEvictionReasons: Array<{
         reason: string;
         count: number;
+}
     }>;
     emergencyOverrides: number;
     gracePeriodUsage: number;

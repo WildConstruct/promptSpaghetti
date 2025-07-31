@@ -14,6 +14,7 @@ import {
 
 // Request type definitions
 }
+}
 interface QueryAuditEventsRequest {
   Querystring: {
     startDate?: string;
@@ -38,24 +39,30 @@ interface QueryAuditEventsRequest {
     sortBy?: 'timestamp' | 'severity' | 'eventType' | 'actorEmail';
     sortOrder?: 'asc' | 'desc';
 }
+}
   };
 }
 
+}
 }
 interface GetStatisticsRequest {
   Querystring: {
     startDate?: string;
     endDate?: string;
 }
+}
   };
 }
 
+}
 }
 interface CreateComplianceReportRequestBody {
   Body: CreateComplianceReportRequest;
 }
 }
+}
 
+}
 }
 interface ExportAuditLogsRequest {
   Querystring: AuditEventQuery & {
@@ -63,14 +70,17 @@ interface ExportAuditLogsRequest {
     includeMetadata?: boolean;
     includeIntegrityData?: boolean;
 }
+}
   };
 }
 
+}
 }
 interface GetAuditTrailRequest {
   Params: {
     resourceType: string;
     resourceId: string;
+}
 }
   };
   Querystring: {

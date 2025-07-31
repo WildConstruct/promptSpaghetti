@@ -41,6 +41,7 @@ import {
 
 // Region annotation types
 
+}
 export interface RegionAnnotation {
   id: string;
   name: string;
@@ -61,6 +62,8 @@ export interface RegionAnnotation {
   tags: string;
   metadata: RegionMetadata;
 }
+}
+}
 export interface RegionArea {
   shape: 'rectangle' | 'circle' | 'polygon' | 'freehand';
   bounds: {
@@ -68,10 +71,12 @@ export interface RegionArea {
   y: number;
   width: number;
   height: number;
+}
 };
   points: Array<{ x: number; y: number }>; // For polygons and freehand
   center?: { x: number; y: number };
   radius?: number; // For circles
+}
 }
 export interface RegionStyle {
   borderColor: string;
@@ -82,7 +87,9 @@ export interface RegionStyle {
   shadowColor?: string;
   shadowBlur?: number;
   animation?: 'none' | 'pulse' | 'glow' | 'march'
+}
   }
+}
 export interface RegionMetadata {
   nodeCount: number;
   totalComplexity?: number;
@@ -90,6 +97,7 @@ export interface RegionMetadata {
   performanceImpact?: 'low' | 'medium' | 'high';
   lastAnalysis?: string;
   // MARS (Motion, Action, Reaction, Subject) zone types for VFX workflow
+}
 }
 export type MARSZoneType = 
   | 'motion_source'      // Primary motion generators
@@ -103,16 +111,20 @@ export type MARSZoneType =
   | 'timing_critical'    // Time-sensitive coordination zones
   | 'creative_decision'; // Director decision points
 
+}
 export interface VFXUser {
   id: string;
   name: string;
   role: string;
   color: string;
 }
+}
+}
 export interface RegionAnnotationSystemProps {
   width: number;
   height: number;
   regions: RegionAnnotation;
+}
   nodes?: Array<{ id: string; x: number; y: number; width: number; height: number; type: string }>;
   currentUser: VFXUser;
   onRegionsChange: (regions: RegionAnnotation) => void;

@@ -74,6 +74,8 @@ export enum ComplianceFramework {
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
   businessImpact: string;
 }
+}
+}
 export interface Evidence {
   id: string;
   type: 'document' | 'screenshot' | 'log' | 'certificate' | 'policy';
@@ -84,7 +86,9 @@ export interface Evidence {
   location: string;
   owner: string;
   status: 'current' | 'outdated' | 'missing'
+}
   }
+}
 export interface Finding {
   id: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -97,6 +101,8 @@ export interface Finding {
   status: 'open' | 'in_progress' | 'resolved' | 'accepted_risk';
   owner: string;
   estimatedEffort: string;
+}
+}
 }
 export interface AuditCycle {
   id: string;
@@ -112,6 +118,8 @@ export interface AuditCycle {
   findings: Finding;
   reportUrl?: string;
 }
+}
+}
 export interface ComplianceMetrics {
   overallScore: number;
   byFramework: Record<ComplianceFramework, {,
@@ -121,6 +129,7 @@ export interface ComplianceMetrics {
   criticalGaps: number;
   lastAudit: Date;
   nextAudit?: Date;
+}
 }>;
   riskProfile: {
   high: number;
@@ -140,6 +149,7 @@ export interface ComplianceMetrics {
   expiringWithin30Days: number;
 };
 }
+}
 export interface ComplianceSecurityDashboardProps {
   metrics: ComplianceMetrics;
   requirements: ComplianceRequirement;
@@ -154,6 +164,7 @@ export interface ComplianceSecurityDashboardProps {
   /**
   * Compliance Security Dashboard Component
   */
+}
 }
 export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardProps> = ({)
   metrics,

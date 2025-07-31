@@ -5,6 +5,7 @@
 import React from 'react';
 import { ProjectTemplate, ProjectTemplateManager } from '../../templates/ProjectTemplateManager';
 
+}
 interface TemplateCreationWizardProps {
     graphData: unknown;
     isOpen: boolean;
@@ -13,5 +14,6 @@ interface TemplateCreationWizardProps {
     templateManager: ProjectTemplateManager;
 
 export declare const TemplateCreationWizard: React.FC<TemplateCreationWizardProps>;
+}
 export {};
 //# sourceMappingURL=TemplateCreationWizard.d.ts.map

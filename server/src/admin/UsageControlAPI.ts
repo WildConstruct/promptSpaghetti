@@ -28,6 +28,7 @@ import { AuditService } from '../auth/services/AuditService';
 // ==========================================
 
 }
+}
 export interface UsageControlResponse<T = any> {
   success: boolean;
   data?: T;
@@ -40,6 +41,7 @@ export interface UsageControlResponse<T = any> {
   };
 }
 
+}
 }
 export interface CreateUsageLimitRequest {
   name: string;
@@ -57,6 +59,7 @@ export interface CreateUsageLimitRequest {
     ipAddresses?: string[];
     apiKeys?: string[];
 }
+}
   };
   configuration?: {
     burstAllowance?: number;
@@ -72,6 +75,7 @@ export interface CreateUsageLimitRequest {
   };
 }
 
+}
 }
 export interface UpdateUsageLimitRequest {
   name?: string;
@@ -89,10 +93,12 @@ export interface UpdateUsageLimitRequest {
     ipAddresses?: string[];
     apiKeys?: string[];
 }
+}
   };
   configuration?: any;
 }
 
+}
 }
 export interface UsageCheckRequest {
   userId?: string;
@@ -104,12 +110,15 @@ export interface UsageCheckRequest {
   requestSize?: number;
 }
 }
+}
 
+}
 }
 export interface UsageAnalyticsRequest {
   timeRange: {
     start: string;
     end: string;
+}
 }
   };
   filters?: {
@@ -121,12 +130,14 @@ export interface UsageAnalyticsRequest {
 }
 
 }
+}
 export interface UsageControlConfigRequest {
   globalLimits?: {
     requestsPerMinute?: number;
     requestsPerHour?: number;
     bandwidthPerHour?: number; // bytes
     concurrentConnections?: number;
+}
 }
   };
   enforcementMode?: 'strict' | 'permissive' | 'monitoring_only';
@@ -143,10 +154,12 @@ export interface UsageControlConfigRequest {
 }
 
 }
+}
 export interface BulkUsageActionRequest {
   action: 'enable' | 'disable' | 'reset' | 'delete';
   limitIds: string[];
   reason?: string;
+}
 }
 }
 

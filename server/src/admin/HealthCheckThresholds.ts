@@ -15,11 +15,13 @@ import { PerformanceThreshold, ThresholdCategory, AlertSeverity } from '../types
  */
 
 }
+}
 export interface Epic17ThresholdConfig {
   adminOperations: Record<string, PerformanceThreshold>;
   healthChecks: Record<string, PerformanceThreshold>;
   dashboardMetrics: Record<string, PerformanceThreshold>;
   systemAdmin: Record<string, PerformanceThreshold>;
+}
 }
 }
 

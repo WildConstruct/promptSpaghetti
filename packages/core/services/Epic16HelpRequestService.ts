@@ -9,6 +9,7 @@ import { EventEmitter } from 'events';
 
 // Core help request interfaces
 
+}
 export interface HelpRequest {
   id: string;
   type: HelpRequestType;
@@ -49,6 +50,7 @@ export interface HelpRequest {
   sla: HelpSLA;
   // Analytics
   analytics: HelpAnalytics;
+}
 }
 export enum HelpRequestType {
   QUESTION = 'question',
@@ -98,6 +100,7 @@ export enum HelpRequestType {
   country: string;
   region: string;
   timezone: string;
+}
 };
   // Session context
   sessionId: string;
@@ -123,6 +126,7 @@ export enum HelpRequestType {
   previousTickets: number;
   successfulTransactions: number;
 }
+}
 export interface RoutingDecision {
   strategy: 'auto_resolve' | 'knowledge_base' | 'community' | 'support_agent' | 'specialist';
   confidence: number;
@@ -130,6 +134,8 @@ export interface RoutingDecision {
   estimatedResolutionTime: number; // minutes,
   recommendedAgent?: string;
   fallbackStrategy?: string;
+}
+}
 }
 export interface HelpResponse {
   id: string;
@@ -140,6 +146,8 @@ export interface HelpResponse {
   helpful: boolean | null;
   attachments: string;
   timestamp: Date;
+}
+}
 }
 export interface HelpAttachment {
   id: string;
@@ -154,7 +162,9 @@ export interface HelpAttachment {
   isScreenshot: boolean;
   containsPersonalInfo: boolean;
   category: string;
+}
 };
+}
 }
 export interface HelpSLA {
   responseTime: {
@@ -162,6 +172,7 @@ export interface HelpSLA {
   actual?: number;
   deadline: Date;
   breached: boolean;
+}
 };
   resolutionTime: {
   target: number; // minutes,
@@ -170,6 +181,7 @@ export interface HelpSLA {
   breached: boolean;
 };
   escalationThreshold: number; // minutes
+}
 }
 export interface HelpAnalytics {
   viewCount: number;
@@ -181,6 +193,8 @@ export interface HelpAnalytics {
   deflectionScore?: number; // How well auto-suggestions worked,
   resolutionSource: 'self_service' | 'knowledge_base' | 'community' | 'agent' | 'escalation';
   // Knowledge base integration
+}
+}
 }
 export interface KnowledgeBaseArticle {
   id: string;
@@ -195,6 +209,8 @@ export interface KnowledgeBaseArticle {
   lastUpdated: Date;
   url: string;
 }
+}
+}
 export interface KnowledgeBaseSearch {
   query: string;
   categories?: HelpCategory;
@@ -202,10 +218,12 @@ export interface KnowledgeBaseSearch {
   minRating?: number;
   language?: string;
   userType?: string;
+}
 };
   limit?: number;
 
 // Smart routing interfaces
+}
 }
 export interface RoutingRule {
   id: string;
@@ -216,11 +234,15 @@ export interface RoutingRule {
   priority: number;
   active: boolean;
 }
+}
+}
 export interface RoutingCondition {
   field: string;
   operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'in' | 'not_in';
   value: any;
   weight: number;
+}
+}
 }
 export interface RoutingAction {
   type: 'assign_to_queue' | 'assign_to_agent' | 'escalate' | 'auto_resolve' | 'suggest_articles';
@@ -228,11 +250,14 @@ export interface RoutingAction {
   parameters: Record<string, any>;
   // Service configuration
 }
+}
+}
 export interface HelpRequestConfig {
   autoResolution: {
   enabled: boolean;
   confidenceThreshold: number;
   maxAttempts: number;
+}
 };
   knowledgeBase: {
   enabled: boolean;
@@ -262,6 +287,7 @@ export interface HelpRequestConfig {
   emailSupport: boolean;
 };
 }
+}
 export interface EscalationRule {
   trigger: 'time_based' | 'priority_based' | 'satisfaction_based' | 'complexity_based';
   condition: string;
@@ -273,6 +299,7 @@ export interface EscalationRule {
   * Intelligent help request management system with AI-powered routing,
   * knowledge base integration, and comprehensive analytics.
   */
+}
 }
 export class Epic16HelpRequestService extends EventEmitter {
   private requests: Map<string, HelpRequest> = new Map();
@@ -335,6 +362,7 @@ export class Epic16HelpRequestService extends EventEmitter {
    * Submit a new help request
    */
   async submitHelpRequest(requestData: Omit<HelpRequest, 'id' | 'createdAt' | 'updatedAt' | 'sla' | 'analytics' | 'responses' | 'suggestedArticles' | 'routingDecision'>): Promise<HelpRequest> {
+
   const requestId = this.generateRequestId();
   const now = new Date();
   const helpRequest: HelpRequest = {,
@@ -365,6 +393,7 @@ export class Epic16HelpRequestService extends EventEmitter {
    * Process help request through intelligent pipeline
    */
   private async processHelpRequest(request: HelpRequest): Promise<void> {
+
     // Step 1: Knowledge base search and auto-suggestion
     if (this.config.knowledgeBase.enabled) {
       await this.suggestKnowledgeBaseArticles(request);
@@ -383,6 +412,7 @@ export class Epic16HelpRequestService extends EventEmitter {
    * Search knowledge base and suggest relevant articles
    */
   private async suggestKnowledgeBaseArticles(request: HelpRequest): Promise<void> {
+
     const searchQuery = `${request.title} ${request.description}`;}
     const suggestions = await this.searchKnowledgeBase({)
   query: searchQuery,
@@ -409,6 +439,7 @@ export class Epic16HelpRequestService extends EventEmitter {
    * Make intelligent routing decision
    */
   private async makeRoutingDecision(request: HelpRequest): Promise<void> {
+
   let bestRoute: RoutingDecision = {,
   strategy: 'support_agent',
   confidence: 0.5,
@@ -435,6 +466,7 @@ export class Epic16HelpRequestService extends EventEmitter {
    * Attempt auto-resolution using knowledge base
    */
   private async attemptAutoResolution(request: HelpRequest): Promise<void> {
+
     if (request.suggestedArticles.length === 0) return;
     const bestArticle = request.suggestedArticles[0];
     if (bestArticle.relevanceScore >= this.config.autoResolution.confidenceThreshold) {
@@ -459,6 +491,7 @@ export class Epic16HelpRequestService extends EventEmitter {
    * Route request based on routing decision
    */
   private async routeRequest(request: HelpRequest): Promise<void> {
+
     const { strategy, recommendedAgent } = request.routingDecision;
     switch (strategy) {
     case 'support_agent':
@@ -480,6 +513,7 @@ export class Epic16HelpRequestService extends EventEmitter {
    * Search knowledge base
    */
   async searchKnowledgeBase(search: KnowledgeBaseSearch): Promise<KnowledgeBaseArticle> {
+
     const results: KnowledgeBaseArticle = [];
     const searchTerms = search.query.toLowerCase().split(' ');
     for (const article of this.knowledgeBase.values()) {
@@ -516,6 +550,7 @@ export class Epic16HelpRequestService extends EventEmitter {
    * Add response to help request
    */
   async addResponse(requestId: string, responseData: Omit<HelpResponse, 'id' | 'timestamp'>): Promise<HelpResponse | null> {
+
   const request = this.requests.get(requestId);
   if (!request) return null;
   const response: HelpResponse = {,
@@ -537,6 +572,7 @@ export class Epic16HelpRequestService extends EventEmitter {
    * Update help request status
    */
   async updateStatus(requestId: string, newStatus: HelpRequestStatus, updatedBy: string): Promise<HelpRequest | null> {
+
     const request = this.requests.get(requestId);
     if (!request) return null;
     const oldStatus = request.status;
@@ -556,6 +592,7 @@ export class Epic16HelpRequestService extends EventEmitter {
    * Escalate help request
    */
   async escalateRequest(requestId: string, reason: string, escalatedBy: string): Promise<HelpRequest | null> {
+
     const request = this.requests.get(requestId);
     if (!request) return null;
     request.status = HelpRequestStatus.ESCALATED;
@@ -591,6 +628,7 @@ export class Epic16HelpRequestService extends EventEmitter {
   total: number;
   hasMore: boolean;
 }> {
+
   let filtered = Array.from(this.requests.values());
   // Apply filters
   if (filters.status) {
@@ -842,6 +880,7 @@ export class Epic16HelpRequestService extends EventEmitter {
 ${articleList}
 Please review these resources. If they don't help, I'll connect you with our support team.`;
   private async assignToAvailableAgent(request: HelpRequest): Promise<string> {
+
   // Simplified agent assignment - in real implementation would check availability
   const agents = ['agent-1', 'agent-2', 'agent-3', 'agent-4'];
   return agents[request.id.length % agents.length];
@@ -855,6 +894,7 @@ Please review these resources. If they don't help, I'll connect you with our sup
 };
     return specialists[request.category] || 'general-specialist-1';
   private async routeToCommunity(request: HelpRequest): Promise<void> {
+
     // Route to community forum - implementation would post to forum
     request.status = HelpRequestStatus.IN_PROGRESS;
     request.analytics.resolutionSource = 'community';

@@ -8,6 +8,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface QueryProfile {
     id: string;
     query_hash: string;
@@ -20,6 +21,7 @@ export interface QueryProfile {
         filter_selectivity: number;
         join_complexity: number;
         aggregation_complexity: number;
+}
     };
     performance_history: QueryExecution[];
     optimization: {
@@ -40,6 +42,7 @@ export interface QueryProfile {
     last_updated: number;
     last_executed: number;
 
+}
 export interface QueryExecution {
     id: string;
     query_profile_id: string;
@@ -71,6 +74,7 @@ export interface QueryExecution {
     result_completeness: number;
     user_satisfaction_score?: number;
 
+}
 export interface CachingStrategy {
     cache_type: 'none' | 'result_cache' | 'partial_cache' | 'materialized_view' | 'smart_cache';
     cache_duration_seconds: number;
@@ -80,18 +84,20 @@ export interface CachingStrategy {
     cache_compression: boolean;
     cache_location: 'memory' | 'ssd' | 'distributed';
 
+}
 export interface ExecutionPlan {
     id: string;
     plan_type: 'sequential' | 'parallel' | 'distributed' | 'hybrid';
     estimated_cost: number;
     estimated_time_ms: number;
-    steps: Array<{,
+    steps: Array<{
         step_id: number;
         operation: string;
         estimated_time_ms: number;
         estimated_rows: number;
         parallelization: number;
         dependencies: number[];
+}
     }>;
     resources: {
         cpu_cores: number;
@@ -108,31 +114,36 @@ export interface ExecutionPlan {
         aggregation_pushdown: boolean;
     };
 
+}
 export interface UserUsagePattern {
     user_id: string;
     usage_frequency: number;
-    preferred_time_ranges: Array<{,
+    preferred_time_ranges: Array<{
         start_hour: number;
         end_hour: number;
+}
     }>;
     query_complexity_preference: 'simple' | 'moderate' | 'complex';
     result_size_preference: 'small' | 'medium' | 'large';
     latency_tolerance_ms: number;
 
+}
 export interface SeasonalPattern {
     pattern_type: 'daily' | 'weekly' | 'monthly' | 'quarterly';
-    peak_periods: Array<{,
+    peak_periods: Array<{
         start: number;
         end: number;
         multiplier: number;
+}
     }>;
-    low_periods: Array<{,
+    low_periods: Array<{
         start: number;
         end: number;
         multiplier: number;
     }>;
     confidence_score: number;
 
+}
 export interface CacheEntry {
     cache_key: string;
     query_hash: string;
@@ -148,6 +159,7 @@ export interface CacheEntry {
         column_count: number;
         data_freshness: number;
         computation_time_ms: number;
+}
     };
     hit_rate: number;
     avg_retrieval_time_ms: number;
@@ -159,6 +171,7 @@ export interface CacheEntry {
     replication_factor: number;
     geographic_distribution: string[];
 
+}
 export interface QueryOptimizationRule {
     id: string;
     name: string;
@@ -171,6 +184,7 @@ export interface QueryOptimizationRule {
             min_cpu_time_ms?: number;
             min_memory_usage_mb?: number;
             min_cost?: number;
+}
         };
         usage_patterns: {
             min_frequency_per_day?: number;
@@ -194,6 +208,7 @@ export interface QueryOptimizationRule {
     application_count: number;
     success_rate: number;
 
+}
 export interface IndexRecommendation {
     index_name: string;
     table_name: string;
@@ -204,6 +219,7 @@ export interface IndexRecommendation {
     maintenance_cost: number;
     creation_time_estimate_minutes: number;
 
+}
 export interface QueryRewrite {
     original_pattern: string;
     optimized_pattern: string;
@@ -212,6 +228,7 @@ export interface QueryRewrite {
     risk_level: 'low' | 'medium' | 'high';
     validation_required: boolean;
 
+}
 export interface OptimizationJob {
     id: string;
     name: string;
@@ -223,6 +240,7 @@ export interface OptimizationJob {
         optimization_level: 'conservative' | 'moderate' | 'aggressive';
         max_duration_minutes: number;
         max_resource_usage_percentage: number;
+}
     };
     schedule: {
         type: 'manual' | 'scheduled' | 'triggered';
@@ -252,11 +270,13 @@ export interface OptimizationJob {
     last_updated: number;
     enabled: boolean;
 
+}
 export interface PerformanceMetrics {
     id: string;
     collection_period: {
         start: number;
         end: number;
+}
     };
     query_performance: {
         total_queries: number;
@@ -301,6 +321,7 @@ export interface PerformanceMetrics {
     };
     collected_at: number;
 
+}
 export interface OptimizationEvent {
     id: string;
     type: 'optimization_applied' | 'cache_miss_spike' | 'performance_degradation' | 'rule_triggered' | 'index_created' | 'cache_warmed';
@@ -316,6 +337,7 @@ export interface OptimizationEvent {
         after_metrics: Record<string, number>;
         improvement_percentage: number;
         cost_impact: number;
+}
     };
     context: {
         affected_queries: string[];

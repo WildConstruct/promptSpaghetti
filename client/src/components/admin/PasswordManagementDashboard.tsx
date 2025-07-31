@@ -10,6 +10,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 // Password Management Types
 
+}
 export interface PasswordPolicy {
   id: string;,
   name: string;
@@ -29,6 +30,8 @@ export interface PasswordPolicy {
   createdAt: string;,
   updatedAt: string;
 }
+}
+}
 export interface PasswordStrengthResult {
   score: number; // 0-100,
   level: 'weak' | 'fair' | 'good' | 'strong' | 'excellent';,
@@ -36,6 +39,8 @@ export interface PasswordStrengthResult {
   suggestions: string;,
   breachDetected: boolean;
   entropy: number;
+}
+}
 }
 export interface SecurityEvent {
   id: string;,
@@ -52,6 +57,8 @@ export interface SecurityEvent {
   resolvedAt?: string;
   resolvedBy?: string;
 }
+}
+}
 export interface PasswordManagementStats {
   totalUsers: number;,
   usersWithExpiredPasswords: number;
@@ -66,6 +73,7 @@ export interface PasswordManagementStats {
   userRole: string;
   onExport?: (type: string) => void;
   className?: string;
+}
 }
 export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardProps> = ({)
   userRole,

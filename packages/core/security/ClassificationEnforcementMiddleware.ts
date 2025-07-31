@@ -27,6 +27,7 @@ import { DataClassificationHelpers } from './DataClassificationHelpers';
  * Extended request with classification information
  */
 
+}
 export interface ClassificationAwareRequest extends Request {
   classification?: {
   level: DataClassificationLevel;
@@ -45,6 +46,7 @@ export interface ClassificationAwareRequest extends Request {
  * Middleware configuration
  */
 
+}
 export interface ClassificationEnforcementMiddlewareConfig {
   /** Environment preset for the enforcer */
   environment: 'development' | 'staging' | 'production';
@@ -60,6 +62,7 @@ export interface ClassificationEnforcementMiddlewareConfig {
   detailedErrors?: boolean;
   /** Audit event handler */
   auditHandler?: (event: ClassificationAuditEvent) => Promise<void>;
+}
 }
 
 /**
@@ -240,6 +243,7 @@ async function extractClassification(
     req: ClassificationAwareRequest,
     config: ClassificationEnforcementMiddlewareConfig,
   ): Promise<DataClassificationLevel | null> {
+
   // Use custom extractor if provided
   if (config.classificationExtractor) {
     return await config.classificationExtractor(req);
@@ -266,6 +270,7 @@ async function extractClassification(
  * Extract classification from path pattern
  */
 async function extractClassificationFromPath(req: Request): Promise<DataClassificationLevel | null> {
+
   // Common patterns
   const patterns: Array<{ pattern: RegExp; level: DataClassificationLevel }> = [
     { pattern: /\/api\/v\d+\/public\//, level: 'PUBLIC' },
@@ -420,6 +425,7 @@ function isValidClassification(value: string): boolean {
  * Detect classification from data
  */
 async function detectClassificationFromData(data: any): Promise<DataClassificationLevel | null> {
+
   if (!data || typeof data !== 'object') {
     return null;
   }

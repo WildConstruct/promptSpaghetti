@@ -41,6 +41,8 @@ export enum AIModelType {
   supportsAsync?: boolean;
   customParameters?: Record<string, unknown>;
 }
+}
+}
 export interface ModelMetadata {
   name: string;
   version: string;
@@ -54,9 +56,11 @@ export interface ModelMetadata {
   rateLimit?: {
   requestsPerMinute: number;
   tokensPerMinute?: number;
+}
 };
   tags?: string;
   lastUpdated: Date;
+}
 }
 export interface CostEstimate {
   estimatedCost: number;
@@ -65,8 +69,10 @@ export interface CostEstimate {
   inputCost: number;
   outputCost: number;
   processingCost: number;
+}
 };
   confidence: number; // 0-1
+}
 }
 export interface HealthStatus {
   status: AIModelStatus;
@@ -80,8 +86,10 @@ export interface HealthStatus {
   cpuUsage?: number;
   diskSpace?: number;
   networkLatency?: number;
+}
 };
   issues?: string;
+}
 }
 export interface AIRequest {
   id: string;
@@ -93,8 +101,10 @@ export interface AIRequest {
   priority?: 'low' | 'normal' | 'high' | 'urgent';
   timeout?: number;
   retryCount?: number;
+}
 };
   createdAt: Date;
+}
 }
 export interface AIResponse {
   id: string;
@@ -107,6 +117,7 @@ export interface AIResponse {
   tokensUsed?: {
   input: number;
   output: number;
+}
 };
     quality?: number; // 0-1 quality score
   };
@@ -149,6 +160,7 @@ export abstract class BaseAIModel {
   abstract cleanup(): Promise<void>;
   // Default implementations that can be overridden
   async estimate(input: unknown, options?: unknown): Promise<CostEstimate> {
+
   // Default estimation based on metadata
   const baseRequestCost = this._metadata.costPerRequest || 0;
   const tokenCost = this._calculateTokenCost(input, options);
@@ -162,6 +174,7 @@ export abstract class BaseAIModel {
   processingCost: baseRequestCost,
 };
   async health(): Promise<HealthStatus> {
+
     const now = new Date();
     this._healthStats.lastCheck = now;
     this._healthStats.uptime = now.getTime() - this._lastActivity.getTime();
@@ -176,6 +189,7 @@ export abstract class BaseAIModel {
     return { ...this._healthStats };
   // Request management
   async executeRequest(request: AIRequest): Promise<AIResponse> {
+
     const startTime = Date.now();
     this._activeRequests.add(request.id);
     this._lastActivity = new Date();
@@ -224,6 +238,7 @@ export abstract class BaseAIModel {
         this._status = AIModelStatus.READY;
   // Batch processing support
   async executeBatch(requests: AIRequest): Promise<AIResponse> {
+
     if (!this._capabilities.supportsBatch) {
       // Execute sequentially if batch not supported
       const responses: AIResponse = [];
@@ -239,6 +254,7 @@ export abstract class BaseAIModel {
     this._capabilities = { ...this._capabilities, ...capabilities };
   // Protected helper methods
   protected async _validateRequest(request: AIRequest): Promise<void> {
+
     if (!request.input) {
       throw new Error('Request input is required');
     // Validate input size
@@ -302,6 +318,8 @@ export abstract class BaseAIModel {
   getDefaultConfiguration(type: AIModelType): ModelConfiguration;
   // Configuration interface for model creation
 }
+}
+}
 export interface ModelConfiguration {
   id: string;
   type: AIModelType;
@@ -313,6 +331,7 @@ export interface ModelConfiguration {
   capabilities?: Partial<ModelCapabilities>;
   metadata?: Partial<ModelMetadata>;
   // Error types
+}
 }
 export class ModelInitializationError extends Error {
   constructor(modelId: string, cause: string) {

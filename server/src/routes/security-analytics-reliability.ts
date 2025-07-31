@@ -27,6 +27,7 @@ import { HealthCheckFramework } from '../admin/HealthCheckFramework';
 let reliabilityEngineer: SecurityAnalyticsReliabilityEngineer | null = null;
 
 }
+}
 interface ReliabilityQuery {
   includeMetrics?: boolean;
   includeIncidents?: boolean;
@@ -36,7 +37,9 @@ interface ReliabilityQuery {
   timeRange?: 'last_hour' | 'last_day' | 'last_week' | 'last_month';
 }
 }
+}
 
+}
 }
 interface DisasterRecoveryRequest {
   planId: string;
@@ -44,20 +47,25 @@ interface DisasterRecoveryRequest {
   force?: boolean;
 }
 }
+}
 
+}
 }
 interface CircuitBreakerRequest {
   componentName: string;
   action: 'reset' | 'force_open' | 'force_close';
 }
 }
+}
 
+}
 }
 interface ReliabilityResponse {
   success: boolean;
   data?: any;
   error?: string;
   timestamp: number;
+}
 }
 }
 

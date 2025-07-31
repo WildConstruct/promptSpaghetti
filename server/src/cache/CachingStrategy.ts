@@ -22,6 +22,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 
 // Core Cache Interfaces
 }
+}
 export interface CacheEntry<T = any> {
   value: T;
   metadata: CacheMetadata;
@@ -37,6 +38,7 @@ export interface CacheEntry<T = any> {
 }
 
 }
+}
 export interface CacheMetadata {
   namespace: string;
   type: CacheEntryType;
@@ -49,6 +51,7 @@ export interface CacheMetadata {
   ttl: number; // seconds
   softTtl?: number; // seconds for soft expiry
   refreshAfter?: number; // seconds for proactive refresh
+}
 }
 }
 
@@ -112,6 +115,7 @@ export enum CacheLayer {
 
 // Cache Configuration
 }
+}
 export interface CacheConfig {
   // Global settings
   enabled: boolean;
@@ -143,7 +147,9 @@ export interface CacheConfig {
   evictionPolicy: EvictionPolicy;
 }
 }
+}
 
+}
 }
 export interface CacheLayerConfig {
   enabled: boolean;
@@ -156,7 +162,9 @@ export interface CacheLayerConfig {
   writePreference: WritePreference;
 }
 }
+}
 
+}
 }
 export interface CacheAlertThresholds {
   hitRateBelow: number; // percentage
@@ -164,6 +172,7 @@ export interface CacheAlertThresholds {
   responseTimeAbove: number; // milliseconds
   errorRateAbove: number; // percentage
   evictionRateAbove: number; // per minute
+}
 }
 }
 
@@ -208,6 +217,7 @@ export enum InvalidationStrategy {
 
 // Cache Statistics and Monitoring
 }
+}
 export interface CacheStatistics {
   // Performance metrics
   hitRate: number;           // 0-1
@@ -251,6 +261,7 @@ export interface CacheStatistics {
     throughput: number;
     memoryUsage: number;
 }
+}
   }>;
   
   // Recent performance samples
@@ -264,6 +275,7 @@ export interface CacheStatistics {
 }
 
 }
+}
 export interface LayerStatistics {
   hitRate: number;
   averageLatency: number;
@@ -273,7 +285,9 @@ export interface LayerStatistics {
   replicationLag: number; // milliseconds
 }
 }
+}
 
+}
 }
 export interface TypeStatistics {
   hitRate: number;
@@ -283,8 +297,10 @@ export interface TypeStatistics {
   evictionCount: number;
 }
 }
+}
 
 // Cache Operations Interface
+}
 }
 export interface CacheOperationOptions {
   layer?: CacheLayer;
@@ -298,7 +314,9 @@ export interface CacheOperationOptions {
   timeout?: number;
 }
 }
+}
 
+}
 }
 export interface CacheResult<T> {
   value: T | null;
@@ -309,6 +327,7 @@ export interface CacheResult<T> {
   metadata?: CacheMetadata;
 }
 
+}
 }
 export interface CacheBatchResult<T> {
   results: Record<string, CacheResult<T>>;
@@ -1087,12 +1106,14 @@ class CacheMonitoringService {
 
 // Cache Layer Interfaces
 }
+}
 interface CacheLayerInstance {
   get<T>(key: string, options: CacheOperationOptions): Promise<CacheResult<T>>;
   set<T>(key: string, entry: CacheEntry<T>, options: CacheOperationOptions): Promise<boolean>;
   delete(key: string, options: CacheOperationOptions): Promise<boolean>;
   runEviction(aggressive?: boolean): Promise<number>;
   getStatistics(): Promise<LayerStatistics>;
+}
 }
   healthCheck(): Promise<{ score: number; issues: string[] }>;
 }

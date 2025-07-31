@@ -75,6 +75,7 @@ export declare class ExtensionCompatibilityChecker {
      */
     private initializeDefaultRules;
 
+}
 export interface CompatibilityContext {
     systemVersion: string;
     platform: string;
@@ -82,6 +83,7 @@ export interface CompatibilityContext {
     grantedPermissions: string[];
     browserInfo?: Record<string, string>;
 
+}
 export interface ExtensionCompatibilityResult {
     compatible: boolean;
     issues: CompatibilityIssue[];
@@ -92,10 +94,12 @@ export interface ExtensionCompatibilityResult {
     platformCheck: CompatibilityCheck;
     permissionCheck: CompatibilityCheck;
     securityCheck: CompatibilityCheck;
+}
 interface CompatibilityCheck {
     compatible: boolean;
     issues: CompatibilityIssue[];
     warnings: string[];
+}
 interface CompatibilityRule {
     id: string;
     name: string;
@@ -103,6 +107,7 @@ interface CompatibilityRule {
     check: (extension: ExtensionManifest) => {,
         compatible: boolean;
         issues: CompatibilityIssue[];
+}
     };
 
 export declare const extensionCompatibilityChecker: ExtensionCompatibilityChecker;

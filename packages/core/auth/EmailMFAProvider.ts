@@ -22,11 +22,13 @@ import { ErrorFactory } from '../errors/ErrorFactory';
 // ========================================
 // Configuration & Types
 // ========================================
+}
 interface EmailMFAConfig {
   encryption: {
   algorithm: 'aes-256-gcm';
   keyDerivation: 'pbkdf2';
   iterations: number;
+}
 };
   templates: {
   verificationCode: string;
@@ -36,16 +38,19 @@ interface EmailMFAConfig {
   maxDailyEmails: number;
   cooldownMinutes: number;
 };
+}
 interface EmailTemplate {
   subject: string;
   htmlTemplate: string;
   textTemplate: string;
   variables: string;
+}
 interface EmailSendResult {
   messageId: string;
   status: 'sent' | 'failed';
   error?: string;
   timestamp: Date;
+}
 interface RiskAssessmentContext {
   ipAddress: string;
   userAgent: string;
@@ -56,14 +61,17 @@ interface RiskAssessmentContext {
 // ========================================
 // Email Service Interface
 // ========================================
+}
 interface EmailService {
   sendEmail(to: string, template: EmailTemplate, variables: Record<string, string>): Promise<EmailSendResult>;
   validateEmailAddress(email: string): Promise<boolean>;
+}
   checkEmailReputation(email: string): Promise<{ valid: boolean; risk: number }>;
 
 // ========================================
 // Database Interface
 // ========================================
+}
 interface EmailMFAStorage {
   // Configuration management
   saveConfiguration(config: EmailConfiguration): Promise<void>;
@@ -77,6 +85,7 @@ interface EmailMFAStorage {
   getActiveVerifications(userId: string): Promise<EmailVerification>;
   deleteVerification(verificationId: string): Promise<void>;
   // Rate limiting
+}
   getRateLimitState(userId: string, action: string): Promise<{ count: number; windowStart: Date } | null>;
   updateRateLimitState(userId: string, action: string, count: number): Promise<void>;
   // Audit logging
@@ -119,6 +128,7 @@ export class EmailMFAProvider {
   // Enrollment Methods
   // ========================================
   async enrollMethod(userId: string, request: MFAEnrollmentRequest): Promise<MFAEnrollmentResponse> {
+
     // Validate input
     const validated = EmailEnrollmentSchema.parse(request);
     // Check if user already has email MFA configured
@@ -174,6 +184,7 @@ export class EmailMFAProvider {
   expiresAt: new Date(Date.now() + MFA_CONSTANTS.EMAIL.TOKEN_EXPIRY * 1000),
 };
   async completeEnrollment(userId: string, verificationId: string, code: string): Promise<void> {
+
     const verification = await this.storage.getVerification(verificationId);
     if (!verification || verification.userId !== userId) {
       throw ErrorFactory.createMFAVerificationError('invalid_code', { userId, operation: 'verify_mfa_code' });
@@ -202,6 +213,7 @@ export class EmailMFAProvider {
   // Verification Methods
   // ========================================
   async initiateVerification(userId: string, configurationId: string, context: RiskAssessmentContext): Promise<string> {
+
     // Get configuration
     const configuration = await this.storage.getConfigurationById(configurationId);
     if (!configuration || configuration.userId !== userId) {
@@ -249,6 +261,7 @@ export class EmailMFAProvider {
     await this.updateRateLimit(userId, 'email_send');
     return verificationId;
   async verifyCode(request: MFAVerificationRequest, context: RiskAssessmentContext): Promise<MFAVerificationResponse> {
+
   const startTime = Date.now();
   try {
   // Validate input
@@ -354,6 +367,7 @@ export class EmailMFAProvider {
   // Email Sending Methods
   // ========================================
   private async sendEnrollmentVerification(userId: string, emailAddress: string): Promise<void> {
+
   const verificationCode = this.generateVerificationCode();
   const verificationId = crypto.randomUUID();
   const verification: EmailVerification = {,
@@ -435,6 +449,7 @@ export class EmailMFAProvider {
       result |= a.charCodeAt(i) ^ b.charCodeAt(i);
     return result === 0;
   private async assessRisk(context: RiskAssessmentContext): Promise<number> {
+
     let riskScore = 0;
     // Base risk assessment
     if (context.previousAttempts > 2) riskScore += 20;
@@ -447,6 +462,7 @@ export class EmailMFAProvider {
     // - Time-based analysis
     return Math.min(riskScore, 100);
   private async checkRateLimit(userId: string, action: string): Promise<void> {
+
     const state = await this.storage.getRateLimitState(userId, action);
     if (state) {
       const windowAge = Date.now() - state.windowStart.getTime();
@@ -454,6 +470,7 @@ export class EmailMFAProvider {
       if (windowAge < windowDuration && state.count >= MFA_CONSTANTS.EMAIL.MAX_DAILY_SENDS) {
         throw ErrorFactory.createMFAVerificationError('rate_limit', { userId, operation: 'send_verification_email' });
   private async updateRateLimit(userId: string, action: string): Promise<void> {
+
     const state = await this.storage.getRateLimitState(userId, action);
     if (state) {
       const windowAge = Date.now() - state.windowStart.getTime();
@@ -465,6 +482,7 @@ export class EmailMFAProvider {
     } else {
       await this.storage.updateRateLimitState(userId, action, 1);
   private async checkRateLimitForVerification(userId: string): Promise<{ allowed: boolean; remainingAttempts: number }> {
+
     const state = await this.storage.getRateLimitState(userId, 'email_verify');
     if (!state) {
       return { allowed: true, remainingAttempts: 5 };
@@ -478,6 +496,7 @@ export class EmailMFAProvider {
   remainingAttempts
 };
   private async cleanupExpiredVerifications(userId: string): Promise<void> {
+
   const verifications = await this.storage.getActiveVerifications(userId);
   for (const verification of verifications) {
   if (this.isExpired(verification)) {
@@ -494,6 +513,7 @@ export class EmailMFAProvider {
   // Management Methods
   // ========================================
   async updateEmailAddress(userId: string, configurationId: string, newEmailAddress: string): Promise<void> {
+
     const configuration = await this.storage.getConfigurationById(configurationId);
     if (!configuration || configuration.userId !== userId) {
       throw ErrorFactory.createMFAConfigurationError()
@@ -520,6 +540,7 @@ export class EmailMFAProvider {
     // Send verification to new email
     await this.sendEnrollmentVerification(userId, newEmailAddress);
   async disableMethod(userId: string, configurationId: string): Promise<void> {
+
     const configuration = await this.storage.getConfigurationById(configurationId);
     if (!configuration || configuration.userId !== userId) {
       throw ErrorFactory.createMFAConfigurationError()
@@ -532,6 +553,7 @@ export class EmailMFAProvider {
     configuration.updatedAt = new Date();
     await this.storage.updateConfiguration(configurationId, configuration);
   async revokeMethod(userId: string, configurationId: string): Promise<void> {
+
     const configuration = await this.storage.getConfigurationById(configurationId);
     if (!configuration || configuration.userId !== userId) {
       throw ErrorFactory.createMFAConfigurationError()

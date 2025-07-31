@@ -6,6 +6,7 @@ import { MarketplaceDAO } from './dao';
 import { Pool } from 'pg';
 
 }
+}
 interface ElasticsearchTemplate {
   id: string;
   title: string;
@@ -25,12 +26,15 @@ interface ElasticsearchTemplate {
   updated_at: string;
 }
 }
+}
 
+}
 }
 interface SearchResponse {
   templates: TemplateWithStats[];
   total: number;
   aggregations?: {
+}
 }
     categories: Array<{ name: string; count: number }>;
     price_ranges: Array<{ min: number; max: number; count: number }>;

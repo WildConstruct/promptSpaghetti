@@ -21,6 +21,7 @@ import {
  * Enforcement configuration
  */
 
+}
 export interface ClassificationEnforcementConfig {
     /** Strict mode - blocks all non-compliant operations */
     strictMode: boolean;
@@ -42,12 +43,14 @@ export interface ClassificationEnforcementConfig {
         roles?: string[];
         conditions?: string[];
 
+}
     };
 
 /**
  * Enforcement result
  */
 
+}
 export interface EnforcementResult {
     allowed: boolean;
     classification: DataClassificationLevel;
@@ -63,6 +66,7 @@ export interface EnforcementResult {
  * Access decision
  */
 
+}
 export interface AccessDecision {
     granted: boolean;
     reason: string;
@@ -105,6 +109,7 @@ export declare class ClassificationEnforcer {
         valid: boolean;
         issues: string[];
         controls: string[];
+}
     }>;
     /**
      * Get effective requirements considering overrides

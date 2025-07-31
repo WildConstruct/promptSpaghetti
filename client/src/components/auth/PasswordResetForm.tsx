@@ -16,6 +16,7 @@ const PasswordResetConfirmSchema = z.object({)
   message: 'Passwords don\'t match',
   path: ['confirmPassword'],
 });
+}
 interface PasswordResetFormProps {
   mode: 'request' | 'confirm';
   token?: string;
@@ -26,6 +27,7 @@ interface PasswordResetFormProps {
   token,
   onSuccess,
   onCancel
+}
 }) => {
   const [formData, setFormData] = useState({)
   email: '',

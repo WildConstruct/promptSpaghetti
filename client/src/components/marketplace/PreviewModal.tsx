@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import { Badge } from '../common/Badge';
 import './PreviewModal.css';
+}
 interface PreviewModalProps {
   templateId: string;,
   template: Error;
@@ -21,9 +22,10 @@ interface PreviewModalProps {
   output: string;,
   cost_estimate: number;
   quality_score: number;,
-  token_usage: {,
+  token_usage: {
   input_tokens: number;,
   output_tokens: number;
+}
 };
   cached: boolean;,
   redacted_sections: string;
@@ -67,7 +69,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({)
       const response = await fetch(`/api/marketplace/templates/${templateId}/preview`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`}
   },

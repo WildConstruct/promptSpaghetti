@@ -13,12 +13,14 @@ import { DatabaseService } from '../../database/DatabaseService';
 import { AuditService } from '../../auth/services/AuditService';
 
 }
+}
 interface OptimizationQueryParams {
   timeWindow?: number;
   keyId?: string;
   focusAreas?: string;
   severity?: string;
   includeBenchmarks?: boolean;
+}
 }
 }
 

@@ -15,6 +15,7 @@ import {
   CLASSIFICATION_LEVELS,
   DEFAULT_HANDLING_REQUIREMENTS
 } from '../../types/DataClassification';
+}
 interface ClassificationTaggingUIProps {
   dataElement: unknown;
   dataId: string;
@@ -41,6 +42,7 @@ interface ClassificationTaggingUIProps {
   onValidationChange,
   readonly = false,
   showHandlingRequirements = true
+}
 }) => {
   const [formData, setFormData] = useState<ClassificationFormData>({)
   classification: existingClassification?.classification || '',

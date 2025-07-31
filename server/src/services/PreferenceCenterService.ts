@@ -7,6 +7,7 @@ import { PolicyAcceptanceTrackingService } from './PolicyAcceptanceTrackingServi
 import { EventEmitter } from 'events';
 
 }
+}
 export interface UserPreferenceCenter {
   preferenceCenterId: string;
   userId: string;
@@ -26,7 +27,9 @@ export interface UserPreferenceCenter {
   metadata: PreferenceCenterMetadata;
 }
 }
+}
 
+}
 }
 export interface ProfilePreferences {
   displayName: string;
@@ -43,7 +46,9 @@ export interface ProfilePreferences {
   visibility: ProfileVisibility;
 }
 }
+}
 
+}
 }
 export interface ProfileVisibility {
   profilePublic: boolean;
@@ -55,7 +60,9 @@ export interface ProfileVisibility {
   allowDirectMessages: boolean;
 }
 }
+}
 
+}
 }
 export interface PrivacyPreferences {
   dataMinimization: boolean;
@@ -71,7 +78,9 @@ export interface PrivacyPreferences {
   consentWithdrawal: ConsentWithdrawalSettings;
 }
 }
+}
 
+}
 }
 export interface ThirdPartySharing {
   enabled: boolean;
@@ -81,6 +90,7 @@ export interface ThirdPartySharing {
   allowDataEnrichment: boolean;
   allowMarketing: boolean;
   allowAnalytics: boolean;
+}
 }
 }
 
@@ -98,6 +108,7 @@ export enum ThirdPartyCategory {
 }
 
 }
+}
 export interface RightToErasureSettings {
   enableAutomaticDeletion: boolean;
   automaticDeletionPeriod: number; // days
@@ -109,7 +120,9 @@ export interface RightToErasureSettings {
   notificationPeriod: number; // days
 }
 }
+}
 
+}
 }
 export interface DataPortabilitySettings {
   allowDataExport: boolean;
@@ -120,6 +133,7 @@ export interface DataPortabilitySettings {
   automaticBackups: boolean;
   backupFrequency: BackupFrequency;
   encryptExports: boolean;
+}
 }
 }
 
@@ -140,6 +154,7 @@ export enum BackupFrequency {
 }
 
 }
+}
 export interface ConsentWithdrawalSettings {
   allowGranularWithdrawal: boolean;
   requireReason: boolean;
@@ -150,7 +165,9 @@ export interface ConsentWithdrawalSettings {
   automaticCleanup: boolean;
 }
 }
+}
 
+}
 }
 export interface CommunicationPreferences {
   email: EmailCommunicationSettings;
@@ -163,7 +180,9 @@ export interface CommunicationPreferences {
   channels: CommunicationChannel[];
 }
 }
+}
 
+}
 }
 export interface EmailCommunicationSettings {
   enabled: boolean;
@@ -177,13 +196,16 @@ export interface EmailCommunicationSettings {
   allowThirdParty: boolean;
 }
 }
+}
 
+}
 }
 export interface EmailCategory {
   category: EmailCategoryType;
   enabled: boolean;
   frequency: EmailFrequency;
   priority: CommunicationPriority;
+}
 }
 }
 
@@ -223,6 +245,7 @@ export enum UnsubscribeMethod {
 }
 
 }
+}
 export interface SMSCommunicationSettings {
   enabled: boolean;
   phoneNumber: string;
@@ -233,12 +256,15 @@ export interface SMSCommunicationSettings {
   optOutMethod: SMSOptOutMethod;
 }
 }
+}
 
+}
 }
 export interface SMSCategory {
   category: SMSCategoryType;
   enabled: boolean;
   priority: CommunicationPriority;
+}
 }
 }
 
@@ -258,6 +284,7 @@ export enum SMSOptOutMethod {
 }
 
 }
+}
 export interface PushNotificationSettings {
   enabled: boolean;
   devices: PushDevice[];
@@ -269,7 +296,9 @@ export interface PushNotificationSettings {
   geofencing: boolean;
 }
 }
+}
 
+}
 }
 export interface PushDevice {
   deviceId: string;
@@ -280,13 +309,16 @@ export interface PushDevice {
   lastSeen: Date;
 }
 }
+}
 
+}
 }
 export interface PushCategory {
   category: PushCategoryType;
   enabled: boolean;
   priority: CommunicationPriority;
   allowQuietHours: boolean;
+}
 }
 }
 
@@ -302,6 +334,7 @@ export enum PushCategoryType {
 }
 
 }
+}
 export interface InAppNotificationSettings {
   enabled: boolean;
   categories: InAppCategory[];
@@ -312,13 +345,16 @@ export interface InAppNotificationSettings {
   retentionPeriod: number; // days
 }
 }
+}
 
+}
 }
 export interface InAppCategory {
   category: InAppCategoryType;
   enabled: boolean;
   priority: CommunicationPriority;
   showPreview: boolean;
+}
 }
 }
 
@@ -333,6 +369,7 @@ export enum InAppCategoryType {
 }
 
 }
+}
 export interface PostalCommunicationSettings {
   enabled: boolean;
   address: PostalAddress;
@@ -342,7 +379,9 @@ export interface PostalCommunicationSettings {
   allowSurveys: boolean;
 }
 }
+}
 
+}
 }
 export interface PostalAddress {
   name: string;
@@ -356,11 +395,14 @@ export interface PostalAddress {
   verifiedAt?: Date;
 }
 }
+}
 
+}
 }
 export interface PostalCategory {
   category: PostalCategoryType;
   enabled: boolean;
+}
 }
 }
 
@@ -373,6 +415,7 @@ export enum PostalCategoryType {
 }
 
 }
+}
 export interface CommunicationFrequency {
   global: GlobalFrequency;
   byChannel: ChannelFrequency[];
@@ -382,7 +425,9 @@ export interface CommunicationFrequency {
   intelligentTiming: boolean;
 }
 }
+}
 
+}
 }
 export interface GlobalFrequency {
   maxDaily: number;
@@ -391,7 +436,9 @@ export interface GlobalFrequency {
   priorityOverride: boolean;
 }
 }
+}
 
+}
 }
 export interface ChannelFrequency {
   channel: CommunicationChannelType;
@@ -400,7 +447,9 @@ export interface ChannelFrequency {
   respectGlobal: boolean;
 }
 }
+}
 
+}
 }
 export interface CategoryFrequency {
   category: string;
@@ -409,7 +458,9 @@ export interface CategoryFrequency {
   priority: CommunicationPriority;
 }
 }
+}
 
+}
 }
 export interface QuietHoursSettings {
   enabled: boolean;
@@ -420,6 +471,7 @@ export interface QuietHoursSettings {
   allowCritical: boolean;
   allowSecurity: boolean;
   exceptions: QuietHoursException[];
+}
 }
 }
 
@@ -434,6 +486,7 @@ export enum DayOfWeek {
 }
 
 }
+}
 export interface QuietHoursException {
   exceptionId: string;
   name: string;
@@ -445,7 +498,9 @@ export interface QuietHoursException {
   recurrencePattern?: RecurrencePattern;
 }
 }
+}
 
+}
 }
 export interface RecurrencePattern {
   type: 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'YEARLY';
@@ -455,7 +510,9 @@ export interface RecurrencePattern {
   monthOfYear?: number;
 }
 }
+}
 
+}
 }
 export interface CommunicationChannel {
   channelId: string;
@@ -463,6 +520,7 @@ export interface CommunicationChannel {
   enabled: boolean;
   priority: number;
   settings: Record<string, any>;
+}
 }
 }
 
@@ -478,6 +536,7 @@ export enum CommunicationChannelType {
 }
 
 }
+}
 export interface DataPreferences {
   collection: DataCollectionSettings;
   processing: DataProcessingSettings;
@@ -488,7 +547,9 @@ export interface DataPreferences {
   tracking: TrackingSettings;
 }
 }
+}
 
+}
 }
 export interface DataCollectionSettings {
   allowAutomaticCollection: boolean;
@@ -503,7 +564,9 @@ export interface DataCollectionSettings {
   collectDevice: boolean;
 }
 }
+}
 
+}
 }
 export interface DataProcessingSettings {
   allowAutomatedDecisions: boolean;
@@ -517,7 +580,9 @@ export interface DataProcessingSettings {
   processOnlyNecessary: boolean;
 }
 }
+}
 
+}
 }
 export interface DataRetentionSettings {
   useDefaultRetention: boolean;
@@ -530,7 +595,9 @@ export interface DataRetentionSettings {
   archiveBeforeDelete: boolean;
 }
 }
+}
 
+}
 }
 export interface CustomRetentionPeriod {
   dataCategory: string;
@@ -540,7 +607,9 @@ export interface CustomRetentionPeriod {
   reviewRequired: boolean;
 }
 }
+}
 
+}
 }
 export interface DataSharingSettings {
   allowSharing: boolean;
@@ -553,7 +622,9 @@ export interface DataSharingSettings {
   geographicRestrictions: GeographicRestriction[];
 }
 }
+}
 
+}
 }
 export interface SharingPartner {
   partnerId: string;
@@ -564,6 +635,7 @@ export interface SharingPartner {
   retentionPeriod: number;
   contractualSafeguards: boolean;
   adequacyDecision: boolean;
+}
 }
 }
 
@@ -588,6 +660,7 @@ export enum SharingPurpose {
 }
 
 }
+}
 export interface GeographicRestriction {
   type: 'ALLOW' | 'BLOCK';
   countries: string[];
@@ -596,7 +669,9 @@ export interface GeographicRestriction {
   safeguardsRequired: boolean;
 }
 }
+}
 
+}
 }
 export interface AnalyticsSettings {
   allowAnalytics: boolean;
@@ -611,7 +686,9 @@ export interface AnalyticsSettings {
   retentionPeriod: number; // days
 }
 }
+}
 
+}
 }
 export interface CookieSettings {
   allowEssentialCookies: boolean;
@@ -625,7 +702,9 @@ export interface CookieSettings {
   secureOnly: boolean;
 }
 }
+}
 
+}
 }
 export interface CookieRetentionSettings {
   essentialRetention: number; // days
@@ -635,6 +714,7 @@ export interface CookieRetentionSettings {
   autoCleanup: boolean;
 }
 }
+}
 
 export enum SameSitePolicy {
   STRICT = 'Strict',
@@ -642,6 +722,7 @@ export enum SameSitePolicy {
   NONE = 'None'
 }
 
+}
 }
 export interface TrackingSettings {
   allowTracking: boolean;
@@ -656,7 +737,9 @@ export interface TrackingSettings {
   globalPrivacyControl: boolean;
 }
 }
+}
 
+}
 }
 export interface SecurityPreferences {
   twoFactorAuth: TwoFactorSettings;
@@ -668,7 +751,9 @@ export interface SecurityPreferences {
   privacyEnhancements: PrivacyEnhancementSettings;
 }
 }
+}
 
+}
 }
 export interface TwoFactorSettings {
   enabled: boolean;
@@ -679,7 +764,9 @@ export interface TwoFactorSettings {
   rememberDuration: number; // days
 }
 }
+}
 
+}
 }
 export interface TwoFactorMethod {
   methodId: string;
@@ -688,6 +775,7 @@ export interface TwoFactorMethod {
   isPrimary: boolean;
   isBackup: boolean;
   metadata: Record<string, any>;
+}
 }
 }
 
@@ -700,6 +788,7 @@ export enum TwoFactorType {
   PUSH = 'PUSH'
 }
 
+}
 }
 export interface PasswordSecuritySettings {
   requireStrong: boolean;
@@ -715,7 +804,9 @@ export interface PasswordSecuritySettings {
   warningDays: number;
 }
 }
+}
 
+}
 }
 export interface SessionSecuritySettings {
   maxConcurrentSessions: number;
@@ -727,7 +818,9 @@ export interface SessionSecuritySettings {
   secureTransmission: boolean;
 }
 }
+}
 
+}
 }
 export interface DeviceSecuritySettings {
   allowedDevices: TrustedDevice[];
@@ -738,7 +831,9 @@ export interface DeviceSecuritySettings {
   deviceLimit: number;
 }
 }
+}
 
+}
 }
 export interface TrustedDevice {
   deviceId: string;
@@ -751,7 +846,9 @@ export interface TrustedDevice {
   location?: string;
 }
 }
+}
 
+}
 }
 export interface LoginNotificationSettings {
   enabled: boolean;
@@ -763,7 +860,9 @@ export interface LoginNotificationSettings {
   deliveryMethods: CommunicationChannelType[];
 }
 }
+}
 
+}
 }
 export interface SecurityAlertSettings {
   enabled: boolean;
@@ -772,6 +871,7 @@ export interface SecurityAlertSettings {
   deliveryMethods: CommunicationChannelType[];
   autoResponse: boolean;
   escalation: boolean;
+}
 }
 }
 
@@ -792,6 +892,7 @@ export enum SecurityAlertSeverity {
 }
 
 }
+}
 export interface PrivacyEnhancementSettings {
   anonymizeIpAddress: boolean;
   maskSensitiveData: boolean;
@@ -803,7 +904,9 @@ export interface PrivacyEnhancementSettings {
   differentialPrivacy: boolean;
 }
 }
+}
 
+}
 }
 export interface ConsentPreferences {
   consentMethod: ConsentMethod;
@@ -816,6 +919,7 @@ export interface ConsentPreferences {
   crossBorderConsent: CrossBorderConsentSettings;
 }
 }
+}
 
 export enum ConsentMethod {
   OPT_IN = 'OPT_IN',
@@ -826,6 +930,7 @@ export enum ConsentMethod {
 }
 
 }
+}
 export interface ConsentHistorySettings {
   trackHistory: boolean;
   retainHistory: boolean;
@@ -835,7 +940,9 @@ export interface ConsentHistorySettings {
   includeWithdrawals: boolean;
 }
 }
+}
 
+}
 }
 export interface ConsentRenewalSettings {
   requireRenewal: boolean;
@@ -846,7 +953,9 @@ export interface ConsentRenewalSettings {
   gracePeriod: number; // days
 }
 }
+}
 
+}
 }
 export interface ReminderSchedule {
   daysBefore: number;
@@ -855,7 +964,9 @@ export interface ReminderSchedule {
   critical: boolean;
 }
 }
+}
 
+}
 }
 export interface CrossBorderConsentSettings {
   allowCrossBorderTransfer: boolean;
@@ -866,7 +977,9 @@ export interface CrossBorderConsentSettings {
   blockedDestinations: string[];
 }
 }
+}
 
+}
 }
 export interface NotificationPreferences {
   globalSettings: GlobalNotificationSettings;
@@ -877,7 +990,9 @@ export interface NotificationPreferences {
   appearanceSettings: NotificationAppearanceSettings;
 }
 }
+}
 
+}
 }
 export interface GlobalNotificationSettings {
   enabled: boolean;
@@ -888,7 +1003,9 @@ export interface GlobalNotificationSettings {
   priorityOverride: boolean;
 }
 }
+}
 
+}
 }
 export interface FrequencyLimit {
   timeWindow: number; // minutes
@@ -897,7 +1014,9 @@ export interface FrequencyLimit {
   channels: CommunicationChannelType[];
 }
 }
+}
 
+}
 }
 export interface NotificationCategorySettings {
   category: NotificationCategory;
@@ -908,6 +1027,7 @@ export interface NotificationCategorySettings {
   grouping: boolean;
   sound: string;
   vibration: boolean;
+}
 }
 }
 
@@ -923,6 +1043,7 @@ export enum NotificationCategory {
 }
 
 }
+}
 export interface NotificationTiming {
   immediate: boolean;
   delayed: boolean;
@@ -932,7 +1053,9 @@ export interface NotificationTiming {
   respectQuietHours: boolean;
 }
 }
+}
 
+}
 }
 export interface NotificationChannelSettings {
   channel: CommunicationChannelType;
@@ -943,7 +1066,9 @@ export interface NotificationChannelSettings {
   formatSettings: FormatSettings;
 }
 }
+}
 
+}
 }
 export interface RetrySettings {
   enabled: boolean;
@@ -953,7 +1078,9 @@ export interface RetrySettings {
   giveUpAfter: number; // hours
 }
 }
+}
 
+}
 }
 export interface FormatSettings {
   template: string;
@@ -963,7 +1090,9 @@ export interface FormatSettings {
   personalized: boolean;
 }
 }
+}
 
+}
 }
 export interface NotificationTimingSettings {
   quietHours: QuietHoursSettings;
@@ -973,7 +1102,9 @@ export interface NotificationTimingSettings {
   holidaySettings: HolidaySettings;
 }
 }
+}
 
+}
 }
 export interface WorkingHoursSettings {
   enabled: boolean;
@@ -984,7 +1115,9 @@ export interface WorkingHoursSettings {
   allowUrgent: boolean;
 }
 }
+}
 
+}
 }
 export interface WeekendSettings {
   treatAsQuietTime: boolean;
@@ -995,7 +1128,9 @@ export interface WeekendSettings {
   customEndTime?: string;
 }
 }
+}
 
+}
 }
 export interface HolidaySettings {
   respectHolidays: boolean;
@@ -1005,7 +1140,9 @@ export interface HolidaySettings {
   customHolidays: CustomHoliday[];
 }
 }
+}
 
+}
 }
 export interface CustomHoliday {
   name: string;
@@ -1015,7 +1152,9 @@ export interface CustomHoliday {
   allowedCategories: NotificationCategory[];
 }
 }
+}
 
+}
 }
 export interface NotificationDeliverySettings {
   consolidation: ConsolidationSettings;
@@ -1024,7 +1163,9 @@ export interface NotificationDeliverySettings {
   failover: FailoverSettings;
 }
 }
+}
 
+}
 }
 export interface ConsolidationSettings {
   enabled: boolean;
@@ -1035,7 +1176,9 @@ export interface ConsolidationSettings {
   groupByPriority: boolean;
 }
 }
+}
 
+}
 }
 export interface BatchingSettings {
   enabled: boolean;
@@ -1045,7 +1188,9 @@ export interface BatchingSettings {
   respectTiming: boolean;
 }
 }
+}
 
+}
 }
 export interface ThrottlingSettings {
   enabled: boolean;
@@ -1056,7 +1201,9 @@ export interface ThrottlingSettings {
   priorityExempt: CommunicationPriority[];
 }
 }
+}
 
+}
 }
 export interface FailoverSettings {
   enabled: boolean;
@@ -1066,7 +1213,9 @@ export interface FailoverSettings {
   criticalOnly: boolean;
 }
 }
+}
 
+}
 }
 export interface NotificationAppearanceSettings {
   theme: 'light' | 'dark' | 'auto';
@@ -1075,6 +1224,7 @@ export interface NotificationAppearanceSettings {
   animation: NotificationAnimation;
   sounds: NotificationSoundSettings;
   visual: VisualSettings;
+}
 }
 }
 
@@ -1096,12 +1246,14 @@ export enum NotificationAnimation {
 }
 
 }
+}
 export interface NotificationSoundSettings {
   enabled: boolean;
   volume: number; // 0-100
   soundScheme: SoundScheme;
   customSounds: CustomSound[];
   respectSystemVolume: boolean;
+}
 }
 }
 
@@ -1114,6 +1266,7 @@ export enum SoundScheme {
 }
 
 }
+}
 export interface CustomSound {
   category: NotificationCategory;
   soundFile: string;
@@ -1121,7 +1274,9 @@ export interface CustomSound {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface VisualSettings {
   showPreviews: boolean;
@@ -1133,7 +1288,9 @@ export interface VisualSettings {
   colors: ColorSettings;
 }
 }
+}
 
+}
 }
 export interface ColorSettings {
   primary: string;
@@ -1144,7 +1301,9 @@ export interface ColorSettings {
   border: string;
 }
 }
+}
 
+}
 }
 export interface AccessibilityPreferences {
   visualAccessibility: VisualAccessibilitySettings;
@@ -1154,7 +1313,9 @@ export interface AccessibilityPreferences {
   assistiveTechnology: AssistiveTechnologySettings;
 }
 }
+}
 
+}
 }
 export interface VisualAccessibilitySettings {
   highContrast: boolean;
@@ -1165,6 +1326,7 @@ export interface VisualAccessibilitySettings {
   focusIndicators: boolean;
   colorBlindSupport: ColorBlindSupport;
   screenReader: boolean;
+}
 }
 }
 
@@ -1184,6 +1346,7 @@ export enum ColorBlindSupport {
 }
 
 }
+}
 export interface AudioAccessibilitySettings {
   audioDescriptions: boolean;
   captions: boolean;
@@ -1194,6 +1357,7 @@ export interface AudioAccessibilitySettings {
   audioFormats: AudioFormat[];
 }
 }
+}
 
 export enum AudioFormat {
   MP3 = 'MP3',
@@ -1202,6 +1366,7 @@ export enum AudioFormat {
   AAC = 'AAC'
 }
 
+}
 }
 export interface MotorAccessibilitySettings {
   keyboardNavigation: boolean;
@@ -1214,7 +1379,9 @@ export interface MotorAccessibilitySettings {
   voiceControl: boolean;
 }
 }
+}
 
+}
 }
 export interface CognitiveAccessibilitySettings {
   simplifiedInterface: boolean;
@@ -1225,7 +1392,9 @@ export interface CognitiveAccessibilitySettings {
   reminderSettings: CognitiveReminderSettings;
 }
 }
+}
 
+}
 }
 export interface TimeoutSettings {
   enabled: boolean;
@@ -1235,7 +1404,9 @@ export interface TimeoutSettings {
   sessionTimeout: number; // minutes
 }
 }
+}
 
+}
 }
 export interface CognitiveReminderSettings {
   enabled: boolean;
@@ -1245,7 +1416,9 @@ export interface CognitiveReminderSettings {
   confirmationDialogs: boolean;
 }
 }
+}
 
+}
 }
 export interface AssistiveTechnologySettings {
   screenReader: ScreenReaderSettings;
@@ -1254,7 +1427,9 @@ export interface AssistiveTechnologySettings {
   switchControl: SwitchControlSettings;
 }
 }
+}
 
+}
 }
 export interface ScreenReaderSettings {
   enabled: boolean;
@@ -1263,6 +1438,7 @@ export interface ScreenReaderSettings {
   speechVolume: number;
   punctuationLevel: PunctuationLevel;
   verbosity: VerbosityLevel;
+}
 }
 }
 
@@ -1280,6 +1456,7 @@ export enum VerbosityLevel {
 }
 
 }
+}
 export interface VoiceControlSettings {
   enabled: boolean;
   sensitivity: number;
@@ -1288,7 +1465,9 @@ export interface VoiceControlSettings {
   noiseFiltering: boolean;
 }
 }
+}
 
+}
 }
 export interface EyeTrackingSettings {
   enabled: boolean;
@@ -1298,7 +1477,9 @@ export interface EyeTrackingSettings {
   smoothing: boolean;
 }
 }
+}
 
+}
 }
 export interface SwitchControlSettings {
   enabled: boolean;
@@ -1308,13 +1489,16 @@ export interface SwitchControlSettings {
   scanningMethod: ScanningMethod;
 }
 }
+}
 
+}
 }
 export interface SwitchConfiguration {
   switchId: string;
   switchType: string;
   action: string;
   enabled: boolean;
+}
 }
 }
 
@@ -1325,6 +1509,7 @@ export enum ScanningMethod {
 }
 
 }
+}
 export interface IntegrationPreferences {
   apiAccess: APIAccessSettings;
   webhooks: WebhookSettings;
@@ -1334,7 +1519,9 @@ export interface IntegrationPreferences {
   importSettings: ImportSettings;
 }
 }
+}
 
+}
 }
 export interface APIAccessSettings {
   enabled: boolean;
@@ -1346,7 +1533,9 @@ export interface APIAccessSettings {
   logAccess: boolean;
 }
 }
+}
 
+}
 }
 export interface APIKey {
   keyId: string;
@@ -1360,7 +1549,9 @@ export interface APIKey {
   lastUsed?: Date;
 }
 }
+}
 
+}
 }
 export interface APIPermission {
   resource: string;
@@ -1368,7 +1559,9 @@ export interface APIPermission {
   conditions?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface APIRateLimit {
   operation: string;
@@ -1376,6 +1569,7 @@ export interface APIRateLimit {
   requestsPerHour: number;
   requestsPerDay: number;
   burstLimit: number;
+}
 }
 }
 
@@ -1388,6 +1582,7 @@ export enum APIOperation {
 }
 
 }
+}
 export interface WebhookSettings {
   enabled: boolean;
   webhooks: Webhook[];
@@ -1396,7 +1591,9 @@ export interface WebhookSettings {
   logging: WebhookLoggingSettings;
 }
 }
+}
 
+}
 }
 export interface Webhook {
   webhookId: string;
@@ -1410,6 +1607,7 @@ export interface Webhook {
   timeout: number; // seconds
   lastTriggered?: Date;
   status: WebhookStatus;
+}
 }
 }
 
@@ -1432,6 +1630,7 @@ export enum WebhookStatus {
 }
 
 }
+}
 export interface WebhookRetrySettings {
   maxRetries: number;
   retryInterval: number; // seconds
@@ -1439,7 +1638,9 @@ export interface WebhookRetrySettings {
   maxBackoffTime: number; // seconds
 }
 }
+}
 
+}
 }
 export interface WebhookSecuritySettings {
   validateSignature: boolean;
@@ -1449,7 +1650,9 @@ export interface WebhookSecuritySettings {
   timeoutSeconds: number;
 }
 }
+}
 
+}
 }
 export interface WebhookLoggingSettings {
   logRequests: boolean;
@@ -1459,7 +1662,9 @@ export interface WebhookLoggingSettings {
   retentionDays: number;
 }
 }
+}
 
+}
 }
 export interface ThirdPartyIntegrationSettings {
   integrations: ThirdPartyIntegration[];
@@ -1468,7 +1673,9 @@ export interface ThirdPartyIntegrationSettings {
   dataSharing: IntegrationDataSharingSettings;
 }
 }
+}
 
+}
 }
 export interface ThirdPartyIntegration {
   integrationId: string;
@@ -1483,6 +1690,7 @@ export interface ThirdPartyIntegration {
   status: IntegrationStatus;
 }
 }
+}
 
 export enum IntegrationType {
   OAUTH = 'OAUTH',
@@ -1493,11 +1701,13 @@ export enum IntegrationType {
 }
 
 }
+}
 export interface IntegrationPermission {
   scope: string;
   granted: boolean;
   grantedAt: Date;
   expiresAt?: Date;
+}
 }
 }
 
@@ -1510,6 +1720,7 @@ export enum IntegrationStatus {
 }
 
 }
+}
 export interface OAuthIntegrationSettings {
   allowOAuth: boolean;
   authorizedProviders: string[];
@@ -1518,7 +1729,9 @@ export interface OAuthIntegrationSettings {
   refreshSettings: OAuthRefreshSettings;
 }
 }
+}
 
+}
 }
 export interface ScopeRestriction {
   providerId: string;
@@ -1527,7 +1740,9 @@ export interface ScopeRestriction {
   requireExplicitConsent: boolean;
 }
 }
+}
 
+}
 }
 export interface OAuthTokenSettings {
   storeTokens: boolean;
@@ -1536,7 +1751,9 @@ export interface OAuthTokenSettings {
   rotateRefreshTokens: boolean;
 }
 }
+}
 
+}
 }
 export interface OAuthRefreshSettings {
   autoRefresh: boolean;
@@ -1545,7 +1762,9 @@ export interface OAuthRefreshSettings {
   failureRetries: number;
 }
 }
+}
 
+}
 }
 export interface APIIntegrationSettings {
   allowAPIIntegrations: boolean;
@@ -1554,7 +1773,9 @@ export interface APIIntegrationSettings {
   securitySettings: IntegrationSecuritySettings;
 }
 }
+}
 
+}
 }
 export interface IntegrationRateLimitSettings {
   enableLimits: boolean;
@@ -1563,7 +1784,9 @@ export interface IntegrationRateLimitSettings {
   shareUserLimits: boolean;
 }
 }
+}
 
+}
 }
 export interface IntegrationSecuritySettings {
   requireSSL: boolean;
@@ -1573,7 +1796,9 @@ export interface IntegrationSecuritySettings {
   ipWhitelist: string[];
 }
 }
+}
 
+}
 }
 export interface IntegrationDataSharingSettings {
   allowDataSharing: boolean;
@@ -1584,7 +1809,9 @@ export interface IntegrationDataSharingSettings {
   retentionLimits: Record<string, number>;
 }
 }
+}
 
+}
 }
 export interface DataSyncSettings {
   enableSync: boolean;
@@ -1592,6 +1819,7 @@ export interface DataSyncSettings {
   syncScope: SyncScope[];
   conflictResolution: ConflictResolutionStrategy;
   syncSecurity: SyncSecuritySettings;
+}
 }
 }
 
@@ -1604,12 +1832,14 @@ export enum SyncFrequency {
 }
 
 }
+}
 export interface SyncScope {
   dataType: string;
   direction: SyncDirection;
   enabled: boolean;
   lastSync?: Date;
   nextSync?: Date;
+}
 }
 }
 
@@ -1627,6 +1857,7 @@ export enum ConflictResolutionStrategy {
 }
 
 }
+}
 export interface SyncSecuritySettings {
   encryptInTransit: boolean;
   encryptAtRest: boolean;
@@ -1635,7 +1866,9 @@ export interface SyncSecuritySettings {
   requireApproval: boolean;
 }
 }
+}
 
+}
 }
 export interface ExportSettings {
   allowExports: boolean;
@@ -1645,7 +1878,9 @@ export interface ExportSettings {
   exportRetention: ExportRetentionSettings;
 }
 }
+}
 
+}
 }
 export interface ExportSchedule {
   enabled: boolean;
@@ -1654,6 +1889,7 @@ export interface ExportSchedule {
   timezone: string;
   includeMetadata: boolean;
   notifyOnCompletion: boolean;
+}
 }
 }
 
@@ -1666,6 +1902,7 @@ export enum ExportFrequency {
 }
 
 }
+}
 export interface ExportSecuritySettings {
   encryptExports: boolean;
   passwordProtect: boolean;
@@ -1674,7 +1911,9 @@ export interface ExportSecuritySettings {
   watermarkFiles: boolean;
 }
 }
+}
 
+}
 }
 export interface ExportRetentionSettings {
   retainExports: boolean;
@@ -1684,7 +1923,9 @@ export interface ExportRetentionSettings {
   notifyBeforeDelete: boolean;
 }
 }
+}
 
+}
 }
 export interface ImportSettings {
   allowImports: boolean;
@@ -1694,7 +1935,9 @@ export interface ImportSettings {
   conflictResolution: ImportConflictResolution;
 }
 }
+}
 
+}
 }
 export interface ImportValidationSettings {
   validateSchema: boolean;
@@ -1704,7 +1947,9 @@ export interface ImportValidationSettings {
   maximumSize: number; // MB
 }
 }
+}
 
+}
 }
 export interface ImportSecuritySettings {
   scanForMalware: boolean;
@@ -1714,7 +1959,9 @@ export interface ImportSecuritySettings {
   quarantineSuspicious: boolean;
 }
 }
+}
 
+}
 }
 export interface ImportConflictResolution {
   strategy: ConflictResolutionStrategy;
@@ -1724,7 +1971,9 @@ export interface ImportConflictResolution {
   preserveHistory: boolean;
 }
 }
+}
 
+}
 }
 export interface CustomPreference {
   preferenceId: string;
@@ -1739,6 +1988,7 @@ export interface CustomPreference {
   metadata: Record<string, any>;
   createdAt: Date;
   updatedAt: Date;
+}
 }
 }
 
@@ -1757,6 +2007,7 @@ export enum PreferenceType {
 }
 
 }
+}
 export interface PreferenceOption {
   value: Error;
   label: string;
@@ -1764,7 +2015,9 @@ export interface PreferenceOption {
   disabled?: boolean;
 }
 }
+}
 
+}
 }
 export interface PreferenceValidation {
   required: boolean;
@@ -1776,7 +2029,9 @@ export interface PreferenceValidation {
   customValidator?: string;
 }
 }
+}
 
+}
 }
 export interface PreferenceCenterMetadata {
   version: string;
@@ -1790,6 +2045,7 @@ export interface PreferenceCenterMetadata {
   auditTrail: PreferenceAuditEvent[];
 }
 }
+}
 
 export enum PreferenceSource {
   USER_INPUT = 'USER_INPUT',
@@ -1801,6 +2057,7 @@ export enum PreferenceSource {
 }
 
 }
+}
 export interface PreferenceMigration {
   migrationId: string;
   fromVersion: string;
@@ -1811,7 +2068,9 @@ export interface PreferenceMigration {
   errors?: string[];
 }
 }
+}
 
+}
 }
 export interface PreferenceChange {
   field: string;
@@ -1819,6 +2078,7 @@ export interface PreferenceChange {
   newValue: Error;
   reason: string;
   timestamp: Date;
+}
 }
 }
 
@@ -1838,6 +2098,7 @@ export enum ValidationStatus {
 }
 
 }
+}
 export interface PreferenceAuditEvent {
   eventId: string;
   eventType: PreferenceEventType;
@@ -1848,6 +2109,7 @@ export interface PreferenceAuditEvent {
   ipAddress: string;
   userAgent: string;
   sessionId: string;
+}
 }
 }
 
@@ -1863,10 +2125,12 @@ export enum PreferenceEventType {
 }
 
 }
+}
 export interface AuditContext {
   source: string;
   reason: string;
   metadata: Record<string, any>;
+}
 }
 }
 
@@ -3312,6 +3576,7 @@ export class PreferenceCenterService extends EventEmitter {
 
 // Supporting interfaces and types
 }
+}
 export interface OperationContext {
   ipAddress?: string;
   userAgent?: string;
@@ -3321,7 +3586,9 @@ export interface OperationContext {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ValidationResult {
   isValid: boolean;
@@ -3329,7 +3596,9 @@ export interface ValidationResult {
   warnings: string[];
 }
 }
+}
 
+}
 }
 export interface ExportResult {
   exportId: string;
@@ -3341,7 +3610,9 @@ export interface ExportResult {
   expiresAt: Date;
 }
 }
+}
 
+}
 }
 export interface PreferenceSummary {
   userId: string;
@@ -3356,5 +3627,6 @@ export interface PreferenceSummary {
   lastUpdated: Date;
   recommendations: string[];
   completionScore: number; // percentage
+}
 }
 }

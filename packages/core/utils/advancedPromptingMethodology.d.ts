@@ -1,5 +1,6 @@
 import { VariableSuggestion } from './templateParser';
 
+}
 export interface ZadaTemplateComponent {
     category: 'time_setting' | 'actions' | 'locations' | 'characters' | 'cinematography';
     name: string;
@@ -14,6 +15,7 @@ export declare export declare const parseMarsFramework: (template: string) => {
     tags: MarsTag[];
     conflicts: string[];
     suggestions: string[];
+}
 };
 export declare const createHybridTemplate: (naturalTemplate: string, marsFramework?: boolean) => {
     hybrid: string;

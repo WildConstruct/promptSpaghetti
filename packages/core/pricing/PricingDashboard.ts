@@ -7,6 +7,7 @@
 import { EventEmitter } from 'events';
 import { PricingOptimizer, PricingAnalytics, PricingModel } from './PricingOptimizer';
 
+}
 export interface DashboardConfig {
   refreshIntervalMs: number;
   showPredictiveAnalytics: boolean;
@@ -16,8 +17,10 @@ export interface DashboardConfig {
   revenueDeclinePercent: number;
   demandDropPercent: number;
   competitiveThreatScore: number;
+}
 };
   filmIndustryFocus: boolean;
+}
 }
 export interface DashboardMetrics {
   // Revenue metrics
@@ -36,16 +39,18 @@ export interface DashboardMetrics {
   // Film industry specific metrics
   studioTierBreakdown: Record<string, number>;
   productionTypeDistribution: Record<string, number>;
-  seasonalTrends: Array<{,
+  seasonalTrends: Array<{
   period: string;
   revenue: number;
   growth: number;
+}
 }>;
   // Competitive intelligence
   marketPosition: 'leader' | 'challenger' | 'follower';
   competitiveAdvantage: number;
   pricePositioning: 'premium' | 'competitive' | 'value';
   updatedAt: number;
+}
 }
 export interface PricingAlert {
   id: string;
@@ -60,6 +65,8 @@ export interface PricingAlert {
   createdAt: number;
   acknowledged: boolean;
 }
+}
+}
 export interface PricingInsight {
   id: string;
   type: 'trend' | 'opportunity' | 'risk' | 'optimization';
@@ -69,13 +76,15 @@ export interface PricingInsight {
   confidence: number;
   impact: 'low' | 'medium' | 'high';
   actionItems: string;
-  dataPoints: Array<{,
+  dataPoints: Array<{
   metric: string;
   current: number;
   previous: number;
   change: number;
+}
 }>;
   createdAt: number;
+}
 }
 export interface RevenueProjection {
   period: '1_month' | '3_months' | '6_months' | '1_year';
@@ -83,6 +92,7 @@ export interface RevenueProjection {
   confidenceInterval: {
   lower: number;
   upper: number;
+}
 };
   assumptions: string;
   keyFactors: Array<{;
@@ -173,6 +183,7 @@ export class PricingDashboard extends EventEmitter {
   pricingRecommendations: string;
   threatLevel: 'low' | 'medium' | 'high'
   }> {
+
   // Aggregate competitive analysis from all models
   const models = this.getAllModels();
   const competitiveAnalyses = await Promise.all(;);
@@ -299,6 +310,7 @@ export class PricingDashboard extends EventEmitter {
       this.refreshMetrics();
     }, this.config.refreshIntervalMs);
   private async refreshMetrics(): Promise<void> {
+
     try {
       const models = this.getAllModels();
       let totalRevenue = 0;
@@ -359,6 +371,7 @@ export class PricingDashboard extends EventEmitter {
     const cutoff = now - (this.config.maxHistoryDays * 24 * 60 * 60 * 1000);
     this.revenueHistory = this.revenueHistory.filter(entry => entry.timestamp > cutoff);
   private async generateInsights(): Promise<void> {
+
     const insights: PricingInsight = [];
     // Revenue trend insight
     if (this.metrics.revenueGrowthRate > 20) {
@@ -460,6 +473,7 @@ export class PricingDashboard extends EventEmitter {
   });
         this.emit('alert_created', this.alerts.get(alertId));
   private async calculateRevenueProjection(period: RevenueProjection['period']): Promise<RevenueProjection> {
+
   const periodDays = {
   '1_month': 30,
   '3_months': 90,

@@ -14,6 +14,7 @@ import { AuditService } from '../auth/AuditService';
 import { Role, Permission, User } from '../auth/types';
 
 }
+}
 export interface CloneRoleRequest {
   sourceRoleId: string;
   targetName: string;
@@ -26,9 +27,11 @@ export interface CloneRoleRequest {
     templateVersion?: string;
     customProperties?: Record<string, unknown>;
 }
+}
   };
 }
 
+}
 }
 export interface CloneRoleResponse {
   success: boolean;
@@ -38,7 +41,9 @@ export interface CloneRoleResponse {
   warnings?: string[];
 }
 }
+}
 
+}
 }
 export interface CloneOperationResult {
   operationId: string;
@@ -51,7 +56,9 @@ export interface CloneOperationResult {
   conflicts: CloneConflict[];
 }
 }
+}
 
+}
 }
 export interface CloneConflict {
   type: 'permission_scope_mismatch' | 'permission_not_found' | 'scope_incompatible' | 'organization_mismatch';
@@ -60,7 +67,9 @@ export interface CloneConflict {
   resolution: 'skip' | 'adjust' | 'manual_review';
 }
 }
+}
 
+}
 }
 export interface RoleCloneHistory {
   roleId: string;
@@ -71,6 +80,7 @@ export interface RoleCloneHistory {
     roleName: string;
     clonedAt: Date;
     clonedBy: string;
+}
 }
   }>;
   templateUsage?: {

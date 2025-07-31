@@ -27,6 +27,7 @@ export type TestStatus = 'pending' | 'running' | 'completed' | 'failed' | 'cance
 export type TestSeverity = 'low' | 'medium' | 'high' | 'critical';
 
 }
+}
 export interface SegmentTest {
   id: string;
   name: string;
@@ -55,7 +56,9 @@ export interface SegmentTest {
   version: string;
 }
 }
+}
 
+}
 }
 export interface TestConfiguration {
   // Sample Configuration
@@ -85,7 +88,9 @@ export interface TestConfiguration {
   timeoutMs?: number;
 }
 }
+}
 
+}
 }
 export interface TestExpectation {
   id: string;
@@ -97,7 +102,9 @@ export interface TestExpectation {
   failureMessage?: string;
 }
 }
+}
 
+}
 }
 export interface TestResult {
   testId: string;
@@ -144,7 +151,9 @@ export interface TestResult {
   testLogs?: string[];
 }
 }
+}
 
+}
 }
 export interface GoldStandardEntry {
   userId: string;
@@ -153,7 +162,9 @@ export interface GoldStandardEntry {
   confidence?: number;
 }
 }
+}
 
+}
 }
 export interface OverlapAnalysis {
   totalUsers: number;
@@ -164,11 +175,13 @@ export interface OverlapAnalysis {
     overlapPercentage: number;
     jaccard: number; // Jaccard similarity coefficient
 }
+}
   }>;
   uniqueUsers: number;
   exclusiveUsers: number;
 }
 
+}
 }
 export interface IntegrationTestResult {
   testName: string;
@@ -177,7 +190,9 @@ export interface IntegrationTestResult {
   executionTime: number;
 }
 }
+}
 
+}
 }
 export interface TestError {
   id: string;
@@ -189,7 +204,9 @@ export interface TestError {
   stackTrace?: string;
 }
 }
+}
 
+}
 }
 export interface TestWarning {
   id: string;
@@ -198,13 +215,16 @@ export interface TestWarning {
   suggestion?: string;
 }
 }
+}
 
+}
 }
 export interface BatchTestRequest {
   testConfigs: Array<{
     segmentId: string;
     testTypes: TestType[];
     config?: Partial<TestConfiguration>;
+}
 }
   }>;
   runInParallel?: boolean;
@@ -213,6 +233,7 @@ export interface BatchTestRequest {
   createdBy: string;
 }
 
+}
 }
 export interface BatchTestResult {
   batchId: string;
@@ -225,10 +246,12 @@ export interface BatchTestResult {
     avgExecutionTime: number;
     totalDuration: number;
 }
+}
   };
   timestamp: string;
 }
 
+}
 }
 export interface TestReport {
   segmentId: string;
@@ -245,6 +268,7 @@ export interface TestReport {
     testsRun: number;
     passRate: number;
     avgScore: number;
+}
 }
   }>;
   

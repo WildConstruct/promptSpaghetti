@@ -15,13 +15,16 @@ import { DatabaseService } from '../../auth/database/DatabaseService';
 // import { UserAccessTransparencyService } from '../../../packages/core/security/UserAccessTransparency';
 // Mock interface for now to avoid import issues
 }
+}
 interface UserAccessTransparencyService {
   recordDataAccess(userId: string, evidenceId: string, action: string, timestamp: Date): Promise<void>;
+}
 }
 }
 import crypto from 'crypto';
 
 // Core audit trail data structures
+}
 }
 export interface EvidenceAccessAuditEntry {
   id: string;
@@ -37,6 +40,7 @@ export interface EvidenceAccessAuditEntry {
     permissions: string[];
     ipAddress: string;
     userAgent: string;
+}
 }
   };
   
@@ -112,6 +116,7 @@ export enum EvidenceAccessOutcome {
 }
 
 }
+}
 export interface AuditTrailQuery {
   evidenceId?: string;
   userId?: string;
@@ -125,7 +130,9 @@ export interface AuditTrailQuery {
   includeDeleted?: boolean;
 }
 }
+}
 
+}
 }
 export interface AuditTrailReport {
   summary: {
@@ -134,6 +141,7 @@ export interface AuditTrailReport {
     riskDistribution: Record<string, number>;
     actionDistribution: Record<string, number>;
     outcomeDistribution: Record<string, number>;
+}
 }
   };
   entries: EvidenceAccessAuditEntry[];

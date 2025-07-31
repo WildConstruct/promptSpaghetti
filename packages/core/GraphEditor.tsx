@@ -107,10 +107,12 @@ const ANIMATION_CSS = `;
 
 // Inject styles safely on module load
 injectSafeStyles();
+}
 interface GraphEditorProps {
   initialNodes: Node;
   initialEdges: Edge;
   validateConnection?: (edges: Edge, nodes: Node) => ValidationError;
+}
 }
 
 const NODE_TYPES: NodeMeta[] = [

@@ -12,6 +12,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { AlertTriangle, CheckCircle, XCircle, AlertCircle, Activity, Zap, Database, Wifi, HardDrive } from 'lucide-react';
 
 // Types for health monitoring
+}
 interface HealthStatus {
   overall: HealthScore;
   components: ComponentHealth;
@@ -39,6 +40,7 @@ interface HealthStatus {
   usage: number;
   cores: number;
   temperature?: number;
+}
 };
   memory: {
   used: number;
@@ -64,6 +66,7 @@ interface HealthStatus {
   queryTime: number;
   queueSize: number;
 };
+}
 interface SystemAlert {
   id: string;
   type: 'error' | 'warning' | 'info';
@@ -94,6 +97,7 @@ interface SystemAlert {
   autoRefresh = true,
   showDetails = true,
   onAlertAction
+}
 }) => {
   // State management
   const [healthStatus, setHealthStatus] = useState<HealthStatus | null>(null);

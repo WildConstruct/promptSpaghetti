@@ -20,6 +20,7 @@ import { AuditService } from '../auth/services/AuditService';
 // ==========================================
 
 }
+}
 export interface ExecuteDiagnosticsRequest {
   suiteId?: string;
   diagnosticIds?: string[];
@@ -29,9 +30,11 @@ export interface ExecuteDiagnosticsRequest {
     skipOnError?: boolean;
     generateReport?: boolean;
 }
+}
   };
 }
 
+}
 }
 export interface DiagnosticsResponse<T = any> {
   success: boolean;
@@ -46,6 +49,7 @@ export interface DiagnosticsResponse<T = any> {
 }
 
 }
+}
 export interface HealthCheckQuery {
   includeDetails?: boolean;
   includeRecommendations?: boolean;
@@ -53,7 +57,9 @@ export interface HealthCheckQuery {
   categories?: string;
 }
 }
+}
 
+}
 }
 export interface DiagnosticListQuery {
   category?: DiagnosticCategory;
@@ -62,13 +68,16 @@ export interface DiagnosticListQuery {
   offset?: number;
 }
 }
+}
 
+}
 }
 export interface HealthReportQuery {
   startDate?: string;
   endDate?: string;
   limit?: number;
   includeDetails?: boolean;
+}
 }
 }
 

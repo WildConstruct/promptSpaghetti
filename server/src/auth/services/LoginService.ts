@@ -20,6 +20,7 @@ import { AUDIT_EVENTS, RATE_LIMIT_RULES } from '../config';
 import { GeolocationService, GeolocationData } from './GeolocationService';
 
 }
+}
 export interface LoginAttempt {
   userId?: string;
   email: string;
@@ -36,9 +37,11 @@ export interface LoginAttempt {
     distanceFromNearestKm?: number;
     suspiciousIndicators: string[];
 }
+}
   };
 }
 
+}
 }
 export interface LoginAnalytics {
   totalAttempts: number;
@@ -49,6 +52,7 @@ export interface LoginAnalytics {
     reason: string;
     count: number;
     percentage: number;
+}
 }
   }>;
   suspiciousActivity: Array<{
@@ -65,6 +69,7 @@ export interface LoginAnalytics {
 }
 
 }
+}
 export interface DeviceInfo {
   browser?: string;
   os?: string;
@@ -72,6 +77,7 @@ export interface DeviceInfo {
   userAgent: string;
   fingerprint?: string;
   trusted?: boolean;
+}
 }
 }
 

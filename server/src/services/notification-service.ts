@@ -9,6 +9,7 @@ import {
 } from '../database/scheduling-models';
 
 }
+}
 export interface NotificationChannel {
   id: string;
   type: 'email' | 'slack' | 'webhook' | 'in_app';
@@ -16,7 +17,9 @@ export interface NotificationChannel {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface NotificationTemplate {
   id: string;
@@ -26,7 +29,9 @@ export interface NotificationTemplate {
   variables: string[];
 }
 }
+}
 
+}
 }
 export interface NotificationEvent {
   type: 'execution_success' | 'execution_failure' | 'conflict_detected' | 'schedule_expired';
@@ -36,6 +41,7 @@ export interface NotificationEvent {
   conflict?: ScheduleConflict;
   metadata: Record<string, any>;
   timestamp: Date;
+}
 }
 }
 

@@ -3,9 +3,11 @@
  */
 import React, { useState } from 'react';
 import { useGraphStore } from '../../graphStore';
+}
 interface LoadProjectDialogProps {
   isOpen: boolean;
   onClose: () => void;
+}
   onLoad?: (result: { success: boolean; error?: string; warnings?: string }) => void;
 }
 

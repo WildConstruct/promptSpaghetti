@@ -8,6 +8,7 @@ import { RedisService } from '../database/RedisService';
 import { IdleTimeoutDetectionService } from './IdleTimeoutDetectionService';
 
 }
+}
 export interface ActivityDefinition {
   id: string;
   name: string;
@@ -23,6 +24,7 @@ export interface ActivityDefinition {
       payloadPattern?: string;
       minDuration?: number; // milliseconds
       userInitiated: boolean;
+}
 }
     }>;
     
@@ -69,6 +71,7 @@ export interface ActivityDefinition {
 }
 
 }
+}
 export interface DetectedActivity {
   id: string;
   sessionId: string;
@@ -82,6 +85,7 @@ export interface DetectedActivity {
     userAgent?: string;
     ipAddress: string;
     referrer?: string;
+}
 }
   };
   
@@ -133,6 +137,7 @@ export interface DetectedActivity {
 }
 
 }
+}
 export interface ActivityPattern {
   id: string;
   name: string;
@@ -148,6 +153,7 @@ export interface ActivityPattern {
       operator: 'equals' | 'contains' | 'matches' | 'between' | 'greater' | 'less';
       value: any;
       weight: number;
+}
 }
     }>;
     
@@ -175,6 +181,7 @@ export interface ActivityPattern {
 }
 
 }
+}
 export interface ActivitySession {
   sessionId: string;
   userId: string;
@@ -189,6 +196,7 @@ export interface ActivitySession {
     automatedActivities: number;
     averageGenuineness: number;
     timeoutResets: number;
+}
 }
   };
   

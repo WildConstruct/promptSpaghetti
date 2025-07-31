@@ -8,6 +8,7 @@
  */
 import React from 'react';
 
+}
 export interface MonitoringMetrics {
     system: {
         cpu: number;
@@ -16,6 +17,7 @@ export interface MonitoringMetrics {
         network: {
             inbound: number;
             outbound: number;
+}
         };
         uptime: number;
         lastUpdated: string;
@@ -43,6 +45,7 @@ export interface MonitoringMetrics {
         operationsPerSecond: number;
     };
 
+}
 export interface AlertData {
     id: string;
     severity: 'critical' | 'high' | 'medium' | 'low' | 'info';
@@ -54,11 +57,13 @@ export interface AlertData {
     resolved: boolean;
     assignee?: string;
 
+}
 export interface MonitoringViewConfig {
     layout: 'executive' | 'operational' | 'analytics' | 'compliance';
     refreshInterval: number;
     widgets: string[];
     rolePermissions: string[];
+}
 interface MonitoringInterfaceProps {
     userRole: string;
     userId: string;
@@ -69,3 +74,4 @@ interface MonitoringInterfaceProps {
 export declare const MonitoringInterface: React.FC<MonitoringInterfaceProps>;
 export default MonitoringInterface;
 //# sourceMappingURL=MonitoringInterface.d.ts.map
+}

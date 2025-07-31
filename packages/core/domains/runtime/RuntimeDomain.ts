@@ -28,6 +28,7 @@ import {
 
 // Domain service interfaces
 
+}
 export interface IExecutionService {
   executeGraph(graph: Graph, seeds: number, options?: ExecutionOptions): Promise<ExecutionRecord>;
   executeNode(nodeId: string, inputs: any, context: ExecutionContext): Promise<any>;
@@ -40,6 +41,8 @@ export interface IExecutionService {
   resumeQueue(): Promise<void>;
   clearQueue(): Promise<void>;
 }
+}
+}
 export interface INodeRegistryService {
   registerNode(definition: NodeDefinition): Promise<void>;
   unregisterNode(nodeType: string): Promise<void>;
@@ -51,6 +54,8 @@ export interface INodeRegistryService {
   searchNodes(query: string, filters?: NodeSearchFilters): Promise<NodeDefinition>;
   getNodeMetrics(nodeType: string): Promise<NodeMetrics>;
 }
+}
+}
 export interface IValidationService {
   validateGraph(graph: Graph): Promise<ValidationResult>;
   validateNode(node: any, definition: NodeDefinition): Promise<ValidationResult>;
@@ -60,6 +65,8 @@ export interface IValidationService {
   getValidationRules(nodeType: string): Promise<any>;
   addCustomValidation(name: string, validator: Function): Promise<void>;
   removeCustomValidation(name: string): Promise<void>;
+}
+}
 }
 export interface IPerformanceService {
   getMetrics(period?: string): Promise<RuntimeMetrics>;
@@ -72,6 +79,8 @@ export interface IPerformanceService {
   benchmarkNode(nodeType: string, iterations: number): Promise<BenchmarkResult>;
   generatePerformanceReport(criteria: ReportCriteria): Promise<PerformanceReport>;
 }
+}
+}
 export interface ICacheService {
   get(key: string): Promise<any>;
   set(key: string, value: any, ttl?: number): Promise<void>;
@@ -83,6 +92,8 @@ export interface ICacheService {
   export(): Promise<CacheExport>;
   import(data: CacheExport): Promise<void>;
 }
+}
+}
 export interface ISecurityService {
   validateExecution(graph: Graph, context: ExecutionContext): Promise<SecurityValidation>;
   checkPermissions(nodeType: string, userId: string): Promise<boolean>;
@@ -93,15 +104,19 @@ export interface ISecurityService {
   validateNodeSecurity(definition: NodeDefinition): Promise<SecurityValidation>;
   // Support types
 }
+}
+}
 export interface ExecutionHistoryFilters {
   graphId?: string;
   userId?: string;
   status?: string;
 
+}
   dateRange?: { start: Date; end: Date };
   nodeTypes?: string;
   limit?: number;
   offset?: number;
+}
 }
 export interface QueueStatus {
   queueSize: number;
@@ -112,12 +127,16 @@ export interface QueueStatus {
   averageWaitTime: number;
   estimatedProcessingTime: number;
 }
+}
+}
 export interface NodeSearchFilters {
   category?: string;
   tags?: string;
   author?: string;
   version?: string;
   capabilities?: string;
+}
+}
 }
 export interface ProfileResult {
   executionId: string;
@@ -126,6 +145,8 @@ export interface ProfileResult {
   memoryProfile: MemoryProfile;
   cpuProfile: CpuProfile;
   recommendations: string;
+}
+}
 }
 export interface NodeProfile {
   nodeId: string;
@@ -136,12 +157,16 @@ export interface NodeProfile {
   cacheHits: number;
   cacheMisses: number;
 }
+}
+}
 export interface MemoryProfile {
   peakUsage: number;
   averageUsage: number;
   allocations: number;
   deallocations: number;
   gcTime: number;
+}
+}
 }
 export interface CpuProfile {
   totalTime: number;
@@ -150,10 +175,14 @@ export interface CpuProfile {
   idleTime: number;
   samples: CpuSample;
 }
+}
+}
 export interface CpuSample {
   timestamp: number;
   usage: number;
   function: string;
+}
+}
 }
 export interface PerformanceAnalysis {
   executionId: string;
@@ -162,6 +191,8 @@ export interface PerformanceAnalysis {
   score: number;
   metrics: PerformanceMetrics;
 }
+}
+}
 export interface PerformanceBottleneck {
   type: 'cpu' | 'memory' | 'io' | 'network' | 'serialization';
   nodeId: string;
@@ -169,18 +200,24 @@ export interface PerformanceBottleneck {
   description: string;
   suggestion: string;
 }
+}
+}
 export interface PerformanceRecommendation {
   type: 'optimization' | 'caching' | 'parallelization' | 'resource_allocation';
   priority: 'low' | 'medium' | 'high';
   description: string;
   expectedImprovement: number;
   effort: 'low' | 'medium' | 'high'
+}
   }
+}
 export interface PerformanceMetrics {
   throughput: number;
   latency: number;
   resourceUtilization: number;
   efficiency: number;
+}
+}
 }
 export interface OptimizedGraph {
   original: Graph;
@@ -188,11 +225,15 @@ export interface OptimizedGraph {
   optimizations: GraphOptimization;
   estimatedImprovement: number;
 }
+}
+}
 export interface GraphOptimization {
   type: 'node_elimination' | 'node_fusion' | 'parallelization' | 'caching';
   description: string;
   impact: number;
   nodes: string;
+}
+}
 }
 export interface BenchmarkResult {
   nodeType: string;
@@ -204,6 +245,8 @@ export interface BenchmarkResult {
   standardDeviation: number;
   throughput: number;
 }
+}
+}
 export interface ReportCriteria {
   period: { start: Date; end: Date };
   includeNodeMetrics: boolean;
@@ -211,6 +254,7 @@ export interface ReportCriteria {
   includeRecommendations: boolean;
   format: 'summary' | 'detailed' | 'executive'
   }
+}
 export interface PerformanceReport {
   criteria: ReportCriteria;
   summary: ReportSummary;
@@ -220,6 +264,8 @@ export interface PerformanceReport {
   trends: PerformanceTrend;
   generatedAt: Date;
 }
+}
+}
 export interface ReportSummary {
   totalExecutions: number;
   averageExecutionTime: number;
@@ -227,11 +273,15 @@ export interface ReportSummary {
   topPerformingNodes: string;
   worstPerformingNodes: string;
 }
+}
+}
 export interface PerformanceTrend {
   metric: string;
+}
   values: { timestamp: Date; value: number }[];
   trend: 'improving' | 'degrading' | 'stable';
   changeRate: number;
+}
 }
 export interface CacheStats {
   size: number;
@@ -241,10 +291,14 @@ export interface CacheStats {
   evictions: number;
   memoryUsage: number;
 }
+}
+}
 export interface CacheExport {
   entries: CacheEntry;
   metadata: CacheMetadata;
   exportedAt: Date;
+}
+}
 }
 export interface CacheEntry {
   key: string;
@@ -253,11 +307,15 @@ export interface CacheEntry {
   createdAt: Date;
   lastAccessed: Date;
 }
+}
+}
 export interface CacheMetadata {
   version: string;
   totalEntries: number;
   totalSize: number;
   strategy: string;
+}
+}
 }
 export interface SecurityValidation {
   allowed: boolean;
@@ -265,11 +323,15 @@ export interface SecurityValidation {
   requirements: string;
   recommendations: string;
 }
+}
+}
 export interface SecurityRisk {
   type: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
   description: string;
   mitigation: string;
+}
+}
 }
 export interface SecurityAlert {
   type: string;
@@ -278,6 +340,8 @@ export interface SecurityAlert {
   evidence: any;
   timestamp: Date;
   // Main domain interface
+}
+}
 }
 export interface IRuntimeDomain {
   // React Components
@@ -290,6 +354,7 @@ export interface IRuntimeDomain {
   PerformanceMetrics: React.ComponentType<any>;
   NodeEditor: React.ComponentType<any>;
   ValidationResults: React.ComponentType<any>;
+}
 };
   // React Hooks
   hooks: {
@@ -363,9 +428,11 @@ export interface IRuntimeDomain {
 
 // Domain factory function
 }
+}
 export interface RuntimeDomainFactory {
   create(config?: Partial<RuntimeConfig>): IRuntimeDomain;
   // Event constants for cross-domain communication
+}
 }
 export const RUNTIME_DOMAIN_EVENTS = {
   EXECUTION_STARTED: 'runtime:execution:started',

@@ -6,6 +6,7 @@ export type FavoritesChangeListener = (favorites: string[]) => void;
  * Favorites data structure
  */
 
+}
 export interface FavoritesData {
     nodeIds: string[];
     lastModified: string;
@@ -95,3 +96,4 @@ export declare class FavoritesManager {
     private setupBeforeUnloadHandler;
 
 export declare //# sourceMappingURL=FavoritesManager.d.ts.map
+}

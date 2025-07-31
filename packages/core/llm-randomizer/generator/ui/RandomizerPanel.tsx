@@ -5,6 +5,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { RandomizerParameters, ParameterPreset, ValidationResult, ComplexityLevel, StylePreference, LLMProvider } from '../parameters/parameter-schema';
 import { ParameterManager } from '../parameters/parameter-manager';
 import { RandomizerWorkflow } from '../workflow/randomizer-workflow';
+}
 interface RandomizerPanelProps {
   onGraphGenerated?: (graph: any) => void;
   onError?: (error: Error) => void;
@@ -17,6 +18,7 @@ export const RandomizerPanel: React.FC<RandomizerPanelProps> = ({)
   onGraphGenerated,
   onError,
   className = '',
+}
   initialParameters = {}
 }) => {
   // State management

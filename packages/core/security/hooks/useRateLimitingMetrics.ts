@@ -21,12 +21,15 @@ import { AdaptiveThrottlingRulesEngine } from '../AdaptiveThrottlingRules';
 // Hook Types and Interfaces
 // ========================================
 
+}
 export interface UseRateLimitingMetricsOptions {
   autoRefresh?: boolean;
   refreshInterval?: number; // seconds,
   timeRange?: string;
   enableAlerts?: boolean;
   retainHistoryHours?: number;
+}
+}
 }
 export interface MetricsHookReturn {
   // Data
@@ -53,6 +56,8 @@ export interface MetricsHookReturn {
   error: string | null;
   clearError: () => void;
 }
+}
+}
 export interface MetricsServiceConfig {
   rateLimitingService: RateLimitingService;
   throttlingEngine?: AdaptiveThrottlingRulesEngine;
@@ -60,6 +65,7 @@ export interface MetricsServiceConfig {
   // ========================================
   // Custom Hook Implementation
   // ========================================
+}
 }
 export const useRateLimitingMetrics = ({)
   rateLimitingService,

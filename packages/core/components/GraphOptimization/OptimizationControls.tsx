@@ -3,6 +3,7 @@
  */
 import React, { useState } from 'react';
 
+}
 export interface OptimizationSettings {
   deadCodeElimination: boolean;
   constantPropagation: boolean;
@@ -26,6 +27,7 @@ export interface OptimizationSettings {
   precompilation: false,
   performanceMonitoring: true,
   debugMode: false,
+}
 };
 }
 export const OptimizationControls: React.FC<OptimizationControlsProps> = ({)

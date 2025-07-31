@@ -6,6 +6,7 @@ import React from 'react';
 import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 import { ExtensionStatus } from './ExtensionManagerStore';
 
+}
 export interface ExtensionDetailViewProps {
     extension: ExtensionManifest;
     status: ExtensionStatus;
@@ -20,3 +21,4 @@ export interface ExtensionDetailViewProps {
 export declare const ExtensionDetailView: React.FC<ExtensionDetailViewProps>;
 export default ExtensionDetailView;
 //# sourceMappingURL=ExtensionDetailView.d.ts.map
+}

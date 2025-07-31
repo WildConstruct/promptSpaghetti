@@ -4,9 +4,9 @@ import { useCallback, useRef } from 'react';
  * Provides debounced execution to prevent excessive preview regeneration
  * when weight controls change rapidly.
  */
-export function useDebounce<T extends (...args: any) => void>((;)
-  callback: T,
-    delay: number,
+export function useDebounce<T extends (...args: any) => void>((;(
+    callback: T,
+    delay: number
   ): T {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const debouncedCallback = useCallback((...args: Parameters<T>) => {,

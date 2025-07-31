@@ -32,6 +32,7 @@ import {
   ReviewDecision,
   AssignmentRecommendation
 } from '../../types/ReviewTools';
+}
 interface ReviewDashboardProps {
   onReviewSelect?: (review: ReviewItem) => void;
   onAssignmentAction?: (action: AssignmentAction) => void;
@@ -58,6 +59,7 @@ interface ReviewDashboardProps {
   dateRange?: {
   startDate: Date;
   endDate: Date;
+}
 };
   searchQuery?: string;
 

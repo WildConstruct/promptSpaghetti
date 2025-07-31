@@ -5,6 +5,7 @@ import { Node, Edge } from 'reactflow';
  * Template data structure as defined in story requirements
  */
 
+}
 export interface Template {
   id: string;
   name: string;
@@ -20,6 +21,8 @@ export interface Template {
   * Complete graph data including annotations from Epic 8.7
   */
 }
+}
+}
 export interface GraphData {
   nodes: Node;
   edges: Edge;
@@ -27,6 +30,8 @@ export interface GraphData {
   /**
   * Epic 8.7 annotation system as defined in story architecture
   */
+}
+}
 }
 export interface GraphAnnotations {
   stickyNotes: StickyNote;
@@ -38,10 +43,13 @@ export interface GraphAnnotations {
   created: string;
   modified: string;
   version: string;
+}
 };
+}
 }
 export interface StickyNote {
   id: string;
+}
   position: { x: number; y: number };
   content: string;
   color: string;
@@ -49,10 +57,12 @@ export interface StickyNote {
   author: string;
   timestamp: string;
 }
+}
 export interface RegionGroup {
   id: string;
   label: string;
   color: string;
+}
   bounds: { x: number; y: number; width: number; height: number };
   nodeIds: string;
   collapsed: boolean;
@@ -60,6 +70,7 @@ export interface RegionGroup {
 /**
  * Review system for templates
  */
+}
 }
 export interface Review {
   id: string;
@@ -71,6 +82,8 @@ export interface Review {
   /**
   * Template metadata
   */
+}
+}
 }
 export interface TemplateMetadata {
   created: string;
@@ -87,6 +100,7 @@ export interface TemplateMetadata {
   * Template category system
   */
 }
+}
 export type TemplateCategory = 
   | 'character'
   | 'setting' 
@@ -102,6 +116,7 @@ export type TemplateCategory =
  * Template sharing and permissions
  */
 
+}
 export interface TemplateSharing {
   isPublic: boolean;
   sharedWith: string; // user IDs,
@@ -111,6 +126,8 @@ export interface TemplateSharing {
   /**
   * Template search and filtering
   */
+}
+}
 }
 export interface TemplateFilter {
   category?: TemplateCategory;
@@ -125,6 +142,8 @@ export interface TemplateFilter {
   * Template instantiation options
   */
 }
+}
+}
 export interface TemplateInstantiationOptions {
   preservePositions: boolean;
   mergeWithCurrent: boolean;
@@ -135,6 +154,8 @@ export interface TemplateInstantiationOptions {
   * Template validation result
   */
 }
+}
+}
 export interface TemplateValidation {
   isValid: boolean;
   errors: string;
@@ -143,11 +164,13 @@ export interface TemplateValidation {
   version: string;
   features: string;
   missingFeatures: string;
+}
 };
 
 /**
  * Template library state
  */
+}
 }
 export interface TemplateLibraryState {
   templates: Template;
@@ -159,6 +182,8 @@ export interface TemplateLibraryState {
   /**
   * Template operations
   */
+}
+}
 }
 export interface TemplateOperations {
   // CRUD operations
@@ -187,6 +212,8 @@ export interface TemplateOperations {
   * Template save dialog data
   */
 }
+}
+}
 export interface TemplateSaveData {
   name: string;
   description: string;
@@ -197,6 +224,8 @@ export interface TemplateSaveData {
   /**
   * Template browser UI state
   */
+}
+}
 }
 export interface TemplateBrowserState {
   isOpen: boolean;
@@ -210,6 +239,7 @@ export interface TemplateBrowserState {
   * Template event types for component communication
   */
 }
+}
 export type TemplateEvent = 
   | { type: 'template-saved'; template: Template }
   | { type: 'template-applied'; templateId: string; options: TemplateInstantiationOptions }
@@ -219,6 +249,7 @@ export type TemplateEvent =
  * Template compatibility with existing graph system
  */
 
+}
 export interface TemplateCompatibility {
   supportsNodeTypes: string;
   requiredFeatures: string;
@@ -228,5 +259,6 @@ export interface TemplateCompatibility {
   nodeLabels: boolean;
   regionGroups: boolean;
   connectionLabels: boolean;
+}
 };
 }

@@ -23,6 +23,7 @@ import { MetricsCollector } from '../performance/MetricsCollector';
 // ============================================================================
 
 }
+}
 export interface APIRateLimitingAnalyticsConfig {
   // Analytics configuration
   analytics_configuration: {
@@ -32,6 +33,7 @@ export interface APIRateLimitingAnalyticsConfig {
     real_time_processing: boolean;
     batch_processing_interval_minutes: number;
     aggregation_levels: ('minute' | 'hour' | 'day' | 'week' | 'month')[];
+}
 }
   };
   
@@ -144,6 +146,7 @@ export interface APIRateLimitingAnalyticsConfig {
 }
 
 }
+}
 export interface RateLimitingAnalyticsData {
   analytics_metadata: {
     analysis_id: string;
@@ -152,6 +155,7 @@ export interface RateLimitingAnalyticsData {
     data_window_end: number;
     data_completeness_percentage: number;
     analysis_confidence: number;
+}
 }
   };
   
@@ -287,6 +291,7 @@ export interface RateLimitingAnalyticsData {
 }
 
 }
+}
 export interface AnalyticsReport {
   report_metadata: {
     report_id: string;
@@ -294,6 +299,7 @@ export interface AnalyticsReport {
     generation_timestamp: number;
     reporting_period: string;
     data_sources: string[];
+}
 }
   };
   
@@ -348,6 +354,7 @@ export interface AnalyticsReport {
 // ============================================================================
 
 }
+}
 interface AnalyticsEngine {
   data_processors: Array<{
     processor_name: string;
@@ -355,6 +362,7 @@ interface AnalyticsEngine {
     processing_capacity: number;
     current_load: number;
     performance_metrics: Record<string, number>;
+}
 }
   }>;
   

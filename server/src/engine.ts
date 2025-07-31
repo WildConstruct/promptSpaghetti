@@ -7,10 +7,12 @@ import { Graph, Node, NodeTypeEnum } from '../../packages/core/graphSchema';
 
 // Interface for Conditional node branches
 }
+}
 interface ConditionalBranch {
   condition: string;
   output: string;
   label?: string;
+}
 }
 }
 

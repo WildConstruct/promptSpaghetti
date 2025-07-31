@@ -11,6 +11,7 @@ import {
   ExclamationTriangleIcon
 } from '@heroicons/react/24/outline';
 import { useWorkflowStore } from '../stores/workflowStore';
+}
 interface WorkflowTransition {
   id: string;
   from_state_id?: string;
@@ -42,6 +43,7 @@ interface WorkflowTransition {
   onTransitionComplete,
   onApprovalRequested,
   disabled = false
+}
 }) => {
   const {
     states,

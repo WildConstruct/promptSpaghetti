@@ -6,11 +6,13 @@
 import React, { useState, useEffect } from 'react';
 import { PerformanceProfiler, PerformanceAlert, PerformanceReport, PerformanceProfile } from '../PerformanceProfiler';
 
+}
 export interface PerformancePanelProps {
   performanceProfiler: PerformanceProfiler;
   alerts: PerformanceAlert;
   report: PerformanceReport | null;
   onGenerateReport: () => void;
+}
 }
 export const PerformancePanel: React.FC<PerformancePanelProps> = ({)
   performanceProfiler,

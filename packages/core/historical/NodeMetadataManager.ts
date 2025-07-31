@@ -6,6 +6,7 @@
  * genre/style classification, and tag management.
  */
 
+}
 export interface NodeMetadata {
   id: string;
   nodeId: string;
@@ -19,6 +20,8 @@ export interface NodeMetadata {
   updated: string;
   author: string;
 }
+}
+}
 export interface NodeTag {
   id: string;
   type: 'era' | 'genre' | 'style' | 'material' | 'social_class' | 'region' | 'custom';
@@ -27,18 +30,22 @@ export interface NodeTag {
   confidence: number; // 0-1 confidence score,
   metadata?: Record<string, any>;
 }
+}
+}
 export interface EraTag {
   id: string;
   name: string;
   period: {
   start: number;
   end: number;
+}
 };
   region: string;
   accuracy: 'high' | 'medium' | 'low';
   description: string;
   parent?: string; // For hierarchical periods
   children?: string; // Sub-periods
+}
 }
 export interface GenreTag {
   id: string;
@@ -47,6 +54,8 @@ export interface GenreTag {
   description: string;
   characteristics: string;
   relatedGenres: string;
+}
+}
 }
 export interface StyleTag {
   id: string;
@@ -57,12 +66,16 @@ export interface StyleTag {
   description: string;
   keyFeatures: string;
 }
+}
+}
 export interface QualityMetadata {
   authenticity: number; // 0-1 historical authenticity score,
   completeness: number; // 0-1 how complete the information is,
   sources: string; // References to data sources,
   verification: 'verified' | 'unverified' | 'disputed' | 'fictional';
   lastVerified?: string;
+}
+}
 }
 export interface HistoricalContext {
   socialClass: 'peasant' | 'artisan' | 'merchant' | 'noble' | 'clergy' | 'royal' | 'unknown';
@@ -71,6 +84,8 @@ export interface HistoricalContext {
   materials: string;
   productionMethod: string;
   culturalSignificance: string;
+}
+}
 }
 export interface TagInheritanceRule {
   id: string;
@@ -81,10 +96,14 @@ export interface TagInheritanceRule {
   transformations: TagTransformation;
   enabled: boolean;
 }
+}
+}
 export interface TagCondition {
   field: string;
   operator: 'equals' | 'contains' | 'matches' | 'in' | 'not_in';
   value: any;
+}
+}
 }
 export interface TagTransformation {
   type: 'copy' | 'modify' | 'merge' | 'filter';
@@ -92,6 +111,7 @@ export interface TagTransformation {
   /**
   * NodeMetadataManager - Manages metadata and tagging for nodes
   */
+}
 }
 export class NodeMetadataManager {
   private static instance: NodeMetadataManager;

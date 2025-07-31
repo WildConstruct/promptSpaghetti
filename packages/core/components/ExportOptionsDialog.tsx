@@ -9,6 +9,7 @@ import React, { useState, useMemo } from 'react';
 import { ResultExportService, ExportFormat, ResultExportOptions } from '../services/ResultExportService';
 import { PreviewResultWithPath } from '../types/ExecutionPath';
 import { professionalColors } from '../styles/professional-design-system';
+}
 interface ExportOptionsDialogProps {
   open: boolean;
   onClose: () => void;
@@ -18,6 +19,7 @@ interface ExportOptionsDialogProps {
   individualIndex?: number;
   onExport: (format: ExportFormat, options: ResultExportOptions) => Promise<void>;
   sourceGraph?: unknown;
+}
 }
 
 export const ExportOptionsDialog: React.FC<ExportOptionsDialogProps> = ({

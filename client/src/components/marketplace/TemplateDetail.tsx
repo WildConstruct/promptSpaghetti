@@ -10,12 +10,14 @@ import { PreviewModal } from './PreviewModal';
 import { PurchaseModal } from './PurchaseModal';
 import { useMarketplace } from '../../hooks/useMarketplace';
 import './TemplateDetail.css';
+}
 interface TemplateDetailProps {
   templateId: string;
   className?: string;
   export const TemplateDetail: React.FC<TemplateDetailProps> = ({,)
   templateId,
   className = ''
+}
 }) => {
   const [template, setTemplate] = useState<unknown>(null);
   const [similarTemplates, setSimilarTemplates] = useState<Array<{

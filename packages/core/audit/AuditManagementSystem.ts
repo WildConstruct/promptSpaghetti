@@ -185,6 +185,7 @@ export class AuditManagementSystem {
   totalPages: number;
   analytics: unknown;
 }> {
+
   const validatedQuery = AuditQuerySchema.parse(query);
   // Apply filters
   let filteredEvents = this.applyFilters(Array.from(this.events.values()), validatedQuery);

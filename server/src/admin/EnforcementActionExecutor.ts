@@ -14,6 +14,7 @@ import { TrustScoreService } from '../services/trust/TrustScoreService';
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 export interface ExecutionPlan {
   planId: string;
   actions: EnforcementAction[];
@@ -25,6 +26,7 @@ export interface ExecutionPlan {
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
     mitigationStrategies: string[];
 }
+}
   };
   executionSteps: ExecutionStep[];
   rollbackPlan: RollbackStep[];
@@ -34,6 +36,7 @@ export interface ExecutionPlan {
   createdAt: Date;
 }
 
+}
 }
 export interface ExecutionStep {
   stepId: string;
@@ -49,9 +52,11 @@ export interface ExecutionStep {
     manualApprovalRequired?: boolean;
     notificationSent?: boolean;
 }
+}
   };
 }
 
+}
 }
 export interface RollbackStep {
   stepId: string;
@@ -63,7 +68,9 @@ export interface RollbackStep {
   scheduledAt?: Date;
 }
 }
+}
 
+}
 }
 export interface ExecutionResult {
   planId: string;
@@ -77,7 +84,9 @@ export interface ExecutionResult {
   rollbackAvailable: boolean;
 }
 }
+}
 
+}
 }
 export interface StepResult {
   stepId: string;
@@ -88,7 +97,9 @@ export interface StepResult {
   rollbackId?: string;
 }
 }
+}
 
+}
 }
 export interface AdminOverride {
   overrideId: string;
@@ -100,6 +111,7 @@ export interface AdminOverride {
   approvedBy?: string;
   createdAt: Date;
   appliedAt?: Date;
+}
 }
 }
 

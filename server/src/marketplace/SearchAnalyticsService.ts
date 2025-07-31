@@ -18,6 +18,7 @@ import { Pool } from 'pg';
 import { Redis } from 'ioredis';
 
 }
+}
 interface SearchEvent {
   sessionId: string;
   userId?: string;
@@ -31,7 +32,9 @@ interface SearchEvent {
   ipAddress?: string;
 }
 }
+}
 
+}
 }
 interface SearchClickEvent {
   sessionId: string;
@@ -43,7 +46,9 @@ interface SearchClickEvent {
   clickedFromSearch: boolean;
 }
 }
+}
 
+}
 }
 interface SearchAbandonmentEvent {
   sessionId: string;
@@ -55,12 +60,15 @@ interface SearchAbandonmentEvent {
   reason: 'no_results' | 'irrelevant_results' | 'timeout' | 'navigation';
 }
 }
+}
 
+}
 }
 interface SearchMetrics {
   period: {
     start: Date;
     end: Date;
+}
 }
   };
   totalSearches: number;
@@ -97,12 +105,14 @@ interface SearchMetrics {
 }
 
 }
+}
 interface SearchOptimizationRecommendations {
   slowQueries: Array<{
     query: string;
     avgResponseTime: number;
     frequency: number;
     recommendation: string;
+}
 }
   }>;
   lowPerformingFilters: Array<{

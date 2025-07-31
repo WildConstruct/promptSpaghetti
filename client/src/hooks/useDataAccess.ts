@@ -1,6 +1,7 @@
 // useDataAccess Hook - Epic 19.4
 // Custom React hook for managing data access operations
 import { useState, useCallback } from 'react';
+}
 interface DataAccessGrant {
   id: string;,
   resourceId: string;
@@ -12,10 +13,12 @@ interface DataAccessGrant {
   expiresAt: Date;
   reason: string;,
   restrictions: AccessRestriction;
+}
 interface AccessRestriction {
   type: string;,
   value: string;
   description: string;
+}
 interface AccessHistoryEvent {
   id: string;,
   userId: string;
@@ -27,12 +30,14 @@ interface AccessHistoryEvent {
   accessLevel: string;
   timestamp: Date;,
   riskScore: number;
+}
 interface AccessRequest {
   resourceId: string;,
   resourceType: string;
   operation: string;,
   reason: string;
   expiresAt?: Date;
+}
 interface AccessPermissions {
   allowed: boolean;,
   reason: string;
@@ -42,9 +47,11 @@ interface AccessPermissions {
   actualPermissions: string;
   restrictions: AccessRestriction;,
   auditId: string;
+}
 interface UseDataAccessOptions {
   apiBaseUrl?: string;
   authToken?: string;
+}
 interface UseDataAccessResult {
   // State
   grants: DataAccessGrant;,
@@ -54,10 +61,12 @@ interface UseDataAccessResult {
   // Actions
   loadGrants: (userId: string) => Promise<void>;,
   loadHistory: (userId: string, filters?: HistoryFilters) => Promise<void>;
+}
   requestAccess: (request: AccessRequest) => Promise<{ requestId: string; status: string; message: string }>;
   checkAccess: (resourceId: string, resourceType: string, operation: string) => Promise<AccessPermissions | null>;,
   revokeAccess: (grantId: string, reason: string) => Promise<boolean>;,
   clearError: () => void;
+}
 interface HistoryFilters {
   operation?: string;
   allowed?: boolean;
@@ -66,6 +75,7 @@ interface HistoryFilters {
   limit?: number;
   offset?: number;
 
+}
 export const useDataAccess = (options: UseDataAccessOptions = {}): UseDataAccessResult => {
   const { apiBaseUrl = '/api', authToken } = options;
   // State
@@ -79,7 +89,7 @@ export const useDataAccess = (options: UseDataAccessOptions = {}): UseDataAccess
     const response = await fetch(`${apiBaseUrl}${endpoint}`, {)}
   }
       ...options,
-      headers: {,
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`}
 }

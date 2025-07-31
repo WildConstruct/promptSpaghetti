@@ -8,6 +8,7 @@ import { AuditService } from './AuditService';
 import { TokenService } from './TokenService';
 
 }
+}
 export interface SessionData {
   userId: string;
   deviceInfo?: {
@@ -18,6 +19,7 @@ export interface SessionData {
     version?: string;
     language?: string;
     timezone?: string;
+}
 }
   };
   location?: {
@@ -30,13 +32,16 @@ export interface SessionData {
 }
 
 }
+}
 export interface SessionValidationResult {
   valid: boolean;
   session?: UserSession;
   reason?: string;
 }
 }
+}
 
+}
 }
 export interface ActiveSession {
   id: string;
@@ -45,6 +50,7 @@ export interface ActiveSession {
   lastAccessedAt: Date;
   createdAt: Date;
   current?: boolean;
+}
 }
 }
 

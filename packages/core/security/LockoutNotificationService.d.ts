@@ -40,6 +40,7 @@ export declare enum NotificationStatus {
     RETRYING = "retrying",
     EXPIRED = "expired"
 
+}
 export interface TemplateVariables {
     userName: string;
     userEmail: string;
@@ -57,6 +58,7 @@ export interface TemplateVariables {
     nextSteps: string[];
     estimatedResolution?: string;
 
+}
 export interface NotificationTemplate {
     id: string;
     type: NotificationType;
@@ -71,6 +73,7 @@ export interface NotificationTemplate {
     expiryMinutes: number;
     metadata: Record<string, any>;
 
+}
 export interface RetryPolicy {
     maxAttempts: number;
     backoffMultiplier: number;
@@ -78,12 +81,14 @@ export interface RetryPolicy {
     maxDelaySeconds: number;
     retryOn: string[];
 
+}
 export interface UserNotificationPreferences {
     userId: string;
     channels: {
         email: boolean;
         sms: boolean;
         push: boolean;
+}
     };
     language: string;
     timezone: string;
@@ -99,6 +104,7 @@ export interface UserNotificationPreferences {
   };
     metadata: Record<string, any>;
 
+}
 export interface NotificationRequest {
     id: string;
     type: NotificationType;
@@ -111,6 +117,7 @@ export interface NotificationRequest {
     expiresAt?: Date;
     metadata: Record<string, any>;
 
+}
 export interface NotificationDelivery {
     id: string;
     requestId: string;
@@ -122,6 +129,7 @@ export interface NotificationDelivery {
         subject?: string;
         body: string;
         html?: string;
+}
     };
     sentAt?: Date;
     deliveredAt?: Date;
@@ -130,11 +138,13 @@ export interface NotificationDelivery {
     providerResponse?: any;
     metadata: Record<string, any>;
 
+}
 export interface AdminNotificationRule {
     id: string;
     trigger: {
         event: string;
         conditions: Record<string, any>;
+}
     };
     recipients: {
         roles: AdminRole[];
@@ -223,7 +233,7 @@ export declare class LockoutNotificationService extends EventEmitter {
         byStatus: Record<NotificationStatus, number>;
         deliveryRate: number;
         averageDeliveryTime: number;
-        failureReasons: Array<{,
+        failureReasons: Array<{
             reason: string;
             count: number;
         }>;

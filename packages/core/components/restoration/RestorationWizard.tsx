@@ -22,6 +22,7 @@ import { useRestoration } from '../../hooks/useRestoration';
 const { Step } = Steps;
 const { Title, Text } = Typography;
 const { Option } = Select;
+}
 interface RestorationWizardProps {
   visible: boolean;
   onClose: () => void;
@@ -39,6 +40,7 @@ interface RestorationWizardProps {
   title: 'Configure',
   description: 'Set restoration options',
   icon: <RestoreOutlined />,
+}
 }
   {
   title: 'Preview',

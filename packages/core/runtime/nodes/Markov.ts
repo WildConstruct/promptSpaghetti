@@ -18,6 +18,7 @@ import seedrandom from 'seedrandom';
  * State tracking for Markov chain processing
  */
 
+}
 export interface MarkovState {
   /** Current state in the chain */
   currentState: string;
@@ -31,9 +32,12 @@ export interface MarkovState {
   * Transition matrix interface for Markov chains
   */
 }
+}
+}
 export interface TransitionMatrix {
   /** Available states in the chain */
   states: string;
+}
   /** Transition probabilities: state -> {nextState: probability} */
   transitions: Record<string, Record<string, number>>;
   /** Get the initial state for new chains */
@@ -45,6 +49,7 @@ export interface TransitionMatrix {
 /**
  * Configuration for Markov chain behavior
  */
+}
 }
 export interface MarkovConfig {
   /** Maximum number of transitions before forcing termination */
@@ -60,6 +65,7 @@ export interface MarkovConfig {
   /**
   * Standard transition matrix implementation
   */
+}
 }
 export class StandardTransitionMatrix implements TransitionMatrix {
   states: string;

@@ -9,6 +9,7 @@ import { HistoricalConstraint } from '../../types/UTDG';
 import { ConstraintValidator } from '../../historical/ConstraintValidator';
 import './ConstraintRuleManager.css';
 
+}
 interface ConstraintRuleManagerProps {
     validator: ConstraintValidator;
     onConstraintsChange?: (constraints: HistoricalConstraint[]) => void;
@@ -17,3 +18,4 @@ interface ConstraintRuleManagerProps {
 export declare const ConstraintRuleManager: React.FC<ConstraintRuleManagerProps>;
 export default ConstraintRuleManager;
 //# sourceMappingURL=ConstraintRuleManager.d.ts.map
+}

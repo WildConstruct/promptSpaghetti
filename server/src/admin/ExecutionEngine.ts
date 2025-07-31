@@ -27,6 +27,7 @@ import { UploaderService } from './UploaderArchitecture';
 import { BulkOperationFramework } from './BulkOperationFramework';
 
 }
+}
 export interface ExecutionRequest {
   id: string;
   operation: ExecutionOperation;
@@ -40,7 +41,9 @@ export interface ExecutionRequest {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ExecutionOperation {
   type: ExecutionOperationType;
@@ -56,7 +59,9 @@ export interface ExecutionOperation {
   retryPolicy?: RetryPolicy;
 }
 }
+}
 
+}
 }
 export interface ExecutionStep {
   id: string;
@@ -74,7 +79,9 @@ export interface ExecutionStep {
   resourceRequirements?: ResourceRequirements;
 }
 }
+}
 
+}
 }
 export interface ExecutionCondition {
   type: 'javascript' | 'jsonLogic' | 'custom';
@@ -82,7 +89,9 @@ export interface ExecutionCondition {
   parameters?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ExecutionRequestContext {
   userId?: string;
@@ -95,7 +104,9 @@ export interface ExecutionRequestContext {
   environmentContext: EnvironmentContext;
 }
 }
+}
 
+}
 }
 export interface BusinessContext {
   department?: string;
@@ -107,7 +118,9 @@ export interface BusinessContext {
   businessJustification?: string;
 }
 }
+}
 
+}
 }
 export interface SecurityExecutionContext {
   requiredPermissions: string[];
@@ -118,7 +131,9 @@ export interface SecurityExecutionContext {
   encryptionRequired: boolean;
 }
 }
+}
 
+}
 }
 export interface EnvironmentContext {
   environment: string;
@@ -128,7 +143,9 @@ export interface EnvironmentContext {
   nodeId?: string;
 }
 }
+}
 
+}
 }
 export interface ExecutionDependency {
   type: DependencyType;
@@ -139,7 +156,9 @@ export interface ExecutionDependency {
   timeoutMs?: number;
 }
 }
+}
 
+}
 }
 export interface ExecutionConfiguration {
   executionMode: ExecutionMode;
@@ -151,7 +170,9 @@ export interface ExecutionConfiguration {
   recovery: RecoveryConfig;
 }
 }
+}
 
+}
 }
 export interface ParallelismConfig {
   maxConcurrentSteps: number;
@@ -160,7 +181,9 @@ export interface ParallelismConfig {
   resourcePooling: boolean;
 }
 }
+}
 
+}
 }
 export interface ResourceLimits {
   maxCpuUsage: number; // percentage
@@ -172,7 +195,9 @@ export interface ResourceLimits {
   timeoutMs: number;
 }
 }
+}
 
+}
 }
 export interface ResourceRequirements {
   estimatedCpuUsage: number;
@@ -183,7 +208,9 @@ export interface ResourceRequirements {
   exclusiveResources?: string[];
 }
 }
+}
 
+}
 }
 export interface MonitoringConfig {
   enableMetricsCollection: boolean;
@@ -193,7 +220,9 @@ export interface MonitoringConfig {
   healthCheckInterval: number;
 }
 }
+}
 
+}
 }
 export interface AlertThreshold {
   metric: string;
@@ -203,7 +232,9 @@ export interface AlertThreshold {
   suppressionPeriod?: number;
 }
 }
+}
 
+}
 }
 export interface NotificationConfig {
   enabled: boolean;
@@ -213,7 +244,9 @@ export interface NotificationConfig {
   templates?: Record<string, string>;
 }
 }
+}
 
+}
 }
 export interface NotificationChannel {
   type: 'email' | 'slack' | 'webhook' | 'sms' | 'teams';
@@ -222,7 +255,9 @@ export interface NotificationChannel {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface NotificationRecipient {
   type: 'user' | 'role' | 'group';
@@ -230,7 +265,9 @@ export interface NotificationRecipient {
   channels: string[];
 }
 }
+}
 
+}
 }
 export interface NotificationEvent {
   event: ExecutionEventType;
@@ -238,7 +275,9 @@ export interface NotificationEvent {
   conditions?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface PersistenceConfig {
   saveIntermediateResults: boolean;
@@ -248,7 +287,9 @@ export interface PersistenceConfig {
   storageLocation?: string;
 }
 }
+}
 
+}
 }
 export interface RecoveryConfig {
   enableCheckpointing: boolean;
@@ -258,7 +299,9 @@ export interface RecoveryConfig {
   compensationEnabled: boolean;
 }
 }
+}
 
+}
 }
 export interface ValidationRule {
   type: 'pre-execution' | 'post-execution' | 'step-validation';
@@ -268,7 +311,9 @@ export interface ValidationRule {
   severity: 'warning' | 'error' | 'critical';
 }
 }
+}
 
+}
 }
 export interface RetryPolicy {
   maxAttempts: number;
@@ -277,6 +322,7 @@ export interface RetryPolicy {
   maxDelayMs: number;
   retryableErrors?: string[];
   nonRetryableErrors?: string[];
+}
 }
 }
 
@@ -369,6 +415,7 @@ export enum ExecutionEventType {
 }
 
 }
+}
 export interface ExecutionContext {
   executionId: string;
   request: ExecutionRequest;
@@ -381,7 +428,9 @@ export interface ExecutionContext {
   alerts: ExecutionAlert[];
 }
 }
+}
 
+}
 }
 export interface ExecutionResourceUsage {
   cpuUsage: number;
@@ -394,7 +443,9 @@ export interface ExecutionResourceUsage {
   lastUpdated: Date;
 }
 }
+}
 
+}
 }
 export interface ExecutionCheckpoint {
   id: string;
@@ -404,7 +455,9 @@ export interface ExecutionCheckpoint {
   resourceUsage: ExecutionResourceUsage;
 }
 }
+}
 
+}
 }
 export interface ExecutionAlert {
   id: string;
@@ -416,7 +469,9 @@ export interface ExecutionAlert {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ExecutionResult {
   executionId: string;
@@ -432,7 +487,9 @@ export interface ExecutionResult {
   resourceUsage: ExecutionResourceUsage;
 }
 }
+}
 
+}
 }
 export interface ExecutionError {
   stepId?: string;
@@ -443,7 +500,9 @@ export interface ExecutionError {
   recoverable: boolean;
 }
 }
+}
 
+}
 }
 export interface ExecutionWarning {
   stepId?: string;
@@ -453,7 +512,9 @@ export interface ExecutionWarning {
   timestamp: Date;
 }
 }
+}
 
+}
 }
 export interface ExecutionMetrics {
   totalSteps: number;
@@ -467,10 +528,12 @@ export interface ExecutionMetrics {
   performanceScore: number;
 }
 }
+}
 
 /**
  * Step Handler Interface
  */
+}
 }
 export interface StepHandler {
   name: string;
@@ -485,7 +548,9 @@ export interface StepHandler {
   getResourceRequirements?(step: ExecutionStep): ResourceRequirements;
 }
 }
+}
 
+}
 }
 export interface ValidationResult {
   valid: boolean;
@@ -493,7 +558,9 @@ export interface ValidationResult {
   warnings: string[];
 }
 }
+}
 
+}
 }
 export interface StepResult {
   success: boolean;
@@ -501,6 +568,7 @@ export interface StepResult {
   error?: string;
   metrics?: Record<string, number>;
   checkpointData?: Record<string, any>;
+}
 }
 }
 
@@ -1030,11 +1098,14 @@ export class ExecutionEngine extends EventEmitter {
 // Supporting interfaces and classes
 
 }
+}
 interface ExecutionPlan {
   batches: ExecutionStep[][];
 }
 }
+}
 
+}
 }
 interface StepExecutionResult {
   stepId: string;
@@ -1048,13 +1119,16 @@ interface StepExecutionResult {
   skipped?: boolean;
 }
 }
+}
 
+}
 }
 interface ResourceReservation {
   id: string;
   resources: ResourceRequirements;
   reservedAt: Date;
   expiresAt: Date;
+}
 }
 }
 
@@ -1083,6 +1157,7 @@ class ResourcePool {
 }
 
 }
+}
 export interface ExecutionEngineConfig {
   maxConcurrentExecutions: number;
   defaultTimeout: number;
@@ -1095,6 +1170,7 @@ export interface ExecutionEngineConfig {
     maxMemoryUsage: number;
     maxDiskUsage: number;
     maxNetworkBandwidth: number;
+}
 }
   };
 }

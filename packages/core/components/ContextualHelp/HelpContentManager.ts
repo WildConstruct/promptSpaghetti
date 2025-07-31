@@ -13,6 +13,7 @@
  */
 import { HelpContent } from './ContextualHelpSystem';
 
+}
 export interface UserProfile {
   id: string;
   level: 'beginner' | 'intermediate' | 'advanced' | 'professional';
@@ -23,6 +24,7 @@ export interface UserProfile {
   autoTriggerHelp: boolean;
   preferredComplexity: 'simple' | 'detailed' | 'comprehensive';
   filmIndustryRole?: 'director' | 'producer' | 'writer' | 'vfx-artist' | 'editor'
+}
   };
   progress: {
   nodesCreated: number;
@@ -33,6 +35,7 @@ export interface UserProfile {
 };
   lastActivity: Date;
 }
+}
 export interface LearningPath {
   id: string;
   name: string;
@@ -42,6 +45,7 @@ export interface LearningPath {
   contentId: string;
   requiredProgress?: Record<string, number>;
   unlockConditions?: string;
+}
 }[];
 }
 export class HelpContentManager {

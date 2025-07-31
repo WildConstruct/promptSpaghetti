@@ -14,6 +14,7 @@ import path from 'path';
 import os from 'os';
 
 // Mock comprehensive extension system
+}
 interface ExtensionSystem {
   loader: unknown;
   lifecycle: unknown;
@@ -31,6 +32,7 @@ interface ExtensionSystem {
   restart(): Promise<void>;
   getSystemHealth(): unknown;
   // Bulk operations
+}
   installMultiple(sources: string): Promise<Array<{source: string, success: boolean, error?: string}>>;
   updateAll(): Promise<void>;
 describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {

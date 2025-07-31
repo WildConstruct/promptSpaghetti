@@ -17,6 +17,7 @@ import { Database } from '../database/DatabaseService';
 import { AuditService } from '../../auth/services/AuditService';
 
 }
+}
 export interface OperationType {
   id: string;
   name: string;
@@ -58,7 +59,9 @@ export interface OperationType {
   tags: string[];
 }
 }
+}
 
+}
 }
 export interface OperationParameter {
   name: string;
@@ -83,7 +86,9 @@ export interface OperationParameter {
   conditionallyRequired?: ConditionalRequirement[];
 }
 }
+}
 
+}
 }
 export interface OperationCapability {
   capability: string;
@@ -91,7 +96,9 @@ export interface OperationCapability {
   limitations?: string[];
 }
 }
+}
 
+}
 }
 export interface ResourceRequirements {
   cpuIntensive: boolean;
@@ -104,7 +111,9 @@ export interface ResourceRequirements {
   estimatedDiskUsage?: number; // MB
 }
 }
+}
 
+}
 }
 export interface UIConfiguration {
   icon?: string;
@@ -118,7 +127,9 @@ export interface UIConfiguration {
   sortOrder: number;
 }
 }
+}
 
+}
 }
 export interface ParameterConstraint {
   type: 'min' | 'max' | 'length' | 'pattern' | 'enum' | 'custom';
@@ -126,7 +137,9 @@ export interface ParameterConstraint {
   message: string;
 }
 }
+}
 
+}
 }
 export interface ValidationRule {
   rule: string;
@@ -134,7 +147,9 @@ export interface ValidationRule {
   severity: 'error' | 'warning' | 'info';
 }
 }
+}
 
+}
 }
 export interface ParameterOption {
   value: any;
@@ -144,11 +159,14 @@ export interface ParameterOption {
   group?: string;
 }
 }
+}
 
+}
 }
 export interface ConditionalRequirement {
   condition: string; // JavaScript expression
   message: string;
+}
 }
 }
 
@@ -219,6 +237,7 @@ export enum TargetType {
 }
 
 }
+}
 export interface OperationExecution {
   id: string;
   operationTypeId: string;
@@ -254,7 +273,9 @@ export interface OperationExecution {
   updatedAt: Date;
 }
 }
+}
 
+}
 }
 export interface ExecutionProgress {
   percentage: number;
@@ -265,7 +286,9 @@ export interface ExecutionProgress {
   lastUpdateTime: Date;
 }
 }
+}
 
+}
 }
 export interface OperationResult {
   targetId: string;
@@ -276,7 +299,9 @@ export interface OperationResult {
   timestamp: Date;
 }
 }
+}
 
+}
 }
 export interface OperationLog {
   level: 'debug' | 'info' | 'warn' | 'error';
@@ -285,7 +310,9 @@ export interface OperationLog {
   context?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface OperationError {
   code: string;
@@ -296,7 +323,9 @@ export interface OperationError {
   recoverable: boolean;
 }
 }
+}
 
+}
 }
 export interface ResourceUsage {
   peakMemoryMB: number;
@@ -306,6 +335,7 @@ export interface ResourceUsage {
   networkInMB: number;
   networkOutMB: number;
   databaseQueries: number;
+}
 }
 }
 
@@ -831,10 +861,12 @@ export class OperationTypesService {
 }
 
 }
+}
 export interface ValidationError {
   parameter: string;
   message: string;
   code: string;
+}
 }
 }
 

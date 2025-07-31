@@ -11,6 +11,7 @@ import { EventEmitter } from 'events';
 import { SecurityEvent, ThreatPrediction } from './PredictiveSecurityAnalytics';
 import { UserBehaviorEvent, BehaviorAnomaly } from './UserBehaviorAnalytics';
 
+}
 export interface SecurityAnalyticsConfig {
     enablePredictiveAnalytics: boolean;
     enableBehaviorAnalytics: boolean;
@@ -22,6 +23,7 @@ export interface SecurityAnalyticsConfig {
     mlModelConfig: MLModelConfig;
 
 
+}
 export interface Epic1IntegrationConfig {
     enabled: boolean;
     analyticsEndpoint: string;
@@ -30,6 +32,7 @@ export interface Epic1IntegrationConfig {
     dataRetentionDays: number;
 
 
+}
 export interface Epic17IntegrationConfig {
     enabled: boolean;
     securityApiEndpoint: string;
@@ -38,6 +41,7 @@ export interface Epic17IntegrationConfig {
     auditLoggingEnabled: boolean;
 
 
+}
 export interface MLModelConfig {
     modelUpdateFrequency: number;
     enableOnlineLearning: boolean;
@@ -46,6 +50,7 @@ export interface MLModelConfig {
     crossValidationEnabled: boolean;
 
 
+}
 export interface SecurityIntelligence {
     id: string;
     timestamp: Date;
@@ -76,6 +81,7 @@ export declare enum SecuritySeverity {
     HIGH = "high",
     CRITICAL = "critical"
 
+}
 export interface SecurityIntelligenceSource {
     sourceType: 'predictive' | 'behavioral' | 'external';
     sourceId: string;
@@ -83,6 +89,7 @@ export interface SecurityIntelligenceSource {
     confidence: number;
 
 
+}
 export interface SecurityAction {
     actionId: string;
     actionType: SecurityActionType;
@@ -106,6 +113,7 @@ export declare enum SecurityActionType {
     UPDATE_SECURITY_POLICY = "update_security_policy",
     TRIGGER_INCIDENT_RESPONSE = "trigger_incident_response"
 
+}
 export interface SecurityMetrics {
     totalEvents: number;
     threatsDetected: number;
@@ -117,6 +125,7 @@ export interface SecurityMetrics {
     modelPerformance: ModelPerformanceMetrics;
 
 
+}
 export interface ModelPerformanceMetrics {
     predictiveAccuracy: number;
     behavioralAccuracy: number;
@@ -189,3 +198,4 @@ export declare class Epic31SecurityAnalytics {
 
 export default MLSecurityAnalyticsFramework;
 //# sourceMappingURL=MLSecurityAnalyticsFramework.d.ts.map
+}

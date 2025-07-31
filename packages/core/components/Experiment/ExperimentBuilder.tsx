@@ -38,17 +38,21 @@ import {
   ExperimentStatus
 } from '../../types/experiment';
 
+}
 export interface ExperimentBuilderProps {
   experiment?: Experiment;
   onSave: (experiment: Partial<Experiment>) => Promise<void>;
+}
   onPreview: (variant: ExperimentVariant) => Promise<{ cost: number; tokens: number; latency: number }>;
   onStart: (experimentId: string) => Promise<void>;
   onPause: (experimentId: string) => Promise<void>;
   className?: string;
+}
 interface BuilderState {
   experiment: Partial<Experiment>;
   activeTab: string;
   validationErrors: string;
+}
   previewResults: Record<string, { cost: number; tokens: number; latency: number }>;
   saving: boolean;
   estimatedSampleSize: number;

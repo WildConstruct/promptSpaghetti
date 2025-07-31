@@ -8,21 +8,23 @@
  */
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuthStore } from '../../stores/authStore';
+}
 interface DashboardMetrics {
-  summary: {,
-  today: {,
+  summary: {
+  today: {
   operations: number;,
   users: number;
   downloads: number;,
   errorRate: number;
+}
 };
-    thisWeek: {,
+    thisWeek: {
   operations: number;
   users: number;,
   downloads: number;
   errorRate: number;
 };
-    thisMonth: {,
+    thisMonth: {
   operations: number;
   users: number;,
   downloads: number;
@@ -31,24 +33,26 @@ interface DashboardMetrics {
   };
   topOperations: Record<string, number>;
   topFileTypes: Record<string, number>;
-  performanceMetrics: {,
+  performanceMetrics: {
   averageLoadTime: number;
   averageOperationTime: number;
 };
-  searchMetrics: {,
+  searchMetrics: {
   totalSearches: number;
   uniqueSearchTerms: number;,
   averageResultsClicked: number;
 };
   generatedAt: string;
+}
 interface DeveloperInsights {
-  systemHealth: {,
+  systemHealth: {
   overallScore: number;,
   reliability: number;
   performance: number;,
   usability: number;
+}
 };
-  recommendations: Array<{,
+  recommendations: Array<{
   category: 'performance' | 'usability' | 'features' | 'security';
   priority: 'high' | 'medium' | 'low';,
   title: string;
@@ -57,7 +61,7 @@ interface DeveloperInsights {
   effort: 'low' | 'medium' | 'high';,
   metrics: Record<string, number>;
 }>;
-  alerts: Array<{,
+  alerts: Array<{
   severity: 'critical' | 'warning' | 'info';
   category: string;,
   message: string;
@@ -65,12 +69,13 @@ interface DeveloperInsights {
   affectedUsers: number;
   suggestedAction: string;
 }>;
-  trends: {,
+  trends: {
   usageGrowth: number;
   errorRateChange: number;,
   performanceChange: number;
   userSatisfactionTrend: number;
 };
+}
 interface AnalyticsDashboardProps {
   className?: string;
   showInsights?: boolean;
@@ -78,6 +83,7 @@ interface AnalyticsDashboardProps {
   export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({,)
   className = '',
   showInsights = false
+}
 }) => {
   const { user, isAuthenticated } = useAuthStore();
   const [dashboardData, setDashboardData] = useState<DashboardMetrics | null>(null);
@@ -95,7 +101,7 @@ interface AnalyticsDashboardProps {
     try {
       const response = await fetch('/api/file-browser/analytics/dashboard', {)
   method: 'GET',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${user?.token}`}
 }
           'Content-Type': 'application/json'
@@ -114,7 +120,7 @@ interface AnalyticsDashboardProps {
     try {
       const response = await fetch('/api/file-browser/analytics/insights', {)
   method: 'GET',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${user?.token}`}
 }
           'Content-Type': 'application/json'

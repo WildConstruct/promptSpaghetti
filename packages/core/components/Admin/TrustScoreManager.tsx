@@ -32,6 +32,7 @@ import {
 } from 'lucide-react';
 import type { TrustScore } from '../../types/TrustTypes';
 
+}
 export interface UserTrustData {
   userId: string;
   userName: string;
@@ -43,11 +44,13 @@ export interface UserTrustData {
   phone: boolean;
   identity: boolean;
   professional: boolean;
+}
 };
   accountStatus: 'active' | 'suspended' | 'under_review';
   lastActivity: Date;
   joinDate: Date;
   riskFlags: string;
+}
 }
 export interface TrustScoreAdjustment {
   userId: string;
@@ -58,8 +61,11 @@ export interface TrustScoreAdjustment {
   timestamp: Date;
   expiresAt?: Date;
 }
+}
+}
 export interface TrustScoreManagerProps {
   className?: string;
+}
 }
 export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
   className = ''

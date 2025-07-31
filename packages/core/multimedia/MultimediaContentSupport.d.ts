@@ -18,6 +18,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface MediaAsset {
     id: string;
     name: string;
@@ -28,6 +29,7 @@ export interface MediaAsset {
     dimensions?: {
         width: number;
         height: number;
+}
     };
     url: string;
     thumbnailUrl?: string;
@@ -38,6 +40,7 @@ export interface MediaAsset {
     created: Date;
     lastModified: Date;
 
+}
 export interface MediaMetadata {
     title?: string;
     description?: string;
@@ -54,8 +57,10 @@ export interface MediaMetadata {
         bitrate: number;
         framerate?: number;
         sampleRate?: number;
+}
     };
 
+}
 export interface MediaChapter {
     id: string;
     title: string;
@@ -64,6 +69,7 @@ export interface MediaChapter {
     description?: string;
     thumbnailUrl?: string;
 
+}
 export interface AccessibilityFeatures {
     altText: string;
     transcription?: string;
@@ -73,6 +79,7 @@ export interface AccessibilityFeatures {
     highContrast?: boolean;
     screenReaderOptimized: boolean;
 
+}
 export interface MediaCaption {
     id: string;
     language: string;
@@ -82,6 +89,7 @@ export interface MediaCaption {
     position?: {
         x: number;
         y: number;
+}
     };
     styling?: {
         fontSize: number;
@@ -90,6 +98,7 @@ export interface MediaCaption {
         fontFamily: string;
     };
 
+}
 export interface ProcessingStatus {
     status: 'pending' | 'processing' | 'completed' | 'failed' | 'optimizing';
     progress: number;
@@ -98,6 +107,7 @@ export interface ProcessingStatus {
     estimatedCompletion?: Date;
     processingTime?: number;
 
+}
 export interface ProcessingStage {
     name: string;
     status: 'pending' | 'processing' | 'completed' | 'failed';
@@ -106,6 +116,7 @@ export interface ProcessingStage {
     endTime?: Date;
     details?: string;
 
+}
 export interface StorageInfo {
     provider: 'local' | 'cloud' | 'cdn';
     bucket?: string;
@@ -114,6 +125,7 @@ export interface StorageInfo {
         url: string;
         distribution: string;
         region: string;
+}
     };
     compression: {
         enabled: boolean;
@@ -126,12 +138,14 @@ export interface StorageInfo {
         lastBackup?: Date;
     };
 
+}
 export interface MediaProcessingOptions {
     image?: {
         resize?: {
             width?: number;
             height?: number;
             maintainAspectRatio?: boolean;
+}
         };
         optimize?: boolean;
         format?: 'jpeg' | 'png' | 'webp' | 'avif';
@@ -180,12 +194,14 @@ export interface MediaProcessingOptions {
         compress?: boolean;
     };
 
+}
 export interface MultimediaConfig {
     storage: {
         provider: 'local' | 'aws' | 'gcp' | 'azure';
         maxFileSize: number;
         allowedTypes: string[];
         compressionEnabled: boolean;
+}
     };
     processing: {
         enableTranscoding: boolean;

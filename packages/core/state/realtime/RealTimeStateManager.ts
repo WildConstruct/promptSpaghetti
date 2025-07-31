@@ -12,6 +12,7 @@ import { StateSynchronizer, SyncMessage, OptimisticUpdate } from '../orchestrati
 
 // Real-time types
 
+}
 export interface WebSocketConnection {
   socket: WebSocket;
   id: string;
@@ -23,12 +24,16 @@ export interface WebSocketConnection {
   reconnectAttempts: number;
   metadata: ConnectionMetadata;
 }
+}
+}
 export interface ConnectionMetadata {
   userAgent: string;
   ip?: string;
   location?: string;
   sessionId: string;
   connectTime: number;
+}
+}
 }
 export interface StateSubscription {
   id: string;
@@ -37,25 +42,33 @@ export interface StateSubscription {
   callback: StateChangeCallback;
   options: SubscriptionOptions;
 }
+}
+}
 export interface SubscriptionFilter {
   type: 'path' | 'user' | 'change_type' | 'custom';
   value: string | string | ((change: StateChange<any>) => boolean);
   operator?: 'equals' | 'contains' | 'matches' | 'in'
+}
   }
+}
 export interface SubscriptionOptions {
   includeOptimistic?: boolean;
   batchUpdates?: boolean;
   throttleMs?: number;
   priority?: 'low' | 'normal' | 'high'
+}
   }
 export type StateChangeCallback = (change: StateChange<any>, metadata: ChangeMetadata) => void;
 
+}
 export interface ChangeMetadata {
   source: 'local' | 'remote' | 'server';
   optimistic: boolean;
   clientId: string;
   latency?: number;
   timestamp: number;
+}
+}
 }
 export interface StateMutation {
   domain: string;
@@ -64,8 +77,10 @@ export interface StateMutation {
   value?: any;
   metadata?: Record<string, any>;
 }
+}
 export type MutationOperation = 'create' | 'update' | 'delete' | 'replace' | 'merge';
 
+}
 export interface RealtimeConfig {
   wsUrl: string;
   reconnectInterval: number;
@@ -79,6 +94,8 @@ export interface RealtimeConfig {
   enableHeartbeat: boolean;
   debugMode: boolean;
 }
+}
+}
 export interface ConnectionState {
   status: 'disconnected' | 'connecting' | 'connected' | 'reconnecting' | 'error';
   error?: Error;
@@ -89,6 +106,7 @@ export interface ConnectionState {
   messagesReceived: number;
   bytesTransferred: number;
   // Error types
+}
 }
 export class StateConflictError extends Error {
   constructor(message: string, public cause?: Error) {
@@ -153,6 +171,7 @@ export class RealTimeStateManager extends EventEmitter {
     this.setupSynchronizerEvents();
   // Connection management
   async connect(userId: string, sessionId?: string): Promise<void> {
+
   if (this.connectionState.status === 'connected' || this.connectionState.status === 'connecting') {
   return;
   this.connectionState.status = 'connecting';
@@ -238,6 +257,7 @@ export class RealTimeStateManager extends EventEmitter {
       this.handleWebSocketError(event);
     });
   private async handleWebSocketMessage(event: MessageEvent): Promise<void> {
+
   try {
   this.connectionState.messagesReceived++;
   this.connectionState.bytesTransferred += event.data.length;
@@ -299,6 +319,7 @@ export class RealTimeStateManager extends EventEmitter {
   timestamp: syncMessage.timestamp,
 });
   private async handleOptimisticConfirm(message: any): Promise<void> {
+
     const { updateId } = message.payload;
     await this.synchronizer.confirmOptimisticUpdate(updateId);
     const update = this.optimisticUpdates.get(updateId);
@@ -306,6 +327,7 @@ export class RealTimeStateManager extends EventEmitter {
       this.optimisticUpdates.delete(updateId);
       this.emit('optimisticUpdateConfirmed', { updateId, domain: update.domain });
   private async handleOptimisticReject(message: any): Promise<void> {
+
     const { updateId, reason } = message.payload;
     await this.synchronizer.rollbackOptimisticUpdate(updateId);
     const update = this.optimisticUpdates.get(updateId);
@@ -313,11 +335,14 @@ export class RealTimeStateManager extends EventEmitter {
       this.optimisticUpdates.delete(updateId);
       this.emit('optimisticUpdateRejected', { updateId, domain: update.domain, reason });
   private async handleSyncRequest(message: any): Promise<void> {
+
     // Server is requesting a full sync
     await this.synchronizer.requestFullSync();
   private async handlePing(message: any): Promise<void> {
+
     await this.sendPong(message.id);
   private async handlePong(message: any): Promise<void> {
+
     if (this.connection) {
       const now = Date.now();
       this.connection.latency = now - this.connection.lastPing;
@@ -394,6 +419,7 @@ export class RealTimeStateManager extends EventEmitter {
 });
   // Optimistic updates
   async optimisticUpdate(domain: string, mutation: StateMutation): Promise<string> {
+
     if (!this.config.enableOptimistic) {
       throw new OptimisticUpdateError('Optimistic updates are disabled', '');
     if (!this.isConnected()) {
@@ -446,6 +472,7 @@ export class RealTimeStateManager extends EventEmitter {
         updateId
       );
   async syncWithServer(mutation: StateMutation): Promise<void> {
+
     if (!this.isConnected()) {
       throw new Error('Not connected to server');
     await this.sendMessage({)
@@ -473,6 +500,7 @@ export class RealTimeStateManager extends EventEmitter {
       });
   // Message sending
   private async sendMessage(message: any): Promise<void> {
+
   if (!this.isConnected() || !this.connection?.isReady) {
   this.messageQueue.push(message);
   return;
@@ -502,6 +530,7 @@ export class RealTimeStateManager extends EventEmitter {
   metadata: this.connection?.metadata;
   });
   private async sendPing(): Promise<void> {
+
     if (this.connection) {
       this.connection.lastPing = Date.now();
       await this.sendMessage({)
@@ -509,6 +538,7 @@ export class RealTimeStateManager extends EventEmitter {
         payload: { timestamp: this.connection.lastPing }
       });
   private async sendPong(pingId: string): Promise<void> {
+
     await this.sendMessage({)
   type: 'pong',
       payload: { pingId, timestamp: Date.now() }

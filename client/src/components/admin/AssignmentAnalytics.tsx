@@ -13,47 +13,50 @@ import {
   RiskLevel
 } from '../../types/PolicyAssignmentTypes';
 import './AssignmentAnalytics.css';
+}
 interface AnalyticsData {
   totalAssignments: number;,
   assignmentsByStatus: Record<AssignmentStatus, number>;
   assignmentsByTargetType: Record<AssignmentTargetType, number>;
   assignmentsByRiskLevel: Record<RiskLevel, number>;
   assignmentsByPolicyType: Record<string, number>;
-  trendsOverTime: {,
+  trendsOverTime: {
   date: string;,
   created: number;
   revoked: number;,
   expired: number;
+}
 }[];
-  topPolicies: {,
+  topPolicies: {
   policyType: string;
   count: number;,
   riskDistribution: Record<RiskLevel, number>;
 }[];
-  conflictsDetected: {,
+  conflictsDetected: {
   conflictId: string;
   type: string;,
   severity: string;
   affectedAssignments: number;
 }[];
-  inheritanceChains: {,
+  inheritanceChains: {
   rootTargetType: AssignmentTargetType;
   rootTargetId: string;,
   depth: number;
   totalAssignments: number;
 }[];
-  complianceMetrics: {,
+  complianceMetrics: {
   averageApprovalTime: number;
   pendingApprovals: number;,
   expiredAssignments: number;
   reviewOverdue: number;
 };
-  performanceMetrics: {,
+  performanceMetrics: {
   averageProcessingTime: number;
   successRate: number;,
   errorRate: number;
   systemLoad: number;
 };
+}
 interface ChartData {
   labels: string;,
   values: number;
@@ -64,6 +67,7 @@ interface ChartData {
   const [dateRange, setDateRange] = useState({)
   startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
   endDate: new Date().toISOString().split('T')[0],
+}
 });
   const [selectedMetric, setSelectedMetric] = useState<'assignments' | 'conflicts' | 'performance' | 'compliance'>('assignments');
   const loadAnalytics = useCallback(async () => {
@@ -89,7 +93,7 @@ interface ChartData {
   }, [dateRange, loadAnalytics]);
   const createMockAnalytics = (): AnalyticsData => ({)
   totalAssignments: 1247,
-  assignmentsByStatus: {,
+  assignmentsByStatus: {
   [AssignmentStatus.ACTIVE]: 892,
   [AssignmentStatus.PENDING_APPROVAL]: 45,
   [AssignmentStatus.DRAFT]: 23,
@@ -97,7 +101,7 @@ interface ChartData {
   [AssignmentStatus.EXPIRED]: 189,
   [AssignmentStatus.REVOKED]: 86,
 },
-  assignmentsByTargetType: {,
+  assignmentsByTargetType: {
   [AssignmentTargetType.USER]: 456,
   [AssignmentTargetType.ROLE]: 234,
   [AssignmentTargetType.TEAM]: 189,
@@ -107,13 +111,13 @@ interface ChartData {
   [AssignmentTargetType.DATA_TYPE]: 56,
   [AssignmentTargetType.SYSTEM]: 33,
 },
-  assignmentsByRiskLevel: {,
+  assignmentsByRiskLevel: {
   [RiskLevel.LOW]: 567,
   [RiskLevel.MEDIUM]: 445,
   [RiskLevel.HIGH]: 189,
   [RiskLevel.CRITICAL]: 46,
 },
-  assignmentsByPolicyType: {,
+  assignmentsByPolicyType: {
   'ACCESS_CONTROL': 345,
   'DATA_FILTERING': 289,
   'ENCRYPTION': 234,
@@ -131,7 +135,7 @@ interface ChartData {
       {
   policyType: 'ACCESS_CONTROL',
   count: 345,
-  riskDistribution: {,
+  riskDistribution: {
   [RiskLevel.LOW]: 123,
   [RiskLevel.MEDIUM]: 134,
   [RiskLevel.HIGH]: 67,
@@ -140,7 +144,7 @@ interface ChartData {
       {
         policyType: 'DATA_FILTERING',
         count: 289,
-        riskDistribution: {,
+        riskDistribution: {
           [RiskLevel.LOW]: 145,
           [RiskLevel.MEDIUM]: 89,
           [RiskLevel.HIGH]: 45,
@@ -155,13 +159,13 @@ interface ChartData {
       { rootTargetType: AssignmentTargetType.ORG_UNIT, rootTargetId: 'OU001', depth: 4, totalAssignments: 67 },
       { rootTargetType: AssignmentTargetType.DEPARTMENT, rootTargetId: 'DEPT001', depth: 3, totalAssignments: 45 }
     ],
-    complianceMetrics: {,
+    complianceMetrics: {
   averageApprovalTime: 2.3,
   pendingApprovals: 45,
   expiredAssignments: 189,
   reviewOverdue: 23,
 },
-  performanceMetrics: {,
+  performanceMetrics: {
   averageProcessingTime: 1.2,
   successRate: 97.8,
   errorRate: 2.2,

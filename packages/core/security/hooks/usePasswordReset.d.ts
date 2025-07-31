@@ -24,6 +24,7 @@ export declare enum PasswordStrength {
     GOOD = "good",
     STRONG = "strong"
 
+}
 export interface PasswordValidation {
     isValid: boolean;
     strength: PasswordStrength;
@@ -35,13 +36,16 @@ export interface PasswordValidation {
         lowercase: boolean;
         numbers: boolean;
         symbols: boolean;
+}
     };
 
+}
 export interface ResetToken {
     token: string;
     tokenId: string;
     expiresAt: Date;
 
+}
 export interface UsePasswordResetOptions {
     onStepChange?: (step: ResetStep) => void;
     onSecurityEvent?: (event: string, details: any) => void;
@@ -50,6 +54,7 @@ export interface UsePasswordResetOptions {
     autoAdvance?: boolean;
     resendCooldown?: number;
 
+}
 export interface UsePasswordResetReturn {
     currentStep: ResetStep;
     loading: boolean;
@@ -82,3 +87,4 @@ export interface UsePasswordResetReturn {
 export declare const usePasswordReset: (options?: UsePasswordResetOptions) => UsePasswordResetReturn;
 export default usePasswordReset;
 //# sourceMappingURL=usePasswordReset.d.ts.map
+}

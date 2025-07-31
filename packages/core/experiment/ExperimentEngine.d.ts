@@ -11,6 +11,7 @@ import {
   AllocationServiceConfig
 } from '../types/experiment';
 
+}
 export interface ExperimentStorage {
     getExperiment(id: string): Promise<Experiment | null>;
     saveExperiment(experiment: Experiment): Promise<void>;
@@ -18,6 +19,7 @@ export interface ExperimentStorage {
     saveUserAssignment(assignment: UserAssignment): Promise<void>;
     getActiveExperiments(organizationId?: string): Promise<Experiment[]>;
 
+}
 export interface ExperimentMetrics {
     recordAssignment(assignment: UserAssignment): Promise<void>;
     recordEvent();
@@ -112,3 +114,4 @@ export declare function createExperimentEngine(storage: ExperimentStorage)
   allocationConfig?: Partial<AllocationServiceConfig>
 ): ExperimentEngine;
 //# sourceMappingURL=ExperimentEngine.d.ts.map
+}

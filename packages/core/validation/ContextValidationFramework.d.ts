@@ -7,6 +7,7 @@
 import { AdvancedExecutionContext, AdvancedNodeConfig } from '../runtime/advanced';
 import { EventEmitter } from 'events';
 
+}
 export interface ContextValidationResult {
     valid: boolean;
     errors: string[];
@@ -18,8 +19,10 @@ export interface ContextValidationResult {
         stateConsistency: number;
         cacheEfficiency: number;
         memoryUsage: number;
+}
     };
 
+}
 export interface ContextValidationRule {
     name: string;
     description: string;
@@ -27,12 +30,14 @@ export interface ContextValidationRule {
     weight: number;
     validate: (context: AdvancedExecutionContext, config?: AdvancedNodeConfig) => ContextValidationRuleResult;
 
+}
 export interface ContextValidationRuleResult {
     passed: boolean;
     score: number;
     message?: string;
     details?: Record<string, any>;
 
+}
 export interface ContextValidationConfig {
     enableVariableValidation: boolean;
     enableStateValidation: boolean;
@@ -72,11 +77,12 @@ export declare class ContextValidationFramework extends EventEmitter {
         averageScore: number;
         errorRate: number;
         warningRate: number;
-        recentValidations: Array<{,
+        recentValidations: Array<{
             contextId: string;
             score: number;
             timestamp: number;
             valid: boolean;
+}
         }>;
     };
     /**

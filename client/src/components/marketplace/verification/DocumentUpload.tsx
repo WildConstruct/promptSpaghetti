@@ -1,6 +1,7 @@
 // Epic 17.5.5 - Document Upload Component for Verification System
 import React, { useState, useCallback } from 'react';
 import { DocumentType } from './types';
+}
 interface DocumentUploadProps {
   verificationRequestId: string;
   onUploadComplete?: (document: unknown) => void;
@@ -18,6 +19,7 @@ interface DocumentUploadProps {
   portfolio: 'Portfolio/Work Samples',
   credential: 'Professional Credential/Certificate',
   other: 'Other Supporting Document',
+}
 };
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB;
 const ALLOWED_TYPES = [;
@@ -73,7 +75,7 @@ export const [documentType, setDocumentType] = useState<DocumentType>('identity'
       // Step 1: Create document upload record and get presigned URL
       const createResponse = await fetch('/api/marketplace/verification/documents/upload', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`}
   },
@@ -95,7 +97,7 @@ export const [documentType, setDocumentType] = useState<DocumentType>('identity'
       const uploadResponse = await fetch(upload_url, {)
   method: 'PUT',
   body: selectedFile,
-  headers: {,
+  headers: {
   'Content-Type': selectedFile.type,
   'Content-Length': selectedFile.size.toString(),
 });
@@ -106,7 +108,7 @@ export const [documentType, setDocumentType] = useState<DocumentType>('identity'
       const confirmResponse = await fetch(`/api/marketplace/verification/documents/${document.id}/confirm`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`}
       });
       if (!confirmResponse.ok) {

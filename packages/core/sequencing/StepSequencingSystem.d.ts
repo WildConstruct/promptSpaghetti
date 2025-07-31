@@ -18,6 +18,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface SequenceStep {
     id: string;
     name: string;
@@ -35,6 +36,7 @@ export interface SequenceStep {
     metadata: StepMetadata;
     performance: StepPerformance;
 
+}
 export interface StepCondition {
     id: string;
     type: 'boolean' | 'value' | 'expression' | 'function';
@@ -45,6 +47,7 @@ export interface StepCondition {
     function?: string;
     negated?: boolean;
 
+}
 export interface StepAction {
     type: 'function' | 'api' | 'ui' | 'data' | 'navigation' | 'notification';
     handler: string;
@@ -55,15 +58,18 @@ export interface StepAction {
     onFailure?: string;
     onSkip?: string;
 
+}
 export interface StepValidation {
     required: boolean;
     validators: {
         type: 'required' | 'format' | 'range' | 'custom';
         message: string;
         parameters?: Record<string, unknown>;
+}
     }[];
     onValidationFailure: 'retry' | 'skip' | 'abort' | 'rollback';
 
+}
 export interface StepRollback {
     enabled: boolean;
     action?: StepAction;
@@ -71,6 +77,7 @@ export interface StepRollback {
     preserveState: boolean;
     dependencies?: string[];
 
+}
 export interface RetryPolicy {
     maxAttempts: number;
     backoffStrategy: 'linear' | 'exponential' | 'custom';
@@ -78,6 +85,7 @@ export interface RetryPolicy {
     maxDelay: number;
     retryConditions: string[];
 
+}
 export interface StepMetadata {
     estimatedDuration: number;
     category: string;
@@ -90,6 +98,7 @@ export interface StepMetadata {
     lastModified: Date;
     version: string;
 
+}
 export interface StepPerformance {
     averageExecutionTime: number;
     successRate: number;
@@ -97,6 +106,7 @@ export interface StepPerformance {
     retryRate: number;
     lastExecutions: ExecutionRecord[];
 
+}
 export interface ExecutionRecord {
     timestamp: Date;
     duration: number;
@@ -106,6 +116,7 @@ export interface ExecutionRecord {
 
 export type StepExecutionStatus = 'pending' | 'running' | 'completed' | 'failed' | 'skipped' | 'cancelled' | 'retrying' | 'rolled_back';
 
+}
 export interface SequenceDefinition {
     id: string;
     name: string;
@@ -123,8 +134,10 @@ export interface SequenceDefinition {
         difficulty: 'easy' | 'medium' | 'hard' | 'expert';
         createdAt: Date;
         lastModified: Date;
+}
     };
 
+}
 export interface SequenceExecution {
     id: string;
     sequenceId: string;
@@ -142,6 +155,7 @@ export interface SequenceExecution {
     pausedAt?: Date;
     resumedAt?: Date;
 
+}
 export interface ExecutionContext {
     variables: Record<string, unknown>;
     userInput: Record<string, unknown>;
@@ -149,6 +163,7 @@ export interface ExecutionContext {
     executionState: Record<string, unknown>;
     rollbackStack: RollbackEntry[];
 
+}
 export interface RollbackEntry {
     stepId: string;
     timestamp: Date;
@@ -156,6 +171,7 @@ export interface RollbackEntry {
     action: string;
     reversible: boolean;
 
+}
 export interface SequenceProgress {
     totalSteps: number;
     completedSteps: number;
@@ -164,6 +180,7 @@ export interface SequenceProgress {
     estimatedTimeRemaining: number;
     milestones: ProgressMilestone[];
 
+}
 export interface ProgressMilestone {
     id: string;
     name: string;
@@ -172,12 +189,14 @@ export interface ProgressMilestone {
     reached: boolean;
     timestamp?: Date;
 
+}
 export interface ExecutionPerformance {
     totalDuration: number;
     averageStepDuration: number;
     fastestStep: {
         id: string;
         duration: number;
+}
     };
     slowestStep: {
         id: string;
@@ -187,6 +206,7 @@ export interface ExecutionPerformance {
     errorCount: number;
     effectiveSuccessRate: number;
 
+}
 export interface SequencingConfig {
     execution: {
         defaultTimeout: number;
@@ -195,6 +215,7 @@ export interface SequencingConfig {
         enablePerformanceTracking: boolean;
         enableRollback: boolean;
         autoRetryOnFailure: boolean;
+}
     };
     validation: {
         validateDependencies: boolean;
@@ -252,7 +273,7 @@ export declare class StepSequencingSystem extends EventEmitter {
         totalExecutions: number;
         successRate: number;
         averageDuration: number;
-        commonFailurePoints: Array<{,
+        commonFailurePoints: Array<{
             stepId: string;
             failureRate: number;
         }>;

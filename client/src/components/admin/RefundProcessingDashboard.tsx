@@ -34,6 +34,7 @@ import {
   Eye,
   MessageCircle
 } from 'lucide-react';
+}
 interface RefundRequest {
   refundId: string;,
   purchaseId: string;
@@ -46,12 +47,13 @@ interface RefundRequest {
   status: string;,
   priority: 'low' | 'medium' | 'high' | 'urgent';
   assignedTo?: string;
-  originalPurchase: {,
+  originalPurchase: {
   customerId: string;,
   creatorId: string;
   templateId: string;,
   originalAmount: number;
   purchaseDate: Date;
+}
 };
   createdAt: Date;,
   updatedAt: Date;
@@ -59,6 +61,7 @@ interface RefundRequest {
   approvedBy?: string;
   workflowHistory: unknown;,
   notes: unknown;
+}
 interface RefundStats {
   totalRequests: number;,
   pendingRequests: number;
@@ -67,20 +70,23 @@ interface RefundStats {
   averageProcessingTime: number;,
   byReason: Record<string, number>;
   byStatus: Record<string, number>;
-  creatorImpact: {,
+  creatorImpact: {
   creatorsAffected: number;,
   totalCreatorDeductions: number;
   avgDeductionAmount: number;
+}
 };
-  performance: {,
+  performance: {
   approvalRate: number;
   avgResolutionTime: number;,
   escalationRate: number;
   customerSatisfaction: number;
 };
 
+}
 export interface RefundProcessingDashboardProps {
   className?: string;
+}
 }
 export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps> = ({)
   className

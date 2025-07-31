@@ -5,10 +5,12 @@ import { X, AlertCircle, Info } from 'lucide-react';
 import { ValidationMessage } from '../common/ValidationMessage';
 import { TargetingRuleBuilder } from './targeting/TargetingRuleBuilder';
 import './targeting/TargetingRuleBuilder.css';
+}
 interface CreateToggleModalProps {
   isOpen: boolean;,
   onClose: () => void;
   onSubmit: (toggleData: CreateToggleData) => Promise<void>;
+}
 interface CreateToggleData {
   key: string;,
   name: string;
@@ -18,6 +20,7 @@ interface CreateToggleData {
   claudeImpact: 'NONE' | 'PROMPT_COST' | 'MODEL_VERSION' | 'OUTPUT_QUALITY' | 'HALLUCINATION_RISK';,
   enabled: boolean;
 
+}
 export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, onClose, onSubmit }) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);

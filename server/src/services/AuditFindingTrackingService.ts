@@ -33,6 +33,7 @@ export enum SLAStatus {
 }
 
 }
+}
 export interface AuditFindingTracker extends WorkflowFinding {
   // Enhanced tracking fields
   findingId: string;
@@ -54,6 +55,7 @@ export interface AuditFindingTracker extends WorkflowFinding {
 }
 
 }
+}
 export interface BusinessImpactAssessment {
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
   businessUnit: string;
@@ -67,7 +69,9 @@ export interface BusinessImpactAssessment {
   assessor: string;
 }
 }
+}
 
+}
 }
 export interface DataExposureAssessment {
   hasPersonalData: boolean;
@@ -78,7 +82,9 @@ export interface DataExposureAssessment {
   affectedPersons: number;
 }
 }
+}
 
+}
 }
 export interface RegulatoryImplication {
   framework: string;
@@ -89,7 +95,9 @@ export interface RegulatoryImplication {
   potentialFines: number;
 }
 }
+}
 
+}
 }
 export interface FinancialImpactEstimate {
   directCosts: number;
@@ -101,7 +109,9 @@ export interface FinancialImpactEstimate {
   confidence: 'low' | 'medium' | 'high';
 }
 }
+}
 
+}
 }
 export interface OperationalImpactMetrics {
   systemsAffected: number;
@@ -112,7 +122,9 @@ export interface OperationalImpactMetrics {
   backupRequired: boolean;
 }
 }
+}
 
+}
 }
 export interface SLATracking {
   acknowledgmentSLA: number; // hours
@@ -127,7 +139,9 @@ export interface SLATracking {
   resolvedAt?: Date;
 }
 }
+}
 
+}
 }
 export interface EscalationTrigger {
   type: 'sla_breach' | 'severity_increase' | 'manual' | 'risk_threshold' | 'regulatory_deadline';
@@ -138,7 +152,9 @@ export interface EscalationTrigger {
   recipients: string[];
 }
 }
+}
 
+}
 }
 export interface TimeExtension {
   extensionId: string;
@@ -151,7 +167,9 @@ export interface TimeExtension {
   status: 'pending' | 'approved' | 'denied';
 }
 }
+}
 
+}
 }
 export interface EscalationRecord {
   escalationId: string;
@@ -164,7 +182,9 @@ export interface EscalationRecord {
   completedAt?: Date;
 }
 }
+}
 
+}
 }
 export interface EscalationResolution {
   status: 'pending' | 'acknowledged' | 'action_taken' | 'resolved';
@@ -174,7 +194,9 @@ export interface EscalationResolution {
   resolvedBy: string;
 }
 }
+}
 
+}
 }
 export interface StakeholderCommunication {
   communicationId: string;
@@ -187,7 +209,9 @@ export interface StakeholderCommunication {
   responseTracking: ResponseTracking;
 }
 }
+}
 
+}
 }
 export interface StakeholderGroup {
   groupId: string;
@@ -197,7 +221,9 @@ export interface StakeholderGroup {
   notificationPreferences: NotificationPreferences;
 }
 }
+}
 
+}
 }
 export interface CommunicationMessage {
   subject: string;
@@ -207,7 +233,9 @@ export interface CommunicationMessage {
   priority: 'low' | 'normal' | 'high' | 'urgent';
 }
 }
+}
 
+}
 }
 export interface DeliveryStatus {
   sent: boolean;
@@ -220,7 +248,9 @@ export interface DeliveryStatus {
   deliveredAt?: Date;
 }
 }
+}
 
+}
 }
 export interface ResponseTracking {
   responseRequired: boolean;
@@ -230,7 +260,9 @@ export interface ResponseTracking {
   escalationOnNoResponse: boolean;
 }
 }
+}
 
+}
 }
 export interface StakeholderResponse {
   userId: string;
@@ -239,7 +271,9 @@ export interface StakeholderResponse {
   type: 'acknowledgment' | 'question' | 'objection' | 'approval';
 }
 }
+}
 
+}
 }
 export interface NotificationPreferences {
   email: boolean;
@@ -250,7 +284,9 @@ export interface NotificationPreferences {
   severityFilter: string[];
 }
 }
+}
 
+}
 }
 export interface RemediationProgress {
   remediationId: string;
@@ -265,7 +301,9 @@ export interface RemediationProgress {
   updatedBy: string;
 }
 }
+}
 
+}
 }
 export interface RemediationPlan {
   planId: string;
@@ -282,7 +320,9 @@ export interface RemediationPlan {
   approvedAt?: Date;
 }
 }
+}
 
+}
 }
 export interface RemediationMilestone {
   milestoneId: string;
@@ -296,7 +336,9 @@ export interface RemediationMilestone {
   progress: number; // 0-100
 }
 }
+}
 
+}
 }
 export interface RemediationBlocker {
   blockerId: string;
@@ -311,7 +353,9 @@ export interface RemediationBlocker {
   status: 'open' | 'in_progress' | 'resolved';
 }
 }
+}
 
+}
 }
 export interface RemediationResource {
   resourceId: string;
@@ -324,7 +368,9 @@ export interface RemediationResource {
   approved: boolean;
 }
 }
+}
 
+}
 }
 export interface ValidationResult {
   validationId: string;
@@ -338,7 +384,9 @@ export interface ValidationResult {
   nextValidation?: Date;
 }
 }
+}
 
+}
 }
 export interface ValidationCriteria {
   criteriaId: string;
@@ -350,7 +398,9 @@ export interface ValidationCriteria {
   weight: number; // 0-1 for weighted scoring
 }
 }
+}
 
+}
 }
 export interface RiskProfileUpdate {
   updateId: string;
@@ -366,7 +416,9 @@ export interface RiskProfileUpdate {
   changeReason?: string;
 }
 }
+}
 
+}
 }
 export interface RiskFactor {
   factorId: string;
@@ -379,7 +431,9 @@ export interface RiskFactor {
   weight: number; // 0-1
 }
 }
+}
 
+}
 }
 export interface MitigatingControl {
   controlId: string;
@@ -391,7 +445,9 @@ export interface MitigatingControl {
   testResults: ControlTestResult[];
 }
 }
+}
 
+}
 }
 export interface ControlTestResult {
   testDate: Date;
@@ -401,7 +457,9 @@ export interface ControlTestResult {
   tester: string;
 }
 }
+}
 
+}
 }
 export interface ComplianceImpact {
   framework: string;
@@ -413,7 +471,9 @@ export interface ComplianceImpact {
   potentialConsequences: string[];
 }
 }
+}
 
+}
 }
 export interface ReportingRequirement {
   requirementId: string;
@@ -426,7 +486,9 @@ export interface ReportingRequirement {
   completedBy?: string;
 }
 }
+}
 
+}
 }
 export interface FindingTrackingReport {
   reportId: string;
@@ -441,7 +503,9 @@ export interface FindingTrackingReport {
   attachments: ReportAttachment[];
 }
 }
+}
 
+}
 }
 export interface FindingSummary {
   finding: AuditFindingTracker;
@@ -453,7 +517,9 @@ export interface FindingSummary {
   stakeholderEngagement: number;
 }
 }
+}
 
+}
 }
 export interface FindingTimelineEntry {
   timestamp: Date;
@@ -463,7 +529,9 @@ export interface FindingTimelineEntry {
   category: 'status_change' | 'escalation' | 'communication' | 'remediation' | 'validation';
 }
 }
+}
 
+}
 }
 export interface FindingMetrics {
   timeToAcknowledgment: number; // hours
@@ -475,7 +543,9 @@ export interface FindingMetrics {
   costToResolve: number;
 }
 }
+}
 
+}
 }
 export interface ReportAttachment {
   attachmentId: string;
@@ -485,6 +555,7 @@ export interface ReportAttachment {
   url: string;
   uploadedBy: string;
   uploadedAt: Date;
+}
 }
 }
 

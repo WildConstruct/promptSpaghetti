@@ -5,6 +5,7 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { PayloadEncryptionService, EncryptedPayload } from '../middleware/payload-encryption';
 
 }
+}
 interface EncryptPayloadRequest {
   data: unknown;
   endpoint?: string;
@@ -12,24 +13,31 @@ interface EncryptPayloadRequest {
   compression?: boolean;
 }
 }
+}
 
+}
 }
 interface DecryptPayloadRequest {
   encryptedPayload: EncryptedPayload;
 }
 }
+}
 
+}
 }
 interface KeyRotationRequest {
   reason?: string;
   scheduleDate?: string;
 }
 }
+}
 
+}
 }
 interface EncryptionTestRequest {
   testData: unknown;
   iterations?: number;
+}
 }
 }
 

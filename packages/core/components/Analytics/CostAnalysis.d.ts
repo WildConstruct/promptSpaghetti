@@ -4,11 +4,13 @@ import { AnalyticsClient } from '../../analytics/AnalyticsClient';
  * Cost analysis props
  */
 
+}
 export interface CostAnalysisProps {
     analyticsClient: AnalyticsClient;
     timeRange: {
         startTime: number;
         endTime: number;
+}
     };
     userId?: number;
     organizationId?: number;

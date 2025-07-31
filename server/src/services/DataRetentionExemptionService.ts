@@ -5,6 +5,7 @@ import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 export interface ExemptionRequest {
   requestId?: string;
   requestorId: string;
@@ -21,7 +22,9 @@ export interface ExemptionRequest {
   status?: ExemptionStatus;
 }
 }
+}
 
+}
 }
 export interface ExemptionRecord {
   id: string;
@@ -43,7 +46,9 @@ export interface ExemptionRecord {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ExemptionApproval {
   approverId: string;
@@ -54,7 +59,9 @@ export interface ExemptionApproval {
   conditions?: string[];
 }
 }
+}
 
+}
 }
 export interface ExemptionReview {
   reviewId: string;
@@ -65,6 +72,7 @@ export interface ExemptionReview {
   recommendations: string[];
   nextReviewDate?: Date;
   complianceStatus: ComplianceStatus;
+}
 }
 }
 
@@ -570,6 +578,7 @@ export class DataRetentionExemptionService {
 
 // Supporting interfaces
 }
+}
 interface ComplianceSummary {
   totalExemptions: number;
   activeExemptions: number;
@@ -578,7 +587,9 @@ interface ComplianceSummary {
   complianceRate: number;
 }
 }
+}
 
+}
 }
 interface ReviewComplianceMetrics {
   scheduledReviews: number;
@@ -587,12 +598,15 @@ interface ReviewComplianceMetrics {
   averageReviewTime: number;
 }
 }
+}
 
+}
 }
 interface RiskAssessment {
   overallRiskScore: number;
   highRiskExemptions: number;
   riskFactors: string[];
   mitigationRecommendations: string[];
+}
 }
 }

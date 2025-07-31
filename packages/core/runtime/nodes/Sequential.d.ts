@@ -3,6 +3,7 @@ import { AdvancedRuntimeNode, AdvancedExecutionContext, AdvancedNodeData, Valida
  * Configuration for different sequence patterns
  */
 
+}
 export interface SequencePatternConfig {
     /** For weighted pattern: weights corresponding to sequence items */
     weights?: number[];
@@ -14,6 +15,7 @@ export interface SequencePatternConfig {
  * Sequence pattern interface for different traversal strategies
  */
 
+}
 export interface SequencePattern {
     type: 'linear' | 'cyclical' | 'random' | 'weighted';
     getNext(sequence: string[], state: SequenceState, ctx: AdvancedExecutionContext): string;
@@ -21,6 +23,7 @@ export interface SequencePattern {
  * State tracking for sequential processing
  */
 
+}
 export interface SequenceState {
     /** Current index in the sequence */
     index: number;
@@ -110,5 +113,6 @@ export declare     readonly createCyclicalPattern: () => SequencePattern;
     readonly createRandomPattern: () => SequencePattern;
     readonly createWeightedPattern: (weights: number[]) => SequencePattern;
     readonly resetSequenceState: (node: SequentialNode, ctx: AdvancedExecutionContext) => void;
+}
 };
 //# sourceMappingURL=Sequential.d.ts.map

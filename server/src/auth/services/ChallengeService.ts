@@ -27,18 +27,22 @@ import {
 // ========================================
 
 }
+}
 interface MathPuzzle {
   question: string;
   answer: string;
   difficulty: ChallengeDifficulty;
 }
 }
+}
 
+}
 }
 interface ImageSelectionChallenge {
   images: string[];
   correctIndices: number[];
   prompt: string;
+}
 }
 }
 

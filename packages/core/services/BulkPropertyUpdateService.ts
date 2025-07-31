@@ -8,11 +8,14 @@
  * Epic: 17 - Backstage Admin Controls
  */
 
+}
 export interface BulkUpdateTarget {
   type: TargetType;
   id: string;
   displayName?: string;
   currentValues?: Record<string, any>;
+}
+}
 }
 export interface BulkUpdateOperation {
   id: string;
@@ -34,6 +37,8 @@ export interface BulkUpdateOperation {
   completedAt?: Date;
   rolledBackAt?: Date;
 }
+}
+}
 export interface PropertyUpdate {
   property: string;
   operation: UpdateOperationType;
@@ -41,16 +46,22 @@ export interface PropertyUpdate {
   conditions?: UpdateCondition;
   transformation?: PropertyTransformation;
 }
+}
+}
 export interface UpdateCondition {
   type: 'equals' | 'not_equals' | 'contains' | 'not_contains' | 'greater_than' | 'less_than' | 'exists' | 'not_exists' | 'matches_regex';
   field: string;
   value: any;
   description: string;
 }
+}
+}
 export interface PropertyTransformation {
   type: 'case_convert' | 'trim' | 'replace' | 'append' | 'prepend' | 'calculate' | 'format' | 'extract' | 'custom';
   parameters: Record<string, any>;
   description: string;
+}
+}
 }
 export interface ValidationRules {
   required?: string; // Required fields,
@@ -58,17 +69,23 @@ export interface ValidationRules {
   customValidators?: CustomValidator;
   skipInvalid?: boolean; // Continue with valid items if some are invalid,
 }
+}
+}
 export interface PropertyConstraint {
   property: string;
   type: 'type' | 'length' | 'range' | 'pattern' | 'enum' | 'unique' | 'custom';
   parameters: Record<string, any>;
   message: string;
 }
+}
+}
 export interface CustomValidator {
   name: string;
   function: string; // JavaScript function as string,
   parameters: Record<string, any>;
   message: string;
+}
+}
 }
 export interface ExecutionSettings {
   mode: 'sequential' | 'parallel' | 'batched';
@@ -80,11 +97,15 @@ export interface ExecutionSettings {
   dryRun?: boolean; // Preview changes without applying,
   backupBeforeUpdate?: boolean;
 }
+}
+}
 export interface RollbackSettings {
   enabled: boolean;
   autoRollbackOnFailure?: boolean;
   retainBackups?: boolean;
   backupExpiration?: Date;
+}
+}
 }
 export interface OperationProgress {
   total: number;
@@ -94,6 +115,8 @@ export interface OperationProgress {
   currentItem?: string;
   startTime?: Date;
   estimatedCompletion?: Date;
+}
+}
 }
 export interface OperationResult {
   targetId: string;
@@ -105,6 +128,8 @@ export interface OperationResult {
   duration: number; // milliseconds,
   backup?: Record<string, any>; // Original values,
 }
+}
+}
 export interface PropertyChange {
   property: string;
   oldValue: any;
@@ -112,11 +137,14 @@ export interface PropertyChange {
   operation: UpdateOperationType;
   applied: boolean;
 }
+}
+}
 export interface OperationError {
   type: 'validation' | 'execution' | 'timeout' | 'permission' | 'not_found' | 'conflict';
   message: string;
   property?: string;
   details?: Record<string, any>;
+}
 }
 export type TargetType = 
   | 'user'
@@ -156,6 +184,7 @@ export type OperationStatus =
   | 'rolling_back' 
   | 'rolled_back';
 
+}
 export interface BulkUpdateTemplate {
   id: string;
   name: string;
@@ -170,13 +199,17 @@ export interface BulkUpdateTemplate {
   createdBy: string;
   createdAt: Date;
 }
+}
+}
 export interface BulkUpdateFilter {
   statuses?: OperationStatus;
   targetTypes?: TargetType;
   createdBy?: string;
+}
   dateRange?: { start?: Date; end?: Date };
   searchQuery?: string;
   hasErrors?: boolean;
+}
 }
 export interface BulkUpdateStats {
   totalOperations: number;
@@ -189,9 +222,10 @@ export interface BulkUpdateStats {
   total: number;
   successful: number;
   rate: number;
+}
 }>;
   // Most common errors
-  commonErrors: Array<{,
+  commonErrors: Array<{
   type: string;
   message: string;
   count: number;
@@ -275,6 +309,7 @@ export class BulkPropertyUpdateService {
     this.notifyListeners('operation_created', operation);
     return operation;
   async validateOperation(operationId: string): Promise<ValidationResult> {
+
     const operation = this.operations.get(operationId);
     if (!operation) {
       throw new Error(`Operation ${operationId} not found`);}
@@ -305,6 +340,7 @@ export class BulkPropertyUpdateService {
       this.operations.set(operationId, operation);
       throw error;
   async executeOperation(operationId: string): Promise<boolean> {
+
     const operation = this.operations.get(operationId);
     if (!operation) {
       throw new Error(`Operation ${operationId} not found`);}
@@ -340,6 +376,7 @@ export class BulkPropertyUpdateService {
         await this.rollbackOperation(operationId);
       throw error;
   async rollbackOperation(operationId: string): Promise<boolean> {
+
     const operation = this.operations.get(operationId);
     if (!operation) {
       throw new Error(`Operation ${operationId} not found`);}
@@ -563,6 +600,7 @@ export class BulkPropertyUpdateService {
       this.operations.set(operation.id, operation);
       this.notifyListeners('operation_progress', operation);
   private async executeInParallel(operation: BulkUpdateOperation): Promise<void> {
+
     const promises = operation.targets.map(async (target) => {
       try {
         const result = await this.executeForTarget(target, operation);
@@ -592,6 +630,7 @@ export class BulkPropertyUpdateService {
     await Promise.allSettled(promises);
     this.operations.set(operation.id, operation);
   private async executeInBatches(operation: BulkUpdateOperation): Promise<void> {
+
     const batchSize = operation.execution.batchSize || 10;
     const batches = this.chunkArray(operation.targets, batchSize);
     for (const batch of batches) {
@@ -625,8 +664,7 @@ export class BulkPropertyUpdateService {
       // Add delay between batches if configured
       if (operation.execution.delayBetweenItems) {
   await this.sleep(operation.execution.delayBetweenItems);
-  private async executeForTarget(()
-  target: BulkUpdateTarget,
+  private async executeForTarget((target: BulkUpdateTarget,
   operation: BulkUpdateOperation): Promise<OperationResult> {,
   const startTime = Date.now();
   const result: OperationResult = {,
@@ -669,6 +707,7 @@ export class BulkPropertyUpdateService {
     update: PropertyUpdate,
     originalEntity: Record<string, any>
   ): Promise<PropertyChange> {
+
   const change: PropertyChange = {,
   property: update.property,
   oldValue: entity[update.property],
@@ -932,6 +971,7 @@ export class BulkPropertyUpdateService {
   data: any;
   timestamp: Date;
   // Export singleton instance
+}
 }
 export const bulkPropertyUpdateService = BulkPropertyUpdateService.getInstance();
 

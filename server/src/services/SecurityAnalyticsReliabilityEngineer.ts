@@ -16,6 +16,7 @@ import { DiagnosticService } from '../admin/DiagnosticService';
 import { HealthCheckFramework } from '../admin/HealthCheckFramework';
 
 }
+}
 export interface ReliabilityConfig {
   circuit_breaker: {
     enabled: boolean;
@@ -23,6 +24,7 @@ export interface ReliabilityConfig {
     recovery_timeout_ms: number;
     half_open_max_calls: number;
     monitoring_window_ms: number;
+}
 }
   };
   fault_tolerance: {
@@ -65,6 +67,7 @@ export interface ReliabilityConfig {
 }
 
 }
+}
 export interface CircuitBreakerState {
   state: 'closed' | 'open' | 'half_open';
   failure_count: number;
@@ -75,7 +78,9 @@ export interface CircuitBreakerState {
   last_state_change: number;
 }
 }
+}
 
+}
 }
 export interface SystemHealthStatus {
   overall_health: 'healthy' | 'degraded' | 'critical' | 'failed';
@@ -87,6 +92,7 @@ export interface SystemHealthStatus {
       response_time_ms: number;
       error_rate: number;
       availability_percent: number;
+}
 }
     };
   };
@@ -102,6 +108,7 @@ export interface SystemHealthStatus {
 }
 
 }
+}
 export interface DisasterRecoveryPlan {
   id: string;
   name: string;
@@ -115,7 +122,9 @@ export interface DisasterRecoveryPlan {
   success_rate: number;
 }
 }
+}
 
+}
 }
 export interface RecoveryStep {
   id: string;
@@ -128,7 +137,9 @@ export interface RecoveryStep {
   validation_checks: string[];
 }
 }
+}
 
+}
 }
 export interface ReliabilityMetrics {
   availability_percent: number;
@@ -143,7 +154,9 @@ export interface ReliabilityMetrics {
   incident_count_last_24h: number;
 }
 }
+}
 
+}
 }
 export interface IncidentRecord {
   id: string;
@@ -158,6 +171,7 @@ export interface IncidentRecord {
   mttr_minutes?: number; // Mean Time To Recovery
   lessons_learned?: string[];
   prevention_measures?: string[];
+}
 }
 }
 

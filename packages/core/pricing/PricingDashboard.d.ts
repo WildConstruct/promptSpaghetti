@@ -7,6 +7,7 @@
 import { EventEmitter } from 'events';
 import { PricingOptimizer } from './PricingOptimizer';
 
+}
 export interface DashboardConfig {
     refreshIntervalMs: number;
     showPredictiveAnalytics: boolean;
@@ -16,9 +17,11 @@ export interface DashboardConfig {
         revenueDeclinePercent: number;
         demandDropPercent: number;
         competitiveThreatScore: number;
+}
     };
     filmIndustryFocus: boolean;
 
+}
 export interface DashboardMetrics {
     totalRevenue: number;
     revenueGrowthRate: number;
@@ -32,16 +35,18 @@ export interface DashboardMetrics {
     demandPredictionAccuracy: number;
     studioTierBreakdown: Record<string, number>;
     productionTypeDistribution: Record<string, number>;
-    seasonalTrends: Array<{,
+    seasonalTrends: Array<{
         period: string;
         revenue: number;
         growth: number;
+}
     }>;
     marketPosition: 'leader' | 'challenger' | 'follower';
     competitiveAdvantage: number;
     pricePositioning: 'premium' | 'competitive' | 'value';
     updatedAt: number;
 
+}
 export interface PricingAlert {
     id: string;
     type: 'revenue_decline' | 'demand_drop' | 'competitive_threat' | 'optimization_opportunity';
@@ -55,6 +60,7 @@ export interface PricingAlert {
     createdAt: number;
     acknowledged: boolean;
 
+}
 export interface PricingInsight {
     id: string;
     type: 'trend' | 'opportunity' | 'risk' | 'optimization';
@@ -64,23 +70,26 @@ export interface PricingInsight {
     confidence: number;
     impact: 'low' | 'medium' | 'high';
     actionItems: string[];
-    dataPoints: Array<{,
+    dataPoints: Array<{
         metric: string;
         current: number;
         previous: number;
         change: number;
+}
     }>;
     createdAt: number;
 
+}
 export interface RevenueProjection {
     period: '1_month' | '3_months' | '6_months' | '1_year';
     projectedRevenue: number;
     confidenceInterval: {
         lower: number;
         upper: number;
+}
     };
     assumptions: string[];
-    keyFactors: Array<{,
+    keyFactors: Array<{
         factor: string;
         impact: number;
         confidence: number;
@@ -133,22 +142,22 @@ export declare class PricingDashboard extends EventEmitter {
      * Get film industry specific dashboard data
      */
     getFilmIndustryDashboard(): {
-        studioSegments: Array<{,
+        studioSegments: Array<{
             segment: string;
             revenue: number;
             growth: number;
         }>;
-        productionTrends: Array<{,
+        productionTrends: Array<{
             type: string;
             volume: number;
             avgPrice: number;
         }>;
-        seasonalPerformance: Array<{,
+        seasonalPerformance: Array<{
             season: string;
             multiplier: number;
             revenue: number;
         }>;
-        contentTypeAnalysis: Array<{,
+        contentTypeAnalysis: Array<{
             type: string;
             demand: number;
             pricing: number;

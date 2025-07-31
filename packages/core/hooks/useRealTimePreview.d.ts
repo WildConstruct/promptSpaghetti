@@ -1,5 +1,6 @@
 import { WeightControlOption } from '../components/Inspector/WeightControlSlider';
 
+}
 export interface PreviewVariant {
     id: string;
     seed: number;
@@ -9,12 +10,14 @@ export interface PreviewVariant {
     weightSnapshot: WeightControlOption[];
     variables: Record<string, string>;
 
+}
 export interface PreviewPerformance {
     averageExecutionTime: number;
     totalGenerations: number;
     successRate: number;
     lastUpdate: number;
 
+}
 export interface RealTimePreviewConfig {
     maxVariants: number;
     debounceMs: number;
@@ -43,6 +46,7 @@ export declare const useRealTimePreview: (graph: GraphData, seedConfig?: SeedCon
             variables: Record<string, string>;
             timestamp: number;
             executionTime: number;
+}
         }[];
         performance: PreviewPerformance;
         exportTimestamp: number;

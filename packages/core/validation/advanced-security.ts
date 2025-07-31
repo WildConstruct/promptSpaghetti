@@ -7,6 +7,7 @@
 import { SecurityValidation } from './security';
 
 // ML-inspired pattern scoring system
+}
 interface PatternSignature {
   pattern: RegExp;
   weight: number;
@@ -22,6 +23,7 @@ interface PatternSignature {
   category: 'injection',
   severity: 'critical',
   description: 'Array-based constructor access attempt',
+}
 }
   {
   pattern: /window\[.*\]\s*\(/gi),
@@ -273,6 +275,8 @@ interface PatternSignature {
   threatsDetected: string;
   confidence: number; // 0.0 (low) to 1.0 (high),
 }
+}
+}
 export interface SecurityMetrics {
   patternsAnalyzed: number;
   cacheSize: number;
@@ -280,6 +284,7 @@ export interface SecurityMetrics {
   version: string;
   lastUpdated: Date;
   // Export singleton instance for application use
+}
 }
 export const advancedSecurityAnalyzer = new AdvancedSecurityAnalyzer();
 

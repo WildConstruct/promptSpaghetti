@@ -48,6 +48,7 @@ export {
 } from './AdvancedCacheManager';
 
 // Type definitions for missing interfaces
+}
 interface CacheConfig {
   maxSize: number;
   maxMemoryMB: number;
@@ -55,7 +56,9 @@ interface CacheConfig {
   evictionPolicy: string;
   compressionEnabled: boolean;
   persistToDisk: boolean;
+}
   metrics: { enabled: boolean; reportingInterval?: number };
+}
 interface LoadBalancerConfig {
   maxRetries: number;
   strategy: string;
@@ -94,6 +97,7 @@ interface LoadBalancerConfig {
   cpuUsage: number;
   diskUsage: number;
   responseTime: number;
+}
 };
   strategies: {
   memoryOptimization: boolean;
@@ -160,8 +164,10 @@ export const calculateResourceEfficiency = (usage: ResourceUsage, performance: P
   return (memoryEfficiency * 0.3) + (cpuEfficiency * 0.3) + (performanceScore * 0.4);
 };
 
+}
 export interface OptimizationCategories {
   categories: {
+}
   caching: { score: number; recommendations: string };
     performance: { score: number; recommendations: string };
     resources: { score: number; recommendations: string };

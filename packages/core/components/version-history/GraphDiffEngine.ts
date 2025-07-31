@@ -3,12 +3,15 @@
  * Advanced graph comparison and difference calculation with visual diff support
  */
 
+}
 export interface GraphNode {
   id: string;
   type: string;
+}
   position: { x: number; y: number };
   data: Record<string, unknown>;
   style?: unknown;
+}
 }
 export interface GraphEdge {
   id: string;
@@ -18,10 +21,14 @@ export interface GraphEdge {
   data?: unknown;
   style?: unknown;
 }
+}
+}
 export interface GraphData {
   nodes: GraphNode;
   edges: GraphEdge;
   metadata?: unknown;
+}
+}
 }
 export interface DiffChange {
   type: 'added' | 'removed' | 'modified' | 'moved';
@@ -31,11 +38,13 @@ export interface DiffChange {
   new_value?: unknown;
   property_path?: string;
   position_change?: {
+}
     from: { x: number; y: number };
     to: { x: number; y: number };
     distance: number;
   };
   significance: number; // 0-1 scale indicating how significant this change is
+}
 }
 export interface GraphDiff {
   id: string;
@@ -54,6 +63,7 @@ export interface GraphDiff {
   property_changes: number;
   similarity_score: number; // 0-1, how similar the graphs are,
   complexity_score: number; // 0-10, how complex the diff is to understand,
+}
 };
   visualization_data: {
   changed_regions: Array<{;
@@ -61,7 +71,7 @@ export interface GraphDiff {
       change_types: string;
   intensity: number;
     }>;
-    change_paths: Array<{,
+    change_paths: Array<{
   from_position: { x: number; y: number };
       to_position: { x: number; y: number };
       change_type: string;
@@ -80,6 +90,7 @@ export class GraphDiffEngine {
 } = {}) {}
   // Main diff computation method
   async computeDiff(fromGraph: GraphData, toGraph: GraphData): Promise<GraphDiff> {
+
   const startTime = Date.now();
   const changes: DiffChange = [];
   // Create lookup maps for efficient comparison
@@ -388,12 +399,12 @@ export class GraphDiffEngine {
     summary.complexity_score = Math.min(10, weightedChanges / 2);
     return summary;
   private generateVisualizationData(changes: DiffChange, fromGraph: GraphData, toGraph: GraphData) {
-    const changedRegions: Array<{,
+    const changedRegions: Array<{
   bounds: { x: number; y: number; width: number; height: number };
       change_types: string;
   intensity: number;
     }> = [];
-    const changePaths: Array<{,
+    const changePaths: Array<{
   from_position: { x: number; y: number };
       to_position: { x: number; y: number };
       change_type: string;

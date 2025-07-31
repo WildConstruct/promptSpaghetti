@@ -5,6 +5,7 @@
  * Provides methods for submitting requests, tracking status, and managing documents.
  */
 import { IdentityValidationType, IdentityValidationData, ValidationStatus } from '../auth/IdentityValidation';
+}
 interface VerificationRequestsHook {
     isLoading: boolean;
     isSubmitting: boolean;
@@ -14,10 +15,12 @@ interface VerificationRequestsHook {
     submitVerificationRequest: (type: IdentityValidationType, data: Partial<IdentityValidationData>) => Promise<{
         requestId: string;
         status: string;
+}
     }>;
     refreshStatus: () => Promise<void>;
     uploadDocuments: (requestId: string, files: File[]) => Promise<void>;
     getVerificationTypes: () => Promise<VerificationType[]>;
+}
 interface VerificationSummary {
     totalRequests: number;
     approvedCount: number;
@@ -27,6 +30,7 @@ interface VerificationSummary {
     completedValidations: IdentityValidationType[];
     missingValidations: IdentityValidationType[];
     requests: VerificationRequest[];
+}
 interface VerificationRequest {
     requestId: string;
     type: IdentityValidationType;
@@ -37,7 +41,9 @@ interface VerificationRequest {
         userAgent: string;
         sessionId: string;
         requestSource: string;
+}
     };
+}
 interface TrustScore {
     overall: number;
     components: {
@@ -45,10 +51,12 @@ interface TrustScore {
         professional: number;
         community: number;
         activity: number;
+}
     };
     tier: 'unverified' | 'basic' | 'verified' | 'professional' | 'expert';
     badges: string[];
     lastUpdated: number;
+}
 interface VerificationType {
     type: IdentityValidationType;
     title: string;
@@ -63,3 +71,4 @@ interface VerificationType {
 export declare function useVerificationRequests(userId: string): VerificationRequestsHook;
 export default useVerificationRequests;
 //# sourceMappingURL=useVerificationRequests.d.ts.map
+}

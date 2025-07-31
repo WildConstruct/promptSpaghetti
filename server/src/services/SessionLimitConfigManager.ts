@@ -59,6 +59,7 @@ const SessionLimitConfigSchema = z.object({
 });
 
 }
+}
 export interface ConfigurationTemplate {
   id: string;
   name: string;
@@ -71,12 +72,15 @@ export interface ConfigurationTemplate {
   updatedAt: Date;
 }
 }
+}
 
+}
 }
 export interface ConfigurationAuditLog {
   id: string;
   configId: string;
   action: 'created' | 'updated' | 'deleted' | 'applied';
+}
 }
   changes: Record<string, { old: unknown; new: unknown }>;
   userId: string;

@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 
 // Types for status overrides
+}
 interface StatusOverride {
   id: string;,
   toggleId: string;
@@ -56,6 +57,7 @@ interface StatusOverride {
   isOpen,
   onClose,
   onOverrideCreated
+}
 }) => {
   const [activeOverrides, setActiveOverrides] = useState<StatusOverride>([]);
   const [loading, setLoading] = useState(false);

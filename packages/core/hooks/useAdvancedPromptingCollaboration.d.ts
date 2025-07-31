@@ -6,6 +6,7 @@
  */
 import { AdvancedPromptingCollaborationService, PromptingMethodologySession, FilmIndustryUser, MARSRegionTemplate, ZadaPromptPattern, FilmIndustryRole } from '../services/AdvancedPromptingCollaborationService';
 
+}
 export interface AdvancedCollaborationConfig {
     enableRealTimeSync: boolean;
     enableMARSRegions: boolean;
@@ -15,6 +16,7 @@ export interface AdvancedCollaborationConfig {
     maxCollaborators: number;
 
 
+}
 export interface AdvancedCollaborationState {
     collaborationService: AdvancedPromptingCollaborationService | null;
     currentUser: FilmIndustryUser | null;
@@ -25,6 +27,7 @@ export interface AdvancedCollaborationState {
     lastSync: Date | null;
 
 
+}
 export interface AdvancedCollaborationActions {
     initializeCollaboration: (user: FilmIndustryUser, config?: Partial<AdvancedCollaborationConfig>) => Promise<void>;
     createSession: (title: string, methodology: 'zada' | 'mars' | 'hybrid' | 'custom') => Promise<PromptingMethodologySession>;
@@ -52,5 +55,6 @@ export declare function useAdvancedPromptingCollaboration(config?: Partial<Advan
     getUsersByRole: (role: FilmIndustryRole) => FilmIndustryUser[];
     getSessionParticipants: () => FilmIndustryUser[];
     isUserCompatibleWithMethodology: (methodology: 'zada' | 'mars' | 'hybrid' | 'custom') => boolean;
+}
 };
 //# sourceMappingURL=useAdvancedPromptingCollaboration.d.ts.map

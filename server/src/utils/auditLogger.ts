@@ -14,6 +14,7 @@ import {
 } from '../types/audit';
 
 }
+}
 export interface AuditContext {
   userId?: string;
   sessionId?: string;
@@ -23,7 +24,9 @@ export interface AuditContext {
   systemComponent?: string;
 }
 }
+}
 
+}
 }
 export interface DataDeletionAuditOptions {
   affectedUserId?: string;
@@ -36,6 +39,7 @@ export interface DataDeletionAuditOptions {
   complianceFramework?: string;
   isSubjectRequest?: boolean;
   legalBasis?: string;
+}
 }
 }
 

@@ -26,11 +26,13 @@ import {
   Target
 } from 'lucide-react';
 
+}
 export interface VerificationAnalyticsData {
   period: {
   start: Date;
   end: Date;
   label: string;
+}
 };
   overview: {
   totalRequests: number;
@@ -40,20 +42,20 @@ export interface VerificationAnalyticsData {
   averageProcessingTime: number; // hours,
   approvalRate: number; // percentage,
 };
-  requestsByType: Array<{,
+  requestsByType: Array<{
   type: string;
   count: number;
   approvalRate: number;
   averageProcessingTime: number;
 }>;
-  processingTrends: Array<{,
+  processingTrends: Array<{
   date: Date;
   requests: number;
   approved: number;
   rejected: number;
   averageTime: number;
 }>;
-  trustScoreDistribution: Array<{,
+  trustScoreDistribution: Array<{
   range: string;
   count: number;
   percentage: number;
@@ -71,8 +73,10 @@ export interface VerificationAnalyticsData {
   systemUptime: number; // percentage,
 };
 }
+}
 export interface VerificationAnalyticsProps {
   className?: string;
+}
 }
 export const VerificationAnalytics: React.FC<VerificationAnalyticsProps> = ({)
   className = ''

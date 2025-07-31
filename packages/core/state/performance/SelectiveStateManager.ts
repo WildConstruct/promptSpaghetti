@@ -10,6 +10,7 @@ import { StateChange } from '../containers/BaseStateContainer';
 
 // Performance optimization types
 
+}
 export interface StateSelector<T, R> {
   (state: T): R;
   dependencies?: (keyof T)[];
@@ -21,7 +22,9 @@ export interface StateSelector<T, R> {
   selector?: StateSelector<any, any>;
   lastValue?: any;
   priority: 'low' | 'normal' | 'high' | 'critical'
+}
   }
+}
 export interface StateUpdateBatch {
   id: string;
   updates: StatePathUpdate;
@@ -31,17 +34,23 @@ export interface StateUpdateBatch {
   scheduledTime?: number;
   executed?: boolean;
 }
+}
+}
 export interface StatePathUpdate {
   path: string;
   value: any;
   operation: 'set' | 'merge' | 'delete' | 'append' | 'remove';
   metadata?: Record<string, any>;
 }
+}
+}
 export interface StateGraph {
   nodes: Map<string, StateGraphNode>;
   edges: Map<string, StateGraphEdge>;
   rootPaths: Set<string>;
   dependencyMap: Map<string, Set<string>>;
+}
+}
 }
 export interface StateGraphNode {
   path: string;
@@ -52,11 +61,15 @@ export interface StateGraphNode {
   accessCount: number;
   subscriptions: Set<string>;
 }
+}
+}
 export interface StateGraphEdge {
   from: string;
   to: string;
   type: 'dependency' | 'derivation' | 'subscription';
   weight: number;
+}
+}
 }
 export interface PerformanceMetrics {
   updateLatency: number;
@@ -67,6 +80,8 @@ export interface PerformanceMetrics {
   cacheHitRate: number;
   selectorExecutionTime: Map<string, number>;
   componentUpdateTime: Map<string, number>;
+}
+}
 }
 export interface SelectorCache<T> {
   key: string;
@@ -82,6 +97,7 @@ export interface SelectorCache<T> {
   getQueueSize(): number;
   getScheduledUpdates(): StateUpdateBatch;
   // Main selective state manager
+}
 }
 export class SelectiveStateManager extends EventEmitter {
   private stateGraph: StateGraph;
@@ -285,9 +301,9 @@ export class SelectiveStateManager extends EventEmitter {
           if (this.comparePriority(dep.priority, maxPriority) > 0) {
             maxPriority = dep.priority;
     return maxPriority;
-  private comparePriority(()
+  private comparePriority(((
     a: ComponentDependency['priority'],
-    b: ComponentDependency['priority'],
+    b: ComponentDependency['priority']
   ): number {
     const priorities = { low: 0, normal: 1, high: 2, critical: 3 };
     return priorities[a] - priorities[b];
@@ -347,6 +363,7 @@ export class SelectiveStateManager extends EventEmitter {
         this.processBatchQueue();
       }, 0);
   private async processBatchQueue(): Promise<void> {
+
     if (this.isProcessing || this.batchQueue.length === 0) return;
     this.isProcessing = true;
     const startTime = performance.now();
@@ -378,6 +395,7 @@ export class SelectiveStateManager extends EventEmitter {
     });
     return groups;
   private async processComponentBatches(componentId: string, batches: StateUpdateBatch): Promise<void> {
+
   const startTime = performance.now();
   try {
   // Check if component should be updated
@@ -418,6 +436,7 @@ export class SelectiveStateManager extends EventEmitter {
           return false;
     return true;
   private async applyUpdates(updates: StatePathUpdate): Promise<void> {
+
     // Apply all updates to the state graph
     updates.forEach(update => {)
   const node = this.stateGraph.nodes.get(update.path);

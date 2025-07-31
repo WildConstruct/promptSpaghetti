@@ -15,6 +15,7 @@ import {
   ChevronRight,
   Palette
 } from 'lucide-react';
+}
 interface Organization {
   id: string;
   name: string;
@@ -37,12 +38,14 @@ interface Organization {
   maxUsers: number;
   maxTeams: number;
   maxStorage: number;
+}
 };
   usage: {
   users: number;
   teams: number;
   storage: number;
 };
+}
 interface CreateOrganizationData {
   name: string;
   slug?: string;
@@ -52,7 +55,9 @@ interface CreateOrganizationData {
   maxUsers?: number;
   settings?: Record<string, unknown>;
   branding?: Record<string, unknown>;
+}
 interface OrganizationManagerProps {
+}
   currentUser?: { id: string; name: string; email: string; role: string };
   onOrganizationChange?: (org: Organization) => void;
   onInvitationSent?: (invitation: { id: string; email: string; role: string }) => void;

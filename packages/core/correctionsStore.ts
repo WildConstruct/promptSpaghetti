@@ -3,6 +3,7 @@ import { devtools, persist } from 'zustand/middleware';
 
 // Export/Import options types
 
+}
 export interface ExportOptions {
   name?: string;
   description?: string;
@@ -10,10 +11,14 @@ export interface ExportOptions {
   includeStatistics?: boolean;
   ruleIds?: string;
 }
+}
+}
 export interface ImportOptions {
   overwrite?: boolean;
   merge?: boolean;
   skipDuplicates?: boolean;
+}
+}
 }
 export interface CorrectionRule {
   id: string;
@@ -27,7 +32,9 @@ export interface CorrectionRule {
   createdAt: Date;
   updatedAt: Date;
 }
+}
 
+}
 interface CorrectionsState {
   rules: CorrectionRule[];
   isEnabled: boolean;
@@ -46,6 +53,7 @@ interface CorrectionsState {
   exportRules: (
     format: 'json' | 'yaml' | 'csv',
     options?: ExportOptions
+}
   ) => Promise<{ success: boolean; data?: Blob; error?: string; filename?: string }>;
   importRules: (
     content: string,

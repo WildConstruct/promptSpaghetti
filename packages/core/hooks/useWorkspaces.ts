@@ -5,10 +5,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { WorkspaceWithMembership, CreateWorkspace, UpdateWorkspace } from '../types/workspace';
 const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:8000/api';
+}
 interface UseWorkspacesOptions {
   autoRefresh?: boolean;
   refreshInterval?: number;
 
+}
 export function useWorkspaces(userId: string, options: UseWorkspacesOptions = {}) {
   const { autoRefresh = false, refreshInterval = 30000 } = options;
   const [workspaces, setWorkspaces] = useState<WorkspaceWithMembership>([]);

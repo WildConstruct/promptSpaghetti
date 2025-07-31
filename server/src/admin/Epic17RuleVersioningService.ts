@@ -19,6 +19,7 @@ import * as diff from 'deep-diff';
 // =============================================================================
 
 }
+}
 export interface RuleVersioningConfig {
   // General settings
   enabled: boolean;
@@ -32,6 +33,7 @@ export interface RuleVersioningConfig {
     keepRecentVersions: number; // Number of recent versions to always keep
     retentionDays: number;
     archiveOldVersions: boolean;
+}
 }
   };
   
@@ -119,6 +121,7 @@ export enum VersionStatus {
 }
 
 }
+}
 export interface RuleVersion {
   versionId: string;
   ruleId: string;
@@ -173,7 +176,9 @@ export interface RuleVersion {
   usageStatistics?: UsageStatistics;
 }
 }
+}
 
+}
 }
 export interface RuleMetadata {
   category: string;
@@ -197,7 +202,9 @@ export interface RuleMetadata {
   troubleshooting: TroubleshootingInfo[];
 }
 }
+}
 
+}
 }
 export interface ChangeRecord {
   changeId: string;
@@ -210,7 +217,9 @@ export interface ChangeRecord {
   timestamp: Date;
 }
 }
+}
 
+}
 }
 export interface ValidationResult {
   validationId: string;
@@ -221,7 +230,9 @@ export interface ValidationResult {
   timestamp: Date;
 }
 }
+}
 
+}
 }
 export interface ValidationMessage {
   messageId: string;
@@ -231,7 +242,9 @@ export interface ValidationMessage {
   suggestion?: string;
 }
 }
+}
 
+}
 }
 export interface TestResult {
   testId: string;
@@ -244,7 +257,9 @@ export interface TestResult {
   timestamp: Date;
 }
 }
+}
 
+}
 }
 export interface DeploymentStatus {
   status: 'not_deployed' | 'deploying' | 'deployed' | 'failed' | 'rolled_back';
@@ -254,7 +269,9 @@ export interface DeploymentStatus {
   deploymentErrors: DeploymentError[];
 }
 }
+}
 
+}
 }
 export interface DeploymentError {
   errorId: string;
@@ -265,7 +282,9 @@ export interface DeploymentError {
   resolved: boolean;
 }
 }
+}
 
+}
 }
 export interface RolloutProgress {
   totalTargets: number;
@@ -276,7 +295,9 @@ export interface RolloutProgress {
   estimatedCompletion?: Date;
 }
 }
+}
 
+}
 }
 export interface PerformanceMetrics {
   executionTime: number; // milliseconds
@@ -290,7 +311,9 @@ export interface PerformanceMetrics {
   benchmarkComparison: number; // vs. baseline performance
 }
 }
+}
 
+}
 }
 export interface UsageStatistics {
   executionCount: number;
@@ -304,7 +327,9 @@ export interface UsageStatistics {
   usageByEnvironment: Record<string, number>;
 }
 }
+}
 
+}
 }
 export interface RuleDependency {
   dependencyId: string;
@@ -314,7 +339,9 @@ export interface RuleDependency {
   reason: string;
 }
 }
+}
 
+}
 }
 export interface TroubleshootingInfo {
   issue: string;
@@ -323,7 +350,9 @@ export interface TroubleshootingInfo {
   severity: 'low' | 'medium' | 'high';
 }
 }
+}
 
+}
 }
 export interface VersionComparison {
   comparisonId: string;
@@ -346,7 +375,9 @@ export interface VersionComparison {
   mitigationStrategies: string[];
 }
 }
+}
 
+}
 }
 export interface MigrationStep {
   stepId: string;
@@ -357,7 +388,9 @@ export interface MigrationStep {
   rollbackSteps: string[];
 }
 }
+}
 
+}
 }
 export interface RollbackPlan {
   rollbackId: string;
@@ -387,7 +420,9 @@ export interface RollbackPlan {
   rollbackStatus: 'planned' | 'approved' | 'executing' | 'completed' | 'failed';
 }
 }
+}
 
+}
 }
 export interface RollbackStep {
   stepId: string;
@@ -399,7 +434,9 @@ export interface RollbackStep {
   rollbackOnFailure: boolean;
 }
 }
+}
 
+}
 }
 export interface ValidationCheck {
   checkId: string;
@@ -410,7 +447,9 @@ export interface ValidationCheck {
   timeout: number; // seconds
 }
 }
+}
 
+}
 }
 export interface SafetyCheck {
   checkId: string;
@@ -420,7 +459,9 @@ export interface SafetyCheck {
   required: boolean;
 }
 }
+}
 
+}
 }
 export interface ImpactAssessment {
   userImpact: 'none' | 'minimal' | 'moderate' | 'significant';
@@ -428,6 +469,7 @@ export interface ImpactAssessment {
   dataImpact: 'none' | 'minimal' | 'moderate' | 'significant';
   performanceImpact: 'improvement' | 'none' | 'degradation';
   securityImpact: 'improvement' | 'none' | 'degradation';
+}
 }
 }
 

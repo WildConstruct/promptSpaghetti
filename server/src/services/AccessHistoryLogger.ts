@@ -83,6 +83,7 @@ export enum RiskLevel {
 }
 
 }
+}
 export interface AccessContext {
   // User Context
   userId?: string;
@@ -98,6 +99,7 @@ export interface AccessContext {
     coordinates?: {
       latitude: number;
       longitude: number;
+}
 }
     };
     isp?: string;
@@ -137,6 +139,7 @@ export interface AccessContext {
   projectId?: string;
 }
 
+}
 }
 export interface AccessHistoryEvent {
   // Core Event Information
@@ -178,7 +181,9 @@ export interface AccessHistoryEvent {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface SessionTracking {
   sessionId: string;
@@ -198,7 +203,9 @@ export interface SessionTracking {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ResourceAccessSummary {
   resourceType: string;
@@ -212,7 +219,9 @@ export interface ResourceAccessSummary {
   complianceFlags: string[];
 }
 }
+}
 
+}
 }
 export interface AccessPattern {
   patternId: string;
@@ -228,12 +237,15 @@ export interface AccessPattern {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface AccessAnalytics {
   timeframe: {
     start: Date;
     end: Date;
+}
 }
   };
   totalEvents: number;
@@ -1031,6 +1043,7 @@ export class AccessHistoryLogger extends EventEmitter {
 }
 
 }
+}
 export interface AccessHistoryConfig {
   maxRecentEvents: number;
   sessionTimeout: number;
@@ -1039,5 +1052,6 @@ export interface AccessHistoryConfig {
   eventRetentionPeriod: number;
   rapidAccessThreshold: number;
   highRiskCountries: string[];
+}
 }
 }

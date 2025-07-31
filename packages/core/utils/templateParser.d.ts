@@ -8,6 +8,7 @@ export interface ExtractedVariable {
     defaultValue?: string;
 
 
+}
 export interface TemplateParseResult {
     variables: ExtractedVariable[];
     errors: TemplateError[];
@@ -15,6 +16,7 @@ export interface TemplateParseResult {
     processedTemplate: string;
 
 
+}
 export interface TemplateError {
     type: 'unclosed_brace' | 'empty_variable' | 'invalid_name' | 'nested_braces';
     message: string;
@@ -23,6 +25,7 @@ export interface TemplateError {
 
 export type VariableType = 'string' | 'number' | 'boolean' | 'array' | 'object' | 'auto';
 
+}
 export interface VariableTypeInference {
     type: VariableType;
     confidence: number;
@@ -30,6 +33,7 @@ export interface VariableTypeInference {
     defaultValue: string;
 
 
+}
 export interface VariableSuggestion {
     name: string;
     category: 'character' | 'setting' | 'action' | 'mood' | 'object' | 'cinematic' | 'temporal' | 'descriptive' | 'narrative' | 'custom';
@@ -98,6 +102,7 @@ declare class TemplateParser {
     getPreviewWithSamples(template: string): {
         preview: string;
         usedSamples: Record<string, string>;
+}
     };
     /**
      * Clear parse cache

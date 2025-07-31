@@ -29,9 +29,11 @@ import {
 
 // Time tracking interfaces
 
+}
 export interface FunnelTimeTrackingProps {
   funnelDefinition: ConversionFunnelDefinition;
   analyticsInfrastructure: ConversionAnalyticsInfrastructure;
+}
   timeRange: { start: number; end: number };
   segments?: UserSegment;
   cohorts?: ConversionCohort;
@@ -44,6 +46,7 @@ export interface FunnelTimeTrackingProps {
 }
 export type TimeGranularity = 'hour' | 'day' | 'week' | 'month' | 'quarter';
 
+}
 export interface TimeTrackingData {
   performanceTimeline: PerformanceTimelineData;
   trendAnalysis: TrendAnalysis;
@@ -54,6 +57,8 @@ export interface TimeTrackingData {
   comparativePeriods: ComparativePeriodAnalysis;
   realTimeMetrics: RealTimeMetrics;
 }
+}
+}
 export interface PerformanceTimelineData {
   timestamp: number;
   period: string;
@@ -61,6 +66,8 @@ export interface PerformanceTimelineData {
   overallMetrics: TimelineMetrics;
   stepMetrics: StepTimelineMetrics;
   environmentalFactors: EnvironmentalFactor;
+}
+}
 }
 export interface TimelineMetrics {
   totalEntries: number;
@@ -73,6 +80,8 @@ export interface TimelineMetrics {
   dropOffCount: number;
   dropOffRate: number;
 }
+}
+}
 export interface StepTimelineMetrics {
   stepId: string;
   stepName: string;
@@ -84,11 +93,15 @@ export interface StepTimelineMetrics {
   dropOffRate: number;
   revenue: number;
 }
+}
+}
 export interface EnvironmentalFactor {
   factor: string;
   value: number | string;
   impact: 'positive' | 'negative' | 'neutral';
   confidence: number;
+}
+}
 }
 export interface TrendAnalysis {
   stepId?: string; // If null, overall funnel trend,
@@ -102,16 +115,20 @@ export interface TrendAnalysis {
   forecast: ForecastData;
   insights: TrendInsight;
 }
+}
 export type TrendDirection = 'increasing' | 'decreasing' | 'stable' | 'volatile';
 
+}
 export interface ForecastData {
   timestamp: number;
   predictedValue: number;
   confidenceInterval: {
   lower: number;
   upper: number;
+}
 };
   factors: string;
+}
 }
 export interface TrendInsight {
   type: 'opportunity' | 'risk' | 'pattern' | 'recommendation';
@@ -121,6 +138,8 @@ export interface TrendInsight {
   urgency: 'high' | 'medium' | 'low';
   actionable: boolean;
   recommendedActions: string;
+}
+}
 }
 export interface SeasonalPattern {
   pattern: 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly';
@@ -132,12 +151,16 @@ export interface SeasonalPattern {
   reliability: number; // How consistent the pattern is,
   recommendations: SeasonalRecommendation;
 }
+}
+}
 export interface SeasonalPeak {
   period: string;
   value: number;
   consistency: number;
   duration: number; // Duration in periods,
   contributingFactors: string;
+}
+}
 }
 export interface SeasonalTrough {
   period: string;
@@ -146,6 +169,8 @@ export interface SeasonalTrough {
   duration: number;
   contributingFactors: string;
 }
+}
+}
 export interface SeasonalRecommendation {
   type: 'marketing' | 'operations' | 'product' | 'support';
   title: string;
@@ -153,6 +178,8 @@ export interface SeasonalRecommendation {
   timing: string;
   expectedImpact: number;
   implementation: string;
+}
+}
 }
 export interface PerformanceAnomaly {
   id: string;
@@ -170,13 +197,17 @@ export interface PerformanceAnomaly {
   businessImpact: number;
   autoResolved: boolean;
   investigationStatus: 'pending' | 'investigating' | 'resolved' | 'false_positive'
+}
   }
+}
 export interface PossibleCause {
   category: 'technical' | 'external' | 'product' | 'marketing' | 'seasonal';
   description: string;
   likelihood: number; // 0-1,
   evidence: string;
   investigationSteps: string;
+}
+}
 }
 export interface StepTimeAnalysis {
   stepId: string;
@@ -186,6 +217,8 @@ export interface StepTimeAnalysis {
   timeToConvert: TimeDistribution;
   abandonmentTiming: AbandonmentTiming;
   temporalPatterns: StepTemporalPattern;
+}
+}
 }
 export interface TimeDistribution {
   mean: number;
@@ -197,6 +230,8 @@ export interface TimeDistribution {
   standardDeviation: number;
   skewness: number;
 }
+}
+}
 export interface AbandonmentTiming {
   earlyAbandonment: number; // % abandoning in first 30 seconds,
   midAbandonment: number; // % abandoning after 30s-5min,
@@ -204,12 +239,16 @@ export interface AbandonmentTiming {
   averageTimeBeforeAbandonment: number;
   peakAbandonmentTime: number;
 }
+}
+}
 export interface StepTemporalPattern {
   pattern: string;
   frequency: number;
   impact: number;
   timeframe: string;
   description: string;
+}
+}
 }
 export interface ConversionVelocityData {
   timestamp: number;
@@ -220,6 +259,8 @@ export interface ConversionVelocityData {
   stepVelocities: StepVelocityData;
   bottleneckAnalysis: BottleneckAnalysis;
 }
+}
+}
 export interface StepVelocityData {
   stepId: string;
   stepName: string;
@@ -227,7 +268,9 @@ export interface StepVelocityData {
   throughput: number; // Users per hour,
   efficiency: number; // Conversion rate / time,
   bottleneckSeverity: 'none' | 'minor' | 'moderate' | 'severe'
+}
   }
+}
 export interface BottleneckAnalysis {
   stepId: string;
   stepName: string;
@@ -236,12 +279,16 @@ export interface BottleneckAnalysis {
   impact: number; // Users affected per hour,
   solutions: BottleneckSolution;
 }
+}
+}
 export interface BottleneckSolution {
   title: string;
   description: string;
   effort: 'low' | 'medium' | 'high';
   expectedImprovement: number; // % improvement in velocity,
   implementationTime: number; // Days,
+}
+}
 }
 export interface ComparativePeriodAnalysis {
   baselinePeriod: { start: number; end: number; label: string };
@@ -250,6 +297,7 @@ export interface ComparativePeriodAnalysis {
   stepComparisons: StepPeriodComparison;
   significantChanges: SignificantChange;
   insights: PeriodInsight;
+}
 }
 export interface PeriodComparison {
   metric: string;
@@ -260,11 +308,15 @@ export interface PeriodComparison {
   significance: number;
   confidence: number;
   direction: 'improvement' | 'decline' | 'no_change'
+}
   }
+}
 export interface StepPeriodComparison {
   stepId: string;
   stepName: string;
   comparisons: PeriodComparison;
+}
+}
 }
 export interface SignificantChange {
   stepId?: string;
@@ -276,6 +328,8 @@ export interface SignificantChange {
   businessImpact: number;
   possibleReasons: string;
 }
+}
+}
 export interface PeriodInsight {
   type: 'performance' | 'trend' | 'anomaly' | 'opportunity';
   title: string;
@@ -283,7 +337,9 @@ export interface PeriodInsight {
   evidence: string;
   recommendations: string;
   priority: 'high' | 'medium' | 'low'
+}
   }
+}
 export interface RealTimeMetrics {
   currentConversionRate: number;
   currentVelocity: number;
@@ -293,6 +349,8 @@ export interface RealTimeMetrics {
   currentBottlenecks: string;
   alertsActive: number;
   lastUpdated: number;
+}
+}
 }
 export interface TimeTrackingExportData {
   timeRange: { start: number; end: number };
@@ -484,6 +542,7 @@ export const FunnelTimeTracking: React.FC<FunnelTimeTrackingProps> = ({)
 /**
  * Time Tracking Header Component
  */
+}
 interface TimeTrackingHeaderProps {
   funnelDefinition: ConversionFunnelDefinition;
   realTimeMetrics: RealTimeMetrics;
@@ -500,6 +559,7 @@ interface TimeTrackingHeaderProps {
   activeView,
   onViewChange,
   onExport
+}
 }) => {
   const timeframes: TimeGranularity = ['hour', 'day', 'week', 'month'];
   const views = [;
@@ -571,6 +631,7 @@ interface TimeTrackingHeaderProps {
 /**
  * Timeline View Component
  */
+}
 interface TimelineViewProps {
   performanceTimeline: PerformanceTimelineData;
   stepTimeAnalysis: StepTimeAnalysis;
@@ -581,6 +642,7 @@ interface TimelineViewProps {
   stepTimeAnalysis,
   conversionVelocity,
   granularity
+}
 }) => {
   return;
     <div className="timeline-view">
@@ -608,9 +670,11 @@ interface TimelineViewProps {
 /**
  * Conversion Rate Timeline Component
  */
+}
 interface ConversionRateTimelineProps {
   data: PerformanceTimelineData;
   granularity: TimeGranularity;
+}
 const ConversionRateTimeline: React.FC<ConversionRateTimelineProps> = ({ data, granularity }) => {
   const maxRate = Math.max(...data.map(d => d.overallMetrics.conversionRate));
   const chartWidth = 800;
@@ -691,9 +755,11 @@ const ConversionRateTimeline: React.FC<ConversionRateTimelineProps> = ({ data, g
 /**
  * Velocity Timeline Component
  */
+}
 interface VelocityTimelineProps {
   data: ConversionVelocityData;
   granularity: TimeGranularity;
+}
 const VelocityTimeline: React.FC<VelocityTimelineProps> = ({ data, granularity }) => {
   return;
     <div className="velocity-timeline">
@@ -730,8 +796,10 @@ const VelocityTimeline: React.FC<VelocityTimelineProps> = ({ data, granularity }
 /**
  * Step Time Card Component
  */
+}
 interface StepTimeCardProps {
   analysis: StepTimeAnalysis;
+}
 const StepTimeCard: React.FC<StepTimeCardProps> = ({ analysis }) => {
   return;
     <div className="step-time-card">
@@ -766,9 +834,11 @@ const StepTimeCard: React.FC<StepTimeCardProps> = ({ analysis }) => {
 /**
  * Trends View Component
  */
+}
 interface TrendsViewProps {
   trendAnalysis: TrendAnalysis;
   comparativePeriods: ComparativePeriodAnalysis;
+}
 const TrendsView: React.FC<TrendsViewProps> = ({ trendAnalysis, comparativePeriods }) => {
   const significantTrends = trendAnalysis.filter(t => t.significance < 0.05);
   return;
@@ -795,8 +865,10 @@ const TrendsView: React.FC<TrendsViewProps> = ({ trendAnalysis, comparativePerio
 /**
  * Trend Card Component
  */
+}
 interface TrendCardProps {
   trend: TrendAnalysis;
+}
 const TrendCard: React.FC<TrendCardProps> = ({ trend }) => {
   return;
     <div className={`trend-card ${trend.trend}`}>}
@@ -842,8 +914,10 @@ const TrendCard: React.FC<TrendCardProps> = ({ trend }) => {
 /**
  * Comparative Period Card Component
  */
+}
 interface ComparativePeriodCardProps {
   comparison: ComparativePeriodAnalysis;
+}
 const ComparativePeriodCard: React.FC<ComparativePeriodCardProps> = ({ comparison }) => {
   return;
     <div className="comparative-period-card">
@@ -879,8 +953,10 @@ const ComparativePeriodCard: React.FC<ComparativePeriodCardProps> = ({ compariso
 /**
  * Seasonality View Component
  */
+}
 interface SeasonalityViewProps {
   seasonalPatterns: SeasonalPattern;
+}
 const SeasonalityView: React.FC<SeasonalityViewProps> = ({ seasonalPatterns }) => {
   return;
     <div className="seasonality-view">
@@ -896,8 +972,10 @@ const SeasonalityView: React.FC<SeasonalityViewProps> = ({ seasonalPatterns }) =
 /**
  * Seasonal Pattern Card Component
  */
+}
 interface SeasonalPatternCardProps {
   pattern: SeasonalPattern;
+}
 const SeasonalPatternCard: React.FC<SeasonalPatternCardProps> = ({ pattern }) => {
   return;
     <div className="seasonal-pattern-card">
@@ -945,9 +1023,11 @@ const SeasonalPatternCard: React.FC<SeasonalPatternCardProps> = ({ pattern }) =>
 /**
  * Anomalies View Component
  */
+}
 interface AnomaliesViewProps {
   anomalies: PerformanceAnomaly;
   onAnomalyInvestigate: (anomaly: PerformanceAnomaly) => void;
+}
 const AnomaliesView: React.FC<AnomaliesViewProps> = ({ anomalies, onAnomalyInvestigate }) => {
   const activeAnomalies = anomalies.filter(a => !a.autoResolved && a.investigationStatus !== 'resolved');
   const criticalAnomalies = activeAnomalies.filter(a => a.severity === 'critical');
@@ -986,9 +1066,11 @@ const AnomaliesView: React.FC<AnomaliesViewProps> = ({ anomalies, onAnomalyInves
 /**
  * Anomaly Card Component
  */
+}
 interface AnomalyCardProps {
   anomaly: PerformanceAnomaly;
   onInvestigate: () => void;
+}
 const AnomalyCard: React.FC<AnomalyCardProps> = ({ anomaly, onInvestigate }) => {
   return;
     <div className={`anomaly-card ${anomaly.severity}`}>}
@@ -1048,9 +1130,11 @@ const TimeTrackingLoadingState: React.FC = () => ()
     <p>Loading time-based analysis...</p>
   </div>
 );
+}
 interface TimeTrackingErrorStateProps {
   error: string;
   onRetry: () => void;
+}
 const TimeTrackingErrorState: React.FC<TimeTrackingErrorStateProps> = ({ error, onRetry }) => ()
   <div className="time-tracking-error">
     <div className="error-message">

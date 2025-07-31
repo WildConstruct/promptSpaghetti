@@ -62,6 +62,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 // Types
+}
 interface AuditEvent {
   id: string;,
   eventType: string;
@@ -86,10 +87,12 @@ interface AuditEvent {
   tags: string;,
   timestamp: Date;
   duration?: number;
-  error?: {,
+  error?: {
   code: string;,
   message: string;
+}
 };
+}
 interface AuditFilters {
   startDate?: Date;
   endDate?: Date;
@@ -100,6 +103,7 @@ interface AuditFilters {
   actorEmails: string;,
   resourceTypes: string;
   searchTerm: string;
+}
 interface AuditStatistics {
   totalEvents: number;,
   eventsByCategory: Record<string, number>;
@@ -121,6 +125,7 @@ const EVENT_CATEGORIES = [;
 const SEVERITIES = ['low', 'medium', 'high', 'critical'];
 // 
 const SEVERITY_CONFIG = {
+}
   low: { color: 'info', icon: InfoIcon },
   medium: { color: 'warning', icon: WarningIcon },
   high: { color: 'error', icon: ErrorIcon },
@@ -201,7 +206,7 @@ export const AuditLogViewer: React.FC = () => {
           metadata: { loginMethod: 'password', reason: 'invalid_credentials' },
           tags: ['security', 'authentication'],
           timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-          error: {,
+          error: {
   code: 'INVALID_CREDENTIALS',
   message: 'Invalid email or password',
 }
@@ -220,7 +225,7 @@ export const AuditLogViewer: React.FC = () => {
           beforeValue: { enabled: false },
           afterValue: { enabled: true },
           changedFields: ['enabled'],
-          metadata: {,
+          metadata: {
   executionId: 'exec_1',
   duration: 2500,
   affectedUsers: 1250,
@@ -241,14 +246,14 @@ export const AuditLogViewer: React.FC = () => {
   // Mock statistics - replace with actual API
   const mockStats: AuditStatistics = {,
   totalEvents: 15423,
-  eventsByCategory: {,
+  eventsByCategory: {
   'data_modification': 5840,
   'authentication': 3210,
   'system_configuration': 2876,
   'security': 1843,
   'authorization': 1654,
 },
-  eventsBySeverity: {,
+  eventsBySeverity: {
   'low': 8934,
   'medium': 4521,
   'high': 1756,

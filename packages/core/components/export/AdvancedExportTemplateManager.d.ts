@@ -8,6 +8,7 @@
 import React from 'react';
 import { ExportTemplate } from '../../types/export';
 
+}
 interface AdvancedExportTemplateManagerProps {
     visible?: boolean;
     onClose?: () => void;
@@ -20,3 +21,4 @@ interface AdvancedExportTemplateManagerProps {
 export declare const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManagerProps>;
 export default AdvancedExportTemplateManager;
 //# sourceMappingURL=AdvancedExportTemplateManager.d.ts.map
+}

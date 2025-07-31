@@ -13,11 +13,13 @@ import {
   IdentityValidationRequest
 } from '../auth/IdentityValidation';
 
+}
 export interface IdentityValidationHookConfig {
     userId?: string;
     autoLoadUserData?: boolean;
     enableRealTimeUpdates?: boolean;
 
+}
 export interface ValidationSubmissionResult {
     success: boolean;
     requestId?: string;
@@ -45,6 +47,7 @@ export declare const useIdentityValidation: (config?: IdentityValidationHookConf
         description: string;
         priority: "high" | "medium" | "low";
         requiredFor: string;
+}
     }[];
     hasVerification: (type: IdentityValidationType) => boolean;
     getTrustTierBenefits: (tier?: TrustScore["tier"]) => string[];

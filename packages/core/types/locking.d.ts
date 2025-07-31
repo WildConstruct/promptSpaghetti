@@ -10,6 +10,7 @@ export interface WorkflowLock {
     auto_release: boolean;
     metadata?: Record<string, any>;
 
+}
 export interface LockRequest {
     resource_id: string;
     user_id: string;
@@ -20,6 +21,7 @@ export interface LockRequest {
     force?: boolean;
     metadata?: Record<string, any>;
 
+}
 export interface LockPolicy {
     id: string;
     workspace_id: string;
@@ -40,6 +42,7 @@ export interface LockPolicy {
     created_at: string;
     updated_at: string;
 
+}
 export interface LockConflict {
     id: string;
     resource_id: string;
@@ -52,6 +55,7 @@ export interface LockConflict {
     resolved_at?: string;
     resolution_action?: string;
 
+}
 export interface LockQueue {
     id: string;
     resource_id: string;
@@ -62,6 +66,7 @@ export interface LockQueue {
     estimated_wait_time?: number;
     notification_sent: boolean;
 
+}
 export interface LockNotification {
     id: string;
     user_id: string;
@@ -75,6 +80,7 @@ export interface LockNotification {
     read_at?: string;
     metadata: Record<string, any>;
 
+}
 export interface LockingStatistics {
     total_locks: number;
     active_locks: number;
@@ -84,12 +90,14 @@ export interface LockingStatistics {
     by_user: Record<string, number>;
     avg_lock_duration_minutes: number;
     conflict_rate: number;
-    most_contended_resources: Array<{,
+    most_contended_resources: Array<{
         resource_id: string;
         conflict_count: number;
         avg_wait_time: number;
+}
     }>;
 
+}
 export interface LockingState {
     locks: WorkflowLock[];
     conflicts: LockConflict[];
@@ -100,11 +108,13 @@ export interface LockingState {
     isLoading: boolean;
     error: string | null;
 
+}
 export interface LockingActions {
     fetchLocks: (workspaceId: string) => Promise<void>;
     acquireLock: (request: LockRequest) => Promise<{,
         success: boolean;
         error?: string;
+}
     }>;
     releaseLock: (lockId: string, userId: string) => Promise<{
         success: boolean;

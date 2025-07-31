@@ -4,6 +4,7 @@ import { useNotifications } from '../../hooks/useNotifications';
 import { NotificationItem } from './NotificationItem';
 import { NotificationPreferences } from './NotificationPreferences';
 import { NotificationType, NotificationPriority } from '../../types/NotificationTypes';
+}
 interface NotificationCenterProps {
   userId: string;
   workspaceId?: string;
@@ -12,6 +13,7 @@ interface NotificationCenterProps {
   userId,
   workspaceId,
   className
+}
 }) => {
   const [showPreferences, setShowPreferences] = useState(false);
   const [filter, setFilter] = useState<NotificationType | 'all'>('all');

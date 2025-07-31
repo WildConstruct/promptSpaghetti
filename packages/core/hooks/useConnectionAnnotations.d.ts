@@ -1,9 +1,11 @@
 import { Edge } from 'reactflow';
 import { AnnotatedEdge } from '../components/Annotations/ConnectionAnnotations';
+}
 interface UseConnectionAnnotationsProps {
     edges: Edge[];
     onEdgesChange: (edges: Edge[]) => void;
     autoOptimizePositions?: boolean;
+}
 interface UseConnectionAnnotationsReturn {
     annotatedEdges: AnnotatedEdge[];
     selectedEdgeId: string | null;
@@ -28,6 +30,7 @@ interface UseConnectionAnnotationsReturn {
 export declare const useConnectionAnnotations: ()
   { edges,
   onEdgesChange,
+}
   autoOptimizePositions }: UseConnectionAnnotationsProps
 ) => UseConnectionAnnotationsReturn;
 export declare const connectionAnnotationPresets: {

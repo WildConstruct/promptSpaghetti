@@ -5,6 +5,7 @@ import { GraphGenerationRequest, generateGraphWithOpenAI } from '../scripts/open
 import { ClaudeGenerationRequest, generateGraphWithClaude } from '../scripts/anthropic-agent';
 import { GeminiGenerationRequest, generateGraphWithGemini } from '../scripts/gemini-agent';
 
+}
 export interface CrossModelTestResult {
   openai?: any;
   claude?: any;
@@ -15,6 +16,7 @@ export interface CrossModelTestResult {
   totalAttempts: number;
   averageGenerationTime: number;
   consistencyScore: number;
+}
 };
 }
 export class CrossModelTester {

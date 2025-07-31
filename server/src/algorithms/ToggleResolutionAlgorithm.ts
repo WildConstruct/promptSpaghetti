@@ -30,6 +30,7 @@ import { FeatureToggleDAO } from '../database/feature-toggle-dao';
 
 // Core Algorithm Interfaces
 }
+}
 export interface ToggleResolutionRequest {
   toggleKeys: string[];
   context: ToggleEvaluationContext;
@@ -41,7 +42,9 @@ export interface ToggleResolutionRequest {
   enableOptimizations?: boolean;
 }
 }
+}
 
+}
 }
 export interface ToggleResolutionResult {
   resolutions: Record<string, ToggleEvaluationResult>;
@@ -52,7 +55,9 @@ export interface ToggleResolutionResult {
   dependencyGraph?: DependencyGraphNode[];
 }
 }
+}
 
+}
 }
 export interface ResolutionMetadata {
   strategy: ResolutionStrategy;
@@ -65,7 +70,9 @@ export interface ResolutionMetadata {
   optimizationsApplied: string[];
 }
 }
+}
 
+}
 }
 export interface PerformanceMetrics {
   totalEvaluationTime: number;
@@ -78,7 +85,9 @@ export interface PerformanceMetrics {
   networkRequests: number;
 }
 }
+}
 
+}
 }
 export interface ResolutionWarning {
   type: 'dependency_cycle' | 'performance_degradation' | 'cache_miss' | 'timeout_risk' | 'conflict_detected';
@@ -89,7 +98,9 @@ export interface ResolutionWarning {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ConflictReport {
   type: 'mutual_exclusion' | 'dependency_conflict' | 'version_mismatch' | 'rule_contradiction';
@@ -100,7 +111,9 @@ export interface ConflictReport {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface DependencyGraphNode {
   toggleKey: string;
@@ -110,6 +123,7 @@ export interface DependencyGraphNode {
   evaluationOrder: number;
   hasCycles: boolean;
   criticalPath: boolean;
+}
 }
 }
 
@@ -133,6 +147,7 @@ export enum TogglePriority {
 }
 
 }
+}
 export interface ToggleResolutionConfig {
   maxConcurrency: number;
   cacheTimeout: number;
@@ -143,6 +158,7 @@ export interface ToggleResolutionConfig {
   enableCircuitBreaker: boolean;
   enableOptimizations: boolean;
   fallbackValues: Record<string, any>;
+}
 }
 }
 

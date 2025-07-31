@@ -36,6 +36,7 @@ import {
   Plus,
   X
 } from 'lucide-react';
+}
 interface DateTimeSelection {
   date: Date;
   time: string; // HH:MM format,
@@ -43,12 +44,14 @@ interface DateTimeSelection {
   businessHoursOnly?: boolean;
   avoidWeekends?: boolean;
   smartSuggestion?: boolean;
+}
 interface BusinessHours {
   enabled: boolean;
   workdays: number; // 0-6 (Sunday-Saturday)
   startTime: string; // HH:MM,
   endTime: string; // HH:MM,
   timezone: string;
+}
 interface ConflictInfo {
   hasConflict: boolean;
   type: 'business_hours' | 'weekend' | 'holiday' | 'maintenance' | 'high_traffic' | 'other';
@@ -56,6 +59,7 @@ interface ConflictInfo {
   severity: 'low' | 'medium' | 'high';
   suggestion?: string;
   alternativeTimes?: Date;
+}
 interface AdvancedDateTimeControlsProps {
   value?: DateTimeSelection;
   onChange: (selection: DateTimeSelection) => void;
@@ -67,6 +71,7 @@ interface AdvancedDateTimeControlsProps {
   className?: string;
 const TIMEZONE_GROUPS = {
   'Popular': [
+}
     { value: 'UTC', label: 'UTC (Coordinated Universal Time)', offset: '+00:00' },
     { value: 'America/New_York', label: 'Eastern Time (US & Canada)', offset: '-05:00' },
     { value: 'America/Los_Angeles', label: 'Pacific Time (US & Canada)', offset: '-08:00' },

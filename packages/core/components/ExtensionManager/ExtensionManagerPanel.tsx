@@ -12,10 +12,12 @@ import { ExtensionInstallDialog } from './ExtensionInstallDialog';
 import { ExtensionConfigurationPanel } from './ExtensionConfigurationPanel';
 import { ExtensionMarketplace } from './ExtensionMarketplace';
 
+}
 export interface ExtensionManagerPanelProps {
   className?: string;
   onClose?: () => void;
   initialView?: 'installed' | 'marketplace' | 'settings';
+}
 }
 
 export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({

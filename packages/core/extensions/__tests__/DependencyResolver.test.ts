@@ -11,10 +11,12 @@
 import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals';
 
 // Types for dependency resolution system
+}
 interface DependencyConstraint {
   name: string;
   version: string;
   optional?: boolean;
+}
 interface PluginManifest {
   id: string;
   name: string;
@@ -23,15 +25,18 @@ interface PluginManifest {
   peerDependencies?: Record<string, string>;
   optionalDependencies?: Record<string, string>;
   engines?: Record<string, string>;
+}
 interface DependencyNode {
   plugin: PluginManifest;
   dependencies: DependencyNode;
   resolved: boolean;
   circular?: boolean;
+}
 interface DependencyResolver {
   resolveDependencies(plugins: PluginManifest): Promise<PluginManifest>;
   validateVersionConstraints(plugin: PluginManifest, available: PluginManifest): boolean;
   detectCircularDependencies(dependencies: Map<string, string>): string | null;
+}
   resolveConflicts(conflicts: Array<{plugin: string, dependency: string, versions: string}>): Map<string, string>;
   buildDependencyGraph(plugins: PluginManifest): Map<string, DependencyNode>;
   getInstallationOrder(plugins: PluginManifest): string;

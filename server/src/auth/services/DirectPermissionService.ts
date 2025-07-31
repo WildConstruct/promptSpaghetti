@@ -18,6 +18,7 @@ import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from './AuditService';
 
 }
+}
 export interface DirectPermission {
   id: string;
   userId: string;
@@ -36,7 +37,9 @@ export interface DirectPermission {
   permanent: boolean;
 }
 }
+}
 
+}
 }
 export interface DirectPermissionGrant {
   userId: string;
@@ -50,7 +53,9 @@ export interface DirectPermissionGrant {
   reason: string;
 }
 }
+}
 
+}
 }
 export interface BulkPermissionGrant {
   userId: string;
@@ -58,7 +63,9 @@ export interface BulkPermissionGrant {
   reason: string;
 }
 }
+}
 
+}
 }
 export interface PermissionQuery {
   userId?: string;
@@ -69,6 +76,7 @@ export interface PermissionQuery {
   permanent?: boolean;
   grantedBy?: string;
   expiringWithinHours?: number;
+}
 }
 }
 

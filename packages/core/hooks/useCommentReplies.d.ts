@@ -4,6 +4,7 @@
  */
 import { Comment } from '../types/workspace';
 
+}
 interface UseCommentRepliesOptions {
     commentId: string;
     userId: string;
@@ -25,6 +26,7 @@ export declare function useCommentReplies(options: UseCommentRepliesOptions): {
     addReply: (newReply: Comment) => void;
     updateReply: (replyId: string, updatedReply: Comment) => void;
     removeReply: (replyId: string) => void;
+}
 };
 export {};
 //# sourceMappingURL=useCommentReplies.d.ts.map

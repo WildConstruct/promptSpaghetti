@@ -18,6 +18,7 @@ import { ThreatLevel } from '../RateLimitingService';
 // ========================================
 // Component Props and Types
 // ========================================
+}
 interface RateLimitingAnalyticsDashboardProps {
   analyticsDashboard: RateLimitingAnalyticsDashboard;
   className?: string;
@@ -38,12 +39,13 @@ interface RateLimitingAnalyticsDashboardProps {
   total: number;
   byType: Record<string, number>;
   bySeverity: Record<string, number>;
-  recent: Array<{,
+  recent: Array<{
   id: string;
   type: string;
   severity: string;
   message: string;
   timestamp: Date;
+}
 }>;
 
 // ========================================

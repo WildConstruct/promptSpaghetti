@@ -12,6 +12,7 @@ import {
   ZadaPromptPattern
 } from '../../services/AdvancedPromptingCollaborationService';
 
+}
 interface AdvancedPromptingCollaborationPanelProps {
     collaborationService: AdvancedPromptingCollaborationService;
     currentUser: FilmIndustryUser;
@@ -24,3 +25,4 @@ interface AdvancedPromptingCollaborationPanelProps {
 declare const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborationPanelProps>;
 export default AdvancedPromptingCollaborationPanel;
 //# sourceMappingURL=AdvancedPromptingCollaborationPanel.d.ts.map
+}

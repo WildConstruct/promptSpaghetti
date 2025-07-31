@@ -11,6 +11,7 @@ import { RBACService } from '../../auth/services/RBACService';
 import { AuditService } from '../../auth/services/AuditService';
 
 }
+}
 export interface UserBulkOperationParameters {
   // Status operations
   status?: 'active' | 'suspended' | 'deactivated' | 'locked';
@@ -37,6 +38,7 @@ export interface UserBulkOperationParameters {
     resource: string;
     actions: string[];
 }
+}
   }>;
   
   // Metadata operations
@@ -48,6 +50,7 @@ export interface UserBulkOperationParameters {
 }
 
 }
+}
 export interface UserOperationResult {
   userId: string;
   previousStatus?: string;
@@ -56,6 +59,7 @@ export interface UserOperationResult {
   affectedPermissions?: string[];
   sessionTerminationCount?: number;
   notificationSent?: boolean;
+}
 }
 }
 

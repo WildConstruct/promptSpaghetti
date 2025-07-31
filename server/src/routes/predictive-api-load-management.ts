@@ -24,6 +24,7 @@ import { RateLimiter } from '../../packages/core/security/RateLimiter';
 let predictiveLoadManager: PredictiveAPILoadManager | null = null;
 
 }
+}
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
@@ -32,6 +33,7 @@ interface APIResponse<T = any> {
   timestamp: number;
 }
 
+}
 }
 interface InitializePredictiveLoadManagerRequest {
   load_management_configuration: {
@@ -46,6 +48,7 @@ interface InitializePredictiveLoadManagerRequest {
         seasonal_features?: boolean;
         trend_features?: boolean;
         external_factors?: boolean;
+}
 }
       };
     };
@@ -132,12 +135,14 @@ interface InitializePredictiveLoadManagerRequest {
 }
 
 }
+}
 interface ExecutePredictiveAnalysisRequest {
   analysis_configuration: {
     analysis_type: 'current_prediction' | 'pattern_analysis' | 'comprehensive_forecast' | 'risk_assessment';
     time_horizon_minutes?: number;
     confidence_level?: number;
     include_recommendations?: boolean;
+}
 }
   };
   prediction_settings?: {
@@ -158,6 +163,7 @@ interface ExecutePredictiveAnalysisRequest {
 }
 
 }
+}
 interface OptimizeResourceAllocationRequest {
   optimization_scope: {
     target_resources: ('cpu' | 'memory' | 'network' | 'storage' | 'api_capacity')[];
@@ -166,6 +172,7 @@ interface OptimizeResourceAllocationRequest {
       start_time?: string;
       end_time?: string;
       duration_minutes?: number;
+}
 }
     };
   };
@@ -188,11 +195,13 @@ interface OptimizeResourceAllocationRequest {
 }
 
 }
+}
 interface GetPredictiveInsightsRequest {
   insights_scope: {
     analysis_period: {
       start_time: string;
       end_time: string;
+}
 }
     };
     insight_types: ('load_patterns' | 'performance_trends' | 'resource_utilization' | 'cost_analysis' | 'risk_assessment')[];

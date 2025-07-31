@@ -7,6 +7,7 @@
  */
 import React from 'react';
 
+}
 export interface ContributionFormData {
     title: string;
     description: string;
@@ -16,13 +17,15 @@ export interface ContributionFormData {
     difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
     estimatedTime: number;
     prerequisites: string[];
-    resources: Array<{,
+    resources: Array<{
         type: 'link' | 'file' | 'image' | 'video';
         url: string;
         title: string;
+}
     }>;
     license: 'cc0' | 'cc-by' | 'cc-by-sa' | 'proprietary';
 
+}
 export interface ContributionItem {
     id: string;
     title: string;
@@ -32,6 +35,7 @@ export interface ContributionItem {
         name: string;
         avatar?: string;
         reputation: number;
+}
     };
     category: string;
     tags: string[];
@@ -44,11 +48,13 @@ export interface ContributionItem {
     downloadCount: number;
     comments: number;
 
+}
 export interface ValidationError {
     field: string;
     message: string;
     code: string;
 
+}
 export interface ContributionError {
     type: 'validation' | 'network' | 'permission' | 'server' | 'unknown';
     message: string;
@@ -62,6 +68,7 @@ export declare class ContributionValidator {
     static validateContent(content: string): ValidationError[];
     static validateTags(tags: string[]): ValidationError[];
     static validateFormData(formData: ContributionFormData): ValidationError[];
+}
 interface ErrorBoundaryState {
     hasError: boolean;
     error?: Error;
@@ -70,17 +77,20 @@ interface ErrorBoundaryState {
 export declare class ContributionErrorBoundary extends React.Component<{
     children: React.ReactNode;
     onError?: (error: Error) => void;
+}
 }, ErrorBoundaryState> {
     constructor(props: Record<string, unknown>);
     static getDerivedStateFromError(error: Error): ErrorBoundaryState;
     componentDidCatch(error: Error, errorInfo: unknown): void;
     render(): string | number | boolean | Iterable<React.ReactNode> | import("react/jsx-runtime").JSX.Element | null | undefined;
 
+}
 export interface ContributionFormProps {
     initialData?: Partial<ContributionFormData>;
     onSubmit: (data: ContributionFormData) => Promise<{,
         success: boolean;
         error?: ContributionError;
+}
     }>;
     onSaveDraft?: (data: ContributionFormData) => Promise<{
         success: boolean;
@@ -91,6 +101,7 @@ export interface ContributionFormProps {
 
 export declare const ContributionForm: React.FC<ContributionFormProps>;
 
+}
 export interface ContributionListProps {
     contributions: ContributionItem[];
     onView?: (contribution: ContributionItem) => void;
@@ -105,3 +116,4 @@ export interface ContributionListProps {
 export declare const ContributionList: React.FC<ContributionListProps>;
 export default ContributionForm;
 //# sourceMappingURL=ContributionUIComponents.d.ts.map
+}

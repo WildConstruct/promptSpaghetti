@@ -48,6 +48,7 @@ export const SENSITIVITY_LEVEL_MAPPING: Record<DataSensitivityLevel, Classificat
  * Enhanced data element with sensitivity information
  */
 
+}
 export interface EnhancedDataElement extends DataElement {
   sensitivityLevel?: DataSensitivityLevel;
   handlingRequirements?: DataHandlingRequirements;
@@ -60,6 +61,7 @@ export interface EnhancedDataElement extends DataElement {
  * Security policy enforcement result
  */
 
+}
 export interface SecurityPolicyEnforcementResult {
   compliant: boolean;
   violations: string[];
@@ -69,6 +71,7 @@ export interface SecurityPolicyEnforcementResult {
     accessControl: string[];
     monitoring: string;
     retention: string;
+}
   };
   riskScore: number;
 }
@@ -76,6 +79,7 @@ export interface SecurityPolicyEnforcementResult {
 /**
  * Data flow security assessment
  */
+}
 export interface DataFlowSecurityAssessment {
   sourceLevel: DataSensitivityLevel;
   targetLevel: DataSensitivityLevel;
@@ -86,6 +90,7 @@ export interface DataFlowSecurityAssessment {
   /**
   * Comprehensive data classification helper utilities
   */
+}
 }
 export class DataClassificationHelpers {
   /**
@@ -333,7 +338,7 @@ export class DataClassificationHelpers {
   violationCount: number;
 };
     levelBreakdown: Record<DataSensitivityLevel, number>;
-    violations: Array<{,
+    violations: Array<{
   elementId: string;
   sensitivityLevel: DataSensitivityLevel;
   violations: string;
@@ -352,7 +357,7 @@ export class DataClassificationHelpers {
   [DataSensitivityLevel.CONFIDENTIAL]: 0,
   [DataSensitivityLevel.RESTRICTED]: 0,
 };
-    const violations: Array<{,
+    const violations: Array<{
   elementId: string;
   sensitivityLevel: DataSensitivityLevel;
   violations: string;

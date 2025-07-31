@@ -7,6 +7,7 @@ import crypto from 'crypto';
 import { EventEmitter } from 'events';
 
 }
+}
 export interface TemporaryLockoutConfig {
   enabled: boolean;
   baseDuration: number; // seconds
@@ -21,7 +22,9 @@ export interface TemporaryLockoutConfig {
   exemptUserAgents: string[];
 }
 }
+}
 
+}
 }
 export interface LockoutTrigger {
   id: string;
@@ -36,7 +39,9 @@ export interface LockoutTrigger {
   description: string;
 }
 }
+}
 
+}
 }
 export interface TemporaryLockout {
   id: string;
@@ -52,6 +57,7 @@ export interface TemporaryLockout {
     duration: number; // seconds
     gracePeriod: number; // seconds
     remainingTime: number; // seconds (calculated dynamically)
+}
 }
   };
   
@@ -92,6 +98,7 @@ export interface TemporaryLockout {
 }
 
 }
+}
 export interface LockoutAttempt {
   id: string;
   userId: string;
@@ -110,6 +117,7 @@ export interface LockoutAttempt {
     errorType?: string;
     blocked: boolean;
 }
+}
   };
   
   triggers: {
@@ -126,6 +134,7 @@ export interface LockoutAttempt {
 }
 
 }
+}
 export interface LockoutWarning {
   id: string;
   userId: string;
@@ -138,6 +147,7 @@ export interface LockoutWarning {
     issuedAt: Date;
     expiresAt: Date;
     acknowledgedAt?: Date;
+}
 }
   };
   

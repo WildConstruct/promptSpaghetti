@@ -21,6 +21,7 @@ import { DiagnosticService } from '../admin/DiagnosticService';
 import { Epic17PerformanceMonitor } from '../monitoring/Epic17PerformanceMonitor';
 
 }
+}
 export interface MonitoringIntegrationConfig {
   epic1_integration: {
     analytics_collector_enabled: boolean;
@@ -29,6 +30,7 @@ export interface MonitoringIntegrationConfig {
     event_forwarding_enabled: boolean;
     metrics_aggregation_interval_ms: number;
     reliability_event_types: string[];
+}
 }
   };
   epic17_integration: {
@@ -57,6 +59,7 @@ export interface MonitoringIntegrationConfig {
 }
 
 }
+}
 export interface IntegratedMonitoringMetrics {
   epic1_metrics: {
     analytics_events_processed: number;
@@ -64,6 +67,7 @@ export interface IntegratedMonitoringMetrics {
     data_persistence_operations: number;
     event_processing_latency_ms: number;
     analytics_system_health: number;
+}
 }
   };
   epic17_metrics: {
@@ -90,6 +94,7 @@ export interface IntegratedMonitoringMetrics {
 }
 
 }
+}
 export interface UnifiedSystemHealth {
   overall_status: 'healthy' | 'degraded' | 'critical' | 'failed';
   overall_health_score: number;
@@ -97,6 +102,7 @@ export interface UnifiedSystemHealth {
     status: string;
     health_score: number;
     critical_components: string[];
+}
 }
   };
   epic17_health: {

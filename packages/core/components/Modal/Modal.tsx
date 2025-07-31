@@ -23,6 +23,7 @@ const uiColors = {
   disabled: '#6b7280',
 };
 
+}
 export interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -45,6 +46,7 @@ export interface ModalProps {
   * - Multiple size options
   * - Portal rendering for z-index management
   */
+}
 }
 export const Modal: React.FC<ModalProps> = ({)
   isOpen,

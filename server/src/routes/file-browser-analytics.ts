@@ -13,6 +13,7 @@ import { AnalyticsCollector } from '../analytics/AnalyticsCollector';
 
 // Request/Response type definitions
 }
+}
 interface AnalyticsQuery {
   startDate?: string;
   endDate?: string;
@@ -23,7 +24,9 @@ interface AnalyticsQuery {
   offset?: number;
 }
 }
+}
 
+}
 }
 interface TrackOperationBody {
   operationType: string;
@@ -33,7 +36,9 @@ interface TrackOperationBody {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 interface TrackSearchBody {
   searchTerm: string;
@@ -42,13 +47,16 @@ interface TrackSearchBody {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 interface TrackPerformanceBody {
   operationType: string;
   duration: number;
   success?: boolean;
   metadata?: Record<string, any>;
+}
 }
 }
 

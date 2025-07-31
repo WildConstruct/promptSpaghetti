@@ -53,6 +53,7 @@ export enum ComplianceFramework {
   PCI_DSS = 'pci_dss'
 }
 
+}
 export interface ClassificationRule {
   id: string;
   name: string;
@@ -66,13 +67,17 @@ export interface ClassificationRule {
   priority: number;
   enabled: boolean;
 }
+}
 
+}
 export interface ContextRule {
   field: string;
   condition: 'equals' | 'contains' | 'matches' | 'exists';
   value?: string | RegExp;
 }
+}
 
+}
 export interface ClassificationResult {
   level: ClassificationLevel;
   category: DataCategory;
@@ -84,7 +89,9 @@ export interface ClassificationResult {
   accessControls: string[];
   reasoning: string[];
 }
+}
 
+}
 export interface DataElement {
   id: string;
   fieldName: string;
@@ -94,7 +101,9 @@ export interface DataElement {
   source: string;
   timestamp: Date;
 }
+}
 
+}
 export interface ClassificationMetadata {
   classifiedAt: Date;
   classifiedBy: string;
@@ -102,6 +111,7 @@ export interface ClassificationMetadata {
   reviewDate: Date;
   lastModified: Date;
   approvedBy?: string;
+}
 }
 
 /**
@@ -670,6 +680,7 @@ export class ClassificationPolicyManager {
 }
 
 // Supporting interfaces
+}
 export interface ClassificationPolicy {
   id: string;
   name: string;
@@ -681,6 +692,7 @@ export interface ClassificationPolicy {
     minimumPeriod: string;
     maximumPeriod: string;
     disposalMethod: string;
+}
   };
   auditRequirements: {
     frequency: string;
@@ -688,11 +700,13 @@ export interface ClassificationPolicy {
   };
 }
 
+}
 export interface ComplianceValidationResult {
   compliant: boolean;
   violations: string[];
   policy: string;
   timestamp: Date;
+}
 }
 
 // Export default instance

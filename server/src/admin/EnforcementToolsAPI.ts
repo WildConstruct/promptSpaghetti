@@ -20,6 +20,7 @@ import {
 } from '../services/trust/AutomatedEnforcementService';
 
 }
+}
 export interface ViolationReport {
   reportId: string;
   type: 'fraud' | 'abuse' | 'violation' | 'security' | 'quality';
@@ -40,9 +41,11 @@ export interface ViolationReport {
     resolvedBy: string;
     resolvedAt: Date;
 }
+}
   };
 }
 
+}
 }
 export interface EnforcementStats {
   totalActions: number;
@@ -57,6 +60,7 @@ export interface EnforcementStats {
     flags: number;
     blocks: number;
     quarantines: number;
+}
 }
   };
   severityBreakdown: {

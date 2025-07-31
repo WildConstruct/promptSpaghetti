@@ -48,6 +48,7 @@ export declare enum ComplianceFramework {
     NIST = "nist",
     CCPA = "ccpa"
 
+}
 export interface LogContext {
     userId?: string;
     userEmail?: string;
@@ -64,6 +65,7 @@ export interface LogContext {
         city?: string;
         latitude?: number;
         longitude?: number;
+}
     };
     deviceInfo?: {
         deviceId?: string;
@@ -78,6 +80,7 @@ export interface LogContext {
         indicators?: string[];
     };
 
+}
 export interface SecurityLogEntry {
     id: string;
     timestamp: Date;
@@ -89,6 +92,7 @@ export interface SecurityLogEntry {
         id: string;
         email?: string;
         role?: AdminRole;
+}
     };
     target?: {
         type: 'user' | 'account' | 'lockout' | 'system';
@@ -114,6 +118,7 @@ export interface SecurityLogEntry {
         checksum: string;
     };
 
+}
 export interface AuditTrailEntry {
     id: string;
     timestamp: Date;
@@ -124,6 +129,7 @@ export interface AuditTrailEntry {
         type: 'user' | 'admin' | 'system';
         id: string;
         email?: string;
+}
     };
     changes: {
         before?: any;
@@ -135,10 +141,12 @@ export interface AuditTrailEntry {
     compliance: ComplianceFramework[];
     signature: string;
 
+}
 export interface SecurityMetrics {
     period: {
         start: Date;
         end: Date;
+}
     };
     lockoutEvents: {
         total: number;
@@ -166,11 +174,11 @@ export interface SecurityMetrics {
         auditAccess: number;
     };
     threatLandscape: {
-        topAttackVectors: Array<{,
+        topAttackVectors: Array<{
             vector: string;
             count: number;
         }>;
-        topTargetedUsers: Array<{,
+        topTargetedUsers: Array<{
             userId: string;
             count: number;
         }>;
@@ -181,6 +189,7 @@ export interface SecurityMetrics {
         };
     };
 
+}
 export interface LogQuery {
     startTime?: Date;
     endTime?: Date;
@@ -196,6 +205,7 @@ export interface LogQuery {
     sortOrder?: 'asc' | 'desc';
     search?: string;
 
+}
 export interface LogRetentionPolicy {
     framework: ComplianceFramework;
     retentionDays: number;
@@ -258,6 +268,7 @@ export declare class SecurityLogger extends EventEmitter {
         before?: any;
         after?: any;
         fields: string[];
+}
     }, reason?: string, context?: LogContext): string;
     /**
      * Query security logs

@@ -7,25 +7,31 @@ import { requireAuth } from '../auth/middleware/requireAuth';
 import { requirePermission } from '../auth/middleware/requirePermission';
 
 }
+}
 export interface SessionRotationPolicyRequest {
   Body: Partial<SessionRotationPolicy>;
 }
 }
+}
 
+}
 }
 export interface SessionRotationHistoryQuery {
   Querystring: {
     limit?: string;
     offset?: string;
 }
+}
   };
 }
 
+}
 }
 export interface SessionRotationStatsQuery {
   Querystring: {
     startDate?: string;
     endDate?: string;
+}
 }
   };
 }

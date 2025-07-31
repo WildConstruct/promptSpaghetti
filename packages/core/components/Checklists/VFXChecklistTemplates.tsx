@@ -437,6 +437,7 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate = [
         history: []],
 ];
 
+}
 export interface VFXChecklistTemplatesProps {
   templates?: VFXChecklistTemplate;
   currentUser: VFXTeamMember;
@@ -447,6 +448,7 @@ export interface VFXChecklistTemplatesProps {
   onTemplateClone?: (templateId: string, newName: string) => void;
   readonly?: boolean;
   className?: string;
+}
 }
 export const VFXChecklistTemplates: React.FC<VFXChecklistTemplatesProps> = ({)
   templates = [],
@@ -651,6 +653,7 @@ export const VFXChecklistTemplates: React.FC<VFXChecklistTemplatesProps> = ({)
 };
 
 // Individual template card component
+}
 interface TemplateCardProps {
   template: VFXChecklistTemplate;
   currentUser: VFXTeamMember;
@@ -671,6 +674,7 @@ interface TemplateCardProps {
   onUpdate,
   onDelete,
   readonly = false
+}
 }) => {
   const isOwner = template.createdBy.id === currentUser.id;
   const isBuiltIn = template.createdBy.id === 'system';

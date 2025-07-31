@@ -10,6 +10,7 @@
  */
 import { ActionSeverity } from './EnforcementTypes';
 
+}
 export interface UsageQuota {
     quotaId: string;
     quotaName: string;
@@ -37,6 +38,7 @@ export type QuotaType = 'api_requests' | 'api_requests_per_endpoint' | 'data_pro
 export type TimePeriod = 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year' | 'rolling';
 export type UsageUnit = 'requests' | 'bytes' | 'megabytes' | 'tokens' | 'executions' | 'minutes' | 'hours' | 'sessions' | 'operations' | 'items' | 'users';
 
+}
 export interface QuotaScope {
     type: ScopeType;
     value?: string;
@@ -44,6 +46,7 @@ export interface QuotaScope {
 
 export type ScopeType = 'user' | 'organization' | 'tier' | 'role' | 'global' | 'conditional';
 
+}
 export interface ScopeCondition {
     field: string;
     operator: 'equals' | 'in' | 'greater_than' | 'less_than' | 'contains';
@@ -53,6 +56,7 @@ export interface ScopeCondition {
 export type EnforcementAction = 'warn' | 'throttle' | 'soft_block' | 'hard_block' | 'review' | 'degrade' | 'redirect' | 'upgrade_prompt';
 export type ResetBehavior = 'automatic' | 'manual' | 'rolling' | 'cascade';
 
+}
 export interface QuotaConfiguration {
     warningThresholds: number[];
     emergencyMultiplier: number;
@@ -67,6 +71,7 @@ export interface QuotaConfiguration {
     asyncEnforcement: boolean;
 
 
+}
 export interface QuotaMetadata {
     description: string;
     category: QuotaCategory;
@@ -83,6 +88,7 @@ export interface QuotaMetadata {
 
 export type QuotaCategory = 'resource_management' | 'security_enforcement' | 'business_logic' | 'performance_protection' | 'compliance_requirement' | 'billing_constraint';
 
+}
 export interface UsageTracking {
     trackingId: number;
     quotaId: string;
@@ -103,6 +109,7 @@ export interface UsageTracking {
     enforcementDetails: EnforcementDetails;
 
 
+}
 export interface EnforcementDetails {
     actionTaken: EnforcementAction;
     timestamp: Date;
@@ -113,6 +120,7 @@ export interface EnforcementDetails {
     additionalData?: Record<string, any>;
 
 
+}
 export interface QuotaViolation {
     violationId: string;
     quotaId: string;
@@ -136,6 +144,7 @@ export interface QuotaViolation {
     appealDetails?: AppealDetails;
 
 
+}
 export interface ViolationImpact {
     businessImpact: 'none' | 'low' | 'medium' | 'high' | 'critical';
     technicalImpact: 'none' | 'low' | 'medium' | 'high' | 'critical';
@@ -146,6 +155,7 @@ export interface ViolationImpact {
 export type ViolationStatus = 'active' | 'resolved' | 'appealed' | 'under_review' | 'escalated' | 'expired';
 export type AppealStatus = 'submitted' | 'under_review' | 'approved' | 'denied' | 'escalated';
 
+}
 export interface AppealDetails {
     appealId: string;
     submittedAt: Date;
@@ -158,6 +168,7 @@ export interface AppealDetails {
     decisionReason?: string;
 
 
+}
 export interface UsageAnalytics {
     period: AnalyticsPeriod;
     periodStart: Date;
@@ -179,6 +190,7 @@ export interface UsageAnalytics {
     resourceUtilization: ResourceUtilization;
 
 
+}
 export interface AnalyticsPeriod {
     type: 'hour' | 'day' | 'week' | 'month' | 'quarter' | 'year';
     value: number;
@@ -186,6 +198,7 @@ export interface AnalyticsPeriod {
 
 export type TrendDirection = 'increasing' | 'stable' | 'decreasing';
 
+}
 export interface SeasonalPattern {
     period: 'hourly' | 'daily' | 'weekly' | 'monthly';
     pattern: number[];
@@ -193,6 +206,7 @@ export interface SeasonalPattern {
     description: string;
 
 
+}
 export interface UserUsageSummary {
     userId: string;
     username?: string;
@@ -203,12 +217,14 @@ export interface UserUsageSummary {
     tier?: string;
 
 
+}
 export interface UsageDistribution {
     percentiles: Record<number, number>;
     buckets: DistributionBucket[];
     outliers: OutlierUser[];
 
 
+}
 export interface DistributionBucket {
     min: number;
     max: number;
@@ -216,6 +232,7 @@ export interface DistributionBucket {
     percentage: number;
 
 
+}
 export interface OutlierUser {
     userId: string;
     usage: number;
@@ -223,6 +240,7 @@ export interface OutlierUser {
     flagged: boolean;
 
 
+}
 export interface ResourceUtilization {
     cpu: number;
     memory: number;
@@ -231,6 +249,7 @@ export interface ResourceUtilization {
     database: number;
 
 
+}
 export interface QuotaCheckRequest {
     userId: string;
     quotaType: QuotaType;
@@ -239,6 +258,7 @@ export interface QuotaCheckRequest {
     metadata?: Record<string, any>;
 
 
+}
 export interface QuotaCheckResult {
     allowed: boolean;
     quotaId?: string;
@@ -254,6 +274,7 @@ export interface QuotaCheckResult {
     recommendations: QuotaRecommendation[];
 
 
+}
 export interface QuotaRecommendation {
     type: 'upgrade_plan' | 'reduce_usage' | 'optimize_requests' | 'contact_support';
     title: string;
@@ -262,6 +283,7 @@ export interface QuotaRecommendation {
     priority: 'low' | 'medium' | 'high';
 
 
+}
 export interface QuotaUsageSummary {
     userId: string;
     organizationId?: string;
@@ -275,6 +297,7 @@ export interface QuotaUsageSummary {
     upgradeRecommendations: QuotaRecommendation[];
 
 
+}
 export interface QuotaUsageDetail {
     quotaId: string;
     quotaName: string;
@@ -287,6 +310,7 @@ export interface QuotaUsageDetail {
     violationCount: number;
 
 
+}
 export interface ProjectedUsage {
     quotaId: string;
     currentUsage: number;
@@ -296,6 +320,7 @@ export interface ProjectedUsage {
     projectionMethod: 'linear' | 'exponential' | 'seasonal' | 'ml_model';
 
 
+}
 export interface QuotaAdminOperation {
     operationId: string;
     operationType: AdminOperationType;
@@ -315,6 +340,7 @@ export interface QuotaAdminOperation {
 
 export type AdminOperationType = 'create_quota' | 'update_quota' | 'delete_quota' | 'override_quota' | 'reset_usage' | 'resolve_violation' | 'bulk_quota_assignment' | 'emergency_quota_increase' | 'user_quota_exemption';
 
+}
 export interface OperationResult {
     success: boolean;
     affectedRecords: number;
@@ -322,6 +348,7 @@ export interface OperationResult {
     details: Record<string, any>;
 
 
+}
 export interface QuotaTemplate {
     templateId: string;
     templateName: string;
@@ -336,6 +363,7 @@ export interface QuotaTemplate {
     enabled: boolean;
 
 
+}
 export interface QuotaTemplateDefinition {
     quotaType: QuotaType;
     resourceIdentifier: string;
@@ -347,11 +375,13 @@ export interface QuotaTemplateDefinition {
     conditionalRules: ConditionalRule[];
 
 
+}
 export interface ConditionalRule {
     condition: string;
     modifications: Record<string, any>;
 
 
+}
 export interface TemplateValidationRule {
     field: string;
     rule: 'required' | 'min_value' | 'max_value' | 'unique' | 'format';
@@ -359,6 +389,7 @@ export interface TemplateValidationRule {
     errorMessage: string;
 
 
+}
 export interface QuotaServiceConfiguration {
     rateLimitingEnabled: boolean;
     rateLimitingService: string;
@@ -371,6 +402,7 @@ export interface QuotaServiceConfiguration {
     emergencySettings: EmergencyQuotaSettings;
 
 
+}
 export interface FraudDetectionThresholds {
     suspiciousViolationCount: number;
     suspiciousViolationWindow: number;
@@ -378,6 +410,7 @@ export interface FraudDetectionThresholds {
     automaticBlockThreshold: number;
 
 
+}
 export interface QuotaNotificationSettings {
     emailEnabled: boolean;
     slackEnabled: boolean;
@@ -388,6 +421,7 @@ export interface QuotaNotificationSettings {
     notificationTemplates: Record<string, NotificationTemplate>;
 
 
+}
 export interface NotificationTemplate {
     subject: string;
     body: string;
@@ -396,6 +430,7 @@ export interface NotificationTemplate {
     urgency: 'low' | 'medium' | 'high' | 'critical';
 
 
+}
 export interface QuotaPerformanceSettings {
     cacheEnabled: boolean;
     cacheTtl: number;
@@ -405,6 +440,7 @@ export interface QuotaPerformanceSettings {
     metricsCollection: boolean;
 
 
+}
 export interface EmergencyQuotaSettings {
     emergencyMultiplier: number;
     emergencyDuration: number;
@@ -413,6 +449,7 @@ export interface EmergencyQuotaSettings {
     escalationChain: string[];
 
 
+}
 export interface QuotaEventLog {
     eventId: string;
     eventType: QuotaEventType;
@@ -430,3 +467,4 @@ export interface QuotaEventLog {
 
 export type QuotaEventType = 'quota_created' | 'quota_updated' | 'quota_deleted' | 'usage_tracked' | 'warning_triggered' | 'violation_occurred' | 'enforcement_applied' | 'violation_resolved' | 'appeal_submitted' | 'appeal_processed' | 'admin_override' | 'emergency_quota_activated' | 'system_error' | 'integration_failure';
 //# sourceMappingURL=UsageQuotaTypes.d.ts.map
+}

@@ -8,6 +8,7 @@ import { FrameworkNode, NodeDefinition } from '../NodeFramework';
 import { AdvancedNodeConfig, AdvancedExecutionContext } from '../../runtime/advanced';
 import { IOPortDefinition } from '../../runtime/io-system';
 
+}
 export interface WeightedChoiceData {
   choices: string;
   weights: number;
@@ -16,6 +17,7 @@ export interface WeightedChoiceData {
   /**
   * Framework-integrated WeightedChoice node
   */
+}
 }
 export class WeightedChoiceFrameworkNode extends FrameworkNode {
   private data: WeightedChoiceData;
@@ -79,6 +81,7 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
   experimental: false,
 };
   protected async onInitialize(): Promise<void> {
+
   // Validate and normalize the data
   this.validateChoicesAndWeights();
   this.calculateNormalizedWeights();
@@ -90,6 +93,7 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
   hint: 'fast_execution',
 });
   protected async executeNode(context: AdvancedExecutionContext): Promise<any> {
+
   const startTime = performance.now();
   try {
   // Use seeded random if deterministic mode is enabled
@@ -111,6 +115,7 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
     } catch (error) {
       throw new Error(`WeightedChoice execution failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   protected async onDestroy(): Promise<void> {
+
     // Clean up any resources
     this.normalizedWeights = [];
     this.totalWeight = 0;
@@ -132,7 +137,7 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
   totalChoices: number;
   totalWeight: number;
   averageWeight: number;
-  choiceDistribution: Array<{,
+  choiceDistribution: Array<{
   choice: string;
   weight: number;
   normalizedWeight: number;
@@ -161,7 +166,7 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
   simulate(iterations: number, seed?: number): {
   results: Record<string, number>;
   percentages: Record<string, number>;
-  expectedVsActual: Array<{,
+  expectedVsActual: Array<{
   choice: string;
   expected: number;
   actual: number;

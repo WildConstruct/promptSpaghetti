@@ -51,6 +51,7 @@ const { Option } = Select;
 const { Search } = Input;
 
 // Types and interfaces
+}
 interface PolicyStats {
   total_policies: number;,
   active_policies: number;
@@ -58,12 +59,14 @@ interface PolicyStats {
   total_violations: number;
   open_violations: number;,
   appeal_rate: number;
+}
 interface PolicyDashboardData {
   statistics: PolicyStats;,
   recent_activities: unknown;
   policy_compliance_scores: Record<string, number>;
   enforcement_metrics: unknown;,
   trending_violations: unknown;
+}
 interface Policy {
   id: string;,
   title: string;
@@ -73,6 +76,7 @@ interface Policy {
   created_at: string;
   last_modified: string;,
   compliance_score: number;
+}
 interface Violation {
   id: string;,
   type: string;
@@ -95,6 +99,7 @@ export const PolicyManagementDashboard: React.FC = () => {
   const [policyModalVisible, setPolicyModalVisible] = useState(false);
   const [violationDrawerVisible, setViolationDrawerVisible] = useState(false);
   const [ setFilters] = useState({)
+}
   dateRange: null as { start: Date; end: Date } | null,
     policyType: null as string | null,
     violationStatus: null as string | null;

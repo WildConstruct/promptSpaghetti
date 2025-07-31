@@ -8,6 +8,7 @@
  * Epic: 17 - Backstage Admin Controls
  */
 
+}
 export interface PlacementSlot {
   slotId: string;
   name: string;
@@ -36,6 +37,7 @@ export interface PlacementSlot {
   lastModifiedBy?: string;
   // Performance Data
   performanceMetrics?: PlacementSlotMetrics;
+}
 }
 export enum PlacementArea {
   HOMEPAGE = 'homepage',
@@ -73,7 +75,9 @@ export enum PlacementArea {
   mobile: Partial<PlacementDimensions>;
   tablet: Partial<PlacementDimensions>;
   desktop: Partial<PlacementDimensions>;
+}
 };
+}
 }
 export interface PlacementStyling {
   backgroundColor?: string;
@@ -85,15 +89,19 @@ export interface PlacementStyling {
   width: number;
   color: string;
   style: 'solid' | 'dashed' | 'dotted'
+}
   };
   animation?: PlacementAnimation;
   customCss?: string;
+}
 }
 export interface PlacementAnimation {
   type: 'fade' | 'slide' | 'zoom' | 'bounce' | 'none';
   duration: number;
   delay?: number;
   easing?: string;
+}
+}
 }
 export interface PlacementLayout {
   type: 'grid' | 'carousel' | 'stack' | 'masonry' | 'list';
@@ -108,7 +116,9 @@ export interface PlacementLayout {
   enabled: boolean;
   interval: number; // seconds,
   pauseOnHover: boolean;
+}
 };
+}
 }
 export interface PlacementTargetingRules {
   userSegments?: string;
@@ -117,6 +127,7 @@ export interface PlacementTargetingRules {
   regions?: string;
   cities?: string;
   excludeCountries?: string;
+}
 };
   deviceTargeting?: {
   deviceTypes?: ('desktop' | 'mobile' | 'tablet')[];
@@ -139,11 +150,13 @@ export interface PlacementTargetingRules {
 };
   };
 }
+}
 export interface PlacementDisplayRules {
   frequencyCapping?: {
   maxImpressions: number;
   timeWindow: number; // hours,
   perUser: boolean;
+}
 };
   exclusionRules?: {
   excludeIfPurchased?: boolean;
@@ -156,6 +169,7 @@ export interface PlacementDisplayRules {
   priority: 'high' | 'medium' | 'low';
   fallback?: string; // fallback content,
 };
+}
 }
 export interface ContentPlacement {
   placementId: string;
@@ -189,6 +203,7 @@ export interface ContentPlacement {
   lastModifiedBy?: string;
   notes?: string;
   tags?: string;
+}
 }
 export enum ContentType {
   TEMPLATE = 'template',
@@ -232,6 +247,7 @@ export enum ContentType {
   updatedAt: Date;
   createdBy: string;
 }
+}
 export enum ScheduleType {
   ONE_TIME = 'one_time',
   RECURRING = 'recurring',
@@ -244,6 +260,8 @@ export enum ScheduleType {
   specificDays?: number; // [1, 3, 5] for Mon, Wed, Fri,
   specificDates?: Date;
 }
+}
+}
 export interface RecurrenceRules {
   count?: number; // number of occurrences,
   until?: Date; // end date,
@@ -251,6 +269,8 @@ export interface RecurrenceRules {
   byMonthDay?: number;
   byMonth?: number;
   exceptions?: Date; // exclude these dates,
+}
+}
 }
 export interface PlacementCampaign {
   campaignId: string;
@@ -277,6 +297,7 @@ export interface PlacementCampaign {
   createdBy: string;
   tags?: string;
 }
+}
 export enum CampaignObjective {
   AWARENESS = 'awareness',
   ENGAGEMENT = 'engagement',
@@ -288,12 +309,15 @@ export enum CampaignObjective {
   dailyBudget?: number;
   currency: string;
   spendingPace: 'even' | 'accelerated'
+}
   }
+}
 export interface CampaignKPI {
   metric: string;
   target: number;
   unit: string;
   priority: 'high' | 'medium' | 'low'
+}
   }
 export enum CampaignStatus {
   DRAFT = 'draft',
@@ -327,6 +351,8 @@ export enum CampaignStatus {
   performanceIndex: number; // vs baseline,
   competitiveIndex?: number; // vs other slots,
 }
+}
+}
 export interface ContentPlacementMetrics {
   placementId: string;
   period: MetricsPeriod;
@@ -349,6 +375,8 @@ export interface ContentPlacementMetrics {
   confidenceLevel?: number;
   statisticalSignificance?: boolean;
 }
+}
+}
 export interface CampaignMetrics {
   campaignId: string;
   period: MetricsPeriod;
@@ -362,22 +390,26 @@ export interface CampaignMetrics {
   costPerConversion?: number;
   returnOnAdSpend?: number;
   // Goal Achievement
-  kpiProgress: Array<{,
+  kpiProgress: Array<{
   kpi: string;
   current: number;
   target: number;
   progress: number; // percentage,
+}
 }>;
   // Budget Utilization
   budgetSpent?: number;
   budgetRemaining?: number;
   paceToGoal?: number;
 }
+}
 export interface MetricsPeriod {
   startDate: Date;
   endDate: Date;
   granularity: 'hour' | 'day' | 'week' | 'month'
+}
   }
+}
 export interface PlacementAnalytics {
   period: MetricsPeriod;
   generatedAt: Date;
@@ -393,6 +425,7 @@ export interface PlacementAnalytics {
   averageCTR: number;
   totalConversions: number;
   totalRevenue: number;
+}
 };
   // Top Performers
   topSlots: PlacementSlotMetrics;
@@ -401,6 +434,7 @@ export interface PlacementAnalytics {
   // Insights and Recommendations
   insights: PlacementInsight;
   recommendations: PlacementRecommendation;
+}
 }
 export interface PlacementInsight {
   insightId: string;
@@ -411,6 +445,8 @@ export interface PlacementInsight {
   confidence: number; // 0-100,
   data: Record<string, any>;
   generatedAt: Date;
+}
+}
 }
 export interface PlacementRecommendation {
   recommendationId: string;
@@ -424,6 +460,8 @@ export interface PlacementRecommendation {
   implementationEffort: 'low' | 'medium' | 'high';
   generatedAt: Date;
 }
+}
+}
 export interface PlacementPreview {
   previewId: string;
   slotId: string;
@@ -435,6 +473,7 @@ export interface PlacementPreview {
   deviceType: 'desktop' | 'mobile' | 'tablet';
   location?: string;
   timestamp: Date;
+}
 };
   // Rendered Output
   renderedContent: RenderedPlacement;
@@ -448,6 +487,7 @@ export interface PlacementPreview {
   createdAt: Date;
   expiresAt: Date;
 }
+}
 export interface RenderedPlacement {
   placementId: string;
   slotPosition: number;
@@ -459,9 +499,11 @@ export interface RenderedPlacement {
   imageUrl?: string;
   ctaText?: string;
   targetUrl: string;
+}
 };
   styling: PlacementStyling;
   metadata: Record<string, any>;
+}
 }
 export interface PlacementFilter {
   slotIds?: string;
@@ -473,6 +515,7 @@ export interface PlacementFilter {
   dateRange?: {
   start: Date;
   end: Date;
+}
 };
   performanceThreshold?: {
   metric: string;
@@ -480,6 +523,7 @@ export interface PlacementFilter {
   value: number;
 };
   createdBy?: string;
+}
 }
 export interface PlacementSearchCriteria extends PlacementFilter {
   query?: string;
@@ -498,14 +542,16 @@ export interface PlacementSearchCriteria extends PlacementFilter {
   // Results
   successCount: number;
   failureCount: number;
-  errors: Array<{,
+  errors: Array<{
   placementId: string;
   error: string;
+}
 }>;
   // Metadata
   createdAt: Date;
   completedAt?: Date;
   initiatedBy: string;
+}
 }
 export interface PlacementTemplate {
   templateId: string;
@@ -528,16 +574,19 @@ export interface PlacementTemplate {
   version: string;
   tags: string;
 }
+}
+}
 export interface PlacementAuditLog {
   logId: string;
   entityType: 'slot' | 'placement' | 'campaign' | 'schedule';
   entityId: string;
   action: string;
   // Change Details
-  changes?: Array<{,
+  changes?: Array<{
   field: string;
   oldValue: any;
   newValue: any;
+}
 }>;
   // Context
   userId: string;

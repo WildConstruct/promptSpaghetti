@@ -16,6 +16,7 @@ export type ContentStatus = 'draft' | 'published' | 'archived' | 'under_review' 
 export type ContentVisibility = 'public' | 'private' | 'organization' | 'admin_only';
 
 }
+}
 export interface ContentItem {
   id: string;
   title: string;
@@ -38,6 +39,7 @@ export interface ContentItem {
     publishedAt?: string;
     customFields: Record<string, any>;
 }
+}
   };
   organizationId?: string;
   parentId?: string; // For content hierarchies
@@ -45,6 +47,7 @@ export interface ContentItem {
   updatedAt: string;
 }
 
+}
 }
 export interface ContentFilter {
   type?: ContentType;
@@ -60,9 +63,11 @@ export interface ContentFilter {
     start: string;
     end: string;
 }
+}
   };
 }
 
+}
 }
 export interface ContentCreateRequest {
   title: string;
@@ -78,12 +83,14 @@ export interface ContentCreateRequest {
     expiresAt?: string;
     customFields?: Record<string, any>;
 }
+}
   };
   organizationId?: string;
   parentId?: string;
   publishImmediately?: boolean;
 }
 
+}
 }
 export interface ContentUpdateRequest {
   title?: string;
@@ -99,10 +106,12 @@ export interface ContentUpdateRequest {
     expiresAt?: string;
     customFields?: Record<string, any>;
 }
+}
   };
   publishImmediately?: boolean;
 }
 
+}
 }
 export interface ContentStatistics {
   totalItems: number;
@@ -114,6 +123,7 @@ export interface ContentStatistics {
     created24h: number;
     updated24h: number;
     published24h: number;
+}
 }
   };
   topCategories: Array<{
@@ -128,6 +138,7 @@ export interface ContentStatistics {
 }
 
 }
+}
 export interface ContentRevision {
   id: string;
   contentId: string;
@@ -140,6 +151,7 @@ export interface ContentRevision {
   authorId: string;
   createdAt: string;
   comment?: string;
+}
 }
 }
 

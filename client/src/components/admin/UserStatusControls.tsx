@@ -11,6 +11,7 @@ import React, { useState, useCallback } from 'react';
 // User Status Types
 export type UserStatus = 'active' | 'suspended' | 'deleted' | 'locked' | 'pending_activation';
 
+}
 export interface UserStatusInfo {
   userId: string;,
   email: string;
@@ -25,6 +26,8 @@ export interface UserStatusInfo {
   lastLogin?: string;
   createdAt: string;,
   roles: string;
+}
+}
 }
 export interface StatusChangeRequest {
   userId: string;,
@@ -42,6 +45,7 @@ export interface StatusChangeRequest {
   onRefresh: () => void;
   isLoading?: boolean;
   className?: string;
+}
 }
 export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
   users,
@@ -74,31 +78,31 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
   };
   // Status configurations
   const statusConfigs = {
-  active: {,
+  active: {
   label: 'Active',
   color: '#10b981',
   icon: '✅',
   description: 'User can access the system normally',
 },
-  suspended: {,
+  suspended: {
   label: 'Suspended',
   color: '#f59e0b',
   icon: '⏸️',
   description: 'User access temporarily disabled',
 },
-  deleted: {,
+  deleted: {
   label: 'Deleted',
   color: '#ef4444',
   icon: '🗑️',
   description: 'Account soft-deleted (retained for compliance)',
 },
-  locked: {,
+  locked: {
   label: 'Locked',
   color: '#dc2626',
   icon: '🔒',
   description: 'Account locked due to security concerns',
 },
-  pending_activation: {,
+  pending_activation: {
   label: 'Pending',
   color: '#6b7280',
   icon: '⏳',

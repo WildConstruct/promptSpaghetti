@@ -54,6 +54,7 @@ export enum AnalyticsPermission {
 
 // Authorization Policy
 }
+}
 export interface AuthorizationPolicy {
   id: string;
   name: string;
@@ -63,7 +64,9 @@ export interface AuthorizationPolicy {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface AuthorizationRule {
   id: string;
@@ -77,6 +80,7 @@ export interface AuthorizationRule {
     requiredPermissions: string[];
     requiredRoles?: string[];
 }
+}
   };
   action: 'allow' | 'deny';
   fields?: {
@@ -88,12 +92,14 @@ export interface AuthorizationRule {
 
 // Authorization Result
 }
+}
 export interface AuthorizationResult {
   allowed: boolean;
   reason?: string;
   filteredEvent?: Partial<UnifiedAnalyticsEvent>;
   redactedFields?: string[];
   appliedRules?: string[];
+}
 }
 }
 

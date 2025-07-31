@@ -33,10 +33,12 @@ import { QualityMetrics } from '../../hooks/useQualityMetrics';
 // Quality Metrics Overview Component
 // =============================================================================
 
+}
 export interface QualityMetricsOverviewProps {
   metrics: QualityMetrics;
   compact?: boolean;
   className?: string;
+}
 }
 export const QualityMetricsOverview: React.FC<QualityMetricsOverviewProps> = ({)
   metrics,

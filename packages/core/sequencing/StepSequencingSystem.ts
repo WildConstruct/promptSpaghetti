@@ -20,6 +20,7 @@ import { EventEmitter } from 'events';
 
 // Core step sequencing interfaces
 
+}
 export interface SequenceStep {
   id: string;
   name: string;
@@ -37,6 +38,8 @@ export interface SequenceStep {
   metadata: StepMetadata;
   performance: StepPerformance;
 }
+}
+}
 export interface StepCondition {
   id: string;
   type: 'boolean' | 'value' | 'expression' | 'function';
@@ -46,6 +49,8 @@ export interface StepCondition {
   expression?: string;
   function?: string;
   negated?: boolean;
+}
+}
 }
 export interface StepAction {
   type: 'function' | 'api' | 'ui' | 'data' | 'navigation' | 'notification';
@@ -57,15 +62,19 @@ export interface StepAction {
   onFailure?: string; // Failure step ID,
   onSkip?: string; // Skip step ID,
 }
+}
+}
 export interface StepValidation {
   required: boolean;
   validators: {
   type: 'required' | 'format' | 'range' | 'custom';
   message: string;
   parameters?: Record<string, unknown>;
+}
 }[];
   onValidationFailure: 'retry' | 'skip' | 'abort' | 'rollback'
   }
+}
 export interface StepRollback {
   enabled: boolean;
   action?: StepAction;
@@ -73,12 +82,16 @@ export interface StepRollback {
   preserveState: boolean;
   dependencies?: string;
 }
+}
+}
 export interface RetryPolicy {
   maxAttempts: number;
   backoffStrategy: 'linear' | 'exponential' | 'custom';
   baseDelay: number;
   maxDelay: number;
   retryConditions: string;
+}
+}
 }
 export interface StepMetadata {
   estimatedDuration: number;
@@ -92,6 +105,8 @@ export interface StepMetadata {
   lastModified: Date;
   version: string;
 }
+}
+}
 export interface StepPerformance {
   averageExecutionTime: number;
   successRate: number;
@@ -99,12 +114,15 @@ export interface StepPerformance {
   retryRate: number;
   lastExecutions: ExecutionRecord;
 }
+}
+}
 export interface ExecutionRecord {
   timestamp: Date;
   duration: number;
   status: StepExecutionStatus;
   attempts: number;
   errorMessage?: string;
+}
 }
 export type StepExecutionStatus = 
   | 'pending' 
@@ -116,6 +134,7 @@ export type StepExecutionStatus =
   | 'retrying'
   | 'rolled_back';
 
+}
 export interface SequenceDefinition {
   id: string;
   name: string;
@@ -133,7 +152,9 @@ export interface SequenceDefinition {
   difficulty: 'easy' | 'medium' | 'hard' | 'expert';
   createdAt: Date;
   lastModified: Date;
+}
 };
+}
 }
 export interface SequenceExecution {
   id: string;
@@ -152,6 +173,8 @@ export interface SequenceExecution {
   pausedAt?: Date;
   resumedAt?: Date;
 }
+}
+}
 export interface ExecutionContext {
   variables: Record<string, unknown>;
   userInput: Record<string, unknown>;
@@ -159,12 +182,16 @@ export interface ExecutionContext {
   executionState: Record<string, unknown>;
   rollbackStack: RollbackEntry;
 }
+}
+}
 export interface RollbackEntry {
   stepId: string;
   timestamp: Date;
   state: Record<string, unknown>;
   action: string;
   reversible: boolean;
+}
+}
 }
 export interface SequenceProgress {
   totalSteps: number;
@@ -174,6 +201,8 @@ export interface SequenceProgress {
   estimatedTimeRemaining: number;
   milestones: ProgressMilestone;
 }
+}
+}
 export interface ProgressMilestone {
   id: string;
   name: string;
@@ -182,14 +211,18 @@ export interface ProgressMilestone {
   reached: boolean;
   timestamp?: Date;
 }
+}
+}
 export interface ExecutionPerformance {
   totalDuration: number;
   averageStepDuration: number;
+}
   fastestStep: { id: string; duration: number };
   slowestStep: { id: string; duration: number };
   retryCount: number;
   errorCount: number;
   effectiveSuccessRate: number;
+}
 }
 export interface SequencingConfig {
   execution: {
@@ -199,6 +232,7 @@ export interface SequencingConfig {
   enablePerformanceTracking: boolean;
   enableRollback: boolean;
   autoRetryOnFailure: boolean;
+}
 };
   validation: {
   validateDependencies: boolean;
@@ -251,6 +285,7 @@ export class StepSequencingSystem extends EventEmitter {
     this.registerBuiltInHandlers();
   // Sequence management
   async createSequence(definition: Omit<SequenceDefinition, 'id'>): Promise<string> {
+
     const sequenceId = `seq_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
     const sequence: SequenceDefinition = {,
   id: sequenceId,
@@ -272,6 +307,7 @@ export class StepSequencingSystem extends EventEmitter {
     });
     return sequenceId;
   async updateSequence(sequenceId: string, updates: Partial<SequenceDefinition>): Promise<void> {
+
     const sequence = this.sequences.get(sequenceId);
     if (!sequence) {
       throw new Error(`Sequence ${sequenceId} not found`);}
@@ -296,6 +332,7 @@ export class StepSequencingSystem extends EventEmitter {
   updates
 });
   async deleteSequence(sequenceId: string, force = false): Promise<void> {
+
     const sequence = this.sequences.get(sequenceId);
     if (!sequence) {
       return;
@@ -312,10 +349,11 @@ export class StepSequencingSystem extends EventEmitter {
       sequence
     });
   // Execution management
-  async startExecution(sequenceId: string, )
+  async startExecution(sequenceId: string, (
     context: Partial<ExecutionContext> = {},
     options: { name?: string; timeout?: number } = {}
   ): Promise<string> {
+
     const sequence = this.sequences.get(sequenceId);
     if (!sequence) {
       throw new Error(`Sequence ${sequenceId} not found`);}
@@ -363,6 +401,7 @@ export class StepSequencingSystem extends EventEmitter {
     this.runExecution(executionId);
     return executionId;
   async pauseExecution(executionId: string): Promise<void> {
+
     const execution = this.executions.get(executionId);
     if (!execution) {
       throw new Error(`Execution ${executionId} not found`);}
@@ -376,6 +415,7 @@ export class StepSequencingSystem extends EventEmitter {
       execution
     });
   async resumeExecution(executionId: string): Promise<void> {
+
     const execution = this.executions.get(executionId);
     if (!execution) {
       throw new Error(`Execution ${executionId} not found`);}
@@ -391,6 +431,7 @@ export class StepSequencingSystem extends EventEmitter {
     // Resume execution
     this.runExecution(executionId);
   async cancelExecution(executionId: string): Promise<void> {
+
     const execution = this.executions.get(executionId);
     if (!execution) {
       throw new Error(`Execution ${executionId} not found`);}
@@ -403,6 +444,7 @@ export class StepSequencingSystem extends EventEmitter {
     });
   // Step execution and control
   async executeStep(executionId: string, stepId: string): Promise<StepExecutionStatus> {
+
     const execution = this.executions.get(executionId);
     if (!execution) {
       throw new Error(`Execution ${executionId} not found`);}
@@ -493,6 +535,7 @@ export class StepSequencingSystem extends EventEmitter {
     return 'failed';
   // Rollback operations
   async rollbackExecution(executionId: string, toStepId?: string): Promise<void> {
+
     const execution = this.executions.get(executionId);
     if (!execution) {
       throw new Error(`Execution ${executionId} not found`);}
@@ -671,6 +714,7 @@ export class StepSequencingSystem extends EventEmitter {
   error: error.message,
 });
   private async validateSequence(sequence: SequenceDefinition): Promise<void> {
+
     // Check for entry point
     const entryStep = sequence.steps.find(s => s.id === sequence.entryPoint);
     if (!entryStep) {
@@ -759,10 +803,12 @@ export class StepSequencingSystem extends EventEmitter {
   milestones
 };
   private async validateStepDependencies(execution: SequenceExecution, step: SequenceStep): Promise<void> {
+
     for (const depId of step.dependencies) {
       if (!execution.completedSteps.includes(depId)) {
         throw new Error(`Step ${step.id} dependency ${depId} has not been completed`);}
   private async evaluateStepConditions(execution: SequenceExecution, step: SequenceStep): Promise<boolean> {
+
     if (!step.conditions || step.conditions.length === 0) {
       return true;
     for (const condition of step.conditions) {
@@ -771,6 +817,7 @@ export class StepSequencingSystem extends EventEmitter {
         return false;
     return true;
   private async evaluateCondition(execution: SequenceExecution, condition: StepCondition): Promise<boolean> {
+
     let result = false;
     switch (condition.type) {
     case 'boolean':
@@ -806,6 +853,7 @@ export class StepSequencingSystem extends EventEmitter {
     } catch {
       return false;
   private async executeStepAction(execution: SequenceExecution, step: SequenceStep): Promise<void> {
+
     if (!step.action) return;
     const handler = this.actionHandlers.get(step.action.type);
     if (!handler) {
@@ -819,6 +867,7 @@ export class StepSequencingSystem extends EventEmitter {
     } else {
       await handler(step.action.parameters, execution.context);
   private async validateStepCompletion(execution: SequenceExecution, step: SequenceStep): Promise<void> {
+
     if (!step.validation || !step.validation.required) return;
     for (const validator of step.validation.validators) {
       const validatorFunc = this.validators.get(validator.type);
@@ -838,6 +887,7 @@ export class StepSequencingSystem extends EventEmitter {
   };
     execution.context.rollbackStack.push(entry);
   private async executeRollbackAction(execution: SequenceExecution, entry: RollbackEntry): Promise<void> {
+
   const handler = this.rollbackHandlers.get(entry.stepId);
   if (handler) {
   await handler(execution.context, entry.state);
@@ -936,6 +986,7 @@ export class StepSequencingSystem extends EventEmitter {
       return regex.test(String(value));
     });
   private delay(ms: number): Promise<void> {
+
   return new Promise(resolve => setTimeout(resolve, ms));
   // Sequence Builder Helper
   export class SequenceBuilder {

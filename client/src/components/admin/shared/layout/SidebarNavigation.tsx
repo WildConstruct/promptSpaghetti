@@ -19,14 +19,17 @@ import {
   ChevronDown,
   ChevronRight
 } from 'lucide-react';
+}
 interface NavItem {
   id: string;,
   label: string;
   href?: string;
+}
   icon?: React.ComponentType<{ size?: number }>;
   children?: NavItem;
   permission?: string;
   badge?: string | number;
+}
 interface SidebarNavigationProps {
   collapsed?: boolean;
   onToggle?: () => void;
@@ -37,6 +40,7 @@ interface SidebarNavigationProps {
   label: 'Dashboard',
   href: '/admin',
   icon: Home,
+}
 }
   {
     id: 'users',

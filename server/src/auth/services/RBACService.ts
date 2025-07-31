@@ -7,6 +7,7 @@ import { AuditService } from './AuditService';
 import { SessionRotationService, PrivilegeChangeEvent } from './SessionRotationService';
 
 }
+}
 export interface CreateRoleData {
   name: string;
   description?: string;
@@ -15,7 +16,9 @@ export interface CreateRoleData {
   permissions: CreatePermissionData[];
 }
 }
+}
 
+}
 }
 export interface CreatePermissionData {
   resource: string;
@@ -24,7 +27,9 @@ export interface CreatePermissionData {
   conditions?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface AssignRoleData {
   userId: string;
@@ -34,12 +39,15 @@ export interface AssignRoleData {
   scopeContext?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface PermissionCheckResult {
   allowed: boolean;
   reason?: string;
   matchingPermissions?: Permission[];
+}
 }
 }
 

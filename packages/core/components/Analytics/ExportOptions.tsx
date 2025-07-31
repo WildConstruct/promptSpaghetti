@@ -10,6 +10,7 @@ import { Download, FileText, Table, Image, Settings } from 'lucide-react';
 /**
  * Export configuration interface
  */
+}
 interface ExportConfig {
   format: 'json' | 'csv' | 'html' | 'pdf';
   includeHeatMap: boolean;
@@ -19,14 +20,17 @@ interface ExportConfig {
   dateRange: {
   startTime: number;
   endTime: number;
+}
 };
   customName?: string;
 /**
  * Export options props
  */
 
+}
 export interface ExportOptionsProps {
   analyticsClient: AnalyticsClient;
+}
   timeRange: { startTime: number; endTime: number };
   className?: string;
 /**

@@ -15,6 +15,7 @@
  * - Resource-based permissions
  */
 
+}
 export interface SystemUser {
   id: string;
   username: string;
@@ -47,6 +48,8 @@ export interface SystemUser {
   privacyPolicyAccepted?: Date;
   dataRetentionConsent?: boolean;
 }
+}
+}
 export interface UserProfile {
   firstName?: string;
   lastName?: string;
@@ -59,6 +62,8 @@ export interface UserProfile {
   organization?: string;
   manager?: string;
 }
+}
+}
 export interface UserRole {
   id: string;
   roleId: string;
@@ -69,6 +74,8 @@ export interface UserRole {
   expiresAt?: Date;
   scope: RoleScope;
   context?: Record<string, any>;
+}
+}
 }
 export interface DirectPermission {
   id: string;
@@ -82,10 +89,14 @@ export interface DirectPermission {
   expiresAt?: Date;
   conditions?: PermissionCondition;
 }
+}
+}
 export interface PermissionCondition {
   type: 'time' | 'location' | 'device' | 'mfa' | 'approval';
   constraint: Record<string, any>;
   description: string;
+}
+}
 }
 export interface SystemRole {
   id: string;
@@ -108,12 +119,16 @@ export interface SystemRole {
   updatedAt: Date;
   createdBy: string;
 }
+}
+}
 export interface RolePermission {
   permission: string;
   resource: string;
   actions: string;
   scope: PermissionScope;
   conditions?: PermissionCondition;
+}
+}
 }
 export interface AccessRequest {
   id: string;
@@ -143,6 +158,8 @@ export interface AccessRequest {
   // Audit
   auditTrail: AccessAuditEntry;
 }
+}
+}
 export interface AccessApprover {
   userId: string;
   displayName: string;
@@ -151,6 +168,8 @@ export interface AccessApprover {
   status: ApprovalStatus;
   respondedAt?: Date;
   comments?: string;
+}
+}
 }
 export interface AccessAuditEntry {
   id: string;
@@ -161,6 +180,8 @@ export interface AccessAuditEntry {
   ipAddress?: string;
   userAgent?: string;
 }
+}
+}
 export interface AccessRestriction {
   type: RestrictionType;
   description: string;
@@ -169,6 +190,8 @@ export interface AccessRestriction {
   conditions: Record<string, any>;
   appliedBy: string;
   appliedAt: Date;
+}
+}
 }
 export interface SystemAccess {
   id: string;
@@ -179,11 +202,14 @@ export interface SystemAccess {
   lastUsed?: Date;
   restrictions: SystemRestriction;
 }
+}
+}
 export interface SystemRestriction {
   type: 'ip_whitelist' | 'time_window' | 'mfa_required' | 'approval_required' | 'read_only';
   configuration: Record<string, any>;
   description: string;
   // Enums and Types
+}
 }
 export type UserStatus = 'active' | 'inactive' | 'suspended' | 'locked' | 'pending' | 'deactivated';
 export type SystemAccessLevel = 'none' | 'basic' | 'advanced' | 'admin' | 'super_admin' | 'system';
@@ -197,6 +223,7 @@ export type AccessRequestStatus = 'pending' | 'approved' | 'rejected' | 'expired
 export type ApprovalStatus = 'pending' | 'approved' | 'rejected' | 'delegated';
 export type RestrictionType = 'time' | 'location' | 'device' | 'resource' | 'action' | 'network';
 
+}
 export interface AccessFilter {
   userIds?: string;
   roles?: string;
@@ -209,6 +236,8 @@ export interface AccessFilter {
   searchQuery?: string;
   includeInactive?: boolean;
   securityClearance?: SecurityClearance;
+}
+}
 }
 export interface AccessStats {
   totalUsers: number;
@@ -224,6 +253,7 @@ export interface AccessStats {
   accessRevoked: number;
   loginAttempts: number;
   failedLogins: number;
+}
 };
   compliance: {
   mfaEnabled: number;
@@ -293,6 +323,7 @@ export class SystemAccessManager {
 });
     return updatedUser;
   async deleteUser(userId: string, deletedBy: string): Promise<boolean> {
+
   const user = this.users.get(userId);
   if (!user) return false;
   // Deactivate instead of hard delete for audit purposes
@@ -361,6 +392,7 @@ export class SystemAccessManager {
 });
     return true;
   async revokeRole(userId: string, roleId: string, revokedBy: string): Promise<boolean> {
+
   const user = this.users.get(userId);
   if (!user) return false;
   const roleIndex = user.roles.findIndex(r => r.roleId === roleId);
@@ -415,6 +447,7 @@ export class SystemAccessManager {
     });
     return true;
   async revokePermission(userId: string, permissionId: string, revokedBy: string): Promise<boolean> {
+
   const user = this.users.get(userId);
   if (!user) return false;
   const permissionIndex = user.permissions.findIndex(p => p.id === permissionId);
@@ -435,6 +468,7 @@ export class SystemAccessManager {
    */
   async createAccessRequest(requestData: Omit<AccessRequest, 'id' | 'requestedAt' | 'status' | 'auditTrail'>)
   ): Promise<AccessRequest> {
+
     const request: AccessRequest = {
       ...requestData,
       id: this.generateId('request'),
@@ -462,6 +496,7 @@ export class SystemAccessManager {
     approverId: string,
     comments?: string
   ): Promise<boolean> {
+
     const request = this.accessRequests.get(requestId);
     if (!request || request.status !== 'pending') return false;
     // Find approver
@@ -654,9 +689,9 @@ export class SystemAccessManager {
     // Keep last 10000 entries
     if (this.auditLog.length > 10000) {
       this.auditLog = this.auditLog.slice(-10000);
-  private groupBy<T extends Record<string, any>, K extends keyof T>(()
+  private groupBy<T extends Record<string, any>, K extends keyof T>(((
     items: T,
-    field: K,
+    field: K
   ): Record<string, number> {
     const grouped: Record<string, number> = {};
     items.forEach(item => {)

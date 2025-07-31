@@ -8,6 +8,7 @@
  */
 import React from 'react';
 
+}
 export interface WidgetConfig {
     id: string;
     title: string;
@@ -18,6 +19,7 @@ export interface WidgetConfig {
     dataSource: string;
 
 
+}
 interface MonitoringWidgetProps {
     config: WidgetConfig;
     userRole: string;
@@ -33,3 +35,4 @@ export declare const ActivityFeedWidget: React.FC<MonitoringWidgetProps>;
 export declare const MonitoringWidget: React.FC<MonitoringWidgetProps>;
 export default MonitoringWidget;
 //# sourceMappingURL=MonitoringWidgets.d.ts.map
+}

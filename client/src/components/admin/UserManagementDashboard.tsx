@@ -18,6 +18,7 @@ import {
 import { useAuthStore } from '../../stores/authStore';
 
 // Types
+}
 interface User {
   id: string;,
   name: string;
@@ -34,12 +35,14 @@ interface User {
   avatar?: string;
   permissions?: string;
   teams?: string;
+}
 interface UserFilters {
   searchTerm: string;,
   roleFilter: string;
   statusFilter: string;,
   departmentFilter: string;
   locationFilter: string;
+}
 interface UserManagementState {
   users: User;,
   loading: boolean;
@@ -56,13 +59,14 @@ interface UserManagementState {
 const UserManagementDashboard: React.FC = () => {
   const navigate = useNavigate();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+}
   const { user: currentUser } = useAuthStore();
   // State management
   const [state, setState] = useState<UserManagementState>({)
   users: [],
   loading: true,
   error: null,
-  filters: {,
+  filters: {
   searchTerm: '',
   roleFilter: '',
   statusFilter: '',
@@ -600,7 +604,7 @@ const UserManagementDashboard: React.FC = () => {
               <button
                 onClick={() => setState(prev => ({)
   ...prev,
-  filters: {,
+  filters: {
   searchTerm: '',
   roleFilter: '',
   statusFilter: '',

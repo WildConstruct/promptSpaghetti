@@ -1,5 +1,6 @@
 import { Graph } from '../../graphSchema';
 
+}
 export interface SerializationMetadata {
     name?: string;
     description?: string;
@@ -7,6 +8,7 @@ export interface SerializationMetadata {
     created?: string;
     tags?: string[];
 
+}
 export interface SerializationOptions {
     includeChecksum?: boolean;
     includeMetadata?: boolean;
@@ -60,3 +62,4 @@ export declare function serializeGraph(graph: Graph)
  */
 export declare function createDefaultMetadata(): SerializationMetadata;
 //# sourceMappingURL=serializer.d.ts.map
+}

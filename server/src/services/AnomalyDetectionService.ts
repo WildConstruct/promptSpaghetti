@@ -7,6 +7,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 
 }
+}
 export interface AnomalyPattern {
   id: string;
   name: string;
@@ -21,10 +22,12 @@ export interface AnomalyPattern {
     aggregateType: 'count' | 'rate' | 'distinct_count' | 'average';
     comparisonOperator: '>' | '<' | '>=' | '<=' | '==' | '!=';
 }
+}
   };
   actions: AnomalyAction[];
 }
 
+}
 }
 export interface AnomalyAction {
   type: 'notify' | 'block_ip' | 'disable_account' | 'require_2fa' | 'create_incident';
@@ -32,7 +35,9 @@ export interface AnomalyAction {
   delay?: number; // Delay in seconds before executing
 }
 }
+}
 
+}
 }
 export interface AnomalyEvent {
   id: string;
@@ -48,6 +53,7 @@ export interface AnomalyEvent {
     sessionId?: string;
     resource?: string;
 }
+}
   };
   eventData: unknown[];
   description: string;
@@ -58,6 +64,7 @@ export interface AnomalyEvent {
 }
 
 }
+}
 export interface AnomalyDetectionConfig {
   enabled: boolean;
   checkIntervalSeconds: number;
@@ -67,6 +74,7 @@ export interface AnomalyDetectionConfig {
     webhook?: string;
     email?: string[];
     slack?: string;
+}
 }
   };
   responseConfig: {

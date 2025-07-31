@@ -18,6 +18,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface ShareConfig {
     domainConfig: DomainConfig;
     security: SecurityConfig;
@@ -27,6 +28,7 @@ export interface ShareConfig {
     features: FeatureConfig;
     integrations: IntegrationConfig;
 
+}
 export interface DomainConfig {
     primaryDomain: string;
     customDomains: CustomDomain[];
@@ -36,6 +38,7 @@ export interface DomainConfig {
     enableShortening: boolean;
     shorteningStrategy: 'base62' | 'base36' | 'uuid' | 'custom';
 
+}
 export interface CustomDomain {
     domain: string;
     verified: boolean;
@@ -46,6 +49,7 @@ export interface CustomDomain {
     owner: string;
     usage: DomainUsage;
 
+}
 export interface DomainUsage {
     totalLinks: number;
     totalClicks: number;
@@ -53,6 +57,7 @@ export interface DomainUsage {
     currentMonthUsage: number;
     lastReset: Date;
 
+}
 export interface SecurityConfig {
     tokenGeneration: TokenConfig;
     accessControl: AccessControlConfig;
@@ -61,6 +66,7 @@ export interface SecurityConfig {
     fraud: FraudDetectionConfig;
     privacy: PrivacyConfig;
 
+}
 export interface TokenConfig {
     algorithm: 'random' | 'hash' | 'jwt' | 'signed';
     length: number;
@@ -69,6 +75,7 @@ export interface TokenConfig {
     caseSensitive: boolean;
     excludeAmbiguous: boolean;
 
+}
 export interface AccessControlConfig {
     requireAuthentication: boolean;
     allowedRoles: string[];
@@ -77,34 +84,40 @@ export interface AccessControlConfig {
     deviceRestrictions: DeviceRestriction[];
     timeRestrictions: TimeRestriction[];
 
+}
 export interface GeoRestriction {
     type: 'allow' | 'deny';
     countries: string[];
     regions: string[];
     cities: string[];
 
+}
 export interface DeviceRestriction {
     type: 'allow' | 'deny';
     deviceTypes: ('desktop' | 'mobile' | 'tablet')[];
     browsers: string[];
     operatingSystems: string[];
 
+}
 export interface TimeRestriction {
     type: 'allow' | 'deny';
     schedule: TimeSchedule;
     timezone: string;
 
+}
 export interface TimeSchedule {
     days: string[];
     hours: {
         start: string;
         end: string;
+}
     };
     dateRange?: {
         start: Date;
         end: Date;
     };
 
+}
 export interface ValidationConfig {
     enableLinkValidation: boolean;
     contentValidation: ContentValidation;
@@ -112,6 +125,7 @@ export interface ValidationConfig {
     malwareScanning: boolean;
     phishingDetection: boolean;
 
+}
 export interface ContentValidation {
     enabled: boolean;
     allowedContentTypes: string[];
@@ -119,6 +133,7 @@ export interface ContentValidation {
     scanForMalware: boolean;
     requireApproval: boolean;
 
+}
 export interface URLValidation {
     enabled: boolean;
     allowedDomains: string[];
@@ -126,6 +141,7 @@ export interface URLValidation {
     requireHTTPS: boolean;
     validateDNS: boolean;
 
+}
 export interface RateLimitConfig {
     enabled: boolean;
     requests: number;
@@ -133,6 +149,7 @@ export interface RateLimitConfig {
     skipAuthenticated: boolean;
     storage: 'memory' | 'redis' | 'database';
 
+}
 export interface FraudDetectionConfig {
     enabled: boolean;
     botDetection: boolean;
@@ -141,6 +158,7 @@ export interface FraudDetectionConfig {
     fingerprintTracking: boolean;
     anomalyDetection: boolean;
 
+}
 export interface PrivacyConfig {
     anonymizeIPs: boolean;
     respectDoNotTrack: boolean;
@@ -149,6 +167,7 @@ export interface PrivacyConfig {
     allowOptOut: boolean;
     consentRequired: boolean;
 
+}
 export interface AnalyticsConfig {
     enabled: boolean;
     trackClicks: boolean;
@@ -159,6 +178,7 @@ export interface AnalyticsConfig {
     attributionTracking: boolean;
     customEvents: string[];
 
+}
 export interface BrandingConfig {
     enabled: boolean;
     logoUrl?: string;
@@ -167,6 +187,7 @@ export interface BrandingConfig {
     customPages: CustomPageConfig;
     socialMediaCards: SocialMediaConfig;
 
+}
 export interface BrandColors {
     primary: string;
     secondary: string;
@@ -174,24 +195,28 @@ export interface BrandColors {
     background: string;
     text: string;
 
+}
 export interface CustomPageConfig {
     landingPage?: PageTemplate;
     errorPage?: PageTemplate;
     expiredPage?: PageTemplate;
     restrictedPage?: PageTemplate;
 
+}
 export interface PageTemplate {
     template: string;
     variables: Record<string, string>;
     css?: string;
     javascript?: string;
 
+}
 export interface SocialMediaConfig {
     enabled: boolean;
     openGraph: OpenGraphConfig;
     twitterCard: TwitterCardConfig;
     linkedIn: LinkedInConfig;
 
+}
 export interface OpenGraphConfig {
     title?: string;
     description?: string;
@@ -199,6 +224,7 @@ export interface OpenGraphConfig {
     type?: string;
     siteName?: string;
 
+}
 export interface TwitterCardConfig {
     card?: 'summary' | 'summary_large_image' | 'app' | 'player';
     title?: string;
@@ -206,11 +232,13 @@ export interface TwitterCardConfig {
     image?: string;
     creator?: string;
 
+}
 export interface LinkedInConfig {
     title?: string;
     description?: string;
     image?: string;
 
+}
 export interface LimitsConfig {
     maxLinksPerUser: number;
     maxLinksPerDay: number;
@@ -218,6 +246,7 @@ export interface LimitsConfig {
     linkExpirationDays: number;
     customLimits: CustomLimit[];
 
+}
 export interface CustomLimit {
     name: string;
     type: 'user' | 'domain' | 'ip' | 'global';
@@ -225,6 +254,7 @@ export interface CustomLimit {
     period: 'hour' | 'day' | 'week' | 'month' | 'year';
     action: 'block' | 'throttle' | 'notify';
 
+}
 export interface FeatureConfig {
     qrCodes: QRCodeConfig;
     preview: PreviewConfig;
@@ -232,6 +262,7 @@ export interface FeatureConfig {
     collaboration: CollaborationConfig;
     automation: AutomationConfig;
 
+}
 export interface QRCodeConfig {
     enabled: boolean;
     defaultSize: number;
@@ -239,10 +270,12 @@ export interface QRCodeConfig {
     errorCorrection: 'low' | 'medium' | 'quartile' | 'high';
     customization: QRCustomization;
 
+}
 export interface QRCustomization {
     colors: {
         foreground: string;
         background: string;
+}
     };
     logo?: {
         url: string;
@@ -251,6 +284,7 @@ export interface QRCustomization {
     style: 'square' | 'rounded' | 'circular';
     margin: number;
 
+}
 export interface PreviewConfig {
     enabled: boolean;
     generatePreviews: boolean;
@@ -258,29 +292,34 @@ export interface PreviewConfig {
     supportedTypes: string[];
     maxPreviewSize: number;
 
+}
 export interface SchedulingConfig {
     enabled: boolean;
     maxScheduleDays: number;
     timezoneSupport: boolean;
     recurringShares: boolean;
 
+}
 export interface CollaborationConfig {
     enabled: boolean;
     allowTeamSharing: boolean;
     permissions: CollaborationPermission[];
     notifications: NotificationConfig;
 
+}
 export interface CollaborationPermission {
     role: string;
     actions: ('create' | 'edit' | 'delete' | 'view' | 'share')[];
     limits?: Record<string, number>;
 
+}
 export interface NotificationConfig {
     email: boolean;
     webhook: boolean;
     inApp: boolean;
     events: string[];
 
+}
 export interface AutomationConfig {
     enabled: boolean;
     autoExpiration: boolean;
@@ -288,12 +327,14 @@ export interface AutomationConfig {
     smartRedirects: boolean;
     bulkOperations: boolean;
 
+}
 export interface IntegrationConfig {
     attribution: AttributionIntegration;
     analytics: AnalyticsIntegration;
     social: SocialIntegration;
     webhooks: WebhookIntegration;
 
+}
 export interface AttributionIntegration {
     enabled: boolean;
     trackingParameters: string[];
@@ -301,12 +342,14 @@ export interface AttributionIntegration {
     defaultMedium: string;
     campaignTracking: boolean;
 
+}
 export interface AnalyticsIntegration {
     providers: AnalyticsProvider[];
     realTimeSync: boolean;
     customDimensions: string[];
     eventTracking: boolean;
 
+}
 export interface AnalyticsProvider {
     name: string;
     type: 'google_analytics' | 'adobe_analytics' | 'mixpanel' | 'segment' | 'custom';
@@ -314,24 +357,28 @@ export interface AnalyticsProvider {
     config: Record<string, any>;
     enabled: boolean;
 
+}
 export interface SocialIntegration {
     platforms: SocialPlatform[];
     autoPosting: boolean;
     hashtagSuggestions: boolean;
     optimalTiming: boolean;
 
+}
 export interface SocialPlatform {
     name: string;
     apiCredentials: Record<string, string>;
     enabled: boolean;
     defaultSettings: Record<string, any>;
 
+}
 export interface WebhookIntegration {
     endpoints: WebhookEndpoint[];
     events: string[];
     retryPolicy: RetryPolicy;
     security: WebhookSecurity;
 
+}
 export interface WebhookEndpoint {
     name: string;
     url: string;
@@ -339,18 +386,21 @@ export interface WebhookEndpoint {
     headers: Record<string, string>;
     enabled: boolean;
 
+}
 export interface RetryPolicy {
     maxAttempts: number;
     backoffStrategy: 'linear' | 'exponential' | 'fixed';
     baseDelay: number;
     maxDelay: number;
 
+}
 export interface WebhookSecurity {
     signatureVerification: boolean;
     secretKey?: string;
     ipWhitelist: string[];
     requireHTTPS: boolean;
 
+}
 export interface ShareLink {
     id: string;
     shortCode: string;
@@ -370,6 +420,7 @@ export interface ShareLink {
     expires?: Date;
     lastAccessed?: Date;
 
+}
 export interface LinkMetadata {
     contentType?: string;
     fileSize?: number;
@@ -382,6 +433,7 @@ export interface LinkMetadata {
     utm: UTMParameters;
     custom: Record<string, any>;
 
+}
 export interface PreviewData {
     title: string;
     description: string;
@@ -390,6 +442,7 @@ export interface PreviewData {
     siteName?: string;
     type: 'website' | 'article' | 'video' | 'image' | 'document';
 
+}
 export interface UTMParameters {
     source?: string;
     medium?: string;
@@ -398,6 +451,7 @@ export interface UTMParameters {
     content?: string;
     custom: Record<string, string>;
 
+}
 export interface LinkSecurity {
     accessLevel: AccessLevel;
     password?: string;
@@ -408,6 +462,7 @@ export interface LinkSecurity {
 
 export type AccessLevel = 'public' | 'restricted' | 'private' | 'team' | 'custom';
 
+}
 export interface AccessRestriction {
     type: RestrictionType;
     config: Record<string, any>;
@@ -415,12 +470,14 @@ export interface AccessRestriction {
 
 export type RestrictionType = 'geo' | 'time' | 'device' | 'ip' | 'referrer' | 'user_agent' | 'click_limit' | 'rate_limit';
 
+}
 export interface VerificationConfig {
     requireEmail: boolean;
     requirePhone: boolean;
     requireCaptcha: boolean;
     require2FA: boolean;
 
+}
 export interface LinkAnalytics {
     totalClicks: number;
     uniqueClicks: number;
@@ -433,6 +490,7 @@ export interface LinkAnalytics {
     revenue?: number;
     goals: GoalTracking[];
 
+}
 export interface GoalTracking {
     goalId: string;
     goalName: string;
@@ -441,6 +499,7 @@ export interface GoalTracking {
     value: number;
     lastConversion?: Date;
 
+}
 export interface LinkBranding {
     domain: string;
     customSlug?: string;
@@ -451,6 +510,7 @@ export interface LinkBranding {
 
 export type LinkStatus = 'active' | 'paused' | 'expired' | 'disabled' | 'archived' | 'pending' | 'error';
 
+}
 export interface UserInfo {
     id: string;
     email: string;
@@ -458,23 +518,27 @@ export interface UserInfo {
     role: string;
     permissions: string[];
 
+}
 export interface TeamInfo {
     id: string;
     name: string;
     members: TeamMember[];
     permissions: TeamPermission[];
 
+}
 export interface TeamMember {
     userId: string;
     role: string;
     joinedAt: Date;
     permissions: string[];
 
+}
 export interface TeamPermission {
     action: string;
     resource: string;
     conditions?: Record<string, any>;
 
+}
 export interface ClickEvent {
     id: string;
     linkId: string;
@@ -486,6 +550,7 @@ export interface ClickEvent {
     attribution: ClickAttribution;
     conversion?: ConversionInfo;
 
+}
 export interface VisitorInfo {
     id: string;
     isUnique: boolean;
@@ -497,6 +562,7 @@ export interface VisitorInfo {
     device: DeviceInfo;
     referrer?: ReferrerInfo;
 
+}
 export interface GeoLocation {
     country: string;
     countryCode: string;
@@ -507,6 +573,7 @@ export interface GeoLocation {
     timezone?: string;
     isp?: string;
 
+}
 export interface DeviceInfo {
     type: 'desktop' | 'mobile' | 'tablet' | 'tv' | 'bot';
     os: string;
@@ -516,6 +583,7 @@ export interface DeviceInfo {
     screenResolution?: string;
     language?: string;
 
+}
 export interface ReferrerInfo {
     url?: string;
     domain?: string;
@@ -523,6 +591,7 @@ export interface ReferrerInfo {
     searchTerm?: string;
     socialPlatform?: string;
 
+}
 export interface RequestInfo {
     method: string;
     headers: Record<string, string>;
@@ -530,6 +599,7 @@ export interface RequestInfo {
     body?: any;
     timestamp: Date;
 
+}
 export interface ResponseInfo {
     statusCode: number;
     redirectUrl: string;
@@ -537,6 +607,7 @@ export interface ResponseInfo {
     cacheHit: boolean;
     errors?: string[];
 
+}
 export interface ClickAttribution {
     touchPointId?: string;
     campaignId?: string;
@@ -547,6 +618,7 @@ export interface ClickAttribution {
     term?: string;
     custom: Record<string, string>;
 
+}
 export interface ConversionInfo {
     type: string;
     value: number;
@@ -555,6 +627,7 @@ export interface ConversionInfo {
     timestamp: Date;
     attribution: string;
 
+}
 export interface BulkOperation {
     id: string;
     type: BulkOperationType;
@@ -570,11 +643,13 @@ export interface BulkOperation {
 export type BulkOperationType = 'create' | 'update' | 'delete' | 'archive' | 'export' | 'import';
 export type OperationStatus = 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
 
+}
 export interface BulkRequest {
     items: any[];
     options: Record<string, any>;
     metadata: Record<string, any>;
 
+}
 export interface OperationProgress {
     total: number;
     completed: number;
@@ -583,11 +658,13 @@ export interface OperationProgress {
     estimatedCompletion?: Date;
     currentItem?: string;
 
+}
 export interface BulkResults {
     successful: BulkResultItem[];
     failed: BulkResultItem[];
     summary: ResultSummary;
 
+}
 export interface BulkResultItem {
     index: number;
     input: any;
@@ -595,6 +672,7 @@ export interface BulkResultItem {
     error?: string;
     duration: number;
 
+}
 export interface ResultSummary {
     totalProcessed: number;
     successCount: number;
@@ -620,6 +698,7 @@ export declare class DirectLinkSharing extends EventEmitter {
     getLinkAnalytics(linkId: string, timeRange?: {)
         start: Date;
         end: Date;
+}
     }): Promise<LinkAnalyticsReport>;
     getBulkAnalytics(linkIds: string[], timeRange?: {)
         start: Date;
@@ -678,6 +757,7 @@ export declare class DirectLinkSharing extends EventEmitter {
     private getRecentActivity;
     private getPerformanceMetrics;
 
+}
 export interface CreateLinkRequest {
     originalUrl: string;
     title?: string;
@@ -690,6 +770,7 @@ export interface CreateLinkRequest {
     creator: UserInfo;
     team?: TeamInfo;
 
+}
 export interface UpdateLinkRequest {
     originalUrl?: string;
     title?: string;
@@ -699,6 +780,7 @@ export interface UpdateLinkRequest {
     security?: Partial<LinkSecurity>;
     metadata?: Partial<LinkMetadata>;
 
+}
 export interface AccessContext {
     ipAddress?: string;
     userAgent?: string;
@@ -713,12 +795,14 @@ export interface AccessContext {
     referrer?: ReferrerInfo;
     attribution?: ClickAttribution;
 
+}
 export interface AccessValidation {
     allowed: boolean;
     reason?: string;
 
 export type AccessResultStatus = 'allowed' | 'not_found' | 'inactive' | 'expired' | 'restricted';
 
+}
 export interface AccessResult {
     status: AccessResultStatus;
     link?: ShareLink;
@@ -726,6 +810,7 @@ export interface AccessResult {
     clickEvent?: ClickEvent;
     timestamp: Date;
 
+}
 export interface QRCodeOptions {
     size?: number;
     format?: 'png' | 'svg' | 'pdf';
@@ -733,12 +818,14 @@ export interface QRCodeOptions {
     colors?: {
         foreground: string;
         background: string;
+}
     };
     logo?: {
         url: string;
         size: number;
     };
 
+}
 export interface QRCodeResult {
     url: string;
     dataUrl: string;
@@ -746,6 +833,7 @@ export interface QRCodeResult {
     size: number;
     format: string;
 
+}
 export interface ShareSchedule {
     publishAt: Date;
     timezone: string;
@@ -753,8 +841,10 @@ export interface ShareSchedule {
         frequency: 'daily' | 'weekly' | 'monthly';
         interval: number;
         endDate?: Date;
+}
     };
 
+}
 export interface ScheduledShare {
     id: string;
     request: CreateLinkRequest;
@@ -764,11 +854,13 @@ export interface ScheduledShare {
     publishedAt?: Date;
     error?: string;
 
+}
 export interface LinkAnalyticsReport {
     linkId: string;
     timeRange: {
         start: Date;
         end: Date;
+}
     };
     summary: {
         totalClicks: number;
@@ -782,12 +874,13 @@ export interface LinkAnalyticsReport {
         byReferrer: Record<string, number>;
         byHour: Record<string, number>;
     };
-    trends: Array<{,
+    trends: Array<{
         date: Date;
         clicks: number;
     }>;
     generatedAt: Date;
 
+}
 export interface BulkAnalyticsReport {
     totalLinks: number;
     summary: {
@@ -795,17 +888,19 @@ export interface BulkAnalyticsReport {
         uniqueClicks: number;
         conversionRate: number;
         averageClicksPerDay: number;
+}
     };
-    topPerformers: Array<{,
+    topPerformers: Array<{
         linkId: string;
         clicks: number;
     }>;
-    trends: Array<{,
+    trends: Array<{
         date: Date;
         clicks: number;
     }>;
     generatedAt: Date;
 
+}
 export interface UserAnalyticsReport {
     userId: string;
     totalLinks: number;
@@ -815,24 +910,27 @@ export interface UserAnalyticsReport {
         uniqueClicks: number;
         conversionRate: number;
         averageClicksPerDay: number;
+}
     };
-    topLinks: Array<{,
+    topLinks: Array<{
         linkId: string;
         clicks: number;
     }>;
     generatedAt: Date;
 
+}
 export interface SystemStats {
     totalLinks: number;
     activeLinks: number;
     totalClicks: number;
     uniqueVisitors: number;
     averageClicksPerLink: number;
-    topDomains: Array<{,
+    topDomains: Array<{
         domain: string;
         count: number;
+}
     }>;
-    recentActivity: Array<{,
+    recentActivity: Array<{
         type: string;
         timestamp: Date;
         data: any;

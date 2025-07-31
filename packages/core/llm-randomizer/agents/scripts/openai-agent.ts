@@ -3,6 +3,7 @@
 // OpenAI agent script with JSON mode integration and error correction
 import { validateFormat } from '../../serialization/validator';
 
+}
 export interface OpenAIAgentConfig {
   apiKey: string;
   model: string;
@@ -13,6 +14,8 @@ export interface OpenAIAgentConfig {
   maxRetries: number;
   retryTemperatureReduction: number;
 }
+}
+}
 export interface GraphGenerationRequest {
   purpose: string;
   complexity: 'simple' | 'moderate' | 'complex';
@@ -22,6 +25,8 @@ export interface GraphGenerationRequest {
   focusAreas?: string;
   style?: 'creative' | 'logical' | 'balanced';
   domain?: string;
+}
+}
 }
 export interface GenerationResult {
   success: boolean;
@@ -34,6 +39,7 @@ export interface GenerationResult {
   temperature: number;
   tokenCount: number;
   generationTime: number;
+}
 };
 }
 export class OpenAIGraphAgent {
@@ -226,6 +232,7 @@ OUTPUT THE COMPLETE GRAPH:`;
   error?: string;
   tokenCount?: number;
 }> {
+
     try {
       // Mock OpenAI API call for now - replace with actual API call
       // const response = await openai.chat.completions.create({
@@ -316,9 +323,10 @@ export const defaultOpenAIConfig: OpenAIAgentConfig = {,
 /**
  * Utility function to create and use OpenAI agent
  */
-export async function generateGraphWithOpenAI(()
+export async function generateGraphWithOpenAI(((
     request: GraphGenerationRequest,
     config: Partial<OpenAIAgentConfig> = {}
   ): Promise<GenerationResult> {
+
   const agent = new OpenAIGraphAgent({ ...defaultOpenAIConfig, ...config });
   return agent.generateGraph(request);

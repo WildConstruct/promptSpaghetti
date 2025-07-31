@@ -8,6 +8,7 @@
  */
 import React, { useState, useRef, useEffect } from 'react';
 import { useSearch } from './SearchContext';
+}
 interface SearchBarProps {
   placeholder?: string;
   autoFocus?: boolean;
@@ -22,6 +23,7 @@ interface SearchBarProps {
   showSuggestions = true,
   onSearch,
   className = ''
+}
 }) => {
   const {
     query,

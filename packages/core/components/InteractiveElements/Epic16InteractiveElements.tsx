@@ -17,6 +17,7 @@ import {
 import { LiveChatWidget } from './LiveChatWidget';
 import { GamifiedProgressBar } from './GamifiedProgressBar';
 import { QuickPreviewWidget } from './QuickPreviewWidget';
+}
 interface Epic16InteractiveElementsProps {
   userId: string;
   userName: string;
@@ -28,9 +29,11 @@ interface Epic16InteractiveElementsProps {
   pageType: 'marketplace' | 'community' | 'profile' | 'template' | 'learning';
   templateId?: string;
   categoryId?: string;
+}
 };
   onElementInteraction?: (elementId: string, interaction: unknown) => void;
   onAnalyticsUpdate?: (analytics: unknown) => void;
+}
 interface ElementState {
   id: string;
   element: InteractiveElement;
@@ -49,6 +52,7 @@ interface ElementState {
   pageContext,
   onElementInteraction,
   onAnalyticsUpdate
+}
 }) => {
   // Service initialization
   const interactiveService = useMemo(() => new Epic16InteractiveElementsService(), []);

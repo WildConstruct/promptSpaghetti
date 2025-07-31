@@ -1,6 +1,7 @@
 import React from 'react';
 import { TemplateInstantiationOptions } from '../../types/TemplateTypes';
 
+}
 interface TemplateBrowserProps {
     isOpen: boolean;
     onClose: () => void;
@@ -8,5 +9,6 @@ interface TemplateBrowserProps {
     currentAuthor?: string;
 
 export declare const TemplateBrowser: React.FC<TemplateBrowserProps>;
+}
 export {};
 //# sourceMappingURL=TemplateBrowser.d.ts.map

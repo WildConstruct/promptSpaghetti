@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useActivityFeed } from '../../hooks/useActivityFeed';
 import { ActivityEvent, ActivityEventType } from '../../types/ActivityTypes';
+}
 interface ActivityFeedProps {
   workspaceId?: string;
   projectId?: string;
@@ -49,6 +50,7 @@ interface ActivityFeedProps {
   'template_applied': FileText,
   'collaboration_started': Users,
   'collaboration_ended': Users,
+}
 };
 const ACTIVITY_COLORS: Record<ActivityEventType, string> = {
   'project_created': 'text-green-500',

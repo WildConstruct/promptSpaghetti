@@ -535,7 +535,7 @@ export declare class AuditCalendarSystem {
      * Generate calendar view data
      */
     generateCalendarView(config: CalendarViewConfig): {
-        events: Array<{,
+        events: Array<{
             id: string;
             title: string;
             start: Date;
@@ -571,7 +571,7 @@ export declare class AuditCalendarSystem {
      * Automated schedule monitoring and alerts
      */
     processScheduleMonitoring(): {
-        alerts: Array<{,
+        alerts: Array<{
             type: 'overdue' | 'upcoming' | 'dependency' | 'resource';
             schedule_id: string;
             message: string;
@@ -597,7 +597,7 @@ export declare class AuditCalendarSystem {
         };
         activity_breakdown: Record<AuditActivityType, number>;
         priority_distribution: Record<SchedulePriority, number>;
-        timeline_analysis: Array<{,
+        timeline_analysis: Array<{
             date: string;
             scheduled: number;
             completed: number;

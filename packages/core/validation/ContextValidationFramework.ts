@@ -7,6 +7,7 @@
 import { AdvancedExecutionContext, AdvancedNodeConfig } from '../runtime/advanced';
 import { EventEmitter } from 'events';
 
+}
 export interface ContextValidationResult {
   valid: boolean;
   errors: string;
@@ -18,7 +19,9 @@ export interface ContextValidationResult {
   stateConsistency: number;
   cacheEfficiency: number;
   memoryUsage: number;
+}
 };
+}
 }
 export interface ContextValidationRule {
   name: string;
@@ -27,11 +30,15 @@ export interface ContextValidationRule {
   weight: number; // Impact on overall score,
   validate: (context: AdvancedExecutionContext, config?: AdvancedNodeConfig) => ContextValidationRuleResult;
 }
+}
+}
 export interface ContextValidationRuleResult {
   passed: boolean;
   score: number; // 0-100,
   message?: string;
   details?: Record<string, any>;
+}
+}
 }
 export interface ContextValidationConfig {
   enableVariableValidation: boolean;
@@ -48,10 +55,11 @@ export interface ContextValidationConfig {
   * Comprehensive context validation framework
   */
 }
+}
 export class ContextValidationFramework extends EventEmitter {
   private config: ContextValidationConfig;
   private rules: Map<string, ContextValidationRule>;
-  private validationHistory: Array<{,
+  private validationHistory: Array<{
   timestamp: number;
   contextId: string;
   result: ContextValidationResult;
@@ -79,6 +87,7 @@ export class ContextValidationFramework extends EventEmitter {
   async validateContext(context: AdvancedExecutionContext)
     config?: AdvancedNodeConfig
   ): Promise<ContextValidationResult> {
+
   const startTime = performance.now();
   const errors: string = [];
   const warnings: string = [];
@@ -195,7 +204,7 @@ export class ContextValidationFramework extends EventEmitter {
   averageScore: number;
   errorRate: number;
   warningRate: number;
-  recentValidations: Array<{,
+  recentValidations: Array<{
   contextId: string;
   score: number;
   timestamp: number;

@@ -3,6 +3,7 @@
  * Provides historical trend analysis and reporting for compliance metrics
  */
 
+}
 export interface HistoricalDataPoint {
     timestamp: Date;
     value: number;
@@ -13,6 +14,7 @@ export interface HistoricalDataPoint {
     category: string;
     metric: string;
 
+}
 export interface ComplianceTrendReport {
     reportId: string;
     generatedAt: Date;
@@ -20,6 +22,7 @@ export interface ComplianceTrendReport {
         startDate: Date;
         endDate: Date;
         duration: string;
+}
     };
     framework: string;
     summary: {
@@ -52,6 +55,7 @@ export interface ComplianceTrendReport {
         changeType: 'improvement' | 'degradation' | 'stable'
   };
 
+}
 export interface ComplianceForecasting {
     baselineId: string;
     forecastHorizon: number;
@@ -61,6 +65,7 @@ export interface ComplianceForecasting {
         confidenceInterval: {
             lower: number;
             upper: number;
+}
         };
         riskLevel: 'low' | 'medium' | 'high'
   }[];
@@ -72,11 +77,13 @@ export interface ComplianceForecasting {
         likelihood: number;
     }[];
 
+}
 export interface ComplianceAuditTrail {
     auditId: string;
     auditPeriod: {
         startDate: Date;
         endDate: Date;
+}
     };
     framework: string;
     auditType: 'internal' | 'external' | 'certification';

@@ -16,6 +16,7 @@ import {
 } from './StandardComplianceReportingService';
 
 }
+}
 export interface ValidationResult {
   isValid: boolean;
   overallScore: number;
@@ -29,7 +30,9 @@ export interface ValidationResult {
   nextValidationDue?: Date;
 }
 }
+}
 
+}
 }
 export interface ValidationSummary {
   totalChecks: number;
@@ -43,7 +46,9 @@ export interface ValidationSummary {
   complianceScore: number;
 }
 }
+}
 
+}
 }
 export interface ValidationCheck {
   id: string;
@@ -65,7 +70,9 @@ export interface ValidationCheck {
   executionTimeMs: number;
 }
 }
+}
 
+}
 }
 export interface ValidationThreshold {
   minValue?: number;
@@ -76,7 +83,9 @@ export interface ValidationThreshold {
   customRule?: ValidationRule;
 }
 }
+}
 
+}
 }
 export interface ValidationRule {
   ruleId: string;
@@ -87,7 +96,9 @@ export interface ValidationRule {
   errorMessage: string;
 }
 }
+}
 
+}
 }
 export interface ValidationRecommendation {
   id: string;
@@ -102,7 +113,9 @@ export interface ValidationRecommendation {
   relatedChecks: string[];
 }
 }
+}
 
+}
 }
 export interface ActionItem {
   action: string;
@@ -112,7 +125,9 @@ export interface ActionItem {
   dependencies?: string[];
 }
 }
+}
 
+}
 }
 export interface ValidationEvidence {
   evidenceId: string;
@@ -122,6 +137,7 @@ export interface ValidationEvidence {
   timestamp: Date;
   hash: string;
   metadata: Record<string, any>;
+}
 }
 }
 
@@ -139,12 +155,14 @@ export enum ValidationCategory {
 }
 
 }
+}
 export interface ValidationConfiguration {
   enabledCategories: ValidationCategory[];
   severityThresholds: {
     critical: number;
     high: number;
     medium: number;
+}
 }
   };
   frameworkSpecificRules: Map<ComplianceFramework, ValidationRule[]>;
@@ -154,6 +172,7 @@ export interface ValidationConfiguration {
 }
 
 }
+}
 export interface CustomValidator {
   validatorId: string;
   name: string;
@@ -161,6 +180,7 @@ export interface CustomValidator {
   category: ValidationCategory;
   applicableFrameworks: ComplianceFramework[];
   validatorFunction: (report: StandardComplianceReport) => Promise<ValidationCheck>;
+}
 }
 }
 

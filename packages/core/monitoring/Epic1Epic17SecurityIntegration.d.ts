@@ -10,6 +10,7 @@ import { Epic17PerformanceMonitor, AdminPerformanceMetric, AdminOperation, Syste
 import { SecurityAnalyticsMonitor, SecurityAnalyticsMetrics, SecuritySystemHealth } from './SecurityAnalyticsMonitor';
 import { SecurityEvent, CrossSystemAlertingSystem } from '../security/AlertingSystem';
 
+}
 export interface IntegratedSecurityMetrics {
     performanceMetrics: {
         nodeExecutionMetrics: PerformanceMetrics[];
@@ -19,6 +20,7 @@ export interface IntegratedSecurityMetrics {
             averageExecutionTime: number;
             errorRate: number;
             memoryUsage: number;
+}
         };
     };
     adminMetrics: {
@@ -47,6 +49,7 @@ export interface IntegratedSecurityMetrics {
         integratedHealthScore: number;
     };
 
+}
 export interface IntegratedAlertRule {
     ruleId: string;
     name: string;
@@ -57,6 +60,7 @@ export interface IntegratedAlertRule {
             slowExecutionThreshold: number;
             errorRateThreshold: number;
             memoryThreshold: number;
+}
         };
         adminConditions?: {
             adminOperations: AdminOperation[];
@@ -75,7 +79,7 @@ export interface IntegratedAlertRule {
         };
     };
     actions: {
-        notifications: Array<{,
+        notifications: Array<{
             type: 'email' | 'slack' | 'webhook' | 'admin_dashboard' | 'security_dashboard';
             target: string;
             priority: 'low' | 'normal' | 'high' | 'critical'
@@ -100,6 +104,7 @@ export interface IntegratedAlertRule {
         riskLevel: 'low' | 'medium' | 'high' | 'critical'
   };
 
+}
 export interface IntegratedDashboardData {
     realTimeStatus: {
         timestamp: number;
@@ -108,6 +113,7 @@ export interface IntegratedDashboardData {
         systemsTotal: number;
         criticalAlertsCount: number;
         activeIncidentsCount: number;
+}
     };
     performanceOverview: {
         nodeExecutions: {
@@ -116,29 +122,29 @@ export interface IntegratedDashboardData {
             failed: number;
             averageTime: number;
         };
-        topPerformingNodes: Array<{,
+        topPerformingNodes: Array<{
             nodeType: string;
             avgTime: number;
         }>;
-        bottomPerformingNodes: Array<{,
+        bottomPerformingNodes: Array<{
             nodeType: string;
             avgTime: number;
         }>;
-        memoryTrend: Array<{,
+        memoryTrend: Array<{
             timestamp: number;
             usage: number;
         }>;
     };
     adminOverview: {
         activeAdminSessions: number;
-        recentOperations: Array<{,
+        recentOperations: Array<{
             operation: AdminOperation;
             timestamp: number;
             duration: number;
             success: boolean;
             adminUser: string;
         }>;
-        integrationStatus: Array<{,
+        integrationStatus: Array<{
             integration: SystemIntegration;
             status: 'healthy' | 'degraded' | 'unhealthy';
             responseTime: number;
@@ -148,12 +154,12 @@ export interface IntegratedDashboardData {
     securityOverview: {
         threatLevel: number;
         activeSecurityAlerts: number;
-        securitySystemsHealth: Array<{,
+        securitySystemsHealth: Array<{
             systemId: string;
             healthScore: number;
             status: 'healthy' | 'degraded' | 'critical' | 'offline'
   }>;
-        recentSecurityEvents: Array<{,
+        recentSecurityEvents: Array<{
             type: SecurityEvent['type'];
             severity: SecurityEvent['severity'];
             timestamp: number;
@@ -161,14 +167,14 @@ export interface IntegratedDashboardData {
         }>;
     };
     crossSystemInsights: {
-        correlatedEvents: Array<{,
+        correlatedEvents: Array<{
             type: 'performance_security' | 'admin_security' | 'performance_admin';
             description: string;
             confidence: number;
             timestamp: number;
             affectedSystems: string[];
         }>;
-        recommendations: Array<{,
+        recommendations: Array<{
             category: 'performance' | 'security' | 'admin' | 'compliance';
             priority: 'low' | 'medium' | 'high' | 'critical';
             title: string;
@@ -177,7 +183,7 @@ export interface IntegratedDashboardData {
         }>;
         riskAssessment: {
             overallRisk: 'low' | 'medium' | 'high' | 'critical';
-            riskFactors: Array<{,
+            riskFactors: Array<{
                 factor: string;
                 impact: number;
                 likelihood: number;
@@ -186,12 +192,14 @@ export interface IntegratedDashboardData {
         };
     };
 
+}
 export interface IntegrationConfig {
     epic1Integration: {
         enabled: boolean;
         performanceMonitoringInterval: number;
         nodeMetricsCollection: boolean;
         memoryTrackingEnabled: boolean;
+}
     };
     epic17Integration: {
         enabled: boolean;
@@ -305,13 +313,13 @@ export declare class Epic1Epic17SecurityIntegration extends EventEmitter {
         };
         correlationAnalysis: {
             correlatedEvents: number;
-            riskFactors: Array<{,
+            riskFactors: Array<{
                 factor: string;
                 severity: number;
             }>;
             predictiveInsights: string[];
         };
-        recommendations: Array<{,
+        recommendations: Array<{
             category: string;
             priority: 'low' | 'medium' | 'high' | 'critical';
             recommendation: string;

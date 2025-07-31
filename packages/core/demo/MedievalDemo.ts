@@ -6,6 +6,7 @@
 import { NodeMetadataManager, HistoricalEra, Genre, Style } from '../historical/NodeMetadataManager';
 import { DataSourceManager } from '../external-data/DataSourceManager';
 
+}
 export interface MedievalClothing {
   id: string;
   name: string;
@@ -17,12 +18,14 @@ export interface MedievalClothing {
   period: {
   start: number; // Year,
   end: number;   // Year,
+}
 };
   regions: string;
   seasonality: 'all' | 'spring' | 'summer' | 'autumn' | 'winter';
   occasions: string;
   historicalAccuracy: 'high' | 'medium' | 'low';
   sources: string;
+}
 }
 export interface MedievalMaterial {
   id: string;
@@ -36,6 +39,8 @@ export interface MedievalMaterial {
   primaryUses: string;
   historicalNotes: string;
 }
+}
+}
 export interface MedievalLocation {
   id: string;
   name: string;
@@ -48,6 +53,8 @@ export interface MedievalLocation {
   season: 'spring' | 'summer' | 'autumn' | 'winter' | 'any';
   geographicalRegion: string;
   politicalContext: string;
+}
+}
 }
 export interface MedievalCharacter {
   id: string;
@@ -64,6 +71,8 @@ export interface MedievalCharacter {
   socialConnections: string;
   historicalContext: string;
 }
+}
+}
 export interface MedievalScene {
   id: string;
   title: string;
@@ -73,6 +82,7 @@ export interface MedievalScene {
   season: string;
   timeOfDay: string;
   weather?: string;
+}
 };
   activities: string;
   socialDynamics: string;
@@ -101,6 +111,7 @@ export class MedievalDemo {
    * Initialize medieval content databases with historically accurate data
    */
   private async initializeMedievalDatabases(): Promise<void> {
+
     await this.loadClothingDatabase();
     await this.loadMaterialDatabase();
     await this.loadLocationDatabase();
@@ -110,6 +121,7 @@ export class MedievalDemo {
    * Load medieval clothing database
    */
   private async loadClothingDatabase(): Promise<void> {
+
     const clothingData: MedievalClothing = [
       {
         id: 'tunic_peasant',
@@ -178,6 +190,7 @@ export class MedievalDemo {
    * Load medieval materials database
    */
   private async loadMaterialDatabase(): Promise<void> {
+
   const materialData: MedievalMaterial = [
   {
   id: 'wool_rough',
@@ -233,6 +246,7 @@ export class MedievalDemo {
    * Load medieval locations database
    */
   private async loadLocationDatabase(): Promise<void> {
+
   const locationData: MedievalLocation = [
   {
   id: 'castle_great_hall',
@@ -279,6 +293,7 @@ export class MedievalDemo {
    * Load medieval characters database
    */
   private async loadCharacterDatabase(): Promise<void> {
+
   const characterData: MedievalCharacter = [
   {
   id: 'sir_gareth',
@@ -329,6 +344,7 @@ export class MedievalDemo {
    * Load medieval scenes database
    */
   private async loadSceneDatabase(): Promise<void> {
+
   const sceneData: MedievalScene = [
   {
   id: 'feast_preparation',
@@ -566,6 +582,7 @@ manuscript illustrations, and documented practices of the time.
    * Integration with Node Metadata Manager
    */
   public async integrateWithMetadata(nodeId: string, sceneId: string): Promise<void> {
+
     const scene = this.sceneDatabase.get(sceneId);
     if (!scene) return (
     // Apply medieval era metadata

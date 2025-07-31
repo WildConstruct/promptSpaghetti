@@ -21,6 +21,7 @@ import {
   ChevronRightIcon,
   ArrowTopRightOnSquareIcon
 } from '@heroicons/react/24/outline';
+}
 interface DeploymentApprovalRequest {
   id: string;
   deployment_id: string;
@@ -47,12 +48,14 @@ interface DeploymentApprovalRequest {
   security_scan_status: 'passed' | 'warning' | 'failed';
   performance_regression: number;
   deployment_type: 'github_actions' | 'manual' | 'auto'
+}
   };
   // Approval criteria and progress
   criteria: DeploymentCriterion;
   approvals: DeploymentApproval;
   current_approvals: number;
   required_approvals: number;
+}
 interface DeploymentCriterion {
   type: 'security-review' | 'performance-impact' | 'business-approval';
   status: 'pending' | 'approved' | 'rejected';
@@ -83,6 +86,7 @@ interface DeploymentCriterion {
   currentUserId,
   mode = 'reviewer',
   environment
+}
 }) => {
   const [deploymentRequests, setDeploymentRequests] = useState<DeploymentApprovalRequest>([]);
   const [loading, setLoading] = useState(true);

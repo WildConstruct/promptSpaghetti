@@ -3,6 +3,7 @@
  */
 import React, { useMemo } from 'react';
 import { Node, Edge } from 'reactflow';
+}
 interface GraphAnalysisResult {
   nodeCount: number;
   edgeCount: number;
@@ -37,6 +38,7 @@ interface GraphAnalysisResult {
   if (!outgoingEdges.has(edge.source)) outgoingEdges.set(edge.source, []);
   incomingEdges.get(edge.target)!.push(edge);
   outgoingEdges.get(edge.source)!.push(edge);
+}
 });
   // Find dead nodes (no outputs or unreachable)
   const deadNodes = nodes;

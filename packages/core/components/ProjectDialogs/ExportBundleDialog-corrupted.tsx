@@ -4,14 +4,17 @@
 import React, { useState } from 'react';
 import { useGraphStore } from '../../graphStore';
 import { Node, Edge } from 'reactflow';
+}
 interface ExportBundleDialogProps {
   isOpen: boolean;
   onClose: () => void;
   nodes: Node;
   edges: Edge;
+}
   onExport?: (result: { success: boolean; error?: string }) => void;
 }
 
+}
 interface ExportOptions {
   name: string;
   version: string;
@@ -29,6 +32,7 @@ interface ExportOptions {
   nodes,
   edges,
   onExport
+}
 }) => {
   const { currentProject } = useGraphStore();
   const [formData, setFormData] = useState<ExportOptions>({)

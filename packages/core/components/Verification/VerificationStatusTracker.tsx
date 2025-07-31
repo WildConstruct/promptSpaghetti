@@ -6,6 +6,7 @@
  */
 import React, { useState, useEffect, useCallback } from 'react';
 import { IdentityValidationType, ValidationStatus, IdentityValidationRequest } from '../../auth/IdentityValidation';
+}
 interface VerificationStatusTrackerProps {
   userId: string;
   onRefresh?: () => void;
@@ -27,6 +28,7 @@ interface VerificationStatusTrackerProps {
   title: 'Email Verification',
   description: 'Verify your email address for account security',
   priority: 'high',
+}
 }
   {
   type: 'phone_verification',
@@ -488,9 +490,9 @@ function generateNextSteps(status: ValidationStatus | 'not_started', type: Ident
     return ['Verification complete!', 'Your trust score has been updated'];
   default:
     return [];
-function getEstimatedCompletion(()
+function getEstimatedCompletion(((
     status: ValidationStatus | 'not_started',
-    type: IdentityValidationType,
+    type: IdentityValidationType
   ): string | undefined {
   if (status === 'approved' || status === 'rejected') {
   return undefined;

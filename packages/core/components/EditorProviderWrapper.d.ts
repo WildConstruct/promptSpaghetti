@@ -6,6 +6,7 @@ import React from 'react';
 import { Node, Edge } from 'reactflow';
 import { ProviderHook, ProviderRegistry, EditorStateContext, EditorActions } from '../hooks/useEditorProviders';
 
+}
 export interface EditorProviderWrapperProps {
     children: (props: {),
         registry: ProviderRegistry;
@@ -13,6 +14,7 @@ export interface EditorProviderWrapperProps {
         editorActions: EditorActions;
         isLoading: boolean;
 
+}
     }) => React.ReactNode;
     initialNodes: Node[];
     initialEdges: Edge[];

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Graph } from '../../../graphSchema';
 
+}
 interface GraphPreviewProps {
     graph?: Graph;
     isGenerating?: boolean;
@@ -15,5 +16,6 @@ interface GraphPreviewProps {
  * Graph preview component with interactive visualization
  */
 export declare const GraphPreview: React.FC<GraphPreviewProps>;
+}
 export {};
 //# sourceMappingURL=GraphPreview.d.ts.map

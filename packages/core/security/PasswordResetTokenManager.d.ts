@@ -35,6 +35,7 @@ export declare enum SecurityLevel {
     ENHANCED = "enhanced",// Higher security requirements
     MAXIMUM = "maximum"
 
+}
 export interface TokenConfig {
     defaultExpiration: number;
     maxExpiration: number;
@@ -49,6 +50,7 @@ export interface TokenConfig {
     requireEmailVerification: boolean;
     allowMultipleTokens: boolean;
 
+}
 export interface ResetToken {
     id: string;
     userId: string;
@@ -69,11 +71,13 @@ export interface ResetToken {
         deviceFingerprint?: string;
         locationData?: any;
         additionalContext?: Record<string, any>;
+}
     };
     usageCount: number;
     maxUsageCount: number;
     revocationReason?: string;
 
+}
 export interface TokenRequest {
     userId: string;
     email: string;
@@ -84,6 +88,7 @@ export interface TokenRequest {
     securityLevel?: SecurityLevel;
     metadata?: Record<string, any>;
 
+}
 export interface TokenValidation {
     valid: boolean;
     token?: ResetToken;
@@ -91,6 +96,7 @@ export interface TokenValidation {
     securityEvents?: string[];
     riskScore?: number;
 
+}
 export interface RateLimitData {
     count: number;
     resetTime: number;
@@ -108,6 +114,7 @@ export declare enum SecurityEvent {
     SUSPICIOUS_ACTIVITY = "suspicious_activity",
     TOKEN_CLEANUP = "token_cleanup"
 
+}
 export interface AuditLogEntry {
     id: string;
     event: SecurityEvent;
@@ -120,6 +127,7 @@ export interface AuditLogEntry {
     riskScore: number;
     sessionId?: string;
 
+}
 export interface TokenStatistics {
     totalTokens: number;
     activeTokens: number;
@@ -136,6 +144,7 @@ export interface TokenStatistics {
         lastCleanup: Date;
         tokensRemoved: number;
         auditLogsRemoved: number;
+}
     };
 /**
  * Comprehensive password reset token management service

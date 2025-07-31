@@ -19,6 +19,7 @@ import {
 
 // Request/Response Types
 }
+}
 interface RegisterServiceRequest {
   name: string;
   description?: string;
@@ -35,6 +36,7 @@ interface RegisterServiceRequest {
       description: string;
       url: string;
 }
+}
     };
   };
   owner?: string;
@@ -46,6 +48,7 @@ interface RegisterServiceRequest {
   complianceLabels?: string[];
 }
 
+}
 }
 interface RegisterEndpointRequest {
   name: string;
@@ -65,6 +68,7 @@ interface RegisterEndpointRequest {
     location?: string;
     name?: string;
     scheme?: string;
+}
 }
   };
   permissions?: string[];
@@ -95,6 +99,7 @@ interface RegisterEndpointRequest {
 }
 
 }
+}
 interface UpdateEndpointRequest {
   name?: string;
   description?: string;
@@ -104,12 +109,14 @@ interface UpdateEndpointRequest {
     summary?: string;
     description?: string;
 }
+}
   };
   tags?: string[];
   categories?: string[];
   rateLimits?: any;
 }
 
+}
 }
 interface SearchQuery {
   serviceIds?: string;
@@ -126,7 +133,9 @@ interface SearchQuery {
   sortOrder?: 'asc' | 'desc';
 }
 }
+}
 
+}
 }
 interface AnalyticsQuery {
   startDate: string;
@@ -135,6 +144,7 @@ interface AnalyticsQuery {
   includeHealth?: boolean;
   includeGrowth?: boolean;
   includeCompliance?: boolean;
+}
 }
 }
 

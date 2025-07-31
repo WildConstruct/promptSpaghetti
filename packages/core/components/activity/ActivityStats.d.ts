@@ -3,17 +3,20 @@
  * Statistics dashboard for workspace activity
  */
 import React from 'react';
+}
 interface ActivityStatsData {
     total_events: number;
     events_by_type: Record<string, number>;
-    events_by_day: Array<{,
+    events_by_day: Array<{
         date: string;
         count: number;
+}
     }>;
-    most_active_users: Array<{,
+    most_active_users: Array<{
         user_id: string;
         count: number;
     }>;
+}
 interface ActivityStatsProps {
     stats: ActivityStatsData;
     workspaceId: string;
@@ -22,3 +25,4 @@ interface ActivityStatsProps {
 export declare const ActivityStats: React.FC<ActivityStatsProps>;
 export default ActivityStats;
 //# sourceMappingURL=ActivityStats.d.ts.map
+}

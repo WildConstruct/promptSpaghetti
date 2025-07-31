@@ -23,6 +23,7 @@ const uiColors = {
   disabled: '#6b7280',
 };
 
+}
 export interface BatchControlsProps {
   settings: BatchSettings;
   onChange: (settings: BatchSettings) => void;
@@ -30,6 +31,7 @@ export interface BatchControlsProps {
   * Batch Processing Settings Controls Component
   * Manages batch execution and output formatting
   */
+}
 }
 export const BatchControls: React.FC<BatchControlsProps> = ({)
   settings,

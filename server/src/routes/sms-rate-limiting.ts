@@ -15,6 +15,7 @@ import SMSRateLimitingService, {
 } from '../services/SMSRateLimitingService';
 
 }
+}
 interface SendSMSBody {
   to: string;
   message: string;
@@ -27,27 +28,34 @@ interface SendSMSBody {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 interface BatchSendSMSBody {
   messages: SendSMSBody[];
   queueImmediate?: boolean;
 }
 }
+}
 
+}
 }
 interface UpdateConfigBody {
   configs: Array<{
     configId: string;
     config: Partial<RateLimitConfig>;
 }
+}
   }>;
 }
 
 }
+}
 interface RateLimitCheckParams {
   scope: RateLimitScope;
   identifier: string;
+}
 }
 }
 

@@ -18,6 +18,8 @@ export interface User {
 }
 }
 }
+}
+}
 export interface UserProfile {
     id: string;
     userId: string;
@@ -33,6 +35,8 @@ export interface UserProfile {
 }
 }
 }
+}
+}
 export interface UserPreferences {
     id: string;
     userId: string;
@@ -40,6 +44,8 @@ export interface UserPreferences {
     settings: Record<string, any>;
     createdAt: Date;
     updatedAt: Date;
+}
+}
 }
 }
 }
@@ -59,6 +65,8 @@ export interface LinkedAccount {
 }
 }
 }
+}
+}
 export interface UserSession {
     id: string;
     userId: string;
@@ -75,6 +83,8 @@ export interface UserSession {
 }
 }
 }
+}
+}
 export interface Role {
     id: string;
     name: string;
@@ -83,6 +93,8 @@ export interface Role {
     organizationId?: string;
     createdAt: Date;
     updatedAt: Date;
+}
+}
 }
 }
 }
@@ -97,6 +109,8 @@ export interface Permission {
 }
 }
 }
+}
+}
 export interface UserRole {
     id: string;
     userId: string;
@@ -105,6 +119,8 @@ export interface UserRole {
     grantedAt: Date;
     expiresAt?: Date;
     scopeContext?: Record<string, any>;
+}
+}
 }
 }
 }
@@ -125,6 +141,8 @@ export interface Organization {
 }
 }
 }
+}
+}
 export interface Team {
     id: string;
     organizationId: string;
@@ -138,6 +156,8 @@ export interface Team {
 }
 }
 }
+}
+}
 export interface TeamMember {
     id: string;
     teamId: string;
@@ -145,6 +165,8 @@ export interface TeamMember {
     role: 'owner' | 'admin' | 'member' | 'viewer';
     joinedAt: Date;
     invitedBy?: string;
+}
+}
 }
 }
 }
@@ -164,6 +186,8 @@ export interface UserInvitation {
 }
 }
 }
+}
+}
 export interface AuditLog {
     id: string;
     userId?: string;
@@ -176,6 +200,8 @@ export interface AuditLog {
     sessionId?: string;
     severity: 'info' | 'warning' | 'error' | 'critical';
     createdAt: Date;
+}
+}
 }
 }
 }
@@ -193,6 +219,8 @@ export interface JWTPayload {
 }
 }
 }
+}
+}
 export interface LoginRequest {
     email: string;
     password: string;
@@ -201,11 +229,15 @@ export interface LoginRequest {
 }
 }
 }
+}
+}
 export interface LoginResponse {
     accessToken: string;
     refreshToken: string;
     user: PublicUser;
     expiresAt: Date;
+}
+}
 }
 }
 }
@@ -219,14 +251,20 @@ export interface RegisterRequest {
 }
 }
 }
+}
+}
 export interface RegisterResponse {
     user: PublicUser;
     emailVerificationRequired: boolean;
 }
 }
 }
+}
+}
 export interface PasswordResetRequest {
     email: string;
+}
+}
 }
 }
 }
@@ -236,8 +274,12 @@ export interface PasswordResetConfirmRequest {
 }
 }
 }
+}
+}
 export interface EmailVerificationRequest {
     token: string;
+}
+}
 }
 }
 }
@@ -246,9 +288,13 @@ export interface RefreshTokenRequest {
 }
 }
 }
+}
+}
 export interface ChangePasswordRequest {
     currentPassword: string;
     newPassword: string;
+}
+}
 }
 }
 }
@@ -263,7 +309,9 @@ export interface PublicUser {
     permissions: Permission[];
 }
 }
+}
 export type OAuthProvider = 'google' | 'github' | 'microsoft';
+}
 }
 export interface OAuthTokenResponse {
     access_token: string;
@@ -271,6 +319,8 @@ export interface OAuthTokenResponse {
     expires_in?: number;
     token_type: string;
     scope?: string;
+}
+}
 }
 }
 }
@@ -283,10 +333,14 @@ export interface OAuthUserInfo {
 }
 }
 }
+}
+}
 export interface OAuthCallbackRequest {
     code: string;
     state: string;
     provider: OAuthProvider;
+}
+}
 }
 }
 }
@@ -298,6 +352,8 @@ export interface OAuthProviderConfig {
     authorizationUrl: string;
     tokenUrl: string;
     userInfoUrl: string;
+}
+}
 }
 }
 }
@@ -317,6 +373,8 @@ export interface OAuthAccount {
 }
 }
 }
+}
+}
 export interface RateLimitRule {
     window: number;
     max: number;
@@ -325,11 +383,15 @@ export interface RateLimitRule {
 }
 }
 }
+}
+}
 export interface RateLimitResult {
     allowed: boolean;
     remaining: number;
     resetTime: Date;
     totalRequests: number;
+}
+}
 }
 }
 }
@@ -348,6 +410,8 @@ export interface SecurityConfig {
 }
 }
 }
+}
+}
 export interface PermissionContext {
     userId: string;
     organizationId?: string;
@@ -356,10 +420,14 @@ export interface PermissionContext {
 }
 }
 }
+}
+}
 export interface PermissionCheck {
     resource: string;
     action: string;
     context?: PermissionContext;
+}
+}
 }
 }
 }
@@ -374,12 +442,16 @@ export interface AuthDatabaseConfig {
 }
 }
 }
+}
+}
 export interface RedisConfig {
     host: string;
     port: number;
     password?: string;
     db?: number;
     keyPrefix?: string;
+}
+}
 }
 }
 }
@@ -395,12 +467,14 @@ export interface AuthConfig {
         github: OAuthProviderConfig;
         microsoft: OAuthProviderConfig;
 }
+}
     };
     emailService?: {
         apiKey: string;
         fromEmail: string;
         fromName: string;
     };
+}
 }
 }
 export interface IUserService {
@@ -414,6 +488,8 @@ export interface IUserService {
 }
 }
 }
+}
+}
 export interface ITokenService {
     generateAccessToken(user: User): Promise<string>;
     generateRefreshToken(user: User): Promise<string>;
@@ -424,6 +500,8 @@ export interface ITokenService {
 }
 }
 }
+}
+}
 export interface ISessionService {
     createSession(userId: string, deviceInfo?: Record<string, any>): Promise<UserSession>;
     getSession(sessionToken: string): Promise<UserSession | null>;
@@ -431,6 +509,8 @@ export interface ISessionService {
     revokeSession(sessionId: string): Promise<void>;
     revokeAllUserSessions(userId: string): Promise<void>;
     cleanupExpiredSessions(): Promise<number>;
+}
+}
 }
 }
 }
@@ -445,9 +525,13 @@ export interface IPermissionService {
 }
 }
 }
+}
+}
 export interface IRateLimitService {
     checkRateLimit(key: string, rule: RateLimitRule): Promise<RateLimitResult>;
     resetRateLimit(key: string): Promise<void>;
+}
+}
 }
 }
 }
@@ -461,7 +545,9 @@ export interface IAuditService {
         limit?: number;
         offset?: number;
 }
+}
     }): Promise<AuditLog[]>;
+}
 }
 }
 export interface PasswordResetToken {
@@ -474,6 +560,8 @@ export interface PasswordResetToken {
 }
 }
 }
+}
+}
 export interface PasswordResetRequest {
     email: string;
     captchaToken?: string;
@@ -482,13 +570,17 @@ export interface PasswordResetRequest {
         ipAddress: string;
         fingerprint?: string;
 }
+}
     };
+}
 }
 }
 export interface PasswordResetResponse {
     success: boolean;
     message: string;
     estimatedDelivery?: Date;
+}
+}
 }
 }
 }
@@ -502,6 +594,8 @@ export interface PasswordResetValidation {
 }
 }
 }
+}
+}
 export interface PasswordResetConfirmation {
     token: string;
     newPassword: string;
@@ -511,7 +605,9 @@ export interface PasswordResetConfirmation {
         ipAddress: string;
         fingerprint?: string;
 }
+}
     };
+}
 }
 }
 export interface PasswordResetAttempt {
@@ -520,6 +616,8 @@ export interface PasswordResetAttempt {
     userAgent: string;
     completed: boolean;
     revoked: boolean;
+}
+}
 }
 }
 }
@@ -534,6 +632,8 @@ export interface SecurityEvent {
 }
 }
 }
+}
+}
 export interface ChallengeRequest {
     type: ChallengeType;
     difficulty?: ChallengeDifficulty;
@@ -543,7 +643,9 @@ export interface ChallengeRequest {
         ipAddress: string;
         fingerprint?: string;
 }
+}
     };
+}
 }
 }
 export interface ChallengeResponse {
@@ -556,6 +658,8 @@ export interface ChallengeResponse {
 }
 }
 }
+}
+}
 export interface ChallengeValidation {
     challengeId: string;
     solution: string;
@@ -564,7 +668,9 @@ export interface ChallengeValidation {
         ipAddress: string;
         fingerprint?: string;
 }
+}
     };
+}
 }
 }
 export interface ChallengeResult {
@@ -577,12 +683,15 @@ export interface ChallengeResult {
 }
 }
 }
+}
+}
 export interface ChallengeData {
     imageUrl?: string;
     audioUrl?: string;
     text?: string;
     options?: string[];
     metadata?: Record<string, any>;
+}
 }
 }
 export declare enum ChallengeType {
@@ -603,6 +712,7 @@ export declare enum ChallengeDifficulty {
     ADAPTIVE = "adaptive"
 }
 }
+}
 export interface ChallengeContext {
     action: string;
     resource?: string;
@@ -614,6 +724,8 @@ export interface ChallengeContext {
 }
 }
 }
+}
+}
 export interface ChallengeConfig {
     providers: {
         recaptcha?: {
@@ -622,6 +734,7 @@ export interface ChallengeConfig {
             v2Enabled: boolean;
             v3Enabled: boolean;
             v3Threshold: number;
+}
 }
         };
         hcaptcha?: {
@@ -651,6 +764,7 @@ export interface ChallengeConfig {
     };
 }
 }
+}
 export interface ChallengeRule {
     id: string;
     name: string;
@@ -666,12 +780,16 @@ export interface ChallengeRule {
 }
 }
 }
+}
+}
 export interface ChallengeCondition {
     type: 'action' | 'riskScore' | 'failedAttempts' | 'ipReputation' | 'deviceTrust' | 'timeOfDay' | 'custom';
     operator: 'equals' | 'greaterThan' | 'lessThan' | 'in' | 'contains' | 'between';
     value: any;
     values?: any[];
     metadata?: Record<string, any>;
+}
+}
 }
 }
 }
@@ -683,8 +801,10 @@ export interface ProgressiveStage {
         failedAttempts: number;
         timeWindow: number;
 }
+}
     };
     escalationDelay: number;
+}
 }
 }
 export interface ChallengeSession {
@@ -703,6 +823,8 @@ export interface ChallengeSession {
 }
 }
 }
+}
+}
 export interface ChallengeAttempt {
     id: string;
     challengeId: string;
@@ -717,6 +839,8 @@ export interface ChallengeAttempt {
 }
 }
 }
+}
+}
 export interface ChallengeStats {
     totalChallenges: number;
     successfulChallenges: number;
@@ -725,6 +849,8 @@ export interface ChallengeStats {
     typeBreakdown: Record<ChallengeType, number>;
     difficultyBreakdown: Record<ChallengeDifficulty, number>;
     suspiciousActivity: number;
+}
+}
 }
 }
 }
@@ -739,6 +865,7 @@ export interface IChallengeService {
         endDate?: Date;
         userId?: string;
         challengeType?: ChallengeType;
+}
 }
     }): Promise<ChallengeStats>;
 }

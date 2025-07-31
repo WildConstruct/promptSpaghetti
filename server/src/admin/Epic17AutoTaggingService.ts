@@ -19,6 +19,7 @@ import * as crypto from 'crypto';
 // =============================================================================
 
 }
+}
 export interface AutoTaggingConfig {
   // General settings
   enabled: boolean;
@@ -32,6 +33,7 @@ export interface AutoTaggingConfig {
     ruleEvaluationTimeout: number; // seconds
     priorityBasedProcessing: boolean;
     parallelProcessing: boolean;
+}
 }
   };
   
@@ -98,6 +100,7 @@ export enum TaggingRuleType {
 }
 
 }
+}
 export interface AutoTaggingRule {
   ruleId: string;
   ruleName: string;
@@ -137,7 +140,9 @@ export interface AutoTaggingRule {
   validationRules: ValidationRule[];
 }
 }
+}
 
+}
 }
 export interface AutoTaggingCondition {
   conditionId: string;
@@ -159,7 +164,9 @@ export interface AutoTaggingCondition {
   negated: boolean;
 }
 }
+}
 
+}
 }
 export interface TaggingAction {
   actionId: string;
@@ -181,7 +188,9 @@ export interface TaggingAction {
   notifyOnApply: boolean;
 }
 }
+}
 
+}
 }
 export interface PatternAnalysisConfig {
   analysisType: 'naming' | 'usage' | 'relationship' | 'temporal';
@@ -191,7 +200,9 @@ export interface PatternAnalysisConfig {
   includeHistorical: boolean;
 }
 }
+}
 
+}
 }
 export interface MLTaggingConfig {
   modelType: 'classification' | 'clustering' | 'regression';
@@ -201,7 +212,9 @@ export interface MLTaggingConfig {
   retrainingEnabled: boolean;
 }
 }
+}
 
+}
 }
 export interface ValidationRule {
   ruleId: string;
@@ -210,7 +223,9 @@ export interface ValidationRule {
   errorMessage: string;
 }
 }
+}
 
+}
 }
 export interface TaggingExecution {
   executionId: string;
@@ -241,7 +256,9 @@ export interface TaggingExecution {
   parentExecutionId?: string;
 }
 }
+}
 
+}
 }
 export interface TaggingError {
   errorId: string;
@@ -253,7 +270,9 @@ export interface TaggingError {
   timestamp: Date;
 }
 }
+}
 
+}
 }
 export interface TaggingWarning {
   warningId: string;
@@ -264,7 +283,9 @@ export interface TaggingWarning {
   timestamp: Date;
 }
 }
+}
 
+}
 }
 export interface ResourceTaggingResult {
   resourceId: string;
@@ -277,7 +298,9 @@ export interface ResourceTaggingResult {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface TaggingConflict {
   conflictType: 'duplicate' | 'contradictory' | 'validation' | 'permission';
@@ -285,6 +308,7 @@ export interface TaggingConflict {
   conflictingTags: string[];
   resolutionStrategy: string;
   resolved: boolean;
+}
 }
 }
 
@@ -1104,6 +1128,7 @@ export class Epic17AutoTaggingService extends EventEmitter {
 // =============================================================================
 
 }
+}
 export interface TaggingPattern {
   patternId: string;
   patternType: 'naming' | 'usage' | 'relationship' | 'temporal';
@@ -1114,7 +1139,9 @@ export interface TaggingPattern {
   suggestedTags: string[];
 }
 }
+}
 
+}
 }
 export interface RuleSuggestion {
   suggestionId: string;
@@ -1127,6 +1154,7 @@ export interface RuleSuggestion {
     affectedResources: number;
     tagsToAdd: number;
     conflictsExpected: number;
+}
 }
   };
   suggestedRule: Partial<AutoTaggingRule>;

@@ -64,8 +64,10 @@ export type WorkflowStage = 'automated_analysis' | 'editorial_review' | 'special
 // Integration helpers for Epic 16 components
 // Event types for component communication
 
+}
 export interface CommunityComponentEvents {
   // Version control events
+}
   'version:created': { version: ContentVersion; contentId: string };
   'version:published': { version: ContentVersion; contentId: string };
   'version:reviewed': { version: ContentVersion; feedback: ReviewFeedback };

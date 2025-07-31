@@ -129,7 +129,7 @@ describe('Node Validation', () => {
     test('should detect invalid options', () => {
       const invalidNode = { 
         ...panelArchetypeTemplate, 
-        data: {,
+        data: {
           ...panelArchetypeTemplate.data, 
           options: [{ label: '', value: 'test', weight: -1 }]
       };

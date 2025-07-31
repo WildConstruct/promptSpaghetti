@@ -60,11 +60,13 @@ import {
   BulkUpdateFilter,
   BulkUpdateStats
 } from '../../services/BulkPropertyUpdateService';
+}
 interface BulkPropertyUpdateDashboardProps {
   className?: string;
   userId?: string;
   userRole?: string;
 const TARGET_TYPE_CONFIG = {
+}
   user: { color: 'text-blue-600 bg-blue-100', icon: Users },
   content: { color: 'text-green-600 bg-green-100', icon: FileText },
   product: { color: 'text-orange-600 bg-orange-100', icon: Package },
@@ -906,6 +908,7 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
 };
 
 // Operation Card Component (simplified for space)
+}
 interface OperationCardProps {
   operation: BulkUpdateOperation;
   onSelect: (operation: BulkUpdateOperation) => void;
@@ -918,6 +921,7 @@ interface OperationCardProps {
   onExecute,
   onRollback,
   userRole
+}
 }) => {
   const statusConfig = STATUS_CONFIG[operation.status];
   const StatusIcon = statusConfig.icon;
@@ -1012,11 +1016,13 @@ interface OperationCardProps {
 };
 
 // Template Card Component (simplified)
+}
 interface TemplateCardProps {
   template: BulkUpdateTemplate;
   onUse: (templateId: string) => void;
   onEdit: (templateId: string) => void;
   onDelete: (templateId: string) => void;
+}
 const TemplateCard: React.FC<TemplateCardProps> = ({ template, onUse, onEdit, onDelete }) => {
   const typeConfig = TARGET_TYPE_CONFIG[template.targetType];
   const TypeIcon = typeConfig.icon;
@@ -1093,6 +1099,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ template, onUse, onEdit, on
 };
 
 // Operation Detail Modal (simplified)
+}
 interface OperationDetailModalProps {
   operation: BulkUpdateOperation;
   onClose: () => void;
@@ -1105,6 +1112,7 @@ interface OperationDetailModalProps {
   onExecute,
   onRollback,
   userRole
+}
 }) => {
   const statusConfig = STATUS_CONFIG[operation.status];
   const StatusIcon = statusConfig.icon;

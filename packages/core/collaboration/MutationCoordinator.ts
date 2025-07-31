@@ -35,6 +35,7 @@ import { GraphCRDT } from './GraphCRDT';
  * Result of operational transformation
  */
 
+}
 export interface TransformResult {
   op1: MutationOperation | null;
   op2: MutationOperation | null;
@@ -43,6 +44,8 @@ export interface TransformResult {
   /**
   * Batch operation result
   */
+}
+}
 }
 export interface BatchResult {
   success: boolean;
@@ -53,6 +56,8 @@ export interface BatchResult {
   /**
   * Operation queue item
   */
+}
+}
 }
 export interface QueuedOperation {
   operation: MutationOperation;
@@ -67,6 +72,7 @@ export interface QueuedOperation {
   /**
   * Coordinates graph mutations with conflict resolution and operational transform
   */
+}
 }
 export class MutationCoordinator {
   private graphCRDT: GraphCRDT;
@@ -200,6 +206,7 @@ export class MutationCoordinator {
    * Resolve a conflict with specified strategy
    */
   async resolveConflict(conflictId: string, strategy: ResolutionStrategy, resolutionData?: any): Promise<boolean> {
+
     const conflict = this.conflictOperations.get(conflictId);
     if (!conflict) {
       console.warn(`Conflict ${conflictId} not found`);}
@@ -371,6 +378,7 @@ export class MutationCoordinator {
    * Execute a single operation on the CRDT
    */
   private async executeOperation(operation: MutationOperation): Promise<boolean> {
+
     switch (operation.type) {
     case 'NODE_ADD':
       return this.graphCRDT.addNode(operation as NodeAddOperation);
@@ -409,6 +417,7 @@ export class MutationCoordinator {
    * Handle detected conflicts
    */
   private async handleConflicts(operation: MutationOperation, conflicts: MutationOperation): Promise<boolean> {
+
     for (const conflictOp of conflicts) {
       const transformResult = this.transformOperations(operation, conflictOp);
       if (transformResult.requiresResolution) {
@@ -446,6 +455,7 @@ export class MutationCoordinator {
    * Apply conflict resolution
    */
   private async applyConflictResolution(conflict: ConflictOperation, resolution: ConflictResolution): Promise<boolean> {
+
   try {
   let valueToApply: any;
   switch (resolution.strategy) {
@@ -558,6 +568,7 @@ export class MutationCoordinator {
   hasConflicts: boolean;
   conflicts: ConflictOperation;
 }> {
+
   const conflicts: ConflictOperation[] = [];
   // Check for internal conflicts within the batch
   for (let i = 0; i < operations.length; i++) {
@@ -574,6 +585,7 @@ export class MutationCoordinator {
    * Rollback applied operations
    */
   private async rollbackOperations(operations: MutationOperation): Promise<void> {
+
   // Rollback in reverse order
   for (let i = operations.length - 1; i >= 0; i--) {
   const operation = operations[i];

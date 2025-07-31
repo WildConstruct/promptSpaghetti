@@ -9,9 +9,11 @@ export interface GeminiAgentConfig {
     safetySettings?: Array<{
         category: string;
         threshold: string;
+}
     }>;
     stopSequences?: string[];
 
+}
 export interface GeminiGenerationRequest {
     purpose: string;
     complexity: 'simple' | 'moderate' | 'complex';
@@ -24,6 +26,7 @@ export interface GeminiGenerationRequest {
     constraints?: string[];
     examples?: string[];
 
+}
 export interface GeminiGenerationResult {
     success: boolean;
     graph?: string;
@@ -33,6 +36,7 @@ export interface GeminiGenerationResult {
     safetyRatings?: Array<{
         category: string;
         probability: string;
+}
     }>;
     metadata: {
         model: string;

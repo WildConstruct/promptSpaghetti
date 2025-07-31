@@ -17,6 +17,7 @@ import { AnalyticsDAO } from '../database/analytics-dao';
 import { DiagnosticService } from '../admin/DiagnosticService';
 
 }
+}
 export interface OptimizationConfig {
   auto_optimization_enabled: boolean;
   optimization_triggers: {
@@ -24,6 +25,7 @@ export interface OptimizationConfig {
     memory_threshold_mb: number;
     cpu_threshold_percent: number;
     latency_threshold_ms: number;
+}
 }
   };
   caching: {
@@ -55,6 +57,7 @@ export interface OptimizationConfig {
 }
 
 }
+}
 export interface OptimizationRecommendation {
   id: string;
   type: 'performance' | 'memory' | 'cpu' | 'cache' | 'resource_allocation';
@@ -69,7 +72,9 @@ export interface OptimizationRecommendation {
   created_at: number;
 }
 }
+}
 
+}
 }
 export interface OptimizationResult {
   id: string;
@@ -85,7 +90,9 @@ export interface OptimizationResult {
   error_message?: string;
 }
 }
+}
 
+}
 }
 export interface CacheMetrics {
   hit_rate: number;
@@ -96,7 +103,9 @@ export interface CacheMetrics {
   total_requests: number;
 }
 }
+}
 
+}
 }
 export interface SecurityValidationResult {
   is_valid: boolean;
@@ -107,7 +116,9 @@ export interface SecurityValidationResult {
   recommendation: 'allow' | 'deny' | 'review_required';
 }
 }
+}
 
+}
 }
 export interface ThreatDetectionMetrics {
   suspicious_patterns: number;
@@ -115,6 +126,7 @@ export interface ThreatDetectionMetrics {
   risk_score: number;
   recent_threats: string[];
   security_events: number;
+}
 }
 }
 

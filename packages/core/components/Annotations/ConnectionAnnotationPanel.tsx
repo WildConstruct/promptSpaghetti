@@ -4,6 +4,7 @@ import React, { useState, useCallback } from 'react';
 // import { Edge } from 'reactflow';
 import { AnnotatedEdge, ConnectionLabelEditor } from './ConnectionAnnotations';
 import { connectionAnnotationPresets, labelTemplates } from '../../hooks/useConnectionAnnotations';
+}
 interface ConnectionAnnotationPanelProps {
   edges: AnnotatedEdge;
   selectedEdgeId: string | null;
@@ -40,6 +41,7 @@ interface ConnectionAnnotationPanelProps {
   onSetLabelEditMode,
   onSetSmartPositioning,
   getVisibleLabelsCount
+}
 }) => {
   const [showEditor, setShowEditor] = useState(false);
   const [quickLabelInput, setQuickLabelInput] = useState('');

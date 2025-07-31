@@ -18,6 +18,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface EmbedConfig {
     id: string;
     type: EmbedType;
@@ -34,6 +35,7 @@ export interface EmbedConfig {
 
 export type EmbedType = 'widget' | 'form' | 'gallery' | 'chart' | 'video' | 'chat' | 'survey' | 'calendar' | 'map' | 'feed' | 'custom';
 
+}
 export interface EmbedContent {
     html?: string;
     css?: string;
@@ -44,6 +46,7 @@ export interface EmbedContent {
     layout: LayoutConfig;
     interactions: InteractionConfig[];
 
+}
 export interface ContentData {
     static: Record<string, any>;
     dynamic: DynamicDataConfig[];
@@ -52,6 +55,7 @@ export interface ContentData {
     cachingStrategy: 'none' | 'browser' | 'cdn' | 'aggressive';
     compression: boolean;
 
+}
 export interface DynamicDataConfig {
     id: string;
     source: DataSource;
@@ -63,6 +67,7 @@ export interface DynamicDataConfig {
     fallback?: any;
     errorHandling: ErrorHandlingConfig;
 
+}
 export interface DataSource {
     type: 'api' | 'database' | 'file' | 'stream' | 'websocket';
     url: string;
@@ -70,12 +75,14 @@ export interface DataSource {
     timeout: number;
     retryPolicy: RetryPolicy;
 
+}
 export interface AuthConfig {
     type: 'none' | 'api_key' | 'bearer' | 'basic' | 'oauth';
     credentials: Record<string, string>;
     refreshToken?: string;
     expiryTime?: Date;
 
+}
 export interface ErrorHandlingConfig {
     strategy: 'fail' | 'fallback' | 'retry' | 'ignore';
     maxRetries: number;
@@ -83,6 +90,7 @@ export interface ErrorHandlingConfig {
     fallbackValue?: any;
     errorMessage?: string;
 
+}
 export interface RetryPolicy {
     maxAttempts: number;
     backoffStrategy: 'linear' | 'exponential' | 'fixed';
@@ -90,6 +98,7 @@ export interface RetryPolicy {
     maxDelay: number;
     jitter: boolean;
 
+}
 export interface TemplateConfig {
     engine: 'mustache' | 'handlebars' | 'react' | 'vue' | 'custom';
     template: string;
@@ -97,6 +106,7 @@ export interface TemplateConfig {
     helpers?: Record<string, string>;
     data?: Record<string, any>;
 
+}
 export interface ComponentConfig {
     id: string;
     type: ComponentType;
@@ -111,6 +121,7 @@ export interface ComponentConfig {
 
 export type ComponentType = 'button' | 'input' | 'select' | 'textarea' | 'checkbox' | 'radio' | 'slider' | 'datepicker' | 'image' | 'video' | 'audio' | 'chart' | 'table' | 'list' | 'card' | 'modal' | 'tooltip' | 'progress' | 'spinner' | 'custom';
 
+}
 export interface ComponentStyling {
     css?: string;
     classes?: string[];
@@ -119,16 +130,19 @@ export interface ComponentStyling {
     responsive?: ResponsiveConfig;
     animations?: AnimationConfig[];
 
+}
 export interface ResponsiveConfig {
     breakpoints: Record<string, number>;
     rules: ResponsiveRule[];
     strategy: 'mobile-first' | 'desktop-first';
 
+}
 export interface ResponsiveRule {
     breakpoint: string;
     styles: Record<string, string>;
     behavior?: Record<string, any>;
 
+}
 export interface AnimationConfig {
     trigger: 'load' | 'hover' | 'click' | 'scroll' | 'custom';
     type: 'fade' | 'slide' | 'scale' | 'rotate' | 'bounce' | 'custom';
@@ -137,6 +151,7 @@ export interface AnimationConfig {
     delay?: number;
     loop?: boolean | number;
 
+}
 export interface ComponentEvent {
     type: string;
     handler: string;
@@ -145,6 +160,7 @@ export interface ComponentEvent {
     debounce?: number;
     throttle?: number;
 
+}
 export interface LayoutConfig {
     type: 'fixed' | 'fluid' | 'responsive' | 'adaptive';
     container: ContainerConfig;
@@ -153,6 +169,7 @@ export interface LayoutConfig {
     position: PositionConfig;
     overflow: OverflowConfig;
 
+}
 export interface ContainerConfig {
     width: DimensionValue;
     height: DimensionValue;
@@ -163,6 +180,7 @@ export interface ContainerConfig {
     padding: SpacingValue;
     margin: SpacingValue;
 
+}
 export interface GridConfig {
     columns: number | 'auto';
     rows: number | 'auto';
@@ -170,6 +188,7 @@ export interface GridConfig {
     areas?: string[][];
     autoFlow: 'row' | 'column' | 'row dense' | 'column dense';
 
+}
 export interface FlexboxConfig {
     direction: 'row' | 'column' | 'row-reverse' | 'column-reverse';
     wrap: 'nowrap' | 'wrap' | 'wrap-reverse';
@@ -177,6 +196,7 @@ export interface FlexboxConfig {
     align: 'flex-start' | 'flex-end' | 'center' | 'baseline' | 'stretch';
     gap: SpacingValue;
 
+}
 export interface PositionConfig {
     type: 'static' | 'relative' | 'absolute' | 'fixed' | 'sticky';
     top?: DimensionValue;
@@ -185,19 +205,23 @@ export interface PositionConfig {
     left?: DimensionValue;
     zIndex?: number;
 
+}
 export interface OverflowConfig {
     x: 'visible' | 'hidden' | 'scroll' | 'auto';
     y: 'visible' | 'hidden' | 'scroll' | 'auto';
 
 export type DimensionValue = string | number | 'auto' | 'inherit' | 'initial' | 'unset';
 
+}
 export type SpacingValue = string | number | {
     top?: DimensionValue;
     right?: DimensionValue;
     bottom?: DimensionValue;
     left?: DimensionValue;
+}
 };
 
+}
 export interface InteractionConfig {
     id: string;
     trigger: InteractionTrigger;
@@ -207,17 +231,20 @@ export interface InteractionConfig {
     debounce?: number;
     once?: boolean;
 
+}
 export interface InteractionTrigger {
     type: 'click' | 'hover' | 'focus' | 'scroll' | 'resize' | 'keypress' | 'custom';
     target?: string;
     key?: string;
     threshold?: number;
 
+}
 export interface InteractionAction {
     type: 'navigate' | 'submit' | 'toggle' | 'animate' | 'update' | 'emit' | 'custom';
     params: Record<string, any>;
     callback?: string;
 
+}
 export interface EmbedStyling {
     theme: ThemeConfig;
     customCSS?: string;
@@ -230,6 +257,7 @@ export interface EmbedStyling {
     shadows: ShadowConfig[];
     borders: BorderConfig;
 
+}
 export interface ThemeConfig {
     name: string;
     variant: 'light' | 'dark' | 'auto';
@@ -240,6 +268,7 @@ export interface ThemeConfig {
     shadows: boolean;
     animations: boolean;
 
+}
 export interface ColorScheme {
     primary: string;
     secondary: string;
@@ -253,15 +282,18 @@ export interface ColorScheme {
         primary: string;
         secondary: string;
         disabled: string;
+}
     };
     border: string;
     divider: string;
 
+}
 export interface TypographyConfig {
     fontFamily: {
         primary: string;
         secondary?: string;
         monospace: string;
+}
     };
     fontSize: {
         xs: string;
@@ -286,11 +318,13 @@ export interface TypographyConfig {
         relaxed: number;
     };
 
+}
 export interface SpacingConfig {
     scale: 'linear' | 'geometric' | 'custom';
     base: number;
     values: Record<string, number>;
 
+}
 export interface BorderRadiusConfig {
     none: string;
     sm: string;
@@ -299,6 +333,7 @@ export interface BorderRadiusConfig {
     xl: string;
     full: string;
 
+}
 export interface FontConfig {
     family: string;
     source: 'google' | 'adobe' | 'system' | 'custom';
@@ -307,6 +342,7 @@ export interface FontConfig {
     styles: ('normal' | 'italic')[];
     display: 'auto' | 'block' | 'swap' | 'fallback' | 'optional';
 
+}
 export interface ColorPalette {
     [key: string]: {
         50: string;
@@ -319,20 +355,25 @@ export interface ColorPalette {
         700: string;
         800: string;
         900: string;
+}
     };
 
+}
 export interface SpacingScale {
     [key: string]: string;
 
+}
 export interface ShadowConfig {
     name: string;
     value: string;
 
+}
 export interface BorderConfig {
     width: Record<string, string>;
     style: Record<string, string>;
     color: Record<string, string>;
 
+}
 export interface EmbedBehavior {
     responsive: boolean;
     autoResize: boolean;
@@ -343,6 +384,7 @@ export interface EmbedBehavior {
     lifecycle: LifecycleConfig;
     performance: PerformanceConfig;
 
+}
 export interface SandboxConfig {
     enabled: boolean;
     permissions: SandboxPermission[];
@@ -351,6 +393,7 @@ export interface SandboxConfig {
 
 export type SandboxPermission = 'allow-scripts' | 'allow-forms' | 'allow-popups' | 'allow-modals' | 'allow-orientation-lock' | 'allow-pointer-lock' | 'allow-presentation' | 'allow-same-origin' | 'allow-top-navigation' | 'allow-downloads';
 
+}
 export interface LoadingConfig {
     strategy: 'eager' | 'lazy' | 'conditional';
     placeholder?: PlaceholderConfig;
@@ -359,29 +402,34 @@ export interface LoadingConfig {
     timeout: number;
     fallback?: FallbackConfig;
 
+}
 export interface PlaceholderConfig {
     type: 'image' | 'text' | 'custom';
     content: string;
     styling?: Record<string, string>;
 
+}
 export interface SkeletonConfig {
     enabled: boolean;
     animation: 'pulse' | 'wave' | 'none';
     color: string;
     highlightColor: string;
 
+}
 export interface SpinnerConfig {
     type: 'circle' | 'dots' | 'bars' | 'custom';
     size: 'sm' | 'md' | 'lg';
     color: string;
     speed: number;
 
+}
 export interface FallbackConfig {
     content: string;
     styling?: Record<string, string>;
     retry?: boolean;
     retryText?: string;
 
+}
 export interface CommunicationConfig {
     enabled: boolean;
     protocol: 'postMessage' | 'custom';
@@ -389,6 +437,7 @@ export interface CommunicationConfig {
     messageTypes: string[];
     encryption?: EncryptionConfig;
 
+}
 export interface EncryptionConfig {
     enabled: boolean;
     algorithm: 'AES' | 'RSA';
@@ -396,6 +445,7 @@ export interface EncryptionConfig {
     publicKey?: string;
     privateKey?: string;
 
+}
 export interface LifecycleConfig {
     hooks: LifecycleHook[];
     autoMount: boolean;
@@ -403,11 +453,13 @@ export interface LifecycleConfig {
     persistState: boolean;
     stateKey?: string;
 
+}
 export interface LifecycleHook {
     stage: 'beforeMount' | 'mounted' | 'beforeUpdate' | 'updated' | 'beforeDestroy' | 'destroyed';
     handler: string;
     async: boolean;
 
+}
 export interface PerformanceConfig {
     lazyLoading: boolean;
     codesplitting: boolean;
@@ -416,6 +468,7 @@ export interface PerformanceConfig {
     caching: CachingConfig;
     monitoring: MonitoringConfig;
 
+}
 export interface CachingConfig {
     enabled: boolean;
     strategy: 'memory' | 'localStorage' | 'sessionStorage' | 'indexedDB';
@@ -423,18 +476,21 @@ export interface CachingConfig {
     maxSize: number;
     version: string;
 
+}
 export interface MonitoringConfig {
     enabled: boolean;
     metrics: string[];
     sampling: number;
     reporting: ReportingConfig;
 
+}
 export interface ReportingConfig {
     endpoint: string;
     batchSize: number;
     flushInterval: number;
     authentication?: AuthConfig;
 
+}
 export interface SecurityConfig {
     csp: CSPConfig;
     cors: CORSConfig;
@@ -443,12 +499,14 @@ export interface SecurityConfig {
     validation: ValidationConfig;
     sanitization: SanitizationConfig;
 
+}
 export interface CSPConfig {
     enabled: boolean;
     directives: Record<string, string>;
     reportUri?: string;
     reportOnly: boolean;
 
+}
 export interface CORSConfig {
     enabled: boolean;
     allowedOrigins: string[];
@@ -457,6 +515,7 @@ export interface CORSConfig {
     credentials: boolean;
     maxAge: number;
 
+}
 export interface RateLimitConfig {
     enabled: boolean;
     requests: number;
@@ -464,36 +523,42 @@ export interface RateLimitConfig {
     skipSuccessfulRequests?: boolean;
     skipFailedRequests?: boolean;
 
+}
 export interface ValidationConfig {
     enabled: boolean;
     schemas: Record<string, any>;
     strict: boolean;
     stripUnknown: boolean;
 
+}
 export interface SanitizationConfig {
     enabled: boolean;
     htmlSanitizer?: HTMLSanitizerConfig;
     cssSanitizer?: CSSSanitizerConfig;
     jsSanitizer?: JSSanitizerConfig;
 
+}
 export interface HTMLSanitizerConfig {
     allowedTags: string[];
     allowedAttributes: Record<string, string[]>;
     allowedSchemes: string[];
     allowedClasses: string[];
 
+}
 export interface CSSSanitizerConfig {
     allowedProperties: string[];
     allowedValues: Record<string, string[]>;
     allowedUnits: string[];
     blockedSelectors: string[];
 
+}
 export interface JSSanitizerConfig {
     allowedFunctions: string[];
     blockedKeywords: string[];
     maxExecutionTime: number;
     memoryLimit: number;
 
+}
 export interface AnalyticsConfig {
     enabled: boolean;
     trackingId?: string;
@@ -501,6 +566,7 @@ export interface AnalyticsConfig {
     sampling: number;
     privacy: PrivacyConfig;
 
+}
 export interface AnalyticsEvent {
     name: string;
     trigger: string;
@@ -508,18 +574,21 @@ export interface AnalyticsEvent {
     category?: string;
     label?: string;
 
+}
 export interface PrivacyConfig {
     anonymizeIp: boolean;
     respectDoNotTrack: boolean;
     cookieConsent: boolean;
     dataRetention: number;
 
+}
 export interface PermissionConfig {
     required: Permission[];
     optional: Permission[];
     requestOnDemand: boolean;
     gracefulDegradation: boolean;
 
+}
 export interface Permission {
     type: PermissionType;
     reason: string;
@@ -527,6 +596,7 @@ export interface Permission {
 
 export type PermissionType = 'geolocation' | 'camera' | 'microphone' | 'notifications' | 'clipboard' | 'fullscreen' | 'storage' | 'cookies';
 
+}
 export interface EmbedMetadata {
     name: string;
     description: string;
@@ -544,6 +614,7 @@ export interface EmbedMetadata {
     deprecated?: boolean;
     deprecationMessage?: string;
 
+}
 export interface AuthorInfo {
     name: string;
     email?: string;
@@ -649,6 +720,7 @@ export declare class EmbedBuilder {
 declare const _default: {
     EmbeddableContent: typeof EmbeddableContent;
     EmbedBuilder: typeof EmbedBuilder;
+}
 };
 export default _default;
 //# sourceMappingURL=EmbeddableContent.d.ts.map

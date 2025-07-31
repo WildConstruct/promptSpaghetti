@@ -5,12 +5,14 @@ import { ReportCard } from './ReportCard';
 import { ExportManager } from './ExportManager';
 import { analyticsService } from '../../../services/analyticsService';
 import './ReportsManager.css';
+}
 interface ReportsManagerProps {
   creatorId: string;
   className?: string;
   export const ReportsManager: React.FC<ReportsManagerProps> = ({,)
   creatorId,
   className = ''
+}
 }) => {
   const [reports, setReports] = useState<CustomReport>([]);
   const [loading, setLoading] = useState(true);

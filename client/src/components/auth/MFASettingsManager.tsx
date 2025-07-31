@@ -33,6 +33,7 @@ import type {
   MFAListResponse
 } from '../../types/MFATypes';
 import { MFAEnrollmentWorkflow } from './MFAEnrollmentWorkflow';
+}
 interface MFASettingsManagerProps {
   userId: string;
   onMethodChange?: (methods: BaseMFAConfiguration) => void;
@@ -50,9 +51,10 @@ interface MFASettingsManagerProps {
   [MFAMethodType.TOTP]: Smartphone,
   [MFAMethodType.EMAIL]: Mail,
   [MFAMethodType.SMS]: MessageSquare,
+}
 };
 const STATUS_CONFIG = {
-  [MFAMethodStatus.ACTIVE]: {,
+  [MFAMethodStatus.ACTIVE]: {
   color: 'green',
   label: 'Active',
   icon: CheckCircle,
@@ -116,7 +118,7 @@ export function MFASettingsManager({ userId, onMethodChange }: MFASettingsManage
       const response = await fetch(`/api/mfa/configure/${configId}`, {)}
   },
   method: 'PATCH',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
   },

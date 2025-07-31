@@ -33,9 +33,11 @@ const oauthUnlinkSchema = z.object({
 });
 
 }
+}
 interface OAuthRouteContext {
   authService: AuthenticationService;
   oauthService: OAuthService;
+}
 }
 }
 

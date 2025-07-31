@@ -6,6 +6,7 @@
  */
 import { MarketplaceEventType, TemplateMetrics, CreatorMetrics } from '../analytics/MarketplaceMetrics';
 
+}
 export interface MarketplaceMetricsConfig {
     enableAutoTracking?: boolean;
     trackPageViews?: boolean;
@@ -35,12 +36,13 @@ export declare const useMarketplaceMetrics: (config?: MarketplaceMetricsConfig) 
     getCreatorAnalytics: (creatorId: string) => CreatorMetrics | null;
     getTopPerformingTemplates: (metric?: "revenue" | "downloads" | "rating", limit?: number) => TemplateMetrics[];
     getSearchAnalytics: () => {,
-        topQueries: Array<{,
+        topQueries: Array<{
             query: string;
             count: number;
             ctr: number;
+}
         }>;
-        zeroResultQueries: Array<{,
+        zeroResultQueries: Array<{
             query: string;
             count: number;
         }>;

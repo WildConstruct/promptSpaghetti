@@ -4,6 +4,7 @@
  */
 import type { ProjectMetadata } from '../schemas/psgSchema';
 
+}
 export interface RecentProjectEntry {
     id: string;
     name: string;
@@ -14,6 +15,7 @@ export interface RecentProjectEntry {
     fileSize?: number;
 
 
+}
 export interface RecentProjectsData {
     projects: RecentProjectEntry[];
     version: string;
@@ -52,6 +54,7 @@ export declare class RecentProjectsManager {
     static checkStorageQuota(): {
         available: boolean;
         usage?: number;
+}
     };
     /**
      * Get project metadata for display

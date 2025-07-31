@@ -9,6 +9,7 @@ import { RetentionExceptionTrackingService } from './RetentionExceptionTrackingS
 import { DataCategory, Jurisdiction } from '../types/DataRetentionPeriods';
 
 }
+}
 export interface RetentionMonitoringReport {
   reportId: string;
   title: string;
@@ -30,6 +31,7 @@ export interface RetentionMonitoringReport {
   metadata: ReportMetadata;
 }
 }
+}
 
 export enum ReportType {
   EXECUTIVE_SUMMARY = 'EXECUTIVE_SUMMARY',
@@ -43,11 +45,13 @@ export enum ReportType {
 }
 
 }
+}
 export interface ReportPeriod {
   startDate: Date;
   endDate: Date;
   description: string;
   frequency: ReportFrequency;
+}
 }
 }
 
@@ -62,6 +66,7 @@ export enum ReportFrequency {
 }
 
 }
+}
 export interface ReportScope {
   categories: DataCategory[];
   jurisdictions: Jurisdiction[];
@@ -73,14 +78,18 @@ export interface ReportScope {
   volumeThreshold?: number;
 }
 }
+}
 
+}
 }
 export interface AgeRange {
   minDays: number;
   maxDays: number;
 }
 }
+}
 
+}
 }
 export interface RetentionSummary {
   totalRecords: number;
@@ -94,7 +103,9 @@ export interface RetentionSummary {
   keyMetrics: KeyMetric[];
 }
 }
+}
 
+}
 }
 export interface DataVolume {
   totalBytes: number;
@@ -104,7 +115,9 @@ export interface DataVolume {
   humanReadable: string;
 }
 }
+}
 
+}
 }
 export interface CategoryBreakdown {
   category: DataCategory;
@@ -115,7 +128,9 @@ export interface CategoryBreakdown {
   averageAge: number; // days
 }
 }
+}
 
+}
 }
 export interface LifecycleBreakdown {
   stage: string;
@@ -125,7 +140,9 @@ export interface LifecycleBreakdown {
   efficiency: number; // percentage
 }
 }
+}
 
+}
 }
 export interface KeyMetric {
   name: string;
@@ -135,6 +152,7 @@ export interface KeyMetric {
   status: MetricStatus;
   trend: TrendDirection;
   impact: ImpactLevel;
+}
 }
 }
 
@@ -161,6 +179,7 @@ export enum ImpactLevel {
 }
 
 }
+}
 export interface ComplianceMetrics {
   overallScore: number;
   categoryScores: CategoryComplianceScore[];
@@ -170,7 +189,9 @@ export interface ComplianceMetrics {
   maturityAssessment: MaturityAssessment;
 }
 }
+}
 
+}
 }
 export interface CategoryComplianceScore {
   category: DataCategory;
@@ -181,7 +202,9 @@ export interface CategoryComplianceScore {
   riskLevel: RiskLevel;
 }
 }
+}
 
+}
 }
 export interface RegulationComplianceScore {
   regulation: string;
@@ -192,7 +215,9 @@ export interface RegulationComplianceScore {
   certificationStatus: CertificationStatus;
 }
 }
+}
 
+}
 }
 export interface RequirementCompliance {
   requirementId: string;
@@ -201,6 +226,7 @@ export interface RequirementCompliance {
   evidence: string[];
   lastVerified: Date;
   responsible: string;
+}
 }
 }
 
@@ -213,6 +239,7 @@ export enum CertificationStatus {
 }
 
 }
+}
 export interface ControlEffectiveness {
   controlId: string;
   name: string;
@@ -222,6 +249,7 @@ export interface ControlEffectiveness {
   reliability: number; // percentage
   lastTested: Date;
   testResult: TestResult;
+}
 }
 }
 
@@ -241,6 +269,7 @@ export enum TestResult {
 }
 
 }
+}
 export interface ComplianceGap {
   gapId: string;
   area: string;
@@ -252,6 +281,7 @@ export interface ComplianceGap {
   timeline: number; // days
   responsible: string;
   status: GapStatus;
+}
 }
 }
 
@@ -279,11 +309,13 @@ export enum GapStatus {
 }
 
 }
+}
 export interface MaturityAssessment {
   overallLevel: MaturityLevel;
   dimensions: MaturityDimension[];
   recommendations: MaturityRecommendation[];
   roadmap: MaturityRoadmap[];
+}
 }
 }
 
@@ -296,6 +328,7 @@ export enum MaturityLevel {
 }
 
 }
+}
 export interface MaturityDimension {
   dimension: string;
   currentLevel: MaturityLevel;
@@ -305,7 +338,9 @@ export interface MaturityDimension {
   recommendations: string[];
 }
 }
+}
 
+}
 }
 export interface MaturityRecommendation {
   area: string;
@@ -317,6 +352,7 @@ export interface MaturityRecommendation {
   timeline: number; // days
 }
 }
+}
 
 export enum Priority {
   LOW = 'LOW',
@@ -325,6 +361,7 @@ export enum Priority {
   URGENT = 'URGENT'
 }
 
+}
 }
 export interface MaturityRoadmap {
   phase: string;
@@ -335,7 +372,9 @@ export interface MaturityRoadmap {
   milestones: Milestone[];
 }
 }
+}
 
+}
 }
 export interface Milestone {
   name: string;
@@ -345,7 +384,9 @@ export interface Milestone {
   criteria: string[];
 }
 }
+}
 
+}
 }
 export interface ViolationMetrics {
   totalViolations: number;
@@ -358,7 +399,9 @@ export interface ViolationMetrics {
   trends: ViolationTrend[];
 }
 }
+}
 
+}
 }
 export interface ViolationByCategory {
   category: DataCategory;
@@ -368,13 +411,16 @@ export interface ViolationByCategory {
   averageSeverity: number;
 }
 }
+}
 
+}
 }
 export interface ViolationBySeverity {
   severity: ViolationSeverity;
   count: number;
   percentage: number;
   averageAge: number; // days
+}
 }
 }
 
@@ -386,11 +432,13 @@ export enum ViolationSeverity {
 }
 
 }
+}
 export interface ViolationByType {
   type: ViolationType;
   count: number;
   percentage: number;
   impact: ImpactLevel;
+}
 }
 }
 
@@ -405,6 +453,7 @@ export enum ViolationType {
 }
 
 }
+}
 export interface ResolutionMetrics {
   averageResolutionTime: number; // days
   resolutionTimeByCategory: CategoryResolutionTime[];
@@ -413,7 +462,9 @@ export interface ResolutionMetrics {
   escalationRate: number; // percentage
 }
 }
+}
 
+}
 }
 export interface CategoryResolutionTime {
   category: DataCategory;
@@ -422,7 +473,9 @@ export interface CategoryResolutionTime {
   slaCompliance: number; // percentage
 }
 }
+}
 
+}
 }
 export interface ViolationTrend {
   period: string;
@@ -432,7 +485,9 @@ export interface ViolationTrend {
   forecast: number;
 }
 }
+}
 
+}
 }
 export interface ExceptionMetrics {
   totalExceptions: number;
@@ -444,7 +499,9 @@ export interface ExceptionMetrics {
   renewalMetrics: RenewalMetrics;
 }
 }
+}
 
+}
 }
 export interface ExceptionByType {
   type: string;
@@ -452,6 +509,7 @@ export interface ExceptionByType {
   percentage: number;
   averageDuration: number; // days
   riskLevel: RiskLevel;
+}
 }
 }
 
@@ -463,6 +521,7 @@ export enum RiskLevel {
 }
 
 }
+}
 export interface ApprovalMetrics {
   averageApprovalTime: number; // days
   approvalSuccess: number; // percentage
@@ -471,7 +530,9 @@ export interface ApprovalMetrics {
   bottlenecks: ApprovalBottleneck[];
 }
 }
+}
 
+}
 }
 export interface ApprovalBottleneck {
   role: string;
@@ -480,7 +541,9 @@ export interface ApprovalBottleneck {
   efficiency: number; // percentage
 }
 }
+}
 
+}
 }
 export interface ExceptionRiskMetrics {
   overallRisk: RiskLevel;
@@ -489,7 +552,9 @@ export interface ExceptionRiskMetrics {
   residualRisk: RiskLevel;
 }
 }
+}
 
+}
 }
 export interface RiskDistribution {
   riskLevel: RiskLevel;
@@ -498,7 +563,9 @@ export interface RiskDistribution {
   categories: string[];
 }
 }
+}
 
+}
 }
 export interface RenewalMetrics {
   eligibleForRenewal: number;
@@ -508,7 +575,9 @@ export interface RenewalMetrics {
   averageRenewalTime: number; // days
 }
 }
+}
 
+}
 }
 export interface LifecycleMetrics {
   stageDistribution: StageDistribution[];
@@ -518,7 +587,9 @@ export interface LifecycleMetrics {
   bottlenecks: LifecycleBottleneck[];
 }
 }
+}
 
+}
 }
 export interface StageDistribution {
   stage: string;
@@ -528,7 +599,9 @@ export interface StageDistribution {
   efficiency: number; // percentage
 }
 }
+}
 
+}
 }
 export interface TransitionMetrics {
   fromStage: string;
@@ -539,7 +612,9 @@ export interface TransitionMetrics {
   automation: number; // percentage
 }
 }
+}
 
+}
 }
 export interface LifecycleEfficiency {
   overallEfficiency: number; // percentage
@@ -549,7 +624,9 @@ export interface LifecycleEfficiency {
   bottleneckImpact: number; // percentage
 }
 }
+}
 
+}
 }
 export interface AutomationMetrics {
   totalAutomatedActions: number;
@@ -559,7 +636,9 @@ export interface AutomationMetrics {
   timeSaved: number; // hours
 }
 }
+}
 
+}
 }
 export interface LifecycleBottleneck {
   stage: string;
@@ -570,7 +649,9 @@ export interface LifecycleBottleneck {
   recommendation: string;
 }
 }
+}
 
+}
 }
 export interface RiskMetrics {
   overallRiskScore: number;
@@ -580,7 +661,9 @@ export interface RiskMetrics {
   riskAppetite: RiskAppetite;
 }
 }
+}
 
+}
 }
 export interface RiskByCategory {
   category: string;
@@ -591,7 +674,9 @@ export interface RiskByCategory {
   trend: TrendDirection;
 }
 }
+}
 
+}
 }
 export interface RiskTrend {
   period: string;
@@ -600,7 +685,9 @@ export interface RiskTrend {
   drivers: string[];
 }
 }
+}
 
+}
 }
 export interface MitigationStatus {
   riskId: string;
@@ -609,6 +696,7 @@ export interface MitigationStatus {
   effectiveness: number; // percentage
   cost: number;
   dueDate: Date;
+}
 }
 }
 
@@ -621,6 +709,7 @@ export enum MitigationState {
 }
 
 }
+}
 export interface RiskAppetite {
   current: number;
   target: number;
@@ -629,7 +718,9 @@ export interface RiskAppetite {
   breaches: number;
 }
 }
+}
 
+}
 }
 export interface Recommendation {
   recommendationId: string;
@@ -648,6 +739,7 @@ export interface Recommendation {
   roi: number; // percentage
 }
 }
+}
 
 export enum RecommendationCategory {
   POLICY = 'POLICY',
@@ -659,6 +751,7 @@ export enum RecommendationCategory {
 }
 
 }
+}
 export interface TrendAnalysis {
   metric: string;
   timeframe: string;
@@ -669,7 +762,9 @@ export interface TrendAnalysis {
   anomalies: AnomalyDetection[];
 }
 }
+}
 
+}
 }
 export interface TrendDataPoint {
   timestamp: Date;
@@ -677,7 +772,9 @@ export interface TrendDataPoint {
   context: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface SeasonalityPattern {
   detected: boolean;
@@ -686,7 +783,9 @@ export interface SeasonalityPattern {
   description: string;
 }
 }
+}
 
+}
 }
 export interface ForecastData {
   periods: number;
@@ -694,6 +793,7 @@ export interface ForecastData {
   confidence: number; // percentage
   predictions: PredictionPoint[];
   accuracy: number; // percentage
+}
 }
 }
 
@@ -706,13 +806,16 @@ export enum ForecastMethod {
 }
 
 }
+}
 export interface PredictionPoint {
   timestamp: Date;
   predicted: number;
   confidence: ConfidenceInterval;
 }
 }
+}
 
+}
 }
 export interface ConfidenceInterval {
   lower: number;
@@ -720,7 +823,9 @@ export interface ConfidenceInterval {
   level: number; // percentage
 }
 }
+}
 
+}
 }
 export interface AnomalyDetection {
   timestamp: Date;
@@ -729,6 +834,7 @@ export interface AnomalyDetection {
   deviation: number;
   severity: AnomalySeverity;
   explanation: string;
+}
 }
 }
 
@@ -740,6 +846,7 @@ export enum AnomalySeverity {
 }
 
 }
+}
 export interface CostAnalysis {
   totalCost: number;
   costByCategory: CostByCategory[];
@@ -748,7 +855,9 @@ export interface CostAnalysis {
   budget: BudgetAnalysis;
 }
 }
+}
 
+}
 }
 export interface CostByCategory {
   category: string;
@@ -758,7 +867,9 @@ export interface CostByCategory {
   efficiency: number; // cost per unit
 }
 }
+}
 
+}
 }
 export interface CostTrend {
   period: string;
@@ -767,7 +878,9 @@ export interface CostTrend {
   drivers: string[];
 }
 }
+}
 
+}
 }
 export interface CostOptimization {
   area: string;
@@ -779,7 +892,9 @@ export interface CostOptimization {
   risks: string[];
 }
 }
+}
 
+}
 }
 export interface BudgetAnalysis {
   allocated: number;
@@ -788,6 +903,7 @@ export interface BudgetAnalysis {
   variance: number; // percentage
   forecast: number;
   risk: BudgetRisk;
+}
 }
 }
 
@@ -799,6 +915,7 @@ export enum BudgetRisk {
 }
 
 }
+}
 export interface ReportAttachment {
   attachmentId: string;
   name: string;
@@ -807,6 +924,7 @@ export interface ReportAttachment {
   location: string;
   size: number;
   createdAt: Date;
+}
 }
 }
 
@@ -818,6 +936,7 @@ export enum AttachmentType {
   EVIDENCE_PACKAGE = 'EVIDENCE_PACKAGE'
 }
 
+}
 }
 export interface ReportMetadata {
   version: string;
@@ -831,6 +950,7 @@ export interface ReportMetadata {
   approvals: ReportApproval[];
 }
 }
+}
 
 export enum ConfidentialityLevel {
   PUBLIC = 'PUBLIC',
@@ -840,6 +960,7 @@ export enum ConfidentialityLevel {
 }
 
 }
+}
 export interface ReportApproval {
   approver: string;
   role: string;
@@ -847,7 +968,9 @@ export interface ReportApproval {
   conditions: string[];
 }
 }
+}
 
+}
 }
 export interface MonitoringAlert {
   alertId: string;
@@ -863,6 +986,7 @@ export interface MonitoringAlert {
   resolvedAt?: Date;
   escalationLevel: number;
   notifications: AlertNotification[];
+}
 }
 }
 
@@ -891,6 +1015,7 @@ export enum AlertStatus {
 }
 
 }
+}
 export interface AlertNotification {
   notificationId: string;
   channel: NotificationChannel;
@@ -898,6 +1023,7 @@ export interface AlertNotification {
   sentAt: Date;
   delivered: boolean;
   acknowledged: boolean;
+}
 }
 }
 
@@ -909,6 +1035,7 @@ export enum NotificationChannel {
   DASHBOARD = 'DASHBOARD'
 }
 
+}
 }
 export interface MonitoringDashboard {
   dashboardId: string;
@@ -922,7 +1049,9 @@ export interface MonitoringDashboard {
   lastUpdated: Date;
 }
 }
+}
 
+}
 }
 export interface DashboardWidget {
   widgetId: string;
@@ -932,6 +1061,7 @@ export interface DashboardWidget {
   position: WidgetPosition;
   dataSource: DataSource;
   refreshRate: number; // seconds
+}
 }
 }
 
@@ -947,6 +1077,7 @@ export enum WidgetType {
 }
 
 }
+}
 export interface WidgetConfiguration {
   metrics: string[];
   timeRange: TimeRange;
@@ -955,7 +1086,9 @@ export interface WidgetConfiguration {
   styling: WidgetStyling;
 }
 }
+}
 
+}
 }
 export interface TimeRange {
   start: Date;
@@ -963,11 +1096,14 @@ export interface TimeRange {
   relative?: RelativeTimeRange;
 }
 }
+}
 
+}
 }
 export interface RelativeTimeRange {
   value: number;
   unit: TimeUnit;
+}
 }
 }
 
@@ -989,12 +1125,14 @@ export enum AggregationType {
 }
 
 }
+}
 export interface WidgetStyling {
   colors: string[];
   theme: string;
   size: WidgetSize;
   borders: boolean;
   animations: boolean;
+}
 }
 }
 
@@ -1006,6 +1144,7 @@ export enum WidgetSize {
 }
 
 }
+}
 export interface WidgetPosition {
   x: number;
   y: number;
@@ -1014,7 +1153,9 @@ export interface WidgetPosition {
   zIndex: number;
 }
 }
+}
 
+}
 }
 export interface DataSource {
   sourceId: string;
@@ -1022,6 +1163,7 @@ export interface DataSource {
   connection: string;
   query: string;
   parameters: Record<string, any>;
+}
 }
 }
 
@@ -1033,11 +1175,13 @@ export enum DataSourceType {
 }
 
 }
+}
 export interface DashboardLayout {
   type: LayoutType;
   columns: number;
   responsive: boolean;
   margins: Margins;
+}
 }
 }
 
@@ -1048,6 +1192,7 @@ export enum LayoutType {
 }
 
 }
+}
 export interface Margins {
   top: number;
   right: number;
@@ -1055,7 +1200,9 @@ export interface Margins {
   left: number;
 }
 }
+}
 
+}
 }
 export interface DashboardFilter {
   filterId: string;
@@ -1064,6 +1211,7 @@ export interface DashboardFilter {
   options: FilterOption[];
   defaultValue: Error;
   required: boolean;
+}
 }
 }
 
@@ -1076,13 +1224,16 @@ export enum FilterType {
 }
 
 }
+}
 export interface FilterOption {
   value: Error;
   label: string;
   description?: string;
 }
 }
+}
 
+}
 }
 export interface DashboardPermission {
   userId: string;
@@ -1090,6 +1241,7 @@ export interface DashboardPermission {
   permissions: Permission[];
   grantedAt: Date;
   expiresAt?: Date;
+}
 }
 }
 

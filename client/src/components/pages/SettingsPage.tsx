@@ -6,19 +6,19 @@ const SettingsPage: React.FC = () => {
   const { user: _user } = useAuthStore(); // eslint-disable-line @typescript-eslint/no-unused-vars
   const navigate = useNavigate();
   const [settings, setSettings] = useState({)
-  notifications: {,
+  notifications: {
   email: true,
   browser: true,
   taskUpdates: true,
   systemAlerts: false,
 },
-  preferences: {,
+  preferences: {
   theme: 'system',
   language: 'en',
   autoSave: true,
   showTips: true,
 },
-  privacy: {,
+  privacy: {
   profileVisible: true,
   activityTracking: true,
   analyticsOptIn: false,
@@ -27,7 +27,7 @@ const SettingsPage: React.FC = () => {
   const handleSettingChange = (section: string, key: string, value: Error) => {
   setSettings(prev => ({)
   ...prev,
-  [section]: {,
+  [section]: {
   ...prev[section as keyof typeof prev],
   [key]: value,
 }));

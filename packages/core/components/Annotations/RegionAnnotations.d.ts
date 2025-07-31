@@ -6,6 +6,7 @@
  */
 import React from 'react';
 
+}
 export interface RegionAnnotation {
     id: string;
     name: string;
@@ -26,6 +27,7 @@ export interface RegionAnnotation {
     tags: string[];
     metadata: RegionMetadata;
 
+}
 export interface RegionArea {
     shape: 'rectangle' | 'circle' | 'polygon' | 'freehand';
     bounds: {
@@ -33,8 +35,9 @@ export interface RegionArea {
         y: number;
         width: number;
         height: number;
+}
     };
-    points: Array<{,
+    points: Array<{
         x: number;
         y: number;
     }>;
@@ -44,6 +47,7 @@ export interface RegionArea {
     };
     radius?: number;
 
+}
 export interface RegionStyle {
     borderColor: string;
     borderWidth: number;
@@ -54,6 +58,7 @@ export interface RegionStyle {
     shadowBlur?: number;
     animation?: 'none' | 'pulse' | 'glow' | 'march';
 
+}
 export interface RegionMetadata {
     nodeCount: number;
     totalComplexity?: number;
@@ -63,12 +68,14 @@ export interface RegionMetadata {
 
 export type MARSZoneType = 'motion_source' | 'action_trigger' | 'reaction_output' | 'subject_focus' | 'camera_influence' | 'lighting_zone' | 'effects_region' | 'audio_sync' | 'timing_critical' | 'creative_decision';
 
+}
 export interface VFXUser {
     id: string;
     name: string;
     role: string;
     color: string;
 
+}
 export interface RegionAnnotationSystemProps {
     width: number;
     height: number;
@@ -80,6 +87,7 @@ export interface RegionAnnotationSystemProps {
         width: number;
         height: number;
         type: string;
+}
     }>;
     currentUser: VFXUser;
     onRegionsChange: (regions: RegionAnnotation[]) => void;

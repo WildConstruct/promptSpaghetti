@@ -9,6 +9,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface QuotaRecommendationConfig {
     enablePatternAnalysis: boolean;
     analysisWindow: number;
@@ -20,6 +21,7 @@ export interface QuotaRecommendationConfig {
     alertingConfig: QuotaAlertingConfig;
 
 
+}
 export interface UsagePatternConfig {
     patternId: string;
     patternName: string;
@@ -39,6 +41,7 @@ export declare enum UsagePatternType {
     ABUSE_PATTERN = "abuse_pattern",
     SEASONAL_PATTERN = "seasonal_pattern"
 
+}
 export interface PatternDetectionRule {
     ruleId: string;
     condition: string;
@@ -48,6 +51,7 @@ export interface PatternDetectionRule {
     enabled: boolean;
 
 
+}
 export interface QuotaImpact {
     quotaMultiplier: number;
     adjustmentType: QuotaAdjustmentType;
@@ -62,6 +66,7 @@ export declare enum QuotaAdjustmentType {
     TEMPORARY_BOOST = "temporary_boost",
     GRADUAL_CHANGE = "gradual_change"
 
+}
 export interface QuotaAdjustmentRule {
     ruleId: string;
     ruleName: string;
@@ -73,6 +78,7 @@ export interface QuotaAdjustmentRule {
     lastApplied?: Date;
 
 
+}
 export interface AdjustmentCondition {
     conditionType: ConditionType;
     field: string;
@@ -90,6 +96,7 @@ export declare enum ConditionType {
     HISTORICAL_PATTERN = "historical_pattern",
     BUSINESS_METRIC = "business_metric"
 
+}
 export interface AdjustmentAction {
     actionType: AdjustmentActionType;
     parameters: Record<string, any>;
@@ -106,6 +113,7 @@ export declare enum AdjustmentActionType {
     BLOCK_USER = "block_user",
     THROTTLE_REQUESTS = "throttle_requests"
 
+}
 export interface FairnessConfig {
     enableFairnessAnalysis: boolean;
     fairnessMetrics: FairnessMetric[];
@@ -113,6 +121,7 @@ export interface FairnessConfig {
     priorityTiers: PriorityTier[];
 
 
+}
 export interface FairnessMetric {
     metricId: string;
     metricName: string;
@@ -130,6 +139,7 @@ export declare enum FairnessMetricType {
     RESPONSE_TIME_EQUITY = "response_time_equity",
     ERROR_RATE_EQUITY = "error_rate_equity"
 
+}
 export interface RedistributionRule {
     ruleId: string;
     triggerCondition: string;
@@ -140,18 +150,21 @@ export interface RedistributionRule {
     enabled: boolean;
 
 
+}
 export interface SourceCondition {
     condition: string;
     minUtilization: number;
     surplusAmount: number;
 
 
+}
 export interface TargetCondition {
     condition: string;
     maxUtilization: number;
     deficitAmount: number;
 
 
+}
 export interface PriorityTier {
     tierId: string;
     tierName: string;
@@ -162,6 +175,7 @@ export interface PriorityTier {
     features: TierFeature[];
 
 
+}
 export interface TierFeature {
     featureId: string;
     featureName: string;
@@ -169,6 +183,7 @@ export interface TierFeature {
     parameters: Record<string, any>;
 
 
+}
 export interface AbuseDetectionConfig {
     enableAbuseDetection: boolean;
     abusePatterns: AbusePattern[];
@@ -177,6 +192,7 @@ export interface AbuseDetectionConfig {
     whitelistRules: WhitelistRule[];
 
 
+}
 export interface AbusePattern {
     patternId: string;
     patternName: string;
@@ -187,6 +203,7 @@ export interface AbusePattern {
     enabled: boolean;
 
 
+}
 export interface AbuseDetectionRule {
     ruleId: string;
     ruleType: AbuseRuleType;
@@ -210,6 +227,7 @@ export declare enum AbuseSeverity {
     HIGH = "high",
     CRITICAL = "critical"
 
+}
 export interface AbuseResponseAction {
     actionId: string;
     severity: AbuseSeverity;
@@ -227,6 +245,7 @@ export declare enum AbuseActionType {
     CAPTCHA_CHALLENGE = "captcha_challenge",
     ACCOUNT_REVIEW = "account_review"
 
+}
 export interface WhitelistRule {
     ruleId: string;
     ruleName: string;
@@ -235,6 +254,7 @@ export interface WhitelistRule {
     enabled: boolean;
 
 
+}
 export interface AbuseExemption {
     exemptionType: ExemptionType;
     value: string;
@@ -248,6 +268,7 @@ export declare enum ExemptionType {
     USER_AGENT = "user_agent",
     DOMAIN = "domain"
 
+}
 export interface QuotaAlertingConfig {
     enableAlerting: boolean;
     alertThresholds: AlertThreshold[];
@@ -255,6 +276,7 @@ export interface QuotaAlertingConfig {
     escalationRules: EscalationRule[];
 
 
+}
 export interface AlertThreshold {
     thresholdId: string;
     metricType: AlertMetricType;
@@ -270,6 +292,7 @@ export declare enum AlertMetricType {
     FAIRNESS_VIOLATION = "fairness_violation",
     SYSTEM_OVERLOAD = "system_overload"
 
+}
 export interface NotificationChannel {
     channelId: string;
     channelType: NotificationChannelType;
@@ -283,6 +306,7 @@ export declare enum NotificationChannelType {
     SMS = "sms",
     DASHBOARD = "dashboard"
 
+}
 export interface EscalationRule {
     ruleId: string;
     triggerCondition: string;
@@ -292,6 +316,7 @@ export interface EscalationRule {
     enabled: boolean;
 
 
+}
 export interface UsagePattern {
     patternId: string;
     userId: string;
@@ -305,6 +330,7 @@ export interface UsagePattern {
     recommendations: PatternRecommendation[];
 
 
+}
 export interface PatternMetrics {
     averageRequestRate: number;
     peakRequestRate: number;
@@ -315,6 +341,7 @@ export interface PatternMetrics {
     timingPattern: TimingPattern;
 
 
+}
 export interface TimingPattern {
     peakHours: number[];
     peakDays: number[];
@@ -323,6 +350,7 @@ export interface TimingPattern {
     steadyStateRatio: number;
 
 
+}
 export interface SeasonalityInfo {
     hasSeasonality: boolean;
     period: number;
@@ -330,6 +358,7 @@ export interface SeasonalityInfo {
     phase: number;
 
 
+}
 export interface PatternCharacteristics {
     predictability: number;
     volatility: number;
@@ -339,6 +368,7 @@ export interface PatternCharacteristics {
     consistency: number;
 
 
+}
 export interface UsageForecast {
     forecastHorizon: number;
     predictedUsage: ForecastPoint[];
@@ -347,6 +377,7 @@ export interface UsageForecast {
     scenarioForecasts: ScenarioForecast[];
 
 
+}
 export interface ForecastPoint {
     timestamp: Date;
     requestRate: number;
@@ -354,12 +385,14 @@ export interface ForecastPoint {
     confidence: number;
 
 
+}
 export interface UncertaintyBounds {
     upperBound: number[];
     lowerBound: number[];
     confidenceInterval: number;
 
 
+}
 export interface ScenarioForecast {
     scenarioId: string;
     scenarioName: string;
@@ -368,6 +401,7 @@ export interface ScenarioForecast {
     description: string;
 
 
+}
 export interface PatternRecommendation {
     recommendationId: string;
     recommendationType: RecommendationType;
@@ -400,6 +434,7 @@ export declare enum RiskLevel {
     HIGH = "high",
     CRITICAL = "critical"
 
+}
 export interface ActionItem {
     itemId: string;
     description: string;
@@ -409,6 +444,7 @@ export interface ActionItem {
     dependencies: string[];
 
 
+}
 export interface QuotaRecommendation {
     recommendationId: string;
     userId: string;
@@ -425,6 +461,7 @@ export interface QuotaRecommendation {
     feedback?: RecommendationFeedback;
 
 
+}
 export interface QuotaAllocation {
     requestsPerSecond: number;
     requestsPerMinute: number;
@@ -435,6 +472,7 @@ export interface QuotaAllocation {
     specialLimits: SpecialLimit[];
 
 
+}
 export interface SpecialLimit {
     limitType: string;
     value: number;
@@ -442,6 +480,7 @@ export interface SpecialLimit {
     scope: string;
 
 
+}
 export interface QuotaImpactAnalysis {
     performanceImpact: PerformanceImpact;
     businessImpact: BusinessImpact;
@@ -450,6 +489,7 @@ export interface QuotaImpactAnalysis {
     costImpact: CostImpact;
 
 
+}
 export interface PerformanceImpact {
     responseTimeChange: number;
     throughputChange: number;
@@ -457,6 +497,7 @@ export interface PerformanceImpact {
     availabilityChange: number;
 
 
+}
 export interface BusinessImpact {
     revenueImpact: number;
     userSatisfactionChange: number;
@@ -464,6 +505,7 @@ export interface BusinessImpact {
     competitiveAdvantage: string;
 
 
+}
 export interface SystemImpact {
     resourceUtilizationChange: number;
     capacityRequirementChange: number;
@@ -471,6 +513,7 @@ export interface SystemImpact {
     infrastructureCost: number;
 
 
+}
 export interface UserExperienceImpact {
     satisfactionScore: number;
     frustractionEvents: number;
@@ -478,6 +521,7 @@ export interface UserExperienceImpact {
     feedbackSentiment: string;
 
 
+}
 export interface CostImpact {
     operationalCostChange: number;
     infrastructureCostChange: number;
@@ -492,6 +536,7 @@ export declare enum RecommendationStatus {
     EXPIRED = "expired",
     MONITORING = "monitoring"
 
+}
 export interface RecommendationFeedback {
     feedbackId: string;
     rating: number;
@@ -501,6 +546,7 @@ export interface RecommendationFeedback {
     providedAt: Date;
 
 
+}
 export interface FairnessAnalysis {
     analysisId: string;
     timestamp: Date;
@@ -511,6 +557,7 @@ export interface FairnessAnalysis {
     recommendations: FairnessRecommendation[];
 
 
+}
 export interface FairnessMetricResult {
     metricId: string;
     metricName: string;
@@ -525,6 +572,7 @@ export declare enum MetricSeverity {
     MAJOR_CONCERN = "major_concern",
     CRITICAL_ISSUE = "critical_issue"
 
+}
 export interface InequalityIssue {
     issueId: string;
     issueType: InequalityType;
@@ -541,6 +589,7 @@ export declare enum InequalityType {
     RESOURCE_MONOPOLIZATION = "resource_monopolization",
     TIER_IMBALANCE = "tier_imbalance"
 
+}
 export interface RedistributionOpportunity {
     opportunityId: string;
     sourceUsers: string[];
@@ -551,6 +600,7 @@ export interface RedistributionOpportunity {
     implementationPlan: string[];
 
 
+}
 export interface FairnessRecommendation {
     recommendationId: string;
     category: FairnessCategory;
@@ -566,6 +616,7 @@ export declare enum FairnessCategory {
     POLICY_ADJUSTMENT = "policy_adjustment",
     MONITORING_ENHANCEMENT = "monitoring_enhancement"
 
+}
 export interface AbuseDetectionResult {
     detectionId: string;
     userId: string;
@@ -587,6 +638,7 @@ export declare enum AbuseType {
     DOS_ATTACK = "dos_attack",
     FRAUD_ATTEMPT = "fraud_attempt"
 
+}
 export interface AbuseEvidence {
     evidenceType: EvidenceType;
     description: string;
@@ -602,6 +654,7 @@ export declare enum EvidenceType {
     BEHAVIORAL_ANOMALY = "behavioral_anomaly",
     TECHNICAL_FINGERPRINT = "technical_fingerprint"
 
+}
 export interface AbuseImpact {
     systemImpact: number;
     userImpact: number;
@@ -610,6 +663,7 @@ export interface AbuseImpact {
     resourceConsumption: number;
 
 
+}
 export interface ResponseAction {
     actionId: string;
     actionType: AbuseActionType;
@@ -739,6 +793,7 @@ export declare class ApiUsagePatternQuotaRecommendations extends EventEmitter {
     private getAffectedUsers;
     private calculateOptimizationBenefit;
 
+}
 interface OptimizationResult {
     optimizationId: string;
     timestamp: Date;
@@ -754,3 +809,4 @@ export declare class ApiUsagePatternQuotaRecommendationsFactory {
 
 export default ApiUsagePatternQuotaRecommendations;
 //# sourceMappingURL=ApiUsagePatternQuotaRecommendations.d.ts.map
+}

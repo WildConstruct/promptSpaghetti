@@ -15,6 +15,7 @@ import React from 'react';
 import { Node, Edge } from 'reactflow';
 import { PreviewVariant } from '../../hooks/useRealTimePreview';
 
+}
 interface RealTimePreviewIntegrationProps {
     nodes: Node[];
     edges: Edge[];
@@ -29,3 +30,4 @@ interface RealTimePreviewIntegrationProps {
 export declare const RealTimePreviewIntegration: React.FC<RealTimePreviewIntegrationProps>;
 export default RealTimePreviewIntegration;
 //# sourceMappingURL=RealTimePreviewIntegration.d.ts.map
+}

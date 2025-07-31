@@ -66,6 +66,7 @@ export class GraphMutationEngine extends EventEmitter {
    * Execute a single operation with full validation and history tracking
    */
   async execute(operation: AnyGraphOperation): Promise<OperationResult> {
+
     const startTime = Date.now();
     try {
       // Queue operation if engine is busy
@@ -137,6 +138,7 @@ export class GraphMutationEngine extends EventEmitter {
    * Execute multiple operations as a batch
    */
   async executeBatch(operations: AnyGraphOperation): Promise<BatchOperationResult> {
+
     const batchId = this.generateId();
     const results: OperationResult = [];
     // Validate batch size
@@ -204,6 +206,7 @@ export class GraphMutationEngine extends EventEmitter {
    * Undo the last operation
    */
   async undo(): Promise<UndoResult> {
+
     if (!this.config.enableUndo) {
       return { success: false, error: 'Undo is disabled' };
     const result = await this.history.undo(this);
@@ -217,6 +220,7 @@ export class GraphMutationEngine extends EventEmitter {
    * Redo the last undone operation
    */
   async redo(): Promise<RedoResult> {
+
     if (!this.config.enableRedo) {
       return { success: false, error: 'Redo is disabled' };
     const result = await this.history.redo(this);
@@ -261,6 +265,7 @@ export class GraphMutationEngine extends EventEmitter {
    * Restore state from snapshot
    */
   async restoreSnapshot(snapshot: GraphSnapshot): Promise<void> {
+
     // Verify checksum
     const expectedChecksum = this.calculateChecksum(snapshot.state);
     if (snapshot.checksum && snapshot.checksum !== expectedChecksum) {
@@ -273,6 +278,7 @@ export class GraphMutationEngine extends EventEmitter {
     });
   // PRIVATE METHODS
   private async executeOperation(operation: AnyGraphOperation): Promise<OperationResult> {
+
     const snapshot = this.createSnapshot(operation);
     const previousState = { ...this.currentState };
     try {
@@ -312,9 +318,11 @@ export class GraphMutationEngine extends EventEmitter {
       this.currentState = previousState;
       throw error;
   private async executeNodeAdd(operation: NodeAddOperation): Promise<void> {
+
     const { node } = operation.payload;
     this.currentState.nodes = [...this.currentState.nodes, node];
   private async executeNodeDelete(operation: NodeDeleteOperation): Promise<void> {
+
     const { nodeId } = operation.payload;
     this.currentState.nodes = this.currentState.nodes.filter(n => n.id !== nodeId);
     // Remove connected edges
@@ -322,6 +330,7 @@ export class GraphMutationEngine extends EventEmitter {
       e => e.source !== nodeId && e.target !== nodeId
     );
   private async executeNodeUpdate(operation: NodeUpdateOperation): Promise<void> {
+
     const { nodeId, updates } = operation.payload;
     this.currentState.nodes = this.currentState.nodes.map(node =>)
       node.id === nodeId
@@ -329,15 +338,18 @@ export class GraphMutationEngine extends EventEmitter {
         : node
     );
   private async executeEdgeAdd(operation: EdgeAddOperation): Promise<void> {
+
     const { edge } = operation.payload;
     this.currentState.edges = [...this.currentState.edges, edge];
   private async executeEdgeDelete(operation: EdgeDeleteOperation): Promise<void> {
+
     const { edgeId } = operation.payload;
     this.currentState.edges = this.currentState.edges.filter(e => e.id !== edgeId);
-  private async handleConflicts(()
+  private async handleConflicts(((
     operation: GraphOperation,
-    conflictResult: ConflictResult,
+    conflictResult: ConflictResult
   ): Promise<GraphOperation> {
+
   // Implement conflict resolution based on strategy
   switch (this.config.conflictResolution.strategy) {
   case 'LAST_WRITER_WINS':,
@@ -354,8 +366,7 @@ export class GraphMutationEngine extends EventEmitter {
   const lastEntry = this.history.getLastEntry();
   if (lastEntry) {
   await this.restoreSnapshot(lastEntry.snapshot);
-  private createFailureResult(()
-  operation: GraphOperation,
+  private createFailureResult((operation: GraphOperation,
   errors: string): OperationResult {,
   return {
   success: false,
@@ -379,9 +390,9 @@ export class GraphMutationEngine extends EventEmitter {
   operation,
   error: 'Operation queued for execution',
 };
-  private createConflictResult(()
+  private createConflictResult(((
     operation: GraphOperation,
-    conflictResult: ConflictResult,
+    conflictResult: ConflictResult
   ): OperationResult {
   return {
   success: false,

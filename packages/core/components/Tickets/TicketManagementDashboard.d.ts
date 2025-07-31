@@ -7,6 +7,7 @@
 import React from 'react';
 import { MarketplaceTicket, Epic16TicketIntegrationService } from '../../services/Epic16TicketIntegrationService';
 
+}
 interface TicketManagementDashboardProps {
     ticketService: Epic16TicketIntegrationService;
     userId: string;
@@ -16,3 +17,4 @@ interface TicketManagementDashboardProps {
 export declare const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>;
 export default TicketManagementDashboard;
 //# sourceMappingURL=TicketManagementDashboard.d.ts.map
+}

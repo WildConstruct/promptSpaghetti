@@ -7,6 +7,7 @@ import crypto from 'crypto';
 import { EventEmitter } from 'events';
 
 }
+}
 export interface SecurityHeader {
   name: string;
   value: string;
@@ -17,7 +18,9 @@ export interface SecurityHeader {
   recommendation: string;
 }
 }
+}
 
+}
 }
 export interface HeaderAuditRule {
   id: string;
@@ -33,6 +36,7 @@ export interface HeaderAuditRule {
     dayOfWeek?: number; // 0-6 for weekly
     dayOfMonth?: number; // 1-31 for monthly
 }
+}
   };
   notifications: {
     onViolation: boolean;
@@ -46,6 +50,7 @@ export interface HeaderAuditRule {
 }
 
 }
+}
 export interface HeaderAuditResult {
   id: string;
   ruleId: string;
@@ -57,6 +62,7 @@ export interface HeaderAuditResult {
       value: string;
       compliant: boolean;
       issues: string[];
+}
 }
     }>;
     missing: Array<{
@@ -87,9 +93,11 @@ export interface HeaderAuditResult {
 }
 
 }
+}
 export interface AuditReport {
   id: string;
   generatedAt: Date;
+}
 }
   timeRange: { start: Date; end: Date };
   summary: {

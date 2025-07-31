@@ -25,6 +25,7 @@ import { SecurityTimeSeriesAnalysisEngine } from '../services/SecurityTimeSeries
 let insightsEngine: SecurityInsightsAutomationEngine | null = null;
 
 }
+}
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
@@ -34,6 +35,7 @@ interface APIResponse<T = any> {
 }
 
 }
+}
 interface GenerateInsightsRequest {
   generation_configuration: {
     generation_type: 'scheduled' | 'triggered' | 'on_demand';
@@ -42,6 +44,7 @@ interface GenerateInsightsRequest {
     time_range?: {
       start: number;
       end: number;
+}
 }
     };
     priority_filter?: ('low' | 'medium' | 'high' | 'critical')[];
@@ -63,6 +66,7 @@ interface GenerateInsightsRequest {
 }
 
 }
+}
 interface DistributeInsightsRequest {
   insight_ids: string[];
   distribution_configuration: {
@@ -74,6 +78,7 @@ interface DistributeInsightsRequest {
       immediate?: boolean;
       scheduled_time?: number;
       recurring_schedule?: string;
+}
 }
     };
   };
@@ -89,6 +94,7 @@ interface DistributeInsightsRequest {
 }
 
 }
+}
 interface CreatePersonalizationProfileRequest {
   profile_configuration: {
     user_role: string;
@@ -99,6 +105,7 @@ interface CreatePersonalizationProfileRequest {
     preferred_formats: string[];
     delivery_schedule: string;
     language_preference?: string;
+}
 }
   };
   customization_options?: {
@@ -122,6 +129,7 @@ interface CreatePersonalizationProfileRequest {
 }
 
 }
+}
 interface SearchInsightsRequest {
   search_criteria: {
     insight_types?: string[];
@@ -129,6 +137,7 @@ interface SearchInsightsRequest {
     date_range?: {
       start: number;
       end: number;
+}
 }
     };
     confidence_threshold?: number;
@@ -152,12 +161,14 @@ interface SearchInsightsRequest {
 }
 
 }
+}
 interface GenerateReportRequest {
   report_type: 'insights_summary' | 'distribution_analytics' | 'engagement_analysis' | 'business_impact' | 'automation_performance';
   report_scope: {
     time_range?: {
       start: number;
       end: number;
+}
 }
     };
     insight_ids?: string[];

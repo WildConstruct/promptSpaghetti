@@ -7,6 +7,7 @@
 import { AdvancedRuntimeNode, AdvancedExecutionContext, NodeExecutionResult } from '../advanced';
 import { TypedInputs } from '../io-system';
 
+}
 export interface CrossModalConfig {
     provider: 'openai' | 'anthropic' | 'google' | 'custom';
     apiKey: string;
@@ -14,6 +15,7 @@ export interface CrossModalConfig {
     model?: string;
     defaultParameters?: Record<string, any>;
 
+}
 export interface MultimodalInput {
     type: 'text' | 'image' | 'audio' | 'video';
     content: string | ArrayBuffer | File | Blob;
@@ -24,9 +26,11 @@ export interface MultimodalInput {
         resolution?: {
             width: number;
             height: number;
+}
         };
     };
 
+}
 export interface CrossModalAnalysis {
     content_understanding: {
         overall_summary: string;
@@ -34,37 +38,38 @@ export interface CrossModalAnalysis {
         sentiment: {
             score: number;
             label: string;
+}
         };
         complexity_score: number;
     };
-    modality_insights: Array<{,
+    modality_insights: Array<{
         modality: string;
         confidence: number;
         key_elements: string[];
         dominant_features: string[];
     }>;
-    cross_modal_connections: Array<{,
+    cross_modal_connections: Array<{
         connection_type: 'semantic' | 'temporal' | 'causal' | 'contextual';
         modalities: string[];
         strength: number;
         description: string;
     }>;
     extracted_information: {
-        entities: Array<{,
+        entities: Array<{
             name: string;
             type: string;
             confidence: number;
         }>;
-        topics: Array<{,
+        topics: Array<{
             topic: string;
             relevance: number;
         }>;
-        emotions: Array<{,
+        emotions: Array<{
             emotion: string;
             intensity: number;
             source: string;
         }>;
-        actions: Array<{,
+        actions: Array<{
             action: string;
             confidence: number;
         }>;

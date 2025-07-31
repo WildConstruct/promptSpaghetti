@@ -26,41 +26,44 @@ import {
   Flag,
   Eye
 } from 'lucide-react';
+}
 interface ReputationMetrics {
   totalUsers: number;,
-  reputationDistribution: {,
+  reputationDistribution: {
   veryHigh: number;,
   high: number;
   medium: number;,
   low: number;
   veryLow: number;
+}
 };
-  verificationStats: {,
+  verificationStats: {
   identityVerified: number;
   emailVerified: number;,
   phoneVerified: number;
   fullyVerified: number;,
   verificationRate: number;
 };
-  trustTrends: {,
+  trustTrends: {
   averageTrustScore: number;
     trendDirection: 'improving' | 'stable' | 'declining';,
   monthlyChange: number;
     topReputationUsers: Array<{ userId: string; username: string; score: number }>;
   };
-  riskAnalysis: {,
+  riskAnalysis: {
   highRiskUsers: number;
   flaggedUsers: number;,
   suspiciousActivity: number;
-  fraudPrevented: {,
+  fraudPrevented: {
   estimatedValue: number;,
   incidentsBlocked: number;
 };
   };
-  badgeStats: {,
+  badgeStats: {
   totalBadgesAwarded: number;
     mostPopularBadges: Array<{ badgeType: string; count: number }>;
   };
+}
 interface ReputationAlert {
   alertId: string;,
   userId: string;
@@ -87,24 +90,27 @@ interface ReputationAlert {
   flagged: boolean;,
   lastCalculated: Date;
   interface ReputationDashboardData {
-  overview: {,
+  overview: {
   totalUsers: number;,
   averageTrustScore: number;
   verificationRate: number;,
   activeAlerts: number;
   criticalAlerts: number;
+}
 };
   metrics: ReputationMetrics;,
   alerts: ReputationAlert;
   recentActivity: unknown;,
   systemHealth: unknown;
   lastUpdated: Date;
+}
 interface ReputationDashboardProps {
   className?: string;
   refreshInterval?: number;
   export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({,)
   className,
   refreshInterval = 60000
+}
 }) => {
   const [dashboardData, setDashboardData] = useState<ReputationDashboardData | null>(null);
   const [loading, setLoading] = useState(true);

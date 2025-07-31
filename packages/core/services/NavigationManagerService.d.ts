@@ -6,6 +6,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface NavigationPreferences {
     userId: string;
     expandedSections: string[];
@@ -21,6 +22,7 @@ export interface NavigationPreferences {
     lastSection: string;
     customSections: CustomNavigationSection[];
 
+}
 export interface NavigationHistoryItem {
     id: string;
     label: string;
@@ -31,6 +33,7 @@ export interface NavigationHistoryItem {
     accessCount: number;
     lastAccessed: Date;
 
+}
 export interface CustomNavigationSection {
     id: string;
     label: string;
@@ -44,6 +47,7 @@ export interface CustomNavigationSection {
     createdBy: string;
     created: Date;
 
+}
 export interface NavigationAnalytics {
     userId: string;
     sessionId: string;
@@ -54,6 +58,7 @@ export interface NavigationAnalytics {
     errorEvents: NavigationErrorEvent[];
     performanceMetrics: NavigationPerformanceMetric[];
 
+}
 export interface NavigationPathEvent {
     path: string;
     section: string;
@@ -61,6 +66,7 @@ export interface NavigationPathEvent {
     duration: number;
     source: 'click' | 'keyboard' | 'bookmark' | 'direct' | 'search';
 
+}
 export interface SearchQueryEvent {
     query: string;
     timestamp: Date;
@@ -68,6 +74,7 @@ export interface SearchQueryEvent {
     selectedResult?: string;
     source: 'header' | 'sidebar' | 'modal';
 
+}
 export interface NavigationErrorEvent {
     path: string;
     error: string;
@@ -75,12 +82,14 @@ export interface NavigationErrorEvent {
     userAgent: string;
     resolved: boolean;
 
+}
 export interface NavigationPerformanceMetric {
     action: string;
     duration: number;
     timestamp: Date;
     metadata: Record<string, any>;
 
+}
 export interface NavigationSearchOptions {
     query: string;
     categories?: string[];
@@ -90,6 +99,7 @@ export interface NavigationSearchOptions {
     includeDescriptions?: boolean;
     userId?: string;
 
+}
 export interface NavigationSearchResult {
     item: {
         id: string;
@@ -98,6 +108,7 @@ export interface NavigationSearchResult {
         path: string;
         icon: string;
         category: string;
+}
     };
     score: number;
     matchType: 'exact' | 'partial' | 'fuzzy' | 'description';

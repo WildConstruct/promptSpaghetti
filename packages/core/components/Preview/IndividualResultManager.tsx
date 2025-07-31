@@ -8,6 +8,7 @@
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { usePreviewStateStore } from '../../stores/previewStateStore';
 import { usePreviewSeeds } from '../../usePreviewSeeds';
+}
 interface IndividualResultManagerProps {
   visible?: boolean;
   onClose?: () => void;
@@ -40,6 +41,7 @@ interface IndividualResultManagerProps {
   enableComparison = true,
   enableAnalytics = true,
   maxDisplayResults = 10
+}
 }) => {
   // Store hooks
   const {
@@ -104,7 +106,7 @@ interface IndividualResultManagerProps {
     const negativeWords = ['bad', 'terrible', 'awful', 'horrible', 'disappointing', 'poor'];
     const positiveCount = words.filter(word => positiveWords.includes(word)).length;
     const negativeCount = words.filter(word => negativeWords.includes(word)).length;
-    const sentiment = positiveCount > negativeCount ? 'positive' :;
+    const sentiment = positiveCount > negativeCount ? 'positive' :
                      negativeCount > positiveCount ? 'negative' : 'neutral';
     // Extract potential topics (simple approach)
     const topics = words;

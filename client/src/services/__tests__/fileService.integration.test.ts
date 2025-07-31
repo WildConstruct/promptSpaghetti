@@ -15,6 +15,7 @@ class MockHttpClient implements HttpClient {
   setFailure(url: string): void {
     this.shouldFail.add(url);
   async request<T>(url: string, options?: RequestInit): Promise<T> {
+
     this.requestLog.push({ url, options });
     if (this.shouldFail.has(url)) {
       throw new Error(`Network error for ${url}`);}
@@ -192,7 +193,7 @@ class MockLogger implements Logger {
         'https://api.example.com/api/files/upload',
         expect.objectContaining({)
   method: 'POST',
-  headers: {,
+  headers: {
   'Authorization': 'Bearer test-token-123',
 },
   body: expect.any(FormData);

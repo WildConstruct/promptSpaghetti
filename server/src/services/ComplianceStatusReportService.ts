@@ -7,6 +7,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { RegulatoryReportingService, ComplianceRegulation } from './RegulatoryReportingService';
 
 }
+}
 export interface ComplianceStatusReport {
   reportId: string;
   title: string;
@@ -27,13 +28,16 @@ export interface ComplianceStatusReport {
   metadata: ComplianceReportMetadata;
 }
 }
+}
 
+}
 }
 export interface ReportPeriod {
   startDate: Date;
   endDate: Date;
   description: string;
   frequency: ReportFrequency;
+}
 }
 }
 
@@ -55,6 +59,7 @@ export enum ComplianceStatus {
 }
 
 }
+}
 export interface ExecutiveSummary {
   keyFindings: string[];
   criticalIssues: string[];
@@ -63,6 +68,7 @@ export interface ExecutiveSummary {
   budgetImpact: BudgetImpact;
   timelineForCompliance: string;
   regulatoryChanges: RegulatoryChange[];
+}
 }
 }
 
@@ -74,19 +80,23 @@ export enum RiskLevel {
 }
 
 }
+}
 export interface BudgetImpact {
   estimatedCost: number;
   currency: string;
   breakdown: CostBreakdown[];
 }
 }
+}
 
+}
 }
 export interface CostBreakdown {
   category: string;
   amount: number;
   description: string;
   urgency: Priority;
+}
 }
 }
 
@@ -98,6 +108,7 @@ export enum Priority {
 }
 
 }
+}
 export interface RegulatoryChange {
   changeId: string;
   title: string;
@@ -105,6 +116,7 @@ export interface RegulatoryChange {
   effectiveDate: Date;
   impact: ImpactLevel;
   actionRequired: boolean;
+}
 }
 }
 
@@ -115,6 +127,7 @@ export enum ImpactLevel {
   MAJOR = 'MAJOR'
 }
 
+}
 }
 export interface ComplianceArea {
   areaId: string;
@@ -130,7 +143,9 @@ export interface ComplianceArea {
   gaps: ComplianceGap[];
 }
 }
+}
 
+}
 }
 export interface ComplianceRequirement {
   requirementId: string;
@@ -144,6 +159,7 @@ export interface ComplianceRequirement {
   verifiedBy: string;
 }
 }
+}
 
 export enum RequirementStatus {
   COMPLIANT = 'COMPLIANT',
@@ -154,6 +170,7 @@ export enum RequirementStatus {
 }
 
 }
+}
 export interface Evidence {
   evidenceId: string;
   type: EvidenceType;
@@ -161,6 +178,7 @@ export interface Evidence {
   location: string;
   collectedAt: Date;
   validUntil?: Date;
+}
 }
 }
 
@@ -175,6 +193,7 @@ export enum EvidenceType {
 }
 
 }
+}
 export interface ControlAssessment {
   controlId: string;
   name: string;
@@ -185,6 +204,7 @@ export interface ControlAssessment {
   lastTested: Date;
   nextTest: Date;
   owner: string;
+}
 }
 }
 
@@ -205,6 +225,7 @@ export enum ControlEffectiveness {
 }
 
 }
+}
 export interface TestResult {
   testId: string;
   testDate: Date;
@@ -215,6 +236,7 @@ export interface TestResult {
   recommendations: string[];
 }
 }
+}
 
 export enum TestOutcome {
   PASS = 'PASS',
@@ -223,6 +245,7 @@ export enum TestOutcome {
   INCONCLUSIVE = 'INCONCLUSIVE'
 }
 
+}
 }
 export interface ComplianceGap {
   gapId: string;
@@ -235,6 +258,7 @@ export interface ComplianceGap {
   riskRating: number;
 }
 }
+}
 
 export enum GapSeverity {
   LOW = 'LOW',
@@ -244,6 +268,7 @@ export enum GapSeverity {
 }
 
 }
+}
 export interface RemediationPlan {
   planId: string;
   description: string;
@@ -252,6 +277,7 @@ export interface RemediationPlan {
   status: RemediationStatus;
   progress: number;
   resources: ResourceRequirement[];
+}
 }
 }
 
@@ -264,11 +290,13 @@ export enum RemediationStatus {
 }
 
 }
+}
 export interface ResourceRequirement {
   type: ResourceType;
   quantity: number;
   cost: number;
   description: string;
+}
 }
 }
 
@@ -282,6 +310,7 @@ export enum ResourceType {
 }
 
 }
+}
 export interface ViolationSummary {
   totalViolations: number;
   activeViolations: number;
@@ -292,13 +321,16 @@ export interface ViolationSummary {
   trends: ViolationTrend[];
 }
 }
+}
 
+}
 }
 export interface ViolationCategory {
   category: string;
   count: number;
   percentage: number;
   trend: TrendDirection;
+}
 }
 }
 
@@ -309,13 +341,16 @@ export enum TrendDirection {
 }
 
 }
+}
 export interface ViolationBySeverity {
   severity: GapSeverity;
   count: number;
   percentage: number;
 }
 }
+}
 
+}
 }
 export interface ViolationTrend {
   period: string;
@@ -323,7 +358,9 @@ export interface ViolationTrend {
   severity: GapSeverity;
 }
 }
+}
 
+}
 }
 export interface RemediationSummary {
   totalPlans: number;
@@ -336,7 +373,9 @@ export interface RemediationSummary {
   resourceUtilization: ResourceUtilization[];
 }
 }
+}
 
+}
 }
 export interface ResourceUtilization {
   resource: ResourceType;
@@ -345,7 +384,9 @@ export interface ResourceUtilization {
   efficiency: number;
 }
 }
+}
 
+}
 }
 export interface ComplianceTrend {
   metric: string;
@@ -356,7 +397,9 @@ export interface ComplianceTrend {
   trend: TrendDirection;
 }
 }
+}
 
+}
 }
 export interface Recommendation {
   recommendationId: string;
@@ -369,6 +412,7 @@ export interface Recommendation {
   timeline: string;
   benefits: string[];
   risks: string[];
+}
 }
 }
 
@@ -389,6 +433,7 @@ export enum EffortLevel {
 }
 
 }
+}
 export interface NextAction {
   actionId: string;
   description: string;
@@ -399,7 +444,9 @@ export interface NextAction {
   successCriteria: string[];
 }
 }
+}
 
+}
 }
 export interface ReportAttachment {
   attachmentId: string;
@@ -409,6 +456,7 @@ export interface ReportAttachment {
   location: string;
   size: number;
   createdAt: Date;
+}
 }
 }
 
@@ -421,6 +469,7 @@ export enum AttachmentType {
 }
 
 }
+}
 export interface ComplianceReportMetadata {
   version: string;
   template: string;
@@ -430,6 +479,7 @@ export interface ComplianceReportMetadata {
   approvers: string[];
   retention: number;
   confidentiality: ConfidentialityLevel;
+}
 }
 }
 

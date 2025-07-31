@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useGraphStore } from '../../graphStore';
 
+}
 export interface VariationListProps {
   nodeId: string;
   variations: string;
@@ -11,6 +12,7 @@ export interface VariationListProps {
   maxVariations?: number;
   placeholder?: string;
   allowQuickEntry?: boolean;
+}
 }
 export const VariationList: React.FC<VariationListProps> = ({
   nodeId,

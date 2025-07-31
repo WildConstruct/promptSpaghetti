@@ -17,6 +17,7 @@ import {
   DEFAULT_REGION_GROUP_PREFERENCES,
   REGION_GROUP_COLORS
 } from '../../types/CollaborationTypes';
+}
 interface RegionGroupsLayerProps {
   nodes: Node;
   regionGroups: RegionGroupType;
@@ -26,6 +27,7 @@ interface RegionGroupsLayerProps {
   hoveredGroupId?: string | null;
   author?: string;
   readOnly?: boolean;
+}
   canvasOffset?: { x: number; y: number };
   zoom?: number;
 

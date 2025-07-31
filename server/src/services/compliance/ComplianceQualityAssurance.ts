@@ -19,6 +19,7 @@ import {
 } from './ComplianceReportValidationService';
 
 }
+}
 export interface QualityAssessment {
   assessmentId: string;
   reportId: string;
@@ -34,7 +35,9 @@ export interface QualityAssessment {
   auditTrail: QualityAuditEntry[];
 }
 }
+}
 
+}
 }
 export interface QualityDimension {
   dimensionId: string;
@@ -49,7 +52,9 @@ export interface QualityDimension {
   recommendations: string[];
 }
 }
+}
 
+}
 }
 export interface QualityCriteria {
   criteriaId: string;
@@ -63,7 +68,9 @@ export interface QualityCriteria {
   assessorNotes: string;
 }
 }
+}
 
+}
 }
 export interface ScoringRubric {
   excellent: RubricLevel;
@@ -73,7 +80,9 @@ export interface ScoringRubric {
   unacceptable: RubricLevel;
 }
 }
+}
 
+}
 }
 export interface RubricLevel {
   scoreRange: [number, number];
@@ -82,7 +91,9 @@ export interface RubricLevel {
   examples: string[];
 }
 }
+}
 
+}
 }
 export interface PeerReview {
   reviewId: string;
@@ -99,7 +110,9 @@ export interface PeerReview {
   signoffDate?: Date;
 }
 }
+}
 
+}
 }
 export interface ReviewDimension {
   dimension: string;
@@ -109,7 +122,9 @@ export interface ReviewDimension {
   evidence: string[];
 }
 }
+}
 
+}
 }
 export interface ReviewComment {
   commentId: string;
@@ -122,7 +137,9 @@ export interface ReviewComment {
   responseDate?: Date;
 }
 }
+}
 
+}
 }
 export interface BenchmarkComparison {
   benchmarkType: 'industry' | 'internal' | 'regulatory' | 'best_practice';
@@ -135,7 +152,9 @@ export interface BenchmarkComparison {
   insights: string[];
 }
 }
+}
 
+}
 }
 export interface BenchmarkDimension {
   dimension: string;
@@ -147,7 +166,9 @@ export interface BenchmarkDimension {
   trend: 'improving' | 'declining' | 'stable';
 }
 }
+}
 
+}
 }
 export interface ImprovementAction {
   actionId: string;
@@ -165,7 +186,9 @@ export interface ImprovementAction {
   resources: ResourceRequirement[];
 }
 }
+}
 
+}
 }
 export interface SuccessMetric {
   metricName: string;
@@ -175,7 +198,9 @@ export interface SuccessMetric {
   reviewFrequency: string;
 }
 }
+}
 
+}
 }
 export interface ResourceRequirement {
   resourceType: 'budget' | 'personnel' | 'technology' | 'training' | 'external';
@@ -185,7 +210,9 @@ export interface ResourceRequirement {
   skillsRequired: string[];
 }
 }
+}
 
+}
 }
 export interface QualityCertification {
   certificationId: string;
@@ -198,7 +225,9 @@ export interface QualityCertification {
   attestation: string;
 }
 }
+}
 
+}
 }
 export interface QualityAssessor {
   assessorId: string;
@@ -210,7 +239,9 @@ export interface QualityAssessor {
   specializations: ComplianceFramework[];
 }
 }
+}
 
+}
 }
 export interface QualityEvidence {
   evidenceId: string;
@@ -222,7 +253,9 @@ export interface QualityEvidence {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface QualityAuditEntry {
   entryId: string;
@@ -233,12 +266,15 @@ export interface QualityAuditEntry {
   impact: string;
 }
 }
+}
 
+}
 }
 export interface QualityMetrics {
   reportingPeriod: {
     startDate: Date;
     endDate: Date;
+}
 }
   };
   totalReportsAssessed: number;
@@ -257,6 +293,7 @@ export interface QualityMetrics {
 }
 
 }
+}
 export interface CommonIssue {
   issue: string;
   frequency: number;
@@ -265,7 +302,9 @@ export interface CommonIssue {
   recommendedActions: string[];
 }
 }
+}
 
+}
 }
 export interface ImprovementImpact {
   actionType: string;
@@ -273,6 +312,7 @@ export interface ImprovementImpact {
   averageImprovementPercent: number;
   costEffectiveness: number;
   recommendedContinuation: boolean;
+}
 }
 }
 

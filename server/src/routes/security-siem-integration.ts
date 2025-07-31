@@ -24,6 +24,7 @@ import { SecurityIntelligenceAutomationEngine } from '../services/SecurityIntell
 let siemEngine: SecuritySIEMIntegrationEngine | null = null;
 
 }
+}
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
@@ -32,6 +33,7 @@ interface APIResponse<T = any> {
   timestamp: number;
 }
 
+}
 }
 interface CreateSIEMConnectionRequest {
   connection_configuration: {
@@ -44,6 +46,7 @@ interface CreateSIEMConnectionRequest {
     ssl_enabled: boolean;
     data_format: 'cef' | 'leef' | 'json' | 'xml' | 'csv' | 'syslog' | 'stix_taxii' | 'misp';
     streaming_enabled?: boolean;
+}
 }
   };
   advanced_settings?: {
@@ -62,6 +65,7 @@ interface CreateSIEMConnectionRequest {
 }
 
 }
+}
 interface ExportThreatIntelligenceRequest {
   export_configuration: {
     connection_id: string;
@@ -70,6 +74,7 @@ interface ExportThreatIntelligenceRequest {
     time_range?: {
       start: number;
       end: number;
+}
 }
     };
     include_metadata?: boolean;
@@ -92,6 +97,7 @@ interface ExportThreatIntelligenceRequest {
 }
 
 }
+}
 interface StartStreamingRequest {
   streaming_configuration: {
     connection_id: string;
@@ -100,6 +106,7 @@ interface StartStreamingRequest {
     batch_size?: number;
     flush_interval?: number;
     quality_checks?: boolean;
+}
 }
   };
   filter_criteria?: {
@@ -118,6 +125,7 @@ interface StartStreamingRequest {
 }
 
 }
+}
 interface CreateExportJobRequest {
   job_configuration: {
     job_name: string;
@@ -127,6 +135,7 @@ interface CreateExportJobRequest {
     export_format: string;
     schedule?: string;
     trigger_conditions?: string[];
+}
 }
   };
   export_settings?: {
@@ -144,12 +153,14 @@ interface CreateExportJobRequest {
 }
 
 }
+}
 interface ConfigureMappingRequest {
   mapping_configuration: {
     connection_id: string;
     field_mappings?: FieldMapping[];
     transformation_rules?: string[];
     validation_rules?: string[];
+}
 }
   };
   enrichment_configuration?: {
@@ -165,12 +176,14 @@ interface ConfigureMappingRequest {
 }
 
 }
+}
 interface SearchExportHistoryRequest {
   search_criteria: {
     connection_ids?: string[];
     date_range?: {
       start: number;
       end: number;
+}
 }
     };
     export_status?: string[];

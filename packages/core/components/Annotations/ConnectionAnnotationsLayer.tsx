@@ -18,11 +18,13 @@ import {
   CONNECTION_LABEL_STYLES,
   DEFAULT_CONNECTION_ANNOTATION_PREFERENCES
 } from '../../types/CollaborationTypes';
+}
 interface ConnectionAnnotationsLayerProps {
   canEdit?: boolean;
   showTooltips?: boolean;
   visible?: boolean;
   onSelectionChange?: (selectedAnnotations: string[]) => void;
+}
 }
 
 export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProps> = ({

@@ -19,6 +19,7 @@ export declare enum WebSocketMessageType {
  * WebSocket message structure
  */
 
+}
 export interface WebSocketMessage {
     type: WebSocketMessageType;
     data: any;
@@ -30,6 +31,7 @@ export interface WebSocketMessage {
  * Subscription configuration
  */
 
+}
 export interface SubscriptionConfig {
     topic: string;
     filters?: {
@@ -37,6 +39,7 @@ export interface SubscriptionConfig {
         organizationId?: number;
         eventTypes?: string[];
         minSeverity?: 'info' | 'warning' | 'critical'
+}
   };
     throttle?: number;
 
@@ -44,6 +47,7 @@ export interface SubscriptionConfig {
  * WebSocket client configuration
  */
 
+}
 export interface WebSocketClientConfig {
     url: string;
     reconnectInterval: number;
@@ -171,3 +175,4 @@ export declare class AnalyticsWebSocketClient extends WebSocketClient {
  * Create analytics WebSocket client instance
  */
 export declare //# sourceMappingURL=WebSocketClient.d.ts.map
+}

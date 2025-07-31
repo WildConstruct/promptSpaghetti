@@ -16,6 +16,7 @@ import { AnalyticsDAO } from '../database/analytics-dao';
 import { AdminAuthGuard } from '../admin/guards/AdminAuthGuard';
 
 }
+}
 export interface SecurityAPIConfig {
   // Core API settings
   api_version: string;
@@ -24,6 +25,7 @@ export interface SecurityAPIConfig {
     max_requests_per_minute: number;
     burst_limit: number;
     window_size_ms: number;
+}
 }
   };
   
@@ -78,6 +80,7 @@ export interface SecurityAPIConfig {
 }
 
 }
+}
 export interface SecurityAPIMetrics {
   api_calls: {
     total_requests: number;
@@ -85,6 +88,7 @@ export interface SecurityAPIMetrics {
     failed_requests: number;
     average_response_time_ms: number;
     requests_per_second: number;
+}
 }
   };
   
@@ -113,6 +117,7 @@ export interface SecurityAPIMetrics {
 }
 
 }
+}
 export interface ExternalSecurityTool {
   id: string;
   name: string;
@@ -122,6 +127,7 @@ export interface ExternalSecurityTool {
     type: 'api_key' | 'oauth2' | 'basic_auth' | 'certificate';
     credentials: Record<string, any>;
 }
+}
   };
   capabilities: string[];
   data_format: 'json' | 'xml' | 'csv' | 'syslog';
@@ -130,6 +136,7 @@ export interface ExternalSecurityTool {
   configuration: Record<string, any>;
 }
 
+}
 }
 export interface SecurityEvent {
   id: string;
@@ -142,6 +149,7 @@ export interface SecurityEvent {
   metadata: Record<string, any>;
   correlation_id?: string;
   mitigation_status: 'pending' | 'in_progress' | 'resolved' | 'false_positive';
+}
 }
 }
 

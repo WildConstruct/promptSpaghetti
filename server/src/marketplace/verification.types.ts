@@ -38,6 +38,7 @@ export enum VerificationRequestStatus {
 
 // Core verification interfaces
 }
+}
 export interface VerificationRequest {
   id: string;
   user_id: string;
@@ -54,7 +55,9 @@ export interface VerificationRequest {
   updated_at: Date;
 }
 }
+}
 
+}
 }
 export interface VerificationInformation {
   personal_info: {
@@ -68,6 +71,7 @@ export interface VerificationInformation {
     postal_code?: string;
     address_line_1?: string;
     address_line_2?: string;
+}
 }
   };
   professional_info?: {
@@ -98,6 +102,7 @@ export interface VerificationInformation {
 }
 
 }
+}
 export interface VerificationDocument {
   id: string;
   verification_request_id: string;
@@ -115,7 +120,9 @@ export interface VerificationDocument {
   updated_at: Date;
 }
 }
+}
 
+}
 }
 export interface UserVerificationStatus {
   user_id: string;
@@ -128,7 +135,9 @@ export interface UserVerificationStatus {
   verification_history: VerificationRequest[];
 }
 }
+}
 
+}
 }
 export interface TrustBadge {
   id: string;
@@ -138,6 +147,7 @@ export interface TrustBadge {
   requirements: {
     min_verification_level: VerificationLevel;
     additional_criteria: Record<string, any>;
+}
 }
   };
   is_active: boolean;
@@ -212,6 +222,7 @@ export const ReviewVerificationRequestSchema = z.object({
 
 // Analytics and reporting interfaces
 }
+}
 export interface VerificationMetrics {
   period_start: Date;
   period_end: Date;
@@ -221,16 +232,19 @@ export interface VerificationMetrics {
   avg_review_time_hours: number;
   approval_rate: number;
 }
+}
   trust_score_distribution: Array<{ range: string; count: number }>;
   top_rejection_reasons: Array<{ reason: string; count: number }>;
 }
 
+}
 }
 export interface VerificationQueue {
   pending_reviews: VerificationRequest[];
   avg_wait_time_hours: number;
   queue_depth: number;
   sla_breaches: number;
+}
 }
   reviewer_workload: Array<{ reviewer_id: string; assigned_count: number }>;
 }

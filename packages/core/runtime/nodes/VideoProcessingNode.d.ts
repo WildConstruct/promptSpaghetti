@@ -7,6 +7,7 @@
 import { AdvancedRuntimeNode, AdvancedExecutionContext, NodeExecutionResult } from '../advanced';
 import { TypedInputs } from '../io-system';
 
+}
 export interface VideoConfig {
     provider: 'runwayml' | 'stable-video' | 'pika-labs';
     apiKey?: string;
@@ -14,12 +15,14 @@ export interface VideoConfig {
     model?: string;
     defaultParameters?: Record<string, any>;
 
+}
 export interface VideoMetadata {
     duration: number;
     format: string;
     resolution: {
         width: number;
         height: number;
+}
     };
     fps: number;
     frame_count: number;
@@ -31,6 +34,7 @@ export interface VideoMetadata {
     codec?: string;
     bitrate?: number;
 
+}
 export interface GeneratedVideo {
     url?: string;
     data?: ArrayBuffer;
@@ -80,3 +84,4 @@ export declare class VideoCompositionNode extends AdvancedRuntimeNode {
     validateInputs(inputs: Record<string, any>): Promise<string[]>;
 
 //# sourceMappingURL=VideoProcessingNode.d.ts.map
+}

@@ -6,6 +6,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
+}
 interface AuthLayoutProps {
   children: React.ReactNode;,
   title: string;
@@ -22,6 +23,7 @@ interface AuthLayoutProps {
   showBranding = true,
   maxWidth = '450px',
   backgroundPattern = true
+}
 }) => {
   const location = useLocation();
   const { error, clearError, isLoading } = useAuthStore();

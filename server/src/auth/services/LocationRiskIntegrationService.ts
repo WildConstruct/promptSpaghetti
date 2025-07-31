@@ -12,6 +12,7 @@ import { LoginAttempt } from './LoginService';
 import { DatabaseService } from '../database/DatabaseService';
 
 }
+}
 export interface EnhancedSecurityAnalysis {
   riskScore: RiskScore;
   geolocationData: GeolocationData;
@@ -20,6 +21,7 @@ export interface EnhancedSecurityAnalysis {
     isTypicalLocation: boolean;
     distanceFromNearestKm?: number;
     suspiciousIndicators: string[];
+}
 }
   };
   recommendations: string[];

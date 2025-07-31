@@ -44,6 +44,8 @@ export interface WorkspaceId extends String {
   created_by: UserId;
   is_active: boolean;
 }
+}
+}
 export interface WorkspaceSettings {
   visibility: 'private' | 'internal' | 'public';
   features: {
@@ -52,6 +54,7 @@ export interface WorkspaceSettings {
   comments: boolean;
   notifications: boolean;
   integrations: boolean;
+}
 };
   limits: {
   max_projects: number;
@@ -63,6 +66,7 @@ export interface WorkspaceSettings {
   who_can_create_projects: 'owners' | 'admins' | 'members';
   default_project_visibility: 'private' | 'workspace' | 'public'
   };
+}
 }
 export interface Project {
   id: ProjectId;
@@ -76,6 +80,8 @@ export interface Project {
   is_active: boolean;
   last_activity_at: Date;
 }
+}
+}
 export interface ProjectSettings {
   visibility: 'private' | 'workspace' | 'public';
   features: {
@@ -83,12 +89,14 @@ export interface ProjectSettings {
   version_control: boolean;
   real_time_sync: boolean;
   notifications: boolean;
+}
 };
   collaboration: {
   max_concurrent_editors: number;
   conflict_resolution: 'manual' | 'automatic' | 'last_writer_wins';
   presence_timeout_ms: number;
 };
+}
 }
 export interface Resource {
   id: ResourceId;
@@ -103,12 +111,16 @@ export interface Resource {
   is_active: boolean;
   version: number;
 }
+}
+}
 export interface ResourceMetadata {
   size_bytes: number;
   mime_type?: string;
   checksum: string;
   tags: string;
   custom_properties: Record<string, any>;
+}
+}
 }
 export interface WorkspaceMember {
   workspace_id: WorkspaceId;
@@ -119,6 +131,8 @@ export interface WorkspaceMember {
   is_active: boolean;
   last_activity_at: Date;
 }
+}
+}
 export interface ProjectMember {
   project_id: ProjectId;
   user_id: UserId;
@@ -127,6 +141,8 @@ export interface ProjectMember {
   invited_by: UserId;
   is_active: boolean;
   last_activity_at: Date;
+}
+}
 }
 export interface ActivityEvent {
   id: string;
@@ -139,19 +155,25 @@ export interface ActivityEvent {
   metadata: ActivityMetadata;
   created_at: Date;
 }
+}
+}
 export interface ActivityDetails {
   action: string;
   target_type: string;
   target_id: string;
 
+}
   changes?: Record<string, { from: any; to: any }>;
   description?: string;
+}
 }
 export interface ActivityMetadata {
   user_agent?: string;
   ip_address?: string;
   session_id?: string;
   request_id?: string;
+}
+}
 }
 export interface Comment {
   id: string;
@@ -166,6 +188,8 @@ export interface Comment {
   updated_at: Date;
   is_active: boolean;
 }
+}
+}
 export interface CommentMetadata {
   mentions: UserId;
   attachments: string;
@@ -173,6 +197,8 @@ export interface CommentMetadata {
   is_resolved: boolean;
   resolved_by?: UserId;
   resolved_at?: Date;
+}
+}
 }
 export interface Notification {
   id: string;
@@ -186,6 +212,7 @@ export interface Notification {
   created_at: Date;
   read_at?: Date;
   is_active: boolean;
+}
 }
 export enum NotificationType {
   WORKSPACE_INVITE = 'workspace.invite',
@@ -202,6 +229,8 @@ export enum NotificationType {
   target_id?: string;
   metadata?: Record<string, any>;
   // Workspace operations interface
+}
+}
 }
 export interface WorkspaceOperations {
   // Workspace management
@@ -238,4 +267,5 @@ export interface WorkspaceOperations {
   createNotification(data: Omit<Notification, 'id' | 'created_at'>): Promise<Notification>;
   getUserNotifications(userId: UserId, unreadOnly?: boolean): Promise<Notification>;
   markNotificationRead(id: string): Promise<void>;
+}
 }

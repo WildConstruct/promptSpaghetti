@@ -4,6 +4,7 @@ import { ConnectionState, ConnectionQuality, ConnectionStateConfig } from './Con
 import { ReconnectionState, ReconnectionConfig } from './ReconnectionHandler';
 import { SyncDelta, RecoveryConfig } from './SynchronizationRecovery';
 
+}
 export interface NetworkResilienceConfig {
     enabled: boolean;
     offlineQueue: Partial<OfflineQueueConfig>;
@@ -16,6 +17,7 @@ export interface NetworkResilienceConfig {
         showConnectionQuality: boolean;
         notifyOnReconnect: boolean;
         notifyOnSyncComplete: boolean;
+}
     };
     persistence: {
         enabled: boolean;
@@ -28,6 +30,7 @@ export interface NetworkResilienceConfig {
         enableProfiling: boolean;
     };
 
+}
 export interface ResilienceMetrics {
     uptime: number;
     totalDowntime: number;
@@ -40,6 +43,7 @@ export interface ResilienceMetrics {
     dataLoss: number;
     conflicts: number;
 
+}
 export interface NetworkStatus {
     isOnline: boolean;
     connectionState: ConnectionState;
@@ -185,3 +189,4 @@ export declare class NetworkResilienceManager extends EventEmitter {
     private loadPersistedState;
 
 //# sourceMappingURL=NetworkResilienceManager.d.ts.map
+}

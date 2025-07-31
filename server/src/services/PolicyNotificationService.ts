@@ -13,6 +13,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { PolicyAuthoringService } from './PolicyAuthoringService';
 
 }
+}
 export interface PolicyNotification {
   notificationId: string;
   policyId: string;
@@ -37,7 +38,9 @@ export interface PolicyNotification {
   status: NotificationStatus;
 }
 }
+}
 
+}
 }
 export interface NotificationAudience {
   audienceId: string;
@@ -51,7 +54,9 @@ export interface NotificationAudience {
   actualReach?: number;
 }
 }
+}
 
+}
 }
 export interface NotificationTarget {
   targetId: string;
@@ -66,7 +71,9 @@ export interface NotificationTarget {
   lastNotified?: Date;
 }
 }
+}
 
+}
 }
 export interface ContactInfo {
   email?: string;
@@ -78,7 +85,9 @@ export interface ContactInfo {
   alternativeContacts: AlternativeContact[];
 }
 }
+}
 
+}
 }
 export interface AlternativeContact {
   type: 'EMAIL' | 'PHONE' | 'WEBHOOK';
@@ -88,7 +97,9 @@ export interface AlternativeContact {
   purpose: 'PRIMARY' | 'BACKUP' | 'EMERGENCY';
 }
 }
+}
 
+}
 }
 export interface NotificationPreferences {
   enabled: boolean;
@@ -100,7 +111,9 @@ export interface NotificationPreferences {
   subscriptions: NotificationSubscription[];
 }
 }
+}
 
+}
 }
 export interface ChannelPreference {
   channel: string;
@@ -110,7 +123,9 @@ export interface ChannelPreference {
   customSettings: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ChannelCondition {
   conditionType: 'SEVERITY' | 'POLICY_TYPE' | 'TIME' | 'URGENCY' | 'COMPLIANCE';
@@ -118,7 +133,9 @@ export interface ChannelCondition {
   value: Error;
 }
 }
+}
 
+}
 }
 export interface FrequencyPreference {
   immediate: boolean;
@@ -129,7 +146,9 @@ export interface FrequencyPreference {
   maxNotificationsPerHour: number;
 }
 }
+}
 
+}
 }
 export interface DigestPreference {
   enabled: boolean;
@@ -141,7 +160,9 @@ export interface DigestPreference {
   groupByPolicy: boolean;
 }
 }
+}
 
+}
 }
 export interface RateLimitingPreference {
   enabled: boolean;
@@ -152,7 +173,9 @@ export interface RateLimitingPreference {
   backoffStrategy: 'LINEAR' | 'EXPONENTIAL' | 'FIXED';
 }
 }
+}
 
+}
 }
 export interface QuietHours {
   enabled: boolean;
@@ -164,7 +187,9 @@ export interface QuietHours {
   complianceOverride: boolean;
 }
 }
+}
 
+}
 }
 export interface ContentPreference {
   language: string;
@@ -176,7 +201,9 @@ export interface ContentPreference {
   customizations: ContentCustomization[];
 }
 }
+}
 
+}
 }
 export interface ContentCustomization {
   customizationId: string;
@@ -186,7 +213,9 @@ export interface ContentCustomization {
   conditions: string[];
 }
 }
+}
 
+}
 }
 export interface ComplianceOverride {
   framework: string;
@@ -198,7 +227,9 @@ export interface ComplianceOverride {
   expiresAt?: Date;
 }
 }
+}
 
+}
 }
 export interface NotificationSubscription {
   subscriptionId: string;
@@ -213,7 +244,9 @@ export interface NotificationSubscription {
   lastUpdated: Date;
 }
 }
+}
 
+}
 }
 export interface SubscriptionFilter {
   filterType: 'POLICY_ID' | 'POLICY_TYPE' | 'JURISDICTION' | 'FRAMEWORK' | 'AUTHOR' | 'AUDIENCE';
@@ -222,7 +255,9 @@ export interface SubscriptionFilter {
   caseSensitive: boolean;
 }
 }
+}
 
+}
 }
 export interface AudienceFilter {
   filterId: string;
@@ -232,7 +267,9 @@ export interface AudienceFilter {
   priority: number;
 }
 }
+}
 
+}
 }
 export interface FilterCriteria {
   field: string;
@@ -241,7 +278,9 @@ export interface FilterCriteria {
   dataType: 'STRING' | 'NUMBER' | 'DATE' | 'BOOLEAN' | 'ARRAY';
 }
 }
+}
 
+}
 }
 export interface AudienceSegmentation {
   enabled: boolean;
@@ -250,7 +289,9 @@ export interface AudienceSegmentation {
   deliveryOrder: SegmentDeliveryOrder[];
 }
 }
+}
 
+}
 }
 export interface NotificationSegment {
   segmentId: string;
@@ -264,7 +305,9 @@ export interface NotificationSegment {
   actualSize?: number;
 }
 }
+}
 
+}
 }
 export interface SegmentCustomization {
   customizationType: 'CONTENT' | 'TIMING' | 'CHANNEL' | 'FREQUENCY';
@@ -272,7 +315,9 @@ export interface SegmentCustomization {
   conditions: string[];
 }
 }
+}
 
+}
 }
 export interface SegmentDeliveryOrder {
   segmentId: string;
@@ -282,7 +327,9 @@ export interface SegmentDeliveryOrder {
   rollbackCriteria: RollbackCriteria[];
 }
 }
+}
 
+}
 }
 export interface DeliveryCondition {
   conditionType: 'SUCCESS_RATE' | 'DELIVERY_RATE' | 'ENGAGEMENT_RATE' | 'ERROR_RATE';
@@ -291,7 +338,9 @@ export interface DeliveryCondition {
   action: 'CONTINUE' | 'PAUSE' | 'STOP' | 'ESCALATE';
 }
 }
+}
 
+}
 }
 export interface RollbackCriteria {
   criteriaType: 'HIGH_ERROR_RATE' | 'LOW_DELIVERY_RATE' | 'USER_COMPLAINTS' | 'SYSTEM_OVERLOAD';
@@ -300,7 +349,9 @@ export interface RollbackCriteria {
   action: 'PAUSE' | 'STOP' | 'FALLBACK_CHANNEL' | 'ESCALATE';
 }
 }
+}
 
+}
 }
 export interface NotificationExclusion {
   exclusionId: string;
@@ -313,7 +364,9 @@ export interface NotificationExclusion {
   overridable: boolean;
 }
 }
+}
 
+}
 }
 export interface NotificationChannel {
   channelId: string;
@@ -330,7 +383,9 @@ export interface NotificationChannel {
   status: ChannelStatus;
 }
 }
+}
 
+}
 }
 export interface ChannelConfiguration {
   endpoint?: string;
@@ -343,7 +398,9 @@ export interface ChannelConfiguration {
   customSettings: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ChannelDeliverySettings {
   batchSize: number;
@@ -354,7 +411,9 @@ export interface ChannelDeliverySettings {
   failureHandling: FailureHandling;
 }
 }
+}
 
+}
 }
 export interface TimeWindow {
   startTime: string;
@@ -364,7 +423,9 @@ export interface TimeWindow {
   exceptions: TimeException[];
 }
 }
+}
 
+}
 }
 export interface TimeException {
   type: 'HOLIDAY' | 'MAINTENANCE' | 'BLACKOUT' | 'EMERGENCY';
@@ -374,7 +435,9 @@ export interface TimeException {
   override: boolean;
 }
 }
+}
 
+}
 }
 export interface PriorityHandling {
   enabled: boolean;
@@ -383,7 +446,9 @@ export interface PriorityHandling {
   overrideCapabilities: OverrideCapability[];
 }
 }
+}
 
+}
 }
 export interface PriorityQueue {
   priority: NotificationPriority;
@@ -392,7 +457,9 @@ export interface PriorityQueue {
   timeouts: QueueTimeout[];
 }
 }
+}
 
+}
 }
 export interface QueueTimeout {
   severity: NotificationSeverity;
@@ -400,7 +467,9 @@ export interface QueueTimeout {
   action: 'ESCALATE' | 'FALLBACK' | 'DROP' | 'RETRY';
 }
 }
+}
 
+}
 }
 export interface EscalationRule {
   trigger: EscalationTrigger;
@@ -410,7 +479,9 @@ export interface EscalationRule {
   recipients: string[];
 }
 }
+}
 
+}
 }
 export interface OverrideCapability {
   type: 'EMERGENCY' | 'COMPLIANCE' | 'EXECUTIVE' | 'SYSTEM';
@@ -420,7 +491,9 @@ export interface OverrideCapability {
   auditRequired: boolean;
 }
 }
+}
 
+}
 }
 export interface FailureHandling {
   retryPolicy: RetryPolicy;
@@ -429,7 +502,9 @@ export interface FailureHandling {
   errorNotification: ErrorNotificationConfig;
 }
 }
+}
 
+}
 }
 export interface RetryPolicy {
   maxAttempts: number;
@@ -440,7 +515,9 @@ export interface RetryPolicy {
   nonRetryableErrors: string[];
 }
 }
+}
 
+}
 }
 export interface FallbackChannel {
   channelId: string;
@@ -449,7 +526,9 @@ export interface FallbackChannel {
   transformation: MessageTransformation;
 }
 }
+}
 
+}
 }
 export interface FallbackCondition {
   errorType: string;
@@ -458,7 +537,9 @@ export interface FallbackCondition {
   timeWindow?: number; // minutes
 }
 }
+}
 
+}
 }
 export interface MessageTransformation {
   enabled: boolean;
@@ -466,7 +547,9 @@ export interface MessageTransformation {
   validation: TransformationValidation;
 }
 }
+}
 
+}
 }
 export interface ContentTransformation {
   type: 'FORMAT_CHANGE' | 'CONTENT_REDUCTION' | 'MEDIUM_ADAPTATION' | 'LANGUAGE_CHANGE';
@@ -474,7 +557,9 @@ export interface ContentTransformation {
   conditions: string[];
 }
 }
+}
 
+}
 }
 export interface TransformationValidation {
   validateLength: boolean;
@@ -484,7 +569,9 @@ export interface TransformationValidation {
   customValidators: string[];
 }
 }
+}
 
+}
 }
 export interface DeadLetterQueueConfig {
   enabled: boolean;
@@ -494,7 +581,9 @@ export interface DeadLetterQueueConfig {
   escalationRecipients: string[];
 }
 }
+}
 
+}
 }
 export interface ErrorNotificationConfig {
   enabled: boolean;
@@ -505,7 +594,9 @@ export interface ErrorNotificationConfig {
   suppressDuplicates: boolean;
 }
 }
+}
 
+}
 }
 export interface NotificationTemplate {
   templateId: string;
@@ -524,7 +615,9 @@ export interface NotificationTemplate {
   status: TemplateStatus;
 }
 }
+}
 
+}
 }
 export interface TemplateVariable {
   name: string;
@@ -536,7 +629,9 @@ export interface TemplateVariable {
   examples: unknown[];
 }
 }
+}
 
+}
 }
 export interface VariableValidation {
   pattern?: string;
@@ -548,7 +643,9 @@ export interface VariableValidation {
   customValidator?: string;
 }
 }
+}
 
+}
 }
 export interface TemplateLocalization {
   language: string;
@@ -561,7 +658,9 @@ export interface TemplateLocalization {
   reviewed: boolean;
 }
 }
+}
 
+}
 }
 export interface CulturalAdaptation {
   aspect: 'DATE_FORMAT' | 'TIME_FORMAT' | 'NUMBER_FORMAT' | 'CURRENCY' | 'ADDRESS' | 'PHONE' | 'TONE';
@@ -569,7 +668,9 @@ export interface CulturalAdaptation {
   conditions: string[];
 }
 }
+}
 
+}
 }
 export interface TemplateStyling {
   theme: string;
@@ -580,7 +681,9 @@ export interface TemplateStyling {
   responsive: ResponsiveConfiguration;
 }
 }
+}
 
+}
 }
 export interface LayoutConfiguration {
   structure: string;
@@ -589,7 +692,9 @@ export interface LayoutConfiguration {
   alignment: AlignmentConfiguration;
 }
 }
+}
 
+}
 }
 export interface LayoutSection {
   sectionId: string;
@@ -599,7 +704,9 @@ export interface LayoutSection {
   conditions: string[];
 }
 }
+}
 
+}
 }
 export interface SpacingConfiguration {
   margin: string;
@@ -608,7 +715,9 @@ export interface SpacingConfiguration {
   sectionSpacing: string;
 }
 }
+}
 
+}
 }
 export interface AlignmentConfiguration {
   text: 'LEFT' | 'CENTER' | 'RIGHT' | 'JUSTIFY';
@@ -616,7 +725,9 @@ export interface AlignmentConfiguration {
   actions: 'LEFT' | 'CENTER' | 'RIGHT';
 }
 }
+}
 
+}
 }
 export interface BrandingConfiguration {
   logo?: string;
@@ -627,7 +738,9 @@ export interface BrandingConfiguration {
   footer?: string;
 }
 }
+}
 
+}
 }
 export interface ContactBranding {
   showEmail: boolean;
@@ -637,7 +750,9 @@ export interface ContactBranding {
   customContact?: string;
 }
 }
+}
 
+}
 }
 export interface ResponsiveConfiguration {
   enabled: boolean;
@@ -645,7 +760,9 @@ export interface ResponsiveConfiguration {
   adaptations: ResponsiveAdaptation[];
 }
 }
+}
 
+}
 }
 export interface ResponsiveBreakpoint {
   name: string;
@@ -654,7 +771,9 @@ export interface ResponsiveBreakpoint {
   adaptations: string[];
 }
 }
+}
 
+}
 }
 export interface ResponsiveAdaptation {
   breakpoint: string;
@@ -662,7 +781,9 @@ export interface ResponsiveAdaptation {
   contentChanges: ContentChange[];
 }
 }
+}
 
+}
 }
 export interface StyleChange {
   selector: string;
@@ -670,7 +791,9 @@ export interface StyleChange {
   conditions: string[];
 }
 }
+}
 
+}
 }
 export interface ContentChange {
   element: string;
@@ -679,7 +802,9 @@ export interface ContentChange {
   conditions: string[];
 }
 }
+}
 
+}
 }
 export interface TemplateValidation {
   validateSyntax: boolean;
@@ -690,7 +815,9 @@ export interface TemplateValidation {
   customValidators: string[];
 }
 }
+}
 
+}
 }
 export interface TemplateCompliance {
   frameworks: string[];
@@ -699,7 +826,9 @@ export interface TemplateCompliance {
   approvals: ComplianceApproval[];
 }
 }
+}
 
+}
 }
 export interface ComplianceRequirement {
   framework: string;
@@ -709,7 +838,9 @@ export interface ComplianceRequirement {
   evidence: string[];
 }
 }
+}
 
+}
 }
 export interface ComplianceRestriction {
   type: 'CONTENT' | 'TIMING' | 'AUDIENCE' | 'CHANNEL';
@@ -718,7 +849,9 @@ export interface ComplianceRestriction {
   exceptions: string[];
 }
 }
+}
 
+}
 }
 export interface ComplianceApproval {
   framework: string;
@@ -729,7 +862,9 @@ export interface ComplianceApproval {
   reviewRequired: boolean;
 }
 }
+}
 
+}
 }
 export interface ChannelRateLimit {
   enabled: boolean;
@@ -739,7 +874,9 @@ export interface ChannelRateLimit {
   enforcement: EnforcementConfiguration;
 }
 }
+}
 
+}
 }
 export interface RateLimit {
   period: 'SECOND' | 'MINUTE' | 'HOUR' | 'DAY' | 'MONTH';
@@ -748,7 +885,9 @@ export interface RateLimit {
   priority: NotificationPriority;
 }
 }
+}
 
+}
 }
 export interface BurstConfiguration {
   enabled: boolean;
@@ -758,7 +897,9 @@ export interface BurstConfiguration {
   priorityOverride: boolean;
 }
 }
+}
 
+}
 }
 export interface QuotaConfiguration {
   period: 'HOUR' | 'DAY' | 'WEEK' | 'MONTH';
@@ -768,7 +909,9 @@ export interface QuotaConfiguration {
   warningThreshold: number; // percentage
 }
 }
+}
 
+}
 }
 export interface EnforcementConfiguration {
   strategy: 'DENY' | 'QUEUE' | 'THROTTLE' | 'PRIORITIZE';
@@ -778,7 +921,9 @@ export interface EnforcementConfiguration {
   escalationPaths: string[];
 }
 }
+}
 
+}
 }
 export interface ChannelReliability {
   availability: AvailabilityMetrics;
@@ -787,7 +932,9 @@ export interface ChannelReliability {
   monitoring: MonitoringConfiguration;
 }
 }
+}
 
+}
 }
 export interface AvailabilityMetrics {
   uptimePercentage: number;
@@ -797,7 +944,9 @@ export interface AvailabilityMetrics {
   mtbf: number; // Mean Time Between Failures in hours
 }
 }
+}
 
+}
 }
 export interface PerformanceMetrics {
   averageLatency: number; // milliseconds
@@ -807,7 +956,9 @@ export interface PerformanceMetrics {
   successRate: number; // percentage
 }
 }
+}
 
+}
 }
 export interface ErrorRateMetrics {
   overallErrorRate: number; // percentage
@@ -816,7 +967,9 @@ export interface ErrorRateMetrics {
   recoveryTime: number; // average recovery time in minutes
 }
 }
+}
 
+}
 }
 export interface ErrorSummary {
   errorType: string;
@@ -826,7 +979,9 @@ export interface ErrorSummary {
   resolution?: string;
 }
 }
+}
 
+}
 }
 export interface MonitoringConfiguration {
   healthCheck: HealthCheckConfiguration;
@@ -835,7 +990,9 @@ export interface MonitoringConfiguration {
   metrics: MetricsConfiguration;
 }
 }
+}
 
+}
 }
 export interface HealthCheckConfiguration {
   enabled: boolean;
@@ -847,7 +1004,9 @@ export interface HealthCheckConfiguration {
   unhealthyThreshold: number;
 }
 }
+}
 
+}
 }
 export interface AlertingConfiguration {
   enabled: boolean;
@@ -857,7 +1016,9 @@ export interface AlertingConfiguration {
   suppressionRules: SuppressionRule[];
 }
 }
+}
 
+}
 }
 export interface AlertRule {
   ruleId: string;
@@ -869,7 +1030,9 @@ export interface AlertRule {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface AlertEscalation {
   level: number;
@@ -879,7 +1042,9 @@ export interface AlertEscalation {
   conditions: string[];
 }
 }
+}
 
+}
 }
 export interface SuppressionRule {
   ruleId: string;
@@ -889,7 +1054,9 @@ export interface SuppressionRule {
   exceptions: string[];
 }
 }
+}
 
+}
 }
 export interface LoggingConfiguration {
   enabled: boolean;
@@ -899,7 +1066,9 @@ export interface LoggingConfiguration {
   sampling: SamplingConfiguration;
 }
 }
+}
 
+}
 }
 export interface LogDestination {
   type: 'FILE' | 'DATABASE' | 'EXTERNAL' | 'STREAM';
@@ -907,7 +1076,9 @@ export interface LogDestination {
   filters: LogFilter[];
 }
 }
+}
 
+}
 }
 export interface LogFilter {
   field: string;
@@ -916,7 +1087,9 @@ export interface LogFilter {
   action: 'INCLUDE' | 'EXCLUDE';
 }
 }
+}
 
+}
 }
 export interface SamplingConfiguration {
   enabled: boolean;
@@ -925,7 +1098,9 @@ export interface SamplingConfiguration {
   preserveErrors: boolean;
 }
 }
+}
 
+}
 }
 export interface MetricsConfiguration {
   enabled: boolean;
@@ -934,7 +1109,9 @@ export interface MetricsConfiguration {
   export: MetricsExportConfiguration;
 }
 }
+}
 
+}
 }
 export interface MetricDefinition {
   name: string;
@@ -944,7 +1121,9 @@ export interface MetricDefinition {
   buckets?: number[];
 }
 }
+}
 
+}
 }
 export interface AggregationConfiguration {
   intervals: number[]; // seconds
@@ -952,7 +1131,9 @@ export interface AggregationConfiguration {
   retention: number; // days
 }
 }
+}
 
+}
 }
 export interface MetricsExportConfiguration {
   enabled: boolean;
@@ -961,7 +1142,9 @@ export interface MetricsExportConfiguration {
   interval: number; // seconds
 }
 }
+}
 
+}
 }
 export interface ChannelCost {
   costModel: CostModel;
@@ -970,7 +1153,9 @@ export interface ChannelCost {
   optimization: CostOptimization;
 }
 }
+}
 
+}
 }
 export interface CostModel {
   type: 'PER_MESSAGE' | 'PER_BATCH' | 'MONTHLY' | 'TIERED' | 'CUSTOM';
@@ -979,7 +1164,9 @@ export interface CostModel {
   discounts: CostDiscount[];
 }
 }
+}
 
+}
 }
 export interface VariableCost {
   factor: string;
@@ -988,7 +1175,9 @@ export interface VariableCost {
   cap?: number;
 }
 }
+}
 
+}
 }
 export interface CostDiscount {
   type: 'VOLUME' | 'COMMITMENT' | 'PROMOTIONAL';
@@ -997,7 +1186,9 @@ export interface CostDiscount {
   expiresAt?: Date;
 }
 }
+}
 
+}
 }
 export interface PricingConfiguration {
   currency: string;
@@ -1006,7 +1197,9 @@ export interface PricingConfiguration {
   reporting: CostReportingConfiguration;
 }
 }
+}
 
+}
 }
 export interface BillingConfiguration {
   cycle: 'MONTHLY' | 'QUARTERLY' | 'ANNUALLY';
@@ -1015,7 +1208,9 @@ export interface BillingConfiguration {
   minimumCharge?: number;
 }
 }
+}
 
+}
 }
 export interface CostTrackingConfiguration {
   granularity: 'MESSAGE' | 'BATCH' | 'HOUR' | 'DAY';
@@ -1023,7 +1218,9 @@ export interface CostTrackingConfiguration {
   allocation: AllocationConfiguration;
 }
 }
+}
 
+}
 }
 export interface AttributionConfiguration {
   dimensions: string[];
@@ -1031,7 +1228,9 @@ export interface AttributionConfiguration {
   defaultAttribution: string;
 }
 }
+}
 
+}
 }
 export interface AttributionRule {
   condition: string;
@@ -1039,7 +1238,9 @@ export interface AttributionRule {
   priority: number;
 }
 }
+}
 
+}
 }
 export interface AllocationConfiguration {
   method: 'DIRECT' | 'PROPORTIONAL' | 'EQUAL' | 'WEIGHTED';
@@ -1047,7 +1248,9 @@ export interface AllocationConfiguration {
   rules: AllocationRule[];
 }
 }
+}
 
+}
 }
 export interface AllocationRule {
   condition: string;
@@ -1055,7 +1258,9 @@ export interface AllocationRule {
   percentage: number;
 }
 }
+}
 
+}
 }
 export interface CostReportingConfiguration {
   enabled: boolean;
@@ -1065,7 +1270,9 @@ export interface CostReportingConfiguration {
   details: string[];
 }
 }
+}
 
+}
 }
 export interface BudgetConfiguration {
   enabled: boolean;
@@ -1074,7 +1281,9 @@ export interface BudgetConfiguration {
   enforcement: BudgetEnforcement;
 }
 }
+}
 
+}
 }
 export interface Budget {
   budgetId: string;
@@ -1085,7 +1294,9 @@ export interface Budget {
   filters: BudgetFilter[];
 }
 }
+}
 
+}
 }
 export interface BudgetFilter {
   dimension: string;
@@ -1093,7 +1304,9 @@ export interface BudgetFilter {
   operator: 'IN' | 'NOT_IN' | 'EQUALS' | 'NOT_EQUALS';
 }
 }
+}
 
+}
 }
 export interface BudgetAlert {
   threshold: number; // percentage
@@ -1102,7 +1315,9 @@ export interface BudgetAlert {
   message: string;
 }
 }
+}
 
+}
 }
 export interface BudgetEnforcement {
   enabled: boolean;
@@ -1110,7 +1325,9 @@ export interface BudgetEnforcement {
   overrides: EnforcementOverride[];
 }
 }
+}
 
+}
 }
 export interface EnforcementAction {
   threshold: number; // percentage
@@ -1118,7 +1335,9 @@ export interface EnforcementAction {
   parameters: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface EnforcementOverride {
   type: 'EMERGENCY' | 'COMPLIANCE' | 'EXECUTIVE';
@@ -1127,7 +1346,9 @@ export interface EnforcementOverride {
   auditRequired: boolean;
 }
 }
+}
 
+}
 }
 export interface CostOptimization {
   enabled: boolean;
@@ -1136,7 +1357,9 @@ export interface CostOptimization {
   recommendations: OptimizationRecommendation[];
 }
 }
+}
 
+}
 }
 export interface OptimizationStrategy {
   strategyId: string;
@@ -1147,7 +1370,9 @@ export interface OptimizationStrategy {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface OptimizationMonitoring {
   trackSavings: boolean;
@@ -1156,7 +1381,9 @@ export interface OptimizationMonitoring {
   benchmarks: OptimizationBenchmark[];
 }
 }
+}
 
+}
 }
 export interface OptimizationBenchmark {
   metric: string;
@@ -1165,7 +1392,9 @@ export interface OptimizationBenchmark {
   threshold: number;
 }
 }
+}
 
+}
 }
 export interface OptimizationRecommendation {
   recommendationId: string;
@@ -1177,7 +1406,9 @@ export interface OptimizationRecommendation {
   confidence: number; // percentage
 }
 }
+}
 
+}
 }
 export interface ChannelCompliance {
   frameworks: string[];
@@ -1186,7 +1417,9 @@ export interface ChannelCompliance {
   auditing: ComplianceAuditing;
 }
 }
+}
 
+}
 }
 export interface ComplianceCertification {
   framework: string;
@@ -1198,7 +1431,9 @@ export interface ComplianceCertification {
   conditions: string[];
 }
 }
+}
 
+}
 }
 export interface ChannelComplianceRequirement {
   framework: string;
@@ -1210,7 +1445,9 @@ export interface ChannelComplianceRequirement {
   nextValidation: Date;
 }
 }
+}
 
+}
 }
 export interface ComplianceAuditing {
   enabled: boolean;
@@ -1220,7 +1457,9 @@ export interface ComplianceAuditing {
   reporting: AuditReporting;
 }
 }
+}
 
+}
 }
 export interface AuditReporting {
   recipients: string[];
@@ -1229,7 +1468,9 @@ export interface AuditReporting {
   retention: number; // days
 }
 }
+}
 
+}
 }
 export interface NotificationScheduling {
   immediate: boolean;
@@ -1241,7 +1482,9 @@ export interface NotificationScheduling {
   optimization: SchedulingOptimization;
 }
 }
+}
 
+}
 }
 export interface RecurringSchedule {
   enabled: boolean;
@@ -1252,7 +1495,9 @@ export interface RecurringSchedule {
   exceptions: ScheduleException[];
 }
 }
+}
 
+}
 }
 export interface RecurrencePattern {
   type: 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'YEARLY' | 'CUSTOM';
@@ -1263,7 +1508,9 @@ export interface RecurrencePattern {
   customPattern?: string; // cron format
 }
 }
+}
 
+}
 }
 export interface ScheduleException {
   type: 'SKIP' | 'RESCHEDULE' | 'MODIFY';
@@ -1273,7 +1520,9 @@ export interface ScheduleException {
   modifications?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface SchedulingCondition {
   conditionType: 'TIME_WINDOW' | 'SYSTEM_LOAD' | 'USER_AVAILABILITY' | 'BUSINESS_HOURS' | 'COMPLIANCE';
@@ -1282,7 +1531,9 @@ export interface SchedulingCondition {
   override: boolean;
 }
 }
+}
 
+}
 }
 export interface SchedulingDependency {
   dependencyType: 'NOTIFICATION' | 'POLICY_EVENT' | 'SYSTEM_EVENT' | 'USER_ACTION';
@@ -1292,7 +1543,9 @@ export interface SchedulingDependency {
   fallbackAction: 'PROCEED' | 'CANCEL' | 'RESCHEDULE';
 }
 }
+}
 
+}
 }
 export interface SchedulingOptimization {
   enabled: boolean;
@@ -1301,7 +1554,9 @@ export interface SchedulingOptimization {
   algorithm: 'GREEDY' | 'GENETIC' | 'SIMULATED_ANNEALING' | 'CUSTOM';
 }
 }
+}
 
+}
 }
 export interface OptimizationObjective {
   type: 'MAXIMIZE_DELIVERY_RATE' | 'MINIMIZE_COST' | 'OPTIMIZE_ENGAGEMENT' | 'BALANCE_LOAD';
@@ -1309,7 +1564,9 @@ export interface OptimizationObjective {
   parameters: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface OptimizationConstraint {
   type: 'TIME_WINDOW' | 'RESOURCE_LIMIT' | 'COMPLIANCE_REQUIREMENT' | 'USER_PREFERENCE';
@@ -1317,7 +1574,9 @@ export interface OptimizationConstraint {
   hard: boolean;
 }
 }
+}
 
+}
 }
 export interface NotificationPersonalization {
   enabled: boolean;
@@ -1327,7 +1586,9 @@ export interface NotificationPersonalization {
   contentAdaptation: ContentAdaptation;
 }
 }
+}
 
+}
 }
 export interface PersonalizationRule {
   ruleId: string;
@@ -1338,7 +1599,9 @@ export interface PersonalizationRule {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface PersonalizationAction {
   type: 'REPLACE_CONTENT' | 'ADD_CONTENT' | 'REMOVE_CONTENT' | 'MODIFY_STYLING' | 'CHANGE_CHANNEL';
@@ -1347,7 +1610,9 @@ export interface PersonalizationAction {
   conditions: string[];
 }
 }
+}
 
+}
 }
 export interface DynamicContent {
   contentId: string;
@@ -1357,7 +1622,9 @@ export interface DynamicContent {
   fallback: ContentFallback;
 }
 }
+}
 
+}
 }
 export interface ContentSource {
   sourceType: 'API' | 'DATABASE' | 'FILE' | 'COMPUTED' | 'USER_GENERATED';
@@ -1367,7 +1634,9 @@ export interface ContentSource {
   validation: ContentValidation;
 }
 }
+}
 
+}
 }
 export interface ContentValidation {
   enabled: boolean;
@@ -1376,7 +1645,9 @@ export interface ContentValidation {
   approval: ContentApprovalWorkflow;
 }
 }
+}
 
+}
 }
 export interface ValidationRule {
   ruleType: 'LENGTH' | 'FORMAT' | 'CONTENT' | 'LINKS' | 'IMAGES' | 'COMPLIANCE';
@@ -1384,7 +1655,9 @@ export interface ValidationRule {
   severity: 'ERROR' | 'WARNING' | 'INFO';
 }
 }
+}
 
+}
 }
 export interface SanitizationRule {
   ruleType: 'HTML_STRIP' | 'SCRIPT_REMOVE' | 'LINK_VALIDATE' | 'PROFANITY_FILTER' | 'PII_MASK';
@@ -1392,7 +1665,9 @@ export interface SanitizationRule {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface ContentApprovalWorkflow {
   required: boolean;
@@ -1402,7 +1677,9 @@ export interface ContentApprovalWorkflow {
   timeout: number; // hours
 }
 }
+}
 
+}
 }
 export interface AutoApprovalRule {
   condition: string;
@@ -1410,7 +1687,9 @@ export interface AutoApprovalRule {
   confidence: number; // percentage
 }
 }
+}
 
+}
 }
 export interface ContentCaching {
   enabled: boolean;
@@ -1419,7 +1698,9 @@ export interface ContentCaching {
   invalidation: CacheInvalidation;
 }
 }
+}
 
+}
 }
 export interface CacheInvalidation {
   triggers: InvalidationTrigger[];
@@ -1427,7 +1708,9 @@ export interface CacheInvalidation {
   cascading: boolean;
 }
 }
+}
 
+}
 }
 export interface InvalidationTrigger {
   triggerType: 'TIME' | 'EVENT' | 'CONDITION' | 'MANUAL';
@@ -1435,7 +1718,9 @@ export interface InvalidationTrigger {
   conditions: string[];
 }
 }
+}
 
+}
 }
 export interface ContentFallback {
   enabled: boolean;
@@ -1444,7 +1729,9 @@ export interface ContentFallback {
   timeout: number; // milliseconds
 }
 }
+}
 
+}
 }
 export interface UserContext {
   userId: string;
@@ -1456,7 +1743,9 @@ export interface UserContext {
   device: DeviceInfo;
 }
 }
+}
 
+}
 }
 export interface UserProfile {
   demographics: UserDemographics;
@@ -1467,7 +1756,9 @@ export interface UserProfile {
   preferences: UserPreferences;
 }
 }
+}
 
+}
 }
 export interface UserDemographics {
   age?: number;
@@ -1478,7 +1769,9 @@ export interface UserDemographics {
   culture: string;
 }
 }
+}
 
+}
 }
 export interface UserPreferences {
   language: string;
@@ -1489,7 +1782,9 @@ export interface UserPreferences {
   currency: string;
 }
 }
+}
 
+}
 }
 export interface NotificationHistory {
   totalReceived: number;
@@ -1500,7 +1795,9 @@ export interface NotificationHistory {
   engagementScore: number;
 }
 }
+}
 
+}
 }
 export interface HistoryEntry {
   notificationId: string;
@@ -1512,7 +1809,9 @@ export interface HistoryEntry {
   engagement: EngagementMetrics;
 }
 }
+}
 
+}
 }
 export interface EngagementMetrics {
   opened: boolean;
@@ -1524,7 +1823,9 @@ export interface EngagementMetrics {
   actionsTaken: string[];
 }
 }
+}
 
+}
 }
 export interface UserBehavior {
   engagementPatterns: EngagementPattern[];
@@ -1533,7 +1834,9 @@ export interface UserBehavior {
   contentPreferences: ContentEngagement[];
 }
 }
+}
 
+}
 }
 export interface EngagementPattern {
   pattern: string;
@@ -1542,7 +1845,9 @@ export interface EngagementPattern {
   trend: 'INCREASING' | 'DECREASING' | 'STABLE';
 }
 }
+}
 
+}
 }
 export interface TimePreference {
   dayOfWeek: string;
@@ -1551,7 +1856,9 @@ export interface TimePreference {
   sampleSize: number;
 }
 }
+}
 
+}
 }
 export interface ChannelEngagement {
   channel: string;
@@ -1561,7 +1868,9 @@ export interface ChannelEngagement {
   lastUsed: Date;
 }
 }
+}
 
+}
 }
 export interface ContentEngagement {
   contentType: string;
@@ -1570,7 +1879,9 @@ export interface ContentEngagement {
   preference: number; // 1-10 scale
 }
 }
+}
 
+}
 }
 export interface UserLocation {
   country: string;
@@ -1582,14 +1893,18 @@ export interface UserLocation {
   lastUpdated: Date;
 }
 }
+}
 
+}
 }
 export interface Coordinates {
   latitude: number;
   longitude: number;
 }
 }
+}
 
+}
 }
 export interface DeviceInfo {
   deviceType: 'DESKTOP' | 'MOBILE' | 'TABLET' | 'WEARABLE' | 'IOT';
@@ -1600,7 +1915,9 @@ export interface DeviceInfo {
   lastSeen: Date;
 }
 }
+}
 
+}
 }
 export interface DeviceCapabilities {
   pushNotifications: boolean;
@@ -1610,7 +1927,9 @@ export interface DeviceCapabilities {
   biometrics: boolean;
 }
 }
+}
 
+}
 }
 export interface ContentAdaptation {
   enabled: boolean;
@@ -1619,7 +1938,9 @@ export interface ContentAdaptation {
   testing: AdaptationTesting;
 }
 }
+}
 
+}
 }
 export interface AdaptationRule {
   ruleId: string;
@@ -1629,7 +1950,9 @@ export interface AdaptationRule {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface AdaptationContext {
   contextType: 'DEVICE' | 'LOCATION' | 'TIME' | 'USER' | 'CONTENT' | 'SITUATION';
@@ -1637,7 +1960,9 @@ export interface AdaptationContext {
   adaptations: string[];
 }
 }
+}
 
+}
 }
 export interface AdaptationTesting {
   enabled: boolean;
@@ -1646,7 +1971,9 @@ export interface AdaptationTesting {
   reporting: TestingReporting;
 }
 }
+}
 
+}
 }
 export interface TestingStrategy {
   strategyType: 'A_B_TEST' | 'MULTIVARIATE' | 'CANARY' | 'GRADUAL_ROLLOUT';
@@ -1655,7 +1982,9 @@ export interface TestingStrategy {
   successCriteria: SuccessCriteria[];
 }
 }
+}
 
+}
 }
 export interface SuccessCriteria {
   metric: string;
@@ -1664,7 +1993,9 @@ export interface SuccessCriteria {
   significance: number; // percentage
 }
 }
+}
 
+}
 }
 export interface TestingMetric {
   name: string;
@@ -1673,7 +2004,9 @@ export interface TestingMetric {
   targets: Record<string, number>;
 }
 }
+}
 
+}
 }
 export interface TestingReporting {
   frequency: 'REAL_TIME' | 'HOURLY' | 'DAILY' | 'WEEKLY';
@@ -1682,7 +2015,9 @@ export interface TestingReporting {
   details: string[];
 }
 }
+}
 
+}
 }
 export interface ComplianceNotificationData {
   frameworks: string[];
@@ -1692,7 +2027,9 @@ export interface ComplianceNotificationData {
   restrictions: ComplianceNotificationRestriction[];
 }
 }
+}
 
+}
 }
 export interface ComplianceNotificationRequirement {
   framework: string;
@@ -1703,7 +2040,9 @@ export interface ComplianceNotificationRequirement {
   validation: string[];
 }
 }
+}
 
+}
 }
 export interface ComplianceEvidence {
   evidenceId: string;
@@ -1714,7 +2053,9 @@ export interface ComplianceEvidence {
   integrity: EvidenceIntegrity;
 }
 }
+}
 
+}
 }
 export interface EvidenceIntegrity {
   hash: string;
@@ -1723,7 +2064,9 @@ export interface EvidenceIntegrity {
   tamperProof: boolean;
 }
 }
+}
 
+}
 }
 export interface ComplianceNotificationApproval {
   framework: string;
@@ -1734,7 +2077,9 @@ export interface ComplianceNotificationApproval {
   expiresAt?: Date;
 }
 }
+}
 
+}
 }
 export interface ComplianceNotificationRestriction {
   framework: string;
@@ -1744,7 +2089,9 @@ export interface ComplianceNotificationRestriction {
   exceptions: string[];
 }
 }
+}
 
+}
 }
 export interface NotificationMetadata {
   source: string;
@@ -1759,7 +2106,9 @@ export interface NotificationMetadata {
   business: BusinessMetadata;
 }
 }
+}
 
+}
 }
 export interface RetentionMetadata {
   retentionPeriod: number; // days
@@ -1769,7 +2118,9 @@ export interface RetentionMetadata {
   legalHold: boolean;
 }
 }
+}
 
+}
 }
 export interface TrackingMetadata {
   trackDelivery: boolean;
@@ -1780,7 +2131,9 @@ export interface TrackingMetadata {
   analyticsId?: string;
 }
 }
+}
 
+}
 }
 export interface BusinessMetadata {
   costCenter: string;
@@ -1791,7 +2144,9 @@ export interface BusinessMetadata {
   stakeholders: string[];
 }
 }
+}
 
+}
 }
 export interface DeliveryAttempt {
   attemptId: string;
@@ -1805,7 +2160,9 @@ export interface DeliveryAttempt {
   metrics: AttemptMetrics;
 }
 }
+}
 
+}
 }
 export interface AttemptResponse {
   statusCode?: number;
@@ -1815,7 +2172,9 @@ export interface AttemptResponse {
   trackingInfo?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface AttemptError {
   errorCode: string;
@@ -1825,7 +2184,9 @@ export interface AttemptError {
   category: ErrorCategory;
 }
 }
+}
 
+}
 }
 export interface AttemptMetrics {
   latency: number; // milliseconds
@@ -1834,7 +2195,9 @@ export interface AttemptMetrics {
   cost?: number;
 }
 }
+}
 
+}
 }
 export interface UserInteraction {
   interactionId: string;
@@ -1845,6 +2208,7 @@ export interface UserInteraction {
   data?: unknown;
   location?: UserLocation;
   device?: DeviceInfo;
+}
 }
 }
 
@@ -2007,12 +2371,14 @@ export type EscalationAction =
   | 'MANUAL_INTERVENTION';
 
 }
+}
 export type AuthenticationConfiguration = {
   type: 'NONE' | 'BASIC' | 'BEARER' | 'API_KEY' | 'OAUTH' | 'CUSTOM';
   credentials: Record<string, any>;
   refreshMechanism?: RefreshMechanism;
 };
 
+}
 }
 export type RefreshMechanism = {
   enabled: boolean;
@@ -2022,6 +2388,7 @@ export type RefreshMechanism = {
 };
 
 }
+}
 export type EncryptionConfiguration = {
   enabled: boolean;
   algorithm: string;
@@ -2030,12 +2397,14 @@ export type EncryptionConfiguration = {
 };
 
 }
+}
 export type KeyManagementConfiguration = {
   provider: 'INTERNAL' | 'AWS_KMS' | 'AZURE_KEY_VAULT' | 'GOOGLE_KMS' | 'CUSTOM';
   keyId: string;
   rotationPolicy: KeyRotationPolicy;
 };
 
+}
 }
 export type KeyRotationPolicy = {
   enabled: boolean;
@@ -2958,6 +3327,7 @@ export class PolicyNotificationService extends EventEmitter {
 
 // Supporting interfaces
 }
+}
 export interface DeliveryMetrics {
   totalAttempts: number;
   delivered: number;
@@ -2968,7 +3338,9 @@ export interface DeliveryMetrics {
   totalCost: number;
 }
 }
+}
 
+}
 }
 export interface NotificationAnalytics {
   summary: NotificationSummary;
@@ -2978,7 +3350,9 @@ export interface NotificationAnalytics {
   costAnalysis: CostAnalysis;
 }
 }
+}
 
+}
 }
 export interface NotificationSummary {
   totalNotifications: number;
@@ -2988,7 +3362,9 @@ export interface NotificationSummary {
   unsubscribeRate: number;
 }
 }
+}
 
+}
 }
 export interface NotificationTrend {
   period: string;
@@ -2998,7 +3374,9 @@ export interface NotificationTrend {
   direction: 'UP' | 'DOWN' | 'STABLE';
 }
 }
+}
 
+}
 }
 export interface ChannelPerformance {
   channel: string;
@@ -3008,7 +3386,9 @@ export interface ChannelPerformance {
   reliability: number;
 }
 }
+}
 
+}
 }
 export interface AudienceInsight {
   segment: string;
@@ -3018,7 +3398,9 @@ export interface AudienceInsight {
   trends: string[];
 }
 }
+}
 
+}
 }
 export interface CostAnalysis {
   totalCost: number;
@@ -3027,7 +3409,9 @@ export interface CostAnalysis {
   budgetUtilization: number;
 }
 }
+}
 
+}
 }
 export interface NotificationAnalyticsFilters {
   dateRange?: { start: Date; end: Date };

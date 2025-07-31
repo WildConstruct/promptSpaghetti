@@ -8,6 +8,7 @@ import { AuditService } from './AuditService';
 import { RedisService } from '../database/RedisService';
 
 }
+}
 export interface SessionMetrics {
   totalActiveSessions: number;
   sessionsByDevice: Record<string, number>;
@@ -17,7 +18,9 @@ export interface SessionMetrics {
   concurrentSessionsPerUser: Record<string, number>;
 }
 }
+}
 
+}
 }
 export interface SessionAlert {
   id: string;
@@ -32,7 +35,9 @@ export interface SessionAlert {
   resolvedBy?: string;
 }
 }
+}
 
+}
 }
 export interface MonitoringRule {
   id: string;
@@ -44,10 +49,13 @@ export interface MonitoringRule {
   action: 'alert' | 'block' | 'require_2fa' | 'notify_user';
 }
 }
+}
 
+}
 }
 export interface SessionAnalytics {
   userId?: string;
+}
 }
   timeRange: { start: Date; end: Date };
   metrics: {

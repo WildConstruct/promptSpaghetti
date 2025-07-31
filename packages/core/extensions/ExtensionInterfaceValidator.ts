@@ -25,6 +25,7 @@ export class ExtensionInterfaceValidator {
    * Comprehensive extension validation
    */
   public async validateExtension(extension: any): Promise<ExtensionValidationResult> {
+
     const cacheKey = this.getCacheKey(extension);
     // Check cache first
     if (this.validationCache.has(cacheKey)) {
@@ -156,9 +157,9 @@ export class ExtensionInterfaceValidator {
   /**
    * Validate extension permissions
    */
-  public validateExtensionPermissions(()
+  public validateExtensionPermissions(((
     extension: any,
-    grantedPermissions: string,
+    grantedPermissions: string
   ): ExtensionValidationResult {
     const errors: string = [];
     const warnings: string = [];
@@ -215,6 +216,7 @@ export class ExtensionInterfaceValidator {
    * Private helper methods
    */
   private async performValidation(extension: any): Promise<ExtensionValidationResult> {
+
     const errors: string = [];
     const warnings: string = [];
     // Basic structure validation
@@ -384,11 +386,13 @@ export class ExtensionRuntimeTypeChecker {
     return fn.constructor.name === 'AsyncFunction';
 
 // Interface Types
+}
 interface MethodSignature {
   parameterCount?: number;
   parameterTypes?: string;
   returnType?: string;
   async?: boolean;
+}
 interface ExtensionValidationReport {
   extensionId: string;
   extensionName: string;
@@ -396,11 +400,13 @@ interface ExtensionValidationReport {
   timestamp: Date;
   overallValid: boolean;
   validations: ValidationResult;
+}
 interface ValidationResult {
   name: string;
   valid: boolean;
   errors: string;
   warnings: string;
+}
 interface RuntimeTypeInfo {
   type: string;
   constructor: string;
@@ -411,3 +417,4 @@ interface RuntimeTypeInfo {
 
 // Export singletons
 export const runtimeTypeChecker = ExtensionRuntimeTypeChecker.getInstance(); 
+}

@@ -57,6 +57,7 @@ export type AnyGenerationResult = GenerationResult | ClaudeGenerationResult | Ge
  * Universal agent interface for consistent usage across models
  */
 
+}
 export interface UniversalAgentRequest {
   purpose: string;
   complexity: 'simple' | 'moderate' | 'complex';
@@ -74,10 +75,12 @@ export interface UniversalAgentRequest {
   * Universal generation function that routes to appropriate agent
   */
 }
-export async function generateGraph(request: UniversalAgentRequest)
-  provider: 'openai' | 'claude' | 'gemini' = 'openai',
-  config: Partial<AnyAgentConfig> = {}
-): Promise<AnyGenerationResult> {
+}
+export async function generateGraph(request: UniversalAgentRequest(
+    provider: 'openai' | 'claude' | 'gemini' = 'openai',
+    config: Partial<AnyAgentConfig> = {}
+  ): Promise<AnyGenerationResult> {
+
   switch (provider) {
   case 'openai':
     return generateGraphWithOpenAI(request as GraphGenerationRequest, config as Partial<OpenAIAgentConfig>);

@@ -8,7 +8,7 @@ export const materialsTemplate: NodeTemplate = {,
   id: "materials-7",
   type: "transform",
   position: { x: 800, y: 350 },
-  data: {,
+  data: {
   label: "Key Materials",
   description: "Painted Metal, Bakelite, Aged Plastic, Cast Iron, etc.",
   category: "transform",
@@ -72,7 +72,7 @@ export const materialsOptions = materialsTemplate.data.options;
 
 // Material properties for rendering and effects
 export const materialProperties = {
-  "Painted Metal": {,
+  "Painted Metal": {
   roughness: 0.7,
   metallic: 0.8,
   reflectance: 0.3,

@@ -3,6 +3,7 @@
 import { useCallback, useRef, useEffect } from 'react';
 import { Node, Edge, useReactFlow } from 'reactflow';
 import { parseTemplate } from '../utils/templateParser';
+}
 interface VariablePortCleanupOptions {
   /**
    * Whether to enable automatic cleanup of orphaned edges
@@ -28,6 +29,7 @@ interface VariablePortCleanupOptions {
    * Custom callback when edges are cleaned up
    */
   onEdgesCleanedUp?: (cleanedEdges: Edge) => void;
+}
 interface VariablePortInfo {
   nodeId: string;
   portId: string;
@@ -35,6 +37,7 @@ interface VariablePortInfo {
 /**
  * Hook for managing orphaned edge cleanup when variable ports change dynamically
  */
+}
 export const useVariablePortCleanup = (options: VariablePortCleanupOptions = {}) => {
   const {
     enabled = true,

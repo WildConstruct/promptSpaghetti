@@ -58,9 +58,9 @@ export };
 export return new SecurityAnalyticsMonitor({ ...defaultConfig, ...config });
 };
 
-export const createDefaultSecuritySystemHealth = (()
+export const createDefaultSecuritySystemHealth = (((
     systemId: string,
-    systemType: SecuritySystemHealth['systemType'],
+    systemType: SecuritySystemHealth['systemType']
   ): SecuritySystemHealth => ({)
   systemId,
   systemType,

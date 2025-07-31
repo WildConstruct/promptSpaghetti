@@ -7,6 +7,7 @@
 import { Node, Edge } from 'reactflow';
 import { PsgFile, ProjectMetadata, ProjectSettings, CollaborationData } from '../schemas/psgSchema';
 
+}
 export interface GraphState {
     nodes: Node[];
     edges: Edge[];
@@ -17,6 +18,7 @@ export interface GraphState {
             position: {
                 x: number;
                 y: number;
+}
             };
         }>;
         nodeLabels?: Record<string, string>;
@@ -29,6 +31,7 @@ export interface GraphState {
         [key: string]: unknown;
     };
 
+}
 export interface SerializationOptions {
     includeMetadata?: boolean;
     includeSettings?: boolean;
@@ -36,17 +39,20 @@ export interface SerializationOptions {
     compress?: boolean;
     validateOutput?: boolean;
 
+}
 export interface DeserializationOptions {
     skipValidation?: boolean;
     autoMigrate?: boolean;
     preserveIds?: boolean;
 
+}
 export interface SerializationResult {
     success: boolean;
     data?: string;
     error?: string;
     warnings?: string[];
 
+}
 export interface DeserializationResult {
     success: boolean;
     data?: {
@@ -54,6 +60,7 @@ export interface DeserializationResult {
         metadata: ProjectMetadata;
         settings: ProjectSettings;
         collaboration?: CollaborationData;
+}
     };
     error?: string;
     warnings?: string[];

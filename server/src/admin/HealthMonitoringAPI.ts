@@ -20,6 +20,7 @@ import { AuditService } from '../auth/services/AuditService';
 // ==========================================
 
 }
+}
 export interface HealthMonitoringResponse<T = any> {
   success: boolean;
   data?: T;
@@ -33,6 +34,7 @@ export interface HealthMonitoringResponse<T = any> {
 }
 
 }
+}
 export interface HealthCheckExecutionRequest {
   checkIds?: string[];
   suiteId?: string;
@@ -40,7 +42,9 @@ export interface HealthCheckExecutionRequest {
   timeout?: number;
 }
 }
+}
 
+}
 }
 export interface ErrorCaptureRequest {
   error: string;
@@ -54,11 +58,13 @@ export interface ErrorCaptureRequest {
     httpStatus?: number;
     additionalData?: Record<string, any>;
 }
+}
   };
   severity?: ErrorSeverity;
   tags?: string[];
 }
 
+}
 }
 export interface HealthDashboardQuery {
   timeRange?: string;
@@ -67,12 +73,15 @@ export interface HealthDashboardQuery {
   refreshInterval?: number;
 }
 }
+}
 
+}
 }
 export interface ErrorReportQuery {
   timeRange: {
     start: string;
     end: string;
+}
 }
   };
   severity?: ErrorSeverity[];

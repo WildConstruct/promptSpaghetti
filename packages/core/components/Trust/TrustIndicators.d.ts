@@ -8,6 +8,7 @@
 import React from 'react';
 import { TrustScore } from '../auth/IdentityValidation';
 
+}
 export interface TrustIndicatorProps {
     trustScore?: TrustScore | null;
     size?: 'small' | 'medium' | 'large';
@@ -17,6 +18,7 @@ export interface TrustIndicatorProps {
     className?: string;
 
 
+}
 export interface CreatorTrustBadgeProps {
     creatorId: string;
     creatorName: string;
@@ -26,6 +28,7 @@ export interface CreatorTrustBadgeProps {
     className?: string;
 
 
+}
 export interface TrustScoreDisplayProps {
     trustScore: TrustScore;
     showBreakdown?: boolean;
@@ -33,6 +36,7 @@ export interface TrustScoreDisplayProps {
     className?: string;
 
 
+}
 export interface VerificationBadgesProps {
     verifications: string[];
     maxDisplay?: number;
@@ -60,6 +64,7 @@ export declare const VerificationBadges: React.FC<VerificationBadgesProps>;
  * Template trust indicator for marketplace
  */
 
+}
 export interface TemplateTrustIndicatorProps {
     creatorTrustScore?: TrustScore | null;
     templateQualityScore?: number;
@@ -73,6 +78,7 @@ export declare const TemplateTrustIndicator: React.FC<TemplateTrustIndicatorProp
  * Inline trust status for compact displays
  */
 
+}
 export interface InlineTrustStatusProps {
     trustTier?: string;
     isVerified?: boolean;
@@ -87,6 +93,7 @@ declare const _default: {
     VerificationBadges: React.FC<VerificationBadgesProps>;
     TemplateTrustIndicator: React.FC<TemplateTrustIndicatorProps>;
     InlineTrustStatus: React.FC<InlineTrustStatusProps>;
+}
 };
 export default _default;
 //# sourceMappingURL=TrustIndicators.d.ts.map

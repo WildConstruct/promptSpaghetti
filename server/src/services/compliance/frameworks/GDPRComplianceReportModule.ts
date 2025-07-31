@@ -16,6 +16,7 @@ import {
 } from '../StandardComplianceReportingService';
 
 }
+}
 export interface GDPRComplianceReport extends StandardComplianceReport {
   gdprSpecific: {
     dataSubjectRights: DataSubjectRightsReport;
@@ -32,6 +33,7 @@ export interface GDPRComplianceReport extends StandardComplianceReport {
 }
 
 }
+}
 export interface DataSubjectRightsReport {
   reportingPeriod: ReportingPeriod;
   summary: {
@@ -39,6 +41,7 @@ export interface DataSubjectRightsReport {
     totalRequestsProcessed: number;
     averageResponseTimeHours: number;
     complianceRate: number; // % within 30-day requirement
+}
 }
   };
   requestBreakdown: {
@@ -80,6 +83,7 @@ export interface DataSubjectRightsReport {
 }
 
 }
+}
 export interface RequestTypeStats {
   received: number;
   processed: number;
@@ -90,9 +94,11 @@ export interface RequestTypeStats {
     moderate: number;
     complex: number;
 }
+}
   };
 }
 
+}
 }
 export interface ProcessingActivityReport {
   activityId: string;
@@ -101,6 +107,7 @@ export interface ProcessingActivityReport {
     name: string;
     contact: ContactInfo;
     representative?: ContactInfo;
+}
 }
   };
   processor?: {
@@ -145,12 +152,14 @@ export interface ProcessingActivityReport {
 }
 
 }
+}
 export interface ConsentManagementReport {
   consentMechanism: {
     consentCollectionMethods: ConsentMethod[];
     granularityLevel: 'purpose_specific' | 'activity_specific' | 'global';
     withdrawalMechanism: WithdrawalMethod[];
     recordKeeping: ConsentRecordKeeping;
+}
 }
   };
   consentMetrics: {
@@ -184,6 +193,7 @@ export interface ConsentManagementReport {
 }
 
 }
+}
 export interface DataTransferReport {
   transferId: string;
   transferType: 'adequacy_decision' | 'standard_contractual_clauses' | 'binding_corporate_rules' | 'derogation';
@@ -192,6 +202,7 @@ export interface DataTransferReport {
     country: string;
     adequacyDecisionStatus: boolean;
     safeguardsMechanism: string[];
+}
 }
   };
   dataCategories: string[];
@@ -223,6 +234,7 @@ export interface DataTransferReport {
 }
 
 }
+}
 export interface PIAReport {
   piaId: string;
   assessmentScope: {
@@ -230,6 +242,7 @@ export interface PIAReport {
     dataTypes: string[];
     dataSubjects: string[];
     purposes: string[];
+}
 }
   };
   necessityAssessment: {
@@ -268,6 +281,7 @@ export interface PIAReport {
 }
 
 }
+}
 export interface BreachNotificationReport {
   incidentId: string;
   breachDetails: {
@@ -277,6 +291,7 @@ export interface BreachNotificationReport {
     approximateRecordsAffected: number;
     causeOfBreach: string;
     unauthorizedAccess: boolean;
+}
 }
   };
   riskAssessment: {
@@ -318,6 +333,7 @@ export interface BreachNotificationReport {
 }
 
 }
+}
 export interface DPOReport {
   dpoDetails: {
     name: string;
@@ -325,6 +341,7 @@ export interface DPOReport {
     qualifications: string[];
     appointmentDate: Date;
     independenceAssurance: boolean;
+}
 }
   };
   dpoActivities: {
@@ -626,6 +643,7 @@ export class GDPRComplianceReportModule {
 
 // Supporting types and interfaces
 }
+}
 interface ContactInfo {
   name: string;
   email: string;
@@ -633,12 +651,15 @@ interface ContactInfo {
   address: string;
 }
 }
+}
 
+}
 }
 interface ValidationResult {
   isValid: boolean;
   score: number;
   details: string;
+}
 }
 }
 
@@ -652,13 +673,16 @@ enum LegalBasisType {
 }
 
 }
+}
 interface PersonalDataCategory {
   category: string;
   description: string;
   sensitivity: 'low' | 'medium' | 'high';
 }
 }
+}
 
+}
 }
 interface SpecialCategoryData {
   category: string;
@@ -666,7 +690,9 @@ interface SpecialCategoryData {
   safeguards: string[];
 }
 }
+}
 
+}
 }
 interface DataSubjectCategory {
   category: string;
@@ -674,7 +700,9 @@ interface DataSubjectCategory {
   vulnerabilityFactors: string[];
 }
 }
+}
 
+}
 }
 interface InternalRecipient {
   department: string;
@@ -682,7 +710,9 @@ interface InternalRecipient {
   accessLevel: string;
 }
 }
+}
 
+}
 }
 interface ExternalRecipient {
   organization: string;
@@ -690,7 +720,9 @@ interface ExternalRecipient {
   safeguards: string[];
 }
 }
+}
 
+}
 }
 interface ThirdCountryTransfer {
   country: string;
@@ -698,7 +730,9 @@ interface ThirdCountryTransfer {
   safeguards: string[];
 }
 }
+}
 
+}
 }
 interface RetentionPeriod {
   duration: string;
@@ -706,7 +740,9 @@ interface RetentionPeriod {
   reviewFrequency: string;
 }
 }
+}
 
+}
 }
 interface RetentionException {
   reason: string;
@@ -714,7 +750,9 @@ interface RetentionException {
   authorization: string;
 }
 }
+}
 
+}
 }
 interface TechnicalMeasure {
   measure: string;
@@ -722,7 +760,9 @@ interface TechnicalMeasure {
   effectiveness: string;
 }
 }
+}
 
+}
 }
 interface OrganizationalMeasure {
   measure: string;
@@ -730,7 +770,9 @@ interface OrganizationalMeasure {
   effectiveness: string;
 }
 }
+}
 
+}
 }
 interface AccessControlMeasure {
   type: string;
@@ -738,7 +780,9 @@ interface AccessControlMeasure {
   coverage: string;
 }
 }
+}
 
+}
 }
 interface ConsentMethod {
   method: string;
@@ -746,7 +790,9 @@ interface ConsentMethod {
   compliance: boolean;
 }
 }
+}
 
+}
 }
 interface WithdrawalMethod {
   method: string;
@@ -754,7 +800,9 @@ interface WithdrawalMethod {
   ease: string;
 }
 }
+}
 
+}
 }
 interface ConsentRecordKeeping {
   storageMethod: string;
@@ -762,7 +810,9 @@ interface ConsentRecordKeeping {
   accessibility: string;
 }
 }
+}
 
+}
 }
 interface ContractualClause {
   type: string;
@@ -770,7 +820,9 @@ interface ContractualClause {
   lastUpdated: Date;
 }
 }
+}
 
+}
 }
 interface AssessmentResult {
   result: 'pass' | 'fail' | 'partial';
@@ -778,7 +830,9 @@ interface AssessmentResult {
   findings: string[];
 }
 }
+}
 
+}
 }
 interface PrivacyRisk {
   risk: string;
@@ -787,7 +841,9 @@ interface PrivacyRisk {
   severity: string;
 }
 }
+}
 
+}
 }
 interface DataSubjectRight {
   right: string;
@@ -795,21 +851,27 @@ interface DataSubjectRight {
   impactLevel: string;
 }
 }
+}
 
+}
 }
 interface RiskLikelihood {
   level: 'low' | 'medium' | 'high';
   justification: string;
 }
 }
+}
 
+}
 }
 interface RiskImpact {
   level: 'low' | 'medium' | 'high';
   justification: string;
 }
 }
+}
 
+}
 }
 interface MitigationMeasure {
   measure: string;
@@ -817,7 +879,9 @@ interface MitigationMeasure {
   implementation: string;
 }
 }
+}
 
+}
 }
 interface SANotificationDetails {
   notificationDate: Date;
@@ -825,7 +889,9 @@ interface SANotificationDetails {
   followUpRequired: boolean;
 }
 }
+}
 
+}
 }
 interface DSNotificationDetails {
   notificationDate: Date;
@@ -833,7 +899,9 @@ interface DSNotificationDetails {
   content: string;
 }
 }
+}
 
+}
 }
 interface PublicNotificationDetails {
   publicationDate: Date;
@@ -841,7 +909,9 @@ interface PublicNotificationDetails {
   content: string;
 }
 }
+}
 
+}
 }
 interface TrainingActivity {
   topic: string;
@@ -850,7 +920,9 @@ interface TrainingActivity {
   effectiveness: number;
 }
 }
+}
 
+}
 }
 interface AdviceActivity {
   topic: string;
@@ -859,7 +931,9 @@ interface AdviceActivity {
   outcome: string;
 }
 }
+}
 
+}
 }
 interface AuditActivity {
   scope: string;
@@ -868,13 +942,16 @@ interface AuditActivity {
   recommendations: string[];
 }
 }
+}
 
+}
 }
 interface MeetingActivity {
   type: string;
   participants: string[];
   date: Date;
   outcomes: string[];
+}
 }
 }
 

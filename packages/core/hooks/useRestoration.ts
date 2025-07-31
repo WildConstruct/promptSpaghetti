@@ -12,6 +12,7 @@ import {
   ConflictResolutionResult,
   RestorationFilter
 } from '../types/restoration';
+}
 interface UseRestorationReturn {
   // State
   loading: boolean;
@@ -36,6 +37,7 @@ export const useRestoration = (): UseRestorationReturn => {
   const [error, setError] = useState<string | null>(null);
   const apiCall = useCallback(async <T>(;);
     url: string,
+}
     options: RequestInit = {}
   ): Promise<T> => {
   try {

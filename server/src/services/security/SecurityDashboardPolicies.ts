@@ -63,6 +63,7 @@ export enum DataSensitivityLevel {
 }
 
 }
+}
 export interface DashboardPolicy {
   id: string;
   name: string;
@@ -103,7 +104,9 @@ export interface DashboardPolicy {
   version: number;
 }
 }
+}
 
+}
 }
 export interface AccessSchedule {
   allowedDays: number[]; // 0-6 (Sunday-Saturday)
@@ -111,11 +114,13 @@ export interface AccessSchedule {
     start: string; // HH:MM format
     end: string;
 }
+}
   };
   timezone: string;
   exceptions: ScheduleException[];
 }
 
+}
 }
 export interface ScheduleException {
   date: string; // YYYY-MM-DD
@@ -123,7 +128,9 @@ export interface ScheduleException {
   reason: string;
 }
 }
+}
 
+}
 }
 export interface ContentFilter {
   type: 'FIELD' | 'VALUE' | 'REGEX' | 'CLASSIFICATION' | 'KEYWORD';
@@ -134,7 +141,9 @@ export interface ContentFilter {
   maskingPattern?: string; // e.g., '***' or 'X' repeated
 }
 }
+}
 
+}
 }
 export interface DataRetentionPolicy {
   retentionPeriod: number; // days
@@ -143,7 +152,9 @@ export interface DataRetentionPolicy {
   complianceHolds: string[]; // Legal hold IDs
 }
 }
+}
 
+}
 }
 export interface PolicyCondition {
   type: 'USER_ATTRIBUTE' | 'TIME' | 'LOCATION' | 'DEVICE' | 'CONTEXT' | 'RISK_SCORE';
@@ -153,7 +164,9 @@ export interface PolicyCondition {
   weight: number; // 0-1
 }
 }
+}
 
+}
 }
 export interface PolicyEvaluationContext {
   userId: string;
@@ -167,6 +180,7 @@ export interface PolicyEvaluationContext {
     timestamp: Date;
     sessionId: string;
 }
+}
   };
   requestedData: {
     type: string;
@@ -177,6 +191,7 @@ export interface PolicyEvaluationContext {
   riskScore?: number;
 }
 
+}
 }
 export interface PolicyEvaluationResult {
   allowed: boolean;
@@ -189,7 +204,9 @@ export interface PolicyEvaluationResult {
   warnings: string[];
 }
 }
+}
 
+}
 }
 export interface PolicyRestriction {
   type: 'TIME_LIMIT' | 'DATA_LIMIT' | 'OPERATION_LIMIT' | 'EXPORT_DISABLED' | 'APPROVAL_REQUIRED';
@@ -197,7 +214,9 @@ export interface PolicyRestriction {
   parameters: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface DashboardViewConfiguration {
   userId: string;
@@ -212,9 +231,11 @@ export interface DashboardViewConfiguration {
     allowedFormats: string[];
     watermarkRequired: boolean;
 }
+}
   };
 }
 
+}
 }
 export interface ComplianceReport {
   id: string;
@@ -224,6 +245,7 @@ export interface ComplianceReport {
   period: {
     start: Date;
     end: Date;
+}
 }
   };
   
@@ -246,6 +268,7 @@ export interface ComplianceReport {
 }
 
 }
+}
 export interface ComplianceFinding {
   id: string;
   severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
@@ -257,7 +280,9 @@ export interface ComplianceFinding {
   status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'ACCEPTED_RISK';
 }
 }
+}
 
+}
 }
 export interface ComplianceEvidence {
   type: 'AUDIT_LOG' | 'CONFIGURATION' | 'SCREENSHOT' | 'DOCUMENT';
@@ -267,7 +292,9 @@ export interface ComplianceEvidence {
   hash: string; // For integrity verification
 }
 }
+}
 
+}
 }
 export interface ComplianceRecommendation {
   priority: 'LOW' | 'MEDIUM' | 'HIGH';
@@ -276,6 +303,7 @@ export interface ComplianceRecommendation {
   implementation: string;
   impact: string;
   effort: 'LOW' | 'MEDIUM' | 'HIGH';
+}
 }
 }
 
@@ -1300,6 +1328,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
 }
 
 }
+}
 interface PolicyAuditEntry {
   timestamp: Date;
   userId: string;
@@ -1311,6 +1340,7 @@ interface PolicyAuditEntry {
     projectId?: string;
     ipAddress: string;
     userAgent: string;
+}
 }
   };
 }

@@ -7,6 +7,7 @@
  */
 import React from 'react';
 
+}
 export interface WeightedOption {
     id: string;
     text: string;
@@ -16,6 +17,7 @@ export interface WeightedOption {
     category?: string;
 
 
+}
 export interface DragReorderProps {
     options: WeightedOption[];
     onChange: (options: WeightedOption[]) => void;
@@ -40,6 +42,7 @@ export interface DragReorderProps {
     showStatistics?: boolean;
 
 
+}
 export interface WeightStatistics {
     totalWeight: number;
     averageWeight: number;
@@ -53,3 +56,4 @@ export interface WeightStatistics {
 export declare const DragReorderWeightManager: React.FC<DragReorderProps>;
 export default DragReorderWeightManager;
 //# sourceMappingURL=DragReorderWeightManager.d.ts.map
+}

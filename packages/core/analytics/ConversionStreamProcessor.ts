@@ -15,6 +15,7 @@
 import { EventEmitter } from 'events';
 import { EnhancedConversionEvent, FunnelStreamConfig } from './ConversionFunnelArchitecture';
 
+}
 export interface StreamEvent {
   id: string;
   type: 'conversion_event' | 'funnel_step' | 'attribution_update' | 'session_event';
@@ -25,6 +26,8 @@ export interface StreamEvent {
   headers: Record<string, string>;
   retryCount: number;
 }
+}
+}
 export interface StreamPartition {
   id: number;
   events: StreamEvent;
@@ -32,6 +35,8 @@ export interface StreamPartition {
   lastProcessed: number;
   consumerCount: number;
   lag: number;
+}
+}
 }
 export interface StreamConsumer {
   id: string;
@@ -42,6 +47,8 @@ export interface StreamConsumer {
   isActive: boolean;
   processingRate: number;
 }
+}
+}
 export interface StreamMetrics {
   totalEvents: number;
   eventsPerSecond: number;
@@ -50,6 +57,7 @@ export interface StreamMetrics {
   events: number;
   lag: number;
   throughput: number;
+}
 }>;
   consumerMetrics: Map<string, {
   processedEvents: number;
@@ -61,12 +69,14 @@ export interface StreamMetrics {
   oldestEvent: number;
 };
 }
+}
 export interface ProcessingResult {
   success: boolean;
   eventId: string;
   processingTime: number;
   error?: string;
   retryable: boolean;
+}
 }
 export type EventProcessor = (event: StreamEvent) => Promise<ProcessingResult>;
 /**
@@ -150,10 +160,11 @@ export class ConversionStreamProcessor extends EventEmitter {
   /**
    * Publish conversion event to stream
    */
-  public async publishEvent()
+  public async publishEvent(
     event: EnhancedConversionEvent,
     headers: Record<string, string> = {}
   ): Promise<boolean> {
+
   try {
   const partition = this.selectPartition(event);
   const streamEvent: StreamEvent = {,
@@ -306,8 +317,7 @@ export class ConversionStreamProcessor extends EventEmitter {
   processingTime: Date.now() - startTime,
   error: String(error),
   retryable: true,
-};
-      );
+});
       await Promise.allSettled(processingPromises);
       this.emit('event_processed', event);
     } catch (error) {
@@ -317,6 +327,7 @@ export class ConversionStreamProcessor extends EventEmitter {
    * Retry event processing
    */
   private async retryEvent(event: StreamEvent): Promise<void> {
+
     event.retryCount++;
     if (event.retryCount <= this.config.retryPolicy.maxRetries) {
       // Calculate backoff delay
@@ -461,6 +472,7 @@ export class ConversionStreamProcessor extends EventEmitter {
    * Reprocess dead letter queue event
    */
   public async reprocessDeadLetterEvent(eventId: string): Promise<boolean> {
+
     const eventIndex = this.deadLetterQueue.findIndex(e => e.id === eventId);
     if (eventIndex === -1) return false;
     const event = this.deadLetterQueue.splice(eventIndex, 1)[0];

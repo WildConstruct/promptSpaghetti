@@ -5,6 +5,7 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { VerificationThresholdService, VerificationContext, ThresholdConfig } from '../services/VerificationThresholdService';
 
 }
+}
 interface AssessmentRequest {
   requestedAction?: string;
   deviceFingerprint?: string;
@@ -13,9 +14,11 @@ interface AssessmentRequest {
     city?: string;
     timezone?: string;
 }
+}
   };
 }
 
+}
 }
 interface VerificationCompletionRequest {
   level: string;
@@ -23,7 +26,9 @@ interface VerificationCompletionRequest {
   method?: string;
 }
 }
+}
 
+}
 }
 interface ThresholdConfigUpdateRequest {
   lowRisk?: number;
@@ -32,6 +37,7 @@ interface ThresholdConfigUpdateRequest {
   criticalRisk?: number;
   weights?: Partial<ThresholdConfig['weights']>;
   actionThresholds?: Partial<ThresholdConfig['actionThresholds']>;
+}
 }
 }
 

@@ -25,6 +25,7 @@ import {
 
 // Type definitions for article management
 
+}
 export interface Article {
   id: string;
   title: string;
@@ -52,6 +53,7 @@ export interface Article {
   metaTitle?: string;
   metaDescription?: string;
   keywords?: string;
+}
 };
   analytics: {
   averageRating: number;
@@ -59,6 +61,7 @@ export interface Article {
   completionRate: number;
   bounceRate: number;
 };
+}
 }
 export interface ArticleCategory {
   id: string;
@@ -69,6 +72,8 @@ export interface ArticleCategory {
   icon?: string;
   parentId?: string;
   articleCount: number;
+}
+}
 }
 export interface ArticleAuthor {
   id: string;
@@ -81,7 +86,9 @@ export interface ArticleAuthor {
   twitter?: string;
   github?: string;
   linkedin?: string;
+}
 };
+}
 }
 export interface ArticleAttachment {
   id: string;
@@ -90,6 +97,8 @@ export interface ArticleAttachment {
   type: 'image' | 'document' | 'video' | 'audio' | 'archive';
   size: number;
   mimeType: string;
+}
+}
 }
 export interface ArticleFilter {
   status?: Article['status'][];
@@ -100,14 +109,18 @@ export interface ArticleFilter {
   dateRange?: {
   start: Date;
   end: Date;
+}
 };
   featured?: boolean;
   searchQuery?: string;
+}
 }
 export interface ArticleSort {
   field: 'title' | 'createdAt' | 'updatedAt' | 'publishedAt' | 'viewCount' | 'likeCount' | 'rating';
   direction: 'asc' | 'desc';
   // Props for main ArticleManagement component
+}
+}
 }
 export interface ArticleManagementProps {
   articles: Article;
@@ -124,6 +137,7 @@ export interface ArticleManagementProps {
   onUpdateCategory: (id: string, category: Partial<ArticleCategory>) => Promise<ArticleCategory>;
   className?: string;
   // Article List Component
+}
 }
 export const ArticleList: React.FC<{,
   articles: Article;

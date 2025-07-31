@@ -4,11 +4,13 @@
 import React from 'react';
 import { Node, Edge } from 'reactflow';
 
+}
 interface ExportBundleDialogProps {
   isOpen: boolean;
   onClose: () => void;
   nodes: Node[];
   edges: Edge[];
+}
   onExport?: (result: { success: boolean; error?: string }) => void;
 }
 

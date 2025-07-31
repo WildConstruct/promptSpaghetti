@@ -15,6 +15,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { ReputationSystem } from './ReputationSystem';
 
 }
+}
 export interface VerificationDisplayConfig {
   // Display Settings
   showTrustScores: boolean;
@@ -34,6 +35,7 @@ export interface VerificationDisplayConfig {
     lowReputationUsers: boolean;
     flaggedUsers: boolean;
 }
+}
   };
   
   // Thresholds
@@ -50,6 +52,7 @@ export interface VerificationDisplayConfig {
 }
 
 }
+}
 export interface VerificationDisplayStats {
   configurationAge: number; // days since last update
   activeConfigurations: number;
@@ -57,6 +60,7 @@ export interface VerificationDisplayStats {
     usersAffected: number;
     displayRate: number;
     averageElementsShown: number;
+}
 }
   };
   performanceMetrics: {

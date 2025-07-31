@@ -8,6 +8,7 @@ import { ActivityFilters } from './ActivityFilters';
 import { ActivityStats } from './ActivityStats';
 import { useActivityFeed } from '../../hooks/useActivityFeed';
 import { ActivityEventWithActorInfo, ActivityEventFilter } from '../../types/workspace';
+}
 interface ActivityFeedProps {
   workspaceId: string;
   userId: string;
@@ -24,6 +25,7 @@ interface ActivityFeedProps {
   showFilters = true,
   maxItems,
   compact = false
+}
 }) => {
   const [filters, setFilters] = useState<ActivityEventFilter>({})
   project_id: projectId,
@@ -150,9 +152,11 @@ interface ActivityFeedProps {
     </div>
   );
 };
+}
 interface ActivityFeedSkeletonProps {
   count: number;
   compact: boolean;
+}
 const ActivityFeedSkeleton: React.FC<ActivityFeedSkeletonProps> = ({ count, compact }) => ()
   <>
     {Array.from({ length: count }, (_, i) => ()
@@ -171,9 +175,11 @@ const ActivityFeedSkeleton: React.FC<ActivityFeedSkeletonProps> = ({ count, comp
     ))}
   </>
 );
+}
 interface ActivityEventModalProps {
   event: ActivityEventWithActorInfo;
   onClose: () => void;
+}
 const ActivityEventModal: React.FC<ActivityEventModalProps> = ({ event, onClose }) => ()
   <div className="modal-overlay">
     <div className="modal modal--medium">

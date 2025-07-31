@@ -6,6 +6,7 @@
  * Adapts the proven TemplateVersionManager pattern for content versioning.
  */
 
+}
 export interface CommunityContent {
     id: string;
     type: 'article' | 'tutorial' | 'case-study' | 'guide' | 'documentation';
@@ -18,6 +19,7 @@ export interface CommunityContent {
         summary: string;
         tableOfContents?: ContentSection[];
         metadata: ContentMetadata;
+}
     };
     media: ContentMediaAttachment[];
     category: string;
@@ -37,6 +39,7 @@ export interface CommunityContent {
         lastReview?: string;
     };
 
+}
 export interface ContentSection {
     id: string;
     title: string;
@@ -44,6 +47,7 @@ export interface ContentSection {
     anchor: string;
     children?: ContentSection[];
 
+}
 export interface ContentMetadata {
     readingTime: number;
     wordCount: number;
@@ -53,6 +57,7 @@ export interface ContentMetadata {
     learningObjectives: string[];
     relatedContent: string[];
 
+}
 export interface ContentMediaAttachment {
     id: string;
     type: 'image' | 'video' | 'audio' | 'document' | 'interactive';
@@ -67,10 +72,12 @@ export interface ContentMediaAttachment {
     dimensions?: {
         width: number;
         height: number;
+}
     };
     duration?: number;
     position: number;
 
+}
 export interface ContentVersion {
     id: string;
     content_id: string;
@@ -103,6 +110,7 @@ export interface ContentVersion {
     plagiarism_check?: PlagiarismResult;
     fact_check?: FactCheckResult;
 
+}
 export interface ReviewFeedback {
     id: string;
     reviewer_id: string;
@@ -115,6 +123,7 @@ export interface ReviewFeedback {
     status: 'open' | 'addressed' | 'dismissed';
     resolution?: string;
 
+}
 export interface ContentContributor {
     user_id: string;
     name: string;
@@ -123,6 +132,7 @@ export interface ContentContributor {
     contribution_date: string;
     attribution_visible: boolean;
 
+}
 export interface ContentQualityScore {
     overall_score: number;
     dimensions: {
@@ -132,6 +142,7 @@ export interface ContentQualityScore {
         usefulness: number;
         originality: number;
         engagement: number;
+}
     };
     automated_checks: {
         grammar_score: number;
@@ -146,30 +157,35 @@ export interface ContentQualityScore {
         target_audience_fit: number;
     };
 
+}
 export interface PlagiarismResult {
     overall_similarity: number;
-    sources_found: Array<{,
+    sources_found: Array<{
         url: string;
         similarity: number;
         matched_text: string;
         context: string;
+}
     }>;
     confidence_level: number;
     check_date: string;
 
+}
 export interface FactCheckResult {
     overall_accuracy: number;
     claims_checked: number;
     claims_verified: number;
-    disputed_claims: Array<{,
+    disputed_claims: Array<{
         claim: string;
         status: 'verified' | 'disputed' | 'false' | 'unverifiable';
         sources: string[];
         explanation: string;
+}
     }>;
     check_date: string;
     checker_id?: string;
 
+}
 export interface ContentImportOptions {
     format: 'markdown' | 'html' | 'docx' | 'pdf' | 'notion' | 'confluence';
     source: string | File | ArrayBuffer;
@@ -188,6 +204,7 @@ export interface ContentImportOptions {
     target_status?: 'draft' | 'review';
     import_notes?: string;
 
+}
 export interface ContentExportOptions {
     format: 'markdown' | 'html' | 'pdf' | 'docx' | 'epub' | 'content_bundle';
     include_version_history?: boolean;
@@ -206,23 +223,26 @@ export interface ContentExportOptions {
         theme?: string;
         custom_css?: string;
         include_toc?: boolean;
+}
     };
 
+}
 export interface ContentVersionDiff {
-    content_changes: Array<{,
+    content_changes: Array<{
         section: string;
         change_type: 'added' | 'removed' | 'modified';
         old_content?: string;
         new_content?: string;
         line_number?: number;
+}
     }>;
-    metadata_changes: Array<{,
+    metadata_changes: Array<{
         field: string;
         old_value: unknown;
         new_value: unknown;
         change_type: 'added' | 'removed' | 'modified'
   }>;
-    media_changes: Array<{,
+    media_changes: Array<{
         media_id: string;
         change_type: 'added' | 'removed' | 'modified';
         old_media?: ContentMediaAttachment;
@@ -330,6 +350,7 @@ export declare class ContentVersionManager {
     private generateNextVersion;
     private calculateQualityMetrics;
 
+}
 export interface ContentBundle {
     format_version: string;
     created_at: string;
@@ -345,6 +366,7 @@ export interface ContentBundle {
             name: string;
             description: string;
             preview: string;
+}
         }>;
     };
     checksums: Record<string, string>;

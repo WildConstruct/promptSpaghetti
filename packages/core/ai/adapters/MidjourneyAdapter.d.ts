@@ -6,6 +6,7 @@
  */
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
 
+}
 export interface MidjourneyConfig {
     apiKey?: string;
     serverUrl: string;
@@ -14,6 +15,7 @@ export interface MidjourneyConfig {
     pollInterval?: number;
     maxPollAttempts?: number;
 
+}
 export interface MidjourneyRequestOptions {
     version?: 'v5' | 'v5.1' | 'v5.2' | 'v6';
     aspectRatio?: '1:1' | '2:3' | '3:2' | '4:5' | '5:4' | '9:16' | '16:9';
@@ -28,6 +30,7 @@ export interface MidjourneyRequestOptions {
     weird?: number;
     stop?: number;
 
+}
 export interface MidjourneyJobStatus {
     id: string;
     status: 'pending' | 'running' | 'completed' | 'failed';
@@ -47,8 +50,10 @@ export interface MidjourneyJobStatus {
         chaos: number;
         quality: number;
         seed?: number;
+}
     };
 
+}
 export interface MidjourneyResponse {
     success: boolean;
     jobId: string;
@@ -61,17 +66,20 @@ export interface MidjourneyResponse {
         variations?: string[];
         prompt: string;
         seed?: number;
+}
     };
     error?: string;
 
+}
 export interface MidjourneyGenerationResult {
     jobId: string;
     status: 'completed' | 'failed';
-    images: Array<{,
+    images: Array<{
         url: string;
         thumbnailUrl?: string;
         type: 'main' | 'upscaled' | 'variation';
         index?: number;
+}
     }>;
     originalPrompt: string;
     processedPrompt: string;

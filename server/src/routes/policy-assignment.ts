@@ -21,6 +21,7 @@ import {
 
 // Request/Response schemas
 }
+}
 interface CreateAssignmentRequest {
   Body: {
     policyId: string;
@@ -36,9 +37,11 @@ interface CreateAssignmentRequest {
     inheritance?: any;
     metadata?: any;
 }
+}
   };
 }
 
+}
 }
 interface BulkAssignmentRequest {
   Body: {
@@ -53,10 +56,12 @@ interface BulkAssignmentRequest {
       executionMode?: string;
       rollbackOnError?: boolean;
 }
+}
     };
   };
 }
 
+}
 }
 interface GetAssignmentsRequest {
   Querystring: {
@@ -68,38 +73,47 @@ interface GetAssignmentsRequest {
     limit?: number;
     includeInherited?: boolean;
 }
+}
   };
 }
 
+}
 }
 interface AssignmentByIdRequest {
   Params: {
     assignmentId: string;
 }
+}
   };
 }
 
+}
 }
 interface BulkAssignmentByIdRequest {
   Params: {
     bulkAssignmentId: string;
 }
+}
   };
 }
 
+}
 }
 interface ConflictAnalysisRequest {
   Body: {
     assignments: any[];
 }
+}
   };
 }
 
+}
 }
 interface EffectivePoliciesRequest {
   Params: {
     targetType: AssignmentTargetType;
     targetId: string;
+}
 }
   };
   Querystring: {

@@ -18,11 +18,14 @@ import {
 
 // Request/Response Types
 }
+}
 interface CreatePolicyRequest {
   Body: Omit<UnifiedPolicy, 'id' | 'metadata'>;
 }
 }
+}
 
+}
 }
 interface UpdatePolicyRequest {
   Params: { policyId: string };
@@ -30,10 +33,12 @@ interface UpdatePolicyRequest {
 }
 
 }
+}
 interface DeletePolicyRequest {
   Params: { policyId: string };
 }
 
+}
 }
 interface GetPoliciesRequest {
   Querystring: {
@@ -45,9 +50,11 @@ interface GetPoliciesRequest {
     offset?: number;
     search?: string;
 }
+}
   };
 }
 
+}
 }
 interface EvaluatePolicyRequest {
   Body: {
@@ -58,6 +65,7 @@ interface EvaluatePolicyRequest {
       type: string;
       parameters: Record<string, any>;
       riskLevel?: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+}
 }
     };
     contentContext?: {
@@ -70,6 +78,7 @@ interface EvaluatePolicyRequest {
   };
 }
 
+}
 }
 interface ComplianceReportRequest {
   Params: { framework: ComplianceFramework };

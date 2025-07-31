@@ -1,6 +1,7 @@
 // Epic 11 Form Analytics Hook
 // Track user interactions with forms for UX optimization
 import { useCallback, useRef } from 'react';
+}
 interface FormAnalyticsData {
   sessionId: string;,
   formType: string;
@@ -10,6 +11,7 @@ interface FormAnalyticsData {
   changeCount: number;
   errorCount: number;
   lastValue?: string;
+}
 }>;
   stepTimes: Map<number, number>;
   startTime: number;
@@ -116,7 +118,7 @@ async function sendFieldAnalytics(fieldName: string,)
       return;
     await fetch('/analytics/field-interaction', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),
@@ -128,8 +130,7 @@ async function sendFieldAnalytics(fieldName: string,)
     });
   } catch (error) {
   console.error('Failed to send field analytics:', error);
-  async function sendStepAnalytics(()
-  stepNumber: number,
+  async function sendStepAnalytics((stepNumber: number,
   formType: string): Promise<void> {,
   try {
   // Google Analytics integration
@@ -144,7 +145,7 @@ async function sendFieldAnalytics(fieldName: string,)
       return;
     await fetch('/analytics/form-step', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),
@@ -172,7 +173,7 @@ async function sendFieldAnalytics(fieldName: string,)
       return;
     await fetch('/analytics/form-completion', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),
@@ -201,7 +202,7 @@ async function sendFieldAnalytics(fieldName: string,)
       return;
     await fetch('/analytics/form-abandonment', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),
@@ -223,7 +224,7 @@ async function sendFieldAnalytics(fieldName: string,)
   try {
   await fetch('/analytics/field-validation', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),
@@ -243,7 +244,7 @@ async function sendFieldAnalytics(fieldName: string,)
   try {
   await fetch('/analytics/user-hesitation', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),
@@ -261,7 +262,7 @@ async function sendFieldAnalytics(fieldName: string,)
   try {
   await fetch('/analytics/form-errors', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),
@@ -291,3 +292,4 @@ declare global {
       action: string,
       parameters?: Record<string, any>
     ) => void;
+}

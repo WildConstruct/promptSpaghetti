@@ -7,12 +7,15 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Node, Edge, useReactFlow } from 'reactflow';
 
+}
 export interface SelectionRect {
   startX: number;
   startY: number;
   currentX: number;
   currentY: number;
   active: boolean;
+}
+}
 }
 export interface MultiSelectionManagerProps {
   nodes: Node[];
@@ -21,6 +24,7 @@ export interface MultiSelectionManagerProps {
   selectedEdges: Edge[];
   onNodesSelect: (nodes: Node[]) => void;
   onEdgesSelect: (edges: Edge[]) => void;
+}
   onSelectionChange: (selection: { nodes: Node[]; edges: Edge[] }) => void;
   theme?: 'light' | 'dark' | 'cinema';
   disabled?: boolean;
@@ -280,6 +284,7 @@ export const MultiSelectionManager: React.FC<MultiSelectionManagerProps> = ({
 };
 
 // Selection Info Panel Component
+}
 interface SelectionInfoPanelProps {
   selectedNodes: Node[];
   selectedEdges: Edge[];
@@ -287,6 +292,7 @@ interface SelectionInfoPanelProps {
   onSelectAll: () => void;
   onInvertSelection: () => void;
   theme: 'light' | 'dark' | 'cinema'
+}
   }
 
 const SelectionInfoPanel: React.FC<SelectionInfoPanelProps> = ({

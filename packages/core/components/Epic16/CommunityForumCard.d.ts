@@ -6,6 +6,7 @@
  */
 import React from 'react';
 
+}
 export interface ForumUser {
     id: string;
     name: string;
@@ -16,6 +17,7 @@ export interface ForumUser {
     isModerator: boolean;
 
 
+}
 export interface ForumPost {
     id: string;
     title: string;
@@ -46,8 +48,10 @@ export interface ForumPost {
         size: number;
         url: string;
 
+}
     }>;
 
+}
 interface CommunityForumCardProps {
     post: ForumPost;
     variant?: 'compact' | 'detailed' | 'featured';
@@ -65,3 +69,4 @@ interface CommunityForumCardProps {
 export declare const CommunityForumCard: React.FC<CommunityForumCardProps>;
 export default CommunityForumCard;
 //# sourceMappingURL=CommunityForumCard.d.ts.map
+}

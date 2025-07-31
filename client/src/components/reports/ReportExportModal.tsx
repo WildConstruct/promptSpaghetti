@@ -30,29 +30,33 @@ import {
 } from 'lucide-react';
 
 // Types
+}
 interface ReportData {
-  metadata: {,
+  metadata: {
   title: string;,
   description: string;
   generatedAt: Date;,
   generatedBy: string;
   version: string;
+}
 };
   summary: Record<string, unknown>;
   data: Array<Record<string, unknown>>;
+}
 interface ExportConfig {
   format: 'pdf' | 'excel' | 'csv' | 'json' | 'xml' | 'html';,
   delivery: 'file' | 'email' | 'webhook' | 'api';
   filename?: string;
-  options?: {,
+  options?: {
   includeCharts?: boolean;
   includeRawData?: boolean;
   compression?: boolean;
   encryption?: boolean;
   password?: string;
+}
 };
   delivery_config?: {
-  email?: {,
+  email?: {
   to: string;,
   subject: string;
   message?: string;
@@ -63,6 +67,7 @@ interface ExportConfig {
   method?: 'POST' | 'PUT';
 };
   };
+}
 interface ExportStatus {
   id: string;,
   status: 'pending' | 'processing' | 'completed' | 'failed';
@@ -79,12 +84,13 @@ interface ExportStatus {
   onClose,
   reportData,
   title = 'Export Report'
+}
 }) => {
   const [activeTab, setActiveTab] = useState('export');
   const [exportConfig, setExportConfig] = useState<ExportConfig>({)
   format: 'pdf',
   delivery: 'file',
-  options: {,
+  options: {
   includeCharts: true,
   includeRawData: true,
   compression: false,
@@ -131,7 +137,7 @@ interface ExportStatus {
       }, 500);
       const response = await fetch('/api/reports/export', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),
@@ -164,7 +170,7 @@ interface ExportStatus {
   try {
   const response = await fetch('/api/reports/schedule', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({,)
@@ -172,7 +178,7 @@ interface ExportStatus {
   description: scheduleDescription,
   reportQuery: 'dynamic', // Would be replaced with actual query,
   exportConfig,
-  schedule: {,
+  schedule: {
   frequency: scheduleFrequency,
   time: scheduleTime,
   dayOfWeek: scheduleDayOfWeek,
@@ -324,9 +330,9 @@ interface ExportStatus {
                       onChange={(e) => {
   const emails = e.target.value.split(',').map(email => email.trim());
   updateExportConfig({)
-  delivery_config: {,
+  delivery_config: {
   ...exportConfig.delivery_config,
-  email: {,
+  email: {
   ...exportConfig.delivery_config?.email,
   to: emails,
 });
@@ -340,9 +346,9 @@ interface ExportStatus {
                       placeholder="Report Export"
                       onChange={(e) => {
   updateExportConfig({)
-  delivery_config: {,
+  delivery_config: {
   ...exportConfig.delivery_config,
-  email: {,
+  email: {
   ...exportConfig.delivery_config?.email,
   to: exportConfig.delivery_config?.email?.to || [],
   subject: e.target.value,
@@ -358,9 +364,9 @@ interface ExportStatus {
                     placeholder="Please find the attached report..."
                     onChange={(e) => {
   updateExportConfig({)
-  delivery_config: {,
+  delivery_config: {
   ...exportConfig.delivery_config,
-  email: {,
+  email: {
   ...exportConfig.delivery_config?.email,
   to: exportConfig.delivery_config?.email?.to || [],
   subject: exportConfig.delivery_config?.email?.subject || '',

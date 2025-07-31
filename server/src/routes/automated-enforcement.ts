@@ -17,6 +17,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { requireAuth, requireAdmin } from '../middleware/auth';
 
 }
+}
 interface EnforcementRoutes {
   '/enforcement/actions': {
     GET: {
@@ -28,6 +29,7 @@ interface EnforcementRoutes {
         limit?: number;
         offset?: number;
         include_expired?: boolean;
+}
 }
       };
     };

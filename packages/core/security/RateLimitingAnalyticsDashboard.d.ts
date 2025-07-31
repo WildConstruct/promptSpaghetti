@@ -11,6 +11,7 @@ import { RateLimitingService, ThreatLevel } from './RateLimitingService';
 import { AdaptiveThrottlingRulesEngine } from './AdaptiveThrottlingRules';
 import { RateLimitingPerformanceMetrics } from './RateLimitingPerformanceMetrics';
 
+}
 export interface AnalyticsDashboardConfig {
     enableRealTimeAnalytics: boolean;
     enablePredictiveAnalytics: boolean;
@@ -21,16 +22,18 @@ export interface AnalyticsDashboardConfig {
     analyticsProcessingInterval: number;
     mlModelUpdateInterval: number;
 
+}
 export interface SecurityAnalytics {
     threatAnalysis: {
         currentThreatLevel: ThreatLevel;
-        threatTrends: Array<{,
+        threatTrends: Array<{
             timestamp: Date;
             level: ThreatLevel;
             confidence: number;
             indicators: string[];
+}
         }>;
-        attackPatterns: Array<{,
+        attackPatterns: Array<{
             patternId: string;
             patternType: 'brute_force' | 'ddos' | 'credential_stuffing' | 'bot_activity' | 'anomalous_behavior';
             frequency: number;
@@ -41,7 +44,7 @@ export interface SecurityAnalytics {
             sourceIPs: string[];
             countermeasures: string[];
         }>;
-        geographicThreats: Array<{,
+        geographicThreats: Array<{
             country: string;
             region: string;
             threatCount: number;
@@ -58,7 +61,7 @@ export interface SecurityAnalytics {
                 dataProcessing: number;
                 alerting: number;
             };
-            degradationFactors: Array<{,
+            degradationFactors: Array<{
                 factor: string;
                 impact: number;
                 recommendation: string;
@@ -68,7 +71,7 @@ export interface SecurityAnalytics {
             currentCapacity: number;
             peakCapacity: number;
             averageUtilization: number;
-            bottlenecks: Array<{,
+            bottlenecks: Array<{
                 component: string;
                 utilizationLevel: number;
                 impactScore: number;
@@ -96,7 +99,7 @@ export interface SecurityAnalytics {
         };
     };
     businessIntelligence: {
-        userBehaviorAnalytics: Array<{,
+        userBehaviorAnalytics: Array<{
             segment: string;
             userCount: number;
             avgSessionDuration: number;
@@ -104,7 +107,7 @@ export interface SecurityAnalytics {
             conversionRate: number;
             riskScore: number;
         }>;
-        endpointAnalytics: Array<{,
+        endpointAnalytics: Array<{
             endpoint: string;
             totalRequests: number;
             uniqueUsers: number;
@@ -122,8 +125,9 @@ export interface SecurityAnalytics {
         };
     };
 
+}
 export interface PredictiveInsights {
-    threatPredictions: Array<{,
+    threatPredictions: Array<{
         predictionId: string;
         predictedThreatType: string;
         probability: number;
@@ -131,8 +135,9 @@ export interface PredictiveInsights {
         impactEstimate: 'low' | 'medium' | 'high' | 'critical';
         recommendedActions: string[];
         modelConfidence: number;
+}
     }>;
-    capacityForecasts: Array<{,
+    capacityForecasts: Array<{
         forecastId: string;
         metric: 'cpu' | 'memory' | 'throughput' | 'connections';
         currentValue: number;
@@ -141,7 +146,7 @@ export interface PredictiveInsights {
         confidence: number;
         scalingRecommendation: string;
     }>;
-    anomalyDetections: Array<{,
+    anomalyDetections: Array<{
         anomalyId: string;
         anomalyType: 'statistical' | 'behavioral' | 'temporal' | 'pattern-based';
         description: string;
@@ -152,8 +157,9 @@ export interface PredictiveInsights {
         investigationSteps: string[];
     }>;
 
+}
 export interface DashboardVisualization {
-    chartConfigurations: Array<{,
+    chartConfigurations: Array<{
         chartId: string;
         chartType: 'line' | 'bar' | 'pie' | 'heatmap' | 'gauge' | 'scatter' | 'waterfall';
         title: string;
@@ -164,6 +170,7 @@ export interface DashboardVisualization {
             filtering: boolean;
             timeRangeSelector: boolean;
             exportOptions: string[];
+}
         };
         styling: {
             colorScheme: string;
@@ -174,7 +181,7 @@ export interface DashboardVisualization {
             };
         };
     }>;
-    alertPanels: Array<{,
+    alertPanels: Array<{
         panelId: string;
         alertType: 'security' | 'performance' | 'business';
         severity: 'info' | 'warning' | 'error' | 'critical';
@@ -183,7 +190,7 @@ export interface DashboardVisualization {
         actionable: boolean;
         quickActions: string[];
     }>;
-    keyMetrics: Array<{,
+    keyMetrics: Array<{
         metricId: string;
         displayName: string;
         currentValue: number | string;

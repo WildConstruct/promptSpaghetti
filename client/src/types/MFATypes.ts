@@ -50,6 +50,7 @@ export const MFAVerificationResult = {
 
 // Frontend-specific interfaces
 
+}
 export interface BaseMFAConfiguration {
   id: string;,
   userId: string;
@@ -63,6 +64,8 @@ export interface BaseMFAConfiguration {
   failedAttempts: number;
   lockedUntil?: string;
 }
+}
+}
 export interface TOTPSecret {
   secret: string;,
   qrCodeDataUrl: string;
@@ -70,17 +73,23 @@ export interface TOTPSecret {
   issuer: string;
   accountName: string;
 }
+}
+}
 export interface TOTPEnrollmentData {
   configurationId: string;,
   secret: TOTPSecret;
   backupCodes: string;,
   expiresAt: string; // ISO string,
 }
+}
+}
 export interface MFAEnrollmentRequest {
   methodType: MFAMethodType;,
   displayName: string;
   emailAddress?: string;
   phoneNumber?: string;
+}
+}
 }
 export interface MFAEnrollmentResponse {
   configurationId: string;,
@@ -89,10 +98,14 @@ export interface MFAEnrollmentResponse {
   requiresVerification: boolean;,
   expiresAt: string;
 }
+}
+}
 export interface MFAVerificationRequest {
   configurationId: string;,
   code: string;
   backupCode?: boolean;
+}
+}
 }
 export interface MFAVerificationResponse {
   success: boolean;,
@@ -101,17 +114,20 @@ export interface MFAVerificationResponse {
   lockoutDuration?: number;
   nextMethodSuggested?: MFAMethodType;
 }
+}
+}
 export interface UserMFAProfile {
   userId: string;,
   isEnabled: boolean;
   hasAnyMethodConfigured: boolean;
   primaryMethod?: MFAMethodType;
   configuredMethods: MFAMethodType;
-  lastUsed?: {,
+  lastUsed?: {
   methodType: MFAMethodType;,
   timestamp: string;
+}
 };
-  securityMetrics: {,
+  securityMetrics: {
   totalAttempts: number;
   successfulAttempts: number;,
   failedAttempts: number;
@@ -119,14 +135,16 @@ export interface UserMFAProfile {
   accountLocked: boolean;
   lockedUntil?: string;
 };
-  preferences: {,
+  preferences: {
   defaultMethod: MFAMethodType;
   backupMethodEnabled: boolean;,
   securityNotifications: boolean;
 };
 }
+}
 export interface MFAListResponse {
   configurations: BaseMFAConfiguration;,
   profile: UserMFAProfile;
   availableBackupCodes: number;
+}
 }

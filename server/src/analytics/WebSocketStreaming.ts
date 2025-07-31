@@ -54,6 +54,7 @@ export type SubscriptionConfig = z.infer<typeof SubscriptionConfigSchema>;
 
 // Client Connection
 }
+}
 interface ClientConnection {
   id: string;
   ws: WebSocket; // WebSocket interface
@@ -67,8 +68,10 @@ interface ClientConnection {
   userAgent?: string;
 }
 }
+}
 
 // Connection Statistics
+}
 }
 interface ConnectionStats {
   totalConnections: number;
@@ -80,8 +83,10 @@ interface ConnectionStats {
   errorRate: number;
 }
 }
+}
 
 // WebSocket Server Configuration
+}
 }
 interface WSServerConfig {
   port: number;
@@ -93,6 +98,7 @@ interface WSServerConfig {
   enableCompression: boolean;
   enableCors: boolean;
   corsOrigins: string[];
+}
 }
 }
 

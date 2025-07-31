@@ -12,6 +12,7 @@ import { EventEmitter } from 'events';
 
 // Core authorization interfaces
 
+}
 export interface AuthorizationContext {
   user: UserContext;
   resource?: ResourceContext;
@@ -19,6 +20,8 @@ export interface AuthorizationContext {
   environment: EnvironmentContext;
   requestContext?: RequestMetadata;
   additionalData?: Record<string, any>;
+}
+}
 }
 export interface UserContext {
   id: string;
@@ -30,6 +33,8 @@ export interface UserContext {
   sessionId?: string;
   lastLogin?: Date;
 }
+}
+}
 export interface ResourceContext {
   type: ResourceType;
   id: string;
@@ -38,6 +43,7 @@ export interface ResourceContext {
   tags: string;
   namespace?: string;
   parentResource?: string;
+}
 }
 export enum ResourceType {
   FEATURE_TOGGLE = 'feature_toggle',
@@ -62,11 +68,14 @@ export enum ResourceType {
   grantedAt: Date;
   expiresAt?: Date;
 }
+}
+}
 export interface PermissionCondition {
   type: ConditionType;
   operator: ConditionOperator;
   value: any;
   attribute: string;
+}
 }
 export enum ConditionType {
   USER_ATTRIBUTE = 'user_attribute',
@@ -98,6 +107,8 @@ export enum ConditionType {
   maintenanceMode?: boolean;
   debugMode?: boolean;
 }
+}
+}
 export interface RequestMetadata {
   ip: string;
   userAgent: string;
@@ -107,6 +118,8 @@ export interface RequestMetadata {
   path: string;
   headers: Record<string, string>;
   // Role and permission management
+}
+}
 }
 export interface Role {
   id: string;
@@ -119,10 +132,14 @@ export interface Role {
   active: boolean;
   metadata: RoleMetadata;
 }
+}
+}
 export interface RoleCondition {
   type: 'time_based' | 'attribute_based' | 'context_based';
   rule: string;
   parameters: Record<string, any>;
+}
+}
 }
 export interface RoleMetadata {
   category: 'system' | 'administrative' | 'functional' | 'custom';
@@ -138,6 +155,8 @@ export interface RoleMetadata {
   modifiedBy: string;
   // Authorization results
 }
+}
+}
 export interface AuthorizationResult {
   granted: boolean;
   reason: string;
@@ -146,12 +165,16 @@ export interface AuthorizationResult {
   conditions: EvaluatedCondition;
   metadata: AuthorizationMetadata;
 }
+}
+}
 export interface AuthorizationDecision {
   result: 'allow' | 'deny' | 'conditional';
   confidence: number; // 0-1,
   riskScore: number; // 0-1,
   recommendedActions: string;
   alternatives: AlternativeAction;
+}
+}
 }
 export interface EvaluatedCondition {
   conditionId: string;
@@ -161,12 +184,16 @@ export interface EvaluatedCondition {
   reason: string;
   evaluationTime: number; // milliseconds,
 }
+}
+}
 export interface AlternativeAction {
   action: string;
   description: string;
   requiredConditions: string;
   riskLevel: 'low' | 'medium' | 'high'
+}
   }
+}
 export interface AuthorizationMetadata {
   evaluationId: string;
   userId: string;
@@ -178,6 +205,8 @@ export interface AuthorizationMetadata {
   policyVersion: string;
   debugInfo?: Record<string, any>;
   // Policy management
+}
+}
 }
 export interface AuthorizationPolicy {
   id: string;
@@ -192,12 +221,16 @@ export interface AuthorizationPolicy {
   active: boolean;
   metadata: PolicyMetadata;
 }
+}
+}
 export interface PolicyTarget {
   users: string;
   roles: string;
   resources: ResourceSelector;
   actions: string;
   environments: string;
+}
+}
 }
 export interface ResourceSelector {
   type: ResourceType | '*';
@@ -206,6 +239,8 @@ export interface ResourceSelector {
   tags?: string;
   namespace?: string;
 }
+}
+}
 export interface PolicyCondition {
   id: string;
   type: ConditionType;
@@ -213,10 +248,14 @@ export interface PolicyCondition {
   parameters: Record<string, any>;
   required: boolean;
 }
+}
+}
 export interface PolicyObligation {
   type: 'log_access' | 'require_mfa' | 'limit_time' | 'require_approval';
   parameters: Record<string, any>;
   priority: number;
+}
+}
 }
 export interface PolicyMetadata {
   category: string;
@@ -232,6 +271,8 @@ export interface PolicyMetadata {
   lastModified: Date;
   // Service configuration
 }
+}
+}
 export interface AuthorizationConfig {
   evaluation: {
   enableCaching: boolean;
@@ -239,6 +280,7 @@ export interface AuthorizationConfig {
   evaluationTimeout: number; // milliseconds,
   maxPolicyDepth: number;
   strictMode: boolean;
+}
 };
   audit: {
   enableAuditLogging: boolean;
@@ -384,6 +426,7 @@ export class Epic17AuthorizationService extends EventEmitter {
     action: string, 
     resourceId?: string
   ): Promise<boolean> {
+
     const context: AuthorizationContext = {
       user,
       resource: resourceId ? {,
@@ -405,6 +448,7 @@ export class Epic17AuthorizationService extends EventEmitter {
    * Get effective permissions for a user
    */
   async getUserPermissions(userId: string): Promise<Permission> {
+
   const userRoles = await this.getUserRoles(userId);
   const permissions: Permission = [];
   for (const role of userRoles) {
@@ -436,6 +480,7 @@ export class Epic17AuthorizationService extends EventEmitter {
    * Add or update a role
    */
   async addRole(role: Omit<Role, 'id'>): Promise<Role> {
+
     const id = this.generateRoleId();
     const fullRole: Role = { ...role, id };
     this.roles.set(id, fullRole);
@@ -446,6 +491,7 @@ export class Epic17AuthorizationService extends EventEmitter {
    * Add or update a permission
    */
   async addPermission(permission: Omit<Permission, 'id'>): Promise<Permission> {
+
     const id = this.generatePermissionId();
     const fullPermission: Permission = { ...permission, id };
     this.permissions.set(id, fullPermission);
@@ -456,6 +502,7 @@ export class Epic17AuthorizationService extends EventEmitter {
    * Add or update an authorization policy
    */
   async addPolicy(policy: Omit<AuthorizationPolicy, 'id'>): Promise<AuthorizationPolicy> {
+
     const id = this.generatePolicyId();
     const fullPolicy: AuthorizationPolicy = { ...policy, id };
     this.policies.set(id, fullPolicy);
@@ -463,10 +510,11 @@ export class Epic17AuthorizationService extends EventEmitter {
     this.emit('policy_added', { policy: fullPolicy });
     return fullPolicy;
   // Private implementation methods
-  private async evaluateAuthorization(()
+  private async evaluateAuthorization(((
     context: AuthorizationContext,
-    evaluationId: string,
+    evaluationId: string
   ): Promise<AuthorizationResult> {
+
   const appliedPolicies: string = [];
   const evaluatedConditions: EvaluatedCondition = [];
   let finalDecision = this.config.permissions.defaultDenyMode ? 'deny' : 'allow';
@@ -550,10 +598,11 @@ export class Epic17AuthorizationService extends EventEmitter {
       if (!selector.tags.some(tag => resource.tags.includes(tag))) {
         return false;
     return true;
-  private async evaluatePolicyConditions(()
+  private async evaluatePolicyConditions(((
     policy: AuthorizationPolicy,
-    context: AuthorizationContext,
+    context: AuthorizationContext
   ): Promise<EvaluatedCondition> {
+
     const results: EvaluatedCondition = [];
     for (const condition of policy.conditions) {
       const startTime = Date.now();
@@ -589,37 +638,38 @@ export class Epic17AuthorizationService extends EventEmitter {
   evaluationTime: Date.now() - startTime,
 });
     return results;
-  private evaluateUserAttributeCondition(()
+  private evaluateUserAttributeCondition(((
     condition: PolicyCondition,
-    context: AuthorizationContext,
+    context: AuthorizationContext
   ): { result: boolean; value: any; reason: string } {
     // Implementation for user attribute conditions
     return { result: true, value: null, reason: 'User attribute condition passed' };
-  private evaluateResourceAttributeCondition(()
+  private evaluateResourceAttributeCondition(((
     condition: PolicyCondition,
-    context: AuthorizationContext,
+    context: AuthorizationContext
   ): { result: boolean; value: any; reason: string } {
     // Implementation for resource attribute conditions
     return { result: true, value: null, reason: 'Resource attribute condition passed' };
-  private evaluateTimeBasedCondition(()
+  private evaluateTimeBasedCondition(((
     condition: PolicyCondition,
-    context: AuthorizationContext,
+    context: AuthorizationContext
   ): { result: boolean; value: any; reason: string } {
     // Implementation for time-based conditions
     return { result: true, value: null, reason: 'Time-based condition passed' };
-  private evaluateIpBasedCondition(()
+  private evaluateIpBasedCondition(((
     condition: PolicyCondition,
-    context: AuthorizationContext,
+    context: AuthorizationContext
   ): { result: boolean; value: any; reason: string } {
     // Implementation for IP-based conditions
     return { result: true, value: null, reason: 'IP-based condition passed' };
-  private evaluateContextBasedCondition(()
+  private evaluateContextBasedCondition(((
     condition: PolicyCondition,
-    context: AuthorizationContext,
+    context: AuthorizationContext
   ): { result: boolean; value: any; reason: string } {
     // Implementation for context-based conditions
     return { result: true, value: null, reason: 'Context-based condition passed' };
   private async checkDirectPermissions(context: AuthorizationContext): Promise<boolean> {
+
     const userRoles = await this.getUserRoles(context.user.id);
     for (const role of userRoles) {
       for (const permission of role.permissions) {
@@ -643,6 +693,7 @@ export class Epic17AuthorizationService extends EventEmitter {
   default:
       return true; // Other scopes need more complex implementation
   private async getUserRoles(userId: string): Promise<Role> {
+
     // This would typically fetch from a database
     // For now, return roles based on user context
     return Array.from(this.roles.values()).filter(role => role.active);
@@ -675,8 +726,7 @@ export class Epic17AuthorizationService extends EventEmitter {
   private generateAlternatives(context: AuthorizationContext): AlternativeAction {,
   // Generate alternative actions the user might be able to perform
   return [];
-  private async auditAuthorizationDecision(()
-  context: AuthorizationContext,
+  private async auditAuthorizationDecision((context: AuthorizationContext,
   result: AuthorizationResult): Promise<void> {,
   // Implementation for audit logging
   this.emit('authorization_audit', {)

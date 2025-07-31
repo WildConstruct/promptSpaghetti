@@ -3,6 +3,7 @@
 // Anthropic Claude agent script with XML formatting and error correction
 import { validateFormat } from '../../serialization/validator';
 
+}
 export interface AnthropicAgentConfig {
   apiKey: string;
   model: string;
@@ -12,6 +13,8 @@ export interface AnthropicAgentConfig {
   retryTemperatureReduction: number;
   useXmlFormatting: boolean;
   stopSequences?: string;
+}
+}
 }
 export interface ClaudeGenerationRequest {
   purpose: string;
@@ -23,6 +26,8 @@ export interface ClaudeGenerationRequest {
   style?: 'creative' | 'logical' | 'balanced';
   domain?: string;
   userContext?: string;
+}
+}
 }
 export interface ClaudeGenerationResult {
   success: boolean;
@@ -36,6 +41,7 @@ export interface ClaudeGenerationResult {
   temperature: number;
   tokenCount: number;
   generationTime: number;
+}
 };
 }
 export class AnthropicGraphAgent {
@@ -48,6 +54,7 @@ export class AnthropicGraphAgent {
    * Generate a graph using Claude with XML formatting
    */
   async generateGraph(request: ClaudeGenerationRequest): Promise<ClaudeGenerationResult> {
+
     const startTime = Date.now();
     let attempts = 0;
     let currentTemperature = this.config.temperature;
@@ -291,6 +298,7 @@ Please provide your reasoning in a <reasoning> section, then output the complete
   error?: string;
   tokenCount?: number;
 }> {
+
     try {
       // Mock Anthropic API call for now - replace with actual API call
       // const response = await anthropic.messages.create({
@@ -400,9 +408,10 @@ export const defaultAnthropicConfig: AnthropicAgentConfig = {,
 /**
  * Utility function to create and use Anthropic agent
  */
-export async function generateGraphWithClaude(()
+export async function generateGraphWithClaude(((
     request: ClaudeGenerationRequest,
     config: Partial<AnthropicAgentConfig> = {}
   ): Promise<ClaudeGenerationResult> {
+
   const agent = new AnthropicGraphAgent({ ...defaultAnthropicConfig, ...config });
   return agent.generateGraph(request);

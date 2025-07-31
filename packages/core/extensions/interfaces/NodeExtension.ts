@@ -8,6 +8,7 @@ import { RuntimeNode, AdvancedRuntimeNode, ExecutionContext, AdvancedExecutionCo
 
 // Node Extension Interface
 
+}
 export interface NodeExtension extends BaseExtension {
   readonly extensionType: 'node';
   // Node registration (supporting both legacy and new method names)
@@ -28,6 +29,7 @@ export interface NodeExtension extends BaseExtension {
 }
 
 // Node Definition
+}
 export interface NodeDefinition {
   // Basic metadata
   id: string;
@@ -48,6 +50,7 @@ export interface NodeDefinition {
   // Validation
   validation?: NodeValidation;
 }
+}
 export enum NodeCategory {
   INPUT = 'input',
   OUTPUT = 'output',
@@ -63,6 +66,7 @@ export type NodeClass =
   | (new (id: string, config: any) => AdvancedRuntimeNode<any>);
 
 // Node UI Configuration
+}
 export interface NodeUIConfiguration {
   // Visual appearance
   icon?: string;
@@ -75,6 +79,8 @@ export interface NodeUIConfiguration {
   // Preview configuration
   preview?: NodePreviewConfiguration;
 }
+}
+}
 export interface NodeEditorConfiguration {
   // Custom editor component
   component?: React.ComponentType<NodeEditorProps>;
@@ -86,6 +92,8 @@ export interface NodeEditorConfiguration {
   // Validation
   validation?: NodeEditorValidation;
 }
+}
+}
 export interface NodeEditorProps {
   node: any;
   config: any;
@@ -93,20 +101,26 @@ export interface NodeEditorProps {
   onValidate?: (result: ExtensionValidationResult) => void;
   context: ExtensionContext;
 }
+}
+}
 export interface NodeFieldConfiguration {
   type: 'text' | 'textarea' | 'number' | 'boolean' | 'select' | 'multiselect' | 'custom';
   label?: string;
   placeholder?: string;
   helpText?: string;
   validation?: z.ZodSchema<any>;
+}
   options?: Array<{ value: any; label: string }>;
   component?: React.ComponentType<any>;
+}
 }
 export interface NodeEditorValidation {
   validateOnChange?: boolean;
   validateOnBlur?: boolean;
   showErrors?: boolean;
   customValidation?: (config: any) => ExtensionValidationResult;
+}
+}
 }
 export interface NodePaletteConfiguration {
   // Grouping
@@ -120,6 +134,8 @@ export interface NodePaletteConfiguration {
   // Tooltip
   tooltip?: string;
 }
+}
+}
 export interface NodePreviewConfiguration {
   // Preview component
   component?: React.ComponentType<NodePreviewProps>;
@@ -130,11 +146,15 @@ export interface NodePreviewConfiguration {
   // Update frequency
   updateFrequency?: 'onChange' | 'onFocus' | 'manual';
 }
+}
+}
 export interface NodePreviewProps {
   node: any;
   config: any;
   context: ExtensionContext;
   executionResult?: any;
+}
+}
 }
 export interface NodeRuntimeConfiguration {
   // Execution settings
@@ -147,11 +167,15 @@ export interface NodeRuntimeConfiguration {
   // Caching
   caching?: NodeCachingConfiguration;
 }
+}
+}
 export interface NodePerformanceHints {
   expectedExecutionTime?: 'fast' | 'medium' | 'slow';
   memoryUsage?: 'low' | 'medium' | 'high';
   cpuIntensive?: boolean;
   ioIntensive?: boolean;
+}
+}
 }
 export interface NodeSecuritySettings {
   sandboxed?: boolean;
@@ -161,12 +185,16 @@ export interface NodeSecuritySettings {
   maxMemoryUsage?: number;
   maxExecutionTime?: number;
 }
+}
+}
 export interface NodeCachingConfiguration {
   enabled?: boolean;
   strategy?: 'lru' | 'ttl' | 'custom';
   maxSize?: number;
   ttl?: number;
   keyGenerator?: (node: any, context: ExecutionContext) => string;
+}
+}
 }
 export interface NodeMetadata {
   author: string;
@@ -181,10 +209,12 @@ export interface NodeMetadata {
     maxVersion?: string;
     deprecatedIn?: string;
     removedIn?: string;
+}
   };
   // Tags
   tags?: string[];
   keywords?: string[];
+}
 }
 export interface NodeExample {
   name: string;
@@ -192,6 +222,8 @@ export interface NodeExample {
   config: any;
   expectedOutput?: any;
   code?: string;
+}
+}
 }
 export interface NodeValidation {
   // Configuration validation
@@ -203,11 +235,15 @@ export interface NodeValidation {
   // Custom validation rules
   customRules?: NodeValidationRule[];
 }
+}
+}
 export interface NodeValidationRule {
   name: string;
   description: string;
   validate: (node: any, context: any) => ExtensionValidationResult;
   severity: 'error' | 'warning' | 'info';
+}
+}
 }
 export interface NodeRegistry {
   // Registration
@@ -226,6 +262,8 @@ export interface NodeRegistry {
   on(event: 'registered' | 'unregistered' | 'updated', listener: (definition: NodeDefinition) => void): void;
   off(event: 'registered' | 'unregistered' | 'updated', listener: (definition: NodeDefinition) => void): void;
 }
+}
+}
 export interface NodeFactory {
   // Creation
   create(nodeType: string, nodeId: string, config: any): RuntimeNode<any>;
@@ -238,6 +276,8 @@ export interface NodeFactory {
   supports(nodeType: string): boolean;
   supportsAdvanced(nodeType: string): boolean;
 }
+}
+}
 export interface NodeExecutionContextExtensions {
   // Node-specific extensions
   nodeExtensions: Map<string, any>;
@@ -247,6 +287,7 @@ export interface NodeExecutionContextExtensions {
     endTime?: number;
     executionTime?: number;
     memoryUsage?: number;
+}
   };
   // Security context
   securityContext: {
@@ -265,11 +306,13 @@ export interface NodeExecutionContextExtensions {
     cacheSize?: number;
   };
 }
+}
 export interface ExtendedExecutionContext extends AdvancedExecutionContext {
   extensions: NodeExecutionContextExtensions;
 }
 
 // Node Execution Monitor
+}
 export interface NodeExecutionMonitor {
   // Monitoring
   onExecutionStart(node: RuntimeNode<any>, context: ExtendedExecutionContext): void;
@@ -280,6 +323,8 @@ export interface NodeExecutionMonitor {
   getAllMetrics(): Map<string, NodeExecutionMetrics>;
   // Events
   on(event: 'execution' | 'error' | 'performance', listener: (data: any) => void): void;
+}
+}
 }
 export interface NodeExecutionMetrics {
   nodeId: string;
@@ -292,6 +337,7 @@ export interface NodeExecutionMetrics {
   averageMemoryUsage: number;
   lastExecuted: Date;
   lastError?: Error;
+}
 }
 export namespace NodeExtensionHelpers {
   export function createNodeDefinition(config: Partial<NodeDefinition>): NodeDefinition {

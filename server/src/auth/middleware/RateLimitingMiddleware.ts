@@ -7,6 +7,7 @@ import { Request, Response, NextFunction } from 'express';
 import crypto from 'crypto';
 
 }
+}
 export interface RateLimitRule {
   id: string;
   name: string;
@@ -23,6 +24,7 @@ export interface RateLimitRule {
     routes?: string[];
     methods?: string[];
     userAgents?: string[];
+}
 }
   };
   
@@ -66,6 +68,7 @@ export interface RateLimitRule {
 }
 
 }
+}
 export interface RateLimitAttempt {
   id: string;
   identifier: string; // IP or user ID
@@ -81,7 +84,9 @@ export interface RateLimitAttempt {
   banExpires?: Date;
 }
 }
+}
 
+}
 }
 export interface RateLimitStatus {
   identifier: string;
@@ -91,6 +96,7 @@ export interface RateLimitStatus {
     limit: number;
     remaining: number;
     resetTime: Date;
+}
 }
   };
   totalRequests: number;
@@ -102,6 +108,7 @@ export interface RateLimitStatus {
 }
 
 }
+}
 export interface AdaptiveConfig {
   enabled: boolean;
   baselineRequests: number;
@@ -110,6 +117,7 @@ export interface AdaptiveConfig {
   maxLimit: number;
   learningPeriod: number; // hours
   adjustmentInterval: number; // minutes
+}
 }
 }
 

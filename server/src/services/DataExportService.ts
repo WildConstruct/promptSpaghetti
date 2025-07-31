@@ -9,6 +9,7 @@ import * as path from 'path';
 import * as csv from 'csv-writer';
 
 }
+}
 export interface ExportRequest {
   requestId?: string;
   userId: string;
@@ -22,12 +23,14 @@ export interface ExportRequest {
     startDate: Date;
     endDate: Date;
 }
+}
   };
   includeMetadata?: boolean;
   anonymize?: boolean;
   encryptOutput?: boolean;
 }
 
+}
 }
 export interface ExportFilters {
   classification?: string[];
@@ -37,7 +40,9 @@ export interface ExportFilters {
   customFilters?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ExportJob {
   jobId: string;
@@ -54,7 +59,9 @@ export interface ExportJob {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ExportManifest {
   exportId: string;
@@ -69,6 +76,7 @@ export interface ExportManifest {
   retentionPolicy: string;
   anonymized: boolean;
   encrypted: boolean;
+}
 }
 }
 

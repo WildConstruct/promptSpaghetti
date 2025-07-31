@@ -1,6 +1,7 @@
 import { Node } from 'reactflow';
 import { AnnotatedEdge } from '../components/Annotations/ConnectionAnnotations';
 
+}
 export interface SharedGraphFormat {
     metadata: {
         exportId: string;
@@ -12,6 +13,7 @@ export interface SharedGraphFormat {
             id: string;
             name: string;
             email?: string;
+}
         };
         versionControl: {
             version: number;
@@ -22,7 +24,7 @@ export interface SharedGraphFormat {
         };
         sharing: {
             permissions: 'private' | 'read_only' | 'collaborative' | 'public';
-            collaborators: Array<{,
+            collaborators: Array<{
                 userId: string;
                 name: string;
                 role: 'viewer' | 'editor' | 'admin';
@@ -48,14 +50,14 @@ export interface SharedGraphFormat {
         };
     };
     annotations: {
-        connectionLabels: Array<{,
+        connectionLabels: Array<{
             edgeId: string;
             label: string;
             style?: any;
             position?: any;
             visible: boolean;
         }>;
-        stickyNotes: Array<{,
+        stickyNotes: Array<{
             id: string;
             position: {
                 x: number;
@@ -73,7 +75,7 @@ export interface SharedGraphFormat {
             updatedAt: string;
             visible: boolean;
         }>;
-        nodeLabels: Array<{,
+        nodeLabels: Array<{
             nodeId: string;
             label?: string;
             description?: string;
@@ -81,7 +83,7 @@ export interface SharedGraphFormat {
             color?: string;
             notes?: string;
         }>;
-        regions: Array<{,
+        regions: Array<{
             id: string;
             name: string;
             bounds: {
@@ -96,7 +98,7 @@ export interface SharedGraphFormat {
             description?: string;
             collapsed: boolean;
         }>;
-        comments: Array<{,
+        comments: Array<{
             id: string;
             content: string;
             author: string;
@@ -108,7 +110,7 @@ export interface SharedGraphFormat {
             targetType: 'node' | 'edge' | 'region' | 'canvas';
             targetId?: string;
             resolved: boolean;
-            replies: Array<{,
+            replies: Array<{
                 id: string;
                 content: string;
                 author: string;
@@ -117,7 +119,7 @@ export interface SharedGraphFormat {
         }>;
     };
     collaboration: {
-        changeHistory: Array<{,
+        changeHistory: Array<{
             id: string;
             timestamp: string;
             author: string;
@@ -127,7 +129,7 @@ export interface SharedGraphFormat {
             after?: any;
             description: string;
         }>;
-        conflicts: Array<{,
+        conflicts: Array<{
             id: string;
             timestamp: string;
             type: 'merge' | 'edit' | 'delete';

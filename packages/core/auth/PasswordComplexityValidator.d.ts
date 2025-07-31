@@ -4,6 +4,7 @@
  * Epic 19: Authentication Enhancement & Security Hardening
  */
 
+}
 export interface PasswordComplexityRule {
     id: string;
     name: string;
@@ -16,6 +17,7 @@ export interface PasswordComplexityRule {
     validate: (password: string, context?: PasswordValidationContext) => PasswordRuleResult;
 
 
+}
 export interface PasswordValidationContext {
     username?: string;
     email?: string;
@@ -29,6 +31,7 @@ export interface PasswordValidationContext {
     locale?: string;
 
 
+}
 export interface PasswordRuleResult {
     passed: boolean;
     score: number;
@@ -39,8 +42,10 @@ export interface PasswordRuleResult {
         actual?: unknown;
         examples?: string[];
 
+}
     };
 
+}
 export interface PasswordComplexityConfig {
     enabled: boolean;
     mode: 'strict' | 'balanced' | 'lenient' | 'custom';
@@ -51,6 +56,7 @@ export interface PasswordComplexityConfig {
         roles: string[];
         requireJustification: boolean;
 
+}
     };
     breachChecking?: {
         enabled: boolean;
@@ -64,6 +70,7 @@ export interface PasswordComplexityConfig {
         categories: string[];
     };
 
+}
 export interface PasswordValidationResult {
     valid: boolean;
     score: number;
@@ -77,6 +84,7 @@ export interface PasswordValidationResult {
         online: string;
         unit: string;
 
+}
     };
     entropy?: number;
     passedRules: number;

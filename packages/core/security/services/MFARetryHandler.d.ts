@@ -47,6 +47,7 @@ export declare enum CircuitBreakerStateEnum {
     OPEN = "open",
     HALF_OPEN = "half_open"
 
+}
 export interface RetryConfig {
     maxAttempts: number;
     strategy: RetryStrategy;
@@ -58,21 +59,25 @@ export interface RetryConfig {
     retryableErrors: FailureType[];
     customDelayFunction?: (attempt: number, baseDelay: number) => number;
 
+}
 export interface CircuitBreakerConfig {
     failureThreshold: number;
     resetTimeoutMs: number;
     monitoringWindowMs: number;
     halfOpenMaxAttempts: number;
 
+}
 export interface MFARetryConfig {
     operationConfigs: {
         [key in MFAOperation]: RetryConfig;
+}
     };
     circuitBreaker: CircuitBreakerConfig;
     globalTimeoutMs: number;
     enableMetrics: boolean;
     enableLogging: boolean;
 
+}
 export interface OperationContext {
     operationId: string;
     operation: MFAOperation;
@@ -82,6 +87,7 @@ export interface OperationContext {
     attempt: number;
     metadata: Record<string, any>;
 
+}
 export interface RetryAttempt {
     attempt: number;
     startTime: Date;
@@ -91,6 +97,7 @@ export interface RetryAttempt {
     success: boolean;
     timeoutReached: boolean;
 
+}
 export interface OperationResult<T = any> {
     success: boolean;
     data?: T;
@@ -100,6 +107,7 @@ export interface OperationResult<T = any> {
     circuitBreakerTriggered: boolean;
     rateLimited: boolean;
 
+}
 export interface RetryMetrics {
     totalOperations: number;
     successfulOperations: number;
@@ -114,6 +122,7 @@ export interface RetryMetrics {
             successRate: number;
             averageAttempts: number;
             averageDuration: number;
+}
         };
     };
     errorMetrics: {

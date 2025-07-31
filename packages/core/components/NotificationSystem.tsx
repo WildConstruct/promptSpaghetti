@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useCorrectionsStore, Notification } from '../correctionsStore';
+}
 interface NotificationSystemProps {
   position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
   maxVisible?: number;
   autoHideDuration?: number;
+}
 }
 
 export const NotificationSystem: React.FC<NotificationSystemProps> = ({

@@ -8,6 +8,7 @@ import { EmailService } from './EmailService';
 import { User } from '../types';
 
 }
+}
 export interface LockoutConfig {
   maxFailedAttempts: number;
   lockoutDurationMinutes: number;
@@ -21,7 +22,9 @@ export interface LockoutConfig {
   captchaThreshold: number;
 }
 }
+}
 
+}
 }
 export interface LockoutAttempt {
   userId?: string;
@@ -33,7 +36,9 @@ export interface LockoutAttempt {
   failureReason?: string;
 }
 }
+}
 
+}
 }
 export interface LockoutStatus {
   isLocked: boolean;
@@ -46,7 +51,9 @@ export interface LockoutStatus {
   lockoutReason: string;
 }
 }
+}
 
+}
 }
 export interface LockoutEvent {
   userId?: string;
@@ -59,6 +66,7 @@ export interface LockoutEvent {
   timestamp: Date;
   adminAction?: boolean;
   unlockMethod?: 'time' | 'admin' | 'token' | 'password_reset';
+}
 }
 }
 

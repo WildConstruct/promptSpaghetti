@@ -1374,6 +1374,7 @@ export declare const NotificationSchema: z.ZodObject<{
 }>;
 export type Notification = z.infer<typeof NotificationSchema>;
 
+}
 export type Epic16ContentModel = {
     UserProfile: UserProfile;
     Template: Template;
@@ -2692,13 +2693,13 @@ export declare const Epic16ContentSchemas: {
         scheduledFor?: Date | undefined;
     }>;
 };
-export declare function validateContentModel<T extends keyof Epic16ContentModel>(()
+export declare function validateContentModel<T extends keyof Epic16ContentModel>(((
     type: T,
-    data: unknown,
+    data: unknown
   ): Epic16ContentModel[T];
-export declare function isValidContentModel<T extends keyof Epic16ContentModel>(()
+export declare function isValidContentModel<T extends keyof Epic16ContentModel>(((
     type: T,
-    data: unknown,
+    data: unknown
   ): data is Epic16ContentModel[T];
 export declare const Epic16Relationships: {
     readonly userToTemplates: "one-to-many";

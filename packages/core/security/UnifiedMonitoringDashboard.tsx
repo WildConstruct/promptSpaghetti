@@ -8,6 +8,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { AlertTriangle, Shield, Activity, Users, Server, Globe, Clock, TrendingUp, TrendingDown, AlertCircle, CheckCircle, XCircle, Zap } from 'lucide-react';
 
 // Types
+}
 interface DashboardMetrics {
   security: {
   active_alerts: number;
@@ -16,6 +17,7 @@ interface DashboardMetrics {
   incidents_today: number;
   mean_response_time: number;
   false_positive_rate: number;
+}
 };
   performance: {
   system_health: number; // 0-100,
@@ -41,6 +43,7 @@ interface DashboardMetrics {
   storage_usage: number;
   backup_status: 'success' | 'warning' | 'error'
   };
+}
 interface AlertSummary {
   id: string;
   type: 'security' | 'performance' | 'infrastructure' | 'business';
@@ -71,6 +74,7 @@ interface AlertSummary {
   incidents_today: 5,
   mean_response_time: 4200,
   false_positive_rate: 0.08,
+}
 },
   performance: {
   system_health: 94,

@@ -9,6 +9,7 @@ import { RBACService } from './RBACService';
 import { TokenService } from './TokenService';
 
 }
+}
 export interface PrivilegeChangeEvent {
   userId: string;
   changeType: 'role_added' | 'role_removed' | 'permission_added' | 'permission_removed' | 'organization_change' | 'status_change';
@@ -18,7 +19,9 @@ export interface PrivilegeChangeEvent {
   performedBy?: string;
 }
 }
+}
 
+}
 }
 export interface SessionRotationResult {
   success: boolean;
@@ -27,7 +30,9 @@ export interface SessionRotationResult {
   errors?: string[];
 }
 }
+}
 
+}
 }
 export interface SessionRotationPolicy {
   rotateOnRoleChange: boolean;
@@ -37,6 +42,7 @@ export interface SessionRotationPolicy {
   preserveCurrentSession: boolean;
   notifyUser: boolean;
   graceWindowMinutes: number;
+}
 }
 }
 

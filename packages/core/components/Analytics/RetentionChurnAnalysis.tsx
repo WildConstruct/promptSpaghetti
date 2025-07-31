@@ -13,6 +13,7 @@ import {
 
 // Core interfaces
 
+}
 export interface RetentionChurnAnalysisProps {
   analyticsInfrastructure: ConversionAnalyticsInfrastructure;
   retentionConfig: RetentionAnalysisConfig;
@@ -21,11 +22,15 @@ export interface RetentionChurnAnalysisProps {
   onRetentionInsight?: (insight: RetentionInsight) => void;
   onExport?: (data: RetentionChurnExportData) => void;
 }
+}
+}
 export interface RetentionAnalysisConfig {
   cohortDefinition: CohortDefinition;
   retentionPeriods: RetentionPeriod;
   segmentation: RetentionSegmentation;
   benchmarks: RetentionBenchmark;
+}
+}
 }
 export interface ChurnPredictionConfig {
   predictionModels: ChurnPredictionModel;
@@ -33,6 +38,8 @@ export interface ChurnPredictionConfig {
   interventionStrategies: ChurnInterventionStrategy;
   evaluationMetrics: ChurnModelMetric;
   // Data structures
+}
+}
 }
 export interface RetentionData {
   cohortId: string;
@@ -42,12 +49,16 @@ export interface RetentionData {
   retentionRates: RetentionRateData;
   segments: SegmentRetentionData;
 }
+}
+}
 export interface RetentionRateData {
   period: number;
   retainedUsers: number;
   retentionRate: number;
   benchmark: number;
   variance: number;
+}
+}
 }
 export interface ChurnPredictionData {
   userId: string;
@@ -57,8 +68,10 @@ export interface ChurnPredictionData {
   predictions: ChurnPrediction;
   recommendedActions: ChurnPreventionAction;
 }
+}
 export type ChurnRiskLevel = 'low' | 'medium' | 'high' | 'critical';
 
+}
 export interface ChurnPrediction {
   timeHorizon: number; // days,
   probability: number;
@@ -70,6 +83,7 @@ const generateRetentionData = (): RetentionData => {
   const cohortSize = Math.floor(Math.random() * 1000) + 500;
   const acquisitionDate = Date.now() - Math.random() * 365 * 86400000;
   return {
+}
     cohortId: `cohort_${Math.random().toString(36).substr(2, 8)}`}
 },
   cohortName: `Cohort ${new Date(acquisitionDate).toLocaleDateString()}`}
@@ -451,27 +465,38 @@ export const RetentionChurnAnalysis: React.FC<RetentionChurnAnalysisProps> = ({)
 
 // Supporting interfaces (condensed)
 
+}
 export interface CohortDefinition {
   timeRange: 'daily' | 'weekly' | 'monthly';
   criteria: CohortCriteria;
+}
+}
 }
 export interface CohortCriteria {
   field: string;
   operator: string;
   value: Error;
 }
+}
+}
 export interface RetentionPeriod {
   days: number;
   label: string;
+}
+}
 }
 export interface RetentionSegmentation {
   enabled: boolean;
   segments: string;
 }
+}
+}
 export interface RetentionBenchmark {
   period: number;
   value: number;
   source: string;
+}
+}
 }
 export interface ChurnPredictionModel {
   modelId: string;
@@ -479,10 +504,14 @@ export interface ChurnPredictionModel {
   accuracy: number;
   features: string;
 }
+}
+}
 export interface ChurnRiskFactor {
   factor: string;
   weight: number;
   category: string;
+}
+}
 }
 export interface ChurnInterventionStrategy {
   strategyId: string;
@@ -490,20 +519,28 @@ export interface ChurnInterventionStrategy {
   effectiveness: number;
   cost: string;
 }
+}
+}
 export interface ChurnModelMetric {
   metric: string;
   target: number;
   current: number;
 }
+}
+}
 export interface SegmentRetentionData {
   segment: string;
   retentionRates: RetentionRateData;
+}
+}
 }
 export interface ActiveRiskFactor {
   factor: string;
   impact: number;
   trend: string;
   daysActive: number;
+}
+}
 }
 export interface ChurnPreventionAction {
   action: string;
@@ -512,12 +549,16 @@ export interface ChurnPreventionAction {
   cost: string;
   timeline: string;
 }
+}
+}
 export interface RetentionInsight {
   insightId: string;
   type: string;
   message: string;
   severity: string;
   recommendations: string;
+}
+}
 }
 export interface ChurnAlert {
   alertId: string;
@@ -528,6 +569,8 @@ export interface ChurnAlert {
   affectedUsers: number;
   recommendedActions: string;
 }
+}
+}
 export interface RetentionChurnExportData {
   retentionData: RetentionData;
   churnPredictions: ChurnPredictionData;
@@ -537,6 +580,7 @@ export interface RetentionChurnExportData {
   totalUsers: number;
   highRiskUsers: number;
   averageRetention30d: number;
+}
 };
 }
 export default RetentionChurnAnalysis;

@@ -7,6 +7,7 @@
 import React from 'react';
 import { QuickPreviewElement, Epic16InteractiveElementsService } from '../../services/Epic16InteractiveElementsService';
 
+}
 interface QuickPreviewWidgetProps {
     element: QuickPreviewElement;
     interactiveService: Epic16InteractiveElementsService;
@@ -19,6 +20,7 @@ interface QuickPreviewWidgetProps {
     onPurchase?: (templateId: string) => void;
 
 
+}
 interface TemplatePreviewData {
     id: string;
     title: string;
@@ -51,3 +53,4 @@ interface TemplatePreviewData {
 export declare const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps>;
 export default QuickPreviewWidget;
 //# sourceMappingURL=QuickPreviewWidget.d.ts.map
+}

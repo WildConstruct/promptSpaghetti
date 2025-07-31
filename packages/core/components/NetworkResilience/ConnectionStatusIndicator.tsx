@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ConnectionState, ConnectionQuality } from '../../network-resilience/ConnectionStateManager';
 import { ReconnectionState } from '../../network-resilience/ReconnectionHandler';
 import { NetworkStatus } from '../../network-resilience/NetworkResilienceManager';
+}
 interface ConnectionStatusIndicatorProps {
   status: NetworkStatus;
   showDetails?: boolean;
@@ -14,6 +15,7 @@ interface ConnectionStatusIndicatorProps {
   compact = false,
   className = '',
   onClick
+}
 }) => {
   const [isAnimating, setIsAnimating] = useState(false);
   useEffect(() => {

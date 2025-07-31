@@ -25,6 +25,7 @@ import { HealthCheckFramework } from './HealthCheckFramework';
 import crypto from 'crypto';
 
 }
+}
 export interface AdminDashboardData {
   systemHealth: {
     status: 'healthy' | 'warning' | 'critical';
@@ -33,6 +34,7 @@ export interface AdminDashboardData {
     activeUsers: number;
     totalRequests: number;
     errorRate: number;
+}
 }
   };
   userMetrics: {
@@ -62,6 +64,7 @@ export interface AdminDashboardData {
 }
 
 }
+}
 export interface SecurityAlert {
   id: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -74,7 +77,9 @@ export interface SecurityAlert {
   metadata?: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 export interface AdminActivity {
   id: string;
@@ -89,7 +94,9 @@ export interface AdminActivity {
   details?: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 export interface MaintenanceTask {
   id: string;
@@ -104,7 +111,9 @@ export interface MaintenanceTask {
   assignedTo?: string;
 }
 }
+}
 
+}
 }
 export interface UserManagementAction {
   userId: string;
@@ -114,7 +123,9 @@ export interface UserManagementAction {
   notifyUser?: boolean;
 }
 }
+}
 
+}
 }
 export interface SystemConfiguration {
   category: string;
@@ -125,7 +136,9 @@ export interface SystemConfiguration {
   description?: string;
 }
 }
+}
 
+}
 }
 export interface BulkUserOperation {
   operation: 'activate' | 'deactivate' | 'suspend' | 'grant_role' | 'revoke_role' | 'send_notification';
@@ -133,6 +146,7 @@ export interface BulkUserOperation {
   parameters?: Record<string, unknown>;
   reason: string;
   scheduledAt?: Date;
+}
 }
 }
 

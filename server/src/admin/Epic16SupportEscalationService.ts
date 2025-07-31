@@ -18,6 +18,7 @@ import * as crypto from 'crypto';
 // =============================================================================
 
 }
+}
 export interface SupportEscalationConfig {
   // General settings
   enabled: boolean;
@@ -33,6 +34,7 @@ export interface SupportEscalationConfig {
     businessHoursOnly: boolean;
     businessHours: BusinessHours;
     holidays: Date[];
+}
 }
   };
   
@@ -118,6 +120,7 @@ export enum NotificationChannel {
 }
 
 }
+}
 export interface BusinessHours {
   monday: { start: string; end: string; enabled: boolean };
   tuesday: { start: string; end: string; enabled: boolean };
@@ -130,6 +133,7 @@ export interface BusinessHours {
 }
 
 }
+}
 export interface RoutingStrategy {
   strategyId: string;
   strategyName: string;
@@ -139,7 +143,9 @@ export interface RoutingStrategy {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface RoutingCriteria {
   criteriaType: 'priority' | 'category' | 'skill' | 'workload' | 'availability' | 'experience';
@@ -148,7 +154,9 @@ export interface RoutingCriteria {
   weight: number; // 0-1 scale for scoring
 }
 }
+}
 
+}
 }
 export interface AlertThreshold {
   metricName: string;
@@ -158,7 +166,9 @@ export interface AlertThreshold {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface EmailIntegrationConfig {
   enabled: boolean;
@@ -169,10 +179,12 @@ export interface EmailIntegrationConfig {
     username: string;
     password: string;
 }
+}
   };
   templates: Record<string, EmailTemplate>;
 }
 
+}
 }
 export interface SlackIntegrationConfig {
   enabled: boolean;
@@ -181,7 +193,9 @@ export interface SlackIntegrationConfig {
   mentionGroups: string[];
 }
 }
+}
 
+}
 }
 export interface WebhookIntegrationConfig {
   enabled: boolean;
@@ -190,7 +204,9 @@ export interface WebhookIntegrationConfig {
   retryPolicy: RetryPolicy;
 }
 }
+}
 
+}
 }
 export interface TicketingSystemConfig {
   enabled: boolean;
@@ -200,7 +216,9 @@ export interface TicketingSystemConfig {
   fieldMapping: Record<string, string>;
 }
 }
+}
 
+}
 }
 export interface EmailTemplate {
   templateId: string;
@@ -210,7 +228,9 @@ export interface EmailTemplate {
   variables: string[];
 }
 }
+}
 
+}
 }
 export interface WebhookEndpoint {
   endpointId: string;
@@ -220,14 +240,18 @@ export interface WebhookEndpoint {
   timeout: number;
 }
 }
+}
 
+}
 }
 export interface WebhookAuth {
   type: 'none' | 'basic' | 'bearer' | 'api_key';
   credentials: Record<string, string>;
 }
 }
+}
 
+}
 }
 export interface RetryPolicy {
   maxRetries: number;
@@ -235,7 +259,9 @@ export interface RetryPolicy {
   backoffMultiplier: number;
 }
 }
+}
 
+}
 }
 export interface SupportTicket {
   ticketId: string;
@@ -293,7 +319,9 @@ export interface SupportTicket {
   satisfactionFeedback?: string;
 }
 }
+}
 
+}
 }
 export interface EscalationEvent {
   escalationId: string;
@@ -326,7 +354,9 @@ export interface EscalationEvent {
   resolutionNotes?: string;
 }
 }
+}
 
+}
 }
 export interface EscalationNotification {
   notificationId: string;
@@ -340,7 +370,9 @@ export interface EscalationNotification {
   errorMessage?: string;
 }
 }
+}
 
+}
 }
 export interface SLASettings {
   responseTimeMinutes: number;
@@ -350,7 +382,9 @@ export interface SLASettings {
   pausedTime: number; // Total paused time in minutes
 }
 }
+}
 
+}
 }
 export interface SLAStatus {
   responseTimeRemaining: number; // minutes
@@ -363,7 +397,9 @@ export interface SLAStatus {
   lastWarningAt?: Date;
 }
 }
+}
 
+}
 }
 export interface TicketAttachment {
   attachmentId: string;
@@ -376,7 +412,9 @@ export interface TicketAttachment {
   checksum: string;
 }
 }
+}
 
+}
 }
 export interface TicketCommunication {
   communicationId: string;
@@ -407,7 +445,9 @@ export interface TicketCommunication {
   errorMessage?: string;
 }
 }
+}
 
+}
 }
 export interface CommunicationRecipient {
   recipientType: 'to' | 'cc' | 'bcc';
@@ -416,7 +456,9 @@ export interface CommunicationRecipient {
   userId?: string;
 }
 }
+}
 
+}
 }
 export interface EscalationRule {
   ruleId: string;
@@ -451,7 +493,9 @@ export interface EscalationRule {
   successRate: number;
 }
 }
+}
 
+}
 }
 export interface EscalationTrigger {
   triggerId: string;
@@ -461,7 +505,9 @@ export interface EscalationTrigger {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface EscalationAction {
   actionId: string;
@@ -471,7 +517,9 @@ export interface EscalationAction {
   required: boolean;
 }
 }
+}
 
+}
 }
 export interface SupportAgent {
   agentId: string;
@@ -503,7 +551,9 @@ export interface SupportAgent {
   workingHours: BusinessHours;
 }
 }
+}
 
+}
 }
 export interface AgentAvailability {
   currentlyAvailable: boolean;
@@ -513,7 +563,9 @@ export interface AgentAvailability {
   scheduledBreaks: ScheduledBreak[];
 }
 }
+}
 
+}
 }
 export interface ScheduledBreak {
   breakId: string;
@@ -523,7 +575,9 @@ export interface ScheduledBreak {
   description?: string;
 }
 }
+}
 
+}
 }
 export interface AgentPerformanceMetrics {
   totalTicketsHandled: number;
@@ -535,10 +589,12 @@ export interface AgentPerformanceMetrics {
     average: number;
     percentile95: number;
 }
+}
   };
   workloadEfficiency: number; // percentage
 }
 
+}
 }
 export interface NotificationPreferences {
   emailNotifications: boolean;
@@ -547,9 +603,11 @@ export interface NotificationPreferences {
   inAppNotifications: boolean;
   digestFrequency: 'real_time' | 'hourly' | 'daily' | 'weekly';
 }
+}
   quietHours: { start: string; end: string; enabled: boolean };
 }
 
+}
 }
 export interface EscalationMetrics {
   totalEscalations: number;
@@ -574,7 +632,9 @@ export interface EscalationMetrics {
   customerSatisfactionTrend: TrendData[];
 }
 }
+}
 
+}
 }
 export interface AgentMetric {
   agentId: string;
@@ -585,12 +645,15 @@ export interface AgentMetric {
   escalationRate: number;
 }
 }
+}
 
+}
 }
 export interface TrendData {
   timestamp: Date;
   value: number;
   period: 'hour' | 'day' | 'week' | 'month';
+}
 }
 }
 

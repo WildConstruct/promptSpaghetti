@@ -9,6 +9,7 @@
  */
 import { TimeRange } from '../marketplace/analytics.types';
 
+}
 export interface EnforcementAction {
     actionId: string;
     actionType: EnforcementActionType;
@@ -45,6 +46,7 @@ export type TargetType = 'user' | 'template' | 'transaction' | 'review' | 'comme
 export type ExecutionType = 'automatic' | 'manual' | 'scheduled' | 'escalated';
 export type ReviewStatus = 'not_reviewed' | 'under_review' | 'reviewed_upheld' | 'reviewed_modified' | 'reviewed_reversed' | 'appeal_pending' | 'appeal_denied' | 'appeal_approved';
 
+}
 export interface TargetDetails {
     title?: string;
     creator?: string;
@@ -53,6 +55,7 @@ export interface TargetDetails {
     impactLevel?: 'user' | 'community' | 'marketplace';
 
 
+}
 export interface ViolationReason {
     category: ViolationCategory;
     subcategory?: string;
@@ -64,6 +67,7 @@ export interface ViolationReason {
 
 export type ViolationCategory = 'content_policy' | 'quality_standards' | 'security_threat' | 'fraud_abuse' | 'intellectual_property' | 'privacy_violation' | 'spam_manipulation' | 'harassment_hate' | 'legal_compliance' | 'terms_of_service' | 'community_guidelines' | 'payment_issues' | 'technical_violation';
 
+}
 export interface Evidence {
     evidenceId: string;
     type: EvidenceType;
@@ -78,6 +82,7 @@ export interface Evidence {
 export type EvidenceType = 'user_report' | 'automated_detection' | 'system_log' | 'content_analysis' | 'behavioral_pattern' | 'security_scan' | 'fraud_signal' | 'trust_score_violation' | 'manual_investigation' | 'external_report';
 export type EvidenceSource = 'user_submission' | 'automated_system' | 'trust_score_service' | 'content_quality_service' | 'security_scanner' | 'fraud_detector' | 'admin_review' | 'community_moderator' | 'external_api';
 
+}
 export interface EvidenceAttachment {
     attachmentId: string;
     fileName: string;
@@ -88,6 +93,7 @@ export interface EvidenceAttachment {
     uploadedAt: Date;
 
 
+}
 export interface ActionDuration {
     type: 'temporary' | 'permanent' | 'conditional';
     duration?: number;
@@ -96,6 +102,7 @@ export interface ActionDuration {
     escalationPeriod?: number;
 
 
+}
 export interface EnforcementPolicy {
     policyId: string;
     name: string;
@@ -114,6 +121,7 @@ export interface EnforcementPolicy {
     lastModified: Date;
 
 
+}
 export interface PolicyScope {
     global: boolean;
     regions?: string[];
@@ -122,6 +130,7 @@ export interface PolicyScope {
     excludedEntities?: string[];
 
 
+}
 export interface ViolationRule {
     ruleId: string;
     name: string;
@@ -135,6 +144,7 @@ export interface ViolationRule {
     escalationPath: string[];
 
 
+}
 export interface RuleTrigger {
     type: TriggerType;
     source: string;
@@ -143,6 +153,7 @@ export interface RuleTrigger {
 
 export type TriggerType = 'trust_score_change' | 'violation_report' | 'automated_detection' | 'user_action' | 'system_event' | 'external_signal';
 
+}
 export interface RuleCondition {
     field: string;
     operator: ConditionOperator;
@@ -151,6 +162,7 @@ export interface RuleCondition {
 
 export type ConditionOperator = 'equals' | 'not_equals' | 'greater_than' | 'less_than' | 'contains' | 'not_contains' | 'in' | 'not_in' | 'regex' | 'exists' | 'not_exists';
 
+}
 export interface RuleThreshold {
     metric: string;
     threshold: number;
@@ -158,6 +170,7 @@ export interface RuleThreshold {
     aggregation: 'count' | 'sum' | 'average' | 'max' | 'min';
 
 
+}
 export interface RuleAction {
     actionType: EnforcementActionType;
     severity: ActionSeverity;
@@ -167,6 +180,7 @@ export interface RuleAction {
     notificationRequired: boolean;
 
 
+}
 export interface ActionMatrix {
     firstOffense: EnforcementActionType[];
     repeatOffense: EnforcementActionType[];
@@ -175,6 +189,7 @@ export interface ActionMatrix {
     legalViolation: EnforcementActionType[];
 
 
+}
 export interface EnforcementWorkflow {
     workflowId: string;
     name: string;
@@ -197,12 +212,14 @@ export interface EnforcementWorkflow {
     version: string;
 
 
+}
 export interface WorkflowTrigger {
     type: 'violation_detected' | 'trust_score_threshold' | 'manual_request' | 'scheduled' | 'external_event';
     conditions: TriggerCondition[];
     debounceTime?: number;
 
 
+}
 export interface TriggerCondition {
     field: string;
     operator: ConditionOperator;
@@ -210,6 +227,7 @@ export interface TriggerCondition {
     required: boolean;
 
 
+}
 export interface WorkflowStep {
     stepId: string;
     name: string;
@@ -226,12 +244,14 @@ export interface WorkflowStep {
 
 export type StepType = 'enforcement_action' | 'notification' | 'data_collection' | 'risk_assessment' | 'manual_review' | 'escalation' | 'approval' | 'rollback';
 
+}
 export interface StepAction {
     actionType: string;
     parameters: Record<string, any>;
     failureHandling: 'continue' | 'retry' | 'abort' | 'escalate';
 
 
+}
 export interface StepCondition {
     field: string;
     operator: ConditionOperator;
@@ -240,12 +260,14 @@ export interface StepCondition {
     branchTo?: string;
 
 
+}
 export interface NextStep {
     stepId: string;
     condition?: string;
     delay?: number;
 
 
+}
 export interface RetryPolicy {
     maxRetries: number;
     retryDelay: number;
@@ -254,6 +276,7 @@ export interface RetryPolicy {
 
 export type ApprovalLevel = 'admin' | 'senior_admin' | 'legal' | 'security_team' | 'multi_level';
 
+}
 export interface ViolationReport {
     reportId: string;
     reportType: ReportType;
@@ -279,6 +302,7 @@ export interface ViolationReport {
 
 export type ReportType = 'community_report' | 'automated_detection' | 'security_alert' | 'trust_score_violation' | 'quality_violation' | 'fraud_detection' | 'admin_investigation';
 
+}
 export interface ReporterInfo {
     reporterId: string;
     reporterType: 'user' | 'moderator' | 'admin' | 'system' | 'external';
@@ -288,6 +312,7 @@ export interface ReporterInfo {
     isVerified: boolean;
 
 
+}
 export interface DetectionMethod {
     method: 'manual_report' | 'automated_scan' | 'pattern_analysis' | 'ml_detection' | 'rule_engine';
     algorithm?: string;
@@ -297,6 +322,7 @@ export interface DetectionMethod {
 
 export type ReportStatus = 'submitted' | 'under_review' | 'escalated' | 'resolved' | 'dismissed' | 'duplicate' | 'insufficient_evidence';
 
+}
 export interface InvestigationNote {
     noteId: string;
     investigatorId: string;
@@ -306,6 +332,7 @@ export interface InvestigationNote {
     attachments?: EvidenceAttachment[];
 
 
+}
 export interface ReportResolution {
     outcome: ResolutionOutcome;
     actions: string[];
@@ -318,6 +345,7 @@ export interface ReportResolution {
 
 export type ResolutionOutcome = 'violation_confirmed' | 'violation_not_found' | 'insufficient_evidence' | 'policy_clarification_needed' | 'duplicate_report' | 'malicious_report';
 
+}
 export interface EnforcementAppeal {
     appealId: string;
     enforcementActionId: string;
@@ -345,6 +373,7 @@ export interface EnforcementAppeal {
     legalImplications: boolean;
 
 
+}
 export interface AppealReason {
     category: AppealCategory;
     specificReason: string;
@@ -356,6 +385,7 @@ export interface AppealReason {
 
 export type AppealCategory = 'factual_error' | 'procedural_error' | 'disproportionate_action' | 'policy_misinterpretation' | 'technical_error' | 'bias_discrimination' | 'new_evidence' | 'changed_circumstances';
 
+}
 export interface RequestedOutcome {
     action: 'complete_reversal' | 'partial_reversal' | 'action_modification' | 'compensation' | 'policy_clarification';
     specificRequest: string;
@@ -363,6 +393,7 @@ export interface RequestedOutcome {
 
 export type AppealStatus = 'submitted' | 'under_review' | 'additional_info_requested' | 'panel_review' | 'decision_pending' | 'approved' | 'denied' | 'partially_approved' | 'withdrawn';
 
+}
 export interface ReviewNote {
     reviewerId: string;
     note: string;
@@ -371,6 +402,7 @@ export interface ReviewNote {
     confidential: boolean;
 
 
+}
 export interface AppealDecision {
     outcome: 'approved' | 'denied' | 'partially_approved' | 'remanded';
     reasoning: string;
@@ -382,6 +414,7 @@ export interface AppealDecision {
     monitoringRequired?: boolean;
 
 
+}
 export interface Compensation {
     type: 'monetary' | 'service_credit' | 'fee_waiver' | 'priority_review' | 'public_apology';
     amount?: number;
@@ -390,6 +423,7 @@ export interface Compensation {
     processingTime: number;
 
 
+}
 export interface EnforcementAnalytics {
     period: AnalyticsPeriod;
     generatedAt: Date;
@@ -404,12 +438,14 @@ export interface EnforcementAnalytics {
     recommendations: EnforcementRecommendation[];
 
 
+}
 export interface AnalyticsPeriod {
     startDate: Date;
     endDate: Date;
     timeRange: TimeRange;
 
 
+}
 export interface EnforcementOverallMetrics {
     totalActions: number;
     totalViolations: number;
@@ -423,6 +459,7 @@ export interface EnforcementOverallMetrics {
     communityTrustImpact: number;
 
 
+}
 export interface ActionBreakdown {
     byType: ActionTypeMetrics[];
     bySeverity: ActionSeverityMetrics[];
@@ -430,6 +467,7 @@ export interface ActionBreakdown {
     byExecutionType: ExecutionTypeMetrics[];
 
 
+}
 export interface ActionTypeMetrics {
     actionType: EnforcementActionType;
     count: number;
@@ -439,6 +477,7 @@ export interface ActionTypeMetrics {
     appealRate: number;
 
 
+}
 export interface ActionSeverityMetrics {
     severity: ActionSeverity;
     count: number;
@@ -447,6 +486,7 @@ export interface ActionSeverityMetrics {
     escalationRate: number;
 
 
+}
 export interface ActionStatusMetrics {
     status: ActionStatus;
     count: number;
@@ -454,6 +494,7 @@ export interface ActionStatusMetrics {
     averageTimeInStatus: number;
 
 
+}
 export interface ExecutionTypeMetrics {
     executionType: ExecutionType;
     count: number;
@@ -462,12 +503,14 @@ export interface ExecutionTypeMetrics {
     overrideRate: number;
 
 
+}
 export interface ViolationBreakdown {
     byCategory: ViolationCategoryMetrics[];
     bySource: ViolationSourceMetrics[];
     byConfidence: ConfidenceMetrics[];
 
 
+}
 export interface ViolationCategoryMetrics {
     category: ViolationCategory;
     count: number;
@@ -477,6 +520,7 @@ export interface ViolationCategoryMetrics {
     falsePositiveRate: number;
 
 
+}
 export interface ViolationSourceMetrics {
     source: EvidenceSource;
     count: number;
@@ -485,6 +529,7 @@ export interface ViolationSourceMetrics {
     averageConfidence: number;
 
 
+}
 export interface ConfidenceMetrics {
     confidenceRange: string;
     count: number;
@@ -492,6 +537,7 @@ export interface ConfidenceMetrics {
     falsePositiveRate: number;
 
 
+}
 export interface EffectivenessMetrics {
     deterrentEffect: number;
     recidivismRate: number;
@@ -503,6 +549,7 @@ export interface EffectivenessMetrics {
     averageResolutionTime: number;
 
 
+}
 export interface EnforcementTrends {
     violationTrend: 'increasing' | 'stable' | 'decreasing';
     actionTrend: 'increasing' | 'stable' | 'decreasing';
@@ -515,6 +562,7 @@ export interface EnforcementTrends {
     predictionConfidence: number;
 
 
+}
 export interface ViolationPattern {
     patternId: string;
     description: string;
@@ -525,6 +573,7 @@ export interface ViolationPattern {
     preventionStrategy: string;
 
 
+}
 export interface SeasonalPattern {
     period: 'weekly' | 'monthly' | 'quarterly' | 'yearly';
     pattern: number[];
@@ -532,6 +581,7 @@ export interface SeasonalPattern {
     description: string;
 
 
+}
 export interface AppealMetrics {
     totalAppeals: number;
     appealRate: number;
@@ -544,6 +594,7 @@ export interface AppealMetrics {
     overturnRate: number;
 
 
+}
 export interface EnforcementInsight {
     insightId: string;
     type: 'trend' | 'anomaly' | 'pattern' | 'risk' | 'opportunity';
@@ -556,6 +607,7 @@ export interface EnforcementInsight {
     generatedAt: Date;
 
 
+}
 export interface EnforcementRecommendation {
     recommendationId: string;
     category: 'policy' | 'automation' | 'process' | 'training' | 'technology';
@@ -570,3 +622,4 @@ export interface EnforcementRecommendation {
 
 
 //# sourceMappingURL=EnforcementTypes.d.ts.map
+}

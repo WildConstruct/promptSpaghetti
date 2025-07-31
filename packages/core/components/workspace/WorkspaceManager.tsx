@@ -9,12 +9,14 @@ import { InviteUserModal } from './InviteUserModal';
 import { WorkspaceSettings } from './WorkspaceSettings';
 import { useWorkspaces } from '../../hooks/useWorkspaces';
 import { Workspace, WorkspaceWithMembership } from '../../types/workspace';
+}
 interface WorkspaceManagerProps {
   userId: string;
   onWorkspaceSelect?: (workspace: Workspace) => void;
   export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({,)
   userId,
   onWorkspaceSelect
+}
 }) => {
   const [selectedWorkspace, setSelectedWorkspace] = useState<WorkspaceWithMembership | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);

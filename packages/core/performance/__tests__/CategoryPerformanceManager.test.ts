@@ -397,7 +397,7 @@ describe('CategoryPerformanceManager', () => {
       const promises = [];
       const nodeCount = 1000;
       for (let i = 0; i < nodeCount; i++) {
-        const nodeType = i % 4 === 0 ? 'WeightedChoice' :;
+        const nodeType = i % 4 === 0 ? 'WeightedChoice' :
           i % 4 === 1 ? 'WeightedAdvanced' :
             i % 4 === 2 ? 'Include' : 'APICall';
         promises.push(categoryManager.registerExecution(`load-node-${i}`, nodeType, Math.floor(Math.random() * 10)));}

@@ -34,6 +34,7 @@ import { RecurrenceEditor } from './RecurrenceEditor';
 import { ActionConfigEditor } from './ActionConfigEditor';
 import { ConflictPreview } from './ConflictPreview';
 
+}
 export interface ScheduleFormData {
   id?: string;
   toggleId: string;,
@@ -44,7 +45,7 @@ export interface ScheduleFormData {
   startTime: Date;
   endTime?: Date;
   timezone: string;
-  recurrence?: {,
+  recurrence?: {
   type: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'custom';,
   interval: number;
   daysOfWeek?: number;
@@ -53,11 +54,12 @@ export interface ScheduleFormData {
   cronExpression?: string;
   maxOccurrences?: number;
   endDate?: Date;
+}
 };
-  actionConfig: {,
+  actionConfig: {
   targetValue?: unknown;
   rolloutPercentage?: number;
-  conditions?: Array<{,
+  conditions?: Array<{
   attribute: string;,
   operator: string;
   value: Error;
@@ -71,6 +73,7 @@ export interface ScheduleFormData {
   priority: number;,
   conflictResolution: 'skip' | 'override' | 'merge';
   enabled: boolean;
+}
 interface ScheduleEditorProps {
   open: boolean;,
   onClose: () => void;
@@ -78,12 +81,13 @@ interface ScheduleEditorProps {
   initialData?: Partial<ScheduleFormData>;
   toggleId: string;
   toggleName?: string;
-  existingSchedules?: Array<{,
+  existingSchedules?: Array<{
   id: string;,
   name: string;
   startTime: Date;
   endTime?: Date;
   action: string;
+}
 }>;
 const SCHEDULE_TYPES = [;
   { value: 'one_time', label: 'One-time', description: 'Execute once at the specified time' },
@@ -324,7 +328,7 @@ const CONFLICT_RESOLUTIONS = [;
                     value={formData.startTime}
                     onChange={(date) => handleFieldChange('startTime', date)}
                     slotProps={{
-  textField: {,
+  textField: {
   fullWidth: true,
   error: !!errors.startTime,
   helperText: errors.startTime,
@@ -337,7 +341,7 @@ const CONFLICT_RESOLUTIONS = [;
                     value={formData.endTime}
                     onChange={(date) => handleFieldChange('endTime', date)}
                     slotProps={{
-  textField: {,
+  textField: {
   fullWidth: true,
   error: !!errors.endTime,
   helperText: errors.endTime,

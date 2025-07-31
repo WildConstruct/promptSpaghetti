@@ -28,6 +28,7 @@ import { DiagnosticService } from '../admin/DiagnosticService';
 let securityAPIPlatform: SecurityAPIIntegrationPlatform | null = null;
 
 }
+}
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
@@ -37,6 +38,7 @@ interface APIResponse<T = any> {
 }
 
 }
+}
 interface ExternalToolRegistrationRequest {
   name: string;
   type: 'siem' | 'vulnerability_scanner' | 'threat_intelligence' | 'endpoint_protection';
@@ -45,12 +47,14 @@ interface ExternalToolRegistrationRequest {
     type: 'api_key' | 'oauth2' | 'basic_auth' | 'certificate';
     credentials: Record<string, any>;
 }
+}
   };
   capabilities: string[];
   data_format: 'json' | 'xml' | 'csv' | 'syslog';
   configuration?: Record<string, any>;
 }
 
+}
 }
 interface SecurityEventRequest {
   type: 'threat_detected' | 'vulnerability_found' | 'compliance_violation' | 'security_incident';
@@ -61,13 +65,16 @@ interface SecurityEventRequest {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 interface PlatformQueryParams {
   include_metrics?: boolean;
   include_tools?: boolean;
   include_events?: boolean;
   time_range?: 'last_hour' | 'last_day' | 'last_week';
+}
 }
 }
 

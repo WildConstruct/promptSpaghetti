@@ -48,6 +48,7 @@ import {
 const { RangePicker } = DatePicker;
 const { Search } = Input;
 const { TabPane } = Tabs;
+}
 interface DashboardState {
   events: AuditEvent;
   totalCount: number;
@@ -78,6 +79,7 @@ interface DashboardState {
   limit: 50,
   sort_field: 'timestamp',
   sort_order: 'desc',
+}
 },
   analytics: null,
     anomalousPatterns: [];

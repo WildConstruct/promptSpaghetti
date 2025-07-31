@@ -7,6 +7,7 @@ import { NodeMetadataManager, HistoricalEra, Genre, Style } from '../historical/
 import { DataSourceManager } from '../external-data/DataSourceManager';
 import { MedievalDemo } from '../demo/MedievalDemo';
 
+}
 export interface UTDGNode {
   id: string;
   type: 'concept' | 'entity' | 'relationship' | 'attribute' | 'constraint';
@@ -21,8 +22,10 @@ export interface UTDGNode {
   confidence: number; // 0-1 accuracy score,
   sources: string;
   lastUpdated: Date;
+}
 };
   relationships: UTDGRelationship;
+}
 }
 export interface UTDGRelationship {
   id: string;
@@ -36,7 +39,9 @@ export interface UTDGRelationship {
   before?: Date;
   after?: Date;
   duration?: number; // milliseconds,
+}
 };
+}
 }
 export interface UTDGQuery {
   nodeTypes?: string;
@@ -51,6 +56,7 @@ export interface UTDGQuery {
   spatialConstraints?: {
   regions?: string;
   excludeRegions?: string;
+}
 };
   temporalConstraints?: {
   startYear?: number;
@@ -63,12 +69,14 @@ export interface UTDGQuery {
   genders?: string;
 };
 }
+}
 export interface UTDGContext {
   historical: {
   era: HistoricalEra;
   year?: number;
   region?: string;
   culturalContext?: string;
+}
 };
   creative: {
   genre: Genre;
@@ -82,6 +90,7 @@ export interface UTDGContext {
   validation: boolean;
 };
 }
+}
 export interface UTDGContentSuggestion {
   type: 'character' | 'setting' | 'object' | 'event' | 'concept';
   content: any;
@@ -92,6 +101,7 @@ export interface UTDGContentSuggestion {
   score: number;
   violations: string;
   suggestions: string;
+}
 };
 }
 export class UTDGFoundation {
@@ -113,6 +123,7 @@ export class UTDGFoundation {
    * Initialize UTDG foundation with core knowledge graph
    */
   private async initializeFoundation(): Promise<void> {
+
     await this.buildCoreKnowledgeGraph();
     await this.integrateMedievalContent();
     await this.buildHistoricalRelationships();
@@ -121,6 +132,7 @@ export class UTDGFoundation {
    * Build core knowledge graph structure
    */
   private async buildCoreKnowledgeGraph(): Promise<void> {
+
     // Historical Eras as core nodes
     const eras = await this.metadataManager.getAllEras();
     for (const era of eras) {
@@ -204,6 +216,7 @@ export class UTDGFoundation {
    * Integrate medieval content into UTDG
    */
   private async integrateMedievalContent(): Promise<void> {
+
     const medievalContent = this.medievalDemo.getAllMedievalContent();
     // Add clothing as entities
     for (const clothing of medievalContent.clothing) {
@@ -334,6 +347,7 @@ export class UTDGFoundation {
    * Build relationships between historical elements
    */
   private async buildHistoricalRelationships(): Promise<void> {
+
     // Temporal relationships between eras
     const eraSequence = ['ancient_egypt', 'classical_antiquity', 'early_medieval', 'medieval', 'renaissance'];
     for (let i = 0; i < eraSequence.length - 1; i++) {
@@ -556,6 +570,7 @@ export class UTDGFoundation {
   errors: string;
   warnings: string;
 }> {
+
     const errors: string = [];
     const warnings: string = [];
     // Check for orphaned relationships

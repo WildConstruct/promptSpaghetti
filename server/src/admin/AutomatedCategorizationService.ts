@@ -46,6 +46,7 @@ export enum ConfidenceLevel {
 }
 
 }
+}
 export interface CategorizationRequest {
   requestId: string;
   itemId: string;
@@ -58,7 +59,9 @@ export interface CategorizationRequest {
   options?: CategorizationOptions;
 }
 }
+}
 
+}
 }
 export interface CategorizationResult {
   requestId: string;
@@ -98,7 +101,9 @@ export interface CategorizationResult {
   reasoningChain: ReasoningStep[];
 }
 }
+}
 
+}
 }
 export interface CategorizationContext {
   organizationId?: string;
@@ -115,9 +120,11 @@ export interface CategorizationContext {
     country: string;
     timezone: string;
 }
+}
   };
 }
 
+}
 }
 export interface CategorizationOptions {
   enableMLCategorization?: boolean;
@@ -131,7 +138,9 @@ export interface CategorizationOptions {
   priorityCategories?: string[];
 }
 }
+}
 
+}
 }
 export interface AutoAssignment {
   assignmentType: 'user' | 'team' | 'role' | 'permission' | 'queue' | 'workflow';
@@ -142,7 +151,9 @@ export interface AutoAssignment {
   metadata?: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 export interface AssignmentCondition {
   field: string;
@@ -151,7 +162,9 @@ export interface AssignmentCondition {
   description: string;
 }
 }
+}
 
+}
 }
 export interface ReasoningStep {
   stepId: string;
@@ -164,7 +177,9 @@ export interface ReasoningStep {
   metadata?: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 export interface CategorizationRule {
   ruleId: string;
@@ -198,9 +213,11 @@ export interface CategorizationRule {
     successRate: number;
     averageConfidence: number;
 }
+}
   };
 }
 
+}
 }
 export interface RuleTrigger {
   field: string;
@@ -209,7 +226,9 @@ export interface RuleTrigger {
   weight: number; // 0-100
 }
 }
+}
 
+}
 }
 export interface RuleCondition {
   field: string;
@@ -219,7 +238,9 @@ export interface RuleCondition {
   negate?: boolean;
 }
 }
+}
 
+}
 }
 export interface RuleAction {
   actionType: 'categorize' | 'assign' | 'flag' | 'escalate' | 'notify';
@@ -227,7 +248,9 @@ export interface RuleAction {
   conditions?: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 export interface CategoryDefinition {
   categoryId: string;
@@ -260,6 +283,7 @@ export interface CategoryDefinition {
     lastUsed?: Date;
     averageConfidence: number;
 }
+}
   };
   
   // ML Training
@@ -270,6 +294,7 @@ export interface CategoryDefinition {
   }>;
 }
 
+}
 }
 export interface CategorizationStats {
   totalRequests: number;
@@ -291,6 +316,7 @@ export interface CategorizationStats {
     category: string;
     count: number;
     averageConfidence: number;
+}
 }
   }>;
   

@@ -7,6 +7,7 @@
  */
 import React, { useState, useEffect, useCallback } from 'react';
 
+}
 export interface ReactionType {
   id: string;
   emoji: string;
@@ -14,6 +15,8 @@ export interface ReactionType {
   category: 'positive' | 'neutral' | 'negative';
   weight: number; // For analytics scoring,
   description: string;
+}
+}
 }
 export interface ReactionData {
   reactionId: string;
@@ -24,20 +27,24 @@ export interface ReactionData {
   timestamp: Date;
   metadata?: Record<string, unknown>;
 }
+}
+}
 export interface ReactionSummary {
   contentId: string;
   totalReactions: number;
   reactionCounts: Record<string, number>;
   userReaction?: string;
-  topReactions: Array<{,
+  topReactions: Array<{
   type: string;
   emoji: string;
   count: number;
   percentage: number;
+}
 }>;
   sentimentScore: number; // -1 to 1 scale,
   engagementLevel: 'low' | 'medium' | 'high' | 'viral'
   }
+}
 export interface ReactionButtonProps {
   contentId: string;
   contentType: 'template' | 'comment' | 'review' | 'project' | 'user';
@@ -59,6 +66,7 @@ export interface ReactionButtonProps {
   category: 'positive',
   weight: 1.0,
   description: 'Love this content',
+}
 }
   {
   id: 'like',
@@ -595,7 +603,7 @@ function generateMockSummary(contentId: string, userId?: string): ReactionSummar
       return score + (reactionDef?.weight || 0) * count;
     }, 0) / Math.max(totalReactions, 1);
   // Determine engagement level
-  const engagementLevel = totalReactions > 50 ? 'viral' :;
+  const engagementLevel = totalReactions > 50 ? 'viral' :
     totalReactions > 20 ? 'high' :
       totalReactions > 5 ? 'medium' : 'low';
   // Simulate user reaction (20% chance)
@@ -649,7 +657,7 @@ function updateSummaryAfterReaction(currentSummary: ReactionSummary)
       return score + (reactionDef?.weight || 0) * count;
     }, 0) / Math.max(totalReactions, 1);
   // Recalculate engagement level
-  const engagementLevel = totalReactions > 50 ? 'viral' :;
+  const engagementLevel = totalReactions > 50 ? 'viral' :
     totalReactions > 20 ? 'high' :
       totalReactions > 5 ? 'medium' : 'low';
   return {

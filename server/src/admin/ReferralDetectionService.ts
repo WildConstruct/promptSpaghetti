@@ -193,6 +193,7 @@ export type ReferralCampaign = z.infer<typeof ReferralCampaignSchema>;
 // =============================================================================
 
 }
+}
 export interface FraudDetectionConfig {
   enableRealTimeDetection: boolean;
   maxClicksPerIp: number;
@@ -206,11 +207,13 @@ export interface FraudDetectionConfig {
   autoRejectThreshold: number; // risk score 0-1
 }
 }
+}
 
 // =============================================================================
 // Main Referral Detection Service
 // =============================================================================
 
+}
 }
 export interface ReferralDetectionConfig {
   enableTracking: boolean;
@@ -232,6 +235,7 @@ export interface ReferralDetectionConfig {
   rewardService: string;
   fraudDetectionService: string;
   notificationService: string;
+}
 }
 }
 

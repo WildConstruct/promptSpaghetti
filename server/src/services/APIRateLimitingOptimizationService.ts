@@ -19,6 +19,7 @@ import { MetricsCollector } from '../performance/MetricsCollector';
 // ============================================================================
 
 }
+}
 export interface RateLimitingOptimizationConfig {
   // Analysis configuration
   analysis: {
@@ -29,6 +30,7 @@ export interface RateLimitingOptimizationConfig {
     minimum_data_points: number;
     include_historical_analysis: boolean;
     include_predictive_analysis: boolean;
+}
 }
   };
   
@@ -132,6 +134,7 @@ export interface RateLimitingOptimizationConfig {
 }
 
 }
+}
 export interface OptimizationSuggestion {
   id: string;
   created_at: Date;
@@ -154,6 +157,7 @@ export interface OptimizationSuggestion {
     geographic_regions?: string[];
     time_periods?: string[];
     global?: boolean;
+}
 }
   };
   
@@ -239,12 +243,14 @@ export interface OptimizationSuggestion {
 }
 
 }
+}
 export interface OptimizationAnalysis {
   analysis_id: string;
   analysis_timestamp: Date;
   analysis_window: {
     start_timestamp: Date;
     end_timestamp: Date;
+}
 }
   };
   
@@ -332,6 +338,7 @@ export interface OptimizationAnalysis {
 }
 
 }
+}
 export interface OptimizationOpportunity {
   opportunity_id: string;
   opportunity_type: string;
@@ -343,7 +350,9 @@ export interface OptimizationOpportunity {
   confidence_score: number;
 }
 }
+}
 
+}
 }
 export interface OptimizationSuggestionAnalytics {
   // Overall optimization analytics
@@ -353,6 +362,7 @@ export interface OptimizationSuggestionAnalytics {
     suggestions_by_priority: Record<string, number>;
     average_confidence_score: number;
     total_potential_impact: number;
+}
 }
   };
   

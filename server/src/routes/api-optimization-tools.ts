@@ -28,6 +28,7 @@ import { MetricsCollector } from '../performance/MetricsCollector';
 // ============================================================================
 
 }
+}
 interface InitializeOptimizationToolsRequest {
   config: APIOptimizationToolsConfig;
   integration_settings?: {
@@ -36,9 +37,11 @@ interface InitializeOptimizationToolsRequest {
     enable_alerting: boolean;
     ci_cd_integration: boolean;
 }
+}
   };
 }
 
+}
 }
 interface RunOptimizationAnalysisRequest {
   analysis_scope?: {
@@ -47,6 +50,7 @@ interface RunOptimizationAnalysisRequest {
     time_window_hours?: number;
     include_predictive_analysis?: boolean;
     generate_implementation_roadmap?: boolean;
+}
 }
   };
   analysis_preferences?: {
@@ -58,6 +62,7 @@ interface RunOptimizationAnalysisRequest {
 }
 
 }
+}
 interface ExecuteOptimizationsRequest {
   recommendations: OptimizationOpportunity[];
   execution_options?: {
@@ -66,6 +71,7 @@ interface ExecuteOptimizationsRequest {
     rollback_enabled?: boolean;
     monitoring_duration_hours?: number;
     success_criteria?: string[];
+}
 }
   };
   approval_workflow?: {
@@ -77,11 +83,13 @@ interface ExecuteOptimizationsRequest {
 }
 
 }
+}
 interface GetOptimizationToolsAnalyticsRequest {
   analytics_scope: {
     time_range: {
       start_timestamp: number;
       end_timestamp: number;
+}
 }
     };
     analytics_categories?: ('tools_usage' | 'performance_improvements' | 'cost_savings' | 'tool_effectiveness' | 'trend_analysis')[];
@@ -95,12 +103,14 @@ interface GetOptimizationToolsAnalyticsRequest {
 }
 
 }
+}
 interface GetOptimizationHistoryRequest {
   history_scope?: {
     time_window_days?: number;
     optimization_types?: string[];
     success_status?: 'all' | 'successful' | 'failed';
     include_details?: boolean;
+}
 }
   };
   pagination?: {
@@ -112,6 +122,7 @@ interface GetOptimizationHistoryRequest {
 }
 
 }
+}
 interface UpdateOptimizationConfigRequest {
   config_updates: Partial<APIOptimizationToolsConfig>;
   update_scope?: {
@@ -119,10 +130,12 @@ interface UpdateOptimizationConfigRequest {
     affected_tools?: string[];
     restart_required_tools?: boolean;
 }
+}
   };
 }
 
 // Response interfaces
+}
 }
 interface APIResponse {
   success: boolean;
@@ -133,6 +146,7 @@ interface APIResponse {
     request_id: string;
     processing_time_ms: number;
     api_version: string;
+}
 }
   };
 }

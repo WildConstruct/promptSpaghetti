@@ -8,7 +8,7 @@ export const aestheticInfluenceTemplate: NodeTemplate = {,
   id: "aesthetic-3",
   type: "logic",
   position: { x: 500, y: 200 },
-  data: {,
+  data: {
   label: "Aesthetic Influence",
   description: "Style: Star Wars, Cassette Futurism, Dieselpunk, Atompunk, etc.",
   category: "logic",

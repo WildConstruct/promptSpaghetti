@@ -9,6 +9,7 @@ import { ConsentCollectionService } from '../services/ConsentCollectionService';
 import { logger } from '../utils/logger';
 
 }
+}
 export interface ConsentContext {
   userId: string;
   sessionId: string;
@@ -20,7 +21,9 @@ export interface ConsentContext {
   thirdPartySharing?: boolean; // Whether data will be shared with third parties
 }
 }
+}
 
+}
 }
 export interface ConsentEnforcementRule {
   id: string;
@@ -35,7 +38,9 @@ export interface ConsentEnforcementRule {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface ConsentViolation {
   id: string;
@@ -48,6 +53,7 @@ export interface ConsentViolation {
   missingConsents: string[];
   action: 'blocked' | 'allowed_with_warning' | 'audit_logged';
   reason: string;
+}
 }
 }
 

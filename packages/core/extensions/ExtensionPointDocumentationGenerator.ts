@@ -3,12 +3,14 @@
  * Generates documentation for extension points in the system
  */
 
+}
 export interface ExtensionPointDocumentation {
   name: string;
   description: string;
   interface: string;
   examples: string;
   version: string;
+}
 }
 export class ExtensionPointDocumentationGenerator {
   constructor() {}

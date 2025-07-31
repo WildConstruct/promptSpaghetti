@@ -22,11 +22,14 @@ import {
 
 // Hook types
 
+}
 export interface UseRealTimeStateOptions {
   autoConnect?: boolean;
   userId?: string;
   sessionId?: string;
   domains?: string;
+}
+}
 }
 export interface UseRealTimeStateReturn {
   isConnected: boolean;
@@ -36,6 +39,8 @@ export interface UseRealTimeStateReturn {
   connect: (userId: string, sessionId?: string) => Promise<void>;
   disconnect: () => Promise<void>;
   error: Error | null;
+}
+}
 }
 export interface UseStateSubscriptionOptions extends SubscriptionOptions {
   enabled?: boolean;
@@ -53,6 +58,8 @@ export interface UseStateSubscriptionOptions extends SubscriptionOptions {
   retry?: number | boolean;
   retryDelay?: number | ((attempt: number) => number);
 }
+}
+}
 export interface UseOptimisticMutationReturn<TVariables, TData> {
   mutate: (variables: TVariables) => Promise<TData>;
   mutateAsync: (variables: TVariables) => Promise<TData>;
@@ -62,12 +69,14 @@ export interface UseOptimisticMutationReturn<TVariables, TData> {
   reset: () => void;
   optimisticUpdates: OptimisticUpdate;
 
+}
 export interface UseDomainStateOptions<T> {
   domain: string;
   selector?: (state: any) => T;
   equalityFn?: (a: T, b: T) => boolean;
   suspense?: boolean;
 
+}
 export interface UseDomainStateReturn<T> {
   state: T;
   setState: (updater: (prev: T) => T | Partial<T>) => void;
@@ -131,10 +140,10 @@ export function useRealTimeState(options: UseRealTimeStateOptions = {})
 };
 
 // State subscription hook
-export function useStateSubscription<T = any>(domain: string)
-  filters: SubscriptionFilter = [],
-  options: UseStateSubscriptionOptions = {}
-): UseStateSubscriptionReturn<T> {
+export function useStateSubscription<T = any>(domain: string(
+    filters: SubscriptionFilter = [],
+    options: UseStateSubscriptionOptions = {}
+  ): UseStateSubscriptionReturn<T> {
   const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);

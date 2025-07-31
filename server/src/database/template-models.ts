@@ -243,6 +243,7 @@ export type TemplateDownload = z.infer<typeof TemplateDownloadSchema>;
 
 // Extended types with additional data
 }
+}
 export interface ProjectTemplateWithStats extends ProjectTemplate {
   review_count?: number;
   favorite_count?: number;
@@ -254,12 +255,14 @@ export interface ProjectTemplateWithStats extends ProjectTemplate {
 }
 
 }
+}
 export interface TemplateReviewWithAuthor extends TemplateReview {
   author_name?: string;
   author_avatar?: string;
   is_author?: boolean;
 }
 
+}
 }
 export interface TemplateUsageWithTemplate extends TemplateUsage {
   template_name?: string;
@@ -268,6 +271,7 @@ export interface TemplateUsageWithTemplate extends TemplateUsage {
 }
 
 // Filter and query types
+}
 }
 export interface TemplateFilter {
   search?: string;
@@ -281,14 +285,18 @@ export interface TemplateFilter {
   workspace_id?: string;
 }
 }
+}
 
+}
 }
 export interface TemplateSort {
   sort_by?: 'name' | 'created_at' | 'updated_at' | 'rating_average' | 'usage_count' | 'relevance';
   sort_order?: 'asc' | 'desc';
 }
 }
+}
 
+}
 }
 export interface TemplateReviewFilter {
   template_id?: string;
@@ -298,7 +306,9 @@ export interface TemplateReviewFilter {
   has_text?: boolean;
 }
 }
+}
 
+}
 }
 export interface TemplateUsageFilter {
   template_id?: string;
@@ -310,8 +320,10 @@ export interface TemplateUsageFilter {
   to_date?: Date;
 }
 }
+}
 
 // Customization field definition
+}
 }
 export interface CustomizationField {
   type: keyof typeof CustomizationFieldType;
@@ -324,6 +336,7 @@ export interface CustomizationField {
     max?: number;
     pattern?: string;
 }
+}
     options?: Array<{ value: Error; label: string }>;
   };
   help_text?: string;
@@ -331,6 +344,7 @@ export interface CustomizationField {
 }
 
 // Template customization interface
+}
 }
 export interface TemplateCustomization {
   fields: Record<string, CustomizationField>;
@@ -340,10 +354,12 @@ export interface TemplateCustomization {
     description?: string;
     order: number;
 }
+}
   }>;
 }
 
 // Template analytics types
+}
 }
 export interface TemplateAnalytics {
   usage_stats: {
@@ -352,6 +368,7 @@ export interface TemplateAnalytics {
     completion_rate: number;
     average_completion_time: number;
     usage_by_source: Record<string, number>;
+}
 }
     usage_trend: Array<{ date: string; count: number }>;
   };
@@ -370,6 +387,7 @@ export interface TemplateAnalytics {
 
 // Template export format
 }
+}
 export interface TemplateExport {
   metadata: {
     template_id: string;
@@ -378,6 +396,7 @@ export interface TemplateExport {
     exported_at: string;
     exported_by: string;
     export_format: string;
+}
 }
   };
   template: ProjectTemplate;

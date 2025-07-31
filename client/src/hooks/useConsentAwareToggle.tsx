@@ -8,20 +8,23 @@
  */
 import { useState, useEffect, useCallback } from 'react';
 import { useConsent } from './useConsent';
+}
 interface ToggleResult {
   enabled: boolean;,
   value: unknown;
   reason: string;
   variantKey?: string;
   ruleMatched?: string;
-  metadata?: {,
+  metadata?: {
   consentChecked?: boolean;
   consentRequired?: boolean;
   consentGranted?: boolean;
   requiredConsents?: string;
   fallbackBehavior?: string;
   [key: string]: unknown;
+}
 };
+}
 interface UseConsentAwareToggleOptions {
   userId?: string;
   orgId?: string;
@@ -33,14 +36,16 @@ interface UseConsentAwareToggleOptions {
   result: ToggleResult | null;,
   isLoading: boolean;
   error: string | null;
-  consentInfo?: {,
+  consentInfo?: {
   isConsentRequired: boolean;,
   requiredConsents: string;
   consentChecked: boolean;,
   consentGranted: boolean;
+}
 };
   refresh: () => Promise<void>;,
   isFeatureAvailable: () => boolean;
+}
 interface BatchToggleResult {
   [key: string]: ToggleResult;
   interface UseBatchConsentAwareToggleReturn {
@@ -52,6 +57,7 @@ interface BatchToggleResult {
   requiredConsents: string;
   consentChecked: boolean;,
   consentGranted: boolean;
+}
 }>;
   refresh: () => Promise<void>;,
   getToggle: (key: string) => ToggleResult | null;
@@ -59,7 +65,7 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 /**
  * Hook for single consent-aware feature toggle
  */
-export function useConsentAwareToggle(()
+export function useConsentAwareToggle(((
     toggleKey: string,
     options: UseConsentAwareToggleOptions = {}
   ): UseConsentAwareToggleReturn {
@@ -88,7 +94,7 @@ export function useConsentAwareToggle(()
       const url = `${API_BASE_URL}/consent-toggles/${toggleKey}?${queryParams.toString()}`;}
       const response = await fetch(url, {)
   method: 'GET',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   credentials: 'include';
@@ -138,7 +144,7 @@ export function useConsentAwareToggle(()
 /**
  * Hook for batch consent-aware feature toggle evaluation
  */
-export function useBatchConsentAwareToggle(()
+export function useBatchConsentAwareToggle(((
     toggleKeys: string,
     options: UseConsentAwareToggleOptions = {}
   ): UseBatchConsentAwareToggleReturn {
@@ -162,7 +168,7 @@ export function useBatchConsentAwareToggle(()
   try {
   const requestBody = {
   keys: toggleKeys,
-  context: {,
+  context: {
   userId,
   orgId,
   sessionId: preferences?.sessionId,
@@ -173,7 +179,7 @@ export function useBatchConsentAwareToggle(()
       const response = await fetch(`${API_BASE_URL}/consent-toggles/batch`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
   'Content-Type': 'application/json',
 },
   credentials: 'include',
@@ -226,6 +232,7 @@ export function useBatchConsentAwareToggle(()
 /**
  * Helper component for conditional rendering based on consent-aware toggles
  */
+}
 interface ConsentAwareFeatureProps {
   toggleKey: string;
   options?: UseConsentAwareToggleOptions;
@@ -235,6 +242,7 @@ interface ConsentAwareFeatureProps {
 
 export function ConsentAwareFeature({)
   toggleKey,
+}
   options = {},
   children,
   fallback = null,

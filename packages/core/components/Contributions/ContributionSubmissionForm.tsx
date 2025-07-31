@@ -13,6 +13,7 @@ import {
   CONTRIBUTION_TYPE_DESCRIPTIONS 
 } from '../../types/contributions';
 
+}
 export interface ContributionSubmissionFormProps {
   onSubmit: (data: CreateContributionRequest) => void;
   onCancel: () => void;
@@ -27,6 +28,7 @@ export interface ContributionSubmissionFormProps {
   id: 'type',
   title: 'Choose Type',
   description: 'Select the type of contribution you want to create',
+}
 }
   {
   id: 'basic',

@@ -17,6 +17,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 
 }
+}
 export interface DashboardConfig {
   enableWebSocket: boolean;
   websocketPort?: number;
@@ -25,7 +26,9 @@ export interface DashboardConfig {
   enableRealTimeAlerts: boolean;
 }
 }
+}
 
+}
 }
 export interface DashboardClient {
   clientId: string;
@@ -36,7 +39,9 @@ export interface DashboardClient {
   isActive: boolean;
 }
 }
+}
 
+}
 }
 export interface DashboardSubscription {
   type: 'metrics' | 'benchmarks' | 'alerts' | 'system_health';
@@ -45,10 +50,12 @@ export interface DashboardSubscription {
     categories?: string[];
     severities?: string[];
 }
+}
   };
   realTime: boolean;
 }
 
+}
 }
 export interface DashboardWidget {
   widgetId: string;
@@ -59,7 +66,9 @@ export interface DashboardWidget {
   lastUpdated: Date;
 }
 }
+}
 
+}
 }
 export interface WidgetConfig {
   timeRange: TimeRange;
@@ -67,15 +76,18 @@ export interface WidgetConfig {
   visualization: VisualizationType;
   metrics: string[];
 }
+}
   thresholds?: { warning: number; critical: number };
   chartOptions?: Record<string, any>;
 }
 
 }
+}
 export interface TimeRange {
   type: 'realtime' | 'last_hour' | 'last_24h' | 'last_7d' | 'custom';
   customStart?: Date;
   customEnd?: Date;
+}
 }
 }
 

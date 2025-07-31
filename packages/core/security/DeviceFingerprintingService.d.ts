@@ -34,6 +34,7 @@ export declare enum DeviceType {
     EMBEDDED = "embedded",
     UNKNOWN = "unknown"
 
+}
 export interface DeviceFingerprint {
     id: string;
     type: FingerprintType;
@@ -49,6 +50,7 @@ export interface DeviceFingerprint {
         doNotTrack: boolean;
         timezone: string;
         timezoneOffset: number;
+}
     };
     enhanced: {
         screen: {
@@ -69,7 +71,7 @@ export interface DeviceFingerprint {
             vendor?: string;
             vendorSub?: string;
         };
-        plugins: Array<{,
+        plugins: Array<{
             name: string;
             filename: string;
             description: string;
@@ -143,6 +145,7 @@ export interface DeviceFingerprint {
         };
     };
 
+}
 export interface LocationData {
     id: string;
     timestamp: Date;
@@ -157,6 +160,7 @@ export interface LocationData {
         altitudeAccuracy?: number;
         heading?: number;
         speed?: number;
+}
     };
     address: {
         country: string;
@@ -189,20 +193,23 @@ export interface LocationData {
         area?: number;
     };
 
+}
 export interface RiskAssessment {
     deviceId: string;
     overallRisk: RiskLevel;
     riskScore: number;
-    factors: Array<{,
+    factors: Array<{
         category: string;
         factor: string;
         impact: number;
         confidence: number;
         description: string;
+}
     }>;
     recommendations: string[];
     timestamp: Date;
 
+}
 export interface FingerprintContext {
     ipAddress: string;
     userAgent: string;
@@ -226,6 +233,7 @@ export interface FingerprintContext {
         storage?: any;
         permissions?: any;
         network?: any;
+}
     };
 /**
  * Comprehensive device fingerprinting and location service
@@ -265,7 +273,7 @@ export declare class DeviceFingerprintingService extends EventEmitter {
         totalFingerprints: number;
         uniqueDevices: number;
         riskDistribution: Record<RiskLevel, number>;
-        topCountries: Array<{,
+        topCountries: Array<{
             country: string;
             count: number;
         }>;

@@ -13,6 +13,7 @@ import {
 } from '../../types/consent';
 import { useConsent } from '../../hooks/useConsent';
 import './JustInTimeConsentPrompt.css';
+}
 interface JustInTimeConsentPromptProps {
   prompt: ActivePrompt;,
   onRespond: (promptId: string, granted: boolean) => Promise<void>;,
@@ -23,6 +24,7 @@ interface JustInTimeConsentPromptProps {
   onRespond,
   onDismiss,
   onClose
+}
 }) => {
   const { hasConsent, grantConsent, withdrawConsent } = useConsent();
   const [isLoading, setIsLoading] = useState(false);

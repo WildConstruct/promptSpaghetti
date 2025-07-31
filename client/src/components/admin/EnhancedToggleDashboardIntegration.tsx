@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 
 // Types from our enhanced services
+}
 interface EnhancedEvaluationResult {
   enabled: boolean;,
   value: Error;
@@ -34,13 +35,14 @@ interface EnhancedEvaluationResult {
   evaluationTime: number;
   cacheHit: boolean;
   ruleName?: string;
-  dependencyStatus?: {,
+  dependencyStatus?: {
   checked: boolean;,
   violations: unknown;
   warnings: unknown;,
   blockers: string;
   requirements: string;,
   canActivate: boolean;
+}
 };
   cascadeEffects?: unknown;
   riskAssessment?: {
@@ -56,6 +58,7 @@ interface EnhancedEvaluationResult {
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
   modelRecommendation?: string;
 };
+}
 interface OperationEnforcement {
   allowed: boolean;,
   blockers: unknown;
@@ -85,13 +88,14 @@ interface OperationEnforcement {
   const [error, setError] = useState<string | null>(null);
   const evaluateToggle = useCallback(async (;);
   toggleKey: string,
-  context?: {,
-  claudeContext?: {,
+  context?: {
+  claudeContext?: {
   modelVersion?: string;
   promptType?: 'creative' | 'analytical' | 'conversational' | 'code';
   tokensUsed?: number;
   riskLevel?: 'low' | 'medium' | 'high' | 'critical';
   costImpact?: 'none' | 'low' | 'medium' | 'high';
+}
 };
       performanceHints?: {
   priority?: 'low' | 'normal' | 'high' | 'critical';
@@ -109,7 +113,7 @@ interface OperationEnforcement {
     try {
       const response = await fetch('/api/enhanced-feature-toggles/enhanced-evaluation', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
   },
@@ -133,7 +137,7 @@ interface OperationEnforcement {
   const evaluateBulkToggles = useCallback(async (;);
     toggleKeys: string,
     context?: {
-  claudeContext?: {,
+  claudeContext?: {
   modelVersion?: string;
   promptType?: 'creative' | 'analytical' | 'conversational' | 'code';
   tokensUsed?: number;
@@ -156,7 +160,7 @@ interface OperationEnforcement {
     try {
       const response = await fetch('/api/enhanced-feature-toggles/bulk-enhanced-evaluation', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
   },
@@ -191,14 +195,14 @@ export const useOperationEnforcement = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const enforceOperation = useCallback(async (;);
-  operation: {,
+  operation: {
   type: 'activate' | 'deactivate' | 'modify_value' | 'modify_config' | 'archive';,
   targetToggleId: string;
   reason: string;
   newState?: boolean;
   newValue?: unknown;
 },
-  context: {,
+  context: {
   requestSource: 'admin_dashboard';
       urgencyLevel: 'low' | 'normal' | 'high' | 'emergency';
       approvals?: unknown;
@@ -209,7 +213,7 @@ export const useOperationEnforcement = () => {
     try {
       const response = await fetch('/api/enhanced-feature-toggles/enforce-operation', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
   },
@@ -241,7 +245,7 @@ export const useOperationEnforcement = () => {
     try {
       const response = await fetch('/api/enhanced-feature-toggles/execute-operation', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
   },
@@ -277,13 +281,13 @@ export const useImpactPreview = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const getImpactPreview = useCallback(async (;);
-  operation: {,
+  operation: {
   type: string;,
   targetToggleId: string;
   reason: string;
 }
     context?: {
-  claudeContext?: {,
+  claudeContext?: {
   modelVersion?: string;
   promptType?: 'creative' | 'analytical' | 'conversational' | 'code';
   tokensUsed?: number;
@@ -306,7 +310,7 @@ export const useImpactPreview = () => {
     try {
       const response = await fetch('/api/enhanced-feature-toggles/impact-preview', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
   },
@@ -341,7 +345,7 @@ export const useImpactPreview = () => {
  * Risk Assessment Display Component
  */
 export const RiskAssessmentBadge: React.FC<{
-  riskAssessment?: {,
+  riskAssessment?: {
   riskScore: number;,
   recommendation: 'proceed' | 'caution' | 'review' | 'block';
 };
@@ -378,7 +382,7 @@ export const RiskAssessmentBadge: React.FC<{
  * Claude Impact Display Component
  */
 export const ClaudeImpactDisplay: React.FC<{
-  claudeMetadata?: {,
+  claudeMetadata?: {
   costImpact: 'none' | 'low' | 'medium' | 'high';,
   qualityImpact: 'none' | 'positive' | 'neutral' | 'negative';
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
@@ -454,7 +458,7 @@ export const PerformanceMetrics: React.FC<{,
  * Dependency Status Indicator Component
  */
 export const DependencyStatusIndicator: React.FC<{
-  dependencyStatus?: {,
+  dependencyStatus?: {
   checked: boolean;,
   violations: unknown;
   warnings: unknown;,
@@ -533,7 +537,7 @@ export const CascadeEffectsPreview: React.FC<{
 export const ImpactPreviewModal: React.FC<{,
   isOpen: boolean;
   onClose: () => void;,
-  operation: {,
+  operation: {
   type: string;,
   targetToggleId: string;
   reason: string;

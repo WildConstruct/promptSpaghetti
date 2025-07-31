@@ -4,6 +4,7 @@
  */
 import { Node, Edge, Graph } from '../graphSchema';
 
+}
 export interface CollaborativeGraphOptions {
     documentId: string;
     userId: string;
@@ -74,6 +75,7 @@ export declare class GraphCRDTAdapter {
     addNode(node: Node, position?: {)
         x: number;
         y: number;
+}
     }): void;
     /**
      * Public API: Update a node collaboratively

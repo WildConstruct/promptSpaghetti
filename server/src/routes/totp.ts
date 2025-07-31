@@ -5,6 +5,7 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { TOTPService } from '../auth/services/TOTPService';
 
 }
+}
 interface TOTPEnrollmentRequest {
   accountName?: string;
   options?: {
@@ -12,20 +13,25 @@ interface TOTPEnrollmentRequest {
     digits?: number;
     period?: number;
 }
+}
   };
 }
 
+}
 }
 interface TOTPVerificationRequest {
   configurationId: string;
   code: string;
 }
 }
+}
 
+}
 }
 interface TOTPAuthenticationRequest {
   code: string;
   isBackupCode?: boolean;
+}
 }
 }
 

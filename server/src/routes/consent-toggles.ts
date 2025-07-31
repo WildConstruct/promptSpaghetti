@@ -10,11 +10,14 @@ import ConsentFeatureToggleService, { ConsentAwareContext, FeatureConsentMapping
 import { FeatureToggleDAO } from '../database/feature-toggle-dao';
 
 }
+}
 interface EvaluateToggleParams {
   key: string;
 }
 }
+}
 
+}
 }
 interface EvaluateToggleQuery {
   userId?: string;
@@ -23,7 +26,9 @@ interface EvaluateToggleQuery {
   includeConsentData?: boolean;
 }
 }
+}
 
+}
 }
 interface BatchEvaluateBody {
   keys: string[];
@@ -31,18 +36,23 @@ interface BatchEvaluateBody {
   includeConsentData?: boolean;
 }
 }
+}
 
+}
 }
 interface RegisterMappingBody {
   mappings: FeatureConsentMapping[];
 }
 }
+}
 
+}
 }
 interface ConsentStatusBody {
   consents: Record<string, string>;
   userId?: string;
   sessionId?: string;
+}
 }
 }
 

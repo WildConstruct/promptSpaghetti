@@ -13,6 +13,7 @@ export enum CircuitState {
 }
 
 }
+}
 export interface CircuitBreakerOptions {
   failureThreshold: number;        // Number of failures before opening circuit
   successThreshold: number;        // Number of successes to close from half-open
@@ -22,7 +23,9 @@ export interface CircuitBreakerOptions {
   name: string;                   // Circuit breaker name for identification
 }
 }
+}
 
+}
 }
 export interface CircuitBreakerMetrics {
   state: CircuitState;
@@ -34,6 +37,7 @@ export interface CircuitBreakerMetrics {
   lastSuccessTime?: number;
   stateChangedTime: number;
   nextRetryTime?: number;
+}
 }
 }
 

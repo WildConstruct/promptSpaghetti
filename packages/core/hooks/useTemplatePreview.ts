@@ -10,6 +10,7 @@ import {
   ExtractedVariable 
 } from '../utils/templateParser';
 
+}
 export interface TemplatePreviewVariant {
   id: string;
   seed: number;
@@ -21,12 +22,16 @@ export interface TemplatePreviewVariant {
   hasErrors: boolean;
   errorMessage?: string;
 }
+}
+}
 export interface TemplatePreviewPerformance {
   averageExecutionTime: number;
   totalGenerations: number;
   successRate: number;
   lastUpdate: number;
   templatesProcessed: number;
+}
+}
 }
 export interface TemplatePreviewConfig {
   maxVariants: number;
@@ -42,6 +47,7 @@ export interface TemplatePreviewConfig {
   autoRefresh: true,
   showVariableSubstitution: true,
   errorOnUndefinedVariables: false,
+}
 };
 }
 export const useTemplatePreview = ()

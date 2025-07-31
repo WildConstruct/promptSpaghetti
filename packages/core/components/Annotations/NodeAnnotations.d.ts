@@ -6,6 +6,7 @@
  */
 import React from 'react';
 
+}
 export interface NodeAnnotation {
     id: string;
     nodeId: string;
@@ -25,6 +26,7 @@ export interface NodeAnnotation {
     deadline?: string;
     assignee?: VFXUser;
 
+}
 export interface NodeAnnotationAttachment {
     id: string;
     type: 'image' | 'video' | 'audio' | 'link' | 'file';
@@ -34,6 +36,7 @@ export interface NodeAnnotationAttachment {
     size?: number;
     duration?: number;
 
+}
 export interface NodeAnnotationReply {
     id: string;
     content: string;
@@ -41,8 +44,10 @@ export interface NodeAnnotationReply {
     timestamp: string;
     reactions: {
         [emoji: string]: VFXUser[];
+}
     };
 
+}
 export interface VFXUser {
     id: string;
     name: string;
@@ -50,6 +55,7 @@ export interface VFXUser {
     avatar?: string;
     email: string;
 
+}
 export interface NodeAnnotationSystemProps {
     nodeId: string;
     nodeName: string;
@@ -66,3 +72,4 @@ export interface NodeAnnotationSystemProps {
 export declare const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps>;
 export default NodeAnnotationSystem;
 //# sourceMappingURL=NodeAnnotations.d.ts.map
+}

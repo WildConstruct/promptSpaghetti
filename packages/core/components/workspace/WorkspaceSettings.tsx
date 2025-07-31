@@ -4,8 +4,10 @@
  */
 import React, { useState } from 'react';
 import { WorkspaceWithMembership } from '../../types/workspace';
+}
 interface WorkspaceSettingsProps {
   workspace: WorkspaceWithMembership;
+}
   onUpdate: (updates: { name?: string; description?: string }) => void;
   onArchive: () => void;
   onCancel: () => void;

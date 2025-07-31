@@ -6,12 +6,14 @@
  */
 import React from 'react';
 
+}
 export interface DrawingAnnotation {
     id: string;
     type: 'freehand' | 'arrow' | 'circle' | 'rectangle' | 'line' | 'text';
-    points: Array<{,
+    points: Array<{
         x: number;
         y: number;
+}
     }>;
     style: DrawingStyle;
     layer: number;
@@ -28,6 +30,7 @@ export interface DrawingAnnotation {
         };
     };
 
+}
 export interface DrawingStyle {
     color: string;
     thickness: number;
@@ -41,12 +44,14 @@ export interface DrawingStyle {
     fontFamily?: string;
     fontWeight?: 'normal' | 'bold';
 
+}
 export interface VFXUser {
     id: string;
     name: string;
     role: string;
     color: string;
 
+}
 export interface DrawingCanvasProps {
     width: number;
     height: number;
@@ -63,3 +68,4 @@ export interface DrawingCanvasProps {
 export declare const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps>;
 export default DrawingAnnotationsCanvas;
 //# sourceMappingURL=DrawingAnnotations.d.ts.map
+}

@@ -13,11 +13,13 @@ import {
   BadgeCategory
 } from '../gamification/BadgeSystem';
 
+}
 export interface BadgeSystemHookConfig {
   userId?: string;
   autoCheckBadges?: boolean;
   enableNotifications?: boolean;
   checkInterval?: number; // milliseconds,
+}
 }
 export const useBadgeSystem = (config: BadgeSystemHookConfig = {}) => {
   const { 

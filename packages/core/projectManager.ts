@@ -22,6 +22,7 @@ export { ProjectMetadata, ProjectSettings } from './schemas/psgSchema';
 
 // Interfaces for save/load operations
 
+}
 export interface SaveProjectOptions {
   name: string;
   description?: string;
@@ -29,9 +30,12 @@ export interface SaveProjectOptions {
   tags?: string;
   fileName?: string;
 }
+}
+}
 export interface LoadProjectResult {
   success: boolean;
   data?: {
+}
     graph: { nodes: Node; edges: Edge };
     metadata: ProjectMetadata;
   settings: ProjectSettings;
@@ -39,11 +43,14 @@ export interface LoadProjectResult {
   error?: string;
   warnings?: string;
 }
+}
 export interface SaveProjectResult {
   success: boolean;
   fileName?: string;
   error?: string;
   warnings?: string;
+}
+}
 }
 export interface PSGFile {
   id: string;
@@ -60,8 +67,10 @@ export interface PSGFile {
   version: string;
   created: Date;
   thumbnail?: string;
+}
 };
   isFavorite: boolean;
+}
 }
 export interface ProjectFolder {
   id: string;
@@ -74,7 +83,9 @@ export interface ProjectFolder {
   tags: string;
   created: Date;
   lastModified: Date;
+}
 };
+}
 }
 export interface Project {
   id: string;
@@ -86,6 +97,7 @@ export interface Project {
   backupEnabled: boolean;
   collaborationEnabled: boolean;
   visibility: 'private' | 'shared' | 'public'
+}
   };
   created: Date;
   lastModified: Date;
@@ -112,6 +124,7 @@ export class ProjectManager {
    * Generate thumbnail for PSG file
    */
   async generateThumbnail(file: PSGFile): Promise<string> {
+
     // Mock implementation - in real scenario would generate actual thumbnail
     const colors = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
     const nodeCount = file.nodeCount || Math.floor(Math.random() * 20) + 5;
@@ -238,6 +251,7 @@ export class ProjectManager {
     options: SaveProjectOptions,
     settings: ProjectSettings
   ): Promise<SaveProjectResult> {
+
     try {
       // Create metadata
       const metadata = createDefaultMetadata(
@@ -301,6 +315,7 @@ export class ProjectManager {
    * Static method to load project from device (Story 6.1)
    */
   static async loadProjectFromDevice(): Promise<LoadProjectResult> {
+
   return new Promise((resolve) => {
   try {
   const input = document.createElement('input');

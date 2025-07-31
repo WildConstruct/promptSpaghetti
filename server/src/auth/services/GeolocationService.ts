@@ -5,6 +5,7 @@ import { DatabaseService } from '../database/DatabaseService';
 import { RedisService } from '../database/RedisService';
 
 }
+}
 export interface GeolocationData {
   country: string;
   countryCode: string;
@@ -16,6 +17,7 @@ export interface GeolocationData {
   coordinates?: {
     latitude: number;
     longitude: number;
+}
 }
   };
   isp?: string;
@@ -30,6 +32,7 @@ export interface GeolocationData {
 }
 
 }
+}
 export interface LocationHistory {
   userId: string;
   location: GeolocationData;
@@ -39,7 +42,9 @@ export interface LocationHistory {
   isTypical: boolean;
 }
 }
+}
 
+}
 }
 export interface GeolocationConfig {
   // API configurations
@@ -56,6 +61,7 @@ export interface GeolocationConfig {
   newLocationThresholdKm: number;
   typicalLocationUpdateThreshold: number;
   suspiciousLocationPatterns: string[];
+}
 }
 }
 

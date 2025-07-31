@@ -8,6 +8,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface CostCenter {
     id: string;
     name: string;
@@ -24,6 +25,7 @@ export interface CostCenter {
             network: number;
             licensing: number;
             personnel: number;
+}
         };
     };
     tracking: {
@@ -59,6 +61,7 @@ export interface CostCenter {
     last_updated: number;
     active: boolean;
 
+}
 export interface CostAlert {
     id: string;
     name: string;
@@ -70,6 +73,7 @@ export interface CostAlert {
             percentage?: number;
             period: 'hourly' | 'daily' | 'weekly' | 'monthly';
             comparison: 'greater_than' | 'less_than' | 'percentage_increase'
+}
   };
         anomaly?: {
             sensitivity: 'low' | 'medium' | 'high';
@@ -104,6 +108,7 @@ export interface CostAlert {
     last_triggered?: number;
     trigger_count: number;
 
+}
 export interface AutoCostAction {
     id: string;
     name: string;
@@ -116,6 +121,7 @@ export interface AutoCostAction {
         confirmation_required?: boolean;
         rollback_conditions?: string[];
         max_executions_per_day?: number;
+}
     };
     safety: {
         require_approval: boolean;
@@ -134,6 +140,7 @@ export interface AutoCostAction {
     enabled: boolean;
     created_at: number;
 
+}
 export interface CostMetrics {
     id: string;
     cost_center_id: string;
@@ -141,6 +148,7 @@ export interface CostMetrics {
         start: number;
         end: number;
         granularity: 'hourly' | 'daily' | 'weekly' | 'monthly'
+}
   };
     costs: {
         total_cost: number;
@@ -175,7 +183,7 @@ export interface CostMetrics {
         forecasted_monthly_cost: number;
         forecasted_yearly_cost: number;
     };
-    services: Array<{,
+    services: Array<{
         service_name: string;
         cost: number;
         percentage: number;
@@ -198,6 +206,7 @@ export interface CostMetrics {
     collected_at: number;
     collection_method: 'automated' | 'manual';
 
+}
 export interface CostOptimizationRecommendation {
     id: string;
     title: string;
@@ -211,6 +220,7 @@ export interface CostOptimizationRecommendation {
         estimated_savings_yearly: number;
         savings_percentage: number;
         payback_period_months: number;
+}
     };
     implementation: {
         complexity: 'low' | 'medium' | 'high';
@@ -242,6 +252,7 @@ export interface CostOptimizationRecommendation {
     created_at: number;
     last_updated: number;
 
+}
 export interface CostBudget {
     id: string;
     name: string;
@@ -254,15 +265,16 @@ export interface CostBudget {
         start_date: number;
         end_date: number;
         rollover_unused: boolean;
+}
     };
     allocation: {
-        services: Array<{,
+        services: Array<{
             service_name: string;
             allocated_amount: number;
             allocated_percentage: number;
             flexible: boolean;
         }>;
-        categories: Array<{,
+        categories: Array<{
             category: 'compute' | 'storage' | 'network' | 'licensing' | 'personnel';
             allocated_amount: number;
             allocated_percentage: number;
@@ -296,6 +308,7 @@ export interface CostBudget {
     last_updated: number;
     active: boolean;
 
+}
 export interface CostReport {
     id: string;
     title: string;
@@ -306,6 +319,7 @@ export interface CostReport {
         end: number;
         comparison_period_start?: number;
         comparison_period_end?: number;
+}
     };
     summary: {
         total_cost: number;
@@ -317,21 +331,21 @@ export interface CostReport {
         critical_recommendations: number;
     };
     analysis: {
-        cost_breakdown: Array<{,
+        cost_breakdown: Array<{
             category: string;
             current_cost: number;
             previous_cost: number;
             change_amount: number;
             change_percentage: number;
         }>;
-        utilization_analysis: Array<{,
+        utilization_analysis: Array<{
             service: string;
             utilization: number;
             cost: number;
             efficiency_rating: 'excellent' | 'good' | 'fair' | 'poor';
             optimization_potential: number;
         }>;
-        trending_data: Array<{,
+        trending_data: Array<{
             metric: string;
             current_value: number;
             trend_direction: 'up' | 'down' | 'stable';
@@ -357,6 +371,7 @@ export interface CostReport {
     recipients?: string[];
     status: 'draft' | 'published' | 'archived';
 
+}
 export interface CostEvent {
     id: string;
     type: 'threshold_exceeded' | 'anomaly_detected' | 'budget_alert' | 'optimization_applied' | 'cost_spike' | 'efficiency_improvement';
@@ -372,6 +387,7 @@ export interface CostEvent {
         percentage: number;
         currency: string;
         period: string;
+}
     };
     data: {
         threshold_value?: number;
@@ -463,7 +479,7 @@ export declare class SecurityCostOptimizer extends EventEmitter {
         total_potential_savings: number;
         efficiency_score: number;
         recent_events: CostEvent[];
-        top_cost_drivers: Array<{,
+        top_cost_drivers: Array<{
             name: string;
             cost: number;
             percentage: number;

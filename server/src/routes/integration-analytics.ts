@@ -19,6 +19,7 @@ import {
 
 // Request/Response Types
 }
+}
 interface RecordIntegrationEventRequest {
   integrationId: string;
   integrationType: IntegrationType;
@@ -32,6 +33,7 @@ interface RecordIntegrationEventRequest {
     parameters?: Record<string, any>;
     headers?: Record<string, string>;
     payload?: any;
+}
 }
   };
   responseTime: number;
@@ -58,6 +60,7 @@ interface RecordIntegrationEventRequest {
 }
 
 }
+}
 interface IntegrationAnalyticsQuery {
   integrationIds?: string;
   integrationTypes?: string;
@@ -71,7 +74,9 @@ interface IntegrationAnalyticsQuery {
   offset?: number;
 }
 }
+}
 
+}
 }
 interface IntegrationReportRequest {
   startDate: string;
@@ -87,11 +92,13 @@ interface IntegrationReportRequest {
     recommendations?: boolean;
     predictions?: boolean;
 }
+}
   };
   format?: 'json' | 'pdf' | 'csv' | 'excel';
   emailRecipients?: string[];
 }
 
+}
 }
 interface IntegrationHealthQuery {
   integrationIds?: string;
@@ -101,7 +108,9 @@ interface IntegrationHealthQuery {
   timeRange?: string;
 }
 }
+}
 
+}
 }
 interface IntegrationMetricsQuery {
   integrationId: string;
@@ -110,6 +119,7 @@ interface IntegrationMetricsQuery {
   metrics?: string; // comma-separated list
   granularity?: 'minute' | 'hour' | 'day' | 'week';
   aggregation?: 'avg' | 'sum' | 'min' | 'max' | 'count';
+}
 }
 }
 

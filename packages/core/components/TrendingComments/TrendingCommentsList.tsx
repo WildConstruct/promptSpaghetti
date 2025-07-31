@@ -17,6 +17,7 @@ import {
 } from '../../types/TrendingCommentsTypes';
 import { TrendingCommentsService } from '../../services/TrendingCommentsService';
 import { TrendingCommentCard } from './TrendingCommentCard';
+}
 interface TrendingCommentsListProps {
   resourceId: string;
   resourceType: CommentableResourceType;
@@ -35,6 +36,7 @@ interface TrendingCommentsListProps {
   showFilters = true,
   showAnalytics = true,
   onCommentEngagement
+}
 }) => {
   const [comments, setComments] = useState<TrendingComment>([]);
   const [isLoading, setIsLoading] = useState(true);

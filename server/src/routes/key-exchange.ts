@@ -5,6 +5,7 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { KeyExchangeService } from '../services/KeyExchangeService';
 
 }
+}
 interface InitiateKeyExchangeRequest {
   clientId?: string;
   securityLevel?: 'standard' | 'high' | 'maximum';
@@ -14,9 +15,11 @@ interface InitiateKeyExchangeRequest {
     expiryHours?: number;
     maxUsage?: number;
 }
+}
   }>;
 }
 
+}
 }
 interface CompleteKeyExchangeRequest {
   sessionId: string;
@@ -27,13 +30,16 @@ interface CompleteKeyExchangeRequest {
     expiryHours?: number;
     maxUsage?: number;
 }
+}
   }>;
 }
 
 }
+}
 interface RevokeKeyRequest {
   keyId: string;
   reason: string;
+}
 }
 }
 

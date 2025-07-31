@@ -7,6 +7,7 @@ import React, { ComponentType } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 
+}
 export interface RouteProtectionOptions {
   requireAuth?: boolean;
   requiredRoles?: string;
@@ -14,6 +15,7 @@ export interface RouteProtectionOptions {
   redirectTo?: string;
   loadingComponent?: React.ComponentType;
   unauthorizedComponent?: React.ComponentType;
+}
 }
 export function withRouteProtection<P extends object>()
   WrappedComponent: ComponentType<P>,

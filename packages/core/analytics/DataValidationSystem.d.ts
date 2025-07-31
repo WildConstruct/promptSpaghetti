@@ -170,6 +170,7 @@ export declare const ValidationRuleSchema: z.ZodObject<{
 }>;
 export type ValidationRule = z.infer<typeof ValidationRuleSchema>;
 
+}
 export interface ValidationResult {
     ruleId: string;
     ruleName: string;
@@ -187,9 +188,11 @@ export interface ValidationResult {
         inconsistentEventCount?: number;
         orphanedEventCount?: number;
         [key: string]: unknown;
+}
     };
     timestamp: number;
 
+}
 export interface ConsistencyCheckResult {
     checkId: string;
     checkName: string;
@@ -202,16 +205,19 @@ export interface ConsistencyCheckResult {
         invalidRecords: number;
         warningRecords: number;
         errorRate: number;
+}
     };
     violations: ValidationResult[];
     recommendations: string[];
     timestamp: number;
 
+}
 export interface DataQualityMetrics {
     completeness: {
         score: number;
         missingFields: {
             [field: string]: number;
+}
         };
         requiredFieldsCoverage: number;
     };

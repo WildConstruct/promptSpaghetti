@@ -3,10 +3,13 @@
 import { RuntimeNode, ExecutionContext } from './types';
 import seedrandom from 'seedrandom';
 
+}
 export interface ValidationResult {
   valid: boolean;
   errors: string;
   warnings: string;
+}
+}
 }
 export interface AdvancedNodeConfig {
   /** Whether this node uses deterministic (seeded) random behavior */
@@ -19,7 +22,9 @@ export interface AdvancedNodeConfig {
   performanceHints?: {
   expectedExecutionTime?: 'fast' | 'medium' | 'slow';
   memoryUsage?: 'low' | 'medium' | 'high'
+}
   };
+}
 }
 export interface AdvancedNodeData {
   id: string;
@@ -30,10 +35,12 @@ export interface AdvancedNodeData {
   version: string;
   created: string;
   lastModified?: string;
+}
 };
 /**
  * Enhanced execution context for advanced nodes with state management and caching
  */
+}
 }
 export interface AdvancedExecutionContext extends ExecutionContext {
   /** State storage for stateful nodes (nodeId -> state) */

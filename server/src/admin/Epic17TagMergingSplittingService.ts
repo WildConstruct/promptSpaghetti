@@ -18,6 +18,7 @@ import * as crypto from 'crypto';
 // =============================================================================
 
 }
+}
 export interface TagMergingSplittingConfig {
   // General settings
   enabled: boolean;
@@ -31,6 +32,7 @@ export interface TagMergingSplittingConfig {
     preserveHistory: boolean;
     requireApproval: boolean;
     maxMergeDepth: number; // Prevent infinite merge chains
+}
 }
   };
   
@@ -106,6 +108,7 @@ export enum TagOperationStatus {
 }
 
 }
+}
 export interface TagMergeOperation {
   operationId: string;
   operationType: TagOperationType.MERGE;
@@ -145,7 +148,9 @@ export interface TagMergeOperation {
   executionTime?: number; // milliseconds
 }
 }
+}
 
+}
 }
 export interface TagSplitOperation {
   operationId: string;
@@ -191,7 +196,9 @@ export interface TagSplitOperation {
   executionTime?: number;
 }
 }
+}
 
+}
 }
 export interface SplitCriteria {
   criteriaType: 'pattern' | 'semantic' | 'usage' | 'metadata' | 'custom';
@@ -200,6 +207,7 @@ export interface SplitCriteria {
   patterns?: {
     delimiter?: string;
     regex?: string;
+}
 }
     prefixSuffix?: { prefix?: string; suffix?: string; };
   };
@@ -240,6 +248,7 @@ export enum ResourceDistributionStrategy {
 }
 
 }
+}
 export interface TagImpactAnalysis {
   analysisId: string;
   analyzedAt: Date;
@@ -270,7 +279,9 @@ export interface TagImpactAnalysis {
   recommendedActions: string[];
 }
 }
+}
 
+}
 }
 export interface HierarchyChange {
   changeType: 'parent_change' | 'child_addition' | 'child_removal' | 'level_change';
@@ -280,7 +291,9 @@ export interface HierarchyChange {
   impact: string;
 }
 }
+}
 
+}
 }
 export interface PerformanceImpact {
   estimatedExecutionTime: number; // milliseconds
@@ -289,11 +302,13 @@ export interface PerformanceImpact {
     memory: number; // MB
     storage: number; // MB
 }
+}
   };
   systemLoad: 'low' | 'medium' | 'high';
   concurrencyConstraints: string[];
 }
 
+}
 }
 export interface BusinessRuleViolation {
   ruleId: string;
@@ -304,7 +319,9 @@ export interface BusinessRuleViolation {
   resolution: string;
 }
 }
+}
 
+}
 }
 export interface TagOperationError {
   errorId: string;
@@ -317,7 +334,9 @@ export interface TagOperationError {
   stackTrace?: string;
 }
 }
+}
 
+}
 }
 export interface TagOperationWarning {
   warningId: string;
@@ -329,7 +348,9 @@ export interface TagOperationWarning {
   actionable: boolean;
 }
 }
+}
 
+}
 }
 export interface DuplicateTagGroup {
   groupId: string;
@@ -345,6 +366,7 @@ export interface DuplicateTagGroup {
     targetTag: string;
     reasoning: string;
 }
+}
   };
   
   // Usage information
@@ -357,6 +379,7 @@ export interface DuplicateTagGroup {
   falsePositive: boolean;
 }
 
+}
 }
 export interface TagRelationship {
   relationshipId: string;
@@ -374,6 +397,7 @@ export interface TagRelationship {
   establishedBy: string;
   validatedAt?: Date;
   deprecated: boolean;
+}
 }
 }
 

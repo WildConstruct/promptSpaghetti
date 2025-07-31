@@ -54,11 +54,13 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 // Chart components (would need to install chart library)
 // For now, we'll create simple visual representations
+}
 interface ChartData {
   timestamp: Date;,
   value: number;
   category?: string;
   severity?: string;
+}
 interface LogMetrics {
   totalLogs: number;,
   errorRate: number;
@@ -68,12 +70,14 @@ interface LogMetrics {
   levels: Record<string, number>;
   anomalies: number;,
   patterns: number;
+}
 interface LogSource {
   name: string;,
   status: 'healthy' | 'warning' | 'error';
   lastSeen: Date;,
   messageCount: number;
   errorRate: number;
+}
 interface PatternAlert {
   id: string;,
   type: string;
@@ -83,11 +87,13 @@ interface PatternAlert {
   timestamp: Date;
   affectedSources: string;,
   count: number;
+}
 interface TimeRangeOption {
   label: string;,
   value: string;
   hours: number;
 const TIME_RANGES: TimeRangeOption = [
+}
   { label: 'Last 15 minutes', value: '15m', hours: 0.25 },
   { label: 'Last hour', value: '1h', hours: 1 },
   { label: 'Last 6 hours', value: '6h', hours: 6 },

@@ -12,6 +12,7 @@ import { SecurityPolicyAnalysisEngine } from './SecurityPolicyAnalysisEngine';
 import { SecurityPatternRecognitionEngine } from './SecurityPatternRecognitionEngine';
 
 }
+}
 export interface SecurityTimeSeriesConfig {
   analysis_settings: {
     enabled: boolean;
@@ -22,6 +23,7 @@ export interface SecurityTimeSeriesConfig {
     trend_analysis_enabled: boolean;
     seasonal_analysis_enabled: boolean;
     correlation_analysis_enabled: boolean;
+}
 }
   };
   
@@ -78,6 +80,7 @@ export interface SecurityTimeSeriesConfig {
 }
 
 }
+}
 export interface SecurityTimeSeries {
   series_id: string;
   series_name: string;
@@ -94,6 +97,7 @@ export interface SecurityTimeSeries {
     data_quality_score: number;
     completeness_percentage: number;
     source_systems: string[];
+}
 }
   };
   
@@ -123,6 +127,7 @@ export interface SecurityTimeSeries {
 }
 
 }
+}
 export interface TimeSeriesDataPoint {
   timestamp: number;
   value: number;
@@ -133,9 +138,11 @@ export interface TimeSeriesDataPoint {
     tags: string[];
     context: unknown;
 }
+}
   };
 }
 
+}
 }
 export interface TimeSeriesComponent {
   component_name: string;
@@ -144,7 +151,9 @@ export interface TimeSeriesComponent {
   confidence: number;
 }
 }
+}
 
+}
 }
 export interface SecurityTimeSeriesAnomaly {
   anomaly_id: string;
@@ -153,6 +162,7 @@ export interface SecurityTimeSeriesAnomaly {
   time_range: {
     start_timestamp: number;
     end_timestamp: number;
+}
 }
   };
   
@@ -194,6 +204,7 @@ export interface SecurityTimeSeriesAnomaly {
 }
 
 }
+}
 export interface TimeSeriesCorrelation {
   correlation_id: string;
   series_a: string;
@@ -204,6 +215,7 @@ export interface TimeSeriesCorrelation {
   correlation_analysis: {
     statistical_significance: number;
     p_value: number;
+}
 }
     confidence_interval: { lower: number; upper: number };
     correlation_strength: 'weak' | 'moderate' | 'strong' | 'very_strong';
@@ -225,6 +237,7 @@ export interface TimeSeriesCorrelation {
 }
 
 }
+}
 export interface SecurityTrendForecast {
   forecast_id: string;
   forecast_name: string;
@@ -236,6 +249,7 @@ export interface SecurityTrendForecast {
     end_date: number;
     forecast_periods: number;
     forecast_frequency: string;
+}
 }
   };
   
@@ -279,15 +293,18 @@ export interface SecurityTrendForecast {
 }
 
 }
+}
 export interface ForecastDataPoint {
   timestamp: number;
   predicted_value: number;
   prediction_confidence: number;
 }
+}
   prediction_interval: { lower: number; upper: number };
   contributing_factors: string[];
 }
 
+}
 }
 export interface ConfidenceInterval {
   timestamp: number;
@@ -297,7 +314,9 @@ export interface ConfidenceInterval {
   interval_width: number;
 }
 }
+}
 
+}
 }
 export interface AccuracyMetrics {
   mean_absolute_error: number;
@@ -309,7 +328,9 @@ export interface AccuracyMetrics {
   directional_accuracy: number;
 }
 }
+}
 
+}
 }
 export interface ModelPerformance {
   training_performance: AccuracyMetrics;
@@ -319,7 +340,9 @@ export interface ModelPerformance {
   model_stability: number;
 }
 }
+}
 
+}
 }
 export interface FeatureImportance {
   feature_name: string;
@@ -328,7 +351,9 @@ export interface FeatureImportance {
   feature_type: string;
 }
 }
+}
 
+}
 }
 export interface ScenarioForecast {
   scenario_name: string;
@@ -339,7 +364,9 @@ export interface ScenarioForecast {
   risk_factors: string[];
 }
 }
+}
 
+}
 }
 export interface RiskIndicator {
   indicator_name: string;
@@ -350,7 +377,9 @@ export interface RiskIndicator {
   mitigation_strategies: string[];
 }
 }
+}
 
+}
 }
 export interface OpportunityIndicator {
   indicator_name: string;
@@ -360,7 +389,9 @@ export interface OpportunityIndicator {
   recommended_timeline: string;
 }
 }
+}
 
+}
 }
 export interface MonitoringPoint {
   metric_name: string;
@@ -370,7 +401,9 @@ export interface MonitoringPoint {
   escalation_procedures: string[];
 }
 }
+}
 
+}
 }
 export interface TimeSeriesAnalysisResult {
   analysis_id: string;
@@ -388,6 +421,7 @@ export interface TimeSeriesAnalysisResult {
     anomaly_insights: AnomalyInsight[];
     correlation_insights: CorrelationInsight[];
     forecast_insights: ForecastInsight[];
+}
 }
   };
   
@@ -408,6 +442,7 @@ export interface TimeSeriesAnalysisResult {
 
 // Supporting interfaces
 }
+}
 interface TrendInsight {
   insight_type: string;
   insight_description: string;
@@ -415,7 +450,9 @@ interface TrendInsight {
   business_relevance: string;
 }
 }
+}
 
+}
 }
 interface AnomalyInsight {
   anomaly_pattern: string;
@@ -424,7 +461,9 @@ interface AnomalyInsight {
   investigation_priority: string;
 }
 }
+}
 
+}
 }
 interface CorrelationInsight {
   correlation_pattern: string;
@@ -433,7 +472,9 @@ interface CorrelationInsight {
   monitoring_recommendations: string[];
 }
 }
+}
 
+}
 }
 interface ForecastInsight {
   forecast_pattern: string;
@@ -442,7 +483,9 @@ interface ForecastInsight {
   opportunity_implications: string[];
 }
 }
+}
 
+}
 }
 interface ActionRecommendation {
   action_type: string;
@@ -452,7 +495,9 @@ interface ActionRecommendation {
   expected_impact: string;
 }
 }
+}
 
+}
 }
 interface StrategyRecommendation {
   strategy_type: string;
@@ -462,7 +507,9 @@ interface StrategyRecommendation {
   success_metrics: string[];
 }
 }
+}
 
+}
 }
 interface InitiativeRecommendation {
   initiative_type: string;
@@ -472,7 +519,9 @@ interface InitiativeRecommendation {
   expected_roi: string;
 }
 }
+}
 
+}
 }
 interface MonitoringRecommendation {
   monitoring_type: string;
@@ -482,7 +531,9 @@ interface MonitoringRecommendation {
   integration_requirements: string[];
 }
 }
+}
 
+}
 }
 interface DataQualityAssessment {
   overall_quality_score: number;
@@ -493,7 +544,9 @@ interface DataQualityAssessment {
   quality_issues: string[];
 }
 }
+}
 
+}
 }
 interface AlgorithmPerformanceMetrics {
   algorithm_accuracy: number;
@@ -503,7 +556,9 @@ interface AlgorithmPerformanceMetrics {
   stability_metrics: number;
 }
 }
+}
 
+}
 }
 interface ComputationalMetrics {
   total_processing_time_ms: number;
@@ -512,7 +567,9 @@ interface ComputationalMetrics {
   algorithm_efficiency_score: number;
 }
 }
+}
 
+}
 }
 interface ConfidenceAssessment {
   overall_confidence: number;
@@ -522,7 +579,9 @@ interface ConfidenceAssessment {
   correlation_analysis_confidence: number;
 }
 }
+}
 
+}
 }
 export interface TimeSeriesAnalytics {
   summary: {
@@ -534,6 +593,7 @@ export interface TimeSeriesAnalytics {
     active_forecasts: number;
     average_forecast_accuracy: number;
     average_anomaly_detection_rate: number;
+}
 }
   };
   

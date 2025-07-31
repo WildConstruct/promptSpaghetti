@@ -12,6 +12,7 @@ export interface CorrectionsTheme {
             tertiary: string;
             elevated: string;
             overlay: string;
+}
         };
         text: {
             primary: string;
@@ -88,6 +89,7 @@ export interface CorrectionsTheme {
     };
 
 export declare }
+}
 interface CorrectionsThemeProviderProps {
     children: ReactNode;
     initialTheme?: 'light' | 'dark';
@@ -100,6 +102,7 @@ export declare export declare             color: string;
             fontWeight: number;
             cursor: string;
             transition: string;
+}
         };
         secondary: {
             backgroundColor: string;

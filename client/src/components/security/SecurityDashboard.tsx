@@ -18,6 +18,7 @@ import {
 // SecurityMetric type was removed as unused
 import { formatDistanceToNow } from 'date-fns';
 import './SecurityDashboard.css';
+}
 interface SecurityDashboardProps {
   onIncidentClick?: (incidentId: string) => void;
   onThreatClick?: (threatId: string) => void;
@@ -38,6 +39,7 @@ interface SecurityDashboardProps {
   export const SecurityDashboard: React.FC<SecurityDashboardProps> = ({,)
   onIncidentClick,
   // onThreatClick // Commented out unused prop
+}
 }) => {
   const [metrics, setMetrics] = useState<ThreatMetrics>({)
   totalThreats: 0,

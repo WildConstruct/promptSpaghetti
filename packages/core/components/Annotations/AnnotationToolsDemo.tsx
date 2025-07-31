@@ -48,6 +48,7 @@ import type { RegionAnnotation } from './RegionAnnotations';
 
 // Unified VFX User type
 
+}
 export interface VFXUser {
   id: string;
   name: string;
@@ -69,6 +70,8 @@ export interface VFXUser {
   source: string;
   target: string;
 }
+}
+}
 export interface AnnotationToolsDemoProps {
   className?: string;
   title?: string;
@@ -78,6 +81,7 @@ export interface AnnotationToolsDemoProps {
 
 // Sample VFX workflow data
 const SAMPLE_NODES: MockNode = [
+}
   { id: 'node-001', name: 'Character Input', type: 'input', x: 50, y: 100, width: 120, height: 80 },
   { id: 'node-002', name: 'Motion Blur', type: 'effect', x: 250, y: 100, width: 120, height: 80 },
   { id: 'node-003', name: 'Color Correction', type: 'color', x: 450, y: 100, width: 120, height: 80 },

@@ -16,6 +16,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 
 }
+}
 export interface PerformanceTestConfig {
   testSuiteId: string;
   name: string;
@@ -34,6 +35,7 @@ export interface PerformanceTestConfig {
   resourceLimits: {
     maxMemory: number; // MB
     maxCpu: number; // percentage
+}
 }
   };
   
@@ -55,6 +57,7 @@ export interface PerformanceTestConfig {
 }
 
 }
+}
 export interface PerformanceTest {
   testId: string;
   name: string;
@@ -74,6 +77,7 @@ export interface PerformanceTest {
     maxMemory?: number; // MB
     minThroughput?: number; // operations per second
 }
+}
   };
   
   // Test Dependencies
@@ -86,6 +90,7 @@ export interface PerformanceTest {
   version: string;
 }
 
+}
 }
 export interface TestContext {
   testId: string;
@@ -112,7 +117,9 @@ export interface TestContext {
   getCpuUsage: () => NodeJS.CpuUsage;
 }
 }
+}
 
+}
 }
 export interface TestResult {
   testId: string;
@@ -137,6 +144,7 @@ export interface TestResult {
     stack?: string;
     type: string;
 }
+}
   };
   
   // Timing Breakdown
@@ -153,6 +161,7 @@ export interface TestResult {
   metadata: Record<string, any>;
 }
 
+}
 }
 export interface TestSuiteResult {
   suiteId: string;
@@ -182,7 +191,9 @@ export interface TestSuiteResult {
   errors: TestError[];
 }
 }
+}
 
+}
 }
 export interface TestSummary {
   totalTests: number;
@@ -205,7 +216,9 @@ export interface TestSummary {
   totalOperations: number;
 }
 }
+}
 
+}
 }
 export interface PerformanceAnalysis {
   bottlenecks: Bottleneck[];
@@ -215,7 +228,9 @@ export interface PerformanceAnalysis {
   improvements: Improvement[];
 }
 }
+}
 
+}
 }
 export interface Bottleneck {
   type: 'cpu' | 'memory' | 'io' | 'network' | 'database';
@@ -226,7 +241,9 @@ export interface Bottleneck {
   impact: number; // percentage impact on performance
 }
 }
+}
 
+}
 }
 export interface PerformanceTrend {
   metric: string;
@@ -236,7 +253,9 @@ export interface PerformanceTrend {
   timeframe: string;
 }
 }
+}
 
+}
 }
 export interface Recommendation {
   category: 'optimization' | 'architecture' | 'scaling' | 'monitoring';
@@ -248,7 +267,9 @@ export interface Recommendation {
   relatedTests: string[];
 }
 }
+}
 
+}
 }
 export interface Regression {
   testId: string;
@@ -259,7 +280,9 @@ export interface Regression {
   severity: 'minor' | 'moderate' | 'major' | 'critical';
 }
 }
+}
 
+}
 }
 export interface Improvement {
   testId: string;
@@ -268,6 +291,7 @@ export interface Improvement {
   baselineValue: number;
   improvementPercentage: number;
   significance: 'minor' | 'moderate' | 'major';
+}
 }
 }
 
@@ -284,6 +308,7 @@ export type TestCategory =
 export type TestPriority = 'low' | 'medium' | 'high' | 'critical';
 
 }
+}
 export interface MemoryUsageSnapshot {
   heapUsed: number;
   heapTotal: number;
@@ -291,14 +316,18 @@ export interface MemoryUsageSnapshot {
   rss: number;
 }
 }
+}
 
+}
 }
 export interface CpuUsageSnapshot {
   user: number;
   system: number;
 }
 }
+}
 
+}
 }
 export interface ResourceSnapshot {
   memory: MemoryUsageSnapshot;
@@ -306,7 +335,9 @@ export interface ResourceSnapshot {
   timestamp: Date;
 }
 }
+}
 
+}
 }
 export interface BaselineComparison {
   baselineDate: Date;
@@ -326,9 +357,11 @@ export interface BaselineComparison {
     change: number;
     significant: boolean;
 }
+}
   }>;
 }
 
+}
 }
 export interface TestEnvironment {
   nodeVersion: string;
@@ -341,13 +374,16 @@ export interface TestEnvironment {
   commitHash?: string;
 }
 }
+}
 
+}
 }
 export interface TestError {
   testId: string;
   message: string;
   stack?: string;
   timestamp: Date;
+}
 }
 }
 

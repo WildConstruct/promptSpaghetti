@@ -4,6 +4,7 @@
  * for GDPR, SOC2, MPA, and internal security standards
  */
 
+}
 export interface ComplianceBaseline {
     id: string;
     framework: 'GDPR' | 'CCPA' | 'SOC2' | 'ISO27001' | 'MPA' | 'INTERNAL';
@@ -18,6 +19,7 @@ export interface ComplianceBaseline {
     lastUpdatedAt: Date;
     isActive: boolean;
 
+}
 export interface ComplianceMeasurement {
     id: string;
     baselineId: string;
@@ -29,6 +31,7 @@ export interface ComplianceMeasurement {
     context?: Record<string, any>;
     notes?: string;
 
+}
 export interface BaselineTrend {
     baselineId: string;
     framework: string;
@@ -41,6 +44,7 @@ export interface BaselineTrend {
     lastMeasurement: ComplianceMeasurement;
     recommendedActions: string[];
 
+}
 export interface BaselineDashboard {
     overallHealthScore: number;
     frameworkHealth: Record<string, {
@@ -49,6 +53,7 @@ export interface BaselineDashboard {
         baselinesTracked: number;
         baselinesMet: number;
         criticalDeviations: number;
+}
     }>;
     recentDeviations: ComplianceMeasurement[];
     trendAnalysis: BaselineTrend[];

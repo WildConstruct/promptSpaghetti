@@ -1,8 +1,10 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { useCorrectionsStore, CorrectionRule, DEFAULT_CORRECTION_RULES } from '../correctionsStore';
+}
 interface MobileCorrectionsPanelProps {
   isOpen: boolean;
   onClose: () => void;
+}
 }
 
 type TabType = 'rules' | 'test' | 'add' | 'settings';

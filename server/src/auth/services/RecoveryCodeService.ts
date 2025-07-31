@@ -7,6 +7,7 @@ import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 
 }
+}
 export interface RecoveryCode {
   id: string;
   userId: string;
@@ -19,7 +20,9 @@ export interface RecoveryCode {
   expiresAt?: Date;
 }
 }
+}
 
+}
 }
 export interface RecoveryCodeSet {
   id: string;
@@ -32,9 +35,11 @@ export interface RecoveryCodeSet {
     replacedSetId?: string;
     deviceFingerprint?: string;
 }
+}
   };
 }
 
+}
 }
 export interface RecoveryCodeUsage {
   codeId: string;
@@ -46,7 +51,9 @@ export interface RecoveryCodeUsage {
   failureReason?: string;
 }
 }
+}
 
+}
 }
 export interface RecoveryCodeGenerationOptions {
   count?: number;
@@ -58,6 +65,7 @@ export interface RecoveryCodeGenerationOptions {
   generatedBy: string;
   reason: string;
   deviceFingerprint?: string;
+}
 }
 }
 

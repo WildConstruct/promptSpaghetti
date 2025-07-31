@@ -19,6 +19,7 @@ import { Redis } from 'ioredis';
 import { SearchAnalyticsService } from './SearchAnalyticsService';
 
 }
+}
 interface PerformanceAlert {
   id: string;
   type: 'performance' | 'availability' | 'error_rate' | 'user_experience';
@@ -33,7 +34,9 @@ interface PerformanceAlert {
   actions: string[];
 }
 }
+}
 
+}
 }
 interface HealthCheck {
   service: string;
@@ -44,7 +47,9 @@ interface HealthCheck {
   details?: any;
 }
 }
+}
 
+}
 }
 interface PerformanceMetrics {
   searchLatency: {
@@ -52,6 +57,7 @@ interface PerformanceMetrics {
     p95: number;
     p99: number;
     avg: number;
+}
 }
   };
   throughput: {
@@ -81,6 +87,7 @@ interface PerformanceMetrics {
 }
 
 }
+}
 interface OptimizationRecommendation {
   category: 'index' | 'query' | 'cache' | 'infrastructure';
   priority: 'low' | 'medium' | 'high' | 'critical';
@@ -90,6 +97,7 @@ interface OptimizationRecommendation {
   effort: string;
   actions: string[];
   estimatedImprovement: string;
+}
 }
 }
 

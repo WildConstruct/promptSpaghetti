@@ -18,6 +18,7 @@
  */
 import React from 'react';
 
+}
 export interface TargetingCondition {
     id: string;
     type: 'attribute' | 'behavior' | 'segment' | 'geography' | 'device' | 'time';
@@ -28,6 +29,7 @@ export interface TargetingCondition {
     weight?: number;
     isEnabled: boolean;
 
+}
 export interface UserSegment {
     id: string;
     name: string;
@@ -40,6 +42,7 @@ export interface UserSegment {
     tags: string[];
     color: string;
 
+}
 export interface TargetingAudience {
     id: string;
     name: string;
@@ -50,21 +53,24 @@ export interface TargetingAudience {
     isActive: boolean;
     rolloutPercentage: number;
 
+}
 export interface TargetingPreview {
     totalUsers: number;
     matchedUsers: number;
     matchPercentage: number;
-    sampleUsers: Array<{,
+    sampleUsers: Array<{
         id: string;
         email: string;
         attributes: Record<string, any>;
         matchReasons: string[];
+}
     }>;
     demographics: {
         age: Record<string, number>;
         location: Record<string, number>;
         userType: Record<string, number>;
     };
+}
 interface AudienceSelectorProps {
     audiences: TargetingAudience[];
     selectedAudience?: TargetingAudience;
@@ -81,6 +87,7 @@ export declare     availableFields: Array<{
         type: string;
         category: string;
         options?: unknown[];
+}
     }>;
     onPreview?: (conditions: TargetingCondition[]) => Promise<TargetingPreview>;
     showVisualBuilder?: boolean;

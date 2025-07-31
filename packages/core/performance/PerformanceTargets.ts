@@ -3,12 +3,15 @@
  * Defines performance targets based on user requirements, industry standards, and business objectives
  */
 
+}
 export interface PerformanceTargetConfig {
   environment: 'development' | 'staging' | 'production';
   userSegment: 'power-users' | 'general' | 'enterprise';
   deviceProfile: 'high-end' | 'mid-range' | 'low-end';
   networkProfile: 'fast' | 'average' | 'slow'
+}
   }
+}
 export interface PerformanceTarget {
   kpiId: string;
   target: number;
@@ -20,6 +23,7 @@ export interface PerformanceTarget {
   userExperience: 'high' | 'medium' | 'low';
   businessValue: 'high' | 'medium' | 'low';
   technicalRisk: 'high' | 'medium' | 'low'
+}
   };
 /**
  * Performance targets based on Web Vitals and industry standards
@@ -369,7 +373,7 @@ export function validatePerformanceTargets(currentMetrics: Record<string, number
   config: PerformanceTargetConfig): {;
   passed: boolean;
   score: number;
-  violations: Array<{,
+  violations: Array<{
   kpiId: string;
   current: number;
   target: number;
@@ -408,9 +412,9 @@ export function validatePerformanceTargets(currentMetrics: Record<string, number
 /**
  * Generate recommendations based on target violations
  */
-function generateTargetRecommendations(()
+function generateTargetRecommendations(((
     violations: any,
-    config: PerformanceTargetConfig,
+    config: PerformanceTargetConfig
   ): string {
   const recommendations: string = [];
   const criticalViolations = violations.filter(v => v.severity === 'critical');

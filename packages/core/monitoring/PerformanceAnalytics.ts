@@ -7,11 +7,13 @@
 import { PerformanceMonitor, PerformanceMetrics, AggregatedMetrics, PerformanceAlert } from './PerformanceMonitor';
 import { EventEmitter } from 'events';
 
+}
 export interface PerformanceReport {
   generatedAt: number;
   timeRange: {
   start: number;
   end: number;
+}
 };
   // Executive Summary
   summary: {
@@ -27,7 +29,7 @@ export interface PerformanceReport {
   p50ExecutionTime: number;
   p95ExecutionTime: number;
   p99ExecutionTime: number;
-  slowestNodes: Array<{,
+  slowestNodes: Array<{
   nodeId: string;
   nodeType: string;
   averageDuration: number;
@@ -39,7 +41,7 @@ export interface PerformanceReport {
   errorRate: number;
   mostReliableTypes: string;
   leastReliableTypes: string;
-  errorPatterns: Array<{,
+  errorPatterns: Array<{
   pattern: string;
   frequency: number;
   affectedNodes: string;
@@ -56,7 +58,7 @@ export interface PerformanceReport {
   performanceTrend: 'improving' | 'stable' | 'degrading';
   trendConfidence: number; // 0-1,
   projectedImprovement: number;
-  seasonalPatterns: Array<{,
+  seasonalPatterns: Array<{
   period: string;
   impact: number;
   description: string;
@@ -67,12 +69,13 @@ export interface PerformanceReport {
   high: number;
   medium: number;
   low: number;
-  topAlertTypes: Array<{,
+  topAlertTypes: Array<{
   type: string;
   frequency: number;
   severity: string;
 }>;
   };
+}
 }
 export interface PerformanceBenchmark {
   nodeType: string;
@@ -81,6 +84,7 @@ export interface PerformanceBenchmark {
   maxExecutionTime: number;
   successRate: number;
   memoryUsage: number;
+}
 };
   current: {
   averageExecutionTime: number;
@@ -90,6 +94,7 @@ export interface PerformanceBenchmark {
 };
   status: 'exceeds' | 'meets' | 'below' | 'critical';
   improvement: number; // Percentage improvement needed
+}
 }
 export interface PerformanceInsight {
   id: string;
@@ -106,6 +111,7 @@ export interface PerformanceInsight {
   /**
   * Advanced performance analytics and reporting system
   */
+}
 }
 export class PerformanceAnalytics extends EventEmitter {
   private monitor: PerformanceMonitor;
@@ -406,9 +412,9 @@ export class PerformanceAnalytics extends EventEmitter {
   metrics.push(aggregated);
 });
     return metrics;
-  private calculateSummaryScores(()
+  private calculateSummaryScores(((
     metrics: PerformanceMetrics,
-    alerts: PerformanceAlert,
+    alerts: PerformanceAlert
   ): PerformanceReport['summary'] {
   const summary = this.monitor.getStatisticsSummary();
   // Performance score (0-100)
@@ -430,9 +436,9 @@ export class PerformanceAnalytics extends EventEmitter {
   efficiencyScore,
   recommendation
 };
-  private analyzePerformance(()
+  private analyzePerformance(((
     metrics: PerformanceMetrics,
-    aggregated: AggregatedMetrics,
+    aggregated: AggregatedMetrics
   ): PerformanceReport['performance'] {
     const summary = this.monitor.getStatisticsSummary();
     // Calculate percentiles from aggregated data
@@ -455,9 +461,9 @@ export class PerformanceAnalytics extends EventEmitter {
   p99ExecutionTime: p99,
   slowestNodes
 };
-  private analyzeReliability(()
+  private analyzeReliability(((
     metrics: PerformanceMetrics,
-    aggregated: AggregatedMetrics,
+    aggregated: AggregatedMetrics
   ): PerformanceReport['reliability'] {
   const summary = this.monitor.getStatisticsSummary();
   return {
@@ -476,9 +482,9 @@ export class PerformanceAnalytics extends EventEmitter {
   frequency: Math.floor(summary.errorRate * 0.3),
   affectedNodes: summary.underperformingTypes];
   };
-  private analyzeEfficiency(()
+  private analyzeEfficiency(((
     metrics: PerformanceMetrics,
-    aggregated: AggregatedMetrics,
+    aggregated: AggregatedMetrics
   ): PerformanceReport['efficiency'] {
   const summary = this.monitor.getStatisticsSummary();
   const avgCacheHitRate = aggregated.length > 0 ? ;

@@ -32,6 +32,7 @@ const getFilmmakerFriendlyError = (message: string): string => {
   return friendlyMessage;
 };
 
+}
 export interface BaseNodeEditorProps {
   nodeId: string;
   nodeData: Record<string, unknown>;
@@ -39,6 +40,8 @@ export interface BaseNodeEditorProps {
   onChange: (partial: Record<string, unknown>) => void;
   className?: string;
   children?: React.ReactNode;
+}
+}
 }
 export interface EditorFieldProps {
   label: string;
@@ -49,6 +52,7 @@ export interface EditorFieldProps {
   onChange: (value: unknown) => void;
   placeholder?: string;
   disabled?: boolean;
+}
 }
 export const BaseNodeEditor: React.FC<BaseNodeEditorProps> = ({)
   nodeId,

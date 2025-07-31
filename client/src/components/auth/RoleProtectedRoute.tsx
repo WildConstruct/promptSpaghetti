@@ -8,6 +8,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 import { PrivateRoute } from './PrivateRoute';
 
+}
 interface RoleProtectedRouteProps {
   children: React.ReactNode;,
   requiredRoles: string;
@@ -20,6 +21,7 @@ interface RoleProtectedRouteProps {
   requireAll = false,
   redirectTo = '/unauthorized',
   fallback = null
+}
 }) => {
   const { user, isAuthenticated, isLoading } = useAuthStore();
   const location = useLocation();

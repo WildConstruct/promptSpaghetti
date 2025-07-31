@@ -15,6 +15,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 export interface ReputationDashboardAPI {
   // User Reputation Management
   getUserReputation(userId: string): Promise<UserReputation>;
@@ -38,7 +39,9 @@ export interface ReputationDashboardAPI {
   exportReputationData(filters: any): Promise<any>;
 }
 }
+}
 
+}
 }
 export interface ReputationAPIRequest {
   // User Management
@@ -60,7 +63,9 @@ export interface ReputationAPIRequest {
   batchSize?: number;
 }
 }
+}
 
+}
 }
 export interface ReputationAPIResponse {
   success: boolean;
@@ -71,6 +76,7 @@ export interface ReputationAPIResponse {
     processedCount?: number;
     failedCount?: number;
     processingTime?: number;
+}
 }
   };
 }

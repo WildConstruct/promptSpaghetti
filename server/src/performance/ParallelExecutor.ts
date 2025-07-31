@@ -14,19 +14,23 @@
 import { Graph, Node } from '../../../../packages/core/graphSchema';
 
 }
+}
 export interface ParallelExecutionOptions {
   maxConcurrency?: number;
   enableMemoization?: boolean;
   timeoutMs?: number;
 }
 }
+}
 
+}
 }
 export interface ExecutionResult {
   outputs: string[];
   executionTimeMs: number;
   parallelizationRatio: number; // Ratio of parallel vs sequential execution
   cacheHitRate: number;
+}
 }
 }
 
@@ -265,11 +269,13 @@ export async function executeGraphAdaptive(
  * Performance monitoring utilities
  */
 }
+}
 export interface ParallelExecutionMetrics {
   averageParallelizationRatio: number;
   averageCacheHitRate: number;
   averageExecutionTime: number;
   totalExecutions: number;
+}
 }
 }
 

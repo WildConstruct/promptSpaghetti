@@ -6,6 +6,7 @@
  */
 import { useState, useEffect, useCallback, useMemo } from 'react';
 
+}
 export interface Permission {
   id: string;,
   name: string;
@@ -13,16 +14,21 @@ export interface Permission {
   action: string;
   conditions?: Record<string, any>;
 }
+}
+}
 export interface Role {
   id: string;,
   name: string;
   permissions: Permission;,
   level: number;
 }
+}
+}
 export interface User {
   id: string;,
   roles: Role;
   permissions: Permission;
+}
 interface UsePermissionsReturn {
   user: User | null;,
   loading: boolean;
@@ -31,6 +37,7 @@ interface UsePermissionsReturn {
   hasRole: (roleName: string) => boolean;,
   hasAnyRole: (roleNames: string) => boolean;,
   hasAllRoles: (roleNames: string) => boolean;,
+}
   canAccess: (requiredPermissions: Array<{ resource: string; action: string }>) => boolean;
   getHighestRole: () => Role | null;,
   refreshPermissions: () => Promise<void>;
@@ -38,36 +45,36 @@ interface UsePermissionsReturn {
 // Define standard permission resources and actions
 }
 export const PERMISSIONS = {
-  USERS: {,
+  USERS: {
   VIEW: 'users:view',
   CREATE: 'users:create',
   UPDATE: 'users:update',
   DELETE: 'users:delete',
   MANAGE_ROLES: 'users:manage_roles',
 },
-  FEATURE_TOGGLES: {,
+  FEATURE_TOGGLES: {
   VIEW: 'feature_toggles:view',
   CREATE: 'feature_toggles:create',
   UPDATE: 'feature_toggles:update',
   DELETE: 'feature_toggles:delete',
   TOGGLE: 'feature_toggles:toggle',
 },
-  POLICIES: {,
+  POLICIES: {
   VIEW: 'policies:view',
   CREATE: 'policies:create',
   UPDATE: 'policies:update',
   DELETE: 'policies:delete',
   ASSIGN: 'policies:assign',
 },
-  ANALYTICS: {,
+  ANALYTICS: {
   VIEW: 'analytics:view',
   EXPORT: 'analytics:export',
 },
-  AUDIT: {,
+  AUDIT: {
   VIEW: 'audit:view',
   EXPORT: 'audit:export',
 },
-  SYSTEM: {,
+  SYSTEM: {
   SETTINGS: 'system:settings',
   MONITORING: 'system:monitoring',
 } as const;
@@ -178,6 +185,7 @@ export const usePermissions = (): UsePermissionsReturn => {
 };
 
 // Permission checking helper components
+}
 interface PermissionGateProps {
   resource: string;,
   action: string;
@@ -188,10 +196,12 @@ interface PermissionGateProps {
   action,
   children,
   fallback = null
+}
 }) => {
   const { hasPermission } = usePermissions();
   return hasPermission(resource, action) ? <>{children}</> : <>{fallback}</>;
 };
+}
 interface RoleGateProps {
   roles: string | string;
   requireAll?: boolean;
@@ -202,10 +212,11 @@ interface RoleGateProps {
   requireAll = false,
   children,
   fallback = null
+}
 }) => {
   const { hasRole, hasAnyRole, hasAllRoles } = usePermissions();
   const roleNames = Array.isArray(roles) ? roles : [roles];
-  const hasAccess = requireAll ? hasAllRoles(roleNames) :;
+  const hasAccess = requireAll ? hasAllRoles(roleNames) :
                    roleNames.length === 1 ? hasRole(roleNames[0]) : 
                    hasAnyRole(roleNames);
   return hasAccess ? <>{children}</> : <>{fallback}</>;

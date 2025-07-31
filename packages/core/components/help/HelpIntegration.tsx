@@ -25,6 +25,7 @@ export function withHelp<P extends object>()
 
 // Enhanced input field with integrated help
 
+}
 export interface HelpfulInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   helpId: string;
   helpTitle: string;
@@ -123,6 +124,7 @@ export interface HelpfulInputProps extends React.InputHTMLAttributes<HTMLInputEl
 
 // Enhanced button with integrated help
 
+}
 export interface HelpfulButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   helpId: string;
   helpTitle: string;
@@ -203,6 +205,7 @@ export interface HelpfulButtonProps extends React.ButtonHTMLAttributes<HTMLButto
 
 // Section wrapper with help integration
 
+}
 export interface HelpfulSectionProps {
   helpId: string;
   helpTitle: string;
@@ -215,6 +218,7 @@ export interface HelpfulSectionProps {
   defaultExpanded?: boolean;
   className?: string;
   style?: React.CSSProperties;
+}
 }
 export const HelpfulSection: React.FC<HelpfulSectionProps> = ({)
   helpId,

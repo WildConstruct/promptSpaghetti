@@ -15,6 +15,7 @@ import {
   CLASSIFICATION_LEVELS,
   ClassificationCondition
 } from '../../types/DataClassification';
+}
 interface DataElement {
   id: string;
   name: string;
@@ -38,7 +39,9 @@ interface DataElement {
   dataTypes: string;
   namePatterns: string;
   contentPatterns: string;
+}
 };
+}
 interface BulkOperationState {
   selectedElements: Set<string>;
   operationType: 'manual' | 'template' | 'rules' | 'ai';
@@ -58,6 +61,7 @@ const DEFAULT_TEMPLATES: ClassificationTemplate = [
     criteria: {
   dataTypes: ['personal', 'customer', 'employee'],
       namePatterns: ['*email*', '*phone*', '*ssn*', '*name*', '*address*'],
+}
       contentPatterns: ['\\b\\d{3}-\\d{2}-\\d{4}\\b', '\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2
 }\\b']
   }

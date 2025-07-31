@@ -20,6 +20,7 @@ import { AuditService } from '../auth/services/AuditService';
 // ==========================================
 
 }
+}
 export interface BackupVerificationStep {
   stepId: string;
   stepName: string;
@@ -31,6 +32,7 @@ export interface BackupVerificationStep {
   dependencies?: string[]; // other step IDs that must pass first
   configurable: boolean;
   estimatedDuration: number; // seconds
+}
 }
 }
 
@@ -45,6 +47,7 @@ export enum VerificationStepType {
 }
 
 }
+}
 export interface BackupVerificationResult {
   stepId: string;
   status: VerificationStatus;
@@ -54,6 +57,7 @@ export interface BackupVerificationResult {
   details: VerificationDetails;
   warnings?: string[];
   recommendations?: string[];
+}
 }
 }
 
@@ -67,6 +71,7 @@ export enum VerificationStatus {
 }
 
 }
+}
 export interface VerificationDetails {
   [key: string]: any;
   // Common fields
@@ -78,7 +83,9 @@ export interface VerificationDetails {
   // Step-specific data stored as arbitrary key-value pairs
 }
 }
+}
 
+}
 }
 export interface BackupData {
   backupId: string;
@@ -93,6 +100,7 @@ export interface BackupData {
   retention: BackupRetention;
 }
 }
+}
 
 export enum BackupType {
   FULL = 'full',
@@ -101,6 +109,7 @@ export enum BackupType {
   SNAPSHOT = 'snapshot'
 }
 
+}
 }
 export interface BackupMetadata {
   version: string;
@@ -113,7 +122,9 @@ export interface BackupMetadata {
   customFields: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface BackupEncryption {
   enabled: boolean;
@@ -123,7 +134,9 @@ export interface BackupEncryption {
   verified?: boolean;
 }
 }
+}
 
+}
 }
 export interface BackupRetention {
   policy: string;
@@ -133,7 +146,9 @@ export interface BackupRetention {
   complianceRequirements: string[];
 }
 }
+}
 
+}
 }
 export interface VerificationSession {
   sessionId: string;
@@ -147,6 +162,7 @@ export interface VerificationSession {
   configuration: VerificationConfiguration;
 }
 }
+}
 
 export enum SessionStatus {
   PENDING = 'pending',
@@ -156,6 +172,7 @@ export enum SessionStatus {
   CANCELLED = 'cancelled'
 }
 
+}
 }
 export interface VerificationSummary {
   totalSteps: number;
@@ -169,6 +186,7 @@ export interface VerificationSummary {
   riskLevel: RiskLevel;
 }
 }
+}
 
 export enum RiskLevel {
   LOW = 'low',
@@ -178,6 +196,7 @@ export enum RiskLevel {
 }
 
 }
+}
 export interface VerificationConfiguration {
   stepsEnabled: string[];
   stepsDisabled: string[];
@@ -186,6 +205,7 @@ export interface VerificationConfiguration {
   customParameters: Record<string, any>;
   skipOnWarnings: boolean;
   abortOnCriticalFailure: boolean;
+}
 }
 }
 

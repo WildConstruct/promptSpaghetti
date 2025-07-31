@@ -51,6 +51,7 @@ export type ServiceStatus = 'running' | 'stopped' | 'error' | 'starting' | 'stop
 export type UserStatus = 'active' | 'inactive' | 'suspended' | 'locked' | 'pending';
 export type ProcessStatus = 'running' | 'idle' | 'busy' | 'error' | 'stopped';
 
+}
 export interface SystemService {
   id: string;
   name: string;
@@ -67,6 +68,8 @@ export interface SystemService {
   logs: ServiceLog;
   metrics: ServiceMetrics;
 }
+}
+}
 export interface ServiceLog {
   id: string;
   timestamp: Date;
@@ -75,6 +78,8 @@ export interface ServiceLog {
   service: string;
   details?: Record<string, any>;
 }
+}
+}
 export interface ServiceMetrics {
   cpuUsage: number;
   memoryUsage: number;
@@ -82,6 +87,8 @@ export interface ServiceMetrics {
   errorRate: number;
   responseTime: number;
   throughput: number;
+}
+}
 }
 export interface SystemOverview {
   overallStatus: SystemStatus;
@@ -96,6 +103,8 @@ export interface SystemOverview {
   activeUsers: number;
   backgroundJobs: number;
 }
+}
+}
 export interface StatusControlsProps {
   className?: string;
   adminLevel?: 'admin' | 'super_admin' | 'system';
@@ -106,6 +115,7 @@ export interface StatusControlsProps {
   color: 'text-green-600 bg-green-100',
   icon: CheckCircle,
   actions: ['stop', 'restart', 'pause'],
+}
 },
   stopped: {
   color: 'text-gray-600 bg-gray-100',
@@ -803,6 +813,7 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
 };
 
 // Service Card Component
+}
 interface ServiceCardProps {
   service: SystemService;
   onAction: (serviceId: string, action: string) => void;
@@ -813,6 +824,7 @@ interface ServiceCardProps {
   onAction,
   onSelect,
   adminLevel
+}
 }) => {
   const statusConfig = SERVICE_STATUS_CONFIG[service.status];
   const StatusIcon = statusConfig.icon;
@@ -942,6 +954,7 @@ interface ServiceCardProps {
 };
 
 // Service Detail Modal Component
+}
 interface ServiceDetailModalProps {
   service: SystemService;
   onClose: () => void;
@@ -952,6 +965,7 @@ interface ServiceDetailModalProps {
   onClose,
   onAction,
   adminLevel
+}
 }) => {
   const statusConfig = SERVICE_STATUS_CONFIG[service.status];
   const StatusIcon = statusConfig.icon;

@@ -6,6 +6,7 @@ import { getNodeCategories, getCategoryById } from './NodeCategory';
  * Search result with relevance scoring
  */
 
+}
 export interface SearchResult {
   node: NodeMeta;
   relevance: number;
@@ -14,6 +15,8 @@ export interface SearchResult {
   /**
   * Search options configuration
   */
+}
+}
 }
 export interface SearchOptions {
   fuzzyThreshold?: number;    // 0-1, higher = more fuzzy matching,
@@ -30,6 +33,7 @@ export interface SearchOptions {
   includeCategories: true,
   sortByRelevance: true,
   minimumRelevance: 0.1,
+}
 };
 /**
  * Advanced palette search engine
@@ -126,7 +130,7 @@ export class PaletteSearch {
       categories.forEach(catId => {)
   const category = getCategoryById(catId);
         if (category) {
-          searchFields.push()
+          searchFields.push(
             { field: 'category-name', content: category.name, weight: 1 },
             { field: 'category-desc', content: category.description, weight: 0.5 }
           );
@@ -235,11 +239,13 @@ export class PaletteSearch {
 /**
  * Search index structure
  */
+}
 interface SearchIndex {
   terms: Map<string, TermInfo>;
 /**
  * Term information in search index
  */
+}
 interface TermInfo {
   frequency: number;
   nodes: Set<string>;
@@ -250,6 +256,7 @@ export function highlightSearchTerms(text: string, searchTerms: string): string 
   if (!searchTerms.length) return text;
   let highlighted = text;
   for (const term of searchTerms) {
+}
     const regex = new RegExp(`(${term})`, 'gi');}
     highlighted = highlighted.replace(regex, '<mark>$1</mark>');
   return highlighted;

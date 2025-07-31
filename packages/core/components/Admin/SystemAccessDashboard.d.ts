@@ -9,6 +9,7 @@
  */
 import React from 'react';
 
+}
 interface SystemAccessDashboardProps {
     className?: string;
     userId?: string;
@@ -17,3 +18,4 @@ interface SystemAccessDashboardProps {
 export declare const SystemAccessDashboard: React.FC<SystemAccessDashboardProps>;
 export default SystemAccessDashboard;
 //# sourceMappingURL=SystemAccessDashboard.d.ts.map
+}

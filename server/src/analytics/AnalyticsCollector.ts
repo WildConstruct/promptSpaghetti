@@ -40,6 +40,7 @@ export enum AnalyticsEventType {
  * Base analytics event structure
  */
 }
+}
 export interface AnalyticsEvent {
   id: string;
   type: AnalyticsEventType;
@@ -50,10 +51,12 @@ export interface AnalyticsEvent {
   metadata: Record<string, any>;
 }
 }
+}
 
 /**
  * Graph execution analytics event
  */
+}
 }
 export interface GraphExecutionEvent extends AnalyticsEvent {
   type: AnalyticsEventType.GRAPH_EXECUTION_START | 
@@ -75,6 +78,7 @@ export interface GraphExecutionEvent extends AnalyticsEvent {
  * Node execution analytics event
  */
 }
+}
 export interface NodeExecutionEvent extends AnalyticsEvent {
   type: AnalyticsEventType.NODE_EXECUTION_START | 
         AnalyticsEventType.NODE_EXECUTION_COMPLETE | 
@@ -94,6 +98,7 @@ export interface NodeExecutionEvent extends AnalyticsEvent {
 /**
  * User interaction analytics event
  */
+}
 }
 export interface UserInteractionEvent extends AnalyticsEvent {
   type: AnalyticsEventType.NODE_CREATED | 
@@ -116,6 +121,7 @@ export interface UserInteractionEvent extends AnalyticsEvent {
  * Token usage analytics event
  */
 }
+}
 export interface TokenUsageEvent extends AnalyticsEvent {
   type: AnalyticsEventType.TOKEN_USAGE;
   metadata: {
@@ -134,6 +140,7 @@ export interface TokenUsageEvent extends AnalyticsEvent {
  * Performance metrics event
  */
 }
+}
 export interface PerformanceMetricEvent extends AnalyticsEvent {
   type: AnalyticsEventType.PERFORMANCE_METRIC;
   metadata: {
@@ -149,6 +156,7 @@ export interface PerformanceMetricEvent extends AnalyticsEvent {
 /**
  * Analytics configuration
  */
+}
 }
 export interface AnalyticsConfig {
   /** Enable/disable analytics collection */
@@ -167,10 +175,12 @@ export interface AnalyticsConfig {
   retentionPeriod: number;
 }
 }
+}
 
 /**
  * Analytics data aggregation window
  */
+}
 }
 export interface AnalyticsWindow {
   startTime: number;
@@ -185,6 +195,7 @@ export interface AnalyticsWindow {
     totalTokenUsage: number;
     totalCost: number;
     errorRate: number;
+}
 }
   };
 }

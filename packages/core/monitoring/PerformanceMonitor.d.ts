@@ -7,6 +7,7 @@
 import { EventEmitter } from 'events';
 import { AdvancedExecutionContext } from '../runtime/advanced';
 
+}
 export interface PerformanceMetrics {
     nodeId: string;
     nodeType: string;
@@ -19,6 +20,7 @@ export interface PerformanceMetrics {
         after: number;
         peak: number;
         delta: number;
+}
     };
     contextSize: {
         variableCount: number;
@@ -31,6 +33,7 @@ export interface PerformanceMetrics {
     warnings: string[];
     customMetrics: Map<string, number | string | boolean>;
 
+}
 export interface AggregatedMetrics {
     nodeType: string;
     totalExecutions: number;
@@ -50,6 +53,7 @@ export interface AggregatedMetrics {
     lastUpdated: number;
     optimizationRecommendations: string[];
 
+}
 export interface PerformanceAlert {
     id: string;
     timestamp: number;
@@ -61,6 +65,7 @@ export interface PerformanceAlert {
     details: Record<string, any>;
     resolved: boolean;
 
+}
 export interface PerformanceMonitorConfig {
     enableMemoryTracking: boolean;
     enableContextTracking: boolean;
@@ -129,6 +134,7 @@ export declare class PerformanceMonitor extends EventEmitter {
         activeAlerts: number;
         topPerformingTypes: string[];
         underperformingTypes: string[];
+}
     };
     /**
      * Clear all metrics and reset the monitor

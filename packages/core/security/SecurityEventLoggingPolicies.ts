@@ -145,6 +145,7 @@ export type SecurityEvent = z.infer<typeof SecurityEventSchema>;
 
 // Security Event Policy Configuration
 
+}
 export interface SecurityEventPolicy {
   policy_id: string;
   policy_name: string;
@@ -153,11 +154,12 @@ export interface SecurityEventPolicy {
   enabled: boolean;
   // Detection Configuration
   detection_rules: {
-  conditions: Array<{,
+  conditions: Array<{
   field: string;
   operator: 'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte' | 'contains' | 'regex';
   value: any;
   logic?: 'and' | 'or'
+}
   }>;
     time_window?: number; // milliseconds
     frequency_threshold?: number;

@@ -40,6 +40,7 @@ import VFXChecklistSystem, {
 } from './VFXChecklistSystem';
 import VFXChecklistTemplates, { type VFXChecklistTemplate } from './VFXChecklistTemplates';
 
+}
 export interface VFXChecklistDemoProps {
   title?: string;
   showTemplates?: boolean;
@@ -64,6 +65,7 @@ export interface VFXChecklistDemoProps {
   canApprove: true,
   canAssign: true,
   canViewReports: true,
+}
 }
   {
   id: 'user-vfx-sup',
@@ -846,7 +848,7 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
                     <CardContent>
                       <div className="space-y-3">
                         {Object.entries(analytics.priorityDistribution).map(([priority, count]) => {
-                          const color = priority === 'critical' ? 'bg-red-500' :;
+                          const color = priority === 'critical' ? 'bg-red-500' :
                             priority === 'high' ? 'bg-orange-500' :
                               priority === 'medium' ? 'bg-yellow-500' : 'bg-green-500';
                           return;

@@ -4,6 +4,7 @@
  */
 import { ExtensionPoint, ExtensionPointCategory, extensionPointRegistry } from './ExtensionPointRegistry';
 
+}
 export interface VisualizationOptions {
   format?: 'mermaid' | 'graphviz' | 'json';
   includeInternal?: boolean;
@@ -11,7 +12,9 @@ export interface VisualizationOptions {
   showDependencies?: boolean;
   showInterfaces?: boolean;
   theme?: 'light' | 'dark'
+}
   }
+}
 export interface ExtensionPointNode {
   id: string;
   name: string;
@@ -22,16 +25,21 @@ export interface ExtensionPointNode {
   dependencies: string;
   location: string;
 }
+}
+}
 export interface ExtensionPointEdge {
   source: string;
   target: string;
   type: 'dependency' | 'interface' | 'inheritance';
   label?: string;
 }
+}
+}
 export interface ExtensionPointGraph {
   nodes: ExtensionPointNode;
   edges: ExtensionPointEdge;
   categories: Record<ExtensionPointCategory, ExtensionPointNode>;
+}
 }
 export class ExtensionPointVisualizer {
   private static instance: ExtensionPointVisualizer;

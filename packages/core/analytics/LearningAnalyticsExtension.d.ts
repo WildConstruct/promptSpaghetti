@@ -58,6 +58,7 @@ export declare enum ContentType {
     HELP_CONTENT = "help_content",
     ASSESSMENT = "assessment"
 
+}
 export interface LearningAnalyticsEvent extends AnalyticsEvent {
     learning_context: {
         content_type: ContentType;
@@ -82,6 +83,7 @@ export interface LearningAnalyticsEvent extends AnalyticsEvent {
         satisfaction_score?: number;
     };
 
+}
 export interface TutorialAnalyticsEvent extends LearningAnalyticsEvent {
     tutorial_context: {
         tutorial_id: string;
@@ -98,6 +100,7 @@ export interface TutorialAnalyticsEvent extends LearningAnalyticsEvent {
         real_world_application_success?: boolean;
     };
 
+}
 export interface KnowledgeBaseAnalyticsEvent extends LearningAnalyticsEvent {
     knowledge_context: {
         search_query?: string;
@@ -113,6 +116,7 @@ export interface KnowledgeBaseAnalyticsEvent extends LearningAnalyticsEvent {
         completeness_rating?: number;
     };
 
+}
 export interface CommunityAnalyticsEvent extends LearningAnalyticsEvent {
     contribution_context: {
         contribution_type: string;
@@ -128,6 +132,7 @@ export interface CommunityAnalyticsEvent extends LearningAnalyticsEvent {
         community_reputation_change?: number;
     };
 
+}
 export interface LearningEffectivenessMetrics {
     content_id: string;
     content_type: ContentType;
@@ -141,6 +146,7 @@ export interface LearningEffectivenessMetrics {
         drop_off_rate: number;
         retry_rate: number;
         user_satisfaction_score: number;
+}
     };
     learning_outcomes: {
         skill_acquisition_rate: number;
@@ -168,6 +174,7 @@ export interface LearningEffectivenessMetrics {
         performance_by_learning_style: Record<string, PerformanceMetrics>;
     };
 
+}
 export interface PerformanceMetrics {
     completion_rate: number;
     average_time_minutes: number;
@@ -175,6 +182,7 @@ export interface PerformanceMetrics {
     skill_acquisition_rate: number;
     user_count: number;
 
+}
 export interface UserLearningAnalytics {
     user_id: string;
     analysis_period: string;
@@ -185,9 +193,10 @@ export interface UserLearningAnalytics {
         learning_paths_completed: number;
         knowledge_base_interactions: number;
         community_contributions: number;
+}
     };
     skill_development: {
-        skills_acquired: Array<{,
+        skills_acquired: Array<{
             skill_domain: SkillDomain;
             previous_level: SkillLevel;
             current_level: SkillLevel;
@@ -219,6 +228,7 @@ export interface UserLearningAnalytics {
         community_engagement_impact: number;
     };
 
+}
 export interface LearningSessionPattern {
     pattern_type: 'intensive' | 'distributed' | 'sporadic' | 'consistent';
     average_session_duration: number;
@@ -227,6 +237,7 @@ export interface LearningSessionPattern {
     interruption_frequency: number;
     multi_tasking_tendency: number;
 
+}
 export interface HelpSeekingBehavior {
     help_request_frequency: number;
     preferred_help_sources: string[];
@@ -234,6 +245,7 @@ export interface HelpSeekingBehavior {
     community_help_participation: number;
     documentation_usage_rate: number;
 
+}
 export interface CollaborationEngagement {
     peer_interaction_frequency: number;
     mentoring_participation: number;
@@ -241,6 +253,7 @@ export interface CollaborationEngagement {
     community_discussion_engagement: number;
     collaboration_success_rate: number;
 
+}
 export interface CommunityKnowledgeMetrics {
     community_id: string;
     analysis_period: string;
@@ -251,6 +264,7 @@ export interface CommunityKnowledgeMetrics {
         contribution_quality_score: number;
         publication_rate: number;
         update_frequency: number;
+}
     };
     knowledge_sharing: {
         knowledge_transfer_events: number;
@@ -281,6 +295,7 @@ export interface CommunityKnowledgeMetrics {
         knowledge_gap_closure_rate: number;
     };
 
+}
 export interface KnowledgeBaseUsageMetrics {
     knowledge_base_id: string;
     analysis_period: string;
@@ -290,6 +305,7 @@ export interface KnowledgeBaseUsageMetrics {
         search_success_rate: number;
         content_discovery_rate: number;
         repeat_usage_rate: number;
+}
     };
     content_effectiveness: {
         content_utilization_rate: Record<ContentType, number>;
@@ -299,12 +315,12 @@ export interface KnowledgeBaseUsageMetrics {
         outdated_content_detection: OutdatedContent[];
     };
     search_intelligence: {
-        popular_search_terms: Array<{,
+        popular_search_terms: Array<{
             term: string;
             frequency: number;
             success_rate: number;
         }>;
-        failed_search_patterns: Array<{,
+        failed_search_patterns: Array<{
             pattern: string;
             frequency: number;
             suggested_content: string[];
@@ -319,6 +335,7 @@ export interface KnowledgeBaseUsageMetrics {
         learning_progression_tracking: LearningProgressionMetric[];
     };
 
+}
 export interface ContentGap {
     gap_type: 'missing_content' | 'insufficient_depth' | 'outdated_information' | 'accessibility_issue';
     topic_area: string;
@@ -327,6 +344,7 @@ export interface ContentGap {
     business_impact: 'high' | 'medium' | 'low';
     suggested_content_type: ContentType;
 
+}
 export interface OutdatedContent {
     content_id: string;
     content_type: ContentType;
@@ -336,6 +354,7 @@ export interface OutdatedContent {
     accuracy_decline_indicators: string[];
     update_priority: 'urgent' | 'high' | 'medium' | 'low';
 
+}
 export interface QueryRefinementPattern {
     initial_query: string;
     refined_query: string;
@@ -343,6 +362,7 @@ export interface QueryRefinementPattern {
     success_improvement: number;
     frequency: number;
 
+}
 export interface UserPath {
     path_pattern: string[];
     frequency: number;
@@ -350,6 +370,7 @@ export interface UserPath {
     average_time_minutes: number;
     typical_outcomes: string[];
 
+}
 export interface CrossContentNavigation {
     from_content_type: ContentType;
     to_content_type: ContentType;
@@ -357,6 +378,7 @@ export interface CrossContentNavigation {
     success_correlation: number;
     typical_transition_triggers: string[];
 
+}
 export interface LearningProgressionMetric {
     progression_type: 'linear' | 'branching' | 'circular' | 'exploratory';
     skill_development_rate: number;
@@ -364,6 +386,7 @@ export interface LearningProgressionMetric {
     user_satisfaction_progression: number;
     marketplace_outcome_correlation: number;
 
+}
 export interface LearningAnalyticsService {
     trackLearningEvent(event: LearningAnalyticsEvent): Promise<void>;
     trackTutorialEvent(event: TutorialAnalyticsEvent): Promise<void>;
@@ -394,18 +417,21 @@ export interface LearningAnalyticsService {
     integrateWithMarketplaceAnalytics(correlationQuery: AnalyticsCorrelationQuery): Promise<CrossPlatformInsights>;
     generateComprehensiveReport(reportConfig: LearningAnalyticsReportConfig): Promise<ComprehensiveAnalyticsReport>;
 
+}
 export interface LearningTrend {
     trend_type: 'skill_demand' | 'content_popularity' | 'learning_pattern' | 'community_growth';
     trend_description: string;
     confidence_score: number;
     impact_assessment: 'high' | 'medium' | 'low';
-    time_series_data: Array<{,
+    time_series_data: Array<{
         date: Date;
         value: number;
+}
     }>;
     contributing_factors: string[];
     projected_continuation: boolean;
 
+}
 export interface PerformanceAnomaly {
     anomaly_type: 'sudden_drop' | 'sudden_spike' | 'gradual_decline' | 'stagnation';
     content_id: string;
@@ -416,6 +442,7 @@ export interface PerformanceAnomaly {
     potential_causes: string[];
     recommended_actions: string[];
 
+}
 export interface PersonalizedInsight {
     insight_type: 'learning_opportunity' | 'skill_gap' | 'performance_improvement' | 'engagement_optimization';
     title: string;
@@ -425,6 +452,7 @@ export interface PersonalizedInsight {
     effort_required: 'low' | 'medium' | 'high';
     timeline_estimate: string;
 
+}
 export interface LearningPathAnalytics {
     learning_path_id: string;
     analysis_period: string;
@@ -432,9 +460,10 @@ export interface LearningPathAnalytics {
         total_enrollments: number;
         completion_rate: number;
         average_completion_time: number;
-        drop_off_points: Array<{,
+        drop_off_points: Array<{
             step: string;
             drop_off_rate: number;
+}
         }>;
     };
     effectiveness_metrics: {
@@ -449,6 +478,7 @@ export interface LearningPathAnalytics {
         user_preference_alignment: number;
     };
 
+}
 export interface SkillDevelopmentROI {
     user_id: string;
     analysis_period: string;
@@ -456,6 +486,7 @@ export interface SkillDevelopmentROI {
         time_invested_hours: number;
         learning_activities_completed: number;
         community_contributions: number;
+}
     };
     outcome_metrics: {
         skills_acquired: number;
@@ -470,6 +501,7 @@ export interface SkillDevelopmentROI {
         overall_roi_score: number;
     };
 
+}
 export interface CommunityHealthScore {
     community_id: string;
     overall_health_score: number;
@@ -480,6 +512,7 @@ export interface CommunityHealthScore {
         knowledge_sharing: number;
         collaboration_effectiveness: number;
         innovation_rate: number;
+}
     };
     health_trends: {
         trend_direction: 'improving' | 'stable' | 'declining';
@@ -488,6 +521,7 @@ export interface CommunityHealthScore {
         recommended_interventions: string[];
     };
 
+}
 export interface KnowledgeTransferMetrics {
     analysis_period: string;
     transfer_volume: {
@@ -495,6 +529,7 @@ export interface KnowledgeTransferMetrics {
         knowledge_sharing_events: number;
         peer_learning_interactions: number;
         expert_guidance_sessions: number;
+}
     };
     transfer_effectiveness: {
         knowledge_adoption_rate: number;
@@ -508,6 +543,7 @@ export interface KnowledgeTransferMetrics {
         bottleneck_identification: KnowledgeBottleneck[];
     };
 
+}
 export interface KnowledgeHub {
     hub_id: string;
     hub_type: 'individual_expert' | 'content_cluster' | 'community_group';
@@ -516,6 +552,7 @@ export interface KnowledgeHub {
     transfer_reach: number;
     expertise_recognition: number;
 
+}
 export interface TransferPathway {
     pathway_id: string;
     source_type: 'tutorial' | 'community' | 'expert' | 'content';
@@ -524,6 +561,7 @@ export interface TransferPathway {
     volume: number;
     success_rate: number;
 
+}
 export interface KnowledgeBottleneck {
     bottleneck_type: 'content_gap' | 'access_barrier' | 'quality_issue' | 'discovery_problem';
     impact_severity: 'high' | 'medium' | 'low';
@@ -531,6 +569,7 @@ export interface KnowledgeBottleneck {
     resolution_priority: number;
     suggested_solutions: string[];
 
+}
 export interface RealTimeLearningActivity {
     active_learners: number;
     tutorials_in_progress: number;
@@ -539,6 +578,7 @@ export interface RealTimeLearningActivity {
     skill_demonstrations: number;
     current_learning_velocity: number;
 
+}
 export interface RealTimeCommunityEngagement {
     active_contributors: number;
     contributions_in_review: number;
@@ -547,6 +587,7 @@ export interface RealTimeCommunityEngagement {
     community_discussions: number;
     collaboration_sessions: number;
 
+}
 export interface RealTimeKnowledgeActivity {
     search_queries_per_minute: number;
     content_views_per_minute: number;
@@ -555,6 +596,7 @@ export interface RealTimeKnowledgeActivity {
     user_satisfaction_realtime: number;
     content_effectiveness_realtime: number;
 
+}
 export interface LearningAnalyticsQuery extends AnalyticsQuery {
     learning_filters: {
         skill_domains?: SkillDomain[];
@@ -562,6 +604,7 @@ export interface LearningAnalyticsQuery extends AnalyticsQuery {
         content_types?: ContentType[];
         learning_objectives?: string[];
         user_segments?: LearningAnalyticsSegment[];
+}
     };
     performance_filters: {
         min_completion_rate?: number;
@@ -573,6 +616,7 @@ export interface LearningAnalyticsQuery extends AnalyticsQuery {
         };
     };
 
+}
 export interface AnalyticsCorrelationQuery {
     primary_metrics: LearningMetricType[];
     marketplace_metrics: MetricType[];
@@ -580,29 +624,32 @@ export interface AnalyticsCorrelationQuery {
     time_alignment: 'synchronous' | 'lagged' | 'causal';
     user_segment?: LearningAnalyticsSegment;
 
+}
 export interface CrossPlatformInsights {
     correlation_strength: number;
-    significant_correlations: Array<{,
+    significant_correlations: Array<{
         learning_metric: LearningMetricType;
         marketplace_metric: MetricType;
         correlation_coefficient: number;
         statistical_significance: number;
         business_interpretation: string;
+}
     }>;
-    causal_relationships: Array<{,
+    causal_relationships: Array<{
         cause_metric: string;
         effect_metric: string;
         causal_strength: number;
         time_lag_hours: number;
         confidence_interval: [number, number];
     }>;
-    actionable_insights: Array<{,
+    actionable_insights: Array<{
         insight: string;
         impact_potential: 'high' | 'medium' | 'low';
         implementation_effort: 'low' | 'medium' | 'high';
         roi_estimate: string;
     }>;
 
+}
 export interface LearningDataExport {
     export_id: string;
     export_timestamp: Date;
@@ -612,6 +659,7 @@ export interface LearningDataExport {
         time_range: {
             start: Date;
             end: Date;
+}
         };
         metrics_included: string[];
         privacy_level: 'aggregated' | 'anonymized' | 'pseudonymized'
@@ -619,6 +667,7 @@ export interface LearningDataExport {
     download_url: string;
     expiration_date: Date;
 
+}
 export interface LearningAnalyticsReportConfig {
     report_type: 'executive_summary' | 'detailed_analysis' | 'performance_review' | 'trend_analysis';
     target_audience: 'executives' | 'educators' | 'product_team' | 'community_managers';
@@ -630,8 +679,10 @@ export interface LearningAnalyticsReportConfig {
         include_visualizations: boolean;
         include_raw_data: boolean;
         privacy_level: 'high' | 'medium' | 'low'
+}
   };
 
+}
 export interface ComprehensiveAnalyticsReport {
     report_id: string;
     generated_at: Date;
@@ -641,8 +692,9 @@ export interface ComprehensiveAnalyticsReport {
         major_trends: string[];
         critical_insights: string[];
         priority_recommendations: string[];
+}
     };
-    detailed_sections: Array<{,
+    detailed_sections: Array<{
         section_title: string;
         metrics: Record<string, any>;
         analysis: string;

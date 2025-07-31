@@ -3,6 +3,7 @@ import { AdvancedRuntimeNode, AdvancedExecutionContext, AdvancedNodeData, Valida
  * A conditional branch with condition expression and output value
  */
 
+}
 export interface ConditionalBranch {
     /** JavaScript-like expression to evaluate (e.g., "variable > 5", "hasFlag('debug')") */
     condition: string;
@@ -16,6 +17,7 @@ export interface ConditionalBranch {
  * Configuration for conditional evaluation
  */
 
+}
 export interface ConditionalConfig {
     /** Whether to allow access to execution context variables */
     allowVariableAccess?: boolean;
@@ -93,3 +95,4 @@ export declare class ConditionalBuilder {
  */
 export declare function conditional(_______id: string): ConditionalBuilder;
 //# sourceMappingURL=Conditional.d.ts.map
+}

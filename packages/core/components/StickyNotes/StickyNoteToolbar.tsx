@@ -11,6 +11,7 @@
  */
 import React, { useState } from 'react';
 import { StickyNote, StickyNoteColor, StickyNoteCategory } from '../../types/StickyNotes';
+}
 interface StickyNoteToolbarProps {
   selectedNotes: StickyNote;
   onColorChange: (color: StickyNoteColor) => void;
@@ -19,6 +20,7 @@ interface StickyNoteToolbarProps {
   onSettingsChange: (settings: unknown) => void;
   settings: unknown;
   className?: string;
+}
 const COLORS: { value: StickyNoteColor; label: string; bg: string; border: string }[] = [
   { value: 'yellow', label: 'Yellow', bg: '#FEF3C7', border: '#F59E0B' },
   { value: 'blue', label: 'Blue', bg: '#DBEAFE', border: '#3B82F6' },

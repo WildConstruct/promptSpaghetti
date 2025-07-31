@@ -25,6 +25,7 @@ import { MetricsCollector } from '../performance/MetricsCollector';
 // ============================================================================
 
 }
+}
 interface APIResponse {
   success: boolean;
   data?: unknown;
@@ -33,7 +34,9 @@ interface APIResponse {
   request_id: string;
 }
 }
+}
 
+}
 }
 interface InitializeQuotaManagementRequest {
   config: APIQuotaManagementConfig;
@@ -41,7 +44,9 @@ interface InitializeQuotaManagementRequest {
   enable_auto_optimization: boolean;
 }
 }
+}
 
+}
 }
 interface RunQuotaAnalysisRequest {
   analysis_scope: 'comprehensive' | 'forecasting_only' | 'optimization_only' | 'governance_only';
@@ -50,7 +55,9 @@ interface RunQuotaAnalysisRequest {
   include_business_intelligence: boolean;
 }
 }
+}
 
+}
 }
 interface ApplyQuotaRecommendationsRequest {
   recommendation_ids: string[];
@@ -59,7 +66,9 @@ interface ApplyQuotaRecommendationsRequest {
   approval_workflow_enabled: boolean;
 }
 }
+}
 
+}
 }
 interface UpdateQuotaConfigurationRequest {
   config_updates: Partial<APIQuotaManagementConfig>;
@@ -67,7 +76,9 @@ interface UpdateQuotaConfigurationRequest {
   validate_before_apply: boolean;
 }
 }
+}
 
+}
 }
 interface GenerateUsageForecastRequest {
   forecast_type: 'short_term' | 'long_term' | 'hybrid';
@@ -77,12 +88,15 @@ interface GenerateUsageForecastRequest {
   forecasting_algorithms?: ('time_series' | 'regression' | 'neural_network' | 'ensemble')[];
 }
 }
+}
 
+}
 }
 interface GetQuotaInsightsRequest {
   insight_types: ('optimization_opportunities' | 'risk_assessments' | 'business_impact' | 'governance_metrics')[];
   aggregation_level: 'global' | 'tenant' | 'endpoint' | 'detailed';
   time_window_hours: number;
+}
 }
 }
 

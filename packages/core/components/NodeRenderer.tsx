@@ -2,6 +2,7 @@ import React, { memo, useState, useRef, useEffect } from 'react';
 import { Handle, Position } from 'reactflow';
 import { NodeMeta } from '../Palette';
 import { useSmoothHover, globalAnimationManager } from '../utils/smoothAnimations';
+}
 interface NodeRendererProps {
   id: string;
   data: Record<string, unknown>;
@@ -16,6 +17,7 @@ interface NodeRendererProps {
   onSelect,
   getNodeMeta,
   getCategoryColor
+}
 }) => {
   const [_____isCreating, setIsCreating] = useState(false);
   const [isDeleting, _____setIsDeleting] = useState(false);

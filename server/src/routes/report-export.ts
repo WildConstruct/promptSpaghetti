@@ -24,12 +24,15 @@ const exportService = new ReportExportService('./exports');
  * Request/Response schemas
  */
 }
+}
 interface ExportRequestBody {
   reportData: ReportData;
   config: ExportConfig;
 }
 }
+}
 
+}
 }
 interface ScheduleExportBody {
   name: string;
@@ -43,16 +46,19 @@ interface ScheduleExportBody {
     dayOfMonth?: number;
     cron?: string;
 }
+}
   };
   enabled?: boolean;
 }
 
+}
 }
 interface BulkExportBody {
   reports: Array<{
     name: string;
     reportData: ReportData;
     config: ExportConfig;
+}
 }
   }>;
   options?: {

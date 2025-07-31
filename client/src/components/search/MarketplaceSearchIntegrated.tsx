@@ -9,6 +9,7 @@ import React, { useCallback, useState } from 'react';
 import { UnifiedSearchSystem } from './UnifiedSearchSystem';
 import { SearchQuery, SearchResult } from './SearchContext';
 import { searchApiService, Template } from '../../services/searchApiService';
+}
 interface MarketplaceSearchProps {
   // UI customization
   placeholder?: string;
@@ -27,6 +28,7 @@ interface MarketplaceSearchProps {
   className?: string;
 
 // Default template renderer
+}
 const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {)
   template: Template;,
   index: number;

@@ -22,6 +22,7 @@ import * as path from 'path';
 // =============================================================================
 
 }
+}
 export interface QualityMetricsConfig {
   enabled: boolean;
   collectRealTime: boolean;
@@ -43,6 +44,7 @@ export interface QualityMetricsConfig {
     documentation: boolean;
     buildHealth: boolean;
 }
+}
   };
   
   // Caching and performance
@@ -60,11 +62,13 @@ export interface QualityMetricsConfig {
 }
 
 }
+}
 export interface QualityThresholds {
   testCoverage: {
     minimum: number; // percentage
     target: number; // percentage
     critical: number; // percentage below which alerts fire
+}
 }
   };
   
@@ -94,6 +98,7 @@ export interface QualityThresholds {
 }
 
 }
+}
 export interface QualityMetrics {
   timestamp: Date;
   overall: OverallQualityScore;
@@ -118,9 +123,11 @@ export interface QualityMetrics {
     lastUpdated: Date;
     version: string;
 }
+}
   };
 }
 
+}
 }
 export interface OverallQualityScore {
   score: number; // 0-100
@@ -137,6 +144,7 @@ export interface OverallQualityScore {
     documentation: number;
     buildHealth: number;
 }
+}
   };
   
   // Weightings used in calculation
@@ -151,6 +159,7 @@ export interface OverallQualityScore {
 }
 
 }
+}
 export interface TestCoverageMetrics {
   overall: {
     percentage: number;
@@ -160,6 +169,7 @@ export interface TestCoverageMetrics {
     branchesCovered: number;
     functionsTotal: number;
     functionsCovered: number;
+}
 }
   };
   
@@ -178,12 +188,14 @@ export interface TestCoverageMetrics {
 }
 
 }
+}
 export interface CodeQualityMetrics {
   complexity: {
     average: number;
     maximum: number;
     distribution: ComplexityDistribution;
     highComplexityFiles: string[];
+}
 }
   };
   
@@ -216,6 +228,7 @@ export interface CodeQualityMetrics {
 }
 
 }
+}
 export interface PerformanceQualityMetrics {
   responseTime: {
     average: number;
@@ -223,6 +236,7 @@ export interface PerformanceQualityMetrics {
     p90: number;
     p95: number;
     p99: number;
+}
 }
   };
   
@@ -260,6 +274,7 @@ export interface PerformanceQualityMetrics {
 }
 
 }
+}
 export interface SecurityQualityMetrics {
   vulnerabilities: {
     total: number;
@@ -268,6 +283,7 @@ export interface SecurityQualityMetrics {
     medium: number;
     low: number;
     trends: number[];
+}
 }
   };
   
@@ -298,12 +314,14 @@ export interface SecurityQualityMetrics {
 }
 
 }
+}
 export interface DocumentationQualityMetrics {
   coverage: {
     apiDocumentation: number; // percentage
     codeDocumentation: number; // percentage
     userGuides: number; // percentage
     overall: number; // percentage
+}
 }
   };
   
@@ -328,12 +346,14 @@ export interface DocumentationQualityMetrics {
 }
 
 }
+}
 export interface BuildHealthMetrics {
   builds: {
     successRate: number; // percentage last 30 days
     averageDuration: number; // minutes
     failureReasons: BuildFailureReason[];
     trends: number[];
+}
 }
   };
   
@@ -360,6 +380,7 @@ export interface BuildHealthMetrics {
 }
 
 }
+}
 export interface QualityTrends {
   overall: TrendData;
   testCoverage: TrendData;
@@ -370,7 +391,9 @@ export interface QualityTrends {
   buildHealth: TrendData;
 }
 }
+}
 
+}
 }
 export interface TrendData {
   daily: number[];
@@ -381,7 +404,9 @@ export interface TrendData {
   projection: number; // projected value in 30 days
 }
 }
+}
 
+}
 }
 export interface QualityRecommendation {
   id: string;
@@ -402,6 +427,7 @@ export interface QualityRecommendation {
     projectedValue: number;
     confidence: number; // 0-100
 }
+}
   };
   
   // Related items
@@ -414,6 +440,7 @@ export interface QualityRecommendation {
   updatedAt: Date;
 }
 
+}
 }
 export interface QualityAlert {
   id: string;
@@ -439,8 +466,10 @@ export interface QualityAlert {
   resolvedAt?: Date;
 }
 }
+}
 
 // Supporting interfaces
+}
 }
 interface PackageCoverageMetrics {
   name: string;
@@ -449,7 +478,9 @@ interface PackageCoverageMetrics {
   linesCovered: number;
 }
 }
+}
 
+}
 }
 interface ComponentCoverageMetrics {
   name: string;
@@ -459,7 +490,9 @@ interface ComponentCoverageMetrics {
   uncoveredPaths: number;
 }
 }
+}
 
+}
 }
 interface CoverageHotspot {
   file: string;
@@ -469,7 +502,9 @@ interface CoverageHotspot {
   reason: string;
 }
 }
+}
 
+}
 }
 interface ComplexityDistribution {
   '1-5': number;
@@ -479,7 +514,9 @@ interface ComplexityDistribution {
   '50+': number;
 }
 }
+}
 
+}
 }
 interface DuplicationBlock {
   lines: number;
@@ -487,7 +524,9 @@ interface DuplicationBlock {
   similarity: number; // percentage
 }
 }
+}
 
+}
 }
 interface FileMaintainability {
   file: string;
@@ -497,7 +536,9 @@ interface FileMaintainability {
   issues: string[];
 }
 }
+}
 
+}
 }
 interface LintRuleBreakdown {
   rule: string;
@@ -506,7 +547,9 @@ interface LintRuleBreakdown {
   trend: 'increasing' | 'stable' | 'decreasing';
 }
 }
+}
 
+}
 }
 interface TechnicalDebtBreakdown {
   category: string;
@@ -515,7 +558,9 @@ interface TechnicalDebtBreakdown {
   priority: 'low' | 'medium' | 'high' | 'critical';
 }
 }
+}
 
+}
 }
 interface LoadTestResult {
   timestamp: Date;
@@ -527,7 +572,9 @@ interface LoadTestResult {
   passed: boolean;
 }
 }
+}
 
+}
 }
 interface LicenseBreakdown {
   license: string;
@@ -536,7 +583,9 @@ interface LicenseBreakdown {
   risk: 'low' | 'medium' | 'high';
 }
 }
+}
 
+}
 }
 interface SecurityCategoryBreakdown {
   category: string;
@@ -544,7 +593,9 @@ interface SecurityCategoryBreakdown {
   severity: 'low' | 'medium' | 'high' | 'critical';
 }
 }
+}
 
+}
 }
 interface ComplianceFrameworkStatus {
   framework: string; // e.g., 'GDPR', 'SOX', 'ISO27001'
@@ -553,7 +604,9 @@ interface ComplianceFrameworkStatus {
   lastAssessed: Date;
 }
 }
+}
 
+}
 }
 interface ComplianceGap {
   framework: string;
@@ -562,7 +615,9 @@ interface ComplianceGap {
   priority: 'low' | 'medium' | 'high' | 'critical';
 }
 }
+}
 
+}
 }
 interface BuildFailureReason {
   reason: string;
@@ -571,7 +626,9 @@ interface BuildFailureReason {
   trend: 'increasing' | 'stable' | 'decreasing';
 }
 }
+}
 
+}
 }
 interface SlowTest {
   name: string;
@@ -580,7 +637,9 @@ interface SlowTest {
   trend: 'improving' | 'stable' | 'degrading';
 }
 }
+}
 
+}
 }
 interface PipelineStage {
   name: string;
@@ -589,13 +648,16 @@ interface PipelineStage {
   bottleneck: boolean;
 }
 }
+}
 
+}
 }
 interface RecommendationAction {
   description: string;
   type: 'code_change' | 'configuration' | 'process' | 'tooling';
   effort: 'low' | 'medium' | 'high';
   automated: boolean;
+}
 }
 }
 

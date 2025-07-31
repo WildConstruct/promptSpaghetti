@@ -60,6 +60,8 @@ export enum TimeoutPolicy {
   locationTrustFactor: number; // 0-1, affects timeout duration,
   // Activity Tracking
 }
+}
+}
 export interface ActivityData {
   timestamp: Date;
   type: 'mouse' | 'keyboard' | 'touch' | 'api' | 'navigation' | 'interaction';
@@ -68,6 +70,8 @@ export interface ActivityData {
   duration?: number;
   metadata?: Record<string, any>;
   // Session Timeout State
+}
+}
 }
 export interface SessionTimeoutState {
   sessionId: string;
@@ -92,12 +96,14 @@ export interface SessionTimeoutState {
   peakHours: number;
   averageSessionLength: number;
   typicalActivityLevel: ActivityLevel;
+}
 };
   // Status
   status: 'active' | 'warning' | 'grace' | 'expired' | 'extended';
   timeoutReason?: TimeoutReason;
 
 // Timeout Event
+}
 }
 export interface TimeoutEvent {
   sessionId: string;
@@ -112,6 +118,7 @@ export interface TimeoutEvent {
   * Comprehensive session timeout management service
   */
 }
+}
 export class SessionTimeoutController extends EventEmitter {
   private sessionStates: Map<string, SessionTimeoutState> = new Map();
   private timeoutTimers: Map<string, NodeJS.Timeout> = new Map();
@@ -124,8 +131,7 @@ export class SessionTimeoutController extends EventEmitter {
   /**
   * Initialize timeout control for a session
   */
-  public initializeSession(()
-  sessionId: string,
+  public initializeSession((sessionId: string,
   configuration: Partial<TimeoutConfiguration>): SessionTimeoutState {,
   const defaultConfig: TimeoutConfiguration = {,
   sessionId,
@@ -204,9 +210,9 @@ export class SessionTimeoutController extends EventEmitter {
   /**
    * Extend session timeout
    */
-  public extendSession(()
+  public extendSession(((
     sessionId: string,
-    reason: 'manual' | 'activity' | 'critical' | 'grace' = 'manual',
+    reason: 'manual' | 'activity' | 'critical' | 'grace' = 'manual'
   ): boolean {
     const state = this.sessionStates.get(sessionId);
     if (!state || !state.isActive) {

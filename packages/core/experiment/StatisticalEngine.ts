@@ -11,6 +11,7 @@ import {
   ExperimentInsight
 } from '../types/experiment';
 
+}
 export interface StatisticalTestResult {
   pValue: number;
   testStatistic: number;
@@ -20,17 +21,22 @@ export interface StatisticalTestResult {
   significant: boolean;
   practicallySignificant: boolean;
 }
+}
+}
 export interface BayesianResult {
   posteriorProbability: number;
   credibleInterval: [number, number];
   probabilityToBeatControl: number;
   expectedLoss: number;
 }
+}
+}
 export interface SampleSizeCalculation {
   requiredSampleSize: number;
   estimatedDuration: number; // hours,
   powerAchieved: number;
   minimumDetectableEffect: number;
+}
 }
 export class StatisticalEngine {
   private confidenceLevel: number;

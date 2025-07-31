@@ -18,6 +18,7 @@ import * as crypto from 'crypto';
 // =============================================================================
 
 }
+}
 export interface ToggleOverviewConfig {
   // General settings
   enabled: boolean;
@@ -32,6 +33,7 @@ export interface ToggleOverviewConfig {
     enableRealTime: boolean;
     maxWidgets: number;
     defaultLayout: string;
+}
 }
   };
   
@@ -127,6 +129,7 @@ export enum MetricType {
 }
 
 }
+}
 export interface HealthThreshold {
   metric: MetricType;
   warningThreshold: number;
@@ -135,7 +138,9 @@ export interface HealthThreshold {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface DashboardWidget {
   widgetId: string;
@@ -144,6 +149,7 @@ export interface DashboardWidget {
   description: string;
   
   // Position and sizing
+}
 }
   position: { x: number; y: number; width: number; height: number };
   
@@ -175,13 +181,16 @@ export interface DashboardWidget {
 }
 
 }
+}
 export interface WidgetAction {
   actionType: 'drill_down' | 'navigate' | 'filter' | 'export';
   actionConfig: Record<string, any>;
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface ToggleOverviewSummary {
   // Basic statistics
@@ -222,7 +231,9 @@ export interface ToggleOverviewSummary {
   lastUpdated: Date;
 }
 }
+}
 
+}
 }
 export interface CategorySummary {
   category: string;
@@ -235,7 +246,9 @@ export interface CategorySummary {
   changeFrequency: number;
 }
 }
+}
 
+}
 }
 export interface PrioritySummary {
   priority: string;
@@ -246,7 +259,9 @@ export interface PrioritySummary {
   avgTimeToApproval: number;
 }
 }
+}
 
+}
 }
 export interface Issue {
   issueId: string;
@@ -261,7 +276,9 @@ export interface Issue {
   resolutionNotes?: string;
 }
 }
+}
 
+}
 }
 export interface TrendIndicator {
   metric: MetricType;
@@ -272,7 +289,9 @@ export interface TrendIndicator {
   significance: 'none' | 'low' | 'medium' | 'high';
 }
 }
+}
 
+}
 }
 export interface AnalyticsData {
   timeRange: TimeRange;
@@ -284,7 +303,9 @@ export interface AnalyticsData {
   insights: Insight[];
 }
 }
+}
 
+}
 }
 export interface DataPoint {
   timestamp: Date;
@@ -292,7 +313,9 @@ export interface DataPoint {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface AggregatedMetric {
   metric: MetricType;
@@ -305,7 +328,9 @@ export interface AggregatedMetric {
   standardDeviation: number;
 }
 }
+}
 
+}
 }
 export interface TrendAnalysis {
   metric: MetricType;
@@ -316,15 +341,19 @@ export interface TrendAnalysis {
   forecast: ForecastPoint[];
 }
 }
+}
 
+}
 }
 export interface ForecastPoint {
   timestamp: Date;
   predictedValue: number;
 }
+}
   confidenceInterval: { lower: number; upper: number };
 }
 
+}
 }
 export interface Correlation {
   metric1: MetricType;
@@ -334,7 +363,9 @@ export interface Correlation {
   relationship: 'positive' | 'negative' | 'none';
 }
 }
+}
 
+}
 }
 export interface Anomaly {
   timestamp: Date;
@@ -346,7 +377,9 @@ export interface Anomaly {
   possibleCauses: string[];
 }
 }
+}
 
+}
 }
 export interface Insight {
   insightId: string;
@@ -360,7 +393,9 @@ export interface Insight {
   relatedMetrics: MetricType[];
 }
 }
+}
 
+}
 }
 export interface ToggleReport {
   reportId: string;
@@ -383,6 +418,7 @@ export interface ToggleReport {
   // Report metadata
   generatedBy: string;
   generatedAt: Date;
+}
 }
   reportPeriod: { start: Date; end: Date };
   version: string;

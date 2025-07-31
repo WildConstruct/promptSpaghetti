@@ -21,12 +21,16 @@ export enum ConnectionState {
   lastMeasurement: number;
   measurementCount: number;
 }
+}
+}
 export interface NetworkInfo {
   type: 'wifi' | 'cellular' | 'ethernet' | 'unknown';
   effectiveType: '2g' | '3g' | '4g' | 'slow-2g' | 'unknown';
   downlink: number;
   rtt: number;
   saveData: boolean;
+}
+}
 }
 export interface ConnectionStateData {
   state: ConnectionState;
@@ -38,11 +42,13 @@ export interface ConnectionStateData {
   totalDowntime: number;
   metrics: ConnectionMetrics;
   networkInfo: NetworkInfo | null;
-  stateHistory: Array<{,
+  stateHistory: Array<{
   state: ConnectionState;
   timestamp: number;
   reason?: string;
+}
 }>;
+}
 }
 export interface ConnectionStateConfig {
   pingInterval: number;
@@ -51,6 +57,7 @@ export interface ConnectionStateConfig {
   excellent: number;
   good: number;
   fair: number;
+}
 };
   packetLossThreshold: {
   excellent: number;
@@ -235,6 +242,7 @@ export class ConnectionStateManager extends EventEmitter {
    * Perform connection test
    */
   async testConnection(): Promise<ConnectionMetrics> {
+
   const startTime = performance.now();
   try {
   const response = await fetch(this.config.onlineCheckUrl, {)

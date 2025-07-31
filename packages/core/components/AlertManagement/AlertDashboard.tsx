@@ -36,6 +36,7 @@ import {
   AlertType as AlertTypeEnum,
   AlertCategory
 } from '../../services/AlertSystem';
+}
 interface AlertDashboardProps {
   className?: string;
   /**
@@ -47,6 +48,7 @@ interface AlertDashboardProps {
   badgeColor: 'bg-red-100 text-red-800',
   icon: AlertOctagon,
   priority: 5,
+}
 },
   high: {
   color: 'text-orange-700 bg-orange-50 border-orange-200',
@@ -380,6 +382,7 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
 /**
  * Alert Card Component
  */
+}
 interface AlertCardProps {
   alert: AlertType;
   onAcknowledge: (id: string) => void;
@@ -392,6 +395,7 @@ interface AlertCardProps {
   onResolve,
   onSuppress,
   onClick
+}
 }) => {
   const severityConfig = SEVERITY_CONFIG[alert.severity];
   const statusConfig = STATUS_CONFIG[alert.status];
@@ -450,6 +454,7 @@ interface AlertCardProps {
 /**
  * Alert List Component
  */
+}
 interface AlertListProps {
   alerts: AlertType;
   onAcknowledge: (id: string) => void;
@@ -462,6 +467,7 @@ interface AlertListProps {
   onResolve,
   onSuppress,
   onSelectAlert
+}
 }) => {
   if (alerts.length === 0) {
     return;
@@ -489,6 +495,7 @@ interface AlertListProps {
 /**
  * Alert Detail Modal Component
  */
+}
 interface AlertDetailModalProps {
   alert: AlertType;
   onClose: () => void;
@@ -501,6 +508,7 @@ interface AlertDetailModalProps {
   onAcknowledge,
   onResolve,
   onSuppress
+}
 }) => {
   const severityConfig = SEVERITY_CONFIG[alert.severity];
   const SeverityIcon = severityConfig.icon;

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+}
 export interface ApprovalRequest {
   id: string;,
   type: 'content' | 'user_access' | 'template' | 'deletion' | 'policy_change';
@@ -25,6 +26,7 @@ export interface ApprovalRequest {
   onReject?: (requestId: string, reason: string) => void;
   onEscalate?: (requestId: string, reason: string) => void;
   onRequestDetails?: (requestId: string) => void;
+}
 }
 export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({)
   requests,

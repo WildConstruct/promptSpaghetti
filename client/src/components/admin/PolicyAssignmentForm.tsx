@@ -18,6 +18,7 @@ import {
   AssignmentSource
 } from '../../types/PolicyAssignmentTypes';
 import './PolicyAssignmentForm.css';
+}
 interface PolicyAssignmentFormProps {
   assignment?: PolicyAssignment;
   onSubmit: (data: Partial<PolicyAssignment>) => Promise<void>;,
@@ -33,12 +34,13 @@ interface PolicyAssignmentFormProps {
   expirationDate: string;
   priority: number;,
   conditions: AssignmentCondition;
-  inheritance: {,
+  inheritance: {
   type: InheritanceType;,
   inheritanceDepth: number;
   blockInheritance: boolean;
+}
 };
-  metadata: {,
+  metadata: {
   reason: string;
   businessJustification: string;,
   riskLevel: RiskLevel;
@@ -58,12 +60,12 @@ const INITIAL_FORM_DATA: FormData = {,
   expirationDate: '',
   priority: 100,
   conditions: [],
-  inheritance: {,
+  inheritance: {
   type: InheritanceType.NONE,
   inheritanceDepth: 0,
   blockInheritance: false,
 },
-  metadata: {,
+  metadata: {
   reason: '',
   businessJustification: '',
   riskLevel: RiskLevel.MEDIUM,
@@ -127,7 +129,7 @@ export const PolicyAssignmentForm: React.FC<PolicyAssignmentFormProps> = ({)
   ...formData,
   effectiveDate: new Date(formData.effectiveDate),
   expirationDate: formData.expirationDate ? new Date(formData.expirationDate) : undefined,
-  metadata: {,
+  metadata: {
   ...formData.metadata,
   source: AssignmentSource.MANUAL,
 };
@@ -152,7 +154,7 @@ export const PolicyAssignmentForm: React.FC<PolicyAssignmentFormProps> = ({)
   const updateNestedFormData = (section: string, field: string, value: Error) => {
   setFormData(prev => ({)
   ...prev,
-  [section]: {,
+  [section]: {
   ...prev[section as keyof FormData],
   [field]: value,
 }));

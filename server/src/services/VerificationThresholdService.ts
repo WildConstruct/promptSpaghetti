@@ -6,6 +6,7 @@ import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 export interface RiskFactor {
   factor: string;
   weight: number;
@@ -14,7 +15,9 @@ export interface RiskFactor {
   source: 'device' | 'location' | 'behavior' | 'time' | 'security';
 }
 }
+}
 
+}
 }
 export interface VerificationContext {
   userId: string;
@@ -28,10 +31,12 @@ export interface VerificationContext {
     city?: string;
     timezone?: string;
 }
+}
   };
   timestamp: Date;
 }
 
+}
 }
 export interface VerificationRequirement {
   required: boolean;
@@ -45,10 +50,12 @@ export interface VerificationRequirement {
     reason?: string;
     requiresAdminApproval?: boolean;
 }
+}
   };
   recommendations: string[];
 }
 
+}
 }
 export interface ThresholdConfig {
   // Risk score thresholds (0-100 scale)
@@ -64,6 +71,7 @@ export interface ThresholdConfig {
     behaviorAnomalies: number; // Unusual patterns
     timeFactors: number;      // Off-hours access
     securityEvents: number;   // Recent security incidents
+}
 }
   };
 

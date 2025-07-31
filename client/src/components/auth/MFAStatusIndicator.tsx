@@ -38,6 +38,7 @@ export type MFAIndicatorVariant =
   | 'detailed'
   | 'badge'
   | 'header';
+}
 interface MFAStatusIndicatorProps {
   userId: string;
   variant?: MFAIndicatorVariant;
@@ -49,15 +50,16 @@ interface MFAStatusIndicatorProps {
   profile: UserMFAProfile | null;
   isLoading: boolean;,
   lastCheck: Date | null;
-  recentActivity: {,
+  recentActivity: {
   lastSuccess?: Date;
   lastFailure?: Date;
   suspiciousActivity: boolean;,
   breachDetected: boolean;
+}
 };
   recommendations: string;
 const SECURITY_LEVEL_CONFIG = {
-  ['none']: {,
+  ['none']: {
   icon: ShieldX,
   color: 'red',
   label: 'No Protection',
@@ -115,7 +117,7 @@ export function MFAStatusIndicator({ )
   profile: null,
   isLoading: true,
   lastCheck: null,
-  recentActivity: {,
+  recentActivity: {
   suspiciousActivity: false,
   breachDetected: false,
 },
@@ -143,7 +145,7 @@ export function MFAStatusIndicator({ )
   profile,
   isLoading: false,
   lastCheck: new Date(),
-  recentActivity: {,
+  recentActivity: {
   lastSuccess: activity.lastSuccess ? new Date(activity.lastSuccess) : undefined,
   lastFailure: activity.lastFailure ? new Date(activity.lastFailure) : undefined,
   suspiciousActivity: activity.suspiciousActivity || false,

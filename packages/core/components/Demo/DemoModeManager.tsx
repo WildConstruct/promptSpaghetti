@@ -7,6 +7,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ProfessionalSpinner } from '../LoadingStates/ProfessionalSpinner';
 
+}
 export interface DemoModeConfig {
   screenshotMode: boolean;
   presentationFocus: boolean;
@@ -14,6 +15,8 @@ export interface DemoModeConfig {
   accessibilityMode: boolean;
   brandingVisible: boolean;
   debugElementsHidden: boolean;
+}
+}
 }
 export interface DemoModeManagerProps {
   children: React.ReactNode;
@@ -26,6 +29,7 @@ export interface DemoModeManagerProps {
   accessibilityMode: false,
   brandingVisible: true,
   debugElementsHidden: false,
+}
 };
 }
 export const DemoModeManager: React.FC<DemoModeManagerProps> = ({)
@@ -168,9 +172,11 @@ export const DemoModeManager: React.FC<DemoModeManagerProps> = ({)
 };
 
 // Demo control panel for development/presentation setup
+}
 interface DemoControlPanelProps {
   config: DemoModeConfig;
   onConfigChange: (updates: Partial<DemoModeConfig>) => void;
+}
 const DemoControlPanel: React.FC<DemoControlPanelProps> = ({ config, onConfigChange }) => {
   const [panelVisible, setPanelVisible] = useState(false);
   return;

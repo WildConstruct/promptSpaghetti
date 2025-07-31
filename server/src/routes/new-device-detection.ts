@@ -5,6 +5,7 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { NewDeviceDetectionService } from '../services/NewDeviceDetectionService';
 
 }
+}
 interface DetectDeviceRequest {
   deviceFingerprint: string;
   ipAddress?: string;
@@ -15,6 +16,7 @@ interface DetectDeviceRequest {
     latitude?: number;
     longitude?: number;
 }
+}
   };
   metadata?: {
     sessionId?: string;
@@ -23,17 +25,21 @@ interface DetectDeviceRequest {
 }
 
 }
+}
 interface ApproveDeviceRequest {
   deviceFingerprint: string;
   approvalMethod: string;
   verificationCode?: string;
 }
 }
+}
 
+}
 }
 interface RejectDeviceRequest {
   deviceFingerprint: string;
   reason: string;
+}
 }
 }
 

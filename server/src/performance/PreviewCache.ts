@@ -15,12 +15,15 @@ import { Graph } from '../../../../packages/core/graphSchema';
 import crypto from 'crypto';
 
 }
+}
 export interface PreviewResult {
   seed: number;
   output: string;
 }
 }
+}
 
+}
 }
 export interface CachedPreviewResult {
   results: PreviewResult[];
@@ -29,7 +32,9 @@ export interface CachedPreviewResult {
   executionTimeMs: number;
 }
 }
+}
 
+}
 }
 export interface PreviewCacheConfig {
   maxCacheSize: number;
@@ -38,7 +43,9 @@ export interface PreviewCacheConfig {
   enableMetrics: boolean;
 }
 }
+}
 
+}
 }
 export interface PreviewCacheMetrics {
   cacheHits: number;
@@ -48,6 +55,7 @@ export interface PreviewCacheMetrics {
   averageExecutionTime: number;
   cacheSize: number;
   deduplicationHits: number;
+}
 }
 }
 

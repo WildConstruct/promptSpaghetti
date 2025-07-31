@@ -15,6 +15,7 @@ import {
 
 // Database interface (to be implemented by the application)
 
+}
 export interface VerificationCodeStorage {
   save(code: VerificationCodeData): Promise<void>;
   findById(id: string): Promise<VerificationCodeData | null>;
@@ -25,11 +26,15 @@ export interface VerificationCodeStorage {
   findByUser(userId: string): Promise<VerificationCodeData>;
   // Rate limiting interface
 }
+}
+}
 export interface RateLimiter {
   isAllowed(key: string, limit: number, windowMs: number): Promise<boolean>;
   increment(key: string, windowMs: number): Promise<number>;
   reset(key: string): Promise<void>;
   // Configuration
+}
+}
 }
 export interface ValidationServiceConfig {
   rateLimiting: {
@@ -37,6 +42,7 @@ export interface ValidationServiceConfig {
   maxGenerationsPerHour: number;
   maxValidationAttemptsPerHour: number;
   maxValidationAttemptsPerCode: number;
+}
 };
   monitoring: {
   enabled: boolean;
@@ -74,6 +80,7 @@ const DEFAULT_CONFIG: ValidationServiceConfig = {,
   blockAfterFailures: 10,
 };
 }
+}
 export interface ValidationAttempt {
   id: string;
   userId: string;
@@ -85,6 +92,8 @@ export interface ValidationAttempt {
   userAgent?: string;
   timestamp: Date;
 }
+}
+}
 export interface SuspiciousActivity {
   type: 'rapid_fire' | 'enumeration' | 'expired_code_use' | 'brute_force';
   userId: string;
@@ -93,6 +102,7 @@ export interface SuspiciousActivity {
   /**
   * Comprehensive validation service with security monitoring
   */
+}
 }
 export class ValidationService extends EventEmitter {
   private generator: SecureCodeGenerator;
@@ -123,6 +133,7 @@ export class ValidationService extends EventEmitter {
   ipAddress?: string;
 } = {}
   ): Promise<{ code: string; id: string }> {
+
     const {
       length = 6,
       format = 'numeric',
@@ -184,6 +195,7 @@ export class ValidationService extends EventEmitter {
   purpose?: string;
 } = {}
   ): Promise<ValidationResult> {
+
     const { userId, ipAddress, userAgent, purpose } = options;
     // Clean the input code
     const cleanCode = CodeUtils.cleanUserInput(inputCode);
@@ -303,6 +315,7 @@ export class ValidationService extends EventEmitter {
   userAgent?: string;
 } = {}
   ): Promise<ValidationResult> {
+
   // Find the most recent code for this user and purpose
   const codes = await this.storage.findByUserAndPurpose(userId, purpose);
   const activeCode = codes;
@@ -322,6 +335,7 @@ export class ValidationService extends EventEmitter {
    * Invalidate a specific verification code
    */
   async invalidateCode(codeId: string): Promise<void> {
+
     await this.storage.update(codeId, { used: true });
     this.emit('codeInvalidated', {)
   id: codeId,
@@ -331,6 +345,7 @@ export class ValidationService extends EventEmitter {
    * Invalidate all codes for a user and purpose
    */
   async invalidateExistingCodes(userId: string, purpose: string): Promise<void> {
+
     const codes = await this.storage.findByUserAndPurpose(userId, purpose);
     for (const code of codes) {
       if (!code.used && new Date() <= code.expiresAt) {
@@ -353,6 +368,7 @@ export class ValidationService extends EventEmitter {
   successfulValidations: number;
   failedValidations: number;
 }> {
+
   const codes = await this.storage.findByUser(userId);
   const now = new Date();
   const stats = {
@@ -369,6 +385,7 @@ export class ValidationService extends EventEmitter {
    * Clean up expired codes
    */
   async cleanupExpiredCodes(): Promise<number> {
+
   const deletedCount = await this.storage.deleteExpired();
   this.emit('expiredCodesCleanup', {)
   deletedCount,
@@ -379,6 +396,7 @@ export class ValidationService extends EventEmitter {
    * Shutdown the service and clean up resources
    */
   async shutdown(): Promise<void> {
+
     if (this.cleanupInterval) {
       clearInterval(this.cleanupInterval);
     this.removeAllListeners();

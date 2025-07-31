@@ -53,6 +53,7 @@ import { EventEmitter } from 'events';
 import { DataClassificationLevel, DataOperation } from './DataClassificationAccessControl';
 import { SecurityAlert } from './CentralizedAccessControlService';
 
+}
 export interface SecurityAlertingConfig {
     enableRealTimeAnalytics: boolean;
     enablePatternAnalysis: boolean;
@@ -66,6 +67,7 @@ export interface SecurityAlertingConfig {
     correlationRules: CorrelationRule[];
     responseAutomation: ResponseAutomation;
 
+}
 export interface EscalationThresholds {
     criticalAlertCount: number;
     highAlertCount: number;
@@ -75,6 +77,7 @@ export interface EscalationThresholds {
     dataExfiltrationThreshold: number;
     anomalyScoreThreshold: number;
 
+}
 export interface AlertMetrics {
     totalAlerts: number;
     alertsByType: Record<string, number>;
@@ -90,6 +93,7 @@ export interface AlertMetrics {
     threatIntelligenceMatches: number;
     trendsAnalysis: TrendAnalysis;
 
+}
 export interface TrendAnalysis {
     alertVolumeGrowth: number;
     topThreats: ThreatSummary[];
@@ -99,6 +103,7 @@ export interface TrendAnalysis {
     userBehaviorTrends: UserBehaviorTrend[];
     systemPerformanceImpact: PerformanceImpact;
 
+}
 export interface ThreatSummary {
     threatType: string;
     count: number;
@@ -109,6 +114,7 @@ export interface ThreatSummary {
     affectedSystems: string[];
     mitigationStatus: 'NONE' | 'PARTIAL' | 'COMPLETE';
 
+}
 export interface TargetSummary {
     targetId: string;
     targetType: 'USER' | 'SYSTEM' | 'DATA' | 'NETWORK';
@@ -119,6 +125,7 @@ export interface TargetSummary {
     threatTypes: string[];
     protectionLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'MAXIMUM';
 
+}
 export interface TimePattern {
     timeOfDay: number;
     dayOfWeek: number;
@@ -127,6 +134,7 @@ export interface TimePattern {
     commonThreats: string[];
     anomalyScore: number;
 
+}
 export interface GeographicPattern {
     country: string;
     region: string;
@@ -135,6 +143,7 @@ export interface GeographicPattern {
     riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     isKnownThreatRegion: boolean;
 
+}
 export interface UserBehaviorTrend {
     userId: string;
     normalBehaviorScore: number;
@@ -144,6 +153,7 @@ export interface UserBehaviorTrend {
     riskFactors: RiskFactor[];
     recommendedActions: string[];
 
+}
 export interface BehaviorChange {
     aspect: 'ACCESS_PATTERN' | 'TIME_PATTERN' | 'LOCATION' | 'OPERATION_TYPE' | 'DATA_ACCESS';
     previousValue: any;
@@ -152,6 +162,7 @@ export interface BehaviorChange {
     changeDate: Date;
     contextualFactors: string[];
 
+}
 export interface RiskFactor {
     factor: string;
     weight: number;
@@ -159,6 +170,7 @@ export interface RiskFactor {
     evidence: string[];
     mitigationSuggestions: string[];
 
+}
 export interface PerformanceImpact {
     systemLatency: number;
     processingOverhead: number;
@@ -167,6 +179,7 @@ export interface PerformanceImpact {
     alertProcessingTime: number;
     falsePositiveRatio: number;
 
+}
 export interface CorrelationRule {
     id: string;
     name: string;
@@ -178,6 +191,7 @@ export interface CorrelationRule {
     enabled: boolean;
     priority: number;
 
+}
 export interface CorrelationCondition {
     field: string;
     operator: 'EQUALS' | 'CONTAINS' | 'GREATER_THAN' | 'LESS_THAN' | 'IN' | 'MATCHES' | 'EXISTS';
@@ -185,6 +199,7 @@ export interface CorrelationCondition {
     weight: number;
     required: boolean;
 
+}
 export interface ResponseAction {
     type: 'ALERT' | 'BLOCK' | 'QUARANTINE' | 'ESCALATE' | 'INVESTIGATE' | 'AUTOFIX';
     parameters: Record<string, any>;
@@ -192,23 +207,27 @@ export interface ResponseAction {
     automation: AutomationLevel;
     approval: ApprovalRequirement;
 
+}
 export interface ResponseCondition {
     condition: string;
     value: any;
     operator: string;
 
+}
 export interface AutomationLevel {
     level: 'MANUAL' | 'SEMI_AUTOMATIC' | 'AUTOMATIC';
     confidence: number;
     humanOverride: boolean;
     rollback: boolean;
 
+}
 export interface ApprovalRequirement {
     required: boolean;
     approvers: string[];
     timeout: number;
     fallbackAction: string;
 
+}
 export interface ResponseAutomation {
     enabled: boolean;
     confidenceThreshold: number;
@@ -217,12 +236,14 @@ export interface ResponseAutomation {
     approvalBypass: ApprovalBypass;
     responseTemplates: ResponseTemplate[];
 
+}
 export interface ApprovalBypass {
     emergencyConditions: string[];
     bypassApprovers: string[];
     auditRequired: boolean;
     timeLimit: number;
 
+}
 export interface ResponseTemplate {
     id: string;
     name: string;
@@ -233,6 +254,7 @@ export interface ResponseTemplate {
     lastUsed: Date;
     successRate: number;
 
+}
 export interface AlertPattern {
     patternId: string;
     patternType: 'TEMPORAL' | 'BEHAVIORAL' | 'VOLUMETRIC' | 'GEOGRAPHIC' | 'CONTEXTUAL';
@@ -246,6 +268,7 @@ export interface AlertPattern {
     prediction: PatternPrediction;
     mitigation: MitigationRecommendation;
 
+}
 export interface PatternPrediction {
     nextOccurrence: Date;
     confidence: number;
@@ -253,6 +276,7 @@ export interface PatternPrediction {
     impactAssessment: ImpactAssessment;
     preventionRecommendations: string[];
 
+}
 export interface ImpactAssessment {
     affectedSystems: string[];
     dataAtRisk: DataRiskAssessment[];
@@ -261,6 +285,7 @@ export interface ImpactAssessment {
     reputationalImpact: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     complianceImpact: ComplianceImpact[];
 
+}
 export interface DataRiskAssessment {
     dataId: string;
     classification: DataClassificationLevel;
@@ -269,6 +294,7 @@ export interface DataRiskAssessment {
     complianceRequirements: string[];
     protectionLevel: string;
 
+}
 export interface ComplianceImpact {
     framework: string;
     violationType: string;
@@ -277,6 +303,7 @@ export interface ComplianceImpact {
     reportingRequired: boolean;
     timelineRequirements: string[];
 
+}
 export interface MitigationRecommendation {
     immediate: ImmediateAction[];
     shortTerm: ShortTermAction[];
@@ -286,6 +313,7 @@ export interface MitigationRecommendation {
     estimatedCost: number;
     estimatedEffectiveness: number;
 
+}
 export interface ImmediateAction {
     action: string;
     description: string;
@@ -294,6 +322,7 @@ export interface ImmediateAction {
     effort: 'LOW' | 'MEDIUM' | 'HIGH';
     dependencies: string[];
 
+}
 export interface ShortTermAction {
     action: string;
     description: string;
@@ -302,6 +331,7 @@ export interface ShortTermAction {
     expectedOutcome: string;
     successMetrics: string[];
 
+}
 export interface LongTermAction {
     action: string;
     description: string;
@@ -310,6 +340,7 @@ export interface LongTermAction {
     expectedROI: number;
     riskMitigation: number;
 
+}
 export interface PreventiveAction {
     action: string;
     description: string;
@@ -318,6 +349,7 @@ export interface PreventiveAction {
     maintenanceRequired: boolean;
     effectiveness: number;
 
+}
 export interface ThreatIntelligence {
     threatFeeds: ThreatFeed[];
     indicators: ThreatIndicator[];
@@ -326,6 +358,7 @@ export interface ThreatIntelligence {
     predictions: ThreatPrediction[];
     contextualData: ContextualThreatData;
 
+}
 export interface ThreatFeed {
     feedId: string;
     source: string;
@@ -336,6 +369,7 @@ export interface ThreatFeed {
     relevanceScore: number;
     coverage: string[];
 
+}
 export interface ThreatIndicator {
     indicatorId: string;
     type: 'IP' | 'DOMAIN' | 'HASH' | 'URL' | 'EMAIL' | 'BEHAVIOR';
@@ -347,6 +381,7 @@ export interface ThreatIndicator {
     context: ThreatContext;
     severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 
+}
 export interface ThreatContext {
     campaign: string;
     malwareFamily: string;
@@ -355,6 +390,7 @@ export interface ThreatContext {
     geolocation: string[];
     additionalMetadata: Record<string, any>;
 
+}
 export interface ThreatCampaign {
     campaignId: string;
     name: string;
@@ -369,6 +405,7 @@ export interface ThreatCampaign {
     targets: string[];
     attribution: AttributionData;
 
+}
 export interface AttributionData {
     actor: string;
     confidence: number;
@@ -378,6 +415,7 @@ export interface AttributionData {
     capability: 'LOW' | 'MEDIUM' | 'HIGH' | 'ADVANCED';
     resources: string[];
 
+}
 export interface ThreatAttribution {
     actorId: string;
     actorName: string;
@@ -392,6 +430,7 @@ export interface ThreatAttribution {
     geolocation: string[];
     associatedCampaigns: string[];
 
+}
 export interface ThreatPrediction {
     predictionId: string;
     threatType: string;
@@ -403,6 +442,7 @@ export interface ThreatPrediction {
     recommendations: string[];
     impactAssessment: PredictedImpact;
 
+}
 export interface PredictedImpact {
     scope: string[];
     severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
@@ -411,6 +451,7 @@ export interface PredictedImpact {
     preventionCost: number;
     mitigationCost: number;
 
+}
 export interface ContextualThreatData {
     industryThrends: IndustryThrend[];
     geopoliticalFactors: GeopoliticalFactor[];
@@ -418,6 +459,7 @@ export interface ContextualThreatData {
     seasonalPatterns: SeasonalPattern[];
     emergingThreats: EmergingThreat[];
 
+}
 export interface IndustryThrend {
     industry: string;
     threatTypes: string[];
@@ -426,6 +468,7 @@ export interface IndustryThrend {
     trends: string[];
     predictions: string[];
 
+}
 export interface GeopoliticalFactor {
     region: string;
     factor: string;
@@ -434,6 +477,7 @@ export interface GeopoliticalFactor {
     riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     timeline: string;
 
+}
 export interface VulnerabilityCorrelation {
     vulnerabilityId: string;
     cve: string;
@@ -442,6 +486,7 @@ export interface VulnerabilityCorrelation {
     campaigns: string[];
     mitigationStatus: string;
 
+}
 export interface SeasonalPattern {
     pattern: string;
     timeframe: string;
@@ -450,6 +495,7 @@ export interface SeasonalPattern {
     preparation: string[];
     indicators: string[];
 
+}
 export interface EmergingThreat {
     threatId: string;
     description: string;
@@ -460,6 +506,7 @@ export interface EmergingThreat {
     indicators: string[];
     countermeasures: string[];
 
+}
 export interface MLModel {
     modelId: string;
     name: string;
@@ -476,17 +523,20 @@ export interface MLModel {
     hyperparameters: Record<string, any>;
     status: 'TRAINING' | 'ACTIVE' | 'DEPRECATED' | 'FAILED';
 
+}
 export interface TrainingDataInfo {
     size: number;
     timeRange: {
         start: Date;
         end: Date;
+}
     };
     sources: string[];
     quality: number;
     bias: BiasMetrics;
     distribution: DataDistribution;
 
+}
 export interface BiasMetrics {
     overallBias: number;
     demographicBias: Record<string, number>;
@@ -494,6 +544,7 @@ export interface BiasMetrics {
     systemBias: number;
     mitigationApplied: string[];
 
+}
 export interface DataDistribution {
     classes: Record<string, number>;
     features: Record<string, FeatureDistribution>;
@@ -501,6 +552,7 @@ export interface DataDistribution {
     missing: number;
     duplicates: number;
 
+}
 export interface FeatureDistribution {
     mean: number;
     std: number;
@@ -509,6 +561,7 @@ export interface FeatureDistribution {
     skewness: number;
     kurtosis: number;
 
+}
 export interface ModelFeature {
     name: string;
     type: 'NUMERIC' | 'CATEGORICAL' | 'BINARY' | 'TEXT' | 'TEMPORAL';
@@ -542,6 +595,7 @@ export declare class SecurityAlertingAnalytics extends EventEmitter {
         threatSummary: ThreatSummary[];
         recommendations: MitigationRecommendation[];
         performance: PerformanceImpact;
+}
     };
     /**
      * Get real-time threat intelligence

@@ -24,6 +24,7 @@ import { SecurityABTestingFramework } from '../services/SecurityABTestingFramewo
 let experimentationPlatform: SecurityExperimentationPlatform | null = null;
 
 }
+}
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
@@ -32,6 +33,7 @@ interface APIResponse<T = any> {
   timestamp: number;
 }
 
+}
 }
 interface CreateExperimentRequest {
   experiment_name: string;
@@ -48,6 +50,7 @@ interface CreateExperimentRequest {
         sampling_method: 'random' | 'stratified' | 'systematic' | 'cluster' | 'convenience' | 'purposive';
         sample_size: number;
         population_definition: string;
+}
 }
       };
     };
@@ -88,6 +91,7 @@ interface CreateExperimentRequest {
 }
 
 }
+}
 interface StartExperimentRequest {
   safety_override?: boolean;
   notification_recipients?: string[];
@@ -95,9 +99,11 @@ interface StartExperimentRequest {
     real_time_monitoring: boolean;
     alert_thresholds: Record<string, number>;
 }
+}
   };
 }
 
+}
 }
 interface StopExperimentRequest {
   reason: string;
@@ -105,7 +111,9 @@ interface StopExperimentRequest {
   generate_report?: boolean;
 }
 }
+}
 
+}
 }
 interface CreatePortfolioRequest {
   portfolio_name: string;
@@ -115,6 +123,7 @@ interface CreatePortfolioRequest {
     theme_name: string;
     theme_description: string;
     research_questions: string[];
+}
 }
   }[];
   coordination_requirements?: {

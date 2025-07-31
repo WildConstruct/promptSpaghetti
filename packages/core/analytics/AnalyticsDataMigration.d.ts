@@ -51,6 +51,7 @@ export declare enum MigrationStatus {
     FAILED = "failed",
     CANCELLED = "cancelled"
 
+}
 export interface MigrationResult {
     migrationId: string;
     systemName: string;
@@ -69,10 +70,12 @@ export interface MigrationResult {
         averageBatchTime: number;
         peakMemoryUsage: number;
         totalDataSize: number;
+}
     };
     backupLocation?: string;
     rollbackAvailable: boolean;
 
+}
 export interface ValidationError {
     recordId?: string;
     field: string;
@@ -82,6 +85,7 @@ export interface ValidationError {
     message: string;
     severity: 'warning' | 'error' | 'critical';
 
+}
 export interface DataTransformationRule {
     id: string;
     sourceSystem: string;
@@ -92,6 +96,7 @@ export interface DataTransformationRule {
         expression?: string;
         lookupTable?: {
             [key: string]: any;
+}
         };
         conditions?: Array<{
             condition: string;
@@ -109,6 +114,7 @@ export interface DataTransformationRule {
         enum?: any[];
     };
 
+}
 export interface MigrationProgress {
     migrationId: string;
     systemName: string;
@@ -120,6 +126,7 @@ export interface MigrationProgress {
         currentBatch: number;
         totalBatches: number;
         eta: number;
+}
     };
     currentOperation: string;
     lastError?: string;

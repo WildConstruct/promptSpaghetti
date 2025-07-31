@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { StarRating } from './StarRating';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import './ReviewList.css';
+}
 interface Review {
   id: string;,
   buyer_id: string;
@@ -25,6 +26,7 @@ interface Review {
   templateId,
   onReviewAdded,
   className = ''
+}
 }) => {
   const [showAddReview, setShowAddReview] = useState(false);
   const [newReview, setNewReview] = useState<NewReview>({ stars: 5, comment: '' });
@@ -44,7 +46,7 @@ interface Review {
       const token = localStorage.getItem('auth_token');
       const response = await fetch('/api/marketplace/reviews', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`}
   },

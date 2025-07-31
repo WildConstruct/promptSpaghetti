@@ -7,6 +7,7 @@
 import { EventEmitter } from 'events';
 import { PricingOptimizer } from './PricingOptimizer';
 
+}
 export interface FilmStudioProfile {
     studioId: string;
     name: string;
@@ -19,12 +20,14 @@ export interface FilmStudioProfile {
         preferredBilling: 'monthly' | 'per_project' | 'annual';
         creditLimit: number;
         paymentDays: number;
+}
     };
     premiumFeatures: string[];
     contractStartDate: number;
     contractEndDate: number;
     loyaltyStatus: 'new' | 'standard' | 'preferred' | 'vip';
 
+}
 export interface ProjectPricingRequest {
     studioId: string;
     projectId: string;
@@ -36,6 +39,7 @@ export interface ProjectPricingRequest {
             startDate: number;
             endDate: number;
             deliveryDate: number;
+}
         };
         deliverables: ProjectDeliverable[];
         priority: 'standard' | 'rush' | 'emergency';
@@ -49,6 +53,7 @@ export interface ProjectPricingRequest {
         characterDevelopment?: CharacterDevelopmentOptions;
     };
 
+}
 export interface ProjectDeliverable {
     type: 'script_analysis' | 'character_profiles' | 'scene_breakdown' | 'dialogue_generation' | 'storyboard_concepts' | 'visual_references' | 'marketing_taglines' | 'synopsis_variants';
     quantity: number;
@@ -58,6 +63,7 @@ export interface ProjectDeliverable {
     format: string[];
     specifications: Record<string, any>;
 
+}
 export interface ScriptAnalysisOptions {
     analysisDepth: 'basic' | 'comprehensive' | 'deep_dive';
     includeCharacterArcs: boolean;
@@ -66,6 +72,7 @@ export interface ScriptAnalysisOptions {
     includeGenreCompliance: boolean;
     benchmarkScripts?: string[];
 
+}
 export interface StoryboardOptions {
     artStyle: 'sketch' | 'detailed' | 'cinematic' | 'animatic';
     frameCount: number;
@@ -73,6 +80,7 @@ export interface StoryboardOptions {
     colorTreatment: 'bw' | 'color' | 'mood_palette';
     animationPreview: boolean;
 
+}
 export interface ConceptArtOptions {
     artDirection: 'realistic' | 'stylized' | 'fantastical' | 'period_accurate';
     deliverableTypes: ('character_design' | 'environment_design' | 'prop_design' | 'costume_design')[];
@@ -80,6 +88,7 @@ export interface ConceptArtOptions {
     highResolution: boolean;
     includeVariations: boolean;
 
+}
 export interface MarketingContentOptions {
     campaignScope: 'teaser' | 'full_campaign' | 'awards_season' | 'international';
     platforms: ('theatrical' | 'digital' | 'social' | 'print' | 'tv')[];
@@ -87,6 +96,7 @@ export interface MarketingContentOptions {
     brandGuidelines: boolean;
     localizationNeeded: string[];
 
+}
 export interface CharacterDevelopmentOptions {
     characterCount: number;
     developmentDepth: 'basic_profile' | 'detailed_background' | 'full_psychology';
@@ -94,6 +104,7 @@ export interface CharacterDevelopmentOptions {
     includeVisualReferences: boolean;
     includeRelationshipMaps: boolean;
 
+}
 export interface FilmIndustryPricingResult {
     projectId: string;
     studioId: string;
@@ -103,12 +114,13 @@ export interface FilmIndustryPricingResult {
     studioTierAdjustment: number;
     projectComplexityMultiplier: number;
     timelineAdjustment: number;
-    deliverablesPricing: Array<{,
+    deliverablesPricing: Array<{
         deliverable: string;
         quantity: number;
         unitPrice: number;
         subtotal: number;
         complexity: string;
+}
     }>;
     genreMultiplier: number;
     budgetTierMultiplier: number;
@@ -128,6 +140,7 @@ export interface FilmIndustryPricingResult {
     validUntil: number;
     createdAt: number;
 
+}
 export interface PaymentScheduleItem {
     milestone: string;
     percentage: number;
@@ -135,11 +148,13 @@ export interface PaymentScheduleItem {
     dueDate: number;
     description: string;
 
+}
 export interface StudioPricingAnalytics {
     studioId: string;
     period: {
         start: number;
         end: number;
+}
     };
     totalRevenue: number;
     averageProjectValue: number;
@@ -158,7 +173,7 @@ export interface StudioPricingAnalytics {
         qualityScore: number;
         revisionRate: number;
     };
-    seasonalPatterns: Array<{,
+    seasonalPatterns: Array<{
         period: string;
         volume: number;
         revenue: number;
@@ -211,12 +226,12 @@ export declare class FilmIndustryPricingService extends EventEmitter {
     getIndustryTrends(): {
         averagePricing: Record<string, number>;
         growthRates: Record<string, number>;
-        seasonalPatterns: Array<{,
+        seasonalPatterns: Array<{
             period: string;
             multiplier: number;
         }>;
         emergingServices: string[];
-        competitiveLandscape: Array<{,
+        competitiveLandscape: Array<{
             category: string;
             competitorCount: number;
             priceRange: {
@@ -236,7 +251,7 @@ export declare class FilmIndustryPricingService extends EventEmitter {
             volumeChange: number;
             marginChange: number;
         };
-        implementationPlan: Array<{,
+        implementationPlan: Array<{
             action: string;
             timeline: string;
             priority: 'high' | 'medium' | 'low';

@@ -12,6 +12,7 @@ import './PaymentAnalyticsDashboard.css';
 
 // Payment Analytics Types
 
+}
 export interface PaymentProviderMetrics {
   provider: PaymentProvider;,
   totalAttempts: number;
@@ -25,16 +26,18 @@ export interface PaymentProviderMetrics {
   averageFeeRate: number;
   failuresByReason: Record<string, number>;
   retrySuccessRate: number;,
-  performanceByCountry: Array<{,
+  performanceByCountry: Array<{
   countryCode: string;,
   successRate: number;
   averageProcessingTime: number;
+}
 }>;
-  performanceByHour: Array<{,
+  performanceByHour: Array<{
   hour: number;
   successRate: number;,
   volume: number;
 }>;
+}
 }
 export interface PaymentMethodMetrics {
   methodType: PaymentMethodType;,
@@ -44,16 +47,18 @@ export interface PaymentMethodMetrics {
   totalVolume: number;,
   userPreferenceRank: number;
   conversionRate: number;,
-  ageGroupPerformance: Array<{,
+  ageGroupPerformance: Array<{
   ageGroup: string;,
   successRate: number;
   usage: number;
+}
 }>;
-  devicePerformance: Array<{,
+  devicePerformance: Array<{
   deviceType: 'mobile' | 'desktop' | 'tablet';
   successRate: number;,
   usage: number;
 }>;
+}
 }
 export interface PaymentFailureAnalysis {
   failureCode: string;,
@@ -64,35 +69,40 @@ export interface PaymentFailureAnalysis {
   suggestedAction: string;
   isRetryable: boolean;,
   averageRetrySuccess: number;
-  timePattern: Array<{,
+  timePattern: Array<{
   hour: number;,
   frequency: number;
+}
 }>;
-  geographicPattern: Array<{,
+  geographicPattern: Array<{
   countryCode: string;
   frequency: number;
 }>;
-  amountPattern: Array<{,
+  amountPattern: Array<{
   amountRange: string;
   frequency: number;
 }>;
+}
 }
 export interface PaymentAnalyticsData {
   providerMetrics: PaymentProviderMetrics;,
   methodMetrics: PaymentMethodMetrics;
   failureAnalysis: PaymentFailureAnalysis;,
   lastUpdated: Date;
-  timeRange: {,
+  timeRange: {
   start: Date;,
   end: Date;
+}
 };
+}
 }
 export interface PaymentAnalyticsDashboardProps {
   className?: string;
   timeRange?: RevenueTimeRange;
-  customDateRange?: {,
+  customDateRange?: {
   start: Date | null;,
   end: Date | null;
+}
 };
   providers?: PaymentProvider;
   autoRefresh?: boolean;

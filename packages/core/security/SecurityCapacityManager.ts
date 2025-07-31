@@ -9,6 +9,7 @@
 import { EventEmitter } from 'events';
 import * as os from 'os';
 
+}
 export interface CapacityPlan {
   id: string;
   name: string;
@@ -19,6 +20,7 @@ export interface CapacityPlan {
   short_term_days: number; // Operational planning (typically 7-30 days),
   medium_term_days: number; // Tactical planning (typically 90-180 days),
   long_term_days: number; // Strategic planning (typically 365+ days),
+}
 };
   // Capacity requirements
   requirements: {
@@ -85,6 +87,7 @@ export interface CapacityPlan {
   next_review_date: number;
   enabled: boolean;
 }
+}
 export interface ResourceRequirements {
   cpu_cores: number;
   memory_gb: number;
@@ -93,6 +96,8 @@ export interface ResourceRequirements {
   iops_required: number;
   gpu_units?: number;
   custom_resources?: Record<string, number>;
+}
+}
 }
 export interface GrowthProjection {
   period: 'monthly' | 'quarterly' | 'yearly';
@@ -103,12 +108,16 @@ export interface GrowthProjection {
   assumptions: string;
   seasonal_factors?: SeasonalFactor;
 }
+}
+}
 export interface SeasonalFactor {
   period: 'daily' | 'weekly' | 'monthly' | 'yearly';
   pattern: 'cyclical' | 'trending' | 'spike';
   multiplier: number; // Factor to multiply baseline by,
   duration_hours?: number; // For spike patterns,
   description: string;
+}
+}
 }
 export interface PerformanceTargets {
   response_time_p95_ms: number;
@@ -118,6 +127,8 @@ export interface PerformanceTargets {
   availability_percentage: number;
   data_processing_latency_ms: number;
 }
+}
+}
 export interface AvailabilityRequirements {
   target_availability: number; // 99.9%,
   downtime_budget_minutes_monthly: number;
@@ -126,12 +137,14 @@ export interface AvailabilityRequirements {
   start_time: string;
   duration_hours: number;
   timezone: string;
+}
 };
   disaster_recovery: {
   rto_minutes: number; // Recovery Time Objective,
   rpo_minutes: number; // Recovery Point Objective,
   geographic_redundancy: boolean;
 };
+}
 }
 export interface ScalingPolicy {
   id: string;
@@ -144,6 +157,7 @@ export interface ScalingPolicy {
   metric_based: MetricTrigger;
   time_based: TimeTrigger;
   event_based: EventTrigger;
+}
 };
   // Scaling actions
   actions: {
@@ -162,6 +176,7 @@ export interface ScalingPolicy {
   last_triggered: number;
   trigger_count: number;
 }
+}
 export interface MetricTrigger {
   metric_name: string;
   comparison: 'greater_than' | 'less_than' | 'greater_than_or_equal' | 'less_than_or_equal';
@@ -169,6 +184,8 @@ export interface MetricTrigger {
   duration_seconds: number; // How long condition must persist,
   datapoints_to_alarm: number;
   evaluation_periods: number;
+}
+}
 }
 export interface TimeTrigger {
   schedule_type: 'cron' | 'recurring' | 'one_time';
@@ -178,15 +195,19 @@ export interface TimeTrigger {
   times: string; // HH:MM format,
   days_of_week?: string;
   timezone: string;
+}
 };
   one_time_datetime?: number;
   target_capacity: number; // Target instance count or percentage
+}
 }
 export interface EventTrigger {
   event_type: 'security_incident' | 'high_alert_volume' | 'system_failure' | 'maintenance_mode';
   event_source: string;
   conditions: Record<string, any>;
   scaling_factor: number; // Multiplier for capacity,
+}
+}
 }
 export interface ScalingAction {
   action_type: 'instance_count' | 'resource_adjustment' | 'load_balancer_weight';
@@ -196,18 +217,24 @@ export interface ScalingAction {
   instance_types?: string;
   availability_zones?: string;
   termination_policy?: 'oldest_first' | 'newest_first' | 'least_utilized'
+}
   }
+}
 export interface NotificationAction {
   channel: 'email' | 'slack' | 'webhook' | 'sms';
   target: string;
   message_template: string;
   severity: 'info' | 'warning' | 'error'
+}
   }
+}
 export interface CustomMetricTarget {
   metric_name: string;
   target_value: number;
   comparison: 'less_than' | 'greater_than';
   weight: number; // Relative importance (0-1),
+}
+}
 }
 export interface InstanceTypeConfig {
   instance_type: string;
@@ -220,6 +247,8 @@ export interface InstanceTypeConfig {
   use_cases: string;
   priority: number; // Lower numbers = higher priority,
 }
+}
+}
 export interface CapacityMetrics {
   id: string;
   service: string;
@@ -227,6 +256,7 @@ export interface CapacityMetrics {
   collection_period: {
   start: number;
   end: number;
+}
 };
   // Current utilization
   current_utilization: {
@@ -272,6 +302,7 @@ export interface CapacityMetrics {
   cost_optimization_opportunities: string;
 };
 }
+}
 export interface ScalingEvent {
   id: string;
   timestamp: number;
@@ -289,6 +320,7 @@ export interface ScalingEvent {
   scaling_duration_seconds: number;
   instances_added: number;
   instances_removed: number;
+}
 };
   // Impact assessment
   impact: {
@@ -312,6 +344,7 @@ export interface ScalingEvent {
   rollback_required: boolean;
 };
 }
+}
 export interface CapacityForecast {
   id: string;
   service: string;
@@ -324,9 +357,10 @@ export interface CapacityForecast {
   historical_data_points: number;
   seasonal_adjustments: boolean;
   trend_adjustments: boolean;
+}
 };
   // Forecast data
-  forecasts: Array<{,
+  forecasts: Array<{
   date: number;
   predicted_load: number;
   confidence_upper: number;
@@ -349,6 +383,7 @@ export interface CapacityForecast {
   cost_prediction_accuracy: number;
 };
 }
+}
 export interface CapacityRecommendation {
   id: string;
   priority: 'low' | 'medium' | 'high' | 'critical';
@@ -364,6 +399,7 @@ export interface CapacityRecommendation {
   prerequisites: string;
   risks: string;
   rollback_plan: string;
+}
 };
   // Timeline
   timeline: {
@@ -394,6 +430,7 @@ export class SecurityCapacityManager extends EventEmitter {
     this.startForecastGeneration();
   // Capacity Planning
   async createCapacityPlan(plan: Omit<CapacityPlan, 'id' | 'created_at' | 'last_updated' | 'last_reviewed' | 'next_review_date'>): Promise<string> {
+
     const id = `plan_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
     const newPlan: CapacityPlan = {
   ...plan,
@@ -418,6 +455,7 @@ export class SecurityCapacityManager extends EventEmitter {
 });
     return id;
   private async createDefaultScalingPolicies(planId: string, service: string): Promise<void> {
+
     const plan = this.capacityPlans.get(planId);
     if (!plan) return;
     // CPU-based scale up policy
@@ -509,6 +547,7 @@ export class SecurityCapacityManager extends EventEmitter {
 };
     await this.createScalingPolicy(memoryScaleUpPolicy);
   async createScalingPolicy(policy: Omit<ScalingPolicy, 'id' | 'created_at' | 'last_triggered' | 'trigger_count'>): Promise<string> {
+
     const id = `policy_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
     const newPolicy: ScalingPolicy = {
   ...policy,
@@ -527,6 +566,7 @@ export class SecurityCapacityManager extends EventEmitter {
     return id;
   // Metrics Collection and Monitoring
   async collectCapacityMetrics(service: string): Promise<string> {
+
     const id = `metrics_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
     // Simulate realistic capacity metrics
     const currentInstances = this.currentCapacity.get(service) || 1;
@@ -634,11 +674,13 @@ export class SecurityCapacityManager extends EventEmitter {
     return optimizations;
   // Scaling Operations
   private async evaluateScalingPolicies(service: string, metrics: CapacityMetrics): Promise<void> {
+
     const relevantPolicies = Array.from(this.scalingPolicies.values());
       .filter(policy => policy.enabled);
     for (const policy of relevantPolicies) {
       await this.evaluatePolicy(service, policy, metrics);
   private async evaluatePolicy(service: string, policy: ScalingPolicy, metrics: CapacityMetrics): Promise<void> {
+
     // Check if in cooldown period
     const lastCooldown = this.cooldownPeriods.get(`${service}_${policy.id}`) || 0;}
     if (Date.now() - lastCooldown < policy.constraints.cooldown_period_seconds * 1000) {
@@ -656,6 +698,7 @@ export class SecurityCapacityManager extends EventEmitter {
         await this.executeScalingAction(service, policy, 'scheduled', 'time_triggered');
         break;
   private async evaluateMetricTrigger(trigger: MetricTrigger, metrics: CapacityMetrics): Promise<boolean> {
+
     let metricValue: number;
     switch (trigger.metric_name) {
       case 'cpu_utilization':
@@ -699,6 +742,7 @@ export class SecurityCapacityManager extends EventEmitter {
     // Cron expression evaluation would require a cron parser library
     return false;
   private async executeScalingAction(service: string, policy: ScalingPolicy, triggerReason: string, triggerType: string): Promise<void> {
+
   if (this.activeScaling.get(service)) {
   return; // Already scaling
   this.activeScaling.set(service, true);
@@ -748,6 +792,7 @@ export class SecurityCapacityManager extends EventEmitter {
       await this.sendScalingNotification(notification, service, scalingEvent);
     this.emit('scaling_completed', scalingEvent);
   private async performScaling(service: string, currentCapacity: number, targetCapacity: number, policyId: string, triggerReason: string): Promise<ScalingEvent> {
+
     const scalingEvent: ScalingEvent = {,
   id: `scaling_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`}
 },
@@ -787,6 +832,7 @@ export class SecurityCapacityManager extends EventEmitter {
     this.scalingEvents.push(scalingEvent);
     return scalingEvent;
   private async sendScalingNotification(notification: NotificationAction, service: string, event: ScalingEvent): Promise<void> {
+
     // Simulate notification sending
     const message = notification.message_template;
       .replace('{{service}}', service)
@@ -803,6 +849,7 @@ export class SecurityCapacityManager extends EventEmitter {
 });
   // Capacity Forecasting
   async generateCapacityForecast(service: string, horizonDays: number = 30): Promise<string> {
+
     const id = `forecast_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
     const serviceMetrics = this.metrics.get(service) || [];
     const historicalDataPoints = Math.min(serviceMetrics.length, 100);
@@ -877,6 +924,7 @@ export class SecurityCapacityManager extends EventEmitter {
       risks.push('Short-term spike predicted - prepare immediate scaling');
     return risks;
   private async generateCapacityRecommendations(service: string): Promise<CapacityForecast['recommendations']> {
+
     const immediate: CapacityRecommendation = [];
     const shortTerm: CapacityRecommendation = [];
     const longTerm: CapacityRecommendation = [];
@@ -963,6 +1011,7 @@ export class SecurityCapacityManager extends EventEmitter {
 };
   // Manual Scaling Operations
   async manualScale(service: string, targetCapacity: number, reason: string, scaledBy: string): Promise<string> {
+
     const currentCapacity = this.currentCapacity.get(service) || 1;
     const plan = Array.from(this.capacityPlans.values()).find(p => p.service === service);
     if (!plan) {
@@ -984,7 +1033,7 @@ export class SecurityCapacityManager extends EventEmitter {
     return scalingEvent.id;
   // System Status and Health
   getCapacityStatus(): {
-    services: Array<{,
+    services: Array<{
   service: string;
       current_capacity: number;
   utilization: { cpu: number; memory: number };
@@ -1229,6 +1278,7 @@ export class SecurityCapacityManager extends EventEmitter {
 };
     return JSON.stringify(config, null, 2);
   async importConfiguration(configJson: string): Promise<void> {
+
   try {
   const config = JSON.parse(configJson);
   // Import capacity plans

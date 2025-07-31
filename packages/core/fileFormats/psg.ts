@@ -145,6 +145,7 @@ export function validatePSGFile(data: unknown): PSGFile {
   * Safely parses a .psg file with comprehensive error handling
   */
 }
+}
 export function parsePSGFile(jsonString: string, options: {)
   maxFileSize?: number;
   strictValidation?: boolean;

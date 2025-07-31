@@ -7,6 +7,7 @@
  */
 
 }
+}
 export interface ModerationDecision {
   id: string;
   caseId: string;
@@ -64,7 +65,9 @@ export interface ModerationDecision {
   expiresAt?: Date;
 }
 }
+}
 
+}
 }
 export interface DecisionAction {
   type: string;
@@ -75,7 +78,9 @@ export interface DecisionAction {
   result?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface DecisionTemplate {
   id: string;
@@ -109,7 +114,9 @@ export interface DecisionTemplate {
   lastUsed?: Date;
 }
 }
+}
 
+}
 }
 export interface DecisionHistory {
   id: string;
@@ -124,7 +131,9 @@ export interface DecisionHistory {
   createdAt: Date;
 }
 }
+}
 
+}
 }
 export interface DecisionAnalytics {
   date: string;
@@ -154,7 +163,9 @@ export interface DecisionAnalytics {
   contentTypeBreakdown: Record<string, number>;
 }
 }
+}
 
+}
 }
 export interface DecisionFilter {
   contentTypes?: string[];
@@ -162,12 +173,14 @@ export interface DecisionFilter {
   decisionStatus?: string[];
   moderatorIds?: string[];
 }
+}
   dateRange?: { start?: Date; end?: Date };
   caseIds?: string[];
   appealable?: boolean;
   confidenceRange?: { min?: number; max?: number };
 }
 
+}
 }
 export interface CreateDecisionRequest {
   caseId: string;
@@ -190,7 +203,9 @@ export interface CreateDecisionRequest {
   expiresAt?: Date;
 }
 }
+}
 
+}
 }
 export interface UpdateDecisionRequest {
   decisionStatus?: string;
@@ -203,6 +218,7 @@ export interface UpdateDecisionRequest {
   feedbackReceived?: string;
   metadata?: Record<string, any>;
   internalNotes?: string;
+}
 }
 }
 

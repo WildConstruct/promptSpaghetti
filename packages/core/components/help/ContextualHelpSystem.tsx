@@ -4,6 +4,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useUISettingsStore } from '../../stores/uiSettingsStore';
 
+}
 export interface HelpContent {
   id: string;
   title: string;
@@ -17,13 +18,17 @@ export interface HelpContent {
   shortcut?: string;
   relatedFeatures?: string;
   priority?: 'high' | 'medium' | 'low'
+}
   }
+}
 export interface ContextualTooltipProps {
   content: HelpContent;
   children: React.ReactNode;
   disabled?: boolean;
   delay?: number;
   className?: string;
+}
+}
 }
 export interface HelpSystemProps {
   helpContent: HelpContent;
@@ -33,6 +38,7 @@ export interface HelpSystemProps {
   className?: string;
   // Built-in help content for common components
   // Individual tooltip component
+}
 }
 export const ContextualTooltip: React.FC<ContextualTooltipProps> = ({)
   content,
@@ -275,6 +281,7 @@ export const ContextualTooltip: React.FC<ContextualTooltipProps> = ({)
 };
 
 // Progressive onboarding system
+}
 interface ProgressiveOnboardingProps {
   steps: any;
   currentStep: number;
@@ -297,6 +304,7 @@ interface ProgressiveOnboardingProps {
   padding: 20,
   maxWidth: 400,
   boxShadow: '0 8px 24px rgba(0, 0, 0, 0.4)',
+}
 }}
     >
       {/* Step Indicator */}

@@ -6,9 +6,11 @@ import { ProjectTemplate } from './ProjectTemplateManager';
 import { TemplateVersion, TemplateBundle } from './TemplateVersionManager';
 import YAML from 'yaml';
 
+}
 export interface FormatProcessor {
   export(template: ProjectTemplate, version?: TemplateVersion, options?: any): Promise<string | ArrayBuffer>;
   import(data: string | ArrayBuffer, options?: any): Promise<ProjectTemplate>;
+}
   validate(data: string | ArrayBuffer): Promise<{ valid: boolean; errors: string }>;
   getMetadata(data: string | ArrayBuffer): Promise<any>;
 
@@ -20,6 +22,7 @@ export class JSONFormatProcessor implements FormatProcessor {
   pretty_print?: boolean;
   include_metadata?: boolean;
 } = {}): Promise<string> {
+
   const exportData: any = {,
   template
 };
@@ -41,6 +44,7 @@ export class JSONFormatProcessor implements FormatProcessor {
     const indent = options.pretty_print ? 2 : 0;
     return JSON.stringify(exportData, null, indent);
   async import(data: string): Promise<ProjectTemplate> {
+
     try {
       const parsed = JSON.parse(data);
       if (parsed.template) {
@@ -53,6 +57,7 @@ export class JSONFormatProcessor implements FormatProcessor {
 } catch (error) {
       throw new Error(`JSON parsing failed: ${(error as Error).message}`);}
   async validate(data: string): Promise<{ valid: boolean; errors: string }> {
+
   const errors: string = [];
   try {
   const parsed = JSON.parse(data);
@@ -67,6 +72,7 @@ export class JSONFormatProcessor implements FormatProcessor {
       errors.push(`Invalid JSON: ${(error as Error).message}`);}
     return { valid: errors.length === 0, errors };
   async getMetadata(data: string): Promise<any> {
+
   try {
   const parsed = JSON.parse(data);
   return {
@@ -85,6 +91,7 @@ export class YAMLFormatProcessor implements FormatProcessor {
   include_version_info?: boolean;
   include_metadata?: boolean;
 } = {}): Promise<string> {
+
   const exportData: any = {,
   template
 };
@@ -105,6 +112,7 @@ export class YAMLFormatProcessor implements FormatProcessor {
 };
     return YAML.stringify(exportData);
   async import(data: string): Promise<ProjectTemplate> {
+
     try {
       const parsed = YAML.parse(data);
       if (parsed.template) {
@@ -116,6 +124,7 @@ export class YAMLFormatProcessor implements FormatProcessor {
 } catch (error) {
       throw new Error(`YAML parsing failed: ${(error as Error).message}`);}
   async validate(data: string): Promise<{ valid: boolean; errors: string }> {
+
   const errors: string = [];
   try {
   const parsed = YAML.parse(data);
@@ -129,6 +138,7 @@ export class YAMLFormatProcessor implements FormatProcessor {
       errors.push(`Invalid YAML: ${(error as Error).message}`);}
     return { valid: errors.length === 0, errors };
   async getMetadata(data: string): Promise<any> {
+
   try {
   const parsed = YAML.parse(data);
   return {
@@ -149,6 +159,7 @@ export class BundleFormatProcessor implements FormatProcessor {
   include_documentation?: boolean;
   compress?: boolean;
 } = {}): Promise<ArrayBuffer> {
+
   const bundle: TemplateBundle = {,
   format_version: '1.0',
   created_at: new Date().toISOString(),
@@ -175,6 +186,7 @@ export class BundleFormatProcessor implements FormatProcessor {
     const bundleData = JSON.stringify(bundle, null, 2);
     return new TextEncoder().encode(bundleData).buffer;
   async import(data: ArrayBuffer): Promise<ProjectTemplate> {
+
   try {
   // Simplified - would extract from actual ZIP
   const bundleJson = new TextDecoder().decode(data);
@@ -188,6 +200,7 @@ export class BundleFormatProcessor implements FormatProcessor {
     } catch (error) {
       throw new Error(`Bundle import failed: ${(error as Error).message}`);}
   async validate(data: ArrayBuffer): Promise<{ valid: boolean; errors: string }> {
+
   const errors: string = [];
   try {
   const bundleJson = new TextDecoder().decode(data);
@@ -208,6 +221,7 @@ export class BundleFormatProcessor implements FormatProcessor {
       errors.push(`Bundle validation failed: ${(error as Error).message}`);}
     return { valid: errors.length === 0, errors };
   async getMetadata(data: ArrayBuffer): Promise<any> {
+
   try {
   const bundleJson = new TextDecoder().decode(data);
   const bundle: TemplateBundle = JSON.parse(bundleJson);
@@ -245,7 +259,7 @@ ${template.prerequisites.map(p => `- ${p}`).join('\n')}
 ## Learning Objectives
 ${template.learning_objectives.map(o => `- ${o}`).join('\n')}
 `;
-  private generateExamples(template: ProjectTemplate): Array<{,
+  private generateExamples(template: ProjectTemplate): Array<{
   name: string;
   description: string;
   graph_data: any;
@@ -274,6 +288,7 @@ ${template.learning_objectives.map(o => `- ${o}`).join('\n')}
   include_dependencies?: boolean;
   separate_files?: boolean;
 } = {}): Promise<ArrayBuffer> {
+
     // Create file structure
     const files: Record<string, string> = {};
     // Main template file
@@ -312,6 +327,7 @@ ${template.learning_objectives.map(o => `- ${o}`).join('\n')}
 };
     return new TextEncoder().encode(JSON.stringify(archive, null, 2)).buffer;
   async import(data: ArrayBuffer): Promise<ProjectTemplate> {
+
     try {
       // Simplified - would extract from actual ZIP
       const archiveJson = new TextDecoder().decode(data);
@@ -323,6 +339,7 @@ ${template.learning_objectives.map(o => `- ${o}`).join('\n')}
     } catch (error) {
       throw new Error(`ZIP import failed: ${(error as Error).message}`);}
   async validate(data: ArrayBuffer): Promise<{ valid: boolean; errors: string }> {
+
   const errors: string = [];
   try {
   const archiveJson = new TextDecoder().decode(data);
@@ -345,6 +362,7 @@ ${template.learning_objectives.map(o => `- ${o}`).join('\n')}
       errors.push(`ZIP validation failed: ${(error as Error).message}`);}
     return { valid: errors.length === 0, errors };
   async getMetadata(data: ArrayBuffer): Promise<any> {
+
     try {
       const archiveJson = new TextDecoder().decode(data);
       const archive = JSON.parse(archiveJson);
@@ -405,6 +423,7 @@ export class TemplateFormatRegistry {
   getSupportedFormats(): string {
     return Array.from(this.processors.keys());
   async detectFormat(data: string | ArrayBuffer): Promise<string | null> {
+
     // Try to detect format from data
     if (typeof data === 'string') {
       const trimmed = data.trim();

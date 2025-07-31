@@ -13,6 +13,7 @@ import { ConnectionManager } from './ConnectionManager';
 
 // Enhanced collaboration types
 }
+}
 export interface CollaborationSession {
   sessionId: string;
   documentId: string;
@@ -30,7 +31,9 @@ export interface CollaborationSession {
   analytics: SessionAnalytics;
 }
 }
+}
 
+}
 }
 export interface CollaborationParticipant {
   userId: string;
@@ -45,7 +48,9 @@ export interface CollaborationParticipant {
   contribution: ContributionMetrics;
 }
 }
+}
 
+}
 }
 export interface SessionSettings {
   enableRealTimeSync: boolean;
@@ -61,7 +66,9 @@ export interface SessionSettings {
   requireAuthentication: boolean;
 }
 }
+}
 
+}
 }
 export interface SessionPermissions {
   canEdit: boolean;
@@ -74,7 +81,9 @@ export interface SessionPermissions {
   canResolveConflicts: boolean;
 }
 }
+}
 
+}
 }
 export interface ParticipantPermissions extends SessionPermissions {
   canViewPresence: boolean;
@@ -83,6 +92,7 @@ export interface ParticipantPermissions extends SessionPermissions {
   canRestoreSnapshots: boolean;
 }
 
+}
 }
 export interface DocumentLock {
   lockId: string;
@@ -96,7 +106,9 @@ export interface DocumentLock {
   isAutoLock: boolean;
 }
 }
+}
 
+}
 }
 export interface SessionSnapshot {
   snapshotId: string;
@@ -110,7 +122,9 @@ export interface SessionSnapshot {
   tags: string[];
 }
 }
+}
 
+}
 }
 export interface SessionAnalytics {
   totalEdits: number;
@@ -124,10 +138,12 @@ export interface SessionAnalytics {
     edgeCount: number;
     complexity: number;
 }
+}
   };
   performanceMetrics: PerformanceMetrics;
 }
 
+}
 }
 export interface ContributionMetrics {
   editsCount: number;
@@ -140,7 +156,9 @@ export interface ContributionMetrics {
   elementsDeleted: number;
 }
 }
+}
 
+}
 }
 export interface PerformanceMetrics {
   averageLatency: number;
@@ -150,7 +168,9 @@ export interface PerformanceMetrics {
   messagingVolume: number;
 }
 }
+}
 
+}
 }
 export interface CollaborationEvent {
   eventId: string;
@@ -160,6 +180,7 @@ export interface CollaborationEvent {
   timestamp: number;
   data: unknown;
   metadata?: unknown;
+}
 }
 }
 
@@ -180,6 +201,7 @@ export enum CollaborationEventType {
 }
 
 }
+}
 export interface EnhancedCollaborationConfig {
   maxSessionsPerDocument: number;
   sessionTimeoutMs: number;
@@ -191,6 +213,7 @@ export interface EnhancedCollaborationConfig {
   enableAdvancedConflictResolution: boolean;
   enableSmartMerging: boolean;
   enableOperationalTransform: boolean;
+}
 }
 }
 

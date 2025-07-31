@@ -9,6 +9,7 @@ import {
   SpacingScale 
 } from '../../VisualHierarchy/HierarchyDesignSystem';
 import { useUISettingsStore } from '../../../stores/uiSettingsStore';
+}
 interface VisualHierarchyDemoEditorProps {
   nodeId: string;
   nodeType: string;
@@ -29,6 +30,7 @@ interface VisualHierarchyDemoEditorProps {
   nodeType,
   data,
   onChange
+}
 }) => {
   const { getNodeDisclosureLevel } = useUISettingsStore();
   const currentLevel = getNodeDisclosureLevel(nodeId, nodeType);

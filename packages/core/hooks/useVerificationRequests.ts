@@ -6,6 +6,7 @@
  */
 import { useState, useCallback, useEffect } from 'react';
 import { IdentityValidationType, IdentityValidationData, ValidationStatus } from '../auth/IdentityValidation';
+}
 interface VerificationRequestsHook {
   // State
   isLoading: boolean;
@@ -17,10 +18,12 @@ interface VerificationRequestsHook {
   // Actions
   submitVerificationRequest: (),
     type: IdentityValidationType,
+}
     data: Partial<IdentityValidationData>) => Promise<{ requestId: string; status: string }>;
   refreshStatus: () => Promise<void>;
   uploadDocuments: (requestId: string, files: File) => Promise<void>;
   getVerificationTypes: () => Promise<VerificationType>;
+}
 interface VerificationSummary {
   totalRequests: number;
   approvedCount: number;
@@ -40,7 +43,9 @@ interface VerificationSummary {
   userAgent: string;
   sessionId: string;
   requestSource: string;
+}
 };
+}
 interface TrustScore {
   overall: number;
   components: {
@@ -48,10 +53,12 @@ interface TrustScore {
   professional: number;
   community: number;
   activity: number;
+}
 };
   tier: 'unverified' | 'basic' | 'verified' | 'professional' | 'expert';
   badges: string;
   lastUpdated: number;
+}
 interface VerificationType {
   type: IdentityValidationType;
   title: string;
@@ -75,6 +82,7 @@ interface VerificationType {
   if (error.message) {
   return error.message;
   return 'An unexpected error occurred';
+}
 }, []);
   const fetchVerificationStatus = useCallback(async () => {
     try {

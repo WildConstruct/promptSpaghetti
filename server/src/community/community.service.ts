@@ -4,6 +4,7 @@
 import { Pool, PoolClient } from 'pg';
 
 }
+}
 export interface CommunityUser {
   id: string;
   display_name: string;
@@ -16,7 +17,9 @@ export interface CommunityUser {
   total_revenue: number;
 }
 }
+}
 
+}
 }
 export interface CommunityPost {
   id: string;
@@ -30,6 +33,7 @@ export interface CommunityPost {
     description: string;
     price_cents: number;
 }
+}
   };
   type: 'text' | 'template_showcase' | 'tutorial' | 'question' | 'announcement';
   likes_count: number;
@@ -42,6 +46,7 @@ export interface CommunityPost {
   tags: string[];
 }
 
+}
 }
 export interface CommunityDiscussion {
   id: string;
@@ -58,7 +63,9 @@ export interface CommunityDiscussion {
   created_at: string;
 }
 }
+}
 
+}
 }
 export interface CommunityEvent {
   id: string;
@@ -74,7 +81,9 @@ export interface CommunityEvent {
   tags: string[];
 }
 }
+}
 
+}
 }
 export interface CreatePostRequest {
   content: string;
@@ -84,7 +93,9 @@ export interface CreatePostRequest {
   tags?: string[];
 }
 }
+}
 
+}
 }
 export interface CreateDiscussionRequest {
   title: string;
@@ -93,7 +104,9 @@ export interface CreateDiscussionRequest {
   tags?: string[];
 }
 }
+}
 
+}
 }
 export interface CreateEventRequest {
   title: string;
@@ -103,6 +116,7 @@ export interface CreateEventRequest {
   end_date: string;
   max_attendees?: number;
   tags?: string[];
+}
 }
 }
 

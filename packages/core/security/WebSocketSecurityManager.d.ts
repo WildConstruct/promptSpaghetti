@@ -15,6 +15,7 @@ import { DataClassifier, ClassificationLevel } from './DataClassifier';
 import { DeviceFingerprintingService } from './DeviceFingerprintingService';
 import { TrustedDeviceManager } from './TrustedDeviceManager';
 
+}
 export interface WebSocketSecurityConfig {
     enableMessageEncryption: boolean;
     encryptionKeyRotationMinutes: number;
@@ -39,6 +40,7 @@ export interface WebSocketSecurityConfig {
     allowedOrigins: string[];
     requireSecureTransport: boolean;
 
+}
 export interface ConnectionSecurityContext {
     connectionId: string;
     userId: string;
@@ -67,8 +69,10 @@ export interface ConnectionSecurityContext {
         botDetected: boolean;
         repeatedLoginAttempts: boolean;
         anomalousPatterns: boolean;
+}
     };
 
+}
 export interface SecureWebSocketMessage {
     id: string;
     type: string;
@@ -84,6 +88,7 @@ export interface SecureWebSocketMessage {
     originUserId: string;
     processingPath: string[];
 
+}
 export interface SecurityEvent {
     id: string;
     type: 'authentication' | 'encryption' | 'threat_detected' | 'policy_violation' | 'anomaly';
@@ -94,6 +99,7 @@ export interface SecurityEvent {
     description: string;
     metadata: Record<string, any>;
 
+}
 export interface ThreatDetectionRule {
     id: string;
     name: string;
@@ -134,6 +140,7 @@ export declare class WebSocketSecurityManager extends EventEmitter {
         userAgent: string;
         origin: string;
         headers: Record<string, string>;
+}
     }): Promise<ConnectionSecurityContext>;
     /**
      * Authenticate connection with enhanced security

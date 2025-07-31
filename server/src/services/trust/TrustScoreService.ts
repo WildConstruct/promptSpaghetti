@@ -44,6 +44,7 @@ import {
 
 // Database row interface for enforcement actions with violation data
 }
+}
 interface EnforcementActionRow {
   id: string;
   action_type: 'warning' | 'account_warning' | 'account_restriction' | 'account_suspension' | 'account_termination' | 'content_removal' | 'marketplace_ban' | string;
@@ -55,13 +56,16 @@ interface EnforcementActionRow {
   reported_at: string | null;
 }
 }
+}
 
 // Interface for trust score history entries
+}
 }
 interface TrustScoreHistoryEntry {
   date: string | Date;
   score: number;
   [key: string]: unknown;
+}
 }
 }
 
@@ -2578,6 +2582,7 @@ export class TrustScoreService {
 
 // Supporting interfaces for trust events
 }
+}
 export interface TrustEvent {
   eventType: string;
   entityType: 'user' | 'template' | 'transaction';
@@ -2588,7 +2593,9 @@ export interface TrustEvent {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface SuspiciousActivityReport {
   reportId?: string;
@@ -2601,5 +2608,6 @@ export interface SuspiciousActivityReport {
   evidence: string[];
   reportedBy: string;
   reportedAt: Date;
+}
 }
 }

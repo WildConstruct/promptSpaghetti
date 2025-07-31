@@ -9,6 +9,7 @@ import { EventEmitter } from 'events';
 
 // Core knowledge base interfaces
 
+}
 export interface KnowledgeBaseArticle {
   id: string;
   title: string;
@@ -59,6 +60,7 @@ export interface KnowledgeBaseArticle {
   images: ImageContent;
   // Analytics
   analytics: ArticleAnalytics;
+}
 }
 export enum KnowledgeCategory {
   GETTING_STARTED = 'getting_started',
@@ -111,6 +113,7 @@ export enum KnowledgeCategory {
   isCollapsible: boolean;
   metadata: Record<string, any>;
 }
+}
 export enum SectionType {
   TEXT = 'text',
   CODE = 'code',
@@ -133,12 +136,16 @@ export enum SectionType {
   downloadCount: number;
   isPublic: boolean;
 }
+}
+}
 export interface ArticleRating {
   userId: string;
   rating: number; // 1-5,
   comment?: string;
   timestamp: Date;
   helpful: boolean;
+}
+}
 }
 export interface ArticleFeedback {
   id: string;
@@ -149,6 +156,7 @@ export interface ArticleFeedback {
   response?: string;
   timestamp: Date;
   resolved: boolean;
+}
 }
 export enum FeedbackType {
   IMPROVEMENT = 'improvement',
@@ -168,6 +176,7 @@ export enum FeedbackType {
   description: string;
   enabled: boolean;
 }
+}
 export enum AccessibilityType {
   SCREEN_READER = 'screen_reader',
   HIGH_CONTRAST = 'high_contrast',
@@ -181,6 +190,7 @@ export enum AccessibilityType {
   type: InteractiveElementType;
   config: Record<string, any>;
   position: ElementPosition;
+}
 }
 export enum InteractiveElementType {
   COLLAPSIBLE_SECTION = 'collapsible_section',
@@ -197,7 +207,9 @@ export enum InteractiveElementType {
   sectionId: string;
   order: number;
   placement: 'before' | 'after' | 'replace' | 'inline'
+}
   }
+}
 export interface CodeExample {
   id: string;
   language: string;
@@ -207,6 +219,8 @@ export interface CodeExample {
   output?: string;
   runnable: boolean;
   githubLink?: string;
+}
+}
 }
 export interface VideoContent {
   id: string;
@@ -219,11 +233,15 @@ export interface VideoContent {
   captions?: string;
   chapters: VideoChapter;
 }
+}
+}
 export interface VideoChapter {
   title: string;
   startTime: number;
   endTime: number;
   description?: string;
+}
+}
 }
 export interface ImageContent {
   id: string;
@@ -234,6 +252,8 @@ export interface ImageContent {
   height: number;
   format: string;
   zoomable: boolean;
+}
+}
 }
 export interface ArticleAnalytics {
   totalViews: number;
@@ -256,11 +276,15 @@ export interface ArticleAnalytics {
   freshnessScore: number;
   seoScore: number;
 }
+}
+}
 export interface SectionAnalytics {
   sectionId: string;
   views: number;
   timeSpent: number;
   exitRate: number;
+}
+}
 }
 export interface UserJourneyStep {
   fromArticle?: string;
@@ -268,6 +292,8 @@ export interface UserJourneyStep {
   timestamp: Date;
   sessionId: string;
   // Search and discovery interfaces
+}
+}
 }
 export interface KnowledgeBaseSearch {
   query: string;
@@ -277,6 +303,8 @@ export interface KnowledgeBaseSearch {
   totalResults: number;
   searchTime: number;
   didYouMean?: string;
+}
+}
 }
 export interface SearchFilters {
   categories: KnowledgeCategory;
@@ -289,9 +317,13 @@ export interface SearchFilters {
   hasVideo: boolean;
   hasCode: boolean;
 }
+}
+}
 export interface DateRange {
   start?: Date;
   end?: Date;
+}
+}
 }
 export interface SearchResult {
   article: KnowledgeBaseArticle;
@@ -300,17 +332,22 @@ export interface SearchResult {
   highlightedContent: string;
   relevanceReason: string;
 }
+}
+}
 export interface MatchedSection {
   sectionId: string;
   title: string;
   matchScore: number;
   highlightedText: string;
 }
+}
+}
 export interface SearchSuggestion {
   text: string;
   type: SuggestionType;
   score: number;
   category?: KnowledgeCategory;
+}
 }
 export enum SuggestionType {
   QUERY_COMPLETION = 'query_completion',
@@ -324,6 +361,7 @@ export enum SuggestionType {
   reason: RecommendationReason;
   context: RecommendationContext;
   personalizedFactors: PersonalizationFactor;
+}
 }
 export enum RecommendationReason {
   SIMILAR_CONTENT = 'similar_content',
@@ -341,10 +379,13 @@ export enum RecommendationReason {
   userExperience: string;
   timestamp: Date;
 }
+}
+}
 export interface PersonalizationFactor {
   type: PersonalizationType;
   weight: number;
   value: any;
+}
 }
 export enum PersonalizationType {
   USER_ROLE = 'user_role',
@@ -369,6 +410,8 @@ export enum PersonalizationType {
   // Integration settings
   integrationConfig: IntegrationConfig;
 }
+}
+}
 export interface SearchConfig {
   enableAISearch: boolean;
   enableAutoComplete: boolean;
@@ -380,6 +423,8 @@ export interface SearchConfig {
   stopWords: string;
   synonyms: Record<string, string>;
 }
+}
+}
 export interface AIConfig {
   enableRecommendations: boolean;
   enableContentGeneration: boolean;
@@ -388,6 +433,8 @@ export interface AIConfig {
   confidenceThreshold: number;
   maxRecommendations: number;
   personalizedWeight: number;
+}
+}
 }
 export interface ContentConfig {
   autoPublish: boolean;
@@ -398,6 +445,8 @@ export interface ContentConfig {
   contentModeration: boolean;
   duplicateDetection: boolean;
 }
+}
+}
 export interface AnalyticsConfig {
   trackingEnabled: boolean;
   retentionPeriod: number;
@@ -406,12 +455,16 @@ export interface AnalyticsConfig {
   heatmapTracking: boolean;
   performanceTracking: boolean;
 }
+}
+}
 export interface LocalizationConfig {
   defaultLanguage: string;
   supportedLanguages: string;
   autoTranslation: boolean;
   translationService: string;
   fallbackLanguage: string;
+}
+}
 }
 export interface IntegrationConfig {
   crmIntegration: boolean;
@@ -422,6 +475,7 @@ export interface IntegrationConfig {
   apiAccess: boolean;
   webhookSupport: boolean;
   // Knowledge base service class
+}
 }
 export class Epic16KnowledgeBaseService extends EventEmitter {
   private articles: Map<string, KnowledgeBaseArticle> = new Map();
@@ -434,6 +488,7 @@ export class Epic16KnowledgeBaseService extends EventEmitter {
     this.config = this.initializeConfig(config);
   // Article management
   async createArticle(articleData: Omit<KnowledgeBaseArticle, 'id' | 'publishedAt' | 'analytics'>): Promise<KnowledgeBaseArticle> {
+
     const article: KnowledgeBaseArticle = {,
   id: `kb-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
 },
@@ -448,6 +503,7 @@ export class Epic16KnowledgeBaseService extends EventEmitter {
     this.emit('articleCreated', article);
     return article;
   async updateArticle(articleId: string, updates: Partial<KnowledgeBaseArticle>): Promise<KnowledgeBaseArticle | null> {
+
   const article = this.articles.get(articleId);
   if (!article) return null;
   const updatedArticle = {
@@ -461,6 +517,7 @@ export class Epic16KnowledgeBaseService extends EventEmitter {
     this.emit('articleUpdated', updatedArticle);
     return updatedArticle;
   async deleteArticle(articleId: string): Promise<boolean> {
+
     const article = this.articles.get(articleId);
     if (!article) return false;
     this.articles.delete(articleId);
@@ -469,6 +526,7 @@ export class Epic16KnowledgeBaseService extends EventEmitter {
     this.emit('articleDeleted', { articleId, article });
     return true;
   async getArticle(articleId: string, userId?: string): Promise<KnowledgeBaseArticle | null> {
+
     const article = this.articles.get(articleId);
     if (!article || article.status !== ArticleStatus.PUBLISHED) return null;
     // Track view
@@ -476,6 +534,7 @@ export class Epic16KnowledgeBaseService extends EventEmitter {
       await this.trackArticleView(articleId, userId);
     return article;
   async getArticleBySlug(slug: string, userId?: string): Promise<KnowledgeBaseArticle | null> {
+
     const article = Array.from(this.articles.values()).find(a => a.slug === slug);
     if (!article || article.status !== ArticleStatus.PUBLISHED) return null;
     // Track view
@@ -484,6 +543,7 @@ export class Epic16KnowledgeBaseService extends EventEmitter {
     return article;
   // Search functionality
   async searchArticles(query: string, filters?: Partial<SearchFilters>, userId?: string): Promise<KnowledgeBaseSearch> {
+
     const startTime = Date.now();
     // Track search
     if (userId) {
@@ -504,6 +564,7 @@ export class Epic16KnowledgeBaseService extends EventEmitter {
     this.emit('searchPerformed', { query, results: results.length, userId });
     return searchResult;
   async getPopularArticles(category?: KnowledgeCategory, limit = 10): Promise<KnowledgeBaseArticle> {
+
     let articles = Array.from(this.articles.values());
       .filter(article => article.status === ArticleStatus.PUBLISHED);
     if (category) {
@@ -516,6 +577,7 @@ export class Epic16KnowledgeBaseService extends EventEmitter {
   }
       .slice(0, limit);
   async getRecentArticles(limit = 10): Promise<KnowledgeBaseArticle> {
+
   return Array.from(this.articles.values())
   .filter(article => article.status === ArticleStatus.PUBLISHED)
   .sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime())
@@ -541,6 +603,7 @@ export class Epic16KnowledgeBaseService extends EventEmitter {
       .slice(0, Math.min(limit, this.config.aiConfig.maxRecommendations));
   // Analytics and tracking
   async trackArticleView(articleId: string, userId: string): Promise<void> {
+
     const analytics = this.analytics.get(articleId);
     if (!analytics) return;
     analytics.totalViews++;
@@ -553,6 +616,7 @@ export class Epic16KnowledgeBaseService extends EventEmitter {
       session.viewedArticles.add(articleId);
     this.emit('articleViewed', { articleId, userId, analytics });
   async trackSearch(userId: string, query: string): Promise<void> {
+
   const session = this.getUserSession(userId);
   session.searchHistory.push({)
   query,
@@ -563,6 +627,7 @@ export class Epic16KnowledgeBaseService extends EventEmitter {
     if (session.searchHistory.length > 100) {
       session.searchHistory = session.searchHistory.slice(-100);
   async submitFeedback(articleId: string, feedback: Omit<ArticleFeedback, 'id' | 'timestamp'>): Promise<ArticleFeedback> {
+
     const article = this.articles.get(articleId);
     if (!article) throw new Error('Article not found');
     const newFeedback: ArticleFeedback = {,
@@ -577,6 +642,7 @@ export class Epic16KnowledgeBaseService extends EventEmitter {
     this.emit('feedbackSubmitted', { articleId, feedback: newFeedback });
     return newFeedback;
   async rateArticle(articleId: string, rating: Omit<ArticleRating, 'timestamp'>): Promise<void> {
+
   const article = this.articles.get(articleId);
   if (!article) throw new Error('Article not found');
   // Remove existing rating from same user
@@ -774,6 +840,7 @@ export class Epic16KnowledgeBaseService extends EventEmitter {
         reasons.push(`Tagged with "${term}"`);}
     return reasons;
   private async generateSearchSuggestions(query: string): Promise<SearchSuggestion> {
+
   // This would use ML/AI in production
   const suggestions: SearchSuggestion = [];
   // Add completion suggestions
@@ -787,6 +854,7 @@ export class Epic16KnowledgeBaseService extends EventEmitter {
 });
     return suggestions.sort((a, b) => b.score - a.score);
   private async generateDidYouMean(query: string): Promise<string | undefined> {
+
   // Simple spell check implementation
   const commonTerms = ['marketplace', 'template', 'community', 'support', 'billing'];
   for (const term of commonTerms) {
@@ -875,6 +943,7 @@ export class Epic16KnowledgeBaseService extends EventEmitter {
 
 // Supporting interfaces
 
+}
 export interface UserKBSession {
   userId: string;
   sessionStart: Date;
@@ -882,10 +951,14 @@ export interface UserKBSession {
   searchHistory: SearchHistoryItem;
   preferences: UserKBPreferences;
 }
+}
+}
 export interface SearchHistoryItem {
   query: string;
   timestamp: Date;
   results: number;
+}
+}
 }
 export interface UserKBPreferences {
   favoriteCategories?: KnowledgeCategory;
@@ -893,5 +966,6 @@ export interface UserKBPreferences {
   language?: string;
   emailNotifications?: boolean;
   darkMode?: boolean;
+}
 }
 export default Epic16KnowledgeBaseService;

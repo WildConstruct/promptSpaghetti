@@ -19,6 +19,7 @@ import * as crypto from 'crypto';
 // =============================================================================
 
 }
+}
 export interface BulkStatusChangeConfig {
   // Operation limits
   maxItemsPerOperation: number;
@@ -30,6 +31,7 @@ export interface BulkStatusChangeConfig {
   approvalRequired: {
     itemCount: number;
     impactLevel: 'high' | 'critical';
+}
 }
   };
   rollbackEnabled: boolean;
@@ -72,6 +74,7 @@ export enum BulkChangeStatus {
   ROLLED_BACK = 'rolled_back'
 }
 
+}
 }
 export interface BulkStatusChangeOperation {
   operationId: string;
@@ -137,7 +140,9 @@ export interface BulkStatusChangeOperation {
   throughput: number; // items per minute
 }
 }
+}
 
+}
 }
 export interface BulkChangeFilter {
   // Date filters
@@ -167,7 +172,9 @@ export interface BulkChangeFilter {
   sqlWhere?: string;
 }
 }
+}
 
+}
 }
 export interface BulkChangeResult {
   id: string;
@@ -185,9 +192,11 @@ export interface BulkChangeResult {
     rollbackData: any;
     rollbackInstructions?: string;
 }
+}
   };
 }
 
+}
 }
 export interface BulkChangeError {
   id: string;
@@ -202,7 +211,9 @@ export interface BulkChangeError {
   escalated: boolean;
 }
 }
+}
 
+}
 }
 export interface BulkChangeWarning {
   id: string;
@@ -214,7 +225,9 @@ export interface BulkChangeWarning {
   recommendation?: string;
 }
 }
+}
 
+}
 }
 export interface BulkRollbackData {
   rollbackId: string;
@@ -226,7 +239,9 @@ export interface BulkRollbackData {
   rollbackEstimatedTime: number; // minutes
 }
 }
+}
 
+}
 }
 export interface RollbackInstruction {
   step: number;
@@ -237,7 +252,9 @@ export interface RollbackInstruction {
   verificationRequired: boolean;
 }
 }
+}
 
+}
 }
 export interface ApprovalRequest {
   requestId: string;
@@ -253,7 +270,9 @@ export interface ApprovalRequest {
   riskAssessment: string;
 }
 }
+}
 
+}
 }
 export interface Approval {
   approvedBy: string;
@@ -263,7 +282,9 @@ export interface Approval {
   conditions?: string[];
 }
 }
+}
 
+}
 }
 export interface BulkChangeDryRunResult {
   dryRunId: string;
@@ -279,11 +300,13 @@ export interface BulkChangeDryRunResult {
     businessImpact: string;
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
 }
+}
   };
   recommendations: string[];
   warnings: BulkChangeWarning[];
 }
 
+}
 }
 export interface ImpactAssessment {
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
@@ -296,7 +319,9 @@ export interface ImpactAssessment {
   rollbackComplexity: 'simple' | 'moderate' | 'complex' | 'high_risk';
 }
 }
+}
 
+}
 }
 export interface SafetyCheckResult {
   checkName: string;
@@ -309,7 +334,9 @@ export interface SafetyCheckResult {
   blockingIssue: boolean;
 }
 }
+}
 
+}
 }
 export interface BulkStatusChangeMetrics {
   totalOperations: number;
@@ -330,6 +357,7 @@ export interface BulkStatusChangeMetrics {
     max: number;
     average: number;
     median: number;
+}
 }
   };
   

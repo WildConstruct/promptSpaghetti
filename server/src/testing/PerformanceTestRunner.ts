@@ -19,6 +19,7 @@ import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 export interface TestRunnerConfig {
   // Test Execution
   suites: string[]; // Test suite IDs to run
@@ -50,7 +51,9 @@ export interface TestRunnerConfig {
   testTimeout: number; // Individual test timeout
 }
 }
+}
 
+}
 }
 export interface TestExecutionPlan {
   planId: string;
@@ -61,7 +64,9 @@ export interface TestExecutionPlan {
   createdAt: Date;
 }
 }
+}
 
+}
 }
 export interface TestSuiteExecutionPlan {
   suiteId: string;
@@ -72,7 +77,9 @@ export interface TestSuiteExecutionPlan {
   priority: number;
 }
 }
+}
 
+}
 }
 export interface TestRunResult {
   runId: string;
@@ -99,7 +106,9 @@ export interface TestRunResult {
   environment: TestEnvironmentInfo;
 }
 }
+}
 
+}
 }
 export interface OverallTestSummary {
   totalSuites: number;
@@ -121,7 +130,9 @@ export interface OverallTestSummary {
   performanceRegressions: number;
 }
 }
+}
 
+}
 }
 export interface OverallPerformanceAnalysis {
   overallTrend: 'improving' | 'stable' | 'degrading';
@@ -138,9 +149,11 @@ export interface OverallPerformanceAnalysis {
     trend: string;
     issueCount: number;
 }
+}
   }>;
 }
 
+}
 }
 export interface RegressionAnalysis {
   hasRegressions: boolean;
@@ -156,11 +169,13 @@ export interface RegressionAnalysis {
     regressionPercentage: number;
     severity: 'minor' | 'moderate' | 'major' | 'critical';
 }
+}
   }>;
   
   recommendation: string;
 }
 
+}
 }
 export interface GeneratedReport {
   reportId: string;
@@ -170,7 +185,9 @@ export interface GeneratedReport {
   generatedAt: Date;
 }
 }
+}
 
+}
 }
 export interface TestEnvironmentInfo {
   nodeVersion: string;
@@ -182,6 +199,7 @@ export interface TestEnvironmentInfo {
     commit: string;
     branch: string;
     buildTime: Date;
+}
 }
   };
   ciInfo?: {

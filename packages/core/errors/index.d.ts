@@ -34,6 +34,7 @@ export declare enum ErrorSeverity {
     HIGH = "high",
     CRITICAL = "critical"
 
+}
 export interface ErrorContext {
     timestamp: string;
     userId?: string;
@@ -45,6 +46,7 @@ export interface ErrorContext {
     originalError?: any;
     metadata?: Record<string, any>;
 
+}
 export interface RecoveryAction {
     type: 'retry' | 'fallback' | 'redirect' | 'reset' | 'manual';
     description: string;
@@ -66,6 +68,7 @@ export declare abstract class BaseError extends Error {
         recoveryActions?: RecoveryAction[];
         userMessage?: string;
         cause?: Error;
+}
     });
     /**
      * Convert error to JSON for API responses and logging
@@ -92,7 +95,7 @@ export declare abstract class BaseError extends Error {
  * Graph-related errors
  */
 export declare class GraphValidationError extends BaseError {
-    validationErrors: Array<{,
+    validationErrors: Array<{
         field: string;
         value: any;
         expected: string;

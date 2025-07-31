@@ -6,9 +6,11 @@ import React, { useState, useRef } from 'react';
 import { ExtensionManifest, parseExtensionManifest } from '../../extensions/ExtensionManifest-simple';
 import { extensionCompatibilityChecker } from '../../extensions/ExtensionCompatibilityChecker';
 
+}
 export interface ExtensionInstallDialogProps {
   onInstall: (extension: ExtensionManifest) => Promise<void>;
   onCancel: () => void;
+}
 }
 export const ExtensionInstallDialog: React.FC<ExtensionInstallDialogProps> = ({)
   onInstall,

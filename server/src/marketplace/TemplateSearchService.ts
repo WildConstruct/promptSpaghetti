@@ -21,6 +21,7 @@ import { Pool } from 'pg';
 import { Redis } from 'ioredis';
 
 }
+}
 export interface SearchQuery {
   query?: string;              // Text search query
   categories?: string[];       // Filter by categories
@@ -34,6 +35,7 @@ export interface SearchQuery {
     start?: Date;
     end?: Date;
 }
+}
   };
   priceRange?: {             // Filter by price (if applicable)
     min?: number;
@@ -45,6 +47,7 @@ export interface SearchQuery {
 }
 
 }
+}
 export interface SearchFacets {
   categories: Array<{ name: string; count: number; subcategories?: Array<{ name: string; count: number }> }>;
   tags: Array<{ name: string; count: number }>;
@@ -54,6 +57,7 @@ export interface SearchFacets {
   dateRanges: Array<{ range: string; count: number }>;
 }
 
+}
 }
 export interface SearchResult {
   id: string;
@@ -68,6 +72,7 @@ export interface SearchResult {
     name: string;
     verified: boolean;
     avatar?: string;
+}
 }
   };
   rating: {
@@ -97,6 +102,7 @@ export interface SearchResult {
 }
 
 }
+}
 export interface SearchResponse {
   results: SearchResult[];
   total: number;
@@ -109,7 +115,9 @@ export interface SearchResponse {
   limit: number;
 }
 }
+}
 
+}
 }
 export interface SearchSuggestion {
   query: string;
@@ -118,7 +126,9 @@ export interface SearchSuggestion {
   category?: string;
 }
 }
+}
 
+}
 }
 export interface TrendingSearch {
   query: string;
@@ -126,6 +136,7 @@ export interface TrendingSearch {
   growth: number;
   category?: string;
   timeframe: '1h' | '24h' | '7d' | '30d';
+}
 }
 }
 

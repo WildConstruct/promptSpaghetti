@@ -13,6 +13,7 @@ import { ApiKeyManagementService } from '../services/ApiKeyManagementService';
 import { WebhookAuthenticationService } from '../services/WebhookAuthenticationService';
 
 }
+}
 export interface AuthContext {
   authenticated: boolean;
   method: 'jwt' | 'api_key' | 'oauth' | 'webhook' | 'none';
@@ -21,6 +22,7 @@ export interface AuthContext {
     keyId: string;
     scopes: string[];
     rateLimitStatus: any;
+}
 }
   };
   webhook?: {
@@ -42,6 +44,7 @@ export interface AuthContext {
 }
 
 }
+}
 export interface AuthOptions {
   required?: boolean;
   allowMethods?: Array<'jwt' | 'api_key' | 'oauth' | 'webhook'>;
@@ -49,6 +52,7 @@ export interface AuthOptions {
   requiredPermissions?: string[];
   allowWebhookProviders?: string[];
   bypassForPaths?: string[];
+}
 }
 }
 
@@ -479,10 +483,12 @@ declare module 'fastify' {
     requireJWT: (permissions?: string[]) => (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
     unifiedAuth: UnifiedAuthenticationMiddleware;
 }
+}
   }
 
   interface FastifyRequest {
     authContext?: AuthContext;
+}
 }
   }
 }

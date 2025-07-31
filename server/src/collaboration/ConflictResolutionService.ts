@@ -30,6 +30,7 @@ import {
 // =============================================================================
 
 }
+}
 export interface ConflictResolutionConfig {
   default_strategy: ResolutionStrategy;
   auto_resolution_enabled: boolean;
@@ -40,7 +41,9 @@ export interface ConflictResolutionConfig {
   conflict_threshold_seconds: number; // Time window for conflict detection
 }
 }
+}
 
+}
 }
 export interface ConflictNotification {
   type: 'conflict_detected' | 'conflict_resolved' | 'resolution_failed' | 'rollback_performed';
@@ -54,7 +57,9 @@ export interface ConflictNotification {
   requires_user_action: boolean;
 }
 }
+}
 
+}
 }
 export interface ConflictAnalysis {
   resource_id: string;
@@ -63,6 +68,7 @@ export interface ConflictAnalysis {
   recommended_strategy: ResolutionStrategy;
   prevention_suggestions: string[];
   estimated_resolution_time: number;
+}
 }
 }
 

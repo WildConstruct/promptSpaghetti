@@ -7,13 +7,16 @@
 
 // Pagination types
 
+}
 export interface PaginationOptions {
   page?: number;
   limit?: number;
   offset?: number;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc'
+}
   }
+}
 export interface PaginatedResult<T> {
   data: T;
   pagination: {
@@ -36,6 +39,7 @@ export interface PaginatedResult<T> {
 // Role-Based Access Control (RBAC) Types
 // Re-exported from auth types for consistency
 
+}
 export interface Role {
   id: string;
   name: string;
@@ -45,6 +49,8 @@ export interface Role {
   createdAt: Date;
   updatedAt: Date;
 }
+}
+}
 export interface Permission {
   id: string;
   roleId: string;
@@ -53,6 +59,8 @@ export interface Permission {
   scope: 'global' | 'organization' | 'team' | 'own';
   conditions?: Record<string, unknown>;
   createdAt: Date;
+}
+}
 }
 export interface UserRole {
   id: string;
@@ -64,12 +72,16 @@ export interface UserRole {
   scopeContext?: Record<string, unknown>;
   // Database query result types
 }
+}
+}
 export interface QueryOptions {
   select?: string;
   where?: Record<string, unknown>;
   orderBy?: Record<string, 'asc' | 'desc'>;
   include?: string;
   distinct?: boolean;
+}
+}
 }
 export interface QueryResult<T> {
   rows: T;
@@ -88,11 +100,15 @@ export interface QueryResult<T> {
   connectionTimeout?: number;
   commandTimeout?: number;
 }
+}
+}
 export interface TransactionContext {
   id: string;
   startedAt: Date;
   isolationLevel?: 'READ_UNCOMMITTED' | 'READ_COMMITTED' | 'REPEATABLE_READ' | 'SERIALIZABLE';
   // Audit and tracking types
+}
+}
 }
 export interface AuditableEntity {
   createdAt: Date;
@@ -101,11 +117,15 @@ export interface AuditableEntity {
   updatedBy?: string;
   version?: number;
 }
+}
+}
 export interface SoftDeletableEntity {
   deletedAt?: Date;
   deletedBy?: string;
   isDeleted: boolean;
   // Generic database entity base
+}
+}
 }
 export interface BaseEntity extends AuditableEntity {
   id: string;
@@ -114,6 +134,7 @@ export interface FullEntity extends BaseEntity, SoftDeletableEntity {}
 
 // Search and filtering types
 
+}
 export interface SearchOptions {
   query?: string;
   fields?: string;
@@ -121,12 +142,16 @@ export interface SearchOptions {
   fuzzy?: boolean;
   caseSensitive?: boolean;
 }
+}
+}
 export interface FilterOptions {
   field: string;
   operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'nin' | 'like' | 'ilike' | 'between';
   value: any;
   values?: any;
   // Database operation result types
+}
+}
 }
 export interface OperationResult<T = unknown> {
   success: boolean;
@@ -140,7 +165,7 @@ export interface OperationResult<T = unknown> {
   successCount: number;
   errorCount: number;
   data?: T;
-  errors?: Array<{,
+  errors?: Array<{
   index: number;
   error: string;
   item?: any;
@@ -150,10 +175,13 @@ export interface OperationResult<T = unknown> {
 
 // Cache-related types
 
+}
 export interface CacheOptions {
   ttl?: number; // time to live in seconds,
   tags?: string;
   version?: string;
+}
+}
 }
 export interface CachedResult<T> {
   data: T;
@@ -170,6 +198,7 @@ export interface CachedResult<T> {
   timestamp: Date;
   metadata?: Record<string, unknown>;
   // Helper types for type-safe database queries
+}
 }
 export type Primitive = string | number | boolean | Date | null | undefined;
 export type DatabaseValue = Primitive | Record<string, unknown> | Array<unknown>;

@@ -24,6 +24,7 @@ import { TrustedDeviceManager } from './TrustedDeviceManager';
 
 // Security configuration
 
+}
 export interface WebSocketSecurityConfig {
   // Encryption settings
   enableMessageEncryption: boolean;
@@ -55,6 +56,8 @@ export interface WebSocketSecurityConfig {
   allowedOrigins: string;
   requireSecureTransport: boolean;
   // Security context for connections
+}
+}
 }
 export interface ConnectionSecurityContext {
   connectionId: string;
@@ -90,9 +93,11 @@ export interface ConnectionSecurityContext {
   botDetected: boolean;
   repeatedLoginAttempts: boolean;
   anomalousPatterns: boolean;
+}
 };
 
 // Enhanced message with security metadata
+}
 }
 export interface SecureWebSocketMessage {
   id: string;
@@ -113,6 +118,8 @@ export interface SecureWebSocketMessage {
   processingPath: string;
   // Security events
 }
+}
+}
 export interface SecurityEvent {
   id: string;
   type: 'authentication' | 'encryption' | 'threat_detected' | 'policy_violation' | 'anomaly';
@@ -123,6 +130,8 @@ export interface SecurityEvent {
   description: string;
   metadata: Record<string, any>;
   // Threat detection rules
+}
+}
 }
 export interface ThreatDetectionRule {
   id: string;
@@ -136,6 +145,7 @@ export interface ThreatDetectionRule {
   /**
   * WebSocket Security Manager
   */
+}
 }
 export class WebSocketSecurityManager extends EventEmitter {
   private connectionContexts: Map<string, ConnectionSecurityContext> = new Map();
@@ -157,7 +167,7 @@ export class WebSocketSecurityManager extends EventEmitter {
   /**
    * Initialize connection security context
    */
-  public async initializeConnection()
+  public async initializeConnection(
     connectionId: string,
     userId: string,
     requestInfo: {
@@ -274,13 +284,14 @@ export class WebSocketSecurityManager extends EventEmitter {
   /**
    * Authenticate connection with enhanced security
    */
-  public async authenticateConnection()
+  public async authenticateConnection(
     connectionId: string,
     credentials: {
   token: string;
       mfaCode?: string;
       deviceVerificationToken?: string;
   ): Promise<boolean> {
+
     const context = this.connectionContexts.get(connectionId);
     if (!context) {
       throw new Error('Connection context not found');
@@ -347,10 +358,11 @@ export class WebSocketSecurityManager extends EventEmitter {
   /**
    * Encrypt outgoing message
    */
-  public async encryptMessage(()
+  public async encryptMessage(((
     connectionId: string,
-    message: any,
+    message: any
   ): Promise<SecureWebSocketMessage> {
+
     const context = this.connectionContexts.get(connectionId);
     if (!context) {
       throw new Error('Connection context not found');
@@ -439,10 +451,11 @@ export class WebSocketSecurityManager extends EventEmitter {
   /**
    * Decrypt incoming message
    */
-  public async decryptMessage(()
+  public async decryptMessage(((
     connectionId: string,
-    secureMessage: SecureWebSocketMessage,
+    secureMessage: SecureWebSocketMessage
   ): Promise<any> {
+
     const context = this.connectionContexts.get(connectionId);
     if (!context) {
       throw new Error('Connection context not found');
@@ -505,7 +518,7 @@ export class WebSocketSecurityManager extends EventEmitter {
   /**
   * Block connection due to security violation
   */
-  public async blockConnection()
+  public async blockConnection(
   connectionId: string,
   reason: string,
   duration?: number): Promise<void> {,
@@ -587,6 +600,7 @@ export class WebSocketSecurityManager extends EventEmitter {
 };
   // Private helper methods
   private async generateSessionEncryptionKey(context: ConnectionSecurityContext): Promise<void> {
+
     try {
       const key = await this.keyManagementService.generateKey({)
   type: KeyType.SYMMETRIC,
@@ -625,17 +639,20 @@ export class WebSocketSecurityManager extends EventEmitter {
     if (context.deviceVerified || context.mfaVerified) return 'verified';
     return 'basic';
   private async validateToken(token: string, userId: string): Promise<boolean> {
+
     // Implement your token validation logic
     // This is a placeholder
     return token.length > 10 && userId.length > 0;
   private async validateMFACode(userId: string, code: string): Promise<boolean> {
+
     // Implement your MFA validation logic
     // This is a placeholder
     return code.length === 6 && /^\d+$/.test(code);
-  private async checkForThreats(()
+  private async checkForThreats(((
     connectionId: string,
-    message: SecureWebSocketMessage,
+    message: SecureWebSocketMessage
   ): Promise<void> {
+
     const context = this.connectionContexts.get(connectionId);
     if (!context) return;
     // Rate limiting check
@@ -664,10 +681,11 @@ export class WebSocketSecurityManager extends EventEmitter {
     // Check for suspicious patterns
     if (this.config.enableAnomalyDetection) {
       await this.detectAnomalies(connectionId, message);
-  private async detectAnomalies(()
+  private async detectAnomalies(((
     connectionId: string,
-    message: SecureWebSocketMessage,
+    message: SecureWebSocketMessage
   ): Promise<void> {
+
     const context = this.connectionContexts.get(connectionId);
     if (!context) return;
     // Simple anomaly detection patterns
@@ -740,6 +758,7 @@ export class WebSocketSecurityManager extends EventEmitter {
       this.cleanupOldSecurityEvents();
     }, 3600000); // Every hour
   private async rotateSessionKeys(): Promise<void> {
+
     for (const [connectionId, context] of this.connectionContexts) {
       if (context.encryptionKeyId && )
           Date.now() - context.lastKeyRotation.getTime() > 
@@ -761,6 +780,7 @@ export class WebSocketSecurityManager extends EventEmitter {
     const cutoffTime = new Date(Date.now() - this.config.auditLogRetentionDays * 24 * 60 * 60 * 1000);
     this.securityEvents = this.securityEvents.filter(event => event.timestamp > cutoffTime);
   private async logSecurityEvent(eventData: Omit<SecurityEvent, 'id' | 'timestamp'>): Promise<void> {
+
     if (!this.config.enableSecurityAuditLog) return;
     const event: SecurityEvent = {,
   id: `security_event_${Date.now()}_${randomBytes(4).toString('hex')}`}

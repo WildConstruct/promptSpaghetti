@@ -1,6 +1,7 @@
 import { ConnectionState } from '../websocket/WebSocketClient';
 import { GraphUpdatePayload, PresenceUpdatePayload } from '../../../server/src/websocket/types';
 
+}
 export interface UseWebSocketOptions {
     url?: string;
     documentId: string;
@@ -15,6 +16,7 @@ export interface UseWebSocketOptions {
     onUserLeave?: (user: any) => void;
     onError?: (error: any) => void;
 
+}
 export interface UseWebSocketReturn {
     connectionState: ConnectionState;
     isConnected: boolean;
@@ -32,6 +34,7 @@ export declare function usePresence(documentId: string, userId: string, userName
         x: number;
         y: number;
         nodeId?: string;
+}
     } | null;
     selection: string[];
     currentTool: string;

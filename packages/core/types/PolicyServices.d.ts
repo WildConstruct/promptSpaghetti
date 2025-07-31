@@ -11,6 +11,7 @@ import { BasePolicy, PolicyType, PolicyStatus, PolicySearchCriteria, PolicySearc
  * Main policy management service interface
  */
 
+}
 export interface IPolicyService {
     createPolicy(policy: CreatePolicyRequest): Promise<PolicyServiceResponse<BasePolicy>>;
     updatePolicy(id: string, updates: UpdatePolicyRequest): Promise<PolicyServiceResponse<BasePolicy>>;
@@ -37,6 +38,7 @@ export interface IPolicyService {
  * Policy evaluation service interface
  */
 
+}
 export interface IPolicyEvaluationService {
     evaluatePolicy(policyId: string, context: EvaluationContext): Promise<PolicyServiceResponse<PolicyEvaluation>>;
     evaluatePolicies(policyIds: string[], context: EvaluationContext): Promise<PolicyServiceResponse<PolicyEvaluation[]>>;
@@ -52,6 +54,7 @@ export interface IPolicyEvaluationService {
  * Policy assignment service interface
  */
 
+}
 export interface IPolicyAssignmentService {
     createAssignment(assignment: CreateAssignmentRequest): Promise<PolicyServiceResponse<PolicyAssignment>>;
     updateAssignment(id: string, updates: UpdateAssignmentRequest): Promise<PolicyServiceResponse<PolicyAssignment>>;
@@ -73,6 +76,7 @@ export interface IPolicyAssignmentService {
  * Policy analytics service interface
  */
 
+}
 export interface IPolicyAnalyticsService {
     generateAnalytics(period: AnalyticsPeriod, criteria?: AnalyticsSearchCriteria): Promise<PolicyServiceResponse<PolicyAnalytics>>;
     getUsageAnalytics(policyIds?: string[], period?: AnalyticsPeriod): Promise<PolicyServiceResponse<UsageAnalytics>>;
@@ -91,6 +95,7 @@ export interface IPolicyAnalyticsService {
  * Policy template service interface
  */
 
+}
 export interface IPolicyTemplateService {
     createTemplate(template: CreateTemplateRequest): Promise<PolicyServiceResponse<PolicyTemplate>>;
     updateTemplate(id: string, updates: UpdateTemplateRequest): Promise<PolicyServiceResponse<PolicyTemplate>>;
@@ -109,6 +114,7 @@ export interface IPolicyTemplateService {
  * Policy import/export service interface
  */
 
+}
 export interface IPolicyImportExportService {
     exportPolicies(criteria: PolicySearchCriteria, options: ExportOptions): Promise<PolicyServiceResponse<PolicyExport>>;
     exportAssignments(criteria: AssignmentSearchCriteria, options: ExportOptions): Promise<PolicyServiceResponse<PolicyAssignment[]>>;
@@ -120,12 +126,14 @@ export interface IPolicyImportExportService {
     scheduleBatchImport(source: ImportSource, schedule: ImportSchedule): Promise<PolicyServiceResponse<BatchJob>>;
 
 
+}
 export interface PolicyServiceResponse<T> {
     success: boolean;
     data?: T;
     error?: ServiceError;
     metadata?: ResponseMetadata;
 
+}
 export interface ServiceError {
     code: string;
     message: string;
@@ -134,6 +142,7 @@ export interface ServiceError {
     requestId?: string;
 
 
+}
 export interface ResponseMetadata {
     requestId: string;
     timestamp: Date;
@@ -142,12 +151,14 @@ export interface ResponseMetadata {
     rateLimitRemaining?: number;
 
 
+}
 export interface CreatePolicyRequest {
     policy: Omit<BasePolicy, 'id' | 'createdAt' | 'updatedAt' | 'createdBy' | 'lastModifiedBy'>;
     validateOnly?: boolean;
     dryRun?: boolean;
 
 
+}
 export interface UpdatePolicyRequest {
     policy: Partial<BasePolicy>;
     incrementVersion?: boolean;
@@ -155,6 +166,7 @@ export interface UpdatePolicyRequest {
     validateOnly?: boolean;
 
 
+}
 export interface PolicyTestCase {
     testId: string;
     name: string;
@@ -164,6 +176,7 @@ export interface PolicyTestCase {
     expectedReasons?: string[];
 
 
+}
 export interface PolicyTestResult {
     testId: string;
     passed: boolean;
@@ -173,6 +186,7 @@ export interface PolicyTestResult {
     executionTime: number;
 
 
+}
 export interface TestDeviation {
     field: string;
     expected: any;
@@ -180,6 +194,7 @@ export interface TestDeviation {
     severity: 'info' | 'warning' | 'error';
 
 
+}
 export interface PolicyVersion {
     version: string;
     createdAt: Date;
@@ -189,6 +204,7 @@ export interface PolicyVersion {
     policy: BasePolicy;
 
 
+}
 export interface BulkOperationResult {
     totalRequested: number;
     successful: number;
@@ -197,6 +213,7 @@ export interface BulkOperationResult {
     errors: ServiceError[];
 
 
+}
 export interface BulkOperationItem {
     id: string;
     success: boolean;
@@ -204,18 +221,21 @@ export interface BulkOperationItem {
     data?: any;
 
 
+}
 export interface BulkUpdateRequest {
     id: string;
     updates: Partial<BasePolicy>;
     reason?: string;
 
 
+}
 export interface EvaluationRequest {
     policyId?: string;
     context: EvaluationContext;
     options?: EvaluationOptions;
 
 
+}
 export interface EvaluationOptions {
     useCache?: boolean;
     cacheExpiration?: number;
@@ -223,6 +243,7 @@ export interface EvaluationOptions {
     maxEvaluationTime?: number;
 
 
+}
 export interface EvaluationPerformanceMetrics {
     totalEvaluations: number;
     averageLatency: number;
@@ -234,15 +255,18 @@ export interface EvaluationPerformanceMetrics {
     timeframe: AnalyticsPeriod;
 
 
+}
 export interface CreateAssignmentRequest {
     assignment: Omit<PolicyAssignment, 'assignmentId' | 'assignedAt'>;
 
 
+}
 export interface UpdateAssignmentRequest {
     assignment: Partial<PolicyAssignment>;
     reason?: string;
 
 
+}
 export interface AssignmentSearchCriteria {
     policyIds?: string[];
     targetTypes?: AssignmentTargetType[];
@@ -252,6 +276,7 @@ export interface AssignmentSearchCriteria {
     assignedBefore?: Date;
 
 
+}
 export interface AssignmentSearchResult {
     assignments: PolicyAssignment[];
     totalCount: number;
@@ -259,6 +284,7 @@ export interface AssignmentSearchResult {
     currentPage: number;
 
 
+}
 export interface AssignmentOptions {
     priority?: number;
     overridable?: boolean;
@@ -267,6 +293,7 @@ export interface AssignmentOptions {
     effectiveUntil?: Date;
 
 
+}
 export interface ConflictResolutionResult {
     hasConflicts: boolean;
     conflicts: AssignmentConflict[];
@@ -274,6 +301,7 @@ export interface ConflictResolutionResult {
     recommendations: ConflictRecommendation[];
 
 
+}
 export interface AssignmentConflict {
     conflictType: 'priority' | 'contradiction' | 'duplicate';
     involvedAssignments: string[];
@@ -281,12 +309,14 @@ export interface AssignmentConflict {
     severity: 'low' | 'medium' | 'high' | 'critical';
 
 
+}
 export interface ConflictRecommendation {
     recommendationType: 'merge' | 'prioritize' | 'exclude' | 'manual_review';
     description: string;
     automatable: boolean;
 
 
+}
 export interface AssignmentInheritanceChain {
     assignmentId: string;
     chain: InheritanceLevel[];
@@ -294,6 +324,7 @@ export interface AssignmentInheritanceChain {
     overrides: string[];
 
 
+}
 export interface InheritanceLevel {
     assignmentId: string;
     targetType: AssignmentTargetType;
@@ -302,12 +333,14 @@ export interface InheritanceLevel {
     priority: number;
 
 
+}
 export interface AssignmentValidationResult {
     valid: boolean;
     errors: AssignmentValidationError[];
     warnings: AssignmentValidationWarning[];
 
 
+}
 export interface AssignmentValidationError {
     field: string;
     message: string;
@@ -315,6 +348,7 @@ export interface AssignmentValidationError {
     severity: 'error' | 'warning';
 
 
+}
 export interface AssignmentValidationWarning {
     field: string;
     message: string;
@@ -322,6 +356,7 @@ export interface AssignmentValidationWarning {
     recommendation?: string;
 
 
+}
 export interface AssignmentSimulationResult {
     wouldSucceed: boolean;
     predictedConflicts: AssignmentConflict[];
@@ -329,6 +364,7 @@ export interface AssignmentSimulationResult {
     recommendations: string[];
 
 
+}
 export interface AssignmentImpact {
     affectedTargets: number;
     cascadingAssignments: number;
@@ -336,6 +372,7 @@ export interface AssignmentImpact {
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
 
 
+}
 export interface AnalyticsSearchCriteria {
     policyTypes?: PolicyType[];
     policyIds?: string[];
@@ -344,6 +381,7 @@ export interface AnalyticsSearchCriteria {
     includeInactive?: boolean;
 
 
+}
 export interface UsageAnalytics {
     period: AnalyticsPeriod;
     policyUsage: PolicyUsageData[];
@@ -352,6 +390,7 @@ export interface UsageAnalytics {
     topPolicies: TopPolicyData[];
 
 
+}
 export interface PolicyUsageData {
     policyId: string;
     policyName: string;
@@ -361,6 +400,7 @@ export interface PolicyUsageData {
     errorCount: number;
 
 
+}
 export interface TopPolicyData {
     policyId: string;
     policyName: string;
@@ -369,6 +409,7 @@ export interface TopPolicyData {
     impact: 'low' | 'medium' | 'high';
 
 
+}
 export interface ComplianceAnalytics {
     period: AnalyticsPeriod;
     overallScore: number;
@@ -377,6 +418,7 @@ export interface ComplianceAnalytics {
     recommendations: ComplianceRecommendation[];
 
 
+}
 export interface FrameworkScore {
     framework: ComplianceFramework;
     score: number;
@@ -385,6 +427,7 @@ export interface FrameworkScore {
     trending: 'up' | 'stable' | 'down';
 
 
+}
 export interface ComplianceViolation {
     violationId: string;
     framework: ComplianceFramework;
@@ -395,6 +438,7 @@ export interface ComplianceViolation {
     status: 'open' | 'acknowledged' | 'resolved' | 'false_positive';
 
 
+}
 export interface ComplianceRecommendation {
     recommendationId: string;
     framework: ComplianceFramework;
@@ -404,6 +448,7 @@ export interface ComplianceRecommendation {
     effort: 'low' | 'medium' | 'high';
 
 
+}
 export interface PerformanceAnalytics {
     period: AnalyticsPeriod;
     systemMetrics: SystemPerformanceMetrics;
@@ -411,6 +456,7 @@ export interface PerformanceAnalytics {
     bottlenecks: PerformanceBottleneck[];
 
 
+}
 export interface SystemPerformanceMetrics {
     totalRequests: number;
     averageLatency: number;
@@ -419,6 +465,7 @@ export interface SystemPerformanceMetrics {
     availability: number;
 
 
+}
 export interface PolicyPerformanceMetrics {
     policyId: string;
     averageEvaluationTime: number;
@@ -427,6 +474,7 @@ export interface PolicyPerformanceMetrics {
     complexity: 'low' | 'medium' | 'high';
 
 
+}
 export interface PerformanceBottleneck {
     type: 'latency' | 'throughput' | 'memory' | 'cpu';
     component: string;
@@ -435,6 +483,7 @@ export interface PerformanceBottleneck {
     recommendation: string;
 
 
+}
 export interface RealTimeMetrics {
     timestamp: Date;
     activeEvaluations: number;
@@ -445,6 +494,7 @@ export interface RealTimeMetrics {
     systemLoad: number;
 
 
+}
 export interface SystemHealthMetrics {
     overallHealth: 'healthy' | 'degraded' | 'critical';
     healthScore: number;
@@ -452,6 +502,7 @@ export interface SystemHealthMetrics {
     lastCheck: Date;
 
 
+}
 export interface ComponentHealth {
     component: string;
     status: 'healthy' | 'degraded' | 'critical';
@@ -459,15 +510,18 @@ export interface ComponentHealth {
     lastCheck: Date;
 
 
+}
 export interface CreateTemplateRequest {
     template: Omit<PolicyTemplate, 'templateId' | 'createdAt' | 'createdBy' | 'popularity' | 'usage_count'>;
 
 
+}
 export interface UpdateTemplateRequest {
     template: Partial<PolicyTemplate>;
     reason?: string;
 
 
+}
 export interface TemplateSearchCriteria {
     policyTypes?: PolicyType[];
     complianceFrameworks?: ComplianceFramework[];
@@ -477,6 +531,7 @@ export interface TemplateSearchCriteria {
     text?: string;
 
 
+}
 export interface TemplateSearchResult {
     templates: PolicyTemplate[];
     totalCount: number;
@@ -484,6 +539,7 @@ export interface TemplateSearchResult {
     currentPage: number;
 
 
+}
 export interface TemplateCustomization {
     fieldValues: Record<string, any>;
     customFields?: Record<string, any>;
@@ -491,6 +547,7 @@ export interface TemplateCustomization {
     description?: string;
 
 
+}
 export interface TemplateUsageStats {
     templateId: string;
     totalUsages: number;
@@ -500,6 +557,7 @@ export interface TemplateUsageStats {
     popularCustomizations: PopularCustomization[];
 
 
+}
 export interface PopularCustomization {
     field: string;
     value: any;
@@ -507,6 +565,7 @@ export interface PopularCustomization {
     percentage: number;
 
 
+}
 export interface TemplateRecommendationContext {
     organizationType?: string;
     industry?: string;
@@ -515,12 +574,14 @@ export interface TemplateRecommendationContext {
     existingPolicies?: string[];
 
 
+}
 export interface TemplateValidationResult {
     valid: boolean;
     errors: TemplateValidationError[];
     warnings: TemplateValidationWarning[];
 
 
+}
 export interface TemplateValidationError {
     field: string;
     message: string;
@@ -528,6 +589,7 @@ export interface TemplateValidationError {
     severity: 'error' | 'warning';
 
 
+}
 export interface TemplateValidationWarning {
     field: string;
     message: string;
@@ -535,17 +597,20 @@ export interface TemplateValidationWarning {
     suggestion?: string;
 
 
+}
 export interface TemplateTestData {
     customizations: TemplateCustomization[];
     validationTests: TemplateValidationTest[];
 
 
+}
 export interface TemplateValidationTest {
     testName: string;
     expectedValid: boolean;
     customization: TemplateCustomization;
 
 
+}
 export interface TemplateTestResult {
     testsPassed: number;
     totalTests: number;
@@ -553,6 +618,7 @@ export interface TemplateTestResult {
     overallSuccess: boolean;
 
 
+}
 export interface TemplateTestCaseResult {
     testName: string;
     passed: boolean;
@@ -560,6 +626,7 @@ export interface TemplateTestCaseResult {
     generatedPolicy?: BasePolicy;
 
 
+}
 export interface ExportOptions {
     format: ExportFormat;
     includeAssignments?: boolean;
@@ -569,18 +636,21 @@ export interface ExportOptions {
     encryption?: ExportEncryption;
 
 
+}
 export interface ExportEncryption {
     enabled: boolean;
     algorithm?: string;
     keyId?: string;
 
 
+}
 export interface ImportData {
     format: ExportFormat;
     data: string | Buffer;
     metadata?: ExportMetadata;
 
 
+}
 export interface ImportOptions {
     conflictResolution?: ImportConflictResolution;
     validateOnly?: boolean;
@@ -589,11 +659,13 @@ export interface ImportOptions {
     overwriteExisting?: boolean;
 
 
+}
 export interface ImportConflictResolution {
     strategy: 'skip' | 'overwrite' | 'merge' | 'rename' | 'manual';
     customResolver?: string;
 
 
+}
 export interface ImportValidationResult {
     valid: boolean;
     totalPolicies: number;
@@ -603,6 +675,7 @@ export interface ImportValidationResult {
     warnings: ImportValidationWarning[];
 
 
+}
 export interface ImportValidationError {
     policyId?: string;
     message: string;
@@ -611,6 +684,7 @@ export interface ImportValidationError {
     code: string;
 
 
+}
 export interface ImportValidationWarning {
     policyId?: string;
     message: string;
@@ -620,6 +694,7 @@ export interface ImportValidationWarning {
     suggestion?: string;
 
 
+}
 export interface ExportSchedule {
     frequency: 'daily' | 'weekly' | 'monthly';
     time: string;
@@ -627,6 +702,7 @@ export interface ExportSchedule {
     enabled: boolean;
 
 
+}
 export interface ImportSchedule {
     frequency: 'hourly' | 'daily' | 'weekly';
     time?: string;
@@ -634,6 +710,7 @@ export interface ImportSchedule {
     enabled: boolean;
 
 
+}
 export interface BatchJob {
     jobId: string;
     type: 'export' | 'import';
@@ -645,6 +722,7 @@ export interface BatchJob {
     results?: BatchJobResult[];
 
 
+}
 export interface BatchJobResult {
     runId: string;
     startedAt: Date;
@@ -655,6 +733,7 @@ export interface BatchJobResult {
     outputLocation?: string;
 
 
+}
 export interface ImportSource {
     type: 'url' | 'file' | 's3' | 'database';
     location: string;
@@ -662,11 +741,13 @@ export interface ImportSource {
     format: ExportFormat;
 
 
+}
 export interface SourceCredentials {
     type: 'basic' | 'bearer' | 'oauth' | 'aws' | 'key';
     credentials: Record<string, string>;
 
 
+}
 export interface PolicyInsight {
     insightId: string;
     type: 'usage' | 'performance' | 'compliance' | 'security' | 'optimization';
@@ -678,6 +759,7 @@ export interface PolicyInsight {
     generatedAt: Date;
 
 
+}
 export interface PolicyRecommendation {
     recommendationId: string;
     category: 'security' | 'performance' | 'compliance' | 'user_experience' | 'cost_optimization';
@@ -691,6 +773,7 @@ export interface PolicyRecommendation {
     generatedAt: Date;
 
 
+}
 export interface InsightCriteria {
     types?: string[];
     minImpact?: 'low' | 'medium' | 'high' | 'critical';
@@ -699,6 +782,7 @@ export interface InsightCriteria {
     generatedAfter?: Date;
 
 
+}
 export interface RecommendationCriteria {
     categories?: string[];
     minPriority?: 'low' | 'medium' | 'high' | 'critical';
@@ -708,6 +792,7 @@ export interface RecommendationCriteria {
 
 export type ReportFormat = 'pdf' | 'html' | 'csv' | 'json' | 'xml';
 
+}
 export interface ComplianceReport {
     reportId: string;
     generatedAt: Date;
@@ -721,6 +806,7 @@ export interface ComplianceReport {
     downloadUrl?: string;
 
 
+}
 export interface FrameworkResult {
     framework: ComplianceFramework;
     score: number;
@@ -731,6 +817,7 @@ export interface FrameworkResult {
     status: 'compliant' | 'partially_compliant' | 'non_compliant';
 
 
+}
 export interface UsageReport {
     reportId: string;
     generatedAt: Date;
@@ -743,6 +830,7 @@ export interface UsageReport {
     downloadUrl?: string;
 
 
+}
 export interface UsageTrendData {
     date: Date;
     evaluations: number;
@@ -751,6 +839,7 @@ export interface UsageTrendData {
     errorRate: number;
 
 
+}
 export interface AuditReport {
     reportId: string;
     generatedAt: Date;
@@ -763,6 +852,7 @@ export interface AuditReport {
     downloadUrl?: string;
 
 
+}
 export interface AuditTrailEntry {
     timestamp: Date;
     userId: string;
@@ -774,6 +864,7 @@ export interface AuditTrailEntry {
     userAgent?: string;
 
 
+}
 export interface PolicyChangeEntry {
     timestamp: Date;
     policyId: string;
@@ -784,6 +875,7 @@ export interface PolicyChangeEntry {
     newVersion?: string;
 
 
+}
 export interface AccessLogEntry {
     timestamp: Date;
     userId: string;
@@ -795,6 +887,7 @@ export interface AccessLogEntry {
     userAgent?: string;
 
 
+}
 export interface SecurityEventEntry {
     timestamp: Date;
     eventType: 'authentication' | 'authorization' | 'policy_violation' | 'suspicious_activity';
@@ -806,3 +899,4 @@ export interface SecurityEventEntry {
 
 
 //# sourceMappingURL=PolicyServices.d.ts.map
+}

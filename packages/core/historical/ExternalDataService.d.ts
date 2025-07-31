@@ -6,6 +6,7 @@
  */
 import { DataSource, HistoricalQuery, HistoricalQueryResult, UTDGNode } from '../types/UTDG';
 
+}
 export interface CacheEntry {
     data: any;
     timestamp: number;
@@ -13,6 +14,7 @@ export interface CacheEntry {
     source_id: string;
 
 
+}
 export interface DataSourceRegistry {
     [sourceId: string]: DataSource;
 
@@ -52,6 +54,7 @@ export declare class ExternalDataService {
         valid: boolean;
         error?: string;
         sample_data?: any;
+}
     }>;
     /**
      * Clear cache for all or specific sources

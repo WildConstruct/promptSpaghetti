@@ -16,6 +16,7 @@ import {
   QUALITY_ASSESSMENT_CONFIG
 } from '../../community/ContentQualityAssessment';
 
+}
 export interface QualityAssessmentDashboardProps {
   contentId: string;
   versionId: string;
@@ -25,6 +26,7 @@ export interface QualityAssessmentDashboardProps {
   showReviewInterface?: boolean;
   readOnly?: boolean;
   className?: string;
+}
 }
 export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProps> = ({)
   contentId,

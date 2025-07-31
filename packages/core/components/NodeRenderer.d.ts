@@ -1,6 +1,7 @@
 import React from 'react';
 import { NodeMeta } from '../Palette';
 
+}
 interface NodeRendererProps {
     id: string;
     data: Record<string, unknown>;
@@ -10,5 +11,6 @@ interface NodeRendererProps {
     getCategoryColor: (category: string) => string;
 
 export declare const NodeRenderer: React.NamedExoticComponent<NodeRendererProps>;
+}
 export {};
 //# sourceMappingURL=NodeRenderer.d.ts.map

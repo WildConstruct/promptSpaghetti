@@ -16,6 +16,7 @@ import { UserPolicyInteractionService } from './UserPolicyInteractionService';
 import { OperationContext } from '../../../packages/core/types/DataClassification';
 
 }
+}
 export interface PolicyEffectivenessMetrics {
   trackingId: string;
   policyId: string;
@@ -51,7 +52,9 @@ export interface PolicyEffectivenessMetrics {
   lastUpdated: Date;
 }
 }
+}
 
+}
 }
 export interface TrackingPeriod {
   startDate: Date;
@@ -61,7 +64,9 @@ export interface TrackingPeriod {
   benchmarkPeriod?: TrackingPeriod;
 }
 }
+}
 
+}
 }
 export interface AdoptionMetrics {
   // User Adoption
@@ -90,7 +95,9 @@ export interface AdoptionMetrics {
   seasonalPatterns: SeasonalPattern[];
 }
 }
+}
 
+}
 }
 export interface ComplianceMetrics {
   // Overall Compliance
@@ -119,7 +126,9 @@ export interface ComplianceMetrics {
   complianceGaps: ComplianceGap[];
 }
 }
+}
 
+}
 }
 export interface UserBehaviorMetrics {
   // Engagement Patterns
@@ -149,7 +158,9 @@ export interface UserBehaviorMetrics {
   conversionFunnels: ConversionFunnel[];
 }
 }
+}
 
+}
 }
 export interface BusinessImpactMetrics {
   // Operational Impact
@@ -182,7 +193,9 @@ export interface BusinessImpactMetrics {
   roi: number;
 }
 }
+}
 
+}
 }
 export interface GoalAchievementMetrics {
   // Policy Objectives
@@ -202,7 +215,9 @@ export interface GoalAchievementMetrics {
   improvementAreas: ImprovementArea[];
 }
 }
+}
 
+}
 }
 export interface EffectivenessScore {
   overallScore: number; // 0-100
@@ -229,7 +244,9 @@ export interface EffectivenessScore {
   scorePrediction: ScorePrediction;
 }
 }
+}
 
+}
 }
 export interface EffectivenessRecommendation {
   recommendationId: string;
@@ -259,7 +276,9 @@ export interface EffectivenessRecommendation {
   dataSupport: DataSupport[];
 }
 }
+}
 
+}
 }
 export interface TrackingMetadata {
   trackingMethod: TrackingMethod;
@@ -283,9 +302,11 @@ export interface TrackingMetadata {
   changeLog: string[];
 }
 }
+}
 
 // Supporting interfaces and types
 
+}
 }
 export interface AdoptionVelocity {
   dailyAdoption: number;
@@ -294,7 +315,9 @@ export interface AdoptionVelocity {
   accelerationRate: number;
 }
 }
+}
 
+}
 }
 export interface SegmentAdoption {
   segmentName: string;
@@ -304,7 +327,9 @@ export interface SegmentAdoption {
   timeToAdopt: number;
 }
 }
+}
 
+}
 }
 export interface RegionAdoption {
   region: string;
@@ -314,7 +339,9 @@ export interface RegionAdoption {
   complianceRequirements: string[];
 }
 }
+}
 
+}
 }
 export interface RoleAdoption {
   role: string;
@@ -324,7 +351,9 @@ export interface RoleAdoption {
   riskLevel: string;
 }
 }
+}
 
+}
 }
 export interface TrendData {
   timestamp: Date;
@@ -333,7 +362,9 @@ export interface TrendData {
   changeRate: number;
 }
 }
+}
 
+}
 }
 export interface SeasonalPattern {
   pattern: string;
@@ -343,7 +374,9 @@ export interface SeasonalPattern {
   confidence: number;
 }
 }
+}
 
+}
 }
 export interface FrameworkCompliance {
   framework: string;
@@ -353,7 +386,9 @@ export interface FrameworkCompliance {
   lastAssessment: Date;
 }
 }
+}
 
+}
 }
 export interface RequirementCompliance {
   requirementId: string;
@@ -363,7 +398,9 @@ export interface RequirementCompliance {
   gaps: string[];
 }
 }
+}
 
+}
 }
 export interface ViolationTypeMetrics {
   violationType: string;
@@ -373,7 +410,9 @@ export interface ViolationTypeMetrics {
   trend: TrendData[];
 }
 }
+}
 
+}
 }
 export interface IncidentSeverityMetrics {
   low: number;
@@ -383,7 +422,9 @@ export interface IncidentSeverityMetrics {
   averageSeverity: number;
 }
 }
+}
 
+}
 }
 export interface AuditFinding {
   findingId: string;
@@ -395,7 +436,9 @@ export interface AuditFinding {
   dueDate: Date;
 }
 }
+}
 
+}
 }
 export interface RegulatoryCompliance {
   regulation: string;
@@ -406,7 +449,9 @@ export interface RegulatoryCompliance {
   nextReview: Date;
 }
 }
+}
 
+}
 }
 export interface ComplianceGap {
   gapId: string;
@@ -417,7 +462,9 @@ export interface ComplianceGap {
   owner: string;
 }
 }
+}
 
+}
 }
 export interface AttentionMetrics {
   focusScore: number;
@@ -426,7 +473,9 @@ export interface AttentionMetrics {
   engagementLevel: number;
 }
 }
+}
 
+}
 }
 export interface SentimentAnalysis {
   overallSentiment: 'POSITIVE' | 'NEUTRAL' | 'NEGATIVE';
@@ -435,7 +484,9 @@ export interface SentimentAnalysis {
   topicSentiment: TopicSentiment[];
 }
 }
+}
 
+}
 }
 export interface EmotionalIndicator {
   emotion: string;
@@ -443,7 +494,9 @@ export interface EmotionalIndicator {
   frequency: number;
 }
 }
+}
 
+}
 }
 export interface TopicSentiment {
   topic: string;
@@ -451,7 +504,9 @@ export interface TopicSentiment {
   confidence: number;
 }
 }
+}
 
+}
 }
 export interface BehaviorChangeIndicator {
   behaviorType: string;
@@ -461,7 +516,9 @@ export interface BehaviorChangeIndicator {
   significance: number;
 }
 }
+}
 
+}
 }
 export interface DataProcessingChange {
   changeType: string;
@@ -471,7 +528,9 @@ export interface DataProcessingChange {
   complianceImpact: string;
 }
 }
+}
 
+}
 }
 export interface PrivacySettingChange {
   settingType: string;
@@ -481,7 +540,9 @@ export interface PrivacySettingChange {
   impactAssessment: string;
 }
 }
+}
 
+}
 }
 export interface UserJourneyMetrics {
   averageJourneyTime: number;
@@ -490,7 +551,9 @@ export interface UserJourneyMetrics {
   satisfactionAtStages: Stagesatisfaction[];
 }
 }
+}
 
+}
 }
 export interface DropOffPoint {
   stage: string;
@@ -499,7 +562,9 @@ export interface DropOffPoint {
   improvementSuggestions: string[];
 }
 }
+}
 
+}
 }
 export interface Stagesatisfaction {
   stage: string;
@@ -508,7 +573,9 @@ export interface Stagesatisfaction {
   commonIssues: string[];
 }
 }
+}
 
+}
 }
 export interface ConversionFunnel {
   funnelName: string;
@@ -517,7 +584,9 @@ export interface ConversionFunnel {
   dropOffAnalysis: string[];
 }
 }
+}
 
+}
 }
 export interface FunnelStage {
   stageName: string;
@@ -527,7 +596,9 @@ export interface FunnelStage {
   averageTime: number;
 }
 }
+}
 
+}
 }
 export interface ProcessImprovement {
   processName: string;
@@ -537,7 +608,9 @@ export interface ProcessImprovement {
   implementationDate: Date;
 }
 }
+}
 
+}
 }
 export interface CostReduction {
   category: string;
@@ -547,7 +620,9 @@ export interface CostReduction {
   calculationMethod: string;
 }
 }
+}
 
+}
 }
 export interface TimeSaving {
   activity: string;
@@ -557,7 +632,9 @@ export interface TimeSaving {
   monetaryValue: number;
 }
 }
+}
 
+}
 }
 export interface CompetitiveAdvantage {
   advantageType: string;
@@ -567,7 +644,9 @@ export interface CompetitiveAdvantage {
   sustainabilityFactor: number;
 }
 }
+}
 
+}
 }
 export interface ObjectiveMetrics {
   objectiveId: string;
@@ -578,7 +657,9 @@ export interface ObjectiveMetrics {
   status: 'EXCEEDED' | 'MET' | 'IN_PROGRESS' | 'AT_RISK' | 'NOT_MET';
 }
 }
+}
 
+}
 }
 export interface TargetAchievement {
   targetId: string;
@@ -589,7 +670,9 @@ export interface TargetAchievement {
   achievementDate?: Date;
 }
 }
+}
 
+}
 }
 export interface MilestoneProgress {
   milestoneId: string;
@@ -600,7 +683,9 @@ export interface MilestoneProgress {
   status: 'COMPLETED' | 'ON_TRACK' | 'DELAYED' | 'AT_RISK';
 }
 }
+}
 
+}
 }
 export interface SuccessIndicator {
   indicatorName: string;
@@ -611,7 +696,9 @@ export interface SuccessIndicator {
   trend: 'IMPROVING' | 'STABLE' | 'DECLINING';
 }
 }
+}
 
+}
 }
 export interface KPIMetrics {
   kpiName: string;
@@ -622,7 +709,9 @@ export interface KPIMetrics {
   lastUpdated: Date;
 }
 }
+}
 
+}
 }
 export interface GoalGap {
   gapId: string;
@@ -634,7 +723,9 @@ export interface GoalGap {
   actionPlan: string;
 }
 }
+}
 
+}
 }
 export interface ImprovementArea {
   areaName: string;
@@ -645,7 +736,9 @@ export interface ImprovementArea {
   recommendations: string[];
 }
 }
+}
 
+}
 }
 export interface CategoryScore {
   category: string;
@@ -654,7 +747,9 @@ export interface CategoryScore {
   contributionToOverall: number;
 }
 }
+}
 
+}
 }
 export interface ScoringModel {
   modelName: string;
@@ -664,7 +759,9 @@ export interface ScoringModel {
   calibrationDate: Date;
 }
 }
+}
 
+}
 }
 export interface ScoringFactor {
   factorName: string;
@@ -673,7 +770,9 @@ export interface ScoringFactor {
   dataSource: string;
 }
 }
+}
 
+}
 }
 export interface WeightingFactor {
   component: string;
@@ -682,7 +781,9 @@ export interface WeightingFactor {
   adjustmentHistory: WeightAdjustment[];
 }
 }
+}
 
+}
 }
 export interface WeightAdjustment {
   adjustmentDate: Date;
@@ -692,7 +793,9 @@ export interface WeightAdjustment {
   impact: number;
 }
 }
+}
 
+}
 }
 export interface ScoreHistory {
   date: Date;
@@ -701,7 +804,9 @@ export interface ScoreHistory {
   events: string[];
 }
 }
+}
 
+}
 }
 export interface ScorePrediction {
   predictedScore: number;
@@ -711,7 +816,9 @@ export interface ScorePrediction {
   riskFactors: string[];
 }
 }
+}
 
+}
 }
 export interface ExpectedImpact {
   impactType: string;
@@ -721,7 +828,9 @@ export interface ExpectedImpact {
   beneficiaries: string[];
 }
 }
+}
 
+}
 }
 export interface ImplementationEffort {
   effortLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH';
@@ -731,7 +840,9 @@ export interface ImplementationEffort {
   complexity: number;
 }
 }
+}
 
+}
 }
 export interface RecommendationTimeline {
   plannedStart: Date;
@@ -741,7 +852,9 @@ export interface RecommendationTimeline {
   criticalPath: string[];
 }
 }
+}
 
+}
 }
 export interface TimelineMilestone {
   milestoneId: string;
@@ -751,7 +864,9 @@ export interface TimelineMilestone {
   status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'DELAYED';
 }
 }
+}
 
+}
 }
 export interface ActionItem {
   actionId: string;
@@ -763,7 +878,9 @@ export interface ActionItem {
   dependencies: string[];
 }
 }
+}
 
+}
 }
 export interface RecommendationEvidence {
   evidenceType: string;
@@ -774,7 +891,9 @@ export interface RecommendationEvidence {
   date: Date;
 }
 }
+}
 
+}
 }
 export interface DataSupport {
   dataPoint: string;
@@ -784,7 +903,9 @@ export interface DataSupport {
   source: string;
 }
 }
+}
 
+}
 }
 export interface DataQuality {
   completeness: number;
@@ -795,7 +916,9 @@ export interface DataQuality {
   overallQuality: number;
 }
 }
+}
 
+}
 }
 export interface EnvironmentalFactor {
   factorType: string;
@@ -805,7 +928,9 @@ export interface EnvironmentalFactor {
   controlLevel: 'CONTROLLED' | 'INFLUENCED' | 'EXTERNAL';
 }
 }
+}
 
+}
 }
 export interface ExternalInfluence {
   influenceType: string;
@@ -814,6 +939,7 @@ export interface ExternalInfluence {
   endDate?: Date;
   impact: number;
   compensationApplied: boolean;
+}
 }
 }
 
@@ -1793,6 +1919,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
 
 // Additional interfaces for reporting and comparison
 }
+}
 export interface EffectivenessReport {
   reportId: string;
   trackingId: string;
@@ -1805,7 +1932,9 @@ export interface EffectivenessReport {
   appendices?: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 export interface EffectivenessComparison {
   comparisonId: string;
@@ -1816,7 +1945,9 @@ export interface EffectivenessComparison {
   generatedAt: Date;
 }
 }
+}
 
+}
 }
 export interface PolicyComparison {
   trackingId: string;
@@ -1829,6 +1960,7 @@ export interface PolicyComparison {
     complianceScore: number;
     userSatisfaction: number;
     businessImpact: number;
+}
 }
   };
 }

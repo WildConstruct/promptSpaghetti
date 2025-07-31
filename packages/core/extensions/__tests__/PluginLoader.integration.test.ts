@@ -16,6 +16,7 @@ import os from 'os';
 jest.mock('child_process');
 
 // Integration test interfaces (would match actual implementation)
+}
 interface PluginSystem {
   loader: unknown;
   lifecycle: unknown;
@@ -41,6 +42,7 @@ interface PluginSystem {
   validatePlugin: jest.fn<unknown, unknown>(),
   getCachedPlugin: jest.fn<unknown, unknown>(),
   clearCache: jest.fn<unknown, unknown>(),
+}
 },
   lifecycle: {
   registerExtension: jest.fn<unknown, unknown>(),

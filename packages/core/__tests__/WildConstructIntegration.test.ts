@@ -766,6 +766,7 @@ export class IntegrationTestUtils {
   static validateHistoricalAccuracy(accuracy: number): boolean {
     return accuracy >= 0.8 && accuracy <= 1.0;
   static mockAPICall(endpoint: string, data: unknown): Promise<any> {
+
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve({)

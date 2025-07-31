@@ -6,6 +6,7 @@
  */
 import { ValidationResult, AdvancedNodeData } from '../runtime/advanced';
 
+}
 export interface NodeValidationConfig {
     /** Enable strict type checking */
     strictTypeValidation: boolean;
@@ -22,12 +23,14 @@ export interface NodeValidationConfig {
     /** Maximum execution time per node (milliseconds) */
     maxExecutionTime: number;
 
+}
 export interface NodeValidationResult extends ValidationResult {
     /** Security-specific validation results */
     security: {
         passed: boolean;
         threats: SecurityThreat[];
         riskLevel: 'low' | 'medium' | 'high' | 'critical'
+}
   };
     /** Performance-specific validation results */
     performance: {
@@ -48,6 +51,7 @@ export interface NodeValidationResult extends ValidationResult {
         schemaErrors: string[];
     };
 
+}
 export interface SecurityThreat {
     type: 'injection' | 'eval' | 'prototype_pollution' | 'xss' | 'unsafe_function' | 'dangerous_import';
     severity: 'low' | 'medium' | 'high' | 'critical';
@@ -55,6 +59,7 @@ export interface SecurityThreat {
     location: string;
     recommendation: string;
 
+}
 export interface PerformanceIssue {
     type: 'memory' | 'execution_time' | 'infinite_loop' | 'inefficient_algorithm';
     severity: 'low' | 'medium' | 'high';
@@ -62,6 +67,7 @@ export interface PerformanceIssue {
     impact: string;
     suggestion: string;
 
+}
 export interface TypeError {
     expected: string;
     actual: string;
@@ -149,6 +155,7 @@ export declare class NodeValidationUtils {
     static estimateNodePerformance(nodeData: AdvancedNodeData): {
         memory: number;
         time: number;
+}
     };
     /**
      * Batch validate multiple nodes

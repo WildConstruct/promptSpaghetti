@@ -22,6 +22,7 @@ import { RedisService } from '../auth/database/RedisService';
 
 // Request/Response schemas
 }
+}
 interface SignEvidenceRequest {
   Body: {
     evidence_id: string;
@@ -33,9 +34,11 @@ interface SignEvidenceRequest {
     metadata?: Record<string, any>;
     timestamp?: string;
 }
+}
   };
 }
 
+}
 }
 interface SignBatchRequest {
   Body: {
@@ -48,14 +51,17 @@ interface SignBatchRequest {
       compliance_frameworks?: string[];
       metadata?: Record<string, any>;
 }
+}
     }[];
   };
 }
 
 }
+}
 interface VerifySignatureRequest {
   Params: {
     signatureId: string;
+}
 }
   };
   Body?: {
@@ -64,9 +70,11 @@ interface VerifySignatureRequest {
 }
 
 }
+}
 interface CustodyTransferRequest {
   Params: {
     evidenceId: string;
+}
 }
   };
   Body: {

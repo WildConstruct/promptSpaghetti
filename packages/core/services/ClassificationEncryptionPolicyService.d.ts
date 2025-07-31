@@ -13,6 +13,7 @@ import {
   ValidationResult
 } from '../types/DataClassification';
 
+}
 export interface EncryptionPolicy {
     id: string;
     name: string;
@@ -26,6 +27,7 @@ export interface EncryptionPolicy {
     version: string;
 
 
+}
 export interface EncryptionAlgorithm {
     name: string;
     keyLength: number;
@@ -38,6 +40,7 @@ export interface EncryptionAlgorithm {
     deprecatedDate?: Date;
 
 
+}
 export interface KeyManagementPolicy {
     keyRotationDays: number;
     keyEscrowRequired: boolean;
@@ -49,6 +52,7 @@ export interface KeyManagementPolicy {
     auditLogging: boolean;
 
 
+}
 export interface EncryptionCompliance {
     dataId: string;
     classification: DataClassificationLevel;
@@ -63,6 +67,7 @@ export interface EncryptionCompliance {
     assessmentDate: Date;
 
 
+}
 export interface EncryptionAuditEvent {
     id: string;
     timestamp: Date;
@@ -109,6 +114,7 @@ export declare class ClassificationEncryptionPolicyService {
         algorithm?: string;
         keyLength?: number;
         lastRotationDate?: Date;
+}
     }, context: OperationContext): Promise<ValidationResult>;
     /**
      * Validate encryption algorithm

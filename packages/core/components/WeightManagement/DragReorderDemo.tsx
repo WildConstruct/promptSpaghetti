@@ -7,6 +7,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { DragReorderWeightManager, WeightedOption } from './DragReorderWeightManager';
 
+}
 export interface DragReorderDemoProps {
   theme?: 'light' | 'dark' | 'cinema';
   showCode?: boolean;
@@ -14,6 +15,7 @@ export interface DragReorderDemoProps {
   /**
   * Interactive demo showcasing drag-to-reorder weight management capabilities
   */
+}
 }
 export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({)
   theme = 'cinema',

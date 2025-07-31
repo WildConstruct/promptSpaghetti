@@ -31,6 +31,7 @@ import { ExecutiveSecurityDashboard } from './ExecutiveSecurityDashboard';
 import { OperationalSecurityDashboard } from './OperationalSecurityDashboard';
 import { ComplianceSecurityDashboard } from './ComplianceSecurityDashboard';
 
+}
 export interface DashboardTemplate {
   id: string;
   type: DashboardType;
@@ -47,6 +48,7 @@ export interface DashboardTemplate {
   allowWidgetAdd: boolean;
   allowWidgetRemove: boolean;
   allowThemeChange: boolean;
+}
 };
   metadata: {
   version: string;
@@ -58,6 +60,7 @@ export interface DashboardTemplate {
   complianceFrameworks?: string;
 };
 }
+}
 export interface DashboardPreset {
   id: string;
   name: string;
@@ -68,11 +71,13 @@ export interface DashboardPreset {
   widgets: {
   id: string;
     type: string;
+}
   position: { x: number; y: number };
     size: { width: number; height: number };
     config: Record<string, any>;
   }[];
   permissions: DashboardPermissions;
+}
 }
 export interface RegistryOptions {
   enableCache: boolean;
@@ -86,6 +91,7 @@ export interface RegistryOptions {
   *
   * Manages the registration, discovery, and instantiation of security dashboards.
   */
+}
 }
 export class DashboardRegistry {
   private dashboards: Map<string, DashboardTemplate> = new Map();

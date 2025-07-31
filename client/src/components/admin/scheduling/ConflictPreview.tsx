@@ -25,6 +25,7 @@ import {
   Block as BlockIcon
 } from '@mui/icons-material';
 
+}
 interface Conflict {
   description: string;,
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -32,25 +33,26 @@ interface Conflict {
   conflicts: Conflict;,
   resolution: 'skip' | 'override' | 'merge';
   const SEVERITY_CONFIG = {
-  low: {,
+  low: {
   icon: InfoIcon,
   color: 'info' as const,
   label: 'Low',
   description: 'Minor scheduling overlap with minimal impact',
+}
 },
-  medium: {,
+  medium: {
   icon: WarningIcon,
   color: 'warning' as const,
   label: 'Medium',
   description: 'Moderate conflict that may cause unexpected behavior',
 },
-  high: {,
+  high: {
   icon: ErrorIcon,
   color: 'error' as const,
   label: 'High',
   description: 'Significant conflict that will likely cause issues',
 },
-  critical: {,
+  critical: {
   icon: ErrorIcon,
   color: 'error' as const,
   label: 'Critical',

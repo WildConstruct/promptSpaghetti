@@ -22,6 +22,7 @@ import { DiagnosticService } from '../admin/DiagnosticService';
 import { HealthCheckFramework } from '../admin/HealthCheckFramework';
 
 }
+}
 export interface MLSecurityAnalyticsConfig {
   ml_framework: {
     enabled: boolean;
@@ -32,6 +33,7 @@ export interface MLSecurityAnalyticsConfig {
     feature_store_enabled: boolean;
     model_versioning: boolean;
     a_b_testing: boolean;
+}
 }
   };
   threat_detection: {
@@ -83,6 +85,7 @@ export interface MLSecurityAnalyticsConfig {
 }
 
 }
+}
 export interface MLModel {
   id: string;
   name: string;
@@ -100,6 +103,7 @@ export interface MLModel {
   performance_metrics: ModelPerformanceMetrics;
   deployment_config: ModelDeploymentConfig;
   metadata: ModelMetadata;
+}
 }
 }
 
@@ -141,6 +145,7 @@ export enum ModelStatus {
 }
 
 }
+}
 export interface ModelFeature {
   name: string;
   type: FeatureType;
@@ -149,6 +154,7 @@ export interface ModelFeature {
   transformation: FeatureTransformation[];
   statistics: FeatureStatistics;
   data_quality: FeatureDataQuality;
+}
 }
 }
 
@@ -164,10 +170,12 @@ export enum FeatureType {
 }
 
 }
+}
 export interface FeatureTransformation {
   type: TransformationType;
   parameters: Record<string, unknown>;
   order: number;
+}
 }
 }
 
@@ -185,6 +193,7 @@ export enum TransformationType {
 }
 
 }
+}
 export interface FeatureStatistics {
   count: number;
   mean?: number;
@@ -197,7 +206,9 @@ export interface FeatureStatistics {
   outliers: number;
 }
 }
+}
 
+}
 }
 export interface FeatureDataQuality {
   completeness: number;
@@ -208,7 +219,9 @@ export interface FeatureDataQuality {
   timeliness: number;
 }
 }
+}
 
+}
 }
 export interface ModelPerformanceMetrics {
   accuracy?: number;
@@ -228,7 +241,9 @@ export interface ModelPerformanceMetrics {
   validation_curves?: ValidationCurve[];
 }
 }
+}
 
+}
 }
 export interface ClassificationReport {
   classes: string[];
@@ -240,7 +255,9 @@ export interface ClassificationReport {
   weighted_avg: MetricSummary;
 }
 }
+}
 
+}
 }
 export interface MetricSummary {
   precision: number;
@@ -249,7 +266,9 @@ export interface MetricSummary {
   support: number;
 }
 }
+}
 
+}
 }
 export interface ValidationCurve {
   parameter_name: string;
@@ -258,7 +277,9 @@ export interface ValidationCurve {
   validation_scores: number[];
 }
 }
+}
 
+}
 }
 export interface ModelDeploymentConfig {
   deployment_type: DeploymentType;
@@ -266,6 +287,7 @@ export interface ModelDeploymentConfig {
   scaling_config: ScalingConfig;
   monitoring_config: MonitoringConfig;
   rollback_config: RollbackConfig;
+}
 }
 }
 
@@ -277,6 +299,7 @@ export enum DeploymentType {
 }
 
 }
+}
 export interface ResourceRequirements {
   cpu_cores: number;
   memory_gb: number;
@@ -286,7 +309,9 @@ export interface ResourceRequirements {
   network_bandwidth_mbps: number;
 }
 }
+}
 
+}
 }
 export interface ScalingConfig {
   auto_scaling: boolean;
@@ -298,7 +323,9 @@ export interface ScalingConfig {
   scale_down_cooldown_seconds: number;
 }
 }
+}
 
+}
 }
 export interface MonitoringConfig {
   accuracy_threshold: number;
@@ -309,7 +336,9 @@ export interface MonitoringConfig {
   alert_channels: string[];
 }
 }
+}
 
+}
 }
 export interface RollbackConfig {
   auto_rollback: boolean;
@@ -318,7 +347,9 @@ export interface RollbackConfig {
   rollback_window_minutes: number;
 }
 }
+}
 
+}
 }
 export interface ModelMetadata {
   training_start_time: number;
@@ -333,7 +364,9 @@ export interface ModelMetadata {
   tags: string[];
 }
 }
+}
 
+}
 }
 export interface TrainingJob {
   id: string;
@@ -350,6 +383,7 @@ export interface TrainingJob {
   artifacts: TrainingArtifact[];
 }
 }
+}
 
 export enum TrainingJobStatus {
   QUEUED = 'queued',
@@ -360,6 +394,7 @@ export enum TrainingJobStatus {
   PAUSED = 'paused'
 }
 
+}
 }
 export interface TrainingConfig {
   algorithm: MLAlgorithm;
@@ -374,7 +409,9 @@ export interface TrainingConfig {
   cv_folds: number;
 }
 }
+}
 
+}
 }
 export interface DatasetInfo {
   source: string;
@@ -387,7 +424,9 @@ export interface DatasetInfo {
   preprocessing_steps: string[];
 }
 }
+}
 
+}
 }
 export interface TrainingProgress {
   current_epoch: number;
@@ -400,7 +439,9 @@ export interface TrainingProgress {
   best_metrics: Record<string, number>;
 }
 }
+}
 
+}
 }
 export interface TrainingLog {
   timestamp: number;
@@ -409,6 +450,7 @@ export interface TrainingLog {
   epoch?: number;
   batch?: number;
   metrics?: Record<string, number>;
+}
 }
 }
 
@@ -420,6 +462,7 @@ export enum LogLevel {
 }
 
 }
+}
 export interface TrainingArtifact {
   type: ArtifactType;
   name: string;
@@ -427,6 +470,7 @@ export interface TrainingArtifact {
   size: number;
   checksum: string;
   created_at: number;
+}
 }
 }
 
@@ -443,6 +487,7 @@ export enum ArtifactType {
 }
 
 }
+}
 export interface InferenceRequest {
   id: string;
   model_id: string;
@@ -454,6 +499,7 @@ export interface InferenceRequest {
   metadata: Record<string, unknown>;
 }
 }
+}
 
 export enum InferencePriority {
   LOW = 'low',
@@ -462,6 +508,7 @@ export enum InferencePriority {
   CRITICAL = 'critical'
 }
 
+}
 }
 export interface InferenceResponse {
   request_id: string;
@@ -475,7 +522,9 @@ export interface InferenceResponse {
   metadata: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 export interface ModelPrediction {
   sample_id: string;
@@ -487,7 +536,9 @@ export interface ModelPrediction {
   explanation?: SampleExplanation;
 }
 }
+}
 
+}
 }
 export interface FeatureImportance {
   feature_name: string;
@@ -496,13 +547,16 @@ export interface FeatureImportance {
   contribution: number;
 }
 }
+}
 
+}
 }
 export interface ModelExplanation {
   method: ExplanationMethod;
   global_importance: FeatureImportance[];
   model_insights: ModelInsight[];
   decision_boundaries?: DecisionBoundary[];
+}
 }
 }
 
@@ -515,11 +569,13 @@ export enum ExplanationMethod {
 }
 
 }
+}
 export interface ModelInsight {
   type: InsightType;
   description: string;
   importance: number;
   supporting_data: Record<string, unknown>;
+}
 }
 }
 
@@ -532,22 +588,27 @@ export enum InsightType {
 }
 
 }
+}
 export interface DecisionBoundary {
   feature_x: string;
   feature_y: string;
+}
 }
   boundary_points: Array<{ x: number; y: number }>;
   class_regions: ClassRegion[];
 }
 
 }
+}
 export interface ClassRegion {
   class_name: string;
   confidence: number;
 }
+}
   region_points: Array<{ x: number; y: number }>;
 }
 
+}
 }
 export interface SampleExplanation {
   feature_contributions: FeatureContribution[];
@@ -555,7 +616,9 @@ export interface SampleExplanation {
   similar_samples?: SimilarSample[];
 }
 }
+}
 
+}
 }
 export interface FeatureContribution {
   feature_name: string;
@@ -564,7 +627,9 @@ export interface FeatureContribution {
   importance: number;
 }
 }
+}
 
+}
 }
 export interface Counterfactual {
   feature_name: string;
@@ -573,7 +638,9 @@ export interface Counterfactual {
   impact: number;
 }
 }
+}
 
+}
 }
 export interface SimilarSample {
   sample_id: string;
@@ -582,7 +649,9 @@ export interface SimilarSample {
   confidence: number;
 }
 }
+}
 
+}
 }
 export interface MLSecurityAnalyticsMetrics {
   model_metrics: ModelMetrics;
@@ -592,7 +661,9 @@ export interface MLSecurityAnalyticsMetrics {
   business_metrics: BusinessMetrics;
 }
 }
+}
 
+}
 }
 export interface ModelMetrics {
   total_models: number;
@@ -605,7 +676,9 @@ export interface ModelMetrics {
   model_performance_trends: ModelTrend[];
 }
 }
+}
 
+}
 }
 export interface ModelPerformanceSummary {
   model_id: string;
@@ -617,11 +690,14 @@ export interface ModelPerformanceSummary {
   deployment_date: number;
 }
 }
+}
 
+}
 }
 export interface ModelTrend {
   model_id: string;
   metric_name: string;
+}
 }
   trend_data: Array<{ timestamp: number; value: number }>;
   trend_direction: TrendDirection;
@@ -636,6 +712,7 @@ export enum TrendDirection {
 }
 
 }
+}
 export interface TrainingMetrics {
   total_training_jobs: number;
   successful_trainings: number;
@@ -646,7 +723,9 @@ export interface TrainingMetrics {
   hyperparameter_optimization_jobs: number;
 }
 }
+}
 
+}
 }
 export interface ResourceUtilization {
   cpu_utilization_percent: number;
@@ -656,7 +735,9 @@ export interface ResourceUtilization {
   network_utilization_mbps: number;
 }
 }
+}
 
+}
 }
 export interface InferenceMetrics {
   total_inference_requests: number;
@@ -668,7 +749,9 @@ export interface InferenceMetrics {
   model_serving_errors: number;
 }
 }
+}
 
+}
 }
 export interface SystemMetrics {
   ml_framework_health: FrameworkHealth;
@@ -677,7 +760,9 @@ export interface SystemMetrics {
   monitoring_system_metrics: MonitoringSystemMetrics;
 }
 }
+}
 
+}
 }
 export interface FrameworkHealth {
   overall_health_score: number;
@@ -687,7 +772,9 @@ export interface FrameworkHealth {
   resource_usage: ResourceUtilization;
 }
 }
+}
 
+}
 }
 export interface FeatureStoreMetrics {
   total_features: number;
@@ -697,7 +784,9 @@ export interface FeatureStoreMetrics {
   data_drift_incidents: number;
 }
 }
+}
 
+}
 }
 export interface FeatureUsageStats {
   feature_name: string;
@@ -707,7 +796,9 @@ export interface FeatureUsageStats {
   quality_score: number;
 }
 }
+}
 
+}
 }
 export interface ModelRegistryMetrics {
   total_registered_models: number;
@@ -717,7 +808,9 @@ export interface ModelRegistryMetrics {
   registry_storage_usage_gb: number;
 }
 }
+}
 
+}
 }
 export interface MonitoringSystemMetrics {
   alerts_generated: number;
@@ -727,7 +820,9 @@ export interface MonitoringSystemMetrics {
   false_positive_rate: number;
 }
 }
+}
 
+}
 }
 export interface BusinessMetrics {
   threat_detection_improvement: number;
@@ -737,6 +832,7 @@ export interface BusinessMetrics {
   security_posture_score: number;
   cost_savings: number;
   roi_percentage: number;
+}
 }
 }
 

@@ -21,6 +21,7 @@ import { DiagnosticService } from '../admin/DiagnosticService';
 import { HealthCheckFramework } from '../admin/HealthCheckFramework';
 
 }
+}
 export interface SecurityIntelligenceAutomationConfig {
   automation: {
     enabled: boolean;
@@ -30,6 +31,7 @@ export interface SecurityIntelligenceAutomationConfig {
     retry_delay_ms: number;
     failure_escalation: boolean;
     success_rate_threshold: number;
+}
 }
   };
   threat_detection: {
@@ -87,6 +89,7 @@ export interface SecurityIntelligenceAutomationConfig {
 }
 
 }
+}
 export interface AutomationRule {
   id: string;
   name: string;
@@ -103,6 +106,7 @@ export interface AutomationRule {
   success_rate: number;
   last_execution: number;
   tags: string[];
+}
 }
 }
 
@@ -125,6 +129,7 @@ export enum AutomationPriority {
 }
 
 }
+}
 export interface AutomationCondition {
   id: string;
   type: ConditionType;
@@ -132,6 +137,7 @@ export interface AutomationCondition {
   operator: ConditionOperator;
   value: unknown;
   logical_operator?: LogicalOperator;
+}
 }
 }
 
@@ -163,6 +169,7 @@ export enum LogicalOperator {
 }
 
 }
+}
 export interface AutomationAction {
   id: string;
   type: AutomationActionType;
@@ -171,6 +178,7 @@ export interface AutomationAction {
   retry_attempts: number;
   on_failure: FailureAction;
   depends_on?: string[];
+}
 }
 }
 
@@ -197,6 +205,7 @@ export enum FailureAction {
 }
 
 }
+}
 export interface SecurityPlaybook {
   id: string;
   name: string;
@@ -216,6 +225,7 @@ export interface SecurityPlaybook {
   tags: string[];
 }
 }
+}
 
 export enum PlaybookCategory {
   THREAT_RESPONSE = 'threat_response',
@@ -227,6 +237,7 @@ export enum PlaybookCategory {
   PREVENTIVE_MAINTENANCE = 'preventive_maintenance'
 }
 
+}
 }
 export interface PlaybookStep {
   id: string;
@@ -243,6 +254,7 @@ export interface PlaybookStep {
   on_failure: StepTransition[];
 }
 }
+}
 
 export enum PlaybookStepType {
   AUTOMATED_ACTION = 'automated_action',
@@ -256,18 +268,22 @@ export enum PlaybookStepType {
 }
 
 }
+}
 export interface StepTransition {
   target_step_id: string;
   condition?: AutomationCondition;
 }
 }
+}
 
+}
 }
 export interface PlaybookTrigger {
   id: string;
   type: TriggerType;
   conditions: AutomationCondition[];
   enabled: boolean;
+}
 }
 }
 
@@ -280,12 +296,14 @@ export enum TriggerType {
 }
 
 }
+}
 export interface PlaybookVariable {
   name: string;
   type: VariableType;
   default_value?: unknown;
   description: string;
   required: boolean;
+}
 }
 }
 
@@ -298,6 +316,7 @@ export enum VariableType {
   DATE = 'date'
 }
 
+}
 }
 export interface AutomationExecution {
   id: string;
@@ -317,6 +336,7 @@ export interface AutomationExecution {
   assigned_analyst?: string;
 }
 }
+}
 
 export enum ExecutionStatus {
   PENDING = 'pending',
@@ -329,6 +349,7 @@ export enum ExecutionStatus {
 }
 
 }
+}
 export interface ExecutionLogEntry {
   timestamp: number;
   level: LogLevel;
@@ -336,6 +357,7 @@ export interface ExecutionLogEntry {
   action_id?: string;
   message: string;
   data?: Record<string, unknown>;
+}
 }
 }
 
@@ -347,6 +369,7 @@ export enum LogLevel {
   CRITICAL = 'critical'
 }
 
+}
 }
 export interface AutomationMetrics {
   total_automations: number;
@@ -362,7 +385,9 @@ export interface AutomationMetrics {
   performance_metrics: AutomationPerformanceMetrics;
 }
 }
+}
 
+}
 }
 export interface PlaybookMetrics {
   total_playbooks: number;
@@ -373,7 +398,9 @@ export interface PlaybookMetrics {
   most_used_playbooks: PlaybookUsageMetric[];
 }
 }
+}
 
+}
 }
 export interface PlaybookUsageMetric {
   playbook_id: string;
@@ -383,7 +410,9 @@ export interface PlaybookUsageMetric {
   average_duration_ms: number;
 }
 }
+}
 
+}
 }
 export interface RuleMetrics {
   total_rules: number;
@@ -394,7 +423,9 @@ export interface RuleMetrics {
   most_triggered_rules: RuleUsageMetric[];
 }
 }
+}
 
+}
 }
 export interface RuleUsageMetric {
   rule_id: string;
@@ -404,7 +435,9 @@ export interface RuleUsageMetric {
   false_positive_rate: number;
 }
 }
+}
 
+}
 }
 export interface AutomationPerformanceMetrics {
   cpu_utilization_percent: number;
@@ -413,6 +446,7 @@ export interface AutomationPerformanceMetrics {
   disk_io_operations_per_second: number;
   database_query_time_ms: number;
   api_response_time_ms: number;
+}
 }
 }
 

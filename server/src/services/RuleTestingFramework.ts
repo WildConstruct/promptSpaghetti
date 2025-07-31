@@ -22,6 +22,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { DatabaseService } from '../database/DatabaseService';
 
 }
+}
 export interface RuleTestSuite {
   suiteId: string;
   name: string;
@@ -37,6 +38,7 @@ export interface RuleTestSuite {
   dependencies: TestSuiteDependency[];
   coverage: TestCoverageConfig;
   reporting: TestReportingConfig;
+}
 }
 }
 
@@ -61,6 +63,7 @@ export enum TestSuitePriority {
 }
 
 }
+}
 export interface TestSuiteConfiguration {
   parallel: boolean;
   timeout: number; // milliseconds
@@ -75,6 +78,7 @@ export interface TestSuiteConfiguration {
   reporting: ReportingSettings;
 }
 }
+}
 
 export enum CleanupStrategy {
   NONE = 'NONE',
@@ -84,6 +88,7 @@ export enum CleanupStrategy {
 }
 
 }
+}
 export interface ResourceLimits {
   maxMemory: number; // MB
   maxCpu: number; // percentage
@@ -91,7 +96,9 @@ export interface ResourceLimits {
   maxConcurrency: number;
 }
 }
+}
 
+}
 }
 export interface ReportingSettings {
   generateDetailedReports: boolean;
@@ -99,6 +106,7 @@ export interface ReportingSettings {
   recordPerformanceMetrics: boolean;
   logLevel: LogLevel;
   outputFormats: OutputFormat[];
+}
 }
 }
 
@@ -118,6 +126,7 @@ export enum OutputFormat {
   CUCUMBER = 'CUCUMBER'
 }
 
+}
 }
 export interface RuleTest {
   testId: string;
@@ -141,6 +150,7 @@ export interface RuleTest {
   performance: PerformanceExpectations;
   coverage: TestCoverage;
   metadata: TestMetadata;
+}
 }
 }
 
@@ -188,6 +198,7 @@ export enum TestStatus {
 }
 
 }
+}
 export interface TestScenario {
   scenarioId: string;
   name: string;
@@ -202,6 +213,7 @@ export interface TestScenario {
   preconditions: Precondition[];
   steps: TestStep[];
   postconditions: Postcondition[];
+}
 }
 }
 
@@ -224,6 +236,7 @@ export enum ScenarioComplexity {
 }
 
 }
+}
 export interface BusinessContext {
   industry: string;
   organizationSize: OrganizationSize;
@@ -232,6 +245,7 @@ export interface BusinessContext {
   stakeholders: string[];
   complianceRequirements: string[];
   riskProfile: RiskProfile;
+}
 }
 }
 
@@ -243,11 +257,13 @@ export enum OrganizationSize {
 }
 
 }
+}
 export interface RiskProfile {
   level: RiskLevel;
   categories: RiskCategory[];
   mitigations: RiskMitigation[];
   tolerance: RiskTolerance;
+}
 }
 }
 
@@ -270,6 +286,7 @@ export enum RiskCategory {
 }
 
 }
+}
 export interface DataContext {
   dataTypes: DataType[];
   dataVolume: DataVolume;
@@ -280,7 +297,9 @@ export interface DataContext {
   sensitivity: SensitivityContext;
 }
 }
+}
 
+}
 }
 export interface DataType {
   typeId: string;
@@ -292,7 +311,9 @@ export interface DataType {
   regulations: string[];
 }
 }
+}
 
+}
 }
 export interface DataVolume {
   recordCount: number;
@@ -301,7 +322,9 @@ export interface DataVolume {
   distribution: VolumeDistribution;
 }
 }
+}
 
+}
 }
 export interface VolumeDistribution {
   daily: number;
@@ -310,7 +333,9 @@ export interface VolumeDistribution {
   seasonal: SeasonalPattern[];
 }
 }
+}
 
+}
 }
 export interface SeasonalPattern {
   period: string;
@@ -318,7 +343,9 @@ export interface SeasonalPattern {
   description: string;
 }
 }
+}
 
+}
 }
 export interface TestInput {
   ruleContext: RuleEvaluationContext;
@@ -329,7 +356,9 @@ export interface TestInput {
   variableBindings: VariableBinding[];
 }
 }
+}
 
+}
 }
 export interface TestData {
   records: TestRecord[];
@@ -339,7 +368,9 @@ export interface TestData {
   validation: DataValidation;
 }
 }
+}
 
+}
 }
 export interface TestRecord {
   recordId: string;
@@ -352,7 +383,9 @@ export interface TestRecord {
   tags: string[];
 }
 }
+}
 
+}
 }
 export interface DataRelationship {
   relationshipId: string;
@@ -360,6 +393,7 @@ export interface DataRelationship {
   targetRecordId: string;
   type: RelationshipType;
   properties: Record<string, any>;
+}
 }
 }
 
@@ -373,6 +407,7 @@ export enum RelationshipType {
 }
 
 }
+}
 export interface ExpectedResult {
   outcome: ExpectedOutcome;
   performance: PerformanceExpectations;
@@ -384,7 +419,9 @@ export interface ExpectedResult {
   evidence: ExpectedEvidence[];
 }
 }
+}
 
+}
 }
 export interface ExpectedOutcome {
   result: string;
@@ -396,7 +433,9 @@ export interface ExpectedOutcome {
   nextActions: string[];
 }
 }
+}
 
+}
 }
 export interface NumberRange {
   min: number;
@@ -404,7 +443,9 @@ export interface NumberRange {
   exact?: number;
 }
 }
+}
 
+}
 }
 export interface ImpactExpectation {
   businessImpact: string;
@@ -413,7 +454,9 @@ export interface ImpactExpectation {
   userImpact: string;
 }
 }
+}
 
+}
 }
 export interface PerformanceExpectations {
   maxDuration: number; // milliseconds
@@ -424,7 +467,9 @@ export interface PerformanceExpectations {
   reliability: ReliabilityExpectation;
 }
 }
+}
 
+}
 }
 export interface ThroughputExpectation {
   rulesPerSecond: number;
@@ -432,7 +477,9 @@ export interface ThroughputExpectation {
   actionsPerSecond: number;
 }
 }
+}
 
+}
 }
 export interface ScalabilityExpectation {
   maxConcurrentRules: number;
@@ -440,7 +487,9 @@ export interface ScalabilityExpectation {
   maxComplexity: number;
 }
 }
+}
 
+}
 }
 export interface ReliabilityExpectation {
   uptime: number; // percentage
@@ -448,7 +497,9 @@ export interface ReliabilityExpectation {
   consistency: number; // percentage
 }
 }
+}
 
+}
 }
 export interface TestAssertion {
   assertionId: string;
@@ -459,6 +510,7 @@ export interface TestAssertion {
   timeout: number;
   retries: number;
   context: AssertionContext;
+}
 }
 }
 
@@ -475,12 +527,14 @@ export enum AssertionType {
 }
 
 }
+}
 export interface AssertionCondition {
   path: string;
   operator: string;
   value: Error;
   message: string;
   tolerance?: number;
+}
 }
 }
 
@@ -493,6 +547,7 @@ export enum AssertionSeverity {
 }
 
 }
+}
 export interface TestMock {
   mockId: string;
   type: MockType;
@@ -500,6 +555,7 @@ export interface TestMock {
   behavior: MockBehavior;
   configuration: MockConfiguration;
   verification: MockVerification;
+}
 }
 }
 
@@ -514,6 +570,7 @@ export enum MockType {
 }
 
 }
+}
 export interface MockBehavior {
   responses: MockResponse[];
   delays: MockDelay[];
@@ -521,7 +578,9 @@ export interface MockBehavior {
   stateTransitions: StateTransition[];
 }
 }
+}
 
+}
 }
 export interface MockResponse {
   responseId: string;
@@ -531,7 +590,9 @@ export interface MockResponse {
   statusCode?: number;
 }
 }
+}
 
+}
 }
 export interface TestExecution {
   startTime?: Date;
@@ -545,7 +606,9 @@ export interface TestExecution {
   warnings: ExecutionWarning[];
 }
 }
+}
 
+}
 }
 export interface TestExecutionResult {
   status: TestStatus;
@@ -556,7 +619,9 @@ export interface TestExecutionResult {
   quality: QualityMetrics;
 }
 }
+}
 
+}
 }
 export interface CoverageMetrics {
   ruleCoverage: number; // percentage
@@ -567,7 +632,9 @@ export interface CoverageMetrics {
   statementCoverage: number; // percentage
 }
 }
+}
 
+}
 }
 export interface PerformanceMetrics {
   executionTime: number;
@@ -578,7 +645,9 @@ export interface PerformanceMetrics {
   resourceUtilization: ResourceUtilization;
 }
 }
+}
 
+}
 }
 export interface LatencyMetrics {
   p50: number;
@@ -589,7 +658,9 @@ export interface LatencyMetrics {
   median: number;
 }
 }
+}
 
+}
 }
 export interface QualityMetrics {
   accuracy: number; // percentage
@@ -600,7 +671,9 @@ export interface QualityMetrics {
   reliability: number; // percentage
 }
 }
+}
 
+}
 }
 export interface TestReport {
   reportId: string;
@@ -614,7 +687,9 @@ export interface TestReport {
   metadata: ReportMetadata;
 }
 }
+}
 
+}
 }
 export interface TestSummary {
   totalTests: number;
@@ -629,7 +704,9 @@ export interface TestSummary {
   quality: QualityMetrics;
 }
 }
+}
 
+}
 }
 export interface TestDetails {
   testResults: TestResult[];
@@ -640,7 +717,9 @@ export interface TestDetails {
   trendAnalysis: TrendAnalysis;
 }
 }
+}
 
+}
 }
 export interface TestResult {
   testId: string;
@@ -654,7 +733,9 @@ export interface TestResult {
   artifacts: string[];
 }
 }
+}
 
+}
 }
 export interface AssertionResult {
   assertionId: string;
@@ -663,6 +744,7 @@ export interface AssertionResult {
   actual: unknown;
   message: string;
   severity: AssertionSeverity;
+}
 }
 }
 
@@ -1269,8 +1351,7 @@ export class RuleTestingFramework {
   // - executeSuiteSetup()
   // - executeSuiteTeardown()
   // - generateTestsForType()
-  // - detectConflictsInScenario()
-  // - generateConflictResolutions(// etc.
+  // - detectConflictsInScenario(// - generateConflictResolutions(// etc.
 
   // Simplified implementations for key methods
   private async setupTestEnvironment(): Promise<void> {
@@ -1413,6 +1494,7 @@ export class RuleTestingFramework {
 
 // Additional interfaces for the framework
 }
+}
 export interface FrameworkConfiguration {
   environment: string;
   parallelExecution: boolean;
@@ -1422,7 +1504,9 @@ export interface FrameworkConfiguration {
   performanceMonitoring: boolean;
 }
 }
+}
 
+}
 }
 export interface TestSuiteExecutionResult {
   suiteId: string;
@@ -1442,7 +1526,9 @@ export interface TestSuiteExecutionResult {
   testResults: TestExecutionResult[];
 }
 }
+}
 
+}
 }
 export interface ConflictValidationResult {
   scenarioId: string;
@@ -1452,7 +1538,9 @@ export interface ConflictValidationResult {
   recommendations: string[];
 }
 }
+}
 
+}
 }
 interface RuleConflict {
   conflictId: string;
@@ -1462,7 +1550,9 @@ interface RuleConflict {
   description: string;
 }
 }
+}
 
+}
 }
 interface ConflictResolution {
   resolutionId: string;
@@ -1472,13 +1562,16 @@ interface ConflictResolution {
   description: string;
 }
 }
+}
 
+}
 }
 interface ConflictImpact {
   level: string;
   description: string;
   affectedAreas: string[];
   mitigationRequired: boolean;
+}
 }
 }
 

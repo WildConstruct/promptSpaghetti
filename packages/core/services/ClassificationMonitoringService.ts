@@ -12,6 +12,7 @@ import {
   ValidationResult
 } from '../types/DataClassification';
 
+}
 export interface MonitoringEvent {
   id: string;
   timestamp: Date;
@@ -25,12 +26,16 @@ export interface MonitoringEvent {
   context: OperationContext;
   metrics?: MonitoringMetrics;
 }
+}
+}
 export interface MonitoringMetrics {
   processingTimeMs: number;
   dataSize?: number;
   violationCount?: number;
   complianceScore?: number;
   riskScore?: number;
+}
+}
 }
 export interface ClassificationStats {
   classification: DataClassificationLevel;
@@ -43,6 +48,8 @@ export interface ClassificationStats {
   complianceRate: number;
   lastUpdated: Date;
 }
+}
+}
 export interface UserActivity {
   userId: string;
   totalEvents: number;
@@ -51,6 +58,8 @@ export interface UserActivity {
   lastActivity: Date;
   riskScore: number;
   suspiciousActivities: string;
+}
+}
 }
 export interface MonitoringAlert {
   id: string;
@@ -63,6 +72,8 @@ export interface MonitoringAlert {
   resolvedAt?: Date;
   resolvedBy?: string;
 }
+}
+}
 export interface MonitoringThreshold {
   name: string;
   description: string;
@@ -74,6 +85,8 @@ export interface MonitoringThreshold {
   cooldownMinutes: number;
   lastTriggered?: Date;
 }
+}
+}
 export interface MonitoringDashboard {
   overallStats: {
   totalEvents: number;
@@ -82,6 +95,7 @@ export interface MonitoringDashboard {
   activeUsers: number;
   violationCount: number;
   complianceScore: number;
+}
 };
   classificationBreakdown: ClassificationStats;
   topUsers: UserActivity;
@@ -183,6 +197,7 @@ export class ClassificationMonitoringService {
    * Record a monitoring event
    */
   async recordEvent(event: Omit<MonitoringEvent, 'id'>): Promise<void> {
+
     const monitoringEvent: MonitoringEvent = {,
   id: `event-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
 }
@@ -312,6 +327,7 @@ export class ClassificationMonitoringService {
    * Check monitoring thresholds
    */
   private async checkThresholds(event: MonitoringEvent): Promise<void> {
+
     for (const [name, threshold] of this.thresholds) {
       if (!threshold.enabled) continue;
       // Check cooldown
@@ -374,6 +390,7 @@ export class ClassificationMonitoringService {
    * Create monitoring alert
    */
   private async createAlert(alert: Omit<MonitoringAlert, 'id' | 'timestamp' | 'resolved'>): Promise<void> {
+
     const monitoringAlert: MonitoringAlert = {,
   id: `alert-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
 },

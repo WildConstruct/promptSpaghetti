@@ -3,6 +3,7 @@
  */
 import React from 'react';
 
+}
 interface ExecutionMetric {
     timestamp: number;
     duration: number;
@@ -12,6 +13,7 @@ interface ExecutionMetric {
     outputLength: number;
 
 
+}
 interface PerformanceMonitorProps {
     isVisible: boolean;
     onToggle: () => void;
@@ -20,3 +22,4 @@ interface PerformanceMonitorProps {
 export declare const PerformanceMonitor: React.FC<PerformanceMonitorProps>;
 export default PerformanceMonitor;
 //# sourceMappingURL=PerformanceMonitor.d.ts.map
+}

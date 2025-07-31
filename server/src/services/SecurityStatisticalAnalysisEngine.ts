@@ -10,6 +10,7 @@ import { EventEmitter } from 'events';
 import { SecurityPolicyAnalysisEngine, SecurityPolicy, PolicyImpactAnalysis } from './SecurityPolicyAnalysisEngine';
 
 }
+}
 export interface SecurityStatistics {
   threat_landscape: {
     total_threats_detected: number;
@@ -19,6 +20,7 @@ export interface SecurityStatistics {
       increasing: string[];
       decreasing: string[];
       emerging: string[];
+}
 }
     };
     geographic_distribution: Record<string, number>;
@@ -93,6 +95,7 @@ export interface SecurityStatistics {
 }
 
 }
+}
 export interface ThreatAssessment {
   assessment_id: string;
   timestamp: number;
@@ -105,6 +108,7 @@ export interface ThreatAssessment {
       credibility_score: number;
       last_updated: number;
       threat_indicators: string[];
+}
 }
     }>;
     iocs: Array<{ // Indicators of Compromise
@@ -193,6 +197,7 @@ export interface ThreatAssessment {
 }
 
 }
+}
 export interface StatisticalModel {
   model_id: string;
   model_type: 'regression' | 'classification' | 'clustering' | 'time_series' | 'anomaly_detection';
@@ -209,7 +214,9 @@ export interface StatisticalModel {
   prediction_confidence_threshold: number;
 }
 }
+}
 
+}
 }
 export interface SecurityTrend {
   trend_id: string;
@@ -219,6 +226,7 @@ export interface SecurityTrend {
     timestamp: number;
     value: number;
     confidence_interval: [number, number];
+}
 }
   }>;
   statistical_significance: number;

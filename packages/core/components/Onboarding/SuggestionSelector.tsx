@@ -14,6 +14,7 @@ import {
   GENERATION_DEFAULTS
 } from '../../types/NodeGenerationTypes';
 
+}
 export interface SuggestionSelectorProps {
   suggestions: NodeSuggestion;
   onGenerate: (selectedSuggestions: NodeSuggestion, options: GenerationOptions) => void;
@@ -23,6 +24,7 @@ export interface SuggestionSelectorProps {
   /**
   * Component for selecting suggestions and configuring generation options
   */
+}
 }
 export const [generationOptions, setGenerationOptions] = useState<GenerationOptions>({)
   layout: GENERATION_DEFAULTS.DEFAULT_LAYOUT,

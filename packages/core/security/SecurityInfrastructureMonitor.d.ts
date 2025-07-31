@@ -8,6 +8,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface InfrastructureComponent {
     id: string;
     name: string;
@@ -21,6 +22,7 @@ export interface InfrastructureComponent {
         region: string;
         availability_zone?: string;
         tags: Record<string, string>;
+}
     };
     monitoring: {
         enabled: boolean;
@@ -63,6 +65,7 @@ export interface InfrastructureComponent {
     last_updated: number;
     enabled: boolean;
 
+}
 export interface HealthCheckConfig {
     id: string;
     name: string;
@@ -77,6 +80,7 @@ export interface HealthCheckConfig {
         script_path?: string;
         threshold_value?: number;
         threshold_unit?: string;
+}
     };
     success_criteria: {
         min_success_rate: number;
@@ -86,6 +90,7 @@ export interface HealthCheckConfig {
     enabled: boolean;
     weight: number;
 
+}
 export interface CustomMetricConfig {
     id: string;
     name: string;
@@ -96,6 +101,7 @@ export interface CustomMetricConfig {
         source: string;
         parsing_rule?: string;
         aggregation_method?: 'sum' | 'avg' | 'min' | 'max' | 'count'
+}
   };
     thresholds: {
         warning_threshold?: number;
@@ -105,6 +111,7 @@ export interface CustomMetricConfig {
     unit: string;
     enabled: boolean;
 
+}
 export interface AlertThreshold {
     id: string;
     name: string;
@@ -115,11 +122,13 @@ export interface AlertThreshold {
         value_max?: number;
         duration_minutes?: number;
         evaluation_window_minutes?: number;
+}
     };
     severity: 'info' | 'warning' | 'critical';
     enabled: boolean;
     priority: number;
 
+}
 export interface NotificationChannel {
     id: string;
     name: string;
@@ -132,6 +141,7 @@ export interface NotificationChannel {
         phone_numbers?: string[];
         channel_id?: string;
         template?: string;
+}
     };
     routing: {
         severity_filter: ('info' | 'warning' | 'critical')[];
@@ -151,15 +161,17 @@ export interface NotificationChannel {
     };
     enabled: boolean;
 
+}
 export interface EscalationPolicy {
     id: string;
     name: string;
     description: string;
-    escalation_levels: Array<{,
+    escalation_levels: Array<{
         level: number;
         delay_minutes: number;
         notification_channels: string[];
         actions: EscalationAction[];
+}
     }>;
     trigger_conditions: {
         severity_levels: ('info' | 'warning' | 'critical')[];
@@ -175,12 +187,14 @@ export interface EscalationPolicy {
     enabled: boolean;
     priority: number;
 
+}
 export interface EscalationAction {
     action_type: 'notify_oncall' | 'create_incident' | 'run_automation' | 'scale_resources' | 'failover' | 'custom_webhook';
     parameters: Record<string, any>;
     timeout_minutes?: number;
     retry_attempts?: number;
 
+}
 export interface SuppressionRule {
     id: string;
     name: string;
@@ -190,6 +204,7 @@ export interface SuppressionRule {
         alert_patterns: string[];
         severity_levels: ('info' | 'warning' | 'critical')[];
         maintenance_windows?: MaintenanceWindow[];
+}
     };
     behavior: {
         suppress_notifications: boolean;
@@ -206,6 +221,7 @@ export interface SuppressionRule {
     enabled: boolean;
     priority: number;
 
+}
 export interface MaintenanceWindow {
     id: string;
     name: string;
@@ -216,6 +232,7 @@ export interface MaintenanceWindow {
         timezone: string;
         recurring: boolean;
         recurrence_pattern?: string;
+}
     };
     affected_components: string[];
     suppress_all_alerts: boolean;
@@ -223,6 +240,7 @@ export interface MaintenanceWindow {
     created_by: string;
     created_at: number;
 
+}
 export interface InfrastructureMetrics {
     component_id: string;
     timestamp: number;
@@ -237,6 +255,7 @@ export interface InfrastructureMetrics {
         load_average_1m: number;
         load_average_5m: number;
         load_average_15m: number;
+}
     };
     application?: {
         request_rate_per_second: number;
@@ -260,6 +279,7 @@ export interface InfrastructureMetrics {
     };
     custom_metrics: Record<string, number>;
 
+}
 export interface InfrastructureAlert {
     id: string;
     component_id: string;
@@ -277,6 +297,7 @@ export interface InfrastructureAlert {
         affected_services: string[];
         root_cause_analysis?: string;
         impact_assessment: 'none' | 'low' | 'medium' | 'high' | 'critical'
+}
   };
     resolution: {
         acknowledged: boolean;
@@ -292,7 +313,7 @@ export interface InfrastructureAlert {
     escalation: {
         escalated: boolean;
         escalation_level: number;
-        escalation_history: Array<{,
+        escalation_history: Array<{
             level: number;
             escalated_at: number;
             escalated_to: string[];
@@ -307,6 +328,7 @@ export interface InfrastructureAlert {
         suppression_reason?: string;
     };
 
+}
 export interface InfrastructureEvent {
     id: string;
     component_id: string;
@@ -321,6 +343,7 @@ export interface InfrastructureEvent {
         triggered_by?: string;
         correlation_id?: string;
         tags: Record<string, string>;
+}
     };
     impact: {
         severity: 'none' | 'low' | 'medium' | 'high' | 'critical';
@@ -335,6 +358,7 @@ export interface InfrastructureEvent {
         lessons_learned?: string;
     };
 
+}
 export interface MonitoringReport {
     report_id: string;
     generated_at: number;
@@ -342,6 +366,7 @@ export interface MonitoringReport {
         start_time: number;
         end_time: number;
         duration_hours: number;
+}
     };
     health_summary: {
         total_components: number;
@@ -369,7 +394,7 @@ export interface MonitoringReport {
         avg_resolution_time_minutes: number;
         false_positive_rate_percent: number;
     };
-    top_issues: Array<{,
+    top_issues: Array<{
         component_id: string;
         component_name: string;
         issue_type: string;

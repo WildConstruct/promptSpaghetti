@@ -101,6 +101,7 @@ export enum DisputePhase {
  * Main chargeback tracking interface
  */
 }
+}
 export interface Chargeback {
   readonly id: string;
   
@@ -168,10 +169,12 @@ export interface Chargeback {
   last_updated_by: string;
 }
 }
+}
 
 /**
  * Evidence submitted for chargeback disputes
  */
+}
 }
 export interface ChargebackEvidence {
   readonly id: string;
@@ -205,10 +208,12 @@ export interface ChargebackEvidence {
   created_by: string;
 }
 }
+}
 
 /**
  * Communication history for chargebacks
  */
+}
 }
 export interface ChargebackCommunication {
   readonly id: string;
@@ -240,7 +245,9 @@ export interface ChargebackCommunication {
   created_by: string;
 }
 }
+}
 
+}
 }
 export interface CommunicationAttachment {
   id: string;
@@ -250,10 +257,12 @@ export interface CommunicationAttachment {
   content_type: string;
 }
 }
+}
 
 /**
  * Chargeback analytics and metrics
  */
+}
 }
 export interface ChargebackAnalytics {
   period_start: Date;
@@ -282,6 +291,7 @@ export interface ChargebackAnalytics {
     count: number;
     amount_cents: number;
     win_rate: number;
+}
 }
   }>;
   
@@ -312,6 +322,7 @@ export interface ChargebackAnalytics {
 /**
  * Chargeback prevention and alerts
  */
+}
 }
 export interface ChargebackAlert {
   readonly id: string;
@@ -348,10 +359,12 @@ export interface ChargebackAlert {
   expires_at?: Date;
 }
 }
+}
 
 /**
  * Chargeback prevention rules
  */
+}
 }
 export interface ChargebackPreventionRule {
   readonly id: string;
@@ -380,7 +393,9 @@ export interface ChargebackPreventionRule {
   last_triggered_at?: Date;
 }
 }
+}
 
+}
 }
 export interface PreventionRuleCondition {
   field: string; // e.g., 'risk_score', 'transaction_amount', 'user_chargeback_history'
@@ -389,12 +404,15 @@ export interface PreventionRuleCondition {
   weight: number;
 }
 }
+}
 
+}
 }
 export interface PreventionRuleAction {
   type: 'block_transaction' | 'require_verification' | 'manual_review' | 'send_alert' | 'delay_fulfillment';
   parameters: Record<string, any>;
   auto_execute: boolean;
+}
 }
 }
 
@@ -405,6 +423,7 @@ export interface PreventionRuleAction {
 /**
  * Pre-built response templates for different chargeback reasons
  */
+}
 }
 export interface ChargebackResponseTemplate {
   readonly id: string;
@@ -435,10 +454,12 @@ export interface ChargebackResponseTemplate {
   tags: string[];
 }
 }
+}
 
 /**
  * Automated evidence collection
  */
+}
 }
 export interface EvidenceCollector {
   readonly id: string;
@@ -467,6 +488,7 @@ export interface EvidenceCollector {
   created_at: Date;
   updated_at: Date;
   last_run_at?: Date;
+}
 }
 }
 
@@ -542,6 +564,7 @@ export const CreateResponseTemplateSchema = z.object({
 // =============================================================================
 
 }
+}
 export interface ChargebackServiceResponse<T> {
   success: boolean;
   data?: T;
@@ -557,6 +580,7 @@ export interface ChargebackServiceResponse<T> {
   };
 }
 
+}
 }
 export interface ChargebackSearchCriteria {
   user_id?: string;
@@ -582,7 +606,9 @@ export interface ChargebackSearchCriteria {
   sort_order?: 'asc' | 'desc';
 }
 }
+}
 
+}
 }
 export interface ChargebackSearchResult {
   chargebacks: Chargeback[];
@@ -594,9 +620,11 @@ export interface ChargebackSearchResult {
     status_distribution: Record<ChargebackStatus, number>;
     reason_distribution: Record<ChargebackReason, number>;
 }
+}
   };
 }
 
+}
 }
 export interface ChargebackBulkAction {
   action: 'update_status' | 'submit_evidence' | 'add_notes' | 'add_tags' | 'assign_reviewer';
@@ -604,7 +632,9 @@ export interface ChargebackBulkAction {
   parameters: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ChargebackBulkResult {
   total_processed: number;
@@ -615,6 +645,7 @@ export interface ChargebackBulkResult {
     success: boolean;
     error?: string;
 }
+}
   }>;
 }
 
@@ -622,6 +653,7 @@ export interface ChargebackBulkResult {
 // Webhook and Integration Types
 // =============================================================================
 
+}
 }
 export interface ChargebackWebhookPayload {
   event_type: 'chargeback.created' | 'chargeback.updated' | 'chargeback.evidence_required' | 'chargeback.closed';
@@ -633,9 +665,11 @@ export interface ChargebackWebhookPayload {
     provider: PaymentProvider;
     retry_count: number;
 }
+}
   };
 }
 
+}
 }
 export interface ProviderChargebackData {
   provider: PaymentProvider;
@@ -643,6 +677,7 @@ export interface ProviderChargebackData {
   raw_data: Record<string, any>;
   mapped_data: Partial<Chargeback>;
   mapping_version: string;
+}
 }
 }
 

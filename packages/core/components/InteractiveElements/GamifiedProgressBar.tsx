@@ -12,6 +12,7 @@ import {
   Milestone,
   ColorThreshold
 } from '../../services/Epic16InteractiveElementsService';
+}
 interface GamifiedProgressBarProps {
   element: ProgressBarElement;
   interactiveService: Epic16InteractiveElementsService;
@@ -42,6 +43,7 @@ interface GamifiedProgressBarProps {
   onMilestoneReached,
   onComplete,
   className = ''
+}
 }) => {
   // Configuration
   const config = element.config.progress_config;

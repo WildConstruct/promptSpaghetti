@@ -11,6 +11,7 @@ import {
 } from '../database/audit-models';
 
 }
+}
 export interface AuditMiddlewareOptions {
   enabled?: boolean;
   excludeRoutes?: string[];
@@ -20,6 +21,7 @@ export interface AuditMiddlewareOptions {
   logSecurityEvents?: boolean;
   sensitiveHeaders?: string[];
   sensitiveParams?: string[];
+}
 }
 }
 
@@ -531,6 +533,7 @@ declare module 'fastify' {
       schedules: ReturnType<AuditMiddleware['createScheduleAuditor']>;
       users: ReturnType<AuditMiddleware['createUserAuditor']>;
       system: ReturnType<AuditMiddleware['createSystemAuditor']>;
+}
 }
     };
   }

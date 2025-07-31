@@ -6,6 +6,7 @@ import { Pool } from 'pg';
 import { CommunityService, CreatePostRequest, CreateDiscussionRequest, CreateEventRequest } from './community.service';
 
 }
+}
 interface AuthenticatedRequest extends FastifyRequest {
   user: {
     id: string;
@@ -15,13 +16,16 @@ interface AuthenticatedRequest extends FastifyRequest {
 }
 
 }
+}
 interface PostsQuerystring {
   filter?: 'all' | 'following' | 'trending';
   limit?: number;
   offset?: number;
 }
 }
+}
 
+}
 }
 interface DiscussionsQuerystring {
   category?: string;
@@ -29,17 +33,22 @@ interface DiscussionsQuerystring {
   offset?: number;
 }
 }
+}
 
+}
 }
 interface EventsQuerystring {
   limit?: number;
   upcoming?: boolean;
 }
 }
+}
 
+}
 }
 interface CreatorsQuerystring {
   limit?: number;
+}
 }
 }
 

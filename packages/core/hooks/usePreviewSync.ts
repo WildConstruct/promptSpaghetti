@@ -9,6 +9,7 @@ import { useEffect, useRef, useCallback, useMemo } from 'react';
 import { useGraphStore } from '../graphStore';
 import { usePreviewStateStore } from '../stores/previewStateStore';
 import { debounce } from 'lodash';
+}
 interface GraphChangeAnalysis {
   changeType: 'structural' | 'content' | 'cosmetic';
   affectedNodes: string;
@@ -33,6 +34,7 @@ interface GraphChangeAnalysis {
   avgSyncTime: number;
   successRate: number;
   cacheHitRate: number;
+}
 };
 
 // Generate hash for graph objects for change detection

@@ -7,6 +7,7 @@
  */
 
 }
+}
 export interface EvidenceMappingConfig {
   // Core mapping settings
   mapping: {
@@ -15,6 +16,7 @@ export interface EvidenceMappingConfig {
     evidence_collection_timeout: number;
     mapping_cache_ttl: number;
     evidence_integrity_verification: boolean;
+}
 }
   };
 

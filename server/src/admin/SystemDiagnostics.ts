@@ -22,6 +22,7 @@ import { performance } from 'perf_hooks';
 // ==========================================
 
 }
+}
 export interface SystemHealthReport {
   reportId: string;
   generatedAt: Date;
@@ -35,7 +36,9 @@ export interface SystemHealthReport {
   metadata: ReportMetadata;
 }
 }
+}
 
+}
 }
 export interface SystemInformation {
   hostname: string;
@@ -49,7 +52,9 @@ export interface SystemInformation {
   storageInfo: StorageInformation;
 }
 }
+}
 
+}
 }
 export interface CPUInformation {
   model: string;
@@ -59,7 +64,9 @@ export interface CPUInformation {
   utilization: number;
 }
 }
+}
 
+}
 }
 export interface MemoryInformation {
   total: number;
@@ -69,7 +76,9 @@ export interface MemoryInformation {
   heapUsage: NodeJS.MemoryUsage;
 }
 }
+}
 
+}
 }
 export interface NetworkInformation {
   interfaces: NetworkInterface[];
@@ -77,7 +86,9 @@ export interface NetworkInformation {
   bandwidthUtilization: number;
 }
 }
+}
 
+}
 }
 export interface NetworkInterface {
   name: string;
@@ -87,7 +98,9 @@ export interface NetworkInterface {
   mac: string;
 }
 }
+}
 
+}
 }
 export interface StorageInformation {
   disks: DiskInformation[];
@@ -97,7 +110,9 @@ export interface StorageInformation {
   utilization: number;
 }
 }
+}
 
+}
 }
 export interface DiskInformation {
   path: string;
@@ -107,7 +122,9 @@ export interface DiskInformation {
   utilization: number;
 }
 }
+}
 
+}
 }
 export interface CategoryHealthReport {
   category: DiagnosticCategory;
@@ -120,7 +137,9 @@ export interface CategoryHealthReport {
   trends: CategoryTrends;
 }
 }
+}
 
+}
 }
 export interface CriticalIssue {
   issueId: string;
@@ -135,7 +154,9 @@ export interface CriticalIssue {
   affectedSystems: string[];
 }
 }
+}
 
+}
 }
 export interface SystemRecommendation {
   recommendationId: string;
@@ -149,7 +170,9 @@ export interface SystemRecommendation {
   dependencies: string[];
 }
 }
+}
 
+}
 }
 export interface HealthTrends {
   timeRange: string;
@@ -158,7 +181,9 @@ export interface HealthTrends {
   performanceMetrics: PerformanceTrends;
 }
 }
+}
 
+}
 }
 export interface CategoryTrends {
   trend: 'improving' | 'stable' | 'degrading';
@@ -168,7 +193,9 @@ export interface CategoryTrends {
   currentScore: number;
 }
 }
+}
 
+}
 }
 export interface PerformanceTrends {
   responseTime: TrendData;
@@ -177,7 +204,9 @@ export interface PerformanceTrends {
   resourceUtilization: TrendData;
 }
 }
+}
 
+}
 }
 export interface TrendData {
   current: number;
@@ -187,14 +216,18 @@ export interface TrendData {
   dataPoints: DataPoint[];
 }
 }
+}
 
+}
 }
 export interface DataPoint {
   timestamp: Date;
   value: number;
 }
 }
+}
 
+}
 }
 export interface ReportMetadata {
   generationDuration: number;
@@ -204,7 +237,9 @@ export interface ReportMetadata {
   configurationSnapshot: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface SystemDiagnosticConfiguration {
   enabledCategories: DiagnosticCategory[];
@@ -214,7 +249,9 @@ export interface SystemDiagnosticConfiguration {
   maintenanceWindows: MaintenanceWindow[];
 }
 }
+}
 
+}
 }
 export interface AlertThresholds {
   cpu: ThresholdConfig;
@@ -225,7 +262,9 @@ export interface AlertThresholds {
   performance: ThresholdConfig;
 }
 }
+}
 
+}
 }
 export interface ThresholdConfig {
   warning: number;
@@ -234,7 +273,9 @@ export interface ThresholdConfig {
   escalationDelay: number; // minutes
 }
 }
+}
 
+}
 }
 export interface ReportingSettings {
   generateDaily: boolean;
@@ -245,7 +286,9 @@ export interface ReportingSettings {
   retentionPeriod: number; // days
 }
 }
+}
 
+}
 }
 export interface MaintenanceWindow {
   id: string;
@@ -256,6 +299,7 @@ export interface MaintenanceWindow {
   timezone: string;
   suppressAlerts: boolean;
   skipChecks: boolean;
+}
 }
 }
 

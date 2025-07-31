@@ -6,6 +6,7 @@
  * and building trust through verified achievements.
  */
 
+}
 export interface Badge {
     id: string;
     name: string;
@@ -25,12 +26,14 @@ export interface Badge {
         createdAt: number;
         updatedAt: number;
         version: string;
+}
     };
 
 export type BadgeCategory = 'verification' | 'creation' | 'collaboration' | 'marketplace' | 'community' | 'achievement' | 'milestone' | 'professional' | 'special';
 export type BadgeTier = 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond';
 export type BadgeRarity = 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
 
+}
 export interface BadgeCriteria {
     type: 'count' | 'threshold' | 'completion' | 'verification' | 'composite';
     metric?: string;
@@ -39,6 +42,7 @@ export interface BadgeCriteria {
     conditions?: Record<string, any>;
     customLogic?: (user: UserBadgeProgress) => boolean;
 
+}
 export interface UserBadge {
     badgeId: string;
     userId: string;
@@ -49,6 +53,7 @@ export interface UserBadge {
     isDisplayed: boolean;
     isNotificationSent: boolean;
 
+}
 export interface UserBadgeProgress {
     userId: string;
     badges: Map<string, UserBadge>;
@@ -68,6 +73,7 @@ export interface UserBadgeProgress {
         helpfulVotes: number;
         mentoringSessions: number;
         workshopsAttended: number;
+}
     };
     achievements: {
         firstTemplate: boolean;
@@ -77,6 +83,7 @@ export interface UserBadgeProgress {
         communityLeader: boolean;
     };
 
+}
 export interface BadgeUnlockEvent {
     userId: string;
     badgeId: string;
@@ -137,6 +144,7 @@ export declare class BadgeSystem {
         level: number;
         badgeCount: number;
         rank: number;
+}
     }>;
     /**
      * Update user statistics

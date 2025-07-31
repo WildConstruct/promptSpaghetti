@@ -2,6 +2,7 @@
 // Calculates risk scores based on multiple behavioral and contextual factors
 
 }
+}
 export interface LoginAttempt {
   userId?: string;
   ipAddress: string;
@@ -10,6 +11,7 @@ export interface LoginAttempt {
     country: string;
     region: string;
     city: string;
+}
 }
     coordinates?: { lat: number; lng: number };
   };
@@ -21,12 +23,14 @@ export interface LoginAttempt {
 }
 
 }
+}
 export interface UserProfile {
   userId: string;
   typicalLocations: Array<{
     country: string;
     region: string;
     frequency: number;
+}
 }
   }>;
   typicalDevices: Array<{
@@ -44,6 +48,7 @@ export interface UserProfile {
   riskLevel: 'low' | 'medium' | 'high';
 }
 
+}
 }
 export interface RiskFactors {
   // Location-based factors
@@ -67,7 +72,9 @@ export interface RiskFactors {
   mfaBypass: number;           // 0-1: attempts to bypass MFA
 }
 }
+}
 
+}
 }
 export interface RiskScore {
   overallScore: number;         // 0-100: final calculated risk score
@@ -78,7 +85,9 @@ export interface RiskScore {
   explanation: string;
 }
 }
+}
 
+}
 }
 export interface RiskScoringConfig {
   // Weight configuration for different risk factors
@@ -87,6 +96,7 @@ export interface RiskScoringConfig {
     behavioral: number;         // Weight for behavioral factors
     patterns: number;           // Weight for pattern-based factors
     contextual: number;         // Weight for contextual factors
+}
 }
   };
   

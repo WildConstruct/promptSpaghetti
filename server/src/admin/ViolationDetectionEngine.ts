@@ -21,6 +21,7 @@ import {
 } from '../../../packages/core/types/TrustTypes';
 
 }
+}
 export interface ViolationRule {
   ruleId: string;
   name: string;
@@ -32,6 +33,7 @@ export interface ViolationRule {
     trustScore?: {
       operator: 'lt' | 'lte' | 'gt' | 'gte' | 'eq';
       value: number;
+}
 }
     };
     riskFactors?: {
@@ -62,6 +64,7 @@ export interface ViolationRule {
 }
 
 }
+}
 export interface ScanOptions {
   entityTypes?: ('user' | 'template' | 'transaction')[];
   entityIds?: string[];
@@ -72,10 +75,12 @@ export interface ScanOptions {
     from: Date;
     to: Date;
 }
+}
   };
   maxResults?: number;
 }
 
+}
 }
 export interface ScanResult {
   totalScanned: number;
@@ -85,6 +90,7 @@ export interface ScanResult {
   violations: PolicyViolation[];
   scanDuration: number;
   timestamp: Date;
+}
 }
 }
 

@@ -29,9 +29,11 @@ import {
 
 // Cohort analysis interfaces
 
+}
 export interface CohortFunnelAnalysisProps {
   funnelDefinition: ConversionFunnelDefinition;
   analyticsInfrastructure: ConversionAnalyticsInfrastructure;
+}
   timeRange: { start: number; end: number };
   selectedCohorts?: ConversionCohort;
   analysisMode?: CohortAnalysisMode;
@@ -47,6 +49,7 @@ export type CohortAnalysisMode =
   | 'value_based'
   | 'lifecycle';
 
+}
 export interface CohortAnalysisData {
   cohortPerformance: CohortPerformanceData;
   comparativeAnalysis: CohortComparativeAnalysis;
@@ -57,6 +60,8 @@ export interface CohortAnalysisData {
   predictiveModels: CohortPredictiveModel;
   insights: CohortInsight;
   healthScores: CohortHealthScore;
+}
+}
 }
 export interface CohortPerformanceData {
   cohortId: string;
@@ -69,6 +74,8 @@ export interface CohortPerformanceData {
   valueMetrics: CohortValueMetrics;
   benchmarkComparison: CohortBenchmarkComparison;
 }
+}
+}
 export interface CohortDefinitionSummary {
   criteriaEvent: string;
   timeWindow: number;
@@ -76,6 +83,8 @@ export interface CohortDefinitionSummary {
   creationDate: number;
   maturity: 'new' | 'growing' | 'mature' | 'declining';
   characteristics: string;
+}
+}
 }
 export interface CohortFunnelMetrics {
   totalEntries: number;
@@ -86,6 +95,8 @@ export interface CohortFunnelMetrics {
   dropOffRate: number;
   retentionRate: number;
   reactivationRate: number;
+}
+}
 }
 export interface CohortStepPerformance {
   stepId: string;
@@ -101,12 +112,16 @@ export interface CohortStepPerformance {
   stepEfficiency: number;
   cohortSpecificBehaviors: CohortBehaviorMetric;
 }
+}
+}
 export interface CohortBehaviorMetric {
   behavior: string;
   frequency: number;
   impact: number;
   uniqueness: number; // How unique this behavior is to this cohort,
   description: string;
+}
+}
 }
 export interface CohortTemporalPerformance {
   period: number; // Days/weeks since cohort creation,
@@ -118,13 +133,17 @@ export interface CohortTemporalPerformance {
   reactivationCount: number;
   valueGenerated: number;
   trendDirection: 'improving' | 'declining' | 'stable'
+}
   }
+}
 export interface CohortProgressionMetrics {
   progressionRate: number; // % of cohort progressing through funnel,
   averageProgressionTime: number;
   progressionStages: ProgressionStage;
   stagnationPoints: StagnationPoint;
   accelerationFactors: AccelerationFactor;
+}
+}
 }
 export interface ProgressionStage {
   stageId: string;
@@ -135,6 +154,8 @@ export interface ProgressionStage {
   progressionRate: number;
   commonExitReasons: string;
 }
+}
+}
 export interface StagnationPoint {
   stepId: string;
   stepName: string;
@@ -143,13 +164,17 @@ export interface StagnationPoint {
   recoveryRate: number;
   interventionOpportunities: string;
 }
+}
+}
 export interface AccelerationFactor {
   factor: string;
   impact: number;
   frequency: number;
   conditions: string;
   replicability: 'high' | 'medium' | 'low'
+}
   }
+}
 export interface CohortValueMetrics {
   totalValue: number;
   valuePerUser: number;
@@ -159,6 +184,8 @@ export interface CohortValueMetrics {
   valueDistribution: ValueDistribution;
   moneyGenerationPattern: MoneyGenerationPattern;
 }
+}
+}
 export interface ValueTrajectoryPoint {
   period: number;
   periodLabel: string;
@@ -167,11 +194,14 @@ export interface ValueTrajectoryPoint {
   valueVelocity: number;
   projectedValue: number;
 }
+}
+}
 export interface ValueDistribution {
   lowValue: { threshold: number; percentage: number; totalValue: number };
   mediumValue: { threshold: number; percentage: number; totalValue: number };
   highValue: { threshold: number; percentage: number; totalValue: number };
   topPercentile: { threshold: number; percentage: number; totalValue: number };
+}
 }
 export interface MoneyGenerationPattern {
   pattern: 'front_loaded' | 'gradual' | 'back_loaded' | 'sporadic';
@@ -179,17 +209,23 @@ export interface MoneyGenerationPattern {
   predictability: number;
   seasonality: SeasonalityInfo;
 }
+}
+}
 export interface SeasonalityInfo {
   hasSeasonality: boolean;
   pattern?: 'weekly' | 'monthly' | 'quarterly';
   peaks?: string;
   troughs?: string;
 }
+}
+}
 export interface CohortBenchmarkComparison {
   overallPerformance: BenchmarkMetric;
   stepComparisons: StepBenchmarkMetric;
   peerCohorts: PeerCohortComparison;
   industryBenchmarks: IndustryBenchmarkMetric;
+}
+}
 }
 export interface BenchmarkMetric {
   metric: string;
@@ -198,6 +234,8 @@ export interface BenchmarkMetric {
   percentile: number;
   performance: 'excellent' | 'good' | 'average' | 'below_average' | 'poor';
   improvementPotential: number;
+}
+}
 }
 export interface StepBenchmarkMetric extends BenchmarkMetric {
   stepId: string;
@@ -210,6 +248,8 @@ export interface StepBenchmarkMetric extends BenchmarkMetric {
   keyDifferences: string;
   learnings: string;
 }
+}
+}
 export interface IndustryBenchmarkMetric {
   metric: string;
   industryAverage: number;
@@ -217,7 +257,9 @@ export interface IndustryBenchmarkMetric {
   cohortValue: number;
   industryRanking: number;
   competitivePosition: 'leader' | 'challenger' | 'follower' | 'niche'
+}
   }
+}
 export interface CohortComparativeAnalysis {
   crossCohortMetrics: CrossCohortMetric;
   performanceRankings: CohortRanking;
@@ -225,32 +267,40 @@ export interface CohortComparativeAnalysis {
   convergenceAnalysis: ConvergenceAnalysis;
   outlierAnalysis: CohortOutlierAnalysis;
 }
+}
+}
 export interface CrossCohortMetric {
   metric: string;
+}
   values: Array<{ cohortId: string; cohortName: string; value: number }>;
   variance: number;
   coefficient: number;
   trend: 'converging' | 'diverging' | 'stable';
   insights: string;
 }
+}
 export interface CohortRanking {
   metric: string;
-  rankings: Array<{,
+  rankings: Array<{
   rank: number;
   cohortId: string;
   cohortName: string;
   value: number;
   score: number;
+}
 }>;
+}
 }
 export interface CohortDifference {
   metric: string;
+}
   cohortA: { id: string; name: string; value: number };
   cohortB: { id: string; name: string; value: number };
   difference: number;
   significance: number;
   possibleReasons: string;
   actionableInsights: string;
+}
 }
 export interface ConvergenceAnalysis {
   cohortIds: string;
@@ -261,6 +311,8 @@ export interface ConvergenceAnalysis {
   convergencePoint: number;
   factors: string;
 }
+}
+}
 export interface CohortOutlierAnalysis {
   cohortId: string;
   cohortName: string;
@@ -268,7 +320,9 @@ export interface CohortOutlierAnalysis {
   deviationSeverity: 'extreme' | 'significant' | 'moderate';
   possibleCauses: string;
   investigationPriority: 'high' | 'medium' | 'low'
+}
   }
+}
 export interface CohortRetentionAnalysis {
   cohortId: string;
   cohortName: string;
@@ -277,6 +331,8 @@ export interface CohortRetentionAnalysis {
   retentionFactors: RetentionFactor;
   churnAnalysis: ChurnAnalysis;
   reactivationAnalysis: ReactivationAnalysis;
+}
+}
 }
 export interface RetentionPoint {
   period: number;
@@ -288,6 +344,8 @@ export interface RetentionPoint {
   reactivatedUsers: number;
   netRetention: number;
 }
+}
+}
 export interface RetentionMetrics {
   dayOneRetention: number;
   daySevenRetention: number;
@@ -296,13 +354,17 @@ export interface RetentionMetrics {
   halfLife: number; // Days until 50% retention,
   retentionStability: number;
   retentionTrend: 'improving' | 'declining' | 'stable'
+}
   }
+}
 export interface RetentionFactor {
   factor: string;
   impact: number;
   correlation: number;
   actionability: 'high' | 'medium' | 'low';
   description: string;
+}
+}
 }
 export interface ChurnAnalysis {
   overallChurnRate: number;
@@ -311,12 +373,16 @@ export interface ChurnAnalysis {
   preventableChurn: number;
   churnValue: number; // Value lost to churn,
 }
+}
+}
 export interface ChurnPredictor {
   predictor: string;
   accuracy: number;
   leadTime: number; // Days before churn,
   actionWindow: number; // Days to take action,
   interventions: string;
+}
+}
 }
 export interface ChurnSegment {
   segment: string;
@@ -325,12 +391,16 @@ export interface ChurnSegment {
   reasons: string;
   preventionStrategies: string;
 }
+}
+}
 export interface ReactivationAnalysis {
   reactivationRate: number;
   averageTimeToReactivation: number;
   reactivationTriggers: ReactivationTrigger;
   reactivationValue: number;
   reactivationROI: number;
+}
+}
 }
 export interface ReactivationTrigger {
   trigger: string;
@@ -339,6 +409,8 @@ export interface ReactivationTrigger {
   timeToAction: number;
   suitableCohorts: string;
 }
+}
+}
 export interface CohortLifecycleAnalysis {
   cohortId: string;
   cohortName: string;
@@ -346,6 +418,8 @@ export interface CohortLifecycleAnalysis {
   stageTransitions: StageTransition;
   maturityMetrics: MaturityMetrics;
   lifecycleHealth: LifecycleHealthMetrics;
+}
+}
 }
 export interface LifecycleStage {
   stage: 'onboarding' | 'activation' | 'engagement' | 'retention' | 'expansion' | 'advocacy';
@@ -356,6 +430,8 @@ export interface LifecycleStage {
   valueGenerated: number;
   stageCharacteristics: string;
 }
+}
+}
 export interface StageTransition {
   fromStage: string;
   toStage: string;
@@ -364,12 +440,16 @@ export interface StageTransition {
   transitionFactors: string;
   optimizationOpportunities: string;
 }
+}
+}
 export interface MaturityMetrics {
   overallMaturity: number; // 0-100,
   maturityFactors: MaturityFactor;
   maturityTrajectory: 'accelerating' | 'steady' | 'plateauing' | 'declining';
   expectedPeakValue: number;
   timeToMaturity: number;
+}
+}
 }
 export interface MaturityFactor {
   factor: string;
@@ -378,11 +458,15 @@ export interface MaturityFactor {
   targetScore: number;
   improvementActions: string;
 }
+}
+}
 export interface LifecycleHealthMetrics {
   healthScore: number; // 0-100,
   healthFactors: HealthFactor;
   riskIndicators: RiskIndicator;
   opportunityAreas: OpportunityArea;
+}
+}
 }
 export interface HealthFactor {
   factor: string;
@@ -391,12 +475,16 @@ export interface HealthFactor {
   trend: 'improving' | 'stable' | 'declining';
   impact: string;
 }
+}
+}
 export interface RiskIndicator {
   risk: string;
   severity: 'high' | 'medium' | 'low';
   probability: number;
   impact: number;
   mitigationActions: string;
+}
+}
 }
 export interface OpportunityArea {
   opportunity: string;
@@ -405,6 +493,8 @@ export interface OpportunityArea {
   timeframe: 'immediate' | 'short_term' | 'long_term';
   actions: string;
 }
+}
+}
 export interface CohortBehaviorPattern {
   cohortId: string;
   cohortName: string;
@@ -412,6 +502,8 @@ export interface CohortBehaviorPattern {
   uniqueBehaviors: UniqueBehavior;
   behaviorEvolution: BehaviorEvolution;
   crossCohortComparison: BehaviorComparison;
+}
+}
 }
 export interface BehaviorPattern {
   pattern: string;
@@ -422,6 +514,8 @@ export interface BehaviorPattern {
   predictability: number;
   description: string;
 }
+}
+}
 export interface UniqueBehavior {
   behavior: string;
   uniquenessScore: number;
@@ -430,6 +524,8 @@ export interface UniqueBehavior {
   replicability: string;
   description: string;
 }
+}
+}
 export interface BehaviorEvolution {
   period: number;
   periodLabel: string;
@@ -437,11 +533,15 @@ export interface BehaviorEvolution {
   adaptationRate: number;
   stabilityScore: number;
 }
+}
+}
 export interface BehaviorChange {
   behavior: string;
   changeType: 'emerged' | 'strengthened' | 'weakened' | 'disappeared';
   changeIntensity: number;
   drivers: string;
+}
+}
 }
 export interface BehaviorComparison {
   behavior: string;
@@ -449,6 +549,8 @@ export interface BehaviorComparison {
   otherCohortsAverage: number;
   relativeStrength: number;
   significance: number;
+}
+}
 }
 export interface CohortPredictiveModel {
   cohortId: string;
@@ -460,6 +562,8 @@ export interface CohortPredictiveModel {
   keyPredictors: ModelPredictor;
   scenarioAnalysis: ScenarioAnalysis;
 }
+}
+}
 export interface PredictionResult {
   timeframe: number; // Days ahead,
   timeframeLabel: string;
@@ -468,6 +572,8 @@ export interface PredictionResult {
   factors: string;
   assumptions: string;
 }
+}
+}
 export interface ModelPredictor {
   predictor: string;
   importance: number;
@@ -475,12 +581,16 @@ export interface ModelPredictor {
   stability: number;
   actionability: string;
 }
+}
+}
 export interface ScenarioAnalysis {
   scenario: string;
   probability: number;
   predictedOutcome: number;
   impactFactors: string;
   preparationActions: string;
+}
+}
 }
 export interface CohortInsight {
   type: 'performance' | 'behavior' | 'opportunity' | 'risk' | 'comparison';
@@ -497,6 +607,8 @@ export interface CohortInsight {
   evidence: string;
   relatedInsights: string;
 }
+}
+}
 export interface CohortHealthScore {
   cohortId: string;
   cohortName: string;
@@ -507,6 +619,8 @@ export interface CohortHealthScore {
   riskLevel: 'low' | 'medium' | 'high';
   interventionRecommendations: InterventionRecommendation;
 }
+}
+}
 export interface HealthScoreComponent {
   component: string;
   score: number;
@@ -515,15 +629,21 @@ export interface HealthScoreComponent {
   benchmark: number;
   contributingFactors: string;
 }
+}
+}
 export interface HealthScoreHistory {
   timestamp: number;
   score: number;
   changes: ScoreChange;
 }
+}
+}
 export interface ScoreChange {
   component: string;
   change: number;
   reason: string;
+}
+}
 }
 export interface InterventionRecommendation {
   recommendation: string;
@@ -533,8 +653,11 @@ export interface InterventionRecommendation {
   timeframe: string;
   successMetrics: string;
 }
+}
+}
 export interface CohortAnalysisExportData {
   analysisMode: CohortAnalysisMode;
+}
   timeRange: { start: number; end: number };
   cohorts: string;
   data: CohortAnalysisData;
@@ -719,6 +842,7 @@ export const CohortFunnelAnalysis: React.FC<CohortFunnelAnalysisProps> = ({)
 /**
  * Cohort Analysis Header Component
  */
+}
 interface CohortAnalysisHeaderProps {
   funnelDefinition: ConversionFunnelDefinition;
   selectedCohorts: ConversionCohort;
@@ -735,6 +859,7 @@ interface CohortAnalysisHeaderProps {
   onViewChange,
   onCohortSelection,
   onExport
+}
 }) => {
   const views = [;
     { key: 'comparative', label: 'Comparative' },
@@ -802,6 +927,7 @@ interface CohortAnalysisHeaderProps {
 /**
  * Comparative Analysis View Component
  */
+}
 interface ComparativeAnalysisViewProps {
   cohortPerformance: CohortPerformanceData;
   comparativeAnalysis: CohortComparativeAnalysis;
@@ -810,6 +936,7 @@ interface ComparativeAnalysisViewProps {
   cohortPerformance,
   comparativeAnalysis,
   funnelDefinition
+}
 }) => {
   return;
     <div className="comparative-analysis-view">
@@ -868,12 +995,14 @@ interface ComparativeAnalysisViewProps {
 /**
  * Step Comparison Chart Component
  */
+}
 interface StepComparisonChartProps {
   cohortPerformance: CohortPerformanceData;
   funnelSteps: ConversionStep;
   const StepComparisonChart: React.FC<StepComparisonChartProps> = ({,)
   cohortPerformance,
   funnelSteps
+}
 }) => {
   const chartWidth = 800;
   const chartHeight = 300;
@@ -957,8 +1086,10 @@ interface StepComparisonChartProps {
 /**
  * Cohort Difference Card Component
  */
+}
 interface CohortDifferenceCardProps {
   difference: CohortDifference;
+}
 const CohortDifferenceCard: React.FC<CohortDifferenceCardProps> = ({ difference }) => {
   return;
     <div className="cohort-difference-card">
@@ -1000,8 +1131,10 @@ const CohortDifferenceCard: React.FC<CohortDifferenceCardProps> = ({ difference 
 /**
  * Retention Analysis View Component
  */
+}
 interface RetentionAnalysisViewProps {
   retentionAnalysis: CohortRetentionAnalysis;
+}
 const RetentionAnalysisView: React.FC<RetentionAnalysisViewProps> = ({ retentionAnalysis }) => {
   return;
     <div className="retention-analysis-view">
@@ -1026,8 +1159,10 @@ const RetentionAnalysisView: React.FC<RetentionAnalysisViewProps> = ({ retention
 /**
  * Retention Metrics Card Component
  */
+}
 interface RetentionMetricsCardProps {
   analysis: CohortRetentionAnalysis;
+}
 const RetentionMetricsCard: React.FC<RetentionMetricsCardProps> = ({ analysis }) => {
   return;
     <div className="retention-metrics-card">
@@ -1078,8 +1213,10 @@ const RetentionMetricsCard: React.FC<RetentionMetricsCardProps> = ({ analysis })
 /**
  * Retention Curves Chart Component
  */
+}
 interface RetentionCurvesChartProps {
   retentionAnalysis: CohortRetentionAnalysis;
+}
 const RetentionCurvesChart: React.FC<RetentionCurvesChartProps> = ({ retentionAnalysis }) => {
   const chartWidth = 800;
   const chartHeight = 400;
@@ -1203,12 +1340,14 @@ const RetentionCurvesChart: React.FC<RetentionCurvesChartProps> = ({ retentionAn
 /**
  * Lifecycle Analysis View Component
  */
+}
 interface LifecycleAnalysisViewProps {
   lifecycleAnalysis: CohortLifecycleAnalysis;
   healthScores: CohortHealthScore;
   const LifecycleAnalysisView: React.FC<LifecycleAnalysisViewProps> = ({,)
   lifecycleAnalysis,
   healthScores
+}
 }) => {
   return;
     <div className="lifecycle-analysis-view">
@@ -1234,8 +1373,10 @@ interface LifecycleAnalysisViewProps {
 /**
  * Lifecycle Card Component
  */
+}
 interface LifecycleCardProps {
   analysis: CohortLifecycleAnalysis;
+}
 const LifecycleCard: React.FC<LifecycleCardProps> = ({ analysis }) => {
   return;
     <div className="lifecycle-card">
@@ -1278,8 +1419,10 @@ const LifecycleCard: React.FC<LifecycleCardProps> = ({ analysis }) => {
 /**
  * Health Score Card Component
  */
+}
 interface HealthScoreCardProps {
   healthScore: CohortHealthScore;
+}
 const HealthScoreCard: React.FC<HealthScoreCardProps> = ({ healthScore }) => {
   return;
     <div className="health-score-card">
@@ -1330,8 +1473,10 @@ const HealthScoreCard: React.FC<HealthScoreCardProps> = ({ healthScore }) => {
 /**
  * Behavior Analysis View Component
  */
+}
 interface BehaviorAnalysisViewProps {
   behaviorPatterns: CohortBehaviorPattern;
+}
 const BehaviorAnalysisView: React.FC<BehaviorAnalysisViewProps> = ({ behaviorPatterns }) => {
   return;
     <div className="behavior-analysis-view">
@@ -1347,8 +1492,10 @@ const BehaviorAnalysisView: React.FC<BehaviorAnalysisViewProps> = ({ behaviorPat
 /**
  * Behavior Pattern Card Component
  */
+}
 interface BehaviorPatternCardProps {
   pattern: CohortBehaviorPattern;
+}
 const BehaviorPatternCard: React.FC<BehaviorPatternCardProps> = ({ pattern }) => {
   return;
     <div className="behavior-pattern-card">
@@ -1384,8 +1531,10 @@ const BehaviorPatternCard: React.FC<BehaviorPatternCardProps> = ({ pattern }) =>
 /**
  * Predictive Analysis View Component
  */
+}
 interface PredictiveAnalysisViewProps {
   predictiveModels: CohortPredictiveModel;
+}
 const PredictiveAnalysisView: React.FC<PredictiveAnalysisViewProps> = ({ predictiveModels }) => {
   return;
     <div className="predictive-analysis-view">
@@ -1401,8 +1550,10 @@ const PredictiveAnalysisView: React.FC<PredictiveAnalysisViewProps> = ({ predict
 /**
  * Predictive Model Card Component
  */
+}
 interface PredictiveModelCardProps {
   model: CohortPredictiveModel;
+}
 const PredictiveModelCard: React.FC<PredictiveModelCardProps> = ({ model }) => {
   return;
     <div className="predictive-model-card">
@@ -1441,8 +1592,10 @@ const PredictiveModelCard: React.FC<PredictiveModelCardProps> = ({ model }) => {
 /**
  * Value Analysis View Component
  */
+}
 interface ValueAnalysisViewProps {
   valueAnalysis: CohortValueAnalysis;
+}
 const ValueAnalysisView: React.FC<ValueAnalysisViewProps> = ({ valueAnalysis }) => {
   return;
     <div className="value-analysis-view">
@@ -1454,9 +1607,11 @@ const ValueAnalysisView: React.FC<ValueAnalysisViewProps> = ({ valueAnalysis }) 
 /**
  * Cohort Insights Panel Component
  */
+}
 interface CohortInsightsPanelProps {
   insights: CohortInsight;
   healthScores: CohortHealthScore;
+}
 const CohortInsightsPanel: React.FC<CohortInsightsPanelProps> = ({ insights, healthScores }) => {
   const criticalInsights = insights.filter(i => i.severity === 'critical' || i.severity === 'high');
   return;
@@ -1501,9 +1656,11 @@ const CohortAnalysisLoadingState: React.FC = () => ()
     <p>Loading cohort analysis...</p>
   </div>
 );
+}
 interface CohortAnalysisErrorStateProps {
   error: string;
   onRetry: () => void;
+}
 const CohortAnalysisErrorState: React.FC<CohortAnalysisErrorStateProps> = ({ error, onRetry }) => ()
   <div className="cohort-analysis-error">
     <div className="error-message">

@@ -48,14 +48,20 @@ export enum PasswordStrength {
   userAgent?: string;
   metadata?: Record<string, any>;
 }
+}
+}
 export interface TokenVerification {
   token: string;
   email: string;
+}
+}
 }
 export interface PasswordResetData {
   token: string;
   newPassword: string;
   confirmPassword: string;
+}
+}
 }
 export interface PasswordValidation {
   isValid: boolean;
@@ -68,7 +74,9 @@ export interface PasswordValidation {
   lowercase: boolean;
   numbers: boolean;
   symbols: boolean;
+}
 };
+}
 }
 export interface PasswordResetFlowProps {
   onResetComplete?: (success: boolean, email: string) => void;
@@ -78,6 +86,7 @@ export interface PasswordResetFlowProps {
   brandName?: string;
   supportEmail?: string;
   customValidation?: (password: string) => PasswordValidation;
+}
 }
 export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({)
   onResetComplete,

@@ -28,6 +28,7 @@ export type EnvironmentType = 'PRODUCTION' | 'STAGING' | 'DEVELOPMENT';
 export type ComplianceFramework = 'OAuth2.1' | 'GDPR' | 'CCPA' | 'SOX' | 'PCI_DSS' | 'ISO27001' | 'HIPAA';
 
 }
+}
 export interface OAuthPolicyTemplate {
   templateId: string;
   policyType: OAuthPolicyType;
@@ -43,7 +44,9 @@ export interface OAuthPolicyTemplate {
   updatedAt: Date;
 }
 }
+}
 
+}
 }
 export interface PolicyDocument {
   title: string;
@@ -55,7 +58,9 @@ export interface PolicyDocument {
   approvalRequired: boolean;
 }
 }
+}
 
+}
 }
 export interface PolicySection {
   sectionId: string;
@@ -66,7 +71,9 @@ export interface PolicySection {
   validations: ValidationRule[];
 }
 }
+}
 
+}
 }
 export interface PolicyVariable {
   name: string;
@@ -82,9 +89,11 @@ export interface PolicyVariable {
     min?: number;
     max?: number;
 }
+}
   };
 }
 
+}
 }
 export interface PolicyRequirement {
   requirementId: string;
@@ -96,7 +105,9 @@ export interface PolicyRequirement {
   enforcementAction: 'BLOCK' | 'WARN' | 'LOG' | 'REQUIRE_APPROVAL';
 }
 }
+}
 
+}
 }
 export interface PolicyException {
   exceptionId: string;
@@ -107,7 +118,9 @@ export interface PolicyException {
   validUntil?: Date;
 }
 }
+}
 
+}
 }
 export interface ExceptionCondition {
   field: string;
@@ -115,7 +128,9 @@ export interface ExceptionCondition {
   value: any;
 }
 }
+}
 
+}
 }
 export interface ValidationRule {
   ruleId: string;
@@ -124,7 +139,9 @@ export interface ValidationRule {
   severity: 'ERROR' | 'WARNING' | 'INFO';
 }
 }
+}
 
+}
 }
 export interface PolicyRule {
   ruleId: string;
@@ -136,7 +153,9 @@ export interface PolicyRule {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface EnforcementMechanism {
   mechanismId: string;
@@ -147,7 +166,9 @@ export interface EnforcementMechanism {
   automated: boolean;
 }
 }
+}
 
+}
 }
 export interface OAuthConfiguration {
   clientId: string;
@@ -160,7 +181,9 @@ export interface OAuthConfiguration {
   customAttributes: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface TokenConfiguration {
   accessTokenTtl: number;
@@ -172,7 +195,9 @@ export interface TokenConfiguration {
   scopes: string[];
 }
 }
+}
 
+}
 }
 export interface PolicyEnforcementResult {
   compliant: boolean;
@@ -185,7 +210,9 @@ export interface PolicyEnforcementResult {
   nextEvaluation?: Date;
 }
 }
+}
 
+}
 }
 export interface PolicyViolation {
   violationId: string;
@@ -199,7 +226,9 @@ export interface PolicyViolation {
   remediationSuggestion: string;
 }
 }
+}
 
+}
 }
 export interface PolicyRecommendation {
   recommendationId: string;
@@ -211,7 +240,9 @@ export interface PolicyRecommendation {
   estimatedEffort: string;
 }
 }
+}
 
+}
 }
 export interface EnforcementAction {
   actionId: string;
@@ -223,7 +254,9 @@ export interface EnforcementAction {
   result?: string;
 }
 }
+}
 
+}
 }
 export interface OAuthGovernanceFramework {
   frameworkId: string;
@@ -237,7 +270,9 @@ export interface OAuthGovernanceFramework {
   approvalWorkflows: ApprovalWorkflow[];
 }
 }
+}
 
+}
 }
 export interface ReportingSchedule {
   daily?: string[];
@@ -247,7 +282,9 @@ export interface ReportingSchedule {
   annual?: string[];
 }
 }
+}
 
+}
 }
 export interface ComplianceRequirement {
   frameworkId: ComplianceFramework;
@@ -259,7 +296,9 @@ export interface ComplianceRequirement {
   automated: boolean;
 }
 }
+}
 
+}
 }
 export interface ApprovalWorkflow {
   workflowId: string;
@@ -270,7 +309,9 @@ export interface ApprovalWorkflow {
   escalations: EscalationRule[];
 }
 }
+}
 
+}
 }
 export interface ApprovalStep {
   stepId: string;
@@ -282,7 +323,9 @@ export interface ApprovalStep {
   conditions?: string;
 }
 }
+}
 
+}
 }
 export interface WorkflowTimeout {
   stepId: string;
@@ -290,13 +333,16 @@ export interface WorkflowTimeout {
   action: 'AUTO_APPROVE' | 'AUTO_REJECT' | 'ESCALATE' | 'NOTIFY';
 }
 }
+}
 
+}
 }
 export interface EscalationRule {
   ruleId: string;
   condition: string;
   escalateTo: string[];
   action: string;
+}
 }
 }
 

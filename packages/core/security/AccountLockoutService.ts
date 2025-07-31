@@ -68,10 +68,12 @@ export enum LockoutStatus {
   geolocation?: string;
   riskScore: number;
   threatLevel: string;
+}
 };
   adminActions: AdminAction;
   notifications: LockoutNotification;
   auditTrail: AuditEntry;
+}
 }
 export interface AdminAction {
   id: string;
@@ -88,6 +90,8 @@ export interface AdminAction {
   approvalTime?: Date;
   metadata: Record<string, any>;
 }
+}
+}
 export interface LockoutNotification {
   id: string;
   type: NotificationType;
@@ -98,7 +102,9 @@ export interface LockoutNotification {
   readAt?: Date;
   content: string;
   status: 'pending' | 'sent' | 'delivered' | 'failed' | 'read'
+}
   }
+}
 export interface AuditEntry {
   id: string;
   timestamp: Date;
@@ -109,6 +115,8 @@ export interface AuditEntry {
   ipAddress?: string;
   sessionId?: string;
 }
+}
+}
 export interface UnlockRequest {
   lockoutId: string;
   adminId: string;
@@ -118,6 +126,8 @@ export interface UnlockRequest {
   justification: string;
   approvalRequired: boolean;
   metadata?: Record<string, any>;
+}
+}
 }
 export interface UnlockPolicy {
   adminRole: AdminRole;
@@ -132,6 +142,7 @@ export interface UnlockPolicy {
   * Comprehensive account lockout management service
   */
 }
+}
 export class AccountLockoutService extends EventEmitter {
   private lockouts: Map<string, AccountLockout> = new Map();
   private unlockPolicies: Map<AdminRole, UnlockPolicy> = new Map();
@@ -143,12 +154,13 @@ export class AccountLockoutService extends EventEmitter {
   /**
    * Create a new account lockout
    */
-  public async createLockout()
+  public async createLockout(
     userId: string,
     userEmail: string,
     reason: LockoutReason,
     metadata: Partial<AccountLockout['metadata']> = {}
   ): Promise<string> {
+
   const lockout: AccountLockout = {,
   id: this.generateLockoutId(),
   userId,
@@ -185,10 +197,11 @@ export class AccountLockoutService extends EventEmitter {
   /**
    * Administrator unlock capability with comprehensive security
    */
-  public async adminUnlock(()
+  public async adminUnlock(((
     lockoutId: string,
-    unlockRequest: UnlockRequest,
+    unlockRequest: UnlockRequest
   ): Promise<{ success: boolean; message: string; requiresApproval?: boolean }> {
+
     const lockout = this.lockouts.get(lockoutId);
     if (!lockout) {
       throw new Error(`Lockout not found: ${lockoutId}`);}
@@ -212,11 +225,12 @@ export class AccountLockoutService extends EventEmitter {
   /**
    * Emergency unlock capability for critical situations
    */
-  public async emergencyUnlock()
+  public async emergencyUnlock(
     lockoutId: string,
     adminId: string,
     emergencyCode: string,
     justification: string): Promise<{ success: boolean; message: string }> {
+
     // Verify emergency override code
     if (!this.emergencyOverrides.has(emergencyCode)) {
       this.logSecurityEvent(null, 'invalid_emergency_code', { adminId, lockoutId });
@@ -253,13 +267,14 @@ export class AccountLockoutService extends EventEmitter {
   /**
    * Approve pending unlock request
    */
-  public async approveUnlock()
+  public async approveUnlock(
     lockoutId: string,
     adminActionId: string,
     approverId: string,
     approved: boolean,
     comments?: string
   ): Promise<{ success: boolean; message: string }> {
+
     const lockout = this.lockouts.get(lockoutId);
     if (!lockout) {
       throw new Error(`Lockout not found: ${lockoutId}`);}
@@ -405,10 +420,11 @@ export class AccountLockoutService extends EventEmitter {
   topAffectedUsers
 };
   // Private helper methods
-  private async requestUnlockApproval(()
+  private async requestUnlockApproval(((
     lockout: AccountLockout,
-    unlockRequest: UnlockRequest,
+    unlockRequest: UnlockRequest
   ): Promise<{ success: boolean; message: string; requiresApproval: boolean }> {
+
     const adminAction: AdminAction = {,
   id: crypto.randomUUID(),
       adminId: unlockRequest.adminId,
@@ -449,10 +465,11 @@ export class AccountLockoutService extends EventEmitter {
   message: 'Unlock request submitted for approval',
   requiresApproval: true,
 };
-  private async performUnlock(()
+  private async performUnlock(((
     lockout: AccountLockout,
-    unlockRequest: UnlockRequest,
+    unlockRequest: UnlockRequest
   ): Promise<{ success: boolean; message: string }> {
+
     // Update lockout status
     lockout.status = LockoutStatus.UNLOCKED;
     lockout.unlockTime = new Date();
@@ -500,16 +517,18 @@ export class AccountLockoutService extends EventEmitter {
   message: 'Account successfully unlocked',
 };
   private async sendLockoutNotification(lockout: AccountLockout): Promise<void> {
+
   const content = this.generateLockoutNotificationContent(lockout);
   await this.sendNotification(lockout, {)
   type: NotificationType.LOCKOUT_NOTIFICATION,
   recipient: lockout.userEmail,
   content
 });
-  private async sendNotification(()
+  private async sendNotification(((
     lockout: AccountLockout,
-    notificationData: Partial<LockoutNotification>,
+    notificationData: Partial<LockoutNotification>
   ): Promise<void> {
+
   const notification: LockoutNotification = {,
   id: crypto.randomUUID(),
   type: notificationData.type || NotificationType.LOCKOUT_NOTIFICATION,

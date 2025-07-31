@@ -10,6 +10,7 @@ import { RiskScoringService } from './RiskScoringService';
 import { logger } from '../utils/logger';
 
 }
+}
 export interface ThreatDetectionAlert {
   id: string;
   type: 'threat_detected' | 'anomaly_detected' | 'policy_violation' | 'brute_force' | 'credential_stuffing';
@@ -24,6 +25,7 @@ export interface ThreatDetectionAlert {
     sessions: string[];
     ipAddresses: string[];
     systems: string[];
+}
 }
   };
   indicators: {
@@ -44,6 +46,7 @@ export interface ThreatDetectionAlert {
 }
 
 }
+}
 export interface AutomatedResponse {
   id: string;
   alertId: string;
@@ -57,7 +60,9 @@ export interface AutomatedResponse {
   revertReason?: string;
 }
 }
+}
 
+}
 }
 export interface ThreatIntelligenceFeed {
   id: string;
@@ -71,7 +76,9 @@ export interface ThreatIntelligenceFeed {
   recordCount: number;
 }
 }
+}
 
+}
 }
 export interface PlaybookDefinition {
   id: string;
@@ -80,6 +87,7 @@ export interface PlaybookDefinition {
   triggers: {
     eventTypes: string[];
     conditions: Record<string, any>;
+}
 }
   };
   steps: {

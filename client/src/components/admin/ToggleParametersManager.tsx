@@ -42,13 +42,15 @@ export enum ToggleType {
   interface PercentageRolloutParams {
   percentage: number;
   saltKey?: string;
-  gradualRollout?: {,
+  gradualRollout?: {
   enabled: boolean;,
   startPercentage: number;
   endPercentage: number;,
   durationHours: number;
   incrementSize: number;
+}
 };
+}
 interface MultivariateVariant {
   key: string;,
   value: Error;
@@ -65,13 +67,15 @@ interface MultivariateVariant {
   startTime?: string;
   endTime?: string;
   timezone: string;
-  recurrence?: {,
+  recurrence?: {
   type: 'none' | 'daily' | 'weekly' | 'monthly';,
   interval: number;
   daysOfWeek?: number;
   dayOfMonth?: number;
+}
 };
   overrideOnHolidays?: boolean;
+}
 interface SegmentationRule {
   id: string;,
   attribute: string;
@@ -91,6 +95,7 @@ interface SegmentationRule {
   onParametersChange,
   onSave,
   readonly = false
+}
 }) => {
   const [parameters, setParameters] = useState<Record<string, unknown>>(currentValue);
   const [validation, setValidation] = useState<{ isValid: boolean; errors: string }>({ isValid: true, errors: [] });
@@ -128,14 +133,14 @@ interface SegmentationRule {
   errors.push('At least one variant is required');
   isValid = false;
   break;
-  case ToggleType.SCHEDULED: {,
+  case ToggleType.SCHEDULED: {
   const scheduledParams = params as ScheduledParams;
   if (scheduledParams.enabled && scheduledParams.startTime && scheduledParams.endTime) {
   if (new Date(scheduledParams.startTime) >= new Date(scheduledParams.endTime)) {
   errors.push('Start time must be before end time');
   isValid = false;
   break;
-  case ToggleType.SEGMENTATION: {,
+  case ToggleType.SEGMENTATION: {
   const segmentationParams = params as SegmentationParams;
   if (!segmentationParams.rules?.length) {
   errors.push('At least one segmentation rule is required');
@@ -227,7 +232,7 @@ interface SegmentationRule {
                   checked={params.gradualRollout?.enabled || false}
                   onChange={(e) => handleParametersUpdate({)
   ...params,
-  gradualRollout: {,
+  gradualRollout: {
   ...params.gradualRollout,
   enabled: e.target.checked,
   startPercentage: params.gradualRollout?.startPercentage || 0,
@@ -252,7 +257,7 @@ interface SegmentationRule {
                       value={params.gradualRollout?.startPercentage || 0}
                       onChange={(e) => handleParametersUpdate({)
   ...params,
-  gradualRollout: {,
+  gradualRollout: {
   ...params.gradualRollout!,
   startPercentage: parseFloat(e.target.value) || 0,
 })}
@@ -269,7 +274,7 @@ interface SegmentationRule {
                       value={params.gradualRollout?.endPercentage || 100}
                       onChange={(e) => handleParametersUpdate({)
   ...params,
-  gradualRollout: {,
+  gradualRollout: {
   ...params.gradualRollout!,
   endPercentage: parseFloat(e.target.value) || 100,
 })}
@@ -287,7 +292,7 @@ interface SegmentationRule {
                       value={params.gradualRollout?.durationHours || 24}
                       onChange={(e) => handleParametersUpdate({)
   ...params,
-  gradualRollout: {,
+  gradualRollout: {
   ...params.gradualRollout!,
   durationHours: parseInt(e.target.value) || 24,
 })}
@@ -304,7 +309,7 @@ interface SegmentationRule {
                       value={params.gradualRollout?.incrementSize || 10}
                       onChange={(e) => handleParametersUpdate({)
   ...params,
-  gradualRollout: {,
+  gradualRollout: {
   ...params.gradualRollout!,
   incrementSize: parseInt(e.target.value) || 10,
 })}
@@ -590,7 +595,7 @@ interface SegmentationRule {
                     value={params.recurrence?.type || 'none'}
                     onChange={(e) => handleParametersUpdate({)
   ...params,
-  recurrence: {,
+  recurrence: {
   ...params.recurrence,
   type: e.target.value as 'none' | 'daily' | 'weekly' | 'monthly',
   interval: params.recurrence?.interval || 1,
@@ -613,7 +618,7 @@ interface SegmentationRule {
                       value={params.recurrence?.interval || 1}
                       onChange={(e) => handleParametersUpdate({)
   ...params,
-  recurrence: {,
+  recurrence: {
   ...params.recurrence!,
   interval: parseInt(e.target.value) || 1,
 })}

@@ -6,6 +6,7 @@
  */
 import React from 'react';
 
+}
 export interface QueueSubmission {
     id: string;
     template_id: string;
@@ -22,6 +23,7 @@ export interface QueueSubmission {
         price_cents: number;
         is_ai_generated?: boolean;
         intended_use_cases: string[];
+}
     };
     validation_results: ValidationResult[];
     submitted_at: Date;
@@ -31,6 +33,7 @@ export interface QueueSubmission {
     estimated_review_time?: number;
     complexity_score?: number;
 
+}
 export interface ValidationResult {
     rule_id: string;
     severity: 'error' | 'warning' | 'info';
@@ -39,6 +42,7 @@ export interface ValidationResult {
     field?: string;
     auto_fixable: boolean;
 
+}
 export interface QueueMetrics {
     total_pending: number;
     total_under_review: number;
@@ -47,14 +51,16 @@ export interface QueueMetrics {
     average_review_time_hours: number;
     reviews_completed_today: number;
     queue_velocity: number;
-    reviewer_workload: Array<{,
+    reviewer_workload: Array<{
         reviewer_id: string;
         reviewer_name: string;
         active_reviews: number;
         completed_today: number;
         average_review_time: number;
+}
     }>;
 
+}
 export interface QueueFilters {
     status?: string[];
     priority?: string[];
@@ -73,3 +79,4 @@ export interface QueueFilters {
 declare const SubmissionQueueDashboard: React.FC;
 export default SubmissionQueueDashboard;
 //# sourceMappingURL=SubmissionQueueDashboard.d.ts.map
+}

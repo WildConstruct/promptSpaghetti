@@ -17,6 +17,7 @@
  */
 import React, { ReactNode } from 'react';
 
+}
 export interface HelpContentItem {
     id: string;
     title: string;
@@ -33,8 +34,10 @@ export interface HelpContentItem {
     helpfulness: {
         helpful: number;
         unhelpful: number;
+}
     };
 
+}
 export interface TourStep {
     id: string;
     title: string;
@@ -49,6 +52,7 @@ export interface TourStep {
     highlight?: boolean;
     delay?: number;
 
+}
 export interface HelpTour {
     id: string;
     name: string;
@@ -62,6 +66,7 @@ export interface HelpTour {
     estimatedDuration: number;
     difficulty: 'beginner' | 'intermediate' | 'advanced';
 
+}
 export interface HelpContext {
     currentPage: string;
     userRole?: string;
@@ -73,8 +78,10 @@ export interface HelpContext {
         showTours: boolean;
         preferredHelpType: 'text' | 'video' | 'interactive';
         autoplayVideos: boolean;
+}
     };
 
+}
 export interface HelpTooltipProps {
     content: string | ReactNode;
     title?: string;
@@ -92,6 +99,7 @@ export interface HelpTooltipProps {
 
 export declare const HelpTooltip: React.FC<HelpTooltipProps>;
 
+}
 export interface ContextualHelpPanelProps {
     title: string;
     content: HelpContentItem[];
@@ -107,6 +115,7 @@ export interface ContextualHelpPanelProps {
 
 export declare const ContextualHelpPanel: React.FC<ContextualHelpPanelProps>;
 
+}
 export interface GuidedTourProps {
     tour: HelpTour;
     isActive: boolean;
@@ -117,6 +126,7 @@ export interface GuidedTourProps {
 
 export declare const GuidedTour: React.FC<GuidedTourProps>;
 
+}
 export interface HelpHubProps {
     tours: HelpTour[];
     content: HelpContentItem[];
@@ -127,6 +137,7 @@ export interface HelpHubProps {
 
 export declare const HelpHub: React.FC<HelpHubProps>;
 
+}
 export interface QuickHelpProps {
     helpContent: HelpContentItem[];
     onHelpRequest?: () => void;
@@ -139,6 +150,7 @@ declare const _default: {
     GuidedTour: React.FC<GuidedTourProps>;
     HelpHub: React.FC<HelpHubProps>;
     QuickHelp: React.FC<QuickHelpProps>;
+}
 };
 export default _default;
 //# sourceMappingURL=InAppHelpComponents.d.ts.map

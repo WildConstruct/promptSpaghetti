@@ -14,6 +14,7 @@ const CITATION_STYLES = [;
   { id: 'mla', name: 'MLA', description: 'Modern Language Association' },
   { id: 'apa', name: 'APA', description: 'American Psychological Association' }
 ] as const;
+}
 interface CitationFormData {
   type: Citation['type'];
   volume?: string;
@@ -32,6 +33,7 @@ interface CitationFormData {
   onCitationDelete,
   citationStyle,
   className = ''
+}
 }) => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingCitation, setEditingCitation] = useState<Citation | null>(null);

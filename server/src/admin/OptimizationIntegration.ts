@@ -20,6 +20,7 @@ import { AuditService } from '../auth/services/AuditService';
 import optimizationConfig from './optimization-config.json';
 
 }
+}
 export interface OptimizationIntegrationConfig {
   enabled: boolean;
   enableWebDashboard: boolean;
@@ -28,6 +29,7 @@ export interface OptimizationIntegrationConfig {
   dashboardPath: string;
   cliPath: string;
   updateInterval: number; // milliseconds
+}
 }
 }
 

@@ -21,6 +21,7 @@ import {
 
 // Activity Storage Interface
 
+}
 export interface ActivityStorage {
   create(activity: Activity): Promise<Activity>;
   findById(id: string): Promise<Activity | null>;
@@ -31,6 +32,8 @@ export interface ActivityStorage {
   getMetrics(query: ActivityQuery): Promise<ActivityMetrics>;
   // Activity Streaming Interface
 }
+}
+}
 export interface ActivityStreaming {
   createStream(filters: ActivityQuery): Promise<ActivityStream>;
   destroyStream(subscriptionId: string): Promise<boolean>;
@@ -38,6 +41,8 @@ export interface ActivityStreaming {
   subscribe(subscriptionId: string, callback: (event: ActivityStreamEvent) => void): Promise<void>;
   unsubscribe(subscriptionId: string): Promise<void>;
   // Activity Service Configuration
+}
+}
 }
 export interface ActivityServiceConfig {
   storage: ActivityStorage;
@@ -50,6 +55,7 @@ export interface ActivityServiceConfig {
   flushInterval?: number; // milliseconds,
   enableCompression?: boolean;
   enableEncryption?: boolean;
+}
 }
 export class ActivityTrackingService {
   private config: ActivityServiceConfig;
@@ -70,6 +76,7 @@ export class ActivityTrackingService {
     this.startFlushTimer();
   // Core Activity Tracking
   async trackActivity(activity: Partial<BaseActivity>): Promise<Activity> {
+
     const fullActivity: Activity = {,
   id: this.generateActivityId(),
       timestamp: new Date().toISOString(),
@@ -107,6 +114,7 @@ export class ActivityTrackingService {
   metadata?: Record<string, unknown>;
   severity?: ActivitySeverity;
 }): Promise<Activity> {
+
   return this.trackActivity({)
   type: 'user_action',
   userId: params.userId,
@@ -131,6 +139,7 @@ export class ActivityTrackingService {
   systemMetrics?: unknown;
   metadata?: Record<string, unknown>;
 }): Promise<Activity> {
+
   return this.trackActivity({)
   type: 'system_event',
   source: params.source,
@@ -154,6 +163,7 @@ export class ActivityTrackingService {
   metadata?: Record<string, unknown>;
   severity?: ActivitySeverity;
 }): Promise<Activity> {
+
   return this.trackActivity({)
   type: 'admin_action',
   userId: params.adminUserId,
@@ -182,6 +192,7 @@ export class ActivityTrackingService {
   forensicData?: unknown;
   metadata?: Record<string, unknown>;
 }): Promise<Activity> {
+
   return this.trackActivity({)
   type: 'security_event',
   action: params.action,
@@ -209,6 +220,7 @@ export class ActivityTrackingService {
   responseSize?: number;
   metadata?: Record<string, unknown>;
 }): Promise<Activity> {
+
     const severity = this.getApiCallSeverity(params.statusCode, params.duration);
     return this.trackActivity({)
   type: 'api_call',
@@ -237,6 +249,7 @@ export class ActivityTrackingService {
   thresholdViolations?: string;
   metadata?: Record<string, unknown>;
 }): Promise<Activity> {
+
     const severity = params.thresholdViolations?.length ? 'high' : 'info';
     return this.trackActivity({)
   type: 'performance_event',
@@ -253,6 +266,7 @@ export class ActivityTrackingService {
 });
   // Activity Querying
   async queryActivities(query: ActivityQuery): Promise<ActivityQueryResult> {
+
   return this.config.storage.query(query);
   // Get Activity Metrics
   async getMetrics(query: ActivityQuery): Promise<ActivityMetrics> {,
@@ -288,11 +302,14 @@ export class ActivityTrackingService {
       await this.config.streaming.publishActivity(updatedActivity);
     return updatedActivity;
   async getActivity(id: string): Promise<Activity | null> {
+
     return this.config.storage.findById(id);
   async deleteActivity(id: string): Promise<boolean> {
+
     return this.config.storage.delete(id);
   // Batch Operations
   async trackActivities(activities: Partial<BaseActivity>[]): Promise<Activity> {
+
     const fullActivities = activities.map(activity => ({)
   id: this.generateActivityId(),
       timestamp: new Date().toISOString(),

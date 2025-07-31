@@ -2,6 +2,7 @@ export type NotificationType = 'comment' | 'mention' | 'approval' | 'workflow' |
 export type NotificationPriority = 'high' | 'medium' | 'low';
 export type NotificationStatus = 'unread' | 'read' | 'archived';
 
+}
 export interface Notification {
     id: string;
     user_id: string;
@@ -20,11 +21,13 @@ export interface Notification {
         resource_id?: string;
         resource_name?: string;
         [key: string]: any;
+}
     };
     read_at?: string;
     created_at: string;
     updated_at: string;
 
+}
 export interface NotificationPreferences {
     user_id: string;
     workspace_id?: string;
@@ -36,6 +39,7 @@ export interface NotificationPreferences {
             in_app?: boolean;
             email?: boolean;
             push?: boolean;
+}
         };
     };
     quiet_hours: {
@@ -48,6 +52,7 @@ export interface NotificationPreferences {
     created_at?: string;
     updated_at?: string;
 
+}
 export interface NotificationTemplate {
     id: string;
     type: NotificationType;
@@ -59,6 +64,7 @@ export interface NotificationTemplate {
     created_at: string;
     updated_at: string;
 
+}
 export interface NotificationDeliveryLog {
     id: string;
     notification_id: string;
@@ -68,6 +74,7 @@ export interface NotificationDeliveryLog {
     delivered_at?: string;
     created_at: string;
 
+}
 export interface NotificationStats {
     total: number;
     unread: number;
@@ -77,19 +84,23 @@ export interface NotificationStats {
         today: number;
         this_week: number;
         this_month: number;
+}
     };
 
+}
 export interface RealTimeNotificationConnection {
     status: 'connected' | 'connecting' | 'disconnected' | 'error';
     lastConnected?: Date;
     reconnectAttempts: number;
     error?: string;
 
+}
 export interface NotificationEvent {
     type: 'notification_created' | 'notification_updated' | 'notification_deleted';
     notification: Notification;
     timestamp: string;
 
+}
 export interface NotificationListResponse {
     notifications: Notification[];
     total: number;
@@ -97,6 +108,7 @@ export interface NotificationListResponse {
     has_more: boolean;
     next_cursor?: string;
 
+}
 export interface NotificationCreateRequest {
     user_id: string;
     workspace_id?: string;
@@ -108,6 +120,7 @@ export interface NotificationCreateRequest {
     action_url?: string;
     metadata?: Record<string, any>;
 
+}
 export interface UseNotificationsReturn {
     notifications: Notification[];
     unreadCount: number;
@@ -124,3 +137,4 @@ export interface UseNotificationsReturn {
     setUnreadOnly: (unreadOnly: boolean) => void;
 
 //# sourceMappingURL=NotificationTypes.d.ts.map
+}

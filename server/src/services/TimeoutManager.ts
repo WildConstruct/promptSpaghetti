@@ -12,6 +12,7 @@
 import { EventEmitter } from 'events';
 
 }
+}
 export interface TimeoutConfig {
   // Database timeouts
   database: {
@@ -19,6 +20,7 @@ export interface TimeoutConfig {
     query: number;
     transaction: number;
     migration: number;
+}
 }
   };
   
@@ -65,6 +67,7 @@ export interface TimeoutConfig {
 }
 
 }
+}
 export interface RetryConfig {
   maxRetries: number;
   baseDelay: number;
@@ -73,7 +76,9 @@ export interface RetryConfig {
   jitterEnabled: boolean;
 }
 }
+}
 
+}
 }
 export interface CircuitBreakerConfig {
   failureThreshold: number;
@@ -81,7 +86,9 @@ export interface CircuitBreakerConfig {
   monitoringPeriod: number;
 }
 }
+}
 
+}
 }
 export interface TimeoutMetrics {
   totalOperations: number;
@@ -92,7 +99,9 @@ export interface TimeoutMetrics {
   lastTimeout: Date | null;
 }
 }
+}
 
+}
 }
 export interface OperationResult<T> {
   success: boolean;
@@ -114,11 +123,13 @@ enum CircuitBreakerState {
 }
 
 }
+}
 interface CircuitBreaker {
   state: CircuitBreakerState;
   failureCount: number;
   lastFailureTime: Date | null;
   nextAttemptTime: Date | null;
+}
 }
 }
 

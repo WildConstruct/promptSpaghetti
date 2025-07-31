@@ -11,6 +11,7 @@ import { EventEmitter } from 'events';
 import { SecurityEvent, ThreatType } from './PredictiveSecurityAnalytics';
 import { SecurityAnomaly } from './SecurityAnomalyDetector';
 
+}
 export interface ThreatForecast {
     forecastId: string;
     timestamp: Date;
@@ -34,6 +35,7 @@ export declare enum ForecastType {
     TREND_BASED = "trend_based",// Trend extrapolation
     SCENARIO_BASED = "scenario_based"
 
+}
 export interface SeasonalFactor {
     period: SeasonalPeriod;
     amplitude: number;
@@ -49,6 +51,7 @@ export declare enum SeasonalPeriod {
     MONTHLY = "monthly",
     QUARTERLY = "quarterly"
 
+}
 export interface TrendComponent {
     trendType: TrendType;
     direction: 'increasing' | 'decreasing' | 'stable';
@@ -66,6 +69,7 @@ export declare enum TrendType {
     CYCLICAL = "cyclical",
     VOLATILE = "volatile"
 
+}
 export interface ChangePoint {
     timestamp: Date;
     magnitude: number;
@@ -73,6 +77,7 @@ export interface ChangePoint {
     confidence: number;
 
 
+}
 export interface ForecastRiskMetrics {
     expectedValue: number;
     valueAtRisk: number;
@@ -82,6 +87,7 @@ export interface ForecastRiskMetrics {
     scenarioRisks: ScenarioRisk[];
 
 
+}
 export interface ScenarioRisk {
     scenario: string;
     probability: number;
@@ -89,6 +95,7 @@ export interface ScenarioRisk {
     description: string;
 
 
+}
 export interface ForecastRecommendation {
     type: RecommendationType;
     priority: 'immediate' | 'high' | 'medium' | 'low';
@@ -107,6 +114,7 @@ export declare enum RecommendationType {
     TRAINING_RECOMMENDATION = "training_recommendation",
     INFRASTRUCTURE_CHANGE = "infrastructure_change"
 
+}
 export interface ForecastModelMetadata {
     modelName: string;
     modelVersion: string;
@@ -127,6 +135,7 @@ export declare enum ForecastAlgorithm {
     GRADIENT_BOOSTING = "gradient_boosting",
     ENSEMBLE = "ensemble"
 
+}
 export interface ModelAccuracyMetrics {
     mape: number;
     rmse: number;
@@ -135,12 +144,14 @@ export interface ModelAccuracyMetrics {
     directionalAccuracy: number;
 
 
+}
 export interface TimeSeriesData {
     timestamp: Date;
     value: number;
     metadata: Record<string, unknown>;
 
 
+}
 export interface ForecastingConfig {
     enableRealTimeForecasting: boolean;
     forecastUpdateInterval: number;
@@ -153,6 +164,7 @@ export interface ForecastingConfig {
     minDataPointsForForecast: number;
 
 
+}
 export interface ThreatScenario {
     scenarioId: string;
     name: string;
@@ -165,12 +177,14 @@ export interface ThreatScenario {
     impactAssessment: ScenarioImpact;
 
 
+}
 export interface ScenarioTrigger {
     triggerType: 'metric_threshold' | 'anomaly_count' | 'time_based' | 'external_event';
     condition: string;
     weight: number;
 
 
+}
 export interface ScenarioImpact {
     businessImpact: number;
     technicalImpact: number;
@@ -254,3 +268,4 @@ export declare class SecurityThreatForecasting extends EventEmitter {
 
 export default SecurityThreatForecasting;
 //# sourceMappingURL=SecurityThreatForecasting.d.ts.map
+}

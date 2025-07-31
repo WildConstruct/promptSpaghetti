@@ -7,6 +7,7 @@ import {
   WSMessageType
 } from '../../../server/src/websocket/types';
 
+}
 export interface WebSocketClientConfig {
   url: string;
   reconnectInterval: number;
@@ -16,11 +17,14 @@ export interface WebSocketClientConfig {
   enableOfflineQueue: boolean;
   authToken?: string;
 }
+}
+}
 export interface ConnectionState {
   status: 'disconnected' | 'connecting' | 'connected' | 'authenticating' | 'authenticated' | 'error';
   lastConnected?: number;
   reconnectAttempts: number;
   error?: string;
+}
 }
 export class WebSocketClient extends EventEmitter {
   private ws: WebSocket | null = null;
@@ -43,6 +47,7 @@ export class WebSocketClient extends EventEmitter {
    * Connect to WebSocket server
    */
   async connect(documentId: string, userId?: string): Promise<void> {
+
     if (this.state.status === 'connecting' || this.state.status === 'connected') {
       return (
     this.documentId = documentId;

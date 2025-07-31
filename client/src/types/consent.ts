@@ -65,6 +65,7 @@ export const LegalBasis = {
 
 // Consent record structure
 
+}
 export interface ConsentRecord {
   consentId: string;
   userId?: string;
@@ -82,6 +83,8 @@ export interface ConsentRecord {
   metadata?: Record<string, unknown>;
   // Configuration types
 }
+}
+}
 export interface ConsentConfiguration {
   version: string;,
   lastUpdated: Date;
@@ -90,6 +93,8 @@ export interface ConsentConfiguration {
   retentionPeriod: number; // days,
   autoExpiry: boolean;,
   requireExplicitConsent: boolean;
+}
+}
 }
 export interface ConsentTypeConfig {
   type: ConsentType;,
@@ -105,11 +110,15 @@ export interface ConsentTypeConfig {
   cookies: CookieInfo;,
   justInTimePrompts: JustInTimePromptConfig;
 }
+}
+}
 export interface DataCategoryInfo {
   name: string;,
   description: string;
   examples: string;,
   retention: string;
+}
+}
 }
 export interface ThirdPartyInfo {
   name: string;,
@@ -117,6 +126,8 @@ export interface ThirdPartyInfo {
   purpose: string;,
   dataShared: string;
   privacyPolicy: string;
+}
+}
 }
 export interface CookieInfo {
   name: string;,
@@ -127,6 +138,8 @@ export interface CookieInfo {
   path?: string;
   // Just-in-time prompt configuration
 }
+}
+}
 export interface JustInTimePromptConfig {
   triggerId: string;,
   title: string;
@@ -135,6 +148,8 @@ export interface JustInTimePromptConfig {
   appearance: JustInTimeAppearance;,
   behavior: JustInTimeBehavior;
 }
+}
+}
 export interface JustInTimeContext {
   feature: string; // e.g., 'analytics_dashboard', 'marketing_newsletter', 'social_sharing',
   action: string; // e.g., 'view', 'click', 'submit', 'load',
@@ -142,11 +157,15 @@ export interface JustInTimeContext {
   urlPattern?: string; // URL pattern to match,
   conditions?: ContextCondition;
 }
+}
+}
 export interface ContextCondition {
   type: 'user_property' | 'session_property' | 'page_property' | 'time_based';,
   property: string;
   operator: 'equals' | 'contains' | 'starts_with' | 'greater_than' | 'less_than';,
   value: unknown;
+}
+}
 }
 export interface JustInTimeAppearance {
   style: 'modal' | 'banner' | 'sidebar' | 'tooltip' | 'inline';
@@ -157,6 +176,8 @@ export interface JustInTimeAppearance {
   iconType?: 'info' | 'warning' | 'question' | 'shield';
   customStyles?: CSSStyleDeclaration;
 }
+}
+}
 export interface JustInTimeBehavior {
   showOnce: boolean;
   cooldownPeriod?: number; // minutes,
@@ -166,6 +187,8 @@ export interface JustInTimeBehavior {
   autoHideAfter?: number; // seconds,
   blockInteraction: boolean; // block the original action until consent is given,
   // Banner configuration
+}
+}
 }
 export interface BannerConfiguration {
   enabled: boolean;,
@@ -178,11 +201,15 @@ export interface BannerConfiguration {
   enableRejectAll: boolean;
   enableCustomize: boolean;
 }
+}
+}
 export interface BannerLayout {
   showLogo: boolean;,
   buttonsLayout: 'horizontal' | 'vertical' | 'stacked';
   showCloseButton: boolean;,
   showProgressBar: boolean;
+}
+}
 }
 export interface BannerContent {
   title: string;,
@@ -193,6 +220,8 @@ export interface BannerContent {
   privacyPolicyUrl: string;
   cookiePolicyUrl: string;
   learnMoreUrl?: string;
+}
+}
 }
 export interface BannerStyling {
   backgroundColor?: string;
@@ -209,6 +238,8 @@ export interface BannerStyling {
   zIndex?: number;
   // User preferences
 }
+}
+}
 export interface ConsentPreferences {
   userId?: string;
   sessionId: string;,
@@ -218,17 +249,23 @@ export interface ConsentPreferences {
   userPreferences: UserPreferenceSettings;,
   notifications: NotificationSettings;
 }
+}
+}
 export interface UserPreferenceSettings {
   language: string;,
   timezone: string;
   privacySettings: PrivacySettings;,
   communicationPreferences: CommunicationPreferences;
 }
+}
+}
 export interface PrivacySettings {
   dataProcessingOptOut: boolean;,
   profileVisibility: 'public' | 'limited' | 'private';
   trackingOptOut: boolean;,
   dataRetentionPeriod: number; // days,
+}
+}
 }
 export interface CommunicationPreferences {
   emailNotifications: boolean;,
@@ -238,12 +275,16 @@ export interface CommunicationPreferences {
   productUpdates: boolean;,
   securityAlerts: boolean;
 }
+}
+}
 export interface NotificationSettings {
   showBanner: boolean;,
   showJustInTimePrompts: boolean;
   reminderFrequency: number; // days,
   lastReminderShown?: Date;
   // State management
+}
+}
 }
 export interface ConsentBannerState {
   isVisible: boolean;,
@@ -253,11 +294,15 @@ export interface ConsentBannerState {
   isLoading: boolean;
   error?: string;
 }
+}
+}
 export interface JustInTimePromptState {
   activePrompts: ActivePrompt;,
   cooldowns: Record<string, Date>;
   sessionCounts: Record<string, number>;
   dismissedPrompts: string;
+}
+}
 }
 export interface ActivePrompt {
   id: string;,
@@ -266,9 +311,11 @@ export interface ActivePrompt {
   context: JustInTimeContext;
   triggeredAt: Date;
 
+}
   position?: { x: number; y: number };
 
 // Data export (GDPR Article 20)
+}
 }
 export interface ConsentExport {
   exportId: string;
@@ -276,12 +323,14 @@ export interface ConsentExport {
   sessionId: string;,
   exportedAt: Date;
   version: string;,
-  data: {,
+  data: {
   consents: ConsentRecord;,
   preferences: ConsentPreferences;
   interactions: ConsentInteraction;,
   configuration: ConsentConfiguration;
+}
 };
+}
 }
 export interface ConsentInteraction {
   interactionId: string;,
@@ -292,24 +341,34 @@ export interface ConsentInteraction {
   metadata?: Record<string, unknown>;
   // API types
 }
+}
+}
 export interface ConsentConfigRequest {
   version?: string;
   types?: ConsentType;
+}
+}
 }
 export interface ConsentConfigResponse {
   success: boolean;,
   data: ConsentConfiguration;
   version: string;
 }
+}
+}
 export interface ConsentPreferencesRequest {
   userId?: string;
   sessionId: string;,
   preferences: Partial<ConsentPreferences>;
 }
+}
+}
 export interface ConsentPreferencesResponse {
   success: boolean;,
   preferences: ConsentPreferences;
   message?: string;
+}
+}
 }
 export interface ConsentRecordRequest {
   consentType: ConsentType;,
@@ -317,11 +376,15 @@ export interface ConsentRecordRequest {
   source: string;
   metadata?: Record<string, unknown>;
 }
+}
+}
 export interface ConsentRecordResponse {
   success: boolean;,
   record: ConsentRecord;
   message?: string;
   // Hook return type
+}
+}
 }
 export interface UseConsentReturn {
   preferences: ConsentPreferences | null;,
@@ -336,6 +399,8 @@ export interface UseConsentReturn {
   refreshConfig: () => Promise<void>;
   // Just-in-time prompt hook return type
 }
+}
+}
 export interface UseJustInTimeReturn {
   activePrompts: ActivePrompt;,
   showPrompt: (feature: string, action: string, element?: HTMLElement) => Promise<boolean>;
@@ -345,6 +410,8 @@ export interface UseJustInTimeReturn {
   isPromptAllowed: (triggerId: string) => boolean;
   // Event types for consent service
 }
+}
+}
 export interface ConsentEvent {
   type: 'consent_given' | 'consent_withdrawn' | 'preferences_saved' | 'just_in_time_shown' | 'just_in_time_responded';
   consentType?: ConsentType;
@@ -353,14 +420,19 @@ export interface ConsentEvent {
   metadata?: Record<string, unknown>;
   // Validation types
 }
+}
+}
 export interface ConsentValidationResult {
   isValid: boolean;,
   errors: string;
   warnings: string;
+}
+}
 }
 export interface ConsentComplianceCheck {
   isCompliant: boolean;,
   missingConsents: ConsentType;
   expiredConsents: ConsentType;,
   recommendations: string;
+}
 }

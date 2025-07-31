@@ -5,6 +5,7 @@ import { Graph, GraphId, UserId } from '../../types';
  * Supports JSON document handling for graph storage
  */
 }
+}
 export interface GraphRepository {
   /**
    * Save a graph (create or update)
@@ -47,20 +48,24 @@ export interface GraphRepository {
   getMetadata(id: GraphId): Promise<GraphMetadata | null>;
 }
 }
+}
 
 /**
  * Transaction context interface for cross-repository operations
  */
+}
 }
 export interface TransactionContext {
   commit(): Promise<void>;
   rollback(): Promise<void>;
 }
 }
+}
 
 /**
  * Graph metadata for lightweight operations
  */
+}
 }
 export interface GraphMetadata {
   id: GraphId;
@@ -69,5 +74,6 @@ export interface GraphMetadata {
   version: number;
   createdAt: Date;
   updatedAt: Date;
+}
 }
 }

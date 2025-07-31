@@ -26,6 +26,7 @@ import {
 
 // Enhanced feature toggle with Epic 17 admin dashboard capabilities
 }
+}
 export interface Epic17FeatureToggle extends FeatureToggle {
   // Epic 17 Dashboard Analytics
   analytics: {
@@ -93,6 +94,7 @@ export interface Epic17FeatureToggle extends FeatureToggle {
 
 // Toggle issue tracking for health monitoring
 }
+}
 export interface ToggleIssue {
   id: string;
   severity: 'info' | 'warning' | 'error' | 'critical';
@@ -105,8 +107,10 @@ export interface ToggleIssue {
   autoResolve: boolean;
 }
 }
+}
 
 // Rollback conditions for automated rollout management
+}
 }
 export interface RollbackCondition {
   metric: 'error_rate' | 'latency' | 'user_complaints' | 'dependency_failure';
@@ -115,12 +119,14 @@ export interface RollbackCondition {
   enabled: boolean;
 }
 }
+}
 
 // ====================================
 // Epic 17 Dashboard Query Models
 // ====================================
 
 // Enhanced toggle filter for admin dashboard
+}
 }
 export interface Epic17ToggleFilter {
   // Basic filters
@@ -158,8 +164,10 @@ export interface Epic17ToggleFilter {
   rolloutStage?: string[];
 }
 }
+}
 
 // Enhanced sorting for admin dashboard
+}
 }
 export interface Epic17ToggleSort {
   field: 'name' | 'key' | 'created_at' | 'updated_at' | 'last_evaluated' |
@@ -170,10 +178,12 @@ export interface Epic17ToggleSort {
     field: Epic17ToggleSort['field'];
     direction: 'asc' | 'desc';
 }
+}
   };
 }
 
 // Paginated query for dashboard
+}
 }
 export interface Epic17ToggleQuery {
   filters?: Epic17ToggleFilter;
@@ -183,6 +193,7 @@ export interface Epic17ToggleQuery {
     limit: number;
     cursor?: string; // For cursor-based pagination
 }
+}
   };
   includeAnalytics?: boolean;
   includeHealth?: boolean;
@@ -190,6 +201,7 @@ export interface Epic17ToggleQuery {
 }
 
 // Query response with metadata
+}
 }
 export interface Epic17ToggleQueryResponse {
   toggles: Epic17FeatureToggle[];
@@ -199,6 +211,7 @@ export interface Epic17ToggleQueryResponse {
     limit: number;
     hasMore: boolean;
     nextCursor?: string;
+}
 }
   };
   aggregations: {
@@ -224,6 +237,7 @@ export interface Epic17ToggleQueryResponse {
 
 // Dashboard summary statistics
 }
+}
 export interface Epic17DashboardSummary {
   overview: {
     totalToggles: number;
@@ -232,6 +246,7 @@ export interface Epic17DashboardSummary {
     unhealthyToggles: number;
     avgHealthScore: number;
     systemHealth: 'healthy' | 'degraded' | 'critical';
+}
 }
   };
 
@@ -284,6 +299,7 @@ export interface Epic17DashboardSummary {
 
 // Real-time dashboard updates
 }
+}
 export interface Epic17DashboardUpdate {
   timestamp: Date;
   updateType: 'toggle_created' | 'toggle_updated' | 'toggle_evaluated' | 'health_changed' | 'alert_triggered';
@@ -293,10 +309,12 @@ export interface Epic17DashboardUpdate {
     toggle?: Partial<Epic17FeatureToggle>;
     alert?: ToggleAlert;
 }
+}
   };
 }
 
 // Alert system for dashboard notifications
+}
 }
 export interface ToggleAlert {
   id: string;
@@ -312,13 +330,16 @@ export interface ToggleAlert {
   actions?: AlertAction[];
 }
 }
+}
 
+}
 }
 export interface AlertAction {
   type: 'disable_toggle' | 'rollback' | 'notify_owner' | 'create_ticket';
   label: string;
   url?: string;
   confirm?: boolean;
+}
 }
 }
 
@@ -567,6 +588,7 @@ export type BatchToggleOperationOutput = z.output<typeof BatchToggleOperationSch
 
 // Utility type for database operations
 export type Epic17ToggleCreateData = Omit<Epic17FeatureToggle, 'id' | 'createdAt' | 'updatedAt' | 'version'>;
+}
 }
 export type Epic17ToggleUpdateData = Partial<Omit<Epic17FeatureToggle, 'id' | 'key' | 'createdAt' | 'createdBy'>> & {
   updatedBy: string;

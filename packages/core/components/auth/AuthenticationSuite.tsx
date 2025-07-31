@@ -16,6 +16,7 @@ import {
   Database,
   Zap
 } from 'lucide-react';
+}
 interface FeatureCard {
   title: string;
   description: string;
@@ -42,6 +43,7 @@ interface FeatureCard {
   'Account lockout protection',
   'Suspicious activity detection'
   ]
+}
 }
     {
   title: 'User Profile & Preferences',

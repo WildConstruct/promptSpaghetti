@@ -23,12 +23,14 @@ import {
 // Factory Configuration Types
 // ========================================
 
+}
 export interface UnifiedSecurityConfig {
   // Rate limiting configuration
   rateLimiting: {
   enabled: boolean;
   strictMode: boolean;
   customEndpoints?: Record<string, any>;
+}
 };
   // Adaptive throttling configuration
   throttling: {
@@ -471,9 +473,9 @@ export enum SecurityProfile {
   /**
    * Merge configurations with deep merge
    */
-  private static mergeConfigurations(()
+  private static mergeConfigurations(((
     base: UnifiedSecurityConfig,
-    custom: Partial<UnifiedSecurityConfig>,
+    custom: Partial<UnifiedSecurityConfig>
   ): UnifiedSecurityConfig {
     const merged = { ...base };
     if (custom.rateLimiting) {

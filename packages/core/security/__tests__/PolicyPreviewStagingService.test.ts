@@ -748,7 +748,7 @@ describe('PolicyPreviewStagingService', () => {
     test('should handle multiple concurrent operations', async () => {
       const operations = [];
       for (let i = 0; i < 5; i++) {
-        operations.push()
+        operations.push(
           service.createPolicyPreview()
             `policy-${i}`}
 }

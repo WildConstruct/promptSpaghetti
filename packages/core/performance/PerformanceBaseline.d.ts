@@ -5,6 +5,7 @@
 import { KPISnapshot } from './PerformanceKPIs';
 import { EventEmitter } from 'events';
 
+}
 export interface BaselineSnapshot {
     id: string;
     timestamp: number;
@@ -13,6 +14,7 @@ export interface BaselineSnapshot {
         viewport?: {
             width: number;
             height: number;
+}
         };
         connection?: string;
         deviceMemory?: number;
@@ -30,6 +32,7 @@ export interface BaselineSnapshot {
         concurrentUsers: number;
     };
 
+}
 export interface BaselineSummary {
     capturedAt: number;
     totalKPIs: number;
@@ -39,6 +42,7 @@ export interface BaselineSummary {
         good: number;
         warning: number;
         critical: number;
+}
     };
     averageScores: {
         runtime: number;

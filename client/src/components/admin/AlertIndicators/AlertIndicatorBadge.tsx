@@ -12,6 +12,7 @@ import { AlertTriangle, AlertCircle, Info, Zap } from 'lucide-react';
 
 export type AlertSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
 
+}
 export interface AlertCount {
   critical: number;,
   high: number;
@@ -36,6 +37,7 @@ export interface AlertCount {
   className = '',
   onClick,
   animate = false
+}
 }) => {
   // Calculate total count or specific severity count
   const getDisplayCount = (): number => {,
@@ -55,35 +57,35 @@ export interface AlertCount {
   // Get severity configuration
   const getSeverityConfig = (sev: AlertSeverity) => {
   const configs = {
-  critical: {,
+  critical: {
   icon: Zap,
   bgColor: 'bg-red-500',
   textColor: 'text-white',
   borderColor: 'border-red-500',
   ringColor: 'ring-red-500/20',
 },
-  high: {,
+  high: {
   icon: AlertTriangle,
   bgColor: 'bg-orange-500',
   textColor: 'text-white',
   borderColor: 'border-orange-500',
   ringColor: 'ring-orange-500/20',
 },
-  medium: {,
+  medium: {
   icon: AlertCircle,
   bgColor: 'bg-yellow-500',
   textColor: 'text-white',
   borderColor: 'border-yellow-500',
   ringColor: 'ring-yellow-500/20',
 },
-  low: {,
+  low: {
   icon: Info,
   bgColor: 'bg-blue-500',
   textColor: 'text-white',
   borderColor: 'border-blue-500',
   ringColor: 'ring-blue-500/20',
 },
-  info: {,
+  info: {
   icon: Info,
   bgColor: 'bg-gray-500',
   textColor: 'text-white',
@@ -95,17 +97,17 @@ export interface AlertCount {
   // Get size configuration
   const getSizeConfig = (sz: string) => {
     const configs: Record<string, { container: string; icon: string; text: string }> = {
-  sm: {,
+  sm: {
   container: 'px-1.5 py-0.5 text-xs min-w-[20px] h-5',
   icon: 'w-3 h-3',
   text: 'text-xs',
 },
-  md: {,
+  md: {
   container: 'px-2 py-1 text-sm min-w-[24px] h-6',
   icon: 'w-4 h-4',
   text: 'text-sm',
 },
-  lg: {,
+  lg: {
   container: 'px-2.5 py-1.5 text-base min-w-[28px] h-7',
   icon: 'w-5 h-5',
   text: 'text-base',

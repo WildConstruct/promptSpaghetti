@@ -7,6 +7,7 @@
 import { ModelConfiguration, AIModelProvider } from './BaseAIModel';
 import { ModelRegistration } from './AIModelFactory';
 
+}
 export interface EnvironmentConfig {
     name: string;
     description: string;
@@ -17,6 +18,7 @@ export interface EnvironmentConfig {
         rateLimit: {
             requestsPerMinute: number;
             tokensPerMinute: number;
+}
         };
     };
     features: {
@@ -26,6 +28,7 @@ export interface EnvironmentConfig {
         enableMetrics: boolean;
     };
 
+}
 export interface ConfigurationSchema {
     version: string;
     environments: Record<string, EnvironmentConfig>;
@@ -33,18 +36,21 @@ export interface ConfigurationSchema {
     providerDefaults: Record<AIModelProvider, Partial<ModelConfiguration>>;
     validationRules: ValidationRule[];
 
+}
 export interface ValidationRule {
     id: string;
     name: string;
     description: string;
     validate: (config: ModelConfiguration) => ValidationResult;
 
+}
 export interface ValidationResult {
     valid: boolean;
     errors: string[];
     warnings: string[];
     suggestions: string[];
 
+}
 export interface ConfigurationUpdate {
     path: string;
     value: unknown;
@@ -53,12 +59,14 @@ export interface ConfigurationUpdate {
     timestamp: Date;
     reason?: string;
 
+}
 export interface ConfigurationHistory {
     updates: ConfigurationUpdate[];
-    snapshots: Array<{,
+    snapshots: Array<{
         timestamp: Date;
         config: ConfigurationSchema;
         version: string;
+}
     }>;
 
 export declare class ConfigurationValidator {

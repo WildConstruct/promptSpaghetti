@@ -35,6 +35,7 @@ import {
 } from 'lucide-react';
 
 // Algorithm configuration interfaces
+}
 export interface RecommendationAlgorithm {
   id: string;
   name: string;
@@ -49,11 +50,13 @@ export interface RecommendationAlgorithm {
     ndcg: number;
     click_through_rate: number;
     conversion_rate: number;
+}
   };
   last_trained?: Date;
   training_status: 'idle' | 'training' | 'failed' | 'completed';
 }
 
+}
 export interface FeaturedContentConfig {
   algorithm_weights: {
     trending_boost: number;
@@ -61,6 +64,7 @@ export interface FeaturedContentConfig {
     diversity_boost: number;
     recency_boost: number;
     creator_tier_boost: number;
+}
   };
   content_filters: {
     min_quality_score: number;
@@ -81,6 +85,7 @@ export interface FeaturedContentConfig {
   };
 }
 
+}
 export interface ABTestVariant {
   id: string;
   name: string;
@@ -91,9 +96,11 @@ export interface ABTestVariant {
     conversion_rate: number;
     engagement_score: number;
     revenue_per_view: number;
+}
   };
 }
 
+}
 export interface RecommendationMetrics {
   overall_performance: {
     total_recommendations_served: number;
@@ -101,6 +108,7 @@ export interface RecommendationMetrics {
     conversion_rate: number;
     avg_engagement_time: number;
     revenue_impact: number;
+}
   };
   algorithm_performance: Record<
     string,
@@ -131,8 +139,10 @@ export interface RecommendationMetrics {
   };
 }
 
+}
 export interface RecommendationEngineAdminProps {
   className?: string;
+}
 }
 
 export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps> = ({ className = '' }) => {

@@ -10,6 +10,7 @@ import { EventEmitter } from 'events';
 import { SecurityStatisticalAnalysisEngine } from './SecurityStatisticalAnalysisEngine';
 
 }
+}
 export interface SecurityMLModel {
   model_id: string;
   model_name: string;
@@ -27,6 +28,7 @@ export interface SecurityMLModel {
     training_samples: number;
     validation_samples: number;
     test_samples: number;
+}
 }
   };
   
@@ -72,6 +74,7 @@ export interface SecurityMLModel {
 }
 
 }
+}
 export interface ThreatDetectionResult {
   detection_id: string;
   timestamp: number;
@@ -84,6 +87,7 @@ export interface ThreatDetectionResult {
     confidence_score: number; // 0-1
     severity_level: 'low' | 'medium' | 'high' | 'critical';
     risk_score: number; // 0-100
+}
 }
   };
   
@@ -153,6 +157,7 @@ export interface ThreatDetectionResult {
 }
 
 }
+}
 export interface BehavioralAnalysisResult {
   analysis_id: string;
   timestamp: number;
@@ -165,6 +170,7 @@ export interface BehavioralAnalysisResult {
       hourly_pattern: number[];
       daily_pattern: number[];
       location_pattern: Record<string, number>;
+}
 }
     };
     resource_usage: {
@@ -242,6 +248,7 @@ export interface BehavioralAnalysisResult {
 }
 
 }
+}
 export interface SecurityPrediction {
   prediction_id: string;
   timestamp: number;
@@ -254,6 +261,7 @@ export interface SecurityPrediction {
     confidence_interval: [number, number];
     time_horizon: number; // hours
     prediction_accuracy_estimate: number;
+}
 }
   };
   
@@ -296,6 +304,7 @@ export interface SecurityPrediction {
 }
 
 }
+}
 export interface MLTrainingJob {
   job_id: string;
   model_id: string;
@@ -312,6 +321,7 @@ export interface MLTrainingJob {
     learning_rate: number;
     early_stopping: boolean;
     cross_validation_folds: number;
+}
 }
   };
   

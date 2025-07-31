@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { NodeData } from '../../types/NodeTypes';
+}
 interface RichTextEditorProps {
   value: string;
   onChange: (value: string) => void;
@@ -18,6 +19,7 @@ interface RichTextEditorProps {
   showToolbar = true,
   enableSyntaxHighlighting = true,
   theme = 'cinema'
+}
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [cursorPosition, setCursorPosition] = useState(0);
@@ -34,13 +36,13 @@ interface RichTextEditorProps {
     while ((match = variableRegex.exec(text)) !== null) {
       // Add text before variable
       if (match.index > lastIndex) {
-        parts.push()
+        parts.push(
           <span key={`text-${lastIndex}`}>}
             {text.slice(lastIndex, match.index)}
           </span>
         );
       // Add highlighted variable
-      parts.push()
+      parts.push(
         <span
           key={`var-${match.index}`}
           style={{
@@ -58,7 +60,7 @@ interface RichTextEditorProps {
       lastIndex = match.index + match[0].length;
     // Add remaining text
     if (lastIndex < text.length) {
-      parts.push()
+      parts.push(
         <span key={`text-${lastIndex}`}>}
           {text.slice(lastIndex)}
         </span>
@@ -254,11 +256,13 @@ interface RichTextEditorProps {
 };
 
 // Toolbar Button Component
+}
 interface ToolbarButtonProps {
   onClick: () => void;
   title: string;
   children: React.ReactNode;
   theme: 'light' | 'dark' | 'cinema';
+}
 const ToolbarButton: React.FC<ToolbarButtonProps> = ({ onClick, title, children, theme }) => {
   const getButtonColors = () => {
     switch (theme) {

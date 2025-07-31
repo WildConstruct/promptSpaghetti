@@ -19,6 +19,7 @@ import { RedisService } from '../auth/database/RedisService';
 
 // OpenID Connect Types and Interfaces
 }
+}
 export interface OpenIDConnectConfiguration {
   issuer: string;
   authorization_endpoint: string;
@@ -52,7 +53,9 @@ export interface OpenIDConnectConfiguration {
   code_challenge_methods_supported: string[];
 }
 }
+}
 
+}
 }
 export interface IDTokenClaims {
   iss: string;           // Issuer identifier
@@ -89,7 +92,9 @@ export interface IDTokenClaims {
   updated_at?: number;
 }
 }
+}
 
+}
 }
 export interface AddressClaim {
   formatted?: string;
@@ -100,7 +105,9 @@ export interface AddressClaim {
   country?: string;
 }
 }
+}
 
+}
 }
 export interface UserInfoClaims {
   sub: string;
@@ -125,7 +132,9 @@ export interface UserInfoClaims {
   updated_at?: number;
 }
 }
+}
 
+}
 }
 export interface JWKSKey {
   kty: string;           // Key type
@@ -141,13 +150,17 @@ export interface JWKSKey {
   e: string;             // RSA exponent
 }
 }
+}
 
+}
 }
 export interface JWKSDocument {
   keys: JWKSKey[];
 }
 }
+}
 
+}
 }
 export interface OIDCAuthenticationContext {
   userId: string;
@@ -159,6 +172,7 @@ export interface OIDCAuthenticationContext {
   scopes: string[];
   nonce?: string;
   maxAge?: number;
+}
 }
 }
 

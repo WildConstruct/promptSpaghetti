@@ -14,6 +14,7 @@ import { AuditService } from '../auth/services/AuditService';
 export type UserStatus = 'active' | 'suspended' | 'deleted' | 'locked' | 'pending_activation';
 
 }
+}
 export interface UserStatusInfo {
   userId: string;
   email: string;
@@ -30,7 +31,9 @@ export interface UserStatusInfo {
   roles: string[];
 }
 }
+}
 
+}
 }
 export interface StatusChangeRequest {
   userId: string;
@@ -45,7 +48,9 @@ export interface StatusChangeRequest {
   userAgent?: string;
 }
 }
+}
 
+}
 }
 export interface StatusChangeResult {
   success: boolean;
@@ -58,7 +63,9 @@ export interface StatusChangeResult {
   error?: string;
 }
 }
+}
 
+}
 }
 export interface StatusChangeAuditLog {
   id: string;
@@ -75,7 +82,9 @@ export interface StatusChangeAuditLog {
   bulkOperationId?: string;
 }
 }
+}
 
+}
 }
 export interface StatusStatistics {
   totalUsers: number;
@@ -84,6 +93,7 @@ export interface StatusStatistics {
     last24Hours: number;
     last7Days: number;
     last30Days: number;
+}
 }
   };
   topChangeReasons: Array<{

@@ -18,6 +18,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface AttributionConfig {
     trackingId: string;
     attribution: AttributionSettings;
@@ -28,6 +29,7 @@ export interface AttributionConfig {
     reporting: ReportingSettings;
     integration: IntegrationSettings;
 
+}
 export interface AttributionSettings {
     lookbackWindow: LookbackWindow;
     crossDevice: CrossDeviceConfig;
@@ -38,6 +40,7 @@ export interface AttributionSettings {
     dataRetention: number;
     samplingRate: number;
 
+}
 export interface LookbackWindow {
     impression: number;
     click: number;
@@ -45,6 +48,7 @@ export interface LookbackWindow {
     engagement: number;
     custom: Record<string, number>;
 
+}
 export interface CrossDeviceConfig {
     enabled: boolean;
     identityResolution: IdentityResolutionConfig;
@@ -53,6 +57,7 @@ export interface CrossDeviceConfig {
     deterministicMatching: boolean;
     confidenceThreshold: number;
 
+}
 export interface IdentityResolutionConfig {
     email: boolean;
     phone: boolean;
@@ -62,12 +67,14 @@ export interface IdentityResolutionConfig {
     ipAddress: boolean;
     userAgent: boolean;
 
+}
 export interface DeduplicationConfig {
     enabled: boolean;
     strategy: 'first' | 'last' | 'unique' | 'position';
     window: number;
     fields: string[];
 
+}
 export interface AttributionModel {
     id: string;
     name: string;
@@ -84,6 +91,7 @@ export interface AttributionModel {
 
 export type AttributionModelType = 'first_touch' | 'last_touch' | 'linear' | 'time_decay' | 'position_based' | 'data_driven' | 'custom';
 
+}
 export interface ModelConfiguration {
     decayRate?: number;
     halfLife?: number;
@@ -93,6 +101,7 @@ export interface ModelConfiguration {
     customWeights?: Record<string, number>;
     parameters: Record<string, any>;
 
+}
 export interface AttributionWeights {
     byPosition: PositionWeight[];
     byChannel: ChannelWeight[];
@@ -100,37 +109,44 @@ export interface AttributionWeights {
     byTimeDecay: TimeDecayWeight[];
     byCustom: CustomWeight[];
 
+}
 export interface PositionWeight {
     position: 'first' | 'middle' | 'last' | number;
     weight: number;
     conditions?: WeightCondition[];
 
+}
 export interface ChannelWeight {
     channel: string;
     weight: number;
     conditions?: WeightCondition[];
 
+}
 export interface TouchTypeWeight {
     touchType: string;
     weight: number;
     conditions?: WeightCondition[];
 
+}
 export interface TimeDecayWeight {
     daysFromConversion: number;
     weight: number;
     decayFunction: 'linear' | 'exponential' | 'custom';
 
+}
 export interface CustomWeight {
     dimension: string;
     value: string;
     weight: number;
     conditions?: WeightCondition[];
 
+}
 export interface WeightCondition {
     field: string;
     operator: 'equals' | 'contains' | 'greater' | 'less' | 'in';
     value: any;
 
+}
 export interface AttributionRule {
     id: string;
     name: string;
@@ -139,6 +155,7 @@ export interface AttributionRule {
     priority: number;
     isActive: boolean;
 
+}
 export interface RuleCondition {
     field: string;
     operator: string;
@@ -146,11 +163,13 @@ export interface RuleCondition {
     logicalOperator?: 'AND' | 'OR' | 'NOT';
     nested?: RuleCondition[];
 
+}
 export interface RuleAction {
     type: 'include' | 'exclude' | 'modify' | 'redirect';
     parameters: Record<string, any>;
     weight?: number;
 
+}
 export interface ChannelConfig {
     id: string;
     name: string;
@@ -163,6 +182,7 @@ export interface ChannelConfig {
 export type ChannelType = 'organic_search' | 'paid_search' | 'social_organic' | 'social_paid' | 'email' | 'direct' | 'referral' | 'display' | 'video' | 'affiliate' | 'content' | 'mobile_app' | 'offline' | 'custom';
 export type ChannelCategory = 'acquisition' | 'engagement' | 'retention' | 'conversion' | 'support';
 
+}
 export interface ChannelAttributionConfig {
     defaultWeight: number;
     lookbackWindow: number;
@@ -171,6 +191,7 @@ export interface ChannelAttributionConfig {
     assistWeight: number;
     lastTouchWeight: number;
 
+}
 export interface TouchPointCapture {
     impression: boolean;
     click: boolean;
@@ -179,6 +200,7 @@ export interface TouchPointCapture {
     conversion: boolean;
     custom: Record<string, boolean>;
 
+}
 export interface ChannelTrackingConfig {
     utmTracking: UTMTracking;
     customParameters: CustomParameter[];
@@ -186,6 +208,7 @@ export interface ChannelTrackingConfig {
     cookieDomain: string;
     sessionTimeout: number;
 
+}
 export interface UTMTracking {
     source: boolean;
     medium: boolean;
@@ -194,6 +217,7 @@ export interface UTMTracking {
     content: boolean;
     customDimensions: string[];
 
+}
 export interface CustomParameter {
     name: string;
     source: 'url' | 'cookie' | 'header' | 'custom';
@@ -201,6 +225,7 @@ export interface CustomParameter {
     defaultValue?: string;
     required: boolean;
 
+}
 export interface ChannelMetadata {
     description: string;
     cost: CostConfig;
@@ -209,6 +234,7 @@ export interface ChannelMetadata {
     created: Date;
     updated: Date;
 
+}
 export interface CostConfig {
     enabled: boolean;
     currency: string;
@@ -216,6 +242,7 @@ export interface CostConfig {
     defaultCost: number;
     costSource?: string;
 
+}
 export interface PerformanceMetrics {
     impressions: number;
     clicks: number;
@@ -227,6 +254,7 @@ export interface PerformanceMetrics {
     roas: number;
     cpa: number;
 
+}
 export interface CustomerJourney {
     id: string;
     userId?: string;
@@ -241,6 +269,7 @@ export interface CustomerJourney {
     created: Date;
     updated: Date;
 
+}
 export interface TouchPoint {
     id: string;
     journeyId: string;
@@ -259,6 +288,7 @@ export interface TouchPoint {
 
 export type TouchPointType = 'impression' | 'click' | 'view' | 'engagement' | 'conversion' | 'assist' | 'custom';
 
+}
 export interface TouchPointData {
     url: string;
     referrer?: string;
@@ -268,6 +298,7 @@ export interface TouchPointData {
     location: LocationData;
     custom: Record<string, any>;
 
+}
 export interface PageData {
     title: string;
     path: string;
@@ -278,6 +309,7 @@ export interface PageData {
     publishDate?: Date;
     engagementScore?: number;
 
+}
 export interface UserData {
     segment?: string;
     lifecycle?: string;
@@ -286,6 +318,7 @@ export interface UserData {
     preferences: Record<string, any>;
     behavior: BehaviorData;
 
+}
 export interface BehaviorData {
     sessionCount: number;
     pageViews: number;
@@ -294,12 +327,14 @@ export interface BehaviorData {
     previousVisits: Date[];
     interactionHistory: InteractionEvent[];
 
+}
 export interface InteractionEvent {
     type: string;
     element: string;
     timestamp: Date;
     data: Record<string, any>;
 
+}
 export interface DeviceData {
     type: 'desktop' | 'mobile' | 'tablet' | 'tv';
     os: string;
@@ -308,6 +343,7 @@ export interface DeviceData {
     userAgent: string;
     fingerprint?: string;
 
+}
 export interface LocationData {
     country?: string;
     region?: string;
@@ -318,6 +354,7 @@ export interface LocationData {
     timezone?: string;
     isp?: string;
 
+}
 export interface TouchPointContext {
     experiment?: ExperimentContext;
     audience?: AudienceContext;
@@ -325,23 +362,27 @@ export interface TouchPointContext {
     timeContext?: TimeContext;
     businessContext?: BusinessContext;
 
+}
 export interface ExperimentContext {
     experimentId: string;
     variant: string;
     allocation: number;
 
+}
 export interface AudienceContext {
     segments: string[];
     lookalike?: string;
     predictedValue?: number;
     churnRisk?: number;
 
+}
 export interface WeatherContext {
     condition: string;
     temperature: number;
     humidity: number;
     season: string;
 
+}
 export interface TimeContext {
     dayOfWeek: string;
     hourOfDay: number;
@@ -350,12 +391,14 @@ export interface TimeContext {
     season: string;
     timeZone: string;
 
+}
 export interface BusinessContext {
     campaignObjective?: string;
     budget?: number;
     targetAudience?: string;
     competitorActivity?: string;
 
+}
 export interface TouchPointAttribution {
     credit: number;
     weight: number;
@@ -364,6 +407,7 @@ export interface TouchPointAttribution {
     influence: number;
     decay: number;
 
+}
 export interface Conversion {
     id: string;
     journeyId: string;
@@ -376,6 +420,7 @@ export interface Conversion {
 
 export type ConversionType = 'purchase' | 'lead' | 'signup' | 'subscription' | 'download' | 'engagement' | 'custom';
 
+}
 export interface ConversionValue {
     revenue?: number;
     quantity?: number;
@@ -385,6 +430,7 @@ export interface ConversionValue {
     cost?: number;
     custom: Record<string, number>;
 
+}
 export interface ConversionAttribution {
     touchPoints: TouchPointAttribution[];
     models: Record<string, ModelAttribution>;
@@ -392,12 +438,14 @@ export interface ConversionAttribution {
     assisted: ModelAttribution;
     incrementality: IncrementalityData;
 
+}
 export interface ModelAttribution {
     model: string;
     credit: TouchPointCredit[];
     confidence: number;
     methodology: string;
 
+}
 export interface TouchPointCredit {
     touchPointId: string;
     credit: number;
@@ -405,6 +453,7 @@ export interface TouchPointCredit {
     channel: string;
     position: number;
 
+}
 export interface IncrementalityData {
     baseline: number;
     incremental: number;
@@ -412,6 +461,7 @@ export interface IncrementalityData {
     confidence: number;
     methodology: string;
 
+}
 export interface FunnelData {
     stage: string;
     position: number;
@@ -419,12 +469,14 @@ export interface FunnelData {
     dropoff?: boolean;
     micro_conversions: MicroConversion[];
 
+}
 export interface MicroConversion {
     type: string;
     value: number;
     timestamp: Date;
     attribution: number;
 
+}
 export interface ConversionData {
     product?: ProductData;
     transaction?: TransactionData;
@@ -432,6 +484,7 @@ export interface ConversionData {
     engagement?: EngagementData;
     custom: Record<string, any>;
 
+}
 export interface ProductData {
     id: string;
     name: string;
@@ -442,6 +495,7 @@ export interface ProductData {
     brand?: string;
     variant?: string;
 
+}
 export interface TransactionData {
     id: string;
     total: number;
@@ -452,6 +506,7 @@ export interface TransactionData {
     paymentMethod: string;
     products: ProductData[];
 
+}
 export interface FormData {
     formId: string;
     fields: FormField[];
@@ -459,6 +514,7 @@ export interface FormData {
     timeToComplete: number;
     abandonmentPoint?: string;
 
+}
 export interface FormField {
     name: string;
     value: any;
@@ -466,6 +522,7 @@ export interface FormField {
     required: boolean;
     filled: boolean;
 
+}
 export interface EngagementData {
     type: string;
     duration: number;
@@ -473,6 +530,7 @@ export interface EngagementData {
     depth: number;
     quality: number;
 
+}
 export interface JourneyAttribution {
     models: Record<string, JourneyModelAttribution>;
     primary: string;
@@ -482,18 +540,21 @@ export interface JourneyAttribution {
     assist_interactions: number;
     direct_interactions: number;
 
+}
 export interface JourneyModelAttribution {
     model: string;
     distribution: ChannelDistribution[];
     totalCredit: number;
     confidence: number;
 
+}
 export interface ChannelDistribution {
     channel: string;
     credit: number;
     percentage: number;
     touchPoints: number;
 
+}
 export interface JourneyTimeline {
     firstTouch: Date;
     lastTouch: Date;
@@ -503,6 +564,7 @@ export interface JourneyTimeline {
     conversionsByDay: Record<string, number>;
     engagementPeaks: Date[];
 
+}
 export interface JourneyMetadata {
     source: string;
     quality: QualityScore;
@@ -510,6 +572,7 @@ export interface JourneyMetadata {
     anomalies: AnomalyData[];
     tags: string[];
 
+}
 export interface QualityScore {
     overall: number;
     dataCompleteness: number;
@@ -517,6 +580,7 @@ export interface QualityScore {
     cross_device_matching: number;
     deduplication: number;
 
+}
 export interface CompletenessScore {
     touchPoints: number;
     conversions: number;
@@ -524,6 +588,7 @@ export interface CompletenessScore {
     context_data: number;
     overall: number;
 
+}
 export interface AnomalyData {
     type: string;
     description: string;
@@ -531,6 +596,7 @@ export interface AnomalyData {
     impact: 'low' | 'medium' | 'high';
     timestamp: Date;
 
+}
 export interface PrivacySettings {
     gdprCompliance: boolean;
     ccpaCompliance: boolean;
@@ -540,6 +606,7 @@ export interface PrivacySettings {
     retention: RetentionConfig;
     userRights: UserRightsConfig;
 
+}
 export interface AnonymizationConfig {
     enabled: boolean;
     ipAnonymization: boolean;
@@ -548,6 +615,7 @@ export interface AnonymizationConfig {
     aggregationThreshold: number;
     kAnonymity: number;
 
+}
 export interface RetentionConfig {
     touchPoints: number;
     conversions: number;
@@ -556,6 +624,7 @@ export interface RetentionConfig {
     logs: number;
     autoDelete: boolean;
 
+}
 export interface UserRightsConfig {
     accessRequests: boolean;
     deleteRequests: boolean;
@@ -563,6 +632,7 @@ export interface UserRightsConfig {
     optOutRequests: boolean;
     correctionRequests: boolean;
 
+}
 export interface StorageSettings {
     backend: StorageBackend;
     partitioning: PartitioningConfig;
@@ -570,6 +640,7 @@ export interface StorageSettings {
     encryption: EncryptionConfig;
     backup: BackupConfig;
 
+}
 export interface StorageBackend {
     type: 'local' | 'cloud' | 'hybrid';
     provider?: string;
@@ -577,28 +648,33 @@ export interface StorageBackend {
     endpoint?: string;
     credentials?: Record<string, string>;
 
+}
 export interface PartitioningConfig {
     strategy: 'time' | 'user' | 'channel' | 'custom';
     granularity: 'day' | 'week' | 'month';
     retention: number;
 
+}
 export interface CompressionConfig {
     enabled: boolean;
     algorithm: 'gzip' | 'lz4' | 'snappy';
     level: number;
 
+}
 export interface EncryptionConfig {
     enabled: boolean;
     algorithm: 'AES-256' | 'ChaCha20';
     keyRotation: boolean;
     rotationInterval: number;
 
+}
 export interface BackupConfig {
     enabled: boolean;
     frequency: 'hourly' | 'daily' | 'weekly';
     retention: number;
     offsite: boolean;
 
+}
 export interface ReportingSettings {
     realTime: boolean;
     batchInterval: number;
@@ -607,24 +683,28 @@ export interface ReportingSettings {
     metrics: ReportMetric[];
     exports: ExportConfig[];
 
+}
 export interface AggregationLevel {
     name: string;
     granularity: 'minute' | 'hour' | 'day' | 'week' | 'month';
     dimensions: string[];
     metrics: string[];
 
+}
 export interface ReportDimension {
     name: string;
     type: 'string' | 'number' | 'date' | 'boolean';
     cardinality: 'low' | 'medium' | 'high';
     nullable: boolean;
 
+}
 export interface ReportMetric {
     name: string;
     type: 'count' | 'sum' | 'avg' | 'min' | 'max' | 'distinct';
     aggregation: string;
     precision: number;
 
+}
 export interface ExportConfig {
     name: string;
     format: 'csv' | 'json' | 'parquet' | 'avro';
@@ -632,29 +712,34 @@ export interface ExportConfig {
     schedule: ExportSchedule;
     filters: ExportFilter[];
 
+}
 export interface ExportDestination {
     type: 'file' | 'database' | 'api' | 'warehouse';
     connection: Record<string, string>;
     path?: string;
     table?: string;
 
+}
 export interface ExportSchedule {
     frequency: 'hourly' | 'daily' | 'weekly' | 'monthly';
     time?: string;
     timezone?: string;
     enabled: boolean;
 
+}
 export interface ExportFilter {
     field: string;
     operator: string;
     value: any;
 
+}
 export interface IntegrationSettings {
     dataImport: DataImportConfig[];
     webhooks: WebhookConfig[];
     apis: APIConfig[];
     connectors: ConnectorConfig[];
 
+}
 export interface DataImportConfig {
     name: string;
     source: ImportSource;
@@ -662,32 +747,38 @@ export interface DataImportConfig {
     schedule: ImportSchedule;
     validation: ValidationConfig;
 
+}
 export interface ImportSource {
     type: 'file' | 'database' | 'api' | 'stream';
     connection: Record<string, string>;
     format?: 'csv' | 'json' | 'xml' | 'avro';
 
+}
 export interface FieldMapping {
     source: string;
     target: string;
     transform?: string;
     required: boolean;
 
+}
 export interface ImportSchedule {
     frequency: 'realtime' | 'hourly' | 'daily' | 'weekly';
     enabled: boolean;
 
+}
 export interface ValidationConfig {
     enabled: boolean;
     rules: ValidationRule[];
     errorHandling: 'skip' | 'fail' | 'log';
 
+}
 export interface ValidationRule {
     field: string;
     type: 'required' | 'format' | 'range' | 'custom';
     parameters: Record<string, any>;
     message: string;
 
+}
 export interface WebhookConfig {
     name: string;
     url: string;
@@ -696,16 +787,19 @@ export interface WebhookConfig {
     retryPolicy: RetryPolicy;
     enabled: boolean;
 
+}
 export interface AuthConfig {
     type: 'none' | 'basic' | 'bearer' | 'oauth' | 'custom';
     credentials: Record<string, string>;
 
+}
 export interface RetryPolicy {
     maxAttempts: number;
     backoffStrategy: 'linear' | 'exponential' | 'fixed';
     baseDelay: number;
     maxDelay: number;
 
+}
 export interface APIConfig {
     name: string;
     baseUrl: string;
@@ -713,23 +807,27 @@ export interface APIConfig {
     rateLimiting: RateLimitConfig;
     endpoints: EndpointConfig[];
 
+}
 export interface RateLimitConfig {
     requestsPerSecond: number;
     burstLimit: number;
     retryAfter: number;
 
+}
 export interface EndpointConfig {
     path: string;
     method: 'GET' | 'POST' | 'PUT' | 'DELETE';
     purpose: string;
     parameters: ParameterConfig[];
 
+}
 export interface ParameterConfig {
     name: string;
     type: 'query' | 'path' | 'body' | 'header';
     required: boolean;
     default?: any;
 
+}
 export interface ConnectorConfig {
     name: string;
     type: 'google_analytics' | 'facebook_ads' | 'google_ads' | 'salesforce' | 'custom';
@@ -737,6 +835,7 @@ export interface ConnectorConfig {
     syncSettings: SyncSettings;
     fieldMapping: FieldMapping[];
 
+}
 export interface SyncSettings {
     frequency: 'realtime' | 'hourly' | 'daily';
     enabled: boolean;
@@ -762,6 +861,7 @@ export declare class AttributionTracker extends EventEmitter {
     getAttributionReport(timeRange: {)
         start: Date;
         end: Date;
+}
     }, options?: {
         models?: string[];
         channels?: string[];
@@ -837,11 +937,13 @@ export declare class AttributionTracker extends EventEmitter {
     private analyzeConversionPaths;
     private generateInsights;
 
+}
 export interface AttributionReport {
     id: string;
     timeRange: {
         start: Date;
         end: Date;
+}
     };
     summary: {
         totalJourneys: number;
@@ -856,6 +958,7 @@ export interface AttributionReport {
     insights: any[];
     generatedAt: Date;
 
+}
 export interface ChannelPerformanceReport {
     channels: any[];
     summary: {
@@ -864,6 +967,7 @@ export interface ChannelPerformanceReport {
         totalConversions: number;
         averageCPA: number;
         averageROAS: number;
+}
     };
     timeRange: {
         start: Date;
@@ -871,6 +975,7 @@ export interface ChannelPerformanceReport {
     };
     generatedAt: Date;
 
+}
 export interface ConversionPath {
     id: string;
     path: string[];
@@ -880,6 +985,7 @@ export interface ConversionPath {
     averageValue: number;
     frequency: number;
 
+}
 export interface AttributionInsights {
     trends: any[];
     anomalies: any[];
@@ -889,6 +995,7 @@ export interface AttributionInsights {
     generatedAt: Date;
 declare const _default: {
     AttributionTracker: typeof AttributionTracker;
+}
 };
 export default _default;
 //# sourceMappingURL=AttributionTracking.d.ts.map

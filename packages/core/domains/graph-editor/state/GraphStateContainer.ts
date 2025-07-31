@@ -15,6 +15,7 @@ import { GraphSchema } from '../../types/GraphTypes';
 
 // Graph state interface
 
+}
 export interface GraphState {
   // Core graph data
   nodes: Record<string, GraphNode>;
@@ -25,6 +26,7 @@ export interface GraphState {
   selectedNodes: string;
   selectedEdges: string;
   isMultiSelect: boolean;
+}
 };
   // View state
   viewport: {
@@ -62,9 +64,11 @@ export interface GraphState {
 
 // Supporting interfaces
 }
+}
 export interface GraphNode {
   id: string;
   type: string;
+}
   position: { x: number; y: number };
   data: Record<string, any>;
   width?: number;
@@ -79,6 +83,7 @@ export interface GraphNode {
   author?: string;
   version?: number;
 };
+}
 }
 export interface GraphEdge {
   id: string;
@@ -96,7 +101,9 @@ export interface GraphEdge {
   created: number;
   modified: number;
   author?: string;
+}
 };
+}
 }
 export interface GraphMetadata {
   id: string;
@@ -115,7 +122,9 @@ export interface GraphMetadata {
   showGrid: boolean;
   nodeSpacing: number;
   autoLayout: boolean;
+}
 };
+}
 }
 export interface ExecutionError {
   id: string;
@@ -125,6 +134,8 @@ export interface ExecutionError {
   timestamp: number;
   stack?: string;
 }
+}
+}
 export interface CollaboratorInfo {
   id: string;
   name: string;
@@ -133,6 +144,8 @@ export interface CollaboratorInfo {
   isActive: boolean;
   lastSeen: number;
 }
+}
+}
 export interface CursorPosition {
   userId: string;
   x: number;
@@ -140,6 +153,7 @@ export interface CursorPosition {
   nodeId?: string;
   timestamp: number;
   // Graph operations
+}
 }
 export type GraphOperation = 
   | { type: 'ADD_NODE'; node: GraphNode }
@@ -159,6 +173,7 @@ export type GraphOperation =
 
 // Transaction context for batch operations
 
+}
 export interface GraphTransaction {
   id: string;
   operations: GraphOperation;
@@ -166,6 +181,7 @@ export interface GraphTransaction {
   userId?: string;
   description?: string;
   // Graph state container implementation
+}
 }
 export class GraphStateContainer extends BaseStateContainer<GraphState> implements DomainStateContainer {
   private transactionQueue: GraphTransaction = [];
@@ -354,6 +370,7 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
 };
     this.setState(prevState => this.applyOperationToState(prevState, operation), change);
   async applyTransaction(transaction: GraphTransaction): Promise<void> {
+
   this.activeTransaction = transaction;
   try {
   // Apply all operations in the transaction atomically
@@ -473,6 +490,7 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
     return newState;
   // DomainStateContainer interface implementation
   async applyExternalChange(change: DomainStateChange): Promise<void> {
+
     // Apply changes from other domains or remote sources
     if (change.operation === 'update' && change.path) {
       this.setState(prevState => {)
@@ -487,12 +505,15 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
     // Additional validation logic
     return true;
   async prepareForTransaction(transactionId: string): Promise<void> {
+
     // Prepare for cross-domain transaction
     this.emit('transactionPrepared', { transactionId, domain: this.getDomainName() });
   async commitTransaction(transactionId: string): Promise<void> {
+
     // Commit cross-domain transaction
     this.emit('transactionCommitted', { transactionId, domain: this.getDomainName() });
   async rollbackTransaction(transactionId: string): Promise<void> {
+
     // Rollback cross-domain transaction
     this.emit('transactionRolledBack', { transactionId, domain: this.getDomainName() });
   // Graph-specific query methods

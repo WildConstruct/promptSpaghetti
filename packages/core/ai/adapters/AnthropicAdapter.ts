@@ -17,11 +17,14 @@ import {
   ModelUnavailableError
 } from '../BaseAIModel';
 
+}
 export interface AnthropicConfig {
   apiKey: string;
   baseURL?: string;
   timeout?: number;
   maxRetries?: number;
+}
+}
 }
 export interface AnthropicRequestOptions {
   model?: string;
@@ -33,27 +36,32 @@ export interface AnthropicRequestOptions {
   stream?: boolean;
   system?: string;
   tools?: unknown;
+}
   tool_choice?: { type: 'auto' | 'any' | 'tool', name?: string };
+}
 }
 export interface ClaudeMessage {
   role: 'user' | 'assistant';
-  content: string | Array<{,
+  content: string | Array<{
   type: 'text' | 'image';
   text?: string;
   source?: {
   type: 'base64';
   media_type: string;
   data: string;
+}
 };
   }>;
+}
 }
 export interface AnthropicResponse {
   id: string;
   type: 'message';
   role: 'assistant';
-  content: Array<{,
+  content: Array<{
   type: 'text';
   text: string;
+}
 }>;
   model: string;
   stop_reason: 'end_turn' | 'max_tokens' | 'stop_sequence' | 'tool_use';
@@ -102,6 +110,7 @@ export class AnthropicAdapter extends BaseAIModel {
     this.config = config;
     this.apiEndpoint = config.baseURL || 'https://api.anthropic.com';
   async initialize(): Promise<void> {
+
     try {
       this._status = AIModelStatus.INITIALIZING;
       // Validate API key
@@ -115,6 +124,7 @@ export class AnthropicAdapter extends BaseAIModel {
       this._status = AIModelStatus.ERROR;
       throw new ModelInitializationError(this._id, error instanceof Error ? error.message : 'Unknown error');
   async process(input: unknown, options?: AnthropicRequestOptions): Promise<unknown> {
+
     try {
       if (this._status !== AIModelStatus.READY) {
         throw new ModelUnavailableError(this._id);
@@ -188,6 +198,7 @@ export class AnthropicAdapter extends BaseAIModel {
     return latencies[modelName] || 1200;
   // Private helper methods
   private async _testConnection(): Promise<void> {
+
     try {
       // Anthropic doesn't have a public models endpoint, so we test with a minimal message
       const testPayload = {
@@ -210,6 +221,7 @@ export class AnthropicAdapter extends BaseAIModel {
     } catch (error) {
       throw new Error(`Failed to connect to Anthropic API: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   private async _makeRequest(endpoint: string, payload: unknown): Promise<AnthropicResponse> {
+
     const url = `${this.apiEndpoint}${endpoint}`;}
     const response = await fetch(url, {)
   method: 'POST',
@@ -268,6 +280,7 @@ export class AnthropicAdapter extends BaseAIModel {
 }).join(' ');
     return Math.ceil(totalText.length / 4);
   protected async _performHealthCheck(): Promise<void> {
+
     await this._testConnection();
 
 export default AnthropicAdapter;

@@ -14,6 +14,7 @@ import { NodeTypeEnum, Node } from '../graphSchema';
  * Base interface for all graph mutation operations
  */
 
+}
 export interface BaseMutationOperation {
   operationId: string;
   documentId: string;
@@ -26,11 +27,14 @@ export interface BaseMutationOperation {
   * Version vector for operation ordering and conflict resolution
   */
 }
+}
+}
 export interface VersionVector {
   [clientId: string]: number;
   /**
   * Operation priority for conflict resolution
   */
+}
 }
 export enum OperationPriority {
   LOW = 1,
@@ -45,6 +49,7 @@ export enum OperationPriority {
  * Node Addition Operation
  */
 
+}
 export interface NodeAddOperation extends BaseMutationOperation {
   type: 'NODE_ADD';
   nodeId: string;
@@ -57,6 +62,7 @@ export interface NodeAddOperation extends BaseMutationOperation {
  * Node Update Operation
  */
 
+}
 export interface NodeUpdateOperation extends BaseMutationOperation {
   type: 'NODE_UPDATE';
   nodeId: string;
@@ -93,6 +99,8 @@ export interface NodeUpdateOperation extends BaseMutationOperation {
   /**
   * Edge Addition Operation
   */
+}
+}
 }
 export interface EdgeAddOperation extends BaseMutationOperation {
   type: 'EDGE_ADD';
@@ -228,6 +236,8 @@ export interface EdgeAddOperation extends BaseMutationOperation {
   * Conflict operation for manual resolution UI
   */
 }
+}
+}
 export interface ConflictOperation {
   id: string;
   type: ConflictType;
@@ -247,6 +257,8 @@ export interface ConflictOperation {
   * Resolution option for conflict UI
   */
 }
+}
+}
 export interface ResolutionOption {
   strategy: ResolutionStrategy;
   label: string;
@@ -259,6 +271,8 @@ export interface ResolutionOption {
   /**
   * Graph mutation message for WebSocket transport
   */
+}
+}
 }
 export interface GraphMutationMessage {
   type: 'GRAPH_MUTATION';
@@ -274,6 +288,8 @@ export interface GraphMutationMessage {
   * Batch mutation message
   */
 }
+}
+}
 export interface BatchMutationMessage {
   type: 'BATCH_MUTATION';
   batchId: string;
@@ -285,6 +301,8 @@ export interface BatchMutationMessage {
   /**
   * Conflict detected message
   */
+}
+}
 }
 export interface ConflictDetectedMessage {
   type: 'CONFLICT_DETECTED';
@@ -301,6 +319,8 @@ export interface ConflictDetectedMessage {
   * Conflict resolved message
   */
 }
+}
+}
 export interface ConflictResolvedMessage {
   type: 'CONFLICT_RESOLVED';
   conflictId: string;
@@ -311,6 +331,8 @@ export interface ConflictResolvedMessage {
   /**
   * Delta synchronization message
   */
+}
+}
 }
 export interface DeltaSyncMessage {
   type: 'DELTA_SYNC';
@@ -323,6 +345,8 @@ export interface DeltaSyncMessage {
   /**
   * State verification message
   */
+}
+}
 }
 export interface StateVerificationMessage {
   type: 'STATE_VERIFICATION';
@@ -338,6 +362,8 @@ export interface StateVerificationMessage {
   * Operation acknowledgment message
   */
 }
+}
+}
 export interface OperationAckMessage {
   type: 'OPERATION_ACK';
   operationId: string;
@@ -352,6 +378,7 @@ export interface OperationAckMessage {
   /**
   * Version vector validation schema
   */
+}
 }
 export const VersionVectorSchema = z.record(z.string(), z.number().min(0));
 /**

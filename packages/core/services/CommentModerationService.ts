@@ -11,6 +11,7 @@ import { ModerationWorkflowService } from './ModerationWorkflowService';
 import { CommentAnalyticsService } from './CommentAnalyticsService';
 import { CommentableResourceType } from '../types/TrendingCommentsTypes';
 
+}
 export interface CommentModerationRequest {
   commentId: string;
   action: CommentModerationAction;
@@ -20,12 +21,16 @@ export interface CommentModerationRequest {
   notifyAuthor?: boolean;
   scheduledFor?: Date;
 }
+}
+}
 export interface CommentModerationAction {
   type: 'approve' | 'reject' | 'flag' | 'hide' | 'delete' | 'ban_author' | 'require_edit' | 'escalate';
   severity?: 'low' | 'medium' | 'high' | 'critical';
   duration?: number; // For temporary actions like hide/ban,
   appealable?: boolean;
   escalateTo?: string;
+}
+}
 }
 export interface CommentModerationResult {
   commentId: string;
@@ -40,6 +45,8 @@ export interface CommentModerationResult {
   workflowId?: string;
   error?: string;
 }
+}
+}
 export interface CommentModerationFilters {
   resourceId?: string;
   resourceType?: CommentableResourceType;
@@ -49,6 +56,7 @@ export interface CommentModerationFilters {
   dateRange?: {
   start: Date;
   end: Date;
+}
 };
   toxicityRange?: {
   min: number;
@@ -71,6 +79,7 @@ export interface CommentModerationFilters {
   limit?: number;
   offset?: number;
 }
+}
 export interface CommentModerationQueue {
   queueId: string;
   name: string;
@@ -83,12 +92,16 @@ export interface CommentModerationQueue {
   enableAutoModeration: boolean;
   escalationRules: EscalationRule;
 }
+}
+}
 export interface EscalationRule {
   condition: 'timeout' | 'toxicity_threshold' | 'report_count' | 'quality_threshold' | 'custom';
   threshold: number;
   action: 'escalate' | 'auto_reject' | 'require_supervisor' | 'flag_urgent';
   escalateTo?: string;
   notifyStakeholders: string;
+}
+}
 }
 export interface CommentModerationStats {
   totalComments: number;
@@ -98,12 +111,13 @@ export interface CommentModerationStats {
   flaggedComments: number;
   escalatedComments: number;
   avgProcessingTimeMinutes: number;
-  moderatorWorkload: Array<{,
+  moderatorWorkload: Array<{
   moderatorId: string;
   assignedComments: number;
   completedToday: number;
   avgTimeMinutes: number;
   accuracy: number;
+}
 }>;
   toxicityDistribution: {
   low: number;
@@ -123,6 +137,7 @@ export interface CommentModerationStats {
   qualityChange24h: number;
 };
 }
+}
 export interface BulkModerationRequest {
   commentIds: string;
   action: CommentModerationAction;
@@ -132,15 +147,18 @@ export interface BulkModerationRequest {
   parallel?: boolean;
   validateBeforeAction?: boolean;
 }
+}
+}
 export interface BulkModerationResult {
   batchId: string;
   totalItems: number;
   successful: number;
   failed: number;
   results: CommentModerationResult;
-  errors: Array<{,
+  errors: Array<{
   commentId: string;
   error: string;
+}
 }>;
   processingTimeMs: number;
   summary: Record<string, number>;
@@ -168,6 +186,7 @@ export class CommentModerationService {
    * Moderate a single comment
    */
   async moderateComment(request: CommentModerationRequest): Promise<CommentModerationResult> {
+
     const startTime = Date.now();
     try {
       // Validate request
@@ -212,6 +231,7 @@ export class CommentModerationService {
    * Execute bulk moderation actions
    */
   async bulkModerateComments(request: BulkModerationRequest): Promise<BulkModerationResult> {
+
     const startTime = Date.now();
     const batchId = `batch_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
     console.log(`🔄 Starting bulk moderation: ${request.commentIds.length} comments`);}
@@ -279,6 +299,7 @@ export class CommentModerationService {
    */
   async getModerationStats(timeRange?: { start: Date; end: Date })
   ): Promise<CommentModerationStats> {
+
   const range = timeRange || {
   start: new Date(Date.now() - 24 * 60 * 60 * 1000), // 24 hours ago,
   end: new Date(),
@@ -310,6 +331,7 @@ export class CommentModerationService {
    * Create or update moderation queue
    */
   async createModerationQueue(queue: CommentModerationQueue): Promise<void> {
+
     try {
       // Validate queue configuration
       this.validateQueueConfig(queue);
@@ -360,6 +382,7 @@ export class CommentModerationService {
   flaggedForReview: number;
   errors: number;
 }> {
+
   const defaultOptions = {
   toxicityThreshold: 0.8,
   qualityThreshold: 0.3,
@@ -497,10 +520,11 @@ export class CommentModerationService {
   moderationStatus: 'pending',
   createdAt: new Date(),
 };
-  private async executeModerationAction(()
+  private async executeModerationAction(((
     request: CommentModerationRequest,
-    commentData: any,
+    commentData: any
   ): Promise<any> {
+
     // Execute the specific moderation action
     switch (request.action.type) {
     case 'approve':
@@ -518,6 +542,7 @@ export class CommentModerationService {
     default:
       throw new Error(`Unknown moderation action: ${request.action.type}`);}
   private async approveComment(request: CommentModerationRequest, commentData: any): Promise<any> {
+
   // Approve comment logic
   return {
   newState: 'approved',
@@ -525,6 +550,7 @@ export class CommentModerationService {
   workflowId: null,
 };
   private async rejectComment(request: CommentModerationRequest, commentData: any): Promise<any> {
+
   // Reject comment logic
   const appealDeadline = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days;
   return {
@@ -533,6 +559,7 @@ export class CommentModerationService {
   workflowId: null,
 };
   private async flagComment(request: CommentModerationRequest, commentData: any): Promise<any> {
+
   // Flag comment logic
   return {
   newState: 'flagged',
@@ -540,6 +567,7 @@ export class CommentModerationService {
   workflowId: null,
 };
   private async hideComment(request: CommentModerationRequest, commentData: any): Promise<any> {
+
   // Hide comment logic
   return {
   newState: 'hidden',
@@ -547,6 +575,7 @@ export class CommentModerationService {
   workflowId: null,
 };
   private async deleteComment(request: CommentModerationRequest, commentData: any): Promise<any> {
+
   // Delete comment logic (hard delete)
   return {
   newState: 'deleted',
@@ -554,6 +583,7 @@ export class CommentModerationService {
   workflowId: null,
 };
   private async escalateComment(request: CommentModerationRequest, commentData: any): Promise<any> {
+
   // Escalate to higher-level moderator or workflow
   const workflowId = await this.workflowService.createWorkflow({)
   type: 'comment_escalation',
@@ -566,16 +596,18 @@ export class CommentModerationService {
   appealDeadline: null,
   workflowId
 };
-  private async updateModerationAnalytics(()
+  private async updateModerationAnalytics(((
     request: CommentModerationRequest,
-    result: any,
+    result: any
   ): Promise<void> {
+
     // Update analytics with moderation action
     // This would integrate with the analytics service
-  private async sendModerationNotification(()
+  private async sendModerationNotification(((
     request: CommentModerationRequest,
-    result: any,
+    result: any
   ): Promise<void> {
+
     // Send notification to comment author about moderation action
     console.log(`📧 Moderation notification sent for comment ${request.commentId}`);}
   private chunkArray<T>(array: T, size: number): T[] {
@@ -640,11 +672,11 @@ export class CommentModerationService {
   error: error.message,
 });
   private async fetchCommentsForModeration(filters: CommentModerationFilters): Promise<any> {
+
   // In real implementation, this would query the database
   // For now, return mock data
   return [];
-  private async calculateQueueStats(()
-  queueId: string,
+  private async calculateQueueStats((queueId: string,
   filters: CommentModerationFilters): Promise<Partial<CommentModerationStats>> {,
   // Calculate queue-specific statistics
   return {
@@ -653,6 +685,7 @@ export class CommentModerationService {
   avgProcessingTimeMinutes: 0,
 };
   private async getBasicModerationStats(range: { start: Date; end: Date }): Promise<any> {
+
   // Get basic moderation statistics
   return {
   totalComments: 1250,
@@ -664,15 +697,18 @@ export class CommentModerationService {
   avgProcessingTimeMinutes: 15.5,
 };
   private async getModeratorWorkloadStats(range: { start: Date; end: Date }): Promise<any> {
+
     // Get moderator workload statistics
     return [];
   private async getDistributionStats(range: { start: Date; end: Date }): Promise<any> {
+
     // Get toxicity and quality distribution stats
     return {
       toxicity: { low: 80, medium: 15, high: 4, critical: 1 },
       quality: { excellent: 25, good: 50, fair: 20, poor: 5 }
     };
   private async getTrendStats(range: { start: Date; end: Date }): Promise<any> {
+
   // Get recent trends
   return {
   volumeChange24h: 12.5,
@@ -687,11 +723,12 @@ export class CommentModerationService {
     if (queue.slaMinutes <= 0) {
       throw new Error('SLA minutes must be positive');
   private async setupAutoAssignment(queue: CommentModerationQueue): Promise<void> {
+
     // Set up auto-assignment logic for the queue
     console.log(`🔄 Auto-assignment enabled for queue: ${queue.queueId}`);}
-  private makeAutoModerationDecision(()
+  private makeAutoModerationDecision(((
     analysis: any,
-    options: any,
+    options: any
   ): { action: string; reason: string } {
     // Make auto-moderation decision based on ML analysis
     if (analysis.toxicity > options.toxicityThreshold) {

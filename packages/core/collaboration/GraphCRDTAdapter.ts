@@ -8,6 +8,7 @@ import { GraphSyncHandler } from '../../crdt-research/src/graph-sync';
 import { YGraph } from '../../crdt-research/src/y-graph';
 import { CRDTNode, CRDTEdge } from '../../crdt-research/src/types';
 
+}
 export interface CollaborativeGraphOptions {
   documentId: string;
   userId: string;
@@ -17,6 +18,7 @@ export interface CollaborativeGraphOptions {
   /**
   * Adapter that wraps the existing graph model with CRDT capabilities
   */
+}
 }
 export class GraphCRDTAdapter {
   private syncHandler: GraphSyncHandler;

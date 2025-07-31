@@ -12,6 +12,7 @@ import {
   ConflictResolutionStrategy
 } from '../../types/PolicyAssignmentTypes';
 import './AssignmentConflictResolver.css';
+}
 interface AssignmentConflictResolverProps {
   conflicts: PolicyConflict;,
   onResolve: () => void;
@@ -27,6 +28,7 @@ interface AssignmentConflictResolverProps {
   export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProps> = ({,)
   conflicts,
   onResolve
+}
 }) => {
   const [resolutions, setResolutions] = useState<Record<string, ConflictResolution>>({});
   const [selectedConflict, setSelectedConflict] = useState<PolicyConflict | null>(null);
@@ -66,7 +68,7 @@ interface AssignmentConflictResolverProps {
   const updateResolution = (conflictId: string, updates: Partial<ConflictResolution>) => {
   setResolutions(prev => ({)
   ...prev,
-  [conflictId]: {,
+  [conflictId]: {
   ...prev[conflictId],
   ...updates
 }));

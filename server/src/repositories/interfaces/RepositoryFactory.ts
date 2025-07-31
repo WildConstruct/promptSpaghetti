@@ -8,6 +8,7 @@ import { AnalyticsRepository } from './AnalyticsRepository';
  * Supports configuration-based implementation selection
  */
 }
+}
 export interface RepositoryFactory {
   /**
    * Create a graph repository instance
@@ -45,10 +46,12 @@ export interface RepositoryFactory {
   healthCheck(): Promise<RepositoryHealth>;
 }
 }
+}
 
 /**
  * Health status for all repositories
  */
+}
 }
 export interface RepositoryHealth {
   graph: boolean;
@@ -58,10 +61,12 @@ export interface RepositoryHealth {
   overall: boolean;
 }
 }
+}
 
 /**
  * Configuration for repository factory
  */
+}
 }
 export interface RepositoryConfig {
   database: {
@@ -72,6 +77,7 @@ export interface RepositoryConfig {
     database?: string;
     username?: string;
     password?: string;
+}
 }
   };
   cache: {

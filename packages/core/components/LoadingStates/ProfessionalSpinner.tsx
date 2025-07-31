@@ -12,12 +12,14 @@ import {
 } from '../../utils/smoothAnimations';
 import '../../styles/smoothAnimations.css';
 
+}
 export interface ProfessionalSpinnerProps {
   size?: 'small' | 'medium' | 'large' | 'xl';
   variant?: 'primary' | 'secondary' | 'accent' | 'cinema4d';
   type?: 'spinner' | 'dots' | 'pulse' | 'bars' | 'ring';
   message?: string;
   progress?: number; // 0-100 for progress indicators,
+}
 }
 export const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps> = ({)
   size = 'medium',
@@ -239,6 +241,7 @@ export const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps> = ({)
  * Full-screen professional loading overlay
  */
 
+}
 export interface LoadingOverlayProps {
   visible: boolean;
   message?: string;
@@ -246,6 +249,7 @@ export interface LoadingOverlayProps {
   variant?: 'primary' | 'secondary' | 'accent' | 'cinema4d';
   backdrop?: 'blur' | 'solid' | 'transparent';
   onCancel?: () => void;
+}
 }
 export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({)
   visible,
@@ -347,11 +351,13 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({)
  * Inline loading state for smaller components
  */
 
+}
 export interface InlineLoaderProps {
   loading: boolean;
   size?: 'small' | 'medium';
   text?: string;
   children: React.ReactNode;
+}
 }
 export const InlineLoader: React.FC<InlineLoaderProps> = ({)
   loading,

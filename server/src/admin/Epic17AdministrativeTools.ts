@@ -21,6 +21,7 @@ import * as path from 'path';
 // =============================================================================
 
 }
+}
 export interface AdminToolsConfig {
   // System monitoring
   healthCheckInterval: number; // seconds
@@ -29,6 +30,7 @@ export interface AdminToolsConfig {
     maxErrorRate: number; // percentage
     maxMemoryUsage: number; // percentage
     maxCpuUsage: number; // percentage
+}
 }
   };
   
@@ -68,6 +70,7 @@ export interface AdminToolsConfig {
 }
 
 }
+}
 export interface SystemHealthStatus {
   overall: 'healthy' | 'degraded' | 'unhealthy';
   timestamp: Date;
@@ -78,6 +81,7 @@ export interface SystemHealthStatus {
     authentication: ComponentHealth;
     monitoring: ComponentHealth;
     vault: ComponentHealth;
+}
 }
   };
   metrics: {
@@ -94,6 +98,7 @@ export interface SystemHealthStatus {
 }
 
 }
+}
 export interface ComponentHealth {
   status: 'healthy' | 'degraded' | 'unhealthy';
   lastChecked: Date;
@@ -103,7 +108,9 @@ export interface ComponentHealth {
   metrics?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface SystemAlert {
   id: string;
@@ -117,7 +124,9 @@ export interface SystemAlert {
   actions?: string[];
 }
 }
+}
 
+}
 }
 export interface BulkOperation {
   operationId: string;
@@ -151,7 +160,9 @@ export interface BulkOperation {
   rollbackPossible: boolean;
 }
 }
+}
 
+}
 }
 export interface BulkOperationResult {
   id: string;
@@ -161,7 +172,9 @@ export interface BulkOperationResult {
   processedAt: Date;
 }
 }
+}
 
+}
 }
 export interface BulkOperationError {
   id: string;
@@ -171,7 +184,9 @@ export interface BulkOperationError {
   occuredAt: Date;
 }
 }
+}
 
+}
 }
 export interface MaintenanceWindow {
   windowId: string;
@@ -201,7 +216,9 @@ export interface MaintenanceWindow {
   reason: string;
 }
 }
+}
 
+}
 }
 export interface MaintenanceOperation {
   operationId: string;
@@ -221,7 +238,9 @@ export interface MaintenanceOperation {
   rollbackInstructions?: string;
 }
 }
+}
 
+}
 }
 export interface SecurityScanResult {
   scanId: string;
@@ -250,7 +269,9 @@ export interface SecurityScanResult {
   scanParameters: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface SecurityFinding {
   findingId: string;
@@ -264,7 +285,9 @@ export interface SecurityFinding {
   riskScore: number;
 }
 }
+}
 
+}
 }
 export interface SecurityRecommendation {
   recommendationId: string;
@@ -276,7 +299,9 @@ export interface SecurityRecommendation {
   impactAssessment: string;
 }
 }
+}
 
+}
 }
 export interface DataCleanupOperation {
   cleanupId: string;
@@ -304,6 +329,7 @@ export interface DataCleanupOperation {
   initiatedBy: string;
   approvedBy?: string;
   backupLocation?: string;
+}
 }
 }
 

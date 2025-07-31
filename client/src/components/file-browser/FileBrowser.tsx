@@ -57,7 +57,7 @@ const mockFiles: TreeNode = [
   tags: ['chatbot', 'customer-service'],
   extension: 'psg',
   mimeType: 'application/psg',
-  metadata: {,
+  metadata: {
   nodeCount: 15,
   edgeCount: 18,
   description: 'Automated customer service workflow',
@@ -85,7 +85,7 @@ const mockFiles: TreeNode = [
   tags: ['template', 'basic'],
   extension: 'psg',
   mimeType: 'application/psg',
-  metadata: {,
+  metadata: {
   nodeCount: 8,
   edgeCount: 7,
   description: 'Simple prompt chaining template',
@@ -618,12 +618,12 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
   case 'lastModified':,
   comparison = a.lastModified.getTime() - b.lastModified.getTime();
   break;
-  case 'size': {,
+  case 'size': {
   const sizeA = a.type === 'file' ? a.size ?? 0 : 0;
   const sizeB = b.type === 'file' ? b.size ?? 0 : 0;
   comparison = sizeA - sizeB;
   break;
-  case 'type': {,
+  case 'type': {
   const extA = a.type === 'file' ? a.extension ?? '' : '';
   const extB = b.type === 'file' ? b.extension ?? '' : '';
   comparison = extA.localeCompare(extB);

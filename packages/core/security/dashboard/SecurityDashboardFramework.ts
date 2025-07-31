@@ -94,6 +94,8 @@ export enum DashboardType {
   dataClassification: DataClassificationLevel;
   // Layout Configuration
 }
+}
+}
 export interface DashboardLayout {
   type: 'grid' | 'masonry' | 'custom';
   columns: number;
@@ -103,11 +105,15 @@ export interface DashboardLayout {
   breakpoints?: LayoutBreakpoint;
   regions?: LayoutRegion;
 }
+}
+}
 export interface LayoutBreakpoint {
   name: string;
   minWidth: number;
   columns: number;
   gap?: number;
+}
+}
 }
 export interface LayoutRegion {
   id: string;
@@ -118,6 +124,8 @@ export interface LayoutRegion {
   resizable?: boolean;
   collapsible?: boolean;
   // Widget Configuration
+}
+}
 }
 export interface WidgetConfiguration {
   id: string;
@@ -133,11 +141,15 @@ export interface WidgetConfiguration {
   autoRefresh?: boolean;
   customStyles?: Record<string, any>;
 }
+}
+}
 export interface WidgetPosition {
   x: number;
   y: number;
   order?: number;
   region?: string;
+}
+}
 }
 export interface WidgetSize {
   width: number;
@@ -149,6 +161,8 @@ export interface WidgetSize {
   resizable?: boolean;
   // Data Source Configuration
 }
+}
+}
 export interface DataSourceConfig {
   type: 'realtime' | 'batch' | 'static';
   source: string;
@@ -159,26 +173,36 @@ export interface DataSourceConfig {
   caching?: CachingConfig;
   authentication?: AuthenticationConfig;
 }
+}
+}
 export interface AggregationConfig {
   groupBy: string;
   timeWindow: string;
   functions: AggregationFunction;
+}
+}
 }
 export interface AggregationFunction {
   field: string;
   function: 'sum' | 'avg' | 'min' | 'max' | 'count' | 'distinct';
   alias?: string;
 }
+}
+}
 export interface CachingConfig {
   enabled: boolean;
   ttl: number; // seconds,
   invalidationRules?: string;
+}
+}
 }
 export interface AuthenticationConfig {
   required: boolean;
   method: 'oauth' | 'apikey' | 'certificate' | 'none';
   credentials?: Record<string, string>;
   // Permission System
+}
+}
 }
 export interface DashboardPermissions {
   view: SecurityRole;
@@ -189,6 +213,8 @@ export interface DashboardPermissions {
   adminOnly: boolean;
   dataClassificationRequirement?: DataClassificationLevel;
 }
+}
+}
 export interface WidgetPermissions {
   view: SecurityRole;
   configure: SecurityRole;
@@ -196,6 +222,8 @@ export interface WidgetPermissions {
   drillDown: SecurityRole;
   dataAccess: DataClassificationLevel;
   // Metadata
+}
+}
 }
 export interface DashboardMetadata {
   version: string;
@@ -209,12 +237,16 @@ export interface DashboardMetadata {
   compliance: ComplianceMetadata;
   usage: UsageMetadata;
 }
+}
+}
 export interface ComplianceMetadata {
   frameworks: string;
   requirements: string;
   auditRequired: boolean;
   retentionPeriod: number; // days,
   dataResidency: string;
+}
+}
 }
 export interface UsageMetadata {
   viewCount: number;
@@ -223,6 +255,8 @@ export interface UsageMetadata {
   averageSessionDuration: number; // seconds,
   peakUsageHours: number;
   // Widget Registry
+}
+}
 }
 export interface WidgetDefinition {
   type: string;
@@ -240,6 +274,8 @@ export interface WidgetDefinition {
   tags: string;
   version: string;
 }
+}
+}
 export interface DataRequirement {
   field: string;
   type: 'number' | 'string' | 'boolean' | 'date' | 'object';
@@ -248,11 +284,15 @@ export interface DataRequirement {
   format?: string;
   validation?: ValidationRule;
 }
+}
+}
 export interface ValidationRule {
   type: 'range' | 'pattern' | 'enum' | 'custom';
   params: Record<string, any>;
   message: string;
   // Theme Configuration
+}
+}
 }
 export interface ThemeConfig {
   name: DashboardTheme;
@@ -264,6 +304,8 @@ export interface ThemeConfig {
   borders: BorderConfig;
   animations: AnimationConfig;
   accessibility: AccessibilityConfig;
+}
+}
 }
 export interface ColorPalette {
   primary: string;
@@ -282,6 +324,8 @@ export interface ColorPalette {
   border: string;
   shadow: string;
 }
+}
+}
 export interface TypographyConfig {
   fontFamily: string;
   fontSize: {
@@ -292,6 +336,7 @@ export interface TypographyConfig {
   xl: string;
   '2xl': string;
   '3xl': string;
+}
 };
   fontWeight: {
   light: number;
@@ -306,6 +351,7 @@ export interface TypographyConfig {
   relaxed: number;
 };
 }
+}
 export interface SpacingConfig {
   xs: string;
   sm: string;
@@ -315,17 +361,22 @@ export interface SpacingConfig {
   '2xl': string;
   '3xl': string;
 }
+}
+}
 export interface ShadowConfig {
   sm: string;
   md: string;
   lg: string;
   xl: string;
 }
+}
+}
 export interface BorderConfig {
   width: {
   thin: string;
   normal: string;
   thick: string;
+}
 };
   radius: {
   sm: string;
@@ -334,11 +385,13 @@ export interface BorderConfig {
   full: string;
 };
 }
+}
 export interface AnimationConfig {
   duration: {
   fast: string;
   normal: string;
   slow: string;
+}
 };
   easing: {
   linear: string;
@@ -346,6 +399,7 @@ export interface AnimationConfig {
   easeOut: string;
   easeInOut: string;
 };
+}
 }
 export interface AccessibilityConfig {
   focusRing: string;
@@ -355,9 +409,11 @@ export interface AccessibilityConfig {
   fontSize: {
   min: string;
   max: string;
+}
 };
 
 // Dashboard Framework Events
+}
 }
 export interface DashboardFrameworkEvents {
   'dashboard:loaded': (dashboard: DashboardConfig) => void;
@@ -371,12 +427,16 @@ export interface DashboardFrameworkEvents {
   'theme:changed': (theme: DashboardTheme) => void;
   'layout:changed': (layout: DashboardLayout) => void;
 }
+}
+}
 export interface UserInteractionEvent {
   userId: string;
   action: string;
   target: string;
   timestamp: Date;
   metadata: Record<string, any>;
+}
+}
 }
 export interface PermissionDeniedEvent {
   userId: string;
@@ -386,6 +446,8 @@ export interface PermissionDeniedEvent {
   action: string;
   timestamp: Date;
   // Main Framework Class
+}
+}
 }
 export interface SecurityDashboardFrameworkOptions {
   enableAuditLogging: boolean;
@@ -400,6 +462,7 @@ export interface SecurityDashboardFrameworkOptions {
   /**
   * Main Security Dashboard Framework Class
   */
+}
 }
 export class SecurityDashboardFramework extends EventEmitter {
   private dashboards: Map<string, DashboardConfig> = new Map();
@@ -432,6 +495,7 @@ export class SecurityDashboardFramework extends EventEmitter {
    * Initialize the dashboard framework
    */
   private async initializeFramework(): Promise<void> {
+
   try {
   // Load default themes
   this.loadDefaultThemes();
@@ -463,6 +527,7 @@ export class SecurityDashboardFramework extends EventEmitter {
    * Register a new dashboard
    */
   async registerDashboard(config: DashboardConfig, userId: string): Promise<boolean> {
+
   try {
   // Validate configuration
   this.validateDashboardConfig(config);
@@ -641,6 +706,7 @@ export class SecurityDashboardFramework extends EventEmitter {
    * Load saved dashboards
    */
   private async loadDashboards(): Promise<void> {
+
     // Implementation would load dashboards from persistent storage
     // This is a placeholder for dashboard loading
   /**

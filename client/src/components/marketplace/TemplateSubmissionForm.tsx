@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import './TemplateSubmissionForm.css';
+}
 interface SubmissionData {
   title: string;,
   description: string;
@@ -30,14 +31,17 @@ interface SubmissionData {
   details?: Record<string, unknown>;
   suggested_fix?: string;
   auto_fixable: boolean;
-  location?: {,
+  location?: {
   field?: string;
+}
 };
+}
 interface Category {
   id: string;,
   name: string;
   description?: string;
   icon?: string;
+}
 interface TemplateSubmissionFormProps {
   templateId?: string;
   onSubmit?: (submissionId: string) => void;
@@ -57,6 +61,7 @@ const DEFAULT_SUBMISSION_DATA: SubmissionData = {,
   is_ai_generated: false,
   claude_compat: ['claude-3-sonnet'],
   claude_model: 'claude-3-sonnet',
+}
   graph_json: {},
   token_per_run_estimate: 0,
   intended_use_cases: [''],
@@ -91,7 +96,7 @@ export const TemplateSubmissionForm: React.FC<TemplateSubmissionFormProps> = ({)
   const fetchCategories = async () => {
     try {
       const response = await fetch('/api/marketplace/categories', {)
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
       });
       if (response.ok) {
@@ -105,7 +110,7 @@ export const TemplateSubmissionForm: React.FC<TemplateSubmissionFormProps> = ({)
       setIsLoading(true);
       const response = await fetch(`/api/marketplace/submissions/${submissionId}`, {)}
   },
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
       });
       if (response.ok) {
@@ -212,7 +217,7 @@ export const TemplateSubmissionForm: React.FC<TemplateSubmissionFormProps> = ({)
       const method = submissionId ? 'PUT' : 'POST';
       const response = await fetch(url, {)
   method,
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
   },
@@ -240,7 +245,7 @@ export const TemplateSubmissionForm: React.FC<TemplateSubmissionFormProps> = ({)
       const response = await fetch(`/api/marketplace/submissions/${submissionId}/submit`, {)}
   },
   method: 'POST',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
       });
       if (response.ok) {

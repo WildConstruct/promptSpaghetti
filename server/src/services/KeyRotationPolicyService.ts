@@ -10,6 +10,7 @@ import { EventEmitter } from 'events';
 import * as cron from 'node-cron';
 
 }
+}
 export interface KeyRotationPolicyConfig {
   // Rotation scheduling
   enableAutomaticRotation: boolean;
@@ -35,7 +36,9 @@ export interface KeyRotationPolicyConfig {
   complianceReportingEnabled: boolean;
 }
 }
+}
 
+}
 }
 export interface RotationPolicy {
   id: string;
@@ -80,7 +83,9 @@ export interface RotationPolicy {
   priority: number; // Higher number = higher priority
 }
 }
+}
 
+}
 }
 export interface RotationSchedule {
   id: string;
@@ -93,6 +98,7 @@ export interface RotationSchedule {
   rotationWindow: {
     startTime: Date;
     endTime: Date;
+}
 }
   };
   
@@ -124,6 +130,7 @@ export interface RotationSchedule {
 }
 
 }
+}
 export interface RotationNotification {
   id: string;
   type: 'reminder' | 'approval_request' | 'emergency' | 'completion' | 'failure';
@@ -133,7 +140,9 @@ export interface RotationNotification {
   acknowledgedAt?: Date;
 }
 }
+}
 
+}
 }
 export interface PolicyEvaluation {
   policyId: string;
@@ -147,9 +156,11 @@ export interface PolicyEvaluation {
     downtime: number;
     riskLevel: string;
 }
+}
   };
 }
 
+}
 }
 export interface RotationMetrics {
   totalRotations: number;
@@ -160,6 +171,7 @@ export interface RotationMetrics {
   upcomingRotations: number;
   overdueRotations: number;
   emergencyRotations: number;
+}
 }
 }
 

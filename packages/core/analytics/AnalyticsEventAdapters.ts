@@ -31,6 +31,7 @@ export abstract class BaseAnalyticsAdapter {
    * Publish event through unified bus
    */
   protected async publishEvent(legacyEvent: any): Promise<string | null> {
+
     if (!this.enabled) return null;
     try {
       const transformedEvent = this.transformEvent(legacyEvent);
@@ -112,16 +113,19 @@ export class MainAnalyticsAdapter extends BaseAnalyticsAdapter {
   ...execution
 });
   async recordNodeExecution(execution: any): Promise<string | null> {
+
   return this.publishEvent({)
   eventType: 'node_execution',
   ...execution
 });
   async recordTokenUsage(usage: any): Promise<string | null> {
+
   return this.publishEvent({)
   eventType: 'token_usage',
   ...usage
 });
   async recordUserInteraction(interaction: any): Promise<string | null> {
+
   return this.publishEvent({)
   eventType: 'user_interaction',
   ...interaction
@@ -164,6 +168,7 @@ export class IntegrationAnalyticsAdapter extends BaseAnalyticsAdapter {
       environment: legacyEvent.context?.environment;
   };
   async recordIntegrationEvent(event: any): Promise<string | null> {
+
   return this.publishEvent(event);
   /**
   * Behavior Analytics Adapter
@@ -196,6 +201,7 @@ export class IntegrationAnalyticsAdapter extends BaseAnalyticsAdapter {
   tags: ['behavior', legacyEvent.behaviorType, legacyEvent.action]
     };
   async recordBehaviorEvent(event: any): Promise<string | null> {
+
   return this.publishEvent(event);
   /**
   * Performance Monitoring Adapter
@@ -311,6 +317,7 @@ export class IntegrationAnalyticsAdapter extends BaseAnalyticsAdapter {
   tags: ['revenue', legacyEvent.revenueType, legacyEvent.currency]
     };
   async recordRevenueEvent(event: any): Promise<string | null> {
+
   return this.publishEvent(event);
   /**
   * Session Monitoring Adapter
@@ -346,6 +353,7 @@ export class IntegrationAnalyticsAdapter extends BaseAnalyticsAdapter {
   tags: ['session', legacyEvent.sessionEvent, legacyEvent.deviceType]
     };
   async recordSessionEvent(event: any): Promise<string | null> {
+
     return this.publishEvent(event);
 /**
  * Analytics Adapter Manager
@@ -401,6 +409,7 @@ export class AnalyticsAdapterManager {
   async migrateAllSystems(migrationData: { [systemName: string]: any }): Promise<{
     [systemName: string]: { migrated: number; failed: number; errors: string };
   }> {
+
     const results: { [systemName: string]: any } = {};
     for (const [systemName, events] of Object.entries(migrationData)) {
   const adapter = this.adapters.get(systemName);
@@ -429,6 +438,7 @@ export class AnalyticsAdapterManager {
    * Shutdown all adapters
    */
   async shutdown(): Promise<void> {
+
     for (const adapter of this.adapters.values()) {
       adapter.setEnabled(false);
     this.adapters.clear();

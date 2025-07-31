@@ -20,6 +20,7 @@ import { EventEmitter } from 'events';
 
 // Core Attribution Interfaces
 
+}
 export interface AttributionConfig {
   trackingId: string;
   attribution: AttributionSettings;
@@ -29,6 +30,8 @@ export interface AttributionConfig {
   storage: StorageSettings;
   reporting: ReportingSettings;
   integration: IntegrationSettings;
+}
+}
 }
 export interface AttributionSettings {
   lookbackWindow: LookbackWindow;
@@ -40,12 +43,16 @@ export interface AttributionSettings {
   dataRetention: number; // days,
   samplingRate: number; // 0-1,
 }
+}
+}
 export interface LookbackWindow {
   impression: number; // days,
   click: number; // days,
   view: number; // days,
   engagement: number; // days,
   custom: Record<string, number>;
+}
+}
 }
 export interface CrossDeviceConfig {
   enabled: boolean;
@@ -54,6 +61,8 @@ export interface CrossDeviceConfig {
   probabilisticMatching: boolean;
   deterministicMatching: boolean;
   confidenceThreshold: number;
+}
+}
 }
 export interface IdentityResolutionConfig {
   email: boolean;
@@ -64,11 +73,15 @@ export interface IdentityResolutionConfig {
   ipAddress: boolean;
   userAgent: boolean;
 }
+}
+}
 export interface DeduplicationConfig {
   enabled: boolean;
   strategy: 'first' | 'last' | 'unique' | 'position';
   window: number; // minutes,
   fields: string;
+}
+}
 }
 export interface AttributionModel {
   id: string;
@@ -84,6 +97,7 @@ export interface AttributionModel {
   created: Date;
   updated: Date;
 }
+}
 export type AttributionModelType = 
   | 'first_touch'
   | 'last_touch'
@@ -93,6 +107,7 @@ export type AttributionModelType =
   | 'data_driven'
   | 'custom';
 
+}
 export interface ModelConfiguration {
   decayRate?: number; // for time_decay,
   halfLife?: number; // for time_decay in days,
@@ -102,6 +117,8 @@ export interface ModelConfiguration {
   customWeights?: Record<string, number>;
   parameters: Record<string, any>;
 }
+}
+}
 export interface AttributionWeights {
   byPosition: PositionWeight;
   byChannel: ChannelWeight;
@@ -109,36 +126,50 @@ export interface AttributionWeights {
   byTimeDecay: TimeDecayWeight;
   byCustom: CustomWeight;
 }
+}
+}
 export interface PositionWeight {
   position: 'first' | 'middle' | 'last' | number;
   weight: number;
   conditions?: WeightCondition;
+}
+}
 }
 export interface ChannelWeight {
   channel: string;
   weight: number;
   conditions?: WeightCondition;
 }
+}
+}
 export interface TouchTypeWeight {
   touchType: string;
   weight: number;
   conditions?: WeightCondition;
 }
+}
+}
 export interface TimeDecayWeight {
   daysFromConversion: number;
   weight: number;
   decayFunction: 'linear' | 'exponential' | 'custom'
+}
   }
+}
 export interface CustomWeight {
   dimension: string;
   value: string;
   weight: number;
   conditions?: WeightCondition;
 }
+}
+}
 export interface WeightCondition {
   field: string;
   operator: 'equals' | 'contains' | 'greater' | 'less' | 'in';
   value: any;
+}
+}
 }
 export interface AttributionRule {
   id: string;
@@ -148,6 +179,8 @@ export interface AttributionRule {
   priority: number;
   isActive: boolean;
 }
+}
+}
 export interface RuleCondition {
   field: string;
   operator: string;
@@ -155,10 +188,14 @@ export interface RuleCondition {
   logicalOperator?: 'AND' | 'OR' | 'NOT';
   nested?: RuleCondition;
 }
+}
+}
 export interface RuleAction {
   type: 'include' | 'exclude' | 'modify' | 'redirect';
   parameters: Record<string, any>;
   weight?: number;
+}
+}
 }
 export interface ChannelConfig {
   id: string;
@@ -168,6 +205,7 @@ export interface ChannelConfig {
   attribution: ChannelAttributionConfig;
   tracking: ChannelTrackingConfig;
   metadata: ChannelMetadata;
+}
 }
 export type ChannelType = 
   | 'organic_search'
@@ -192,6 +230,7 @@ export type ChannelCategory =
   | 'conversion'
   | 'support';
 
+}
 export interface ChannelAttributionConfig {
   defaultWeight: number;
   lookbackWindow: number;
@@ -199,6 +238,8 @@ export interface ChannelAttributionConfig {
   conversionWindow: number;
   assistWeight: number;
   lastTouchWeight: number;
+}
+}
 }
 export interface TouchPointCapture {
   impression: boolean;
@@ -208,12 +249,16 @@ export interface TouchPointCapture {
   conversion: boolean;
   custom: Record<string, boolean>;
 }
+}
+}
 export interface ChannelTrackingConfig {
   utmTracking: UTMTracking;
   customParameters: CustomParameter;
   crossDomainTracking: boolean;
   cookieDomain: string;
   sessionTimeout: number; // minutes,
+}
+}
 }
 export interface UTMTracking {
   source: boolean;
@@ -223,12 +268,16 @@ export interface UTMTracking {
   content: boolean;
   customDimensions: string;
 }
+}
+}
 export interface CustomParameter {
   name: string;
   source: 'url' | 'cookie' | 'header' | 'custom';
   pattern?: string;
   defaultValue?: string;
   required: boolean;
+}
+}
 }
 export interface ChannelMetadata {
   description: string;
@@ -238,12 +287,16 @@ export interface ChannelMetadata {
   created: Date;
   updated: Date;
 }
+}
+}
 export interface CostConfig {
   enabled: boolean;
   currency: string;
   costModel: 'cpc' | 'cpm' | 'cpa' | 'fixed' | 'custom';
   defaultCost: number;
   costSource?: string;
+}
+}
 }
 export interface PerformanceMetrics {
   impressions: number;
@@ -256,6 +309,8 @@ export interface PerformanceMetrics {
   roas: number;
   cpa: number;
   // Journey and Touchpoint Tracking
+}
+}
 }
 export interface CustomerJourney {
   id: string;
@@ -270,6 +325,8 @@ export interface CustomerJourney {
   metadata: JourneyMetadata;
   created: Date;
   updated: Date;
+}
+}
 }
 export interface TouchPoint {
   id: string;
@@ -287,6 +344,7 @@ export interface TouchPoint {
   context: TouchPointContext;
   attribution: TouchPointAttribution;
 }
+}
 export type TouchPointType = 
   | 'impression'
   | 'click'
@@ -296,6 +354,7 @@ export type TouchPointType =
   | 'assist'
   | 'custom';
 
+}
 export interface TouchPointData {
   url: string;
   referrer?: string;
@@ -304,6 +363,8 @@ export interface TouchPointData {
   device: DeviceData;
   location: LocationData;
   custom: Record<string, any>;
+}
+}
 }
 export interface PageData {
   title: string;
@@ -315,6 +376,8 @@ export interface PageData {
   publishDate?: Date;
   engagementScore?: number;
 }
+}
+}
 export interface UserData {
   segment?: string;
   lifecycle?: string;
@@ -322,6 +385,8 @@ export interface UserData {
   cohort?: string;
   preferences: Record<string, any>;
   behavior: BehaviorData;
+}
+}
 }
 export interface BehaviorData {
   sessionCount: number;
@@ -331,11 +396,15 @@ export interface BehaviorData {
   previousVisits: Date;
   interactionHistory: InteractionEvent;
 }
+}
+}
 export interface InteractionEvent {
   type: string;
   element: string;
   timestamp: Date;
   data: Record<string, any>;
+}
+}
 }
 export interface DeviceData {
   type: 'desktop' | 'mobile' | 'tablet' | 'tv';
@@ -344,6 +413,8 @@ export interface DeviceData {
   resolution: string;
   userAgent: string;
   fingerprint?: string;
+}
+}
 }
 export interface LocationData {
   country?: string;
@@ -355,6 +426,8 @@ export interface LocationData {
   timezone?: string;
   isp?: string;
 }
+}
+}
 export interface TouchPointContext {
   experiment?: ExperimentContext;
   audience?: AudienceContext;
@@ -362,10 +435,14 @@ export interface TouchPointContext {
   timeContext?: TimeContext;
   businessContext?: BusinessContext;
 }
+}
+}
 export interface ExperimentContext {
   experimentId: string;
   variant: string;
   allocation: number;
+}
+}
 }
 export interface AudienceContext {
   segments: string;
@@ -373,11 +450,15 @@ export interface AudienceContext {
   predictedValue?: number;
   churnRisk?: number;
 }
+}
+}
 export interface WeatherContext {
   condition: string;
   temperature: number;
   humidity: number;
   season: string;
+}
+}
 }
 export interface TimeContext {
   dayOfWeek: string;
@@ -387,11 +468,15 @@ export interface TimeContext {
   season: string;
   timeZone: string;
 }
+}
+}
 export interface BusinessContext {
   campaignObjective?: string;
   budget?: number;
   targetAudience?: string;
   competitorActivity?: string;
+}
+}
 }
 export interface TouchPointAttribution {
   credit: number;
@@ -400,6 +485,8 @@ export interface TouchPointAttribution {
   rank: number;
   influence: number;
   decay: number;
+}
+}
 }
 export interface Conversion {
   id: string;
@@ -411,6 +498,7 @@ export interface Conversion {
   timestamp: Date;
   data: ConversionData;
 }
+}
 export type ConversionType = 
   | 'purchase'
   | 'lead'
@@ -420,6 +508,7 @@ export type ConversionType =
   | 'engagement'
   | 'custom';
 
+}
 export interface ConversionValue {
   revenue?: number;
   quantity?: number;
@@ -429,6 +518,8 @@ export interface ConversionValue {
   cost?: number;
   custom: Record<string, number>;
 }
+}
+}
 export interface ConversionAttribution {
   touchPoints: TouchPointAttribution;
   models: Record<string, ModelAttribution>;
@@ -436,11 +527,15 @@ export interface ConversionAttribution {
   assisted: ModelAttribution;
   incrementality: IncrementalityData;
 }
+}
+}
 export interface ModelAttribution {
   model: string;
   credit: TouchPointCredit;
   confidence: number;
   methodology: string;
+}
+}
 }
 export interface TouchPointCredit {
   touchPointId: string;
@@ -449,12 +544,16 @@ export interface TouchPointCredit {
   channel: string;
   position: number;
 }
+}
+}
 export interface IncrementalityData {
   baseline: number;
   incremental: number;
   lift: number;
   confidence: number;
   methodology: string;
+}
+}
 }
 export interface FunnelData {
   stage: string;
@@ -463,11 +562,15 @@ export interface FunnelData {
   dropoff?: boolean;
   micro_conversions: MicroConversion;
 }
+}
+}
 export interface MicroConversion {
   type: string;
   value: number;
   timestamp: Date;
   attribution: number;
+}
+}
 }
 export interface ConversionData {
   product?: ProductData;
@@ -475,6 +578,8 @@ export interface ConversionData {
   form?: FormData;
   engagement?: EngagementData;
   custom: Record<string, any>;
+}
+}
 }
 export interface ProductData {
   id: string;
@@ -486,6 +591,8 @@ export interface ProductData {
   brand?: string;
   variant?: string;
 }
+}
+}
 export interface TransactionData {
   id: string;
   total: number;
@@ -496,12 +603,16 @@ export interface TransactionData {
   paymentMethod: string;
   products: ProductData;
 }
+}
+}
 export interface FormData {
   formId: string;
   fields: FormField;
   completion: number;
   timeToComplete: number;
   abandonmentPoint?: string;
+}
+}
 }
 export interface FormField {
   name: string;
@@ -510,12 +621,16 @@ export interface FormField {
   required: boolean;
   filled: boolean;
 }
+}
+}
 export interface EngagementData {
   type: string;
   duration: number;
   interactions: number;
   depth: number;
   quality: number;
+}
+}
 }
 export interface JourneyAttribution {
   models: Record<string, JourneyModelAttribution>;
@@ -526,17 +641,23 @@ export interface JourneyAttribution {
   assist_interactions: number;
   direct_interactions: number;
 }
+}
+}
 export interface JourneyModelAttribution {
   model: string;
   distribution: ChannelDistribution;
   totalCredit: number;
   confidence: number;
 }
+}
+}
 export interface ChannelDistribution {
   channel: string;
   credit: number;
   percentage: number;
   touchPoints: number;
+}
+}
 }
 export interface JourneyTimeline {
   firstTouch: Date;
@@ -547,12 +668,16 @@ export interface JourneyTimeline {
   conversionsByDay: Record<string, number>;
   engagementPeaks: Date;
 }
+}
+}
 export interface JourneyMetadata {
   source: string;
   quality: QualityScore;
   completeness: CompletenessScore;
   anomalies: AnomalyData;
   tags: string;
+}
+}
 }
 export interface QualityScore {
   overall: number;
@@ -561,12 +686,16 @@ export interface QualityScore {
   cross_device_matching: number;
   deduplication: number;
 }
+}
+}
 export interface CompletenessScore {
   touchPoints: number;
   conversions: number;
   user_data: number;
   context_data: number;
   overall: number;
+}
+}
 }
 export interface AnomalyData {
   type: string;
@@ -575,6 +704,8 @@ export interface AnomalyData {
   impact: 'low' | 'medium' | 'high';
   timestamp: Date;
   // Privacy and Storage Configuration
+}
+}
 }
 export interface PrivacySettings {
   gdprCompliance: boolean;
@@ -585,6 +716,8 @@ export interface PrivacySettings {
   retention: RetentionConfig;
   userRights: UserRightsConfig;
 }
+}
+}
 export interface AnonymizationConfig {
   enabled: boolean;
   ipAnonymization: boolean;
@@ -592,6 +725,8 @@ export interface AnonymizationConfig {
   piiRemoval: boolean;
   aggregationThreshold: number;
   kAnonymity: number;
+}
+}
 }
 export interface RetentionConfig {
   touchPoints: number; // days,
@@ -601,12 +736,16 @@ export interface RetentionConfig {
   logs: number; // days,
   autoDelete: boolean;
 }
+}
+}
 export interface UserRightsConfig {
   accessRequests: boolean;
   deleteRequests: boolean;
   portabilityRequests: boolean;
   optOutRequests: boolean;
   correctionRequests: boolean;
+}
+}
 }
 export interface StorageSettings {
   backend: StorageBackend;
@@ -615,6 +754,8 @@ export interface StorageSettings {
   encryption: EncryptionConfig;
   backup: BackupConfig;
 }
+}
+}
 export interface StorageBackend {
   type: 'local' | 'cloud' | 'hybrid';
   provider?: string;
@@ -622,15 +763,21 @@ export interface StorageBackend {
   endpoint?: string;
   credentials?: Record<string, string>;
 }
+}
+}
 export interface PartitioningConfig {
   strategy: 'time' | 'user' | 'channel' | 'custom';
   granularity: 'day' | 'week' | 'month';
   retention: number; // partitions to keep,
 }
+}
+}
 export interface CompressionConfig {
   enabled: boolean;
   algorithm: 'gzip' | 'lz4' | 'snappy';
   level: number;
+}
+}
 }
 export interface EncryptionConfig {
   enabled: boolean;
@@ -638,11 +785,15 @@ export interface EncryptionConfig {
   keyRotation: boolean;
   rotationInterval: number; // days,
 }
+}
+}
 export interface BackupConfig {
   enabled: boolean;
   frequency: 'hourly' | 'daily' | 'weekly';
   retention: number; // backup count,
   offsite: boolean;
+}
+}
 }
 export interface ReportingSettings {
   realTime: boolean;
@@ -652,11 +803,15 @@ export interface ReportingSettings {
   metrics: ReportMetric;
   exports: ExportConfig;
 }
+}
+}
 export interface AggregationLevel {
   name: string;
   granularity: 'minute' | 'hour' | 'day' | 'week' | 'month';
   dimensions: string;
   metrics: string;
+}
+}
 }
 export interface ReportDimension {
   name: string;
@@ -664,11 +819,15 @@ export interface ReportDimension {
   cardinality: 'low' | 'medium' | 'high';
   nullable: boolean;
 }
+}
+}
 export interface ReportMetric {
   name: string;
   type: 'count' | 'sum' | 'avg' | 'min' | 'max' | 'distinct';
   aggregation: string;
   precision: number;
+}
+}
 }
 export interface ExportConfig {
   name: string;
@@ -677,11 +836,15 @@ export interface ExportConfig {
   schedule: ExportSchedule;
   filters: ExportFilter;
 }
+}
+}
 export interface ExportDestination {
   type: 'file' | 'database' | 'api' | 'warehouse';
   connection: Record<string, string>;
   path?: string;
   table?: string;
+}
+}
 }
 export interface ExportSchedule {
   frequency: 'hourly' | 'daily' | 'weekly' | 'monthly';
@@ -689,16 +852,22 @@ export interface ExportSchedule {
   timezone?: string;
   enabled: boolean;
 }
+}
+}
 export interface ExportFilter {
   field: string;
   operator: string;
   value: any;
+}
+}
 }
 export interface IntegrationSettings {
   dataImport: DataImportConfig;
   webhooks: WebhookConfig;
   apis: APIConfig;
   connectors: ConnectorConfig;
+}
+}
 }
 export interface DataImportConfig {
   name: string;
@@ -707,31 +876,43 @@ export interface DataImportConfig {
   schedule: ImportSchedule;
   validation: ValidationConfig;
 }
+}
+}
 export interface ImportSource {
   type: 'file' | 'database' | 'api' | 'stream';
   connection: Record<string, string>;
   format?: 'csv' | 'json' | 'xml' | 'avro'
+}
   }
+}
 export interface FieldMapping {
   source: string;
   target: string;
   transform?: string;
   required: boolean;
 }
+}
+}
 export interface ImportSchedule {
   frequency: 'realtime' | 'hourly' | 'daily' | 'weekly';
   enabled: boolean;
+}
+}
 }
 export interface ValidationConfig {
   enabled: boolean;
   rules: ValidationRule;
   errorHandling: 'skip' | 'fail' | 'log'
+}
   }
+}
 export interface ValidationRule {
   field: string;
   type: 'required' | 'format' | 'range' | 'custom';
   parameters: Record<string, any>;
   message: string;
+}
+}
 }
 export interface WebhookConfig {
   name: string;
@@ -741,15 +922,21 @@ export interface WebhookConfig {
   retryPolicy: RetryPolicy;
   enabled: boolean;
 }
+}
+}
 export interface AuthConfig {
   type: 'none' | 'basic' | 'bearer' | 'oauth' | 'custom';
   credentials: Record<string, string>;
+}
+}
 }
 export interface RetryPolicy {
   maxAttempts: number;
   backoffStrategy: 'linear' | 'exponential' | 'fixed';
   baseDelay: number;
   maxDelay: number;
+}
+}
 }
 export interface APIConfig {
   name: string;
@@ -758,10 +945,14 @@ export interface APIConfig {
   rateLimiting: RateLimitConfig;
   endpoints: EndpointConfig;
 }
+}
+}
 export interface RateLimitConfig {
   requestsPerSecond: number;
   burstLimit: number;
   retryAfter: number;
+}
+}
 }
 export interface EndpointConfig {
   path: string;
@@ -769,11 +960,15 @@ export interface EndpointConfig {
   purpose: string;
   parameters: ParameterConfig;
 }
+}
+}
 export interface ParameterConfig {
   name: string;
   type: 'query' | 'path' | 'body' | 'header';
   required: boolean;
   default?: any;
+}
+}
 }
 export interface ConnectorConfig {
   name: string;
@@ -782,12 +977,15 @@ export interface ConnectorConfig {
   syncSettings: SyncSettings;
   fieldMapping: FieldMapping;
 }
+}
+}
 export interface SyncSettings {
   frequency: 'realtime' | 'hourly' | 'daily';
   enabled: boolean;
   lastSync?: Date;
   syncWindow: number; // days,
   // Main Attribution Tracking System
+}
 }
 export class AttributionTracker extends EventEmitter {
   private config: AttributionConfig;
@@ -806,6 +1004,7 @@ export class AttributionTracker extends EventEmitter {
     this.startProcessing();
   // Core Tracking Methods
   async trackTouchPoint(data: Partial<TouchPoint>): Promise<string> {
+
     try {
       const touchPoint = this.createTouchPoint(data);
       // Add to processing queue
@@ -819,6 +1018,7 @@ export class AttributionTracker extends EventEmitter {
       this.emit('trackingError', { type: 'touchpoint', error: error instanceof Error ? error.message : String(error) });
       throw error;
   async trackConversion(data: Partial<Conversion>): Promise<string> {
+
     try {
       const conversion = this.createConversion(data);
       // Add to processing queue
@@ -833,12 +1033,15 @@ export class AttributionTracker extends EventEmitter {
       throw error;
   // Journey Management
   async getJourney(journeyId: string): Promise<CustomerJourney | null> {
+
     return this.journeys.get(journeyId) || null;
   async getUserJourneys(userId: string): Promise<CustomerJourney> {
+
     return Array.from(this.journeys.values()).filter()
       journey => journey.userId === userId
     );
   async mergeJourneys(sourceJourneyId: string, targetJourneyId: string): Promise<CustomerJourney> {
+
     const sourceJourney = this.journeys.get(sourceJourneyId);
     const targetJourney = this.journeys.get(targetJourneyId);
     if (!sourceJourney || !targetJourney) {
@@ -854,6 +1057,7 @@ export class AttributionTracker extends EventEmitter {
   async calculateAttribution(conversionId: string)
     modelId?: string
   ): Promise<ConversionAttribution> {
+
     const conversion = await this.findConversion(conversionId);
     if (!conversion) {
       throw new Error('Conversion not found');
@@ -874,6 +1078,7 @@ export class AttributionTracker extends EventEmitter {
   metrics?: string;
 } = {}
   ): Promise<AttributionReport> {
+
   const journeys = this.getJourneysInRange(timeRange);
   const conversions = this.getConversionsInRange(timeRange);
   return this.generateAttributionReport(journeys, conversions, options);
@@ -890,6 +1095,7 @@ export class AttributionTracker extends EventEmitter {
     this.emit('modelAdded', { model: fullModel });
     return modelId;
   async updateAttributionModel(modelId: string, updates: Partial<AttributionModel>): Promise<void> {
+
   const model = this.models.get(modelId);
   if (!model) {
   throw new Error('Model not found');
@@ -901,11 +1107,13 @@ export class AttributionTracker extends EventEmitter {
     this.models.set(modelId, updatedModel);
     this.emit('modelUpdated', { modelId, model: updatedModel });
   async removeAttributionModel(modelId: string): Promise<void> {
+
     if (!this.models.delete(modelId)) {
       throw new Error('Model not found');
     this.emit('modelRemoved', { modelId });
   // Channel Management
   async addChannel(channel: Omit<ChannelConfig, 'id'>): Promise<string> {
+
   const channelId = this.generateChannelId();
   const fullChannel: ChannelConfig = {,
   id: channelId,
@@ -915,6 +1123,7 @@ export class AttributionTracker extends EventEmitter {
     this.emit('channelAdded', { channel: fullChannel });
     return channelId;
   async updateChannel(channelId: string, updates: Partial<ChannelConfig>): Promise<void> {
+
     const channel = this.channels.get(channelId);
     if (!channel) {
       throw new Error('Channel not found');
@@ -923,6 +1132,7 @@ export class AttributionTracker extends EventEmitter {
     this.emit('channelUpdated', { channelId, channel: updatedChannel });
   // Cross-Device Tracking
   async linkDevices(deviceIds: string, userId?: string): Promise<void> {
+
     if (!this.config.attribution.crossDevice.enabled) {
       throw new Error('Cross-device tracking is disabled');
     // Find journeys for each device
@@ -937,6 +1147,7 @@ export class AttributionTracker extends EventEmitter {
     this.emit('devicesLinked', { deviceIds, userId });
   // Privacy and Compliance
   async deleteUserData(userId: string): Promise<void> {
+
     // Find all journeys for the user
     const userJourneys = Array.from(this.journeys.values()).filter(;);
       journey => journey.userId === userId
@@ -946,6 +1157,7 @@ export class AttributionTracker extends EventEmitter {
       this.journeys.delete(journey.id);
     this.emit('userDataDeleted', { userId, journeyCount: userJourneys.length });
   async anonymizeUserData(userId: string): Promise<void> {
+
     // Find all journeys for the user
     const userJourneys = Array.from(this.journeys.values()).filter(;);
       journey => journey.userId === userId
@@ -957,6 +1169,7 @@ export class AttributionTracker extends EventEmitter {
       journey.updated = new Date();
     this.emit('userDataAnonymized', { userId, journeyCount: userJourneys.length });
   async exportUserData(userId: string): Promise<any> {
+
   const userJourneys = Array.from(this.journeys.values()).filter(;);
   journey => journey.userId === userId
   );
@@ -974,13 +1187,16 @@ export class AttributionTracker extends EventEmitter {
     return { ...this.config };
   // System Management
   async flush(): Promise<void> {
+
     await this.processQueues();
   async stop(): Promise<void> {
+
     this.stopProcessing();
     await this.flush();
     this.cleanup();
   // Analytics and Insights
   async getChannelPerformance(timeRange: { start: Date; end: Date }): Promise<ChannelPerformanceReport> {
+
     const journeys = this.getJourneysInRange(timeRange);
     return this.calculateChannelPerformance(journeys);
   async getConversionPaths(timeRange: { start: Date; end: Date })
@@ -990,9 +1206,11 @@ export class AttributionTracker extends EventEmitter {
   channels?: string;
 } = {}
   ): Promise<ConversionPath> {
+
     const journeys = this.getJourneysInRange(timeRange);
     return this.analyzeConversionPaths(journeys, options);
   async getAttributionInsights(timeRange: { start: Date; end: Date }): Promise<AttributionInsights> {
+
     const journeys = this.getJourneysInRange(timeRange);
     const conversions = this.getConversionsInRange(timeRange);
     return this.generateInsights(journeys, conversions);
@@ -1190,6 +1408,7 @@ export class AttributionTracker extends EventEmitter {
       clearInterval(this.processingTimer);
       this.processingTimer = undefined;
   private async processQueues(): Promise<void> {
+
     // Process touchpoint queue
     while (this.touchPointQueue.length > 0) {
       const touchPoint = this.touchPointQueue.shift()!;
@@ -1256,6 +1475,7 @@ export class AttributionTracker extends EventEmitter {
       data: data.data || { custom: {} }
     };
   private async processTouchPoint(touchPoint: TouchPoint): Promise<void> {
+
     // Find or create journey
     let journey = this.journeys.get(touchPoint.journeyId);
     if (!journey) {
@@ -1268,6 +1488,7 @@ export class AttributionTracker extends EventEmitter {
     this.updateJourneyTimeline(journey, touchPoint);
     this.emit('touchPointProcessed', { touchPoint, journey });
   private async processConversion(conversion: Conversion): Promise<void> {
+
     // Find journey
     const journey = this.journeys.get(conversion.journeyId);
     if (!journey) {
@@ -1674,6 +1895,7 @@ export class AttributionTracker extends EventEmitter {
           conversions.push(conversion);
     return conversions;
   private async findConversion(conversionId: string): Promise<Conversion | null> {
+
     for (const journey of this.journeys.values()) {
       const conversion = journey.conversions.find(c => c.id === conversionId);
       if (conversion) {
@@ -1696,6 +1918,7 @@ export class AttributionTracker extends EventEmitter {
     target.updated = new Date();
     return target;
   private async mergeDeviceJourneys(deviceJourneys: Map<string, CustomerJourney>, userId?: string): Promise<void> {
+
     // Implementation for cross-device journey merging
   private generateJourneyId(): string {
     return `journey_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
@@ -1748,6 +1971,7 @@ export class AttributionTracker extends EventEmitter {
       generatedAt: new Date();
   };
   private async calculateChannelPerformance(journeys: CustomerJourney): Promise<ChannelPerformanceReport> {
+
   return {
   channels: [],
   summary: {
@@ -1761,6 +1985,7 @@ export class AttributionTracker extends EventEmitter {
       generatedAt: new Date();
   };
   private async analyzeConversionPaths(journeys: CustomerJourney, options: any): Promise<ConversionPath> {
+
   return [];
   private async generateInsights(journeys: CustomerJourney, conversions: Conversion): Promise<AttributionInsights> {,
   return {
@@ -1774,8 +1999,10 @@ export class AttributionTracker extends EventEmitter {
 
 // Supporting interfaces for reporting
 
+}
 export interface AttributionReport {
   id: string;
+}
   timeRange: { start: Date; end: Date };
   summary: {
   totalJourneys: number;
@@ -1790,6 +2017,7 @@ export interface AttributionReport {
   insights: any;
   generatedAt: Date;
 }
+}
 export interface ChannelPerformanceReport {
   channels: any;
   summary: {
@@ -1798,9 +2026,11 @@ export interface ChannelPerformanceReport {
   totalConversions: number;
   averageCPA: number;
   averageROAS: number;
+}
 };
   timeRange: { start: Date; end: Date };
   generatedAt: Date;
+}
 }
 export interface ConversionPath {
   id: string;
@@ -1811,6 +2041,8 @@ export interface ConversionPath {
   averageValue: number;
   frequency: number;
 }
+}
+}
 export interface AttributionInsights {
   trends: any;
   anomalies: any;
@@ -1818,6 +2050,7 @@ export interface AttributionInsights {
   recommendations: any;
   confidence: number;
   generatedAt: Date;
+}
 }
 export default {
   AttributionTracker

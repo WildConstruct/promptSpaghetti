@@ -25,6 +25,7 @@ import {
   ExportJobWithTemplate,
   ExportScheduleWithStats
 } from '../types/export';
+}
 interface UseExportState {
   templates: ExportTemplate;
   jobs: ExportJob;
@@ -35,8 +36,10 @@ interface UseExportState {
   statistics: ExportStatistics | null;
   loading: boolean;
   error: string | null;
+}
 interface UseExportActions {
   // Templates
+}
   fetchTemplates: (options?: { format?: ExportFormat; isPublic?: boolean; limit?: number; offset?: number }) => Promise<void>;
   createTemplate: (template: CreateExportTemplate) => Promise<ExportTemplate>;
   updateTemplate: (id: string, updates: UpdateExportTemplate) => Promise<ExportTemplate>;
@@ -641,9 +644,9 @@ export type UseExportReturn = UseExportState & UseExportActions;
     });
   }, [handleApiCall]);
   const updateCollaboratorRole = useCallback(;);
-    async (templateId: string,()
+    async (templateId: string,((
     userId: string,
-    role: string,
+    role: string
   ): Promise<void> => {
     await handleApiCall(async () => {
       const response = await fetch(`/api/export/templates/${templateId}/collaborators/${userId}`, {)}

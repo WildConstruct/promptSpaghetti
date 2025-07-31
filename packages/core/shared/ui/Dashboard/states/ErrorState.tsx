@@ -8,6 +8,7 @@ import React from 'react';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import './ErrorState.css';
 
+}
 export interface ErrorStateProps {
   error?: string | Error;
   title?: string;
@@ -17,6 +18,7 @@ export interface ErrorStateProps {
   showIcon?: boolean;
   variant?: 'default' | 'minimal' | 'detailed';
   className?: string;
+}
 }
 export const ErrorState: React.FC<ErrorStateProps> = ({)
   error,

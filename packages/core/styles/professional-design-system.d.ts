@@ -6,6 +6,7 @@
  * shadows, and layout tokens for VFX industry standards.
  */
 
+}
 export interface ProfessionalColorPalette {
     background: {
         primary: string;
@@ -13,6 +14,7 @@ export interface ProfessionalColorPalette {
         tertiary: string;
         elevated: string;
         inverse: string;
+}
     };
     text: {
         primary: string;
@@ -47,11 +49,13 @@ export interface ProfessionalColorPalette {
         hover: string;
     };
 
+}
 export interface ProfessionalTypography {
     fontFamilies: {
         primary: string;
         mono: string;
         heading: string;
+}
     };
     fontSizes: {
         xs: string;
@@ -79,6 +83,7 @@ export interface ProfessionalTypography {
         wide: string;
     };
 
+}
 export interface ProfessionalShadows {
     elevation: {
         none: string;
@@ -87,6 +92,7 @@ export interface ProfessionalShadows {
         lg: string;
         xl: string;
         '2xl': string;
+}
     };
     node: {
         default: string;
@@ -101,6 +107,7 @@ export interface ProfessionalShadows {
         accent: string;
     };
 
+}
 export interface ProfessionalSpacing {
     px: string;
     0.5: string;
@@ -118,6 +125,7 @@ export interface ProfessionalSpacing {
     24: string;
     32: string;
 
+}
 export interface ProfessionalBorderRadius {
     none: string;
     sm: string;
@@ -133,6 +141,7 @@ export declare const professionalShadows: ProfessionalShadows;
 export declare const professionalSpacing: ProfessionalSpacing;
 export declare const professionalBorderRadius: ProfessionalBorderRadius;
 
+}
 export interface ProfessionalDesignSystem {
     colors: ProfessionalColorPalette;
     typography: ProfessionalTypography;
@@ -178,5 +187,6 @@ export declare const generateCSSCustomProperties: (colors?: ProfessionalColorPal
     '--radius-sm': string;
     '--radius-md': string;
     '--radius-lg': string;
+}
 };
 //# sourceMappingURL=professional-design-system.d.ts.map

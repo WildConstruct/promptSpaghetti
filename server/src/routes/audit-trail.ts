@@ -22,12 +22,14 @@ import { z } from 'zod';
 
 // Internal interfaces for analytics
 }
+}
 interface UserRiskData {
   userId: string;
   totalRisk: number;
   accessCount: number;
   highRiskCount: number;
   avgRisk?: number;
+}
 }
 }
 
@@ -70,6 +72,7 @@ const BulkAuditSchema = z.object({
   }
 });
 
+}
 }
 interface AuthenticatedRequest extends FastifyRequest {
   user: {

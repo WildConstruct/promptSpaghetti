@@ -111,6 +111,7 @@ export type EventFilter = z.infer<typeof EventFilterSchema>;
 
 // Subscriber Interface
 }
+}
 export interface EventSubscriber {
   id: string;
   name: string;
@@ -122,10 +123,12 @@ export interface EventSubscriber {
     maxRetries: number;
     backoffMs: number;
 }
+}
   };
 }
 
 // Event Bus Configuration
+}
 }
 export interface EventBusConfig {
   maxEventHistory: number;
@@ -136,8 +139,10 @@ export interface EventBusConfig {
   metricsEnabled: boolean;
 }
 }
+}
 
 // Event Bus Metrics
+}
 }
 export interface EventBusMetrics {
   eventsPublished: number;
@@ -147,6 +152,7 @@ export interface EventBusMetrics {
   averageProcessingTime: number;
   queueDepth: number;
   lastEventTime: number;
+}
 }
 }
 

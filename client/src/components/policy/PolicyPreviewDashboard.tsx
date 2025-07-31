@@ -57,6 +57,7 @@ import {
   Activity,
   GitBranch
 } from 'lucide-react';
+}
 interface PolicyPreview {
   previewId: string;,
   policyId: string;
@@ -139,6 +140,7 @@ interface PolicyPreview {
   const response = await fetch('/api/policy-preview/previews');
   const data = await response.json();
   setPreviews(data.previews || []);
+}
 } catch (error) {
   console.error('Failed to fetch previews:', error);
 } finally {

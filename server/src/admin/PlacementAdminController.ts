@@ -32,12 +32,14 @@ import {
 } from '../../../packages/core/types/PlacementTypes';
 
 }
+}
 export interface PlacementAdminConfig {
   maxSlotsPerArea: number;
   maxPlacementsPerSlot: number;
   previewCacheTTL: number;
   bulkOperationLimit: number;
   analyticsRetentionDays: number;
+}
 }
 }
 

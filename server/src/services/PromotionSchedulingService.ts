@@ -29,6 +29,7 @@ export type RotationPattern =
 
 // Core interfaces
 }
+}
 export interface PromotionSlot {
   id: string;
   name: string;
@@ -39,6 +40,7 @@ export interface PromotionSlot {
   priority: number;
   metadata: {
 }
+}
     dimensions?: { width: number; height: number };
     position?: string;
     styling?: Record<string, any>;
@@ -48,6 +50,7 @@ export interface PromotionSlot {
   updated_at: Date;
 }
 
+}
 }
 export interface PromotionSchedule {
   id: string;
@@ -86,7 +89,9 @@ export interface PromotionSchedule {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ContentCriteria {
   // Quality filters
@@ -125,7 +130,9 @@ export interface ContentCriteria {
   diversification_rules?: DiversificationRule[];
 }
 }
+}
 
+}
 }
 export interface DiversificationRule {
   attribute: string; // 'category', 'creator', 'content_type'
@@ -133,7 +140,9 @@ export interface DiversificationRule {
   enforce_uniqueness: boolean;
 }
 }
+}
 
+}
 }
 export interface RotationConfig {
   // Fixed duration rotation
@@ -156,7 +165,9 @@ export interface RotationConfig {
   cooldown_period?: number; // hours before content can be promoted again
 }
 }
+}
 
+}
 }
 export interface WeightCriteria {
   performance_weight: number; // 0-1
@@ -166,7 +177,9 @@ export interface WeightCriteria {
   custom_weights?: Record<string, number>;
 }
 }
+}
 
+}
 }
 export interface TargetMetrics {
   target_impressions?: number;
@@ -178,7 +191,9 @@ export interface TargetMetrics {
   min_engagement_time?: number; // seconds
 }
 }
+}
 
+}
 }
 export interface ActualMetrics {
   impressions: number;
@@ -192,7 +207,9 @@ export interface ActualMetrics {
   last_updated: Date;
 }
 }
+}
 
+}
 }
 export interface ABTestConfig {
   test_name: string;
@@ -205,7 +222,9 @@ export interface ABTestConfig {
   early_stopping_enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface ABTestVariant {
   id: string;
@@ -215,13 +234,16 @@ export interface ABTestVariant {
   target_metrics?: Partial<TargetMetrics>;
 }
 }
+}
 
+}
 }
 export interface PromotionPerformanceReport {
   promotion_id: string;
   time_period: {
     start: Date;
     end: Date;
+}
 }
   };
   overall_performance: ActualMetrics;
@@ -233,6 +255,7 @@ export interface PromotionPerformanceReport {
 }
 
 }
+}
 export interface ContentPerformanceMetrics {
   content_id: string;
   content_title: string;
@@ -242,7 +265,9 @@ export interface ContentPerformanceMetrics {
   rotation_efficiency: number;
 }
 }
+}
 
+}
 }
 export interface SlotPerformanceMetrics {
   slot_id: string;
@@ -254,7 +279,9 @@ export interface SlotPerformanceMetrics {
   utilization_rate: number; // Percentage of time slot was active
 }
 }
+}
 
+}
 }
 export interface ComparisonMetrics {
   vs_previous_promotion?: MetricComparison;
@@ -262,7 +289,9 @@ export interface ComparisonMetrics {
   vs_target?: MetricComparison;
 }
 }
+}
 
+}
 }
 export interface MetricComparison {
   metric_name: string;
@@ -272,7 +301,9 @@ export interface MetricComparison {
   is_improvement: boolean;
 }
 }
+}
 
+}
 }
 export interface PerformanceInsight {
   type: 'positive' | 'negative' | 'neutral';
@@ -283,7 +314,9 @@ export interface PerformanceInsight {
   supporting_data: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface PromotionRecommendation {
   type: 'optimization' | 'content_selection' | 'scheduling' | 'rotation' | 'budget';
@@ -293,6 +326,7 @@ export interface PromotionRecommendation {
   effort_level: 'low' | 'medium' | 'high';
   priority_score: number; // 0-100
   implementation_steps: string[];
+}
 }
 }
 

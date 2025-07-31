@@ -27,6 +27,7 @@ import {
 // =============================================================================
 
 }
+}
 export interface ReviewProcessTemplate {
   id: string;
   name: string;
@@ -65,7 +66,9 @@ export interface ReviewProcessTemplate {
   active: boolean;
 }
 }
+}
 
+}
 }
 export interface ReviewStage {
   id: string;
@@ -95,7 +98,9 @@ export interface ReviewStage {
   onEscalate?: StageAction[];
 }
 }
+}
 
+}
 }
 export interface StageAction {
   type: 'assign_reviewer' | 'send_notification' | 'update_metadata' | 'create_task' | 'call_webhook';
@@ -103,7 +108,9 @@ export interface StageAction {
   condition?: string;
 }
 }
+}
 
+}
 }
 export interface EscalationThreshold {
   condition: string; // e.g., "time_elapsed > 24h" or "decision_confidence < 60"
@@ -111,14 +118,18 @@ export interface EscalationThreshold {
   action: EscalationAction;
 }
 }
+}
 
+}
 }
 export interface EscalationAction {
   type: 'assign_senior_reviewer' | 'require_consensus' | 'notify_admin' | 'auto_approve' | 'auto_reject';
   config: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface EscalationRule {
   id: string;
@@ -128,7 +139,9 @@ export interface EscalationRule {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface AutoApprovalRule {
   id: string;
@@ -138,7 +151,9 @@ export interface AutoApprovalRule {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface NotificationSettings {
   email: boolean;
@@ -157,11 +172,13 @@ export interface NotificationSettings {
   stakeholders: string[];
 }
 }
+}
 
 // =============================================================================
 // Review Process State Management
 // =============================================================================
 
+}
 }
 export interface ReviewProcess {
   id: string;
@@ -194,6 +211,7 @@ export interface ReviewProcess {
   created_by: string;
 }
 }
+}
 
 export type ReviewProcessStatus = 
   | 'pending'
@@ -206,6 +224,7 @@ export type ReviewProcessStatus =
   | 'expired'
   | 'cancelled';
 
+}
 }
 export interface ReviewProcessResult {
   reviewId: string;
@@ -228,6 +247,7 @@ export interface ReviewProcessResult {
   summary: string;
   recommendations: string[];
   completed_at: Date;
+}
 }
 }
 

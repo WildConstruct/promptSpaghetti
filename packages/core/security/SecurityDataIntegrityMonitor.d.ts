@@ -8,6 +8,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface DataIntegrityCheck {
     id: string;
     name: string;
@@ -18,6 +19,7 @@ export interface DataIntegrityCheck {
         location: string;
         scope: 'full' | 'incremental' | 'sample';
         filters?: Record<string, any>;
+}
     };
     parameters: {
         hashAlgorithm?: 'sha256' | 'sha512' | 'md5';
@@ -57,6 +59,7 @@ export interface DataIntegrityCheck {
     lastUpdated: number;
     enabled: boolean;
 
+}
 export interface AutoRemediationAction {
     id: string;
     name: string;
@@ -69,6 +72,7 @@ export interface AutoRemediationAction {
         quarantineLocation?: string;
         lockDuration?: number;
         keyRotationScope?: string[];
+}
     };
     safetyChecks: {
         requiresConfirmation: boolean;
@@ -84,6 +88,7 @@ export interface AutoRemediationAction {
         cooldownPeriod: number;
     };
 
+}
 export interface IntegrityCheckResult {
     checkId: string;
     executionId: string;
@@ -97,6 +102,7 @@ export interface IntegrityCheckResult {
         recordsFailed: number;
         recordsSkipped: number;
         errorRate: number;
+}
     };
     findings: IntegrityFinding[];
     performance: {
@@ -117,6 +123,7 @@ export interface IntegrityCheckResult {
         correlationId?: string;
     };
 
+}
 export interface IntegrityFinding {
     id: string;
     severity: 'info' | 'low' | 'medium' | 'high' | 'critical';
@@ -128,6 +135,7 @@ export interface IntegrityFinding {
         recordIds: string[];
         fields: string[];
         estimatedImpact: 'low' | 'medium' | 'high' | 'critical'
+}
   };
     evidence: {
         expectedValue?: any;
@@ -161,6 +169,7 @@ export interface IntegrityFinding {
     lastSeen: number;
     occurrenceCount: number;
 
+}
 export interface RemediationResult {
     actionId: string;
     actionName: string;
@@ -173,6 +182,7 @@ export interface RemediationResult {
         recordsFailed: number;
         backupCreated?: string;
         rollbackAvailable: boolean;
+}
     };
     errors?: Array<{
         recordId: string;
@@ -185,6 +195,7 @@ export interface RemediationResult {
         residualIssues: number;
     };
 
+}
 export interface DataIntegrityMetrics {
     overallIntegrityScore: number;
     dataHealthTrend: 'improving' | 'stable' | 'degrading';
@@ -199,6 +210,7 @@ export interface DataIntegrityMetrics {
         newFindings: number;
         resolvedFindings: number;
         recurringFindings: number;
+}
     };
     remediationSuccessRate: number;
     averageRemediationTime: number;
@@ -219,6 +231,7 @@ export interface DataIntegrityMetrics {
         end: number;
     };
 
+}
 export interface DataIntegrityConfig {
     enabled: boolean;
     defaultHashAlgorithm: 'sha256' | 'sha512';
@@ -230,6 +243,7 @@ export interface DataIntegrityConfig {
         logRetentionDays: number;
         compressionEnabled: boolean;
         encryptionEnabled: boolean;
+}
     };
     performance: {
         maxResourceUsage: {
@@ -360,7 +374,7 @@ export declare class SecurityDataIntegrityMonitor extends EventEmitter {
             totalFindings: number;
             criticalFindings: number;
         };
-        checksExecuted: Array<{,
+        checksExecuted: Array<{
             checkId: string;
             checkName: string;
             executionCount: number;
@@ -371,7 +385,7 @@ export declare class SecurityDataIntegrityMonitor extends EventEmitter {
         findingsSummary: {
             bySeverity: Record<IntegrityFinding['severity'], number>;
             byCategory: Record<IntegrityFinding['category'], number>;
-            topAffectedDataTypes: Array<{,
+            topAffectedDataTypes: Array<{
                 dataType: string;
                 count: number;
             }>;
@@ -387,7 +401,7 @@ export declare class SecurityDataIntegrityMonitor extends EventEmitter {
             successfulRemediations: number;
             failedRemediations: number;
             averageRemediationTime: number;
-            topRemediationActions: Array<{,
+            topRemediationActions: Array<{
                 action: string;
                 count: number;
                 successRate: number;

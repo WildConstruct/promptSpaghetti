@@ -10,6 +10,7 @@ import { RedisService } from '../auth/database/RedisService';
 import { SessionLimitConfig } from './SessionLimitManager';
 
 }
+}
 export interface LimitCheckResult {
   allowed: boolean;
   reason?: string;
@@ -17,6 +18,7 @@ export interface LimitCheckResult {
   severity?: 'low' | 'medium' | 'high' | 'critical';
   type?: string;
   details?: Record<string, any>;
+}
 }
 }
 

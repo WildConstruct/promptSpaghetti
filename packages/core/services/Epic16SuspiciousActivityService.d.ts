@@ -7,6 +7,7 @@
  */
 import { EventEmitter } from 'events';
 
+}
 export interface SuspiciousActivity {
     id: string;
     type: ActivityType;
@@ -99,6 +100,7 @@ export declare enum DetectionMethod {
     PATTERN_MATCHING = "pattern_matching",
     HONEYPOT = "honeypot"
 
+}
 export interface ActivityEvidence {
     type: EvidenceType;
     description: string;
@@ -117,6 +119,7 @@ export declare enum EvidenceType {
     SCREEN_RECORDING = "screen_recording",
     METADATA = "metadata"
 
+}
 export interface DetectionPattern {
     id: string;
     name: string;
@@ -126,6 +129,7 @@ export interface DetectionPattern {
     threshold: number;
     observedValue: number;
 
+}
 export interface ActivityResolution {
     action: ResolutionAction;
     reason: string;
@@ -144,6 +148,7 @@ export declare enum ResolutionAction {
     PAYMENT_BLOCKED = "payment_blocked",
     ESCALATED_TO_AUTHORITIES = "escalated_to_authorities"
 
+}
 export interface ResponseAction {
     type: ResponseType;
     status: ActionStatus;
@@ -170,6 +175,7 @@ export declare enum ActionStatus {
     FAILED = "failed",
     REVERSED = "reversed"
 
+}
 export interface GeoLocation {
     country: string;
     region: string;
@@ -180,6 +186,7 @@ export interface GeoLocation {
     isp?: string;
     organization?: string;
 
+}
 export interface DeviceFingerprint {
     userAgent: string;
     screenResolution: string;
@@ -195,6 +202,7 @@ export interface DeviceFingerprint {
     hardwareConcurrency: number;
     deviceMemory?: number;
 
+}
 export interface DetectionRule {
     id: string;
     name: string;
@@ -225,6 +233,7 @@ export declare enum RuleCategory {
     MARKETPLACE_FRAUD = "marketplace_fraud",
     COMMUNITY_ABUSE = "community_abuse"
 
+}
 export interface RuleCondition {
     field: string;
     operator: ConditionOperator;
@@ -245,6 +254,7 @@ export declare enum ConditionOperator {
     EXISTS = "exists",
     NOT_EXISTS = "not_exists"
 
+}
 export interface AggregationRule {
     type: AggregationType;
     field?: string;
@@ -259,11 +269,13 @@ export declare enum AggregationType {
     RATE = "rate",
     STANDARD_DEVIATION = "standard_deviation"
 
+}
 export interface TimeWindow {
     duration: number;
     sliding: boolean;
     bucketSize?: number;
 
+}
 export interface RuleThreshold {
     value: number;
     operator: ConditionOperator;
@@ -271,18 +283,21 @@ export interface RuleThreshold {
     baseline?: number;
     adaptation?: AdaptationConfig;
 
+}
 export interface AdaptationConfig {
     enabled: boolean;
     learningPeriod: number;
     adaptationRate: number;
     minimumSamples: number;
 
+}
 export interface RuleAction {
     type: ResponseType;
     parameters: Record<string, any>;
     delay?: number;
     condition?: string;
 
+}
 export interface RuleAnalytics {
     totalTriggers: number;
     truePositives: number;
@@ -293,6 +308,7 @@ export interface RuleAnalytics {
     averageProcessingTime: number;
     lastTriggered?: Date;
 
+}
 export interface UserBehaviorProfile {
     userId: string;
     createdAt: Date;
@@ -309,6 +325,7 @@ export interface UserBehaviorProfile {
     anomalyBaseline: AnomalyBaseline;
     recentAnomalies: BehaviorAnomaly[];
 
+}
 export interface LoginPattern {
     averageSessionDuration: number;
     commonLoginTimes: TimeRange[];
@@ -317,11 +334,13 @@ export interface LoginPattern {
     deviceConsistency: number;
     ipConsistency: number;
 
+}
 export interface TimeRange {
     start: number;
     end: number;
     frequency: number;
 
+}
 export interface LocationFrequency {
     country: string;
     region: string;
@@ -329,18 +348,21 @@ export interface LocationFrequency {
     frequency: number;
     lastSeen: Date;
 
+}
 export interface DevicePattern {
     fingerprint: DeviceFingerprint;
     frequency: number;
     lastSeen: Date;
     trusted: boolean;
 
+}
 export interface LocationPattern {
     location: GeoLocation;
     frequency: number;
     lastSeen: Date;
     velocity: number;
 
+}
 export interface ActivityPattern {
     pageViewsPerSession: number;
     averageTimeOnSite: number;
@@ -349,27 +371,32 @@ export interface ActivityPattern {
     searchPatterns: SearchPattern[];
     uploadPatterns: UploadPattern;
 
+}
 export interface PageFrequency {
     page: string;
     frequency: number;
     averageTime: number;
 
+}
 export interface ClickPattern {
     elementType: string;
     frequency: number;
     timing: number;
 
+}
 export interface SearchPattern {
     queries: string[];
     frequency: number;
     categories: string[];
 
+}
 export interface UploadPattern {
     frequency: number;
     averageFileSize: number;
     commonFileTypes: string[];
     uploadTimes: TimeRange[];
 
+}
 export interface ContentPattern {
     postingFrequency: number;
     averageContentLength: number;
@@ -377,16 +404,19 @@ export interface ContentPattern {
     sentimentDistribution: SentimentDistribution;
     languagePatterns: LanguagePattern[];
 
+}
 export interface SentimentDistribution {
     positive: number;
     neutral: number;
     negative: number;
 
+}
 export interface LanguagePattern {
     language: string;
     frequency: number;
     complexity: number;
 
+}
 export interface TransactionPattern {
     averageTransactionAmount: number;
     transactionFrequency: number;
@@ -395,6 +425,7 @@ export interface TransactionPattern {
     refundRate: number;
     chargebackRate: number;
 
+}
 export interface SocialPattern {
     connectionGrowthRate: number;
     messagingFrequency: number;
@@ -402,12 +433,14 @@ export interface SocialPattern {
     influenceScore: number;
     reciprocityRate: number;
 
+}
 export interface RiskFactor {
     factor: string;
     weight: number;
     description: string;
     evidence: string[];
 
+}
 export interface AnomalyBaseline {
     loginFrequency: StatisticalBaseline;
     sessionDuration: StatisticalBaseline;
@@ -415,6 +448,7 @@ export interface AnomalyBaseline {
     contentPosting: StatisticalBaseline;
     apiUsage: StatisticalBaseline;
 
+}
 export interface StatisticalBaseline {
     mean: number;
     standardDeviation: number;
@@ -423,6 +457,7 @@ export interface StatisticalBaseline {
     percentiles: Record<number, number>;
     lastCalculated: Date;
 
+}
 export interface BehaviorAnomaly {
     type: string;
     timestamp: Date;
@@ -431,6 +466,7 @@ export interface BehaviorAnomaly {
     deviationScore: number;
     context: Record<string, any>;
 
+}
 export interface ThreatIntelligence {
     id: string;
     type: ThreatType;
@@ -461,6 +497,7 @@ export declare enum ThreatType {
     CAMPAIGN = "campaign",
     THREAT_ACTOR = "threat_actor"
 
+}
 export interface ThreatIndicator {
     type: IndicatorType;
     value: string;
@@ -479,6 +516,7 @@ export declare enum IndicatorType {
     MUTEX = "mutex",
     YARA_RULE = "yara_rule"
 
+}
 export interface ThreatImpact {
     confidentiality: ImpactLevel;
     integrity: ImpactLevel;
@@ -493,6 +531,7 @@ export declare enum ImpactLevel {
     HIGH = "high",
     CRITICAL = "critical"
 
+}
 export interface Mitigation {
     type: MitigationType;
     description: string;
@@ -552,6 +591,7 @@ export declare class Epic16SuspiciousActivityService extends EventEmitter {
     getSecurityMetrics(timeRange: {)
         start: Date;
         end: Date;
+}
     }): Promise<SecurityMetrics>;
     private evaluateRule;
     private evaluateCondition;
@@ -588,6 +628,7 @@ export declare class Epic16SuspiciousActivityService extends EventEmitter {
     private calculateFalsePositiveRate;
     private calculateTrends;
 
+}
 export interface SuspiciousActivityEvent {
     eventType: string;
     userId?: string;
@@ -599,16 +640,18 @@ export interface SuspiciousActivityEvent {
     deviceFingerprint?: DeviceFingerprint;
     metadata: Record<string, any>;
 
+}
 export interface SecurityMetrics {
     totalActivities: number;
     severityDistribution: Record<SeverityLevel, number>;
     typeDistribution: Record<ActivityType, number>;
     statusDistribution: Record<ActivityStatus, number>;
-    topAttackers: Array<{,
+    topAttackers: Array<{
         ip: string;
         count: number;
+}
     }>;
-    topTargets: Array<{,
+    topTargets: Array<{
         userId: string;
         count: number;
     }>;

@@ -7,6 +7,7 @@ import { AuditService } from '../auth/services/AuditService';
 import crypto from 'crypto';
 
 }
+}
 export interface DeviceFingerprint {
   fingerprint: string;
   components: {
@@ -30,6 +31,7 @@ export interface DeviceFingerprint {
       localIP?: string;
       publicIP?: string;
 }
+}
     };
   };
   metadata: {
@@ -41,6 +43,7 @@ export interface DeviceFingerprint {
   };
 }
 
+}
 }
 export interface DeviceTrustProfile {
   deviceId: string;
@@ -54,6 +57,7 @@ export interface DeviceTrustProfile {
     country: string;
     city: string;
     timestamp: Date;
+}
 }
   }>;
   behaviorMetrics: {
@@ -71,6 +75,7 @@ export interface DeviceTrustProfile {
 }
 
 }
+}
 export interface DeviceFingerprintConfig {
   enabled: boolean;
   
@@ -83,6 +88,7 @@ export interface DeviceFingerprintConfig {
     collectPlugins: boolean;
     collectWebRTC: boolean;
     collectHardware: boolean;
+}
 }
   };
   

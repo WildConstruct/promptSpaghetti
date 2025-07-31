@@ -9,6 +9,7 @@ import { EventEmitter } from 'events';
 
 // Core suspicious activity interfaces
 
+}
 export interface SuspiciousActivity {
   id: string;
   type: ActivityType;
@@ -44,6 +45,7 @@ export interface SuspiciousActivity {
   geolocation?: GeoLocation;
   // Device fingerprint
   deviceFingerprint?: DeviceFingerprint;
+}
 }
 export enum ActivityType {
   // Authentication anomalies
@@ -102,6 +104,7 @@ export enum SeverityLevel {
       .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
   // Investigation and resolution
   async investigateActivity(activityId: string, investigatorId: string): Promise<void> {
+
   const activity = this.activities.get(activityId);
   if (!activity) throw new Error('Activity not found');
   activity.investigated = true;
@@ -109,8 +112,7 @@ export enum SeverityLevel {
   activity.investigatedAt = new Date();
   activity.status = ActivityStatus.INVESTIGATING;
   this.emit('activityInvestigated', activity);
-  async resolveActivity(()
-  activityId: string,
+  async resolveActivity((activityId: string,
   resolution: ActivityResolution): Promise<void> {,
   const activity = this.activities.get(activityId);
   if (!activity) throw new Error('Activity not found');
@@ -137,6 +139,7 @@ export enum SeverityLevel {
     this.emit('falsePositiveMarked', activity);
   // Rule management
   async createRule(ruleData: Omit<DetectionRule, 'id' | 'analytics'>): Promise<DetectionRule> {
+
     const rule: DetectionRule = {,
   id: `rule-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
 },
@@ -155,6 +158,7 @@ export enum SeverityLevel {
     this.emit('ruleCreated', rule);
     return rule;
   async updateRule(ruleId: string, updates: Partial<DetectionRule>): Promise<DetectionRule | null> {
+
     const rule = this.rules.get(ruleId);
     if (!rule) return null;
     const updatedRule = { ...rule, ...updates, lastUpdated: new Date() };
@@ -162,14 +166,17 @@ export enum SeverityLevel {
     this.emit('ruleUpdated', updatedRule);
     return updatedRule;
   async deleteRule(ruleId: string): Promise<boolean> {
+
     const deleted = this.rules.delete(ruleId);
     if (deleted) {
       this.emit('ruleDeleted', { ruleId });
     return deleted;
   // Behavioral analysis
   async getUserProfile(userId: string): Promise<UserBehaviorProfile | null> {
+
     return this.userProfiles.get(userId) || null;
   async detectBehavioralAnomalies(userId: string, event: SuspiciousActivityEvent): Promise<SuspiciousActivity> {
+
     const profile = this.userProfiles.get(userId);
     if (!profile) return [];
     const anomalies: SuspiciousActivity = [];
@@ -190,6 +197,7 @@ export enum SeverityLevel {
     return anomalies;
   // Threat intelligence
   async addThreatIntelligence(threat: Omit<ThreatIntelligence, 'id'>): Promise<ThreatIntelligence> {
+
     const threatData: ThreatIntelligence = {,
   id: `threat-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
 }
@@ -199,6 +207,7 @@ export enum SeverityLevel {
     this.emit('threatIntelligenceAdded', threatData);
     return threatData;
   async checkThreatIntelligence(event: SuspiciousActivityEvent): Promise<ThreatIntelligence> {
+
     const matches: ThreatIntelligence = [];
     for (const threat of this.threatIntelligence.values()) {
       if (this.matchesThreatIndicators(threat, event)) {
@@ -206,6 +215,7 @@ export enum SeverityLevel {
     return matches;
   // Analytics and reporting
   async getSecurityMetrics(timeRange: { start: Date; end: Date }): Promise<SecurityMetrics> {
+
   const activities = Array.from(this.activities.values());
   .filter(activity => )
   activity.timestamp >= timeRange.start && activity.timestamp <= timeRange.end
@@ -225,6 +235,7 @@ export enum SeverityLevel {
     return metrics;
   // Private helper methods
   private async evaluateRule(rule: DetectionRule, event: SuspiciousActivityEvent): Promise<SuspiciousActivity | null> {
+
     const startTime = Date.now();
     try {
       // Check if event matches rule conditions
@@ -360,6 +371,7 @@ export enum SeverityLevel {
   error: error instanceof Error ? error.message : 'Unknown error',
 });
   private async executeAction(action: RuleAction, activity: SuspiciousActivity): Promise<void> {
+
     switch (action.type) {
     case ResponseType.RATE_LIMIT:
       // Implement rate limiting
@@ -473,6 +485,7 @@ export enum SeverityLevel {
         this.processEventQueue();
     }, 1000);
   private async processEventQueue(): Promise<void> {
+
     this.processingQueue = true;
     try {
       while (this.eventQueue.length > 0) {
@@ -494,6 +507,7 @@ export enum SeverityLevel {
     return levels[a] - levels[b];
   // Additional helper methods would be implemented here...
   private async getRelatedEvents(event: SuspiciousActivityEvent, rule: DetectionRule): Promise<SuspiciousActivityEvent> {
+
     // Implementation for getting related events within time window
     return [];
   private evaluateAggregation(aggregation: AggregationRule, events: SuspiciousActivityEvent): boolean {
@@ -607,6 +621,7 @@ export enum SeverityLevel {
 
 // Supporting interfaces
 
+}
 export interface SuspiciousActivityEvent {
   eventType: string;
   userId?: string;
@@ -618,11 +633,14 @@ export interface SuspiciousActivityEvent {
   deviceFingerprint?: DeviceFingerprint;
   metadata: Record<string, any>;
 }
+}
+}
 export interface SecurityMetrics {
   totalActivities: number;
   severityDistribution: Record<SeverityLevel, number>;
   typeDistribution: Record<ActivityType, number>;
   statusDistribution: Record<ActivityStatus, number>;
+}
   topAttackers: Array<{ ip: string; count: number }>;
   topTargets: Array<{ userId: string; count: number }>;
   detectionEffectiveness: number;

@@ -49,6 +49,7 @@ import {
   ScheduleStatus,
   FeatureToggleSchedule
 } from '../../../server/src/database/scheduling-models';
+}
 interface RecurringSchedule extends FeatureToggleSchedule {
   nextOccurrences: Date;
   conflictCount: number;
@@ -57,6 +58,7 @@ interface RecurringSchedule extends FeatureToggleSchedule {
   averageExecutionTime: number;
   lastFailureReason?: string;
 };
+}
 interface ScheduleConflict {
   id: string;
   scheduleIds: string;
@@ -77,6 +79,7 @@ interface ScheduleConflict {
   type: 'weekly' as RecurrenceType,
   interval: 1,
   daysOfWeek: [1, 2, 3, 4, 5],
+}
 }
   {
   id: 'weekly-maintenance',

@@ -1,5 +1,6 @@
 import React from 'react';
 
+}
 interface Team {
     id: string;
     organizationId: string;
@@ -13,6 +14,7 @@ interface Team {
     path?: string[];
 
 
+}
 interface TeamManagerProps {
     organizationId: string;
     currentUser?: {
@@ -21,6 +23,7 @@ interface TeamManagerProps {
         email: string;
         role: string;
 
+}
     };
     onTeamChange?: (team: Team) => void;
     onMembershipUpdated?: (membership: {)

@@ -11,6 +11,7 @@ import {
   InteractionType,
   ActivationContext
 } from '../../services/Epic16InteractiveElementsService';
+}
 interface LiveChatWidgetProps {
   element: LiveChatElement;
   interactiveService: Epic16InteractiveElementsService;
@@ -51,6 +52,7 @@ interface LiveChatWidgetProps {
   isMinimized = false,
   onMinimize,
   onClose
+}
 }) => {
   // State management
   const [messages, setMessages] = useState<ChatMessage>([]);

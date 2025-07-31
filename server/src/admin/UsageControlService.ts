@@ -45,6 +45,7 @@ export enum UsageControlStatus {
 }
 
 }
+}
 export interface UsageLimit {
   limitId: string;
   name: string;
@@ -59,7 +60,9 @@ export interface UsageLimit {
   metadata: UsageLimitMetadata;
 }
 }
+}
 
+}
 }
 export interface UsageScope {
   global: boolean;
@@ -72,7 +75,9 @@ export interface UsageScope {
   customFilters?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface LimitConfiguration {
   burstAllowance: number;
@@ -85,7 +90,9 @@ export interface LimitConfiguration {
   customRules: CustomUsageRule[];
 }
 }
+}
 
+}
 }
 export interface AlertThreshold {
   percentage: number; // of limit
@@ -94,7 +101,9 @@ export interface AlertThreshold {
   cooldown: number; // milliseconds
 }
 }
+}
 
+}
 }
 export interface UsageExemption {
   exemptionId: string;
@@ -105,7 +114,9 @@ export interface UsageExemption {
   createdBy: string;
 }
 }
+}
 
+}
 }
 export interface CustomUsageRule {
   ruleId: string;
@@ -116,7 +127,9 @@ export interface CustomUsageRule {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface UsageLimitMetadata {
   createdBy: string;
@@ -128,7 +141,9 @@ export interface UsageLimitMetadata {
   auditTrail: string[];
 }
 }
+}
 
+}
 }
 export interface UsageRecord {
   recordId: string;
@@ -148,7 +163,9 @@ export interface UsageRecord {
   metadata: UsageRecordMetadata;
 }
 }
+}
 
+}
 }
 export interface LimitCheck {
   limitId: string;
@@ -161,7 +178,9 @@ export interface LimitCheck {
   reason?: string;
 }
 }
+}
 
+}
 }
 export interface UsageRecordMetadata {
   requestId: string;
@@ -171,12 +190,15 @@ export interface UsageRecordMetadata {
   labels: Record<string, string>;
 }
 }
+}
 
+}
 }
 export interface UsageAnalytics {
   timeRange: {
     start: Date;
     end: Date;
+}
 }
   };
   totalRequests: number;
@@ -193,6 +215,7 @@ export interface UsageAnalytics {
 }
 
 }
+}
 export interface EndpointUsage {
   endpoint: string;
   requestCount: number;
@@ -202,7 +225,9 @@ export interface EndpointUsage {
   uniqueUsers: number;
 }
 }
+}
 
+}
 }
 export interface UserUsage {
   userId: string;
@@ -214,7 +239,9 @@ export interface UserUsage {
   quotaUtilization: number;
 }
 }
+}
 
+}
 }
 export interface LimitViolation {
   violationId: string;
@@ -230,7 +257,9 @@ export interface LimitViolation {
   resolution?: string;
 }
 }
+}
 
+}
 }
 export interface UsageTrends {
   requestTrend: TrendData;
@@ -240,7 +269,9 @@ export interface UsageTrends {
   userActivityTrend: TrendData;
 }
 }
+}
 
+}
 }
 export interface TrendData {
   current: number;
@@ -251,14 +282,18 @@ export interface TrendData {
   dataPoints: DataPoint[];
 }
 }
+}
 
+}
 }
 export interface DataPoint {
   timestamp: Date;
   value: number;
 }
 }
+}
 
+}
 }
 export interface QuotaUtilization {
   limitId: string;
@@ -270,7 +305,9 @@ export interface QuotaUtilization {
   status: 'ok' | 'warning' | 'critical';
 }
 }
+}
 
+}
 }
 export interface UsageControlDecision {
   allowed: boolean;
@@ -283,7 +320,9 @@ export interface UsageControlDecision {
   warnings: string[];
 }
 }
+}
 
+}
 }
 export interface UsageSnapshot {
   timestamp: Date;
@@ -297,7 +336,9 @@ export interface UsageSnapshot {
   systemLoad: SystemLoadMetrics;
 }
 }
+}
 
+}
 }
 export interface ResourceConsumer {
   identifier: string;
@@ -308,7 +349,9 @@ export interface ResourceConsumer {
   quotaUsage: number;
 }
 }
+}
 
+}
 }
 export interface SystemLoadMetrics {
   cpuUsage: number;
@@ -316,6 +359,7 @@ export interface SystemLoadMetrics {
   networkUtilization: number;
   responseTimeP95: number;
   errorRate: number;
+}
 }
 }
 
@@ -1301,6 +1345,7 @@ export class UsageControlService {
 // ==========================================
 
 }
+}
 interface RateLimitState {
   requests: number;
   bandwidth: number;
@@ -1308,11 +1353,14 @@ interface RateLimitState {
   lastUpdated: number;
 }
 }
+}
 
+}
 }
 interface QuotaState {
   used: number;
   resetTime: number;
   lastUpdated: number;
+}
 }
 }

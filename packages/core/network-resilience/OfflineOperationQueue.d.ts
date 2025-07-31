@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
 
+}
 export interface QueuedOperation {
     id: string;
     type: 'graph_update' | 'presence_update' | 'cursor_update' | 'selection_update' | 'activity_update';
@@ -14,6 +15,7 @@ export interface QueuedOperation {
     maxRetries: number;
     expiresAt?: number;
 
+}
 export interface QueueMetrics {
     totalOperations: number;
     pendingOperations: number;
@@ -26,9 +28,11 @@ export interface QueueMetrics {
         high: number;
         medium: number;
         low: number;
+}
     };
     operationsByType: Map<string, number>;
 
+}
 export interface OfflineQueueConfig {
     maxQueueSize: number;
     maxRetries: number;
@@ -43,6 +47,7 @@ export interface OfflineQueueConfig {
         high: number;
         medium: number;
         low: number;
+}
     };
 
 export declare class OfflineOperationQueue extends EventEmitter {

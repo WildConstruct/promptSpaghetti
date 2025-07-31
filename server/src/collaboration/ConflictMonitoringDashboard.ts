@@ -18,6 +18,7 @@ import { Epic23WorkspaceDAO } from '../database/epic23-workspace-dao';
 // =============================================================================
 
 }
+}
 export interface ConflictMetrics {
   total_conflicts: number;
   resolved_conflicts: number;
@@ -31,7 +32,9 @@ export interface ConflictMetrics {
   last_updated: Date;
 }
 }
+}
 
+}
 }
 export interface ConflictPattern {
   pattern_id: string;
@@ -44,7 +47,9 @@ export interface ConflictPattern {
   suggested_mitigation: string[];
 }
 }
+}
 
+}
 }
 export interface ResolutionEffectiveness {
   strategy: ResolutionStrategy;
@@ -55,7 +60,9 @@ export interface ResolutionEffectiveness {
   common_failure_reasons: string[];
 }
 }
+}
 
+}
 }
 export interface WorkspaceConflictProfile {
   workspace_id: string;
@@ -69,7 +76,9 @@ export interface WorkspaceConflictProfile {
   recommendations: string[];
 }
 }
+}
 
+}
 }
 export interface RealTimeAlert {
   alert_id: string;
@@ -84,7 +93,9 @@ export interface RealTimeAlert {
   auto_resolve: boolean;
 }
 }
+}
 
+}
 }
 export interface DashboardState {
   metrics: ConflictMetrics;
@@ -100,6 +111,7 @@ export interface DashboardState {
     active_connections: number;
     queue_depth: number;
 }
+}
   };
   last_updated: Date;
 }
@@ -108,6 +120,7 @@ export interface DashboardState {
 // MONITORING CONFIGURATION
 // =============================================================================
 
+}
 }
 export interface MonitoringConfig {
   update_interval_ms: number;
@@ -118,6 +131,7 @@ export interface MonitoringConfig {
     response_time_threshold_ms: number;        // Max acceptable response time
     memory_usage_threshold: number;            // Memory usage percentage
     cpu_usage_threshold: number;               // CPU usage percentage
+}
 }
   };
   retention_periods: {
@@ -587,8 +601,7 @@ export class ConflictMonitoringDashboard extends EventEmitter {
         active_monitoring_sessions: 0,
         average_resolution_time_ms: 0,
         conflict_frequency_per_hour: 0,
-        last_updated: new Date()
-  }
+        last_updated: new Date(}
       patterns: [],
       effectiveness: [],
       workspace_profiles: [],

@@ -23,6 +23,7 @@ import {
 // Integration Types and Interfaces
 // ========================================
 
+}
 export interface IntegrationConfig {
   enableUnifiedProtection: boolean;
   rateLimitingPriority: number; // 1-100, higher means rate limiting takes precedence,
@@ -32,6 +33,7 @@ export interface IntegrationConfig {
   fallbackBehavior: FallbackBehavior;
   analyticsIntegration: boolean;
   crossSystemLearning: boolean;
+}
 }
 export enum IntegrationMode {
   SEQUENTIAL = 'sequential',           // Apply rate limiting first, then throttling
@@ -70,6 +72,7 @@ export enum IntegrationMode {
   decisionTrail: ProtectionDecision;
 };
 
+}
 export interface ProtectionDecision {
   system: 'rate_limiting' | 'throttling' | 'integration';
   timestamp: Date;
@@ -77,6 +80,8 @@ export interface ProtectionDecision {
   confidence: number; // 0-100,
   reasoning: string;
   parameters: Record<string, unknown>;
+}
+}
 }
 export interface UnifiedProtectionResult {
   action: 'allow' | 'block' | 'throttle' | 'delay';
@@ -88,6 +93,7 @@ export interface UnifiedProtectionResult {
   strategy: CoordinationStrategy;
   confidence: number;
   reasoning: string;
+}
 };
   recommendations: {
   adjustRateLimits: boolean;
@@ -105,12 +111,14 @@ export interface UnifiedProtectionResult {
 };
   };
 }
+}
 export interface CrossSystemLearning {
   rateLimitingInsights: {
   effectiveBackoffStrategies: BackoffStrategy;
   optimalThreatThresholds: Record<ThreatLevel, number>;
   endpointVulnerabilities: Record<string, number>;
   patternRecognition: string;
+}
 };
   throttlingInsights: {
   effectiveRuleCombinations: string;
@@ -167,7 +175,7 @@ export class AdaptiveRateLimitingIntegration extends EventEmitter {
   /**
    * Apply unified protection with both rate limiting and adaptive throttling
    */
-  public async applyUnifiedProtection()
+  public async applyUnifiedProtection(
     context: UnifiedProtectionContext): Promise<UnifiedProtectionResult> {,
   const startTime = Date.now();
   try {
@@ -218,6 +226,7 @@ export class AdaptiveRateLimitingIntegration extends EventEmitter {
    * Apply sequential protection (rate limiting first, then throttling)
    */
   private async applySequentialProtection(context: UnifiedProtectionContext): Promise<UnifiedProtectionResult> {
+
     // Step 1: Apply rate limiting
     const rateLimitResult = await this.rateLimitingService.checkRateLimit(;);
       context.ip,
@@ -245,6 +254,7 @@ export class AdaptiveRateLimitingIntegration extends EventEmitter {
    * Apply parallel protection (both systems simultaneously)
    */
   private async applyParallelProtection(context: UnifiedProtectionContext): Promise<UnifiedProtectionResult> {
+
     // Apply both systems in parallel
     const [rateLimitResult, throttlingResult] = await Promise.all([)
       this.rateLimitingService.checkRateLimit()
@@ -262,6 +272,7 @@ export class AdaptiveRateLimitingIntegration extends EventEmitter {
    * Apply conditional protection (choose system based on conditions)
    */
   private async applyConditionalProtection(context: UnifiedProtectionContext): Promise<UnifiedProtectionResult> {
+
     // Decision logic for which system to use
     const useRateLimiting = this.shouldUseRateLimiting(context);
     if (useRateLimiting) {
@@ -296,6 +307,7 @@ export class AdaptiveRateLimitingIntegration extends EventEmitter {
    * Apply hierarchical protection (layered with priorities)
    */
   private async applyHierarchicalProtection(context: UnifiedProtectionContext): Promise<UnifiedProtectionResult> {
+
     const results: Array<{ system: string; result: any; priority: number }> = [];
     // Apply rate limiting
     const rateLimitResult = await this.rateLimitingService.checkRateLimit(;);
@@ -364,9 +376,9 @@ export class AdaptiveRateLimitingIntegration extends EventEmitter {
   /**
    * Apply most restrictive coordination strategy
    */
-  private applyMostRestrictive(()
+  private applyMostRestrictive(((
     rateLimitResult: RateLimitStatus,
-    throttlingResult: ThrottlingResult,
+    throttlingResult: ThrottlingResult
   ): { finalAction: 'allow' | 'block' | 'throttle' | 'delay'; finalDelay: number; decisionSystem: string; reasoning: string; confidence: number } {
   // Rate limiting blocks
   if (rateLimitResult.result === 'blocked') {
@@ -409,9 +421,9 @@ export class AdaptiveRateLimitingIntegration extends EventEmitter {
   /**
    * Apply least restrictive coordination strategy
    */
-  private applyLeastRestrictive(()
+  private applyLeastRestrictive(((
     rateLimitResult: RateLimitStatus,
-    throttlingResult: ThrottlingResult,
+    throttlingResult: ThrottlingResult
   ): { finalAction: 'allow' | 'block' | 'throttle' | 'delay'; finalDelay: number; decisionSystem: string; reasoning: string; confidence: number } {
   // If either allows, allow (with minimum delay)
   if (rateLimitResult.result === 'allowed' || throttlingResult.action === 'allow') {
@@ -437,9 +449,9 @@ export class AdaptiveRateLimitingIntegration extends EventEmitter {
   /**
    * Apply weighted average coordination strategy
    */
-  private applyWeightedAverage(()
+  private applyWeightedAverage(((
     rateLimitResult: RateLimitStatus,
-    throttlingResult: ThrottlingResult,
+    throttlingResult: ThrottlingResult
   ): { finalAction: 'allow' | 'block' | 'throttle' | 'delay'; finalDelay: number; decisionSystem: string; reasoning: string; confidence: number } {
     const rateLimitWeight = this.config.rateLimitingPriority / 100;
     const throttlingWeight = this.config.throttlingPriority / 100;
@@ -473,9 +485,9 @@ export class AdaptiveRateLimitingIntegration extends EventEmitter {
   /**
    * Apply dynamic selection coordination strategy
    */
-  private applyDynamicSelection(()
+  private applyDynamicSelection(((
     rateLimitResult: RateLimitStatus,
-    throttlingResult: ThrottlingResult,
+    throttlingResult: ThrottlingResult
   ): { finalAction: 'allow' | 'block' | 'throttle' | 'delay'; finalDelay: number; decisionSystem: string; reasoning: string; confidence: number } {
   // Use rate limiting for high threat levels
   if (rateLimitResult.threatLevel === ThreatLevel.HIGH || rateLimitResult.threatLevel === ThreatLevel.CRITICAL) {
@@ -501,9 +513,9 @@ export class AdaptiveRateLimitingIntegration extends EventEmitter {
   /**
    * Apply consensus-based coordination strategy
    */
-  private applyConsensusBased(()
+  private applyConsensusBased(((
     rateLimitResult: RateLimitStatus,
-    throttlingResult: ThrottlingResult,
+    throttlingResult: ThrottlingResult
   ): { finalAction: 'allow' | 'block' | 'throttle' | 'delay'; finalDelay: number; decisionSystem: string; reasoning: string; confidence: number } {
   const rateLimitBlocks = rateLimitResult.result === 'blocked';
   const throttlingBlocks = throttlingResult.action === 'block';
@@ -534,9 +546,9 @@ export class AdaptiveRateLimitingIntegration extends EventEmitter {
   /**
    * Apply fallback behavior when systems disagree
    */
-  private applyFallbackBehavior(()
+  private applyFallbackBehavior(((
     rateLimitResult: RateLimitStatus,
-    throttlingResult: ThrottlingResult,
+    throttlingResult: ThrottlingResult
   ): { finalAction: 'allow' | 'block' | 'throttle' | 'delay'; finalDelay: number; decisionSystem: string; reasoning: string; confidence: number } {
   switch (this.config.fallbackBehavior) {
   case FallbackBehavior.ALLOW:,
@@ -659,6 +671,7 @@ export class AdaptiveRateLimitingIntegration extends EventEmitter {
    * Enhance context with integration-specific data
    */
   private async enhanceContext(context: UnifiedProtectionContext): Promise<UnifiedProtectionContext> {
+
   // Add rate limiting history
   const rateLimitingHistory = {
   recentAttempts: this.rateLimitingService.getRecentAttemptsForIntegration?.(),
@@ -864,10 +877,11 @@ export class AdaptiveRateLimitingIntegration extends EventEmitter {
   /**
    * Record decision for learning and analytics
    */
-  private async recordDecision(()
+  private async recordDecision(((
     context: UnifiedProtectionContext,
-    result: UnifiedProtectionResult,
+    result: UnifiedProtectionResult
   ): Promise<void> {
+
   const decision: ProtectionDecision = {,
   system: result.finalDecision.system as 'rate_limiting' | 'throttling' | 'integration',
   timestamp: new Date(),

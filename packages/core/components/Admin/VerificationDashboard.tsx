@@ -33,9 +33,12 @@ import type {
   IdentityValidationType 
 } from '../../auth/IdentityValidation';
 
+}
 export interface VerificationDashboardProps {
   className?: string;
   onRequestSelect?: (request: IdentityValidationRequest) => void;
+}
+}
 }
 export interface AdminVerificationMetrics {
   totalRequests: number;
@@ -45,6 +48,8 @@ export interface AdminVerificationMetrics {
   averageProcessingTime: number; // hours,
   queueBacklog: number;
   priorityRequests: number;
+}
+}
 }
 export interface VerificationQueueItem extends IdentityValidationRequest {
   priority: 'low' | 'medium' | 'high' | 'urgent';

@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
 import { v4 as uuidv4 } from 'uuid';
 
+}
 export interface QueuedOperation {
   id: string;
   type: 'graph_update' | 'presence_update' | 'cursor_update' | 'selection_update' | 'activity_update';
@@ -15,6 +16,8 @@ export interface QueuedOperation {
   maxRetries: number;
   expiresAt?: number;
 }
+}
+}
 export interface QueueMetrics {
   totalOperations: number;
   pendingOperations: number;
@@ -27,8 +30,10 @@ export interface QueueMetrics {
   high: number;
   medium: number;
   low: number;
+}
 };
   operationsByType: Map<string, number>;
+}
 }
 export interface OfflineQueueConfig {
   maxQueueSize: number;
@@ -44,6 +49,7 @@ export interface OfflineQueueConfig {
   high: number;
   medium: number;
   low: number;
+}
 };
 }
 export class OfflineOperationQueue extends EventEmitter {

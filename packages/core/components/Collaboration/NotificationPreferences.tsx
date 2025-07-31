@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Save, X } from 'lucide-react';
 import { NotificationType, NotificationPreferences as PreferencesType } from '../../types/NotificationTypes';
+}
 interface NotificationPreferencesProps {
   userId: string;
   workspaceId?: string;
   onClose: () => void;
+}
 const NOTIFICATION_TYPES: { type: NotificationType; label: string; description: string }[] = [
   {
   type: 'comment',

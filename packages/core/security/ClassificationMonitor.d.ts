@@ -38,6 +38,7 @@ export declare enum AlertSeverity {
     ERROR = "error",
     CRITICAL = "critical"
 
+}
 export interface MonitoringEvent {
     id: string;
     type: MonitoringEventType;
@@ -49,6 +50,7 @@ export interface MonitoringEvent {
     source: string;
     userId?: string;
 
+}
 export interface ClassificationPerformanceMetrics {
     totalClassifications: number;
     averageResponseTime: number;
@@ -60,6 +62,7 @@ export interface ClassificationPerformanceMetrics {
     queueDepth: number;
     lastUpdated: Date;
 
+}
 export interface ClassificationStatistics {
     byLevel: Record<ClassificationLevel, number>;
     byCategory: Record<DataCategory, number>;
@@ -70,8 +73,10 @@ export interface ClassificationStatistics {
     timeRange: {
         start: Date;
         end: Date;
+}
     };
 
+}
 export interface ComplianceMetrics {
     totalViolations: number;
     violationsByFramework: Record<ComplianceFramework, number>;
@@ -81,6 +86,7 @@ export interface ComplianceMetrics {
     resolvedViolations: number;
     pendingRemediation: number;
 
+}
 export interface ClassificationAnomaly {
     id: string;
     type: 'volume' | 'pattern' | 'timing' | 'classification_change';
@@ -92,6 +98,7 @@ export interface ClassificationAnomaly {
     actualPattern: any;
     recommendation: string;
 
+}
 export interface AlertConfig {
     enabled: boolean;
     thresholds: {
@@ -99,6 +106,7 @@ export interface AlertConfig {
         responseTime: number;
         violationCount: number;
         anomalyConfidence: number;
+}
     };
     channels: {
         email: boolean;
@@ -108,6 +116,7 @@ export interface AlertConfig {
     recipients: string[];
     webhookUrl?: string;
 
+}
 export interface MonitorConfig {
     enableRealTimeMonitoring: boolean;
     enablePerformanceTracking: boolean;
@@ -186,6 +195,7 @@ export declare class ClassificationMonitor extends EventEmitter {
         recentAnomalies: ClassificationAnomaly[];
         alerts: MonitoringEvent[];
         healthStatus: 'healthy' | 'warning' | 'critical'
+}
   };
     /**
      * Export monitoring data

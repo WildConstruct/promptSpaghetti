@@ -18,6 +18,7 @@ import {
   BulkAssignmentStrategy
 } from '../../types/PolicyAssignmentTypes';
 import './BulkAssignmentWizard.css';
+}
 interface BulkAssignmentWizardProps {
   onSubmit: (data: Partial<BulkPolicyAssignment>) => Promise<void>;,
   onCancel: () => void;
@@ -38,6 +39,7 @@ interface BulkAssignmentWizardProps {
   dryRun: false,
   executionMode: 'IMMEDIATE',
   rollbackOnError: true,
+}
 };
 const INITIAL_FORM_DATA: BulkFormData = {,
   title: '',
@@ -132,12 +134,12 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({)
   effectiveDate: new Date(),
   priority: 100,
   conditions: [],
-  inheritance: {,
+  inheritance: {
   type: InheritanceType.NONE,
   inheritanceDepth: 0,
   blockInheritance: false,
 },
-  metadata: {,
+  metadata: {
   reason: '',
   businessJustification: '',
   riskLevel: RiskLevel.MEDIUM,
@@ -181,12 +183,12 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({)
   priority: parseInt(values[headers.indexOf('priority')]) || 100,
   effectiveDate: new Date(),
   conditions: [],
-  inheritance: {,
+  inheritance: {
   type: InheritanceType.NONE,
   inheritanceDepth: 0,
   blockInheritance: false,
 },
-  metadata: {,
+  metadata: {
   reason: values[headers.indexOf('reason')] || '',
   businessJustification: values[headers.indexOf('businessJustification')] || '',
   riskLevel: (values[headers.indexOf('riskLevel')] as RiskLevel) || RiskLevel.MEDIUM,
@@ -346,7 +348,7 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({)
               value={formData.strategy.conflictResolution}
               onChange={(e) => setFormData({)
   ...formData,
-  strategy: {,
+  strategy: {
   ...formData.strategy,
   conflictResolution: e.target.value as ConflictResolutionStrategy,
 })}
@@ -364,7 +366,7 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({)
               value={formData.strategy.executionMode}
               onChange={(e) => setFormData({)
   ...formData,
-  strategy: {,
+  strategy: {
   ...formData.strategy,
   executionMode: e.target.value,
 })}
@@ -383,7 +385,7 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({)
               checked={formData.strategy.approvalRequired}
               onChange={(e) => setFormData({)
   ...formData,
-  strategy: {,
+  strategy: {
   ...formData.strategy,
   approvalRequired: e.target.checked,
 })}
@@ -396,7 +398,7 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({)
               checked={formData.strategy.dryRun}
               onChange={(e) => setFormData({)
   ...formData,
-  strategy: {,
+  strategy: {
   ...formData.strategy,
   dryRun: e.target.checked,
 })}
@@ -409,7 +411,7 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({)
               checked={formData.strategy.rollbackOnError}
               onChange={(e) => setFormData({)
   ...formData,
-  strategy: {,
+  strategy: {
   ...formData.strategy,
   rollbackOnError: e.target.checked,
 })}

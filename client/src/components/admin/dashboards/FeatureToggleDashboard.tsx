@@ -18,6 +18,7 @@ import {
   PermissionGate,
   PERMISSIONS
 } from '../shared';
+}
 interface FeatureToggle {
   id: string;,
   key: string;
@@ -35,6 +36,7 @@ export const FeatureToggleDashboard: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'enabled' | 'disabled'>('all');
   const [showCreateModal, setShowCreateModal] = useState(false);
+}
   const { getToggles, loading, error } = useAdminFeatureToggleApi();
   const { hasPermission } = usePermissions();
   // Load toggles on mount
@@ -72,7 +74,7 @@ export const FeatureToggleDashboard: React.FC = () => {
   value: toggles.filter(t => t.enabled).length,
   label: 'Enabled',
   format: 'number' as const,
-  trend: {,
+  trend: {
   value: 12,
   direction: 'up' as const,
   label: 'vs last week',

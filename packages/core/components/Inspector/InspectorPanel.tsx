@@ -28,6 +28,7 @@ const getFilmmakerFriendlyName = (nodeType: string): string => {
   return friendlyNames[nodeType] || nodeType;
 };
 
+}
 export interface InspectorPanelProps {
   node: Error | null;
   schema: ZodSchema<unknown> | null;
@@ -37,6 +38,7 @@ export interface InspectorPanelProps {
   initialWidth?: number;
   minWidth?: number;
   maxWidth?: number;
+}
 }
 export const InspectorPanel = ({
   node, 

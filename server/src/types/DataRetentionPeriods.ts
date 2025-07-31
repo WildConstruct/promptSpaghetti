@@ -3,6 +3,7 @@
 // Task: T-1752989143998-476
 
 }
+}
 export interface DataRetentionPeriod {
   category: DataCategory;
   subcategory?: string;
@@ -13,6 +14,7 @@ export interface DataRetentionPeriod {
   archiveBeforeDeletion: boolean;
   reviewRequired: boolean;
   exceptions: RetentionException[];
+}
 }
 }
 
@@ -50,11 +52,13 @@ export enum Jurisdiction {
 }
 
 }
+}
 export interface RetentionException {
   condition: string;
   extendedPeriod: number; // additional days
   reason: string;
   approval: ApprovalLevel;
+}
 }
 }
 

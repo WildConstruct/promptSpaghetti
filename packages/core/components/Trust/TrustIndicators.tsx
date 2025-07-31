@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { TrustScore } from '../auth/IdentityValidation';
 
+}
 export interface TrustIndicatorProps {
   trustScore?: TrustScore | null;
   size?: 'small' | 'medium' | 'large';
@@ -32,6 +33,8 @@ export interface TrustIndicatorProps {
   showLabel?: boolean;
   showTooltip?: boolean;
   className?: string;
+}
+}
 }
 export interface CreatorTrustBadgeProps {
   creatorId: string;
@@ -41,11 +44,15 @@ export interface CreatorTrustBadgeProps {
   showFullDetails?: boolean;
   className?: string;
 }
+}
+}
 export interface TrustScoreDisplayProps {
   trustScore: TrustScore;
   showBreakdown?: boolean;
   orientation?: 'horizontal' | 'vertical';
   className?: string;
+}
+}
 }
 export interface VerificationBadgesProps {
   verifications: string;
@@ -55,6 +62,7 @@ export interface VerificationBadgesProps {
   /**
   * Main trust indicator component
   */
+}
 }
 export const TrustIndicator: React.FC<TrustIndicatorProps> = ({)
   trustScore,
@@ -342,6 +350,7 @@ export const VerificationBadges: React.FC<VerificationBadgesProps> = ({)
  * Template trust indicator for marketplace
  */
 
+}
 export interface TemplateTrustIndicatorProps {
   creatorTrustScore?: TrustScore | null;
   templateQualityScore?: number;
@@ -349,6 +358,7 @@ export interface TemplateTrustIndicatorProps {
   rating?: number;
   isVerifiedCreator?: boolean;
   className?: string;
+}
 }
 export const TemplateTrustIndicator: React.FC<TemplateTrustIndicatorProps> = ({)
   creatorTrustScore,
@@ -412,11 +422,13 @@ export const TemplateTrustIndicator: React.FC<TemplateTrustIndicatorProps> = ({)
  * Inline trust status for compact displays
  */
 
+}
 export interface InlineTrustStatusProps {
   trustTier?: string;
   isVerified?: boolean;
   size?: 'small' | 'medium';
   className?: string;
+}
 }
 export const InlineTrustStatus: React.FC<InlineTrustStatusProps> = ({)
   trustTier = 'unverified',

@@ -4,6 +4,7 @@
  */
 import { ProjectTemplate, TemplateVariable, CustomizationPoint } from './ProjectTemplateManager';
 
+}
 export interface TemplateVersion {
     id: string;
     template_id: string;
@@ -33,18 +34,21 @@ export interface TemplateVersion {
     dependencies: TemplateDependency[];
     conflicts: TemplateConflict[];
 
+}
 export interface TemplateDependency {
     template_id: string;
     version_constraint: string;
     dependency_type: 'required' | 'optional' | 'peer';
     description?: string;
 
+}
 export interface TemplateConflict {
     template_id: string;
     conflict_type: 'api_version' | 'node_type' | 'variable_name' | 'resource';
     description: string;
     severity: 'warning' | 'error';
 
+}
 export interface TemplateImportOptions {
     format: 'json' | 'yaml' | 'zip' | 'git' | 'template_bundle';
     source: string | File | ArrayBuffer;
@@ -61,6 +65,7 @@ export interface TemplateImportOptions {
     import_notes?: string;
     tags?: string[];
 
+}
 export interface TemplateExportOptions {
     format: 'json' | 'yaml' | 'zip' | 'template_bundle';
     include_version_history?: boolean;
@@ -79,8 +84,10 @@ export interface TemplateExportOptions {
         enabled: boolean;
         password?: string;
         algorithm?: string;
+}
     };
 
+}
 export interface TemplateImportResult {
     success: boolean;
     imported_version: TemplateVersion;
@@ -96,6 +103,7 @@ export interface TemplateImportResult {
     backup_version_id?: string;
     can_rollback: boolean;
 
+}
 export interface VersionComparisonResult {
     from_version: TemplateVersion;
     to_version: TemplateVersion;
@@ -105,25 +113,28 @@ export interface VersionComparisonResult {
         api_changes: boolean;
         schema_changes: boolean;
         dependency_changes: boolean;
+}
     };
     migration_required: boolean;
     migration_complexity: 'simple' | 'moderate' | 'complex';
     estimated_migration_time: number;
 
+}
 export interface TemplateDiff {
-    metadata_changes: Array<{,
+    metadata_changes: Array<{
         field: string;
         old_value: any;
         new_value: any;
         change_type: 'added' | 'removed' | 'modified'
+}
   }>;
-    variable_changes: Array<{,
+    variable_changes: Array<{
         variable_id: string;
         change_type: 'added' | 'removed' | 'modified';
         old_variable?: TemplateVariable;
         new_variable?: TemplateVariable;
     }>;
-    customization_changes: Array<{,
+    customization_changes: Array<{
         point_id: string;
         change_type: 'added' | 'removed' | 'modified';
         old_point?: CustomizationPoint;
@@ -204,7 +215,7 @@ export declare class TemplateVersionManager {
         satisfied: boolean;
         missing: TemplateDependency[];
         conflicts: TemplateConflict[];
-        recommendations: Array<{,
+        recommendations: Array<{
             template_id: string;
             recommended_version: string;
             reason: string;
@@ -224,7 +235,7 @@ export declare class TemplateVersionManager {
         instructions: string;
         complexity: 'simple' | 'moderate' | 'complex';
         estimated_time: number;
-        breaking_changes: Array<{,
+        breaking_changes: Array<{
             type: string;
             description: string;
             action_required: string;
@@ -240,6 +251,7 @@ export declare class TemplateVersionManager {
     private getCurrentApiVersion;
     private calculateChecksum;
 
+}
 export interface TemplateBundle {
     format_version: string;
     created_at: string;
@@ -247,11 +259,12 @@ export interface TemplateBundle {
     template: TemplateVersion;
     dependencies: TemplateVersion[];
     related_templates: TemplateVersion[];
-    assets: Array<{,
+    assets: Array<{
         type: 'image' | 'document' | 'config' | 'script';
         filename: string;
         data: ArrayBuffer | string;
         mime_type: string;
+}
     }>;
     documentation: {
         readme: string;

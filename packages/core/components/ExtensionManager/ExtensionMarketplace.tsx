@@ -5,6 +5,7 @@
 import React, { useState } from 'react';
 import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 
+}
 export interface ExtensionMarketplaceProps {
   extensions: ExtensionManifest;
   selectedExtension: ExtensionManifest | null;
@@ -16,6 +17,7 @@ export interface ExtensionMarketplaceProps {
   icon: string;
   description: string;
   count: number;
+}
 }
 export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({)
   extensions,

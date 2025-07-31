@@ -49,6 +49,7 @@ export enum LicenseStatus {
 
 // Shopping Cart interfaces
 }
+}
 export interface CartItem {
   id: string;
   template_id: string;
@@ -60,7 +61,9 @@ export interface CartItem {
   added_at: Date;
 }
 }
+}
 
+}
 }
 export interface ShoppingCart {
   id: string;
@@ -75,8 +78,10 @@ export interface ShoppingCart {
   expires_at: Date;
 }
 }
+}
 
 // Payment Processing interfaces
+}
 }
 export interface PaymentMethod {
   id: string;
@@ -92,7 +97,9 @@ export interface PaymentMethod {
   created_at: Date;
 }
 }
+}
 
+}
 }
 export interface PaymentIntent {
   id: string;
@@ -111,8 +118,10 @@ export interface PaymentIntent {
   updated_at: Date;
 }
 }
+}
 
 // Enhanced Transaction interface
+}
 }
 export interface Transaction {
   id: string;
@@ -136,8 +145,10 @@ export interface Transaction {
   updated_at: Date;
 }
 }
+}
 
 // License Management interfaces
+}
 }
 export interface TemplateLicense {
   id: string;
@@ -161,7 +172,9 @@ export interface TemplateLicense {
   last_used_at?: Date;
 }
 }
+}
 
+}
 }
 export interface LicenseTransfer {
   id: string;
@@ -174,8 +187,10 @@ export interface LicenseTransfer {
   created_at: Date;
 }
 }
+}
 
 // Order and Receipt interfaces
+}
 }
 export interface Order {
   id: string;
@@ -200,7 +215,9 @@ export interface Order {
   completed_at?: Date;
 }
 }
+}
 
+}
 }
 export interface OrderItem {
   id: string;
@@ -216,7 +233,9 @@ export interface OrderItem {
   metadata: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface BillingAddress {
   name: string;
@@ -230,8 +249,10 @@ export interface BillingAddress {
   tax_id?: string;
 }
 }
+}
 
 // Refund interfaces
+}
 }
 export interface RefundRequest {
   id: string;
@@ -247,7 +268,9 @@ export interface RefundRequest {
   created_at: Date;
 }
 }
+}
 
+}
 }
 export interface Refund {
   id: string;
@@ -262,8 +285,10 @@ export interface Refund {
   updated_at: Date;
 }
 }
+}
 
 // Fraud and Risk Management
+}
 }
 export interface RiskAssessment {
   id: string;
@@ -281,8 +306,10 @@ export interface RiskAssessment {
   created_at: Date;
 }
 }
+}
 
 // Tax interfaces
+}
 }
 export interface TaxCalculation {
   id: string;
@@ -297,6 +324,7 @@ export interface TaxCalculation {
     type: string;
     rate: number;
     amount_cents: number;
+}
 }
   }>;
   calculated_at: Date;
@@ -356,6 +384,7 @@ export const LicenseTransferSchema = z.object({
 
 // Analytics interfaces for transactions
 }
+}
 export interface TransactionAnalytics {
   period_start: Date;
   period_end: Date;
@@ -367,6 +396,7 @@ export interface TransactionAnalytics {
     refund_rate: number;
     dispute_rate: number;
     fraud_rate: number;
+}
 }
   };
   payment_methods: Array<{

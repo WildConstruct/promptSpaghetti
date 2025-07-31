@@ -7,6 +7,7 @@
  */
 import { BasePromotion, ContentPromotion, CampaignPromotion, PromotionType, PromotionStatus, PromotionServiceResponse, PromotionEligibilityCheck, PromotionApplicationResult, PromotionSearchCriteria, PromotionSearchResult, PromotionPerformanceMetrics, PromotionRule, PromotionTemplate } from './PromotionInterfaces';
 
+}
 export interface IPromotionService {
     createPromotion(promotionData: CreatePromotionRequest): Promise<PromotionServiceResponse<BasePromotion>>;
     getPromotion(promotionId: string): Promise<PromotionServiceResponse<BasePromotion>>;
@@ -16,6 +17,7 @@ export interface IPromotionService {
     updatePromotions(updates: Array<{)
         id: string;
         data: UpdatePromotionRequest;
+}
     }>): Promise<PromotionServiceResponse<BasePromotion[]>>;
     deletePromotions(promotionIds: string[], deletedBy: string): Promise<PromotionServiceResponse<BulkOperationResult>>;
     searchPromotions(criteria: PromotionSearchCriteria): Promise<PromotionServiceResponse<PromotionSearchResult>>;
@@ -27,6 +29,7 @@ export interface IPromotionService {
     validatePromotion(promotionData: Partial<BasePromotion>): Promise<PromotionServiceResponse<PromotionValidationResult>>;
     checkPromotionConflicts(promotionId: string): Promise<PromotionServiceResponse<PromotionConflictCheck>>;
 
+}
 export interface IPromotionEligibilityService {
     checkEligibility(request: EligibilityCheckRequest): Promise<PromotionServiceResponse<PromotionEligibilityCheck>>;
     checkMultipleEligibility(request: MultipleEligibilityCheckRequest): Promise<PromotionServiceResponse<PromotionEligibilityCheck[]>>;
@@ -40,6 +43,7 @@ export interface IPromotionEligibilityService {
     validatePromoCode(promoCode: string, userId: string, context?: PromotionContext): Promise<PromotionServiceResponse<PromoCodeValidation>>;
     applyPromoCode(promoCode: string, cartId: string, userId: string): Promise<PromotionServiceResponse<PromotionApplicationResult>>;
 
+}
 export interface IContentPromotionService {
     createContentPromotion(promotionData: CreateContentPromotionRequest): Promise<PromotionServiceResponse<ContentPromotion>>;
     updateContentSelection(promotionId: string, contentIds: string[]): Promise<PromotionServiceResponse<ContentPromotion>>;
@@ -54,6 +58,7 @@ export interface IContentPromotionService {
     createContentABTest(testConfig: ContentABTestConfig): Promise<PromotionServiceResponse<ContentABTest>>;
     getABTestResults(testId: string): Promise<PromotionServiceResponse<ABTestResults>>;
 
+}
 export interface ICampaignService {
     createCampaign(campaignData: CreateCampaignRequest): Promise<PromotionServiceResponse<CampaignPromotion>>;
     getCampaign(campaignId: string): Promise<PromotionServiceResponse<CampaignPromotion>>;
@@ -69,6 +74,7 @@ export interface ICampaignService {
     updateCampaignBudget(campaignId: string, budgetUpdates: CampaignBudgetUpdate): Promise<PromotionServiceResponse<CampaignPromotion>>;
     getCampaignSpending(campaignId: string, dateRange?: DateRange): Promise<PromotionServiceResponse<CampaignSpendingReport>>;
 
+}
 export interface IPromotionAnalyticsService {
     getPromotionPerformance(promotionId: string, dateRange?: DateRange): Promise<PromotionServiceResponse<PromotionPerformanceReport>>;
     getMultiplePromotionPerformance(promotionIds: string[], dateRange?: DateRange): Promise<PromotionServiceResponse<PromotionPerformanceReport[]>>;
@@ -86,6 +92,7 @@ export interface IPromotionAnalyticsService {
     getRealtimePromotionStats(promotionId: string): Promise<PromotionServiceResponse<RealtimePromotionStats>>;
     subscribeToPromotionUpdates(promotionId: string, callback: PromotionUpdateCallback): Promise<PromotionServiceResponse<SubscriptionHandle>>;
 
+}
 export interface IPromotionRulesService {
     createRule(ruleData: CreateRuleRequest): Promise<PromotionServiceResponse<PromotionRule>>;
     getRule(ruleId: string): Promise<PromotionServiceResponse<PromotionRule>>;
@@ -98,6 +105,7 @@ export interface IPromotionRulesService {
     getRulePerformance(ruleId: string, dateRange?: DateRange): Promise<PromotionServiceResponse<RulePerformanceReport>>;
     optimizeRules(criteria: RuleOptimizationCriteria): Promise<PromotionServiceResponse<RuleOptimizationResult>>;
 
+}
 export interface IPromotionTemplateService {
     createTemplate(templateData: CreateTemplateRequest): Promise<PromotionServiceResponse<PromotionTemplate>>;
     getTemplate(templateId: string): Promise<PromotionServiceResponse<PromotionTemplate>>;
@@ -111,6 +119,7 @@ export interface IPromotionTemplateService {
     getTemplateUsageStats(templateId: string): Promise<PromotionServiceResponse<TemplateUsageStats>>;
     getTemplatePerformance(templateId: string): Promise<PromotionServiceResponse<TemplatePerformanceStats>>;
 
+}
 export interface CreatePromotionRequest {
     type: PromotionType;
     name: string;
@@ -130,6 +139,7 @@ export interface CreatePromotionRequest {
     tags?: string[];
     created_by: string;
 
+}
 export interface UpdatePromotionRequest {
     name?: string;
     description?: string;
@@ -143,6 +153,7 @@ export interface UpdatePromotionRequest {
     tags?: string[];
     updated_by: string;
 
+}
 export interface EligibilityCheckRequest {
     promotion_id: string;
     user_id: string;
@@ -151,6 +162,7 @@ export interface EligibilityCheckRequest {
     promo_code?: string;
     context?: PromotionContext;
 
+}
 export interface MultipleEligibilityCheckRequest {
     promotion_ids: string[];
     user_id: string;
@@ -158,6 +170,7 @@ export interface MultipleEligibilityCheckRequest {
     item_ids?: string[];
     context?: PromotionContext;
 
+}
 export interface ApplyPromotionRequest {
     promotion_id: string;
     user_id: string;
@@ -166,12 +179,14 @@ export interface ApplyPromotionRequest {
     force_apply?: boolean;
     context?: PromotionContext;
 
+}
 export interface RemovePromotionRequest {
     promotion_id: string;
     user_id: string;
     cart_id: string;
     reason?: string;
 
+}
 export interface PromotionContext {
     user_agent?: string;
     ip_address?: string;
@@ -182,59 +197,70 @@ export interface PromotionContext {
         country: string;
         region?: string;
         city?: string;
+}
     };
     session_data?: Record<string, any>;
     custom_attributes?: Record<string, any>;
 
+}
 export interface ActivePromotionFilters {
     type?: PromotionType[];
     applicable_to_user?: string;
     location?: string;
     limit?: number;
 
+}
 export interface PromotionValidationResult {
     valid: boolean;
     errors: ValidationError[];
     warnings: ValidationWarning[];
     suggestions: string[];
 
+}
 export interface ValidationError {
     field: string;
     code: string;
     message: string;
     severity: 'error' | 'warning';
 
+}
 export interface ValidationWarning {
     field: string;
     message: string;
     impact: 'low' | 'medium' | 'high';
 
+}
 export interface PromotionConflictCheck {
     has_conflicts: boolean;
-    conflicts: Array<{,
+    conflicts: Array<{
         conflicting_promotion_id: string;
         conflict_type: 'time_overlap' | 'mutual_exclusion' | 'resource_conflict';
         description: string;
         severity: 'blocking' | 'warning'
+}
   }>;
     recommendations: string[];
 
+}
 export interface BulkOperationResult {
     total_processed: number;
     successful: number;
     failed: number;
-    results: Array<{,
+    results: Array<{
         id: string;
         success: boolean;
         error?: string;
+}
     }>;
 
+}
 export interface ApplicablePromotionsResult {
     applicable_promotions: PromotionEligibilityCheck[];
     auto_applied: string[];
     suggested: PromotionRecommendation[];
     total_potential_savings_cents: number;
 
+}
 export interface PromotionRecommendation {
     promotion_id: string;
     promotion_name: string;
@@ -245,6 +271,7 @@ export interface PromotionRecommendation {
     call_to_action: string;
     expires_at?: Date;
 
+}
 export interface CartPromotionEvaluation {
     cart_id: string;
     current_promotions: string[];
@@ -252,12 +279,14 @@ export interface CartPromotionEvaluation {
     potential_savings_cents: number;
     optimization_suggestions: PromotionOptimizationSuggestion[];
 
+}
 export interface PromotionOptimizationSuggestion {
     type: 'add_item' | 'increase_quantity' | 'apply_code' | 'stack_promotion';
     description: string;
     additional_savings_cents: number;
     required_actions: string[];
 
+}
 export interface CartPromotionApplication {
     cart_id: string;
     applied_promotions: PromotionApplicationResult[];
@@ -265,6 +294,7 @@ export interface CartPromotionApplication {
     final_cart_total_cents: number;
     optimization_performed: boolean;
 
+}
 export interface PromoCodeValidation {
     valid: boolean;
     promotion_id?: string;
@@ -273,23 +303,26 @@ export interface PromoCodeValidation {
         type: string;
         amount_cents?: number;
         percentage?: number;
+}
     };
     error_code?: string;
     error_message?: string;
     expires_at?: Date;
 
+}
 export interface PromotionPerformanceReport {
     promotion_id: string;
     promotion_name: string;
     date_range: DateRange;
     metrics: PromotionPerformanceMetrics;
-    time_series: Array<{,
+    time_series: Array<{
         date: string;
         usage_count: number;
         revenue_cents: number;
         conversion_rate: number;
+}
     }>;
-    user_segments: Array<{,
+    user_segments: Array<{
         segment_name: string;
         usage_count: number;
         conversion_rate: number;
@@ -298,6 +331,7 @@ export interface PromotionPerformanceReport {
     insights: PerformanceInsight[];
     recommendations: OptimizationRecommendation[];
 
+}
 export interface PerformanceInsight {
     type: 'positive' | 'negative' | 'neutral';
     title: string;
@@ -306,6 +340,7 @@ export interface PerformanceInsight {
     confidence: number;
     supporting_data: Record<string, any>;
 
+}
 export interface OptimizationRecommendation {
     type: 'increase_budget' | 'adjust_targeting' | 'modify_timing' | 'change_discount' | 'extend_duration';
     title: string;
@@ -315,14 +350,17 @@ export interface OptimizationRecommendation {
     priority_score: number;
     implementation_steps: string[];
 
+}
 export interface DateRange {
     start_date: Date;
     end_date: Date;
 
+}
 export interface BenchmarkType {
     type: 'industry' | 'category' | 'historical' | 'similar_promotions';
     parameters?: Record<string, any>;
 
+}
 export interface RevenueAnalyticsReport {
     promotion_id: string;
     date_range: DateRange;
@@ -335,17 +373,19 @@ export interface RevenueAnalyticsReport {
     roi_percentage: number;
     payback_period_days?: number;
     break_even_usage_count: number;
-    revenue_by_segment: Array<{,
+    revenue_by_segment: Array<{
         segment: string;
         revenue_cents: number;
         percentage: number;
+}
     }>;
-    daily_revenue: Array<{,
+    daily_revenue: Array<{
         date: string;
         revenue_cents: number;
         usage_count: number;
     }>;
 
+}
 export interface UserPromotionHistory {
     promotion_id: string;
     promotion_name: string;
@@ -355,17 +395,21 @@ export interface UserPromotionHistory {
     order_total_cents: number;
     items_purchased: number;
 
+}
 export interface PromotionUpdateCallback {
     (update: PromotionUpdate): void;
 
+}
 export interface PromotionUpdate {
     promotion_id: string;
     update_type: 'usage' | 'performance' | 'status_change';
     data: any;
     timestamp: Date;
 
+}
 export interface SubscriptionHandle {
     unsubscribe(): void;
 
+}
 export type { IPromotionService, IPromotionEligibilityService, IContentPromotionService, ICampaignService, IPromotionAnalyticsService, IPromotionRulesService, IPromotionTemplateService };
 //# sourceMappingURL=PromotionServices.d.ts.map

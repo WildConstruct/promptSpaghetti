@@ -13,6 +13,7 @@
  * - A/B testing for marketplace features
  */
 
+}
 export interface MarketplaceEvent {
     id: string;
     userId: string;
@@ -29,11 +30,13 @@ export interface MarketplaceEvent {
         referrer: string;
         location?: string;
         deviceType: 'desktop' | 'mobile' | 'tablet'
+}
   };
 
 export type MarketplaceEventType = 'marketplace_visited' | 'category_browsed' | 'search_performed' | 'filter_applied' | 'template_viewed' | 'template_previewed' | 'template_favorited' | 'template_shared' | 'creator_followed' | 'review_submitted' | 'rating_given' | 'template_purchased' | 'template_downloaded' | 'subscription_started' | 'premium_accessed' | 'template_uploaded' | 'template_updated' | 'creator_profile_viewed' | 'earnings_withdrawn' | 'recommendation_shown' | 'recommendation_clicked' | 'promotion_viewed' | 'discount_applied';
 export type MarketplaceCategory = 'discovery' | 'engagement' | 'monetization' | 'creator_economy' | 'recommendation';
 
+}
 export interface TemplateMetrics {
     templateId: string;
     name: string;
@@ -51,6 +54,7 @@ export interface TemplateMetrics {
             count: number;
             distribution: {
                 [stars: number]: number;
+}
             };
         };
         revenue: {
@@ -70,6 +74,7 @@ export interface TemplateMetrics {
         ratingTrend: 'improving' | 'stable' | 'declining'
   };
 
+}
 export interface CreatorMetrics {
     creatorId: string;
     name: string;
@@ -83,6 +88,7 @@ export interface CreatorMetrics {
             id: string;
             name: string;
             revenue: number;
+}
         };
         recentPerformance: {
             period: string;
@@ -97,6 +103,7 @@ export interface CreatorMetrics {
         templatePerformance: 'improving' | 'stable' | 'declining'
   };
 
+}
 export interface MarketplaceDashboardData {
     overview: {
         totalRevenue: number;
@@ -105,12 +112,13 @@ export interface MarketplaceDashboardData {
         activeCreators: number;
         averageRating: number;
         conversionRate: number;
+}
     };
     trends: {
         revenueGrowth: number;
         transactionGrowth: number;
         userGrowth: number;
-        topCategories: Array<{,
+        topCategories: Array<{
             category: string;
             revenue: number;
             growth: number;
@@ -125,13 +133,13 @@ export interface MarketplaceDashboardData {
     };
     searchAnalytics: {
         totalSearches: number;
-        topQueries: Array<{,
+        topQueries: Array<{
             query: string;
             count: number;
             resultsFound: number;
             ctr: number;
         }>;
-        zeroResultQueries: Array<{,
+        zeroResultQueries: Array<{
             query: string;
             count: number;
         }>;
@@ -184,12 +192,12 @@ export declare class MarketplaceMetrics {
      * Get search analytics
      */
     getSearchAnalytics(): {
-        topQueries: Array<{,
+        topQueries: Array<{
             query: string;
             count: number;
             ctr: number;
         }>;
-        zeroResultQueries: Array<{,
+        zeroResultQueries: Array<{
             query: string;
             count: number;
         }>;

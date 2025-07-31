@@ -10,8 +10,10 @@ import { CommandPalette, GenerationFlow, CommandPaletteAction } from './CommandP
 import { useCommandPaletteShortcuts } from '../hooks/useKeyboardShortcuts';
 import { useGraphStore } from '../graphStore';
 
+}
 export interface CommandPaletteIntegrationProps {
   theme?: 'light' | 'dark' | 'cinema';
+}
   onNodeCreate?: (nodeType: string, position: { x: number; y: number }, data?: any) => void;
   onNodesDelete?: (nodeIds: string) => void;
   onExport?: (format: 'json' | 'png' | 'svg' | 'pdf') => void;

@@ -41,6 +41,7 @@ export enum ConsentStatus {
 
 // Extended context to include consent information
 }
+}
 export interface ConsentAwareContext extends ToggleEvaluationContext {
   consents?: Record<ConsentType, ConsentStatus>;
   consentVersion?: string;
@@ -48,6 +49,7 @@ export interface ConsentAwareContext extends ToggleEvaluationContext {
 }
 
 // Feature to consent mapping
+}
 }
 export interface FeatureConsentMapping {
   featureKey: string;
@@ -57,8 +59,10 @@ export interface FeatureConsentMapping {
   consentExplanation?: string;
 }
 }
+}
 
 // Configuration for consent-aware feature toggle
+}
 }
 export interface ConsentToggleConfig {
   enableConsentChecking: boolean;
@@ -66,6 +70,7 @@ export interface ConsentToggleConfig {
   defaultConsentStatus: ConsentStatus; // used when consent is unknown
   auditConsentUsage: boolean;
   consentCacheTimeout: number; // minutes
+}
 }
 }
 
@@ -426,17 +431,21 @@ export class ConsentFeatureToggleService extends FeatureToggleService {
 // Supporting interfaces
 
 }
+}
 interface ConsentEvaluationDetails {
   requiredConsents: ConsentType[];
   consentStatuses: Record<ConsentType, ConsentStatus>;
   logic: 'AND' | 'OR';
 }
 }
+}
 
+}
 }
 interface ConsentServiceInterface {
   getConsents(userId?: string, sessionId?: string): Promise<Record<ConsentType, ConsentStatus>>;
   clearCache?(userId?: string, sessionId?: string): Promise<void>;
+}
 }
 }
 

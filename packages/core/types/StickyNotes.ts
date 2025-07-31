@@ -3,11 +3,13 @@
  * Epic 8.7 Task 1: Collaboration & Documentation Tools - Sticky Notes System
  */
 
+}
 export interface StickyNote {
   id: string;
   position: {
   x: number;
   y: number;
+}
 };
   size: {
   width: number;
@@ -67,15 +69,18 @@ export type StickyNoteCategory =
   | 'action-item'
   | 'reference';
 
+}
 export interface StickyNoteComment {
   id: string;
   text: string;
   author: {
   id: string;
   name: string;
+}
 };
   timestamp: string;
   resolved: boolean;
+}
 }
 export interface StickyNoteGroup {
   id: string;
@@ -84,12 +89,14 @@ export interface StickyNoteGroup {
   position: {
   x: number;
   y: number;
+}
 };
   appearance: {
   backgroundColor: string;
   borderColor: string;
   collapsed: boolean;
 };
+}
 }
 export interface StickyNoteFilter {
   author?: string;
@@ -98,9 +105,11 @@ export interface StickyNoteFilter {
   dateRange?: {
   start: string;
   end: string;
+}
 };
   textSearch?: string;
   tags?: string;
+}
 }
 export interface StickyNoteState {
   notes: Record<string, StickyNote>;
@@ -115,11 +124,14 @@ export interface StickyNoteState {
   gridSize: number;
   defaultColor: StickyNoteColor;
   defaultCategory: StickyNoteCategory;
+}
 };
+}
 }
 export interface StickyNoteActions {
   // Note management
 
+}
   createNote: (position: { x: number; y: number }, content?: string) => string;
   updateNote: (id: string, updates: Partial<StickyNote>) => void;
   deleteNote: (id: string) => void;
@@ -160,19 +172,23 @@ export interface StickyNoteActions {
 
 // Event types for React Flow integration
 }
+}
 export interface StickyNoteEvent {
   type: 'create' | 'update' | 'delete' | 'move' | 'resize' | 'select';
   noteId: string;
   data?: any;
 
+}
   position?: { x: number; y: number };
 
 // Integration with React Flow
+}
 }
 export interface StickyNoteReactFlowNode {
   id: string;
   type: 'stickyNote';
 
+}
   position: { x: number; y: number };
   data: StickyNote;
   draggable: boolean;
@@ -180,6 +196,7 @@ export interface StickyNoteReactFlowNode {
   deletable: boolean;
 
 // Template system
+}
 }
 export interface StickyNoteTemplate {
   id: string;
@@ -191,10 +208,12 @@ export interface StickyNoteTemplate {
   author: {
   id: string;
   name: string;
+}
 };
   createdAt: string;
   usageCount: number;
   tags: string;
+}
 }
 export interface StickyNoteTemplateLibrary {
   templates: Record<string, StickyNoteTemplate>;
@@ -203,12 +222,16 @@ export interface StickyNoteTemplateLibrary {
   favorites: string;
   // Persistence and synchronization
 }
+}
+}
 export interface StickyNotePersistence {
   save: (state: StickyNoteState) => Promise<void>;
   load: () => Promise<StickyNoteState>;
   sync: (changes: Partial<StickyNoteState>) => Promise<void>;
   subscribe: (callback: (state: StickyNoteState) => void) => () => void;
   // Keyboard shortcuts
+}
+}
 }
 export interface StickyNoteShortcuts {
   'cmd+n': 'createNote';
@@ -219,5 +242,6 @@ export interface StickyNoteShortcuts {
   'escape': 'stopEditing';
   'cmd+z': 'undo';
   'cmd+shift+z': 'redo'
+}
   }
 export default StickyNote;

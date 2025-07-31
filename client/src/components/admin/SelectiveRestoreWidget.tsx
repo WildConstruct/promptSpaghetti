@@ -25,6 +25,7 @@ const { Option } = Select;
 // =============================================================================
 // Type Definitions
 // =============================================================================
+}
 interface RecoveryPoint {
   id: string;,
   backup_type: 'scheduled' | 'transaction' | 'manual' | 'compliance' | 'incident';
@@ -32,10 +33,11 @@ interface RecoveryPoint {
   backup_size_bytes: number;
   included_tables: string;,
   excluded_tables: string;
-  recovery_context: {,
+  recovery_context: {
   description: string;,
   triggered_by: string;
   retention_class: string;
+}
 };
   validation_status: 'not_validated' | 'valid' | 'corrupted' | 'partially_valid';,
   storage_info: {;
@@ -43,17 +45,19 @@ interface RecoveryPoint {
   location: string;
   encryption_status: string;
 };
+}
 interface RestoreRequest {
   recovery_point_id: string;,
   operation_type: 'selective_restore';
   restore_scope: 'full_database' | 'table_level' | 'record_level' | 'schema_only' | 'data_only';,
   restore_strategy: 'replace' | 'merge' | 'append' | 'compare_first' | 'backup_first';
   target_database?: string;
-  table_filters: {,
+  table_filters: {
   include_tables: string;,
   exclude_tables: string;
   where_conditions: Record<string, string>;
   limit_records?: number;
+}
 };
   validation_level: 'none' | 'basic' | 'full' | 'business_rules' | 'compliance';,
   notification_config: {;
@@ -61,6 +65,7 @@ interface RestoreRequest {
   on_error: boolean;
   notification_channels: string;
 };
+}
 interface RestoreProgress {
   request_id: string;,
   status: 'pending' | 'in_progress' | 'completed' | 'failed' | 'cancelled';
@@ -72,12 +77,14 @@ interface RestoreProgress {
   conflicts_resolved: number;
   started_at: string;
   estimated_completion?: string;
-  errors: Array<{,
+  errors: Array<{
   table: string;,
   error_type: string;
   message: string;,
   severity: 'error' | 'warning';
+}
 }>;
+}
 interface SelectiveRestoreWidgetProps {
   onRestoreComplete?: (requestId: string) => void;
   onError?: (error: string) => void;
@@ -87,6 +94,7 @@ interface SelectiveRestoreWidgetProps {
   export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({,)
   onRestoreComplete,
   onError
+}
 }) => {
   // State Management
   const [form] = Form.useForm();
@@ -180,14 +188,14 @@ interface SelectiveRestoreWidgetProps {
         restore_scope: values.restore_scope || 'table_level',
         restore_strategy: values.restore_strategy || 'backup_first',
         target_database: values.target_database,
-        table_filters: {,
+        table_filters: {
   include_tables: values.table_filters?.include_tables || [],
           exclude_tables: values.table_filters?.exclude_tables || [],
           where_conditions: values.table_filters?.where_conditions || {},
           limit_records: values.table_filters?.limit_records;
   },
   validation_level: values.validation_level || 'business_rules',
-        notification_config: {,
+        notification_config: {
   on_completion: values.notification_config?.on_completion ?? true,
   on_error: values.notification_config?.on_error ?? true,
   notification_channels: values.notification_config?.notification_channels || ['email'],

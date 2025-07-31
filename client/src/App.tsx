@@ -9,15 +9,19 @@ import { ProfessionalMenuBar } from '../../packages/core/components/MenuBar/Prof
 import { KeyboardShortcutsManager } from '../../packages/core/components/CommandPalette/KeyboardShortcutsManager';
 import { CommandPalette } from '../../packages/core/components/CommandPalette/CommandPalette';
 import { IntegratedFileBrowser, PSGFile, ProjectManager } from '../../packages/core';
+}
 interface GraphEditorProps {
   initialNodes?: unknown[];
   initialEdges?: unknown[];
 }
+}
 
+}
 interface RandomizerPanelProps {
   onGraphGenerated?: (graph: unknown) => void;
   onError?: (error: Error) => void;
   className?: string;
+}
 }
 
 // Enhanced import approach - try full core, fallback to enhanced editor with professional features

@@ -5,6 +5,7 @@
 import { HistoricalQuery, HistoricalItem, Era, ValidationResult } from '../types/UTDG';
 import { VFXPipelineMetadata } from '../types/VFXExport';
 
+}
 export interface CrowdGenerationRequest {
     scene: {
         era: Era;
@@ -12,6 +13,7 @@ export interface CrowdGenerationRequest {
         location: string;
         timeOfDay: 'dawn' | 'morning' | 'noon' | 'afternoon' | 'evening' | 'night';
         season: 'spring' | 'summer' | 'autumn' | 'winter'
+}
   };
     crowd: {
         size: number;
@@ -31,6 +33,7 @@ export interface CrowdGenerationRequest {
         vfxPipeline: VFXPipelineMetadata;
     };
 
+}
 export interface CrowdDemographics {
     socialClasses: {
         peasant: number;
@@ -39,6 +42,7 @@ export interface CrowdDemographics {
         noble: number;
         clergy: number;
         royal: number;
+}
     };
     ageDistribution: {
         children: number;
@@ -52,17 +56,20 @@ export interface CrowdDemographics {
         nonBinary?: number;
     };
 
+}
 export interface CrowdActivity {
     primary: string;
     secondary: string[];
     mood: 'festive' | 'solemn' | 'busy' | 'tense' | 'peaceful';
     interactions: InteractionType[];
 
+}
 export interface InteractionType {
     type: 'trading' | 'conversation' | 'ceremony' | 'performance' | 'labor';
     participants: string[];
     frequency: 'rare' | 'occasional' | 'common';
 
+}
 export interface CrowdGenerationResult {
     individuals: CrowdIndividual[];
     groups: CrowdGroup[];
@@ -70,6 +77,7 @@ export interface CrowdGenerationResult {
     validation: ValidationResult;
     metadata: CrowdMetadata;
 
+}
 export interface CrowdIndividual {
     id: string;
     demographics: {
@@ -77,6 +85,7 @@ export interface CrowdIndividual {
         gender: 'male' | 'female';
         socialClass: string;
         occupation: string;
+}
     };
     appearance: {
         clothing: HistoricalItem[];
@@ -97,6 +106,7 @@ export interface CrowdIndividual {
     };
     historicalAccuracy: number;
 
+}
 export interface CrowdGroup {
     id: string;
     type: 'family' | 'guild' | 'religious' | 'merchant' | 'nobility';
@@ -105,6 +115,7 @@ export interface CrowdGroup {
     formation: 'circle' | 'line' | 'cluster' | 'processional';
     relationship: string;
 
+}
 export interface CrowdInteraction {
     id: string;
     type: InteractionType['type'];
@@ -113,12 +124,14 @@ export interface CrowdInteraction {
     intensity: 'subtle' | 'moderate' | 'prominent';
     historicalContext: string;
 
+}
 export interface CrowdMetadata {
     generation: {
         timestamp: string;
         processingTime: number;
         algorithm: string;
         version: string;
+}
     };
     validation: {
         overallAccuracy: number;

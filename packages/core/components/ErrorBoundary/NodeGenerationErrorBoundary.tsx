@@ -7,12 +7,15 @@
  */
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 
+}
 export interface NodeGenerationErrorBoundaryProps {
   children: ReactNode;
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
   fallback?: (error: Error, retry: () => void) => ReactNode;
   theme?: 'light' | 'dark' | 'cinema'
+}
   }
+}
 export interface NodeGenerationErrorBoundaryState {
   hasError: boolean;
   error: Error | null;
@@ -21,6 +24,7 @@ export interface NodeGenerationErrorBoundaryState {
   /**
   * Error boundary component for node generation operations
   */
+}
 }
 export class NodeGenerationErrorBoundary extends Component<
   NodeGenerationErrorBoundaryProps,

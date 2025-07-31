@@ -43,6 +43,7 @@ const RECOMMENDATION_TYPE_ICONS = {
 /**
  * Recommendation item props
  */
+}
 interface RecommendationItemProps {
   recommendation: unknown;
   onApply?: (recommendationId: string) => void;
@@ -56,6 +57,7 @@ interface RecommendationItemProps {
   onApply,
   onDismiss,
   onFeedback
+}
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -231,6 +233,7 @@ interface RecommendationItemProps {
 /**
  * Recommendation summary props
  */
+}
 interface RecommendationSummaryProps {
   recommendations: unknown;
   onRefresh?: () => void;
@@ -240,6 +243,7 @@ interface RecommendationSummaryProps {
   const RecommendationSummary: React.FC<RecommendationSummaryProps> = ({,)
   recommendations,
   onRefresh
+}
 }) => {
   const totalSavings = recommendations.reduce((sum, rec) => sum + (rec.estimatedSavings || 0), 0);
   const highPriorityCount = recommendations.filter(rec => rec.priority === 'high').length;
@@ -312,6 +316,7 @@ interface RecommendationSummaryProps {
  * Recommendations panel props
  */
 
+}
 export interface RecommendationsPanelProps {
   recommendations: unknown;
   analyticsClient: AnalyticsClient;
@@ -322,6 +327,7 @@ export interface RecommendationsPanelProps {
   /**
   * Recommendations panel component
   */
+}
 }
 export const RecommendationsPanel: React.FC<RecommendationsPanelProps> = ({)
   recommendations,

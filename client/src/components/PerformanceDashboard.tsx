@@ -8,18 +8,19 @@
  */
 import React, { useState, useEffect, useCallback } from 'react';
 import { usePerformanceProfiler } from '../hooks/usePerformanceProfiler';
+}
 interface ServerMetrics {
   cpu: number;,
-  memory: number;
+  memory: number,
   responseTime: number;,
-  errorRate: number;
+  errorRate: number,
   requestsPerSecond: number;,
   timestamp: number;
   interface ClientMetrics {
   renderTime: number;,
-  memoryUsage: number;
+  memoryUsage: number,
   responseTime: number;,
-  layoutShift: number;
+  layoutShift: number,
   interactionCount: number;,
   timestamp: number;
   interface PerformanceDashboardProps {
@@ -32,6 +33,7 @@ interface ServerMetrics {
   showClientMetrics = true,
   refreshInterval = 1000,
   className = ''
+}
 }) => {
   const [serverMetrics, setServerMetrics] = useState<ServerMetrics | null>(null);
   const [clientMetrics, setClientMetrics] = useState<ClientMetrics | null>(null);

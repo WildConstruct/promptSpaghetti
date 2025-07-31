@@ -31,6 +31,7 @@ const TIME_RANGES = [;
  * Analytics dashboard props
  */
 
+}
 export interface AnalyticsDashboardProps {
   analyticsClient: AnalyticsClient;
   userId?: number;
@@ -57,6 +58,7 @@ export interface AnalyticsDashboardProps {
   /**
   * Main analytics dashboard component
   */
+}
 }
 export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
   analyticsClient,

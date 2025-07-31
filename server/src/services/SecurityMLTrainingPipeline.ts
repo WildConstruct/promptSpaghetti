@@ -11,6 +11,7 @@ import { SecurityMLToolsEngine, SecurityMLModel } from './SecurityMLToolsEngine'
 import { SecurityStatisticalAnalysisEngine, SecurityStatistics } from './SecurityStatisticalAnalysisEngine';
 
 }
+}
 export interface MLTrainingDataset {
   dataset_id: string;
   name: string;
@@ -25,6 +26,7 @@ export interface MLTrainingDataset {
       query_config: Record<string, any>;
       sampling_strategy: 'random' | 'stratified' | 'time_based' | 'balanced';
       sample_size: number;
+}
 }
     }[];
     
@@ -74,6 +76,7 @@ export interface MLTrainingDataset {
 }
 
 }
+}
 export interface MLTrainingJob {
   job_id: string;
   dataset_id: string;
@@ -87,6 +90,7 @@ export interface MLTrainingJob {
     max_training_time_minutes: number;
     max_iterations: number;
     convergence_threshold: number;
+}
 }
   };
   
@@ -170,6 +174,7 @@ export interface MLTrainingJob {
 }
 
 }
+}
 export interface ModelDeploymentConfig {
   deployment_id: string;
   model_id: string;
@@ -182,6 +187,7 @@ export interface ModelDeploymentConfig {
       memory_gb: number;
       gpu_required: boolean;
       max_concurrent_requests: number;
+}
 }
     };
     
@@ -218,6 +224,7 @@ export interface ModelDeploymentConfig {
 }
 
 }
+}
 export interface AutoMLConfig {
   enabled: boolean;
   search_strategy: 'random' | 'grid' | 'bayesian' | 'evolutionary' | 'neural_architecture';
@@ -228,6 +235,7 @@ export interface AutoMLConfig {
       type: 'int' | 'float' | 'categorical' | 'boolean';
       range?: [number, number];
       choices?: unknown[];
+}
 }
     }>;
     

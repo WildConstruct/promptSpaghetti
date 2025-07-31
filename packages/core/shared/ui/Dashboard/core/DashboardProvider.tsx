@@ -6,6 +6,7 @@
  */
 import React, { createContext, useContext, useState, useCallback } from 'react';
 
+}
 export interface DashboardContextValue {
   // Time range state
   timeRange: string;
@@ -40,12 +41,15 @@ export interface DashboardContextValue {
   onTimeRangeChange?: (timeRange: string) => void;
   const DashboardContext = createContext<DashboardContextValue | undefined>(undefined);
 }
+}
+}
 export interface DashboardProviderProps {
   children: React.ReactNode;
   timeRange?: string;
   onTimeRangeChange?: (timeRange: string) => void;
   onRefresh?: () => void;
   onExport?: (format: 'csv' | 'pdf' | 'excel') => void;
+}
 }
 export const DashboardProvider: React.FC<DashboardProviderProps> = ({)
   children,

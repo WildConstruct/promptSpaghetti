@@ -1,7 +1,9 @@
 import React from 'react';
 
+}
 export interface ExportStatsDashboardProps {
   className?: string;
+}
 }
 export const ExportStatsDashboard: React.FC<ExportStatsDashboardProps> = ({ className = '' }) => {
   return;

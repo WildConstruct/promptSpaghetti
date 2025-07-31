@@ -7,6 +7,7 @@ import { EventEmitter } from 'events';
 import crypto from 'crypto';
 
 }
+}
 export interface EnforcementRule {
   id: string;
   name: string;
@@ -22,6 +23,7 @@ export interface EnforcementRule {
     lastLoginDays?: number; // Days since last login
     breachDetected?: boolean;
     consecutiveFailures?: number;
+}
 }
   };
   actions: {
@@ -55,6 +57,7 @@ export interface EnforcementRule {
 }
 
 }
+}
 export interface EnforcementAction {
   id: string;
   userId: string;
@@ -77,9 +80,11 @@ export interface EnforcementAction {
     adminNotified: boolean;
     attempts: number;
 }
+}
   };
 }
 
+}
 }
 export interface UserEnforcementStatus {
   userId: string;
@@ -98,9 +103,11 @@ export interface UserEnforcementStatus {
     resolvedAt?: Date;
     status: string;
 }
+}
   }>;
 }
 
+}
 }
 export interface EnforcementContext {
   userId: string;
@@ -113,7 +120,9 @@ export interface EnforcementContext {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface EnforcementResult {
   allowed: boolean;
@@ -125,6 +134,7 @@ export interface EnforcementResult {
   gracePeriodRemaining?: number;
   activeEnforcements: string[];
   suggestedActions: string[];
+}
 }
 }
 

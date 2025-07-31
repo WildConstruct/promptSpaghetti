@@ -11,6 +11,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 
 // Types and interfaces
+}
 interface OAuthProvider {
   id: string;,
   name: string;
@@ -19,12 +20,14 @@ interface OAuthProvider {
   iconUrl: string;,
   supportedScopes: string;
   requiredScopes: string;,
-  endpoints: {,
+  endpoints: {
   authorization: string;,
   token: string;
   userInfo: string;
+}
 };
   configuration?: OAuthConfiguration;
+}
 interface OAuthConfiguration {
   id: string;,
   providerId: string;
@@ -66,26 +69,31 @@ interface OAuthConfiguration {
   recommendation: string;
   interface ComplianceStatus {
   overall: boolean;,
-  frameworks: {,
+  frameworks: {
   gdpr: boolean;,
   ccpa: boolean;
   sox: boolean;,
   hipaa: boolean;
+}
 };
   issues: ComplianceIssue;
+}
 interface ComplianceIssue {
   framework: string;,
   issue: string;
   severity: 'low' | 'medium' | 'high';,
   remediation: string;
+}
 interface ValidationResult {
   valid: boolean;,
   errors: ValidationError;
   warnings: ValidationWarning;
+}
 interface ValidationError {
   field: string;,
   message: string;
   code: string;
+}
 interface ValidationWarning {
   field: string;,
   message: string;
@@ -95,6 +103,7 @@ interface ValidationWarning {
 export const OAuthConfigurationInterface: React.FC = () => {
   // State management
   const [selectedProvider, setSelectedProvider] = useState<string>('');
+}
   const [configuration, setConfiguration] = useState<Partial<OAuthConfiguration>>({});
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_providers, _setProviders] = useState<OAuthProvider>([]);
@@ -118,7 +127,7 @@ export const OAuthConfigurationInterface: React.FC = () => {
   iconUrl: '/icons/google.svg',
   supportedScopes: ['openid', 'email', 'profile', 'https://www.googleapis.com/auth/drive.readonly'],
   requiredScopes: ['openid', 'email', 'profile'],
-  endpoints: {,
+  endpoints: {
   authorization: 'https://accounts.google.com/o/oauth2/v2/auth',
   token: 'https://oauth2.googleapis.com/token',
   userInfo: 'https://www.googleapis.com/oauth2/v2/userinfo',
@@ -131,7 +140,7 @@ export const OAuthConfigurationInterface: React.FC = () => {
   iconUrl: '/icons/github.svg',
   supportedScopes: ['read:user', 'user:email', 'repo', 'admin:org'],
   requiredScopes: ['read:user', 'user:email'],
-  endpoints: {,
+  endpoints: {
   authorization: 'https://github.com/login/oauth/authorize',
   token: 'https://github.com/login/oauth/access_token',
   userInfo: 'https://api.github.com/user',
@@ -144,7 +153,7 @@ export const OAuthConfigurationInterface: React.FC = () => {
   iconUrl: '/icons/microsoft.svg',
   supportedScopes: ['openid', 'email', 'profile', 'offline_access', 'https://graph.microsoft.com/User.Read'],
   requiredScopes: ['openid', 'email', 'profile'],
-  endpoints: {,
+  endpoints: {
   authorization: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
   token: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
   userInfo: 'https://graph.microsoft.com/v1.0/me'], []);
@@ -179,7 +188,7 @@ export const OAuthConfigurationInterface: React.FC = () => {
       redirectUri: `${window.location.origin}/auth/oauth/callback/${provider.id}`}
 },
   additionalParams: {},
-      securitySettings: {,
+      securitySettings: {
   enablePKCE: true,
   enableCertificatePinning: true,
   enableMTLS: false,
@@ -188,7 +197,7 @@ export const OAuthConfigurationInterface: React.FC = () => {
   allowedRedirectDomains: [window.location.hostname],
   sessionTimeout: 3600 // 1 hour,
 },
-  complianceSettings: {,
+  complianceSettings: {
   gdprCompliant: true,
   ccpaCompliant: true,
   soxCompliant: false,
@@ -231,7 +240,7 @@ export const OAuthConfigurationInterface: React.FC = () => {
         level: 'low',
         findings: [{ severity: 'error', category: 'Assessment', message: 'Security assessment failed', recommendation: 'Check configuration and try again' }],
         recommendations: ['Review configuration and try again'],
-        complianceStatus: {,
+        complianceStatus: {
   overall: false,
           frameworks: { gdpr: false, ccpa: false, sox: false, hipaa: false },
           issues: [];
@@ -275,7 +284,7 @@ export const OAuthConfigurationInterface: React.FC = () => {
         body: JSON.stringify({,)
   provider: selectedProvider,
   configuration,
-  requirements: {,
+  requirements: {
   security_level: 'high',
   compliance_frameworks: getSelectedFrameworks(),
   custom_requirements: [],

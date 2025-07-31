@@ -29,6 +29,7 @@ export enum FileType {
 
 // Template submission interface
 }
+}
 export interface TemplateSubmission {
   id: string;
   template_id: string;
@@ -46,8 +47,10 @@ export interface TemplateSubmission {
   updated_at: Date;
 }
 }
+}
 
 // Submission data structure
+}
 }
 export interface SubmissionData {
   // Template metadata
@@ -78,8 +81,10 @@ export interface SubmissionData {
   previous_version_id?: string;
 }
 }
+}
 
 // Validation result interface
+}
 }
 export interface ValidationResult {
   id: string;
@@ -95,10 +100,12 @@ export interface ValidationResult {
     column?: number;
     field?: string;
 }
+}
   };
 }
 
 // File upload interface
+}
 }
 export interface UploadedFile {
   id: string;
@@ -113,8 +120,10 @@ export interface UploadedFile {
   uploaded_at: Date;
 }
 }
+}
 
 // Submission review interface
+}
 }
 export interface SubmissionReview {
   id: string;
@@ -127,14 +136,17 @@ export interface SubmissionReview {
   created_at: Date;
 }
 }
+}
 
 // Review feedback structure
+}
 }
 export interface ReviewFeedback {
   category: 'content' | 'quality' | 'compliance' | 'usability' | 'technical';
   rating: number; // 1-5
   comments: string;
   suggestions: string[];
+}
 }
 }
 

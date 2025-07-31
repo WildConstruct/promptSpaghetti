@@ -61,7 +61,7 @@ export declare class SharingService {
     getShareDashboard(userId: string): Promise<{
         totalShares: number;
         totalViews: number;
-        topPerformers: Array<{,
+        topPerformers: Array<{
             resourceId: string;
             title: string;
             views: number;

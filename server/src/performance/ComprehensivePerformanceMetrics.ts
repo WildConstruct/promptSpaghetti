@@ -22,6 +22,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 
 }
+}
 export interface APIPerformanceMetrics {
   timestamp: number;
   endpoint: string;
@@ -41,7 +42,9 @@ export interface APIPerformanceMetrics {
   ipAddress?: string;
 }
 }
+}
 
+}
 }
 export interface DatabasePerformanceMetrics {
   timestamp: number;
@@ -61,10 +64,12 @@ export interface DatabasePerformanceMetrics {
     readLatency: number;
     writeLatency: number;
 }
+}
   };
   replicationLag?: number;
 }
 
+}
 }
 export interface BusinessPerformanceMetrics {
   timestamp: number;
@@ -76,12 +81,14 @@ export interface BusinessPerformanceMetrics {
     activations: number;
     retentions: number;
 }
+}
   };
   errorsByCategory: Record<string, number>;
   userSatisfactionScore: number;
   performanceImpactScore: number;
 }
 
+}
 }
 export interface SecurityPerformanceMetrics {
   timestamp: number;
@@ -95,7 +102,9 @@ export interface SecurityPerformanceMetrics {
   securityScanLatency: number;
 }
 }
+}
 
+}
 }
 export interface PerformanceBaseline {
   endpoint: string;
@@ -106,7 +115,9 @@ export interface PerformanceBaseline {
   businessCritical: boolean;
 }
 }
+}
 
+}
 }
 export interface PerformanceAnomaly {
   id: string;
@@ -124,7 +135,9 @@ export interface PerformanceAnomaly {
   autoResolution?: string;
 }
 }
+}
 
+}
 }
 export interface PerformanceTrend {
   metric: string;
@@ -137,7 +150,9 @@ export interface PerformanceTrend {
   recommendation: string;
 }
 }
+}
 
+}
 }
 export interface PerformanceReport {
   id: string;
@@ -146,6 +161,7 @@ export interface PerformanceReport {
     start: number;
     end: number;
     duration: number;
+}
 }
   };
   summary: {

@@ -10,6 +10,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { logger } from '../utils/logger';
 
 }
+}
 interface SecurityDashboardQuery {
   timeRange?: string; // '1h', '24h', '7d', '30d'
   severity?: string; // 'low', 'medium', 'high', 'critical'
@@ -20,19 +21,24 @@ interface SecurityDashboardQuery {
   offset?: number;
 }
 }
+}
 
+}
 }
 interface ThreatRuleRequest {
   rule: ThreatDetectionRule;
 }
 }
+}
 
+}
 }
 interface SecurityAlertQuery {
   status?: string; // 'active', 'resolved', 'dismissed'
   priority?: string; // 'low', 'medium', 'high', 'critical'
   limit?: number;
   offset?: number;
+}
 }
 }
 

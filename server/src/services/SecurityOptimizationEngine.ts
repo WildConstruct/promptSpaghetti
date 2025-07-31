@@ -11,6 +11,7 @@ import { SecurityAPIIntegrationPlatform, SecurityAPIMetrics, SecurityEvent } fro
 import { SecurityAnalyticsIntegrationService } from './SecurityAnalyticsIntegrationService';
 
 }
+}
 export interface SecurityOptimizationConfig {
   analysis_settings: {
     enabled: boolean;
@@ -18,6 +19,7 @@ export interface SecurityOptimizationConfig {
     deep_analysis_enabled: boolean;
     historical_analysis_days: number;
     confidence_threshold: number;
+}
 }
   };
   
@@ -49,6 +51,7 @@ export interface SecurityOptimizationConfig {
 }
 
 }
+}
 export interface OptimizationRecommendation {
   id: string;
   category: 'performance' | 'security' | 'resource' | 'threat_detection' | 'compliance' | 'cost';
@@ -61,6 +64,7 @@ export interface OptimizationRecommendation {
     cost_impact: number; // 0-100
     implementation_effort: 'low' | 'medium' | 'high';
     risk_level: 'low' | 'medium' | 'high' | 'critical';
+}
 }
   };
   recommendations: {
@@ -88,6 +92,7 @@ export interface OptimizationRecommendation {
 }
 
 }
+}
 export interface SystemAnalysisResult {
   timestamp: number;
   analysis_type: 'performance' | 'security' | 'comprehensive';
@@ -98,6 +103,7 @@ export interface SystemAnalysisResult {
     bottlenecks_identified: string[];
     resource_utilization: Record<string, number>;
     optimization_opportunities: string[];
+}
 }
   };
   

@@ -18,6 +18,7 @@ import { EventEmitter } from 'events';
 // =============================================================================
 
 }
+}
 export interface PermissionCacheConfig {
   // Cache backends
   redisEnabled: boolean;
@@ -48,7 +49,9 @@ export interface PermissionCacheConfig {
   statsCollectionInterval: number; // milliseconds
 }
 }
+}
 
+}
 }
 export interface CacheKey {
   type: 'permission' | 'role' | 'assignment' | 'decision' | 'user_permissions' | 'policy_result';
@@ -57,7 +60,9 @@ export interface CacheKey {
   version?: number;
 }
 }
+}
 
+}
 }
 export interface CacheEntry<T> {
   key: string;
@@ -74,6 +79,7 @@ export interface CacheEntry<T> {
   };
 }
 
+}
 }
 export interface CacheStats {
   // Hit/miss statistics
@@ -92,6 +98,7 @@ export interface CacheStats {
     totalSize: number;
     maxSize: number;
     utilizationPercentage: number;
+}
 }
   };
   
@@ -121,6 +128,7 @@ export interface CacheStats {
 }
 
 }
+}
 export interface UserPermissionsCacheEntry {
   userId: string;
   permissions: ApiPermission[];
@@ -130,13 +138,16 @@ export interface UserPermissionsCacheEntry {
   effectiveUntil: Date;
 }
 }
+}
 
+}
 }
 export interface DecisionCacheEntry {
   requestSignature: string;
   decision: ApiAccessDecision;
   contextHash: string;
   dependencies: string[]; // Cache keys this decision depends on
+}
 }
 }
 

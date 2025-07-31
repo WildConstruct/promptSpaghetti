@@ -9,6 +9,7 @@ import { ZodSchema, ZodTypeAny, z } from 'zod';
  * - onChange: Callback when form values change (debounced)
  */
 
+}
 interface NodeData {
   id: string;
   type: string;
@@ -17,6 +18,7 @@ interface NodeData {
   node: NodeData | null;
   schema: ZodSchema<Record<string, unknown>> | null;
   onChange: (partial: Record<string, unknown>) => void;
+}
 }
 export const InspectorSidebar: React.FC<InspectorSidebarProps> = ({ node, schema, onChange }) => {
   const [values, setValues] = React.useState<Record<string, unknown>>({});

@@ -6,6 +6,7 @@
  * 
  * Task: T-1752989144295-168 - Profile server and client performance under load
  */
+}
 interface RenderMetrics {
   componentCount: number;,
   renderTime: number;
@@ -51,11 +52,12 @@ interface RenderMetrics {
   trackUserInteractions: boolean;,
   trackWebVitals: boolean;
   maxSnapshots: number;,
-  alertThresholds: {,
+  alertThresholds: {
   renderTime: number;,
   memoryUsage: number;
   responseTime: number;,
   layoutShift: number;
+}
 };
 /**
  * Client Performance Profiler
@@ -91,7 +93,7 @@ export class ClientPerformanceProfiler {
   trackUserInteractions: true,
   trackWebVitals: true,
   maxSnapshots: 3600, // 1 hour,
-  alertThresholds: {,
+  alertThresholds: {
   renderTime: 16.67, // 60fps threshold,
   memoryUsage: 80, // %,
   responseTime: 2000, // ms,
@@ -398,7 +400,7 @@ export class ClientPerformanceProfiler {
   console.warn('No client snapshots to generate report');
   return;
   const report = {
-  metadata: {,
+  metadata: {
   userAgent: navigator.userAgent,
   startTime: this.startTime,
   endTime: performance.now(),
@@ -420,10 +422,11 @@ export class ClientPerformanceProfiler {
    * Send report to server
    */
   private async sendReportToServer(report: PerformanceSnapshot): Promise<void> {
+
   try {
   await fetch('/api/performance/client-report', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   body: JSON.stringify(report);
@@ -440,23 +443,23 @@ export class ClientPerformanceProfiler {
   const memoryUsage = this.snapshots.map(s => s.memory.heapUtilization);
   const responseTimes = this.snapshots.map(s => s.network.averageResponseTime);
   return {
-  render: {,
+  render: {
   average: this.average(renderTimes),
   max: Math.max(...renderTimes),
   min: Math.min(...renderTimes),
   totalReRenders: this.renderMetrics.reRenderCount,
 },
-  memory: {,
+  memory: {
   average: this.average(memoryUsage),
   max: Math.max(...memoryUsage),
   peak: Math.max(...this.snapshots.map(s => s.memory.usedJSHeapSize)),
 },
-  network: {,
+  network: {
   average: this.average(responseTimes),
   totalRequests: this.snapshots.reduce((sum, s) => sum + s.network.requestCount, 0),
   totalTransfer: this.snapshots.reduce((sum, s) => sum + s.network.totalTransferSize, 0),
 },
-  interactions: {,
+  interactions: {
   totalClicks: this.userInteractions.clickCount,
   totalScrolls: this.userInteractions.scrollEvents,
   totalInputs: this.userInteractions.inputEvents,

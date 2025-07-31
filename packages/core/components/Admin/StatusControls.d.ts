@@ -13,6 +13,7 @@ export type ServiceStatus = 'running' | 'stopped' | 'error' | 'starting' | 'stop
 export type UserStatus = 'active' | 'inactive' | 'suspended' | 'locked' | 'pending';
 export type ProcessStatus = 'running' | 'idle' | 'busy' | 'error' | 'stopped';
 
+}
 export interface SystemService {
     id: string;
     name: string;
@@ -30,6 +31,7 @@ export interface SystemService {
     metrics: ServiceMetrics;
 
 
+}
 export interface ServiceLog {
     id: string;
     timestamp: Date;
@@ -39,6 +41,7 @@ export interface ServiceLog {
     details?: Record<string, any>;
 
 
+}
 export interface ServiceMetrics {
     cpuUsage: number;
     memoryUsage: number;
@@ -48,6 +51,7 @@ export interface ServiceMetrics {
     throughput: number;
 
 
+}
 export interface SystemOverview {
     overallStatus: SystemStatus;
     totalServices: number;
@@ -62,6 +66,7 @@ export interface SystemOverview {
     backgroundJobs: number;
 
 
+}
 export interface StatusControlsProps {
     className?: string;
     adminLevel?: 'admin' | 'super_admin' | 'system';
@@ -71,3 +76,4 @@ export interface StatusControlsProps {
 export declare const StatusControls: React.FC<StatusControlsProps>;
 export default StatusControls;
 //# sourceMappingURL=StatusControls.d.ts.map
+}

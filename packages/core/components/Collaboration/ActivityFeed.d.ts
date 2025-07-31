@@ -1,5 +1,6 @@
 import React from 'react';
 
+}
 interface ActivityFeedProps {
     workspaceId?: string;
     projectId?: string;
@@ -11,5 +12,6 @@ interface ActivityFeedProps {
     realTime?: boolean;
 
 export declare const ActivityFeed: React.FC<ActivityFeedProps>;
+}
 export {};
 //# sourceMappingURL=ActivityFeed.d.ts.map

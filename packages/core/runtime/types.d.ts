@@ -11,3 +11,5 @@ export declare abstract class RuntimeNode<TOutput = unknown> {
     abstract run(ctx: ExecutionContext): Promise<TOutput> | TOutput;
 
 //# sourceMappingURL=types.d.ts.map
+}
+}

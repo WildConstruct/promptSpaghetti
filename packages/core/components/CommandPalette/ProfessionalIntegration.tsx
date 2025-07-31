@@ -12,6 +12,7 @@ import { MultiSelectionManager } from './MultiSelectionManager';
 import { AutosaveManager } from './AutosaveManager';
 import { KeyboardShortcutsManager } from './KeyboardShortcutsManager';
 
+}
 export interface ProfessionalIntegrationProps {
   nodes: Node[];
   edges: Edge[];
@@ -21,6 +22,7 @@ export interface ProfessionalIntegrationProps {
   onEdgesChange: (edges: Edge[]) => void;
   onNodesSelect: (nodes: Node[]) => void;
   onEdgesSelect: (edges: Edge[]) => void;
+}
   onNodeCreate: (nodeType: string, position: { x: number; y: number }, data?: Record<string, unknown>) => void;
   onNodeDelete: (nodeIds: string[]) => void;
   onExport: (format: 'json' | 'png' | 'svg' | 'pdf') => void;

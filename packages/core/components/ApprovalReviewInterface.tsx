@@ -16,6 +16,7 @@ import {
   StarIcon,
   ClipboardDocumentListIcon
 } from '@heroicons/react/24/outline';
+}
 interface ApprovalCriteria {
   id: string;
   name: string;
@@ -61,6 +62,7 @@ interface ApprovalCriteria {
   onReviewSubmit,
   onClose,
   readOnly = false
+}
 }) => {
   const [reviewerAssignments, setReviewerAssignments] = useState<ReviewerAssignment>([]);
   const [approvalCriteria, setApprovalCriteria] = useState<ApprovalCriteria>([]);

@@ -12,6 +12,7 @@ import {
   RestoreResult 
 } from '../../version-history/VersionRestoreManager';
 import { VersionSnapshot } from '../../version-history/VersionHistoryManager';
+}
 interface VersionRestoreDialogProps {
   snapshot: VersionSnapshot;
   currentGraphData: unknown;
@@ -29,6 +30,7 @@ interface VersionRestoreDialogProps {
   onClose,
   onRestoreComplete,
   className = ''
+}
 }) => {
   const [currentStep, setCurrentStep] = useState<DialogStep>('options');
   const [restoreOptions, setRestoreOptions] = useState<RestoreOptions>({)
@@ -316,10 +318,12 @@ interface VersionRestoreDialogProps {
 };
 
 // Step Components
+}
 interface RestoreOptionsStepProps {
   options: RestoreOptions;
   onChange: (options: RestoreOptions) => void;
   snapshot: VersionSnapshot;
+}
 const RestoreOptionsStep: React.FC<RestoreOptionsStepProps> = ({ options, onChange, snapshot }) => {
   return;
     <div className="space-y-6">
@@ -484,6 +488,7 @@ const RestoreOptionsStep: React.FC<RestoreOptionsStepProps> = ({ options, onChan
     </div>
   );
 };
+}
 interface ConflictResolutionStepProps {
   conflicts: RestoreConflict;
   resolutions: Record<string, string>;
@@ -494,6 +499,7 @@ interface ConflictResolutionStepProps {
   resolutions,
   onResolutionChange,
   getSeverityColor
+}
 }) => {
   const conflictsByType = conflicts.reduce((acc, conflict) => {
     if (!acc[conflict.type]) acc[conflict.type] = [];
@@ -589,6 +595,7 @@ interface ConflictResolutionStepProps {
     </div>
   );
 };
+}
 interface RestorePreviewStepProps {
   preview: RestorePreview;
   options: RestoreOptions;
@@ -599,6 +606,7 @@ interface RestorePreviewStepProps {
   options,
   conflicts,
   getRiskLevelColor
+}
 }) => {
   return;
     <div className="space-y-6">
@@ -698,9 +706,11 @@ interface RestorePreviewStepProps {
     </div>
   );
 };
+}
 interface RestoreProgressStepProps {
   restoreState: RestoreState;
   onCancel: () => void;
+}
 const RestoreProgressStep: React.FC<RestoreProgressStepProps> = ({ restoreState, onCancel }) => {
   return;
     <div className="space-y-6 text-center">
@@ -742,9 +752,11 @@ const RestoreProgressStep: React.FC<RestoreProgressStepProps> = ({ restoreState,
     </div>
   );
 };
+}
 interface RestoreResultStepProps {
   result: RestoreResult;
   onClose: () => void;
+}
 const RestoreResultStep: React.FC<RestoreResultStepProps> = ({ result, onClose }) => {
   return;
     <div className="space-y-6 text-center">

@@ -16,6 +16,7 @@ import { PerformancePanel } from './PerformancePanel';
 import { StateInspectorPanel } from './StateInspectorPanel';
 import { DependencyGraphPanel } from './DependencyGraphPanel';
 
+}
 export interface DevToolsPanelProps {
   devTools: StateDevTools;
   timeTravel: TimeTravel;
@@ -25,7 +26,9 @@ export interface DevToolsPanelProps {
   defaultTab?: string;
   position?: 'bottom' | 'right' | 'floating';
   theme?: 'light' | 'dark' | 'auto'
+}
   }
+}
 export interface DevToolsState {
   activeTab: string;
   isRecording: boolean;
@@ -35,6 +38,7 @@ export interface DevToolsState {
   dependencyGraph: DependencyGraph | null;
   performanceReport: PerformanceReport | null;
 const TABS = [;
+}
   { id: 'inspector', label: 'State Inspector', icon: '🔍' },
   { id: 'timetravel', label: 'Time Travel', icon: '⏰' },
   { id: 'performance', label: 'Performance', icon: '📊' },
@@ -341,6 +345,7 @@ export const DevToolsPanel: React.FC<DevToolsPanelProps> = ({)
 };
 
 // DevTools Settings Panel Component
+}
 interface DevToolsSettingsPanelProps {
   devTools: StateDevTools;
   timeTravel: TimeTravel;
@@ -349,6 +354,7 @@ interface DevToolsSettingsPanelProps {
   devTools,
   timeTravel,
   performanceProfiler
+}
 }) => {
   const [settings, setSettings] = useState({)
   maxHistorySize: 1000,

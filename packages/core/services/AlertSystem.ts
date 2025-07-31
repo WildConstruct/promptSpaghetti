@@ -13,6 +13,7 @@
  * - Alert filtering and prioritization
  */
 
+}
 export interface AlertRule {
   id: string;
   name: string;
@@ -31,6 +32,8 @@ export interface AlertRule {
   updatedAt: Date;
   createdBy: string;
 }
+}
+}
 export interface AlertCondition {
   id: string;
   field: string; // e.g., 'execution_time', 'error_rate', 'memory_usage',
@@ -38,6 +41,8 @@ export interface AlertCondition {
   value: string | number | boolean;
   aggregation?: 'sum' | 'avg' | 'min' | 'max' | 'count';
   timeWindow?: number; // Minutes to evaluate condition over,
+}
+}
 }
 export interface AlertAction {
   id: string;
@@ -48,7 +53,9 @@ export interface AlertAction {
   maxRetries: number;
   retryDelay: number; // seconds,
   backoffMultiplier?: number;
+}
 };
+}
 }
 export interface AlertThreshold {
   id: string;
@@ -57,9 +64,13 @@ export interface AlertThreshold {
   comparison: 'above' | 'below' | 'equals';
   severity: AlertSeverity;
 }
+}
+}
 export interface AlertEscalation {
   enabled: boolean;
   stages: AlertEscalationStage;
+}
+}
 }
 export interface AlertEscalationStage {
   id: string;
@@ -67,7 +78,9 @@ export interface AlertEscalationStage {
   severity: AlertSeverity;
   actions: AlertAction;
   condition?: 'unacknowledged' | 'unresolved' | 'recurring'
+}
   }
+}
 export interface Alert {
   id: string;
   ruleId: string;
@@ -107,6 +120,7 @@ export interface Alert {
   priority: AlertPriority;
   tags: string;
 }
+}
 export type AlertType = 
   | 'performance' 
   | 'error' 
@@ -135,6 +149,7 @@ export type AlertSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
 export type AlertStatus = 'active' | 'acknowledged' | 'resolved' | 'suppressed' | 'expired';
 export type AlertPriority = 'urgent' | 'high' | 'normal' | 'low';
 
+}
 export interface AlertFilter {
   types?: AlertType;
   categories?: AlertCategory;
@@ -145,8 +160,10 @@ export interface AlertFilter {
   dateRange?: {
   start: Date;
   end: Date;
+}
 };
   searchQuery?: string;
+}
 }
 export interface AlertStats {
   total: number;
@@ -163,6 +180,7 @@ export interface AlertStats {
   /**
   * Enhanced Alert System Service
   */
+}
 }
 export class AlertSystem {
   private static instance: AlertSystem;
@@ -196,6 +214,7 @@ export class AlertSystem {
     context: Record<string, any>,
     overrides?: Partial<Alert>
   ): Promise<Alert | null> {
+
   const rule = this.rules.get(ruleId);
   if (!rule || !rule.enabled) {
   return null;
@@ -466,6 +485,7 @@ export class AlertSystem {
       ...overrides
     };
   private async executeActions(actions: AlertAction, alert: Alert): Promise<void> {
+
     for (const action of actions.filter(a => a.enabled)) {
       try {
         await this.executeAction(action, alert);
@@ -473,6 +493,7 @@ export class AlertSystem {
         console.error(`Failed to execute alert action ${action.id}:`, error);}
         // Could implement action retry logic here
   private async executeAction(action: AlertAction, alert: Alert): Promise<void> {
+
     switch (action.type) {
     case 'notification':
       await this.sendNotification(alert, action.configuration);
@@ -601,9 +622,9 @@ export class AlertSystem {
     return (alert.resolvedAt.getTime() - alert.triggeredAt.getTime()) / (1000 * 60); // minutes
   private getNestedValue(obj: Record<string, any>, path: string): any {
     return path.split('.').reduce((current, key) => current?.[key], obj);
-  private groupByField<T extends Record<string, any>, K extends keyof T>(()
+  private groupByField<T extends Record<string, any>, K extends keyof T>(((
     items: T,
-    field: K,
+    field: K
   ): Record<string, number> {
     const grouped: Record<string, number> = {};
     items.forEach(item => {)
@@ -728,6 +749,7 @@ export class AlertSystem {
     });
   // Action implementations
   private async sendNotification(alert: Alert, config: Record<string, any>): Promise<void> {
+
   // Integration with existing notification system
   const notification = {
   type: config.type || 'info',
@@ -743,9 +765,11 @@ export class AlertSystem {
     // This would integrate with the existing NotificationSystem
     console.debug('Sending notification:', notification);
   private async sendEmail(alert: Alert, config: Record<string, any>): Promise<void> {
+
     // Email sending implementation
     console.debug('Sending email alert:', { alert: alert.id, config });
   private async callWebhook(alert: Alert, config: Record<string, any>): Promise<void> {
+
     // Webhook calling implementation
     if (!config.url) return;
     try {
@@ -766,9 +790,11 @@ export class AlertSystem {
       console.error('Webhook error:', error);
       throw error;
   private async executeScript(alert: Alert, config: Record<string, any>): Promise<void> {
+
     // Script execution implementation (would need proper sandboxing)
     console.debug('Executing script for alert:', { alert: alert.id, config });
   private async createTask(alert: Alert, config: Record<string, any>): Promise<void> {
+
     // Task creation implementation
     console.debug('Creating task for alert:', { alert: alert.id, config });
 

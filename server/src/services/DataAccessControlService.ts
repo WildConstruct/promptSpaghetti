@@ -9,6 +9,7 @@ import { DataClassificationService } from '../../../packages/core/security/DataC
 import { AccessControlManager } from './AccessControlManager';
 
 }
+}
 export interface DataAccessRequest {
   userId: string;
   resourceId: string;
@@ -20,7 +21,9 @@ export interface DataAccessRequest {
   expiresAt?: Date;
 }
 }
+}
 
+}
 }
 export interface DataAccessResponse {
   allowed: boolean;
@@ -33,7 +36,9 @@ export interface DataAccessResponse {
   auditId: string;
 }
 }
+}
 
+}
 }
 export interface AccessGrant {
   id: string;
@@ -50,12 +55,15 @@ export interface AccessGrant {
   restrictions?: AccessRestriction[];
 }
 }
+}
 
+}
 }
 export interface AccessRestriction {
   type: 'time' | 'location' | 'operation' | 'export' | 'share';
   value: string;
   description: string;
+}
 }
 }
 
@@ -78,6 +86,7 @@ export type AccessLevel =
   | 'FULL_ACCESS';
 
 }
+}
 export interface UserRole {
   id: string;
   name: string;
@@ -86,7 +95,9 @@ export interface UserRole {
   hierarchy: number; // 1=lowest, 10=highest
 }
 }
+}
 
+}
 }
 export interface AccessAuditEvent {
   id: string;
@@ -102,6 +113,7 @@ export interface AccessAuditEvent {
   ipAddress?: string;
   userAgent?: string;
   riskScore?: number;
+}
 }
 }
 

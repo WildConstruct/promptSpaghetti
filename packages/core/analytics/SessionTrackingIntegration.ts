@@ -13,6 +13,7 @@
 import { AnalyticsClient } from './AnalyticsClient';
 import { ConversionArchitectureManager, CrossDeviceIdentity, DeviceIdentity, LinkingSignal } from './ConversionFunnelArchitecture';
 
+}
 export interface EnhancedSession {
   sessionId: string;
   userId: string;
@@ -33,6 +34,7 @@ export interface EnhancedSession {
   country?: string;
   region?: string;
   city?: string; // Only if user consents,
+}
 };
   // Attribution data
   utmSource?: string;
@@ -60,12 +62,14 @@ export interface EnhancedSession {
   browser: string;
   os: string;
 }
+}
 export interface SessionEvent {
   sessionId: string;
   timestamp: number;
   type: SessionEventType;
   page?: string;
   properties: Record<string, any>;
+}
 }
 export type SessionEventType = 
   | 'session_start'
@@ -76,6 +80,7 @@ export type SessionEventType =
   | 'cross_device_link'
   | 'consent_update';
 
+}
 export interface SessionAnalytics {
   totalSessions: number;
   uniqueUsers: number;
@@ -93,12 +98,13 @@ export interface SessionAnalytics {
   hourlyDistribution: number;
   dailyDistribution: number;
   // User journey insights
-  commonPaths: Array<{,
+  commonPaths: Array<{
   path: string;
   frequency: number;
   conversionRate: number;
+}
 }>;
-  dropoffPoints: Array<{,
+  dropoffPoints: Array<{
   page: string;
   dropoffRate: number;
   recoverableUsers: number;

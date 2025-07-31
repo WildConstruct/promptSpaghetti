@@ -38,6 +38,7 @@ export enum DeliveryMethod {
  * Report data structure
  */
 }
+}
 export interface ReportData {
   metadata: {
     title: string;
@@ -45,6 +46,7 @@ export interface ReportData {
     generatedAt: Date;
     generatedBy: string;
     version: string;
+}
 }
   };
   summary: Record<string, any>;
@@ -66,6 +68,7 @@ export interface ReportData {
  * Export configuration
  */
 }
+}
 export interface ExportConfig {
   format: ExportFormat;
   delivery: DeliveryMethod;
@@ -77,6 +80,7 @@ export interface ExportConfig {
     compression?: boolean;
     encryption?: boolean;
     password?: string;
+}
 }
   };
   deliveryConfig?: {
@@ -103,6 +107,7 @@ export interface ExportConfig {
  * Export result
  */
 }
+}
 export interface ExportResult {
   id: string;
   success: boolean;
@@ -119,12 +124,14 @@ export interface ExportResult {
     processingTime: number;
     compressionRatio?: number;
 }
+}
   };
 }
 
 /**
  * Scheduled export configuration
  */
+}
 }
 export interface ScheduledExport {
   id: string;
@@ -138,6 +145,7 @@ export interface ScheduledExport {
     dayOfWeek?: number; // 0-6 for weekly
     dayOfMonth?: number; // 1-31 for monthly
     cron?: string; // Custom cron expression
+}
 }
   };
   enabled: boolean;

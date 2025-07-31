@@ -13,6 +13,7 @@ import {
   ValidationResult
 } from '../types/DataClassification';
 
+}
 export interface EncryptionPolicy {
   id: string;
   name: string;
@@ -25,6 +26,8 @@ export interface EncryptionPolicy {
   effectiveDate: Date;
   version: string;
 }
+}
+}
 export interface EncryptionAlgorithm {
   name: string;
   keyLength: number;
@@ -36,6 +39,8 @@ export interface EncryptionAlgorithm {
   quantumResistant: boolean;
   deprecatedDate?: Date;
 }
+}
+}
 export interface KeyManagementPolicy {
   keyRotationDays: number;
   keyEscrowRequired: boolean;
@@ -45,6 +50,8 @@ export interface KeyManagementPolicy {
   multiPartyControl: boolean;
   keyRecoveryProcedure: string;
   auditLogging: boolean;
+}
+}
 }
 export interface EncryptionCompliance {
   dataId: string;
@@ -59,6 +66,8 @@ export interface EncryptionCompliance {
   recommendations: string;
   assessmentDate: Date;
 }
+}
+}
 export interface EncryptionAuditEvent {
   id: string;
   timestamp: Date;
@@ -70,6 +79,7 @@ export interface EncryptionAuditEvent {
   keyId: string;
   result: 'SUCCESS' | 'FAILURE' | 'WARNING';
   details: Record<string, any>;
+}
 }
 export class ClassificationEncryptionPolicyService {
   private encryptionPolicies: Map<DataClassificationLevel, EncryptionPolicy> = new Map();
@@ -266,9 +276,9 @@ export class ClassificationEncryptionPolicyService {
   /**
    * Check if algorithm is approved for classification level
    */
-  private isAlgorithmApprovedForClassification(()
+  private isAlgorithmApprovedForClassification(((
     algorithm: EncryptionAlgorithm,
-    classification: DataClassificationLevel,
+    classification: DataClassificationLevel
   ): boolean {
   const classificationLevels: Record<DataClassificationLevel, number> = {,
   PUBLIC: 1,
@@ -414,6 +424,7 @@ export class ClassificationEncryptionPolicyService {
    * Record audit event
    */
   private async recordAuditEvent(event: Omit<EncryptionAuditEvent, 'id' | 'timestamp'>): Promise<void> {
+
     const auditEvent: EncryptionAuditEvent = {,
   id: `audit-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
 },
@@ -460,10 +471,11 @@ export class ClassificationEncryptionPolicyService {
   /**
    * Update encryption policy
    */
-  async updateEncryptionPolicy(()
+  async updateEncryptionPolicy(((
     classification: DataClassificationLevel,
-    updates: Partial<EncryptionPolicy>,
+    updates: Partial<EncryptionPolicy>
   ): Promise<void> {
+
     const existingPolicy = this.encryptionPolicies.get(classification);
     if (!existingPolicy) {
       throw new Error(`No encryption policy found for classification: ${classification}`);}

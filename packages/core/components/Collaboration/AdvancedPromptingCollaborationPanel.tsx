@@ -15,6 +15,7 @@ import {
   PromptingMethodology,
   FilmIndustryWorkflowTemplate
 } from '../../services/AdvancedPromptingCollaborationService';
+}
 interface AdvancedPromptingCollaborationPanelProps {
   collaborationService: AdvancedPromptingCollaborationService;
   currentUser: FilmIndustryUser;
@@ -29,6 +30,7 @@ interface AdvancedPromptingCollaborationPanelProps {
   onZadaPatternCreate,
   onVFXExport,
   className
+}
 }) => {
   const [currentSession, setCurrentSession] = useState<PromptingMethodologySession | null>(null);
   const [sessions, setSessions] = useState<PromptingMethodologySession>([]);

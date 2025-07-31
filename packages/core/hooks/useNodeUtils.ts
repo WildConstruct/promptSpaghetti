@@ -1,14 +1,17 @@
 import { useMemo } from 'react';
 import { NodeMeta } from '../Palette';
 
+}
 interface UseNodeUtilsProps {
   nodeTypes: NodeMeta;
 
 
+}
 interface UseNodeUtilsReturn {
   getNodeMeta: (nodeType: string) => NodeMeta;
   getCategoryColor: (category: string) => string;
 
+}
 export const useNodeUtils = ({ nodeTypes }: UseNodeUtilsProps): UseNodeUtilsReturn => {
   const getNodeMeta = useMemo(() => {
   return (nodeType: string): NodeMeta => {,

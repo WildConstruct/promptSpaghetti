@@ -39,9 +39,11 @@ import {
 
 // Drawing annotation types
 
+}
 export interface DrawingAnnotation {
   id: string;
   type: 'freehand' | 'arrow' | 'circle' | 'rectangle' | 'line' | 'text';
+}
   points: Array<{ x: number; y: number }>;
   style: DrawingStyle;
   layer: number;
@@ -55,6 +57,7 @@ export interface DrawingAnnotation {
   scale: { x: number; y: number };
   };
 }
+}
 export interface DrawingStyle {
   color: string;
   thickness: number;
@@ -67,12 +70,16 @@ export interface DrawingStyle {
   fontSize?: number; // For text,
   fontFamily?: string;
   fontWeight?: 'normal' | 'bold'
+}
   }
+}
 export interface VFXUser {
   id: string;
   name: string;
   role: string;
   color: string; // User's drawing color,
+}
+}
 }
 export interface DrawingCanvasProps {
   width: number;
@@ -89,6 +96,7 @@ export interface DrawingCanvasProps {
 
 // Drawing tool configurations
 const DRAWING_TOOLS = {
+}
   freehand: { icon: <Pen className="w-4 h-4" />, label: 'Pen', cursor: 'crosshair' },
   arrow: { icon: <ArrowRight className="w-4 h-4" />, label: 'Arrow', cursor: 'crosshair' },
   circle: { icon: <Circle className="w-4 h-4" />, label: 'Circle', cursor: 'crosshair' },

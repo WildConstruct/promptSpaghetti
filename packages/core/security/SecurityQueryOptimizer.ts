@@ -9,6 +9,7 @@
 import { EventEmitter } from 'events';
 import * as crypto from 'crypto';
 
+}
 export interface QueryProfile {
   id: string;
   query_hash: string;
@@ -22,6 +23,7 @@ export interface QueryProfile {
   filter_selectivity: number; // 0-1, how selective filters are,
   join_complexity: number; // Number and complexity of joins,
   aggregation_complexity: number; // Complexity of grouping/aggregation,
+}
 };
   // Performance history
   performance_history: QueryExecution;
@@ -44,6 +46,7 @@ export interface QueryProfile {
   created_at: number;
   last_updated: number;
   last_executed: number;
+}
 }
 export interface QueryExecution {
   id: string;
@@ -82,6 +85,8 @@ export interface QueryExecution {
   result_completeness: number; // 0-1 scale,
   user_satisfaction_score?: number; // 1-5 scale,
 }
+}
+}
 export interface CachingStrategy {
   cache_type: 'none' | 'result_cache' | 'partial_cache' | 'materialized_view' | 'smart_cache';
   cache_duration_seconds: number;
@@ -90,20 +95,23 @@ export interface CachingStrategy {
   cache_partitioning: boolean;
   cache_compression: boolean;
   cache_location: 'memory' | 'ssd' | 'distributed'
+}
   }
+}
 export interface ExecutionPlan {
   id: string;
   plan_type: 'sequential' | 'parallel' | 'distributed' | 'hybrid';
   estimated_cost: number;
   estimated_time_ms: number;
   // Plan steps
-  steps: Array<{,
+  steps: Array<{
   step_id: number;
   operation: string;
   estimated_time_ms: number;
   estimated_rows: number;
   parallelization: number;
   dependencies: number;
+}
 }>;
   // Resource requirements
   resources: {
@@ -122,19 +130,24 @@ export interface ExecutionPlan {
   aggregation_pushdown: boolean;
 };
 }
+}
 export interface UserUsagePattern {
   user_id: string;
   usage_frequency: number;
+}
   preferred_time_ranges: Array<{ start_hour: number; end_hour: number }>;
   query_complexity_preference: 'simple' | 'moderate' | 'complex';
   result_size_preference: 'small' | 'medium' | 'large';
   latency_tolerance_ms: number;
 }
+}
 export interface SeasonalPattern {
   pattern_type: 'daily' | 'weekly' | 'monthly' | 'quarterly';
+}
   peak_periods: Array<{ start: number; end: number; multiplier: number }>;
   low_periods: Array<{ start: number; end: number; multiplier: number }>;
   confidence_score: number;
+}
 }
 export interface CacheEntry {
   cache_key: string;
@@ -153,6 +166,7 @@ export interface CacheEntry {
   column_count: number;
   data_freshness: number;
   computation_time_ms: number;
+}
 };
   // Cache performance
   hit_rate: number;
@@ -167,6 +181,7 @@ export interface CacheEntry {
   replication_factor: number;
   geographic_distribution: string;
 }
+}
 export interface QueryOptimizationRule {
   id: string;
   name: string;
@@ -180,6 +195,7 @@ export interface QueryOptimizationRule {
   min_cpu_time_ms?: number;
   min_memory_usage_mb?: number;
   min_cost?: number;
+}
 };
     usage_patterns: {
   min_frequency_per_day?: number;
@@ -205,6 +221,7 @@ export interface QueryOptimizationRule {
   application_count: number;
   success_rate: number;
 }
+}
 export interface IndexRecommendation {
   index_name: string;
   table_name: string;
@@ -215,6 +232,8 @@ export interface IndexRecommendation {
   maintenance_cost: number;
   creation_time_estimate_minutes: number;
 }
+}
+}
 export interface QueryRewrite {
   original_pattern: string;
   optimized_pattern: string;
@@ -222,6 +241,8 @@ export interface QueryRewrite {
   expected_improvement_percentage: number;
   risk_level: 'low' | 'medium' | 'high';
   validation_required: boolean;
+}
+}
 }
 export interface OptimizationJob {
   id: string;
@@ -235,6 +256,7 @@ export interface OptimizationJob {
   optimization_level: 'conservative' | 'moderate' | 'aggressive';
   max_duration_minutes: number;
   max_resource_usage_percentage: number;
+}
 };
   // Scheduling
   schedule: {
@@ -267,11 +289,13 @@ export interface OptimizationJob {
   last_updated: number;
   enabled: boolean;
 }
+}
 export interface PerformanceMetrics {
   id: string;
   collection_period: {
   start: number;
   end: number;
+}
 };
   // Query performance
   query_performance: {
@@ -321,6 +345,7 @@ export interface PerformanceMetrics {
 };
   collected_at: number;
 }
+}
 export interface OptimizationEvent {
   id: string;
   type: 'optimization_applied' | 'cache_miss_spike' | 'performance_degradation' | 'rule_triggered' | 'index_created' | 'cache_warmed';
@@ -338,6 +363,7 @@ export interface OptimizationEvent {
   after_metrics: Record<string, number>;
   improvement_percentage: number;
   cost_impact: number;
+}
 };
   // Context data
   context: {
@@ -504,8 +530,7 @@ export class SecurityQueryOptimizer extends EventEmitter {
   const windowFunctions = (queryText.match(/\bOVER\b/gi) || []).length;
   complexity += windowFunctions;
   return complexity;
-  private async generateOptimizationStrategy(()
-  queryText: string,
+  private async generateOptimizationStrategy((queryText: string,
   queryType: QueryProfile['query_type']): Promise<QueryProfile['optimization']> {,
   const characteristics = await this.analyzeQueryCharacteristics(queryText);
   return {
@@ -588,10 +613,11 @@ export class SecurityQueryOptimizer extends EventEmitter {
   cache_compression: true,
   cache_location: 'memory',
 };
-  private async generateExecutionPlan(()
+  private async generateExecutionPlan(((
     queryText: string,
-    characteristics: QueryProfile['characteristics'],
+    characteristics: QueryProfile['characteristics']
   ): Promise<ExecutionPlan> {
+
     const planId = `plan_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;}
     // Determine plan type based on complexity and data volume
     let planType: ExecutionPlan['plan_type'] = 'sequential';
@@ -631,8 +657,7 @@ export class SecurityQueryOptimizer extends EventEmitter {
   // Factor in selectivity
   timeMs *= (2 - characteristics.filter_selectivity);
   return timeMs;
-  private generateExecutionSteps(()
-  queryText: string,
+  private generateExecutionSteps((queryText: string,
   characteristics: QueryProfile['characteristics']): ExecutionPlan['steps'] {,
   const steps: ExecutionPlan['steps'] = [];
   let stepId = 1;
@@ -676,9 +701,9 @@ export class SecurityQueryOptimizer extends EventEmitter {
   dependencies: [stepId - 2],
 });
     return steps;
-  private calculateResourceRequirements(()
+  private calculateResourceRequirements(((
     characteristics: QueryProfile['characteristics'],
-    planType: ExecutionPlan['plan_type'],
+    planType: ExecutionPlan['plan_type']
   ): ExecutionPlan['resources'] {
   const baseMemory = 256; // Base 256MB;
   const baseCpu = 1;
@@ -702,10 +727,11 @@ export class SecurityQueryOptimizer extends EventEmitter {
   network_mb: Math.ceil(baseNetwork * multiplier * (1 + characteristics.join_complexity / 5)),
 };
   // Query Execution and Caching
-  private async executeQueryWithProfiling(()
+  private async executeQueryWithProfiling(((
     profile: QueryProfile,
-    executedBy: string,
+    executedBy: string
   ): Promise<QueryExecution> {
+
     const executionId = `exec_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
     const startTime = Date.now();
     // Check cache first
@@ -763,6 +789,7 @@ export class SecurityQueryOptimizer extends EventEmitter {
     this.queryExecutions.set(executionId, execution);
     return execution;
   private async simulateQueryExecution(profile: QueryProfile): Promise<void> {
+
     // Simulate execution time based on complexity
     const executionTime = this.estimateExecutionTime(profile.characteristics);
     // Add some randomness to make it realistic
@@ -792,6 +819,7 @@ export class SecurityQueryOptimizer extends EventEmitter {
       params.offset = parseInt(offsetMatch[1]);
     return params;
   private async createCacheEntry(profile: QueryProfile, cacheKey: string): Promise<void> {
+
     const cacheEntry: CacheEntry = {,
   cache_key: cacheKey,
       query_hash: profile.query_hash,
@@ -875,6 +903,7 @@ export class SecurityQueryOptimizer extends EventEmitter {
       return false;
     return true;
   private async applyOptimizationRule(rule: QueryOptimizationRule, profile: QueryProfile): Promise<void> {
+
     console.log(`🔧 Applying optimization rule: ${rule.name} to query ${profile.id}`);}
     // Apply index recommendations
     for (const indexRec of rule.actions.index_recommendations) {
@@ -929,6 +958,7 @@ export class SecurityQueryOptimizer extends EventEmitter {
   event_id: event.id,
 });
   private async createRecommendedIndex(indexRec: IndexRecommendation, profile: QueryProfile): Promise<void> {
+
     console.log(`📊 Creating recommended index: ${indexRec.index_name} on ${indexRec.table_name}`);}
     // Simulate index creation
     await new Promise(resolve => setTimeout(resolve, 100)); // Brief delay for demo
@@ -936,6 +966,7 @@ export class SecurityQueryOptimizer extends EventEmitter {
     if (!profile.optimization.suggested_indices.includes(indexRec.index_name)) {
       profile.optimization.suggested_indices.push(indexRec.index_name);
   private async applyQueryRewrite(rewrite: QueryRewrite, profile: QueryProfile): Promise<void> {
+
     console.log(`✏️ Applying query rewrite: ${rewrite.transformation_type}`);}
     // Apply query transformation (simplified)
     if (rewrite.risk_level === 'low' && !rewrite.validation_required) {
@@ -951,6 +982,7 @@ export class SecurityQueryOptimizer extends EventEmitter {
         profile.last_updated = Date.now();
   // Performance Monitoring and Metrics
   async collectPerformanceMetrics(): Promise<string> {
+
     const id = `metrics_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
     const now = Date.now();
     const hourAgo = now - 3600000;
@@ -1330,6 +1362,7 @@ export class SecurityQueryOptimizer extends EventEmitter {
 };
     return JSON.stringify(config, null, 2);
   async importConfiguration(configJson: string): Promise<void> {
+
   try {
   const config = JSON.parse(configJson);
   // Import query profiles

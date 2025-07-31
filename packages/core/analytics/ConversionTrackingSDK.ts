@@ -17,6 +17,7 @@ import { ConversionArchitectureManager, EnhancedConversionEvent, TouchPoint } fr
 import { SessionTrackingManager } from './SessionTrackingIntegration';
 import { ConversionEvent, ConversionEventType, ConversionCategory } from './ConversionTracker';
 
+}
 export interface ConversionTrackingConfig extends AnalyticsClientConfig {
   // Real-time streaming configuration
   enableRealTimeStreaming: boolean;
@@ -42,11 +43,15 @@ export interface ConversionTrackingConfig extends AnalyticsClientConfig {
   validator?: (value: unknown) => boolean;
   errorMessage: string;
 }
+}
+}
 export interface QueuedEvent {
   event: EnhancedConversionEvent;
   timestamp: number;
   retryCount: number;
   queuedOffline: boolean;
+}
+}
 }
 export interface TrackingMetrics {
   eventsTracked: number;
@@ -57,6 +62,8 @@ export interface TrackingMetrics {
   duplicatesFiltered: number;
   offlineEvents: number;
   privacyBlockedEvents: number;
+}
+}
 }
 export interface ConversionContext {
   sessionId: string;
@@ -69,6 +76,7 @@ export interface ConversionContext {
   analytics: boolean;
   personalization: boolean;
   crossDevice: boolean;
+}
 };
   attribution: {
   source: string;
@@ -194,7 +202,7 @@ export class ConversionTrackingSDK extends AnalyticsClient {
   /**
    * Track conversion event with enhanced capabilities
    */
-  public async trackConversionEvent()
+  public async trackConversionEvent(
     eventType: string,
     properties: Record<string, any> = {},
     value?: number,
@@ -259,11 +267,12 @@ export class ConversionTrackingSDK extends AnalyticsClient {
   /**
    * Track funnel step progression
    */
-  public async trackFunnelStep()
+  public async trackFunnelStep(
     funnelId: string,
     stepId: string,
     properties: Record<string, any> = {}
   ): Promise<boolean> {
+
     return this.trackConversionEvent(`funnel_step_${stepId}`, {)}
   }
       funnelId,
@@ -273,12 +282,13 @@ export class ConversionTrackingSDK extends AnalyticsClient {
   /**
    * Track attribution touchpoint
    */
-  public async trackTouchpoint()
+  public async trackTouchpoint(
     channel: string,
     source: string,
     medium: string,
     properties: Record<string, any> = {}
   ): Promise<boolean> {
+
   const touchpoint: TouchPoint = {,
   id: this.generateTouchpointId(),
   timestamp: Date.now(),
@@ -333,6 +343,7 @@ export class ConversionTrackingSDK extends AnalyticsClient {
    * Manually flush event queue
    */
   public async flushQueue(): Promise<void> {
+
     if (this.eventQueue.length === 0) return;
     this.debugLog('Flushing event queue', { queueSize: this.eventQueue.length });
     if (this.isOnline && this.streamingConnection?.readyState === WebSocket.OPEN) {
@@ -412,6 +423,7 @@ export class ConversionTrackingSDK extends AnalyticsClient {
 };
     return btoa(JSON.stringify(hashData)).substring(0, 16);
   private async queueEvent(event: EnhancedConversionEvent): Promise<void> {
+
   const queuedEvent: QueuedEvent = {,
   event,
   timestamp: Date.now(),
@@ -462,6 +474,7 @@ export class ConversionTrackingSDK extends AnalyticsClient {
       this.eventQueue.unshift(...events);
       await this.flushToAPI();
   private async flushToAPI(): Promise<void> {
+
     const events = this.eventQueue.splice(0, this.conversionConfig.batchSize);
     if (events.length === 0) return;
     try {
@@ -498,6 +511,7 @@ export class ConversionTrackingSDK extends AnalyticsClient {
       });
       this.reportError('flushToAPI', error);
   private async processOfflineBuffer(): Promise<void> {
+
   if (this.offlineBuffer.length === 0) return;
   this.debugLog('Processing offline buffer', { )
   bufferSize: this.offlineBuffer.length,

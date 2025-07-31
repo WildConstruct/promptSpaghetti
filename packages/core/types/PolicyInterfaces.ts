@@ -18,6 +18,7 @@ import { TrustScore } from './TrustTypes';
  * Base interface for all policy types
  */
 
+}
 export interface BasePolicy {
   readonly id: string;
   readonly type: PolicyType;
@@ -46,6 +47,7 @@ export interface BasePolicy {
   lastAuditDate?: Date;
   nextAuditDate?: Date;
 }
+}
 export type PolicyType = 
   | 'security'
   | 'privacy' 
@@ -67,6 +69,7 @@ export type PolicyStatus =
   | 'archived'
   | 'suspended';
 
+}
 export interface PolicyScope {
   // Geographic scope
   global: boolean;
@@ -84,15 +87,18 @@ export interface PolicyScope {
   // Conditional scope
   conditions?: PolicyCondition;
 }
+}
 export type UserType = 'individual' | 'business' | 'enterprise' | 'admin' | 'moderator' | 'developer';
 export type OrganizationType = 'startup' | 'sme' | 'enterprise' | 'non_profit' | 'government' | 'educational';
 export type Environment = 'development' | 'staging' | 'production' | 'test';
 
+}
 export interface PolicyCondition {
   field: string;
   operator: ConditionOperator;
   value: any;
   weight?: number; // For weighted condition evaluation,
+}
 }
 export type ConditionOperator = 
   | 'equals' | 'not_equals'
@@ -117,6 +123,7 @@ export type ComplianceFramework =
  * Security Policy Interface
  */
 
+}
 export interface SecurityPolicy extends BasePolicy {
   readonly type: 'security';
   securityLevel: SecurityLevel;
@@ -148,6 +155,8 @@ export interface SecurityPolicy extends BasePolicy {
   burstAllowance?: number;
   whitelistedIps?: string;
 }
+}
+}
 export interface SecurityHeadersConfig {
   contentSecurityPolicy?: string;
   xFrameOptions?: 'DENY' | 'SAMEORIGIN' | string;
@@ -157,6 +166,8 @@ export interface SecurityHeadersConfig {
   permissionsPolicy?: string;
   strictTransportSecurity?: string;
 }
+}
+}
 export interface AlertThreshold {
   metric: string;
   threshold: number;
@@ -165,6 +176,8 @@ export interface AlertThreshold {
   /**
   * Privacy Policy Interface
   */
+}
+}
 }
 export interface PrivacyPolicy extends BasePolicy {
   readonly type: 'privacy';
@@ -196,11 +209,15 @@ export interface PrivacyPolicy extends BasePolicy {
   automaticDeletion: boolean;
   backupRetention: number; // days,
 }
+}
+}
 export interface ThirdPartyConfig {
   sharingAllowed: boolean;
   partners?: string;
   purposes?: ProcessingPurpose;
   safeguards?: string;
+}
+}
 }
 export interface TransferConfig {
   internationalAllowed: boolean;
@@ -210,6 +227,8 @@ export interface TransferConfig {
   /**
   * Content Policy Interface
   */
+}
+}
 }
 export interface ContentPolicy extends BasePolicy {
   readonly type: 'content';
@@ -240,12 +259,16 @@ export interface ContentPolicy extends BasePolicy {
   keywords?: string;
   mlDetection?: boolean;
 }
+}
+}
 export interface RequirementRule {
   ruleId: string;
   requirement: string;
   mandatory: boolean;
   validationMethod: 'automatic' | 'manual' | 'hybrid'
+}
   }
+}
 export interface QualityStandard {
   standardId: string;
   name: string;
@@ -253,11 +276,15 @@ export interface QualityStandard {
   minScore: number; // 0-100,
   weight: number;
 }
+}
+}
 export interface QualityCriteria {
   criterion: string;
   weight: number;
   evaluationMethod: 'automatic' | 'manual' | 'hybrid';
   threshold?: number;
+}
+}
 }
 export interface ViolationAction {
   actionType: 'warning' | 'removal' | 'restriction' | 'suspension' | 'termination';
@@ -265,21 +292,29 @@ export interface ViolationAction {
   automatic: boolean;
   escalationPath?: string;
 }
+}
+}
 export interface AppealConfig {
   appealAllowed: boolean;
   timeLimit: number; // days,
   reviewLevels: AppealLevel;
   automaticReview?: boolean;
 }
+}
+}
 export interface AppealLevel {
   level: string;
   reviewerType: 'system' | 'moderator' | 'admin' | 'panel';
   timeLimit: number; // hours,
 }
+}
+}
 export interface AgeRestriction {
   minAge: number;
   contentType: ContentType;
   verificationRequired: boolean;
+}
+}
 }
 export interface RegionalRestriction {
   region: string;
@@ -292,6 +327,8 @@ export interface RegionalRestriction {
   /**
   * Policy Template Interface
   */
+}
+}
 }
 export interface PolicyTemplate {
   templateId: string;
@@ -317,6 +354,8 @@ export interface PolicyTemplate {
   parentTemplateId?: string;
   childTemplates?: string;
 }
+}
+}
 export interface FieldValidation {
   field: string;
   validationType: 'required' | 'format' | 'range' | 'custom';
@@ -325,6 +364,8 @@ export interface FieldValidation {
   /**
   * Policy Assignment Interface
   */
+}
+}
 }
 export interface PolicyAssignment {
   assignmentId: string;
@@ -353,6 +394,7 @@ export interface PolicyAssignment {
   reason?: string;
   notes?: string;
 }
+}
 export type AssignmentTargetType = 
   | 'global'
   | 'organization' 
@@ -366,10 +408,12 @@ export type AssignmentTargetType =
 export type AssignmentType = 'direct' | 'inherited' | 'computed' | 'default';
 export type AssignmentStatus = 'pending' | 'active' | 'suspended' | 'revoked' | 'expired';
 
+}
 export interface ConflictResolution {
   strategy: ConflictStrategy;
   priorityRules: PriorityRule;
   customLogic?: string;
+}
 }
 export type ConflictStrategy = 
   | 'highest_priority'
@@ -378,10 +422,13 @@ export type ConflictStrategy =
   | 'latest_assigned'
   | 'custom';
 
+}
 export interface PriorityRule {
   condition: string;
   priorityModifier: number;
   description: string;
+}
+}
 }
 export interface PolicyOverride {
   overrideId: string;
@@ -394,6 +441,8 @@ export interface PolicyOverride {
   /**
   * Policy Evaluation Interface
   */
+}
+}
 }
 export interface PolicyEvaluation {
   evaluationId: string;
@@ -418,6 +467,8 @@ export interface PolicyEvaluation {
   evaluatedBy: string;
   traceData?: EvaluationTrace;
 }
+}
+}
 export interface EvaluationContext {
   userId?: string;
   organizationId?: string;
@@ -428,8 +479,10 @@ export interface EvaluationContext {
   timestamp: Date;
   additionalData?: Record<string, any>;
 }
+}
 export type PolicyDecision = 'allow' | 'deny' | 'conditional' | 'review_required';
 
+}
 export interface EvaluationResult {
   decision: PolicyDecision;
   reasons: string;
@@ -442,12 +495,16 @@ export interface EvaluationResult {
   // Additional data
   metadata?: Record<string, any>;
 }
+}
+}
 export interface PolicyConflict {
   conflictType: 'priority' | 'contradiction' | 'ambiguity';
   involvedPolicies: string;
   description: string;
   resolution: string;
   resolutionConfidence: number; // 0-100,
+}
+}
 }
 export interface EvaluationTrace {
   step: string;
@@ -462,6 +519,8 @@ export interface EvaluationTrace {
   /**
   * Policy Analytics Interface
   */
+}
+}
 }
 export interface PolicyAnalytics {
   period: AnalyticsPeriod;
@@ -478,10 +537,14 @@ export interface PolicyAnalytics {
   insights: PolicyInsight;
   recommendations: PolicyRecommendation;
 }
+}
+}
 export interface AnalyticsPeriod {
   startDate: Date;
   endDate: Date;
   timeRange: TimeRange;
+}
+}
 }
 export interface PolicyUsageMetrics {
   policyId: string;
@@ -498,6 +561,8 @@ export interface PolicyUsageMetrics {
   falsePositiveRate?: number;
   falseNegativeRate?: number;
 }
+}
+}
 export interface EvaluationMetrics {
   totalEvaluations: number;
   averageEvaluationTime: number;
@@ -512,6 +577,8 @@ export interface EvaluationMetrics {
   cacheSize: number;
   cacheEvictions: number;
 }
+}
+}
 export interface PerformanceMetrics {
   averageLatency: number; // milliseconds,
   p50Latency: number;
@@ -523,6 +590,8 @@ export interface PerformanceMetrics {
   // Resource utilization
   memoryUsage: number; // bytes,
   cpuUsage: number; // percentage,
+}
+}
 }
 export interface ComplianceMetrics {
   overallComplianceScore: number; // 0-100,
@@ -536,6 +605,8 @@ export interface ComplianceMetrics {
   documentsUpToDate: number; // percentage,
   lastAuditFindings: number;
 }
+}
+}
 export interface PolicyTrend {
   trendType: 'usage' | 'performance' | 'compliance' | 'violations';
   direction: 'increasing' | 'stable' | 'decreasing';
@@ -544,6 +615,8 @@ export interface PolicyTrend {
   timeframe: string;
   description: string;
 }
+}
+}
 export interface PolicyInsight {
   insightType: 'optimization' | 'risk' | 'opportunity' | 'anomaly';
   title: string;
@@ -551,6 +624,8 @@ export interface PolicyInsight {
   impact: 'low' | 'medium' | 'high' | 'critical';
   actionable: boolean;
   relatedPolicies: string;
+}
+}
 }
 export interface PolicyRecommendation {
   category: 'optimization' | 'security' | 'compliance' | 'performance' | 'user_experience';
@@ -565,10 +640,14 @@ export interface PolicyRecommendation {
   // Utility Types and Helper Interfaces
   // =============================================================================
 }
+}
+}
 export interface PolicyValidationResult {
   valid: boolean;
   errors: ValidationError;
   warnings: ValidationWarning;
+}
+}
 }
 export interface ValidationError {
   field: string;
@@ -576,11 +655,15 @@ export interface ValidationError {
   severity: 'error' | 'warning';
   code: string;
 }
+}
+}
 export interface ValidationWarning {
   field: string;
   message: string;
   code: string;
   suggestion?: string;
+}
+}
 }
 export interface PolicySearchCriteria {
   types?: PolicyType;
@@ -593,6 +676,8 @@ export interface PolicySearchCriteria {
   modifiedBefore?: Date;
   text?: string; // Full-text search,
 }
+}
+}
 export interface PolicySearchResult {
   policies: BasePolicy;
   totalCount: number;
@@ -603,6 +688,8 @@ export interface PolicySearchResult {
   * Policy diff interface for version comparison
   */
 }
+}
+}
 export interface PolicyDiff {
   policyId: string;
   oldVersion: string;
@@ -610,12 +697,16 @@ export interface PolicyDiff {
   changes: PolicyChange;
   summary: DiffSummary;
 }
+}
+}
 export interface PolicyChange {
   changeType: 'added' | 'removed' | 'modified';
   field: string;
   oldValue?: any;
   newValue?: any;
   path: string;
+}
+}
 }
 export interface DiffSummary {
   totalChanges: number;
@@ -627,6 +718,8 @@ export interface DiffSummary {
   * Policy export/import interfaces
   */
 }
+}
+}
 export interface PolicyExport {
   exportId: string;
   exportedAt: Date;
@@ -636,14 +729,18 @@ export interface PolicyExport {
   assignments?: PolicyAssignment;
   metadata: ExportMetadata;
 }
+}
 export type ExportFormat = 'json' | 'yaml' | 'csv' | 'xml';
 
+}
 export interface ExportMetadata {
   version: string;
   description?: string;
   includeAssignments: boolean;
   includeHistory: boolean;
   filters?: PolicySearchCriteria;
+}
+}
 }
 export interface PolicyImport {
   importId: string;
@@ -653,8 +750,10 @@ export interface PolicyImport {
   status: ImportStatus;
   result: ImportResult;
 }
+}
 export type ImportStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'partially_completed';
 
+}
 export interface ImportResult {
   totalPolicies: number;
   successfullyImported: number;
@@ -663,15 +762,20 @@ export interface ImportResult {
   errors: ImportError;
   warnings: ImportWarning;
 }
+}
+}
 export interface ImportError {
   policyId?: string;
   message: string;
   field?: string;
   code: string;
 }
+}
+}
 export interface ImportWarning {
   policyId?: string;
   message: string;
   field?: string;
   code: string;
+}
 }

@@ -7,9 +7,11 @@ import {
 import { WorkflowManager } from './components/WorkflowManager';
 import { NotificationSystem } from './components/NotificationSystem';
 import { CorrectionsStatsDashboard } from './components/CorrectionsStatsDashboard';
+}
 interface CorrectionsPanelProps {
   isOpen: boolean;
   onClose: () => void;
+}
 }
 
 type FilterType = 'all' | 'active' | 'inactive' | 'regex' | 'text' | 'draft' | 'published' | 'deprecated';

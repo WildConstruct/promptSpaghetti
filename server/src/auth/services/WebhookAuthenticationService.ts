@@ -12,6 +12,7 @@ import { FastifyRequest } from 'fastify';
 import { AuditService } from './AuditService';
 
 }
+}
 export interface WebhookProvider {
   providerId: string;
   name: string;
@@ -27,7 +28,9 @@ export interface WebhookProvider {
   updatedAt: Date;
 }
 }
+}
 
+}
 }
 export interface WebhookValidationResult {
   valid: boolean;
@@ -42,7 +45,9 @@ export interface WebhookValidationResult {
   metadata?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface WebhookRequest {
   providerId: string;
@@ -53,7 +58,9 @@ export interface WebhookRequest {
   eventType?: string;
 }
 }
+}
 
+}
 }
 export interface WebhookEvent {
   eventId: string;
@@ -68,7 +75,9 @@ export interface WebhookEvent {
   error?: string;
 }
 }
+}
 
+}
 }
 export interface WebhookConfig {
   providers: Record<string, WebhookProvider>;
@@ -78,6 +87,7 @@ export interface WebhookConfig {
   enableReplayProtection: boolean;
   replayWindowSeconds: number;
   enableAuditLogging: boolean;
+}
 }
 }
 

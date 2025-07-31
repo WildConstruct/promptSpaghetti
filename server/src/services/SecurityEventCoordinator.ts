@@ -11,6 +11,7 @@ import { SecurityAuditService } from './security-audit-service';
 import { logger } from '../utils/logger';
 
 }
+}
 export interface SecurityEvent {
   id: string;
   type: string;
@@ -26,7 +27,9 @@ export interface SecurityEvent {
   enrichmentData?: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface ThreatDetectionRule {
   id: string;
@@ -40,6 +43,7 @@ export interface ThreatDetectionRule {
     userPattern?: string;
     ipPattern?: string;
 }
+}
   };
   actions: {
     alert: boolean;
@@ -52,10 +56,12 @@ export interface ThreatDetectionRule {
 }
 
 }
+}
 export interface SecurityEventStats {
   totalEvents: number;
   eventsByType: Record<string, number>;
   eventsBySeverity: Record<string, number>;
+}
 }
   topUsers: Array<{ userId: string; count: number }>;
   topIPs: Array<{ ipAddress: string; count: number }>;

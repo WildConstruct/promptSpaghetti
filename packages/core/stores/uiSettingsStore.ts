@@ -3,15 +3,20 @@ import { persist } from 'zustand/middleware';
 
 // Per-node disclosure preferences
 
+}
 export interface NodePreferences {
   disclosureLevel: 'basic' | 'advanced' | 'debug';
   useGlobalDefault: boolean;
   lastModified: number;
   // Per-node type preferences
 }
+}
+}
 export interface NodeTypePreferences {
   disclosureLevel: 'basic' | 'advanced' | 'debug';
   collapsedSections: string;
+}
+}
 }
 export interface UISettings {
   // Professional Interface Settings
@@ -33,6 +38,7 @@ export interface UISettings {
   // Demo Settings
   demoMode: boolean;           // Optimizes for presentation/demo,
   hideAllTechnicalUI: boolean; // Forces all technical UI hidden
+}
 interface UISettingsState extends UISettings {
   // Actions
   setDebugMode: (enabled: boolean) => void;
@@ -66,6 +72,7 @@ const DEFAULT_SETTINGS: UISettings = {,
   complexityLevel: 'basic',
   globalDisclosureLevel: 'basic',
   hideAdvancedFeatures: false,
+}
   nodePreferences: {},
   nodeTypePreferences: {},
   preferenceInheritance: 'global',

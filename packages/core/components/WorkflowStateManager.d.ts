@@ -1,5 +1,6 @@
 import React from 'react';
 
+}
 interface WorkflowStateManagerProps {
     workspaceId: string;
     resourceId?: string;
@@ -9,5 +10,6 @@ interface WorkflowStateManagerProps {
     onLockReleased?: (lockId: string) => void;
 
 export declare const WorkflowStateManager: React.FC<WorkflowStateManagerProps>;
+}
 export {};
 //# sourceMappingURL=WorkflowStateManager.d.ts.map

@@ -5,6 +5,7 @@ import {
   UpdateDiffSessionRequest
 } from '../types/comparison';
 
+}
 interface UseDiffSessionResult {
     session: VisualDiffSession | null;
     comparison: DetailedComparison | null;
@@ -16,5 +17,6 @@ interface UseDiffSessionResult {
     clearError: () => void;
 
 export declare const useDiffSession: () => UseDiffSessionResult;
+}
 export {};
 //# sourceMappingURL=useDiffSession.d.ts.map

@@ -5,18 +5,23 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { LocationDetectionService } from '../services/LocationDetectionService';
 
 }
+}
 interface LocationDetectionRequest {
   ipAddress?: string;
 }
 }
+}
 
+}
 }
 interface AcknowledgeAlertRequest {
   acknowledgedBy: string;
   notes?: string;
 }
 }
+}
 
+}
 }
 interface LocationFilters {
   severity?: 'low' | 'medium' | 'high' | 'critical';
@@ -24,6 +29,7 @@ interface LocationFilters {
   alertType?: string;
   limit?: number;
   offset?: number;
+}
 }
 }
 

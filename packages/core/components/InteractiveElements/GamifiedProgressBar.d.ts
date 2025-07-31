@@ -7,6 +7,7 @@
 import React from 'react';
 import { ProgressBarElement, Epic16InteractiveElementsService, Milestone } from '../../services/Epic16InteractiveElementsService';
 
+}
 interface GamifiedProgressBarProps {
     element: ProgressBarElement;
     interactiveService: Epic16InteractiveElementsService;
@@ -19,3 +20,4 @@ interface GamifiedProgressBarProps {
 export declare const GamifiedProgressBar: React.FC<GamifiedProgressBarProps>;
 export default GamifiedProgressBar;
 //# sourceMappingURL=GamifiedProgressBar.d.ts.map
+}

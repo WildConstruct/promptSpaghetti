@@ -14,6 +14,7 @@ import { z } from 'zod';
 
 // Base event interface that all events must extend
 
+}
 export interface BaseEvent {
   type: string;
   timestamp: Date;
@@ -23,6 +24,7 @@ export interface BaseEvent {
   sessionId?: string;
   metadata?: Record<string, unknown>;
   // Event priority levels for processing and filtering
+}
 }
 export enum EventPriority {
   CRITICAL = 'critical',   // System errors, security issues
@@ -100,6 +102,7 @@ export const UIEventSchema = z.object({)
 
 // Event filter interface for subscriptions
 
+}
 export interface EventFilter {
   types?: string;
   categories?: EventCategory;
@@ -110,6 +113,7 @@ export interface EventFilter {
   timeWindow?: {
   start?: Date;
   end?: Date;
+}
 };
 
 // Event handler function type
@@ -118,6 +122,7 @@ export type EventHandler<T extends BaseEvent = BaseEvent> = (event: T) => void |
 
 // Event subscription interface
 
+}
 export interface EventSubscription {
   id: string;
   filter: EventFilter;
@@ -125,6 +130,7 @@ export interface EventSubscription {
   priority: EventPriority;
   once?: boolean;
   // Event middleware for processing events before handlers
+}
 }
 export type EventMiddleware = (event: BaseEvent, next: () => void) => void | Promise<void>;
 
@@ -252,6 +258,7 @@ export class EventBus extends EventEmitter {
   eventTypes
 };
   private async processMiddleware(event: BaseEvent): Promise<void> {
+
     let index = 0;
     const next = async () => {
       if (index < this.middleware.length) {

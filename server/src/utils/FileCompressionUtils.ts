@@ -26,6 +26,7 @@ import {
 import { join, dirname, basename, extname } from 'path';
 
 }
+}
 export interface FileCompressionOptions {
   algorithm?: CompressionAlgorithm;
   level?: CompressionLevel;
@@ -42,7 +43,9 @@ export interface FileCompressionOptions {
   minFileSize?: number; // bytes
 }
 }
+}
 
+}
 }
 export interface FileCompressionResult extends CompressionResult {
   inputPath: string;
@@ -54,6 +57,7 @@ export interface FileCompressionResult extends CompressionResult {
   skipReason?: string;
 }
 
+}
 }
 export interface BatchCompressionResult {
   totalFiles: number;
@@ -67,9 +71,11 @@ export interface BatchCompressionResult {
   averageCompressionRatio: number;
   results: FileCompressionResult[];
 }
+}
   errors: Array<{ file: string; error: string }>;
 }
 
+}
 }
 export interface ArchiveOptions {
   algorithm?: CompressionAlgorithm;
@@ -78,6 +84,7 @@ export interface ArchiveOptions {
   followSymlinks?: boolean;
   preservePermissions?: boolean;
   includeMetadata?: boolean;
+}
 }
 }
 

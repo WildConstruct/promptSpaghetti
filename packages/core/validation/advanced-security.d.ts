@@ -31,6 +31,7 @@ export declare class AdvancedSecurityAnalyzer {
     private buildResult;
     private calculateConfidence;
 
+}
 export interface SecurityAnalysisResult {
     isSecure: boolean;
     riskScore: number;
@@ -38,6 +39,7 @@ export interface SecurityAnalysisResult {
     confidence: number;
 
 
+}
 export interface SecurityMetrics {
     patternsAnalyzed: number;
     cacheSize: number;
@@ -53,5 +55,6 @@ export declare     /**
      * Get security analysis details
      */
     getAnalysis: (input: string) => SecurityAnalysisResult;
+}
 };
 //# sourceMappingURL=advanced-security.d.ts.map

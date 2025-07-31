@@ -12,6 +12,7 @@ import {
   ValidationResult
 } from '../types/DataClassification';
 
+}
 export interface InheritanceRule {
     id: string;
     name: string;
@@ -22,6 +23,7 @@ export interface InheritanceRule {
     action: InheritanceAction;
     overridePolicy: OverridePolicy;
 
+}
 export interface InheritanceCondition {
     type: 'PARENT_TYPE' | 'PARENT_CLASSIFICATION' | 'CHILD_TYPE' | 'RELATIONSHIP_TYPE' | 'CONTEXT_MATCH';
     field: string;
@@ -29,18 +31,21 @@ export interface InheritanceCondition {
     value: string | string[];
     required: boolean;
 
+}
 export interface InheritanceAction {
     type: 'INHERIT_EXACT' | 'INHERIT_ELEVATED' | 'INHERIT_REDUCED' | 'APPLY_MINIMUM' | 'APPLY_CUSTOM';
     customClassification?: DataClassificationLevel;
     elevationLevel?: number;
     rationale: string;
 
+}
 export interface OverridePolicy {
     allowManualOverride: boolean;
     requireApprovalForOverride: boolean;
     maxOverrideLevel?: DataClassificationLevel;
     overrideReasons: string[];
 
+}
 export interface DataRelationship {
     parentId: string;
     childId: string;
@@ -48,12 +53,14 @@ export interface DataRelationship {
     strength: 'WEAK' | 'MODERATE' | 'STRONG' | 'ABSOLUTE';
     metadata?: Record<string, any>;
 
+}
 export interface InheritanceContext {
     parentElement: {
         id: string;
         type: string;
         classification?: DataClassification;
         metadata?: Record<string, any>;
+}
     };
     childElement: {
         id: string;
@@ -64,6 +71,7 @@ export interface InheritanceContext {
     relationship: DataRelationship;
     businessContext?: ClassificationContext;
 
+}
 export interface InheritanceResult {
     elementId: string;
     inheritedClassification: DataClassification;
@@ -72,6 +80,7 @@ export interface InheritanceResult {
     requiresReview: boolean;
     validationResult: ValidationResult;
 
+}
 export interface AppliedRule {
     ruleId: string;
     ruleName: string;
@@ -155,3 +164,4 @@ export declare class ClassificationInheritanceService {
     batchApplyInheritance(contexts: InheritanceContext[]): Promise<Map<string, InheritanceResult>>;
 
 //# sourceMappingURL=ClassificationInheritanceService.d.ts.map
+}

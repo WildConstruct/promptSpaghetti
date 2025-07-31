@@ -24,6 +24,7 @@ export type EncryptionAlgorithm =
  * Encryption state interface
  */
 
+}
 export interface EncryptionState {
   status: EncryptionStatusType;
   algorithm?: EncryptionAlgorithm;
@@ -38,6 +39,7 @@ export interface EncryptionState {
   encryptionState: EncryptionState;
   className?: string;
   showDetails?: boolean;
+}
 }
 export const EncryptionStatus: React.FC<EncryptionStatusProps> = ({)
   encryptionState,

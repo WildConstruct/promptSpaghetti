@@ -52,6 +52,7 @@ export declare enum DataSensitivityLevel {
     TOP_SECRET = "TOP_SECRET"
 }
 }
+}
 export interface DashboardPolicy {
     id: string;
     name: string;
@@ -79,21 +80,27 @@ export interface DashboardPolicy {
 }
 }
 }
+}
+}
 export interface AccessSchedule {
     allowedDays: number[];
     allowedHours: {
         start: string;
         end: string;
 }
+}
     };
     timezone: string;
     exceptions: ScheduleException[];
+}
 }
 }
 export interface ScheduleException {
     date: string;
     type: 'ALLOW' | 'DENY';
     reason: string;
+}
+}
 }
 }
 }
@@ -107,11 +114,15 @@ export interface ContentFilter {
 }
 }
 }
+}
+}
 export interface DataRetentionPolicy {
     retentionPeriod: number;
     archiveAfter: number;
     purgeAfter: number;
     complianceHolds: string[];
+}
+}
 }
 }
 }
@@ -121,6 +132,8 @@ export interface PolicyCondition {
     operator: 'EQUALS' | 'NOT_EQUALS' | 'IN' | 'NOT_IN' | 'GREATER_THAN' | 'LESS_THAN' | 'BETWEEN';
     value: Error;
     weight: number;
+}
+}
 }
 }
 }
@@ -136,6 +149,7 @@ export interface PolicyEvaluationContext {
         timestamp: Date;
         sessionId: string;
 }
+}
     };
     requestedData: {
         type: string;
@@ -144,6 +158,7 @@ export interface PolicyEvaluationContext {
         operations: DataOperation[];
     };
     riskScore?: number;
+}
 }
 }
 export interface PolicyEvaluationResult {
@@ -158,10 +173,14 @@ export interface PolicyEvaluationResult {
 }
 }
 }
+}
+}
 export interface PolicyRestriction {
     type: 'TIME_LIMIT' | 'DATA_LIMIT' | 'OPERATION_LIMIT' | 'EXPORT_DISABLED' | 'APPROVAL_REQUIRED';
     description: string;
     parameters: Record<string, any>;
+}
+}
 }
 }
 }
@@ -178,7 +197,9 @@ export interface DashboardViewConfiguration {
         allowedFormats: string[];
         watermarkRequired: boolean;
 }
+}
     };
+}
 }
 }
 export interface ComplianceReport {
@@ -189,6 +210,7 @@ export interface ComplianceReport {
     period: {
         start: Date;
         end: Date;
+}
 }
     };
     summary: {
@@ -207,6 +229,7 @@ export interface ComplianceReport {
     };
 }
 }
+}
 export interface ComplianceFinding {
     id: string;
     severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
@@ -219,12 +242,16 @@ export interface ComplianceFinding {
 }
 }
 }
+}
+}
 export interface ComplianceEvidence {
     type: 'AUDIT_LOG' | 'CONFIGURATION' | 'SCREENSHOT' | 'DOCUMENT';
     source: string;
     timestamp: Date;
     data: Record<string, unknown>;
     hash: string;
+}
+}
 }
 }
 }
@@ -235,6 +262,7 @@ export interface ComplianceRecommendation {
     implementation: string;
     impact: string;
     effort: 'LOW' | 'MEDIUM' | 'HIGH';
+}
 }
 }
 /**

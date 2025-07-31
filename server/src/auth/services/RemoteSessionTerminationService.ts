@@ -9,6 +9,7 @@ import { AuditService } from './AuditService';
 import { EmailService } from './EmailService';
 
 }
+}
 export interface TerminationRequest {
   id: string;
   sessionId: string;
@@ -22,6 +23,7 @@ export interface TerminationRequest {
           'account_compromise' | 'policy_violation' | 'maintenance';
     description: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
+}
 }
   };
   
@@ -58,6 +60,7 @@ export interface TerminationRequest {
 }
 
 }
+}
 export interface BulkTerminationRequest {
   id: string;
   criteria: {
@@ -69,6 +72,7 @@ export interface BulkTerminationRequest {
     inactivityThreshold?: number; // seconds
     riskScoreThreshold?: number;
     excludeCurrentSession?: boolean;
+}
 }
   };
   
@@ -93,6 +97,7 @@ export interface BulkTerminationRequest {
 }
 
 }
+}
 export interface TerminationPolicy {
   id: string;
   name: string;
@@ -106,6 +111,7 @@ export interface TerminationPolicy {
     riskScoreThreshold?: number;
     maxConcurrentSessions?: number;
     timeConditions?: {
+}
 }
       afterHours?: { start: string; end: string };
       weekends?: boolean;
@@ -135,6 +141,7 @@ export interface TerminationPolicy {
 }
 
 }
+}
 export interface TerminationEvent {
   id: string;
   timestamp: Date;
@@ -148,6 +155,7 @@ export interface TerminationEvent {
     method: string;
     success: boolean;
     errorMessage?: string;
+}
 }
   };
   

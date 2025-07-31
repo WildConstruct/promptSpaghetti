@@ -32,6 +32,7 @@ import {
   Download
 } from 'lucide-react';
 
+}
 export interface PolicyData {
   id: string;
   name: string;
@@ -48,6 +49,8 @@ export interface PolicyData {
   createdBy: string;
   updatedAt: Date;
 }
+}
+}
 export interface PolicyViolationData {
   violationId: string;
   policyId: string;
@@ -61,8 +64,11 @@ export interface PolicyViolationData {
   reviewedBy?: string;
   description: string;
 }
+}
+}
 export interface PolicyManagementDashboardProps {
   className?: string;
+}
 }
 export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps> = ({)
   className = ''

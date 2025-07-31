@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import { Autocomplete } from '@mui/material';
 import { Public as PublicIcon, Schedule as ScheduleIcon } from '@mui/icons-material';
+}
 interface TimezoneSelectProps {
   value: string;,
   onChange: (timezone: string) => void;
@@ -68,6 +69,7 @@ interface TimezoneSelectProps {
   'Africa/Lagos',
   'Africa/Casablanca'
   ]
+}
 };
 
 // Get all available timezones
@@ -108,7 +110,7 @@ export const TimezoneSelect: React.FC<TimezoneSelectProps> = ({ )
   const searchTerm = externalSearchTerm ?? internalSearchTerm;
   // Create timezone options
   const timezoneOptions = useMemo(() => {
-  const options: Array<{,
+  const options: Array<{
   value: string;,
   label: string;
   offset: string;,

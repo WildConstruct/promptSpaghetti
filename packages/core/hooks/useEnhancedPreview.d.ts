@@ -5,6 +5,7 @@
  * designed for film industry workflows.
  */
 
+}
 export interface EnhancedPreviewConfig {
     maxResults?: number;
     enableProfessionalMetadata?: boolean;
@@ -13,6 +14,7 @@ export interface EnhancedPreviewConfig {
     seedStrategy?: 'random' | 'sequential' | 'custom';
     customSeeds?: number[];
 
+}
 export interface VarianceAnalysis {
     wordCountVariance: number;
     lengthDistribution: {
@@ -20,6 +22,7 @@ export interface VarianceAnalysis {
         max: number;
         avg: number;
         std: number;
+}
     };
     averageSimilarity: number;
     uniquenessScore: number;
@@ -31,6 +34,7 @@ export interface VarianceAnalysis {
     professionalSuitability: number;
     genreConsistency: number;
 
+}
 export interface PreviewPerformanceStats {
     totalExecutionTime: number;
     averageExecutionTime: number;
@@ -42,3 +46,4 @@ export interface PreviewPerformanceStats {
 
 export declare const useEnhancedPreviewResultManagement: () => any;
 //# sourceMappingURL=useEnhancedPreview.d.ts.map
+}

@@ -19,6 +19,7 @@ const isBrowser = (function() {
     return false;
 })();
 
+}
 export interface ParameterHistory {
   id: string;
   parameters: RandomizerParameters;
@@ -26,6 +27,8 @@ export interface ParameterHistory {
   success: boolean;
   generationTime?: number;
   errorCount?: number;
+}
+}
 }
 export interface ParameterManagerOptions {
   enableHistory: boolean;
@@ -35,6 +38,7 @@ export interface ParameterManagerOptions {
   /**
   * Manages randomizer parameters, presets, and history
   */
+}
 }
 export class ParameterManager {
   private presets: Map<string, ParameterPreset> = new Map();

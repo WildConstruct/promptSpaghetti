@@ -8,6 +8,7 @@ import { AuditService } from '../auth/services/AuditService';
 import * as crypto from 'crypto';
 
 }
+}
 export interface DataClassificationConfig {
   enabled: boolean;
   defaultClassification: DataClassification;
@@ -21,6 +22,7 @@ export interface DataClassificationConfig {
     restricted: boolean;
     internal: boolean;
     public: boolean;
+}
 }
   };
   approvalRequired: {
@@ -50,6 +52,7 @@ export type DataClassification = 'public' | 'internal' | 'confidential' | 'restr
 export type TransferDestination = DataClassification | 'external';
 
 }
+}
 export interface ClassificationRule {
   id: string;
   name: string;
@@ -62,7 +65,9 @@ export interface ClassificationRule {
   updatedAt: Date;
 }
 }
+}
 
+}
 }
 export interface ClassificationCondition {
   field: string; // 'content', 'metadata', 'filename', 'size', 'source'
@@ -71,7 +76,9 @@ export interface ClassificationCondition {
   caseSensitive?: boolean;
 }
 }
+}
 
+}
 }
 export interface TransferPolicy {
   id: string;
@@ -90,19 +97,23 @@ export interface TransferPolicy {
   updatedAt: Date;
 }
 }
+}
 
 export type TransferType = 'api_export' | 'file_download' | 'data_sync' | 'backup' | 'migration' | 'sharing';
 export type PolicyAction = 'allow' | 'deny' | 'require_approval' | 'encrypt_only';
 export type AuditLevel = 'none' | 'basic' | 'detailed' | 'full';
 
 }
+}
 export interface TransferCondition {
   type: 'user_role' | 'time_window' | 'location' | 'approval_status' | 'encryption_status';
   operator: 'equals' | 'in' | 'between' | 'not_in';
 }
+}
   value: string | string[] | { start: string; end: string };
 }
 
+}
 }
 export interface DataTransferRequest {
   id: string;
@@ -122,7 +133,9 @@ export interface DataTransferRequest {
   auditRequired: boolean;
 }
 }
+}
 
+}
 }
 export interface TransferDecision {
   requestId: string;
@@ -137,7 +150,9 @@ export interface TransferDecision {
   decidedAt: Date;
 }
 }
+}
 
+}
 }
 export interface ClassificationResult {
   dataId: string;
@@ -150,7 +165,9 @@ export interface ClassificationResult {
   classifiedAt: Date;
 }
 }
+}
 
+}
 }
 export interface TransferAuditEvent {
   id: string;
@@ -168,7 +185,9 @@ export interface TransferAuditEvent {
   timestamp: Date;
 }
 }
+}
 
+}
 }
 export interface ClassificationDriftEvent {
   id: string;
@@ -185,16 +204,19 @@ export interface ClassificationDriftEvent {
   detectedAt: Date;
 }
 }
+}
 
 export type DriftType = 'upgrade' | 'downgrade' | 'lateral' | 'oscillation';
 export type DriftSeverity = 'low' | 'medium' | 'high' | 'critical';
 
+}
 }
 export interface DriftAnalysisResult {
   analysisId: string;
   timeRange: {
     start: Date;
     end: Date;
+}
 }
   };
   totalDataItems: number;
@@ -218,6 +240,7 @@ export interface DriftAnalysisResult {
 }
 
 }
+}
 export interface DriftAlert {
   id: string;
   type: 'significant_change' | 'rapid_change' | 'classification_downgrade' | 'classification_upgrade' | 'rule_instability';
@@ -227,6 +250,7 @@ export interface DriftAlert {
   affectedPercentage: number;
   timeWindow: string;
   createdAt: Date;
+}
 }
 }
 

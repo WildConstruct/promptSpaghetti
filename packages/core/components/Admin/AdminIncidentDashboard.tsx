@@ -44,6 +44,7 @@ import {
   MetricThreshold as _MetricThreshold
 } from '../../types/Epic17IncidentPlaybooks';
 import { ActionSeverity } from '../../types/EnforcementTypes';
+}
 interface AdminIncidentDashboardProps {
   onPlaybookExecute?: (playbookId: string, options: ExecutionOptions) => Promise<void>;
   onIncidentCreate?: (incident: IncidentCreationData) => Promise<void>;
@@ -146,6 +147,7 @@ interface AdminIncidentDashboardProps {
   onPlaybookExecute,
   onIncidentCreate,
   className = ''
+}
 }) => {
   // State management
   const [dashboardState, setDashboardState] = useState<DashboardState | null>(null);

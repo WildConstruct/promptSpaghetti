@@ -13,6 +13,7 @@ import { SecurityIntelligenceIncidentResponse, SecurityIncident } from './Securi
 import { SecurityAdHocAnalysisEngine, Investigation, InvestigationResult } from './SecurityAdHocAnalysisEngine';
 
 }
+}
 export interface ReportTemplate {
   template_id: string;
   name: string;
@@ -28,6 +29,7 @@ export interface ReportTemplate {
     intended_audience: ('executives' | 'security_team' | 'it_operations' | 'compliance' | 'auditors')[];
     security_clearance_required?: string;
     classification_level: 'public' | 'internal' | 'confidential' | 'restricted';
+}
 }
   };
   
@@ -116,6 +118,7 @@ export interface ReportTemplate {
 }
 
 }
+}
 export interface ReportSchedule {
   schedule_id: string;
   template_id: string;
@@ -128,6 +131,7 @@ export interface ReportSchedule {
       hour: number;
       minute: number;
       timezone: string;
+}
 }
     };
     
@@ -191,6 +195,7 @@ export interface ReportSchedule {
 }
 
 }
+}
 export interface SecurityReport {
   report_id: string;
   template_id: string;
@@ -205,6 +210,7 @@ export interface SecurityReport {
       start_time: number;
       end_time: number;
       timezone: string;
+}
 }
     };
     
@@ -421,6 +427,7 @@ export interface SecurityReport {
 }
 
 }
+}
 export interface DeliveryReceipt {
   receipt_id: string;
   report_id: string;
@@ -433,6 +440,7 @@ export interface DeliveryReceipt {
     delivered_at?: number;
     read_at?: number;
     error_message?: string;
+}
 }
   };
   

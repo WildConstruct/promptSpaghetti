@@ -7,6 +7,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthStore, authenticatedFetch } from '../../stores/authStore';
 import { OAuthProviderButtons } from './OAuthProviderButtons';
+}
 interface LinkedAccount {
   provider: 'google' | 'github' | 'microsoft';,
   providerId: string;
@@ -18,6 +19,7 @@ interface LinkedAccount {
   className?: string;
   export const OAuthAccountManager: React.FC<OAuthAccountManagerProps> = ({,)
   className = ''
+}
 }) => {
   const [linkedAccounts, setLinkedAccounts] = useState<LinkedAccount>([]);
   const [isLoading, setIsLoading] = useState(true);

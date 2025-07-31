@@ -10,10 +10,13 @@ import {
 } from '../types/workspace';
 import { WorkspaceDAO } from '../dao/workspace-dao';
 
+}
 export interface NotificationChannel {
   type: 'in_app' | 'email' | 'slack' | 'webhook';
   enabled: boolean;
   config: Record<string, unknown>;
+}
+}
 }
 export interface NotificationPreferences {
   userId: UserId;
@@ -23,13 +26,17 @@ export interface NotificationPreferences {
   enabled: boolean;
   frequency: 'immediate' | 'hourly' | 'daily' | 'weekly';
   time?: string; // For scheduled digests,
+}
 };
+}
 }
 export interface NotificationFilter {
   type: 'workspace' | 'project' | 'activity_type' | 'user';
   value: string;
   action: 'include' | 'exclude'
+}
   }
+}
 export interface NotificationTemplate {
   type: NotificationType;
   channels: {
@@ -37,8 +44,10 @@ export interface NotificationTemplate {
   subject: string;
   body: string;
   metadata?: Record<string, unknown>;
+}
 };
   };
+}
 }
 export interface NotificationContext {
   workspaceId: WorkspaceId;
@@ -47,6 +56,8 @@ export interface NotificationContext {
   actorUserId: UserId;
   targetUserIds: UserId;
   data: Record<string, unknown>;
+}
+}
 }
 export interface NotificationDelivery {
   id: string;
@@ -58,6 +69,7 @@ export interface NotificationDelivery {
   readAt?: Date;
   error?: string;
   retryCount: number;
+}
 }
 export class WorkspaceNotificationSystem extends EventEmitter {
   private preferences: Map<UserId, NotificationPreferences> = new Map();
@@ -207,6 +219,7 @@ The Team`
     });
   // Set user notification preferences
   async setUserPreferences(preferences: NotificationPreferences): Promise<void> {
+
     this.preferences.set(preferences.userId, preferences);
     // Persist preferences to database or user settings
     // Implementation would store these in a user_notification_preferences table
@@ -236,24 +249,31 @@ The Team`
 };
   // Send notification for workspace invitation
   async notifyWorkspaceInvite(context: NotificationContext): Promise<void> {
+
     await this.sendNotification(NotificationType.WORKSPACE_INVITE, context);
   // Send notification for project invitation
   async notifyProjectInvite(context: NotificationContext): Promise<void> {
+
     await this.sendNotification(NotificationType.PROJECT_INVITE, context);
   // Send notification for comment mention
   async notifyCommentMention(context: NotificationContext): Promise<void> {
+
     await this.sendNotification(NotificationType.COMMENT_MENTION, context);
   // Send notification for comment reply
   async notifyCommentReply(context: NotificationContext): Promise<void> {
+
     await this.sendNotification(NotificationType.COMMENT_REPLY, context);
   // Send notification for resource sharing
   async notifyResourceShared(context: NotificationContext): Promise<void> {
+
     await this.sendNotification(NotificationType.RESOURCE_SHARED, context);
   // Send notification for role change
   async notifyRoleChanged(context: NotificationContext): Promise<void> {
+
     await this.sendNotification(NotificationType.ROLE_CHANGED, context);
   // Send activity digest
   async sendActivityDigest(userId: UserId, workspaceId: WorkspaceId): Promise<void> {
+
     const activities = await this.dao.getWorkspaceActivity(workspaceId, 50);
     const context: NotificationContext = {
       workspaceId,
@@ -263,10 +283,11 @@ The Team`
     };
     await this.sendNotification(NotificationType.ACTIVITY_DIGEST, context);
   // Core notification sending logic
-  private async sendNotification(()
+  private async sendNotification(((
     type: NotificationType,
-    context: NotificationContext,
+    context: NotificationContext
   ): Promise<void> {
+
     const template = this.templates.get(type);
     if (!template) {
       console.error(`No template found for notification type: ${type}`);}
@@ -372,6 +393,7 @@ The Team`
           this.deliveryQueue.push(delivery);
     this.isProcessing = false;
   private async deliverNotification(delivery: NotificationDelivery): Promise<void> {
+
     switch (delivery.channel) {
     case 'in_app':
       // In-app notifications are already stored in the database
@@ -388,15 +410,18 @@ The Team`
     default:
       throw new Error(`Unsupported delivery channel: ${delivery.channel}`);}
   private async deliverEmail(delivery: NotificationDelivery): Promise<void> {
+
     // Email delivery implementation
     console.log(`Delivering email notification ${delivery.notificationId} to user ${delivery.userId}`);}
     // This would integrate with an email service like SendGrid, AWS SES, etc.
     // For now, just log the delivery
   private async deliverSlack(delivery: NotificationDelivery): Promise<void> {
+
     // Slack delivery implementation
     console.log(`Delivering Slack notification ${delivery.notificationId} to user ${delivery.userId}`);}
     // This would integrate with Slack API
   private async deliverWebhook(delivery: NotificationDelivery): Promise<void> {
+
     // Webhook delivery implementation
     console.log(`Delivering webhook notification ${delivery.notificationId} to user ${delivery.userId}`);}
     // This would send HTTP POST to configured webhook URL
@@ -484,10 +509,12 @@ The Team`
     return 'just now';
   // Mark notification as read
   async markAsRead(notificationId: string): Promise<void> {
+
     await this.dao.markNotificationRead(notificationId);
     this.emit('notification_read', { notificationId });
   // Get unread notifications for user
   async getUnreadNotifications(userId: UserId): Promise<Notification> {
+
   return await this.dao.getUserNotifications(userId, true);
   // Start scheduled digest processing
   private startDeliveryProcessor(): void {,
@@ -502,6 +529,7 @@ The Team`
     }, 60000);
   // Shutdown and cleanup
   async shutdown(): Promise<void> {
+
     // Process remaining items in queue
     if (this.deliveryQueue.length > 0) {
       await this.processDeliveryQueue();

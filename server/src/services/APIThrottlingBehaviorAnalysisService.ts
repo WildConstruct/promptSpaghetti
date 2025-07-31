@@ -20,6 +20,7 @@ import { MetricsCollector } from '../performance/MetricsCollector';
 // ============================================================================
 
 }
+}
 export interface APIThrottlingBehaviorConfig {
   // Behavior analysis configuration
   behavior_analysis: {
@@ -29,6 +30,7 @@ export interface APIThrottlingBehaviorConfig {
     behavior_classification_enabled: boolean;
     adaptive_learning_enabled: boolean;
     real_time_analysis_interval_seconds: number;
+}
 }
   };
   
@@ -131,6 +133,7 @@ export interface APIThrottlingBehaviorConfig {
 }
 
 }
+}
 export interface ThrottlingBehaviorData {
   behavior_metadata: {
     analysis_id: string;
@@ -139,6 +142,7 @@ export interface ThrottlingBehaviorData {
     analysis_window_end: number;
     data_quality_score: number;
     confidence_level: number;
+}
 }
   };
   
@@ -204,6 +208,7 @@ export interface ThrottlingBehaviorData {
 }
 
 }
+}
 export interface ThrottlingAdjustmentRecommendation {
   recommendation_id: string;
   recommendation_type: 'threshold_adjustment' | 'algorithm_change' | 'rule_modification' | 'pattern_update';
@@ -213,6 +218,7 @@ export interface ThrottlingAdjustmentRecommendation {
     parameter_name: string;
     current_value: unknown;
     configuration_context: Record<string, unknown>;
+}
 }
   };
   
@@ -245,6 +251,7 @@ export interface ThrottlingAdjustmentRecommendation {
 }
 
 }
+}
 export interface APIThrottlingBehaviorAnalysisResult {
   analysis_metadata: {
     analysis_id: string;
@@ -252,6 +259,7 @@ export interface APIThrottlingBehaviorAnalysisResult {
     analysis_duration_ms: number;
     data_sources: string[];
     analysis_completeness: number;
+}
 }
   };
   
@@ -314,6 +322,7 @@ export interface APIThrottlingBehaviorAnalysisResult {
 // ============================================================================
 
 }
+}
 interface BehaviorPredictionModel {
   model_id: string;
   model_type: string;
@@ -322,9 +331,11 @@ interface BehaviorPredictionModel {
   feature_importance: Record<string, number>;
   last_trained: number;
 }
+}
   prediction_cache: Map<string, { prediction: unknown; timestamp: number; confidence: number }>;
 }
 
+}
 }
 interface AnomalyDetectionModel {
   model_id: string;
@@ -335,7 +346,9 @@ interface AnomalyDetectionModel {
   model_state: Record<string, unknown>;
 }
 }
+}
 
+}
 }
 interface OptimizationEngine {
   optimization_objectives: Array<{
@@ -343,6 +356,7 @@ interface OptimizationEngine {
     weight: number;
     current_value: number;
     target_value: number;
+}
 }
   }>;
   constraint_functions: Array<{

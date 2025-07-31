@@ -18,6 +18,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // k6 test result interfaces
 }
+}
 interface K6Metric {
   name: string;
   type: string;
@@ -33,6 +34,7 @@ interface K6Metric {
     count?: number;
     rate?: number;
 }
+}
   };
   thresholds?: {
     [key: string]: {
@@ -42,9 +44,11 @@ interface K6Metric {
 }
 
 }
+}
 interface K6TestResult {
   metrics: {
     [key: string]: K6Metric;
+}
 }
   };
   root_group: {
@@ -67,6 +71,7 @@ interface K6TestResult {
 
 // k6 test suite configuration
 }
+}
 interface K6TestSuite {
   name: string;
   scenario: 'light' | 'moderate' | 'heavy' | 'stress';
@@ -76,8 +81,10 @@ interface K6TestSuite {
   maxDuration: string;
 }
 }
+}
 
 // Performance regression detection
+}
 }
 interface RegressionAnalysis {
   detected: boolean;
@@ -87,6 +94,7 @@ interface RegressionAnalysis {
     current: number;
     change: number;
     severity: 'minor' | 'major' | 'critical';
+}
 }
   }>;
   improvements: Array<{

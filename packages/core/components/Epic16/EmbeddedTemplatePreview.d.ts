@@ -8,6 +8,7 @@ import React from 'react';
 import { Template } from './TemplatePreviewModal';
 import { EmbedConfiguration, EmbedTheme, EmbedSize, EmbedFeatures } from '../embed/EmbeddableContent';
 
+}
 export interface EmbeddedTemplatePreviewProps {
     template: Template;
     embedConfig: EmbedConfiguration;
@@ -29,12 +30,14 @@ export interface EmbeddedTemplatePreviewProps {
     maxHeight?: number;
 
 
+}
 export interface ShareMethod {
     type: 'link' | 'embed' | 'social' | 'email' | 'copy';
     platform?: 'twitter' | 'linkedin' | 'facebook' | 'reddit' | 'discord';
     customization?: EmbedCustomization;
 
 
+}
 export interface EmbedCustomization {
     size: EmbedSize;
     theme: EmbedTheme;
@@ -44,6 +47,7 @@ export interface EmbedCustomization {
     social: EmbedSocialConfig;
 
 
+}
 export interface EmbedLayout {
     orientation: 'horizontal' | 'vertical' | 'grid';
     showHeader: boolean;
@@ -55,6 +59,7 @@ export interface EmbedLayout {
     shadow: 'none' | 'sm' | 'md' | 'lg' | 'xl';
 
 
+}
 export interface EmbedBranding {
     showLogo: boolean;
     showTitle: boolean;
@@ -67,12 +72,14 @@ export interface EmbedBranding {
         background: string;
         text: string;
 
+}
     };
     customFonts?: {
         heading: string;
         body: string;
     };
 
+}
 export interface EmbedSocialConfig {
     showLikes: boolean;
     showShares: boolean;
@@ -84,6 +91,7 @@ export interface EmbedSocialConfig {
     showStats: boolean;
 
 
+}
 export interface PreviewSize {
     width: number;
     height: number;
@@ -96,6 +104,7 @@ export declare const EmbedCodeGenerator: React.FC<{
     template: Template;
     customization: EmbedCustomization;
     onCustomizationChange: (updates: Partial<EmbedCustomization>) => void;
+}
 }>;
 export declare const EmbedCustomizationPanel: React.FC<{
     customization: EmbedCustomization;

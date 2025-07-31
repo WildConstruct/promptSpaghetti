@@ -6,13 +6,16 @@
  */
 import React, { useState, useMemo } from 'react';
 import { VarianceAnalysis, EnhancedPreviewResult } from '../../hooks/useEnhancedPreview';
+}
 interface CreativeVarianceAnalyzerProps {
   results: EnhancedPreviewResult;
   varianceAnalysis: VarianceAnalysis | null;
   className?: string;
+}
 interface AdvancedVarianceMetrics {
   // Content structure analysis
   sentenceLengthVariance: number;
+}
   paragraphCount: { min: number; max: number; avg: number };
   readingComplexity: number; // 0-100 scale
   // Semantic analysis

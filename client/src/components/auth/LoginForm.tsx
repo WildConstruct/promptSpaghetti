@@ -19,12 +19,14 @@ const loginSchema = z.object({)
   rememberMe: z.boolean(),
 });
 type LoginFormData = z.infer<typeof loginSchema>;
+}
 interface LoginFormProps {
   onSuccess?: () => void;
   onError?: (error: string) => void;
   export const LoginForm: React.FC<LoginFormProps> = ({,)
   onSuccess,
   onError
+}
 }) => {
   const navigate = useNavigate();
   const { login, isLoading, error: authError, returnUrl } = useAuthStore();

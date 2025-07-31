@@ -7,6 +7,7 @@
 import { EventEmitter } from 'events';
 import { PricingOptimizer, PricingModel, PricingCalculationRequest } from './PricingOptimizer';
 
+}
 export interface FilmStudioProfile {
   studioId: string;
   name: string;
@@ -19,12 +20,14 @@ export interface FilmStudioProfile {
   preferredBilling: 'monthly' | 'per_project' | 'annual';
   creditLimit: number;
   paymentDays: number;
+}
 };
   premiumFeatures: string;
   contractStartDate: number;
   contractEndDate: number;
   loyaltyStatus: 'new' | 'standard' | 'preferred' | 'vip'
   }
+}
 export interface ProjectPricingRequest {
   studioId: string;
   projectId: string;
@@ -36,6 +39,7 @@ export interface ProjectPricingRequest {
   startDate: number;
   endDate: number;
   deliveryDate: number;
+}
 };
     deliverables: ProjectDeliverable;
   priority: 'standard' | 'rush' | 'emergency';
@@ -49,6 +53,7 @@ export interface ProjectPricingRequest {
   characterDevelopment?: CharacterDevelopmentOptions;
 };
 }
+}
 export interface ProjectDeliverable {
   type: 'script_analysis' | 'character_profiles' | 'scene_breakdown' | 'dialogue_generation' | ,
   'storyboard_concepts' | 'visual_references' | 'marketing_taglines' | 'synopsis_variants';
@@ -59,6 +64,8 @@ export interface ProjectDeliverable {
   format: string;
   specifications: Record<string, any>;
 }
+}
+}
 export interface ScriptAnalysisOptions {
   analysisDepth: 'basic' | 'comprehensive' | 'deep_dive';
   includeCharacterArcs: boolean;
@@ -67,12 +74,16 @@ export interface ScriptAnalysisOptions {
   includeGenreCompliance: boolean;
   benchmarkScripts?: string;
 }
+}
+}
 export interface StoryboardOptions {
   artStyle: 'sketch' | 'detailed' | 'cinematic' | 'animatic';
   frameCount: number;
   includeNotes: boolean;
   colorTreatment: 'bw' | 'color' | 'mood_palette';
   animationPreview: boolean;
+}
+}
 }
 export interface ConceptArtOptions {
   artDirection: 'realistic' | 'stylized' | 'fantastical' | 'period_accurate';
@@ -81,6 +92,8 @@ export interface ConceptArtOptions {
   highResolution: boolean;
   includeVariations: boolean;
 }
+}
+}
 export interface MarketingContentOptions {
   campaignScope: 'teaser' | 'full_campaign' | 'awards_season' | 'international';
   platforms: ('theatrical' | 'digital' | 'social' | 'print' | 'tv')[];
@@ -88,12 +101,16 @@ export interface MarketingContentOptions {
   brandGuidelines: boolean;
   localizationNeeded: string;
 }
+}
+}
 export interface CharacterDevelopmentOptions {
   characterCount: number;
   developmentDepth: 'basic_profile' | 'detailed_background' | 'full_psychology';
   includeDialoguePatterns: boolean;
   includeVisualReferences: boolean;
   includeRelationshipMaps: boolean;
+}
+}
 }
 export interface FilmIndustryPricingResult {
   projectId: string;
@@ -105,12 +122,13 @@ export interface FilmIndustryPricingResult {
   studioTierAdjustment: number;
   projectComplexityMultiplier: number;
   timelineAdjustment: number;
-  deliverablesPricing: Array<{,
+  deliverablesPricing: Array<{
   deliverable: string;
   quantity: number;
   unitPrice: number;
   subtotal: number;
   complexity: string;
+}
 }>;
   // Industry-specific adjustments
   genreMultiplier: number;
@@ -135,6 +153,7 @@ export interface FilmIndustryPricingResult {
   validUntil: number;
   createdAt: number;
 }
+}
 export interface PaymentScheduleItem {
   milestone: string;
   percentage: number;
@@ -142,11 +161,14 @@ export interface PaymentScheduleItem {
   dueDate: number;
   description: string;
 }
+}
+}
 export interface StudioPricingAnalytics {
   studioId: string;
   period: {
   start: number;
   end: number;
+}
 };
   // Financial metrics
   totalRevenue: number;
@@ -169,7 +191,7 @@ export interface StudioPricingAnalytics {
   revisionRate: number;
 };
   // Trends and insights
-  seasonalPatterns: Array<{,
+  seasonalPatterns: Array<{
   period: string;
   volume: number;
   revenue: number;
@@ -213,6 +235,7 @@ export class FilmIndustryPricingService extends EventEmitter {
    * Calculate project pricing for film industry clients
    */
   async calculateProjectPricing(request: ProjectPricingRequest): Promise<FilmIndustryPricingResult> {
+
     const studio = this.studioProfiles.get(request.studioId);
     if (!studio) {
       throw new Error(`Studio profile not found: ${request.studioId}`);}
@@ -291,6 +314,7 @@ export class FilmIndustryPricingService extends EventEmitter {
   performanceRank: number;
 };
   }> {
+
     const studio = this.studioProfiles.get(studioId);
     const analytics = this.studioAnalytics.get(studioId);
     if (!studio || !analytics) {
@@ -366,7 +390,7 @@ export class FilmIndustryPricingService extends EventEmitter {
   volumeChange: number;
   marginChange: number;
 };
-    implementationPlan: Array<{,
+    implementationPlan: Array<{
   action: string;
   timeline: string;
   priority: 'high' | 'medium' | 'low';
@@ -486,14 +510,14 @@ export class FilmIndustryPricingService extends EventEmitter {
 };
   private calculateDeliverablesPricing(request: ProjectPricingRequest): {
   total: number;
-  breakdown: Array<{,
+  breakdown: Array<{
   deliverable: string;
   quantity: number;
   unitPrice: number;
   subtotal: number;
   complexity: string;
 }>;
-    const breakdown: Array<{,
+    const breakdown: Array<{
   deliverable: string;
   quantity: number;
   unitPrice: number;
@@ -541,7 +565,7 @@ export class FilmIndustryPricingService extends EventEmitter {
   const schedule: PaymentScheduleItem = [];
   const totalAmount = 10000; // This would be calculated from the final price;
   if (studio.paymentTerms.preferredBilling === 'per_project') {
-  schedule.push()
+  schedule.push(
   {
   milestone: 'Project Start',
   percentage: 50,
@@ -628,8 +652,7 @@ export class FilmIndustryPricingService extends EventEmitter {
     for (const deliverable of request.projectDetails.deliverables) {
   limits[deliverable.type] = deliverable.revisions;
   return limits;
-  private assessCompetitivePosition(()
-  price: number,
+  private assessCompetitivePosition((price: number,
   request: ProjectPricingRequest): 'below_market' | 'market_rate' | 'premium' {,
   // Simplified competitive assessment
   const marketRate = 15000; // This would be calculated from market data;
@@ -670,6 +693,7 @@ export class FilmIndustryPricingService extends EventEmitter {
   tierAverage: number;
   performanceRank: number;
 }> {
+
   // Simplified benchmark calculation
   return {
   industryAverage: 12000,
@@ -684,9 +708,9 @@ export class FilmIndustryPricingService extends EventEmitter {
   'concept_art': 3500,
   'marketing_content': 3000,
 };
-  private async calculateOptimalStudioPricing(()
+  private async calculateOptimalStudioPricing(((
     studio: FilmStudioProfile,
-    analytics: StudioPricingAnalytics,
+    analytics: StudioPricingAnalytics
   ): Promise<Record<string, number>> {
   // Calculate optimized pricing based on studio performance and market conditions
   return {

@@ -17,16 +17,21 @@ import { EventEmitter } from 'events';
 
 // Types and Interfaces
 
+}
 export interface CodeGenerationOptions {
   length: number;
   format: 'numeric' | 'alphanumeric' | 'alphabetic';
   excludeAmbiguous: boolean;
   customAlphabet?: string;
 }
+}
+}
 export interface CodeValidationOptions {
   allowedAttempts: number;
   timeWindowMinutes: number;
   constantTimeValidation: boolean;
+}
+}
 }
 export interface VerificationCodeData {
   id: string;
@@ -41,6 +46,8 @@ export interface VerificationCodeData {
   maxAttempts: number;
   used: boolean;
   metadata?: Record<string, any>;
+}
+}
 }
 export interface ValidationResult {
   valid: boolean;
@@ -64,6 +71,7 @@ export interface ValidationResult {
   numeric: '0123456789',
   alphanumeric: 'ABCDEFGHJKMNPQRSTUVWXYZ23456789', // Excludes 0,O,1,I,L,
   alphabetic: 'ABCDEFGHJKMNPQRSTUVWXYZ',
+}
 } as const;
 /**
  * Secure verification code generator with cryptographic best practices
@@ -100,7 +108,7 @@ export class SecureCodeGenerator extends EventEmitter {
   /**
    * Create a complete verification code record with secure hashing
    */
-  public async createVerificationCode()
+  public async createVerificationCode(
     code: string,
     userId: string,
     purpose: string,
@@ -110,6 +118,7 @@ export class SecureCodeGenerator extends EventEmitter {
   metadata?: Record<string, any>;
 } = {}
   ): Promise<VerificationCodeData> {
+
     const {
       expirationMinutes = 15,
       maxAttempts = 5,
@@ -150,11 +159,12 @@ export class SecureCodeGenerator extends EventEmitter {
   /**
    * Validate a verification code with timing attack protection
    */
-  public async validateCode()
+  public async validateCode(
     inputCode: string,
     storedCode: VerificationCodeData,
     options: Partial<CodeValidationOptions> = {}
   ): Promise<ValidationResult> {
+
   const opts: CodeValidationOptions = {,
   allowedAttempts: storedCode.maxAttempts,
   timeWindowMinutes: 15,
@@ -229,9 +239,9 @@ export class SecureCodeGenerator extends EventEmitter {
   /**
    * Validate input code format before processing
    */
-  public validateCodeFormat(()
+  public validateCodeFormat(((
     code: string,
-    expectedFormat: CodeGenerationOptions['format'] = 'numeric',
+    expectedFormat: CodeGenerationOptions['format'] = 'numeric'
   ): { valid: boolean; reason?: string } {
     if (!code || typeof code !== 'string') {
       return { valid: false, reason: 'Code must be a non-empty string' };
@@ -305,6 +315,7 @@ export class SecureCodeGenerator extends EventEmitter {
       result.reason = reason;
     return result;
   private sleep(ms: number): Promise<void> {
+
     return new Promise(resolve => setTimeout(resolve, ms));
 /**
  * High-level factory for common verification code scenarios
@@ -316,10 +327,11 @@ export class VerificationCodeFactory {
   /**
    * Create an email verification code
    */
-  async createEmailVerificationCode(()
+  async createEmailVerificationCode(((
     userId: string,
-    email: string,
+    email: string
   ): Promise<{ code: string; data: VerificationCodeData }> {
+
   const code = this.generator.generateCode({)
   length: 6,
   format: 'numeric',
@@ -337,10 +349,11 @@ export class VerificationCodeFactory {
   /**
    * Create an SMS verification code
    */
-  async createSMSVerificationCode(()
+  async createSMSVerificationCode(((
     userId: string,
-    phoneNumber: string,
+    phoneNumber: string
   ): Promise<{ code: string; data: VerificationCodeData }> {
+
   const code = this.generator.generateCode({)
   length: 6,
   format: 'numeric',
@@ -358,10 +371,11 @@ export class VerificationCodeFactory {
   /**
    * Create a password reset code
    */
-  async createPasswordResetCode(()
+  async createPasswordResetCode(((
     userId: string,
-    email: string,
+    email: string
   ): Promise<{ code: string; data: VerificationCodeData }> {
+
   const code = this.generator.generateCode({)
   length: 8,
   format: 'alphanumeric',
@@ -383,6 +397,7 @@ export class VerificationCodeFactory {
   codes: string;
   data: VerificationCodeData;
 }> {
+
     const rawCodes = this.generator.generateRecoveryCodes(10);
     const data: VerificationCodeData = [];
     for (const code of rawCodes) {
@@ -400,10 +415,11 @@ export class VerificationCodeFactory {
   /**
    * Validate any verification code
    */
-  async validateVerificationCode(()
+  async validateVerificationCode(((
     inputCode: string,
-    storedCode: VerificationCodeData,
+    storedCode: VerificationCodeData
   ): Promise<ValidationResult> {
+
     return this.generator.validateCode(inputCode, storedCode);
 
 // Export default instance for convenience

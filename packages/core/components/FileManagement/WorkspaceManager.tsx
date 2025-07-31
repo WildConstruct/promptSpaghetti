@@ -7,6 +7,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { PSGFile } from '../../projectManager';
 
+}
 export interface WorkspaceSession {
   id: string;
   name: string;
@@ -16,6 +17,8 @@ export interface WorkspaceSession {
   timestamp: Date;
   autoSaved: boolean;
 }
+}
+}
 export interface WorkspaceManagerProps {
   currentSession?: WorkspaceSession;
   onSessionLoad?: (session: WorkspaceSession) => void;
@@ -23,6 +26,7 @@ export interface WorkspaceManagerProps {
   onSessionDelete?: (sessionId: string) => void;
   theme?: 'light' | 'dark' | 'cinema';
   maxSessions?: number;
+}
 }
 export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({
   currentSession,

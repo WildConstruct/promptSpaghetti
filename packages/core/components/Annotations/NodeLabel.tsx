@@ -13,6 +13,7 @@ import {
   NodeLabelPosition,
   NODE_LABEL_STYLES
 } from '../../types/CollaborationTypes';
+}
 interface NodeLabelProps {
   config: NodeLabelConfig;
   nodeId: string;
@@ -35,6 +36,7 @@ interface NodeLabelProps {
   isNodeFocused = false,
   canEdit = true,
   showTooltip = true
+}
 }) => {
   const [isEditing, setIsEditing] = useState(config.isEditing || false);
   const [editValue, setEditValue] = useState(config.customLabel);

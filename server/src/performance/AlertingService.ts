@@ -13,6 +13,7 @@ import nodemailer from 'nodemailer';
 import { WebhookClient } from '@slack/webhook';
 
 }
+}
 export interface AlertConfig {
   id: string;
   name: string;
@@ -27,7 +28,9 @@ export interface AlertConfig {
   tags: string[];
 }
 }
+}
 
+}
 }
 export interface AlertChannel {
   type: 'email' | 'slack' | 'webhook' | 'sms';
@@ -37,9 +40,11 @@ export interface AlertChannel {
     webhookUrl?: string;
     smsNumbers?: string[];
 }
+}
   };
 }
 
+}
 }
 export interface Alert {
   id: string;
@@ -58,7 +63,9 @@ export interface Alert {
   context: Record<string, any>;
 }
 }
+}
 
+}
 }
 export interface EscalationPolicy {
   id: string;
@@ -67,13 +74,16 @@ export interface EscalationPolicy {
   enabled: boolean;
 }
 }
+}
 
+}
 }
 export interface EscalationRule {
   afterMinutes: number;
   severity: string[];
   channels: AlertChannel[];
   assignTo?: string;
+}
 }
 }
 

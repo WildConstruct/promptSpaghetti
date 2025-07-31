@@ -4,6 +4,7 @@
  */
 import { Notification } from './NotificationCenter';
 
+}
 export interface NotificationPreferences {
     in_app_enabled: boolean;
     email_enabled: boolean;
@@ -12,6 +13,7 @@ export interface NotificationPreferences {
         enabled: boolean;
         channels: ('in_app' | 'email' | 'push')[];
         mentions_only: boolean;
+}
     };
     collaboration: {
         enabled: boolean;
@@ -44,6 +46,7 @@ export interface NotificationPreferences {
         time: string;
     };
 
+}
 export interface NotificationFilter {
     filter: 'all' | 'unread' | 'mentions' | 'workspace';
     sort_by: 'newest' | 'priority' | 'type';
@@ -52,6 +55,7 @@ export interface NotificationFilter {
     start_date?: string;
     end_date?: string;
 
+}
 export interface NotificationStats {
     total: number;
     unread: number;
@@ -60,6 +64,7 @@ export interface NotificationStats {
     by_day: {
         date: string;
         count: number;
+}
     }[];
 
 export declare class NotificationManager {

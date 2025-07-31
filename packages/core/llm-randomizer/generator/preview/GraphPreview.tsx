@@ -3,6 +3,7 @@
 // Real-time graph preview with visualization
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Graph, Node } from '../../../graphSchema';
+}
 interface GraphPreviewProps {
   graph?: Graph;
   isGenerating?: boolean;
@@ -45,6 +46,7 @@ interface GraphPreviewProps {
   className = '',
   showStats = true,
   interactive = true
+}
 }) => {
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [selectedEdge, setSelectedEdge] = useState<{ source: string; target: string } | null>(null);
@@ -362,10 +364,10 @@ function calculateMaxDepth(nodes: Node, edgeMap: Map<string, Set<string>>): numb
 /**
  * Generate layout for visual nodes and edges
  */
-function generateLayout(graph: Graph, )
-  selectedNodeId: string | null,
-  selectedEdge: { source: string; target: string } | null
-): { visualNodes: VisualNode; visualEdges: VisualEdge } {
+function generateLayout(graph: Graph, (
+    selectedNodeId: string | null,
+    selectedEdge: { source: string; target: string } | null
+  ): { visualNodes: VisualNode; visualEdges: VisualEdge } {
   const nodes = graph.nodes;
   const visualNodes: VisualNode = [];
   const visualEdges: VisualEdge = [];

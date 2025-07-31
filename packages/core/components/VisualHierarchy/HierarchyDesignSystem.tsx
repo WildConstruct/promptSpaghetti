@@ -171,6 +171,7 @@ export const classifyFieldPriority = (fieldName: string, nodeType = 'generic'): 
 
 // Section header component with visual hierarchy
 
+}
 export interface HierarchyHeaderProps {
   title: string;
   level: 'basic' | 'advanced' | 'debug';
@@ -181,6 +182,7 @@ export interface HierarchyHeaderProps {
   isExpanded?: boolean;
   onToggle?: () => void;
   children?: React.ReactNode;
+}
 }
 export const HierarchyHeader: React.FC<HierarchyHeaderProps> = ({)
   title,
@@ -262,6 +264,7 @@ export const HierarchyHeader: React.FC<HierarchyHeaderProps> = ({)
 
 // Field wrapper with visual hierarchy
 
+}
 export interface HierarchyFieldProps {
   priority: FieldPriority;
   level: 'basic' | 'advanced' | 'debug';
@@ -271,6 +274,7 @@ export interface HierarchyFieldProps {
   required?: boolean;
   error?: string;
   className?: string;
+}
 }
 export const HierarchyField: React.FC<HierarchyFieldProps> = ({)
   priority,
@@ -358,10 +362,12 @@ export const HierarchyField: React.FC<HierarchyFieldProps> = ({)
 
 // Visual complexity indicator
 
+}
 export interface ComplexityIndicatorProps {
   level: 'basic' | 'advanced' | 'debug';
   showLabel?: boolean;
   size?: 'small' | 'medium' | 'large'
+}
   }
 export const ComplexityIndicator: React.FC<ComplexityIndicatorProps> = ({)
   level,

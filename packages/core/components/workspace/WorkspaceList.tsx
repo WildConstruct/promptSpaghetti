@@ -4,6 +4,7 @@
  */
 import React, { useState, useMemo } from 'react';
 import { WorkspaceWithMembership } from '../../types/workspace';
+}
 interface WorkspaceListProps {
   workspaces: WorkspaceWithMembership;
   selectedWorkspace: WorkspaceWithMembership | null;
@@ -14,6 +15,7 @@ interface WorkspaceListProps {
   selectedWorkspace,
   onWorkspaceSelect,
   loading = false
+}
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterBy, setFilterBy] = useState<'all' | 'owner' | 'member'>('all');
@@ -104,6 +106,7 @@ interface WorkspaceListProps {
     </div>
   );
 };
+}
 interface WorkspaceItemProps {
   workspace: WorkspaceWithMembership;
   isSelected: boolean;
@@ -112,6 +115,7 @@ interface WorkspaceItemProps {
   workspace,
   isSelected,
   onSelect
+}
 }) => {
   const isOwner = workspace.owner_id === workspace.membership?.user_id;
   const memberCount = 1; // TODO: Get actual member count from API;

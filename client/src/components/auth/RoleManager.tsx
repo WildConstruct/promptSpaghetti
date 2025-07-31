@@ -2,6 +2,7 @@
 // Administrative interface for creating, editing, and managing roles and permissions
 import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronDown, ChevronRight, Edit, Trash2, Plus, Users, Shield, Settings, Filter, Search } from 'lucide-react';
+}
 interface Permission {
   id: string;,
   roleId: string;
@@ -26,12 +27,14 @@ interface Permission {
   description?: string;
   scope: 'global' | 'organization' | 'team';
   organizationId?: string;
-  permissions: {,
+  permissions: {
   resource: string;,
   action: string;
   scope: 'global' | 'organization' | 'team' | 'own';
   conditions?: Record<string, unknown>;
+}
 }[];
+}
 interface RoleStats {
   totalRoles: number;,
   rolesByScope: Record<string, number>;
@@ -55,6 +58,7 @@ interface RoleStats {
   description: '',
   scope: 'global',
   permissions: [],
+}
 });
   // Permission templates for common role types
   const permissionTemplates = {
@@ -125,7 +129,7 @@ interface RoleStats {
   try {
   const response = await fetch('/api/auth/rbac/roles', {)
   method: 'POST',
-  headers: {,
+  headers: {
   'Content-Type': 'application/json',
 },
   credentials: 'include',

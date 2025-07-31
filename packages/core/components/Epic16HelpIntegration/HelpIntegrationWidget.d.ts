@@ -9,6 +9,7 @@ import React from 'react';
 import { HelpContent } from '../ContextualHelp/ContextualHelpSystem';
 import './HelpIntegrationWidget.css';
 
+}
 export interface HelpIntegrationProps {
     currentSystem: 'graph-editor' | 'marketplace';
     currentView: string;
@@ -23,6 +24,7 @@ export interface HelpIntegrationProps {
     minimized?: boolean;
     hidden?: boolean;
 
+}
 export interface HelpSession {
     id: string;
     sessionType: string;
@@ -34,9 +36,11 @@ export interface HelpSession {
         completedActions: string[];
         skippedContent: string[];
         ratings: Record<string, number>;
+}
     };
     escalationLevel: number;
 
+}
 export interface TransitionContext {
     fromSystem: 'graph-editor' | 'marketplace';
     toSystem: 'graph-editor' | 'marketplace';
@@ -47,3 +51,4 @@ export interface TransitionContext {
 export declare const HelpIntegrationWidget: React.FC<HelpIntegrationProps>;
 export default HelpIntegrationWidget;
 //# sourceMappingURL=HelpIntegrationWidget.d.ts.map
+}

@@ -1644,6 +1644,7 @@ export declare function bundleToGraph(bundle: GeneratorBundle): Graph;
  * Professional export system with VFX-ready formats
  */
 }
+}
 export interface ExportRequest {
     format: string;
     data: Record<string, unknown>;
@@ -1652,11 +1653,14 @@ export interface ExportRequest {
 }
 }
 }
+}
+}
 export interface ExportResult {
     type: 'text' | 'binary';
     data: Record<string, unknown>;
     mimeType: string;
     shouldDownload?: boolean;
+}
 }
 }
 export declare function exportResults(request: ExportRequest): Promise<ExportResult>;

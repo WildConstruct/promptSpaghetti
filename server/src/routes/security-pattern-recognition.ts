@@ -22,6 +22,7 @@ import { SecurityRiskScoringEngine } from '../services/SecurityRiskScoringEngine
 let patternRecognitionEngine: SecurityPatternRecognitionEngine | null = null;
 
 }
+}
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
@@ -31,6 +32,7 @@ interface APIResponse<T = any> {
 }
 
 }
+}
 interface RecognizePatternsRequest {
   data_sources: {
     security_logs?: any[];
@@ -39,6 +41,7 @@ interface RecognizePatternsRequest {
     application_logs?: any[];
     threat_intelligence?: any[];
     user_behavior_data?: any[];
+}
 }
   };
   analysis_type: 'real_time' | 'batch' | 'historical' | 'targeted';
@@ -61,6 +64,7 @@ interface RecognizePatternsRequest {
 }
 
 }
+}
 interface CreateClusterRequest {
   cluster_name: string;
   cluster_type: 'attack_campaign' | 'threat_actor' | 'malware_family' | 'infrastructure' | 'behavioral' | 'temporal' | 'geographic';
@@ -70,6 +74,7 @@ interface CreateClusterRequest {
     similarity_threshold?: number;
     clustering_algorithm?: string;
     validation_required?: boolean;
+}
 }
   };
   metadata?: {
@@ -83,6 +88,7 @@ interface CreateClusterRequest {
 }
 
 }
+}
 interface UpdateClusterRequest {
   cluster_updates: {
     cluster_name?: string;
@@ -90,6 +96,7 @@ interface UpdateClusterRequest {
     member_threats_to_add?: string[];
     member_threats_to_remove?: string[];
     metadata_updates?: any;
+}
 }
   };
   reanalysis_required?: boolean;
@@ -101,6 +108,7 @@ interface UpdateClusterRequest {
 }
 
 }
+}
 interface SearchPatternsRequest {
   search_criteria: {
     pattern_types?: string[];
@@ -109,6 +117,7 @@ interface SearchPatternsRequest {
     date_range?: {
       start: number;
       end: number;
+}
 }
     };
     keywords?: string[];
@@ -126,6 +135,7 @@ interface SearchPatternsRequest {
 }
 
 }
+}
 interface GenerateReportRequest {
   report_type: 'summary' | 'detailed' | 'technical' | 'executive';
   scope: {
@@ -134,6 +144,7 @@ interface GenerateReportRequest {
     time_range?: {
       start: number;
       end: number;
+}
 }
     };
     focus_areas?: string[];

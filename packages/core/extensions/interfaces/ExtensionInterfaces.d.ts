@@ -4,6 +4,7 @@
  */
 import { z } from 'zod';
 
+}
 export interface BaseExtension {
     readonly id: string;
     readonly name: string;
@@ -22,12 +23,14 @@ export interface BaseExtension {
     isHealthy(): boolean;
     getHealthStatus(): ExtensionHealthStatus;
 
+}
 export interface ExtensionHealthStatus {
     status: 'healthy' | 'warning' | 'error';
     message?: string;
     lastChecked: Date;
     details?: Record<string, any>;
 
+}
 export interface ExtensionContext {
     readonly extensionId: string;
     readonly systemVersion: string;
@@ -38,6 +41,7 @@ export interface ExtensionContext {
     readonly ui: ExtensionUIContext;
     readonly api: ExtensionAPIContext;
 
+}
 export interface ExtensionLogger {
     debug(message: string, ...args: any[]): void;
     info(message: string, ...args: any[]): void;
@@ -45,6 +49,7 @@ export interface ExtensionLogger {
     error(message: string, ...args: any[]): void;
     trace(message: string, ...args: any[]): void;
 
+}
 export interface ExtensionStorage {
     get<T>(key: string): Promise<T | undefined>;
     set<T>(key: string, value: T): Promise<void>;
@@ -53,6 +58,7 @@ export interface ExtensionStorage {
     keys(): Promise<string[]>;
     getScoped(scope: string): ExtensionStorage;
 
+}
 export interface ExtensionEventEmitter {
     on(event: string, listener: (...args: any[]) => void): void;
     off(event: string, listener: (...args: any[]) => void): void;
@@ -60,6 +66,7 @@ export interface ExtensionEventEmitter {
     once(event: string, listener: (...args: any[]) => void): void;
     removeAllListeners(event?: string): void;
 
+}
 export interface ExtensionRuntime {
     readonly version: string;
     readonly environment: 'development' | 'production' | 'test';
@@ -69,6 +76,7 @@ export interface ExtensionRuntime {
     unregisterNode(nodeId: string): void;
     getRegisteredNodes(): NodeDefinition[];
 
+}
 export interface ExtensionUIContext {
     registerComponent(componentId: string, component: React.ComponentType<any>): void;
     unregisterComponent(componentId: string): void;
@@ -79,6 +87,7 @@ export interface ExtensionUIContext {
     showNotification(notification: Notification): void;
     showModal(modal: ModalDefinition): void;
 
+}
 export interface ExtensionAPIContext {
     createHttpClient(): HttpClient;
     registerEndpoint(path: string, handler: APIHandler): void;
@@ -86,6 +95,7 @@ export interface ExtensionAPIContext {
     registerMiddleware(middleware: APIMiddleware): void;
     unregisterMiddleware(middlewareId: string): void;
 
+}
 export interface SystemInfo {
     version: string;
     platform: string;
@@ -94,6 +104,7 @@ export interface SystemInfo {
     memoryUsage: NodeJS.MemoryUsage;
     uptime: number;
 
+}
 export interface PerformanceMetrics {
     executionTime: number;
     memoryUsage: number;
@@ -101,6 +112,7 @@ export interface PerformanceMetrics {
     activeNodes: number;
     totalExecutions: number;
 
+}
 export interface NodeDefinition {
     id: string;
     name: string;
@@ -117,8 +129,10 @@ export interface NodeDefinition {
         license: string;
         repository?: string;
         documentation?: string;
+}
     };
 
+}
 export interface MenuItem {
     id: string;
     label: string;
@@ -128,6 +142,7 @@ export interface MenuItem {
     disabled?: boolean;
     submenu?: MenuItem[];
 
+}
 export interface Notification {
     id?: string;
     type: 'info' | 'success' | 'warning' | 'error';
@@ -136,11 +151,13 @@ export interface Notification {
     duration?: number;
     actions?: NotificationAction[];
 
+}
 export interface NotificationAction {
     label: string;
     action: () => void;
     primary?: boolean;
 
+}
 export interface ModalDefinition {
     id: string;
     title: string;
@@ -149,6 +166,7 @@ export interface ModalDefinition {
     closable?: boolean;
     onClose?: () => void;
 
+}
 export interface HttpClient {
     get<T>(url: string, options?: RequestOptions): Promise<T>;
     post<T>(url: string, data?: any, options?: RequestOptions): Promise<T>;
@@ -156,15 +174,18 @@ export interface HttpClient {
     patch<T>(url: string, data?: any, options?: RequestOptions): Promise<T>;
     delete<T>(url: string, options?: RequestOptions): Promise<T>;
 
+}
 export interface RequestOptions {
     headers?: Record<string, string>;
     timeout?: number;
     retries?: number;
     validateStatus?: (status: number) => boolean;
 
+}
 export interface APIHandler {
     (request: APIRequest, response: APIResponse): Promise<void> | void;
 
+}
 export interface APIRequest {
     method: string;
     url: string;
@@ -175,6 +196,7 @@ export interface APIRequest {
     body: any;
     user?: any;
 
+}
 export interface APIResponse {
     status(code: number): APIResponse;
     json(data: any): APIResponse;
@@ -182,6 +204,7 @@ export interface APIResponse {
     header(name: string, value: string): APIResponse;
     redirect(url: string): APIResponse;
 
+}
 export interface APIMiddleware {
     id: string;
     priority: number;
@@ -213,6 +236,7 @@ export declare class ExtensionError extends Error {
     readonly cause?: Error | undefined;
     constructor(type: ExtensionErrorType, extensionId: string, message: string, cause?: Error | undefined);
 
+}
 export interface ExtensionValidationResult {
     valid: boolean;
     errors: string[];
@@ -228,6 +252,7 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
     engines: z.ZodObject<{,
         promptSpaghetti: z.ZodString;
         node: z.ZodOptional<z.ZodString>;
+}
     }, "strip", z.ZodTypeAny, {
         promptSpaghetti: string;
         node?: string | undefined;

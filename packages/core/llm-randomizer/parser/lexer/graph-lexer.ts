@@ -2,10 +2,12 @@
 // Story 12.3 - Parser Implementation
 // Lexical analysis for LLM-generated graph format
 
+}
 export interface LexerPosition {
   line: number;
   column: number;
   offset: number;
+}
 }
 export enum TokenType {
   // Structure tokens
@@ -39,10 +41,13 @@ export enum TokenType {
   position: LexerPosition;
   raw?: string; // Original text for error reporting,
 }
+}
+}
 export interface LexerError {
   message: string;
   position: LexerPosition;
   suggestion?: string;
+}
 }
 export class GraphLexer {
   private input: string;

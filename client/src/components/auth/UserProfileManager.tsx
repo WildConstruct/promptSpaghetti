@@ -2,6 +2,7 @@
 // Comprehensive user profile management with inline editing
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../hooks/useAuth';
+}
 interface UserProfile {
   id?: string;
   displayName?: string;
@@ -25,6 +26,7 @@ interface UserProfile {
   onProfileUpdate,
   showCompleteness = true,
   allowImageUpload = true
+}
 }) => {
   const { user } = useAuth();
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -54,7 +56,7 @@ interface UserProfile {
     try {
       setLoading(true);
       const response = await fetch('/api/auth/profile', {)
-  headers: {,
+  headers: {
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
       });
       if (!response.ok) {
@@ -79,7 +81,7 @@ interface UserProfile {
       setError(null);
       const response = await fetch('/api/auth/profile', {)
   method: 'PUT',
-        headers: {,
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
   },
@@ -109,7 +111,7 @@ interface UserProfile {
       formData.append('file', file);
       const response = await fetch('/api/auth/profile/avatar', {)
   method: 'POST',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
   },
   body: formData;
@@ -131,7 +133,7 @@ interface UserProfile {
       setError(null);
       const response = await fetch('/api/auth/profile/avatar', {)
   method: 'DELETE',
-        headers: {,
+        headers: {
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
       });
       if (!response.ok) {

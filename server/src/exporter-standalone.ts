@@ -4,6 +4,7 @@ import { z } from 'zod';
 /**
  * Minimal Graph type definition to avoid corrupted imports
  */
+}
 export interface Graph {
   id?: string;
   nodes?: Node[];
@@ -11,20 +12,25 @@ export interface Graph {
   seed?: number;
   metadata?: Record<string, any>;
 }
+}
 
+}
 export interface Node {
   id: string;
   type: string;
   inputs?: string[];
   [key: string]: any;
 }
+}
 
+}
 export interface Edge {
   id: string;
   source: string;
   target: string;
   sourceHandle?: string;
   targetHandle?: string;
+}
 }
 
 /**

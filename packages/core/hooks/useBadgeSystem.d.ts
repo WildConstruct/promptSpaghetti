@@ -5,6 +5,7 @@
  */
 import { Badge, UserBadge, UserBadgeProgress, BadgeUnlockEvent, BadgeCategory } from '../gamification/BadgeSystem';
 
+}
 export interface BadgeSystemHookConfig {
     userId?: string;
     autoCheckBadges?: boolean;
@@ -25,6 +26,7 @@ export declare const useBadgeSystem: (config?: BadgeSystemHookConfig) => {
     getBadgesByTier: (badges?: Badge[]) => Record<string, Badge[]>;
     getNextBadges: (limit?: number) => Array<Badge & {,
         progress: number;
+}
     }>;
     getStatistics: () => {,
         templatesCreated: number;

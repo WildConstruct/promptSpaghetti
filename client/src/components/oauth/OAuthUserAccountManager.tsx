@@ -11,6 +11,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 
 // Types and interfaces
+}
 interface LinkedOAuthAccount {
   id: string;,
   providerId: string;
@@ -38,11 +39,13 @@ interface LinkedOAuthAccount {
   hasRefreshToken: boolean;
   loginCount: number;,
   securityLevel: 'basic' | 'standard' | 'high';
-  complianceFlags: {,
+  complianceFlags: {
   gdprConsent: boolean;,
   ccpaConsent: boolean;
   dataProcessingConsent: boolean;
+}
 };
+}
 interface AvailableProvider {
   id: string;,
   name: string;
@@ -53,6 +56,7 @@ interface AvailableProvider {
   features: string;,
   status: 'available' | 'configured' | 'maintenance';
   complianceLevel: 'basic' | 'standard' | 'enterprise';
+}
 interface ProviderScope {
   scope: string;,
   displayName: string;
@@ -68,6 +72,7 @@ interface ProviderScope {
 //   requiresConsent?: boolean;
 //   consentUrl?: string;
 
+}
 // }
 
 export const OAuthUserAccountManager: React.FC = () => {
