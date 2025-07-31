@@ -834,12 +834,14 @@ const NODE_TYPES: NodeMeta[] = [
         event.preventDefault();
         setSettingsModalOpen(true);
         return;
+      }
 
       // Ctrl+S/Cmd+S saves project (Story 6.1)
       if ((event.ctrlKey || event.metaKey) && event.key === 's') {
         event.preventDefault();
         handleSaveProject();
         return;
+      }
 
       // Ctrl+O/Cmd+O opens project (Story 6.1)
       if ((event.ctrlKey || event.metaKey) && event.key === 'o') {
@@ -855,12 +857,12 @@ const NODE_TYPES: NodeMeta[] = [
   return (
     <DemoModeManager
       initialConfig={{
-  brandingVisible: true,
-  debugElementsHidden: false,
-
+        brandingVisible: true,
+        debugElementsHidden: false,
+      }}
       onModeChange={(config) => {
-  console.log('Demo mode changed:', config);
-
+        console.log('Demo mode changed:', config);
+      }}
     >
       <div style={{ position: 'relative', width: '100%', height: '100%' }>
         <RestorePrompt
@@ -872,11 +874,11 @@ const NODE_TYPES: NodeMeta[] = [
             setShowRestorePrompt(false);
             setStatusMessage('Draft Restored');
             setTimeout(() => setStatusMessage(''), 3000);
-
+          }}
           onDismiss={() => {
             setShowRestorePrompt(false);
             localStorage.removeItem('graphDraft');
-
+          }}
         />
         <div style={{ display: 'flex', height: '100%' }>
           <TabbedPalette

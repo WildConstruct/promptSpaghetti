@@ -138,7 +138,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
     const link = document.createElement('a');
     link.href = url;
     // Generate filename based on format and export type
-    const timestamp = new Date().toISOString().slice(0, 19).replace(/[\:\-]/g, '');
+    const timestamp = new Date().toISOString().slice(0, 19).replace(/[:-]/g, '');
     const extension = getFileExtension(format);
     let filename = `promptscape-${exportDialog.type}-${timestamp}.${extension}`;
     if (exportDialog.type === 'individual' && typeof exportDialog.individualIndex === 'number') {
@@ -188,7 +188,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-}>
+}}>
       <div style={{
         background: professionalColors.background.elevated,
         borderRadius: 12,
@@ -328,7 +328,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
             {showExecutionPaths && hasExecutionPaths && (
               <div style={{ marginBottom: 20 }>
                 {/* Temporarily disabled ExecutionPathVisualization */}
-                <div>Execution Path Visualization would go here</div>
+                <div>Placeholder</div>
               </div>
             )}
             {/* Variance Analysis Component */}

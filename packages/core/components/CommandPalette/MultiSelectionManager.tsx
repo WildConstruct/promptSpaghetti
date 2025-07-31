@@ -289,7 +289,6 @@ interface SelectionInfoPanelProps {
   onInvertSelection: () => void;
   theme: 'light' | 'dark' | 'cinema'
 }
-  }
 
 const SelectionInfoPanel: React.FC<SelectionInfoPanelProps> = ({
   selectedNodes,

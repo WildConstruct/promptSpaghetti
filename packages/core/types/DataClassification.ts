@@ -13,7 +13,6 @@ export enum DataClassificationLevel {
   TOP_SECRET = 'TOP_SECRET'
 }
 
-}
 export interface DataClassification {
   id: string;
   dataElement: string;

@@ -380,13 +380,15 @@ export class SessionTimeoutController extends EventEmitter {
   return false;
   // Check time until timeout
   const timeUntilTimeout = state.currentTimeout.getTime() - Date.now();
-  const extensionThreshold = state.configuration.extensionDuration / 4; // Extend when 1/4 extension time remains;
+  const extensionThreshold = state.configuration.extensionDuration / 4; // Extend when 1/4 extension time remains
   return timeUntilTimeout <= extensionThreshold;
-  private calculateActivityScore(activities: ActivityData): number {,
+}
+
+private calculateActivityScore(activities: ActivityData): number {
   if (activities.length === 0) return 0;
   const now = Date.now();
   let score = 0;
-  activities.forEach(activity => {)
+  activities.forEach(activity => {
   const age = now - activity.timestamp.getTime();
   const ageMultiplier = Math.max(0, 1 - (age / (10 * 60 * 1000))); // Decay over 10 minutes;
   let intensityScore = 0;

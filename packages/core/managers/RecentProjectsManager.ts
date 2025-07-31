@@ -114,10 +114,10 @@ export class RecentProjectsManager {
   y: Math.floor(index / 5) * 20 + 12,
 }));
       // Create SVG string
-      let svg = `<svg width="${svgWidth}" height="${svgHeight}" xmlns="http://www.w3.org/2000/svg">`;}
+      let svg = `<svg width="${svgWidth}" height="${svgHeight}" xmlns="http://www.w3.org/2000/svg">`;
       svg += '<rect width="100%" height="100%" fill="#f8f9fa"/>';
       // Draw simplified edges
-      edges.forEach(edge => {)
+      edges.forEach(edge => {
   const sourceIndex = displayNodes.findIndex(n => n.id === edge.source);
         const targetIndex = displayNodes.findIndex(n => n.id === edge.target);
         if (sourceIndex >= 0 && targetIndex >= 0) {
@@ -198,7 +198,7 @@ export class RecentProjectsManager {
     return colorMap[nodeType] || '#6b7280';
   private static getDefaultThumbnail(): string {
     // Simple default thumbnail SVG
-    const svg = `<svg width="120" height="80" xmlns="http://www.w3.org/2000/svg">;
+    const svg = `<svg width="120" height="80" xmlns="http://www.w3.org/2000/svg">
       <rect width="100%" height="100%" fill="#f8f9fa"/>
       <circle cx="60" cy="40" r="20" fill="#e5e7eb" stroke="#9ca3af" stroke-width="2"/>
       <text x="60" y="45" text-anchor="middle" font-family="Arial" font-size="12" fill="#6b7280">PSG</text>

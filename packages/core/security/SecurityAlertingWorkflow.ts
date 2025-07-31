@@ -899,14 +899,16 @@ export class SecurityAlertingWorkflow extends EventEmitter {
       await this.activateIncidentResponse(alert);
       break;
     default:
-      console.log(`Unknown step action: ${actionId}`);}
+      console.log(`Unknown step action: ${actionId}`);
+  }
+  
   private formatNotificationContent(alert: SecurityAlert, channel: AlertChannel): string {
-    const baseContent = `🚨 SECURITY ALERT [${alert.severity.toUpperCase()}]},}
-  Title: ${alert.title},}
+    const baseContent = `🚨 SECURITY ALERT [${alert.severity.toUpperCase()}]
+  Title: ${alert.title}
   Category: ${alert.category}
-Risk Score: ${alert.risk.score}/100},}
-  Time: ${alert.timestamp.toISOString()},}
-  ID: ${alert.id},}
+  Risk Score: ${alert.risk.score}/100
+  Time: ${alert.timestamp.toISOString()}
+  ID: ${alert.id}
   Description:
 ${alert.description}
 Affected Systems: ${alert.context.affectedSystems.join(', ') || 'None'}

@@ -14,7 +14,6 @@ export interface ServerProject extends PSGFile {
   userId?: number;
 }
 
-}
 export interface ProjectListResponse {
   projects: ServerProject[];
   total: number;
