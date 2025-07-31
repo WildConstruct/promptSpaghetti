@@ -1,0 +1,20 @@
+/**
+ * Security Dashboard Components - Main Export
+ * Task T-1752989143998-955: Implement security dashboard
+ *
+ * Main export file for security dashboard components providing a unified
+ * interface for importing and using all security dashboard functionality.
+ *
+ * @author Security Engineering Team
+ * @version 1.0.0
+ * @since 2025-07-22
+ */
+// Main Components
+export { default as SecurityDashboardMain } from './SecurityDashboardMain';
+export { default as SecurityDashboardDataService } from './SecurityDashboardDataService';
+// Core Framework Components (re-exported for convenience)
+export { SecurityDashboardFramework, DashboardType, SecurityRole, DashboardTheme, } from '../../security/dashboard/SecurityDashboardFramework';
+export { SecurityDashboardWorkflow } from '../../security/dashboard/SecurityDashboardWorkflow';
+export { OperationalSecurityDashboard } from '../../security/dashboard/OperationalSecurityDashboard';
+export { ExecutiveSecurityDashboard } from '../../security/dashboard/ExecutiveSecurityDashboard';
+export { ComplianceSecurityDashboard } from '../../security/dashboard/ComplianceSecurityDashboard';

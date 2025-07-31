@@ -1,0 +1,15 @@
+;
+;
+created_at: string;
+updated_at: string;
+;
+action_type: 'workflow_transition' | 'approval_request' | 'custom';
+action_config: Record;
+is_active: boolean;
+last_executed_at ?  : string;
+next_execution_at ?  : string;
+execution_count: number;
+failure_count: number;
+created_at: string;
+updated_at: string;
+export {};

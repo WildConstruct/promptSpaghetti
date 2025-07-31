@@ -1239,31 +1239,39 @@ const NODE_TYPES: NodeMeta[] = [
           transform: scale(1.05) !important;
         /* Professional Minimap */
         .react-flow__minimap {
-          background: linear-gradient(),
+          background: linear-gradient(
             145deg,
-            var(--color-bg-secondary)
-            #383838
-          ), var(--color-bg-primary, #2c2c2c)) !important;
+            var(--color-bg-secondary, #383838),
+            var(--color-bg-primary, #2c2c2c)
+          ) !important;
           border: 1px solid var(--color-ui-border, #4a4a4a) !important;
           backdrop-filter: blur(12px) !important;
           border-radius: 8px !important;
           box-shadow: var(--shadow-lg, 0 10px 15px rgba(0, 0, 0, 0.5)) !important;
+        }
         .react-flow__minimap-node {
           fill: var(--color-accent-orange, #ff7800) !important;
           opacity: 0.8 !important;
+        }
         /* Professional Background */
         .react-flow__background {
           background: var(--color-bg-primary, #2c2c2c) !important;
+        }
         @keyframes glowPulse {
           0%, 100% {
             opacity: 0.6;
+          }
           50% {
             opacity: 1;
+          }
+        }
         @keyframes fadeIn {
           from {
             opacity: 0;
+          }
           to {
             opacity: 1;
+          }
       `}</style>
         {/* Epic 8.3 - Director Preview Toolbar Integration */}
         <DirectorPreviewToolbar
@@ -1633,7 +1641,7 @@ const NODE_TYPES: NodeMeta[] = [
             // Replace current graph with test graph
               setNodes(testNodes);
               setEdges(testEdges);
-
+            }}
             targetFPS={30}
             maxRenderTime={16}
           />
@@ -1642,8 +1650,6 @@ const NODE_TYPES: NodeMeta[] = [
     </DemoModeManager>
   );
 }; // Close GraphEditorInner component function
-
-} // Additional closing brace that was missing
 
 // Wrapper component with ReactFlowProvider
 export const GraphEditor: React.FC<GraphEditorProps> = (props) => {
