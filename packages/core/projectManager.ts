@@ -22,7 +22,6 @@ export { ProjectMetadata, ProjectSettings } from './schemas/psgSchema';
 
 // Interfaces for save/load operations
 
-}
 export interface SaveProjectOptions {
   name: string;
   description?: string;

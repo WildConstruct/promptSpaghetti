@@ -14,14 +14,13 @@ export interface GraphState {
   description: string;
   id: string;
 }
-}
-}
+
 export interface UndoRedoManagerProps {
   onStateChange: (state: GraphState) => void;
   maxHistorySize?: number;
-  theme?: 'light' | 'dark' | 'cinema'
+  theme?: 'light' | 'dark' | 'cinema';
 }
-  }
+
 export class UndoRedoSystem {
   private history: GraphState[] = [];
   private currentIndex: number = -1;

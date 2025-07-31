@@ -220,7 +220,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   fontSize: 12,
   fontWeight: 500,
   cursor: 'pointer',
-
+                }}
               >
                 {showExecutionPaths ? '📊 Hide Paths' : '🔍 Show Paths'}
               </button>

@@ -368,6 +368,7 @@ const NODE_TYPES: NodeMeta[] = [
             getCategoryColor={getCategoryColor}
           />
         );
+      }
 
       return (
         <NodeRenderer

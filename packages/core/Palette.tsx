@@ -100,30 +100,30 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
             }, {} as Record<string, typeof nodes>);
             const categoryOrder = ['content', 'flow', 'advanced', 'transform', 'output', 'memory', 'smart', 'process', 'other'];
             const categoryLabels = {
-  content: 'Content Building Blocks',
-  flow: 'Content Flow Tools',
-  advanced: 'Advanced Nodes',
-  transform: 'Transform & Logic',
-  output: 'Final Output',
-  memory: 'Memory & Storage',
-  smart: 'Smart Tools',
-  process: 'Custom Processing',
-  other: 'Other Tools',
-};
+              content: 'Content Building Blocks',
+              flow: 'Content Flow Tools',
+              advanced: 'Advanced Nodes',
+              transform: 'Transform & Logic',
+              output: 'Final Output',
+              memory: 'Memory & Storage',
+              smart: 'Smart Tools',
+              process: 'Custom Processing',
+              other: 'Other Tools',
+            };
             return categoryOrder.map(categoryKey => {
-  const categoryNodes = categories[categoryKey];
+              const categoryNodes = categories[categoryKey];
               if (!categoryNodes || categoryNodes.length === 0) return null;
               return (
-                <div key={categoryKey} style={{ marginBottom: 16 }>
+                <div key={categoryKey} style={{ marginBottom: 16 }}>
                   <div style={{
-  fontSize: 11,
-  fontWeight: 600,
-  color: '#9ca3af',
-  textTransform: 'uppercase',
-  letterSpacing: '0.5px',
-  marginBottom: 8,
-  paddingLeft: 8,
-}}>
+                    fontSize: 11,
+                    fontWeight: 600,
+                    color: '#9ca3af',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px',
+                    marginBottom: 8,
+                    paddingLeft: 8,
+                  }}>
                     {categoryLabels[categoryKey as keyof typeof categoryLabels]}
                   </div>
                   {categoryNodes.map((node) => (
@@ -166,9 +166,9 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
                     >
                       <span id={`tooltip-${node.id}`} style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }}>{node.tooltip}</span>
                       <span style={{ fontSize: 22, width: 28, textAlign: 'center' }}>{node.icon}</span>
-                      <div style={{ flex: 1 }>
-                        <div style={{ fontSize: 13, fontWeight: 500 }>{node.label}</div>
-                        <div style={{ fontSize: 11, color: '#9ca3af', marginTop: 2 }>{node.tooltip}</div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: 13, fontWeight: 500 }}>{node.label}</div>
+                        <div style={{ fontSize: 11, color: '#9ca3af', marginTop: 2 }}>{node.tooltip}</div>
                       </div>
                     </div>
                   ))}
