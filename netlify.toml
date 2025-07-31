@@ -6,7 +6,7 @@
   publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "20"
+  NODE_VERSION = "20.11.0"
   NPM_CONFIG_LEGACY_PEER_DEPS = "true"
   # Skip Netlify's automatic dependency installation
   # NPM_FLAGS removed
