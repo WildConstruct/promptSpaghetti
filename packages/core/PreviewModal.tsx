@@ -320,8 +320,8 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
             )}
           </div>
         </div>
-        {loading && <div style={{ marginBottom: 12 }}>✨ Generating content...</div>}
-        {error && <div style={{ color: '#c00' }>⚠️ Something went wrong: {error}</div>}
+        {loading && <div style={{ marginBottom: 12 }}>Generating content...</div>}
+        {error && <div style={{ color: '#c00' }}>Error: Something went wrong: {error}</div>}
         {!loading && !error && (
           <div>
             {/* Execution Path Visualization */}
@@ -331,10 +331,10 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                   results={results as PreviewResultWithPath[]}
                   onNodeHighlight={onNodeHighlight}
                   config={{
-  showExecutionOrder: true,
-  showRandomChoices: true,
-  showPerformanceMetrics: true,
-
+                    showExecutionOrder: true,
+                    showRandomChoices: true,
+                    showPerformanceMetrics: true,
+                  }}
                 />
               </div>
             )}

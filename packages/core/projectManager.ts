@@ -33,14 +33,12 @@ export interface SaveProjectOptions {
 export interface LoadProjectResult {
   success: boolean;
   data?: {
-}
-    graph: { nodes: Node; edges: Edge };
+    graph: { nodes: Node[]; edges: Edge[] };
     metadata: ProjectMetadata;
-  settings: ProjectSettings;
+    settings: ProjectSettings;
   };
   error?: string;
   warnings?: string;
-}
 }
 export interface SaveProjectResult {
   success: boolean;
@@ -48,8 +46,7 @@ export interface SaveProjectResult {
   error?: string;
   warnings?: string;
 }
-}
-}
+
 export interface PSGFile {
   id: string;
   name: string;
@@ -64,11 +61,9 @@ export interface PSGFile {
   author?: string;
   version: string;
   created: Date;
-  thumbnail?: string;
-}
-};
+    thumbnail?: string;
+  };
   isFavorite: boolean;
-}
 }
 export interface ProjectFolder {
   id: string;
