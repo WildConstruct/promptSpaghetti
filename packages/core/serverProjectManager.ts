@@ -9,8 +9,6 @@ export interface ServerProjectMetadata extends ProjectMetadata {
   id: string;
   userId?: number;
 }
-
-}
 export interface ServerProject extends PSGFile {
   id: string;
   userId?: number;

@@ -1,5 +1,0 @@
-;
- > ;
-className ?  : string;
-;
-export {};

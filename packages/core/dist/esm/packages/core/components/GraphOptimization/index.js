@@ -1,6 +1,0 @@
-/**
- * Graph Optimization Components - Index
- */
-export { default as GraphAnalysisPanel } from './GraphAnalysisPanel';
-export { default as PerformanceMonitor } from './PerformanceMonitor';
-export { default as OptimizationControls } from './OptimizationControls';
