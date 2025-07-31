@@ -355,6 +355,7 @@ const NODE_TYPES: NodeMeta[] = [
             />
           </SmoothNodeWrapper>
         );
+      }
 
       // Fallback to standard rendering for performance
       if (shouldUseVariablePorts) {
@@ -420,7 +421,7 @@ const NODE_TYPES: NodeMeta[] = [
       previewTimeoutRef.current = setTimeout(run, 500 - sinceChange);
     } else {
       run();
-
+    }
   }, [nodes, edges, runPreview]);
   const handleInspectorChange = (partial: Record<string, unknown>) => {
     if (!selectedNode) return;
@@ -429,7 +430,7 @@ const NODE_TYPES: NodeMeta[] = [
     // Also update local React state immediately for UI responsiveness
     setNodes(prev => prev.map(n =>
       n.id === selectedNode.id 
-        ? { ...n, data: { ...n.data, ...partial }
+        ? { ...n, data: { ...n.data, ...partial } }
         : n
     ));
   };
@@ -460,6 +461,7 @@ const NODE_TYPES: NodeMeta[] = [
           if (hasUnsavedChanges) {
             const confirmed = confirm('You have unsaved changes. Load the dropped project anyway?');
             if (!confirmed) return;
+          }
 
           try {
             const content = await file.text();
@@ -482,30 +484,33 @@ const NODE_TYPES: NodeMeta[] = [
               setTimeout(() => setStatusMessage(''), 3000);
               if (result.warnings && result.warnings.length > 0) {
                 console.warn('Project load warnings:', result.warnings);
-
+              }
             } else {
               setStatusMessage(`Failed to load project: ${result.error}`);
               setTimeout(() => setStatusMessage(''), 5000);
-
+            }
           } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
             setStatusMessage(`Failed to load project: ${errorMessage}`);
             setTimeout(() => setStatusMessage(''), 5000);
-
+          }
           return; // Exit early for file drops
         } else {
           setStatusMessage('Only .psg files are supported for drag and drop');
           setTimeout(() => setStatusMessage(''), 3000);
           return;
+        }
+      }
 
-        // Handle node type drops from palette (existing functionality)
-  const nodeType = event.dataTransfer.getData('application/node-type');
-  if (!nodeType || !(nodeType in nodeSchemas)) return;
-  // Use React Flow's screenToFlowPosition for accurate positioning
-  const position = reactFlowInstance.screenToFlowPosition({
-  x: event.clientX,
-  y: event.clientY,
-});
+      // Handle node type drops from palette (existing functionality)
+      const nodeType = event.dataTransfer.getData('application/node-type');
+      if (!nodeType || !(nodeType in nodeSchemas)) return;
+      
+      // Use React Flow's screenToFlowPosition for accurate positioning
+      const position = reactFlowInstance.screenToFlowPosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
       // Smooth node creation animation
       setIsCreatingNode(true);
       const nodeId = `${nodeType}-${Date.now()}`;
@@ -514,12 +519,12 @@ const NODE_TYPES: NodeMeta[] = [
       const schema = nodeSchemas[nodeType];
       const params = schema.parse({});
       const newNode: Node = {
-  id: nodeId,
+        id: nodeId,
         type: 'default',
         position,
         data: { ...params, nodeType: nodeType },
         selected: false
-  };
+      };
       // Add with animation
       globalAnimationManager.scheduleAnimation(() => {
         addNode(newNode);
@@ -531,8 +536,9 @@ const NODE_TYPES: NodeMeta[] = [
           setNodeCreationAnimation(null);
         }, 600);
       });
-
-  }, [reactFlowInstance, addNode, hasUnsavedChanges, setNodes, setEdges, setStatusMessage]);
+    },
+    [reactFlowInstance, addNode, hasUnsavedChanges, setNodes, setEdges, setStatusMessage]
+  );
   // Allow drop on canvas
   const handleDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
@@ -548,9 +554,9 @@ const NODE_TYPES: NodeMeta[] = [
     (changes: NodeChange[]) => {
   // Get canvas size for optimization
   const canvasSize = canvasRef.current ? {
-  width: canvasRef.current.offsetWidth,
-  height: canvasRef.current.offsetHeight,
-} : { width: 1920, height: 1080 };
+    width: canvasRef.current.offsetWidth,
+    height: canvasRef.current.offsetHeight,
+  } : { width: 1920, height: 1080 };
       setNodes((nds) => {
         let updatedNodes = nds.map((node) => {
           const change = changes.find((c) => 'id' in c && c.id === node.id);
@@ -559,12 +565,14 @@ const NODE_TYPES: NodeMeta[] = [
             setDragPreview({ node: {...node, ...change}, position: change.position || node.position });
           } else if (change && 'dragging' in change && !change.dragging) {
             setDragPreview(null);
+          }
 
           return change ? { ...node, ...change } : node;
         });
         // Apply canvas optimization for performance
         if (updatedNodes.length > 100) {
           updatedNodes = optimizer.optimizeNodeVisibility(updatedNodes, viewport, canvasSize);
+        }
 
         return updatedNodes;
       });
@@ -582,6 +590,7 @@ const NODE_TYPES: NodeMeta[] = [
         // Apply edge optimization for performance
         if (updatedEdges.length > 200) {
           updatedEdges = optimizer.optimizeEdges(updatedEdges, nodes, viewport);
+        }
 
         return updatedEdges;
       });
@@ -664,7 +673,7 @@ const NODE_TYPES: NodeMeta[] = [
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         setStatusMessage(`Failed to load recent project: ${errorMessage}`);
         setTimeout(() => setStatusMessage(''), 5000);
-
+      }
     });
   }, [confirmNavigation]);
   const handleSaveSuccess = useCallback((result: { success: boolean; error?: string; projectName?: string; metadata?: unknown }) => {
@@ -692,12 +701,12 @@ const NODE_TYPES: NodeMeta[] = [
           // });
         } catch (error) {
           console.warn('Failed to add project to recent list:', error);
-
-
+        }
+      }
     } else {
       setStatusMessage(`Save failed: ${result.error}`);
-
-    setTimeout(() => setStatusMessage(''), 5000);
+      setTimeout(() => setStatusMessage(''), 5000);
+    }
   }, []);
   const handleLoadSuccess = useCallback((result: { success: boolean; error?: string; warnings?: string; projectName?: string; metadata?: unknown }) => {
     if (result.success) {
@@ -730,12 +739,12 @@ const NODE_TYPES: NodeMeta[] = [
           // });
         } catch (error) {
           console.warn('Failed to add project to recent list:', error);
-
-
+        }
+      }
     } else {
       setStatusMessage(`Load failed: ${result.error}`);
-
-    setTimeout(() => setStatusMessage(''), 5000);
+      setTimeout(() => setStatusMessage(''), 5000);
+    }
   }, []);
   const handleExportBundle = useCallback(() => {
     setExportDialogOpen(true);
@@ -809,13 +818,13 @@ const NODE_TYPES: NodeMeta[] = [
       const target = event.target as HTMLElement;
       if (!target.closest('[data-optimization-menu]') && !target.closest('[data-optimization-button]')) {
         setOptimizationMenuOpen(false);
-
+      }
     };
     
     if (optimizationMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
       return () => document.removeEventListener('mousedown', handleClickOutside);
-
+    }
   }, [optimizationMenuOpen]);
   // Keyboard shortcuts (Epic 7.3 + Story 6.1)
   useEffect(() => {
