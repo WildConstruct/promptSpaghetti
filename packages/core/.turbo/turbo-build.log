@@ -1,4 +1,8 @@
 
 > @promptscape/core@0.1.0-alpha build /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core
-> tsc
+> npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> @promptscape/core@0.1.0-alpha build:esm
+> tsc --project tsconfig.esm.json
 

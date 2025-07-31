@@ -96,7 +96,7 @@ export const InspectorSidebar: React.FC<InspectorSidebarProps> = ({ node, schema
                 onChange={e => {
   const isNumber = zodType instanceof z.ZodNumber || (zodType as unknown)._def?.typeName === 'ZodNumber';
   updateField(key, isNumber ? Number(e.target.value) : e.target.value);
-}
+
                 style={{ width: '100%', padding: 6, border: fieldErrors[key] ? '1px solid #f00' : '1px solid #ccc', borderRadius: 4 }
               />
               {fieldErrors[key] && <div style={{ color: '#f00', fontSize: 12 }>{fieldErrors[key]}</div>}

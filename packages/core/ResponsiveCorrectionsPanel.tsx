@@ -7,7 +7,7 @@ import { CorrectionsStatsDashboard } from './components/CorrectionsStatsDashboar
 interface ResponsiveCorrectionsPanelProps {
   isOpen: boolean;
   onClose: () => void;
-
+}
 
 export const ResponsiveCorrectionsPanel: React.FC<ResponsiveCorrectionsPanelProps> = ({
   isOpen,

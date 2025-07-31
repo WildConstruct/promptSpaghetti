@@ -32,7 +32,6 @@ import {
   DEFAULT_CONNECTION_ANNOTATION_PREFERENCES
 } from './types/CollaborationTypes';
 
-}
 export interface GraphState {
   nodes: Node[];
   edges: Edge[];
@@ -85,7 +84,6 @@ export interface GraphState {
   setConnectionAnnotationPreferences: (preferences: Partial<ConnectionAnnotationPreferences>) => void;
   connectionAnnotationPreferences?: ConnectionAnnotationPreferences;
   // Project operations (file-based)
-}
   saveProject: (options: SaveProjectOptions) => Promise<{ success: boolean; error?: string }>;
   loadProject: () => Promise<{ success: boolean; error?: string }>;
   // Project operations (server-based)
@@ -98,8 +96,7 @@ export interface GraphState {
   deleteProjectFromServer: (projectId: string, userId?: number) => Promise<{ success: boolean; error?: string }>;
   listUserProjects: (
     userId?: number,
-    query?: Record<string,
-    unknown>
+    query?: Record<string, unknown>
   ) => Promise<{ success: boolean; projects?: ProjectMetadata; error?: string }>;
   // Common project operations
   newProject: () => void;

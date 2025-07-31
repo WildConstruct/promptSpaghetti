@@ -31,7 +31,7 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column'
-  }
+      }}
     >
       <button
         aria-label={collapsed ? 'Expand palette' : 'Collapse palette'}
@@ -47,7 +47,7 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
           cursor: 'pointer',
           outline: 'none',
           transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
-        }
+        }}
       >
         {collapsed ? '»' : '«'}
       </button>
@@ -66,24 +66,24 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
               onDragStart={(e) => {
                 e.dataTransfer?.setData?.('application/node-type', node.id);
                 onDragStart?.(node.id);
-              }
+              }}
               title={node.tooltip}
               style={{
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: '10px 0',
-  marginBottom: 4,
-  borderRadius: 6,
-  background: 'none',
-  cursor: 'grab',
-  outline: 'none',
-}
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '10px 0',
+                marginBottom: 4,
+                borderRadius: 6,
+                background: 'none',
+                cursor: 'grab',
+                outline: 'none'
+              }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   onDragStart?.(node.id);
-
-              }
+                }
+              }}
             >
               <span id={`tooltip-${node.id}`} style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }>{node.tooltip}</span>
               <span style={{ fontSize: 22, width: 28, textAlign: 'center' }>{node.icon}</span>
@@ -138,31 +138,31 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
                       onDragStart={(e) => {
                         e.dataTransfer?.setData?.('application/node-type', node.id);
                         onDragStart?.(node.id);
-                      }
+                      }}
                       title={node.tooltip}
                       style={{
-  display: 'flex',
-  alignItems: 'center',
-  gap: 12,
-  padding: '10px 16px',
-  marginBottom: 4,
-  borderRadius: 6,
-  background: 'none',
-  cursor: 'grab',
-  outline: 'none',
-  transition: 'background-color 0.2s',
-}
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 12,
+                        padding: '10px 16px',
+                        marginBottom: 4,
+                        borderRadius: 6,
+                        background: 'none',
+                        cursor: 'grab',
+                        outline: 'none',
+                        transition: 'background-color 0.2s'
+                      }}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.backgroundColor = '#2a2f3a';
-                      }
+                      }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'none'
-  }
+                        e.currentTarget.style.backgroundColor = 'none';
+                      }}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' || e.key === ' ') {
                           onDragStart?.(node.id);
-
-                      }
+                        }
+                      }}
                     >
                       <span id={`tooltip-${node.id}`} style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }>{node.tooltip}</span>
                       <span style={{ fontSize: 22, width: 28, textAlign: 'center' }>{node.icon}</span>

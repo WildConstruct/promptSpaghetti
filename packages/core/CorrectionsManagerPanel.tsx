@@ -11,13 +11,13 @@ import { CorrectionsStatsDashboard } from './components/CorrectionsStatsDashboar
 interface CorrectionsPanelProps {
   isOpen: boolean;
   onClose: () => void;
-
+}
 
 type FilterType = 'all' | 'active' | 'inactive' | 'regex' | 'text' | 'draft' | 'published' | 'deprecated';
 type SortType = 'name' | 'priority' | 'created' | 'updated' | 'usage';
 type ViewMode = 'list' | 'grid' | 'compact';
 
-export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = ({ isOpen, onClose }) => {
+export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onClose }) => {
   const { rules, isEnabled, addRule, updateRule, deleteRule, toggleRule, reorderRules, clearAllRules, applyCorrections } = useCorrectionsStore();
   // UI State
   const [editingRule, setEditingRule] = useState<CorrectionRule | null>(null);
@@ -213,7 +213,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   display: 'flex',
   flexDirection: 'column',
   transition: 'width 0.3s ease',
-}
+
       data-testid="corrections-manager-panel"
     >
       {/* Header */}
@@ -252,7 +252,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   padding: '4px',
   borderRadius: '4px',
   fontSize: '14px',
-}
+
                 title="Collapse panel"
               >
                 ←
@@ -267,7 +267,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   padding: '4px',
   borderRadius: '4px',
   fontSize: '16px',
-}
+
                 title="Close panel"
               >
                 ×
@@ -287,7 +287,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   padding: '4px',
   borderRadius: '4px',
   fontSize: '14px',
-}
+
               title="Expand panel"
             >
               →
@@ -323,7 +323,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   border: '1px solid #444',
   borderRadius: '6px',
   fontSize: '14px',
-}
+
               />
             </div>
             {/* Filters and Controls */}
@@ -344,7 +344,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   border: '1px solid #444',
   borderRadius: '4px',
   fontSize: '12px',
-}
+
               >
                 <option value="all">All Rules</option>
                 <option value="active">Active</option>
@@ -366,7 +366,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   border: '1px solid #444',
   borderRadius: '4px',
   fontSize: '12px',
-}
+
               >
                 <option value="priority">Priority</option>
                 <option value="name">Name</option>
@@ -384,7 +384,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   border: '1px solid #444',
   borderRadius: '4px',
   fontSize: '12px',
-}
+
               >
                 <option value="list">List</option>
                 <option value="grid">Grid</option>
@@ -403,7 +403,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   borderRadius: '4px',
   fontSize: '12px',
   cursor: 'pointer',
-}
+
               >
                 {selectedRules.size === filteredAndSortedRules.length ? 'Deselect All' : 'Select All'}
               </button>
@@ -419,7 +419,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   borderRadius: '4px',
   fontSize: '12px',
   cursor: 'pointer',
-}
+
                   >
                     Activate ({selectedRules.size})
                   </button>
@@ -433,7 +433,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   borderRadius: '4px',
   fontSize: '12px',
   cursor: 'pointer',
-}
+
                   >
                     Deactivate ({selectedRules.size})
                   </button>
@@ -447,7 +447,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   borderRadius: '4px',
   fontSize: '12px',
   cursor: 'pointer',
-}
+
                   >
                     Delete ({selectedRules.size})
                   </button>
@@ -463,7 +463,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   borderRadius: '4px',
   fontSize: '12px',
   cursor: 'pointer',
-}
+
               >
                 Import/Export
               </button>
@@ -477,7 +477,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   borderRadius: '4px',
   fontSize: '12px',
   cursor: 'pointer',
-}
+
               >
                 Stats
               </button>
@@ -492,7 +492,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   fontSize: '12px',
   cursor: 'pointer',
   position: 'relative',
-}
+
               >
                 Workflow
                 {getDraftRules().length > 0 && (
@@ -545,7 +545,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   border: '1px solid #444',
   borderRadius: '4px',
   fontSize: '12px',
-}
+
                   >
                     <option value="json">JSON</option>
                     <option value="yaml">YAML</option>
@@ -561,7 +561,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   borderRadius: '4px',
   fontSize: '12px',
   cursor: 'pointer',
-}
+
                   >
                     Export
                   </button>
@@ -584,7 +584,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
                         setImportContent(e.target?.result as string);
                       };
                       reader.readAsText(file);
-                  }
+
                   style={{
   width: '100%',
   padding: '6px',
@@ -594,7 +594,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   borderRadius: '4px',
   fontSize: '12px',
   marginBottom: '8px',
-}
+
                 />
                 {importContent && (
                   <button
@@ -607,7 +607,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   borderRadius: '4px',
   fontSize: '12px',
   cursor: 'pointer',
-}
+
                   >
                     Import
                   </button>
@@ -634,7 +634,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   borderRadius: '6px',
   resize: 'vertical',
   fontSize: '14px',
-}
+
             />
             {testText && (
               <div style={{ marginTop: '8px' }>
@@ -648,7 +648,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   marginTop: '4px',
   fontSize: '14px',
   wordBreak: 'break-word',
-}
+
                 >
                   {handleTestCorrections()}
                 </div>
@@ -671,7 +671,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
                   onClick={() => {
                     if (window.confirm('This will add default correction rules. Continue?')) {
                       DEFAULT_CORRECTION_RULES.forEach(rule => addRule(rule));
-                  }
+
                   style={{
   padding: '6px 12px',
   background: '#4a5568',
@@ -680,7 +680,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   borderRadius: '4px',
   fontSize: '12px',
   cursor: 'pointer',
-}
+
                 >
                   Load Defaults
                 </button>
@@ -688,7 +688,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
                   onClick={() => {
                     if (window.confirm('This will delete all correction rules. Continue?')) {
                       clearAllRules();
-                  }
+
                   style={{
   padding: '6px 12px',
   background: '#e53e3e',
@@ -697,7 +697,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   borderRadius: '4px',
   fontSize: '12px',
   cursor: 'pointer',
-}
+
                 >
                   Clear All
                 </button>
@@ -714,7 +714,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   borderRadius: '6px',
   padding: '12px',
   transition: 'background 0.2s ease',
-}
+
                 >
                   <div style={{
   display: 'flex',
@@ -733,7 +733,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
                           } else {
                             newSelected.delete(rule.id);
                           setSelectedRules(newSelected);
-                        }
+
                         style={{ marginRight: '4px' }
                       />
                       <input
@@ -784,7 +784,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   fontSize: '12px',
   padding: '4px 8px',
   borderRadius: '4px',
-}
+
                       >
                         Edit
                       </button>
@@ -798,7 +798,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   fontSize: '12px',
   padding: '4px 8px',
   borderRadius: '4px',
-}
+
                       >
                         Delete
                       </button>
@@ -875,7 +875,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   border: '1px solid #444',
   borderRadius: '4px',
   fontSize: '14px',
-}
+
               />
               <input
                 type="text"
@@ -889,7 +889,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   border: '1px solid #444',
   borderRadius: '4px',
   fontSize: '14px',
-}
+
               />
               <input
                 type="text"
@@ -903,7 +903,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   border: '1px solid #444',
   borderRadius: '4px',
   fontSize: '14px',
-}
+
               />
               <input
                 type="text"
@@ -917,7 +917,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   border: '1px solid #444',
   borderRadius: '4px',
   fontSize: '14px',
-}
+
               />
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }>
                 <label style={{ display: 'flex', alignItems: 'center', fontSize: '14px' }>
@@ -951,7 +951,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   cursor: newRule.name.trim() && newRule.findPattern.trim() ? 'pointer' : 'not-allowed',
   fontSize: '14px',
   fontWeight: 500,
-}
+
               >
                 Add Rule
               </button>
@@ -973,7 +973,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   alignItems: 'center',
   justifyContent: 'center',
   zIndex: 1001,
-}
+
         >
           <div
             style={{
@@ -984,7 +984,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   maxWidth: '90vw',
   maxHeight: '90vh',
   overflow: 'auto',
-}
+
           >
             <h3 style={{ marginBottom: '16px', fontSize: '16px', fontWeight: 600 }>
               Edit Rule
@@ -1002,7 +1002,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   border: '1px solid #444',
   borderRadius: '4px',
   fontSize: '14px',
-}
+
               />
               <input
                 type="text"
@@ -1016,7 +1016,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   border: '1px solid #444',
   borderRadius: '4px',
   fontSize: '14px',
-}
+
               />
               <input
                 type="text"
@@ -1030,7 +1030,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   border: '1px solid #444',
   borderRadius: '4px',
   fontSize: '14px',
-}
+
               />
               <input
                 type="text"
@@ -1044,7 +1044,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   border: '1px solid #444',
   borderRadius: '4px',
   fontSize: '14px',
-}
+
               />
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }>
                 <label style={{ display: 'flex', alignItems: 'center', fontSize: '14px' }>
@@ -1079,7 +1079,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   flex: 1,
   fontSize: '14px',
   fontWeight: 500,
-}
+
                 >
                   Save
                 </button>
@@ -1095,7 +1095,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsManagerPanelProps> = (
   flex: 1,
   fontSize: '14px',
   fontWeight: 500,
-}
+
                 >
                   Cancel
                 </button>

@@ -14,22 +14,21 @@ interface ResultAction {
   type: 'regenerate' | 'lock' | 'unlock' | 'compare' | 'export';
   resultIndex: number;
   data?: Record<string, unknown>;
-
+}
 
 interface LockedResult {
   index: number;
   seed: number;
   lockedAt: number;
   note?: string;
-
+}
 
 // Legacy interface for backward compatibility
-
 interface PreviewResult {
   seed: number;
   output?: string;
   error?: string;
-
+}
 
 export interface PreviewModalProps {
   open: boolean;
@@ -46,7 +45,7 @@ export interface PreviewModalProps {
   regeneratingResults?: number[];
   // Epic 8.5 Task 5: Creative variance analysis
   onVarianceSuggestion?: (suggestion: VarianceSuggestion) => void;
-
+}
 
 export const PreviewModal: React.FC<PreviewModalProps> = ({
   open,
@@ -220,7 +219,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   fontSize: 12,
   fontWeight: 500,
   cursor: 'pointer',
-}
+
               >
                 {showExecutionPaths ? '📊 Hide Paths' : '🔍 Show Paths'}
               </button>
@@ -238,7 +237,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   fontSize: 12,
   fontWeight: 500,
   cursor: 'pointer',
-}
+
               >
                 {showVarianceAnalysis ? '📈 Hide Variance' : '📊 Show Variance'}
               </button>
@@ -251,7 +250,6 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                 } else {
                   setCompareMode(true);
 
-              }
               style={{
   background: compareMode ? '#10b981' : '#e2e8f0',
   color: compareMode ? '#fff' : '#2d3748',
@@ -261,7 +259,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   fontSize: 12,
   fontWeight: 500,
   cursor: 'pointer',
-}
+
             >
               {compareMode ? '⚖️ Exit Compare' : '⚖️ Compare'}
             </button>
@@ -281,7 +279,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   fontSize: 12,
   fontWeight: 500,
   cursor: 'pointer',
-}
+
               >
                 💾 Export Selected
               </button>
@@ -302,7 +300,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   fontSize: 12,
   fontWeight: 500,
   cursor: 'pointer',
-}
+
               >
                 📊 Export All
               </button>
@@ -334,7 +332,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   showExecutionOrder: true,
   showRandomChoices: true,
   showPerformanceMetrics: true,
-}
+
                 />
               </div>
             )}
@@ -477,7 +475,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                           onClick={(e) => {
                             e.stopPropagation();
                             toggleComparisonSelection(i);
-                          }
+
                           disabled={!selected && selectedForComparison.length >= 3}
                           style={{
   width: 20,
@@ -491,7 +489,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-}
+
                         >
                           ✓
                         </button>
@@ -501,7 +499,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                         onClick={(e) => {
   e.stopPropagation();
   handleResultAction(locked ? 'unlock' : 'lock', i);
-}
+
                         style={{
   width: 20,
   height: 20,
@@ -514,7 +512,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-}
+
                       >
                         {locked ? '🔒' : '🔓'}
                       </button>
@@ -525,7 +523,6 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                           if (!regenerating && !locked) {
                             handleResultAction('regenerate', i);
 
-                        }
                         disabled={regenerating || locked}
                         style={{
   width: 20,
@@ -539,7 +536,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-}
+
                       >
                         ⟳
                       </button>
@@ -548,7 +545,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                         onClick={(e) => {
                           e.stopPropagation();
                           handleResultAction('export', i);
-                        }
+
                         style={{
   width: 20,
   height: 20,
@@ -561,7 +558,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-}
+
                       >
                         💾
                       </button>
@@ -795,7 +792,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   borderRadius: 4,
   cursor: 'pointer',
   fontSize: 12,
-}
+
               >
                 Cancel
               </button>
@@ -810,7 +807,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   borderRadius: 4,
   cursor: 'pointer',
   fontSize: 12,
-}
+
             >
               Close
             </button>

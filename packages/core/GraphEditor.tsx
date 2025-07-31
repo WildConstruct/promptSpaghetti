@@ -112,7 +112,6 @@ interface GraphEditorProps {
   initialNodes: Node[];
   initialEdges: Edge[];
   validateConnection?: (edges: Edge[], nodes: Node[]) => ValidationError | null;
-}
 
 const NODE_TYPES: NodeMeta[] = [
   // Content Building Blocks
@@ -239,7 +238,7 @@ const NODE_TYPES: NodeMeta[] = [
   const [statsOpen, setStatsOpen] = useState(false);
   const [extensionsOpen, setExtensionsOpen] = useState(false);
   const [showControls, setShowControls] = useState(false);
-  const [ setDragPreview] = useState<{node: Node, position: {x: number, y: number} | null>(null);
+  const [dragPreview, setDragPreview] = useState<{node: Node, position: {x: number, y: number} | null>(null);
   // Canvas optimization and smooth animations
   const [isCreatingNode, setIsCreatingNode] = useState(false);
   const [nodeCreationAnimation, setNodeCreationAnimation] = useState<string | null>(null);
@@ -847,10 +846,10 @@ const NODE_TYPES: NodeMeta[] = [
       initialConfig={{
   brandingVisible: true,
   debugElementsHidden: false,
-}
+
       onModeChange={(config) => {
   console.log('Demo mode changed:', config);
-}
+
     >
       <div style={{ position: 'relative', width: '100%', height: '100%' }>
         <RestorePrompt
@@ -862,11 +861,11 @@ const NODE_TYPES: NodeMeta[] = [
             setShowRestorePrompt(false);
             setStatusMessage('Draft Restored');
             setTimeout(() => setStatusMessage(''), 3000);
-          }
+
           onDismiss={() => {
             setShowRestorePrompt(false);
             localStorage.removeItem('graphDraft');
-          }
+
         />
         <div style={{ display: 'flex', height: '100%' }>
           <TabbedPalette
@@ -891,11 +890,11 @@ const NODE_TYPES: NodeMeta[] = [
               onNodesChange={(changes) => {
                 lastChangeRef.current = Date.now();
                 onNodesChange(changes);
-              }
+
               onEdgesChange={(changes) => {
                 lastChangeRef.current = Date.now();
                 onEdgesChange(changes);
-              }
+
               onConnect={onConnect}
               onNodeClick={onNodeClick}
               fitView
@@ -934,13 +933,13 @@ const NODE_TYPES: NodeMeta[] = [
 
                 // Only handle keyboard events for canvas interaction
                 e.stopPropagation();
-              }
+
               // Professional connection styling with performance optimization
               connectionLineStyle={{
   stroke: isPerformanceGood ? '#ff7c00' : '#4a5568',
   strokeWidth: isPerformanceGood ? 3 : 2,
   filter: isPerformanceGood ? 'drop-shadow(0 0 6px rgba(255, 124, 0, 0.3))' : 'none',
-}
+
               connectionLineType={viewport.zoom > 0.5 ? ConnectionLineType.SmoothStep : ConnectionLineType.Straight}
               // Dynamic edge options based on performance
               defaultEdgeOptions={{
@@ -956,7 +955,6 @@ const NODE_TYPES: NodeMeta[] = [
                   width: isPerformanceGood ? 16 : 12,
                   height: isPerformanceGood ? 16 : 12,
 
-              }
               // Professional zoom/pan settings with smooth transitions
               minZoom={0.05}
               maxZoom={6}
@@ -979,7 +977,7 @@ const NODE_TYPES: NodeMeta[] = [
                   style={{
   backgroundColor: 'rgba(31, 41, 55, 0.8)',
   border: '1px solid rgba(55, 65, 81, 0.6)',
-}
+
                 />
               )}
               <Controls 
@@ -989,7 +987,6 @@ const NODE_TYPES: NodeMeta[] = [
                     border: '1px solid rgba(55, 65, 81, 0.6)',
                     color: '#e5e7eb',
 
-                }
               />
             </ReactFlow>
             {/* Professional UI Integration - Cinema 4D-inspired interface */}
@@ -1007,7 +1004,7 @@ const NODE_TYPES: NodeMeta[] = [
                     selected: selectedNodes.some(s => s.id === node.id),
                   }))
                 );
-              }
+
               onEdgesSelect={(selectedEdges) => {
                 setEdges(prevEdges =>
                   prevEdges.map(edge => ({
@@ -1015,7 +1012,7 @@ const NODE_TYPES: NodeMeta[] = [
                     selected: selectedEdges.some(s => s.id === edge.id),
                   }))
                 );
-              }
+
               onNodeCreate={(nodeType, position, data) => {
                 const newNode: Node = {
                   id: `${nodeType}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -1025,17 +1022,17 @@ const NODE_TYPES: NodeMeta[] = [
                   draggable: true
                 };
                 setNodes(prevNodes => [...prevNodes, newNode]);
-              }
+
               onNodeDelete={(nodeIds) => {
                 setNodes(prevNodes => prevNodes.filter(n => !nodeIds.includes(n.id)));
                 setEdges(prevEdges => prevEdges.filter(e =>
                   !nodeIds.includes(e.source) && !nodeIds.includes(e.target)
                 ));
-              }
+
               onExport={(format) => {
                 console.log(`Exporting in format: ${format}`);
                 // Export functionality would be implemented here
-              }
+
               onSave={() => handleSaveProject()}
               onLoad={() => handleLoadProject()}
               theme="cinema"
@@ -1075,7 +1072,7 @@ const NODE_TYPES: NodeMeta[] = [
   color: '#a0aec0',
   cursor: 'pointer',
   userSelect: 'none',
-}
+
             onClick={() => setShowControls(!showControls)}
             >
               <div style={{ fontWeight: 600, marginBottom: 4, color: '#e2e8f0' }>
@@ -1102,7 +1099,7 @@ const NODE_TYPES: NodeMeta[] = [
   opacity: selectedNode ? 1 : 0,
   overflow: 'hidden',
   borderLeft: selectedNode ? '1px solid rgba(55, 65, 81, 0.6)' : 'none',
-}
+
           >
             {selectedNode && (
               <div
@@ -1111,7 +1108,7 @@ const NODE_TYPES: NodeMeta[] = [
   transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
   width: 320,
   height: '100%',
-}
+
               >
                 {isPerformanceGood ? (
                   <SmoothInspectorPanel
@@ -1278,13 +1275,11 @@ const NODE_TYPES: NodeMeta[] = [
               } else {
                 run();
 
-
-          }
           onHighlightPath={(nodeIds, edgeIds) => {
             // Highlight execution path on the canvas
             setHighlightNodeIds(new Set(nodeIds));
             setHighlightEdgeIds(new Set(edgeIds));
-          }
+
         />
         {/* Epic 8.4 - Contextual Help System Integration */}
         <ContextualHelpSystem
@@ -1298,11 +1293,11 @@ const NODE_TYPES: NodeMeta[] = [
           showProgressiveHints={true}
           onHelpContentViewed={(contentId) => {
             helpContentManager.markContentViewed(contentId);
-          }
+
           onUserLevelChange={(level) => {
   console.log('User level changed to:', level);
   // Could integrate with user profile management
-}
+
         />
         <StatusBar
           statusMessage={statusMessage}
@@ -1322,7 +1317,6 @@ const NODE_TYPES: NodeMeta[] = [
             } else {
               run();
 
-          }
           onSaveJson={() => {
             const blob = new Blob([
               JSON.stringify({ nodes, edges }, null, 2)
@@ -1337,7 +1331,7 @@ const NODE_TYPES: NodeMeta[] = [
               document.body.removeChild(a);
               URL.revokeObjectURL(url);
             }, 0);
-          }
+
           onExportBundle={handleExportBundle}
           onSaveProject={handleSaveProject}
           onLoadProject={handleLoadProject}
@@ -1376,7 +1370,7 @@ const NODE_TYPES: NodeMeta[] = [
   alignItems: 'center',
   justifyContent: 'center',
   zIndex: 9999,
-}
+
           >
             <ProfessionalSpinner 
               type="dots" 
@@ -1401,7 +1395,7 @@ const NODE_TYPES: NodeMeta[] = [
   fontFamily: 'monospace',
   fontSize: 11,
   zIndex: 10000,
-}
+
           >
             <div>FPS: {metrics.fps}</div>
             <div>Nodes: {metrics.visibleNodes}/{nodes.length}</div>
@@ -1418,7 +1412,7 @@ const NODE_TYPES: NodeMeta[] = [
             setPreviewOpen(false);
             setHighlightEdgeIds(new Set());
             setHighlightNodeIds(new Set());
-          }
+
           onCancel={cancelPreview}
           onResultHover={(idx) => {
             const res = previewResults[idx];
@@ -1432,7 +1426,6 @@ const NODE_TYPES: NodeMeta[] = [
             } else {
               setHighlightNodeIds(new Set());
 
-          }
         />
         <ResponsiveCorrectionsPanel
           isOpen={correctionsOpen}
@@ -1493,7 +1486,7 @@ const NODE_TYPES: NodeMeta[] = [
           onSettingsChange={(settings) => {
   console.log('Settings updated:', settings);
   // Settings changes are automatically handled by the SettingsManager
-}
+
         />
         {/* Epic 8.5 - Real-Time Preview Panels */}
         <RealTimePreviewPanel
@@ -1546,7 +1539,7 @@ const NODE_TYPES: NodeMeta[] = [
               onClick={() => {
                 setGraphAnalysisOpen(true);
                 setOptimizationMenuOpen(false);
-              }
+
               style={{
   padding: '12px 16px',
   backgroundColor: '#17a2b8',
@@ -1556,7 +1549,7 @@ const NODE_TYPES: NodeMeta[] = [
   cursor: 'pointer',
   fontSize: '14px',
   fontWeight: '500',
-}
+
             >
             📊 Analyze Graph
             </button>
@@ -1564,7 +1557,7 @@ const NODE_TYPES: NodeMeta[] = [
               onClick={() => {
                 setOptimizationControlsOpen(true);
                 setOptimizationMenuOpen(false);
-              }
+
               style={{
   padding: '12px 16px',
   backgroundColor: '#28a745',
@@ -1574,7 +1567,7 @@ const NODE_TYPES: NodeMeta[] = [
   cursor: 'pointer',
   fontSize: '14px',
   fontWeight: '500',
-}
+
             >
             ⚙️ Settings
             </button>
@@ -1582,7 +1575,7 @@ const NODE_TYPES: NodeMeta[] = [
               onClick={() => {
                 setPerformanceMonitorVisible(true);
                 setOptimizationMenuOpen(false);
-              }
+
               style={{
   padding: '12px 16px',
   backgroundColor: '#fd7e14',
@@ -1592,7 +1585,7 @@ const NODE_TYPES: NodeMeta[] = [
   cursor: 'pointer',
   fontSize: '14px',
   fontWeight: '500',
-}
+
             >
             📈 Monitor
             </button>
@@ -1611,7 +1604,7 @@ const NODE_TYPES: NodeMeta[] = [
   background: 'radial-gradient(circle, rgba(255, 124, 0, 0.3), transparent)',
   borderRadius: 12,
   animation: 'nodeCreatePulse 0.6s ease-out',
-}
+
           />
         )}
         {/* Demo Performance Tester (development only) */}
@@ -1623,12 +1616,11 @@ const NODE_TYPES: NodeMeta[] = [
                 setStatusMessage(`Performance warning: ${result.recommendations[0]}`);
                 setTimeout(() => setStatusMessage(''), 5000);
 
-            }
             onGraphGenerated={(testNodes, testEdges) => {
             // Replace current graph with test graph
               setNodes(testNodes);
               setEdges(testEdges);
-            }
+
             targetFPS={30}
             maxRenderTime={16}
           />
