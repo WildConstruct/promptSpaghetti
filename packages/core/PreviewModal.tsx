@@ -357,7 +357,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   borderRadius: 8,
 }>
                 <h3 style={{ margin: '0 0 12px 0', color: '#0c4a6e', fontSize: 14 }>⚖️ Result Comparison</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }>
+                <div style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fit, minmax(200px, 1fr))`, gap: 12 }>
                   {selectedForComparison.map(index => {
   const result = results[index];
                     return (

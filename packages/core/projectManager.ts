@@ -72,13 +72,11 @@ export interface ProjectFolder {
   parentId?: string;
   children: (ProjectFolder | PSGFile)[];
   metadata: {
-  description?: string;
-  tags: string;
-  created: Date;
-  lastModified: Date;
-}
-};
-}
+    description?: string;
+    tags: string;
+    created: Date;
+    lastModified: Date;
+  };
 }
 export interface Project {
   id: string;
