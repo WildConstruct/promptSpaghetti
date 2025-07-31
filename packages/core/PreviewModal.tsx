@@ -786,7 +786,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   borderRadius: 4,
   cursor: 'pointer',
   fontSize: 12,
-
+}}
               >
                 Cancel
               </button>
@@ -801,7 +801,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   borderRadius: 4,
   cursor: 'pointer',
   fontSize: 12,
-
+}}
             >
               Close
             </button>
