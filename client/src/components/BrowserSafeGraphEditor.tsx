@@ -72,7 +72,7 @@ const nodeTypes = {
       </div>
     </div>
   ),
-  process: ({ data }: { data: NodeData }) => ()
+  process: ({ data }: { data: NodeData }) => (
     <div style={{
   padding: '10px',
   border: '2px solid #2196F3',

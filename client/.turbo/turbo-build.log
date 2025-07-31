@@ -10,20 +10,20 @@ Core package copying disabled - using minimal inline components for deployment
 Running production build...
 vite v7.0.5 building for production...
 transforming...
-✓ 114 modules transformed.
-✗ Build failed in 623ms
+✓ 38 modules transformed.
+✗ Build failed in 282ms
 error during build:
 [vite:esbuild] Transform failed with 1 error:
-/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/historical/UTDGManager.ts:63:8: ERROR: Expected ";" but found "generateHistoricalContent"
-file: /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/historical/UTDGManager.ts:63:8
+/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/components/CommandPalette/UndoRedoManager.tsx:10:0: ERROR: Unexpected "}"
+file: /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/components/CommandPalette/UndoRedoManager.tsx:10:0
 
-Expected ";" but found "generateHistoricalContent"
-61 |    * Generate historically accurate content for a specific scenario
-62 |    */
-63 |    async generateHistoricalContent(config: ContentGenerationConfig): Promise<GeneratedContent> {,
-   |          ^
-64 |    const startTime = performance.now();
-65 |    // Build query from configuration
+Unexpected "}"
+8  |  import { Node, Edge } from 'reactflow';
+9  |  
+10 |  }
+   |  ^
+11 |  export interface GraphState {
+12 |    nodes: Node[];
 
     at failureErrorWithLog (/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:1465:15)
     at /Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:734:50
@@ -38,20 +38,20 @@ Expected ";" but found "generateHistoricalContent"
 Safe config failed, trying regular config...
 vite v7.0.5 building for production...
 transforming...
-✓ 97 modules transformed.
-✗ Build failed in 749ms
+✓ 47 modules transformed.
+✗ Build failed in 444ms
 error during build:
 [vite:esbuild] Transform failed with 1 error:
-/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/security/ClassificationEnforcementMiddleware.ts:199:0: ERROR: Unexpected "export"
-file: /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/security/ClassificationEnforcementMiddleware.ts:199:0
+/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/GraphEditor.tsx:242:96: ERROR: Expected "}" but found ";"
+file: /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core/GraphEditor.tsx:242:96
 
-Unexpected "export"
-197|   * Create operation validation middleware
-198|   */
-199|  export function createOperationValidationMiddleware(): 
-   |  ^
-200|    (req: ClassificationAwareRequest, res: Response, next: NextFunction) => Promise<void> {
-201|    const enforcer = new ClassificationEnforcer();
+Expected "}" but found ";"
+240|    const [extensionsOpen, setExtensionsOpen] = useState(false);
+241|    const [showControls, setShowControls] = useState(false);
+242|    const [ setDragPreview] = useState<{node: Node, position: {x: number, y: number} | null>(null);
+   |                                                                                                  ^
+243|    // Canvas optimization and smooth animations
+244|    const [isCreatingNode, setIsCreatingNode] = useState(false);
 
     at failureErrorWithLog (/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:1465:15)
     at /Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:734:50
@@ -79,7 +79,7 @@ Error: Command failed: vite build --config vite.config.production.ts
   status: 1,
   signal: null,
   output: [ null, null, null ],
-  pid: 67097,
+  pid: 9897,
   stdout: null,
   stderr: null
 }
