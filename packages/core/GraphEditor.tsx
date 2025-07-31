@@ -846,7 +846,7 @@ const NODE_TYPES: NodeMeta[] = [
         event.preventDefault();
         handleLoadProject();
         return;
-
+      }
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
