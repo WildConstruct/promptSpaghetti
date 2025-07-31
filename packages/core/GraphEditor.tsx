@@ -107,12 +107,11 @@ const ANIMATION_CSS = `;
 
 // Inject styles safely on module load
 injectSafeStyles();
-}
+
 interface GraphEditorProps {
-  initialNodes: Node;
-  initialEdges: Edge;
-  validateConnection?: (edges: Edge, nodes: Node) => ValidationError;
-}
+  initialNodes: Node[];
+  initialEdges: Edge[];
+  validateConnection?: (edges: Edge[], nodes: Node[]) => ValidationError | null;
 }
 
 const NODE_TYPES: NodeMeta[] = [
@@ -240,7 +239,7 @@ const NODE_TYPES: NodeMeta[] = [
   const [statsOpen, setStatsOpen] = useState(false);
   const [extensionsOpen, setExtensionsOpen] = useState(false);
   const [showControls, setShowControls] = useState(false);
-  const [ setDragPreview] = useState<{node: Node, position: {x: number, y: number}} | null>(null);
+  const [ setDragPreview] = useState<{node: Node, position: {x: number, y: number} | null>(null);
   // Canvas optimization and smooth animations
   const [isCreatingNode, setIsCreatingNode] = useState(false);
   const [nodeCreationAnimation, setNodeCreationAnimation] = useState<string | null>(null);
@@ -315,7 +314,7 @@ const NODE_TYPES: NodeMeta[] = [
   // In practice, you'd need to wire this up with the actual save dialog result
   resolve(true);
   });
-  }
+
 });
 
   // Highlighted nodes & edges from preview result hover
@@ -356,7 +355,7 @@ const NODE_TYPES: NodeMeta[] = [
             />
           </SmoothNodeWrapper>
         );
-      }
+
       // Fallback to standard rendering for performance
       if (shouldUseVariablePorts) {
         return (
@@ -369,7 +368,7 @@ const NODE_TYPES: NodeMeta[] = [
             getCategoryColor={getCategoryColor}
           />
         );
-      }
+
       return (
         <NodeRenderer
           id={props.id}
@@ -420,7 +419,7 @@ const NODE_TYPES: NodeMeta[] = [
       previewTimeoutRef.current = setTimeout(run, 500 - sinceChange);
     } else {
       run();
-    }
+
   }, [nodes, edges, runPreview]);
   const handleInspectorChange = (partial: Record<string, unknown>) => {
     if (!selectedNode) return;
@@ -429,7 +428,7 @@ const NODE_TYPES: NodeMeta[] = [
     // Also update local React state immediately for UI responsiveness
     setNodes(prev => prev.map(n =>
       n.id === selectedNode.id 
-        ? { ...n, data: { ...n.data, ...partial } }
+        ? { ...n, data: { ...n.data, ...partial }
         : n
     ));
   };
@@ -460,7 +459,7 @@ const NODE_TYPES: NodeMeta[] = [
           if (hasUnsavedChanges) {
             const confirmed = confirm('You have unsaved changes. Load the dropped project anyway?');
             if (!confirmed) return;
-          }
+
           try {
             const content = await file.text();
             const { deserializeProject } = await import('./utils/projectSerialization');
@@ -482,23 +481,22 @@ const NODE_TYPES: NodeMeta[] = [
               setTimeout(() => setStatusMessage(''), 3000);
               if (result.warnings && result.warnings.length > 0) {
                 console.warn('Project load warnings:', result.warnings);
-              }
+
             } else {
               setStatusMessage(`Failed to load project: ${result.error}`);
               setTimeout(() => setStatusMessage(''), 5000);
-            }
+
           } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
             setStatusMessage(`Failed to load project: ${errorMessage}`);
             setTimeout(() => setStatusMessage(''), 5000);
-          }
+
           return; // Exit early for file drops
         } else {
           setStatusMessage('Only .psg files are supported for drag and drop');
           setTimeout(() => setStatusMessage(''), 3000);
           return;
-        }
-        
+
         // Handle node type drops from palette (existing functionality)
   const nodeType = event.dataTransfer.getData('application/node-type');
   if (!nodeType || !(nodeType in nodeSchemas)) return;
@@ -532,7 +530,7 @@ const NODE_TYPES: NodeMeta[] = [
           setNodeCreationAnimation(null);
         }, 600);
       });
-    }
+
   }, [reactFlowInstance, addNode, hasUnsavedChanges, setNodes, setEdges, setStatusMessage]);
   // Allow drop on canvas
   const handleDragOver = useCallback((event: React.DragEvent) => {
@@ -560,13 +558,13 @@ const NODE_TYPES: NodeMeta[] = [
             setDragPreview({ node: {...node, ...change}, position: change.position || node.position });
           } else if (change && 'dragging' in change && !change.dragging) {
             setDragPreview(null);
-          }
+
           return change ? { ...node, ...change } : node;
         });
         // Apply canvas optimization for performance
         if (updatedNodes.length > 100) {
           updatedNodes = optimizer.optimizeNodeVisibility(updatedNodes, viewport, canvasSize);
-        }
+
         return updatedNodes;
       });
     },
@@ -583,7 +581,7 @@ const NODE_TYPES: NodeMeta[] = [
         // Apply edge optimization for performance
         if (updatedEdges.length > 200) {
           updatedEdges = optimizer.optimizeEdges(updatedEdges, nodes, viewport);
-        }
+
         return updatedEdges;
       });
     },
@@ -665,7 +663,7 @@ const NODE_TYPES: NodeMeta[] = [
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         setStatusMessage(`Failed to load recent project: ${errorMessage}`);
         setTimeout(() => setStatusMessage(''), 5000);
-      }
+
     });
   }, [confirmNavigation]);
   const handleSaveSuccess = useCallback((result: { success: boolean; error?: string; projectName?: string; metadata?: unknown }) => {
@@ -693,11 +691,11 @@ const NODE_TYPES: NodeMeta[] = [
           // });
         } catch (error) {
           console.warn('Failed to add project to recent list:', error);
-        }
-      }
+
+
     } else {
       setStatusMessage(`Save failed: ${result.error}`);
-    }
+
     setTimeout(() => setStatusMessage(''), 5000);
   }, []);
   const handleLoadSuccess = useCallback((result: { success: boolean; error?: string; warnings?: string; projectName?: string; metadata?: unknown }) => {
@@ -731,11 +729,11 @@ const NODE_TYPES: NodeMeta[] = [
           // });
         } catch (error) {
           console.warn('Failed to add project to recent list:', error);
-        }
-      }
+
+
     } else {
       setStatusMessage(`Load failed: ${result.error}`);
-    }
+
     setTimeout(() => setStatusMessage(''), 5000);
   }, []);
   const handleExportBundle = useCallback(() => {
@@ -810,13 +808,13 @@ const NODE_TYPES: NodeMeta[] = [
       const target = event.target as HTMLElement;
       if (!target.closest('[data-optimization-menu]') && !target.closest('[data-optimization-button]')) {
         setOptimizationMenuOpen(false);
-      }
+
     };
     
     if (optimizationMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
       return () => document.removeEventListener('mousedown', handleClickOutside);
-    }
+
   }, [optimizationMenuOpen]);
   // Keyboard shortcuts (Epic 7.3 + Story 6.1)
   useEffect(() => {
@@ -826,19 +824,19 @@ const NODE_TYPES: NodeMeta[] = [
         event.preventDefault();
         setSettingsModalOpen(true);
         return;
-      }
+
       // Ctrl+S/Cmd+S saves project (Story 6.1)
       if ((event.ctrlKey || event.metaKey) && event.key === 's') {
         event.preventDefault();
         handleSaveProject();
         return;
-      }
+
       // Ctrl+O/Cmd+O opens project (Story 6.1)
       if ((event.ctrlKey || event.metaKey) && event.key === 'o') {
         event.preventDefault();
         handleLoadProject();
         return;
-      }
+
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
@@ -849,12 +847,12 @@ const NODE_TYPES: NodeMeta[] = [
       initialConfig={{
   brandingVisible: true,
   debugElementsHidden: false,
-}}
+}
       onModeChange={(config) => {
   console.log('Demo mode changed:', config);
-}}
+}
     >
-      <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <div style={{ position: 'relative', width: '100%', height: '100%' }>
         <RestorePrompt
           show={showRestorePrompt}
           draft={restoreDraft}
@@ -864,13 +862,13 @@ const NODE_TYPES: NodeMeta[] = [
             setShowRestorePrompt(false);
             setStatusMessage('Draft Restored');
             setTimeout(() => setStatusMessage(''), 3000);
-          }}
+          }
           onDismiss={() => {
             setShowRestorePrompt(false);
             localStorage.removeItem('graphDraft');
-          }}
+          }
         />
-        <div style={{ display: 'flex', height: '100%' }}>
+        <div style={{ display: 'flex', height: '100%' }>
           <TabbedPalette
             nodes={NODE_TYPES}
             collapsed={paletteCollapsed}
@@ -883,7 +881,7 @@ const NODE_TYPES: NodeMeta[] = [
           />
           <div 
             ref={canvasRef}
-            style={{ flex: 1, position: 'relative', overflow: 'visible' }} 
+            style={{ flex: 1, position: 'relative', overflow: 'visible' } 
             data-testid="react-flow-canvas-wrapper"
           >
             <ReactFlow
@@ -893,15 +891,15 @@ const NODE_TYPES: NodeMeta[] = [
               onNodesChange={(changes) => {
                 lastChangeRef.current = Date.now();
                 onNodesChange(changes);
-              }}
+              }
               onEdgesChange={(changes) => {
                 lastChangeRef.current = Date.now();
                 onEdgesChange(changes);
-              }}
+              }
               onConnect={onConnect}
               onNodeClick={onNodeClick}
               fitView
-              style={{ background: 'var(--color-bg-primary, #2c2c2c)', height: '100%' }}
+              style={{ background: 'var(--color-bg-primary, #2c2c2c)', height: '100%' }
               nodeTypes={nodeTypes}
               onDrop={handleDrop}
               onDragOver={handleDragOver}
@@ -933,16 +931,16 @@ const NODE_TYPES: NodeMeta[] = [
                 if (isFormElement || isInInspector) {
                   // Don't capture keyboard events for form elements or inspector
                   return;
-                }
+
                 // Only handle keyboard events for canvas interaction
                 e.stopPropagation();
-              }}
+              }
               // Professional connection styling with performance optimization
               connectionLineStyle={{
   stroke: isPerformanceGood ? '#ff7c00' : '#4a5568',
   strokeWidth: isPerformanceGood ? 3 : 2,
   filter: isPerformanceGood ? 'drop-shadow(0 0 6px rgba(255, 124, 0, 0.3))' : 'none',
-}}
+}
               connectionLineType={viewport.zoom > 0.5 ? ConnectionLineType.SmoothStep : ConnectionLineType.Straight}
               // Dynamic edge options based on performance
               defaultEdgeOptions={{
@@ -957,12 +955,12 @@ const NODE_TYPES: NodeMeta[] = [
                   color: isPerformanceGood ? '#ff7c00' : '#666',
                   width: isPerformanceGood ? 16 : 12,
                   height: isPerformanceGood ? 16 : 12,
-                }
-              }}
+
+              }
               // Professional zoom/pan settings with smooth transitions
               minZoom={0.05}
               maxZoom={6}
-              defaultViewport={{ x: 0, y: 0, zoom: 1 }}
+              defaultViewport={{ x: 0, y: 0, zoom: 1 }
               // Smooth zoom and pan transitions
               translateExtent={[[-2000, -2000], [4000, 4000]]}
               nodeExtent={[[-1500, -1500], [3000, 3000]]}
@@ -981,7 +979,7 @@ const NODE_TYPES: NodeMeta[] = [
                   style={{
   backgroundColor: 'rgba(31, 41, 55, 0.8)',
   border: '1px solid rgba(55, 65, 81, 0.6)',
-}}
+}
                 />
               )}
               <Controls 
@@ -990,8 +988,8 @@ const NODE_TYPES: NodeMeta[] = [
                     backgroundColor: 'rgba(31, 41, 55, 0.9)',
                     border: '1px solid rgba(55, 65, 81, 0.6)',
                     color: '#e5e7eb',
-                  }
-                }}
+
+                }
               />
             </ReactFlow>
             {/* Professional UI Integration - Cinema 4D-inspired interface */}
@@ -1009,7 +1007,7 @@ const NODE_TYPES: NodeMeta[] = [
                     selected: selectedNodes.some(s => s.id === node.id),
                   }))
                 );
-              }}
+              }
               onEdgesSelect={(selectedEdges) => {
                 setEdges(prevEdges =>
                   prevEdges.map(edge => ({
@@ -1017,7 +1015,7 @@ const NODE_TYPES: NodeMeta[] = [
                     selected: selectedEdges.some(s => s.id === edge.id),
                   }))
                 );
-              }}
+              }
               onNodeCreate={(nodeType, position, data) => {
                 const newNode: Node = {
                   id: `${nodeType}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -1027,17 +1025,17 @@ const NODE_TYPES: NodeMeta[] = [
                   draggable: true
                 };
                 setNodes(prevNodes => [...prevNodes, newNode]);
-              }}
+              }
               onNodeDelete={(nodeIds) => {
                 setNodes(prevNodes => prevNodes.filter(n => !nodeIds.includes(n.id)));
                 setEdges(prevEdges => prevEdges.filter(e =>
                   !nodeIds.includes(e.source) && !nodeIds.includes(e.target)
                 ));
-              }}
+              }
               onExport={(format) => {
                 console.log(`Exporting in format: ${format}`);
                 // Export functionality would be implemented here
-              }}
+              }
               onSave={() => handleSaveProject()}
               onLoad={() => handleLoadProject()}
               theme="cinema"
@@ -1077,14 +1075,14 @@ const NODE_TYPES: NodeMeta[] = [
   color: '#a0aec0',
   cursor: 'pointer',
   userSelect: 'none',
-}}
+}
             onClick={() => setShowControls(!showControls)}
             >
-              <div style={{ fontWeight: 600, marginBottom: 4, color: '#e2e8f0' }}>
+              <div style={{ fontWeight: 600, marginBottom: 4, color: '#e2e8f0' }>
                 🖱️ Controls {showControls ? '▼' : '▶'}
               </div>
               {showControls && (
-                <div style={{ marginTop: 8, lineHeight: 1.6 }}>
+                <div style={{ marginTop: 8, lineHeight: 1.6 }>
                   <div><b>Pan:</b> Left-click + drag on canvas</div>
                   <div><b>Zoom:</b> Mouse wheel / trackpad scroll</div>
                   <div><b>Select:</b> Click node</div>
@@ -1104,7 +1102,7 @@ const NODE_TYPES: NodeMeta[] = [
   opacity: selectedNode ? 1 : 0,
   overflow: 'hidden',
   borderLeft: selectedNode ? '1px solid rgba(55, 65, 81, 0.6)' : 'none',
-}}
+}
           >
             {selectedNode && (
               <div
@@ -1113,7 +1111,7 @@ const NODE_TYPES: NodeMeta[] = [
   transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
   width: 320,
   height: '100%',
-}}
+}
               >
                 {isPerformanceGood ? (
                   <SmoothInspectorPanel
@@ -1149,7 +1147,7 @@ const NODE_TYPES: NodeMeta[] = [
           color: var(--color-text-primary, #e5e7eb) !important;
           transition: all var(--transition-normal, 0.25s cubic-bezier(0.4, 0, 0.2, 1)) !important;
           backdrop-filter: blur(8px) !important;
-        }
+
         .react-flow__node:hover {
           transform: translateY(-3px) scale(1.03) !important;
           box-shadow: var(--shadow-xl, 0 20px 25px rgba(0, 0, 0, 0.6)) !important;
@@ -1159,7 +1157,7 @@ const NODE_TYPES: NodeMeta[] = [
             var(--color-bg-tertiary, #404040)
           ) !important;
           border-color: var(--color-accent-orange, #ff7800) !important;
-        }
+
         .react-flow__node.selected {
           box-shadow: var(--shadow-lg, 0 10px 15px rgba(0, 0, 0, 0.5)), 
                      0 0 0 3px var(--color-accent-orange, #ff7800),
@@ -1170,23 +1168,23 @@ const NODE_TYPES: NodeMeta[] = [
             var(--color-bg-quaternary, #4a4a4a),
             var(--color-bg-tertiary, #404040)
           ) !important;
-        }
+
         /* Professional Edge Styling */
         .react-flow__edge path {
           stroke: var(--color-ui-border-light, #525252) !important;
           stroke-width: 2px !important;
           transition: all var(--transition-normal, 0.25s cubic-bezier(0.4, 0, 0.2, 1)) !important;
-        }
+
         .react-flow__edge:hover path {
           stroke: var(--color-accent-orange, #ff7800) !important;
           stroke-width: 4px !important;
           filter: drop-shadow(0 0 12px rgba(255, 120, 0, 0.6)) !important;
-        }
+
         .react-flow__edge.selected path {
           stroke: var(--color-accent-orange, #ff7800) !important;
           stroke-width: 3px !important;
           filter: drop-shadow(0 0 8px rgba(255, 120, 0, 0.4)) !important;
-        }
+
         /* Professional Handle Styling */
         .react-flow__handle {
           background: var(--color-bg-secondary, #383838) !important;
@@ -1279,14 +1277,14 @@ const NODE_TYPES: NodeMeta[] = [
                 previewTimeoutRef.current = setTimeout(run, 500 - sinceChange);
               } else {
                 run();
-              }
-            }
-          }}
+
+
+          }
           onHighlightPath={(nodeIds, edgeIds) => {
             // Highlight execution path on the canvas
             setHighlightNodeIds(new Set(nodeIds));
             setHighlightEdgeIds(new Set(edgeIds));
-          }}
+          }
         />
         {/* Epic 8.4 - Contextual Help System Integration */}
         <ContextualHelpSystem
@@ -1300,11 +1298,11 @@ const NODE_TYPES: NodeMeta[] = [
           showProgressiveHints={true}
           onHelpContentViewed={(contentId) => {
             helpContentManager.markContentViewed(contentId);
-          }}
+          }
           onUserLevelChange={(level) => {
   console.log('User level changed to:', level);
   // Could integrate with user profile management
-}}
+}
         />
         <StatusBar
           statusMessage={statusMessage}
@@ -1323,8 +1321,8 @@ const NODE_TYPES: NodeMeta[] = [
               previewTimeoutRef.current = setTimeout(run, 500 - sinceChange);
             } else {
               run();
-            }
-          }}
+
+          }
           onSaveJson={() => {
             const blob = new Blob([
               JSON.stringify({ nodes, edges }, null, 2)
@@ -1339,7 +1337,7 @@ const NODE_TYPES: NodeMeta[] = [
               document.body.removeChild(a);
               URL.revokeObjectURL(url);
             }, 0);
-          }}
+          }
           onExportBundle={handleExportBundle}
           onSaveProject={handleSaveProject}
           onLoadProject={handleLoadProject}
@@ -1378,7 +1376,7 @@ const NODE_TYPES: NodeMeta[] = [
   alignItems: 'center',
   justifyContent: 'center',
   zIndex: 9999,
-}}
+}
           >
             <ProfessionalSpinner 
               type="dots" 
@@ -1403,7 +1401,7 @@ const NODE_TYPES: NodeMeta[] = [
   fontFamily: 'monospace',
   fontSize: 11,
   zIndex: 10000,
-}}
+}
           >
             <div>FPS: {metrics.fps}</div>
             <div>Nodes: {metrics.visibleNodes}/{nodes.length}</div>
@@ -1420,7 +1418,7 @@ const NODE_TYPES: NodeMeta[] = [
             setPreviewOpen(false);
             setHighlightEdgeIds(new Set());
             setHighlightNodeIds(new Set());
-          }}
+          }
           onCancel={cancelPreview}
           onResultHover={(idx) => {
             const res = previewResults[idx];
@@ -1428,13 +1426,13 @@ const NODE_TYPES: NodeMeta[] = [
               setHighlightEdgeIds(new Set(res.usedEdgeIds));
             } else {
               setHighlightEdgeIds(new Set());
-            }
+
             if (res?.usedNodeIds) {
               setHighlightNodeIds(new Set(res.usedNodeIds));
             } else {
               setHighlightNodeIds(new Set());
-            }
-          }}
+
+          }
         />
         <ResponsiveCorrectionsPanel
           isOpen={correctionsOpen}
@@ -1495,7 +1493,7 @@ const NODE_TYPES: NodeMeta[] = [
           onSettingsChange={(settings) => {
   console.log('Settings updated:', settings);
   // Settings changes are automatically handled by the SettingsManager
-}}
+}
         />
         {/* Epic 8.5 - Real-Time Preview Panels */}
         <RealTimePreviewPanel
@@ -1543,12 +1541,12 @@ const NODE_TYPES: NodeMeta[] = [
   zIndex: 1001,
   display: 'flex',
   gap: '8px',
-}}>
+}>
             <button
               onClick={() => {
                 setGraphAnalysisOpen(true);
                 setOptimizationMenuOpen(false);
-              }}
+              }
               style={{
   padding: '12px 16px',
   backgroundColor: '#17a2b8',
@@ -1558,7 +1556,7 @@ const NODE_TYPES: NodeMeta[] = [
   cursor: 'pointer',
   fontSize: '14px',
   fontWeight: '500',
-}}
+}
             >
             📊 Analyze Graph
             </button>
@@ -1566,7 +1564,7 @@ const NODE_TYPES: NodeMeta[] = [
               onClick={() => {
                 setOptimizationControlsOpen(true);
                 setOptimizationMenuOpen(false);
-              }}
+              }
               style={{
   padding: '12px 16px',
   backgroundColor: '#28a745',
@@ -1576,7 +1574,7 @@ const NODE_TYPES: NodeMeta[] = [
   cursor: 'pointer',
   fontSize: '14px',
   fontWeight: '500',
-}}
+}
             >
             ⚙️ Settings
             </button>
@@ -1584,7 +1582,7 @@ const NODE_TYPES: NodeMeta[] = [
               onClick={() => {
                 setPerformanceMonitorVisible(true);
                 setOptimizationMenuOpen(false);
-              }}
+              }
               style={{
   padding: '12px 16px',
   backgroundColor: '#fd7e14',
@@ -1594,7 +1592,7 @@ const NODE_TYPES: NodeMeta[] = [
   cursor: 'pointer',
   fontSize: '14px',
   fontWeight: '500',
-}}
+}
             >
             📈 Monitor
             </button>
@@ -1613,7 +1611,7 @@ const NODE_TYPES: NodeMeta[] = [
   background: 'radial-gradient(circle, rgba(255, 124, 0, 0.3), transparent)',
   borderRadius: 12,
   animation: 'nodeCreatePulse 0.6s ease-out',
-}}
+}
           />
         )}
         {/* Demo Performance Tester (development only) */}
@@ -1624,13 +1622,13 @@ const NODE_TYPES: NodeMeta[] = [
               if (!result.passedThreshold) {
                 setStatusMessage(`Performance warning: ${result.recommendations[0]}`);
                 setTimeout(() => setStatusMessage(''), 5000);
-              }
-            }}
+
+            }
             onGraphGenerated={(testNodes, testEdges) => {
             // Replace current graph with test graph
               setNodes(testNodes);
               setEdges(testEdges);
-            }}
+            }
             targetFPS={30}
             maxRenderTime={16}
           />

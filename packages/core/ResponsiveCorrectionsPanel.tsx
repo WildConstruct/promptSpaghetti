@@ -4,12 +4,10 @@ import { CorrectionsManagerPanel } from './CorrectionsManagerPanel';
 import { MobileCorrectionsPanel } from './components/MobileCorrectionsPanel';
 import { CorrectionsStatsDashboard } from './components/CorrectionsStatsDashboard';
 
-}
 interface ResponsiveCorrectionsPanelProps {
   isOpen: boolean;
   onClose: () => void;
-}
-}
+
 
 export const ResponsiveCorrectionsPanel: React.FC<ResponsiveCorrectionsPanelProps> = ({
   isOpen,
