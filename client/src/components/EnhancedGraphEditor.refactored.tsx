@@ -38,27 +38,25 @@ import {
 import { TemplateSelector, useNodeFactory } from './GraphTemplates';
 
 // Professional Design System (kept from original)
-}
 interface ProfessionalColors {
   background: {
-  primary: string;,
-  secondary: string,
-  tertiary: string;
-}
-};
+    primary: string;
+    secondary: string;
+    tertiary: string;
+  };
   text: {
-  primary: string,
-  secondary: string;,
-  accent: string;
-};
+    primary: string;
+    secondary: string;
+    accent: string;
+  };
   accent: {
-  orange: string,
-  blue: string;,
-  cyan: string,
-  purple: string;,
-  green: string,
-  red: string;
-};
+    orange: string;
+    blue: string;
+    cyan: string;
+    purple: string;
+    green: string;
+    red: string;
+  };
   nodes: {
   text: string,
   logic: string;,
@@ -244,14 +242,14 @@ const ProfessionalControlPanel = ({ onRun }: { onRun: () => void }) => ()
 );
 
 // Main component
-}
 interface EnhancedGraphEditorProps {
   className?: string;
   showTemplateSelector?: boolean;
-  const EnhancedGraphEditor: React.FC<EnhancedGraphEditorProps> = ({ ),
+}
+
+const EnhancedGraphEditor: React.FC<EnhancedGraphEditorProps> = ({
   className = "",
   showTemplateSelector = false
-}
 }) => {
   const [nodes, setNodes, onNodesChange] = useNodesState(createDefaultNodes());
   const [edges, setEdges, onEdgesChange] = useEdgesState(defaultEdges);
@@ -259,7 +257,7 @@ interface EnhancedGraphEditorProps {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const { getIntersectingNodes } = useReactFlow();
   const { createNode } = useNodeFactory();
-  const onConnect = useCallback(;);
+  const onConnect = useCallback(() => {});
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );

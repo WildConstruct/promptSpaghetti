@@ -215,6 +215,7 @@ describe('Node Selection Bug Fixes (Real ReactFlow)', () => {
       if (index === 1) {
         // Should have some visual separation from the first node
         expect(element.textContent).toBeTruthy();
+      }
     });
   });
 });

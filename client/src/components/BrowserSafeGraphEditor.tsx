@@ -11,18 +11,15 @@ import ReactFlow, {
   Background,
   BackgroundVariant
 } from 'reactflow';
-}
+
 interface BrowserSafeGraphEditorProps {
   initialNodes?: unknown;
   initialEdges?: unknown;
 }
-}
 
-}
 interface NodeData {
   label?: string;
   description?: string;
-}
 }
 
 // Sample node types for the basic editor
@@ -43,7 +40,7 @@ const nodeTypes = {
       </div>
     </div>
   ),
-  input: ({ data }: { data: NodeData }) => ()
+  input: ({ data }: { data: NodeData }) => (
     <div style={{
   padding: '10px',
   border: '2px solid #4CAF50',
@@ -59,7 +56,7 @@ const nodeTypes = {
       </div>
     </div>
   ),
-  output: ({ data }: { data: NodeData }) => ()
+  output: ({ data }: { data: NodeData }) => (
     <div style={{
   padding: '10px',
   border: '2px solid #FF9800',

@@ -18,13 +18,11 @@ import ReactFlow, {
 } from 'reactflow';
 
 // Professional Design System
-}
 interface ProfessionalColors {
   background: {
     primary: string;
     secondary: string;
     tertiary: string;
-}
   };
   text: {
     primary: string;
@@ -101,13 +99,12 @@ const professionalShadows = {
 };
 
 }
+
 interface EnhancedGraphEditorProps {
   initialNodes?: unknown;
   initialEdges?: unknown;
 }
-}
 
-}
 interface NodeData {
   label?: string;
   description?: string;
