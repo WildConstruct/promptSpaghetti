@@ -315,7 +315,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                 background: '#f7fafc',
                 borderRadius: 4,
               }}>
-                {selectedForComparison.length}/3 selected
+                {`${selectedForComparison.length}/3 selected`}
               </span>
             )}
           </div>
@@ -338,7 +338,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                 />
               </div>
             )}
-            {/* Variance Analysis */}
+            {/* Variance Analysis Component */}
             {showVarianceAnalysis && results.length >= 2 && (
               <div style={{ marginBottom: 20 }>
                 <VarianceAnalysis 
