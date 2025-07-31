@@ -25,8 +25,7 @@ export interface DataClassification {
   approvals: ClassificationApproval;
   metadata: ClassificationMetadata;
 }
-}
-}
+
 export interface ClassificationApproval {
   approver: string;
   role: string;
